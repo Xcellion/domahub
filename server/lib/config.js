@@ -25,7 +25,7 @@ module.exports = function(passport, db){
 			usernameField: 'email',
 			passReqToCallback : true // allows us to pass back the entire request to the callback
 		},
-		function(req, username, password, done) { // callback with email and password from our form
+		function(req, email, password, done) { // callback with email and password from our form
 			db.query("SELECT * FROM accounts WHERE email = ?", function(rows){
 				if (rows.length) {
 					console.log('User exists');
@@ -37,14 +37,13 @@ module.exports = function(passport, db){
 						rows.id = rows.insertId;
 						return done(null, rows);
 					}, {
-						email: username,
-						name: req.body.name,
+						email: email,
 						password: bcrypt.hashSync(password, null, null),
 						date_created: new Date(),
 						date_accessed: new Date()
 					});
 				}
-			}, username);
+			}, email);
 		})
 	);
 	
@@ -52,7 +51,7 @@ module.exports = function(passport, db){
 			usernameField: 'email',
 			passReqToCallback : true // allows us to pass back the entire request to the callback
 		},
-		function(req, username, password, done) { // callback with email and password from our form
+		function(req, email, password, done) { // callback with email and password from our form
 			db.query("SELECT * FROM accounts WHERE email = ?", function(rows){
 				if (!rows.length) {
 					console.log('No user found!');
@@ -75,9 +74,9 @@ module.exports = function(passport, db){
 							console.log(result);
 							console.log("Failed to update last accessed date!");
 						}
-					}, [{ date_accessed : new Date()}, username]);
+					}, [{ date_accessed : new Date()}, email]);
 				}
-			}, username);
+			}, email);
 		})
 	);
 };

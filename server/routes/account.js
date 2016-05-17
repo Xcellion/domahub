@@ -43,11 +43,8 @@ function isLoggedIn(req, res, next) {
 
 //retrieves the user desk preference after logging in
 function profile(req, res){
-	Account.get_game_account(req.user.id, function(results){
-		res.render("profile.ejs", {
-			user: req.user,
-			game_info: results.info
-		});
+	res.render("profile.ejs", {
+		user: req.user
 	});
 }
 

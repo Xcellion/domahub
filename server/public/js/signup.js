@@ -20,16 +20,6 @@ $(document).ready(function() {
 			return false;
 		}
 		
-		//if no name is entered
-		else if (!$("#name_input").val()) {
-			$("#sub_message").fadeOut(100, function(){
-				$(this).css("color", "#ed1c24").html("Please enter your name!").fadeIn(100);
-				$("#name_input").focus();
-			});
-			//to prevent submission of the form
-			return false;
-		}
-		
 		//if no password is entered
 		else if (!$("#pw_input").val()) {
 			$("#sub_message").fadeOut(100, function(){
