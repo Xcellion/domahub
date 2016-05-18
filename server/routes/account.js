@@ -32,7 +32,7 @@ function isLoggedIn(req, res, next) {
 	//if user is authenticated in the session, carry on
 	if (req.isAuthenticated()){
 		delete req.user.password;
-		console.log("Logged in!");
+		console.log("Authenticated!");
 		return next();
 	}
 	else {
@@ -41,10 +41,11 @@ function isLoggedIn(req, res, next) {
 	}
 }
 
-//retrieves the user desk preference after logging in
+//goes to profile
 function profile(req, res){
 	res.render("profile.ejs", {
-		user: req.user
+		user: req.user,
+		message: ""
 	});
 }
 

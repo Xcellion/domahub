@@ -54,7 +54,7 @@ require('./routes/routes.js')(app, db, passport, io);
 //404
 app.get('*', function(req, res){
 	console.log("404 not found!");
-	res.redirect('/');
+	res.redirect('/profile');
 });
 
 var port = Number(process.env.PORT || 8080);
