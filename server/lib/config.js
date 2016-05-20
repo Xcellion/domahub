@@ -38,6 +38,7 @@ module.exports = function(passport, db){
 						return done(null, rows);
 					}, {
 						email: email,
+						fullname: req.body.fullname,
 						password: bcrypt.hashSync(password, null, null),
 						date_created: new Date(),
 						date_accessed: new Date()

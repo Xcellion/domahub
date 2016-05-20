@@ -26,3 +26,15 @@ body{
 .body_wrapper {
 	text-align:center;
 }
+
+table{
+    border-collapse: collapse;
+}
+
+th{
+ text-align:left;
+}
+
+td,th{
+   border: 1px solid black;
+}

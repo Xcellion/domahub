@@ -14,8 +14,20 @@ module.exports = function(app_pass, db, pp){
 	Account = new account_model(database);
 	Listing = new listing_model(database, Account);
 	
+	app.get("/", function(req, res, next){
+		console.log("Checking if user is authenticated...");
+		if (req.isAuthenticated()){
+			delete req.user.password;
+			console.log("Authenticated!");
+			return next();
+		}
+		else {
+			console.log("User is not authenticated");
+			return next();
+		}
+	}, mainPage);
+	
 	//checks if the user is logged in before running anything
-	app.get('/', isLoggedIn, profile);
 	app.get('/profile', isLoggedIn, profile);
 	app.get('/logout', isLoggedIn, logout);
 	app.get('/signup', signup);
@@ -25,6 +37,18 @@ module.exports = function(app_pass, db, pp){
 	
 	//login to existing account
 	app.post('/', loginPost);
+}
+
+//display main page with everything
+function mainPage(req, res, next){
+	Listing.getAllListings(function(result){
+		if (result.state == "success"){
+			res.render("index.ejs", {
+				message: "",
+				listings: result.listings
+			});
+		}
+	});
 }
 
 //make sure user is logged in before doing anything
