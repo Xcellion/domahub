@@ -35,26 +35,15 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.get("/", function(req, res, next){
-	console.log("Checking if user is authenticated...");
-	if (req.isAuthenticated()){
-		console.log("User is authenticated, redirecting...");
-		res.redirect('/account/profile');
-	}
-	else {
-		console.log("User is not authenticated");
-		return next();
-	}
-});
+require('./routes/routes.js')(app, db, passport, io);
 
 app.use(express.static(__dirname + '/public'));
 
-require('./routes/routes.js')(app, db, passport, io);
 
 //404
 app.get('*', function(req, res){
 	console.log("404 not found!");
-	res.redirect('/profile');
+	res.redirect('/');
 });
 
 var port = Number(process.env.PORT || 8080);

@@ -16,6 +16,9 @@ module.exports = function(app_pass, db, pp){
 	
 	//checks if the user is logged in before running anything
 	app.get('/listing/:listing_id', isLoggedIn, getListing);
+	
+	//returns the files 
+	app.get('/listing_text/:domain_name/:rental_id', getListingText);
 }
 
 //make sure user is logged in before doing anything
@@ -37,11 +40,12 @@ function getListing(req, res, next) {
 	
 	//only if the listing id is a number
 	if (parseFloat(listing_id) === listing_id >>> 0){
-		Listing.getListingInfo(listing_id, "listings", function(result){
+		console.log("Attempting to get info for listing #" + listing_id);
+		Listing.getListingInfo("id", listing_id, "listings", function(result){
 			if (result.state == "success" && result.listing_info){
 				res.render("listing.ejs", {
 					user: req.user,
-					listing_info: result.listing_info
+					listing_info: result.listing_info[0]
 				});
 			}
 			//listing doesnt exist
@@ -58,3 +62,19 @@ function getListing(req, res, next) {
 		});
 	}
 }
+
+//gets the file information for a particular listing
+function getListingText(req, res, next){
+	domain_name = req.params.domain_name;
+	rental_id = req.params.rental_id;
+	
+	console.log("Attempting to get file info for domain " + domain_name + " and rental #" + rental_id);
+	Listing.getListingText(domain_name, rental_id, function(result){
+		if (result.state == "success"){
+			res.send(result.listing_info);
+		}
+		else {
+			res.status(404).send('Not found');
+		}
+	});
+};
