@@ -71,7 +71,8 @@ function getListingText(req, res, next){
 	console.log("Attempting to get file info for domain " + domain_name + " and rental #" + rental_id);
 	Listing.getListingText(domain_name, rental_id, function(result){
 		if (result.state == "success"){
-			res.send(result.listing_info);
+		    res.setHeader('Content-Type', 'application/json');
+			res.send(JSON.stringify(result.listing_info));
 		}
 		else {
 			res.status(404).send('Not found');
