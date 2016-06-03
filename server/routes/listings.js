@@ -18,7 +18,10 @@ module.exports = function(app_pass, db, pp){
 	app.get('/listing/:listing_id', isLoggedIn, getListing);
 	
 	//returns the files 
-	app.get('/listing_text/:domain_name/:rental_id', getListingText);
+	app.get('/rental_info/:domain_name/:rental_id', getRentalInfo);
+	
+	//returns current rental
+	app.get('/rental_info/:domain_name', getRentalInfo);
 }
 
 //make sure user is logged in before doing anything
@@ -63,15 +66,20 @@ function getListing(req, res, next) {
 	}
 }
 
-//gets the file information for a particular listing
-function getListingText(req, res, next){
+//gets the file information for a particular rental
+function getRentalInfo(req, res, next){
 	domain_name = req.params.domain_name;
-	rental_id = req.params.rental_id;
+	rental_id = req.params.rental_id || false;
 	
-	console.log("Attempting to get file info for domain " + domain_name + " and rental #" + rental_id);
+	if (rental_id){
+		console.log("Attempting to get rental info for domain " + domain_name + " and rental #" + rental_id);
+	}
+	else{
+		console.log("Attempting to get current rental info for domain " + domain_name);
+	}
 	Listing.getListingText(domain_name, rental_id, function(result){
 		if (result.state == "success"){
-		    res.jsonp(result.listing_info[0]);
+		    res.jsonp(result.listing_info);
 		}
 		else {
 			res.status(404).send('Not found');

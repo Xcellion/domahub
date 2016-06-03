@@ -40,8 +40,12 @@ listing_model.prototype.setListings = function(listing_id, listing_info, callbac
 }
 
 //gets listings database info
-listing_model.prototype.getListingInfo = function(db_where, db_where_equal, listing_DB, callback){
-	this.db.query('SELECT * from ?? WHERE ?? = ?', function(result){
+listing_model.prototype.getListingInfo = function(listing_DB, db_where, db_where_equal, special, callback){
+	db_query = 'SELECT * from ?? WHERE ?? = ? '
+	if (special){
+		db_query += special;
+	}
+	this.db.query(db_query, function(result){
 		//listing info successfully retrieved
 		if (result.length > 0){
 			callback({
@@ -62,23 +66,49 @@ listing_model.prototype.getListingInfo = function(db_where, db_where_equal, list
 listing_model.prototype.getListingText = function(domain_name, rental_id, callback){
 	listing_model = this;
 	
-	this.getListingInfo("domain_name", domain_name, "listings", function(result){
+	this.getListingInfo("listings", "domain_name", domain_name, false, function(result){
 		//domain exists!
 		if (result.state == "success"){
-			listing_id = result.listing_info.id;
+			listing_id = result.listing_info[0].id;
 			
-			console.log("Attempting to get rental info for listing #" + listing_id + " with rental id #" + rental_id);
-			listing_model.getListingInfo("rental_id", rental_id, "rental_details", function(result){
-				if (result.state == "success"){
-					callback(result);
-				}
-				else {
-					callback({
-						state: "error",
-						description: "there is no rental info"
-					});
-				}
-			});
+			if (rental_id){
+				listing_model.getListingInfo("rental_details", "rental_id", rental_id, false, function(result){
+					if (result.state == "success"){
+						callback({
+							state: "success",
+							listing_info: result.listing_info[0]
+						});
+					}
+					else {
+						callback({
+							state: "error",
+							description: "there is no rental info"
+						});
+					}
+				});
+			}
+			//no rental ID provided, grab current one
+			else {
+				listing_model.getListingInfo("rentals", "listing_id", listing_id, "ORDER BY date DESC", function(result){
+					var now = new Date();
+					var date_array = result.listing_info[0].date.split(/[- :]/);
+					var startDate = new Date(date_array[0], date_array[1]-1, date_array[2], date_array[3], date_array[4], date_array[5]);
+					//still rented!
+					if (startDate.getTime() + result.listing_info[0].duration > now.getTime()){
+						callback({
+							state: "success",
+							listing_info: result.listing_info[0]
+						});	
+					}
+					//last rental expired!
+					else {
+						callback({
+							state: "success",
+							listing_info: result.listing_info[result.listing_info.length-1]
+						});	
+					}
+				});
+			}
 		}
 		//domain does not exist
 		else {

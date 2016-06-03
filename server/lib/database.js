@@ -36,7 +36,8 @@ function database_connect(multibool) {
 		user: 'administrator',
 		password: 'Password01',
 		database: 'w3bbi',
-		multipleStatements: multibool
+		multipleStatements: multibool,
+		dateStrings: true
 	});
 	
 	connection.connect(function(err) {
