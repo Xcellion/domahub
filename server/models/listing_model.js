@@ -41,7 +41,7 @@ listing_model.prototype.setListings = function(listing_id, listing_info, callbac
 
 //gets listings database info
 listing_model.prototype.getListingInfo = function(listing_DB, db_where, db_where_equal, special, callback){
-	db_query = 'SELECT * from ?? WHERE ?? = ? '
+	db_query = 'SELECT * from ?? WHERE ?? = ?'
 	if (special){
 		db_query += special;
 	}
@@ -76,7 +76,7 @@ listing_model.prototype.getListingText = function(domain_name, rental_id, callba
 					if (result.state == "success"){
 						callback({
 							state: "success",
-							listing_info: result.listing_info[0]
+							listing_info: result.listing_info
 						});
 					}
 					else {
@@ -89,7 +89,7 @@ listing_model.prototype.getListingText = function(domain_name, rental_id, callba
 			}
 			//no rental ID provided, grab current one
 			else {
-				listing_model.getListingInfo("rentals", "listing_id", listing_id, "ORDER BY date DESC", function(result){
+				listing_model.getListingInfo("rentals", "listing_id", listing_id, " ORDER BY date DESC", function(result){
 					var now = new Date();
 					var date_array = result.listing_info[0].date.split(/[- :]/);
 					var startDate = new Date(date_array[0], date_array[1]-1, date_array[2], date_array[3], date_array[4], date_array[5]);
