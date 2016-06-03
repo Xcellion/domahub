@@ -39,10 +39,8 @@ require('./routes/routes.js')(app, db, passport, io);
 
 app.use(express.static(__dirname + '/public'));
 
-
 //404
 app.get('*', function(req, res){
-	console.log("404 not found!");
 	res.redirect('/');
 });
 

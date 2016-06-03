@@ -63,7 +63,7 @@ listing_model.prototype.getListingInfo = function(listing_DB, db_where, db_where
 }
 
 //gets listings files info
-listing_model.prototype.getListingText = function(domain_name, rental_id, callback){
+listing_model.prototype.getListing = function(domain_name, rental_id, callback){
 	listing_model = this;
 	
 	this.getListingInfo("listings", "domain_name", domain_name, false, function(result){
@@ -80,10 +80,7 @@ listing_model.prototype.getListingText = function(domain_name, rental_id, callba
 						});
 					}
 					else {
-						callback({
-							state: "error",
-							description: "there is no rental info"
-						});
+						listing_model.sendDefaultRental(listing_id, callback);
 					}
 				});
 			}
@@ -93,19 +90,27 @@ listing_model.prototype.getListingText = function(domain_name, rental_id, callba
 					var now = new Date();
 					var date_array = result.listing_info[0].date.split(/[- :]/);
 					var startDate = new Date(date_array[0], date_array[1]-1, date_array[2], date_array[3], date_array[4], date_array[5]);
+					
+					var latest_rental = result.listing_info[0].rental_id;
+					var default_rental = result.listing_info[result.listing_info.length-1].rental_id;
+					
 					//still rented!
 					if (startDate.getTime() + result.listing_info[0].duration > now.getTime()){
-						callback({
-							state: "success",
-							listing_info: result.listing_info[0]
-						});	
+						listing_model.getListingInfo("rental_details", "rental_id", latest_rental, false, function(result){
+							if (result.state == "success"){
+								callback({
+									state: "success",
+									listing_info: result.listing_info
+								});
+							}
+							else {
+								listing_model.sendDefaultRental(listing_id, callback);
+							}
+						});
 					}
 					//last rental expired!
 					else {
-						callback({
-							state: "success",
-							listing_info: result.listing_info[result.listing_info.length-1]
-						});	
+						listing_model.sendDefaultRental(listing_id, callback);
 					}
 				});
 			}
@@ -118,4 +123,34 @@ listing_model.prototype.getListingText = function(domain_name, rental_id, callba
 			});
 		}
 	})
+}
+
+//assumes listing exists
+listing_model.prototype.sendDefaultRental = function(listing_id, callback){
+	listing_model.getListingInfo("rentals", "listing_id", listing_id, " ORDER BY rental_id ASC", function(result){
+		//success!
+		if (result.state == "success"){
+			default_rental = result.listing_info[0].rental_id;
+			listing_model.getListingInfo("rental_details", "rental_id", default_rental, false, function(result){
+				if (result.state == "success"){
+					callback({
+						state: "success",
+						listing_info: result.listing_info
+					});
+				}
+				else {
+					callback({
+						state: "error",
+						description: "there is no rental info"
+					});
+				}
+			});
+		}
+		else {
+			callback({
+				state: "error",
+				description: "default rental could not be found"
+			});
+		}
+	});
 }

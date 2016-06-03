@@ -77,7 +77,7 @@ function getRentalInfo(req, res, next){
 	else{
 		console.log("Attempting to get current rental info for domain " + domain_name);
 	}
-	Listing.getListingText(domain_name, rental_id, function(result){
+	Listing.getListing(domain_name, rental_id, function(result){
 		if (result.state == "success"){
 		    res.jsonp(result.listing_info);
 		}
