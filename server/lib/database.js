@@ -37,7 +37,8 @@ function database_connect(multibool) {
 		password: 'Password01',
 		database: 'w3bbi',
 		multipleStatements: multibool,
-		dateStrings: true
+		dateStrings: true,
+		timezone: 'utc'
 	});
 	
 	connection.connect(function(err) {
