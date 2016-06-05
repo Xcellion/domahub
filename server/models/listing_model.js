@@ -88,11 +88,10 @@ listing_model.prototype.getListing = function(domain_name, rental_id, callback){
 			else {
 				listing_model.getListingInfo("rentals", "listing_id", listing_id, " ORDER BY date DESC LIMIT 1", function(result){
 					var now = new Date();
-					var date_array = result.listing_info[0].date.split(/[- :]/);
-					var startDate = new Date(date_array[0], date_array[1]-1, date_array[2], date_array[3], date_array[4], date_array[5]);
-					
+					var startDate = new Date(result.listing_info[0].date);
 					var latest_rental = result.listing_info[0].rental_id;
 					
+					console.log(startDate, now);
 					//still rented!
 					console.log(startDate.getTime(), result.listing_info[0].duration, now.getTime());
 					if (startDate.getTime() + result.listing_info[0].duration > now.getTime()){
