@@ -91,9 +91,7 @@ listing_model.prototype.getListing = function(domain_name, rental_id, callback){
 					var startDate = new Date(result.listing_info[0].date);
 					var latest_rental = result.listing_info[0].rental_id;
 					
-					console.log(startDate, now);
 					//still rented!
-					console.log(startDate.getTime(), result.listing_info[0].duration, now.getTime());
 					if (startDate.getTime() + result.listing_info[0].duration > now.getTime()){
 						listing_model.getListingInfo("rental_details", "rental_id", latest_rental, false, function(result){
 							if (result.state == "success"){
