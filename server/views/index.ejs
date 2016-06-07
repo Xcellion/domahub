@@ -11,23 +11,28 @@
 		<script type="text/javascript">
 			var message = <%-JSON.stringify(message) || "" %>;
 			var listings = <%-JSON.stringify(listings) || "" %>;
+			var auth = <%-JSON.stringify(auth) || "" %>;
 		</script>
 		<link rel="icon" type="image/ico" href="/images/favicon.ico">
 	</head>
 
 	<body>
 		<h1>w3bbi.</h1>
-		<div id="form_wrapper">
-			<form id="target" action="/" method="post">
-				<input name="email" placeholder="Email" type="text" id="email_input" autofocus>
-				<input name="password" placeholder="Password" type="password" id="pw_input">
-				<input id="submit" type="submit" value="Sign in">
-			</form>
-			<div id="signup_wrapper">
-				<a id="signup" href="/signup">Create an account</a>
+		<% if (!auth) {%>
+			<div id="form_wrapper">
+				<form id="target" action="/" method="post">
+					<input name="email" placeholder="Email" type="text" id="email_input" autofocus>
+					<input name="password" placeholder="Password" type="password" id="pw_input">
+					<input id="submit" type="submit" value="Sign in">
+				</form>
+				<div id="signup_wrapper">
+					<a id="signup" href="/signup">Create an account</a>
+				</div>
 			</div>
-		</div>
-		<div>
+		<% } else {%>
+			<p id="sub_message">Welcome!</p>
+		<% } %>
+
 		<h2>All Domain Names:</h2>
 		<table>
 			<th>Date Created</th>

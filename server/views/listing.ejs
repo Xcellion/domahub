@@ -24,7 +24,24 @@
 			<% } else {%>
 				<a href="/">Log in</a>
 			<% } %>
-			<p><%= JSON.stringify(listing_info,null,4) %></p>
+		<table>
+			<th>Date Created</th>
+			<th>Domain Name</th>
+			<tr>  
+				<td><%= listing_info.date_created %></td>  
+				<td><%= listing_info.domain_name %></td>  
+			</tr>                                   
+		</table>
+	
+		<div id="form_wrapper">
+			<p>Hours</p>
+			<form id="target" action="/listing/<%= listing_info.domain_name %>/rent" method="post">
+				<input autofocus name="date" placeholder="Date" type="datetime" id="duration_input">
+				<input name="duration" placeholder="Hours" min="0" type="number" id="duration_input">
+				<input id="submit" type="submit" value="Rent now!">
+			</form>
+		</div>
+			
 		</div>
 
 	</body>

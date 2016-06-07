@@ -19,10 +19,12 @@ module.exports = function(app_pass, db, pp){
 		if (req.isAuthenticated()){
 			delete req.user.password;
 			console.log("Authenticated!");
+			req.auth = true;
 			return next();
 		}
 		else {
 			console.log("User is not authenticated");
+			req.auth = false;
 			return next();
 		}
 	}, mainPage);
@@ -45,7 +47,8 @@ function mainPage(req, res, next){
 		if (result.state == "success"){
 			res.render("index.ejs", {
 				message: "",
-				listings: result.listings
+				listings: result.listings,
+				auth: req.user
 			});
 		}
 	});
@@ -67,9 +70,14 @@ function isLoggedIn(req, res, next) {
 
 //goes to profile
 function profile(req, res){
-	res.render("profile.ejs", {
-		user: req.user,
-		message: ""
+	Listing.getAllListings(function(result){
+		if (result.state == "success"){
+			res.render("index.ejs", {
+				message: "",
+				listings: result.listings,
+				auth: req.user
+			});
+		}
 	});
 }
 
@@ -112,7 +120,7 @@ function signupPost(req, res, next){
 
 function loginPost(req, res, next){
 	Passport.authenticate('local-login', {
-		successRedirect : '/profile', // redirect to the secure profile section
+		successRedirect : '/', // redirect back to main page
 		failureRedirect : '/', // redirect back to the signup page if there is an error
 	}, function(err, user, info){
 		if (!user && info){
@@ -129,7 +137,7 @@ function loginPost(req, res, next){
 
 		  // set the message
 		  req.session.messages = "Login successfully";
-		  return res.redirect('/profile');
+		  return res.redirect('/');
 		});
 	})(req, res, next);
 };

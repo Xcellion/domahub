@@ -14,8 +14,11 @@ module.exports = function(app_pass, db, pp){
 	Account = new account_model(database);
 	Listing = new listing_model(database, Account);
 	
-	//checks if the user is logged in before running anything
-	app.get('/listing/:listing_id', isLoggedIn, getListing);
+	//get a new listing
+	app.get('/listing/:listing', getListing);
+	
+	//create new rental
+	app.post('/listing/:listing/rent', isLoggedIn, postListing);
 	
 	//returns the files 
 	app.get('/rental_info/:domain_name/:rental_id', getRentalInfo);
@@ -33,18 +36,18 @@ function isLoggedIn(req, res, next) {
 		return next();
 	}
 	else {
-		return next();
+		res.redirect("/");
 	}
 }
 
 //gets the listing info
 function getListing(req, res, next) {
-	listing_id = req.params.listing_id
+	listing = req.params.listing
 	
-	//only if the listing id is a number
-	if (parseFloat(listing_id) === listing_id >>> 0){
-		console.log("Attempting to get info for listing #" + listing_id);
-		Listing.getListingInfo("id", listing_id, "listings", function(result){
+	//listing id?
+	if (parseFloat(listing) === listing >>> 0){
+		console.log("Attempting to get info for listing #" + listing);
+		Listing.getListingInfo("listings", "id", listing, false, function(result){
 			if (result.state == "success" && result.listing_info){
 				res.render("listing.ejs", {
 					user: req.user,
@@ -59,11 +62,38 @@ function getListing(req, res, next) {
 			}
 		});
 	}
+	//or listing name?
 	else {
-		res.render("listing_error.ejs", {
-			message: "Please enter a number!"
+		console.log("Attempting to get info for listing " + listing);
+		Listing.getListingInfo("listings", "domain_name", listing, false, function(result){
+			if (result.state == "success" && result.listing_info){
+				res.render("listing.ejs", {
+					user: req.user,
+					listing_info: result.listing_info[0]
+				});
+			}
+			//listing doesnt exist
+			else {
+				res.render("listing_error.ejs", {
+					message: "No such listing exists!"
+				});
+			}
 		});
 	}
+}
+
+//create a new rental for a listing
+function postListing(req, res, next){
+	listing = req.params.listing
+	
+	Listing.newRental(listing, function(result){
+		if (result.state == "success"){
+		    res.jsonp(result.listing_info);
+		}
+		else {
+			res.status(404).send('Not found');
+		}
+	});
 }
 
 //gets the file information for a particular rental
@@ -85,4 +115,4 @@ function getRentalInfo(req, res, next){
 			res.status(404).send('Not found');
 		}
 	});
-};
+}

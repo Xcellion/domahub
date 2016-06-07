@@ -151,3 +151,8 @@ listing_model.prototype.sendDefaultRental = function(listing_id, callback){
 		}
 	});
 }
+
+//checks to see if a rental is available at that time slot, and then rents it
+listing_model.prototype.newRental = function(listing, callback){
+
+}
