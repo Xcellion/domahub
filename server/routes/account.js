@@ -30,7 +30,7 @@ module.exports = function(app_pass, db, pp){
 	}, mainPage);
 	
 	//checks if the user is logged in before running anything
-	app.get('/profile', isLoggedIn, profile);
+	app.get('/profile', isLoggedIn, mainPage);
 	app.get('/logout', isLoggedIn, logout);
 	app.get('/signup', signup);
 	
@@ -43,10 +43,11 @@ module.exports = function(app_pass, db, pp){
 
 //display main page with everything
 function mainPage(req, res, next){
+	message = req.session.message || "";
 	Listing.getAllListings(function(result){
 		if (result.state == "success"){
 			res.render("index.ejs", {
-				message: "",
+				message: message,
 				listings: result.listings,
 				auth: req.user
 			});
@@ -70,14 +71,10 @@ function isLoggedIn(req, res, next) {
 
 //goes to profile
 function profile(req, res){
-	Listing.getAllListings(function(result){
-		if (result.state == "success"){
-			res.render("index.ejs", {
-				message: "",
-				listings: result.listings,
-				auth: req.user
-			});
-		}
+	message = req.session.message || "";
+	res.render("profile.ejs", {
+		message: message,
+		auth: req.user
 	});
 }
 
@@ -98,7 +95,7 @@ function signup(req, res){
 
 function signupPost(req, res, next){
 	Passport.authenticate('local-signup', {
-		successRedirect : '/profile', // redirect to the secure profile section
+		successRedirect : '/', // redirect to main page
 		failureRedirect : '/signup', // redirect back to the signup page if there is an error
 	}, function(err, user, info){
 		if (!user){
@@ -107,13 +104,13 @@ function signupPost(req, res, next){
 		}
 		req.logIn(user, function(err) {
 		  if (err) {
-			req.session.messages = "Error";
+			req.session.message = "Error";
 			return next(err);
 		  }
 
 		  // set the message
-		  req.session.messages = "Logged in successfully!";
-		  return res.redirect('/profile');
+		  req.session.message = "Logged in successfully!";
+		  return res.redirect('/');
 		});
 	})(req, res, next);
 };

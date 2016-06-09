@@ -31,8 +31,8 @@ module.exports = {
 function database_connect(multibool) {
 	//create connection object
 	connection = mysql.createConnection({
-		host: 'p3plcpnl0172.prod.phx3.secureserver.net',
-		//host: 'localhost',
+		//host: 'p3plcpnl0172.prod.phx3.secureserver.net',
+		host: 'localhost',
 		user: 'administrator',
 		password: 'Password01',
 		database: 'w3bbi',

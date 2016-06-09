@@ -24,6 +24,7 @@
 			<% } else {%>
 				<a href="/">Log in</a>
 			<% } %>
+		<a href="/">Home</a>
 		<table>
 			<th>Date Created</th>
 			<th>Domain Name</th>
@@ -35,9 +36,9 @@
 	
 		<div id="form_wrapper">
 			<p>Hours</p>
-			<form id="target" action="/listing/<%= listing_info.domain_name %>/rent" method="post">
-				<input autofocus name="date" placeholder="Date" type="datetime" id="duration_input">
-				<input name="duration" placeholder="Hours" min="0" type="number" id="duration_input">
+			<form id="target" action="/listing/<%= listing_info.id %>/rent" method="post">
+				<input autofocus name="date" placeholder="Date" type="datetime" id="date_input">
+				<input name="duration" placeholder="Hours" min="1" type="number" id="duration_input">
 				<input id="submit" type="submit" value="Rent now!">
 			</form>
 		</div>

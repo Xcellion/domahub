@@ -36,6 +36,7 @@ function isLoggedIn(req, res, next) {
 		return next();
 	}
 	else {
+		req.session.message = "Not logged in!"
 		res.redirect("/");
 	}
 }
@@ -56,9 +57,8 @@ function getListing(req, res, next) {
 			}
 			//listing doesnt exist
 			else {
-				res.render("listing_error.ejs", {
-					message: "No such listing exists!"
-				});
+				req.session.message = "No such listing exists!"
+				res.redirect("/");
 			}
 		});
 	}
@@ -74,26 +74,11 @@ function getListing(req, res, next) {
 			}
 			//listing doesnt exist
 			else {
-				res.render("listing_error.ejs", {
-					message: "No such listing exists!"
-				});
+				req.session.message = "No such listing exists!"
+				res.redirect("/");
 			}
 		});
 	}
-}
-
-//create a new rental for a listing
-function postListing(req, res, next){
-	listing = req.params.listing
-	
-	Listing.newRental(listing, function(result){
-		if (result.state == "success"){
-		    res.jsonp(result.listing_info);
-		}
-		else {
-			res.status(404).send('Not found');
-		}
-	});
 }
 
 //gets the file information for a particular rental
@@ -107,12 +92,54 @@ function getRentalInfo(req, res, next){
 	else{
 		console.log("Attempting to get current rental info for domain " + domain_name);
 	}
-	Listing.getListing(domain_name, rental_id, function(result){
-		if (result.state == "success"){
-		    res.jsonp(result.listing_info);
-		}
-		else {
-			res.status(404).send('Not found');
-		}
-	});
+	if (parseFloat(rental_id) === rental_id >>> 0){
+		Listing.getListing(domain_name, rental_id, function(result){
+			if (result.state == "success"){
+				res.jsonp(result.listing_info);
+			}
+			else {
+				res.status(404).send('Not found');
+			}
+		});
+	}
+	//rental id is not a number
+	else {
+		req.session.message = "No such rental exists!"
+		res.redirect("/");
+	}
+}
+
+//create a new rental for a listing
+function postListing(req, res, next){
+	listing_id = req.params.listing
+	date = req.body.date;
+	duration = req.body.duration;
+	user_id = req.user.id;
+	
+	if (parseFloat(listing_id) != listing_id >>> 0){
+		req.session.message = "Invalid listing!";
+		res.redirect("/");
+	}
+	else if (!date){
+		req.session.message = "Invalid date!";
+		res.redirect("/");
+	}
+	else if (parseFloat(duration) != duration >>> 0){
+		req.session.message = "Invalid duration!";
+		res.redirect("/");
+	}
+	else if (parseFloat(user_id) != user_id >>> 0){
+		req.session.message = "Invalid user id!";
+		res.redirect("/");
+	}
+	else {
+		Listing.newRental(listing_id, req.body.date, req.body.duration, req.user, function(result){
+			if (result.state == "success"){
+				res.jsonp(result.listing_info);
+			}
+			else {
+				res.status(404).send('Not found');
+			}
+		});
+	}
 }

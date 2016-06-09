@@ -32,6 +32,10 @@
 		<% } else {%>
 			<p id="sub_message">Welcome!</p>
 		<% } %>
+		
+		<% if (message) {%>
+			<h2 id="message"><%= message %></h2>
+		<% } %>
 
 		<h2>All Domain Names:</h2>
 		<table>
@@ -42,9 +46,9 @@
 			 <% listings.forEach(function (listing) { %>
 				<tr>  
 					<td><%= listing.date_created %></td>  
-					<td><%= listing.domain_name %></td>  
-					<td><%= listing.fullname %></td>  
-					<td><%= listing.email %></td>  
+					<td><a href=<%= "/listing/" + listing.domain_name %>><%= listing.domain_name %></a></td>  
+					<td><%= listing.fullname %></td>
+					<td><%= listing.email %></td>
 				</tr>                                   
 			 <% }) %>
 		</table>

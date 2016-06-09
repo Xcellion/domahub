@@ -91,8 +91,12 @@ listing_model.prototype.getListing = function(domain_name, rental_id, callback){
 					var startDate = new Date(result.listing_info[0].date);
 					var latest_rental = result.listing_info[0].rental_id;
 					
-					//still rented!
-					if (startDate.getTime() + result.listing_info[0].duration > now.getTime()){
+					//not yet time!
+					if (startDate.getTime() > now.getTime()){
+						listing_model.sendDefaultRental(listing_id, callback);
+					}
+					//rented!
+					else if (startDate.getTime() + result.listing_info[0].duration > now.getTime()){
 						listing_model.getListingInfo("rental_details", "rental_id", latest_rental, false, function(result){
 							if (result.state == "success"){
 								callback({
@@ -124,6 +128,8 @@ listing_model.prototype.getListing = function(domain_name, rental_id, callback){
 
 //assumes listing exists
 listing_model.prototype.sendDefaultRental = function(listing_id, callback){
+	listing_model = this;
+
 	listing_model.getListingInfo("rentals", "listing_id", listing_id, " ORDER BY rental_id ASC", function(result){
 		//success!
 		if (result.state == "success"){
@@ -153,6 +159,46 @@ listing_model.prototype.sendDefaultRental = function(listing_id, callback){
 }
 
 //checks to see if a rental is available at that time slot, and then rents it
-listing_model.prototype.newRental = function(listing, callback){
+listing_model.prototype.newRental = function(listing, date, duration, user_id, callback){
+	listing_model = this;
 
+	listing_model.getListingInfo("rentals", "listing_id", listing, false, function(result){
+		if (result.state == "success"){
+			for (var x = 0; x < result.listing_info.length; x++){
+				if (result.listing_info[x].date != "0000-00-00 00:00:00" || result.listing_info[x].duration != 0){
+					var tempListing = result.listing_info[x];
+					var tempDateX = new Date(tempListing.date);
+					var tempDateY = new Date(date);
+					var durationMil = duration * 3600000;
+					
+					if (!isNaN(tempDateX) && !isNaN(tempDateY)){
+						//check if it overlaps
+						if (checkSchedule(tempDateX, tempListing.duration, tempDateY, duration)){
+							callback({
+								state: "error",
+								description: "That time slot is already rented out!"
+							});
+						}
+						else {
+							callback({
+								state: "success",
+								description: "That time slot is available!"
+							});
+						}
+					}
+				}
+			};
+		}
+		else {
+			callback({
+				state: "error",
+				description: "There is no rental info"
+			});
+		}
+	});
+}
+
+//helper function to check if dates overlap
+function checkSchedule(dateX, durationX, dateY, durationY){
+	return (dateX.getTime() <= dateY.getTime() + durationY) && (dateY.getTime() <= dateX.getTime() + durationX);
 }
