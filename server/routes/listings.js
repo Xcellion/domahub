@@ -92,21 +92,16 @@ function getRentalInfo(req, res, next){
 	else{
 		console.log("Attempting to get current rental info for domain " + domain_name);
 	}
-	if (parseFloat(rental_id) === rental_id >>> 0){
-		Listing.getListing(domain_name, rental_id, function(result){
-			if (result.state == "success"){
-				res.jsonp(result.listing_info);
-			}
-			else {
-				res.status(404).send('Not found');
-			}
-		});
-	}
-	//rental id is not a number
-	else {
-		req.session.message = "No such rental exists!"
-		res.redirect("/");
-	}
+	
+	//doesnt matter if its a rental id or not
+	Listing.getListing(domain_name, rental_id, function(result){
+		if (result.state == "success"){
+			res.jsonp(result.listing_info);
+		}
+		else {
+			res.status(404).send('Not found');
+		}
+	});
 }
 
 //create a new rental for a listing
