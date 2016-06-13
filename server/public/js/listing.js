@@ -1,7 +1,3 @@
-$(document).click(function(event){
-	console.log("Mouse is at:", event.pageY);
-});
-
 $(document).ready(function() {
 	 $('#calendar').fullCalendar({
 		defaultView: "agendaWeek",
@@ -32,8 +28,7 @@ $(document).ready(function() {
 			}
 			datetime+= " ";
 			for (var x = 0; x < rows.length; x++){
-				console.log(Math.round($(rows[x]).offset().top), $(rows[x]).data("time"));
-				if (jsEvent.pageY >= Math.round($(rows[x]).offset().top) && jsEvent.pageY == Math.round($(rows[x]).offset().top) + $(rows[x]).height()){
+				if (jsEvent.pageY >= Math.round($(rows[x]).offset().top) && (jsEvent.pageY == Math.round($(rows[x]).offset().top) + $(rows[x]).height() || jsEvent.pageY == Math.round($(rows[x]).offset().top) + $(rows[x]).height() - 1)){
 					//bullshit bug in fullcalendar
 					tempDate = datetime + $(rows[x]).data("time");
 					if (moment(calEvent.start._d).format('YYYY-MM-DD HH:mm') == moment(tempDate).format('YYYY-MM-DD HH:mm')){
