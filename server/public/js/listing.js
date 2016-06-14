@@ -32,9 +32,8 @@ $(document).on("mousedown", ".fc-event", function(e){
 $(document).on("mouseup", ".fc-event", function(mouseUpJsEvent){
 	var mouseUpCalEvent = $("#calendar").fullCalendar('clientEvents', $(this).attr("id"))[0];
 	var datetime;
-	
 	//if mousedown exists and the mousedown event is the same as the mouseup event
-	if (mouseDownJsEvent && mouseDownCalEvent.id == mouseUpCalEvent.id){
+	if (mouseDownJsEvent && mouseDownCalEvent._id == mouseUpCalEvent._id){
 		//get the time slots of both mousedown and mouseup
 		var mouseDownSlot = getTimeSlot(mouseUpCalEvent, mouseDownJsEvent);
 		var mouseUpSlot = getTimeSlot(mouseUpCalEvent, mouseUpJsEvent);
@@ -53,6 +52,8 @@ $(document).on("mouseup", ".fc-event", function(mouseUpJsEvent){
 			removeEventTimeSlot(mouseUpCalEvent, mouseUpSlot, mouseDownSlot);
 		}
 	}
+	mouseDownCalEvent = {};
+	mouseDownJsEvent = {};
 });
 
 //helper function to determine the time slot of a mouse event
@@ -121,15 +122,38 @@ function removeEventTimeSlot(calEvent, mouseDownSlot, mouseUpSlot){
 	}
 	//if middle of event
 	else {
-		var eventData = {
-			title: calEvent.title,
-			start: mouseUpSlot.end,
-			end: calEvent.end
-		};
-		$('#calendar').fullCalendar('renderEvent', eventData, true);
+		var tempEnd = calEvent.end;
 		calEvent.end = mouseDownSlot.start;
+		$('#calendar').fullCalendar('updateEvent', calEvent);
+		//overlaps something, cancel creation
+		if (!checkOverlap(mouseUpSlot.end, tempEnd)){
+			var eventData = {
+				title: calEvent.title,
+				start: mouseUpSlot.end,
+				end: tempEnd
+			};
+			$('#calendar').fullCalendar('renderEvent', eventData, true);
+		}
+		else {
+			console.log('blocked!');
+			calEvent.end = tempEnd;
+		}
 	}
 	$('#calendar').fullCalendar('updateEvent', calEvent);
+}
+
+//helper function to check if new event overlaps any existing event
+function checkOverlap(start, end){
+	var allevents = $('#calendar').fullCalendar('clientEvents');
+	var overlap = false;
+	$.each(allevents, function( index, eventitem ){
+		//overlaps something, cancel creation
+		if (checkSchedule(start._d, end - start, eventitem.start._d, eventitem.end - eventitem.start)){
+			overlap = true;
+			return false;
+		}
+	});
+	return overlap;
 }
 
 //helper function to check if dates overlap
