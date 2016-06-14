@@ -14,68 +14,123 @@ $(document).ready(function() {
 			$('#calendar').fullCalendar('unselect');
 		},
 		
-		//clicking on existing events
-		eventClick: function(calEvent, jsEvent, view) {
-			var datetime = "";
-			var rows = $(jsEvent.delegateTarget).find("[data-time]");
-			var days = $(jsEvent.delegateTarget).find("[data-date]");
-
-			for (var y = 0; y < days.length; y++){
- 				if (jsEvent.pageX >= $(days[y]).offset().left && jsEvent.pageX <= $(days[y]).offset().left + $(days[y]).width()){
-					datetime += $(days[y]).data("date");
-					break;
-				}
-			}
-			datetime+= " ";
-			for (var x = 0; x < rows.length; x++){
-				if (jsEvent.pageY >= Math.round($(rows[x]).offset().top) && (jsEvent.pageY == Math.round($(rows[x]).offset().top) + $(rows[x]).height() || jsEvent.pageY == Math.round($(rows[x]).offset().top) + $(rows[x]).height() - 1)){
-					//bullshit bug in fullcalendar
-					tempDate = datetime + $(rows[x]).data("time");
-					if (moment(calEvent.start._d).format('YYYY-MM-DD HH:mm') == moment(tempDate).format('YYYY-MM-DD HH:mm')){
-						datetime += $(rows[x]).data("time");
-						break;
-					}
-					else {
-						datetime += $(rows[x+1]).data("time");
-						break;
-					}
-				}
- 				else if (jsEvent.pageY >= Math.round($(rows[x]).offset().top) && jsEvent.pageY <= Math.round($(rows[x]).offset().top) + $(rows[x]).height()){
-					datetime += $(rows[x]).data("time");
-					break;
-				}
-			}
-			var datetime = new Date(datetime);
-			var removeStart = moment(datetime);
-			var removeEnd = moment(removeStart).add(30, "minutes");
-
-			//event is equal to remove slot
-			if (moment(calEvent.start).format('YYYY-MM-DD HH:mm') == moment(removeStart).format('YYYY-MM-DD HH:mm') 
-				&& moment(calEvent.end).format('YYYY-MM-DD HH:mm') == moment(removeEnd).format('YYYY-MM-DD HH:mm')){
-				$('#calendar').fullCalendar('removeEvents', calEvent._id);
-			}
-			//if clipping start of event
-			else if (moment(calEvent.start).format('YYYY-MM-DD HH:mm') == moment(removeStart).format('YYYY-MM-DD HH:mm')){
-				calEvent.start = removeEnd;
-			}
-			//if clipping end of event
-			else if (moment(calEvent.end).format('YYYY-MM-DD HH:mm') == moment(removeEnd).format('YYYY-MM-DD HH:mm')){
-				calEvent.end = removeStart;
-			}
-			//if middle of event
-			else {
-				var eventData = {
-					title: calEvent.title,
-					start: removeEnd,
-					end: calEvent.end
-				};
-				$('#calendar').fullCalendar('renderEvent', eventData, true);
-				calEvent.end = removeStart;
-			}
-			$('#calendar').fullCalendar('updateEvent', calEvent);
-		}
+		//tag id to HTML DOM for easy access
+		eventAfterRender: function(event, element, view ) { 
+			$(element).attr("id", event._id);
+		},
     })
 });
+
+var mouseDownJsEvent;
+var mouseDownCalEvent;
+
+$(document).on("mousedown", ".fc-event", function(e){
+	mouseDownCalEvent = $("#calendar").fullCalendar('clientEvents', $(this).attr("id"))[0];
+	mouseDownJsEvent = e;
+});
+
+$(document).on("mouseup", ".fc-event", function(mouseUpJsEvent){
+	var mouseUpCalEvent = $("#calendar").fullCalendar('clientEvents', $(this).attr("id"))[0];
+	var datetime;
+	
+	//if mousedown exists and the mousedown event is the same as the mouseup event
+	if (mouseDownJsEvent && mouseDownCalEvent.id == mouseUpCalEvent.id){
+		//get the time slots of both mousedown and mouseup
+		var mouseDownSlot = getTimeSlot(mouseUpCalEvent, mouseDownJsEvent);
+		var mouseUpSlot = getTimeSlot(mouseUpCalEvent, mouseUpJsEvent);
+		
+		var mouseDown_start = moment(mouseDownSlot.start).format('YYYY-MM-DD HH:mm');
+		var mouseUp_start = moment(mouseUpSlot.start).format('YYYY-MM-DD HH:mm');
+		
+		//moved down
+		if (mouseDown_start <= mouseUp_start){
+			//remove the time slots in between mousedown and mouseup from the event
+			removeEventTimeSlot(mouseUpCalEvent, mouseDownSlot, mouseUpSlot);
+		}
+		//moved up
+		else {
+			//same function, but reversed the mousedown and mouseup, genius
+			removeEventTimeSlot(mouseUpCalEvent, mouseUpSlot, mouseDownSlot);
+		}
+	}
+});
+
+//helper function to determine the time slot of a mouse event
+function getTimeSlot(calEvent, jsEvent){
+	var datetime = "";
+	var rows = $(jsEvent.delegateTarget).find("[data-time]");
+	var days = $(jsEvent.delegateTarget).find("[data-date]");
+	
+	for (var y = 0; y < days.length; y++){
+		if (jsEvent.pageX >= $(days[y]).offset().left && jsEvent.pageX <= $(days[y]).offset().left + $(days[y]).width()){
+			datetime += $(days[y]).data("date");
+			break;
+		}
+	}
+	datetime+= " ";
+	for (var x = 0; x < rows.length; x++){
+		if (jsEvent.pageY >= Math.round($(rows[x]).offset().top) && (jsEvent.pageY == Math.round($(rows[x]).offset().top) + $(rows[x]).height() || jsEvent.pageY == Math.round($(rows[x]).offset().top) + $(rows[x]).height() - 1)){
+			//bullshit bug in fullcalendar
+			tempDate = datetime + $(rows[x]).data("time");
+			if (moment(calEvent.start._d).format('YYYY-MM-DD HH:mm') <= moment(tempDate).format('YYYY-MM-DD HH:mm')){
+				datetime += $(rows[x]).data("time");
+				break;
+			}
+			else {
+				datetime += $(rows[x+1]).data("time");
+				break;
+			}
+		}
+		else if (jsEvent.pageY >= Math.round($(rows[x]).offset().top) && jsEvent.pageY <= Math.round($(rows[x]).offset().top) + $(rows[x]).height()){
+			datetime += $(rows[x]).data("time");
+			break;
+		}
+	}
+	var removeStart = new Date(datetime);
+	var removeEnd = moment(removeStart).add(30, "minutes");
+
+	return {
+		start: removeStart,
+		end: removeEnd
+	}
+}
+
+//helper function to remove time slots from an event
+function removeEventTimeSlot(calEvent, mouseDownSlot, mouseUpSlot){
+	var calEvent_start = moment(calEvent.start).format('YYYY-MM-DD HH:mm');
+	var calEvent_end = moment(calEvent.end).format('YYYY-MM-DD HH:mm');
+	
+	var mouseDown_start = moment(mouseDownSlot.start).format('YYYY-MM-DD HH:mm');
+	var mouseDown_end = moment(mouseDownSlot.end).format('YYYY-MM-DD HH:mm');
+	
+	var mouseUp_start = moment(mouseUpSlot.start).format('YYYY-MM-DD HH:mm');
+	var mouseUp_end = moment(mouseUpSlot.end).format('YYYY-MM-DD HH:mm');
+
+	//event is equal to slot
+	if (calEvent_start == mouseDown_start 
+		&& calEvent_end == mouseUp_end){
+			$('#calendar').fullCalendar('removeEvents', calEvent._id);
+	}
+	//if clipping starts at top of event
+	else if (calEvent_start == mouseDown_start){
+		calEvent.start = mouseUpSlot.end;
+	}
+	//if clipping starts at middle of event and goes all the way
+	else if (calEvent_end == mouseUp_end){
+		calEvent.end = mouseDownSlot.start;
+	}
+	//if middle of event
+	else {
+		var eventData = {
+			title: calEvent.title,
+			start: mouseUpSlot.end,
+			end: calEvent.end
+		};
+		$('#calendar').fullCalendar('renderEvent', eventData, true);
+		calEvent.end = mouseDownSlot.start;
+	}
+	$('#calendar').fullCalendar('updateEvent', calEvent);
+}
 
 //helper function to check if dates overlap
 function checkSchedule(dateX, durationX, dateY, durationY){

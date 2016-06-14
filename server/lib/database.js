@@ -58,6 +58,10 @@ function database_connect(multibool) {
 			console.log("Reconnecting to MYSQL...");
 			database_connect();
 		}
+		else if (err.code === 'ECONNRESET') {
+			console.log("Reconnecting to MYSQL...");
+			database_connect();
+		}
 		else {
 			throw err;
 		}
