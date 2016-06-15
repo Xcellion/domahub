@@ -211,6 +211,8 @@ function createEvent(start, end){
 	
 	//there are mergable events, merge them!
 	if (mergingEvents.length){
+		//TO-DO if overlapping events are mine
+
 		if (mergingEvents.length == 2){
 			//if the first merge event is above second merge event
 			if (mergingEvents[0].start < mergingEvents[1].start){
@@ -240,6 +242,8 @@ function createEvent(start, end){
 			$('#calendar').fullCalendar('removeEvents', mergingEvents[0]._id);
 		}
 		mergingEvents = [];
+		
+		//TO-DO else it belongs to someone else, create events around it
 	}
 	
 	//there are fully overlapping events
@@ -250,6 +254,7 @@ function createEvent(start, end){
 			
 		}
 		fullyOverlappingEvents = [];
+		
 		//TO-DO else it belongs to someone else, create events around it
 	}
 	
@@ -269,6 +274,7 @@ function createEvent(start, end){
 			$('#calendar').fullCalendar('removeEvents', overlappingEvents[x]._id, true);
 		}
 		overlappingEvents = [];
+		
 		//TO-DO else it belongs to someone else, create events around it
 	}
 	
