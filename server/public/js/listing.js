@@ -10,14 +10,14 @@ $(document).ready(function() {
 		
 		//creating new events
 		select: function(start, end, jsEvent, view){
-			mergeEvents(start, end);
+			createEvent(start, end);
 			$('#calendar').fullCalendar('unselect');
 		},
 		
 		//tag id to HTML DOM for easy access
 		eventAfterRender: function(event, element, view ) { 
 			$(element).attr("id", event._id);
-		},
+		}
     })
 });
 
@@ -41,7 +41,7 @@ $(document).on("mouseup", ".fc-event", function(mouseUpJsEvent){
 		var mouseDown_start = moment(mouseDownSlot.start).format('YYYY-MM-DD HH:mm');
 		var mouseUp_start = moment(mouseUpSlot.start).format('YYYY-MM-DD HH:mm');
 		
-		//moved down
+		//moved down or stayed the same
 		if (mouseDown_start <= mouseUp_start){
 			//remove the time slots in between mousedown and mouseup from the event
 			removeEventTimeSlot(mouseUpCalEvent, mouseDownSlot, mouseUpSlot);
@@ -62,6 +62,7 @@ function getTimeSlot(calEvent, jsEvent){
 	var rows = $(jsEvent.delegateTarget).find("[data-time]");
 	var days = $(jsEvent.delegateTarget).find("[data-date]");
 	
+	//find the day of the clicked on event
 	for (var y = 0; y < days.length; y++){
 		if (jsEvent.pageX >= $(days[y]).offset().left && jsEvent.pageX <= $(days[y]).offset().left + $(days[y]).width()){
 			datetime += $(days[y]).data("date");
@@ -126,7 +127,7 @@ function removeEventTimeSlot(calEvent, mouseDownSlot, mouseUpSlot){
 		calEvent.end = mouseDownSlot.start;
 		$('#calendar').fullCalendar('updateEvent', calEvent);
 		//overlaps something, cancel creation
-		if (!checkOverlap(mouseUpSlot.end, tempEnd)){
+		if (!checkEventOverlap(mouseUpSlot.end, tempEnd)){
 			var eventData = {
 				title: calEvent.title,
 				start: mouseUpSlot.end,
@@ -135,7 +136,6 @@ function removeEventTimeSlot(calEvent, mouseDownSlot, mouseUpSlot){
 			$('#calendar').fullCalendar('renderEvent', eventData, true);
 		}
 		else {
-			console.log('blocked!');
 			calEvent.end = tempEnd;
 		}
 	}
@@ -143,12 +143,12 @@ function removeEventTimeSlot(calEvent, mouseDownSlot, mouseUpSlot){
 }
 
 //helper function to check if new event overlaps any existing event
-function checkOverlap(start, end){
+function checkEventOverlap(start, end){
 	var allevents = $('#calendar').fullCalendar('clientEvents');
 	var overlap = false;
 	$.each(allevents, function( index, eventitem ){
 		//overlaps something, cancel creation
-		if (checkSchedule(start._d, end - start, eventitem.start._d, eventitem.end - eventitem.start)){
+		if (checkOverlap(start._d, end - start, eventitem.start._d, eventitem.end - eventitem.start)){
 			overlap = true;
 			return false;
 		}
@@ -156,44 +156,61 @@ function checkOverlap(start, end){
 	return overlap;
 }
 
-//helper function to check if dates overlap
-function checkSchedule(dateX, durationX, dateY, durationY){
+//helper function to check if date X overlaps any part with date Y
+function checkOverlap(dateX, durationX, dateY, durationY){
 	return (dateX.getTime() < dateY.getTime() + durationY) && (dateY.getTime() < dateX.getTime() + durationX);
 }
 
+//helper function to check if date X is fully covered by date Y
+function checkFullOverlap(dateX, durationX, dateY, durationY){
+	return (dateY.getTime() <= dateX.getTime()) && (dateX.getTime() + durationX <= dateY.getTime() + durationY);
+}
+
 //helper function to merge events
-function mergeEvents(start, end){
+function createEvent(start, end){
 	var allevents = $('#calendar').fullCalendar('clientEvents');
 	var mergingEvents = [];
-	var overlap = false;
+	var overlappingEvents = [];
+	var fullyOverlappingEvents = [];
+	
+	//check for overlapping events or mergeable events
 	$.each(allevents, function( index, eventitem )
 	{
 		if (eventitem !== null && typeof eventitem != 'undefined')
 		{
-			//overlaps something, cancel creation
-			if (checkSchedule(start._d, end - start, eventitem.start._d, eventitem.end - eventitem.start)){
-				overlap = true;
-				return false;
+			//check if existing event is fully overlapped by event being created
+			if (checkFullOverlap(eventitem.start._d, eventitem.end - eventitem.start, start._d, end - start)){
+				fullyOverlappingEvents.push(eventitem);
+				console.log('f');
+			}
+			//overlaps something, just not completely
+			else if (checkOverlap(start._d, end - start, eventitem.start._d, eventitem.end - eventitem.start)){
+				overlappingEvents.push(eventitem);
+				console.log('p');
 			}
 			
-			//if start time of new event (2nd slot) is end time of existing event (1st slot)
-			//i.e. if new event is below any existing events
-			if (moment(start).format('YYYY-MM-DD HH:mm') == moment(eventitem.end).format('YYYY-MM-DD HH:mm'))
-			{
-				mergingEvents.push(eventitem);
+			//no overlaps, check for merges
+			if (moment(start).format('YYYY-MM-DD HH:mm') == moment(eventitem.end).format('YYYY-MM-DD HH:mm')
+				|| moment(end).format('YYYY-MM-DD HH:mm') == moment(eventitem.start).format('YYYY-MM-DD HH:mm')){
+				console.log('m');
+				//if start time of new event (2nd slot) is end time of existing event (1st slot)
+				//i.e. if new event is below any existing events
+				if (moment(start).format('YYYY-MM-DD HH:mm') == moment(eventitem.end).format('YYYY-MM-DD HH:mm'))
+				{
+					mergingEvents.push(eventitem);
+				}
+				//if end time of new event (1st slot) is start time of existing event (2nd slot)
+				//i.e. if new event is above any existing events
+				else if (moment(end).format('YYYY-MM-DD HH:mm') == moment(eventitem.start).format('YYYY-MM-DD HH:mm'))
+				{
+					mergingEvents.push(eventitem);
+				}
 			}
-			//if end time of new event (1st slot) is start time of existing event (2nd slot)
-			//i.e. if new event is above any existing events
-			else if (moment(end).format('YYYY-MM-DD HH:mm') == moment(eventitem.start).format('YYYY-MM-DD HH:mm'))
-			{
-				mergingEvents.push(eventitem);
-			}
-
 		}
 	});
 	
-	//both merge
-	if (!overlap){
+	//there are mergable events, merge them!
+	if (mergingEvents.length){
 		if (mergingEvents.length == 2){
 			//if the first merge event is above second merge event
 			if (mergingEvents[0].start < mergingEvents[1].start){
@@ -223,14 +240,47 @@ function mergeEvents(start, end){
 			}
 			$('#calendar').fullCalendar('updateEvent', mergingEvents[0]);
 		}
-		else{
-			title = user.fullname || "Guest";
-			var eventData = {
-				title: title,
-				start: start,
-				end: end
-			};
-			$('#calendar').fullCalendar('renderEvent', eventData, true);
+	}
+	
+	//there are fully overlapping events
+	if (fullyOverlappingEvents.length){
+		//TO-DO if overlapping events are mine
+		for (var x = 0; x < fullyOverlappingEvents.length; x++){
+			$('#calendar').fullCalendar('removeEvents', fullyOverlappingEvents[x]._id);
+			
+		}
+		fullyOverlappingEvents = [];
+		//TO-DO else it belongs to someone else, create events around it
+	}
+	
+	//there are some partially overlapping events
+	if (overlappingEvents.length){
+
+		//TO-DO if overlapping events are mine
+		for (var x = 0; x < overlappingEvents.length; x++){
+			//existing event's bottom is overlapped
+			if (overlappingEvents[x].end < end){
+				start = overlappingEvents[x].start;
+			}
+			//existing event's top is overlapped
+			else {
+				end = overlappingEvents[x].end;
+			}
+			$('#calendar').fullCalendar('removeEvents', overlappingEvents[x]._id, true);
+		}
+		overlappingEvents = [];
+		//TO-DO else it belongs to someone else, create events around it
+	}
+	
+	console.log(mergingEvents.length, overlappingEvents.length, fullyOverlappingEvents.length);
+	if (mergingEvents.length == 0 && overlappingEvents.length == 0 && fullyOverlappingEvents.length == 0){
+		console.log('n');
+		title = user.fullname || "Guest";
+		var eventData = {
+			title: title,
+			start: start,
+			end: end
 		};
+		$('#calendar').fullCalendar('renderEvent', eventData, true);
 	}
 }
