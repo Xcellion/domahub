@@ -214,32 +214,32 @@ function createEvent(start, end){
 		if (mergingEvents.length == 2){
 			//if the first merge event is above second merge event
 			if (mergingEvents[0].start < mergingEvents[1].start){
-				mergingEvents[0].end = mergingEvents[1].end;
-				$('#calendar').fullCalendar('removeEvents', mergingEvents[1]._id);
-				$('#calendar').fullCalendar('updateEvent', mergingEvents[0]);
+				start = mergingEvents[0].start;
+				end = mergingEvents[1].end;
+
 			}
 			else {
-				mergingEvents[1].end = mergingEvents[0].end;
-				$('#calendar').fullCalendar('removeEvents', mergingEvents[0]._id);
-				$('#calendar').fullCalendar('updateEvent', mergingEvents[1]);
+				mergingEvents[1].start = mergingEvents[0].start;
+				end = mergingEvents[0].end;
 			}
+			$('#calendar').fullCalendar('removeEvents', mergingEvents[1]._id);
+			$('#calendar').fullCalendar('removeEvents', mergingEvents[0]._id);
 		}
 		//only 1 merge
 		else if (mergingEvents.length == 1){
-			//if start time of new event (2nd slot) is end time of existing event (1st slot)
-			//i.e. if new event is below any existing events
+			//if new event is below any existing events
 			if (moment(start).format('YYYY-MM-DD HH:mm') == moment(mergingEvents[0].end).format('YYYY-MM-DD HH:mm'))
 			{
-				mergingEvents[0].end = end;
+				start = mergingEvents[0].start;
 			}
-			//if end time of new event (1st slot) is start time of existing event (2nd slot)
-			//i.e. if new event is above any existing events
+			//if new event is above any existing events
 			else if (moment(end).format('YYYY-MM-DD HH:mm') == moment(mergingEvents[0].start).format('YYYY-MM-DD HH:mm'))
 			{
-				mergingEvents[0].start = start;
+				end = mergingEvents[0].end;
 			}
-			$('#calendar').fullCalendar('updateEvent', mergingEvents[0]);
+			$('#calendar').fullCalendar('removeEvents', mergingEvents[0]._id);
 		}
+		mergingEvents = [];
 	}
 	
 	//there are fully overlapping events
