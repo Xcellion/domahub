@@ -1,3 +1,5 @@
+//calendar logic
+
 $(document).ready(function() {
 	 $('#calendar').fullCalendar({
 		defaultView: "agendaWeek",
