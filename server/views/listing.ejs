@@ -23,31 +23,28 @@
 
 		<div class="body_wrapper">
 			<% if (user) {%>
-				<h2>Logged in: <%= user.email %></h2>
+				<p>Logged in: <%= user.email %></p>
 				<p><a href="/logout">Log Out</a></p>
 			<% } else {%>
 				<a href="/">Log in</a>
 			<% } %>
-		<a href="/">Home</a>
-		<table>
-			<th>Date Created</th>
-			<th>Domain Name</th>
-			<tr>  
-				<td><%= listing_info.date_created %></td>  
-				<td><%= listing_info.domain_name %></td>  
-			</tr>                                   
-		</table>
-<!-- 	
-		<div id="form_wrapper">
-			<p>Hours</p>
-			<form id="target" action="/listing/<%= listing_info.id %>/rent" method="post">
-				<input autofocus name="date" placeholder="Date" type="datetime" id="date_input">
-				<input name="duration" placeholder="Hours" min="1" type="number" id="duration_input">
-				<input id="submit" type="submit" value="Rent now!">
-			</form>
-		</div> -->
-		
-		<div id="calendar"></div>
+			<a href="/">Home</a>
+			<table>
+				<th>Date Created</th>
+				<th>Domain Name</th>
+				<tr>  
+					<td><%= listing_info.date_created %></td>  
+					<td><%= listing_info.domain_name %></td>  
+				</tr>                                   
+			</table>
+
+			<div id="form_wrapper">
+				<form id="listing_form">
+					<input id="submit" type="submit" value="Rent now!">
+				</form>
+			</div>
+			
+			<div id="calendar"></div>
 			
 		</div>
 

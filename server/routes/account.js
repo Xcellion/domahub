@@ -43,7 +43,7 @@ module.exports = function(app_pass, db, pp){
 
 //display main page with everything
 function mainPage(req, res, next){
-	message = req.session.message || "";
+	message = req.session.message || "Successfully logged in!";
 	Listing.getAllListings(function(result){
 		if (result.state == "success"){
 			res.render("index.ejs", {

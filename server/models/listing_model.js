@@ -159,35 +159,53 @@ listing_model.prototype.sendDefaultRental = function(listing_id, callback){
 }
 
 //checks to see if a rental is available at that time slot, and then rents it
-listing_model.prototype.newRental = function(listing, date, duration, user_id, callback){
+listing_model.prototype.newRental = function(listing, events, user_id, callback){
 	listing_model = this;
+	var eventStates = [];
 
+	//get all rentals for the listing
 	listing_model.getListingInfo("rentals", "listing_id", listing, false, function(result){
 		if (result.state == "success"){
+			//loop through all existing events in the database
 			for (var x = 0; x < result.listing_info.length; x++){
+				//if not any of the default ones
 				if (result.listing_info[x].date != "0000-00-00 00:00:00" || result.listing_info[x].duration != 0){
-					var tempListing = result.listing_info[x];
-					var tempDateX = new Date(tempListing.date);
-					var tempDateY = new Date(date);
-					var durationMil = duration * 3600000;
-					
-					if (!isNaN(tempDateX) && !isNaN(tempDateY)){
-						//check if it overlaps
-						if (checkSchedule(tempDateX, tempListing.duration, tempDateY, duration)){
-							callback({
-								state: "error",
-								description: "That time slot is already rented out!"
-							});
-						}
-						else {
-							callback({
-								state: "success",
-								description: "That time slot is available!"
-							});
+					//cross reference with all events posted
+					for (var x = 0; x < events.length; x++){
+						var date = events[x].start;
+						var duration = events[x].end - events[x].start;
+
+						var tempListing = result.listing_info[x];
+						var tempDateX = new Date(tempListing.date);
+						var tempDateY = toUTC(date);
+						
+						if (!isNaN(tempDateX) && !isNaN(tempDateY)){
+							//check if it overlaps
+							if (checkSchedule(tempDateX, tempListing.duration, tempDateY, duration)){
+								eventStates.push({
+									id: events[x]._id,
+									availability : false
+								});
+							}
+							else {
+								eventStates.push({
+									id: events[x]._id,
+									availability : true
+								});
+							}
 						}
 					}
 				}
-			};
+			}
+			
+			console.log(eventStates);
+			//send the availability of all events posted
+			if (eventStates.length){
+				callback({
+					state: "success",
+					eventStates: eventStates
+				});
+			}
 		}
 		else {
 			callback({
@@ -201,4 +219,10 @@ listing_model.prototype.newRental = function(listing, date, duration, user_id, c
 //helper function to check if dates overlap
 function checkSchedule(dateX, durationX, dateY, durationY){
 	return (dateX.getTime() <= dateY.getTime() + durationY) && (dateY.getTime() <= dateX.getTime() + durationX);
+}
+
+//helper function to change a date to UTC
+function toUTC(date){
+	date = new Date(date);
+	return new Date(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(),  date.getUTCHours(), date.getUTCMinutes(), date.getUTCSeconds());
 }

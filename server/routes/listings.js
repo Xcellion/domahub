@@ -18,7 +18,7 @@ module.exports = function(app_pass, db, pp){
 	app.get('/listing/:listing', getListing);
 	
 	//create new rental
-	app.post('/listing/:listing/rent', isLoggedIn, postListing);
+	app.post('/listing/:listing/rent', isLoggedIn, postRental);
 	
 	//returns the files 
 	app.get('/rental_info/:domain_name/:rental_id', getRentalInfo);
@@ -105,36 +105,43 @@ function getRentalInfo(req, res, next){
 }
 
 //create a new rental for a listing
-function postListing(req, res, next){
+function postRental(req, res, next){
 	listing_id = req.params.listing
-	date = req.body.date;
-	duration = req.body.duration;
+	events = req.body.events;
 	user_id = req.user.id;
 	
+	//check if listing id is legit
 	if (parseFloat(listing_id) != listing_id >>> 0){
 		req.session.message = "Invalid listing!";
 		res.redirect("/");
 	}
-	else if (!date){
-		req.session.message = "Invalid date!";
-		res.redirect("/");
-	}
-	else if (parseFloat(duration) != duration >>> 0){
-		req.session.message = "Invalid duration!";
-		res.redirect("/");
-	}
+	
+	//check if user id is legit
 	else if (parseFloat(user_id) != user_id >>> 0){
 		req.session.message = "Invalid user id!";
 		res.redirect("/");
 	}
-	else {
-		Listing.newRental(listing_id, req.body.date, req.body.duration, req.user, function(result){
-			if (result.state == "success"){
-				res.jsonp(result.listing_info);
+	
+	//check if event info is legit
+	else if (events){
+		for (var x = 0; x < events.length; x++){
+			events[x].start = new Date(events[x].start);
+			events[x].end = new Date(events[x].end);
+			if (isNaN(events[x].start) || isNaN(events[x].end)){
+				req.session.message = "Invalid date!";
+				res.redirect("/");
 			}
-			else {
-				res.status(404).send('Not found');
-			}
-		});
+		}
 	}
+	
+	//all gucci
+	Listing.newRental(listing_id, events, req.user, function(result){
+		console.log(result);
+		if (result.state == "success"){
+			res.jsonp(result.eventStates);
+		}
+		else {
+			res.status(404).send('Not found');
+		}
+	});
 }

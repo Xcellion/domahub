@@ -12,6 +12,8 @@ $(document).ready(function() {
 		
 		//creating new events
 		select: function(start, end, jsEvent, view){
+			start = moment(start.format());
+			end = moment(end.format());
 			createEvent(start, end);
 			$('#calendar').fullCalendar('unselect');
 		},
@@ -21,6 +23,29 @@ $(document).ready(function() {
 			$(element).attr("id", event._id);
 		}
     })
+	
+	
+	$("#listing_form").click(function(e){
+		var allevents = $('#calendar').fullCalendar('clientEvents');
+		e.preventDefault();
+		
+		minEvents = [];
+		for (var x = 0; x < allevents.length; x++){
+			minEvents.push({
+				start: allevents[x].start._d,
+				end: allevents[x].end._d,
+				_id: allevents[x]._id
+			});
+		}
+		
+		$.ajax({
+			type: "POST",
+			url: "/listing/" + listing_info.id + "/rent",
+			data: {events: minEvents}
+		}).done(function(data){
+			console.log(data);
+		});
+	});
 });
 
 var mouseDownJsEvent;
@@ -114,17 +139,21 @@ function removeEventTimeSlot(calEvent, mouseDownSlot, mouseUpSlot){
 	if (calEvent_start == mouseDown_start 
 		&& calEvent_end == mouseUp_end){
 			$('#calendar').fullCalendar('removeEvents', calEvent._id);
+			//console.log('event equal to slot');
 	}
 	//if clipping starts at top of event
 	else if (calEvent_start == mouseDown_start){
 		calEvent.start = mouseUpSlot.end;
+		//console.log('clipping at top');
 	}
 	//if clipping starts at middle of event and goes all the way
 	else if (calEvent_end == mouseUp_end){
 		calEvent.end = mouseDownSlot.start;
+		//console.log('clipping at bottom');
 	}
 	//if middle of event
 	else {
+		//console.log('middle of event');
 		var tempEnd = calEvent.end;
 		calEvent.end = mouseDownSlot.start;
 		$('#calendar').fullCalendar('updateEvent', calEvent);
@@ -174,27 +203,36 @@ function createEvent(start, end){
 	var mergingEvents = [];
 	var overlappingEvents = [];
 	var fullyOverlappingEvents = [];
-	
+	var eventEncompassed = false;
 	//check for overlapping events or mergeable events
 	$.each(allevents, function( index, eventitem )
 	{
 		if (eventitem !== null && typeof eventitem != 'undefined')
 		{
+			//event being created is fully overlapped by existing event, so dont create anything new
+			if (checkFullOverlap(start._d, end - start, eventitem.start._d, eventitem.end - eventitem.start)){
+				//console.log('new event is not needed');
+				eventEncompassed = true;
+				//check if new event is in multiples of days (i.e. pressed the all-day button)
+				if ((start - end) % 86400000 === 0){
+					removeEventTimeSlot(eventitem, {start: start, end: end}, {start: start, end: end});
+				}
+			}
 			//check if existing event is fully overlapped by event being created
-			if (checkFullOverlap(eventitem.start._d, eventitem.end - eventitem.start, start._d, end - start)){
+			else if (checkFullOverlap(eventitem.start._d, eventitem.end - eventitem.start, start._d, end - start)){
+				//console.log('full overlap');
 				fullyOverlappingEvents.push(eventitem);
-				console.log('f');
 			}
 			//overlaps something, just not completely
 			else if (checkOverlap(start._d, end - start, eventitem.start._d, eventitem.end - eventitem.start)){
+				//console.log('partial overlap');
 				overlappingEvents.push(eventitem);
-				console.log('p');
 			}
 			
 			//no overlaps, check for merges
-			if (moment(start).format('YYYY-MM-DD HH:mm') == moment(eventitem.end).format('YYYY-MM-DD HH:mm')
-				|| moment(end).format('YYYY-MM-DD HH:mm') == moment(eventitem.start).format('YYYY-MM-DD HH:mm')){
-				console.log('m');
+			if (!eventEncompassed && (moment(start).format('YYYY-MM-DD HH:mm') == moment(eventitem.end).format('YYYY-MM-DD HH:mm')
+				|| moment(end).format('YYYY-MM-DD HH:mm') == moment(eventitem.start).format('YYYY-MM-DD HH:mm'))){
+				//console.log('merge');
 				//if start time of new event (2nd slot) is end time of existing event (1st slot)
 				//i.e. if new event is below any existing events
 				if (moment(start).format('YYYY-MM-DD HH:mm') == moment(eventitem.end).format('YYYY-MM-DD HH:mm'))
@@ -223,7 +261,7 @@ function createEvent(start, end){
 
 			}
 			else {
-				mergingEvents[1].start = mergingEvents[0].start;
+				start = mergingEvents[1].start;
 				end = mergingEvents[0].end;
 			}
 			$('#calendar').fullCalendar('removeEvents', mergingEvents[1]._id);
@@ -280,9 +318,9 @@ function createEvent(start, end){
 		//TO-DO else it belongs to someone else, create events around it
 	}
 	
-	console.log(mergingEvents.length, overlappingEvents.length, fullyOverlappingEvents.length);
-	if (mergingEvents.length == 0 && overlappingEvents.length == 0 && fullyOverlappingEvents.length == 0){
-		console.log('n');
+	//checked for all cases, create the new event!
+	if (!eventEncompassed && mergingEvents.length == 0 && overlappingEvents.length == 0 && fullyOverlappingEvents.length == 0){
+		////console.log('n');
 		title = user.fullname || "Guest";
 		var eventData = {
 			title: title,
