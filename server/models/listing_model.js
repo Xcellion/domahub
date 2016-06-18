@@ -27,7 +27,7 @@ listing_model.prototype.getAllListings = function(callback){
 }
 
 //sets listings database
-listing_model.prototype.setListings = function(listing_id, listing_info, callback){
+listing_model.prototype.setListings = function(listing_id, info, callback){
 	console.log("Attempting to set info for listing #" + listing_id);
 	this.db.query('UPDATE listings SET ? WHERE id = ?', function(result){
 		//listing info was changed
@@ -36,11 +36,11 @@ listing_model.prototype.setListings = function(listing_id, listing_info, callbac
 				"state" : "success"
 			});
 		}
-	}, [listing_info, listing_id]);
+	}, [info, listing_id]);
 }
 
 //gets listings database info
-listing_model.prototype.getListingInfo = function(listing_DB, db_where, db_where_equal, special, callback){
+listing_model.prototype.getInfo = function(listing_DB, db_where, db_where_equal, special, callback){
 	db_query = 'SELECT * from ?? WHERE ?? = ?'
 	if (special){
 		db_query += special;
@@ -50,7 +50,7 @@ listing_model.prototype.getListingInfo = function(listing_DB, db_where, db_where
 		if (result.length > 0){
 			callback({
 				"state" : "success",
-				"listing_info" : result
+				"info" : result
 			});
 		}
 		else {
@@ -66,17 +66,17 @@ listing_model.prototype.getListingInfo = function(listing_DB, db_where, db_where
 listing_model.prototype.getListing = function(domain_name, rental_id, callback){
 	listing_model = this;
 	
-	this.getListingInfo("listings", "domain_name", domain_name, false, function(result){
+	this.getInfo("listings", "domain_name", domain_name, false, function(result){
 		//domain exists!
 		if (result.state == "success"){
-			listing_id = result.listing_info[0].id;
+			listing_id = result.info[0].id;
 			
 			if (rental_id){
-				listing_model.getListingInfo("rental_details", "rental_id", rental_id, false, function(result){
+				listing_model.getInfo("rental_details", "rental_id", rental_id, false, function(result){
 					if (result.state == "success"){
 						callback({
 							state: "success",
-							listing_info: result.listing_info
+							info: result.info
 						});
 					}
 					else {
@@ -86,22 +86,22 @@ listing_model.prototype.getListing = function(domain_name, rental_id, callback){
 			}
 			//no rental ID provided, grab current one
 			else {
-				listing_model.getListingInfo("rentals", "listing_id", listing_id, " ORDER BY date DESC LIMIT 1", function(result){
+				listing_model.getInfo("rentals", "listing_id", listing_id, " ORDER BY date DESC LIMIT 1", function(result){
 					var now = new Date();
-					var startDate = new Date(result.listing_info[0].date);
-					var latest_rental = result.listing_info[0].rental_id;
+					var startDate = new Date(result.info[0].date);
+					var latest_rental = result.info[0].rental_id;
 					
 					//not yet time!
 					if (startDate.getTime() > now.getTime()){
 						listing_model.sendDefaultRental(listing_id, callback);
 					}
 					//rented!
-					else if (startDate.getTime() + result.listing_info[0].duration > now.getTime()){
-						listing_model.getListingInfo("rental_details", "rental_id", latest_rental, false, function(result){
+					else if (startDate.getTime() + result.info[0].duration > now.getTime()){
+						listing_model.getInfo("rental_details", "rental_id", latest_rental, false, function(result){
 							if (result.state == "success"){
 								callback({
 									state: "success",
-									listing_info: result.listing_info
+									info: result.info
 								});
 							}
 							else {
@@ -130,15 +130,15 @@ listing_model.prototype.getListing = function(domain_name, rental_id, callback){
 listing_model.prototype.sendDefaultRental = function(listing_id, callback){
 	listing_model = this;
 
-	listing_model.getListingInfo("rentals", "listing_id", listing_id, " ORDER BY rental_id ASC", function(result){
+	listing_model.getInfo("rentals", "listing_id", listing_id, " ORDER BY rental_id ASC", function(result){
 		//success!
 		if (result.state == "success"){
-			default_rental = result.listing_info[0].rental_id;
-			listing_model.getListingInfo("rental_details", "rental_id", default_rental, false, function(result){
+			default_rental = result.info[0].rental_id;
+			listing_model.getInfo("rental_details", "rental_id", default_rental, false, function(result){
 				if (result.state == "success"){
 					callback({
 						state: "success",
-						listing_info: result.listing_info
+						info: result.info
 					});
 				}
 				else {
@@ -164,18 +164,18 @@ listing_model.prototype.newRental = function(listing, events, user_id, callback)
 	var eventStates = [];
 
 	//get all rentals for the listing
-	listing_model.getListingInfo("rentals", "listing_id", listing, false, function(result){
+	listing_model.getInfo("rentals", "listing_id", listing, false, function(result){
 		if (result.state == "success"){
 			//loop through all existing events in the database
-			for (var x = 0; x < result.listing_info.length; x++){
+			for (var x = 0; x < result.info.length; x++){
 				//if not any of the default ones
-				if (result.listing_info[x].date != "0000-00-00 00:00:00" || result.listing_info[x].duration != 0){
+				if (result.info[x].date != "0000-00-00 00:00:00" || result.info[x].duration != 0){
 					//cross reference with all events posted
-					for (var x = 0; x < events.length; x++){
-						var date = events[x].start;
-						var duration = events[x].end - events[x].start;
+					for (var y = 0; y < events.length; y++){
+						var date = events[y].start;
+						var duration = events[y].end - events[y].start;
 
-						var tempListing = result.listing_info[x];
+						var tempListing = result.info[x];
 						var tempDateX = new Date(tempListing.date);
 						var tempDateY = toUTC(date);
 						
@@ -183,13 +183,13 @@ listing_model.prototype.newRental = function(listing, events, user_id, callback)
 							//check if it overlaps
 							if (checkSchedule(tempDateX, tempListing.duration, tempDateY, duration)){
 								eventStates.push({
-									id: events[x]._id,
+									id: events[y]._id,
 									availability : false
 								});
 							}
 							else {
 								eventStates.push({
-									id: events[x]._id,
+									id: events[y]._id,
 									availability : true
 								});
 							}
@@ -198,7 +198,6 @@ listing_model.prototype.newRental = function(listing, events, user_id, callback)
 				}
 			}
 			
-			console.log(eventStates);
 			//send the availability of all events posted
 			if (eventStates.length){
 				callback({

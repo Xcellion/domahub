@@ -24,6 +24,18 @@ $(document).ready(function() {
 		}
     })
 	
+	//create pre-existing rentals
+	for (var x = 0; x < info.rentals.length; x++){
+		var start = new Date(info.rentals[0].date + " UTC");
+		var eventData = {
+			title: info.rentals[x].account_id,
+			start: start,
+			end: new Date(start.getTime() + 86400000),
+			color: "red",
+			other: true
+		};
+		$('#calendar').fullCalendar('renderEvent', eventData, true);
+	}
 	
 	$("#listing_form").click(function(e){
 		var allevents = $('#calendar').fullCalendar('clientEvents');
@@ -40,7 +52,7 @@ $(document).ready(function() {
 		
 		$.ajax({
 			type: "POST",
-			url: "/listing/" + listing_info.id + "/rent",
+			url: "/listing/" + info.id + "/rent",
 			data: {events: minEvents}
 		}).done(function(data){
 			console.log(data);
@@ -53,34 +65,38 @@ var mouseDownCalEvent;
 
 $(document).on("mousedown", ".fc-event", function(e){
 	mouseDownCalEvent = $("#calendar").fullCalendar('clientEvents', $(this).attr("id"))[0];
-	mouseDownJsEvent = e;
+	if (!mouseDownCalEvent.other){
+		mouseDownJsEvent = e;
+	}
 });
 
 $(document).on("mouseup", ".fc-event", function(mouseUpJsEvent){
 	var mouseUpCalEvent = $("#calendar").fullCalendar('clientEvents', $(this).attr("id"))[0];
-	var datetime;
-	//if mousedown exists and the mousedown event is the same as the mouseup event
-	if (mouseDownJsEvent && mouseDownCalEvent._id == mouseUpCalEvent._id){
-		//get the time slots of both mousedown and mouseup
-		var mouseDownSlot = getTimeSlot(mouseUpCalEvent, mouseDownJsEvent);
-		var mouseUpSlot = getTimeSlot(mouseUpCalEvent, mouseUpJsEvent);
-		
-		var mouseDown_start = moment(mouseDownSlot.start).format('YYYY-MM-DD HH:mm');
-		var mouseUp_start = moment(mouseUpSlot.start).format('YYYY-MM-DD HH:mm');
-		
-		//moved down or stayed the same
-		if (mouseDown_start <= mouseUp_start){
-			//remove the time slots in between mousedown and mouseup from the event
-			removeEventTimeSlot(mouseUpCalEvent, mouseDownSlot, mouseUpSlot);
+	if (!mouseUpCalEvent.other){
+		var datetime;
+		//if mousedown exists and the mousedown event is the same as the mouseup event
+		if (mouseDownJsEvent && mouseDownCalEvent._id == mouseUpCalEvent._id){
+			//get the time slots of both mousedown and mouseup
+			var mouseDownSlot = getTimeSlot(mouseUpCalEvent, mouseDownJsEvent);
+			var mouseUpSlot = getTimeSlot(mouseUpCalEvent, mouseUpJsEvent);
+			
+			var mouseDown_start = moment(mouseDownSlot.start).format('YYYY-MM-DD HH:mm');
+			var mouseUp_start = moment(mouseUpSlot.start).format('YYYY-MM-DD HH:mm');
+			
+			//moved down or stayed the same
+			if (mouseDown_start <= mouseUp_start){
+				//remove the time slots in between mousedown and mouseup from the event
+				removeEventTimeSlot(mouseUpCalEvent, mouseDownSlot, mouseUpSlot);
+			}
+			//moved up
+			else {
+				//same function, but reversed the mousedown and mouseup, genius
+				removeEventTimeSlot(mouseUpCalEvent, mouseUpSlot, mouseDownSlot);
+			}
 		}
-		//moved up
-		else {
-			//same function, but reversed the mousedown and mouseup, genius
-			removeEventTimeSlot(mouseUpCalEvent, mouseUpSlot, mouseDownSlot);
-		}
+		mouseDownCalEvent = {};
+		mouseDownJsEvent = {};
 	}
-	mouseDownCalEvent = {};
-	mouseDownJsEvent = {};
 });
 
 //helper function to determine the time slot of a mouse event

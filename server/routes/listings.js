@@ -44,41 +44,46 @@ function isLoggedIn(req, res, next) {
 //gets the listing info
 function getListing(req, res, next) {
 	listing = req.params.listing
+	whereParam = "";
 	
 	//listing id?
 	if (parseFloat(listing) === listing >>> 0){
 		console.log("Attempting to get info for listing #" + listing);
-		Listing.getListingInfo("listings", "id", listing, false, function(result){
-			if (result.state == "success" && result.listing_info){
-				res.render("listing.ejs", {
-					user: req.user,
-					listing_info: result.listing_info[0]
-				});
-			}
-			//listing doesnt exist
-			else {
-				req.session.message = "No such listing exists!"
-				res.redirect("/");
-			}
-		});
+		whereParam = "id";
 	}
 	//or listing name?
 	else {
 		console.log("Attempting to get info for listing " + listing);
-		Listing.getListingInfo("listings", "domain_name", listing, false, function(result){
-			if (result.state == "success" && result.listing_info){
-				res.render("listing.ejs", {
-					user: req.user,
-					listing_info: result.listing_info[0]
-				});
-			}
-			//listing doesnt exist
-			else {
-				req.session.message = "No such listing exists!"
-				res.redirect("/");
-			}
-		});
+		whereParam = "domain_name";
 	}
+	
+	//get basic listing info
+	Listing.getInfo("listings", whereParam, listing, false, function(result){
+		if (result.state == "success" && result.info){
+			info = result.info[0];
+			listing = result.info[0].id;
+			
+			//get all rental info for that listing that is not default
+			Listing.getInfo("rentals", "listing_id", listing, ' AND date != "0000-00-00 00:00:00"', function(result){
+				if (result.state == "success"){
+					info.rentals = result.info;
+					res.render("listing.ejs", {
+						user: req.user,
+						info: info
+					});
+				}
+				else {
+					req.session.message = "Rental listing error!"
+					res.redirect("/");
+				}
+			});
+		}
+		//listing doesnt exist
+		else {
+			req.session.message = "No such listing exists!"
+			res.redirect("/");
+		}
+	});
 }
 
 //gets the file information for a particular rental
@@ -96,7 +101,7 @@ function getRentalInfo(req, res, next){
 	//doesnt matter if its a rental id or not
 	Listing.getListing(domain_name, rental_id, function(result){
 		if (result.state == "success"){
-			res.jsonp(result.listing_info);
+			res.jsonp(result.info);
 		}
 		else {
 			res.status(404).send('Not found');
@@ -136,7 +141,6 @@ function postRental(req, res, next){
 	
 	//all gucci
 	Listing.newRental(listing_id, events, req.user, function(result){
-		console.log(result);
 		if (result.state == "success"){
 			res.jsonp(result.eventStates);
 		}
