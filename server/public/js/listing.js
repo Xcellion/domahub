@@ -219,6 +219,7 @@ function createEvent(start, end){
 	var mergingEvents = [];
 	var overlappingEvents = [];
 	var fullyOverlappingEvents = [];
+	var removeEvents = [];
 	var eventEncompassed = false;
 	//check for overlapping events or mergeable events
 	$.each(allevents, function( index, eventitem )
@@ -246,7 +247,7 @@ function createEvent(start, end){
 			}
 			
 			//no overlaps, check for merges
-			if (!eventEncompassed && (moment(start).format('YYYY-MM-DD HH:mm') == moment(eventitem.end).format('YYYY-MM-DD HH:mm')
+			if (!eventitem.other && !eventEncompassed && (moment(start).format('YYYY-MM-DD HH:mm') == moment(eventitem.end).format('YYYY-MM-DD HH:mm')
 				|| moment(end).format('YYYY-MM-DD HH:mm') == moment(eventitem.start).format('YYYY-MM-DD HH:mm'))){
 				//console.log('merge');
 				//if start time of new event (2nd slot) is end time of existing event (1st slot)
@@ -267,14 +268,11 @@ function createEvent(start, end){
 	
 	//there are mergable events, merge them!
 	if (mergingEvents.length){
-		//TO-DO if overlapping events are mine
-
 		if (mergingEvents.length == 2){
 			//if the first merge event is above second merge event
 			if (mergingEvents[0].start < mergingEvents[1].start){
 				start = mergingEvents[0].start;
 				end = mergingEvents[1].end;
-
 			}
 			else {
 				start = mergingEvents[1].start;
@@ -298,51 +296,70 @@ function createEvent(start, end){
 			$('#calendar').fullCalendar('removeEvents', mergingEvents[0]._id);
 		}
 		mergingEvents = [];
-		
-		//TO-DO else it belongs to someone else, create events around it
 	}
 	
 	//there are fully overlapping events
 	if (fullyOverlappingEvents.length){
-		//TO-DO if overlapping events are mine
 		for (var x = 0; x < fullyOverlappingEvents.length; x++){
-			$('#calendar').fullCalendar('removeEvents', fullyOverlappingEvents[x]._id);
-			
+			//if fully overlapped events are not mine, add them to an array to be removed later
+			if (fullyOverlappingEvents[x].other){
+				fullyOverlappingEvents[x].full = true;
+				removeEvents.push(fullyOverlappingEvents[x]);
+			}
+			//if fully overlapped events are mine
+			else {
+				$('#calendar').fullCalendar('removeEvents', fullyOverlappingEvents[x]._id);
+			}
 		}
 		fullyOverlappingEvents = [];
-		
-		//TO-DO else it belongs to someone else, create events around it
 	}
 	
 	//there are some partially overlapping events
 	if (overlappingEvents.length){
-
-		//TO-DO if overlapping events are mine
 		for (var x = 0; x < overlappingEvents.length; x++){
-			//existing event's bottom is overlapped
-			if (overlappingEvents[x].end < end){
-				start = overlappingEvents[x].start;
+		//if partially overlapped events are not mine, add them to an array to be removed later
+			if (overlappingEvents[x].other){
+				overlappingEvents[x].full = false;
+				removeEvents.push(overlappingEvents[x]);
 			}
-			//existing event's top is overlapped
+			//if partially overlapped events are mine
 			else {
-				end = overlappingEvents[x].end;
+				//existing event's bottom is overlapped
+				if (overlappingEvents[x].end < end){
+					start = overlappingEvents[x].start;
+				}
+				//existing event's top is overlapped
+				else {
+					end = overlappingEvents[x].end;
+				}
+				$('#calendar').fullCalendar('removeEvents', overlappingEvents[x]._id, true);
 			}
-			$('#calendar').fullCalendar('removeEvents', overlappingEvents[x]._id, true);
+
 		}
 		overlappingEvents = [];
-		
-		//TO-DO else it belongs to someone else, create events around it
 	}
 	
 	//checked for all cases, create the new event!
 	if (!eventEncompassed && mergingEvents.length == 0 && overlappingEvents.length == 0 && fullyOverlappingEvents.length == 0){
-		////console.log('n');
+		//console.log('n');
 		title = user.fullname || "Guest";
 		var eventData = {
 			title: title,
 			start: start,
 			end: end
 		};
-		$('#calendar').fullCalendar('renderEvent', eventData, true);
+		var newEvent = $('#calendar').fullCalendar('renderEvent', eventData, true);
+
+		//if any slots need to removed because they overlap existing slots, remove them here
+		for (var x = 0; x < removeEvents.length; x++){
+			//remove the entire chunk of the full existing event from the newly created event
+			if (removeEvents[x].full){
+				removeEventTimeSlot(newEvent[0], removeEvents[x], removeEvents[x]);
+			}
+			//remove only the partially overlapped portion
+			else {
+				removeEventTimeSlot(newEvent[0], removeEvents[x], {start: removeEvents[x].start, end: end});
+			}
+		}
 	}
 }
