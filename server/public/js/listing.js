@@ -146,9 +146,7 @@ function removeEventTimeSlot(calEvent, mouseDownSlot, mouseUpSlot){
 	var calEvent_end = moment(calEvent.end).format('YYYY-MM-DD HH:mm');
 	
 	var mouseDown_start = moment(mouseDownSlot.start).format('YYYY-MM-DD HH:mm');
-	var mouseDown_end = moment(mouseDownSlot.end).format('YYYY-MM-DD HH:mm');
 	
-	var mouseUp_start = moment(mouseUpSlot.start).format('YYYY-MM-DD HH:mm');
 	var mouseUp_end = moment(mouseUpSlot.end).format('YYYY-MM-DD HH:mm');
 
 	//event is equal to slot
@@ -317,24 +315,31 @@ function createEvent(start, end){
 	//there are some partially overlapping events
 	if (overlappingEvents.length){
 		for (var x = 0; x < overlappingEvents.length; x++){
-		//if partially overlapped events are not mine, add them to an array to be removed later
-			if (overlappingEvents[x].other){
-				overlappingEvents[x].full = false;
-				removeEvents.push(overlappingEvents[x]);
-			}
-			//if partially overlapped events are mine
-			else {
-				//existing event's bottom is overlapped
-				if (overlappingEvents[x].end < end){
-					start = overlappingEvents[x].start;
+			//existing event's bottom is overlapped
+			if (overlappingEvents[x].end < end){
+				//if partially overlapped events are not mine, add them to an array to be removed later
+				if (overlappingEvents[x].other){
+					overlappingEvents[x].full = false;
+					overlappingEvents[x].bottom = true;
+					removeEvents.push(overlappingEvents[x]);
 				}
-				//existing event's top is overlapped
+				else {
+					start = overlappingEvents[x].start;
+					$('#calendar').fullCalendar('removeEvents', overlappingEvents[x]._id, true);
+				}
+			}
+			//existing event's top is overlapped
+			else {
+				if (overlappingEvents[x].other){
+					overlappingEvents[x].full = false;
+					overlappingEvents[x].bottom = false;
+					removeEvents.push(overlappingEvents[x]);
+				}
 				else {
 					end = overlappingEvents[x].end;
+					$('#calendar').fullCalendar('removeEvents', overlappingEvents[x]._id, true);
 				}
-				$('#calendar').fullCalendar('removeEvents', overlappingEvents[x]._id, true);
 			}
-
 		}
 		overlappingEvents = [];
 	}
@@ -354,11 +359,18 @@ function createEvent(start, end){
 		for (var x = 0; x < removeEvents.length; x++){
 			//remove the entire chunk of the full existing event from the newly created event
 			if (removeEvents[x].full){
+				//console.log('full existing removed');
 				removeEventTimeSlot(newEvent[0], removeEvents[x], removeEvents[x]);
 			}
 			//remove only the partially overlapped portion
 			else {
-				removeEventTimeSlot(newEvent[0], removeEvents[x], {start: removeEvents[x].start, end: end});
+				//console.log('partial existing removed');
+				if (removeEvents[x].bottom){
+					removeEventTimeSlot(newEvent[0], {start: start}, removeEvents[x]);
+				}
+				else {
+					removeEventTimeSlot(newEvent[0], removeEvents[x], {end: end});
+				}
 			}
 		}
 	}
