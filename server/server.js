@@ -35,12 +35,15 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
-require('./routes/routes.js')(app, db, passport, io);
-
 app.use(express.static(__dirname + '/public'));
+
+//favicon requests second time for some reason
+app.get('*.ico', function(){})
+require('./routes/routes.js')(app, db, passport, io);
 
 //404
 app.get('*', function(req, res){
+	console.log("404, not found!");
 	res.redirect('/');
 });
 

@@ -6,39 +6,21 @@ var	account_model = require('../models/account_model.js'),
 	Account,
 	Passport;
 
-module.exports = function(app_pass, db, pp){
+module.exports = function(app_pass, db, auth){
 	app = app_pass;
 	database = db;
-	Passport = pp;
 	
 	Account = new account_model(database);
 	Listing = new listing_model(database, Account);
-	
-	//get a new listing
-	app.get('/listing/:listing', getListing);
-	
-	//create new rental
-	app.post('/listing/:listing/rent', isLoggedIn, postRental);
-	
-	//returns the files 
-	app.get('/rental_info/:domain_name/:rental_id', getRentalInfo);
-	
-	//returns current rental
-	app.get('/rental_info/:domain_name', getRentalInfo);
-}
+		
+	//function to check if logged in
+	isLoggedIn = auth.isLoggedIn;
 
-//make sure user is logged in before doing anything
-function isLoggedIn(req, res, next) {
-	//if user is authenticated in the session
-	if (req.isAuthenticated()){
-		delete req.user.password;
-		console.log("Authenticated!");
-		return next();
-	}
-	else {
-		req.session.message = "Not logged in!"
-		res.redirect("/");
-	}
+	app.get('/listing/:listing', getListing);
+	app.get('/rental_info/:domain_name/:rental_id', getRentalDetails);
+	app.get('/rental_info/:domain_name', getRentalDetails);
+	
+	app.post('/listing/:listing/rent', isLoggedIn, postRental);
 }
 
 //gets the listing info
@@ -87,7 +69,7 @@ function getListing(req, res, next) {
 }
 
 //gets the file information for a particular rental
-function getRentalInfo(req, res, next){
+function getRentalDetails(req, res, next){
 	domain_name = req.params.domain_name;
 	rental_id = req.params.rental_id || false;
 	
@@ -99,7 +81,7 @@ function getRentalInfo(req, res, next){
 	}
 	
 	//doesnt matter if its a rental id or not
-	Listing.getListing(domain_name, rental_id, function(result){
+	Listing.getRentalDetails(domain_name, rental_id, function(result){
 		if (result.state == "success"){
 			res.jsonp(result.info);
 		}
@@ -114,7 +96,7 @@ function postRental(req, res, next){
 	listing_id = req.params.listing
 	events = req.body.events;
 	user_id = req.user.id;
-	
+		
 	//check if listing id is legit
 	if (parseFloat(listing_id) != listing_id >>> 0){
 		req.session.message = "Invalid listing!";
@@ -127,7 +109,13 @@ function postRental(req, res, next){
 		res.redirect("/");
 	}
 	
-	//check if event info is legit
+	//check if events even exist
+	else if (!events){
+		req.session.message = "Invalid date!";
+		res.redirect("/");
+	}
+	
+	//check if all the event info are legit dates
 	else if (events){
 		for (var x = 0; x < events.length; x++){
 			events[x].start = new Date(events[x].start);
@@ -139,13 +127,15 @@ function postRental(req, res, next){
 		}
 	}
 	
-	//all gucci
-	Listing.newRental(listing_id, events, req.user, function(result){
+	if (events){
+		//all gucci
+		Listing.newRental(listing_id, events, req.user, function(result){
 		if (result.state == "success"){
-			res.jsonp(result.eventStates);
-		}
-		else {
-			res.status(404).send('Not found');
-		}
-	});
+				res.jsonp(result.eventStates);
+			}
+			else {
+				res.status(404).send('Not found');
+			}
+		});
+	}
 }

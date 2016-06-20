@@ -1,5 +1,7 @@
 // set up paths
 module.exports = function(app, db, passport, io){
-	require('./account.js')(app, db, passport);
-	require('./listings.js')(app, db, passport);
+	var auth = require('./auth.js').auth(db, passport);
+	var auth = require('./auth.js');
+	require('./account.js')(app, db, auth);
+	require('./listings.js')(app, db, auth);
 }

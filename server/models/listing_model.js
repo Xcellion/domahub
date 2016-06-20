@@ -63,7 +63,7 @@ listing_model.prototype.getInfo = function(listing_DB, db_where, db_where_equal,
 }
 
 //gets listings files info
-listing_model.prototype.getListing = function(domain_name, rental_id, callback){
+listing_model.prototype.getRentalDetails = function(domain_name, rental_id, callback){
 	listing_model = this;
 	
 	this.getInfo("listings", "domain_name", domain_name, false, function(result){
@@ -89,8 +89,15 @@ listing_model.prototype.getListing = function(domain_name, rental_id, callback){
 				listing_model.getInfo("rentals", "listing_id", listing_id, " ORDER BY date DESC LIMIT 1", function(result){
 					var now = new Date();
 					var startDate = new Date(result.info[0].date);
-					var latest_rental = result.info[0].rental_id;
 					
+					//is the rental the main rental? (for when multiple rentals use the same details)
+					if (result.info[0].same_details != null){
+						var latest_rental = result.info[0].same_details 
+					}
+					else {
+						var latest_rental = result.info[0].rental_id;
+					}
+
 					//not yet time!
 					if (startDate.getTime() > now.getTime()){
 						listing_model.sendDefaultRental(listing_id, callback);
@@ -164,7 +171,7 @@ listing_model.prototype.newRental = function(listing, events, user_id, callback)
 	var eventStates = [];
 
 	//get all rentals for the listing
-	listing_model.getInfo("rentals", "listing_id", listing, false, function(result){
+	listing_model.getInfo("rentals", "listing_id", listing, false, function(result){	
 		if (result.state == "success"){
 			//loop through all existing events in the database
 			for (var x = 0; x < result.info.length; x++){

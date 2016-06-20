@@ -15,7 +15,7 @@
 		<h1>w3bbi.</h1>
 		<% if (!auth) {%>
 			<div id="form_wrapper">
-				<form id="target" action="/" method="post">
+				<form id="target" action="/login" method="post">
 					<input name="email" placeholder="Email" type="text" id="email_input" autofocus>
 					<input name="password" placeholder="Password" type="password" id="pw_input">
 					<input id="submit" type="submit" value="Sign in">
@@ -26,6 +26,8 @@
 			</div>
 		<% } else {%>
 			<p id="sub_message">Welcome!</p>
+			<p>Logged in: <%= auth.email %></p>
+			<p><a href="/logout">Log Out</a></p>
 		<% } %>
 		
 		<% if (message) {%>

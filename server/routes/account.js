@@ -6,42 +6,28 @@ var	account_model = require('../models/account_model.js'),
 	Account,
 	Passport;
 
-module.exports = function(app_pass, db, pp){
+module.exports = function(app_pass, db, auth){
 	app = app_pass;
 	database = db;
-	Passport = pp;
 	
 	Account = new account_model(database);
 	Listing = new listing_model(database, Account);
 	
-	app.get("/", function(req, res, next){
-		console.log("Checking if user is authenticated...");
-		if (req.isAuthenticated()){
-			delete req.user.password;
-			console.log("Authenticated!");
-			req.auth = true;
-			return next();
-		}
-		else {
-			console.log("User is not authenticated");
-			req.auth = false;
-			return next();
-		}
-	}, mainPage);
-	
-	//checks if the user is logged in before running anything
+	//function to check if logged in
+	isLoggedIn = auth.isLoggedIn;
+
+	//default page
+	app.get("/", mainPage);
 	app.get('/profile', isLoggedIn, mainPage);
+	app.get('/login', isLoggedIn);
 	app.get('/logout', isLoggedIn, logout);
 	app.get('/signup', signup);
 	
-	//create a new account
-	app.post('/signup', signupPost);
-	
-	//login to existing account
-	app.post('/', loginPost);
+	app.post('/signup', auth.signupPost);
+	app.post('/login', auth.loginPost);
 }
 
-//display main page with everything
+//display main page with all listings
 function mainPage(req, res, next){
 	message = req.session.message || "Successfully logged in!";
 	Listing.getAllListings(function(result){
@@ -53,20 +39,6 @@ function mainPage(req, res, next){
 			});
 		}
 	});
-}
-
-//make sure user is logged in before doing anything
-function isLoggedIn(req, res, next) {
-	//if user is authenticated in the session, carry on
-	if (req.isAuthenticated()){
-		delete req.user.password;
-		console.log("Authenticated!");
-		return next();
-	}
-	else {
-		//if they aren't redirect them to the home page
-		res.redirect('/');
-	}
 }
 
 //goes to profile
@@ -82,8 +54,14 @@ function profile(req, res){
 function logout(req, res) {
 	console.log("Logging out");
 	req.logout();
-	//redirect to home page
-	res.redirect('/');
+	
+	//check if theres a page to redirect back to, or go back to home page
+	if (req.session.redirectTo){
+		res.redirect(req.session.redirectTo);
+	}
+	else {
+		res.redirect('/');
+	}
 };
 
 //sign up for a new account
@@ -91,50 +69,4 @@ function signup(req, res){
 	var message = req.session.message || "";
 	req.session.message = "";
 	res.render("signup.ejs", { message: message});
-};
-
-function signupPost(req, res, next){
-	Passport.authenticate('local-signup', {
-		successRedirect : '/', // redirect to main page
-		failureRedirect : '/signup', // redirect back to the signup page if there is an error
-	}, function(err, user, info){
-		if (!user){
-			req.session.message = info.message;
-			return res.redirect('/signup');
-		}
-		req.logIn(user, function(err) {
-		  if (err) {
-			req.session.message = "Error";
-			return next(err);
-		  }
-
-		  // set the message
-		  req.session.message = "Logged in successfully!";
-		  return res.redirect('/');
-		});
-	})(req, res, next);
-};
-
-function loginPost(req, res, next){
-	Passport.authenticate('local-login', {
-		successRedirect : '/', // redirect back to main page
-		failureRedirect : '/', // redirect back to the signup page if there is an error
-	}, function(err, user, info){
-		if (!user && info){
-			req.session.message = info.message;
-			var message = req.session.message || "";
-			req.session.message = "";
-			return res.render('index.ejs', { message: message} );
-		}
-		req.logIn(user, function(err) {
-		  if (err) {
-			req.session.messages = "Error";
-			return next(err);
-		  }
-
-		  // set the message
-		  req.session.messages = "Login successfully";
-		  return res.redirect('/');
-		});
-	})(req, res, next);
 };

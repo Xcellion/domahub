@@ -26,7 +26,16 @@
 				<p>Logged in: <%= user.email %></p>
 				<p><a href="/logout">Log Out</a></p>
 			<% } else {%>
-				<a href="/">Log in</a>
+				<div id="form_wrapper">
+				<form id="target" action="/login" method="post">
+					<input name="email" placeholder="Email" type="text" id="email_input" autofocus>
+					<input name="password" placeholder="Password" type="password" id="pw_input">
+					<input id="submit" type="submit" value="Sign in">
+				</form>
+				<div id="signup_wrapper">
+					<a id="signup" href="/signup">Create an account</a>
+				</div>
+			</div>
 			<% } %>
 			<a href="/">Home</a>
 			<table>

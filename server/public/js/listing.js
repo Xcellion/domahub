@@ -38,18 +38,26 @@ $(document).ready(function() {
 	}
 	
 	$("#listing_form").click(function(e){
-		var allevents = $('#calendar').fullCalendar('clientEvents');
 		e.preventDefault();
-		
-		minEvents = [];
-		for (var x = 0; x < allevents.length; x++){
+		submitRentals();
+	});
+});
+
+function submitRentals(){
+	var allevents = $('#calendar').fullCalendar('clientEvents');
+	minEvents = [];
+	for (var x = 0; x < allevents.length; x++){
+		if (!allevents[x].other){
 			minEvents.push({
 				start: allevents[x].start._d,
 				end: allevents[x].end._d,
 				_id: allevents[x]._id
 			});
 		}
-		
+	}
+	
+	//client side check if authenticated
+	if (user){
 		$.ajax({
 			type: "POST",
 			url: "/listing/" + info.id + "/rent",
@@ -57,8 +65,11 @@ $(document).ready(function() {
 		}).done(function(data){
 			console.log(data);
 		});
-	});
-});
+	}
+	else {
+		console.log('log in');
+	}
+}
 
 var mouseDownJsEvent;
 var mouseDownCalEvent;
