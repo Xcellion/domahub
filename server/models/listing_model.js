@@ -56,81 +56,100 @@ listing_model.prototype.getInfo = function(listing_DB, db_where, db_where_equal,
 		else {
 			callback({
 				"state": "error",
-				"description": result
+				"info": result
 			});
 		}
 	}, [listing_DB, db_where, db_where_equal]);
 }
 
 //gets listings files info
-listing_model.prototype.getRentalDetails = function(domain_name, rental_id, callback){
+listing_model.prototype.getListingRental = function(domain_name, callback){
 	listing_model = this;
 	
 	this.getInfo("listings", "domain_name", domain_name, false, function(result){
 		//domain exists!
 		if (result.state == "success"){
 			listing_id = result.info[0].id;
-			
-			if (rental_id){
-				listing_model.getInfo("rental_details", "rental_id", rental_id, false, function(result){
-					if (result.state == "success"){
-						callback({
-							state: "success",
-							info: result.info
-						});
-					}
-					else {
-						listing_model.sendDefaultRental(listing_id, callback);
-					}
-				});
-			}
-			//no rental ID provided, grab current one
-			else {
-				listing_model.getInfo("rentals", "listing_id", listing_id, " ORDER BY date DESC LIMIT 1", function(result){
-					var now = new Date();
-					var startDate = new Date(result.info[0].date);
-					
-					//is the rental the main rental? (for when multiple rentals use the same details)
-					if (result.info[0].same_details != null){
-						var latest_rental = result.info[0].same_details 
-					}
-					else {
-						var latest_rental = result.info[0].rental_id;
-					}
 
-					//not yet time!
-					if (startDate.getTime() > now.getTime()){
-						listing_model.sendDefaultRental(listing_id, callback);
-					}
-					//rented!
-					else if (startDate.getTime() + result.info[0].duration > now.getTime()){
-						listing_model.getInfo("rental_details", "rental_id", latest_rental, false, function(result){
-							if (result.state == "success"){
-								callback({
-									state: "success",
-									info: result.info
-								});
-							}
-							else {
-								listing_model.sendDefaultRental(listing_id, callback);
-							}
-						});
-					}
-					//last rental expired!
-					else {
-						listing_model.sendDefaultRental(listing_id, callback);
-					}
-				});
-			}
+			listing_model.getInfo("rentals", "listing_id", listing_id, " ORDER BY date DESC LIMIT 1", function(result){
+				var now = new Date();
+				var rental_info = result.info[0];
+				var startDateJS = new Date(rental_info.date);
+				var type = rental_info.type;
+				
+				//is the rental the main rental? (for when multiple rentals use the same details)
+				if (result.info[0].same_details != null){
+					var latest_rental = result.info[0].same_details 
+				}
+				else {
+					var latest_rental = result.info[0].rental_id;
+				}
+
+				//not yet time!
+				if (startDateJS.getTime() > now.getTime()){
+					listing_model.sendDefaultRental(listing_id, callback);
+				}
+				//rented!
+				else if (startDateJS.getTime() + result.info[0].duration > now.getTime()){
+					listing_model.getInfo("rental_details", "rental_id", latest_rental, false, function(result){
+						if (result.state == "success"){
+							callback({
+								state: "success",
+								rental_info: rental_info,
+								rental_details: result.info
+							});
+						}
+						else {
+							listing_model.sendDefaultRental(listing_id, callback);
+						}
+					});
+				}
+				//last rental expired!
+				else {
+					listing_model.sendDefaultRental(listing_id, callback);
+				}
+			});
 		}
 		//domain does not exist
 		else {
 			callback({
 				state : "error",
-				description : "domain does not exist"
+				description : "Domain does not exist"
 			});
 		}
 	})
+}
+
+listing_model.prototype.getRental = function(rental_id, callback){
+	listing_model = this;
+
+	listing_model.getInfo("rentals", "rental_id", rental_id, false, function(result){
+		if (result.state == "success"){
+			rental_info = result.info[0];
+			
+			listing_model.getInfo("rental_details", "rental_id", rental_id, false, function(result){
+				if (result.state == "success"){
+					callback({
+						state: "success",
+						rental_info: rental_info,
+						rental_details: result.info
+					});
+				}
+				else {
+					callback({
+						state: "error",
+						description: "Rental details dont exist!"
+					});
+				}
+			});
+		}
+		else {
+			callback({
+				state: "error",
+				description: "Rental doesnt exist!"
+			});
+		}
+	});
 }
 
 //assumes listing exists
@@ -141,17 +160,19 @@ listing_model.prototype.sendDefaultRental = function(listing_id, callback){
 		//success!
 		if (result.state == "success"){
 			default_rental = result.info[0].rental_id;
+			var rental_info = result.info[0]
 			listing_model.getInfo("rental_details", "rental_id", default_rental, false, function(result){
 				if (result.state == "success"){
 					callback({
 						state: "success",
-						info: result.info
+						rental_info: rental_info,
+						rental_details: result.info
 					});
 				}
 				else {
 					callback({
 						state: "error",
-						description: "there is no rental info"
+						description: "There is no rental info!"
 					});
 				}
 			});
@@ -159,7 +180,7 @@ listing_model.prototype.sendDefaultRental = function(listing_id, callback){
 		else {
 			callback({
 				state: "error",
-				description: "default rental could not be found"
+				description: "Default rental could not be found!"
 			});
 		}
 	});
@@ -172,7 +193,7 @@ listing_model.prototype.newRental = function(listing, events, user_id, callback)
 
 	//get all rentals for the listing
 	listing_model.getInfo("rentals", "listing_id", listing, false, function(result){	
-		if (result.state == "success"){
+		if (result.info.length){
 			//loop through all existing events in the database
 			for (var x = 0; x < result.info.length; x++){
 				//if not any of the default ones
@@ -213,10 +234,12 @@ listing_model.prototype.newRental = function(listing, events, user_id, callback)
 				});
 			}
 		}
+		
+		//no rentals exist for that listing!
 		else {
 			callback({
 				state: "error",
-				description: "There is no rental info"
+				description: "There is no rental info!"
 			});
 		}
 	});

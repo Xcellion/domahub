@@ -37,12 +37,13 @@ $(document).ready(function() {
 		$('#calendar').fullCalendar('renderEvent', eventData, true);
 	}
 	
-	$("#listing_form").click(function(e){
+	$("#listing_form").submit(function(e){
 		e.preventDefault();
 		submitRentals();
 	});
 });
 
+//function to submit new rental info
 function submitRentals(){
 	var allevents = $('#calendar').fullCalendar('clientEvents');
 	minEvents = [];
@@ -61,13 +62,13 @@ function submitRentals(){
 		$.ajax({
 			type: "POST",
 			url: "/listing/" + info.id + "/rent",
-			data: {events: minEvents}
+			data: {events: minEvents, type: $("input[type='radio'][name='type']:checked").val()}
 		}).done(function(data){
 			console.log(data);
 		});
 	}
 	else {
-		console.log('log in');
+		console.log('log in pls');
 	}
 }
 

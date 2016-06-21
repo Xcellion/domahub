@@ -2,7 +2,7 @@
   "name": "w3bbi",
   "version": "0.0.1",
   "description": "A domain rental marketplace",
-  "main": "server.js",
+  "main": "server/server.js",
   "dependencies": {
     "body-parser": "1.8.4",
     "express": "4.8.8",
