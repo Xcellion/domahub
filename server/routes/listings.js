@@ -18,16 +18,17 @@ module.exports = function(app_pass, db, auth, e){
 	//function to check if logged in
 	isLoggedIn = auth.isLoggedIn;
 
-	app.get('/listing/:domain_name', getListing);
-	app.get('/listing/:domain_name/:rental_id', getRentalPage);
+	app.get('/listing/:domain_name', getListingAccount);
 	app.get('/rental_info/:domain_name/:rental_id', getRental);
 	app.get('/rental_info/:domain_name', getListingRental);
-	
-	app.post('/listing/:listing/rent', isLoggedIn, postRental);
+	app.get('/listing/:domain_name/:rental_id', isLoggedIn, getRentalPage);
+
+	app.post('/listing/:domain_name/rent', isLoggedIn, postRental);
+	app.post('/listing/:domain_name/:rental_id', isLoggedIn, postRentalPage);
 }
 
 //gets the listing info
-function getListing(req, res, next) {
+function getListingAccount(req, res, next) {
 	domain_name = req.params.domain_name
 	
 	//we dont accept listing ids, only domain names
@@ -36,46 +37,21 @@ function getListing(req, res, next) {
 	}
 	
 	else {
-		//get basic listing info
-		Listing.getInfo("listings", "domain_name", domain_name, false, function(result){
-			if (result.state == "success" && result.info){
-				info = result.info[0];
-				
-				//get all rental info for that listing that is not default
-				Listing.getInfo("rentals", "listing_id", result.info[0].id, ' AND date != "0000-00-00 00:00:00"', function(result){
-					if (result.state == "success"){
-						info.rentals = result.info;
-						res.render("listing.ejs", {
-							user: req.user,
-							info: info
-						});
-					}
-					else {
-						//no existing rentals!
-						if (result.description.length == 0){
-							info.rentals = result.description;
-							res.render("listing.ejs", {
-								user: req.user,
-								info: info
-							});
-						}
-						else {
-							error.errorMessage(req, res, "Rental listing error!");
-						}
-					}
+		var new_listing_info = req.session.new_listing_info || false;
+	
+		Listing.getListingAccount(domain_name, function(result){
+			if (result.state == "success"){
+				res.render("listing.ejs", {
+					user: req.user,
+					listing_info: result.listing_info,
+					new_listing_info: new_listing_info
 				});
 			}
-			//listing doesnt exist
 			else {
-				error.errorMessage(req, res, "No such listing exists!");
+				error.errorMessage(req, res, result.description);
 			}
 		});
 	}
-}
-
-//gets the page to edit rental info
-function getRentalPage(req, res, next){
-
 }
 
 //helper function to send rental information
@@ -105,7 +81,7 @@ function getRental(req, res, next) {
 	}
 
 	else {
-		Listing.getRental(rental_id, function(result){
+		Listing.getRental(rental_id, false, function(result){
 			sendRentalInfo(req, res, result);
 		});
 	}
@@ -114,24 +90,83 @@ function getRental(req, res, next) {
 //gets the current rental details and information for a listing
 function getListingRental(req, res, next){
 	domain_name = req.params.domain_name;
+			
+	//check if domain name is legit
+	if (parseFloat(domain_name) === domain_name >>> 0){
+		error.errorMessage(req, res, "Invalid listing!");
+	}
 	
 	//get the current rental for the listing
-	Listing.getListingRental(domain_name, function(result){
+	Listing.getListingRental(domain_name, false, function(result){
 		sendRentalInfo(req, res, result);
 	});
+}
+
+//gets the page to edit rental info
+function getRentalPage(req, res, next){
+	domain_name = req.params.domain_name
+	rental_id = req.params.rental_id
+	new_listing_info = req.session.new_listing_info;
+
+	//we dont accept listing ids, only domain names
+	if (parseFloat(domain_name) === domain_name >>> 0){
+		error.errorMessage(req, res, "No such listing exists!");
+	}
+	
+	//redirect to listing page if you just navigate to URL
+	if (!new_listing_info && rental_id == "new"){
+		res.redirect("/listing/" + domain_name);
+	}
+	//we're creating a new rental
+	else if (parseFloat(rental_id) != rental_id >>> 0){
+		Listing.getListingAccount(domain_name, function(result){
+			var listing_info = result.listing_info;
+			
+			if (result.state == "success"){
+				res.render("rental.ejs", {
+					user: req.user,
+					listing_info: listing_info,
+					rental_info: new_listing_info.rental_info,
+					rental_details: "",
+					new_listing_info: new_listing_info
+				});
+			}
+			else {
+				error.errorMessage(req, res, result.description);
+			}
+		});
+	}
+	//or editing an existing one
+	else {
+		delete req.session.new_listing_info;
+		Listing.getListingRental(domain_name, rental_id, function(result){
+			if (result.state == "success"){
+				res.render("rental.ejs", {
+					user: req.user,
+					listing_info: result.listing_info,
+					rental_info: result.rental_info,
+					rental_details: result.rental_details,
+					new_listing_info: false
+				});
+			}
+			else {
+				error.errorMessage(req, res, result.description);
+			}
+		});
+	}
 }
 
 //create a new rental for a listing
 function postRental(req, res, next){
 	user_id = req.user.id;
-	listing_id = req.params.listing
+	domain_name = req.params.domain_name
 	events = req.body.events;
 	type = req.body.type;
 	
 	checks = true;
 		
 	//check if listing id is legit
-	if (parseFloat(listing_id) != listing_id >>> 0){
+	if (parseFloat(domain_name) === domain_name >>> 0){
 		checks = false;
 		error.errorMessage(req, res, "Invalid listing!");
 	}
@@ -169,13 +204,49 @@ function postRental(req, res, next){
 	
 	if (checks){
 		//all gucci
-		Listing.newRental(listing_id, events, req.user, function(result){
+		Listing.newRental(domain_name, events, req.user, function(result){
 			if (result.state == "success"){
-				res.jsonp(result.eventStates);
+				//check if any are unavailable
+				var unavailable = [];
+				for (var x = 0; x < result.eventStates.length; x++){
+					if (!result.eventStates[x].availability){
+						unavailable.push(result.eventStates[x]);
+					}
+				}
+				
+				//some were unavailable
+				if (unavailable.length){
+					res.send({
+						unavailable: unavailable
+					});
+				}
+				//all good!
+				else {
+					var new_listing_info = {
+						user: req.user,
+						listing_info: result.listing_info,
+						rental_info: result.eventStates,
+						type: type
+					}
+					req.session.new_listing_info = new_listing_info;
+					res.send({
+						redirect: "/listing/" + domain_name + "/new"
+					});
+				}
 			}
 			else {
-				error.errorMessage(req, res, "Rent failed!");
+				error.errorMessage(req, res, result.description);
 			}
 		});
 	}
 }
+
+//function to edit a rental or create a new rental
+function postRentalPage(req, res, next){
+	user_id = req.user.id;
+	domain_name = req.params.domain_name
+	events = req.body.events;
+	type = req.body.type;
+	
+	
+};

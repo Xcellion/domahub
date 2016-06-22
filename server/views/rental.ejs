@@ -10,11 +10,12 @@
 		<script src="/js/jquery/jquery.js" type="text/javascript"></script>
 		<script src="/js/moment/moment.min.js" type="text/javascript"></script>
 		<script src="/js/fullcalendar.min.js" type="text/javascript"></script>
-		<script src="/js/listing.js" type="text/javascript"></script>
 		<script type="text/javascript">
-			var user = <% if(locals.user){ %><%-JSON.stringify(user)%><% }else{ %>""<% } %>;
-			var listing_info = <% if(locals.listing_info){ %><%-JSON.stringify(listing_info)%><% }else{ %>""<% } %>;
-			var new_listing_info = <% if(locals.new_listing_info){ %><%-JSON.stringify(new_listing_info)%><% }else{ %>""<% } %>;
+			var user = <% if(user){ %><%-JSON.stringify(user)%><% }else{ %>""<% } %>;
+			var listing_info = <% if(listing_info){ %><%-JSON.stringify(listing_info)%><% }else{ %>""<% } %>;
+			var rental_info = <% if(rental_info){ %><%-JSON.stringify(rental_info)%><% }else{ %>""<% } %>;
+			var rental_details = <% if(rental_details){ %><%-JSON.stringify(rental_details)%><% }else{ %>""<% } %>;
+			var new_listing_info = <% if(new_listing_info){ %><%-JSON.stringify(rental_details)%><% }else{ %>""<% } %>;
 		</script>
 		<script src="/js/profile.js" type="text/javascript"></script>
 		<link rel="icon" type="image/ico" href="/images/favicon.ico">
@@ -39,6 +40,22 @@
 			</div>
 			<% } %>
 			<a href="/">Home</a>
+			<a href="/listing/<%=listing_info.domain_name%>">Back to calendar</a>
+			
+			<div>Rental Information</div>
+			<% for (var x = 0; x < rental_info.length; x++) { %>
+				<div>Start: <%=rental_info[x].start %></div>
+				<div>End: <%=rental_info[x].end %></div>
+			<% } %>
+			
+			<div>Rental Details:</div>
+			<% if (rental_details) { %>
+				
+			<% } else {%>
+				
+			<% } %>
+			
+			<div>Listing Information:</div>
 			<table>
 				<th>Date Created</th>
 				<th>Domain Name</th>
@@ -55,16 +72,6 @@
 					<td><%= listing_info.set_price %></td>  
 				</tr>                                   
 			</table>
-
-			<div id="form_wrapper">
-				<form id="listing_form">
-					<input name="type" value="0" type="radio" class="type_input" id="radio_0_input">
-					<input name="type" value="1" type="radio" class="type_input" id="radio_1_input">
-					<input id="submit" type="submit" value="Rent now!">
-				</form>
-			</div>
-			
-			<div id="calendar"></div>
 			
 		</div>
 

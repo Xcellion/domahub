@@ -25,16 +25,29 @@ $(document).ready(function() {
     })
 	
 	//create pre-existing rentals
-	for (var x = 0; x < info.rentals.length; x++){
-		var start = new Date(info.rentals[0].date + " UTC");
+	for (var x = 0; x < listing_info.rentals.length; x++){
+		var start = new Date(listing_info.rentals[x].date + " UTC");
+		var end = new Date(start.getTime() + listing_info.rentals[x].duration + " UTC");
 		var eventData = {
-			title: info.rentals[x].account_id,
+			title: listing_info.rentals[x].account_id,
 			start: start,
-			end: new Date(start.getTime() + 86400000),
+			end: end,
 			color: "red",
 			other: true
 		};
 		$('#calendar').fullCalendar('renderEvent', eventData, true);
+	}
+	
+	//if rental has yet to be submitted
+	if (new_listing_info){
+		for (var y = 0; y < new_listing_info.rental_info.length; y++){
+			var eventData = {
+				title: listing_info.fullname,
+				start: new_listing_info.rental_info[y].start,
+				end: new_listing_info.rental_info[y].end
+			};
+			$('#calendar').fullCalendar('renderEvent', eventData, true);
+		}
 	}
 	
 	$("#listing_form").submit(function(e){
@@ -61,10 +74,18 @@ function submitRentals(){
 	if (user){
 		$.ajax({
 			type: "POST",
-			url: "/listing/" + info.id + "/rent",
+			url: "/listing/" + listing_info.domain_name + "/rent",
 			data: {events: minEvents, type: $("input[type='radio'][name='type']:checked").val()}
 		}).done(function(data){
-			console.log(data);
+			if (data.unavailable){
+				for (var x = 0; x < data.unavailable.length; x++){
+					console.log(data.unavailable[x] + " is unavailable");
+					$('#calendar').fullCalendar('removeEvents', data.unavailable[x]._id);
+				}
+			}
+			else if (data.redirect){
+				window.location = data.redirect;
+			}
 		});
 	}
 	else {
