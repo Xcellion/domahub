@@ -57,10 +57,13 @@ function getListingAccount(req, res, next) {
 //helper function to send rental information
 function sendRentalInfo(req, res, result){
 	if (result.state == "success"){
-		// Website you wish to allow to connect
-		res.setHeader('Access-Control-Allow-Origin', 'http://imsorryimdumb.com');
-		res.setHeader('Access-Control-Allow-Origin', 'http://youreacutie.com');
-
+		
+		var allowedOrigins = ['http://www.youreacutie.com', 'http://imsorryimdumb.com'];
+		var origin = req.headers.origin;
+		if(allowedOrigins.indexOf(origin) > -1){
+			res.setHeader('Access-Control-Allow-Origin', origin);
+		}
+		
 		switch (result.rental_info.type){
 			case 0:
 			    res.setHeader('Content-Type', 'application/json');
