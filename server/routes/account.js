@@ -54,14 +54,8 @@ function profile(req, res){
 function logout(req, res) {
 	console.log("Logging out");
 	req.logout();
-	
-	//check if theres a page to redirect back to, or go back to home page
-	if (req.session.redirectTo){
-		res.redirect(req.session.redirectTo);
-	}
-	else {
-		res.redirect('/');
-	}
+	console.log(req.session);
+	res.redirect('/');
 };
 
 //sign up for a new account

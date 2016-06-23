@@ -27,7 +27,7 @@ $(document).ready(function() {
 	//create pre-existing rentals
 	for (var x = 0; x < listing_info.rentals.length; x++){
 		var start = new Date(listing_info.rentals[x].date + " UTC");
-		var end = new Date(start.getTime() + listing_info.rentals[x].duration + " UTC");
+		var end = new Date(start.getTime() + listing_info.rentals[x].duration);
 		var eventData = {
 			title: listing_info.rentals[x].account_id,
 			start: start,
@@ -62,9 +62,12 @@ function submitRentals(){
 	minEvents = [];
 	for (var x = 0; x < allevents.length; x++){
 		if (!allevents[x].other){
+			var start = new Date(allevents[x].start._d);
+			var offset = start.getTimezoneOffset();
 			minEvents.push({
 				start: allevents[x].start._d,
 				end: allevents[x].end._d,
+				offset: offset,
 				_id: allevents[x]._id
 			});
 		}
@@ -79,8 +82,8 @@ function submitRentals(){
 		}).done(function(data){
 			if (data.unavailable){
 				for (var x = 0; x < data.unavailable.length; x++){
-					console.log(data.unavailable[x] + " is unavailable");
-					$('#calendar').fullCalendar('removeEvents', data.unavailable[x]._id);
+					console.log("That time slot is unavailable");
+					$('#calendar').fullCalendar('removeEvents', data.unavailable[x].id);
 				}
 			}
 			else if (data.redirect){
@@ -259,7 +262,7 @@ function createEvent(start, end){
 		{
 			//event being created is fully overlapped by existing event, so dont create anything new
 			if (checkFullOverlap(start._d, end - start, eventitem.start._d, eventitem.end - eventitem.start)){
-				//console.log('new event is not needed');
+				console.log('new event is not needed');
 				eventEncompassed = true;
 				//check if new event is in multiples of days (i.e. pressed the all-day button)
 				if ((start - end) % 86400000 === 0){
@@ -268,19 +271,20 @@ function createEvent(start, end){
 			}
 			//check if existing event is fully overlapped by event being created
 			else if (checkFullOverlap(eventitem.start._d, eventitem.end - eventitem.start, start._d, end - start)){
-				//console.log('full overlap');
+				console.log(eventitem.end, eventitem.start, start._d, end - start);
+				console.log('full overlap');
 				fullyOverlappingEvents.push(eventitem);
 			}
 			//overlaps something, just not completely
 			else if (checkOverlap(start._d, end - start, eventitem.start._d, eventitem.end - eventitem.start)){
-				//console.log('partial overlap');
+				console.log('partial overlap');
 				overlappingEvents.push(eventitem);
 			}
 			
 			//no overlaps, check for merges
 			if (!eventitem.other && !eventEncompassed && (moment(start).format('YYYY-MM-DD HH:mm') == moment(eventitem.end).format('YYYY-MM-DD HH:mm')
 				|| moment(end).format('YYYY-MM-DD HH:mm') == moment(eventitem.start).format('YYYY-MM-DD HH:mm'))){
-				//console.log('merge');
+				console.log('merge');
 				//if start time of new event (2nd slot) is end time of existing event (1st slot)
 				//i.e. if new event is below any existing events
 				if (moment(start).format('YYYY-MM-DD HH:mm') == moment(eventitem.end).format('YYYY-MM-DD HH:mm'))
@@ -392,12 +396,12 @@ function createEvent(start, end){
 		for (var x = 0; x < removeEvents.length; x++){
 			//remove the entire chunk of the full existing event from the newly created event
 			if (removeEvents[x].full){
-				//console.log('full existing removed');
+				console.log('full existing removed');
 				removeEventTimeSlot(newEvent[0], removeEvents[x], removeEvents[x]);
 			}
 			//remove only the partially overlapped portion
 			else {
-				//console.log('partial existing removed');
+				console.log('partial existing removed');
 				if (removeEvents[x].bottom){
 					removeEventTimeSlot(newEvent[0], {start: start}, removeEvents[x]);
 				}

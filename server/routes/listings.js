@@ -156,15 +156,10 @@ function getRentalPage(req, res, next){
 	}
 }
 
-//create a new rental for a listing
-function postRental(req, res, next){
-	user_id = req.user.id;
-	domain_name = req.params.domain_name
-	events = req.body.events;
-	type = req.body.type;
+//helper function to do some checks for rental posting
+function rentalChecks(domain_name, user_id, type, events){
+	var bool = true;
 	
-	checks = true;
-		
 	//check if listing id is legit
 	if (parseFloat(domain_name) === domain_name >>> 0){
 		checks = false;
@@ -202,9 +197,19 @@ function postRental(req, res, next){
 		}
 	}
 	
-	if (checks){
+	return bool;
+}
+
+//create a new rental for a listing
+function postRental(req, res, next){
+	domain_name = req.params.domain_name;
+	user_id = req.user.id;
+	type = req.body.type;
+	events = req.body.events;
+
+	if (rentalChecks(domain_name, user_id, type, events)){
 		//all gucci
-		Listing.newRental(domain_name, events, req.user, function(result){
+		Listing.checkRentalTime(domain_name, events, req.user, function(result){
 			if (result.state == "success"){
 				//check if any are unavailable
 				var unavailable = [];
@@ -243,10 +248,19 @@ function postRental(req, res, next){
 
 //function to edit a rental or create a new rental
 function postRentalPage(req, res, next){
+	domain_name = req.params.domain_name;
 	user_id = req.user.id;
-	domain_name = req.params.domain_name
+	rental_data = req.body.rental_data;
 	events = req.body.events;
-	type = req.body.type;
 	
-	
+	if (rentalChecks(domain_name, user_id, type, events)){
+		Listing.newRental(domain_name, user_id, rental_data, events, function(result){
+			if (result.state == "success"){
+				delete req.session.new_listing_info;
+			}
+			else {
+				error.errorMessage(req, res, result.description);
+			}
+		});
+	}
 };
