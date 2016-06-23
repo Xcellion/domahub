@@ -239,31 +239,40 @@ listing_model.prototype.getRental = function(rental_id, listing_info, callback){
 listing_model.prototype.sendCurrentRental = function (listing_id, callback){
 	listing_model = this;
 	
-	listing_model.getInfo("rentals", "listing_id", listing_id, "SELECT * from ?? WHERE ?? = ? ORDER BY date DESC LIMIT 1", function(result){
+	listing_model.getInfo("rentals", "listing_id", listing_id, "SELECT * from ?? WHERE ?? = ? AND duration != 0", function(result){
 		var now = new Date();
-		var rental_info = result.info[0];
-		var startDateJS = new Date(rental_info.date);
-		var type = rental_info.type;
+		now = toUTC(now, now.getTimezoneOffset());
+		var rented = false;
 		
-		//is the rental the main rental? (for when multiple rentals use the same details)
-		if (result.info[0].same_details != null){
-			var latest_rental = result.info[0].same_details 
-		}
-		else {
-			var latest_rental = result.info[0].rental_id;
-		}
+		//loop through to see if any overlap
+		for (var x = 0; x < result.info.length; x++){
+			event_date = result.info[x].date + " UTC";
+			var existingStart = new Date(event_date);
 
-		//not yet time!
-		if (startDateJS.getTime() > now.getTime()){
-			listing_model.sendDefaultRental(listing_id, callback);
-		}
+			if (now.getTime() < existingStart.getTime() + result.info[x].duration
+				&& now.getTime() >= existingStart.getTime())
+			{
+				rented = result.info[x];
+				break;
+			}
+		};
+		
 		//rented!
-		else if (startDateJS.getTime() + result.info[0].duration > now.getTime()){
+		if (rented){
+				
+			//is the rental the main rental? (for when multiple rentals use the same details)
+			if (rented.same_details != null){
+				var latest_rental = rented.same_details;
+			}
+			else {
+				var latest_rental = rented.rental_id;
+			}
+		
 			listing_model.getInfo("rental_details", "rental_id", latest_rental, false, function(result){
 				if (result.state == "success"){
 					callback({
 						state: "success",
-						rental_info: rental_info,
+						rental_info: rented,
 						rental_details: result.info
 					});
 				}
@@ -272,7 +281,7 @@ listing_model.prototype.sendCurrentRental = function (listing_id, callback){
 				}
 			});
 		}
-		//last rental expired!
+		//no rentals!
 		else {
 			listing_model.sendDefaultRental(listing_id, callback);
 		}
@@ -318,12 +327,11 @@ listing_model.prototype.checkRentalTime = function(domain_name, events, user_id,
 	listing_model = this;
 	var eventStates = [];
 
-	db_query = "SELECT * from ?? INNER JOIN listings ON rentals.listing_id = listings.id WHERE ?? = ? "
+	db_query = "SELECT * from ?? INNER JOIN listings ON rentals.listing_id = listings.id WHERE ?? = ? AND duration != 0"
 
 	//get all rentals for the listing
 	listing_model.getInfo("rentals", "listings.domain_name", domain_name, db_query, function(result){
 		listing_id = result.info[0].listing_id;
-	
 		if (result.state == "success"){
 			//loop through all posted events
 			for (var y = 0; y < events.length; y++){
@@ -336,7 +344,7 @@ listing_model.prototype.checkRentalTime = function(domain_name, events, user_id,
 				for (var x = 0; x < result.info.length; x++){
 					
 					//make sure we dont check the default ones
-					if (result.info[x].date != "0000-00-00 00:00:00" || result.info[x].duration != 0){
+					if (result.info[x].date != "0000-00-00 00:00:00"){
 					
 						//UTC magic
 						var tempListing = result.info[x].date;
@@ -390,12 +398,12 @@ listing_model.prototype.checkRentalTime = function(domain_name, events, user_id,
 listing_model.prototype.newRental = function(domain_name, user_id, rental_data, events, callback){
 	listing_model = this;
 	var error = false;
-	
+
 	//first double check that the time is available
 	listing_model.checkRentalTime(domain_name, events, user_id, function(result){
 		var start = toUTC(events[0].start, events[0].offset);
 		var end = toUTC(events[0].end, events[0].offset);
-	
+		
 		if (result.state == "success"){
 			var insert = {
 				account_id: user_id,
@@ -480,7 +488,7 @@ listing_model.prototype.newRentalDetails = function(rental_id, rental_data, call
 				
 				values.push(tempValue);
 			}
-			
+						
 			listing_model.insertInfo("rental_details", keys, values, function(result){
 				if (result.state == "success"){
 					callback({

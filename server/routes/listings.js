@@ -157,30 +157,30 @@ function getRentalPage(req, res, next){
 }
 
 //helper function to do some checks for rental posting
-function rentalChecks(domain_name, user_id, type, events){
+function rentalChecks(req, res, domain_name, user_id, type, events){
 	var bool = true;
 	
 	//check if listing id is legit
 	if (parseFloat(domain_name) === domain_name >>> 0){
-		checks = false;
+		bool = false;
 		error.errorMessage(req, res, "Invalid listing!");
 	}
 	
 	//check if user id is legit
 	else if (parseFloat(user_id) != user_id >>> 0){
-		checks = false;
+		bool = false;
 		error.errorMessage(req, res, "Invalid user id!");
 	}
 	
 	//check if rental type is legit
 	else if (parseFloat(type) != type >>> 0){
-		checks = false;
+		bool = false;
 		error.errorMessage(req, res, "Invalid rental type!");
 	}
 	
 	//check if events even exist
 	else if (!events){
-		checks = false;
+		bool = false;
 		error.errorMessage(req, res, "Invalid date!");
 	}
 	
@@ -191,7 +191,7 @@ function rentalChecks(domain_name, user_id, type, events){
 			events[x].start = new Date(events[x].start);
 			events[x].end = new Date(events[x].end);
 			if (isNaN(events[x].start) || isNaN(events[x].end)){
-				checks = false;
+				bool = false;
 				error.errorMessage(req, res, "Invalid date!");
 			}
 		}
@@ -207,7 +207,7 @@ function postRental(req, res, next){
 	type = req.body.type;
 	events = req.body.events;
 
-	if (rentalChecks(domain_name, user_id, type, events)){
+	if (rentalChecks(req, res, domain_name, user_id, type, events)){
 		//all gucci
 		Listing.checkRentalTime(domain_name, events, req.user, function(result){
 			if (result.state == "success"){
@@ -253,7 +253,11 @@ function postRentalPage(req, res, next){
 	rental_data = req.body.rental_data;
 	events = req.body.events;
 	
-	if (rentalChecks(domain_name, user_id, type, events)){
+	//check if data is legit
+	if (rental_data.rental_details.length <= 0){
+		error.errorMessage(req, res, "Invalid user id!");
+	}
+	else if (rentalChecks(req, res, domain_name, user_id, type, events)){
 		Listing.newRental(domain_name, user_id, rental_data, events, function(result){
 			if (result.state == "success"){
 				delete req.session.new_listing_info;
