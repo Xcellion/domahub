@@ -59,10 +59,10 @@ function sendRentalInfo(req, res, result){
 	if (result.state == "success"){
 		switch (result.rental_info.type){
 			case 0:
-				res.jsonp(result.rental_details);
+			    res.setHeader('Content-Type', 'application/json');
+				res.json(result.rental_details);
 				break;
 			case 1:
-				console.log(result.rental_details[0].text_value);
 				res.writeHead(301,
 					  {Location: result.rental_details[0].text_value}
 					);
