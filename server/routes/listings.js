@@ -62,9 +62,11 @@ function sendRentalInfo(req, res, result){
 				res.jsonp(result.rental_details);
 				break;
 			case 1:
+				console.log(result.rental_details[0].text_value);
 				res.writeHead(301,
 					  {Location: result.rental_details[0].text_value}
 					);
+				res.end()
 				break;
 		}
 	}
