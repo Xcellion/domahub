@@ -57,23 +57,14 @@ function getListingAccount(req, res, next) {
 //helper function to send rental information
 function sendRentalInfo(req, res, result){
 	if (result.state == "success"){
-		
-		var allowedOrigins = ['http://www.youreacutie.com', 'http://www.imsorryimdumb.com'];
-		var origin = req.headers.origin;
-		if (allowedOrigins.indexOf(origin) > -1){
-			res.setHeader('Access-Control-Allow-Origin', origin);
-		}
+		res.setHeader('Content-Type', 'application/json');
 		
 		switch (result.rental_info.type){
 			case 0:
-			    res.setHeader('Content-Type', 'application/json');
 				res.json(result.rental_details);
 				break;
 			case 1:
-				res.writeHead(301,
-					  {Location: result.rental_details[0].text_value}
-					);
-				res.end()
+				res.json({location: result.rental_details[0].text_value});
 				break;
 		}
 	}
