@@ -62,7 +62,6 @@ function sendRentalInfo(req, res, result){
 		var origin = req.headers.origin;
 		if (allowedOrigins.indexOf(origin) > -1){
 			res.setHeader('Access-Control-Allow-Origin', origin);
-			console.log(origin);
 		}
 		
 		switch (result.rental_info.type){
