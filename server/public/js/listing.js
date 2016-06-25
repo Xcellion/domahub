@@ -29,7 +29,7 @@ $(document).ready(function() {
 		var start = new Date(listing_info.rentals[x].date + " UTC");
 		var end = new Date(start.getTime() + listing_info.rentals[x].duration);
 		var eventData = {
-			title: listing_info.rentals[x].account_id,
+			title: "Rented!",
 			start: start,
 			end: end,
 			color: "red",
