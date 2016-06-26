@@ -511,12 +511,17 @@ listing_model.prototype.newRentalDetails = function(rental_id, rental_info, rent
 			for (var x = 0; x < rental_details.length; x++){
 				var tempValue = [];
 				tempValue.push(rental_id);
+<<<<<<< HEAD
 				for (var y in rental_details[x]){
+=======
+				for (var y = 0; y < rental_details[x].length; y++){
+>>>>>>> 0921b342fda7570f59f7d441e92b0e015d6d164d
 					tempValue.push(rental_details[x][y]);
 				}
 				
 				values.push(tempValue);
 			}
+			console.log(tempValue);
 						
 			listing_model.insertInfo("rental_details", keys, values, function(result){
 				if (result.state == "success"){
