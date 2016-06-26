@@ -14,42 +14,54 @@ $(document).ready(function() {
 });
 
 //helper function to get rental details
-function rentalDetails(){
+function rentalData(){
 	var rental_details = [];
-	var detail = {
-		rental_key: "",
-		rental_value: ""
+	var rental_data = {
+		rental_details : rental_details
+	};
+
+	//new rental
+	if (new_listing_info){
+		rental_data.rental_info = new_listing_info;
+		switch (parseFloat(new_listing_info.type)){
+			case 0:
+				break;
+			case 1:
+				var detail = {
+					rental_key: "redirect",
+					rental_value: $("#url_input").val()
+				}
+				rental_details.push(detail);
+				break;
+		}
+	}
+	//editing rental
+	else {
+		rental_data.rental_info = rental_info;
+		$(".rental_pair").each(function(){
+			var rental_pair = [];
+			$(this).children(".rental_value").each(function(){
+				rental_pair.push($(this).html());
+			});
+			rental_details.push(rental_pair);
+		});
 	}
 	
-	switch (parseFloat(new_listing_info.type)){
-		case 0:
-			break;
-		case 1:
-			detail.rental_key = "redirect";
-			detail.rental_value = $("#url_input").val();
-			break;
-	}
-	rental_details.push(detail);
-	
-	return rental_details;
+	return rental_data;
 }
 
 //function to submit new rental info
 function submitRentals(){
 	//client side check if authenticated
-	if (user){
-		var rental_details = rentalDetails();
-		var rental_data = {
-			type: new_listing_info.type,
-			rental_details: rental_details
-		};
-		
+	 if (user){
+		var rental_data = rentalData();
+
 		$.ajax({
-			type: "POST",
-			url: "/listing/" + listing_info.domain_name + "/new",
+			type: "POST",	
+			url: window.location.pathname,
 			data: {
-				events: rental_info,
-				rental_data: rental_data
+				rental_info: rental_data.rental_info,
+				rental_details: rental_data.rental_details
 			}
 		}).done(function(data){
 			console.log(data);

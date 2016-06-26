@@ -43,6 +43,7 @@ require('./routes/routes.js')(app, db, passport, io);
 
 //404
 app.get('*', function(req, res){
+	console.log("Unable to find " + req.originalUrl);
 	console.log("404, not found!");
 	res.redirect('/');
 });

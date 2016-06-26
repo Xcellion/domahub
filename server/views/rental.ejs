@@ -93,6 +93,15 @@
 				<% } else {%>
 					<form id="listing_form" action="/listing/<%=listing_info.domain_name%>/<%=rental_info.rental_id%>" method="post">
 					<div>Rental Details:</div>
+					<% for (var x = 0; x < rental_details.length; x++){ %>
+						<div class="rental_pair">
+						<% for (var y in rental_details[x]) { %>
+							<% if (rental_details[x].hasOwnProperty(y) && (y == "text_key" || y == "text_value")) { %>
+								<div class="rental_value"><%= rental_details[x][y]%></div>
+							<% } %>
+						<% } %>
+						</div>
+					<% } %>
 				<% } %>
 			
 					<input id="submit" type="submit" value="Submit">

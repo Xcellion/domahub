@@ -257,22 +257,38 @@ function postRental(req, res, next){
 //function to edit a rental or create a new rental
 function postRentalPage(req, res, next){
 	domain_name = req.params.domain_name;
+	rental_id = req.params.rental_id;
 	user_id = req.user.id;
-	rental_data = req.body.rental_data;
-	events = req.body.events;
+	rental_info = req.body.rental_info;
+	rental_details = req.body.rental_details;
 	
 	//check if data is legit
-	if (rental_data.rental_details.length <= 0){
-		error.errorMessage(req, res, "Invalid user id!");
+	if (rental_details.length <= 0){
+		error.errorMessage(req, res, "Invalid rental data!");
 	}
-	else if (rentalChecks(req, res, domain_name, user_id, type, events)){
-		Listing.newRental(domain_name, user_id, rental_data, events, function(result){
-			if (result.state == "success"){
-				delete req.session.new_listing_info;
-			}
-			else {
-				error.errorMessage(req, res, result.description);
-			}
-		});
+	else {
+		//editing a rental
+		if (parseFloat(rental_id) == rental_id >>> 0){
+			Listing.setRentalDetails(rental_id, rental_info, rental_details, function(result){
+				console.log(result);
+				if (result.state == "success"){
+					
+				}
+				else {
+					
+				}
+			})
+		}
+		//new rental
+		else if (rental_id == "new" && rentalChecks(req, res, domain_name, user_id, type, rental_info)){
+			Listing.newRental(domain_name, user_id, rental_info, rental_details, function(result){
+				if (result.state == "success"){
+					delete req.session.new_listing_info;
+				}
+				else {
+					error.errorMessage(req, res, result.description);
+				}
+			});
+		}
 	}
 };

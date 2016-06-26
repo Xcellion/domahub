@@ -1,5 +1,4 @@
 //calendar logic
-
 $(document).ready(function() {
 	 $('#calendar').fullCalendar({
 		defaultView: "agendaWeek",
@@ -29,7 +28,7 @@ $(document).ready(function() {
 		var start = new Date(listing_info.rentals[x].date + " UTC");
 		var end = new Date(start.getTime() + listing_info.rentals[x].duration);
 		var eventData = {
-			title: listing_info.rentals[x].account_id,
+			title: "Rented!",
 			start: start,
 			end: end,
 			color: "red",
@@ -50,31 +49,78 @@ $(document).ready(function() {
 		}
 	}
 	
+	//check if theres a cookie for local events
+	if (document.cookie.match(new RegExp('local_events=([^;]+)'))){
+		var existing_events = read_cookie("local_events");
+		
+		for (var x = 0; x < existing_events.length; x++){
+			$('#calendar').fullCalendar('renderEvent', existing_events[x], true);
+		}
+	}
+	
+	//check if theres a cookie for the rental type
+	if (document.cookie.match(new RegExp('type=([^;]+)'))){
+		var type = read_cookie("type");
+		$("#radio_"+type+"_input").prop("checked", true);
+	}
+	
 	$("#listing_form").submit(function(e){
 		e.preventDefault();
 		submitRentals();
 	});
+	
+	$("#remove_events").click(function(e){
+		$('#calendar').fullCalendar('removeEvents', filterMine);
+		storeCookies("local_events");
+	});
+	
+	$("input[type='radio'][name='type']").click(function(e){
+		storeCookies("type");
+	});
 });
+
+//helper function to check if everything is legit
+function checkSubmit(allevents){
+	var bool = "success";
+	
+	if (!user){ bool = "Log in!"; }
+	else if (!$("input[type='radio'][name='type']:checked").val()) { bool = "Please select a rental type!"; }
+	else {
+		for (var x = 0; x < allevents.length; x++){
+			if (!allevents[x].other){
+				var start = new Date(allevents[x].start._d);
+				if (isNaN(start)){
+					bool = "Invalid dates selected!";
+					break;
+				}
+			}
+		}
+	}
+	
+	return bool;
+}
 
 //function to submit new rental info
 function submitRentals(){
 	var allevents = $('#calendar').fullCalendar('clientEvents');
-	minEvents = [];
-	for (var x = 0; x < allevents.length; x++){
-		if (!allevents[x].other){
-			var start = new Date(allevents[x].start._d);
-			var offset = start.getTimezoneOffset();
-			minEvents.push({
-				start: allevents[x].start._d,
-				end: allevents[x].end._d,
-				offset: offset,
-				_id: allevents[x]._id
-			});
-		}
-	}
+	var checks = checkSubmit(allevents);
 	
-	//client side check if authenticated
-	if (user){
+	//check if everything is legit
+	if (checks == "success"){
+	
+		minEvents = [];
+		for (var x = 0; x < allevents.length; x++){
+			if (!allevents[x].other){
+				var start = new Date(allevents[x].start._d);
+				var offset = start.getTimezoneOffset();
+				minEvents.push({
+					start: allevents[x].start._d,
+					end: allevents[x].end._d,
+					offset: offset,
+					_id: allevents[x]._id
+				});
+			}
+		}
 		$.ajax({
 			type: "POST",
 			url: "/listing/" + listing_info.domain_name + "/rent",
@@ -92,7 +138,7 @@ function submitRentals(){
 		});
 	}
 	else {
-		console.log('log in pls');
+		console.log(checks);
 	}
 }
 
@@ -133,6 +179,7 @@ $(document).on("mouseup", ".fc-event", function(mouseUpJsEvent){
 		mouseDownCalEvent = {};
 		mouseDownJsEvent = {};
 	}
+	storeCookies("local_events");
 });
 
 //helper function to determine the time slot of a mouse event
@@ -189,16 +236,19 @@ function removeEventTimeSlot(calEvent, mouseDownSlot, mouseUpSlot){
 	if (calEvent_start == mouseDown_start 
 		&& calEvent_end == mouseUp_end){
 			$('#calendar').fullCalendar('removeEvents', calEvent._id);
+			$('#calendar').fullCalendar('updateEvent', calEvent);
 			//console.log('event equal to slot');
 	}
 	//if clipping starts at top of event
 	else if (calEvent_start == mouseDown_start){
 		calEvent.start = mouseUpSlot.end;
+		$('#calendar').fullCalendar('updateEvent', calEvent);
 		//console.log('clipping at top');
 	}
 	//if clipping starts at middle of event and goes all the way
 	else if (calEvent_end == mouseUp_end){
 		calEvent.end = mouseDownSlot.start;
+		$('#calendar').fullCalendar('updateEvent', calEvent);
 		//console.log('clipping at bottom');
 	}
 	//if middle of event
@@ -214,13 +264,12 @@ function removeEventTimeSlot(calEvent, mouseDownSlot, mouseUpSlot){
 				start: mouseUpSlot.end,
 				end: tempEnd
 			};
-			$('#calendar').fullCalendar('renderEvent', eventData, true);
+			var newEvent = $('#calendar').fullCalendar('renderEvent', eventData, true);
 		}
 		else {
 			calEvent.end = tempEnd;
 		}
 	}
-	$('#calendar').fullCalendar('updateEvent', calEvent);
 }
 
 //helper function to check if new event overlaps any existing event
@@ -271,7 +320,6 @@ function createEvent(start, end){
 			}
 			//check if existing event is fully overlapped by event being created
 			else if (checkFullOverlap(eventitem.start._d, eventitem.end - eventitem.start, start._d, end - start)){
-				console.log(eventitem.end, eventitem.start, start._d, end - start);
 				console.log('full overlap');
 				fullyOverlappingEvents.push(eventitem);
 			}
@@ -392,23 +440,83 @@ function createEvent(start, end){
 		};
 		var newEvent = $('#calendar').fullCalendar('renderEvent', eventData, true);
 
-		//if any slots need to removed because they overlap existing slots, remove them here
-		for (var x = 0; x < removeEvents.length; x++){
-			//remove the entire chunk of the full existing event from the newly created event
-			if (removeEvents[x].full){
-				console.log('full existing removed');
-				removeEventTimeSlot(newEvent[0], removeEvents[x], removeEvents[x]);
-			}
-			//remove only the partially overlapped portion
-			else {
-				console.log('partial existing removed');
-				if (removeEvents[x].bottom){
-					removeEventTimeSlot(newEvent[0], {start: start}, removeEvents[x]);
+		if (removeEvents.length){
+			
+			//sort events so we can remove them properly
+			removeEvents.sort(function(a, b){
+				return b.start - a.start;
+			});
+
+			//if any slots need to removed because they overlap existing slots, remove them here
+			for (var x = 0; x < removeEvents.length; x++){
+				//remove the entire chunk of the full existing event from the newly created event
+				if (removeEvents[x].full){
+					console.log('full existing removed');
+					removeEventTimeSlot(newEvent[0], removeEvents[x], removeEvents[x]);
 				}
+				//remove only the partially overlapped portion
 				else {
-					removeEventTimeSlot(newEvent[0], removeEvents[x], {end: end});
+					console.log('partial existing removed');
+					if (removeEvents[x].bottom){
+						removeEventTimeSlot(newEvent[0], {start: start}, removeEvents[x]);
+					}
+					else {
+						removeEventTimeSlot(newEvent[0], removeEvents[x], {end: end});
+					}
 				}
 			}
 		}
+	
+		//store local events as cookie so we dont lose it
+		storeCookies("local_events");
 	}
+}
+
+//helper function to store local events as a cookie
+function storeCookies(type){
+	if (type == "local_events"){
+		local_events = $('#calendar').fullCalendar('clientEvents', filterMine);
+		cookie = [];
+		for (var x = 0; x < local_events.length; x++){
+			temp_event = {
+				title: local_events[x].title,
+				start: local_events[x].start,
+				end: local_events[x].end
+			}
+			cookie.push(temp_event);
+		}
+	}
+	else if (type == "type"){
+		cookie = $("input[type='radio'][name='type']:checked").val();
+	}
+	
+	if (read_cookie(type)){
+		delete_cookie(type);
+	}
+	bake_cookie(type, cookie);
+}
+
+//helper function to filter out events that aren't mine
+function filterMine(event) {
+    return !event.hasOwnProperty("other");
+}
+
+//helper function to make cookie
+function bake_cookie(name, value) {
+	//var cookie = [name, '=', JSON.stringify(value), '; domain=.', window.location.host.toString(), '; path=/;'].join('');
+	var cookie = [name, '=', JSON.stringify(value)].join('');
+	document.cookie = cookie;
+}
+
+//helper function to read a cookie
+function read_cookie(name) {
+	var result = document.cookie.match(new RegExp(name + '=([^;]+)'));
+	result && (result = JSON.parse(result[1]));
+	return result;
+}
+
+//helper function to delete a cookie
+function delete_cookie(name) {
+	//document.cookie = [name, '=; expires=Thu, 01-Jan-1970 00:00:01 GMT; path=/; domain=.', window.location.host.toString()].join('');
+	document.cookie = [name, '=; expires=Thu, 01-Jan-1970 00:00:01 GMT'].join('');
 }
