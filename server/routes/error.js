@@ -10,6 +10,13 @@ function errorMessage(req, res, message, type) {
 		case "json":
 			res.json(message);
 			break;
+		case "message":
+			//set message
+			console.log(message);
+			req.session.message = message;
+			
+			res.json(message);
+			break;
 		default:
 			//redirect back
 			redirectTo = "/";

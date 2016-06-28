@@ -1,6 +1,8 @@
 var app,
 	database,
 	error;
+	
+var request = require('request');
 
 var	account_model = require('../models/account_model.js'),
 	listing_model = require('../models/listing_model.js'),
@@ -127,16 +129,21 @@ function getRentalPage(req, res, next){
 	}
 	//we're creating a new rental
 	else if (parseFloat(rental_id) != rental_id >>> 0){
-		Listing.getListingAccount(domain_name, function(result){
-			var listing_info = result.listing_info;
-			
+		Listing.getListingRental(domain_name, false, function(result){
 			if (result.state == "success"){
-				res.render("rental.ejs", {
-					user: req.user,
-					listing_info: listing_info,
-					rental_info: new_listing_info.rental_info,
-					rental_details: "",
-					new_listing_info: new_listing_info
+				
+				//get the default html for the domain
+				request('http://www.' + result.listing_info.domain_name + '/reset.html#background_image', function (error, response, body) {
+					if (!error && response.statusCode == 200) {
+						res.render("rental.ejs", {
+							user: req.user,
+							listing_info: result.listing_info,
+							rental_info: new_listing_info.rental_info,
+							rental_html: body,
+							rental_details: result.rental_details,
+							new_listing_info: new_listing_info
+						});
+					}
 				});
 			}
 			else {
@@ -171,25 +178,25 @@ function rentalChecks(req, res, domain_name, user_id, type, events){
 	//check if listing id is legit
 	if (parseFloat(domain_name) === domain_name >>> 0){
 		bool = false;
-		error.errorMessage(req, res, "Invalid listing!");
+		error.errorMessage(req, res, "Invalid listing!", "message");
 	}
 	
 	//check if user id is legit
 	else if (parseFloat(user_id) != user_id >>> 0){
 		bool = false;
-		error.errorMessage(req, res, "Invalid user id!");
+		error.errorMessage(req, res, "Invalid user id!", "message");
 	}
 	
 	//check if rental type is legit
 	else if (parseFloat(type) != type >>> 0){
 		bool = false;
-		error.errorMessage(req, res, "Invalid rental type!");
+		error.errorMessage(req, res, "Invalid rental type!", "message");
 	}
 	
 	//check if events even exist
 	else if (!events){
 		bool = false;
-		error.errorMessage(req, res, "Invalid date!");
+		error.errorMessage(req, res, "Invalid date!", "message");
 	}
 	
 	//check if all the event info are legit dates
@@ -200,7 +207,7 @@ function rentalChecks(req, res, domain_name, user_id, type, events){
 			events[x].end = new Date(events[x].end);
 			if (isNaN(events[x].start) || isNaN(events[x].end)){
 				bool = false;
-				error.errorMessage(req, res, "Invalid date!");
+				error.errorMessage(req, res, "Invalid date!", "message");
 			}
 		}
 	}
@@ -248,7 +255,7 @@ function postRental(req, res, next){
 				}
 			}
 			else {
-				error.errorMessage(req, res, result.description);
+				error.errorMessage(req, res, result.description, "message");
 			}
 		});
 	}
@@ -261,10 +268,10 @@ function postRentalPage(req, res, next){
 	user_id = req.user.id;
 	rental_info = req.body.rental_info;
 	rental_details = req.body.rental_details;
-	
+		
 	//check if data is legit
-	if (rental_details.length <= 0){
-		error.errorMessage(req, res, "Invalid rental data!");
+	if (!rental_details || rental_details.length <= 0){
+		error.errorMessage(req, res, "Invalid rental data!", "message");
 	}
 	else {
 		//editing a rental
@@ -286,7 +293,7 @@ function postRentalPage(req, res, next){
 					delete req.session.new_listing_info;
 				}
 				else {
-					error.errorMessage(req, res, result.description);
+					error.errorMessage(req, res, result.description, "message");
 				}
 			});
 		}

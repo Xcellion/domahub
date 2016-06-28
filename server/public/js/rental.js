@@ -11,6 +11,8 @@ $(document).ready(function() {
 		e.preventDefault();
 		submitRentals();
 	});
+	
+	updatePage(rental_html, rental_details);
 });
 
 //helper function to get rental details
@@ -55,7 +57,7 @@ function submitRentals(){
 	//client side check if authenticated
 	 if (user){
 		var rental_data = rentalData();
-
+	
 		$.ajax({
 			type: "POST",	
 			url: window.location.pathname,
@@ -64,10 +66,22 @@ function submitRentals(){
 				rental_details: rental_data.rental_details
 			}
 		}).done(function(data){
-			console.log(data);
+			$("#message").html(data);
 		});
 	}
 	else {
 		console.log('log in pls');
+	}
+}
+
+//update page based on database data
+function updatePage(html, data){
+	var parsed = $.parseHTML(html);
+	$("#rental_edit").append(parsed);
+	if (data){
+		for (var x = 0; x < data.length; x++){
+			var tempElem = $(data[x].text_key);
+			tempElem.append(data[x].text_value);
+		};
 	}
 }

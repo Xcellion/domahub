@@ -212,7 +212,7 @@ listing_model.prototype.getListingRental = function(domain_name, rental_id, call
 			}
 			//otherwise get the current rental
 			else {
-				listing_model.sendCurrentRental(listing_id, callback);
+				listing_model.sendCurrentRental(listing_id, listing_info, callback);
 			}
 		}
 		else {
@@ -259,7 +259,7 @@ listing_model.prototype.getRental = function(rental_id, listing_info, callback){
 }
 
 //figures out the current rental
-listing_model.prototype.sendCurrentRental = function (listing_id, callback){
+listing_model.prototype.sendCurrentRental = function (listing_id, listing_info, callback){
 	listing_model = this;
 	
 	listing_model.getInfo("rentals", "listing_id", listing_id, "SELECT * from ?? WHERE ?? = ? AND duration != 0", function(result){
@@ -295,24 +295,25 @@ listing_model.prototype.sendCurrentRental = function (listing_id, callback){
 				if (result.state == "success"){
 					callback({
 						state: "success",
+						listing_info: listing_info,
 						rental_info: rented,
 						rental_details: result.info
 					});
 				}
 				else {
-					listing_model.sendDefaultRental(listing_id, callback);
+					listing_model.sendDefaultRental(listing_id, listing_info, callback);
 				}
 			});
 		}
 		//no rentals!
 		else {
-			listing_model.sendDefaultRental(listing_id, callback);
+			listing_model.sendDefaultRental(listing_id, listing_info, callback);
 		}
 	});
 }
 
 //assumes listing exists
-listing_model.prototype.sendDefaultRental = function(listing_id, callback){
+listing_model.prototype.sendDefaultRental = function(listing_id, listing_info, callback){
 	listing_model = this;
 
 	listing_model.getInfo("rentals", "listing_id", listing_id, "SELECT * from ?? WHERE ?? = ? ORDER BY rental_id ASC", function(result){
@@ -324,6 +325,7 @@ listing_model.prototype.sendDefaultRental = function(listing_id, callback){
 				if (result.state == "success"){
 					callback({
 						state: "success",
+						listing_info: listing_info,
 						rental_info: rental_info,
 						rental_details: result.info
 					});
@@ -511,17 +513,12 @@ listing_model.prototype.newRentalDetails = function(rental_id, rental_info, rent
 			for (var x = 0; x < rental_details.length; x++){
 				var tempValue = [];
 				tempValue.push(rental_id);
-<<<<<<< HEAD
 				for (var y in rental_details[x]){
-=======
-				for (var y = 0; y < rental_details[x].length; y++){
->>>>>>> 0921b342fda7570f59f7d441e92b0e015d6d164d
 					tempValue.push(rental_details[x][y]);
 				}
 				
 				values.push(tempValue);
 			}
-			console.log(tempValue);
 						
 			listing_model.insertInfo("rental_details", keys, values, function(result){
 				if (result.state == "success"){

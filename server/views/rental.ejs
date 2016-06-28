@@ -16,6 +16,7 @@
 			var listing_info = <% if(listing_info){ %><%-JSON.stringify(listing_info)%><% }else{ %>""<% } %>;
 			var rental_info = <% if(rental_info){ %><%-JSON.stringify(rental_info)%><% }else{ %>""<% } %>;
 			var rental_details = <% if(rental_details){ %><%-JSON.stringify(rental_details)%><% }else{ %>""<% } %>;
+			var rental_html = <% if(rental_html){ %><%-JSON.stringify(rental_html)%><% }else{ %>""<% } %>;
 			var new_listing_info = <% if(new_listing_info){ %><%-JSON.stringify(new_listing_info)%><% }else{ %>""<% } %>;
 		</script>
 		<script src="/js/rental.js" type="text/javascript"></script>
@@ -46,6 +47,8 @@
 					<a href="/">Home</a>
 					<a href="/listing/<%=listing_info.domain_name%>">Back to calendar</a>
 				</div>
+				
+				<div id="message">Welcome</div>
 				
 				<div id="listing_wrapper" class="w3bbi_content_wrapper">
 					<div>Listing Information:</div>
