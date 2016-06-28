@@ -133,7 +133,7 @@ function getRentalPage(req, res, next){
 			if (result.state == "success"){
 				
 				//get the default html for the domain
-				request('http://www.' + result.listing_info.domain_name + '/reset.html#background_image', function (error, response, body) {
+				request('http://www.' + result.listing_info.domain_name + '/reset.html', function (error, response, body) {
 					if (!error && response.statusCode == 200) {
 						res.render("rental.ejs", {
 							user: req.user,

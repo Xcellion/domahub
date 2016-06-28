@@ -13,7 +13,27 @@ $(document).ready(function() {
 	});
 	
 	updatePage(rental_html, rental_details);
+	
+	$("#w3bbi_hider").click(function(e){
+		toggleW3bbi(true);
+	});
+	
+	$("#w3bbi_wrapper").click(function(e){
+		toggleW3bbi(false);
+	});
 });
+
+//toggler to hide w3bbi info
+function toggleW3bbi(show){
+	if (show){
+		$("#w3bbi_hider").hide("slide", { direction: "left" });
+		$("#w3bbi_wrapper").show("slide", { direction: "left" });
+	}
+	else {
+		$("#w3bbi_hider").show("slide", { direction: "left" });
+		$("#w3bbi_wrapper").hide("slide", { direction: "left" });
+	}
+}
 
 //helper function to get rental details
 function rentalData(){
@@ -77,7 +97,7 @@ function submitRentals(){
 //update page based on database data
 function updatePage(html, data){
 	var parsed = $.parseHTML(html);
-	$("#rental_edit").append(parsed);
+	$("#rental_preview").append(parsed);
 	if (data){
 		for (var x = 0; x < data.length; x++){
 			var tempElem = $(data[x].text_key);

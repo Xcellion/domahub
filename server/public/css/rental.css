@@ -1,6 +1,25 @@
 #w3bbi_wrapper{
 	position:fixed;
+	display:none;
 	top:0;
 	left:0;
 	text-align:left;
+	background-color:rgba(0,0,0,0.2);
+	padding:15px;
+	color:#FFF;
+}
+
+#w3bbi_hider{
+	position:fixed;
+	top:0;
+	left:0;
+	width:35px;
+	height:35px;
+	cursor:pointer;
+	background-color:#222;
+	z-index:1;
+}
+
+#w3bbi_hider:hover{
+	background-color:#333;
 }
