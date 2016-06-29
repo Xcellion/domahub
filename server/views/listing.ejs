@@ -23,7 +23,7 @@
 	<body>
 
 		<div class="body_wrapper">
-			<% if (user) {%>
+			<% if (typeof user != "undefined") {%>
 				<p>Logged in: <%= user.email %></p>
 				<p><a href="/logout">Log Out</a></p>
 			<% } else {%>
@@ -56,7 +56,13 @@
 				</tr>                                   
 			</table>
 			
-			<div id="message">Welcome</div>
+			<div id="message">
+				<% if (typeof message != "undefined") {%>
+					<%= message %>
+				<% } else {%>
+					Welcome
+				<% } %>
+			</div>
 
 			<div id="form_wrapper">
 				<form id="listing_form">

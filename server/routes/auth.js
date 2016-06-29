@@ -1,12 +1,17 @@
 var database,
-	Passport;
+	passport,
+	error;
 
 module.exports = {
-	auth: function(db, pp){
+	
+	//constructor
+	auth: function(db, pp, e){
 		database = db;
-		Passport = pp;
+		passport = pp;
+		error = e;
 	},
 	
+	//helper functions related to authentication
 	isLoggedIn: isLoggedIn,
 	signupPost: signupPost,
 	loginPost: loginPost
@@ -14,6 +19,8 @@ module.exports = {
 
 //make sure user is logged in before doing anything
 function isLoggedIn(req, res, next) {
+	var route = req.route.path;
+	
 	//if user is authenticated in the session, carry on
 	if (req.isAuthenticated()){
 		delete req.user.password;
@@ -22,11 +29,15 @@ function isLoggedIn(req, res, next) {
 	}
 	else {
 		console.log("Not logged in!");
-		req.session.message = "Not logged in!";
-		//if they aren't redirect them to the login page
-		res.render("login.ejs", {
-			message: "unauthenticated"
-		});
+		//redirect them back to the listing page with message
+		if (route == "/listing/:domain_name/:rental_id"){
+			error.handler(req, res, "Invalid user!");
+		}
+		//redirect to the default login page
+		else {
+			req.session.redirectTo = req.header('Referer');
+			res.render("login.ejs");
+		}
 	}
 }
 
@@ -34,7 +45,7 @@ function isLoggedIn(req, res, next) {
 function loginPost(req, res, next){
 	//redirect to referrer or main page
 	redirectURL = req.header('Referer') || "/";
-	Passport.authenticate('local-login', function(err, user, info){
+	passport.authenticate('local-login', function(err, user, info){
 		if (!user && info){
 			req.session.message = info.message;
 			var message = req.session.message || "";
@@ -56,7 +67,7 @@ function loginPost(req, res, next){
 
 //function to sign up for a new account
 function signupPost(req, res, next){
-	Passport.authenticate('local-signup', {
+	passport.authenticate('local-signup', {
 		successRedirect : '/', // redirect to main page
 		failureRedirect : '/signup', // redirect back to the signup page if there is an error
 	}, function(err, user, info){
@@ -76,3 +87,10 @@ function signupPost(req, res, next){
 		});
 	})(req, res, next);
 };
+
+//helper function to remove last part of URL
+function RemoveLastDirectoryPartOf(the_url){
+    var the_arr = the_url.split('/');
+    the_arr.pop();
+    return( the_arr.join('/') );
+}

@@ -32,7 +32,8 @@ $(document).ready(function() {
 			start: start,
 			end: end,
 			color: "red",
-			other: true
+			other: true,
+			rental_id: listing_info.rentals[x].rental_id
 		};
 		$('#calendar').fullCalendar('renderEvent', eventData, true);
 	}
@@ -77,13 +78,18 @@ $(document).ready(function() {
 	$("input[type='radio'][name='type']").click(function(e){
 		storeCookies("type");
 	});
+	
+	$("#remove_events").click(function(e){
+		$('#calendar').fullCalendar('removeEvents', filterMine);
+		storeCookies("local_events");
+	});
 });
 
 //helper function to check if everything is legit
 function checkSubmit(allevents){
 	var bool = "success";
 	
-	if (!user){ bool = "Log in!"; }
+	if (!user){ bool = "Please log in!"; }
 	else if (!$("input[type='radio'][name='type']:checked").val()) { bool = "Please select a rental type!"; }
 	else {
 		for (var x = 0; x < allevents.length; x++){
@@ -128,8 +134,8 @@ function submitRentals(){
 		}).done(function(data){
 			if (data.unavailable){
 				for (var x = 0; x < data.unavailable.length; x++){
-					console.log("That time slot is unavailable");
-					$('#calendar').fullCalendar('removeEvents', data.unavailable[x].id);
+					$("#message").text("Some time slots were unavailable! They have been removed.");
+					$('#calendar').fullCalendar('removeEvents', data.unavailable[x]._id);
 				}
 			}
 			else if (data.redirect){
@@ -144,6 +150,8 @@ function submitRentals(){
 		$("#message").html(checks);
 	}
 }
+
+//--------------------------------------------------------------------------------------------------------------------------------
 
 var mouseDownJsEvent;
 var mouseDownCalEvent;
@@ -507,7 +515,7 @@ function filterMine(event) {
 //helper function to make cookie
 function bake_cookie(name, value) {
 	//var cookie = [name, '=', JSON.stringify(value), '; domain=.', window.location.host.toString(), '; path=/;'].join('');
-	var cookie = [name, '=', JSON.stringify(value)].join('');
+	var cookie = [name, '=', JSON.stringify(value), '; path=/;'].join('');
 	document.cookie = cookie;
 }
 
@@ -521,5 +529,5 @@ function read_cookie(name) {
 //helper function to delete a cookie
 function delete_cookie(name) {
 	//document.cookie = [name, '=; expires=Thu, 01-Jan-1970 00:00:01 GMT; path=/; domain=.', window.location.host.toString()].join('');
-	document.cookie = [name, '=; expires=Thu, 01-Jan-1970 00:00:01 GMT'].join('');
+	document.cookie = [name, '=; expires=Thu, 01-Jan-1970 00:00:01 GMT', '; path=/;'].join('');
 }

@@ -133,8 +133,9 @@ function submitRentals(){
 		}).done(function(data){
 			if (data == "Success"){
 				$("#message").html(data);
-				//remove cookie since it was successful
+				//remove cookies since it was successful
 				delete_cookie("local_events");
+				delete_cookie("type");
 			}
 			else {
 				$("#message").html(data);
@@ -196,7 +197,7 @@ function getStyleSheet(unique_title) {
 	}
 }
 
-//helper functio nto find URLs in a text
+//helper function to find URLs in a text
 function findUrls( text ){
     var source = (text || '').toString();
     var urlArray = [];
@@ -207,8 +208,7 @@ function findUrls( text ){
     var regexToken = /(((ftp|https?):\/\/)[\-\w@:%_\+.~#?,&\/\/=]+)|((mailto:)?[_.\w-]+@([\w][\w\-]+\.)+[a-zA-Z]{2,3})/g;
 
     // Iterate through any URLs in the text.
-    while( (matchArray = regexToken.exec( source )) !== null )
-    {
+    while( (matchArray = regexToken.exec( source )) !== null ){
         var token = matchArray[0];
         urlArray.push( token );
     }
@@ -217,7 +217,7 @@ function findUrls( text ){
 }
 
 //helper function to delete a cookie
-function delete_cookie(name) {
+function delete_cookiedelete_cookie(name) {
 	//document.cookie = [name, '=; expires=Thu, 01-Jan-1970 00:00:01 GMT; path=/; domain=.', window.location.host.toString()].join('');
-	document.cookie = [name, '=; expires=Thu, 01-Jan-1970 00:00:01 GMT'].join('');
+	document.cookie = [name, '=; expires=Thu, 01-Jan-1970 00:00:01 GMT', '; path=/;'].join('');
 }

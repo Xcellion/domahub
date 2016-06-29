@@ -5,6 +5,8 @@ function listing_model(database, Account){
 	this.account = Account;
 }
 
+//--------------------------------------------------------------------------------------------------------------------------------
+
 listing_model.prototype.getAllListings = function(callback){
 	console.log("Attempting to get all listing info");
 	this.db.query('SELECT \
@@ -129,8 +131,10 @@ listing_model.prototype.getInfo = function(database, db_where, db_where_equal, s
 	}, [database, db_where, db_where_equal]);
 }
 
+//--------------------------------------------------------------------------------------------------------------------------------
+
 //gets all info for a listing
-listing_model.prototype.getListingAccount = function(domain_name, callback){
+listing_model.prototype.getListingInfo = function(domain_name, callback){
 	db_query = "SELECT \
 					listings.date_created,\
 					listings.domain_name,\
@@ -147,7 +151,7 @@ listing_model.prototype.getListingAccount = function(domain_name, callback){
 			listing_info = result.info[0];
 			
 			//get all rental info for that listing that is not default
-			Listing.getInfo("rentals", "listing_id", result.info[0].id, 'SELECT * from ?? WHERE ?? = ? AND date != "0000-00-00 00:00:00"', function(result){
+			Listing.getInfo("rentals", "listing_id", result.info[0].id, 'SELECT date, duration, rental_id from ?? WHERE ?? = ? AND date != "0000-00-00 00:00:00"', function(result){
 				if (result.state == "success"){
 					listing_info.rentals = result.info;
 				}
@@ -167,7 +171,7 @@ listing_model.prototype.getListingAccount = function(domain_name, callback){
 		else {
 			callback({
 				state: "error",
-				description: "Listing doesn't exist!"
+				description: "Invalid listing!"
 			});
 		}
 	});
@@ -177,7 +181,8 @@ listing_model.prototype.getListingAccount = function(domain_name, callback){
 listing_model.prototype.getListingRental = function(domain_name, rental_id, callback){
 	listing_model = this;
 	
-	listing_model.getListingAccount(domain_name, function(result){
+	//check for listing
+	listing_model.getListingInfo(domain_name, function(result){
 		//domain exists!
 		if (result.state == "success"){
 			listing_id = result.listing_info.id;
@@ -201,10 +206,12 @@ listing_model.prototype.getListingRental = function(domain_name, rental_id, call
 					if (rental_in_listing){
 						listing_model.getRental(rental_id, listing_info, callback);
 					}
+					
+					//rental does not belong to this listing!
 					else {
 						callback({
 							state: "error",
-							description: "Rental does not belong to this domain!"
+							description: "Invalid rental!"
 						});
 					}
 				});
@@ -215,10 +222,11 @@ listing_model.prototype.getListingRental = function(domain_name, rental_id, call
 				listing_model.sendCurrentRental(listing_id, listing_info, callback);
 			}
 		}
+		//listing doesnt exist
 		else {
 			callback({
 				state: "error",
-				description: "Listing does not exist!"
+				description: "Invalid listing!"
 			});
 		}
 	});
@@ -257,7 +265,7 @@ listing_model.prototype.getRental = function(rental_id, listing_info, callback){
 		else {
 			callback({
 				state: "error",
-				description: "Rental doesnt exist!"
+				description: "Invalid rental!"
 			});
 		}
 	});
@@ -317,7 +325,7 @@ listing_model.prototype.sendCurrentRental = function (listing_id, listing_info, 
 	});
 }
 
-//assumes listing exists
+//assuming the listing exists, send the default rental
 listing_model.prototype.sendDefaultRental = function(listing_id, listing_info, callback){
 	listing_model = this;
 
@@ -338,7 +346,7 @@ listing_model.prototype.sendDefaultRental = function(listing_id, listing_info, c
 				else {
 					callback({
 						state: "error",
-						description: "There is no rental info!"
+						description: "Invalid rental!"
 					});
 				}
 			});
@@ -346,7 +354,7 @@ listing_model.prototype.sendDefaultRental = function(listing_id, listing_info, c
 		else {
 			callback({
 				state: "error",
-				description: "Default rental could not be found!"
+				description: "Invalid rental!"
 			});
 		}
 	});
@@ -366,42 +374,38 @@ listing_model.prototype.checkRentalTime = function(domain_name, events, user_id,
 			//loop through all posted events
 			for (var y = 0; y < events.length; y++){
 				var availability = true;
-				var date = events[y].start;
-				var offset = events[y].offset;
-				var duration = events[y].end - events[y].start;
 				
+				//posted date
+				var user_start = new Date(events[y].start);
+				var user_offset = events[y].offset;
+				var user_end = new Date(events[y].end);
+				var user_duration = user_end - user_start;
+								
 				//cross reference with all existing events in the database
 				for (var x = 0; x < result.info.length; x++){
 					
 					//make sure we dont check the default ones
 					if (result.info[x].date != "0000-00-00 00:00:00"){
-					
+			
+						//existing db date, already in UTC
+						var db_utc = new Date(result.info[x].date + " UTC");
+						var db_duration = result.info[x].duration;
+						
 						//UTC magic
-						var tempListing = result.info[x].date;
-						var tempDate = new Date(result.info[x].date);
-						var tempOffset = tempDate.getTimezoneOffset();
-						var tempDateX = toUTC(tempDate, tempOffset);
-						var tempDateY = toUTC(date, offset);
-						
+						var user_utc = toUTC(user_start, user_offset);
+												
 						//check if legit dates
-						if (!isNaN(tempDateX) && !isNaN(tempDateY)){
-						
-							//check if it overlaps
-							if (checkSchedule(tempDateX, tempListing.duration, tempDateY, duration)){
+						if (!isNaN(db_utc) && !isNaN(user_utc)){
+							//check if its available
+							if (checkOverlap(user_utc, user_duration, db_utc, db_duration)){
 								availability = false;
 								break;
 							}
 						}
 					}
 				}
-				var eventState = {
-					id: events[y]._id,
-					offset: offset,
-					availability: availability,
-					start: date,
-					end: events[y].end
-				};
-				eventStates.push(eventState);
+				events[y].availability = availability;
+				eventStates.push(events[y]);
 			}
 			
 			//send the availability of all events posted
@@ -418,7 +422,7 @@ listing_model.prototype.checkRentalTime = function(domain_name, events, user_id,
 		else {
 			callback({
 				state: "error",
-				description: "There is no rental info!"
+				description: "Invalid rental!"
 			});
 		}
 	});
@@ -536,7 +540,7 @@ listing_model.prototype.newRentalDetails = function(rental_id, rental_info, rent
 		else {
 			callback({
 				state: "error",
-				description: "Something wrong with rental details!"
+				description: "Invalid rental details!"
 			});
 		}
 	});
@@ -582,12 +586,11 @@ listing_model.prototype.setRentalDetails = function(rental_id, rental_info, rent
 		else {
 			callback({
 				state: "error",
-				description: "Rental doesn't exist!"
+				description: "Invalid rental!"
 			});
 		}		
 	});
 }
-
 
 //function to delete last insert and callback error
 listing_model.prototype.callbackError = function(insertId, error, callback){
@@ -600,8 +603,9 @@ listing_model.prototype.callbackError = function(insertId, error, callback){
 }
 
 //helper function to check if dates overlap
-function checkSchedule(dateX, durationX, dateY, durationY){
-	return ((dateX.getTime() <= dateY.getTime() + durationY) && (dateY.getTime() <= dateX.getTime() + durationX));
+function checkOverlap(dateX, durationX, dateY, durationY){
+	console.log(dateX, dateY);
+	return ((dateX.getTime() < dateY.getTime() + durationY) && (dateY.getTime() < dateX.getTime() + durationX));
 }
 
 //helper function to change a date to UTC
