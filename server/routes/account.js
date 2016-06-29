@@ -29,7 +29,7 @@ module.exports = function(app_pass, db, auth){
 
 //display main page with all listings
 function mainPage(req, res, next){
-	message = req.session.message || "Successfully logged in!";
+	message = req.session.message;
 	Listing.getAllListings(function(result){
 		if (result.state == "success"){
 			res.render("index.ejs", {

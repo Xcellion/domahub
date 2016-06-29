@@ -84,7 +84,7 @@ function rentalData(){
 				}
 				$(".editable").each(function(){
 					var rental_pair = [];
-					rental_pair.push("#" + $(this).attr("id"));
+					rental_pair.push($(this).attr("id"));
 					rental_pair.push($(this).html());
 					rental_details.push(rental_pair);
 				});
@@ -132,8 +132,7 @@ function submitRentals(){
 			}
 		}).done(function(data){
 			if (data == "Success"){
-				console.log("Success");
-				
+				$("#message").html(data);
 				//remove cookie since it was successful
 				delete_cookie("local_events");
 			}

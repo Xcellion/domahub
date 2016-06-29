@@ -69,7 +69,7 @@ $(document).ready(function() {
 		submitRentals();
 	});
 	
-	$("#remove_events").click(function(e){
+	$("#events").click(function(e){
 		$('#calendar').fullCalendar('removeEvents', filterMine);
 		storeCookies("local_events");
 	});
