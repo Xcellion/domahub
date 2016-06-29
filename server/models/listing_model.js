@@ -241,10 +241,15 @@ listing_model.prototype.getRental = function(rental_id, listing_info, callback){
 						rental_details: result.info
 					});
 				}
+				//no details exist, send current one instead!
 				else {
-					callback({
-						state: "error",
-						description: "Rental details dont exist!"
+					listing_model.sendCurrentRental(listing_id, listing_info, function(result){
+						callback({
+							state: "success",
+							listing_info: listing_info,
+							rental_info: rental_info,
+							rental_details: result.rental_details
+						});
 					});
 				}
 			});
@@ -501,40 +506,40 @@ listing_model.prototype.newRental = function(domain_name, user_id, new_listing_i
 //function to add rental details
 listing_model.prototype.newRentalDetails = function(rental_id, rental_info, rental_details, callback){
 	listing_model = this;
+
+	var keys = ["rental_id", "text_key", "text_value"];
+	var values = [];
 	
-	switch (parseFloat(rental_info.type)){
-		//custom page
-		case 0:
-			break;
-		//simple redirect
-		case 1:
-			var keys = ["rental_id", "text_key", "text_value"];
-			var values = [];
-			for (var x = 0; x < rental_details.length; x++){
-				var tempValue = [];
-				tempValue.push(rental_id);
-				for (var y in rental_details[x]){
-					tempValue.push(rental_details[x][y]);
-				}
-				
-				values.push(tempValue);
+	for (var x = 0; x < rental_details.length; x++){
+		var tempValue = [];
+		tempValue.push(rental_id);
+		for (var y in rental_details[x]){
+			if (rental_details[x][y] == "css"){
+				tempValue.push("css");
+				tempValue.push("body {background:url(" + rental_details[x][1] + ") no-repeat center bottom fixed; }");
+				break;
 			}
-						
-			listing_model.insertInfo("rental_details", keys, values, function(result){
-				if (result.state == "success"){
-					callback({
-						state: "success"
-					});
-				}
-				else {
-					callback({
-						state: "error",
-						description: "Something wrong with rental details!"
-					});
-				}
-			});
-			break;
+			else {
+				tempValue.push(rental_details[x][y]);
+			}
+		}
+		
+		values.push(tempValue);
 	}
+				
+	listing_model.insertInfo("rental_details", keys, values, function(result){
+		if (result.state == "success"){
+			callback({
+				state: "success"
+			});
+		}
+		else {
+			callback({
+				state: "error",
+				description: "Something wrong with rental details!"
+			});
+		}
+	});
 }
 
 //function to edit rental details
@@ -546,7 +551,7 @@ listing_model.prototype.setRentalDetails = function(rental_id, rental_info, rent
 		if (result.state == "success"){
 			var special = " WHERE rental_id = " + rental_id;
 
-			if (rental_info.same_details == "0"){
+			if (rental_info.same_details == "0" || rental_info.same_details == ""){
 				rental_info.same_details = null;
 			}
 			

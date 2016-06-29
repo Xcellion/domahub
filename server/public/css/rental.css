@@ -4,22 +4,97 @@
 	top:0;
 	left:0;
 	text-align:left;
-	background-color:rgba(0,0,0,0.2);
+	background-color:rgba(0,0,0,0.3);
 	padding:15px;
 	color:#FFF;
+	border-right: 1px solid #fff;
+	border-bottom: 1px solid #fff;
+	white-space: nowrap;
+}
+
+#w3bbi_wrapper ::selection {
+	background: #222 /* WebKit/Blink Browsers */
+}
+#w3bbi_wrapper ::-moz-selection {
+	background: #222; /* Gecko Browsers */
+}
+
+#w3bbi_wrapper a {
+	color:#D3D3D3;
 }
 
 #w3bbi_hider{
 	position:fixed;
 	top:0;
 	left:0;
-	width:35px;
-	height:35px;
+	padding:5px;
+	color:#FFF;
+	text-wrap:none;
 	cursor:pointer;
-	background-color:#222;
+	background-color:rgba(0,0,0,0.3);
 	z-index:1;
+	border-right: 1px solid #fff;
+	border-bottom: 1px solid #fff;
+	white-space: nowrap;
 }
 
 #w3bbi_hider:hover{
-	background-color:#333;
+	background-color:rgba(0,0,0,0.5);
+}
+
+.button{
+	display:inline-block;
+	cursor:pointer;
+	padding:5px;
+	color:#FFF !important;
+	background-color: rgba(0,0,0,0);
+	outline:none;
+	border: 1px solid #fff;
+	text-decoration: none;
+}
+
+.button:hover{
+	border: 1px solid #D3D3D3;
+}
+
+.w3bbi_content_wrapper{
+	padding: 15px 0 15px 0;
+}
+
+.border_white{
+	border-bottom: 1px solid #fff;
+}
+
+#listing_table{
+	border:1px solid #FFF;
+}
+
+#listing_table tr, th, td{
+	padding:5px;
+}
+
+/* --------------------------------------------------- EDITING RENTAL */
+
+#edit_now_details{
+	display:none;
+}
+
+.edit_input{
+	outline:none;
+	border:0;
+	margin:0;
+	padding:5px 5px 5px 2.5px;
+	width: calc(100% - 7.5px);
+}
+
+#rental_preview{
+	height:100vh;
+	width:100vw;
+}
+
+.highlight{
+	border:1px dashed #FFF;
+	cursor:pointer;
+	min-height:50px;
+	min-width:100px;
 }

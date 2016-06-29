@@ -14,7 +14,6 @@ module.exports = {
 
 //make sure user is logged in before doing anything
 function isLoggedIn(req, res, next) {
-	req.session.redirectTo = req.header('Referer');
 	//if user is authenticated in the session, carry on
 	if (req.isAuthenticated()){
 		delete req.user.password;
@@ -22,6 +21,8 @@ function isLoggedIn(req, res, next) {
 		return next();
 	}
 	else {
+		console.log("Not logged in!");
+		req.session.message = "Not logged in!";
 		//if they aren't redirect them to the login page
 		res.render("login.ejs", {
 			message: "unauthenticated"

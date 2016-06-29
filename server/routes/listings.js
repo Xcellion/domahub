@@ -156,12 +156,17 @@ function getRentalPage(req, res, next){
 		delete req.session.new_listing_info;
 		Listing.getListingRental(domain_name, rental_id, function(result){
 			if (result.state == "success"){
-				res.render("rental.ejs", {
-					user: req.user,
-					listing_info: result.listing_info,
-					rental_info: result.rental_info,
-					rental_details: result.rental_details,
-					new_listing_info: false
+				request('http://www.' + result.listing_info.domain_name + '/reset.html', function (error, response, body) {
+					if (!error && response.statusCode == 200) {
+						res.render("rental.ejs", {
+							user: req.user,
+							listing_info: result.listing_info,
+							rental_info: result.rental_info,
+							rental_html: body,
+							rental_details: result.rental_details,
+							new_listing_info: false
+						});
+					}
 				});
 			}
 			else {
@@ -215,7 +220,7 @@ function rentalChecks(req, res, domain_name, user_id, type, events){
 	return bool;
 }
 
-//create a new rental for a listing
+//check if rental time is legit and send user to rental edit page
 function postRental(req, res, next){
 	domain_name = req.params.domain_name;
 	user_id = req.user.id;
@@ -277,12 +282,11 @@ function postRentalPage(req, res, next){
 		//editing a rental
 		if (parseFloat(rental_id) == rental_id >>> 0){
 			Listing.setRentalDetails(rental_id, rental_info, rental_details, function(result){
-				console.log(result);
 				if (result.state == "success"){
-					
+					res.json("Success");
 				}
 				else {
-					
+					error.errorMessage(req, res, result.description, "message");
 				}
 			})
 		}
@@ -291,6 +295,7 @@ function postRentalPage(req, res, next){
 			Listing.newRental(domain_name, user_id, rental_info, rental_details, function(result){
 				if (result.state == "success"){
 					delete req.session.new_listing_info;
+					res.json("Success");
 				}
 				else {
 					error.errorMessage(req, res, result.description, "message");

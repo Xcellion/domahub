@@ -32,9 +32,5 @@ table{
 }
 
 th{
- text-align:left;
-}
-
-td,th{
-   border: 1px solid black;
+	text-align:left;
 }

@@ -54,7 +54,6 @@ function profile(req, res){
 function logout(req, res) {
 	console.log("Logging out");
 	req.logout();
-	console.log(req.session);
 	res.redirect('/');
 };
 

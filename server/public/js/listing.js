@@ -50,7 +50,7 @@ $(document).ready(function() {
 	}
 	
 	//check if theres a cookie for local events
-	if (document.cookie.match(new RegExp('local_events=([^;]+)'))){
+	if (document.cookie.match(new RegExp('local_events=([^;]+)')) && $('#calendar').fullCalendar('clientEvents', filterMine).length == 0){
 		var existing_events = read_cookie("local_events");
 		
 		for (var x = 0; x < existing_events.length; x++){
@@ -135,10 +135,13 @@ function submitRentals(){
 			else if (data.redirect){
 				window.location = data.redirect;
 			}
+			else {
+				$("#message").html(data);
+			}
 		});
 	}
 	else {
-		console.log(checks);
+		$("#message").html(checks);
 	}
 }
 
