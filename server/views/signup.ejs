@@ -1,3 +1,5 @@
+<!-- page to sign up for new accounts -->
+
 <!doctype html>
 
 <html>
@@ -16,12 +18,16 @@
 		<div class="body_wrapper">
 			
 			<div id="form_wrapper">
-				<% if (message) {%>
-					<p id="sub_message"><%= message %>
-				<% } else {%>
-					<p id="sub_message">Enter your information below</p>
-				<% } %>
-			
+		
+				<!-- any messages from the server -->
+				<div id="message">
+					<% if (typeof message != "undefined") {%>
+						<%= message %>
+					<% } else {%>
+						Enter your information below!
+					<% } %>
+				</div>
+				
 				<form id="target" action="/signup" method="post">
 					<input autofocus name="email" placeholder="Email" type="text" id="email_input">
 					<input name="fullname" placeholder="Full Name" type="text" id="fullname_input">

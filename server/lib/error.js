@@ -11,22 +11,31 @@ function handler(req, res, message, type) {
 			res.json(message);
 			break;
 		default:
-			var redirectTo;
+			var redirectTo = req.header("Referer") || "/";
 			req.session.message = message;
-
+			
 			//if the user is coming from a click instead of a URL enter
 			if (req.header("Referer")){
-				redirectTo = req.header("Referer");
+				switch (message){
+					case "User exists!":
+						break;
+					case "Invalid user!":
+					case "Invalid password!":
+						console.log(message);
+						req.session.message = "Invalid username / password!"
+						break;
+					default:
+						break;
+				}
 			}
 			//user came from URL input
 			else {
-
 				switch (message){
 					case "Invalid listing!":
-						redirectTo = "/";
 						break;
 					case "Invalid user!":
-						req.session.message = "Please log in!";
+					case "Invalid password!":
+						req.session.message = "Invalid username / password!";
 					case "Invalid rental!":
 					case "Invalid rental type!":
 					case "Invalid rental date!":
@@ -36,7 +45,6 @@ function handler(req, res, message, type) {
 						redirectTo = req.path;
 						break;
 					default:
-						redirectTo = "/"
 						break;
 				}
 			}
@@ -45,6 +53,7 @@ function handler(req, res, message, type) {
 
 			console.log(message + " Sending back to " + redirectTo);
 			res.redirect(redirectTo);
+			req.session.message = "";
 			break;
 	}
 }

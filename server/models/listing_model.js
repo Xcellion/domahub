@@ -19,7 +19,7 @@ listing_model.prototype.getAllListings = function(callback){
 					listings.owner_id,\
 					accounts.fullname,\
 					accounts.email\
-				FROM listings JOIN accounts ON listings.owner_id = accounts.id', function(result){
+				FROM listings JOIN accounts ON listings.owner_id = accounts.id WHERE listings.active = 1', function(result){
 		//listing info successfully retrieved
 		if (result.length >= 0){
 			callback({

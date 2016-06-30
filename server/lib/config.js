@@ -55,14 +55,12 @@ module.exports = function(passport, db){
 		function(req, email, password, done) { // callback with email and password from our form
 			db.query("SELECT * FROM accounts WHERE email = ?", function(rows){
 				if (!rows.length) {
-					console.log('No user found!');
-					return done(null, false, {message: 'No user found!'});
+					return done(null, false, {message: 'Invalid user!'});
 				}
 
 				// if the user is found but the password is wrong
 				if (!bcrypt.compareSync(password, rows[0].password)){
-					console.log('Wrong password!');
-					return done(null, false, {message: 'Wrong password!'});
+					return done(null, false, {message: 'Invalid password!'});
 				}
 				
 				// all is well, return successful user

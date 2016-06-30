@@ -1,3 +1,5 @@
+<!-- w3bbi main page -->
+
 <!doctype html>
 
 <html>
@@ -13,7 +15,9 @@
 
 	<body>
 		<h1>w3bbi.</h1>
-		<% if (!auth) {%>
+		
+		<!-- checks if user is logged in -->
+		<% if (typeof user == "undefined") {%>
 			<div id="form_wrapper">
 				<form id="target" action="/login" method="post">
 					<input name="email" placeholder="Email" type="text" id="email_input" autofocus>
@@ -24,30 +28,41 @@
 					<a id="signup" href="/signup">Create an account</a>
 				</div>
 			</div>
+			
+		<!-- if not logged in -->
 		<% } else {%>
 			<p id="sub_message">Welcome!</p>
-			<p>Logged in: <%= auth.email %></p>
+			<p>Logged in: <%= user.email %></p>
 			<p><a href="/logout">Log Out</a></p>
 		<% } %>
 		
-		<% if (message) {%>
-			<h2 id="message"><%= message %></h2>
-		<% } %>
+		<!-- any messages from the server -->
+		<div id="message">
+			<% if (typeof message != "undefined") {%>
+				<%= message %>
+			<% } else {%>
+				Welcome
+			<% } %>
+		</div>
 
-		<h2>All Domain Names:</h2>
-		<table>
-			<th>Date Created</th>
-			<th>Domain Name</th>
-			<th>Owner Name</th>
-			<th>Owner Email</th>
-			 <% listings.forEach(function (listing) { %>
-				<tr>  
-					<td><%= listing.date_created %></td>  
-					<td><a href=<%= "/listing/" + listing.domain_name %>><%= listing.domain_name %></a></td>  
-					<td><%= listing.fullname %></td>
-					<td><%= listing.email %></td>
-				</tr>                                   
-			 <% }) %>
-		</table>
+		<!-- all listings -->
+		<% if (typeof listings != "undefined") {%>
+			<h2>All Domain Names:</h2>
+			<table>
+				<th>Date Created</th>
+				<th>Domain Name</th>
+				<th>Owner Name</th>
+				<th>Owner Email</th>
+				 <% listings.forEach(function (listing) { %>
+					<tr>  
+						<td><%= listing.date_created %></td>  
+						<td><a href=<%= "/listing/" + listing.domain_name %>><%= listing.domain_name %></a></td>  
+						<td><%= listing.fullname %></td>
+						<td><%= listing.email %></td>
+					</tr>                                   
+				 <% }) %>
+			</table>
+		<% } %>
+		
 	</body>
 </html>

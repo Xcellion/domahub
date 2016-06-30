@@ -1,6 +1,7 @@
 /**************************************************
 ** NODE.JS REQUIREMENTS
 **************************************************/
+
 var express = require('express'),
 	app = express(),
 	bodyParser 	= require('body-parser'),
@@ -9,28 +10,32 @@ var express = require('express'),
 	io = require("socket.io").listen(server),
 	session = require('express-session'),
 	passport = require('passport'),
-	db = require('./lib/database.js');
-	
-require('./lib/config.js')(passport, db);
+	db = require('./lib/database.js'),
+	error = require('./lib/error.js');
+
+require('./lib/auth.js').auth(db, passport, error);
+
+var auth = require('./lib/auth.js');
 
 /**************************************************
 ** SERVER INITIALIZATION
 **************************************************/
-app.use(cookieParser()); // read cookies (needed for auth)
+
+app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
 	extended: true
 }));
 
-app.set('view engine', 'ejs'); // set up ejs for templating
+app.set('view engine', 'ejs');
 app.set('views', __dirname + '/views');
 
-//express session
+//express session secret
 app.use(session({ 
-		secret: 'wonminleew3bbi',
+		secret: 'w3bbi_market',
 		saveUninitialized: true,
 		resave: true}
-	)); // session secret
+	));
 
 app.use(passport.initialize());
 app.use(passport.session());
@@ -39,7 +44,7 @@ app.use(express.static(__dirname + '/public'));
 
 //favicon requests second time for some reason
 app.get('*.ico', function(){})
-require('./routes/routes.js')(app, db, passport, io);
+require('./routes/routes.js')(app, db, auth, io);
 
 //404
 app.get('*', function(req, res){

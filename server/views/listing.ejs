@@ -1,3 +1,5 @@
+<!-- page to display listing information and calendar for rentals -->
+
 <!DOCTYPE html>
 
 <html>
@@ -21,41 +23,50 @@
 	</head>
 	
 	<body>
-
 		<div class="body_wrapper">
-			<% if (typeof user != "undefined") {%>
+		
+			<!-- checks if user is logged in -->
+			<% if (typeof user == "undefined") {%>
+				<div id="form_wrapper">
+					<form id="target" action="/login" method="post">
+						<input name="email" placeholder="Email" type="text" id="email_input" autofocus>
+						<input name="password" placeholder="Password" type="password" id="pw_input">
+						<input id="submit" type="submit" value="Sign in">
+					</form>
+					<div id="signup_wrapper">
+						<a id="signup" href="/signup">Create an account</a>
+					</div>
+				</div>
+			
+			<!-- user is logged in! -->
+			<% } else {%>
 				<p>Logged in: <%= user.email %></p>
 				<p><a href="/logout">Log Out</a></p>
-			<% } else {%>
-				<div id="form_wrapper">
-				<form id="target" action="/login" method="post">
-					<input name="email" placeholder="Email" type="text" id="email_input" autofocus>
-					<input name="password" placeholder="Password" type="password" id="pw_input">
-					<input id="submit" type="submit" value="Sign in">
-				</form>
-				<div id="signup_wrapper">
-					<a id="signup" href="/signup">Create an account</a>
-				</div>
-			</div>
 			<% } %>
-			<a href="/">Home</a>
-			<table>
-				<th>Date Created</th>
-				<th>Domain Name</th>
-				<th>Owner Email</th>
-				<th>Owner Name</th>
-				<th>Price Type</th>
-				<th>Set Price</th>
-				<tr>  
-					<td><%= listing_info.date_created %></td>  
-					<td><%= listing_info.domain_name %></td>  
-					<td><%= listing_info.email %></td>  
-					<td><%= listing_info.fullname %></td>  
-					<td><%= listing_info.price_type %></td>  
-					<td><%= listing_info.set_price %></td>  
-				</tr>                                   
-			</table>
 			
+			<a href="/">Home</a>
+			
+			<!-- information about the current listing -->
+			<% if (typeof listing_info != "undefined") {%>
+				<table>
+					<th>Date Created</th>
+					<th>Domain Name</th>
+					<th>Owner Email</th>
+					<th>Owner Name</th>
+					<th>Price Type</th>
+					<th>Set Price</th>
+					<tr>  
+						<td><%= listing_info.date_created %></td>  
+						<td><%= listing_info.domain_name %></td>  
+						<td><%= listing_info.email %></td>  
+						<td><%= listing_info.fullname %></td>  
+						<td><%= listing_info.price_type %></td>  
+						<td><%= listing_info.set_price %></td>  
+					</tr>                                   
+				</table>
+			<% } %>
+			
+			<!-- any messages from the server -->
 			<div id="message">
 				<% if (typeof message != "undefined") {%>
 					<%= message %>
@@ -66,7 +77,7 @@
 
 			<div id="form_wrapper">
 				<form id="listing_form">
-					<input name="type" value="0" type="radio" class="type_input" id="radio_0_input">
+					<input name="type" value="0" type="radio" class="type_input" id="radio_0_input" checked="checked">
 					<input name="type" value="1" type="radio" class="type_input" id="radio_1_input">
 					<input id="submit" type="submit" value="Rent now!">
 				</form>

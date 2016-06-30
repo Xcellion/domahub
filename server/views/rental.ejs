@@ -1,3 +1,5 @@
+<!-- editing rental page -->
+
 <!DOCTYPE html>
 
 <html>
@@ -31,10 +33,9 @@
 			<div id="w3bbi_hider">w3bbi Rental Info</div>
 			<div id="w3bbi_wrapper">
 				<div id="account_wrapper" class="border_white w3bbi_content_wrapper">
-					<% if (user) {%>
-						<div>Logged in as <%= user.email %></div>
-						<a class="button" href="/logout">Log Out</a>
-					<% } else {%>
+				
+					<!-- checks if user is logged in -->
+					<% if (typeof user == "undefined") {%>
 						<div id="form_wrapper">
 							<form id="target" action="/login" method="post">
 								<input name="email" placeholder="Email" type="text" id="email_input" autofocus>
@@ -45,32 +46,45 @@
 								<a class="button" id="signup" href="/signup">Create an account</a>
 							</div>
 						</div>
+					<!-- if not logged in -->
+					<% } else {%>
+						<div>Logged in as <%= user.email %></div>
+						<a class="button" href="/logout">Log Out</a>
 					<% } %>
+					
 					<a class="button" href="/">Home</a>
-					<a class="button" href="/listing/<%=listing_info.domain_name%>">Back to calendar</a>
+					
+					<!-- listing information, this should never error -->
+					<% if (typeof listing_info != "undefined") {%>
+						<a class="button" href="/listing/<%=listing_info.domain_name%>">Back to calendar</a>
+					<% } %>
 				</div>
 				
 				<div id="message" class="w3bbi_content_wrapper">Currently editing</div>
-				
-				<div id="listing_wrapper" class="w3bbi_content_wrapper">
-					<table id="listing_table">
-						<th>Domain Name</th>
-						<th>Owner Name</th>
-						<tr>  
-							<td><%= listing_info.domain_name %></td>  
-							<td><a href="<%= listing_info.email %>"><%= listing_info.fullname %></a></td>  
-						</tr>                                   
-					</table>
-				</div>
+
+				<!-- listing information, this should never error -->
+				<% if (typeof listing_info != "undefined") {%>
+					<div id="listing_wrapper" class="w3bbi_content_wrapper">
+						<table id="listing_table">
+							<th>Domain Name</th>
+							<th>Owner Name</th>
+							<tr>  
+								<td><%= listing_info.domain_name %></td>  
+								<td><a href="<%= listing_info.email %>"><%= listing_info.fullname %></a></td>  
+							</tr>                                   
+						</table>
+					</div>
+				<% } %>
 			
 				<div id="rental_wrapper" class="w3bbi_content_wrapper">
 					<div>Rented from:</div>
 				</div>
 				
+				<!-- rental edit wrapper -->
 				<div id="rental_edit" class="border_white w3bbi_content_wrapper">
 				
 					<!-- if new rental -->
-					<% if (new_listing_info) { %>
+					<% if (typeof new_listing_info != "undefined") { %>
 						<form id="listing_form" action="/listing/<%=listing_info.domain_name%>/new" method="post">
 						<% if (new_listing_info.type == 0) { %>
 							<div id="edit_now" class="button">Edit now</div>
@@ -81,20 +95,22 @@
 					<!-- if editing existing rental -->
 					<% } else {%>
 						<form id="listing_form" action="/listing/<%=listing_info.domain_name%>/<%=rental_info.rental_id%>" method="post">
-						<div id="edit_now" class="button">Edit now</div>
+							<div id="edit_now" class="button">Edit now</div>
 					<% } %>
-						<input id="submit" class="button" type="submit" value="Submit">
-					</form>
+					
+							<input id="submit" class="button" type="submit" value="Submit">
+						</form>
 				</div>
+				
+				<!-- more rental edits -->
 				<div id="edit_now_details" class="w3bbi_content_wrapper">
 					<form id="edit_details_form">
 						<div>Background image:</div>
 						<input class="edit_input" name="background" placeholder="http://URL-of-background-image.com" type="url" id="background_input" autofocus>
 					</form>
 				</div>
+				
 			</div>
-			
-
 			
 			<div id="rental_preview"></div>
 		</div>
