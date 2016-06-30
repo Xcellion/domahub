@@ -210,17 +210,9 @@ function postListingPage(req, res, next){
 	if (rentalChecks(req, res, domain_name, user_id, type, events)){
 		//all gucci
 		Listing.checkRentalTime(domain_name, events, req.user, function(result){
-			if (result.state == "success"){
-				//check if any are unavailable
-				var unavailable = [];
-				for (var x = 0; x < result.eventStates.length; x++){
-					if (!result.eventStates[x].availability){
-						unavailable.push(result.eventStates[x]);
-					}
-				}
-								
+			if (result.state == "success"){		
 				//some were unavailable
-				if (unavailable.length){
+				if (result.unavailable.length){
 					res.json({
 						unavailable: unavailable
 					});
@@ -263,7 +255,9 @@ function postRentalPage(req, res, next){
 		if (parseFloat(rental_id) == rental_id >>> 0){
 			Listing.setRentalDetails(rental_id, rental_info, rental_details, function(result){
 				if (result.state == "success"){
-					res.json("Success");
+					res.json({
+						message: "Success"
+					});
 				}
 				else {
 					error.handler(req, res, result.description);
@@ -275,7 +269,10 @@ function postRentalPage(req, res, next){
 			Listing.newRental(domain_name, user_id, rental_info, rental_details, function(result){
 				if (result.state == "success"){
 					delete req.session.new_listing_info;
-					res.json("Success");
+					res.json({
+						message: "Success",
+						rental_id: result.rental_id
+					});
 				}
 				else {
 					error.handler(req, res, result.description);

@@ -31,7 +31,7 @@ $(document).ready(function() {
 		
 		//change if different
 		if (new_text != $(this).html() && new_text != null){
-			$(this).html(new_text);
+			$(this).html(sanitizeHtml(new_text));
 		}
 	});
 });
@@ -64,6 +64,11 @@ function toggleEdit(){
 	}
 	else {
 		$('#edit_now').html("Edit now");
+		var backgroundUrl = sanitizeHtml($("#background_input").val());
+		console.log(backgroundUrl);
+		var style_sheet = getStyleSheet("main_css");
+		style_sheet.insertRule("body {background:url(" + backgroundUrl + ")", 0);
+		$("#background_input").val(sanitizeHtml($("#background_input").val()));
 	}
 }
 
@@ -131,11 +136,15 @@ function submitRentals(){
 				rental_details: rental_data.rental_details
 			}
 		}).done(function(data){
-			if (data == "Success"){
-				$("#message").html(data);
+			if (data.message == "Success"){
+				$("#message").html(data.message);
 				//remove cookies since it was successful
 				delete_cookie("local_events");
 				delete_cookie("type");
+				
+				//replace the URL in the window
+				history.replaceState(0, "", data.rental_id)
+				window.location = window.location.pathname.replace(/\/[^\/]*$/, '/'+data.rental_id);
 			}
 			else {
 				$("#message").html(data);
@@ -204,10 +213,10 @@ function findUrls( text ){
     var url;
     var matchArray;
 
-    // Regular expression to find FTP, HTTP(S) and email URLs.
+    //regular expression to find FTP, HTTP(S) and email URLs.
     var regexToken = /(((ftp|https?):\/\/)[\-\w@:%_\+.~#?,&\/\/=]+)|((mailto:)?[_.\w-]+@([\w][\w\-]+\.)+[a-zA-Z]{2,3})/g;
 
-    // Iterate through any URLs in the text.
+    //iterate through any URLs in the text.
     while( (matchArray = regexToken.exec( source )) !== null ){
         var token = matchArray[0];
         urlArray.push( token );
@@ -217,7 +226,7 @@ function findUrls( text ){
 }
 
 //helper function to delete a cookie
-function delete_cookiedelete_cookie(name) {
+function delete_cookie(name) {
 	//document.cookie = [name, '=; expires=Thu, 01-Jan-1970 00:00:01 GMT; path=/; domain=.', window.location.host.toString()].join('');
 	document.cookie = [name, '=; expires=Thu, 01-Jan-1970 00:00:01 GMT', '; path=/;'].join('');
 }

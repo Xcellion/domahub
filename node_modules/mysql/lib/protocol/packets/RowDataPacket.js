@@ -7,7 +7,19 @@ module.exports = RowDataPacket;
 function RowDataPacket() {
 }
 
-RowDataPacket.prototype.parse = function(parser, fieldPackets, typeCast, nestTables, connection) {
+Object.defineProperty(RowDataPacket.prototype, 'parse', {
+  configurable: true,
+  enumerable: false,
+  value: parse
+});
+
+Object.defineProperty(RowDataPacket.prototype, '_typeCast', {
+  configurable: true,
+  enumerable: false,
+  value: typeCast
+});
+
+function parse(parser, fieldPackets, typeCast, nestTables, connection) {
   var self = this;
   var next = function () {
     return self._typeCast(fieldPacket, parser, connection.config.timezone, connection.config.supportBigNumbers, connection.config.bigNumberStrings, connection.config.dateStrings);
@@ -36,15 +48,17 @@ RowDataPacket.prototype.parse = function(parser, fieldPackets, typeCast, nestTab
       this[fieldPacket.name] = value;
     }
   }
-};
+}
 
-RowDataPacket.prototype._typeCast = function(field, parser, timeZone, supportBigNumbers, bigNumberStrings, dateStrings) {
+function typeCast(field, parser, timeZone, supportBigNumbers, bigNumberStrings, dateStrings) {
   var numberString;
 
   switch (field.type) {
     case Types.TIMESTAMP:
+    case Types.TIMESTAMP2:
     case Types.DATE:
     case Types.DATETIME:
+    case Types.DATETIME2:
     case Types.NEWDATE:
       var dateString = parser.parseLengthCodedString();
       if (dateStrings) {
@@ -86,7 +100,7 @@ RowDataPacket.prototype._typeCast = function(field, parser, timeZone, supportBig
       numberString = parser.parseLengthCodedString();
       return (numberString === null || (field.zeroFill && numberString[0] == "0"))
         ? numberString
-        : ((supportBigNumbers && (bigNumberStrings || (Number(numberString) > IEEE_754_BINARY_64_PRECISION)))
+        : ((supportBigNumbers && (bigNumberStrings || (Number(numberString) >= IEEE_754_BINARY_64_PRECISION) || Number(numberString) <= -IEEE_754_BINARY_64_PRECISION))
           ? numberString
           : Number(numberString));
     case Types.BIT:
@@ -105,4 +119,4 @@ RowDataPacket.prototype._typeCast = function(field, parser, timeZone, supportBig
     default:
       return parser.parseLengthCodedString();
   }
-};
+}

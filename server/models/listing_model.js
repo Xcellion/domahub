@@ -1,3 +1,5 @@
+var sanitizeHtml = require('sanitize-html');
+
 module.exports = listing_model;
 
 function listing_model(database, Account){
@@ -371,10 +373,13 @@ listing_model.prototype.checkRentalTime = function(domain_name, events, user_id,
 	listing_model.getInfo("rentals", "listings.domain_name", domain_name, db_query, function(result){
 		listing_id = result.info[0].listing_id;
 		if (result.state == "success"){
+			//array of all unavailable events
+			var unavailable = [];
+
 			//loop through all posted events
 			for (var y = 0; y < events.length; y++){
 				var availability = true;
-				
+
 				//posted date
 				var user_start = new Date(events[y].start);
 				var user_offset = events[y].offset;
@@ -399,6 +404,7 @@ listing_model.prototype.checkRentalTime = function(domain_name, events, user_id,
 							//check if its available
 							if (checkOverlap(user_utc, user_duration, db_utc, db_duration)){
 								availability = false;
+								unavailable.push(events[y])
 								break;
 							}
 						}
@@ -413,7 +419,8 @@ listing_model.prototype.checkRentalTime = function(domain_name, events, user_id,
 				callback({
 					state: "success",
 					eventStates: eventStates,
-					listing_id: listing_id
+					listing_id: listing_id,
+					unavailable: unavailable
 				});
 			}
 		}
@@ -437,7 +444,7 @@ listing_model.prototype.newRental = function(domain_name, user_id, new_listing_i
 	
 	//first double check that the time is available
 	listing_model.checkRentalTime(domain_name, new_events, user_id, function(result){		
-		if (result.state == "success"){
+		if (result.state == "success" && result.unavailable.length == 0){
 			var tempStart = new Date(new_events[0].start);
 			var tempEnd = new Date(new_events[0].end);
 			var start = toUTC(tempStart, new_events[0].offset);
@@ -452,6 +459,7 @@ listing_model.prototype.newRental = function(domain_name, user_id, new_listing_i
 			
 			//try to create a new rental
 			listing_model.insertSetInfo("rentals", insert, function(result){
+				//the rental id of the newly created rental
 				insertId = result.insertId;
 				
 				//rental succeeded
@@ -520,21 +528,24 @@ listing_model.prototype.newRentalDetails = function(rental_id, rental_info, rent
 		for (var y in rental_details[x]){
 			if (rental_details[x][y] == "css"){
 				tempValue.push("css");
-				tempValue.push("body {background:url(" + rental_details[x][1] + ") no-repeat center bottom fixed; }");
+				tempValue.push("body {background:url(" + sanitizeHtml(rental_details[x][1]) + ") no-repeat center bottom fixed; }");
 				break;
 			}
 			else {
-				tempValue.push(rental_details[x][y]);
+				//make sure to sanitize the HTML
+				tempValue.push(sanitizeHtml(rental_details[x][y]));
 			}
 		}
 		
 		values.push(tempValue);
 	}
-				
+	
+	//insert the rental details!
 	listing_model.insertInfo("rental_details", keys, values, function(result){
 		if (result.state == "success"){
 			callback({
-				state: "success"
+				state: "success",
+				rental_id: rental_id
 			});
 		}
 		else {

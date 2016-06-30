@@ -8,6 +8,7 @@ $(document).ready(function() {
 		editable: false, //prevents editing of events
 		eventOverlap: false, //prevents overlap of events
 		eventStartEditable: false, //prevents moving of events
+		nowIndicator: true,
 		
 		//creating new events
 		select: function(start, end, jsEvent, view){
@@ -498,7 +499,7 @@ function storeCookies(type){
 		}
 	}
 	else if (type == "type"){
-		cookie = $("input[type='radio'][name='type']:checked").val();
+		cookie = parseFloat($("input[type='radio'][name='type']:checked").val());
 	}
 	
 	if (read_cookie(type)){
