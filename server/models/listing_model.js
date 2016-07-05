@@ -241,25 +241,49 @@ listing_model.prototype.getRental = function(rental_id, listing_info, callback){
 	listing_model.getInfo("rentals", "rental_id", rental_id, false, function(result){
 		if (result.state == "success"){
 			rental_info = result.info[0];
+			var rentals = [{
+				date: result.info[0].date,
+				duration: result.info[0].duration
+			}];
 			
-			listing_model.getInfo("rental_details", "rental_id", rental_id, false, function(result){
+			//get the rental info for all rentals with same details
+			listing_model.getInfo("rentals", "same_details", rental_id, false, function(result){
 				if (result.state == "success"){
-					callback({
-						state: "success",
-						listing_info: listing_info,
-						rental_info: rental_info,
-						rental_details: result.info
+					for (var x in result.info){
+						tempInfo = {
+							date: result.info[x].date,
+							duration: result.info[x].duration
+						}
+						rentals.push(tempInfo);
+					}
+					rental_info.rentals = rentals;
+				
+					listing_model.getInfo("rental_details", "rental_id", rental_id, false, function(result){
+						if (result.state == "success"){
+							callback({
+								state: "success",
+								listing_info: listing_info,
+								rental_info: rental_info,
+								rental_details: result.info
+							});
+						}
+						//no details exist, send current one instead!
+						else {
+							listing_model.sendCurrentRental(listing_id, listing_info, function(result){
+								callback({
+									state: "success",
+									listing_info: listing_info,
+									rental_info: rental_info,
+									rental_details: result.rental_details
+								});
+							});
+						}
 					});
 				}
-				//no details exist, send current one instead!
 				else {
-					listing_model.sendCurrentRental(listing_id, listing_info, function(result){
-						callback({
-							state: "success",
-							listing_info: listing_info,
-							rental_info: rental_info,
-							rental_details: result.rental_details
-						});
+					callback({
+						state: "error",
+						description: "Invalid rental!"
 					});
 				}
 			});
@@ -615,7 +639,6 @@ listing_model.prototype.callbackError = function(insertId, error, callback){
 
 //helper function to check if dates overlap
 function checkOverlap(dateX, durationX, dateY, durationY){
-	console.log(dateX, dateY);
 	return ((dateX.getTime() < dateY.getTime() + durationY) && (dateY.getTime() < dateX.getTime() + durationX));
 }
 

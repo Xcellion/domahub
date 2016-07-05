@@ -44,7 +44,7 @@ app.use(express.static(__dirname + '/public'));
 
 //favicon requests second time for some reason
 app.get('*.ico', function(){})
-require('./routes/routes.js')(app, db, auth, io);
+require('./routes/routes.js')(app, db, auth, error);
 
 //404
 app.get('*', function(req, res){

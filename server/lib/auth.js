@@ -118,14 +118,21 @@ function isLoggedIn(req, res, next) {
 	}
 	else {
 		console.log("Not logged in!");
-		//redirect them back to the listing page with message
-		if (route == "/listing/:domain_name/:rental_id"){
-			error.handler(req, res, "Invalid user!");
-		}
-		//redirect to the default login page
-		else {
-			req.session.redirectTo = req.header('Referer');
-			res.render("login.ejs");
+		switch (req.method){
+			case ("POST"):
+				error.handler(req, res, "Invalid username / password!", "json");
+				break;
+			default:
+				//redirect them back to the listing page with message
+				if (route == "/listing/:domain_name/:rental_id"){
+					error.handler(req, res, "Invalid user!");
+				}
+				//redirect to the default login page
+				else {
+					req.session.redirectTo = req.header('Referer');
+					res.render("login.ejs");
+				}
+				break;
 		}
 	}
 }
@@ -152,7 +159,8 @@ function signup(req, res){
 //function to login 
 function loginPost(req, res, next){
 	//redirect to referrer or main page
-	redirectURL = req.path == "/login" ? "/" : req.header("Referer");
+	redirectTo = req.header("Referer") ? req.header("Referer") : "/";
+	redirectURL = req.session.redirectBack ? req.session.redirectBack : redirectTo;
 	passport.authenticate('local-login', function(err, user, info){
 		if (!user && info){
 			error.handler(req, res, info.message);

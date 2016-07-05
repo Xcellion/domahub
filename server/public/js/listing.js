@@ -142,8 +142,11 @@ function submitRentals(){
 			else if (data.redirect){
 				window.location = data.redirect;
 			}
+			else if (data.state == "error"){
+				$("#message").html(data.message);
+			}
 			else {
-				$("#message").html(data);
+				console.log(data);
 			}
 		});
 	}

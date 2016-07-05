@@ -4,56 +4,42 @@ module.exports = {
 	handler: handler
 }
 
-//make sure user is logged in before doing anything
+//handle errors, either send them back json, or redirect the page
 function handler(req, res, message, type) {
 	switch (type){
 		case "json":
-			res.json(message);
+			res.json({
+				message: message,
+				state: "error"
+			});
 			break;
 		default:
 			var redirectTo = req.header("Referer") || "/";
+			var redirectBack = req.path;
 			req.session.message = message;
-			
-			//if the user is coming from a click instead of a URL enter
-			if (req.header("Referer")){
-				switch (message){
-					case "User exists!":
-						break;
-					case "Invalid user!":
-					case "Invalid password!":
-						console.log(message);
-						req.session.message = "Invalid username / password!"
-						break;
-					default:
-						break;
-				}
-			}
-			//user came from URL input
-			else {
-				switch (message){
-					case "Invalid listing!":
-						break;
-					case "Invalid user!":
-					case "Invalid password!":
-						req.session.message = "Invalid username / password!";
-					case "Invalid rental!":
-					case "Invalid rental type!":
-					case "Invalid rental date!":
-						redirectTo = RemoveLastDirectoryPartOf(req.path);
-						break;
-					case "Invalid rental data!":
-						redirectTo = req.path;
-						break;
-					default:
-						break;
-				}
+
+			switch (message){
+				case "Invalid listing!":
+					break;
+				case "Invalid user!":
+				case "Invalid password!":
+					req.session.message = "Invalid username / password!";
+					redirectTo = "/login";
+					break;
+				case "Invalid rental!":
+					redirectTo = RemoveLastDirectoryPartOf(req.path);
+					break;
+				case "Invalid rental data!":
+					redirectTo = req.path;
+					break;
+				default:
+					break;
 			}
 			
-			req.session.redirectTo = redirectTo;
+			req.session.redirectBack = redirectBack;
 
 			console.log(message + " Sending back to " + redirectTo);
 			res.redirect(redirectTo);
-			req.session.message = "";
 			break;
 	}
 }

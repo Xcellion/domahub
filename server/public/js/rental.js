@@ -159,17 +159,33 @@ function submitRentals(){
 //update page based on database data
 function updatePage(html, data){
 
-	//update w3bbi rental info
-	for (var x = 0; x < rental_info.length; x++){
-		var start = new Date(rental_info[x].start);
-		start = moment(start).format('YYYY, MMMM D, h:mm:ss A');
-		var end = new Date(rental_info[x].end);
-		end = moment(end).format('YYYY, MMMM D, h:mm:ss A');
-		
-		var rented_start = '<span id="rental_start">'+start+'</span>'
-		var rented_end = '<span id="rental_end">'+end+'</span>'
-		var rented_dates = $('<li>' + rented_start + ' -- ' + rented_end + '</li>')
-		$("#rental_wrapper").append(rented_dates);
+	//update w3bbi rental info for new rentals
+	if (new_listing_info){
+		for (var x = 0; x < rental_info.length; x++){
+			var start = new Date(rental_info[x].start);
+			start = moment(start).format('YYYY, MMMM D, h:mm:ss A');
+			var end = new Date(rental_info[x].end);
+			end = moment(end).format('YYYY, MMMM D, h:mm:ss A');
+			
+			var rented_start = '<span id="rental_start">'+start+'</span>'
+			var rented_end = '<span id="rental_end">'+end+'</span>'
+			var rented_dates = $('<li>' + rented_start + ' -- ' + rented_end + '</li>')
+			$("#rental_wrapper").append(rented_dates);
+		}
+	}
+	//update w3bbi rental info for editing rentals
+	else {
+		for (var x = 0; x < rental_info.rentals.length; x++){
+			var start = new Date(rental_info.rentals[x].date);
+			start = moment(start).format('YYYY, MMMM D, h:mm:ss A');
+			var end = new Date(start + rental_info.rentals[x].duration);
+			end = moment(end).format('YYYY, MMMM D, h:mm:ss A');
+			
+			var rented_start = '<span id="rental_start">'+start+'</span>'
+			var rented_end = '<span id="rental_end">'+end+'</span>'
+			var rented_dates = $('<li>' + rented_start + ' -- ' + rented_end + '</li>')
+			$("#rental_wrapper").append(rented_dates);
+		}
 	}
 
 	//update rental preview

@@ -185,8 +185,7 @@ function getRentalPage(req, res, next){
 							listing_info: result.listing_info,
 							rental_info: result.rental_info,
 							rental_html: body,
-							rental_details: result.rental_details,
-							new_listing_info: false
+							rental_details: result.rental_details
 						});
 					}
 				});
@@ -299,12 +298,12 @@ function rentalChecks(req, res, domain_name, user_id, type, events){
 	//check if rental type is legit
 	else if (parseFloat(type) != type >>> 0){
 		bool = false;
-		error.handler(req, res, "Invalid rental type!");
+		error.handler(req, res, "Invalid rental type!", "json");
 	}
 	//check if events even exist
 	else if (!events){
 		bool = false;
-		error.handler(req, res, "Invalid date!");
+		error.handler(req, res, "Invalid date!", "json");
 	}
 	//check if all the event info are legit dates
 	else if (events){
