@@ -3,6 +3,7 @@ var app,
 	error;
 	
 var request = require('request');
+var paypal = require('../lib/paypal.js');
 
 var	account_model = require('../models/account_model.js'),
 	listing_model = require('../models/listing_model.js'),
@@ -27,6 +28,9 @@ module.exports = function(app_pass, db, auth, e){
 	//w3bbi pages
 	app.get('/listing/:domain_name', getListingPage);
 	app.get('/listing/:domain_name/:rental_id', isLoggedIn, getRentalPage);
+
+	//payment post
+	app.post('/listing/:domain_name/pay', isLoggedIn, payRentalpage);
 
 	//w3bbi posts
 	app.post('/listing/:domain_name/rent', isLoggedIn, postListingPage);
@@ -318,4 +322,61 @@ function rentalChecks(req, res, domain_name, user_id, type, events){
 	}
 	
 	return bool;
+}
+
+//function to pay via paypal
+function payRentalpage(req, res, next){
+
+	var create_payment_json = {
+		"intent": "sale",
+		"payer": {
+			"payment_method": "paypal"
+		},
+		"redirect_urls": {
+			"return_url": "http://www.localhost:8080/return",
+			"cancel_url": "http://www.localhost:8080/cancel"
+		},
+		"transactions": [{
+			"item_list": {
+				"items": [{
+					"name": "Domain Rental",
+					"sku": "Hourly",
+					"price": "1.00",
+					"currency": "USD",
+					"quantity": 25
+				}]
+			},
+			"amount": {
+				"currency": "USD",
+				"total": "25.00"
+			},
+			"description": "Renting domain name."
+		}]
+	};
+
+	
+	paypal.webProfile.getId(function (error, web_profile_id) {
+		if (error) {
+			console.log("Error with getting the profile! ", error);
+			throw error;
+		} else {
+			//Set the id of the created payment experience in payment json
+			var experience_profile_id = web_profile_id;
+			create_payment_json.experience_profile_id = experience_profile_id;
+
+			paypal.payment.create(create_payment_json, function (error, payment) {
+				if (error) {
+					console.log("Payment error! ", error.response.details);
+					throw error;
+				} else {
+					console.log("Payment successfully created! Need authorization now!");
+					for (var i = 0; i < payment.links.length; i++) {
+						if (payment.links[i].rel === 'approval_url') {
+							res.redirect(payment.links[i].href);
+						}
+					}
+				}
+			});
+		}
+	});
 }

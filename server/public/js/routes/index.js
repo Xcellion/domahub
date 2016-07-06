@@ -23,4 +23,10 @@ $(document).ready(function() {
 			return false;
 		}
 	});
+	
+	if (!user){
+		delete_cookie("type");
+		delete_cookie("local_events");
+	}
 });
+

@@ -125,12 +125,12 @@ function rentalData(){
 //function to submit new rental info
 function submitRentals(){
 	//client side check if authenticated
-	 if (user){
+	if (user){
 		var rental_data = rentalData();
 	
 		$.ajax({
 			type: "POST",	
-			url: window.location.pathname,
+			url: RemoveLastDirectoryPartOf(window.location.pathname) + "/pay",
 			data: {
 				rental_info: rental_data.rental_info,
 				rental_details: rental_data.rental_details
@@ -245,4 +245,11 @@ function findUrls( text ){
 function delete_cookie(name) {
 	//document.cookie = [name, '=; expires=Thu, 01-Jan-1970 00:00:01 GMT; path=/; domain=.', window.location.host.toString()].join('');
 	document.cookie = [name, '=; expires=Thu, 01-Jan-1970 00:00:01 GMT', '; path=/;'].join('');
+}
+
+//helper function to remove last part of URL
+function RemoveLastDirectoryPartOf(the_url){
+    var the_arr = the_url.split('/');
+    the_arr.pop();
+    return( the_arr.join('/') );
 }

@@ -9,20 +9,21 @@
 		<link class="main_css" rel="stylesheet" href="/css/style_base.css" type="text/css" />
 		<link rel="stylesheet" href="/css/rental.css" type="text/css" />
 		<link rel="stylesheet" href="/css/fullcalendar.min.css" type="text/css" />
-		<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script> -->
+		<!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script> -->
 		<script src="/js/jquery/jquery.js" type="text/javascript"></script>
 		<script src="/js/jquery/jquery-ui.js" type="text/javascript"></script>
 		<script src="/js/moment/moment.min.js" type="text/javascript"></script>
 		<script src="/js/sanitize-html.js" type="text/javascript"></script>
 		<script type="text/javascript">
-			var user = <% if(user){ %><%-JSON.stringify(user)%><% }else{ %>""<% } %>;
-			var listing_info = <% if(listing_info){ %><%-JSON.stringify(listing_info)%><% }else{ %>""<% } %>;
-			var rental_info = <% if(rental_info){ %><%-JSON.stringify(rental_info)%><% }else{ %>""<% } %>;
-			var rental_details = <% if(rental_details){ %><%-JSON.stringify(rental_details)%><% }else{ %>""<% } %>;
-			var rental_html = <% if(rental_html){ %><%-JSON.stringify(rental_html)%><% }else{ %>""<% } %>;
-			var new_listing_info = <% if(new_listing_info){ %><%-JSON.stringify(new_listing_info)%><% }else{ %>""<% } %>;
+			var user = <% if(typeof user != "undefined"){ %><%-JSON.stringify(user)%><% }else{ %>""<% } %>;
+			var listing_info = <% if(typeof listing_info != "undefined"){ %><%-JSON.stringify(listing_info)%><% }else{ %>""<% } %>;
+			var rental_info = <% if(typeof rental_info != "undefined"){ %><%-JSON.stringify(rental_info)%><% }else{ %>""<% } %>;
+			var rental_details = <% if(typeof rental_details != "undefined"){ %><%-JSON.stringify(rental_details)%><% }else{ %>""<% } %>;
+			var rental_html = <% if(typeof rental_html != "undefined"){ %><%-JSON.stringify(rental_html)%><% }else{ %>""<% } %>;
+			var new_listing_info = <% if(typeof new_listing_info != "undefined"){ %><%-JSON.stringify(new_listing_info)%><% }else{ %>""<% } %>;
 		</script>
-		<script src="/js/rental.js" type="text/javascript"></script>
+		<script src="/js/cookie.js" type="text/javascript"></script>
+		<script src="/js/routes/rental.js" type="text/javascript"></script>
 		<link rel="icon" type="image/ico" href="/images/favicon.ico">
 	</head>
 	
@@ -85,7 +86,7 @@
 				
 					<!-- if new rental -->
 					<% if (typeof new_listing_info != "undefined") { %>
-						<form id="listing_form" action="/listing/<%=listing_info.domain_name%>/new" method="post">
+						<form id="listing_form" action="/listing/<%=listing_info.domain_name%>/pay" method="post">
 						<% if (new_listing_info.type == 0) { %>
 							<div id="edit_now" class="button">Edit now</div>
 						<% } else if (new_listing_info.type == 1) { %>
@@ -93,13 +94,7 @@
 						<% } %>
 							<input id="submit" class="button" type="submit" value="Submit">
 						</form>
-						
-						<!-- paypal stuff -->
-						<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
-							<input type="hidden" name="cmd" value="_s-xclick">
-							<input type="hidden" name="encrypted" value="-----BEGIN PKCS7-----MIIH2QYJKoZIhvcNAQcEoIIHyjCCB8YCAQExggEwMIIBLAIBADCBlDCBjjELMAkGA1UEBhMCVVMxCzAJBgNVBAgTAkNBMRYwFAYDVQQHEw1Nb3VudGFpbiBWaWV3MRQwEgYDVQQKEwtQYXlQYWwgSW5jLjETMBEGA1UECxQKbGl2ZV9jZXJ0czERMA8GA1UEAxQIbGl2ZV9hcGkxHDAaBgkqhkiG9w0BCQEWDXJlQHBheXBhbC5jb20CAQAwDQYJKoZIhvcNAQEBBQAEgYCN9yIiIRCIKpxEkOmw/2cHcaYQlU3j9Y8vZ/mylNtrSCnesDNMVvZisqVuITnQaqlmXak+kW8d1Cq7hfJkkxpGjAfGd1SlYcKU5oSseLfxPDUrPhlFxDgL8hySr+HrEWr5rRZEkVOrIFbZrqMp3YRVRIPEkq8hrQRKFvP+dCMzcjELMAkGBSsOAwIaBQAwggFVBgkqhkiG9w0BBwEwFAYIKoZIhvcNAwcECMPzmCkLCkE9gIIBMAAFqfbz2eCUE71qhBovuw9yU4NUxM33y0jUSFxHLWWPMRqtKbgcH5bdM5x392ZSyDojs85u6Y1KoGatnKHZGt7qzL6j3sQhuL9kw7bydhw4WNaegqBgcbbd6GKijbKdy8ikJpFTYzbNBxdflKDYPINzuB9knGIvdFTRsY3qt2nlMTqh99iZgylbpWnWyUHx5lNBgYN71UIV4ZVIx0a0GoPfenn73I65sFWflgUEMI04G2A6NgiN0yZVq/qxyQrarsvxC3pkYnoEDBp25tQXa3BpYgIc2WIEyLT68YPN/ajMigNh5yWBcSUObxh4Zh8tMpRsqgpjrJuqCc0GbTLq7SBfIHbuDYl1wmyPOZxniUPLnoKsuCih7MtohaoY4rH0WDLsgjowdufCFwwGGQXLGMygggOHMIIDgzCCAuygAwIBAgIBADANBgkqhkiG9w0BAQUFADCBjjELMAkGA1UEBhMCVVMxCzAJBgNVBAgTAkNBMRYwFAYDVQQHEw1Nb3VudGFpbiBWaWV3MRQwEgYDVQQKEwtQYXlQYWwgSW5jLjETMBEGA1UECxQKbGl2ZV9jZXJ0czERMA8GA1UEAxQIbGl2ZV9hcGkxHDAaBgkqhkiG9w0BCQEWDXJlQHBheXBhbC5jb20wHhcNMDQwMjEzMTAxMzE1WhcNMzUwMjEzMTAxMzE1WjCBjjELMAkGA1UEBhMCVVMxCzAJBgNVBAgTAkNBMRYwFAYDVQQHEw1Nb3VudGFpbiBWaWV3MRQwEgYDVQQKEwtQYXlQYWwgSW5jLjETMBEGA1UECxQKbGl2ZV9jZXJ0czERMA8GA1UEAxQIbGl2ZV9hcGkxHDAaBgkqhkiG9w0BCQEWDXJlQHBheXBhbC5jb20wgZ8wDQYJKoZIhvcNAQEBBQADgY0AMIGJAoGBAMFHTt38RMxLXJyO2SmS+Ndl72T7oKJ4u4uw+6awntALWh03PewmIJuzbALScsTS4sZoS1fKciBGoh11gIfHzylvkdNe/hJl66/RGqrj5rFb08sAABNTzDTiqqNpJeBsYs/c2aiGozptX2RlnBktH+SUNpAajW724Nv2Wvhif6sFAgMBAAGjge4wgeswHQYDVR0OBBYEFJaffLvGbxe9WT9S1wob7BDWZJRrMIG7BgNVHSMEgbMwgbCAFJaffLvGbxe9WT9S1wob7BDWZJRroYGUpIGRMIGOMQswCQYDVQQGEwJVUzELMAkGA1UECBMCQ0ExFjAUBgNVBAcTDU1vdW50YWluIFZpZXcxFDASBgNVBAoTC1BheVBhbCBJbmMuMRMwEQYDVQQLFApsaXZlX2NlcnRzMREwDwYDVQQDFAhsaXZlX2FwaTEcMBoGCSqGSIb3DQEJARYNcmVAcGF5cGFsLmNvbYIBADAMBgNVHRMEBTADAQH/MA0GCSqGSIb3DQEBBQUAA4GBAIFfOlaagFrl71+jq6OKidbWFSE+Q4FqROvdgIONth+8kSK//Y/4ihuE4Ymvzn5ceE3S/iBSQQMjyvb+s2TWbQYDwcp129OPIbD9epdr4tJOUNiSojw7BHwYRiPh58S1xGlFgHFXwrEBb3dgNbMUa+u4qectsMAXpVHnD9wIyfmHMYIBmjCCAZYCAQEwgZQwgY4xCzAJBgNVBAYTAlVTMQswCQYDVQQIEwJDQTEWMBQGA1UEBxMNTW91bnRhaW4gVmlldzEUMBIGA1UEChMLUGF5UGFsIEluYy4xEzARBgNVBAsUCmxpdmVfY2VydHMxETAPBgNVBAMUCGxpdmVfYXBpMRwwGgYJKoZIhvcNAQkBFg1yZUBwYXlwYWwuY29tAgEAMAkGBSsOAwIaBQCgXTAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcBMBwGCSqGSIb3DQEJBTEPFw0xNjA3MDUxODQxMDVaMCMGCSqGSIb3DQEJBDEWBBQBQ2pt2yUm8bStShny3KVRGoWuGDANBgkqhkiG9w0BAQEFAASBgKqFBOOtIWrgi0PKkaOBJ7VGJWN063IqIP1SdZ8EHTaC7YNFse6dB9uk0ZeodV7e1mNYPZOWo+K5F2QrMFhhWCxQQnrZ2kJFlNpvel2KdQjLZLJHlmwCytjjM5J4hi2TG+xcOUtAO0VIt72/iNN4+ncEq3NyVXF/K/b4qPTsNjdW-----END PKCS7-----">
-							<input type="image" src="https://www.paypalobjects.com/webstatic/en_US/i/buttons/checkout-logo-small.png" alt="Check out with PayPal"" border="0" name="paypal_submit" alt="Check out with PayPal">
-						</form>
+	
 					<!-- if editing existing rental -->
 					<% } else {%>
 						<form id="listing_form" action="/listing/<%=listing_info.domain_name%>/<%=rental_info.rental_id%>" method="post">
