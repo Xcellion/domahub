@@ -1,12 +1,21 @@
-$(document).ready(function() {
+var handler;
 
-	//if rental has yet to be submitted
-	if (new_listing_info){
-		for (var y = 0; y < new_listing_info.rental_info.length; y++){
-			
+$(document).ready(function() {
+	handler = StripeCheckout.configure({
+		key: 'pk_test_kcmOEkkC3QtULG5JiRMWVODJ',
+		name: 'w3bbi Domain Rental',
+		image: '/images/www.jpg',
+		panelLabel: 'Pay',
+		zipCode : true,
+		locale: 'auto',
+		token: function(token) {
+			// You can access the token ID with `token.id`.
+			// Get the token ID to your server-side code for use.
+			var $id = $('<input id="stripeToken" type=hidden name=stripeToken />').val(token.id);
+			$('#listing_form').append($id).submit();
 		}
-	}
-	
+	});
+
 	$("#listing_form").submit(function(e){
 		e.preventDefault();
 		submitRentals();
@@ -34,6 +43,22 @@ $(document).ready(function() {
 			$(this).html(sanitizeHtml(new_text));
 		}
 	});
+
+	$('#stripe-button').click(function(){
+		var amount = new_listing_info.price * 100;
+
+		handler.open({
+			amount: amount,
+			description: 'Renting at ' + new_listing_info.listing_info.domain_name
+		});
+
+		return false;
+	});
+});
+
+// Close Checkout on page navigation:
+$(window).on('popstate', function() {
+	handler.close();
 });
 
 //toggler to hide w3bbi info
@@ -133,7 +158,8 @@ function submitRentals(){
 			url: RemoveLastDirectoryPartOf(window.location.pathname) + "/pay",
 			data: {
 				rental_info: rental_data.rental_info,
-				rental_details: rental_data.rental_details
+				rental_details: rental_data.rental_details,
+				stripeToken: $("#stripeToken").val()
 			}
 		}).done(function(data){
 			if (data.message == "Success"){
@@ -161,6 +187,10 @@ function updatePage(html, data){
 
 	//update w3bbi rental info for new rentals
 	if (new_listing_info){
+		//update pricing for stripe
+		$("#stripe-button").data("amount", new_listing_info.price);
+		$("#stripe-button").data("description", new_listing_info.listing_info.domain_name);
+	
 		for (var x = 0; x < rental_info.length; x++){
 			var start = new Date(rental_info[x].start);
 			start = moment(start).format('YYYY, MMMM D, h:mm:ss A');

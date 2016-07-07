@@ -12,14 +12,10 @@ function listing_model(database, Account){
 listing_model.prototype.getAllListings = function(callback){
 	console.log("Attempting to get all listing info");
 	this.db.query('SELECT \
-					listings.date_created,\
-					listings.domain_name,\
-					listings.price_type,\
-					listings.set_price,\
-					listings.owner_id,\
+					listings.*,\
 					accounts.fullname,\
 					accounts.email\
-				FROM listings JOIN accounts ON listings.owner_id = accounts.id WHERE listings.active = 1', function(result){
+				FROM listings JOIN accounts ON listings.owner_id = accounts.id WHERE listings.price_type != 0', function(result){
 		//listing info successfully retrieved
 		if (result.length >= 0){
 			callback({
@@ -138,11 +134,7 @@ listing_model.prototype.getInfo = function(database, db_where, db_where_equal, s
 //gets all info for a listing
 listing_model.prototype.getListingInfo = function(domain_name, callback){
 	db_query = "SELECT \
-					listings.date_created,\
-					listings.domain_name,\
-					listings.price_type,\
-					listings.set_price,\
-					listings.id,\
+					listings.*,\
 					accounts.fullname,\
 					accounts.email\
 				FROM ?? JOIN accounts ON listings.owner_id = accounts.id WHERE ?? = ? ";
@@ -396,6 +388,8 @@ listing_model.prototype.checkRentalTime = function(domain_name, events, user_id,
 	//get all rentals for the listing
 	listing_model.getInfo("rentals", "listings.domain_name", domain_name, db_query, function(result){
 		listing_id = result.info[0].listing_id;
+		listing_info = result.info[0];
+		
 		if (result.state == "success"){
 			//array of all unavailable events
 			var unavailable = [];
@@ -444,6 +438,7 @@ listing_model.prototype.checkRentalTime = function(domain_name, events, user_id,
 					state: "success",
 					eventStates: eventStates,
 					listing_id: listing_id,
+					listing_info: listing_info,
 					unavailable: unavailable
 				});
 			}

@@ -3,7 +3,7 @@ var app,
 	error;
 	
 var request = require('request');
-var paypal = require('../lib/paypal.js');
+var stripe = require("stripe")("sk_test_PHd0TEZT5ytlF0qCNvmgAThp");
 
 var	account_model = require('../models/account_model.js'),
 	listing_model = require('../models/listing_model.js'),
@@ -28,9 +28,6 @@ module.exports = function(app_pass, db, auth, e){
 	//w3bbi pages
 	app.get('/listing/:domain_name', getListingPage);
 	app.get('/listing/:domain_name/:rental_id', isLoggedIn, getRentalPage);
-
-	//payment post
-	app.post('/listing/:domain_name/pay', isLoggedIn, payRentalpage);
 
 	//w3bbi posts
 	app.post('/listing/:domain_name/rent', isLoggedIn, postListingPage);
@@ -151,11 +148,11 @@ function getRentalPage(req, res, next){
 		error.handler(req, res, "Invalid listing!");
 	}
 	//redirect to listing page if rental is not a number
-	else if (parseFloat(rental_id) != rental_id >>> 0 && rental_id != "new"){
+	else if ((parseFloat(rental_id) != rental_id >>> 0) && rental_id != "new"){
 		error.handler(req, res, "Invalid rental!");
 	}
 	//we're creating a new rental
-	else if (parseFloat(rental_id) != rental_id >>> 0 && rental_id == "new"){
+	else if ((parseFloat(rental_id) != rental_id >>> 0) && rental_id == "new"){
 		Listing.getListingRental(domain_name, false, function(result){
 			if (result.state == "success"){
 				//get the default html for the domain
@@ -203,7 +200,7 @@ function getRentalPage(req, res, next){
 
 //----------------------------------------------------------------w3bbi post pages----------------------------------------------------------------
 
-//check if rental time is legit and send user to rental edit page
+//check if rental time is legit, price is legit, and send user to rental edit page
 function postListingPage(req, res, next){
 	domain_name = req.params.domain_name;
 	user_id = req.user.id;
@@ -222,16 +219,26 @@ function postListingPage(req, res, next){
 				}
 				//all good!
 				else {
-					var new_listing_info = {
-						user: req.user,
-						listing_info: result.listing_info,
-						rental_info: result.eventStates,
-						type: type
+					//double check price
+					var price = eventPrices(events, result.listing_info);
+
+					if (price){
+						var new_listing_info = {
+							user: req.user,
+							listing_info: result.listing_info,
+							rental_info: result.eventStates,
+							type: type,
+							price: price
+						}
+						req.session.new_listing_info = new_listing_info;
+						res.send({
+							redirect: "/listing/" + domain_name + "/new"
+						});
 					}
-					req.session.new_listing_info = new_listing_info;
-					res.send({
-						redirect: "/listing/" + domain_name + "/new"
-					});
+					else {
+						error.handler(req, res, "Invalid price!");
+					}
+
 				}
 			}
 			else {
@@ -243,12 +250,17 @@ function postListingPage(req, res, next){
 
 //function to edit a rental or create a new rental
 function postRentalPage(req, res, next){
+	user_id = req.user.id;
+
 	domain_name = req.params.domain_name;
 	rental_id = req.params.rental_id;
-	user_id = req.user.id;
 	rental_info = req.body.rental_info;
 	rental_details = req.body.rental_details;
-		
+	
+	//stripe stuff
+	sess_price = req.session.new_listing_info.price;
+	stripeToken = req.body.stripeToken;
+
 	//check if data is legit
 	if (!rental_details || rental_details.length <= 0){
 		error.handler(req, res, "Invalid rental data!");
@@ -268,17 +280,32 @@ function postRentalPage(req, res, next){
 			})
 		}
 		//new rental
-		else if (rental_id == "new" && rentalChecks(req, res, domain_name, user_id, type, rental_info)){
-			Listing.newRental(domain_name, user_id, rental_info, rental_details, function(result){
-				if (result.state == "success"){
-					delete req.session.new_listing_info;
-					res.json({
-						message: "Success",
-						rental_id: result.rental_id
-					});
+		else if (stripeToken && rental_id == "pay" && rentalChecks(req, res, domain_name, user_id, type, rental_info)){
+		
+			//triple check price
+			Listing.getInfo("listings", "domain_name", domain_name, false, function(result){
+				db_price = eventPrices(rental_info.rental_info, result.info[0]);
+				
+				if (sess_price == db_price){
+					//first check if payment was good
+					if (payCheck(stripeToken, db_price, domain_name) === true){
+						Listing.newRental(domain_name, user_id, rental_info, rental_details, function(result){
+							if (result.state == "success"){
+								delete req.session.new_listing_info;
+								res.json({
+									message: "Success",
+									rental_id: result.rental_id
+								});
+							}
+							else {
+								error.handler(req, res, result.description);
+							}
+						});
+					}
 				}
+				//price was tampered with in the session
 				else {
-					error.handler(req, res, result.description);
+					console.log(sess_price, db_price);
 				}
 			});
 		}
@@ -324,59 +351,58 @@ function rentalChecks(req, res, domain_name, user_id, type, events){
 	return bool;
 }
 
-//function to pay via paypal
-function payRentalpage(req, res, next){
-
-	var create_payment_json = {
-		"intent": "sale",
-		"payer": {
-			"payment_method": "paypal"
-		},
-		"redirect_urls": {
-			"return_url": "http://www.localhost:8080/return",
-			"cancel_url": "http://www.localhost:8080/cancel"
-		},
-		"transactions": [{
-			"item_list": {
-				"items": [{
-					"name": "Domain Rental",
-					"sku": "Hourly",
-					"price": "1.00",
-					"currency": "USD",
-					"quantity": 25
-				}]
-			},
-			"amount": {
-				"currency": "USD",
-				"total": "25.00"
-			},
-			"description": "Renting domain name."
-		}]
-	};
-
+//helper function to get price of events
+function eventPrices(events, listing_info){
+	var weeks_price = days_price = hours_price = half_hours_price = totalPrice = 0;
+		
+	for (var x = 0; x < events.length; x++){
+		var tempDuration = new Date(events[x].end) - new Date(events[x].start);
+		
+		var weeks = divided(tempDuration, 604800000);
+		tempDuration = (weeks > 0) ? tempDuration -= weeks*604800000 : tempDuration;
+		
+		var days = divided(tempDuration, 86400000);
+		tempDuration = (days > 0) ? tempDuration -= days*86400000 : tempDuration;
+		
+		var hours = divided(tempDuration, 3600000);
+		tempDuration = (hours > 0) ? tempDuration -= hours*3600000 : tempDuration;
+		
+		var half_hours = divided(tempDuration, 1800000);
+		tempDuration = (half_hours > 0) ? tempDuration -= half_hours*1800000 : tempDuration;
+		
+		weeks_price += weeks * listing_info.week_price;
+		days_price += days * listing_info.day_price;
+		hours_price += hours * listing_info.hour_price;
+		half_hours_price += half_hours * listing_info.hour_price;
+	}
 	
-	paypal.webProfile.getId(function (error, web_profile_id) {
-		if (error) {
-			console.log("Error with getting the profile! ", error);
-			throw error;
-		} else {
-			//Set the id of the created payment experience in payment json
-			var experience_profile_id = web_profile_id;
-			create_payment_json.experience_profile_id = experience_profile_id;
+	totalPrice = weeks_price + days_price + hours_price + half_hours_price;
+	
+	return totalPrice;
+}
 
-			paypal.payment.create(create_payment_json, function (error, payment) {
-				if (error) {
-					console.log("Payment error! ", error.response.details);
-					throw error;
-				} else {
-					console.log("Payment successfully created! Need authorization now!");
-					for (var i = 0; i < payment.links.length; i++) {
-						if (payment.links[i].rel === 'approval_url') {
-							res.redirect(payment.links[i].href);
-						}
-					}
-				}
-			});
+//helper function to divide number
+function divided(num, den){
+    return Math[num > 0 ? 'floor' : 'ceil'](num / den);
+}
+
+//function to pay via stripe
+function payCheck(stripeToken, price, domain_name){
+	var bool = true;
+	
+	console.log("Stripe token is - " + stripeToken);
+
+	var charge = stripe.charges.create({
+		amount: price * 100, // amount in cents
+		currency: "usd",
+		source: stripeToken,
+		description: "Rental for " + domain_name
+	}, function(err, charge) {
+		if (err && err.type === 'StripeCardError') {
+			// The card has been declined
+			console.log(err);
+			bool = false;
 		}
 	});
+	return bool;
 }

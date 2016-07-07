@@ -1,3 +1,5 @@
+var totalPrice = 0;
+
 //calendar logic
 $(document).ready(function() {
 	 $('#calendar').fullCalendar({
@@ -39,18 +41,6 @@ $(document).ready(function() {
 		$('#calendar').fullCalendar('renderEvent', eventData, true);
 	}
 	
-	//if rental has yet to be submitted
-	if (new_listing_info){
-		for (var y = 0; y < new_listing_info.rental_info.length; y++){
-			var eventData = {
-				title: listing_info.fullname,
-				start: new_listing_info.rental_info[y].start,
-				end: new_listing_info.rental_info[y].end
-			};
-			$('#calendar').fullCalendar('renderEvent', eventData, true);
-		}
-	}
-	
 	//check if theres a cookie for local events
 	if (document.cookie.match(new RegExp('local_events=([^;]+)')) && $('#calendar').fullCalendar('clientEvents', filterMine).length == 0){
 		var existing_events = read_cookie("local_events");
@@ -58,6 +48,7 @@ $(document).ready(function() {
 		for (var x = 0; x < existing_events.length; x++){
 			$('#calendar').fullCalendar('renderEvent', existing_events[x], true);
 		}
+		eventPrices();
 	}
 	
 	//check if theres a cookie for the rental type
@@ -74,6 +65,7 @@ $(document).ready(function() {
 	$("#events").click(function(e){
 		$('#calendar').fullCalendar('removeEvents', filterMine);
 		storeCookies("local_events");
+		eventPrices();
 	});
 	
 	$("input[type='radio'][name='type']").click(function(e){
@@ -83,6 +75,7 @@ $(document).ready(function() {
 	$("#remove_events").click(function(e){
 		$('#calendar').fullCalendar('removeEvents', filterMine);
 		storeCookies("local_events");
+		eventPrices();
 	});
 });
 
@@ -131,7 +124,10 @@ function submitRentals(){
 		$.ajax({
 			type: "POST",
 			url: "/listing/" + listing_info.domain_name + "/rent",
-			data: {events: minEvents, type: $("input[type='radio'][name='type']:checked").val()}
+			data: {
+				events: minEvents,
+				type: $("input[type='radio'][name='type']:checked").val()
+			}
 		}).done(function(data){
 			if (data.unavailable){
 				for (var x = 0; x < data.unavailable.length; x++){
@@ -195,6 +191,7 @@ $(document).on("mouseup", ".fc-event", function(mouseUpJsEvent){
 		mouseDownJsEvent = {};
 	}
 	storeCookies("local_events");
+	eventPrices();
 });
 
 //helper function to determine the time slot of a mouse event
@@ -332,6 +329,7 @@ function createEvent(start, end){
 				if ((start - end) % 86400000 === 0){
 					removeEventTimeSlot(eventitem, {start: start, end: end}, {start: start, end: end});
 				}
+				eventPrices();
 			}
 			//check if existing event is fully overlapped by event being created
 			else if (checkFullOverlap(eventitem.start._d, eventitem.end - eventitem.start, start._d, end - start)){
@@ -484,7 +482,55 @@ function createEvent(start, end){
 	
 		//store local events as cookie so we dont lose it
 		storeCookies("local_events");
+		
+		//update the total price of current events
+		eventPrices();
 	}
+}
+
+//server side helper function to get correct price of events
+function eventPrices(){
+	var myevents = $('#calendar').fullCalendar('clientEvents', filterMine);
+	var weeks_price = days_price = hours_price = half_hours_price = 0;
+	
+	for (var x = 0; x < myevents.length; x++){
+		var tempDuration = myevents[x].end - myevents[x].start;
+		
+		var weeks = divided(tempDuration, 604800000);
+		tempDuration = (weeks > 0) ? tempDuration -= weeks*604800000 : tempDuration;
+		
+		var days = divided(tempDuration, 86400000);
+		tempDuration = (days > 0) ? tempDuration -= days*86400000 : tempDuration;
+		
+		var hours = divided(tempDuration, 3600000);
+		tempDuration = (hours > 0) ? tempDuration -= hours*3600000 : tempDuration;
+		
+		var half_hours = divided(tempDuration, 1800000);
+		tempDuration = (half_hours > 0) ? tempDuration -= half_hours*1800000 : tempDuration;
+		
+		weeks_price += weeks * listing_info.week_price;
+		days_price += days * listing_info.day_price;
+		hours_price += hours * listing_info.hour_price;
+		half_hours_price += half_hours * listing_info.hour_price;
+	}
+	
+	totalPrice = weeks_price + days_price + hours_price + half_hours_price;
+	
+	//animation for counting numbers
+	$("#price").prop('Counter', $("#price").prop('Counter')).stop().animate({
+		Counter: totalPrice
+	}, {
+		duration: 100,
+		easing: 'swing',
+		step: function (now) {
+			$(this).text("$" + Math.floor(now));
+		}
+	});
+}
+
+//helper function to divide number
+function divided(num, den){
+    return Math[num > 0 ? 'floor' : 'ceil'](num / den);
 }
 
 //helper function to store local events as a cookie

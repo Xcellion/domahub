@@ -19,12 +19,13 @@ function handler(req, res, message, type) {
 			req.session.message = message;
 
 			switch (message){
-				case "Invalid listing!":
-					break;
 				case "Invalid user!":
 				case "Invalid password!":
 					req.session.message = "Invalid username / password!";
 					redirectTo = "/login";
+					break;
+				case "Invalid listing!":
+				case "Invalid price!":
 					break;
 				case "Invalid rental!":
 					redirectTo = RemoveLastDirectoryPartOf(req.path);
