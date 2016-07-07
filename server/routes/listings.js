@@ -152,7 +152,7 @@ function getRentalPage(req, res, next){
 		error.handler(req, res, "Invalid rental!");
 	}
 	//navigated to /new directly without any rental details
-	else if (!new_listing_info){
+	else if ((parseFloat(rental_id) != rental_id >>> 0) && !new_listing_info){
 		error.handler(req, res, "No rental information!");
 	}
 	//we're creating a new rental
