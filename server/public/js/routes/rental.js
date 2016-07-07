@@ -56,6 +56,7 @@ $(document).ready(function() {
 	});
 });
 
+
 // Close Checkout on page navigation:
 $(window).on('popstate', function() {
 	handler.close();
@@ -226,25 +227,28 @@ function updatePage(html, data){
 	//update rental preview
 	var parsed = $.parseHTML(html);
 	$("#rental_preview").append(parsed);
-	if (data){
-		for (var x = 0; x < data.length; x++){
-			switch (data[x].text_key){
-				case "css":
-					var style_sheet = getStyleSheet("main_css");
-					style_sheet.insertRule(data[x].text_value, 0);
-					$("#background_input").val(findUrls(data[x].text_value));
-					break;
-				case "head":
-					var tempElem = $(data[x].text_key);
-					tempElem.append(data[x].text_value);
-					break;
-				default:
-					var tempElem = $("#" + data[x].text_key);
-					tempElem.append(data[x].text_value);
-					break;
+	document.body.addEventListener('transitionend', function(){
+		if (data){
+			for (var x = 0; x < data.length; x++){
+				switch (data[x].text_key){
+					case "css":
+						var style_sheet = getStyleSheet("rental_main_css");
+						console.log(style_sheet);
+						style_sheet.insertRule(data[x].text_value, 0);
+						$("#background_input").val(findUrls(data[x].text_value));
+						break;
+					case "head":
+						var tempElem = $(data[x].text_key);
+						tempElem.append(data[x].text_value);
+						break;
+					default:
+						var tempElem = $("#" + data[x].text_key);
+						tempElem.append(data[x].text_value);
+						break;
+				}
 			}
 		}
-	}
+	}, false);
 }
 
 //helper function to get CSS style sheet
