@@ -22,10 +22,6 @@ function handler(req, res, message, type) {
 				case "Invalid user!":
 				case "Invalid password!":
 					req.session.message = "Invalid username / password!";
-					redirectTo = "/login";
-					break;
-				case "Invalid listing!":
-				case "Invalid price!":
 					break;
 				case "Invalid rental!":
 				case "No rental information!":
@@ -34,6 +30,9 @@ function handler(req, res, message, type) {
 				case "Invalid rental data!":
 					redirectTo = req.path;
 					break;
+				case "Signup error!":
+				case "Invalid listing!":
+				case "Invalid price!":
 				default:
 					break;
 			}

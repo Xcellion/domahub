@@ -59,7 +59,7 @@
 	border: 1px solid #D3D3D3;
 }
 
-#stripe-button{
+#stripe-button, #submit{
 	height:30px;
 }
 

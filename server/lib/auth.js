@@ -23,7 +23,7 @@ module.exports = {
 		// used to deserialize the user
 		passport.deserializeUser(function(id, done) {
 			db.query("SELECT * FROM accounts WHERE id = ?", function(rows, err){
-				if (!rows.length){
+				if (err){
 					done(err, null);
 				}
 				else{
@@ -32,13 +32,17 @@ module.exports = {
 			}, id);
 		});
 
+		//post to create a new account
 		passport.use('local-signup', new LocalStrategy({
 				usernameField: 'email',
 				passReqToCallback : true // allows us to pass back the entire request to the callback
 			},
 			function(req, email, password, done) { // callback with email and password from our form
-				db.query("SELECT * FROM accounts WHERE email = ?", function(rows){
-					if (rows.length) {
+				db.query("SELECT * FROM accounts WHERE email = ?", function(rows, err){
+					if (err){
+						done(err, null);
+					}
+					else if (rows.length) {
 						return done(null, false, {message: 'User exists!'});
 					}
 					else {
@@ -61,6 +65,7 @@ module.exports = {
 			})
 		);
 		
+		//post to check login
 		passport.use('local-login', new LocalStrategy({
 				usernameField: 'email',
 				passReqToCallback : true // allows us to pass back the entire request to the callback
@@ -147,13 +152,14 @@ function messageReset(req){
 //log out of the session
 function logout(req, res) {
 	console.log("Logging out");
+	delete req.session;
 	req.logout();
 	res.redirect('/');
 };
 
 //sign up for a new account
 function signup(req, res){
-	res.render("signup.ejs", { message: req.session.message});
+	res.render("signup.ejs", { message: messageReset(req)});
 };
 
 //function to login 
@@ -185,16 +191,18 @@ function signupPost(req, res, next){
 		successRedirect : '/', // redirect to main page
 		failureRedirect : '/signup', // redirect back to the signup page if there is an error
 	}, function(err, user, info){
-		if (!user){
-			return res.redirect('/signup');
+		if (!user && info){
+			error.handler(req, res, info.message);
 		}
-		req.logIn(user, function(err) {
-			if (err) {
-				error.handler(req, res, "Signup error!");
-			}
-			else {
-				return res.redirect(redirectURL);
-			}
-		});
+		else {
+			req.logIn(user, function(err) {
+				if (err) {
+					error.handler(req, res, "Signup error!");
+				}
+				else {
+					return res.redirect(redirectURL);
+				}
+			});
+		}
 	})(req, res, next);
 };

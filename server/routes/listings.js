@@ -123,8 +123,7 @@ function getListingPage(req, res, next) {
 				}
 				//if redirected here from somewhere due to an error
 				if (req.session.message){
-					render.message = req.session.message;
-					delete req.session.message;
+					render.message = Auth.messageReset(req);
 				}
 				res.render("listing.ejs", render);
 			}
@@ -260,10 +259,6 @@ function postRentalPage(req, res, next){
 	rental_id = req.params.rental_id;
 	rental_info = req.body.rental_info;
 	rental_details = req.body.rental_details;
-	
-	//stripe stuff
-	sess_price = req.session.new_listing_info.price;
-	stripeToken = req.body.stripeToken;
 
 	//check if data is legit
 	if (!rental_details || rental_details.length <= 0){
@@ -275,7 +270,7 @@ function postRentalPage(req, res, next){
 			Listing.setRentalDetails(rental_id, rental_info, rental_details, function(result){
 				if (result.state == "success"){
 					res.json({
-						message: "Success"
+						message: "success"
 					});
 				}
 				else {
@@ -284,8 +279,11 @@ function postRentalPage(req, res, next){
 			})
 		}
 		//new rental
-		else if (stripeToken && rental_id == "pay" && rentalChecks(req, res, domain_name, user_id, type, rental_info)){
-		
+		else if (rental_id == "pay" && rentalChecks(req, res, domain_name, user_id, type, rental_info)){
+			//stripe stuff
+			sess_price = req.session.new_listing_info.price;
+			stripeToken = req.body.stripeToken;
+			
 			//triple check price
 			Listing.getInfo("listings", "domain_name", domain_name, false, function(result){
 				db_price = eventPrices(rental_info.rental_info, result.info[0]);
@@ -297,7 +295,7 @@ function postRentalPage(req, res, next){
 							if (result.state == "success"){
 								delete req.session.new_listing_info;
 								res.json({
-									message: "Success",
+									message: "success",
 									rental_id: result.rental_id
 								});
 							}

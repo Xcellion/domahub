@@ -1,4 +1,5 @@
 var handler;
+var unlock = true;
 
 $(document).ready(function() {
 	handler = StripeCheckout.configure({
@@ -16,9 +17,9 @@ $(document).ready(function() {
 		}
 	});
 
-	$("#listing_form").submit(function(e){
+	$(".listing_form").submit(function(e){
 		e.preventDefault();
-		submitRentals();
+		submitRentals($(this).attr("id"));
 	});
 	
 	updatePage(rental_html, rental_details);
@@ -154,37 +155,54 @@ function rentalData(){
 }
 
 //function to submit new rental info
-function submitRentals(){
+function submitRentals(id){
 	//client side check if authenticated
 	if (user){
-		var rental_data = rentalData();
-	
-		$.ajax({
-			type: "POST",	
-			url: RemoveLastDirectoryPartOf(window.location.pathname) + "/pay",
-			data: {
-				rental_info: rental_data.rental_info,
-				rental_details: rental_data.rental_details,
-				stripeToken: $("#stripeToken").val()
-			}
-		}).done(function(data){
-			if (data.message == "Success"){
-				$("#message").html(data.message);
-				//remove cookies since it was successful
-				delete_cookie("local_events");
-				delete_cookie("type");
-				
-				//replace the URL in the window
-				history.replaceState(0, "", data.rental_id)
-				window.location = window.location.pathname.replace(/\/[^\/]*$/, '/'+data.rental_id);
-			}
-			else {
-				$("#message").html(data);
-			}
-		});
+		if (unlock){
+			var rental_data = rentalData();
+			var url = id == "listing_form_edit" ? "/"+rental_info.rental_id : "/pay";
+
+			//lock the ajax
+			unlock = false;
+			
+			$.ajax({
+				type: "POST",	
+				url: RemoveLastDirectoryPartOf(window.location.pathname) + url,
+				data: {
+					rental_info: rental_data.rental_info,
+					rental_details: rental_data.rental_details,
+					stripeToken: $("#stripeToken").val()
+				}
+			}).done(function(data){
+				if (data.message == "success"){
+					$("#message").html("Success!");
+					
+					//unlock on success
+					unlock = true;
+					
+					//remove cookies since it was successful
+					delete_cookie("local_events");
+					delete_cookie("type");
+					
+					//if creating a new rental, redirect the URL to the new rental id
+					if (data.rental_id){
+						//replace the URL in the window
+						history.replaceState(0, "", data.rental_id)
+						window.location = window.location.pathname.replace(/\/[^\/]*$/, '/'+data.rental_id);
+					}
+				}
+				else {
+					$("#message").html("Something went wrong!");
+					console.log(data);
+				}
+			});
+		}
+		else {
+			$("#message").html("Please wait!");
+		}
 	}
 	else {
-		console.log('log in pls');
+		$("#message").html("Log in please!");
 	}
 }
 
@@ -233,7 +251,6 @@ function updatePage(html, data){
 				switch (data[x].text_key){
 					case "css":
 						var style_sheet = getStyleSheet("rental_main_css");
-						console.log(style_sheet);
 						style_sheet.insertRule(data[x].text_value, 0);
 						$("#background_input").val(findUrls(data[x].text_value));
 						break;

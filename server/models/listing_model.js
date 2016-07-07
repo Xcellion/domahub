@@ -33,17 +33,17 @@ listing_model.prototype.setInfo = function(database, info, special, callback){
 		db_query += special;
 	}
 	this.db.query(db_query, function(result, err){
-		//listing info successfully retrieved
+		//information successfully set into db
 		if (!err){
 			callback({
-				state : "success",
-				info : result
+				state: "success",
+				info: result
 			});
 		}
 		else {
 			callback({
 				state: "error",
-				info: result
+				info: err
 			});
 		}
 	}, [database, info]);
@@ -56,13 +56,14 @@ listing_model.prototype.insertSetInfo = function(database, info, callback){
 		//listing info was changed
 		if (!err){
 			callback({
-				state : "success",
+				state: "success",
 				insertId: result.insertId
 			});
 		}
 		else {
 			callback({
-				state : "error"
+				state: "error",
+				info: err
 			});
 		}
 	}, [database, info]);
@@ -75,13 +76,14 @@ listing_model.prototype.insertInfo = function(database, keys, values, callback){
 		//listing info was changed
 		if (!err){
 			callback({
-				state : "success",
+				state: "success",
 				insertId: result.insertId
 			});
 		}
 		else {
 			callback({
-				state : "error"
+				state : "error",
+				info: err
 			});
 		}
 	}, [database, keys, values]);
@@ -94,12 +96,13 @@ listing_model.prototype.deleteInfo = function(database, db_where, db_where_equal
 		//listing info was changed
 		if (!err){
 			callback({
-				state : "success"
+				state: "success"
 			});
 		}
 		else {
 			callback({
-				state : "error"
+				state: "error",
+				info: err
 			});
 		}
 	}, [database, db_where, db_where_equal]);
@@ -138,7 +141,7 @@ listing_model.prototype.getListingInfo = function(domain_name, callback){
 					accounts.email\
 				FROM ?? JOIN accounts ON listings.owner_id = accounts.id WHERE ?? = ? ";
 
-	console.log("Getting all listing information and details for " + domain_name);
+	console.log("Getting all listing information for " + domain_name);
 	Listing.getInfo("listings", "domain_name", domain_name, db_query, function(result){
 		if (result.state == "success" && result.info){
 			listing_info = result.info[0];
@@ -519,7 +522,7 @@ listing_model.prototype.newRental = function(domain_name, user_id, new_listing_i
 												
 						listing_model.insertInfo("rentals", keys, values, function(result){
 							if (result.state == "success"){
-								listing_model.newRentalDetails(insertId, new_listing_info, rental_details, callback);
+								listing_model.newRentalDetails(insertId, rental_details, callback);
 							}
 							else {
 								listing_model.callbackError(insertId, "Something wrong with multiple rentals!", callback)
@@ -528,7 +531,7 @@ listing_model.prototype.newRental = function(domain_name, user_id, new_listing_i
 					}
 					//only 1 time slot
 					else {
-						listing_model.newRentalDetails(insertId, new_listing_info, rental_details, callback);
+						listing_model.newRentalDetails(insertId, rental_details, callback);
 					}
 				}
 				//rental failed, delete what was just inserted
@@ -547,7 +550,7 @@ listing_model.prototype.newRental = function(domain_name, user_id, new_listing_i
 }
 
 //function to add rental details
-listing_model.prototype.newRentalDetails = function(rental_id, rental_info, rental_details, callback){
+listing_model.prototype.newRentalDetails = function(rental_id, rental_details, callback){
 	listing_model = this;
 
 	var keys = ["rental_id", "text_key", "text_value"];
@@ -588,7 +591,7 @@ listing_model.prototype.newRentalDetails = function(rental_id, rental_info, rent
 	});
 }
 
-//function to edit rental details
+//function to delete existing rental details and add new ones
 listing_model.prototype.setRentalDetails = function(rental_id, rental_info, rental_details, callback){
 	listing_model = this;
 	
@@ -601,13 +604,15 @@ listing_model.prototype.setRentalDetails = function(rental_id, rental_info, rent
 				rental_info.same_details = null;
 			}
 			
+			delete rental_info.rentals;
+			
 			//edit rental info
 			listing_model.setInfo("rentals", rental_info, special, function(result){
 				if (result.state == "success"){
 					//delete all existing rental data and replace				
 					listing_model.deleteInfo("rental_details", "rental_id", rental_id, function(result){
 						if (result.state == "success"){
-							listing_model.newRentalDetails(rental_id, rental_info, rental_details, callback);
+							listing_model.newRentalDetails(rental_id, rental_details, callback);
 						}
 						else {
 							callback({

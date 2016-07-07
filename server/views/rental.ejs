@@ -87,7 +87,7 @@
 				
 					<!-- if new rental -->
 					<% if (typeof new_listing_info != "undefined") { %>
-						<form id="listing_form" action="/listing/<%=listing_info.domain_name%>/pay" method="post">
+						<form class="listing_form" id="listing_form_pay" action="/listing/<%=listing_info.domain_name%>/pay" method="post">
 						<% if (new_listing_info.type == 0) { %>
 							<div id="edit_now" class="button">Edit now</div>
 						<% } else if (new_listing_info.type == 1) { %>
@@ -100,7 +100,7 @@
 	
 					<!-- if editing existing rental -->
 					<% } else {%>
-						<form id="listing_form" action="/listing/<%=listing_info.domain_name%>/<%=rental_info.rental_id%>" method="post">
+						<form class="listing_form" id="listing_form_edit" action="/listing/<%=listing_info.domain_name%>/<%=rental_info.rental_id%>" method="post">
 							<div id="edit_now" class="button">Edit now</div>
 							<input id="submit" class="button" type="submit" value="Submit">
 						</form>
