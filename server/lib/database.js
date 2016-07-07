@@ -8,7 +8,6 @@ module.exports = {
 	//post is used to escape the SQL query
 	query: function(custom_query, callback, post){
 		connection.query(custom_query, post, function(err, result){
-			if (err) throw err;
 			callback(result, err);
 		});
 	},

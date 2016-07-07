@@ -1,6 +1,6 @@
 /********************************************************* GLOBAL STUFF *********************************************************/
 
-.noselect {
+.noselect{
     -webkit-touch-callout: none;
     -webkit-user-select: none;
     -khtml-user-select: none;
@@ -9,21 +9,26 @@
     user-select: none;
 }
 
-.hover_opacity {
+.hover_opacity{
 	opacity:1 !important;
 }
 
-body, h1, h2, h3, h4, p, a {
- 	padding:0;
-	border:0;
+body, h1, h2, h3, h4, p, a{
 	margin:0;
+	border:0;
+	padding:0;
 }
 
 body{
-
+	-webkit-background-size: cover; 
+	-moz-background-size: cover; 
+	-o-background-size: cover; 
+	background-size: cover; 
+	height:100vh; 
+	text-align:center;
 }
 
-.body_wrapper {
+.body_wrapper{
 	text-align:center;
 }
 

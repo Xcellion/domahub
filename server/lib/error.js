@@ -28,6 +28,7 @@ function handler(req, res, message, type) {
 				case "Invalid price!":
 					break;
 				case "Invalid rental!":
+				case "No rental information!":
 					redirectTo = RemoveLastDirectoryPartOf(req.path);
 					break;
 				case "Invalid rental data!":

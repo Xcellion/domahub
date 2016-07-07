@@ -52,10 +52,15 @@
 	outline:none;
 	border: 1px solid #fff;
 	text-decoration: none;
+	vertical-align:top;
 }
 
 .button:hover{
 	border: 1px solid #D3D3D3;
+}
+
+#stripe-button{
+	height:30px;
 }
 
 .w3bbi_content_wrapper{
@@ -94,8 +99,17 @@
 }
 
 .highlight{
-	border:1px dashed #FFF;
+	border:1px dashed #FFF !important;
 	cursor:pointer;
-	min-height:50px;
+	min-height:16px;
 	min-width:100px;
+	animation: border-pulsate 2s infinite;
+}
+
+@keyframes border-pulsate {
+    0%   { border-color: rgba(255, 255, 255, 1); }
+    25%  { border-color: rgba(255, 255, 255, .8); }
+    50%  { border-color: rgba(255, 255, 255, .6); }
+    75%  { border-color: rgba(255, 255, 255, .8); }
+    100% { border-color: rgba(255, 255, 255, 1); }
 }

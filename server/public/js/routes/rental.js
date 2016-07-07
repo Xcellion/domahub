@@ -89,11 +89,16 @@ function toggleEdit(){
 	}
 	else {
 		$('#edit_now').html("Edit now");
+		
+		//change the background in real time
 		var backgroundUrl = sanitizeHtml($("#background_input").val());
-		console.log(backgroundUrl);
-		var style_sheet = getStyleSheet("main_css");
-		style_sheet.insertRule("body {background:url(" + backgroundUrl + ")", 0);
-		$("#background_input").val(sanitizeHtml($("#background_input").val()));
+		if (backgroundUrl){
+			var w3bbi_main_css = getStyleSheet("w3bbi_main_css");
+			var official_css = getStyleSheet("official");
+			w3bbi_main_css.insertRule("body {background:url(" + backgroundUrl + ") no-repeat center center", 0);
+			official_css.disabled = 1;
+			$("#background_input").val(sanitizeHtml($("#background_input").val()));
+		}
 	}
 }
 

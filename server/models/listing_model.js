@@ -15,9 +15,9 @@ listing_model.prototype.getAllListings = function(callback){
 					listings.*,\
 					accounts.fullname,\
 					accounts.email\
-				FROM listings JOIN accounts ON listings.owner_id = accounts.id WHERE listings.price_type != 0', function(result){
+				FROM listings JOIN accounts ON listings.owner_id = accounts.id WHERE listings.price_type != 0', function(result, err){
 		//listing info successfully retrieved
-		if (result.length >= 0){
+		if (!err){
 			callback({
 				state : "success",
 				listings : result
@@ -32,9 +32,9 @@ listing_model.prototype.setInfo = function(database, info, special, callback){
 	if (special){
 		db_query += special;
 	}
-	this.db.query(db_query, function(result){
+	this.db.query(db_query, function(result, err){
 		//listing info successfully retrieved
-		if (result.affectedRows){
+		if (!err){
 			callback({
 				state : "success",
 				info : result
@@ -52,9 +52,9 @@ listing_model.prototype.setInfo = function(database, info, special, callback){
 //inserts a set of information in database
 listing_model.prototype.insertSetInfo = function(database, info, callback){
 	console.log("Attempting to set info for database " + database);
-	this.db.query('INSERT INTO ?? SET ?', function(result){
+	this.db.query('INSERT INTO ?? SET ?', function(result, err){
 		//listing info was changed
-		if (result.affectedRows){
+		if (!err){
 			callback({
 				state : "success",
 				insertId: result.insertId
@@ -71,9 +71,9 @@ listing_model.prototype.insertSetInfo = function(database, info, callback){
 //inserts information in database
 listing_model.prototype.insertInfo = function(database, keys, values, callback){
 	console.log("Attempting to set info for database " + database);
-	this.db.query('INSERT INTO ?? (??) VALUES ?', function(result){
+	this.db.query('INSERT INTO ?? (??) VALUES ?', function(result, err){
 		//listing info was changed
-		if (result.affectedRows){
+		if (!err){
 			callback({
 				state : "success",
 				insertId: result.insertId
@@ -90,17 +90,16 @@ listing_model.prototype.insertInfo = function(database, keys, values, callback){
 //deletes information in database
 listing_model.prototype.deleteInfo = function(database, db_where, db_where_equal, callback){
 	console.log("Attempting to delete info for database " + database);
-	this.db.query('DELETE FROM ?? WHERE ?? = ?', function(result){
+	this.db.query('DELETE FROM ?? WHERE ?? = ?', function(result, err){
 		//listing info was changed
-		if (result.length >= 0){
+		if (!err){
 			callback({
-				state : "success",
-				insertId: result.insertId
+				state : "success"
 			});
 		}
 		else {
 			callback({
-				state : "success"
+				state : "error"
 			});
 		}
 	}, [database, db_where, db_where_equal]);
@@ -112,9 +111,9 @@ listing_model.prototype.getInfo = function(database, db_where, db_where_equal, s
 	if (special){
 		db_query = special;
 	}
-	this.db.query(db_query, function(result){
+	this.db.query(db_query, function(result, err){
 		//listing info successfully retrieved
-		if (result.length > 0){
+		if (!err){
 			callback({
 				state : "success",
 				info : result
@@ -123,7 +122,7 @@ listing_model.prototype.getInfo = function(database, db_where, db_where_equal, s
 		else {
 			callback({
 				state: "error",
-				info: result
+				info: err
 			});
 		}
 	}, [database, db_where, db_where_equal]);
@@ -383,75 +382,88 @@ listing_model.prototype.checkRentalTime = function(domain_name, events, user_id,
 	listing_model = this;
 	var eventStates = [];
 
-	db_query = "SELECT * from ?? INNER JOIN listings ON rentals.listing_id = listings.id WHERE ?? = ? AND duration != 0"
-
-	//get all rentals for the listing
-	listing_model.getInfo("rentals", "listings.domain_name", domain_name, db_query, function(result){
-		listing_id = result.info[0].listing_id;
-		listing_info = result.info[0];
-		
+	//get listing info first
+	listing_model.getInfo("listings", "domain_name", domain_name, false, function(result){
 		if (result.state == "success"){
-			//array of all unavailable events
-			var unavailable = [];
-
-			//loop through all posted events
-			for (var y = 0; y < events.length; y++){
-				var availability = true;
-
-				//posted date
-				var user_start = new Date(events[y].start);
-				var user_offset = events[y].offset;
-				var user_end = new Date(events[y].end);
-				var user_duration = user_end - user_start;
-								
-				//cross reference with all existing events in the database
-				for (var x = 0; x < result.info.length; x++){
-					
-					//make sure we dont check the default ones
-					if (result.info[x].date != "0000-00-00 00:00:00"){
+			listing_info = result.info[0];
 			
-						//existing db date, already in UTC
-						var db_utc = new Date(result.info[x].date + " UTC");
-						var db_duration = result.info[x].duration;
-						
-						//UTC magic
-						var user_utc = toUTC(user_start, user_offset);
-												
-						//check if legit dates
-						if (!isNaN(db_utc) && !isNaN(user_utc)){
-							//check if its available
-							if (checkOverlap(user_utc, user_duration, db_utc, db_duration)){
-								availability = false;
-								unavailable.push(events[y])
-								break;
+			db_query = "SELECT * from ?? WHERE ?? = ? AND duration != 0";
+			
+			//get all rentals for the listing
+			listing_model.getInfo("rentals", "listing_id", listing_info.id, db_query, function(result){			
+				if (result.state == "success"){
+					//array of all unavailable events
+					var unavailable = [];
+
+					//loop through all posted events
+					for (var y = 0; y < events.length; y++){
+						var availability = true;
+
+						//posted date
+						var user_start = new Date(events[y].start);
+						var user_offset = events[y].offset;
+						var user_end = new Date(events[y].end);
+						var user_duration = user_end - user_start;
+										
+						//cross reference with all existing events in the database
+						for (var x = 0; x < result.info.length; x++){
+							
+							//make sure we dont check the default ones
+							if (result.info[x].date != "0000-00-00 00:00:00"){
+					
+								//existing db date, already in UTC
+								var db_utc = new Date(result.info[x].date + " UTC");
+								var db_duration = result.info[x].duration;
+								
+								//UTC magic
+								var user_utc = toUTC(user_start, user_offset);
+														
+								//check if legit dates
+								if (!isNaN(db_utc) && !isNaN(user_utc)){
+									//check if its available
+									if (checkOverlap(user_utc, user_duration, db_utc, db_duration)){
+										availability = false;
+										unavailable.push(events[y])
+										break;
+									}
+								}
 							}
 						}
+						
+						events[y].availability = availability;
+						eventStates.push(events[y]);
+					}
+					
+					//send the availability of all events posted
+					if (eventStates.length){
+						callback({
+							state: "success",
+							eventStates: eventStates,
+							listing_id: listing_info.id,
+							listing_info: listing_info,
+							unavailable: unavailable
+						});
 					}
 				}
-				events[y].availability = availability;
-				eventStates.push(events[y]);
-			}
-			
-			//send the availability of all events posted
-			if (eventStates.length){
-				callback({
-					state: "success",
-					eventStates: eventStates,
-					listing_id: listing_id,
-					listing_info: listing_info,
-					unavailable: unavailable
-				});
-			}
+				
+				//no rentals exist for that listing!
+				else {
+					callback({
+						state: "error",
+						description: "Invalid rental!"
+					});
+				}
+			});
 		}
-		
-		//no rentals exist for that listing!
+		//listing doesnt exist
 		else {
 			callback({
 				state: "error",
-				description: "Invalid rental!"
+				description: "Invalid listing!"
 			});
 		}
-	});
+	})
+	
 }
 
 //rent it now!
