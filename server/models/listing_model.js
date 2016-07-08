@@ -325,7 +325,10 @@ listing_model.prototype.sendCurrentRental = function (listing_id, listing_info, 
 			}
 		
 			listing_model.getInfo("rental_details", "rental_id", latest_rental, false, function(result){
-				if (result.state == "success"){
+				if (result.info.length == 0){
+					listing_model.sendDefaultRental(listing_id, listing_info, callback);
+				}
+				else if (result.state == "success"){
 					callback({
 						state: "success",
 						listing_info: listing_info,
