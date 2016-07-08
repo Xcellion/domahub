@@ -1,17 +1,11 @@
-var app,
-	database;
-
 var	account_model = require('../models/account_model.js'),
 	listing_model = require('../models/listing_model.js');
 
-module.exports = function(app_pass, db, au){
-	app = app_pass;
-	database = db;
-	
+module.exports = function(app, db, au){
 	Auth = au;
 	
-	Account = new account_model(database);
-	Listing = new listing_model(database, Account);
+	Account = new account_model(db);
+	Listing = new listing_model(db, Account);
 	
 	//function to check if logged in
 	isLoggedIn = Auth.isLoggedIn;

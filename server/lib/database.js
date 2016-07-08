@@ -16,24 +16,14 @@ var pool = mysql.createPool({
 module.exports = {
 	connect: database_connect,
 	
-	//post is used to escape the SQL query
+	//grab a connection from the pool, then run SQL query
 	query: function(custom_query, callback, post){
-		connection.query(custom_query, post, function(err, result){
-			callback(result, err);
+		pool.getConnection(function(err, con){
+			con.query(custom_query, post, function(err, result){
+				con.release();
+				callback(result, err);
+			});
 		});
-	},
-	
-	//escape user input parameters
-	escape: function(data){
-		return connection.escape(data);
-	},
-	
-	//closes the current connection and creates a new one
-	end: function(){
-		connection.release(function(err){
-			if (err) throw err;
-		});
-		database_connect();
 	}
 };
 

@@ -1,7 +1,3 @@
-var app,
-	database,
-	error;
-	
 var request = require('request');
 var stripe = require("stripe")("sk_test_PHd0TEZT5ytlF0qCNvmgAThp");
 
@@ -10,13 +6,11 @@ var	account_model = require('../models/account_model.js'),
 	Account,
 	Passport;
 
-module.exports = function(app_pass, db, auth, e){
-	app = app_pass;
-	database = db;
+module.exports = function(app, db, auth, e){
 	error = e;
 	
-	Account = new account_model(database);
-	Listing = new listing_model(database, Account);
+	Account = new account_model(db);
+	Listing = new listing_model(db, Account);
 		
 	//function to check if logged in
 	isLoggedIn = auth.isLoggedIn;
