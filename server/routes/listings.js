@@ -106,14 +106,16 @@ function getListingPage(req, res, next) {
 		error.handler(req, res, "Invalid listing!");
 	}
 	else {
-		var new_listing_info = req.session.new_listing_info || false;
+		var new_rental_info = req.session.new_rental_info || false;
+		var old_rental_info = req.session.old_rental_info || false;
 		
 		Listing.getListingInfo(domain_name, function(result){
 			if (result.state == "success"){
 				var render = {
 					user: req.user,
 					listing_info: result.listing_info,
-					new_listing_info: new_listing_info
+					new_rental_info: new_rental_info,
+					old_rental_info: old_rental_info
 				}
 				//if redirected here from somewhere due to an error
 				if (req.session.message){
@@ -134,7 +136,8 @@ function getListingPage(req, res, next) {
 function getRentalPage(req, res, next){
 	domain_name = req.params.domain_name
 	rental_id = req.params.rental_id
-	new_listing_info = req.session.new_listing_info;
+	new_rental_info = req.session.new_rental_info;
+	old_rental_info = req.session.old_rental_info
 
 	//we dont accept listing ids, only domain names
 	if (parseFloat(domain_name) === domain_name >>> 0){
@@ -145,7 +148,7 @@ function getRentalPage(req, res, next){
 		error.handler(req, res, "Invalid rental!");
 	}
 	//navigated to /new directly without any rental details
-	else if ((parseFloat(rental_id) != rental_id >>> 0) && !new_listing_info){
+	else if ((parseFloat(rental_id) != rental_id >>> 0) && !new_rental_info){
 		error.handler(req, res, "No rental information!");
 	}
 	//we're creating a new rental
@@ -158,10 +161,10 @@ function getRentalPage(req, res, next){
 						res.render("rental.ejs", {
 							user: req.user,
 							listing_info: result.listing_info,
-							rental_info: new_listing_info.rental_info,
+							rental_info: new_rental_info.rental_info,
 							rental_html: body,
 							rental_details: result.rental_details,
-							new_listing_info: new_listing_info
+							new_rental_info: new_rental_info
 						});
 					}
 				});
@@ -173,18 +176,27 @@ function getRentalPage(req, res, next){
 	}
 	//editing an existing rental
 	else {
-		delete req.session.new_listing_info;
+		delete req.session.new_rental_info;
 		Listing.getListingRental(domain_name, rental_id, function(result){
 			if (result.state == "success"){
 				request('http://www.' + result.listing_info.domain_name + '/reset.html', function (error, response, body) {
 					if (!error && response.statusCode == 200) {
-						res.render("rental.ejs", {
+						var render = {
 							user: req.user,
 							listing_info: result.listing_info,
 							rental_info: result.rental_info,
 							rental_html: body,
 							rental_details: result.rental_details
-						});
+						}
+						if (old_rental_info){
+							for (var x in old_rental_info.rentals){
+								render.rental_info.rentals.push(old_rental_info.rentals[x]);
+							}
+						}
+						else {
+							req.session.old_rental_info = result.rental_info;
+						}
+						res.render("rental.ejs", render);
 					}
 				});
 			}
@@ -203,6 +215,7 @@ function postListingPage(req, res, next){
 	user_id = req.user.id;
 	type = req.body.type;
 	events = req.body.events;
+	old_rental_info = req.session.old_rental_info
 
 	if (rentalChecks(req, res, domain_name, user_id, type, events)){
 		//all gucci
@@ -220,17 +233,25 @@ function postListingPage(req, res, next){
 					var price = eventPrices(events, result.listing_info);
 
 					if (price){
-						var new_listing_info = {
-							user: req.user,
-							listing_info: result.listing_info,
-							rental_info: result.eventStates,
-							type: type,
-							price: price
+						if (old_rental_info){
+							old_rental_info.rentals = result.eventStates;
+							res.send({
+								redirect: "/listing/" + domain_name + "/" + old_rental_info.rental_id
+							});
 						}
-						req.session.new_listing_info = new_listing_info;
-						res.send({
-							redirect: "/listing/" + domain_name + "/new"
-						});
+						else {
+							var new_rental_info = {
+								user: req.user,
+								listing_info: result.listing_info,
+								rental_info: result.eventStates,
+								type: type,
+								price: price
+							}
+							req.session.new_rental_info = new_rental_info;
+							res.send({
+								redirect: "/listing/" + domain_name + "/new"
+							});
+						}
 					}
 					else {
 						error.handler(req, res, "Invalid price!");
@@ -275,7 +296,7 @@ function postRentalPage(req, res, next){
 		//new rental
 		else if (rental_id == "pay" && rentalChecks(req, res, domain_name, user_id, type, rental_info)){
 			//stripe stuff
-			sess_price = req.session.new_listing_info.price;
+			sess_price = req.session.new_rental_info.price;
 			stripeToken = req.body.stripeToken;
 			
 			//triple check price
@@ -287,7 +308,8 @@ function postRentalPage(req, res, next){
 					if (payCheck(stripeToken, db_price, domain_name) === true){
 						Listing.newRental(domain_name, user_id, rental_info, rental_details, function(result){
 							if (result.state == "success"){
-								delete req.session.new_listing_info;
+								delete req.session.new_rental_info;
+								delete req.session.old_rental_info;
 								res.json({
 									message: "success",
 									rental_id: result.rental_id

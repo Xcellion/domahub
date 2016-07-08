@@ -473,11 +473,11 @@ listing_model.prototype.checkRentalTime = function(domain_name, events, user_id,
 }
 
 //rent it now!
-listing_model.prototype.newRental = function(domain_name, user_id, new_listing_info, rental_details, callback){
+listing_model.prototype.newRental = function(domain_name, user_id, new_rental_info, rental_details, callback){
 	listing_model = this;
 	var error = false;
 	
-	var new_events = new_listing_info.rental_info;
+	var new_events = new_rental_info.rental_info;
 	
 	//first double check that the time is available
 	listing_model.checkRentalTime(domain_name, new_events, user_id, function(result){		
@@ -489,7 +489,7 @@ listing_model.prototype.newRental = function(domain_name, user_id, new_listing_i
 			var insert = {
 				account_id: user_id,
 				listing_id: result.listing_id,
-				type: new_listing_info.type,
+				type: new_rental_info.type,
 				date: start,
 				duration: end - start
 			};
@@ -607,7 +607,7 @@ listing_model.prototype.setRentalDetails = function(rental_id, rental_info, rent
 				rental_info.same_details = null;
 			}
 			
-			delete rental_info.rentals;
+			delete rental_info.rentals; //todo
 			
 			//edit rental info
 			listing_model.setInfo("rentals", rental_info, special, function(result){

@@ -22,11 +22,11 @@ $(document).ready(function() {
 	//--------------------------------------form submission clicks
 	
 	$('#stripe-button').click(function(){
-		var amount = new_listing_info.price * 100;
+		var amount = new_rental_info.price * 100;
 
 		handler.open({
 			amount: amount,
-			description: 'Renting at ' + new_listing_info.listing_info.domain_name
+			description: 'Renting at ' + new_rental_info.listing_info.domain_name
 		});
 
 		return false;
@@ -119,8 +119,8 @@ function rentalData(){
 	};
 
 	//new rental
-	if (new_listing_info){
-		switch (parseFloat(new_listing_info.type)){
+	if (new_rental_info){
+		switch (parseFloat(new_rental_info.type)){
 			case 0:
 				if ($("#background_input").val()){
 					var detail = [ "css", $("#background_input").val() ]
@@ -141,7 +141,7 @@ function rentalData(){
 				rental_details.push(detail);
 				break;
 		}
-		rental_data.rental_info = new_listing_info;
+		rental_data.rental_info = new_rental_info;
 	}
 	//editing rental
 	else {
@@ -217,10 +217,10 @@ function submitRentals(id){
 function updatePage(html, data){
 
 	//update w3bbi rental info for new rentals
-	if (new_listing_info){
+	if (new_rental_info){
 		//update pricing for stripe
-		$("#stripe-button").data("amount", new_listing_info.price);
-		$("#stripe-button").data("description", new_listing_info.listing_info.domain_name);
+		$("#stripe-button").data("amount", new_rental_info.price);
+		$("#stripe-button").data("description", new_rental_info.listing_info.domain_name);
 	
 		for (var x = 0; x < rental_info.length; x++){
 			var start = new Date(rental_info[x].start);

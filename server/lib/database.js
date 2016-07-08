@@ -37,7 +37,7 @@ function database_connect() {
 			setTimeout(database_connect, 2000);
 		}
 		else {
-			console.log("Successful connection!");
+			console.log("Successfully connected to MYSQL database!");
 			connection = con;
 		}
 	});

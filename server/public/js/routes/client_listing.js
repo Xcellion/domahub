@@ -28,17 +28,37 @@ $(document).ready(function() {
 	
 	//create pre-existing rentals
 	for (var x = 0; x < listing_info.rentals.length; x++){
-		var start = new Date(listing_info.rentals[x].date + " UTC");
-		var end = new Date(start.getTime() + listing_info.rentals[x].duration);
-		var eventData = {
-			title: "Rented!",
-			start: start,
-			end: end,
-			color: "red",
-			other: true,
-			rental_id: listing_info.rentals[x].rental_id
-		};
-		$('#calendar').fullCalendar('renderEvent', eventData, true);
+		bool = true;
+		for (var y = 0; y < old_rental_info.rentals.length; y++){
+			if (listing_info.rentals[x].rental_id == old_rental_info.rental_id){
+				var start = new Date(listing_info.rentals[x].date + " UTC");
+				var end = new Date(start.getTime() + listing_info.rentals[x].duration);
+				var eventData = {
+					title: user.fullname || "Guest",
+					start: start,
+					end: end,
+					color: "orange",
+					other: true
+				};
+				$('#calendar').fullCalendar('renderEvent', eventData, true);
+				bool = false;
+				break;
+			}
+		}
+		
+		if (bool){
+			var start = new Date(listing_info.rentals[x].date + " UTC");
+			var end = new Date(start.getTime() + listing_info.rentals[x].duration);
+			var eventData = {
+				title: "Rented!",
+				start: start,
+				end: end,
+				color: "red",
+				other: true,
+				rental_id: listing_info.rentals[x].rental_id
+			};
+			$('#calendar').fullCalendar('renderEvent', eventData, true);
+		}
 	}
 	
 	//check if theres a cookie for local events
@@ -48,7 +68,6 @@ $(document).ready(function() {
 		for (var x = 0; x < existing_events.length; x++){
 			$('#calendar').fullCalendar('renderEvent', existing_events[x], true);
 		}
-		eventPrices();
 	}
 	
 	//check if theres a cookie for the rental type
@@ -56,6 +75,18 @@ $(document).ready(function() {
 		var type = read_cookie("type");
 		$("#radio_"+type+"_input").prop("checked", true);
 	}
+	
+	//------------------------------------------old rental (editing existing) stuff
+	
+	if (old_rental_info){
+		var type = old_rental_info.type;
+		$("#radio_"+type+"_input").prop("checked", true);
+	}
+	
+	//show prices
+	eventPrices();
+	
+	//------------------------------------------interactive stuff
 	
 	$("#listing_form").submit(function(e){
 		e.preventDefault();
@@ -322,7 +353,7 @@ function createEvent(start, end){
 		if (eventitem !== null && typeof eventitem != 'undefined')
 		{
 			//event being created is fully overlapped by existing event, so dont create anything new
-			if (checkFullOverlap(start._d, end - start, eventitem.start._d, eventitem.end - eventitem.start)){
+			if (checkFullOverlap(start._d, end - start, eventitem.start._d, eventitem.end - eventitem.start) && !eventitem.other){
 				console.log('new event is not needed');
 				eventEncompassed = true;
 				//check if new event is in multiples of days (i.e. pressed the all-day button)
@@ -560,4 +591,9 @@ function storeCookies(type){
 //helper function to filter out events that aren't mine
 function filterMine(event) {
     return !event.hasOwnProperty("other");
+}
+
+//helper function to filter out existing rental for editing
+function filterExisting(event){
+	return !event.hasOwnProperty("other") && !event.hasOwnProperty("existing");
 }
