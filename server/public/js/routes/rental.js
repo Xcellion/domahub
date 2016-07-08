@@ -2,6 +2,8 @@ var handler;
 var unlock = true;
 
 $(document).ready(function() {
+	//--------------------------------------stripe configuration
+	
 	handler = StripeCheckout.configure({
 		key: 'pk_test_kcmOEkkC3QtULG5JiRMWVODJ',
 		name: 'w3bbi Domain Rental',
@@ -13,8 +15,21 @@ $(document).ready(function() {
 			// You can access the token ID with `token.id`.
 			// Get the token ID to your server-side code for use.
 			var $id = $('<input id="stripeToken" type=hidden name=stripeToken />').val(token.id);
-			$('#listing_form').append($id).submit();
+			$('#listing_form_pay').append($id).submit();
 		}
+	});
+	
+	//--------------------------------------form submission clicks
+	
+	$('#stripe-button').click(function(){
+		var amount = new_listing_info.price * 100;
+
+		handler.open({
+			amount: amount,
+			description: 'Renting at ' + new_listing_info.listing_info.domain_name
+		});
+
+		return false;
 	});
 
 	$(".listing_form").submit(function(e){
@@ -22,6 +37,8 @@ $(document).ready(function() {
 		submitRentals($(this).attr("id"));
 	});
 	
+	//--------------------------------------page update
+		
 	updatePage(rental_html, rental_details);
 	
 	$("#w3bbi_hider").click(function(e){
@@ -45,16 +62,6 @@ $(document).ready(function() {
 		}
 	});
 
-	$('#stripe-button').click(function(){
-		var amount = new_listing_info.price * 100;
-
-		handler.open({
-			amount: amount,
-			description: 'Renting at ' + new_listing_info.listing_info.domain_name
-		});
-
-		return false;
-	});
 });
 
 
@@ -229,10 +236,13 @@ function updatePage(html, data){
 	}
 	//update w3bbi rental info for editing rentals
 	else {
+		//update UTC time to local time
+		rental_info.date = moment(new Date(rental_info.date + " UTC")).format('YYYY-MM-DD HH:mm:mm');
+	
 		for (var x = 0; x < rental_info.rentals.length; x++){
-			var start = new Date(rental_info.rentals[x].date);
+			var start = new Date(rental_info.rentals[x].date + " UTC");
+			var end = new Date(start.getTime() + rental_info.rentals[x].duration);
 			start = moment(start).format('YYYY, MMMM D, h:mm:ss A');
-			var end = new Date(start + rental_info.rentals[x].duration);
 			end = moment(end).format('YYYY, MMMM D, h:mm:ss A');
 			
 			var rented_start = '<span id="rental_start">'+start+'</span>'

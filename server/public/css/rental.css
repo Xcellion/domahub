@@ -1,47 +1,35 @@
-#w3bbi_wrapper{
+.w3bbi_wrapper{
 	position:fixed;
-	display:none;
-	top:0;
 	left:0;
-	text-align:left;
-	background-color:rgba(0,0,0,0.3);
-	padding:15px;
 	color:#FFF;
+	text-wrap:none;
+	z-index:1;
+	background-color:rgba(0,0,0,0.3);
 	border-right: 1px solid #fff;
 	border-bottom: 1px solid #fff;
+    border-bottom-right-radius: 5px;
 	white-space: nowrap;
-	z-index:1;
 }
 
-#w3bbi_wrapper ::selection {
-	background: #222 /* WebKit/Blink Browsers */
-}
-#w3bbi_wrapper ::-moz-selection {
-	background: #222; /* Gecko Browsers */
-}
-
-#w3bbi_wrapper a {
-	color:#D3D3D3;
+#w3bbi_wrapper{
+	display:none;
+	top:0;
+	padding:15px;
+	text-align:left
 }
 
 #w3bbi_hider{
-	position:fixed;
-	top:0;
-	left:0;
-	padding:5px;
-	color:#FFF;
-	text-wrap:none;
+	top:30px;
+	padding:7px;
 	cursor:pointer;
-	background-color:rgba(0,0,0,0.3);
-	z-index:1;
-	border-right: 1px solid #fff;
-	border-bottom: 1px solid #fff;
-	white-space: nowrap;
+	border-top-right-radius: 5px;
 }
 
-#w3bbi_hider:hover{
-	background-color:rgba(0,0,0,0.5);
-}
+#w3bbi_hider:hover{background-color:rgba(0,0,0,0.5);}
+
+#w3bbi_wrapper ::selection {background: #222 /* WebKit/Blink Browsers */}
+#w3bbi_wrapper ::-moz-selection {background: #222; /* Gecko Browsers */}
+#w3bbi_wrapper a {color:#D3D3D3;}
 
 .button{
 	display:inline-block;
