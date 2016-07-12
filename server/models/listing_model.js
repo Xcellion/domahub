@@ -2,9 +2,8 @@ var sanitizeHtml = require('sanitize-html');
 
 module.exports = listing_model;
 
-function listing_model(database, Account){
+function listing_model(database){
 	this.db = database;
-	this.account = Account;
 }
 
 //--------------------------------------------------------------------------------------------------------------------------------
@@ -179,54 +178,48 @@ listing_model.prototype.getListingInfo = function(domain_name, callback){
 	});
 }
 
-//gets listings files info
-listing_model.prototype.getListingRental = function(domain_name, rental_id, callback){
+//checks if listing exists, if account owns that rental, if rental is in listing, then returns all rental/listing info
+listing_model.prototype.getListingRental = function(domain_name, rental_id, account_id, callback){
 	listing_model = this;
 	
-	//check for listing
-	listing_model.getListingInfo(domain_name, function(result){
-		//domain exists!
-		if (result.state == "success"){
-			listing_id = result.listing_info.id;
-			listing_info = result.listing_info;
-			
-			//if rental id is specified
+	checkListing(domain_name, callback, function(result){
+		listing_info = result.listing_info;
+		
+		//is an account specified?
+		if (account_id){
 			if (rental_id){
-			
-				//check if that rental id belongs to this listing
-				listing_model.getInfo("rentals", "listing_id", listing_id, false, function(result){
-					rentals = result.info;
-					rental_in_listing = false;
-				
-					for (var x = 0; x < rentals.length; x++){
-						if (rentals[x].rental_id == rental_id){
-							rental_in_listing = true;
-							break;
-						}
-					}
-					
-					if (rental_in_listing){
-						listing_model.getRental(rental_id, listing_info, callback);
-					}
-					
-					//rental does not belong to this listing!
-					else {
-						callback({
-							state: "error",
-							description: "Invalid rental!"
-						});
-					}
+				checkAccountRental(account_id, rental_id, callback, function(result){
+					checkListingRental(listing_info.id, rental_id, callback, function(result){
+						rental_info = result.rental_info;
+						listing_model.getRental(rental_info, listing_info, callback);
+					});
 				});
-
-			}
-			//otherwise get the current rental
-			else {
-				listing_model.sendCurrentRental(listing_id, listing_info, callback);
 			}
 		}
-		//listing doesnt exist
+		//is there a rental id?
+		else if (rental_id){
+			checkListingRental(listing_info.id, rental_id, callback, function(result){
+				rental_info = result.rental_info;
+				listing_model.getRental(rental_info, listing_info, callback);
+			});
+		}
+		//otherwise get the current rental
 		else {
-			callback({
+			listing_model.sendCurrentRental(listing_info.id, listing_info, callback);
+		}
+	});
+}
+
+//function to check if listing exists
+function checkListing(domain_name, callback_error, callback_success){
+	listing_model.getListingInfo(domain_name, function(result){
+		if (result.state == "success"){
+			callback_success({
+				listing_info: result.listing_info
+			});
+		}
+		else {
+			callback_error({
 				state: "error",
 				description: "Invalid listing!"
 			});
@@ -234,62 +227,130 @@ listing_model.prototype.getListingRental = function(domain_name, rental_id, call
 	});
 }
 
-//gets all information and any details about the rental
-listing_model.prototype.getRental = function(rental_id, listing_info, callback){
-	listing_model = this;
-
+//function to check that account owns a certain rental
+function checkAccountRental(account_id, rental_id, callback_error, callback_success){
 	listing_model.getInfo("rentals", "rental_id", rental_id, false, function(result){
-		if (result.state == "success"){
-			rental_info = result.info[0];
-			var rentals = [{
-				date: result.info[0].date,
-				duration: result.info[0].duration
-			}];
-			
-			//get the rental info for all rentals with same details
-			listing_model.getInfo("rentals", "same_details", rental_id, false, function(result){
-				if (result.state == "success"){
-					for (var x in result.info){
-						tempInfo = {
-							date: result.info[x].date,
-							duration: result.info[x].duration
-						}
-						rentals.push(tempInfo);
-					}
-					rental_info.rentals = rentals;
+		if (result.info[0].account_id == account_id){
+			callback_success();
+		}
+		//rental does not belong to this listing!
+		else {
+			callback_error({
+				state: "error",
+				description: "Invalid user / rental!"
+			});
+		}
+	});
+}
+
+//function to check that rental id belongs to this listing
+function checkListingRental(listing_id, rental_id, callback_error, callback_success){
+	listing_model.getInfo("rentals", "listing_id", listing_id, false, function(result){
+		listing_haystack = result.info; //list of rentals that belong to a listing
+		listing_needle = false; //particular rental to look for
+
+		for (var x = 0; x < listing_haystack.length; x++){
+			if (listing_haystack[x].rental_id == rental_id){
+				listing_needle = listing_haystack[x];
+				break;
+			}
+		}
+		
+		if (listing_needle){
+			callback_success({
+				rental_info: listing_needle
+			});
+		}
+		//rental does not belong to this listing!
+		else {
+			callback_error({
+				state: "error",
+				description: "Invalid rental!"
+			});
+		}
+	});
+}
+
+//gets all information and any details about the rental including any split times
+listing_model.prototype.getRental = function(rental_info, listing_info, callback){
+	listing_model = this;
+	
+	//get all rentals split across time slots
+	getSameDetailRentals(rental_info, callback, function(result){
+		rental_info.rentals = result.rentals;
 				
-					listing_model.getInfo("rental_details", "rental_id", rental_id, false, function(result){
-						if (result.state == "success"){
-							callback({
-								state: "success",
-								listing_info: listing_info,
-								rental_info: rental_info,
-								rental_details: result.info
-							});
-						}
-						//no details exist, send current one instead!
-						else {
-							listing_model.sendCurrentRental(listing_id, listing_info, function(result){
-								callback({
-									state: "success",
-									listing_info: listing_info,
-									rental_info: rental_info,
-									rental_details: result.rental_details
-								});
-							});
-						}
-					});
-				}
-				else {
+		//get the rental details
+		getRentalDetails(rental_info.rental_id, callback, function(result){
+			if (result.rental_details){
+				callback({
+					state: "success",
+					listing_info: listing_info,
+					rental_info: rental_info,
+					rental_details: result.rental_details
+				});
+			}
+			else {
+				listing_model.sendCurrentRental(listing_info.id, listing_info, function(result){
 					callback({
-						state: "error",
-						description: "Invalid rental!"
+						state: "success",
+						listing_info: listing_info,
+						rental_info: rental_info,
+						rental_details: result.rental_details
 					});
+				});
+			}
+		});
+	});
+}
+
+//function to get any time split rentals
+function getSameDetailRentals(rental_info, callback_error, callback_success){
+
+	//array for any and all split time rentals
+	var rentals = [{
+		date: rental_info.date,
+		duration: rental_info.duration
+	}];
+	
+	//get the rental info for all rentals with same details
+	listing_model.getInfo("rentals", "same_details", rental_info.rental_id, false, function(result){
+		if (result.state == "success"){
+			for (var x in result.info){
+				tempInfo = {
+					date: result.info[x].date,
+					duration: result.info[x].duration
 				}
+				rentals.push(tempInfo);
+			}
+			callback_success({
+				rentals : rentals
+			})
+		}
+		else {
+			callback_error({
+				state: "error",
+				description: "Invalid rental!"
+			});
+		}
+	});
+}
+
+//function to get rental details
+function getRentalDetails(rental_id, callback_error, callback_success){
+	listing_model.getInfo("rental_details", "rental_id", rental_id, false, function(result){
+		if (result.state == "success" && result.info.length > 0){
+			callback_success({
+				rental_details: result.info
+			});
+		}
+		//no details exist, send current one instead!
+		else if (result.info.length == 0){
+			callback_success({
+				rental_details: false
 			});
 		}
 		else {
-			callback({
+			callback_error({
 				state: "error",
 				description: "Invalid rental!"
 			});
@@ -354,7 +415,7 @@ listing_model.prototype.sendCurrentRental = function (listing_id, listing_info, 
 	});
 }
 
-//assuming the listing exists, send the default rental
+//send the default rental
 listing_model.prototype.sendDefaultRental = function(listing_id, listing_info, callback){
 	listing_model = this;
 
@@ -395,87 +456,77 @@ listing_model.prototype.checkRentalTime = function(domain_name, events, user_id,
 	var eventStates = [];
 
 	//get listing info first
-	listing_model.getInfo("listings", "domain_name", domain_name, false, function(result){
-		if (result.state == "success"){
-			listing_info = result.info[0];
+	checkListing(domain_name, callback, function(result){
+		listing_info = result.listing_info;
 			
-			db_query = "SELECT * from ?? WHERE ?? = ? AND duration != 0";
-			
-			//get all rentals for the listing
-			listing_model.getInfo("rentals", "listing_id", listing_info.id, db_query, function(result){			
-				if (result.state == "success"){
-					//array of all unavailable events
-					var unavailable = [];
+		db_query = "SELECT * from ?? WHERE ?? = ? AND duration != 0";
+		
+		//get all rentals for the listing
+		listing_model.getInfo("rentals", "listing_id", listing_info.id, db_query, function(result){			
+			if (result.state == "success"){
+				//array of all unavailable events
+				var unavailable = [];
 
-					//loop through all posted events
-					for (var y = 0; y < events.length; y++){
-						var availability = true;
+				//loop through all posted events
+				for (var y = 0; y < events.length; y++){
+					var availability = true;
 
-						//posted date
-						var user_start = new Date(events[y].start);
-						var user_offset = events[y].offset;
-						var user_end = new Date(events[y].end);
-						var user_duration = user_end - user_start;
-										
-						//cross reference with all existing events in the database
-						for (var x = 0; x < result.info.length; x++){
+					//posted date
+					var user_start = new Date(events[y].start);
+					var user_offset = events[y].offset;
+					var user_end = new Date(events[y].end);
+					var user_duration = user_end - user_start;
+									
+					//cross reference with all existing events in the database
+					for (var x = 0; x < result.info.length; x++){
+						
+						//make sure we dont check the default ones
+						if (result.info[x].date != "0000-00-00 00:00:00"){
+				
+							//existing db date, already in UTC
+							var db_utc = new Date(result.info[x].date + " UTC");
+							var db_duration = result.info[x].duration;
 							
-							//make sure we dont check the default ones
-							if (result.info[x].date != "0000-00-00 00:00:00"){
-					
-								//existing db date, already in UTC
-								var db_utc = new Date(result.info[x].date + " UTC");
-								var db_duration = result.info[x].duration;
-								
-								//UTC magic
-								var user_utc = toUTC(user_start, user_offset);
-														
-								//check if legit dates
-								if (!isNaN(db_utc) && !isNaN(user_utc)){
-									//check if its available
-									if (checkOverlap(user_utc, user_duration, db_utc, db_duration)){
-										availability = false;
-										unavailable.push(events[y])
-										break;
-									}
+							//UTC magic
+							var user_utc = toUTC(user_start, user_offset);
+													
+							//check if legit dates
+							if (!isNaN(db_utc) && !isNaN(user_utc)){
+								//check if its available
+								if (checkOverlap(user_utc, user_duration, db_utc, db_duration)){
+									availability = false;
+									unavailable.push(events[y])
+									break;
 								}
 							}
 						}
-						
-						events[y].availability = availability;
-						eventStates.push(events[y]);
 					}
 					
-					//send the availability of all events posted
-					if (eventStates.length){
-						callback({
-							state: "success",
-							eventStates: eventStates,
-							listing_id: listing_info.id,
-							listing_info: listing_info,
-							unavailable: unavailable
-						});
-					}
+					events[y].availability = availability;
+					eventStates.push(events[y]);
 				}
 				
-				//no rentals exist for that listing!
-				else {
+				//send the availability of all events posted
+				if (eventStates.length){
 					callback({
-						state: "error",
-						description: "Invalid rental!"
+						state: "success",
+						eventStates: eventStates,
+						listing_id: listing_info.id,
+						listing_info: listing_info,
+						unavailable: unavailable
 					});
 				}
-			});
-		}
-		//listing doesnt exist
-		else {
-			callback({
-				state: "error",
-				description: "Invalid listing!"
-			});
-		}
-	})
-	
+			}
+			
+			//something went wrong with getting rentals for a listing
+			else {
+				callback({
+					state: "error",
+					description: "Invalid rental!"
+				});
+			}
+		});
+	});
 }
 
 //rent it now!

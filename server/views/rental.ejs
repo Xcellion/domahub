@@ -89,19 +89,27 @@
 					</div>
 				<% } %>
 				
-				<!-- editing existing rental, add more time -->
-				<% if (typeof rental_info != "undefined") { %>
-					<form id="edit_rental_info" action="/listing/<%=listing_info.domain_name%>/edit" method="post">
-						<input name="rental_id" type="hidden" value=<%= rental_info.rental_id %>>
-						<input id="edit_info_submit" class="button form_submit" type="submit" value="Add more time">
-					</form>
-				<% } %>
-				
 				<!-- rental edit wrapper -->
 				<div id="rental_edit" class="border_white w3bbi_content_wrapper">
 				
+					<!-- add more time -->
+					<% if (typeof rental_info != "undefined") { %>
+						<form id="edit_rental_info" action="/listing/<%=listing_info.domain_name%>/edit" method="post">
+							<input name="rental_id" type="hidden" value=<%= rental_info.rental_id %>>
+							<input id="edit_info_submit" class="button form_submit" type="submit" value="Add more time">
+						</form>
+					<% } else {%>
+						<a class="button" href="/listing/<%=listing_info.domain_name%>">Add more time</a>
+					<% } %>
+					
+					<!-- if editing existing rental -->
+					<% if (typeof new_rental_info == "undefined") { %>
+						<form class="edit_rental_details" id="edit_rental_details" action="/listing/<%=listing_info.domain_name%>/<%=rental_info.rental_id%>" method="post">
+							<div id="edit_now" class="button">Edit page</div>
+							<input id="edit_details_submit" class="button form_submit" type="submit" value="Submit">
+						</form>
 					<!-- if new rental -->
-					<% if (typeof new_rental_info != "undefined") { %>
+					<% } else {%>
 						<form class="edit_rental_details" id="edit_rental_details_pay" action="/listing/<%=listing_info.domain_name%>/pay" method="post">
 						<% if (new_rental_info.type == 0) { %>
 							<div id="edit_now" class="button">Edit page</div>
@@ -111,13 +119,6 @@
 							<button class="form_submit button btn btn-primary btn-lg" id="stripe-button">
 								Checkout <span class="glyphicon glyphicon-shopping-cart"></span>
 							</button>
-						</form>
-	
-					<!-- if editing existing rental -->
-					<% } else {%>
-						<form class="edit_rental_details" id="edit_rental_details" action="/listing/<%=listing_info.domain_name%>/<%=rental_info.rental_id%>" method="post">
-							<div id="edit_now" class="button">Edit page</div>
-							<input id="edit_details_submit" class="button form_submit" type="submit" value="Submit">
 						</form>
 					<% } %>
 				</div>

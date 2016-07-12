@@ -34,13 +34,18 @@ module.exports = function(app, db, auth, e){
 //send rental details and info for a specific rental
 function getRental(req, res, next) {
 	rental_id = req.params.rental_id;
+	domain_name = req.params.domain_name;
 
 	//check if rental id is legit
 	if (parseFloat(rental_id) != rental_id >>> 0){
 		error.handler(req, res, "Invalid rental!", "json");
 	}
+	//check if domain name is legit
+	else if (parseFloat(domain_name) === domain_name >>> 0){
+		error.handler(req, res, "Invalid listing!", "json");
+	}
 	else {
-		Listing.getRental(rental_id, false, function(result){
+		Listing.getListingRental(domain_name, rental_id, false, function(result){
 			sendRentalInfo(req, res, result);
 		});
 	}
@@ -56,7 +61,7 @@ function getCurrentRental(req, res, next){
 	}
 	else {
 		//get the current rental for the listing
-		Listing.getListingRental(domain_name, false, function(result){
+		Listing.getListingRental(domain_name, false, false, function(result){
 			sendRentalInfo(req, res, result);
 		});
 	}
@@ -135,8 +140,9 @@ function getListingPage(req, res, next) {
 
 //gets the rental/listing info and sends user to the rental edit page
 function getRentalPage(req, res, next){
-	domain_name = req.params.domain_name
-	rental_id = req.params.rental_id
+	account_id = req.user.id;
+	domain_name = req.params.domain_name;
+	rental_id = req.params.rental_id;
 	new_rental_info = req.session.new_rental_info;
 	old_rental_info = req.session.old_rental_info;
 
@@ -154,7 +160,7 @@ function getRentalPage(req, res, next){
 	}
 	//we're creating a new rental
 	else if (rental_id == "new"){
-		Listing.getListingRental(domain_name, false, function(result){
+		Listing.getListingRental(domain_name, false, false, function(result){
 			if (result.state == "success"){
 				//get the default html for the domain
 				request('http://www.' + result.listing_info.domain_name + '/reset.html', function (error, response, body) {
@@ -176,7 +182,7 @@ function getRentalPage(req, res, next){
 	}
 	//editing an existing rental
 	else {
-		Listing.getListingRental(domain_name, rental_id, function(result){
+		Listing.getListingRental(domain_name, rental_id, account_id, function(result){
 			if (result.state == "success"){
 				if (result.rental_info.same_details){
 					console.log("Same details found! Redirecting...");
@@ -189,8 +195,8 @@ function getRentalPage(req, res, next){
 								user: req.user,
 								listing_info: result.listing_info,
 								rental_info: result.rental_info,
-								rental_html: body,
-								rental_details: result.rental_details
+								rental_details: result.rental_details,
+								rental_html: body
 							}
 							res.render("rental.ejs", render);
 						}
@@ -212,12 +218,15 @@ function postListingPage(req, res, next){
 	user_id = req.user.id;
 	type = req.body.type;
 	events = req.body.events;
-	old_rental_info = req.session.old_rental_info
-
+	
+	if (req.body.old_rental_info != "false"){
+		req.session.old_rental_info = req.body.old_rental_info;
+	}
+	old_rental_info = req.session.old_rental_info || false;
 	if (rentalChecks(req, res, domain_name, user_id, type, events)){
 		//various rental checks are all gucci
 		Listing.checkRentalTime(domain_name, events, req.user, function(result){
-			if (result.state == "success"){		
+			if (result.state == "success"){
 				//some were unavailable
 				if (result.unavailable.length){
 					res.json({
@@ -238,12 +247,9 @@ function postListingPage(req, res, next){
 								price: price
 							}
 						req.session.new_rental_info = new_rental_info;
-						if (old_rental_info){
-							redirect = old_rental_info.rental_id;
-						}
-						else {
-							redirect = "new";
-						}
+
+						//redirect to an existing rental or a new one
+						redirect = old_rental_info ? old_rental_info.rental_id : "new";
 						res.send({redirect: "/listing/" + domain_name + "/" + redirect});
 					}
 					else {
@@ -264,7 +270,7 @@ function editRental(req, res, next){
 	user_id = req.user.id;
 	domain_name = req.params.domain_name;
 	rental_id = req.body.rental_id;
-	
+		
 	//check if rental is legit
 	if (parseFloat(rental_id) != rental_id >>> 0){
 		error.handler(req, res, "Invalid rental!", "json");

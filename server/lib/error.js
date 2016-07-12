@@ -14,7 +14,7 @@ function handler(req, res, message, type) {
 			});
 			break;
 		default:
-			var redirectTo = req.header("Referer") || "/";
+			var redirectTo = req.header("Referer") || "/login";
 			var redirectBack = req.path;
 			req.session.message = message;
 
@@ -23,6 +23,9 @@ function handler(req, res, message, type) {
 				case "Invalid password!":
 					req.session.message = "Invalid username / password!";
 					break;
+				case "Invalid user / rental!":
+					req.session.message = "Invalid rental!";
+					console.log("Someone tried to access someone else's rental!");
 				case "Invalid rental!":
 				case "No rental information!":
 					redirectTo = RemoveLastDirectoryPartOf(req.path);
@@ -34,6 +37,7 @@ function handler(req, res, message, type) {
 				case "Invalid listing!":
 				case "Invalid price!":
 				default:
+					console.log(message);
 					break;
 			}
 			

@@ -97,11 +97,11 @@ function toggleEdit(){
 		$("#edit_now_details").slideDown();
 	}
 
-	if ($('#edit_now').html() == "Edit now"){
+	if ($('#edit_now').html() == "Edit page"){
 		$('#edit_now').html("Finish editing");
 	}
 	else {
-		$('#edit_now').html("Edit now");
+		$('#edit_now').html("Edit page");
 		
 		//change the background in real time
 		var backgroundUrl = sanitizeHtml($("#background_input").val());

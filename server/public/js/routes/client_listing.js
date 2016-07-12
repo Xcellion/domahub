@@ -1,7 +1,7 @@
 var totalPrice = 0;
 
-//calendar logic
 $(document).ready(function() {
+	//calendar logic
 	 $('#calendar').fullCalendar({
 		defaultView: "agendaWeek",
 		allDayDefault: false,
@@ -72,13 +72,6 @@ $(document).ready(function() {
 		$("#radio_"+type+"_input").prop("checked", true);
 	}
 	
-	//------------------------------------------old rental (editing existing) stuff
-	
-	if (old_rental_info){
-		var type = old_rental_info.type;
-		$("#radio_"+type+"_input").prop("checked", true);
-	}
-	
 	//show prices
 	eventPrices();
 	
@@ -129,31 +122,31 @@ function checkSubmit(allevents){
 
 //function to submit new rental info
 function submitRentals(){
-	var allevents = $('#calendar').fullCalendar('clientEvents');
-	var checks = checkSubmit(allevents);
+	var newEvents = $('#calendar').fullCalendar('clientEvents', filterNew);
+	var checks = checkSubmit(newEvents);	//check if everything is legit
 	
-	//check if everything is legit
 	if (checks == "success"){
-	
+		//get all new events, calculate the timezone offset
 		minEvents = [];
-		for (var x = 0; x < allevents.length; x++){
-			if (!allevents[x].old){
-				var start = new Date(allevents[x].start._d);
-				var offset = start.getTimezoneOffset();
-				minEvents.push({
-					start: allevents[x].start._d,
-					end: allevents[x].end._d,
-					offset: offset,
-					_id: allevents[x]._id
-				});
-			}
+		for (var x = 0; x < newEvents.length; x++){
+			var start = new Date(newEvents[x].start._d);
+			var offset = start.getTimezoneOffset();
+			minEvents.push({
+				start: newEvents[x].start._d,
+				end: newEvents[x].end._d,
+				offset: offset,
+				_id: newEvents[x]._id
+			});
 		}
+				
+		//post to ajax
 		$.ajax({
 			type: "POST",
 			url: "/listing/" + listing_info.domain_name + "/rent",
 			data: {
 				events: minEvents,
-				type: $("input[type='radio'][name='type']:checked").val()
+				type: $("input[type='radio'][name='type']:checked").val(),
+				old_rental_info: old_rental_info
 			}
 		}).done(function(data){
 			if (data.unavailable){
@@ -223,12 +216,26 @@ $(document).on("mouseup", ".fc-event", function(mouseUpJsEvent){
 		
 		//get the id of the main rental
 		var same_id = mouseUpCalEvent.same_details ? mouseUpCalEvent.same_details : mouseUpCalEvent.rental_id;
-		window.location = window.location.href + "/" + same_id; //todo
+		
+		if (mouseUpCalEvent.editing){
+			eventEdit(same_id, "Add more time?", "green");
+			mouseUpCalEvent.editing = false;
+			old_rental_info = false;
+			$("#calendar").fullCalendar('removeEvents', filterNew);
+		}
+		else {
+			eventEdit(same_id, "Editing", "orange");
+			mouseUpCalEvent.editing = true;
+			old_rental_info = {
+				rental_id: same_id
+			}
+			$("#calendar").fullCalendar('removeEvents', filterNew);
+		}
+		//window.location = window.location.href + "/" + same_id; //todo
 	}
 	storeCookies("local_events");
 	eventPrices();
 });
-
 
 //to show edit confirmation for existing rentals on hover. highlights the rentals that are grouped together
 var mousein = false;
@@ -237,18 +244,10 @@ $(document).on("mouseenter", ".fc-event", function(e){
 	mouseEvent = $("#calendar").fullCalendar('clientEvents', $(this).attr("id"))[0];
 	
 	var same_id = mouseEvent.same_details ? mouseEvent.same_details : mouseEvent.rental_id;
-	
-	if (!mouseEvent.other){
-		sameEvents = $("#calendar").fullCalendar('clientEvents', function(e){
-			return sameFilter(e, same_id);
-		});
-		if (!mouseEvent.editing && user && mouseEvent.account_id == user.id && !mousein){
-			mousein = true;
-			for (var x = 0; x < sameEvents.length; x++){
-				sameEvents[x].title = "Add more time?";
-				$('#calendar').fullCalendar('updateEvent', sameEvents[x]);
-			}
-		}
+	if (!mouseEvent.other && !mouseEvent.editing && user && mouseEvent.account_id == user.id && !mousein){
+		eventEdit(same_id, "Add more time?");
+		mousein = true;
+		$(this).css("cursor:pointer");
 	}
 });
 
@@ -256,22 +255,25 @@ $(document).on("mouseleave", ".fc-event", function(e){
 	mouseEvent = $("#calendar").fullCalendar('clientEvents', $(this).attr("id"))[0];
 	
 	var same_id = mouseEvent.same_details ? mouseEvent.same_details : mouseEvent.rental_id;
-	
-	if (!mouseEvent.other){
-		sameEvents = $("#calendar").fullCalendar('clientEvents', function(e){
-			return sameFilter(e, same_id);
-		});
-		if (!mouseEvent.editing && user && mouseEvent.account_id == user.id){
-			var title = user.fullname || "Guest";
-			for (var x = 0; x < sameEvents.length; x++){
-				sameEvents[x].title = title;
-				$('#calendar').fullCalendar('updateEvent', sameEvents[x]);
-			}
-			
-			mousein = false;
-		}
+	if (!mouseEvent.other && !mouseEvent.editing && user && mouseEvent.account_id == user.id){
+		var title = user.fullname || "Guest";
+		eventEdit(same_id, title);
+		mousein = false;
 	}
 });
+
+//helper function to enable editing of time
+function eventEdit(same_id, title, color){
+	sameEvents = $("#calendar").fullCalendar('clientEvents', function(e){
+		return filterSame(e, same_id);
+	});
+	
+	for (var x = 0; x < sameEvents.length; x++){
+		sameEvents[x].title = title;
+		sameEvents[x].color = color || sameEvents[x].color;
+		$('#calendar').fullCalendar('updateEvent', sameEvents[x]);
+	}
+}
 
 //helper function to determine the time slot of a mouse event
 function getTimeSlot(calEvent, jsEvent){
@@ -524,15 +526,15 @@ function createEvent(start, end){
 	//checked for all cases, create the new event!
 	if (!eventEncompassed && mergingEvents.length == 0 && overlappingEvents.length == 0 && fullyOverlappingEvents.length == 0){
 		//console.log('n');
-		title = user.fullname || "Guest";
 		var eventData = {
 			start: start,
-			end: end
+			end: end,
+			newevent: true
 		};
 		
 		//orange if adding more time
 		eventData.color = (parseFloat(old_rental_info.rental_id) === old_rental_info.rental_id >>> 0) ? "orange" : "";
-		eventData.title = (parseFloat(old_rental_info.rental_id) === old_rental_info.rental_id >>> 0) ? "Added time" : title;
+		eventData.title = (parseFloat(old_rental_info.rental_id) === old_rental_info.rental_id >>> 0) ? "Added time" : "New rental";
 		
 		var newEvent = $('#calendar').fullCalendar('renderEvent', eventData, true);
 
@@ -626,7 +628,8 @@ function storeCookies(type){
 				title: local_events[x].title,
 				start: local_events[x].start,
 				end: local_events[x].end,
-				color: local_events[x].color
+				color: local_events[x].color,
+				newevent: true
 			}
 			cookie.push(temp_event);
 		}
@@ -647,6 +650,11 @@ function filterMine(event) {
 }
 
 //helper function to filter out existing rental for editing
-function sameFilter(event, id){
+function filterSame(event, id){
 	return (event.same_details == id || event.rental_id == id);
+}
+
+//helper function to find all newly added time
+function filterNew(event){
+	return event.newevent;
 }

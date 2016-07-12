@@ -52,6 +52,10 @@
 	height:30px !important;
 }
 
+.edit_rental_details{
+	display:inline-block;
+}
+
 .w3bbi_content_wrapper{
 	padding: 15px 0 15px 0;
 }

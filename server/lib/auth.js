@@ -151,15 +151,19 @@ function messageReset(req){
 
 //log out of the session
 function logout(req, res) {
-	console.log("Logging out");
-	req.logout();
-	redirectTo = req.header("Referer") ? req.header("Referer") : "/";
+	if (req.isAuthenticated()){
+		console.log("Logging out");
+		req.logout();
+	}
+	redirectTo = req.path != "/logout" ? req.header("Referer") : "/";
 	redirectURL = req.session.redirectBack ? req.session.redirectBack : redirectTo;
+	delete req.session.redirectBack;
 	res.redirect(redirectURL);
 };
 
 //sign up for a new account
 function signup(req, res){
+	req.session.redirectBack = req.header("Referer") || "/";
 	res.render("signup.ejs", { message: messageReset(req)});
 };
 
@@ -168,6 +172,7 @@ function loginPost(req, res, next){
 	//redirect to referrer or main page
 	redirectTo = req.header("Referer") ? req.header("Referer") : "/";
 	redirectURL = req.session.redirectBack ? req.session.redirectBack : redirectTo;
+	delete req.session.redirectBack;
 	passport.authenticate('local-login', function(err, user, info){
 		if (!user && info){
 			error.handler(req, res, info.message);
@@ -188,6 +193,8 @@ function loginPost(req, res, next){
 //function to sign up for a new account
 function signupPost(req, res, next){
 	redirectURL = req.path == "/signup" ? "/" : req.header("Referer");
+	redirectURL = req.session.redirectBack ? req.session.redirectBack : redirectTo;
+	delete req.session.redirectBack;
 	passport.authenticate('local-signup', {
 		successRedirect : '/', // redirect to main page
 		failureRedirect : '/signup', // redirect back to the signup page if there is an error
