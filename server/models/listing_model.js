@@ -146,8 +146,14 @@ listing_model.prototype.getListingInfo = function(domain_name, callback){
 		if (result.state == "success" && result.info){
 			listing_info = result.info[0];
 			
+			db_query = "SELECT \
+							rentals.*, \
+							accounts.fullname, \
+							accounts.email \
+						FROM ?? JOIN accounts ON rentals.account_id = accounts.id  WHERE ?? = ? AND rentals.date != '0000-00-00 00:00:00'"
+			
 			//get all rental info for that listing that is not default
-			Listing.getInfo("rentals", "listing_id", result.info[0].id, 'SELECT date, duration, rental_id from ?? WHERE ?? = ? AND date != "0000-00-00 00:00:00"', function(result){
+			Listing.getInfo("rentals", "rentals.listing_id", result.info[0].id, db_query, function(result){
 				if (result.state == "success"){
 					listing_info.rentals = result.info;
 				}
@@ -473,19 +479,17 @@ listing_model.prototype.checkRentalTime = function(domain_name, events, user_id,
 }
 
 //rent it now!
-listing_model.prototype.newRental = function(domain_name, user_id, new_rental_info, rental_details, callback){
+listing_model.prototype.newRental = function(domain_name, user_id, new_rental_info, new_rentals, rental_details, callback){
 	listing_model = this;
 	var error = false;
 	
-	var new_events = new_rental_info.rental_info;
-	
 	//first double check that the time is available
-	listing_model.checkRentalTime(domain_name, new_events, user_id, function(result){		
+	listing_model.checkRentalTime(domain_name, new_rentals, user_id, function(result){		
 		if (result.state == "success" && result.unavailable.length == 0){
-			var tempStart = new Date(new_events[0].start);
-			var tempEnd = new Date(new_events[0].end);
-			var start = toUTC(tempStart, new_events[0].offset);
-			var end = toUTC(tempEnd, new_events[0].offset);
+			var tempStart = new Date(new_rentals[0].start);
+			var tempEnd = new Date(new_rentals[0].end);
+			var start = toUTC(tempStart, new_rentals[0].offset);
+			var end = toUTC(tempEnd, new_rentals[0].offset);
 			var insert = {
 				account_id: user_id,
 				listing_id: result.listing_id,
@@ -494,24 +498,28 @@ listing_model.prototype.newRental = function(domain_name, user_id, new_rental_in
 				duration: end - start
 			};
 			
+			var editing = new_rental_info.old_rental_info ? true : false;
+			
+			insert.same_details = editing ? new_rental_info.old_rental_info.rental_id : undefined;
+			
 			//try to create a new rental
 			listing_model.insertSetInfo("rentals", insert, function(result){
 				//the rental id of the newly created rental
-				insertId = result.insertId;
+				insertId = editing ? new_rental_info.old_rental_info.rental_id : result.insertId;
 				
 				//rental succeeded
 				if (result.state == "success"){
 					//events are split across multiple times
-					if (new_events.length > 1){
+					if (new_rentals.length > 1){
 						var keys = ["account_id", "listing_id", "same_details", "type", "date", "duration"];
 						var values = [];
 						
-						for (var x = 1; x < new_events.length; x++){
+						for (var x = 1; x < new_rentals.length; x++){
 							var tempValue = [];
-							var tempStart = new Date(new_events[x].start);
-							var tempEnd = new Date(new_events[x].end);
-							var start = toUTC(tempStart, new_events[x].offset);
-							var end = toUTC(tempEnd, new_events[x].offset);
+							var tempStart = new Date(new_rentals[x].start);
+							var tempEnd = new Date(new_rentals[x].end);
+							var start = toUTC(tempStart, new_rentals[x].offset);
+							var end = toUTC(tempEnd, new_rentals[x].offset);
 							var duration = end - start;
 							
 							tempValue.push(insert.account_id);
@@ -525,7 +533,7 @@ listing_model.prototype.newRental = function(domain_name, user_id, new_rental_in
 												
 						listing_model.insertInfo("rentals", keys, values, function(result){
 							if (result.state == "success"){
-								listing_model.newRentalDetails(insertId, rental_details, callback);
+								listing_model.newRentalDetails(insertId, rental_details, editing, callback);
 							}
 							else {
 								listing_model.callbackError(insertId, "Something wrong with multiple rentals!", callback)
@@ -534,7 +542,7 @@ listing_model.prototype.newRental = function(domain_name, user_id, new_rental_in
 					}
 					//only 1 time slot
 					else {
-						listing_model.newRentalDetails(insertId, rental_details, callback);
+						listing_model.newRentalDetails(insertId, rental_details, editing, callback);
 					}
 				}
 				//rental failed, delete what was just inserted
@@ -553,45 +561,54 @@ listing_model.prototype.newRental = function(domain_name, user_id, new_rental_in
 }
 
 //function to add rental details
-listing_model.prototype.newRentalDetails = function(rental_id, rental_details, callback){
+listing_model.prototype.newRentalDetails = function(rental_id, rental_details, editing, callback){
 	listing_model = this;
 
 	var keys = ["rental_id", "text_key", "text_value"];
 	var values = [];
 	
-	for (var x = 0; x < rental_details.length; x++){
-		var tempValue = [];
-		tempValue.push(rental_id);
-		for (var y in rental_details[x]){
-			if (rental_details[x][y] == "css"){
-				tempValue.push("css");
-				tempValue.push("body {background:url(" + sanitizeHtml(rental_details[x][1]) + ") no-repeat center bottom fixed; }");
-				break;
+	if (rental_details && !editing){
+		for (var x = 0; x < rental_details.length; x++){
+			var tempValue = [];
+			tempValue.push(rental_id);
+			for (var y in rental_details[x]){
+				if (rental_details[x][y] == "css"){
+					tempValue.push("css");
+					tempValue.push("body {background:url(" + sanitizeHtml(rental_details[x][1]) + ") no-repeat center bottom fixed; }");
+					break;
+				}
+				else {
+					//make sure to sanitize the HTML
+					tempValue.push(sanitizeHtml(rental_details[x][y]));
+				}
 			}
-			else {
-				//make sure to sanitize the HTML
-				tempValue.push(sanitizeHtml(rental_details[x][y]));
-			}
+			
+			values.push(tempValue);
 		}
 		
-		values.push(tempValue);
+		//insert the rental details!
+		listing_model.insertInfo("rental_details", keys, values, function(result){
+			if (result.state == "success"){
+				callback({
+					state: "success",
+					rental_id: rental_id
+				});
+			}
+			else {
+				callback({
+					state: "error",
+					description: "Invalid rental details!"
+				});
+			}
+		});
 	}
-	
-	//insert the rental details!
-	listing_model.insertInfo("rental_details", keys, values, function(result){
-		if (result.state == "success"){
-			callback({
-				state: "success",
-				rental_id: rental_id
-			});
-		}
-		else {
-			callback({
-				state: "error",
-				description: "Invalid rental details!"
-			});
-		}
-	});
+	else {
+		console.log("No rental details to insert!");
+		callback({
+			state: "success",
+			rental_id: rental_id
+		});
+	}
 }
 
 //function to delete existing rental details and add new ones
@@ -607,15 +624,19 @@ listing_model.prototype.setRentalDetails = function(rental_id, rental_info, rent
 				rental_info.same_details = null;
 			}
 			
+			delete rental_info.listing_info; //todo
 			delete rental_info.rentals; //todo
 			
-			//edit rental info
-			listing_model.setInfo("rentals", rental_info, special, function(result){
-				if (result.state == "success"){
+			if (rental_info.rentals){
+				domain_name = rental_info.listing_info.domain_name;
+				user_id = rental_info.account_id;
+				rental_info.same_details = rental_info.rental_id;
+			
+				listing_model.newRental(domain_name, user_id, rental_info, rental_info.rentals, false, function(result){
 					//delete all existing rental data and replace				
 					listing_model.deleteInfo("rental_details", "rental_id", rental_id, function(result){
 						if (result.state == "success"){
-							listing_model.newRentalDetails(rental_id, rental_details, callback);
+							listing_model.newRentalDetails(rental_id, rental_details, true, callback);
 						}
 						else {
 							callback({
@@ -624,14 +645,11 @@ listing_model.prototype.setRentalDetails = function(rental_id, rental_info, rent
 							});
 						}
 					});
-				}
-				else {
-					callback({
-						state: "error",
-						description: "Rental updating error!"
-					});
-				}
-			});
+				});
+			}
+			else {
+				
+			}
 		}
 		else {
 			callback({

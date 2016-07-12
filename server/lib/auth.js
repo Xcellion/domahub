@@ -152,9 +152,10 @@ function messageReset(req){
 //log out of the session
 function logout(req, res) {
 	console.log("Logging out");
-	delete req.session;
 	req.logout();
-	res.redirect('/');
+	redirectTo = req.header("Referer") ? req.header("Referer") : "/";
+	redirectURL = req.session.redirectBack ? req.session.redirectBack : redirectTo;
+	res.redirect(redirectURL);
 };
 
 //sign up for a new account

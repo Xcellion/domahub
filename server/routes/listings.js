@@ -25,6 +25,7 @@ module.exports = function(app, db, auth, e){
 
 	//w3bbi posts
 	app.post('/listing/:domain_name/rent', isLoggedIn, postListingPage);
+	app.post('/listing/:domain_name/edit', isLoggedIn, editRental);
 	app.post('/listing/:domain_name/:rental_id', isLoggedIn, postRentalPage);
 }
 
@@ -137,7 +138,7 @@ function getRentalPage(req, res, next){
 	domain_name = req.params.domain_name
 	rental_id = req.params.rental_id
 	new_rental_info = req.session.new_rental_info;
-	old_rental_info = req.session.old_rental_info
+	old_rental_info = req.session.old_rental_info;
 
 	//we dont accept listing ids, only domain names
 	if (parseFloat(domain_name) === domain_name >>> 0){
@@ -161,7 +162,6 @@ function getRentalPage(req, res, next){
 						res.render("rental.ejs", {
 							user: req.user,
 							listing_info: result.listing_info,
-							rental_info: new_rental_info.rental_info,
 							rental_html: body,
 							rental_details: result.rental_details,
 							new_rental_info: new_rental_info
@@ -176,29 +176,26 @@ function getRentalPage(req, res, next){
 	}
 	//editing an existing rental
 	else {
-		delete req.session.new_rental_info;
 		Listing.getListingRental(domain_name, rental_id, function(result){
 			if (result.state == "success"){
-				request('http://www.' + result.listing_info.domain_name + '/reset.html', function (error, response, body) {
-					if (!error && response.statusCode == 200) {
-						var render = {
-							user: req.user,
-							listing_info: result.listing_info,
-							rental_info: result.rental_info,
-							rental_html: body,
-							rental_details: result.rental_details
-						}
-						if (old_rental_info){
-							for (var x in old_rental_info.rentals){
-								render.rental_info.rentals.push(old_rental_info.rentals[x]);
+				if (result.rental_info.same_details){
+					console.log("Same details found! Redirecting...");
+					res.redirect("/listing/" + domain_name + "/" + result.rental_info.same_details);
+				}
+				else {
+					request('http://www.' + result.listing_info.domain_name + '/reset.html', function (error, response, body) {
+						if (!error && response.statusCode == 200) {
+							var render = {
+								user: req.user,
+								listing_info: result.listing_info,
+								rental_info: result.rental_info,
+								rental_html: body,
+								rental_details: result.rental_details
 							}
+							res.render("rental.ejs", render);
 						}
-						else {
-							req.session.old_rental_info = result.rental_info;
-						}
-						res.render("rental.ejs", render);
-					}
-				});
+					});
+				}
 			}
 			else {
 				error.handler(req, res, result.description);
@@ -218,7 +215,7 @@ function postListingPage(req, res, next){
 	old_rental_info = req.session.old_rental_info
 
 	if (rentalChecks(req, res, domain_name, user_id, type, events)){
-		//all gucci
+		//various rental checks are all gucci
 		Listing.checkRentalTime(domain_name, events, req.user, function(result){
 			if (result.state == "success"){		
 				//some were unavailable
@@ -233,25 +230,21 @@ function postListingPage(req, res, next){
 					var price = eventPrices(events, result.listing_info);
 
 					if (price){
-						if (old_rental_info){
-							old_rental_info.rentals = result.eventStates;
-							res.send({
-								redirect: "/listing/" + domain_name + "/" + old_rental_info.rental_id
-							});
-						}
-						else {
-							var new_rental_info = {
+						var new_rental_info = {
 								user: req.user,
 								listing_info: result.listing_info,
-								rental_info: result.eventStates,
+								rentals: result.eventStates,
 								type: type,
 								price: price
 							}
-							req.session.new_rental_info = new_rental_info;
-							res.send({
-								redirect: "/listing/" + domain_name + "/new"
-							});
+						req.session.new_rental_info = new_rental_info;
+						if (old_rental_info){
+							redirect = old_rental_info.rental_id;
 						}
+						else {
+							redirect = "new";
+						}
+						res.send({redirect: "/listing/" + domain_name + "/" + redirect});
 					}
 					else {
 						error.handler(req, res, "Invalid price!");
@@ -266,6 +259,24 @@ function postListingPage(req, res, next){
 	}
 }
 
+//function to initiate editing a rental
+function editRental(req, res, next){
+	user_id = req.user.id;
+	domain_name = req.params.domain_name;
+	rental_id = req.body.rental_id;
+	
+	//check if rental is legit
+	if (parseFloat(rental_id) != rental_id >>> 0){
+		error.handler(req, res, "Invalid rental!", "json");
+	}
+	else {
+		req.session.old_rental_info = {
+			rental_id: rental_id
+		}
+		res.redirect("/listing/" + domain_name);
+	}
+}
+
 //function to edit a rental or create a new rental
 function postRentalPage(req, res, next){
 	user_id = req.user.id;
@@ -274,6 +285,10 @@ function postRentalPage(req, res, next){
 	rental_id = req.params.rental_id;
 	rental_info = req.body.rental_info;
 	rental_details = req.body.rental_details;
+	
+	if (old_rental_info){
+		rental_info.old_rental_info = req.session.old_rental_info;
+	}
 
 	//check if data is legit
 	if (!rental_details || rental_details.length <= 0){
@@ -301,12 +316,12 @@ function postRentalPage(req, res, next){
 			
 			//triple check price
 			Listing.getInfo("listings", "domain_name", domain_name, false, function(result){
-				db_price = eventPrices(rental_info.rental_info, result.info[0]);
+				db_price = eventPrices(rental_info.rentals, result.info[0]);
 				
 				if (sess_price == db_price){
 					//first check if payment was good
 					if (payCheck(stripeToken, db_price, domain_name) === true){
-						Listing.newRental(domain_name, user_id, rental_info, rental_details, function(result){
+						Listing.newRental(domain_name, user_id, rental_info, rental_info.rentals, rental_details, function(result){
 							if (result.state == "success"){
 								delete req.session.new_rental_info;
 								delete req.session.old_rental_info;

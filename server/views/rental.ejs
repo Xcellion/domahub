@@ -58,7 +58,7 @@
 					
 					<!-- listing information, this should never error -->
 					<% if (typeof listing_info != "undefined") {%>
-						<a class="button" href="/listing/<%=listing_info.domain_name%>">Back to calendar</a>
+						<a class="button" href="/listing/<%=listing_info.domain_name%>">Back to listing</a>
 					<% } %>
 				</div>
 				
@@ -77,32 +77,47 @@
 						</table>
 					</div>
 				<% } %>
-			
-				<div id="rental_wrapper" class="w3bbi_content_wrapper">
-					<div>Rented from:</div>
-				</div>
+				
+				<% if (typeof rental_info != "undefined") { %>
+					<div id="rental_wrapper" class="w3bbi_content_wrapper">
+						<div>Rented from:</div>
+					</div>
+				<% } %>
+				<% if (typeof new_rental_info != "undefined") { %>
+					<div id="new_rental_wrapper" class="w3bbi_content_wrapper">
+						<div>Renting for:</div>
+					</div>
+				<% } %>
+				
+				<!-- editing existing rental, add more time -->
+				<% if (typeof rental_info != "undefined") { %>
+					<form id="edit_rental_info" action="/listing/<%=listing_info.domain_name%>/edit" method="post">
+						<input name="rental_id" type="hidden" value=<%= rental_info.rental_id %>>
+						<input id="edit_info_submit" class="button form_submit" type="submit" value="Add more time">
+					</form>
+				<% } %>
 				
 				<!-- rental edit wrapper -->
 				<div id="rental_edit" class="border_white w3bbi_content_wrapper">
 				
 					<!-- if new rental -->
 					<% if (typeof new_rental_info != "undefined") { %>
-						<form class="listing_form" id="listing_form_pay" action="/listing/<%=listing_info.domain_name%>/pay" method="post">
+						<form class="edit_rental_details" id="edit_rental_details_pay" action="/listing/<%=listing_info.domain_name%>/pay" method="post">
 						<% if (new_rental_info.type == 0) { %>
-							<div id="edit_now" class="button">Edit now</div>
+							<div id="edit_now" class="button">Edit page</div>
 						<% } else if (new_rental_info.type == 1) { %>
 							<input name="redirect" placeholder="http://url-to-redirect-to.com" type="url" id="url_input" autofocus>
 						<% } %>
-							<button class="button btn btn-primary btn-lg" id="stripe-button">
+							<button class="form_submit button btn btn-primary btn-lg" id="stripe-button">
 								Checkout <span class="glyphicon glyphicon-shopping-cart"></span>
 							</button>
 						</form>
 	
 					<!-- if editing existing rental -->
 					<% } else {%>
-						<form class="listing_form" id="listing_form_edit" action="/listing/<%=listing_info.domain_name%>/<%=rental_info.rental_id%>" method="post">
-							<div id="edit_now" class="button">Edit now</div>
-							<input id="submit" class="button" type="submit" value="Submit">
+						<form class="edit_rental_details" id="edit_rental_details" action="/listing/<%=listing_info.domain_name%>/<%=rental_info.rental_id%>" method="post">
+							<div id="edit_now" class="button">Edit page</div>
+							<input id="edit_details_submit" class="button form_submit" type="submit" value="Submit">
 						</form>
 					<% } %>
 				</div>

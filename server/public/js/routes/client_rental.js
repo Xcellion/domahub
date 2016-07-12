@@ -15,7 +15,7 @@ $(document).ready(function() {
 			// You can access the token ID with `token.id`.
 			// Get the token ID to your server-side code for use.
 			var $id = $('<input id="stripeToken" type=hidden name=stripeToken />').val(token.id);
-			$('#listing_form_pay').append($id).submit();
+			$('#edit_rental_details_pay').append($id).submit();
 		}
 	});
 	
@@ -32,9 +32,13 @@ $(document).ready(function() {
 		return false;
 	});
 
-	$(".listing_form").submit(function(e){
+	$(".edit_rental_details").submit(function(e){
 		e.preventDefault();
 		submitRentals($(this).attr("id"));
+	});
+	
+	$("#edit_rental_info").submit(function(e){
+		
 	});
 	
 	//--------------------------------------page update
@@ -145,6 +149,7 @@ function rentalData(){
 	}
 	//editing rental
 	else {
+		rental_info.listing_info = listing_info;
 		rental_data.rental_info = rental_info;
 		if ($("#background_input").val()){
 			var detail = [ "css", $("#background_input").val() ]
@@ -167,7 +172,7 @@ function submitRentals(id){
 	if (user){
 		if (unlock){
 			var rental_data = rentalData();
-			var url = id == "listing_form_edit" ? "/"+rental_info.rental_id : "/pay";
+			var url = id == "edit_rental_details" ? "/"+rental_info.rental_id : "/pay";
 
 			//lock the ajax
 			unlock = false;
@@ -198,6 +203,10 @@ function submitRentals(id){
 						window.location = window.location.pathname.replace(/\/[^\/]*$/, '/'+data.rental_id);
 					}
 				}
+				else if (data.message){
+					$("#message").text(data.message);
+					console.log(data);
+				}
 				else {
 					$("#message").html("Something went wrong!");
 					console.log(data);
@@ -215,41 +224,19 @@ function submitRentals(id){
 
 //update page based on database data
 function updatePage(html, data){
-
+	//any existing rentals
+	if (rental_info.rentals){
+		//update UTC time to local time
+		rental_info.date = moment(new Date(rental_info.date + " UTC")).format('YYYY-MM-DD HH:mm:mm');
+		appendRentals(rental_info.rentals, false);
+	}
+	
 	//update w3bbi rental info for new rentals
 	if (new_rental_info){
 		//update pricing for stripe
 		$("#stripe-button").data("amount", new_rental_info.price);
 		$("#stripe-button").data("description", new_rental_info.listing_info.domain_name);
-	
-		for (var x = 0; x < rental_info.length; x++){
-			var start = new Date(rental_info[x].start);
-			start = moment(start).format('YYYY, MMMM D, h:mm:ss A');
-			var end = new Date(rental_info[x].end);
-			end = moment(end).format('YYYY, MMMM D, h:mm:ss A');
-			
-			var rented_start = '<span id="rental_start">'+start+'</span>'
-			var rented_end = '<span id="rental_end">'+end+'</span>'
-			var rented_dates = $('<li>' + rented_start + ' -- ' + rented_end + '</li>')
-			$("#rental_wrapper").append(rented_dates);
-		}
-	}
-	//update w3bbi rental info for editing rentals
-	else {
-		//update UTC time to local time
-		rental_info.date = moment(new Date(rental_info.date + " UTC")).format('YYYY-MM-DD HH:mm:mm');
-	
-		for (var x = 0; x < rental_info.rentals.length; x++){
-			var start = new Date(rental_info.rentals[x].date + " UTC");
-			var end = new Date(start.getTime() + rental_info.rentals[x].duration);
-			start = moment(start).format('YYYY, MMMM D, h:mm:ss A');
-			end = moment(end).format('YYYY, MMMM D, h:mm:ss A');
-			
-			var rented_start = '<span id="rental_start">'+start+'</span>'
-			var rented_end = '<span id="rental_end">'+end+'</span>'
-			var rented_dates = $('<li>' + rented_start + ' -- ' + rented_end + '</li>')
-			$("#rental_wrapper").append(rented_dates);
-		}
+		appendRentals(new_rental_info.rentals, true);
 	}
 
 	//update rental preview
@@ -276,6 +263,28 @@ function updatePage(html, data){
 			}
 		}
 	}, false);
+}
+
+//helper function to append rental dates
+function appendRentals(rentals, new_rental){
+	for (var x = 0; x < rentals.length; x++){
+		if (new_rental){
+			start = moment(rentals[x].start).format('YYYY, MMMM D, h:mm:ss A');
+			end = moment(rentals[x].end).format('YYYY, MMMM D, h:mm:ss A');
+		}
+		else {
+			start = moment(rentals[x].date)._d.getTime();
+			end = moment(start + rentals[x].duration).format('YYYY, MMMM D, h:mm:ss A');
+			start = moment(start).format('YYYY, MMMM D, h:mm:ss A');
+		}
+		
+		var rented_start = '<span id="rental_start">'+start+'</span>';
+		var rented_end = '<span id="rental_end">'+end+'</span>';
+		var rented_dates = $('<li>' + rented_start + ' -- ' + rented_end + '</li>');
+		
+		var wrapper = new_rental ? "#new_rental_wrapper" : "#rental_wrapper";
+		$(wrapper).append(rented_dates);
+	}
 }
 
 //helper function to get CSS style sheet

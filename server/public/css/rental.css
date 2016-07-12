@@ -22,6 +22,7 @@
 	top:30px;
 	padding:7px;
 	cursor:pointer;
+	border-top: 1px solid #fff;
 	border-top-right-radius: 5px;
 }
 
@@ -47,8 +48,8 @@
 	border: 1px solid #D3D3D3;
 }
 
-#stripe-button, #submit{
-	height:30px;
+.form_submit {
+	height:30px !important;
 }
 
 .w3bbi_content_wrapper{

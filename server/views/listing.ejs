@@ -75,6 +75,10 @@
 				<% } else {%>
 					Welcome
 				<% } %>
+				
+				<% if (typeof old_rental_info != "undefined") {%>
+					<div>Currently editing existing rental!</div>
+				<% } %>
 			</div>
 			
 			<div id="price">$0</div>

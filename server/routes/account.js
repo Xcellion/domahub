@@ -14,7 +14,7 @@ module.exports = function(app, db, au){
 	app.get("/", mainPage);
 	app.get('/profile', isLoggedIn, mainPage);
 	app.get('/login', isLoggedIn);
-	app.get('/logout', Auth.logout);
+	app.get('/logout', isLoggedIn, Auth.logout);
 	app.get('/signup', Auth.signup);
 	
 	app.post('/signup', Auth.signupPost);
