@@ -40,7 +40,7 @@ $(document).ready(function() {
 		};
 		
 		//came from editing an existing rental, color that one orange
-		if (listing_info.rentals[x].rental_id == old_rental_info.rental_id){
+		if (listing_info.rentals[x].rental_id == old_rental_info.rental_id || (listing_info.rentals[x].same_details && listing_info.rentals[x].same_details == old_rental_info.rental_id)){
 			eventData.title = "Original time";
 			eventData.color = "orange";
 			eventData.editing = true;
@@ -223,8 +223,7 @@ $(document).on("mouseup", ".fc-event", function(mouseUpJsEvent){
 		
 		//get the id of the main rental
 		var same_id = mouseUpCalEvent.same_details ? mouseUpCalEvent.same_details : mouseUpCalEvent.rental_id;
-		
-		window.location = window.location.href + "/" + same_id;
+		window.location = window.location.href + "/" + same_id; //todo
 	}
 	storeCookies("local_events");
 	eventPrices();
@@ -246,7 +245,7 @@ $(document).on("mouseenter", ".fc-event", function(e){
 		if (!mouseEvent.editing && user && mouseEvent.account_id == user.id && !mousein){
 			mousein = true;
 			for (var x = 0; x < sameEvents.length; x++){
-				sameEvents[x].title = "Edit?";
+				sameEvents[x].title = "Add more time?";
 				$('#calendar').fullCalendar('updateEvent', sameEvents[x]);
 			}
 		}

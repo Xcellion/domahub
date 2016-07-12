@@ -624,8 +624,8 @@ listing_model.prototype.setRentalDetails = function(rental_id, rental_info, rent
 				rental_info.same_details = null;
 			}
 			
-			delete rental_info.listing_info; //todo
-			delete rental_info.rentals; //todo
+			delete rental_info.listing_info;
+			delete rental_info.rentals;
 			
 			if (rental_info.rentals){
 				domain_name = rental_info.listing_info.domain_name;
