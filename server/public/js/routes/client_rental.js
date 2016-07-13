@@ -15,7 +15,7 @@ $(document).ready(function() {
 			// You can access the token ID with `token.id`.
 			// Get the token ID to your server-side code for use.
 			var $id = $('<input id="stripeToken" type=hidden name=stripeToken />').val(token.id);
-			$('#edit_rental_details_pay').append($id).submit();
+			$('#edit_details_pay').append($id).submit();
 		}
 	});
 	
@@ -32,13 +32,9 @@ $(document).ready(function() {
 		return false;
 	});
 
-	$(".edit_rental_details").submit(function(e){
+	$(".edit_details_form").submit(function(e){
 		e.preventDefault();
 		submitRentals($(this).attr("id"));
-	});
-	
-	$("#edit_rental_info").submit(function(e){
-		
 	});
 	
 	//--------------------------------------page update
@@ -172,7 +168,7 @@ function submitRentals(id){
 	if (user){
 		if (unlock){
 			var rental_data = rentalData();
-			var url = id == "edit_rental_details" ? "/"+rental_info.rental_id : "/pay";
+			var url = id == "edit_details" ? "/"+rental_info.rental_id : "/pay";
 
 			//lock the ajax
 			unlock = false;
@@ -224,10 +220,14 @@ function submitRentals(id){
 
 //update page based on database data
 function updatePage(html, data){
-	//any existing rentals
+	//change all UTC to local time
+	rental_info.offset = new Date(rental_info.date + " UTC").getTimezoneOffset();
+	rental_info.date = moment(new Date(rental_info.date + " UTC")).format('YYYY-MM-DD HH:mm:ss');
+	
 	if (rental_info.rentals){
-		//update UTC time to local time
-		rental_info.date = moment(new Date(rental_info.date + " UTC")).format('YYYY-MM-DD HH:mm:mm');
+		for (var x = 0; x < rental_info.rentals.length; x++){
+			rental_info.rentals[x].date = moment(new Date(rental_info.rentals[x].date + " UTC")).format('YYYY-MM-DD HH:mm:ss');
+		}
 		appendRentals(rental_info.rentals, false);
 	}
 	
@@ -265,7 +265,7 @@ function updatePage(html, data){
 	}, false);
 }
 
-//helper function to append rental dates
+//helper function to append rental dates once changed to local instead of UTC
 function appendRentals(rentals, new_rental){
 	for (var x = 0; x < rentals.length; x++){
 		if (new_rental){

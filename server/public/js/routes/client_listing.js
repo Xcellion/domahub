@@ -100,15 +100,15 @@ $(document).ready(function() {
 });
 
 //helper function to check if everything is legit
-function checkSubmit(allevents){
+function checkSubmit(newEvents){
 	var bool = "success";
 	
 	if (!user){ bool = "Please log in!"; }
 	else if (!$("input[type='radio'][name='type']:checked").val()) { bool = "Please select a rental type!"; }
-	else {
-		for (var x = 0; x < allevents.length; x++){
-			if (!allevents[x].old){
-				var start = new Date(allevents[x].start._d);
+	else if (newEvents.length > 0){
+		for (var x = 0; x < newEvents.length; x++){
+			if (!newEvents[x].old){
+				var start = new Date(newEvents[x].start._d);
 				if (isNaN(start)){
 					bool = "Invalid dates selected!";
 					break;

@@ -26,8 +26,8 @@ listing_model.prototype.getAllListings = function(callback){
 }
 
 //sets info in database
-listing_model.prototype.setInfo = function(database, info, special, callback){
-	db_query = 'UPDATE ?? SET ?'
+listing_model.prototype.setInfo = function(database, db_where, db_where_equal, info, special, callback){
+	db_query = 'UPDATE ?? SET ? WHERE ?? = ?'
 	if (special){
 		db_query += special;
 	}
@@ -45,7 +45,7 @@ listing_model.prototype.setInfo = function(database, info, special, callback){
 				info: err
 			});
 		}
-	}, [database, info]);
+	}, [database, info, db_where, db_where_equal]);
 }
 
 //inserts a set of information in database
@@ -454,78 +454,91 @@ listing_model.prototype.sendDefaultRental = function(listing_id, listing_info, c
 listing_model.prototype.checkRentalTime = function(domain_name, events, user_id, callback){
 	listing_model = this;
 	var eventStates = [];
-
+	
 	//get listing info first
 	checkListing(domain_name, callback, function(result){
 		listing_info = result.listing_info;
-			
-		db_query = "SELECT * from ?? WHERE ?? = ? AND duration != 0";
 		
-		//get all rentals for the listing
-		listing_model.getInfo("rentals", "listing_id", listing_info.id, db_query, function(result){			
-			if (result.state == "success"){
-				//array of all unavailable events
-				var unavailable = [];
+		//if there are any events posted
+		if (events.length > 0){		
+			db_query = "SELECT * from ?? WHERE ?? = ? AND duration != 0";
+			
+			//get all rentals for the listing
+			listing_model.getInfo("rentals", "listing_id", listing_info.id, db_query, function(result){			
+				if (result.state == "success"){
+					//array of all unavailable events
+					var unavailable = [];
 
-				//loop through all posted events
-				for (var y = 0; y < events.length; y++){
-					var availability = true;
+					//loop through all posted events
+					for (var y = 0; y < events.length; y++){
+						var availability = true;
 
-					//posted date
-					var user_start = new Date(events[y].start);
-					var user_offset = events[y].offset;
-					var user_end = new Date(events[y].end);
-					var user_duration = user_end - user_start;
-									
-					//cross reference with all existing events in the database
-					for (var x = 0; x < result.info.length; x++){
-						
-						//make sure we dont check the default ones
-						if (result.info[x].date != "0000-00-00 00:00:00"){
-				
-							//existing db date, already in UTC
-							var db_utc = new Date(result.info[x].date + " UTC");
-							var db_duration = result.info[x].duration;
+						//posted date
+						var user_start = new Date(events[y].start);
+						var user_offset = events[y].offset;
+						var user_end = new Date(events[y].end);
+						var user_duration = user_end - user_start;
+										
+						//cross reference with all existing events in the database
+						for (var x = 0; x < result.info.length; x++){
 							
-							//UTC magic
-							var user_utc = toUTC(user_start, user_offset);
-													
-							//check if legit dates
-							if (!isNaN(db_utc) && !isNaN(user_utc)){
-								//check if its available
-								if (checkOverlap(user_utc, user_duration, db_utc, db_duration)){
-									availability = false;
-									unavailable.push(events[y])
-									break;
+							//make sure we dont check the default ones
+							if (result.info[x].date != "0000-00-00 00:00:00"){
+					
+								//existing db date, already in UTC
+								var db_utc = new Date(result.info[x].date + " UTC");
+								var db_duration = result.info[x].duration;
+								
+								//UTC magic
+								var user_utc = toUTC(user_start, user_offset);
+														
+								//check if legit dates
+								if (!isNaN(db_utc) && !isNaN(user_utc)){
+									//check if its available
+									if (checkOverlap(user_utc, user_duration, db_utc, db_duration)){
+										availability = false;
+										unavailable.push(events[y])
+										break;
+									}
 								}
 							}
 						}
+						
+						events[y].availability = availability;
+						eventStates.push(events[y]);
 					}
 					
-					events[y].availability = availability;
-					eventStates.push(events[y]);
+					//send the availability of all events posted
+					if (eventStates.length){
+						callback({
+							state: "success",
+							eventStates: eventStates,
+							listing_id: listing_info.id,
+							listing_info: listing_info,
+							unavailable: unavailable
+						});
+					}
 				}
 				
-				//send the availability of all events posted
-				if (eventStates.length){
+				//something went wrong with getting rentals for a listing
+				else {
 					callback({
-						state: "success",
-						eventStates: eventStates,
-						listing_id: listing_info.id,
-						listing_info: listing_info,
-						unavailable: unavailable
+						state: "error",
+						description: "Invalid rental!"
 					});
 				}
-			}
-			
-			//something went wrong with getting rentals for a listing
-			else {
-				callback({
-					state: "error",
-					description: "Invalid rental!"
-				});
-			}
-		});
+			});
+		}
+		//no events were posted, all is available!
+		else {
+			callback({
+				state: "success",
+				eventStates: eventStates,
+				listing_id: listing_info.id,
+				listing_info: listing_info,
+				unavailable: []
+			});
+		}
 	});
 }
 
@@ -549,6 +562,7 @@ listing_model.prototype.newRental = function(domain_name, user_id, new_rental_in
 				duration: end - start
 			};
 			
+			//if we're adding more time slots to an existing event, no need to create rental details for it
 			var editing = new_rental_info.old_rental_info ? true : false;
 			
 			insert.same_details = editing ? new_rental_info.old_rental_info.rental_id : undefined;
@@ -662,8 +676,8 @@ listing_model.prototype.newRentalDetails = function(rental_id, rental_details, e
 	}
 }
 
-//function to delete existing rental details and add new ones
-listing_model.prototype.setRentalDetails = function(rental_id, rental_info, rental_details, callback){
+//function to delete existing rental info and details and add new ones
+listing_model.prototype.setRental = function(rental_id, rental_info, rental_details, callback){
 	listing_model = this;
 	
 	listing_model.getInfo("rentals", "rental_id", rental_id, false, function(result){
@@ -675,32 +689,28 @@ listing_model.prototype.setRentalDetails = function(rental_id, rental_info, rent
 				rental_info.same_details = null;
 			}
 			
+			//change local to UTC
+			var tempDate = new Date(rental_info.date);
+			rental_info.date = toUTC(tempDate, rental_info.offset);
+			
+			//delete unnecessary info for setting into db
+			delete rental_info.offset;
 			delete rental_info.listing_info;
 			delete rental_info.rentals;
-			
-			if (rental_info.rentals){
-				domain_name = rental_info.listing_info.domain_name;
-				user_id = rental_info.account_id;
-				rental_info.same_details = rental_info.rental_id;
-			
-				listing_model.newRental(domain_name, user_id, rental_info, rental_info.rentals, false, function(result){
+			delete rental_info.old_rental_info;
+						
+			Listing.setInfo("rentals", "rental_id", rental_id, rental_info, false, function(result){
+				if (result.state == "success"){
 					//delete all existing rental data and replace				
-					listing_model.deleteInfo("rental_details", "rental_id", rental_id, function(result){
-						if (result.state == "success"){
-							listing_model.newRentalDetails(rental_id, rental_details, true, callback);
-						}
-						else {
-							callback({
-								state: "error",
-								description: "Rental detail deletion error!"
-							});
-						}
+					changeRentalDetails(rental_id, rental_details, callback);
+				}
+				else {
+					callback({
+						state: "error",
+						description: "Something went wrong with setting rental info!"
 					});
-				});
-			}
-			else {
-				
-			}
+				}
+			});
 		}
 		else {
 			callback({
@@ -708,6 +718,33 @@ listing_model.prototype.setRentalDetails = function(rental_id, rental_info, rent
 				description: "Invalid rental!"
 			});
 		}		
+	});
+}
+
+//function to delete all existing rental data and replace		
+function changeRentalDetails(rental_id, rental_details, callback){		
+	listing_model.deleteInfo("rental_details", "rental_id", rental_id, function(result){
+		if (result.state == "success"){
+			listing_model.newRentalDetails(rental_id, rental_details, false, callback);
+		}
+		else {
+			callback({
+				state: "error",
+				description: "Rental detail deletion error!"
+			});
+		}
+	});
+}
+
+//function to change rental type
+listing_model.prototype.changeRentalType = function(rental_id, callback){
+	Listing.setInfo("rentals", "rental_id", old_rental_info.rental_id, {type: type}, false, function(result){
+		if (result.state == "success"){
+			
+		}
+		else {
+			error.handler(req, res, result.description);
+		}
 	});
 }
 

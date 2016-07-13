@@ -221,6 +221,9 @@ function postListingPage(req, res, next){
 	
 	if (req.body.old_rental_info != "false"){
 		req.session.old_rental_info = req.body.old_rental_info;
+		if (!events){
+			events = [];
+		}
 	}
 	old_rental_info = req.session.old_rental_info || false;
 	if (rentalChecks(req, res, domain_name, user_id, type, events)){
@@ -237,7 +240,7 @@ function postListingPage(req, res, next){
 				else {
 					//double check price
 					var price = eventPrices(events, result.listing_info);
-
+					
 					if (price){
 						var new_rental_info = {
 								user: req.user,
@@ -246,16 +249,28 @@ function postListingPage(req, res, next){
 								type: type,
 								price: price
 							}
+						
 						req.session.new_rental_info = new_rental_info;
-
-						//redirect to an existing rental or a new one
-						redirect = old_rental_info ? old_rental_info.rental_id : "new";
-						res.send({redirect: "/listing/" + domain_name + "/" + redirect});
 					}
-					else {
+					else if (parseFloat(old_rental_info.rental_id) != old_rental_info.rental_id >>> 0 && events.length === 0){
 						error.handler(req, res, "Invalid price!");
 					}
 
+					//update the type of rental
+					if (parseFloat(old_rental_info.rental_id) === old_rental_info.rental_id >>> 0){
+						Listing.setInfo("rentals", "rental_id", old_rental_info.rental_id, {type: type}, false, function(result){
+							if (result.state == "success"){
+								res.send({redirect: "/listing/" + domain_name + "/" + old_rental_info.rental_id});
+							}
+							else {
+								error.handler(req, res, result.description);
+							}
+						});
+					}
+					//no old rental to update
+					else if (price){
+						res.send({redirect: "/listing/" + domain_name + "/new"});
+					}
 				}
 			}
 			else {
@@ -303,7 +318,7 @@ function postRentalPage(req, res, next){
 	else {
 		//editing a rental
 		if (parseFloat(rental_id) == rental_id >>> 0){
-			Listing.setRentalDetails(rental_id, rental_info, rental_details, function(result){
+			Listing.setRental(rental_id, rental_info, rental_details, function(result){
 				if (result.state == "success"){
 					res.json({
 						message: "success"
