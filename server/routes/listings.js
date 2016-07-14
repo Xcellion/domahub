@@ -127,7 +127,14 @@ function getListingPage(req, res, next) {
 				if (req.session.message){
 					render.message = Auth.messageReset(req);
 				}
-				res.render("listing.ejs", render);
+				
+				//if sending just the updated listing info instead of the whole page
+				if (req.header("page-or-data") == "data"){
+					res.json(result.listing_info);
+				}
+				else {
+					res.render("listing.ejs", render);
+				}
 			}
 			
 			//listing doesnt exist, redirect to main page
@@ -160,6 +167,7 @@ function getRentalPage(req, res, next){
 	}
 	//we're creating a new rental
 	else if (rental_id == "new"){
+		console.log(rental_id, 'new');
 		Listing.getListingRental(domain_name, false, false, function(result){
 			if (result.state == "success"){
 				//get the default html for the domain
@@ -169,6 +177,7 @@ function getRentalPage(req, res, next){
 							user: req.user,
 							listing_info: result.listing_info,
 							rental_html: body,
+							rental_info: undefined,
 							rental_details: result.rental_details,
 							new_rental_info: new_rental_info
 						});
@@ -182,6 +191,8 @@ function getRentalPage(req, res, next){
 	}
 	//editing an existing rental
 	else {
+				console.log(rental_id, 'old');
+
 		Listing.getListingRental(domain_name, rental_id, account_id, function(result){
 			if (result.state == "success"){
 				if (result.rental_info.same_details){
@@ -225,6 +236,9 @@ function postListingPage(req, res, next){
 			events = [];
 		}
 	}
+	else {
+		delete req.session.old_rental_info;
+	}
 	old_rental_info = req.session.old_rental_info || false;
 	if (rentalChecks(req, res, domain_name, user_id, type, events)){
 		//various rental checks are all gucci
@@ -233,7 +247,7 @@ function postListingPage(req, res, next){
 				//some were unavailable
 				if (result.unavailable.length){
 					res.json({
-						unavailable: unavailable
+						unavailable: result.unavailable
 					});
 				}
 				//all good!
@@ -320,6 +334,7 @@ function postRentalPage(req, res, next){
 		if (parseFloat(rental_id) == rental_id >>> 0){
 			Listing.setRental(rental_id, rental_info, rental_details, function(result){
 				if (result.state == "success"){
+					delete req.session.old_rental_info;
 					res.json({
 						message: "success"
 					});

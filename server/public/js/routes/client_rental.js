@@ -189,8 +189,7 @@ function submitRentals(id){
 					unlock = true;
 					
 					//remove cookies since it was successful
-					delete_cookie("local_events");
-					delete_cookie("type");
+					delete_cookies();
 					
 					//if creating a new rental, redirect the URL to the new rental id
 					if (data.rental_id){
@@ -220,11 +219,11 @@ function submitRentals(id){
 
 //update page based on database data
 function updatePage(html, data){
-	//change all UTC to local time
-	rental_info.offset = new Date(rental_info.date + " UTC").getTimezoneOffset();
-	rental_info.date = moment(new Date(rental_info.date + " UTC")).format('YYYY-MM-DD HH:mm:ss');
-	
-	if (rental_info.rentals){
+	if (rental_info){
+		//change all UTC to local time
+		rental_info.offset = new Date(rental_info.date + " UTC").getTimezoneOffset();
+		rental_info.date = moment(new Date(rental_info.date + " UTC")).format('YYYY-MM-DD HH:mm:ss');
+
 		for (var x = 0; x < rental_info.rentals.length; x++){
 			rental_info.rentals[x].date = moment(new Date(rental_info.rentals[x].date + " UTC")).format('YYYY-MM-DD HH:mm:ss');
 		}
@@ -269,13 +268,13 @@ function updatePage(html, data){
 function appendRentals(rentals, new_rental){
 	for (var x = 0; x < rentals.length; x++){
 		if (new_rental){
-			start = moment(rentals[x].start).format('YYYY, MMMM D, h:mm:ss A');
-			end = moment(rentals[x].end).format('YYYY, MMMM D, h:mm:ss A');
+			start = moment(rentals[x].start).format('YYYY, MMMM D, hh:mm A');
+			end = moment(rentals[x].end).format('YYYY, MMMM D, hh:mm A');
 		}
 		else {
 			start = moment(rentals[x].date)._d.getTime();
-			end = moment(start + rentals[x].duration).format('YYYY, MMMM D, h:mm:ss A');
-			start = moment(start).format('YYYY, MMMM D, h:mm:ss A');
+			end = moment(start + rentals[x].duration).format('YYYY, MMMM D, hh:mm A');
+			start = moment(start).format('YYYY, MMMM D, hh:mm A');
 		}
 		
 		var rented_start = '<span id="rental_start">'+start+'</span>';
@@ -314,6 +313,13 @@ function findUrls( text ){
     }
 
     return urlArray;
+}
+
+//helper function to delete all cookies
+function delete_cookies(){
+	delete_cookie("local_events");
+	delete_cookie("type");
+	delete_cookie("old_rental_info");
 }
 
 //helper function to delete a cookie

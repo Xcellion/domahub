@@ -25,38 +25,7 @@ $(document).ready(function() {
 			$(element).attr("id", event._id);
 		}
     })
-	
-	//create pre-existing rentals
-	for (var x = 0; x < listing_info.rentals.length; x++){
-		var start = new Date(listing_info.rentals[x].date + " UTC");
-		var end = new Date(start.getTime() + listing_info.rentals[x].duration);
-		var eventData = {
-			start: start,
-			end: end,
-			old: true,
-			rental_id: listing_info.rentals[x].rental_id,
-			same_details: listing_info.rentals[x].same_details,
-			account_id: listing_info.rentals[x].account_id
-		};
 		
-		//came from editing an existing rental, color that one orange
-		if (listing_info.rentals[x].rental_id == old_rental_info.rental_id || (listing_info.rentals[x].same_details && listing_info.rentals[x].same_details == old_rental_info.rental_id)){
-			eventData.title = "Original time";
-			eventData.color = "orange";
-			eventData.editing = true;
-		}
-		else if (user.id == listing_info.rentals[x].account_id){
-			eventData.title = user.fullname || "Guest";
-			eventData.color = "green";
-		}
-		else {
-			eventData.title = "Rented!";
-			eventData.color = "red";
-			eventData.other = true;
-		}
-		$('#calendar').fullCalendar('renderEvent', eventData, true);
-	}
-	
 	//check if theres a cookie for local events
 	if (document.cookie.match(new RegExp('local_events=([^;]+)')) && $('#calendar').fullCalendar('clientEvents', filterMine).length == 0){
 		var existing_events = read_cookie("local_events");
@@ -72,8 +41,18 @@ $(document).ready(function() {
 		$("#radio_"+type+"_input").prop("checked", true);
 	}
 	
+	//check if theres a cookie for editing an event
+	if (document.cookie.match(new RegExp('old_rental_info=([^;]+)'))){
+		var cookie = read_cookie("old_rental_info");
+		old_rental_info = cookie;
+		editingRental();
+	}
+	
+	//create existing rentals
+	createExisting(listing_info.rentals);
+	
 	//show prices
-	eventPrices();
+	eventPrices(listing_info.rentals);
 	
 	//------------------------------------------interactive stuff
 	
@@ -98,6 +77,50 @@ $(document).ready(function() {
 		eventPrices();
 	});
 });
+
+//helper function to create pre-existing rentals
+function createExisting(rentals){
+	var allevents = $('#calendar').fullCalendar('clientEvents');
+
+	for (var x = 0; x < rentals.length; x++){
+		var exists = false;
+		for (var y = 0; y < allevents.length; y++){
+			if (allevents[y].rental_id == rentals[x].rental_id){
+				exists = true;
+				break;
+			}
+		}
+		if (!exists){
+			var start = new Date(rentals[x].date + " UTC");
+			var end = new Date(start.getTime() + rentals[x].duration);
+			var eventData = {
+				start: start,
+				end: end,
+				old: true,
+				rental_id: rentals[x].rental_id,
+				same_details: rentals[x].same_details,
+				account_id: rentals[x].account_id
+			};
+			
+			//came from editing an existing rental, color that one orange
+			if (rentals[x].rental_id == old_rental_info.rental_id || (rentals[x].same_details && rentals[x].same_details == old_rental_info.rental_id)){
+				eventData.title = "Original time";
+				eventData.color = "orange";
+				eventData.editing = true;
+			}
+			else if (user.id == rentals[x].account_id){
+				eventData.title = user.fullname || "Guest";
+				eventData.color = "green";
+			}
+			else {
+				eventData.title = "Rented!";
+				eventData.color = "red";
+				eventData.other = true;
+			}
+			$('#calendar').fullCalendar('renderEvent', eventData, true);
+		}
+	}
+}
 
 //helper function to check if everything is legit
 function checkSubmit(newEvents){
@@ -154,6 +177,16 @@ function submitRentals(){
 					$("#message").text("Some time slots were unavailable! They have been removed.");
 					$('#calendar').fullCalendar('removeEvents', data.unavailable[x]._id);
 				}
+				
+				$.ajax({
+					type: "GET",
+					url: "/listing/" + listing_info.domain_name,
+					headers: {
+						"page-or-data" : "data"
+					}
+				}).done(function(data){
+					createExisting(data.rentals);
+				});
 			}
 			else if (data.redirect){
 				window.location = data.redirect;
@@ -217,25 +250,38 @@ $(document).on("mouseup", ".fc-event", function(mouseUpJsEvent){
 		//get the id of the main rental
 		var same_id = mouseUpCalEvent.same_details ? mouseUpCalEvent.same_details : mouseUpCalEvent.rental_id;
 		
+		//click an editing event to stop editing it
 		if (mouseUpCalEvent.editing){
-			eventEdit(same_id, "Add more time?", "green");
-			mouseUpCalEvent.editing = false;
 			old_rental_info = false;
-			$("#calendar").fullCalendar('removeEvents', filterNew);
+			editingRental();
+			eventEdit(same_id, "Add more time?", "green", false);
+			$("#calendar").fullCalendar('removeEvents', filterNew); //remove all new events
 		}
+		//click an existing event to edit it
 		else {
-			eventEdit(same_id, "Editing", "orange");
-			mouseUpCalEvent.editing = true;
 			old_rental_info = {
 				rental_id: same_id
 			}
-			$("#calendar").fullCalendar('removeEvents', filterNew);
+			editingRental();
+			$("#calendar").fullCalendar('removeEvents', filterNew); //remove all new events
 		}
 		//window.location = window.location.href + "/" + same_id; //todo
 	}
 	storeCookies("local_events");
 	eventPrices();
 });
+
+//helper function to toggle edit mode
+function editingRental(){
+	storeCookies("old_rental_info");
+	if (old_rental_info){
+		eventEdit(old_rental_info.rental_id, "Editing", "orange", true);
+		$("#message").text("Currently editing existing rental!");
+	}
+	else {
+		$("#message").text("Welcome!");
+	}
+}
 
 //to show edit confirmation for existing rentals on hover. highlights the rentals that are grouped together
 var mousein = false;
@@ -263,12 +309,13 @@ $(document).on("mouseleave", ".fc-event", function(e){
 });
 
 //helper function to enable editing of time
-function eventEdit(same_id, title, color){
+function eventEdit(same_id, title, color, editing){
 	sameEvents = $("#calendar").fullCalendar('clientEvents', function(e){
 		return filterSame(e, same_id);
 	});
 	
 	for (var x = 0; x < sameEvents.length; x++){
+		sameEvents[x].editing = editing;
 		sameEvents[x].title = title;
 		sameEvents[x].color = color || sameEvents[x].color;
 		$('#calendar').fullCalendar('updateEvent', sameEvents[x]);
@@ -355,8 +402,11 @@ function removeEventTimeSlot(calEvent, mouseDownSlot, mouseUpSlot){
 			var eventData = {
 				title: calEvent.title,
 				start: mouseUpSlot.end,
-				end: tempEnd
+				end: tempEnd,
+				color: calEvent.color,
+				newevent: true
 			};
+			console.log(calEvent);
 			var newEvent = $('#calendar').fullCalendar('renderEvent', eventData, true);
 		}
 		else {
@@ -636,6 +686,9 @@ function storeCookies(type){
 	}
 	else if (type == "type"){
 		cookie = parseFloat($("input[type='radio'][name='type']:checked").val());
+	}
+	else if (type == "old_rental_info"){
+		cookie = old_rental_info;
 	}
 	
 	if (read_cookie(type)){

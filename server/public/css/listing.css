@@ -1,3 +1,7 @@
 .fc-event:hover{
 	cursor:pointer;
 }
+
+.message{
+	display:inline-block;
+}

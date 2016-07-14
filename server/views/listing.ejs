@@ -70,16 +70,12 @@
 			<% } %>
 			
 			<!-- any messages from the server -->
-			<div id="message">
+			<div class="message" id="message">
 				<% if (typeof message != "undefined") {%>
 					<%= message %>
 				<% } else {%>
-					Welcome
-				<% } %>
-				
-				<% if (old_rental_info != false) {%>
-					<div>Currently editing existing rental!</div>
-				<% } %>
+					Welcome!
+				<% } %>				
 			</div>
 			
 			<div id="price">$0</div>
@@ -92,7 +88,7 @@
 				</form>
 			</div>
 			
-			<input type="button" id="remove_events" value="Remove all events"></input>
+			<input type="button" id="remove_events" value="Remove all new events"></input>
 			
 			<div id="calendar"></div>
 			
