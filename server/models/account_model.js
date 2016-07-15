@@ -61,7 +61,7 @@ account_model.prototype.getRentalsAccount = function(account_id, callback){
 	account_model.getInfo("id", account_id, false, function(result){
 		if (result.state == "success"){
 			//get all rentals for that account
-			db_query = "SELECT * from ?? WHERE ?? = ? AND duration != 0";
+			db_query = "SELECT * from ?? INNER JOIN listings ON listings.id = rentals.listing_id WHERE ?? = ? AND duration != 0";
 						
 			listing.getInfo("rentals", "account_id", account_id, db_query, function(result){
 				if (result.state == "success"){
