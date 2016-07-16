@@ -10,14 +10,9 @@
 }); */
 
 $(document).ready(function() {
-	$.when(
-		$("body").load("http://www.w3bbi.com/rental_info/" + window.location.hostname, function(data){
-			if (data.location){window.location = data.location;}
-		}),
-		$.getScript("http://www.w3bbi.com/reset/content-tools/editor.js"),
-		$.getScript("http://www.w3bbi.com/reset/content-tools/content-tools.min.js"),
-		$.getScript("http://www.w3bbi.com/reset/content-tools/content-tools.js")
-	);
+	$("body").load("http://www.w3bbi.com/rental_info/" + window.location.hostname, function(data){
+		if (data.location){window.location = data.location;}
+	});
 });
 
 //sends the ajax for data needed to update the page

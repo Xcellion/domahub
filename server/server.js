@@ -44,9 +44,11 @@ app.use(passport.session());
 app.use(function(req, res, next) {
 	var allowedOrigins = [
 		'http://www.youreacutie.com',
+		'http://youreacutie.com',
 		'http://www.imsorryimdumb.com',
 		'http://imsorryimdumb.com',
-		'http://youreacutie.com'
+		'http://w3bbi.com',
+		'http://www.w3bbi.com'
 	];
 
 	var origin = req.headers.origin;

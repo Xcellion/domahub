@@ -9,12 +9,16 @@
 		<link class="w3bbi_main_css" rel="stylesheet" href="/css/style_base.css" type="text/css" />
 		<link rel="stylesheet" href="/css/rental.css" type="text/css" />
 		<link rel="stylesheet" href="/css/fullcalendar.min.css" type="text/css" />
+		<link rel="stylesheet" href="/reset/content-tools/content-tools.min.css" type="text/css" />
 		<!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script> -->
 		<script src="https://checkout.stripe.com/checkout.js"></script>
 		<script src="/js/jquery/jquery.js" type="text/javascript"></script>
 		<script src="/js/jquery/jquery-ui.js" type="text/javascript"></script>
 		<script src="/js/moment/moment.min.js" type="text/javascript"></script>
 		<script src="/js/sanitize-html.js" type="text/javascript"></script>
+		<script src="/reset/content-tools/content-tools.min.js" type="text/javascript"></script>
+		<script src="/reset/content-tools/content-tools.js" type="text/javascript"></script>
+		<script src="/reset/content-tools/editor.js" type="text/javascript"></script>
 		<script type="text/javascript">
 			var user = <% if(typeof user != "undefined"){ %><%-JSON.stringify(user)%><% }else{ %>""<% } %>;
 			var listing_info = <% if(typeof listing_info != "undefined"){ %><%-JSON.stringify(listing_info)%><% }else{ %>""<% } %>;
@@ -27,15 +31,15 @@
 		<script src="/js/routes/client_rental.js" type="text/javascript"></script>
 		<link rel="icon" type="image/ico" href="/images/favicon.ico">
 	</head>
-	
+
 	<body>
 
 	<div>
-			
+
 			<div class="w3bbi_wrapper" id="w3bbi_hider">w3bbi Rental Info</div>
 			<div class="w3bbi_wrapper" id="w3bbi_wrapper">
 				<div id="account_wrapper" class="border_white w3bbi_content_wrapper">
-				
+
 					<!-- checks if user is logged in -->
 					<% if (typeof user == "undefined") {%>
 						<div id="form_wrapper">
@@ -54,15 +58,15 @@
 						<a class="button" href="/profile">Profile</a>
 						<a class="button" href="/logout">Log Out</a>
 					<% } %>
-					
+
 					<a class="button" href="/">Home</a>
-					
+
 					<!-- listing information, this should never error -->
 					<% if (typeof listing_info != "undefined") {%>
 						<a class="button" href="/listing/<%=listing_info.domain_name%>">Back to listing</a>
 					<% } %>
 				</div>
-				
+
 				<div id="message" class="w3bbi_content_wrapper">Currently editing</div>
 
 				<!-- listing information, this should never error -->
@@ -71,14 +75,14 @@
 						<table id="listing_table">
 							<th>Domain Name</th>
 							<th>Owner Name</th>
-							<tr>  
-								<td><a href="http://www.<%= listing_info.domain_name %>"><%= listing_info.domain_name %></a></td>  
-								<td><a href="<%= listing_info.email %>"><%= listing_info.fullname %></a></td>  
-							</tr>                                   
+							<tr>
+								<td><a href="http://www.<%= listing_info.domain_name %>"><%= listing_info.domain_name %></a></td>
+								<td><a href="<%= listing_info.email %>"><%= listing_info.fullname %></a></td>
+							</tr>
 						</table>
 					</div>
 				<% } %>
-				
+
 				<% if (typeof rental_info != "undefined") { %>
 					<div id="rental_wrapper" class="w3bbi_content_wrapper">
 						<div>Rented from:</div>
@@ -89,10 +93,10 @@
 						<div>Renting for:</div>
 					</div>
 				<% } %>
-				
+
 				<!-- rental edit wrapper -->
 				<div id="rental_edit" class="border_white w3bbi_content_wrapper">
-				
+
 					<!-- add more time -->
 					<% if (typeof rental_info != "undefined") { %>
 						<form class="edit_form" id="edit_rental_info" action="/listing/<%=listing_info.domain_name%>/edit" method="post">
@@ -102,7 +106,7 @@
 					<% } else {%>
 						<a class="button" href="/listing/<%=listing_info.domain_name%>">Add more time</a>
 					<% } %>
-					
+
 					<!-- if editing existing rental -->
 					<% if (typeof new_rental_info == "undefined") { %>
 						<form class="edit_form edit_details_form" id="edit_details" action="/listing/<%=listing_info.domain_name%>/<%=rental_info.rental_id%>" method="post">
@@ -123,7 +127,7 @@
 						</form>
 					<% } %>
 				</div>
-				
+
 				<!-- more rental edits -->
 				<div id="edit_now_details" class="w3bbi_content_wrapper">
 					<form id="edit_details_form">
@@ -131,13 +135,13 @@
 						<input class="edit_input" name="background" placeholder="http://URL-of-background-image.com" type="url" id="background_input" autofocus>
 					</form>
 				</div>
-				
+
 			</div>
-			
+
 			<div id="rental_preview">
 				<%- include('reset', {rental_details: rental_details}); %>
 			</div>
-		</div>	
+		</div>
 	</body>
-	
+
 </html>
