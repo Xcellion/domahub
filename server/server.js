@@ -48,7 +48,8 @@ app.use(function(req, res, next) {
 		'http://www.imsorryimdumb.com',
 		'http://imsorryimdumb.com',
 		'http://w3bbi.com',
-		'http://www.w3bbi.com'
+		'http://www.w3bbi.com',
+		'http://localhost:8080'
 	];
 
 	var origin = req.headers.origin;
