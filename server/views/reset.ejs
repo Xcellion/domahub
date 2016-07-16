@@ -8,17 +8,17 @@
 		<title></title>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
 		<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
-		<!-- 
+		<!--
 		<link class="rental_main_css" rel="stylesheet" type="text/css" href="http://localhost:8080/reset/css/reset.css">
 		<link rel="stylesheet" type="text/css" href="http://localhost:8080/reset/content-tools/content-tools.min.css">
 		 -->
 		<link class="rental_main_css" rel="stylesheet" type="text/css" href="http://www.w3bbi.com/reset/css/reset.css">
 		<link rel="stylesheet" type="text/css" href="http://www.w3bbi.com/reset/content-tools/content-tools.min.css">
 	</head>
-	
+
 	<body>
 		<div id="background_image" class="center_horizontal center_vertical">
-			<div id="text_wrapper"">
+			<div id="text_wrapper">
 				<div data-editable data-name="text_wrapper">
 					<h1 id="main_text">
 						<% if(typeof rental_details == "undefined"){ %>
@@ -38,12 +38,12 @@
 				</a> -->
 			</div>
 		</div>
-		
+
 		<script type="text/javascript">
 			var rental_details = <% if(typeof rental_details != "undefined"){ %><%-JSON.stringify(rental_details)%><% }else{ %>""<% } %>;
 			var style = $("<style></style");
 			$("head").append(style);
-	
+
 			for (var x = 0; x < rental_details.length; x++){
 				switch (rental_details[x].text_key){
 					case "css":
@@ -61,5 +61,5 @@
 			}
 		</script>
 	</body>
-	
+
 </html>

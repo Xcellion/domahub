@@ -1,0 +1,21 @@
+/* -------------------------------------------------------------- GENERAL STUFF ---------------------------------------------------------- */
+
+html{
+	background:url(../images/loading.gif); 
+	background-repeat: no-repeat;
+	background-position:50% 50%;
+	height:100vh;
+	overflow:hidden;
+}
+
+#text_wrapper{ font-family: 'Raleway', sans-serif;}
+#text_wrapper > a{ color:#FFFFA5;}
+#text_wrapper ::selection{ background: #FFFFA5 /* WebKit/Blink Browsers */}
+#text_wrapper ::-moz-selection{ background: #FFFFA5; /* Gecko Browsers */}
+#main_text{ 
+	font-family: 'Indie Flower', cursive, arial, helvetica !important;
+	font-size:300%;
+	font-weight:normal;
+	padding-bottom:15px;
+	}
+#footer_wrapper{ color:#FFFFA5;}

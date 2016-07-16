@@ -1,0 +1,20 @@
+/* -------------------------------------------------------------- GENERAL STUFF ---------------------------------------------------------- */
+
+html{
+	background:url(../images/loading.gif); 
+	background-repeat: no-repeat;
+	background-position:50% 50%;
+	height:100vh;
+	overflow:hidden;
+}
+
+#text_wrapper{ font-family: 'Quicksand', sans-serif;}
+#text_wrapper > a{ color:#FFCC00;}
+#text_wrapper ::selection { background: rgba(0,0,0,.5); /* WebKit/Blink Browsers */}
+#text_wrapper ::-moz-selection { background: rgba(0,0,0,.5); /* Gecko Browsers */}
+#main_text{
+	font-family: 'Covered By Your Grace', cursive;
+	font-size:300%;
+	font-weight:normal;
+	padding-bottom:15px;
+}

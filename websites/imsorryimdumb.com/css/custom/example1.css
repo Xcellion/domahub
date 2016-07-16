@@ -1,0 +1,12 @@
+/* -------------------------------------------------------------- GENERAL STUFF ---------------------------------------------------------- */
+
+body{
+	background:url();
+}
+
+.footer_wrapper{
+    padding: 7px;
+    background-color: rgba(0,0,0,0.35);
+	cursor:pointer;
+	color:#FFFFA5;
+}
