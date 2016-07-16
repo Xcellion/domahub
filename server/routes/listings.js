@@ -1,4 +1,3 @@
-var request = require('request');
 var stripe = require("stripe")("sk_test_PHd0TEZT5ytlF0qCNvmgAThp");
 
 var	account_model = require('../models/account_model.js'),
@@ -10,15 +9,11 @@ module.exports = function(app, db, auth, e){
 	error = e;
 	
 	Account = new account_model(db);
-	Listing = new listing_model(db, Account);
+	Listing = new listing_model(db);
 		
 	//function to check if logged in
 	isLoggedIn = auth.isLoggedIn;
 	
-	//API for rental info
-	app.get('/rental_info/:domain_name/:rental_id', getRental);
-	app.get('/rental_info/:domain_name', getCurrentRental);
-
 	//w3bbi pages
 	app.get('/listing/:domain_name', getListingPage);
 	app.get('/listing/:domain_name/:rental_id', isLoggedIn, getRentalPage);
@@ -27,78 +22,6 @@ module.exports = function(app, db, auth, e){
 	app.post('/listing/:domain_name/rent', isLoggedIn, postListingPage);
 	app.post('/listing/:domain_name/edit', isLoggedIn, editRental);
 	app.post('/listing/:domain_name/:rental_id', isLoggedIn, postRentalPage);
-}
-
-//----------------------------------------------------------------API pages----------------------------------------------------------------
-
-//send rental details and info for a specific rental
-function getRental(req, res, next) {
-	rental_id = req.params.rental_id;
-	domain_name = req.params.domain_name;
-
-	//check if rental id is legit
-	if (parseFloat(rental_id) != rental_id >>> 0){
-		error.handler(req, res, "Invalid rental!", "json");
-	}
-	//check if domain name is legit
-	else if (parseFloat(domain_name) === domain_name >>> 0){
-		error.handler(req, res, "Invalid listing!", "json");
-	}
-	else {
-		Listing.getListingRental(domain_name, rental_id, false, function(result){
-			sendRentalInfo(req, res, result);
-		});
-	}
-}
-
-//send the current rental details and information for a listing
-function getCurrentRental(req, res, next){
-	domain_name = req.params.domain_name;
-			
-	//check if domain name is legit
-	if (parseFloat(domain_name) === domain_name >>> 0){
-		error.handler(req, res, "Invalid listing!", "json");
-	}
-	else {
-		//get the current rental for the listing
-		Listing.getListingRental(domain_name, false, false, function(result){
-			sendRentalInfo(req, res, result);
-		});
-	}
-}
-
-//helper function to send rental information
-function sendRentalInfo(req, res, result){
-	if (result.state == "success"){
-	
-		//allow access-control list
-		var allowedOrigins = [
-			'http://www.youreacutie.com', 
-			'http://www.imsorryimdumb.com', 
-			'http://imsorryimdumb.com', 
-			'http://youreacutie.com'
-		];
-		var origin = req.headers.origin;
-		if (allowedOrigins.indexOf(origin) > -1){
-			res.setHeader('Access-Control-Allow-Origin', origin);
-		}
-		res.setHeader('Content-Type', 'application/json');
-		
-		//what type of rental is it?
-		switch (result.rental_info.type){
-			//simple page
-			case 0:
-				res.json(result.rental_details);
-				break;
-			//simple redirect
-			case 1:
-				res.json({location: result.rental_details[0].text_value});
-				break;
-		}
-	}
-	else {
-		error.handler(req, res, result.description, "json");
-	}
 }
 
 //----------------------------------------------------------------w3bbi pages----------------------------------------------------------------
@@ -167,21 +90,15 @@ function getRentalPage(req, res, next){
 	}
 	//we're creating a new rental
 	else if (rental_id == "new"){
-		console.log(rental_id, 'new');
 		Listing.getListingRental(domain_name, false, false, function(result){
 			if (result.state == "success"){
-				//get the default html for the domain
-				request('http://www.' + result.listing_info.domain_name + '/reset.html', function (error, response, body) {
-					if (!error && response.statusCode == 200) {
-						res.render("rental.ejs", {
-							user: req.user,
-							listing_info: result.listing_info,
-							rental_html: body,
-							rental_info: undefined,
-							rental_details: result.rental_details,
-							new_rental_info: new_rental_info
-						});
-					}
+				res.render("rental.ejs", {
+					user: req.user,
+					listing_info: result.listing_info,
+					rental_html: body,
+					rental_info: undefined,
+					rental_details: result.rental_details,
+					new_rental_info: new_rental_info
 				});
 			}
 			else {
@@ -191,8 +108,6 @@ function getRentalPage(req, res, next){
 	}
 	//editing an existing rental
 	else {
-				console.log(rental_id, 'old');
-
 		Listing.getListingRental(domain_name, rental_id, account_id, function(result){
 			if (result.state == "success"){
 				if (result.rental_info.same_details){
@@ -200,18 +115,13 @@ function getRentalPage(req, res, next){
 					res.redirect("/listing/" + domain_name + "/" + result.rental_info.same_details);
 				}
 				else {
-					request('http://www.' + result.listing_info.domain_name + '/reset.html', function (error, response, body) {
-						if (!error && response.statusCode == 200) {
-							var render = {
-								user: req.user,
-								listing_info: result.listing_info,
-								rental_info: result.rental_info,
-								rental_details: result.rental_details,
-								rental_html: body
-							}
-							res.render("rental.ejs", render);
-						}
-					});
+					var render = {
+						user: req.user,
+						listing_info: result.listing_info,
+						rental_info: result.rental_info,
+						rental_details: result.rental_details
+					}
+					res.render("rental.ejs", render);
 				}
 			}
 			else {

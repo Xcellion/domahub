@@ -142,7 +142,7 @@ listing_model.prototype.getListingInfo = function(domain_name, callback){
 
 	console.log("Getting all listing information for " + domain_name);
 	Listing.getInfo("listings", "domain_name", domain_name, db_query, function(result){
-		if (result.state == "success" && result.info){
+		if (result.state == "success" && result.info.length){
 			listing_info = result.info[0];
 			
 			db_query = "SELECT \

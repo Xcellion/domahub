@@ -40,6 +40,25 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
+//allow access-control list
+app.use(function(req, res, next) {
+	var allowedOrigins = [
+		'http://www.youreacutie.com', 
+		'http://www.imsorryimdumb.com', 
+		'http://imsorryimdumb.com', 
+		'http://youreacutie.com'
+	];
+	
+	var origin = req.headers.origin;
+	
+	if (allowedOrigins.indexOf(origin) > -1){
+		res.setHeader('Access-Control-Allow-Origin', origin);
+		res.setHeader('Content-Type', 'application/jsonp');
+	}
+	
+	next();
+});
+
 app.use(express.static(__dirname + '/public'));
 
 //favicon requests second time for some reason

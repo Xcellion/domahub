@@ -1,0 +1,61 @@
+<!-- reset page for all rentals -->
+
+<!DOCTYPE html>
+
+<html>
+
+	<head>
+		<title></title>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+		<link class="rental_main_css" rel="stylesheet" type="text/css" href="http://localhost:8080/reset/css/reset.css">
+		<link rel="stylesheet" type="text/css" href="http://localhost:8080/reset/content-tools/content-tools.min.css">
+	</head>
+	
+	<body>
+		<div id="background_image" class="center_horizontal center_vertical">
+			<div id="text_wrapper"">
+				<div data-editable data-name="text_wrapper">
+					<h1 id="main_text">
+						<% if(typeof rental_details == "undefined"){ %>
+							Title of site
+						<% } %>
+					</h1>
+				</div>
+				<div data-editable data-name="middle_text" id="middle_text">
+					<% if(typeof rental_details == "undefined"){ %>
+						<p>Here is where users can type custom messages</p>
+					<% } %>
+				</div>
+			</div>
+			<div id="footer_wrapper" class="center_horizontal">
+<!-- 			<a href="http://www.w3bbi.com/listing/<%= listing_info.domain_name %>">
+					About this page
+				</a> -->
+			</div>
+		</div>
+		
+		<script type="text/javascript">
+			var rental_details = <% if(typeof rental_details != "undefined"){ %><%-JSON.stringify(rental_details)%><% }else{ %>""<% } %>;
+			var style = $("<style></style");
+			$("head").append(style);
+	
+			for (var x = 0; x < rental_details.length; x++){
+				switch (rental_details[x].text_key){
+					case "css":
+						style.append(rental_details[x].text_value);
+						break;
+					case "head":
+						var tempElem = $(rental_details[x].text_key);
+						tempElem.append(rental_details[x].text_value);
+						break;
+					default:
+						var tempElem = $("#" + rental_details[x].text_key);
+						tempElem.append(rental_details[x].text_value);
+						break;
+				}
+			}
+		</script>
+	</body>
+	
+</html>

@@ -39,7 +39,7 @@ $(document).ready(function() {
 	
 	//--------------------------------------page update
 		
-	updatePage(rental_html, rental_details);
+	updatePage();
 	
 	$("#w3bbi_hider").click(function(e){
 		toggleW3bbi(true);
@@ -63,7 +63,6 @@ $(document).ready(function() {
 	});
 
 });
-
 
 // Close Checkout on page navigation:
 $(window).on('popstate', function() {
@@ -218,7 +217,7 @@ function submitRentals(id){
 }
 
 //update page based on database data
-function updatePage(html, data){
+function updatePage(data){
 	if (rental_info){
 		//change all UTC to local time
 		rental_info.offset = new Date(rental_info.date + " UTC").getTimezoneOffset();
@@ -237,31 +236,6 @@ function updatePage(html, data){
 		$("#stripe-button").data("description", new_rental_info.listing_info.domain_name);
 		appendRentals(new_rental_info.rentals, true);
 	}
-
-	//update rental preview
-	var parsed = $.parseHTML(html);
-	$("#rental_preview").append(parsed);
-	document.body.addEventListener('transitionend', function(){
-		if (data){
-			for (var x = 0; x < data.length; x++){
-				switch (data[x].text_key){
-					case "css":
-						var style_sheet = getStyleSheet("rental_main_css");
-						style_sheet.insertRule(data[x].text_value, 0);
-						$("#background_input").val(findUrls(data[x].text_value));
-						break;
-					case "head":
-						var tempElem = $(data[x].text_key);
-						tempElem.append(data[x].text_value);
-						break;
-					default:
-						var tempElem = $("#" + data[x].text_key);
-						tempElem.append(data[x].text_value);
-						break;
-				}
-			}
-		}
-	}, false);
 }
 
 //helper function to append rental dates once changed to local instead of UTC
@@ -294,25 +268,6 @@ function getStyleSheet(unique_title) {
 			return sheet;
 		}
 	}
-}
-
-//helper function to find URLs in a text
-function findUrls( text ){
-    var source = (text || '').toString();
-    var urlArray = [];
-    var url;
-    var matchArray;
-
-    //regular expression to find FTP, HTTP(S) and email URLs.
-    var regexToken = /(((ftp|https?):\/\/)[\-\w@:%_\+.~#?,&\/\/=]+)|((mailto:)?[_.\w-]+@([\w][\w\-]+\.)+[a-zA-Z]{2,3})/g;
-
-    //iterate through any URLs in the text.
-    while( (matchArray = regexToken.exec( source )) !== null ){
-        var token = matchArray[0];
-        urlArray.push( token );
-    }
-
-    return urlArray;
 }
 
 //helper function to delete all cookies

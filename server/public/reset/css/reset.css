@@ -1,0 +1,99 @@
+body, p, h1, h2, h3, h4, h5{
+	margin:0;
+	border:0;
+	padding:0;
+}
+
+#background_image{
+	position:absolute;
+	-webkit-background-size: cover; 
+	-moz-background-size: cover; 
+	-o-background-size: cover; 
+	background-size: cover; 
+	height:100vh;
+	width:100vw;
+	text-align:center;
+	/* so both loading gif, and the rental edit will appear */
+	transition: outline-color 0.1s linear;
+    outline-color: #fff;
+}
+
+#text_wrapper{
+	color:#fff;
+	border:2px solid #fff;
+	background-color:rgba(0,0,0,.35);
+	padding:15px;
+	position:absolute;
+	top:50%;
+	left:50%;
+	transform:translate(-50%, -50%);
+	margin-right:-50%;
+	min-width:25%;
+}
+
+#main_text{
+
+}
+
+#middle_text{
+
+}
+
+#footer_wrapper{
+	position:fixed;
+	bottom:0;
+	left:50%;
+	transform:translateX(-50%);
+	margin-right:-50%;
+	color:#FFF;
+    font-size: small;
+}
+
+/* -------------------------------------------------------------- RESET STUFF ---------------------------------------------------------- */
+/* Alignment styles for images, videos and iframes in editable regions */
+
+/* Center (default) */
+[data-editable] iframe,
+[data-editable] image,
+[data-editable] [data-ce-tag=img],
+[data-editable] img,
+[data-editable] video {
+    clear: both;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 100%;
+}
+
+/* Left align */
+[data-editable] .align-left {
+    clear: initial;
+    float: left;
+    margin-right: 0.5em;
+}
+
+/* Right align */
+[data-editable].align-right {
+    clear: initial;
+    float: right;
+    margin-left: 0.5em;
+}
+
+/* Alignment styles for text in editable regions */
+[data-editable] .text-center {
+    text-align: center;
+}
+
+[data-editable] .text-left {
+    text-align: left;
+}
+
+[data-editable] .text-right {
+    text-align: right;
+}
+
+/* -------------------------------------------------------------- CUSTOM RESET STYLES ---------------------------------------------------------- */
+
+.test{
+	color:black;
+}

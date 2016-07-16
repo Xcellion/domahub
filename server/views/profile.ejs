@@ -29,36 +29,32 @@
 			<p><a href="/logout">Log Out</a></p>
 		<% } %>
 		
-
-		<!-- all available listings -->
+		<h2>My Domains:</h2>
 		<% if (typeof listings != "undefined") {%>
-			<h2>All Domain Names:</h2>
 			<table>
 				<th>Date Created</th>
 				<th>Domain Name</th>
-				<th>Owner Name</th>
-				<th>Owner Email</th>
 				 <% listings.forEach(function (listing) { %>
 					<tr>  
 						<td><%= listing.date_created %></td>  
 						<td><a href=<%= "/listing/" + listing.domain_name %>><%= listing.domain_name %></a></td>  
-						<td><%= listing.fullname %></td>
-						<td><%= listing.email %></td>
 					</tr>                                   
 				 <% }) %>
 			</table>
+		<% } else { %>
+			<p>You have no domains currently!</p>
 		<% } %>
 		
-		
-		<!-- all listings -->
+		<h2>My Rentals:</h2>
 		<% if (typeof rentals != "undefined") {%>
-			<h2>My Rentals:</h2>
 			<table id="rental_table">
 				<th>Domain Name</th>
 				<th>Start Date</th>
 				<th>End Date</th>
 			</table>
-		<% } %>
+		<% } else { %>
+			<p>You have no rentals currently!</p>
+		<% } %>		
 
 	</body>
 	

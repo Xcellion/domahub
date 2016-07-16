@@ -42,7 +42,7 @@ function profile(req, res){
 	//check if user id is legit
 	if (parseFloat(account_id) == account_id >>> 0){
 		//get all available listings
-		Listing.getAllListings(function(result){
+		Account.getListingsAccount(account_id, function(result){
 			listings = result.listings;
 			
 			//get all rentals for that user
