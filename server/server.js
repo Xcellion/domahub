@@ -32,19 +32,10 @@ app.set('views', __dirname + '/views');
 
 //express session secret
 app.use(session({
-		secret: 'w3bbi_market',
-		saveUninitialized: true,
-		resave: true}
-	));
-
-app.all(/.*/, function(req, res, next) {
-  var host = req.header("host");
-  if (host.match(/^www\..*/i)) {
-    next();
-  } else {
-    res.redirect(301, "http://www." + host);
-  }
-});
+	secret: 'w3bbi_market',
+	saveUninitialized: true,
+	resave: true}
+));
 
 app.use(passport.initialize());
 app.use(passport.session());
