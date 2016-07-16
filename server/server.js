@@ -31,11 +31,20 @@ app.set('view engine', 'ejs');
 app.set('views', __dirname + '/views');
 
 //express session secret
-app.use(session({ 
+app.use(session({
 		secret: 'w3bbi_market',
 		saveUninitialized: true,
 		resave: true}
 	));
+
+app.all(/.*/, function(req, res, next) {
+  var host = req.header("host");
+  if (host.match(/^www\..*/i)) {
+    next();
+  } else {
+    res.redirect(301, "http://www." + host);
+  }
+});
 
 app.use(passport.initialize());
 app.use(passport.session());
@@ -43,19 +52,19 @@ app.use(passport.session());
 //allow access-control list
 app.use(function(req, res, next) {
 	var allowedOrigins = [
-		'http://www.youreacutie.com', 
-		'http://www.imsorryimdumb.com', 
-		'http://imsorryimdumb.com', 
+		'http://www.youreacutie.com',
+		'http://www.imsorryimdumb.com',
+		'http://imsorryimdumb.com',
 		'http://youreacutie.com'
 	];
-	
+
 	var origin = req.headers.origin;
-	
+
 	if (allowedOrigins.indexOf(origin) > -1){
 		res.setHeader('Access-Control-Allow-Origin', origin);
 		res.setHeader('Content-Type', 'application/jsonp');
 	}
-	
+
 	next();
 });
 
