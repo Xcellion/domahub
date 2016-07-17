@@ -20,42 +20,57 @@
 		<script src="/js/routes/client_profile.js" type="text/javascript"></script>
 		<link rel="icon" type="image/ico" href="/images/favicon.ico">
 	</head>
-	
+
 	<body>
-		
+
 		<% if (typeof user != "undefined") {%>
 			<p>Logged in: <%= user.email %></p>
 			<p><a href="/">Home</a></p>
 			<p><a href="/logout">Log Out</a></p>
-		<% } %>
-		
-		<h2>My Domains:</h2>
-		<% if (typeof listings != "undefined") {%>
-			<table>
-				<th>Date Created</th>
-				<th>Domain Name</th>
-				 <% listings.forEach(function (listing) { %>
-					<tr>  
-						<td><%= listing.date_created %></td>  
-						<td><a href=<%= "/listing/" + listing.domain_name %>><%= listing.domain_name %></a></td>  
-					</tr>                                   
-				 <% }) %>
-			</table>
-		<% } else { %>
-			<p>You have no domains currently!</p>
-		<% } %>
-		
-		<h2>My Rentals:</h2>
-		<% if (typeof rentals != "undefined") {%>
-			<table id="rental_table">
-				<th>Domain Name</th>
-				<th>Start Date</th>
-				<th>End Date</th>
-			</table>
-		<% } else { %>
-			<p>You have no rentals currently!</p>
-		<% } %>		
 
+
+			<p id="message">Welcome!</p>
+
+			<h2>My Domains:</h2>
+			<% if (typeof listings != "undefined") {%>
+				<table>
+					<th>Date Created</th>
+					<th>Domain Name</th>
+					<th>Active?</th>
+					 <% listings.forEach(function (listing) { %>
+						<tr>
+							<td><%= listing.date_created %></td>
+							<td><a href=<%= "/listing/" + listing.domain_name %>><%= listing.domain_name %></a></td>
+							<td><%= (listing.price_type != 0) ? "True" : "False"%></td>
+						</tr>
+					 <% }) %>
+				</table>
+			<% } else { %>
+				<p>You have no domains currently!</p>
+			<% } %>
+
+			<div id="form_wrapper">
+				<form id="listing_form" action="/profile" method="post">
+					<input id="listing_form_domain_name" type="url" name="domain_name" placeholder="https://myawesomedomain.com">
+					<input id="listing_form_description" type="text" name="description" placeholder="The best website ever!">
+					<input id="submit" type="submit" value="Create new listing!">
+				</form>
+			</div>
+
+			<h2>My Rentals:</h2>
+			<% if (typeof rentals != "undefined") {%>
+				<table id="rental_table">
+					<th>Domain Name</th>
+					<th>Start Date</th>
+					<th>End Date</th>
+				</table>
+			<% } else { %>
+				<p>You have no rentals currently!</p>
+			<% } %>
+
+		<% } else {%>
+			<%- include("login"); %>
+		<% } %>
 	</body>
-	
+
 </html>
