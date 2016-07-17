@@ -19,7 +19,7 @@
 
 	<body>
 		<h1>w3bbi.</h1>
-		
+
 		<!-- checks if user is logged in -->
 		<% if (typeof user == "undefined") {%>
 			<div id="form_wrapper">
@@ -32,7 +32,7 @@
 					<a id="signup" href="/signup">Create an account</a>
 				</div>
 			</div>
-			
+
 		<!-- if not logged in -->
 		<% } else {%>
 			<p id="sub_message">Welcome!</p>
@@ -40,7 +40,7 @@
 			<p><a href="/profile">Profile</a></p>
 			<p><a href="/logout">Log Out</a></p>
 		<% } %>
-		
+
 		<!-- any messages from the server -->
 		<div id="message">
 			<% if (typeof message != "undefined") {%>
@@ -59,15 +59,15 @@
 				<th>Owner Name</th>
 				<th>Owner Email</th>
 				 <% listings.forEach(function (listing) { %>
-					<tr>  
-						<td><%= listing.date_created %></td>  
-						<td><a href=<%= "/listing/" + listing.domain_name %>><%= listing.domain_name %></a></td>  
+					<tr>
+						<td><%= listing.date_created %></td>
+						<td><a href=<%= "/listing/" + listing.domain_name %>><%= listing.domain_name %></a></td>
 						<td><%= listing.fullname %></td>
 						<td><%= listing.email %></td>
-					</tr>                                   
+					</tr>
 				 <% }) %>
 			</table>
 		<% } %>
-		
+
 	</body>
 </html>

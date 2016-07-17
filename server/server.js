@@ -75,7 +75,7 @@ app.get('*', function(req, res){
 	res.redirect('/');
 });
 
-var port = Number(process.env.PORT || 8080);
+var port = Number(process.env.PORT || 80);
 server.listen(port, function(){
 	console.log("Listening on port " + port);
 });
