@@ -63,6 +63,7 @@ function sendRentalInfo(req, res, result){
 		//what type of rental is it?
 		switch (result.rental_info.type){
 			//simple page / default
+			case 3:
 			case 0:
 				res.render("reset.ejs", {
 					listing_info: result.listing_info,
