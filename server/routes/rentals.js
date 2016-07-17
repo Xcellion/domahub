@@ -7,13 +7,13 @@ var	account_model = require('../models/account_model.js'),
 
 module.exports = function(app, db, auth, e){
 	error = e;
-	
+
 	Account = new account_model(db);
 	Listing = new listing_model(db, Account);
-		
+
 	//function to check if logged in
 	isLoggedIn = auth.isLoggedIn;
-	
+
 	//API for rental info
 	app.get('/rental_info/:domain_name/:rental_id', getRental);
 	app.get('/rental_info/:domain_name', getCurrentRental);
@@ -25,7 +25,7 @@ module.exports = function(app, db, auth, e){
 function getRental(req, res, next) {
 	rental_id = req.params.rental_id;
 	domain_name = req.params.domain_name.replace(/^(https?:\/\/)?(www\.)?/,'');
-	
+
 	//check if rental id is legit
 	if (parseFloat(rental_id) != rental_id >>> 0){
 		error.handler(req, res, "Invalid rental!", "json");
@@ -62,10 +62,11 @@ function sendRentalInfo(req, res, result){
 	if (result.state == "success"){
 		//what type of rental is it?
 		switch (result.rental_info.type){
-			//simple page
+			//simple page / default
 			case 0:
 				res.render("reset.ejs", {
 					listing_info: result.listing_info,
+					rental_info: result.rental_info,
 					rental_details: result.rental_details
 				});
 				break;

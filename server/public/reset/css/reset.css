@@ -6,10 +6,10 @@ body, p, h1, h2, h3, h4, h5{
 
 #background_image{
 	position:absolute;
-	-webkit-background-size: cover; 
-	-moz-background-size: cover; 
-	-o-background-size: cover; 
-	background-size: cover; 
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;
 	height:100vh;
 	width:100vw;
 	text-align:center;
@@ -44,9 +44,15 @@ body, p, h1, h2, h3, h4, h5{
 	bottom:0;
 	left:50%;
 	transform:translateX(-50%);
+	background-color:rgba(0,0,0,.35);
+	padding:6px;
 	margin-right:-50%;
 	color:#FFF;
     font-size: small;
+}
+
+#footer_wrapper a:visited{
+	color:#FFF;
 }
 
 /* -------------------------------------------------------------- RESET STUFF ---------------------------------------------------------- */
@@ -93,7 +99,3 @@ body, p, h1, h2, h3, h4, h5{
 }
 
 /* -------------------------------------------------------------- CUSTOM RESET STYLES ---------------------------------------------------------- */
-
-.test{
-	color:black;
-}

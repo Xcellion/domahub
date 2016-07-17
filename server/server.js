@@ -56,7 +56,7 @@ app.use(function(req, res, next) {
 
 	if (allowedOrigins.indexOf(origin) > -1){
 		res.setHeader('Access-Control-Allow-Origin', origin);
-		res.setHeader('Content-Type', 'application/jsonp');
+	//	res.setHeader('Content-Type', 'application/jsonp');
 	}
 
 	next();

@@ -11,7 +11,7 @@ $(document).ready(function() {
 		eventOverlap: false, //prevents overlap of events
 		eventStartEditable: false, //prevents moving of events
 		nowIndicator: true,
-		
+
 		//creating new events
 		select: function(start, end, jsEvent, view){
 			start = moment(start.format());
@@ -19,58 +19,58 @@ $(document).ready(function() {
 			createEvent(start, end);
 			$('#calendar').fullCalendar('unselect');
 		},
-		
+
 		//tag id to HTML DOM for easy access
-		eventAfterRender: function(event, element, view ) { 
+		eventAfterRender: function(event, element, view ) {
 			$(element).attr("id", event._id);
 		}
     })
-		
+
 	//check if theres a cookie for local events
 	if (document.cookie.match(new RegExp('local_events=([^;]+)')) && $('#calendar').fullCalendar('clientEvents', filterMine).length == 0){
 		var existing_events = read_cookie("local_events");
-		
+
 		for (var x = 0; x < existing_events.length; x++){
 			$('#calendar').fullCalendar('renderEvent', existing_events[x], true);
 		}
 	}
-	
+
 	//check if theres a cookie for the rental type
 	if (document.cookie.match(new RegExp('type=([^;]+)'))){
 		var type = read_cookie("type");
 		$("#radio_"+type+"_input").prop("checked", true);
 	}
-	
+
 	//check if theres a cookie for editing an event
 	if (document.cookie.match(new RegExp('old_rental_info=([^;]+)'))){
 		var cookie = read_cookie("old_rental_info");
 		old_rental_info = cookie;
 		editingRental();
 	}
-	
+
 	//create existing rentals
 	createExisting(listing_info.rentals);
-	
+
 	//show prices
 	eventPrices(listing_info.rentals);
-	
+
 	//------------------------------------------interactive stuff
-	
+
 	$("#listing_form").submit(function(e){
 		e.preventDefault();
 		submitRentals();
 	});
-	
+
 	$("#events").click(function(e){
 		$('#calendar').fullCalendar('removeEvents', filterMine);
 		storeCookies("local_events");
 		eventPrices();
 	});
-	
+
 	$("input[type='radio'][name='type']").click(function(e){
 		storeCookies("type");
 	});
-	
+
 	$("#remove_events").click(function(e){
 		$('#calendar').fullCalendar('removeEvents', filterMine);
 		storeCookies("local_events");
@@ -101,7 +101,7 @@ function createExisting(rentals){
 				same_details: rentals[x].same_details,
 				account_id: rentals[x].account_id
 			};
-			
+
 			//came from editing an existing rental, color that one orange
 			if (rentals[x].rental_id == old_rental_info.rental_id || (rentals[x].same_details && rentals[x].same_details == old_rental_info.rental_id)){
 				eventData.title = "Original time";
@@ -125,7 +125,7 @@ function createExisting(rentals){
 //helper function to check if everything is legit
 function checkSubmit(newEvents){
 	var bool = "success";
-	
+
 	if (!user){ bool = "Please log in!"; }
 	else if (!$("input[type='radio'][name='type']:checked").val()) { bool = "Please select a rental type!"; }
 	else if (newEvents.length > 0){
@@ -139,7 +139,7 @@ function checkSubmit(newEvents){
 			}
 		}
 	}
-	
+
 	return bool;
 }
 
@@ -147,7 +147,7 @@ function checkSubmit(newEvents){
 function submitRentals(){
 	var newEvents = $('#calendar').fullCalendar('clientEvents', filterNew);
 	var checks = checkSubmit(newEvents);	//check if everything is legit
-	
+
 	if (checks == "success"){
 		//get all new events, calculate the timezone offset
 		minEvents = [];
@@ -161,7 +161,7 @@ function submitRentals(){
 				_id: newEvents[x]._id
 			});
 		}
-				
+
 		//post to ajax
 		$.ajax({
 			type: "POST",
@@ -177,7 +177,7 @@ function submitRentals(){
 					$("#message").text("Some time slots were unavailable! They have been removed.");
 					$('#calendar').fullCalendar('removeEvents', data.unavailable[x]._id);
 				}
-				
+
 				$.ajax({
 					type: "GET",
 					url: "/listing/" + listing_info.domain_name,
@@ -225,10 +225,10 @@ $(document).on("mouseup", ".fc-event", function(mouseUpJsEvent){
 			//get the time slots of both mousedown and mouseup
 			var mouseDownSlot = getTimeSlot(mouseUpCalEvent, mouseDownJsEvent);
 			var mouseUpSlot = getTimeSlot(mouseUpCalEvent, mouseUpJsEvent);
-			
+
 			var mouseDown_start = moment(mouseDownSlot.start).format('YYYY-MM-DD HH:mm');
 			var mouseUp_start = moment(mouseUpSlot.start).format('YYYY-MM-DD HH:mm');
-			
+
 			//moved down or stayed the same
 			if (mouseDown_start <= mouseUp_start){
 				//remove the time slots in between mousedown and mouseup from the event
@@ -246,10 +246,10 @@ $(document).on("mouseup", ".fc-event", function(mouseUpJsEvent){
 	else if (mouseUpCalEvent.account_id == user.id){
 		delete_cookie("local_events");
 		delete_cookie("type");
-		
+
 		//get the id of the main rental
 		var same_id = mouseUpCalEvent.same_details ? mouseUpCalEvent.same_details : mouseUpCalEvent.rental_id;
-		
+
 		//click an editing event to stop editing it
 		if (mouseUpCalEvent.editing){
 			old_rental_info = false;
@@ -288,7 +288,7 @@ var mousein = false;
 
 $(document).on("mouseenter", ".fc-event", function(e){
 	mouseEvent = $("#calendar").fullCalendar('clientEvents', $(this).attr("id"))[0];
-	
+
 	var same_id = mouseEvent.same_details ? mouseEvent.same_details : mouseEvent.rental_id;
 	if (!mouseEvent.other && !mouseEvent.editing && user && mouseEvent.account_id == user.id && !mousein){
 		eventEdit(same_id, "Add more time?");
@@ -299,7 +299,7 @@ $(document).on("mouseenter", ".fc-event", function(e){
 
 $(document).on("mouseleave", ".fc-event", function(e){
 	mouseEvent = $("#calendar").fullCalendar('clientEvents', $(this).attr("id"))[0];
-	
+
 	var same_id = mouseEvent.same_details ? mouseEvent.same_details : mouseEvent.rental_id;
 	if (!mouseEvent.other && !mouseEvent.editing && user && mouseEvent.account_id == user.id){
 		var title = user.fullname || "Guest";
@@ -313,7 +313,7 @@ function eventEdit(same_id, title, color, editing){
 	sameEvents = $("#calendar").fullCalendar('clientEvents', function(e){
 		return filterSame(e, same_id);
 	});
-	
+
 	for (var x = 0; x < sameEvents.length; x++){
 		sameEvents[x].editing = editing;
 		sameEvents[x].title = title;
@@ -327,7 +327,7 @@ function getTimeSlot(calEvent, jsEvent){
 	var datetime = "";
 	var rows = $(jsEvent.delegateTarget).find("[data-time]");
 	var days = $(jsEvent.delegateTarget).find("[data-date]");
-	
+
 	//find the day of the clicked on event
 	for (var y = 0; y < days.length; y++){
 		if (jsEvent.pageX >= $(days[y]).offset().left && jsEvent.pageX <= $(days[y]).offset().left + $(days[y]).width()){
@@ -367,13 +367,13 @@ function getTimeSlot(calEvent, jsEvent){
 function removeEventTimeSlot(calEvent, mouseDownSlot, mouseUpSlot){
 	var calEvent_start = moment(calEvent.start).format('YYYY-MM-DD HH:mm');
 	var calEvent_end = moment(calEvent.end).format('YYYY-MM-DD HH:mm');
-	
+
 	var mouseDown_start = moment(mouseDownSlot.start).format('YYYY-MM-DD HH:mm');
-	
+
 	var mouseUp_end = moment(mouseUpSlot.end).format('YYYY-MM-DD HH:mm');
 
 	//event is equal to slot
-	if (calEvent_start == mouseDown_start 
+	if (calEvent_start == mouseDown_start
 		&& calEvent_end == mouseUp_end){
 			$('#calendar').fullCalendar('removeEvents', calEvent._id);
 			$('#calendar').fullCalendar('updateEvent', calEvent);
@@ -472,7 +472,7 @@ function createEvent(start, end){
 				console.log('partial overlap');
 				overlappingEvents.push(eventitem);
 			}
-			
+
 			//no overlaps, check for merges
 			if (!eventitem.old && !eventEncompassed && (moment(start).format('YYYY-MM-DD HH:mm') == moment(eventitem.end).format('YYYY-MM-DD HH:mm')
 				|| moment(end).format('YYYY-MM-DD HH:mm') == moment(eventitem.start).format('YYYY-MM-DD HH:mm'))){
@@ -492,7 +492,7 @@ function createEvent(start, end){
 			}
 		}
 	});
-	
+
 	//there are mergable events, merge them!
 	if (mergingEvents.length){
 		if (mergingEvents.length == 2){
@@ -524,7 +524,7 @@ function createEvent(start, end){
 		}
 		mergingEvents = [];
 	}
-	
+
 	//there are fully overlapping events
 	if (fullyOverlappingEvents.length){
 		for (var x = 0; x < fullyOverlappingEvents.length; x++){
@@ -540,7 +540,7 @@ function createEvent(start, end){
 		}
 		fullyOverlappingEvents = [];
 	}
-	
+
 	//there are some partially overlapping events
 	if (overlappingEvents.length){
 		for (var x = 0; x < overlappingEvents.length; x++){
@@ -572,7 +572,7 @@ function createEvent(start, end){
 		}
 		overlappingEvents = [];
 	}
-	
+
 	//checked for all cases, create the new event!
 	if (!eventEncompassed && mergingEvents.length == 0 && overlappingEvents.length == 0 && fullyOverlappingEvents.length == 0){
 		//console.log('n');
@@ -581,15 +581,15 @@ function createEvent(start, end){
 			end: end,
 			newevent: true
 		};
-		
+
 		//orange if adding more time
 		eventData.color = (parseFloat(old_rental_info.rental_id) === old_rental_info.rental_id >>> 0) ? "orange" : "";
 		eventData.title = (parseFloat(old_rental_info.rental_id) === old_rental_info.rental_id >>> 0) ? "Added time" : "New rental";
-		
+
 		var newEvent = $('#calendar').fullCalendar('renderEvent', eventData, true);
 
 		if (removeEvents.length){
-			
+
 			//sort events so we can remove them properly
 			removeEvents.sort(function(a, b){
 				return b.start - a.start;
@@ -614,10 +614,10 @@ function createEvent(start, end){
 				}
 			}
 		}
-	
+
 		//store local events as cookie so we dont lose it
 		storeCookies("local_events");
-		
+
 		//update the total price of current events
 		eventPrices();
 	}
@@ -627,30 +627,30 @@ function createEvent(start, end){
 function eventPrices(){
 	var myevents = $('#calendar').fullCalendar('clientEvents', filterMine);
 	var weeks_price = days_price = hours_price = half_hours_price = 0;
-	
+
 	for (var x = 0; x < myevents.length; x++){
 		var tempDuration = myevents[x].end - myevents[x].start;
-		
+
 		var weeks = divided(tempDuration, 604800000);
 		tempDuration = (weeks > 0) ? tempDuration -= weeks*604800000 : tempDuration;
-		
+
 		var days = divided(tempDuration, 86400000);
 		tempDuration = (days > 0) ? tempDuration -= days*86400000 : tempDuration;
-		
+
 		var hours = divided(tempDuration, 3600000);
 		tempDuration = (hours > 0) ? tempDuration -= hours*3600000 : tempDuration;
-		
+
 		var half_hours = divided(tempDuration, 1800000);
 		tempDuration = (half_hours > 0) ? tempDuration -= half_hours*1800000 : tempDuration;
-		
+
 		weeks_price += weeks * listing_info.week_price;
 		days_price += days * listing_info.day_price;
 		hours_price += hours * listing_info.hour_price;
 		half_hours_price += half_hours * listing_info.hour_price;
 	}
-	
+
 	totalPrice = weeks_price + days_price + hours_price + half_hours_price;
-	
+
 	//animation for counting numbers
 	$("#price").prop('Counter', $("#price").prop('Counter')).stop().animate({
 		Counter: totalPrice
@@ -690,7 +690,7 @@ function storeCookies(type){
 	else if (type == "old_rental_info"){
 		cookie = old_rental_info;
 	}
-	
+
 	if (read_cookie(type)){
 		delete_cookie(type);
 	}

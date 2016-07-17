@@ -3,7 +3,7 @@ var unlock = true;
 
 $(document).ready(function() {
 	//--------------------------------------stripe configuration
-	
+
 	handler = StripeCheckout.configure({
 		key: 'pk_test_kcmOEkkC3QtULG5JiRMWVODJ',
 		name: 'w3bbi Domain Rental',
@@ -18,9 +18,9 @@ $(document).ready(function() {
 			$('#edit_details_pay').append($id).submit();
 		}
 	});
-	
+
 	//--------------------------------------form submission clicks
-	
+
 	$('#stripe-button').click(function(){
 		var amount = new_rental_info.price * 100;
 
@@ -36,26 +36,31 @@ $(document).ready(function() {
 		e.preventDefault();
 		submitRentals($(this).attr("id"));
 	});
-	
+
 	//--------------------------------------page update
-		
+
 	updatePage();
-	
+
 	$("#w3bbi_hider").click(function(e){
 		toggleW3bbi(true);
 	});
-	
+
 	$("#rental_preview").click(function(e){
 		toggleW3bbi(false);
 	});
-	
+
 	$("#edit_now").click(function(e){
-		toggleEdit();
+		toggleEdit(true);
 	});
-	
+
+	//cancel editing of rental
+	$("#cancel_edits").click(function(e){
+		toggleEdit(false);
+	});
+
 	$("body").on("click", ".highlight", function(e){
 		var new_text = prompt("Enter new text:", $(this).html());
-		
+
 		//change if different
 		if (new_text != $(this).html() && new_text != null){
 			$(this).html(sanitizeHtml(new_text));
@@ -82,31 +87,27 @@ function toggleW3bbi(show){
 }
 
 //toggler to edit the page
-function toggleEdit(){
-	$(".editable").toggleClass("highlight");
-	
+function toggleEdit(bool){
+	//finished editing
 	if ($("#edit_now_details").is(":visible")){
-		$("#edit_now_details").slideUp();
-	}
-	else {
-		$("#edit_now_details").slideDown();
-	}
-
-	if ($('#edit_now').html() == "Edit page"){
-		$('#edit_now').html("Finish editing");
-	}
-	else {
+		$("#edit_now_details").stop().slideUp();
+		editor.stop(bool);
+		$("#cancel_edits").css('display', 'none');
 		$('#edit_now').html("Edit page");
-		
+
 		//change the background in real time
 		var backgroundUrl = sanitizeHtml($("#background_input").val());
 		if (backgroundUrl){
-			var w3bbi_main_css = getStyleSheet("w3bbi_main_css");
-			var official_css = getStyleSheet("official");
-			w3bbi_main_css.insertRule("body {background:url(" + backgroundUrl + ") no-repeat center center", 0);
-			official_css.disabled = 1;
+			$("#background_image").css("background", "url(" + backgroundUrl + ") no-repeat center center / cover fixed");
 			$("#background_input").val(sanitizeHtml($("#background_input").val()));
 		}
+	}
+	//editing
+	else {
+		$("#edit_now_details").stop().slideDown();
+		editor.start();
+		$("#cancel_edits").css('display', 'inline-block');
+		$('#edit_now').html("Save edits");
 	}
 }
 
@@ -171,9 +172,9 @@ function submitRentals(id){
 
 			//lock the ajax
 			unlock = false;
-			
+
 			$.ajax({
-				type: "POST",	
+				type: "POST",
 				url: RemoveLastDirectoryPartOf(window.location.pathname) + url,
 				data: {
 					rental_info: rental_data.rental_info,
@@ -183,13 +184,13 @@ function submitRentals(id){
 			}).done(function(data){
 				if (data.message == "success"){
 					$("#message").html("Success!");
-					
+
 					//unlock on success
 					unlock = true;
-					
+
 					//remove cookies since it was successful
 					delete_cookies();
-					
+
 					//if creating a new rental, redirect the URL to the new rental id
 					if (data.rental_id){
 						//replace the URL in the window
@@ -228,7 +229,7 @@ function updatePage(data){
 		}
 		appendRentals(rental_info.rentals, false);
 	}
-	
+
 	//update w3bbi rental info for new rentals
 	if (new_rental_info){
 		//update pricing for stripe
@@ -236,6 +237,9 @@ function updatePage(data){
 		$("#stripe-button").data("description", new_rental_info.listing_info.domain_name);
 		appendRentals(new_rental_info.rentals, true);
 	}
+
+	//initiate content tools editor
+	contentToolsInit();
 }
 
 //helper function to append rental dates once changed to local instead of UTC
@@ -250,11 +254,11 @@ function appendRentals(rentals, new_rental){
 			end = moment(start + rentals[x].duration).format('YYYY, MMMM D, hh:mm A');
 			start = moment(start).format('YYYY, MMMM D, hh:mm A');
 		}
-		
+
 		var rented_start = '<span id="rental_start">'+start+'</span>';
 		var rented_end = '<span id="rental_end">'+end+'</span>';
 		var rented_dates = $('<li>' + rented_start + ' -- ' + rented_end + '</li>');
-		
+
 		var wrapper = new_rental ? "#new_rental_wrapper" : "#rental_wrapper";
 		$(wrapper).append(rented_dates);
 	}

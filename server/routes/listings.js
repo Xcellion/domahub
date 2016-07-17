@@ -7,13 +7,13 @@ var	account_model = require('../models/account_model.js'),
 
 module.exports = function(app, db, auth, e){
 	error = e;
-	
+
 	Account = new account_model(db);
 	Listing = new listing_model(db);
-		
+
 	//function to check if logged in
 	isLoggedIn = auth.isLoggedIn;
-	
+
 	//w3bbi pages
 	app.get('/listing/:domain_name', getListingPage);
 	app.get('/listing/:domain_name/:rental_id', isLoggedIn, getRentalPage);
@@ -29,7 +29,7 @@ module.exports = function(app, db, auth, e){
 //gets the listing info and sends user to the listing page
 function getListingPage(req, res, next) {
 	domain_name = req.params.domain_name
-	
+
 	//we dont accept listing ids, only domain names
 	if (parseFloat(domain_name) === domain_name >>> 0){
 		error.handler(req, res, "Invalid listing!");
@@ -37,7 +37,7 @@ function getListingPage(req, res, next) {
 	else {
 		var new_rental_info = req.session.new_rental_info || false;
 		var old_rental_info = req.session.old_rental_info || false;
-		
+
 		Listing.getListingInfo(domain_name, function(result){
 			if (result.state == "success"){
 				var render = {
@@ -50,7 +50,7 @@ function getListingPage(req, res, next) {
 				if (req.session.message){
 					render.message = Auth.messageReset(req);
 				}
-				
+
 				//if sending just the updated listing info instead of the whole page
 				if (req.header("page-or-data") == "data"){
 					res.json(result.listing_info);
@@ -59,7 +59,7 @@ function getListingPage(req, res, next) {
 					res.render("listing.ejs", render);
 				}
 			}
-			
+
 			//listing doesnt exist, redirect to main page
 			else {
 				error.handler(req, res, result.description);
@@ -139,7 +139,7 @@ function postListingPage(req, res, next){
 	user_id = req.user.id;
 	type = req.body.type;
 	events = req.body.events;
-	
+
 	if (req.body.old_rental_info != "false"){
 		req.session.old_rental_info = req.body.old_rental_info;
 		if (!events){
@@ -164,7 +164,7 @@ function postListingPage(req, res, next){
 				else {
 					//double check price
 					var price = eventPrices(events, result.listing_info);
-					
+
 					if (price){
 						var new_rental_info = {
 								user: req.user,
@@ -173,7 +173,7 @@ function postListingPage(req, res, next){
 								type: type,
 								price: price
 							}
-						
+
 						req.session.new_rental_info = new_rental_info;
 					}
 					else if (parseFloat(old_rental_info.rental_id) != old_rental_info.rental_id >>> 0 && events.length === 0){
@@ -209,7 +209,7 @@ function editRental(req, res, next){
 	user_id = req.user.id;
 	domain_name = req.params.domain_name;
 	rental_id = req.body.rental_id;
-		
+
 	//check if rental is legit
 	if (parseFloat(rental_id) != rental_id >>> 0){
 		error.handler(req, res, "Invalid rental!", "json");
@@ -230,7 +230,7 @@ function postRentalPage(req, res, next){
 	rental_id = req.params.rental_id;
 	rental_info = req.body.rental_info;
 	rental_details = req.body.rental_details;
-	
+
 	if (old_rental_info){
 		rental_info.old_rental_info = req.session.old_rental_info;
 	}
@@ -259,11 +259,11 @@ function postRentalPage(req, res, next){
 			//stripe stuff
 			sess_price = req.session.new_rental_info.price;
 			stripeToken = req.body.stripeToken;
-			
+
 			//triple check price
 			Listing.getInfo("listings", "domain_name", domain_name, false, function(result){
 				db_price = eventPrices(rental_info.rentals, result.info[0]);
-				
+
 				if (sess_price == db_price){
 					//first check if payment was good
 					if (payCheck(stripeToken, db_price, domain_name) === true){
@@ -294,7 +294,7 @@ function postRentalPage(req, res, next){
 //helper function to do some checks for rental posting
 function rentalChecks(req, res, domain_name, user_id, type, events){
 	var bool = true;
-	
+
 	//check if listing id is legit
 	if (parseFloat(domain_name) === domain_name >>> 0){
 		bool = false;
@@ -326,37 +326,37 @@ function rentalChecks(req, res, domain_name, user_id, type, events){
 			}
 		}
 	}
-	
+
 	return bool;
 }
 
 //helper function to get price of events
 function eventPrices(events, listing_info){
 	var weeks_price = days_price = hours_price = half_hours_price = totalPrice = 0;
-		
+
 	for (var x = 0; x < events.length; x++){
 		var tempDuration = new Date(events[x].end) - new Date(events[x].start);
-		
+
 		var weeks = divided(tempDuration, 604800000);
 		tempDuration = (weeks > 0) ? tempDuration -= weeks*604800000 : tempDuration;
-		
+
 		var days = divided(tempDuration, 86400000);
 		tempDuration = (days > 0) ? tempDuration -= days*86400000 : tempDuration;
-		
+
 		var hours = divided(tempDuration, 3600000);
 		tempDuration = (hours > 0) ? tempDuration -= hours*3600000 : tempDuration;
-		
+
 		var half_hours = divided(tempDuration, 1800000);
 		tempDuration = (half_hours > 0) ? tempDuration -= half_hours*1800000 : tempDuration;
-		
+
 		weeks_price += weeks * listing_info.week_price;
 		days_price += days * listing_info.day_price;
 		hours_price += hours * listing_info.hour_price;
 		half_hours_price += half_hours * listing_info.hour_price;
 	}
-	
+
 	totalPrice = weeks_price + days_price + hours_price + half_hours_price;
-	
+
 	return totalPrice;
 }
 
@@ -368,7 +368,7 @@ function divided(num, den){
 //function to pay via stripe
 function payCheck(stripeToken, price, domain_name){
 	var bool = true;
-	
+
 	console.log("Stripe token is - " + stripeToken);
 
 	var charge = stripe.charges.create({

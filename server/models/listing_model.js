@@ -69,9 +69,13 @@ listing_model.prototype.insertSetInfo = function(database, info, callback){
 }
 
 //inserts information in database
-listing_model.prototype.insertInfo = function(database, keys, values, callback){
+listing_model.prototype.insertInfo = function(database, keys, values, special, callback){
 	console.log("Attempting to set info for database " + database);
-	this.db.query('INSERT INTO ?? (??) VALUES ?', function(result, err){
+	db_query = 'INSERT INTO ?? (??) VALUES ?';
+	if (special){
+		db_query += special;
+	}
+	this.db.query(db_query, function(result, err){
 		//listing info was changed
 		if (!err){
 			callback({
@@ -144,13 +148,13 @@ listing_model.prototype.getListingInfo = function(domain_name, callback){
 	Listing.getInfo("listings", "domain_name", domain_name, db_query, function(result){
 		if (result.state == "success" && result.info.length){
 			listing_info = result.info[0];
-			
+
 			db_query = "SELECT \
 							rentals.*, \
 							accounts.fullname, \
 							accounts.email \
 						FROM ?? JOIN accounts ON rentals.account_id = accounts.id  WHERE ?? = ? AND rentals.date != '0000-00-00 00:00:00'"
-			
+
 			//get all rental info for that listing that is not default
 			Listing.getInfo("rentals", "rentals.listing_id", result.info[0].id, db_query, function(result){
 				if (result.state == "success"){
@@ -181,10 +185,10 @@ listing_model.prototype.getListingInfo = function(domain_name, callback){
 //checks if listing exists, if account owns that rental, if rental is in listing, then returns all rental/listing info
 listing_model.prototype.getListingRental = function(domain_name, rental_id, account_id, callback){
 	listing_model = this;
-	
+
 	checkListing(domain_name, callback, function(result){
 		listing_info = result.listing_info;
-		
+
 		//is an account specified?
 		if (account_id){
 			if (rental_id){
@@ -255,7 +259,7 @@ function checkListingRental(listing_id, rental_id, callback_error, callback_succ
 				break;
 			}
 		}
-		
+
 		if (listing_needle){
 			callback_success({
 				rental_info: listing_needle
@@ -274,11 +278,11 @@ function checkListingRental(listing_id, rental_id, callback_error, callback_succ
 //gets all information and any details about the rental including any split times
 listing_model.prototype.getRental = function(rental_info, listing_info, callback){
 	listing_model = this;
-	
+
 	//get all rentals split across time slots
 	getSameDetailRentals(rental_info, callback, function(result){
 		rental_info.rentals = result.rentals;
-				
+
 		//get the rental details
 		getRentalDetails(rental_info.rental_id, callback, function(result){
 			if (result.rental_details){
@@ -311,7 +315,7 @@ function getSameDetailRentals(rental_info, callback_error, callback_success){
 		date: rental_info.date,
 		duration: rental_info.duration
 	}];
-	
+
 	//get the rental info for all rentals with same details
 	listing_model.getInfo("rentals", "same_details", rental_info.rental_id, false, function(result){
 		if (result.state == "success"){
@@ -361,12 +365,12 @@ function getRentalDetails(rental_id, callback_error, callback_success){
 //figures out the current rental
 listing_model.prototype.sendCurrentRental = function (listing_id, listing_info, callback){
 	listing_model = this;
-	
+
 	listing_model.getInfo("rentals", "listing_id", listing_id, "SELECT * from ?? WHERE ?? = ? AND duration != 0", function(result){
 		var now = new Date();
 		now = toUTC(now, now.getTimezoneOffset());
 		var rented = false;
-		
+
 		//loop through to see if any overlap
 		for (var x = 0; x < result.info.length; x++){
 			event_date = result.info[x].date + " UTC";
@@ -379,10 +383,10 @@ listing_model.prototype.sendCurrentRental = function (listing_id, listing_info, 
 				break;
 			}
 		};
-		
+
 		//rented!
 		if (rented){
-				
+
 			//is the rental the main rental? (for when multiple rentals use the same details)
 			if (rented.same_details != null){
 				var latest_rental = rented.same_details;
@@ -390,7 +394,7 @@ listing_model.prototype.sendCurrentRental = function (listing_id, listing_info, 
 			else {
 				var latest_rental = rented.rental_id;
 			}
-		
+
 			listing_model.getInfo("rental_details", "rental_id", latest_rental, false, function(result){
 				if (result.info.length == 0){
 					listing_model.sendDefaultRental(listing_id, listing_info, callback);
@@ -454,17 +458,17 @@ listing_model.prototype.sendDefaultRental = function(listing_id, listing_info, c
 listing_model.prototype.checkRentalTime = function(domain_name, events, user_id, callback){
 	listing_model = this;
 	var eventStates = [];
-	
+
 	//get listing info first
 	checkListing(domain_name, callback, function(result){
 		listing_info = result.listing_info;
-		
+
 		//if there are any events posted
-		if (events.length > 0){		
+		if (events.length > 0){
 			db_query = "SELECT * from ?? WHERE ?? = ? AND duration != 0";
-			
+
 			//get all rentals for the listing
-			listing_model.getInfo("rentals", "listing_id", listing_info.id, db_query, function(result){			
+			listing_model.getInfo("rentals", "listing_id", listing_info.id, db_query, function(result){
 				if (result.state == "success"){
 					//array of all unavailable events
 					var unavailable = [];
@@ -478,20 +482,20 @@ listing_model.prototype.checkRentalTime = function(domain_name, events, user_id,
 						var user_offset = events[y].offset;
 						var user_end = new Date(events[y].end);
 						var user_duration = user_end - user_start;
-										
+
 						//cross reference with all existing events in the database
 						for (var x = 0; x < result.info.length; x++){
-							
+
 							//make sure we dont check the default ones
 							if (result.info[x].date != "0000-00-00 00:00:00"){
-					
+
 								//existing db date, already in UTC
 								var db_utc = new Date(result.info[x].date + " UTC");
 								var db_duration = result.info[x].duration;
-								
+
 								//UTC magic
 								var user_utc = toUTC(user_start, user_offset);
-														
+
 								//check if legit dates
 								if (!isNaN(db_utc) && !isNaN(user_utc)){
 									//check if its available
@@ -503,11 +507,11 @@ listing_model.prototype.checkRentalTime = function(domain_name, events, user_id,
 								}
 							}
 						}
-						
+
 						events[y].availability = availability;
 						eventStates.push(events[y]);
 					}
-					
+
 					//send the availability of all events posted
 					if (eventStates.length){
 						callback({
@@ -519,7 +523,7 @@ listing_model.prototype.checkRentalTime = function(domain_name, events, user_id,
 						});
 					}
 				}
-				
+
 				//something went wrong with getting rentals for a listing
 				else {
 					callback({
@@ -546,9 +550,9 @@ listing_model.prototype.checkRentalTime = function(domain_name, events, user_id,
 listing_model.prototype.newRental = function(domain_name, user_id, new_rental_info, new_rentals, rental_details, callback){
 	listing_model = this;
 	var error = false;
-	
+
 	//first double check that the time is available
-	listing_model.checkRentalTime(domain_name, new_rentals, user_id, function(result){		
+	listing_model.checkRentalTime(domain_name, new_rentals, user_id, function(result){
 		if (result.state == "success" && result.unavailable.length == 0){
 			var tempStart = new Date(new_rentals[0].start);
 			var tempEnd = new Date(new_rentals[0].end);
@@ -561,24 +565,24 @@ listing_model.prototype.newRental = function(domain_name, user_id, new_rental_in
 				date: start,
 				duration: end - start
 			};
-			
+
 			//if we're adding more time slots to an existing event, no need to create rental details for it
 			var editing = new_rental_info.old_rental_info ? true : false;
-			
+
 			insert.same_details = editing ? new_rental_info.old_rental_info.rental_id : undefined;
-			
+
 			//try to create a new rental
 			listing_model.insertSetInfo("rentals", insert, function(result){
 				//the rental id of the newly created rental
 				insertId = editing ? new_rental_info.old_rental_info.rental_id : result.insertId;
-				
+
 				//rental succeeded
 				if (result.state == "success"){
 					//events are split across multiple times
 					if (new_rentals.length > 1){
 						var keys = ["account_id", "listing_id", "same_details", "type", "date", "duration"];
 						var values = [];
-						
+
 						for (var x = 1; x < new_rentals.length; x++){
 							var tempValue = [];
 							var tempStart = new Date(new_rentals[x].start);
@@ -586,7 +590,7 @@ listing_model.prototype.newRental = function(domain_name, user_id, new_rental_in
 							var start = toUTC(tempStart, new_rentals[x].offset);
 							var end = toUTC(tempEnd, new_rentals[x].offset);
 							var duration = end - start;
-							
+
 							tempValue.push(insert.account_id);
 							tempValue.push(insert.listing_id);
 							tempValue.push(insertId);
@@ -595,8 +599,8 @@ listing_model.prototype.newRental = function(domain_name, user_id, new_rental_in
 							tempValue.push(duration);
 							values.push(tempValue);
 						}
-												
-						listing_model.insertInfo("rentals", keys, values, function(result){
+
+						listing_model.insertInfo("rentals", keys, values, false, function(result){
 							if (result.state == "success"){
 								listing_model.newRentalDetails(insertId, rental_details, editing, callback);
 							}
@@ -630,29 +634,11 @@ listing_model.prototype.newRentalDetails = function(rental_id, rental_details, e
 	listing_model = this;
 
 	var keys = ["rental_id", "text_key", "text_value"];
-	var values = [];
-	
-	if (rental_details && !editing){
-		for (var x = 0; x < rental_details.length; x++){
-			var tempValue = [];
-			tempValue.push(rental_id);
-			for (var y in rental_details[x]){
-				if (rental_details[x][y] == "css"){
-					tempValue.push("css");
-					tempValue.push("body {background:url(" + sanitizeHtml(rental_details[x][1]) + ") no-repeat center bottom fixed; }");
-					break;
-				}
-				else {
-					//make sure to sanitize the HTML
-					tempValue.push(sanitizeHtml(rental_details[x][y]));
-				}
-			}
-			
-			values.push(tempValue);
-		}
-		
+	var new_rental_details = formatRentalDetails(rental_id, rental_details);
+
+	if (new_rental_details && !editing){
 		//insert the rental details!
-		listing_model.insertInfo("rental_details", keys, values, function(result){
+		listing_model.insertInfo("rental_details", keys, new_rental_details, false, function(result){
 			if (result.state == "success"){
 				callback({
 					state: "success",
@@ -676,10 +662,39 @@ listing_model.prototype.newRentalDetails = function(rental_id, rental_details, e
 	}
 }
 
+//helper function to format rental details
+function formatRentalDetails(rental_id, rental_details){
+	if (rental_details){
+		var values = [];
+
+		for (var x = 0; x < rental_details.length; x++){
+			var tempValue = [];
+			tempValue.push(rental_id);
+			for (var y in rental_details[x]){
+				if (rental_details[x][y] == "css"){
+					tempValue.push("css");
+					tempValue.push("body { background:url(" + sanitizeHtml(rental_details[x][1]) + ") no-repeat center center / cover fixed; }");
+					break;
+				}
+				else {
+					//make sure to sanitize the HTML
+					tempValue.push(sanitizeHtml(rental_details[x][y]).replace(/\r?\n|\r/,""));
+				}
+			}
+
+			values.push(tempValue);
+		}
+		return values;
+	}
+	else {
+		return false;
+	}
+}
+
 //function to delete existing rental info and details and add new ones
 listing_model.prototype.setRental = function(rental_id, rental_info, rental_details, callback){
 	listing_model = this;
-	
+
 	listing_model.getInfo("rentals", "rental_id", rental_id, false, function(result){
 		//rental exists!
 		if (result.state == "success"){
@@ -688,20 +703,20 @@ listing_model.prototype.setRental = function(rental_id, rental_info, rental_deta
 			if (rental_info.same_details == "0" || rental_info.same_details == ""){
 				rental_info.same_details = null;
 			}
-			
+
 			//change local to UTC
 			var tempDate = new Date(rental_info.date);
 			rental_info.date = toUTC(tempDate, rental_info.offset);
-			
+
 			//delete unnecessary info for setting into db
 			delete rental_info.offset;
 			delete rental_info.listing_info;
 			delete rental_info.rentals;
 			delete rental_info.old_rental_info;
-						
+
 			Listing.setInfo("rentals", "rental_id", rental_id, rental_info, false, function(result){
 				if (result.state == "success"){
-					//delete all existing rental data and replace				
+					//delete all existing rental data and replace
 					changeRentalDetails(rental_id, rental_details, callback);
 				}
 				else {
@@ -717,30 +732,44 @@ listing_model.prototype.setRental = function(rental_id, rental_info, rental_deta
 				state: "error",
 				description: "Invalid rental!"
 			});
-		}		
+		}
 	});
 }
 
-//function to delete all existing rental data and replace		
-function changeRentalDetails(rental_id, rental_details, callback){		
-	listing_model.deleteInfo("rental_details", "rental_id", rental_id, function(result){
-		if (result.state == "success"){
-			listing_model.newRentalDetails(rental_id, rental_details, false, callback);
-		}
-		else {
-			callback({
-				state: "error",
-				description: "Rental detail deletion error!"
-			});
-		}
-	});
+//function to delete all existing rental data and replace
+function changeRentalDetails(rental_id, rental_details, callback){
+	var keys = ["rental_id", "text_key", "text_value"];
+	var formatted_details = formatRentalDetails(rental_id, rental_details);
+
+	if (formatted_details){
+		listing_model.insertInfo("rental_details", keys, formatted_details, " ON DUPLICATE KEY UPDATE text_value=VALUES(text_value)", function(result){
+			if (result.state == "success"){
+				callback({
+					state: "success",
+					rental_id: rental_id
+				});
+			}
+			else {
+				callback({
+					state: "error",
+					description: "Invalid rental details!"
+				});
+			}
+		});
+	}
+	else {
+		callback({
+			state: "error",
+			description: "Invalid rental details!"
+		})
+	}
 }
 
 //function to change rental type
 listing_model.prototype.changeRentalType = function(rental_id, callback){
 	Listing.setInfo("rentals", "rental_id", old_rental_info.rental_id, {type: type}, false, function(result){
 		if (result.state == "success"){
-			
+
 		}
 		else {
 			error.handler(req, res, result.description);
