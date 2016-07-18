@@ -78,31 +78,11 @@ table {
 
 /* BUTTONS */
 
-#landing_button {
-  margin-top: 3.0em;
-  text-align: center;
-}
-
-#landing_button a {
-  font-size: 1.3em;
-  letter-spacing: 1px;
-  padding: 10px;
-}
-
-#main_button {
-  margin-top: 2.0em;
-  text-align: center;
-}
-
-#main_button a {
-  padding: 10px;
-}
-
 .clear-button a {
   border-radius: 3px;
   border: 1px solid #bdbdbd;
   color: #bdbdbd;
-  display: inline-block;
+  font-family: 'Share Tech';
   font-size: 0.9em;
   font-weight: 400;
   transition: background-color: 0.25s;
@@ -120,6 +100,7 @@ table {
   background-color: #3CBC8D;
   border-radius: 3px;
   color: #efefef;
+  font-family: 'Share Tech';
   font-size: 1.2em;
   font-weight: 400;
   transition: background-color 0.25s;
@@ -141,6 +122,7 @@ table {
   font-family: 'Roboto Condensed';
   height: 60px;
   margin: 0;
+  opacity: 0.9;
   overflow: hidden;
   padding: 0;
   position: fixed;
