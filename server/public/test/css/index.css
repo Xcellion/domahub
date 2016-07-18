@@ -88,39 +88,6 @@ table {
   padding: 10px;
 }
 
-.clear-button a {
-  border-radius: 3px;
-  border: 1px solid #bdbdbd;
-  color: #bdbdbd;
-  font-size: 0.9em;
-  font-weight: 400;
-  transition: background-color: 0.25s;
-  -webkit-transition: background-color 0.25s;
-}
-
-.clear-button a:hover:not(.active) {
-  background-color: #3CBC8D;
-  border: 1px solid #3CBC8D;
-  color: #ffffff;
-  cursor: pointer;
-}
-
-.solid-button a {
-  background-color: #3CBC8D;
-  border-radius: 3px;
-  color: #efefef;
-  font-size: 1.2em;
-  font-weight: 400;
-  transition: background-color 0.25s;
-  -webkit-transition: background-color 0.25s;
-}
-
-.solid-button a:hover:not(.active) {
-  background-color: #FF8751;
-  color: #ffffff;
-  cursor: pointer;
-}
-
 /********************************************************* LANDING *********************************************************/
 
 #landing {
