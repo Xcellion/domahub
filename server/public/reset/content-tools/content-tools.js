@@ -5267,10 +5267,11 @@
   ContentTools = {
     Tools: {},
     CANCEL_MESSAGE: 'Your changes have not been saved, do you really want to lose them?'.trim(),
-    DEFAULT_TOOLS: [['bold', 'italic', 'link', 'align-left', 'align-center', 'align-right'], ['heading', 'subheading', 'paragraph', 'unordered-list', 'ordered-list', 'table', 'indent', 'unindent', 'line-break'], ['image', 'video', 'preformatted'], ['undo', 'redo', 'remove']],
+    // DEFAULT_TOOLS: [['bold', 'italic', 'link', 'align-left', 'align-center', 'align-right'], ['heading', 'subheading', 'paragraph', 'unordered-list', 'ordered-list', 'table', 'indent', 'unindent', 'line-break'], ['image', 'video', 'preformatted'], ['undo', 'redo', 'remove']],
+    DEFAULT_TOOLS: [['bold', 'italic', 'link', 'align-left', 'align-center', 'align-right'], ['heading', 'subheading', 'paragraph', 'unordered-list', 'ordered-list', 'table', 'indent', 'unindent', 'line-break'], ['undo', 'redo', 'remove']],
     DEFAULT_VIDEO_HEIGHT: 300,
     DEFAULT_VIDEO_WIDTH: 400,
-    HIGHLIGHT_HOLD_DURATION: 2000,
+    HIGHLIGHT_HOLD_DURATION: 500,
     INSPECTOR_IGNORED_ELEMENTS: ['Fixture', 'ListItemText', 'Region', 'TableCellText'],
     IMAGE_UPLOADER: null,
     MIN_CROP: 10,

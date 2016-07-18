@@ -182,6 +182,20 @@ listing_model.prototype.getListingInfo = function(domain_name, callback){
 	});
 }
 
+
+//checks if listing exists, if account owns that rental, if rental is in listing, then sets listing info
+listing_model.prototype.setListingAccount = function(domain_name, account_id, callback){
+	listing_model = this;
+
+	checkListing(domain_name, callback, function(result){
+		listing_id = result.listing_info.id;
+
+		checkAccountOwnership(account_id, "listings", listing_id, callback, function(result){
+			console.log(result);//todo
+		});
+	});
+}
+
 //checks if listing exists, if account owns that rental, if rental is in listing, then returns all rental/listing info
 listing_model.prototype.getListingRental = function(domain_name, rental_id, account_id, callback){
 	listing_model = this;
@@ -192,7 +206,7 @@ listing_model.prototype.getListingRental = function(domain_name, rental_id, acco
 		//is an account specified?
 		if (account_id){
 			if (rental_id){
-				checkAccountRental(account_id, rental_id, callback, function(result){
+				checkAccountOwnership(account_id, "rentals", rental_id, callback, function(result){
 					checkListingRental(listing_info.id, rental_id, callback, function(result){
 						rental_info = result.rental_info;
 						listing_model.getRental(rental_info, listing_info, callback);
@@ -232,10 +246,14 @@ function checkListing(domain_name, callback_error, callback_success){
 }
 
 //function to check that account owns a certain rental
-function checkAccountRental(account_id, rental_id, callback_error, callback_success){
-	listing_model.getInfo("rentals", "rental_id", rental_id, false, function(result){
-		if (result.info[0].account_id == account_id){
-			callback_success();
+function checkAccountOwnership(account_id, database, id_to_check, callback_error, callback_success){
+	db = database == "rentals" ? "rentals" : "listings";
+	db_col = database == "rentals" ? "rental_id" : "id";
+	listing_model.getInfo(db, db_col, id_to_check, false, function(result){
+		if (result.info.length > 0){
+			if (result.info[0].account_id == account_id){
+				callback_success();
+			}
 		}
 		//rental does not belong to this listing!
 		else {

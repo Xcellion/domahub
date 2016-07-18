@@ -1,4 +1,5 @@
 var database;
+var url = require("url");
 
 module.exports = {
 	handler: handler
@@ -40,7 +41,7 @@ function handler(req, res, message, type) {
 					console.log(message);
 					break;
 			}
-			
+
 			req.session.redirectBack = redirectBack;
 
 			console.log(message + " Sending back to " + redirectTo);

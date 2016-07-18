@@ -23,10 +23,10 @@
 		</script>
 		<link rel="icon" type="image/ico" href="/images/favicon.ico">
 	</head>
-	
+
 	<body>
 		<div class="body_wrapper">
-		
+
 			<!-- checks if user is logged in -->
 			<% if (typeof user == "undefined") {%>
 				<div id="form_wrapper">
@@ -39,61 +39,63 @@
 						<a id="signup" href="/signup">Create an account</a>
 					</div>
 				</div>
-			
+
 			<!-- user is logged in! -->
 			<% } else {%>
 				<p>Logged in: <%= user.email %></p>
 				<p><a href="/profile">Profile</a></p>
 				<p><a href="/logout">Log Out</a></p>
 			<% } %>
-			
+
 			<a href="/">Home</a>
-			
+
 			<!-- information about the current listing -->
 			<% if (typeof listing_info != "undefined") {%>
 				<table>
 					<th>Date Created</th>
 					<th>Domain Name</th>
+					<th>Description</th>
 					<th>Owner Email</th>
 					<th>Owner Name</th>
 					<th>Price Type</th>
 					<th>Set Price</th>
-					<tr>  
-						<td><%= listing_info.date_created %></td>  
-						<td><%= listing_info.domain_name %></td>  
+					<tr>
+						<td><%= listing_info.date_created %></td>
+						<td><%= listing_info.domain_name %></td>
+						<td><%= listing_info.description %></td>
 						<td><%= listing_info.email %></td>
 						<td><%= listing_info.fullname %></td>
 						<td><%= listing_info.price_type %></td>
 						<td><%= listing_info.set_price %></td>
-					</tr>                                   
+					</tr>
 				</table>
 			<% } %>
-			
+
 			<!-- any messages from the server -->
 			<div class="message" id="message">
 				<% if (typeof message != "undefined") {%>
 					<%= message %>
 				<% } else {%>
 					Welcome!
-				<% } %>				
+				<% } %>
 			</div>
-			
+
 			<div id="price">$0</div>
 
 			<div id="form_wrapper">
-				<form id="listing_form">
+				<form id="listing_form" action="/listing/<%=listing_info.domain_name%>" method="post">
 					<input name="type" value="0" type="radio" class="type_input" id="radio_0_input" checked="checked">
 					<input name="type" value="1" type="radio" class="type_input" id="radio_1_input">
 					<input id="submit" type="submit" value="Rent now!">
 				</form>
 			</div>
-			
+
 			<input type="button" id="remove_events" value="Remove all new events"></input>
-			
+
 			<div id="calendar"></div>
-			
+
 		</div>
 
 	</body>
-	
+
 </html>
