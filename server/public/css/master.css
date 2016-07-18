@@ -1,0 +1,258 @@
+/* GLOBAL STUFF */
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+  border: 0;
+  font: inherit;
+  margin: 0;
+  padding: 0;
+  text-decoration: none;
+  vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure,
+footer, header, hgroup, menu, nav, section {
+  display: block;
+}
+body {
+  line-height: 1;
+}
+ol, ul {
+  list-style: none;
+}
+blockquote, q {
+  quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+  content: '';
+  content: none;
+}
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+.noselect {
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+/* MISC */
+.webbi_text {
+  font-family: monospace;
+  font-size: 1.2em;
+  font-weight: bold;
+}
+
+.construction {
+  background-color: #3CBC8D;
+  color: #ffffff;
+  font-family: 'Roboto Condensed';
+  padding: 5px;
+  position: absolute;
+  text-transform: uppercase;
+  top: 60px;
+}
+
+/* PAGE BREAK ELEMENTS */
+
+#linebreak {
+  border-bottom: 1px solid #dddddd;
+  margin: 4em auto 4em auto;
+  width: 25%;
+}
+
+/* BUTTONS */
+
+#landing_button {
+  margin-top: 3.0em;
+  text-align: center;
+}
+
+#landing_button a {
+  font-size: 1.3em;
+  letter-spacing: 1px;
+  padding: 10px;
+}
+
+#main_button {
+  margin-top: 2.0em;
+  text-align: center;
+}
+
+#main_button a {
+  padding: 10px;
+}
+
+.clear-button a {
+  border-radius: 3px;
+  border: 1px solid #bdbdbd;
+  color: #bdbdbd;
+  display: inline-block;
+  font-size: 0.9em;
+  font-weight: 400;
+  transition: background-color: 0.25s;
+  -webkit-transition: background-color 0.25s;
+}
+
+.clear-button a:hover:not(.active) {
+  background-color: #3CBC8D;
+  border: 1px solid #3CBC8D;
+  color: #ffffff;
+  cursor: pointer;
+}
+
+.solid-button a {
+  background-color: #3CBC8D;
+  border-radius: 3px;
+  color: #efefef;
+  font-size: 1.2em;
+  font-weight: 400;
+  transition: background-color 0.25s;
+  -webkit-transition: background-color 0.25s;
+}
+
+.solid-button a:hover:not(.active) {
+  background-color: #FF8751;
+  color: #ffffff;
+  cursor: pointer;
+}
+
+/* NAVBAR */
+
+#navbar {
+  align-items: center;
+  background-color: #ffffff;
+  display: flex;
+  font-family: 'Roboto Condensed';
+  height: 60px;
+  margin: 0;
+  overflow: hidden;
+  padding: 0;
+  position: fixed;
+  width: 100%;
+}
+
+.w3bbi_icon {
+  border-right: 1px solid #cccccc;
+  box-sizing: border-box;
+  color: #3CBC8D;
+  font-family: 'Share Tech';
+  font-size: 1.5em;
+  font-weight: bold;
+  padding: 0 15px 0 15px;
+}
+
+.w3bbi_icon:hover:not(.active) {
+  opacity: 0.9;
+  cursor: pointer;
+}
+
+.search_icon {
+  box-sizing: border-box;
+  color: #525255;
+  padding: 0 10px 0 10px;
+}
+
+#searchbar {
+  flex: 1;
+  order: 1;
+}
+
+input {
+  border: none;
+  box-sizing: border-box;
+  color: #525255;
+  font-family: 'Share Tech';
+  font-size: 1.0em;
+  outline: none;
+  width: 100%;
+}
+
+input:focus {
+}
+
+#list {
+  order: 2;
+}
+
+#rent {
+  order: 3;
+}
+
+#login {
+  order: 4;
+}
+
+.nav-button {
+  border-right: 1px solid #cccccc;
+  box-sizing: border-box;
+  padding: 0 15px 0 15px;
+}
+
+.nav-button a {
+  color: #525255;
+  padding: 5px;
+}
+
+.nav-button a:hover:not(.active) {
+  border-top: 1px solid #3CBC8D;
+  cursor: pointer;
+}
+
+
+/* FOOTER */
+
+#footer {
+  background-color: #2a2a2a;;
+  font-family: 'Roboto Condensed', sans-serif;
+  height: 100%;
+  text-align: center;
+  width: 100%;
+}
+
+.footer_list {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  list-style-type: none;
+  overflow: hidden;
+  padding-top: 2.0em;
+}
+
+.footer_item {
+  display: inline-block;
+}
+
+.footer_item a {
+  color: #efefef;
+  padding: 10px;
+  font-size: 0.9em;
+  text-decoration: none;
+}
+
+.footer_item a:hover {
+  color: #FF8751;
+  cursor: pointer;
+}
+
+.company_text {
+  color: #888888;
+  font-size: 0.8em;
+  margin-bottom: 1.0em;
+  margin-top: 1.0em;
+}
