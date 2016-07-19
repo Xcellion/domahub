@@ -1,4 +1,4 @@
-/* GLOBAL STUFF */
+/*************************** GLOBAL ***************************/
 html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
 a, abbr, acronym, address, big, cite, code,
@@ -51,7 +51,7 @@ table {
   user-select: none;
 }
 
-/* MISC */
+/*************************** MISC ***************************/
 .webbi_text {
   font-family: monospace;
   font-size: 1.2em;
@@ -68,7 +68,7 @@ table {
   top: 60px;
 }
 
-/* PAGE BREAK ELEMENTS */
+/*************************** LINEBREAK ***************************/
 
 #linebreak {
   border-bottom: 1px solid #dddddd;
@@ -76,13 +76,13 @@ table {
   width: 25%;
 }
 
-/* BUTTONS */
+/*************************** BUTTONS ***************************/
 
 .clear-button a {
   border-radius: 3px;
   border: 1px solid #bdbdbd;
   color: #bdbdbd;
-  font-family: 'Share Tech';
+  font-family: 'Roboto Condensed';
   font-size: 0.9em;
   font-weight: 400;
   transition: background-color: 0.25s;
@@ -90,8 +90,8 @@ table {
 }
 
 .clear-button a:hover:not(.active) {
-  background-color: #3CBC8D;
-  border: 1px solid #3CBC8D;
+  background-color: #FF8751;
+  border: 1px solid #FF8751;
   color: #ffffff;
   cursor: pointer;
 }
@@ -100,7 +100,7 @@ table {
   background-color: #3CBC8D;
   border-radius: 3px;
   color: #efefef;
-  font-family: 'Share Tech';
+  font-family: 'Roboto Condensed';
   font-size: 1.2em;
   font-weight: 400;
   transition: background-color 0.25s;
@@ -113,7 +113,7 @@ table {
   cursor: pointer;
 }
 
-/* NAVBAR */
+/*************************** NAVBAR ***************************/
 
 #navbar {
   align-items: center;
@@ -127,6 +127,7 @@ table {
   padding: 0;
   position: fixed;
   width: 100%;
+  z-index: 1;
 }
 
 .w3bbi_icon {
@@ -165,9 +166,6 @@ input {
   width: 100%;
 }
 
-input:focus {
-}
-
 #list {
   order: 2;
 }
@@ -196,8 +194,7 @@ input:focus {
   cursor: pointer;
 }
 
-
-/* FOOTER */
+/*************************** FOOTER ***************************/
 
 #footer {
   background-color: #2a2a2a;;

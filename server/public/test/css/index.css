@@ -1,69 +1,9 @@
-/********************************************************* GLOBAL STUFF *********************************************************/
-html, body, div, span, applet, object, iframe,
-h1, h2, h3, h4, h5, h6, p, blockquote, pre,
-a, abbr, acronym, address, big, cite, code,
-del, dfn, em, img, ins, kbd, q, s, samp,
-small, strike, strong, sub, sup, tt, var,
-b, u, i, center,
-dl, dt, dd, ol, ul, li,
-fieldset, form, label, legend,
-table, caption, tbody, tfoot, thead, tr, th, td,
-article, aside, canvas, details, embed,
-figure, figcaption, footer, header, hgroup,
-menu, nav, output, ruby, section, summary,
-time, mark, audio, video {
-  border: 0;
-  font: inherit;
-  margin: 0;
-  padding: 0;
-  text-decoration: none;
-  vertical-align: baseline;
-}
-/* HTML5 display-role reset for older browsers */
-article, aside, details, figcaption, figure,
-footer, header, hgroup, menu, nav, section {
-  display: block;
-}
-body {
-  line-height: 1;
-}
-ol, ul {
-  list-style: none;
-}
-blockquote, q {
-  quotes: none;
-}
-blockquote:before, blockquote:after,
-q:before, q:after {
-  content: '';
-  content: none;
-}
-table {
-  border-collapse: collapse;
-  border-spacing: 0;
-}
-.noselect {
-  -khtml-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  -webkit-touch-callout: none;
-  -webkit-user-select: none;
-  user-select: none;
-}
-
 /********************************************************* MISC*********************************************************/
 
-.webbi_text {
+.w3bbi_kit {
   font-family: monospace;
   font-size: 1.2em;
   font-weight: bold;
-}
-/********************************************************* LINE BREAK *********************************************************/
-
-#linebreak {
-  border-bottom: 1px solid #dddddd;
-  margin: 4em auto 4em auto;
-  width: 25%;
 }
 
 /********************************************************* BUTTONS *********************************************************/
@@ -100,14 +40,22 @@ table {
   width: 100%;
 }
 
+#landing_img {
+  background-image: url('http://www.showwwcase.nl/img/bg.jpg');
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  height: 100%;
+}
+
 #landing_text {
   padding: 4.0em;
 }
 
 .eye_text {
   color: #3CBC8D;
+  font-family: 'Source Sans Pro', sans-serif;
   font-size: 4.0em;
-  font-weight: 400;
 }
 
 .flavor_text {
@@ -115,33 +63,6 @@ table {
   font-size: 1.8em;
   font-weight: 300;
 }
-
-/*form {
-  text-align: center;
-  margin-top: 3.0em;
-}
-
-input {
-  background-color: #2a2a2a;
-  border: none;
-  border-left: 1px solid #3CBC8D;
-  box-sizing: border-box;
-  color: #bdbdbd;
-  font-family: 'Share Tech';
-  font-size: 1.0em;
-  outline: none;
-  padding: 5px;
-  text-align: center;
-  transition: border-bottom 0.75s ease-in-out, width 0.75s ease-in-out;
-  -webkit-transition: border-bottom 0.75s ease-in-out, width 0.75s ease-in-out;
-  width: 10%;
-}
-
-input:focus {
-  border: none;
-  border-bottom: 1px solid #3CBC8D;
-  width: 15%;
-}*/
 
 /********************************************************* MAIN *********************************************************/
 
@@ -154,25 +75,96 @@ input:focus {
 }
 
 #main h1 {
-  display: inline-block;
-  font-size: 2.0em;
+  font-size: 2.5em;
   font-weight: 300;
-  padding: 0.25em;
+  padding-bottom: 0.25em;
 }
 
 #main h2 {
-  display: inline-block;
-  font-size: 1.4em;
-  font-weight: bold;
-  padding: 0.25em;
+  font-size: 1.5em;
+  padding-bottom: 0.25em;
 }
 
-#main p {
+.filler_text p {
   color: #484848;
-  font-size: 1.2em;
+  font-size: 1.3em;
+  font-weight: 300;
+  padding: 15px;
+}
+
+.main_sect p {
+  color: #484848;
+  font-size: 1.3em;
+  font-weight: 300;
+  padding: 50px;
+}
+
+.filler_text {
+  display: flex;
+  justify-content: center;
+  padding: 100px 0 0 0;
+  width: 100%;
+}
+
+.main_sect {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  padding: 50px 0 50px 0;
+  width: 100%;
+}
+
+.column-1 {
+  text-align: center;
+  width: 50%;
+}
+
+.column-2 {
+  line-height: 1.4;
+  width: 25%;
+}
+
+.main_text1 {
+  order: 1;
+}
+
+.main_img1 {
+  order: 2;
+}
+
+.main_text2 {
+  order: 4;
+}
+
+.main_img2 {
+  order: 3;
+}
+
+.fa-caret-right {
+  color: #FF8751;
+  padding-left: 5px;
+}
+
+.main_link {
+  padding: 0 50px 0 50px;
+}
+
+.main_link a {
+  color: #FF8751;
+  opacity: 0.9;
+  text-decoration: none;
+}
+
+.main_link a:hover:not(.active) {
+  opacity: 1.0;
 }
 
 .header {
+  margin-bottom: -40px;
+  text-align: center;
+}
+
+/*.header {
   text-align: center;
 }
 
@@ -203,7 +195,7 @@ input:focus {
   flex-direction: row;
   justify-content: space-around;
   width: 100%;
-}
+}*/
 
 @media screen and (max-width:1175px) {
 
