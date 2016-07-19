@@ -2,6 +2,7 @@ var	account_model = require('../models/account_model.js'),
 	listing_model = require('../models/listing_model.js');
 
 const url = require("url");
+const val_url = require("valid-url");
 
 module.exports = function(app, db, auth, e){
 	Auth = auth;
@@ -54,7 +55,7 @@ function getProfile(req, res){
 //posts new listing information to the profile
 function postProfile(req, res){
 	user = req.user;
-	domain_name = req.body.domain_name;
+	domain_name = val_url.isUri(req.body.domain_name) ? req.body.domain_name : false;
 	description = req.body.description;
 
 	//check if user id is legit

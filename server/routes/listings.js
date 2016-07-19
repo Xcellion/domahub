@@ -1,4 +1,9 @@
 var stripe = require("stripe")("sk_test_PHd0TEZT5ytlF0qCNvmgAThp");
+var request = require("request");
+var https = require("https");
+var dns = require("dns");
+var url = require("url");
+var val_url = require("valid-url");
 
 var	account_model = require('../models/account_model.js'),
 	listing_model = require('../models/listing_model.js'),
@@ -14,20 +19,57 @@ module.exports = function(app, db, auth, e){
 	//function to check if logged in
 	isLoggedIn = auth.isLoggedIn;
 
-	//w3bbi pages
-	app.get('/listing/:domain_name', getListingPage);
-	app.get('/listing/:domain_name/:rental_id', isLoggedIn, getRentalPage);
+	app.get('/listing', getSearchListing);
+	app.get('/listing/:domain_name', getListing);
+	app.get('/listing/:domain_name/:rental_id', isLoggedIn, getRental);
 
-	//w3bbi posts
-	app.post('/listing/:domain_name/rent', isLoggedIn, postListingPage);
+	app.post("/listing", postSearchListing);
+	app.post('/listing/:domain_name/rent', isLoggedIn, postListing);
 	app.post('/listing/:domain_name/edit', isLoggedIn, editRental);
-	app.post('/listing/:domain_name/:rental_id', isLoggedIn, postRentalPage);
+	app.post('/listing/:domain_name/:rental_id', isLoggedIn, postRental);
 }
 
 //----------------------------------------------------------------w3bbi pages----------------------------------------------------------------
 
+//listing page to search for domain name availability
+function getSearchListing(req, res, next){
+	res.render("search_listing");
+}
+
+//search for a specific domain name
+function postSearchListing(req, res, next){
+	domain_name = val_url.isUri(req.body.domain_name) ? url.parse(req.body.domain_name).host : false;
+	agentOptions = {
+		host: 'www.example.com',
+		port: '443',
+		path: '/',
+		rejectUnauthorized: false
+	};
+
+	agent = new https.Agent(agentOptions);
+
+	if (domain_name){
+		request({
+			url: 'https://api.ote-godaddy.com/v1/domains/available?domain='+ domain_name + '&checkType=FAST&forTransfer=false',
+			headers: {
+				"Accept" : "application/json"
+			},
+			agent: agent
+		}, function (error, response, body) {
+			if (!error && response.statusCode == 200) {
+				res.json(JSON.parse(body).available);
+			}
+			else {
+				console.log(error);
+			}
+		})
+	}
+
+}
+
+
 //gets the listing info and sends user to the listing page
-function getListingPage(req, res, next) {
+function getListing(req, res, next) {
 	domain_name = req.params.domain_name
 
 	//we dont accept listing ids, only domain names
@@ -69,7 +111,7 @@ function getListingPage(req, res, next) {
 }
 
 //gets the rental/listing info and sends user to the rental edit page
-function getRentalPage(req, res, next){
+function getRental(req, res, next){
 	account_id = req.user.id;
 	domain_name = req.params.domain_name;
 	rental_id = req.params.rental_id;
@@ -134,7 +176,7 @@ function getRentalPage(req, res, next){
 //----------------------------------------------------------------w3bbi post pages----------------------------------------------------------------
 
 //check if rental time is legit, price is legit, and send user to rental edit page
-function postListingPage(req, res, next){
+function postListing(req, res, next){
 	domain_name = req.params.domain_name;
 	user_id = req.user.id;
 	type = req.body.type;
@@ -223,7 +265,7 @@ function editRental(req, res, next){
 }
 
 //function to edit a rental or create a new rental
-function postRentalPage(req, res, next){
+function postRental(req, res, next){
 	user_id = req.user.id;
 
 	domain_name = req.params.domain_name;
