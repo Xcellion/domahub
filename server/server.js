@@ -13,6 +13,8 @@ var express = require('express'),
 	db = require('./lib/database.js'),
 	error = require('./lib/error.js');
 
+db.connect();
+
 require('./lib/auth.js').auth(db, passport, error);
 
 var auth = require('./lib/auth.js');

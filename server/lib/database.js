@@ -1,6 +1,5 @@
 var mysql = require('mysql'),
-	os = require('os'),
-	connection;
+	os = require('os');
 
 var pool = mysql.createPool({
 		host: 'p3plcpnl0172.prod.phx3.secureserver.net',
@@ -19,10 +18,15 @@ module.exports = {
 	//grab a connection from the pool, then run SQL query
 	query: function(custom_query, callback, post){
 		pool.getConnection(function(err, con){
-			con.query(custom_query, post, function(err, result){
-				con.release();
-				callback(result, err);
-			});
+			if (!err){
+				con.query(custom_query, post, function(err, result){
+					con.release();
+					callback(result, err);
+				});
+			}
+			else {
+				callback(false, err);
+			}
 		});
 	}
 };
@@ -34,11 +38,11 @@ function database_connect() {
 		if (err){
 			console.log(err);
 			console.log("MYSQL pool connection error!");
-			setTimeout(database_connect, 2000);
+
+		//	setTimeout(database_connect, 2000);
 		}
 		else {
 			console.log("Successfully connected to MYSQL database!");
-			connection = con;
 		}
 	});
 

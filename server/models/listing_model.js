@@ -22,6 +22,12 @@ listing_model.prototype.getAllListings = function(callback){
 				listings : result
 			});
 		}
+		else {
+			callback({
+				state: "error",
+				description: err
+			})
+		}
 	});
 }
 

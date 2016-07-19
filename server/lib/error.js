@@ -16,7 +16,8 @@ function handler(req, res, message, type) {
 			break;
 		default:
 			var redirectTo = req.header("Referer") || "/login";
-			var redirectBack = req.path;
+			var redirectBack = req.session.redirectBack || req.path;
+			req.session.redirectBack = redirectBack;
 			req.session.message = message;
 
 			switch (message){
@@ -41,8 +42,6 @@ function handler(req, res, message, type) {
 					console.log(message);
 					break;
 			}
-
-			req.session.redirectBack = redirectBack;
 
 			console.log(message + " Sending back to " + redirectTo);
 			res.redirect(redirectTo);

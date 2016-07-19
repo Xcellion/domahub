@@ -1,7 +1,5 @@
 var stripe = require("stripe")("sk_test_PHd0TEZT5ytlF0qCNvmgAThp");
 var request = require("request");
-var https = require("https");
-var dns = require("dns");
 var url = require("url");
 var val_url = require("valid-url");
 
@@ -33,36 +31,43 @@ module.exports = function(app, db, auth, e){
 
 //listing page to search for domain name availability
 function getSearchListing(req, res, next){
-	res.render("search_listing");
+	res.render("listings");
+}
+
+function addhttp(url) {
+    if (!/^(?:f|ht)tps?\:\/\//.test(url)) {
+        url = "http://" + url;
+    }
+    return url;
 }
 
 //search for a specific domain name
 function postSearchListing(req, res, next){
-	domain_name = val_url.isUri(req.body.domain_name) ? url.parse(req.body.domain_name).host : false;
-	agentOptions = {
-		host: 'www.example.com',
-		port: '443',
-		path: '/',
-		rejectUnauthorized: false
-	};
-
-	agent = new https.Agent(agentOptions);
+	domain_name = url.parse(addhttp(req.body.domain_name)).host;
 
 	if (domain_name){
-		request({
-			url: 'https://api.ote-godaddy.com/v1/domains/available?domain='+ domain_name + '&checkType=FAST&forTransfer=false',
-			headers: {
-				"Accept" : "application/json"
-			},
-			agent: agent
-		}, function (error, response, body) {
-			if (!error && response.statusCode == 200) {
-				res.json(JSON.parse(body).available);
+		Listing.getListingInfo(domain_name, function(result){
+			if (result.state == "error"){
+				request({
+					url: 'https://api.ote-godaddy.com/v1/domains/available?domain='+ domain_name + '&checkType=FAST&forTransfer=false',
+					headers: {
+						"Authorization": "sso-key VUxKSUdS_77eVNvivVEXKyjCTTUweLk:77eYkfS7McHYHvcAv9fZdN",
+					}
+				}, function (error, response, body) {
+					if (!error && response.statusCode == 200) {
+						res.json(JSON.parse(body));
+					}
+					else {
+						console.log(error, response);
+					}
+				})
 			}
 			else {
-				console.log(error);
+				res.json({
+					redirect: result.listing_info
+				})
 			}
-		})
+		});
 	}
 
 }

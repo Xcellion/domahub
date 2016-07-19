@@ -1,20 +1,18 @@
 var database,
 	passport,
 	error;
-	
+
 var LocalStrategy = require('passport-local').Strategy;
 var bcrypt = require('bcrypt-nodejs');
 
 module.exports = {
-	
+
 	//constructor
 	auth: function(db, pp, e){
 		database = db;
 		passport = pp;
-		error = e;		
-		
-		database.connect();
-		
+		error = e;
+
 		// used to serialize the user for the session
 		passport.serializeUser(function(user, done) {
 			done(null, user.id);
@@ -64,7 +62,7 @@ module.exports = {
 				}, email);
 			})
 		);
-		
+
 		//post to check login
 		passport.use('local-login', new LocalStrategy({
 				usernameField: 'email',
@@ -80,7 +78,7 @@ module.exports = {
 					if (!bcrypt.compareSync(password, rows[0].password)){
 						return done(null, false, {message: 'Invalid password!'});
 					}
-					
+
 					// all is well, return successful user
 					else {
 						var now = new Date();
@@ -99,9 +97,9 @@ module.exports = {
 				}, email);
 			})
 		);
-		
+
 	},
-	
+
 	//helper functions related to authentication
 	messageReset: messageReset,
 	isLoggedIn: isLoggedIn,
@@ -114,7 +112,7 @@ module.exports = {
 //make sure user is logged in before doing anything
 function isLoggedIn(req, res, next) {
 	var route = req.route.path;
-	
+
 	//if user is authenticated in the session, carry on
 	if (req.isAuthenticated()){
 		delete req.user.password;
@@ -155,10 +153,8 @@ function logout(req, res) {
 		console.log("Logging out");
 		req.logout();
 	}
-	redirectTo = req.path != "/logout" ? req.header("Referer") : "/";
-	redirectURL = req.session.redirectBack ? req.session.redirectBack : redirectTo;
-	delete req.session.redirectBack;
-	res.redirect(redirectURL);
+	redirectTo = req.header("Referer") || "/";
+	res.redirect(redirectTo);
 };
 
 //sign up for a new account
@@ -167,12 +163,11 @@ function signup(req, res){
 	res.render("signup.ejs", { message: messageReset(req)});
 };
 
-//function to login 
+//function to login
 function loginPost(req, res, next){
 	//redirect to referrer or main page
 	redirectTo = req.header("Referer") ? req.header("Referer") : "/";
 	redirectURL = req.session.redirectBack ? req.session.redirectBack : redirectTo;
-	delete req.session.redirectBack;
 	passport.authenticate('local-login', function(err, user, info){
 		if (!user && info){
 			error.handler(req, res, info.message);
@@ -183,6 +178,7 @@ function loginPost(req, res, next){
 					error.handler(req, res, "Login error!");
 				}
 				else {
+					delete req.session.redirectBack;
 					return res.redirect(redirectURL);
 				}
 			});

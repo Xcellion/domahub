@@ -1,0 +1,8 @@
+#domain_available_wrapper, #domain_result_wrapper{
+	display:none;
+}
+
+.domain_buy_link{
+	display:inline-block;
+	padding:5px;
+}

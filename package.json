@@ -14,7 +14,6 @@
     "node-uuid": "^1.4.7",
     "passport": "^0.3.2",
     "passport-local": "latest",
-    "paypal-rest-sdk": "^1.6.9",
     "request": "latest",
     "sanitize-html": "*",
     "socket.io": "^1.4.8",

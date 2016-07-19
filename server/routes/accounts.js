@@ -32,5 +32,10 @@ function mainPage(req, res, next){
 				user: req.user
 			});
 		}
+		else {
+			res.render("index.ejs", {
+				message: "Database error!"
+			});
+		}
 	});
 }
