@@ -132,17 +132,21 @@
   order: 2;
 }
 
-.main_text2 {
-  order: 4;
-}
-
 .main_img2 {
   order: 3;
+}
+
+.main_text2 {
+  order: 4;
 }
 
 .fa-caret-right {
   color: #FF8751;
   padding-left: 5px;
+}
+
+.fa-caret-right:active {
+  padding-left: 10px;
 }
 
 .main_link {

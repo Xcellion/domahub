@@ -1,0 +1,65 @@
+<html>
+<head>
+  <title>w3bbi - Website Name Rentals</title>
+  <link rel="stylesheet" type="text/css" href="./css/index.css" />
+  <link rel="stylesheet" type="text/css" href="./css/master.css" />
+  <link rel="stylesheet" href="./font-awesome-4.6.3/css/font-awesome.min.css" />
+  <link rel="icon" type="image/png" href="favicon-32x32.png" sizes="32x32">
+  <link rel="icon" type="image/png" href="favicon-16x16.png" sizes="16x16">
+  <link href='https://fonts.googleapis.com/css?family=Share+Tech|Roboto+Condensed:400,300|Source+Sans+Pro:400,300' rel='stylesheet' type='text/css' />
+</head>
+<body>
+
+  <div id="navbar">
+    <div class="w3bbi_icon">
+      w3bbi
+    </div>
+    <div class="search_icon">
+      <span class="fa fa-search fa-lg"></span>
+    </div>
+    <div id="searchbar">
+      <form>
+        <input type="text" placeholder="Find your perfect website name" name="q" maxlength="255" autocomplete="off">
+      </form>
+    </div>
+    <div id="list" class="nav-button">
+      <a href="sellers.html">List</a>
+    </div>
+    <div id="rent" class="nav-button">
+      <a href="buyers.html">Rent</a>
+    </div>
+    <div id="login" class="nav-button">
+      <div id="session">
+        Log In
+      </div>
+      <div id="login_dropdown">
+        <form method="post" action="#">
+        <fieldset class="credentials">
+          <label class="email">Email</label>
+          <input id="username" name="username" type="text" autocomplete="on">
+          <label class="password">Password</label>
+          <input id="password" name="password" type="password">
+        </fieldset>
+
+        <fieldset class="remember_submit">
+          <label class="remember">Remember me</label>
+          <input type="checkbox" value="1" name="remember_me" />
+          <button class="submit button" type="button">Sign in</button>
+        </fieldset>
+        <fieldset class="login_triggers">
+          <a class="forgot" href="#">Forgot your credentials?</a>
+          <a class="mobile" href="#">Sign in with Facebook</a>
+        </fieldset>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="bkheight"></div>
+
+</body>
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script src="js/app.js"></script>
+
+</html>

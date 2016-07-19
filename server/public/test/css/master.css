@@ -156,7 +156,7 @@ table {
   order: 1;
 }
 
-input {
+#searchbar input {
   border: none;
   box-sizing: border-box;
   color: #525255;
@@ -178,8 +178,41 @@ input {
   order: 4;
 }
 
+#session {
+  color: #525255;
+
+}
+
+#session.active,#session:hover {
+  color: #FF8751;
+  cursor: pointer;
+}
+
+
+#login_dropdown {
+  background-color: #ffffff;
+  opacity: 0.9;
+  display: none;
+  min-height: 200px;
+  min-width: 160px;
+  position: absolute;
+  top: 60px;
+  right: 0;
+  z-index: 99;
+}
+
+#login_dropdown form {
+  height: 200px;
+  width: 200px;
+}
+
+#login_dropdown fieldset {
+  border: none;
+  display: block;
+}
+
 .nav-button {
-  border-right: 1px solid #cccccc;
+  border-left: 1px solid #cccccc;
   box-sizing: border-box;
   padding: 0 15px 0 15px;
 }
@@ -194,6 +227,10 @@ input {
   cursor: pointer;
 }
 
+.bkheight {
+  background-color: #2a2a2a;
+  height: 500px;
+}
 /*************************** FOOTER ***************************/
 
 #footer {
