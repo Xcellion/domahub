@@ -1,7 +1,7 @@
 var mysql = require('mysql'),
 	os = require('os'),
 	connection;
-	
+
 var pool = mysql.createPool({
 		host: 'p3plcpnl0172.prod.phx3.secureserver.net',
 		//host: 'localhost',
@@ -15,7 +15,7 @@ var pool = mysql.createPool({
 
 module.exports = {
 	connect: database_connect,
-	
+
 	//grab a connection from the pool, then run SQL query
 	query: function(custom_query, callback, post){
 		pool.getConnection(function(err, con){
@@ -41,7 +41,7 @@ function database_connect() {
 			connection = con;
 		}
 	});
-	
+
 	//reconnect if errored
 	pool.on('error', function(err) {
 		if (err.code === 'PROTOCOL_CONNECTION_LOST') {
