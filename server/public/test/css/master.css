@@ -68,6 +68,17 @@ table {
   top: 60px;
 }
 
+#lean_overlay {
+    position: fixed;
+    z-index: 100;
+    top: 0px;
+    left: 0px;
+    height: 100%;
+    width: 100%;
+    background: #000;
+    display: none;
+}
+
 /*************************** LINEBREAK ***************************/
 
 #linebreak {
@@ -110,6 +121,45 @@ table {
 .solid-button a:hover:not(.active) {
   background-color: #FF8751;
   color: #ffffff;
+  cursor: pointer;
+}
+
+.submit_button {
+  background-color: #3CBC8D;
+  border: none;
+  border-radius: 3px;
+  color: white;
+  display: inline-block;
+  font-size: 1.0em;
+  padding: 10px;
+  text-decoration: none;
+  -webkit-transition: background-color 0.25s;
+  transition: background-color 0.25s;
+}
+
+.submit_button:focus {
+  border: none;
+  outline: none;
+}
+
+.submit_button:hover {
+  background-color: #FF8751;
+  cursor: pointer;
+}
+
+.nav-button {
+  border-left: 1px solid #cccccc;
+  box-sizing: border-box;
+  padding: 0 15px 0 15px;
+}
+
+.nav-button a {
+  color: #525255;
+  padding: 5px;
+}
+
+.nav-button a:hover:not(.active) {
+  border-top: 1px solid #3CBC8D;
   cursor: pointer;
 }
 
@@ -178,53 +228,65 @@ table {
   order: 4;
 }
 
-#session {
-  color: #525255;
-
-}
-
-#session.active,#session:hover {
-  color: #FF8751;
-  cursor: pointer;
-}
-
-
-#login_dropdown {
-  background-color: #ffffff;
-  opacity: 0.9;
-  display: none;
-  min-height: 200px;
-  min-width: 160px;
-  position: absolute;
-  top: 60px;
-  right: 0;
-  z-index: 99;
-}
-
-#login_dropdown form {
-  height: 200px;
-  width: 200px;
-}
-
-#login_dropdown fieldset {
-  border: none;
-  display: block;
-}
-
-.nav-button {
-  border-left: 1px solid #cccccc;
-  box-sizing: border-box;
-  padding: 0 15px 0 15px;
-}
-
-.nav-button a {
+#session p {
   color: #525255;
   padding: 5px;
 }
 
-.nav-button a:hover:not(.active) {
+#session:hover p {
   border-top: 1px solid #3CBC8D;
   cursor: pointer;
+}
+
+#login_dropdown {
+  background-color: #ffffff;
+  color: #525255;
+  display: none;
+  height: 225px;
+  left: 0;
+  margin: auto;
+  position: absolute;
+  right: 0;
+  top: 80px;
+  width: 325px;
+  z-index: 99;
+  font-family: 'Roboto Condensed';
+  padding: 20px;
+}
+
+#login_dropdown fieldset {
+  border: none;
+  margin: 15px 0 15px 0;
+  width: 100%;
+}
+
+#login_dropdown label {
+  display: block;
+  margin: 5px 0 5px 0;
+}
+
+#login_dropdown input {
+  font-family: 'Share Tech';
+  padding: 5px;
+  width: 95%;
+}
+
+#login_dropdown input:focus {
+  outline-color: #FF8751;
+}
+
+#login_dropdown a {
+  color: #FF8751;
+  display: inline-block;
+  font-weight: 300;
+}
+
+#login_dropdown a:hover:not(.active) {
+  font-weight: 400;
+}
+
+.login_field {
+  text-align: center;
 }
 
 .bkheight {
