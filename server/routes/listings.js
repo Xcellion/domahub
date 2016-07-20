@@ -1,5 +1,9 @@
 var stripe = require("stripe")("sk_test_PHd0TEZT5ytlF0qCNvmgAThp");
+
+var crypto = require('crypto');
+
 var request = require("request");
+var dns = require("dns");
 var url = require("url");
 var val_url = require("valid-url");
 
@@ -19,10 +23,11 @@ module.exports = function(app, db, auth, e){
 
 	app.get('/listing', getSearchListing);
 	app.get('/listing/:domain_name', getListing);
-	app.get('/listing/:domain_name/activate', isLoggedIn, activateListing);
+	app.get('/listing/:domain_name/activate', isLoggedIn, getActivateHash);
 	app.get('/listing/:domain_name/:rental_id', isLoggedIn, getRental);
 
 	app.post("/listing", postSearchListing);
+	app.post('/listing/:domain_name/activate', isLoggedIn, activateListing);
 	app.post('/listing/:domain_name/rent', isLoggedIn, postListing);
 	app.post('/listing/:domain_name/edit', isLoggedIn, editRental);
 	app.post('/listing/:domain_name/:rental_id', isLoggedIn, postRental);
@@ -76,10 +81,40 @@ function postSearchListing(req, res, next){
 
 }
 
+function getActivateHash(req, res, next){
+	account_id = req.user.id;
+	domain_name = req.params.domain_name;
+
+	if (!req.header("Referer") || req.header("Referer").split("/").pop() == "activate"){
+		error.handler(req, res, "Cannot activate through URL!");
+	}
+	//check if user id is legit
+	else if (parseFloat(account_id) != account_id >>> 0){
+		error.handler(req, res, "Invalid user!");
+	}
+	//check if domain is legit
+	else if (!val_url.isUri(addhttp(domain_name))){
+		console.log(domain_name, addhttp(domain_name), val_url.isUri(addhttp(domain_name)))
+		error.handler(req, res, "Invalid listing activation!");
+	}
+	else {
+		Listing.getInfo("listings", "domain_name", domain_name, false, function(result){
+			if (result.state == "success"){
+				var hash = crypto.createHash('md5').update('"' + result.info[0].date_created + result.info[0].id + result.info[0].owner_id + '"').digest('hex');
+				res.send(hash);
+			}
+			else {
+				error.handler(req, res, "Invalid listing!");
+			}
+		})
+	}
+}
+
 //function to change listing to active
 function activateListing(req, res, next){
 	account_id = req.user.id;
 	domain_name = req.params.domain_name;
+	activation_type = req.body.activation_type;
 
 	//check if user id is legit
 	if (parseFloat(account_id) != account_id >>> 0){
@@ -91,27 +126,63 @@ function activateListing(req, res, next){
 		error.handler(req, res, "Invalid listing activation!");
 	}
 	else {
-
-		//look for the custom w3bbi header to prove ownership
-		request({
-			url: addhttp(domain_name)
-		}, function (error, response, body) {
-			if (!error && response.statusCode == 200) {
-
-				//if it doesnt exist, then its the wrong domain, or the user hasn't added it to his htaccess yet
-				if (response.headers.w3bbi){
-					// Listing.activateListing(domain_name, account_id, function(result){
-					//
-					// })
-				}
-				else {
-					error.handler(req, res, "Invalid listing activation!");
-				}
+		var activate = false;
+		Listing.getInfo("listings", "domain_name", domain_name, false, function(result){
+			if (result.state == "success"){
+				var hash = crypto.createHash('md5').update('"' + result.info.date_created + result.info.id + result.info.owner_id + '"').digest('hex');
 			}
 			else {
-				console.log(error, response);
+				error.handler(req, res, "Invalid listing!");
 			}
 		})
+
+		switch (activation_type){
+
+			//using a DNS txt record to prove ownership
+			case ("txt"):
+				dns.resolveTxt(domain_name, function(err, values){
+					if (err){
+						console.log(err);
+					}
+					else {
+						for (var x = 0; x < values.length; x++){
+							if (values[x][0] == hash){
+								activate = true;
+								break;
+							}
+						}
+					}
+				})
+				break;
+
+			//using a custom html file to prove ownership
+			case ("html"):
+				break;
+
+			//using a custom meta file in the main index page of the website to prove ownership
+			case ("meta"):
+				break;
+
+			//utilizing a custom header in the htaccess file to prove ownership
+			case ("htaccess"):
+				request({
+					url: addhttp(domain_name)
+				}, function (error, response, body) {
+					if (!error && response.statusCode == 200) {
+						if (response.headers.w3bbi == hash){
+							activate = true;
+						}
+					}
+					else {
+						console.log(error, response);
+					}
+				})
+				break;
+
+			default:
+				error.handler(req, res, "Invalid activation type!");
+				break;
+		}
 	}
 }
 

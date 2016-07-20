@@ -32,6 +32,9 @@ function handler(req, res, message, type) {
 				case "No rental information!":
 					redirectTo = RemoveLastDirectoryPartOf(req.path);
 					break;
+				case "Cannot activate through URL!":
+					redirectTo = "/profile";
+					break;
 				case "Invalid rental data!":
 					redirectTo = req.path;
 					break;

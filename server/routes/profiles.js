@@ -1,7 +1,6 @@
 var	account_model = require('../models/account_model.js'),
 	listing_model = require('../models/listing_model.js');
 
-var rhd = require('node-humanhash');
 var crypto = require('crypto');
 
 const url = require("url");
@@ -81,19 +80,21 @@ function postProfile(req, res){
 		Listing.insertSetInfo("listings", info, function(result){
 			if (result.state == "success") {
 
-				digest = crypto.createHash('md5').update("'" + result.insertId + "'").digest('hex');
-				rhd = rhd.humanizeDigest(digest);
+				Listing.getInfo("listings", "id", result.insertId, false, function(result){
+					//create hash based on listing date created, listing id, and owner id
+					hash = crypto.createHash('md5').update('"' + result.info.date_created + result.info.id + result.info.owner_id + '"').digest('hex');
 
-				res.json({
-					state: "success",
-					listing_info: {
-						domain_name: domain_name,
-						id: result.insertId,
-						rhd: rhd,
-						owner_id: account_id,
-						price_type: 0
-					},
-					message: "Successfully added a new listing!"
+					res.json({
+						state: "success",
+						listing_info: {
+							domain_name: domain_name,
+							id: result.insertId,
+							hash: hash,
+							owner_id: account_id,
+							price_type: 0
+						},
+						message: "Successfully added a new listing!"
+					})
 				})
 			}
 			else {

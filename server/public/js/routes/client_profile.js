@@ -11,6 +11,21 @@ $(document).ready(function() {
 		$("#rental_table").append(tr);
 	}
 
+	$(".activate_button").click(function(e){
+		id = $(this).attr("id");
+		domain_name = id.substr(9, id.length);
+
+		$.ajax({
+			url: "/listing/" + domain_name + "/activate",
+			data: {
+				domain_name: domain_name
+			}
+		}).done(function(data){
+			console.log(data);
+		})
+
+	});
+
 	$("#listing_form").submit(function(e){
 		e.preventDefault();
 		submitListings();
@@ -38,11 +53,12 @@ function submitListings(){
 				row.append("<td><a href=/listing/" + data.listing_info.domain_name + ">" + data.listing_info.domain_name + "</a></td>")
 				var active = data.price_type != 0 ? "False" : "True";
 				row.append("<td>" + active + "</td>")
+				row.append("<td class='activate_button' id='activate_" + data.listing_info.domain_name + "'>Activate?</td>");
 				$("#domain_table").append(row);
 
 				//random human hash
-				$("#rhd_wrapper").show();
-				$("#rhd_code").text(data.listing_info.rhd);
+				$("#hash_wrapper").show();
+				$("#hash_code").text(data.listing_info.hash);
 			}
 			else if (data.state == "error"){
 				$("#message").html(data.message);

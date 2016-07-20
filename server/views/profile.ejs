@@ -38,8 +38,11 @@
 					<th>Active?</th>
 					 <% listings.forEach(function (listing) { %>
 						<tr>
-							<td><a href=<%= "/listing/" + listing.domain_name %>><%= listing.domain_name %></a></td>
+							<td><a href="/listing/<%= listing.domain_name %>"><%= listing.domain_name %></a></td>
 							<td><%= (listing.price_type != 0) ? "True" : "False"%></td>
+							<% if (listing.price_type == 0){ %>
+								<td class="activate_button" id="activate_<%= listing.domain_name %>">Activate?</td>
+							<% } %>
 						</tr>
 					 <% }) %>
 				</table>
@@ -56,12 +59,23 @@
 					</form>
 				</div>
 
-				<div id="rhd_wrapper">
-					<p>Copy the below code into the .htaccess file of your website to prove that you own the domain name!</p>
-					<p>What is the .htaccess file?</p>
-					<p>An .htaccess file is a list of various settings for your website. By entering in your unique code below to your .htaccess file, we can create a link that will prove the ownership of this website name.</p>
-					<p>How do I edit my .htaccess file?</p>
-					<code>Header set w3bbi "<span id="rhd_code"></span>"</code>
+				<div id="hash_wrapper">
+					<div id="hash_txt">
+
+					</div>
+					<div id="hash_html">
+
+					</div>
+					<div id="hash_meta">
+
+					</div>
+					<div id="hash_htaccess">
+						<p>Copy the below code into the .htaccess file of your website to prove that you own the domain name!</p>
+						<p>What is the .htaccess file?</p>
+						<p>An .htaccess file is a list of various settings for your website. By entering in your unique code below to your .htaccess file, we can create a link that will prove the ownership of this website name.</p>
+						<p>How do I edit my .htaccess file?</p>
+						<code>Header set w3bbi "<span id="hash_code"></span>"</code>
+					</div>
 				</div>
 			</div>
 
