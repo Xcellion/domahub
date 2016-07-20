@@ -33,13 +33,11 @@
 
 			<h2>My Domains:</h2>
 			<% if (typeof listings != "undefined") {%>
-				<table>
-					<th>Date Created</th>
+				<table id="domain_table">
 					<th>Domain Name</th>
 					<th>Active?</th>
 					 <% listings.forEach(function (listing) { %>
 						<tr>
-							<td><%= listing.date_created %></td>
 							<td><a href=<%= "/listing/" + listing.domain_name %>><%= listing.domain_name %></a></td>
 							<td><%= (listing.price_type != 0) ? "True" : "False"%></td>
 						</tr>
@@ -49,13 +47,24 @@
 				<p>You have no domains currently!</p>
 			<% } %>
 
-			<div id="form_wrapper">
-				<form id="listing_form" action="/profile" method="post">
-					<input id="listing_form_domain_name" type="url" name="domain_name" placeholder="https://myawesomedomain.com">
-					<input id="listing_form_description" type="text" name="description" placeholder="The best website ever!">
-					<input id="submit" type="submit" value="Create new listing!">
-				</form>
+			<div id="new_listing_wrapper">
+				<div id="form_wrapper">
+					<form id="listing_form" action="/profile" method="post" novalidate>
+						<input id="listing_form_domain_name" type="url" name="domain_name" placeholder="https://myawesomedomain.com">
+						<input id="listing_form_description" type="text" name="description" placeholder="The best website ever!">
+						<input id="submit" type="submit" value="Create new listing!">
+					</form>
+				</div>
+
+				<div id="rhd_wrapper">
+					<p>Copy the below code into the .htaccess file of your website to prove that you own the domain name!</p>
+					<p>What is the .htaccess file?</p>
+					<p>An .htaccess file is a list of various settings for your website. By entering in your unique code below to your .htaccess file, we can create a link that will prove the ownership of this website name.</p>
+					<p>How do I edit my .htaccess file?</p>
+					<code>Header set w3bbi "<span id="rhd_code"></span>"</code>
+				</div>
 			</div>
+
 
 			<h2>My Rentals:</h2>
 			<% if (typeof rentals != "undefined") {%>

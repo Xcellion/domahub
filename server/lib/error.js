@@ -10,8 +10,8 @@ function handler(req, res, message, type) {
 	switch (type){
 		case "json":
 			res.json({
-				message: message,
-				state: "error"
+				state: "error",
+				message: message
 			});
 			break;
 		default:
@@ -35,8 +35,12 @@ function handler(req, res, message, type) {
 				case "Invalid rental data!":
 					redirectTo = req.path;
 					break;
-				case "Signup error!":
 				case "Invalid listing!":
+				case "Invalid domain name!":
+				case "Invalid listing activation!":
+					redirectTo = "/listing";
+					break;
+				case "Signup error!":
 				case "Invalid price!":
 				default:
 					console.log(message);

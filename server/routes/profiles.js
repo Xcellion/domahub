@@ -1,6 +1,9 @@
 var	account_model = require('../models/account_model.js'),
 	listing_model = require('../models/listing_model.js');
 
+var rhd = require('node-humanhash');
+var crypto = require('crypto');
+
 const url = require("url");
 const val_url = require("valid-url");
 
@@ -20,7 +23,6 @@ module.exports = function(app, db, auth, e){
 
 	//posts for account
 	app.post('/profile', isLoggedIn, postProfile);
-	app.post('/profile/changeActive', isLoggedIn, changeActive);
 }
 
 //goes to profile
@@ -54,48 +56,57 @@ function getProfile(req, res){
 
 //posts new listing information to the profile
 function postProfile(req, res){
-	user = req.user;
-	domain_name = val_url.isUri(req.body.domain_name) ? req.body.domain_name : false;
+	account_id = req.user.id;
+	domain_name = url.parse(addhttp(req.body.domain_name)).host;
 	description = req.body.description;
 
 	//check if user id is legit
-	if (parseFloat(account_id) == account_id >>> 0 && description && domain_name){
+	if (parseFloat(account_id) != account_id >>> 0){
+		error.handler(req, res, "Invalid user!");
+	}
+	else if (!description){
+		error.handler(req, res, "Invalid domain description!");
+	}
+	else if (!val_url.isUri(addhttp(req.body.domain_name))){
+		error.handler(req, res, "Invalid domain name!");
+	}
+	else {
 		info = {
-			domain_name : url.parse(req.body.domain_name).host,
+			domain_name : domain_name,
 			description: req.body.description,
-			owner_id: user.id,
-			price_type: 2
+			owner_id: account_id,
+			price_type: 0
 		}
+
 		Listing.insertSetInfo("listings", info, function(result){
 			if (result.state == "success") {
-				console.log(result);
-				res.send({
+
+				digest = crypto.createHash('md5').update("'" + result.insertId + "'").digest('hex');
+				rhd = rhd.humanizeDigest(digest);
+
+				res.json({
 					state: "success",
+					listing_info: {
+						domain_name: domain_name,
+						id: result.insertId,
+						rhd: rhd,
+						owner_id: account_id,
+						price_type: 0
+					},
 					message: "Successfully added a new listing!"
 				})
 			}
 			else {
-				error.handler(req, res, "Invalid listing!");
+				error.handler(req, res, "Listing already exists!", "json");
 			}
 		})
 	}
-	else {
-		error.handler(req, res, "Invalid user!");
-	}
 }
 
-//function to change listing to active
-function changeActive(req, res, next){
-	account_id = req.user.id;
-	domain_name = req.body.domain_name;
-
-	//check if user id is legit
-	if (parseFloat(account_id) == account_id >>> 0 && domain_name){
-		Listing.setListingAccount(domain_name, account_id, function(result){
-			console.log(result);
-		})
-	}
-	else {
-		error.handler(req, res, "Invalid user!");
-	}
+//function to add protocol to a URL
+function addhttp(url) {
+    if (!/^(?:f|ht)tps?\:\/\//.test(url)) {
+        url = "http://" + url;
+    }
+    return url;
 }

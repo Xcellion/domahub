@@ -19,6 +19,7 @@ module.exports = function(app, db, auth, e){
 
 	app.get('/listing', getSearchListing);
 	app.get('/listing/:domain_name', getListing);
+	app.get('/listing/:domain_name/activate', isLoggedIn, activateListing);
 	app.get('/listing/:domain_name/:rental_id', isLoggedIn, getRental);
 
 	app.post("/listing", postSearchListing);
@@ -45,7 +46,10 @@ function addhttp(url) {
 function postSearchListing(req, res, next){
 	domain_name = url.parse(addhttp(req.body.domain_name)).host;
 
-	if (domain_name){
+	if (!val_url.isUri(addhttp(domain_name))){
+		error.handler(req, res, "Invalid domain name!");
+	}
+	else{
 		Listing.getListingInfo(domain_name, function(result){
 			if (result.state == "error"){
 				request({
@@ -70,6 +74,45 @@ function postSearchListing(req, res, next){
 		});
 	}
 
+}
+
+//function to change listing to active
+function activateListing(req, res, next){
+	account_id = req.user.id;
+	domain_name = req.params.domain_name;
+
+	//check if user id is legit
+	if (parseFloat(account_id) != account_id >>> 0){
+		error.handler(req, res, "Invalid user!");
+	}
+	//check if domain is legit
+	else if (!val_url.isUri(addhttp(domain_name))){
+		console.log(domain_name, addhttp(domain_name), val_url.isUri(addhttp(domain_name)))
+		error.handler(req, res, "Invalid listing activation!");
+	}
+	else {
+
+		//look for the custom w3bbi header to prove ownership
+		request({
+			url: addhttp(domain_name)
+		}, function (error, response, body) {
+			if (!error && response.statusCode == 200) {
+
+				//if it doesnt exist, then its the wrong domain, or the user hasn't added it to his htaccess yet
+				if (response.headers.w3bbi){
+					// Listing.activateListing(domain_name, account_id, function(result){
+					//
+					// })
+				}
+				else {
+					error.handler(req, res, "Invalid listing activation!");
+				}
+			}
+			else {
+				console.log(error, response);
+			}
+		})
+	}
 }
 
 

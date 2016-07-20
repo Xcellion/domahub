@@ -115,6 +115,9 @@ function isLoggedIn(req, res, next) {
 
 	//if user is authenticated in the session, carry on
 	if (req.isAuthenticated()){
+		res.header('Cache-Control', 'private, no-cache, no-store, must-revalidate');
+		res.header('Expires', '-1');
+		res.header('Pragma', 'no-cache');
 		delete req.user.password;
 		console.log("Authenticated!");
 		return next();

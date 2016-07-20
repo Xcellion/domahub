@@ -11,6 +11,7 @@
     "express": "^4.14.0",
     "express-session": "^1.13.0",
     "mysql": "^2.11.1",
+    "node-humanhash": "^1.0.3",
     "node-uuid": "^1.4.7",
     "passport": "^0.3.2",
     "passport-local": "latest",
