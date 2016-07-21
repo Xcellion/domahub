@@ -85,8 +85,8 @@ server.listen(port, function(){
 
 var dnsd = require("dnsd");
 var server = dnsd.createServer(handler)
-server.zone('example.com', 'ns1.example.com', 'us@example.com', 'now', '2h', '30m', '2w', '10m').listen(port)
-console.log('DNS server listening on ' + port)
+server.zone('example.com', 'ns1.example.com', 'us@example.com', 'now', '2h', '30m', '2w', '10m').listen(process.env.PORT || 5353)
+console.log('DNS server listening on 5353')
 
 function handler(req, res) {
 
