@@ -1,0 +1,12 @@
+.verification_method_wrapper{
+    display:none;
+}
+
+#batch_listing_show{
+    text-decoration:underline;
+    cursor:pointer;
+}
+
+#batch_form_wrapper{
+    display:none;
+}

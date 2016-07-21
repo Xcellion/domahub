@@ -7,6 +7,44 @@ var dns = require("dns");
 var url = require("url");
 var val_url = require("valid-url");
 
+
+var multer = require("multer");
+var parse = require("csv-parse");
+var fs = require('fs')
+
+var upload = multer({
+	dest:'./uploads',
+	limits: { fileSize: 50000 },
+	fileFilter: function (req, file, cb) {
+
+		var allowedMimeTypes = [
+			"text/csv",
+			"application/csv",
+			"application/excel",
+			"application/vnd.ms-excel",
+			"application/vnd.msexcel",
+			"text/comma-separated-values"
+		];
+
+		if (allowedMimeTypes.indexOf(file.mimetype) <= -1) {
+			req.fileValidationError = 'Wrong file type!';
+			return cb(null, false, new Error('Wrong file type'));
+		}
+		cb(null, true);
+	}
+}).single("csv");
+
+var uploadSizeCheck = function(req, res, next){
+	upload(req, res, function(err){
+		if (err){
+			error.handler(req, res, "File too large!");
+		}
+		else {
+			next();
+		}
+	});
+}
+
 var	account_model = require('../models/account_model.js'),
 	listing_model = require('../models/listing_model.js'),
 	Account,
@@ -22,13 +60,20 @@ module.exports = function(app, db, auth, e){
 	isLoggedIn = auth.isLoggedIn;
 
 	app.get('/listing', getSearchListing);
+
+	app.get('/listing/create', isLoggedIn, createListingPage);
+
 	app.get('/listing/:domain_name', getListing);
 	app.get('/listing/:domain_name/activate', isLoggedIn, getActivateHash);
 	app.get('/listing/:domain_name/:rental_id', isLoggedIn, getRental);
 
 	app.post("/listing", postSearchListing);
+
+	app.post("/listing/create", isLoggedIn, createListing)
+	app.post("/listing/create/batch", [isLoggedIn, uploadSizeCheck, createBatchListing])
+
 	app.post('/listing/:domain_name/activate', isLoggedIn, activateListing);
-	app.post('/listing/:domain_name/rent', isLoggedIn, postListing);
+	app.post('/listing/:domain_name/rent', isLoggedIn, createRental);
 	app.post('/listing/:domain_name/edit', isLoggedIn, editRental);
 	app.post('/listing/:domain_name/:rental_id', isLoggedIn, postRental);
 }
@@ -40,45 +85,12 @@ function getSearchListing(req, res, next){
 	res.render("listings");
 }
 
-function addhttp(url) {
-    if (!/^(?:f|ht)tps?\:\/\//.test(url)) {
-        url = "http://" + url;
-    }
-    return url;
-}
-
-//search for a specific domain name
-function postSearchListing(req, res, next){
-	domain_name = url.parse(addhttp(req.body.domain_name)).host;
-
-	if (!val_url.isUri(addhttp(domain_name))){
-		error.handler(req, res, "Invalid domain name!");
-	}
-	else{
-		Listing.getListingInfo(domain_name, function(result){
-			if (result.state == "error"){
-				request({
-					url: 'https://api.ote-godaddy.com/v1/domains/available?domain='+ domain_name + '&checkType=FAST&forTransfer=false',
-					headers: {
-						"Authorization": "sso-key VUxKSUdS_77eVNvivVEXKyjCTTUweLk:77eYkfS7McHYHvcAv9fZdN",
-					}
-				}, function (error, response, body) {
-					if (!error && response.statusCode == 200) {
-						res.json(JSON.parse(body));
-					}
-					else {
-						console.log(error, response);
-					}
-				})
-			}
-			else {
-				res.json({
-					redirect: result.listing_info
-				})
-			}
-		});
-	}
-
+//function to display the create listing page
+function createListingPage(req, res, next){
+	res.render("listing_create.ejs", {
+		message: Auth.messageReset(req),
+		user: req.user,
+	});
 }
 
 function getActivateHash(req, res, next){
@@ -109,83 +121,6 @@ function getActivateHash(req, res, next){
 		})
 	}
 }
-
-//function to change listing to active
-function activateListing(req, res, next){
-	account_id = req.user.id;
-	domain_name = req.params.domain_name;
-	activation_type = req.body.activation_type;
-
-	//check if user id is legit
-	if (parseFloat(account_id) != account_id >>> 0){
-		error.handler(req, res, "Invalid user!");
-	}
-	//check if domain is legit
-	else if (!val_url.isUri(addhttp(domain_name))){
-		console.log(domain_name, addhttp(domain_name), val_url.isUri(addhttp(domain_name)))
-		error.handler(req, res, "Invalid listing activation!");
-	}
-	else {
-		var activate = false;
-		Listing.getInfo("listings", "domain_name", domain_name, false, function(result){
-			if (result.state == "success"){
-				var hash = crypto.createHash('md5').update('"' + result.info.date_created + result.info.id + result.info.owner_id + '"').digest('hex');
-			}
-			else {
-				error.handler(req, res, "Invalid listing!");
-			}
-		})
-
-		switch (activation_type){
-
-			//using a DNS txt record to prove ownership
-			case ("txt"):
-				dns.resolveTxt(domain_name, function(err, values){
-					if (err){
-						console.log(err);
-					}
-					else {
-						for (var x = 0; x < values.length; x++){
-							if (values[x][0] == hash){
-								activate = true;
-								break;
-							}
-						}
-					}
-				})
-				break;
-
-			//using a custom html file to prove ownership
-			case ("html"):
-				break;
-
-			//using a custom meta file in the main index page of the website to prove ownership
-			case ("meta"):
-				break;
-
-			//utilizing a custom header in the htaccess file to prove ownership
-			case ("htaccess"):
-				request({
-					url: addhttp(domain_name)
-				}, function (error, response, body) {
-					if (!error && response.statusCode == 200) {
-						if (response.headers.w3bbi == hash){
-							activate = true;
-						}
-					}
-					else {
-						console.log(error, response);
-					}
-				})
-				break;
-
-			default:
-				error.handler(req, res, "Invalid activation type!");
-				break;
-		}
-	}
-}
-
 
 //gets the listing info and sends user to the listing page
 function getListing(req, res, next) {
@@ -294,8 +229,239 @@ function getRental(req, res, next){
 
 //----------------------------------------------------------------w3bbi post pages----------------------------------------------------------------
 
+//search for a specific domain name
+function postSearchListing(req, res, next){
+	domain_name = url.parse(addhttp(req.body.domain_name)).host;
+
+	if (!val_url.isUri(addhttp(domain_name))){
+		error.handler(req, res, "Invalid domain name!");
+	}
+	else{
+		Listing.getListingInfo(domain_name, function(result){
+			if (result.state == "error"){
+				request({
+					url: 'https://api.ote-godaddy.com/v1/domains/available?domain='+ domain_name + '&checkType=FAST&forTransfer=false',
+					headers: {
+						"Authorization": "sso-key VUxKSUdS_77eVNvivVEXKyjCTTUweLk:77eYkfS7McHYHvcAv9fZdN",
+					}
+				}, function (error, response, body) {
+					if (!error && response.statusCode == 200) {
+						res.json(JSON.parse(body));
+					}
+					else {
+						console.log(error, response);
+					}
+				})
+			}
+			else {
+				res.json({
+					redirect: result.listing_info
+				})
+			}
+		});
+	}
+
+}
+
+//function to create a new listing
+function createListing(req, res, next){
+	account_id = req.user.id;
+	domain_name = url.parse(addhttp(req.body.domain_name)).host;
+	description = req.body.description;
+
+	//check if user id is legit
+	if (parseFloat(account_id) != account_id >>> 0){
+		error.handler(req, res, "Invalid user!");
+	}
+	else if (!description){
+		error.handler(req, res, "Invalid domain description!");
+	}
+	else if (!val_url.isUri(addhttp(req.body.domain_name))){
+		error.handler(req, res, "Invalid domain name!");
+	}
+	else {
+		info = {
+			domain_name : domain_name,
+			description: req.body.description,
+			owner_id: account_id,
+			price_type: 0
+		}
+
+		Listing.insertSetInfo("listings", info, function(result){
+			if (result.state == "success") {
+
+				Listing.getInfo("listings", "id", result.insertId, false, function(result){
+					//create hash based on listing date created, listing id, and owner id
+					hash = crypto.createHash('md5').update('"' + result.info.date_created + result.info.id + result.info.owner_id + '"').digest('hex');
+
+					res.json({
+						state: "success",
+						listing_info: {
+							domain_name: domain_name,
+							id: result.insertId,
+							hash: hash,
+							owner_id: account_id,
+							price_type: 0
+						},
+						message: "Successfully added a new listing!"
+					})
+				})
+			}
+			else {
+				error.handler(req, res, "Listing already exists!", "json");
+			}
+		})
+	}
+}
+
+//helper function to parse the csv file
+function parseCSVFile(sourceFilePath, onNewRecord, handleError, done){
+    var source = fs.createReadStream(sourceFilePath);
+    var parser = parse({
+		skip_empty_lines: true
+    });
+
+    parser.on("readable", function(){
+        var record;
+        while (record = parser.read()) {
+            onNewRecord(record);
+        }
+    });
+
+    parser.on("error", function(error){
+        handleError(error)
+    });
+
+    parser.on("end", function(){
+        done();
+    });
+
+    source.pipe(parser);
+}
+
+//function to handle batch listing creation
+function createBatchListing(req, res, next){
+	console.log('wtf');
+	if (req.fileToolarge){
+		error.handler(req, res, "File too large!");
+	}
+	else if (req.fileValidationError) {
+		error.handler(req, res, "Wrong file type!");
+	}
+	else {
+		var listings = [];
+		var bad_listings = [];
+
+	    function onNewRecord(record){
+			if (record.length != 2){
+				bad_listings.push(record, "Incorrect format");
+			}
+			else if (!val_url.isWebUri(addhttp(record[0]))){
+				bad_listings.push(record, "Incorrect domain name");
+			}
+			else if (record[1].length = 0 || !record[1]){
+				bad_listings.push(record, "Need a description");
+			}
+			else {
+				listings.push(record);
+			}
+	    }
+
+	    function onError(error){
+			console.log(error);
+	    	error.handler(req, res, "CSV parser error!");
+	    }
+
+	    function done(linesRead){
+			//todo - create the good listings, send back list of bad listings
+	        res.send({
+				listings: listings,
+				bad_listings: bad_listings
+			});
+	    }
+
+	    parseCSVFile(req.file.path, onNewRecord, onError, done);
+	}
+}
+
+//function to change listing to active
+function activateListing(req, res, next){
+	account_id = req.user.id;
+	domain_name = req.params.domain_name;
+	activation_type = req.body.activation_type;
+
+	//check if user id is legit
+	if (parseFloat(account_id) != account_id >>> 0){
+		error.handler(req, res, "Invalid user!");
+	}
+	//check if domain is legit
+	else if (!val_url.isUri(addhttp(domain_name))){
+		console.log(domain_name, addhttp(domain_name), val_url.isUri(addhttp(domain_name)))
+		error.handler(req, res, "Invalid listing activation!");
+	}
+	else {
+		var activate = false;
+		Listing.getInfo("listings", "domain_name", domain_name, false, function(result){
+			if (result.state == "success"){
+				var hash = crypto.createHash('md5').update('"' + result.info.date_created + result.info.id + result.info.owner_id + '"').digest('hex');
+			}
+			else {
+				error.handler(req, res, "Invalid listing!");
+			}
+		})
+
+		switch (activation_type){
+
+			//using a DNS txt record to prove ownership
+			case ("txt"):
+				dns.resolveTxt(domain_name, function(err, values){
+					if (err){
+						console.log(err);
+					}
+					else {
+						for (var x = 0; x < values.length; x++){
+							if (values[x][0] == hash){
+								activate = true;
+								break;
+							}
+						}
+					}
+				})
+				break;
+
+			//using a custom html file to prove ownership
+			case ("html"):
+				break;
+
+			//using a custom meta file in the main index page of the website to prove ownership
+			case ("meta"):
+				break;
+
+			//utilizing a custom header in the htaccess file to prove ownership
+			case ("htaccess"):
+				request({
+					url: addhttp(domain_name)
+				}, function (error, response, body) {
+					if (!error && response.statusCode == 200) {
+						if (response.headers.w3bbi == hash){
+							activate = true;
+						}
+					}
+					else {
+						console.log(error, response);
+					}
+				})
+				break;
+
+			default:
+				error.handler(req, res, "Invalid activation type!");
+				break;
+		}
+	}
+}
+
 //check if rental time is legit, price is legit, and send user to rental edit page
-function postListing(req, res, next){
+function createRental(req, res, next){
 	domain_name = req.params.domain_name;
 	user_id = req.user.id;
 	type = req.body.type;
@@ -451,6 +617,16 @@ function postRental(req, res, next){
 		}
 	}
 };
+
+//----------------------------------------------------------------helper functions----------------------------------------------------------------
+
+//helper function to add http protocol to a url if it doesnt have it
+function addhttp(url) {
+    if (!/^(?:f|ht)tps?\:\/\//.test(url)) {
+        url = "http://" + url;
+    }
+    return url;
+}
 
 //helper function to do some checks for rental posting
 function rentalChecks(req, res, domain_name, user_id, type, events){
