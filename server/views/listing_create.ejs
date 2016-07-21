@@ -27,6 +27,8 @@
 			<p><a href="/profile">Profile</a></p>
 			<p><a href="/logout">Log Out</a></p>
 
+			<p id="message">Welcome!</p>
+
 			<div id="new_listing_wrapper">
 				<form id="listing_form" action="/listing/create" method="post" novalidate>
 					<input id="listing_form_domain_name" type="url" name="domain_name" placeholder="https://myawesomedomain.com" />
@@ -42,6 +44,7 @@
 						<input id="listing_form_csv" type="file" name="csv" accept=".csv" />
 						<input id="submit" type="submit" value="Create new listings!" />
 					</form>
+					<progress></progress>
 				</div>
 
 				<div id="instruction_wrapper">

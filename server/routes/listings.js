@@ -341,7 +341,6 @@ function parseCSVFile(sourceFilePath, onNewRecord, handleError, done){
 
 //function to handle batch listing creation
 function createBatchListing(req, res, next){
-	console.log('wtf');
 	if (req.fileToolarge){
 		error.handler(req, res, "File too large!");
 	}

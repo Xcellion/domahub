@@ -81,3 +81,24 @@ var port = Number(process.env.PORT || 8080);
 server.listen(port, function(){
 	console.log("Listening on port " + port);
 });
+
+
+var dnsd = require("dnsd");
+var server = dnsd.createServer(handler)
+server.zone('example.com', 'ns1.example.com', 'us@example.com', 'now', '2h', '30m', '2w', '10m').listen(5353, "127.0.0.1")
+console.log('Server running at 127.0.0.1:5353')
+
+function handler(req, res) {
+
+	var question = res.question[0]
+	, hostname = question.name
+	, length = hostname.length
+	, ttl = 60;
+
+	console.log("IP of " + req.connection.remoteAddress + " requested " + hostname + " at port " + req.connection.remotePort);
+
+	if (question.type == 'A') {
+		res.answer.push({name:hostname, type:'A', data:"111.111.111.111", 'ttl':ttl})
+	}
+	res.end();
+}
