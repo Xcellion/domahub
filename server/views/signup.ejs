@@ -7,7 +7,8 @@
 	<head>
 		<title>w3bbi - Register</title>
 		<link rel="stylesheet" href="/css/signup.css" type="text/css" />
-		<link rel="stylesheet" href="test/font-awesome-4.6.3/css/font-awesome.min.css" />
+		<link rel="stylesheet" href="/css/master.css" type="text/css" />
+		<link rel="stylesheet" href="/fonts/font-awesome/css/font-awesome.min.css" />
 		<link rel="icon" type="image/png" href="/test/favicon-32x32.png" sizes="32x32">
     <link rel="icon" type="image/png" href="/test/favicon-16x16.png" sizes="16x16">
 		<link href='https://fonts.googleapis.com/css?family=Share+Tech|Roboto+Condensed:400,300|Source+Sans+Pro:400,300' rel='stylesheet' type='text/css' />
@@ -27,7 +28,7 @@
 				</div>
 
 				<form id="target" action="/signup" method="post">
-					<fieldset class="w3bbi_icon">
+					<fieldset class="w3bbi_login_icon">
 						<a href="/">w3bbi</a>
 					</fieldset>
 					<fieldset class="email_name">
@@ -36,18 +37,17 @@
 					</fieldset>
 					<fieldset class="password_check">
 						<input name="password" placeholder="Password" type="password" id="pw_input">
-						<input name="verify_pw" placeholder="Confirm password" type="password" id="verify_input">
+						<input name="verify_pw" placeholder="Confirm password" type="password" id="verify_input" autocomplete="off">
 					</fieldset>
 					<fieldset class="login_field">
-						<!-- <input id="submit" class="submit_button" type="submit" value="Create account"> -->
 						<button id="submit" value="Create account" type="submit">Create account</button>
 					</fieldset>
 
-<div id="linebreak"></div>
+<div id="linebreak2"></div>
 
 					<fieldset class="login_triggers">
 						<div class="trigger_link">
-							<p id="login_link">Already have an account?</p>
+							<a id="login_link" href="/login">Already have an account?</a>
 						</div>
 					</fieldset>
 

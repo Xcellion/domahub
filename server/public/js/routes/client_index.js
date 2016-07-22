@@ -1,4 +1,5 @@
 $(document).ready(function() {
+
 	//hide the choices until login
 	$("#email_input").focus();
 
@@ -12,7 +13,7 @@ $(document).ready(function() {
 			//to prevent submission of the form
 			return false;
 		}
-		
+
 		//if no password is entered
 		if (!$("#pw_input").val()) {
 			$("#sub_message").fadeOut(100, function(){
@@ -23,10 +24,9 @@ $(document).ready(function() {
 			return false;
 		}
 	});
-	
+
 	if (!user){
 		delete_cookie("type");
 		delete_cookie("local_events");
 	}
 });
-

@@ -1,4 +1,4 @@
-/* GLOBAL STUFF */
+/*************************** GLOBAL ***************************/
 html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
 a, abbr, acronym, address, big, cite, code,
@@ -51,7 +51,7 @@ table {
   user-select: none;
 }
 
-/* MISC */
+/*************************** MISC ***************************/
 .webbi_text {
   font-family: monospace;
   font-size: 1.2em;
@@ -68,7 +68,24 @@ table {
   top: 60px;
 }
 
-/* PAGE BREAK ELEMENTS */
+#lean_overlay {
+    position: fixed;
+    z-index: 100;
+    top: 0px;
+    left: 0px;
+    height: 100%;
+    width: 100%;
+    background: #000;
+    display: none;
+}
+
+.foobar {
+  background-color: #2a2a2a;
+  height: 50px;
+  padding-top: 60px;
+}
+
+/*************************** LINEBREAK ***************************/
 
 #linebreak {
   border-bottom: 1px solid #dddddd;
@@ -76,33 +93,18 @@ table {
   width: 25%;
 }
 
-/* BUTTONS */
-
-#landing_button {
-  margin-top: 3.0em;
-  text-align: center;
+#linebreak2 {
+  border-bottom: 1px solid #dddddd;
+  margin: 5px auto 5px auto;
+  width: 100%;
 }
-
-#landing_button a {
-  font-size: 1.3em;
-  letter-spacing: 1px;
-  padding: 10px;
-}
-
-#main_button {
-  margin-top: 2.0em;
-  text-align: center;
-}
-
-#main_button a {
-  padding: 10px;
-}
+/*************************** BUTTONS ***************************/
 
 .clear-button a {
   border-radius: 3px;
   border: 1px solid #bdbdbd;
   color: #bdbdbd;
-  display: inline-block;
+  font-family: 'Roboto Condensed';
   font-size: 0.9em;
   font-weight: 400;
   transition: background-color: 0.25s;
@@ -110,8 +112,8 @@ table {
 }
 
 .clear-button a:hover:not(.active) {
-  background-color: #3CBC8D;
-  border: 1px solid #3CBC8D;
+  background-color: #FF8751;
+  border: 1px solid #FF8751;
   color: #ffffff;
   cursor: pointer;
 }
@@ -120,6 +122,7 @@ table {
   background-color: #3CBC8D;
   border-radius: 3px;
   color: #efefef;
+  font-family: 'Roboto Condensed';
   font-size: 1.2em;
   font-weight: 400;
   transition: background-color 0.25s;
@@ -132,7 +135,55 @@ table {
   cursor: pointer;
 }
 
-/* NAVBAR */
+.submit_button {
+  background-color: #3CBC8D;
+  border: none;
+  border-radius: 3px;
+  color: white;
+  display: inline-block;
+  font-size: 1.0em;
+  padding: 10px;
+  text-decoration: none;
+  -webkit-transition: background-color 0.25s;
+  transition: background-color 0.25s;
+}
+
+.submit_button:focus {
+  border: none;
+  outline: none;
+}
+
+.submit_button:hover {
+  background-color: #FF8751;
+  cursor: pointer;
+}
+
+.nav-button {
+  border-left: 1px solid #cccccc;
+  box-sizing: border-box;
+  padding: 0 15px 0 15px;
+}
+
+.nav-button a {
+  color: #525255;
+  padding: 5px;
+}
+
+.nav-button a:hover:not(.active) {
+  border-top: 1px solid #3CBC8D;
+  cursor: pointer;
+}
+
+#main_button {
+  margin-top: 2.0em;
+  text-align: center;
+}
+
+#main_button a {
+  padding: 10px;
+}
+
+/*************************** NAVBAR ***************************/
 
 #navbar {
   align-items: center;
@@ -141,13 +192,15 @@ table {
   font-family: 'Roboto Condensed';
   height: 60px;
   margin: 0;
+  opacity: 0.9;
   overflow: hidden;
   padding: 0;
   position: fixed;
   width: 100%;
+  z-index: 1;
 }
 
-.w3bbi_icon {
+.w3bbi_icon a {
   border-right: 1px solid #cccccc;
   box-sizing: border-box;
   color: #3CBC8D;
@@ -157,7 +210,7 @@ table {
   padding: 0 15px 0 15px;
 }
 
-.w3bbi_icon:hover:not(.active) {
+.w3bbi_icon a:hover:not(.active) {
   opacity: 0.9;
   cursor: pointer;
 }
@@ -173,7 +226,7 @@ table {
   order: 1;
 }
 
-input {
+#searchbar input {
   border: none;
   box-sizing: border-box;
   color: #525255;
@@ -181,9 +234,6 @@ input {
   font-size: 1.0em;
   outline: none;
   width: 100%;
-}
-
-input:focus {
 }
 
 #list {
@@ -198,27 +248,111 @@ input:focus {
   order: 4;
 }
 
-.nav-button {
-  border-right: 1px solid #cccccc;
-  box-sizing: border-box;
-  padding: 0 15px 0 15px;
-}
-
-.nav-button a {
+#session p {
   color: #525255;
   padding: 5px;
 }
 
-.nav-button a:hover:not(.active) {
+#session:hover p {
   border-top: 1px solid #3CBC8D;
   cursor: pointer;
 }
 
+#login_dropdown {
+  background-color: #ffffff;
+  color: #525255;
+  display: none;
+  height: 300px;
+  left: 0;
+  margin: auto;
+  position: absolute;
+  right: 0;
+  top: 80px;
+  width: 350px;
+  z-index: 99;
+  font-family: 'Roboto Condensed';
+  padding: 20px;
+}
 
-/* FOOTER */
+#login_dropdown fieldset {
+  border: none;
+  margin: 15px 0 15px 0;
+  width: 100%;
+}
+
+#login_dropdown label {
+  display: block;
+  margin: 5px 0 5px 0;
+}
+
+#login_dropdown input[type="text"] {
+  box-sizing: border-box;
+  font-family: 'Share Tech';
+  font-size: 1.0em;
+  padding: 10px;
+  width: 100%;
+}
+
+#login_dropdown input[type="password"] {
+  box-sizing: border-box;
+  font-family: 'Share Tech';
+  font-size: 1.0em;
+  padding: 10px;
+  width: 100%;
+}
+
+#login_dropdown input[type="text"]:focus, input[type="password"]:focus {
+  outline-color: #FF8751;
+}
+
+.dropdown_trigger_link {
+  display: block;
+  padding: 5px 0 5px 0;
+}
+
+.dropdown_login_triggers a {
+  color: #FF8751;
+  display: inline-block;
+  font-weight: 300;
+}
+
+.dropdown_login_triggers a:hover:not(.active) {
+  cursor: pointer;
+  font-weight: 400;
+}
+
+.dropdown_login_field {
+  text-align: center;
+}
+
+#submit {
+  background-color: #3CBC8D;
+  border: none;
+  border-radius: 3px;
+  color: white;
+  display: inline-block;
+  font-size: 1.0em;
+  padding: 10px;
+  text-decoration: none;
+  -webkit-transition: background-color 0.25s;
+  transition: background-color 0.25s;
+  width: 100%;
+}
+
+#submit {
+  border: none;
+  outline: none;
+}
+
+#submit:hover {
+  background-color: #FF8751;
+  cursor: pointer;
+}
+
+/*************************** FOOTER ***************************/
 
 #footer {
-  background-color: #2a2a2a;;
+  background-color: #2a2a2a;
   font-family: 'Roboto Condensed', sans-serif;
   height: 100%;
   text-align: center;

@@ -1,21 +1,5 @@
 $(document).ready(function() {
 
-	// Calling Login Form
-	$("#login_link").click(function() {
-			$("#register_form").hide();
-			$("#login_form").show();
-			location.assign("/test/login.html");
-			return false;
-	});
-
-	// Calling Register Form
-	$("#register_link").click(function() {
-			$("#login_form").hide();
-			$("#register_form").show();
-			location.assign("/signup");
-			return false;
-	});
-
 	$('#target').submit(function(event){
 		//if no email is entered
 		if (!$("#email_input").val()) {
