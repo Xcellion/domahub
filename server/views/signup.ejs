@@ -5,43 +5,57 @@
 <html>
 
 	<head>
-		<title>w3bbi</title>
-		<link rel="stylesheet" href="/css/style_base.css" type="text/css" />
-		<!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script> -->
-		<script src="/js/jquery/jquery.js" type="text/javascript"></script>
-		<script src="/js/routes/client_signup.js" type="text/javascript"></script>
-		<link rel="icon" type="image/ico" href="/images/favicon.ico">
+		<title>w3bbi - Register</title>
+		<link rel="stylesheet" href="/css/signup.css" type="text/css" />
+		<link rel="stylesheet" href="test/font-awesome-4.6.3/css/font-awesome.min.css" />
+		<link rel="icon" type="image/png" href="/test/favicon-32x32.png" sizes="32x32">
+    <link rel="icon" type="image/png" href="/test/favicon-16x16.png" sizes="16x16">
+		<link href='https://fonts.googleapis.com/css?family=Share+Tech|Roboto+Condensed:400,300|Source+Sans+Pro:400,300' rel='stylesheet' type='text/css' />
 	</head>
-	
+
 	<body>
 
-		<div class="body_wrapper">
-			
-			<div id="form_wrapper">
-		
+			<div id="register_form">
+
 				<!-- any messages from the server -->
 				<div id="message">
 					<% if (typeof message != "undefined") {%>
 						<%= message %>
 					<% } else {%>
-						Enter your information below!
+
 					<% } %>
 				</div>
-				
+
 				<form id="target" action="/signup" method="post">
-					<input autofocus name="email" placeholder="Email" type="text" id="email_input">
-					<input name="fullname" placeholder="Full Name" type="text" id="fullname_input">
-					<input name="password" placeholder="Password" type="password" id="pw_input">
-					<input name="verify_pw" placeholder="Confirm password" type="password" id="verify_input">
-					<input id="submit" type="submit" value="Create account">
+					<fieldset class="w3bbi_icon">
+						<a href="/">w3bbi</a>
+					</fieldset>
+					<fieldset class="email_name">
+						<input autofocus name="email" placeholder="Email" type="text" id="email_input">
+						<input name="fullname" placeholder="Full Name" type="text" id="fullname_input">
+					</fieldset>
+					<fieldset class="password_check">
+						<input name="password" placeholder="Password" type="password" id="pw_input">
+						<input name="verify_pw" placeholder="Confirm password" type="password" id="verify_input">
+					</fieldset>
+					<fieldset class="login_field">
+						<!-- <input id="submit" class="submit_button" type="submit" value="Create account"> -->
+						<button id="submit" value="Create account" type="submit">Create account</button>
+					</fieldset>
+
+<div id="linebreak"></div>
+
+					<fieldset class="login_triggers">
+						<div class="trigger_link">
+							<p id="login_link">Already have an account?</p>
+						</div>
+					</fieldset>
+
 				</form>
-				<div id="signup_wrapper">
-					<a id="signup" href="/">Home</a>
-				</div>
 			</div>
-			
-		</div>
 
 	</body>
-	
+
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+	<script src="/js/routes/client_signup.js" type="text/javascript"></script>
 </html>

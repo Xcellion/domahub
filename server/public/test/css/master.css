@@ -87,6 +87,11 @@ table {
   width: 25%;
 }
 
+#linebreak2 {
+  border-bottom: 1px solid #dddddd;
+  margin: 5px auto 5px auto;
+  width: 100%;
+}
 /*************************** BUTTONS ***************************/
 
 .clear-button a {
@@ -242,13 +247,13 @@ table {
   background-color: #ffffff;
   color: #525255;
   display: none;
-  height: 250px;
+  height: 300px;
   left: 0;
   margin: auto;
   position: absolute;
   right: 0;
   top: 80px;
-  width: 325px;
+  width: 350px;
   z-index: 99;
   font-family: 'Roboto Condensed';
   padding: 20px;
@@ -267,7 +272,8 @@ table {
 
 #login_dropdown input {
   font-family: 'Share Tech';
-  padding: 5px;
+  font-size: 1.0em;
+  padding: 10px;
   width: 95%;
 }
 
