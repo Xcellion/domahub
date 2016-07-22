@@ -124,12 +124,14 @@ body {
   padding: 5px 0 5px 0;
 }
 
-.login_triggers a {
+.login_triggers p {
   color: #FF8751;
+  display: inline-block;
   font-weight: 300;
 }
 
-.login_triggers a:hover:not(.active) {
+.login_triggers p:hover:not(.active) {
+  cursor: pointer;
   font-weight: 400;
 }
 

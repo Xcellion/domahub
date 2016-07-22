@@ -44,25 +44,25 @@
     </div>
 
     <div id="login_dropdown">
-      <form method="post" action="#">
+      <form id="target" action="#" method="post">
       <fieldset class="credentials">
         <label class="email">Email</label>
-        <input id="username" name="username" type="text" autocomplete="on">
+        <input id="username" name="email" autofocus name="email" placeholder="Email" type="text" autocomplete="on">
         <label class="password">Password</label>
-        <input id="password" name="password" type="password">
+        <input id="password" name="password" placeholder="Password" type="password">
       </fieldset>
       <fieldset class="login_field">
-        <button class="submit_button" type="button">Log In</button>
+        <button id="submit" value="Log In" type="submit">Log In</button>
       </fieldset>
 
 <div id="linebreak2"></div>
 
       <fieldset class="login_triggers">
         <div class="trigger_link">
-          <a class="forgot" href="forgot">Forgot password?</a>
+          <p class="forgot">Forgot password?</p>
         </div>
-        <div class="trigger_link">
-          <a class="register" href="signup.html">Register now</a>
+        <div id="register_link" class="trigger_link">
+          <p class="register">Register now</p>
         </div>
       </fieldset>
       </form>
