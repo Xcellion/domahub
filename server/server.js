@@ -4,10 +4,14 @@
 
 var express = require('express'),
 	app = express(),
-	bodyParser 	= require('body-parser'),
+	http = require('http'),
+	server = function(appplication){
+		return http.createServer(appplication);
+	},
+ 	proxy = require('subdomain-router');
+
+var bodyParser 	= require('body-parser'),
 	cookieParser = require('cookie-parser'),
-	server = require('http').createServer(app),
-	io = require("socket.io").listen(server),
 	session = require('express-session'),
 	passport = require('passport'),
 	db = require('./lib/database.js'),
@@ -77,16 +81,15 @@ app.get('*', function(req, res){
 	res.redirect('/');
 });
 
-var port = Number(process.env.PORT || 8080);
-server.listen(port, function(){
+var port = Number(process.env.PORT || 80);
+server(app).listen(port, function(){
 	console.log("Listening on port " + port);
 });
 
-
 var dnsd = require("dnsd");
 var server = dnsd.createServer(handler)
-server.zone('example.com', 'ns1.example.com', 'us@example.com', 'now', '2h', '30m', '2w', '10m').listen(process.env.PORT || 5353)
-console.log('DNS server listening on 5353')
+server.zone('example.com', 'ns1.example.com', 'us@example.com', 'now', '2h', '30m', '2w', '10m').listen(process.env.PORT || 53)
+console.log('DNS server listening on 53')
 
 function handler(req, res) {
 
@@ -102,3 +105,12 @@ function handler(req, res) {
 	}
 	res.end();
 }
+
+var proxyServer = proxy({
+	host: 'w3bbi.com',
+	subdomains: {
+		dns: 53
+	}
+});
+
+proxyServer.listen(process.env.PORT || 8080);
