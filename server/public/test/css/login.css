@@ -1,0 +1,164 @@
+/*************************** GLOBAL ***************************/
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+  border: 0;
+  font: inherit;
+  margin: 0;
+  padding: 0;
+  text-decoration: none;
+  vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure,
+footer, header, hgroup, menu, nav, section {
+  display: block;
+}
+body {
+  line-height: 1;
+}
+ol, ul {
+  list-style: none;
+}
+blockquote, q {
+  quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+  content: '';
+  content: none;
+}
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+.noselect {
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+body {
+  background-color: #eeeeee;
+}
+
+#linebreak {
+  border-bottom: 1px solid #dddddd;
+  margin: 5px auto 5px auto;
+  width: 100%;
+}
+
+/*************************** LOG IN ***************************/
+
+.w3bbi_icon {
+  color: #3CBC8D;
+  display: inline-block;
+  text-align: center;
+  font-family: 'Share Tech';
+  font-size: 1.5em;
+  font-weight: bold;
+}
+
+.w3bbi_icon:hover:not(.active) {
+  opacity: 0.9;
+  cursor: pointer;
+}
+
+.w3bbi_icon a {
+  color: #3CBC8D;
+  font-weight: bold;
+}
+
+#login_form {
+  background-color: #fff;
+  color: #525255;
+  height: 350px;
+  left: 0;
+  margin: auto;
+  position: absolute;
+  right: 0;
+  top: 80px;
+  width: 350px;
+  z-index: 99;
+  font-family: 'Roboto Condensed';
+  padding: 20px;
+}
+
+#login_form fieldset {
+  border: none;
+  margin: 15px 0 15px 0;
+  width: 100%;
+}
+
+#login_form label {
+  display: block;
+  margin: 5px 0 5px 0;
+}
+
+#login_form input[type="text"], input[type="password"] {
+  font-family: 'Share Tech';
+  font-size: 1.0em;
+  padding: 10px;
+  width: 95%;
+}
+
+#login_form input[type="text"]:focus, input[type="password"]:focus {
+  outline-color: #FF8751;
+}
+
+.trigger_link {
+  display: block;
+  padding: 5px 0 5px 0;
+}
+
+.login_triggers p {
+  color: #FF8751;
+  display: inline-block;
+  font-weight: 300;
+}
+
+.login_triggers p:hover:not(.active) {
+  cursor: pointer;
+  font-weight: 400;
+}
+
+.login_field {
+  text-align: center;
+}
+
+#submit {
+  background-color: #3CBC8D;
+  border: none;
+  border-radius: 3px;
+  color: white;
+  display: inline-block;
+  font-size: 1.0em;
+  padding: 10px;
+  text-decoration: none;
+  -webkit-transition: background-color 0.25s;
+  transition: background-color 0.25s;
+  width: 100%;
+}
+
+#submit {
+  border: none;
+  outline: none;
+}
+
+#submit:hover {
+  background-color: #FF8751;
+  cursor: pointer;
+}

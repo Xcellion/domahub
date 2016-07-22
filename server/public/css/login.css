@@ -1,0 +1,122 @@
+body {
+  background-color: #eeeeee;
+}
+
+/*************************** LOG IN ***************************/
+
+#message {
+  color: red;
+  font-family: 'Share Tech';
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.w3bbi_login_icon {
+  display: inline-block;
+  font-family: 'Share Tech';
+  font-size: 1.5em;
+  font-weight: bold;
+  margin: 15px 0 15px 0;
+  text-align: center;
+}
+
+.w3bbi_login_icon:hover:not(.active) {
+  cursor: pointer;
+  opacity: 0.9;
+}
+
+.w3bbi_login_icon a {
+  color: #3CBC8D;
+  font-weight: bold;
+}
+
+#login_form {
+  background-color: #fff;
+  color: #525255;
+  font-family: 'Roboto Condensed';
+  height: 350px;
+  left: 0;
+  margin: auto;
+  padding: 20px;
+  position: absolute;
+  right: 0;
+  top: 80px;
+  width: 325px;
+  z-index: 99;
+}
+
+#login_form fieldset {
+  border: none;
+  box-sizing: border-box;
+  margin: 15px 0 15px 0;
+  width: 100%;
+}
+
+#login_form label {
+  display: block;
+  margin: 5px 0 5px 0;
+}
+
+#login_form input[type="text"] {
+  box-sizing: border-box;
+  font-family: 'Share Tech';
+  font-size: 1.0em;
+  padding: 10px;
+  width: 100%;
+}
+
+#login_form input[type="password"] {
+  box-sizing: border-box;
+  font-family: 'Share Tech';
+  font-size: 1.0em;
+  padding: 10px;
+  width: 100%;
+}
+
+#login_form input[type="text"]:focus, input[type="password"]:focus {
+  outline-color: #FF8751;
+}
+
+.trigger_link {
+  display: block;
+  padding: 5px 0 5px 0;
+}
+
+.login_triggers a {
+  color: #FF8751;
+  display: inline-block;
+  font-weight: 300;
+}
+
+.login_triggers a:hover:not(.active) {
+  cursor: pointer;
+  font-weight: 400;
+}
+
+.login_field {
+  text-align: center;
+}
+
+#submit {
+  background-color: #3CBC8D;
+  border: none;
+  border-radius: 3px;
+  color: white;
+  display: inline-block;
+  font-size: 1.0em;
+  padding: 10px;
+  text-decoration: none;
+  -webkit-transition: background-color 0.25s;
+  transition: background-color 0.25s;
+  width: 100%;
+}
+
+#submit {
+  border: none;
+  outline: none;
+}
+
+#submit:hover {
+  background-color: #FF8751;
+  cursor: pointer;
+}

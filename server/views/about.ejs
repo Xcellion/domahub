@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>w3bbi - About Us</title>
+  <link rel="stylesheet" type="text/css" href="/css/about.css" />
+  <link rel="stylesheet" type="text/css" href="/css/master.css" />
+  <link rel="stylesheet" href="/fonts/css/font-awesome.min.css" />
+  <link rel="icon" type="image/png" href="favicon-32x32.png" sizes="32x32">
+  <link rel="icon" type="image/png" href="favicon-16x16.png" sizes="16x16">
+  <link href='https://fonts.googleapis.com/css?family=Share+Tech:400,300|Roboto+Condensed:400,300|Source+Sans+Pro' rel='stylesheet' type='text/css' />
+</head>
+
+<body>
+
+  <div id="navbar">
+    <div class="w3bbi_icon">
+      <a href="/">w3bbi</a>
+    </div>
+    <div class="search_icon">
+      <span class="fa fa-search fa-lg"></span>
+    </div>
+    <div id="searchbar">
+      <form>
+        <input type="text" placeholder="Find your perfect website name" name="q" maxlength="255" autocomplete="off">
+      </form>
+    </div>
+    <div id="list" class="nav-button">
+      <a href="sellers.html">List</a>
+    </div>
+    <div id="rent" class="nav-button">
+      <a href="buyers.html">Rent</a>
+    </div>
+    <a id="login" href="#login_dropdown" class="nav-button">
+      <div id="session">
+        <p>
+          Log In
+        </p>
+      </div>
+    </a>
+  </div>
+
+  <div id="login_dropdown">
+    <form id="target" action="#" method="post">
+    <fieldset class="credentials">
+      <label class="email">Email</label>
+      <input id="username" name="email" autofocus name="email" placeholder="Email" type="text" autocomplete="on">
+      <label class="password">Password</label>
+      <input id="password" name="password" placeholder="Password" type="password">
+    </fieldset>
+    <fieldset class="dropdown_login_field">
+      <button id="submit" value="Log In" type="submit">Log In</button>
+    </fieldset>
+
+<div id="linebreak2"></div>
+
+    <fieldset class="dropdown_login_triggers">
+      <div class="dropdown_trigger_link">
+        <a class="forgot" href="/forgot">Forgot password?</a>
+      </div>
+      <div id="register_link" class="dropdown_trigger_link">
+        <a class="register" href="/signup">Register now</a>
+      </div>
+    </fieldset>
+    </form>
+  </div>
+
+  <div class="foobar"></div>
+
+  <div id="main">
+    <div class="column-2-small">
+        <ul>
+          <li><a href="about.html">Company</a></li>
+          <li><a href="#">Employees</a></li>
+        </ul>
+    </div>
+    <div class="column-2-large">
+      <div class="about_company">
+        <h1>About Us</h1>
+        <p>
+          w3bbi was founded in 2016 to challenge the normal domain name marketplace
+          by creating a platform where domains are rented - not bought - for a
+          reasonable price.
+        </p>
+        <p>
+          Sellers are now empowered to continously generate income on their domain
+          names while buyers are able to purchase these domains for as long or as
+          short as they please. w3bbi aims to provide significant returns for sellers
+          without exposing buyers to the conventionally exorbitant pricetags associated
+          with domain names.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div id="footer">
+    <ul class="footer_list">
+      <li class="footer_item"><a href="about.html">About Us</a></li>
+      <li class="footer_item"><a href="http://1qlee.com/w3bbi/views/tos">Terms of Service</a></li>
+      <li class="footer_item"><a href="http://1qlee.com/w3bbi/views/privacy">Privacy Policy</a></li>
+      <li class="footer_item"><a href="http://1qlee.com/w3bbi/views/careers">Careers</a></li>
+      <li class="footer_item"><a href="http://1qlee.com/w3bbi/views/contact">Contact</a></li>
+    </ul>
+
+    <p class="company_text">
+      &#169; w3bbi.com | 2016
+    </p>
+  </div>
+
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+  <script src="js/jquery/jquery.leanModal.min.js" type="text/javascript"></script>
+  <script src="/js/routes/login_dropdown.js" type="text/javascript"></script>
+</body>
+
+</html>
