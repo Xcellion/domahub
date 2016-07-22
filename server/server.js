@@ -81,15 +81,14 @@ app.get('*', function(req, res){
 	res.redirect('/');
 });
 
-var port = Number(8080);
-server(app).listen(port, function(){
-	console.log("Listening on port " + port);
-});
+// server(app).listen(8080, function(){
+// 	console.log("Main website listening on port 8080");
+// });
 
 var dnsd = require("dnsd");
-var server = dnsd.createServer(handler)
-server.zone('example.com', 'ns1.example.com', 'us@example.com', 'now', '2h', '30m', '2w', '10m').listen(5353)
-console.log('DNS server listening on 53')
+var server = dnsd.createServer(handler);
+server.zone('example.com', 'ns1.example.com', 'us@example.com', 'now', '2h', '30m', '2w', '10m').listen(process.env.PORT || 5353, "127.0.0.1");
+console.log('DNS server listening on 5353')
 
 function handler(req, res) {
 
@@ -113,5 +112,8 @@ var proxyServer = proxy({
 		dns: 5353
 	}
 });
-
-proxyServer.listen(process.env.PORT || 8080);
+//
+// var proxy_port = process.env.PORT || 2020;
+// proxyServer.listen(proxy_port, function(){
+// 	console.log("Reverse proxy listening on port " + proxy_port);
+// });
