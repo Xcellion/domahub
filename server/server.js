@@ -81,8 +81,8 @@ app.get('*', function(req, res){
 	res.redirect('/');
 });
 
-server(app).listen(process.env.PORT || 80, function(){
-	console.log("Main website listening on port 80");
+server(app).listen(process.env.PORT || 8080, function(){
+	console.log("Main website listening on port 8080");
 });
 
 var dnsd = require("dnsd");
