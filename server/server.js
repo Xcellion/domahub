@@ -81,14 +81,14 @@ app.get('*', function(req, res){
 	res.redirect('/');
 });
 
-var port = Number(80);
+var port = Number(8080);
 server(app).listen(port, function(){
 	console.log("Listening on port " + port);
 });
 
 var dnsd = require("dnsd");
 var server = dnsd.createServer(handler)
-server.zone('example.com', 'ns1.example.com', 'us@example.com', 'now', '2h', '30m', '2w', '10m').listen(53)
+server.zone('example.com', 'ns1.example.com', 'us@example.com', 'now', '2h', '30m', '2w', '10m').listen(5353)
 console.log('DNS server listening on 53')
 
 function handler(req, res) {
@@ -109,7 +109,8 @@ function handler(req, res) {
 var proxyServer = proxy({
 	host: 'w3bbi.com',
 	subdomains: {
-		dns: 53
+		"": 8080,
+		dns: 5353
 	}
 });
 
