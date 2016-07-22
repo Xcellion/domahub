@@ -92,7 +92,7 @@ body {
   background-color: #fff;
   color: #525255;
   font-family: 'Roboto Condensed';
-  height: 380px;
+  height: 400px;
   left: 0;
   margin: auto;
   padding: 20px;
@@ -118,6 +118,7 @@ body {
   font-family: 'Share Tech';
   font-size: 1.0em;
   padding: 10px;
+  margin-bottom: 2px;
   width: 95%;
 }
 
