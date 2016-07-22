@@ -81,10 +81,12 @@ app.get('*', function(req, res){
 	res.redirect('/');
 });
 
+//main website
 server(app).listen(process.env.PORT || 8080, function(){
 	console.log("Main website listening on port 8080");
 });
 
+//dns nameserver
 var dnsd = require("dnsd");
 var server = dnsd.createServer(handler);
 server.zone('example.com', 'ns1.example.com', 'us@example.com', 'now', '2h', '30m', '2w', '10m').listen(53);
