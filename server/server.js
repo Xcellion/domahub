@@ -87,7 +87,7 @@ app.get('*', function(req, res){
 
 var dnsd = require("dnsd");
 var server = dnsd.createServer(handler);
-server.zone('example.com', 'ns1.example.com', 'us@example.com', 'now', '2h', '30m', '2w', '10m').listen(process.env.PORT || 5353, "127.0.0.1");
+server.zone('example.com', 'ns1.example.com', 'us@example.com', 'now', '2h', '30m', '2w', '10m').listen(process.env.PORT, process.env.IP);
 console.log('DNS server listening on 5353')
 
 function handler(req, res) {
@@ -105,13 +105,13 @@ function handler(req, res) {
 	res.end();
 }
 
-var proxyServer = proxy({
-	host: 'w3bbi.com',
-	subdomains: {
-		"": 8080,
-		dns: 5353
-	}
-});
+// var proxyServer = proxy({
+// 	host: 'w3bbi.com',
+// 	subdomains: {
+// 		"": 8080,
+// 		dns: 5353
+// 	}
+// });
 //
 // var proxy_port = process.env.PORT || 2020;
 // proxyServer.listen(proxy_port, function(){
