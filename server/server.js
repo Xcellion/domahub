@@ -81,29 +81,30 @@ app.get('*', function(req, res){
 	res.redirect('/');
 });
 
-// server(app).listen(8080, function(){
-// 	console.log("Main website listening on port 8080");
-// });
+port = process.env.PORT || 80;
+server(app).listen(port, function(){
+	console.log("Main website listening on port " + port);
+});
 
-var dnsd = require("dnsd");
-var server = dnsd.createServer(handler);
-server.zone('example.com', 'ns1.example.com', 'us@example.com', 'now', '2h', '30m', '2w', '10m').listen(process.env.PORT, process.env.IP);
-console.log('DNS server listening on 5353')
+// var dnsd = require("dnsd");
+// var server = dnsd.createServer(handler);
+// server.zone('example.com', 'ns1.example.com', 'us@example.com', 'now', '2h', '30m', '2w', '10m').listen(process.env.PORT, process.env.IP);
+// console.log('DNS server listening on 5353')
 
-function handler(req, res) {
-
-	var question = res.question[0]
-	, hostname = question.name
-	, length = hostname.length
-	, ttl = 60;
-
-	console.log("IP of " + req.connection.remoteAddress + " requested " + hostname + " at port " + req.connection.remotePort);
-
-	if (question.type == 'A') {
-		res.answer.push({name:hostname, type:'A', data:"111.111.111.111", 'ttl':ttl})
-	}
-	res.end();
-}
+// function handler(req, res) {
+//
+// 	var question = res.question[0]
+// 	, hostname = question.name
+// 	, length = hostname.length
+// 	, ttl = 60;
+//
+// 	console.log("IP of " + req.connection.remoteAddress + " requested " + hostname + " at port " + req.connection.remotePort);
+//
+// 	if (question.type == 'A') {
+// 		res.answer.push({name:hostname, type:'A', data:"111.111.111.111", 'ttl':ttl})
+// 	}
+// 	res.end();
+// }
 
 // var proxyServer = proxy({
 // 	host: 'w3bbi.com',
