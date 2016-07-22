@@ -81,7 +81,7 @@ app.get('*', function(req, res){
 	res.redirect('/');
 });
 
-server(app).listen(8080, function(){
+server(app).listen(process.env.PORT || 8080, function(){
 	console.log("Main website listening on port 8080");
 });
 
