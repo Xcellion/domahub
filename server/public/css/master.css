@@ -175,11 +175,12 @@ table {
 }
 
 #main_button {
-  margin-top: 2.0em;
+  margin: 2.0em 0 2.0em 0;
   text-align: center;
 }
 
 #main_button a {
+  display: inline-block;
   padding: 10px;
 }
 
