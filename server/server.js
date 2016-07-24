@@ -90,8 +90,9 @@ server(app).listen(10000, function(){
 proxy({
   host: 'w3bbi.com',
   subdomains: {
-    '': 10000,		//main website at 8080
-	dns: 10000,		//dns at 8080 as well
+    '': 10000,		//main website at 10000
+	www: 10000,		//main website at 10000
+	dns: 10000,		//dns at 10000 as well
 	api: 10000		//api for display websites
   }
 }).listen(port);
