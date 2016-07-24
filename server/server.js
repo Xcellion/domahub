@@ -83,27 +83,15 @@ app.get('*', function(req, res){
 
 //main website
 var port = process.env.PORT || 8080;
-server(app).listen(port, function(){
-	console.log("Main website listening on port 8080");
+server(app).listen(10000, function(){
+	console.log("Main website listening on port 10000");
 });
 
-//DNS nameserver
-var dnsd = require("dnsd");
-var server = dnsd.createServer(handler);
-server.zone('example.com', 'ns1.example.com', 'us@example.com', 'now', '2h', '30m', '2w', '10m').listen(process.env.PORT || 53);
-console.log('DNS server listening on 53')
-
-function handler(req, res) {
-
-	var question = res.question[0]
-	, hostname = question.name
-	, length = hostname.length
-	, ttl = 60;
-
-	console.log("IP of " + req.connection.remoteAddress + " requested " + hostname + " at port " + req.connection.remotePort);
-
-	if (question.type == 'A') {
-		res.answer.push({name:hostname, type:'A', data:"111.111.111.111", 'ttl':ttl})
-	}
-	res.end();
-}
+proxy({
+  host: 'w3bbi.com',
+  subdomains: {
+    '': 10000,		//main website at 8080
+	dns: 10000,		//dns at 8080 as well
+	api: 10000		//api for display websites
+  }
+}).listen(port);

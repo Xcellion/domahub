@@ -22,20 +22,10 @@ module.exports = function(app, db, auth, e){
 	app.post('/login', Auth.loginPost);
 }
 
-//display main page with all listings
+//display main page
 function mainPage(req, res, next){
-	Listing.getAllListings(function(result){
-		if (result.state == "success"){
-			res.render("index.ejs", {
-				message: Auth.messageReset(req),
-				listings: result.listings,
-				user: req.user
-			});
-		}
-		else {
-			res.render("index.ejs", {
-				message: "Database error!"
-			});
-		}
+	res.render("index.ejs", {
+		message: Auth.messageReset(req),
+		user: req.user
 	});
 }
