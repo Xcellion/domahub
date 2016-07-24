@@ -50,10 +50,3 @@
   text-align: center;
   width: 25%;
 }
-
-.partners_img {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-around;
-  width: 100%;
-}
