@@ -102,8 +102,8 @@ table {
 
 .clear-button a {
   border-radius: 3px;
-  border: 1px solid #bdbdbd;
-  color: #bdbdbd;
+  border: 1px solid #eeeeee;
+  color: #eeeeee;
   font-family: 'Roboto Condensed';
   font-size: 0.9em;
   font-weight: 400;
@@ -193,7 +193,7 @@ table {
   font-family: 'Roboto Condensed';
   height: 60px;
   margin: 0;
-  opacity: 0.9;
+  /*opacity: 0.9;*/
   overflow: hidden;
   padding: 0;
   position: fixed;
