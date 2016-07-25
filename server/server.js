@@ -75,7 +75,7 @@ app.use(express.static(__dirname + '/public'));
 app.get('*.ico', function(){})
 require('./routes/routes.js')(app, db, auth, error);
 
-//404
+//404 not found
 app.get('*', function(req, res){
 	console.log("Unable to find " + req.originalUrl);
 	console.log("404, not found!");
