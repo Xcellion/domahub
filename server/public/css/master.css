@@ -81,7 +81,7 @@ table {
 
 .foobar {
   background-color: #2a2a2a;
-  height: 50px;
+  height: 60px;
   padding-top: 60px;
 }
 
@@ -97,6 +97,12 @@ table {
   border-bottom: 1px solid #dddddd;
   margin: 5px auto 5px auto;
   width: 100%;
+}
+
+#linebreak3 {
+  border-bottom: 1px solid #dddddd;
+  margin: 5px auto 5px auto;
+  width: 50%;
 }
 /*************************** BUTTONS ***************************/
 
@@ -165,13 +171,17 @@ table {
 }
 
 .nav-button a {
-  color: #525255;
+  color: #eeeeee;
   padding: 5px;
+  -webkit-transition: border-top 0.25s, opacity 0.25s;
+  transition: border-top 0.25s, opacity 0.25s;
 }
 
 .nav-button a:hover:not(.active) {
-  border-top: 1px solid #3CBC8D;
+  border-top: 3px solid #FF8751;
+  color: #FF8751;
   cursor: pointer;
+  opacity: 0.9;
 }
 
 #main_button {
@@ -188,12 +198,11 @@ table {
 
 #navbar {
   align-items: center;
-  background-color: #ffffff;
+  background-color: #2a2a2a;
   display: flex;
   font-family: 'Roboto Condensed';
   height: 60px;
   margin: 0;
-  /*opacity: 0.9;*/
   overflow: hidden;
   padding: 0;
   position: fixed;
@@ -208,20 +217,17 @@ table {
   font-size: 1.5em;
   font-weight: bold;
   margin: 0 15px 0 15px;
-  -webkit-transition: border-bottom 0.5s, opacity 0.5s;
-  transition: border-bottom 0.5s, opacity 0.5s;
 }
 
 .w3bbi_icon a:hover:not(.active) {
-  border-bottom: 4px solid #3CBC8D;
   cursor: pointer;
   opacity: 0.85;
 }
 
 .search_icon {
-  /*border-left: 1px solid #cccccc;*/
+  border-left: 1px solid #cccccc;
   box-sizing: border-box;
-  color: #525255;
+  color: #eeeeee;
   padding: 0 10px 0 10px;
 }
 
@@ -231,9 +237,10 @@ table {
 }
 
 #searchbar input {
+  background-color: #2a2a2a;
   border: none;
   box-sizing: border-box;
-  color: #525255;
+  color: #eeeeee;
   font-family: 'Share Tech';
   font-size: 1.0em;
   outline: none;
@@ -378,7 +385,7 @@ table {
 
 .footer_item a {
   color: #efefef;
-  padding: 10px;
+  margin: 10px;
   font-size: 0.9em;
   text-decoration: none;
 }
