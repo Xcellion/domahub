@@ -202,21 +202,24 @@ table {
 }
 
 .w3bbi_icon a {
-  border-right: 1px solid #cccccc;
   box-sizing: border-box;
   color: #3CBC8D;
   font-family: 'Share Tech';
   font-size: 1.5em;
   font-weight: bold;
-  padding: 0 15px 0 15px;
+  margin: 0 15px 0 15px;
+  -webkit-transition: border-bottom 0.5s, opacity 0.5s;
+  transition: border-bottom 0.5s, opacity 0.5s;
 }
 
 .w3bbi_icon a:hover:not(.active) {
-  opacity: 0.9;
+  border-bottom: 4px solid #3CBC8D;
   cursor: pointer;
+  opacity: 0.85;
 }
 
 .search_icon {
+  /*border-left: 1px solid #cccccc;*/
   box-sizing: border-box;
   color: #525255;
   padding: 0 10px 0 10px;
