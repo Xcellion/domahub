@@ -73,6 +73,8 @@ app.use(express.static(__dirname + '/public'));
 
 //favicon requests
 app.get('*.ico', function(){})
+
+//main routes
 require('./routes/routes.js')(app, db, auth, error);
 
 //404 not found
