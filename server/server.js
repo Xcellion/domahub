@@ -87,7 +87,7 @@ server(app).listen(10000, function(){
 	console.log("Main website listening on port 10000");
 });
 
-//sub domain router reverse proxy
+//sub-domain router reverse proxy
 proxy({
   host: 'w3bbi.com',
   subdomains: {
