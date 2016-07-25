@@ -98,4 +98,4 @@ server(app).listen(8080, function(){
 // 	dns: 11111,		//dns at 10000 as well
 // 	api: 11111		//api for display websites
 //   }
-// }).listen(80);
+// }).listen(8080);
