@@ -81,7 +81,7 @@ app.get('*', function(req, res){
 	res.redirect('/');
 });
 
-//main website
+//main website on port 10000
 var port = process.env.PORT || 8080;
 server(app).listen(10000, function(){
 	console.log("Main website listening on port 10000");
