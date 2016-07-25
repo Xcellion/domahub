@@ -68,6 +68,7 @@ app.use(function(req, res, next) {
 	next();
 });
 
+//for routing of static files
 app.use(express.static(__dirname + '/public'));
 
 //favicon requests second time for some reason
@@ -81,12 +82,13 @@ app.get('*', function(req, res){
 	res.redirect('/');
 });
 
-//main website
+//main website on port 10000
 var port = process.env.PORT || 8080;
 server(app).listen(10000, function(){
 	console.log("Main website listening on port 10000");
 });
 
+//sub-domain router reverse proxy
 proxy({
   host: 'w3bbi.com',
   subdomains: {
