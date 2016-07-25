@@ -82,19 +82,18 @@ app.get('*', function(req, res){
 	res.redirect('/');
 });
 
-//main website on port 10000
-var port = process.env.PORT || 8080;
-server(app).listen(10000, function(){
-	console.log("Main website listening on port 10000");
+//main website on port 8080
+server(app).listen(8080, function(){
+	console.log("Main website listening on port 8080");
 });
 
-//sub-domain router reverse proxy
-proxy({
-  host: 'w3bbi.com',
-  subdomains: {
-    '': 10000,		//main website at 10000
-	www: 10000,		//main website at 10000
-	dns: 10000,		//dns at 10000 as well
-	api: 10000		//api for display websites
-  }
-}).listen(port);
+// //sub-domain router reverse proxy
+// proxy({
+//   host: 'w3bbi.com',
+//   subdomains: {
+//     '': 11111,		//main website at 10000
+// 	www: 11111,		//main website at 10000
+// 	dns: 11111,		//dns at 10000 as well
+// 	api: 11111		//api for display websites
+//   }
+// }).listen(80);
