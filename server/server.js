@@ -68,6 +68,7 @@ app.use(function(req, res, next) {
 	next();
 });
 
+//for routing of static files
 app.use(express.static(__dirname + '/public'));
 
 //favicon requests second time for some reason
