@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>w3bbi - Listing with w3bbi</title>
+    <link rel="stylesheet" type="text/css" href="./css/master.css" />
+    <link rel="stylesheet" type="text/css" href="./css/sellers.css" />
+    <link rel="stylesheet" href="/fonts/font-awesome/css/font-awesome.min.css" />
+    <link rel="icon" type="image/png" href="favicon-32x32.png" sizes="32x32">
+    <link rel="icon" type="image/png" href="favicon-16x16.png" sizes="16x16">
+    <link href='https://fonts.googleapis.com/css?family=Share+Tech|Roboto+Condensed:400,300|Source+Sans+Pro:400,300' rel='stylesheet' type='text/css' />
+  </head>
+
+  <body>
+
+    <div id="navbar">
+      <div class="w3bbi_icon">
+        <a href="/">w3bbi</a>
+      </div>
+      <div class="search_icon">
+        <span class="fa fa-search fa-lg"></span>
+      </div>
+      <div id="searchbar">
+        <form>
+          <input type="text" placeholder="Search websites" name="q" maxlength="255" autocomplete="off">
+        </form>
+      </div>
+      <div id="list" class="nav-button">
+        <a href="/sellers">List</a>
+      </div>
+      <div id="rent" class="nav-button">
+        <a href="/buyers">Rent</a>
+      </div>
+      <div id="login" class="nav-button">
+        <a id="login_modal" href="#login_dropdown">Log In</a>
+      </div>
+    </div>
+
+    <div id="login_dropdown">
+      <form id="target" action="#" method="post">
+      <fieldset class="credentials">
+        <label class="email">Email</label>
+        <input id="username" name="email" autofocus name="email" placeholder="Email" type="text" autocomplete="on">
+        <label class="password">Password</label>
+        <input id="password" name="password" placeholder="Password" type="password">
+      </fieldset>
+      <fieldset class="dropdown_login_field">
+        <button id="submit" value="Log In" type="submit">Log In</button>
+      </fieldset>
+
+  <div id="linebreak2"></div>
+
+      <fieldset class="dropdown_login_triggers">
+        <div class="dropdown_trigger_link">
+          <a class="forgot" href="/forgot">Forgot password?</a>
+        </div>
+        <div id="register_link" class="dropdown_trigger_link">
+          <a class="register" href="/signup">Register now</a>
+        </div>
+      </fieldset>
+      </form>
+    </div>
+
+  <div class="foobar"></div>
+
+    <div id="main">
+      <div class="header">
+          <h1>Listing a website with w3bbi</h1>
+      </div>
+
+      <div class="main_sect">
+        <div class="column-3" class="col_price">
+          <h2>Price</h2>
+          <div class="col_icon">
+            <span class="fa fa-money fa-4x fa-fw"></span>
+          </div>
+          <p>
+            Price your rental based on hourly, weekly, monthly, or yearly rates.
+          </p>
+        </div>
+
+        <div class="column-3" class="col_schedule">
+          <h2>Schedule</h2>
+          <div class="col_icon">
+            <span class="fa fa-calendar fa-4x fa-fw"></span>
+          </div>
+          <p>
+            Configure your website's availability down to the exact hour,
+            if necessary.
+          </p>
+        </div>
+
+        <div class="column-3" class="col_list">
+          <h2>List!</h2>
+          <div class="col_icon">
+            <span class="fa fa-list-alt fa-4x fa-fw"></span>
+          </div>
+          <p>
+            Confirm your settings and list! Your website is now being
+            shopped by thousands of users!
+          </p>
+        </div>
+      </div>
+
+      <div id="main_button" class="solid-button">
+        <a href="listings.html">List Now</a>
+      </div>
+
+  </div>
+
+<div id="linebreak"></div>
+
+    <div id="footer">
+      <ul class="footer_list">
+        <li class="footer_item"><a href="/about">About Us</a></li>
+        <li class="footer_item"><a href="/tos">Terms of Service</a></li>
+        <li class="footer_item"><a href="/privacy">Privacy Policy</a></li>
+        <li class="footer_item"><a href="/careers">Careers</a></li>
+        <li class="footer_item"><a href="/contact">Contact</a></li>
+      </ul>
+
+      <p class="company_text">
+        &#169; w3bbi.com | 2016
+      </p>
+    </div>
+
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script type="text/javascript" src="js/jquery/jquery.leanModal.min.js"></script>
+    <script src="/js/routes/login_dropdown.js" type="text/javascript"></script>
+  </body>
+</html>
