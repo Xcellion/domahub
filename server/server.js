@@ -71,7 +71,7 @@ app.use(function(req, res, next) {
 //for routing of static files
 app.use(express.static(__dirname + '/public'));
 
-//favicon requests second time for some reason
+//favicon requests
 app.get('*.ico', function(){})
 require('./routes/routes.js')(app, db, auth, error);
 
