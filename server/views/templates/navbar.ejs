@@ -1,0 +1,52 @@
+<link rel="stylesheet" type="text/css" href="/css/navbar.css" />
+
+<div id="navbar">
+  <div class="w3bbi_icon">
+    <a href="/">w3bbi</a>
+  </div>
+  <div class="search_icon">
+    <span class="fa fa-search fa-lg"></span>
+  </div>
+  <div id="searchbar">
+    <form>
+      <input type="text" placeholder="Search websites" name="q" maxlength="255" autocomplete="off">
+    </form>
+  </div>
+  <div id="list" class="nav-button">
+    <a href="/sellers">List</a>
+  </div>
+  <div id="rent" class="nav-button">
+    <a href="/buyers">Rent</a>
+  </div>
+  <div id="login" class="nav-button">
+    <a id="login_modal" href="#login_dropdown">Log In</a>
+  </div>
+</div>
+
+<div id="login_dropdown">
+  <form id="target" action="#" method="post">
+  <fieldset class="credentials">
+    <label class="email">Email</label>
+    <input id="username" name="email" autofocus name="email" placeholder="Email" type="text" autocomplete="on">
+    <label class="password">Password</label>
+    <input id="password" name="password" placeholder="Password" type="password">
+  </fieldset>
+  <fieldset class="dropdown_login_field">
+    <button id="submit" value="Log In" type="submit">Log In</button>
+  </fieldset>
+
+<div id="linebreak2"></div>
+
+  <fieldset class="dropdown_login_triggers">
+    <div class="dropdown_trigger_link">
+      <a class="forgot" href="/forgot">Forgot password?</a>
+    </div>
+    <div id="register_link" class="dropdown_trigger_link">
+      <a class="register" href="/signup">Register now</a>
+    </div>
+  </fieldset>
+  </form>
+</div>
+
+<script src="js/jquery/jquery.leanModal.min.js" type="text/javascript"></script>
+<script src="/js/routes/login_dropdown.js" type="text/javascript"></script>
