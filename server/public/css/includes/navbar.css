@@ -15,28 +15,9 @@
   width: 100%;
 }
 
-.nav-button {
-  box-sizing: border-box;
-  padding: 0 15px 0 15px;
-}
-
-.nav-button a {
-  color: #eeeeee;
-  padding: 5px;
-  -webkit-transition: border-top 0.25s, opacity 0.25s;
-  transition: border-top 0.25s, opacity 0.25s;
-}
-
-.nav-button a:hover:not(.active) {
-  border-top: 3px solid #FF8751;
-  color: #FF8751;
-  cursor: pointer;
-  opacity: 0.9;
-}
-
 #navbar {
   align-items: center;
-  /*background-color: #2a2a2a;*/
+  background-color: transparent;
   display: flex;
   font-family: 'Roboto Condensed';
   height: 60px;
@@ -44,8 +25,15 @@
   overflow: hidden;
   padding: 0;
   position: fixed;
+  top: 0;
+  transition: all 0.5s ease;
   width: 100%;
   z-index: 1;
+}
+
+#navbar.past-landing {
+  background-color: #2a2a2a;
+  color: #eeeeee;
 }
 
 .w3bbi_icon a {
@@ -68,6 +56,10 @@
   padding: 0 10px 0 10px;
 }
 
+.search_icon.past-landing {
+  color: #eeeeee;
+}
+
 #searchbar {
   flex: 1;
   order: 1;
@@ -84,6 +76,10 @@
   width: 100%;
 }
 
+input.past-landing {
+  color: #eeeeee;
+}
+
 #list {
   order: 2;
 }
@@ -96,14 +92,23 @@
   order: 4;
 }
 
-#session p {
-  color: #525255;
-  padding: 5px;
+.nav-button {
+  box-sizing: border-box;
+  padding: 0 15px 0 15px;
 }
 
-#session:hover p {
-  border-top: 1px solid #3CBC8D;
+.nav-button a {
+  color: #eeeeee;
+  padding: 5px;
+  -webkit-transition: border-top 0.5s, opacity 0.25s;
+  transition: border-top 0.5s, opacity 0.25s;
+}
+
+.nav-button a:hover:not(.active) {
+  border-top: 1px solid #FF8751;
+  color: #FF8751;
   cursor: pointer;
+  opacity: 0.9;
 }
 
 #login_dropdown {
