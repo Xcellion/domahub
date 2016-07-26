@@ -9,19 +9,11 @@ $(window).on('scroll',function(){
     if (stop > landingBottom) {
         $('#navbar').addClass('past-landing');
         $('.search_icon').addClass('past-landing');
-        $('#navbar').removeClass('past-middle');
-        $('.search_icon').removeClass('past-middle');
-        $(':input').css('color','#eeeeee');
-    } else if (stop > landingMiddle && stop < landingBottom) {
-        $('#navbar').addClass('past-middle');
-        $('.search_icon').addClass('past-middle');
         $(':input').css('color','#eeeeee');
     }
     else {
         $('#navbar').removeClass('past-landing');
         $('.search_icon').removeClass('past-landing');
-        $('#navbar').removeClass('past-middle');
-        $('.search_icon').removeClass('past-middle');
         $(':input').css('color','#525255');
    }
 
