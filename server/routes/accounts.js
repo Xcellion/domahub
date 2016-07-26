@@ -11,7 +11,6 @@ module.exports = function(app, db, auth, e){
 	//function to check if logged in
 	isLoggedIn = Auth.isLoggedIn;
 
-	app.get("*", testAPI);
 	//default page
 	app.get("/", mainPage);
 	app.get('/login', isLoggedIn);
@@ -21,11 +20,6 @@ module.exports = function(app, db, auth, e){
 	//posts for account
 	app.post('/signup', Auth.signupPost);
 	app.post('/login', Auth.loginPost);
-}
-
-function testAPI(req, res, next){
-	console.log(req.headers.host);
-	next();
 }
 
 //display main page
