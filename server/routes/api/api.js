@@ -15,7 +15,7 @@ module.exports = function(app, db, auth, e){
 function checkHost(req, res, next){
     domain_name = req.headers.host.replace("www.","");
 
-	if (domain_name != "www.w3bbi.com" && domain_name != "w3bbi.com" && domain_name != "localhost"){
+	if (domain_name != "www.w3bbi.com" && domain_name != "w3bbi.com" && domain_name != "localhost" && domain_name != "localhost:8080"){
         req.session.api = true;
 
         Listing.getListingInfo(domain_name, function(result){
