@@ -13,9 +13,9 @@ module.exports = function(app, db, auth, e){
 
 //function to check if the requested host is not for w3bbi
 function checkHost(req, res, next){
-    domain_name = req.headers.host;
+    domain_name = getHostName(req.headers.host);
 
-	if (domain_name != "w3bbi.com" && domain_name != "localhost"){
+	if (domain_name != "www.w3bbi.com" && domain_name != "w3bbi.com" && domain_name != "localhost"){
         req.session.api = true;
 
         Listing.getListingInfo(domain_name, function(result){
@@ -29,7 +29,7 @@ function checkHost(req, res, next){
                         });
                     }
                     else {
-                        //error, send a custom w3bbi error
+                        //todo error, send a custom w3bbi error
                     }
                 });
             }
@@ -42,5 +42,16 @@ function checkHost(req, res, next){
     }
     else {
         next();
+    }
+}
+
+//helper function to remove http://www
+function getHostName(url) {
+    var match = url.match(/:\/\/(www[0-9]?\.)?(.[^/:]+)/i);
+    if (match != null && match.length > 2 && typeof match[2] === 'string' && match[2].length > 0) {
+    return match[2];
+    }
+    else {
+        return null;
     }
 }
