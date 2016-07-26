@@ -13,10 +13,15 @@
 </head>
 
 <body>
-  <div class="construction">
+  <!-- <div class="construction">
     Warning: Site is Currently Under Construction
-  </div>
-      <%- include("templates/navbar"); %>
+  </div> -->
+
+      <%- include("templates/navbar", {is_index: true}); %>
+      <% if (is_index = false) { %>
+        <style>.nav-button a {color: #484848;}</style>
+      <% } %>
+
   <div id="landing">
     <div id="landing_img">
       <div id="landing_text">
@@ -35,7 +40,7 @@
       </div>
     </div>
   </div>
-  
+
 <div id="linebreak"></div>
 
   <div id="main">

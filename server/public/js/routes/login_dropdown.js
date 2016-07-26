@@ -6,4 +6,12 @@ $('#login_modal').leanModal({
   closeButton: ".modal_close"
 });
 
+$('.nav-button').hover(function() {
+  $(this).addClass('hover_navDiv');
+  $(this).find('a').css('color', '#FF8751');
+}, function() {
+  $(this).removeClass('hover_navDiv');
+  $(this).find('a').css('color', '#eeeeee');
+});
+
 });
