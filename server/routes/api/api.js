@@ -13,7 +13,7 @@ module.exports = function(app, db, auth, e){
 
 //function to check if the requested host is not for w3bbi
 function checkHost(req, res, next){
-    domain_name = getHostName(req.headers.host);
+    domain_name = req.headers.host.replace("www.","");
 
 	if (domain_name != "www.w3bbi.com" && domain_name != "w3bbi.com" && domain_name != "localhost"){
         req.session.api = true;
