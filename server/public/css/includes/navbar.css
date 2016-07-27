@@ -106,21 +106,21 @@
 }
 
 #login {
+  margin: 0 10px 0 10px;
+  order: 4;
+}
+
+#login a {
   background-color: #3CBC8D;
   border-radius: 3px;
   box-sizing: border-box;
-  margin: 0 10px 0 10px;
+  color: #eeeeee;
   padding: 7px 10px 7px 10px;
-  order: 4;
   -webkit-transition: all 0.5s;
   transition: all 0.5s;
 }
 
-#login a {
-  color: #eeeeee;
-}
-
-#login:hover {
+#login a:hover {
   background-color: #FF8751;
   cursor: pointer;
 }
@@ -166,6 +166,10 @@
   z-index: 99;
   font-family: 'Roboto Condensed';
   padding: 20px;
+}
+
+#message {
+  text-align: center;
 }
 
 fieldset {

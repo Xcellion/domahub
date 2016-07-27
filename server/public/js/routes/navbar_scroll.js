@@ -9,12 +9,12 @@ $(window).on('scroll',function(){
     if (stop > landingBottom) {
         $('#navbar').addClass('past-landing');
         $('.search_icon').addClass('past-landing');
-        $(':input').css('color','#eeeeee');
+        $("input[name='q']").css('color','#eeeeee');
     }
     else {
         $('#navbar').removeClass('past-landing');
         $('.search_icon').removeClass('past-landing');
-        $(':input').css('color','#525255');
+        $("input[name='q']").css('color','#525255');
    }
 
 });
