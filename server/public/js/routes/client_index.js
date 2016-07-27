@@ -1,22 +1,22 @@
 $(document).ready(function() {
 
 	//hide the choices until login
-	$("#email_input").focus();
+	$("#username").focus();
 
 	$('#target').submit(function(event){
 		//if no email is entered
-		if (!$("#email_input").val()) {
-			$("#sub_message").fadeOut(100, function(){
+		if (!$("#username").val()) {
+			$("#message").fadeOut(100, function(){
 				$(this).css("color", "#ed1c24").html("Please enter your email address!").fadeIn(100);
-				$("#email_input").focus();
+				$("#username").focus();
 			});
 			//to prevent submission of the form
 			return false;
 		}
 
 		//if no password is entered
-		if (!$("#pw_input").val()) {
-			$("#sub_message").fadeOut(100, function(){
+		if (!$("#password").val()) {
+			$("#password").fadeOut(100, function(){
 				$(this).css("color", "#ed1c24").html("Please enter your password!").fadeIn(100);
 				$("#pw_input").focus();
 			});
@@ -25,8 +25,14 @@ $(document).ready(function() {
 		}
 	});
 
+	//used to delete any old cookies set from renting a domain
 	if (!user){
 		delete_cookie("type");
 		delete_cookie("local_events");
+	}
+
+	//used to display the message sent from the server
+	if (message){
+		$("#message").text(message);
 	}
 });

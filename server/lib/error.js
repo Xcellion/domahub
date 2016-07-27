@@ -44,7 +44,6 @@ function handler(req, res, message, type) {
 				case "Signup error!":
 				case "Invalid price!":
 				default:
-					console.log(message);
 					break;
 			}
 

@@ -18,40 +18,57 @@
   <div id="rent" class="nav-button">
     <a class="nav_link" href="/buyers">Rent</a>
   </div>
+
+<%# navbar checks for a user variable, if it doesnt exist, then display the login button %>
+<% if (!user) { %>
   <div id="login">
     <a id="login_modal" href="#login_dropdown">Log In</a>
   </div>
+
+<%# or else display the logout button %>
+<% } else { %>
+  <div id="login">
+    <a href="/logout">Logout</a>
+  </div>
+<% } %>
+
 </div>
 
-<div id="login_dropdown">
-  <form id="target" action="/login" method="post">
-  <fieldset class="credentials">
-    <div class="input_group">
-      <span class="fa fa-envelope-o fa-fw"></span>
-      <input id="username" name="email" autofocus name="email" placeholder="Email" type="text" autocomplete="on">
-    </div>
-    <div class="input_group">
-      <span class="fa fa-key fa-fw"></span>
-      <input id="password" name="password" placeholder="Password" type="password" autocomplete="off">
-    </div>
-  </fieldset>
-  <fieldset class="dropdown_login_field">
-    <button id="submit" value="Log In" type="submit">Log In</button>
-  </fieldset>
+<%# navbar checks for a user variable, if it doesnt exist, then display the login modal stuff %>
+<% if (!user){ %>
+    <div id="login_dropdown">
+      <div id="message">Please log in below!</div>
+      <form id="target" action="/login" method="post">
+      <fieldset class="credentials">
+        <div class="input_group">
+          <span class="fa fa-envelope-o fa-fw"></span>
+          <input id="username" name="email" autofocus name="email" placeholder="Email" type="text" autocomplete="on">
+        </div>
+        <div class="input_group">
+          <span class="fa fa-key fa-fw"></span>
+          <input id="password" name="password" placeholder="Password" type="password" autocomplete="off">
+        </div>
+      </fieldset>
+      <fieldset class="dropdown_login_field">
+        <button id="submit" value="Log In" type="submit">Log In</button>
+      </fieldset>
 
-<div id="linebreak2"></div>
+    <div id="linebreak2"></div>
 
-  <fieldset class="dropdown_login_triggers">
-    <div class="dropdown_trigger_link">
-      <a class="forgot" href="/forgot">Forgot password?</a>
+      <fieldset class="dropdown_login_triggers">
+        <div class="dropdown_trigger_link">
+          <a class="forgot" href="/forgot">Forgot password?</a>
+        </div>
+        <div id="register_link" class="dropdown_trigger_link">
+          <a class="register" href="/signup">Register now</a>
+        </div>
+      </fieldset>
+      </form>
     </div>
-    <div id="register_link" class="dropdown_trigger_link">
-      <a class="register" href="/signup">Register now</a>
-    </div>
-  </fieldset>
-  </form>
-</div>
+<% } %>
+
 
 <script src="js/jquery/jquery.leanModal.min.js" type="text/javascript"></script>
 <script src="/js/routes/login_dropdown.js" type="text/javascript"></script>
 <script src="/js/routes/navbar_scroll.js" type="text/javascript"></script>
+<script src="/js/routes/client_index.js" type="text/javascript"></script>
