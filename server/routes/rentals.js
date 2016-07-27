@@ -62,16 +62,17 @@ function sendRentalInfo(req, res, result){
 	if (result.state == "success"){
 		//what type of rental is it?
 		switch (result.rental_info.type){
-			//simple page / default
-			case 3:
+			//default page 0
+			//simple page 2
 			case 0:
+			case 2:
 				res.render("reset.ejs", {
 					listing_info: result.listing_info,
 					rental_info: result.rental_info,
 					rental_details: result.rental_details
 				});
 				break;
-			//simple redirect
+			//simple redirect 1
 			case 1:
 				res.json({location: result.rental_details[0].text_value});
 				break;

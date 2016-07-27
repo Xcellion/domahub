@@ -5,10 +5,11 @@
 var express = require('express'),
 	app = express(),
 	http = require('http'),
-	server = function(appplication){
-		return http.createServer(appplication);
+	server = function(application){
+		return http.createServer(application);
 	},
- 	proxy = require('subdomain-router');
+	httpProxy = require('http-proxy'),
+ 	proxy = httpProxy.createProxyServer({});
 
 var bodyParser 	= require('body-parser'),
 	cookieParser = require('cookie-parser'),
@@ -75,7 +76,7 @@ app.use(express.static(__dirname + '/public'));
 app.get('*.ico', function(){})
 
 //main routes
-require('./routes/routes.js')(app, db, auth, error);
+require('./routes/routes.js')(app, db, auth, error, proxy);
 
 //404 not found
 app.get('*', function(req, res){
@@ -85,17 +86,6 @@ app.get('*', function(req, res){
 });
 
 //main website on port 8080
-server(app).listen(8080, function(){
+server(app).listen(80, function(){
 	console.log("Main website listening on port 8080");
 });
-
-// //sub-domain router reverse proxy
-// proxy({
-//   host: 'w3bbi.com',
-//   subdomains: {
-//     '': 11111,		//main website at 10000
-// 	www: 11111,		//main website at 10000
-// 	dns: 11111,		//dns at 10000 as well
-// 	api: 11111		//api for display websites
-//   }
-// }).listen(8080);

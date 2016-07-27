@@ -8,11 +8,9 @@ module.exports = {
 //handle errors, either send them back json, or redirect the page
 function handler(req, res, message, type) {
 	switch (type){
-		case "json":
-			res.json({
-				state: "error",
-				message: message
-			});
+		case "api":
+			req.session.message = "Test";
+			res.redirect(301, 'http://w3bbi.com');
 			break;
 		default:
 			var redirectTo = req.header("Referer") || "/login";

@@ -5,6 +5,8 @@ body, p, h1, h2, h3, h4, h5{
 }
 
 #background_image{
+	background: url(https://source.unsplash.com/category/people) no-repeat center center fixed;
+    background-size: cover;
 	position:absolute;
 	-webkit-background-size: cover;
 	-moz-background-size: cover;
@@ -20,8 +22,7 @@ body, p, h1, h2, h3, h4, h5{
 
 #text_wrapper{
 	color:#fff;
-	border:2px solid #fff;
-	background-color:rgba(0,0,0,.35);
+	background-color:rgba(0,0,0,.75);
 	padding:15px;
 	position:absolute;
 	top:50%;
@@ -31,8 +32,14 @@ body, p, h1, h2, h3, h4, h5{
 	min-width:25%;
 }
 
-#main_text{
+#text_wrapper > a{ color:#FFF;}
+#text_wrapper ::selection{ background: #FFF /* WebKit/Blink Browsers */}
+#text_wrapper ::-moz-selection{ background: #FFF; /* Gecko Browsers */}
 
+#main_text{
+	font-size:300%;
+	font-weight:normal;
+	padding-bottom:15px;
 }
 
 #middle_text{
@@ -53,6 +60,31 @@ body, p, h1, h2, h3, h4, h5{
 
 #footer_wrapper a:visited{
 	color:#FFF;
+}
+
+.button_wrapper{
+	margin-bottom:7px;
+}
+
+.buttons{
+	border:1px solid #FFF;
+	background-color:rgba(0,0,0,.5);
+	padding:7px;
+	color:#FFF;
+	text-decoration:none;
+	opacity:.8;
+	margin:5px;
+	white-space:nowrap;
+	display: inline-block;
+	cursor: pointer;
+}
+
+.buttons:hover{
+	opacity:.9;
+}
+
+.buttons:active{
+	opacity:1;
 }
 
 /* -------------------------------------------------------------- RESET STUFF ---------------------------------------------------------- */
