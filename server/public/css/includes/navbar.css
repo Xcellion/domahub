@@ -119,19 +119,19 @@
   transition: all 0.25s;
 }
 
-.nav-button a {
+.nav_link {
   color: #eeeeee;
   padding: 5px;
   -webkit-transition: all 0.25s;
   transition: all 0.25s;
 }
 
-.hover_navLink {
+.nav_link:hover {
   color: #FF8751;
 }
 
-.hover_navDiv {
-  border-top: 5px solid #FF8751;
+.hover_navLink {
+  border-top: 4px solid #FF8751;
   color: #FF8751;
   cursor: pointer;
 }

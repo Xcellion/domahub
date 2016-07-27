@@ -8,10 +8,12 @@
 
   <body>
 
-
+    <%- include("templates/navbar", {is_index: false}); %>
+    <% if (is_index == false) { %>
+      <style>.nav-button a {color: #484848;}</style>
+    <% } %>
 
     <div id="main">
-      <%- include("templates/navbar"); %>
       <div class="header">
           <h1>Listing a website with w3bbi</h1>
       </div>
