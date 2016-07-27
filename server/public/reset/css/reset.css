@@ -11,6 +11,8 @@ body, p, h1, h2, h3, h4, h5{
 }
 
 #background_image{
+	transition:all .1s ;
+    border:1px solid #000;
     background-size: cover;
 	-webkit-background-size: cover;
 	-moz-background-size: cover;
