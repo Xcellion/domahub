@@ -157,11 +157,8 @@
   color: #525255;
   display: none;
   height: 250px;
-  left: 0;
   margin: auto;
   position: absolute;
-  right: 0;
-  top: 80px;
   width: 350px;
   z-index: 99;
   font-family: 'Roboto Condensed';
@@ -178,12 +175,6 @@ fieldset {
   width: 100%;
 }
 
-label {
-  display: block;
-  margin: 5px 0 5px 0;
-  text-decoration: underline;
-}
-
 .input_group {
   margin-top: 5px;
 }
@@ -191,7 +182,6 @@ label {
 input[type="text"] {
   box-sizing: border-box;
   display: inline-block;
-  font-family: 'Share Tech';
   font-size: 1.0em;
   padding: 10px;
   width: 80%;
@@ -200,7 +190,6 @@ input[type="text"] {
 input[type="password"] {
   box-sizing: border-box;
   display: inline-block;
-  font-family: 'Share Tech';
   font-size: 1.0em;
   padding: 10px;
   width: 80%;

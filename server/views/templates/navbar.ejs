@@ -35,7 +35,7 @@
 </div>
 
 <%# navbar checks for a user variable, if it doesnt exist, then display the login modal stuff %>
-<% if (!user){ %>
+<% if (!user) { %>
     <div id="login_dropdown">
       <div id="message">Please log in below!</div>
       <form id="target" action="/login" method="post">
@@ -65,6 +65,7 @@
       </fieldset>
       </form>
     </div>
+
 <% } %>
 
 

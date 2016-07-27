@@ -1,6 +1,11 @@
-
 body {
-  background-color: #dedede;
+  /*background-color: #dedede;*/
+}
+
+#linebreak2 {
+  border-bottom: 1px solid #dddddd;
+  margin: 5px auto 5px auto;
+  width: 100%;
 }
 
 /*************************** REGISTER ***************************/
@@ -43,7 +48,7 @@ body {
   position: absolute;
   right: 0;
   top: 80px;
-  width: 350px;
+  width: 400px;
 }
 
 #register_form fieldset {
@@ -54,7 +59,6 @@ body {
 
 #register_form input[type="text"] {
   box-sizing: border-box;
-  font-family: 'Share Tech';
   font-size: 1.0em;
   padding: 10px;
   margin-bottom: 5px;
@@ -63,7 +67,6 @@ body {
 
 #register_form input[type="password"] {
   box-sizing: border-box;
-  font-family: 'Share Tech';
   font-size: 1.0em;
   padding: 10px;
   margin-bottom: 5px;

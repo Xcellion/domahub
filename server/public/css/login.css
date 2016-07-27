@@ -1,12 +1,25 @@
 body {
-  background-color: #eeeeee;
+  /*background-color: #eeeeee;*/
+  font-family: 'Roboto Condensed';
+}
+
+.icon_container {
+  box-sizing: border-box;
+  display: inline-block;
+  font-size: 24px;
+  padding: 2px;
+}
+
+#linebreak2 {
+  border-bottom: 1px solid #dddddd;
+  margin: 5px auto 5px auto;
+  width: 100%;
 }
 
 /*************************** LOG IN ***************************/
 
 #message {
   color: red;
-  font-family: 'Share Tech';
   text-align: center;
   text-transform: uppercase;
 }
@@ -41,8 +54,12 @@ body {
   position: absolute;
   right: 0;
   top: 80px;
-  width: 325px;
+  width: 400px;
   z-index: 99;
+}
+
+.input_group {
+  margin-top: 5px;
 }
 
 #login_form fieldset {
@@ -52,25 +69,20 @@ body {
   width: 100%;
 }
 
-#login_form label {
-  display: block;
-  margin: 5px 0 5px 0;
-}
-
 #login_form input[type="text"] {
   box-sizing: border-box;
-  font-family: 'Share Tech';
+  display: inline-block;
   font-size: 1.0em;
   padding: 10px;
-  width: 100%;
+  width: 90%;
 }
 
 #login_form input[type="password"] {
   box-sizing: border-box;
-  font-family: 'Share Tech';
+  display: inline-block;
   font-size: 1.0em;
   padding: 10px;
-  width: 100%;
+  width: 90%;
 }
 
 #login_form input[type="text"]:focus, input[type="password"]:focus {
@@ -101,7 +113,7 @@ body {
   background-color: #3CBC8D;
   border: none;
   border-radius: 3px;
-  color: white;
+  color: #eeeeee;
   display: inline-block;
   font-size: 1.0em;
   padding: 10px;

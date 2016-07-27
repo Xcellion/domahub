@@ -24,10 +24,18 @@
         <a href="/">w3bbi</a>
       </fieldset>
       <fieldset class="credentials">
-        <label class="email">Email</label>
-        <input id="email_input" name="email" autofocus name="email" placeholder="Email" type="text" autocomplete="on">
-        <label class="password">Password</label>
-        <input id="pw_input" name="password" placeholder="Password" type="password">
+        <div class="input_group">
+          <div class="icon_container">
+            <span class="fa fa-envelope-o fa-fw"></span>
+          </div>
+          <input id="username" name="email" autofocus name="email" placeholder="Email" type="text" autocomplete="on">
+        </div>
+        <div class="input_group">
+          <div class="icon_container">
+            <span class="fa fa-key fa-fw"></span>
+          </div>
+          <input id="password" name="password" placeholder="Password" type="password" autocomplete="off">
+        </div>
       </fieldset>
       <fieldset class="login_field">
         <button id="submit" value="Log In" type="submit">Log In</button>
