@@ -24,12 +24,16 @@
 </div>
 
 <div id="login_dropdown">
-  <form id="target" action="#" method="post">
+  <form id="target" action="/login" method="post">
   <fieldset class="credentials">
-    <label class="email">Email</label>
-    <input id="username" name="email" autofocus name="email" placeholder="Email" type="text" autocomplete="on">
-    <label class="password">Password</label>
-    <input id="password" name="password" placeholder="Password" type="password">
+    <div class="input_group">
+      <span class="fa fa-envelope-o fa-fw"></span>
+      <input id="username" name="email" autofocus name="email" placeholder="Email" type="text" autocomplete="on">
+    </div>
+    <div class="input_group">
+      <span class="fa fa-key fa-fw"></span>
+      <input id="password" name="password" placeholder="Password" type="password" autocomplete="off">
+    </div>
   </fieldset>
   <fieldset class="dropdown_login_field">
     <button id="submit" value="Log In" type="submit">Log In</button>
