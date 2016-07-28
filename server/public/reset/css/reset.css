@@ -6,6 +6,10 @@ body, p, h1, h2, h3, h4, h5{
 	overflow:hidden;
 }
 
+p {
+	font-size:125%;
+}
+
 .background_image_wrapper{
 
 }
