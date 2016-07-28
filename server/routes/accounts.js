@@ -24,7 +24,7 @@ module.exports = function(app, db, auth, e){
 
 //display main page
 function mainPage(req, res, next){
-	res.render("index.ejs", {
+	res.render("index", {
 		message: Auth.messageReset(req),
 		user: req.user
 	});
