@@ -47,8 +47,8 @@ p {
 	margin-right:-50%;
 }
 
-#text_wrapper > a{ color:gray;}
-#text_wrapper p>a:visited{ color: gray;}
+#text_wrapper > a{ color:#f5f5f5;}
+#text_wrapper p>a:visited{ color: #f5f5f5;}
 #text_wrapper ::selection{ background: #FFF /* WebKit/Blink Browsers */}
 #text_wrapper ::-moz-selection{ background: #FFF; /* Gecko Browsers */}
 
