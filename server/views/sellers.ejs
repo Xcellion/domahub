@@ -8,7 +8,7 @@
 
   <body>
 
-    <%- include("templates/navbar", {is_index: false}); %>
+    <%- include("templates/navbar", {user: user, is_index: false}); %>
     <% if (is_index == false) { %>
       <style>.nav-button a {color: #484848;}</style>
     <% } %>

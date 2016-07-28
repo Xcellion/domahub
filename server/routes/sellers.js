@@ -13,9 +13,19 @@ module.exports = function(app, db, auth, e){
 
 	//default page
 	app.get("/sellers", sellersPage);
+	app.get('/login', isLoggedIn);
+	app.get('/logout', Auth.logout);
+	app.get('/signup', Auth.signup);
 
+	//posts for account
+	app.post('/signup', Auth.signupPost);
+	app.post('/login', Auth.loginPost);
 }
 
-function sellersPage(req, res, next) {
-  res.render("sellers");
+//display about page
+function sellersPage(req, res, next){
+	res.render("sellers", {
+		message: Auth.messageReset(req),
+		user: req.user
+	});
 }
