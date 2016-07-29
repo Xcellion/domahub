@@ -15,7 +15,8 @@
   <% } %>
 
   <div id="main">
-    <div class="header">
+    <div id="main_wrapper">
+    <div class="header_wrapper">
       <h1>About Us</h1>
     </div>
     <div id="about_sect" class="column-1">
@@ -42,15 +43,15 @@
         </p> -->
       </div>
     </div>
-    <div class="header">
+    <div class="header_wrapper">
       <h1>FAQ</h1>
     </div>
     <div id="faq_sect" class="column-1">
       <div class="column-2-small">
-          <a href="" class="faq_selection">Renters</a>
-          <a href="" class="faq_selection">Sellers</a>
+          <a href="#renters" id="renter_tab" class="faq_selection">Renters</a>
+          <a href="#sellers" id="seller_tab" class="faq_selection">Sellers</a>
       </div>
-      <div class="column-2-large">
+      <div id="renter_faq" class="column-2-large">
         <h3 class="faq_question">1. Lorem ipsum dolor sit amet?</h3>
         <p class="faq_answer">
           Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam ac ullamcorper eros, tempor interdum libero. Maecenas sed ligula tortor.
@@ -73,6 +74,24 @@
           In vitae nibh enim. Aliquam non nulla id.
         </p>
       </div>
+      <div id="seller_faq" class="column-2-large">
+        <h3 class="faq_question">1. How much does a tortoise cost?</h3>
+        <p class="faq_answer">
+        Leverage agile frameworks to provide a robust synopsis for high level overviews. Iterative approaches to corporate strategy foster collaborative thinking to further the overall value proposition.        </p>
+        <h3 class="faq_question">2. How much does a tortoise cost?</h3>
+        <p class="faq_answer">
+        Leverage agile frameworks to provide a robust synopsis for high level overviews. Iterative approaches to corporate strategy foster collaborative thinking to further the overall value proposition.        </p>
+        <h3 class="faq_question">3. How much does a tortoise cost?</h3>
+        <p class="faq_answer">
+        Leverage agile frameworks to provide a robust synopsis for high level overviews. Iterative approaches to corporate strategy foster collaborative thinking to further the overall value proposition.        </p>
+        <h3 class="faq_question">4. How much does a tortoise cost?</h3>
+        <p class="faq_answer">
+        Leverage agile frameworks to provide a robust synopsis for high level overviews. Iterative approaches to corporate strategy foster collaborative thinking to further the overall value proposition.        </p>
+        <h3 class="faq_question">5. How much does a tortoise cost?</h3>
+        <p class="faq_answer">
+        Leverage agile frameworks to provide a robust synopsis for high level overviews. Iterative approaches to corporate strategy foster collaborative thinking to further the overall value proposition.        </p>
+      </div>
+      </div>
     </div>
 
 
@@ -81,6 +100,7 @@
   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
   <script src="js/jquery/jquery.leanModal.min.js" type="text/javascript"></script>
   <script src="/js/routes/login_dropdown.js" type="text/javascript"></script>
+  <script src="/js/routes/animations.js" type="text/javascript"></script>
 </body>
 
 </html>

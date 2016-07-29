@@ -63,6 +63,7 @@
 }
 
 .w3bbi_icon a:hover:not(.active) {
+  color: #3CBC8D;
   cursor: pointer;
   opacity: 0.85;
 }

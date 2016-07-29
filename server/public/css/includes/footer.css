@@ -3,10 +3,6 @@
 #footer {
   background-color: #2a2a2a;
   font-family: 'Roboto Condensed', sans-serif;
-  position: absolute;
-  left:0px;
-  right: 0px;
-  bottom:0px;
   text-align: center;
   width: 100%;
 }
@@ -25,15 +21,8 @@
 }
 
 .footer_item a {
-  color: #efefef;
   margin: 10px;
   font-size: 0.9em;
-  text-decoration: none;
-}
-
-.footer_item a:hover {
-  color: #FF8751;
-  cursor: pointer;
 }
 
 .company_text {

@@ -26,13 +26,13 @@ $(document).ready(function() {
 	});
 
 	//used to delete any old cookies set from renting a domain
-	if (!user){
+	if (typeof user == "undefined"){
 		delete_cookie("type");
 		delete_cookie("local_events");
 	}
 
 	//used to display the message sent from the server
-	if (message){
+	if (typeof message != "undefined"){
 		$("#message").text(message);
 	}
 });

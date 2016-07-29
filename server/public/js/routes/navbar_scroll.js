@@ -1,7 +1,6 @@
 // get the value of the bottom of the #main element by adding the offset of that element plus its height, set it as a variable
 var landingBottom = $('#landing').offset().top + $('#landing').height();
-var landingMiddle = $('#landing').offset().top + $(window).height() - ($('#landing').height() / 2);
-// on scroll,
+
 $(window).on('scroll',function(){
 
     // we round here to reduce a little workload
