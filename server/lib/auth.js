@@ -20,7 +20,7 @@ module.exports = {
 
 		// used to deserialize the user
 		passport.deserializeUser(function(id, done) {
-			db.query("SELECT fullname, email, date_created, date_accessed, admin, buyer_seller FROM accounts WHERE id = ?", function(rows, err){
+			db.query("SELECT id, fullname, email, date_created, date_accessed, admin, buyer_seller FROM accounts WHERE id = ?", function(rows, err){
 				if (err){
 					done(err, null);
 				}
@@ -36,7 +36,7 @@ module.exports = {
 				passReqToCallback : true // allows us to pass back the entire request to the callback
 			},
 			function(req, email, password, done) { // callback with email and password from our form
-				db.query("SELECT fullname, email, date_created, date_accessed, admin, buyer_seller FROM accounts WHERE email = ?", function(rows, err){
+				db.query("SELECT id, fullname, email, date_created, date_accessed, admin, buyer_seller FROM accounts WHERE email = ?", function(rows, err){
 					if (err){
 						done(err, null);
 					}
