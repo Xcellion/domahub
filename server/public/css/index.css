@@ -98,16 +98,6 @@
   font-size: 1.1em;
 }
 
-.column-1 {
-  text-align: center;
-  width: 75%;
-}
-
-.column-2 {
-  line-height: 1.4;
-  width: 25%;
-}
-
 .partners_img {
   display: flex;
   flex-direction: row;

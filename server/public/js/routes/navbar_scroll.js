@@ -1,3 +1,9 @@
+// change link color to white if at index
+var is_index = (window.location.pathname);
+if (is_index == "/") {
+  $('.nav_link').css('color', '#eeeeee');
+}
+
 // get the value of the bottom of the #main element by adding the offset of that element plus its height, set it as a variable
 var landingBottom = $('#landing').offset().top + $('#landing').height();
 

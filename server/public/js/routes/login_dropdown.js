@@ -6,10 +6,4 @@ $('#login_modal').leanModal({
   closeButton: ".modal_close"
 });
 
-$('.nav_link').hover(function() {
-  $(this).addClass('hover_navLink');
-}, function() {
-  $(this).removeClass('hover_navLink');
-});
-
 });

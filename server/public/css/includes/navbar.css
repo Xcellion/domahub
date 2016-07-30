@@ -135,19 +135,15 @@
 }
 
 .nav_link {
-  color: #eeeeee;
+  color: #484848;
   padding: 5px;
   -webkit-transition: all 0.25s;
   transition: all 0.25s;
 }
 
 .nav_link:hover {
-  color: #FF8751;
-}
-
-.hover_navLink {
   border-top: 4px solid #FF8751;
-  color: #FF8751;
+  color: #FF8751 !important; 
   cursor: pointer;
 }
 
@@ -170,7 +166,7 @@
   text-align: center;
 }
 
-fieldset {
+#login_dropdown fieldset {
   border: none;
   margin: 15px 0 15px 0;
   width: 100%;
@@ -180,7 +176,7 @@ fieldset {
   margin-top: 5px;
 }
 
-input[type="text"] {
+#login_dropdown input[type="text"] {
   box-sizing: border-box;
   display: inline-block;
   font-size: 1.0em;
@@ -188,7 +184,7 @@ input[type="text"] {
   width: 80%;
 }
 
-input[type="password"] {
+#login_dropdown input[type="password"] {
   box-sizing: border-box;
   display: inline-block;
   font-size: 1.0em;
@@ -196,7 +192,7 @@ input[type="password"] {
   width: 80%;
 }
 
-input[type="text"]:focus, input[type="password"]:focus {
+#login_dropdown input[type="text"]:focus, input[type="password"]:focus {
   outline-color: #FF8751;
   background-color: #fff;
 }

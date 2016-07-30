@@ -11,7 +11,7 @@ $primary: #3CBC8D; // turqoise
 $accent: #FF8751; // orange
 $white: #eeeeee; // for dark backgrounds
 $white-line: #dddddd; // for linebreak lines
-$black-h: #525255; // main header texts
+$black-h: #333333; // main header texts
 $black-p: #484848; // main p texts
 $black-bkgd: #2a2a2a; // footer bkgrnd
 $gray: #888888; // for almost invisible text
@@ -156,15 +156,17 @@ body {
   h1 {
   color: $black-h;
   display: inline-block;
-  font-size: 3.0em;
+  font-size: 2.6em;
   font-weight: 300;
   }
   h2 {
     color: $black-h;
+    display: inline-block;
     font-size: 1.5em;
   }
   h3 {
     color: $black-h;
+    display: inline-block;
     font-size: 1.2em;
   }
   p {
@@ -180,4 +182,36 @@ body {
 .header_wrapper {
   padding: 20px;
   text-align: center;
+}
+
+.column-40 {
+  align-self: center;
+  width: 40%;
+}
+
+.column-100 {
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
+}
+
+.column-50 {
+  // margin-left: auto;
+  // margin-right: auto;
+  width: 50%;
+}
+
+.column-75 {
+  text-align: center;
+  width: 75%;
+}
+
+.column-25 {
+  width: 25%;
+}
+
+.column-33 {
+  padding: 25px;
+  text-align: center;
+  width: 33%;
 }

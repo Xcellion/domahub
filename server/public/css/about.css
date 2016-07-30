@@ -3,8 +3,7 @@
 #main_wrapper {
   display: flex;
   flex-direction: column;
-  height: 1000px;
-  margin-top: 60px;
+  margin: 60px 0 60px 0;
 }
 
 #about_sect p {
@@ -15,12 +14,6 @@
 .p_wrapper {
   text-align: center;
   width: 100%;
-}
-
-.column-1 {
-  align-self: center;
-  margin-top: 25px;
-  width: 40%;
 }
 
 #faq_sect {
@@ -40,18 +33,9 @@
   margin-right: 30px;
 }
 
-.column-2-small {
-  margin-left: auto;
-  margin-right: auto;
+#faq_tabs {
   text-align: center;
-  width: 50%;
   margin-bottom: 10px;
-}
-
-.column-2-large {
-  margin-left: auto;
-  margin-right: auto;
-  width: 100%;
 }
 
 .faq_selection {

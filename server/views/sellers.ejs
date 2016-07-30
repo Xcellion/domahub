@@ -6,57 +6,83 @@
     <%- include("templates/head_links"); %>
   </head>
 
-  <body>
+<body>
 
-    <%- include("templates/navbar", {user: user, is_index: false}); %>
-    <% if (is_index == false) { %>
-      <style>.nav-button a {color: #484848;}</style>
-    <% } %>
+  <%- include("templates/navbar", {user: user, is_index: false}); %>
+  <% if (is_index = false) { %>
+    <style>.nav-button a {color: #484848;}</style>
+  <% } %>
 
-    <div id="main">
-      <div class="header">
-          <h1>Listing a website with w3bbi</h1>
+  <div id="main">
+    <div id="main_wrapper">
+
+      <div class="header_wrapper">
+          <h1>Listing with w3bbi</h1>
       </div>
 
-      <div class="main_sect">
-        <div class="column-3" class="col_price">
-          <h2>Price</h2>
-          <div class="col_icon">
-            <span class="fa fa-money fa-4x fa-fw"></span>
-          </div>
-          <p>
-            You have full control over pricing. Price your rental based
-            on hourly, weekly, monthly, or yearly rates.
-          </p>
-        </div>
+<div id="linebreak"></div>
 
-        <div class="column-3" class="col_schedule">
-          <h2>Schedule</h2>
-          <div class="col_icon">
-            <span class="fa fa-calendar fa-4x fa-fw"></span>
-          </div>
-          <p>
-            Use our calendar tool to configure your website's availability
-            down to the exact hour, if necessary.
-          </p>
-        </div>
-
-        <div class="column-3" class="col_list">
-          <h2>List!</h2>
-          <div class="col_icon">
-            <span class="fa fa-list-alt fa-4x fa-fw"></span>
-          </div>
-          <p>
-            Confirm your settings and list! Your website is now being
-            shopped by thousands of users!
-          </p>
+    <div id="calculator_wrapper" class="column-100">
+      <div class="calculator_content" class="column-25">
+        <h2>Unlock a new revenue stream</h2>
+        <div class="main_link">
+          <a class="orange_link" href="#">Find out how much you can make</a>
+          <span class="fa fa-angle-right"></span>
         </div>
       </div>
+      <div class="calculator_content" class="column-25">
+        <label>Domains</label>
+        <input type="text" />
+        <input type="text" />
+        <input type="text" />
+      </div>
+    </div>
+
+<div id="linebreak"></div>
+
+    <div class="header_wrapper">
+        <h1>Why w3bbi?</h1>
+    </div>
+
+    <div id="icon_thirds" class="column-50">
+      <div id="col_price" class="column-33">
+        <div class="col_icon">
+          <span class="fa fa-money fa-4x fa-fw"></span>
+        </div>
+        <h2>Full price control</h2>
+        <p>
+          You decide the price. Price your rental based
+          on flexible hourly, weekly, monthly, or yearly rates.
+        </p>
+      </div>
+
+      <div id="col_schedule" class="column-33">
+        <div class="col_icon">
+          <span class="fa fa-calendar fa-4x fa-fw"></span>
+        </div>
+        <h2>Flexible scheduling</h2>
+        <p>
+          Use our calendar tool to configure your website's availability
+          down to the exact hour, if necessary.
+        </p>
+      </div>
+
+      <div id="col_list" class="column-33">
+        <div class="col_icon">
+          <span class="fa fa-list-alt fa-4x fa-fw"></span>
+        </div>
+        <h2>Immediate listing</h2>
+        <p>
+          Your listings are posted immediately once automatically
+          approved. Buyers can access your listing in seconds!
+        </p>
+      </div>
+    </div>
 
       <div id="main_button" class="solid-button">
         <a href="listings.html">List Now</a>
       </div>
-
+    </div>
   </div>
 
 <div id="linebreak"></div>
