@@ -5,9 +5,8 @@ if (is_index == "/") {
 }
 
 // get the value of the bottom of the #main element by adding the offset of that element plus its height, set it as a variable
-var offset = $('#landing').offset().top;
-var landingHeight = $('#landing').height();
-var landingBottom = offset + landingHeight;
+var landingBottom = $('#landing').offset().top + $('#landing').height();
+
 
 $(window).on('scroll',function(){
 
