@@ -69,7 +69,7 @@ function sendRentalInfo(req, res, result){
 				res.render("reset.ejs", {
 					listing_info: result.listing_info,
 					rental_info: result.rental_info,
-					rental_details: result.rental_details
+					default_rental_info: result.default_rental_info
 				});
 				break;
 			//simple redirect 1

@@ -3,63 +3,53 @@
 <!DOCTYPE html>
 
 <html>
-
 	<head>
-		<title></title>
+		<%# function to help with checking for default vs rented rental info %>
+		<% function checkRental(rental_info, default_rental_info, key){
+			return (rental_info[key] != null) ? rental_info[key] : default_rental_info[key];
+		} %>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
 		<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
 		<link class="rental_main_css" rel="stylesheet" type="text/css" href="http://www.w3bbi.com/reset/css/reset.css">
 		<link rel="stylesheet" type="text/css" href="http://www.w3bbi.com/reset/content-tools/content-tools.min.css">
 		<meta name="viewport" content="width=device-width, height=device-height">
+		<script>
+			var listing_info = <% if(typeof listing_info != "undefined"){ %><%-JSON.stringify(listing_info)%><% }else{ %>""<% } %>;
+			var rental_info = <% if(typeof rental_info != "undefined"){ %><%-JSON.stringify(rental_info)%><% }else{ %>""<% } %>;
+			var default_rental_info = <% if(typeof default_rental_info != "undefined"){ %><%-JSON.stringify(default_rental_info)%><% }else{ %>""<% } %>;
+		</script>
+		<title><%= checkRental(rental_info, default_rental_info, "title"); %></title>
+		<link rel="shortcut icon" href="<%= checkRental(rental_info, default_rental_info, 'favicon'); %>" type="image/x-icon">
+
+		<%# custom google font %>
+		<link href="https://fonts.googleapis.com/css?family=<%= checkRental(rental_info, default_rental_info, 'font_main'); %>|<%= checkRental(rental_info, default_rental_info, 'font_middle'); %>" rel="stylesheet">
 	</head>
 
 	<body>
 		<div id="background_image_wrapper" class="background_image_wrapper">
-			<img id="background_image" class="background_image" src="https://source.unsplash.com/category/people" width="100%" height="100%"/>
+			<img id="background_image" class="background_image" width="100%" height="100%" src="<%= checkRental(rental_info, default_rental_info, 'background_image'); %>">
 		</div>
 		<div id="text_wrapper" class="text_wrapper">
 			<div data-editable data-name="text_wrapper">
-				<h1 id="main_text" class="main_text editable">
-					<% if(typeof rental_details == "undefined"){ %>
-						Title of site
-					<% } %>
+				<h1 id="main_text" class="main_text editable"
+				style="color: #<%= checkRental(rental_info, default_rental_info, 'color_main'); %>;
+					   font-family: <%= checkRental(rental_info, default_rental_info, 'font_main'); %>;">
+					<%= checkRental(rental_info, default_rental_info, "main_text"); %>
 				</h1>
 			</div>
-			<div data-editable data-name="middle_text" id="middle_text" class="middle_text editable">
-				<% if(typeof rental_details == "undefined"){ %>
-					<p>Here is where users can type custom messages</p>
-				<% } %>
+			<div data-editable data-name="middle_text" id="middle_text" class="middle_text editable"
+			style="color: #<%= checkRental(rental_info, default_rental_info, 'color_middle'); %>;
+				   font-family: <%= checkRental(rental_info, default_rental_info, 'font_middle'); %>;">
+				<%- checkRental(rental_info, default_rental_info, 'middle_text'); %>
 			</div>
 		</div>
-		<% if (rental_info.type != 0) { %>
+		<% if (typeof rental_info == "undefined" || rental_info.type != 0) { %>
 			<div id="footer_wrapper" class="center_horizontal">
  				<a href="http://www.w3bbi.com/listing/<%= listing_info.domain_name %>">
 					What is this website?
 				</a>
 			</div>
 		<% } %>
-
-		<script type="text/javascript">
-			var rental_details = <% if(typeof rental_details != "undefined"){ %><%-JSON.stringify(rental_details)%><% }else{ %>""<% } %>;
-			var style = $("<style></style");
-			$("head").append(style);
-
-			for (var x = 0; x < rental_details.length; x++){
-				switch (rental_details[x].text_key){
-					case "css":
-						style.append(rental_details[x].text_value);
-						break;
-					case "head":
-						var tempElem = $(rental_details[x].text_key);
-						tempElem.append(rental_details[x].text_value);
-						break;
-					default:
-						var tempElem = $("#" + rental_details[x].text_key);
-						tempElem.append(rental_details[x].text_value);
-						break;
-				}
-			}
-		</script>
 	</body>
 
 </html>
