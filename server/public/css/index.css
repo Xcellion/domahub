@@ -74,23 +74,8 @@
   padding: 15px;
 }
 
-.main_sect p {
+.meat_content p {
   padding: 50px;
-}
-
-.filler_text {
-  display: flex;
-  justify-content: center;
-  padding: 50px 0 50px 0;
-  width: 100%;
-}
-
-.main_sect {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  padding: 50px 0 50px 0;
-  width: 100%;
 }
 
 .main_link {

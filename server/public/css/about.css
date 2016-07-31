@@ -16,11 +16,6 @@
   width: 100%;
 }
 
-#faq_sect {
-  display: flex;
-  flex-direction: column;
-}
-
 #renter_faq {
   display: none;
 }
