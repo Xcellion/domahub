@@ -191,9 +191,8 @@ function getRental(req, res, next){
 				res.render("rental.ejs", {
 					user: req.user,
 					listing_info: result.listing_info,
-					rental_html: body,
-					rental_info: undefined,
-					rental_details: result.rental_details,
+					rental_info: result.rental_info,
+					default_rental_info: result.default_rental_info,
 					new_rental_info: new_rental_info
 				});
 			}
@@ -206,19 +205,12 @@ function getRental(req, res, next){
 	else {
 		Listing.getListingRental(domain_name, rental_id, account_id, function(result){
 			if (result.state == "success"){
-				if (result.rental_info.same_details){
-					console.log("Same details found! Redirecting...");
-					res.redirect("/listing/" + domain_name + "/" + result.rental_info.same_details);
-				}
-				else {
-					var render = {
-						user: req.user,
-						listing_info: result.listing_info,
-						rental_info: result.rental_info,
-						rental_details: result.rental_details
-					}
-					res.render("rental.ejs", render);
-				}
+				res.render("rental.ejs", {
+					user: req.user,
+					listing_info: result.listing_info,
+					rental_info: result.rental_info,
+					default_rental_info: result.default_rental_info
+				});
 			}
 			else {
 				error.handler(req, res, result.description);
@@ -647,7 +639,7 @@ function rentalChecks(req, res, domain_name, user_id, type, events){
 		error.handler(req, res, "Invalid rental type!", "json");
 	}
 	//check if events even exist
-	else if (!events){
+	else if (!events || events.length <= 0){
 		bool = false;
 		error.handler(req, res, "Invalid date!", "json");
 	}

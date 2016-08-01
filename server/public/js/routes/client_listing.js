@@ -80,45 +80,33 @@ $(document).ready(function() {
 
 //helper function to create pre-existing rentals
 function createExisting(rentals){
-	var allevents = $('#calendar').fullCalendar('clientEvents');
-
 	for (var x = 0; x < rentals.length; x++){
-		var exists = false;
-		for (var y = 0; y < allevents.length; y++){
-			if (allevents[y].rental_id == rentals[x].rental_id){
-				exists = true;
-				break;
-			}
-		}
-		if (!exists){
-			var start = new Date(rentals[x].date + " UTC");
-			var end = new Date(start.getTime() + rentals[x].duration);
-			var eventData = {
-				start: start,
-				end: end,
-				old: true,
-				rental_id: rentals[x].rental_id,
-				same_details: rentals[x].same_details,
-				account_id: rentals[x].account_id
-			};
+		var start = new Date(rentals[x].date + " UTC");
+		var end = new Date(start.getTime() + rentals[x].duration);
+		var eventData = {
+			start: start,
+			end: end,
+			old: true,
+			rental_id: rentals[x].rental_id,
+			account_id: rentals[x].account_id
+		};
 
-			//came from editing an existing rental, color that one orange
-			if (rentals[x].rental_id == old_rental_info.rental_id || (rentals[x].same_details && rentals[x].same_details == old_rental_info.rental_id)){
-				eventData.title = "Original time";
-				eventData.color = "orange";
-				eventData.editing = true;
-			}
-			else if (user.id == rentals[x].account_id){
-				eventData.title = user.fullname || "Guest";
-				eventData.color = "green";
-			}
-			else {
-				eventData.title = "Rented!";
-				eventData.color = "red";
-				eventData.other = true;
-			}
-			$('#calendar').fullCalendar('renderEvent', eventData, true);
+		//came from editing an existing rental, color that one orange
+		if (rentals[x].rental_id == old_rental_info.rental_id){
+			eventData.title = "Original time";
+			eventData.color = "orange";
+			eventData.editing = true;
 		}
+		else if (user.id == rentals[x].account_id){
+			eventData.title = user.fullname || "Guest";
+			eventData.color = "green";
+		}
+		else {
+			eventData.title = "Rented!";
+			eventData.color = "red";
+			eventData.other = true;
+		}
+		$('#calendar').fullCalendar('renderEvent', eventData, true);
 	}
 }
 
@@ -247,20 +235,17 @@ $(document).on("mouseup", ".fc-event", function(mouseUpJsEvent){
 		delete_cookie("local_events");
 		delete_cookie("type");
 
-		//get the id of the main rental
-		var same_id = mouseUpCalEvent.same_details ? mouseUpCalEvent.same_details : mouseUpCalEvent.rental_id;
-
 		//click an editing event to stop editing it
 		if (mouseUpCalEvent.editing){
 			old_rental_info = false;
 			editingRental();
-			eventEdit(same_id, "Add more time?", "green", false);
+			eventEdit(mouseUpCalEvent.rental_id, "Add more time?", "green", false);
 			$("#calendar").fullCalendar('removeEvents', filterNew); //remove all new events
 		}
 		//click an existing event to edit it
 		else {
 			old_rental_info = {
-				rental_id: same_id
+				rental_id: mouseUpCalEvent.rental_id
 			}
 			editingRental();
 			$("#calendar").fullCalendar('removeEvents', filterNew); //remove all new events
@@ -289,9 +274,8 @@ var mousein = false;
 $(document).on("mouseenter", ".fc-event", function(e){
 	mouseEvent = $("#calendar").fullCalendar('clientEvents', $(this).attr("id"))[0];
 
-	var same_id = mouseEvent.same_details ? mouseEvent.same_details : mouseEvent.rental_id;
 	if (!mouseEvent.other && !mouseEvent.editing && user && mouseEvent.account_id == user.id && !mousein){
-		eventEdit(same_id, "Add more time?");
+		eventEdit(mouseEvent.rental_id, "Add more time?");
 		mousein = true;
 		$(this).css("cursor:pointer");
 	}
@@ -300,10 +284,9 @@ $(document).on("mouseenter", ".fc-event", function(e){
 $(document).on("mouseleave", ".fc-event", function(e){
 	mouseEvent = $("#calendar").fullCalendar('clientEvents', $(this).attr("id"))[0];
 
-	var same_id = mouseEvent.same_details ? mouseEvent.same_details : mouseEvent.rental_id;
 	if (!mouseEvent.other && !mouseEvent.editing && user && mouseEvent.account_id == user.id){
 		var title = user.fullname || "Guest";
-		eventEdit(same_id, title);
+		eventEdit(mouseEvent.rental_id, title);
 		mousein = false;
 	}
 });
@@ -704,7 +687,7 @@ function filterMine(event) {
 
 //helper function to filter out existing rental for editing
 function filterSame(event, id){
-	return (event.same_details == id || event.rental_id == id);
+	return event.rental_id == id;
 }
 
 //helper function to find all newly added time

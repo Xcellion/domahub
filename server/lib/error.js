@@ -25,12 +25,14 @@ function handler(req, res, message, type) {
 				case "Invalid user!":
 				case "Invalid password!":
 					req.session.message = "Invalid username / password!";
+					redirectTo = "/login";
 					break;
 				case "Invalid user / rental!":
 					req.session.message = "Invalid rental!";
 					console.log("Someone tried to access someone else's rental!");
 				case "Invalid rental!":
 				case "No rental information!":
+				case "Invalid rental / listing!":
 					redirectTo = RemoveLastDirectoryPartOf(req.path);
 					break;
 				case "Cannot activate through URL!":

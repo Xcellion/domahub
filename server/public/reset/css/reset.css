@@ -4,14 +4,11 @@ body, p, h1, h2, h3, h4, h5{
 	padding:0;
 	text-align:center;
 	overflow:hidden;
+	font-family: arial, helvetica;
 }
 
 p {
 	font-size:125%;
-}
-
-.background_image_wrapper{
-
 }
 
 #background_image_wrapper{
@@ -49,8 +46,9 @@ p {
 
 #text_wrapper > a{ color:#f5f5f5;}
 #text_wrapper p>a:visited{ color: #f5f5f5;}
-#text_wrapper ::selection{ background: #FFF /* WebKit/Blink Browsers */}
-#text_wrapper ::-moz-selection{ background: #FFF; /* Gecko Browsers */}
+
+::selection{ background: #FFF /* WebKit/Blink Browsers */}
+::-moz-selection{ background: #FFF; /* Gecko Browsers */}
 
 .main_text{
 	color:#fff;
@@ -62,10 +60,6 @@ p {
 
 .middle_text{
 	color:#fff;
-}
-
-#middle_text{
-
 }
 
 #footer_wrapper{

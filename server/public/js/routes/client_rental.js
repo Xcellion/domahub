@@ -220,14 +220,7 @@ function submitRentals(id){
 //update page based on database data
 function updatePage(data){
 	if (rental_info){
-		//change all UTC to local time
-		rental_info.offset = new Date(rental_info.date + " UTC").getTimezoneOffset();
-		rental_info.date = moment(new Date(rental_info.date + " UTC")).format('YYYY-MM-DD HH:mm:ss');
-
-		for (var x = 0; x < rental_info.rentals.length; x++){
-			rental_info.rentals[x].date = moment(new Date(rental_info.rentals[x].date + " UTC")).format('YYYY-MM-DD HH:mm:ss');
-		}
-		appendRentals(rental_info.rentals, false);
+		
 	}
 
 	//update w3bbi rental info for new rentals
