@@ -1,7 +1,7 @@
 /******************** MISC*************************/
 
 .w3bbi_kit {
-  font-family: monospace;
+  font-family: 'Share Tech';
   font-size: 1.2em;
   font-weight: bold;
 }
@@ -35,7 +35,7 @@
 }
 
 #landing_img {
-  background-image: url('https://goo.gl/Wn5kFR');
+  background-image: url('https://hd.unsplash.com/photo-1466584820433-9ad1cc6798f3');
   background-position: bottom center;
   background-repeat: no-repeat;
   background-size: cover;
@@ -47,15 +47,15 @@
 }
 
 .eye_text h1 {
-  color: #3CBC8D;
+  color: #fff;
   font-family: 'Source Sans Pro', sans-serif;
   font-size: 4rem;
-  font-weight: 300;
+  font-weight: bold;
   padding: 0;
 }
 
 .flavor_text p {
-  color: #eee;
+  color: #fff;
   margin-top: 15px;
   font-size: 1.8rem;
 }
