@@ -1,20 +1,6 @@
 /******************** RESET ****************/
 @import 'reset';
-
-/******************** FONTS ****************/
-$roboto: 'Roboto Condensed', Helvetica, sans-serif;
-$sharet: 'Share Tech', 'Lucida Console', monospace;
-$ssp: 'Source Sans Pro', Helvetica, sans-serif; // for eye_text
-
-/******************** COLORS ****************/
-$primary: #3CBC8D; // turqoise
-$accent: #FF8751; // orange
-$white: #eeeeee; // for dark backgrounds
-$white-line: #dddddd; // for linebreak lines
-$black-h: #333; // main header texts
-$black-p: #555; // main p texts
-$black-bkgd: #2a2a2a; // footer bkgrnd
-$gray: #888888; // for almost invisible text
+@import 'fonts_colors';
 
 /******************** MISC ******************/
 .webbi_text {
@@ -33,9 +19,12 @@ $gray: #888888; // for almost invisible text
   top: 60px;
 }
 
+/******************** FORMS/INPUT ******************/
+
 input:-webkit-autofill {
     -webkit-box-shadow: 0 0 0px 1000px white inset;
 }
+
 /********************** LINKS ******************/
 
 body {
@@ -57,7 +46,7 @@ h1 {
   display: inline-block;
   font: {
     size: 2.5rem;
-    weight: 300;
+    weight: bold;
   }
   padding: 15px;
 }
@@ -66,9 +55,9 @@ h2 {
   display: inline-block;
   font: {
     size: 1.5rem;
-    weight: 300;
+    weight: 400;
   }
-  padding: 15px;
+  padding: 10px;
 }
 h3 {
   color: $black-h;
@@ -82,6 +71,7 @@ p {
     size: 1.3rem;
     weight: 300;
   }
+  padding: 10px;
 }
 
 .orange_link {

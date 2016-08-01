@@ -1,0 +1,69 @@
+/******************** FONTS ****************/
+/******************** COLORS ****************/
+/****************** FORM ***************/
+input[type="text"] {
+  box-sizing: border-box;
+  font-color: #555;
+  font-family: "Roboto Condensed", Helvetica, sans-serif;
+  font-size: 1.2rem;
+  font-weight: 300;
+  padding: 10px;
+  margin-bottom: 10px;
+  width: 100%; }
+
+input:focus {
+  outline-color: #FF8751; }
+
+textarea {
+  box-sizing: border-box;
+  font-color: #555;
+  font-family: "Roboto Condensed", Helvetica, sans-serif;
+  font-size: 1.2rem;
+  font-weight: 300;
+  height: 150px;
+  margin-bottom: 10px;
+  padding: 10px;
+  resize: vertical;
+  width: 100%; }
+
+textarea:focus {
+  outline-color: #FF8751; }
+
+/******************* MAIN *******************/
+#main {
+  height: 900px !important; }
+
+#main h2 {
+  border-bottom: 1px solid #333; }
+
+#contact_form {
+  margin-top: 30px;
+  width: 100%; }
+
+#company_address {
+  margin-top: 25px;
+  padding: 20px;
+  background-color: #f8f8f9; }
+
+.sm_icon {
+  padding: 10px; }
+
+.sm_icon a {
+  color: #333;
+  font-size: 1.3rem;
+  font-weight: 300; }
+
+#facebook_icon:hover {
+  color: #3b5998; }
+
+#twitter_icon:hover {
+  color: #00aced; }
+
+#linkedin_icon:hover {
+  color: #0077B5; }
+
+#youtube_icon:hover {
+  color: #cd201f; }
+
+.submit_button {
+  float: right; }

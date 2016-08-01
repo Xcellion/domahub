@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>w3bbi - Contact Us</title>
+  <link rel="stylesheet" type="text/css" href="/css/contact.css" />
+  <%- include("templates/head_links"); %>
+</head>
+
+<body>
+
+  <%- include("templates/navbar", {user: user}); %>
+
+  <div id="main">
+
+    <div class="container">
+      <div class="column-50 is-centered text-center">
+        <h1>Contact Us</h1>
+      </div>
+      <div class="column-40 flex-row-center is-centered">
+        <div id="contact_form">
+          <form method="post">
+            <input type="text" placeholder="Email" name="name" required />
+            <input type="text" placeholder="Subject" name="subject" required />
+            <textarea placeholder="Share something!" name="description" required ></textarea>
+            <button class="submit_button" value="send" type="submit">Send</button>
+          </form>
+        </div>
+      </div>
+      <div id="company_address" class="container flex-row-center">
+        <div class="column-25 text-center">
+          <h2>Headquarters</h2>
+          <div class="p_wrapper">
+            <p>
+              420 Ashe Trail <br />
+                            New York, NY
+            </p>
+          </div>
+        </div>
+        <div class="column-25 text-center">
+          <h2>Social Media</h2>
+            <div class="sm_icon">
+              <a href="https://www.facebook.com" id="facebook_icon">
+                Facebook<span class="fa fa-facebook fa-fw"></span>
+              </a>
+            </div>
+            <div class="sm_icon">
+              <a href="https://www.twitter.com" id="twitter_icon">
+               Twitter<span class="fa fa-twitter fa-fw"></span>
+             </a>
+            </div>
+            <div class="sm_icon">
+              <a href="https://www.linkedin.com" id="linkedin_icon">
+               LinkedIn<span class="fa fa-linkedin fa-fw"></span>
+             </a>
+            </div>
+            <div class="sm_icon">
+              <a href="https://www.youtube.com" id="youtube_icon">
+               YouTube<span class="fa fa-youtube fa-fw"></span>
+             </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <%- include("templates/footer"); %>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+  <script src="js/jquery/jquery.leanModal.min.js" type="text/javascript"></script>
+  <script src="/js/routes/login_dropdown.js" type="text/javascript"></script>
+  <script src="/js/routes/animations.js" type="text/javascript"></script>
+</body>
+
+</html>

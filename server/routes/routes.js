@@ -8,4 +8,5 @@ module.exports = function(app, db, auth, error, proxy){
 	require('./profiles.js')(app, db, auth, error); 		// For individual user profiles
 	require('./rentals.js')(app, db, auth, error); 			//
 	require('./sellers.js')(app, db, auth, error); 			// Sellers information page
+	require('./contact.js')(app, db, auth, error); 			// Contact Us page
 }
