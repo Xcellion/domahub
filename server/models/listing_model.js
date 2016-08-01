@@ -309,7 +309,10 @@ listing_model.prototype.getRental = function(rental_info, listing_info, callback
 
 	getRentalTimes(rental_info, callback, function(result){
 		rental_info.rentals = result.rentals;
-		listing_model.sendDefaultRental(listing_info.id, listing_info, rental_info, callback);
+		getRentalDetails(rental_info, callback, function(result){
+			rental_info.details = result.details;
+			listing_model.sendDefaultRental(listing_info.id, listing_info, rental_info, callback);
+		})
 	});
 }
 
@@ -345,11 +348,32 @@ function getRentalTimes(rental_info, callback_error, callback_success){
 	});
 }
 
+//function to get any rental details (the boxes on the page with text)
+function getRentalDetails(rental_info, callback_error, callback_success){
+
+	//get the rental info for all rentals with same details
+	listing_model.getInfo("rental_details", "rental_id", rental_info.rental_id, false, function(result){
+		if (result.state == "success"){
+			callback_success({
+				details : result.info
+			})
+		}
+		else {
+			callback_error({
+				state: "error",
+				description: "Something went wrong with rental details"
+			});
+		}
+	});
+}
+
 //figures out the current rental
 listing_model.prototype.sendCurrentRental = function (listing_id, listing_info, callback){
 	listing_model = this;
 	mysql_query = "SELECT * from ?? \
-	INNER JOIN rental_times ON rentals.rental_id = rental_times.rental_id WHERE ?? = ?";
+	INNER JOIN rental_times ON rentals.rental_id = rental_times.rental_id \
+	INNER JOIN rental_details ON rentals.rental_id = rental_details.rental_id \
+	WHERE ?? = ?";
 
 	listing_model.getInfo("rentals", "listing_id", listing_id, mysql_query, function(result){
 		var now = new Date();
@@ -378,8 +402,9 @@ listing_model.prototype.sendCurrentRental = function (listing_id, listing_info, 
 //send the default rental
 listing_model.prototype.sendDefaultRental = function(listing_id, listing_info, current_rental, callback){
 	listing_model = this;
+	mysql_query = "SELECT * from ?? INNER JOIN rental_details ON rentals.rental_id = rental_details.rental_id WHERE ?? = ? ORDER BY rentals.rental_id ASC LIMIT 1";
 
-	listing_model.getInfo("rentals", "listing_id", listing_id, "SELECT * from ?? WHERE ?? = ? ORDER BY rental_id ASC LIMIT 1", function(result){
+	listing_model.getInfo("rentals", "listing_id", listing_id, mysql_query, function(result){
 		//success!
 		if (result.state == "success"){
 			callback({
