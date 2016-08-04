@@ -25,7 +25,7 @@ input:-webkit-autofill {
     -webkit-box-shadow: 0 0 0px 1000px white inset;
 }
 
-/********************** LINKS ******************/
+/********************** UNIVERSAL ******************/
 
 body {
   font: {
@@ -39,6 +39,11 @@ body {
     color: $accent;
     cursor: pointer;
   }
+}
+
+html {
+  height: 100%;
+  box-sizing: border-box;
 }
 
 h1 {
@@ -113,10 +118,11 @@ p {
 }
 
 .clear-button a:hover:not(.active) {
-  background-color: $accent;
-  border: 2px solid $accent;
+  background-color: $primary;
+  border: 2px solid $primary;
   color: $white;
   cursor: pointer;
+  opacity: 0.9;
 }
 
 .solid-button a {
@@ -126,14 +132,14 @@ p {
   font-family: $roboto;
   font-size: 1.2rem;
   font-weight: 400;
-  transition: background-color 0.5s;
-  -webkit-transition: background-color 0.5s;
+  transition: background-color 0.25s;
+  -webkit-transition: background-color 0.25s;
 }
 
 .solid-button a:hover:not(.active) {
-  background-color: $accent;
   color: #fff;
   cursor: pointer;
+  opacity: 0.9;
 }
 
 .submit_button {
@@ -155,8 +161,8 @@ p {
 }
 
 .submit_button:hover {
-  background-color: $accent;
   cursor: pointer;
+  opacity: 0.9;
 }
 
 #main_button {
@@ -171,9 +177,9 @@ p {
 
 /********************** MAIN ****************/
 #main {
-  height: 100%;
-  margin: 60px 0 60px 0;
+  padding: 60px 0 225px 0;
   position: relative;
+  min-height: 100%;
   width: 100%;
 }
 

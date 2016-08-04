@@ -1,8 +1,12 @@
 /*************************** FOOTER ***************************/
 
 #footer {
-  background-color: #2a2a2a;
+  bottom:0;
   font-family: 'Roboto Condensed', sans-serif;
+  height: 225px;
+  left:0;
+  position: absolute;
+  right: 0;
   text-align: center;
   width: 100%;
 }
@@ -13,7 +17,7 @@
   justify-content: center;
   list-style-type: none;
   overflow: hidden;
-  padding-top: 2.0rem;
+  padding-top: 125px;
 }
 
 .footer_item {
@@ -21,14 +25,18 @@
 }
 
 .footer_item a {
+  color: #555;
   margin: 10px;
   font-size: 0.9rem;
 }
 
 .company_text {
-  color: #888888;
+  background-color: #f8f8f9;
+  border-radius: 10px;
+  color: #2a2a2a;
+  display: inline-block;
+  margin-top: 10px;
   font-size: 0.8rem;
-  padding: 1.0rem 0 1.0rem 0;
 }
 
 @media only screen and (min-device-width: 300px) and (max-device-width: 600px) {
