@@ -135,7 +135,7 @@ p {
   color: #3CBC8D;
   font-family: "Roboto Condensed", Helvetica, sans-serif;
   font-size: 1rem;
-  font-weight: bold;
+  font-weight: 400;
   transition: background-color 0.25s;
   -webkit-transition: background-color 0.25s; }
 

@@ -15,7 +15,7 @@
 
 #landing_button {
   display: inline-block;
-  padding-left: 50px;
+  margin-top: 50px;
 }
 
 #landing_button a {
@@ -27,7 +27,7 @@
 /*********************** LANDING ************************/
 
 #landing {
-  background-image: url('https://hd.unsplash.com/photo-1448932223592-d1fc686e76ea');
+  background-image: url('http://1qlee.com/w3bbi/background.jpg');
   background-position: bottom center;
   background-repeat: no-repeat;
   background-size: cover;
@@ -37,13 +37,16 @@
   width: 100%;
 }
 
-#landing_img {
+#landing_wrapper {
   background-color: rgba(0,0,0,0.5);
+  display: flex;
+  align-items: center;
+  width: 100%;
   height: 100%;
 }
 
 #landing_text {
-  padding: 325px 50px 50px 50px;
+  padding-left: 25px;
 }
 
 .eye_text h1 {
