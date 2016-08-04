@@ -27,7 +27,7 @@
 /*********************** LANDING ************************/
 
 #landing {
-  background-image: url('http://1qlee.com/w3bbi/background.jpg');
+  background-image: url('https://hd.unsplash.com/photo-1448932223592-d1fc686e76ea');
   background-position: bottom center;
   background-repeat: no-repeat;
   background-size: cover;
@@ -41,12 +41,13 @@
   background-color: rgba(0,0,0,0.5);
   display: flex;
   align-items: center;
+  justify-content: center;
   width: 100%;
   height: 100%;
 }
 
 #landing_text {
-  padding-left: 25px;
+  text-align: center;
 }
 
 .eye_text h1 {
