@@ -22,7 +22,7 @@ $(window).on('scroll',function(){
     else {
         $('#navbar').removeClass('past-landing');
         $('.search_icon').removeClass('past-landing');
-        $("input[name='q']").css('color','#525255');
+        // $("input[name='q']").css('color','#525255');
    }
 
 });

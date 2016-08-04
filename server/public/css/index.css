@@ -27,7 +27,10 @@
 /*********************** LANDING ************************/
 
 #landing {
-  color: #eeeeee;
+  background-image: url('https://hd.unsplash.com/photo-1448932223592-d1fc686e76ea');
+  background-position: bottom center;
+  background-repeat: no-repeat;
+  background-size: cover;
   font-family: 'Roboto Condensed', sans-serif;
   height: 100vh;
   position: relative;
@@ -35,29 +38,27 @@
 }
 
 #landing_img {
-  background-image: url('https://hd.unsplash.com/photo-1466584820433-9ad1cc6798f3');
-  background-position: bottom center;
-  background-repeat: no-repeat;
-  background-size: cover;
+  background-color: rgba(0,0,0,0.5);
   height: 100%;
 }
 
 #landing_text {
-  padding: 350px 50px 50px 50px;
+  padding: 325px 50px 50px 50px;
 }
 
 .eye_text h1 {
-  color: #fff;
+  color: #eee;
   font-family: 'Source Sans Pro', sans-serif;
-  font-size: 4rem;
+  font-size: 3.5rem;
   font-weight: bold;
   padding: 0;
 }
 
 .flavor_text p {
-  color: #fff;
-  margin-top: 15px;
-  font-size: 1.8rem;
+  color: #eee;
+  margin-top: 5px;
+  padding: 0 !important;
+  font-size: 1.5rem;
 }
 
 #photo_cred {

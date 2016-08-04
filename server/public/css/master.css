@@ -131,11 +131,11 @@ p {
 /********************** BUTTONS *******************/
 .clear-button a {
   border-radius: 3px;
-  border: 1px solid #eeeeee;
-  color: #eeeeee;
+  border: 1px solid #3CBC8D;
+  color: #3CBC8D;
   font-family: "Roboto Condensed", Helvetica, sans-serif;
   font-size: 1rem;
-  font-weight: 400;
+  font-weight: bold;
   transition: background-color 0.25s;
   -webkit-transition: background-color 0.25s; }
 
@@ -152,8 +152,8 @@ p {
   font-family: "Roboto Condensed", Helvetica, sans-serif;
   font-size: 1.2rem;
   font-weight: 400;
-  transition: background-color 0.25s;
-  -webkit-transition: background-color 0.25s; }
+  transition: background-color 0.5s;
+  -webkit-transition: background-color 0.5s; }
 
 .solid-button a:hover:not(.active) {
   background-color: #FF8751;
