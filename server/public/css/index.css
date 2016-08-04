@@ -76,10 +76,6 @@
 
 /*********************** MAIN ************************/
 
-.filler_text p {
-  padding: 15px;
-}
-
 #meat_content p {
   padding: 50px;
 }
@@ -146,34 +142,22 @@
 }
 }
 
-@media screen and (max-width:825px) {
+@media screen and (max-width:600px) {
 
-.eye_text h1 {
-  font-size: 3rem;
-}
+  #list_text {
+    width: 80%;
+  }
 
-.flavor_text p {
-  font-size: 1.2rem;
-}
+  #list_img {
+    width: 60%;
+  }
 
-#infographic h1 {
-  font-size: 2rem;
-}
+  #rent_text {
+    width: 80%;
+  }
 
-#infographic p {
-  font-size: 1rem;
-}
-
-}
-/* ----------- MOBILE ----------- */
-
-/* Portrait and Landscape */
-@media only screen and (min-device-width: 300px) and (max-device-width: 1000px) {
-
-
-.column-2 {
-  align-self: center;
-  width: 65%;
-}
+  #rent_img {
+    width: 60%;
+  }
 
 }

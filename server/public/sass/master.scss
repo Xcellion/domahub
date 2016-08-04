@@ -102,8 +102,8 @@ p {
 /********************** BUTTONS *******************/
 
 .clear-button a {
-  border-radius: 3px;
-  border: 1px solid $primary;
+  border-radius: 5px;
+  border: 2px solid $primary;
   color: $primary;
   font-family: $roboto;
   font-size: 1rem;
@@ -114,8 +114,8 @@ p {
 
 .clear-button a:hover:not(.active) {
   background-color: $accent;
-  border: 1px solid $accent;
-  color: #fff;
+  border: 2px solid $accent;
+  color: $white;
   cursor: pointer;
 }
 
@@ -244,6 +244,58 @@ p {
 
 .flex-row-center {
   display: flex;
-
   justify-content: center;
+}
+
+@media screen and (max-width:840px) {
+  html, body {
+    font-size: 14px;
+  }
+}
+
+@media only screen and (min-device-width: 300px) and (max-device-width: 600px) {
+ body,html {
+   font-size: 16px;
+ }
+ #list_text {
+   width: 100%;
+ }
+
+ #list_img {
+   width: 75%;
+ }
+
+ #rent_text {
+   width: 100%;
+ }
+
+ #rent_img {
+   width: 75%;
+ }
+
+ .info-header {
+   width:100%;
+ }
+
+ .info-header h1 {
+   font-size: 1.6rem;
+ }
+
+ .info-paragraph {
+   width: 75%;
+ }
+
+ .flavor_text {
+   margin: auto;
+   width: 75%;
+ }
+
+ .eye_text h1 {
+   font-size: 2.1rem;
+ }
+
+ .flavor_text p {
+   font-size: 1rem;
+ }
+
 }
