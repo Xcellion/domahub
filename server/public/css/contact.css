@@ -28,7 +28,6 @@ textarea:focus {
   outline-color: #FF8751; }
 
 /******************* MAIN *******************/
-
 #main h2 {
   border-bottom: 1px solid #333; }
 
@@ -40,6 +39,15 @@ textarea:focus {
   margin-top: 25px;
   padding: 20px;
   background-color: #f8f8f9; }
+
+.image_container {
+  background-image: url("https://hd.unsplash.com/photo-1464245051818-30da1a636203");
+  background-position: bottom center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  height: 50vh;
+  position: relative;
+  width: 100%; }
 
 .sm_icon {
   padding: 10px; }

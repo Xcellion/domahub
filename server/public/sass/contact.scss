@@ -38,10 +38,6 @@ textarea:focus {
 }
 /******************* MAIN *******************/
 
-#main {
-  height: 900px !important;
-}
-
 #main h2 {
   border-bottom: 1px solid $black-h;
 }
@@ -55,6 +51,16 @@ textarea:focus {
   margin-top: 25px;
   padding: 20px;
   background-color: $gray-back;
+}
+
+.image_container {
+  background-image: url('https://hd.unsplash.com/photo-1464245051818-30da1a636203');
+  background-position: bottom center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  height: 50vh;
+  position: relative;
+  width: 100%;
 }
 
 .sm_icon {
