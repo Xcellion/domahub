@@ -118,7 +118,7 @@ p {
 
 .clear-button a:hover:not(.active) {
   background-color: $primary;
-  border: 2px solid $primary;
+  border-color: $primary;
   color: $white;
   cursor: pointer;
   opacity: 0.9;
