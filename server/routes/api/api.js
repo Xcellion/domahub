@@ -40,9 +40,9 @@ function checkHost(req, res, next){
 function getCurrentRental(req, res, domain_name){
 	//get the current rental for the listing
 	Listing.getCurrentRental(domain_name, function(result){
-		rental_listing_info = result.info;
 		if (result.state != "success"){error.handler(req, res, false, "api");}
 		else {
+			rental_listing_info = result.info;
 			Listing.getRentalDetails(result.rental_id, function(result){
 				rental_listing_info.details = result.info
 				sendRentalInfo(req, res, domain_name, rental_listing_info);

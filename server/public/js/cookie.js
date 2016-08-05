@@ -25,11 +25,11 @@ function storeCookies(type){
 		delete_cookie(type);
 	}
 	bake_cookie(type, cookie);
+	bake_cookie("domain_name", listing_info.domain_name);
 }
 
 //helper function to make cookie
 function bake_cookie(name, value) {
-	//var cookie = [name, '=', JSON.stringify(value), '; domain=.', window.location.host.toString(), '; path=/;'].join('');
 	var cookie = [name, '=', JSON.stringify(value), '; path=/;'].join('');
 	document.cookie = cookie;
 }

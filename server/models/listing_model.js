@@ -129,7 +129,7 @@ listing_model.prototype.getCurrentRental = function(domain_name, callback){
 		if (result.state == "success"){
 			var now = new Date();
 			now = toUTC(now, now.getTimezoneOffset());
-			var rented_id = false;
+			var rented_id = 0;
 
 			//loop through to see if any overlap
 			for (var x = 0; x < result.info.length; x++){
@@ -139,18 +139,14 @@ listing_model.prototype.getCurrentRental = function(domain_name, callback){
 				if (now.getTime() < existingStart.getTime() + result.info[x].duration
 				&& now.getTime() >= existingStart.getTime())
 				{
-					callback({
-						state: "success",
-						rental_id: result.info[x].rental_id,
-						info: result.info[x]
-					})
+					rented_id = x;
 					break;
 				}
 			};
 			callback({
 				state: "success",
-				rental_id: result.info[0].rental_id,
-				info: result.info[0]
+				rental_id: result.info[rented_id].rental_id,
+				info: result.info[rented_id]
 			})
 		}
 		else {

@@ -13,6 +13,10 @@ $(document).ready(function() {
 		highlight: "transparent",
 		validate: validateNewVal,
 		emptytext: "This will be blank!"
+	}).on('shown', function(ev, editable) {
+	    setTimeout(function() {
+	        editable.input.$input.select();
+	    },0);
 	});
 
 	$(".editable-info").editable({
@@ -21,6 +25,10 @@ $(document).ready(function() {
 		highlight: "transparent",
 		validate: validateNewVal,
 		emptytext: "Default value"
+	}).on('shown', function(ev, editable) {
+	    setTimeout(function() {
+	        editable.input.$input.select();
+	    },0);
 	});
 	$('.x-editable').editable('toggleDisabled');
 

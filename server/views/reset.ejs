@@ -24,8 +24,12 @@
 
 	<body>
 		<div id="background_image_wrapper" class="background_image_wrapper">
-			<img id="background_image" class="background_image" width="100%" height="100%" src="<%= checkRental(rental_info, def_rental_info, 'background_image'); %>">
-			<script> document.getElementById('background_image').ondragstart = function() { return false; }; </script>
+			<img id="background_image" class="background_image noselect" width="100%" height="100%" src="<%= checkRental(rental_info, def_rental_info, 'background_image'); %>">
+			<script>
+				document.getElementById('background_image').ondragstart = function() { return false; };
+				document.getElementById('main_text').ondragstart = function() { return false; };
+				document.getElementById('middle_text').ondragstart = function() { return false; };
+			</script>
 		</div>
 
 		<%# for rental details (the boxes)%>
@@ -42,8 +46,8 @@
 
 		<%# footer %>
 		<% if (typeof rental_info == "undefined" || rental_info.type != 0) { %>
-			<div id="footer_wrapper" class="center_horizontal">
- 				<a href="http://www.w3bbi.com/listing/<%= listing_info.domain_name %>">
+			<div id="footer_wrapper" class="footer_wrapper">
+ 				<a href="http://www.w3bbi.com/listing/<%= domain_name %>">
 					What is this website?
 				</a>
 			</div>

@@ -131,7 +131,7 @@
    position: absolute;
    opacity: 0.6;
    z-index: 100;
-
+   cursor:pointer;
    top: 50%;
    right: 6px;
    margin-top: -6px;
