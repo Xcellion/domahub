@@ -15,7 +15,7 @@
 
 #landing_button {
   display: inline-block;
-  padding-left: 50px;
+  margin-top: 50px;
 }
 
 #landing_button a {
@@ -27,37 +27,42 @@
 /*********************** LANDING ************************/
 
 #landing {
-  color: #eeeeee;
+  background-image: url('https://hd.unsplash.com/photo-1448932223592-d1fc686e76ea');
+  background-position: bottom center;
+  background-repeat: no-repeat;
+  background-size: cover;
   font-family: 'Roboto Condensed', sans-serif;
   height: 100vh;
   position: relative;
   width: 100%;
 }
 
-#landing_img {
-  background-image: url('https://hd.unsplash.com/photo-1466584820433-9ad1cc6798f3');
-  background-position: bottom center;
-  background-repeat: no-repeat;
-  background-size: cover;
+#landing_wrapper {
+  background-color: rgba(0,0,0,0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
   height: 100%;
 }
 
 #landing_text {
-  padding: 350px 50px 50px 50px;
+  text-align: center;
 }
 
 .eye_text h1 {
-  color: #fff;
+  color: #eee;
   font-family: 'Source Sans Pro', sans-serif;
-  font-size: 4rem;
+  font-size: 3.5rem;
   font-weight: bold;
   padding: 0;
 }
 
 .flavor_text p {
-  color: #fff;
-  margin-top: 15px;
-  font-size: 1.8rem;
+  color: #eee;
+  margin-top: 5px;
+  padding: 0 !important;
+  font-size: 1.5rem;
 }
 
 #photo_cred {
@@ -70,10 +75,6 @@
 }
 
 /*********************** MAIN ************************/
-
-.filler_text p {
-  padding: 15px;
-}
 
 #meat_content p {
   padding: 50px;
@@ -141,34 +142,22 @@
 }
 }
 
-@media screen and (max-width:825px) {
+@media screen and (max-width:600px) {
 
-.eye_text h1 {
-  font-size: 3rem;
-}
+  #list_text {
+    width: 80%;
+  }
 
-.flavor_text p {
-  font-size: 1.2rem;
-}
+  #list_img {
+    width: 60%;
+  }
 
-#infographic h1 {
-  font-size: 2rem;
-}
+  #rent_text {
+    width: 80%;
+  }
 
-#infographic p {
-  font-size: 1rem;
-}
-
-}
-/* ----------- MOBILE ----------- */
-
-/* Portrait and Landscape */
-@media only screen and (min-device-width: 300px) and (max-device-width: 1000px) {
-
-
-.column-2 {
-  align-self: center;
-  width: 65%;
-}
+  #rent_img {
+    width: 60%;
+  }
 
 }

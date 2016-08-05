@@ -50,8 +50,6 @@ table {
   -webkit-user-select: none;
   user-select: none; }
 
-/******************** FONTS ****************/
-/******************** COLORS ****************/
 /******************** MISC ******************/
 .webbi_text {
   font-family: monospace;
@@ -67,10 +65,11 @@ table {
   text-transform: uppercase;
   top: 60px; }
 
+/******************** FORMS/INPUT ******************/
 input:-webkit-autofill {
   -webkit-box-shadow: 0 0 0px 1000px white inset; }
 
-/********************** LINKS ******************/
+/********************** UNIVERSAL ******************/
 body {
   font-family: "Roboto Condensed", Helvetica, sans-serif;
   font-size: 16px; }
@@ -80,19 +79,23 @@ body {
     color: #FF8751;
     cursor: pointer; }
 
+html {
+  height: 100%;
+  box-sizing: border-box; }
+
 h1 {
   color: #333;
   display: inline-block;
   font-size: 2.5rem;
-  font-weight: 300;
+  font-weight: bold;
   padding: 15px; }
 
 h2 {
   color: #333;
   display: inline-block;
   font-size: 1.5rem;
-  font-weight: 300;
-  padding: 15px; }
+  font-weight: 400;
+  padding: 10px; }
 
 h3 {
   color: #333;
@@ -103,7 +106,8 @@ p {
   color: #555;
   line-height: 1.4;
   font-size: 1.3rem;
-  font-weight: 300; }
+  font-weight: 300;
+  padding: 10px; }
 
 .orange_link {
   color: #FF8751;
@@ -128,9 +132,9 @@ p {
 
 /********************** BUTTONS *******************/
 .clear-button a {
-  border-radius: 3px;
-  border: 1px solid #eeeeee;
-  color: #eeeeee;
+  border-radius: 5px;
+  border: 2px solid #3CBC8D;
+  color: #3CBC8D;
   font-family: "Roboto Condensed", Helvetica, sans-serif;
   font-size: 1rem;
   font-weight: 400;
@@ -138,10 +142,11 @@ p {
   -webkit-transition: background-color 0.25s; }
 
 .clear-button a:hover:not(.active) {
-  background-color: #FF8751;
-  border: 1px solid #FF8751;
-  color: #fff;
-  cursor: pointer; }
+  background-color: #3CBC8D;
+  border: 2px solid #3CBC8D;
+  color: #eeeeee;
+  cursor: pointer;
+  opacity: 0.9; }
 
 .solid-button a {
   background-color: #3CBC8D;
@@ -154,9 +159,9 @@ p {
   -webkit-transition: background-color 0.25s; }
 
 .solid-button a:hover:not(.active) {
-  background-color: #FF8751;
   color: #fff;
-  cursor: pointer; }
+  cursor: pointer;
+  opacity: 0.9; }
 
 .submit_button {
   background-color: #3CBC8D;
@@ -175,8 +180,8 @@ p {
   outline: none; }
 
 .submit_button:hover {
-  background-color: #FF8751;
-  cursor: pointer; }
+  cursor: pointer;
+  opacity: 0.9; }
 
 #main_button {
   margin: 25px 0 25px 0;
@@ -188,9 +193,9 @@ p {
 
 /********************** MAIN ****************/
 #main {
-  height: 100%;
-  margin: 60px 0 60px 0;
+  padding: 60px 0 225px 0;
   position: relative;
+  min-height: 100%;
   width: 100%; }
 
 /******************** CONTAINERS/COLUMNS/STYLE-CLASSES ****************/
@@ -251,3 +256,32 @@ p {
 .flex-row-center {
   display: flex;
   justify-content: center; }
+
+@media screen and (max-width: 840px) {
+  html, body {
+    font-size: 14px; } }
+
+@media only screen and (min-device-width: 300px) and (max-device-width: 600px) {
+  body, html {
+    font-size: 16px; }
+  #list_text {
+    width: 100%; }
+  #list_img {
+    width: 75%; }
+  #rent_text {
+    width: 100%; }
+  #rent_img {
+    width: 75%; }
+  .info-header {
+    width: 100%; }
+  .info-header h1 {
+    font-size: 1.6rem; }
+  .info-paragraph {
+    width: 75%; }
+  .flavor_text {
+    margin: auto;
+    width: 75%; }
+  .eye_text h1 {
+    font-size: 2.1rem; }
+  .flavor_text p {
+    font-size: 1rem; } }
