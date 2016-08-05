@@ -111,9 +111,16 @@ listing_model.prototype.getDefaultRental = function(listing_id, callback){
 }
 
 //gets all rental information for the current rental
-listing_model.prototype.getCurrentRental = function(listing_id, callback){
-	console.log("Attempting to get current rental info for for listing #" + listing_id + "...");
-	this.getListingAllExistingRentals(listing_id, function(result){
+listing_model.prototype.getCurrentRental = function(domain_name, callback){
+	console.log("Attempting to get current rental info for for domain " + domain_name + "...");
+	query = "SELECT * \
+			FROM rentals \
+			INNER JOIN listings \
+			ON rentals.listing_id = listings.id \
+			WHERE listings.domain_name = ? \
+			ORDER BY rental_id \
+			ASC LIMIT 1";
+	listing_query(query, "Failed to get default rental for domain " + domain_name + "!", function(result){
 		if (result.state == "success"){
 			var now = new Date();
 			now = toUTC(now, now.getTimezoneOffset());
@@ -141,7 +148,7 @@ listing_model.prototype.getCurrentRental = function(listing_id, callback){
 				info: "Failed to get current rental for listing #"
 			});
 		}
-	})
+	}, domain_name);
 }
 
 //gets all rental times for a specific rental

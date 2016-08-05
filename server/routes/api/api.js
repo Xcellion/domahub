@@ -39,22 +39,28 @@ function checkHost(req, res, next){
 //send the current rental details and information for a listing
 function getCurrentRental(req, res, domain_name){
 	//get the current rental for the listing
-	Listing.getListingRental(domain_name, false, false, function(result){
-		sendRentalInfo(req, res, result);
+	Listing.getCurrentRental(domain_name, false, false, function(result){
+		rental_listing_info = result.info[0];
+		if (result.state != "success"){error.handler(req, res, false, "api");}
+		else {
+			Listing.getRentalDetails(result.info.rental_id, function(result){
+				sendRentalInfo(req, res, rental_listing_info, result.info);
+			})
+		}
 	});
 }
 
 //helper function to send rental information
-function sendRentalInfo(req, res, result){
+function sendRentalInfo(req, res, rental_listing_info, details){
 	if (result.state == "success"){
 		//what type of rental is it?
-		switch (result.rental_info.type){
+		switch (result.type){
 			//simple page
 			case 0:
 				res.render("reset.ejs", {
-					listing_info: result.listing_info,
-					rental_info: result.rental_info,
-					rental_details: result.rental_details
+					listing_info: rental_listing_info,
+					rental_info: rental_listing_info,
+					rental_details: details
 				});
 				break;
 			//http proxy

@@ -114,7 +114,6 @@ module.exports = {
 				title: new_rental_info.title,
 				favicon: new_rental_info.favicon
 			};
-			console.log(raw_info);
 
 			updateListingRental(req, res, req.params.rental_id, raw_info, function(){
 				if (new_rental_info.formatted_times){
