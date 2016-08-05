@@ -11,7 +11,7 @@ module.exports = function(app, db, auth, e){
 	error = e;
 
 	Account = new account_model(db);
-	Listing = new listing_model(db);
+	// Listing = new listing_model(db);
 
 	//function to check if logged in
 	isLoggedIn = Auth.isLoggedIn;

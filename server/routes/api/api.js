@@ -6,7 +6,7 @@ module.exports = function(app, db, e, p){
 	proxy = p
 
 	Account = new account_model(db);
-	Listing = new listing_model(db);
+	// Listing = new listing_model(db);
 
 	app.get("*", checkHost);
 }

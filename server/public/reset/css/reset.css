@@ -44,7 +44,7 @@ p {
 }
 
 #text_wrapper > a{ color:#f5f5f5;}
-#text_wrapper p>a:visited{ color: #f5f5f5;}
+#text_wrapper > a:visited{ color: #f5f5f5;}
 
 ::selection{ background: #FFF /* WebKit/Blink Browsers */}
 ::-moz-selection{ background: #FFF; /* Gecko Browsers */}
@@ -55,10 +55,16 @@ p {
 
 #main_text{
 	margin-bottom:15px;
+    outline: none;
 }
 
 .middle_text{
 	color:#fff;
+}
+
+#middle_text{
+	outline: none;
+    white-space: pre-wrap;
 }
 
 #footer_wrapper{

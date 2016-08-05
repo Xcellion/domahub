@@ -5,29 +5,33 @@
 <html>
 
 	<head>
+		<%# function to help with checking for default vs rented rental info %>
+		<%
+			function checkRental(rental_info, def_rental_info, key){
+				return (typeof rental_info == undefined || rental_info[key] == null) ? def_rental_info[key] : rental_info[key];
+			}
+		%>
 		<title>w3bbi</title>
 		<link class="w3bbi_main_css" rel="stylesheet" href="/css/style_base.css" type="text/css" />
 		<link rel="stylesheet" href="/css/rental.css" type="text/css" />
 		<link rel="stylesheet" href="/css/fullcalendar.min.css" type="text/css" />
-		<link rel="stylesheet" href="/reset/content-tools/content-tools.min.css" type="text/css" />
-		<!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script> -->
 		<script src="https://checkout.stripe.com/checkout.js"></script>
-		<script src="/js/jquery/jquery.js" type="text/javascript"></script>
-		<script src="/js/jquery/jquery-ui.js" type="text/javascript"></script>
 		<script src="/js/moment/moment.min.js" type="text/javascript"></script>
 		<script src="/js/sanitize-html.js" type="text/javascript"></script>
-		<script src="/reset/content-tools/content-tools.min.js" type="text/javascript"></script>
-		<script src="/reset/content-tools/content-tools.js" type="text/javascript"></script>
-		<script src="/reset/content-tools/editor.js" type="text/javascript"></script>
 		<script type="text/javascript">
 			var user = <% if(typeof user != "undefined"){ %><%-JSON.stringify(user)%><% }else{ %>""<% } %>;
 			var listing_info = <% if(typeof listing_info != "undefined"){ %><%-JSON.stringify(listing_info)%><% }else{ %>""<% } %>;
 			var rental_info = <% if(typeof rental_info != "undefined"){ %><%-JSON.stringify(rental_info)%><% }else{ %>""<% } %>;
 			var new_rental_info = <% if(typeof new_rental_info != "undefined"){ %><%-JSON.stringify(new_rental_info)%><% }else{ %>""<% } %>;
 		</script>
+		<script src="/js/jquery/jquery-2.2.4.min.js" type="text/javascript"></script>
+		<script src="/js/jquery/poshytip/src/jquery.poshytip.min.js" type="text/javascript"></script>
+		<link rel="stylesheet" href="/js/jquery/editable/css/jquery-editable.css" type="text/css" />
+		<script src="/js/jquery/editable/js/jquery-editable-poshytip.js" type="text/javascript"></script>
+		<script src="/js/jquery/jquery-ui.js" type="text/javascript"></script>
+
 		<script src="/js/cookie.js" type="text/javascript"></script>
 		<script src="/js/routes/client_rental.js" type="text/javascript"></script>
-		<link rel="icon" type="image/ico" href="/images/favicon.ico">
 	</head>
 
 	<body>
@@ -65,7 +69,16 @@
 					<% } %>
 				</div>
 
-				<div id="message" class="w3bbi_content_wrapper">Currently editing</div>
+				<% if (rental_info) { %>
+					<div id="rental_wrapper" class="w3bbi_content_wrapper">
+						<div>Rented from:</div>
+					</div>
+				<% } %>
+				<% if (new_rental_info) { %>
+					<div id="new_rental_wrapper" class="w3bbi_content_wrapper">
+						<div>Renting for:</div>
+					</div>
+				<% } %>
 
 				<!-- listing information, this should never error -->
 				<% if (typeof listing_info != "undefined") {%>
@@ -81,45 +94,23 @@
 					</div>
 				<% } %>
 
-				<% if (typeof rental_info.rental_times != "undefined") { %>
-					<div id="rental_wrapper" class="w3bbi_content_wrapper">
-						<div>Rented from:</div>
-					</div>
-				<% } %>
-				<% if (typeof new_rental_info != "undefined") { %>
-					<div id="new_rental_wrapper" class="w3bbi_content_wrapper">
-						<div>Renting for:</div>
-					</div>
-				<% } %>
+				<div id="message" class="w3bbi_content_wrapper">Welcome!</div>
 
 				<!-- rental edit wrapper -->
 				<div id="rental_edit" class="border_white w3bbi_content_wrapper">
 
 					<!-- add more time -->
-					<% if (typeof rental_info != "undefined") { %>
-						<form class="edit_form" id="edit_rental_info" action="/listing/<%=listing_info.domain_name%>/edit" method="post">
-							<input name="rental_id" type="hidden" value=<%= rental_info.rental_id %>>
-							<input id="edit_info_submit" class="button form_submit" type="submit" value="Add more time">
-						</form>
-					<% } else {%>
-						<a class="button" href="/listing/<%=listing_info.domain_name%>">Add more time</a>
-					<% } %>
+					<a class="button" href="/listing/<%=listing_info.domain_name%>">Add more time</a>
+					<div id="edit_now" class="button">Edit page</div>
 
 					<!-- if editing existing rental -->
-					<% if (typeof new_rental_info == "undefined") { %>
+					<% if (!new_rental_info) { %>
 						<form class="edit_form edit_details_form" id="edit_details" action="/listing/<%=listing_info.domain_name%>/<%=rental_info.rental_id%>" method="post">
-							<div id="edit_now" class="button">Edit page</div>
-							<div id="cancel_edits" class="button">Cancel editing</div>
 							<input id="edit_details_submit" class="button form_submit" type="submit" value="Submit">
 						</form>
 					<!-- if new rental -->
 					<% } else {%>
 						<form class="edit_form edit_details_form" id="edit_details_pay" action="/listing/<%=listing_info.domain_name%>/pay" method="post">
-						<% if (new_rental_info.type == 0) { %>
-							<div id="edit_now" class="button">Edit page</div>
-						<% } else if (new_rental_info.type == 1) { %>
-							<input name="redirect" placeholder="IP Address" type="url" id="url_input" autofocus>
-						<% } %>
 							<button class="form_submit button btn btn-primary btn-lg" id="stripe-button">
 								Checkout <span class="glyphicon glyphicon-shopping-cart"></span>
 							</button>
@@ -130,18 +121,20 @@
 				<!-- more rental edits -->
 				<div id="edit_now_details" class="w3bbi_content_wrapper">
 					<form id="edit_details_form">
-						<div>Background image:</div>
-						<input class="edit_input" name="background" placeholder="http://URL-of-background-image.com" type="url" id="background_input" autofocus>
+						<div class="x-editable_wrapper">Page title: </br><a href="#" data-value="<%= checkRental(rental_info, def_rental_info, 'title'); %>" class="x-editable editable-info" id="title_input">Default value</a></div>
+						<div class="x-editable_wrapper">Background image: </br><a href="#" data-type="url" data-value="<%= checkRental(rental_info, def_rental_info, 'background_image'); %>" class="x-editable editable-info" id="background_image_input">Default value</a></div>
+						<div class="x-editable_wrapper">Favicon: </br><a href="#" data-type="url" data-value="<%= checkRental(rental_info, def_rental_info, 'favicon'); %>" class="x-editable editable-info" id="favicon_input">Default value</a></div>
 					</form>
 				</div>
 
 			</div>
 
 			<div id="rental_preview">
+				<% def_rental_info.details[0].middle_text = "Customize me!"; %>
 				<%- include('reset', {
 					listing_info: listing_info,
 					rental_info: rental_info,
-					default_rental_info: default_rental_info
+					def_rental_info: def_rental_info
 				}); %>
 			</div>
 		</div>

@@ -4,7 +4,7 @@ listing_model = require('../models/listing_model.js');
 
 function account_model(database){
 	this.db = database;
-	listing = new listing_model(database);
+	// listing = new listing_model(database);
 }
 
 //sets info in database
@@ -75,12 +75,12 @@ function checkAccount(account_id, callback_error, callback_success){
 //gets all listings belonging to an account
 account_model.prototype.getListingsAccount = function(account_id, callback){
 	account_model = this;
-	
+
 	//check if account exists
 	checkAccount(account_id, callback, function(result){
 		//get all listings for that account
 		db_query = "SELECT * from ?? WHERE ?? = ?";
-					
+
 		listing.getInfo("listings", "owner_id", account_id, db_query, function(result){
 			if (result.state == "success"){
 				callback({
@@ -101,12 +101,12 @@ account_model.prototype.getListingsAccount = function(account_id, callback){
 //gets all rentals belonging to an account
 account_model.prototype.getRentalsAccount = function(account_id, callback){
 	account_model = this;
-	
+
 	//check if account exists
 	checkAccount(account_id, callback, function(result){
 		//get all rentals for that account
 		db_query = "SELECT * from ?? INNER JOIN listings ON listings.id = rentals.listing_id WHERE ?? = ? AND duration != 0";
-					
+
 		listing.getInfo("rentals", "account_id", account_id, db_query, function(result){
 			if (result.state == "success"){
 				callback({

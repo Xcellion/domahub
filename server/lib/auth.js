@@ -101,8 +101,8 @@ module.exports = {
 	},
 
 	//helper functions related to authentication
-	messageReset: messageReset,
 	isLoggedIn: isLoggedIn,
+	messageReset: messageReset,
 	logout: logout,
 	signup: signup,
 	signupPost: signupPost,
@@ -122,7 +122,6 @@ function isLoggedIn(req, res, next) {
 		return next();
 	}
 	else {
-		console.log("Not logged in!");
 		switch (req.method){
 			case ("POST"):
 				error.handler(req, res, "Invalid username / password!", "json");

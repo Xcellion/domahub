@@ -13,7 +13,12 @@ function handler(req, res, message, type) {
 			req.session.message = "Test";
 			res.redirect(301, 'http://w3bbi.com');
 			break;
-
+		case "json":
+			res.send({
+				state: "error",
+				message: message
+			});
+			break;
 		//all other errors
 		default:
 			var redirectTo = req.header("Referer") || "/login";
