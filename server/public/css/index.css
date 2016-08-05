@@ -77,11 +77,11 @@
 /*********************** MAIN ************************/
 
 #meat_content p {
-  padding: 50px;
+  padding-top: 50px;
 }
 
 .main_link {
-  padding: 0 50px 0 50px;
+  padding-top: 50px;
   font-size: 1.1rem;
 }
 
