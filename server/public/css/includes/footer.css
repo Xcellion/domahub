@@ -22,11 +22,10 @@
 
 .footer_item {
   display: inline-block;
+  padding: 10px;
 }
 
 .footer_item a {
-  color: #555;
-  margin: 10px;
   font-size: 0.9rem;
 }
 
@@ -35,12 +34,15 @@
   border-radius: 10px;
   color: #2a2a2a;
   display: inline-block;
-  margin-top: 10px;
+  padding: 10px;
   font-size: 0.8rem;
 }
 
 @media only screen and (min-device-width: 300px) and (max-device-width: 600px) {
   .footer_item a {
     font-size: 0.7rem;
+  }
+  .company_text {
+    font-size: 0.6rem;
   }
 }
