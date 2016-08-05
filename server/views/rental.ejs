@@ -132,7 +132,7 @@
 			<div id="rental_preview">
 				<% def_rental_info.details[0].middle_text = "Customize me!"; %>
 				<%- include('reset', {
-					listing_info: listing_info,
+					domain_name: listing_info.domain_name,
 					rental_info: rental_info,
 					def_rental_info: def_rental_info
 				}); %>

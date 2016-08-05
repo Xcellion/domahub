@@ -113,14 +113,19 @@ listing_model.prototype.getDefaultRental = function(listing_id, callback){
 //gets all rental information for the current rental
 listing_model.prototype.getCurrentRental = function(domain_name, callback){
 	console.log("Attempting to get current rental info for for domain " + domain_name + "...");
-	query = "SELECT * \
+	query = "SELECT \
+				rentals.*,\
+				listings.*,\
+				rental_times.date,\
+				rental_times.duration \
 			FROM rentals \
 			INNER JOIN listings \
 			ON rentals.listing_id = listings.id \
+			LEFT OUTER JOIN rental_times \
+			ON rentals.rental_id = rental_times.rental_id \
 			WHERE listings.domain_name = ? \
-			ORDER BY rental_id \
-			ASC LIMIT 1";
-	listing_query(query, "Failed to get default rental for domain " + domain_name + "!", function(result){
+			ORDER BY rentals.rental_id ASC";
+	listing_query(query, "Failed to get current rental info for domain " + domain_name + "!", function(result){
 		if (result.state == "success"){
 			var now = new Date();
 			now = toUTC(now, now.getTimezoneOffset());
@@ -136,11 +141,17 @@ listing_model.prototype.getCurrentRental = function(domain_name, callback){
 				{
 					callback({
 						state: "success",
+						rental_id: result.info[x].rental_id,
 						info: result.info[x]
 					})
 					break;
 				}
 			};
+			callback({
+				state: "success",
+				rental_id: result.info[0].rental_id,
+				info: result.info[0]
+			})
 		}
 		else {
 			callback({
