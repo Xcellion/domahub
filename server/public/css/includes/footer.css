@@ -17,14 +17,10 @@ ul {
   justify-content: center;
   list-style-type: none;
   overflow: hidden;
-<<<<<<< HEAD
-=======
-  padding-top: 125px;
 }
 
 .footer_item {
   display: inline-block;
->>>>>>> d7b4f9874111c2401dcd0e65321c1a3ae9662284
   padding: 10px;
 }
 

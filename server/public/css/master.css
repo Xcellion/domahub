@@ -106,17 +106,11 @@ h3 {
 
 p {
   color: #555;
-<<<<<<< HEAD
   line-height: 1.3;
   font-size: 1.2rem;
   font-weight: 300;
-  text-align: justify; }
-=======
-  line-height: 1.4;
-  font-size: 1.3rem;
-  font-weight: 300;
+  text-align: justify;
   padding-bottom: 10px; }
->>>>>>> d7b4f9874111c2401dcd0e65321c1a3ae9662284
 
 .orange_link {
   color: #FF8751;
