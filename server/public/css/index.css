@@ -6,9 +6,11 @@
   font-weight: bold;
 }
 
-.fa-angle-right {
+.right-arrow {
   color: #FF8751;
   padding-left: 5px;
+  -webkit-transition: all 0.5s;
+  transition: all 0.5s;
 }
 
 /********************* BUTTONS **********************/
@@ -76,7 +78,16 @@
 
 /*********************** MAIN ************************/
 
+<<<<<<< HEAD
 .main_link {
+=======
+#meat_content p {
+  padding: 25px;
+}
+
+.main_link {
+  padding: 25px;
+>>>>>>> d7b4f9874111c2401dcd0e65321c1a3ae9662284
   font-size: 1.1rem;
   margin-top: 15px;
 }
@@ -87,6 +98,10 @@
   justify-content: space-around;
   margin-top: -50px;
   width: 100%;
+}
+
+.right-arrow.active {
+  padding-left: 10px;
 }
 
 #list_text {

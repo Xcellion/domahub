@@ -109,10 +109,10 @@ module.exports = {
 		}
 		else {
 			raw_info = {
-				type: new_rental_info.type,
-				background_image: new_rental_info.background_image,
-				title: new_rental_info.title,
-				favicon: new_rental_info.favicon
+				type: new_rental_info.type || rental_info.type,
+				background_image: new_rental_info.background_image || rental_info.background_image,
+				title: new_rental_info.title || rental_info.title,
+				favicon: new_rental_info.favicon || rental_info.favicon
 			};
 
 			updateListingRental(req, res, req.params.rental_id, raw_info, function(){
@@ -132,6 +132,23 @@ module.exports = {
 						res.send({message : "success"});
 					});
 				}
+			});
+		}
+	},
+
+	//function to edit rental details
+	editRentalDetails : function(req, res, next){
+		domain_name = req.params.domain_name;
+		new_rental_info = req.session.new_rental_info;
+
+		if (!new_rental_info || !new_rental_info.details){
+			error.handler(req, res, "Invalid rental details!", "json");
+		}
+		else {
+			updateRentalDetails(req, res, rental_id, new_rental_info.details, function(){
+				delete req.session.new_rental_info;
+				req.session.changed = true;
+				res.send({message : "success"});
 			});
 		}
 	},

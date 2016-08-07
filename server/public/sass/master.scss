@@ -78,7 +78,11 @@ p {
     size: 1.2rem;
     weight: 300;
   }
+<<<<<<< HEAD
   text-align: justify;
+=======
+  padding-bottom: 10px;
+>>>>>>> d7b4f9874111c2401dcd0e65321c1a3ae9662284
 }
 
 .orange_link {
@@ -89,6 +93,10 @@ p {
 
 .white_link {
   color: $white;
+}
+
+.black_link {
+  color: $black-p;
 }
 
 /********************** LINEBREAK ******************/
@@ -121,7 +129,6 @@ p {
 
 .clear-button a:hover:not(.active) {
   background-color: $primary;
-  border: 2px solid $primary;
   color: $white;
   cursor: pointer;
   opacity: 0.9;
@@ -280,7 +287,7 @@ p {
 
 @media only screen and (min-device-width: 300px) and (max-device-width: 600px) {
  body,html {
-   font-size: 16px;
+   font-size: 15px;
  }
  #list_text {
    width: 100%;
