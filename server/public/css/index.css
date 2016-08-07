@@ -38,7 +38,7 @@
 }
 
 #landing_wrapper {
-  background-color: rgba(0,0,0,0.5);
+  background-color: rgba(0,0,0,0.7);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -76,13 +76,9 @@
 
 /*********************** MAIN ************************/
 
-#meat_content p {
-  padding-top: 50px;
-}
-
 .main_link {
-  padding-top: 50px;
   font-size: 1.1rem;
+  margin-top: 15px;
 }
 
 .partners_img {
@@ -94,19 +90,27 @@
 }
 
 #list_text {
+  box-sizing: border-box;
   order: 1;
+  padding: 50px 75px 0 100px;
 }
 
 #list_img {
+  box-sizing: border-box;
   order: 2;
+  padding: 50px 100px 0 75px;
 }
 
 #rent_text {
+  box-sizing: border-box;
   order: 2;
+  padding: 50px 100px 0 75px;
 }
 
 #rent_img {
+  box-sizing: border-box;
   order: 1;
+  padding: 50px 75px 0 100px;
 }
 
 /************************ MEDIA QUERIES ************************/
