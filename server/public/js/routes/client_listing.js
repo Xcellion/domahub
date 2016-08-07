@@ -27,26 +27,28 @@ $(document).ready(function() {
 		}
     })
 
-	//check if theres a cookie for local events
-	if (document.cookie.match(new RegExp('local_events=([^;]+)')) && $('#calendar').fullCalendar('clientEvents', filterMine).length == 0){
+	//check if there are cookies for this domain name
+	if (read_cookie("domain_name") == listing_info.domain_name){
 		var existing_events = read_cookie("local_events");
 
 		for (var x = 0; x < existing_events.length; x++){
 			$('#calendar').fullCalendar('renderEvent', existing_events[x], true);
 		}
-	}
 
-	//check if theres a cookie for the rental type
-	if (document.cookie.match(new RegExp('type=([^;]+)'))){
-		var type = read_cookie("type");
-		$("#radio_"+type+"_input").prop("checked", true);
-	}
+		//check if theres a cookie for the rental type
+		if (read_cookie("type")){
+			$("#radio_"+type+"_input").prop("checked", true);
+		}
 
-	//check if theres a cookie for editing an event
-	if (document.cookie.match(new RegExp('rental_info=([^;]+)'))){
-		var cookie = read_cookie("rental_info");
-		rental_info = cookie;
-		editingRental();
+		//check if theres a cookie for editing an event
+		if (document.cookie.match(new RegExp('rental_info=([^;]+)'))){
+			var cookie = read_cookie("rental_info");
+			rental_info = cookie;
+			editingRental();
+		}
+	}
+	else {
+		delete_cookies();
 	}
 
 	//create existing rentals

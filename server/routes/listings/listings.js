@@ -71,7 +71,6 @@ module.exports = function(app, db, auth, e){
 		isLoggedIn,
 		checkDomain,
 		renter_listings.getListing,
-		checkNewOldRental,
 		checkNewRentalInfo,
 		renter_listings.getDefaultRental,
 		renter_listings.redirectToNewOld
@@ -81,7 +80,6 @@ module.exports = function(app, db, auth, e){
 	app.post('/listing/:domain_name/pay', [
 		isLoggedIn,
 		checkDomain,
-		checkNewOldRental,
 		checkNewRentalDetails,
 		renter_listings.createRental
 	]);
@@ -154,6 +152,16 @@ function checkRental(req, res, next){
 	}
 }
 
+//function to check if new or old rental info is still there
+function checkNewOldRental(req, res, next){
+	if (req.session.listing_info){
+		next();
+	}
+	else {
+		error.handler(req, res, "Invalid rental!");
+	}
+}
+
 //function to check the rental info posted
 function checkNewRentalInfo(req, res, next){
 	domain_name = req.params.domain_name;
@@ -216,19 +224,6 @@ function checkNewRentalInfo(req, res, next){
 	else {
 		next();
 	}
-}
-
-//function to check if new or old rental info is still there
-function checkNewOldRental(req, res, next){
-	//editing an existing rental
-	if (req.session.rental_info){
-		delete req.session.new_rental_info;
-	}
-	//completely new rental
-	else if (req.session.new_rental_info || req.session.old_rental_info){
-		delete req.session.rental_info;
-	}
-	next();
 }
 
 //function to check new rental details posted

@@ -14,7 +14,7 @@
 		<link class="rental_main_css" rel="stylesheet" type="text/css" href="/reset/css/reset.css">
 		<meta name="viewport" content="width=device-width, height=device-height">
 		<script>
-			var listing_info = <% if(typeof listing_info != "undefined"){ %><%-JSON.stringify(listing_info)%><% }else{ %>""<% } %>;
+			var domain_name = <% if(typeof domain_name != "undefined"){ %><%-JSON.stringify(domain_name)%><% }else{ %>""<% } %>;
 			var rental_info = <% if(typeof rental_info != "undefined"){ %><%-JSON.stringify(rental_info)%><% }else{ %>""<% } %>;
 			var def_rental_info = <% if(typeof def_rental_info != "undefined"){ %><%-JSON.stringify(def_rental_info)%><% }else{ %>""<% } %>;
 		</script>
@@ -24,8 +24,12 @@
 
 	<body>
 		<div id="background_image_wrapper" class="background_image_wrapper">
-			<img id="background_image" class="background_image" width="100%" height="100%" src="<%= checkRental(rental_info, def_rental_info, 'background_image'); %>">
-			<script> $('img').on('dragstart', function(event) { event.preventDefault(); }); </script>
+			<img id="background_image" class="background_image noselect" width="100%" height="100%" src="<%= checkRental(rental_info, def_rental_info, 'background_image'); %>">
+			<script>
+				document.getElementById('background_image').ondragstart = function() { return false; };
+				document.getElementById('main_text').ondragstart = function() { return false; };
+				document.getElementById('middle_text').ondragstart = function() { return false; };
+			</script>
 		</div>
 
 		<%# for rental details (the boxes)%>
@@ -42,8 +46,8 @@
 
 		<%# footer %>
 		<% if (typeof rental_info == "undefined" || rental_info.type != 0) { %>
-			<div id="footer_wrapper" class="center_horizontal">
- 				<a href="http://www.w3bbi.com/listing/<%= listing_info.domain_name %>">
+			<div id="footer_wrapper" class="footer_wrapper">
+ 				<a href="http://www.w3bbi.com/listing/<%= domain_name %>">
 					What is this website?
 				</a>
 			</div>
