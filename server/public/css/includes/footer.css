@@ -26,10 +26,8 @@
   color: #cd201f; }
 
 .company_text {
-  background-color: #f8f8f9;
-  border-radius: 10px;
+  box-sizing: border-box;
   color: #2a2a2a;
   display: inline-block;
-  padding: 10px;
   font-size: 0.9rem;
 }
