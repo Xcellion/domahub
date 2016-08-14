@@ -113,21 +113,6 @@
   order: 4;
 }
 
-#login a {
-  background-color: #3CBC8D;
-  border-radius: 3px;
-  box-sizing: border-box;
-  color: #eeeeee;
-  padding: 7px 10px 7px 10px;
-  -webkit-transition: all 0.5s;
-  transition: all 0.5s;
-}
-
-#login a:hover {
-  cursor: pointer;
-  opacity: 0.9;
-}
-
 .nav-button {
   box-sizing: border-box;
   padding: 22px 12px 22px 12px;

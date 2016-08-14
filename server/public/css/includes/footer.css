@@ -1,41 +1,12 @@
 /*************************** FOOTER ***************************/
 
-#footer {
-  bottom: 0;
-  box-sizing: border-box;
-  font-family: 'Roboto Condensed', sans-serif;
-  height: 200px;
-  left: 0;
-  padding-top: 25px;
-  position: absolute;
-  right: 0;
-  text-align: center;
-  width: 100%;
-}
-
-ul {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  list-style-type: none;
-  overflow: hidden;
+.footer_item {
+  display: inline-block;
+  padding: 0 10px 0 10px;
 }
 
 .footer_item {
-  display: inline-block;
-  padding: 10px;
-}
-
-.footer_item a {
-  font-size: 0.9rem;
-}
-
-.footer_item a:hover {
-  color: #333;
-}
-
-.social_item {
-  padding: 10px;
+  font-size: 1rem;
 }
 
 .social_icon {
@@ -60,14 +31,5 @@ ul {
   color: #2a2a2a;
   display: inline-block;
   padding: 10px;
-  font-size: 0.8rem;
-}
-
-@media only screen and (min-device-width: 300px) and (max-device-width: 600px) {
-  .footer_item a {
-    font-size: 0.7rem;
-  }
-  .company_text {
-    font-size: 0.6rem;
-  }
+  font-size: 0.9rem;
 }

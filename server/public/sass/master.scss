@@ -1,23 +1,10 @@
 /******************** RESET ****************/
 @import 'reset';
 @import 'fonts_colors';
+@import 'bulma/bulma.sass';
 
 /******************** MISC ******************/
-.webbi_text {
-  font-family: monospace;
-  font-size: 1.2rem;
-  font-weight: bold;
-}
 
-.construction {
-  background-color: $primary;
-  color: $accent;
-  font-family: $roboto;
-  padding: 5px;
-  position: absolute;
-  text-transform: uppercase;
-  top: 60px;
-}
 
 /******************** FORMS/INPUT ******************/
 
@@ -46,11 +33,11 @@ body {
 html {
   height: 100%;
   box-sizing: border-box;
+  background-color: #fff;
 }
 
 h1 {
   color: $black-h;
-  display: inline-block;
   font: {
     size: 2.5rem;
     weight: bold;
@@ -59,7 +46,6 @@ h1 {
 }
 h2 {
   color: $black-h;
-  display: inline-block;
   font: {
     size: 1.8rem;
     weight: 400;
@@ -75,11 +61,15 @@ p {
   color: $black-p;
   line-height: 1.3;
   font: {
-    size: 1.2rem;
+    size: 1.4rem;
     weight: 300;
   }
   text-align: justify;
   padding-bottom: 10px;
+}
+
+.content {
+  padding: 0 60px 0 60px;
 }
 
 .orange_link {
@@ -112,41 +102,6 @@ p {
 }
 
 /********************** BUTTONS *******************/
-
-.clear-button a {
-  border-radius: 5px;
-  border: 2px solid $primary;
-  color: $primary;
-  font-family: $roboto;
-  font-size: 1rem;
-  font-weight: 400;
-  transition: all 0.25s;
-  -webkit-transition: all 0.25s;
-}
-
-.clear-button a:hover:not(.active) {
-  background-color: $primary;
-  color: $white;
-  cursor: pointer;
-  opacity: 0.9;
-}
-
-.solid-button a {
-  background-color: $primary;
-  border-radius: 3px;
-  color: $white;
-  font-family: $roboto;
-  font-size: 1.2rem;
-  font-weight: 400;
-  transition: all 0.25s;
-  -webkit-transition: all 0.25s;
-}
-
-.solid-button a:hover:not(.active) {
-  color: #fff;
-  cursor: pointer;
-  opacity: 0.9;
-}
 
 .submit_button {
   background-color: $primary;
@@ -183,10 +138,14 @@ p {
 
 /********************** MAIN ****************/
 #main {
-  padding: 60px 0 200px 0;
+  padding-top: 60px;
   position: relative;
   min-height: 100%;
   width: 100%;
+}
+
+.section {
+  background-color: #fff;
 }
 
 .image_wrapper {
@@ -204,127 +163,4 @@ p {
   font-size: 3.5rem;
   font-weight: bold;
   padding: 0;
-}
-
-/******************** CONTAINERS/COLUMNS/STYLE-CLASSES ****************/
-
-.container {
-  -webkit-box-flex: 1;
-  -webkit-flex: 1 1 auto;
-  -ms-flex: 1 1 auto;
-  flex: 1 1 auto;
-}
-
-.column-25 {
-  -webkit-box-flex: 0;
-  -webkit-flex: none;
-  -ms-flex: none;
-  flex: none;
-  width: 25%;
-}
-
-.column-33 {
-  -webkit-box-flex: 0;
-  -webkit-flex: none;
-  -ms-flex: none;
-  flex: none;
-  padding: 15px;
-  width: 33%;
-}
-
-.column-40 {
-  -webkit-box-flex: 0;
-  -webkit-flex: none;
-  -ms-flex: none;
-  flex: none;
-  width: 40%;
-}
-
-.column-50 {
-  -webkit-box-flex: 0;
-  -webkit-flex: none;
-  -ms-flex: none;
-  flex: none;
-  width: 50%;
-}
-
-.column-75 {
-  -webkit-box-flex: 0;
-  -webkit-flex: none;
-  -ms-flex: none;
-  flex: none;
-  width: 75%;
-}
-
-.is-centered {
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.text-center {
-  text-align: center;
-}
-
-.flex-column-center {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-
-.flex-row-center {
-  display: flex;
-  justify-content: center;
-}
-
-@media screen and (max-width:840px) {
-  html, body {
-    font-size: 14px;
-  }
-}
-
-@media only screen and (min-device-width: 300px) and (max-device-width: 600px) {
- body,html {
-   font-size: 15px;
- }
- #list_text {
-   width: 100%;
- }
-
- #list_img {
-   width: 75%;
- }
-
- #rent_text {
-   width: 100%;
- }
-
- #rent_img {
-   width: 75%;
- }
-
- .info-header {
-   width:100%;
- }
-
- .info-header h1 {
-   font-size: 1.6rem;
- }
-
- .info-paragraph {
-   width: 75%;
- }
-
- .flavor_text {
-   margin: auto;
-   width: 75%;
- }
-
- .eye_text h1 {
-   font-size: 2.1rem;
- }
-
- .flavor_text p {
-   font-size: 1rem;
- }
-
 }
