@@ -37,7 +37,7 @@ $(document).ready(function() {
 
 		//check if theres a cookie for the rental type
 		if (read_cookie("type")){
-			$("#radio_"+type+"_input").prop("checked", true);
+			$("#radio_" + read_cookie("type") + "_input").prop("checked", true);
 		}
 
 		//check if theres a cookie for editing an event
@@ -119,7 +119,7 @@ function checkSubmit(newEvents){
 
 	if (!user){ bool = "Please log in!"; }
 	else if (!$("input[type='radio'][name='type']:checked").val()) { bool = "Please select a rental type!"; }
-	else if (!newEvents || newEvents.length == 0){
+	else if (!rental_info && (!newEvents || newEvents.length == 0)){
 		bool = "Invalid dates!";
 	}
 	else if (newEvents.length > 0){

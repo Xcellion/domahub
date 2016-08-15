@@ -81,7 +81,7 @@ $(document).ready(function() {
 	if (rental_info){
 		appendRentals(rental_info.times, false);
 	}
-	if (new_rental_info){
+	if (new_rental_info.times){
 		//update pricing for stripe
 		$("#stripe-button").data("amount", new_rental_info.price);
 		$("#stripe-button").data("description", new_rental_info.listing_info.domain_name);
@@ -153,64 +153,79 @@ function appendRentals(rentals, new_rental){
 
 //function to validate client values for a new rental
 function validateNewVal(value){
-	id = $(this).attr("id")
-	switch (id){
-		case ("background_image_input"):
-			//change the background in real time
-			image = ($.trim(value) == "") ? def_rental_info[id.substr(0, id.length - 6)] : value;
-			$("#background_image").attr("src", sanitizeHtml(image));
-		case ("favicon_input"):
-		case ("title_input"):
-			if (value && (value != def_rental_info[id.substr(0, id.length - 6)])){
-				$(this).data("changed", true);
-				$(this).data("value", value);
-				return {newValue: sanitizeHtml(value)};
-			}
-			break;
-		case ("main_text"):
-		case ("middle_text"):
-		case ("main_font"):
-		case ("middle_font"):
-		case ("main_color"):
-		case ("middle_color"):
-		case ("location"):
-			if (value != def_rental_info.details[0][id]){
-				$(this).data("changed", true);
-				return {newValue: sanitizeHtml(value)};
-			}
+	if (typeof def_rental_info == undefined){
+		id = $(this).attr("id")
+		switch (id){
+			case ("background_image_input"):
+				//change the background in real time
+				image = ($.trim(value) == "") ? def_rental_info[id.substr(0, id.length - 6)] : value;
+				$("#background_image").attr("src", sanitizeHtml(image));
+			case ("favicon_input"):
+			case ("title_input"):
+				if (value && (value != def_rental_info[id.substr(0, id.length - 6)])){
+					$(this).data("changed", true);
+					$(this).data("value", value);
+					return {newValue: sanitizeHtml(value)};
+				}
+				break;
+			case ("main_text"):
+			case ("middle_text"):
+			case ("main_font"):
+			case ("middle_font"):
+			case ("main_color"):
+			case ("middle_color"):
+			case ("location"):
+				if (value != def_rental_info.details[0][id]){
+					$(this).data("changed", true);
+					return {newValue: sanitizeHtml(value)};
+				}
+		}
+	}
+	else {
+		if (value != "fuck"){
+			return "Invalid IP address!";
+		}
+		else {
+			return {newValue: value};
+		}
 	}
 }
 
 //helper function to get rental details
 function rentalData(){
-	var rental_details = [];
-	var temp_info = {
-		rental_details : rental_details
-	};
+	var temp_info = {};
 
-	//create rental details
-	$(".text_wrapper").each(function(wrapper){
-		tempDetail = {};
-		$(this).find(".editable-detail").each(function(editable){
+	if (typeof def_rental_info == undefined){
+		var rental_details = [];
+		temp_info.rental_details = rental_details;
+
+		//create rental details
+		$(".text_wrapper").each(function(wrapper){
+			tempDetail = {};
+			$(this).find(".editable-detail").each(function(editable){
+				id = $(this).attr("id");
+				tempDetail[id] = $(this).data("changed") ? $(this).text() : null;		//text
+				tempDetail[id.split("_")[0] + "_color"] = $(this).data("changed") ? $(this).data("color") : null;		//color
+				tempDetail[id.split("_")[0] + "_font"] = $(this).data("changed") ? $(this).data("font") : null;		//font
+			});
+			tempDetail.location = "";		//todo
+			rental_details.push(tempDetail);
+		})
+
+		//create rental info
+		$(".editable-info").each(function(editable){
 			id = $(this).attr("id");
-			tempDetail[id] = $(this).data("changed") ? $(this).text() : null;		//text
-			tempDetail[id.split("_")[0] + "_color"] = $(this).data("changed") ? $(this).data("color") : null;		//color
-			tempDetail[id.split("_")[0] + "_font"] = $(this).data("changed") ? $(this).data("font") : null;		//font
+			temp_info[id.substr(0, id.length - 6)] = $(this).data("changed") ? $(this).data("value") : null;
 		});
-		tempDetail.location = "";		//todo
-		rental_details.push(tempDetail);
-	})
+	}
+	else {
+		temp_info.background_image = $("#background_image_input").data("value") == "" ? undefined : $("#background_image_input").data("value");
+	}
 
-	//create rental info
-	$(".editable-info").each(function(editable){
-		id = $(this).attr("id");
-		temp_info[id.substr(0, id.length - 6)] = $(this).data("changed") ? $(this).data("value") : null;
-	});
-
-	if (rental_info){
-		temp_info.type = rental_info.type;
-		temp_info.times = rental_info.times;
-		temp_info.price = rental_info.price;
+	if (new_rental_info){
+		temp_info.type = new_rental_info.type;
+		temp_info.times = new_rental_info.times;
+		temp_info.price = new_rental_info.price;
 	}
 
 	return temp_info;
@@ -229,35 +244,41 @@ function submitRentals(id){
 		else {
 			unlock = false;		//lock the ajax
 			var rental_data = rentalData();
-			rental_data.stripeToken = $("#stripeToken").val()
-			var url = id == "edit_details" ? "/" + rental_info.rental_id : "/pay";		//pay or not
 
-			$.ajax({
-				type: "POST",
-				url: RemoveLastDirectoryPartOf(window.location.pathname) + url,
-				data: rental_data
-			}).done(function(data){
-				unlock = true;
-				delete_cookies();
-				if (data.message == "success"){
-					$("#message").html("Success!");
+			if (typeof def_rental_info == undefined && !rental_data.background_image){
+				$("#message").text("Please enter a valid IP address!");
+			}
+			else {
+				rental_data.stripeToken = $("#stripeToken").val()
+				var url = id == "edit_details" ? "/" + rental_info.rental_id : "/pay";		//pay or not
 
-					//if creating a new rental, redirect the URL to the new rental id
-					if (data.rental_id){
-						//replace the URL in the window
-						history.replaceState(0, "", data.rental_id)
-						window.location = window.location.pathname.replace(/\/[^\/]*$/, '/'+data.rental_id);
+				$.ajax({
+					type: "POST",
+					url: RemoveLastDirectoryPartOf(window.location.pathname) + url,
+					data: rental_data
+				}).done(function(data){
+					unlock = true;
+					delete_cookies();
+					if (data.message == "success"){
+						$("#message").html("Success!");
+
+						//if creating a new rental, redirect the URL to the new rental id
+						if (data.rental_id){
+							//replace the URL in the window
+							history.replaceState(0, "", data.rental_id)
+							window.location = window.location.pathname.replace(/\/[^\/]*$/, '/'+data.rental_id);
+						}
 					}
-				}
-				else if (data.message){
-					$("#message").text(data.message);
-					console.log(data);
-				}
-				else {
-					$("#message").html("Something went wrong!");
-					console.log(data);
-				}
-			});
+					else if (data.message){
+						$("#message").text(data.message);
+						console.log(data);
+					}
+					else {
+						$("#message").html("Something went wrong!");
+						console.log(data);
+					}
+				});
+			}
 		}
 	}
 }

@@ -105,6 +105,8 @@ function checkDomain(req, res, next){
 	}
 	else {
 		delete req.session.listing_info;
+		delete req.session.rental_info;
+		delete req.session.new_rental_info;
 		//first check to see if listing is legit
 		Listing.checkListing(domain_name, function(result){
 			//doesnt exist!
@@ -169,21 +171,28 @@ function checkNewRentalInfo(req, res, next){
 	times = req.body.events;
 	price = calculatePrice(times, req.session.listing_info);
 
-	//only check if there are no new times to be accounted for
-	if ((req.session.rental_info && req.session.new_listing_info) || !req.session.rental_info){
-		if (type != 1 && type != 2){
-			error.handler(req, res, "Invalid rental type!", "json");
-		}
-		else if (!times || times.length <= 0){
+	bool = true;
+
+	//if its an entirely new rental
+	if (!req.session.rental_info && !req.body.rental_id){
+		if (!times || times.length <= 0){
+			bool = false;
 			error.handler(req, res, "Invalid date!", "json");
 		}
 		else if (!price){
+			bool = false;
 			error.handler(req, res, "Invalid price!");
 		}
-		else if (times){
+	}
+
+	if (bool && type != 1 && type != 2){
+		error.handler(req, res, "Invalid rental type!", "json");
+	}
+	else {
+		//check if its even a valid JS date
+		if (times){
 			invalid_times = [];
 
-			//check if its even a valid JS date
 			for (var x = 0; x < times.length; x++){
 				times[x].start = new Date(times[x].start);
 				times[x].end = new Date(times[x].end);
@@ -197,15 +206,10 @@ function checkNewRentalInfo(req, res, next){
 			}
 			//if all are valid dates, check the DB if they're available
 			else {
-				Listing.checkRentalTime(req.session.listing_info.id, times, function(result){
-					invalid_times = result.unavailable;
-					formatted_times = result.formatted;
-
-					//some were unavailable, please re-submit!
+				checkRentalTime(req.session.listing_info.id, times, function(invalid_times, formatted_times){
 					if (invalid_times.length > 0){
 						res.send({unavailable : invalid_times})
 					}
-					//all gucci
 					else {
 						req.session.new_rental_info = {
 							user: req.user,
@@ -217,13 +221,31 @@ function checkNewRentalInfo(req, res, next){
 						};
 						next();
 					}
-				})
+				});
 			}
 		}
+		else {
+			req.session.new_rental_info = {
+				user: req.user,
+				listing_info: req.session.listing_info,
+				times: times,
+				formatted_times : times,
+				type: type,
+				price: price
+			};
+			next();
+		}
 	}
-	else {
-		next();
-	}
+}
+
+//function to check database for availability
+function checkRentalTime(listing_id, times, callback){
+	Listing.checkRentalTime(listing_id, times, function(result){
+		invalid_times = result.unavailable;
+		formatted_times = result.formatted;
+
+		callback(invalid_times, formatted_times);
+	});
 }
 
 //function to check new rental details posted
