@@ -68,10 +68,6 @@ p {
   padding-bottom: 10px;
 }
 
-.content {
-  // padding: 0 60px 0 60px;
-}
-
 .orange_link {
   color: $accent;
   opacity: 0.9;
@@ -80,10 +76,14 @@ p {
 
 .white_link {
   color: $white;
+  opacity: 0.9;
+  &:hover {opacity:1.0;}
 }
 
 .black_link {
   color: $black-p;
+  opacity: 0.9;
+  &:hover {opacity:1.0;}
 }
 
 /********************** LINEBREAK ******************/
@@ -138,7 +138,7 @@ p {
 
 /********************** MAIN ****************/
 #main {
-  padding-top: 60px;
+  padding: 60px 0 60px 0;
   position: relative;
   min-height: 100%;
   width: 100%;

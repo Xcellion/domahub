@@ -31,14 +31,14 @@
 }
 
 #landing_wrapper {
-  background-color: rgba(0,0,0,0.9);
+  background-color: rgba(0,0,0,0.7);
   height: 100%;
   width: 100%;
 }
 
 
 .title.is-1 {
-  color: #eee;
+  color: #fff;
   padding: 0;
   font-family: 'Source Sans Pro', sans-serif;
   font-weight: bold;
@@ -46,7 +46,7 @@
 
 .subtitle.is-3 {
   padding: 10px;
-  color: #ddd;
+  color: #eee;
   font-weight: 300;
 }
 

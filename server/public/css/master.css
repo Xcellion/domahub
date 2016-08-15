@@ -870,13 +870,6 @@ a.box:active {
       top: 50%;
       position: absolute !important; }
 
-.content a:not(.button) {
-  border-bottom: 1px solid #d3d6db; }
-  .content a:not(.button):visited {
-    color: #847bb9; }
-  .content a:not(.button):hover {
-    border-bottom-color: #3CBC8D; }
-
 .content li + li {
   margin-top: 0.25em; }
 
@@ -3859,15 +3852,9 @@ a.panel-block:hover {
 
 .footer {
   background-color: #f5f7fa;
-  padding: 40px 20px 80px; }
+  padding: 60px 20px 80px; }
   .footer a, .footer a:visited {
-    color: #69707a; }
-    .footer a:hover, .footer a:visited:hover {
-      color: #222324; }
-    .footer a:not(.icon), .footer a:visited:not(.icon) {
-      border-bottom: 1px solid #d3d6db; }
-      .footer a:not(.icon):hover, .footer a:visited:not(.icon):hover {
-        border-bottom-color: #3CBC8D; }
+    color: #333; }
 
 /******************** MISC ******************/
 /******************** FORMS/INPUT ******************/
@@ -3923,10 +3910,16 @@ p {
     opacity: 1.0; }
 
 .white_link {
-  color: #eeeeee; }
+  color: #eeeeee;
+  opacity: 0.9; }
+  .white_link:hover {
+    opacity: 1.0; }
 
 .black_link {
-  color: #555; }
+  color: #555;
+  opacity: 0.9; }
+  .black_link:hover {
+    opacity: 1.0; }
 
 /********************** LINEBREAK ******************/
 #linebreak {
@@ -3971,7 +3964,7 @@ p {
 
 /********************** MAIN ****************/
 #main {
-  padding-top: 60px;
+  padding: 60px 0 60px 0;
   position: relative;
   min-height: 100%;
   width: 100%; }
