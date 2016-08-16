@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>w3bbi - Website Name Rentals</title>
+  <title>w3bbi - Domain Name Rentals</title>
   <link rel="stylesheet" type="text/css" href="/css/index.css" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <%- include("templates/head_links"); %>
@@ -16,14 +16,19 @@
     <section class="hero is-fullheight" id="landing_wrapper">
       <div class="hero-body">
         <div class="container has-text-centered">
-          <h1 class="title is-1">
-            Rent or list your domains
+          <h1 id="landing_title">
+            Rent or list your domains on w3bbi
           </h1>
-          <h2 class="subtitle is-3">
+          <h2 id="landing_subtitle">
             w3bbi is the world's only marketplace for domain rentals
           </h2>
-          <div id="landing_button">
-            <a class="button is-primary is-outlined is-large" title="Buyer or seller" href="/buyer_or_seller">Get Started</a>
+          <div id="landing_buttons" class="container">
+            <div id="landing_button">
+              <a class="button is-primary is-large" title="Rent your domain" href="">List your domains</a>
+            </div>
+            <div id="landing_button">
+              <a class="button is-primary is-large" title="Browse domains" href="">Browse all domains</a>
+            </div>
           </div>
         </div>
       </div>

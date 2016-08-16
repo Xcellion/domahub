@@ -17,7 +17,8 @@
 /********************* BUTTONS **********************/
 
 #landing_button {
-  margin-top: 50px;
+  display: inline-block;
+  padding: 25px;
 }
 
 
@@ -40,17 +41,21 @@
 }
 
 
-.title.is-1 {
+#landing_title {
   color: #fff;
-  padding: 0;
-  font-family: 'Source Sans Pro', sans-serif;
   font-weight: bold;
+  font-size: 4rem;
 }
 
-.subtitle.is-3 {
-  padding: 10px;
+#landing_subtitle {
   color: #eee;
+  padding: 0;
   font-weight: 300;
+  font-size: 1.7rem;
+}
+
+#landing_buttons {
+  margin-top: 50px;
 }
 
 
