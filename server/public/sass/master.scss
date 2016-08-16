@@ -1,5 +1,5 @@
 /******************** RESET ****************/
-@import 'reset';
+// @import 'reset';
 @import 'fonts_colors';
 @import 'bulma/bulma.sass';
 
@@ -25,14 +25,11 @@ body {
     transition: all 0.25s;
   }
   a:hover {
-    color: $accent;
     cursor: pointer;
   }
 }
 
 html {
-  height: 100%;
-  box-sizing: border-box;
   background-color: #fff;
 }
 

@@ -10,7 +10,9 @@
 }
 
 .social_icon {
-  color: #888;
+  color: #333;
+  -webkit-transition: none !important;
+  transition-delay: none !important;
 }
 
 #facebook_icon:hover {
