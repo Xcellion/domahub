@@ -10,7 +10,7 @@
 }
 
 .social_icon {
-  color: #333;
+  color: #eee;
   -webkit-transition: none !important;
   transition-delay: none !important;
 }
@@ -29,7 +29,7 @@
 
 .company_text {
   box-sizing: border-box;
-  color: #2a2a2a;
+  color: #eee;
   display: inline-block;
   font-size: 0.9rem;
 }

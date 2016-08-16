@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>w3bbi - Website Name Rentals</title>
+  <title>w3bbi - Domain Name Rentals</title>
   <link rel="stylesheet" type="text/css" href="/css/index.css" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <%- include("templates/head_links"); %>
@@ -12,27 +12,29 @@
 
   <%- include("templates/navbar", {user: user}); %>
 
-  <div id="landing">
-    <section class="hero is-fullheight" id="landing_wrapper">
-      <div class="hero-body">
-        <div class="container has-text-centered">
-          <h1 class="title is-1">
-            Rent or list your domains
-          </h1>
-          <h2 class="subtitle is-3">
-            w3bbi is the world's only marketplace for domain rentals
-          </h2>
+  <section class="section">
+    <div class="hero-body">
+      <div class="container has-text-centered">
+        <h1 id="landing_title">
+          Rent or list your domains
+        </h1>
+        <h2 id="landing_subtitle">
+          The world's only marketplace for domain rentals
+        </h2>
+        <div id="landing_buttons" class="container">
           <div id="landing_button">
-            <a class="button is-primary is-outlined is-large" title="Buyer or seller" href="/buyer_or_seller">Get Started</a>
+            <a class="button is-primary is-large" title="Rent your domain" href="">Get Started</a>
           </div>
+          <!-- <div id="landing_button">
+            <a class="button is-primary is-medium" title="Browse domains" href="">Browse all domains</a>
+          </div> -->
         </div>
       </div>
-    </section>
-  </div>
+    </div>
+  </section>
 
-
-  <div id="main">
-    <div class="section">
+  <!-- <div id="main"> -->
+    <section class="section is-medium">
       <div class="columns">
         <div id="list_text" class="column is-one-third column is-offset-2">
           <div class="content">
@@ -54,14 +56,14 @@
           </div>
         </div>
         <div id="list_img" class="column is-one-third">
-          <div class="image is-3by2">
-            <img src="https://goo.gl/mdNeCv"/>
+          <div class="image is-3by2 blob">
+
           </div>
         </div>
       </div>
-    </div>
+    </section>
 
-    <div class="section">
+    <section class="section is-medium">
       <div class="columns">
         <div id="rent_text" class="column is-one-third">
           <div class="content">
@@ -82,15 +84,13 @@
           </div>
         </div>
         <div id="rent_img" class="column is-one-third is-offset-2">
-          <div class="image is-3by2">
-            <img src="https://goo.gl/mdNeCv"/>
+          <div class="image is-3by2 blob">
+
           </div>
         </div>
       </div>
-    </div>
-
-
-</div>
+    </section>
+  <!-- </div> -->
     <%- include("templates/footer"); %>
 
     <script type="text/javascript" src="js/jquery/jquery.leanModal.min.js"></script>

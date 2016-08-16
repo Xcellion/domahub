@@ -45,7 +45,7 @@ h2 {
   color: $black-h;
   font: {
     size: 2rem;
-    weight: 400;
+    weight: 300;
   }
   padding: 25px 0 25px 0;
 }
@@ -67,8 +67,8 @@ p {
 
 .orange_link {
   color: $accent;
-  opacity: 0.9;
-  &:hover {opacity:1.0;}
+  // opacity: 0.9;
+  // &:hover {opacity:1.0;}
 }
 
 .white_link {

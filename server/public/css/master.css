@@ -174,7 +174,7 @@ pre {
   line-height: 1.25; }
 
 body {
-  color: #69707a;
+  color: #555;
   font-size: 1rem;
   font-weight: 400;
   line-height: 1.428571428571429; }
@@ -210,12 +210,12 @@ strong {
 
 pre {
   background-color: #f5f7fa;
-  color: #69707a;
+  color: #555;
   white-space: pre;
   word-wrap: normal; }
   pre code {
     background-color: #f5f7fa;
-    color: #69707a;
+    color: #555;
     display: block;
     overflow-x: auto;
     padding: 16px 20px; }
@@ -773,7 +773,7 @@ a.box:active {
   .button.is-link {
     background-color: transparent;
     border-color: transparent;
-    color: #69707a;
+    color: #555;
     text-decoration: underline; }
     .button.is-link:hover, .button.is-link:focus {
       background-color: #d3d6db;
@@ -1400,9 +1400,9 @@ a.box:active {
   .progress::-webkit-progress-bar {
     background-color: #d3d6db; }
   .progress::-webkit-progress-value {
-    background-color: #69707a; }
+    background-color: #555; }
   .progress::-moz-progress-bar {
-    background-color: #69707a; }
+    background-color: #555; }
   .progress.is-white::-webkit-progress-value {
     background-color: #eeeeee; }
   .progress.is-white::-moz-progress-bar {
@@ -1606,7 +1606,7 @@ a.box:active {
       margin-top: -15px; } }
 
 .subtitle {
-  color: #69707a;
+  color: #eeeeee;
   font-size: 18px;
   line-height: 1.125; }
   .subtitle code {
@@ -1730,7 +1730,7 @@ a.box:active {
   position: relative;
   width: 50px; }
   .hamburger span, .nav-toggle span {
-    background-color: #69707a;
+    background-color: #555;
     display: block;
     height: 1px;
     left: 50%;
@@ -1801,7 +1801,7 @@ a.box:active {
   align-items: center;
   background-color: #f5f7fa;
   border-radius: 290486px;
-  color: #69707a;
+  color: #555;
   display: inline-flex;
   font-size: 12px;
   height: 24px;
@@ -1915,7 +1915,7 @@ a.box:active {
 .card {
   background-color: #eeeeee;
   box-shadow: 0 2px 3px rgba(17, 17, 17, 0.1), 0 0 0 1px rgba(17, 17, 17, 0.1);
-  color: #69707a;
+  color: #555;
   max-width: 100%;
   position: relative;
   width: 300px; }
@@ -2728,7 +2728,7 @@ a.box:active {
 
 .menu-list a {
   border-radius: 2px;
-  color: #69707a;
+  color: #555;
   display: block;
   padding: 5px 10px; }
   .menu-list a:hover {
@@ -2760,7 +2760,7 @@ a.box:active {
     color: inherit; }
 
 .message-header {
-  background-color: #69707a;
+  background-color: #555;
   border-radius: 3px 3px 0 0;
   color: white;
   padding: 7px 10px; }
@@ -2951,7 +2951,7 @@ a.box:active {
 
 .nav-item a,
 a.nav-item {
-  color: #69707a; }
+  color: #555; }
   .nav-item a:hover,
   a.nav-item:hover {
     color: #222324; }
@@ -3106,7 +3106,7 @@ a.nav-item {
   padding: 10px; }
 
 .panel-list a {
-  color: #69707a; }
+  color: #555; }
   .panel-list a:hover {
     color: #3CBC8D; }
 
@@ -3153,7 +3153,7 @@ a.panel-block:hover {
   .tabs a {
     align-items: center;
     border-bottom: 1px solid #d3d6db;
-    color: #69707a;
+    color: #555;
     display: flex;
     justify-content: center;
     margin-bottom: -1px;
@@ -3792,8 +3792,8 @@ a.panel-block:hover {
       padding: 240px 20px; } }
 
 .footer {
-  background-color: #f5f7fa;
-  padding: 60px 20px 80px; }
+  background-color: #2a2a2a;
+  padding: 40px 20px 80px; }
 
 /******************** MISC ******************/
 /******************** FORMS/INPUT ******************/
@@ -3823,7 +3823,7 @@ h1 {
 h2 {
   color: #333;
   font-size: 2rem;
-  font-weight: 400;
+  font-weight: 300;
   padding: 25px 0 25px 0; }
 
 h3 {
@@ -3840,10 +3840,7 @@ p {
   padding-bottom: 10px; }
 
 .orange_link {
-  color: #FF8751;
-  opacity: 0.9; }
-  .orange_link:hover {
-    opacity: 1.0; }
+  color: #FF8751; }
 
 .white_link {
   color: #eeeeee;
