@@ -11,10 +11,11 @@ $(document).ready(function() {
 				domain_name: $("#listing_form_domain_name").val()
 			}
 		}).done(function(data){
-			if (data.redirect){
-				window.location = window.location.href + "/" + data.redirect.domain_name;
+			if (data.state == "success"){
+				window.location = window.location.href + "/" + $("#listing_form_domain_name").val();
 			}
 			else {
+				console.log(data);
 				$("#domain_result_wrapper").show();
 				$(".domain_buy_link").each(function(){
 					$(this).attr("href", $(this).attr("href") + data.domain);

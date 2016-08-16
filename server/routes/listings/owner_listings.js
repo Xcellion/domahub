@@ -54,7 +54,7 @@ module.exports = {
 		}
 		else{
 			Listing.checkListing(domain_name, function(result){
-				if (result.state == "success" && !result.info){
+				if (result.state == "success" && !result.info.length){
 					request({
 						url: 'https://api.ote-godaddy.com/v1/domains/available?domain='+ domain_name + '&checkType=FAST&forTransfer=false',
 						headers: {
@@ -71,7 +71,7 @@ module.exports = {
 				}
 				else {
 					res.json({
-						redirect: result.listing_info
+						state: "success"
 					})
 				}
 			});
