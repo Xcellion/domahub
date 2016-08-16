@@ -9,8 +9,8 @@
     <span class="fa fa-search fa-lg"></span>
   </div>
   <div id="searchbar">
-    <form>
-      <input type="text" placeholder="Search websites" name="q" maxlength="255" autocomplete="off">
+    <form id="searchbar_form" novalidate>
+      <input id="domain_name" type="url" placeholder="Search websites" name="domain_name" autocomplete="off">
     </form>
   </div>
   <div id="list" class="nav-button">
@@ -70,7 +70,7 @@
 <% } %>
 
 
-<script src="js/jquery/jquery.leanModal.min.js" type="text/javascript"></script>
+<script src="/js/jquery/jquery.leanModal.min.js" type="text/javascript"></script>
 <script src="/js/routes/login_dropdown.js" type="text/javascript"></script>
 <script src="/js/routes/navbar_scroll.js" type="text/javascript"></script>
-<script src="/js/routes/client_index.js" type="text/javascript"></script>
+<script src="/js/routes/navbar.js" type="text/javascript"></script>

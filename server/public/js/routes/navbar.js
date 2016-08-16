@@ -35,4 +35,9 @@ $(document).ready(function() {
 	if (typeof message != "undefined"){
 		$("#message").text(message);
 	}
+
+	$("#searchbar_form").submit(function(e){
+		e.preventDefault();
+        window.location = window.location.origin + "/listing/" + $('#domain_name').val();;
+	})
 });

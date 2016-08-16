@@ -4,6 +4,8 @@ var	listing_model = require('../../models/listing_model.js');
 var stripe = require("stripe")("sk_test_PHd0TEZT5ytlF0qCNvmgAThp");
 
 //for verifying URLs
+var request = require("request");
+var dns = require("dns");
 var url = require("url");
 var val_url = require("valid-url");
 
@@ -20,10 +22,6 @@ module.exports = function(app, db, auth, e){
 
 	owner_listings.init(e, Listing);
 	renter_listings.init(e, Listing);
-
-	//search listings routes
-	app.get('/listing', owner_listings.getSearchListing);
-	app.post('/listing', owner_listings.postSearchListing);
 
 	//create new listings
 	app.get('/listing/create', isLoggedIn, owner_listings.createListingPage);
@@ -97,27 +95,44 @@ module.exports = function(app, db, auth, e){
 
 //check if listing exists
 function checkDomain(req, res, next){
-	var domain_name = req.params.domain_name;
+	var domain_name = req.params.domain_name || url.parse(addhttp(req.body.domain_name)).host;
 
-	//if already got the info from previous session
-	if (req.session.listing_info && (req.session.listing_info.domain_name == domain_name)){
-		next();
+	if (!val_url.isUri(addhttp(domain_name))){
+		error.handler(req, res, "Invalid domain name!");
 	}
 	else {
-		delete req.session.listing_info;
-		delete req.session.rental_info;
-		delete req.session.new_rental_info;
-		//first check to see if listing is legit
-		Listing.checkListing(domain_name, function(result){
-			//doesnt exist!
-			if (result.state == "error"){
-				error.handler(req, res, "Invalid domain name!");
-			}
-			//exists! handle the rest of the route
-			else {
-				next();
-			}
-		});
+		//if already got the info from previous session
+		if (req.session.listing_info && (req.session.listing_info.domain_name == domain_name)){
+			next();
+		}
+		else {
+			delete req.session.listing_info;
+			delete req.session.rental_info;
+			delete req.session.new_rental_info;
+			//first check to see if listing is legit
+			Listing.checkListing(domain_name, function(result){
+				//doesnt exist!
+				if (!result.info.length || result.state == "error"){
+					request({
+						url: 'https://api.ote-godaddy.com/v1/domains/available?domain='+ domain_name + '&checkType=FAST&forTransfer=false',
+						headers: {
+							"Authorization": "sso-key VUxKSUdS_77eVNvivVEXKyjCTTUweLk:77eYkfS7McHYHvcAv9fZdN",
+						},
+						strictSSL: false
+					}, function (e, response, body) {
+						available = (!e && response.statusCode == 200) ? JSON.parse(body) : false
+						res.render("listing404.ejs", {
+							user: req.user,
+							available: available
+						});
+					})
+				}
+				//exists! handle the rest of the route
+				else {
+					next();
+				}
+			});
+		}
 	}
 }
 
@@ -368,4 +383,12 @@ function nullOrDefault(check, against){
 	else {
 		return check;
 	}
+}
+
+//helper function to add http protocol to a url if it doesnt have it
+function addhttp(url) {
+    if (!/^(?:f|ht)tps?\:\/\//.test(url)) {
+        url = "http://" + url;
+    }
+    return url;
 }

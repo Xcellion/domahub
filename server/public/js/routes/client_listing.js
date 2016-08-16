@@ -79,6 +79,14 @@ $(document).ready(function() {
 		storeCookies("local_events");
 		eventPrices();
 	});
+
+	$(".fc-button").hide();
+
+	$(".button").click(function(e){
+		$(".fc-" + $(this).attr("id")).click();
+	});
+
+	$("#button_wrapper").appendTo(".fc-toolbar");
 });
 
 //helper function to create pre-existing rentals
@@ -572,7 +580,7 @@ function createEvent(start, end){
 		};
 
 		//orange if adding more time
-		eventData.color = (parseFloat(rental_info.rental_id) === rental_info.rental_id >>> 0) ? "orange" : "";
+		eventData.color = (parseFloat(rental_info.rental_id) === rental_info.rental_id >>> 0) ? "orange" : "#3CBC8D";
 		eventData.title = (parseFloat(rental_info.rental_id) === rental_info.rental_id >>> 0) ? "Added time" : "New rental";
 
 		var newEvent = $('#calendar').fullCalendar('renderEvent', eventData, true);

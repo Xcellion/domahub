@@ -40,44 +40,6 @@ module.exports = {
 		Listing = l;
 	},
 
-	//listing page to search for domain name availability
-	getSearchListing : function(req, res, next){
-		res.render("search_listings");
-	},
-
-	//search for a specific domain name
-	postSearchListing : function(req, res, next){
-		domain_name = url.parse(addhttp(req.body.domain_name)).host;
-
-		if (!val_url.isUri(addhttp(domain_name))){
-			error.handler(req, res, "Invalid domain name!");
-		}
-		else{
-			Listing.checkListing(domain_name, function(result){
-				if (result.state == "success" && !result.info.length){
-					request({
-						url: 'https://api.ote-godaddy.com/v1/domains/available?domain='+ domain_name + '&checkType=FAST&forTransfer=false',
-						headers: {
-							"Authorization": "sso-key VUxKSUdS_77eVNvivVEXKyjCTTUweLk:77eYkfS7McHYHvcAv9fZdN",
-						}
-					}, function (error, response, body) {
-						if (!error && response.statusCode == 200) {
-							res.json(JSON.parse(body));
-						}
-						else {
-							console.log(error, response);
-						}
-					})
-				}
-				else {
-					res.json({
-						state: "success"
-					})
-				}
-			});
-		}
-	},
-
 	//function to display the create listing page
 	createListingPage : function(req, res, next){
 		res.render("listing_create.ejs", {
@@ -299,14 +261,6 @@ module.exports = {
 
 }
 //----------------------------------------------------------------helper functions----------------------------------------------------------------
-
-//helper function to add http protocol to a url if it doesnt have it
-function addhttp(url) {
-    if (!/^(?:f|ht)tps?\:\/\//.test(url)) {
-        url = "http://" + url;
-    }
-    return url;
-}
 
 //helper function to parse the csv file
 function parseCSVFile(sourceFilePath, onNewRecord, handleError, done){

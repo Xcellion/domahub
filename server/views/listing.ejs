@@ -6,11 +6,9 @@
 
 	<head>
 		<title>w3bbi</title>
-		<link rel="stylesheet" href="/css/style_base.css" type="text/css" />
+		<%- include("templates/head_links"); %>
 		<link rel="stylesheet" href="/css/fullcalendar.min.css" type="text/css" />
 		<link rel="stylesheet" href="/css/listing.css" type="text/css" />
-		<!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script> -->
-		<script src="/js/jquery/jquery.js" type="text/javascript"></script>
 		<script src="/js/moment/moment.min.js" type="text/javascript"></script>
 		<script src="/js/fullcalendar.min.js" type="text/javascript"></script>
 		<script src="/js/cookie.js" type="text/javascript"></script>
@@ -21,76 +19,54 @@
 			var new_rental_info = <% if(typeof new_rental_info != "undefined"){ %><%-JSON.stringify(new_rental_info)%><% }else{ %>""<% } %>;
 			var rental_info = <% if(typeof rental_info != "undefined"){ %><%-JSON.stringify(rental_info)%><% }else{ %>""<% } %>;
 		</script>
-		<link rel="icon" type="image/ico" href="/images/favicon.ico">
 	</head>
 
 	<body>
-		<div class="body_wrapper">
+		<%- include("templates/navbar", {user: user}); %>
 
-			<!-- checks if user is logged in -->
-			<% if (typeof user == "undefined") {%>
+		<div id="top_wrapper">
+
+			<div id="price_wrapper" class="info_wrapper">
+				<h1 id="price">$0</h1>
+
 				<div id="form_wrapper">
-					<form id="target" action="/login" method="post">
-						<input name="email" placeholder="Email" type="text" id="email_input" autofocus>
-						<input name="password" placeholder="Password" type="password" id="pw_input">
-						<input id="submit" type="submit" value="Sign in">
+					<form id="listing_form" action="/listing/<%=listing_info.domain_name%>" method="post">
+						<%# <input name="type" value="1" type="radio" class="type_input" id="radio_1_input">%>
+						<%# <input name="type" value="2" type="radio" class="type_input" id="radio_0_input" checked="checked">%>
+						<input class="button" id="listing_form_submit" type="submit" value="Rent now!">
 					</form>
-					<div id="signup_wrapper">
-						<a id="signup" href="/signup">Create an account</a>
-					</div>
 				</div>
+			</div>
 
-			<!-- user is logged in! -->
-			<% } else {%>
-				<p>Logged in: <%= user.email %></p>
-				<p><a href="/profile">Profile</a></p>
-				<p><a href="/logout">Log Out</a></p>
-			<% } %>
-
-			<a href="/">Home</a>
-
-			<!-- information about the current listing -->
-			<% if (typeof listing_info != "undefined") {%>
-				<table>
-					<th>Date Created</th>
-					<th>Domain Name</th>
-					<th>Description</th>
-					<th>Owner Email</th>
-					<th>Owner Name</th>
-					<th>Price Type</th>
-					<th>Set Price</th>
-					<tr>
-						<td><%= listing_info.date_created %></td>
-						<td><%= listing_info.domain_name %></td>
-						<td><%= listing_info.description %></td>
-						<td><%= listing_info.email %></td>
-						<td><%= listing_info.fullname %></td>
-						<td><%= listing_info.price_type %></td>
-						<td><%= listing_info.set_price %></td>
-					</tr>
-				</table>
-			<% } %>
-
-			<!-- any messages from the server -->
-			<div class="message" id="message">
-				<% if (typeof message != "undefined") {%>
-					<%= message %>
-				<% } else {%>
-					Welcome!
+			<div id="listing_info_wrapper" class="info_wrapper">
+				<!-- information about the current listing -->
+				<% if (typeof listing_info != "undefined") {%>
+					<h2><%= listing_info.domain_name %></h2>
+					<p><%= listing_info.description %></p>
+					<p class="listing_info_block"><%= listing_info.email %></p>
+					<p class="listing_info_block"><%= listing_info.fullname %></p>
 				<% } %>
 			</div>
 
-			<div id="price">$0</div>
+		</div>
 
-			<div id="form_wrapper">
-				<form id="listing_form" action="/listing/<%=listing_info.domain_name%>" method="post">
-					<input name="type" value="1" type="radio" class="type_input" id="radio_1_input">
-					<input name="type" value="2" type="radio" class="type_input" id="radio_0_input" checked="checked">
-					<input id="submit" type="submit" value="Rent now!">
-				</form>
+		<div id="calendar_wrapper">
+
+			<!-- any messages from the server -->
+			<div id="message">
+				<% if (typeof message != "undefined") {%>
+					<%= message %>
+				<% } else {%>
+						Welcome!
+				<% } %>
 			</div>
 
-			<input type="button" id="remove_events" value="Remove all new events"></input>
+			<div id="button_wrapper" class="info_wrapper">
+				<div class="button" id="prev-button"><</div>
+				<div class="button" id="remove_events">Remove events</div>
+				<div class="button" id="today-button">Today</div>
+				<div class="button" id="next-button">></div>
+			</div>
 
 			<div id="calendar"></div>
 

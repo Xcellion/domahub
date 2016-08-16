@@ -1,7 +1,48 @@
-.fc-event:hover{
+
+#top_wrapper{
+	text-align:center;
+	margin-top:60px;
+}
+
+.info_wrapper{
+	display:inline-block;
+	vertical-align:middle;
+	margin:0 20px 0 20px;
+}
+
+#listing_info_wrapper{
+	text-align:left;
+}
+
+#listing_info_wrapper > h2, p{
+	margin:0;
+	padding:0;
+}
+
+.listing_info_block{
+	display:inline-block;
+	text-align:left;
+}
+
+/*--------------------------------------------------------------------------------------*/
+
+#calendar_wrapper{
+	margin-top:25px;
+}
+
+.fc-left > h2{
+	padding:0;
+}
+
+#button_wrapper{
+	display:inline-block;
+	margin-bottom:25px;
+}
+
+.button{
 	cursor:pointer;
 }
 
-.message{
-	display:inline-block;
+.fc-event:hover{
+	cursor:pointer;
 }
