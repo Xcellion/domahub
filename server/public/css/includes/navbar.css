@@ -97,7 +97,7 @@
   font-family: 'Share Tech';
   font-size: 1.0em;
   outline: none;
-  width: 100%;
+  width: 50%;
 }
 
 #list {
@@ -137,10 +137,13 @@
 /************************************* LOGIN DROPDOWN *************************/
 
 #login_dropdown {
-  background-color: #ffffff;
+  background-color: #fff;
+  -moz-box-shadow: 0 0 5px rgba(0,0,0,0.3);
+  -webkit-box-shadow: 0 0 5px rgba(0,0,0,0.3);
+  box-shadow: 0 0 5px rgba(0,0,0,0.3);
   color: #525255;
   display: none;
-  height: 260px;
+  height: 300px;
   margin: auto;
   position: absolute;
   width: 350px;
@@ -224,6 +227,6 @@
 }
 
 #submit:hover {
-  background-color: #FF8751;
+  opacity: 0.9;
   cursor: pointer;
 }

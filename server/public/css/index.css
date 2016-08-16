@@ -24,7 +24,7 @@
 
 /*********************** LANDING ************************/
 
-#landing {
+/*#landing {
   background-image: url('https://hd.unsplash.com/photo-1448932223592-d1fc686e76ea');
   background-position: bottom center;
   background-repeat: no-repeat;
@@ -32,25 +32,24 @@
   font-family: 'Roboto Condensed', sans-serif;
   height: 100vh;
   width: 100%;
-}
-
+}*/
+/*
 #landing_wrapper {
   background-color: rgba(0,0,0,0.7);
   height: 100%;
   width: 100%;
-}
+}*/
 
 
 #landing_title {
-  color: #fff;
-  font-weight: bold;
-  font-size: 4rem;
+  font-size: 3.5rem;
+  font-family: 'Source Sans Pro';
+  font-weight: 400;
+  padding: 30px 0 0 0;
 }
 
 #landing_subtitle {
-  color: #eee;
   padding: 0;
-  font-weight: 300;
   font-size: 1.7rem;
 }
 
@@ -64,6 +63,11 @@
 .main_link {
   font-size: 1.3rem;
   /*padding: 10px 60px 0 60px;*/
+}
+
+.blob {
+  background-color: #3CBC8D;
+  margin: 30px;
 }
 
 #list_text {
