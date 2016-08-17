@@ -86,7 +86,7 @@ $(document).ready(function() {
 		$(".fc-" + $(this).attr("id")).click();
 	});
 
-	$("#button_wrapper").appendTo(".fc-toolbar");
+	$(".fc-toolbar").prependTo("#calendar_left_wrapper");
 });
 
 //helper function to create pre-existing rentals

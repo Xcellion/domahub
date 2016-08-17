@@ -1,42 +1,79 @@
 
 #top_wrapper{
 	text-align:center;
-	margin-top:60px;
+	background-color:#222;
+	height:100vh;
+}
+
+#info_wrapper{
+	position:absolute;
+	left:50%;
+	top:50%;
+	margin-right:-50%;
+	transform:translate(-50%, -50%);
 }
 
 .info_wrapper{
 	display:inline-block;
 	vertical-align:middle;
-	margin:0 20px 0 20px;
+	margin:0 20px 25px 20px;
 }
 
 #listing_info_wrapper{
 	text-align:left;
 }
 
-#listing_info_wrapper > h2, p{
+#listing_info_title > h2, p{
 	margin:0;
 	padding:0;
+	color:#FFF;
+	margin-right:15px;
 }
 
-.listing_info_block{
+#domain_title{
+	color:#3CBC8D;
+}
+
+#domain_owner, #domain_email{
 	display:inline-block;
-	text-align:left;
+}
+
+#domain_description{
+	font-size:1em;
+	color:gray;
+	max-width:300px;
+}
+
+#price_left_wrapper{
+	display:inline-block;
+	border-right:1px solid #D3D3D3;
+	margin-right:10px;
+	padding-right:10px;
+}
+
+#price_right_wrapper{
+	display:inline-block;
+}
+
+#price_right_wrapper > p{
+	text-align:right;
 }
 
 /*--------------------------------------------------------------------------------------*/
 
 #calendar_wrapper{
-	margin-top:25px;
+	text-align:center;
+	height:100vh;
 }
 
-.fc-left > h2{
+#price, .fc-left > h2{
 	padding:0;
 }
 
-#button_wrapper{
+.calendar_top_wrapper{
+	margin-top:60px;
 	display:inline-block;
-	margin-bottom:25px;
+	vertical-align:middle;
 }
 
 .button{
@@ -45,4 +82,8 @@
 
 .fc-event:hover{
 	cursor:pointer;
+}
+
+#calendar{
+	padding:10px;
 }

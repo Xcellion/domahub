@@ -26,46 +26,65 @@
 
 		<div id="top_wrapper">
 
-			<div id="price_wrapper" class="info_wrapper">
-				<h1 id="price">$0</h1>
+			<div id="info_wrapper">
+
+				<div id="listing_info_wrapper" class="info_wrapper">
+					<!-- information about the current listing -->
+					<div id="listing_info_title">
+					<% if (typeof listing_info != "undefined") {%>
+						<h2 id="domain_title"><%= listing_info.domain_name %></h2>
+						<p id="domain_owner" class="listing_info_block"><%= listing_info.fullname %></p>
+						<p id="domain_email" class="listing_info_block"><%= listing_info.email %></p>
+						</div>
+						<p id="domain_description"><%= listing_info.description %></p>
+					<% } %>
+				</div>
+
+				<div id="price_wrapper" class="info_wrapper">
+					<div id="price_left_wrapper">
+						<p>Hourly</p>
+						<p>Daily</p>
+						<p>Weekly</p>
+						<p>Monthly</p>
+					</div>
+					<div id="price_right_wrapper">
+						<p>$<%=listing_info.hour_price%></p>
+						<p>$<%=listing_info.day_price%></p>
+						<p>$<%=listing_info.week_price%></p>
+						<p>$<%=listing_info.month_price%></p>
+					</div>
+				</div>
 
 				<div id="form_wrapper">
 					<form id="listing_form" action="/listing/<%=listing_info.domain_name%>" method="post">
 						<%# <input name="type" value="1" type="radio" class="type_input" id="radio_1_input">%>
 						<%# <input name="type" value="2" type="radio" class="type_input" id="radio_0_input" checked="checked">%>
-						<input class="button" id="listing_form_submit" type="submit" value="Rent now!">
+						<input class="button is-primary" id="listing_form_submit" type="submit" value="Rent now!">
 					</form>
 				</div>
-			</div>
-
-			<div id="listing_info_wrapper" class="info_wrapper">
-				<!-- information about the current listing -->
-				<% if (typeof listing_info != "undefined") {%>
-					<h2><%= listing_info.domain_name %></h2>
-					<p><%= listing_info.description %></p>
-					<p class="listing_info_block"><%= listing_info.email %></p>
-					<p class="listing_info_block"><%= listing_info.fullname %></p>
-				<% } %>
 			</div>
 
 		</div>
 
 		<div id="calendar_wrapper">
 
-			<!-- any messages from the server -->
-			<div id="message">
-				<% if (typeof message != "undefined") {%>
-					<%= message %>
-				<% } else {%>
-						Welcome!
-				<% } %>
-			</div>
-
-			<div id="button_wrapper" class="info_wrapper">
+			<div id="calendar_left_wrapper" class="info_wrapper calendar_top_wrapper">
 				<div class="button" id="prev-button"><</div>
 				<div class="button" id="remove_events">Remove events</div>
 				<div class="button" id="today-button">Today</div>
 				<div class="button" id="next-button">></div>
+			</div>
+
+			<div id="calendar_right_wrapper" class="calendar_top_wrapper">
+				<h1 id="price">$0</h1>
+				<!-- any messages from the server -->
+				<div id="message">
+					<% if (typeof message != "undefined") {%>
+						<%= message %>
+					<% } else {%>
+						&nbsp;
+					<% } %>
+				</div>
 			</div>
 
 			<div id="calendar"></div>
