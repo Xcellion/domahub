@@ -1,5 +1,5 @@
 /******************** RESET ****************/
-// @import 'reset';
+
 @import 'fonts_colors';
 @import 'bulma/bulma.sass';
 
@@ -160,4 +160,32 @@ p {
   font-size: 3.5rem;
   font-weight: bold;
   padding: 0;
+}
+
+/********************** MEDIA QUERIES****************/
+@media screen and (max-width: 769px) {
+  h1 {
+    font: {
+      size: 1.5rem;
+    }
+  }
+  h2 {
+    font: {
+      size: 1.8rem;
+    }
+    text-align: center;
+  }
+  p {
+    color: $black-p;
+    line-height: 1.2;
+    font: {
+      size: 1.5rem;
+      weight: 300;
+    }
+    text-align: center;
+    padding-bottom: 10px;
+  }
+  .main_link {
+    text-align: center;
+  }
 }

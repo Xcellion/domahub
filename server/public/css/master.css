@@ -841,24 +841,6 @@ a.box:active {
   border-left: 5px solid #d3d6db;
   padding: 1.5em; }
 
-.content h1 {
-  font-size: 2em; }
-
-.content h2 {
-  font-size: 1.75em; }
-
-.content h3 {
-  font-size: 1.5em; }
-
-.content h4 {
-  font-size: 1.25em; }
-
-.content h5 {
-  font-size: 1.125em; }
-
-.content h6 {
-  font-size: 1em; }
-
 .content ol {
   list-style: decimal outside;
   margin-left: 2em;
@@ -2976,7 +2958,7 @@ a.nav-item {
 
 @media screen and (max-width: 768px) {
   .nav-menu {
-    background-color: #eeeeee;
+    background-color: #fff;
     box-shadow: 0 4px 7px rgba(17, 17, 17, 0.1);
     left: 0;
     display: none;
@@ -3020,7 +3002,7 @@ a.nav-item {
 
 .nav {
   align-items: stretch;
-  background-color: #eeeeee;
+  background-color: #fff;
   display: flex;
   min-height: 50px;
   position: relative;
@@ -3919,3 +3901,20 @@ p {
   font-size: 3.5rem;
   font-weight: bold;
   padding: 0; }
+
+/********************** MEDIA QUERIES****************/
+@media screen and (max-width: 769px) {
+  h1 {
+    font-size: 1.5rem; }
+  h2 {
+    font-size: 1.8rem;
+    text-align: center; }
+  p {
+    color: #555;
+    line-height: 1.2;
+    font-size: 1.5rem;
+    font-weight: 300;
+    text-align: center;
+    padding-bottom: 10px; }
+  .main_link {
+    text-align: center; } }
