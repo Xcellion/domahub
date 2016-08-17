@@ -16,39 +16,46 @@
 
 /********************* BUTTONS **********************/
 
-#landing_button {
-  display: inline-block;
-  padding: 25px;
+#landing_buttons {
+  margin-top: 25px;
 }
-
 
 /*********************** LANDING ************************/
 
-/*#landing {
+.landing {
+  padding: 0;
+}
+
+.landing_img {
   background-image: url('https://hd.unsplash.com/photo-1448932223592-d1fc686e76ea');
   background-position: bottom center;
   background-repeat: no-repeat;
   background-size: cover;
   font-family: 'Roboto Condensed', sans-serif;
-  height: 100vh;
+  height: 700px;
   width: 100%;
-}*/
-/*
-#landing_wrapper {
+}
+
+.landing_wrapper {
   background-color: rgba(0,0,0,0.7);
   height: 100%;
   width: 100%;
-}*/
+}
 
+.landing_texts {
+  top: 150px;
+}
 
 #landing_title {
+  color: #eee;
   font-size: 3.5rem;
   font-family: 'Source Sans Pro';
   font-weight: 400;
-  padding: 30px 0 0 0;
+  padding: 0;
 }
 
 #landing_subtitle {
+  color: #eee;
   padding: 0;
   font-size: 1.7rem;
 }
@@ -99,5 +106,13 @@
 
   #landing_subtitle {
     font-size: 1.5rem;
+  }
+
+  .landing_img {
+    height: 500px;
+  }
+
+  .landing_texts {
+    top: 120px;
   }
 }

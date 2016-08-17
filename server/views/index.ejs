@@ -12,86 +12,86 @@
 
   <%- include("templates/navbar", {user: user}); %>
 
-  <section class="section">
-    <div class="hero-body">
-      <div class="container has-text-centered">
-        <h1 id="landing_title">
-          Rent or list your domains
-        </h1>
-        <h2 id="landing_subtitle">
-          The world's only marketplace for domain rentals
-        </h2>
-        <div id="landing_buttons" class="container">
-          <div id="landing_button">
-            <a class="button is-primary is-large" title="Rent your domain" href="">Get Started</a>
+  <section class="landing" class="section">
+    <div class="landing_img">
+      <div class="landing_wrapper">
+        <div class="hero-body">
+          <div class="container has-text-centered landing_texts">
+            <h1 id="landing_title">
+              Rent or list your domains
+            </h1>
+            <h2 id="landing_subtitle">
+              The world's only marketplace for domain rentals
+            </h2>
+            <div id="landing_buttons" class="container">
+              <div id="landing_button">
+                <a class="button is-primary is-outlined is-large" title="Rent your domain" href="">Get Started</a>
+              </div>
+            </div>
           </div>
-          <!-- <div id="landing_button">
-            <a class="button is-primary is-medium" title="Browse domains" href="">Browse all domains</a>
-          </div> -->
         </div>
       </div>
     </div>
   </section>
 
-  <!-- <div id="main"> -->
-    <section class="section is-medium">
-      <div class="columns">
-        <div id="list_text" class="column is-one-third is-offset-2">
-          <div class="content">
-            <h2>Renting out your domain is simple</h2>
-            <p>
-              Listing a website takes seconds. Our online widget
-              guides you through the entire process. Decide what
-              availability works best for you, customize your price
-              down to the exact hourly rate, and start making money
-              immediately! Best of all?
-              We don't take commission.
-            </p>
-          </div>
-          <div class="main_link">
-            <a class="orange_link index_link" title="Listings" href="/sellers">List your website with w3bbi</a>
-            <span class="icon">
-              <i class="fa fa-angle-right right-arrow"></i>
-            </span>
-          </div>
+  <section class="section is-medium">
+    <div class="columns">
+      <div id="list_text" class="column is-one-third is-offset-2">
+        <div class="content">
+          <h2>Renting out your domain is simple</h2>
+          <p>
+            Listing a website takes seconds. Our online widget
+            guides you through the entire process. Decide what
+            availability works best for you, customize your price
+            down to the exact hourly rate, and start making money
+            immediately! Best of all?
+            We don't take commission.
+          </p>
         </div>
-        <div id="list_img" class="column is-one-third">
-          <div class="image is-3by2 blob">
-
-          </div>
+        <div class="main_link">
+          <a class="orange_link index_link" title="Listings" href="/sellers">List your website with w3bbi</a>
+          <span class="icon">
+            <i class="fa fa-angle-right right-arrow"></i>
+          </span>
         </div>
       </div>
-    </section>
+      <div id="list_img" class="column is-one-third">
+        <div class="image is-3by2 blob">
 
-    <section class="section is-medium">
-      <div class="columns">
-        <div id="rent_text" class="column is-one-third">
-          <div class="content">
-            <h2>Millions of rentals are available now</h2>
-            <p>
-              Browse through millions of listings. Find a
-              schedule that works for you and follow our
-              simple steps for ownership transferral. You will
-              have access to your domain name in minutes.
-              Start customizing right away.
-            </p>
-          </div>
-          <div class="main_link">
-            <a class="orange_link index_link" title="Rent" href="/buyers">Browse website rentals</a>
-            <span class="icon">
-              <i class="fa fa-angle-right right-arrow"></i>
-            </span>
-          </div>
-        </div>
-        <div id="rent_img" class="column is-one-third is-offset-2">
-          <div class="image is-3by2 blob">
-
-          </div>
         </div>
       </div>
-    </section>
-  <!-- </div> -->
-    <%- include("templates/footer"); %>
+    </div>
+  </section>
+
+  <section class="section is-medium">
+    <div class="columns">
+      <div id="rent_text" class="column is-one-third">
+        <div class="content">
+          <h2>Millions of rentals are available now</h2>
+          <p>
+            Browse through millions of listings. Find a
+            schedule that works for you and follow our
+            simple steps for ownership transferral. You will
+            have access to your domain name in minutes.
+            Start customizing right away.
+          </p>
+        </div>
+        <div class="main_link">
+          <a class="orange_link index_link" title="Rent" href="/buyers">Browse website rentals</a>
+          <span class="icon">
+            <i class="fa fa-angle-right right-arrow"></i>
+          </span>
+        </div>
+      </div>
+      <div id="rent_img" class="column is-one-third is-offset-2">
+        <div class="image is-3by2 blob">
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <%- include("templates/footer"); %>
 
     <script type="text/javascript" src="js/jquery/jquery.leanModal.min.js"></script>
     <script src="/js/routes/navbar_scroll.js" type="text/javascript"></script>
