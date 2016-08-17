@@ -31,15 +31,17 @@
 
 #navbar {
   align-items: center;
-  background-color: transparent;
+  background-color: #fff;
   display: flex;
-  font-family: 'Roboto Condensed';
+  justify-content: center;
   height: 60px;
-  margin: 0;
+  margin: auto;
   overflow: hidden;
   padding: 0;
   position: fixed;
   top: 0;
+  left:0;
+  right:0;
   transition: all 0.5s ease;
   width: 100%;
   z-index: 1;
@@ -85,7 +87,7 @@
 }
 
 #searchbar {
-  flex: 1;
+  width: 25%;
   order: 1;
 }
 
@@ -97,7 +99,7 @@
   font-family: 'Share Tech';
   font-size: 1.0em;
   outline: none;
-  width: 50%;
+  width: 100%;
 }
 
 #list {
@@ -117,20 +119,18 @@
   box-sizing: border-box;
   padding: 22px 12px 22px 12px;
   margin: 0 10px 0 10px;
-  -webkit-transition: all 0.25s;
-  transition: all 0.25s;
 }
 
 .nav_link {
   color: #484848;
   padding: 5px;
-  -webkit-transition: all 0.25s;
-  transition: all 0.25s;
 }
 
 .nav_link:hover {
-  border-top: 4px solid #FF8751;
-  color: #FF8751 !important;
+  -moz-box-shadow: inset 0 -3px 0 #3CBC8D;
+  -webkit-box-shadow: inset 0 -3px 0 #3CBC8D;
+  box-shadow: inset 0 -3px 0 #3CBC8D;
+  color: #3CBC8D !important;
   cursor: pointer;
 }
 
@@ -148,7 +148,6 @@
   position: absolute;
   width: 350px;
   z-index: 99;
-  font-family: 'Roboto Condensed';
   padding: 20px;
 }
 
@@ -229,4 +228,8 @@
 #submit:hover {
   opacity: 0.9;
   cursor: pointer;
+}
+
+@media screen and (min-width: 769px) {
+
 }

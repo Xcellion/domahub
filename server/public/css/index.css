@@ -87,4 +87,17 @@
 }
 
 /************************ MEDIA QUERIES ************************/
-@media screen
+@media screen and (max-width: 769px) {
+
+  .blob {
+    margin: 0;
+  }
+
+  #landing_title {
+    font-size: 2.7rem;
+  }
+
+  #landing_subtitle {
+    font-size: 1.5rem;
+  }
+}
