@@ -11,7 +11,7 @@ $(document).ready(function() {
 		editable: false, //prevents editing of events
 		eventOverlap: false, //prevents overlap of events
 		eventStartEditable: false, //prevents moving of events
-		nowIndicator: true,
+		nowIndicator: true, //red line indicating current time
 
 		//creating new events
 		select: function(start, end, jsEvent, view){
@@ -25,7 +25,15 @@ $(document).ready(function() {
 		eventAfterRender: function(event, element, view ) {
 			$(element).attr("id", event._id);
 		}
-    })
+    });
+
+	//calendar styling
+	$(".fc-button").hide();
+	$(".button").click(function(e){
+		$(".fc-" + $(this).attr("id")).click();
+	});
+	$(".fc-toolbar").prependTo("#calendar_left_wrapper");
+	$('#calendar').fullCalendar('option', 'height', $("#calendar_wrapper").height() - $("#calendar_top_wrapper").height() - $("#navbar").height());
 
 	//check if there are cookies for this domain name
 	if (read_cookie("domain_name") == listing_info.domain_name){
@@ -79,14 +87,6 @@ $(document).ready(function() {
 		storeCookies("local_events");
 		eventPrices();
 	});
-
-	$(".fc-button").hide();
-
-	$(".button").click(function(e){
-		$(".fc-" + $(this).attr("id")).click();
-	});
-
-	$(".fc-toolbar").prependTo("#calendar_left_wrapper");
 });
 
 //helper function to create pre-existing rentals

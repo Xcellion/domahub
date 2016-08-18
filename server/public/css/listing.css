@@ -1,8 +1,26 @@
+body{
+	overflow-x:hidden;
+}
+
 
 #top_wrapper{
 	text-align:center;
 	background-color:#222;
 	height:100vh;
+	overflow:hidden;
+}
+
+#image_wrapper{
+
+}
+
+#background_image{
+	object-fit:cover;
+	-webkit-filter: blur(5px) grayscale(25%) brightness(50%);
+	-moz-filter: blur(5px) grayscale(25%) brightness(50%);
+	-o-filter: blur(5px) grayscale(25%) brightness(50%);
+	-ms-filter: blur(5px) grayscale(25%) brightness(50%);
+	filter: blur(5px) grayscale(25%) brightness(50%);
 }
 
 #info_wrapper{
@@ -16,7 +34,7 @@
 .info_wrapper{
 	display:inline-block;
 	vertical-align:middle;
-	margin:0 20px 25px 20px;
+	margin:0 20px 0 20px;
 }
 
 #listing_info_wrapper{
@@ -59,6 +77,10 @@
 	text-align:right;
 }
 
+#listing_form_submit{
+	margin-top:50px;
+}
+
 /*--------------------------------------------------------------------------------------*/
 
 #calendar_wrapper{
@@ -66,14 +88,20 @@
 	height:100vh;
 }
 
+#calendar_container{
+	height:500px;
+}
+
+#price {
+	min-width:100px;
+}
+
 #price, .fc-left > h2{
 	padding:0;
 }
 
-.calendar_top_wrapper{
-	margin-top:60px;
-	display:inline-block;
-	vertical-align:middle;
+#calendar_top_wrapper{
+	padding-top:60px;
 }
 
 .button{

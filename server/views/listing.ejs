@@ -25,7 +25,9 @@
 		<%- include("templates/navbar", {user: user}); %>
 
 		<div id="top_wrapper">
-
+			<div id="image_wrapper">
+				<img id="background_image" class="background_image noselect" width="100%" height="100%" src="https://source.unsplash.com/category/people">
+			</div>
 			<div id="info_wrapper">
 
 				<div id="listing_info_wrapper" class="info_wrapper">
@@ -68,22 +70,24 @@
 
 		<div id="calendar_wrapper">
 
-			<div id="calendar_left_wrapper" class="info_wrapper calendar_top_wrapper">
-				<div class="button" id="prev-button"><</div>
-				<div class="button" id="remove_events">Remove events</div>
-				<div class="button" id="today-button">Today</div>
-				<div class="button" id="next-button">></div>
-			</div>
+			<div id="calendar_top_wrapper">
+				<div id="calendar_left_wrapper" class="info_wrapper">
+					<div class="button" id="prev-button"><</div>
+					<div class="button" id="remove_events">Remove events</div>
+					<div class="button" id="today-button">Today</div>
+					<div class="button" id="next-button">></div>
+				</div>
 
-			<div id="calendar_right_wrapper" class="calendar_top_wrapper">
-				<h1 id="price">$0</h1>
-				<!-- any messages from the server -->
-				<div id="message">
-					<% if (typeof message != "undefined") {%>
-						<%= message %>
-					<% } else {%>
-						&nbsp;
-					<% } %>
+				<div id="calendar_right_wrapper" class="info_wrapper">
+					<h1 id="price">$0</h1>
+					<!-- any messages from the server -->
+					<div id="message">
+						<% if (typeof message != "undefined") {%>
+							<%= message %>
+						<% } else {%>
+							&nbsp;
+						<% } %>
+					</div>
 				</div>
 			</div>
 
