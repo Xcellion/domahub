@@ -11,6 +11,7 @@
 
 #linebreak2 {
   border-bottom: 1px solid #dddddd;
+  position: relative;
   margin: 5px auto 5px auto;
   width: 100%;
 }
@@ -110,7 +111,7 @@
   order: 3;
 }
 
-.login {
+#login_modal {
   margin: 0 10px 0 10px;
   order: 4;
 }
@@ -141,93 +142,29 @@
   -moz-box-shadow: 0 0 5px rgba(0,0,0,0.3);
   -webkit-box-shadow: 0 0 5px rgba(0,0,0,0.3);
   box-shadow: 0 0 5px rgba(0,0,0,0.3);
-  color: #525255;
-  display: none;
-  height: 300px;
-  margin: auto;
-  position: absolute;
-  width: 350px;
-  z-index: 99;
-  padding: 20px;
+  padding: 25px;
+  height: 350px;
+}
+
+#drop_login {
+  transition: all 0.25s;
+  -webkit-transition: all 0.25s;
 }
 
 #message {
+  padding-bottom: 20px;
   text-align: center;
 }
 
-#login_dropdown fieldset {
-  border: none;
-  margin: 15px 0 15px 0;
-  width: 100%;
-}
-
-.input_group {
-  margin-top: 5px;
-}
-
-#login_dropdown input[type="text"] {
-  box-sizing: border-box;
-  display: inline-block;
-  font-size: 1.0em;
-  padding: 10px;
-  width: 80%;
-}
-
-#login_dropdown input[type="password"] {
-  box-sizing: border-box;
-  display: inline-block;
-  font-size: 1.0em;
-  padding: 10px;
-  width: 80%;
-}
-
-#login_dropdown input[type="text"]:focus, input[type="password"]:focus {
-  outline-color: #FF8751;
-  background-color: #fff;
-}
-
-.dropdown_trigger_link {
+.login_trigger {
   display: block;
   padding: 5px 0 5px 0;
 }
 
-.dropdown_login_triggers a {
+.login_trigger a {
   color: #FF8751;
   display: inline-block;
   font-weight: 300;
-}
-
-.dropdown_login_triggers a:hover:not(.active) {
-  cursor: pointer;
-  font-weight: 400;
-}
-
-.dropdown_login_field {
-  text-align: center;
-}
-
-#submit {
-  background-color: #3CBC8D;
-  border: none;
-  border-radius: 3px;
-  color: #eeeeee;
-  display: inline-block;
-  font-size: 1.0em;
-  padding: 10px;
-  text-decoration: none;
-  -webkit-transition: background-color 0.25s;
-  transition: background-color 0.25s;
-  width: 80%;
-}
-
-#submit {
-  border: none;
-  outline: none;
-}
-
-#submit:hover {
-  opacity: 0.9;
-  cursor: pointer;
 }
 
 @media screen and (min-width: 769px) {
