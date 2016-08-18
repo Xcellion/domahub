@@ -10,10 +10,6 @@ body{
 	overflow:hidden;
 }
 
-#image_wrapper{
-
-}
-
 #background_image{
 	object-fit:cover;
 	-webkit-filter: blur(5px) grayscale(25%) brightness(50%);
@@ -113,5 +109,5 @@ body{
 }
 
 #calendar{
-	padding:10px;
+	padding:15px;
 }
