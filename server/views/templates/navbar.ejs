@@ -22,8 +22,15 @@
 
 <%# navbar checks for a user variable, if it doesnt exist, then display the login button %>
 <% if (!user) { %>
-  <div id="login">
+  <div class="modal login">
+    <div class="modal-background"></div>
+    <div class="modal-container">
+      <div class="modeal-content">
+        Hello
+      </div>
     <a id="login_modal" class="button is-primary" href="#login_dropdown">Log In</a>
+    </div>
+    <button class="modal-close"></button>
   </div>
 
 <%# or else display the logout button %>

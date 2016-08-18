@@ -24,9 +24,6 @@ object,
 embed {
   max-width: 100%; }
 
-html {
-  overflow-y: scroll; }
-
 ul {
   list-style: none; }
 
@@ -141,13 +138,10 @@ input[type=button] {
     transform: rotate(359deg); } }
 
 html {
-  background-color: #f5f7fa;
-  font-size: 14px;
+  background-color: #fff;
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;
   min-width: 300px;
-  overflow-x: hidden;
-  overflow-y: scroll;
   text-rendering: optimizeLegibility; }
 
 article,
@@ -172,12 +166,6 @@ pre {
   -webkit-font-smoothing: auto;
   font-family: "Source Code Pro", "Monaco", "Inconsolata", monospace;
   line-height: 1.25; }
-
-body {
-  color: #555;
-  font-size: 1rem;
-  font-weight: 400;
-  line-height: 1.428571428571429; }
 
 code {
   background-color: #f5f7fa;
