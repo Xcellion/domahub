@@ -1,11 +1,5 @@
-body {
-  background-color: #eeeeee;
-}
-
-#linebreak2 {
-  border-bottom: 1px solid #dddddd;
-  margin: 5px auto 5px auto;
-  width: 100%;
+html {
+  background-color: #eaeaea !important;
 }
 
 /*************************** REGISTER ***************************/
@@ -17,33 +11,34 @@ body {
   text-transform: uppercase;
 }
 
-.w3bbi_login_icon {
-  display: inline-block;
+.logo_login {
+  margin-bottom: 15px;
+}
+
+.w3bbi_icon {
+  box-sizing: border-box;
+  color: #3CBC8D;
   font-family: 'Share Tech';
   font-size: 1.5em;
   font-weight: bold;
-  margin: 15px 0 15px 0;
-  text-align: center;
+  -webkit-transition: all 0.25s;
+  transition: all 0.25s;
 }
 
-.w3bbi_login_icon:hover:not(.active) {
-  cursor: pointer;
-  opacity: 0.9;
-}
-
-.w3bbi_login_icon a {
+.w3bbi_icon:hover:not(.active) {
   color: #3CBC8D;
-  font-weight: bold;
+  cursor: pointer;
+  opacity: 0.85;
 }
 
-#register_form {
+#signup_form {
   background-color: #fff;
   -moz-box-shadow: 0 0 5px rgba(0,0,0,0.3);
   -webkit-box-shadow: 0 0 5px rgba(0,0,0,0.3);
   box-shadow: 0 0 5px rgba(0,0,0,0.3);
   color: #525255;
   font-family: 'Roboto Condensed';
-  height: 400px;
+  height: 425px;
   left: 0;
   margin: auto;
   padding: 20px;
@@ -53,78 +48,7 @@ body {
   width: 400px;
 }
 
-#register_form fieldset {
-  border: none;
-  box-sizing: border-box;
-  width: 100%;
-}
-
-#register_form input[type="text"] {
-  box-sizing: border-box;
-  font-size: 1.0em;
-  padding: 10px;
-  margin-bottom: 5px;
-  width: 100%;
-}
-
-#register_form input[type="password"] {
-  box-sizing: border-box;
-  font-size: 1.0em;
-  padding: 10px;
-  margin-bottom: 5px;
-  width: 100%;
-}
-
-#register_form input[type="text"]:focus, input[type="password"]:focus {
-  outline-color: #FF8751;
-}
-
-.login_field {
-  margin: 15px 0 15px 0;
-}
-
-#submit {
-  background-color: #3CBC8D;
-  border: none;
-  border-radius: 3px;
-  color: white;
-  display: inline-block;
-  font-size: 1.0em;
-  padding: 10px;
-  text-decoration: none;
-  text-align: center;
-  -webkit-transition: background-color 0.25s;
-  transition: background-color 0.25s;
-  width: 100%;
-}
-
-#submit {
-  border: none;
-  outline: none;
-}
-
-#submit:hover {
-  background-color: #FF8751;
-  cursor: pointer;
-}
-
-.trigger_link {
-  display: block;
-  padding: 5px 0 5px 0;
-}
-
-.login_triggers {
-  padding: 15px 0 15px 0;
-}
-
-.login_triggers a {
-  color: #FF8751;
-  display: inline-block;
-  font-weight: 300;
-  text-decoration: none;
-}
-
-.login_triggers a:hover:not(.active) {
-  cursor: pointer;
-  font-weight: 400;
+#signup_login_button {
+  transition: all 0.25s;
+  -webkit-transition: all 0.25s;
 }

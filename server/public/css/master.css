@@ -3826,6 +3826,12 @@ h3 {
   position: relative;
   width: 25%; }
 
+#linebreak2 {
+  border-bottom: 1px solid #dddddd;
+  position: relative;
+  margin: 15px auto 25px auto;
+  width: 100%; }
+
 #linebreak3 {
   border-bottom: 1px solid #dddddd;
   margin: 5px auto 5px auto;
