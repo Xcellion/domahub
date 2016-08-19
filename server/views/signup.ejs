@@ -5,14 +5,14 @@
 <html>
 
 	<head>
-		<title>w3bbi - Register</title>
+		<title>w3bbi - Sign Up</title>
 		<link rel="stylesheet" href="/css/signup.css" type="text/css" />
   	<%- include("templates/head_links"); %>
 	</head>
 
 	<body>
 
-			<div id="register_form">
+			<div id="signup_form">
 
 				<!-- any messages from the server -->
 				<div id="message">
@@ -24,28 +24,40 @@
 				</div>
 
 				<form id="target" action="/signup" method="post">
-					<fieldset class="w3bbi_login_icon">
-						<a href="/">w3bbi</a>
-					</fieldset>
-					<fieldset class="email_name">
-						<input autofocus name="email" placeholder="Email" type="text" id="email_input">
-						<input name="fullname" placeholder="Full Name" type="text" id="fullname_input">
-					</fieldset>
-					<fieldset class="password_check">
-						<input name="password" placeholder="Password" type="password" id="pw_input">
-						<input name="verify_pw" placeholder="Confirm password" type="password" id="verify_input" autocomplete="off">
-					</fieldset>
-					<fieldset class="login_field">
-						<button id="submit" value="Create account" type="submit">Create account</button>
-					</fieldset>
+					<div class="has-text-centered logo_login">
+						<a class="w3bbi_icon" href="/">w3bbi</a>
+					</div>
+					<p class="control has-icon has-icon-right">
+						<input class="input is-medium" autofocus name="email" placeholder="Email" type="text" id="email_input">
+						<i class="fa fa-check"></i>
+					</p>
+					<p class="control has-icon has-icon-right">
+						<input class="input is-medium" name="fullname" placeholder="Full Name" type="text" id="fullname_input">
+						<i class="fa fa-check"></i>
+					</p>
+					<p class="control">
+						<input class="input is-medium" name="password" placeholder="Password" type="password" id="pw_input">
+					</p>
+					<p class="control has-icon has-icon-right">
+						<input class="input is-medium" name="verify_pw" placeholder="Confirm password" type="password" id="verify_input" autocomplete="off">
+						<i class="fa fa-check"></i>
+					</p>
+					<p class="control">
+						<button id="signup_login_button" class="button is-primary is-medium is-fullwidth">
+	            Create Account
+	          </button>
+					</p>
 
 <div id="linebreak2"></div>
 
-					<fieldset class="login_triggers">
-						<div class="trigger_link">
-							<a id="login_link" href="/login">Already have an account?</a>
-						</div>
-					</fieldset>
+					<p class="control">
+						<p class="has-text-centered">
+							Already have an account?
+						</p>
+						<p class="has-text-centered">
+							<a class="orange_link" href="/login">Sign In Now</a>
+						</p>
+					</p>
 
 				</form>
 			</div>

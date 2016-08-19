@@ -20,37 +20,44 @@
       </div>
 
       <form id="target" action="/login" method="post">
-      <fieldset class="w3bbi_login_icon">
-        <a href="/">w3bbi</a>
-      </fieldset>
-      <fieldset class="credentials">
-        <div class="input_group">
-          <div class="icon_container">
-            <span class="fa fa-envelope-o fa-fw"></span>
-          </div>
-          <input id="username" name="email" autofocus name="email" placeholder="Email" type="text" autocomplete="on">
+        <div class="has-text-centered logo_login">
+          <a class="w3bbi_icon" href="/">w3bbi</a>
         </div>
-        <div class="input_group">
-          <div class="icon_container">
-            <span class="fa fa-key fa-fw"></span>
-          </div>
-          <input id="password" name="password" placeholder="Password" type="password" autocomplete="off">
+        <p class="control has-icon">
+          <input class="input is-medium" type="email" placeholder="Email">
+          <i class="fa fa-envelope"></i>
+        </p>
+        <p class="control has-icon">
+          <input class="input is-medium" type="password" placeholder="Password">
+          <i class="fa fa-lock"></i>
+        </p>
+        <p class="control">
+          <button id="login_button" class="button is-primary is-medium is-fullwidth">
+            Log In
+          </button>
+        </p>
+        <div class="control is-grouped">
+          <p class="control is-expanded">
+            <label class="checkbox">
+              <input type="checkbox">
+              Remember me
+            </label>
+          </p>
+          <p class="control">
+              <a class="forgot orange_link" href="/forgot">Forgot password?</a>
+          </p>
         </div>
-      </fieldset>
-      <fieldset class="login_field">
-        <button id="submit" value="Log In" type="submit">Log In</button>
-      </fieldset>
 
-<div id="linebreak2"></div>
+    <div id="linebreak2"></div>
 
-      <fieldset class="login_triggers">
-        <div class="trigger_link">
-          <a id="forgot_link" href="/forgot_password">Forgot password?</a>
+      <p class="control">
+        <p class="has-text-centered">
+          Don't have an account?
+        </p>
+        <div class="has-text-centered">
+          <a class="signup orange_link" href="/signup">Sign Up Now</a>
         </div>
-        <div class="trigger_link">
-          <a id="register_link" href="/signup">Register now</a>
-        </div>
-      </fieldset>
+      </p>
       </form>
     </div>
 

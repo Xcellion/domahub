@@ -3826,6 +3826,12 @@ h3 {
   position: relative;
   width: 25%; }
 
+#linebreak2 {
+  border-bottom: 1px solid #dddddd;
+  position: relative;
+  margin: 15px auto 25px auto;
+  width: 100%; }
+
 #linebreak3 {
   border-bottom: 1px solid #dddddd;
   margin: 5px auto 5px auto;
@@ -3881,17 +3887,5 @@ h3 {
 
 /********************** MEDIA QUERIES****************/
 @media screen and (max-width: 769px) {
-  h1 {
-    font-size: 1.5rem; }
   h2 {
-    font-size: 1.8rem;
-    text-align: center; }
-  p {
-    color: #555;
-    line-height: 1.2;
-    font-size: 1.5rem;
-    font-weight: 300;
-    text-align: center;
-    padding-bottom: 10px; }
-  .main_link {
-    text-align: center; } }
+    font-size: 1.4rem; } }

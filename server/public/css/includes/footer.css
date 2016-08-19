@@ -33,3 +33,13 @@
   display: inline-block;
   font-size: 0.9rem;
 }
+
+@media screen and (max-width: 769px) {
+  .footer_item {
+    font-size: 0.8rem;
+  }
+
+  .company_text {
+    font-size: 0.7rem;
+  }
+}
