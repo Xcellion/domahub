@@ -22,7 +22,7 @@
 
 <%# navbar checks for a user variable, if it doesnt exist, then display the login button %>
 <% if (!user) { %>
-  <a id="login_modal" class="button is-primary modal-button" data-object="#modal_login">Log In</a>
+  <a id="login_modal" class="button is-primary modal-button" title="Log In" data-object="#modal_login">Log In</a>
 
   <div id="modal_login" class="modal">
     <div class="modal-background"></div>
@@ -31,7 +31,7 @@
         <%# navbar checks for a user variable, if it doesnt exist, then display the login modal stuff %>
         <% if (!user) { %>
           <div id="login_dropdown">
-            <div id="message">Please log in below!</div>
+            <div id="message">Please log in below</div>
             <form id="target" action="/login" method="post">
               <p class="control has-icon">
                 <input id="email" class="input is-medium" name="email" type="email" placeholder="Email">
