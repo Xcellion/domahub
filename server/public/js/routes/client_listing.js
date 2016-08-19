@@ -41,6 +41,9 @@ function checkSubmit(){
 	else if (!rental_info && (!newEvents || newEvents.length == 0)){
 		bool = "Invalid dates!";
 	}
+	else if (!ValidateIPaddress($("#ip_form_input").val())){
+		bool = "Invalid IP address!";
+	}
 	else if (newEvents.length > 0){
 		for (var x = 0; x < newEvents.length; x++){
 			if (!newEvents[x].old){
@@ -51,9 +54,6 @@ function checkSubmit(){
 				}
 			}
 		}
-	}
-	else if (!ValidateIPaddress($("#ip_form_input").val())){
-		bool = "Invalid IP address!";
 	}
 
 	return bool;
@@ -119,9 +119,5 @@ function submitRentals(){
 }
 
 function ValidateIPaddress(ipaddress){
-	if (/^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/.test(ipaddress))
-	{
-		return (true)
-	}
-	return (false)
+	return /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/.test(ipaddress)
 }
