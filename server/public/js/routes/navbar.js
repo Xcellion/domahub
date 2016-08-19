@@ -1,11 +1,7 @@
 $(document).ready(function() {
-
-	//hide the choices until login
-	$("#username").focus();
-
 	$('#target').submit(function(event){
 		//if no email is entered
-		if (!$("#username").val()) {
+		if (!$("#email").val()) {
 			$("#message").fadeOut(100, function(){
 				$(this).css("color", "#ed1c24").html("Please enter your email address!").fadeIn(100);
 				$("#username").focus();
@@ -27,12 +23,11 @@ $(document).ready(function() {
 
 	//used to delete any old cookies set from renting a domain
 	if (typeof user == "undefined"){
-		delete_cookie("type");
-		delete_cookie("local_events");
+		delete_cookies();
 	}
 
 	//used to display the message sent from the server
-	if (typeof message != "undefined"){
+	if (typeof message != "undefined" && message){
 		$("#message").text(message);
 	}
 
