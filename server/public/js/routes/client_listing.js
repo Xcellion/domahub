@@ -15,9 +15,6 @@ $(document).ready(function() {
 			var $id = $('<input id="stripeToken" type=hidden name=stripeToken />').val(token.id);
 			$('#listing_form').append($id);
 			submitRentals();
-		},
-		opened: function(){
-			console.log($(".stripe_checkout_app").find('#submitButton'));
 		}
 	});
 
@@ -157,6 +154,7 @@ function submitRentals(){
 		unlock = false;
 		minEvents = [];
 
+		//format the events to be sent
 		for (var x = 0; x < newEvents.length; x++){
 			var start = new Date(newEvents[x].start._d);
 			var offset = start.getTimezoneOffset();
@@ -168,10 +166,12 @@ function submitRentals(){
 			});
 		}
 
-		//post to ajax
+		//to edit or create a new rental
+		var url = rental_info ? rental_info.rental_id : "rent"
+
 		$.ajax({
 			type: "POST",
-			url: "/listing/" + listing_info.domain_name + "/rent",
+			url: "/listing/" + listing_info.domain_name + "/" + url,
 			data: {
 				events: minEvents,
 				rental_id: rental_info.rental_id,

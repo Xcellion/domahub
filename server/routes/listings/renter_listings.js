@@ -67,6 +67,7 @@ module.exports = {
 	//function to initiate editing a rental
 	editRental : function(req, res, next){
 		domain_name = req.params.domain_name;
+		rental_id = req.params.rental_id;
 		new_rental_info = req.session.new_rental_info;
 
 		if (!new_rental_info){
@@ -77,7 +78,7 @@ module.exports = {
 				ip: new_rental_info.ip
 			};
 
-			updateListingRental(req, res, req.params.rental_id, raw_info, function(){
+			updateListingRental(req, res, rental_id, raw_info, function(){
 				if (new_rental_info.formatted_times){
 					newRentalTimes(req, res, rental_id, new_rental_info.formatted_times, function(){
 						delete req.session.new_rental_info;
