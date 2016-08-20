@@ -75,7 +75,7 @@ listing_model.prototype.getAllListings = function(callback){
 
 //gets all non-default rentals times and their owners for a specific listing
 listing_model.prototype.getListingRentalsInfo = function(listing_id, callback){
-	console.log("Attempting to get all non-default rentals for listing #" + listing_id + "...");
+	console.log("Attempting to get all existing rentals for listing #" + listing_id + "...");
 	query = "SELECT \
 				rentals.account_id, \
 				rentals.rental_id, \

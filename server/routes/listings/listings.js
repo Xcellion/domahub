@@ -38,15 +38,6 @@ module.exports = function(app, db, auth, e){
 		renter_listings.renderListing
 	]);
 
-	app.get('/listing/:domain_name/new', [
-		isLoggedIn,
-		checkDomain,
-		checkNewOldRental,
-		renter_listings.getListing,
-		renter_listings.getDefaultRental,
-		renter_listings.renderRental
-	]);
-
 	app.get('/listing/:domain_name/activate', [
 		isLoggedIn,
 		checkDomain,
@@ -58,27 +49,18 @@ module.exports = function(app, db, auth, e){
 		checkDomain,
 		checkRental,
 		renter_listings.getListing,
-		renter_listings.getDefaultRental,
 		renter_listings.getRental,
-		renter_listings.renderRental
+		renter_listings.renderListing
 	]);
 
 	//------------------------------------------------------------------------------------------------POSTS
 
+	//create a new rental
 	app.post('/listing/:domain_name/rent', [
 		isLoggedIn,
 		checkDomain,
 		renter_listings.getListing,
 		checkNewRentalInfo,
-		renter_listings.getDefaultRental,
-		renter_listings.redirectToNewOld
-	]);
-
-	//create a new rental
-	app.post('/listing/:domain_name/pay', [
-		isLoggedIn,
-		checkDomain,
-		checkNewRentalDetails,
 		renter_listings.createRental
 	]);
 
@@ -87,8 +69,8 @@ module.exports = function(app, db, auth, e){
 		isLoggedIn,
 		checkDomain,
 		checkRental,
+		renter_listings.getListing,
 		checkNewRentalInfo,
-		checkNewRentalDetails,
 		renter_listings.editRental
 	]);
 }
@@ -169,24 +151,15 @@ function checkRental(req, res, next){
 	}
 }
 
-//function to check if new or old rental info is still there
-function checkNewOldRental(req, res, next){
-	if (req.session.listing_info){
-		next();
-	}
-	else {
-		error.handler(req, res, "Invalid rental!");
-	}
-}
-
 //function to check the rental info posted
 function checkNewRentalInfo(req, res, next){
 	domain_name = req.params.domain_name;
-	type = parseFloat(req.body.type);
 	times = req.body.events;
+	ip = req.body.ip;
 	price = calculatePrice(times, req.session.listing_info);
+	stripeToken = req.body.stripeToken;
 
-	bool = true;
+	bool = true;	//bool to check for new or edit
 
 	//if its an entirely new rental
 	if (!req.session.rental_info && !req.body.rental_id){
@@ -199,9 +172,9 @@ function checkNewRentalInfo(req, res, next){
 			error.handler(req, res, "Invalid price!");
 		}
 	}
-
-	if (bool && type != 1 && type != 2){
-		error.handler(req, res, "Invalid rental type!", "json");
+	//passed above checks, continue to check for IP and times
+	if (bool && !ValidateIPaddress(ip)){
+		error.handler(req, res, "Invalid IP address!", "json");
 	}
 	else {
 		//check if its even a valid JS date
@@ -226,27 +199,31 @@ function checkNewRentalInfo(req, res, next){
 						res.send({unavailable : invalid_times})
 					}
 					else {
-						req.session.new_rental_info = {
-							user: req.user,
-							listing_info: req.session.listing_info,
-							times: times,
-							formatted_times : formatted_times,
-							type: type,
-							price: price
-						};
-						next();
+						//check pricing since new times exist
+						if (payCheck(stripeToken, price, domain_name)){
+							req.session.new_rental_info = {
+								account_id: req.user.id,
+								listing_id: req.session.listing_info.id,
+								formatted_times : formatted_times,
+								ip: ip
+							};
+							next();
+						}
+						else {
+							error.handler(req, res, "Invalid price!");
+						}
 					}
 				});
 			}
 		}
+
+		//no new times exist, just update the rental info
 		else {
 			req.session.new_rental_info = {
-				user: req.user,
-				listing_info: req.session.listing_info,
-				times: times,
-				formatted_times : times,
-				type: type,
-				price: price
+				account_id: req.user.id,
+				listing_id: req.session.listing_info.id,
+				formatted_times : false,
+				ip: ip
 			};
 			next();
 		}
@@ -263,56 +240,6 @@ function checkRentalTime(listing_id, times, callback){
 	});
 }
 
-//function to check new rental details posted
-function checkNewRentalDetails(req, res, next){
-	domain_name = req.params.domain_name;
-	title = req.body.title;
-	background_image = req.body.background_image;
-	favicon = req.body.favicon;
-	stripeToken = req.body.stripeToken;
-	rental_details = req.body.rental_details;
-
-	if (background_image != "" && !val_url.isUri(background_image)){
-		error.handler(req, res, "Invalid background image!", "json");
-	}
-	else if (favicon != "" && !val_url.isUri(favicon)){
-		error.handler(req, res, "Invalid favicon!", "json");
-	}
-
-	//if editing an existing rental, but not adding any new times
-	else if (req.session.new_rental_info && !payCheck(stripeToken, req.session.new_rental_info.price, domain_name)){
-		error.handler(req, res, "Credit card error!", "json");
-	}
-	else if (rental_details){
-
-		//if editing an existing rental, but not adding any new times
-		if (!req.session.new_rental_info){req.session.new_rental_info = {}};
-
-		//sanitize everything
-		req.session.new_rental_info.background_image = nullOrDefault(sanitizeHtml(background_image), def_rental_info.background_image);
-		req.session.new_rental_info.favicon = nullOrDefault(sanitizeHtml(favicon), def_rental_info.favicon);
-		req.session.new_rental_info.title = nullOrDefault(sanitizeHtml(title), def_rental_info.title);
-		tempDetails = [];
-		for (var x = 0; x < rental_details.length; x++){
-			tempDet = [];
-			for (var y in rental_details[x]){
-				rental_details[x][y] = sanitizeHtml(rental_details[x][y]);
-			}
-			def_rental_info = req.session.def_rental_info;
-
-			tempDet.push(rental_details[x].main_text);
-			tempDet.push(nullOrDefault(rental_details[x].main_color, def_rental_info.details[0].main_color));
-			tempDet.push(nullOrDefault(rental_details[x].main_font, def_rental_info.details[0].main_font));
-			tempDet.push(rental_details[x].middle_text);
-			tempDet.push(nullOrDefault(rental_details[x].middle_color, def_rental_info.details[0].middle_color));
-			tempDet.push(nullOrDefault(rental_details[x].middle_font, def_rental_info.details[0].middle_font));
-			tempDet.push(rental_details[x].location);
-			tempDetails.push(tempDet);
-		}
-		req.session.new_rental_info.details = tempDetails;
-		next();
-	}
-}
 
 //---------------------------------------------------------------------------------------------------------------------------------
 
@@ -375,20 +302,15 @@ function payCheck(stripeToken, price, domain_name){
 	return bool;
 }
 
-//function to check if null or default
-function nullOrDefault(check, against){
-	if (!check || check.length == 0 || check == against){
-		return null;
-	}
-	else {
-		return check;
-	}
-}
-
 //helper function to add http protocol to a url if it doesnt have it
 function addhttp(url) {
     if (!/^(?:f|ht)tps?\:\/\//.test(url)) {
         url = "http://" + url;
     }
     return url;
+}
+
+//helper function to validate ip address
+function ValidateIPaddress(ipaddress){
+	return /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/.test(ipaddress)
 }

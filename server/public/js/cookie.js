@@ -14,8 +14,8 @@ function storeCookies(type){
 			cookie.push(temp_event);
 		}
 	}
-	else if (type == "type"){
-		cookie = parseFloat($("input[type='radio'][name='type']:checked").val());
+	else if (type == "ip"){
+		cookie = $("#ip_form_input").val();
 	}
 	else if (type == "rental_info"){
 		cookie = rental_info;
@@ -44,8 +44,9 @@ function read_cookie(name) {
 //helper function to delete all cookies
 function delete_cookies(){
 	delete_cookie("local_events");
-	delete_cookie("type");
+	delete_cookie("ip");
 	delete_cookie("rental_info");
+	delete_cookie("domain_name");
 }
 
 //helper function to delete a cookie

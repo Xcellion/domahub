@@ -30,7 +30,6 @@ function handler(req, res, message, type) {
 				case "Invalid user!":
 				case "Invalid password!":
 					req.session.message = "Invalid username / password!";
-					redirectTo = "/login";
 					break;
 				case "Invalid user / rental!":
 					req.session.message = "Invalid rental!";

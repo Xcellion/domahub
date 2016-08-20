@@ -86,7 +86,7 @@ body{
 	text-align:right;
 }
 
-#listing_form_submit{
+#start_form_wrapper{
 	margin-top:50px;
 }
 
@@ -130,12 +130,17 @@ body{
 
 }
 
+#ip_form_wrapper:required:invalid, input:focus:invalid {
+  border:1px solid red;
+}
+
 #ip_form_input{
 	width:auto;
 }
 
 /*--------------------------------------------------------------------------------------*/
 
-#pay_wrapper{
-
+#submitButton{
+	background:#3CBC8D;
+	background-image:none;
 }

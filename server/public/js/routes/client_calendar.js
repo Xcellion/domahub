@@ -34,35 +34,8 @@ $(document).ready(function() {
 	$(".fc-toolbar").prependTo("#calendar_left_wrapper");
 	$('#calendar').fullCalendar('option', 'height', $("#calendar_wrapper").height() - $("#calendar_top_wrapper").height() - $("#navbar").height());
 
-	//check if there are cookies for this domain name
-	if (read_cookie("domain_name") == listing_info.domain_name){
-		var existing_events = read_cookie("local_events");
-
-		for (var x = 0; x < existing_events.length; x++){
-			$('#calendar').fullCalendar('renderEvent', existing_events[x], true);
-		}
-
-		//check if theres a cookie for the rental type
-		if (read_cookie("type")){
-			$("#radio_" + read_cookie("type") + "_input").prop("checked", true);
-		}
-
-		//check if theres a cookie for editing an event
-		if (document.cookie.match(new RegExp('rental_info=([^;]+)'))){
-			var cookie = read_cookie("rental_info");
-			rental_info = cookie;
-			editingRental();
-		}
-	}
-	else {
-		delete_cookies();
-	}
-
 	//create existing rentals
 	createExisting(listing_info.rentals);
-
-	//show prices
-	eventPrices(listing_info.rentals);
 
 	$("#events").click(function(e){
 		$('#calendar').fullCalendar('removeEvents', filterMine);
@@ -149,8 +122,7 @@ $(document).on("mouseup", ".fc-event", function(mouseUpJsEvent){
 		mouseDownJsEvent = {};
 	}
 	else if (mouseUpCalEvent.account_id == user.id){
-		delete_cookie("local_events");
-		delete_cookie("type");
+		delete_cookies();
 
 		//click an editing event to stop editing it
 		if (mouseUpCalEvent.editing){
@@ -526,6 +498,12 @@ function createEvent(start, end){
 //server side helper function to get correct price of events
 function eventPrices(){
 	var myevents = $('#calendar').fullCalendar('clientEvents', filterMine);
+	if (myevents.length){
+		$("#calendar_next").addClass("is-primary");
+	}
+	else {
+		$("#calendar_next").removeClass("is-primary");
+	}
 	var weeks_price = days_price = hours_price = half_hours_price = 0;
 
 	for (var x = 0; x < myevents.length; x++){
