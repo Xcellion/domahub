@@ -2,6 +2,10 @@ body{
 	overflow-x:hidden;
 }
 
+.green_text{
+	color:#3CBC8D;
+}
+
 .page_wrapper{
 	text-align:center;
 	height:100vh;
@@ -21,11 +25,11 @@ body{
 
 #background_image{
 	object-fit:cover;
-	-webkit-filter: blur(5px) grayscale(25%) brightness(75%);
-	-moz-filter: blur(5px) grayscale(25%) brightness(75%);
-	-o-filter: blur(5px) grayscale(25%) brightness(75%);
-	-ms-filter: blur(5px) grayscale(25%) brightness(75%);
-	filter: blur(5px) grayscale(25%) brightness(75%);
+	-webkit-filter: blur(5px) grayscale(25%) brightness(50%);
+	-moz-filter: blur(5px) grayscale(25%) brightness(50%);
+	-o-filter: blur(5px) grayscale(25%) brightness(50%);
+	-ms-filter: blur(5px) grayscale(25%) brightness(50%);
+	filter: blur(5px) grayscale(25%) brightness(50%);
 	transform: scale(1.1);
 }
 
@@ -35,55 +39,40 @@ body{
 	top:50%;
 	margin-right:-50%;
 	transform:translate(-50%, -50%);
-}
-
-.info_wrapper_block{
-	display:inline-block;
-	vertical-align:middle;
-	margin:0 20px 0 20px;
+	max-width:300px;
+	text-align:center;
 }
 
 #listing_info_wrapper{
-	text-align:left;
+	text-align:justify;
+}
+
+#listing_info_title{
+	text-align:center;
 }
 
 .listing_info_text{
 	margin:0;
 	padding:0;
 	color:#FFF;
-}
-
-.domain_title{
-	color:#3CBC8D;
-}
-
-#domain_owner, #domain_email{
 	display:inline-block;
+}
+
+#domain_owner{
+	display:block;
 }
 
 #domain_description{
 	font-size:1em;
-	color:gray;
+	color:#D3D3D3;
 	max-width:300px;
 }
 
-#price_wrapper{
-	color:#FFF;
-}
-
-#price_left_wrapper{
-	display:inline-block;
-	border-right:1px solid #D3D3D3;
-	margin-right:10px;
-	padding-right:10px;
-}
-
-#price_right_wrapper{
-	display:inline-block;
-}
-
-#price_right_wrapper > p{
-	text-align:right;
+#pricing_wrapper{
+	margin: 10px 0;
+	padding: 10px 0;
+	border-bottom: 1px #EDEDED solid;
+	border-top: 1px #EDEDED solid;
 }
 
 #start_form_wrapper{
@@ -94,6 +83,11 @@ body{
 
 #calendar_container{
 	height:500px;
+}
+
+.info_wrapper_block{
+	display:inline-block;
+	vertical-align:middle;
 }
 
 #price {
@@ -126,8 +120,8 @@ body{
 	background-color:#222;
 }
 
-#ip_form_wrapper{
-
+#faq_wrapper > *{
+	color:#D3D3D3;
 }
 
 #ip_form_wrapper:required:invalid, input:focus:invalid {
@@ -141,6 +135,6 @@ body{
 /*--------------------------------------------------------------------------------------*/
 
 #submitButton{
-	background:#3CBC8D;
-	background-image:none;
+	background:#3CBC8D !important;
+	background-image:none !important;
 }

@@ -15,6 +15,9 @@ $(document).ready(function() {
 			var $id = $('<input id="stripeToken" type=hidden name=stripeToken />').val(token.id);
 			$('#listing_form').append($id);
 			submitRentals();
+		},
+		opened: function(){
+			console.log($(".stripe_checkout_app").find('#submitButton'));
 		}
 	});
 
@@ -45,8 +48,11 @@ $(document).ready(function() {
 				amount: totalPrice * 100,
 				description: 'Renting at ' + listing_info.domain_name
 			});
+			$("#submitButton").css("background", "black");
+
 		}
 	});
+
 
 	$("#ip_form_input").keyup(function(e){
 		ipNextChange();
@@ -83,6 +89,11 @@ $(document).ready(function() {
 	else {
 		delete_cookies();
 	}
+});
+
+// Close Checkout on page navigation
+$(window).on('popstate', function () {
+    handler.close();
 });
 
 //helper function to change next icon to primary color
@@ -168,6 +179,7 @@ function submitRentals(){
 				stripeToken: $("#stripeToken").val()
 			}
 		}).done(function(data){
+			delete_cookies();
 			unlock = true;
 			if (data.unavailable){
 				for (var x = 0; x < data.unavailable.length; x++){

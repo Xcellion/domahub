@@ -35,31 +35,19 @@
 			</div>
 			<div class="info_wrapper">
 
-				<div id="listing_info_wrapper" class="info_wrapper_block">
+				<div id="listing_info_wrapper">
 					<!-- information about the current listing -->
 					<div id="listing_info_title">
-					<% if (typeof listing_info != "undefined") {%>
-						<h2 class="listing_info_text domain_title"><%= listing_info.domain_name %></h2>
-						<p id="domain_owner" class="listing_info_text"><%= listing_info.fullname %> | </p>
-						<p id="domain_email" class="listing_info_text"><%= listing_info.email %></p>
+						<h2 class="listing_info_text green_text"><%= listing_info.domain_name %></h2>
+						<p id="domain_owner" class="listing_info_text">Owned by: <a class="green_text" href="mailto:<%= listing_info.email %>"><%= listing_info.fullname %></a></p>
+						<div id="pricing_wrapper">
+							<p class="listing_info_text">Hour <span class="green_text">$<%=listing_info.hour_price%></span> | </p>
+							<p class="listing_info_text">Day <span class="green_text">$<%=listing_info.day_price%></span> | </p>
+							<p class="listing_info_text">Week <span class="green_text">$<%=listing_info.week_price%></span> | </p>
+							<p class="listing_info_text">Month <span class="green_text">$<%=listing_info.month_price%></span></p>
 						</div>
-						<p id="domain_description"><%= listing_info.description %></p>
-					<% } %>
-				</div>
-
-				<div id="price_wrapper" class="info_wrapper_block">
-					<div id="price_left_wrapper">
-						<p>Hourly</p>
-						<p>Daily</p>
-						<p>Weekly</p>
-						<p>Monthly</p>
 					</div>
-					<div id="price_right_wrapper">
-						<p>$<%=listing_info.hour_price%></p>
-						<p>$<%=listing_info.day_price%></p>
-						<p>$<%=listing_info.week_price%></p>
-						<p>$<%=listing_info.month_price%></p>
-					</div>
+					<p id="domain_description"><%= listing_info.description %></p>
 				</div>
 
 				<div id="start_form_wrapper">
@@ -101,7 +89,7 @@
 		<div id="ip_wrapper" class="page_wrapper">
 
 			<div class="info_wrapper">
-				<h2 class="listing_info_text">Connect <span class="domain_title"><%= listing_info.domain_name %></span> to your website!<h2>
+				<h2 class="listing_info_text">Connect <span class="green_text"><%= listing_info.domain_name %></span> to your website!<h2>
 				<input required pattern="^([0-9]{1,3}\.){3}[0-9]{1,3}$" class="input" id="ip_form_input" type="text" placeholder="IP Address">
 				<div class="button next_button" id="ip_next">Next</div>
 				<div id="faq_wrapper">

@@ -71,7 +71,7 @@ function createExisting(rentals){
 		}
 		else if (user.id == rentals[x].account_id){
 			eventData.title = user.fullname || "Guest";
-			eventData.color = "green";
+			eventData.color = "#73c8e3";
 		}
 		else {
 			eventData.title = "Rented!";
@@ -128,7 +128,7 @@ $(document).on("mouseup", ".fc-event", function(mouseUpJsEvent){
 		if (mouseUpCalEvent.editing){
 			rental_info = false;
 			editingRental();
-			eventEdit(mouseUpCalEvent.rental_id, "Add more time?", "green", false);
+			eventEdit(mouseUpCalEvent.rental_id, "Add more time?", "#73c8e3", false);
 			$("#calendar").fullCalendar('removeEvents', filterNew); //remove all new events
 		}
 		//click an existing event to edit it
