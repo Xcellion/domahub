@@ -91,6 +91,11 @@
   order: 4;
 }
 
+#profile {
+  order: 4;
+  margin: 0 10px 0 10px;
+}
+
 .nav-button {
   box-sizing: border-box;
   padding: 22px 12px 22px 12px;
@@ -129,6 +134,13 @@
 #message {
   padding-bottom: 20px;
   text-align: center;
+}
+
+/************************************* PROFILE DROPDOWN BUTTON *************************/
+
+#profile_button {
+  transition: all 0s;
+  -webkit-transition: all 0s;
 }
 
 @media screen and (min-width: 769px) {
