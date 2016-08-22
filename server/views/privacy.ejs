@@ -10,8 +10,9 @@
 <body>
 
   <%- include("templates/navbar", {user: user}); %>
-<section class="section poop">
 
+<section class="section poop">
+  <div class="container">
   <table class="table is-bordered">
     <thead>
       <th style="width: 100px;">
@@ -191,9 +192,27 @@
               </figure>
             </td>
           </tr>
+          <tr>
+            <td><code>Ten</code></td>
+            <td>
+              <figure class="image is-square">
+                <img src="http://1qlee.com/svg/logo3_svg.svg">
+              </figure>
+            </td>
+            <td>
+              <figure class="image is-128x128">
+                <img src="http://1qlee.com/svg/logo3_svg.svg">
+              </figure>
+            </td>
+            <td>
+              <figure class="image is-64x64">
+                <img src="http://1qlee.com/svg/logo3_svg.svg">
+              </figure>
+            </td>
+          </tr>
         </tbody>
       </table>
-
+  </div>
 </section>
 
   <%- include("templates/footer"); %>

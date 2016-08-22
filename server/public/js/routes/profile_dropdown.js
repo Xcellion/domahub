@@ -4,4 +4,9 @@ $(document).ready(function() {
     $(this).toggleClass("is-outlined");
   });
 
+  $(".nav-toggle").click(function() {
+    $(this).toggleClass("is-active");
+    $(".nav-menu").toggleClass("is-active");
+  });
+
 });

@@ -1694,9 +1694,9 @@ a.box:active {
 .hamburger, .nav-toggle {
   cursor: pointer;
   display: block;
-  height: 50px;
+  height: 60px;
   position: relative;
-  width: 50px; }
+  width: 60px; }
   .hamburger span, .nav-toggle span {
     background-color: #555;
     display: block;
@@ -2966,10 +2966,13 @@ a.nav-item {
   display: flex;
   flex-basis: 0;
   flex-grow: 1;
-  justify-content: flex-start;
+  justify-content: center;
   overflow: hidden;
   overflow-x: auto;
   white-space: nowrap; }
+  @media screen and (max-width: 768px) {
+    .nav-left {
+      justify-content: flex-start; } }
 
 .nav-center {
   align-items: stretch;
@@ -2977,6 +2980,9 @@ a.nav-item {
   justify-content: center;
   margin-left: auto;
   margin-right: auto; }
+  @media screen and (max-width: 768px) {
+    .nav-center {
+      justify-content: flex-start; } }
 
 @media screen and (min-width: 769px) {
   .nav-right {
@@ -2984,20 +2990,20 @@ a.nav-item {
     display: flex;
     flex-basis: 0;
     flex-grow: 1;
-    justify-content: flex-end; } }
+    justify-content: center; } }
 
 .nav {
   align-items: stretch;
   background-color: #fff;
   display: flex;
-  min-height: 50px;
+  min-height: 60px;
   position: relative;
   text-align: center;
   z-index: 2; }
   .nav > .container {
     align-items: stretch;
     display: flex;
-    min-height: 50px;
+    min-height: 60px;
     width: 100%; }
     .nav > .container > .nav-left > .nav-item:first-child:not(.is-tab) {
       padding-left: 0; }

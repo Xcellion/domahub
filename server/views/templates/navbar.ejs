@@ -1,89 +1,96 @@
 <link rel="stylesheet" type="text/css" href="/css/includes/navbar.css" />
 <script src="/js/cookie.js" type="text/javascript"></script>
 
-<nav id="navbar">
-  <div class="w3bbi_icon">
-    <a title="Home" href="/">w3bbi</a>
+<nav id="navbar" class="nav">
+  <div class="nav-left">
+    <div class="w3bbi_icon nav-item">
+      <a title="Home" href="/">w3bbi</a>
+    </div>
   </div>
-  <div class="search_icon" class="border-left">
-    <span class="fa fa-search fa-lg"></span>
+  <div class="nav-center">
+
+      <form id="searchbar_form" class="nav-item" novalidate>
+        <p class="control has-icon">
+          <input id="domain_name" class="input" type="url" placeholder="Search websites" name="domain_name" autocomplete="off">
+          <i class="fa fa-search"></i>
+        </p>
+      </form>
+
   </div>
-  <div id="searchbar">
-    <form id="searchbar_form" novalidate>
-      <input id="domain_name" type="url" placeholder="Search websites" name="domain_name" autocomplete="off">
-    </form>
-  </div>
-  <div id="list" class="nav-button">
-    <a class="nav_link" title="Sellers" href="/sellers">List</a>
-  </div>
-  <div id="rent" class="nav-button">
-    <a class="nav_link" title="Renters" href="/buyers">Rent</a>
-  </div>
+  <span class="nav-toggle">
+    <span></span>
+    <span></span>
+    <span></span>
+  </span>
+  <div class="nav-right nav-menu">
+    <div id="list" class="nav-item">
+      <a class="nav_link" title="Sellers" href="/sellers">List</a>
+    </div>
+    <div id="rent" class="nav-item">
+      <a class="nav_link" title="Renters" href="/buyers">Rent</a>
+    </div>
 
 <%# navbar checks for a user variable, if it doesnt exist, then display the login button %>
 <% if (!user) { %>
-  <a id="login_modal" class="button is-primary modal-button" title="Log In" data-object="#modal_login">Log In</a>
-
-  <div id="modal_login" class="modal">
-    <div class="modal-background"></div>
-    <div class="modal-container">
-      <div class="modal-content">
-        <%# navbar checks for a user variable, if it doesnt exist, then display the login modal stuff %>
-        <% if (!user) { %>
-          <div id="login_dropdown">
-            <div id="message">Please log in below</div>
-            <form id="target" action="/login" method="post">
-              <p class="control has-icon">
-                <input id="email" class="input is-medium" name="email" type="email" placeholder="Email">
-                <i class="fa fa-envelope"></i>
-              </p>
-              <p class="control has-icon">
-                <input id="password" class="input is-medium" name="password" type="password" placeholder="Password">
-                <i class="fa fa-lock"></i>
-              </p>
-              <p class="control">
-                <button id="drop_login_button" class="button is-primary is-medium is-fullwidth">
-                  Log In
-                </button>
-              </p>
-              <div class="control is-grouped">
-                <p class="control is-expanded">
-                  <label class="checkbox">
-                    <input type="checkbox">
-                    Remember me
-                  </label>
+    <div class="nav-item">
+      <a id="login_modal" class="button is-primary modal-button" title="Log In" data-object="#modal_login">Log In</a>
+    </div>
+    <!--LOGIN DROPDOWN-->
+    <div id="modal_login" class="modal">
+      <div class="modal-background"></div>
+      <div class="modal-container">
+        <div class="modal-content">
+          <%# navbar checks for a user variable, if it doesnt exist, then display the login modal stuff %>
+          <% if (!user) { %>
+            <div id="login_dropdown">
+              <div id="message">Please log in below</div>
+              <form id="target" action="/login" method="post">
+                <p class="control has-icon">
+                  <input id="email" class="input is-medium" name="email" type="email" placeholder="Email">
+                  <i class="fa fa-envelope"></i>
+                </p>
+                <p class="control has-icon">
+                  <input id="password" class="input is-medium" name="password" type="password" placeholder="Password">
+                  <i class="fa fa-lock"></i>
                 </p>
                 <p class="control">
-                    <a class="forgot orange_link" href="/forgot">Forgot password?</a>
+                  <button id="drop_login_button" class="button is-primary is-medium is-fullwidth">
+                    Log In
+                  </button>
                 </p>
-              </div>
+                <div class="control is-grouped">
+                  <p class="control is-expanded">
+                    <label class="checkbox">
+                      <input type="checkbox">
+                      Remember me
+                    </label>
+                  </p>
+                  <p class="control">
+                      <a class="forgot orange_link" href="/forgot">Forgot password?</a>
+                  </p>
+                </div>
 
-          <div id="linebreak2"></div>
+            <div id="linebreak2"></div>
 
-            <p class="control">
-              <p class="has-text-centered">
-                Don't have an account?
+              <p class="control">
+                <p class="has-text-centered">
+                  Don't have an account?
+                </p>
+                <div class="has-text-centered">
+                  <a class="signup  orange_link" href="/signup">Sign Up Now</a>
+                </div>
               </p>
-              <div class="has-text-centered">
-                <a class="signup  orange_link" href="/signup">Sign Up Now</a>
-              </div>
-            </p>
-            </form>
-          </div>
-        <% } %>
+              </form>
+            </div>
+          <% } %>
+        </div>
       </div>
+      <button class="modal-close"></button>
     </div>
-    <button class="modal-close"></button>
-  </div>
 
 <%# or else display the user profile as logged in %>
 <% } else { %>
-  <div id="profile">
-    <span class="nav-toggle">
-      <span></span>
-      <span></span>
-      <span></span>
-    </span>
+  <div id="profile" class="nav-item">
     <div id="profile_dropdown">
       <a id="profile_button" class="button is-outlined is-primary">
         <span><%= user.fullname %></span>
@@ -95,6 +102,8 @@
   </div>
 <% } %>
 
+
+</div>
 </nav>
 
 <script src="/js/routes/profile_dropdown.js" type="text/javascript"></script>

@@ -1,18 +1,8 @@
 /********************************* NAVBAR ***********************************/
 
 #navbar {
-  align-items: center;
-  background-color: #fff;
-  display: flex;
-  justify-content: center;
   height: 60px;
-  margin: auto;
-  overflow: hidden;
-  padding: 0;
   position: fixed;
-  top: 0;
-  left:0;
-  right:0;
   transition: all 0.5s ease;
   -webkit-transition: all 0.5s ease;
   width: 100%;
@@ -44,12 +34,6 @@
   opacity: 0.85;
 }
 
-.search_icon {
-  box-sizing: border-box;
-  color: #2a2a2a;
-  padding: 0 10px 0 10px;
-}
-
 .search_icon.past-landing {
   color: #eeeeee;
 }
@@ -58,48 +42,15 @@
   color: #aaaaaa;
 }
 
-#searchbar {
-  width: 25%;
-  order: 1;
+#searchbar_form {
+  /*width: 300px;*/
 }
 
-#searchbar input {
-  background-color: transparent;
-  border: none;
-  box-sizing: border-box;
-  color: #525255;
+#searchbar_form input {
+  color: #333;
   font-family: 'Share Tech';
   font-size: 1.0em;
   outline: none;
-  width: 100%;
-}
-
-#list {
-  order: 2;
-}
-
-#rent {
-  order: 3;
-}
-
-#login_modal {
-  margin: 0 10px 0 10px;
-  order: 4;
-}
-
-#login {
-  order: 4;
-}
-
-#profile {
-  order: 4;
-  margin: 0 10px 0 10px;
-}
-
-.nav-button {
-  box-sizing: border-box;
-  padding: 22px 12px 22px 12px;
-  margin: 0 10px 0 10px;
 }
 
 .nav_link {
