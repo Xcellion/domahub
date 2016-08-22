@@ -96,7 +96,7 @@
 
 #profile_dropdown {
   background-color: #fff;
-  box-shadow: 0 4px 7px rgba($black, 0.1);
+  box-shadow: 0 4px 7px rgba(0,0,0, 0.1);
   display: none;
   top: 100%;
   position: absolute;
