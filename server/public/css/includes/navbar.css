@@ -87,11 +87,23 @@
   text-align: center;
 }
 
-/************************************* PROFILE DROPDOWN BUTTON *************************/
+/************************************* PROFILE DROPDOWN *************************/
 
 #profile_button {
   transition: all 0s;
   -webkit-transition: all 0s;
+}
+
+#profile_dropdown {
+  background-color: #fff;
+  box-shadow: 0 4px 7px rgba($black, 0.1);
+  display: none;
+  top: 100%;
+  position: absolute;
+}
+
+#profile_dropdown.is-active {
+  display: block;
 }
 
 @media screen and (min-width: 769px) {

@@ -91,13 +91,45 @@
 <%# or else display the user profile as logged in %>
 <% } else { %>
   <div id="profile" class="nav-item">
+    <a id="profile_button" class="button is-outlined is-primary">
+      <span><%= user.fullname %></span>
+      <span class="icon">
+        <i class="fa fa-angle-down"></i>
+      </span>
+    </a>
     <div id="profile_dropdown">
-      <a id="profile_button" class="button is-outlined is-primary">
-        <span><%= user.fullname %></span>
-        <span class="icon">
-          <i class="fa fa-angle-down"></i>
-        </span>
-      </a>
+      <aside class="menu">
+        <p class="menu-label">
+          General
+        </p>
+        <ul class="menu-list">
+          <li><a href="#">Dashboard</a></li>
+          <li><a href="#">Notifications</a></li>
+        </ul>
+        <p class="menu-label">
+          My Domains
+        </p>
+        <ul class="menu-list">
+          <li><a href="#">Manage Listings</a></li>
+          <li>
+            <a class="" href="#">Manage Listings</a>
+            <ul>
+              <li><a href="#">Example of</a></li>
+              <li><a href="#">an inner</a></li>
+              <li><a href="#">dropdown list</a></li>
+            </ul>
+          </li>
+          <li><a href="#">Manage Bids</a></li>
+        </ul>
+        <p class="menu-label">
+          Transactions
+        </p>
+        <ul class="menu-list">
+          <li><a href="#">Payments</a></li>
+          <li><a href="#">Transfers</a></li>
+          <li><a href="#">Balance</a></li>
+        </ul>
+      </aside>
     </div>
   </div>
 <% } %>
