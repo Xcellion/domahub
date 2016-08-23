@@ -66,21 +66,22 @@
 					<div class="button" id="prev-button"><</div>
 					<div class="button" id="today-button">Today</div>
 					<div class="button" id="next-button">></div>
-					<div class="button next_button" id="calendar_next">Next</div>
 				</div>
 
 				<div id="calendar_right_wrapper" class="info_wrapper_block">
 					<h1 id="price">$0</h1>
-					<!-- any messages from the server -->
-					<div id="listing_message">
-						<% if (typeof listing_message != "undefined") {%>
-							<%= listing_message %>
-						<% } else {%>
-							&nbsp;
-						<% } %>
-					</div>
+					<div class="button next_button" id="calendar_next">Next</div>
 				</div>
 			</div>
+
+			<!-- any messages from the server
+			<div id="listing_message">
+				<% if (typeof listing_message != "undefined") {%>
+					<%= listing_message %>
+				<% } else {%>
+					&nbsp;
+				<% } %>
+			</div>-->
 
 			<div id="calendar"></div>
 

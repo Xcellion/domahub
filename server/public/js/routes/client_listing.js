@@ -86,6 +86,13 @@ $(document).ready(function() {
 	else {
 		delete_cookies();
 	}
+
+	//delete all new cookies if theres a rental being edited
+	if (rental_info){
+		delete_cookies();
+		$("#ip_form_input").val(rental_info.ip);
+		$("#calendar").fullCalendar("gotoDate", rental_info.times[0].date)
+	}
 });
 
 // Close Checkout on page navigation

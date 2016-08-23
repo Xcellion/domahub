@@ -78,7 +78,6 @@ module.exports = function(app, db, auth, e){
 //check if listing exists
 function checkDomain(req, res, next){
 	var domain_name = req.params.domain_name || url.parse(addhttp(req.body.domain_name)).host;
-
 	if (!val_url.isUri(addhttp(domain_name))){
 		error.handler(req, res, "Invalid domain name!");
 	}
@@ -98,9 +97,12 @@ function checkDomain(req, res, next){
 					request({
 						url: 'https://api.ote-godaddy.com/v1/domains/available?domain='+ domain_name + '&checkType=FAST&forTransfer=false',
 						headers: {
-							"Authorization": "sso-key VUxKSUdS_77eVNvivVEXKyjCTTUweLk:77eYkfS7McHYHvcAv9fZdN",
+							"Authorization": "sso-key VUxKSUdS_KjjAhTL4gMXu5LFfV8Q4MJ:KjjEnqWXSAuS3xJWXrRXxG",
 						},
-						strictSSL: false
+						strictSSL: false,
+						success: function(body){
+							console.log(body);
+						}
 					}, function (e, response, body) {
 						available = (!e && response.statusCode == 200) ? JSON.parse(body) : false
 						res.render("listing404.ejs", {

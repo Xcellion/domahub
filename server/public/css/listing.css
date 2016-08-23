@@ -106,6 +106,10 @@ body{
 	cursor:pointer;
 }
 
+.activeButton{
+	color:black;
+}
+
 .fc-event:hover{
 	cursor:pointer;
 }
@@ -130,6 +134,7 @@ body{
 
 #ip_form_input{
 	width:auto;
+    font-family: 'Share Tech';
 }
 
 /*--------------------------------------------------------------------------------------*/

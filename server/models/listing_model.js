@@ -303,6 +303,11 @@ listing_model.prototype.updateListingRental = function(rental_id, rental_info, c
 	listing_query(query, "Failed to update rental #" + rental_id + "!", callback, [rental_info, rental_id]);
 }
 
+//updates rental times if for the same rental
+listing_model.prototype.updateRentalTimes = function(rental_id, rental_times, callback){
+
+}
+
 //----------------------------------------------------------------------DELETE----------------------------------------------------------
 
 //deletes a specific rental

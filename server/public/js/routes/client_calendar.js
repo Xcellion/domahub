@@ -3,6 +3,7 @@ var totalPrice = 0;
 $(document).ready(function() {
 	//calendar logic
 	 $('#calendar').fullCalendar({
+		scrollTime: new Date().getUTCHours() - 5,
 		defaultView: "agendaWeek",
 		allDayDefault: false,
 		selectable: true,
@@ -29,7 +30,8 @@ $(document).ready(function() {
 	//calendar styling
 	$(".fc-button").hide();
 	$(".button").click(function(e){
-		$(".fc-" + $(this).attr("id")).click();
+		id = $(this).attr("id");
+		$(".fc-" + id).click();
 	});
 	$(".fc-toolbar").prependTo("#calendar_left_wrapper");
 	$('#calendar').fullCalendar('option', 'height', $("#calendar_wrapper").height() - $("#calendar_top_wrapper").height() - $("#navbar").height());
@@ -500,9 +502,11 @@ function eventPrices(){
 	var myevents = $('#calendar').fullCalendar('clientEvents', filterMine);
 	if (myevents.length){
 		$("#calendar_next").addClass("is-primary");
+		$("#remove_events").addClass("activeButton");
 	}
 	else {
 		$("#calendar_next").removeClass("is-primary");
+		$("#remove_events").removeClass("activeButton");
 	}
 	var weeks_price = days_price = hours_price = half_hours_price = 0;
 

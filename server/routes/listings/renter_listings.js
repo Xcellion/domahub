@@ -127,14 +127,7 @@ function getRental(req, res, rental_id, callback){
 				if (result.state != "success"){error.handler(req, res, result.description);}
 				else {
 					rental_info.times = result.info;
-
-					Listing.getRentalDetails(rental_id, function(result){
-						if (result.state != "success"){error.handler(req, res, result.description);}
-						else {
-							rental_info.details = result.info;
-							callback(rental_info);
-						}
-					});
+					callback(rental_info);
 				}
 			});
 		}
