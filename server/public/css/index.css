@@ -1,11 +1,10 @@
-.main_p {
+/*.content p {
   color: #555;
   line-height: 1.4;
-  font-size: 1.3rem;
+  font-size: 1.2rem;
   font-weight: 300;
-  text-align: justify;
   padding-bottom: 10px;
-}
+}*/
 
 /******************** MISC*************************/
 
@@ -13,19 +12,8 @@
   color: #FF8751;
 }
 
-.icon {
-  -webkit-transition: all 0.5s;
-  transition: all 0.5s;
-}
-
 .icon.active {
   padding-left: 10px;
-}
-
-/********************* BUTTONS **********************/
-
-#landing_buttons {
-  margin-top: 25px;
 }
 
 /*********************** LANDING ************************/
@@ -82,7 +70,7 @@
 
 .blob {
   background-color: #3CBC8D;
-  margin: 30px;
+  margin-top: 30px;
 }
 
 #list_text {
@@ -103,14 +91,6 @@
 
 /************************ MEDIA QUERIES ************************/
 @media screen and (max-width: 769px) {
-
-  .blob {
-    margin: 0;
-  }
-
-  .section {
-    padding: 20px 10px 20px 10px !important;
-  }
 
   #landing_title {
     font-size: 2rem;
@@ -134,5 +114,12 @@
   }
   .main_link {
     font-size: 1rem;
+  }
+}
+
+@media screen and (min-width: 769px) and (max-width: 1375px) {
+
+  .landing_img {
+    height: 600px;
   }
 }

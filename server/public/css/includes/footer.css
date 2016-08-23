@@ -15,6 +15,11 @@
   transition-delay: none !important;
 }
 
+.icon {
+  -webkit-transition: all 0.5s;
+  transition: all 0.5s;
+}
+
 #facebook_icon:hover {
   color: #3b5998; }
 
@@ -29,9 +34,9 @@
 
 .company_text {
   box-sizing: border-box;
-  color: #eee;
+  color: #eee !important;
   display: inline-block;
-  font-size: 0.9rem;
+  font-size: 0.9rem !important;
 }
 
 @media screen and (max-width: 769px) {
