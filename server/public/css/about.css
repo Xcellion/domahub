@@ -1,17 +1,14 @@
 /********************************************************* BODY *********************************************************/
-
-#about_sect p {
-  margin-bottom: 15px;
-  text-align: left;
+.landing {
+  padding: 0;
 }
 
-.image_container {
-  background-image: url('https://hd.unsplash.com/photo-1414714797901-20d034e9ff68');
-  background-position: center center;
+#about_img {
+  background-image: url('https://media.licdn.com/media//p/8/005/095/0e5/1e9d797.jpg');
+  background-position: bottom center;
   background-repeat: no-repeat;
   background-size: cover;
-  height: 50vh;
-  position: relative;
+  height: 500px;
   width: 100%;
 }
 

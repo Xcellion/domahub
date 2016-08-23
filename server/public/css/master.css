@@ -815,11 +815,6 @@ a.box:active {
 .content ul:not(:last-child) {
   margin-bottom: 1em; }
 
-.content h1:not(:first-child),
-.content h2:not(:first-child),
-.content h3:not(:first-child) {
-  margin-top: 40px; }
-
 .content blockquote {
   background-color: #f5f7fa;
   border-left: 5px solid #d3d6db;
@@ -3782,7 +3777,7 @@ html {
 h1 {
   color: #333;
   font-size: 2.5rem;
-  font-weight: bold;
+  font-weight: 400;
   padding: 25px 0 25px 0; }
 
 h2 {
