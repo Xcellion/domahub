@@ -260,7 +260,7 @@ function submitRentals(){
 				// });
 			}
 			else if (data.state == "success"){
-				window.location = window.location.origin + "/listing/" + data.rental_id;
+				window.location = window.location.origin + "/listing/" + listing_info.domain_name + "/" + data.rental_id;
 			}
 			else if (data.state == "error"){
 				$("#listing_message").html(data.message);

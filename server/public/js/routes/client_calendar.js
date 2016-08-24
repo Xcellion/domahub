@@ -52,6 +52,19 @@ $(document).ready(function() {
 		storeCookies("local_events");
 		eventPrices();
 	});
+
+	$("#month_button").click(function(e){
+		var view = $('#calendar').fullCalendar('getView');
+
+		if (view.name == "agendaWeek"){
+			$("#calendar").fullCalendar( 'changeView', "month");
+			$(this).text("Week");
+		}
+		else {
+			$("#calendar").fullCalendar( 'changeView', "agendaWeek");
+			$(this).text("Month");
+		}
+	})
 });
 
 //helper function to create pre-existing rentals
