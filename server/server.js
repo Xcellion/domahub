@@ -7,15 +7,7 @@ var express = require('express'),
 	http = require('http'),
 	server = function(application){
 		return http.createServer(application);
-	},
-	httpProxy = require('http-proxy'),
- 	proxy = httpProxy.createProxyServer({});
-
-// Listen for the `error` event on `proxy`.
-proxy.on('error', function (err, req, res) {
-	console.log(err);
-	res.redirect("http://w3bbi.com/error");
-});
+	};
 
 var bodyParser 	= require('body-parser'),
 	cookieParser = require('cookie-parser'),
@@ -82,7 +74,7 @@ app.use(express.static(__dirname + '/public'));
 app.get('*.ico', function(){})
 
 //main routes
-require('./routes/routes.js')(app, db, auth, error, proxy);
+require('./routes/routes.js')(app, db, auth, error);
 
 //404 not found
 app.get('*', function(req, res){
