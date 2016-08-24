@@ -43,39 +43,18 @@ function getCurrentRental(req, res, domain_name){
 		if (result.state != "success"){error.handler(req, res, false, "api");}
 		else {
 			rental_listing_info = result.info;
-			Listing.getRentalDetails(result.rental_id, function(result){
-				rental_listing_info.details = result.info
-				sendRentalInfo(req, res, domain_name, rental_listing_info);
-			});
+
+			//current rental exists!
+			if (result.rental_id){
+				proxy.web(req, res, {
+					target: "http://" + result.info.ip
+				});
+			}
+
+			//redirect to listing page
+			else {
+				res.redirect("http://w3bbi.com/listing/" + domain_name)
+			}
 		}
 	});
-}
-
-//helper function to send rental information
-function sendRentalInfo(req, res, domain_name, rental_info, details){
-	if (rental_info){
-		//what type of rental is it?
-		switch (rental_info.type){
-			//http proxy
-			case 1:
-				proxy.web(req, res, {
-					target: 'http://216.58.194.206'
-				});
-				break;
-			//simple page
-			case 0:
-			case 2:
-				res.render("reset.ejs", {
-					domain_name: domain_name,
-					rental_info: rental_info,
-					def_rental_info: rental_info,
-				});
-			break;
-		}
-	}
-
-	//domain doesnt exist at w3bbi
-	else {
-		error.handler(req, res, false, "api");
-	}
 }

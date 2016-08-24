@@ -1,9 +1,11 @@
 var totalPrice = 0;
 
 $(document).ready(function() {
+	var timeNow = new Date();
+
 	//calendar logic
 	 $('#calendar').fullCalendar({
-		scrollTime: new Date().getUTCHours() - 5,
+		scrollTime: moment(timeNow).format("hh:mm:ss"),
 		defaultView: "agendaWeek",
 		allDayDefault: false,
 		selectable: true,
@@ -502,10 +504,12 @@ function eventPrices(){
 	var myevents = $('#calendar').fullCalendar('clientEvents', filterMine);
 	if (myevents.length){
 		$("#calendar_next").addClass("is-primary");
+		$("#calendar_next").data("can_next", true);
 		$("#remove_events").addClass("activeButton");
 	}
 	else {
 		$("#calendar_next").removeClass("is-primary");
+		$("#calendar_next").data("can_next", false);
 		$("#remove_events").removeClass("activeButton");
 	}
 	var weeks_price = days_price = hours_price = half_hours_price = 0;

@@ -1,6 +1,13 @@
 var unlock = true;
 
 $(document).ready(function() {
+
+	//fix 100vh jumping on mobile
+	if ( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+		var h = $('.height-fix').height();
+		$('.height-fix').height(h);
+	}
+
 	//stripe configuration
 	handler = StripeCheckout.configure({
 		key: 'pk_test_kcmOEkkC3QtULG5JiRMWVODJ',
@@ -22,7 +29,7 @@ $(document).ready(function() {
 
 	//page nav next buttons
 	$(".next_button").click(function(e){
-		if ($(this).hasClass("is-primary")){
+		if ($(this).data("can_next") == true){
 			var scroll_elems = ["#top_wrapper", "#calendar_wrapper", "#ip_wrapper", "#pay_wrapper"];
 			var index = scroll_elems.indexOf("#" + $(this).attr("id").split("_").shift().toString() + "_wrapper") + 1;
 			index = index >= scroll_elems.length ? 0 : index;
@@ -50,6 +57,12 @@ $(document).ready(function() {
 		}
 	});
 
+	//prevent all key code except numbers and . and :
+	$("#ip_form_input").keydown(function(e){
+		if ((e.which < 48 || e.which > 57) && e.which != 190 && e.which != 186 && e.which != 8){
+	        e.preventDefault();
+	    }
+	});
 
 	$("#ip_form_input").keyup(function(e){
 		ipNextChange();
@@ -63,11 +76,13 @@ $(document).ready(function() {
 
 	//check if there are cookies for this domain name
 	if (read_cookie("domain_name") == listing_info.domain_name){
-		var existing_events = read_cookie("local_events");
+		if (read_cookie("local_events")){
+			var existing_events = read_cookie("local_events");
 
-		for (var x = 0; x < existing_events.length; x++){
-			$('#calendar').fullCalendar('renderEvent', existing_events[x], true);
-			eventPrices();	//show prices
+			for (var x = 0; x < existing_events.length; x++){
+				$('#calendar').fullCalendar('renderEvent', existing_events[x], true);
+				eventPrices();	//show prices
+			}
 		}
 
 		//check if theres a cookie for the rental type
@@ -76,22 +91,25 @@ $(document).ready(function() {
 			ipNextChange();
 		}
 
-		//check if theres a cookie for editing an event
-		if (document.cookie.match(new RegExp('rental_info=([^;]+)'))){
-			var cookie = read_cookie("rental_info");
-			rental_info = cookie;
-			editingRental();
+		if (!rental_info){
+			//check if theres a cookie for editing an event
+			if (document.cookie.match(new RegExp('rental_info=([^;]+)'))){
+				var cookie = read_cookie("rental_info");
+				rental_info = cookie;
+				editingRental();
+			}
 		}
 	}
 	else {
 		delete_cookies();
 	}
 
-	//delete all new cookies if theres a rental being edited
+	//if rental_info exists, change some stuff around
 	if (rental_info){
-		delete_cookies();
-		$("#ip_form_input").val(rental_info.ip);
-		$("#calendar").fullCalendar("gotoDate", rental_info.times[0].date)
+		displayRental();
+	}
+	else {
+		displayDefault();
 	}
 });
 
@@ -100,13 +118,51 @@ $(window).on('popstate', function () {
     handler.close();
 });
 
+//function to show rental specific stuff
+function displayRental(){
+	delete_cookies();
+
+	//populate ip form with rental info ip
+	$("#ip_form_input").val(rental_info.ip);
+	ipNextChange();
+
+	//go to rental start date
+	$("#calendar").fullCalendar("gotoDate", rental_info.times[0].date);
+
+	//rental top buttons
+	$("#top_next_rental").data("can_next", true);
+	$("#calendar_next_rental").data("can_next", true);
+
+	for (var x = 0; x < rental_info.times.length; x++){
+		start = moment(rental_info.times[x].date).local()._d.getTime();
+		end = moment(start + rental_info.times[x].duration);
+		start = moment(start);
+
+		var disp_start = start.format('YYYY/MM/D, h:mmA');
+		var disp_end = end.format('YYYY/MM/D, hh:mmA');
+
+		$("#rental_times").append("<li class='rental_time'>" + disp_start + " - " + disp_end + "</li>")
+	}
+
+	$(".rental_hide").show();
+	$(".default_hide").hide();
+}
+
+//function to reverse display of rental
+function displayDefault(){
+	$(".default_hide").show();
+	$(".rental_hide").hide();
+}
+
 //helper function to change next icon to primary color
 function ipNextChange(){
 	if (ValidateIPaddress($(ip_form_input).val())){
 		$("#ip_next").addClass("is-primary");
+		$("#ip_next").data("can_next", true);
 	}
 	else {
 		$("#ip_next").removeClass("is-primary");
+		$("#ip_next").data("can_next", false);
 	}
 }
 
@@ -203,8 +259,8 @@ function submitRentals(){
 				// 	createExisting(data.rentals);
 				// });
 			}
-			else if (data.redirect){
-				window.location = data.redirect;
+			else if (data.state == "success"){
+				window.location = window.location.origin + "/listing/" + data.rental_id;
 			}
 			else if (data.state == "error"){
 				$("#listing_message").html(data.message);

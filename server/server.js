@@ -11,6 +11,12 @@ var express = require('express'),
 	httpProxy = require('http-proxy'),
  	proxy = httpProxy.createProxyServer({});
 
+// Listen for the `error` event on `proxy`.
+proxy.on('error', function (err, req, res) {
+	console.log(err);
+	res.redirect("http://w3bbi.com/error");
+});
+
 var bodyParser 	= require('body-parser'),
 	cookieParser = require('cookie-parser'),
 	session = require('express-session'),

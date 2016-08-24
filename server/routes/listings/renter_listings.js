@@ -36,6 +36,12 @@ module.exports = {
 	},
 
 	renderListing : function(req, res, next){
+		//clear out rental_id session if navigating back
+		if (!req.params.rental_id){
+			delete req.session.rental_info;
+			delete req.session.new_rental_info;
+		}
+
 		res.render("listing.ejs", {
 			user: req.user,
 			message: Auth.messageReset(req),
@@ -105,7 +111,7 @@ module.exports = {
 			newRentalTimes(req, res, rental_id, new_rental_info.formatted_times, function(){
 				delete req.session.new_rental_info;
 				res.send({
-					message: "success",
+					state: "success",
 					rental_id: rental_id
 				});
 			});

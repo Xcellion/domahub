@@ -115,7 +115,8 @@ listing_model.prototype.getCurrentRental = function(domain_name, callback){
 	console.log("Attempting to get current rental info for for domain " + domain_name + "...");
 	query = "SELECT \
 				rentals.*,\
-				listings.*,\
+				listings.domain_name,\
+				listings.id,\
 				rental_times.date,\
 				rental_times.duration \
 			FROM rentals \
@@ -126,10 +127,9 @@ listing_model.prototype.getCurrentRental = function(domain_name, callback){
 			WHERE listings.domain_name = ? \
 			ORDER BY rentals.rental_id ASC";
 	listing_query(query, "Failed to get current rental info for domain " + domain_name + "!", function(result){
-		if (result.state == "success"){
+		if (result.state == "success" && result.info.length){
 			var now = new Date();
 			now = toUTC(now, now.getTimezoneOffset());
-			var rented_id = 0;
 
 			//loop through to see if any overlap
 			for (var x = 0; x < result.info.length; x++){
@@ -139,14 +139,19 @@ listing_model.prototype.getCurrentRental = function(domain_name, callback){
 				if (now.getTime() < existingStart.getTime() + result.info[x].duration
 				&& now.getTime() >= existingStart.getTime())
 				{
-					rented_id = x;
+					callback({
+						state: "success",
+						rental_id: result.info[x].rental_id,
+						info: result.info[x]
+					})
 					break;
 				}
-			};
+			}
+		}
+		else if (result.state == "success" && result.info.length == 0){
 			callback({
 				state: "success",
-				rental_id: result.info[rented_id].rental_id,
-				info: result.info[rented_id]
+				rental_id: false
 			})
 		}
 		else {

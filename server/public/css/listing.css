@@ -25,12 +25,12 @@ body{
 
 #background_image{
 	object-fit:cover;
-	-webkit-filter: blur(5px) grayscale(25%) brightness(50%);
-	-moz-filter: blur(5px) grayscale(25%) brightness(50%);
-	-o-filter: blur(5px) grayscale(25%) brightness(50%);
-	-ms-filter: blur(5px) grayscale(25%) brightness(50%);
-	filter: blur(5px) grayscale(25%) brightness(50%);
-	transform: scale(1.1);
+	object-position:bottom;
+	-webkit-filter: blur(1px) grayscale(25%) brightness(50%);
+	-moz-filter: blur(1px) grayscale(25%) brightness(50%);
+	-o-filter: blur(1px) grayscale(25%) brightness(50%);
+	-ms-filter: blur(1px) grayscale(25%) brightness(50%);
+	filter: blur(1px) grayscale(25%) brightness(50%);
 }
 
 .info_wrapper{
@@ -47,15 +47,18 @@ body{
 	text-align:justify;
 }
 
-#listing_info_title{
+.listing_info_center{
 	text-align:center;
 }
 
 .listing_info_text{
 	margin:0;
 	padding:0;
-	color:#FFF;
 	display:inline-block;
+}
+
+.listing_info_text_white{
+	color:#FFF;
 }
 
 #domain_owner{
@@ -75,14 +78,18 @@ body{
 	border-top: 1px #EDEDED solid;
 }
 
-#start_form_wrapper{
-	margin-top:50px;
+.listing_info_margin_top{
+	margin-top:25px;
 }
 
 /*--------------------------------------------------------------------------------------*/
 
 #calendar_container{
 	height:500px;
+}
+
+#calendar_price_wrapper{
+	padding-top:15px;
 }
 
 .info_wrapper_block{
@@ -142,4 +149,10 @@ body{
 #submitButton{
 	background:#3CBC8D !important;
 	background-image:none !important;
+}
+
+/*--------------------------------------------------------------------------------------*/
+
+.rental_time{
+	text-align:right;
 }
