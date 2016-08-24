@@ -75,6 +75,46 @@ h3 {
   &:hover {opacity:1.0;}
 }
 
+.landing_img {
+  background-position: bottom center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  width: 100%;
+}
+
+.img_wrapper {
+  background-color: rgba(0,0,0,0.7);
+  height: 100%;
+  width: 100%;
+}
+
+.img_title {
+  color: $white;
+  font: {
+    family: 'Lato';
+    size: 3.5rem;
+    weight: 400;
+  }
+  padding: 0;
+}
+
+.img_subtitle {
+  color: #eee;
+  padding: 0;
+  font-size: 1.7rem;
+}
+
+.flex-vert-center {
+  display: flex;
+  align-items: center;
+}
+
+.flex-column-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 /********************** LINEBREAK ******************/
 
 #linebreak {

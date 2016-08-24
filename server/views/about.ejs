@@ -11,16 +11,14 @@
 
   <%- include("templates/navbar", {user: user}); %>
 
-  <section id="about_img" class="hero is-primary is-medium">
+  <section id="about_img" class="hero is-primary is-medium landing_img">
     <!-- Hero header: will stick at the top -->
     <div class="hero-head">
 
     </div>
-
-    <!-- Hero content: will be in the middle -->
-    <div class="hero-body">
+    <div class="hero-body flex-vert-center">
       <div class="container has-text-centered">
-        <h1 class="title is-1">
+        <h1 class="img_title">
           From the heart of New York City
         </h1>
         <!-- <h2 class="subtitle">
@@ -28,15 +26,13 @@
         </h2> -->
       </div>
     </div>
-
-    <!-- Hero footer: will stick at the bottom -->
     <div class="hero-foot">
       <nav class="tabs is-centered">
         <ul>
-          <li class="is-active"><a>About Us</a></li>
-          <li><a>Our Mission</a></li>
-          <li><a>Press</a></li>
-          <li><a>FAQ</a></li>
+          <li class="is-active"><a href="/about">About Us</a></li>
+          <li class=""><a href="/mission">Our Mission</a></li>
+          <li><a href="/press">Press</a></li>
+          <li><a href="/faq">FAQ</a></li>
         </ul>
       </nav>
     </div>
