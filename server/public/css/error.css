@@ -1,0 +1,30 @@
+.page_wrapper{
+	text-align:center;
+	height:100vh;
+	position:relative;
+	overflow:hidden;
+}
+
+#image_wrapper{
+	position: absolute;
+	overflow: hidden;
+	left: -10px;
+	top: -10px;
+	bottom: -10px;
+	right: -10px;
+	margin: -10px;
+}
+
+#background_image{
+	object-fit:cover;
+	object-position:bottom;
+}
+
+.info_wrapper{
+	position:absolute;
+	left:50%;
+	top:50%;
+	margin-right:-50%;
+	transform:translate(-50%, -50%);
+	text-align:center;
+}

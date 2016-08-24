@@ -4,7 +4,7 @@ var	account_model = require('../../models/account_model.js'),
 var httpProxy = require('http-proxy'),
  	proxy = httpProxy.createProxyServer({});
 
-// Listen for the `error` event on `proxy`.
+// Listen for any error events
 proxy.on('error', function (err, req, res) {
 	console.log(err);
 	res.redirect("http://w3bbi.com/error");
@@ -22,6 +22,7 @@ module.exports = function(app, db, e){
 	// Listing = new listing_model(db);
 
 	app.get("*", checkHost);
+	app.get("/error", renderError);
 }
 
 //function to check if the requested host is not for w3bbi
@@ -69,5 +70,12 @@ function getCurrentRental(req, res, domain_name){
 				res.redirect("http://w3bbi.com/listing/" + domain_name)
 			}
 		}
+	});
+}
+
+//display the error page
+function renderError(req, res, next){
+	res.render("error", {
+		user: req.user
 	});
 }
