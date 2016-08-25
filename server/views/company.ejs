@@ -3,7 +3,7 @@
 
 <head>
   <title>w3bbi - About Us</title>
-  <link rel="stylesheet" type="text/css" href="/css/about.css" />
+  <link rel="stylesheet" type="text/css" href="/css/company.css" />
   <%- include("templates/head_links"); %>
 </head>
 
@@ -29,16 +29,16 @@
     <div class="hero-foot">
       <nav class="tabs is-centered">
         <ul>
-          <li class="is-active"><a href="/about">About Us</a></li>
-          <li class=""><a href="/mission">Our Mission</a></li>
-          <li><a href="/press">Press</a></li>
-          <li><a href="/faq">FAQ</a></li>
+          <li id="about_tab" class="tab is-active"><a>About Us</a></li>
+          <li id="mission_tab" class="tab"><a>Our Mission</a></li>
+          <li id="press_tab" class="tab"><a>Press</a></li>
+          <li id="faq_tab" class="tab"><a>FAQ</a></li>
         </ul>
       </nav>
     </div>
   </section>
 
-  <section class="section">
+  <section id="about" class="section is-hidden">
     <div class="container">
       <div class="column is-half is-offset-3">
         <div class="content">
@@ -56,7 +56,7 @@
     </div>
   </section>
 
-  <section class="section">
+  <section id="faq" class="section is-hidden">
     <div class="container">
       <div class="column is-half is-offset-3">
         <div class="content">
@@ -122,11 +122,21 @@
     </div>
   </section>
 
+  <section id="press" class="section is-hidden">
+    <div class="container">
+      <h1>There's no press yet!</h1>
+    </div>
+  </section>
+
+  <section id="mission" class="section is-hidden">
+    <div class="container">
+      <h1>Our Mission</h1>
+    </div>
+  </section>
 
   <%- include("templates/footer"); %>
 
-  <script src="/js/routes/login_dropdown.js" type="text/javascript"></script>
-  <script src="/js/routes/about_tabs.js" type="text/javascript"></script>
+  <script src="/js/routes/company_tabs.js" type="text/javascript"></script>
 </body>
 
 </html>

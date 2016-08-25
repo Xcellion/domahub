@@ -6,7 +6,10 @@ module.exports = function(app, db, auth, e){
 	isLoggedIn = Auth.isLoggedIn;
 
 	//default page
-	app.get("/about", aboutPage);
+	app.get('/about', companyPage);
+	app.get('/mission', companyPage);
+	app.get('/press', companyPage);
+	app.get('/faq', companyPage);
 	app.get('/login', isLoggedIn);
 	app.get('/logout', Auth.logout);
 	app.get('/signup', Auth.signup);
@@ -16,9 +19,9 @@ module.exports = function(app, db, auth, e){
 	app.post('/login', Auth.loginPost);
 }
 
-//display about page
-function aboutPage(req, res, next){
-	res.render("about", {
+//display about tab content
+function companyPage(req, res, next){
+	res.render('company', {
 		message: Auth.messageReset(req),
 		user: req.user
 	});
