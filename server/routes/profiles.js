@@ -1,5 +1,4 @@
-var	account_model = require('../models/account_model.js'),
-	listing_model = require('../models/listing_model.js');
+var	account_model = require('../models/account_model.js');
 
 var crypto = require('crypto');
 
@@ -11,13 +10,15 @@ module.exports = function(app, db, auth, e){
 	error = e;
 
 	Account = new account_model(db);
-	// Listing = new listing_model(db);
 
 	//function to check if logged in
 	isLoggedIn = Auth.isLoggedIn;
 
 	//profile page
-	app.get('/profile', isLoggedIn, getProfile);
+	app.get('/profile', [
+		isLoggedIn,
+		getProfile
+	]);
 	app.get('/profile*', function(req, res){res.redirect('/profile')});
 }
 
@@ -25,27 +26,26 @@ module.exports = function(app, db, auth, e){
 function getProfile(req, res){
 	account_id = req.user.id;
 
-	//check if user id is legit
-	if (parseFloat(account_id) == account_id >>> 0){
-		//get all available listings
-		Account.getListingsAccount(account_id, function(result){
-			listings = result.listings;
+	//get all available listings belonging to that account
+	Account.getListingsAccount(account_id, function(result){
+		if (result.state=="error"){error.handler(req, res, result.info);}
+		else {
+			listings = result.info;
 
-			//get all rentals for that user
+			//get all rentals belonging to that account
 			Account.getRentalsAccount(account_id, function(result){
-				rentals = result.rentals;
+				if (result.state=="error"){error.handler(req, res, result.info);}
+				else {
+					rentals = result.info;
 
-				res.render("profile.ejs", {
-					message: Auth.messageReset(req),
-					user: req.user,
-					listings: listings,
-					rentals: rentals
-				});
+					res.render("profile.ejs", {
+						message: Auth.messageReset(req),
+						user: req.user,
+						listings: listings || false,
+						rentals: rentals || false
+					});
+				}
 			});
-
-		});
-	}
-	else {
-		error.handler(req, res, "Invalid user!");
-	}
+		}
+	});
 }

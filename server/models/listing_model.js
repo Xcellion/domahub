@@ -1,5 +1,3 @@
-
-
 listing_model = function(database){
 	this.db = database;
 
