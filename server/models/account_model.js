@@ -1,125 +1,57 @@
+account_model = function(database){
+	this.db = database;
+
+	account_query = function(query, error_description, callback, params){
+		database.query(query, function(result, err){
+			if (err){ console.log(err)}
+			callback({
+				state : (!err) ? "success" : "error",
+				info : (!err) ? result : error_description
+			});
+		}, params);
+	}
+}
+
 module.exports = account_model;
 
-listing_model = require('../models/listing_model.js');
+//GET - 'SELECT * from ?? WHERE ?? = ?'
+//UPDATE SET - 'UPDATE ?? SET ? WHERE ?? = ?'
+//INSERT SET - 'INSERT INTO ?? SET ?'
+//INSERT BULK - 'INSERT INTO ?? (??) VALUES ?'
+//DELETE - 'DELETE FROM ?? WHERE ?? = ?'
 
-function account_model(database){
-	this.db = database;
-	// listing = new listing_model(database);
+//--------------------------------------------------------------------CHECKS------------------------------------------------------------
+
+//check if an account exists
+account_model.prototype.checkAccount = function(email, callback){
+	console.log("Checking to see if account with email " + email + " exists on w3bbi...");
+	query = 'SELECT 1 AS "exist" FROM accounts WHERE email = ?'
+	account_query(query, "Account does not exist!", callback, email);
 }
 
-//sets info in database
-account_model.prototype.setInfo = function(info, special, callback){
-	db_query = 'UPDATE accounts SET ?'
-	if (special){
-		db_query += special;
-	}
-	this.db.query(db_query, function(result, err){
-		//listing info successfully retrieved
-		if (!err){
-			callback({
-				state : "success",
-				info : result
-			});
-		}
-		else {
-			callback({
-				state: "error",
-				info: err
-			});
-		}
-	}, [info]);
-}
+//----------------------------------------------------------------------GETS----------------------------------------------------------
 
-//gets account database info
-account_model.prototype.getInfo = function(db_where, db_where_equal, special, callback){
-	db_query = 'SELECT * from accounts WHERE ?? = ?'
-	if (special){
-		db_query = special;
-	}
-	this.db.query(db_query, function(result, err){
-		//listing info successfully retrieved
-		if (!err){
-			callback({
-				state : "success",
-				info : result
-			});
-		}
-		else {
-			callback({
-				state: "error",
-				info: err
-			});
-		}
-	}, [db_where, db_where_equal]);
-}
-
-//------------------------------------------------------------------------
-
-//function to check if listing exists
-function checkAccount(account_id, callback_error, callback_success){
-	account_model.getInfo("id", account_id, false, function(result){
-		if (result.state == "success"){
-			callback_success({
-				account_info: result.info
-			});
-		}
-		else {
-			callback_error({
-				state: "error",
-				description: "Invalid user!"
-			});
-		}
-	});
-}
-
-//gets all listings belonging to an account
+//gets all listing info belonging to specific account
 account_model.prototype.getListingsAccount = function(account_id, callback){
-	account_model = this;
-
-	//check if account exists
-	checkAccount(account_id, callback, function(result){
-		//get all listings for that account
-		db_query = "SELECT * from ?? WHERE ?? = ?";
-
-		listing.getInfo("listings", "owner_id", account_id, db_query, function(result){
-			if (result.state == "success"){
-				callback({
-					state: "success",
-					listings: result.info
-				});
-			}
-			else {
-				callback({
-					state: "error",
-					description: "Something went wrong with getting listings for user"
-				});
-			}
-		});
-	});
+	console.log("Attempting to get all listings belonging to account " + account_id + "...");
+	query = "SELECT \
+				listings.*\
+			FROM listings \
+			WHERE owner_id = ? ";
+	account_query(query, "Failed to get all listings belonging to account " + account_id + "!", callback, account_id);
 }
 
-//gets all rentals belonging to an account
+//gets all rental info belonging to specific account
 account_model.prototype.getRentalsAccount = function(account_id, callback){
-	account_model = this;
-
-	//check if account exists
-	checkAccount(account_id, callback, function(result){
-		//get all rentals for that account
-		db_query = "SELECT * from ?? INNER JOIN listings ON listings.id = rentals.listing_id WHERE ?? = ? AND duration != 0";
-
-		listing.getInfo("rentals", "account_id", account_id, db_query, function(result){
-			if (result.state == "success"){
-				callback({
-					state: "success",
-					rentals: result.info
-				});
-			}
-			else {
-				callback({
-					state: "error",
-					description: "Something went wrong with getting rentals for user"
-				});
-			}
-		});
-	});
+	console.log("Attempting to get all rentals belonging to account " + account_id + "...");
+	query = "SELECT \
+				rentals.*,\
+				rental_times.*,\
+				listings.id,\
+				listings.domain_name\
+			FROM rentals \
+			JOIN rental_times ON rentals.rental_id = rental_times.rental_id \
+			JOIN listings ON listings.id = rentals.listing_id \
+			WHERE rentals.account_id = ? ";
+	account_query(query, "Failed to get all rentals belonging to account " + account_id + "!", callback, account_id);
 }

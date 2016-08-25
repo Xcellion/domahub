@@ -1,5 +1,3 @@
-
-
 listing_model = function(database){
 	this.db = database;
 
@@ -130,6 +128,7 @@ listing_model.prototype.getCurrentRental = function(domain_name, callback){
 		if (result.state == "success" && result.info.length){
 			var now = new Date();
 			now = toUTC(now, now.getTimezoneOffset());
+			var bool = true;
 
 			//loop through to see if any overlap
 			for (var x = 0; x < result.info.length; x++){
@@ -139,6 +138,7 @@ listing_model.prototype.getCurrentRental = function(domain_name, callback){
 				if (now.getTime() < existingStart.getTime() + result.info[x].duration
 				&& now.getTime() >= existingStart.getTime())
 				{
+					bool = false;
 					callback({
 						state: "success",
 						rental_id: result.info[x].rental_id,
@@ -147,13 +147,25 @@ listing_model.prototype.getCurrentRental = function(domain_name, callback){
 					break;
 				}
 			}
+
+			//none of them are active right now!
+			if (bool){
+				callback({
+					state: "success",
+					rental_id: false
+				})
+			}
 		}
+
+		//no rentals to loop through
 		else if (result.state == "success" && result.info.length == 0){
 			callback({
 				state: "success",
 				rental_id: false
 			})
 		}
+
+		//some sort of error
 		else {
 			callback({
 				state: "error",

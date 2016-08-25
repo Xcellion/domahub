@@ -1,14 +1,28 @@
 var	account_model = require('../../models/account_model.js'),
 	listing_model = require('../../models/listing_model.js');
 
-module.exports = function(app, db, e, p){
+var httpProxy = require('http-proxy'),
+ 	proxy = httpProxy.createProxyServer({});
+
+// Listen for any error events
+proxy.on('error', function (err, req, res) {
+	console.log(err);
+	res.redirect("http://w3bbi.com/error");
+});
+
+//to rewrite header on proxy
+proxy.on('proxyReq', function(proxyReq, req, res, options) {
+	proxyReq.setHeader('w3bbi_proxy', 'w3bbi');
+});
+
+module.exports = function(app, db, e){
 	error = e;
-	proxy = p
 
 	Account = new account_model(db);
 	// Listing = new listing_model(db);
 
 	app.get("*", checkHost);
+	app.get("/error", renderError);
 }
 
 //function to check if the requested host is not for w3bbi
@@ -56,5 +70,12 @@ function getCurrentRental(req, res, domain_name){
 				res.redirect("http://w3bbi.com/listing/" + domain_name)
 			}
 		}
+	});
+}
+
+//display the error page
+function renderError(req, res, next){
+	res.render("error", {
+		user: req.user
 	});
 }
