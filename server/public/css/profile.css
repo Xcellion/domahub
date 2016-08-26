@@ -1,4 +1,4 @@
-.page_wrapper{
+/*.page_wrapper{
     height:100vh;
 }
 
@@ -16,4 +16,9 @@
     vertical-align:top;
     text-align:left;
     margin:15px;
+}*/
+
+.quick_links a {
+  display: block;
+  margin: 10px;
 }

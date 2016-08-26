@@ -4,6 +4,10 @@ var renderPage = function(pathName) {
   $(pathName).removeClass("is-hidden").addClass("is-active");
 }
 
+window.onpopstate = function(event) {
+  alert("location: " + document.location + ", state: " + JSON.stringify(event.state));
+}
+
 $(document).ready(function() {
 
   var path = window.location.pathname;
@@ -12,7 +16,14 @@ $(document).ready(function() {
   renderPage(pathName);
 
   $(".tab").click(function() {
-    renderPage($(this).attr("id").split("_").shift());
+    var tabName = $(this).attr("id").split("_").shift();
+
+    $(".tab").removeClass("is-active");
+    $(this).addClass("is-active");
+    renderPage(tabName);
+
+    var stateObj = { page: tabName};
+    history.pushState(stateObj, "", tabName);
   });
 
 // $('#renter_tab').addClass('active');

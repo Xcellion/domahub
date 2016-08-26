@@ -21,12 +21,100 @@
 	<body>
 		<%- include("templates/navbar", {user: user}); %>
 
-		<div id="top_wrapper" class="page_wrapper">
 
+		<div class="container clear-nav">
+			<div class="tabs is-centered">
+			  <ul>
+			    <li class="is-active"><a>Dashboard</a></li>
+			    <li><a>Inbox</a></li>
+			    <li><a>Your Listings</a></li>
+			    <li><a>Your Rentals</a></li>
+			  </ul>
+			</div>
+		</div>
+
+		<section class="section">
+			<div class="container">
+				<div class="columns">
+					<div class="column is-one-quarter">
+						<div class="card bottom-margin-25">
+							<div class="card-image">
+								<figure class="image is-4by3">
+									<img src="http://goo.gl/XilFJ5" />
+								</figure>
+							</div>
+							<div class="card-content">
+								<h2 class="has-text-centered"><%= user.fullname %></h2>
+							</div>
+							<footer class="card-footer">
+								<a class="card-footer-item">Edit Profile</a>
+								<a class="card-footer-item">View Profile</a>
+							</footer>
+						</div>
+						<article class="message bottom-margin-25">
+							<div class="message-header has-text-centered">
+								Account Settings
+							</div>
+							<div class="message-body has-text-centered">
+								<div class="content quick_links">
+									<a>Manage Payments</a>
+									<a>Add Account Verification</a>
+									<a>Change Email Address</a>
+								</div>
+							</div>
+						</article>
+						<article class="message">
+						  <div class="message-header has-text-centered">
+						    Quick Links
+						  </div>
+						  <div class="message-body has-text-centered">
+						    <div class="content quick_links">
+									<a>FAQ</a>
+									<a>Terms of Service</a>
+									<a>Privacy Policy</a>
+									<a>Support Center</a>
+								</div>
+						  </div>
+						</article>
+
+					</div>
+					<div class="column is-half">
+						<div class="notification is-danger">
+							<button class="delete"></button>
+							Please verify your account by clicking on the link in the email
+							sent to the address associated with your account!
+						</div>
+						<article class="message is-primary">
+						  <div class="message-header">
+						    Welcome to your dashboard
+						  </div>
+						  <div class="message-body">
+									The dashboard is your control panel to w3bbi -
+									from here you can edit your profile, check your private messages,
+									and manage your listings, bids, and rentals.
+						  </div>
+						</article>
+					</div>
+					<div class="column is-one-quarter">
+						<article class="message">
+							<div class="message-body has-text-centered">
+								<div class="content">
+									<p>
+										Your profile is only 50% complete.
+									</p>
+									<progress class="progress is-primary" value="50" max="100"></progress>
+									<a class="button">Complete Now</a>
+								</div>
+							</div>
+						</article>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<!-- <div id="top_wrapper" class="page_wrapper">
 			<div id="top_text_wrapper">
-
 				<div id="my_domain_wrapper" class="info_block_wrapper">
-
 					<h2>My Domains:</h2>
 					<p><a href="/listing/create">Create a new listing</a></p>
 
@@ -49,9 +137,7 @@
 					<% } %>
 
 				</div>
-
 				<div id="my_rental_wrapper" class="info_block_wrapper">
-
 					<h2>My Rentals:</h2>
 					<% if (typeof rentals != "undefined") {%>
 						<table id="rental_table">
@@ -62,11 +148,9 @@
 					<% } else { %>
 						<p>You have no rentals currently!</p>
 					<% } %>
-
 				</div>
-
 			</div>
-		</div>
+		</div> -->
 
 		<%- include("templates/footer"); %>
 
