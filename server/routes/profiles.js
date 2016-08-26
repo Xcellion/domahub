@@ -3,7 +3,6 @@ var	account_model = require('../models/account_model.js');
 var crypto = require('crypto');
 
 const url = require("url");
-const val_url = require("valid-url");
 
 module.exports = function(app, db, auth, e){
 	Auth = auth;
