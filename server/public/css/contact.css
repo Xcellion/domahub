@@ -28,21 +28,55 @@ textarea:focus {
   outline-color: #FF8751; }
 
 /******************* MAIN *******************/
+#main{
+    padding-top: 60px;
+}
+
 #main h2 {
+  padding-top:0;
   border-bottom: 1px solid #333; }
 
+#main_container{
+  text-align:center;
+}
+
 #contact_form {
-  margin-top: 30px;
-  width: 100%; }
+  margin: auto;
+  max-width: 400px; }
 
 #company_address {
-  margin-top: 25px;
-  padding: 20px;
-  background-color: #f8f8f9; }
+  position:absolute;
+  z-index:1;
+  bottom: 6px;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-right: -50%; }
+
+#hq_green{
+  color:#3CBC8D;
+}
+
+.company_address_white {
+    color:#FFF;
+}
+
+#contact_us_wrapper{
+    text-align:center;
+    margin:25px;
+}
+
+#contact_us{
+    padding-top: 0;
+    display:inline-block;
+    margin:auto;
+}
+
+.submit_button {
+  width: 100%; }
 
 .image_container {
-  background-image: url("https://hd.unsplash.com/photo-1464245051818-30da1a636203");
-  background-position: bottom center;
+  background-image: url("https://images.unsplash.com/photo-1437590552276-2e17e82b7b48?dpr=1&auto=format&crop=entropy&fit=crop&w=1500&h=1000&q=80&cs=tinysrgb");
+  background-position: center center;
   background-repeat: no-repeat;
   background-size: cover;
   height: 50vh;
@@ -68,6 +102,3 @@ textarea:focus {
 
 #youtube_icon:hover {
   color: #cd201f; }
-
-.submit_button {
-  float: right; }
