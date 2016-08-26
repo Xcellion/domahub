@@ -82,6 +82,9 @@
 
 					<% if (typeof listings != "undefined") {%>
 					<table id="domain_table" class="table">
+						<caption>
+							My Listings
+						</caption>
 						<thead>
 							<tr>
 								<th>Domain Name</th>
@@ -108,8 +111,27 @@
 					<% } else { %>
 						<p>You have no domains currently!</p>
 					<% } %>
-					<a class="button is-medium is-primary" href="/listing/create">Create a new listing</a>
-
+					<div class="box has-text-centered">
+						<a class="button is-medium" href="/listing/create">Create new listing</a>
+					</div>
+					<div class="container">
+						<% if (typeof rentals != "undefined") {%>
+						<table id="rental_table" class="table">
+							<caption>
+								My Rentals
+							</caption>
+							<thead>
+								<tr>
+									<th>Domain Name</th>
+									<th>Start Date</th>
+									<th>End Date</th>
+								</tr>
+							</thead>
+						</table>
+						<% } else { %>
+							<p>You have no rentals currently!</p>
+						<% } %>
+					</div>
 				</div>
 				<div class="column is-one-quarter">
 					<div class="notification is-danger">
@@ -141,104 +163,6 @@
 				</div>
 			</div>
 		</div>
-
-		<div class="container">
-			<div class="columns">
-				<div class="column is-one-quarter">
-					<nav class="panel">
-					  <p class="panel-heading has-text-centered">
-					    Filters
-					  </p>
-					  <!-- <p class="panel-tabs">
-					    <a class="is-active" href="#">All</a>
-					    <a href="#">Public</a>
-					    <a href="#">Private</a>
-					    <a href="#">Sources</a>
-					    <a href="#">Forks</a>
-					  </p> -->
-					  <a class="panel-block is-active" href="#">
-					    <span class="panel-icon">
-					      <i class="fa fa-area-chart"></i>
-					    </span>
-					    Graph
-					  </a>
-					  <a class="panel-block" href="#">
-					    <span class="panel-icon">
-					      <i class="fa fa-book"></i>
-					    </span>
-					    Read a book dude
-					  </a>
-					  <a class="panel-block" href="#">
-					    <span class="panel-icon">
-					      <i class="fa fa-search"></i>
-					    </span>
-					    Search
-					  </a>
-					  <a class="panel-block" href="#">
-					    <span class="panel-icon">
-					      <i class="fa fa-code-fork"></i>
-					    </span>
-					    Example
-					  </a>
-					  <div class="panel-block">
-					    <button class="button is-primary is-outlined is-fullwidth">
-					      Reset all filters
-					    </button>
-					  </div>
-					</nav>
-				</div>
-				<div class="column is-three-quarters">
-					<div class="notification has-text-centered">
-						<button class="delete"></button>
-						You don't have any listings!
-					</div>
-					<a class="button is-medium is-primary" href="/listing/create">Create a new listing</a>
-					<% if (typeof listings != "undefined") {%>
-					<table id="domain_table" class="table">
-						<thead>
-							<tr>
-								<th>Domain Name</th>
-								<th>Active?</th>
-							</tr>
-						</thead>
-						<tfoot>
-							<tr>
-								<th></th>
-							</tr>
-						</tfoot>
-						<tbody>
-							<% listings.forEach(function (listing) { %>
-							 <tr>
-								 <td><a href="/listing/<%= listing.domain_name %>"><%= listing.domain_name %></a></td>
-								 <td><%= (listing.price_type != 0) ? "True" : "False"%></td>
-								 <% if (listing.price_type == 0){ %>
-									 <td class="activate_button" id="activate_<%= listing.domain_name %>">Activate?</td>
-								 <% } %>
-							 </tr>
-							<% }) %>
-						</tbody>
-					</table>
-					<% } else { %>
-						<p>You have no domains currently!</p>
-					<% } %>
-				</div>
-			</div>
-
-			<div class="container">
-				<% if (typeof rentals != "undefined") {%>
-				<table id="rental_table" class="table">
-					<thead>
-						<tr>
-							<th>Domain Name</th>
-							<th>Start Date</th>
-							<th>End Date</th>
-						</tr>
-					</thead>
-				</table>
-				<% } else { %>
-					<p>You have no rentals currently!</p>
-				<% } %>
-			</div>
 
 	</section>
 
