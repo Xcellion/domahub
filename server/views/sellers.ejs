@@ -10,75 +10,69 @@
 
   <%- include("templates/navbar", {user: user}); %>
 
-  <div id="main">
-    <div class="container flex-column-center">
-
-      <div class="column-50 is-centered text-center">
-          <h1>Unlock a new revenue stream</h1>
-          <p>Let w3bbi do the work</p>
-      </div>
-
-<div id="linebreak"></div>
-
-    <div id="calculator" class="column-100 flex-column-center">
-      <div class="column-50 is-centered">
-        <h2>Find out how much you can make</h2>
-      <br> </br>
-      <form method="post">
-        <input type="text" />
-        <input type="text" />
-        <input type="text" />
-      </form>
-      </div>
-    </div>
-
-    <div class="column-50 is-centered text-center">
-        <h1>Why w3bbi?</h1>
-    </div>
-
-    <div class="column-50 flex-row-center is-centered text-center">
-      <div id="col_price" class="column-33">
-        <div class="col_icon">
-          <span class="fa fa-money fa-3x fa-fw"></span>
+  <section class="landing">
+    <div id="sellers_img" class="landing_img">
+      <div class="container flex-vert-center">
+        <div class="columns is-mobile">
+          <div class="column is-4">
+            <div class="card is-transparent is-fullwidth">
+              <div class="card-content">
+                <div class="content has-text-centered is-medium">
+                  <h1>Make money by listing on w3bbi</h1>
+                  Your domain name can be utilized by millions
+                  of users for a million purposes. We can help
+                  you start generating revenue immediately.
+                </div>
+              </div>
+              <div class="card-content has-text-centered">
+                <a class="button is-primary is-medium">Get Started</a>
+              </div>
+            </div>
+          </div>
         </div>
-        <h2>Full price control</h2>
-        <p>
-          You decide the price. Price your rental based
-          on flexible hourly, weekly, monthly, or yearly rates.
-        </p>
-      </div>
-
-      <div id="col_schedule" class="column-33">
-        <div class="col_icon">
-          <span class="fa fa-calendar fa-3x fa-fw"></span>
-        </div>
-        <h2>Flexible scheduling</h2>
-        <p>
-          Use our calendar tool to configure your website's availability
-          down to the exact hour, if necessary.
-        </p>
-      </div>
-
-      <div id="col_list" class="column-33">
-        <div class="col_icon">
-          <span class="fa fa-list-alt fa-3x fa-fw"></span>
-        </div>
-        <h2>Immediate listing</h2>
-        <p>
-          Your listings are posted immediately once automatically
-          approved. Buyers can access your listing in seconds!
-        </p>
       </div>
     </div>
+  </section>
 
-      <div id="main_button" class="solid-button">
-        <a href="listings.html">List Now</a>
+
+  <section class="section">
+    <div class="container">
+      <div class="columns">
+        <div class="column is-half is-offset-3">
+          <h2 class="has-text-centered">How much could you make with w3bbi?</h2>
+          <nav class="level">
+            <div class="level-left">
+              <div class="level-item">
+                <label class="label">Number of Domains</label>
+                <p class="control">
+                  <input class="input" type="text" placeholder="Enter a number"/>
+                </p>
+              </div>
+              <div class="level-item">
+                <label class="label">Time Period</label>
+                <p class="control">
+                  <input class="input" type="text" placeholder="Enter a number"/>
+                </p>
+              </div>
+              <div class="level-item">
+                <label class="label">Rate</label>
+                <p class="control">
+                  <input class="input" type="text" placeholder="Enter a number"/>
+                </p>
+              </div>
+            </div>
+
+            <!-- Right side -->
+            <div class="level-right">
+
+            </div>
+          </nav>
+        </div>
       </div>
     </div>
-    <div id="linebreak"></div>
-    <%- include("templates/footer"); %>
-  </div>
+  </section>
 
+  <%- include("templates/footer"); %>
 
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     <script type="text/javascript" src="js/jquery/jquery.leanModal.min.js"></script>

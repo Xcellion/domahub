@@ -1,0 +1,203 @@
+0 info it worked if it ends with ok
+1 verbose cli [ '/usr/local/bin/node',
+1 verbose cli   '/usr/local/bin/npm',
+1 verbose cli   'install',
+1 verbose cli   '-g',
+1 verbose cli   'nodemon' ]
+2 info using npm@2.14.12
+3 info using node@v4.3.0
+4 verbose install initial load of /usr/local/lib/package.json
+5 verbose readDependencies loading dependencies from /usr/local/lib/package.json
+6 silly cache add args [ 'nodemon', null ]
+7 verbose cache add spec nodemon
+8 silly cache add parsed spec Result {
+8 silly cache add   raw: 'nodemon',
+8 silly cache add   scope: null,
+8 silly cache add   name: 'nodemon',
+8 silly cache add   rawSpec: '',
+8 silly cache add   spec: 'latest',
+8 silly cache add   type: 'tag' }
+9 silly addNamed nodemon@latest
+10 verbose addNamed "latest" is being treated as a dist-tag for nodemon
+11 info addNameTag [ 'nodemon', 'latest' ]
+12 silly mapToRegistry name nodemon
+13 silly mapToRegistry using default registry
+14 silly mapToRegistry registry https://registry.npmjs.org/
+15 silly mapToRegistry uri https://registry.npmjs.org/nodemon
+16 verbose addNameTag registry:https://registry.npmjs.org/nodemon not in flight; fetching
+17 verbose request uri https://registry.npmjs.org/nodemon
+18 verbose request no auth needed
+19 info attempt registry request try #1 at 18:50:59
+20 verbose request id 8ddf0b40fe3a4021
+21 verbose etag "B40K6LMPNM39R0XM6A5XF75AV"
+22 http request GET https://registry.npmjs.org/nodemon
+23 http 200 https://registry.npmjs.org/nodemon
+24 verbose headers { server: 'CouchDB/1.5.0 (Erlang OTP/R16B03)',
+24 verbose headers   etag: '"B3DYBVRLAWSBIQT3FP35FAZS2"',
+24 verbose headers   'content-type': 'application/json',
+24 verbose headers   'content-encoding': 'gzip',
+24 verbose headers   'cache-control': 'max-age=300',
+24 verbose headers   'content-length': '24480',
+24 verbose headers   'accept-ranges': 'bytes',
+24 verbose headers   date: 'Fri, 26 Aug 2016 22:50:59 GMT',
+24 verbose headers   via: '1.1 varnish',
+24 verbose headers   age: '165',
+24 verbose headers   connection: 'keep-alive',
+24 verbose headers   'x-served-by': 'cache-jfk8148-JFK',
+24 verbose headers   'x-cache': 'HIT',
+24 verbose headers   'x-cache-hits': '1',
+24 verbose headers   'x-timer': 'S1472251859.960702,VS0,VE0',
+24 verbose headers   vary: 'Accept-Encoding' }
+25 silly get cb [ 200,
+25 silly get   { server: 'CouchDB/1.5.0 (Erlang OTP/R16B03)',
+25 silly get     etag: '"B3DYBVRLAWSBIQT3FP35FAZS2"',
+25 silly get     'content-type': 'application/json',
+25 silly get     'content-encoding': 'gzip',
+25 silly get     'cache-control': 'max-age=300',
+25 silly get     'content-length': '24480',
+25 silly get     'accept-ranges': 'bytes',
+25 silly get     date: 'Fri, 26 Aug 2016 22:50:59 GMT',
+25 silly get     via: '1.1 varnish',
+25 silly get     age: '165',
+25 silly get     connection: 'keep-alive',
+25 silly get     'x-served-by': 'cache-jfk8148-JFK',
+25 silly get     'x-cache': 'HIT',
+25 silly get     'x-cache-hits': '1',
+25 silly get     'x-timer': 'S1472251859.960702,VS0,VE0',
+25 silly get     vary: 'Accept-Encoding' } ]
+26 verbose get saving nodemon to /home/wonkyulee/.npm/registry.npmjs.org/nodemon/.cache.json
+27 silly addNameTag next cb for nodemon with tag latest
+28 silly addNamed nodemon@1.10.2
+29 verbose addNamed "1.10.2" is a plain semver version for nodemon
+30 silly mapToRegistry name nodemon
+31 silly mapToRegistry using default registry
+32 silly mapToRegistry registry https://registry.npmjs.org/
+33 silly mapToRegistry uri https://registry.npmjs.org/nodemon
+34 verbose addRemoteTarball https://registry.npmjs.org/nodemon/-/nodemon-1.10.2.tgz not in flight; adding
+35 verbose addRemoteTarball [ 'https://registry.npmjs.org/nodemon/-/nodemon-1.10.2.tgz',
+35 verbose addRemoteTarball   'ec511e14c3ad0858fc121c6006890ed27b7c412e' ]
+36 info retry fetch attempt 1 at 18:51:00
+37 info attempt registry request try #1 at 18:51:00
+38 http fetch GET https://registry.npmjs.org/nodemon/-/nodemon-1.10.2.tgz
+39 http fetch 200 https://registry.npmjs.org/nodemon/-/nodemon-1.10.2.tgz
+40 silly fetchAndShaCheck shasum ec511e14c3ad0858fc121c6006890ed27b7c412e
+41 verbose addTmpTarball /tmp/npm-15551-4a551c16/registry.npmjs.org/nodemon/-/nodemon-1.10.2.tgz not in flight; adding
+42 verbose addTmpTarball already have metadata; skipping unpack for nodemon@1.10.2
+43 silly cache afterAdd nodemon@1.10.2
+44 verbose afterAdd /home/wonkyulee/.npm/nodemon/1.10.2/package/package.json not in flight; writing
+45 verbose afterAdd /home/wonkyulee/.npm/nodemon/1.10.2/package/package.json written
+46 silly install resolved [ { name: 'nodemon',
+46 silly install resolved     homepage: 'http://nodemon.io',
+46 silly install resolved     author: { name: 'Remy Sharp', url: 'http://github.com/remy' },
+46 silly install resolved     bin: { nodemon: './bin/nodemon.js' },
+46 silly install resolved     engines: { node: '>=0.8' },
+46 silly install resolved     repository: { type: 'git', url: 'git+https://github.com/remy/nodemon.git' },
+46 silly install resolved     description: 'Simple monitor script for use during development of a node.js app.',
+46 silly install resolved     keywords:
+46 silly install resolved      [ 'monitor',
+46 silly install resolved        'development',
+46 silly install resolved        'restart',
+46 silly install resolved        'autoload',
+46 silly install resolved        'reload',
+46 silly install resolved        'terminal' ],
+46 silly install resolved     license: 'MIT',
+46 silly install resolved     main: './lib/nodemon',
+46 silly install resolved     scripts:
+46 silly install resolved      { coverage: 'istanbul cover _mocha -- --timeout 30000 --ui bdd --reporter list test/**/*.test.js',
+46 silly install resolved        lint: 'jscs lib/**/*.js -v',
+46 silly install resolved        ':spec': 'mocha --timeout 30000 --ui bdd test/**/*.test.js',
+46 silly install resolved        test: 'npm run lint && npm run spec',
+46 silly install resolved        spec: 'for FILE in test/**/*.test.js; do echo $FILE; ./node_modules/.bin/mocha --timeout 30000 $FILE; if [ $? -ne 0 ]; then exit 1; fi; sleep 1; done',
+46 silly install resolved        web: 'node web',
+46 silly install resolved        'semantic-release': 'semantic-release pre && npm publish && semantic-release post' },
+46 silly install resolved     devDependencies:
+46 silly install resolved      { async: '1.4.2',
+46 silly install resolved        'coffee-script': '~1.7.1',
+46 silly install resolved        connect: '~2.19.1',
+46 silly install resolved        istanbul: '~0.2.10',
+46 silly install resolved        jscs: '2.1.1',
+46 silly install resolved        mocha: '2.3.3',
+46 silly install resolved        should: '~4.0.0',
+46 silly install resolved        'semantic-release': '4.3.5' },
+46 silly install resolved     dependencies:
+46 silly install resolved      { chokidar: '^1.4.3',
+46 silly install resolved        debug: '^2.2.0',
+46 silly install resolved        'es6-promise': '^3.0.2',
+46 silly install resolved        'ignore-by-default': '^1.0.0',
+46 silly install resolved        'lodash.defaults': '^3.1.2',
+46 silly install resolved        minimatch: '^3.0.0',
+46 silly install resolved        'ps-tree': '^1.0.1',
+46 silly install resolved        touch: '1.0.0',
+46 silly install resolved        undefsafe: '0.0.3',
+46 silly install resolved        'update-notifier': '0.5.0' },
+46 silly install resolved     version: '1.10.2',
+46 silly install resolved     gitHead: 'be5d4e8d13a6dcc16c65b5bce59edef54496a8ae',
+46 silly install resolved     bugs: { url: 'https://github.com/remy/nodemon/issues' },
+46 silly install resolved     _id: 'nodemon@1.10.2',
+46 silly install resolved     _shasum: 'ec511e14c3ad0858fc121c6006890ed27b7c412e',
+46 silly install resolved     _from: 'nodemon@latest',
+46 silly install resolved     _npmVersion: '2.15.10',
+46 silly install resolved     _nodeVersion: '6.4.0',
+46 silly install resolved     _npmUser: { name: 'remy', email: 'remy@leftlogic.com' },
+46 silly install resolved     dist:
+46 silly install resolved      { shasum: 'ec511e14c3ad0858fc121c6006890ed27b7c412e',
+46 silly install resolved        tarball: 'https://registry.npmjs.org/nodemon/-/nodemon-1.10.2.tgz' },
+46 silly install resolved     maintainers: [ [Object] ],
+46 silly install resolved     _npmOperationalInternal:
+46 silly install resolved      { host: 'packages-16-east.internal.npmjs.com',
+46 silly install resolved        tmp: 'tmp/nodemon-1.10.2.tgz_1471554605580_0.2310010411310941' },
+46 silly install resolved     directories: {},
+46 silly install resolved     _resolved: 'https://registry.npmjs.org/nodemon/-/nodemon-1.10.2.tgz' } ]
+47 info install nodemon@1.10.2 into /usr/local/lib
+48 info installOne nodemon@1.10.2
+49 verbose installOne of nodemon to /usr/local/lib not in flight; installing
+50 verbose lock using /home/wonkyulee/.npm/_locks/nodemon-49f7ed19e778991e.lock for /usr/local/lib/node_modules/nodemon
+51 silly install write writing nodemon 1.10.2 to /usr/local/lib/node_modules/nodemon
+52 verbose unbuild lib/node_modules/nodemon
+53 info preuninstall nodemon@1.10.0
+54 info uninstall nodemon@1.10.0
+55 verbose unbuild rmStuff nodemon@1.10.0 from /usr/local/lib/node_modules
+56 silly gentlyRm /usr/local/bin/nodemon is being gently removed
+57 silly gentlyRm verifying /usr/local is an npm working directory
+58 silly gentlyRm containing path /usr/local is under npm's control, in /usr/local
+59 silly gentlyRm deletion target /usr/local/bin/nodemon is under /usr/local
+60 verbose gentlyRm vacuuming from /usr/local/bin/nodemon up to /usr/local
+61 silly vacuum-fs removing /usr/local/bin/nodemon
+62 verbose unlock done using /home/wonkyulee/.npm/_locks/nodemon-49f7ed19e778991e.lock for /usr/local/lib/node_modules/nodemon
+63 verbose stack Error: EACCES: permission denied, unlink '/usr/local/bin/nodemon'
+63 verbose stack     at Error (native)
+64 verbose cwd /home/wonkyulee/Documents/w3bbi
+65 error Linux 3.19.0-65-generic
+66 error argv "/usr/local/bin/node" "/usr/local/bin/npm" "install" "-g" "nodemon"
+67 error node v4.3.0
+68 error npm  v2.14.12
+69 error path /usr/local/bin/nodemon
+70 error code EACCES
+71 error errno -13
+72 error syscall unlink
+73 error Error: EACCES: permission denied, unlink '/usr/local/bin/nodemon'
+73 error     at Error (native)
+73 error  { [Error: EACCES: permission denied, unlink '/usr/local/bin/nodemon']
+73 error   errno: -13,
+73 error   code: 'EACCES',
+73 error   syscall: 'unlink',
+73 error   path: '/usr/local/bin/nodemon' }
+74 error Please try running this command again as root/Administrator.
+75 verbose exit [ -13, true ]
+76 verbose unbuild lib/node_modules/nodemon
+77 info preuninstall nodemon@1.10.0
+78 info uninstall nodemon@1.10.0
+79 verbose unbuild rmStuff nodemon@1.10.0 from /usr/local/lib/node_modules
+80 silly gentlyRm /usr/local/bin/nodemon is being gently removed
+81 silly gentlyRm verifying /usr/local is an npm working directory
+82 silly gentlyRm containing path /usr/local is under npm's control, in /usr/local
+83 silly gentlyRm deletion target /usr/local/bin/nodemon is under /usr/local
+84 verbose gentlyRm vacuuming from /usr/local/bin/nodemon up to /usr/local
+85 silly vacuum-fs removing /usr/local/bin/nodemon
+86 error error rolling back Error: EACCES: permission denied, unlink '/usr/local/bin/nodemon'
+86 error error rolling back     at Error (native)
+86 error error rolling back  { [Error: EACCES: permission denied, unlink '/usr/local/bin/nodemon']
+86 error error rolling back   errno: -13,
+86 error error rolling back   code: 'EACCES',
+86 error error rolling back   syscall: 'unlink',
+86 error error rolling back   path: '/usr/local/bin/nodemon' }
