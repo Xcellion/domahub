@@ -86,7 +86,7 @@ module.exports = function(app, db, auth, e){
 function checkDomain(req, res, next){
 	var domain_name = req.params.domain_name || req.body.domain_name;
 
-	if (!validator.isFQDN(req.body.domain_name)){
+	if (!validator.isFQDN(domain_name)){
 		error.handler(req, res, "Invalid domain name!");
 	}
 	else {

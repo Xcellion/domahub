@@ -79,6 +79,39 @@
 
 				</div>
 				<div class="column is-half">
+
+					<% if (typeof listings != "undefined") {%>
+					<table id="domain_table" class="table">
+						<thead>
+							<tr>
+								<th>Domain Name</th>
+								<th>Active?</th>
+							</tr>
+						</thead>
+						<tfoot>
+							<tr>
+								<th></th>
+							</tr>
+						</tfoot>
+						<tbody>
+							<% listings.forEach(function (listing) { %>
+							 <tr>
+								 <td><a href="/listing/<%= listing.domain_name %>"><%= listing.domain_name %></a></td>
+								 <td><%= (listing.price_type != 0) ? "True" : "False"%></td>
+								 <% if (listing.price_type == 0){ %>
+									 <td class="activate_button" id="activate_<%= listing.domain_name %>">Activate?</td>
+								 <% } %>
+							 </tr>
+							<% }) %>
+						</tbody>
+					</table>
+					<% } else { %>
+						<p>You have no domains currently!</p>
+					<% } %>
+					<a class="button is-medium is-primary" href="/listing/create">Create a new listing</a>
+
+				</div>
+				<div class="column is-one-quarter">
 					<div class="notification is-danger">
 						<button class="delete"></button>
 						Please verify your account by clicking on the link in the email
@@ -94,8 +127,6 @@
 								and manage your listings, bids, and rentals.
 					  </div>
 					</article>
-				</div>
-				<div class="column is-one-quarter">
 					<article class="message">
 						<div class="message-body has-text-centered">
 							<div class="content">
