@@ -45,6 +45,7 @@ body{
 
 #listing_info_wrapper{
 	text-align:justify;
+	word-break:break-word;
 }
 
 .listing_info_center{
@@ -63,19 +64,21 @@ body{
 
 #domain_owner{
 	display:block;
+	padding-bottom:10px;
+	border-bottom: 1px #EDEDED solid;
 }
 
 #domain_description{
 	font-size:1em;
 	color:#D3D3D3;
 	max-width:300px;
+	margin-top: 10px;
 }
 
 #pricing_wrapper{
-	margin: 10px 0;
-	padding: 10px 0;
+	margin-top: 10px;
+	padding-bottom: 10px;
 	border-bottom: 1px #EDEDED solid;
-	border-top: 1px #EDEDED solid;
 }
 
 .listing_info_margin_top{

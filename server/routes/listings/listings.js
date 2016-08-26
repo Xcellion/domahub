@@ -9,6 +9,8 @@ var request = require("request");
 var dns = require("dns");
 var url = require("url");
 var validator = require("validator");
+var whois = require("whois");
+var parser = require('parse-whois');
 
 //for sanitizing posted HTML
 var sanitizeHtml = require('sanitize-html');
@@ -36,8 +38,11 @@ module.exports = function(app, db, auth, e){
 		owner_listings.createListingBatch
 	]);
 
-	//all other listing related routes
 	//------------------------------------------------------------------------------------------------GETS
+
+	app.get('/listing', [
+		renter_listings.renderListing404
+	]);
 
 	app.get('/listing/:domain_name', [
 		checkDomain,
@@ -102,22 +107,41 @@ function checkDomain(req, res, next){
 			Listing.checkListing(domain_name, function(result){
 				//doesnt exist!
 				if (!result.info.length || result.state == "error"){
-					request({
-						url: 'https://api.ote-godaddy.com/v1/domains/available?domain='+ domain_name + '&checkType=FAST&forTransfer=false',
-						headers: {
-							"Authorization": "sso-key VUxKSUdS_KjjAhTL4gMXu5LFfV8Q4MJ:KjjEnqWXSAuS3xJWXrRXxG",
-						},
-						strictSSL: false,
-						success: function(body){
-							console.log(body);
+					whois.lookup(domain_name, function(err, data){
+						var whoisObj = {};
+				        if (!err){
+							var array = parser.parseWhoIsData(data);
+							for (var x = 0; x < array.length; x++){
+								whoisObj[array[x].attribute] = array[x].value;
+							}
 						}
-					}, function (e, response, body) {
-						available = (!e && response.statusCode == 200) ? JSON.parse(body) : false
-						res.render("listing404.ejs", {
+						email = whoisObj["Registrant Email"] || whoisObj["Admin Email"] || whoisObj["Tech Email"] || "";
+						owner_name = whoisObj["Registrant Organization"] || whoisObj["Registrant Name"] || "Nobody";
+						description = "This domain is currently unavailable for rent at w3bbi. "
+
+						if (owner_name == "Nobody"){
+							description += "However, it's available for purchase at the below links!";
+						}
+						else {
+							description += "However, if you'd like you can fill out the below time slots and we'll let the owner know!";
+						}
+
+						res.render("listing.ejs", {
 							user: req.user,
-							available: available
+							message: Auth.messageReset(req),
+							whoisObj: whoisObj,
+							listing_info: {
+								domain_name: domain_name,
+								email: email,
+								fullname: owner_name,
+								price_type: false,
+								description: description
+							},
+							new_rental_info : false,
+							rental_info : false,
+							available: (owner_name == "Nobody") ? 1 : 2
 						});
-					})
+				    });
 				}
 				//exists! handle the rest of the route
 				else {

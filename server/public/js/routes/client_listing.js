@@ -2,6 +2,8 @@ var unlock = true;
 
 $(document).ready(function() {
 
+	$('#background_image').on('dragstart', function(event) { event.preventDefault(); });
+
 	//fix 100vh jumping on mobile
 	if ( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
 		var h = $('.height-fix').height();
@@ -28,6 +30,7 @@ $(document).ready(function() {
 	//--------------------------------------------------------------------buttons
 
 	//page nav next buttons
+	$("#top_next").data("can_next", true);
 	$(".next_button").click(function(e){
 		if ($(this).data("can_next") == true){
 			var scroll_elems = ["#top_wrapper", "#calendar_wrapper", "#ip_wrapper", "#pay_wrapper"];

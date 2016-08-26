@@ -39,7 +39,9 @@ $(document).ready(function() {
 	$('#calendar').fullCalendar('option', 'height', $("#calendar_wrapper").height() - $("#calendar_top_wrapper").height() - $("#navbar").height());
 
 	//create existing rentals
-	createExisting(listing_info.rentals);
+	if (listing_info.rentals){
+		createExisting(listing_info.rentals);
+	}
 
 	$("#events").click(function(e){
 		$('#calendar').fullCalendar('removeEvents', filterMine);
@@ -92,7 +94,7 @@ function createExisting(rentals){
 		}
 		else {
 			eventData.title = "Rented!";
-			eventData.color = "red";
+			eventData.color = "#DB7093";
 			eventData.other = true;
 		}
 		$('#calendar').fullCalendar('renderEvent', eventData, true);
@@ -514,52 +516,54 @@ function createEvent(start, end){
 
 //server side helper function to get correct price of events
 function eventPrices(){
-	var myevents = $('#calendar').fullCalendar('clientEvents', filterMine);
-	if (myevents.length){
-		$("#calendar_next").addClass("is-primary");
-		$("#calendar_next").data("can_next", true);
-		$("#remove_events").addClass("activeButton");
-	}
-	else {
-		$("#calendar_next").removeClass("is-primary");
-		$("#calendar_next").data("can_next", false);
-		$("#remove_events").removeClass("activeButton");
-	}
-	var weeks_price = days_price = hours_price = half_hours_price = 0;
-
-	for (var x = 0; x < myevents.length; x++){
-		var tempDuration = myevents[x].end - myevents[x].start;
-
-		var weeks = divided(tempDuration, 604800000);
-		tempDuration = (weeks > 0) ? tempDuration -= weeks*604800000 : tempDuration;
-
-		var days = divided(tempDuration, 86400000);
-		tempDuration = (days > 0) ? tempDuration -= days*86400000 : tempDuration;
-
-		var hours = divided(tempDuration, 3600000);
-		tempDuration = (hours > 0) ? tempDuration -= hours*3600000 : tempDuration;
-
-		var half_hours = divided(tempDuration, 1800000);
-		tempDuration = (half_hours > 0) ? tempDuration -= half_hours*1800000 : tempDuration;
-
-		weeks_price += weeks * listing_info.week_price;
-		days_price += days * listing_info.day_price;
-		hours_price += hours * listing_info.hour_price;
-		half_hours_price += half_hours * listing_info.hour_price;
-	}
-
-	totalPrice = weeks_price + days_price + hours_price + half_hours_price;
-
-	//animation for counting numbers
-	$("#price").prop('Counter', $("#price").prop('Counter')).stop().animate({
-		Counter: totalPrice
-	}, {
-		duration: 100,
-		easing: 'swing',
-		step: function (now) {
-			$(this).text("$" + Math.floor(now));
+	if (listing_info.price_type){
+		var myevents = $('#calendar').fullCalendar('clientEvents', filterMine);
+		if (myevents.length){
+			$("#calendar_next").addClass("is-primary");
+			$("#calendar_next").data("can_next", true);
+			$("#remove_events").addClass("activeButton");
 		}
-	});
+		else {
+			$("#calendar_next").removeClass("is-primary");
+			$("#calendar_next").data("can_next", false);
+			$("#remove_events").removeClass("activeButton");
+		}
+		var weeks_price = days_price = hours_price = half_hours_price = 0;
+
+		for (var x = 0; x < myevents.length; x++){
+			var tempDuration = myevents[x].end - myevents[x].start;
+
+			var weeks = divided(tempDuration, 604800000);
+			tempDuration = (weeks > 0) ? tempDuration -= weeks*604800000 : tempDuration;
+
+			var days = divided(tempDuration, 86400000);
+			tempDuration = (days > 0) ? tempDuration -= days*86400000 : tempDuration;
+
+			var hours = divided(tempDuration, 3600000);
+			tempDuration = (hours > 0) ? tempDuration -= hours*3600000 : tempDuration;
+
+			var half_hours = divided(tempDuration, 1800000);
+			tempDuration = (half_hours > 0) ? tempDuration -= half_hours*1800000 : tempDuration;
+
+			weeks_price += weeks * listing_info.week_price;
+			days_price += days * listing_info.day_price;
+			hours_price += hours * listing_info.hour_price;
+			half_hours_price += half_hours * listing_info.hour_price;
+		}
+
+		totalPrice = weeks_price + days_price + hours_price + half_hours_price;
+
+		//animation for counting numbers
+		$("#price").prop('Counter', $("#price").prop('Counter')).stop().animate({
+			Counter: totalPrice
+		}, {
+			duration: 100,
+			easing: 'swing',
+			step: function (now) {
+				$(this).text("$" + Math.floor(now));
+			}
+		});
+	}
 }
 
 //helper function to divide number
