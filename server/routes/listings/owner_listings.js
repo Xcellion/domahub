@@ -3,7 +3,7 @@ var crypto = require('crypto');
 var request = require("request");
 var dns = require("dns");
 var url = require("url");
-var val_url = require("valid-url");
+var validator = require("validator");
 
 var multer = require("multer");
 var parse = require("csv-parse");
@@ -41,7 +41,7 @@ module.exports = {
 	},
 
 	//function to display the create listing page
-	createListingPage : function(req, res, next){
+	renderCreateListing : function(req, res, next){
 		res.render("listing_create.ejs", {
 			message: Auth.messageReset(req),
 			user: req.user,
@@ -60,8 +60,7 @@ module.exports = {
 			error.handler(req, res, "Invalid user!");
 		}
 		//check if domain is legit
-		else if (!val_url.isUri(addhttp(domain_name))){
-			console.log(domain_name, addhttp(domain_name), val_url.isUri(addhttp(domain_name)))
+		else if (!validator.isFQDN(req.body.domain_name)){
 			error.handler(req, res, "Invalid listing activation!");
 		}
 		else {
@@ -77,55 +76,46 @@ module.exports = {
 		}
 	},
 
-	//function to create a new listing
-	createListing : function(req, res, next){
-		account_id = req.user.id;
-		domain_name = url.parse(addhttp(req.body.domain_name)).host;
+	//function to format the listing info
+	checkListingCreate : function(req, res, next){
+		domain_name = req.body.domain_name;
 		description = req.body.description;
 
-		//check if user id is legit
-		if (parseFloat(account_id) != account_id >>> 0){
-			error.handler(req, res, "Invalid user!");
-		}
-		else if (!description){
+		if (!description){
 			error.handler(req, res, "Invalid domain description!");
 		}
-		else if (!val_url.isUri(addhttp(req.body.domain_name))){
+		else if (!validator.isFQDN(req.body.domain_name)){
 			error.handler(req, res, "Invalid domain name!");
 		}
 		else {
-			info = {
-				domain_name : domain_name,
-				description: req.body.description,
-				owner_id: account_id,
-				price_type: 0
-			}
-
-			Listing.insertSetInfo("listings", info, function(result){
-				if (result.state == "success") {
-
-					Listing.getInfo("listings", "id", result.insertId, false, function(result){
-						//create hash based on listing date created, listing id, and owner id
-						hash = crypto.createHash('md5').update('"' + result.info.date_created + result.info.id + result.info.owner_id + '"').digest('hex');
-
-						res.json({
-							state: "success",
-							listing_info: {
-								domain_name: domain_name,
-								id: result.insertId,
-								hash: hash,
-								owner_id: account_id,
-								price_type: 0
-							},
-							message: "Successfully added a new listing!"
-						})
-					})
-				}
-				else {
-					error.handler(req, res, "Listing already exists!", "json");
-				}
-			})
+			next();
 		}
+	},
+
+	//function to create a new listing
+	createListing : function(req, res, next){
+		listing_info = {
+			domain_name : req.body.domain_name,
+			description: req.body.description,
+			owner_id: req.user.id,
+			price_type: 0
+		}
+
+		Listing.newListing(listing_info, function(result){
+			if (result.state=="error"){error.handler(req, res, result.info);}
+			else {
+				res.json({
+					state: "success",
+					listing_info: {
+						domain_name: domain_name,
+						id: result.info.insertId,
+						owner_id: req.user.id,
+						price_type: 0
+					},
+					message: "Successfully added a new listing!"
+				})
+			}
+		})
 	},
 
 	uploadSizeCheck : function(req, res, next){
@@ -139,8 +129,13 @@ module.exports = {
 		});
 	},
 
+	//function to format batch listings
+	checkListingCreateBatch : function(req, res, next){
+
+	},
+
 	//function to handle batch listing creation
-	createBatchListing : function(req, res, next){
+	createListingBatch : function(req, res, next){
 		if (req.fileToolarge){
 			error.handler(req, res, "File too large!");
 		}
@@ -155,7 +150,7 @@ module.exports = {
 				if (record.length != 2){
 					bad_listings.push(record, "Incorrect format");
 				}
-				else if (!val_url.isWebUri(addhttp(record[0]))){
+				else if (!validator.isFQDN(record[0])){
 					bad_listings.push(record, "Incorrect domain name");
 				}
 				else if (record[1].length = 0 || !record[1]){
@@ -194,8 +189,7 @@ module.exports = {
 			error.handler(req, res, "Invalid user!");
 		}
 		//check if domain is legit
-		else if (!val_url.isUri(addhttp(domain_name))){
-			console.log(domain_name, addhttp(domain_name), val_url.isUri(addhttp(domain_name)))
+		else if (!validator.isFQDN(req.body.domain_name)){
 			error.handler(req, res, "Invalid listing activation!");
 		}
 		else {

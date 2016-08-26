@@ -20,10 +20,10 @@
 		<%- include("templates/navbar", {user: user}); %>
 
 
-		<div id="new_listing_wrapper">
+		<div style="padding-top:120px;" id="new_listing_wrapper">
 			<form id="listing_form" action="/listing/create" method="post" novalidate>
 				<input id="listing_form_domain_name" type="url" name="domain_name" placeholder="https://myawesomedomain.com" />
-				<input id="listing_form_description" type="text" name="description" placeholder="The best website ever!" />
+				<textarea id="listing_form_description" name="description" placeholder="The best website ever!"></textarea>
 				<input id="submit" type="submit" value="Create new listing!" />
 			</form>
 

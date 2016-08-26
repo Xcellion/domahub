@@ -38,7 +38,6 @@ $(document).ready(function() {
 //function to sumibt listings
 function submitListings(){
 	if (can_submit){
-		can_submit = false;
 		$.ajax({
 			type: "POST",
 			url: "/listing/create",
@@ -47,6 +46,7 @@ function submitListings(){
 				description: $("#listing_form_description").val()
 			}
 		}).done(function(data){
+			console.log(data);
 
 			//reset the data
 			$("#listing_form_domain_name").val("");

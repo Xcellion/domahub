@@ -1,13 +1,14 @@
 var	listing_model = require('../../models/listing_model.js');
+var renter_listings = require("./renter_listings");
+var owner_listings = require("./owner_listings");
 
-//stripe API
-var stripe = require("stripe")("sk_test_PHd0TEZT5ytlF0qCNvmgAThp");
+var stripe = require("stripe")("sk_test_PHd0TEZT5ytlF0qCNvmgAThp");		//stripe API
 
 //for verifying URLs
 var request = require("request");
 var dns = require("dns");
 var url = require("url");
-var val_url = require("valid-url");
+var validator = require("validator");
 
 //for sanitizing posted HTML
 var sanitizeHtml = require('sanitize-html');
@@ -17,17 +18,23 @@ module.exports = function(app, db, auth, e){
 	Listing = new listing_model(db);
 	isLoggedIn = auth.isLoggedIn;
 
-	var renter_listings = require("./renter_listings");
-	var owner_listings = require("./owner_listings");
-
+	//initiate the two types of listing routes
 	owner_listings.init(e, Listing);
 	renter_listings.init(e, Listing);
 
 	//create new listings
-	app.get('/listing/create', isLoggedIn, owner_listings.createListingPage);
-	app.post('/listing/create', isLoggedIn, owner_listings.createListing)
-	app.post('/listing/create/batch', [isLoggedIn, owner_listings.uploadSizeCheck, owner_listings.createBatchListing])
-	// app.post('/listing/:domain_name/activate', isLoggedIn, activateListing);
+	app.get('/listing/create', isLoggedIn, owner_listings.renderCreateListing);
+	app.post('/listing/create', [
+		isLoggedIn,
+		owner_listings.checkListingCreate,
+		owner_listings.createListing
+	]);
+	app.post('/listing/create/batch', [
+		isLoggedIn,
+		owner_listings.uploadSizeCheck,
+		owner_listings.checkListingCreateBatch,
+		owner_listings.createListingBatch
+	]);
 
 	//all other listing related routes
 	//------------------------------------------------------------------------------------------------GETS
@@ -77,8 +84,9 @@ module.exports = function(app, db, auth, e){
 
 //check if listing exists
 function checkDomain(req, res, next){
-	var domain_name = req.params.domain_name || url.parse(addhttp(req.body.domain_name)).host;
-	if (!val_url.isUri(addhttp(domain_name))){
+	var domain_name = req.params.domain_name || req.body.domain_name;
+
+	if (!validator.isFQDN(req.body.domain_name)){
 		error.handler(req, res, "Invalid domain name!");
 	}
 	else {
@@ -302,14 +310,6 @@ function payCheck(stripeToken, price, domain_name){
 		}
 	});
 	return bool;
-}
-
-//helper function to add http protocol to a url if it doesnt have it
-function addhttp(url) {
-    if (!/^(?:f|ht)tps?\:\/\//.test(url)) {
-        url = "http://" + url;
-    }
-    return url;
 }
 
 //helper function to validate ip address
