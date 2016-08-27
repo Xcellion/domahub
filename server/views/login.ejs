@@ -9,26 +9,23 @@
   <body>
 
     <div id="login_form">
-
-      <!-- any messages from the server -->
-      <div id="message">
-        <% if (typeof message != "undefined") {%>
-          <%= message %>
-        <% } else {%>
-
-        <% } %>
-      </div>
-
       <form id="target" action="/login" method="post">
         <div class="has-text-centered logo_login">
           <a class="w3bbi_icon" href="/">w3bbi</a>
         </div>
+        <div id="message">
+          <% if (typeof message != "undefined") {%>
+            <%= message %>
+          <% } else {%>
+              Please log in below
+          <% } %>
+        </div>
         <p class="control has-icon">
-          <input name="email" class="input is-medium" type="email" placeholder="Email">
+          <input id="email" name="email" class="input is-medium" type="email" placeholder="Email">
           <i class="fa fa-envelope"></i>
         </p>
         <p class="control has-icon">
-          <input name="password" class="input is-medium" type="password" placeholder="Password">
+          <input id="password" name="password" class="input is-medium" type="password" placeholder="Password">
           <i class="fa fa-lock"></i>
         </p>
         <p class="control">
@@ -61,7 +58,7 @@
       </form>
     </div>
 
-  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+  <script src="/js/routes/login_logic.js" type="text/javascript"></script>
 
   </body>
 

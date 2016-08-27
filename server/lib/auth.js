@@ -134,7 +134,7 @@ function isLoggedIn(req, res, next) {
 				//redirect to the default login page
 				else {
 					req.session.redirectTo = req.header('Referer');
-					res.render("login.ejs");
+					res.render("login.ejs", {message: messageReset(req)});
 				}
 				break;
 		}

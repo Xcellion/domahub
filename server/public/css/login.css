@@ -4,13 +4,12 @@ html {
 }
 
 #message {
-  color: red;
+  margin: 10px 0 20px 0;
   text-align: center;
-  text-transform: uppercase;
 }
 
 .logo_login {
-  margin-bottom: 15px;
+  margin-bottom: 10px;
 }
 
 .w3bbi_icon {
