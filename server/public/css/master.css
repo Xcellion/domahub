@@ -1190,6 +1190,10 @@ a.box:active {
     position: absolute;
     top: 4px;
     z-index: 4; }
+    .control.has-icon > .fa.is-danger {
+      color: #ed6c63; }
+    .control.has-icon > .fa.is-success {
+      color: #97cd76; }
   .control.has-icon .input:focus + .fa, .control.has-icon .textarea:focus + .fa {
     color: #222324; }
   .control.has-icon .input.is-small + .fa, .control.has-icon .is-small.textarea + .fa {

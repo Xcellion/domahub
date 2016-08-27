@@ -1,5 +1,7 @@
 $(document).ready(function() {
-
+	if (!$(".input").val()) {
+		$('.input').focus().next().addClass("is-danger");
+	};
 	//to catch empty emails, name, or passwords
 	$('#target').submit(function(event){
 
@@ -7,7 +9,7 @@ $(document).ready(function() {
 		if (!$("#email_input").val()) {
 			$("#message").fadeOut(100, function(){
 				$("#message").css("color", "#ed1c24").text("Please enter your email address!").fadeIn(100);
-				console.log($("#email_input").focus().next().addClass("is-danger"));
+				// console.log($("#email_input").focus().next().addClass("is-danger"));
 			});
 			return false;
 		}
