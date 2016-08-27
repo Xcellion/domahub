@@ -2,13 +2,13 @@
 <html>
   <head>
     <title>w3bbi - Log In</title>
-    <link rel="stylesheet" type="text/css" href="/css/login.css" />
+    <link rel="stylesheet" type="text/css" href="/css/login_signup.css" />
     <%- include("templates/head_links"); %>
   </head>
 
   <body>
 
-    <div id="login_form">
+    <div id="login_form" class="form">
       <form id="target" action="/login" method="post">
         <div class="has-text-centered logo_login">
           <a class="w3bbi_icon" href="/">w3bbi</a>
@@ -29,7 +29,7 @@
           <i class="fa fa-lock"></i>
         </p>
         <p class="control">
-          <button id="login_button" class="button is-primary is-medium is-fullwidth">
+          <button id="login_button" class="login_button button is-primary is-medium is-fullwidth">
             Log In
           </button>
         </p>

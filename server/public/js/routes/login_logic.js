@@ -7,9 +7,7 @@ $(document).ready(function() {
 		if (!$("#email").val()) {
 			$("#message").fadeOut(100, function(){
 				$("#message").css("color", "#ed1c24").html("Please enter your email address!").fadeIn(100);
-				$("#email").focus();
 			});
-			//to prevent submission of the form
 			return false;
 		}
 
@@ -17,11 +15,9 @@ $(document).ready(function() {
 		if (!$("#password").val()) {
 			$("#message").fadeOut(100, function(){
 				$("#message").css("color", "#ed1c24").html("Please enter your password!").fadeIn(100);
-				$("#password").focus();
 			});
-			//to prevent submission of the form
 			return false;
 		}
 	});
-    
+
 });
