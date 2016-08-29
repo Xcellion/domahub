@@ -1,7 +1,7 @@
 /****************** FORM ***************/
 input[type="text"] {
   box-sizing: border-box;
-  font-color: #555;
+  font-color: #555555;
   font-family: "Roboto Condensed", Helvetica, sans-serif;
   font-size: 1.2rem;
   font-weight: 300;
@@ -14,7 +14,7 @@ input:focus {
 
 textarea {
   box-sizing: border-box;
-  font-color: #555;
+  font-color: #555555;
   font-family: "Roboto Condensed", Helvetica, sans-serif;
   font-size: 1.2rem;
   font-weight: 300;
@@ -29,7 +29,7 @@ textarea:focus {
 
 /******************* MAIN *******************/
 #main h2 {
-  border-bottom: 1px solid #333; }
+  border-bottom: 1px solid #333333; }
 
 #contact_form {
   margin-top: 30px;
@@ -53,7 +53,7 @@ textarea:focus {
   padding: 10px; }
 
 .sm_icon a {
-  color: #333;
+  color: #333333;
   font-size: 1.3rem;
   font-weight: 300; }
 

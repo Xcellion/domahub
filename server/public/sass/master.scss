@@ -1,10 +1,5 @@
-/******************** RESET ****************/
-
-@import 'fonts_colors';
 @import 'bulma/bulma.sass';
-
-/******************** MISC ******************/
-
+@import 'mixins';
 
 /******************** FORMS/INPUT ******************/
 
@@ -15,14 +10,11 @@ input:-webkit-autofill {
 /********************** UNIVERSAL ******************/
 
 body {
-  font: {
-    family: $roboto;
-    size: 16px;
-  }
+  font-family: $roboto;
+  @include font-size(16px);
   a {
     text-decoration: none;
-    -webkit-transition: all 0.25s;
-    transition: all 0.25s;
+    @include transition(all 0.5s);
   }
   a:hover {
     cursor: pointer;
@@ -34,7 +26,7 @@ html {
 }
 
 h1 {
-  color: $black-h;
+  color: $black;
   font: {
     size: 2.5rem;
     weight: 400;
@@ -42,7 +34,7 @@ h1 {
   padding: 25px 0 25px 0;
 }
 h2 {
-  color: $black-h;
+  color: $black;
   font: {
     size: 1.8rem;
     weight: 300;
@@ -50,7 +42,7 @@ h2 {
   padding: 25px 0 25px 0;
 }
 h3 {
-  color: $black-h;
+  color: $black;
   display: inline-block;
   font-size: 1.2rem;
 }
@@ -58,9 +50,7 @@ h3 {
 .orange_link {
   color: $accent;
   opacity: 0.9;
-  &:hover {  -moz-box-shadow: inset 0 -2px 0 $accent;
-    -webkit-box-shadow: inset 0 -2px 0 $accent;
-    box-shadow: inset 0 -2px 0 $accent;}
+  &:hover { @include box-shadow(0, -2px, 0, $accent, inset);}
 }
 
 .white_link {
@@ -70,7 +60,7 @@ h3 {
 }
 
 .black_link {
-  color: $black-p;
+  color: $black;
   opacity: 0.9;
   &:hover {opacity:1.0;}
 }
@@ -126,82 +116,28 @@ h3 {
 /********************** LINEBREAK ******************/
 
 #linebreak {
-  border-bottom: 1px solid $white-line;
+  border-bottom: 1px solid $grey-lighter;
   margin: 50px auto 50px auto;
   position: relative;
   width: 25%;
 }
 
 #linebreak2 {
-  border-bottom: 1px solid #dddddd;
+  border-bottom: 1px solid $grey-lighter;
   position: relative;
   margin: 15px auto 25px auto;
   width: 100%;
 }
 
 #linebreak3 {
-  border-bottom: 1px solid $white-line;
+  border-bottom: 1px solid $grey-lighter;
   margin: 5px auto 5px auto;
   width: 50%;
 }
 
-/********************** BUTTONS *******************/
-
-.submit_button {
-  background-color: $primary;
-  border: none;
-  border-radius: 3px;
-  color: white;
-  display: inline-block;
-  font-size: 1rem;
-  padding: 10px;
-  text-decoration: none;
-  -webkit-transition: background-color 0.25s;
-  transition: background-color 0.25s;
-}
-
-.submit_button:focus {
-  border: none;
-  outline: none;
-}
-
-.submit_button:hover {
-  cursor: pointer;
-  opacity: 0.9;
-}
-
-#main_button {
-  margin: 25px 0 25px 0;
-  text-align: center;
-}
-
-#main_button a {
-  display: inline-block;
-  padding: 10px;
-}
-
 /********************** MAIN ****************/
 
-.section {
-  background-color: #fff;
-}
 
-.image_wrapper {
-  background-color: rgba(0,0,0,0.5);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  height: 100%;
-}
-
-.image_text h1 {
-  color: #eee;
-  font-family: 'Source Sans Pro', sans-serif;
-  font-size: 3.5rem;
-  font-weight: bold;
-  padding: 0;
-}
 
 /********************** MEDIA QUERIES****************/
 @media screen and (max-width: 769px) {

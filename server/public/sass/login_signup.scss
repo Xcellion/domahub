@@ -1,7 +1,8 @@
-@import 'fonts_colors';
+@import 'vars';
+
 /*************************** REGISTER ***************************/
 html {
-  background-color: $gray-lightback;
+  background-color: $grey-lighter !important;
 }
 
 #message {
@@ -24,16 +25,18 @@ html {
 
 .w3bbi_icon {
   box-sizing: border-box;
-  color: #3CBC8D;
-  font-family: 'Share Tech';
-  font-size: 1.5em;
-  font-weight: bold;
+  color: $primary;
+  font: {
+    family: $sharetech;
+    size: 1.5rem;
+    weight: bold;
+  }
   -webkit-transition: all 0.25s;
   transition: all 0.25s;
 }
 
 .w3bbi_icon:hover:not(.active) {
-  color: #3CBC8D;
+  color: $primary;
   cursor: pointer;
   opacity: 0.85;
 }

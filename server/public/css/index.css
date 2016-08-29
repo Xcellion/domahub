@@ -1,88 +1,39 @@
-
 /******************** MISC*************************/
-
 .right-arrow {
-  color: #FF8751;
-}
+  color: #FF8751; }
 
 .icon.active {
-  padding-left: 10px;
-}
+  padding-left: 10px; }
 
 /*********************** LANDING ************************/
-
 .landing {
-  padding: 0;
-}
+  padding: 0; }
 
 #index_img {
-  background-image: url('https://hd.unsplash.com/photo-1448932223592-d1fc686e76ea');
-  height: 700px;
-}
+  background-image: url("https://hd.unsplash.com/photo-1448932223592-d1fc686e76ea");
+  height: 700px; }
 
 #landing_buttons {
-  margin-top: 50px;
-}
-
+  margin-top: 50px; }
 
 /*********************** MAIN ************************/
-
 .main_link {
-  font-size: 1.2rem;
-}
+  font-size: 1.2rem; }
 
 .blob {
   background-color: #3CBC8D;
-  margin-top: 30px;
-}
+  margin-top: 30px; }
 
 #list_text {
-  order: 1;
-}
+  order: 1; }
 
 #list_img {
-  order: 2;
-}
+  order: 2; }
 
 #rent_text {
-  order: 2;
-}
+  order: 2; }
 
 #rent_img {
-  order: 1;
-}
+  order: 1; }
 
 /************************ MEDIA QUERIES ************************/
-@media screen and (max-width: 769px) {
-
-  #landing_title {
-    font-size: 2rem;
-  }
-
-  #landing_subtitle {
-    font-size: 1.2rem;
-  }
-
-  .landing_img {
-    height: 400px;
-  }
-
-  .landing_texts {
-    top: 120px;
-  }
-
-  .main_p {
-    font-size: 1.2rem;
-    font-weight: 300;
-  }
-  .main_link {
-    font-size: 1rem;
-  }
-}
-
-@media screen and (min-width: 769px) and (max-width: 1375px) {
-
-  .landing_img {
-    height: 600px;
-  }
-}
