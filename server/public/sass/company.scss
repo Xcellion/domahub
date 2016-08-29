@@ -1,4 +1,4 @@
-@import 'fonts_colors';
+@import 'vars';
 
 /********************************************************* BODY *********************************************************/
 .landing {
@@ -29,7 +29,7 @@
 
 .faq_selection {
   box-sizing: border-box;
-  color: $black-p;
+  color: $black;
   display: inline-block;
   font-size: 1.3em;
   font-weight: 300;
