@@ -137,12 +137,10 @@ function displayRental(){
 	$("#calendar_next_rental").data("can_next", true);
 
 	for (var x = 0; x < rental_info.times.length; x++){
-		start = moment(rental_info.times[x].date).local()._d.getTime();
-		end = moment(start + rental_info.times[x].duration);
-		start = moment(start);
 
-		var disp_start = start.format('YYYY/MM/D, h:mmA');
-		var disp_end = end.format('YYYY/MM/D, hh:mmA');
+		start = moment(new Date(rental_info.times[x].date + " UTC"));
+		disp_end = moment(new Date(start._d.getTime() + rental_info.times[x].duration)).format('YYYY/MM/D, h:mmA');
+		disp_start = start.format('YYYY/MM/D, h:mmA');
 
 		$("#rental_times").append("<li class='rental_time'>" + disp_start + " - " + disp_end + "</li>")
 	}

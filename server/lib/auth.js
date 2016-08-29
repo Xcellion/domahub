@@ -166,8 +166,8 @@ function signup(req, res){
 
 //function to login
 function loginPost(req, res, next){
-	//redirect to referrer or main page
-	redirectTo = req.header("Referer") ? req.header("Referer") : "/";
+	//redirect to referrer or profile page if coming from a non-listing
+	redirectTo = req.header("Referer").split("/").includes("listing") ? req.header("Referer") : "/profile";
 	redirectURL = req.session.redirectBack ? req.session.redirectBack : redirectTo;
 	passport.authenticate('local-login', function(err, user, info){
 		if (!user && info){
