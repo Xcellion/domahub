@@ -1,3 +1,5 @@
+var	listing_model = require('../models/listing_model.js');
+
 var crypto = require('crypto');
 
 var request = require("request");
@@ -30,8 +32,6 @@ var upload = multer({
 		cb(null, true);
 	}
 }).single("csv");
-
-var	listing_model = require('../../models/listing_model.js');
 
 module.exports = {
 
@@ -81,11 +81,27 @@ module.exports = {
 		domain_name = req.body.domain_name;
 		description = req.body.description;
 
+		minute_price = req.body.minute_price || 1;
+		hour_price = req.body.hour_price || 1;
+		day_price = req.body.day_price || 10;
+		week_price = req.body.week_price || 25;
+		month_price = req.body.month_price || 50;
+
+		background_image = req.body.background_image || null;
+		buy_link = req.body.buy_link || null;
+
 		if (!description){
 			error.handler(req, res, "Invalid domain description!");
 		}
 		else if (!validator.isFQDN(req.body.domain_name)){
 			error.handler(req, res, "Invalid domain name!");
+		}
+		else if ((parseFloat(minute_price) != minute_price >>> 0) ||
+				(parseFloat(hour_price) != hour_price >>> 0) ||
+				(parseFloat(day_price) != day_price >>> 0) ||
+				(parseFloat(week_price) != week_price >>> 0) ||
+				(parseFloat(month_price) != month_price >>> 0)){
+			error.handler(req, res, "Invalid price!");
 		}
 		else {
 			next();
@@ -104,7 +120,7 @@ module.exports = {
 		Listing.newListing(listing_info, function(result){
 			if (result.state=="error"){error.handler(req, res, result.info);}
 			else {
-				res.json({
+				res.send({
 					state: "success",
 					listing_info: {
 						domain_name: domain_name,

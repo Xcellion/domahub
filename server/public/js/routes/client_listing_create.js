@@ -2,11 +2,16 @@ var can_submit = true;
 
 $(document).ready(function() {
 
-	$("#batch_listing_show").click(function(e){
-		$("#batch_form_wrapper").toggle();
+	//to toggle between single submit and multi-submit
+	$("#mult_toggle").click(function(e){
+		$(".form_wrapper").toggle();
+		var mult = "Multiple listings?";
+		var sing = "Single listing?";
+		$(this).text($(this).text() == mult ? sing : mult);
 	});
 
-	$("#listing_form").submit(function(e){
+	//single submit
+	$("#sing_form").submit(function(e){
 		e.preventDefault();
 		submitListings();
 	});
@@ -35,30 +40,69 @@ $(document).ready(function() {
 
 });
 
+//function to client-side check form
+function listingData(){
+	var listingData = {
+			domain_name : $("#sing_domain").val(),
+			description : $("#sing_description").val(),
+			minute_price : $("#minute_price").val(),
+			hour_price : $("#hour_price").val(),
+			day_price : $("#day_price").val(),
+			week_price : $("#week_price").val(),
+			month_price : $("#month_price").val(),
+			background_image : $("#background_image").val(),
+			buy_link : $("#buy_link").val()
+		}
+
+	if (!listingData.domain_name){
+		$("#message").text("Invalid domain name!");
+		console.log("Invalid domain name!");
+	}
+	else if (!listingData.description){
+		$("#message").text("Invalid description!");
+		console.log("Invalid description!");
+	}
+	else if (parseFloat(listingData.minute_price) != listingData.minute_price >>> 0){
+		$("#message").text("Invalid minute price!");
+		console.log("Invalid minute price!");
+	}
+	else if	(parseFloat(listingData.hour_price) != listingData.hour_price >>> 0){
+		$("#message").text("Invalid hourly price!");
+		console.log("Invalid hourly price!");
+	}
+	else if (parseFloat(listingData.day_price) != listingData.day_price >>> 0){
+		$("#message").text("Invalid daily price!");
+		console.log("Invalid daily price!");
+	}
+	else if (parseFloat(listingData.week_price) != listingData.week_price >>> 0){
+		$("#message").text("Invalid weekly price!");
+		console.log("Invalid weekly price!");
+	}
+	else if (parseFloat(listingData.month_price) != listingData.month_price >>> 0){
+		$("#message").text("Invalid monthly price!");
+		console.log("Invalid monthly price!");
+	}
+	else {
+		return listingData;
+	}
+}
+
 //function to sumibt listings
 function submitListings(){
-	if (can_submit){
+	var submit_data = listingData();
+	if (can_submit && submit_data){
 		$.ajax({
 			type: "POST",
 			url: "/listing/create",
-			data: {
-				domain_name: $("#listing_form_domain_name").val(),
-				description: $("#listing_form_description").val()
-			}
+			data: submit_data
 		}).done(function(data){
-			console.log(data);
-
+			alert('w')
 			//reset the data
-			$("#listing_form_domain_name").val("");
-			$("#listing_form_description").val("");
+			$(".input").val("");
 			can_submit = true;
 
 			if (data.state == "success"){
 				$("#message").html(data.message);
-
-				//random human hash
-				$("#hash_wrapper").show();
-				$("#hash_code").text(data.listing_info.hash);
 			}
 			else if (data.state == "error"){
 				$("#message").html(data.message);
