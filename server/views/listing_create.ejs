@@ -20,43 +20,48 @@
 		<%- include("templates/navbar", {user: user}); %>
 
 
-		<div style="padding-top:120px;" id="new_listing_wrapper">
-			<form id="listing_form" action="/listing/create" method="post" novalidate>
-				<input id="listing_form_domain_name" type="url" name="domain_name" placeholder="https://myawesomedomain.com" />
-				<textarea id="listing_form_description" name="description" placeholder="The best website ever!"></textarea>
-				<input id="submit" type="submit" value="Create new listing!" />
-			</form>
+		<div id="top_wrapper">
 
-			<div id="batch_listing_show">Create multiple listings</div>
+			<div id="forms_wrapper">
 
-			<div id="batch_form_wrapper">
-				<p>You can upload a .csv file in the following format:</p>
-				<form id="batch_listing_form" action="/listing/create/batch" method="post" enctype="multipart/form-data">
-					<input id="listing_form_csv" type="file" name="csv" accept=".csv" />
-					<input id="submit" type="submit" value="Create new listings!" />
-				</form>
-				<progress></progress>
-			</div>
-
-			<div id="instruction_wrapper">
-				<div class="verification_method_wrapper" id="hash_txt">
-
+				<div id="sing_form_wrapper" class="form_wrapper">
+					<form id="sing_form" action="/listing/create" method="post" novalidate>
+						<p>Required</p>
+						<input required class="create_input input" id="sing_domain" type="url" name="domain_name" placeholder="MyAwesomeDomain.com" />
+						<textarea required class="create_input input" id="sing_description" name="description" placeholder="All listings need a great description! e.g. - The best website ever!"></textarea>
+						<p>Optional</p>
+						<p class="price_input_text">Minute</p>
+						<input class="create_input price_input input" id="minute_price" type="number" name="minute_price" value="1" placeholder="1" min="1"/>
+						<p class="price_input_text">Hour</p>
+						<input class="create_input price_input input" id="hour_price" type="number" name="hour_price" value="1" placeholder="1" min="1"/>
+						<p class="price_input_text">Day</p>
+						<input class="create_input price_input input" id="day_price" type="number" name="day_price" value="10" placeholder="10" min="1"/>
+						<p class="price_input_text">Week</p>
+						<input class="create_input price_input input" id="week_price" type="number" name="week_price" value="25" placeholder="25" min="1"/>
+						<p class="price_input_text">Month</p>
+						<input class="create_input price_input input" id="month_price" type="number" name="month_price" value="50" placeholder="50" min="1"/>
+						<input class="create_input input" id="sing_background" type="url" name="background_image" placeholder="CustomBackground.com/image.png" />
+						<input class="create_input input" id="sing_buy" type="url" name="buy_link" placeholder="MyAwesomeDomain.com" />
+						<input class="create_input is-primary button" id="sing_submit" type="submit" value="Create new listing!" />
+					</form>
 				</div>
-				<div class="verification_method_wrapper" id="hash_html">
 
+				<div id="mult_form_wrapper" class="form_wrapper">
+					<p>You can upload a .csv:</p>
+					<form id="mult_form" action="/listing/create/batch" method="post" enctype="multipart/form-data">
+						<input id="mult_csv" class="create_input" type="file" name="csv" accept=".csv" />
+						<progress id="mult_progress" class="create_input"></progress>
+						<input id="mult_submit" class="create_input is-primary button" type="submit" value="Create new listings!" />
+					</form>
 				</div>
-				<div class="verification_method_wrapper" id="hash_meta">
 
-				</div>
-				<div class="verification_method_wrapper" id="hash_htaccess">
-					<p>Copy the below code into the .htaccess file of your website to prove that you own the domain name!</p>
-					<p>What is the .htaccess file?</p>
-					<p>An .htaccess file is a list of various settings for your website. By entering in your unique code below to your .htaccess file, we can create a link that will prove the ownership of this website name.</p>
-					<p>How do I edit my .htaccess file?</p>
-					<code>Header set w3bbi "<span id="hash_code"></span>"</code>
-				</div>
+				<div id="mult_toggle">Multiple listings?</div>
+
 			</div>
 		</div>
+
+		<%- include("templates/footer"); %>
+
 	</body>
 
 </html>

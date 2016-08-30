@@ -1,6 +1,6 @@
-var	listing_model = require('../../models/listing_model.js');
-var renter_listings = require("./renter_listings");
-var owner_listings = require("./owner_listings");
+var	listing_model = require('../models/listing_model.js');
+var listings_renter = require("./listings_renter");
+var listings_owner = require("./listings_owner");
 
 var stripe = require("stripe")("sk_test_PHd0TEZT5ytlF0qCNvmgAThp");		//stripe API
 
@@ -21,48 +21,48 @@ module.exports = function(app, db, auth, e){
 	isLoggedIn = auth.isLoggedIn;
 
 	//initiate the two types of listing routes
-	owner_listings.init(e, Listing);
-	renter_listings.init(e, Listing);
+	listings_owner.init(e, Listing);
+	listings_renter.init(e, Listing);
 
 	//create new listings
-	app.get('/listing/create', isLoggedIn, owner_listings.renderCreateListing);
+	app.get('/listing/create', isLoggedIn, listings_owner.renderCreateListing);
 	app.post('/listing/create', [
 		isLoggedIn,
-		owner_listings.checkListingCreate,
-		owner_listings.createListing
+		listings_owner.checkListingCreate,
+		listings_owner.createListing
 	]);
 	app.post('/listing/create/batch', [
 		isLoggedIn,
-		owner_listings.uploadSizeCheck,
-		owner_listings.checkListingCreateBatch,
-		owner_listings.createListingBatch
+		listings_owner.uploadSizeCheck,
+		listings_owner.checkListingCreateBatch,
+		listings_owner.createListingBatch
 	]);
 
 	//------------------------------------------------------------------------------------------------GETS
 
 	app.get('/listing', [
-		renter_listings.renderListing404
+		listings_renter.renderListing404
 	]);
 
 	app.get('/listing/:domain_name', [
 		checkDomain,
-		renter_listings.getListing,
-		renter_listings.renderListing
+		listings_renter.getListing,
+		listings_renter.renderListing
 	]);
 
 	app.get('/listing/:domain_name/activate', [
 		isLoggedIn,
 		checkDomain,
-		owner_listings.getActivateHash
+		listings_owner.getActivateHash
 	]);
 
 	app.get('/listing/:domain_name/:rental_id', [
 		isLoggedIn,
 		checkDomain,
 		checkRental,
-		renter_listings.getListing,
-		renter_listings.getRental,
-		renter_listings.renderListing
+		listings_renter.getListing,
+		listings_renter.getRental,
+		listings_renter.renderListing
 	]);
 
 	//------------------------------------------------------------------------------------------------POSTS
@@ -71,9 +71,9 @@ module.exports = function(app, db, auth, e){
 	app.post('/listing/:domain_name/rent', [
 		isLoggedIn,
 		checkDomain,
-		renter_listings.getListing,
+		listings_renter.getListing,
 		checkNewRentalInfo,
-		renter_listings.createRental
+		listings_renter.createRental
 	]);
 
 	//editing an existing rental
@@ -81,9 +81,9 @@ module.exports = function(app, db, auth, e){
 		isLoggedIn,
 		checkDomain,
 		checkRental,
-		renter_listings.getListing,
+		listings_renter.getListing,
 		checkNewRentalInfo,
-		renter_listings.editRental
+		listings_renter.editRental
 	]);
 }
 

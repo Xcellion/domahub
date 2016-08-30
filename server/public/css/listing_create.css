@@ -1,12 +1,46 @@
-.verification_method_wrapper{
-    display:none;
+#top_wrapper{
+    padding-top:60px;
+    height:100vh;
 }
 
-#batch_listing_show{
+#forms_wrapper{
+    position:absolute;
+    left:50%;
+    top:50%;
+    margin-right:-50%;
+    transform:translate(-50%, -50%);
+    max-width:400px;
+    text-align:center;
+}
+
+.create_input{
+    margin:5px;
+}
+
+#sing_submit{
+    width:100%;
+}
+
+.price_input_text{
+    display:inline-block;
+    vertical-align:middle;
+}
+
+.price_input{
+    display:inline-block;
+    width:60px;
+    vertical-align:middle;
+}
+
+#sing_description{
+    min-height:100px;
+}
+
+#mult_toggle{
     text-decoration:underline;
     cursor:pointer;
 }
 
-#batch_form_wrapper{
+#mult_form_wrapper, #mult_progress{
     display:none;
 }
