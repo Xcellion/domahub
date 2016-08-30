@@ -17,9 +17,15 @@ html {
   &.has-icon {
     .input {
       &:focus + .fa {
-        color: #ed6c63 !important;
+        color: $success !important;
       }
     }
+  }
+}
+
+.control {
+  &.has-icon > .fa {
+    font-size: 21px !important;
   }
 }
 
