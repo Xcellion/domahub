@@ -33,7 +33,6 @@ function renderMainPage(req, res, next){
 //displays any page that we have a view for
 function mainPageLinksRender(req, res, next){
 	var view_name = req.path.slice(1, req.path.length);
-	console.log(view_name);
 
 	//routes for the company pages
 	var about_us_routes = [
@@ -43,7 +42,7 @@ function mainPageLinksRender(req, res, next){
 		"faq"
 	];
 
-	if (about_us_routes.includes(view_name)){
+	if (about_us_routes.indexOf(view_name) != -1){
 		view_name = "company";
 	}
 
