@@ -1,71 +1,32 @@
 $(document).ready(function() {
-	// if (!$(".input").val()) {
-	// 	$(".input").next().addClass("is-hidden");
-	// 	$(".input").next().next().addClass("is-hidden");
-	// };
 
-	function validateEmail(email) {
-	  var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-	  return re.test(email);
-	}
-
-	$("#email_input").keyup(function() {
+	//verify email
+	$("#email_input").keyup(function(e) {
+		//if correct email, show check
 		if (validateEmail($(this).val())) {
-			$(this).next().removeClass("is-hidden");
-			$(this).next().next().addClass("is-hidden");
-		}
-		else if (!$(this).val()) {
-			$(this).next().addClass("is-hidden");
-			$(this).next().next().addClass("is-hidden");
+			successDanger(true, $(this));
 		}
 		else {
-			$(this).next().addClass("is-hidden");
-			$(this).next().next().removeClass("is-hidden");
+			successDanger(false, $(this));
 		}
 	});
 
 	$("#fullname_input").keyup(function() {
-		if ($(this).val().length >= 3) {
-			$(this).next().removeClass("is-hidden");
-			$(this).next().next().addClass("is-hidden");
-		}
-		else if (!$(this).val()) {
-			$(this).next().addClass("is-hidden");
-			$(this).next().next().addClass("is-hidden");
+		//if not blank
+		if ($(this).val().length > 0) {
+			successDanger(true, $(this));
 		}
 		else {
-			$(this).next().addClass("is-hidden");
-			$(this).next().next().removeClass("is-hidden");
-		}
-	});
-
-	$("#pw_input").keyup(function() {
-		if ($(this).val() == $("#verify_pw").val()) {
-			$("#verify_pw").next().removeClass("is-hidden");
-			$("#verify_pw").next().next().addClass("is-hidden");
-		}
-		else if (!$(this).val()) {
-			$("#verify_pw").next().addClass("is-hidden");
-			$("#verify_pw").next().next().addClass("is-hidden");
-		}
-		else {
-			$("#verify_pw").next().addClass("is-hidden");
-			$("#verify_pw").next().next().removeClass("is-hidden");
+			successDanger(false, $(this));
 		}
 	});
 
 	$("#verify_pw").keyup(function() {
 		if ($("#pw_input").val() == $(this).val()) {
-			$(this).next().removeClass("is-hidden");
-			$(this).next().next().addClass("is-hidden");
-		}
-		else if (!$(this).val()) {
-			$(this).next().addClass("is-hidden");
-			$(this).next().next().addClass("is-hidden");
+			successDanger(true, $(this));
 		}
 		else {
-			$(this).next().addClass("is-hidden");
-			$(this).next().next().removeClass("is-hidden");
+			successDanger(false, $(this));
 		}
 	});
 
@@ -109,3 +70,22 @@ $(document).ready(function() {
 		}
 	});
 });
+
+//helper function to hide or show checkmark / x-mark
+function successDanger(bool, elem){
+	//if bool = true, show check mark
+	if (bool){
+		elem.siblings(".is-success").removeClass("is-hidden");
+		elem.siblings(".is-danger").addClass("is-hidden");
+	}
+	else {
+		elem.siblings(".is-success").addClass("is-hidden");
+		elem.siblings(".is-danger").removeClass("is-hidden");
+	}
+}
+
+//helper function to validate email address
+function validateEmail(email) {
+  var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  return re.test(email);
+}
