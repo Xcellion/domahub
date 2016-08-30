@@ -4,29 +4,40 @@ $(document).ready(function() {
 	$("#email_input").keyup(function(e) {
 		//if correct email, show check
 		if (validateEmail($(this).val())) {
-			successDanger(true, $(this));
+			showSuccessDanger($(this), true);
+		}
+		else if ($(this).val().length == 0){
+			showSuccessDanger($(this));
 		}
 		else {
-			successDanger(false, $(this));
+			showSuccessDanger($(this), false);
 		}
 	});
 
-	$("#fullname_input").keyup(function() {
+	//verify fullname
+	$("#fullname_input, #pw_input").keyup(function() {
 		//if not blank
 		if ($(this).val().length > 0) {
-			successDanger(true, $(this));
+			showSuccessDanger($(this), true);
+		}
+		else if ($(this).val().length == 0){
+			showSuccessDanger($(this));
 		}
 		else {
-			successDanger(false, $(this));
+			showSuccessDanger($(this), false);
 		}
 	});
 
+	//verify passwords are matching
 	$("#verify_pw").keyup(function() {
 		if ($("#pw_input").val() == $(this).val()) {
-			successDanger(true, $(this));
+			showSuccessDanger($(this), true);
+		}
+		else if ($(this).val().length == 0){
+			showSuccessDanger($(this));
 		}
 		else {
-			successDanger(false, $(this));
+			showSuccessDanger($(this), false);
 		}
 	});
 
@@ -38,6 +49,7 @@ $(document).ready(function() {
 			$("#message").fadeOut(100, function(){
 				$("#message").css("color", "#ed1c24").text("Please enter your email address!").fadeIn(100);
 				$("#email_input").focus();
+				showSuccessDanger($("#email_input"), false);
 			});
 			return false;
 		}
@@ -47,6 +59,7 @@ $(document).ready(function() {
 			$("#message").fadeOut(100, function(){
 				$("#message").css("color", "#ed1c24").text("Please enter your name!").fadeIn(100);
 				$("#fullname_input").focus();
+				showSuccessDanger($("#fullname_input"), false);
 			});
 			return false;
 		}
@@ -56,6 +69,7 @@ $(document).ready(function() {
 			$("#message").fadeOut(100, function(){
 				$("#message").css("color", "#ed1c24").text("Please enter your password!").fadeIn(100);
 				$("#pw_input").focus();
+				showSuccessDanger($("#pw_input"), false);
 			});
 			return false;
 		}
@@ -65,6 +79,7 @@ $(document).ready(function() {
 			$("#message").fadeOut(100, function(){
 				$("#message").css("color", "#ed1c24").html("Passwords do not match!").fadeIn(100);
 				$("#pw_input").focus();
+				showSuccessDanger($("#verify_pw"), false);
 			});
 			return false;
 		}
@@ -72,10 +87,14 @@ $(document).ready(function() {
 });
 
 //helper function to hide or show checkmark / x-mark
-function successDanger(bool, elem){
+function showSuccessDanger(elem, bool){
 	//if bool = true, show check mark
-	if (bool){
+	if (bool == true){
 		elem.siblings(".is-success").removeClass("is-hidden");
+		elem.siblings(".is-danger").addClass("is-hidden");
+	}
+	else if (typeof bool == "undefined"){
+		elem.siblings(".is-success").addClass("is-hidden");
 		elem.siblings(".is-danger").addClass("is-hidden");
 	}
 	else {
