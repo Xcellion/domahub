@@ -5,7 +5,7 @@ var renderPage = function(pathName) {
 }
 
 window.onpopstate = function(event) {
-  alert("location: " + document.location + ", state: " + JSON.stringify(event.state));
+
 }
 
 $(document).ready(function() {
