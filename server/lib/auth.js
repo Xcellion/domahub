@@ -154,13 +154,15 @@ function logout(req, res) {
 		console.log("Logging out");
 		req.logout();
 	}
-	redirectTo = req.header("Referer") || "/";
+	redirectTo = (req.header("Referer").split("/").indexOf("listing") != -1) ? req.header("Referer") : "/";
 	res.redirect(redirectTo);
 };
 
 //sign up for a new account
 function signup(req, res){
-	req.session.redirectBack = req.header("Referer") || "/";
+	if (req.header("Referer").split("/").indexOf("listing") != -1){
+		req.session.redirectBack = req.header("Referer");
+	}
 	res.render("signup.ejs", { message: messageReset(req)});
 };
 
