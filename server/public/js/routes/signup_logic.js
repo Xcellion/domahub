@@ -25,7 +25,7 @@ $(document).ready(function() {
 	});
 
 	$("#fullname_input").keyup(function() {
-		if ($(this).val().length > 4) {
+		if ($(this).val().length >= 3) {
 			$(this).next().removeClass("is-hidden");
 			$(this).next().next().addClass("is-hidden");
 		}
