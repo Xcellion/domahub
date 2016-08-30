@@ -35,12 +35,12 @@ function mainPageLinksRender(req, res, next){
 	var view_name = req.path.slice(1, req.path.length);
 
 	//routes for the company pages
-	about_us_routes = [
+	var about_us_routes = [
 		"about",
 		"mission",
 		"press",
 		"faq"
-	]
+	];
 
 	if (about_us_routes.includes(view_name)){
 		view_name = "company"
