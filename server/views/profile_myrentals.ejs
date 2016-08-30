@@ -1,0 +1,20 @@
+<html>
+
+	<head>
+		<title>w3bbi</title>
+		<%- include("templates/head_links"); %>
+		<link rel="stylesheet" href="/css/profile.css" type="text/css" />
+		<script src="/js/moment/moment.min.js" type="text/javascript"></script>
+		<script type="text/javascript">
+			//redirect to homepage if user is not defined
+			var user = <% if(typeof user != "undefined"){ %><%-JSON.stringify(user)%><% }else{ %>window.location="/"<% } %>;
+			var listings = <% if(typeof listings != "undefined"){ %><%-JSON.stringify(listings)%><% }else{ %>""<% } %>;
+			var rentals = <% if(typeof rentals != "undefined"){ %><%-JSON.stringify(rentals)%><% }else{ %>""<% } %>;
+		</script>
+		<script src="/js/routes/client_profile.js" type="text/javascript"></script>
+	</head>
+
+<body>
+  <h1>My Rentals</h1>
+</body>
+</html>
