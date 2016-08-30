@@ -8,11 +8,16 @@ html {
 .logo_login {
   margin-bottom: 10px; }
 
-.control.has-icon .input:focus + .fa {
+.control.has-icon .input:focus + .fa-check {
   color: #97cd76 !important; }
 
-.control.has-icon > .fa {
-  font-size: 21px !important; }
+.control.has-icon > .fa-times {
+  font-size: 21px !important;
+  -moz-transform: translate(-4px, 4px);
+  -o-transform: translate(-4px, 4px);
+  -ms-transform: translate(-4px, 4px);
+  -webkit-transform: translate(-4px, 4px);
+  transform: translate(-4px, 4px); }
 
 .w3bbi_icon {
   box-sizing: border-box;

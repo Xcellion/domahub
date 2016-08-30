@@ -1,4 +1,5 @@
 @import 'vars';
+@import 'mixins';
 
 /*************************** REGISTER ***************************/
 html {
@@ -16,7 +17,7 @@ html {
 .control {
   &.has-icon {
     .input {
-      &:focus + .fa {
+      &:focus + .fa-check {
         color: $success !important;
       }
     }
@@ -24,8 +25,9 @@ html {
 }
 
 .control {
-  &.has-icon > .fa {
+  &.has-icon > .fa-times {
     font-size: 21px !important;
+    @include transform(translate(-4px, 4px));
   }
 }
 
