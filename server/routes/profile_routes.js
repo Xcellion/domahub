@@ -13,12 +13,17 @@ module.exports = function(app, db, auth, e){
 	//function to check if logged in
 	isLoggedIn = Auth.isLoggedIn;
 
-	//profile page
+	//profile page route
 	app.get('/profile', [
 		isLoggedIn,
 		getProfile
 	]);
-	app.get('/profile*', function(req, res){res.redirect('/profile')});
+
+	//routes for profile tabs - dashboard, inbox, mylistings, myrentals
+	app.get('/profile/:profile_tab', function(req, res){
+		tab = req.params.profile_tab;
+		res.redirect('/profile/' + tab);
+	});
 }
 
 //goes to profile

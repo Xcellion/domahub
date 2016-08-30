@@ -1,7 +1,5 @@
 var	listing_model = require('../models/listing_model.js');
 
-var crypto = require('crypto');
-
 var request = require("request");
 var dns = require("dns");
 var url = require("url");
@@ -46,34 +44,6 @@ module.exports = {
 			message: Auth.messageReset(req),
 			user: req.user,
 		});
-	},
-
-	getActivateHash : function(req, res, next){
-		account_id = req.user.id;
-		domain_name = req.params.domain_name;
-
-		if (!req.header("Referer") || req.header("Referer").split("/").pop() == "activate"){
-			error.handler(req, res, "Cannot activate through URL!");
-		}
-		//check if user id is legit
-		else if (parseFloat(account_id) != account_id >>> 0){
-			error.handler(req, res, "Invalid user!");
-		}
-		//check if domain is legit
-		else if (!validator.isFQDN(req.body.domain_name)){
-			error.handler(req, res, "Invalid listing activation!");
-		}
-		else {
-			Listing.getInfo("listings", "domain_name", domain_name, false, function(result){
-				if (result.state == "success"){
-					var hash = crypto.createHash('md5').update('"' + result.info[0].date_created + result.info[0].id + result.info[0].owner_id + '"').digest('hex');
-					res.send(hash);
-				}
-				else {
-					error.handler(req, res, "Invalid listing!");
-				}
-			})
-		}
 	},
 
 	//function to format the listing info
@@ -145,13 +115,8 @@ module.exports = {
 		});
 	},
 
-	//function to format batch listings
-	checkListingCreateBatch : function(req, res, next){
-
-	},
-
-	//function to handle batch listing creation
-	createListingBatch : function(req, res, next){
+	//function to check the format of the batch CSV file
+	checkListingBatch : function(req, res, next){
 		if (req.fileToolarge){
 			error.handler(req, res, "File too large!");
 		}
@@ -163,7 +128,8 @@ module.exports = {
 			var bad_listings = [];
 
 		    function onNewRecord(record){
-				if (record.length != 2){
+				//at least 2 records required -- domain name and description
+				if (record.length < 2){
 					bad_listings.push(record, "Incorrect format");
 				}
 				else if (!validator.isFQDN(record[0])){
@@ -182,16 +148,17 @@ module.exports = {
 		    	error.handler(req, res, "CSV parser error!");
 		    }
 
-		    function done(linesRead){
-				//todo - create the good listings, send back list of bad listings
-		        res.send({
-					listings: listings,
-					bad_listings: bad_listings
-				});
-		    }
-
-		    parseCSVFile(req.file.path, onNewRecord, onError, done);
+		    parseCSVFile(req.file.path, onNewRecord, onError, next);
 		}
+	},
+
+	//function to create the batch listings once done
+	createListingBatch : function(req, res, next){
+		//todo - create the good listings, send back list of bad listings
+		res.send({
+			listings: listings,
+			bad_listings: bad_listings
+		});
 	},
 
 	//function to change listing to active
@@ -209,63 +176,7 @@ module.exports = {
 			error.handler(req, res, "Invalid listing activation!");
 		}
 		else {
-			var activate = false;
-			Listing.getInfo("listings", "domain_name", domain_name, false, function(result){
-				if (result.state == "success"){
-					var hash = crypto.createHash('md5').update('"' + result.info.date_created + result.info.id + result.info.owner_id + '"').digest('hex');
-				}
-				else {
-					error.handler(req, res, "Invalid listing!");
-				}
-			})
 
-			switch (activation_type){
-
-				//using a DNS txt record to prove ownership
-				case ("txt"):
-					dns.resolveTxt(domain_name, function(err, values){
-						if (err){
-							console.log(err);
-						}
-						else {
-							for (var x = 0; x < values.length; x++){
-								if (values[x][0] == hash){
-									activate = true;
-									break;
-								}
-							}
-						}
-					})
-					break;
-
-				//using a custom html file to prove ownership
-				case ("html"):
-					break;
-
-				//using a custom meta file in the main index page of the website to prove ownership
-				case ("meta"):
-					break;
-
-				//utilizing a custom header in the htaccess file to prove ownership
-				case ("htaccess"):
-					request({
-						url: addhttp(domain_name)
-					}, function (error, response, body) {
-						if (!error && response.statusCode == 200) {
-							if (response.headers.w3bbi == hash){
-								activate = true;
-							}
-						}
-						else {
-							console.log(error, response);
-						}
-					})
-					break;
-
-				default:
-					error.handler(req, res, "Invalid activation type!");
-					break;
-			}
 		}
 	}
 
