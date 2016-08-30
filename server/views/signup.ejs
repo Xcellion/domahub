@@ -17,29 +17,29 @@
 				<% if (typeof message != "undefined") {%>
 					<%= message %>
 				<% } else {%>
-					Please enter your information below
+					Enter your information below
 				<% } %>
 			</div>
 			<label class="label">Email</label>
 			<p class="control has-icon has-icon-right">
-				<input class="input is-medium" autofocus name="email" placeholder="Email" type="email" id="email_input">
-				<i class="fa fa-check is-success"></i>
-				<i class="fa fa-close is-hidden is-danger"></i>
+				<input class="input is-medium" autofocus name="email" type="email" id="email_input">
+				<i class="fa fa-check is-hidden is-success"></i>
+				<i class="fa fa-times is-hidden is-danger"></i>
 			</p>
 			<label class="label">Full Name</label>
 			<p class="control has-icon has-icon-right">
-				<input class="input is-medium" name="fullname" placeholder="Full Name" type="text" id="fullname_input">
-				<i class="fa fa-check is-success"></i>
+				<input class="input is-medium" name="fullname" type="text" id="fullname_input">
+				<i class="fa fa-check is-hidden is-success"></i>
 				<i class="fa fa-times is-hidden is-danger"></i>
 			</p>
 			<label class="label">Password</label>
 			<p class="control">
-				<input class="input is-medium" name="password" placeholder="Password" type="password" id="pw_input">
+				<input class="input is-medium" name="password" type="password" id="pw_input">
 			</p>
 			<label class="label">Confirm Password</label>
 			<p class="control has-icon has-icon-right">
-				<input class="input is-medium" name="verify_pw" placeholder="Confirm password" type="password" id="verify_input" autocomplete="off">
-				<i class="fa fa-check is-success"></i>
+				<input class="input is-medium" name="verify_pw" type="password" id="verify_pw" autocomplete="off">
+				<i class="fa fa-check is-hidden is-success"></i>
 				<i class="fa fa-times is-hidden is-danger"></i>
 			</p>
 			<p class="control">
