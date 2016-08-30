@@ -1,20 +1,35 @@
 var renderPage = function(pathName) {
-  $(".section").addClass("is-hidden");
-  pathName = "#" + pathName;
-  $(pathName).removeClass("is-hidden").addClass("is-active");
+    //alter tab CSS
+    $(".tab").removeClass("is-active");
+    $("#" + pathName + "_tab").addClass("is-active");
+
+    //change which section is displaying
+    $(".section").addClass("is-hidden");
+    $("#" + pathName).removeClass("is-hidden").addClass("is-active");
 }
 
+//function that runs when back button is pressed
 window.onpopstate = function(event) {
-  alert("location: " + document.location + ", state: " + JSON.stringify(event.state));
+
+    //figure out current path
+    var path = window.location.pathname;
+    var pathName = path.substr(1, path.length);
+
+    //if there was a path inserted via history.pushState
+    if (event.state){
+        pathName = event.state.page;
+    }
+    renderPage(pathName);
 }
 
 $(document).ready(function() {
 
+  //figure out the current path, then render appropriately
   var path = window.location.pathname;
   var pathName = path.substr(1, path.length);
-
   renderPage(pathName);
 
+  //changing tabs
   $(".tab").click(function() {
     var tabName = $(this).attr("id").split("_").shift();
 
@@ -22,37 +37,11 @@ $(document).ready(function() {
     $(this).addClass("is-active");
     renderPage(tabName);
 
-    var stateObj = { page: tabName};
-    history.pushState(stateObj, "", tabName);
+    //only add to history if we clicked on something new
+    if (tabName != pathName){
+        var stateObj = { page: tabName};
+        history.pushState(stateObj, "", tabName);
+    }
   });
-
-// $('#renter_tab').addClass('active');
-// $('#renter_faq').show();
-//
-// $('#renter_tab').click(function() {
-//   if ($('#seller_tab').hasClass('active')) {
-//       $('#seller_tab').removeClass('active');
-//       $(this).addClass('active');
-//       $('#seller_faq').hide();
-//       $('#renter_faq').show();
-//   }
-//   else {
-//     $(this).addClass('active');
-//     $('#renter_faq').show();
-//   }
-// });
-//
-// $('#seller_tab').click(function() {
-//   if ($('#renter_tab').hasClass('active')) {
-//       $('#renter_tab').removeClass('active');
-//       $(this).addClass('active');
-//       $('#renter_faq').hide();
-//       $('#seller_faq').show();
-//   }
-//   else {
-//     $(this).addClass('active');
-//     $('#seller_faq').show();
-//   }
-// });
 
 });
