@@ -4,16 +4,9 @@ var listings_owner = require("./listings_owner");
 
 var stripe = require("stripe")("sk_test_PHd0TEZT5ytlF0qCNvmgAThp");		//stripe API
 
-//for verifying URLs
-var request = require("request");
-var dns = require("dns");
-var url = require("url");
 var validator = require("validator");
 var whois = require("whois");
 var parser = require('parse-whois');
-
-//for sanitizing posted HTML
-var sanitizeHtml = require('sanitize-html');
 
 module.exports = function(app, db, auth, e){
 	error = e;
@@ -24,38 +17,44 @@ module.exports = function(app, db, auth, e){
 	listings_owner.init(e, Listing);
 	listings_renter.init(e, Listing);
 
-	//create new listings
-	app.get('/listing/create', isLoggedIn, listings_owner.renderCreateListing);
+	//------------------------------------------------------------------------------------------------ LISTING RELATED
+
+	//render create listing page
+	app.get('/listing/create', [
+		isLoggedIn,
+		listings_owner.renderCreateListing
+	]);
+
+	//create a single listing
 	app.post('/listing/create', [
 		isLoggedIn,
 		listings_owner.checkListingCreate,
 		listings_owner.createListing
 	]);
+
+	//create multiple listings
 	app.post('/listing/create/batch', [
 		isLoggedIn,
 		listings_owner.uploadSizeCheck,
-		listings_owner.checkListingCreateBatch,
+		listings_owner.checkListingBatch,
 		listings_owner.createListingBatch
 	]);
 
-	//------------------------------------------------------------------------------------------------GETS
+	//------------------------------------------------------------------------------------------------ RENTAL RELATED
 
+	//render the 404 listing page
 	app.get('/listing', [
 		listings_renter.renderListing404
 	]);
 
+	//render listing page
 	app.get('/listing/:domain_name', [
 		checkDomain,
 		listings_renter.getListing,
 		listings_renter.renderListing
 	]);
 
-	app.get('/listing/:domain_name/activate', [
-		isLoggedIn,
-		checkDomain,
-		listings_owner.getActivateHash
-	]);
-
+	//render a specific rental
 	app.get('/listing/:domain_name/:rental_id', [
 		isLoggedIn,
 		checkDomain,
@@ -64,8 +63,6 @@ module.exports = function(app, db, auth, e){
 		listings_renter.getRental,
 		listings_renter.renderListing
 	]);
-
-	//------------------------------------------------------------------------------------------------POSTS
 
 	//create a new rental
 	app.post('/listing/:domain_name/rent', [

@@ -36,10 +36,11 @@ app.set('view engine', 'ejs');
 app.set('views', __dirname + '/views');
 
 //express session secret
+app.set('trust proxy', 1) // trust first proxy
 app.use(session({
 	secret: 'w3bbi_market',
-	saveUninitialized: true,
-	resave: true}
+	saveUninitialized: false,
+	resave: false}
 ));
 
 app.use(passport.initialize());
