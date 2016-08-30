@@ -22,8 +22,6 @@ function handler(req, res, message, type) {
 		//all other errors
 		default:
 			var redirectTo = req.header("Referer") || "/login";
-			var redirectBack = req.session.redirectBack || req.path;
-			req.session.redirectBack = redirectBack;
 			req.session.message = message;
 
 			switch (message){

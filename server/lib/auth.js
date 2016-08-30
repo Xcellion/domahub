@@ -111,7 +111,7 @@ module.exports = {
 
 //make sure user is logged in before doing anything
 function isLoggedIn(req, res, next) {
-	var route = req.route.path;
+	var route = req.path;
 
 	//if user is authenticated in the session, carry on
 	if (req.isAuthenticated()){
@@ -131,9 +131,12 @@ function isLoggedIn(req, res, next) {
 				if (route == "/listing/:domain_name/:rental_id"){
 					error.handler(req, res, "Invalid user!");
 				}
+				else if (route.split("/").indexOf("profile") != -1){
+					req.session.redirectBack = route;
+					res.render("login.ejs", {message: messageReset(req)});
+				}
 				//redirect to the default login page
 				else {
-					req.session.redirectTo = req.header('Referer');
 					res.render("login.ejs", {message: messageReset(req)});
 				}
 				break;
@@ -154,7 +157,12 @@ function logout(req, res) {
 		console.log("Logging out");
 		req.logout();
 	}
-	redirectTo = (req.header("Referer").split("/").indexOf("listing") != -1) ? req.header("Referer") : "/";
+	if (req.header("Referer")){
+		redirectTo = (req.header("Referer").split("/").indexOf("listing") != -1) ? req.header("Referer") : "/";
+	}
+	else {
+		redirectTo = "/";
+	}
 	res.redirect(redirectTo);
 };
 
@@ -168,8 +176,8 @@ function signup(req, res){
 
 //function to login
 function loginPost(req, res, next){
-	//redirect to referrer or profile page if coming from a non-listing
-	redirectTo = (req.header("Referer").split("/").indexOf("listing") != -1) ? req.header("Referer") : "/profile";
+	//if coming from a listing, redirect to listing. otherwise redirect to profile
+	redirectTo = (req.header("Referer").split("/").indexOf("listing") != -1) ? req.header("Referer") : "/profile/dashboard";
 	redirectURL = req.session.redirectBack ? req.session.redirectBack : redirectTo;
 	passport.authenticate('local-login', function(err, user, info){
 		if (!user && info){
@@ -191,9 +199,9 @@ function loginPost(req, res, next){
 
 //function to sign up for a new account
 function signupPost(req, res, next){
-	redirectURL = req.path == "/signup" ? "/" : req.header("Referer");
+	//if coming from a listing, redirect to listing. otherwise redirect to profile
+	redirectTo = (req.header("Referer").split("/").indexOf("listing") != -1) ? req.header("Referer") : "/profile/dashboard";
 	redirectURL = req.session.redirectBack ? req.session.redirectBack : redirectTo;
-	delete req.session.redirectBack;
 	passport.authenticate('local-signup', {
 		successRedirect : '/', // redirect to main page
 		failureRedirect : '/signup', // redirect back to the signup page if there is an error
@@ -207,6 +215,7 @@ function signupPost(req, res, next){
 					error.handler(req, res, "Signup error!");
 				}
 				else {
+					delete req.session.redirectBack;
 					return res.redirect(redirectURL);
 				}
 			});
