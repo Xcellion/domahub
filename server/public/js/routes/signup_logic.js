@@ -1,7 +1,20 @@
 $(document).ready(function() {
 	if (!$(".input").val()) {
-		$('.input').focus().next().addClass("is-danger");
+		$(".input").next().addClass("is-hidden");
+		$(".input").next().next().removeClass("is-hidden");
 	};
+
+	$(".input").keyup(function() {
+		if ($(this).val()) {
+			$(this).next().removeClass("is-hidden");
+			$(this).next().next().addClass("is-hidden");
+		}
+		else {
+			$(this).next().addClass("is-hidden");
+			$(this).next().next().removeClass("is-hidden");
+		}
+	});
+
 	//to catch empty emails, name, or passwords
 	$('#target').submit(function(event){
 
@@ -9,7 +22,7 @@ $(document).ready(function() {
 		if (!$("#email_input").val()) {
 			$("#message").fadeOut(100, function(){
 				$("#message").css("color", "#ed1c24").text("Please enter your email address!").fadeIn(100);
-				// console.log($("#email_input").focus().next().addClass("is-danger"));
+				$("#email_input").focus();
 			});
 			return false;
 		}

@@ -469,10 +469,10 @@ table {
     background-color: #ff8751; }
 
 a.box:hover, a.box:focus {
-  box-shadow: 0 2px 3px rgba(17, 17, 17, 0.1), 0 0 0 1px #ff8751; }
+  box-shadow: 0 2px 3px rgba(17, 17, 17, 0.1), 0 0 0 1px #3CBC8D; }
 
 a.box:active {
-  box-shadow: inset 0 1px 2px rgba(17, 17, 17, 0.2), 0 0 0 1px #ff8751; }
+  box-shadow: inset 0 1px 2px rgba(17, 17, 17, 0.2), 0 0 0 1px #3CBC8D; }
 
 .button {
   -moz-appearance: none;
@@ -499,7 +499,7 @@ a.box:active {
   .button:hover {
     border-color: #aeb1b5; }
   .button:active, .button:focus, .button.is-active {
-    border-color: #ff8751;
+    border-color: #3CBC8D;
     outline: none; }
   .button[disabled], .button.is-disabled {
     background-color: #fff;
@@ -870,7 +870,7 @@ a.box:active {
   .input:hover, .textarea:hover {
     border-color: #aeb1b5; }
   .input:active, .textarea:active, .input:focus, .textarea:focus, .input.is-active, .is-active.textarea {
-    border-color: #ff8751;
+    border-color: #3CBC8D;
     outline: none; }
   .input[disabled], [disabled].textarea, .input.is-disabled, .is-disabled.textarea {
     background-color: #fff;
@@ -987,7 +987,7 @@ a.box:active {
     .select select:hover {
       border-color: #aeb1b5; }
     .select select:active, .select select:focus, .select select.is-active {
-      border-color: #ff8751;
+      border-color: #3CBC8D;
       outline: none; }
     .select select[disabled], .select select.is-disabled {
       background-color: #fff;
@@ -1029,7 +1029,7 @@ a.box:active {
     .select.is-fullwidth select {
       width: 100%; }
   .select:after {
-    border: 1px solid #ff8751;
+    border: 1px solid #3CBC8D;
     border-right: 0;
     border-top: 0;
     content: " ";
@@ -1074,9 +1074,8 @@ a.box:active {
       padding-right: 52px; }
 
 .label {
-  color: #222324;
-  display: block;
-  font-weight: bold; }
+  color: #111;
+  display: block; }
   .label:not(:last-child) {
     margin-bottom: 5px; }
 
@@ -1450,7 +1449,7 @@ a.box:active {
         padding: 8px 10px; }
         .table td.is-link > a:hover,
         .table th.is-link > a:hover {
-          background-color: #ff8751;
+          background-color: #3CBC8D;
           color: white; }
     .table td.is-narrow,
     .table th.is-narrow {
@@ -1712,7 +1711,7 @@ a.box:active {
   .hamburger:hover, .nav-toggle:hover {
     background-color: #fff; }
   .hamburger.is-active span, .is-active.nav-toggle span {
-    background-color: #ff8751; }
+    background-color: #3CBC8D; }
     .hamburger.is-active span:nth-child(1), .is-active.nav-toggle span:nth-child(1) {
       margin-left: -5px;
       transform: rotate(45deg);
@@ -2717,9 +2716,9 @@ a.box:active {
   padding: 5px 10px; }
   .menu-list a:hover {
     background-color: #fff;
-    color: #ff8751; }
+    color: #3CBC8D; }
   .menu-list a.is-active {
-    background-color: #ff8751;
+    background-color: #3CBC8D;
     color: white; }
 
 .menu-list li ul {
@@ -2936,13 +2935,13 @@ a.nav-item.is-tab {
   padding-right: 12px; }
   .nav-item a.is-tab:hover,
   a.nav-item.is-tab:hover {
-    border-bottom: 1px solid #ff8751;
+    border-bottom: 1px solid #3CBC8D;
     border-top: 1px solid transparent; }
   .nav-item a.is-tab.is-active,
   a.nav-item.is-tab.is-active {
-    border-bottom: 3px solid #ff8751;
+    border-bottom: 3px solid #3CBC8D;
     border-top: 3px solid transparent;
-    color: #ff8751; }
+    color: #3CBC8D; }
 
 @media screen and (max-width: 768px) {
   .nav-menu {
@@ -3084,7 +3083,7 @@ a.nav-item.is-tab {
 .panel-list a {
   color: #111; }
   .panel-list a:hover {
-    color: #ff8751; }
+    color: #3CBC8D; }
 
 .panel-tabs {
   display: flex;
@@ -3141,8 +3140,8 @@ a.panel-block:hover {
   .tabs li {
     display: block; }
     .tabs li.is-active a {
-      border-bottom-color: #ff8751;
-      color: #ff8751; }
+      border-bottom-color: #3CBC8D;
+      color: #3CBC8D; }
   .tabs ul {
     align-items: center;
     border-bottom: 1px solid #d3d6db;
