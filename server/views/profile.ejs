@@ -19,8 +19,8 @@
 	</head>
 
 <body>
-	<%- include("templates/navbar", {user: user}); %>
 
+	<%- include("templates/navbar", {user: user}); %>
 
 	<div class="container clear-nav">
 		<div class="tabs is-centered">
@@ -36,6 +36,7 @@
 	<section class="section">
 		<div class="container">
 			<div class="columns">
+				
 				<div class="column is-one-quarter">
 					<div class="card bottom-margin-25">
 						<div class="card-image">
@@ -47,8 +48,7 @@
 							<h2 class="has-text-centered"><%= user.fullname %></h2>
 						</div>
 						<footer class="card-footer">
-							<a class="card-footer-item">Edit Profile</a>
-							<a class="card-footer-item">View Profile</a>
+							<a class="card-footer-item black_link">Edit Profile</a>
 						</footer>
 					</div>
 					<article class="message bottom-margin-25">
@@ -64,52 +64,66 @@
 						</div>
 					</article>
 					<article class="message">
-					  <div class="message-header has-text-centered">
-					    Quick Links
-					  </div>
-					  <div class="message-body has-text-centered">
-					    <div class="content quick_links">
+						<div class="message-header has-text-centered">
+							Quick Links
+						</div>
+						<div class="message-body has-text-centered">
+							<div class="content quick_links">
 								<a>FAQ</a>
 								<a>Terms of Service</a>
 								<a>Privacy Policy</a>
 								<a>Support Center</a>
 							</div>
+						</div>
+					</article>
+				</div>
+
+				<div class="column is-half">
+					<article class="message is-primary">
+					  <div class="message-header">
+					    Welcome to your dashboard
+					  </div>
+					  <div class="message-body">
+								The dashboard is your control panel to w3bbi -
+								from here you can edit your profile, check your private messages,
+								and manage your listings, bids, and rentals.
 					  </div>
 					</article>
-
-				</div>
-				<div class="column is-half">
-
-					<% if (typeof listings != "undefined") {%>
-					<table id="domain_table" class="table">
-						<caption>
-							My Listings
-						</caption>
-						<thead>
-							<tr>
-								<th>Domain Name</th>
-								<th>Status</th>
-							</tr>
-						</thead>
-						<tbody>
-							<% listings.forEach(function (listing) { %>
-							 <tr>
-								 <td><a href="/listing/<%= listing.domain_name %>"><%= listing.domain_name %></a></td>
-								 <td><%= (listing.price_type != 0) ? "Active" : "Need verification"%></td>
-								 <% if (listing.price_type == 0){ %>
-									 <td class="activate_button" id="activate_<%= listing.domain_name %>">Activate?</td>
-								 <% } %>
-							 </tr>
-							<% }) %>
-						</tbody>
-					</table>
-					<% } else { %>
-						<p>You have no domains currently!</p>
-					<% } %>
-					<div class="box has-text-centered">
-						<a class="button is-medium" href="/listing/create">Create new listing</a>
+					<div class="notification is-danger">
+						<button class="delete"></button>
+						Please verify your account by clicking on the link in the email
+						sent to the address associated with your account!
 					</div>
-					<div class="container">
+					<% if (typeof listings != "undefined") {%>
+					<box class="box">
+						<table id="domain_table" class="table">
+							<caption>
+								My Listings
+							</caption>
+							<thead>
+								<tr>
+									<th>Domain Name</th>
+									<th>Status</th>
+								</tr>
+							</thead>
+							<tbody>
+								<% listings.forEach(function (listing) { %>
+								 <tr>
+									 <td><a href="/listing/<%= listing.domain_name %>"><%= listing.domain_name %></a></td>
+									 <td><%= (listing.price_type != 0) ? "Active" : "Need verification"%></td>
+									 <% if (listing.price_type == 0){ %>
+										 <td class="activate_button" id="activate_<%= listing.domain_name %>">Activate?</td>
+									 <% } %>
+								 </tr>
+								<% }) %>
+							</tbody>
+						</table>
+						<% } else { %>
+							<p>You have no domains currently!</p>
+						<% } %>
+						<a class="button" href="/listing/create">Create new listing</a>
+					</box>
+					<div class="box">
 						<% if (typeof rentals != "undefined") {%>
 						<table id="rental_table" class="table">
 							<caption>
@@ -129,29 +143,15 @@
 						<% } %>
 					</div>
 				</div>
+
 				<div class="column is-one-quarter">
-					<div class="notification is-danger">
-						<button class="delete"></button>
-						Please verify your account by clicking on the link in the email
-						sent to the address associated with your account!
-					</div>
-					<article class="message is-primary">
-					  <div class="message-header">
-					    Welcome to your dashboard
-					  </div>
-					  <div class="message-body">
-								The dashboard is your control panel to w3bbi -
-								from here you can edit your profile, check your private messages,
-								and manage your listings, bids, and rentals.
-					  </div>
-					</article>
 					<article class="message">
 						<div class="message-body has-text-centered">
 							<div class="content">
 								<p>
 									Your profile is only 50% complete.
 								</p>
-								<progress class="progress is-primary" value="50" max="100"></progress>
+								<progress class="progress is-warning" value="50" max="100"></progress>
 								<a class="button">Complete Now</a>
 							</div>
 						</div>
@@ -163,6 +163,7 @@
 	</section>
 
 		<%- include("templates/footer"); %>
+		<script src="/js/routes/profile_logic.js" type="text/javascript"></script>
 
 	</body>
 
