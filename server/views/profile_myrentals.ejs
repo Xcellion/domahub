@@ -15,6 +15,26 @@
 	</head>
 
 <body>
-  <h1>My Rentals</h1>
+	<%- include("templates/navbar", {user: user}); %>
+
+	<div class="container clear-nav">
+		<div class="tabs is-centered">
+			<ul>
+				<li><a href="/profile/dashboard">Dashboard</a></li>
+				<li><a href="/profile/inbox">Inbox</a></li>
+				<li><a href="/profile/mylistings">My Listings</a></li>
+				<li class="is-active"><a href="/profile/myrentals">My Rentals</a></li>
+			</ul>
+		</div>
+	</div>
+
+	<section class="section">
+		<div class="container">
+			<div class="columns">
+
+			</div>
+		</div>
+	</section>
+
 </body>
 </html>
