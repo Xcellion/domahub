@@ -2744,7 +2744,7 @@ a.box:active {
     color: inherit; }
 
 .message-header {
-  background-color: #111;
+  background-color: #222324;
   border-radius: 3px 3px 0 0;
   color: white;
   padding: 7px 10px; }
