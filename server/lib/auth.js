@@ -168,7 +168,7 @@ function logout(req, res) {
 
 //sign up for a new account
 function signup(req, res){
-	if (req.header("Referer").split("/").indexOf("listing") != -1){
+	if (req.header("Referer") && req.header("Referer").split("/").indexOf("listing") != -1){
 		req.session.redirectBack = req.header("Referer");
 	}
 	res.render("signup.ejs", { message: messageReset(req)});

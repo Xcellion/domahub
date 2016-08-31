@@ -124,67 +124,94 @@ module.exports = {
 			error.handler(req, res, "Wrong file type!");
 		}
 		else {
-			var listings = [];
-			var bad_listings = [];
 
-		    function onNewRecord(record){
-				//at least 2 records required -- domain name and description
-				if (record.length < 2){
-					bad_listings.push(record, "Incorrect format");
-				}
-				else if (!validator.isFQDN(record[0])){
-					bad_listings.push(record, "Incorrect domain name");
-				}
-				else if (record[1].length = 0 || !record[1]){
-					bad_listings.push(record, "Need a description");
-				}
-				else {
-					listings.push(record);
-				}
-		    }
+			onError = function(req, res){
+				error.handler(req, res, "CSV parser error!");
+			}
 
-		    function onError(error){
-				console.log(error);
-		    	error.handler(req, res, "CSV parser error!");
-		    }
-
-		    parseCSVFile(req.file.path, onNewRecord, onError, next);
+		    parseCSVFile(req.file.path, onError, function(bad_listings, good_listings){
+				console.log("BAD", bad_listings);
+				console.log("GOOD", good_listings);
+				//todo set session variables, then next();
+			});
 		}
 	},
 
 	//function to create the batch listings once done
 	createListingBatch : function(req, res, next){
+		console.log();
 		//todo - create the good listings, send back list of bad listings
-		res.send({
-			listings: listings,
-			bad_listings: bad_listings
-		});
-	},
-
-	//function to change listing to active
-	activateListing : function(req, res, next){
-		account_id = req.user.id;
-		domain_name = req.params.domain_name;
-		activation_type = req.body.activation_type;
-
-		//check if user id is legit
-		if (parseFloat(account_id) != account_id >>> 0){
-			error.handler(req, res, "Invalid user!");
-		}
-		//check if domain is legit
-		else if (!validator.isFQDN(req.body.domain_name)){
-			error.handler(req, res, "Invalid listing activation!");
-		}
-		else {
-
-		}
+		// res.send({
+		// 	listings: listings,
+		// 	bad_listings: bad_listings
+		// });
 	}
 
 }
 //----------------------------------------------------------------helper functions----------------------------------------------------------------
 
+//checks each row of the CSV file
+function checkCSVRow(record, bad_listings, listings){
+	var record_check = {
+		state: "success",
+		reasons: []
+	}
+
+	//at least 2 records required -- domain name and description
+	if (record.length < 2){
+		record_check.state = "error";
+		record_check.reasons.push("Incorrect format");
+	}
+
+	//not a domain name
+	if (!validator.isFQDN(record[0])){
+		record_check.state = "error";
+		record_check.reasons.push("Incorrect domain name");
+	}
+
+	//no description
+	if (record[1].length = 0 || !record[1]){
+		record_check.state = "error";
+		record_check.reasons.push("Invalid description");
+	}
+
+	//optionals were supplied
+	if (record.length > 2){
+		//invalid price
+		if ((record[2] && !validator.isInt(record[2])) ||
+			(record[3] && !validator.isInt(record[3])) ||
+			(record[4] && !validator.isInt(record[4])) ||
+			(record[5] && !validator.isInt(record[5])) ||
+			(record[6] && !validator.isInt(record[6]))){
+			record_check.state = "error";
+			record_check.reasons.push("Invalid price");
+		}
+
+		//invalid URL for background image
+		if (record[7] && !validator.isURL(record[7], { protocols: ["http", "https"]})){
+			record_check.state = "error";
+			record_check.reasons.push("Invalid background image URL");
+		}
+
+		//invalid buy link
+		if (record[8] && !validator.isURL(record[8], { protocols: ["http", "https"]})){
+			record_check.state = "error";
+			record_check.reasons.push("Invalid buy link URL");
+		}
+
+	}
+
+	return record_check;
+}
+
 //helper function to parse the csv file
-function parseCSVFile(sourceFilePath, onNewRecord, handleError, done){
+function parseCSVFile(sourceFilePath, errorHandler, done){
+	var bad_listings = {
+		listings: [],
+		reasons: []
+	};
+	var good_listings = [];
+
     var source = fs.createReadStream(sourceFilePath);
     var parser = parse({
 		skip_empty_lines: true
@@ -192,17 +219,30 @@ function parseCSVFile(sourceFilePath, onNewRecord, handleError, done){
 
     parser.on("readable", function(){
         var record;
+
+		//loop through all rows
         while (record = parser.read()) {
-            onNewRecord(record);
+			record_check = checkCSVRow(record)
+
+			//check if the row is legit
+            if (record_check.state == "error"){
+				bad_listings.listings.push(record);
+				bad_listings.reasons.push(record_check.reasons);
+			}
+			else {
+				good_listings.push(record);
+			}
         }
     });
 
     parser.on("error", function(error){
-        handleError(error)
+		console.log(error);
+		errorHandler();
     });
 
+	//pass it back to create session variables
     parser.on("end", function(){
-        done();
+        done(bad_listings, good_listings);
     });
 
     source.pipe(parser);

@@ -25,6 +25,11 @@ module.exports = function(app, db, auth, e){
 		listings_owner.renderCreateListing
 	]);
 
+	//redirect all /create to proper /create
+	app.get('/listing/create*', function(req, res){
+		res.redirect("/listing/create");
+	})
+
 	//create a single listing
 	app.post('/listing/create', [
 		isLoggedIn,

@@ -47,7 +47,36 @@
 				</div>
 
 				<div id="mult_form_wrapper" class="form_wrapper">
-					<p>You can upload a .csv:</p>
+					<p>You can upload a .csv in the below format</p>
+					<table class='table'>
+						<thead>
+							<tr>
+								<th>Domain name*</th>
+								<th>Description*</th>
+								<th>Minute price</th>
+								<th>Hourly price</th>
+								<th>Daily price</th>
+								<th>Weekly price</th>
+								<th>Monthly price</th>
+								<th>Background image</th>
+								<th>Buy link</th>
+							</tr>
+						</thead>
+					
+						<tbody>
+							<tr>
+								<td>testdomain.com</td>
+								<td>This is a test description</td>
+								<td>1</td>
+								<td>1</td>
+								<td>10</td>
+								<td>25</td>
+								<td>50</td>
+								<td>http://link-to-image.com/image.png</td>
+								<td>http://link-to-buy.com/testdomain</td>
+							</tr>
+						</tbody>
+					</table>
 					<form id="mult_form" action="/listing/create/batch" method="post" enctype="multipart/form-data">
 						<input id="mult_csv" class="create_input" type="file" name="csv" accept=".csv" />
 						<progress id="mult_progress" class="create_input"></progress>
