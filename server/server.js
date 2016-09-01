@@ -45,28 +45,28 @@ app.use(session({
 
 app.use(passport.initialize());
 app.use(passport.session());
-
-//allow access-control list
-app.use(function(req, res, next) {
-	var allowedOrigins = [
-		'http://www.youreacutie.com',
-		'http://youreacutie.com',
-		'http://www.imsorryimdumb.com',
-		'http://imsorryimdumb.com',
-		'http://w3bbi.com',
-		'http://www.w3bbi.com',
-		'http://localhost:8080'
-	];
-
-	var origin = req.headers.origin;
-
-	if (allowedOrigins.indexOf(origin) > -1){
-		res.setHeader('Access-Control-Allow-Origin', origin);
-	//	res.setHeader('Content-Type', 'application/jsonp');
-	}
-
-	next();
-});
+// 
+// //allow access-control list
+// app.use(function(req, res, next) {
+// 	var allowedOrigins = [
+// 		'http://www.youreacutie.com',
+// 		'http://youreacutie.com',
+// 		'http://www.imsorryimdumb.com',
+// 		'http://imsorryimdumb.com',
+// 		'http://w3bbi.com',
+// 		'http://www.w3bbi.com',
+// 		'http://localhost:8080'
+// 	];
+//
+// 	var origin = req.headers.origin;
+//
+// 	if (allowedOrigins.indexOf(origin) > -1){
+// 		res.setHeader('Access-Control-Allow-Origin', origin);
+// 	//	res.setHeader('Content-Type', 'application/jsonp');
+// 	}
+//
+// 	next();
+// });
 
 //for routing of static files
 app.use(express.static(__dirname + '/public'));
