@@ -105,8 +105,11 @@ module.exports = {
 	messageReset: messageReset,
 	logout: logout,
 	signup: signup,
+	forgot: forgot,
+
 	signupPost: signupPost,
-	loginPost: loginPost
+	loginPost: loginPost,
+	forgotPost: forgotPost
 }
 
 //make sure user is logged in before doing anything
@@ -176,6 +179,16 @@ function signup(req, res){
 	res.render("signup.ejs", { message: messageReset(req)});
 };
 
+//forgot my password
+function forgot(req, res){
+	if (req.isAuthenticated()){
+		res.redirect("/");		//if user is authenticated in the session redirect to main page
+	}
+	else {
+		res.render("forgot.ejs", {message: messageReset(req)});
+	}
+}
+
 //function to login
 function loginPost(req, res, next){
 	//if coming from a listing, redirect to listing. otherwise redirect to profile
@@ -224,3 +237,8 @@ function signupPost(req, res, next){
 		}
 	})(req, res, next);
 };
+
+//function to change password
+function forgotPost(req, res, next){
+	console.log(req.body);
+}

@@ -1,0 +1,51 @@
+/*************************** REGISTER ***************************/
+html {
+  background-color: #f5f7fa !important; }
+
+#message {
+  margin: 10px 0 20px 0; }
+
+.logo_login {
+  margin-bottom: 10px; }
+
+.control.has-icon .input:focus + .fa-check {
+  color: #97cd76 !important; }
+
+.control.has-icon > .fa-times {
+  font-size: 21px !important;
+  -moz-transform: translate(-4px, 4px);
+  -o-transform: translate(-4px, 4px);
+  -ms-transform: translate(-4px, 4px);
+  -webkit-transform: translate(-4px, 4px);
+  transform: translate(-4px, 4px); }
+
+.w3bbi_icon {
+  box-sizing: border-box;
+  color: #3CBC8D;
+  font-family: "Share Tech", "Lucida Console", monospace;
+  font-size: 1.5rem;
+  font-weight: bold;
+  -webkit-transition: all 0.25s;
+  transition: all 0.25s; }
+
+.w3bbi_icon:hover:not(.active) {
+  color: #3CBC8D;
+  cursor: pointer;
+  opacity: 0.85; }
+
+.form {
+  background-color: #fff;
+  -moz-box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+  -webkit-box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+  left: 0;
+  margin: auto;
+  padding: 20px;
+  position: absolute;
+  right: 0;
+  top: 80px;
+  width: 400px; }
+
+.login_button {
+  transition: all 0.25s;
+  -webkit-transition: all 0.25s; }
