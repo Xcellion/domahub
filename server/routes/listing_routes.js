@@ -1,4 +1,5 @@
 var	listing_model = require('../models/listing_model.js');
+var	data_model = require('../models/data_model.js');
 var listings_renter = require("./listings_renter");
 var listings_owner = require("./listings_owner");
 
@@ -9,8 +10,11 @@ var whois = require("whois");
 var parser = require('parse-whois');
 
 module.exports = function(app, db, auth, e){
-	error = e;
+	//models
 	Listing = new listing_model(db);
+	Data = new data_model(db);
+
+	error = e;
 	isLoggedIn = auth.isLoggedIn;
 
 	//initiate the two types of listing routes
@@ -105,54 +109,76 @@ function checkDomain(req, res, next){
 			delete req.session.listing_info;
 			delete req.session.rental_info;
 			delete req.session.new_rental_info;
+
 			//first check to see if listing is legit
 			Listing.checkListing(domain_name, function(result){
-				//doesnt exist!
-				if (!result.info.length || result.state == "error"){
-					whois.lookup(domain_name, function(err, data){
-						var whoisObj = {};
-				        if (!err){
-							var array = parser.parseWhoIsData(data);
-							for (var x = 0; x < array.length; x++){
-								whoisObj[array[x].attribute] = array[x].value;
-							}
-						}
-						email = whoisObj["Registrant Email"] || whoisObj["Admin Email"] || whoisObj["Tech Email"] || "";
-						owner_name = whoisObj["Registrant Organization"] || whoisObj["Registrant Name"] || "Nobody";
-						description = "This domain is currently unavailable for rent at w3bbi. "
+				listing_result = result;
 
-						if (owner_name == "Nobody"){
-							description += "However, it's available for purchase at the below links!";
-						}
-						else {
-							description += "However, if you'd like you can fill out the below time slots and we'll let the owner know!";
-						}
+				//add to search history
+				account_id = (typeof req.user == "undefined") ? null : req.user.id;
+				var now = new Date();
+				var now_utc = new Date(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(),  now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds());
 
-						res.render("listing.ejs", {
-							user: req.user,
-							message: Auth.messageReset(req),
-							whoisObj: whoisObj,
-							listing_info: {
-								domain_name: domain_name,
-								email: email,
-								fullname: owner_name,
-								price_type: false,
-								description: description
-							},
-							new_rental_info : false,
-							rental_info : false,
-							available: (owner_name == "Nobody") ? 1 : 2
-						});
-				    });
+				history_info = {
+					account_id: account_id,			//who searched if who exists
+					domain_name: domain_name.toLowerCase(),		//what they searched for
+					search_timestamp: now_utc		//when they searched for it
 				}
-				//exists! handle the rest of the route
-				else {
-					next();
-				}
+
+				Data.newSearchHistory(history_info, function(result){
+					//doesnt exist!
+					if (!listing_result.info.length || listing_result.state == "error"){
+						renderWhoIs(req, res, domain_name);
+					}
+					//exists! handle the rest of the route
+					else {
+						next();
+					}
+				})
 			});
 		}
 	}
 }
+
+//helper function to run whois since domain isn't listed but is a real domain
+function renderWhoIs(req, res, domain_name){
+	whois.lookup(domain_name, function(err, data){
+		var whoisObj = {};
+		if (!err){
+			var array = parser.parseWhoIsData(data);
+			for (var x = 0; x < array.length; x++){
+				whoisObj[array[x].attribute] = array[x].value;
+			}
+		}
+		email = whoisObj["Registrant Email"] || whoisObj["Admin Email"] || whoisObj["Tech Email"] || "";
+		owner_name = whoisObj["Registrant Organization"] || whoisObj["Registrant Name"] || "Nobody";
+		description = "This domain is currently unavailable for rent at w3bbi. "
+
+		if (owner_name == "Nobody"){
+			description += "However, it's available for purchase at the below links!";
+		}
+		else {
+			description += "However, if you'd like you can fill out the below time slots and we'll let the owner know!";
+		}
+
+		res.render("listing.ejs", {
+			user: req.user,
+			message: Auth.messageReset(req),
+			whoisObj: whoisObj,
+			listing_info: {
+				domain_name: domain_name,
+				email: email,
+				fullname: owner_name,
+				price_type: false,
+				description: description
+			},
+			new_rental_info : false,
+			rental_info : false,
+			available: (owner_name == "Nobody") ? 1 : 2
+		});
+	});
+}
+
 
 //check if rental belongs to account and exists
 function checkRental(req, res, next){
