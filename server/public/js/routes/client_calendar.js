@@ -15,12 +15,35 @@ $(document).ready(function() {
 		eventStartEditable: false, //prevents moving of events
 		nowIndicator: true, //red line indicating current time
 
+		//prevent calendar from going back in past
+		viewRender: function(currentView){
+			var minDate = moment();
+
+			// Past
+			if (minDate >= currentView.start && minDate <= currentView.end) {
+				$(".fc-prev-button").prop('disabled', true);
+				$(".fc-prev-button").addClass('fc-state-disabled');
+			}
+			else {
+				$(".fc-prev-button").removeClass('fc-state-disabled');
+				$(".fc-prev-button").prop('disabled', false);
+			}
+		},
+
 		//creating new events
 		select: function(start, end, jsEvent, view){
 			start = moment(start.format());
 			end = moment(end.format());
-			createEvent(start, end);
-			$('#calendar').fullCalendar('unselect');
+			now = new moment();
+
+			//prevent calendar from creating events in the past
+			if (start < now){
+				$('#calendar').fullCalendar('unselect');
+				return false;
+			}
+			else {
+				createEvent(start, end);
+			}
 		},
 
 		//tag id to HTML DOM for easy access

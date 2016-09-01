@@ -13,7 +13,6 @@ var upload = multer({
 	dest:'./uploads',
 	limits: { fileSize: 50000 },
 	fileFilter: function (req, file, cb) {
-
 		var allowedMimeTypes = [
 			"text/csv",
 			"application/csv",
@@ -117,7 +116,10 @@ module.exports = {
 
 	//function to check the format of the batch CSV file
 	checkListingBatch : function(req, res, next){
-		if (req.fileToolarge){
+		if (!req.file){
+			error.handler(req, res, "No file!");
+		}
+		else if (req.fileToolarge){
 			error.handler(req, res, "File too large!");
 		}
 		else if (req.fileValidationError) {
@@ -130,16 +132,24 @@ module.exports = {
 			}
 
 		    parseCSVFile(req.file.path, onError, function(bad_listings, good_listings){
-				console.log("BAD", bad_listings);
-				console.log("GOOD", good_listings);
-				//todo set session variables, then next();
+				if (bad_listings.length > 0){
+					res.send({
+						state: "error",
+						bad_listings: bad_listings,
+						good_listings: good_listings
+					})
+				}
+				else {
+					req.session.good_listings = good_listings;
+					next();
+				}
 			});
 		}
 	},
 
 	//function to create the batch listings once done
 	createListingBatch : function(req, res, next){
-		console.log();
+		console.log('ww');
 		//todo - create the good listings, send back list of bad listings
 		// res.send({
 		// 	listings: listings,
@@ -151,7 +161,7 @@ module.exports = {
 //----------------------------------------------------------------helper functions----------------------------------------------------------------
 
 //checks each row of the CSV file
-function checkCSVRow(record, bad_listings, listings){
+function checkCSVRow(record, domains_sofar){
 	var record_check = {
 		state: "success",
 		reasons: []
@@ -167,6 +177,12 @@ function checkCSVRow(record, bad_listings, listings){
 	if (!validator.isFQDN(record[0])){
 		record_check.state = "error";
 		record_check.reasons.push("Incorrect domain name");
+	}
+
+	//if domain name already exists
+	if (domains_sofar && domains_sofar.indexOf(record[0]) != -1){
+		record_check.state = "error";
+		record_check.reasons.push("Duplicate domain name");
 	}
 
 	//no description
@@ -206,11 +222,10 @@ function checkCSVRow(record, bad_listings, listings){
 
 //helper function to parse the csv file
 function parseCSVFile(sourceFilePath, errorHandler, done){
-	var bad_listings = {
-		listings: [],
-		reasons: []
-	};
+	var bad_listings = [];
 	var good_listings = [];
+	var domains_sofar = [];
+	var row = 0;
 
     var source = fs.createReadStream(sourceFilePath);
     var parser = parse({
@@ -222,14 +237,24 @@ function parseCSVFile(sourceFilePath, errorHandler, done){
 
 		//loop through all rows
         while (record = parser.read()) {
-			record_check = checkCSVRow(record)
+			record_check = checkCSVRow(record, domains_sofar);
+			domains_sofar.push(record[0]);
+			row++;
 
 			//check if the row is legit
             if (record_check.state == "error"){
-				bad_listings.listings.push(record);
-				bad_listings.reasons.push(record_check.reasons);
+				bad_listing = {
+					row: row,
+					data : record,
+					reasons: record_check.reasons
+				}
+				bad_listings.push(bad_listing);
 			}
 			else {
+				good_listing = {
+					row: row,
+					data: record
+				}
 				good_listings.push(record);
 			}
         }
