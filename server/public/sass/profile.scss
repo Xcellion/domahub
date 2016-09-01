@@ -1,4 +1,9 @@
 @import 'vars';
+@import 'mixins';
+
+.panel-list a {
+  @include transition(all 0s);
+}
 
 .quick_links a {
   display: block;

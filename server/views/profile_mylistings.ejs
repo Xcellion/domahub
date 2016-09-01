@@ -1,3 +1,5 @@
+<!DOCTYPE html>
+
 <html>
 
 	<head>
@@ -14,27 +16,127 @@
 		<script src="/js/routes/client_profile.js" type="text/javascript"></script>
 	</head>
 
-<body>
+	<body>
 	<%- include("templates/navbar", {user: user}); %>
 
-	<div class="container clear-nav">
-		<div class="tabs is-centered">
-			<ul>
-				<li><a href="/profile/dashboard">Dashboard</a></li>
-				<li><a href="/profile/inbox">Inbox</a></li>
-				<li class="is-active"><a href="/profile/mylistings">My Listings</a></li>
-				<li><a href="/profile/myrentals">My Rentals</a></li>
-			</ul>
-		</div>
-	</div>
-
-	<section class="section">
-		<div class="container">
-			<div class="columns">
-
+		<div class="container clear-nav">
+			<div class="tabs is-centered">
+				<ul>
+					<li><a href="/profile/dashboard">Dashboard</a></li>
+					<li><a href="/profile/inbox">Inbox</a></li>
+					<li class="is-active"><a href="/profile/mylistings">My Listings</a></li>
+					<li><a href="/profile/myrentals">My Rentals</a></li>
+				</ul>
 			</div>
 		</div>
-	</section>
 
-</body>
+		<section class="section">
+			<div class="container">
+				<div class="columns">
+					<div class="column is-one-quarter">
+
+						<nav class="panel">
+						  <p class="panel-heading has-text-centered">
+						    Search Filters
+						  </p>
+						  <!-- <p class="panel-tabs">
+						    <a class="is-active" href="#">All</a>
+						    <a href="#">Public</a>
+						    <a href="#">Private</a>
+						    <a href="#">Sources</a>
+						    <a href="#">Forks</a>
+						  </p> -->
+							<div class="panel-list">
+						  <a class="panel-block is-active" href="#">
+						    <span class="panel-icon">
+						      <i class="fa fa-book"></i>
+						    </span>
+						    bulma-website
+						  </a>
+						  <a class="panel-block" href="#">
+						    <span class="panel-icon">
+						      <i class="fa fa-book"></i>
+						    </span>
+						    bulma
+						  </a>
+						  <a class="panel-block" href="#">
+						    <span class="panel-icon">
+						      <i class="fa fa-book"></i>
+						    </span>
+						    marksheet
+						  </a>
+						  <a class="panel-block" href="#">
+						    <span class="panel-icon">
+						      <i class="fa fa-code-fork"></i>
+						    </span>
+						    daniellowtw/infBoard
+						  </a>
+						  <a class="panel-block" href="#">
+						    <span class="panel-icon">
+						      <i class="fa fa-book"></i>
+						    </span>
+						    jgthms.github.io
+						  </a>
+						  <a class="panel-block" href="#">
+						    <span class="panel-icon">
+						      <i class="fa fa-code-fork"></i>
+						    </span>
+						    mojs
+						  </a>
+						  <a class="panel-block" href="#">
+						    <span class="panel-icon">
+						      <i class="fa fa-book"></i>
+						    </span>
+						    grumpy-cat
+						  </a>
+						  <div class="panel-block">
+						    <button class="button is-primary is-outlined is-fullwidth">
+						      Reset all filters
+						    </button>
+						  </div>
+							</div>
+						</nav>
+
+					</div>
+
+					<div class="column is-three-quarters">
+						<% if (typeof listings != "undefined") {%>
+						<box class="box">
+							<table id="domain_table" class="table">
+								<caption class="is-medium">
+									My Listings
+								</caption>
+								<thead>
+									<tr>
+										<th>Domain Name</th>
+										<th>Status</th>
+									</tr>
+								</thead>
+								<tbody>
+									<% listings.forEach(function (listing) { %>
+									 <tr>
+										 <td><a href="/listing/<%= listing.domain_name %>"><%= listing.domain_name %></a></td>
+										 <td><%= (listing.price_type != 0) ? "Active" : "Need verification"%></td>
+										 <% if (listing.price_type == 0){ %>
+											 <td class="activate_button" id="activate_<%= listing.domain_name %>">Activate?</td>
+										 <% } %>
+									 </tr>
+									<% }) %>
+								</tbody>
+							</table>
+							<% } else { %>
+								<p>You have no domains currently!</p>
+							<% } %>
+							<a class="button" href="/listing/create">Create new listing</a>
+						</box>
+					</div>
+
+				</div>
+			</div>
+		</section>
+
+	<%- include("templates/footer"); %>
+	<script src="/js/routes/profile_logic.js" type="text/javascript"></script>
+	</body>
+
 </html>

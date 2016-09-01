@@ -3078,7 +3078,7 @@ a.nav-item.is-tab {
   border-radius: 4px 4px 0 0;
   color: #222324;
   font-size: 18px;
-  font-weight: 300;
+  font-weight: 400;
   padding: 10px; }
 
 .panel-list a {
@@ -3102,7 +3102,7 @@ a.nav-item.is-tab {
     border-bottom: 1px solid #d3d6db; }
 
 .panel-block {
-  color: #222324;
+  color: #111;
   display: block;
   line-height: 16px;
   padding: 10px; }
@@ -3110,7 +3110,7 @@ a.nav-item.is-tab {
     border-bottom: 1px solid #d3d6db; }
 
 a.panel-block:hover {
-  background-color: #fff; }
+  background-color: #f5f7fa; }
 
 .panel {
   border: 1px solid #d3d6db;
