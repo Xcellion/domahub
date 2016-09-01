@@ -19,10 +19,11 @@ $(document).ready(function() {
 		viewRender: function(currentView){
 			var minDate = moment();
 
-			// Past
 			if (minDate >= currentView.start && minDate <= currentView.end) {
 				$(".fc-prev-button").prop('disabled', true);
 				$(".fc-prev-button").addClass('fc-state-disabled');
+
+				//todo - add class to custom buttons to "grey out"
 			}
 			else {
 				$(".fc-prev-button").removeClass('fc-state-disabled');
