@@ -16,6 +16,18 @@ $(document).ready(function() {
 		submitListings();
 	});
 
+	//multiple submit
+	$("#mult_form").submit(function(e){
+		e.preventDefault();
+
+		if (!$('#mult_csv')[0].files[0]){
+			$("#mult_message").text("You must select a file!")
+		}
+		else {
+			submitListingsBatch();
+		}
+	});
+
 	//file size and type verification
 	$(':file').change(function(){
 	    var file = this.files[0];
@@ -87,7 +99,7 @@ function listingData(){
 	}
 }
 
-//function to sumibt listings
+//function to submit listings
 function submitListings(){
 	var submit_data = listingData();
 	if (can_submit && submit_data){
@@ -96,20 +108,68 @@ function submitListings(){
 			url: "/listing/create",
 			data: submit_data
 		}).done(function(data){
-			alert('w')
 			//reset the data
 			$(".input").val("");
 			can_submit = true;
 
 			if (data.state == "success"){
-				$("#message").html(data.message);
+				$("#mult_message").text("Success!")
 			}
 			else if (data.state == "error"){
-				$("#message").html(data.message);
+				$("#mult_message").html(data.message);
 			}
 			else {
 				console.log(data);
 			}
 		});
+	}
+}
+
+//function to sumibt listings
+function submitListingsBatch(){
+	if (can_submit){
+		var formData = new FormData();
+		formData.append('csv', $('#mult_csv')[0].files[0]);
+
+        $.ajax({
+			url: "/listing/create/batch",
+            type: 'POST',
+			data: formData,
+
+            success: function(data) {
+				can_submit = true;
+				if (data.state == "success"){
+					$("#mult_message").text("Success!")
+				}
+				else {
+					console.log(data);
+					$("#mult_message").text("Something is wrong with your CSV formatting!")
+
+					//display all the reasons why the upload failed
+					bad_listings = data.bad_listings;
+
+					if (bad_listings){
+						for (var x = 0; x < bad_listings.length; x++){
+							bad_row = $("<div class='bad_row'>Row #" + bad_listings[x].row + "</div>");
+							for (var y = 0; y < bad_listings[x].reasons.length; y++){
+								reason = $("<li class='bad_reason'>" + bad_listings[x].reasons[y] + " </li>");
+								bad_row.append(reason);
+							}
+							$("#mult_message").append(bad_row);
+						}
+					}
+				}
+            },
+            error: function(data) {
+				can_submit = true;
+				console.log(data);
+				$("#mult_message").text("Something went wrong!")
+            },
+
+            // Options to tell jQuery not to process data or worry about the content-type
+            cache: false,
+            contentType: false,
+            processData: false
+        }, 'json');
 	}
 }

@@ -35,13 +35,13 @@ module.exports = function(app, db, auth, e){
 
 //gets all listings for a user
 function getListingsAccount(req, res, next){
-	if (!req.user.listings){
+	if (!req.session.userlistings){
 		account_id = req.user.id;
 
 		Account.getListingsAccount(account_id, function(result){
 			if (result.state=="error"){error.handler(req, res, result.info);}
 			else {
-				req.user.listings = result.info;
+				req.session.userlistings = result.info;
 				next();
 			}
 		});
@@ -53,13 +53,13 @@ function getListingsAccount(req, res, next){
 
 //gets all rentals for a user
 function getRentalsAccount(req, res, next){
-	if (!req.user.rentals){
+	if (!req.session.userrentals){
 		account_id = req.user.id;
 
 		Account.getRentalsAccount(account_id, function(result){
 			if (result.state=="error"){error.handler(req, res, result.info);}
 			else {
-				req.user.rentals = result.info;
+				req.session.userrentals = result.info;
 				next();
 			}
 		});
@@ -78,7 +78,7 @@ function renderProfile(req, res){
 	res.render(ejs_name, {
 		message: Auth.messageReset(req),
 		user: req.user,
-		listings: req.user.listings || false,
-		rentals: req.user.rentals || false
+		listings: req.session.userlistings || false,
+		rentals: req.session.userrentals || false
 	});
 }

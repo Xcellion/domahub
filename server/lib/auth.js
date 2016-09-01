@@ -154,6 +154,8 @@ function messageReset(req){
 //log out of the session
 function logout(req, res) {
 	if (req.isAuthenticated()){
+		delete req.session.mylistings;
+		delete req.session.myrentals;
 		console.log("Logging out");
 		req.logout();
 	}
