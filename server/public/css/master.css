@@ -2744,7 +2744,7 @@ a.box:active {
     color: inherit; }
 
 .message-header {
-  background-color: #222324;
+  background-color: #69707a;
   border-radius: 3px 3px 0 0;
   color: white;
   padding: 7px 10px; }
@@ -3073,10 +3073,10 @@ a.nav-item.is-tab {
     line-height: inherit; }
 
 .panel-heading {
-  background-color: #fff;
+  background-color: #3CBC8D;
   border-bottom: 1px solid #d3d6db;
   border-radius: 4px 4px 0 0;
-  color: #222324;
+  color: #fff;
   font-size: 18px;
   font-weight: 400;
   padding: 10px; }

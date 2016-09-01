@@ -1,0 +1,39 @@
+/******************** MISC*************************/
+.right-arrow {
+  color: #FF8751; }
+
+.icon.active {
+  padding-left: 10px; }
+
+/*********************** LANDING ************************/
+.landing {
+  padding: 0; }
+
+#index_img {
+  background-image: url("https://hd.unsplash.com/photo-1448932223592-d1fc686e76ea");
+  height: 700px; }
+
+#landing_buttons {
+  margin-top: 50px; }
+
+/*********************** MAIN ************************/
+.main_link {
+  font-size: 1.2rem; }
+
+.blob {
+  background-color: #3CBC8D;
+  margin-top: 30px; }
+
+#list_text {
+  order: 1; }
+
+#list_img {
+  order: 2; }
+
+#rent_text {
+  order: 2; }
+
+#rent_img {
+  order: 1; }
+
+/************************ MEDIA QUERIES ************************/

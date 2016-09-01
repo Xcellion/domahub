@@ -37,7 +37,7 @@
 
 						<nav class="panel">
 						  <p class="panel-heading has-text-centered">
-						    Search Filters
+						    Search and Filter
 						  </p>
 						  <!-- <p class="panel-tabs">
 						    <a class="is-active" href="#">All</a>
@@ -48,51 +48,39 @@
 						  </p> -->
 							<div class="panel-list">
 						  <a class="panel-block is-active" href="#">
-						    <span class="panel-icon">
-						      <i class="fa fa-book"></i>
-						    </span>
-						    bulma-website
+						    <p class="control has-icon">
+									<input class="input" type="text" placeholder="Search" />
+									<i class="fa fa-search"></i>
+								</p>
 						  </a>
 						  <a class="panel-block" href="#">
 						    <span class="panel-icon">
-						      <i class="fa fa-book"></i>
+						      <i class="fa fa-list-alt"></i>
 						    </span>
-						    bulma
+						    Currently rented
 						  </a>
 						  <a class="panel-block" href="#">
 						    <span class="panel-icon">
-						      <i class="fa fa-book"></i>
+						      <i class="fa fa-ellipsis-h"></i>
 						    </span>
-						    marksheet
+						    Pending approval
 						  </a>
-						  <a class="panel-block" href="#">
+							<a class="panel-block" href="#">
 						    <span class="panel-icon">
-						      <i class="fa fa-code-fork"></i>
+						      <i class="fa fa-exclamation-circle"></i>
 						    </span>
-						    daniellowtw/infBoard
+						    Expiring soon
 						  </a>
-						  <a class="panel-block" href="#">
-						    <span class="panel-icon">
-						      <i class="fa fa-book"></i>
-						    </span>
-						    jgthms.github.io
-						  </a>
-						  <a class="panel-block" href="#">
-						    <span class="panel-icon">
-						      <i class="fa fa-code-fork"></i>
-						    </span>
-						    mojs
-						  </a>
-						  <a class="panel-block" href="#">
-						    <span class="panel-icon">
-						      <i class="fa fa-book"></i>
-						    </span>
-						    grumpy-cat
-						  </a>
+							<a class="panel-block" href="#">
+								<span class="panel-icon">
+									<i class="fa fa-history"></i>
+								</span>
+								History
+							</a>
 						  <div class="panel-block">
-						    <button class="button is-primary is-outlined is-fullwidth">
+						    <a class="button is-primary is-outlined is-fullwidth">
 						      Reset all filters
-						    </button>
+						    </a>
 						  </div>
 							</div>
 						</nav>
@@ -103,7 +91,7 @@
 						<% if (typeof listings != "undefined") {%>
 						<box class="box">
 							<table id="domain_table" class="table">
-								<caption class="is-medium">
+								<caption class="caption">
 									My Listings
 								</caption>
 								<thead>
