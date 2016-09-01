@@ -1,21 +1,84 @@
 /* -------------------------------------------------------------- GENERAL STUFF ---------------------------------------------------------- */
 
-html{
-	background:url(../images/loading.gif); 
-	background-repeat: no-repeat;
-	background-position:50% 50%;
-	height:100vh;
+html {
+	background-color: #cccccc;
+}
+
+.noselect {
+	-webkit-touch-callout: none; /* iOS Safari */
+	-webkit-user-select: none;   /* Chrome/Safari/Opera */
+	-khtml-user-select: none;    /* Konqueror */
+	-moz-user-select: none;      /* Firefox */
+	-ms-user-select: none;       /* Internet Explorer/Edge */
+	user-select: none;           /* Non-prefixed version, currently not supported by any browser */
+	cursor:	default;
+}
+
+body, p, h1, h2, h3, h4, h5{
+	margin:0;
+	border:0;
+	padding:0;
+	text-align:center;
 	overflow:hidden;
 }
 
-#text_wrapper{ font-family: 'Raleway', sans-serif;}
+p {
+	font-size:125%;
+}
+
+#background_image{
+	background-image: url("../images/imsorryimdumb.jpg");
+	background-position: center bottom;
+    background-size: cover;
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	background-repeat: no-repeat;
+	height:100vh;
+}
+
+#text_wrapper{
+ 	font-family: 'Raleway', sans-serif;
+	padding:15px;
+	position:absolute;
+	top:50%;
+	left:50%;
+	transform:translate(-50%, -50%);
+	margin-right:-50%;
+}
+
 #text_wrapper > a{ color:#FFFFA5;}
-#text_wrapper ::selection{ background: #FFFFA5 /* WebKit/Blink Browsers */}
-#text_wrapper ::-moz-selection{ background: #FFFFA5; /* Gecko Browsers */}
-#main_text{ 
+#text_wrapper > a:visited{ color: #f5f5f5;}
+
+#main_text{
 	font-family: 'Indie Flower', cursive, arial, helvetica !important;
 	font-size:300%;
 	font-weight:normal;
 	padding-bottom:15px;
-	}
-#footer_wrapper{ color:#FFFFA5;}
+	margin-bottom:15px;
+	outline: none;
+	color:#FFF;
+}
+
+#middle_text{
+	color:#FFF;
+}
+
+.buttons{
+	background-color:#FFFFA5;
+	border-radius:3px;
+	border: 1px solid #FFFFA5;
+	font-weight:bold;
+	padding:7px;
+	color:#222;
+	text-decoration:none;
+	margin:5px;
+	display: inline-block;
+}
+
+.buttons:hover{
+	color:#222;
+	background-color:#cccc84;
+	border: 1px solid #cccc84;
+	box-shadow: 2px 2px 1px rgba(0, 0, 0, 0.2);
+}
