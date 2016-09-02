@@ -108,8 +108,9 @@ function submitListings(){
 			url: "/listing/create",
 			data: submit_data
 		}).done(function(data){
-			//reset the data
-			$(".input").val("");
+
+			//reset the data to default value
+			$(".input").val($(this).prop("defaultValue"));
 			can_submit = true;
 
 			if (data.state == "success"){
@@ -142,7 +143,6 @@ function submitListingsBatch(){
 					$("#mult_message").text("Success!")
 				}
 				else {
-					console.log(data);
 					$("#mult_message").text("Something is wrong with your CSV formatting!")
 
 					//display all the reasons why the upload failed

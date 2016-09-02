@@ -45,7 +45,7 @@ app.use(session({
 
 app.use(passport.initialize());
 app.use(passport.session());
-// 
+//
 // //allow access-control list
 // app.use(function(req, res, next) {
 // 	var allowedOrigins = [
