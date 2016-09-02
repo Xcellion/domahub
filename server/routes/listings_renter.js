@@ -101,6 +101,7 @@ module.exports = {
 
 	//function to create a new rental
 	createRental : function(req, res, next){
+		req.user.refresh_rental = true;		//to refresh the user object's list of rentals
 		domain_name = req.params.domain_name;
 		new_rental_info = req.session.new_rental_info;
 

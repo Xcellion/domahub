@@ -1,9 +1,22 @@
+var	account_model = require('../models/account_model.js');
+
 var database,
 	passport,
 	error;
 
 var LocalStrategy = require('passport-local').Strategy;
 var bcrypt = require('bcrypt-nodejs');
+var nodemailer = require('nodemailer');
+var sgTransport = require('nodemailer-sendgrid-transport');
+var validator = require("validator");
+var crypto = require("crypto");
+
+var options = {
+    auth: {
+        api_key: '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'
+    }
+}
+var mailer = nodemailer.createTransport(sgTransport(options));
 
 module.exports = {
 
@@ -13,21 +26,32 @@ module.exports = {
 		passport = pp;
 		error = e;
 
+		Account = new account_model(db);
+
 		// used to serialize the user for the session
 		passport.serializeUser(function(user, done) {
-			done(null, user.id);
+			delete user.password;
+			done(null, user);
 		});
 
-		// used to deserialize the user
-		passport.deserializeUser(function(id, done) {
-			db.query("SELECT id, fullname, email, date_created, date_accessed, admin, buyer_seller FROM accounts WHERE id = ?", function(rows, err){
-				if (err){
-					done(err, null);
-				}
-				else{
-					done(null, rows[0]);
-				}
-			}, id);
+		// called every subsequent request. should we re-get user data?
+		passport.deserializeUser(function(user, done) {
+
+			//if we need to refresh the user, refresh the user.
+			if (user.refresh){
+				delete user.refresh;
+				Account.getAccount(user.email, function(result){
+					if (result.state=="error"){
+						done(err, null);
+					}
+					else {
+						done(null, result.info[0]);
+					}
+				});
+			}
+			else {
+				done(null, user);
+			}
 		});
 
 		//post to create a new account
@@ -36,7 +60,7 @@ module.exports = {
 				passReqToCallback : true // allows us to pass back the entire request to the callback
 			},
 			function(req, email, password, done) { // callback with email and password from our form
-				db.query("SELECT id, fullname, email, date_created, date_accessed, admin, buyer_seller FROM accounts WHERE email = ?", function(rows, err){
+				db.query("SELECT email FROM accounts WHERE email = ?", function(rows, err){
 					if (err){
 						done(err, null);
 					}
@@ -102,14 +126,18 @@ module.exports = {
 
 	//helper functions related to authentication
 	isLoggedIn: isLoggedIn,
+	isNotLoggedIn : isNotLoggedIn,
 	messageReset: messageReset,
+
 	logout: logout,
 	signup: signup,
 	forgot: forgot,
+	reset: reset,
 
 	signupPost: signupPost,
 	loginPost: loginPost,
-	forgotPost: forgotPost
+	forgotPost: forgotPost,
+	resetPost: resetPost
 }
 
 //make sure user is logged in before doing anything
@@ -147,6 +175,16 @@ function isLoggedIn(req, res, next) {
 	}
 }
 
+//function to make sure user is NOT logged in
+function isNotLoggedIn(req, res, next) {
+	if (req.isAuthenticated()){
+		res.redirect("/");		//if user is authenticated in the session redirect to main page
+	}
+	else {
+		next();
+	}
+}
+
 //resets message
 function messageReset(req){
 	var message = req.session.message;
@@ -181,12 +219,13 @@ function signup(req, res){
 
 //forgot my password
 function forgot(req, res){
-	if (req.isAuthenticated()){
-		res.redirect("/");		//if user is authenticated in the session redirect to main page
-	}
-	else {
-		res.render("forgot.ejs", {message: messageReset(req)});
-	}
+	res.render("pw_forgot.ejs", {message: messageReset(req)});
+}
+
+//function to check token for resetting password
+function reset(req, res){
+	var token = req.params.token;
+	res.render("pw_reset.ejs", {message: messageReset(req)});
 }
 
 //function to login
@@ -240,5 +279,47 @@ function signupPost(req, res, next){
 
 //function to change password
 function forgotPost(req, res, next){
-	console.log(req.body);
+	email = req.body.email;
+
+	if (!validator.isEmail(email)){
+		res.send({
+			state: "error",
+			description: "Not an email address!"
+		})
+	}
+	else {
+
+		//generate token to email to user
+		crypto.randomBytes(20, function(err, buf) {
+			var token = buf.toString('hex');
+
+			var email = {
+				to: req.body.email,
+				from: 'theITguy@w3bbi.com',
+				subject: 'Forgot your password for w3bbi?',
+				text: 'You are receiving this because you (or someone else) requested the reset of the password for your account.\n\n' +
+			          'Please click on the following link, or paste this into your browser to complete the process:\n\n' +
+			          'http://' + req.headers.host + '/reset/' + token + '\n\n' +
+			          'If you did not request this, please ignore this email and your password will remain unchanged.\n'
+			};
+
+			//send email
+			mailer.sendMail(email, function(err) {
+				if (err) {
+					console.log(err)
+				}
+				else {
+					res.send({
+						state: "success"
+					})
+				}
+			});
+		});
+
+	}
+}
+
+//function to reset password
+function resetPost(req, res, next){
+
 }

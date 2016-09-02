@@ -56,6 +56,14 @@ module.exports = function(app, db, auth, e){
 		listings_renter.renderListing404
 	]);
 
+	//w3bbi easter egg page
+	app.get('/listing/w3bbi.com', function(req, res){
+		res.render("listing_w3bbi.ejs", {
+			user: req.user,
+			message: Auth.messageReset(req)
+		})
+	});
+
 	//render listing page
 	app.get('/listing/:domain_name', [
 		checkDomain,
