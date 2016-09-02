@@ -78,7 +78,7 @@
 								History
 							</a>
 						  <div class="panel-block">
-						    <a class="button is-primary is-outlined is-fullwidth">
+						    <a class="button is-outlined is-fullwidth">
 						      Reset all filters
 						    </a>
 						  </div>
@@ -103,11 +103,18 @@
 								<tbody>
 									<% listings.forEach(function (listing) { %>
 									 <tr>
-										 <td><a href="/listing/<%= listing.domain_name %>"><%= listing.domain_name %></a></td>
+										 <td><%= listing.domain_name %></td>
 										 <% if (listing.price_type != 0) { %>
 											 <td>Active</td>
 										 <% } else { %>
-											 <td><a href="#">Verify?</a></td>
+											 <td>
+												 <span class="select">
+											    <select>
+											      <option>Listed</option>
+											      <option>Unlist</option>
+											    </select>
+											  </span>
+											</td>
 										 <% } %>
 									 </tr>
 									<% }) %>
@@ -116,7 +123,36 @@
 							<% } else { %>
 								<p>You have no domains currently!</p>
 							<% } %>
-							<a class="button" href="/listing/create">Create new listing</a>
+							<a class="button is-primary" href="/listing/create">Create new listing</a>
+
+							<nav class="pagination">
+								<a class="button">Previous</a>
+								<a class="button">Next page</a>
+								<ul>
+									<li>
+										<a class="button">1</a>
+									</li>
+									<li>
+										<span>...</span>
+									</li>
+									<li>
+										<a class="button">45</a>
+									</li>
+									<li>
+										<a class="button is-primary">46</a>
+									</li>
+									<li>
+										<a class="button">47</a>
+									</li>
+									<li>
+										<span>...</span>
+									</li>
+									<li>
+										<a class="button">86</a>
+									</li>
+								</ul>
+							</nav>
+
 						</box>
 					</div>
 
