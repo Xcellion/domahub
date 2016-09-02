@@ -35,13 +35,16 @@ module.exports = function(app, db, auth, e){
 
 //gets all listings for a user
 function getListingsAccount(req, res, next){
-	if (!req.session.userlistings){
+
+	//if we dont already have the list of listings or if we need to refresh them
+	if (!req.user.listings || req.user.refresh_listing){
+		delete req.user.refresh_listing;
 		account_id = req.user.id;
 
 		Account.getListingsAccount(account_id, function(result){
 			if (result.state=="error"){error.handler(req, res, result.info);}
 			else {
-				req.session.userlistings = result.info;
+				req.user.listings = result.info;
 				next();
 			}
 		});
@@ -53,13 +56,16 @@ function getListingsAccount(req, res, next){
 
 //gets all rentals for a user
 function getRentalsAccount(req, res, next){
-	if (!req.session.userrentals){
+
+	//if we dont already have the list of rentals or if we need to refresh them
+	if (!req.user.rentals || req.user.refresh_rental){
+		delete req.user.refresh_rental;
 		account_id = req.user.id;
 
 		Account.getRentalsAccount(account_id, function(result){
 			if (result.state=="error"){error.handler(req, res, result.info);}
 			else {
-				req.session.userrentals = result.info;
+				req.user.rentals = result.info;
 				next();
 			}
 		});
@@ -78,7 +84,7 @@ function renderProfile(req, res){
 	res.render(ejs_name, {
 		message: Auth.messageReset(req),
 		user: req.user,
-		listings: req.session.userlistings || false,
-		rentals: req.session.userrentals || false
+		listings: req.user.listings || false,
+		rentals: req.user.rentals || false
 	});
 }

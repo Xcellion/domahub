@@ -89,6 +89,7 @@ module.exports = {
 		Listing.newListing(listing_info, function(result){
 			if (result.state=="error"){error.handler(req, res, result.info);}
 			else {
+				req.user.refresh_listing = true;		//to refresh the user object's list of listings
 				res.send({
 					state: "success",
 					listing_info: {
@@ -150,6 +151,8 @@ module.exports = {
 	//function to create the batch listings once done
 	createListingBatch : function(req, res, next){
 		console.log('ww');
+		req.user.refresh_listing = true;
+
 		//todo - create the good listings, send back list of bad listings
 		// res.send({
 		// 	listings: listings,

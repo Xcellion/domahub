@@ -31,6 +31,20 @@ account_model.prototype.checkAccount = function(email, callback){
 
 //----------------------------------------------------------------------GETS----------------------------------------------------------
 
+//gets all non-sensitive account info
+account_model.prototype.getAccount = function(email, callback){
+	console.log("Attempting to get all account information for email: " + email + "...");
+	query = "SELECT \
+				id, \
+				email, \
+				fullname, \
+				date_created, \
+				date_accessed, \
+				type \
+			FROM accounts WHERE email = ?"
+	account_query(query, "Failed to get all account information for email: " + email + "!", callback, email);
+}
+
 //gets all listing info belonging to specific account
 account_model.prototype.getListingsAccount = function(account_id, callback){
 	console.log("Attempting to get all listings belonging to account " + account_id + "...");
