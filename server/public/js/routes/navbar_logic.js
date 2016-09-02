@@ -22,6 +22,7 @@ $(document).ready(function() {
 	$('.modal-close, .modal-background').click(function() {
 	  $('#modal_login').removeClass('is-active');
 	  $("#message").text("Please log in below");
+	  $("#message").attr("style", "");
 	});
 
 	//profile logic
