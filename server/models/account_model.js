@@ -34,14 +34,7 @@ account_model.prototype.checkAccount = function(email, callback){
 //gets all non-sensitive account info
 account_model.prototype.getAccount = function(email, callback){
 	console.log("Attempting to get all account information for email: " + email + "...");
-	query = "SELECT \
-				id, \
-				email, \
-				fullname, \
-				date_created, \
-				date_accessed, \
-				type \
-			FROM accounts WHERE email = ?"
+	query = "SELECT * FROM accounts WHERE email = ?"
 	account_query(query, "Failed to get all account information for email: " + email + "!", callback, email);
 }
 
@@ -68,4 +61,25 @@ account_model.prototype.getRentalsAccount = function(account_id, callback){
 			JOIN listings ON listings.id = rentals.listing_id \
 			WHERE rentals.account_id = ? ";
 	account_query(query, "Failed to get all rentals belonging to account " + account_id + "!", callback, account_id);
+}
+
+//----------------------------------------------------------------------SETS----------------------------------------------------------
+
+//creates a new account
+account_model.prototype.newAccount = function(account_info, callback){
+	console.log("Creating a new account for email: " + account_info.email + "...");
+	query = "INSERT INTO accounts \
+			SET ? "
+	listing_query(query, "Failed to create a new account for email: " + account_info.email + "!", callback, account_info);
+}
+
+//----------------------------------------------------------------------UPDATE----------------------------------------------------------
+
+//updates a new account
+account_model.prototype.updateAccount = function(account_info, email, callback){
+	console.log("Updating account with email: " + email + "...");
+	query = "UPDATE accounts \
+			SET ? \
+			WHERE email = ?"
+	listing_query(query, "Failed to update account with email: " + email + "!", callback, [account_info, email]);
 }

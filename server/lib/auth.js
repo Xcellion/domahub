@@ -59,31 +59,41 @@ module.exports = {
 				usernameField: 'email',
 				passReqToCallback : true // allows us to pass back the entire request to the callback
 			},
-			function(req, email, password, done) { // callback with email and password from our form
-				db.query("SELECT email FROM accounts WHERE email = ?", function(rows, err){
-					if (err){
-						done(err, null);
-					}
-					else if (rows.length) {
+			function(req, email, password, done) {
+
+				//check if account already exists
+				Account.getAccount(email, function(result){
+					if (result.state=="error"){ done(result.info, null); }
+
+					//account exists
+					else if (result.info.length){
 						return done(null, false, {message: 'User exists!'});
 					}
+
+					//account doesnt exist
 					else {
-						var mysql_query = "INSERT INTO accounts SET ?";
 						var now = new Date();
 						var now_utc = new Date(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(),  now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds());
 
-						db.query(mysql_query, function(rows, err){
-							rows.id = rows.insertId;
-							return done(null, rows);
-						}, {
+						var account_info = {
 							email: email,
 							fullname: req.body.fullname,
 							password: bcrypt.hashSync(password, null, null),
 							date_created: now_utc,
 							date_accessed: now_utc
+						}
+
+						//create the new account
+						Account.newAccount(account_info, function(result){
+							if (result.state=="error"){ done(result.info, null); }
+							else {
+								account_info.id = result.info.insertId;
+								account_info.type = 0;
+								return done(null, account_info);
+							}
 						});
 					}
-				}, email);
+				});
 			})
 		);
 
@@ -92,33 +102,39 @@ module.exports = {
 				usernameField: 'email',
 				passReqToCallback : true // allows us to pass back the entire request to the callback
 			},
-			function(req, email, password, done) { // callback with email and password from our form
-				db.query("SELECT * FROM accounts WHERE email = ?", function(rows){
-					if (!rows.length) {
+			function(req, email, password, done) {
+				Account.getAccount(email, function(result){
+					if (result.state=="error"){
+						done(err, null);
+					}
+
+					//account doesnt exists
+					else if (!result.info.length){
 						return done(null, false, {message: 'Invalid user!'});
 					}
 
-					// if the user is found but the password is wrong
-					if (!bcrypt.compareSync(password, rows[0].password)){
+				 	// if the user is found but the password is wrong
+					else if (!bcrypt.compareSync(password, result.info[0].password)){
 						return done(null, false, {message: 'Invalid password!'});
 					}
 
-					// all is well, return successful user
 					else {
+						user = result.info[0];
 						var now = new Date();
 						var now_utc = new Date(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(),  now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds());
+						var account_info = {
+							date_accessed : now_utc
+						};
 
-						db.query("UPDATE accounts SET ? WHERE email = ?", function(result){
-							if (result){
-								return done(null, rows[0]);
-							}
+						//update account last accessed
+						Account.updateAccount(account_info, email, function(result){
+							if (result.state=="error"){ done(result.info, null); }
 							else {
-								console.log("Failed to update last accessed date!");
-								console.log(result);
+								return done(null, user);
 							}
-						}, [{ date_accessed : now_utc}, email]);
+						});
 					}
-				}, email);
+				});
 			})
 		);
 
