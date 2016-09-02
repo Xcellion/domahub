@@ -104,9 +104,10 @@
 									<% listings.forEach(function (listing) { %>
 									 <tr>
 										 <td><a href="/listing/<%= listing.domain_name %>"><%= listing.domain_name %></a></td>
-										 <td><%= (listing.price_type != 0) ? "Active" : "Need verification"%></td>
-										 <% if (listing.price_type == 0){ %>
-											 <td class="activate_button" id="activate_<%= listing.domain_name %>">Activate?</td>
+										 <% if (listing.price_type != 0) { %>
+											 <td>Active</td>
+										 <% } else { %>
+											 <td><a href="#">Verify?</a></td>
 										 <% } %>
 									 </tr>
 									<% }) %>
