@@ -166,7 +166,6 @@ function isLoggedIn(req, res, next) {
 		res.header('Cache-Control', 'private, no-cache, no-store, must-revalidate');
 		res.header('Expires', '-1');
 		res.header('Pragma', 'no-cache');
-		console.log("Authenticated!");
 		return next();
 	}
 	else {
@@ -212,7 +211,6 @@ function messageReset(req){
 //log out of the session
 function logout(req, res) {
 	if (req.isAuthenticated()){
-		console.log(req.user.email + " is logging out.");
 		delete req.session.mylistings;
 		delete req.session.myrentals;
 		req.logout();
