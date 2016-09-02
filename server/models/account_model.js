@@ -31,11 +31,18 @@ account_model.prototype.checkAccount = function(email, callback){
 
 //----------------------------------------------------------------------GETS----------------------------------------------------------
 
-//gets all non-sensitive account info
+//gets all account info
 account_model.prototype.getAccount = function(email, callback){
 	console.log("Attempting to get all account information for email: " + email + "...");
 	query = "SELECT * FROM accounts WHERE email = ?"
 	account_query(query, "Failed to get all account information for email: " + email + "!", callback, email);
+}
+
+//gets account by token
+account_model.prototype.getAccountByToken = function(token, callback){
+	console.log("Attempting to get account information for token: " + token + "...");
+	query = "SELECT email, forgot_token, forgot_exp FROM accounts WHERE forgot_token = ?"
+	account_query(query, "Failed to get account information for token: " + token + "!", callback, token);
 }
 
 //gets all listing info belonging to specific account

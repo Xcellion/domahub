@@ -145,6 +145,7 @@ module.exports = {
 	isNotLoggedIn : isNotLoggedIn,
 	messageReset: messageReset,
 
+	//account related route functions
 	logout: logout,
 	signup: signup,
 	forgot: forgot,
@@ -211,9 +212,9 @@ function messageReset(req){
 //log out of the session
 function logout(req, res) {
 	if (req.isAuthenticated()){
+		console.log(req.user.email + " is logging out.");
 		delete req.session.mylistings;
 		delete req.session.myrentals;
-		console.log("Logging out");
 		req.logout();
 	}
 	if (req.header("Referer")){
@@ -240,7 +241,6 @@ function forgot(req, res){
 
 //function to check token for resetting password
 function reset(req, res){
-	var token = req.params.token;
 	res.render("pw_reset.ejs", {message: messageReset(req)});
 }
 
@@ -298,44 +298,105 @@ function forgotPost(req, res, next){
 	email = req.body.email;
 
 	if (!validator.isEmail(email)){
-		res.send({
-			state: "error",
-			description: "Not an email address!"
-		})
+		error.handler(req, res, "Invalid email!", "json");
 	}
 	else {
 
 		//generate token to email to user
 		crypto.randomBytes(20, function(err, buf) {
-			var token = buf.toString('hex');
+			var forgot_token = buf.toString('hex');
+			var now = new Date(new Date().getTime() + 3600000); 	// 1 hour buffer
+			var forgot_exp = new Date(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(),  now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds());
 
-			var email = {
-				to: req.body.email,
-				from: 'theITguy@w3bbi.com',
-				subject: 'Forgot your password for w3bbi?',
-				text: 'You are receiving this because you (or someone else) requested the reset of the password for your account.\n\n' +
-			          'Please click on the following link, or paste this into your browser to complete the process:\n\n' +
-			          'http://' + req.headers.host + '/reset/' + token + '\n\n' +
-			          'If you did not request this, please ignore this email and your password will remain unchanged.\n'
+			var account_info = {
+				forgot_token : forgot_token,
+				forgot_exp : forgot_exp
 			};
 
-			//send email
-			mailer.sendMail(email, function(err) {
-				if (err) {
-					console.log(err)
-				}
+			//update account with token and expiration
+			Account.updateAccount(account_info, email, function(result){
+				if (result.state=="error"){error.handler(req, res, result.info);}
 				else {
-					res.send({
-						state: "success"
-					})
+					var email = {
+						to: req.body.email,
+						from: 'theITguy@w3bbi.com',
+						subject: 'Forgot your password for w3bbi?',
+						text: 'You are receiving this because you (or someone else) requested the reset of the password for your account.\n\n' +
+					          'Please click on the following link, or paste this into your browser to complete the process:\n\n' +
+					          'http://' + req.headers.host + '/reset/' + forgot_token + '\n\n' +
+					          'If you did not request this, please ignore this email and your password will remain unchanged.\n' +
+							  'The link above will expire in 1 hour.'
+					};
+
+					//send email
+					mailer.sendMail(email, function(err) {
+						if (err) {
+							console.log(err)
+						}
+						else {
+							res.send({
+								state: "success"
+							})
+						}
+					});
 				}
 			});
 		});
-
 	}
 }
 
 //function to reset password
 function resetPost(req, res, next){
+	var token = req.params.token;
+	var password = req.body.password;
 
+	if (!token){
+		error.handler(req, res, "Invalid token!", "json");
+	}
+	else if (!password){
+		error.handler(req, res, "Invalid password!", "json");
+	}
+	else {
+		Account.getAccountByToken(token, function(result){
+			if (result.state=="error"){error.handler(req, res, result.info);}
+			else {
+				var email = result.info[0].email;
+				var forgot_exp = new Date(result.info[0].forgot_exp);
+				var now = new Date();
+				var now_utc = new Date(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(),  now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds());
+
+				//if token hasn't expired
+				if (now_utc < forgot_exp){
+					//update account with new password
+					var account_info = {
+						password : bcrypt.hashSync(password, null, null),
+					};
+
+					Account.updateAccount(account_info, email, function(result){
+						if (result.state=="error"){error.handler(req, res, result.info);}
+						else {
+
+							account_info = {
+								forgot_exp: null,
+								forgot_token: null
+							}
+
+							//delete the token and expiration date
+							Account.updateAccount(account_info, email, function(result){
+								if (result.state=="error"){error.handler(req, res, result.info);}
+								else {
+									res.send({
+										state: "success"
+									});
+								}
+							});
+						}
+					});
+				}
+				else {
+					error.handler(req, res, "The token has expired!", "json");
+				}
+			}
+		});
+	}
 }
