@@ -1503,7 +1503,8 @@ a.box:active {
       background-color: #fafafa; }
 
 .caption {
-  font-size: 1.5rem; }
+  font-size: 1.5rem;
+  padding: 10px 0 10px 0; }
 
 .title,
 .subtitle {
@@ -2851,7 +2852,7 @@ a.box:active {
     .modal-content, .modal-card {
       margin: 0 auto;
       max-height: calc(100vh - 40px);
-      width: 440px; } }
+      width: 400px; } }
 
 .modal-close {
   background: none;
