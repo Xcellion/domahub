@@ -49,3 +49,7 @@ html {
 .login_button {
   transition: all 0.25s;
   -webkit-transition: all 0.25s; }
+
+#remember_checkbox {
+    vertical-align:middle;
+}

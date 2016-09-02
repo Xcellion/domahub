@@ -263,7 +263,7 @@ listing_model.prototype.getListingRentalTimes = function(listing_id, callback){
 
 //creates a new listing
 listing_model.prototype.newListing = function(listing_info, callback){
-	console.log("Attempting to create a listing: " + listing_info.domain_name + "...");
+	console.log("Attempting to create a new listing: " + listing_info.domain_name + "...");
 	query = "INSERT INTO listings \
 			SET ? "
 	listing_query(query, "Failed to create a new listing: " + listing_info.domain_name + "!", callback, listing_info);
