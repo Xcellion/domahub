@@ -25,7 +25,7 @@ html {
 }
 
 .control {
-  &.has-icon > .fa-times {
+  &.has-icon > .fa-warning {
     font-size: 21px !important;
     @include transform(translate(-4px, 4px));
   }
