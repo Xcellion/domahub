@@ -23,7 +23,7 @@ module.exports = function(app, auth){
 		Auth.isNotLoggedIn,
 		Auth.forgotPost
 	]);
-	app.post('/forgot', [
+	app.post("/reset/:token", [
 		Auth.isNotLoggedIn,
 		Auth.resetPost
 	]);

@@ -67,7 +67,7 @@ $(document).ready(function() {
 		//if no password is entered
 		else if (!$("#pw_input").val()) {
 			$("#message").fadeOut(100, function(){
-				$("#message").css("color", "#ed1c24").text("Please enter your password!").fadeIn(100);
+				$("#message").css("color", "#ed1c24").text("Please enter a password!").fadeIn(100);
 				$("#pw_input").focus();
 				showSuccessDanger($("#pw_input"), false);
 			});
