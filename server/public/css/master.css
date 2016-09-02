@@ -2851,7 +2851,7 @@ a.box:active {
     .modal-content, .modal-card {
       margin: 0 auto;
       max-height: calc(100vh - 40px);
-      width: 440px; } }
+      width: 400px; } }
 
 .modal-close {
   background: none;
