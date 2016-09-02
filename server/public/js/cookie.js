@@ -1,6 +1,7 @@
 //helper function to store local events as a cookie
 function storeCookies(type){
 	if (type == "local_events"){
+		bake_cookie("domain_name", listing_info.domain_name);
 		local_events = $('#calendar').fullCalendar('clientEvents', filterMine);
 		cookie = [];
 		for (var x = 0; x < local_events.length; x++){
@@ -21,11 +22,12 @@ function storeCookies(type){
 		cookie = rental_info;
 	}
 
+	//delete any existing cookies
 	if (read_cookie(type)){
 		delete_cookie(type);
 	}
+
 	bake_cookie(type, cookie);
-	bake_cookie("domain_name", listing_info.domain_name);
 }
 
 //helper function to make cookie
