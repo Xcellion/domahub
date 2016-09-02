@@ -1,6 +1,6 @@
 {
   "name": "w3bbi",
-  "version": "0.0.1",
+  "version": "0.1",
   "description": "A domain rental marketplace",
   "main": "server/server.js",
   "dependencies": {
@@ -31,7 +31,7 @@
     "type": "git",
     "url": "git@heroku.com:w3bbi.git"
   },
-  "author": "Wonmin Lee",
+  "author": "w3bbi",
   "license": "ISC",
   "devDependencies": {},
   "scripts": {
@@ -42,7 +42,6 @@
   },
   "keywords": [
     "w3bbi",
-    "heroku",
     "node"
   ]
 }
