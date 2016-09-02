@@ -32,6 +32,80 @@
 		<div class="container">
 			<div class="columns">
 
+				<div class="column is-one-quarter">
+					<nav class="panel">
+						<p class="panel-heading has-text-centered">
+							Search and Filter
+						</p>
+						<!-- <p class="panel-tabs">
+							<a class="is-active" href="#">All</a>
+							<a href="#">Public</a>
+							<a href="#">Private</a>
+							<a href="#">Sources</a>
+							<a href="#">Forks</a>
+						</p> -->
+						<div class="panel-list">
+						<a class="panel-block is-active" href="#">
+							<p class="control has-icon">
+								<input class="input" type="text" placeholder="Search" />
+								<i class="fa fa-search"></i>
+							</p>
+						</a>
+						<a class="panel-block" href="#">
+							<span class="panel-icon">
+								<i class="fa fa-list-alt"></i>
+							</span>
+							Currently listed
+						</a>
+						<a class="panel-block" href="#">
+							<span class="panel-icon">
+								<i class="fa fa-ellipsis-h"></i>
+							</span>
+							Pending approval
+						</a>
+						<a class="panel-block" href="#">
+							<span class="panel-icon">
+								<i class="fa fa-exclamation-circle"></i>
+							</span>
+							Expiring soon
+						</a>
+						<a class="panel-block" href="#">
+							<span class="panel-icon">
+								<i class="fa fa-history"></i>
+							</span>
+							History
+						</a>
+						<div class="panel-block">
+							<a class="button is-primary is-outlined is-fullwidth">
+								Reset all filters
+							</a>
+						</div>
+						</div>
+					</nav>
+				</div>
+
+				<div class="column is-three-quarters">
+					<div class="box">
+						<% if (typeof rentals != "undefined") {%>
+						<table id="rental_table" class="table">
+							<caption class="caption">
+								My Rentals
+							</caption>
+							<thead>
+								<tr>
+									<th>Domain Name</th>
+									<th>Start Date</th>
+									<th>End Date</th>
+									<th></th>
+								</tr>
+							</thead>
+						</table>
+						<% } else { %>
+							<p>You have no rentals currently!</p>
+						<% } %>
+					</div>
+				</div>
+
 			</div>
 		</div>
 	</section>
