@@ -1,6 +1,6 @@
 .table
   background-color: #fff
-  color: $black
+  color: $text
   margin-bottom: 20px
   width: 100%
   td,
@@ -33,23 +33,25 @@
       white-space: nowrap
       width: 1%
   th
-    color: $black
+    color: $text
     text-align: left
   tr
     &:hover
-      background-color: $background
-      color: $black
+      background-color: $grey-lighter
+      color: $text
   thead
     td,
     th
       border-width: 0 0 2px
-      color: $black
+      color: $text
   tbody
     tr
       &:last-child
         td,
         th
           border-bottom-width: 0
+      td
+        font-weight: 300
   tfoot
     td,
     th

@@ -1458,7 +1458,7 @@ a.box:active {
     color: #111;
     text-align: left; }
   .table tr:hover {
-    background-color: #fff;
+    background-color: #f5f7fa;
     color: #111; }
   .table thead td,
   .table thead th {
@@ -1467,6 +1467,8 @@ a.box:active {
   .table tbody tr:last-child td,
   .table tbody tr:last-child th {
     border-bottom-width: 0; }
+  .table tbody tr td {
+    font-weight: 300; }
   .table tfoot td,
   .table tfoot th {
     border-width: 2px 0 0;
@@ -3069,7 +3071,7 @@ a.nav-item.is-tab {
   text-align: center;
   vertical-align: top;
   width: 16px;
-  color: #aeb1b5;
+  color: #111;
   float: left;
   margin: 0 4px 0 -2px; }
   .panel-icon .fa {
@@ -3077,7 +3079,7 @@ a.nav-item.is-tab {
     line-height: inherit; }
 
 .panel-heading {
-  background-color: #3CBC8D;
+  background-color: #69707a;
   border-bottom: 1px solid #d3d6db;
   border-radius: 4px 4px 0 0;
   color: #fff;
@@ -3086,9 +3088,10 @@ a.nav-item.is-tab {
   padding: 10px; }
 
 .panel-list a {
-  color: #111; }
+  color: #111;
+  font-weight: 300; }
   .panel-list a:hover {
-    color: #3CBC8D; }
+    font-weight: 400; }
 
 .panel-tabs {
   display: flex;

@@ -78,7 +78,7 @@
 								History
 							</a>
 						  <div class="panel-block">
-						    <a class="button is-outlined is-fullwidth">
+						    <a class="button is-fullwidth">
 						      Reset all filters
 						    </a>
 						  </div>
@@ -98,6 +98,8 @@
 									<tr>
 										<th>Domain Name</th>
 										<th>Status</th>
+										<th>Date Created</th>
+										<th></th>
 									</tr>
 								</thead>
 								<tbody>
@@ -105,17 +107,34 @@
 									 <tr>
 										 <td><%= listing.domain_name %></td>
 										 <% if (listing.price_type != 0) { %>
-											 <td>Active</td>
+										 <td>Active</td>
 										 <% } else { %>
-											 <td>
-												 <span class="select">
-											    <select>
-											      <option>Listed</option>
-											      <option>Unlist</option>
-											    </select>
-											  </span>
-											</td>
+										 <td>
+											 <span class="select">
+										    <select>
+										      <option>Listed</option>
+										      <option>Unlisted</option>
+										    </select>
+										  </span>
+										</td>
 										 <% } %>
+										 <td><%= listing.date_created %></td>
+										 <td>
+											<a class="button" href="/listing/<%= listing.domain_name %>">
+												<span class="icon">
+													<i class="fa fa-television"></i>
+												</span>
+												<span>View</span>
+											</a>
+										 </td>
+										 <td>
+											<a class="button" href="">
+												<span class="icon">
+											    <i class="fa fa-gear"></i>
+											  </span>
+											  <span>Edit</span>
+											</a>
+										 </td>
 									 </tr>
 									<% }) %>
 								</tbody>
@@ -123,7 +142,9 @@
 							<% } else { %>
 								<p>You have no domains currently!</p>
 							<% } %>
-							<a class="button is-primary" href="/listing/create">Create new listing</a>
+							<div class="container has-text-centered bottom-margin-25">
+								<a class="button" href="/listing/create">Create new listing</a>
+							</div>
 
 							<nav class="pagination">
 								<a class="button">Previous</a>
