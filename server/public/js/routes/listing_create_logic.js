@@ -110,7 +110,11 @@ function submitListings(){
 		}).done(function(data){
 
 			//reset the data to default value
-			$(".input").val($(this).prop("defaultValue"));
+			$(".input").val("");
+			$(".price_input ").each(function(e){
+				$(this).val($(this).prop("defaultValue"));
+			});
+
 			can_submit = true;
 
 			if (data.state == "success"){
