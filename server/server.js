@@ -48,7 +48,7 @@ if (env == "dev"){
 }
 else {
 	//redis store session
-	app.use(express.session({
+	app.use(session({
 		store: new redisStore({
 			host:'10.136.4.55',
 			port:6379
