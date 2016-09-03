@@ -85,15 +85,16 @@
 							</div>
 						</nav>
 
+						<div class="container bottom-margin-25">
+							<a class="button is-info is-medium is-fullwidth" href="/listing/create">Create new listing</a>
+						</div>
+
 					</div>
 
 					<div class="column is-three-quarters">
 						<% if (typeof listings != "undefined") {%>
 						<box class="box">
 							<table id="domain_table" class="table">
-								<caption class="caption">
-									My Listings
-								</caption>
 								<thead>
 									<tr>
 										<th>Domain Name</th>
@@ -113,8 +114,8 @@
 										 <td>
 											 <span class="select">
 										    <select>
-										      <option>Listed</option>
-										      <option>Unlisted</option>
+										      <option>Active</option>
+										      <option>Inactive</option>
 										    </select>
 										  </span>
 										</td>
@@ -143,9 +144,6 @@
 							<% } else { %>
 								<p>You have no domains currently!</p>
 							<% } %>
-							<div class="container has-text-centered bottom-margin-25">
-								<a class="button" href="/listing/create">Create new listing</a>
-							</div>
 
 							<nav class="pagination">
 								<a class="button">Previous</a>
