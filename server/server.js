@@ -1,6 +1,8 @@
 /**************************************************
 ** NODE.JS REQUIREMENTS
 **************************************************/
+var env = process.env.NODE_ENV || 'dev'; 	//dev or prod bool
+console.log(env);
 
 var express = require('express'),
 	app = express(),
@@ -12,6 +14,7 @@ var express = require('express'),
 var bodyParser 	= require('body-parser'),
 	cookieParser = require('cookie-parser'),
 	session = require('express-session'),
+	redisStore = require('connect-redis')(session),
 	passport = require('passport'),
 	db = require('./lib/database.js'),
 	error = require('./lib/error.js');
@@ -35,13 +38,20 @@ app.use(bodyParser.urlencoded({
 app.set('view engine', 'ejs');
 app.set('views', __dirname + '/views');
 
-//express session secret
-app.set('trust proxy', 1) // trust first proxy
+//express session in memory
 app.use(session({
 	secret: 'w3bbi_market',
 	saveUninitialized: false,
 	resave: false}
 ));
+
+//redis store session
+// app.use(express.session({
+// 	store: new redisStore({
+// 		host:'10.136.4.55',
+// 		port:6379
+// 	}), secret: 'w3bbi_market'
+// }));
 
 app.use(passport.initialize());
 app.use(passport.session());
