@@ -43,8 +43,8 @@ if (env == "dev"){
 	app.use(session({
 		secret: 'w3bbi_market',
 		saveUninitialized: false,
-		resave: false}
-	));
+		resave: false
+	}));
 }
 else {
 	//redis store session
@@ -52,7 +52,10 @@ else {
 		store: new redisStore({
 			host:'10.136.4.55',
 			port:6379
-		}), secret: 'w3bbi_market'
+		}),
+		secret: 'w3bbi_market',
+		resave: false,
+		saveUninitialized: false
 	}));
 }
 
