@@ -2,14 +2,14 @@
 
 <nav id="navbar" class="nav has-shadow">
   <div class="nav-left">
-    <div class="w3bbi_icon nav-item">
+    <div class="w3bbi-icon nav-item">
       <a title="Home" href="/">w3bbi</a>
     </div>
   </div>
   <div class="nav-center">
-    <form id="searchbar_form" class="nav-item" novalidate>
+    <form id="searchbar-form" class="nav-item" novalidate>
       <p class="control has-icon">
-        <input id="domain_name" class="input" type="url" placeholder="Search websites" name="domain_name" autocomplete="off">
+        <input id="domain-name" class="input" type="url" placeholder="Search websites" name="domain-name" autocomplete="off">
         <i class="fa fa-search"></i>
       </p>
     </form>
@@ -21,22 +21,22 @@
   </span>
   <div class="nav-right nav-menu">
     <div id="list" class="has-text-centered nav-item">
-      <a class="nav_link" title="Sellers" href="/sellers">List</a>
+      <a class="nav-link" title="Sellers" href="/sellers">List</a>
     </div>
     <div id="rent" class="nav-item">
-      <a class="nav_link" title="Renters" href="/buyers">Rent</a>
+      <a class="nav-link" title="Renters" href="/buyers">Rent</a>
     </div>
 
 <%# navbar checks for a user variable, if it doesnt exist, then display the login button %>
 <% if (!user) { %>
     <div class="nav-item">
-      <a id="login_modal" class="button is-primary modal-button" title="Log In" data-object="#modal_login">Log In</a>
+      <a id="login-modal" class="button is-primary modal-button" title="Log In" data-object="#modal-login">Log In</a>
     </div>
-    <div id="modal_login" class="modal">
+    <div id="modal-login" class="modal">
       <div class="modal-background"></div>
       <div class="modal-container">
         <div class="modal-content">
-            <div id="login_dropdown">
+            <div id="login-dropdown">
               <div id="message">Please log in below</div>
               <form id="target" action="/login" method="post">
                 <p class="control has-icon">
@@ -48,19 +48,19 @@
                   <i class="fa fa-lock"></i>
                 </p>
                 <p class="control">
-                  <button id="drop_login_button" class="button is-primary is-medium is-fullwidth">
+                  <button id="drop-login-button" class="button is-primary is-medium is-fullwidth">
                     Log In
                   </button>
                 </p>
                 <div class="control is-grouped">
                   <p class="control is-expanded">
                     <label class="checkbox">
-                      <input id="remember_checkbox" type="checkbox">
+                      <input id="remember-checkbox" type="checkbox">
                       Remember me
                     </label>
                   </p>
                   <p class="control">
-                      <a class="forgot orange_link" href="/forgot">Forgot password?</a>
+                      <a class="forgot orange-link" href="/forgot">Forgot password?</a>
                   </p>
                 </div>
 
@@ -71,7 +71,7 @@
                   Don&#39;t have an account?
                 </p>
                 <div class="has-text-centered">
-                  <a class="signup  orange_link" href="/signup">Sign Up Now</a>
+                  <a class="signup orange-link" href="/signup">Sign Up Now</a>
                 </div>
               </p>
               </form>
@@ -83,45 +83,43 @@
 
 <!-- or else display the user profile as logged in -->
 <% } else { %>
-  <div class="nav-item">
-    <a id="profile_button" class="button is-outlined is-primary">
+  <div class="nav-item-special">
+    <a id="profile-button" class="button is-outlined is-primary">
       <span><%= user.fullname %></span>
       <span class="icon">
         <i class="fa fa-angle-down"></i>
       </span>
     </a>
-    <div id="profile_dropdown">
-      <aside class="menu">
-        <p class="menu-label">
-          General
-        </p>
-        <ul class="menu-list">
-          <li><a href="/profile">My Profile</a></li>
-          <li><a href="#">Notifications</a></li>
-        </ul>
-        <p class="menu-label">
-          My Domains
-        </p>
-        <ul class="menu-list">
-          <li><a href="#">Manage Listings</a></li>
-          <li>
-            <a class="" href="#">Manage Bids</a>
-            <!-- <ul>
-              <li><a href="#">Example of</a></li>
-              <li><a href="#">an inner</a></li>
-              <li><a href="#">dropdown list</a></li>
-            </ul> -->
-          </li>
-        </ul>
-        <p class="menu-label">
-          Account
-        </p>
-        <ul class="menu-list">
-          <li><a href="#">Settings</a></li>
-          <li><a class="logout" href="/logout">Log Out</a></li>
-        </ul>
-      </aside>
-    </div>
+    <aside id="profile-dropdown" class="menu is-hidden">
+      <p class="menu-label">
+        General
+      </p>
+      <ul class="menu-list">
+        <li><a href="/profile">My Profile</a></li>
+        <li><a href="#">Notifications</a></li>
+      </ul>
+      <p class="menu-label">
+        My Domains
+      </p>
+      <ul class="menu-list">
+        <li><a href="#">Manage Listings</a></li>
+        <li>
+          <a class="" href="#">Manage Bids</a>
+          <!-- <ul>
+            <li><a href="#">Example of</a></li>
+            <li><a href="#">an inner</a></li>
+            <li><a href="#">dropdown list</a></li>
+          </ul> -->
+        </li>
+      </ul>
+      <p class="menu-label">
+        Account
+      </p>
+      <ul class="menu-list">
+        <li><a href="#">Settings</a></li>
+        <li><a class="logout" href="/logout">Log Out</a></li>
+      </ul>
+    </aside>
   </div>
 <% } %>
 

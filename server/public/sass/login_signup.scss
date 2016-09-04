@@ -10,7 +10,7 @@ html {
   margin: 10px 0 20px 0;
 }
 
-.logo_login {
+.logo-login {
   margin-bottom: 10px;
 }
 
@@ -31,7 +31,7 @@ html {
   }
 }
 
-.w3bbi_icon {
+.w3bbi-icon {
   box-sizing: border-box;
   color: $primary;
   font: {
@@ -43,7 +43,7 @@ html {
   transition: all 0.25s;
 }
 
-.w3bbi_icon:hover:not(.active) {
+.w3bbi-icon:hover:not(.active) {
   color: $primary;
   cursor: pointer;
   opacity: 0.85;
@@ -63,7 +63,7 @@ html {
   width: 400px;
 }
 
-.login_button {
+.login-button {
   transition: all 0.25s;
   -webkit-transition: all 0.25s;
 }

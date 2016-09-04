@@ -1457,10 +1457,6 @@ a.box:active {
   .table th {
     color: #111;
     text-align: left; }
-  .table tr:hover {
-    background-color: #f5f7fa;
-    color: #111;
-    cursor: pointer; }
   .table thead td,
   .table thead th {
     border-width: 0 0 2px;
@@ -1468,6 +1464,10 @@ a.box:active {
   .table tbody tr:last-child td,
   .table tbody tr:last-child th {
     border-bottom-width: 0; }
+  .table tbody tr:hover {
+    background-color: #f5f7fa;
+    color: #111;
+    cursor: pointer; }
   .table tbody tr td {
     font-weight: 300; }
   .table tfoot td,
@@ -3790,10 +3790,10 @@ body {
   font-size: 1rem; }
   body a {
     text-decoration: none;
-    -moz-transition: all 0.5s;
-    -o-transition: all 0.5s;
-    -webkit-transition: all 0.5s;
-    transition: all 0.5s; }
+    -moz-transition: all 0.25s;
+    -o-transition: all 0.25s;
+    -webkit-transition: all 0.25s;
+    transition: all 0.25s; }
   body a:hover {
     cursor: pointer; }
 
@@ -3817,24 +3817,24 @@ h3 {
   display: inline-block;
   font-size: 1.2rem; }
 
-.orange_link {
+.orange-link {
   color: #ff8751;
   opacity: 0.9; }
-  .orange_link:hover {
+  .orange-link:hover {
     -webkit-box-shadow: inset 0 -2px 0 #ff8751;
     -moz-box-shadow: inset 0 -2px 0 #ff8751;
     box-shadow: inset 0 -2px 0 #ff8751; }
 
-.white_link {
+.white-link {
   color: #fff;
   opacity: 0.9; }
-  .white_link:hover {
+  .white-link:hover {
     opacity: 1.0; }
 
-.black_link {
+.black-link {
   color: #111;
   opacity: 0.9; }
-  .black_link:hover {
+  .black-link:hover {
     opacity: 1.0; }
 
 .clear-nav {
@@ -3843,25 +3843,25 @@ h3 {
 .bottom-margin-25 {
   margin-bottom: 25px; }
 
-.landing_img {
+.landing-img {
   background-position: bottom center;
   background-repeat: no-repeat;
   background-size: cover;
   width: 100%; }
 
-.img_wrapper {
+.img-wrapper {
   background-color: rgba(0, 0, 0, 0.7);
   height: 100%;
   width: 100%; }
 
-.img_title {
+.img-title {
   color: #fff;
   font-family: 'Lato';
   font-size: 3.5rem;
   font-weight: 400;
   padding: 0; }
 
-.img_subtitle {
+.img-subtitle {
   color: #eee;
   padding: 0;
   font-size: 1.7rem; }

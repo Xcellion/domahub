@@ -5,29 +5,29 @@
   padding: 0;
 }
 
-#about_img {
+#about-img {
   background-image: url('https://media.licdn.com/media//p/8/005/095/0e5/1e9d797.jpg');
   height: 500px;
 }
 
-#renter_faq {
+#renter-faq {
   display: none;
 }
 
-#seller_faq {
+#seller-faq {
   display: none;
 }
 
-#renter_tab {
+#renter-tab {
   margin-right: 30px;
 }
 
-#faq_tabs {
+#faq-tabs {
   text-align: center;
   margin-bottom: 10px;
 }
 
-.faq_selection {
+.faq-selection {
   box-sizing: border-box;
   color: $black;
   display: inline-block;
@@ -38,20 +38,20 @@
   transition: all 0.25s;
 }
 
-.faq_selection:hover {
+.faq-selection:hover {
   cursor: pointer;
 }
 
-.faq_selection.active {
+.faq-selection.active {
   color: #FF8751;
   border: 1px solid #FF8751;
   font-weight: 400;
 }
 
-.faq_question {
+.faq-question {
   padding: 5px 5px 5px 0;
 }
 
-.faq_answer {
+.faq-answer {
   margin-bottom: 10px;
 }

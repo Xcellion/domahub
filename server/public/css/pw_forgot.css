@@ -5,7 +5,7 @@ html {
 #message {
   margin: 10px 0 20px 0; }
 
-.logo_login {
+.logo-login {
   margin-bottom: 10px; }
 
 .control.has-icon .input:focus + .fa-check {
@@ -19,7 +19,7 @@ html {
   -webkit-transform: translate(-4px, 4px);
   transform: translate(-4px, 4px); }
 
-.w3bbi_icon {
+.w3bbi-icon {
   box-sizing: border-box;
   color: #3CBC8D;
   font-family: "Share Tech", "Lucida Console", monospace;
@@ -28,7 +28,7 @@ html {
   -webkit-transition: all 0.25s;
   transition: all 0.25s; }
 
-.w3bbi_icon:hover:not(.active) {
+.w3bbi-icon:hover:not(.active) {
   color: #3CBC8D;
   cursor: pointer;
   opacity: 0.85; }
@@ -46,7 +46,7 @@ html {
   top: 80px;
   width: 400px; }
 
-.login_button {
+.login-button {
   transition: all 0.25s;
   -webkit-transition: all 0.25s; }
 

@@ -14,7 +14,7 @@ body {
   @include font-size(16px);
   a {
     text-decoration: none;
-    @include transition(all 0.5s);
+    @include transition(all 0.25s);
   }
   a:hover {
     cursor: pointer;
@@ -47,19 +47,19 @@ h3 {
   font-size: 1.2rem;
 }
 
-.orange_link {
+.orange-link {
   color: $accent;
   opacity: 0.9;
   &:hover { @include box-shadow(0, -2px, 0, $accent, inset);}
 }
 
-.white_link {
+.white-link {
   color: $white;
   opacity: 0.9;
   &:hover {opacity:1.0;}
 }
 
-.black_link {
+.black-link {
   color: $black;
   opacity: 0.9;
   &:hover {opacity:1.0;}
@@ -73,20 +73,20 @@ h3 {
   margin-bottom: 25px;
 }
 
-.landing_img {
+.landing-img {
   background-position: bottom center;
   background-repeat: no-repeat;
   background-size: cover;
   width: 100%;
 }
 
-.img_wrapper {
+.img-wrapper {
   background-color: rgba(0,0,0,0.7);
   height: 100%;
   width: 100%;
 }
 
-.img_title {
+.img-title {
   color: $white;
   font: {
     family: 'Lato';
@@ -96,7 +96,7 @@ h3 {
   padding: 0;
 }
 
-.img_subtitle {
+.img-subtitle {
   color: #eee;
   padding: 0;
   font-size: 1.7rem;

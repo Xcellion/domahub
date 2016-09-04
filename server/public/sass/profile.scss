@@ -5,12 +5,11 @@
   @include transition(all 0s);
 }
 
-.quick_links a {
-  display: block;
-  margin: 10px;
+.card-footer-item {
+  @include transition(all 0s);
 }
 
-.button_wrapper {
-  margin-top: 35px;
-  margin-bottom: 35px;
+.quick-links a {
+  display: block;
+  margin: 10px;
 }

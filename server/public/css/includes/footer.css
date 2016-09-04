@@ -1,15 +1,15 @@
 /*************************** FOOTER ***************************/
 
-.footer_item {
+.footer-item {
   display: inline-block;
   padding: 0 10px 0 10px;
 }
 
-.footer_item {
+.footer-item {
   font-size: 1rem;
 }
 
-.social_icon {
+.social-icon {
   color: #eee;
   -webkit-transition: none !important;
   transition-delay: none !important;
@@ -20,19 +20,19 @@
   transition: all 0.5s;
 }
 
-#facebook_icon:hover {
+#facebook-icon:hover {
   color: #3b5998; }
 
-#twitter_icon:hover {
+#twitter-icon:hover {
   color: #00aced; }
 
-#linkedin_icon:hover {
+#linkedin-icon:hover {
   color: #0077B5; }
 
-#youtube_icon:hover {
+#youtube-icon:hover {
   color: #cd201f; }
 
-.company_text {
+.company-text {
   box-sizing: border-box;
   color: #eee !important;
   display: inline-block;
@@ -40,11 +40,11 @@
 }
 
 @media screen and (max-width: 769px) {
-  .footer_item {
+  .footer-item {
     font-size: 0.8rem;
   }
 
-  .company_text {
+  .company-text {
     font-size: 0.7rem;
   }
 }

@@ -8,15 +8,15 @@
   z-index: 999;
 }
 
-#navbar.past-landing {
+/*#navbar.past-landing {
   background-color: #2a2a2a;
 }
 
 #navbar.past-middle {
   background-color: rgba(0,0,0,0.65);
-}
+}*/
 
-.w3bbi_icon a {
+.w3bbi-icon a {
   box-sizing: border-box;
   color: #3CBC8D;
   font-family: 'Share Tech';
@@ -27,37 +27,33 @@
   transition: all 0.25s;
 }
 
-.w3bbi_icon a:hover:not(.active) {
+.w3bbi-icon a:hover:not(.active) {
   color: #3CBC8D;
   cursor: pointer;
   opacity: 0.85;
 }
 
-.search_icon.past-landing {
+/*.search-icon.past-landing {
   color: #eeeeee;
 }
 
-.search_icon.past-middle {
+.search-icon.past-middle {
   color: #aaaaaa;
-}
+}*/
 
-#searchbar_form {
-
-}
-
-#searchbar_form input {
+#searchbar-form input {
   color: #333;
   font-family: 'Share Tech';
   font-size: 1.0em;
   outline: none;
 }
 
-.nav_link {
+.nav-link {
   color: #484848;
   padding: 5px;
 }
 
-.nav_link:hover {
+.nav-link:hover {
   -moz-box-shadow: inset 0 -3px 0 #3CBC8D;
   -webkit-box-shadow: inset 0 -3px 0 #3CBC8D;
   box-shadow: inset 0 -3px 0 #3CBC8D;
@@ -67,7 +63,7 @@
 
 /************************************* LOGIN DROPDOWN *************************/
 
-#login_dropdown {
+#login-dropdown {
   background-color: #fff;
   -moz-box-shadow: 0 0 5px rgba(0,0,0,0.3);
   -webkit-box-shadow: 0 0 5px rgba(0,0,0,0.3);
@@ -76,7 +72,7 @@
   margin: auto;
 }
 
-#drop_login_button {
+#drop-login-button {
   transition: all 0.25s;
   -webkit-transition: all 0.25s;
 }
@@ -86,27 +82,28 @@
   text-align: center;
 }
 
-#remember_checkbox{
-    vertical-align:middle;
+#remember-checkbox{
+  vertical-align:middle;
 }
 
 /************************************* PROFILE DROPDOWN *************************/
 
-#profile_button {
+#profile-button {
   transition: all 0s;
   -webkit-transition: all 0s;
 }
 
-#profile_dropdown {
+#profile-dropdown {
   background-color: #fff;
   box-shadow: 0 4px 7px rgba(0,0,0, 0.1);
-  display: none;
-  top: 100%;
+  display: block;
   position: absolute;
+  top: 100%;
 }
 
-#profile_dropdown.is-active {
-  display: block;
+.nav-item-special {
+  padding: 15px 10px 15px 10px;
+
 }
 
 .logout {

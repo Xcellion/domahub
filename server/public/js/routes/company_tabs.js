@@ -1,7 +1,7 @@
 var renderPage = function(pathName) {
     //alter tab CSS
     $(".tab").removeClass("is-active");
-    $("#" + pathName + "_tab").addClass("is-active");
+    $("#" + pathName + "-tab").addClass("is-active");
 
     //change which section is displaying
     $(".section").addClass("is-hidden");
@@ -31,7 +31,7 @@ $(document).ready(function() {
 
   //changing tabs
   $(".tab").click(function() {
-    var tabName = $(this).attr("id").split("_").shift();
+    var tabName = $(this).attr("id").split("-").shift();
 
     $(".tab").removeClass("is-active");
     $(this).addClass("is-active");

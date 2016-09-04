@@ -1,7 +1,7 @@
 $(document).ready(function() {
 
 	//verify email
-	$("#email_input").keyup(function(e) {
+	$("#email-input").keyup(function(e) {
 		//if correct email, show check
 		if (validateEmail($(this).val())) {
 			showSuccessDanger($(this), true);
@@ -15,7 +15,7 @@ $(document).ready(function() {
 	});
 
 	//verify fullname
-	$("#fullname_input, #pw_input").keyup(function() {
+	$("#fullname-input, #pw-input").keyup(function() {
 		//if not blank
 		if ($(this).val().length > 0) {
 			showSuccessDanger($(this), true);
@@ -29,8 +29,8 @@ $(document).ready(function() {
 	});
 
 	//verify passwords are matching
-	$("#verify_pw").keyup(function() {
-		if ($("#pw_input").val() == $(this).val()) {
+	$("#verify-pw").keyup(function() {
+		if ($("#pw-input").val() == $(this).val()) {
 			showSuccessDanger($(this), true);
 		}
 		else if ($(this).val().length == 0){
@@ -45,41 +45,41 @@ $(document).ready(function() {
 	$('#target').submit(function(event){
 
 		//if no email is entered
-		if (!$("#email_input").val()) {
+		if (!$("#email-input").val()) {
 			$("#message").fadeOut(100, function(){
 				$("#message").css("color", "#ed1c24").text("Please enter your email address!").fadeIn(100);
-				$("#email_input").focus();
-				showSuccessDanger($("#email_input"), false);
+				$("#email-input").focus();
+				showSuccessDanger($("#email-input"), false);
 			});
 			return false;
 		}
 
 		//if no name is entered
-		else if (!$("#fullname_input").val()) {
+		else if (!$("#fullname-input").val()) {
 			$("#message").fadeOut(100, function(){
 				$("#message").css("color", "#ed1c24").text("Please enter your name!").fadeIn(100);
-				$("#fullname_input").focus();
-				showSuccessDanger($("#fullname_input"), false);
+				$("#fullname-input").focus();
+				showSuccessDanger($("#fullname-input"), false);
 			});
 			return false;
 		}
 
 		//if no password is entered
-		else if (!$("#pw_input").val()) {
+		else if (!$("#pw-input").val()) {
 			$("#message").fadeOut(100, function(){
 				$("#message").css("color", "#ed1c24").text("Please enter a password!").fadeIn(100);
-				$("#pw_input").focus();
-				showSuccessDanger($("#pw_input"), false);
+				$("#pw-input").focus();
+				showSuccessDanger($("#pw-input"), false);
 			});
 			return false;
 		}
 
 		//if passwords do not match
-		else if ($("#pw_input").val() != $("#verify_pw").val()){
+		else if ($("#pw-input").val() != $("#verify-pw").val()){
 			$("#message").fadeOut(100, function(){
 				$("#message").css("color", "#ed1c24").html("Passwords do not match!").fadeIn(100);
-				$("#pw_input").focus();
-				showSuccessDanger($("#verify_pw"), false);
+				$("#pw-input").focus();
+				showSuccessDanger($("#verify-pw"), false);
 			});
 			return false;
 		}
