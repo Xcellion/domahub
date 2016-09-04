@@ -4,10 +4,12 @@
   -webkit-transition: all 0s;
   transition: all 0s; }
 
-.quick_links a {
+.card-footer-item {
+  -moz-transition: all 0s;
+  -o-transition: all 0s;
+  -webkit-transition: all 0s;
+  transition: all 0s; }
+
+.quick-links a {
   display: block;
   margin: 10px; }
-
-.button_wrapper {
-  margin-top: 35px;
-  margin-bottom: 35px; }

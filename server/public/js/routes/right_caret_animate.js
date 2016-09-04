@@ -1,5 +1,5 @@
 $(document).ready(function() {
-  $('.index_link').hover(function() {
+  $('.index-link').hover(function() {
      $(this).next().toggleClass('active');
   });
 });

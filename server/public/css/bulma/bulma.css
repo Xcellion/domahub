@@ -1457,10 +1457,6 @@ a.box:active {
   .table th {
     color: #111;
     text-align: left; }
-  .table tr:hover {
-    background-color: #f5f7fa;
-    color: #111;
-    cursor: pointer; }
   .table thead td,
   .table thead th {
     border-width: 0 0 2px;
@@ -1468,6 +1464,10 @@ a.box:active {
   .table tbody tr:last-child td,
   .table tbody tr:last-child th {
     border-bottom-width: 0; }
+  .table tbody tr:hover {
+    background-color: #f5f7fa;
+    color: #111;
+    cursor: pointer; }
   .table tbody tr td {
     font-weight: 300; }
   .table tfoot td,

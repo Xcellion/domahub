@@ -35,11 +35,6 @@
   th
     color: $text
     text-align: left
-  tr
-    &:hover
-      background-color: $grey-lighter
-      color: $text
-      cursor: pointer
   thead
     td,
     th
@@ -51,6 +46,10 @@
         td,
         th
           border-bottom-width: 0
+      &:hover
+        background-color: $grey-lighter
+        color: $text
+        cursor: pointer
       td
         font-weight: 300
   tfoot

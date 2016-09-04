@@ -8,7 +8,7 @@ $(document).ready(function() {
 	}
 
 	//remember me check box
-	$("#remember_checkbox").click(function(){
+	$("#remember-checkbox").click(function(){
 		remember($(this).is(":checked"));
 	});
 
@@ -16,7 +16,7 @@ $(document).ready(function() {
 	$('#target').submit(function(event){
 
 		//re-set cookie for remember
-		remember($("#remember_checkbox").is(":checked"));
+		remember($("#remember-checkbox").is(":checked"));
 
 		//if no email is entered
 		if (!$("#email").val()) {

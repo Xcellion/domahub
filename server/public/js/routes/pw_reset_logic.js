@@ -3,7 +3,7 @@ var can_submit = true;
 $(document).ready(function() {
 
 	//verify fullname
-	$("#pw_input").keyup(function() {
+	$("#pw-input").keyup(function() {
 		//if not blank
 		if ($(this).val().length > 0) {
 			showSuccessDanger($(this), true);
@@ -17,8 +17,8 @@ $(document).ready(function() {
 	});
 
 	//verify passwords are matching
-	$("#verify_pw").keyup(function() {
-		if ($("#pw_input").val() == $(this).val()) {
+	$("#verify-pw").keyup(function() {
+		if ($("#pw-input").val() == $(this).val()) {
 			showSuccessDanger($(this), true);
 		}
 		else if ($(this).val().length == 0){
@@ -29,25 +29,25 @@ $(document).ready(function() {
 		}
 	});
 
-	$('#login_form').submit(function(event){
+	$('#login-form').submit(function(event){
 		event.preventDefault();
 
 		//if no password is entered
-		if (!$("#pw_input").val()) {
+		if (!$("#pw-input").val()) {
 			$("#message").fadeOut(100, function(){
 				$("#message").css("color", "#ed1c24").text("Please enter a password!").fadeIn(100);
-				$("#pw_input").focus();
-				showSuccessDanger($("#pw_input"), false);
+				$("#pw-input").focus();
+				showSuccessDanger($("#pw-input"), false);
 			});
 			return false;
 		}
 
 		//if passwords do not match
-		else if ($("#pw_input").val() != $("#verify_pw").val()){
+		else if ($("#pw-input").val() != $("#verify-pw").val()){
 			$("#message").fadeOut(100, function(){
 				$("#message").css("color", "#ed1c24").html("Passwords do not match!").fadeIn(100);
-				$("#pw_input").focus();
-				showSuccessDanger($("#verify_pw"), false);
+				$("#pw-input").focus();
+				showSuccessDanger($("#verify-pw"), false);
 			});
 			return false;
 		}
@@ -58,12 +58,12 @@ $(document).ready(function() {
 				type: "POST",
 				url: window.location.pathname,
 				data: {
-					password: $("#pw_input").val()
+					password: $("#pw-input").val()
 				}
 			}).done(function(data){
 				//reset the data
-				$("#pw_input").val("");
-				$("#verify_pw").val("");
+				$("#pw-input").val("");
+				$("#verify-pw").val("");
 
 				if (data.state == "success"){
 					$("#message").text("Success! You may log in with your new password!");

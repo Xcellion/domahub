@@ -8,10 +8,10 @@
 
   <body>
 
-    <div id="login_form" class="form">
+    <div id="login-form" class="form">
       <form id="target" action="/reset" method="post">
-        <div class="has-text-centered logo_login">
-          <a class="w3bbi_icon" href="/">w3bbi</a>
+        <div class="has-text-centered logo-login">
+          <a class="w3bbi-icon" href="/">w3bbi</a>
         </div>
         <div id="message" class="has-text-centered">
           <% if (typeof message != "undefined") {%>
@@ -24,18 +24,18 @@
       <div id="form_to_hide">
           <label class="label">Password</label>
           <p class="control has-icon has-icon-right">
-              <input class="input is-medium" name="password" type="password" id="pw_input">
+              <input class="input is-medium" name="password" type="password" id="pw-input">
               <i class="fa fa-check is-hidden is-success"></i>
               <i class="fa fa-times is-hidden is-danger"></i>
           </p>
           <label class="label">Confirm Password</label>
           <p class="control has-icon has-icon-right">
-              <input class="input is-medium" name="verify_pw" type="password" id="verify_pw" autocomplete="off">
+              <input class="input is-medium" name="verify-pw" type="password" id="verify-pw" autocomplete="off">
               <i class="fa fa-check is-hidden is-success"></i>
               <i class="fa fa-times is-hidden is-danger"></i>
           </p>
           <p class="control">
-              <button id="login_button" class="login_button button is-primary is-medium is-fullwidth">
+              <button id="login-button" class="login-button button is-primary is-medium is-fullwidth">
                   Change your password
               </button>
           </p>
@@ -47,13 +47,13 @@
                   Remember your password?
               </p>
               <div class="has-text-centered">
-                  <a class="signup orange_link" href="/login">Log In Now</a>
+                  <a class="signup orange-link" href="/login">Log In Now</a>
               </div>
           </p>
       </div>
 
       <div id="accept">
-          <a id="login_button" class="login_button button is-primary is-medium is-fullwidth" href="/login">
+          <a id="login-button" class="login-button button is-primary is-medium is-fullwidth" href="/login">
             Log in
           </a>
       </div>

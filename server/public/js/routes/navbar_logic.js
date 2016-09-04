@@ -3,32 +3,32 @@ $(document).ready(function() {
 	if (typeof message != "undefined" && message){
 		$("#message").text(message);
 		if (message == "Invalid username / password!"){
-			$('#modal_login').addClass('is-active');
+			$('#modal-login').addClass('is-active');
 			$("#message").css("color", "#ed1c24");
 		}
 	}
 
 	//redirect search to the appropriate /listing page
-	$("#searchbar_form").submit(function(e){
+	$("#searchbar-form").submit(function(e){
 		e.preventDefault();
         window.location = window.location.origin + "/listing/" + $('#domain_name').val();
 	});
 
 	//modal stuff
-	$('#login_modal').click(function() {
-	  $('#modal_login').addClass('is-active');
+	$('#login-modal').click(function() {
+	  $('#modal-login').addClass('is-active');
 	});
 
 	$('.modal-close, .modal-background').click(function() {
-	  $('#modal_login').removeClass('is-active');
+	  $('#modal-login').removeClass('is-active');
 	  $("#message").text("Please log in below");
 	  $("#message").attr("style", "");
 	});
 
-	//profile logic
-	$("#profile_button").click(function() {
+	//profile dropdown logic
+	$("#profile-button").click(function() {
 	  $(this).toggleClass("is-outlined is-active");
-	  $("#profile_dropdown").toggleClass("is-active");
+	  $("#profile-dropdown").toggleClass("is-hidden");
 	});
 
 	$(".nav-toggle").click(function() {

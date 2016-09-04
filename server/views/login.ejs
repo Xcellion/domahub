@@ -8,10 +8,10 @@
 
   <body>
 
-    <div id="login_form" class="form">
+    <div id="login-form" class="form">
       <form id="target" action="/login" method="post">
-        <div class="has-text-centered logo_login">
-          <a class="w3bbi_icon" href="/">w3bbi</a>
+        <div class="has-text-centered logo-login">
+          <a class="w3bbi-icon" href="/">w3bbi</a>
         </div>
         <div id="message" class="has-text-centered">
           <% if (typeof message != "undefined") {%>
@@ -29,19 +29,19 @@
           <input id="password" name="password" class="input is-medium" type="password">
         </p>
         <p class="control">
-          <button id="login_button" class="login_button button is-primary is-medium is-fullwidth">
+          <button id="login-button" class="login-button button is-primary is-medium is-fullwidth">
             Log In
           </button>
         </p>
         <div class="control is-grouped">
           <p class="control is-expanded">
             <label class="checkbox">
-              <input id="remember_checkbox" type="checkbox">
+              <input id="remember-checkbox" type="checkbox">
               Remember me
             </label>
           </p>
           <p class="control">
-              <a class="forgot orange_link" href="/forgot">Forgot password?</a>
+              <a class="forgot orange-link" href="/forgot">Forgot password?</a>
           </p>
         </div>
 
@@ -52,7 +52,7 @@
           Don't have an account?
         </p>
         <div class="has-text-centered">
-          <a class="signup orange_link" href="/signup">Sign Up Now</a>
+          <a class="signup orange-link" href="/signup">Sign Up Now</a>
         </div>
       </p>
       </form>
