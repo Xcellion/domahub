@@ -30,7 +30,10 @@
 <%# navbar checks for a user variable, if it doesnt exist, then display the login button %>
 <% if (!user) { %>
     <div class="nav-item">
-      <a id="login-modal" class="button is-primary modal-button" title="Log In" data-object="#modal-login">Log In</a>
+      <a id="login-modal" class="button is-primary is-outlined modal-button" title="Log In" data-object="#modal-login">Log In</a>
+    </div>
+    <div class="nav-item">
+      <a id="signup" class="button is-primary is-outlined" title="Sign Up" href="/signup">Sign Up</a>
     </div>
     <div id="modal-login" class="modal">
       <div class="modal-background"></div>
