@@ -31,7 +31,7 @@
 }
 
 .blob {
-  background-color: #3CBC8D;
+  background-color: $primary;
   margin-top: 30px;
 }
 
@@ -52,36 +52,3 @@
 }
 
 /************************ MEDIA QUERIES ************************/
-// @media screen and (max-width: 769px) {
-//
-//   #landing_title {
-//     font-size: 2rem;
-//   }
-//
-//   #landing_subtitle {
-//     font-size: 1.2rem;
-//   }
-//
-//   .landing_img {
-//     height: 400px;
-//   }
-//
-//   .landing_texts {
-//     top: 120px;
-//   }
-//
-//   .main_p {
-//     font-size: 1.2rem;
-//     font-weight: 300;
-//   }
-//   .main_link {
-//     font-size: 1rem;
-//   }
-// }
-//
-// @media screen and (min-width: 769px) and (max-width: 1375px) {
-//
-//   .landing_img {
-//     height: 600px;
-//   }
-// }
