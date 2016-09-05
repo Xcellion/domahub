@@ -183,7 +183,7 @@ input[type="radio"] {
   vertical-align: baseline; }
 
 small {
-  font-size: 11px; }
+  font-size: 12px; }
 
 span {
   font-style: inherit;
@@ -482,7 +482,7 @@ a.box:active {
   border-radius: 3px;
   color: #222324;
   display: inline-flex;
-  font-size: 14px;
+  font-size: 16px;
   height: 32px;
   justify-content: flex-start;
   line-height: 24px;
@@ -517,7 +517,7 @@ a.box:active {
     color: inherit; }
   .button small {
     display: block;
-    font-size: 11px;
+    font-size: 12px;
     line-height: 1;
     margin-top: 5px; }
   .button .icon:first-child,
@@ -839,7 +839,7 @@ a.box:active {
 .content.is-medium {
   font-size: 18px; }
   .content.is-medium code {
-    font-size: 14px; }
+    font-size: 16px; }
 
 .content.is-large {
   font-size: 24px; }
@@ -855,7 +855,7 @@ a.box:active {
   border-radius: 3px;
   color: #222324;
   display: inline-flex;
-  font-size: 14px;
+  font-size: 16px;
   height: 32px;
   justify-content: flex-start;
   line-height: 24px;
@@ -971,7 +971,7 @@ a.box:active {
     border-radius: 3px;
     color: #222324;
     display: inline-flex;
-    font-size: 14px;
+    font-size: 16px;
     height: 32px;
     justify-content: flex-start;
     line-height: 24px;
@@ -1080,7 +1080,7 @@ a.box:active {
 
 .help {
   display: block;
-  font-size: 11px;
+  font-size: 12px;
   margin-top: 5px; }
   .help.is-white {
     color: #fff; }
@@ -1560,11 +1560,11 @@ a.box:active {
   .title.is-5 {
     font-size: 18px; }
     .title.is-5 code {
-      font-size: 14px; }
+      font-size: 16px; }
   .title.is-6 {
-    font-size: 14px; }
+    font-size: 16px; }
     .title.is-6 code {
-      font-size: 14px; }
+      font-size: 16px; }
   .title.is-normal {
     font-weight: 400; }
     .title.is-normal strong {
@@ -1580,7 +1580,7 @@ a.box:active {
   .subtitle code {
     border-radius: 3px;
     display: inline-block;
-    font-size: 14px;
+    font-size: 16px;
     padding: 2px 3px;
     vertical-align: top; }
   .subtitle strong {
@@ -1606,11 +1606,11 @@ a.box:active {
   .subtitle.is-5 {
     font-size: 18px; }
     .subtitle.is-5 code {
-      font-size: 14px; }
+      font-size: 16px; }
   .subtitle.is-6 {
-    font-size: 14px; }
+    font-size: 16px; }
     .subtitle.is-6 code {
-      font-size: 14px; }
+      font-size: 16px; }
   .subtitle.is-normal {
     font-weight: 400; }
     .subtitle.is-normal strong {
@@ -1810,12 +1810,12 @@ a.box:active {
     background-color: #ed6c63;
     color: white; }
   .tag.is-small {
-    font-size: 11px;
+    font-size: 12px;
     height: 20px;
     padding-left: 8px;
     padding-right: 8px; }
   .tag.is-medium {
-    font-size: 14px;
+    font-size: 16px;
     height: 32px;
     padding-left: 14px;
     padding-right: 14px; }
@@ -2736,7 +2736,7 @@ a.box:active {
 
 .menu-label {
   color: #aeb1b5;
-  font-size: 11px;
+  font-size: 12px;
   letter-spacing: 1px;
   margin-bottom: 5px;
   text-transform: uppercase; }
@@ -3096,7 +3096,7 @@ a.nav-item.is-tab {
 
 .panel-tabs {
   display: flex;
-  font-size: 11px;
+  font-size: 12px;
   padding: 5px 10px 0;
   justify-content: center; }
   .panel-tabs a {
@@ -3213,7 +3213,7 @@ a.panel-block:hover {
   .tabs.is-toggle ul {
     border-bottom: none; }
   .tabs.is-small {
-    font-size: 11px; }
+    font-size: 12px; }
     .tabs.is-small a {
       padding: 2px 8px; }
     .tabs.is-small.is-boxed a, .tabs.is-small.is-toggle a {
