@@ -50,7 +50,7 @@ else {
 	//redis store session
 	app.use(session({
 		store: new redisStore({
-			host:'10.136.4.55',
+			host:'127.0.0.1',
 			port:6379
 		}),
 		secret: 'w3bbi_market',
