@@ -51,7 +51,8 @@ else {
 	app.use(session({
 		store: new redisStore({
 			host:'127.0.0.1',
-			port:6379
+			port:6379,
+			pass:"wonmin33"
 		}),
 		secret: 'w3bbi_market',
 		resave: false,
