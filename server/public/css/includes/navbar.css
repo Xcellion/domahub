@@ -1,90 +1,43 @@
 /********************************* NAVBAR ***********************************/
-
-#navbar {
-  position: fixed;
-  width: 100%;
-  z-index: 999;
-}
-
-/*#navbar.past-landing {
-  background-color: #2a2a2a;
-}
-
-#navbar.past-middle {
-  background-color: rgba(0,0,0,0.65);
-}*/
-
-/*.search-icon.past-landing {
-  color: #eeeeee;
-}
-
-.search-icon.past-middle {
-  color: #aaaaaa;
-}*/
-
 .w3bbi-icon a {
-  box-sizing: border-box;
   color: #3CBC8D;
   font-family: 'Share Tech';
-  font-size: 1.5em;
+  font-size: 1.5rem;
   font-weight: bold;
-}
+  opacity: 0.9; }
 
-.w3bbi-icon a:hover:not(.active) {
+.w3bbi-icon a:hover {
   color: #3CBC8D;
-  opacity: 0.85;
-}
+  opacity: 1.0;
+  box-shadow: none;
+  -moz-box-shadow: none;
+  -webkit-box-shadow: none; }
 
 #searchbar-form input {
-  color: #333;
-  font-family: 'Share Tech';
-  font-size: 1.0em;
-  outline: none;
-}
+  font-family: "Share Tech", "Lucida Console", monospace; }
 
 .nav-link {
-  padding: 5px;
-}
+  padding: 5px; }
 
 /************************************* LOGIN DROPDOWN *************************/
-
 #login-dropdown {
   background-color: #fff;
-  -moz-box-shadow: 0 0 5px rgba(0,0,0,0.3);
-  -webkit-box-shadow: 0 0 5px rgba(0,0,0,0.3);
-  box-shadow: 0 0 5px rgba(0,0,0,0.3);
-  padding: 25px;
-  margin: auto;
-}
+  padding: 25px; }
 
-#drop-login-button {
-  transition: all 0.25s;
-  -webkit-transition: all 0.25s;
-}
-
-#message {
-  padding-bottom: 20px;
-  text-align: center;
-}
-
-#remember-checkbox{
-  vertical-align:middle;
-}
+#remember-checkbox {
+  vertical-align: middle; }
 
 /************************************* PROFILE DROPDOWN *************************/
-
 #profile-dropdown {
   background-color: #fff;
-  box-shadow: 0 4px 7px rgba(0,0,0, 0.1);
-  display: block;
+  -moz-box-shadow: 0 4px 7px rgba(0, 0, 0, 0.1);
+  -webkit-box-shadow: 0 4px 7px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 7px rgba(0, 0, 0, 0.1);
   position: absolute;
-  top: 100%;
-}
+  top: 100%; }
 
 .nav-item-special {
-  padding: 15px 10px 15px 10px;
-}
+  padding: 15px 10px 15px 10px; }
 
 .logout {
-  color: #3CBC8D !important;
-}
+  color: #3CBC8D !important; }

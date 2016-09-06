@@ -1,0 +1,59 @@
+@import '../_vars.scss';
+
+/********************************* NAVBAR ***********************************/
+
+.w3bbi-icon a {
+  color: $primary;
+  font: {
+    family: 'Share Tech';
+    size: 1.5rem;
+    weight: bold;
+  }
+  opacity: 0.9;
+}
+
+.w3bbi-icon a:hover {
+  color: $primary;
+  opacity: 1.0;
+  box-shadow: none;
+  -moz-box-shadow: none;
+  -webkit-box-shadow: none;
+}
+
+#searchbar-form input {
+  font-family: $sharetech;
+}
+
+.nav-link {
+  padding: 5px;
+}
+
+/************************************* LOGIN DROPDOWN *************************/
+
+#login-dropdown {
+  background-color: $white;
+  padding: 25px;
+}
+
+#remember-checkbox {
+  vertical-align: middle;
+}
+
+/************************************* PROFILE DROPDOWN *************************/
+
+#profile-dropdown {
+  background-color: $white;
+  -moz-box-shadow: 0 4px 7px rgba(0,0,0, 0.1);
+  -webkit-box-shadow: 0 4px 7px rgba(0,0,0, 0.1);
+  box-shadow: 0 4px 7px rgba(0,0,0, 0.1);
+  position: absolute;
+  top: 100%;
+}
+
+.nav-item-special {
+  padding: 15px 10px 15px 10px;
+}
+
+.logout {
+  color: $primary !important;
+}

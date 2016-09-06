@@ -82,10 +82,14 @@ input:-webkit-autofill {
 }
 
 /********************** MEDIA QUERIES****************/
-@media screen and (max-width: 769px) {
-  h2 {
-    font: {
-      size: 1.4rem;
-    }
+@include mobile {
+  // .img-title {
+  //   text-align: left;
+  // }
+  .img-subtitle {
+    text-align: left;
+  }
+  #landing-buttons {
+    text-align: left;
   }
 }
