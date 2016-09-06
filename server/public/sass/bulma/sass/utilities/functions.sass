@@ -32,3 +32,8 @@
     @return rgba($black, 0.5)
   @else
     @return white
+
+// Font-size rem to px fallback
+@function calculateRem($size)
+  $remSize: $size / 16px
+  @return $remSize * 1rem

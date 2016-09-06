@@ -1,3 +1,62 @@
+=font-size($size)
+  font-size: $size
+  font-size: calculateRem($size)
+
+// Box-shadow mixin
+=box-shadow($top, $left, $blur, $color, $inset: false)
+  @if $inset
+    -webkit-box-shadow:inset $top $left $blur $color
+    -moz-box-shadow:inset $top $left $blur $color
+    box-shadow:inset $top $left $blur $color
+  @else
+    -webkit-box-shadow: $top $left $blur $color
+    -moz-box-shadow: $top $left $blur $color
+    box-shadow: $top $left $blur $color
+
+// Transition mixin
+=transition($transition...)
+    -moz-transition:    $transition
+    -o-transition:      $transition
+    -webkit-transition: $transition
+    transition:         $transition
+
+=transition-property($property...)
+    -moz-transition-property:    $property
+    -o-transition-property:      $property
+    -webkit-transition-property: $property
+    transition-property:         $property
+
+=transition-duration($duration...)
+    -moz-transition-property:    $duration
+    -o-transition-property:      $duration
+    -webkit-transition-property: $duration
+    transition-property:         $duration
+
+=transition-timing-function($timing...)
+    -moz-transition-timing-function:    $timing
+    -o-transition-timing-function:      $timing
+    -webkit-transition-timing-function: $timing
+    transition-timing-function:         $timing
+
+=transition-delay($delay...)
+    -moz-transition-delay:    $delay
+    -o-transition-delay:      $delay
+    -webkit-transition-delay: $delay
+    transition-delay:         $delay
+
+// Border-radius mixin
+=border-radius($radius)
+  -webkit-border-radius: $radius
+     -moz-border-radius: $radius
+      -ms-border-radius: $radius
+          border-radius: $radius
+
+// Opacity mixin
+=opacity($opacity)
+  opacity: $opacity
+  $opacity-ie: $opacity * 100
+  filter: alpha(opacity=$opacity-ie)
+
 =arrow($color)
   border: 1px solid $color
   border-right: 0

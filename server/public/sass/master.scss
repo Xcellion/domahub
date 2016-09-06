@@ -1,5 +1,4 @@
 @import 'bulma/bulma.sass';
-@import 'mixins';
 
 /******************** FORMS/INPUT ******************/
 
@@ -8,61 +7,8 @@ input:-webkit-autofill {
 }
 
 /********************** UNIVERSAL ******************/
-
-body {
-  font-family: $roboto;
-  @include font-size(16px);
-  a {
-    text-decoration: none;
-    @include transition(all 0.25s);
-  }
-  a:hover {
-    cursor: pointer;
-  }
-}
-
-html {
-  background-color: #fff;
-}
-
-h1 {
-  color: $black;
-  font: {
-    size: 2.5rem;
-    weight: 400;
-  }
-  padding: 25px 0 25px 0;
-}
-h2 {
-  color: $black;
-  font: {
-    size: 1.8rem;
-    weight: 300;
-  }
-  padding: 25px 0 25px 0;
-}
-h3 {
-  color: $black;
-  display: inline-block;
-  font-size: 1.2rem;
-}
-
-.orange-link {
-  color: $accent;
-  opacity: 0.9;
-  &:hover { @include box-shadow(0, -2px, 0, $accent, inset);}
-}
-
-.white-link {
-  color: $white;
-  opacity: 0.9;
-  &:hover {opacity:1.0;}
-}
-
-.black-link {
-  color: $black;
-  opacity: 0.9;
-  &:hover {opacity:1.0;}
+.button {
+  line-height: 28px;
 }
 
 .clear-nav {
@@ -134,10 +80,6 @@ h3 {
   margin: 5px auto 5px auto;
   width: 50%;
 }
-
-/********************** MAIN ****************/
-
-
 
 /********************** MEDIA QUERIES****************/
 @media screen and (max-width: 769px) {

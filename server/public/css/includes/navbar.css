@@ -43,16 +43,7 @@
 }
 
 .nav-link {
-  color: #484848;
   padding: 5px;
-}
-
-.nav-link:hover {
-  -moz-box-shadow: inset 0 -3px 0 #3CBC8D;
-  -webkit-box-shadow: inset 0 -3px 0 #3CBC8D;
-  box-shadow: inset 0 -3px 0 #3CBC8D;
-  color: #3CBC8D;
-  cursor: pointer;
 }
 
 /************************************* LOGIN DROPDOWN *************************/
@@ -82,11 +73,6 @@
 
 /************************************* PROFILE DROPDOWN *************************/
 
-#profile-button {
-  transition: all 0s;
-  -webkit-transition: all 0s;
-}
-
 #profile-dropdown {
   background-color: #fff;
   box-shadow: 0 4px 7px rgba(0,0,0, 0.1);
@@ -97,13 +83,8 @@
 
 .nav-item-special {
   padding: 15px 10px 15px 10px;
-
 }
 
 .logout {
   color: #3CBC8D !important;
-}
-
-@media screen and (min-width: 769px) {
-
 }
