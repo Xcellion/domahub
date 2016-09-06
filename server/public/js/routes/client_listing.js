@@ -49,14 +49,15 @@ $(document).ready(function() {
 	//stripe buttons
 	$('#stripe-button').click(function(e){
 		e.preventDefault();
+		console.log(checkSubmit())
 
 		if (checkSubmit() == true && unlock){
 			handler.open({
 				amount: totalPrice * 100,
 				description: 'Renting at ' + listing_info.domain_name
 			});
-			$("#submitButton").css("background", "black");
 
+			$("#submitButton").css("background", "black");
 		}
 	});
 
@@ -174,10 +175,13 @@ function checkSubmit(){
 
 	if (!user){
 		bool = "Please log in!";
-		$("#login_modal").css("background-color", "red");
-		$("#login_modal").addClass("shake").one('webkitAnimationEnd oanimationend msAnimationEnd animationend',
+		$("#login-modal").css({
+			"border-color": "red",
+			"color": "red"
+		});
+		$("#login-modal").addClass("shake").one('webkitAnimationEnd oanimationend msAnimationEnd animationend',
         function (e) {
-            $("#login_modal").removeClass('shake');
+            $("#login-modal").removeClass('shake');
         });
 	}
 	else if (!rental_info && (!newEvents || newEvents.length == 0)){
@@ -213,6 +217,7 @@ function checkSubmit(){
 
 //function to submit new rental info
 function submitRentals(){
+	console.log('w')
 	if (checkSubmit() == true && unlock){
 		var newEvents = $('#calendar').fullCalendar('clientEvents', filterNew);
 		unlock = false;
