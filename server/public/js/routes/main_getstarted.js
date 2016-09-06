@@ -1,4 +1,5 @@
 var surveyJSON = {
+ questionTitleTemplate: "{require} {title}",
  goNextPageAutomatic: true,
  pages: [
   {
@@ -133,4 +134,5 @@ var surveyJSON = {
 };
 
 var survey = new Survey.Survey(surveyJSON, "surveyContainer");
+
 survey.render("surveyContainer")
