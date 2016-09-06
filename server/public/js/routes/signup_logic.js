@@ -15,7 +15,21 @@ $(document).ready(function() {
 	});
 
 	//verify fullname
-	$("#fullname-input, #pw-input").keyup(function() {
+	$("#fullname-input").keyup(function() {
+		//if not blank
+		if (11 > $(this).val().length > 0) {
+			showSuccessDanger($(this), true);
+		}
+		else if ($(this).val().length == 0){
+			showSuccessDanger($(this));
+		}
+		else {
+			showSuccessDanger($(this), false);
+		}
+	});
+
+	// verify password input
+	$("#pw-input").keyup(function() {
 		//if not blank
 		if ($(this).val().length > 0) {
 			showSuccessDanger($(this), true);

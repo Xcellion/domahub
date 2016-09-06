@@ -11,22 +11,43 @@
 
   <%- include("templates/navbar", {user: user}); %>
 
-  <div id="main">
-
-    <div class="container">
-      <div class="column-50 is-centered text-center">
-        <h1>Careers</h1>
-      </div>
-      <div class="column-40 is-centered text-center">
-        <p>w3bbi is not currently hiring at this time</p>
+  <section id="about-img" class="hero is-primary is-medium landing-img clear-nav">
+    <div class="hero-body flex-vert-center">
+      <div class="container has-text-centered">
+        <h1 class="img-title">
+          Every journey begins with one step
+        </h1>
       </div>
     </div>
+    <div class="hero-foot">
+      <nav class="tabs is-medium is-centered">
+        <ul>
+          <li id="-tab" class="tab is-active"><a>Our Culture</a></li>
+          <li id="-tab" class="tab"><a>Current Openings</a></li>
+          <li id="-tab" class="tab"><a>Benefits</a></li>
+        </ul>
+      </nav>
+    </div>
+  </section>
 
-  </div>
-    <%- include("templates/footer"); %>
-  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-  <script src="js/jquery/jquery.leanModal.min.js" type="text/javascript"></script>
-  <script src="/js/routes/login_dropdown.js" type="text/javascript"></script>
+  <section class="section">
+    <div class="container">
+      <div class="columns">
+        <div class="column is-half is-offset-3 has-text-centered">
+          <div class="content">
+            <h1>Page Under Construction</h1>
+            <h2>Careers</h2>
+            <p>
+              w3bbi is not currently hiring. Please come back for
+              possible opportunities in the near future!
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <%- include("templates/footer"); %>
 </body>
 
 </html>

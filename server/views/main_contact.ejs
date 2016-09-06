@@ -11,57 +11,42 @@
 
   <%- include("templates/navbar", {user: user}); %>
 
-  <div id="main">
-
-    <div id="main_container">
-      <div class="image_container">
-        <div class="image_wrapper">
-          <div class="image_text">
-            <h1>Customer service is our priority</h1>
-          </div>
-        </div>
-            <div id="company_address" class="container flex-row-center">
-                <h3 class="company_address_white"><span id="hq_green">HQ</span> | New York, NY</h3>
-            </div>
-        </div>
+  <section id="about-img" class="hero is-primary is-medium landing-img clear-nav">
+    <div class="hero-body flex-vert-center">
+      <div class="container has-text-centered">
+        <h1 class="img-title">
+          Let us work with you
+        </h1>
       </div>
-      <div id="contact_us_wrapper" class="column-40 flex-row-center is-centered">
-        <h1 id="contact_us">Contact Us</h1>
-        <div id="contact_form">
-          <form method="post">
-            <input type="text" placeholder="Email" name="name" required />
-            <input type="text" placeholder="Subject" name="subject" required />
-            <textarea placeholder="What's on your mind?" name="description" required ></textarea>
-            <button class="submit_button" value="send" type="submit">Send</button>
-          </form>
+    </div>
+    <div class="hero-foot">
+      <!-- <nav class="tabs is-medium is-centered">
+        <ul>
+          <li id="-tab" class="tab is-active"><a>Our Culture</a></li>
+          <li id="-tab" class="tab"><a>Current Openings</a></li>
+          <li id="-tab" class="tab"><a></a></li>
+        </ul>
+      </nav> -->
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="columns">
+        <div class="column is-half is-offset-3 has-text-centered">
+          <div class="content">
+            <h1>Page Under Construction</h1>
+            <h2>Contact Us</h2>
+            <p>
+              w3bbi currently does not have any contact information.
+              Please have patience and understanding as we continue to build.
+              We will update with an email address shortly!
+            </p>
+          </div>
         </div>
       </div>
     </div>
-
-    <!--<div class="column-25 text-center">
-      <h2>Social Media</h2>
-        <div class="sm_icon">
-          <a href="https://www.facebook.com" id="facebook_icon">
-            Facebook<span class="fa fa-facebook fa-fw"></span>
-          </a>
-        </div>
-        <div class="sm_icon">
-          <a href="https://www.twitter.com" id="twitter_icon">
-           Twitter<span class="fa fa-twitter fa-fw"></span>
-         </a>
-        </div>
-        <div class="sm_icon">
-          <a href="https://www.linkedin.com" id="linkedin_icon">
-           LinkedIn<span class="fa fa-linkedin fa-fw"></span>
-         </a>
-        </div>
-        <div class="sm_icon">
-          <a href="https://www.youtube.com" id="youtube_icon">
-           YouTube<span class="fa fa-youtube fa-fw"></span>
-         </a>
-        </div>
-      </div>
-    -->
+  </section>
 
   <%- include("templates/footer"); %>
 </body>
