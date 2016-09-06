@@ -14,7 +14,7 @@ $(document).ready(function() {
 	handler = StripeCheckout.configure({
 		key: 'pk_test_kcmOEkkC3QtULG5JiRMWVODJ',
 		name: 'w3bbi Domain Rental',
-		image: '/images/www.jpg',
+		image: '/images/logo.png',
 		panelLabel: 'Pay',
 		zipCode : true,
 		locale: 'auto',
