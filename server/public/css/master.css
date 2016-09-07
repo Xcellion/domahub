@@ -510,11 +510,12 @@ table {
   .box.box-accent {
     background-color: #ff8751; }
 
-a.box:hover, a.box:focus {
-  box-shadow: 0 2px 3px rgba(17, 17, 17, 0.1), 0 0 0 1px #3CBC8D; }
-
-a.box:active {
-  box-shadow: inset 0 1px 2px rgba(17, 17, 17, 0.2), 0 0 0 1px #3CBC8D; }
+a.box {
+  width: 300px; }
+  a.box:hover, a.box:focus {
+    box-shadow: 0 2px 3px rgba(17, 17, 17, 0.1), 0 0 0 1px #ff8751; }
+  a.box:active {
+    box-shadow: inset 0 1px 2px rgba(17, 17, 17, 0.2), 0 0 0 1px #ff8751; }
 
 .button {
   -moz-appearance: none;
@@ -851,11 +852,17 @@ a.box:active {
   font-weight: 300;
   margin-bottom: 10px; }
 
+.content .is-accent {
+  color: #ff8751; }
+
 .content blockquote:not(:last-child),
 .content p:not(:last-child),
 .content ol:not(:last-child),
 .content ul:not(:last-child) {
   margin-bottom: 1em; }
+
+.content .is-accent {
+  color: #ff8751; }
 
 .content blockquote {
   background-color: #fff;
@@ -3906,6 +3913,15 @@ input:-webkit-autofill {
   display: flex;
   flex-direction: column;
   align-items: center; }
+
+.flex-column-justify-center {
+  display: flex;
+  flex-direction: column;
+  justify-content: center; }
+
+.flex-justify-center {
+  display: flex;
+  justify-content: center; }
 
 /********************** LINEBREAK ******************/
 #linebreak {

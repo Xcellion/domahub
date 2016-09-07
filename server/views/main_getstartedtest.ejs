@@ -11,15 +11,18 @@
 
   <%- include("templates/navbar", {user: user}); %>
 
-  <section class="section is-fullheight clear-nav">
-    <div class="container">
-      <div class="column is-half is-offset-3">
-        <div class="has-text-centered">
-          <h1>What can we help you with?</h1>
+  <section class="section flex-column-justify-center is-fullheight">
+    <div class="container flex-justify-center">
+      <div class="column">
+        <div class="content bottom-margin-25 has-text-centered">
+          <h1 class="is-accent">What can we help you with?</h1>
+          <p>
+            Please select one of the options below:
+          </p>
         </div>
       </div>
     </div>
-    <div class="container">
+    <div class="container flex-justify-center">
       <div class="columns">
         <div class="column">
           <a class="box">
