@@ -7,6 +7,10 @@ input:-webkit-autofill {
 }
 
 /********************** UNIVERSAL ******************/
+.is-fullheight {
+  height: 100vh;
+}
+
 .button {
   line-height: 28px;
 }

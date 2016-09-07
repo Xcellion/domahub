@@ -42,10 +42,7 @@
   margin: 0; }
 
 .sv_window_title a, a:link, a:visited {
-  text-decoration: none;
-  font-size: 14px;
-  font-style: normal;
-  color: black; }
+}
 
 .sv_main {
   width: 100%; }
