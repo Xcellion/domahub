@@ -15,7 +15,7 @@
     <div class="container flex-justify-center">
       <div class="column">
         <div class="content bottom-margin-25 has-text-centered">
-          <h1 class="is-accent">What can we help you with?</h1>
+          <h1 class="question is-accent">What can we help you with?</h1>
           <p>
             Please select one of the options below:
           </p>
@@ -27,14 +27,14 @@
         <div class="column">
           <a class="box">
             <div class="content has-text-centered">
-              <h2>I want to rent a domain</h2>
+              <h2 class="selection">I want to rent a domain</h2>
             </div>
           </a>
         </div>
         <div class="column">
           <a class="box">
             <div class="content has-text-centered">
-              <h2>I want to list my domain(s)</h2>
+              <h2 class="selection">I want to list my domain(s)</h2>
             </div>
           </a>
         </div>
@@ -42,7 +42,129 @@
     </div>
   </section>
 
+  <section class="section flex-column-justify-center is-fullheight">
+    <div class="container flex-justify-center">
+      <div class="column">
+        <div class="content bottom-margin-25 has-text-centered">
+          <h1 class="question is-accent">What type of domain are you looking for?</h1>
+          <p>
+            Please select one of the options below:
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="container flex-justify-center">
+      <div class="columns">
+        <div class="column">
+          <a class="box">
+            <div class="content has-text-centered">
+              <h2 class="selection">Start-Up</h2>
+            </div>
+          </a>
+        </div>
+        <div class="column">
+          <a class="box">
+            <div class="content has-text-centered">
+              <h2 class="selection">Business</h2>
+            </div>
+          </a>
+        </div>
+        <div class="column">
+          <a class="box">
+            <div class="content has-text-centered">
+              <h2 class="selection">Event</h2>
+            </div>
+          </a>
+        </div>
+        <div class="column">
+          <a class="box">
+            <div class="content has-text-centered">
+              <h2 class="selection">Invitation</h2>
+            </div>
+          </a>
+        </div>
+        <div class="column">
+          <a class="box">
+            <div class="content has-text-centered">
+              <h2 class="selection">I don&#39t know</h2>
+            </div>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section flex-column-justify-center is-fullheight">
+    <div class="container flex-justify-center">
+      <div class="column">
+        <div class="content bottom-margin-25 has-text-centered">
+          <h1 class="question is-accent">How long will you need it for?</h1>
+          <p>
+            Please input the time desired below (enter 0 if you're not sure):
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="container flex-justify-center">
+      <div class="columns">
+        <div class="column">
+          <p class="control has-addons has-addons-centered">
+            <span class="select">
+              <select>
+                <option>Hours</option>
+                <option>Days</option>
+                <option>Months</option>
+                <option>Years</option>
+              </select>
+            </span>
+            <input class="input" type="text" placeholder="Enter a number">
+            <a class="button is-success">
+              Submit
+            </a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <section class="section flex-column-justify-center is-fullheight">
+    <div class="container flex-justify-center">
+      <div class="column">
+        <div class="content bottom-margin-25 has-text-centered">
+          <h1 class="question is-accent">What is your budget?</h1>
+          <p>
+            Please input your budget below (enter 0 if you're not sure):
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="container flex-justify-center">
+      <div class="columns">
+        <div class="column">
+          <p class="control has-addons has-addons-centered">
+            <input class="input" type="text" placeholder="Enter a number">
+            <a class="button is-success">
+              Submit
+            </a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section flex-column-justify-center is-fullheight">
+    <div class="container flex-justify-center">
+      <div class="column">
+        <div class="content bottom-margin-25 has-text-centered">
+          <h1 class="question is-accent">Hold on ... loading domains according to your inputs!</h1>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <%- include("templates/footer"); %>
+  <script src="/js/routes/getstarted_logic.js" type="text/javascript"></script>
 </body>
 
 </html>
