@@ -11,7 +11,7 @@ module.exports = function(app, auth){
 		"/contact",
 		"/getstarted",
 		"/privacy",
-    "/sellers",
+    	"/sellers",
 		"/tos",
 		"/getstartedtest"
     ]

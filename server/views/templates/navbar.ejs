@@ -88,7 +88,7 @@
 <% } else { %>
   <div class="nav-item-special">
     <a id="profile-button" class="button is-outlined is-primary">
-      <span><%= user.fullname %></span>
+      <span><%= (user.fullname.length > 6) ? user.fullname.slice(0,6) + "..." : user.fullname %></span>
       <span class="icon">
         <i class="fa fa-angle-down"></i>
       </span>
