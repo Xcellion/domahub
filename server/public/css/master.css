@@ -3862,6 +3862,9 @@ input:-webkit-autofill {
   -webkit-box-shadow: 0 0 0px 1000px white inset; }
 
 /********************** UNIVERSAL ******************/
+.is-fullheight {
+  height: 100vh; }
+
 .button {
   line-height: 28px; }
 
