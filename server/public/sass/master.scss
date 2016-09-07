@@ -64,6 +64,17 @@ input:-webkit-autofill {
   align-items: center;
 }
 
+.flex-column-justify-center {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.flex-justify-center {
+  display: flex;
+  justify-content: center;
+}
+
 /********************** LINEBREAK ******************/
 
 #linebreak {
