@@ -25,22 +25,24 @@ $(document).ready(function() {
 	  $("#message").attr("style", "");
 	});
 
-	//profile dropdown logic
-	$("#profile-button").click(function() {
-	  $(this).toggleClass("is-outlined is-active");
-	  $("#profile-dropdown").toggleClass("is-hidden");
-	});
 
 	$(".nav-toggle").click(function() {
 	  $(this).toggleClass("is-active");
 	  $(".nav-menu").toggleClass("is-active");
 	});
 
+	//profile dropdown logic
 	$(document).on("click", function(event) {
-	  if (!$(event.target).closest("#profile-dropdown").length) {
-	    // Hide the menus.
-			$("#profile-dropdown").hide();
-	  }
+		//clicked off profile dropdown
+		if (!$(event.target).closest("#profile-button").length && !$("#profile-dropdown").hasClass("is-hidden")) {
+			$("#profile-dropdown").addClass("is-hidden");
+			$("#profile-button").toggleClass("is-outlined is-active");
+		}
+		//clicked on profile dropdown
+		else if ($(event.target).closest("#profile-button").length){
+			$("#profile-button").toggleClass("is-outlined is-active");
+			$("#profile-dropdown").toggleClass("is-hidden");
+		}
 	});
 
 });
