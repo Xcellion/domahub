@@ -27,6 +27,9 @@
 #remember-checkbox {
   vertical-align: middle; }
 
+#profile-button {
+  width: 110px; }
+
 /************************************* PROFILE DROPDOWN *************************/
 #profile-dropdown {
   background-color: #fff;
@@ -35,7 +38,7 @@
   box-shadow: 0 4px 7px rgba(0, 0, 0, 0.1);
   position: absolute;
   top: 100%;
-  width: 130px; }
+  width: 110px; }
 
 .nav-item-special {
   padding: 15px 10px 15px 10px; }
