@@ -35,4 +35,12 @@ $(document).ready(function() {
 	  $(this).toggleClass("is-active");
 	  $(".nav-menu").toggleClass("is-active");
 	});
+
+	$(document).on("click", function(event) {
+	  if (!$(event.target).closest("#profile-dropdown").length) {
+	    // Hide the menus.
+			$("#profile-dropdown").hide();
+	  }
+	});
+
 });
