@@ -51,22 +51,23 @@ a
   +transition(all 0.25s)
   cursor: pointer
   text-decoration: none
+  color: $text
   &:hover
     cursor: pointer
-.black-link
-  color: $text
-  opacity: 0.9
-  &:hover
-    opacity: 1.0
+    opacity: 0.9
 .white-link
   color: $white
-  opacity: 0.9
-  &:hover
-    opacity: 1.0
+  &-underlined
+    color: $white
+    -moz-box-shadow: inset 0 -2px 0 $white
+    -webkit-box-shadow: inset 0 -2px 0 $white
+    box-shadow: inset 0 -2px 0 $white
 .orange-link
   color: $accent
   &:hover
-    +box-shadow(0, -2px, 0, $accent, inset)
+    -moz-box-shadow: inset 0 -2px 0 $accent
+    -webkit-box-shadow: inset 0 -2px 0 $accent
+    box-shadow: inset 0 -2px 0 $accent
 
 
 code
