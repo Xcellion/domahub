@@ -81,16 +81,12 @@
 				</div>
 
 				<div class="column is-half">
-					<article class="message is-primary">
-					  <div class="message-header">
-					    Welcome to your dashboard
-					  </div>
-					  <div class="message-body">
-								The dashboard is your control panel to w3bbi -
-								from here you can edit your profile, check your private messages,
-								and manage your listings, bids, and rentals.
-					  </div>
-					</article>
+					<div class="notification is-primary">
+						<button class="delete"></button>
+						The dashboard is your control panel to w3bbi -
+						from here you can edit your profile, check your private messages,
+						and manage your listings, bids, and rentals.
+					</div>
 					<% if (user.type == 0){ %>
 						<div class="notification is-danger">
 							<button class="delete"></button>
