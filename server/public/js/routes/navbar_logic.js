@@ -14,18 +14,25 @@ $(document).ready(function() {
         window.location = window.location.origin + "/listing/" + $('#domain-name').val();
 	});
 
-	//modal stuff
+	// adds is-active to login button
 	$('#login-modal').click(function() {
 	  $('#modal-login').addClass('is-active');
 	});
 
+	// various ways to close login dropdown menu
 	$('.modal-close, .modal-background').click(function() {
 	  $('#modal-login').removeClass('is-active');
 	  $("#message").text("Please log in below");
 	  $("#message").attr("style", "");
 	});
 
+	$(document).keyup(function(e) {
+		if (e.which == 27) {
+			$('#modal-login').removeClass('is-active');
+		}
+	});
 
+	// hamburger toggle button
 	$(".nav-toggle").click(function() {
 	  $(this).toggleClass("is-active");
 	  $(".nav-menu").toggleClass("is-active");

@@ -191,8 +191,7 @@ a {
   text-decoration: none;
   color: #111; }
   a:hover {
-    cursor: pointer;
-    opacity: 0.9; }
+    cursor: pointer; }
 
 .white-link {
   color: #fff; }
@@ -1947,6 +1946,9 @@ a.box {
   width: 300px; }
   .card .media:not(:last-child) {
     margin-bottom: 10px; }
+  @media screen and (max-width: 768px) {
+    .card {
+      margin: auto; } }
   .card.is-fullwidth {
     width: 100%; }
   .card.is-rounded {
@@ -2902,7 +2904,6 @@ a.box {
   background-color: rgba(17, 17, 17, 0.86); }
 
 .modal-content, .modal-card {
-  margin: 0 20px;
   max-height: calc(100vh - 160px);
   overflow: auto;
   position: relative;
@@ -2981,7 +2982,8 @@ a.box {
   align-items: center;
   display: flex;
   justify-content: center;
-  padding: 10px; }
+  padding: 10px;
+  white-space: nowrap; }
   .nav-item a {
     flex-grow: 1; }
   .nav-item img {
@@ -2995,7 +2997,7 @@ a.box {
   @media screen and (max-width: 768px) {
     .nav-item {
       justify-content: flex-start;
-      text-align: left; } }
+      text-align: right; } }
 
 .nav-item a,
 a.nav-item {
@@ -3081,7 +3083,8 @@ a.nav-item {
     display: flex;
     flex-basis: 0;
     flex-grow: 1;
-    justify-content: center; } }
+    justify-content: center;
+    padding-right: 80px; } }
 
 .nav {
   align-items: stretch;
