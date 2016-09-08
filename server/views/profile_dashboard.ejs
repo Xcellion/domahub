@@ -24,10 +24,11 @@
 	<div class="container clear-nav">
 		<div class="tabs is-centered">
 		  <ul>
-		    <li class="is-active"><a href="">Dashboard</a></li>
+		    <li class="is-active"><a href="/profile/dashboard">Dashboard</a></li>
 		    <li><a href="/profile/inbox">Inbox</a></li>
 		    <li><a href="/profile/mylistings">My Listings</a></li>
 		    <li><a href="/profile/myrentals">My Rentals</a></li>
+		    <li><a href="/profile/settings">Account Settings</a></li>
 		  </ul>
 		</div>
 	</div>
@@ -45,7 +46,9 @@
 						</div>
 						<div class="card-content">
 							<h2 class="has-text-centered"><%= user.fullname %></h2>
+							<h3 class="has-text-centered"><%= user.email %></h3>
 						</div>
+
 						<footer class="card-footer">
 							<a class="card-footer-item">Edit Profile</a>
 						</footer>
