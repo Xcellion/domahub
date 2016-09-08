@@ -25,12 +25,6 @@ module.exports = function(app, auth){
 		auth.renderVerify
 	]);
 
-	//to resend verification email
-	app.get("/verify", [
-		auth.isLoggedIn,
-		auth.requestVerify
-	]);
-
 	//post routes for authentication
 	app.post([
 		"/signup",
@@ -49,6 +43,12 @@ module.exports = function(app, auth){
 		auth.isNotLoggedIn,
 		auth.checkToken,
 		auth.resetPost
+	]);
+
+	//to resend verification email
+	app.post("/verify", [
+		auth.isLoggedIn,
+		auth.requestVerify
 	]);
 
 	//to verify email
