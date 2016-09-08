@@ -86,8 +86,8 @@
 				</div>
 
 				<div class="column is-three-quarters">
+					<% if (rentals.length) {%>
 					<div class="box">
-						<% if (typeof rentals != "undefined") {%>
 						<table id="rental_table" class="table">
 							<thead>
 								<tr>
@@ -98,8 +98,11 @@
 								</tr>
 							</thead>
 						</table>
-						<% } else { %>
-							<p>You have no rentals currently!</p>
+
+						<% } if (!rentals.length) { %>
+							<div class="box has-text-centered">
+								You have no rentals yet!
+							</div>
 						<% } %>
 
 						<nav class="pagination">

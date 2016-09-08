@@ -93,7 +93,7 @@
 					</div>
 
 					<div class="column is-three-quarters">
-						<% if (typeof listings != "undefined") {%>
+						<% if (listings.length) {%>
 						<box class="box">
 							<table id="domain_table" class="table">
 								<thead>
@@ -142,8 +142,11 @@
 									<% }) %>
 								</tbody>
 							</table>
-							<% } else { %>
-								<p>You have no domains currently!</p>
+							
+							<% } if (!listings.length) { %>
+								<div class="box has-text-centered">
+									You have no listings yet!
+								</div>
 							<% } %>
 
 							<nav class="pagination">
