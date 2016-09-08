@@ -36,16 +36,14 @@ module.exports = {
 
 		// called every subsequent request. should we re-get user data?
 		passport.deserializeUser(function(user, done) {
-
 			//if we need to refresh the user, refresh the user.
 			if (user.refresh){
-				delete user.refresh;
 				Account.getAccount(user.email, function(result){
 					if (result.state=="error"){
-						done(err, null);
+						done(err, user);
 					}
 					else {
-						done(null, result.info[0]);
+						done(null, null);
 					}
 				});
 			}
@@ -288,7 +286,7 @@ function generateVerify(req, res){
 					to: email,
 					from: 'theITguy@w3bbi.com',
 					subject: 'Verify your account at w3bbi?',
-					text: 'Hello, ' + req.user.fullname + ' .\n\n' +
+					text: 'Hello, ' + req.user.fullname + '.\n\n' +
 						  'Please click on the following link, or paste this into your browser to verify your email:\n\n' +
 						  'http://' + req.headers.host + '/verify/' + verify_token + '\n\n' +
 						  'The link above will expire in 1 hour.'
@@ -522,8 +520,8 @@ function verifyPost(req, res, next){
 							else {
 								if (req.user){
 									delete req.user.requested;
+									req.user.refresh = true;
 								}
-								user.refresh = true;
 								res.send({
 									state: "success"
 								});

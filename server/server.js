@@ -60,12 +60,12 @@ else {
 	}));
 }
 
+//for routing of static files
+app.use(express.static(__dirname + '/public'));
+
 //initialize passport for auth
 app.use(passport.initialize());
 app.use(passport.session());
-
-//for routing of static files
-app.use(express.static(__dirname + '/public'));
 
 //favicon requests
 app.get('*.ico', function(){})
