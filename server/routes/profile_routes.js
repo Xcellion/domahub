@@ -18,7 +18,8 @@ module.exports = function(app, db, auth, e){
 		"/profile/dashboard",
 		"/profile/inbox",
 		"/profile/mylistings",
-		"/profile/myrentals"
+		"/profile/myrentals",
+		"/profile/settings"
 	]
 
 	//check if user is legit, get all listings, get all rentals, then renders the appropriate page
