@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>w3bbi - Verify My Account</title>
+    <link rel="stylesheet" type="text/css" href="/css/pw_forgot.css" />
+    <%- include("templates/head_links"); %>
+  </head>
+
+  <body>
+
+    <div id="login-form" class="form">
+        <form id="target" method="post">
+          <div class="has-text-centered logo-login">
+            <a class="w3bbi-icon" href="/">w3bbi</a>
+          </div>
+          <div id="message" class="has-text-centered">
+            <% if (typeof message != "undefined") {%>
+              <%= message %>
+            <% } else {%>
+                Click below to verify your account!
+            <% } %>
+        </div>
+
+        <div id="form_to_hide">
+            <p class="control">
+                <button id="login-button" class="login-button button is-primary is-medium is-fullwidth">
+                    Verify your account
+                </button>
+            </p>
+        </div>
+
+        <div id="resend">
+            <a id="verify-link" class="login-button button is-primary is-medium is-fullwidth" href="/verify">
+                Resend verification email
+            </a>
+        </div>
+
+        <div id="accept">
+            <a id="login-button" class="login-button button is-primary is-medium is-fullwidth" href="/login">
+                Log in
+            </a>
+        </div>
+
+        <div id="home">
+            <a id="login-button" class="login-button button is-primary is-medium is-fullwidth" href="/">
+                Home
+            </a>
+        </div>
+
+        </form>
+    </div>
+
+    <script src="/js/routes/signup_verify_logic.js" type="text/javascript"></script>
+
+  </body>
+
+</html>

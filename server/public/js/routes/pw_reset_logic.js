@@ -70,10 +70,13 @@ $(document).ready(function() {
 					$("#form_to_hide").hide();
 					$("#accept").show();
 				}
+				else if (data.message == "Invalid token! Please click here to reset your password again!"){
+					$("#message").html("Invalid token! Please click <a href='/forgot'>here</a> to reset your password again!");
+				}
 				else {
 					console.log(data);
 					can_submit = true;
-					$("#message").html(data.message);
+					$("#message").text(data.message);
 				}
 			});
 		}

@@ -88,17 +88,20 @@
 								and manage your listings, bids, and rentals.
 					  </div>
 					</article>
-					<div class="notification is-danger">
-						<button class="delete"></button>
-						Please verify your account by clicking on the link in the email
-						sent to the address associated with your account!
-					</div>
-					<% if (typeof listings != "undefined") {%>
+					<% if (user.type == 0){ %>
+						<div class="notification is-danger">
+							<button class="delete"></button>
+							<p id="verify-message">
+								Please verify your account! Click <a id="verify-link" href="#">here</a> to resend the verification email.
+							</p>
+						</div>
+					<% } %>
 					<box class="box">
 						<table id="domain_table" class="table">
 							<caption class="caption">
 								My Listings
 							</caption>
+							<% if (listings.length){ %>
 							<thead>
 								<tr>
 									<th>Domain Name</th>
@@ -117,18 +120,23 @@
 								 </tr>
 								<% }) %>
 							</tbody>
+							<% } %>
 						</table>
-						<% } else { %>
-							<p>You have no domains currently!</p>
+
+						<% if (!listings.length) { %>
+							<div class="column has-text-centered">
+								You have no listings yet!
+							</div>
 						<% } %>
+
 						<a class="button" href="/listing/create">Create new listing</a>
 					</box>
 					<div class="box">
-						<% if (typeof rentals != "undefined") {%>
 						<table id="rental_table" class="table">
 							<caption class="caption">
 								My Rentals
 							</caption>
+							<% if (rentals.length){ %>
 							<thead>
 								<tr>
 									<th>Domain Name</th>
@@ -137,10 +145,15 @@
 									<th></th>
 								</tr>
 							</thead>
+							<% } %>
 						</table>
-						<% } else { %>
-							<p>You have no rentals currently!</p>
+
+						<% if (!rentals.length) { %>
+							<div class="column has-text-centered">
+								You have no rentals yet!
+							</div>
 						<% } %>
+
 					</div>
 				</div>
 

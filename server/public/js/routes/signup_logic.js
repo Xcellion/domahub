@@ -17,7 +17,7 @@ $(document).ready(function() {
 	//verify fullname
 	$("#fullname-input").keyup(function() {
 		//if not blank
-		if (11 > $(this).val().length > 0) {
+		if (70 > $(this).val().length > 0) {
 			showSuccessDanger($(this), true);
 		}
 		else if ($(this).val().length == 0){

@@ -41,7 +41,7 @@ account_model.prototype.getAccount = function(email, callback){
 //gets account by token
 account_model.prototype.getAccountByToken = function(token, callback){
 	console.log("Attempting to get account information for token: " + token + "...");
-	query = "SELECT email, forgot_token, forgot_exp FROM accounts WHERE forgot_token = ?"
+	query = "SELECT email, token, token_exp FROM accounts WHERE token = ?"
 	account_query(query, "Failed to get account information for token: " + token + "!", callback, token);
 }
 
