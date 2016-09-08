@@ -4,3 +4,12 @@
   display: block;
   margin: 10px;
 }
+
+.account-form select {
+  margin-right: 5px;
+}
+
+.control-label {
+  width: 100px;
+  flex-grow: 0;
+}
