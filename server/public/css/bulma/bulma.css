@@ -1894,10 +1894,10 @@ a.box {
 
 .card-header-title {
   align-items: flex-start;
-  color: #222324;
+  color: #111;
   display: flex;
   flex-grow: 1;
-  font-weight: bold;
+  font-weight: 400;
   padding: 10px; }
 
 .card-header-icon {
@@ -3161,7 +3161,7 @@ a.nav-item {
     line-height: inherit; }
 
 .panel-heading {
-  background-color: #69707a;
+  background-color: #3CBC8D;
   border-bottom: 1px solid #d3d6db;
   border-radius: 4px 4px 0 0;
   color: #fff;
@@ -3176,8 +3176,6 @@ a.nav-item {
   transition: all 0s;
   color: #111;
   font-weight: 300; }
-  .panel-list a:hover {
-    font-weight: 400; }
 
 .panel-tabs {
   display: flex;
