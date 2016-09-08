@@ -2,12 +2,14 @@ $(document).ready(function() {
 	var can_submit = true;
 	var can_verify = false;
 
+	//resend verification link
     $("#verify-link").click(function(e) {
         e.preventDefault();
         if (can_verify){
             can_verify = false;
+
             $.ajax({
-                type: "GET",
+                type: "POST",
                 url: "/verify"
             }).done(function(data){
                 if (data.state == "success"){
@@ -17,12 +19,13 @@ $(document).ready(function() {
                 }
                 else {
                     console.log(data);
-                    $("#message").text("Something went wrong with the verification email!");
+                    $("#message").text(data.message);
                 }
             });
         }
     });
 
+	//click to verify
 	$('#login-form').submit(function(event){
 		event.preventDefault();
 
@@ -37,6 +40,7 @@ $(document).ready(function() {
 					$("#form_to_hide").hide();
 					$("#accept").show();
 				}
+				//token was wrong, display resend button
 				else if (data.message == "Invalid token! Please click here to verify your account again!"){
 					if (user){
 						$("#message").html("Invalid token! Please click below to resend the verification email!");

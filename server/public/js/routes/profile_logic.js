@@ -26,7 +26,7 @@ $(document).ready(function() {
       if (can_verify){
           can_verify = false;
           $.ajax({
-              type: "GET",
+              type: "POST",
               url: "/verify"
           }).done(function(data){
               if (data.state == "success"){
@@ -34,7 +34,7 @@ $(document).ready(function() {
               }
               else {
                   console.log(data);
-                  $("#message").text("Something went wrong with the verification email!");
+                  $("#verify-message").text(data.message);
               }
           });
       }

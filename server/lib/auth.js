@@ -316,8 +316,14 @@ function requestVerify(req, res){
 		req.user.requested = true;
 		generateVerify(req, res);
 	}
-	else {
+	else if (req.user.type == 1){
 		error.handler(req, res, "Account is already verified!", "json");
+	}
+	else if (req.user.requested){
+		error.handler(req, res, "Please check your email for further instructions!", "json");
+	}
+	else {
+		error.handler(req, res, "Something went wrong with account verification!", "json");
 	}
 }
 
@@ -514,7 +520,9 @@ function verifyPost(req, res, next){
 						Account.updateAccount(account_info, email, function(result){
 							if (result.state=="error"){error.handler(req, res, result.info);}
 							else {
-								delete req.user.requested;
+								if (req.user){
+									delete req.user.requested;
+								}
 								user.refresh = true;
 								res.send({
 									state: "success"
