@@ -67,6 +67,9 @@ app.use(passport.session());
 //for routing of static files
 app.use(express.static(__dirname + '/public'));
 
+//favicon requests
+app.get('*.ico', function(){})
+
 //main routes
 require('./routes/routes.js')(app, db, auth, error);
 

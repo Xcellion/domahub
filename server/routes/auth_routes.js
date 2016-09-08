@@ -1,30 +1,59 @@
 module.exports = function(app, auth){
-	Auth = auth;
+	app.get('/login', auth.isLoggedIn);
+	app.get('/logout', auth.logout);
 
-	//function to check if logged in
-	isLoggedIn = Auth.isLoggedIn;
+	//cant access these routes if they are logged in
+	app.get([
+		'/signup',
+		'/forgot'
+	], [
+		auth.isNotLoggedIn,
+		function(req, res, next){
+			var path_name = req.path.slice(1, req.path.length);
+			auth[path_name](req, res, next);
+		}
+	])
 
-	app.get('/login', isLoggedIn);
-	app.get('/logout', Auth.logout);
-	app.get('/signup', Auth.signup);
-	app.get('/forgot', [
-		Auth.isNotLoggedIn,
-		Auth.forgot
-	]);
+	//to render reset/verify page
 	app.get("/reset/:token", [
-		Auth.isNotLoggedIn,
-		Auth.reset
+		auth.isNotLoggedIn,
+		auth.checkToken,
+		auth.renderReset
+	]);
+	app.get("/verify/:token", [
+		auth.checkToken,
+		auth.renderVerify
 	]);
 
-	//posts for account
-	app.post('/signup', Auth.signupPost);
-	app.post('/login', Auth.loginPost);
-	app.post('/forgot', [
-		Auth.isNotLoggedIn,
-		Auth.forgotPost
+	//to resend verification email
+	app.get("/verify", [
+		auth.isLoggedIn,
+		auth.requestVerify
 	]);
+
+	//post routes for authentication
+	app.post([
+		"/signup",
+		"/login",
+		"/forgot"
+	], [
+		auth.isNotLoggedIn,
+		function(req, res, next){
+			var path_name = req.path.slice(1, req.path.length) + "Post";
+			auth[path_name](req, res, next);
+		}
+	])
+
+	//to reset password
 	app.post("/reset/:token", [
-		Auth.isNotLoggedIn,
-		Auth.resetPost
+		auth.isNotLoggedIn,
+		auth.checkToken,
+		auth.resetPost
+	]);
+
+	//to verify email
+	app.post("/verify/:token", [
+		auth.checkToken,
+		auth.verifyPost
 	]);
 }

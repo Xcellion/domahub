@@ -60,6 +60,10 @@ module.exports = {
 				passReqToCallback : true // allows us to pass back the entire request to the callback
 			},
 			function(req, email, password, done) {
+				var fullname = req.body.fullname;
+				if (70 > fullname.length > 3){
+					return done(null, false, {message: 'Invalid name!'});
+				}
 
 				//check if account already exists
 				Account.getAccount(email, function(result){
@@ -77,7 +81,7 @@ module.exports = {
 
 						var account_info = {
 							email: email,
-							fullname: req.body.fullname,
+							fullname: fullname,
 							password: bcrypt.hashSync(password, null, null),
 							date_created: now_utc,
 							date_accessed: now_utc
@@ -143,18 +147,23 @@ module.exports = {
 	//helper functions related to authentication
 	isLoggedIn: isLoggedIn,
 	isNotLoggedIn : isNotLoggedIn,
+	checkToken : checkToken,
 	messageReset: messageReset,
 
 	//account related route functions
 	logout: logout,
 	signup: signup,
 	forgot: forgot,
-	reset: reset,
+	renderReset: renderReset,
+	renderVerify: renderVerify,
+
+	requestVerify: requestVerify,
 
 	signupPost: signupPost,
 	loginPost: loginPost,
 	forgotPost: forgotPost,
-	resetPost: resetPost
+	resetPost: resetPost,
+	verifyPost: verifyPost
 }
 
 //make sure user is logged in before doing anything
@@ -201,6 +210,16 @@ function isNotLoggedIn(req, res, next) {
 	}
 }
 
+//function to check token length
+function checkToken(req, res, next){
+	if (req.params.token.length != 40 || !req.params.token){
+		res.redirect('/');
+	}
+	else {
+		next();
+	}
+}
+
 //resets message
 function messageReset(req){
 	var message = req.session.message;
@@ -238,8 +257,68 @@ function forgot(req, res){
 }
 
 //function to check token for resetting password
-function reset(req, res){
+function renderReset(req, res){
 	res.render("pw_reset.ejs", {message: messageReset(req)});
+}
+
+//function to check token for verifying account email
+function renderVerify(req, res){
+	res.render("signup_verify.ejs", {message: messageReset(req)});
+}
+
+//helper function to verify account
+function generateVerify(req, res){
+	//generate token to email to user
+	crypto.randomBytes(20, function(err, buf) {
+		var email = req.user.email;
+		var verify_token = buf.toString('hex');
+		var now = new Date(new Date().getTime() + 3600000); 	// 1 hour buffer
+		var verify_exp = new Date(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(),  now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds());
+
+		var account_info = {
+			token : verify_token,
+			token_exp : verify_exp
+		};
+
+		//update account with token and expiration
+		Account.updateAccount(account_info, email, function(result){
+			if (result.state=="error"){error.handler(req, res, result.info);}
+			else {
+				var email_message = {
+					to: email,
+					from: 'theITguy@w3bbi.com',
+					subject: 'Verify your account at w3bbi?',
+					text: 'Hello, ' + req.user.fullname + ' .\n\n' +
+						  'Please click on the following link, or paste this into your browser to verify your email:\n\n' +
+						  'http://' + req.headers.host + '/verify/' + verify_token + '\n\n' +
+						  'The link above will expire in 1 hour.'
+				};
+
+				//send email
+				mailer.sendMail(email_message, function(err) {
+					if (err) {
+						console.log(err)
+					}
+					else {
+						res.send({
+							state: "success"
+						})
+					}
+				});
+			}
+		});
+	});
+}
+
+//function to request verification
+function requestVerify(req, res){
+	if (req.user.type == 0 && !req.user.requested && req.header("x-requested-with") == "XMLHttpRequest"){
+		req.user.requested = true;
+		generateVerify(req, res);
+	}
+	else {
+		error.handler(req, res, "Account is already verified!", "json");
+	}
 }
 
 //function to login
@@ -302,13 +381,13 @@ function forgotPost(req, res, next){
 
 		//generate token to email to user
 		crypto.randomBytes(20, function(err, buf) {
-			var forgot_token = buf.toString('hex');
+			var token = buf.toString('hex');
 			var now = new Date(new Date().getTime() + 3600000); 	// 1 hour buffer
-			var forgot_exp = new Date(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(),  now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds());
+			var token_exp = new Date(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(),  now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds());
 
 			var account_info = {
-				forgot_token : forgot_token,
-				forgot_exp : forgot_exp
+				token : token,
+				token_exp : token_exp
 			};
 
 			//update account with token and expiration
@@ -321,7 +400,7 @@ function forgotPost(req, res, next){
 						subject: 'Forgot your password for w3bbi?',
 						text: 'You are receiving this because you (or someone else) requested the reset of the password for your account.\n\n' +
 					          'Please click on the following link, or paste this into your browser to complete the process:\n\n' +
-					          'http://' + req.headers.host + '/reset/' + forgot_token + '\n\n' +
+					          'http://' + req.headers.host + '/reset/' + token + '\n\n' +
 					          'If you did not request this, please ignore this email and your password will remain unchanged.\n' +
 							  'The link above will expire in 1 hour.'
 					};
@@ -348,23 +427,23 @@ function resetPost(req, res, next){
 	var token = req.params.token;
 	var password = req.body.password;
 
-	if (!token){
-		error.handler(req, res, "Invalid token!", "json");
-	}
-	else if (!password){
+	if (!password){
 		error.handler(req, res, "Invalid password!", "json");
 	}
 	else {
 		Account.getAccountByToken(token, function(result){
 			if (result.state=="error"){error.handler(req, res, result.info);}
+			else if (!result.info.length){
+				error.handler(req, res, "Invalid token! Please click here to reset your password again!", "json");
+			}
 			else {
 				var email = result.info[0].email;
-				var forgot_exp = new Date(result.info[0].forgot_exp);
+				var token_exp = new Date(result.info[0].token_exp);
 				var now = new Date();
 				var now_utc = new Date(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(),  now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds());
 
 				//if token hasn't expired
-				if (now_utc < forgot_exp){
+				if (now_utc < token_exp){
 					//update account with new password
 					var account_info = {
 						password : bcrypt.hashSync(password, null, null),
@@ -375,8 +454,8 @@ function resetPost(req, res, next){
 						else {
 
 							account_info = {
-								forgot_exp: null,
-								forgot_token: null
+								token: null,
+								token_exp: null
 							}
 
 							//delete the token and expiration date
@@ -397,4 +476,57 @@ function resetPost(req, res, next){
 			}
 		});
 	}
+}
+
+//function to verify account
+function verifyPost(req, res, next){
+	var token = req.params.token;
+
+	Account.getAccountByToken(token, function(result){
+		if (result.state=="error"){error.handler(req, res, result.info);}
+		else if (!result.info.length){
+			error.handler(req, res, "Invalid token! Please click here to verify your account again!", "json");
+		}
+		else {
+			var email = result.info[0].email;
+			var token_exp = new Date(result.info[0].token_exp);
+			var now = new Date();
+			var now_utc = new Date(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(),  now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds());
+
+			//if token hasn't expired
+			if (now_utc < token_exp){
+
+				//update account with new type
+				account_info = {
+					type: 1
+				}
+
+				Account.updateAccount(account_info, email, function(result){
+					if (result.state=="error"){error.handler(req, res, result.info);}
+					else {
+
+						account_info = {
+							token: null,
+							token_exp: null
+						}
+
+						//delete the token and expiration date
+						Account.updateAccount(account_info, email, function(result){
+							if (result.state=="error"){error.handler(req, res, result.info);}
+							else {
+								delete req.user.requested;
+								user.refresh = true;
+								res.send({
+									state: "success"
+								});
+							}
+						});
+					}
+				});
+			}
+			else {
+				error.handler(req, res, "The token has expired!", "json");
+			}
+		}
+	});
 }

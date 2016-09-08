@@ -50,6 +50,6 @@ html {
   transition: all 0.25s;
   -webkit-transition: all 0.25s; }
 
-#accept {
+#accept, #resend, #home {
     display:none;
 }

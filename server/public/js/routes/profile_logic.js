@@ -2,8 +2,8 @@ $(document).ready(function() {
 
     for (var x = 0; x < rentals.length; x++){
         start = moment(new Date(rentals[x].date + " UTC"));
-        disp_end = moment(new Date(start._d.getTime() + rentals[x].duration)).format('YYYY/MM/D, h:mmA');
-        disp_start = start.format('YYYY/MM/D, h:mmA');
+        disp_end = moment(new Date(start._d.getTime() + rentals[x].duration)).format('YYYY/MM/DD, hh:mm A');
+        disp_start = start.format('YYYY/MM/DD, hh:mm A');
 
         var tr = $("<tr></tr");
         tr.append("<td>" + rentals[x].domain_name + "</td>");
@@ -14,11 +14,30 @@ $(document).ready(function() {
     }
 
   $(".delete").click(function() {
-    $(this).parent().hide(200, function() {
+    $(this).parent().slideUp(200, function() {
       $(this).remove();
     });
   });
 
+  var can_verify = true;
 
+  $("#verify-link").click(function(e) {
+      e.preventDefault();
+      if (can_verify){
+          can_verify = false;
+          $.ajax({
+              type: "GET",
+              url: "/verify"
+          }).done(function(data){
+              if (data.state == "success"){
+                  $("#verify-message").text("Please check your email for further instructions!");
+              }
+              else {
+                  console.log(data);
+                  $("#message").text("Something went wrong with the verification email!");
+              }
+          });
+      }
+  });
 
 });
