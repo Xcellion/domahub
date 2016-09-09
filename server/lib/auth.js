@@ -351,6 +351,7 @@ function signupPost(req, res, next){
 	email = req.body.email;
 	fullname = req.body.fullname;
 	password = req.body.password;
+	recaptcha = req.body["g-recaptcha-response"]
 
 	//not a valid email
 	if (!validator.isEmail(email)){
@@ -364,13 +365,17 @@ function signupPost(req, res, next){
 	else if (70 > password.length > 3){
 		error.handler(req, res, "Invalid password!");
 	}
+	//recaptcha is empty
+	else if (!recaptcha){
+		error.handler(req, res, "Invalid captcha!");
+	}
 	//verify recaptcha with google
 	else {
 		request.post({
 			url: 'https://www.google.com/recaptcha/api/siteverify',
 			form: {
 				secret: "6LdwpykTAAAAAEMcP-NUWJuVXMLEQx1fZLbcGfVO",
-				response: req.body.g-recaptcha-response
+				response: recaptcha
 			}
 		},
 			function (error, response, body) {
