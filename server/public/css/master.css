@@ -263,7 +263,8 @@ table {
   margin-bottom: 20px; }
 
 .container {
-  position: relative; }
+  position: relative;
+  margin: 0 auto; }
   @media screen and (min-width: 980px) {
     .container {
       margin: 0 auto;
@@ -3879,7 +3880,7 @@ input:-webkit-autofill {
   line-height: 28px; }
 
 .clear-nav {
-  padding-top: 70px; }
+  padding-top: 60px; }
 
 .bottom-margin-25 {
   margin-bottom: 25px; }
@@ -3892,7 +3893,7 @@ input:-webkit-autofill {
   width: 100%; }
 
 .img-wrapper {
-  background-color: rgba(0, 0, 0, 0.7);
+  background-color: rgba(0, 0, 0, 0.6);
   height: 100%;
   width: 100%; }
 
