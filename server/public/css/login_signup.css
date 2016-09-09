@@ -51,6 +51,13 @@ html {
   -webkit-transition: all 0.25s; }
 
 .g-recaptcha > div {
-  margin:auto;
-  margin-bottom:15px;
-  transform: scale(1.19); }
+  margin: auto;
+  margin-bottom: 15px;
+  -moz-transform: scale(1.19);
+  -o-transform: scale(1.19);
+  -ms-transform: scale(1.19);
+  -webkit-transform: scale(1.19);
+    -webkit-transform-transform: scale(1.19); }
+
+#accept, #resend, #home {
+  display: none; }
