@@ -17,7 +17,7 @@ html {
   -o-transform: translate(-4px, 4px);
   -ms-transform: translate(-4px, 4px);
   -webkit-transform: translate(-4px, 4px);
-  transform: translate(-4px, 4px); }
+    -webkit-transform-transform: translate(-4px, 4px); }
 
 .w3bbi-icon {
   box-sizing: border-box;
@@ -39,23 +39,13 @@ html {
   -webkit-box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
   left: 0;
-  margin: auto;
+  margin: 0 auto;
   padding: 20px;
   position: absolute;
   right: 0;
-  top: 80px;
+  top: 10px;
   width: 400px; }
 
 .login-button {
   transition: all 0.25s;
   -webkit-transition: all 0.25s; }
-
-#accept {
-    display:none;
-}
-
-.g-recaptcha > div {
-    margin:auto;
-    margin-bottom:15px;
-    transform: scale(1.19);
-}

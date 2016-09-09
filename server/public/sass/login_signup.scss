@@ -1,4 +1,5 @@
 @import 'vars';
+@import 'mixins';
 
 /*************************** REGISTER ***************************/
 html {
@@ -26,7 +27,7 @@ html {
 .control {
   &.has-icon > .fa-warning {
     font-size: 21px !important;
-    @include transform(translate(-4px, 4px));
+    @include translate(-4px, 4px);
   }
 }
 
@@ -54,11 +55,11 @@ html {
   -webkit-box-shadow: 0 0 5px rgba(0,0,0,0.3);
   box-shadow: 0 0 5px rgba(0,0,0,0.3);
   left: 0;
-  margin: auto;
+  margin: 0 auto;
   padding: 20px;
   position: absolute;
   right: 0;
-  top: 80px;
+  top: 10px;
   width: 400px;
 }
 

@@ -19,7 +19,7 @@
 
 	<%- include("templates/navbar", {user: user}); %>
 
-  <div class="container clear-nav">
+  <div class="container clear-nav-profile">
     <div class="tabs is-centered">
       <ul>
         <li><a href="/profile/dashboard">Dashboard</a></li>
@@ -71,7 +71,7 @@
         </div>
 
         <div class="column">
-          <div class="card is-fullwidth">
+          <div class="card is-fullwidth bottom-margin-25">
             <header class="card-header">
               <p class="card-header-title">
                 Basic Information
@@ -258,11 +258,28 @@
                     </div>
                   </div>
                 </div>
+								<div class="control is-horizontal">
+									<div class="control-label">
+										<label class="label">Phone Number</label>
+									</div>
+									<div class="control is-grouped">
+									  <p class="control">
+									    <input class="input" type="text" value="No number confirmed">
+									  </p>
+									  <p class="control">
+									    <a class="button is-info">
+									      &#43 Add a number
+									    </a>
+									  </p>
+									</div>
+								</div>
               </form>
             </div>
           </div>
+					<div class="container">
+						<a class="button is-info is-medium">Save Changes</a>
+					</div>
         </div>
-
       </div>
     </div>
   </section>
