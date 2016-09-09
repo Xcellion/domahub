@@ -216,9 +216,11 @@ function checkToken(req, res, next){
 
 //resets message
 function messageReset(req){
-	var message = req.session.message;
-	delete req.session.message;
-	return message;
+	if (req.session){
+		var message = req.session.message;
+		delete req.session.message;
+		return message;
+	}
 }
 
 //log out of the session
