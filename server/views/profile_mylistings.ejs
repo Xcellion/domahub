@@ -19,7 +19,7 @@
 	<body>
 	<%- include("templates/navbar", {user: user}); %>
 
-		<div class="container clear-nav">
+		<div class="container clear-nav-profile">
 			<div class="tabs is-centered">
 				<ul>
 					<li><a href="/profile/dashboard">Dashboard</a></li>
@@ -142,7 +142,7 @@
 									<% }) %>
 								</tbody>
 							</table>
-							
+
 							<% } if (!listings.length) { %>
 								<div class="box has-text-centered">
 									You have no listings yet!
