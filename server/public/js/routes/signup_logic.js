@@ -16,12 +16,12 @@ $(document).ready(function() {
 
 	//verify fullname
 	$("#fullname-input").keyup(function() {
-		length = $(this).val().length;
+		name_length = $(this).val().length;
 
-		if (70 > length && length > 0) {
+		if (70 > name_length && name_length > 0) {
 			showSuccessDanger($(this), true);
 		}
-		else if (length == 0){
+		else if (name_length == 0){
 			showSuccessDanger($(this));
 		}
 		else {
@@ -31,12 +31,12 @@ $(document).ready(function() {
 
 	//verify password input
 	$("#pw-input").keyup(function() {
-		length = $(this).val().length;
+		pw_length = $(this).val().length;
 
-		if (70 > length && length >= 6) {
+		if (70 > pw_length && pw_length >= 6) {
 			showSuccessDanger($(this), true);
 		}
-		else if (length == 0){
+		else if (pw_length == 0){
 			showSuccessDanger($(this));
 		}
 		else {
@@ -111,7 +111,7 @@ $(document).ready(function() {
 		}
 
 		//if recaptcha is not done
-		else if (!validateform()){
+		else if (validateform()){
 			$("#message").fadeOut(100, function(){
 				$("#message").css("color", "#ed1c24").html("Please prove you're not a robot!").fadeIn(100);
 			});
@@ -124,7 +124,7 @@ $(document).ready(function() {
 //to validate recaptcha client side
 function validateform(){
 	var captcha_response = grecaptcha.getResponse();
-	return (captcha_response.length === 0);
+	return captcha_response.length == 0;
 }
 
 //helper function to hide or show checkmark / x-mark
