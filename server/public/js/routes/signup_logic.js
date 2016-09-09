@@ -16,11 +16,12 @@ $(document).ready(function() {
 
 	//verify fullname
 	$("#fullname-input").keyup(function() {
-		//if not blank
-		if (70 > $(this).val().length > 0) {
+		length = $(this).val().length;
+
+		if (70 > length && length > 0) {
 			showSuccessDanger($(this), true);
 		}
-		else if ($(this).val().length == 0){
+		else if (length == 0){
 			showSuccessDanger($(this));
 		}
 		else {
@@ -28,13 +29,14 @@ $(document).ready(function() {
 		}
 	});
 
-	// verify password input
+	//verify password input
 	$("#pw-input").keyup(function() {
-		//if not blank
-		if ($(this).val().length > 0) {
+		length = $(this).val().length;
+
+		if (70 > length && length >= 6) {
 			showSuccessDanger($(this), true);
 		}
-		else if ($(this).val().length == 0){
+		else if (length == 0){
 			showSuccessDanger($(this));
 		}
 		else {
@@ -69,9 +71,9 @@ $(document).ready(function() {
 		}
 
 		//if no name is entered
-		else if (!$("#fullname-input").val()) {
+		else if (!$("#fullname-input").val() || $("#fullname-input").val().length > 70 ) {
 			$("#message").fadeOut(100, function(){
-				$("#message").css("color", "#ed1c24").text("Please enter your name!").fadeIn(100);
+				$("#message").css("color", "#ed1c24").text("Please enter a valid name!").fadeIn(100);
 				$("#fullname-input").focus();
 				showSuccessDanger($("#fullname-input"), false);
 			});
@@ -88,6 +90,16 @@ $(document).ready(function() {
 			return false;
 		}
 
+		//if password is too short or long
+		else if ($("#pw-input").val().length > 70 || $("#pw-input").val().length < 6) {
+			$("#message").fadeOut(100, function(){
+				$("#message").css("color", "#ed1c24").text("Please enter a valid password!").fadeIn(100);
+				$("#pw-input").focus();
+				showSuccessDanger($("#pw-input"), false);
+			});
+			return false;
+		}
+
 		//if passwords do not match
 		else if ($("#pw-input").val() != $("#verify-pw").val()){
 			$("#message").fadeOut(100, function(){
@@ -97,8 +109,23 @@ $(document).ready(function() {
 			});
 			return false;
 		}
+
+		//if recaptcha is not done
+		else if (!validateform()){
+			$("#message").fadeOut(100, function(){
+				$("#message").css("color", "#ed1c24").html("Please prove you're not a robot!").fadeIn(100);
+			});
+			return false;
+		}
+
 	});
 });
+
+//to validate recaptcha client side
+function validateform(){
+	var captcha_response = grecaptcha.getResponse();
+	return (captcha_response.length === 0);
+}
 
 //helper function to hide or show checkmark / x-mark
 function showSuccessDanger(elem, bool){
