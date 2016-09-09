@@ -123,9 +123,11 @@
 						</table>
 
 						<% if (!listings.length) { %>
-							<div class="box has-text-centered">
-								You have no listings yet!
-							</div>
+							<article class="message has-text-centered">
+								<div class="message-body">
+									You have no listings yet!
+								</div>
+							</article>
 						<% } %>
 
 						<a class="button" href="/listing/create">Create new listing</a>
@@ -148,9 +150,11 @@
 						</table>
 
 						<% if (!rentals.length) { %>
-							<div class="column has-text-centered">
-								You have no rentals yet!
-							</div>
+							<article class="message has-text-centered">
+								<div class="message-body">
+									You have no rentals yet!
+								</div>
+							</article>
 						<% } %>
 
 					</div>

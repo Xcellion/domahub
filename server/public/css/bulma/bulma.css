@@ -263,7 +263,8 @@ table {
   margin-bottom: 20px; }
 
 .container {
-  position: relative; }
+  position: relative;
+  margin: 0 auto; }
   @media screen and (min-width: 980px) {
     .container {
       margin: 0 auto;
