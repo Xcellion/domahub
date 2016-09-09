@@ -378,11 +378,12 @@ function signupPost(req, res, next){
 				response: recaptcha
 			}
 		},
-			function (error, response, body) {
-				if (!error && response.statusCode == 200) {
-					//if coming from a listing, redirect to listing. otherwise redirect to profile
-					redirectTo = (req.header("Referer").split("/").indexOf("listing") != -1) ? req.header("Referer") : "/profile/dashboard";
-					redirectURL = req.session.redirectBack ? req.session.redirectBack : redirectTo;
+			function (err, response, body) {
+				body = JSON.parse(body);
+
+				//all good with google!
+				if (!err && response.statusCode == 200 && body.success) {
+
 					passport.authenticate('local-signup', {
 						failureRedirect : '/signup', // redirect back to the signup page if there is an error
 					}, function(user, info){
@@ -390,6 +391,10 @@ function signupPost(req, res, next){
 							error.handler(req, res, info.message);
 						}
 						else {
+							//if coming from a listing, redirect to listing. otherwise redirect to profile
+							redirectTo = (req.header("Referer").split("/").indexOf("listing") != -1) ? req.header("Referer") : "/profile/dashboard";
+							redirectback = req.session.redirectBack;
+							req.session.redirectBack = redirectback || redirectTo;
 							req.session.message = "Successfully created an account! Please log in below.";
 							res.redirect("/login");
 						}

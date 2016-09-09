@@ -54,7 +54,7 @@ html {
     display:none;
 }
 
-#html_element > div {
+.g-recaptcha > div {
     margin:auto;
     margin-bottom:15px;
     transform: scale(1.19);
