@@ -10,6 +10,7 @@ var nodemailer = require('nodemailer');
 var sgTransport = require('nodemailer-sendgrid-transport');
 var validator = require("validator");
 var crypto = require("crypto");
+var request = require('request');
 
 var options = {
     auth: {
@@ -58,18 +59,13 @@ module.exports = {
 				passReqToCallback : true // allows us to pass back the entire request to the callback
 			},
 			function(req, email, password, done) {
-				var fullname = req.body.fullname;
-				if (70 > fullname.length > 3){
-					return done(null, false, {message: 'Invalid name!'});
-				}
-
 				//check if account already exists
 				Account.getAccount(email, function(result){
-					if (result.state=="error"){ done(result.info, null); }
+					if (result.state=="error"){ done(false, { message: result.info}); }
 
 					//account exists
 					else if (result.info.length){
-						return done(null, false, {message: 'User exists!'});
+						return done(false, {message: 'User exists!'});
 					}
 
 					//account doesnt exist
@@ -87,11 +83,11 @@ module.exports = {
 
 						//create the new account
 						Account.newAccount(account_info, function(result){
-							if (result.state=="error"){ done(result.info, null); }
+							if (result.state=="error"){ done(false, { message: result.info}); }
 							else {
 								account_info.id = result.info.insertId;
 								account_info.type = 0;
-								return done(null, account_info);
+								return done(account_info);
 							}
 						});
 					}
@@ -350,28 +346,54 @@ function loginPost(req, res, next){
 
 //function to sign up for a new account
 function signupPost(req, res, next){
-	//if coming from a listing, redirect to listing. otherwise redirect to profile
-	redirectTo = (req.header("Referer").split("/").indexOf("listing") != -1) ? req.header("Referer") : "/profile/dashboard";
-	redirectURL = req.session.redirectBack ? req.session.redirectBack : redirectTo;
-	passport.authenticate('local-signup', {
-		successRedirect : '/', // redirect to main page
-		failureRedirect : '/signup', // redirect back to the signup page if there is an error
-	}, function(err, user, info){
-		if (!user && info){
-			error.handler(req, res, info.message);
-		}
-		else {
-			req.logIn(user, function(err) {
-				if (err) {
-					error.handler(req, res, "Signup error!");
+	email = req.body.email;
+	fullname = req.body.fullname;
+	password = req.body.password;
+
+	//not a valid email
+	if (!validator.isEmail(email)){
+		error.handler(req, res, "Invalid email!");
+	}
+	//fullname is too short
+	else if (70 > fullname.length > 3){
+		error.handler(req, res, "Invalid name!");
+	}
+	//password is too short
+	else if (70 > password.length > 3){
+		error.handler(req, res, "Invalid password!");
+	}
+	//verify recaptcha with google
+	else {
+		request.post({
+			url: 'https://www.google.com/recaptcha/api/siteverify',
+			form: {
+				secret: "6LdwpykTAAAAAEMcP-NUWJuVXMLEQx1fZLbcGfVO",
+				response: req.body.g-recaptcha-response
+			}
+		},
+			function (error, response, body) {
+				if (!error && response.statusCode == 200) {
+					//if coming from a listing, redirect to listing. otherwise redirect to profile
+					redirectTo = (req.header("Referer").split("/").indexOf("listing") != -1) ? req.header("Referer") : "/profile/dashboard";
+					redirectURL = req.session.redirectBack ? req.session.redirectBack : redirectTo;
+					passport.authenticate('local-signup', {
+						failureRedirect : '/signup', // redirect back to the signup page if there is an error
+					}, function(user, info){
+						if (!user && info){
+							error.handler(req, res, info.message);
+						}
+						else {
+							req.session.message = "Successfully created an account! Please log in below.";
+							res.redirect("/login");
+						}
+					})(req, res, next);
 				}
 				else {
-					delete req.session.redirectBack;
-					return res.redirect(redirectURL);
+					error.handler(req, res, "Invalid captcha!");
 				}
-			});
-		}
-	})(req, res, next);
+			}
+		)
+	}
 };
 
 //function to change password

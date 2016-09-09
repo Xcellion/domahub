@@ -49,3 +49,13 @@ html {
 .login-button {
   transition: all 0.25s;
   -webkit-transition: all 0.25s; }
+
+#accept {
+    display:none;
+}
+
+.g-recaptcha > div {
+    margin:auto;
+    margin-bottom:15px;
+    transform: scale(1.19);
+}
