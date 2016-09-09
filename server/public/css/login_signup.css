@@ -49,3 +49,8 @@ html {
 .login-button {
   transition: all 0.25s;
   -webkit-transition: all 0.25s; }
+
+.g-recaptcha > div {
+  margin:auto;
+  margin-bottom:15px;
+  transform: scale(1.19); }
