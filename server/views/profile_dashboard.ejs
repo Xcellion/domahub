@@ -81,12 +81,6 @@
 				</div>
 
 				<div class="column is-half">
-					<div class="notification is-primary">
-						<button class="delete"></button>
-						The dashboard is your control panel to w3bbi -
-						from here you can edit your profile, check your private messages,
-						and manage your listings, bids, and rentals.
-					</div>
 					<% if (user.type == 0){ %>
 						<div class="notification is-danger">
 							<button class="delete"></button>
@@ -130,7 +124,7 @@
 							</article>
 						<% } %>
 
-						<a class="button" href="/listing/create">Create new listing</a>
+						<a class="button is-info" href="/listing/create">Create new listing</a>
 					</box>
 					<div class="box">
 						<table id="rental_table" class="table">
@@ -168,7 +162,7 @@
 									Your profile is only 50% complete.
 								</p>
 								<progress class="progress is-warning" value="50" max="100"></progress>
-								<a class="button">Complete Now</a>
+								<a href="/profile/settings" class="button">Complete Now</a>
 							</div>
 						</div>
 					</article>
@@ -178,7 +172,7 @@
 								<p>
 									As a domain owner, you must connect your account with <a href="https://stripe.com/about">Stripe</a> before you can receive payments.
 								</p>
-								<a href="https://connect.stripe.com/oauth/authorize?response_type=code&client_id=ca_997O55c2IqFxXDmgI9B0WhmpPgoh28s3&scope=read_write" class="button">Connect with Stripe</a>
+								<a href="https://connect.stripe.com/oauth/authorize?response_type=code&client_id=ca_997O55c2IqFxXDmgI9B0WhmpPgoh28s3&scope=read_write" class="button is-success">Connect with Stripe</a>
 							</div>
 						</div>
 					</article>

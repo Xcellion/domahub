@@ -104,7 +104,11 @@ input:-webkit-autofill {
 /********************** MEDIA QUERIES****************/
 @include mobile {
 
+  .img-title {
+    font-size: 2.7rem;
+  }
   .img-subtitle {
+    font-size: 1.2rem;
     text-align: left;
   }
   #landing-buttons {
