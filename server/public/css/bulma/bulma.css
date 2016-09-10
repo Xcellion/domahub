@@ -1891,7 +1891,6 @@ a.box {
 .card-header {
   align-items: stretch;
   background-color: rgba(17, 17, 17, 0.1);
-  box-shadow: 0 1px 2px rgba(17, 17, 17, 0.1);
   display: flex;
   min-height: 40px; }
 
@@ -2821,6 +2820,9 @@ a.box {
     border-radius: 0 0 3px 3px;
     border-top: none; }
 
+.is-primary {
+  background-color: #3CBC8D; }
+
 .message {
   background-color: #fff;
   border-radius: 3px; }
@@ -3219,6 +3221,7 @@ a.panel-block:hover {
 .tabs {
   align-items: stretch;
   display: flex;
+  font-size: 18px;
   justify-content: space-between;
   line-height: 24px;
   overflow: hidden;
@@ -3323,6 +3326,12 @@ a.panel-block:hover {
     .tabs.is-large.is-boxed a, .tabs.is-large.is-toggle a {
       padding-bottom: 13px;
       padding-top: 13px; }
+  @media screen and (max-width: 768px) {
+    .tabs {
+      font-size: 16px; }
+      .tabs.is-boxed a, .tabs.is-toggle a {
+        padding-bottom: 1px;
+        padding-top: 1px; } }
 
 .hero-video {
   bottom: 0;

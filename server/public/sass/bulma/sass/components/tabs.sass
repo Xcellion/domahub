@@ -3,6 +3,7 @@
   @extend .unselectable
   align-items: stretch
   display: flex
+  font-size: $size-medium
   justify-content: space-between
   line-height: 24px
   overflow: hidden
@@ -127,3 +128,12 @@
       a
         padding-bottom: 13px
         padding-top: 13px
+  +mobile
+    font-size: $size-normal
+    // a
+    //   padding: 2px 8px
+    &.is-boxed,
+    &.is-toggle
+      a
+        padding-bottom: 1px
+        padding-top: 1px
