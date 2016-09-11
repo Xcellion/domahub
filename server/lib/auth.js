@@ -111,7 +111,7 @@ module.exports = {
 						return done(null, false, {message: 'Invalid user!'});
 					}
 
-				 	// if the user is found but the password is wrong
+				 	//if the user is found but the password is wrong
 					else if (!bcrypt.compareSync(password, result.info[0].password)){
 						return done(null, false, {message: 'Invalid password!'});
 					}
@@ -169,7 +169,14 @@ function isLoggedIn(req, res, next) {
 		res.header('Cache-Control', 'private, no-cache, no-store, must-revalidate');
 		res.header('Expires', '-1');
 		res.header('Pragma', 'no-cache');
-		return next();
+
+		//no verified email, make them verify
+		if (req.user.type == 0){
+			renderRequestVerify(req, res);
+		}
+		else {
+			return next();
+		}
 	}
 	else {
 		switch (req.method){
@@ -259,14 +266,18 @@ function renderReset(req, res){
 
 //function to check token for verifying account email
 function renderVerify(req, res){
-	res.render("signup_verify.ejs", {message: messageReset(req)});
+	res.render("verify_email.ejs", {message: messageReset(req)});
+}
+
+//function to render page for request another email for verification
+function renderRequestVerify(req, res){
+	res.render("verify_request.ejs", {message: messageReset(req)});
 }
 
 //helper function to verify account
-function generateVerify(req, res){
+function generateVerify(req, res, email, fullname, cb){
 	//generate token to email to user
 	crypto.randomBytes(20, function(err, buf) {
-		var email = req.user.email;
 		var verify_token = buf.toString('hex');
 		var now = new Date(new Date().getTime() + 3600000); 	// 1 hour buffer
 		var verify_exp = new Date(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(),  now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds());
@@ -283,9 +294,9 @@ function generateVerify(req, res){
 				var email_message = {
 					to: email,
 					from: 'theITguy@domahub.com',
-					subject: 'Verify your account at domahub?',
-					text: 'Hello, ' + req.user.fullname + '.\n\n' +
-						  'Please click on the following link, or paste this into your browser to verify your email:\n\n' +
+					subject: 'Verify your account at domahub!',
+					text: 'Hello, ' + fullname + '.\n\n' +
+						  'Please click on the following link, or paste this into your browser to verify your email.\n\n' +
 						  'http://' + req.headers.host + '/verify/' + verify_token + '\n\n' +
 						  'The link above will expire in 1 hour.'
 				};
@@ -293,12 +304,10 @@ function generateVerify(req, res){
 				//send email
 				mailer.sendMail(email_message, function(err) {
 					if (err) {
-						console.log(err)
+						cb(err);
 					}
 					else {
-						res.send({
-							state: "success"
-						})
+						cb("success");
 					}
 				});
 			}
@@ -308,9 +317,25 @@ function generateVerify(req, res){
 
 //function to request verification
 function requestVerify(req, res){
-	if (req.user.type == 0 && !req.user.requested && req.header("x-requested-with") == "XMLHttpRequest"){
+	if (req.isAuthenticated() && req.user.type == 0 && !req.user.requested && req.header("x-requested-with") == "XMLHttpRequest"){
 		req.user.requested = true;
-		generateVerify(req, res);
+		generateVerify(req, res, req.user.email, req.user.fullname, function(state){
+			if (state == "success"){
+				req.logout();
+				res.send({
+					state: "success"
+				})
+			}
+			else {
+				res.send({
+					state: "error"
+				})
+			}
+		});
+	}
+	else if (!req.isAuthenticated()){
+		req.session.message = "You must log in first to verify your account!";
+		error.handler(req, res, "Please log in!", "json");
 	}
 	else if (req.user.type == 1){
 		error.handler(req, res, "Account is already verified!", "json");
@@ -391,12 +416,14 @@ function signupPost(req, res, next){
 							error.handler(req, res, info.message);
 						}
 						else {
-							//if coming from a listing, redirect to listing. otherwise redirect to profile
-							redirectTo = (req.header("Referer").split("/").indexOf("listing") != -1) ? req.header("Referer") : "/profile/dashboard";
-							redirectback = req.session.redirectBack;
-							req.session.redirectBack = redirectback || redirectTo;
-							req.session.message = "Successfully created an account! Please log in below.";
-							res.redirect("/login");
+							generateVerify(req, res, email, fullname, function(state){
+								//if coming from a listing, redirect to listing. otherwise redirect to profile
+								redirectTo = (req.header("Referer").split("/").indexOf("listing") != -1) ? req.header("Referer") : "/profile/dashboard";
+								redirectback = req.session.redirectBack;
+								req.session.redirectBack = redirectback || redirectTo;
+								req.session.message = "Success! Please check your email for further instructions!";
+								res.redirect("/login");
+							});
 						}
 					})(req, res, next);
 				}
