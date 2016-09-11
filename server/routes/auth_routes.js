@@ -25,6 +25,14 @@ module.exports = function(app, auth){
 		auth.renderVerify
 	]);
 
+	//to render the request verify page
+	app.get("/verify", [
+		auth.isLoggedIn,
+		function(req, res){
+			res.redirect('/profile');
+		}
+	]);
+
 	//post routes for authentication
 	app.post([
 		"/signup",
@@ -47,7 +55,6 @@ module.exports = function(app, auth){
 
 	//to resend verification email
 	app.post("/verify", [
-		auth.isLoggedIn,
 		auth.requestVerify
 	]);
 
