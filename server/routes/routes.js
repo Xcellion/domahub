@@ -1,5 +1,5 @@
 module.exports = function(app, db, auth, error){
-	require('./api/api.js')(app, db, error);					// API for all domains listed on w3bbi
+	require('./api/api.js')(app, db, error);					// API for all domains listed on domahub
 	require('./main_routes.js')(app, auth); 				// for all main page links
 
 	require('./auth_routes.js')(app, auth); 						// For authentication, account creation, log in, log out

@@ -13,7 +13,7 @@ $(document).ready(function() {
 	//stripe configuration
 	handler = StripeCheckout.configure({
 		key: 'pk_test_kcmOEkkC3QtULG5JiRMWVODJ',
-		name: 'w3bbi Domain Rental',
+		name: 'domahub Domain Rental',
 		image: '/images/logo.png',
 		panelLabel: 'Pay',
 		zipCode : true,

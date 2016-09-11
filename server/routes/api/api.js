@@ -7,12 +7,12 @@ var httpProxy = require('http-proxy'),
 // Listen for any error events
 proxy.on('error', function (err, req, res) {
 	console.log(err);
-	res.redirect("http://w3bbi.com/error");
+	res.redirect("http://domahub.com/error");
 });
 
 //to rewrite header on proxy
 proxy.on('proxyReq', function(proxyReq, req, res, options) {
-	proxyReq.setHeader('w3bbi_proxy', 'w3bbi');
+	proxyReq.setHeader('domahub_proxy', 'domahub');
 });
 
 module.exports = function(app, db, e){
@@ -25,14 +25,16 @@ module.exports = function(app, db, e){
 	app.get("/error", renderError);
 }
 
-//function to check if the requested host is not for w3bbi
+//function to check if the requested host is not for domahub
 function checkHost(req, res, next){
 	if (req.headers.host){
 	    domain_name = req.headers.host.replace(/^(https?:\/\/)?(www\.)?/,'');
 
-		//check if requesting for w3bbi main page or a listed domain
+		//check if requesting for domahub main page or a listed domain
 		if (domain_name != "www.w3bbi.com"
 			&& domain_name != "w3bbi.com"
+			&& domain_name != "www.domahub.com"
+			&& domain_name != "domahub.com"
 			&& domain_name != "localhost"
 			&& domain_name != "localhost:8080"){
 
@@ -40,7 +42,7 @@ function checkHost(req, res, next){
 	        getCurrentRental(req, res, domain_name);
 	    }
 
-		//requested w3bbi website, not domain
+		//requested domahub website, not domain
 	    else {
 	        next();
 	    }
@@ -67,7 +69,7 @@ function getCurrentRental(req, res, domain_name){
 
 			//redirect to listing page
 			else {
-				res.redirect("http://w3bbi.com/listing/" + domain_name)
+				res.redirect("http://domahub.com/listing/" + domain_name)
 			}
 		}
 	});

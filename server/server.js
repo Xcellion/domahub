@@ -41,7 +41,7 @@ app.set('views', __dirname + '/views');
 if (env == "dev"){
 	//express session in memory
 	app.use(session({
-		secret: 'w3bbi_market',
+		secret: 'domahub_market',
 		saveUninitialized: false,
 		resave: false
 	}));
@@ -54,7 +54,7 @@ else {
 			port:6379,
 			pass:"wonmin33"
 		}),
-		secret: 'w3bbi_market',
+		secret: 'domahub_market',
 		resave: false,
 		saveUninitialized: false
 	}));
