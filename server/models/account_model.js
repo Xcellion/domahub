@@ -24,7 +24,7 @@ module.exports = account_model;
 
 //check if an account exists
 account_model.prototype.checkAccount = function(email, callback){
-	console.log("Checking to see if account with email " + email + " exists on w3bbi...");
+	console.log("Checking to see if account with email " + email + " exists on domahub...");
 	query = 'SELECT 1 AS "exist" FROM accounts WHERE email = ?'
 	account_query(query, "Account does not exist!", callback, email);
 }

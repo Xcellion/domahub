@@ -282,8 +282,8 @@ function generateVerify(req, res){
 			else {
 				var email_message = {
 					to: email,
-					from: 'theITguy@w3bbi.com',
-					subject: 'Verify your account at w3bbi?',
+					from: 'theITguy@domahub.com',
+					subject: 'Verify your account at domahub?',
 					text: 'Hello, ' + req.user.fullname + '.\n\n' +
 						  'Please click on the following link, or paste this into your browser to verify your email:\n\n' +
 						  'http://' + req.headers.host + '/verify/' + verify_token + '\n\n' +
@@ -434,8 +434,8 @@ function forgotPost(req, res, next){
 				else {
 					var email = {
 						to: req.body.email,
-						from: 'theITguy@w3bbi.com',
-						subject: 'Forgot your password for w3bbi?',
+						from: 'theITguy@domahub.com',
+						subject: 'Forgot your password for domahub?',
 						text: 'You are receiving this because you (or someone else) requested the reset of the password for your account.\n\n' +
 					          'Please click on the following link, or paste this into your browser to complete the process:\n\n' +
 					          'http://' + req.headers.host + '/reset/' + token + '\n\n' +

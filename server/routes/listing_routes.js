@@ -56,8 +56,8 @@ module.exports = function(app, db, auth, e){
 		listings_renter.renderListing404
 	]);
 
-	//w3bbi easter egg page
-	app.get('/listing/w3bbi.com', function(req, res){
+	//domahub easter egg page
+	app.get('/listing/domahub.com, /listing/w3bbi.com', function(req, res){
 		res.render("listing_w3bbi.ejs", {
 			user: req.user,
 			message: Auth.messageReset(req)
@@ -160,7 +160,7 @@ function renderWhoIs(req, res, domain_name){
 		}
 		email = whoisObj["Registrant Email"] || whoisObj["Admin Email"] || whoisObj["Tech Email"] || "";
 		owner_name = whoisObj["Registrant Organization"] || whoisObj["Registrant Name"] || "Nobody";
-		description = "This domain is currently unavailable for rent at w3bbi. "
+		description = "This domain is currently unavailable for rent at domahub. "
 
 		if (owner_name == "Nobody"){
 			description += "However, it's available for purchase at the below links!";

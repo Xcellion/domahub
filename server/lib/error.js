@@ -11,7 +11,7 @@ function handler(req, res, message, type) {
 		//errors for api
 		case "api":
 			req.session.message = "Test";
-			res.redirect(301, 'http://w3bbi.com');
+			res.redirect(301, 'http://domahub.com');
 			break;
 		case "json":
 			res.send({
