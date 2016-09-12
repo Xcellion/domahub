@@ -12,8 +12,7 @@ module.exports = function(app, auth){
 		"/getstarted",
 		"/privacy",
     	"/sellers",
-		"/tos",
-		"/getstartedtest"
+		"/tos"
     ]
 
 	//default page
