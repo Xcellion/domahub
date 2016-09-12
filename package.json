@@ -1,5 +1,5 @@
 {
-  "name": "w3bbi",
+  "name": "domahub",
   "version": "0.1",
   "description": "A domain rental marketplace",
   "main": "server/server.js",
@@ -22,6 +22,7 @@
     "parse-whois": "1.0.0",
     "passport": "0.3.2",
     "passport-local": "1.0.0",
+    "qs": "6.2.1",
     "request": "2.73.0",
     "sanitize-html": "1.13.0",
     "stripe": "4.9.0",
@@ -30,9 +31,9 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@heroku.com:w3bbi.git"
+    "url": "https://github.com/domahub/domahub.git"
   },
-  "author": "w3bbi",
+  "author": "domahub",
   "license": "ISC",
   "devDependencies": {},
   "scripts": {
@@ -42,7 +43,6 @@
     "node": "0.12.6"
   },
   "keywords": [
-    "w3bbi",
-    "node"
+    "domahub"
   ]
 }

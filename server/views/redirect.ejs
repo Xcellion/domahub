@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>domahub - Please Wait</title>
+    <link rel="stylesheet" type="text/css" href="/css/login_signup.css" />
+    <%- include("templates/head_links"); %>
+    <script>
+        var redirect = <% if(typeof redirect != "undefined"){ %><%-JSON.stringify(redirect)%><% }else{ %>""<% } %>;
+    </script>
+  </head>
+
+  <body>
+
+    <div id="login-form" class="form">
+      <form id="target" action="/login" method="post">
+        <div class="has-text-centered logo-login">
+          <a class="w3bbi-icon" href="/">domahub</a>
+        </div>
+        <div id="message" class="has-text-centered">
+            Please wait...now redirecting you.
+        </div>
+
+        <div id="test">
+            <a id="login-button" class="login-button button is-primary is-medium is-fullwidth" href="/">
+              Home
+            </a>
+        </div>
+
+      </form>
+    </div>
+
+  <script src="/js/routes/redirect_logic.js" type="text/javascript"></script>
+
+  </body>
+
+</html>

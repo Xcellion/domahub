@@ -80,6 +80,31 @@ account_model.prototype.newAccount = function(account_info, callback){
 	listing_query(query, "Failed to create a new account for email: " + account_info.email + "!", callback, account_info);
 }
 
+//inserts new information into account stripe
+account_model.prototype.newAccountStripe = function(account_info, callback){
+	console.log("Creating new Stripe information for account: " + account_info.account_id + "...");
+	query = "INSERT INTO accounts_stripe \
+			SET ? \
+			ON DUPLICATE KEY UPDATE \
+				token_type = ?, \
+				stripe_publishable_key = ?, \
+				scope = ?, \
+				livemode = ?, \
+				stripe_user_id = ?, \
+				refresh_token = ?, \
+				access_token = ? "
+	listing_query(query, "Failed to create new Stripe info for account: " + account_info.account_id + "!", callback, [
+		account_info,
+		account_info.token_type,
+		account_info.stripe_publishable_key,
+		account_info.scope,
+		account_info.livemode,
+		account_info.stripe_user_id,
+		account_info.refresh_token,
+		account_info.access_token
+	]);
+}
+
 //----------------------------------------------------------------------UPDATE----------------------------------------------------------
 
 //updates a new account

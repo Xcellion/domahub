@@ -3,7 +3,7 @@ $(document).ready(function() {
 	//if remember me is set in the cookie
 	var remember_cookie = read_cookie("remember");
 	if (remember_cookie){
-		$("#remember_checkbox").prop("checked", true);
+		$("#remember-checkbox").prop("checked", true);
 		$("#email").val(remember_cookie);
 	}
 
