@@ -8,6 +8,8 @@
   .logo-text:hover {
     color: #3CBC8D;
     opacity: 1.0; }
+  .logo-text.is-large {
+    font-size: 2.5rem; }
 
 #searchbar-form input {
   font-family: "Share Tech", "Lucida Console", monospace; }
@@ -35,9 +37,6 @@
   position: absolute;
   top: 100%;
   width: 110px; }
-
-.nav-item-special {
-  padding: 15px 10px 15px 10px; }
 
 .logout {
   color: #3CBC8D !important; }

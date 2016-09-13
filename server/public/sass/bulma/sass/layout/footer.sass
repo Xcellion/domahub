@@ -9,21 +9,32 @@
 .footer-list
   display: flex
   flex-direction: column
-  text-align: left
+  text-align: right
   text-decoration: none
   +mobile
-    text-align: center
+    flex-direction: row
+    justify-content: center
+    align-items: center
 
 .footer-header
   color: $white
   font-size: 1.1rem
   font-weight: 300
   margin-bottom: 15px
+  +mobile
+    margin-bottom: 0
+    display: none
 
 .footer-item
   color: $white
   &:not(:nth-child(2))
     margin-top: 10px
+    +mobile
+      margin-top: 0
+  +mobile
+    &:not(:last-child)
+      margin-top: 0
+      margin-right: 15px
 
 .social-icon
   color: $white

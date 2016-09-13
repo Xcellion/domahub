@@ -5,22 +5,22 @@
     <div class="nav-item">
       <a class="logo-text" title="Home" href="/">DomaHub</a>
     </div>
-  </div>
-  <div class="nav-center">
-
-  </div>
-  <span class="nav-toggle">
-    <span></span>
-    <span></span>
-    <span></span>
-  </span>
-  <div class="nav-right nav-menu">
     <form id="searchbar-form" class="nav-item" novalidate>
       <p class="control has-icon">
         <input id="domain-name" class="input" type="url" placeholder="Search websites" name="domain-name" autocomplete="off">
         <i class="fa fa-search"></i>
       </p>
     </form>
+  </div>
+  <!-- <div class="nav-center">
+
+  </div> -->
+  <span class="nav-toggle">
+    <span></span>
+    <span></span>
+    <span></span>
+  </span>
+  <div class="nav-right nav-menu">
     <div class="nav-item">
       <a class="nav-link" title="Renters" href="/buyers">Rent</a>
     </div>
@@ -87,7 +87,7 @@
 
 <!-- or else display the user profile as logged in -->
 <% } else { %>
-  <div class="nav-item-special">
+  <div class="nav-item">
     <a id="profile-button" class="button is-outlined is-primary">
       <span><%= (user.fullname.length > 6) ? user.fullname.slice(0,6) + "..." : user.fullname %></span>
       <span class="icon">
