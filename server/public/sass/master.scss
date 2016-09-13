@@ -7,6 +7,23 @@ input:-webkit-autofill {
 }
 
 /********************** UNIVERSAL ******************/
+.logo-text {
+  color: $primary !important;
+  font: {
+    family: 'Share Tech';
+    size: 1.5rem;
+    weight: bold;
+  }
+  opacity: 0.9;
+  &:hover {
+    color: $primary;
+    opacity: 1.0;
+  }
+  &.is-large {
+    font-size: 2.5rem;
+  }
+}
+
 .is-fullheight {
   height: 100vh;
 }
@@ -82,21 +99,21 @@ input:-webkit-autofill {
 /********************** LINEBREAK ******************/
 
 #linebreak {
-  border-bottom: 1px solid $grey-lighter;
-  margin: 50px auto 50px auto;
+  border-bottom: 1px solid $grey;
+  margin: 60px auto 60px auto;
   position: relative;
-  width: 25%;
+  width: 100%;
 }
 
 #linebreak2 {
-  border-bottom: 1px solid $grey-lighter;
+  border-bottom: 1px solid $grey-light;
   position: relative;
   margin: 15px auto 25px auto;
   width: 100%;
 }
 
 #linebreak3 {
-  border-bottom: 1px solid $grey-lighter;
+  border-bottom: 1px solid $grey-light;
   margin: 5px auto 5px auto;
   width: 50%;
 }

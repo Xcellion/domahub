@@ -1,17 +1,13 @@
 /********************************* NAVBAR ***********************************/
-.w3bbi-icon a {
-  color: #3CBC8D;
+.logo-text {
+  color: #3CBC8D !important;
   font-family: 'Share Tech';
   font-size: 1.5rem;
   font-weight: bold;
   opacity: 0.9; }
-
-.w3bbi-icon a:hover {
-  color: #3CBC8D;
-  opacity: 1.0;
-  box-shadow: none;
-  -moz-box-shadow: none;
-  -webkit-box-shadow: none; }
+  .logo-text:hover {
+    color: #3CBC8D;
+    opacity: 1.0; }
 
 #searchbar-form input {
   font-family: "Share Tech", "Lucida Console", monospace; }

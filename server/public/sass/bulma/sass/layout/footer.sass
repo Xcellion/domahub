@@ -1,3 +1,46 @@
 .footer
   background-color: $grey-darker
-  padding: 40px 20px 80px
+  padding: 60px 20px 80px
+  a
+    color: $grey
+    &:hover
+      color: $grey-lighter
+
+.footer-list
+  display: flex
+  flex-direction: column
+  text-align: left
+  text-decoration: none
+  +mobile
+    text-align: center
+
+.footer-header
+  color: $white
+  font-size: 1.1rem
+  font-weight: 300
+  margin-bottom: 15px
+
+.footer-item
+  color: $white
+  &:not(:nth-child(2))
+    margin-top: 10px
+
+.social-icon
+  color: $white
+  +transition(none)
+
+#facebook-icon
+  &:hover
+    color: #3b5998;
+
+#twitter-icon
+  &:hover
+    color: #00aced;
+
+#linkedin-icon
+  &:hover
+    color: #0077B5;
+
+#youtube-icon
+  &:hover
+    color: #cd201f;

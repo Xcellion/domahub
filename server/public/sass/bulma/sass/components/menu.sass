@@ -5,12 +5,13 @@
 
 .menu-list
   a
+    +transition(none)
     border-radius: $radius-small
     color: $text
     display: block
     padding: 5px 10px
     &:hover
-      background-color: $background
+      background-color: $grey-lighter
       color: $link
     // Modifiers
     &.is-active

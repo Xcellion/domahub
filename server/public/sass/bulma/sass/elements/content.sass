@@ -1,12 +1,5 @@
 .content
   @extend .block
-  // Inline
-  a:not(.button)
-
-    &:visited
-
-    &:hover
-
   li + li
     margin-top: 0.25em
   // Block
@@ -15,9 +8,22 @@
     line-height: 1.4
     font-size: 1.2rem
     font-weight: 300
-    margin-bottom: 10px
+    &:first-child
+      margin-top: 10px
+    &:not(:last-child)
+      margin-bottom: 10px
   .is-accent
     color: $accent
+
+  // Specifically for footer paragraphs
+  &.is-footer
+    p
+      color: $grey
+      line-height: 1
+      font-size: 1rem
+      margin-top: 10px
+    +mobile
+      text-align: center
 
   blockquote,
   p,
@@ -64,7 +70,7 @@
     margin-right: 2em
     margin-top: 1em
   ul
-    list-style: disc outside
+    list-style: none
     margin-left: 2em
     margin-right: 2em
     margin-top: 1em

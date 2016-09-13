@@ -2,22 +2,18 @@
 
 /********************************* NAVBAR ***********************************/
 
-.w3bbi-icon a {
-  color: $primary;
+.logo-text {
+  color: $primary !important;
   font: {
     family: 'Share Tech';
     size: 1.5rem;
     weight: bold;
   }
   opacity: 0.9;
-}
-
-.w3bbi-icon a:hover {
-  color: $primary;
-  opacity: 1.0;
-  box-shadow: none;
-  -moz-box-shadow: none;
-  -webkit-box-shadow: none;
+  &:hover {
+    color: $primary;
+    opacity: 1.0;
+  }
 }
 
 #searchbar-form input {
