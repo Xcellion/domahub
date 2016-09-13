@@ -871,55 +871,55 @@ button {
 .content .is-accent {
   color: #ff8751; }
 
-.content.is-footer p {
+.is-footer p {
   color: #aeb1b5;
   line-height: 1;
   font-size: 1rem;
   margin-top: 10px; }
 
 @media screen and (max-width: 768px) {
-  .content.is-footer {
+  .is-footer {
     text-align: center; } }
 
-.content blockquote:not(:last-child),
-.content p:not(:last-child),
-.content ol:not(:last-child),
-.content ul:not(:last-child) {
+.is-footer blockquote:not(:last-child),
+.is-footer p:not(:last-child),
+.is-footer ol:not(:last-child),
+.is-footer ul:not(:last-child) {
   margin-bottom: 1em; }
 
-.content .is-accent {
+.is-footer .is-accent {
   color: #ff8751; }
 
-.content blockquote {
+.is-footer blockquote {
   background-color: #fff;
   border-left: 5px solid #d3d6db;
   padding: 1.5em; }
 
-.content ol {
+.is-footer ol {
   list-style: decimal outside;
   margin-left: 2em;
   margin-right: 2em;
   margin-top: 1em; }
 
-.content ul {
+.is-footer ul {
   list-style: none;
   margin-left: 2em;
   margin-right: 2em;
   margin-top: 1em; }
-  .content ul ul {
+  .is-footer ul ul {
     list-style-type: circle;
     margin-top: 0.5em; }
-    .content ul ul ul {
+    .is-footer ul ul ul {
       list-style-type: square; }
 
-.content.is-medium {
+.is-footer.is-medium {
   font-size: 18px; }
-  .content.is-medium code {
+  .is-footer.is-medium code {
     font-size: 16px; }
 
-.content.is-large {
+.is-footer.is-large {
   font-size: 24px; }
-  .content.is-large code {
+  .is-footer.is-large code {
     font-size: 18px; }
 
 .input, .textarea {
@@ -3943,11 +3943,7 @@ a.panel-block:hover {
       margin-right: 15px; } }
 
 .social-icon {
-  color: #fff;
-  -moz-transition: none;
-  -o-transition: none;
-  -webkit-transition: none;
-  transition: none; }
+  color: #fff; }
 
 #facebook-icon:hover {
   color: #3b5998; }
