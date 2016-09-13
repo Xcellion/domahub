@@ -26,6 +26,7 @@ module.exports = function(app, db, auth, e){
 	//render create listing page
 	app.get('/listing/create', [
 		isLoggedIn,
+		checkListingAccount,
 		listings_owner.renderCreateListing
 	]);
 
@@ -37,6 +38,7 @@ module.exports = function(app, db, auth, e){
 	//create a single listing
 	app.post('/listing/create', [
 		isLoggedIn,
+		checkListingAccount,
 		listings_owner.checkListingCreate,
 		listings_owner.createListing
 	]);
@@ -44,6 +46,7 @@ module.exports = function(app, db, auth, e){
 	//create multiple listings
 	app.post('/listing/create/batch', [
 		isLoggedIn,
+		checkListingAccount,
 		listings_owner.uploadSizeCheck,
 		listings_owner.checkListingBatch,
 		listings_owner.createListingBatch
@@ -324,6 +327,15 @@ function checkRentalTime(listing_id, times, callback){
 	});
 }
 
+//function to check if the user can create new listings
+function checkListingAccount(req, res, next){
+	if (req.user.type >= 2){
+		next();
+	}
+	else {
+		error.handler(req, res, "You must connect your account to Stripe before you can create a new listing!");
+	}
+}
 
 //---------------------------------------------------------------------------------------------------------------------------------
 
