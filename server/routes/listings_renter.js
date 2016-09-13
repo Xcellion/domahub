@@ -1,6 +1,4 @@
 var	listing_model = require('../models/listing_model.js');
-var stripe = require("stripe")("sk_test_PHd0TEZT5ytlF0qCNvmgAThp");
-var request = require("request");
 
 module.exports = {
 

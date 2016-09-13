@@ -35,7 +35,7 @@ module.exports = function(app, db, auth, e){
 		connectStripe
 	]);
 
-	//connect stripe
+	//temporary to test /redirect page
 	app.get("/redirect", function(req, res){
 		res.render("redirect.ejs", {
 			redirect: "/"
@@ -127,8 +127,6 @@ function connectStripe(req, res){
 	scope = req.query.scope;
 	code = req.query.code;
 
-	console.log(scope, code, req.query.error, req.query.error_description)
-
 	//connection errored
 	if (req.query.error){
 		res.send(req.query.error_description);
@@ -159,15 +157,15 @@ function connectStripe(req, res){
 
 							//successfully connected, now update the type
 							account_info = {
-								type: 3
+								type: 2
 							}
 							Account.updateAccount(account_info, req.user.email, function(result){
 								if (result.state=="error"){error.handler(req, res, result.info);}
 								else {
+									req.user.type = 2;
 									res.render("redirect.ejs", {
-										message: Auth.messageReset(req),
 										redirect: "/profile"
-									});
+									})
 								}
 							});
 						}

@@ -59,7 +59,7 @@
 						</div>
 						<div class="message-body has-text-centered">
 							<div class="content quick-links">
-								<a>Manage Payments</a>
+								<a href="/authorizestripe">Manage Payments</a>
 								<a>Add Account Verification</a>
 								<a>Change Email Address</a>
 							</div>
@@ -80,15 +80,7 @@
 					</article>
 				</div>
 
-				<div class="column is-half">
-					<% if (user.type == 0){ %>
-						<div class="notification is-danger">
-							<button class="delete"></button>
-							<p id="verify-message">
-								Please verify your account! Click <a id="verify-link" class="white-link-underlined" href="#">here</a> to resend the verification email.
-							</p>
-						</div>
-					<% } %>
+				<div class="column">
 					<box class="box">
 						<table id="domain_table" class="table">
 							<caption class="caption">
@@ -154,29 +146,20 @@
 					</div>
 				</div>
 
-				<div class="column is-one-quarter">
-					<article class="message">
-						<div class="message-body has-text-centered">
-							<div class="content">
-								<p>
-									Your profile is only 50% complete.
-								</p>
-								<progress class="progress is-warning" value="50" max="100"></progress>
-								<a href="/profile/settings" class="button">Complete Now</a>
+				<% if (user.type != 2){ %>
+					<div class="column is-one-quarter">
+						<article class="message">
+							<div class="message-body has-text-centered">
+								<div class="content">
+									<p>
+										As a domain owner, you must connect your account with <a href="https://stripe.com/about">Stripe</a> before you can receive payments.
+									</p>
+									<a href="/authorizestripe" class="button is-success">Connect with Stripe</a>
+								</div>
 							</div>
-						</div>
-					</article>
-					<article class="message">
-						<div class="message-body has-text-centered">
-							<div class="content">
-								<p>
-									As a domain owner, you must connect your account with <a href="https://stripe.com/about">Stripe</a> before you can receive payments.
-								</p>
-								<a href="/authorizestripe" class="button is-success">Connect with Stripe</a>
-							</div>
-						</div>
-					</article>
-				</div>
+						</article>
+					</div>
+				<% } %>
 
 			</div>
 		</div>
