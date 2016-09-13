@@ -14,6 +14,9 @@
     color: $primary;
     opacity: 1.0;
   }
+  &.is-large {
+    font-size: 2.5rem;
+  }
 }
 
 #searchbar-form input {
@@ -51,9 +54,9 @@
   width: 110px;
 }
 
-.nav-item-special {
-  padding: 15px 10px 15px 10px;
-}
+// .nav-item-special {
+//   padding: 15px 10px 15px 10px;
+// }
 
 .logout {
   color: $primary !important;
