@@ -1,30 +1,21 @@
 @import '../_vars.scss';
+@import '../_mixins.sass';
 
 /********************************* NAVBAR ***********************************/
-
-.logo-text {
-  color: $primary !important;
-  font: {
-    family: 'Share Tech';
-    size: 1.5rem;
-    weight: bold;
-  }
-  opacity: 0.9;
-  &:hover {
-    color: $primary;
-    opacity: 1.0;
-  }
-  &.is-large {
-    font-size: 2.5rem;
-  }
-}
-
 #searchbar-form input {
   font-family: $sharetech;
 }
 
 .nav-link {
   padding: 5px;
+  &:hover {
+    color: $primary;
+    @include box-shadow(0,-3px,0,$primary, inset);
+    @include mobile {
+      @include box-shadow(0,0,0,$black);
+      align-self: flex-end;
+    }
+  }
 }
 
 /************************************* LOGIN DROPDOWN *************************/

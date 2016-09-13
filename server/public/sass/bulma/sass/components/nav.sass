@@ -23,27 +23,15 @@
       margin-right: 5px
     &:last-child
       margin-left: 5px
-  // Responsiveness
   +mobile
-    justify-content: flex-start
-    text-align: right
+    justify-content: flex-end
+    a
+      flex-grow: 0
 
 
 .nav-item a,
 a.nav-item
   color: $text
-  +tablet
-    &:hover
-      color: $primary
-      -moz-box-shadow: inset 0 -3px 0 $primary
-      -webkit-box-shadow: inset 0 -3px 0 $primary
-      box-shadow: inset 0 -3px 0 $primary
-    // Modifiers
-    &.is-active
-      color: $primary
-      -moz-box-shadow: inset 0 -3px 0 $primary
-      -webkit-box-shadow: inset 0 -3px 0 $primary
-      box-shadow: inset 0 -3px 0 $primary
   &.is-tab
     border-bottom: 1px solid transparent
     border-top: 1px solid transparent
@@ -56,11 +44,9 @@ a.nav-item
       border-bottom: 3px solid $link
       border-top: 3px solid transparent
       color: $link
-  +mobile
-    display: block
+
 
 // Containers
-
 .nav-menu
   // Responsiveness
   +mobile
@@ -74,8 +60,11 @@ a.nav-item
     .nav-item
       border-top: 1px solid rgba($border, 0.5)
       padding: 10px
+      width: 100%
     &.is-active
-      display: block
+      display: flex
+      flex-direction: column
+      align-items: flex-end
   +tablet-only
     padding-right: 20px
 
