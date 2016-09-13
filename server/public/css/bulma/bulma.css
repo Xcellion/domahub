@@ -3028,25 +3028,13 @@ button {
     margin-left: 5px; }
   @media screen and (max-width: 768px) {
     .nav-item {
-      justify-content: flex-start;
-      text-align: right; } }
+      justify-content: flex-end; }
+      .nav-item a {
+        flex-grow: 0; } }
 
 .nav-item a,
 a.nav-item {
   color: #111; }
-  @media screen and (min-width: 769px) {
-    .nav-item a:hover,
-    a.nav-item:hover {
-      color: #3CBC8D;
-      -moz-box-shadow: inset 0 -3px 0 #3CBC8D;
-      -webkit-box-shadow: inset 0 -3px 0 #3CBC8D;
-      box-shadow: inset 0 -3px 0 #3CBC8D; }
-    .nav-item a.is-active,
-    a.nav-item.is-active {
-      color: #3CBC8D;
-      -moz-box-shadow: inset 0 -3px 0 #3CBC8D;
-      -webkit-box-shadow: inset 0 -3px 0 #3CBC8D;
-      box-shadow: inset 0 -3px 0 #3CBC8D; } }
   .nav-item a.is-tab,
   a.nav-item.is-tab {
     border-bottom: 1px solid transparent;
@@ -3062,10 +3050,6 @@ a.nav-item {
       border-bottom: 3px solid #3CBC8D;
       border-top: 3px solid transparent;
       color: #3CBC8D; }
-  @media screen and (max-width: 768px) {
-    .nav-item a,
-    a.nav-item {
-      display: block; } }
 
 @media screen and (max-width: 768px) {
   .nav-menu {
@@ -3078,9 +3062,12 @@ a.nav-item {
     position: absolute; }
     .nav-menu .nav-item {
       border-top: 1px solid rgba(211, 214, 219, 0.5);
-      padding: 10px; }
+      padding: 10px;
+      width: 100%; }
     .nav-menu.is-active {
-      display: block; } }
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end; } }
 
 @media screen and (min-width: 769px) and (max-width: 979px) {
   .nav-menu {
@@ -3248,7 +3235,7 @@ a.panel-block:hover {
 .tabs {
   align-items: stretch;
   display: flex;
-  font-size: 18px;
+  font-size: 16px;
   justify-content: space-between;
   line-height: 24px;
   overflow: hidden;
@@ -3355,7 +3342,7 @@ a.panel-block:hover {
       padding-top: 13px; }
   @media screen and (max-width: 768px) {
     .tabs {
-      font-size: 12px; }
+      font-size: 16px; }
       .tabs.is-boxed a, .tabs.is-toggle a {
         padding-bottom: 1px;
         padding-top: 1px; } }
