@@ -1,9 +1,17 @@
 /******************** MISC*************************/
-.right-arrow {
-  color: #FF8751; }
+.right-caret {
+  color: #FF8751;
+  -moz-transition: all 0.25s;
+  -o-transition: all 0.25s;
+  -webkit-transition: all 0.25s;
+  transition: all 0.25s; }
 
-.icon.active {
-  padding-left: 10px; }
+.right-caret.active {
+  -moz-transform: translate(5px, 0);
+  -o-transform: translate(5px, 0);
+  -ms-transform: translate(5px, 0);
+  -webkit-transform: translate(5px, 0);
+    -webkit-transform-transform: translate(5px, 0); }
 
 /*********************** LANDING ************************/
 .landing {
