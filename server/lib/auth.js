@@ -459,6 +459,7 @@ function forgotPost(req, res, next){
 			Account.updateAccount(account_info, email, function(result){
 				if (result.state=="error"){error.handler(req, res, result.info);}
 				else {
+
 					var email = {
 						to: req.body.email,
 						from: 'noreply@domahub.com',

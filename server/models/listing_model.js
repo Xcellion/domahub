@@ -269,6 +269,27 @@ listing_model.prototype.newListing = function(listing_info, callback){
 	listing_query(query, "Failed to create a new listing: " + listing_info.domain_name + "!", callback, listing_info);
 }
 
+//creates multiple new listings
+//BULK INSERT NEEDS TRIPLE NESTED ARRAYS
+listing_model.prototype.newListings = function(listing_info_array, callback){
+	console.log("Attempting to create " + listing_info_array.length + " new listings...");
+	query = "INSERT INTO listings ( \
+				domain_name, \
+				description, \
+				minute_price, \
+				hour_price, \
+				day_price, \
+				week_price, \
+				month_price, \
+				background_image, \
+				buy_link, \
+				owner_id, \
+				set_price \
+			)\
+			 VALUES ? "
+	listing_query(query, "Failed to create " + listing_info_array.length + " new listings!", callback, [listing_info_array]);
+}
+
 //creates a new rental under a listing
 listing_model.prototype.newListingRental = function(listing_id, rental_info, callback){
 	console.log("Attempting to create a new rental for listing #" + listing_id + "...");
@@ -278,6 +299,7 @@ listing_model.prototype.newListingRental = function(listing_id, rental_info, cal
 }
 
 //creates new rental times for a specific rental
+//BULK INSERT NEEDS TRIPLE NESTED ARRAYS
 listing_model.prototype.newRentalTimes = function(rental_id, rental_times, callback){
 	console.log("Attempting to create a new rental times for rental #" + rental_id + "...");
 	query = "INSERT INTO rental_times (rental_id, date, duration) VALUES ? "

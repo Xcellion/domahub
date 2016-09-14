@@ -101,7 +101,7 @@ module.exports = {
 					message: "Successfully added a new listing!"
 				})
 			}
-		})
+		});
 	},
 
 	uploadSizeCheck : function(req, res, next){
@@ -141,6 +141,10 @@ module.exports = {
 					})
 				}
 				else {
+					//need to add owner id and set_price to the good records
+					for (var x = 0; x < good_listings.length; x++){
+						good_listings[x].push("" + req.user.id + "", "0");
+					}
 					req.session.good_listings = good_listings;
 					next();
 				}
@@ -150,14 +154,22 @@ module.exports = {
 
 	//function to create the batch listings once done
 	createListingBatch : function(req, res, next){
-		console.log('ww');
 		req.user.refresh_listing = true;
+		good_listings = req.session.good_listings;
 
-		//todo - create the good listings, send back list of bad listings
-		// res.send({
-		// 	listings: listings,
-		// 	bad_listings: bad_listings
-		// });
+		Listing.newListings(good_listings, function(result){
+			if (result.state=="error"){error.handler(req, res, result.info);}
+			else {
+				req.user.refresh_listing = true;		//to refresh the user object's list of listings
+				delete req.session.good_listings;
+				delete req.session.bad_listings;
+
+				res.send({
+					state: "success",
+					message: "Successfully added " + good_listings.length + " new listings!"
+				})
+			}
+		});
 	}
 
 }
@@ -254,10 +266,6 @@ function parseCSVFile(sourceFilePath, errorHandler, done){
 				bad_listings.push(bad_listing);
 			}
 			else {
-				good_listing = {
-					row: row,
-					data: record
-				}
 				good_listings.push(record);
 			}
         }

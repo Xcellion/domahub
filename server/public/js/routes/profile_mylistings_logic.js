@@ -1,44 +1,134 @@
 $(document).ready(function() {
-    var listings_per_page = 2;
+    var listings_per_page = 5;
+    var total_pages = Math.ceil(listings.length / listings_per_page);
+    var current_page = 1;
 
-    paginateListings(listings.length / listings_per_page);
-    createAllRows(listings);
+    //create the pagination pages
+    createPaginationPages(total_pages);
+    paginateListings(total_pages, current_page);
 
-    $(".edit-td").click(function(e){
-        e.preventDefault();
-        editRow($(this).parents("tr"));
-    });
+    //create the rows
+    createAllRows(listings_per_page, current_page);
+
+    $(".page-button").click(function(e){
+        current_page = ($(this).text() == "...") ? current_page : $(this).text();
+        changePage(listings_per_page, current_page, total_pages);
+    })
+
+    $("#next-page").click(function(e){
+        current_page++;
+        if (current_page > total_pages){
+            current_page = total_pages;
+        }
+        else {
+            changePage(listings_per_page, current_page, total_pages);
+        }
+    })
+
+    $("#prev-page").click(function(e){
+        current_page--;
+        if (current_page < 1){
+            current_page = 1;
+        }
+        else {
+            changePage(listings_per_page, current_page, total_pages);
+        }
+    })
 
 });
+
+// --------------------------------------------------------------------------------- SORTING
 
 //function to sort the listings
 function sortListings(method){
 
 }
 
-//function to paginate the listings
-function paginateListings(pages){
-    for (var x = 1; x < pages; x++){
-        var y = x+1;
-        temp_li = $("<li></li>");
-        if (x > 4){
-            temp_button = $("<a id='page-" + y + "' class='button is-hidden'>" + y + "</a>")
-        }
-        else {
-            temp_button = $("<a id='page-" + y + "' class='button'>" + y + "</a>")
-        }
-        temp_li.append(temp_button);
+// --------------------------------------------------------------------------------- PAGINATION
 
-        $("#page-list").append(temp_li);
+//function to change pages
+function changePage(listings_per_page, current_page, total_pages){
+    console.log(current_page);
+    createAllRows(listings_per_page, current_page);
+    paginateListings(total_pages, current_page);
+}
+
+//function to create the pagination buttons
+function createPaginationPages(total_pages){
+    if (total_pages > 7){
+        createPaginationPage(1);
+        createPaginationPage(2);
+        createPaginationPage(3);
+        createPaginationPage(4);
+        createPaginationPage(5);
+        createPaginationPage(6, "...");
+        createPaginationPage(7, total_pages);
+    }
+    else {
+        var counter = 1;
+        while (counter <= total_pages){
+            createPaginationPage(counter);
+            counter++;
+        }
     }
 }
 
+//function to create a single page on paginate list
+function createPaginationPage(page_num, text){
+    page_text = text || page_num;
+    temp_li = $("<li></li>");
+    temp_button = $("<a id='page-" + page_num + "' class='page-button button'>" + page_text + "</a>")
+    temp_li.append(temp_button);
+    $("#page-list").append(temp_li);
+}
+
+//function to paginate the listings
+function paginateListings(total_pages, current_page){
+    current_page = parseFloat(current_page);
+    $(".page-button").removeClass("is-primary");
+    if (total_pages > 7){
+        if (current_page < 5){
+            $("#page-2").text(2);
+            $("#page-3").text(3);
+            $("#page-4").text(4);
+            $("#page-5").text(5);
+            $("#page-6").text("...");
+            $("#page-" + current_page).addClass("is-primary");
+        }
+        else if (current_page >= total_pages - 3){
+            current_page_id = 7 - (total_pages - current_page);
+            $("#page-" + current_page_id).addClass("is-primary");
+            $("#page-3").text(total_pages - 4);
+            $("#page-4").text(total_pages - 3);
+            $("#page-5").text(total_pages - 2);
+            $("#page-6").text(total_pages - 1);
+        }
+        else {
+            $("#page-2").text("...");
+            $("#page-3").text(current_page - 1);
+            $("#page-4").text(current_page);
+            $("#page-4").addClass("is-primary");
+            $("#page-5").text(current_page + 1);
+            $("#page-6").text("...");
+        }
+    }
+    else {
+        $("#page-" + current_page).addClass("is-primary");
+    }
+}
+
+// --------------------------------------------------------------------------------- ROWS
+
 //function to create all the rows
-function createAllRows(listings){
-    //$("#mylistings_tbody").empty();
-    for (var x = 0; x < listings.length; x++){
-        $("#mylistings_tbody").append(createRow(listings[x], x));
-        $("#mylistings_tbody").append(createRowDrop(listings[x], x));
+function createAllRows(listings_per_page, current_page){
+    $("#mylistings_tbody").empty();
+    listing_start = listings_per_page * (current_page - 1);
+    for (var x = 0; x < listings_per_page; x++){
+        if (listings[listing_start]){
+            $("#mylistings_tbody").append(createRow(listings[listing_start], listing_start));
+            $("#mylistings_tbody").append(createRowDrop(listings[listing_start], listing_start));
+        }
+        listing_start++;
     }
 }
 
@@ -113,14 +203,20 @@ function createView(listing_info){
 //function to create the edit icon
 function createEdit(listing_info){
     temp_td = $("<td class='td-visible edit-td'></td>");
-        temp_a = $("<a class='button' href=''></a>");
+        temp_a = $("<d class='button'></a>");
             temp_span = $("<span class='icon'></span>");
                 temp_i = $("<i class='fa fa-gear'></i>");
             temp_span2 = $("<span class='edit-text'>Edit</span>");
     temp_td.append(temp_a.append(temp_span.append(temp_i), temp_span2));
 
+    temp_td.on("click", function(e){
+        editRow($(this).parents("tr"));
+    });
+
     return temp_td;
 }
+
+// --------------------------------------------------------------------------------- EDIT ROW
 
 //function to initiate edit mode
 function editRow(row){
@@ -137,7 +233,7 @@ function editRow(row){
 //function to drop down a row
 function dropRow(row, editing){
     row_drop = row.next(".row-drop");
-    row_drop.find("div").slideToggle();
+    row_drop.find("div").slideToggle("fast");
 }
 
 //function to change edit icon
