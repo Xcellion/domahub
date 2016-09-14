@@ -105,74 +105,36 @@
 										<th></th>
 									</tr>
 								</thead>
-								<tbody>
-									<% listings.forEach(function (listing) { %>
-									 <tr>
-										 <td><%= listing.domain_name %></td>
-										 <% if (listing.price_type != 0) { %>
-										 <td>Active</td>
-										 <% } else { %>
-										 <td>
-											 <span class="select">
-										    <select>
-										      <option>Active</option>
-										      <option>Inactive</option>
-										    </select>
-										  </span>
+								<tbody id="mylistings_tbody">
+									<tr>
+										<td colspan="5">
+											<div>
+												<!-- need these things styled -->
+												Minute Price
+												Hour Price
+												Day Price
+												Week Price
+												Month Price
+												Background image
+ 												Buy link
+											</div>
 										</td>
-										 <% } %>
-										 <td><%= listing.date_created %></td>
-										 <td>
-											<a class="button" href="/listing/<%= listing.domain_name %>">
-												<span class="icon">
-													<i class="fa fa-television"></i>
-												</span>
-												<span>View</span>
-											</a>
-										 </td>
-										 <td>
-											<a class="button" href="">
-												<span class="icon">
-											    <i class="fa fa-gear"></i>
-											  </span>
-											  <span>Edit</span>
-											</a>
-										 </td>
-									 </tr>
-									<% }) %>
+									</tr>
 								</tbody>
 							</table>
 
-							<% } if (!listings.length) { %>
-								<div class="box has-text-centered">
-									You have no listings yet!
-								</div>
-							<% } %>
+						<% } else { %>
+							<div class="box has-text-centered">
+								You have no listings yet!
+							</div>
+						<% } %>
 
 							<nav class="pagination">
 								<a class="button">Previous</a>
 								<a class="button">Next page</a>
-								<ul>
+								<ul id="page-list">
 									<li>
-										<a class="button">1</a>
-									</li>
-									<li>
-										<span>...</span>
-									</li>
-									<li>
-										<a class="button">45</a>
-									</li>
-									<li>
-										<a class="button is-primary">46</a>
-									</li>
-									<li>
-										<a class="button">47</a>
-									</li>
-									<li>
-										<span>...</span>
-									</li>
-									<li>
-										<a class="button">86</a>
+										<a id="page-1" class="button is-primary">1</a>
 									</li>
 								</ul>
 							</nav>
@@ -185,7 +147,7 @@
 		</section>
 
 	<%- include("templates/footer"); %>
-	<script src="/js/routes/profile_logic.js" type="text/javascript"></script>
+	<script src="/js/routes/profile_mylistings_logic.js" type="text/javascript"></script>
 	</body>
 
 </html>
