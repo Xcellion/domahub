@@ -193,10 +193,10 @@ a {
   cursor: pointer;
   text-decoration: none;
   color: #111;
-  opacity: 0.9; }
+  opacity: 1.0; }
   a:hover {
     cursor: pointer;
-    opacity: 1.0; }
+    opacity: 0.9; }
 
 .white-link {
   color: #fff; }
@@ -277,7 +277,7 @@ table {
       .container.is-fluid {
         margin: 0 20px;
         max-width: none; } }
-  @media screen and (min-width: 1180px) {
+  @media screen and (min-width: 1260px) {
     .container {
       max-width: 1200px; } }
 
@@ -309,11 +309,11 @@ table {
   .is-block-desktop {
     display: block !important; } }
 
-@media screen and (min-width: 980px) and (max-width: 1179px) {
+@media screen and (min-width: 980px) and (max-width: 1259px) {
   .is-block-desktop-only {
     display: block !important; } }
 
-@media screen and (min-width: 1180px) {
+@media screen and (min-width: 1260px) {
   .is-block-widescreen {
     display: block !important; } }
 
@@ -340,11 +340,11 @@ table {
   .is-flex-desktop {
     display: flex !important; } }
 
-@media screen and (min-width: 980px) and (max-width: 1179px) {
+@media screen and (min-width: 980px) and (max-width: 1259px) {
   .is-flex-desktop-only {
     display: flex !important; } }
 
-@media screen and (min-width: 1180px) {
+@media screen and (min-width: 1260px) {
   .is-flex-widescreen {
     display: flex !important; } }
 
@@ -371,11 +371,11 @@ table {
   .is-inline-desktop {
     display: inline !important; } }
 
-@media screen and (min-width: 980px) and (max-width: 1179px) {
+@media screen and (min-width: 980px) and (max-width: 1259px) {
   .is-inline-desktop-only {
     display: inline !important; } }
 
-@media screen and (min-width: 1180px) {
+@media screen and (min-width: 1260px) {
   .is-inline-widescreen {
     display: inline !important; } }
 
@@ -402,11 +402,11 @@ table {
   .is-inline-block-desktop {
     display: inline-block !important; } }
 
-@media screen and (min-width: 980px) and (max-width: 1179px) {
+@media screen and (min-width: 980px) and (max-width: 1259px) {
   .is-inline-block-desktop-only {
     display: inline-block !important; } }
 
-@media screen and (min-width: 1180px) {
+@media screen and (min-width: 1260px) {
   .is-inline-block-widescreen {
     display: inline-block !important; } }
 
@@ -433,11 +433,11 @@ table {
   .is-inline-flex-desktop {
     display: inline-flex !important; } }
 
-@media screen and (min-width: 980px) and (max-width: 1179px) {
+@media screen and (min-width: 980px) and (max-width: 1259px) {
   .is-inline-flex-desktop-only {
     display: inline-flex !important; } }
 
-@media screen and (min-width: 1180px) {
+@media screen and (min-width: 1260px) {
   .is-inline-flex-widescreen {
     display: inline-flex !important; } }
 
@@ -494,11 +494,11 @@ table {
   .is-hidden-desktop {
     display: none !important; } }
 
-@media screen and (min-width: 980px) and (max-width: 1179px) {
+@media screen and (min-width: 980px) and (max-width: 1259px) {
   .is-hidden-desktop-only {
     display: none !important; } }
 
-@media screen and (min-width: 1180px) {
+@media screen and (min-width: 1260px) {
   .is-hidden-widescreen {
     display: none !important; } }
 
@@ -2368,7 +2368,7 @@ button {
       width: 100%; }
     .column.is-offset-12-desktop {
       margin-left: 100%; } }
-  @media screen and (min-width: 1180px) {
+  @media screen and (min-width: 1260px) {
     .column.is-narrow-widescreen {
       flex: none; }
     .column.is-full-widescreen {
@@ -3078,13 +3078,10 @@ a.nav-item {
   display: flex;
   flex-basis: 0;
   flex-grow: 1;
-  justify-content: center;
+  justify-content: flex-start;
   overflow: hidden;
   overflow-x: auto;
   white-space: nowrap; }
-  @media screen and (max-width: 768px) {
-    .nav-left {
-      justify-content: flex-start; } }
 
 .nav-center {
   align-items: stretch;
@@ -3102,7 +3099,7 @@ a.nav-item {
     display: flex;
     flex-basis: 0;
     flex-grow: 1;
-    justify-content: center; } }
+    justify-content: flex-end; } }
 
 .nav {
   align-items: stretch;
@@ -3118,8 +3115,9 @@ a.nav-item {
     display: flex;
     min-height: 60px;
     width: 100%; }
-    .nav > .container > .nav-left > .nav-item:first-child:not(.is-tab) {
-      padding-left: 0; }
+    @media screen and (min-width: 980px) {
+      .nav > .container > .nav-left > .nav-item:first-child:not(.is-tab) {
+        padding-left: 0; } }
     .nav > .container > .nav-right > .nav-item:last-child:not(.is-tab) {
       padding-right: 0; }
   .container > .nav > .nav-left > .nav-item:first-child:not(.is-tab) {

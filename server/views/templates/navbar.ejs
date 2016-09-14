@@ -1,32 +1,33 @@
 <link rel="stylesheet" type="text/css" href="/css/includes/navbar.css" />
 
 <nav id="navbar" class="nav has-shadow">
-  <div class="nav-left">
-    <div class="nav-item">
-      <a class="logo-text" title="Home" href="/">DomaHub</a>
+  <div class="container">
+    <div class="nav-left">
+      <div class="nav-item">
+        <a class="logo-text" title="Home" href="/">DomaHub</a>
+      </div>
+      <form id="searchbar-form" class="nav-item" novalidate>
+        <p class="control has-icon">
+          <input id="domain-name" class="input" type="url" placeholder="Search websites" name="domain-name" autocomplete="off">
+          <i class="fa fa-search"></i>
+        </p>
+      </form>
     </div>
-    <form id="searchbar-form" class="nav-item" novalidate>
-      <p class="control has-icon">
-        <input id="domain-name" class="input" type="url" placeholder="Search websites" name="domain-name" autocomplete="off">
-        <i class="fa fa-search"></i>
-      </p>
-    </form>
-  </div>
   <!-- <div class="nav-center">
 
   </div> -->
-  <span class="nav-toggle">
-    <span></span>
-    <span></span>
-    <span></span>
-  </span>
-  <div class="nav-right nav-menu">
-    <div class="nav-item">
-      <a class="nav-link" title="Renters" href="/listings">Browse</a>
-    </div>
-    <div class="nav-item">
-      <a class="nav-link" title="Sellers" href="/create">List</a>
-    </div>
+    <span class="nav-toggle">
+      <span></span>
+      <span></span>
+      <span></span>
+    </span>
+    <div class="nav-right nav-menu">
+      <div class="nav-item">
+        <a class="nav-link" title="Renters" href="/listings">Browse</a>
+      </div>
+      <div class="nav-item">
+        <a class="nav-link" title="Sellers" href="/create">List</a>
+      </div>
 
 <%# navbar checks for a user variable, if it doesnt exist, then display the login button %>
 <% if (!user) { %>
@@ -87,39 +88,39 @@
 
 <!-- or else display the user profile as logged in -->
 <% } else { %>
-  <div class="nav-item">
-    <a id="profile-button" class="button is-outlined is-primary">
-      <span><%= (user.fullname.length > 6) ? user.fullname.slice(0,6) + "..." : user.fullname %></span>
-      <span class="icon">
-        <i class="fa fa-angle-down"></i>
-      </span>
-    </a>
-    <aside id="profile-dropdown" class="menu is-hidden">
-      <p class="menu-label">
-        Profile
-      </p>
-      <ul class="menu-list">
-        <li><a href="/profile">Dashboard</a></li>
-        <li><a href="/profile/inbox">Inbox</a></li>
-      </ul>
-      <p class="menu-label">
-        Domains
-      </p>
-      <ul class="menu-list">
-        <li><a href="/profile/mylistings">My Listings</a></li>
-        <li><a href="/profile/myrentals">My Rentals</a></li>
-      </ul>
-      <p class="menu-label">
-        Account
-      </p>
-      <ul class="menu-list">
-        <li><a href="/profile/settings">Settings</a></li>
-        <li><a class="logout" href="/logout">Log Out</a></li>
-      </ul>
-    </aside>
+    <div class="nav-item">
+      <a id="profile-button" class="button is-outlined is-primary">
+        <span><%= (user.fullname.length > 6) ? user.fullname.slice(0,6) + "..." : user.fullname %></span>
+        <span class="icon">
+          <i class="fa fa-angle-down"></i>
+        </span>
+      </a>
+      <aside id="profile-dropdown" class="menu is-hidden">
+        <p class="menu-label">
+          Profile
+        </p>
+        <ul class="menu-list">
+          <li><a href="/profile">Dashboard</a></li>
+          <li><a href="/profile/inbox">Inbox</a></li>
+        </ul>
+        <p class="menu-label">
+          Domains
+        </p>
+        <ul class="menu-list">
+          <li><a href="/profile/mylistings">My Listings</a></li>
+          <li><a href="/profile/myrentals">My Rentals</a></li>
+        </ul>
+        <p class="menu-label">
+          Account
+        </p>
+        <ul class="menu-list">
+          <li><a href="/profile/settings">Settings</a></li>
+          <li><a class="logout" href="/logout">Log Out</a></li>
+        </ul>
+      </aside>
+    </div>
   </div>
 <% } %>
-
 
 </div>
 </nav>
