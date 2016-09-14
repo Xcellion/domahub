@@ -1538,62 +1538,63 @@ button {
     .table th.is-narrow {
       white-space: nowrap;
       width: 1%; }
-  .table > div.td-visible {
-    border: 1px solid #d3d6db;
-    border-width: 0 0 1px;
-    padding: 8px 10px; }
-  .table th {
+
+.td-visible {
+  border: 1px solid #d3d6db;
+  border-width: 0 0 1px;
+  padding: 8px 10px; }
+  .td-visible th {
     border-width: 0 0 1px;
     border: 1px solid #d3d6db;
     color: #111;
     padding: 8px 10px;
     text-align: left; }
-  .table thead td,
-  .table thead th {
+  .td-visible thead td,
+  .td-visible thead th {
     border-width: 0 0 2px;
     color: #111; }
-  .table tbody tr:last-child td,
-  .table tbody tr:last-child th {
+  .td-visible tbody tr:last-child td,
+  .td-visible tbody tr:last-child th {
     border-bottom-width: 0; }
-  .table tbody tr:hover {
+  .td-visible tbody tr:hover {
     background-color: #f5f7fa;
     color: #111;
     cursor: pointer; }
-  .table tbody tr td {
+  .td-visible tbody tr td {
     font-weight: 300; }
-  .table tfoot td,
-  .table tfoot th {
+  .td-visible tfoot td,
+  .td-visible tfoot th {
     border-width: 2px 0 0;
     color: #aeb1b5; }
-  .table.is-bordered td,
-  .table.is-bordered th {
+  .td-visible.is-bordered td,
+  .td-visible.is-bordered th {
     border-width: 1px; }
-  .table.is-bordered tr:last-child td,
-  .table.is-bordered tr:last-child th {
+  .td-visible.is-bordered tr:last-child td,
+  .td-visible.is-bordered tr:last-child th {
     border-bottom-width: 1px; }
-  .table.is-narrow td,
-  .table.is-narrow th {
+  .td-visible.is-narrow td,
+  .td-visible.is-narrow th {
     padding: 5px 10px; }
-    .table.is-narrow td.is-icon,
-    .table.is-narrow th.is-icon {
+    .td-visible.is-narrow td.is-icon,
+    .td-visible.is-narrow th.is-icon {
       padding: 2px; }
-      .table.is-narrow td.is-icon.is-link,
-      .table.is-narrow th.is-icon.is-link {
+      .td-visible.is-narrow td.is-icon.is-link,
+      .td-visible.is-narrow th.is-icon.is-link {
         padding: 0; }
-        .table.is-narrow td.is-icon.is-link > a,
-        .table.is-narrow th.is-icon.is-link > a {
+        .td-visible.is-narrow td.is-icon.is-link > a,
+        .td-visible.is-narrow th.is-icon.is-link > a {
           padding: 2px; }
-    .table.is-narrow td.is-link,
-    .table.is-narrow th.is-link {
+    .td-visible.is-narrow td.is-link,
+    .td-visible.is-narrow th.is-link {
       padding: 0; }
-      .table.is-narrow td.is-link > a,
-      .table.is-narrow th.is-link > a {
+      .td-visible.is-narrow td.is-link > a,
+      .td-visible.is-narrow th.is-link > a {
         padding: 5px 10px; }
-  .table.is-striped tbody tr:hover {
+  .td-visible.is-striped tbody tr:hover {
     background-color: #fafafa; }
-  .table.is-striped tbody tr:nth-child(2n) {
+  .td-visible.is-striped tbody tr:nth-child(2n) {
     background-color: #fff; }
-    .table.is-striped tbody tr:nth-child(2n):hover {
+    .td-visible.is-striped tbody tr:nth-child(2n):hover {
       background-color: #fafafa; }
 
 .caption {
