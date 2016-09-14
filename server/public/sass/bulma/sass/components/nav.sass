@@ -73,12 +73,12 @@ a.nav-item
   display: flex
   flex-basis: 0
   flex-grow: 1
-  justify-content: center
+  justify-content: flex-start
   overflow: hidden
   overflow-x: auto
   white-space: nowrap
   +mobile
-    justify-content: flex-start
+    // margin-left: 20px
 
 .nav-center
   align-items: stretch
@@ -96,7 +96,7 @@ a.nav-item
     display: flex
     flex-basis: 0
     flex-grow: 1
-    justify-content: center
+    justify-content: flex-end
 
 // Main container
 
@@ -116,7 +116,8 @@ a.nav-item
     width: 100%
     & > .nav-left
       & > .nav-item:first-child:not(.is-tab)
-        padding-left: 0
+        +desktop
+          padding-left: 0
     & > .nav-right
       & > .nav-item:last-child:not(.is-tab)
         padding-right: 0
