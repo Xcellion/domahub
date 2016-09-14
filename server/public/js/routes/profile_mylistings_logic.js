@@ -1,18 +1,21 @@
 $(document).ready(function() {
-    var listings_per_page = 5;
+    var listings_per_page = parseFloat($("#domains-per-page").val());
     var total_pages = Math.ceil(listings.length / listings_per_page);
     var current_page = 1;
 
-    //create the pagination pages
-    createPaginationPages(total_pages);
-    paginateListings(total_pages, current_page);
+    setupTable(total_pages, listings_per_page, current_page);
 
-    //create the rows
-    createAllRows(listings_per_page, current_page);
+    //on changing of domains per page
+    $("#domains-per-page").change(function(e){
+        listings_per_page = parseFloat($(this).val());
+        total_pages = Math.ceil(listings.length / listings_per_page);
+        setupTable(total_pages, listings_per_page, current_page);
+    })
 
+    //pagination logic
     $(".page-button").click(function(e){
         current_page = ($(this).text() == "...") ? current_page : $(this).text();
-        changePage(listings_per_page, current_page, total_pages);
+        changePage(total_pages, listings_per_page, current_page);
     })
 
     $("#next-page").click(function(e){
@@ -21,7 +24,7 @@ $(document).ready(function() {
             current_page = total_pages;
         }
         else {
-            changePage(listings_per_page, current_page, total_pages);
+            changePage(total_pages, listings_per_page, current_page);
         }
     })
 
@@ -31,11 +34,19 @@ $(document).ready(function() {
             current_page = 1;
         }
         else {
-            changePage(listings_per_page, current_page, total_pages);
+            changePage(total_pages, listings_per_page, current_page);
         }
     })
 
+
 });
+
+//refresh table (pagination and rows)
+function setupTable(total_pages, listings_per_page, current_page){
+    createPaginationPages(total_pages);
+    paginateListings(total_pages, current_page);
+    createAllRows(listings_per_page, current_page);
+}
 
 // --------------------------------------------------------------------------------- SORTING
 
@@ -47,14 +58,14 @@ function sortListings(method){
 // --------------------------------------------------------------------------------- PAGINATION
 
 //function to change pages
-function changePage(listings_per_page, current_page, total_pages){
-    console.log(current_page);
+function changePage(total_pages, listings_per_page, current_page){
     createAllRows(listings_per_page, current_page);
     paginateListings(total_pages, current_page);
 }
 
 //function to create the pagination buttons
 function createPaginationPages(total_pages){
+    $("#page-list").empty();
     if (total_pages > 7){
         createPaginationPage(1);
         createPaginationPage(2);
@@ -150,51 +161,82 @@ function createRow(listing_info, rownum){
 function createRowDrop(listing_info, rownum){
     temp_drop = $("<tr id='row-drop" + rownum + "' class='row-drop'></tr>");
     temp_td = $("<td class='row-drop-td' colspan='5'></td>")
-    temp_div = $("<div class='td-visible'></div>")
-    temp_div.append(listing_info.set_price);
-    temp_div.append(listing_info.minute_price);
-    temp_div.append(listing_info.hour_price);
-    temp_div.append(listing_info.day_price);
-    temp_div.append(listing_info.week_price);
-    temp_div.append(listing_info.month_price);
-    temp_div.append(listing_info.description);
-    temp_div.append(listing_info.background_image);
-    temp_div.append(listing_info.buy_link);
+    temp_div_drop = $("<div id='div-drop' class='td-visible container'></div>");
+    temp_div_col = $("<div class='columns'></div>");
 
-    temp_div.hide();
-    temp_drop.append(temp_td.append(temp_div));
+    temp_drop.append(temp_td.append(temp_div_drop.append(temp_div_col.append(
+        createImgDropCol(listing_info),
+        createFormDropCol(listing_info)
+    ))));
+    temp_div_drop.hide();
 
     return temp_drop;
 }
 
+//function to create the image drop column
+function createImgDropCol(listing_info){
+    var temp_col = $("<div class='column is-one-quarter'></div>");
+    var temp_figure = $("<figure class='image is-128x128'></figure>");
+        var temp_img = $("<img src=" + listing_info.bacground_image + "/>");
+        temp_figure.append(temp_img);
+    var temp_a = $("<a class='orange-link'>Change Picture</a>");
+    temp_col.append(temp_figure, temp_a);
+
+    return temp_col;
+}
+
+//function to create the image drop column
+function createFormDropCol(listing_info){
+    var temp_col = $("<div class='column is-3'></div>");
+    var temp_form = $("<form'></form>");
+
+    var label_types = ["Hour", "Day", "Week", "Month"];
+    var label_values = [listing_info.hour_price, listing_info.day_price, listing_info.week_price,listing_info.month_price];
+
+    for (var x = 0; x < 4; x++){
+        var temp_div1 = $("<div class='control is-horizontal'></div>");
+            var temp_div_label = $("<div class='control-label'></div>");
+                var temp_label = $('<label class="label">' + label_types[x] + '</label>');
+            var temp_div_control = $("<div class='control'></div>");
+                var temp_control_p = $("<p class='control has-icon'></p>");
+                    var temp_input = $('<input class="input" type="number" value="' + label_values[x] + '">');
+                    var temp_i = $('<i class="fa fa-dollar"></i>');
+
+        temp_form.append(temp_div1.append(temp_div_label.append(temp_label), temp_div_control.append(temp_control_p.append(temp_input, temp_i))));
+    }
+    temp_col.append(temp_form);
+
+    return temp_col;
+}
+
 //function to create the domain name td
 function createDomain(listing_info){
-    temp_td = $("<td class='td-visible domain-td'>" + listing_info.domain_name + "</td>");
+    var temp_td = $("<td class='td-visible domain-td'>" + listing_info.domain_name + "</td>");
     return temp_td;
 }
 
 //function to create the status td
 function createStatus(listing_info){
-    text = (listing_info.price_type != 0) ? "Active" : "Inactive";
-    temp_td = $("<td class='td-visible status-td'>" + text + "</td>");
+    var text = (listing_info.price_type != 0) ? "Active" : "Inactive";
+    var temp_td = $("<td class='td-visible status-td'>" + text + "</td>");
     temp_td.data("status", text);
     return temp_td;
 }
 
 //function to create the date
 function createDate(listing_info){
-    start = moment(new Date(listing_info.date_created + " UTC")).format('YYYY/MM/DD, hh:mm A');
-    temp_td = $("<td class='td-visible date-td'>" + start + "</td>");
+    var start = moment(new Date(listing_info.date_created + " UTC")).format('YYYY/MM/DD, hh:mm A');
+    var temp_td = $("<td class='td-visible date-td'>" + start + "</td>");
     return temp_td;
 }
 
 //function to create the tv icon
 function createView(listing_info){
-    temp_td = $("<td class='td-visible view-td'></td>");
-        temp_a = $("<a class='button' href='/listing/" + listing_info.domain_name + "'></a>");
-            temp_span = $("<span class='icon'></span>");
-                temp_i = $("<i class='fa fa-television'></i>");
-            temp_span2 = $("<span>View</span>");
+    var temp_td = $("<td class='td-visible view-td'></td>");
+        var temp_a = $("<a class='button' href='/listing/" + listing_info.domain_name + "'></a>");
+            var temp_span = $("<span class='icon'></span>");
+                var temp_i = $("<i class='fa fa-television'></i>");
+            var temp_span2 = $("<span>View</span>");
     temp_td.append(temp_a.append(temp_span.append(temp_i), temp_span2));
 
     return temp_td;
@@ -202,11 +244,11 @@ function createView(listing_info){
 
 //function to create the edit icon
 function createEdit(listing_info){
-    temp_td = $("<td class='td-visible edit-td'></td>");
-        temp_a = $("<d class='button'></a>");
-            temp_span = $("<span class='icon'></span>");
-                temp_i = $("<i class='fa fa-gear'></i>");
-            temp_span2 = $("<span class='edit-text'>Edit</span>");
+    var temp_td = $("<td class='td-visible edit-td'></td>");
+        var temp_a = $("<d class='button'></a>");
+            var temp_span = $("<span class='icon'></span>");
+                var temp_i = $("<i class='fa fa-gear'></i>");
+            var temp_span2 = $("<span class='edit-text'>Edit</span>");
     temp_td.append(temp_a.append(temp_span.append(temp_i), temp_span2));
 
     temp_td.on("click", function(e){
@@ -233,7 +275,7 @@ function editRow(row){
 //function to drop down a row
 function dropRow(row, editing){
     row_drop = row.next(".row-drop");
-    row_drop.find("div").slideToggle("fast");
+    row_drop.find("#div-drop").slideToggle("fast");
 }
 
 //function to change edit icon

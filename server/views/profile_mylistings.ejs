@@ -97,11 +97,10 @@
 						<box class="box">
 							<p class="control">
 								<span class="select">
-									<select>
-										<option value="">Domains per page</option>
-							      <option value="10">10</option>
-							      <option value="20">20</option>
-										<option value="50">50</option>
+									<select id="domains-per-page">
+										<option value=10>10</option>
+										<option value=20>20</option>
+										<option value=50>50</option>
 									</select>
 								</span>
 							</p>
@@ -120,14 +119,6 @@
 										<td colspan="5">
 												<div class="container">
 													<div class="columns">
-														<div class="column is-one-quarter">
-															<figure class="image is-128x128">
-																<img src="http://placehold.it/256x256">
-															</figure>
-															<a class="orange-link">
-																Change Picture
-															</a>
-														</div>
 														<div class="column is-3">
 															<form>
 																<div class="control is-horizontal">
@@ -137,8 +128,8 @@
 																  <div class="control">
 																    <p class="control has-icon">
 																      <input class="input" type="number" value="5">
-																			<i class="fa fa-dollar"></i>
-																		</p>
+																	  <i class="fa fa-dollar"></i>
+																	</p>
 																  </div>
 																</div>
 																<div class="control is-horizontal">
@@ -218,7 +209,7 @@
 								<a id="prev-page" class="page-nav button">Previous</a>
 								<a id="next-page" class="page-nav button">Next page</a>
 								<ul id="page-list">
-									
+
 								</ul>
 							</nav>
 
