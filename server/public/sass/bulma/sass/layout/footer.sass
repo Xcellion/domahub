@@ -5,6 +5,10 @@
     color: $grey
     &:hover
       color: $grey-lighter
+  +mobile
+    .columns
+      & > .column
+        text-align: center
 
 .footer-list
   display: flex
@@ -26,7 +30,7 @@
     display: none
 
 .footer-item
-  color: $white
+  color: $grey
   &:not(:nth-child(2))
     margin-top: 10px
     +mobile
