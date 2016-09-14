@@ -151,7 +151,10 @@ function createRow(listing_info, rownum){
     tempRow.append(createStatus(listing_info));
     tempRow.append(createDate(listing_info));
     tempRow.append(createView(listing_info));
-    tempRow.append(createEdit(listing_info));
+
+    tempRow.on("click", function(e){
+        editRow($(this));
+    });
 
     tempRow.data("editing", false);
     return tempRow;
@@ -160,12 +163,13 @@ function createRow(listing_info, rownum){
 //function to create dropdown row
 function createRowDrop(listing_info, rownum){
     temp_drop = $("<tr id='row-drop" + rownum + "' class='row-drop'></tr>");
-    temp_td = $("<td class='row-drop-td' colspan='5'></td>")
+    temp_td = $("<td class='row-drop-td' colspan='4'></td>")
     temp_div_drop = $("<div id='div-drop' class='td-visible container'></div>");
     temp_div_col = $("<div class='columns'></div>");
 
     temp_drop.append(temp_td.append(temp_div_drop.append(temp_div_col.append(
         createImgDropCol(listing_info),
+        createPriceFormDropCol(listing_info),
         createFormDropCol(listing_info)
     ))));
     temp_div_drop.hide();
@@ -185,8 +189,8 @@ function createImgDropCol(listing_info){
     return temp_col;
 }
 
-//function to create the image drop column
-function createFormDropCol(listing_info){
+//function to create the price drop column
+function createPriceFormDropCol(listing_info){
     var temp_col = $("<div class='column is-3'></div>");
     var temp_form = $("<form'></form>");
 
@@ -205,6 +209,37 @@ function createFormDropCol(listing_info){
         temp_form.append(temp_div1.append(temp_div_label.append(temp_label), temp_div_control.append(temp_control_p.append(temp_input, temp_i))));
     }
     temp_col.append(temp_form);
+
+    return temp_col;
+}
+
+//function to create buy link and background image form drop
+function createFormDropCol(listing_info){
+    var temp_col = $("<div class='column'></div>");
+    var temp_form = $("<form'></form>");
+
+    var buy_link = (listing_info.buy_link == null) ? "" : listing_info.buy_link;
+    var description = (listing_info.description == null) ? "" : listing_info.description;
+
+    var temp_div1 = $('<div class="control is-horizontal"></div>');
+        var temp_div1_control = $("<div class='control-label'></div>");
+            var temp_div1_label = $("<label class='label'>Purchase link</label>")
+        var temp_div1_p = $("<p class='control has-icon'></p>");
+            var temp_div1_input = $('<input class="input" type="url" placeholder="https://buy-my-website.com" value="' + buy_link + '"/>');
+                var temp_div1_input_i = $('<i class="fa fa-link"></i>');
+    temp_div1.append(temp_div1_control.append(temp_div1_label), temp_div1_p.append(temp_div1_input.append(temp_div1_input_i)));
+
+    var temp_div2 = $('<div class="control is-horizontal"></div>');
+        var temp_div2_control_label = $('<div class="control-label">');
+            var temp_div2_label = $('<label class="label">Description</label>');
+        var temp_div2_control = $('<div class="control">');
+            var temp_div2_input = $('<textarea class="textarea" placeholder="Rent this website for any time period you please!">' + description + '</textarea>')
+    temp_div2.append(temp_div2_control_label.append(temp_div2_label), temp_div2_control.append(temp_div2_input));
+
+    var temp_div3 = $('<div class="control"></div>');
+        temp_div3.append('<button class="button is-success is-pulled-right">Save</button>');
+
+    temp_col.append(temp_form.append(temp_div1, temp_div2, temp_div3));
 
     return temp_col;
 }
@@ -242,22 +277,6 @@ function createView(listing_info){
     return temp_td;
 }
 
-//function to create the edit icon
-function createEdit(listing_info){
-    var temp_td = $("<td class='td-visible edit-td'></td>");
-        var temp_a = $("<d class='button'></a>");
-            var temp_span = $("<span class='icon'></span>");
-                var temp_i = $("<i class='fa fa-gear'></i>");
-            var temp_span2 = $("<span class='edit-text'>Edit</span>");
-    temp_td.append(temp_a.append(temp_span.append(temp_i), temp_span2));
-
-    temp_td.on("click", function(e){
-        editRow($(this).parents("tr"));
-    });
-
-    return temp_td;
-}
-
 // --------------------------------------------------------------------------------- EDIT ROW
 
 //function to initiate edit mode
@@ -269,7 +288,6 @@ function editRow(row){
 
     dropRow(row, editing);
     editStatus(row, editing);
-    editEdit(row, editing);
 }
 
 //function to drop down a row
