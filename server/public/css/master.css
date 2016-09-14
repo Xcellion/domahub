@@ -1487,13 +1487,21 @@ button {
   background-color: #fff;
   color: #111;
   margin-bottom: 20px;
+  table-layout: fixed;
   width: 100%; }
   .table td,
   .table th {
-    border: 1px solid #d3d6db;
-    border-width: 0 0 1px;
-    padding: 8px 10px;
     vertical-align: middle; }
+    .table td.is-danger,
+    .table th.is-danger {
+      color: #ed6c63;
+      font-weight: 400;
+      text-transform: uppercase; }
+    .table td.is-success,
+    .table th.is-success {
+      color: #97cd76;
+      font-weight: 400;
+      text-transform: uppercase; }
     .table td.is-icon,
     .table th.is-icon {
       padding: 5px;
@@ -1530,8 +1538,16 @@ button {
     .table th.is-narrow {
       white-space: nowrap;
       width: 1%; }
+    .table td.td-visible,
+    .table th.td-visible {
+      border: 1px solid #d3d6db;
+      border-width: 0 0 1px;
+      padding: 8px 10px; }
   .table th {
+    border-width: 0 0 1px;
+    border: 1px solid #d3d6db;
     color: #111;
+    padding: 8px 10px;
     text-align: left; }
   .table thead td,
   .table thead th {
@@ -3961,9 +3977,6 @@ input:-webkit-autofill {
 
 .is-fullheight {
   height: 100vh; }
-
-.button {
-  line-height: 28px; }
 
 .clear-nav {
   padding-top: 60px; }
