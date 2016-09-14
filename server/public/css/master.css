@@ -1987,6 +1987,7 @@ button {
 
 .card {
   background-color: #fff;
+  border-radius: 3px;
   box-shadow: 0 2px 3px rgba(17, 17, 17, 0.1), 0 0 0 1px rgba(17, 17, 17, 0.1);
   color: #111;
   max-width: 100%;
@@ -3916,6 +3917,9 @@ a.panel-block:hover {
     color: #aeb1b5; }
     .footer a:hover {
       color: #f5f7fa; }
+  @media screen and (max-width: 768px) {
+    .footer .columns > .column {
+      text-align: center; } }
 
 .footer-list {
   display: flex;
@@ -3939,7 +3943,7 @@ a.panel-block:hover {
       display: none; } }
 
 .footer-item {
-  color: #fff; }
+  color: #aeb1b5; }
   .footer-item:not(:nth-child(2)) {
     margin-top: 10px; }
     @media screen and (max-width: 768px) {

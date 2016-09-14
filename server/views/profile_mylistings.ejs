@@ -95,6 +95,16 @@
 					<div class="column is-three-quarters">
 						<% if (listings.length) {%>
 						<box class="box">
+							<p class="control">
+								<span class="select">
+									<select>
+										<option value="">Domains per page</option>
+							      <option value="10">10</option>
+							      <option value="20">20</option>
+										<option value="50">50</option>
+									</select>
+								</span>
+							</p>
 							<table id="domain_table" class="table">
 								<thead>
 									<tr>
@@ -108,16 +118,91 @@
 								<tbody id="mylistings_tbody">
 									<tr>
 										<td colspan="5">
-											<div>
-												<!-- need these things styled -->
-												Minute Price
-												Hour Price
-												Day Price
-												Week Price
-												Month Price
-												Background image
- 												Buy link
-											</div>
+												<div class="container">
+													<div class="columns">
+														<div class="column is-one-quarter">
+															<figure class="image is-128x128">
+																<img src="http://placehold.it/256x256">
+															</figure>
+															<a class="orange-link">
+																Change Picture
+															</a>
+														</div>
+														<div class="column is-3">
+															<form>
+																<div class="control is-horizontal">
+																  <div class="control-label">
+																    <label class="label">Hour</label>
+																  </div>
+																  <div class="control">
+																    <p class="control has-icon">
+																      <input class="input" type="number" value="5">
+																			<i class="fa fa-dollar"></i>
+																		</p>
+																  </div>
+																</div>
+																<div class="control is-horizontal">
+																  <div class="control-label">
+																    <label class="label">Week</label>
+																  </div>
+																  <div class="control">
+																    <p class="control has-icon">
+																      <input class="input" type="number" value="5">
+																			<i class="fa fa-dollar"></i>
+																		</p>
+																  </div>
+																</div>
+																<div class="control is-horizontal">
+																  <div class="control-label">
+																    <label class="label">Month</label>
+																  </div>
+																  <div class="control">
+																    <p class="control has-icon">
+																      <input class="input" type="number" value="5">
+																			<i class="fa fa-dollar"></i>
+																		</p>
+																  </div>
+																</div>
+																<div class="control is-horizontal">
+																  <div class="control-label">
+																    <label class="label">Year</label>
+																  </div>
+																  <div class="control">
+																    <p class="control has-icon">
+																      <input class="input" type="number" value="5">
+																			<i class="fa fa-dollar"></i>
+																		</p>
+																  </div>
+																</div>
+															</form>
+														</div>
+
+														<div class="column">
+															<form>
+																<div class="control is-horizontal">
+																  <div class="control-label">
+																    <label class="label">Subject</label>
+																  </div>
+																  <p class="control has-icon">
+																    <input class="input" type="url" value="www.sedo.com/listing/s832ladsfg"/>
+																		<i class="fa fa-link"></i>
+																	</p>
+																</div>
+																<div class="control is-horizontal">
+																	<div class="control-label">
+																		<label class="label">Description</label>
+																	</div>
+																	<div class="control">
+																		<textarea class="textarea" placeholder="Rent this website for any time period you please!"></textarea>
+																	</div>
+																</div>
+																<div class="control">
+																	<button class="button is-success is-pulled-right">Save</button>
+																</div>
+															</form>
+														</div>
+													</div>
+												</div>
 										</td>
 									</tr>
 								</tbody>
