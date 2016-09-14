@@ -1538,11 +1538,10 @@ button {
     .table th.is-narrow {
       white-space: nowrap;
       width: 1%; }
-    .table td.td-visible,
-    .table th.td-visible {
-      border: 1px solid #d3d6db;
-      border-width: 0 0 1px;
-      padding: 8px 10px; }
+  .table > div.td-visible {
+    border: 1px solid #d3d6db;
+    border-width: 0 0 1px;
+    padding: 8px 10px; }
   .table th {
     border-width: 0 0 1px;
     border: 1px solid #d3d6db;
