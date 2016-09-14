@@ -333,7 +333,7 @@ function checkListingAccount(req, res, next){
 		next();
 	}
 	else {
-		error.handler(req, res, "You must connect your account to Stripe before you can create a new listing!");
+		res.render("stripeconnect.ejs");
 	}
 }
 
