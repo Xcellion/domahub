@@ -2,12 +2,18 @@
   background-color: #fff
   color: $text
   margin-bottom: 20px
+  table-layout: fixed
   width: 100%
   td,
   th
-    border: 1px solid $border
-    border-width: 0 0 1px
-    padding: 8px 10px
+    &.is-danger
+      color: $danger
+      font-weight: 400
+      text-transform: uppercase
+    &.is-success
+      color: $success
+      font-weight: 400
+      text-transform: uppercase
     vertical-align: middle
     // Modifiers
     &.is-icon
@@ -32,8 +38,16 @@
     &.is-narrow
       white-space: nowrap
       width: 1%
+    &.td-visible
+      border: 1px solid $border
+      border-width: 0 0 1px
+      padding: 8px 10px
+
   th
+    border-width: 0 0 1px
+    border: 1px solid $border
     color: $text
+    padding: 8px 10px
     text-align: left
   thead
     td,

@@ -268,11 +268,188 @@
               </form>
             </div>
           </div>
-					<div class="container">
+					<div class="container bottom-margin-25">
 						<button class="button is-info">Save Changes</button>
 					</div>
+					<div class="card is-fullwidth">
+						<table class="table">
+							<thead>
+								<tr>
+									<th>Dates</th>
+									<th>Domain</th>
+									<th>Renter</th>
+									<th>Rate</th>
+									<th>Received</th>
+								</tr>
+							</thead>
+							<tfoot>
+								<tr>
+									<td></td>
+									<td></td>
+									<td></td>
+									<td>Total</td>
+									<td>$3075.38</td>
+								</tr>
+							</tfoot>
+							<tbody>
+								<tr>
+									<td>01/13/16 - 09/13/16</td>
+									<td>www.domainterest.com</td>
+									<td><a href="">Ted Montague</a></td>
+									<td>$25 M</td>
+									<td>$206.85</td>
+								</tr>
+								<tr>
+									<td>09/10/16 - 09/13/16</td>
+									<td>www.domains.com</td>
+									<td><a href="">Fred Kirkland</a></td>
+									<td>$1 D</td>
+									<td>$2.20</td>
+								</tr>
+								<tr>
+									<td>09/13/10 - Today</td>
+									<td>www.dominus.com</td>
+									<td><a href="">Dominic Selzer</a></td>
+									<td>$500 Y</td>
+									<td>$2866.33</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+					<nav class="pagination">
+						<a class="button">Previous</a>
+						<a class="button">Next page</a>
+						<ul>
+							<li>
+								<a class="button">1</a>
+							</li>
+							<li>
+								<span>...</span>
+							</li>
+							<li>
+								<a class="button">45</a>
+							</li>
+							<li>
+								<a class="button is-primary">46</a>
+							</li>
+							<li>
+								<a class="button">47</a>
+							</li>
+							<li>
+								<span>...</span>
+							</li>
+							<li>
+								<a class="button">86</a>
+							</li>
+						</ul>
+					</nav>
+					<div class="card is-fullwidth">
+						<table class="table">
+							<thead>
+								<tr>
+									<th>Date Initiated</th>
+									<th>Domain</th>
+									<th>Renter</th>
+									<th>Status</th>
+									<th>Contact</th>
+								</tr>
+							</thead>
+							<tfoot>
+							</tfoot>
+							<tbody>
+								<tr>
+									<td>01/13/16</td>
+									<td>www.domainterest.com</td>
+									<td><a href="">Ted Montague</a></td>
+									<td class="is-success">Paid</td>
+									<td><a class="button" href="">
+										<span class="icon">
+										<i class="fa fa-envelope-o"></i>
+										</span>
+										<span>Message</span></a>
+									</td>
+								</tr>
+								<tr>
+									<td>09/10/16</td>
+									<td>www.domains.com</td>
+									<td><a href="">Fred Kirkland</a></td>
+									<td class="is-danger">Not Paid</td>
+									<td><a class="button" href="">
+										<span class="icon">
+										<i class="fa fa-envelope-o"></i>
+										</span>
+										<span>Message</span></a>
+									</td>
+								</tr>
+								<tr>
+									<td>09/13/10</td>
+									<td>www.dominus.com</td>
+									<td><a href="">Dominic Selzer</a></td>
+									<td class="is-success">Paid</td>
+									<td><a class="button" href="">
+										<span class="icon">
+										<i class="fa fa-envelope-o"></i>
+										</span>
+										<span>Message</span></a>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+					<nav class="pagination">
+						<a class="button">Previous</a>
+						<a class="button">Next page</a>
+						<ul>
+							<li>
+								<a class="button">1</a>
+							</li>
+							<li>
+								<span>...</span>
+							</li>
+							<li>
+								<a class="button">45</a>
+							</li>
+							<li>
+								<a class="button is-primary">46</a>
+							</li>
+							<li>
+								<a class="button">47</a>
+							</li>
+							<li>
+								<span>...</span>
+							</li>
+							<li>
+								<a class="button">86</a>
+							</li>
+						</ul>
+					</nav>
+
+					<div class="card is-fullwidth">
+						<header class="card-header">
+              <p class="card-header-title">
+                Basic Information
+              </p>
+              <a class="card-header-icon">
+                <i class="fa fa-angle-down"></i>
+              </a>
+            </header>
+            <div class="card-content">
+              <form id="account-settings" class="account-form">
+                <div class="control is-horizontal">
+                  <div class="control-label">
+                    <label class="label">Email Address</label>
+                  </div>
+                  <p class="control">
+                    <input class="input" type="text" value="<%= user.email %>"/>
+                  </p>
+                </div>
+              </form>
+            </div>
+					</div>
+
         </div>
       </div>
+
     </div>
   </section>
 	<%- include("templates/footer"); %>
