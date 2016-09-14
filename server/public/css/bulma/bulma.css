@@ -1491,7 +1491,10 @@ button {
   width: 100%; }
   .table td,
   .table th {
-    vertical-align: middle; }
+    vertical-align: middle;
+    border: 1px solid #d3d6db;
+    border-width: 0 0 1px;
+    padding: 8px 10px; }
     .table td.is-danger,
     .table th.is-danger {
       color: #ed6c63;
@@ -1502,6 +1505,15 @@ button {
       color: #97cd76;
       font-weight: 400;
       text-transform: uppercase; }
+    .table td.row-drop-td,
+    .table th.row-drop-td {
+      padding: 0;
+      border: none; }
+    .table td > div,
+    .table th > div {
+      border: 1px solid #d3d6db;
+      border-width: 0 0 1px;
+      padding: 8px 10px; }
     .table td.is-icon,
     .table th.is-icon {
       padding: 5px;
@@ -1538,10 +1550,6 @@ button {
     .table th.is-narrow {
       white-space: nowrap;
       width: 1%; }
-  .table .td-visible {
-    border: 1px solid #d3d6db;
-    border-width: 0 0 1px;
-    padding: 8px 10px; }
   .table th {
     border-width: 0 0 1px;
     border: 1px solid #d3d6db;
