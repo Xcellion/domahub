@@ -95,16 +95,21 @@
 					<div class="column is-three-quarters">
 						<% if (listings.length) {%>
 						<box class="box">
-							<p class="control">
-								<span class="select">
-									<select>
-										<option value="">Domains per page</option>
-							      <option value="10">10</option>
-							      <option value="20">20</option>
-										<option value="50">50</option>
-									</select>
-								</span>
-							</p>
+							<div class="control is-horizontal">
+								<div class="control-label">
+									<label class="label">Show per page&#58</label>
+								</div>
+								<div class="control">
+									<div class="select">
+										<select>
+											<option value="">5</option>
+											<option value="10">10</option>
+											<option value="20">20</option>
+											<option value="50">50</option>
+										</select>
+									</div>
+								</div>
+							</div>
 							<table id="domain_table" class="table">
 								<thead>
 									<tr>
@@ -201,6 +206,7 @@
 																</div>
 															</form>
 														</div>
+
 													</div>
 												</div>
 										</td>
@@ -215,10 +221,12 @@
 						<% } %>
 
 							<nav class="pagination">
-								<a id="prev-page" class="page-nav button">Previous</a>
-								<a id="next-page" class="page-nav button">Next page</a>
+								<a class="button">Previous</a>
+								<a class="button">Next page</a>
 								<ul id="page-list">
-									
+									<li>
+										<a id="page-1" class="button is-primary">1</a>
+									</li>
 								</ul>
 							</nav>
 
