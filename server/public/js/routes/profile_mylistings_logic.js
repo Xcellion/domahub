@@ -11,6 +11,7 @@ $(document).ready(function() {
     $("#domains-per-page").change(function(e){
         listings_per_page = parseFloat($(this).val());
         total_pages = Math.ceil(listings_display.length / listings_per_page);
+        current_page = 1;
         setupTable(total_pages, listings_per_page, current_page, listings_display);
     })
 
@@ -19,6 +20,16 @@ $(document).ready(function() {
         current_page = ($(this).text() == "...") ? current_page : $(this).text();
         changePage(total_pages, listings_per_page, current_page);
     })
+
+    //right and left keyboard click
+    document.addEventListener('keydown', function(event) {
+        if (event.keyCode == 37) {
+            $("#prev-page").click();
+        }
+        else if(event.keyCode == 39) {
+            $("#next-page").click();
+        }
+    });
 
     $("#next-page").click(function(e){
         current_page++;
@@ -71,17 +82,28 @@ $(document).ready(function() {
         }
     })
 
+    //go to a specific page
+    $("#go-to-page-button").click(function(e){
+        page_val = $("#go-to-page-input").val();
+        if (page_val > 0 && page_val <= total_pages){
+            current_page = page_val;
+            changePage(total_pages, listings_per_page, current_page);
+        }
+        else {
+            $("#go-to-page-input").val(1);
+        }
+    })
+
 });
 
 //refresh table (pagination and rows)
 function setupTable(total_pages, listings_per_page, current_page, listings_to_disp){
-    console.log('w')
     if (!listings_to_disp.length){
         $("#no-listings").removeClass("is-hidden");
-        $("#domain_table").addClass("is-hidden");
+        $(".listings-exist").addClass("is-hidden");
     }
     else {
-        $("#domain_table").removeClass("is-hidden");
+        $(".listings-exist").removeClass("is-hidden");
         $("#no-listings").addClass("is-hidden");
         createPaginationPages(total_pages);
         paginateListings(total_pages, current_page);
@@ -152,6 +174,21 @@ function createPaginationPage(page_num, text){
 //function to paginate the listings
 function paginateListings(total_pages, current_page){
     current_page = parseFloat(current_page);
+
+    //grey out next/prev buttons if first or last page
+    if (current_page == total_pages){
+        $("#next-page").addClass("is-disabled");
+    }
+    else {
+        $("#next-page").removeClass("is-disabled");
+    }
+    if (current_page == 1){
+        $("#prev-page").addClass("is-disabled");
+    }
+    else {
+        $("#prev-page").removeClass("is-disabled");
+    }
+
     $(".page-button").removeClass("is-primary");
     if (total_pages > 7){
         if (current_page < 5){
@@ -236,7 +273,7 @@ function createRowDrop(listing_info, rownum){
 
 //function to create the image drop column
 function createImgDrop(listing_info){
-    var background_image = (listing_info.background_image == null || listing_info.background_image == undefined) ? "http://placehold.it/256x256" : listing_info.background_image;
+    var background_image = (listing_info.background_image == null || listing_info.background_image == undefined) ? "" : listing_info.background_image;
 
     var temp_col = $("<div class='column is-one-quarter'></div>");
         var temp_div = $("<div class='card'></div>");
@@ -248,7 +285,7 @@ function createImgDrop(listing_info){
     temp_col.append(temp_div.append(temp_div_image.append(temp_figure.append(temp_img), temp_footer.append(temp_a))));
 
     temp_img.error(function() {
-        $(this).attr("src", "http://placehold.it/256x256");
+        $(this).attr("src", "");
     });
 
     return temp_col;
