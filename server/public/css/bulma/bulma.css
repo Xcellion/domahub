@@ -1342,6 +1342,10 @@ button {
     display: block;
     height: auto;
     width: 100%; }
+    .image img.is-listing {
+      height: 100%;
+      width: 100%;
+      object-fit: cover; }
   .image.is-square img, .image.is-1by1 img, .image.is-4by3 img, .image.is-3by2 img, .image.is-16by9 img, .image.is-2by1 img {
     bottom: 0;
     left: 0;
@@ -1971,10 +1975,6 @@ button {
 .card-image {
   display: block;
   position: relative; }
-  .card-image.is-listing {
-    height: 100%;
-    width: 100%;
-    object-fit: cover; }
 
 .card-content {
   padding: 20px; }
