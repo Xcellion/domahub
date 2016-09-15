@@ -1183,10 +1183,11 @@ button {
 
 @media screen and (min-width: 769px) {
   .control-label {
-    flex-grow: 1;
-    margin-right: 20px;
+    flex-grow: 0;
+    margin-right: 10px;
     padding-top: 7px;
-    text-align: right; } }
+    text-align: right;
+    width: 100px; } }
 
 .control {
   position: relative;
@@ -1568,6 +1569,9 @@ button {
   .table thead td,
   .table thead th {
     border-width: 0 0 2px; }
+    .table thead td:hover,
+    .table thead th:hover {
+      cursor: pointer; }
   .table tbody tr:last-child td,
   .table tbody tr:last-child th {
     border-bottom-width: 0; }
@@ -3205,6 +3209,15 @@ a.nav-item {
   @media screen and (min-width: 769px) {
     .pagination > a:not(:first-child) {
       order: 1; } }
+
+.pagination-control {
+  align-items: center;
+  display: flex;
+  justify-content: space-between; }
+  .pagination-control > .control {
+    margin-bottom: 0; }
+    .pagination-control > .control .input, .pagination-control > .control .textarea {
+      width: 60px; }
 
 .panel-icon {
   display: inline-block;
