@@ -67,7 +67,7 @@ listing_model.prototype.checkRentalTime = function(listing_id, user_times, callb
 				if (result.info || result.info.length > 0){
 					for (var x = 0; x < result.info.length; x++){
 						//existing db date, already in UTC
-						var db_utc = new Date(result.info[x].date + " UTC");
+						var db_utc = new Date(result.info[x].date + "Z");
 						var db_duration = result.info[x].duration;
 
 						//check for any overlaps
@@ -193,7 +193,7 @@ listing_model.prototype.getCurrentRental = function(domain_name, callback){
 
 			//loop through to see if any overlap
 			for (var x = 0; x < result.info.length; x++){
-				event_date = result.info[x].date + " UTC";
+				event_date = result.info[x].date + "Z";
 				var existingStart = new Date(event_date);
 
 				if (now.getTime() < existingStart.getTime() + result.info[x].duration

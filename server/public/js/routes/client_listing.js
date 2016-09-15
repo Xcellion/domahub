@@ -139,7 +139,7 @@ function displayRental(){
 
 	for (var x = 0; x < rental_info.times.length; x++){
 
-		start = moment(new Date(rental_info.times[x].date + " UTC"));
+		start = moment(new Date(rental_info.times[x].date + "Z"));
 		disp_end = moment(new Date(start._d.getTime() + rental_info.times[x].duration)).format('YYYY/MM/D, h:mmA');
 		disp_start = start.format('YYYY/MM/D, h:mmA');
 
