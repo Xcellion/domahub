@@ -38,6 +38,9 @@ $(document).ready(function() {
         }
     })
 
+    $(".td-view a").click(function(e) {
+        e.stopPropagation();
+    });
 
 });
 
@@ -155,6 +158,7 @@ function createRow(listing_info, rownum){
 
     tempRow.on("click", function(e){
         editRow($(this));
+        console.log(e.target);
     });
 
     tempRow.data("editing", false);
@@ -169,9 +173,9 @@ function createRowDrop(listing_info, rownum){
     temp_div_col = $("<div class='columns'></div>");
 
     temp_drop.append(temp_td.append(temp_div_drop.append(temp_div_col.append(
-        createImgDropCol(listing_info),
-        createPriceFormDropCol(listing_info),
-        createFormDropCol(listing_info)
+        createImgDrop(listing_info),
+        createPriceDrop(listing_info),
+        createFormDrop(listing_info)
     ))));
     temp_div_drop.hide();
 
@@ -179,7 +183,7 @@ function createRowDrop(listing_info, rownum){
 }
 
 //function to create the image drop column
-function createImgDropCol(listing_info){
+function createImgDrop(listing_info){
     var background_image = (listing_info.background_image == null || listing_info.background_image == undefined) ? "http://placehold.it/256x256" : listing_info.background_image;
 
     var temp_col = $("<div class='column is-one-quarter'></div>");
@@ -199,11 +203,11 @@ function createImgDropCol(listing_info){
 }
 
 //function to create the price drop column
-function createPriceFormDropCol(listing_info){
+function createPriceDrop(listing_info){
     var temp_col = $("<div class='column is-3'></div>");
     var temp_form = $("<form'></form>");
 
-    var label_types = ["Hour", "Day", "Week", "Month"];
+    var label_types = ["Hourly", "Daily", "Weekly", "Monthly"];
     var label_values = [listing_info.hour_price, listing_info.day_price, listing_info.week_price,listing_info.month_price];
 
     for (var x = 0; x < 4; x++){
@@ -223,7 +227,7 @@ function createPriceFormDropCol(listing_info){
 }
 
 //function to create buy link and background image form drop
-function createFormDropCol(listing_info){
+function createFormDrop(listing_info){
     var temp_col = $("<div class='column'></div>");
     var temp_form = $("<form'></form>");
 
@@ -277,7 +281,7 @@ function createDate(listing_info){
 //function to create the tv icon
 function createView(listing_info){
     var temp_td = $("<td class='td-visible td-view'></td>");
-        var temp_a = $("<a class='button' href='/listing/" + listing_info.domain_name + "'></a>");
+        var temp_a = $("<a class='button' target='_blank' style='target-new: tab;'' href='/listing/" + listing_info.domain_name + "'></a>");
             var temp_span = $("<span class='icon'></span>");
                 var temp_i = $("<i class='fa fa-television'></i>");
             var temp_span2 = $("<span>View</span>");
@@ -305,6 +309,7 @@ function editRow(row){
         if ($(this).data('editing') == true && $(this).attr("id") != row.attr("id")){
             $(this).data("editing", false);
             dropRow($(this), false);
+            editArrow($(this), false);
             editStatus($(this), false);
         }
     });
@@ -314,13 +319,14 @@ function editRow(row){
     row.data("editing", editing);
 
     dropRow(row, editing);
-    editArrow(row);
+    editArrow(row, editing);
     editStatus(row, editing);
 }
 
 //function to drop down a row
 function dropRow(row, editing){
     row_drop = row.next(".row-drop");
+    row.toggleClass("is-active");
     if (editing){
         row_drop.find("#div-drop").stop().slideDown("fast");
     }
@@ -330,11 +336,16 @@ function dropRow(row, editing){
 }
 
 //function to change edit icon
-function editArrow(row){
+function editArrow(row, editing){
     edit_td = row.find(".td-arrow").find("i");
-    row.toggleClass("is-active");
-    edit_td.toggleClass("fa-rotate-90");
-    edit_td.parent("span").toggleClass("is-active");
+    if (editing){
+        edit_td.addClass("fa-rotate-90");
+        edit_td.parent("span").addClass("is-active");
+    }
+    else {
+        edit_td.removeClass("fa-rotate-90");
+        edit_td.parent("span").removeClass("is-active");
+    }
 }
 
 //function to change status column to editable
@@ -343,12 +354,16 @@ function editStatus(row, editing){
 
     if (editing){
         new_td = $("<td class='td-visible td-status'></td>");
-            temp_span = $("<span class='select'></span>");
-            temp_select = $("<select></select>");
+            temp_span = $("<span class='select status-span'></span>");
+            temp_select = $("<select class='status-select'></select>");
                 temp_select.append("<option value='Active'>Active</option");
                 temp_select.append("<option value='Inactive'>Inactive</option");
                 temp_select.val(status_td.data('status'));
         new_td.append(temp_span.append(temp_select));
+
+        new_td.click(function(e) {
+            e.stopPropagation();
+        });
 
         status_td.replaceWith(new_td);
     }
