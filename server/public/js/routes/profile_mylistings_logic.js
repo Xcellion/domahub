@@ -330,7 +330,7 @@ function dropRow(row, editing){
 //function to change edit icon
 function editArrow(row){
     edit_td = row.find(".td-arrow").find("i");
-
+    row.toggleClass("is-active");
     edit_td.toggleClass("fa-rotate-90");
 }
 
