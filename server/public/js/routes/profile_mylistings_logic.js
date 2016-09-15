@@ -147,6 +147,7 @@ function createAllRows(listings_per_page, current_page){
 function createRow(listing_info, rownum){
     tempRow = $("<tr class='row-disp' id='row" + rownum + "'></tr>");
 
+    tempRow.append(createArrow(listing_info));
     tempRow.append(createDomain(listing_info));
     tempRow.append(createStatus(listing_info));
     tempRow.append(createDate(listing_info));
@@ -163,7 +164,7 @@ function createRow(listing_info, rownum){
 //function to create dropdown row
 function createRowDrop(listing_info, rownum){
     temp_drop = $("<tr id='row-drop" + rownum + "' class='row-drop'></tr>");
-    temp_td = $("<td class='row-drop-td' colspan='4'></td>")
+    temp_td = $("<td class='row-drop-td' colspan='5'></td>")
     temp_div_drop = $("<div id='div-drop' class='td-visible container'></div>");
     temp_div_col = $("<div class='columns'></div>");
 
@@ -252,14 +253,14 @@ function createFormDropCol(listing_info){
 
 //function to create the domain name td
 function createDomain(listing_info){
-    var temp_td = $("<td class='td-visible domain-td'>" + listing_info.domain_name + "</td>");
+    var temp_td = $("<td class='td-visible td-domain'>" + listing_info.domain_name + "</td>");
     return temp_td;
 }
 
 //function to create the status td
 function createStatus(listing_info){
     var text = (listing_info.price_type != 0) ? "Active" : "Inactive";
-    var temp_td = $("<td class='td-visible status-td'>" + text + "</td>");
+    var temp_td = $("<td class='td-visible td-status'>" + text + "</td>");
     temp_td.data("status", text);
     return temp_td;
 }
@@ -267,18 +268,28 @@ function createStatus(listing_info){
 //function to create the date
 function createDate(listing_info){
     var start = moment(new Date(listing_info.date_created + " UTC")).format('YYYY/MM/DD, hh:mm A');
-    var temp_td = $("<td class='td-visible date-td'>" + start + "</td>");
+    var temp_td = $("<td class='td-visible td-date'>" + start + "</td>");
     return temp_td;
 }
 
 //function to create the tv icon
 function createView(listing_info){
-    var temp_td = $("<td class='td-visible view-td'></td>");
+    var temp_td = $("<td class='td-visible td-view'></td>");
         var temp_a = $("<a class='button' href='/listing/" + listing_info.domain_name + "'></a>");
             var temp_span = $("<span class='icon'></span>");
                 var temp_i = $("<i class='fa fa-television'></i>");
             var temp_span2 = $("<span>View</span>");
     temp_td.append(temp_a.append(temp_span.append(temp_i), temp_span2));
+
+    return temp_td;
+}
+
+//function to create the dropdown arrow
+function createArrow(){
+    var temp_td = $("<td class='td-visible td-arrow'></td>");
+        var temp_span = $("<span class='icon'></span>");
+            var temp_i = $("<i class='fa fa-angle-right'></i>");
+    temp_td.append(temp_span.append(temp_i));
 
     return temp_td;
 }
@@ -301,6 +312,7 @@ function editRow(row){
     row.data("editing", editing);
 
     dropRow(row, editing);
+    editArrow(row);
     editStatus(row, editing);
 }
 
@@ -316,16 +328,10 @@ function dropRow(row, editing){
 }
 
 //function to change edit icon
-function editEdit(row, editing){
-    edit_td = row.find(".edit-td");
+function editArrow(row){
+    edit_td = row.find(".td-arrow").find("i");
 
-    edit_td.find(".button").toggleClass("is-primary");
-    if (editing){
-        edit_td.find(".edit-text").text("Save");
-    }
-    else {
-        edit_td.find(".edit-text").text("Edit");
-    }
+    edit_td.toggleClass("fa-rotate-90");
 }
 
 //function to change status column to editable
