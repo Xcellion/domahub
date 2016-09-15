@@ -180,17 +180,19 @@ function createRowDrop(listing_info, rownum){
 
 //function to create the image drop column
 function createImgDropCol(listing_info){
-    var background_image = (listing_info.background_image == null || listing_info.background_image == undefined) ? "http://placehold.it/128x128" : listing_info.background_image;
+    var background_image = (listing_info.background_image == null || listing_info.background_image == undefined) ? "http://placehold.it/256x256" : listing_info.background_image;
 
     var temp_col = $("<div class='column is-one-quarter'></div>");
-    var temp_figure = $("<figure class='image is-128x128'></figure>");
-        var temp_img = $("<img alt='Image not found' src=" + listing_info.background_image + "/>");
-        temp_figure.append(temp_img);
-    var temp_a = $("<a class='orange-link'>Change Picture</a>");
-    temp_col.append(temp_figure, temp_a);
+        var temp_div = $("<div class='card'></div>");
+            var temp_div_image = $("<div class='card-image'></div>")
+                var temp_figure = $("<figure class='image is-256x256'></figure>");
+                    var temp_img = $("<img alt='Image not found' src=" + listing_info.background_image + "/>");
+                var temp_footer = $("<footer class='card-footer'></div>");
+                    var temp_a = $("<a class='card-footer-item'>Change Picture</a>");
+    temp_col.append(temp_div.append(temp_div_image.append(temp_figure.append(temp_img), temp_footer.append(temp_a))));
 
     temp_img.error(function() {
-        $(this).attr("src", "http://placehold.it/128x128");
+        $(this).attr("src", "http://placehold.it/256x256");
     });
 
     return temp_col;
@@ -244,7 +246,7 @@ function createFormDropCol(listing_info){
     temp_div2.append(temp_div2_control_label.append(temp_div2_label), temp_div2_control.append(temp_div2_input));
 
     var temp_div3 = $('<div class="control"></div>');
-        temp_div3.append('<button class="button is-success is-pulled-right">Save</button>');
+        temp_div3.append('<button class="button is-medium is-success is-pulled-right">Save</button>');
 
     temp_col.append(temp_form.append(temp_div1, temp_div2, temp_div3));
 
@@ -332,14 +334,15 @@ function editArrow(row){
     edit_td = row.find(".td-arrow").find("i");
     row.toggleClass("is-active");
     edit_td.toggleClass("fa-rotate-90");
+    edit_td.parent("span").toggleClass("is-active");
 }
 
 //function to change status column to editable
 function editStatus(row, editing){
-    status_td = row.find(".status-td");
+    status_td = row.find(".td-status");
 
     if (editing){
-        new_td = $("<td class='td-visible status-td'></td>");
+        new_td = $("<td class='td-visible td-status'></td>");
             temp_span = $("<span class='select'></span>");
             temp_select = $("<select></select>");
                 temp_select.append("<option value='Active'>Active</option");
