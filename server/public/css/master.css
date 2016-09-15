@@ -856,7 +856,7 @@ button {
   transition: all 0.25s; }
 
 .content li + li {
-  margin-top: 0.25em; }
+  margin-top: 10px; }
 
 .content p {
   color: #111;
@@ -1014,7 +1014,7 @@ button {
   min-height: 120px;
   min-width: 100%;
   padding: 10px;
-  resize: vertical; }
+  resize: none; }
 
 .checkbox, .radio {
   cursor: pointer;
@@ -1487,7 +1487,6 @@ button {
   background-color: #fff;
   color: #111;
   margin-bottom: 20px;
-  table-layout: fixed;
   width: 100%; }
   .table td,
   .table th {
@@ -1554,6 +1553,8 @@ button {
     .table th.is-narrow {
       white-space: nowrap;
       width: 1%; }
+  .table td {
+    width: 100%; }
   .table th {
     border-width: 0 0 1px;
     border: 1px solid #d3d6db;
@@ -1562,15 +1563,15 @@ button {
     text-align: left; }
   .table thead td,
   .table thead th {
-    border-width: 0 0 2px;
-    color: #111; }
+    border-width: 0 0 2px; }
   .table tbody tr:last-child td,
   .table tbody tr:last-child th {
     border-bottom-width: 0; }
   .table tbody tr:hover {
     background-color: #f5f7fa;
-    color: #111;
     cursor: pointer; }
+  .table tbody tr.is-active {
+    background-color: #f5f7fa; }
   .table tbody tr td {
     font-weight: 300; }
   .table tfoot td,
@@ -1767,8 +1768,13 @@ button {
   vertical-align: top;
   width: 24px; }
   .icon .fa {
+    color: inherit;
     font-size: inherit;
-    line-height: inherit; }
+    line-height: inherit;
+    -moz-transition: all 0.25s;
+    -o-transition: all 0.25s;
+    -webkit-transition: all 0.25s;
+    transition: all 0.25s; }
   .icon.is-small {
     display: inline-block;
     font-size: 14px;
@@ -1793,6 +1799,8 @@ button {
     text-align: center;
     vertical-align: top;
     width: 48px; }
+  .icon.is-active {
+    color: #3cbc8d; }
 
 .hamburger, .nav-toggle {
   cursor: pointer;

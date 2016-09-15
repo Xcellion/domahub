@@ -2,10 +2,13 @@
   background-color: #fff
   color: $text
   margin-bottom: 20px
-  table-layout: fixed
   width: 100%
   td,
   th
+    vertical-align: middle
+    border: 1px solid $border
+    border-width: 0 0 1px
+    padding: 8px 10px
     &.is-danger
       color: $danger
       font-weight: 400
@@ -14,10 +17,6 @@
       color: $success
       font-weight: 400
       text-transform: uppercase
-    vertical-align: middle
-    border: 1px solid $border
-    border-width: 0 0 1px
-    padding: 8px 10px
     &.row-drop-td
       padding: 0
       border: none
@@ -52,7 +51,8 @@
     &.is-narrow
       white-space: nowrap
       width: 1%
-
+  td
+    width: 100%
   th
     border-width: 0 0 1px
     border: 1px solid $border
@@ -63,7 +63,6 @@
     td,
     th
       border-width: 0 0 2px
-      color: $text
   tbody
     tr
       &:last-child
@@ -72,8 +71,9 @@
           border-bottom-width: 0
       &:hover
         background-color: $grey-lighter
-        color: $text
         cursor: pointer
+      &.is-active
+        background-color: $grey-lighter
       td
         font-weight: 300
   tfoot
