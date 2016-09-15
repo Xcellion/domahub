@@ -978,8 +978,6 @@ button {
     border-color: #fce473; }
   .input.is-danger, .is-danger.textarea {
     border-color: #ed6c63; }
-  .input[type="search"], [type="search"].textarea {
-    border-radius: 290486px; }
   .input.is-small, .is-small.textarea {
     border-radius: 2px;
     font-size: 11px;
@@ -3235,10 +3233,10 @@ a.nav-item {
     line-height: inherit; }
 
 .panel-heading {
-  background-color: #3CBC8D;
+  background-color: #fff;
   border-bottom: 1px solid #d3d6db;
   border-radius: 4px 4px 0 0;
-  color: #fff;
+  color: #222324;
   font-size: 18px;
   font-weight: 400;
   padding: 10px; }
