@@ -1553,8 +1553,6 @@ button {
     .table th.is-narrow {
       white-space: nowrap;
       width: 1%; }
-  .table td {
-    width: 100%; }
   .table th {
     border-width: 0 0 1px;
     border: 1px solid #d3d6db;
