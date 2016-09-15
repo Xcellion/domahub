@@ -145,7 +145,7 @@ function createAllRows(listings_per_page, current_page){
 
 //function to create a listing row
 function createRow(listing_info, rownum){
-    tempRow = $("<tr id='row" + rownum + "'></tr>");
+    tempRow = $("<tr class='row-disp' id='row" + rownum + "'></tr>");
 
     tempRow.append(createDomain(listing_info));
     tempRow.append(createStatus(listing_info));
@@ -179,12 +179,18 @@ function createRowDrop(listing_info, rownum){
 
 //function to create the image drop column
 function createImgDropCol(listing_info){
+    var background_image = (listing_info.background_image == null || listing_info.background_image == undefined) ? "http://placehold.it/128x128" : listing_info.background_image;
+
     var temp_col = $("<div class='column is-one-quarter'></div>");
     var temp_figure = $("<figure class='image is-128x128'></figure>");
-        var temp_img = $("<img src=" + listing_info.bacground_image + "/>");
+        var temp_img = $("<img alt='Image not found' src=" + listing_info.background_image + "/>");
         temp_figure.append(temp_img);
     var temp_a = $("<a class='orange-link'>Change Picture</a>");
     temp_col.append(temp_figure, temp_a);
+
+    temp_img.error(function() {
+        $(this).attr("src", "http://placehold.it/128x128");
+    });
 
     return temp_col;
 }
@@ -226,8 +232,8 @@ function createFormDropCol(listing_info){
             var temp_div1_label = $("<label class='label'>Purchase link</label>")
         var temp_div1_p = $("<p class='control has-icon'></p>");
             var temp_div1_input = $('<input class="input" type="url" placeholder="https://buy-my-website.com" value="' + buy_link + '"/>');
-                var temp_div1_input_i = $('<i class="fa fa-link"></i>');
-    temp_div1.append(temp_div1_control.append(temp_div1_label), temp_div1_p.append(temp_div1_input.append(temp_div1_input_i)));
+            var temp_div1_input_i = $('<i class="fa fa-link"></i>');
+    temp_div1.append(temp_div1_control.append(temp_div1_label), temp_div1_p.append(temp_div1_input, temp_div1_input_i));
 
     var temp_div2 = $('<div class="control is-horizontal"></div>');
         var temp_div2_control_label = $('<div class="control-label">');
@@ -281,6 +287,14 @@ function createView(listing_info){
 
 //function to initiate edit mode
 function editRow(row){
+    //all others are not editing
+    $(".row-disp").each(function(e){
+        if ($(this).data('editing') == true && $(this).attr("id") != row.attr("id")){
+            $(this).data("editing", false);
+            dropRow($(this), false);
+            editStatus($(this), false);
+        }
+    });
 
     //are we editing or saving?
     editing = (row.data("editing") == false) ? true : false;
@@ -293,7 +307,12 @@ function editRow(row){
 //function to drop down a row
 function dropRow(row, editing){
     row_drop = row.next(".row-drop");
-    row_drop.find("#div-drop").slideToggle("fast");
+    if (editing){
+        row_drop.find("#div-drop").stop().slideDown("fast");
+    }
+    else {
+        row_drop.find("#div-drop").stop().slideUp("fast");
+    }
 }
 
 //function to change edit icon
