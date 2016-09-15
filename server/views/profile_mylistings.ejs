@@ -42,9 +42,11 @@
 						  </p>
 							<div class="panel-list">
 						  <a class="panel-block is-active" href="#">
+
 								<p class="control has-icon has-icon-right">
 									<input class="input" type="text" placeholder="Search domains" />
 									<i class="fa fa-times is-hidden"></i>
+
 								</p>
 						  </a>
 						  <a class="panel-block" href="#">
@@ -86,16 +88,20 @@
 					</div>
 
 					<div class="column is-three-quarters">
-						<% if (listings.length) {%>
-						<box class="box">
+
+						<div id="no-listings" class="box has-text-centered is-hidden">
+							There are no listings!
+						</div>
+
+						<box class="listings-exist box">
 
 							<nav class="pagination bottom-margin-25">
-								<a class="button">Previous</a>
-								<a class="button">Next page</a>
+								<a id="prev-page" class="button">Previous</a>
+								<a id="next-page" class="button">Next page</a>
 								<ul id="page-list"></ul>
 							</nav>
 
-							<table id="domain_table" class="table">
+							<table class="table">
 								<thead>
 									<tr>
 										<th class="td-arrow"></th>
@@ -117,12 +123,6 @@
 								<tbody id="mylistings_tbody"></tbody>
 							</table>
 
-						<% } else { %>
-							<div class="box has-text-centered">
-								You have no listings yet!
-							</div>
-						<% } %>
-
 							<nav class="pagination-control">
 								<div class="control is-horizontal">
 									<div class="control-label">
@@ -141,8 +141,8 @@
 								</div>
 								<div class="control">
 									<p class="control has-addons has-addons-right">
-										<input class="input" type="number" value="1" />
-										<a class="button is-primary">
+										<input id="go-to-page-input" class="input" type="number" min="1" value="1" />
+										<a id="go-to-page-button" class="button is-primary">
 											Go to page
 										</a>
 									</p>
