@@ -1,7 +1,7 @@
 $(document).ready(function() {
 
     for (var x = 0; x < rentals.length; x++){
-        start = moment(new Date(rentals[x].date + " UTC"));
+        start = moment(new Date(rentals[x].date + "Z"));
         disp_end = moment(new Date(start._d.getTime() + rentals[x].duration)).format('YYYY/MM/DD, hh:mm A');
         disp_start = start.format('YYYY/MM/DD, hh:mm A');
 

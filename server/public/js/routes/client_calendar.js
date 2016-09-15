@@ -96,7 +96,7 @@ $(document).ready(function() {
 //helper function to create pre-existing rentals
 function createExisting(rentals){
 	for (var x = 0; x < rentals.length; x++){
-		var start = new Date(rentals[x].date + " UTC");
+		var start = new Date(rentals[x].date + "Z");
 		var end = new Date(start.getTime() + rentals[x].duration);
 		var eventData = {
 			start: start,
