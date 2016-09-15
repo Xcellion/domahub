@@ -40,13 +40,6 @@
 						  <p class="panel-heading has-text-centered">
 						    Search and Filter
 						  </p>
-						  <!-- <p class="panel-tabs">
-						    <a class="is-active" href="#">All</a>
-						    <a href="#">Public</a>
-						    <a href="#">Private</a>
-						    <a href="#">Sources</a>
-						    <a href="#">Forks</a>
-						  </p> -->
 							<div class="panel-list">
 						  <a class="panel-block is-active" href="#">
 						    <p class="control has-icon">
@@ -95,28 +88,29 @@
 					<div class="column is-three-quarters">
 						<% if (listings.length) {%>
 						<box class="box">
-							<div class="control is-horizontal">
-								<div class="control-label">
-									<label class="label">Show per page&#58</label>
-								</div>
-								<div class="control">
-									<div class="select">
-										<select id="domains-per-page">
-											<option selected value="5">5</option>
-											<option value="25">25</option>
-											<option value="50">50</option>
-											<option value="100">100</option>
-										</select>
-									</div>
-								</div>
-							</div>
+
+							<nav class="pagination bottom-margin-25">
+								<a class="button">Previous</a>
+								<a class="button">Next page</a>
+								<ul id="page-list"></ul>
+							</nav>
+
 							<table id="domain_table" class="table">
 								<thead>
 									<tr>
 										<th class="td-arrow"></th>
-										<th class="td-domain">Domain Name</th>
-										<th class="td-status">Status</th>
-										<th class="td-date">Date Created</th>
+										<th class="td-domain">
+											Domain Name
+											<span class="icon is-small is-hidden"><i class="fa fa-sort-desc"></i></span>
+										</th>
+										<th class="td-status">
+											Status
+											<span class="icon is-small is-hidden"><i class="fa fa-sort-desc"></i></span>
+										</th>
+										<th class="td-date">
+											Date Created
+											<span class="icon is-small is-hidden"><i class="fa fa-sort-desc"></i></span>
+										</th>
 										<th class="td-view"></th>
 									</tr>
 								</thead>
@@ -129,11 +123,32 @@
 							</div>
 						<% } %>
 
-							<nav class="pagination">
-								<a class="button">Previous</a>
-								<a class="button">Next page</a>
-								<ul id="page-list"></ul>
+							<nav class="pagination-control">
+								<div class="control is-horizontal">
+									<div class="control-label">
+										<label class="label">Show per page&#58</label>
+									</div>
+									<div class="control">
+										<div class="select">
+											<select id="domains-per-page">
+												<option selected value="5">5</option>
+												<option value="25">25</option>
+												<option value="50">50</option>
+												<option value="100">100</option>
+											</select>
+										</div>
+									</div>
+								</div>
+								<div class="control">
+									<p class="control has-addons has-addons-right">
+										<input class="input" type="number" value="1" />
+										<a class="button is-primary">
+											Go to page
+										</a>
+									</p>
+								</div>
 							</nav>
+
 
 						</box>
 					</div>
