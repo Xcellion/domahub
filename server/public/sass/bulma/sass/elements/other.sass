@@ -43,8 +43,10 @@
 .icon
   +fa(21px, 24px)
   .fa
+    color: inherit
     font-size: inherit
     line-height: inherit
+    @include transition(all 0.25s)
   // Sizes
   &.is-small
     +fa(14px, 16px)
@@ -52,6 +54,8 @@
     +fa(28px, 32px)
   &.is-large
     +fa(42px, 48px)
+  &.is-active
+    color: #3cbc8d
 
 .hamburger
   cursor: pointer
