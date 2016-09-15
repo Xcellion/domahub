@@ -50,7 +50,7 @@
 							<div class="panel-list">
 						  <a class="panel-block is-active" href="#">
 						    <p class="control has-icon">
-									<input class="input" type="text" placeholder="Search" />
+									<input id="search-domain" class="input" type="text" placeholder="Search" />
 									<i class="fa fa-search"></i>
 								</p>
 						  </a>
@@ -93,7 +93,6 @@
 					</div>
 
 					<div class="column is-three-quarters">
-						<% if (listings.length) {%>
 						<box class="box">
 							<div class="control is-horizontal">
 								<div class="control-label">
@@ -110,6 +109,11 @@
 									</div>
 								</div>
 							</div>
+
+							<div id="no-listings" class="box has-text-centered is-hidden">
+								There are no listings!
+							</div>
+
 							<table id="domain_table" class="table">
 								<thead>
 									<tr>
@@ -123,15 +127,9 @@
 								<tbody id="mylistings_tbody"></tbody>
 							</table>
 
-						<% } else { %>
-							<div class="box has-text-centered">
-								You have no listings yet!
-							</div>
-						<% } %>
-
 							<nav class="pagination">
-								<a class="button">Previous</a>
-								<a class="button">Next page</a>
+								<a id="prev-page" class="button">Previous</a>
+								<a id="next-page" class="button">Next page</a>
 								<ul id="page-list"></ul>
 							</nav>
 
