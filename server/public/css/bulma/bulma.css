@@ -1336,6 +1336,8 @@ button {
 .image {
   display: block;
   position: relative; }
+  .image.listing-img {
+    height: 193.75px; }
   .image img {
     display: block;
     height: auto;
@@ -1969,6 +1971,10 @@ button {
 .card-image {
   display: block;
   position: relative; }
+  .card-image.is-listing {
+    height: 100%;
+    width: 100%;
+    object-fit: cover; }
 
 .card-content {
   padding: 20px; }
