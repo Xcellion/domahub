@@ -158,7 +158,6 @@ function createRow(listing_info, rownum){
 
     tempRow.on("click", function(e){
         editRow($(this));
-        console.log(e.target);
     });
 
     tempRow.data("editing", false);
@@ -189,8 +188,8 @@ function createImgDrop(listing_info){
     var temp_col = $("<div class='column is-one-quarter'></div>");
         var temp_div = $("<div class='card'></div>");
             var temp_div_image = $("<div class='card-image'></div>")
-                var temp_figure = $("<figure class='image is-256x256'></figure>");
-                    var temp_img = $("<img alt='Image not found' src=" + listing_info.background_image + "/>");
+                var temp_figure = $("<figure class='image listing-img is-256x256'></figure>");
+                    var temp_img = $("<img class='is-listing' alt='Image not found' src=" + listing_info.background_image + "/>");
                 var temp_footer = $("<footer class='card-footer'></div>");
                     var temp_a = $("<a class='card-footer-item'>Change Picture</a>");
     temp_col.append(temp_div.append(temp_div_image.append(temp_figure.append(temp_img), temp_footer.append(temp_a))));
@@ -361,7 +360,7 @@ function editStatus(row, editing){
                 temp_select.val(status_td.data('status'));
         new_td.append(temp_span.append(temp_select));
 
-        new_td.click(function(e) {
+        temp_select.click(function(e) {
             e.stopPropagation();
         });
 
