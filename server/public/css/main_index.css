@@ -1,10 +1,6 @@
 /******************** MISC*************************/
 .right-caret {
-  color: #FF8751;
-  -moz-transition: all 0.25s;
-  -o-transition: all 0.25s;
-  -webkit-transition: all 0.25s;
-  transition: all 0.25s; }
+  color: #FF8751; }
 
 .right-caret.active {
   -moz-transform: translate(5px, 0);
