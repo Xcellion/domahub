@@ -1,15 +1,18 @@
+var listings_display = listings.slice(0);
+
 $(document).ready(function() {
     var listings_per_page = parseFloat($("#domains-per-page").val());
-    var total_pages = Math.ceil(listings.length / listings_per_page);
+    var total_pages = Math.ceil(listings_display.length / listings_per_page);
     var current_page = 1;
 
-    setupTable(total_pages, listings_per_page, current_page);
+    setupTable(total_pages, listings_per_page, current_page, listings_display);
 
     //on changing of domains per page
     $("#domains-per-page").change(function(e){
         listings_per_page = parseFloat($(this).val());
-        total_pages = Math.ceil(listings.length / listings_per_page);
-        setupTable(total_pages, listings_per_page, current_page);
+        total_pages = Math.ceil(listings_display.length / listings_per_page);
+        current_page = 1;
+        setupTable(total_pages, listings_per_page, current_page, listings_display);
     })
 
     //pagination logic
@@ -17,6 +20,16 @@ $(document).ready(function() {
         current_page = ($(this).text() == "...") ? current_page : $(this).text();
         changePage(total_pages, listings_per_page, current_page);
     })
+
+    //right and left keyboard click
+    document.addEventListener('keydown', function(event) {
+        if (event.keyCode == 37) {
+            $("#prev-page").click();
+        }
+        else if(event.keyCode == 39) {
+            $("#next-page").click();
+        }
+    });
 
     $("#next-page").click(function(e){
         current_page++;
@@ -38,24 +51,86 @@ $(document).ready(function() {
         }
     })
 
-    $(".td-view a").click(function(e) {
-        e.stopPropagation();
+    //sort by header
+    $("th").click(function(e){
+        var sorted = ($(this).data("sorted") == 1) ? -1 : 1;
+        $(this).data("sorted", sorted);
+        sortListings($(this).attr('class').split("-").pop(), sorted);
+        createAllRows(listings_per_page, current_page);
     });
+
+    //search for a specific domain
+    $("#search-domain").keyup(function(e){
+        var needle = $(this).val();
+        if (needle){
+            if (listings_display.length){
+                var temp_listings = [];
+                for (var x = 0; x < listings.length; x++){
+                    if (listings[x].domain_name.includes(needle)){
+                        temp_listings.push(listings[x]);
+                    }
+                }
+                listings_display = temp_listings;
+                total_pages = Math.ceil(listings_display.length / listings_per_page);
+                setupTable(total_pages, listings_per_page, current_page, listings_display);
+            }
+        }
+        else {
+            listings_display = listings.slice(0);
+            total_pages = Math.ceil(listings_display.length / listings_per_page);
+            setupTable(total_pages, listings_per_page, current_page, listings_display);
+        }
+    })
+
+    //go to a specific page
+    $("#go-to-page-button").click(function(e){
+        page_val = $("#go-to-page-input").val();
+        if (page_val > 0 && page_val <= total_pages){
+            current_page = page_val;
+            changePage(total_pages, listings_per_page, current_page);
+        }
+        else {
+            $("#go-to-page-input").val(1);
+        }
+    })
 
 });
 
 //refresh table (pagination and rows)
-function setupTable(total_pages, listings_per_page, current_page){
-    createPaginationPages(total_pages);
-    paginateListings(total_pages, current_page);
-    createAllRows(listings_per_page, current_page);
+function setupTable(total_pages, listings_per_page, current_page, listings_to_disp){
+    if (!listings_to_disp.length){
+        $("#no-listings").removeClass("is-hidden");
+        $(".listings-exist").addClass("is-hidden");
+    }
+    else {
+        $(".listings-exist").removeClass("is-hidden");
+        $("#no-listings").addClass("is-hidden");
+        createPaginationPages(total_pages);
+        paginateListings(total_pages, current_page);
+        createAllRows(listings_per_page, current_page);
+    }
 }
 
 // --------------------------------------------------------------------------------- SORTING
 
 //function to sort the listings
-function sortListings(method){
+function sortListings(method, sorted){
+    if (method == "domain"){
+        toggleSort("domain_name", sorted);
+    }
+    else if (method == "status"){
+        toggleSort("price_type", sorted);
+    }
+    else {
+        toggleSort("date_created", sorted);
+    }
+}
 
+//function to toggle the sorting by header
+function toggleSort(attr, bool){
+    listings_display.sort(function(a,b) {
+        return (bool * ((a[attr] > b[attr]) ? 1 : ((b[attr] > a[attr]) ? -1 : 0)));
+    });
 }
 
 // --------------------------------------------------------------------------------- PAGINATION
@@ -99,6 +174,21 @@ function createPaginationPage(page_num, text){
 //function to paginate the listings
 function paginateListings(total_pages, current_page){
     current_page = parseFloat(current_page);
+
+    //grey out next/prev buttons if first or last page
+    if (current_page == total_pages){
+        $("#next-page").addClass("is-disabled");
+    }
+    else {
+        $("#next-page").removeClass("is-disabled");
+    }
+    if (current_page == 1){
+        $("#prev-page").addClass("is-disabled");
+    }
+    else {
+        $("#prev-page").removeClass("is-disabled");
+    }
+
     $(".page-button").removeClass("is-primary");
     if (total_pages > 7){
         if (current_page < 5){
@@ -138,9 +228,9 @@ function createAllRows(listings_per_page, current_page){
     $("#mylistings_tbody").empty();
     listing_start = listings_per_page * (current_page - 1);
     for (var x = 0; x < listings_per_page; x++){
-        if (listings[listing_start]){
-            $("#mylistings_tbody").append(createRow(listings[listing_start], listing_start));
-            $("#mylistings_tbody").append(createRowDrop(listings[listing_start], listing_start));
+        if (listings_display[listing_start]){
+            $("#mylistings_tbody").append(createRow(listings_display[listing_start], listing_start));
+            $("#mylistings_tbody").append(createRowDrop(listings_display[listing_start], listing_start));
         }
         listing_start++;
     }
@@ -183,7 +273,7 @@ function createRowDrop(listing_info, rownum){
 
 //function to create the image drop column
 function createImgDrop(listing_info){
-    var background_image = (listing_info.background_image == null || listing_info.background_image == undefined) ? "http://placehold.it/256x256" : listing_info.background_image;
+    var background_image = (listing_info.background_image == null || listing_info.background_image == undefined) ? "" : listing_info.background_image;
 
     var temp_col = $("<div class='column is-one-quarter'></div>");
         var temp_div = $("<div class='card'></div>");
@@ -195,7 +285,7 @@ function createImgDrop(listing_info){
     temp_col.append(temp_div.append(temp_div_image.append(temp_figure.append(temp_img), temp_footer.append(temp_a))));
 
     temp_img.error(function() {
-        $(this).attr("src", "http://placehold.it/256x256");
+        $(this).attr("src", "");
     });
 
     return temp_col;
@@ -286,6 +376,11 @@ function createView(listing_info){
             var temp_span2 = $("<span>View</span>");
     temp_td.append(temp_a.append(temp_span.append(temp_i), temp_span2));
 
+    //prevent clicking view from dropping down row
+    temp_td.click(function(e) {
+        e.stopPropagation();
+    });
+
     return temp_td;
 }
 
@@ -360,6 +455,7 @@ function editStatus(row, editing){
                 temp_select.val(status_td.data('status'));
         new_td.append(temp_span.append(temp_select));
 
+        //prevent clicking status from dropping down row
         temp_select.click(function(e) {
             e.stopPropagation();
         });
