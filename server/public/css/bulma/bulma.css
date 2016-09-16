@@ -2810,8 +2810,7 @@ button {
 .media {
   align-items: flex-start;
   display: flex;
-  text-align: left;
-  width: 500px; }
+  text-align: left; }
   .media .content:not(:last-child) {
     margin-bottom: 10px; }
   .media .media {
@@ -3427,10 +3426,6 @@ a.panel-block:hover {
       .hero-buttons .button:not(:last-child) {
         margin-right: 20px; } }
 
-.carousel-icon:hover {
-  cursor: pointer;
-  color: #3CBC8D; }
-
 .hero-head,
 .hero-foot {
   flex-shrink: 0; }
@@ -3443,15 +3438,9 @@ a.panel-block:hover {
       padding-left: 0;
       padding-right: 0; } }
 
-.hero-carousel {
-  align-items: center;
-  display: flex;
-  justify-content: space-around;
-  padding: 120px 20px;
-  width: 100%; }
-  @media screen and (max-width: 768px) {
-    .hero-carousel {
-      padding: 50px 0; } }
+.carousel-icon:hover {
+  cursor: pointer;
+  color: #3CBC8D; }
 
 .carousel-control:hover {
   cursor: pointer; }
@@ -3459,15 +3448,27 @@ a.panel-block:hover {
 .carousel-control:focus {
   outline: none !important; }
 
+.ticker-item {
+  width: 500px;
+  margin: 0 auto; }
+  @media screen and (max-width: 768px) {
+    .ticker-item {
+      width: auto; } }
+
 .carousel-wrapper {
-  margin-bottom: 0;
-  width: 75%; }
+  padding: 100px 0; }
+  @media screen and (max-width: 768px) {
+    .carousel-wrapper {
+      padding: 60px 0; } }
 
 .slick-dotted.slick-slider {
   margin-bottom: 0; }
 
 .slick-dots {
-  margin: -20px 0; }
+  margin: 80px 0; }
+  @media screen and (max-width: 768px) {
+    .slick-dots {
+      margin: 40px 0; } }
 
 .hero {
   align-items: stretch;
