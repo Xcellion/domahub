@@ -47,9 +47,11 @@ function handler(req, res, message, type) {
 				case "Invalid listing activation!":
 					redirectTo = "/listing";
 					break;
+				case "DNS error!":
+					redirectTo = "/";
+					break;
 				case "Signup error!":
 				case "Invalid price!":
-				case "DNS error!":
 				default:
 					break;
 			}
