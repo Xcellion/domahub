@@ -49,6 +49,7 @@ function handler(req, res, message, type) {
 					break;
 				case "Signup error!":
 				case "Invalid price!":
+				case "DNS error!":
 				default:
 					break;
 			}
