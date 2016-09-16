@@ -10,55 +10,134 @@
 <body>
 
   <%- include("templates/navbar", {user: user}); %>
-  <section class="hero is-large clear-nav">
-    <!-- Hero header: will stick at the top -->
-    <div class="hero-head">
-
-    </div>
-
-    <!-- Hero content: will be in the middle -->
-    <div class="hero-body">
-      <div class="container has-text-centered">
-        <h1 class="title">
-          Let domains work for you.
-        </h1>
-        <h2 class="subtitle">
-          List and rent domain names with DomaHub, the leading
-          marketplace for domain name transactions.
-        </h2>
+  <section id="index-img" class="hero is-large clear-nav landing-img">
+    <div class="img-wrapper">
+      <div class="hero-head"></div>
+      <div class="hero-body">
+        <div class="container has-text-centered">
+          <h1 class="title is-white">
+            Let domains work for you.
+          </h1>
+          <h2 class="subtitle is-white">
+            List and rent domain names with DomaHub, the leading
+            marketplace for domain name transactions.
+          </h2>
+          <div class="hero-buttons">
+            <a class="button is-primary is-large">Get Started</a>
+          </div>
+        </div>
       </div>
-    </div>
-
-    <!-- Hero footer: will stick at the bottom -->
-    <div class="hero-foot">
-
+      <div class="hero-foot"></div>
     </div>
   </section>
 
-  <!-- <section class="landing">
-    <div id="index-img" class="landing-img">
-      <div class="flex-column-center img-wrapper">
-        <div class="hero-body flex-vert-center">
-          <div class="container ">
-            <h1 class="img-title">
-              Let domains work for you.
-            </h1>
-            <h2 class="img-subtitle has-text-centered">
-              List and rent domain names with DomaHub, the marketplace for
-              allfasdfasdfasdf
-            </h2>
-            <div id="landing-buttons" class="container has-text-centered">
-              <div id="landing-button">
-                <a class="button is-primary is-large" title="Rent your domain" href="/getstarted">Get Started</a>
-              </div>
+  <section class="hero is-light is-small">
+    <div class="hero-ticker">
+      <span id="ticker-left" class="icon is-large ticker-icon">
+        <i class="fa fa-angle-left"></i>
+      </span>
+      <article class="media">
+        <figure class="media-left">
+          <p class="image is-256x256">
+            <img src="http://img.huffingtonpost.com/asset/scalefit_630_noupscale/5660af191b0000580129f2c1.png">
+          </p>
+        </figure>
+        <div class="media-content">
+          <div class="content">
+            <p>
+              DomaHub has officially launched! Feel free to browse domain listings
+              and check out our website.
+              Come say hello at our company <a class="is-underlined" href="/blog">blog</a>.
+            </p>
+          </div>
+          <!-- <nav class="level">
+            <div class="level-left">
+              <a class="level-item">
+                <span class="icon is-small is-active"><i class="fa fa-reply"></i></span>
+              </a>
+              <a class="level-item">
+                <span class="icon is-small is-active"><i class="fa fa-retweet"></i></span>
+              </a>
+              <a class="level-item">
+                <span class="icon is-small is-active"><i class="fa fa-heart"></i></span>
+              </a>
             </div>
+          </nav> -->
+        </div>
+      </article>
+      <span id="ticker-right" class="icon is-large ticker-icon">
+        <i class="fa fa-angle-right"></i>
+      </span>
+    </div>
+  </section>
+
+  <section class="hero is-small">
+      <div class="hero-head"></div>
+      <div class="hero-body">
+        <div class="container has-text-centered">
+          <h1 class="title is-2 is-normal">
+            The new-age marketplace
+          </h1>
+          <h2 class="subtitle is-4">
+            DomaHub is a simple, accessible, and user-friendly platform
+            for both domain name owners and potential renters.
+          </h2>
+        </div>
+      </div>
+      <div class="hero-foot"></div>
+  </section>
+
+  <section class="hero is-light is-medium">
+    <div class="hero-body">
+      <div class="container has-text-centered">
+        Graphic goes here.
+      </div>
+    </div>
+  </section>
+
+  <section class="section is-medium">
+    <div class="container">
+      <div class="columns">
+        <div class="column">
+          <div class="content">
+            <h2>Choose from millions of great domains</h2>
+            <p>
+              Use our online system to <a class="orange-link" href="/listings">browse</a>
+              all domain name listings. Once you find a domain you like, rent it securely
+              using Stripe&trade; payment.
+            </p>
+          </div>
+        </div>
+        <div class="column">
+          <figure class="image is-3by2">
+            <img src="http://placehold.it/480x320" />
+          </figure>
+        </div>
+      </div>
+
+      <div id="linebreak"></div>
+
+      <div class="columns">
+        <div class="column">
+          <figure class="image is-3by2">
+            <img src="http://placehold.it/480x320" />
+          </figure>
+        </div>
+        <div class="column">
+          <div class="content">
+            <h2>Start listing your domains immediately!</h2>
+            <p>
+              Listing a website is quick and easy. Just
+              <a class="orange-link" href="/signup">sign up</a> for an account
+              with us and follow the instructions on how to connect your domains.
+            </p>
           </div>
         </div>
       </div>
     </div>
-  </section> -->
+  </section>
 
-  <section class="section is-medium">
+  <!-- <section class="section is-medium">
     <div class="container is-fluid">
     <div class="columns">
       <div id="rent-text" class="column is-one-third is-offset-2">
@@ -117,7 +196,7 @@
       </div>
     </div>
     </div>
-  </section>
+  </section> -->
 
   <%- include("templates/footer"); %>
 

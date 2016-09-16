@@ -1,29 +1,34 @@
 .content
   @extend .block
+  color: $text
+  // Headers
+  h1
+    font-size: 2.2rem
+    font-weight: bold
+    margin: 15px 0
+  h2
+    font-size: 1.5rem
+    font-weight: 400
+    margin: 15px 0
+    +mobile
+      font-size: 1.4rem
+  h3
+    font-size: 1.2rem
+    font-weight: 300
   li + li
     margin-top: 10px
-  // Block
+  // Paragraphs
   p
     color: $text
     line-height: 1.4
     font-size: 1.2rem
     font-weight: 300
-    &:first-child
-      margin-top: 10px
+    +mobile
+      font-size: 1rem
     &:not(:last-child)
       margin-bottom: 10px
   .is-accent
     color: $accent
-
-.is-footer
-  p
-    color: $grey
-    line-height: 1
-    font-size: 1rem
-    margin-top: 10px
-  +mobile
-    text-align: center
-
 
   blockquote,
   p,
@@ -52,17 +57,6 @@
     background-color: $background
     border-left: 5px solid $border
     padding: 1.5em
-  h1
-
-  h2
-
-  h3
-
-  h4
-
-  h5
-
-  h6
 
   ol
     list-style: decimal outside
