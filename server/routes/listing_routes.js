@@ -24,23 +24,6 @@ module.exports = function(app, db, auth, e){
 
 	//------------------------------------------------------------------------------------------------ LISTING RELATED
 
-	app.get('/listing/:domain_name/verify', function(req, res){
-		domain_name = req.params.domain_name;
-		dns.lookup(domain_name, function (err, address, family) {
-			if (err){console.log(err)};
-
-			domain_ip = address;
-			dns.lookup("domahub.com", function (err, address, family) {
-				if (domain_ip == address){
-					res.sendStatus(200);
-				}
-				else {
-					console.log('wtf')
-				}
-			});
-		});
-	});
-
 	//render create listing page
 	app.get('/listing/create', [
 		isLoggedIn,
@@ -69,6 +52,16 @@ module.exports = function(app, db, auth, e){
 		listings_owner.checkListingBatch,
 		listings_owner.createListingBatch
 	]);
+
+	//verify that someone changed their DNS to point to domahub
+	app.get('/listing/:domain_name/verify', function(req, res){
+		domain_name = req.params.domain_name;
+		dns.lookup(domain_name, function (err, address, family) {
+			if (!err){error.handler(req, res, "DNS error!")};
+
+
+		});
+	});
 
 	//------------------------------------------------------------------------------------------------ RENTAL RELATED
 
