@@ -31,7 +31,7 @@
     .button:not(:last-child)
       margin-right: 20px
 
-.ticker-icon
+.carousel-icon
   &:hover
     cursor: pointer
     color: $primary
@@ -50,14 +50,18 @@
     padding-left: 0
     padding-right: 0
 
-.hero-ticker
+// Hero carousel
+.hero-carousel
   align-items: center
   display: flex
   justify-content: space-around
-  padding: 120px 20px
+  padding: 80px 20px
   width: 100%
   +mobile
     padding: 50px 0
+
+.carousel-wrapper
+  width: 80%
 
 // Main container
 
@@ -149,8 +153,8 @@
   &.is-large
     +tablet
       .hero-body
-        padding-bottom: 280px
-        padding-top: 280px
+        padding-bottom: 250px
+        padding-top: 250px
   &.is-fullheight
     min-height: 100vh
     .hero-body

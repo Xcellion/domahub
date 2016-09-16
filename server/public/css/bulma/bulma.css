@@ -3427,7 +3427,7 @@ a.panel-block:hover {
       .hero-buttons .button:not(:last-child) {
         margin-right: 20px; } }
 
-.ticker-icon:hover {
+.carousel-icon:hover {
   cursor: pointer;
   color: #3CBC8D; }
 
@@ -3443,15 +3443,18 @@ a.panel-block:hover {
       padding-left: 0;
       padding-right: 0; } }
 
-.hero-ticker {
+.hero-carousel {
   align-items: center;
   display: flex;
   justify-content: space-around;
-  padding: 120px 20px;
+  padding: 80px 20px;
   width: 100%; }
   @media screen and (max-width: 768px) {
-    .hero-ticker {
+    .hero-carousel {
       padding: 50px 0; } }
+
+.carousel-wrapper {
+  width: 80%; }
 
 .hero {
   align-items: stretch;
@@ -3929,8 +3932,8 @@ a.panel-block:hover {
       padding-top: 200px; } }
   @media screen and (min-width: 769px) {
     .hero.is-large .hero-body {
-      padding-bottom: 280px;
-      padding-top: 280px; } }
+      padding-bottom: 250px;
+      padding-top: 250px; } }
   .hero.is-fullheight {
     min-height: 100vh; }
     .hero.is-fullheight .hero-body {
