@@ -5,7 +5,7 @@ var listings_owner = require("./listings_owner");
 
 var stripe = require("stripe")("sk_test_PHd0TEZT5ytlF0qCNvmgAThp");		//stripe API
 
-var request = require("request");
+var dns = require("dns");
 var validator = require("validator");
 var whois = require("whois");
 var parser = require('parse-whois');
@@ -25,16 +25,10 @@ module.exports = function(app, db, auth, e){
 	//------------------------------------------------------------------------------------------------ LISTING RELATED
 
 	app.get('/listing/:domain_name/verify', function(req, res){
-		console.log('verify');
 		domain_name = req.params.domain_name;
-		request.get({
-			url: 'http://' + domain_name,
-			headers: {
-			  'domahub-verify': 'domahub-verify'
-			}
-		}, function (err, response, body) {
+		dns.lookup(domain_name, function (err, address, family) {
 			if (err){console.log(err)};
-			console.log(response.headers);
+			console.log(address);
 		});
 	});
 
