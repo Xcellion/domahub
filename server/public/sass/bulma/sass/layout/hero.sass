@@ -31,9 +31,6 @@
     .button:not(:last-child)
       margin-right: 20px
 
-.ticker-control
-  width: 350px
-
 .ticker-icon
   &:hover
     cursor: pointer
@@ -56,9 +53,11 @@
 .hero-ticker
   align-items: center
   display: flex
-  justify-content: space-between
-  padding: 50px 20px
+  justify-content: space-around
+  padding: 120px 20px
   width: 100%
+  +mobile
+    padding: 50px 0
 
 // Main container
 
@@ -145,13 +144,13 @@
   &.is-medium
     +tablet
       .hero-body
-        padding-bottom: 120px
-        padding-top: 120px
+        padding-bottom: 200px
+        padding-top: 200px
   &.is-large
     +tablet
       .hero-body
-        padding-bottom: 240px
-        padding-top: 240px
+        padding-bottom: 280px
+        padding-top: 280px
   &.is-fullheight
     min-height: 100vh
     .hero-body
