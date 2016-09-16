@@ -4,16 +4,16 @@ $(document).ready(function() {
     });
 
     //right and left ticker arrows
-    $(".ticker-icon").click(function(e){
-        if ($(this).attr("id") == "ticker-left"){
-            $('.ticker-wrapper').slick('slickPrev');
+    $(".carousel-icon").click(function(e){
+        if ($(this).attr("id") == "carousel-left-arrow"){
+            $('.carousel-wrapper').slick('slickPrev');
         }
         else {
-            $('.ticker-wrapper').slick('slickNext');
+            $('.carousel-wrapper').slick('slickNext');
         }
     });
 
-    $('.ticker-wrapper').slick({
+    $('.carousel-wrapper').slick({
         dots: true,
         arrows: false,
         autoplay: true,
