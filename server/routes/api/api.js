@@ -28,10 +28,11 @@ module.exports = function(app, db, e){
 
 //function to check if the requested host is not for domahub
 function checkHost(req, res, next){
+	console.log(req.get("domahub-verify"));
+
 	if (req.headers.host){
 	    domain_name = req.headers.host.replace(/^(https?:\/\/)?(www\.)?/,'');
 
-		console.log(domain_name);
 		//is not a valid FQDN
 		if (!validator.isFQDN(domain_name)){
 			error.handler(req, res, false, "api");
