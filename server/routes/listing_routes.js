@@ -30,6 +30,7 @@ module.exports = function(app, db, auth, e){
 		request.get({
 			url: 'http://' + domain_name
 		}, function (err, response, body) {
+			if (err){console.log(err)};
 			console.log(response.headers);
 		});
 	});
