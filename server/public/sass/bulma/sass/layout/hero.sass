@@ -55,13 +55,27 @@
   align-items: center
   display: flex
   justify-content: space-around
-  padding: 80px 20px
+  padding: 120px 20px
   width: 100%
   +mobile
     padding: 50px 0
 
+.carousel-control
+  &:hover
+    cursor: pointer
+  &:focus
+    outline: none !important
+
 .carousel-wrapper
-  width: 80%
+  margin-bottom: 0
+  width: 75%
+
+// Slick classes
+.slick-dotted.slick-slider
+  margin-bottom: 0
+
+.slick-dots
+  margin: -20px 0
 
 // Main container
 
