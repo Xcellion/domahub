@@ -45,7 +45,13 @@ function checkHost(req, res, next){
 			|| domain_name == "localhost"
 			|| domain_name == "localhost:8080"){
 
-			next();
+			if (req.path.indexOf("verify") != -1){
+				console.log('verified');
+				res.sendStatus(200);
+			}
+			else {
+				next();
+			}
 	    }
 	    else {
 			getCurrentRental(req, res, domain_name);
