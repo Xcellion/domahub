@@ -4,6 +4,7 @@ var	account_model = require('../../models/account_model.js'),
 var httpProxy = require('http-proxy'),
  	proxy = httpProxy.createProxyServer({}),
 	validator = require("validator");
+var request = require("request");
 
 // Listen for any error events
 proxy.on('error', function (err, req, res) {
@@ -22,6 +23,19 @@ module.exports = function(app, db, e){
 	Account = new account_model(db);
 	Listing = new listing_model(db);
 
+	app.get('/listing/:domain_name/verify', function(req, res){
+		console.log('verify');
+		domain_name = req.params.domain_name;
+		request.get({
+			url: 'http://' + domain_name,
+			headers: {
+			  'domahub-verify': 'domahub-verify'
+			}
+		}, function (err, response, body) {
+			if (err){console.log(err)};
+			console.log(response.headers);
+		});
+	});
 	app.get("*", checkHost);
 	app.get("/error", renderError);
 }

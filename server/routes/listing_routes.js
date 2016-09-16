@@ -24,20 +24,6 @@ module.exports = function(app, db, auth, e){
 
 	//------------------------------------------------------------------------------------------------ LISTING RELATED
 
-	app.get('/listing/:domain_name/verify', function(req, res){
-		console.log('verify');
-		domain_name = req.params.domain_name;
-		request.get({
-			url: 'http://' + domain_name,
-			headers: {
-			  'domahub-verify': 'domahub-verify'
-			}
-		}, function (err, response, body) {
-			if (err){console.log(err)};
-			console.log(response.headers);
-		});
-	});
-
 	//render create listing page
 	app.get('/listing/create', [
 		isLoggedIn,
