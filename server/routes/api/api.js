@@ -28,6 +28,7 @@ module.exports = function(app, db, e){
 
 //function to check if the requested host is not for domahub
 function checkHost(req, res, next){
+	console.log('requested')
 	if (req.headers.host){
 	    domain_name = req.headers.host.replace(/^(https?:\/\/)?(www\.)?/,'');
 
@@ -56,7 +57,6 @@ function checkHost(req, res, next){
 
 //send the current rental details and information for a listing
 function getCurrentRental(req, res, domain_name){
-	console.log(req.headers["domahub"]);
 	//get the current rental for the listing
 	Listing.getCurrentRental(domain_name, function(result){
 		if (result.state != "success"){error.handler(req, res, false, "api");}
