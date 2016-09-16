@@ -2,7 +2,8 @@ var	account_model = require('../../models/account_model.js'),
 	listing_model = require('../../models/listing_model.js');
 
 var httpProxy = require('http-proxy'),
- 	proxy = httpProxy.createProxyServer({});
+ 	proxy = httpProxy.createProxyServer({}),
+	validator = require("validator");
 
 // Listen for any error events
 proxy.on('error', function (err, req, res) {
@@ -12,14 +13,14 @@ proxy.on('error', function (err, req, res) {
 
 //to rewrite header on proxy
 proxy.on('proxyReq', function(proxyReq, req, res, options) {
-	proxyReq.setHeader('domahub_proxy', 'domahub');
+	proxyReq.setHeader('domahub', 'domahub');
 });
 
 module.exports = function(app, db, e){
 	error = e;
 
 	Account = new account_model(db);
-	// Listing = new listing_model(db);
+	Listing = new listing_model(db);
 
 	app.get("*", checkHost);
 	app.get("/error", renderError);
@@ -30,21 +31,22 @@ function checkHost(req, res, next){
 	if (req.headers.host){
 	    domain_name = req.headers.host.replace(/^(https?:\/\/)?(www\.)?/,'');
 
-		//check if requesting for domahub main page or a listed domain
-		if (domain_name != "www.w3bbi.com"
-			&& domain_name != "w3bbi.com"
-			&& domain_name != "www.domahub.com"
-			&& domain_name != "domahub.com"
-			&& domain_name != "localhost"
-			&& domain_name != "localhost:8080"){
-
-			req.session.api = true;
-	        getCurrentRental(req, res, domain_name);
-	    }
-
+		//is not a valid FQDN
+		if (!validator.isFQDN(domain_name)){
+			error.handler(req, res, false, "api");
+		}
 		//requested domahub website, not domain
+		else if (domain_name == "www.w3bbi.com"
+		 	|| domain_name == "w3bbi.com"
+			|| domain_name == "www.domahub.com"
+			|| domain_name == "domahub.com"
+			|| domain_name == "localhost"
+			|| domain_name == "localhost:8080"){
+
+			next();
+	    }
 	    else {
-	        next();
+			getCurrentRental(req, res, domain_name);
 	    }
 	}
 	else {

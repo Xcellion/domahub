@@ -1,10 +1,6 @@
 var	listing_model = require('../models/listing_model.js');
 
-var request = require("request");
-var dns = require("dns");
-var url = require("url");
 var validator = require("validator");
-
 var multer = require("multer");
 var parse = require("csv-parse");
 var fs = require('fs')
