@@ -31,12 +31,8 @@ function checkHost(req, res, next){
 	if (req.headers.host){
 	    domain_name = req.headers.host.replace(/^(https?:\/\/)?(www\.)?/,'');
 
-		//is not a valid FQDN
-		if (!validator.isFQDN(domain_name)){
-			error.handler(req, res, false, "api");
-		}
 		//requested domahub website, not domain
-		else if (domain_name == "www.w3bbi.com"
+		if (domain_name == "www.w3bbi.com"
 		 	|| domain_name == "w3bbi.com"
 			|| domain_name == "www.domahub.com"
 			|| domain_name == "domahub.com"
@@ -45,6 +41,10 @@ function checkHost(req, res, next){
 
 			next();
 	    }
+		//is not a valid FQDN
+		else if (!validator.isFQDN(domain_name)){
+			error.handler(req, res, false, "api");
+		}
 	    else {
 			getCurrentRental(req, res, domain_name);
 	    }
