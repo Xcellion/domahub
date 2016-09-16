@@ -4,6 +4,8 @@
 <head>
   <title>DomaHub - Domain Name Rentals</title>
   <link rel="stylesheet" type="text/css" href="/css/main_index.css" />
+  <link rel="stylesheet" type="text/css" href="/css/lib/slick.css"/>
+  <link rel="stylesheet" type="text/css" href="/css/lib/slick-theme.css"/>
   <%- include("templates/head_links"); %>
 </head>
 
@@ -32,62 +34,69 @@
   </section>
 
   <section class="hero is-light is-small">
-    <div class="hero-ticker">
-      <span id="ticker-left" class="icon is-large ticker-icon">
-        <i class="fa fa-angle-left"></i>
-      </span>
-      <article class="media">
-        <figure class="media-left">
-          <p class="image is-256x256">
-            <img src="http://img.huffingtonpost.com/asset/scalefit_630_noupscale/5660af191b0000580129f2c1.png">
-          </p>
-        </figure>
-        <div class="media-content">
-          <div class="content">
-            <p>
-              DomaHub has officially launched! Feel free to browse domain listings
-              and check out our website.
-              Come say hello at our company <a class="orange-link" href="/blog">blog</a>.
+  <span id="ticker-left" class="icon is-large ticker-icon">
+    <i class="fa fa-angle-left"></i>
+  </span>
+  <div class="ticker-wrapper">
+      <div class="hero-ticker">
+        <article class="ticker-item media">
+          <figure class="media-left">
+            <p class="image is-256x256">
+              <img src="http://img.huffingtonpost.com/asset/5660af191b0000580129f2c1.png">
             </p>
+          </figure>
+          <div class="media-content">
+            <div class="content">
+              <p>
+                DomaHub has officially launched! Feel free to browse domain listings
+                and check out our website.
+                Come say hello at our company <a class="orange-link" href="/blog">blog</a>.
+              </p>
+            </div>
           </div>
-        </div>
-      </article>
-      <article class="media is-hidden">
-        <figure class="media-left">
-          <p class="image is-256x256">
-            <img src="http://img.huffingtonpost.com/asset/scalefit_630_noupscale/5660af191b0000580129f2c1.png">
-          </p>
-        </figure>
-        <div class="media-content">
-          <div class="content">
-            <p>
-              DomaHub has officially launched! Feel free to browse domain listings
-              and check out our website.
-              Come say hello at our company <a class="orange-link" href="/blog">blog</a>.
+        </article>
+      </div>
+      <div class="hero-ticker">
+        <article class="ticker-item media">
+          <figure class="media-left">
+            <p class="image is-256x256">
+              <img src="http://img.huffingtonpost.com/asset/5660af191b0000580129f2c1.png">
             </p>
+          </figure>
+          <div class="media-content">
+            <div class="content">
+              <p>
+                DomaHub has officially launched! Feel free to browse domain listings
+                and check out our website.
+                Come say hello at our company <a class="orange-link" href="/blog">blog</a>.
+              </p>
+            </div>
           </div>
-        </div>
-      </article>
-      <article class="media is-hidden">
-        <figure class="media-left">
-          <p class="image is-256x256">
-            <img src="http://img.huffingtonpost.com/asset/scalefit_630_noupscale/5660af191b0000580129f2c1.png">
-          </p>
-        </figure>
-        <div class="media-content">
-          <div class="content">
-            <p>
-              DomaHub has officially launched! Feel free to browse domain listings
-              and check out our website.
-              Come say hello at our company <a class="orange-link" href="/blog">blog</a>.
+        </article>
+      </div>
+      <div class="hero-ticker">
+        <article class="ticker-item media">
+          <figure class="media-left">
+            <p class="image is-256x256">
+              <img src="http://img.huffingtonpost.com/asset/5660af191b0000580129f2c1.png">
             </p>
+          </figure>
+          <div class="media-content">
+            <div class="content">
+              <p>
+                DomaHub has officially launched! Feel free to browse domain listings
+                and check out our website.
+                Come say hello at our company <a class="orange-link" href="/blog">blog</a>.
+              </p>
+            </div>
           </div>
-        </div>
-      </article>
-      <span id="ticker-right" class="icon is-large ticker-icon">
-        <i class="fa fa-angle-right"></i>
-      </span>
-    </div>
+        </article>
+      </div>
+  </div>
+
+    <span id="ticker-right" class="icon is-large ticker-icon">
+      <i class="fa fa-angle-right"></i>
+    </span>
   </section>
 
   <section class="hero is-small">
@@ -217,9 +226,9 @@
     </div>
   </section> -->
 
-  <%- include("templates/footer"); %>
-
+    <%- include("templates/footer"); %>
+    <script type="text/javascript" src="/js/lib/slick.min.js"></script>
     <script src="/js/routes/navbar_scroll.js" type="text/javascript"></script>
-    <script src="/js/routes/right_caret_animate.js" type="text/javascript"></script>
+    <script src="/js/routes/main_index_logic.js" type="text/javascript"></script>
   </body>
 </html>
