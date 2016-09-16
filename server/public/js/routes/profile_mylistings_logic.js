@@ -15,12 +15,6 @@ $(document).ready(function() {
         setupTable(total_pages, listings_per_page, current_page, listings_display);
     })
 
-    //pagination logic
-    $(".page-button").click(function(e){
-        current_page = ($(this).text() == "...") ? current_page : $(this).text();
-        changePage(total_pages, listings_per_page, current_page);
-    })
-
     //right and left keyboard click
     document.addEventListener('keydown', function(event) {
         if (event.keyCode == 37) {
@@ -105,7 +99,7 @@ function setupTable(total_pages, listings_per_page, current_page, listings_to_di
     else {
         $(".listings-exist").removeClass("is-hidden");
         $("#no-listings").addClass("is-hidden");
-        createPaginationPages(total_pages);
+        createPaginationPages(total_pages, listings_per_page, current_page);
         paginateListings(total_pages, current_page);
         createAllRows(listings_per_page, current_page);
     }
@@ -142,23 +136,25 @@ function changePage(total_pages, listings_per_page, current_page){
 }
 
 //function to create the pagination buttons
-function createPaginationPages(total_pages){
+function createPaginationPages(total_pages, listings_per_page, current_page){
     $("#page-list").empty();
-    if (total_pages > 7){
-        createPaginationPage(1);
-        createPaginationPage(2);
-        createPaginationPage(3);
-        createPaginationPage(4);
-        createPaginationPage(5);
-        createPaginationPage(6, "...");
-        createPaginationPage(7, total_pages);
-    }
-    else {
-        var counter = 1;
-        while (counter <= total_pages){
-            createPaginationPage(counter);
-            counter++;
+
+    var pages_to_create = (total_pages > 7) ? 7 : total_pages;
+
+    for (var x = 1; x <= pages_to_create; x++){
+        var text;
+        if (x == 6){
+            text = "...";
         }
+        if (x == 7){
+            text = total_pages;
+        }
+        var temp_li = createPaginationPage(x, text);
+        temp_li.find(".page-button").click(function(e){
+            current_page = ($(this).text() == "...") ? current_page : $(this).text();
+            changePage(total_pages, listings_per_page, current_page);
+        })
+        $("#page-list").append(temp_li);
     }
 }
 
@@ -168,7 +164,7 @@ function createPaginationPage(page_num, text){
     temp_li = $("<li></li>");
     temp_button = $("<a id='page-" + page_num + "' class='page-button button'>" + page_text + "</a>")
     temp_li.append(temp_button);
-    $("#page-list").append(temp_li);
+    return temp_li;
 }
 
 //function to paginate the listings
