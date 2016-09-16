@@ -28,8 +28,6 @@ module.exports = function(app, db, e){
 
 //function to check if the requested host is not for domahub
 function checkHost(req, res, next){
-	console.log(req.headers.host, req.path);
-
 	if (req.headers.host){
 	    domain_name = req.headers.host.replace(/^(https?:\/\/)?(www\.)?/,'');
 
@@ -45,13 +43,7 @@ function checkHost(req, res, next){
 			|| domain_name == "localhost"
 			|| domain_name == "localhost:8080"){
 
-			if (req.path.indexOf("verify") != -1){
-				console.log('verified');
-				res.sendStatus(200);
-			}
-			else {
-				next();
-			}
+			next();
 	    }
 	    else {
 			getCurrentRental(req, res, domain_name);

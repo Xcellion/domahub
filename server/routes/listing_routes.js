@@ -26,6 +26,7 @@ module.exports = function(app, db, auth, e){
 
 	app.get('/listing/:domain_name/verify', function(req, res){
 		domain_name = req.params.domain_name;
+		console.log('trying dns');
 		dns.lookup(domain_name, function (err, address, family) {
 			if (err){console.log(err)};
 			console.log(address);
