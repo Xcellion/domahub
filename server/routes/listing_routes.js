@@ -26,10 +26,18 @@ module.exports = function(app, db, auth, e){
 
 	app.get('/listing/:domain_name/verify', function(req, res){
 		domain_name = req.params.domain_name;
-		console.log('trying dns');
 		dns.lookup(domain_name, function (err, address, family) {
 			if (err){console.log(err)};
-			console.log(address);
+
+			domain_ip = address;
+			dns.lookup("domahub.com", function (err, address, family) {
+				if (domain_ip == address){
+					res.sendStatus(200);
+				}
+				else {
+					console.log('wtf')
+				}
+			});
 		});
 	});
 
