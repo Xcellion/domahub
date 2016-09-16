@@ -1,7 +1,6 @@
 .title,
 .subtitle
   @extend .block
-  font-weight: $weight-title-normal
   word-break: break-word
   em,
   span
@@ -15,9 +14,14 @@
     vertical-align: bottom
 
 .title
-  color: $text-strong
-  font-size: $size-large
+  color: $text
+  font-family: $family-primary
+  font-size: 3rem
+  font-weight: bold
   line-height: 1
+  +mobile
+    font-size: 2.3rem
+    text-align: left
   code
     display: inline-block
     font-size: $size-large
@@ -26,7 +30,7 @@
   & + .highlight
     margin-top: -10px
   & + .subtitle
-    margin-top: -10px
+    // margin-top: -10px
   // Colors
   @each $size in $sizes
     $i: index($sizes, $size)
@@ -39,15 +43,25 @@
     font-weight: 400
     strong
       font-weight: 700
+  &.is-white
+    color: $white
+    font-family: $sspro
   // Responsiveness
   +tablet
     & + .subtitle
-      margin-top: -15px
+      // margin-top: -15px
 
 .subtitle
-  color: $white;
-  font-size: $size-medium
+  color: $text
+  font-size: 1.8rem
+  font-weight: 300
   line-height: 1.125
+  width: 70%
+  margin: 0 auto
+  +mobile
+    text-align: left
+    font-size: 1.2rem
+    width: 100%
   code
     border-radius: $radius
     display: inline-block
@@ -57,7 +71,7 @@
   strong
     color: $text-strong
   & + .title
-    margin-top: -20px
+    // margin-top: -20px
   // Colors
   @each $size in $sizes
     $i: index($sizes, $size)
@@ -70,3 +84,5 @@
     font-weight: 400
     strong
       font-weight: 700
+  &.is-white
+    color: $white

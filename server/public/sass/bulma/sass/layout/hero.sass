@@ -18,18 +18,26 @@
     display: none
 
 .hero-buttons
-  margin-top: 20px
+  margin-top: 40px
   // Responsiveness
   +mobile
-    .button
-      display: flex
-      &:not(:last-child)
-        margin-bottom: 10px
+  display: flex
+  justify-content: flex-start
+  &:not(:last-child)
+    margin-bottom: 10px
   +tablet
     display: flex
     justify-content: center
     .button:not(:last-child)
       margin-right: 20px
+
+.ticker-control
+  width: 350px
+
+.ticker-icon
+  &:hover
+    cursor: pointer
+    color: $primary
 
 // Containers
 
@@ -44,6 +52,13 @@
   +desktop
     padding-left: 0
     padding-right: 0
+
+.hero-ticker
+  align-items: center
+  display: flex
+  justify-content: space-between
+  padding: 50px 20px
+  width: 100%
 
 // Main container
 
