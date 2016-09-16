@@ -56,6 +56,7 @@ function checkHost(req, res, next){
 
 //send the current rental details and information for a listing
 function getCurrentRental(req, res, domain_name){
+	console.log(req.headers["domahub"]);
 	//get the current rental for the listing
 	Listing.getCurrentRental(domain_name, function(result){
 		if (result.state != "success"){error.handler(req, res, false, "api");}
