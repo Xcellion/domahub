@@ -3146,6 +3146,10 @@ a.nav-item {
   min-height: 60px;
   position: fixed;
   text-align: center;
+  -moz-transition: all 0.25s;
+  -o-transition: all 0.25s;
+  -webkit-transition: all 0.25s;
+  transition: all 0.25s;
   width: 100%;
   z-index: 999; }
   .nav.is-primary {
