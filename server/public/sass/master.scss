@@ -14,7 +14,7 @@ input:-webkit-autofill {
     size: 1.5rem;
     weight: bold;
   }
-  &.is-white {
+  &.is-active {
     color: $white !important;
     &:hover {
       color: $primary !important;
@@ -49,7 +49,8 @@ input:-webkit-autofill {
     width: 100%;
   }
   @include mobile {
-    background-color: $grey-darker
+    background-color: $grey-darker;
+    padding-top: 60px;
   }
 }
 
