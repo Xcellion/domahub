@@ -49,7 +49,8 @@ input:-webkit-autofill {
     width: 100%;
   }
   @include mobile {
-    background-color: $grey-darker
+    background-color: $grey-darker;
+    padding-top: 60px;
   }
 }
 

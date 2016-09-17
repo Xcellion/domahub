@@ -49,7 +49,7 @@ a.nav-item
 .nav-menu
   // Responsiveness
   +mobile
-    background-color: transparent
+    background-color: $white
     box-shadow: 0 4px 7px rgba($black, 0.1)
     left: 0
     display: none
@@ -108,6 +108,8 @@ a.nav-item
   text-align: center
   width: 100%
   z-index: 999
+  &.is-primary
+    background-color: $primary
   & > .container
     align-items: stretch
     display: flex
