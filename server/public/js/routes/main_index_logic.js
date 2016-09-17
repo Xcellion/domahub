@@ -5,7 +5,7 @@ $(document).ready(function() {
 
     //right and left ticker arrows
     $(".carousel-icon").click(function(e){
-        if ($(this).attr("id") == "carousel-left-arrow"){
+        if ($(this).hasClass("left")){
             $('.carousel-wrapper').slick('slickPrev');
         }
         else {
