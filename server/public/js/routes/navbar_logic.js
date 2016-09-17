@@ -52,4 +52,28 @@ $(document).ready(function() {
 		}
 	});
 
+	//while scrolling
+	$(window).scroll(function(e){
+		if ($(this).scrollTop() > $("#get-started").offset().top){
+			$(".nav").addClass("is-primary");
+			$("#login-modal").addClass("is-inverted");
+			$(".logo-text").addClass("is-white");
+			$(".nav-link").addClass("is-active");
+		}
+		else {
+			$(".nav").removeClass("is-primary");
+			$("#login-modal").removeClass("is-inverted");
+			$(".logo-text").removeClass("is-white");
+			$(".nav-link").removeClass("is-active");			
+		}
+	})
+
 });
+
+
+
+//function to toggle navbar background color
+function navbar_color(){
+	$("#navbar").toggleClass();
+
+}
