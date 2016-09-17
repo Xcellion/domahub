@@ -37,15 +37,26 @@ function createRow(rental_info, rownum){
 
 //function to create the status td
 function createStart(rental_info){
-    start = moment(new Date(rental_info.date + "Z")).format('YYYY/MM/DD, hh:mm A');
+    var earliest = rental_info.date.reduce(function (a, b) { return a < b ? a : b; });
+    var start = moment(new Date(earliest + "Z")).format('YYYY/MM/DD, hh:mm A');
     var temp_td = $("<td class='td-visible td-date'>" + start + "</td>");
     return temp_td;
 }
 
 //function to create the date
 function createEnd(rental_info){
-    start = moment(new Date(rental_info.date + "Z"));
-    disp_end = moment(new Date(start._d.getTime() + rental_info.duration)).format('YYYY/MM/DD, hh:mm A');
+    var end_dates = [];
+
+    //create an array of end dates
+    for (var x = 0; x < rental_info.date.length; x++){
+        start_date = new Date(rental_info.date[x]);
+        end_date = new Date(start_date.getTime() + rental_info.duration[x]);
+        end_dates.push(end_date);
+    }
+
+    //find latest one
+    var latest = end_dates.reduce(function (a, b) { return a > b ? a : b; });
+    var disp_end = moment(new Date(latest + "Z")).format('YYYY/MM/DD, hh:mm A');
     var temp_td = $("<td class='td-visible td-date'>" + disp_end + "</td>");
     return temp_td;
 }
