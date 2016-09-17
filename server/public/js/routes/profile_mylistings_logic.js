@@ -1,236 +1,8 @@
-var listings_display = listings.slice(0);
+var row_display = listings.slice(0);
 
 $(document).ready(function() {
-    var listings_per_page = parseFloat($("#domains-per-page").val());
-    var total_pages = Math.ceil(listings_display.length / listings_per_page);
-    var current_page = 1;
-
-    setupTable(total_pages, listings_per_page, current_page, listings_display);
-
-    //on changing of domains per page
-    $("#domains-per-page").change(function(e){
-        listings_per_page = parseFloat($(this).val());
-        total_pages = Math.ceil(listings_display.length / listings_per_page);
-        current_page = 1;
-        setupTable(total_pages, listings_per_page, current_page, listings_display);
-    })
-
-    //right and left keyboard click
-    document.addEventListener('keydown', function(event) {
-        if (event.keyCode == 37) {
-            $("#prev-page").click();
-        }
-        else if(event.keyCode == 39) {
-            $("#next-page").click();
-        }
-    });
-
-    $("#next-page").click(function(e){
-        current_page++;
-        if (current_page > total_pages){
-            current_page = total_pages;
-        }
-        else {
-            changePage(total_pages, listings_per_page, current_page);
-        }
-    })
-
-    $("#prev-page").click(function(e){
-        current_page--;
-        if (current_page < 1){
-            current_page = 1;
-        }
-        else {
-            changePage(total_pages, listings_per_page, current_page);
-        }
-    })
-
-    //sort by header
-    $("th").click(function(e){
-        var sorted = ($(this).data("sorted") == 1) ? -1 : 1;
-        $(this).data("sorted", sorted);
-        sortListings($(this).attr('class').split("-").pop(), sorted);
-        createAllRows(listings_per_page, current_page);
-    });
-
-    //search for a specific domain
-    $("#search-domain").keyup(function(e){
-        var needle = $(this).val();
-        if (needle){
-            if (listings_display.length){
-                var temp_listings = [];
-                for (var x = 0; x < listings.length; x++){
-                    if (listings[x].domain_name.includes(needle)){
-                        temp_listings.push(listings[x]);
-                    }
-                }
-                listings_display = temp_listings;
-                total_pages = Math.ceil(listings_display.length / listings_per_page);
-                setupTable(total_pages, listings_per_page, current_page, listings_display);
-            }
-        }
-        else {
-            listings_display = listings.slice(0);
-            total_pages = Math.ceil(listings_display.length / listings_per_page);
-            setupTable(total_pages, listings_per_page, current_page, listings_display);
-        }
-    })
-
-    //go to a specific page
-    $("#go-to-page-button").click(function(e){
-        page_val = $("#go-to-page-input").val();
-        if (page_val > 0 && page_val <= total_pages){
-            current_page = page_val;
-            changePage(total_pages, listings_per_page, current_page);
-        }
-        else {
-            $("#go-to-page-input").val(1);
-        }
-    })
 
 });
-
-//refresh table (pagination and rows)
-function setupTable(total_pages, listings_per_page, current_page, listings_to_disp){
-    if (!listings_to_disp.length){
-        $("#no-listings").removeClass("is-hidden");
-        $(".listings-exist").addClass("is-hidden");
-    }
-    else {
-        $(".listings-exist").removeClass("is-hidden");
-        $("#no-listings").addClass("is-hidden");
-        createPaginationPages(total_pages, listings_per_page, current_page);
-        paginateListings(total_pages, current_page);
-        createAllRows(listings_per_page, current_page);
-    }
-}
-
-// --------------------------------------------------------------------------------- SORTING
-
-//function to sort the listings
-function sortListings(method, sorted){
-    if (method == "domain"){
-        toggleSort("domain_name", sorted);
-    }
-    else if (method == "status"){
-        toggleSort("price_type", sorted);
-    }
-    else {
-        toggleSort("date_created", sorted);
-    }
-}
-
-//function to toggle the sorting by header
-function toggleSort(attr, bool){
-    listings_display.sort(function(a,b) {
-        return (bool * ((a[attr] > b[attr]) ? 1 : ((b[attr] > a[attr]) ? -1 : 0)));
-    });
-}
-
-// --------------------------------------------------------------------------------- PAGINATION
-
-//function to change pages
-function changePage(total_pages, listings_per_page, current_page){
-    createAllRows(listings_per_page, current_page);
-    paginateListings(total_pages, current_page);
-}
-
-//function to create the pagination buttons
-function createPaginationPages(total_pages, listings_per_page, current_page){
-    $("#page-list").empty();
-
-    var pages_to_create = (total_pages > 7) ? 7 : total_pages;
-
-    for (var x = 1; x <= pages_to_create; x++){
-        var text;
-        if (x == 6){
-            text = "...";
-        }
-        if (x == 7){
-            text = total_pages;
-        }
-        var temp_li = createPaginationPage(x, text);
-        temp_li.find(".page-button").click(function(e){
-            current_page = ($(this).text() == "...") ? current_page : $(this).text();
-            changePage(total_pages, listings_per_page, current_page);
-        })
-        $("#page-list").append(temp_li);
-    }
-}
-
-//function to create a single page on paginate list
-function createPaginationPage(page_num, text){
-    page_text = text || page_num;
-    temp_li = $("<li></li>");
-    temp_button = $("<a id='page-" + page_num + "' class='page-button button'>" + page_text + "</a>")
-    temp_li.append(temp_button);
-    return temp_li;
-}
-
-//function to paginate the listings
-function paginateListings(total_pages, current_page){
-    current_page = parseFloat(current_page);
-
-    //grey out next/prev buttons if first or last page
-    if (current_page == total_pages){
-        $("#next-page").addClass("is-disabled");
-    }
-    else {
-        $("#next-page").removeClass("is-disabled");
-    }
-    if (current_page == 1){
-        $("#prev-page").addClass("is-disabled");
-    }
-    else {
-        $("#prev-page").removeClass("is-disabled");
-    }
-
-    $(".page-button").removeClass("is-primary");
-    if (total_pages > 7){
-        if (current_page < 5){
-            $("#page-2").text(2);
-            $("#page-3").text(3);
-            $("#page-4").text(4);
-            $("#page-5").text(5);
-            $("#page-6").text("...");
-            $("#page-" + current_page).addClass("is-primary");
-        }
-        else if (current_page >= total_pages - 3){
-            current_page_id = 7 - (total_pages - current_page);
-            $("#page-" + current_page_id).addClass("is-primary");
-            $("#page-3").text(total_pages - 4);
-            $("#page-4").text(total_pages - 3);
-            $("#page-5").text(total_pages - 2);
-            $("#page-6").text(total_pages - 1);
-        }
-        else {
-            $("#page-2").text("...");
-            $("#page-3").text(current_page - 1);
-            $("#page-4").text(current_page);
-            $("#page-4").addClass("is-primary");
-            $("#page-5").text(current_page + 1);
-            $("#page-6").text("...");
-        }
-    }
-    else {
-        $("#page-" + current_page).addClass("is-primary");
-    }
-}
-
-// --------------------------------------------------------------------------------- ROWS
-
-//function to create all the rows
-function createAllRows(listings_per_page, current_page){
-    $("#mylistings_tbody").empty();
-    listing_start = listings_per_page * (current_page - 1);
-    for (var x = 0; x < listings_per_page; x++){
-        if (listings_display[listing_start]){
-            $("#mylistings_tbody").append(createRow(listings_display[listing_start], listing_start));
-            $("#mylistings_tbody").append(createRowDrop(listings_display[listing_start], listing_start));
-        }
-        listing_start++;
-    }
-}
 
 //function to create a listing row
 function createRow(listing_info, rownum){
@@ -248,6 +20,38 @@ function createRow(listing_info, rownum){
 
     tempRow.data("editing", false);
     return tempRow;
+}
+
+//function to create the listing status td
+function createStatus(listing_info){
+    var text = (listing_info.price_type != 0) ? "Active" : "Inactive";
+    var temp_td = $("<td class='td-visible td-status'>" + text + "</td>");
+    temp_td.data("status", text);
+    return temp_td;
+}
+
+//function to create the listing created date
+function createDate(listing_info){
+    var start = moment(new Date(listing_info.date_created + "Z")).format('YYYY/MM/DD, hh:mm A');
+    var temp_td = $("<td class='td-visible td-date'>" + start + "</td>");
+    return temp_td;
+}
+
+//function to create the tv icon
+function createView(listing_info){
+    var temp_td = $("<td class='td-visible td-view'></td>");
+        var temp_a = $("<a class='button' target='_blank' style='target-new: tab;'' href='/listing/" + listing_info.domain_name + "'></a>");
+            var temp_span = $("<span class='icon'></span>");
+                var temp_i = $("<i class='fa fa-external-link'></i>");
+            var temp_span2 = $("<span>View</span>");
+    temp_td.append(temp_a.append(temp_span.append(temp_i), temp_span2));
+
+    //prevent clicking view from dropping down row
+    temp_td.click(function(e) {
+        e.stopPropagation();
+    });
+
+    return temp_td;
 }
 
 //function to create dropdown row
@@ -342,54 +146,6 @@ function createFormDrop(listing_info){
     return temp_col;
 }
 
-//function to create the domain name td
-function createDomain(listing_info){
-    var temp_td = $("<td class='td-visible td-domain'>" + listing_info.domain_name + "</td>");
-    return temp_td;
-}
-
-//function to create the status td
-function createStatus(listing_info){
-    var text = (listing_info.price_type != 0) ? "Active" : "Inactive";
-    var temp_td = $("<td class='td-visible td-status'>" + text + "</td>");
-    temp_td.data("status", text);
-    return temp_td;
-}
-
-//function to create the date
-function createDate(listing_info){
-    var start = moment(new Date(listing_info.date_created + "Z")).format('YYYY/MM/DD, hh:mm A');
-    var temp_td = $("<td class='td-visible td-date'>" + start + "</td>");
-    return temp_td;
-}
-
-//function to create the tv icon
-function createView(listing_info){
-    var temp_td = $("<td class='td-visible td-view'></td>");
-        var temp_a = $("<a class='button' target='_blank' style='target-new: tab;'' href='/listing/" + listing_info.domain_name + "'></a>");
-            var temp_span = $("<span class='icon'></span>");
-                var temp_i = $("<i class='fa fa-television'></i>");
-            var temp_span2 = $("<span>View</span>");
-    temp_td.append(temp_a.append(temp_span.append(temp_i), temp_span2));
-
-    //prevent clicking view from dropping down row
-    temp_td.click(function(e) {
-        e.stopPropagation();
-    });
-
-    return temp_td;
-}
-
-//function to create the dropdown arrow
-function createArrow(){
-    var temp_td = $("<td class='td-visible td-arrow'></td>");
-        var temp_span = $("<span class='icon'></span>");
-            var temp_i = $("<i class='fa fa-angle-right'></i>");
-    temp_td.append(temp_span.append(temp_i));
-
-    return temp_td;
-}
-
 // --------------------------------------------------------------------------------- EDIT ROW
 
 //function to initiate edit mode
@@ -411,31 +167,6 @@ function editRow(row){
     dropRow(row, editing);
     editArrow(row, editing);
     editStatus(row, editing);
-}
-
-//function to drop down a row
-function dropRow(row, editing){
-    row_drop = row.next(".row-drop");
-    row.toggleClass("is-active");
-    if (editing){
-        row_drop.find("#div-drop").stop().slideDown("fast");
-    }
-    else {
-        row_drop.find("#div-drop").stop().slideUp("fast");
-    }
-}
-
-//function to change edit icon
-function editArrow(row, editing){
-    edit_td = row.find(".td-arrow").find("i");
-    if (editing){
-        edit_td.addClass("fa-rotate-90");
-        edit_td.parent("span").addClass("is-active");
-    }
-    else {
-        edit_td.removeClass("fa-rotate-90");
-        edit_td.parent("span").removeClass("is-active");
-    }
 }
 
 //function to change status column to editable

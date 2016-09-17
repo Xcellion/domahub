@@ -13,7 +13,6 @@
 			var listings = <% if(typeof listings != "undefined"){ %><%-JSON.stringify(listings)%><% }else{ %>""<% } %>;
 			var rentals = <% if(typeof rentals != "undefined"){ %><%-JSON.stringify(rentals)%><% }else{ %>""<% } %>;
 		</script>
-		<script src="/js/routes/client_profile.js" type="text/javascript"></script>
 	</head>
 
 	<body>
@@ -44,7 +43,7 @@
 						  <a class="panel-block is-active" href="#">
 
 								<p class="control has-icon has-icon-right">
-									<input class="input" type="text" placeholder="Search domains" />
+									<input id="search-domain" class="input" type="text" placeholder="Search domains" />
 									<i class="fa fa-times is-hidden"></i>
 
 								</p>
@@ -89,11 +88,11 @@
 
 					<div class="column is-three-quarters">
 
-						<div id="no-listings" class="box has-text-centered is-hidden">
+						<div id="no-rows" class="box has-text-centered is-hidden">
 							There are no listings!
 						</div>
 
-						<box class="listings-exist box">
+						<box class="rows-exist box">
 
 							<nav class="pagination bottom-margin-25">
 								<a id="prev-page" class="button">Previous</a>
@@ -120,7 +119,7 @@
 										<th class="td-view"></th>
 									</tr>
 								</thead>
-								<tbody id="mylistings_tbody"></tbody>
+								<tbody id="table_body"></tbody>
 							</table>
 
 							<nav class="pagination-control">
@@ -158,6 +157,7 @@
 		</section>
 
 	<%- include("templates/footer"); %>
+	<script src="/js/routes/profile_pagination.js" type="text/javascript"></script>
 	<script src="/js/routes/profile_mylistings_logic.js" type="text/javascript"></script>
 	</body>
 
