@@ -35,6 +35,12 @@
       align-self: flex-end;
     }
   }
+  &.is-active {
+    &:hover {
+      color: $white;
+      @include box-shadow(0,-3px,0,$white, inset);
+    }
+  }
 }
 
 /************************************* LOGIN DROPDOWN *************************/

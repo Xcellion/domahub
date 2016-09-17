@@ -3091,7 +3091,7 @@ a.nav-item {
 
 @media screen and (max-width: 768px) {
   .nav-menu {
-    background-color: transparent;
+    background-color: #fff;
     box-shadow: 0 4px 7px rgba(17, 17, 17, 0.1);
     left: 0;
     display: none;
@@ -3148,6 +3148,8 @@ a.nav-item {
   text-align: center;
   width: 100%;
   z-index: 999; }
+  .nav.is-primary {
+    background-color: #3CBC8D; }
   .nav > .container {
     align-items: stretch;
     display: flex;
@@ -4073,7 +4075,8 @@ input:-webkit-autofill {
 
 @media screen and (max-width: 768px) {
   .landing-img {
-    background-color: #222324; } }
+    background-color: #222324;
+    padding-top: 60px; } }
 
 @media screen and (min-width: 769px) {
   .img-wrapper {
