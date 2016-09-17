@@ -22,7 +22,7 @@
   // Responsiveness
   +mobile
   display: flex
-  justify-content: flex-start
+  justify-content: center
   &:not(:last-child)
     margin-bottom: 10px
   +tablet
@@ -48,9 +48,17 @@
 
 // Hero Carousel
 .carousel-icon
+  color: $primary
+  position: absolute
+  top: 25%
+  opacity: 0.9
+  &.right
+    right: 0
+  &.left
+    left: 0
   &:hover
     cursor: pointer
-    color: $primary
+    opacity: 1.0
 
 .carousel-control
   &:hover
@@ -58,54 +66,18 @@
   &:focus
     outline: none !important
 
-.ticker-item
-  width: 500px
+.carousel-item
+  width: 70%
   margin: 0 auto
-  +mobile
-    width: auto
+  // .content
+  //   p
+  //     color: $white
 
 .carousel-wrapper
-  padding: 100px 0
-  +mobile
-    padding: 60px 0
-
-// Slick classes
-.slick-dotted.slick-slider
-  margin-bottom: 0
-
-.slick-dots
-  margin: 80px 0
-  +mobile
-    margin: 40px 0
-
-// .hero-carousel
-//   align-items: center
-//   display: flex
-//   justify-content: space-around
-//   padding: 120px 20px
-//   width: 100%
-//   +mobile
-//     padding: 50px 0
-//
-// .carousel-control
-//   &:hover
-//     cursor: pointer
-//   &:focus
-//     outline: none !important
-//
-// .carousel-wrapper
-//   margin-bottom: 0
-//   width: 75%
-
-// Slick classes
-// .slick-dotted.slick-slider
-//   margin-bottom: 0
-//
-// .slick-dots
-//   margin: -20px 0
+  width: 90%
+  margin: 0 auto
 
 // Main container
-
 .hero
   align-items: stretch
   background-color: $white
@@ -186,11 +158,24 @@
           .nav-item
             border-top-color: rgba($color-invert, 0.2)
   // Sizes
+  &.is-carousel
+    +tablet
+      .hero-body
+        padding-bottom: 40px
+        padding-top: 80px
+  &.is-small
+    +tablet
+      .hero-body
+        padding-bottom: 80px
+        padding-top: 80px
   &.is-medium
     +tablet
       .hero-body
-        padding-bottom: 200px
-        padding-top: 200px
+        padding-bottom: 180px
+        padding-top: 180px
+    +mobile
+      .hero-body
+        padding: 100px 20px
   &.is-large
     +tablet
       .hero-body

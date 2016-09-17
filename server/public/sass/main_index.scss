@@ -13,18 +13,10 @@
 
 /*********************** LANDING ************************/
 
-.landing {
-  padding: 0;
-}
-
 #index-img {
   @include tablet {
     background-image: url('https://images.unsplash.com/photo-1448932223592-d1fc686e76ea?dpr=1&auto=format&crop=entropy&fit=crop&w=1500&h=1000&q=80&cs=tinysrgb');
   }
-}
-
-#landing-buttons {
-  margin-top: 50px;
 }
 
 /*********************** MAIN ************************/

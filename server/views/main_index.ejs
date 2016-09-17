@@ -12,7 +12,7 @@
 <body>
 
   <%- include("templates/navbar", {user: user}); %>
-  <section id="index-img" class="hero is-large clear-nav landing-img">
+  <section id="index-img" class="hero is-large landing-img">
     <div class="img-wrapper">
       <div class="hero-head"></div>
       <div class="hero-body">
@@ -33,76 +33,74 @@
     </div>
   </section>
 
-  <section class="hero is-light">
-
-    <!-- <div class="hero-carousel"> -->
-
-      <!-- <span id="carousel-left-arrow" class="icon is-large carousel-icon">
-        <i class="fa fa-angle-left"></i>
-      </span> -->
-
-      <div class="carousel-wrapper">
-        <div class="carousel-control">
-          <article class="ticker-item media">
-            <figure class="media-left">
-              <p class="image is-256x256">
-                <img src="http://img.huffingtonpost.com/asset/5660af191b0000580129f2c1.png">
-              </p>
-            </figure>
-            <div class="media-content">
-              <div class="content">
-                <p>
-                  DomaHub has officially launched! Feel free to browse domain listings
-                  and check out our website.
-                  Come say hello at our company <a class="orange-link" href="/blog">blog</a>.
-                </p>
-              </div>
+  <section class="hero is-carousel is-light">
+    <div class="hero-body">
+      <div class="container">
+        <span class="icon is-large carousel-icon left">
+          <i class="fa fa-angle-left"></i>
+        </span>
+          <div class="carousel-wrapper">
+            <div class="carousel-control">
+              <article class="carousel-item media">
+                <figure class="media-left">
+                  <p class="image is-64x64">
+                    <img src="/images/lib/emojione/1f913.svg">
+                  </p>
+                </figure>
+                <div class="media-content">
+                  <div class="content">
+                    <p>
+                      DomaHub has officially launched! Enjoy 10% off all rentals
+                      from now until XX/XX/2016! Browse domain listings
+                      <a class="is-underlined" href="/listings" title="Listings">here</a>.
+                    </p>
+                  </div>
+                </div>
+              </article>
             </div>
-          </article>
-        </div>
-        <div class="carousel-control">
-          <article class="ticker-item media">
-            <figure class="media-left">
-              <p class="image is-256x256">
-                <img src="http://img.huffingtonpost.com/asset/5660af191b0000580129f2c1.png">
-              </p>
-            </figure>
-            <div class="media-content">
-              <div class="content">
-                <p>
-                  DomaHub has officially launched! Feel free to browse domain listings
-                  and check out our website.
-                  Come say hello at our company <a class="orange-link" href="/blog">blog</a>.
-                </p>
-              </div>
+            <div class="carousel-control">
+              <article class="carousel-item media">
+                <figure class="media-left">
+                  <p class="image is-256x256">
+                    <img src="/images/lib/emojione/1f4bb.svg">
+                  </p>
+                </figure>
+                <div class="media-content">
+                  <div class="content">
+                    <p>
+                      Want to connect with us? Feel free to
+                      <a class="is-underlined" href="/contact" title="Contact Us">contact us</a>.
+                      Also, come see what's happening at Domahub by visiting our
+                      <a class="is-underlined" href="/blog">blog</a>.
+                    </p>
+                  </div>
+                </div>
+              </article>
             </div>
-          </article>
-        </div>
-        <div class="carousel-control">
-          <article class="ticker-item media">
-            <figure class="media-left">
-              <p class="image is-256x256">
-                <img src="http://img.huffingtonpost.com/asset/5660af191b0000580129f2c1.png">
-              </p>
-            </figure>
-            <div class="media-content">
-              <div class="content">
-                <p>
-                  DomaHub has officially launched! Feel free to browse domain listings
-                  and check out our website.
-                  Come say hello at our company <a class="orange-link" href="/blog">blog</a>.
-                </p>
-              </div>
+            <div class="carousel-control">
+              <article class="carousel-item media">
+                <figure class="media-left">
+                  <p class="image is-256x256">
+                    <img src="http://img.huffingtonpost.com/asset/5660af191b0000580129f2c1.png">
+                  </p>
+                </figure>
+                <div class="media-content">
+                  <div class="content">
+                    <p>
+                      DomaHub has officially launched! Feel free to browse domain listings
+                      and check out our website.
+                      Come say hello at our company <a class="orange-link" href="/blog">blog</a>.
+                    </p>
+                  </div>
+                </div>
+              </article>
             </div>
-          </article>
-        </div>
+          </div>
+        <span class="icon is-large carousel-icon right">
+          <i class="fa fa-angle-right"></i>
+        </span>
       </div>
-
-      <!-- <span id="carousel-right-arrow" class="icon is-large carousel-icon">
-        <i class="fa fa-angle-right"></i>
-      </span> -->
-
-    <!-- </div> -->
+    </div>
   </section>
 
   <section class="hero is-medium">
@@ -154,7 +152,11 @@
               using Stripe&trade; payment.
             </p>
           </div>
+          <a class="button is-large is-primary" href="/listings" title="Browse Listings">
+            Browse Listings
+          </a>
         </div>
+
         <div class="column">
           <figure class="image is-3by2">
             <img src="http://placehold.it/480x320" />
@@ -179,6 +181,9 @@
               with us and follow the instructions on how to connect your domains.
             </p>
           </div>
+          <a class="button is-large is-primary" href="/create" title="Create Listings">
+            Create a Listing
+          </a>
         </div>
       </div>
     </div>

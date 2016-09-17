@@ -2,8 +2,27 @@
 @import '../_mixins.sass';
 
 /********************************* NAVBAR ***********************************/
-#searchbar-form input {
-  font-family: $sharetech;
+#searchbar-form {
+   .control {
+     &.has-icon {
+       input {
+         &:focus + .fa {
+           color: $white;
+         }
+       }
+     }
+   }
+  input {
+    font-family: $sharetech;
+    border: none;
+    border-radius: 0;
+    background-color: transparent;
+    @include box-shadow(0,0,0,$black);
+    color: $white;
+    &:focus {
+      @include box-shadow(0,-2px,0,$primary, inset);
+    }
+  }
 }
 
 .nav-link {
@@ -45,10 +64,7 @@
   width: 110px;
 }
 
-// .nav-item-special {
-//   padding: 15px 10px 15px 10px;
-// }
-
+// Logout button on profile dropdown
 .logout {
   color: $primary !important;
 }
