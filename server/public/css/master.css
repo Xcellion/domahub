@@ -3146,6 +3146,10 @@ a.nav-item {
   min-height: 60px;
   position: fixed;
   text-align: center;
+  -moz-transition: all 0.25s;
+  -o-transition: all 0.25s;
+  -webkit-transition: all 0.25s;
+  transition: all 0.25s;
   width: 100%;
   z-index: 999; }
   .nav.is-primary {
@@ -4049,8 +4053,6 @@ input:-webkit-autofill {
   font-weight: bold; }
   .logo-text.is-white {
     color: #fff !important; }
-    .logo-text.is-white:hover {
-      color: #3CBC8D !important; }
   .logo-text.is-large {
     font-size: 2.5rem; }
 
