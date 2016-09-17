@@ -1,12 +1,11 @@
 @import 'vars';
+@import 'mixins';
 
 /********************************************************* BODY *********************************************************/
-.landing {
-  padding: 0;
-}
-
 #about-img {
-  background-image: url('http://images.unsplash.com/photo-1423655156442-ccc11daa4e99?dpr=1&auto=format&crop=entropy&fit=crop&w=1500&h=1000&q=80&cs=tinysrgb');
+  @include tablet {
+    background-image: url('http://images.unsplash.com/photo-1423655156442-ccc11daa4e99?dpr=1&auto=format&crop=entropy&fit=crop&w=1500&h=1000&q=80&cs=tinysrgb');
+  }
 }
 
 #renter-faq {

@@ -28,10 +28,9 @@
     a
       flex-grow: 0
 
-
 .nav-item a,
 a.nav-item
-  color: $text
+  color: $white
   &.is-tab
     border-bottom: 1px solid transparent
     border-top: 1px solid transparent
@@ -50,7 +49,7 @@ a.nav-item
 .nav-menu
   // Responsiveness
   +mobile
-    background-color: #fff
+    background-color: transparent
     box-shadow: 0 4px 7px rgba($black, 0.1)
     left: 0
     display: none
@@ -102,7 +101,7 @@ a.nav-item
 
 .nav
   align-items: stretch
-  background-color: #fff
+  background-color: transparent
   display: flex
   min-height: $nav-height
   position: fixed
