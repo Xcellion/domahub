@@ -4047,9 +4047,9 @@ input:-webkit-autofill {
   font-family: 'Share Tech';
   font-size: 1.5rem;
   font-weight: bold; }
-  .logo-text.is-active {
+  .logo-text.is-white {
     color: #fff !important; }
-    .logo-text.is-active:hover {
+    .logo-text.is-white:hover {
       color: #3CBC8D !important; }
   .logo-text.is-large {
     font-size: 2.5rem; }
