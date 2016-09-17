@@ -84,7 +84,33 @@ function getRentalsAccount(req, res, next){
 		Account.getRentalsAccount(account_id, function(result){
 			if (result.state=="error"){error.handler(req, res, result.info);}
 			else {
-				req.user.rentals = result.info;
+				var all_rentals = result.info;
+
+				//iterate once across all results
+				for (var x = 0; x < all_rentals.length; x++){
+					var temp_dates = [];
+					var temp_durations = [];
+
+					//iterate again to look for multiple dates and durations
+					for (var y = 0; y < all_rentals.length; y++){
+						if (!all_rentals[y].checked && all_rentals[x]["rental_id"] == all_rentals[y]["rental_id"]){
+							temp_dates.push(all_rentals[y].date);
+							temp_durations.push(all_rentals[y].duration);
+							all_rentals[y].checked = true;
+						}
+					}
+
+					//combine dates into a property
+					all_rentals[x].date = temp_dates;
+					all_rentals[x].duration = temp_durations;
+				}
+
+				//remove empty date entries
+				all_rentals = all_rentals.filter(function(value, index, array){
+					return value.date.length;
+				});
+
+				req.user.rentals = all_rentals;
 				next();
 			}
 		});
