@@ -8,16 +8,18 @@ input:-webkit-autofill {
 
 /********************** UNIVERSAL ******************/
 .logo-text {
-  color: $primary !important;
   font: {
     family: 'Share Tech';
     size: 1.5rem;
     weight: bold;
   }
-  &.is-white {
-    color: $white !important;
+  &.primary-logo {
+    color: $primary;
   }
-  &.is-large {
+  &.white-logo {
+    color: $white;
+  }
+  &.large-logo {
     font-size: 2.5rem;
   }
 }
