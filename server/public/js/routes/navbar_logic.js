@@ -55,7 +55,7 @@ $(document).ready(function() {
 	//if this is a page that has an image
 	var potential_paths = [];
 	if (window.location.pathname == "/"){
-		var get_started_offset = $("#get-started").offset().top - 6 || 0;
+		var get_started_offset = $("#get-started").offset().top - 7 || 0;
 
 		//while scrolling
 		$(window).scroll(function(e){
