@@ -77,24 +77,21 @@ module.exports = {
 		rental_id = req.params.rental_id;
 		new_rental_info = req.session.new_rental_info;
 
-		if (!new_rental_info){
-			error.handler(req, res, "Invalid rental!", "json");
-		}
-		else {
-			raw_info = {
-				ip: new_rental_info.ip
-			};
+		raw_info = {
+			ip: new_rental_info.ip
+		};
 
-			updateListingRental(req, res, rental_id, raw_info, function(){
-				if (new_rental_info.formatted_times){
-					newRentalTimes(req, res, rental_id, new_rental_info.formatted_times, function(){
-						delete req.session.new_rental_info;
-						req.session.changed = true;
-						res.send({message : "success"});
-					});
-				}
+		//format any new times and combine with any times that need to be updates
+		formatted_times = formatNewRentalTimes(rental_id, new_rental_info.formatted_times);
+		combined_array = formatted_times.concat(new_rental_info.to_update);
+
+		updateRental(req, res, rental_id, raw_info, function(){
+			newRentalTimes(req, res, rental_id, combined_array, function(){
+				delete req.session.new_rental_info;
+				req.session.changed = true;
+				res.send({message : "success"});
 			});
-		}
+		});
 	},
 
 	//function to create a new rental
@@ -110,12 +107,23 @@ module.exports = {
 		};
 
 		newListingRental(req, res, new_rental_info.listing_id, raw_info, function(rental_id){
-			newRentalTimes(req, res, rental_id, new_rental_info.formatted_times, function(){
-				delete req.session.new_rental_info;
-				res.send({
-					state: "success",
-					rental_id: rental_id
-				});
+
+			//format any new times
+			formatted_times = formatNewRentalTimes(rental_id, new_rental_info.formatted_times);
+
+			newRentalTimes(req, res, rental_id, formatted_times, function(state){
+				if (state == "error"){
+					Listing.deleteRental(rental_id, function(){
+						error.handler(req, res, "Invalid rental times!", "json");
+					})
+				}
+				else {
+					delete req.session.new_rental_info;
+					res.send({
+						state: "success",
+						rental_id: rental_id
+					});
+				}
 			});
 		});
 	}
@@ -153,17 +161,21 @@ function newListingRental(req, res, listing_id, raw_info, callback){
 	});
 }
 
-//function to create new rental times
-function newRentalTimes(req, res, rental_id, times, callback){
-	//add the rental id to the formatted times
+//function to format new rental times
+function formatNewRentalTimes(rental_id, times){
+	//add the rental id to the formatted
 	for (var x in times){
 		times[x].unshift(rental_id);
+		times[x].push("");
 	}
+	return times;
+}
+
+//function to create new rental times
+function newRentalTimes(req, res, rental_id, times, callback){
 	Listing.newRentalTimes(rental_id, times, function(result){
 		if (result.state != "success"){
-			Listing.deleteRental(rental_id, function(){
-				error.handler(req, res, "Invalid rental times!", "json");
-			})
+			callback("error");
 		}
 		else {
 			callback();
@@ -172,8 +184,8 @@ function newRentalTimes(req, res, rental_id, times, callback){
 }
 
 //function to update rental info
-function updateListingRental(req, res, rental_id, raw_info, callback){
-	Listing.updateListingRental(req.params.rental_id, raw_info, function(result){
+function updateRental(req, res, rental_id, raw_info, callback){
+	Listing.updateRental(req.params.rental_id, raw_info, function(result){
 		if (result.state != "success"){error.handler(req, res, result.description);}
 		else {
 			callback();

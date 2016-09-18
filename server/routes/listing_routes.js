@@ -209,7 +209,6 @@ function renderWhoIs(req, res, domain_name){
 	});
 }
 
-
 //check if rental belongs to account and exists
 function checkRental(req, res, next){
 	var domain_name = req.params.domain_name;
@@ -286,12 +285,11 @@ function checkNewRentalInfo(req, res, next){
 			}
 			//if all are valid dates, check the DB if they're available
 			else {
-				checkRentalTime(req.session.listing_info.id, times, function(invalid_times, formatted_times){
-					if (invalid_times.length > 0){
+				checkRentalTime(req.session.listing_info.id, times, function(invalid_times, formatted_times, to_update){
+					if (invalid_times.length > 0 || (formatted_times.length == 0 && to_update.length == 0)){
 						res.send({unavailable : invalid_times})
 					}
 					else {
-
 						//get the stripe id of the listing owner
 						Account.getStripeId(domain_name, function(result){
 							if (result.state == "error"){error.handler(req, res, result.info);}
@@ -305,6 +303,7 @@ function checkNewRentalInfo(req, res, next){
 											account_id: req.user.id,
 											listing_id: req.session.listing_info.id,
 											formatted_times : formatted_times,
+											to_update: to_update,
 											ip: ip
 										};
 										next();
@@ -340,8 +339,9 @@ function checkRentalTime(listing_id, times, callback){
 		else {
 			invalid_times = result.unavailable;
 			formatted_times = result.formatted;
+			to_update = result.to_update;
 
-			callback(invalid_times, formatted_times);
+			callback(invalid_times, formatted_times, to_update);
 		}
 	});
 }
@@ -436,7 +436,7 @@ function payCheck(stripe_id, stripeToken, price, domain_name, cb){
 		currency: "usd",
 		source: stripeToken,
 		description: "Rental for " + domain_name,
-		application_fee: application_fee
+		//application_fee: application_fee
 	}, {
 		stripe_account: stripe_id
 	}, function(err, charge) {

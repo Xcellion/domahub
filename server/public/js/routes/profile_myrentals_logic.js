@@ -11,7 +11,7 @@ function createAllRows(row_per_page, current_page){
     for (var x = 0; x < row_per_page; x++){
         if (row_display[listing_start]){
             $("#table_body").append(createRow(row_display[listing_start], listing_start));
-            //$("#table_body").append(createRowDrop(row_display[listing_start], listing_start));
+            $("#table_body").append(createRowDrop(row_display[listing_start], listing_start));
         }
         listing_start++;
     }
@@ -23,8 +23,7 @@ function createRow(rental_info, rownum){
 
     tempRow.append(createArrow(rental_info));
     tempRow.append(createDomain(rental_info));
-    tempRow.append(createStart(rental_info));
-    tempRow.append(createEnd(rental_info));
+    tempRow.append(creatIP(rental_info));
     tempRow.append(createView(rental_info));
 
     tempRow.on("click", function(e){
@@ -36,28 +35,8 @@ function createRow(rental_info, rownum){
 }
 
 //function to create the status td
-function createStart(rental_info){
-    var earliest = rental_info.date.reduce(function (a, b) { return a < b ? a : b; });
-    var start = moment(new Date(earliest + "Z")).format('YYYY/MM/DD, hh:mm A');
-    var temp_td = $("<td class='td-visible td-date'>" + start + "</td>");
-    return temp_td;
-}
-
-//function to create the date
-function createEnd(rental_info){
-    var end_dates = [];
-
-    //create an array of end dates
-    for (var x = 0; x < rental_info.date.length; x++){
-        start_date = new Date(rental_info.date[x]);
-        end_date = new Date(start_date.getTime() + rental_info.duration[x]);
-        end_dates.push(end_date);
-    }
-
-    //find latest one
-    var latest = end_dates.reduce(function (a, b) { return a > b ? a : b; });
-    var disp_end = moment(new Date(latest + "Z")).format('YYYY/MM/DD, hh:mm A');
-    var temp_td = $("<td class='td-visible td-date'>" + disp_end + "</td>");
+function creatIP(rental_info){
+    var temp_td = $("<td class='td-visible td-date'>" + rental_info.ip + "</td>");
     return temp_td;
 }
 
@@ -86,32 +65,43 @@ function createRowDrop(rental_info, rownum){
     temp_div_col = $("<div class='columns'></div>");
 
     temp_drop.append(temp_td.append(temp_div_drop.append(temp_div_col.append(
-        createFormDrop(rental_info)
+        createDates(rental_info)
     ))));
     temp_div_drop.hide();
 
     return temp_drop;
 }
 
-//function to create buy link and background image form drop
-function createFormDrop(rental_info){
+
+//function to create the status td
+function createStart(rental_info){
+    var earliest = rental_info.date.reduce(function (a, b) { return a < b ? a : b; });
+    var start = moment(new Date(earliest + "Z")).format('YYYY/MM/DD, hh:mm A');
+    var temp_td = $("<td class='td-visible td-date'>" + start + "</td>");
+    return temp_td;
+}
+
+
+//function to create start and end dates
+function createDates(rental_info){
     var temp_col = $("<div class='column'></div>");
-    var temp_form = $("<form'></form>");
 
-    var ip_add = (rental_info.ip == null) ? "" : rental_info.ip;
+    var temp_div = $('<div class="control is-horizontal"></div>');
+    for (var x = 0; x < rental_info.date.length; x++){
+        var start = moment(new Date(rental_info.date[x] + "Z"));
+        var disp_start = start.format('YYYY/MM/DD, hh:mm A');
+        var disp_end = moment(start._d.getTime() + rental_info.duration[x]).format('YYYY/MM/DD, hh:mm A');
 
-    var temp_div1 = $('<div class="control is-horizontal"></div>');
-        var temp_div1_control = $("<div class='control-label'></div>");
-            var temp_div1_label = $("<label class='label'>IP Address</label>")
-        var temp_div1_p = $("<p class='control has-icon'></p>");
-            var temp_div1_input = $('<input class="input" type="url" placeholder="https://buy-my-website.com" value="' + ip_add + '"/>');
-            var temp_div1_input_i = $('<i class="fa fa-link"></i>');
-    temp_div1.append(temp_div1_control.append(temp_div1_label), temp_div1_p.append(temp_div1_input, temp_div1_input_i));
+        var start_label = $("<label class='label'>Start Date</label>")
+        var start_date = $("<p class=''>" + disp_start + "</p>")
 
-    var temp_div2 = $('<div class="control"></div>');
-        temp_div2.append('<button class="button is-medium is-success is-pulled-right">Save</button>');
+        var end_label = $("<label class='label'>End Date</label>")
+        var end_date = $("<p class=''>" + disp_end + "</p>")
 
-    temp_col.append(temp_form.append(temp_div1, temp_div2));
+        var date_wrapper = $("<div class='date-wrapper'></div>");
+        temp_div.append(date_wrapper.append(start_label, start_date, end_label, end_date));
+    }
+    temp_col.append(temp_div);
 
     return temp_col;
 }
