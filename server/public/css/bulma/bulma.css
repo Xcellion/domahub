@@ -3072,24 +3072,21 @@ button {
       .nav-item a {
         flex-grow: 0; } }
 
-.nav-item a,
-a.nav-item {
-  color: #fff; }
-  .nav-item a.is-tab,
-  a.nav-item.is-tab {
-    border-bottom: 1px solid transparent;
-    border-top: 1px solid transparent;
-    padding-left: 12px;
-    padding-right: 12px; }
-    .nav-item a.is-tab:hover,
-    a.nav-item.is-tab:hover {
-      border-bottom: 1px solid #3CBC8D;
-      border-top: 1px solid transparent; }
-    .nav-item a.is-tab.is-active,
-    a.nav-item.is-tab.is-active {
-      border-bottom: 3px solid #3CBC8D;
-      border-top: 3px solid transparent;
-      color: #3CBC8D; }
+.nav-item a.is-tab,
+a.nav-item.is-tab {
+  border-bottom: 1px solid transparent;
+  border-top: 1px solid transparent;
+  padding-left: 12px;
+  padding-right: 12px; }
+  .nav-item a.is-tab:hover,
+  a.nav-item.is-tab:hover {
+    border-bottom: 1px solid #3CBC8D;
+    border-top: 1px solid transparent; }
+  .nav-item a.is-tab.is-active,
+  a.nav-item.is-tab.is-active {
+    border-bottom: 3px solid #3CBC8D;
+    border-top: 3px solid transparent;
+    color: #3CBC8D; }
 
 @media screen and (max-width: 768px) {
   .nav-menu {
