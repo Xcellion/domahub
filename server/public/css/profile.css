@@ -12,3 +12,7 @@
 
 .td-view {
   width: 10px; }
+
+section {
+    min-height: calc(100vh - 400px);
+}
