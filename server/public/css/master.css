@@ -3154,6 +3154,8 @@ a.nav-item {
   transition: all 0.25s;
   width: 100%;
   z-index: 999; }
+  .nav.is-white {
+    background-color: #fff; }
   .nav.is-primary {
     background-color: #3CBC8D; }
   .nav > .container {
