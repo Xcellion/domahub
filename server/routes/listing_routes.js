@@ -285,7 +285,7 @@ function checkNewRentalInfo(req, res, next){
 			}
 			//if all are valid dates, check the DB if they're available
 			else {
-				checkRentalTime(req.session.listing_info.id, times, function(invalid_times, formatted_times, to_update){
+				checkRentalTime(req.session.listing_info.id, times, function(invalid_times, formatted_times, to_update, delete_stuff){
 					if (invalid_times.length > 0 || (formatted_times.length == 0 && to_update.length == 0)){
 						res.send({unavailable : invalid_times})
 					}
@@ -304,6 +304,7 @@ function checkNewRentalInfo(req, res, next){
 											listing_id: req.session.listing_info.id,
 											formatted_times : formatted_times,
 											to_update: to_update,
+											delete_stuff: delete_stuff,
 											ip: ip
 										};
 										next();
@@ -340,8 +341,9 @@ function checkRentalTime(listing_id, times, callback){
 			invalid_times = result.unavailable;
 			formatted_times = result.formatted;
 			to_update = result.to_update;
+			delete_stuff = result.delete_stuff;
 
-			callback(invalid_times, formatted_times, to_update);
+			callback(invalid_times, formatted_times, to_update, delete_stuff);
 		}
 	});
 }

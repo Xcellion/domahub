@@ -81,12 +81,10 @@ module.exports = {
 			ip: new_rental_info.ip
 		};
 
-		//format any new times and combine with any times that need to be updates
 		formatted_times = formatNewRentalTimes(rental_id, new_rental_info.formatted_times);
-		combined_array = formatted_times.concat(new_rental_info.to_update);
 
 		updateRental(req, res, rental_id, raw_info, function(){
-			newRentalTimes(req, res, rental_id, combined_array, function(){
+			newRentalTimes(req, res, rental_id, new_rental_info.formatted_times, function(){
 				delete req.session.new_rental_info;
 				req.session.changed = true;
 				res.send({message : "success"});
@@ -111,11 +109,11 @@ module.exports = {
 			//format any new times
 			formatted_times = formatNewRentalTimes(rental_id, new_rental_info.formatted_times);
 
-			newRentalTimes(req, res, rental_id, formatted_times, function(state){
+			newRentalTimes(req, res, rental_id, new_rental_info.formatted_times, function(state){
 				if (state == "error"){
 					Listing.deleteRental(rental_id, function(){
 						error.handler(req, res, "Invalid rental times!", "json");
-					})
+					});
 				}
 				else {
 					delete req.session.new_rental_info;
