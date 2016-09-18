@@ -140,13 +140,15 @@ listing_model.prototype.getListingRentalsInfo = function(listing_id, callback){
 				rentals.account_id, \
 				rentals.rental_id, \
 				rentals.listing_id, \
-				rental_times.*, \
+				rental_times.date, \
+				rental_times.duration, \
 				accounts.fullname, \
 				accounts.email \
 			FROM rentals \
 			INNER JOIN rental_times ON rentals.rental_id = rental_times.rental_id \
-			INNER JOIN accounts ON rentals.account_id = accounts.id  \
-			WHERE rentals.listing_id = ?"
+			INNER JOIN accounts ON rentals.account_id = accounts.id \
+			WHERE rentals.listing_id = ? \
+			ORDER BY rental_times.date ASC "
 	listing_query(query, "Failed to get all non-default rental info for listing #" + listing_id + "!", callback, listing_id);
 }
 
@@ -244,7 +246,8 @@ listing_model.prototype.getRentalTimes = function(rental_id, callback){
 				date, \
 				duration \
 			FROM rental_times \
-			WHERE rental_id = ?"
+			WHERE rental_id = ?\
+			ORDER BY date ASC"
 	listing_query(query, "Failed to get rental times for rental #" + rental_id + "!", callback, rental_id);
 }
 
@@ -255,7 +258,8 @@ listing_model.prototype.getListingRentalTimes = function(listing_id, callback){
 				rental_times.* \
 			FROM rental_times \
 			INNER JOIN rentals ON rentals.rental_id = rental_times.rental_id \
-			WHERE rentals.listing_id = ?"
+			WHERE rentals.listing_id = ?\
+			ORDER BY rental_times.date ASC "
 	listing_query(query, "Failed to get rental times for listing #" + listing_id + "!", callback, listing_id);
 }
 

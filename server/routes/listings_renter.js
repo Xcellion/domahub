@@ -20,7 +20,7 @@ module.exports = {
 				Listing.getListingRentalsInfo(listing_info.id, function(result){
 					if (result.state=="error"){error.handler(req, res, result.info);}
 					else {
-						listing_info.rentals = result.info;
+						listing_info.rentals = joinRentalTimes(result.info);
 						req.session.listing_info = listing_info;
 						next();
 					}
@@ -140,7 +140,7 @@ function getRental(req, res, rental_id, callback){
 			Listing.getRentalTimes(rental_id, function(result){
 				if (result.state != "success"){error.handler(req, res, result.description);}
 				else {
-					rental_info.times = result.info;
+					rental_info.times = joinRentalTimes(result.info);
 					callback(rental_info);
 				}
 			});
@@ -189,4 +189,29 @@ function updateRental(req, res, rental_id, raw_info, callback){
 			callback();
 		}
 	});
+}
+
+//function to join all rental times
+function joinRentalTimes(rental_times){
+	var temp_times = rental_times.slice(0);
+
+    //loop once
+    for (var x = temp_times.length - 1; x >= 0; x--){
+        var orig_start = new Date(temp_times[x].date);
+        var orig_end = new Date(orig_start.getTime() + temp_times[x].duration);
+
+        //loop twice to check with all others
+        for (var y = temp_times.length - 1; y >= 0; y--){
+            var compare_start = new Date(temp_times[y].date);
+            var compare_end = new Date(compare_start.getTime() + temp_times[y].duration);
+
+            //touches bottom
+            if (x != y && orig_start.getTime() == compare_end.getTime()){
+				temp_times[y].duration = temp_times[y].duration + temp_times[x].duration;
+                temp_times.splice(x, 1);
+            }
+        }
+    }
+
+	return temp_times;
 }

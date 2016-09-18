@@ -54,31 +54,26 @@ $(document).ready(function() {
 
 	//if this is a page that has an image
 	var potential_paths = [];
-	if (window.location.pathname == "/"){
-		var get_started_offset = $("#get-started").offset().top - 7 || 0;
+	var get_started_offset = $("#index-img").offset().top + $("#index-img").height() || 0;
+	window.onresize = function(event) {
+	    get_started_offset = $("#index-img").offset().top + $("#index-img").height() || 0;
+	};
 
+	if (window.location.pathname == "/"){
 		//while scrolling
 		$(window).scroll(function(e){
-			if ($(this).scrollTop() > get_started_offset && !$(".nav").hasClass("is-primary")){
-				$(".nav").addClass("is-primary");
-				$(".nav").addClass("has-shadow");
-				$("#login-modal").addClass("is-inverted");
-				$(".logo-text").addClass("is-white");
-				$(".nav-link").addClass("is-active");
-				$("#get-started").css({
-					position: "fixed",
-					top: "6px",
-					"z-index": "1000",
-					"border-color": "white"
-				});
-			}
-			else if ($(this).scrollTop() <= get_started_offset && $(".nav").hasClass("is-primary")) {
-				$(".nav").removeClass("is-primary");
+
+			//before the image
+			if ($(this).scrollTop() <= get_started_offset && $(".nav").hasClass("is-white")) {
+				$(".nav").removeClass("is-white");
 				$(".nav").removeClass("has-shadow");
-				$("#login-modal").removeClass("is-inverted");
-				$(".logo-text").removeClass("is-white");
-				$(".nav-link").removeClass("is-active");
-				$("#get-started").removeAttr("style");
+				$(".nav-link").addClass("is-white");
+			}
+			//past the image
+			else if ($(this).scrollTop() > get_started_offset && !$(".nav").hasClass("is-white")){
+				$(".nav").addClass("is-white");
+				$(".nav").addClass("has-shadow");
+				$(".nav-link").removeClass("is-white");
 			}
 		})
 	}
@@ -87,7 +82,7 @@ $(document).ready(function() {
 			"background-color": "white"
 		});
 		$(".nav").addClass("has-shadow");
-		//need to make link green
+		$(".nav-link").removeClass("is-white");
 	}
 
 });
