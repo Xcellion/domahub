@@ -3,22 +3,28 @@
 
 /********************************* NAVBAR ***********************************/
 #searchbar-form {
-   .control {
-     &.has-icon {
-       input {
-         &:focus + .fa {
-           color: $white;
-         }
-       }
-     }
-   }
+  &.is-transparent {
+    .control {
+      &.has-icon {
+        input {
+          &:focus + .fa {
+            color: $white;
+          }
+        }
+      }
+    }
+    input {
+      color: $white;
+    }
+  }
   input {
     font-family: $sharetech;
     border: none;
     border-radius: 0;
     background-color: transparent;
     @include box-shadow(0,0,0,$black);
-    color: $white;
+    @include transition(all 0.25s);
+    color: $text;
     &:focus {
       @include box-shadow(0,-2px,0,$primary, inset);
     }
