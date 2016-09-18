@@ -9,7 +9,7 @@
 .nav-item
   align-items: center
   display: flex
-  justify-content: center
+  // justify-content: center
   padding: 10px
   white-space: nowrap
   a
@@ -48,7 +48,7 @@ a.nav-item
 .nav-menu
   // Responsiveness
   +mobile
-    background-color: $white
+    background-color: $grey-darker
     box-shadow: 0 4px 7px rgba($black, 0.1)
     left: 0
     display: none
@@ -69,31 +69,35 @@ a.nav-item
 .nav-left
   align-items: stretch
   display: flex
-  flex-basis: 0
-  flex-grow: 1
+  flex-basis: 1
+  flex-grow: 0
   justify-content: flex-start
   overflow: hidden
   overflow-x: auto
   white-space: nowrap
+  +until($desktop)
+    margin-left: 20px
   +mobile
-    // margin-left: 20px
+    margin-left: 0
 
 .nav-center
   align-items: stretch
   display: flex
-  justify-content: center
-  margin-left: auto
-  margin-right: auto
-  +mobile
-    justify-content: flex-start
+  flex-basis: 0
+  flex-grow: 1
+  justify-content: flex-start
+  & > #searchbar-form
+    width: 100%
+    & > .control
+      width: 100%
 
 .nav-right
   // Responsiveness
   +tablet
     align-items: stretch
     display: flex
-    flex-basis: 0
-    flex-grow: 1
+    flex-basis: 1
+    flex-grow: 0
     justify-content: flex-end
 
 // Main container

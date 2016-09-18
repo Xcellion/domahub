@@ -1809,7 +1809,7 @@ button {
   position: relative;
   width: 60px; }
   .hamburger span, .nav-toggle span {
-    background-color: #222324;
+    background-color: #fff;
     display: block;
     height: 1px;
     left: 50%;
@@ -1825,10 +1825,8 @@ button {
       margin-top: -1px; }
     .hamburger span:nth-child(3), .nav-toggle span:nth-child(3) {
       margin-top: 4px; }
-  .hamburger:hover, .nav-toggle:hover {
-    background-color: #fff; }
   .hamburger.is-active span, .is-active.nav-toggle span {
-    background-color: #222324; }
+    background-color: #fff; }
     .hamburger.is-active span:nth-child(1), .is-active.nav-toggle span:nth-child(1) {
       margin-left: -5px;
       transform: rotate(45deg);
@@ -3050,7 +3048,6 @@ button {
 .nav-item {
   align-items: center;
   display: flex;
-  justify-content: center;
   padding: 10px;
   white-space: nowrap; }
   .nav-item a {
@@ -3087,7 +3084,7 @@ a.nav-item.is-tab {
 
 @media screen and (max-width: 768px) {
   .nav-menu {
-    background-color: #fff;
+    background-color: #222324;
     box-shadow: 0 4px 7px rgba(17, 17, 17, 0.1);
     left: 0;
     display: none;
@@ -3110,29 +3107,36 @@ a.nav-item.is-tab {
 .nav-left {
   align-items: stretch;
   display: flex;
-  flex-basis: 0;
-  flex-grow: 1;
+  flex-basis: 1;
+  flex-grow: 0;
   justify-content: flex-start;
   overflow: hidden;
   overflow-x: auto;
   white-space: nowrap; }
+  @media screen and (max-width: 979px) {
+    .nav-left {
+      margin-left: 20px; } }
+  @media screen and (max-width: 768px) {
+    .nav-left {
+      margin-left: 0; } }
 
 .nav-center {
   align-items: stretch;
   display: flex;
-  justify-content: center;
-  margin-left: auto;
-  margin-right: auto; }
-  @media screen and (max-width: 768px) {
-    .nav-center {
-      justify-content: flex-start; } }
+  flex-basis: 0;
+  flex-grow: 1;
+  justify-content: flex-start; }
+  .nav-center > #searchbar-form {
+    width: 100%; }
+    .nav-center > #searchbar-form > .control {
+      width: 100%; }
 
 @media screen and (min-width: 769px) {
   .nav-right {
     align-items: stretch;
     display: flex;
-    flex-basis: 0;
-    flex-grow: 1;
+    flex-basis: 1;
+    flex-grow: 0;
     justify-content: flex-end; } }
 
 .nav {
