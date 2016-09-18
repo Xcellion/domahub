@@ -1,7 +1,6 @@
 var unlock = true;
 
 $(document).ready(function() {
-
 	$('#background_image').on('dragstart', function(event) { event.preventDefault(); });
 
 	//fix 100vh jumping on mobile
