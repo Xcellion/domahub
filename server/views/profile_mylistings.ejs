@@ -2,163 +2,163 @@
 
 <html>
 
-	<head>
-		<title>DomaHub - My Listings</title>
-		<%- include("templates/head_links"); %>
-		<link rel="stylesheet" href="/css/profile.css" type="text/css" />
-		<script src="/js/lib/moment.min.js" type="text/javascript"></script>
-		<script type="text/javascript">
-			//redirect to homepage if user is not defined
-			var user = <% if(typeof user != "undefined"){ %><%-JSON.stringify(user)%><% }else{ %>window.location="/"<% } %>;
-			var listings = <% if(typeof listings != "undefined"){ %><%-JSON.stringify(listings)%><% }else{ %>""<% } %>;
-			var rentals = <% if(typeof rentals != "undefined"){ %><%-JSON.stringify(rentals)%><% }else{ %>""<% } %>;
-		</script>
-	</head>
+<head>
+	<title>DomaHub - My Listings</title>
+	<%- include("templates/head_links"); %>
+	<link rel="stylesheet" href="/css/profile.css" type="text/css" />
+	<script src="/js/lib/moment.min.js" type="text/javascript"></script>
+	<script type="text/javascript">
+	//redirect to homepage if user is not defined
+	var user = <% if(typeof user != "undefined"){ %><%-JSON.stringify(user)%><% }else{ %>window.location="/"<% } %>;
+	var listings = <% if(typeof listings != "undefined"){ %><%-JSON.stringify(listings)%><% }else{ %>""<% } %>;
+	var rentals = <% if(typeof rentals != "undefined"){ %><%-JSON.stringify(rentals)%><% }else{ %>""<% } %>;
+	</script>
+</head>
 
-	<body>
+<body>
 	<%- include("templates/navbar", {user: user}); %>
 
-		<div class="container clear-nav-profile">
-			<div class="tabs is-centered">
-				<ul>
-					<li><a href="/profile/dashboard">Dashboard</a></li>
-					<li><a href="/profile/inbox">Inbox</a></li>
-					<li class="is-active"><a href="/profile/mylistings">Listings</a></li>
-					<li><a href="/profile/myrentals">Rentals</a></li>
-					<li><a href="/profile/settings">Settings</a></li>
-				</ul>
-			</div>
+	<div class="container clear-nav-profile">
+		<div class="tabs is-centered">
+			<ul>
+				<li><a href="/profile/dashboard">Dashboard</a></li>
+				<li><a href="/profile/inbox">Inbox</a></li>
+				<li class="is-active"><a href="/profile/mylistings">Listings</a></li>
+				<li><a href="/profile/myrentals">Rentals</a></li>
+				<li><a href="/profile/settings">Settings</a></li>
+			</ul>
 		</div>
+	</div>
 
-		<section class="section">
-			<div class="container">
-				<div class="columns">
-					<div class="column is-one-quarter">
+	<section class="section">
+		<div class="container">
+			<div class="columns">
+				<div class="column is-one-quarter">
 
-						<nav class="panel">
-						  <p class="panel-heading has-text-centered">
-						    Search and Filter
-						  </p>
-							<div class="panel-list">
-						  <a class="panel-block is-active" href="#">
+					<nav class="panel">
+						<p class="panel-heading has-text-centered">
+							Search and Filter
+						</p>
+						<div class="panel-list">
+							<a class="panel-block is-active" href="#">
 
 								<p class="control has-icon has-icon-right">
 									<input id="search-domain" class="input" type="text" placeholder="Search domains" />
 									<i class="fa fa-times is-hidden"></i>
 
 								</p>
-						  </a>
-						  <a class="panel-block" href="#">
-						    <span class="panel-icon">
-						      <i class="fa fa-list-alt"></i>
-						    </span>
-						    Currently rented
-						  </a>
-						  <a class="panel-block" href="#">
-						    <span class="panel-icon">
-						      <i class="fa fa-ellipsis-h"></i>
-						    </span>
-						    Pending approval
-						  </a>
+							</a>
 							<a class="panel-block" href="#">
-						    <span class="panel-icon">
-						      <i class="fa fa-exclamation-circle"></i>
-						    </span>
-						    Expiring soon
-						  </a>
+								<span class="panel-icon">
+									<i class="fa fa-list-alt"></i>
+								</span>
+								Currently rented
+							</a>
+							<a class="panel-block" href="#">
+								<span class="panel-icon">
+									<i class="fa fa-ellipsis-h"></i>
+								</span>
+								Pending approval
+							</a>
+							<a class="panel-block" href="#">
+								<span class="panel-icon">
+									<i class="fa fa-exclamation-circle"></i>
+								</span>
+								Expiring soon
+							</a>
 							<a class="panel-block" href="#">
 								<span class="panel-icon">
 									<i class="fa fa-history"></i>
 								</span>
 								History
 							</a>
-						  <div class="panel-block">
-						    <a class="button is-fullwidth">
-						      Reset all filters
-						    </a>
-						  </div>
+							<div class="panel-block">
+								<a class="button is-fullwidth">
+									Reset all filters
+								</a>
 							</div>
-						</nav>
-
-						<div class="container bottom-margin-25">
-							<a class="button is-info is-medium is-fullwidth" href="/listing/create">Create new listing</a>
 						</div>
+					</nav>
 
-					</div>
-
-					<div class="column is-three-quarters">
-
-						<div id="no-rows" class="box has-text-centered is-hidden">
-							There are no listings!
-						</div>
-
-						<box class="rows-exist box">
-
-							<nav class="pagination bottom-margin-25">
-								<a id="prev-page" class="button">Previous</a>
-								<a id="next-page" class="button">Next page</a>
-								<ul id="page-list"></ul>
-							</nav>
-
-							<table class="table">
-								<thead>
-									<tr>
-										<th class="td-arrow"></th>
-										<th class="td-domain">
-											Domain Name
-											<span class="icon is-small is-hidden"><i class="fa fa-sort-desc"></i></span>
-										</th>
-										<th class="td-status">
-											Status
-											<span class="icon is-small is-hidden"><i class="fa fa-sort-desc"></i></span>
-										</th>
-										<th class="td-date">
-											Date Created
-											<span class="icon is-small is-hidden"><i class="fa fa-sort-desc"></i></span>
-										</th>
-										<th class="td-view"></th>
-									</tr>
-								</thead>
-								<tbody id="table_body"></tbody>
-							</table>
-
-							<nav class="pagination-control">
-								<div class="control is-horizontal">
-									<div class="control-label">
-										<label class="label">Show per page&#58</label>
-									</div>
-									<div class="control">
-										<div class="select">
-											<select id="domains-per-page">
-												<option selected value="5">5</option>
-												<option value="25">25</option>
-												<option value="50">50</option>
-												<option value="100">100</option>
-											</select>
-										</div>
-									</div>
-								</div>
-								<div class="control">
-									<p class="control has-addons has-addons-right">
-										<input id="go-to-page-input" class="input" type="number" min="1" value="1" />
-										<a id="go-to-page-button" class="button is-primary">
-											Go to page
-										</a>
-									</p>
-								</div>
-							</nav>
-
-
-						</box>
+					<div class="container bottom-margin-25">
+						<a class="button is-info is-medium is-fullwidth" href="/listing/create">Create new listing</a>
 					</div>
 
 				</div>
+
+				<div class="column is-three-quarters">
+
+					<div id="no-rows" class="box has-text-centered is-hidden">
+						There are no listings!
+					</div>
+
+					<box class="rows-exist box">
+
+						<nav class="pagination bottom-margin-25">
+							<a id="prev-page" class="button">Previous</a>
+							<a id="next-page" class="button">Next page</a>
+							<ul id="page-list"></ul>
+						</nav>
+
+						<table class="table">
+							<thead>
+								<tr>
+									<th class="td-arrow"></th>
+									<th class="td-domain">
+										Domain Name
+										<span class="icon is-small is-hidden"><i class="fa fa-sort-desc"></i></span>
+									</th>
+									<th class="td-status">
+										Status
+										<span class="icon is-small is-hidden"><i class="fa fa-sort-desc"></i></span>
+									</th>
+									<th class="td-date">
+										Date Created
+										<span class="icon is-small is-hidden"><i class="fa fa-sort-desc"></i></span>
+									</th>
+									<th class="td-view"></th>
+								</tr>
+							</thead>
+							<tbody id="table_body"></tbody>
+						</table>
+
+						<nav class="pagination-control">
+							<div class="control is-horizontal">
+								<div class="control-label">
+									<label class="label">Show per page&#58</label>
+								</div>
+								<div class="control">
+									<div class="select">
+										<select id="domains-per-page">
+											<option selected value="5">5</option>
+											<option value="25">25</option>
+											<option value="50">50</option>
+											<option value="100">100</option>
+										</select>
+									</div>
+								</div>
+							</div>
+							<div class="control">
+								<p class="control has-addons has-addons-right">
+									<input id="go-to-page-input" class="input" type="number" min="1" value="1" />
+									<a id="go-to-page-button" class="button is-primary">
+										Go to page
+									</a>
+								</p>
+							</div>
+						</nav>
+
+
+					</box>
+				</div>
+
 			</div>
-		</section>
+		</div>
+	</section>
 
 	<%- include("templates/footer"); %>
 	<script src="/js/routes/profile_pagination.js" type="text/javascript"></script>
 	<script src="/js/routes/profile_mylistings_logic.js" type="text/javascript"></script>
-	</body>
+</body>
 
 </html>
