@@ -176,7 +176,6 @@ a {
   transition: all 0.25s;
   cursor: pointer;
   text-decoration: none;
-  color: #222324;
   opacity: 1.0; }
   a:hover {
     cursor: pointer;
@@ -185,6 +184,9 @@ a {
 .is-underlined {
   color: inherit;
   text-decoration: underline; }
+
+.primary-link {
+  color: #3CBC8D; }
 
 .white-link {
   color: #fff; }
@@ -3979,10 +3981,6 @@ a.panel-block:hover {
 .footer {
   background-color: #222324;
   padding: 60px 20px 80px; }
-  .footer a {
-    color: #aeb1b5; }
-    .footer a:hover {
-      color: #f5f7fa; }
   @media screen and (max-width: 768px) {
     .footer .columns > .column {
       text-align: center; } }
@@ -4012,6 +4010,10 @@ a.panel-block:hover {
   color: #aeb1b5; }
   .footer-item:not(:first-child) {
     margin-top: 10px; }
+  .footer-item a {
+    color: #aeb1b5; }
+    .footer-item a:hover {
+      color: #f5f7fa; }
 
 @media screen and (max-width: 768px) {
   li {
@@ -4047,13 +4049,14 @@ input:-webkit-autofill {
 
 /********************** UNIVERSAL ******************/
 .logo-text {
-  color: #3CBC8D !important;
   font-family: 'Share Tech';
   font-size: 1.5rem;
   font-weight: bold; }
-  .logo-text.is-white {
-    color: #fff !important; }
-  .logo-text.is-large {
+  .logo-text.primary-logo {
+    color: #3CBC8D; }
+  .logo-text.white-logo {
+    color: #fff; }
+  .logo-text.large-logo {
     font-size: 2.5rem; }
 
 .is-fullheight {
