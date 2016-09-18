@@ -23,16 +23,16 @@
     </span>
     <div class="nav-right nav-menu">
       <div class="nav-item">
-        <a class="nav-link" title="Renters" href="/listings">Browse</a>
+        <a class="nav-link is-white" title="Renters" href="/listings">Browse</a>
       </div>
       <div class="nav-item">
-        <a class="nav-link" title="Sellers" href="/create">List</a>
+        <a class="nav-link is-white" title="Sellers" href="/create">List</a>
       </div>
 
 <%# navbar checks for a user variable, if it doesnt exist, then display the login button %>
 <% if (!user) { %>
     <div class="nav-item">
-      <a id="signup" class="nav-link" title="Sign Up" href="/signup">Sign Up</a>
+      <a id="signup" class="nav-link is-white" title="Sign Up" href="/signup">Sign Up</a>
     </div>
     <div class="nav-item">
       <a id="login-modal" class="button is-primary modal-button" title="Log In" data-object="#modal-login">Log In</a>
@@ -89,7 +89,7 @@
 <!-- or else display the user profile as logged in -->
 <% } else { %>
     <div class="nav-item">
-      <a id="profile-button" class="button is-outlined is-primary">
+      <a id="profile-button" class="button is-primary">
         <span><%= (user.fullname.length > 6) ? user.fullname.slice(0,6) + "..." : user.fullname %></span>
         <span class="icon">
           <i class="fa fa-angle-down"></i>
