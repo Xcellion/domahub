@@ -16,9 +16,6 @@ input:-webkit-autofill {
   }
   &.is-white {
     color: $white !important;
-    &:hover {
-      color: $primary !important;
-    }
   }
   &.is-large {
     font-size: 2.5rem;
