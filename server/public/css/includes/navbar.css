@@ -17,7 +17,10 @@
     box-shadow: inset 0 -2px 0 #3CBC8D; }
 
 .nav-link {
-  padding: 5px; }
+  padding: 5px;
+  color: #222324; }
+  .nav-link.is-white {
+    color: #fff; }
   .nav-link:hover {
     color: #3CBC8D;
     -webkit-box-shadow: inset 0 -3px 0 #3CBC8D;
