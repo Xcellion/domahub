@@ -48,43 +48,87 @@ listing_model.prototype.checkRentalTime = function(listing_id, user_times, callb
 	this.getListingRentalTimes(listing_id, function(result){
 		var unavailable = [];		//array of all unavailable events
 		var formatted = [];
+		var to_update = [];
 		if (result.state == "success"){
 
 			//loop through all posted rental times
 			for (var y = 0; y < user_times.length; y++){
-				var availability = true;
-				var user_offset = user_times[y].offset;
-
 				var tempStart = new Date(user_times[y].start);
-				var user_start = toUTC(tempStart, user_offset);
-
 				var tempEnd = new Date(user_times[y].end);
-				var user_end = toUTC(tempEnd, user_offset);
 
+				var user_offset = user_times[y].offset;
+				var user_start = toUTC(tempStart, user_offset);
+				var user_end = toUTC(tempEnd, user_offset);
 				var user_duration = user_end - user_start;
 
-				//cross reference with all existing times in the database
-				if (result.info || result.info.length > 0){
-					for (var x = 0; x < result.info.length; x++){
-						//existing db date, already in UTC
-						var db_utc = new Date(result.info[x].date + "Z");
-						var db_duration = result.info[x].duration;
+				var totally_new = true;
 
-						//check for any overlaps
-						if (checkOverlap(user_start, user_duration, db_utc, db_duration)){
-							availability = false;
-							unavailable.push(user_times[y])
-							break;		//break loop through existing rental times because this user posted one already overlaps
+				//cross reference with all existing times in the database
+				if (result.info && result.info.length > 0){
+					var touches_top = false;
+					var touches_bot = false;
+
+					for (var x = 0; x < result.info.length; x++){
+						var db_start = new Date(result.info[x].date + "Z");
+						var db_duration = result.info[x].duration;
+						var db_end = db_start.getTime() + db_duration;
+
+						//check for any overlaps that prevent it from being created
+						if (checkOverlap(user_start, user_duration, db_start, db_duration)){
+							totally_new = false;
+							unavailable.push(user_times[y]);
+						}
+
+						//check if a new event starts at the end of existing
+						else if (user_start.getTime() == db_end){
+							totally_new = false;
+							touches_bot = result.info[x];
+						}
+
+						//check if new event ends at start of existing
+						else if (user_end.getTime() == db_start.getTime()){
+							totally_new = false;
+							touches_top = result.info[x];
 						}
 					}
 				}
 
-				//available! format the time for DB entry
-				if (availability){
-					var tempValue = [];
-					tempValue.push(user_start);
-					tempValue.push(user_duration);
+				var tempValue = [];
+
+				//totally available! format the time for DB entry
+				if (totally_new){
+					tempValue.push(
+						user_start,
+						user_duration
+					);
 					formatted.push(tempValue);
+				}
+				//sandwiched
+				else if (touches_top != false && touches_bot != false){
+
+					console.log('sandwich');
+
+					//to_update.push(tempValue);
+				}
+				//touches top of existing event
+				else if (touches_top != false){
+					tempValue.push(
+						touches_top.rental_id,
+						user_start,
+						user_duration + touches_top.duration,
+						touches_top.id
+					);
+					to_update.push(tempValue);
+				}
+				//touches bottom of existing event
+				else if (touches_bot != false){
+					tempValue.push(
+						touches_bot.rental_id,
+						touches_bot.date,
+						user_duration + touches_bot.duration,
+						touches_bot.id
+					);
+					to_update.push(tempValue);
 				}
 			}
 
@@ -92,7 +136,8 @@ listing_model.prototype.checkRentalTime = function(listing_id, user_times, callb
 			callback({
 				state: "success",
 				unavailable: unavailable,
-				formatted: formatted
+				formatted: formatted,
+				to_update: to_update
 			});
 		}
 		else {
@@ -251,8 +296,7 @@ listing_model.prototype.getRentalTimes = function(rental_id, callback){
 listing_model.prototype.getListingRentalTimes = function(listing_id, callback){
 	console.log("Attempting to get rental times for listing #" + listing_id + "...");
 	query = "SELECT \
-				rental_times.date, \
-				rental_times.duration \
+				rental_times.* \
 			FROM rental_times \
 			INNER JOIN rentals ON rentals.rental_id = rental_times.rental_id \
 			WHERE rentals.listing_id = ?"
@@ -301,15 +345,20 @@ listing_model.prototype.newListingRental = function(listing_id, rental_info, cal
 //creates new rental times for a specific rental
 //BULK INSERT NEEDS TRIPLE NESTED ARRAYS
 listing_model.prototype.newRentalTimes = function(rental_id, rental_times, callback){
+	console.log("listingmodel", rental_times);
 	console.log("Attempting to create a new rental times for rental #" + rental_id + "...");
-	query = "INSERT INTO rental_times (rental_id, date, duration) VALUES ? "
+	query = "INSERT INTO rental_times (rental_id, date, duration, id) VALUES ? ON DUPLICATE KEY UPDATE \
+		rental_id = VALUES(rental_id), \
+		date = VALUES(date), \
+		duration = VALUES(duration), \
+		id = VALUES(id)"
 	listing_query(query, "Failed to add new rental times for rental #" + rental_id + "!", callback, [rental_times]);
 }
 
 //----------------------------------------------------------------------UPDATE----------------------------------------------------------
 
 //updates a rental info
-listing_model.prototype.updateListingRental = function(rental_id, rental_info, callback){
+listing_model.prototype.updateRental = function(rental_id, rental_info, callback){
 	console.log("Attempting to update rental #" + rental_id + "...");
 	query = "UPDATE rentals \
 			SET ? \
@@ -318,8 +367,12 @@ listing_model.prototype.updateListingRental = function(rental_id, rental_info, c
 }
 
 //updates rental times if for the same rental
-listing_model.prototype.updateRentalTimes = function(rental_id, rental_times, callback){
-
+listing_model.prototype.updateRentalTime = function(new_rental_times, callback){
+	console.log("Attempting to update rental time #" + rental_time_id + "...");
+	query = "UPDATE rental_times \
+			SET duration = ? \
+			WHERE id = ?"
+	listing_query(query, "Failed to update rental #" + rental_id + "!", callback, new_rental_times);
 }
 
 //----------------------------------------------------------------------DELETE----------------------------------------------------------

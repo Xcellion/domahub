@@ -52,21 +52,43 @@ $(document).ready(function() {
 		}
 	});
 
-	//while scrolling
-	$(window).scroll(function(e){
-		if ($(this).scrollTop() > $("#get-started").offset().top){
-			$(".nav").addClass("is-primary");
-			$("#login-modal").addClass("is-inverted");
-			$(".logo-text").addClass("is-white");
-			$(".nav-link").addClass("is-active");
-		}
-		else {
-			$(".nav").removeClass("is-primary");
-			$("#login-modal").removeClass("is-inverted");
-			$(".logo-text").removeClass("is-white");
-			$(".nav-link").removeClass("is-active");			
-		}
-	})
+	//if this is a page that has an image
+	var potential_paths = [];
+	if (window.location.pathname == "/"){
+		var get_started_offset = $("#get-started").offset().top - 6 || 0;
+
+		//while scrolling
+		$(window).scroll(function(e){
+			if ($(this).scrollTop() > get_started_offset && !$(".nav").hasClass("is-primary")){
+				$(".nav").addClass("is-primary");
+				$(".nav").addClass("has-shadow");
+				$("#login-modal").addClass("is-inverted");
+				$(".logo-text").addClass("is-white");
+				$(".nav-link").addClass("is-active");
+				$("#get-started").css({
+					position: "fixed",
+					top: "6px",
+					"z-index": "1000",
+					"border-color": "white"
+				});
+			}
+			else if ($(this).scrollTop() <= get_started_offset && $(".nav").hasClass("is-primary")) {
+				$(".nav").removeClass("is-primary");
+				$(".nav").removeClass("has-shadow");
+				$("#login-modal").removeClass("is-inverted");
+				$(".logo-text").removeClass("is-white");
+				$(".nav-link").removeClass("is-active");
+				$("#get-started").removeAttr("style");
+			}
+		})
+	}
+	else {
+		$(".nav").css({
+			"background-color": "white"
+		});
+		$(".nav").addClass("has-shadow");
+		//need to make link green
+	}
 
 });
 

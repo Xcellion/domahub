@@ -75,7 +75,8 @@ require('./routes/routes.js')(app, db, auth, error);
 
 //404 not found
 app.get('*', function(req, res){
-	console.log("404! Unable to find " + req.originalUrl);
+	referer = req.header("Referer") || "someone";
+	console.log("404! Unable to find " + req.originalUrl + ", requested by " + referer);
 	res.redirect('/');
 });
 

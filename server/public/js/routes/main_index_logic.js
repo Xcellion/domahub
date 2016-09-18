@@ -17,8 +17,8 @@ $(document).ready(function() {
     $('.carousel-wrapper').slick({
         dots: true,
         arrows: false,
-        //autoplay: true,
-        //autoplaySpeed: 4000,
+        autoplay: true,
+        autoplaySpeed: 4000,
         pauseOnFocus: false
     });
 

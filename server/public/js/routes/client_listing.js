@@ -14,7 +14,7 @@ $(document).ready(function() {
 	handler = StripeCheckout.configure({
 		key: 'pk_test_kcmOEkkC3QtULG5JiRMWVODJ',
 		name: 'domahub Domain Rental',
-		image: '/images/logo.png',
+		image: '/images/d-logo.PNG',
 		panelLabel: 'Pay',
 		zipCode : true,
 		locale: 'auto',
@@ -49,7 +49,6 @@ $(document).ready(function() {
 	//stripe buttons
 	$('#stripe-button').click(function(e){
 		e.preventDefault();
-		console.log(checkSubmit())
 
 		if (checkSubmit() == true && unlock){
 			handler.open({
@@ -217,7 +216,6 @@ function checkSubmit(){
 
 //function to submit new rental info
 function submitRentals(){
-	console.log('w')
 	if (checkSubmit() == true && unlock){
 		var newEvents = $('#calendar').fullCalendar('clientEvents', filterNew);
 		unlock = false;
