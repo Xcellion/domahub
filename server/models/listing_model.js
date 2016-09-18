@@ -103,13 +103,29 @@ listing_model.prototype.checkRentalTime = function(listing_id, user_times, callb
 					);
 					formatted.push(tempValue);
 				}
+
 				//sandwiched
 				else if (touches_top != false && touches_bot != false){
+					tempValue.push(
+						touches_top.rental_id,
+						touches_bot.date,
+						touches_bot.duration + user_duration + touches_top.duration,
+						touches_bot.id
+					);
 
-					console.log('sandwich');
+					//mark for delete the one on the bottom via MYSQL trigger
+					var delete_val = [
+						touches_top.rental_id,
+						touches_top.date,
+						0,
+						touches_top.id
+					];
 
-					//to_update.push(tempValue);
+					to_update.push(tempValue);
+					to_update.push(delete_val);
+
 				}
+
 				//touches top of existing event
 				else if (touches_top != false){
 					tempValue.push(
@@ -120,6 +136,7 @@ listing_model.prototype.checkRentalTime = function(listing_id, user_times, callb
 					);
 					to_update.push(tempValue);
 				}
+
 				//touches bottom of existing event
 				else if (touches_bot != false){
 					tempValue.push(
