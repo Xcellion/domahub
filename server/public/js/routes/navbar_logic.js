@@ -54,26 +54,37 @@ $(document).ready(function() {
 
 	//if this is a page that has an image
 	var potential_paths = [];
-	var get_started_offset = $("#index-img").offset().top + $("#index-img").height() || 0;
-	window.onresize = function(event) {
-	    get_started_offset = $("#index-img").offset().top + $("#index-img").height() || 0;
-	};
+
+	//$("#domain-name").width($(".container").width() - $(".nav-left").width() - $(".nav-toggle").width() - $(".nav-right").width());
 
 	if (window.location.pathname == "/"){
+		var get_started_offset = $("#index-img").offset().top + $("#index-img").height() || 0;
+		window.onresize = function(event) {
+			get_started_offset = $("#index-img").offset().top + $("#index-img").height() || 0;
+		};
+
 		//while scrolling
 		$(window).scroll(function(e){
 
 			//before the image
 			if ($(this).scrollTop() <= get_started_offset && $(".nav").hasClass("is-white")) {
-				$(".nav").removeClass("is-white");
-				$(".nav").removeClass("has-shadow");
+				$(".nav").removeClass("is-white has-shadow");
+				$("#searchbar-form").addClass("is-transparent");
+				$("#login-modal").parent(".nav-item").removeClass("is-hidden");
+				$("#signup").removeClass("is-primary button");
+				$("#signup").addClass("is-white nav-link");
 				$(".nav-link").addClass("is-white");
+				$(".nav-link").parent(".nav-item").removeClass("is-hidden");
 			}
 			//past the image
 			else if ($(this).scrollTop() > get_started_offset && !$(".nav").hasClass("is-white")){
-				$(".nav").addClass("is-white");
-				$(".nav").addClass("has-shadow");
+				$(".nav").addClass("is-white has-shadow");
+				$("#searchbar-form").removeClass("is-transparent");
+				$("#signup").removeClass("is-white nav-link");
+				$("#signup").addClass("button is-primary");
+				$("#login-modal").parent(".nav-item").addClass("is-hidden");
 				$(".nav-link").removeClass("is-white");
+				$(".nav-link").parent(".nav-item").addClass("is-hidden");
 			}
 		})
 	}
