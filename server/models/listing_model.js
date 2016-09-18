@@ -48,7 +48,6 @@ listing_model.prototype.checkRentalTime = function(listing_id, user_times, callb
 	this.getListingRentalTimes(listing_id, function(result){
 		var unavailable = [];		//array of all unavailable events
 		var formatted = [];
-		var to_update = [];
 		if (result.state == "success"){
 
 			//loop through all posted rental times
@@ -65,9 +64,6 @@ listing_model.prototype.checkRentalTime = function(listing_id, user_times, callb
 
 				//cross reference with all existing times in the database
 				if (result.info && result.info.length > 0){
-					var touches_top = false;
-					var touches_bot = false;
-
 					for (var x = 0; x < result.info.length; x++){
 						var db_start = new Date(result.info[x].date + "Z");
 						var db_duration = result.info[x].duration;
@@ -77,18 +73,6 @@ listing_model.prototype.checkRentalTime = function(listing_id, user_times, callb
 						if (checkOverlap(user_start, user_duration, db_start, db_duration)){
 							totally_new = false;
 							unavailable.push(user_times[y]);
-						}
-
-						//check if a new event starts at the end of existing
-						else if (user_start.getTime() == db_end){
-							totally_new = false;
-							touches_bot = result.info[x];
-						}
-
-						//check if new event ends at start of existing
-						else if (user_end.getTime() == db_start.getTime()){
-							totally_new = false;
-							touches_top = result.info[x];
 						}
 					}
 				}
@@ -103,58 +87,13 @@ listing_model.prototype.checkRentalTime = function(listing_id, user_times, callb
 					);
 					formatted.push(tempValue);
 				}
-
-				//sandwiched
-				else if (touches_top != false && touches_bot != false){
-					tempValue.push(
-						touches_top.rental_id,
-						touches_bot.date,
-						touches_bot.duration + user_duration + touches_top.duration,
-						touches_bot.id
-					);
-
-					//mark for delete the one on the bottom via MYSQL trigger
-					var delete_val = [
-						touches_top.rental_id,
-						touches_top.date,
-						0,
-						touches_top.id
-					];
-
-					to_update.push(tempValue);
-					to_update.push(delete_val);
-
-				}
-
-				//touches top of existing event
-				else if (touches_top != false){
-					tempValue.push(
-						touches_top.rental_id,
-						user_start,
-						user_duration + touches_top.duration,
-						touches_top.id
-					);
-					to_update.push(tempValue);
-				}
-
-				//touches bottom of existing event
-				else if (touches_bot != false){
-					tempValue.push(
-						touches_bot.rental_id,
-						touches_bot.date,
-						user_duration + touches_bot.duration,
-						touches_bot.id
-					);
-					to_update.push(tempValue);
-				}
 			}
 
 			//send back unavailable and formatted events
 			callback({
 				state: "success",
 				unavailable: unavailable,
-				formatted: formatted,
-				to_update: to_update
+				formatted: formatted
 			});
 		}
 		else {
@@ -362,7 +301,6 @@ listing_model.prototype.newListingRental = function(listing_id, rental_info, cal
 //creates new rental times for a specific rental
 //BULK INSERT NEEDS TRIPLE NESTED ARRAYS
 listing_model.prototype.newRentalTimes = function(rental_id, rental_times, callback){
-	console.log("listingmodel", rental_times);
 	console.log("Attempting to create a new rental times for rental #" + rental_id + "...");
 	query = "INSERT INTO rental_times (rental_id, date, duration, id) VALUES ? ON DUPLICATE KEY UPDATE \
 		rental_id = VALUES(rental_id), \
