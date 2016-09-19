@@ -87,63 +87,30 @@
 							<caption class="caption">
 								My Listings
 							</caption>
-							<% if (listings.length){ %>
 							<thead>
 								<tr>
 									<th>Domain Name</th>
 									<th>Status</th>
 								</tr>
 							</thead>
-							<tbody>
-								<% listings.forEach(function (listing) { %>
-								 <tr>
-									 <td><a href="/listing/<%= listing.domain_name %>"><%= listing.domain_name %></a></td>
-									 <% if (listing.price_type != 0) { %>
-										 <td>Active</td>
-									 <% } else { %>
-										 <td><a href="#">Verify?</a></td>
-									 <% } %>
-								 </tr>
-								<% }) %>
-							</tbody>
-							<% } %>
+							<tbody id="listing_table"></tbody>
 						</table>
-
-						<% if (!listings.length) { %>
-							<article class="message has-text-centered">
-								<div class="message-body">
-									You have no listings yet!
-								</div>
-							</article>
-						<% } %>
 
 						<a class="button is-primary is-outlined" href="/listing/create">Create new listing</a>
 					</box>
 					<div class="box">
-						<table id="rental_table" class="table">
+						<table class="table">
 							<caption class="caption">
 								My Rentals
 							</caption>
-							<% if (rentals.length){ %>
 							<thead>
 								<tr>
 									<th>Domain Name</th>
-									<th>Start Date</th>
-									<th>End Date</th>
 									<th></th>
 								</tr>
 							</thead>
-							<% } %>
+							<tbody id="rental_table"></tbody>
 						</table>
-
-						<% if (!rentals.length) { %>
-							<article class="message has-text-centered">
-								<div class="message-body">
-									You have no rentals yet!
-								</div>
-							</article>
-						<% } %>
-
 					</div>
 				</div>
 
@@ -168,7 +135,7 @@
 	</section>
 
 	<%- include("templates/footer"); %>
-	<script src="/js/routes/profile_logic.js" type="text/javascript"></script>
+	<script src="/js/routes/profile_dashboard_logic.js" type="text/javascript"></script>
 	</body>
 
 </html>

@@ -54,13 +54,10 @@ $(document).ready(function() {
 
 	//if this is a page that has an image
 	var potential_paths = [];
-
-	//$("#domain-name").width($(".container").width() - $(".nav-left").width() - $(".nav-toggle").width() - $(".nav-right").width());
-
 	if (window.location.pathname == "/"){
-		var get_started_offset = $("#index-img").offset().top + $("#index-img").height() || 0;
+		var get_started_offset = $("#index-img").offset().top + $("#index-img").height() - 60 || 0;
 		window.onresize = function(event) {
-			get_started_offset = $("#index-img").offset().top + $("#index-img").height() || 0;
+			get_started_offset = $("#index-img").offset().top + $("#index-img").height() -60 || 0;
 		};
 
 		//while scrolling
@@ -94,6 +91,7 @@ $(document).ready(function() {
 		});
 		$(".nav").addClass("has-shadow");
 		$(".nav-link").removeClass("is-white");
+		$("#searchbar-form").removeClass("is-transparent");
 	}
 
 });

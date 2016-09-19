@@ -60,13 +60,15 @@ account_model.prototype.getRentalsAccount = function(account_id, callback){
 	console.log("Attempting to get all rentals belonging to account " + account_id + "...");
 	query = "SELECT \
 				rentals.*,\
-				rental_times.*,\
+				rental_times.date,\
+				rental_times.duration,\
 				listings.id,\
 				listings.domain_name\
 			FROM rentals \
 			JOIN rental_times ON rentals.rental_id = rental_times.rental_id \
 			JOIN listings ON listings.id = rentals.listing_id \
-			WHERE rentals.account_id = ? ";
+			WHERE rentals.account_id = ? \
+			ORDER BY rental_times.date ASC";
 	account_query(query, "Failed to get all rentals belonging to account " + account_id + "!", callback, account_id);
 }
 
