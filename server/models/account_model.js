@@ -46,7 +46,7 @@ account_model.prototype.getAccountByToken = function(token, callback){
 }
 
 //gets all listing info belonging to specific account
-account_model.prototype.getListingsAccount = function(account_id, callback){
+account_model.prototype.getAccountListings = function(account_id, callback){
 	console.log("Attempting to get all listings belonging to account " + account_id + "...");
 	query = "SELECT \
 				listings.*\
@@ -56,7 +56,7 @@ account_model.prototype.getListingsAccount = function(account_id, callback){
 }
 
 //gets all rental info belonging to specific account
-account_model.prototype.getRentalsAccount = function(account_id, callback){
+account_model.prototype.getAccountRentals = function(account_id, callback){
 	console.log("Attempting to get all rentals belonging to account " + account_id + "...");
 	query = "SELECT \
 				rentals.*,\
@@ -70,6 +70,25 @@ account_model.prototype.getRentalsAccount = function(account_id, callback){
 			WHERE rentals.account_id = ? \
 			ORDER BY listings.domain_name ASC, rentals.rental_id ASC, rental_times.date ASC";
 	account_query(query, "Failed to get all rentals belonging to account " + account_id + "!", callback, account_id);
+}
+
+//gets all chats for an account
+account_model.prototype.getAccountChats = function(account_id, callback){
+	console.log("Attempting to get all chat info for account #" + account_id + "...");
+	query = "SELECT \
+	 			chat_history.*, \
+				receiver_accounts.fullname AS receiver_name, \
+				receiver_accounts.email AS receiver_email, \
+				sender_accounts.fullname AS sender_name, \
+				sender_accounts.email AS sender_email \
+			FROM chat_history \
+			JOIN accounts AS receiver_accounts ON receiver_accounts.id = chat_history.receiver_account_id \
+			JOIN accounts AS sender_accounts ON sender_accounts.id = chat_history.sender_account_id \
+			WHERE chat_history.sender_account_id = ? \
+			OR chat_history.receiver_account_id = ? \
+			GROUP BY receiver_account_id, sender_account_id \
+			ORDER BY chat_history.timestamp DESC"
+	account_query(query, "Failed to get all chat info for account #" + account_id + "!", callback, [account_id, account_id]);
 }
 
 //gets all rental info belonging to specific account

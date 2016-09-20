@@ -17,8 +17,8 @@ module.exports = function(app, db, auth, e){
 	], [
 		checkPageNum,
 		isLoggedIn,
-		getListingsAccount,
-		getRentalsAccount,
+		getAccountListings,
+		getAccountRentals,
 		renderListingOrRental
 	]);
 
@@ -27,14 +27,25 @@ module.exports = function(app, db, auth, e){
 			"/profile/mylistings",
 			"/profile/myrentals",
 			"/profile/dashboard",
-			"/profile/inbox",
-			"/profile/settings"
 		], [
 		isLoggedIn,
-		getListingsAccount,
-		getRentalsAccount,
+		getAccountListings,
+		getAccountRentals,
 		renderProfile
 	]);
+
+	//settings
+	app.get("/profile/settings", [
+		isLoggedIn,
+		renderProfile
+	])
+
+	//inbox
+	app.get("/profile/inbox", [
+		isLoggedIn,
+		getAccountChats,
+		renderProfile
+	])
 
 	//connect stripe
 	app.get("/connectstripe", [
@@ -60,14 +71,14 @@ module.exports = function(app, db, auth, e){
 }
 
 //gets all listings for a user
-function getListingsAccount(req, res, next){
+function getAccountListings(req, res, next){
 
 	//if we dont already have the list of listings or if we need to refresh them
 	if (!req.user.listings || req.user.refresh_listing){
 		delete req.user.refresh_listing;
 		account_id = req.user.id;
 
-		Account.getListingsAccount(account_id, function(result){
+		Account.getAccountListings(account_id, function(result){
 			if (result.state=="error"){error.handler(req, res, result.info);}
 			else {
 				req.user.listings = result.info;
@@ -81,14 +92,14 @@ function getListingsAccount(req, res, next){
 }
 
 //gets all rentals for a user
-function getRentalsAccount(req, res, next){
+function getAccountRentals(req, res, next){
 
 	//if we dont already have the list of rentals or if we need to refresh them
 	if (!req.user.rentals || req.user.refresh_rental){
 		delete req.user.refresh_rental;
 		account_id = req.user.id;
 
-		Account.getRentalsAccount(account_id, function(result){
+		Account.getAccountRentals(account_id, function(result){
 			if (result.state=="error"){error.handler(req, res, result.info);}
 			else {
 				//combine any adjacent rental times
@@ -128,6 +139,26 @@ function getRentalsAccount(req, res, next){
 	}
 }
 
+//gets all chats for a user
+function getAccountChats(req, res, next){
+	//if we dont already have the list of chats or if we need to refresh them
+	if (!req.user.chat_history || req.user.refresh_chat){
+		delete req.user.refresh_chat;
+		account_id = req.user.id;
+
+		Account.getAccountChats(account_id, function(result){
+			if (result.state=="error"){error.handler(req, res, result.info);}
+			else {
+				req.user.chat_history = result.info;
+				next();
+			}
+		});
+	}
+	else {
+		next();
+	}
+}
+
 //check page number
 function checkPageNum(req, res, next){
 	page = req.params.page;
@@ -150,7 +181,8 @@ function renderProfile(req, res){
 		message: Auth.messageReset(req),
 		user: req.user,
 		listings: req.user.listings || false,
-		rentals: req.user.rentals || false
+		rentals: req.user.rentals || false,
+		chat_history: req.user.chat_history || false
 	});
 }
 
