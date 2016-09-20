@@ -8,7 +8,12 @@ function createListingRows(listings){
     for (var x = 0; x < listings.length; x++){
         var tr = $("<tr></tr");
         tr.append("<td>" + listings[x].domain_name + "</td>");
-        tr.append("<td><a href='/listing/" + listings[x].domain_name + "/verify" + "'>Verify</a></td>");
+        if (listings[x].price_type != 1){
+            tr.append("<td><a href='/listing/" + listings[x].domain_name + "/verify" + "'>Verify</a></td>");
+        }
+        else {
+            tr.append("<td><a href='/listing/" + listings[x].domain_name + "'>View</a></td>");
+        }
         $("#listing_table").append(tr);
     }
 }
