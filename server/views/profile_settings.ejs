@@ -10,8 +10,6 @@
 	<script type="text/javascript">
 	//redirect to homepage if user is not defined
 	var user = <% if(typeof user != "undefined"){ %><%-JSON.stringify(user)%><% }else{ %>window.location="/"<% } %>;
-	var listings = <% if(typeof listings != "undefined"){ %><%-JSON.stringify(listings)%><% }else{ %>""<% } %>;
-	var rentals = <% if(typeof rentals != "undefined"){ %><%-JSON.stringify(rentals)%><% }else{ %>""<% } %>;
 	</script>
 </head>
 
