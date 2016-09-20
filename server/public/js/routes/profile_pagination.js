@@ -1,9 +1,21 @@
+//function that runs when back button is pressed
+window.onpopstate = function(event) {
+    var row_per_page = parseFloat($("#domains-per-page").val());
+    var total_pages = Math.ceil(row_display.length / row_per_page);
+    var url_page = parseFloat(window.location.pathname.split('/').pop()) >>> 0;
+    var current_page = calculateCurrentPage(url_page, total_pages, row_per_page);
+    setupTable(total_pages, row_per_page, current_page, row_display);
+    setupControls(total_pages, row_per_page, current_page, row_display)
+}
+
 $(document).ready(function() {
     var row_per_page = parseFloat($("#domains-per-page").val());
     var total_pages = Math.ceil(row_display.length / row_per_page);
-    var current_page = 1;
+    var url_page = parseFloat(window.location.pathname.split('/').pop()) >>> 0;
+    var current_page = calculateCurrentPage(url_page, total_pages, row_per_page);
 
     setupTable(total_pages, row_per_page, current_page, row_display);
+    setupControls(total_pages, row_per_page, current_page, row_display);
 
     //search for a specific domain
     $("#search-domain").keyup(function(e){
@@ -29,46 +41,6 @@ $(document).ready(function() {
         }
     });
 
-    //on changing of domains per page
-    $("#domains-per-page").change(function(e){
-        row_per_page = parseFloat($(this).val());
-        total_pages = Math.ceil(row_display.length / row_per_page);
-        current_page = 1;
-        setupTable(total_pages, row_per_page, current_page, row_display);
-    })
-
-    //right and left keyboard click
-    document.addEventListener('keydown', function(event) {
-        if ($(event.target).is("input")){ return false };
-
-        if (event.keyCode == 37) {
-            $("#prev-page").click();
-        }
-        else if(event.keyCode == 39) {
-            $("#next-page").click();
-        }
-    });
-
-    $("#next-page").click(function(e){
-        current_page++;
-        if (current_page > total_pages){
-            current_page = total_pages;
-        }
-        else {
-            changePage(total_pages, row_per_page, current_page);
-        }
-    })
-
-    $("#prev-page").click(function(e){
-        current_page--;
-        if (current_page < 1){
-            current_page = 1;
-        }
-        else {
-            changePage(total_pages, row_per_page, current_page);
-        }
-    })
-
     //sort by header
     $("th").click(function(e){
         var sorted = ($(this).data("sorted") == 1) ? -1 : 1;
@@ -77,19 +49,28 @@ $(document).ready(function() {
         createAllRows(row_per_page, current_page);
     });
 
-    //go to a specific page
-    $("#go-to-page-button").click(function(e){
-        page_val = $("#go-to-page-input").val();
-        if (page_val > 0 && page_val <= total_pages){
-            current_page = page_val;
-            changePage(total_pages, row_per_page, current_page);
-        }
-        else {
-            $("#go-to-page-input").val(1);
-        }
-    })
-
+    //select all when clicking an input
+    $("input[type=text], input[type=number]").click(function(e){
+        $(this).select();
+    });
 });
+
+//function to prevent high pages
+function calculateCurrentPage(url_page, total_pages, row_per_page){
+    if (url_page <= total_pages && url_page > 0){
+        var current_page = url_page;
+        return current_page;
+    }
+    else {
+        var current_page = 1;
+        history.replaceState({
+            current_page: current_page,
+            total_pages: total_pages,
+            row_per_page: row_per_page
+        }, document.title + " - Page " + current_page, "/profile/mylistings/" + current_page);
+        return current_page;
+    }
+}
 
 //refresh table (pagination and rows)
 function setupTable(total_pages, row_per_page, current_page, rows_to_disp){
@@ -104,6 +85,64 @@ function setupTable(total_pages, row_per_page, current_page, rows_to_disp){
         paginateRows(total_pages, current_page);
         createAllRows(row_per_page, current_page);
     }
+}
+
+//function to refresh the controls
+function setupControls(total_pages, row_per_page, current_page, rows_to_disp){
+    //on changing of domains per page
+    $("#domains-per-page").unbind().change(function(e){
+        row_per_page = parseFloat($(this).val());
+        total_pages = Math.ceil(row_display.length / row_per_page);
+        current_page = 1;
+        setupTable(total_pages, row_per_page, current_page, row_display);
+    });
+
+    //right and left keyboard click
+    $(document).unbind().bind('keydown', function(event) {
+        if ($(event.target).is("input")){
+            return true;
+        }
+        else {
+            if (event.keyCode == 37) {
+                $("#prev-page").click();
+            }
+            else if(event.keyCode == 39) {
+                $("#next-page").click();
+            }
+        }
+    });
+
+    $("#next-page").unbind().click(function(e){
+        current_page++;
+        if (current_page > total_pages){
+            current_page = total_pages;
+        }
+        else {
+            changePage(total_pages, row_per_page, current_page);
+        }
+    });
+
+    $("#prev-page").unbind().click(function(e){
+        current_page--;
+        if (current_page < 1){
+            current_page = 1;
+        }
+        else {
+            changePage(total_pages, row_per_page, current_page);
+        }
+    });
+
+    //go to a specific page
+    $("#go-to-page-button").unbind().click(function(e){
+        page_val = $("#go-to-page-input").val();
+        if (page_val > 0 && page_val <= total_pages && page_val != current_page){
+            current_page = page_val;
+            changePage(total_pages, row_per_page, current_page);
+        }
+        else {
+            $("#go-to-page-input").val(1);
+        }
+    });
 }
 
 // --------------------------------------------------------------------------------- SORTING
@@ -134,7 +173,14 @@ function toggleSort(attr, bool){
 // --------------------------------------------------------------------------------- PAGINATION
 
 //function to change pages
-function changePage(total_pages, row_per_page, current_page){
+function changePage(total_pages, row_per_page, current_page, bool){
+    if (!bool || typeof bool == "undefined"){
+        history.pushState({
+            current_page: current_page,
+            total_pages: total_pages,
+            row_per_page: row_per_page
+        }, document.title + " - Page " + current_page, "/profile/mylistings/" + current_page);
+    }
     createAllRows(row_per_page, current_page);
     paginateRows(total_pages, current_page);
 }
@@ -155,8 +201,12 @@ function createPaginationPages(total_pages, row_per_page, current_page){
         }
         var temp_li = createPaginationPage(x, text);
         temp_li.find(".page-button").click(function(e){
-            current_page = ($(this).text() == "...") ? current_page : $(this).text();
-            changePage(total_pages, row_per_page, current_page);
+            button_page = ($(this).text() == "...") ? current_page : $(this).text();
+            if (button_page != current_page) {
+
+                current_page = button_page;
+                changePage(total_pages, row_per_page, current_page);
+            }
         })
         $("#page-list").append(temp_li);
     }

@@ -8,21 +8,28 @@ module.exports = function(app, db, auth, e){
 	error = e;
 
 	Account = new account_model(db);
-
-	//function to check if logged in
 	isLoggedIn = Auth.isLoggedIn;
 
-	//profile page route
-	profile_tab_routes = [
-		"/profile/dashboard",
-		"/profile/inbox",
-		"/profile/mylistings",
-		"/profile/myrentals",
-		"/profile/settings"
-	]
+	//myrentals and mylistings pages
+	app.get([
+		"/profile/mylistings/:page",
+		"/profile/myrentals/:page",
+	], [
+		checkPageNum,
+		isLoggedIn,
+		getListingsAccount,
+		getRentalsAccount,
+		renderListingOrRental
+	]);
 
 	//check if user is legit, get all listings, get all rentals, then renders the appropriate page
-	app.get(profile_tab_routes, [
+	app.get([
+			"/profile/mylistings",
+			"/profile/myrentals",
+			"/profile/dashboard",
+			"/profile/inbox",
+			"/profile/settings"
+		], [
 		isLoggedIn,
 		getListingsAccount,
 		getRentalsAccount,
@@ -49,7 +56,7 @@ module.exports = function(app, db, auth, e){
 	]);
 
 	//redirect anything not caught above to /profile
-	app.get("/profile*", function(req, res){ res.redirect("/profile/dashboard") });
+	app.get("/profile*", redirectProfile);
 }
 
 //gets all listings for a user
@@ -121,13 +128,38 @@ function getRentalsAccount(req, res, next){
 	}
 }
 
-//renders profile page
+//check page number
+function checkPageNum(req, res, next){
+	page = req.params.page;
+	if (page && (parseFloat(page) >>> 0) && (Number.isInteger(parseFloat(page))) && (parseFloat(page) > 0)){
+		next();
+	}
+	else {
+		var new_path = req.path.includes("listing") ? "/profile/mylistings" : "/profile/myrentals"
+		res.redirect(new_path);
+	}
+}
+
+//renders regular profile pages
 function renderProfile(req, res){
 	account_id = req.user.id;
 
 	ejs_name = req.path.slice(1, req.path.length).split("/").join("_") + ".ejs";
 
 	res.render(ejs_name, {
+		message: Auth.messageReset(req),
+		user: req.user,
+		listings: req.user.listings || false,
+		rentals: req.user.rentals || false
+	});
+}
+
+//renders profile page
+function renderListingOrRental(req, res){
+	account_id = req.user.id;
+	ejs_name = req.path.includes("listing") ? "mylistings" : "myrentals";
+
+	res.render("profile_" + ejs_name, {
 		message: Auth.messageReset(req),
 		user: req.user,
 		listings: req.user.listings || false,
@@ -229,4 +261,24 @@ function joinRentalTimes(rental_times){
     }
 
 	return temp_times;
+}
+
+//function to redirect to appropriate profile page
+function redirectProfile(req, res, next){
+	path = req.path;
+	if (path.includes("dashboard")){
+		res.redirect("/profile/dashboard");
+	}
+	else if (path.includes("inbox")){
+		res.redirect("/profile/inbox");
+	}
+	else if (path.includes("mylistings")){
+		res.redirect("/profile/mylistings");
+	}
+	else if (path.includes("myrentals")){
+		res.redirect("/profile/myrentals");
+	}
+	else {
+		res.redirect("/profile/settings");
+	}
 }
