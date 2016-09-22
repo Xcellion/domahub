@@ -12,6 +12,12 @@ $(document).ready(function() {
         }
     });
 
+    //new message button
+    $("#new-message").click(function(e){
+        console.log('s')
+    })
+
+    //submission of a new msg
     $("#messenger_form").submit(function(e){
         e.preventDefault();
         submit_data = checkMessage();
@@ -28,7 +34,7 @@ $(document).ready(function() {
                         message: $("#msg_text_input").val()
                     }, false));
 
-                    $("#to-msg_text_input").val("");
+                    $("#msg_text_input").val("");
         			can_submit = true;
     			}
     			else if (data.state == "error"){

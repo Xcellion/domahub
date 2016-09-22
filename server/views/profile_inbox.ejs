@@ -46,7 +46,7 @@
 					</nav>
 
 					<div class="container bottom-margin-25">
-						<a class="button is-info is-medium is-fullwidth">Send a message</a>
+						<a id="new-message" class="button is-info is-medium is-fullwidth">Send a message</a>
 					</div>
 
 				</div>
@@ -59,7 +59,7 @@
 				<div class="column">
 					<div class="box">
 						<form action="/messages" method="post" id="messenger_form">
-							<input id="msg_receiver_input" class="input" name="msg_receiver" type="text" />
+							<input id="msg_receiver_input" class="input" placeholder="To: "name="msg_receiver" type="text" />
 
 							<div id="chat_wrapper" class=""></div>
 
