@@ -103,7 +103,7 @@ module.exports = {
 			function(req, email, password, done) {
 				Account.getAccount(email, undefined, function(result){
 					if (result.state=="error"){
-						done(err, null);
+						done(result.info, null);
 					}
 
 					//account doesnt exists

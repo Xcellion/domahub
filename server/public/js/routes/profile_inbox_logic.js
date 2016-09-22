@@ -33,7 +33,7 @@ $(document).ready(function() {
                     $("#chat_wrapper").append(createConvoMsg({
                         message: $("#msg_text_input").val()
                     }, false));
-
+                    $('#chat_wrapper').scrollTop($('#chat_wrapper')[0].scrollHeight);
                     $("#msg_text_input").val("");
         			can_submit = true;
     			}
@@ -95,7 +95,7 @@ function createPanelConvo(convo_item){
 
     //less than a day
     if (diff_to_now < 86400000){
-        var disp_time = latest_time.format("H:mma");
+        var disp_time = latest_time.format("h:mma");
     }
     //less than a week
     else if (diff_to_now < 604800000){
@@ -131,6 +131,7 @@ function createPanelConvo(convo_item){
 
 //function to change selected convo
 function changeConvo(convo_item){
+    console.log(convo_item)
     $("#chat_wrapper").empty();
 
     //changing to a conversation
@@ -139,8 +140,9 @@ function changeConvo(convo_item){
             $("#chat_wrapper").append(createConvoMsg(convo_item.chats[x], true));
         }
         $("#msg_receiver_input").val(convo_item.username).addClass("is-disabled");
+        $('#chat_wrapper').scrollTop($('#chat_wrapper')[0].scrollHeight);
     }
-    //changing to a totall new convo
+    //changing to a totally new convo
     else {
 
     }
@@ -158,10 +160,38 @@ function createConvoMsg(chat_item, bool){
         var send_or_not = "sender_me";
     }
 
+    var latest_time = (chat_item.timestamp) ? moment(new Date(chat_item.timestamp + "Z")) : moment(new Date());
+    var moment_now = moment(new Date());
+    var diff_to_now = moment_now.diff(latest_time);
+    var diff_to_lny = latest_time.diff(moment(new Date("01/01/" + (moment_now.year() - 1))));
+
+    //less than a day
+    if (diff_to_now < 86400000){
+        var disp_time = latest_time.format("h:mma");
+    }
+    //less than a week
+    else if (diff_to_now < 604800000){
+        var disp_time = latest_time.format("ddd");
+    }
+    //less than last year
+    else if (diff_to_now < diff_to_lny){
+        var disp_time = latest_time.format("MMM DD");
+    }
+    //greater than last year
+    else {
+        var disp_time = latest_time.format("YYYY/MM/DD");
+    }
+
     var temp_div = $("<div class='message_wrapper " + send_or_not + "'></div>");
         var temp_msg = $("<p class='chat_message'>" + chat_item.message + "</p>");
-        var temp_timestamp = $("<p class='chat_timestamp'>" + timestamp + "</p>");
-    temp_div.append(temp_msg, temp_timestamp);
+        var temp_timestamp = $("<p class='chat_timestamp'>" + disp_time + "</p>");
+
+    if (send_or_not == "sender_me"){
+        temp_div.append(temp_timestamp, temp_msg);
+    }
+    else {
+        temp_div.append(temp_msg, temp_timestamp);
+    }
 
     return temp_div;
 }

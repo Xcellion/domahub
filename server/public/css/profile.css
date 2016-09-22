@@ -1,7 +1,7 @@
 #messenger_form {
   width: 100%;
-  max-height: 650px;
-  overflow-y: scroll; }
+  height: 650px;
+  position:relative; }
 
 #msg_receiver_input {
   -webkit-box-shadow: 0 2px 3px rgba(17, 17, 17, 0.1);
@@ -15,23 +15,39 @@
   font-size: 1.2rem;
   width: 100%; }
 
+#chat_wrapper{
+    height: 440px;
+    position: relative;
+    overflow-y: scroll;
+    margin-bottom: 200px;
+}
+
 #msg_text_input {
-  margin-top: 10px; }
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+#msg-text-wrapper{
+    position:absolute;
+    bottom:0;
+    width: 100%;
+}
 
 .chat_wrapper {
   width: 100%; }
 
 .message_wrapper {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: flex-start;
   padding: 8px;
   border-radius: 5px;
   word-wrap: break-word; }
 
+.is-three-quarter {
+width: 75%;
+}
+
 .chat_message {
-  max-width: 350px;
+display:inline-block;
+  max-width: 75%;
   padding: 10px;
   border-radius: 5px; }
   @media screen and (max-width: 768px) {
@@ -42,12 +58,21 @@
   background-color: #d3d6db;
   color: #222324; }
 
+.sender_me {
+    text-align:right;
+}
+
 .sender_me > .chat_message {
   background-color: #3CBC8D;
   color: #fff; }
 
 .chat_timestamp {
-  color: #aeb1b5; }
+  color: #aeb1b5;
+  font-size:75%;
+  display:inline-block;
+  vertical-align:bottom;
+  margin: 5px;
+ }
 
 .account-form select {
   margin-right: 5px; }
