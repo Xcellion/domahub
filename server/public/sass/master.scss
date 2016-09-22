@@ -24,6 +24,10 @@ input:-webkit-autofill {
   }
 }
 
+.min-height {
+  min-height: calc(100vh - 320px);
+}
+
 .is-fullheight {
   height: 100vh;
 }

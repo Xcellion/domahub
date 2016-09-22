@@ -3,6 +3,7 @@
 
 /********************************* NAVBAR ***********************************/
 #searchbar-form {
+  width: 100%;
   &.is-transparent {
     .control {
       &.has-icon {
@@ -17,16 +18,19 @@
       color: $white;
     }
   }
+  & > .control {
+    width: 100%;
+  }
   input {
     font-family: $sharetech;
     border: none;
     border-radius: 0;
     background-color: transparent;
     @include box-shadow(0,0,0,$black);
-    @include transition(all 0.25s);
+    @include transition(all 0.5s);
     color: $text;
+    width: 100%;
     &:focus {
-      @include box-shadow(0,-2px,0,$primary, inset);
     }
   }
 }
