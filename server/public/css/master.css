@@ -174,13 +174,17 @@ a {
   -o-transition: all 0.25s;
   -webkit-transition: all 0.25s;
   transition: all 0.25s;
+  color: #222324;
   cursor: pointer;
-  text-decoration: none;
-  opacity: 1.0; }
+  opacity: 1.0;
+  text-decoration: none; }
 
 .is-underlined {
   color: inherit;
   text-decoration: underline; }
+
+.black-link {
+  color: #222324; }
 
 .primary-link {
   color: #3CBC8D; }
@@ -858,6 +862,9 @@ button {
   .content h3 {
     font-size: 1.2rem;
     font-weight: 300; }
+    .content h3.is-danger {
+      color: #ed6c63;
+      font-weight: 400; }
   .content li + li {
     margin-top: 10px; }
   .content p {
@@ -891,8 +898,7 @@ button {
   .content ul {
     list-style: none;
     margin-left: 2em;
-    margin-right: 2em;
-    margin-top: 1em; }
+    margin-right: 2em; }
     .content ul ul {
       list-style-type: circle;
       margin-top: 0.5em; }
@@ -1319,7 +1325,8 @@ button {
 
 .image {
   display: block;
-  position: relative; }
+  position: relative;
+  margin: 0 auto; }
   .image.listing-img {
     height: 193.75px; }
   .image img {
@@ -3126,10 +3133,6 @@ a.nav-item.is-tab {
   flex-basis: 0;
   flex-grow: 1;
   justify-content: flex-start; }
-  .nav-center > #searchbar-form {
-    width: 100%; }
-    .nav-center > #searchbar-form > .control {
-      width: 100%; }
 
 @media screen and (min-width: 769px) {
   .nav-right {
@@ -4058,6 +4061,9 @@ input:-webkit-autofill {
     color: #fff; }
   .logo-text.large-logo {
     font-size: 2.5rem; }
+
+.min-height {
+  min-height: calc(100vh - 320px); }
 
 .is-fullheight {
   height: 100vh; }
