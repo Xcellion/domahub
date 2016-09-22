@@ -850,15 +850,17 @@ button {
   color: #222324; }
   .content h1 {
     font-size: 2.2rem;
-    font-weight: bold;
-    margin: 15px 0; }
+    font-weight: 400; }
+  .content h1 + p {
+    margin-top: 25px; }
   .content h2 {
-    font-size: 1.5rem;
-    font-weight: 400;
-    margin: 15px 0; }
+    font-size: 1.4rem;
+    font-weight: 400; }
     @media screen and (max-width: 768px) {
       .content h2 {
-        font-size: 1.4rem; } }
+        font-size: 1.2rem; } }
+  .content h2 + p {
+    margin-top: 25px; }
   .content h3 {
     font-size: 1.2rem;
     font-weight: 300; }
@@ -1631,7 +1633,6 @@ button {
 
 .title {
   color: #222324;
-  font-family: "Roboto Condensed", Helvetica, sans-serif;
   font-size: 3rem;
   font-weight: bold;
   line-height: 1; }
@@ -1847,10 +1848,10 @@ button {
 
 .heading {
   display: block;
-  font-size: 11px;
+  font-size: 1.2rem;
+  font-weight: 400;
   letter-spacing: 1px;
-  margin-bottom: 5px;
-  text-transform: uppercase; }
+  margin-bottom: 5px; }
 
 .highlight {
   font-size: 12px;
@@ -2729,6 +2730,17 @@ button {
     color: #268bd2; }
   .highlight .il {
     color: #2aa198; }
+
+.level-item.level-hero {
+  padding: 10px;
+  -webkit-box-shadow: inset -3px 0 0 #3CBC8D;
+  -moz-box-shadow: inset -3px 0 0 #3CBC8D;
+  box-shadow: inset -3px 0 0 #3CBC8D; }
+  @media screen and (max-width: 768px) {
+    .level-item.level-hero {
+      -webkit-box-shadow: 0 0 0 #111;
+      -moz-box-shadow: 0 0 0 #111;
+      box-shadow: 0 0 0 #111; } }
 
 .level-item .title,
 .level-item .subtitle {
@@ -4060,7 +4072,7 @@ input:-webkit-autofill {
   .logo-text.white-logo {
     color: #fff; }
   .logo-text.large-logo {
-    font-size: 2.5rem; }
+    font-size: 2.2rem; }
 
 .min-height {
   min-height: calc(100vh - 320px); }
@@ -4079,7 +4091,7 @@ input:-webkit-autofill {
 
 @media screen and (min-width: 769px) {
   .landing-img {
-    background-position: center center;
+    background-position: top center;
     background-repeat: no-repeat;
     background-size: cover;
     width: 100%; } }
@@ -4091,7 +4103,7 @@ input:-webkit-autofill {
 
 @media screen and (min-width: 769px) {
   .img-wrapper {
-    background-color: rgba(0, 0, 0, 0.65);
+    background-color: rgba(0, 0, 0, 0.45);
     height: 100%;
     width: 100%; } }
 

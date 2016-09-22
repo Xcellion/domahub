@@ -1,4 +1,9 @@
 .level-item
+  &.level-hero
+    padding: 10px
+    @include box-shadow(-3px,0,0,$primary,inset)
+    +mobile
+      @include box-shadow(0,0,0,$black)
   .title,
   .subtitle
     margin-bottom: 0
