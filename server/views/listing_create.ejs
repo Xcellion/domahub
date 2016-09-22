@@ -107,15 +107,18 @@
 								<input id="sing-purchase" class="input" type="url" placeholder="godaddy.com/myDomainName"/>
 							</div>
 						</div>
-						<div class="control is-horizontal bottom-margin-25">
-							<div class="control is-grouped">
-								<p class="control is-expanded">
-								</p>
-								<p class="control is-expanded">
-									<input id="sing-submit" class="button is-primary is-pulled-right" type="submit" value="Create listing" />
-								</p>
+						<nav class="level">
+							<div class="level-left">
+								<div class="level-item">
+									<a id="mult-toggle" class="orange-link">Multiple listings?</a>
+								</div>
 							</div>
-						</div>
+							<div class="level-right">
+								<div class="level-item">
+									<input id="sing-submit" class="button is-primary is-pulled-right" type="submit" value="Create listing" />
+								</div>
+							</div>
+						</nav>
 					</form>
 
 					<div id="mult-form-wrapper" class="is-hidden">
@@ -156,21 +159,21 @@
 								<label for="file" class="button"><i class="fa fa-upload"></i>Upload CSV</label>
 							</div>
 							<progress id="mult-progress" class="progress"></progress>
-							<div class="control is-horizontal bottom-margin-25">
-								<div class="control is-grouped">
-									<p class="control is-expanded">
-									</p>
-									<p class="control is-expanded">
-										<input id="mult-submit" class="button is-primary is-pulled-right" type="submit" value="Create listings" />
-									</p>
+							<nav class="level">
+								<div class="level-left">
+									<div class="level-item">
+										<a id="mult-toggle" class="orange-link">Single listing?</a>
+									</div>
 								</div>
-							</div>
+								<div class="level-right">
+									<div class="level-item">
+										<input id="mult-submit" class="button is-primary" type="submit" value="Create listings" />
+									</div>
+								</div>
+							</nav>
 						</form>
 					</div>
 
-					<div class="content has-text-right">
-						<a id="mult-toggle" class="orange-link">Multiple listings?</a>
-					</div>
 				</div>
 			</div>
 		</div>
