@@ -14,11 +14,22 @@ $(document).ready(function() {
 		}
 	});
 
-	//verify fullname
-	$("#fullname-input").keyup(function() {
-		name_length = $(this).val().length;
+	//prevent space in username
+	$("input").keydown(function(e) {
+		if (e.keyCode == 32){
+			e.preventDefault();
+			return false;
+		}
+	});
 
-		if (70 > name_length && name_length > 0) {
+	//verify username
+	$("#username-input").keyup(function(e) {
+		name_length = $(this).val().length;
+		name_val = $(this).val();
+		if (name_val.includes(" ")){
+			showSuccessDanger($(this), false);
+		}
+		else if (70 > name_length && name_length > 0) {
 			showSuccessDanger($(this), true);
 		}
 		else if (name_length == 0){
@@ -46,7 +57,7 @@ $(document).ready(function() {
 
 	//verify passwords are matching
 	$("#verify-pw").keyup(function() {
-		if ($("#pw-input").val() == $(this).val()) {
+		if ($("#pw-input").val().length > 0 && $("#pw-input").val() == $(this).val()) {
 			showSuccessDanger($(this), true);
 		}
 		else if ($(this).val().length == 0){
@@ -71,11 +82,11 @@ $(document).ready(function() {
 		}
 
 		//if no name is entered
-		else if (!$("#fullname-input").val() || $("#fullname-input").val().length > 70 ) {
+		else if (!$("#username-input").val() || $("#username-input").val().length > 70 || $("#username-input").val().includes(" ")) {
 			$("#message").fadeOut(100, function(){
 				$("#message").css("color", "#ed1c24").text("Please enter a valid name!").fadeIn(100);
-				$("#fullname-input").focus();
-				showSuccessDanger($("#fullname-input"), false);
+				$("#username-input").focus();
+				showSuccessDanger($("#username-input"), false);
 			});
 			return false;
 		}

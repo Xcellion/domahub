@@ -3,11 +3,19 @@ account_model = function(database){
 
 	account_query = function(query, error_description, callback, params){
 		database.query(query, function(result, err){
-			if (err){ console.log(err)}
-			callback({
-				state : (!err) ? "success" : "error",
-				info : (!err) ? result : error_description
-			});
+			if (err){
+				callback({
+					state : "error",
+					info : error_description,
+					errcode : err.code
+				});
+			}
+			else {
+				callback({
+					state : "success",
+					info : result
+				});
+			}
 		}, params);
 	}
 }
@@ -32,10 +40,22 @@ account_model.prototype.checkAccount = function(email, callback){
 //----------------------------------------------------------------------GETS----------------------------------------------------------
 
 //gets all account info
-account_model.prototype.getAccount = function(email, callback){
-	console.log("Attempting to get all account information for email: " + email + "...");
-	query = "SELECT * FROM accounts WHERE email = ?"
-	account_query(query, "Failed to get all account information for email: " + email + "!", callback, email);
+account_model.prototype.getAccount = function(email, username, callback){
+	if (email){
+		console.log("Attempting to get all account information for email: " + email + "...");
+	}
+	else {
+		console.log("Attempting to get all account information for username " + username + "...");
+	}
+	query = "SELECT * FROM accounts WHERE email = ? OR username = ?"
+	account_query(query, "Failed to get all account information for email: " + email + "!", callback, [email, username]);
+}
+
+//gets all account info
+account_model.prototype.getAccountByUsername = function(username, callback){
+	console.log("Attempting to get all account information for username: " + username + "...");
+	query = "SELECT * FROM accounts WHERE username = ?"
+	account_query(query, "Failed to get all account information for username: " + username + "!", callback, username);
 }
 
 //gets account by token
@@ -68,7 +88,7 @@ account_model.prototype.getAccountRentals = function(account_id, callback){
 			JOIN rental_times ON rentals.rental_id = rental_times.rental_id \
 			JOIN listings ON listings.id = rentals.listing_id \
 			WHERE rentals.account_id = ? \
-			ORDER BY listings.domain_name ASC, rentals.rental_id ASC, rental_times.date ASC";
+			ORDER BY listings.domain_name ASC, rentals.rental_id ASC, rental_times.date DESC";
 	account_query(query, "Failed to get all rentals belonging to account " + account_id + "!", callback, account_id);
 }
 
@@ -76,18 +96,20 @@ account_model.prototype.getAccountRentals = function(account_id, callback){
 account_model.prototype.getAccountChats = function(account_id, callback){
 	console.log("Attempting to get all chat info for account #" + account_id + "...");
 	query = "SELECT \
-	 			chat_history.*, \
-				receiver_accounts.fullname AS receiver_name, \
-				receiver_accounts.email AS receiver_email, \
-				sender_accounts.fullname AS sender_name, \
-				sender_accounts.email AS sender_email \
+				MAX(chat_history.timestamp) as timestamp, \
+				chat_history.message, \
+				chat_history.sender_account_id, \
+				accounts.username, \
+				accounts.email \
 			FROM chat_history \
-			JOIN accounts AS receiver_accounts ON receiver_accounts.id = chat_history.receiver_account_id \
-			JOIN accounts AS sender_accounts ON sender_accounts.id = chat_history.sender_account_id \
-			WHERE chat_history.sender_account_id = ? \
-			OR chat_history.receiver_account_id = ? \
-			GROUP BY receiver_account_id, sender_account_id \
-			ORDER BY chat_history.timestamp DESC"
+			JOIN accounts \
+				ON ( \
+					(accounts.id = chat_history.sender_account_id AND chat_history.receiver_account_id = ?) \
+					OR \
+					(accounts.id = chat_history.receiver_account_id AND chat_history.sender_account_id = ?) \
+				) \
+			GROUP BY accounts.email \
+			ORDER BY timestamp DESC"
 	account_query(query, "Failed to get all chat info for account #" + account_id + "!", callback, [account_id, account_id]);
 }
 
@@ -109,7 +131,7 @@ account_model.prototype.newAccount = function(account_info, callback){
 	console.log("Creating a new account for email: " + account_info.email + "...");
 	query = "INSERT INTO accounts \
 			SET ? "
-	listing_query(query, "Failed to create a new account for email: " + account_info.email + "!", callback, account_info);
+	account_query(query, "Failed to create a new account for email: " + account_info.email + "!", callback, account_info);
 }
 
 //inserts new information into account stripe
@@ -125,7 +147,7 @@ account_model.prototype.newAccountStripe = function(account_info, callback){
 				stripe_user_id = ?, \
 				refresh_token = ?, \
 				access_token = ? "
-	listing_query(query, "Failed to create new Stripe info for account: " + account_info.account_id + "!", callback, [
+	account_query(query, "Failed to create new Stripe info for account: " + account_info.account_id + "!", callback, [
 		account_info,
 		account_info.token_type,
 		account_info.stripe_publishable_key,
@@ -145,5 +167,5 @@ account_model.prototype.updateAccount = function(account_info, email, callback){
 	query = "UPDATE accounts \
 			SET ? \
 			WHERE email = ?"
-	listing_query(query, "Failed to update account with email: " + email + "!", callback, [account_info, email]);
+	account_query(query, "Failed to update account with email: " + email + "!", callback, [account_info, email]);
 }

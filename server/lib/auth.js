@@ -39,7 +39,7 @@ module.exports = {
 		passport.deserializeUser(function(user, done) {
 			//if we need to refresh the user, refresh the user.
 			if (user.refresh){
-				Account.getAccount(user.email, function(result){
+				Account.getAccount(user.email, undefined, function(result){
 					if (result.state=="error"){
 						done(err, user);
 					}
@@ -60,7 +60,7 @@ module.exports = {
 			},
 			function(req, email, password, done) {
 				//check if account already exists
-				Account.getAccount(email, function(result){
+				Account.getAccount(email, username, function(result){
 					if (result.state=="error"){ done(false, { message: result.info}); }
 
 					//account exists
@@ -75,7 +75,7 @@ module.exports = {
 
 						var account_info = {
 							email: email,
-							fullname: fullname,
+							username: username,
 							password: bcrypt.hashSync(password, null, null),
 							date_created: now_utc,
 							date_accessed: now_utc
@@ -101,7 +101,7 @@ module.exports = {
 				passReqToCallback : true // allows us to pass back the entire request to the callback
 			},
 			function(req, email, password, done) {
-				Account.getAccount(email, function(result){
+				Account.getAccount(email, undefined, function(result){
 					if (result.state=="error"){
 						done(err, null);
 					}
@@ -275,7 +275,7 @@ function renderRequestVerify(req, res){
 }
 
 //helper function to verify account
-function generateVerify(req, res, email, fullname, cb){
+function generateVerify(req, res, email, username, cb){
 	//generate token to email to user
 	crypto.randomBytes(20, function(err, buf) {
 		var verify_token = buf.toString('hex');
@@ -295,7 +295,7 @@ function generateVerify(req, res, email, fullname, cb){
 					to: email,
 					from: 'noreply@domahub.com',
 					subject: 'Verify your account at domahub!',
-					text: 'Hello, ' + fullname + '.\n\n' +
+					text: 'Hello, ' + username + '.\n\n' +
 						  'Please click on the following link, or paste this into your browser to verify your email.\n\n' +
 						  'http://' + req.headers.host + '/verify/' + verify_token + '\n\n' +
 						  'The link above will expire in 1 hour.'
@@ -319,7 +319,7 @@ function generateVerify(req, res, email, fullname, cb){
 function requestVerify(req, res){
 	if (req.isAuthenticated() && req.user.type == 0 && !req.user.requested && req.header("x-requested-with") == "XMLHttpRequest"){
 		req.user.requested = true;
-		generateVerify(req, res, req.user.email, req.user.fullname, function(state){
+		generateVerify(req, res, req.user.email, req.user.username, function(state){
 			if (state == "success"){
 				req.logout();
 				res.send({
@@ -374,7 +374,7 @@ function loginPost(req, res, next){
 //function to sign up for a new account
 function signupPost(req, res, next){
 	email = req.body.email;
-	fullname = req.body.fullname;
+	username = req.body.username;
 	password = req.body.password;
 	recaptcha = req.body["g-recaptcha-response"]
 
@@ -382,8 +382,8 @@ function signupPost(req, res, next){
 	if (!validator.isEmail(email)){
 		error.handler(req, res, "Invalid email!");
 	}
-	//fullname is too short
-	else if (70 > fullname.length > 3){
+	//username is too short
+	else if (70 > username.length > 3 || username.includes(" ")){
 		error.handler(req, res, "Invalid name!");
 	}
 	//password is too short
@@ -416,7 +416,7 @@ function signupPost(req, res, next){
 							error.handler(req, res, info.message);
 						}
 						else {
-							generateVerify(req, res, email, fullname, function(state){
+							generateVerify(req, res, email, username, function(state){
 								//if coming from a listing, redirect to listing. otherwise redirect to profile
 								redirectTo = (req.header("Referer").split("/").indexOf("listing") != -1) ? req.header("Referer") : "/profile/dashboard";
 								redirectback = req.session.redirectBack;

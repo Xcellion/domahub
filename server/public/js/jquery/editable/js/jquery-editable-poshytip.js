@@ -1976,11 +1976,11 @@ Makes editable any HTML element on the page. Applied as jQuery method.
             @method validate()
             @returns {Object} validation errors map
             @example
-            $('#username, #fullname').editable('validate');
+            $('#username, #username').editable('validate');
             // possible result:
             {
               username: "username is required",
-              fullname: "fullname should be minimum 3 letters length"
+              username: "username should be minimum 3 letters length"
             }
             **/
             case 'validate':
@@ -2002,11 +2002,11 @@ Makes editable any HTML element on the page. Applied as jQuery method.
             @param {bool} isSingle whether to return just value of single element
             @returns {Object} object of element names and values
             @example
-            $('#username, #fullname').editable('getValue');
+            $('#username, #username').editable('getValue');
             //result:
             {
             username: "superuser",
-            fullname: "John"
+            username: "John"
             }
             //isSingle = true
             $('#username').editable('getValue', true);

@@ -3,11 +3,19 @@ listing_model = function(database){
 
 	listing_query = function(query, error_description, callback, params){
 		database.query(query, function(result, err){
-			if (err){ console.log(err)}
-			callback({
-				state : (!err) ? "success" : "error",
-				info : (!err) ? result : error_description
-			});
+			if (err){
+				callback({
+					state : "error",
+					info : error_description,
+					errcode : err.code
+				});
+			}
+			else {
+				callback({
+					state : "success",
+					info : result
+				});
+			}
 		}, params);
 	}
 }
@@ -112,7 +120,7 @@ listing_model.prototype.getListing = function(domain_name, callback){
 	console.log("Attempting to get all listing information for " + domain_name + "...");
 	query = "SELECT \
 				listings.*,\
-				accounts.fullname,\
+				accounts.username,\
 				accounts.email\
 			FROM listings \
 			JOIN accounts ON listings.owner_id = accounts.id \
@@ -125,7 +133,7 @@ listing_model.prototype.getAllListings = function(callback){
 	console.log("Attempting to get all listing info...");
 	query = 'SELECT \
 				listings.*,\
-				accounts.fullname,\
+				accounts.username,\
 				accounts.email\
 			FROM listings \
 			JOIN accounts ON listings.owner_id = accounts.id \
@@ -142,7 +150,7 @@ listing_model.prototype.getListingRentalsInfo = function(listing_id, callback){
 				rentals.listing_id, \
 				rental_times.date, \
 				rental_times.duration, \
-				accounts.fullname, \
+				accounts.username, \
 				accounts.email \
 			FROM rentals \
 			INNER JOIN rental_times ON rentals.rental_id = rental_times.rental_id \
