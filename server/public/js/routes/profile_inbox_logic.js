@@ -20,16 +20,15 @@ $(document).ready(function() {
             can_submit = false;
             $.ajax({
     			type: "POST",
-    			url: "/messages",
+    			url: "/messages/new",
     			data: submit_data
     		}).done(function(data){
     			if (data.state == "success"){
-                    createConvoMsg({
+                    $("#chat_wrapper").append(createConvoMsg({
                         message: $("#msg_text_input").val()
-                    }, false);
+                    }, false));
 
-                    //reset the data to default value
-                    $(".to-reset").val("");
+                    $("#to-msg_text_input").val("");
         			can_submit = true;
     			}
     			else if (data.state == "error"){
@@ -126,12 +125,12 @@ function createPanelConvo(convo_item){
 
 //function to change selected convo
 function changeConvo(convo_item){
-    $("#msg_wrapper").empty();
+    $("#chat_wrapper").empty();
 
     //changing to a conversation
     if (convo_item){
         for (var x = 0; x < convo_item.chats.length; x++){
-            $("#msg_wrapper").append(createConvoMsg(convo_item.chats[x]), true);
+            $("#chat_wrapper").append(createConvoMsg(convo_item.chats[x], true));
         }
         $("#msg_receiver_input").val(convo_item.username).addClass("is-disabled");
     }
@@ -152,6 +151,7 @@ function createConvoMsg(chat_item, bool){
         var timestamp = moment(new Date()).format("M/DD, H:mma");
         var send_or_not = "sender_me";
     }
+
     var temp_div = $("<div class='message_wrapper " + send_or_not + "'></div>");
         var temp_msg = $("<p class='chat_message'>" + chat_item.message + "</p>");
         var temp_timestamp = $("<p class='chat_timestamp'>" + timestamp + "</p>");
