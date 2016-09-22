@@ -10,6 +10,9 @@ module.exports = function(app, db, auth, e){
 	Account = new account_model(db);
 	isLoggedIn = Auth.isLoggedIn;
 
+	//redirect profile to dashboard
+	app.get("/profile", function(req, res){ res.redirect("/profile/dashboard") });
+
 	//myrentals and mylistings pages
 	app.get([
 		"/profile/mylistings/:page",
