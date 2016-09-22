@@ -30,23 +30,22 @@
   padding: 8px;
   border-radius: 5px;
   word-wrap: break-word; }
+
+.chat_message {
+  max-width: 350px;
+  padding: 10px;
+  border-radius: 5px; }
   @media screen and (max-width: 768px) {
-    .message_wrapper {
-      max-width: 200px; } }
+    .chat_message {
+      max-width: 150px; } }
 
 .sender_them > .chat_message {
   background-color: #d3d6db;
-  color: #222324;
-  max-width: 500px;
-  padding: 10px;
-  border-radius: 5px; }
+  color: #222324; }
 
 .sender_me > .chat_message {
   background-color: #3CBC8D;
-  color: #fff;
-  max-width: 500px;
-  padding: 10px;
-  border-radius: 5px; }
+  color: #fff; }
 
 .chat_timestamp {
   color: #aeb1b5; }

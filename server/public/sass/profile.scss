@@ -38,8 +38,14 @@
   padding: 8px;
   border-radius: 5px;
   word-wrap: break-word;
+}
+
+.chat_message {
+  max-width: 350px;
+  padding: 10px;
+  border-radius: 5px;
   @include mobile {
-    max-width: 200px;
+    max-width: 150px;
   }
 }
 
@@ -47,9 +53,6 @@
   & > .chat_message {
     background-color: $grey-light;
     color: $text;
-    max-width: 500px;
-    padding: 10px;
-    border-radius: 5px;
   }
 }
 
@@ -57,9 +60,6 @@
   & > .chat_message {
     background-color: $primary;
     color: $white;
-    max-width: 500px;
-    padding: 10px;
-    border-radius: 5px;
   }
 }
 
