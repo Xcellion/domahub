@@ -4,97 +4,180 @@
 
 <html>
 
-	<head>
-		<title>domahub</title>
-		<%- include("templates/head_links"); %>
-		<link rel="stylesheet" href="/css/listing_create.css" type="text/css" />
-		<script type="text/javascript">
-			var user = <% if(typeof user != "undefined"){ %><%-JSON.stringify(user)%><% }else{ %>""<% } %>;
-			var message = <% if(typeof message != "undefined"){ %><%-JSON.stringify(message)%><% }else{ %>""<% } %>;
-		</script>
-		<script src="/js/routes/listing_create_logic.js" type="text/javascript"></script>
-	</head>
+<head>
+	<title>domahub</title>
+	<%- include("templates/head_links"); %>
+	<link rel="stylesheet" href="/css/listing_create.css" type="text/css" />
+	<script type="text/javascript">
+		var user = <% if(typeof user != "undefined"){ %><%-JSON.stringify(user)%><% }else{ %>""<% } %>;
+		var message = <% if(typeof message != "undefined"){ %><%-JSON.stringify(message)%><% }else{ %>""<% } %>;
+	</script>
+	<script src="/js/routes/listing_create_logic.js" type="text/javascript"></script>
+</head>
 
-	<body>
+<body>
 
-		<%- include("templates/navbar", {user: user}); %>
+	<%- include("templates/navbar", {user: user}); %>
 
+	<section class="section is-medium clear-nav min-height">
+		<div class="container">
+			<div class="columns">
+				<div class="column is-half is-offset-3">
+					<form id="sing-form" action="/listing/create" method="post" novalidate>
+						<div class="content has-text-centered">
+							<h2>Create new listings</h2>
+							<h3 id="message" class="is-danger">
 
-		<div id="top_wrapper">
-
-			<div id="forms_wrapper">
-
-				<p id="mult_message">
-					Create new listings!
-				</p>
-
-				<div id="sing_form_wrapper" class="form_wrapper">
-					<form id="sing_form" action="/listing/create" method="post" novalidate>
-						<p>Required</p>
-						<input required class="create_input input" id="sing_domain" type="url" name="domain_name" placeholder="MyAwesomeDomain.com" />
-						<textarea required class="create_input input" id="sing_description" name="description" placeholder="All listings need a great description! e.g. - The best website ever!"></textarea>
-						<p>Optional</p>
-						<p class="price_input_text">Minute</p>
-						<input class="create_input price_input input" id="minute_price" type="number" name="minute_price" defaultValue="1" value="1" placeholder="1" min="1"/>
-						<p class="price_input_text">Hour</p>
-						<input class="create_input price_input input" id="hour_price" type="number" name="hour_price" defaultValue="1" value="1" placeholder="1" min="1"/>
-						<p class="price_input_text">Day</p>
-						<input class="create_input price_input input" id="day_price" type="number" name="day_price" defaultValue="10" value="10" placeholder="10" min="1"/>
-						<p class="price_input_text">Week</p>
-						<input class="create_input price_input input" id="week_price" type="number" name="week_price" defaultValue="25" value="25" placeholder="25" min="1"/>
-						<p class="price_input_text">Month</p>
-						<input class="create_input price_input input" id="month_price" type="number" name="month_price" defaultValue="50" value="50" placeholder="50" min="1"/>
-						<input class="create_input input" id="sing_background" type="url" name="background_image" placeholder="CustomBackground.com/image.png" />
-						<input class="create_input input" id="sing_buy" type="url" name="buy_link" placeholder="MyAwesomeDomain.com" />
-						<input class="create_input is-primary button" id="sing_submit" type="submit" value="Create new listing!" />
+							</h3>
+						</div>
+						<div class="control is-horizontal">
+							<div class="control-label">
+								<label class="label">Domain Name</label>
+							</div>
+							<div class="control">
+								<input id="sing-domain" class="input" type="url" placeholder="MyDomain.com"/>
+							</div>
+						</div>
+						<div class="control is-horizontal">
+							<div class="control-label">
+								<label class="label">Description</label>
+							</div>
+							<div class="control">
+								<textarea id="sing-description" class="textarea" placeholder="All listings need a great description!"></textarea>
+							</div>
+						</div>
+						<div class="control is-horizontal">
+							<div class="control-label">
+								<label class="label">Minute</label>
+							</div>
+							<div class="control has-icon">
+								<input id="minute-price" class="input input-number" type="number" value="1" min="1"/>
+								<i class="fa fa-dollar"></i>
+							</div>
+						</div>
+						<div class="control is-horizontal">
+							<div class="control-label">
+								<label class="label">Hour</label>
+							</div>
+							<div class="control has-icon">
+								<input id="hour-price" class="input input-number" type="number" value="1" min="1"/>
+								<i class="fa fa-dollar"></i>
+							</div>
+						</div>
+						<div class="control is-horizontal">
+							<div class="control-label">
+								<label class="label">Day</label>
+							</div>
+							<div class="control has-icon">
+								<input id="day-price" class="input input-number" type="number" value="10" min="10"/>
+								<i class="fa fa-dollar"></i>
+							</div>
+						</div>
+						<div class="control is-horizontal">
+							<div class="control-label">
+								<label class="label">Week</label>
+							</div>
+							<div class="control has-icon">
+								<input id="week-price" class="input input-number" type="number" value="25" min="25"/>
+								<i class="fa fa-dollar"></i>
+							</div>
+						</div>
+						<div class="control is-horizontal">
+							<div class="control-label">
+								<label class="label">Month</label>
+							</div>
+							<div class="control has-icon">
+								<input id="month-price" class="input input-number" type="number" value="50" min="50"/>
+								<i class="fa fa-dollar"></i>
+							</div>
+						</div>
+						<div class="control is-horizontal">
+							<div class="control-label">
+								<label class="label">Background Image</label>
+							</div>
+							<div class="control">
+								<input id="sing-background" class="input" type="url" placeholder="backgroundImage.com/image.png"/>
+							</div>
+						</div>
+						<div class="control is-horizontal">
+							<div class="control-label">
+								<label class="label">Purchase Link</label>
+							</div>
+							<div class="control">
+								<input id="sing-purchase" class="input" type="url" placeholder="godaddy.com/myDomainName"/>
+							</div>
+						</div>
+						<div class="control is-horizontal bottom-margin-25">
+							<div class="control is-grouped">
+								<p class="control is-expanded">
+								</p>
+								<p class="control is-expanded">
+									<input id="sing-submit" class="button is-primary is-pulled-right" type="submit" value="Create listing" />
+								</p>
+							</div>
+						</div>
 					</form>
+
+					<div id="mult-form-wrapper" class="is-hidden">
+						<table class="table">
+							<div class="content has-text-centered">
+								<h2>You may upload a .csv file in the format below</h2>
+							</div>
+							<thead>
+								<tr>
+									<th>Domain name*</th>
+									<th>Description*</th>
+									<th>Minute price</th>
+									<th>Hourly price</th>
+									<th>Daily price</th>
+									<th>Weekly price</th>
+									<th>Monthly price</th>
+									<th>Background image</th>
+									<th>Purchase link</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td>testdomain.com</td>
+									<td>This is a test description</td>
+									<td>1</td>
+									<td>1</td>
+									<td>10</td>
+									<td>25</td>
+									<td>50</td>
+									<td>http://link-to-image.com/image.png</td>
+									<td>http://link-to-buy.com/testdomain</td>
+								</tr>
+							</tbody>
+						</table>
+						<form id="mult-form" action="/listing/create/batch" method="post" enctype="multipart/form-data">
+							<div class="control is-horizontal">
+								<input type="file" name="file" id="file" class="input-file" />
+								<label for="file" class="button"><i class="fa fa-upload"></i>Upload CSV</label>
+							</div>
+							<progress id="mult-progress" class="progress"></progress>
+							<div class="control is-horizontal bottom-margin-25">
+								<div class="control is-grouped">
+									<p class="control is-expanded">
+									</p>
+									<p class="control is-expanded">
+										<input id="mult-submit" class="button is-primary is-pulled-right" type="submit" value="Create listings" />
+									</p>
+								</div>
+							</div>
+						</form>
+					</div>
+
+					<div class="content has-text-right">
+						<a id="mult-toggle" class="orange-link">Multiple listings?</a>
+					</div>
 				</div>
-
-				<div id="mult_form_wrapper" class="form_wrapper">
-					<p>You can upload a .csv in the below format</p>
-					<table class='table'>
-						<thead>
-							<tr>
-								<th>Domain name*</th>
-								<th>Description*</th>
-								<th>Minute price</th>
-								<th>Hourly price</th>
-								<th>Daily price</th>
-								<th>Weekly price</th>
-								<th>Monthly price</th>
-								<th>Background image</th>
-								<th>Buy link</th>
-							</tr>
-						</thead>
-
-						<tbody>
-							<tr>
-								<td>testdomain.com</td>
-								<td>This is a test description</td>
-								<td>1</td>
-								<td>1</td>
-								<td>10</td>
-								<td>25</td>
-								<td>50</td>
-								<td>http://link-to-image.com/image.png</td>
-								<td>http://link-to-buy.com/testdomain</td>
-							</tr>
-						</tbody>
-					</table>
-					<form id="mult_form" action="/listing/create/batch" method="post" enctype="multipart/form-data">
-						<input id="mult_csv" class="create_input" type="file" name="csv" accept=".csv" />
-						<progress id="mult_progress" class="create_input"></progress>
-						<input id="mult_submit" class="create_input is-primary button" type="submit" value="Create new listings!" />
-					</form>
-				</div>
-
-				<a id="mult_toggle">Multiple listings?</a>
-
 			</div>
 		</div>
+	</section>
 
-		<%- include("templates/footer"); %>
+	<%- include("templates/footer"); %>
 
-	</body>
+</body>
 
 </html>
