@@ -1,25 +1,58 @@
-data_model = function(database){
+chat_model = function(database){
 	this.db = database;
 
-	data_query = function(query, error_description, callback, params){
+	chat_query = function(query, error_description, callback, params){
 		database.query(query, function(result, err){
-			if (err){ console.log(err)}
-			callback({
-				state : (!err) ? "success" : "error",
-				info : (!err) ? result : error_description
-			});
+			if (err){
+				callback({
+					state : "error",
+					info : error_description,
+					errcode : err.code
+				});
+			}
+			else {
+				callback({
+					state : "success",
+					info : result
+				});
+			}
 		}, params);
 	}
 }
 
-module.exports = data_model;
+module.exports = chat_model;
+
+//----------------------------------------------------------------------GETS----------------------------------------------------------
+
+//gets all chats with a specific person
+chat_model.prototype.getChats = function(account_id_1, account_id_2, callback){
+	console.log("Attempting to get all chat info for accounts #" + account_id_1 + " and #" + account_id_2 + "...");
+	query = "SELECT \
+				chat_history.timestamp, \
+				chat_history.message, \
+				chat_history.sender_account_id \
+			FROM chat_history \
+			JOIN accounts \
+				ON ( \
+					(accounts.id = chat_history.receiver_account_id AND chat_history.sender_account_id = ? AND chat_history.receiver_account_id = ?) \
+					OR \
+					(accounts.id = chat_history.sender_account_id AND chat_history.sender_account_id = ? AND chat_history.receiver_account_id = ?) \
+				) \
+			ORDER BY timestamp ASC"
+	chat_query(query, "Failed to get all chat info for accounts #" + account_id_1 + " and #" + account_id_2 + "!", callback, [
+		account_id_1,
+		account_id_2,
+		account_id_2,
+		account_id_1
+	]);
+}
 
 //----------------------------------------------------------------------SETS----------------------------------------------------------
 
 //creates a new chat message
-data_model.prototype.newChatMessage = function(chat_info, callback){
+chat_model.prototype.newChatMessage = function(chat_info, callback){
 	console.log("Adding new chat item for account #" + chat_info.sender_account_id + "...");
 	query = "INSERT INTO chat_history \
 			SET ? "
-	listing_query(query, "Failed to add new chat item for account #" + chat_info.sender_account_id + "!", callback, chat_info);
+	chat_query(query, "Failed to add new chat item for account #" + chat_info.sender_account_id + "!", callback, chat_info);
 }

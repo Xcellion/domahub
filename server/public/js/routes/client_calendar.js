@@ -113,7 +113,7 @@ function createExisting(rentals){
 			eventData.editing = true;
 		}
 		else if (user.id == rentals[x].account_id){
-			eventData.title = user.fullname || "Guest";
+			eventData.title = user.username || "Guest";
 			eventData.color = "#73c8e3";
 		}
 		else {
@@ -217,7 +217,7 @@ $(document).on("mouseleave", ".fc-event", function(e){
 	mouseEvent = $("#calendar").fullCalendar('clientEvents', $(this).attr("id"))[0];
 
 	if (!mouseEvent.other && !mouseEvent.editing && user && mouseEvent.account_id == user.id){
-		var title = user.fullname || "Guest";
+		var title = user.username || "Guest";
 		eventEdit(mouseEvent.rental_id, title);
 		mousein = false;
 	}

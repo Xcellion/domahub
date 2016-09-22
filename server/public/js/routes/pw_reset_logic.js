@@ -2,7 +2,7 @@ var can_submit = true;
 
 $(document).ready(function() {
 
-	//verify fullname
+	//verify username
 	$("#pw-input").keyup(function() {
 		//if not blank
 		if ($(this).val().length > 0) {

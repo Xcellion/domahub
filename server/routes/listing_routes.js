@@ -198,7 +198,7 @@ function renderWhoIs(req, res, domain_name){
 			listing_info: {
 				domain_name: domain_name,
 				email: email,
-				fullname: owner_name,
+				username: owner_name,
 				price_type: false,
 				description: description
 			},
