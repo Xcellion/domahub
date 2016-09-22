@@ -1,4 +1,71 @@
 @import 'vars';
+@import 'mixins';
+
+// For messaging
+
+#messenger_form {
+  width: 100%;
+}
+
+#msg_receiver_input {
+  @include box-shadow(0, 2px, 3px, rgba(17, 17, 17, 0.1));
+  border-radius: 0;
+  border: none;
+  color: $primary;
+  padding: 15px 8px;
+  margin-bottom: 10px;
+  font-size: 1.2rem;
+  width: 100%;
+}
+
+#msg_text_input {
+  margin-top: 10px;
+}
+
+.chat_wrapper {
+  width: 100%;
+}
+
+.message_wrapper + .message_wrapper {
+  margin-top: 10px;
+}
+
+.message_wrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 8px;
+  border-radius: 5px;
+  word-wrap: break-word;
+  @include mobile {
+    max-width: 200px;
+  }
+}
+
+.sender_them {
+  & > .chat_message {
+    background-color: $grey-light;
+    color: $text;
+    max-width: 500px;
+    padding: 10px;
+    border-radius: 5px;
+  }
+}
+
+.sender_me {
+  & > .chat_message {
+    background-color: $primary;
+    color: $white;
+    max-width: 500px;
+    padding: 10px;
+    border-radius: 5px;
+  }
+}
+
+.chat_timestamp {
+  color: $grey;
+}
 
 .account-form select {
   margin-right: 5px;
