@@ -9,7 +9,7 @@ var pool = mysql.createPool({
 		database: 'w3bbi',
 		multipleStatements: true,
 		dateStrings: true,
-		timezone: 'utc'
+		timezone: '+0:00'
 	});
 
 module.exports = {
@@ -33,19 +33,6 @@ module.exports = {
 
 //connects to the mysql database
 function database_connect() {
-	//create connection object from pool
-	pool.getConnection(function(err, con) {
-		if (err){
-			console.log(err);
-			console.log("MYSQL pool connection error!");
-
-		//	setTimeout(database_connect, 2000);
-		}
-		else {
-			console.log("Successfully connected to MYSQL database!");
-		}
-	});
-
 	//reconnect if errored
 	pool.on('error', function(err) {
 		if (err.code === 'PROTOCOL_CONNECTION_LOST') {
@@ -58,5 +45,11 @@ function database_connect() {
 		else {
 			throw err;
 		}
+	});
+
+	//timezone
+	pool.on('connection', function onConnection(connection) {
+		console.log("Setting MYSQL timezone to UTC");
+		connection.query('SET time_zone = ?', '+0:00');
 	});
 }

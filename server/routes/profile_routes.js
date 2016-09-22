@@ -142,14 +142,14 @@ function getAccountRentals(req, res, next){
 //gets all chats for a user
 function getAccountChats(req, res, next){
 	//if we dont already have the list of chats or if we need to refresh them
-	if (!req.user.chat_history || req.user.refresh_chat){
+	if (!req.user.convo_list || req.user.refresh_chat){
 		delete req.user.refresh_chat;
 		account_id = req.user.id;
 
 		Account.getAccountChats(account_id, function(result){
 			if (result.state=="error"){error.handler(req, res, result.info);}
 			else {
-				req.user.chat_history = result.info;
+				req.user.convo_list = result.info;
 				next();
 			}
 		});
@@ -182,7 +182,7 @@ function renderProfile(req, res){
 		user: req.user,
 		listings: req.user.listings || false,
 		rentals: req.user.rentals || false,
-		chat_history: req.user.chat_history || false
+		convo_list: req.user.convo_list || false
 	});
 }
 
