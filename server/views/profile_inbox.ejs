@@ -56,15 +56,17 @@
 					</div>
 				</div>%>
 
-				<div class="column">
+				<div class="column is-three-quarter">
 					<div class="box">
 						<form action="/messages" method="post" id="messenger_form">
 							<input id="msg_receiver_input" class="input" placeholder="To: "name="msg_receiver" type="text" />
 
 							<div id="chat_wrapper" class=""></div>
 
-							<textarea id="msg_text_input" class="textarea to-reset bottom-margin-25" name="msg_text"></textarea>
-							<input id="msg_submit" class="button" type="submit" />
+							<div id="msg-text-wrapper">
+								<textarea id="msg_text_input" class="textarea to-reset" name="msg_text"></textarea>
+								<input id="msg_submit" class="button" type="submit" />
+							</div>
 						</form>
 
 					</div>
