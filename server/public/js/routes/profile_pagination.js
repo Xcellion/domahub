@@ -57,6 +57,8 @@ $(document).ready(function() {
 
 //function to prevent high pages
 function calculateCurrentPage(url_page, total_pages, row_per_page){
+    listing_or_rental = window.location.pathname.indexOf("listings") != -1 ? "mylistings" : "myrentals";
+
     if (url_page <= total_pages && url_page > 0){
         var current_page = url_page;
         return current_page;
@@ -67,7 +69,7 @@ function calculateCurrentPage(url_page, total_pages, row_per_page){
             current_page: current_page,
             total_pages: total_pages,
             row_per_page: row_per_page
-        }, document.title + " - Page " + current_page, "/profile/mylistings/" + current_page);
+        }, document.title + " - Page " + current_page, "/profile/" + listing_or_rental + "/" + current_page);
         return current_page;
     }
 }
