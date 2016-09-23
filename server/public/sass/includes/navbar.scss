@@ -80,8 +80,10 @@
   -webkit-box-shadow: 0 4px 7px rgba(0,0,0, 0.1);
   box-shadow: 0 4px 7px rgba(0,0,0, 0.1);
   position: absolute;
-  top: 100%;
   width: 110px;
+  &.is-transparent {
+    top: 46px;
+  }
 }
 
 // Logout button on profile dropdown
