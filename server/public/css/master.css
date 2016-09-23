@@ -541,6 +541,9 @@ a.box {
   padding-right: 8px;
   position: relative;
   vertical-align: top;
+  -webkit-box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.1);
+  -moz-box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.1);
+  box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.1);
   justify-content: center;
   padding-left: 10px;
   padding-right: 10px;
@@ -1684,8 +1687,7 @@ button {
     .title.is-normal strong {
       font-weight: 700; }
   .title.is-white {
-    color: #fff;
-    font-family: "Source Sans Pro", Helvetica, sans-serif; }
+    color: #fff; }
 
 .subtitle {
   color: #222324;
@@ -3985,13 +3987,14 @@ a.panel-block:hover {
     .hero.is-large .hero-body {
       padding-bottom: 250px;
       padding-top: 250px; } }
-  .hero.is-fullheight {
-    min-height: 100vh; }
-    .hero.is-fullheight .hero-body {
-      align-items: center;
-      display: flex; }
-      .hero.is-fullheight .hero-body > .container {
-        flex-grow: 1; }
+  @media screen and (min-width: 769px) {
+    .hero.is-fullheight {
+      min-height: 100vh; }
+      .hero.is-fullheight .hero-body {
+        align-items: center;
+        display: flex; }
+        .hero.is-fullheight .hero-body > .container {
+          flex-grow: 1; } }
 
 .section {
   background-color: #fff;
@@ -4086,9 +4089,6 @@ input:-webkit-autofill {
 .min-height {
   min-height: calc(100vh - 320px); }
 
-.is-fullheight {
-  height: 100vh; }
-
 .clear-nav {
   padding-top: 60px; }
 
@@ -4113,7 +4113,10 @@ input:-webkit-autofill {
 @media screen and (min-width: 769px) {
   .img-wrapper {
     background-color: rgba(0, 0, 0, 0.45);
-    height: 100%;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    height: 100vh;
     width: 100%; } }
 
 /********************** LINEBREAK ******************/
