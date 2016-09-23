@@ -100,7 +100,7 @@ function setupControls(total_pages, row_per_page, current_page, rows_to_disp){
     });
 
     //right and left keyboard click
-    $(document).unbind().bind('keydown', function(event) {
+    $(document).unbind('keydown').bind('keydown', function(event) {
         if ($(event.target).is("input")){
             return true;
         }
