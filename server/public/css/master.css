@@ -2891,6 +2891,8 @@ button {
   margin-bottom: 5px;
   text-transform: uppercase;
   margin-top: 20px; }
+  .menu-label:first-child {
+    margin-top: 10px; }
 
 .message-body {
   border: 1px solid #d3d6db;
