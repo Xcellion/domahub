@@ -1190,7 +1190,7 @@ button {
     margin-right: 10px;
     padding-top: 7px;
     text-align: right;
-    width: 100px; } }
+    width: 120px; } }
 
 .control {
   position: relative;
@@ -3998,6 +3998,8 @@ a.panel-block:hover {
 .section {
   background-color: #fff;
   padding: 40px 20px; }
+  .section.is-light {
+    background-color: #f5f7fa; }
   @media screen and (min-width: 980px) {
     .section.is-medium {
       padding: 120px 20px; }
