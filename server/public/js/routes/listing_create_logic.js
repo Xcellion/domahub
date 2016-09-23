@@ -3,7 +3,7 @@ var can_submit = true;
 $(document).ready(function() {
 
 	//to toggle between single submit and multi-submit
-	$("#mult-toggle").click(function(e){
+	$(".mult-toggle").click(function(e){
 		$("#sing-form").toggleClass("is-hidden");
 		$("#mult-form-wrapper").toggleClass("is-hidden");
 		var mult = "Multiple listings?";
