@@ -62,7 +62,8 @@
   -webkit-box-shadow: 0 4px 7px rgba(0, 0, 0, 0.1);
   box-shadow: 0 4px 7px rgba(0, 0, 0, 0.1);
   position: absolute;
-  width: 110px; }
+  width: 110px;
+  top: 100%; }
   #profile-dropdown.is-transparent {
     top: 46px; }
 
