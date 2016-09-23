@@ -12,9 +12,8 @@
 <body>
 
   <%- include("templates/navbar", {user: user}); %>
-  <section id="index-img" class="hero is-large landing-img">
+  <section id="index-img" class="hero is-fullheight landing-img">
     <div class="img-wrapper">
-      <div class="hero-head"></div>
       <div class="hero-body">
         <div class="container has-text-centered">
           <h1 class="title is-white">
@@ -29,7 +28,6 @@
           </div>
         </div>
       </div>
-      <div class="hero-foot"></div>
     </div>
   </section>
 
@@ -44,7 +42,7 @@
               <article class="carousel-item media">
                 <figure class="media-left">
                   <p class="image is-64x64">
-                    <img src="/images/lib/emojione/1f913.svg">
+                    <img src="/images/lib/material/satisfied.svg">
                   </p>
                 </figure>
                 <div class="media-content">
@@ -62,7 +60,7 @@
               <article class="carousel-item media">
                 <figure class="media-left">
                   <p class="image is-64x64">
-                    <img src="/images/lib/emojione/1f4bb.svg">
+                    <img src="/images/lib/material/computer.svg">
                   </p>
                 </figure>
                 <div class="media-content">
@@ -81,7 +79,7 @@
               <article class="carousel-item media">
                 <figure class="media-left">
                   <p class="image is-64x64">
-                    <img src="/images/lib/emojione/2764.svg">
+                    <img src="/images/lib/material/heart.svg">
                   </p>
                 </figure>
                 <div class="media-content">
@@ -104,29 +102,27 @@
     </div>
   </section>
 
-  <section class="hero is-small">
-      <div class="hero-head"></div>
-      <div class="hero-body">
-        <div class="container has-text-centered">
-          <h1 class="title is-2 is-normal">
-            The new-age marketplace
-          </h1>
-          <h2 class="subtitle is-4">
-            DomaHub is a simple, accessible, and user-friendly platform
-            for both domain name owners and potential renters.
-          </h2>
-        </div>
+  <section class="hero is-primary is-small">
+    <div class="hero-body">
+      <div class="container has-text-centered">
+        <h1 class="title is-2 is-normal">
+          A Brand New Marketplace
+        </h1>
+        <h2 class="subtitle is-4">
+          DomaHub is a simple, accessible, and user-friendly platform
+          for both domain name owners and potential renters.
+        </h2>
       </div>
-      <div class="hero-foot"></div>
+    </div>
   </section>
 
   <section class="hero is-small">
     <div class="hero-body">
       <div class="container">
         <div class="columns">
-          <div class="column has-text-centered">
+          <div class="column has-text-centered square-border">
             <figure class="image is-128x128 bottom-margin-25">
-              <img src="/images/lib/icon8/briefcase.svg" />
+              <img src="/images/lib/material/domain.svg" />
             </figure>
               <h2>Make the most of your assets</h2>
               <p>
@@ -134,9 +130,9 @@
                 Don't let your assets rot away!
               </p>
           </div>
-          <div class="column has-text-centered">
+          <div class="column has-text-centered square-border">
             <figure class="image is-128x128 bottom-margin-25">
-              <img src="/images/lib/icon8/calendar.svg" />
+              <img src="/images/lib/material/calendar2.svg" />
             </figure>
               <h2>Domains fit to your schedule</h2>
               <p>
@@ -144,21 +140,21 @@
                 You decide the price and when the domain is available.
               </p>
           </div>
-          <div class="column has-text-centered">
+          <div class="column has-text-centered square-border">
             <figure class="image is-128x128 bottom-margin-25">
-              <img src="/images/lib/icon8/privacy.svg" />
+              <img src="/images/lib/material/key.svg" />
             </figure>
-              <h2>Your domain is protected</h2>
+              <h2>Complete rental protection</h2>
               <p>
-                All rentals through DomaHub are binded by contract.
-                This means that the owner cannot just suddenly drop you.
+                All rentals through DomaHub are binded by contract with
+                fixed rates and a pre-negotiated buyout price.
               </p>
           </div>
-          <div class="column has-text-centered">
+          <div class="column has-text-centered square-border">
             <figure class="image is-128x128 bottom-margin-25">
-              <img src="/images/lib/icon8/microphone.svg" />
+              <img src="/images/lib/material/website.svg" />
             </figure>
-              <h2>Advertise directly with us</h2>
+              <h2>Free advertisement</h2>
               <p>
                 DomaHub rental pages are designed to be full-page advertisements.
                 Our web wizard will help you get set up fast!
@@ -169,75 +165,92 @@
     </div>
   </section>
 
-  <div id="linebreak3">
+  <section class="hero is-small">
+    <div class="hero-body">
+      <div class="container has-text-centered">
+        <h1 class="title is-2 is-normal">
+          Getting Started is Easy
+        </h1>
+        <h2 class="subtitle is-4">
+          Whether you're looking to rent or list, we've got you covered.
+        </h2>
+      </div>
+    </div>
+    <div id="linebreak3"></div>
+  </section>
 
-  </div>
-
-  <section class="section is-medium">
+  <section class="section">
     <div class="container">
       <div class="columns">
         <div class="column">
           <div class="content">
-            <h2>Choose from millions of great domains</h2>
+            <div class="step-box">
+              <h1 class="step-number">Step One</h1>
+              <p class="step-text">Create a DomaHub <a class="orange-link" href="/signup" target="_blank">account</a></p>
+            </div>
+            <div class="step-box">
+              <h1 class="step-number">Step Two</h1>
+              <p class="step-text">
+                Connect your account to <a class="orange-link" href="/authorizestripe" target="_blank">Stripe&trade;</a>.
+              </p>
+            </div>
+            <div class="step-box">
+              <h1 class="step-number">Step Three</h1>
+              <p class="step-text">
+                Create an <a class="orange-link" href="/signup" target="_blank">account</a>.
+              </p>
+            </div>
+          </div>
+          <!-- <div class="content">
+            <h2>HOW TO RENT A DOMAIN</h2>
             <p>
-              Use our online system to <a class="orange-link" href="/listings">browse</a>
-              all domain name listings. Once you find a domain you like, rent it securely
-              using Stripe&trade; payment.
+              <span class="shadow-leftTopCorner">STEP ONE&#58</span> Create a DomaHub
+              <a class="orange-link" href="/signup" target="_blank">account</a>.
+            </p>
+            <p>
+              <span class="padding-left-10">STEP TWO</span>&#58 Connect your account to
+               <a class="orange-link" href="/authorizestripe" target="_blank">Stripe&trade;</a>.
+            </p>
+            <p>
+              <span class="padding-left-10">STEP THREE</span>&#58 Search for domains or use our
+              <a class="orange-link" href="/getstarted" target="_blank">Get Started</a>
+              <span class="shadow-rightBottomCorner">page.</span>
             </p>
           </div>
           <a class="button is-medium is-primary" href="/listings" title="Browse Listings">
             Browse Listings
-          </a>
+          </a> -->
         </div>
-
-        <div class="column">
-          <figure class="image is-3by2">
-            <img src="https://placehold.it/480x320" />
-          </figure>
-        </div>
-      </div>
-
-      <div id="linebreak"></div>
-
-      <div class="columns">
-        <div class="column">
-          <figure class="image is-3by2">
-            <img src="https://placehold.it/480x320" />
-          </figure>
-        </div>
-        <div class="column">
-          <div class="content">
-            <h2>Start listing your domains immediately!</h2>
-            <p>
-              Listing a website is quick and easy. Just
-              <a class="orange-link" href="/signup">sign up</a> for an account
-              with us and follow the instructions on how to connect your domains.
-            </p>
-          </div>
-          <a class="button is-medium is-primary" href="/listing/create" title="Create Listings">
-            Create a Listing
-          </a>
+          <!-- <div class="column">
+            <div class="content">
+              <h2>Start listing your domains immediately!</h2>
+              <p>
+                Listing a website is quick and easy. Just
+                <a class="orange-link" href="/signup">sign up</a> for an account
+                with us and follow the instructions on how to connect your domains.
+              </p>
+            </div>
+            <a class="button is-medium is-primary" href="/listing/create" title="Create Listings">
+              Create a Listing
+            </a>
+          </div> -->
         </div>
       </div>
     </div>
   </section>
 
   <section class="hero is-light is-small">
-      <div class="hero-head"></div>
-      <div class="hero-body">
-        <div class="container has-text-centered">
-          <h1 class="title is-2 is-normal">
-            Join our newsletter!
-          </h1>
-
-            <p class="control has-addons has-addons-centered">
-              <input class="input is-medium is-fullwidth" type="email" placeholder="Enter your email!"/>
-              <a class="button is-primary is-medium">Submit</a>
-            </p>
-
-        </div>
+    <div class="hero-body">
+      <div class="container has-text-centered">
+        <h1 class="title is-2 is-normal">
+          Join our newsletter!
+        </h1>
+        <p class="control has-addons has-addons-centered">
+          <input class="input is-medium is-fullwidth" type="email" placeholder="Enter your email!"/>
+          <a class="button is-primary is-medium">Submit</a>
+        </p>
       </div>
-      <div class="hero-foot"></div>
+    </div>
   </section>
 
     <%- include("templates/footer"); %>
