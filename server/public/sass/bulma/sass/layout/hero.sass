@@ -182,9 +182,10 @@
         padding-bottom: 250px
         padding-top: 250px
   &.is-fullheight
-    min-height: 100vh
-    .hero-body
-      align-items: center
-      display: flex
-      & > .container
-        flex-grow: 1
+    +tablet
+      min-height: 100vh
+      .hero-body
+        align-items: center
+        display: flex
+        & > .container
+          flex-grow: 1
