@@ -88,7 +88,7 @@
 <!-- or else display the user profile as logged in -->
 <% } else { %>
     <div class="nav-item">
-      <a id="profile-button" class="button is-primary is-outlined">
+      <a id="profile-button" class="button is-active is-primary is-outlined">
         <span><%= (user.username.length > 6) ? user.username.slice(0,6) + "..." : user.username %></span>
         <span class="icon">
           <i class="fa fa-angle-down"></i>

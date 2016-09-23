@@ -54,6 +54,8 @@
 
 #profile-button {
   width: 110px; }
+  #profile-button.is-active {
+    border-radius: 3px 3px 0px 0px; }
 
 /************************************* PROFILE DROPDOWN *************************/
 #profile-dropdown {
