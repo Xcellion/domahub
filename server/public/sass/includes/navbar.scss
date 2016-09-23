@@ -84,10 +84,7 @@
   box-shadow: 0 4px 7px rgba(0,0,0, 0.1);
   position: absolute;
   width: 110px;
-  top: 100%;
-  &.is-transparent {
-    top: 46px;
-  }
+  top: 46px;
 }
 
 // Logout button on profile dropdown
