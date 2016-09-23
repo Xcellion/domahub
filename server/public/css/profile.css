@@ -4,9 +4,9 @@
   position:relative; }
 
 #msg_receiver_input {
-  -webkit-box-shadow: 0 2px 3px rgba(17, 17, 17, 0.1);
-  -moz-box-shadow: 0 2px 3px rgba(17, 17, 17, 0.1);
-  box-shadow: 0 2px 3px rgba(17, 17, 17, 0.1);
+  -webkit-box-shadow: 0 4px 3px -3px rgba(17, 17, 17, 0.1);
+  -moz-box-shadow: 0 4px 3px -3px rgba(17, 17, 17, 0.1);
+  box-shadow: 0 4px 3px -3px rgba(17, 17, 17, 0.1);
   border-radius: 0;
   border: none;
   color: #3CBC8D;
