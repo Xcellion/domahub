@@ -48,6 +48,10 @@ $(document).ready(function() {
 function checkAccountSubmit(){
     //if no email is entered
     if (!validateEmail($("#email-input").val())) {
+        $("#basic-message").fadeOut(100, function(){
+            $("#basic-message").css("color", "#ed1c24").text("Please enter your email address!").fadeIn(100);
+            $("#email-input").addClass("is-danger").fadeIn(100).focus();
+        });
         return false;
     }
 

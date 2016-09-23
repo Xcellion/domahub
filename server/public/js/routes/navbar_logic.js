@@ -42,12 +42,18 @@ $(document).ready(function() {
 	$(document).on("click", function(event) {
 		//clicked off profile dropdown
 		if (!$(event.target).closest("#profile-button").length && !$("#profile-dropdown").hasClass("is-hidden")) {
+			if (!$(".nav").hasClass("is-white")){
+				$("#profile-button").toggleClass("is-outlined");
+			}
 			$("#profile-dropdown").addClass("is-hidden");
-			$("#profile-button").toggleClass("is-outlined is-active");
+			$("#profile-button").toggleClass("is-active");
 		}
 		//clicked on profile dropdown
 		else if ($(event.target).closest("#profile-button").length){
-			$("#profile-button").toggleClass("is-outlined is-active");
+			if (!$(".nav").hasClass("is-white")){
+				$("#profile-button").toggleClass("is-outlined");
+			}
+			$("#profile-button").toggleClass("is-active");
 			$("#profile-dropdown").toggleClass("is-hidden");
 		}
 	});
@@ -72,6 +78,7 @@ $(document).ready(function() {
 				$("#signup").addClass("is-white nav-link");
 				$(".nav-link").addClass("is-white");
 				$(".nav-link").parent(".nav-item").removeClass("is-hidden");
+				$("#profile-button").addClass("is-outlined");
 			}
 			//past the image
 			else if ($(this).scrollTop() > get_started_offset && !$(".nav").hasClass("is-white")){
@@ -82,6 +89,7 @@ $(document).ready(function() {
 				$("#login-modal").parent(".nav-item").addClass("is-hidden");
 				$(".nav-link").removeClass("is-white");
 				$(".nav-link").parent(".nav-item").addClass("is-hidden");
+				$("#profile-button").removeClass("is-outlined");
 			}
 		})
 	}
