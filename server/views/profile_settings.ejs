@@ -38,28 +38,28 @@
 							Profile
 						</p>
 						<ul class="menu-list">
-							<li><a class="is-active">Edit Account</a></li>
-							<li><a>Account Verifications</a></li>
+							<li><a id="basic-link" class="setting-link is-active">Basic Information</a></li>
+							<li><a id="verifications-link" class="setting-link">Account Verifications</a></li>
 						</ul>
 						<p class="menu-label">
 							Payments
 						</p>
 						<ul class="menu-list">
 							<li>
-								<a class="">Transactions</a>
+								<a id="transactions-link" class="setting-link">Transactions</a>
 								<ul>
-									<li><a>History</a></li>
-									<li><a>Pending</a></li>
-									<li><a>Earnings</a></li>
+									<li><a id="history-link" class="setting-link">History</a></li>
+									<li><a id="pending-link" class="setting-link">Pending</a></li>
+									<li><a id="earnings-link" class="setting-link">Earnings</a></li>
 								</ul>
 							</li>
-							<li><a>Payment Details</a></li>
+							<li><a id="details-link" class="setting-link">Payment Details</a></li>
 						</ul>
 					</aside>
 				</div>
 
 				<div class="column">
-					<div class="card is-fullwidth bottom-margin-25">
+					<div id="basic" class="card is-fullwidth bottom-margin-25">
 						<header class="card-header">
 							<p class="card-header-title">
 								Basic Information
@@ -280,8 +280,7 @@
 						</div>
 
 					</div>
-
-					<div class="card is-fullwidth bottom-margin-25">
+					<div id="verifications" class="card is-fullwidth bottom-margin-25">
 						<header class="card-header">
 							<p class="card-header-title">
 								Account Verifications
@@ -313,7 +312,7 @@
 							</form>
 						</div>
 					</div>
-					<div class="card is-fullwidth bottom-margin-25">
+					<div id="transactions" class="card is-fullwidth bottom-margin-25">
 						<header class="card-header">
 							<p class="card-header-title">
 								Transactions
@@ -395,7 +394,7 @@
 							</nav>
 						</div>
 					</div>
-					<div class="card is-fullwidth bottom-margin-25">
+					<div id="history" class="card is-fullwidth bottom-margin-25">
 						<header class="card-header">
 							<p class="card-header-title">
 								History
@@ -485,7 +484,7 @@
 							</nav>
 						</div>
 					</div>
-					<div class="card is-fullwidth bottom-margin-25">
+					<div id="pending" class="card is-fullwidth bottom-margin-25">
 						<header class="card-header">
 							<p class="card-header-title">
 								Pending
@@ -498,7 +497,7 @@
 							stuff
 						</div>
 					</div>
-					<div class="card is-fullwidth bottom-margin-25">
+					<div id="earnings" class="card is-fullwidth bottom-margin-25">
 						<header class="card-header">
 							<p class="card-header-title">
 								Earnings
@@ -511,7 +510,7 @@
 							stuff
 						</div>
 					</div>
-					<div class="card is-fullwidth bottom-margin-25">
+					<div id="details" class="card is-fullwidth bottom-margin-25">
 						<header class="card-header">
 							<p class="card-header-title">
 								Payment Details
