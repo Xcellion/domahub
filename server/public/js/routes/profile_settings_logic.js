@@ -1,6 +1,11 @@
 var can_submit = true;
+//function that runs when back button is pressed
+window.onpopstate = function(event) {
+    showSectionByURL();
+}
 
 $(document).ready(function() {
+
 
     //function to show section depending on url
     showSectionByURL();
@@ -12,7 +17,12 @@ $(document).ready(function() {
 
         temp_id = $(this).attr("id");
         temp_id = temp_id.substr(0, temp_id.length - 5);
-        history.pushState(null, null, "#" + temp_id);
+        if(history.pushState) {
+            history.pushState(null, null, '#' + temp_id);
+        }
+        else {
+            location.hash = '#' + temp_id;
+        }
         showSection(temp_id);
     });
 
