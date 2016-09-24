@@ -75,6 +75,7 @@
 										<label class="label">Email Address</label>
 									</div>
 									<p class="control">
+										<input name="email" id="old-email-input" class="input is-disabled account-input" type="hidden" value="<%= user.email %>" />
 										<input id="email-input" class="input is-disabled account-input" type="text" value="<%= user.email %>" />
 									</p>
 								</div>
@@ -107,7 +108,7 @@
 										<label class="label">Confirm Password</label>
 									</div>
 									<p class="control">
-										<input id="verify-pw" class="input is-disabled account-input" type="password">
+										<input id="verify-pw-input" class="input is-disabled account-input" type="password">
 									</p>
 								</div>
 
@@ -118,11 +119,11 @@
 									</div>
 									<div class="control">
 										<div class="select">
-											<select id="gender-input" class="is-disabled account-input">
-												<option selected disabled>Gender</option>
-												<option>Female</option>
-												<option>Male</option>
-												<option>Other</option>
+											<select value="<%= user.gender %>" id="gender-input" class="is-disabled account-input">
+												<option disabled>Gender</option>
+												<option value='0'>Female</option>
+												<option value='1'>Male</option>
+												<option value='2'>Other</option>
 											</select>
 										</div>
 									</div>
@@ -295,6 +296,7 @@
 							</form>
 							<div class="container">
 								<button id="change-account-toggle" class="button is-info">Edit Information</button>
+								<button id="change-account-cancel" class="button is-hidden is-info">Cancel Changes</button>
 							</div>
 						</div>
 

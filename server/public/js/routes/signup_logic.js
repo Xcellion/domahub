@@ -84,7 +84,7 @@ $(document).ready(function() {
 		//if no name is entered
 		else if (!$("#username-input").val() || $("#username-input").val().length > 70 || $("#username-input").val().includes(" ")) {
 			$("#message").fadeOut(100, function(){
-				$("#message").css("color", "#ed1c24").text("Please enter a valid name!").fadeIn(100);
+				$("#message").css("color", "#ed1c24").text("Please enter a valid username!").fadeIn(100);
 				$("#username-input").focus();
 				showSuccessDanger($("#username-input"), false);
 			});
