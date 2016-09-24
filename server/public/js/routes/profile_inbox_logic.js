@@ -42,7 +42,7 @@ $(document).ready(function() {
     //submission of a new msg
     $("#messenger_form").submit(function(e){
         e.preventDefault();
-        submit_data = checkSubmitFormat();
+        var submit_data = checkSubmitFormat();
 
         if (can_submit && submit_data){
             can_submit = false;
@@ -61,7 +61,7 @@ $(document).ready(function() {
                     }
 
                     //if its an existing convo, change to it
-                    if (existing){
+                    if (existing && existing.username != $("#msg_receiver_input").val()){
                         changeConvo(existing);
                     }
 
