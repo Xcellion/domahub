@@ -118,19 +118,7 @@ module.exports = {
 
 					else {
 						user = result.info[0];
-						var now = new Date();
-						var now_utc = new Date(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(),  now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds());
-						var account_info = {
-							date_accessed : now_utc
-						};
-
-						//update account last accessed
-						Account.updateAccount(account_info, email, function(result){
-							if (result.state=="error"){ done(result.info, null); }
-							else {
-								return done(null, user);
-							}
-						});
+						return done(null, user);
 					}
 				});
 			})
@@ -157,7 +145,11 @@ module.exports = {
 	loginPost: loginPost,
 	forgotPost: forgotPost,
 	resetPost: resetPost,
-	verifyPost: verifyPost
+	verifyPost: verifyPost,
+
+	//for updating account info
+	checkAccountSettings: checkAccountSettings,
+	updateAccountSettings : updateAccountSettings
 }
 
 //make sure user is logged in before doing anything
@@ -363,8 +355,18 @@ function loginPost(req, res, next){
 					error.handler(req, res, "Login error!");
 				}
 				else {
-					delete req.session.redirectBack;
-					return res.redirect(redirectURL);
+					var now = new Date();
+					var now_utc = new Date(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(),  now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds());
+					var account_info = {
+						date_accessed : now_utc
+					};
+
+					//update account last accessed
+					console.log("Updating last accessed for account with email: " + req.body.email);
+					Account.updateAccount(account_info, req.body.email, function(result){
+						delete req.session.redirectBack;
+						return res.redirect(redirectURL);
+					});
 				}
 			});
 		}
@@ -597,4 +599,61 @@ function verifyPost(req, res, next){
 			}
 		}
 	});
+}
+
+//function to check account settings posted
+function checkAccountSettings(req, res, next){
+	email = req.body.email;
+	username = req.body.username;
+	password = req.body.password;
+
+	//not a valid email
+	if (!validator.isEmail(email)){
+		error.handler(req, res, "Invalid email!", "json");
+	}
+	//username is too short
+	else if (70 > username.length > 3 || username.includes(" ")){
+		error.handler(req, res, "Invalid name!", "json");
+	}
+	//password is too short
+	else if (70 > password.length > 3){
+		error.handler(req, res, "Invalid password!", "json");
+	}
+	//check the pw
+	else {
+		passport.authenticate('local-login', function(err, user, info){
+			if (!user && info){
+				error.handler(req, res, info.message, "json");
+			}
+			else {
+				next();
+			}
+		})(req, res, next);
+	}
+}
+
+//function to update account settings
+function updateAccountSettings(req, res, next){
+	new_account_info = {
+		email: req.body.new_email,
+		username: req.body.username,
+		password:  bcrypt.hashSync(req.body.new_password, null, null)
+	}
+	Account.updateAccount(new_account_info, req.user.email, function(result){
+		if (result.state=="error"){
+			if (result.errcode == "ER_DUP_ENTRY"){
+				error.handler(req, res, "A user with that email/username already exists!", "json");
+			}
+			else {
+				error.handler(req, res, result.info, "json");
+			}
+		}
+		else {
+			req.user.email = req.body.new_email;
+			req.user.username = req.body.username;
+			res.json({
+				state: "success"
+			})
+		}
+	})
 }

@@ -163,9 +163,11 @@ account_model.prototype.newAccountStripe = function(account_info, callback){
 
 //updates a new account
 account_model.prototype.updateAccount = function(account_info, email, callback){
-	console.log("Updating account with email: " + email + "...");
+	if (!account_info.date_accessed){
+		console.log("Updating account with email: " + email + "...");
+	}
 	query = "UPDATE accounts \
 			SET ? \
 			WHERE email = ?"
-	account_query(query, "Failed to update account with email: " + email + "!", callback, [account_info, email]);
+	account_query(query, "Failed to update account!", callback, [account_info, email]);
 }

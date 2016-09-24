@@ -1,9 +1,10 @@
 var	account_model = require('../models/account_model.js');
 
 var request = require('request');
+var validator = require('validator');
 var qs = require('qs');
 
-module.exports = function(app, db, auth, e){
+module.exports = function(app, db, auth, e, pp){
 	Auth = auth;
 	error = e;
 
@@ -71,6 +72,13 @@ module.exports = function(app, db, auth, e){
 
 	//redirect anything not caught above to /profile
 	app.get("/profile*", redirectProfile);
+
+	//post to change account settings
+	app.post("/profile/settings", [
+		isLoggedIn,
+		Auth.checkAccountSettings,
+		Auth.updateAccountSettings
+	])
 }
 
 //gets all listings for a user
