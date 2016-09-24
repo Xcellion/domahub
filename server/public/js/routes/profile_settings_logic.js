@@ -2,13 +2,18 @@ var can_submit = true;
 
 $(document).ready(function() {
 
+    //function to show section depending on url
+    showSectionByURL();
+
     //scroll to specific part of page depending on which side link you pressed
     $(".setting-link").click(function(e){
+        e.preventDefault();
+        window.scrollTo(0,0);
+
         temp_id = $(this).attr("id");
-        console.log($("#" + temp_id.substr(0, temp_id.length - 5)));
-        $("html, body").stop().animate({
-            scrollTop: $("#" + temp_id.substr(0, temp_id.length - 5)).offset().top - 70
-        }, "fast");
+        temp_id = temp_id.substr(0, temp_id.length - 5);
+        history.pushState(null, null, "#" + temp_id);
+        showSection(temp_id);
     });
 
     //submit any account changes
@@ -56,6 +61,30 @@ $(document).ready(function() {
     });
 
 });
+
+//function to show a specific section
+function showSection(section_id){
+    $(".setting-link").removeClass("is-active");
+    $("#" + section_id + "-link").addClass("is-active");
+    temp_section = $("#" + section_id);
+    $(".card, .is-fullwidth").not(temp_section).hide();
+    temp_section.show();
+}
+
+function showSectionByURL(){
+    temp_hash = location.hash.split("#")[1];
+    array_of_ids = [];
+    $(".card, .is-fullwidth").each(function(index) {
+        array_of_ids.push($(this).attr("id"));
+    });
+
+    if (array_of_ids.indexOf(temp_hash) != -1){
+        showSection(temp_hash);
+    }
+    else if (!temp_hash){
+        showSection("basic");
+    }
+}
 
 //function to check if we can submit and submit
 function checkSubmit(){
@@ -137,6 +166,7 @@ function initiateEdit(){
     $("#change-account-cancel").removeClass("is-hidden");
     $('.account-input').removeClass("is-disabled");
     $('.input-to-hide').removeClass("is-hidden");
+    $("#basic-message").text("");
 }
 
 //function to cancel editing mode
