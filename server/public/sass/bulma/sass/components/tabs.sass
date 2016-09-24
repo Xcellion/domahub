@@ -11,7 +11,7 @@
   white-space: nowrap
   a
     align-items: center
-    border-bottom: 1px solid $border
+    +box-shadow(0,-3px,0,$border,inset)
     color: $text
     display: flex
     justify-content: center
@@ -19,20 +19,23 @@
     padding: 6px 12px
     vertical-align: top
     &:hover
-      border-bottom-color: $text-strong
-      color: $text-strong
+      border-bottom-color: $primary-lighter
+      color: $primary-lighter
+    +mobile
+      +box-shadow(0,0,0,$border)
   li
     display: block
     &.is-active
       a
-        border-bottom-color: $link
-        color: $link
+        +box-shadow(0,-3px,0,$primary,inset)
+        color: $primary
   ul
     align-items: center
-    border-bottom: 1px solid $border
     display: flex
     flex-grow: 1
     justify-content: flex-start
+    +mobile
+      +box-shadow(0,-3px,0,$border,inset)
     &.is-left
       padding-right: 10px
     &.is-center
