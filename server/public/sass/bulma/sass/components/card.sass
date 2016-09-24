@@ -1,9 +1,13 @@
 .card-header
+  box-shadow: 0 2px 2px 0 rgba(0,0,0,.14),0 3px 1px -2px rgba(0,0,0,.2),0 1px 5px 0 rgba(0,0,0,.12)
   align-items: stretch
-  background-color: rgba($black, 0.1)
-  // box-shadow: 0 1px 2px rgba($black, 0.1)
+  background-color: $border
   display: flex
   min-height: 40px
+  &:hover
+    cursor: pointer
+  &:active
+    box-shadow: 0 3px 2px 0 rgba(0,0,0,.14),0 4px 1px -2px rgba(0,0,0,.2),0 2px 5px 0 rgba(0,0,0,.12)
 
 .card-header-title
   align-items: flex-start
