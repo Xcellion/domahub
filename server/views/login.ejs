@@ -9,7 +9,7 @@
   <body>
 
     <div id="login-form" class="form">
-      <form id="target" action="/login" method="post">
+      <form id="target" action="/login" method="post" autocomplete="off">
         <div class="has-text-centered logo-login">
           <a class="logo-text primary-logo" href="/">DomaHub</a>
         </div>
@@ -22,11 +22,11 @@
         </div>
         <label class="label">Email</label>
         <p class="control">
-          <input id="email" name="email" class="input is-medium" type="email">
+          <input id="email" autofocus name="email" class="input is-medium" type="email" value="" spellcheck="false">
         </p>
         <label class="label">Password</label>
         <p class="control">
-          <input id="password" name="password" class="input is-medium" type="password">
+          <input id="password" name="password" class="input is-medium" type="password" autocomplete="new-password" value="">
         </p>
         <p class="control">
           <button id="login-button" class="login-button button is-primary is-medium is-fullwidth">
@@ -44,8 +44,6 @@
               <a class="forgot orange-link" href="/forgot">Forgot password?</a>
           </p>
         </div>
-
-    <div id="linebreak2"></div>
 
       <p class="control">
         <p class="has-text-centered">

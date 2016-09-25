@@ -1,10 +1,18 @@
 .footer
-  background-color: $grey-darker
+  background-color: $grey-dark
   padding: 60px 20px 80px
   +mobile
     .columns
       & > .column
         text-align: center
+  li
+    +mobile
+      margin-top: 0
+
+    +mobile
+      &:not(:last-child)
+        margin-top: 0
+        margin-right: 15px
 
 .footer-list
   display: flex
@@ -17,7 +25,7 @@
     align-items: center
 
 .footer-header
-  color: $white
+  color: $white-primary
   font-size: 1.1rem
   font-weight: 300
   margin-bottom: 10px
@@ -26,24 +34,16 @@
     display: none
 
 .footer-item
-  color: $grey
+  color: $white-disabled
   &:not(:first-child)
     margin-top: 10px
   a
-    color: $grey
+    color: $white-disabled
     &:hover
-      color: $grey-lighter
-li
-  +mobile
-    margin-top: 0
-
-  +mobile
-    &:not(:last-child)
-      margin-top: 0
-      margin-right: 15px
+      color: $white-secondary
 
 .social-icon
-  color: $white
+  color: $white-primary
   +transition(all 0s)
 
 #facebook-icon

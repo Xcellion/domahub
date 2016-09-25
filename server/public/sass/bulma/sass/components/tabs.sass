@@ -11,7 +11,7 @@
   white-space: nowrap
   a
     align-items: center
-    +box-shadow(0,-3px,0,$border,inset)
+    +box-shadow(0,-3px,0,$border,0,inset)
     color: $text
     display: flex
     justify-content: center
@@ -19,15 +19,12 @@
     padding: 6px 12px
     vertical-align: top
     &:hover
-      border-bottom-color: $primary-lighter
       color: $primary-lighter
-    +mobile
-      +box-shadow(0,0,0,$border)
   li
     display: block
     &.is-active
       a
-        +box-shadow(0,-3px,0,$primary,inset)
+        +box-shadow(0,-3px,0,$primary,0,inset)
         color: $primary
   ul
     align-items: center
@@ -35,7 +32,7 @@
     flex-grow: 1
     justify-content: flex-start
     +mobile
-      +box-shadow(0,-3px,0,$border,inset)
+      box-shadow: 0 2px 2px 0 rgba(0,0,0,.14),0 3px 1px -2px rgba(0,0,0,.2),0 1px 5px 0 rgba(0,0,0,.12)
     &.is-left
       padding-right: 10px
     &.is-center
@@ -61,6 +58,7 @@
   // Styles
   &.is-boxed
     a
+      +box-shadow(0,0,0,0,$border)
       border: 1px solid transparent
       border-radius: $radius $radius 0 0
       padding-bottom: 5px
@@ -71,6 +69,7 @@
     li
       &.is-active
         a
+          +box-shadow(0,0,0,0,$border)
           background-color: $white
           border-color: $border
           border-bottom-color: transparent !important

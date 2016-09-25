@@ -1,12 +1,6 @@
 @import 'bulma/bulma.sass';
 
-/******************** FORMS/INPUT ******************/
-
-input:-webkit-autofill {
-    -webkit-box-shadow: 0 0 0px 1000px white inset;
-}
-
-/********************** UNIVERSAL ******************/
+/********************** CUSTOM STYLES ******************/
 .logo-text {
   font: {
     family: 'Share Tech';
@@ -40,6 +34,17 @@ input:-webkit-autofill {
   margin-bottom: 25px;
 }
 
+.has-styleBorder {
+  @include tablet {
+    border-left: 5px solid $primary;
+    padding-left: 15px;
+  }
+  @include mobile {
+    @include box-shadow(0,-1px,0,$border,0,inset)
+    padding-bottom: 15px;
+  }
+}
+
 .landing-img {
   @include tablet {
     background-position: top center;
@@ -64,7 +69,7 @@ input:-webkit-autofill {
       align-items: center;
       background-color: rgba(0,0,0,0.45);
       display: flex;
-      height: 100vh;
+      height: 100%;
       justify-content: center;
       width: 100%;
     }
@@ -94,5 +99,3 @@ input:-webkit-autofill {
   margin: 5px auto 5px auto;
   width: 50%;
 }
-
-/********************** MEDIA QUERIES****************/

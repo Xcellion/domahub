@@ -16,7 +16,7 @@
 /*********************** LANDING ************************/
 @media screen and (min-width: 769px) {
   #index-img {
-    background-image: url("https://images.unsplash.com/photo-1417733403748-83bbc7c05140?dpr=1&auto=format&crop=entropy&fit=crop&w=1500&h=1000&q=80&cs=tinysrgb"); } }
+    background-image: url("http://i.imgur.com/LKOHK6f.png"); } }
 
 /*********************** MAIN ************************/
 .step-box {
@@ -35,9 +35,9 @@
 .step-number {
   font-weight: 300;
   padding: 0 10px 10px 0;
-  -webkit-box-shadow: 3px 5px 0 #3CBC8D;
-  -moz-box-shadow: 3px 5px 0 #3CBC8D;
-  box-shadow: 3px 5px 0 #3CBC8D; }
+  -webkit-box-shadow: 3px 5px 0 #3CBC8D 0;
+  -moz-box-shadow: 3px 5px 0 #3CBC8D 0;
+  box-shadow: 3px 5px 0 #3CBC8D 0; }
 
 .padding-left-10 {
   padding-left: 10px; }

@@ -22,13 +22,34 @@ textarea
   font-family: $family-primary
   +font-size(16px)
 
+h1
+  color: $text
+  font-size: $size-1
+  font-weight: 400
+  text-transform: capitalize
+  &.is-light
+    color: $text-light
+  &.is-white
+    color: $white-primary
 h2
-  font-size: 1.4rem
-  // &.is-primary
-  //   color: $primary
-  //   background-color: transparent
+  color: $text-light
+  font-size: $size-4
+  font-weight: 400
+  &.is-white
+    color: $white
+  &.is-white-light
+    color: $white-secondary
+  &.is-normal
+    color: $text
+h3
+  color: $text
+  font-size: $size-5
+  font-weight: 400
 p
-  font-size: 1rem
+  color: $text
+  font-weight: 400
+  &.is-light
+    color: $text-light
 h2 + p
   margin-top: 10px
 
@@ -61,7 +82,7 @@ a
   color: $white
   &-underlined
     color: $white
-    +box-shadow(0,-2px,0,$white,inset)
+    +box-shadow(0,-2px,0,0,$white,inset)
 .orange-link
   color: $accent
   &:hover

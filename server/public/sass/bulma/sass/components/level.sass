@@ -1,9 +1,11 @@
 .level-item
-  &.level-hero
+  &.company-level-item
     padding: 10px
-    @include box-shadow(-3px,0,0,$primary,inset)
-    +mobile
-      @include box-shadow(0,0,0,$black)
+    &:not(:last-child)
+      border-right: 2px solid $border
+      +mobile
+        border-right: none
+        border-bottom: 1px solid $border
   .title,
   .subtitle
     margin-bottom: 0
@@ -41,6 +43,11 @@
   @extend .block
   align-items: center
   justify-content: space-between
+  &.company-level
+    padding: 15px 0
+    border: 2px solid $border
+    +mobile
+      padding: 0
   code
     border-radius: $radius
   img

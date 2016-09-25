@@ -14,12 +14,7 @@
     vertical-align: bottom
 
 .title
-  color: $text
-  font-size: 3rem
-  font-weight: bold
   line-height: 1
-  +mobile
-    font-size: 2.3rem
   code
     display: inline-block
     font-size: $size-large
@@ -41,20 +36,13 @@
     font-weight: 400
     strong
       font-weight: 700
-  &.is-white
-    color: $white
   // Responsiveness
   +tablet
     & + .subtitle
       // margin-top: -15px
 
 .subtitle
-  color: $text
-  font-size: 1.8rem
-  font-weight: 300
   line-height: 1.125
-  width: 60%
-  margin: 0 auto
   +mobile
     font-size: 1.2rem
     width: 100%
@@ -80,5 +68,7 @@
     font-weight: 400
     strong
       font-weight: 700
-  &.is-white
-    color: $white
+
+.title-container
+  +mobile
+    text-align: center
