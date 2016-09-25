@@ -7,15 +7,45 @@
   &:hover
     cursor: pointer
   &:active
-    box-shadow: 0 3px 2px 0 rgba(0,0,0,.14),0 4px 1px -2px rgba(0,0,0,.2),0 2px 5px 0 rgba(0,0,0,.12)
+    box-shadow: 0 3px 3px 0 rgba(0,0,0,.14),0 4px 2px -2px rgba(0,0,0,.2),0 3px 5px 0 rgba(0,0,0,.12)
+  &.no-shadow
+    +box-shadow(0,0,0,$black,0)
+    &:hover
+      cursor: default
+  &.is-white
+    background-color: $white
+
+.card + .card
+  &:not(:first-child)
+    +mobile
+      margin-top: 25px
+    +tablet
+      margin-left: 25px
 
 .card-header-title
   align-items: flex-start
-  color: $text
   display: flex
   flex-grow: 1
-  font-weight: 400
   padding: 10px
+  &-index
+    align-items: flex-start
+    display: flex
+    flex-grow: 1
+    padding: 20px 0 15px 10px
+    &::after
+      background: $accent
+      content: ""
+      height: 3px
+      top: 46px
+      left: 10px
+      position: absolute
+      width: 35px
+
+.card-header-subtitle
+  align-items: flex-start
+  display: flex
+  flex-grow: 1
+  padding: 0 0 8px 10px
 
 .card-header-icon
   align-items: center
@@ -23,6 +53,8 @@
   display: flex
   justify-content: center
   width: 40px
+  &.is-active
+    color: $accent
 
 .card-image
   display: block
@@ -34,9 +66,10 @@
     margin-top: -20px
 
 .card-footer
-  border-top: 1px solid $border
+  // border-top: 1px solid $border
   align-items: stretch
   display: flex
+  padding: 10px
 
 .card-footer-item
   +transition(all 0s)

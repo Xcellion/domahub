@@ -42,14 +42,12 @@
         <div class="modal-content">
             <div id="login-dropdown">
               <div id="message" class="has-text-centered bottom-margin-25">Please log in below</div>
-              <form id="target" action="/login" method="post">
-                <p class="control has-icon">
-                  <input id="email" class="input is-medium" name="email" type="email" placeholder="Email">
-                  <i class="fa fa-envelope"></i>
+              <form id="target" action="/login" method="post" autocomplete="off">
+                <p class="control">
+                  <input id="email" autofocus class="input is-medium" name="email" type="email" placeholder="Email" spellcheck="false">
                 </p>
-                <p class="control has-icon">
-                  <input id="password" class="input is-medium" name="password" type="password" placeholder="Password">
-                  <i class="fa fa-lock"></i>
+                <p class="control">
+                  <input id="password" class="input is-medium" name="password" type="password" placeholder="Password" autocomplete="new-password">
                 </p>
                 <p class="control">
                   <button id="drop-login-button" class="button is-primary is-medium is-fullwidth">
@@ -67,8 +65,6 @@
                       <a class="forgot orange-link" href="/forgot">Forgot password?</a>
                   </p>
                 </div>
-
-            <div id="linebreak2"></div>
 
               <p class="control">
                 <p class="has-text-centered">

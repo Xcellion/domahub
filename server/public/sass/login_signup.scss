@@ -2,10 +2,6 @@
 @import 'mixins';
 
 /*************************** REGISTER ***************************/
-html {
-  background-color: $grey-lighter !important;
-}
-
 #message {
   margin: 10px 0 20px 0;
 }
@@ -51,9 +47,7 @@ html {
 
 .form {
   background-color: #fff;
-  -moz-box-shadow: 0 0 5px rgba(0,0,0,0.3);
-  -webkit-box-shadow: 0 0 5px rgba(0,0,0,0.3);
-  box-shadow: 0 0 5px rgba(0,0,0,0.3);
+  @include box-shadow(0,1px,9px,-1px,$grey);
   left: 0;
   margin: 0 auto;
   padding: 20px;

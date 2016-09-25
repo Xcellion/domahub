@@ -1,7 +1,4 @@
 /*************************** REGISTER ***************************/
-html {
-  background-color: #f5f7fa !important; }
-
 #message {
   margin: 10px 0 20px 0; }
 
@@ -35,9 +32,9 @@ html {
 
 .form {
   background-color: #fff;
-  -moz-box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
-  -webkit-box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+  -webkit-box-shadow: 0 1px 9px -1px #aeb1b5;
+  -moz-box-shadow: 0 1px 9px -1px #aeb1b5;
+  box-shadow: 0 1px 9px -1px #aeb1b5;
   left: 0;
   margin: 0 auto;
   padding: 20px;

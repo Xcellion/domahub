@@ -9,7 +9,7 @@
   <body>
 
     <div id="login-form" class="form">
-      <form id="target" action="/forgot" method="post">
+      <form id="target" action="/forgot" method="post" autocomplete="off">
         <div class="has-text-centered logo-login">
           <a class="logo-text primary-logo" href="/">DomaHub</a>
         </div>
@@ -24,15 +24,13 @@
       <div id="form_to_hide">
           <label class="label">Email</label>
           <p class="control">
-              <input id="email" name="email" class="input is-medium" type="email">
+              <input id="email" name="email" class="input is-medium" type="email" autcomplete="new-password" spellcheck="false">
           </p>
           <p class="control">
               <button id="login-button" class="login-button button is-primary is-medium is-fullwidth">
                   Change your password
               </button>
           </p>
-
-          <div id="linebreak2"></div>
 
           <p class="control">
               <p class="has-text-centered">
