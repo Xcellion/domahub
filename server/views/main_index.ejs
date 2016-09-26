@@ -12,26 +12,23 @@
 <body>
 
   <%- include("templates/navbar", {user: user}); %>
-  <section id="index-img" class="hero is-medium landing-img">
-
-      <div class="hero-body">
-        <div class="container has-text-centered">
-          <h1 class="title is-white">
-            Let domains work for you
-          </h1>
-          <h2 class="subtitle is-white-light">
-            List and rent domain names with DomaHub, the leading
-            marketplace for domain name transactions.
-          </h2>
-          <div class="hero-buttons">
-            <a id="get-started" class="button is-primary is-large" href='/getstarted'>Get Started</a>
-          </div>
+  <section id="index-img" class="section is-large landing-img">
+    <div class="hero-body">
+      <div class="container has-text-centered">
+        <h1 class="title is-white">
+          Let domains work for you
+        </h1>
+        <h2 class="subtitle is-white">
+          DomaHub is the one-stop marketplace for domain name rentals.
+        </h2>
+        <div class="hero-buttons">
+          <a id="get-started" class="button is-primary is-large" href='/getstarted'>Get Started</a>
         </div>
       </div>
-
+    </div>
   </section>
 
-  <!-- <section class="hero is-light is-carousel">
+  <section class="hero is-light is-carousel">
     <div class="hero-body">
       <div class="container">
         <span class="icon is-large carousel-icon left">
@@ -100,11 +97,12 @@
         </span>
       </div>
     </div>
-  </section> -->
+  </section>
+
 
   <section class="hero is-header">
     <div class="hero-body">
-      <div class="container title-container has-styleBorder">
+      <div class="container title-container">
         <h1 class="title is-3 is-normal">
           A brand new marketplace
         </h1>
@@ -135,7 +133,7 @@
             </div>
             <div class="card-image">
               <figure class="image is-2by1">
-                <img src="http://placehold.it/640x320" alt="">
+                <img src="/images/lib/custom/revenue.svg" alt="">
               </figure>
             </div>
             <div class="card-content">
@@ -165,7 +163,7 @@
             </div>
             <div class="card-image">
               <figure class="image is-2by1">
-                <img src="http://placehold.it/640x320" alt="">
+                <img src="/images/lib/custom/schedule.svg" alt="">
               </figure>
             </div>
             <div class="card-content">
@@ -246,118 +244,42 @@
     </div>
   </section>
 
-  <!-- <section class="hero is-small">
+  <section class="hero is-light is-header">
     <div class="hero-body">
-      <div class="container">
-        <div class="columns">
-          <div class="column has-text-centered square-border">
-            <figure class="image is-128x128 bottom-margin-25">
-              <img src="/images/lib/material/domain.svg" />
-            </figure>
-              <h2 class="is-normal">Make the most of your assets</h2>
-              <p>
-                Generate steady income on domains.
-                Don't let your assets rot away!
-              </p>
-          </div>
-          <div class="column has-text-centered square-border">
-            <figure class="image is-128x128 bottom-margin-25">
-              <img src="/images/lib/material/calendar2.svg" />
-            </figure>
-              <h2>Domains fit to your schedule</h2>
-              <p>
-                Schedule your rental down to the exact minute.
-                You decide the price and when the domain is available.
-              </p>
-          </div>
-          <div class="column has-text-centered square-border">
-            <figure class="image is-128x128 bottom-margin-25">
-              <img src="/images/lib/material/key.svg" />
-            </figure>
-              <h2>Complete rental protection</h2>
-              <p>
-                All rentals through DomaHub are binded by contract with
-                fixed rates and a pre-negotiated buyout price.
-              </p>
-          </div>
-          <div class="column has-text-centered square-border">
-            <figure class="image is-128x128 bottom-margin-25">
-              <img src="/images/lib/material/website.svg" />
-            </figure>
-              <h2>Free advertisement</h2>
-              <p>
-                DomaHub rental pages are designed to be full-page advertisements.
-                Our web wizard will help you get set up fast!
-              </p>
-          </div>
-        </div>
+      <div class="container title-container">
+        <h1 class="title is-3 is-normal">
+          Getting started is easy
+        </h1>
+        <h2 class="subtitle is-5">
+          DomaHub is simple, accessible, and user-friendly.
+        </h2>
       </div>
     </div>
-  </section> -->
+  </section>
 
-  <section class="section is-medium is-light">
+  <section class="section is-small is-light">
     <div class="container">
       <div class="columns">
         <div class="column">
-          <div class="has-text-centered bottom-margin-25">
-            <h1 class="title is-2 is-normal">
-              Getting started is easy
-            </h1>
-            <h2 class="subtitle is-4">
-              Whether you're looking to rent or list, we've got you covered.
-            </h2>
+          <div class="content">
+            <h2>1</h2>
+            <p>
+              Create a DomaHub <a class="orange-link" href="/signup">account</a>.
+            </p>
           </div>
           <div class="content">
-            <div class="step-box">
-              <h1 class="step-number">Step One</h1>
-              <p class="step-text">Create a DomaHub <a class="orange-link" href="/signup" target="_blank">account</a></p>
-            </div>
-            <div class="step-box">
-              <h1 class="step-number">Step Two</h1>
-              <p class="step-text">
-                Connect your account to <a class="orange-link" href="/authorizestripe" target="_blank">Stripe&trade;</a>.
-              </p>
-            </div>
-            <div class="step-box">
-              <h1 class="step-number">Step Three</h1>
-              <p class="step-text">
-                Create an <a class="orange-link" href="/signup" target="_blank">account</a>.
-              </p>
-            </div>
-          </div>
-          <!-- <div class="content">
-            <h2>HOW TO RENT A DOMAIN</h2>
+            <h2>2</h2>
             <p>
-              <span class="shadow-leftTopCorner">STEP ONE&#58</span> Create a DomaHub
-              <a class="orange-link" href="/signup" target="_blank">account</a>.
-            </p>
-            <p>
-              <span class="padding-left-10">STEP TWO</span>&#58 Connect your account to
-               <a class="orange-link" href="/authorizestripe" target="_blank">Stripe&trade;</a>.
-            </p>
-            <p>
-              <span class="padding-left-10">STEP THREE</span>&#58 Search for domains or use our
-              <a class="orange-link" href="/getstarted" target="_blank">Get Started</a>
-              <span class="shadow-rightBottomCorner">page.</span>
+              Authorize <a class="orange-link" href="/authorizestripe">Stripe&trade;</a> payments.
             </p>
           </div>
-          <a class="button is-medium is-primary" href="/listings" title="Browse Listings">
-            Browse Listings
-          </a> -->
-        </div>
-          <!-- <div class="column">
-            <div class="content">
-              <h2>Start listing your domains immediately!</h2>
-              <p>
-                Listing a website is quick and easy. Just
-                <a class="orange-link" href="/signup">sign up</a> for an account
-                with us and follow the instructions on how to connect your domains.
-              </p>
-            </div>
-            <a class="button is-medium is-primary" href="/listing/create" title="Create Listings">
-              Create a Listing
-            </a>
-          </div> -->
+          <div class="content">
+          <h2>3</h2>
+          <p>
+            Browse <a class="orange-link" href="/listings">listings</a> or
+            <a class="orange-link" href="/listing/create">create</a> one yourself.
+          </p>
+          </div>
         </div>
       </div>
     </div>
@@ -367,7 +289,7 @@
     <div class="hero-body">
       <div class="container has-text-centered">
         <h1 class="title is-2 is-normal">
-          Join our newsletter!
+          Want to stay updated?
         </h1>
         <p class="control has-addons has-addons-centered">
           <input class="input is-medium is-fullwidth" type="email" placeholder="Enter your email!"/>

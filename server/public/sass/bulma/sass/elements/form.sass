@@ -7,18 +7,19 @@
 
 input
   &:-webkit-autofill
-    -webkit-box-shadow: 0 0 0px 1000px white inset;
+    -webkit-box-shadow: 0 0 0px 1000px white inset
 
 .input
   +form-control
-  +box-shadow(0,-2px,0,$border,0,inset)
-  border: none
-  border-radius: 0
+  border: 1px solid $border
+  border-radius: $radius
   max-width: 100%
   width: 100%
   &:hover
+    outline: none
   &:focus
-    +box-shadow(0,-2px,0,$accent,0,inset)
+    outline: none
+    border: 1px solid $accent
   // Sizes
   &.is-small
     +control-small
@@ -37,7 +38,6 @@ input
 .textarea
   @extend .input
   border: 1px solid $border
-  +box-shadow(0,0,0,$black,0)
   border-radius: $radius
   display: block
   line-height: 1.2
@@ -47,17 +47,14 @@ input
   min-width: 100%
   padding: 10px
   resize: none
-  &:focus
-    +box-shadow(0,0,0,$black,0)
 
 %control-with-element
   cursor: pointer
-  // display: inline-block
-  // line-height: 16px
+  display: inline-block
+  line-height: 16px
   position: relative
   vertical-align: top
   input
-  &:hover
 
   &.is-disabled
     color: $text-disabled
@@ -85,7 +82,7 @@ input
     outline: none
     padding-right: 36px
     &:hover
-      border-color: $control-hover-border
+      border-color: $accent
     &::ms-expand
       display: none
   &.is-fullwidth
@@ -100,6 +97,9 @@ input
   &:hover
     &:after
       border-color: $link-hover
+  &:active,
+  &:focus
+    border-color: $accent
   &.is-small
     height: 24px
     select
@@ -155,7 +155,6 @@ input
     .button,
     .input,
     .select
-      +box-shadow(0,0,0,$black,0)
       border: 1px solid $border
       border-radius: $radius
       margin-right: -1px
@@ -164,7 +163,7 @@ input
         z-index: 2
       &:active,
       &:focus
-        +box-shadow(0,0,0,$black,0)
+        border: 1px solid $primary
         z-index: 3
       &:first-child
         border-radius: 0
