@@ -54,8 +54,8 @@ function getCurrentRental(req, res, domain_name){
 				//current rental exists!
 				if (result.rental_id){
 					console.log("Currently rented! Proxying request...");
-					req.session.rented = result.info.ip;
-					proxyReq(req, res, result.info.ip)
+					req.session.rented = result.info.address;
+					proxyReq(req, res, result.info.address)
 				}
 
 				//redirect to listing page
