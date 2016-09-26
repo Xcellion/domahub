@@ -10,7 +10,7 @@ function handler(req, res, message, type) {
 	switch (type){
 		//errors for api
 		case "api":
-			res.redirect(301, 'http://domahub.com');
+			res.redirect('http://domahub.com/error');
 			break;
 		case "json":
 			res.send({

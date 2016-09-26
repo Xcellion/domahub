@@ -78,7 +78,7 @@ module.exports = {
 		new_rental_info = req.session.new_rental_info;
 
 		raw_info = {
-			ip: new_rental_info.ip
+			address: new_rental_info.address
 		};
 
 		formatted_times = formatNewRentalTimes(rental_id, new_rental_info.formatted_times);
@@ -101,9 +101,9 @@ module.exports = {
 		raw_info = {
 			account_id: new_rental_info.account_id,
 			listing_id: new_rental_info.listing_id,
-			ip: new_rental_info.ip,
+			address: new_rental_info.address,
 		};
-
+		
 		newListingRental(req, res, new_rental_info.listing_id, raw_info, function(rental_id){
 
 			//format any new times

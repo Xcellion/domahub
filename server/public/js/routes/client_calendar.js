@@ -37,8 +37,8 @@ $(document).ready(function() {
 			end = moment(end.format());
 			now = new moment();
 
-			//prevent calendar from creating events in the past
-			if (start < now){
+			//prevent calendar from creating events in the past (except for current 30 minute slot)
+			if (start < now - 1800000){
 				$('#calendar').fullCalendar('unselect');
 				return false;
 			}

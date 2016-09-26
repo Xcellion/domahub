@@ -1,20 +1,8 @@
 var	account_model = require('../../models/account_model.js'),
 	listing_model = require('../../models/listing_model.js');
 
-var httpProxy = require('http-proxy'),
- 	proxy = httpProxy.createProxyServer({}),
-	validator = require("validator");
-
-// Listen for any error events
-proxy.on('error', function (err, req, res) {
-	console.log(err);
-	res.redirect("http://domahub.com/error");
-});
-
-//to rewrite header on proxy
-proxy.on('proxyReq', function(proxyReq, req, res, options) {
-	proxyReq.setHeader('domahub', 'domahub');
-});
+var validator = require("validator");
+	request = require('request');
 
 module.exports = function(app, db, e){
 	error = e;
@@ -30,7 +18,6 @@ module.exports = function(app, db, e){
 function checkHost(req, res, next){
 	if (req.headers.host){
 	    domain_name = req.headers.host.replace(/^(https?:\/\/)?(www\.)?/,'');
-
 		//requested domahub website, not domain
 		if (domain_name == "www.w3bbi.com"
 		 	|| domain_name == "w3bbi.com"
@@ -57,24 +44,30 @@ function checkHost(req, res, next){
 //send the current rental details and information for a listing
 function getCurrentRental(req, res, domain_name){
 	//get the current rental for the listing
-	Listing.getCurrentRental(domain_name, function(result){
-		if (result.state != "success"){error.handler(req, res, false, "api");}
-		else {
-			rental_listing_info = result.info;
-
-			//current rental exists!
-			if (result.rental_id){
-				proxy.web(req, res, {
-					target: "http://" + result.info.ip
-				});
-			}
-
-			//redirect to listing page
+	if (req.session.rented){
+		proxyReq(req, res, req.session.rented);
+	}
+	else {
+		Listing.getCurrentRental(domain_name, function(result){
+			if (result.state != "success"){error.handler(req, res, false, "api");}
 			else {
-				res.redirect("http://domahub.com/listing/" + domain_name)
+				//current rental exists!
+				if (result.rental_id){
+					console.log("Currently rented! Proxying request...");
+					req.session.rented = result.info.ip;
+					proxyReq(req, res, result.info.ip)
+				}
+
+				//redirect to listing page
+				else {
+					console.log("Not rented! Redirecting to listing page");
+					delete req.session.rented;
+					res.redirect("http://domahub.com/listing/" + domain_name)
+				}
 			}
-		}
-	});
+		});
+	}
+
 }
 
 //display the error page
@@ -82,4 +75,23 @@ function renderError(req, res, next){
 	res.render("error", {
 		user: req.user
 	});
+}
+
+//function to proxy request
+function proxyReq(req, res, target){
+	request.get({
+		url: 'http://' + target + req.path,
+		encoding: null
+	},
+		function (err, response, body) {
+			if (!err) {
+				req.session.doma = true;
+				res.setHeader('content-type', response.headers['content-type']);
+				res.send(body);
+			}
+			else {
+				error.handler(req, res, false, "api");
+			}
+		}
+	);
 }
