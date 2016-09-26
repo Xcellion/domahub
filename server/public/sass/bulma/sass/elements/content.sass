@@ -1,15 +1,18 @@
 .content
   @extend .block
   // Headers
-  h1 + p
-    margin-top: 20px
   h2
-    font-size: $size-3
+    font-size: $size-4
     +mobile
       font-size: 1.2rem
   h3
     &.is-danger
       color: $danger
+  h1,
+  h2,
+  h3,
+    & + p
+      margin-top: 10px
   li + li
     margin-top: 10px
   // Paragraphs

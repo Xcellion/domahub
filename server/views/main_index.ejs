@@ -12,17 +12,17 @@
 <body>
 
   <%- include("templates/navbar", {user: user}); %>
-  <section id="index-img" class="section is-large landing-img">
+  <section class="hero is-large is-primary clear-nav">
     <div class="hero-body">
       <div class="container has-text-centered">
-        <h1 class="title is-white">
-          Let domains work for you
+        <h1 class="title title-index is-normal">
+          Domains working for you, on your schedule
         </h1>
-        <h2 class="subtitle is-white">
+        <h2 class="subtitle is-white-light">
           DomaHub is the one-stop marketplace for domain name rentals.
         </h2>
         <div class="hero-buttons">
-          <a id="get-started" class="button is-primary is-large" href='/getstarted'>Get Started</a>
+          <a id="get-started" class="button is-primary is-inverted is-large" href='/getstarted'>Get Started</a>
         </div>
       </div>
     </div>
@@ -31,70 +31,62 @@
   <section class="hero is-light is-carousel">
     <div class="hero-body">
       <div class="container">
-        <span class="icon is-large carousel-icon left">
-          <i class="fa fa-angle-left"></i>
-        </span>
           <div class="carousel-wrapper">
             <div class="carousel-control">
-              <article class="carousel-item media">
-                <figure class="media-left">
-                  <p class="image is-64x64">
-                    <img src="/images/lib/material/satisfied.svg">
-                  </p>
-                </figure>
-                <div class="media-content">
-                  <div class="content">
-                    <p>
-                      DomaHub has officially launched! Enjoy 10% off all rentals
-                      from now until XX/XX/2016! Browse domain listings
-                      <a class="is-underlined" href="/listings" title="Listings">here</a>.
-                    </p>
+              <div class="carousel-item">
+                <nav class="level">
+                  <div class="level-left">
+                    <div class="level-item">
+                      <span class="tag is-primary is-medium">NEWS</span>
+                    </div>
+                    <div class="level-item">
+                      <div class="content">
+                        <p>
+                          DomaHub has officially launched! Browse <a class="orange-link" href="/listings">listings</a> now!
+                        </p>
+                      </div>
+                    </div>
                   </div>
-                </div>
-              </article>
+                </nav>
+              </div>
             </div>
             <div class="carousel-control">
-              <article class="carousel-item media">
-                <figure class="media-left">
-                  <p class="image is-64x64">
-                    <img src="/images/lib/material/computer.svg">
-                  </p>
-                </figure>
-                <div class="media-content">
-                  <div class="content">
-                    <p>
-                      Want to connect with us? Feel free to
-                      <a class="is-underlined" href="/contact" title="Contact Us">contact us</a>.
-                      Also, come see what's happening at Domahub by visiting our
-                      <a class="is-underlined" href="/blog" title="Blog">blog</a>.
-                    </p>
+              <div class="carousel-item">
+                <nav class="level">
+                  <div class="level-left">
+                    <div class="level-item">
+                      <span class="tag is-accent is-medium">PROMO</span>
+                    </div>
+                    <div class="level-item">
+                      <div class="content">
+                        <p>
+                          Use promo code DOMA2016 at checkout for 5&#37 off!
+                        </p>
+                      </div>
+                    </div>
                   </div>
-                </div>
-              </article>
+                </nav>
+              </div>
             </div>
             <div class="carousel-control">
-              <article class="carousel-item media">
-                <figure class="media-left">
-                  <p class="image is-64x64">
-                    <img src="/images/lib/material/heart.svg">
-                  </p>
-                </figure>
-                <div class="media-content">
-                  <div class="content">
-                    <p>
-                      If a domain name is not listed on DomaHub, simply use our
-                      tool (located on every listing's page) to request it.
-                      The DomaHub team will make sure that it gets listed.
-                    </p>
+              <div class="carousel-item">
+                <nav class="level">
+                  <div class="level-left">
+                    <div class="level-item">
+                      <span class="tag is-info is-medium">BLOG</span>
+                    </div>
+                    <div class="level-item">
+                      <div class="content">
+                        <p>
+                          Read about our humble beginnings at our <a class="orange-link" href="https://medium.com/@domahub">blog</a>.
+                        </p>
+                      </div>
+                    </div>
                   </div>
-                </div>
-              </article>
-
+                </nav>
+              </div>
             </div>
           </div>
-        <span class="icon is-large carousel-icon right">
-          <i class="fa fa-angle-right"></i>
-        </span>
       </div>
     </div>
   </section>
@@ -102,9 +94,9 @@
 
   <section class="hero is-header">
     <div class="hero-body">
-      <div class="container title-container">
+      <div class="container has-text-centered">
         <h1 class="title is-3 is-normal">
-          A brand new marketplace
+          A Brand New Marketplace
         </h1>
         <h2 class="subtitle is-5">
           DomaHub is simple, accessible, and user-friendly.
@@ -113,184 +105,119 @@
     </div>
   </section>
 
-  <section class="hero is-small">
-    <div class="hero-body">
-      <div class="container">
-        <div class="columns">
-          <div class="card">
-            <header class="card-header no-shadow is-white">
-              <h3 class="card-header-title-index">
-                Revenue
-              </h3>
-              <a class="card-header-icon is-active">
-                <i class="fa fa-angle-down"></i>
-              </a>
-            </header>
-            <div class="card-header-subtitle">
-              <p class="is-light">
-                Generate continuous income
-              </p>
-            </div>
-            <div class="card-image">
-              <figure class="image is-2by1">
-                <img src="/images/lib/custom/revenue.svg" alt="">
-              </figure>
-            </div>
-            <div class="card-content">
-              <p>
-                Get the most out of your assets. Listing a domain name
-                for rent opens an entirely new revenue stream, allowing
-                you to make money without having to relinquish ownership.
-              </p>
-            </div>
-            <footer class="card-footer">
-              <a class="button is-accent is-inverted">Learn More</a>
-            </footer>
-          </div>
-          <div class="card">
-            <header class="card-header no-shadow is-white">
-              <h3 class="card-header-title-index">
-                Schedule
-              </h3>
-              <a class="card-header-icon is-active">
-                <i class="fa fa-angle-down"></i>
-              </a>
-            </header>
-            <div class="card-header-subtitle">
-              <p class="is-light">
-                Rentals work to your schedule
-              </p>
-            </div>
-            <div class="card-image">
-              <figure class="image is-2by1">
-                <img src="/images/lib/custom/schedule.svg" alt="">
-              </figure>
-            </div>
-            <div class="card-content">
-              <p>
-                Regardless of whether you're a buyer or a seller,
-                you can schedule rentals to the exact minute.
-                Rentals have the upmost flexibility in order to fit
-                your needs.
-              </p>
-            </div>
-            <footer class="card-footer">
-              <a class="button is-accent is-inverted">Learn More</a>
-            </footer>
-          </div>
-          <div class="card">
-            <header class="card-header no-shadow is-white">
-              <h3 class="card-header-title-index">
-                Protection
-              </h3>
-              <a class="card-header-icon is-active">
-                <i class="fa fa-angle-down"></i>
-              </a>
-            </header>
-            <div class="card-header-subtitle">
-              <p class="is-light">
-                Legally binded contracts
-              </p>
-            </div>
-            <div class="card-image">
-              <figure class="image is-2by1">
-                <img src="http://placehold.it/640x320" alt="">
-              </figure>
-            </div>
-            <div class="card-content">
-              <p>
-                All domains rented through DomaHub are protected
-                by contract. Rentals are purchased for a specific
-                time period at a fixed price. Buy-outs are available
-                at a pre-negotiated price.
-              </p>
-            </div>
-            <footer class="card-footer">
-              <a class="button is-accent is-inverted">Learn More</a>
-            </footer>
-          </div>
-          <div class="card">
-            <header class="card-header no-shadow is-white">
-              <h3 class="card-header-title-index">
-                Advertisement
-              </h3>
-              <a class="card-header-icon is-active">
-                <i class="fa fa-angle-down"></i>
-              </a>
-            </header>
-            <div class="card-header-subtitle">
-              <p class="is-light">
-                Free, hosted advertisements
-              </p>
-            </div>
-            <div class="card-image">
-              <figure class="image is-2by1">
-                <img src="http://placehold.it/640x320" alt="">
-              </figure>
-            </div>
-            <div class="card-content">
-              <p>
-                DomaHub listings are designed to be full-page, custom advertisements.
-                Our online tool helps you to create an attractive listing
-                tailored to your preferences.
-              </p>
-            </div>
-            <footer class="card-footer">
-              <a class="button is-accent is-inverted">Learn More</a>
-            </footer>
+  <section class="section">
+    <div class="container">
+      <div class="columns">
+        <div class="column">
+          <figure class="image is-64x64 bottom-margin-25">
+            <img src="/images/lib/material/money-off.svg" alt="free">
+          </figure>
+          <div class="content has-text-centered">
+            <h3>Completely Free</h3>
+            <p class="is-light">
+              Just <a class="orange-link" href="/signup">create an account</a> and start browsing or listing!
+            </p>
           </div>
         </div>
+        <div class="column">
+          <figure class="image is-64x64 bottom-margin-25">
+            <img src="/images/lib/material/calendar.svg" alt="calendar">
+          </figure>
+          <div class="content has-text-centered">
+            <h3>Flexible Schedules</h3>
+            <p class="is-light">
+              Rentals are tailored to your preferences and needs.
+            </p>
+          </div>
+        </div>
+        <div class="column">
+          <figure class="image is-64x64 bottom-margin-25">
+            <img src="/images/lib/material/payment.svg" alt="payment">
+          </figure>
+          <div class="content has-text-centered">
+            <h3>Secure Payments</h3>
+            <p class="is-light">
+              All transactions are powered by
+              <a href="https://www.stripe.com" target="_blank" rel="author" title="Stripe">
+              <img src="/images/companies/stripe-blue.svg" class="stripe-logo" alt="stripe" width="48" height="24"/></a>
+            </p>
+          </div>
+        </div>
+      </div>
       </div>
     </div>
   </section>
 
   <section class="hero is-light is-header">
     <div class="hero-body">
-      <div class="container title-container">
+      <div class="container has-text-centered">
         <h1 class="title is-3 is-normal">
           Getting started is easy
         </h1>
         <h2 class="subtitle is-5">
-          DomaHub is simple, accessible, and user-friendly.
+          Just follow these simple steps
         </h2>
       </div>
     </div>
   </section>
 
-  <section class="section is-small is-light">
+  <section class="section is-medium is-light">
     <div class="container">
       <div class="columns">
         <div class="column">
-          <div class="content">
-            <h2>1</h2>
-            <p>
+          <div class="content has-text-centered">
+            <h3 class="heading">ONE</h3>
+            <p class="title">
               Create a DomaHub <a class="orange-link" href="/signup">account</a>.
             </p>
           </div>
-          <div class="content">
-            <h2>2</h2>
-            <p>
-              Authorize <a class="orange-link" href="/authorizestripe">Stripe&trade;</a> payments.
+        </div>
+        <div class="column">
+          <div class="content has-text-centered">
+            <h3 class="heading">TWO</h3>
+            <p class="title">
+              Authorize <a href="/authorizestripe" class="orange-link" target="_blank" title="Stripe"> Stripe</a> payments.
             </p>
           </div>
-          <div class="content">
-          <h2>3</h2>
-          <p>
-            Browse <a class="orange-link" href="/listings">listings</a> or
-            <a class="orange-link" href="/listing/create">create</a> one yourself.
-          </p>
+        </div>
+        <div class="column">
+          <div class="content has-text-centered">
+            <h3 class="heading">THREE</h3>
+            <p class="title">
+              Browse <a class="orange-link" href="/listings">listings</a> or
+              <a class="orange-link" href="/listing/create">create</a> one yourself.
+            </p>
           </div>
+        </div>
+          <!-- <div class="content">
+            <h3>
+              1. Create a DomaHub <a class="orange-link" href="/signup">account</a>.
+            </h3>
+          </div>
+          <div class="content">
+            <h2>
+              2. Authorize <a href="/authorizestripe" target="_blank" title="Stripe">
+              <img src="/images/companies/stripe-blue.svg" class="stripe-logo" alt="stripe" width="48" height="24"/></a>
+               payments.
+            </h2>
+          </div>
+          <div class="content">
+          <h2>
+            3. Browse <a class="orange-link" href="/listings">listings</a> or
+            <a class="orange-link" href="/listing/create">create</a> one yourself.
+          </h2>
+          </div> -->
         </div>
       </div>
     </div>
   </section>
 
-  <section class="hero is-small">
+  <section class="hero is-medium">
     <div class="hero-body">
       <div class="container has-text-centered">
-        <h1 class="title is-2 is-normal">
-          Want to stay updated?
-        </h1>
+        <h2 class="title is-3">
+          Sign up for our email promotions
+        </h2>
         <p class="control has-addons has-addons-centered">
           <input class="input is-medium is-fullwidth" type="email" placeholder="Enter your email!"/>
           <a class="button is-primary is-medium">Submit</a>
