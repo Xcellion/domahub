@@ -129,7 +129,7 @@ body{
 
 /*--------------------------------------------------------------------------------------*/
 
-#ip_wrapper{
+#address_wrapper{
 	background-color:#222;
 }
 
@@ -137,11 +137,11 @@ body{
 	color:#D3D3D3;
 }
 
-#ip_form_wrapper:required:invalid, input:focus:invalid {
+#address_form_wrapper:required:invalid, input:focus:invalid {
   border:1px solid red;
 }
 
-#ip_form_input{
+#address_form_input{
 	width:auto;
     font-family: 'Share Tech';
 }

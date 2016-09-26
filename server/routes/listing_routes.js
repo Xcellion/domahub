@@ -246,7 +246,7 @@ function checkRental(req, res, next){
 function checkNewRentalInfo(req, res, next){
 	domain_name = req.params.domain_name;
 	times = req.body.events;
-	ip = req.body.ip;
+	address = req.body.address;
 	price = calculatePrice(times, req.session.listing_info);
 	stripeToken = req.body.stripeToken;
 
@@ -263,9 +263,9 @@ function checkNewRentalInfo(req, res, next){
 			error.handler(req, res, "Invalid price!");
 		}
 	}
-	//passed above checks, continue to check for IP and times
-	if (bool && !ValidateIPaddress(ip)){
-		error.handler(req, res, "Invalid IP address!", "json");
+	//passed above checks, continue to check for address and times
+	if (bool && !validator.isIP(address) && !validator.isURL(address, {protocols: ["http", "https"]})){
+		error.handler(req, res, "Invalid address!", "json");
 	}
 	else {
 		//check if its even a valid JS date
@@ -305,7 +305,7 @@ function checkNewRentalInfo(req, res, next){
 											formatted_times : formatted_times,
 											to_update: to_update,
 											delete_stuff: delete_stuff,
-											ip: ip
+											address: address
 										};
 										next();
 									}
@@ -326,7 +326,7 @@ function checkNewRentalInfo(req, res, next){
 				account_id: req.user.id,
 				listing_id: req.session.listing_info.id,
 				formatted_times : false,
-				ip: ip
+				address: address
 			};
 			next();
 		}
@@ -411,7 +411,7 @@ function getStripeId(domain_name, stripeToken, price, next){
 						account_id: req.user.id,
 						listing_id: req.session.listing_info.id,
 						formatted_times : formatted_times,
-						ip: ip
+						address: address
 					};
 					next();
 				}
@@ -450,9 +450,4 @@ function payCheck(stripe_id, stripeToken, price, domain_name, cb){
 			cb(true);
 		}
 	});
-}
-
-//helper function to validate ip address
-function ValidateIPaddress(ipaddress){
-	return /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/.test(ipaddress)
 }
