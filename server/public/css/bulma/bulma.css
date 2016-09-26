@@ -161,8 +161,10 @@ textarea {
 
 h1 {
   color: rgba(0, 0, 0, 0.87);
-  font-size: 48px;
+  font-size: 40px;
   font-weight: bold; }
+  h1.is-primary-darker {
+    color: #3cbc8d; }
   h1.is-light {
     color: rgba(0, 0, 0, 0.54); }
   h1.is-white {
@@ -572,9 +574,9 @@ a.box {
   padding-right: 8px;
   position: relative;
   vertical-align: top;
-  -webkit-box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.12) 0;
-  -moz-box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.12) 0;
-  box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.12) 0;
+  -webkit-box-shadow: 3px 3px 5px 0 rgba(0, 0, 0, 0.12);
+  -moz-box-shadow: 3px 3px 5px 0 rgba(0, 0, 0, 0.12);
+  box-shadow: 3px 3px 5px 0 rgba(0, 0, 0, 0.12);
   justify-content: center;
   padding-left: 10px;
   padding-right: 10px;
@@ -911,17 +913,19 @@ button {
   -webkit-transition: all 0.25s;
   transition: all 0.25s; }
 
-.content h1 + p {
-  margin-top: 20px; }
-
 .content h2 {
-  font-size: 28px; }
+  font-size: 24px; }
   @media screen and (max-width: 768px) {
     .content h2 {
       font-size: 1.2rem; } }
 
 .content h3.is-danger {
   color: #f44336; }
+
+.content h1 + p,
+.content h2 + p,
+.content h3 + p {
+  margin-top: 10px; }
 
 .content li + li {
   margin-top: 10px; }
@@ -3612,11 +3616,15 @@ a.panel-block:hover {
   outline: none !important; }
 
 .carousel-item {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: stretch;
   width: 70%;
   margin: 0 auto; }
 
 .carousel-wrapper {
-  width: 90%;
+  width: 100%;
   margin: 0 auto; }
 
 .hero {
@@ -4146,8 +4154,8 @@ a.panel-block:hover {
       padding-top: 80px; } }
   @media screen and (min-width: 769px) {
     .hero.is-carousel .hero-body {
-      padding-bottom: 40px;
-      padding-top: 80px; } }
+      padding-bottom: 15px;
+      padding-top: 40px; } }
   @media screen and (min-width: 769px) {
     .hero.is-small .hero-body {
       padding-bottom: 80px;
