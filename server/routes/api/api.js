@@ -90,6 +90,7 @@ function proxyReq(req, res, target){
 				res.send(body);
 			}
 			else {
+				console.log(err);
 				error.handler(req, res, false, "api");
 			}
 		}
