@@ -67,6 +67,10 @@
     outline: none !important
 
 .carousel-item
+  display: flex
+  flex-direction: row
+  justify-content: center
+  align-items: stretch
   width: 70%
   margin: 0 auto
   // .content
@@ -74,7 +78,7 @@
   //     color: $white
 
 .carousel-wrapper
-  width: 90%
+  width: 100%
   margin: 0 auto
 
 // Main container
@@ -166,8 +170,8 @@
   &.is-carousel
     +tablet
       .hero-body
-        padding-bottom: 40px
-        padding-top: 80px
+        padding-bottom: 15px
+        padding-top: 40px
   &.is-small
     +tablet
       .hero-body

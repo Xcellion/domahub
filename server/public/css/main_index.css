@@ -18,41 +18,11 @@
   #index-img {
     background-image: url("http://i.imgur.com/dG0Y78S.png"); } }
 
+.title-index {
+  -webkit-box-shadow: 0 -2px 0 #ff8751 0;
+  -moz-box-shadow: 0 -2px 0 #ff8751 0;
+  box-shadow: 0 -2px 0 #ff8751 0; }
+
 /*********************** MAIN ************************/
-.step-box {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-around;
-  align-items: center; }
-
-.step-box + .step-box {
-  margin-top: 30px; }
-
-.step-text {
-  margin-left: 10px;
-  font-weight: 400; }
-
-.step-number {
-  font-weight: 300;
-  padding: 0 10px 10px 0;
-  -webkit-box-shadow: 3px 5px 0 #3CBC8D 0;
-  -moz-box-shadow: 3px 5px 0 #3CBC8D 0;
-  box-shadow: 3px 5px 0 #3CBC8D 0; }
-
-.padding-left-10 {
-  padding-left: 10px; }
-
-.main-link {
-  font-size: 1.2rem; }
-
-#list-text {
-  order: 2; }
-
-#list-img {
-  order: 1; }
-
-#rent-text {
-  order: 1; }
-
-#rent-img {
-  order: 2; }
+.stripe-logo {
+  vertical-align: bottom; }
