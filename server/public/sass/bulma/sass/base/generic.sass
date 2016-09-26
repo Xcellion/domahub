@@ -25,22 +25,21 @@ textarea
 h1
   color: $text
   font-size: $size-1
-  font-weight: 400
-  text-transform: capitalize
+  font-weight: bold
   &.is-light
     color: $text-light
   &.is-white
     color: $white-primary
 h2
-  color: $text-light
+  color: $text
   font-size: $size-4
   font-weight: 400
   &.is-white
     color: $white
   &.is-white-light
     color: $white-secondary
-  &.is-normal
-    color: $text
+  &.is-light
+    color: $text-light
 h3
   color: $text
   font-size: $size-5
@@ -50,6 +49,10 @@ p
   font-weight: 400
   &.is-light
     color: $text-light
+  &.is-white
+    color: $white-primary
+  &.is-white-light
+    color: $white-secondary
 h2 + p
   margin-top: 10px
 
@@ -71,6 +74,8 @@ a
   cursor: pointer
   opacity: 1.0
   text-decoration: none
+  &:active
+    outline: none
 .is-underlined
   color: inherit
   text-decoration: underline

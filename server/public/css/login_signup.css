@@ -16,20 +16,6 @@
   -webkit-transform: translate(-4px, 4px);
     -webkit-transform-transform: translate(-4px, 4px); }
 
-.w3bbi-icon {
-  box-sizing: border-box;
-  color: #3CBC8D;
-  font-family: "Share Tech", "Lucida Console", monospace;
-  font-size: 1.5rem;
-  font-weight: bold;
-  -webkit-transition: all 0.25s;
-  transition: all 0.25s; }
-
-.w3bbi-icon:hover:not(.active) {
-  color: #3CBC8D;
-  cursor: pointer;
-  opacity: 0.85; }
-
 .form {
   background-color: #fff;
   -webkit-box-shadow: 0 1px 9px -1px #aeb1b5;
@@ -40,12 +26,8 @@
   padding: 20px;
   position: absolute;
   right: 0;
-  top: 10px;
+  top: 150px;
   width: 400px; }
-
-.login-button {
-  transition: all 0.25s;
-  -webkit-transition: all 0.25s; }
 
 .g-recaptcha > div {
   margin: auto;

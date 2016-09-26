@@ -8,25 +8,27 @@
 
   <body>
 
+    <div class="content has-text-centered clear-nav">
+      <div class="has-text-centered logo-login">
+        <a class="logo-text primary-logo large-logo" href="/">DomaHub</a>
+      </div>
+      <p id="message" class="">
+        <% if (typeof message != "undefined") {%>
+          <%= message %>
+        <% } else {%>
+            Please log in below
+        <% } %>
+      </p>
+    </div>
     <div id="login-form" class="form">
-      <form id="target" action="/login" method="post" autocomplete="off">
-        <div class="has-text-centered logo-login">
-          <a class="logo-text primary-logo" href="/">DomaHub</a>
-        </div>
-        <div id="message" class="has-text-centered">
-          <% if (typeof message != "undefined") {%>
-            <%= message %>
-          <% } else {%>
-              Please log in below
-          <% } %>
-        </div>
+      <form id="target" action="/login" method="post">
         <label class="label">Email</label>
         <p class="control">
           <input id="email" autofocus name="email" class="input is-medium" type="email" value="" spellcheck="false">
         </p>
         <label class="label">Password</label>
         <p class="control">
-          <input id="password" name="password" class="input is-medium" type="password" autocomplete="new-password" value="">
+          <input id="password" name="password" class="input is-medium" type="password" value="">
         </p>
         <p class="control">
           <button id="login-button" class="login-button button is-primary is-medium is-fullwidth">

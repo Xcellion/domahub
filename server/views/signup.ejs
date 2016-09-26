@@ -8,18 +8,20 @@
 	</head>
 <body>
 
-<div id="signup-form" class="form">
-
+	<div class="content has-text-centered clear-nav">
 		<div class="has-text-centered logo-login">
-			<a class="logo-text primary-logo" href="/">DomaHub</a>
+			<a class="logo-text primary-logo large-logo" href="/">DomaHub</a>
 		</div>
-		<div id="message" class="has-text-centered">
+		<p id="message" class="">
 			<% if (typeof message != "undefined") {%>
 				<%= message %>
-				<% } else {%>
-					Enter your information below
-					<% } %>
-		</div>
+			<% } else {%>
+					Please log in below
+			<% } %>
+		</p>
+	</div>
+
+<div id="signup-form" class="form">
 
 		<form id="target" action="/signup" method="post" autocomplete="off">
 

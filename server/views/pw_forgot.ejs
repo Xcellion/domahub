@@ -8,18 +8,21 @@
 
   <body>
 
+    <div class="content has-text-centered clear-nav">
+      <div class="has-text-centered logo-login">
+        <a class="logo-text primary-logo large-logo" href="/">DomaHub</a>
+      </div>
+      <p id="message" class="">
+        <% if (typeof message != "undefined") {%>
+          <%= message %>
+        <% } else {%>
+            Enter your email to reset your password
+        <% } %>
+      </p>
+    </div>
+
     <div id="login-form" class="form">
       <form id="target" action="/forgot" method="post" autocomplete="off">
-        <div class="has-text-centered logo-login">
-          <a class="logo-text primary-logo" href="/">DomaHub</a>
-        </div>
-        <div id="message" class="has-text-centered">
-          <% if (typeof message != "undefined") {%>
-            <%= message %>
-          <% } else {%>
-              Enter your email to reset your password
-          <% } %>
-      </div>
 
       <div id="form_to_hide">
           <label class="label">Email</label>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+<svg id="svg2" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://www.w3.org/2000/svg" height="320" width="640" version="1.1" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" viewBox="0 0 640.00001 320.00001">
+ <metadata id="metadata7">
+  <rdf:RDF>
+   <cc:Work rdf:about="">
+    <dc:format>image/svg+xml</dc:format>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:title/>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <g id="layer1" transform="translate(0 -732.36)">
+  <rect id="rect4142" height="320" width="640" y="732.36" x="0" fill="none"/>
+  <path id="path4144" fill="none" d="m2.0082 159.9v-158.09h317.95 317.95v158.09 158.09h-317.95-317.95v-158.09z" transform="translate(0 732.36)"/>
+  <path id="path4146" d="m0.10897 892.36v-160h319.95 319.95v160 160h-319.95-319.95v-160z" stroke="#fff" stroke-width="3.4" fill="#3cbc8d"/>
+  <g id="g4233" fill-rule="evenodd" transform="translate(27.5 -2.5)">
+   <g fill-opacity=".94118" fill="#ff572f">
+    <path id="path4156" d="m125 992.36h40v15h-40z"/>
+    <path id="path4158" d="m185 972.36v35h40v-35z"/>
+    <path id="path4160" d="m245 1007.4v-65h40v65z"/>
+    <path id="path4164" d="m305 1007.4v-105h40v105z"/>
+    <path id="path4166" d="m365 1007.4v-155h40v155z"/>
+    <path id="path4214" d="m425 1007.4v-215h40v215z"/>
+   </g>
+   <path id="path4227" d="m95 1007.4h395v10h-395v-10" stroke="#fff" stroke-width="1px" fill="#fff"/>
+   <path id="path4231" d="m95 1007.4v-235h10v235z" stroke="#fff" stroke-width="1px" fill="#fff"/>
+  </g>
+ </g>
+</svg>
