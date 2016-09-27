@@ -1,13 +1,11 @@
-var	account_model = require('../../models/account_model.js'),
-	listing_model = require('../../models/listing_model.js');
+var	listing_model = require('../models/listing_model.js');
 
 var validator = require("validator");
-	request = require('request');
+var	request = require('request');
+var url = require('url');
 
 module.exports = function(app, db, e){
 	error = e;
-
-	Account = new account_model(db);
 	Listing = new listing_model(db);
 
 	app.get("*", checkHost);
@@ -54,8 +52,10 @@ function getCurrentRental(req, res, domain_name){
 				//current rental exists!
 				if (result.rental_id){
 					console.log("Currently rented! Proxying request...");
+
+					req.session.hostname = url.parse(result.info.address).hostname;
 					req.session.rented = result.info.address;
-					proxyReq(req, res, result.info.address)
+					proxyReq(req, res);
 				}
 
 				//redirect to listing page
@@ -78,21 +78,44 @@ function renderError(req, res, next){
 }
 
 //function to proxy request
-function proxyReq(req, res, target){
-	request.get({
-		url: 'http://' + target + req.path,
-		encoding: null
-	},
-		function (err, response, body) {
-			if (!err) {
-				req.session.doma = true;
-				res.setHeader('content-type', response.headers['content-type']);
-				res.send(body);
-			}
-			else {
-				console.log(err);
-				error.handler(req, res, false, "api");
-			}
+function proxyReq(req, res){
+	req.url.replace(req.headers["host"], req.session.hostname)
+
+	if (req.path != "/"){
+		var address = (req.path == "/") ? req.session.hostname : req.session.hostname + req.url;
+	}
+	else {
+		var address = (req.path == "/") ? req.session.rented : req.session.rented + req.url;
+	}
+
+	temp_headers = req.headers;
+	temp_headers["Referer"] = req.session.rented;
+	temp_headers["host"] = req.session.hostname;
+	temp_headers["Host"] = req.session.hostname;
+	temp_headers["Origin"] = req.session.hostname;
+	address = addProtocol(address);
+
+	var proxy_req = request({
+		url: address,
+		method: req.method,
+		headers: temp_headers
+	}, function (err, response, body) {
+		if (err) {
+			console.log(err);
+			error.handler(req, res, false, "api");
 		}
-	);
+	});
+
+	req.pipe(proxy_req).pipe(res);
+}
+
+//function to add http or https
+function addProtocol(address){
+	if (!validator.isURL(address, {
+		protocols: ["http", "https"],
+		require_protocol: true
+	})){
+		address = "http://" + address;
+	}
+	return address;
 }

@@ -27,16 +27,6 @@ var auth = require('./lib/auth.js');
 /**************************************************
 ** SERVER INITIALIZATION
 **************************************************/
-
-app.use(cookieParser());
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({
-	extended: true
-}));
-
-app.set('view engine', 'ejs');
-app.set('views', __dirname + '/views');
-
 //which session store to use depending on DEV or PROD
 if (env == "dev"){
 	console.log("Development environment! Using memory for sessions store.");
@@ -62,6 +52,18 @@ else {
 	}));
 }
 
+// API for all domains listed on domahub
+require('./lib/api.js')(app, db, error);
+
+app.use(cookieParser());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({
+	extended: true
+}));
+
+app.set('view engine', 'ejs');
+app.set('views', __dirname + '/views');
+
 //for routing of static files
 app.use(express.static(__dirname + '/public'));
 
@@ -69,11 +71,11 @@ app.use(express.static(__dirname + '/public'));
 app.use(passport.initialize());
 app.use(passport.session());
 
-//favicon requests
-app.get('*.ico', function(){})
-
 //main routes
 require('./routes/routes.js')(app, db, auth, error);
+
+//favicon requests
+app.get('*.ico', function(){})
 
 //404 not found
 app.get('*', function(req, res){
@@ -83,6 +85,6 @@ app.get('*', function(req, res){
 });
 
 //main website on port 8080
-server(app).listen(8080, function(){
+server(app).listen(80, function(){
 	console.log("Main website listening on port 8080");
 });

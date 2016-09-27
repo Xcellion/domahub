@@ -264,7 +264,7 @@ function checkNewRentalInfo(req, res, next){
 		}
 	}
 	//passed above checks, continue to check for address and times
-	if (bool && !validator.isIP(address) && !validator.isURL(address, {protocols: ["http", "https"]})){
+	if (bool && !validator.isIP(address) && !validator.isURL(address, {protocols: ["http", "https"], require_protocol: true})){
 		error.handler(req, res, "Invalid address!", "json");
 	}
 	else {
@@ -450,4 +450,15 @@ function payCheck(stripe_id, stripeToken, price, domain_name, cb){
 			cb(true);
 		}
 	});
+}
+
+//function to add http or https
+function addProtocol(address){
+	if (!validator.isURL(address, {
+		protocols: ["http", "https"],
+		require_protocol: true
+	})){
+		address = "http://" + address;
+	}
+	return address;
 }
