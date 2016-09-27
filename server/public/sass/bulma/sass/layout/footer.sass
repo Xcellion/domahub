@@ -5,14 +5,6 @@
     .columns
       & > .column
         text-align: center
-  li
-    +mobile
-      margin-top: 0
-
-    +mobile
-      &:not(:last-child)
-        margin-top: 0
-        margin-right: 15px
 
 .footer-list
   display: flex
@@ -36,6 +28,10 @@
   color: $white-disabled
   &:not(:first-child)
     margin-top: 10px
+  +mobile
+    margin-top: 0
+    &:not(:last-child)
+      margin-right: 15px
   a
     color: $white-disabled
     &:hover
