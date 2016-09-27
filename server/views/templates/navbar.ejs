@@ -22,16 +22,16 @@
     </span>
     <div class="nav-right nav-menu">
       <div class="nav-item">
-        <a class="nav-link is-white" title="Renters" href="/listings">Browse</a>
+        <a class="nav-link" title="Renters" href="/listings">Browse</a>
       </div>
       <div class="nav-item">
-        <a class="nav-link is-white" title="Sellers" href="/listing/create">List</a>
+        <a class="nav-link" title="Sellers" href="/listing/create">List</a>
       </div>
 
 <%# navbar checks for a user variable, if it doesnt exist, then display the login button %>
 <% if (!user) { %>
     <div class="nav-item">
-      <a id="signup" class="nav-link is-white" title="Sign Up" href="/signup">Sign Up</a>
+      <a id="signup" class="nav-link" title="Sign Up" href="/signup">Sign Up</a>
     </div>
     <div class="nav-item">
       <a id="login-modal" class="button is-primary modal-button" title="Log In" data-object="#modal-login">Log In</a>
@@ -124,6 +124,6 @@
 </nav>
 
 <!-- all logic for navbar, including modal, profile, search -->
-<!-- <script src="/js/routes/navbar_logic.js" type="text/javascript"></script> -->
+<script src="/js/routes/navbar_logic.js" type="text/javascript"></script>
 <script src="/js/routes/login_logic.js" type="text/javascript"></script>
 <script src="/js/routes/navbar_scroll.js" type="text/javascript"></script>
