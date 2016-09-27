@@ -132,12 +132,12 @@
 
 		<% if (available == 3) { %>
 
-			<div id="ip_wrapper" class="page_wrapper">
+			<div id="address_wrapper" class="page_wrapper">
 
 				<div class="info_wrapper">
 					<h2 class="listing_info_text listing_info_text_white">Connect your website to <span class="green_text"><%= listing_info.domain_name %></span><h2>
-					<input required pattern="^([0-9]{1,3}\.){3}[0-9]{1,3}$" class="input" id="ip_form_input" type="text" placeholder="IP Address">
-					<div class="button next_button" id="ip_next">Next</div>
+					<input required class="input" id="address_form_input" type="url" placeholder="URL">
+					<div class="button next_button" id="address_next">Next</div>
 					<div id="faq_wrapper">
 						<h3>Don&#39;t know how?</h3>
 					</div>
