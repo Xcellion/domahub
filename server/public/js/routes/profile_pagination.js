@@ -5,7 +5,7 @@ window.onpopstate = function(event) {
     var url_page = parseFloat(window.location.pathname.split('/').pop()) >>> 0;
     var current_page = calculateCurrentPage(url_page, total_pages, row_per_page);
     setupTable(total_pages, row_per_page, current_page, row_display);
-    setupControls(total_pages, row_per_page, current_page, row_display)
+    setupControls(total_pages, row_per_page, current_page, row_display);
 }
 
 $(document).ready(function() {
@@ -121,6 +121,8 @@ function setupControls(total_pages, row_per_page, current_page, rows_to_disp){
         }
         else {
             changePage(total_pages, row_per_page, current_page);
+            createPaginationPages(total_pages, row_per_page, current_page);
+            paginateRows(total_pages, current_page);
         }
     });
 
@@ -131,6 +133,8 @@ function setupControls(total_pages, row_per_page, current_page, rows_to_disp){
         }
         else {
             changePage(total_pages, row_per_page, current_page);
+            createPaginationPages(total_pages, row_per_page, current_page);
+            paginateRows(total_pages, current_page);
         }
     });
 
@@ -140,6 +144,8 @@ function setupControls(total_pages, row_per_page, current_page, rows_to_disp){
         if (page_val > 0 && page_val <= total_pages && page_val != current_page){
             current_page = page_val;
             changePage(total_pages, row_per_page, current_page);
+            createPaginationPages(total_pages, row_per_page, current_page);
+            paginateRows(total_pages, current_page);
         }
         else {
             $("#go-to-page-input").val(1);
@@ -208,7 +214,9 @@ function createPaginationPages(total_pages, row_per_page, current_page){
 
                 current_page = button_page;
                 changePage(total_pages, row_per_page, current_page);
+                setupControls(total_pages, row_per_page, current_page, row_display);
             }
+
         })
         $("#page-list").append(temp_li);
     }
