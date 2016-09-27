@@ -4,20 +4,20 @@
 /********************************* NAVBAR ***********************************/
 #searchbar-form {
   width: 100%;
-  &.is-transparent {
-    .control {
-      &.has-icon {
-        input {
-          &:focus + .fa {
-            color: $white;
-          }
-        }
-      }
-    }
-    input {
-      color: $white;
-    }
-  }
+  // &.is-transparent {
+  //   .control {
+  //     &.has-icon {
+  //       input {
+  //         &:focus + .fa {
+  //           color: $white;
+  //         }
+  //       }
+  //     }
+  //   }
+  //   input {
+  //     color: $white;
+  //   }
+  // }
   & > .control {
     width: 100%;
   }
@@ -26,7 +26,7 @@
     border: none;
     border-radius: 0;
     background-color: transparent;
-    @include box-shadow(0,0,0,$black);
+    @include box-shadow(0,0,0,$black,0);
     @include transition(all 0.5s);
     color: $text;
     width: 100%;
@@ -45,7 +45,7 @@
     color: $primary;
     @include box-shadow(0,-3px,0,$primary, inset);
     @include mobile {
-      @include box-shadow(0,0,0,$black);
+      @include box-shadow(0,0,0,$black,0);
       align-self: flex-end;
     }
   }
