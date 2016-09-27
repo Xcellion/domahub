@@ -58,35 +58,17 @@ $(document).ready(function() {
 		}
 	});
 
-	//if this is a page that has an image
-	var potential_paths = [];
-	if (window.location.pathname == "/"){
-		var get_started_offset = $("#index-img").offset().top + $("#index-img").height() - 60 || 0;
-		window.onresize = function(event) {
-			get_started_offset = $("#index-img").offset().top + $("#index-img").height() -60 || 0;
-		};
+	$(window).scroll(function(e){
 
-		//while scrolling
-		$(window).scroll(function(e){
-
-			//before the image
-			if ($(this).scrollTop() <= get_started_offset && $(".nav").hasClass("is-white")) {
-
-			}
-			//past the image
-			else if ($(this).scrollTop() > get_started_offset && !$(".nav").hasClass("is-white")){
-
-			}
-		})
-	}
-	else {
-		$(".nav").css({
-			"background-color": "white"
-		});
-		$(".nav").addClass("has-shadow");
-		$(".nav-link").removeClass("is-white");
-		$("#searchbar-form").removeClass("is-transparent");
-	}
+		//before the top
+		if ($(this).scrollTop() <= 0) {
+			$(".nav").removeClass("has-shadow");
+		}
+		//past the top
+		else if ($(this).scrollTop() > 0){
+			$(".nav").addClass("has-shadow");
+		}
+	})
 
 });
 
