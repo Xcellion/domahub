@@ -1,5 +1,10 @@
 .content
   @extend .block
+  &.index-padded
+    padding: 0 50px
+    +mobile
+      &:first-child
+        padding-bottom: 20px
   // Headers
   h2
     font-size: $size-4
@@ -23,6 +28,10 @@
       margin-bottom: 10px
   .is-accent
     color: $accent
+
+  // link
+  a
+    font-size: $size-5
 
   blockquote,
   p,

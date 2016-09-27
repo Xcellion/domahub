@@ -1,6 +1,6 @@
 $(document).ready(function() {
     $('.index-link').hover(function() {
-        $(this).next().toggleClass('active');
+        $(this).next().find('.right-arrow').toggleClass('active');
     });
 
     //right and left ticker arrows

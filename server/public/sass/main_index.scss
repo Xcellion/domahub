@@ -1,14 +1,10 @@
 @import 'vars';
 @import 'mixins';
 /******************** MISC*************************/
-
-.right-caret {
-  color: #FF8751;
-  @include transition(all 0.25s);
-}
-
-.right-caret.active {
-  @include translate(5px,0);
+.right-arrow {
+  &.active {
+    @include translate(5px,0);
+  }
 }
 
 /*********************** LANDING ************************/

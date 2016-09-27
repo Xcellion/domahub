@@ -21,13 +21,15 @@ select,
 textarea
   font-family: $family-primary
   +font-size(16px)
-
+h1,
+h2,
+h3
+  &.primary-header
+    color: $primary
 h1
   color: $text
   font-size: $size-2
   font-weight: bold
-  &.is-primary-darker
-    color: $primary
   &.is-light
     color: $text-light
   &.is-white
