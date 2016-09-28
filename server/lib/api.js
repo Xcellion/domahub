@@ -97,6 +97,7 @@ function proxyReq(req, res){
 			error.handler(req, res, false, "api");
 		}
 		else {
+			res.setHeader("content-type", response.headers["content-type"]);
 			res.send(body);
 		}
 	});
