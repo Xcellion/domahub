@@ -1,6 +1,3 @@
-var database;
-var url = require("url");
-
 module.exports = {
 	handler: handler
 }

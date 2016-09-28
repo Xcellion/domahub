@@ -1,27 +1,30 @@
-/**************************************************
-** NODE.JS REQUIREMENTS
-**************************************************/
 var env = process.env.NODE_ENV || 'dev'; 	//dev or prod bool
 
 var express = require('express'),
 	app = express(),
+	fs = require('fs'),
 	http = require('http'),
-	server = function(application){
+	https = require('https'),
+	serverHTTP = function(application){
 		return http.createServer(application);
+	},
+	serverHTTPS = function(application){
+		return https.createServer({
+		    pfx: fs.readFileSync('./domahub.pfx'),
+		    passphrase: 'wonmin'
+		}, application);
 	};
 
 var bodyParser 	= require('body-parser'),
 	cookieParser = require('cookie-parser'),
 	session = require('express-session'),
-	redisStore = require('connect-redis')(session),
 	passport = require('passport'),
 	db = require('./lib/database.js'),
 	error = require('./lib/error.js');
 
-db.connect();
+db.connect();	//connect to the database
 
 require('./lib/auth.js').auth(db, passport, error);
-
 var auth = require('./lib/auth.js');
 
 /**************************************************
@@ -33,12 +36,17 @@ if (env == "dev"){
 	//express session in memory
 	app.use(session({
 		secret: 'domahub_market',
+		cookie: {
+			maxAge: 1800000 //30 minutes
+		},
 		saveUninitialized: false,
-		resave: false
+		resave: true
 	}));
 }
 else {
 	console.log("Production environment! Using redis for sessions store.");
+	var redisStore = require('connect-redis')(session);
+
 	//redis store session
 	app.use(session({
 		store: new redisStore({
@@ -46,9 +54,12 @@ else {
 			port: 6379,
 			pass:"wonmin33"
 		}),
+		cookie: {
+			maxAge: 1800000 //30 minutes
+		},
 		secret: 'domahub_market',
-		resave: false,
-		saveUninitialized: false
+		saveUninitialized: false,
+		resave: true
 	}));
 }
 
@@ -84,7 +95,12 @@ app.get('*', function(req, res){
 	res.redirect('/');
 });
 
-//main website on port 8080
-server(app).listen(8080, function(){
-	console.log("Main website listening on port 8080");
+//HTTP website on port 8080
+serverHTTP(app).listen(80, function(){
+	console.log("HTTP website listening on port 8080");
+});
+
+//HTTPS website on port 443
+serverHTTPS(app).listen(443, function(){
+	console.log("HTTPS website listening on port 443");
 });
