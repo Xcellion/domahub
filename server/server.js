@@ -2,17 +2,9 @@ var env = process.env.NODE_ENV || 'dev'; 	//dev or prod bool
 
 var express = require('express'),
 	app = express(),
-	fs = require('fs'),
 	http = require('http'),
-	https = require('https'),
 	serverHTTP = function(application){
 		return http.createServer(application);
-	},
-	serverHTTPS = function(application){
-		return https.createServer({
-		    pfx: fs.readFileSync('./domahub.pfx'),
-		    passphrase: 'wonmin'
-		}, application);
 	};
 
 var bodyParser 	= require('body-parser'),
@@ -98,9 +90,4 @@ app.get('*', function(req, res){
 //HTTP website on port 8080
 serverHTTP(app).listen(8080, function(){
 	console.log("HTTP website listening on port 8080");
-});
-
-//HTTPS website on port 443
-serverHTTPS(app).listen(4343, function(){
-	console.log("HTTPS website listening on port 4343");
 });
