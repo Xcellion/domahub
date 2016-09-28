@@ -1985,6 +1985,8 @@ input:-webkit-autofill {
   padding-right: 10px;
   vertical-align: top;
   white-space: nowrap; }
+  .tag.is-uppercase {
+    text-transform: uppercase; }
   .tag .delete, .tag .modal-close {
     margin-left: 4px;
     margin-right: -6px; }

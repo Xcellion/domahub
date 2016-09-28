@@ -11,7 +11,8 @@ module.exports = function(app, auth){
 		"/contact",
 		"/getstarted",
 		"/privacy",
-    	"/sellers",
+    "/sellers",
+		"/renters",
 		"/tos"
     ]
 
@@ -33,18 +34,6 @@ function renderMainPage(req, res, next){
 //displays any page that we have a view for
 function mainPageLinksRender(req, res, next){
 	var view_name = req.path.slice(1, req.path.length);
-
-	//routes for the company pages
-	var about_us_routes = [
-		"about",
-		"mission",
-		"press",
-		"faq"
-	];
-
-	if (about_us_routes.indexOf(view_name) != -1){
-		view_name = "company";
-	}
 
 	//append main_ to the view name
 	res.render("main_" + view_name, {
