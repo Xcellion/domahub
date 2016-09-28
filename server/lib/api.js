@@ -8,7 +8,7 @@ module.exports = function(app, db, e){
 	error = e;
 	Listing = new listing_model(db);
 
-	app.get("*", checkHost);
+	app.all("*", checkHost);
 	app.get("/error", renderError);
 }
 
@@ -88,26 +88,19 @@ function proxyReq(req, res){
 		var address = (req.path == "/") ? req.session.rented : req.session.rented + req.url;
 	}
 
-	temp_headers = req.headers;
-	temp_headers["Referer"] = req.session.rented;
-	temp_headers["host"] = req.session.hostname;
-	temp_headers["Host"] = req.session.hostname;
-	temp_headers["Origin"] = req.session.hostname;
-	address = addProtocol(address);
-
-	var proxy_req = request({
-		url: address,
-		method: req.method.toLowerCase(),
-		headers: temp_headers
+	request[req.method.toLowerCase()]({
+		url: addProtocol(address),
+		encoding: null
 	}, function (err, response, body) {
 		if (err) {
 			console.log(err);
 			error.handler(req, res, false, "api");
 		}
-		res.send(response);
+		else {
+			res.setHeader("content-type", response.headers["content-type"]);
+			res.send(body);
+		}
 	});
-
-	//req.pipe(proxy_req).pipe(res);
 }
 
 //function to add http or https
