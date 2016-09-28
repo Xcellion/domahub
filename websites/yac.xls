@@ -1,0 +1,595 @@
+<?xml version="1.0" encoding="UTF-8"?>
+                      <Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
+                       xmlns:x="urn:schemas-microsoft-com:office:excel"
+                       xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
+                       xmlns:html="http://www.w3.org/TR/REC-html40">
+                      <Styles>
+                        <Style ss:ID="s17">
+                          <NumberFormat ss:Format="m/d/yy"/>
+                          <Font ss:FontName="Verdana"/>
+                        </Style>
+                        <Style ss:ID="s18">
+                          <NumberFormat ss:Format="m/d/yy"/>
+                          <Font ss:FontName="Verdana" ss:Bold="1"/>
+                        </Style>
+                        <Style ss:ID="s19">
+                          <NumberFormat ss:Format="m/yy"/>
+                          <Font ss:FontName="Verdana"/>
+                        </Style>
+                        <Style ss:ID="s20">
+                          <NumberFormat ss:Format="m/yy"/>
+                          <Font ss:FontName="Verdana" ss:Bold="1"/>
+                        </Style>
+                        <Style ss:ID="s21">
+                          <NumberFormat ss:Format="m/d/yy h:mm AM/PM"/>
+                          <Font ss:FontName="Verdana"/>
+                        </Style>
+                        <Style ss:ID="s22">
+                          <NumberFormat ss:Format="m/d/yy h:mm AM/PM"/>
+                          <Font ss:FontName="Verdana" ss:Bold="1"/>
+                        </Style>
+                        <Style ss:ID="s23">
+                         <Alignment ss:Horizontal="Right" ss:Vertical="Bottom"/>
+                         <Font ss:FontName="Verdana"/>
+                        </Style>
+                        <Style ss:ID="s24">
+                         <Alignment ss:Horizontal="Right" ss:Vertical="Bottom"/>
+                         <Font ss:FontName="Verdana" ss:Bold="1"/>
+                        </Style>
+                        <Style ss:ID="s25">
+                         <Alignment ss:Horizontal="Left" ss:Vertical="Bottom"/>
+                         <Font ss:FontName="Verdana"/>
+                        </Style>
+                        <Style ss:ID="s26">
+                         <Alignment ss:Horizontal="Left" ss:Vertical="Bottom"/>
+                         <Font ss:FontName="Verdana" ss:Bold="1"/>
+                        </Style>
+                        <Style ss:ID="s27">
+                         <NumberFormat ss:Format="0"/>
+                         <Alignment ss:Horizontal="Right" ss:Vertical="Bottom"/>
+                         <Font ss:FontName="Verdana"/>
+                        </Style>
+                        <Style ss:ID="s28">
+                         <NumberFormat ss:Format="0"/>
+                         <Alignment ss:Horizontal="Right" ss:Vertical="Bottom"/>
+                         <Font ss:FontName="Verdana" ss:Bold="1"/>
+                        </Style>
+                        <Style ss:ID="s29">
+                         <NumberFormat ss:Format="_(&quot;$&quot;* #,##0.00_);_(&quot;$&quot;* (#,##0.00);_(&quot;$&quot;* &quot;-&quot;??_);_(@_)"/>
+                         <Alignment ss:Horizontal="Right" ss:Vertical="Bottom"/>
+                         <Font ss:FontName="Verdana"/>
+                        </Style>
+                        <Style ss:ID="s30">
+                         <NumberFormat ss:Format="_(&quot;$&quot;* #,##0.00_);_(&quot;$&quot;* (#,##0.00);_(&quot;$&quot;* &quot;-&quot;??_);_(@_)"/>
+                         <Alignment ss:Horizontal="Right" ss:Vertical="Bottom"/>
+                         <Font ss:FontName="Verdana" ss:Bold="1"/>
+                        </Style>
+                        <Style ss:ID="s31">
+                         <NumberFormat ss:Format="Percent"/>
+                         <Alignment ss:Horizontal="Right" ss:Vertical="Bottom"/>
+                         <Font ss:FontName="Verdana"/>
+                        </Style>
+                        <Style ss:ID="s32">
+                         <NumberFormat ss:Format="Percent"/>
+                         <Alignment ss:Horizontal="Right" ss:Vertical="Bottom"/>
+                         <Font ss:FontName="Verdana" ss:Bold="1"/>
+                        </Style>
+                        <Style ss:ID="s33">
+                         <NumberFormat ss:Format="YYYY-mm-dd"/>
+                         <Alignment ss:Horizontal="Left" ss:Vertical="Bottom"/>
+                        </Style>
+                        <Style ss:ID="s34">
+                         <Alignment ss:Horizontal="Left" ss:Vertical="Bottom"/>
+                         <Font ss:FontName="Verdana" ss:Bold="1"/>
+                        </Style>
+                        <Style ss:ID="s35">
+                         <Alignment ss:Horizontal="Left" ss:Vertical="Bottom"/>
+                         <Font ss:FontName="Verdana"/>
+                        </Style>
+                      <Style ss:ID="s101">
+                                <NumberFormat ss:Format="text"/>
+                                <Alignment ss:Horizontal="Right" ss:Vertical="Bottom"/>
+                                <Font ss:FontName="Verdana" ss:Bold="1"/>
+                              </Style>
+                              <Style ss:ID="s100">
+                                <NumberFormat ss:Format="text"/>
+                                <Alignment ss:Horizontal="Right" ss:Vertical="Bottom"/>
+                              </Style></Styles>
+<Worksheet ss:Name="Sheet1">
+<Table>
+<Column ss:Index="1" ss:AutoFitWidth="0" ss:Width="150"/>
+<Column ss:Index="2" ss:AutoFitWidth="0" ss:Width="150"/>
+<Column ss:Index="3" ss:AutoFitWidth="0" ss:Width="150"/>
+<Column ss:Index="4" ss:AutoFitWidth="0" ss:Width="150"/>
+<Column ss:Index="5" ss:AutoFitWidth="0" ss:Width="150"/>
+<Column ss:Index="6" ss:AutoFitWidth="0" ss:Width="150"/>
+<Column ss:Index="7" ss:AutoFitWidth="0" ss:Width="150"/>
+<Column ss:Index="8" ss:AutoFitWidth="0" ss:Width="150"/>
+<Column ss:Index="9" ss:AutoFitWidth="0" ss:Width="150"/>
+<Column ss:Index="10" ss:AutoFitWidth="0" ss:Width="150"/>
+<Column ss:Index="11" ss:AutoFitWidth="0" ss:Width="150"/>
+<Column ss:Index="12" ss:AutoFitWidth="0" ss:Width="150"/>
+<Column ss:Index="13" ss:AutoFitWidth="0" ss:Width="150"/>
+<Row>
+<Cell ss:StyleID="s34"><Data ss:Type="String">Reporting Starts</Data></Cell>
+<Cell ss:StyleID="s34"><Data ss:Type="String">Reporting Ends</Data></Cell>
+<Cell ss:StyleID="s26"><Data ss:Type="String">Ad Set Name</Data></Cell>
+<Cell ss:StyleID="s26"><Data ss:Type="String">Delivery</Data></Cell>
+<Cell ss:StyleID="s26"><Data ss:Type="String">Results</Data></Cell>
+<Cell ss:StyleID="s26"><Data ss:Type="String">Result Type</Data></Cell>
+<Cell ss:StyleID="s26"><Data ss:Type="String">Reach</Data></Cell>
+<Cell ss:StyleID="s26"><Data ss:Type="String">Cost per Result (USD)</Data></Cell>
+<Cell ss:StyleID="s26"><Data ss:Type="String">Budget</Data></Cell>
+<Cell ss:StyleID="s26"><Data ss:Type="String">Budget Type</Data></Cell>
+<Cell ss:StyleID="s26"><Data ss:Type="String">Amount Spent (USD)</Data></Cell>
+<Cell ss:StyleID="s34"><Data ss:Type="String">Ends</Data></Cell>
+<Cell ss:StyleID="s34"><Data ss:Type="String">Starts</Data></Cell>
+</Row>
+<Row>
+<Cell ss:StyleID="s33"><Data ss:Type="DateTime">2016-07-11</Data></Cell>
+<Cell ss:StyleID="s33"><Data ss:Type="DateTime">2016-07-11</Data></Cell>
+<Cell ss:StyleID="s25"><Data ss:Type="String">youreacutie</Data></Cell>
+<Cell ss:StyleID="s25"><Data ss:Type="String">completed</Data></Cell>
+<Cell ss:StyleID="s27"><Data ss:Type="Number">11</Data></Cell>
+<Cell ss:StyleID="s25"><Data ss:Type="String">actions:link_click</Data></Cell>
+<Cell ss:StyleID="s27"><Data ss:Type="Number">4703</Data></Cell>
+<Cell ss:StyleID="s23"><Data ss:Type="Number">0.511818</Data></Cell>
+<Cell ss:StyleID="s27"><Data ss:Type="Number">305</Data></Cell>
+<Cell ss:StyleID="s25"><Data ss:Type="String">Lifetime</Data></Cell>
+<Cell ss:StyleID="s23"><Data ss:Type="Number">5.63</Data></Cell>
+<Cell ss:StyleID="s33"><Data ss:Type="DateTime">2016-08-11</Data></Cell>
+<Cell ss:StyleID="s33"><Data ss:Type="DateTime">2016-06-11</Data></Cell>
+</Row>
+<Row>
+<Cell ss:StyleID="s33"><Data ss:Type="DateTime">2016-07-12</Data></Cell>
+<Cell ss:StyleID="s33"><Data ss:Type="DateTime">2016-07-12</Data></Cell>
+<Cell ss:StyleID="s25"><Data ss:Type="String">youreacutie</Data></Cell>
+<Cell ss:StyleID="s25"><Data ss:Type="String">completed</Data></Cell>
+<Cell ss:StyleID="s27"><Data ss:Type="Number">10</Data></Cell>
+<Cell ss:StyleID="s25"><Data ss:Type="String">actions:link_click</Data></Cell>
+<Cell ss:StyleID="s27"><Data ss:Type="Number">3450</Data></Cell>
+<Cell ss:StyleID="s23"><Data ss:Type="Number">0.486</Data></Cell>
+<Cell ss:StyleID="s27"><Data ss:Type="Number">305</Data></Cell>
+<Cell ss:StyleID="s25"><Data ss:Type="String">Lifetime</Data></Cell>
+<Cell ss:StyleID="s23"><Data ss:Type="Number">4.86</Data></Cell>
+<Cell ss:StyleID="s33"><Data ss:Type="DateTime">2016-08-11</Data></Cell>
+<Cell ss:StyleID="s33"><Data ss:Type="DateTime">2016-06-11</Data></Cell>
+</Row>
+<Row>
+<Cell ss:StyleID="s33"><Data ss:Type="DateTime">2016-07-13</Data></Cell>
+<Cell ss:StyleID="s33"><Data ss:Type="DateTime">2016-07-13</Data></Cell>
+<Cell ss:StyleID="s25"><Data ss:Type="String">youreacutie</Data></Cell>
+<Cell ss:StyleID="s25"><Data ss:Type="String">completed</Data></Cell>
+<Cell ss:StyleID="s27"><Data ss:Type="Number">12</Data></Cell>
+<Cell ss:StyleID="s25"><Data ss:Type="String">actions:link_click</Data></Cell>
+<Cell ss:StyleID="s27"><Data ss:Type="Number">5960</Data></Cell>
+<Cell ss:StyleID="s23"><Data ss:Type="Number">0.364167</Data></Cell>
+<Cell ss:StyleID="s27"><Data ss:Type="Number">305</Data></Cell>
+<Cell ss:StyleID="s25"><Data ss:Type="String">Lifetime</Data></Cell>
+<Cell ss:StyleID="s23"><Data ss:Type="Number">4.37</Data></Cell>
+<Cell ss:StyleID="s33"><Data ss:Type="DateTime">2016-08-11</Data></Cell>
+<Cell ss:StyleID="s33"><Data ss:Type="DateTime">2016-06-11</Data></Cell>
+</Row>
+<Row>
+<Cell ss:StyleID="s33"><Data ss:Type="DateTime">2016-07-14</Data></Cell>
+<Cell ss:StyleID="s33"><Data ss:Type="DateTime">2016-07-14</Data></Cell>
+<Cell ss:StyleID="s25"><Data ss:Type="String">youreacutie</Data></Cell>
+<Cell ss:StyleID="s25"><Data ss:Type="String">completed</Data></Cell>
+<Cell ss:StyleID="s27"><Data ss:Type="Number">7</Data></Cell>
+<Cell ss:StyleID="s25"><Data ss:Type="String">actions:link_click</Data></Cell>
+<Cell ss:StyleID="s27"><Data ss:Type="Number">8872</Data></Cell>
+<Cell ss:StyleID="s23"><Data ss:Type="Number">0.514286</Data></Cell>
+<Cell ss:StyleID="s27"><Data ss:Type="Number">305</Data></Cell>
+<Cell ss:StyleID="s25"><Data ss:Type="String">Lifetime</Data></Cell>
+<Cell ss:StyleID="s23"><Data ss:Type="Number">3.6</Data></Cell>
+<Cell ss:StyleID="s33"><Data ss:Type="DateTime">2016-08-11</Data></Cell>
+<Cell ss:StyleID="s33"><Data ss:Type="DateTime">2016-06-11</Data></Cell>
+</Row>
+<Row>
+<Cell ss:StyleID="s33"><Data ss:Type="DateTime">2016-07-15</Data></Cell>
+<Cell ss:StyleID="s33"><Data ss:Type="DateTime">2016-07-15</Data></Cell>
+<Cell ss:StyleID="s25"><Data ss:Type="String">youreacutie</Data></Cell>
+<Cell ss:StyleID="s25"><Data ss:Type="String">completed</Data></Cell>
+<Cell ss:StyleID="s27"><Data ss:Type="Number">9</Data></Cell>
+<Cell ss:StyleID="s25"><Data ss:Type="String">actions:link_click</Data></Cell>
+<Cell ss:StyleID="s27"><Data ss:Type="Number">3655</Data></Cell>
+<Cell ss:StyleID="s23"><Data ss:Type="Number">0.61</Data></Cell>
+<Cell ss:StyleID="s27"><Data ss:Type="Number">305</Data></Cell>
+<Cell ss:StyleID="s25"><Data ss:Type="String">Lifetime</Data></Cell>
+<Cell ss:StyleID="s23"><Data ss:Type="Number">5.49</Data></Cell>
+<Cell ss:StyleID="s33"><Data ss:Type="DateTime">2016-08-11</Data></Cell>
+<Cell ss:StyleID="s33"><Data ss:Type="DateTime">2016-06-11</Data></Cell>
+</Row>
+<Row>
+<Cell ss:StyleID="s33"><Data ss:Type="DateTime">2016-07-16</Data></Cell>
+<Cell ss:StyleID="s33"><Data ss:Type="DateTime">2016-07-16</Data></Cell>
+<Cell ss:StyleID="s25"><Data ss:Type="String">youreacutie</Data></Cell>
+<Cell ss:StyleID="s25"><Data ss:Type="String">completed</Data></Cell>
+<Cell ss:StyleID="s27"><Data ss:Type="Number">8</Data></Cell>
+<Cell ss:StyleID="s25"><Data ss:Type="String">actions:link_click</Data></Cell>
+<Cell ss:StyleID="s27"><Data ss:Type="Number">3934</Data></Cell>
+<Cell ss:StyleID="s23"><Data ss:Type="Number">0.725</Data></Cell>
+<Cell ss:StyleID="s27"><Data ss:Type="Number">305</Data></Cell>
+<Cell ss:StyleID="s25"><Data ss:Type="String">Lifetime</Data></Cell>
+<Cell ss:StyleID="s23"><Data ss:Type="Number">5.8</Data></Cell>
+<Cell ss:StyleID="s33"><Data ss:Type="DateTime">2016-08-11</Data></Cell>
+<Cell ss:StyleID="s33"><Data ss:Type="DateTime">2016-06-11</Data></Cell>
+</Row>
+<Row>
+<Cell ss:StyleID="s33"><Data ss:Type="DateTime">2016-07-17</Data></Cell>
+<Cell ss:StyleID="s33"><Data ss:Type="DateTime">2016-07-17</Data></Cell>
+<Cell ss:StyleID="s25"><Data ss:Type="String">youreacutie</Data></Cell>
+<Cell ss:StyleID="s25"><Data ss:Type="String">completed</Data></Cell>
+<Cell ss:StyleID="s27"><Data ss:Type="Number">6</Data></Cell>
+<Cell ss:StyleID="s25"><Data ss:Type="String">actions:link_click</Data></Cell>
+<Cell ss:StyleID="s27"><Data ss:Type="Number">1793</Data></Cell>
+<Cell ss:StyleID="s23"><Data ss:Type="Number">0.611667</Data></Cell>
+<Cell ss:StyleID="s27"><Data ss:Type="Number">305</Data></Cell>
+<Cell ss:StyleID="s25"><Data ss:Type="String">Lifetime</Data></Cell>
+<Cell ss:StyleID="s23"><Data ss:Type="Number">3.67</Data></Cell>
+<Cell ss:StyleID="s33"><Data ss:Type="DateTime">2016-08-11</Data></Cell>
+<Cell ss:StyleID="s33"><Data ss:Type="DateTime">2016-06-11</Data></Cell>
+</Row>
+<Row>
+<Cell ss:StyleID="s33"><Data ss:Type="DateTime">2016-07-18</Data></Cell>
+<Cell ss:StyleID="s33"><Data ss:Type="DateTime">2016-07-18</Data></Cell>
+<Cell ss:StyleID="s25"><Data ss:Type="String">youreacutie</Data></Cell>
+<Cell ss:StyleID="s25"><Data ss:Type="String">completed</Data></Cell>
+<Cell ss:StyleID="s27"><Data ss:Type="Number">10</Data></Cell>
+<Cell ss:StyleID="s25"><Data ss:Type="String">actions:link_click</Data></Cell>
+<Cell ss:StyleID="s27"><Data ss:Type="Number">4734</Data></Cell>
+<Cell ss:StyleID="s23"><Data ss:Type="Number">0.658</Data></Cell>
+<Cell ss:StyleID="s27"><Data ss:Type="Number">305</Data></Cell>
+<Cell ss:StyleID="s25"><Data ss:Type="String">Lifetime</Data></Cell>
+<Cell ss:StyleID="s23"><Data ss:Type="Number">6.58</Data></Cell>
+<Cell ss:StyleID="s33"><Data ss:Type="DateTime">2016-08-11</Data></Cell>
+<Cell ss:StyleID="s33"><Data ss:Type="DateTime">2016-06-11</Data></Cell>
+</Row>
+<Row>
+<Cell ss:StyleID="s33"><Data ss:Type="DateTime">2016-07-19</Data></Cell>
+<Cell ss:StyleID="s33"><Data ss:Type="DateTime">2016-07-19</Data></Cell>
+<Cell ss:StyleID="s25"><Data ss:Type="String">youreacutie</Data></Cell>
+<Cell ss:StyleID="s25"><Data ss:Type="String">completed</Data></Cell>
+<Cell ss:StyleID="s27"><Data ss:Type="Number">8</Data></Cell>
+<Cell ss:StyleID="s25"><Data ss:Type="String">actions:link_click</Data></Cell>
+<Cell ss:StyleID="s27"><Data ss:Type="Number">5040</Data></Cell>
+<Cell ss:StyleID="s23"><Data ss:Type="Number">0.5775</Data></Cell>
+<Cell ss:StyleID="s27"><Data ss:Type="Number">305</Data></Cell>
+<Cell ss:StyleID="s25"><Data ss:Type="String">Lifetime</Data></Cell>
+<Cell ss:StyleID="s23"><Data ss:Type="Number">4.62</Data></Cell>
+<Cell ss:StyleID="s33"><Data ss:Type="DateTime">2016-08-11</Data></Cell>
+<Cell ss:StyleID="s33"><Data ss:Type="DateTime">2016-06-11</Data></Cell>
+</Row>
+<Row>
+<Cell ss:StyleID="s33"><Data ss:Type="DateTime">2016-07-20</Data></Cell>
+<Cell ss:StyleID="s33"><Data ss:Type="DateTime">2016-07-20</Data></Cell>
+<Cell ss:StyleID="s25"><Data ss:Type="String">youreacutie</Data></Cell>
+<Cell ss:StyleID="s25"><Data ss:Type="String">completed</Data></Cell>
+<Cell ss:StyleID="s27"><Data ss:Type="Number">7</Data></Cell>
+<Cell ss:StyleID="s25"><Data ss:Type="String">actions:link_click</Data></Cell>
+<Cell ss:StyleID="s27"><Data ss:Type="Number">4602</Data></Cell>
+<Cell ss:StyleID="s23"><Data ss:Type="Number">1.14</Data></Cell>
+<Cell ss:StyleID="s27"><Data ss:Type="Number">305</Data></Cell>
+<Cell ss:StyleID="s25"><Data ss:Type="String">Lifetime</Data></Cell>
+<Cell ss:StyleID="s23"><Data ss:Type="Number">7.98</Data></Cell>
+<Cell ss:StyleID="s33"><Data ss:Type="DateTime">2016-08-11</Data></Cell>
+<Cell ss:StyleID="s33"><Data ss:Type="DateTime">2016-06-11</Data></Cell>
+</Row>
+<Row>
+<Cell ss:StyleID="s33"><Data ss:Type="DateTime">2016-07-21</Data></Cell>
+<Cell ss:StyleID="s33"><Data ss:Type="DateTime">2016-07-21</Data></Cell>
+<Cell ss:StyleID="s25"><Data ss:Type="String">youreacutie</Data></Cell>
+<Cell ss:StyleID="s25"><Data ss:Type="String">completed</Data></Cell>
+<Cell ss:StyleID="s27"><Data ss:Type="Number">4</Data></Cell>
+<Cell ss:StyleID="s25"><Data ss:Type="String">actions:link_click</Data></Cell>
+<Cell ss:StyleID="s27"><Data ss:Type="Number">1492</Data></Cell>
+<Cell ss:StyleID="s23"><Data ss:Type="Number">1.1375</Data></Cell>
+<Cell ss:StyleID="s27"><Data ss:Type="Number">305</Data></Cell>
+<Cell ss:StyleID="s25"><Data ss:Type="String">Lifetime</Data></Cell>
+<Cell ss:StyleID="s23"><Data ss:Type="Number">4.55</Data></Cell>
+<Cell ss:StyleID="s33"><Data ss:Type="DateTime">2016-08-11</Data></Cell>
+<Cell ss:StyleID="s33"><Data ss:Type="DateTime">2016-06-11</Data></Cell>
+</Row>
+<Row>
+<Cell ss:StyleID="s33"><Data ss:Type="DateTime">2016-07-22</Data></Cell>
+<Cell ss:StyleID="s33"><Data ss:Type="DateTime">2016-07-22</Data></Cell>
+<Cell ss:StyleID="s25"><Data ss:Type="String">youreacutie</Data></Cell>
+<Cell ss:StyleID="s25"><Data ss:Type="String">completed</Data></Cell>
+<Cell ss:StyleID="s27"><Data ss:Type="Number">4</Data></Cell>
+<Cell ss:StyleID="s25"><Data ss:Type="String">actions:link_click</Data></Cell>
+<Cell ss:StyleID="s27"><Data ss:Type="Number">2318</Data></Cell>
+<Cell ss:StyleID="s23"><Data ss:Type="Number">0.77</Data></Cell>
+<Cell ss:StyleID="s27"><Data ss:Type="Number">305</Data></Cell>
+<Cell ss:StyleID="s25"><Data ss:Type="String">Lifetime</Data></Cell>
+<Cell ss:StyleID="s23"><Data ss:Type="Number">3.08</Data></Cell>
+<Cell ss:StyleID="s33"><Data ss:Type="DateTime">2016-08-11</Data></Cell>
+<Cell ss:StyleID="s33"><Data ss:Type="DateTime">2016-06-11</Data></Cell>
+</Row>
+<Row>
+<Cell ss:StyleID="s33"><Data ss:Type="DateTime">2016-07-23</Data></Cell>
+<Cell ss:StyleID="s33"><Data ss:Type="DateTime">2016-07-23</Data></Cell>
+<Cell ss:StyleID="s25"><Data ss:Type="String">youreacutie</Data></Cell>
+<Cell ss:StyleID="s25"><Data ss:Type="String">completed</Data></Cell>
+<Cell ss:StyleID="s27"><Data ss:Type="Number">5</Data></Cell>
+<Cell ss:StyleID="s25"><Data ss:Type="String">actions:link_click</Data></Cell>
+<Cell ss:StyleID="s27"><Data ss:Type="Number">2447</Data></Cell>
+<Cell ss:StyleID="s23"><Data ss:Type="Number">0.732</Data></Cell>
+<Cell ss:StyleID="s27"><Data ss:Type="Number">305</Data></Cell>
+<Cell ss:StyleID="s25"><Data ss:Type="String">Lifetime</Data></Cell>
+<Cell ss:StyleID="s23"><Data ss:Type="Number">3.66</Data></Cell>
+<Cell ss:StyleID="s33"><Data ss:Type="DateTime">2016-08-11</Data></Cell>
+<Cell ss:StyleID="s33"><Data ss:Type="DateTime">2016-06-11</Data></Cell>
+</Row>
+<Row>
+<Cell ss:StyleID="s33"><Data ss:Type="DateTime">2016-07-24</Data></Cell>
+<Cell ss:StyleID="s33"><Data ss:Type="DateTime">2016-07-24</Data></Cell>
+<Cell ss:StyleID="s25"><Data ss:Type="String">youreacutie</Data></Cell>
+<Cell ss:StyleID="s25"><Data ss:Type="String">completed</Data></Cell>
+<Cell ss:StyleID="s27"><Data ss:Type="Number">2</Data></Cell>
+<Cell ss:StyleID="s25"><Data ss:Type="String">actions:link_click</Data></Cell>
+<Cell ss:StyleID="s27"><Data ss:Type="Number">2134</Data></Cell>
+<Cell ss:StyleID="s23"><Data ss:Type="Number">1.37</Data></Cell>
+<Cell ss:StyleID="s27"><Data ss:Type="Number">305</Data></Cell>
+<Cell ss:StyleID="s25"><Data ss:Type="String">Lifetime</Data></Cell>
+<Cell ss:StyleID="s23"><Data ss:Type="Number">2.74</Data></Cell>
+<Cell ss:StyleID="s33"><Data ss:Type="DateTime">2016-08-11</Data></Cell>
+<Cell ss:StyleID="s33"><Data ss:Type="DateTime">2016-06-11</Data></Cell>
+</Row>
+<Row>
+<Cell ss:StyleID="s33"><Data ss:Type="DateTime">2016-07-25</Data></Cell>
+<Cell ss:StyleID="s33"><Data ss:Type="DateTime">2016-07-25</Data></Cell>
+<Cell ss:StyleID="s25"><Data ss:Type="String">youreacutie</Data></Cell>
+<Cell ss:StyleID="s25"><Data ss:Type="String">completed</Data></Cell>
+<Cell ss:StyleID="s27"><Data ss:Type="Number">9</Data></Cell>
+<Cell ss:StyleID="s25"><Data ss:Type="String">actions:link_click</Data></Cell>
+<Cell ss:StyleID="s27"><Data ss:Type="Number">3328</Data></Cell>
+<Cell ss:StyleID="s23"><Data ss:Type="Number">0.462222</Data></Cell>
+<Cell ss:StyleID="s27"><Data ss:Type="Number">305</Data></Cell>
+<Cell ss:StyleID="s25"><Data ss:Type="String">Lifetime</Data></Cell>
+<Cell ss:StyleID="s23"><Data ss:Type="Number">4.16</Data></Cell>
+<Cell ss:StyleID="s33"><Data ss:Type="DateTime">2016-08-11</Data></Cell>
+<Cell ss:StyleID="s33"><Data ss:Type="DateTime">2016-06-11</Data></Cell>
+</Row>
+<Row>
+<Cell ss:StyleID="s33"><Data ss:Type="DateTime">2016-07-26</Data></Cell>
+<Cell ss:StyleID="s33"><Data ss:Type="DateTime">2016-07-26</Data></Cell>
+<Cell ss:StyleID="s25"><Data ss:Type="String">youreacutie</Data></Cell>
+<Cell ss:StyleID="s25"><Data ss:Type="String">completed</Data></Cell>
+<Cell ss:StyleID="s27"><Data ss:Type="Number">10</Data></Cell>
+<Cell ss:StyleID="s25"><Data ss:Type="String">actions:link_click</Data></Cell>
+<Cell ss:StyleID="s27"><Data ss:Type="Number">4692</Data></Cell>
+<Cell ss:StyleID="s23"><Data ss:Type="Number">0.424</Data></Cell>
+<Cell ss:StyleID="s27"><Data ss:Type="Number">305</Data></Cell>
+<Cell ss:StyleID="s25"><Data ss:Type="String">Lifetime</Data></Cell>
+<Cell ss:StyleID="s23"><Data ss:Type="Number">4.24</Data></Cell>
+<Cell ss:StyleID="s33"><Data ss:Type="DateTime">2016-08-11</Data></Cell>
+<Cell ss:StyleID="s33"><Data ss:Type="DateTime">2016-06-11</Data></Cell>
+</Row>
+<Row>
+<Cell ss:StyleID="s33"><Data ss:Type="DateTime">2016-07-27</Data></Cell>
+<Cell ss:StyleID="s33"><Data ss:Type="DateTime">2016-07-27</Data></Cell>
+<Cell ss:StyleID="s25"><Data ss:Type="String">youreacutie</Data></Cell>
+<Cell ss:StyleID="s25"><Data ss:Type="String">completed</Data></Cell>
+<Cell ss:StyleID="s27"><Data ss:Type="Number">11</Data></Cell>
+<Cell ss:StyleID="s25"><Data ss:Type="String">actions:link_click</Data></Cell>
+<Cell ss:StyleID="s27"><Data ss:Type="Number">3950</Data></Cell>
+<Cell ss:StyleID="s23"><Data ss:Type="Number">0.38</Data></Cell>
+<Cell ss:StyleID="s27"><Data ss:Type="Number">305</Data></Cell>
+<Cell ss:StyleID="s25"><Data ss:Type="String">Lifetime</Data></Cell>
+<Cell ss:StyleID="s23"><Data ss:Type="Number">4.18</Data></Cell>
+<Cell ss:StyleID="s33"><Data ss:Type="DateTime">2016-08-11</Data></Cell>
+<Cell ss:StyleID="s33"><Data ss:Type="DateTime">2016-06-11</Data></Cell>
+</Row>
+<Row>
+<Cell ss:StyleID="s33"><Data ss:Type="DateTime">2016-07-28</Data></Cell>
+<Cell ss:StyleID="s33"><Data ss:Type="DateTime">2016-07-28</Data></Cell>
+<Cell ss:StyleID="s25"><Data ss:Type="String">youreacutie</Data></Cell>
+<Cell ss:StyleID="s25"><Data ss:Type="String">completed</Data></Cell>
+<Cell ss:StyleID="s27"><Data ss:Type="Number">10</Data></Cell>
+<Cell ss:StyleID="s25"><Data ss:Type="String">actions:link_click</Data></Cell>
+<Cell ss:StyleID="s27"><Data ss:Type="Number">4841</Data></Cell>
+<Cell ss:StyleID="s23"><Data ss:Type="Number">0.438</Data></Cell>
+<Cell ss:StyleID="s27"><Data ss:Type="Number">305</Data></Cell>
+<Cell ss:StyleID="s25"><Data ss:Type="String">Lifetime</Data></Cell>
+<Cell ss:StyleID="s23"><Data ss:Type="Number">4.38</Data></Cell>
+<Cell ss:StyleID="s33"><Data ss:Type="DateTime">2016-08-11</Data></Cell>
+<Cell ss:StyleID="s33"><Data ss:Type="DateTime">2016-06-11</Data></Cell>
+</Row>
+<Row>
+<Cell ss:StyleID="s33"><Data ss:Type="DateTime">2016-07-29</Data></Cell>
+<Cell ss:StyleID="s33"><Data ss:Type="DateTime">2016-07-29</Data></Cell>
+<Cell ss:StyleID="s25"><Data ss:Type="String">youreacutie</Data></Cell>
+<Cell ss:StyleID="s25"><Data ss:Type="String">completed</Data></Cell>
+<Cell ss:StyleID="s27"><Data ss:Type="Number">11</Data></Cell>
+<Cell ss:StyleID="s25"><Data ss:Type="String">actions:link_click</Data></Cell>
+<Cell ss:StyleID="s27"><Data ss:Type="Number">3868</Data></Cell>
+<Cell ss:StyleID="s23"><Data ss:Type="Number">0.414545</Data></Cell>
+<Cell ss:StyleID="s27"><Data ss:Type="Number">305</Data></Cell>
+<Cell ss:StyleID="s25"><Data ss:Type="String">Lifetime</Data></Cell>
+<Cell ss:StyleID="s23"><Data ss:Type="Number">4.56</Data></Cell>
+<Cell ss:StyleID="s33"><Data ss:Type="DateTime">2016-08-11</Data></Cell>
+<Cell ss:StyleID="s33"><Data ss:Type="DateTime">2016-06-11</Data></Cell>
+</Row>
+<Row>
+<Cell ss:StyleID="s33"><Data ss:Type="DateTime">2016-07-30</Data></Cell>
+<Cell ss:StyleID="s33"><Data ss:Type="DateTime">2016-07-30</Data></Cell>
+<Cell ss:StyleID="s25"><Data ss:Type="String">youreacutie</Data></Cell>
+<Cell ss:StyleID="s25"><Data ss:Type="String">completed</Data></Cell>
+<Cell ss:StyleID="s27"><Data ss:Type="Number">10</Data></Cell>
+<Cell ss:StyleID="s25"><Data ss:Type="String">actions:link_click</Data></Cell>
+<Cell ss:StyleID="s27"><Data ss:Type="Number">2862</Data></Cell>
+<Cell ss:StyleID="s23"><Data ss:Type="Number">0.47</Data></Cell>
+<Cell ss:StyleID="s27"><Data ss:Type="Number">305</Data></Cell>
+<Cell ss:StyleID="s25"><Data ss:Type="String">Lifetime</Data></Cell>
+<Cell ss:StyleID="s23"><Data ss:Type="Number">4.7</Data></Cell>
+<Cell ss:StyleID="s33"><Data ss:Type="DateTime">2016-08-11</Data></Cell>
+<Cell ss:StyleID="s33"><Data ss:Type="DateTime">2016-06-11</Data></Cell>
+</Row>
+<Row>
+<Cell ss:StyleID="s33"><Data ss:Type="DateTime">2016-07-31</Data></Cell>
+<Cell ss:StyleID="s33"><Data ss:Type="DateTime">2016-07-31</Data></Cell>
+<Cell ss:StyleID="s25"><Data ss:Type="String">youreacutie</Data></Cell>
+<Cell ss:StyleID="s25"><Data ss:Type="String">completed</Data></Cell>
+<Cell ss:StyleID="s27"><Data ss:Type="Number">13</Data></Cell>
+<Cell ss:StyleID="s25"><Data ss:Type="String">actions:link_click</Data></Cell>
+<Cell ss:StyleID="s27"><Data ss:Type="Number">3153</Data></Cell>
+<Cell ss:StyleID="s23"><Data ss:Type="Number">0.337692</Data></Cell>
+<Cell ss:StyleID="s27"><Data ss:Type="Number">305</Data></Cell>
+<Cell ss:StyleID="s25"><Data ss:Type="String">Lifetime</Data></Cell>
+<Cell ss:StyleID="s23"><Data ss:Type="Number">4.39</Data></Cell>
+<Cell ss:StyleID="s33"><Data ss:Type="DateTime">2016-08-11</Data></Cell>
+<Cell ss:StyleID="s33"><Data ss:Type="DateTime">2016-06-11</Data></Cell>
+</Row>
+<Row>
+<Cell ss:StyleID="s33"><Data ss:Type="DateTime">2016-08-01</Data></Cell>
+<Cell ss:StyleID="s33"><Data ss:Type="DateTime">2016-08-01</Data></Cell>
+<Cell ss:StyleID="s25"><Data ss:Type="String">youreacutie</Data></Cell>
+<Cell ss:StyleID="s25"><Data ss:Type="String">completed</Data></Cell>
+<Cell ss:StyleID="s27"><Data ss:Type="Number">12</Data></Cell>
+<Cell ss:StyleID="s25"><Data ss:Type="String">actions:link_click</Data></Cell>
+<Cell ss:StyleID="s27"><Data ss:Type="Number">5790</Data></Cell>
+<Cell ss:StyleID="s23"><Data ss:Type="Number">0.335</Data></Cell>
+<Cell ss:StyleID="s27"><Data ss:Type="Number">305</Data></Cell>
+<Cell ss:StyleID="s25"><Data ss:Type="String">Lifetime</Data></Cell>
+<Cell ss:StyleID="s23"><Data ss:Type="Number">4.02</Data></Cell>
+<Cell ss:StyleID="s33"><Data ss:Type="DateTime">2016-08-11</Data></Cell>
+<Cell ss:StyleID="s33"><Data ss:Type="DateTime">2016-06-11</Data></Cell>
+</Row>
+<Row>
+<Cell ss:StyleID="s33"><Data ss:Type="DateTime">2016-08-02</Data></Cell>
+<Cell ss:StyleID="s33"><Data ss:Type="DateTime">2016-08-02</Data></Cell>
+<Cell ss:StyleID="s25"><Data ss:Type="String">youreacutie</Data></Cell>
+<Cell ss:StyleID="s25"><Data ss:Type="String">completed</Data></Cell>
+<Cell ss:StyleID="s27"><Data ss:Type="Number">16</Data></Cell>
+<Cell ss:StyleID="s25"><Data ss:Type="String">actions:link_click</Data></Cell>
+<Cell ss:StyleID="s27"><Data ss:Type="Number">4972</Data></Cell>
+<Cell ss:StyleID="s23"><Data ss:Type="Number">0.313125</Data></Cell>
+<Cell ss:StyleID="s27"><Data ss:Type="Number">305</Data></Cell>
+<Cell ss:StyleID="s25"><Data ss:Type="String">Lifetime</Data></Cell>
+<Cell ss:StyleID="s23"><Data ss:Type="Number">5.01</Data></Cell>
+<Cell ss:StyleID="s33"><Data ss:Type="DateTime">2016-08-11</Data></Cell>
+<Cell ss:StyleID="s33"><Data ss:Type="DateTime">2016-06-11</Data></Cell>
+</Row>
+<Row>
+<Cell ss:StyleID="s33"><Data ss:Type="DateTime">2016-08-03</Data></Cell>
+<Cell ss:StyleID="s33"><Data ss:Type="DateTime">2016-08-03</Data></Cell>
+<Cell ss:StyleID="s25"><Data ss:Type="String">youreacutie</Data></Cell>
+<Cell ss:StyleID="s25"><Data ss:Type="String">completed</Data></Cell>
+<Cell ss:StyleID="s27"><Data ss:Type="Number">12</Data></Cell>
+<Cell ss:StyleID="s25"><Data ss:Type="String">actions:link_click</Data></Cell>
+<Cell ss:StyleID="s27"><Data ss:Type="Number">5008</Data></Cell>
+<Cell ss:StyleID="s23"><Data ss:Type="Number">0.353333</Data></Cell>
+<Cell ss:StyleID="s27"><Data ss:Type="Number">305</Data></Cell>
+<Cell ss:StyleID="s25"><Data ss:Type="String">Lifetime</Data></Cell>
+<Cell ss:StyleID="s23"><Data ss:Type="Number">4.24</Data></Cell>
+<Cell ss:StyleID="s33"><Data ss:Type="DateTime">2016-08-11</Data></Cell>
+<Cell ss:StyleID="s33"><Data ss:Type="DateTime">2016-06-11</Data></Cell>
+</Row>
+<Row>
+<Cell ss:StyleID="s33"><Data ss:Type="DateTime">2016-08-04</Data></Cell>
+<Cell ss:StyleID="s33"><Data ss:Type="DateTime">2016-08-04</Data></Cell>
+<Cell ss:StyleID="s25"><Data ss:Type="String">youreacutie</Data></Cell>
+<Cell ss:StyleID="s25"><Data ss:Type="String">completed</Data></Cell>
+<Cell ss:StyleID="s27"><Data ss:Type="Number">6</Data></Cell>
+<Cell ss:StyleID="s25"><Data ss:Type="String">actions:link_click</Data></Cell>
+<Cell ss:StyleID="s27"><Data ss:Type="Number">3726</Data></Cell>
+<Cell ss:StyleID="s23"><Data ss:Type="Number">0.503333</Data></Cell>
+<Cell ss:StyleID="s27"><Data ss:Type="Number">305</Data></Cell>
+<Cell ss:StyleID="s25"><Data ss:Type="String">Lifetime</Data></Cell>
+<Cell ss:StyleID="s23"><Data ss:Type="Number">3.02</Data></Cell>
+<Cell ss:StyleID="s33"><Data ss:Type="DateTime">2016-08-11</Data></Cell>
+<Cell ss:StyleID="s33"><Data ss:Type="DateTime">2016-06-11</Data></Cell>
+</Row>
+<Row>
+<Cell ss:StyleID="s33"><Data ss:Type="DateTime">2016-08-05</Data></Cell>
+<Cell ss:StyleID="s33"><Data ss:Type="DateTime">2016-08-05</Data></Cell>
+<Cell ss:StyleID="s25"><Data ss:Type="String">youreacutie</Data></Cell>
+<Cell ss:StyleID="s25"><Data ss:Type="String">completed</Data></Cell>
+<Cell ss:StyleID="s27"><Data ss:Type="Number">9</Data></Cell>
+<Cell ss:StyleID="s25"><Data ss:Type="String">actions:link_click</Data></Cell>
+<Cell ss:StyleID="s27"><Data ss:Type="Number">3963</Data></Cell>
+<Cell ss:StyleID="s23"><Data ss:Type="Number">0.431111</Data></Cell>
+<Cell ss:StyleID="s27"><Data ss:Type="Number">305</Data></Cell>
+<Cell ss:StyleID="s25"><Data ss:Type="String">Lifetime</Data></Cell>
+<Cell ss:StyleID="s23"><Data ss:Type="Number">3.88</Data></Cell>
+<Cell ss:StyleID="s33"><Data ss:Type="DateTime">2016-08-11</Data></Cell>
+<Cell ss:StyleID="s33"><Data ss:Type="DateTime">2016-06-11</Data></Cell>
+</Row>
+<Row>
+<Cell ss:StyleID="s33"><Data ss:Type="DateTime">2016-08-06</Data></Cell>
+<Cell ss:StyleID="s33"><Data ss:Type="DateTime">2016-08-06</Data></Cell>
+<Cell ss:StyleID="s25"><Data ss:Type="String">youreacutie</Data></Cell>
+<Cell ss:StyleID="s25"><Data ss:Type="String">completed</Data></Cell>
+<Cell ss:StyleID="s27"><Data ss:Type="Number">7</Data></Cell>
+<Cell ss:StyleID="s25"><Data ss:Type="String">actions:link_click</Data></Cell>
+<Cell ss:StyleID="s27"><Data ss:Type="Number">4996</Data></Cell>
+<Cell ss:StyleID="s23"><Data ss:Type="Number">0.595714</Data></Cell>
+<Cell ss:StyleID="s27"><Data ss:Type="Number">305</Data></Cell>
+<Cell ss:StyleID="s25"><Data ss:Type="String">Lifetime</Data></Cell>
+<Cell ss:StyleID="s23"><Data ss:Type="Number">4.17</Data></Cell>
+<Cell ss:StyleID="s33"><Data ss:Type="DateTime">2016-08-11</Data></Cell>
+<Cell ss:StyleID="s33"><Data ss:Type="DateTime">2016-06-11</Data></Cell>
+</Row>
+<Row>
+<Cell ss:StyleID="s33"><Data ss:Type="DateTime">2016-08-07</Data></Cell>
+<Cell ss:StyleID="s33"><Data ss:Type="DateTime">2016-08-07</Data></Cell>
+<Cell ss:StyleID="s25"><Data ss:Type="String">youreacutie</Data></Cell>
+<Cell ss:StyleID="s25"><Data ss:Type="String">completed</Data></Cell>
+<Cell ss:StyleID="s27"><Data ss:Type="Number">16</Data></Cell>
+<Cell ss:StyleID="s25"><Data ss:Type="String">actions:link_click</Data></Cell>
+<Cell ss:StyleID="s27"><Data ss:Type="Number">4311</Data></Cell>
+<Cell ss:StyleID="s23"><Data ss:Type="Number">0.346875</Data></Cell>
+<Cell ss:StyleID="s27"><Data ss:Type="Number">305</Data></Cell>
+<Cell ss:StyleID="s25"><Data ss:Type="String">Lifetime</Data></Cell>
+<Cell ss:StyleID="s23"><Data ss:Type="Number">5.55</Data></Cell>
+<Cell ss:StyleID="s33"><Data ss:Type="DateTime">2016-08-11</Data></Cell>
+<Cell ss:StyleID="s33"><Data ss:Type="DateTime">2016-06-11</Data></Cell>
+</Row>
+<Row>
+<Cell ss:StyleID="s33"><Data ss:Type="DateTime">2016-08-08</Data></Cell>
+<Cell ss:StyleID="s33"><Data ss:Type="DateTime">2016-08-08</Data></Cell>
+<Cell ss:StyleID="s25"><Data ss:Type="String">youreacutie</Data></Cell>
+<Cell ss:StyleID="s25"><Data ss:Type="String">completed</Data></Cell>
+<Cell ss:StyleID="s27"><Data ss:Type="Number">11</Data></Cell>
+<Cell ss:StyleID="s25"><Data ss:Type="String">actions:link_click</Data></Cell>
+<Cell ss:StyleID="s27"><Data ss:Type="Number">1604</Data></Cell>
+<Cell ss:StyleID="s23"><Data ss:Type="Number">0.260909</Data></Cell>
+<Cell ss:StyleID="s27"><Data ss:Type="Number">305</Data></Cell>
+<Cell ss:StyleID="s25"><Data ss:Type="String">Lifetime</Data></Cell>
+<Cell ss:StyleID="s23"><Data ss:Type="Number">2.87</Data></Cell>
+<Cell ss:StyleID="s33"><Data ss:Type="DateTime">2016-08-11</Data></Cell>
+<Cell ss:StyleID="s33"><Data ss:Type="DateTime">2016-06-11</Data></Cell>
+</Row>
+<Row>
+<Cell ss:StyleID="s33"><Data ss:Type="DateTime">2016-08-09</Data></Cell>
+<Cell ss:StyleID="s33"><Data ss:Type="DateTime">2016-08-09</Data></Cell>
+<Cell ss:StyleID="s25"><Data ss:Type="String">youreacutie</Data></Cell>
+<Cell ss:StyleID="s25"><Data ss:Type="String">completed</Data></Cell>
+<Cell ss:StyleID="s27"><Data ss:Type="Number">10</Data></Cell>
+<Cell ss:StyleID="s25"><Data ss:Type="String">actions:link_click</Data></Cell>
+<Cell ss:StyleID="s27"><Data ss:Type="Number">3545</Data></Cell>
+<Cell ss:StyleID="s23"><Data ss:Type="Number">0.49</Data></Cell>
+<Cell ss:StyleID="s27"><Data ss:Type="Number">305</Data></Cell>
+<Cell ss:StyleID="s25"><Data ss:Type="String">Lifetime</Data></Cell>
+<Cell ss:StyleID="s23"><Data ss:Type="Number">4.9</Data></Cell>
+<Cell ss:StyleID="s33"><Data ss:Type="DateTime">2016-08-11</Data></Cell>
+<Cell ss:StyleID="s33"><Data ss:Type="DateTime">2016-06-11</Data></Cell>
+</Row>
+<Row>
+<Cell ss:StyleID="s33"><Data ss:Type="DateTime">2016-08-10</Data></Cell>
+<Cell ss:StyleID="s33"><Data ss:Type="DateTime">2016-08-10</Data></Cell>
+<Cell ss:StyleID="s25"><Data ss:Type="String">youreacutie</Data></Cell>
+<Cell ss:StyleID="s25"><Data ss:Type="String">completed</Data></Cell>
+<Cell ss:StyleID="s27"><Data ss:Type="Number">4</Data></Cell>
+<Cell ss:StyleID="s25"><Data ss:Type="String">actions:link_click</Data></Cell>
+<Cell ss:StyleID="s27"><Data ss:Type="Number">1902</Data></Cell>
+<Cell ss:StyleID="s23"><Data ss:Type="Number">0.4475</Data></Cell>
+<Cell ss:StyleID="s27"><Data ss:Type="Number">305</Data></Cell>
+<Cell ss:StyleID="s25"><Data ss:Type="String">Lifetime</Data></Cell>
+<Cell ss:StyleID="s23"><Data ss:Type="Number">1.79</Data></Cell>
+<Cell ss:StyleID="s33"><Data ss:Type="DateTime">2016-08-11</Data></Cell>
+<Cell ss:StyleID="s33"><Data ss:Type="DateTime">2016-06-11</Data></Cell>
+</Row>
+</Table>
+</Worksheet>
+</Workbook>
