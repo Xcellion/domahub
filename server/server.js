@@ -101,6 +101,6 @@ serverHTTP(app).listen(8080, function(){
 });
 
 //HTTPS website on port 443
-serverHTTPS(app).listen(443, function(){
-	console.log("HTTPS website listening on port 443");
+serverHTTPS(app).listen(4343, function(){
+	console.log("HTTPS website listening on port 4343");
 });
