@@ -167,6 +167,7 @@ function isLoggedIn(req, res, next) {
 			renderRequestVerify(req, res);
 		}
 		else {
+			req.session.touch();	//reset maxAge for session since user did something
 			return next();
 		}
 	}
