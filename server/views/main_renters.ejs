@@ -11,10 +11,10 @@
 
   <%- include("templates/navbar", {user: user}); %>
 
-  <section class="hero is-primary is-bold is-small clear-nav">
+  <section class="hero is-primary gradient-right-left is-small clear-nav">
     <div class="hero-body">
       <div class="container">
-        <div class="column">
+        <div class="column has-text-right">
           <p class="title flavor-title is-normal">
             A domain isn't just a name, <br />
             it's your playground.
@@ -31,7 +31,10 @@
     <div class="container">
       <div class="columns">
         <div class="column is-half">
-          <div class="content">
+
+        </div>
+        <div class="column is-half">
+          <div class="content has-text-right">
             <p>
               Let's face it. Getting the perfect domain name
               is impossible without paying up the wall for one.
@@ -49,80 +52,141 @@
     <div class="container">
       <div class="columns">
         <div class="column">
-          <figure class="image is-64x64">
-            <img src="/images/lib/material/mail.svg" />
-          </figure>
-          <div class="content has-text-centered">
-            <h3>Send online cards and invitations</h3>
-            <p class="is-light">
-              Give your next e-card or e-invitation a personalized
-              domain name.
-            </p>
-            <a class="button is-accent is-inverted" href="">See example</a>
-          </div>
-        </div>
-        <div class="column">
-          <figure class="image is-64x64">
-            <img src="/images/lib/material/redirect.svg" />
-          </figure>
-          <div class="content has-text-centered">
-            <h3>Redirect your favorite web content</h3>
-            <p class="is-light">
-              You can redirect almost anything on the web - an image,
-              a something, and even another webpage - to your domain name rental.
-            </p>
-            <a class="button is-accent is-inverted" href="">See example</a>
-          </div>
-        </div>
-        <div class="column">
-          <figure class="image is-64x64">
-            <img src="/images/lib/material/business.svg" />
-          </figure>
-          <div class="content has-text-centered">
-            <h3>Start your new business</h3>
-            <p class="is-light">
+          <div class="box-flip">
+            <figure class="image is-64x64 bottom-margin-25">
+              <img src="/images/lib/material/mail.svg" />
+            </figure>
+            <div class="content has-text-centered">
+              <h3>Send online cards and invitations</h3>
+              <p class="is-light">
+                Give your next e-card or e-invitation a personalized
+                domain name.
+              </p>
+            </div>
+            <div class="box-footer">
+              <a class="button is-primary is-outlined">
+                <span class="icon">
+                  <i class="fa fa-angle-double-down"></i>
+                </span>
+                <span>See Example</span>
+              </a>
+            </div>
 
-            </p>
+          </div>
+        </div>
+        <div class="column">
+          <div class="box-flip">
+            <figure class="image is-64x64 bottom-margin-25">
+              <img src="/images/lib/material/showchart.svg" />
+            </figure>
+            <div class="content has-text-centered">
+              <h3>Create unique marketing opportunities</h3>
+              <p class="is-light">
+                Rent a new domain name for your next marketing campaign,
+                new product release, or big company announcement.
+              </p>
+            </div>
+            <div class="box-footer">
+              <a class="button is-primary is-outlined">
+                <span class="icon">
+                  <i class="fa fa-angle-double-down"></i>
+                </span>
+                <span>See Example</span>
+              </a>
+            </div>
+          </div>
+        </div>
+        <div class="column">
+          <div class="box-flip">
+            <figure class="image is-64x64 bottom-margin-25">
+              <img src="/images/lib/material/business.svg" />
+            </figure>
+            <div class="content has-text-centered">
+              <h3>Start your new business</h3>
+              <p class="is-light">
+                A domain rental is the perfect, inexpensive way
+                to brand your new business. Buy-out prices are
+                pre-negotiated so there's no need to worry down
+                the road.
+              </p>
+            </div>
+            <div class="box-footer">
+              <a class="button is-primary is-outlined">
+                <span class="icon">
+                  <i class="fa fa-angle-double-down"></i>
+                </span>
+                <span>See Example</span>
+              </a>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  </section>
 
-  <section class="section">
-    <div class="container">
       <div class="columns">
         <div class="column">
-          <figure class="image is-64x64">
-            <img src="/images/lib/material/mail.svg" />
-          </figure>
-          <div class="content has-text-centered">
-            <h3>Send online cards and invitations</h3>
-            <p class="is-light">
-
-            </p>
+          <div class="box-flip">
+            <figure class="image is-64x64 bottom-margin-25">
+              <img src="/images/lib/material/redirect.svg" />
+            </figure>
+            <div class="content has-text-centered">
+              <h3>Redirect your favorite web content</h3>
+              <p class="is-light">
+                You can redirect almost anything on the web - an image,
+                a GIF, and even another webpage - to your domain name rental.
+              </p>
+            </div>
+            <div class="box-footer">
+              <a class="button is-primary is-outlined">
+                <span class="icon">
+                  <i class="fa fa-angle-double-down"></i>
+                </span>
+                <span>See Example</span>
+              </a>
+            </div>
           </div>
         </div>
         <div class="column">
-          <figure class="image is-64x64">
-            <img src="/images/lib/material/redirect.svg" />
-          </figure>
-          <div class="content has-text-centered">
-            <h3>Redirect your favorite web content</h3>
-            <p class="is-light">
-
-            </p>
+          <div class="box-flip">
+            <figure class="image is-64x64 bottom-margin-25">
+              <img src="/images/lib/material/briefcase.svg" />
+            </figure>
+            <div class="content has-text-centered">
+              <h3>Stand out professionally</h3>
+              <p class="is-light">
+                Spice up your business presentations, slides, proposals,
+                or even your personal resume with a unique domain name.
+              </p>
+            </div>
+            <div class="box-footer">
+              <a class="button is-primary is-outlined">
+                <span class="icon">
+                  <i class="fa fa-angle-double-down"></i>
+                </span>
+                <span>See Example</span>
+              </a>
+            </div>
           </div>
         </div>
         <div class="column">
-          <figure class="image is-64x64">
-            <img src="/images/lib/material/business.svg" />
-          </figure>
-          <div class="content has-text-centered">
-            <h3>Start your new business</h3>
-            <p class="is-light">
-
-            </p>
+          <div class="box-flip">
+            <figure class="image is-64x64 bottom-margin-25">
+              <img src="/images/lib/material/drivetraffic.svg" />
+            </figure>
+            <div class="content has-text-centered">
+              <h3>Drive traffic to your site</h3>
+              <p class="is-light">
+                Don't be held down by one name. Use multiple domain names
+                to convey your brand identity by redirecting them to your main site.
+              </p>
+            </div>
+            <div class="box-footer">
+              <a class="button is-primary is-outlined">
+                <span class="icon">
+                  <i class="fa fa-angle-double-down"></i>
+                </span>
+                <span>See Example</span>
+              </a>
+            </div>
           </div>
         </div>
       </div>
