@@ -89,7 +89,8 @@ function proxyReq(req, res){
 	}
 
 	request[req.method.toLowerCase()]({
-		url: addProtocol(address)
+		url: addProtocol(address),
+		encoding: null
 	}, function (err, response, body) {
 		if (err) {
 			console.log(err);
