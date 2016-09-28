@@ -10,6 +10,13 @@ $(document).ready(function() {
     //function to show section depending on url
     showSectionByURL();
 
+    $("#account-settings .account-input").bind("input", function(e){
+        if ($("#change-account-save").hasClass("is-disabled")){
+            $("#change-account-save").removeClass("is-disabled");
+            $("#change-account-cancel").removeClass("is-hidden");
+        }
+    })
+
     //scroll to specific part of page depending on which side link you pressed
     $(".setting-link").click(function(e){
         e.preventDefault();
@@ -56,18 +63,13 @@ $(document).ready(function() {
     });
 
     //to toggle account changes
-    $("#change-account-toggle").click(function(e){
-        if ($(this).text() != "Save Changes"){
-            initiateEdit();
-        }
-        else{
-            $("#account-settings").submit();
-        }
+    $("#change-account-save").click(function(e){
+        $("#account-settings").submit();
     });
 
     //to cancel account changes
     $("#change-account-cancel").click(function(e){
-        cancelEdit();
+        resetInputs();
     });
 
 });
@@ -169,29 +171,10 @@ function checkAccountSubmit(){
     }
 }
 
-//function to initate editing mode
-function initiateEdit(){
-    $("#pw-label").text("New Password");
-    $("#change-account-toggle").text("Save Changes").addClass("is-success").removeClass("is-info");
-    $("#change-account-cancel").removeClass("is-hidden");
-    $('.account-input').removeClass("is-disabled");
-    $('.input-to-hide').removeClass("is-hidden");
-    $("#basic-message").text("");
-}
-
-//function to cancel editing mode
-function cancelEdit(){
-    $("#pw-label").text("Password");
-    $("#change-account-toggle").text("Edit Information").addClass("is-info").removeClass("is-success");
-    $("#change-account-cancel").addClass("is-hidden");
-    $('.account-input').addClass("is-disabled");
-    $('.input-to-hide').addClass("is-hidden");
-    $("#basic-message").text("");
-    resetInputs();
-}
-
 //function to reset account inputs upon cancel
 function resetInputs(){
+    $("#change-account-save").addClass("is-disabled");
+    $("#change-account-cancel").addClass("is-hidden");
     $("#email-input").val(user.email).removeClass("is-danger");
     $("#username-input").val(user.username).removeClass("is-danger");
     $("#old-pw-input").val("").removeClass("is-danger");

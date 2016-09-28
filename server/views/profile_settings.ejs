@@ -72,8 +72,8 @@
 										<label class="label">Email Address</label>
 									</div>
 									<p class="control">
-										<input name="email" id="old-email-input" class="input is-disabled account-input" type="hidden" value="<%= user.email %>" />
-										<input id="email-input" class="input is-disabled account-input" type="text" value="<%= user.email %>" />
+										<input name="email" id="old-email-input" class="input account-input" type="hidden" value="<%= user.email %>" />
+										<input id="email-input" class="input account-input" type="text" value="<%= user.email %>" />
 									</p>
 								</div>
 								<div class="control is-horizontal">
@@ -81,15 +81,15 @@
 										<label class="label">Username</label>
 									</div>
 									<p class="control">
-										<input id="username-input" class="input is-disabled account-input" type="text" value="<%= user.username %>" />
+										<input id="username-input" class="input account-input" type="text" value="<%= user.username %>" />
 									</p>
 								</div>
-								<div class="control is-horizontal input-to-hide is-hidden">
+								<div class="control is-horizontal input-to-hide">
 									<div class="control-label">
 										<label class="label">Current Password</label>
 									</div>
 									<p class="control">
-										<input id="old-pw-input" class="input is-disabled account-input" type="password">
+										<input id="old-pw-input" class="input account-input" type="password">
 									</p>
 								</div>
 								<div class="control is-horizontal">
@@ -97,15 +97,15 @@
 										<label id="pw-label" class="label">Password</label>
 									</div>
 									<p class="control">
-										<input id="new-pw-input" class="input is-disabled account-input" type="password"/>
+										<input id="new-pw-input" class="input account-input" type="password"/>
 									</p>
 								</div>
-								<div class="control is-horizontal input-to-hide is-hidden">
+								<div class="control is-horizontal input-to-hide">
 									<div class="control-label">
 										<label class="label">Confirm Password</label>
 									</div>
 									<p class="control">
-										<input id="verify-pw-input" class="input is-disabled account-input" type="password">
+										<input id="verify-pw-input" class="input account-input" type="password">
 									</p>
 								</div>
 
@@ -116,7 +116,7 @@
 									</div>
 									<div class="control">
 										<div class="select">
-											<select value="<%= user.gender %>" id="gender-input" class="is-disabled account-input">
+											<select value="<%= user.gender %>" id="gender-input" class="account-input">
 												<option disabled>Gender</option>
 												<option value='0'>Female</option>
 												<option value='1'>Male</option>
@@ -131,7 +131,7 @@
 									</div>
 									<div class="control">
 										<div class="select">
-											<select id="birthday-year-input" class="is-disabled account-input">
+											<select id="birthday-year-input" class="account-input">
 												<option selected disabled>Year</option>
 												<option value="1998">1998</option>
 												<option value="1997">1997</option>
@@ -219,7 +219,7 @@
 											</select>
 										</div>
 										<div class="select">
-											<select id="birthday-month-input" class="is-disabled account-input">
+											<select id="birthday-month-input" class="account-input">
 												<option selected disabled>Month</option>
 												<option value="1">January</option>
 												<option value="2">February</option>
@@ -236,7 +236,7 @@
 											</select>
 										</div>
 										<div class="select">
-											<select id="birthday-day-input" class="is-disabled account-input">
+											<select id="birthday-day-input" class="account-input">
 												<option selected disabled>Day</option>
 												<option value="1">1</option>
 												<option value="2">2</option>
@@ -279,9 +279,9 @@
 									</div>
 									<div class="control is-grouped">
 										<p class="control">
-											<input class="input is-disabled account-input" type="text" value="<%= user.phone %>">
+											<input class="input account-input" type="text" value="<%= user.phone %>">
 										</p>
-										<p class="control input-to-hide is-hidden">
+										<p class="control input-to-hide">
 											<a class="button is-primary">
 												&#43 Add a number
 											</a>
@@ -292,7 +292,7 @@
 
 							</form>
 							<div class="container">
-								<button id="change-account-toggle" class="button is-accent">Edit Information</button>
+								<button id="change-account-save" class="button is-disabled is-success">Save Changes</button>
 								<button id="change-account-cancel" class="button is-hidden is-inverted is-danger">Cancel Changes</button>
 							</div>
 						</div>
