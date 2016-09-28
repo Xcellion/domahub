@@ -97,16 +97,17 @@ function proxyReq(req, res){
 
 	var proxy_req = request({
 		url: address,
-		method: req.method,
+		method: req.method.toLowerCase(),
 		headers: temp_headers
 	}, function (err, response, body) {
 		if (err) {
 			console.log(err);
 			error.handler(req, res, false, "api");
 		}
+		res.send(response);
 	});
 
-	req.pipe(proxy_req).pipe(res);
+	//req.pipe(proxy_req).pipe(res);
 }
 
 //function to add http or https
