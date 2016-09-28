@@ -8,41 +8,41 @@
     border: none;
     border-radius: 0;
     background-color: transparent;
-    -webkit-box-shadow: 0 0 0 #111 0;
-    -moz-box-shadow: 0 0 0 #111 0;
-    box-shadow: 0 0 0 #111 0;
+    -webkit-box-shadow: 0 0 0 black 0;
+    -moz-box-shadow: 0 0 0 black 0;
+    box-shadow: 0 0 0 black 0;
     -moz-transition: all 0.5s;
     -o-transition: all 0.5s;
     -webkit-transition: all 0.5s;
     transition: all 0.5s;
-    color: #222324;
+    color: rgba(0, 0, 0, 0.87);
     width: 100%; }
 
 .nav-link {
   padding: 5px;
-  color: #222324; }
+  color: rgba(0, 0, 0, 0.87); }
   .nav-link.is-white {
-    color: #fff; }
+    color: white; }
   .nav-link:hover {
-    color: #3CBC8D;
-    -webkit-box-shadow: 0 -3px 0 #3CBC8D inset;
-    -moz-box-shadow: 0 -3px 0 #3CBC8D inset;
-    box-shadow: 0 -3px 0 #3CBC8D inset; }
+    color: #3cbc8d;
+    -webkit-box-shadow: 0 -3px 0 #3cbc8d inset;
+    -moz-box-shadow: 0 -3px 0 #3cbc8d inset;
+    box-shadow: 0 -3px 0 #3cbc8d inset; }
     @media screen and (max-width: 768px) {
       .nav-link:hover {
-        -webkit-box-shadow: 0 0 0 #111 0;
-        -moz-box-shadow: 0 0 0 #111 0;
-        box-shadow: 0 0 0 #111 0;
+        -webkit-box-shadow: 0 0 0 black 0;
+        -moz-box-shadow: 0 0 0 black 0;
+        box-shadow: 0 0 0 black 0;
         align-self: flex-end; } }
   .nav-link.is-active:hover {
-    color: #fff;
-    -webkit-box-shadow: 0 -3px 0 #fff inset;
-    -moz-box-shadow: 0 -3px 0 #fff inset;
-    box-shadow: 0 -3px 0 #fff inset; }
+    color: white;
+    -webkit-box-shadow: 0 -3px 0 white inset;
+    -moz-box-shadow: 0 -3px 0 white inset;
+    box-shadow: 0 -3px 0 white inset; }
 
 /************************************* LOGIN DROPDOWN *************************/
 #login-dropdown {
-  background-color: #fff;
+  background-color: white;
   padding: 25px; }
 
 #remember-checkbox {
@@ -55,7 +55,7 @@
 
 /************************************* PROFILE DROPDOWN *************************/
 #profile-dropdown {
-  background-color: #fff;
+  background-color: white;
   -moz-box-shadow: 0 4px 7px rgba(0, 0, 0, 0.1);
   -webkit-box-shadow: 0 4px 7px rgba(0, 0, 0, 0.1);
   box-shadow: 0 4px 7px rgba(0, 0, 0, 0.1);
@@ -64,4 +64,4 @@
   top: 46px; }
 
 .logout {
-  color: #3CBC8D !important; }
+  color: #3cbc8d !important; }
