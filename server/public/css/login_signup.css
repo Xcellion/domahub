@@ -6,7 +6,7 @@
   margin-bottom: 10px; }
 
 .control.has-icon .input:focus + .fa-check {
-  color: #97cd76 !important; }
+  color: #81c784 !important; }
 
 .control.has-icon > .fa-warning {
   font-size: 21px !important;
@@ -18,9 +18,9 @@
 
 .form {
   background-color: #fff;
-  -webkit-box-shadow: 0 1px 9px -1px #aeb1b5;
-  -moz-box-shadow: 0 1px 9px -1px #aeb1b5;
-  box-shadow: 0 1px 9px -1px #aeb1b5;
+  -webkit-box-shadow: 0 1px 9px -1px #9e9e9e;
+  -moz-box-shadow: 0 1px 9px -1px #9e9e9e;
+  box-shadow: 0 1px 9px -1px #9e9e9e;
   left: 0;
   margin: 0 auto;
   padding: 20px;

@@ -9,7 +9,7 @@
   box-shadow: 0 2px 3px rgba(17, 17, 17, 0.1) 0;
   border-radius: 0;
   border: none;
-  color: #3CBC8D;
+  color: #3cbc8d;
   padding: 15px 8px;
   margin-bottom: 10px;
   font-size: 1.2rem;
@@ -39,15 +39,15 @@
       max-width: 150px; } }
 
 .sender_them > .chat_message {
-  background-color: #d3d6db;
-  color: #222324; }
+  background-color: #e0e0e0;
+  color: rgba(0, 0, 0, 0.87); }
 
 .sender_me > .chat_message {
-  background-color: #3CBC8D;
-  color: #fff; }
+  background-color: #3cbc8d;
+  color: white; }
 
 .chat_timestamp {
-  color: #aeb1b5; }
+  color: #9e9e9e; }
 
 .account-form select {
   margin-right: 5px; }
