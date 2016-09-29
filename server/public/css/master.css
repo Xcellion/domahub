@@ -3418,11 +3418,11 @@ a.nav-item.is-tab {
   text-align: center;
   vertical-align: top;
   width: 16px;
-  color: rgba(0, 0, 0, 0.87);
+  color: rgba(0, 0, 0, 0.54);
   float: left;
   margin: 0 4px 0 -2px; }
   .panel-icon .fa {
-    font-size: inherit;
+    font-size: 18px;
     line-height: inherit; }
 
 .panel-heading {
@@ -3444,7 +3444,7 @@ a.nav-item.is-tab {
 
 .panel-tabs {
   display: flex;
-  font-size: 12px;
+  font-size: 16px;
   padding: 5px 10px 0;
   justify-content: center; }
   .panel-tabs a {
@@ -3474,9 +3474,12 @@ a.nav-item.is-tab {
   line-height: 16px;
   padding: 10px; }
   .panel-block.is-active {
-    background-color: #3cbc8d; }
+    background-color: #3cbc8d;
+    color: white; }
+    .panel-block.is-active > p {
+      color: rgba(255, 255, 255, 0.7); }
   .panel-block:hover, .panel-block:active {
-    background-color: #8ad6ba; }
+    background-color: rgba(0, 0, 0, 0.12); }
   .panel-block:not(:last-child) {
     border-bottom: 1px solid rgba(0, 0, 0, 0.12); }
 
