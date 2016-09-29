@@ -55,12 +55,7 @@
   padding: 10px; }
 
 #load-more {
-  border: 1px solid rgba(0, 0, 0, 0.12);
-  padding: 8px;
-  margin: 0 auto;
-  width: 150px; }
-  #load-more:hover {
-    cursor: pointer; }
+  margin: 0 auto; }
 
 .message_wrapper {
   width: 100%;

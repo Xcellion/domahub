@@ -3444,16 +3444,22 @@ a.nav-item.is-tab {
   .panel-tabs:not(:last-child) {
     border-bottom: 1px solid rgba(0, 0, 0, 0.12); }
 
-.panel-block {
-  color: rgba(0, 0, 0, 0.87);
+.panel-search {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
   display: block;
   line-height: 16px;
   padding: 10px; }
+
+.panel-block {
+  display: block;
+  line-height: 16px;
+  padding: 10px; }
+  .panel-block:hover {
+    background-color: #3cbc8d; }
+  .panel-block:active {
+    background-color: #3cbc8d; }
   .panel-block:not(:last-child) {
     border-bottom: 1px solid rgba(0, 0, 0, 0.12); }
-
-a.panel-block:hover {
-  background-color: #f5f5f5; }
 
 .panel {
   border: 1px solid rgba(0, 0, 0, 0.12);
