@@ -39,17 +39,22 @@
   &:not(:last-child)
     border-bottom: 1px solid $border
 
-.panel-block
-  color: $text
+.panel-search
+  border-bottom: 1px solid $border
   display: block
   line-height: 16px
   padding: 10px
+
+.panel-block
+  display: block
+  line-height: 16px
+  padding: 10px
+  &:hover
+    background-color: $primary
+  &:active
+    background-color: $primary
   &:not(:last-child)
     border-bottom: 1px solid $border
-
-a.panel-block
-  &:hover
-    background-color: $grey-lighter
 
 .panel
   border: 1px solid $border

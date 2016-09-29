@@ -65,13 +65,7 @@
 }
 
 #load-more {
-  border: 1px solid $border;
-  padding: 8px;
   margin: 0 auto;
-  width: 150px;
-  &:hover {
-    cursor: pointer;
-  }
 }
 
 .message_wrapper {
