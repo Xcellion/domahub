@@ -88,20 +88,26 @@ function createMessage(req, res, next){
 function getConvo(req, res, next){
 	account_id_1 = req.user.id;
 	account_id_2 = req.other_id;
+	length = parseFloat(req.body.length);
 
-	//get the chats between the two accounts now that we have the ids
-	Chat.getChats(account_id_1, account_id_2, function(result){
-		if (result.state=="error"){error.handler(req, res, result.info);}
-		else {
-			if (result.state == "success"){
-				res.json({
-					username: req.params.account,
-					chats: result.info
-				});
-			}
+	if (parseFloat(length) != length >>> 0){
+		error.handler(req, res, "Invalid length!", "json");
+	}
+	else {
+		//get the chats between the two accounts now that we have the ids
+		Chat.getChats(account_id_1, account_id_2, length, function(result){
+			if (result.state=="error"){error.handler(req, res, result.info);}
 			else {
-				res.redirect("/profile/inbox");
+				if (result.state == "success"){
+					res.json({
+						username: req.params.account,
+						chats: result.info
+					});
+				}
+				else {
+					res.redirect("/profile/inbox");
+				}
 			}
-		}
-	})
+		})
+	}
 }
