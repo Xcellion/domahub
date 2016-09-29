@@ -35,6 +35,10 @@
 			<div class="columns is-gapless">
 				<div class="column is-one-quarter">
 					<nav class="panel is-hidden-mobile">
+						<p class="panel-tabs">
+							<a class="is-active" href="#">Recent</a>
+							<a href="#">Message Requests</a>
+						</p>
 						<a class="panel-search">
 							<p class="control has-icon has-icon">
 								<input id="search-user" class="input" type="text" placeholder="Search contacts" />
@@ -46,10 +50,6 @@
 						</div>
 					</nav>
 
-					<div class="container bottom-margin-25 is-hidden-mobile">
-						<a id="new-message" class="button is-accent is-medium is-fullwidth">Send a new message</a>
-					</div>
-
 				</div>
 				<%# <div class="column has-text-centered">
 					<div class="box">
@@ -60,7 +60,30 @@
 				<div class="column is-two-thirds">
 					<div class="box chat-box">
 						<form action="/messages" method="post" id="messenger_form">
-							<input id="msg_receiver_input" class="input" placeholder="To: "name="msg_receiver" type="text" />
+							<div class="chat-box-header bottom-margin-25">
+								<div class="chat-box-header-item">
+									<input id="msg_receiver_input" class="input" placeholder="To: "name="msg_receiver" type="text" />
+								</div>
+								<div class="chat-box-header-item">
+									<p class="control has-addons">
+									  <a class="button is-small no-shadow">
+									    <span>&#43 New Message</span>
+									  </a>
+									  <a class="button is-small no-shadow">
+									    <span class="icon is-small no-margin">
+									      <i class="fa fa-cog"></i>
+									    </span>
+											<span></span>
+									  </a>
+									  <a class="button is-small no-shadow">
+									    <span class="icon is-small no-margin">
+									      <i class="fa fa-search"></i>
+									    </span>
+											<span></span>
+									  </a>
+									</p>
+								</div>
+							</div>
 
 							<div id="chat_wrapper" class=""></div>
 
@@ -80,7 +103,7 @@
 											Press enter to send
 										</p>
 										<input type="checkbox" class="checkbox" />
-										<input id="msg_submit" value="SEND" class="button is-small is-accent" type="submit" />
+										<input id="msg_submit" value="SEND" class="button is-small is-accent no-shadow" type="submit" />
 									</div>
 								</div>
 							</div>
