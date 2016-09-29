@@ -8,13 +8,31 @@
   max-height: 650px;
 }
 
+.chat-box-header {
+  align-items: stretch;
+  display: flex;
+  justify-content: space-between;
+  @include mobile {
+    flex-direction: column;
+  }
+}
+
+.chat-box-header-item {
+  display: flex;
+  align-items: center;
+  @include mobile {
+    &:not(:first-child) {
+      margin-top: 10px;
+    }
+  }
+}
+
 #msg_receiver_input {
   @include box-shadow(0, -2px, 0, 0, $border, 0);
   border: none;
   border-radius: 0;
   color: $text;
   padding: 15px 8px;
-  margin-bottom: 10px;
   width: 100%;
   &:focus,
   &:active {
@@ -32,7 +50,7 @@
 #msg_text_input {
   min-width: auto;
   max-width: auto;
-  border-radius: 3px 0 0 3px;
+  border-radius: 3px 3px 0 0;
   @include mobile {
     min-height: 75px;
     max-height: 75px;
@@ -44,6 +62,7 @@
   display: flex;
   justify-content: flex-end;
   border: 1px solid $border;
+  border-top: none;
   width: 100%;
 }
 

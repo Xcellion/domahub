@@ -894,14 +894,20 @@ a.box {
         border-color: #f44336;
         color: white; }
   .button.is-blank {
-    background-color: transparent;
-    border-color: transparent;
     -webkit-box-shadow: 0 0 0 0 black;
     -moz-box-shadow: 0 0 0 0 black;
     box-shadow: 0 0 0 0 black;
+    background-color: transparent;
+    border-color: transparent;
     color: rgba(0, 0, 0, 0.87); }
     .button.is-blank:hover, .button.is-blank:focus {
       background-color: rgba(0, 0, 0, 0.12); }
+  .button.no-shadow {
+    -webkit-box-shadow: 0 0 0 0 black;
+    -moz-box-shadow: 0 0 0 0 black;
+    box-shadow: 0 0 0 0 black; }
+    .button.no-shadow:hover, .button.no-shadow:focus, .button.no-shadow.is-active {
+      border-color: rgba(0, 0, 0, 0.87); }
   .button.is-small {
     border-radius: 2px;
     font-size: 14px;
@@ -1307,7 +1313,7 @@ input:-webkit-autofill {
     .control.has-addons .input,
     .control.has-addons .textarea,
     .control.has-addons .select {
-      border-radius: 3px;
+      border-radius: 0;
       margin-right: -1px;
       width: auto; }
       .control.has-addons .button:hover,
@@ -3446,8 +3452,11 @@ a.nav-item.is-tab {
     margin-bottom: -1px;
     padding: 5px; }
     .panel-tabs a.is-active {
-      border-bottom-color: rgba(0, 0, 0, 0.87);
-      color: rgba(0, 0, 0, 0.87); }
+      border-bottom-color: #309670;
+      color: #309670; }
+    .panel-tabs a:hover, .panel-tabs a:active {
+      border-bottom-color: #8ad6ba;
+      color: #8ad6ba; }
   .panel-tabs:not(:last-child) {
     border-bottom: 1px solid rgba(0, 0, 0, 0.12); }
 
@@ -3464,6 +3473,8 @@ a.nav-item.is-tab {
   display: block;
   line-height: 16px;
   padding: 10px; }
+  .panel-block.is-active {
+    background-color: #3cbc8d; }
   .panel-block:hover, .panel-block:active {
     background-color: #8ad6ba; }
   .panel-block:not(:last-child) {

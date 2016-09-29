@@ -80,13 +80,20 @@
           border-color: $color
           color: $color-invert
   &.is-blank
+    +box-shadow(0,0,0,$black,0)
     background-color: transparent
     border-color: transparent
-    +box-shadow(0,0,0,$black,0)
     color: $text
     &:hover,
     &:focus
       background-color: $border
+  &.no-shadow
+    +box-shadow(0,0,0,$black,0)
+    &:hover,
+    &:focus,
+    &.is-active
+      border-color: $control-hover
+
   // Sizes
   &.is-small
     +button-small
