@@ -551,7 +551,8 @@ table {
   display: block;
   padding: 20px; }
   .box.box-accent {
-    background-color: #ff5722; }
+    background-color: #ff5722;
+    color: white; }
 
 .box-flip {
   background-color: white;
