@@ -24,9 +24,9 @@
 
 #msg-text-wrapper {
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
   align-items: center;
-  padding-top: 10px;
+  margin-top: 10px;
 }
 
 #msg_text_input {
@@ -39,13 +39,28 @@
   }
 }
 
-#msg_submit {
-  height: 120px;
-  padding: 10px;
-  border-radius: 0 3px 3px 0;
-  @include mobile {
-    min-height: 75px;
-    max-height: 75px;
+#msg-text-footer {
+  align-items: stretch;
+  display: flex;
+  justify-content: flex-end;
+  border: 1px solid $border;
+  width: 100%;
+}
+
+.msg-text-footer-item {
+  align-items: center;
+  display: flex;
+  justify-content: flex-end;
+  font-size: 14px;
+  padding: 5px 10px;
+  &:not(:last-child) {
+    border-right: 1px solid $border;
+  }
+  & > p {
+
+  }
+  & > .checkbox {
+    margin: 0 5px;
   }
 }
 
@@ -58,10 +73,6 @@
     min-height: 200px;
     max-height: 200px;
   }
-}
-
-#submit_wrapper {
-  padding: 10px;
 }
 
 #load-more {

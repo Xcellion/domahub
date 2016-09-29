@@ -32,7 +32,7 @@
 
 	<section class="section min-height">
 		<div class="container">
-			<div class="columns">
+			<div class="columns is-gapless">
 				<div class="column is-one-quarter">
 					<nav class="panel is-hidden-mobile">
 						<a class="panel-search">
@@ -58,7 +58,7 @@
 				</div>%>
 
 				<div class="column is-two-thirds">
-					<div class="box">
+					<div class="box chat-box">
 						<form action="/messages" method="post" id="messenger_form">
 							<input id="msg_receiver_input" class="input" placeholder="To: "name="msg_receiver" type="text" />
 
@@ -66,7 +66,23 @@
 
 							<div id="msg-text-wrapper">
 								<textarea id="msg_text_input" class="textarea to-reset" name="msg_text" placeholder="Press Enter to send"></textarea>
-								<input id="msg_submit" value="Send" class="button is-primary" type="submit" />
+								<div id="msg-text-footer">
+									<div class="msg-text-footer-item">
+										<a class="button is-small is-blank">
+											<span class="icon">
+												<i class="fa fa-smile-o"></i>
+											</span>
+											<span>Emoji</span>
+										</a>
+									</div>
+									<div class="msg-text-footer-item">
+										<p>
+											Press enter to send
+										</p>
+										<input type="checkbox" class="checkbox" />
+										<input id="msg_submit" value="SEND" class="button is-small is-accent" type="submit" />
+									</div>
+								</div>
 							</div>
 						</form>
 
