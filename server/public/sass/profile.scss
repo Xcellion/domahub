@@ -15,7 +15,7 @@
   color: $text;
   padding: 15px 8px;
   margin-bottom: 10px;
-  width: 200px;
+  width: 100%;
   &:focus,
   &:active {
     @include box-shadow(0, -2px, 0, 0, $primary, 0);
@@ -70,8 +70,8 @@
 
 .message_wrapper {
   width: 100%;
-  padding: 8px;
-  border-radius: 5px;
+  padding: 8px 8px 8px 0;
+  border-radius: 10px;
   word-wrap: break-word;
 }
 
