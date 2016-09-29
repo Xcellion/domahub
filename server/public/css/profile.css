@@ -54,6 +54,14 @@
 #submit_wrapper {
   padding: 10px; }
 
+#load-more {
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  padding: 8px;
+  margin: 0 auto;
+  width: 150px; }
+  #load-more:hover {
+    cursor: pointer; }
+
 .message_wrapper {
   width: 100%;
   padding: 8px;
