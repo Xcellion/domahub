@@ -25,12 +25,10 @@ module.exports = chat_model;
 //----------------------------------------------------------------------GETS----------------------------------------------------------
 
 //gets all chats with a specific person
-chat_model.prototype.getChats = function(account_id_1, account_id_2, callback){
+chat_model.prototype.getChats = function(account_id_1, account_id_2, length, callback){
 	console.log("Attempting to get all chat info for accounts #" + account_id_1 + " and #" + account_id_2 + "...");
 	query = "SELECT \
-				chat_history.timestamp, \
-				chat_history.message, \
-				chat_history.sender_account_id \
+				chat_history.* \
 			FROM chat_history \
 			JOIN accounts \
 				ON ( \
@@ -38,12 +36,14 @@ chat_model.prototype.getChats = function(account_id_1, account_id_2, callback){
 					OR \
 					(accounts.id = chat_history.sender_account_id AND chat_history.sender_account_id = ? AND chat_history.receiver_account_id = ?) \
 				) \
-			ORDER BY timestamp ASC"
+			ORDER BY timestamp DESC \
+			LIMIT ?, 20"
 	chat_query(query, "Failed to get all chat info for accounts #" + account_id_1 + " and #" + account_id_2 + "!", callback, [
 		account_id_1,
 		account_id_2,
 		account_id_2,
-		account_id_1
+		account_id_1,
+		length
 	]);
 }
 

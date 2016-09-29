@@ -1,4 +1,8 @@
-var can_submit = true;
+var inbox_global_obj = {
+    can_submit: true,
+    more_msgs: true,
+    current_target: false
+}
 var chat_panels = convo_list.slice();
 
 $(document).ready(function() {
@@ -31,9 +35,9 @@ $(document).ready(function() {
         changeConvo();
     })
 
-    //enter to submit
+    //enter to submit, shift-enter for new line
     $("#msg_text_input").keypress(function(e){
-        if (e.which == 13) {
+        if (e.which == 13 && !event.shiftKey){
             e.preventDefault();
             $("#messenger_form").submit();
         }
@@ -44,32 +48,26 @@ $(document).ready(function() {
         e.preventDefault();
         var submit_data = checkSubmitFormat();
 
-        if (can_submit && submit_data){
-            can_submit = false;
+        if (inbox_global_obj.can_submit && submit_data){
+            inbox_global_obj.can_submit = false;
             $.ajax({
     			type: "POST",
     			url: "/messages/new",
     			data: submit_data
     		}).done(function(data){
     			if (data.state == "success"){
-                    var existing = false;
-                    for (var x = 0; x < convo_list.length; x++){
-                        if (convo_list[x].username.toLowerCase() == submit_data.msg_receiver.toLowerCase()){
-                            existing = convo_list[x];
-                            break;
-                        }
-                    }
+                    existing = getConvoItem(submit_data.msg_receiver)
 
                     //if its an existing convo, change to it
                     if (existing && existing.username != $("#msg_receiver_input").val()){
-                        changeConvo(existing);
+                        changeConvo(submit_data.msg_receiver);
                     }
 
                     //append new message
                     $("#chat_wrapper").append(createConvoMsg({
                         message: submit_data.msg_text
                     }, false));
-                    can_submit = true;
+                    inbox_global_obj.can_submit = true;
                     $("#msg_text_input").val("");
                     $('#chat_wrapper').scrollTop($('#chat_wrapper')[0].scrollHeight);
     			}
@@ -117,6 +115,7 @@ function checkSubmitFormat(){
 //function to create all chat convos on the left
 function createPanel(chat_panels){
     $(".panel-list").empty();
+
     //side panel convo list
     for (var x = 0; x < chat_panels.length; x++){
         $(".panel-list").append(createPanelConvo(chat_panels[x]));
@@ -136,44 +135,119 @@ function createPanelConvo(convo_item){
 
     //to change the convo
     panel_block.click(function(e){
-        $.ajax({
-            type: "POST",
-            url: "/messages/" + convo_item.username
-        }).done(function(chat_item){
-            changeConvo(appendChatsToConvo(chat_item));
-        });
+        if (convo_item.username != inbox_global_obj.current_target){
+
+            //already have chats, so just change the view
+            if (convo_item.chats){
+                changeConvo(convo_item.username);
+            }
+
+            //clicking a new person without any chats for them
+            else {
+                getMsgs(convo_item.username, 0)
+            }
+        }
     })
 
     return panel_block.append(panel_icon.append(panel_i), name, panel_p);
 }
 
-//function to append chat msgs to convo list
-function appendChatsToConvo(chat_item){
+//--------------------------------------------------------------------------------FUNCTIONS
+
+//function to AJAX call for more msgs
+function getMsgs(username, length){
+    if (inbox_global_obj.more_msgs){
+        inbox_global_obj.more_msgs = false;
+        $.ajax({
+            type: "POST",
+            url: "/messages/" + username,
+            data: {
+                length: length
+            }
+        }).done(function(chat_item){
+            inbox_global_obj.more_msgs = true;
+            if (length == 0){
+                convo_item = appendChatsToConvoObj(chat_item)
+                changeConvo(username);
+            }
+            else {
+                addToConvo(chat_item.chats);
+                convo_item = appendChatsToConvoObj(chat_item)
+            }
+        });
+    }
+}
+
+//function to add chat msgs to convo object
+function appendChatsToConvoObj(chat_item){
     for (var x = 0; x < convo_list.length; x++){
         if (convo_list[x].username == chat_item.username){
-            convo_list[x].chats = chat_item.chats;
+            if (typeof convo_list[x].chats == "undefined"){
+                convo_list[x].chats = chat_item.chats;
+            }
+            else {
+                var temp_array = [];
+                temp_array.push.apply(temp_array, convo_list[x].chats);
+                temp_array.push.apply(temp_array, chat_item.chats);
+                convo_list[x].chats = temp_array;
+            }
+
             return convo_list[x];
         }
     }
 }
 
+//function to append chats to screen
+function appendChats(chats){
+    var prev_height = $('#chat_wrapper')[0].scrollHeight;
+
+    //create the chats
+    for (var x = 0; x < chats.length; x++){
+        $("#chat_wrapper").prepend(createConvoMsg(chats[x], true));
+    }
+
+    //load more messages button
+    if (chats.length % 20 == 0){
+        var load_more = $("<div id='load-more' class='load-more full-width has-text-centered message_wrapper'>Load More...</div>");
+        $("#chat_wrapper").prepend(load_more);
+        load_more.click(function(e){
+            var convo_item = getConvoItem(inbox_global_obj.current_target);
+            getMsgs(convo_item.username, convo_item.chats.length);
+        })
+    }
+
+    //scroll back to where we were before adding to the convo
+    var cur_height =  $('#chat_wrapper')[0].scrollHeight;
+    $('#chat_wrapper').scrollTop(cur_height - prev_height);
+}
+
 //function to change selected convo
-function changeConvo(convo_item){
-    $("#chat_wrapper").empty();
-    $("#msg_text_input").val("");
+function changeConvo(username){
+    var convo_item = getConvoItem(username);
 
     //changing to an existing conversation
     if (convo_item){
-        for (var x = 0; x < convo_item.chats.length; x++){
-            $("#chat_wrapper").append(createConvoMsg(convo_item.chats[x], true));
-        }
+        inbox_global_obj.current_target = username;
+        $("#chat_wrapper").empty();
+        $("#msg_text_input").val("");
+        appendChats(convo_item.chats);
         $("#msg_receiver_input").val(convo_item.username).addClass("is-disabled");
         $('#chat_wrapper').scrollTop($('#chat_wrapper')[0].scrollHeight);
     }
     //changing to a totally new convo (create new msg)
     else {
+        inbox_global_obj.current_target = false;
+        $("#chat_wrapper").empty();
+        $("#msg_text_input").val("");
         $("#msg_receiver_input").val("").removeClass("is-disabled");
     }
+}
+
+//function to add to current convo
+function addToConvo(chats){
+    $(".load-more").remove();
+    appendChats(chats);
+    inbox_global_obj.more_msgs = true;
 }
 
 //function to create a single msg from a chat convo
@@ -230,4 +304,16 @@ function formatTimestamp(latest_time){
     else {
         return latest_time.format("YYYY/MM/DD");
     }
+}
+
+//helper function to return the convo_list item with the given username
+function getConvoItem(username){
+    var temp_convo = false;
+    for (var x = 0; x < convo_list.length; x++){
+        if (convo_list[x].username.toLowerCase() == username.toLowerCase()){
+            temp_convo = convo_list[x];
+            break;
+        }
+    }
+    return temp_convo
 }
