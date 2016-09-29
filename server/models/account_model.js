@@ -95,21 +95,30 @@ account_model.prototype.getAccountRentals = function(account_id, callback){
 //gets all chats for an account
 account_model.prototype.getAccountChats = function(account_id, callback){
 	console.log("Attempting to get all chat info for account #" + account_id + "...");
+
 	query = "SELECT \
-				MAX(chat_history.timestamp) as timestamp, \
 				chat_history.message, \
-				chat_history.sender_account_id, \
-				accounts.username, \
-				accounts.email \
+				chat_history.seen, \
+				max_date.* \
 			FROM chat_history \
-			JOIN accounts \
-				ON ( \
-					(accounts.id = chat_history.sender_account_id AND chat_history.receiver_account_id = ?) \
-					OR \
-					(accounts.id = chat_history.receiver_account_id AND chat_history.sender_account_id = ?) \
+			INNER JOIN ( \
+				SELECT  \
+					 MAX(chat_history.id) as max_id, \
+					 MAX(chat_history.timestamp) as timestamp, \
+					 accounts.email, \
+					 accounts.username, \
+					 accounts.id \
+			 	FROM chat_history  \
+				JOIN accounts \
+				ON (  \
+					(accounts.id = chat_history.sender_account_id AND chat_history.receiver_account_id = ?)  \
+					OR  \
+					(accounts.id = chat_history.receiver_account_id AND chat_history.sender_account_id = ?)  \
 				) \
-			GROUP BY accounts.email \
-			ORDER BY timestamp DESC"
+				GROUP BY accounts.email \
+			) max_date \
+			ON chat_history.timestamp = max_date.timestamp AND chat_history.id = max_date.max_id \
+			ORDER BY chat_history.timestamp DESC"
 	account_query(query, "Failed to get all chat info for account #" + account_id + "!", callback, [account_id, account_id]);
 }
 
