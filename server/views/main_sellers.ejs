@@ -29,8 +29,10 @@
   <section class="section is-medium">
     <div class="container">
       <div class="columns">
-        <div class="column is-half">
-          <h2>How much could you make with DomaHub?</h2>
+        <div class="column">
+          <div class="content">
+            <h2>How much could you make with DomaHub?</h2>
+          </div>
           <nav class="level">
             <div class="level-left">
               <div class="level-item">
@@ -44,11 +46,11 @@
                 <p class="control">
                   <span class="select">
                     <select>
-                      <option>Hourly</option>
-                      <option>Daily</option>
-                      <option>Weekly</option>
-                      <option>Monthly</option>
-                      <option>Yearly</option>
+                      <option value="720">Hourly</option>
+                      <option value="30">Daily</option>
+                      <option value="4">Weekly</option>
+                      <option value="1">Monthly</option>
+                      <option value=".0833">Yearly</option>
                     </select>
                   </span>
                 </p>
@@ -59,11 +61,14 @@
                   <input class="input" type="number" placeholder="Enter a number"/>
                 </p>
               </div>
-            </div>
-
-            <!-- Right side -->
-            <div class="level-right">
-
+              <div class="level-item box box-accent has-text-centered">
+                <div class="content">
+                  <h2 class="is-white">&#36 0</h2>
+                  <p class="is-white-light">
+                    Monthly Average
+                  </p>
+                </div>
+              </div>
             </div>
           </nav>
         </div>
