@@ -132,8 +132,8 @@ function createPanelConvo(convo_item){
         var panel_icon = $("<span class='panel-icon'></span>");
             var panel_i = $("<i class='fa fa-user'></i>");
         var name = (convo_item.username.length > 20) ? convo_item.username.substr(0, 20) + "..." : convo_item.username;
-        var panel_p = $("<p class='is-pulled-right'>" + disp_time + "</p>");
-        var panel_msg = $("<div class='panel-msg'>" + disp_msg + "</div>");
+        var panel_p = $("<p class='is-pulled-right is-light'>" + disp_time + "</p>");
+        var panel_msg = $("<div class='panel-msg is-light'>" + disp_msg + "</div>");
 
     //to change the convo
     panel_block.click(function(e){
@@ -204,8 +204,28 @@ function appendChats(chats){
     var prev_height = $('#chat_wrapper')[0].scrollHeight;
 
     //create the chats
+    var prev_chat;
     for (var x = 0; x < chats.length; x++){
-        $("#chat_wrapper").prepend(createConvoMsg(chats[x], true));
+        var temp_chat = createConvoMsg(chats[x], true);
+        if (!prev_chat){
+            prev_chat = temp_chat;
+            temp_chat.addClass("message_bottom");
+        }
+        //same person talking still
+        else {
+            if (x == chats.length - 1){
+                temp_chat.addClass("message_bottom");
+            }
+            else if ((prev_chat.hasClass("sender_me") && temp_chat.hasClass("sender_me")) || (prev_chat.hasClass("sender_them") && temp_chat.hasClass("sender_them"))){
+                temp_chat.addClass("message_middle");
+            }
+            else {
+                prev_chat.removeClass("message_middle").addClass("message_bottom");
+                temp_chat.addClass("message_top");
+            }
+            prev_chat = temp_chat;
+        }
+        $("#chat_wrapper").prepend(temp_chat);
     }
 
     //load more messages button
