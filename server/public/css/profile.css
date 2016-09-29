@@ -1,37 +1,68 @@
 #messenger_form {
   width: 100%;
-  max-height: 650px;
-  overflow-y: scroll; }
+  max-height: 650px; }
 
 #msg_receiver_input {
-  -webkit-box-shadow: 0 2px 3px rgba(17, 17, 17, 0.1) 0;
-  -moz-box-shadow: 0 2px 3px rgba(17, 17, 17, 0.1) 0;
-  box-shadow: 0 2px 3px rgba(17, 17, 17, 0.1) 0;
-  border-radius: 0;
+  -webkit-box-shadow: inset 0 -2px 0 0 rgba(0, 0, 0, 0.12);
+  -moz-box-shadow: inset 0 -2px 0 0 rgba(0, 0, 0, 0.12);
+  box-shadow: inset 0 -2px 0 0 rgba(0, 0, 0, 0.12);
   border: none;
-  color: #3cbc8d;
+  border-radius: 0;
+  color: rgba(0, 0, 0, 0.87);
   padding: 15px 8px;
   margin-bottom: 10px;
-  font-size: 1.2rem;
-  width: 100%; }
+  width: 200px; }
+  #msg_receiver_input:focus, #msg_receiver_input:active {
+    -webkit-box-shadow: inset 0 -2px 0 0 #3cbc8d;
+    -moz-box-shadow: inset 0 -2px 0 0 #3cbc8d;
+    box-shadow: inset 0 -2px 0 0 #3cbc8d; }
+
+#msg-text-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 10px; }
 
 #msg_text_input {
-  margin-top: 10px; }
+  min-width: auto;
+  max-width: auto;
+  border-radius: 3px 0 0 3px; }
+  @media screen and (max-width: 768px) {
+    #msg_text_input {
+      min-height: 75px;
+      max-height: 75px; } }
 
-.chat_wrapper {
+#msg_submit {
+  height: 120px;
+  padding: 10px;
+  border-radius: 0 3px 3px 0; }
+  @media screen and (max-width: 768px) {
+    #msg_submit {
+      min-height: 75px;
+      max-height: 75px; } }
+
+#chat_wrapper {
+  overflow-y: scroll;
+  min-height: 400px;
+  max-height: 400px;
   width: 100%; }
+  @media screen and (max-width: 768px) {
+    #chat_wrapper {
+      min-height: 200px;
+      max-height: 200px; } }
+
+#submit_wrapper {
+  padding: 10px; }
 
 .message_wrapper {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: flex-start;
+  width: 100%;
   padding: 8px;
   border-radius: 5px;
   word-wrap: break-word; }
 
 .chat_message {
-  max-width: 350px;
+  display: inline-block;
+  max-width: 75%;
   padding: 10px;
   border-radius: 5px; }
   @media screen and (max-width: 768px) {
@@ -42,12 +73,17 @@
   background-color: #e0e0e0;
   color: rgba(0, 0, 0, 0.87); }
 
-.sender_me > .chat_message {
-  background-color: #3cbc8d;
-  color: white; }
+.sender_me {
+  text-align: right; }
+  .sender_me > .chat_message {
+    background-color: #3cbc8d;
+    color: white; }
 
 .chat_timestamp {
-  color: #9e9e9e; }
+  color: #9e9e9e;
+  display: inline-block;
+  padding: 8px;
+  vertical-align: bottom; }
 
 .account-form select {
   margin-right: 5px; }

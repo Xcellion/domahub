@@ -34,10 +34,10 @@
 		<div class="container">
 			<div class="columns">
 				<div class="column is-one-quarter">
-					<nav class="panel">
+					<nav class="panel is-hidden-mobile">
 						<a class="panel-block is-active">
 							<p class="control has-icon has-icon-right">
-								<input id="search-user" class="input" type="text" placeholder="Search messages" />
+								<input id="search-user" class="input" type="text" placeholder="Search contacts" />
 								<i class="fa fa-times is-hidden"></i>
 							</p>
 						</a>
@@ -46,8 +46,8 @@
 						</div>
 					</nav>
 
-					<div class="container bottom-margin-25">
-						<a id="new-message" class="button is-accent is-medium is-fullwidth">Send a message</a>
+					<div class="container bottom-margin-25 is-hidden-mobile">
+						<a id="new-message" class="button is-accent is-medium is-fullwidth">Send a new message</a>
 					</div>
 
 				</div>
@@ -57,7 +57,7 @@
 					</div>
 				</div>%>
 
-				<div class="column is-three-quarter">
+				<div class="column is-three-quarters">
 					<div class="box">
 						<form action="/messages" method="post" id="messenger_form">
 							<input id="msg_receiver_input" class="input" placeholder="To: "name="msg_receiver" type="text" />
@@ -66,7 +66,7 @@
 
 							<div id="msg-text-wrapper">
 								<textarea id="msg_text_input" class="textarea to-reset" name="msg_text" placeholder="Press ENTER to send"></textarea>
-								<input id="msg_submit" value="Submit" class="button" type="submit" />
+								<input id="msg_submit" value="Submit" class="button is-primary" type="submit" />
 							</div>
 						</form>
 
