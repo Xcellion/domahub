@@ -126,12 +126,14 @@ function createPanel(chat_panels){
 function createPanelConvo(convo_item){
     var latest_time = moment(new Date(convo_item.timestamp + "Z"));
     disp_time = formatTimestamp(latest_time);
+    disp_msg = (convo_item.message.length > 30) ? convo_item.message.substr(0,30) + "..." : convo_item.message;
 
     var panel_block = $("<a class='panel-block'></a>");
         var panel_icon = $("<span class='panel-icon'></span>");
             var panel_i = $("<i class='fa fa-user'></i>");
         var name = (convo_item.username.length > 20) ? convo_item.username.substr(0, 20) + "..." : convo_item.username;
         var panel_p = $("<p class='is-pulled-right'>" + disp_time + "</p>");
+        var panel_msg = $("<div class='panel-msg'>" + disp_msg + "</div>");
 
     //to change the convo
     panel_block.click(function(e){
@@ -149,7 +151,7 @@ function createPanelConvo(convo_item){
         }
     })
 
-    return panel_block.append(panel_icon.append(panel_i), name, panel_p);
+    return panel_block.append(panel_icon.append(panel_i), name, panel_p, panel_msg);
 }
 
 //--------------------------------------------------------------------------------FUNCTIONS
@@ -208,9 +210,10 @@ function appendChats(chats){
 
     //load more messages button
     if (chats.length % 20 == 0){
-        var load_more = $("<div id='load-more' class='load-more full-width has-text-centered message_wrapper'>Load More...</div>");
+        var load_more = $("<a id='load-more' class='button load-more'>Load More...</a>");
         $("#chat_wrapper").prepend(load_more);
         load_more.click(function(e){
+            $(this).addClass('is-loading');
             var convo_item = getConvoItem(inbox_global_obj.current_target);
             getMsgs(convo_item.username, convo_item.chats.length);
         })
@@ -309,10 +312,12 @@ function formatTimestamp(latest_time){
 //helper function to return the convo_list item with the given username
 function getConvoItem(username){
     var temp_convo = false;
-    for (var x = 0; x < convo_list.length; x++){
-        if (convo_list[x].username.toLowerCase() == username.toLowerCase()){
-            temp_convo = convo_list[x];
-            break;
+    if (username){
+        for (var x = 0; x < convo_list.length; x++){
+            if (convo_list[x].username.toLowerCase() == username.toLowerCase()){
+                temp_convo = convo_list[x];
+                break;
+            }
         }
     }
     return temp_convo
