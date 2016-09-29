@@ -28,9 +28,9 @@ if (env == "dev"){
 	//express session in memory
 	app.use(session({
 		secret: 'domahub_market',
-		cookie: {
-			maxAge: 1800000 //30 minutes
-		},
+		// cookie: {
+		// 	maxAge: 1800000 //30 minutes
+		// },
 		saveUninitialized: false,
 		resave: true
 	}));
