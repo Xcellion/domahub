@@ -45,20 +45,22 @@
   line-height: 16px
   padding: 10px
 
+.panel-msg
+  margin-top: 5px
+
 .panel-block
   display: block
   line-height: 16px
   padding: 10px
-  &:hover
-    background-color: $primary
+  &:hover,
   &:active
-    background-color: $primary
+    background-color: $primary-lighter
   &:not(:last-child)
     border-bottom: 1px solid $border
 
 .panel
   border: 1px solid $border
-  border-radius: $radius-large
-  box-shadow: 0 2px 2px 0 rgba(0,0,0,.14),0 3px 1px -2px rgba(0,0,0,.2),0 1px 5px 0 rgba(0,0,0,.12)
+  border-right: none
+  border-radius: $radius-large 0 0 $radius-large
   &:not(:last-child)
     margin-bottom: 20px

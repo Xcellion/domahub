@@ -1,8 +1,8 @@
 =button-small
   border-radius: $radius-small
-  font-size: 11px
+  font-size: 14px
   height: 24px
-  line-height: 16px
+  line-height: 13px
   padding-left: 6px
   padding-right: 6px
 =button-medium
@@ -79,15 +79,14 @@
           background-color: $color
           border-color: $color
           color: $color-invert
-  &.is-link
+  &.is-blank
     background-color: transparent
     border-color: transparent
+    +box-shadow(0,0,0,$black,0)
     color: $text
-    text-decoration: underline
     &:hover,
     &:focus
       background-color: $border
-      color: $text-strong
   // Sizes
   &.is-small
     +button-small

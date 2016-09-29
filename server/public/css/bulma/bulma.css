@@ -550,6 +550,12 @@ table {
   box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
   display: block;
   padding: 20px; }
+  .box.chat-box {
+    -webkit-box-shadow: 0 0 0 0 black;
+    -moz-box-shadow: 0 0 0 0 black;
+    box-shadow: 0 0 0 0 black;
+    border: 1px solid rgba(0, 0, 0, 0.12);
+    border-radius: 0 5px 5px 0; }
   .box.box-accent {
     background-color: #ff5722;
     color: white; }
@@ -887,19 +893,20 @@ a.box {
         background-color: #f44336;
         border-color: #f44336;
         color: white; }
-  .button.is-link {
+  .button.is-blank {
     background-color: transparent;
     border-color: transparent;
-    color: rgba(0, 0, 0, 0.87);
-    text-decoration: underline; }
-    .button.is-link:hover, .button.is-link:focus {
-      background-color: rgba(0, 0, 0, 0.12);
-      color: black; }
+    -webkit-box-shadow: 0 0 0 0 black;
+    -moz-box-shadow: 0 0 0 0 black;
+    box-shadow: 0 0 0 0 black;
+    color: rgba(0, 0, 0, 0.87); }
+    .button.is-blank:hover, .button.is-blank:focus {
+      background-color: rgba(0, 0, 0, 0.12); }
   .button.is-small {
     border-radius: 2px;
-    font-size: 11px;
+    font-size: 14px;
     height: 24px;
-    line-height: 16px;
+    line-height: 13px;
     padding-left: 6px;
     padding-right: 6px; }
   .button.is-medium {
@@ -3450,21 +3457,22 @@ a.nav-item.is-tab {
   line-height: 16px;
   padding: 10px; }
 
+.panel-msg {
+  margin-top: 5px; }
+
 .panel-block {
   display: block;
   line-height: 16px;
   padding: 10px; }
-  .panel-block:hover {
-    background-color: #3cbc8d; }
-  .panel-block:active {
-    background-color: #3cbc8d; }
+  .panel-block:hover, .panel-block:active {
+    background-color: #8ad6ba; }
   .panel-block:not(:last-child) {
     border-bottom: 1px solid rgba(0, 0, 0, 0.12); }
 
 .panel {
   border: 1px solid rgba(0, 0, 0, 0.12);
-  border-radius: 5px;
-  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12); }
+  border-right: none;
+  border-radius: 5px 0 0 5px; }
   .panel:not(:last-child) {
     margin-bottom: 20px; }
 
