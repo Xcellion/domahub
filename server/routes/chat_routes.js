@@ -103,12 +103,10 @@ function getConvo(req, res, next){
 			if (result.state=="error"){error.handler(req, res, result.info);}
 			else {
 				if (result.state == "success"){
-					setTimeout(function () {
-						res.json({
-							username: req.params.account,
-							chats: result.info
-						});
-					}, 5000)
+					res.json({
+						username: req.params.account,
+						chats: result.info
+					});
 				}
 				else {
 					res.redirect("/profile/inbox");

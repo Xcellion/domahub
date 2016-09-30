@@ -56,6 +56,8 @@ $(document).ready(function() {
         var submit_data = checkSubmitFormat();
 
         if (inbox_global_obj.can_submit && submit_data){
+            $("#msg_text_input").val("");   //empty the current typed msg
+            
             inbox_global_obj.can_submit = false;
             $.ajax({
     			type: "POST",
@@ -68,8 +70,6 @@ $(document).ready(function() {
                     newMsgChatBubble(submit_data.msg_text, submit_data.msg_receiver);
     			}
     			else if (data.state == "error"){
-                    $("#msg_receiver_input").val("");   //empty the current typed msg
-                    $("#msg_text_input").val("");   //empty the current typed msg
                     $("#inbox-message").text(data.message);
     			}
     			else {
