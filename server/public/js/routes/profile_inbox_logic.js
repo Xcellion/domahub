@@ -8,7 +8,9 @@ var chat_panels = convo_list.slice();
 $(document).ready(function() {
 
     createPanel(chat_panels);     //create the convo list panel on the left
-
+    if (convo_list){
+        changeConvo(convo_list[0].username);
+    }
     //for searching for a specific user
     $("#search-user").keyup(function(e){
         var needle = $(this).val();
@@ -32,7 +34,6 @@ $(document).ready(function() {
 
     //create a new message button
     $("#new-message").click(function(e){
-        $(".panel-block").removeClass('is-active');
         changeConvo();
     })
 
@@ -60,11 +61,9 @@ $(document).ready(function() {
                     //change convo to existing if it exists, otherwise change to blank
                     changeConvo(submit_data.msg_receiver);
 
-                    //append the new message
-                    $("#chat_wrapper").append(createConvoMsg({
-                        message: submit_data.msg_text
-                    }, false));
+                    newMsgChatBubble(submit_data.msg_text);
                     inbox_global_obj.can_submit = true;
+                    $('#chat_wrapper').scrollTop($('#chat_wrapper')[0].scrollHeight);   //scroll to bottom
     			}
     			else if (data.state == "error"){
                     console.log(data.message);
@@ -105,6 +104,16 @@ function checkSubmitFormat(){
     return false;
 }
 
+//function to correct the chat bubble borders
+function newMsgChatBubble(new_text){
+    var prev_latest = $($(".message_wrapper")[$(".message_wrapper").length - 1]);
+    var new_latest = createConvoMsg({
+        message: new_text
+    }, false)
+
+    $("#chat_wrapper").append(new_latest);
+}
+
 //--------------------------------------------------------------------------------DISPLAY
 
 //function to create all chat convos on the left
@@ -143,23 +152,30 @@ function createPanelConvo(convo_item){
 //function to change selected convo
 function changeConvo(username){
     if (!username){
-        $("#chat_wrapper").empty();
         $("#msg_text_input").val("");   //empty the current typed msg
-        $("#new-message-controls").addClass("is-hidden");       //hide new msg controls
-        inbox_global_obj.current_target = false;
-        $("#msg_receiver_input").val("").removeClass("is-disabled");
-    }
-    else if (username != inbox_global_obj.current_target){
+        $(".panel-block").removeClass('is-active');     //remove all selected left panel green
         $("#chat_wrapper").empty();
-        $("#msg_text_input").val("");   //empty the current typed msg
-        $("#new-message-controls").removeClass("is-hidden");    //show new msg controls
-        inbox_global_obj.current_target = username;
-        $("#msg_receiver_input").val(username).addClass("is-disabled");
 
-        $(".panel-block").removeClass('is-active');
+        $("#msg_receiver_input").focus();       //focus the username field
+        $("#new-message-controls").addClass("is-hidden");       //hide new msg controls
+        $("#msg_receiver_input").val("").removeClass("is-disabled");
+        inbox_global_obj.current_target = false;
+    }
+    else if (username.toLowerCase() != inbox_global_obj.current_target){
+        $("#msg_text_input").val("");   //empty the current typed msg
+        $(".panel-block").removeClass('is-active');     //remove all selected left panel green
+        $("#chat_wrapper").empty();
+
+        $("#msg_text_input").focus();       //focus the message textarea
+        $("#new-message-controls").removeClass("is-hidden");    //show new msg controls
+        $("#msg_receiver_input").val(username).addClass("is-disabled");
+        inbox_global_obj.current_target = username.toLowerCase();
         $("#panel-" + username.toLowerCase()).addClass("is-active");
+
         getConvoItem(username, function(convo_item){
+            $("#convo-loading").removeClass("is-hidden");
             appendChats(convo_item.chats);
+            $("#convo-loading").addClass("is-hidden");
         });
     }
 }
@@ -217,7 +233,8 @@ function appendChats(chats){
 
         //click handler for loading more messages when scrolled to the top
         load_more_button.click(function(e){
-            $(this).addClass('is-loading');
+            load_more_i.addClass("is-hidden");
+            load_more_button.addClass('is-loading');
             getConvoItem(inbox_global_obj.current_target, function(convo_item){
                 getMsgsAjax(convo_item, function(chat_item){
                     $("#load-more").remove();
@@ -255,10 +272,10 @@ function createConvoMsg(chat_item, bool){
         var temp_timestamp = $("<p class='chat_timestamp'>" + disp_time + "</p>");
 
     //hover over time to get the exact time
-    temp_timestamp.hover(function(e){
-        $(this).text(moment(latest_time).format("YYYY/MM/DD h:mma"));
+    temp_msg.hover(function(e){
+        temp_timestamp.text(moment(latest_time).format("YYYY/MM/DD h:mma"));
     }, function(e){
-        $(this).text(formatTimestamp(latest_time));
+        temp_timestamp.text(formatTimestamp(latest_time));
     })
 
     //change append order depending on who sent the msg
@@ -325,7 +342,6 @@ function getMsgsAjax(convo_item, cb){
         length = (convo_item.chats) ? convo_item.chats.length : 0;
 
         $.ajax({
-            async: false,
             type: "POST",
             url: "/messages/" + convo_item.username,
             data: {
