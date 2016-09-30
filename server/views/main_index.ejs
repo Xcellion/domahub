@@ -202,8 +202,11 @@
           Join the beta waiting list!
         </h2>
         <p class="control has-addons has-addons-centered">
-          <input class="input is-medium is-fullwidth" type="email" placeholder="Enter your email"/>
-          <a class="button no-shadow is-info is-medium">Submit</a>
+          <form id="beta-form" action="/beta" method="post">
+              <input id="beta-form-email" class="input is-medium is-fullwidth" type="email" name="betaemail" placeholder="Enter your email"/>
+              <a id="beta-form-submit" class="button no-shadow is-primary is-medium">Submit</a>
+          </form>
+          <p id="beta-form-success" class="is-hidden">Success!</p>
         </p>
       </div>
     </div>
@@ -213,5 +216,6 @@
     <script type="text/javascript" src="/js/lib/slick.min.js"></script>
     <script src="/js/routes/navbar_scroll.js" type="text/javascript"></script>
     <script src="/js/routes/main_index_logic.js" type="text/javascript"></script>
+    <script src="/js/routes/beta_signup_logic.js" type="text/javascript"></script>
   </body>
 </html>
