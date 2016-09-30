@@ -21,10 +21,15 @@
   margin-top: 40px
   // Responsiveness
   +mobile
-  display: flex
-  justify-content: center
-  &:not(:last-child)
-    margin-bottom: 10px
+    & > .button
+      flex-grow: 0.2
+      &:not(:last-child)
+        margin-bottom: 10px
+    display: flex
+    flex-direction: column
+    justify-content: center
+    align-items: center
+
   +tablet
     display: flex
     justify-content: center
