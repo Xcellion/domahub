@@ -68,9 +68,6 @@ else {
 	app.get("/", function(req, res){
 		res.render("under_construction");
 	})
-	app.get('*', function(req, res){
-		res.redirect('/');
-	});
 
 	//HTTP website on port 8080
 	serverHTTP(app).listen(8080, function(){
