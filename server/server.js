@@ -22,6 +22,11 @@ var auth = require('./lib/auth.js');
 /**************************************************
 ** SERVER INITIALIZATION
 **************************************************/
+
+//set the view engine
+app.set('view engine', 'ejs');
+app.set('views', __dirname + '/views');
+
 //which session store to use depending on DEV or PROD
 if (env == "dev"){
 	console.log("Development environment! Using memory for sessions store.");
@@ -61,7 +66,7 @@ else {
 	}));
 
 	prod_app.get("/", function(req, res){
-		res.send("Under construction!");
+		res.render("under_construction.ejs");
 	})
 	prod_app.get('*', function(req, res){
 		res.redirect('/');
@@ -81,9 +86,6 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
 	extended: true
 }));
-
-app.set('view engine', 'ejs');
-app.set('views', __dirname + '/views');
 
 //for routing of static files
 app.use(express.static(__dirname + '/public'));
