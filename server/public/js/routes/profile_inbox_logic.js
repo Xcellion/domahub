@@ -38,8 +38,10 @@ $(document).ready(function() {
     })
 
     //to remove the error message if it exists
-    $("#msg_receiver_input").focus(function(e){
-        $("#inbox-message").text("");
+    $("#msg_receiver_input").keypress(function(e){
+        if ($("#inbox-message").text() != ""){
+            $("#inbox-message").text("");
+        }
     })
 
     //enter to submit, shift-enter for new line
@@ -57,7 +59,7 @@ $(document).ready(function() {
 
         if (inbox_global_obj.can_submit && submit_data){
             $("#msg_text_input").val("");   //empty the current typed msg
-            
+
             inbox_global_obj.can_submit = false;
             $.ajax({
     			type: "POST",
@@ -71,6 +73,8 @@ $(document).ready(function() {
     			}
     			else if (data.state == "error"){
                     $("#inbox-message").text(data.message);
+                    $("#msg_receiver_input").val("").focus();
+                    inbox_global_obj.can_submit = true;
     			}
     			else {
     				console.log(data);
@@ -204,7 +208,6 @@ function changeConvo(username){
     if (!username){
         $("#msg_text_input").val("");   //empty the current typed msg
         $(".panel-block").removeClass('is-active');     //remove all selected left panel green
-        $("#convo-loading").removeClass("is-hidden");
         $("#chat_wrapper").find("*").not("#convo-loading").remove();
 
         $("#msg_receiver_input").focus();       //focus the username field
