@@ -65,15 +65,15 @@ else {
 		resave: true
 	}));
 
-	prod_app.get("/", function(req, res){
-		res.render("/views/under_construction.ejs");
+	app.get("/", function(req, res){
+		res.render("under_construction");
 	})
-	prod_app.get('*', function(req, res){
+	app.get('*', function(req, res){
 		res.redirect('/');
 	});
 
 	//HTTP website on port 8080
-	serverHTTP(prod_app).listen(8080, function(){
+	serverHTTP(app).listen(8080, function(){
 		console.log("HTTP website listening on port 8080");
 	});
 }
