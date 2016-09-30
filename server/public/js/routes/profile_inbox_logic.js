@@ -174,34 +174,47 @@ function appendChats(chats){
     var prev_chat;
     for (var x = 0; x < chats.length; x++){
         var temp_chat = createConvoMsg(chats[x], true);
-        if (!prev_chat){
-            prev_chat = temp_chat;
-            temp_chat.addClass("message_bottom");
-        }
-        //same person talking still
-        else {
-            if (x == chats.length - 1){
-                temp_chat.addClass("message_bottom");
-            }
-            else if ((prev_chat.hasClass("sender_me") && temp_chat.hasClass("sender_me")) || (prev_chat.hasClass("sender_them") && temp_chat.hasClass("sender_them"))){
-                temp_chat.addClass("message_middle");
+        if (prev_chat){
+            if ((prev_chat.hasClass("sender_me") && temp_chat.hasClass("sender_me")) || (prev_chat.hasClass("sender_them") && temp_chat.hasClass("sender_them"))){
+                if (prev_chat.hasClass("message_bottom") || prev_chat.hasClass("message_middle")){
+                    temp_chat.addClass("message_middle");
+                }
             }
             else {
-                prev_chat.removeClass("message_middle").addClass("message_bottom");
-                temp_chat.addClass("message_top");
+                if (!prev_chat.hasClass("message_bottom")){
+                    prev_chat.addClass("message_top");
+                }
+                else {
+                    prev_chat.removeClass("message_bottom")
+                }
+                prev_chat.removeClass("message_middle");
+                temp_chat.addClass("message_bottom");
             }
-            prev_chat = temp_chat;
         }
+        else {
+            temp_chat.addClass("message_bottom");
+        }
+        prev_chat = temp_chat;
         $("#chat_wrapper").prepend(temp_chat);
+    }
+    if (!prev_chat.hasClass("message_bottom")){
+        prev_chat.addClass("message_top").removeClass("message_middle");
+    }
+    else {
+        prev_chat.removeClass("message_bottom").removeClass("message_middle");
     }
 
     //load more messages button
     if (chats.length % 20 == 0){
-        var load_more = $("<a id='load-more' class='button no-shadow load-more'>Load More...</a>");
-        $("#chat_wrapper").prepend(load_more);
+        var load_more_button = $("<a id='load-more' class='button no-shadow load-more'></a>");
+            var load_more_icon = $("<span class='icon'></span>");
+                var load_more_i = $("<i class='fa fa-angle-up'></i>");
+            var load_more_text = $("<span>Load More...</span>");
+        load_more_button.append(load_more_icon.append(load_more_i), load_more_text);
+        $("#chat_wrapper").prepend(load_more_button);
 
         //click handler for loading more messages when scrolled to the top
-        load_more.click(function(e){
+        load_more_button.click(function(e){
             $(this).addClass('is-loading');
             getConvoItem(inbox_global_obj.current_target, function(convo_item){
                 getMsgsAjax(convo_item, function(chat_item){
