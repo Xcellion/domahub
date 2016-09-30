@@ -3467,7 +3467,8 @@ a.nav-item.is-tab {
   padding: 10px; }
 
 .panel-msg {
-  margin-top: 5px; }
+  margin-top: 5px;
+  padding-left: 18px; }
 
 .panel-block {
   display: block;
