@@ -105,7 +105,7 @@ function submitMessage(submit_data){
     }).done(function(data){
         inbox_global_obj.can_submit = true;
         var latest = $($(".message_wrapper")[$(".message_wrapper").length - 1]);
-        latest.find(".resend-icon").remove();
+        latest.find("#resend-icon").remove();
 
         if (data.state == "success"){
             latest.find(".chat_message").removeClass("is-disabled");

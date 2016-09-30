@@ -82,7 +82,7 @@ function createMessage(req, res, next){
 		else {
 			req.user.refresh_chat = true;
 			res.json({
-				state: "error"
+				state: "success"
 			})
 		}
 	})
