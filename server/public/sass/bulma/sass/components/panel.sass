@@ -1,10 +1,10 @@
 .panel-icon
   +fa(14px, 16px)
-  color: $text
+  color: $black-secondary
   float: left
   margin: 0 4px 0 -2px
   .fa
-    font-size: inherit
+    font-size: $size-5
     line-height: inherit
 
 .panel-heading
@@ -25,7 +25,7 @@
 
 .panel-tabs
   display: flex
-  font-size: $size-small
+  font-size: $size-normal
   padding: 5px 10px 0
   justify-content: center
   a
@@ -51,6 +51,7 @@
 
 .panel-msg
   margin-top: 5px
+  padding-left: 18px
 
 .panel-block
   display: block
@@ -58,9 +59,12 @@
   padding: 10px
   &.is-active
     background-color: $primary
+    color: $white-primary
+    & > p
+      color: $white-secondary
   &:hover,
   &:active
-    background-color: $primary-lighter
+    background-color: $border
   &:not(:last-child)
     border-bottom: 1px solid $border
 
