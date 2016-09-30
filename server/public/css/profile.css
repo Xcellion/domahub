@@ -110,12 +110,12 @@
   .sender_me > .chat_message {
     background-color: #3cbc8d;
     color: white; }
-    .sender_me > .chat_message.message_top > .chat_message {
-      border-radius: 10px 10px 0 10px; }
-    .sender_me > .chat_message.message_middle > .chat_message {
-      border-radius: 10px 0 0 10px; }
-    .sender_me > .chat_message.message_bottom > .chat_message {
-      border-radius: 10px 0 10px 10px; }
+  .sender_me.message_top > .chat_message {
+    border-radius: 10px 10px 0 10px; }
+  .sender_me.message_middle > .chat_message {
+    border-radius: 10px 0 0 10px; }
+  .sender_me.message_bottom > .chat_message {
+    border-radius: 10px 0 10px 10px; }
 
 .chat_timestamp {
   color: #9e9e9e;
