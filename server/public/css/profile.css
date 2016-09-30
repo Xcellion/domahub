@@ -55,6 +55,14 @@
   border-top: none;
   width: 100%; }
 
+#convo-loading {
+  padding: 35px;
+  position: relative;
+  margin: 150px auto 0 auto; }
+  @media screen and (max-width: 768px) {
+    #convo-loading {
+      margin: 100px auto 0 auto; } }
+
 .msg-text-footer-item {
   align-items: center;
   display: flex;
@@ -73,8 +81,8 @@
   width: 100%; }
   @media screen and (max-width: 768px) {
     #chat_wrapper {
-      min-height: 200px;
-      max-height: 200px; } }
+      min-height: 300px;
+      max-height: 300px; } }
 
 #load-more {
   margin-bottom: 10px; }

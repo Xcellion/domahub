@@ -66,6 +66,15 @@
   width: 100%;
 }
 
+#convo-loading {
+  padding: 35px;
+  position: relative;
+  margin: 150px auto 0 auto;
+  @include mobile {
+    margin: 100px auto 0 auto;
+  }
+}
+
 .msg-text-footer-item {
   align-items: center;
   display: flex;
@@ -89,8 +98,8 @@
   max-height: 400px;
   width: 100%;
   @include mobile {
-    min-height: 200px;
-    max-height: 200px;
+    min-height: 300px;
+    max-height: 300px;
   }
 }
 
