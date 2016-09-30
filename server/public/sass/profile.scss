@@ -144,20 +144,20 @@
   & > .chat_message {
     background-color: $primary;
     color: $white;
-    &.message_top {
-      & > .chat_message {
-        border-radius: 10px 10px 0 10px;
-      }
+  }
+  &.message_top {
+    & > .chat_message {
+      border-radius: 10px 10px 0 10px;
     }
-    &.message_middle {
-      & > .chat_message {
-        border-radius: 10px 0 0 10px;
-      }
+  }
+  &.message_middle {
+    & > .chat_message {
+      border-radius: 10px 0 0 10px;
     }
-    &.message_bottom {
-      & > .chat_message {
-        border-radius: 10px 0 10px 10px;
-      }
+  }
+  &.message_bottom {
+    & > .chat_message {
+      border-radius: 10px 0 10px 10px;
     }
   }
 }
