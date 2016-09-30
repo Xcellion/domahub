@@ -64,7 +64,8 @@
       color: $white-secondary
   &:hover,
   &:active
-    background-color: $border
+    &:not(.is-active)
+      background-color: $border
   &:not(:last-child)
     border-bottom: 1px solid $border
 
