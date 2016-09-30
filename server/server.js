@@ -66,7 +66,7 @@ else {
 	}));
 
 	prod_app.get("/", function(req, res){
-		res.render("under_construction.ejs");
+		res.render("/views/under_construction.ejs");
 	})
 	prod_app.get('*', function(req, res){
 		res.redirect('/');
