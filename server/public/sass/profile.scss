@@ -95,13 +95,12 @@
 }
 
 #load-more {
-  margin: 0 auto;
+  margin: 0 auto 10px auto;
 }
 
 .message_wrapper {
   width: 100%;
-  padding: 8px 8px 8px 0;
-  border-radius: 10px;
+  padding: 1px 1px 1px 0;
   word-wrap: break-word;
 }
 
@@ -109,7 +108,6 @@
   display: inline-block;
   max-width: 75%;
   padding: 10px;
-  border-radius: 5px;
   @include mobile {
     max-width: 150px;
   }
@@ -120,6 +118,24 @@
     background-color: $grey-light;
     color: $text;
   }
+  &.message_top {
+    & > .chat_message {
+      border-radius: 10px 10px 10px 0;
+    }
+  }
+  &.message_middle {
+    & > .chat_message {
+      border-radius: 0 10px 10px 0;
+    }
+  }
+  &.message_bottom {
+    & > .chat_message {
+      border-radius: 0 10px 10px 10px;
+    }
+  }
+}
+
+.message_middle {
 
 }
 
@@ -128,6 +144,21 @@
   & > .chat_message {
     background-color: $primary;
     color: $white;
+    &.message_top {
+      & > .chat_message {
+        border-radius: 10px 10px 0 10px;
+      }
+    }
+    &.message_middle {
+      & > .chat_message {
+        border-radius: 10px 0 0 10px;
+      }
+    }
+    &.message_bottom {
+      & > .chat_message {
+        border-radius: 10px 0 10px 10px;
+      }
+    }
   }
 }
 
