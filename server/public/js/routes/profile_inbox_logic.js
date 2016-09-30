@@ -61,25 +61,9 @@ $(document).ready(function() {
             $("#msg_text_input").val("");   //empty the current typed msg
 
             inbox_global_obj.can_submit = false;
-            $.ajax({
-    			type: "POST",
-    			url: "/messages/new",
-    			data: submit_data
-    		}).done(function(data){
-    			if (data.state == "success"){
-                    //change convo to existing if it exists, otherwise change to blank
-                    changeConvo(submit_data.msg_receiver);
-                    newMsgChatBubble(submit_data.msg_text, submit_data.msg_receiver);
-    			}
-    			else if (data.state == "error"){
-                    $("#inbox-message").text(data.message);
-                    $("#msg_receiver_input").val("").focus();
-                    inbox_global_obj.can_submit = true;
-    			}
-    			else {
-    				console.log(data);
-    			}
-    		});
+            changeConvo(submit_data.msg_receiver);
+            newMsgChatBubble(submit_data.msg_text, submit_data.msg_receiver);
+            submitMessage(submit_data);
         }
         else {
             //please wait
@@ -110,6 +94,45 @@ function checkSubmitFormat(){
     }
 
     return false;
+}
+
+//AJAX to submit new message to server
+function submitMessage(submit_data){
+    $.ajax({
+        type: "POST",
+        url: "/messages/new",
+        data: submit_data
+    }).done(function(data){
+        inbox_global_obj.can_submit = true;
+        var latest = $($(".message_wrapper")[$(".message_wrapper").length - 1]);
+        latest.find(".resend-icon").remove();
+
+        if (data.state == "success"){
+            latest.find(".chat_message").removeClass("is-disabled");
+        }
+        //if errored show the resend button
+        else if (data.state == "error"){
+            latest.find(".chat_message").addClass("is-disabled");
+            var resend_icon = $("<i class='resend-icon fa fa-repeat'></i>");
+
+            resend_icon.click(function(e){
+                submitMessage({
+                    msg_receiver: submit_data.msg_receiver,
+                    msg_text: latest.find(".chat_message").text()
+                });
+            })
+
+            latest.prepend(resend_icon);
+
+            if (data.message){
+                $("#inbox-message").text(data.message);
+                $("#msg_receiver_input").val("").focus();
+            }
+        }
+        else {
+            console.log(data);
+        }
+    });
 }
 
 //get the chat_panels item of the current msg target
