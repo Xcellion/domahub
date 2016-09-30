@@ -640,7 +640,7 @@ a.box {
     margin-left: 4px;
     margin-right: -2px; }
   .button:hover, .button:focus, .button.is-active {
-    color: rgba(0, 0, 0, 0.87); }
+    border-color: rgba(0, 0, 0, 0.87); }
   .button:active {
     box-shadow: 0 4px 5px 0 rgba(0, 0, 0, 0.14), 0 1px 10px 0 rgba(0, 0, 0, 0.12), 0 2px 4px -1px rgba(0, 0, 0, 0.2); }
   .button.is-white {
@@ -906,8 +906,6 @@ a.box {
     -webkit-box-shadow: 0 0 0 0 black;
     -moz-box-shadow: 0 0 0 0 black;
     box-shadow: 0 0 0 0 black; }
-    .button.no-shadow:hover, .button.no-shadow:focus, .button.no-shadow.is-active {
-      border-color: rgba(0, 0, 0, 0.87); }
   .button.is-small {
     border-radius: 2px;
     font-size: 14px;
