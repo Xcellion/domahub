@@ -28,7 +28,7 @@ app.set('view engine', 'ejs');
 app.set('views', __dirname + '/views');
 
 //which session store to use depending on DEV or PROD
-if (env != "dev"){
+if (env == "dev"){
 	console.log("Development environment! Using memory for sessions store.");
 	//express session in memory
 	app.use(session({
@@ -52,11 +52,11 @@ else {
 
 	//redis store session
 	prod_app.use(session({
-		// store: new redisStore({
-		// 	host:'127.0.0.1',
-		// 	port: 6379,
-		// 	pass:"wonmin33"
-		// }),
+		store: new redisStore({
+			host:'127.0.0.1',
+			port: 6379,
+			pass:"wonmin33"
+		}),
 		cookie: {
 			maxAge: 1800000 //30 minutes
 		},
