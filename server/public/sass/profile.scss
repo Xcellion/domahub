@@ -9,9 +9,11 @@
 }
 
 .chat-box-header {
+  @include box-shadow(0, -2px, 0, 0, $border, 0);
   align-items: stretch;
   display: flex;
   justify-content: space-between;
+  padding-bottom: 20px;
   @include mobile {
     flex-direction: column;
   }
@@ -28,14 +30,12 @@
 }
 
 #msg_receiver_input {
-  @include box-shadow(0, -2px, 0, 0, $border, 0);
   border: none;
   border-radius: 0;
   color: $text;
   padding: 15px 8px;
   width: 100%;
-  &:focus,
-  &:active {
+  &:focus {
     @include box-shadow(0, -2px, 0, 0, $primary, 0);
   }
 }
