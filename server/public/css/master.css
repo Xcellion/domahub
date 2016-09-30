@@ -159,45 +159,46 @@ textarea {
   font-size: 16px;
   font-size: 1rem; }
 
-h1.primary-header,
-h2.primary-header,
-h3.primary-header {
-  color: #3cbc8d; }
+h1,
+h2,
+h3 {
+  color: rgba(0, 0, 0, 0.87); }
+  h1.is-white,
+  h2.is-white,
+  h3.is-white {
+    color: white; }
+  h1.is-white-light,
+  h2.is-white-light,
+  h3.is-white-light {
+    color: rgba(255, 255, 255, 0.7); }
+  h1.is-light,
+  h2.is-light,
+  h3.is-light {
+    color: rgba(0, 0, 0, 0.54); }
+  h1.primary-header,
+  h2.primary-header,
+  h3.primary-header {
+    color: #3cbc8d; }
+  h1.accent-header,
+  h2.accent-header,
+  h3.accent-header {
+    color: #ff5722; }
 
 h1 {
-  color: rgba(0, 0, 0, 0.87);
   font-size: 40px;
   font-weight: bold; }
-  h1.is-light {
-    color: rgba(0, 0, 0, 0.54); }
-  h1.is-white {
-    color: white; }
 
 h2 {
-  color: rgba(0, 0, 0, 0.87);
   font-size: 24px;
   font-weight: 400; }
-  h2.is-white {
-    color: white; }
-  h2.is-white-light {
-    color: rgba(255, 255, 255, 0.7); }
-  h2.is-light {
-    color: rgba(0, 0, 0, 0.54); }
 
 h3 {
-  color: rgba(0, 0, 0, 0.87);
   font-size: 18px;
   font-weight: 400; }
 
 p {
   color: rgba(0, 0, 0, 0.87);
   font-weight: 400; }
-  p.is-light {
-    color: rgba(0, 0, 0, 0.54); }
-  p.is-white {
-    color: white; }
-  p.is-white-light {
-    color: rgba(255, 255, 255, 0.7); }
 
 h2 + p {
   margin-top: 10px; }
@@ -977,9 +978,8 @@ button {
   line-height: 1.4; }
   .content p:not(:last-child) {
     margin-bottom: 10px; }
-
-.content .is-accent {
-  color: #ff5722; }
+  .content p.is-accent {
+    color: #ff5722; }
 
 .content a {
   font-size: 18px; }
@@ -990,7 +990,12 @@ button {
 .content ul:not(:last-child) {
   margin-bottom: 1em; }
 
-.content .is-accent {
+.content h1.is-accent,
+.content h2.is-accent,
+.content h3.is-accent,
+.content h4.is-accent,
+.content h5.is-accent,
+.content h6.is-accent {
   color: #ff5722; }
 
 .content blockquote {
@@ -3645,11 +3650,17 @@ a.nav-item.is-tab {
       display: none; } }
 
 .hero-buttons {
-  margin-top: 40px;
-  display: flex;
-  justify-content: center; }
-  .hero-buttons:not(:last-child) {
-    margin-bottom: 10px; }
+  margin-top: 40px; }
+  @media screen and (max-width: 768px) {
+    .hero-buttons {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center; }
+      .hero-buttons > .button {
+        flex-grow: 0.2; }
+        .hero-buttons > .button:not(:last-child) {
+          margin-bottom: 10px; } }
   @media screen and (min-width: 769px) {
     .hero-buttons {
       display: flex;
