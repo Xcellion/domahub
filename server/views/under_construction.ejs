@@ -11,14 +11,27 @@
 
 <body>
 
-  <section style="height: 100vh" class="hero is-large is-primary clear-nav">
+  <section class="hero is-large clear-nav">
     <div class="hero-body">
+      <div class="container bottom-margin-25 has-text-centered">
+        <h1 class="logo-text title-index primary-logo" title="Home" href="/">DomaHub</h1>
+      </div>
       <div class="container has-text-centered">
-        <h1 class="title title-index is-normal">
-          Domahub
-        </h1>
+        <p class="title">
+          Join the beta waiting list!
+        </p>
+        <p class="control has-addons has-addons-centered">
+            <form id="beta-form" action="/beta" method="post">
+                <input id="beta-form-email" class="input is-medium is-fullwidth" type="email" name="betaemail" placeholder="Enter your email"/>
+                <a id="beta-form-submit" class="button no-shadow is-primary is-medium">Submit</a>
+            </form>
+            <p id="beta-form-success" class="is-hidden">Success!</p>
+        </p>
       </div>
     </div>
   </section>
+  
+  <script src="/js/routes/beta_signup_logic.js" type="text/javascript"></script>
+
   </body>
 </html>
