@@ -550,11 +550,12 @@ table {
   box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
   display: block;
   padding: 20px; }
-  .box.chat-box {
+  .box.no-shadow {
     -webkit-box-shadow: 0 0 0 0 black;
     -moz-box-shadow: 0 0 0 0 black;
     box-shadow: 0 0 0 0 black;
-    border: 1px solid rgba(0, 0, 0, 0.12);
+    border: 1px solid rgba(0, 0, 0, 0.12); }
+  .box.radius-right-only {
     border-radius: 0 5px 5px 0; }
   .box.box-accent {
     background-color: #ff5722;
@@ -2164,10 +2165,6 @@ input:-webkit-autofill {
   padding: 10px; }
 
 .card-footer-item {
-  -moz-transition: all 0s;
-  -o-transition: all 0s;
-  -webkit-transition: all 0s;
-  transition: all 0s;
   align-items: center;
   display: flex;
   flex-grow: 1;
