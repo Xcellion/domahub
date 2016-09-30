@@ -62,11 +62,11 @@
 						<form action="/messages" method="post" id="messenger_form">
 							<div class="chat-box-header bottom-margin-25">
 								<div class="chat-box-header-item">
-									<input id="msg_receiver_input" class="input" placeholder="To: "name="msg_receiver" type="text" />
+									<input id="msg_receiver_input" class="input" placeholder="New Message To: "name="msg_receiver" type="text" />
 								</div>
 								<div class="chat-box-header-item">
-									<p class="control has-addons">
-									  <a class="button is-small no-shadow">
+									<p id="new-message-controls" class="is-hidden control has-addons">
+									  <a id="new-message" class="button is-small no-shadow">
 									    <span>&#43 New Message</span>
 									  </a>
 									  <a class="button is-small no-shadow">
@@ -102,7 +102,7 @@
 										<p>
 											Press enter to send
 										</p>
-										<input type="checkbox" class="checkbox" />
+										<input id="enter-checkbox" type="checkbox" checked class="checkbox" />
 										<input id="msg_submit" value="SEND" class="button is-small is-accent no-shadow" type="submit" />
 									</div>
 								</div>
