@@ -113,7 +113,7 @@ function submitMessage(submit_data){
         //if errored show the resend button
         else if (data.state == "error"){
             latest.find(".chat_message").addClass("is-disabled");
-            var resend_icon = $("<i class='resend-icon fa fa-repeat'></i>");
+            var resend_icon = $("<i id='resend-icon' class='fa fa-repeat'></i>");
 
             resend_icon.click(function(e){
                 submitMessage({
