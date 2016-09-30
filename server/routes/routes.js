@@ -3,5 +3,5 @@ module.exports = function(app, db, auth, error){
 	require('./auth_routes.js')(app, auth); 						// for authentication, account creation, log in, log out
 	require('./listing_routes.js')(app, db, auth, error); 			// for website listings
 	require('./profile_routes.js')(app, db, auth, error); 			// for individual user profiles
-	require('./msg_routes.js')(app, db, auth, error); 				// for messaging
+	require('./chat_routes.js')(app, db, auth, error); 				// for messaging
 }

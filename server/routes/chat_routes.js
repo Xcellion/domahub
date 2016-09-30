@@ -64,7 +64,10 @@ function getOtherId(req, res, next){
 					next();
 				}
 				else {
-					res.redirect("/profile/inbox");
+					res.json({
+						state: "error",
+						message: "No such account exists!"
+					})
 				}
 			}
 		});
@@ -77,6 +80,7 @@ function createMessage(req, res, next){
 	Chat.newChatMessage(req.message_item, function(result){
 		if (result.state=="error"){error.handler(req, res, result.info);}
 		else {
+			req.user.refresh_chat = true;
 			res.json({
 				state: "success"
 			})
