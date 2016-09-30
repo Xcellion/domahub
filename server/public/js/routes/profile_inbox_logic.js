@@ -150,8 +150,6 @@ function changeConvo(username){
         $("#msg_receiver_input").val("").removeClass("is-disabled");
     }
     else if (username != inbox_global_obj.current_target){
-        username = username.toLowerCase();
-
         $("#chat_wrapper").empty();
         $("#msg_text_input").val("");   //empty the current typed msg
         $("#new-message-controls").removeClass("is-hidden");    //show new msg controls
@@ -159,7 +157,7 @@ function changeConvo(username){
         $("#msg_receiver_input").val(username).addClass("is-disabled");
 
         $(".panel-block").removeClass('is-active');
-        $("#panel-" + username).addClass("is-active");
+        $("#panel-" + username.toLowerCase()).addClass("is-active");
         getConvoItem(username, function(convo_item){
             appendChats(convo_item.chats);
         });
@@ -171,13 +169,16 @@ function appendChats(chats){
     var prev_height = $('#chat_wrapper')[0].scrollHeight;
 
     //create the chats
-    var prev_chat;
+    var prev_chat = $($(".message_wrapper")[0]);
     for (var x = 0; x < chats.length; x++){
         var temp_chat = createConvoMsg(chats[x], true);
         if (prev_chat){
             if ((prev_chat.hasClass("sender_me") && temp_chat.hasClass("sender_me")) || (prev_chat.hasClass("sender_them") && temp_chat.hasClass("sender_them"))){
                 if (prev_chat.hasClass("message_bottom") || prev_chat.hasClass("message_middle")){
                     temp_chat.addClass("message_middle");
+                }
+                else {
+                    prev_chat.removeClass("message_top").addClass("message_middle");
                 }
             }
             else {
@@ -206,19 +207,20 @@ function appendChats(chats){
 
     //load more messages button
     if (chats.length % 20 == 0){
-        var load_more_button = $("<a id='load-more' class='button no-shadow load-more'></a>");
-            var load_more_icon = $("<span class='icon'></span>");
-                var load_more_i = $("<i class='fa fa-angle-up'></i>");
-            var load_more_text = $("<span>Load More...</span>");
-        load_more_button.append(load_more_icon.append(load_more_i), load_more_text);
-        $("#chat_wrapper").prepend(load_more_button);
+        var load_more_div = $("<div id='load-more' class='has-text-centered'></div>")
+            var load_more_button = $("<a class='button no-shadow load-more'></a>");
+                var load_more_icon = $("<span class='icon'></span>");
+                    var load_more_i = $("<i class='fa fa-angle-up'></i>");
+                var load_more_text = $("<span>Load More...</span>");
+        load_more_div.append(load_more_button.append(load_more_icon.append(load_more_i), load_more_text));
+        $("#chat_wrapper").prepend(load_more_div);
 
         //click handler for loading more messages when scrolled to the top
         load_more_button.click(function(e){
             $(this).addClass('is-loading');
             getConvoItem(inbox_global_obj.current_target, function(convo_item){
                 getMsgsAjax(convo_item, function(chat_item){
-                    $(".load-more").remove();
+                    $("#load-more").remove();
                     appendChats(chat_item.chats);
                 });
             });
@@ -251,6 +253,13 @@ function createConvoMsg(chat_item, bool){
         var temp_msg = $("<p class='chat_message'></p>");
             temp_msg.html(disp_message);
         var temp_timestamp = $("<p class='chat_timestamp'>" + disp_time + "</p>");
+
+    //hover over time to get the exact time
+    temp_timestamp.hover(function(e){
+        $(this).text(moment(latest_time).format("YYYY/MM/DD h:mma"));
+    }, function(e){
+        $(this).text(formatTimestamp(latest_time));
+    })
 
     //change append order depending on who sent the msg
     if (send_or_not == "sender_me"){
