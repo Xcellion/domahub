@@ -34,13 +34,19 @@ if (env == "dev"){
 		saveUninitialized: false,
 		resave: true
 	}));
+
+	//HTTP website on port 8080
+	serverHTTP(app).listen(8080, function(){
+		console.log("HTTP website listening on port 8080");
+	});
 }
 else {
 	console.log("Production environment! Using redis for sessions store.");
 	var redisStore = require('connect-redis')(session);
+	prod_app = express(),
 
 	//redis store session
-	app.use(session({
+	prod_app.use(session({
 		store: new redisStore({
 			host:'127.0.0.1',
 			port: 6379,
@@ -53,6 +59,18 @@ else {
 		saveUninitialized: false,
 		resave: true
 	}));
+
+	prod_app.get("/", function(req, res){
+		res.send("Under construction!");
+	})
+	prod_app.get('*', function(req, res){
+		res.redirect('/');
+	});
+
+	//HTTP website on port 8080
+	serverHTTP(prod_app).listen(8080, function(){
+		console.log("HTTP website listening on port 8080");
+	});
 }
 
 // API for all domains listed on domahub
@@ -85,9 +103,4 @@ app.get('*', function(req, res){
 	referer = req.header("Referer") || "someone";
 	console.log("404! Unable to find " + req.originalUrl + ", requested by " + referer);
 	res.redirect('/');
-});
-
-//HTTP website on port 8080
-serverHTTP(app).listen(8080, function(){
-	console.log("HTTP website listening on port 8080");
 });
