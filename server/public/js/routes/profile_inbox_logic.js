@@ -204,7 +204,8 @@ function changeConvo(username){
     if (!username){
         $("#msg_text_input").val("");   //empty the current typed msg
         $(".panel-block").removeClass('is-active');     //remove all selected left panel green
-        $("#chat_wrapper").empty();
+        $("#convo-loading").removeClass("is-hidden");
+        $("#chat_wrapper").find("*").not("#convo-loading").remove();
 
         $("#msg_receiver_input").focus();       //focus the username field
         $("#new-message-controls").addClass("is-hidden");       //hide new msg controls
@@ -214,7 +215,8 @@ function changeConvo(username){
     else if (username.toLowerCase() != inbox_global_obj.current_target){
         $("#msg_text_input").val("");   //empty the current typed msg
         $(".panel-block").removeClass('is-active');     //remove all selected left panel green
-        $("#chat_wrapper").empty();
+        $("#convo-loading").removeClass("is-hidden");
+        $("#chat_wrapper").find("*").not("#convo-loading").remove();
 
         $("#msg_text_input").focus();       //focus the message textarea
         $("#new-message-controls").removeClass("is-hidden");    //show new msg controls
@@ -223,7 +225,6 @@ function changeConvo(username){
         $("#panel-" + username.toLowerCase()).addClass("is-active");
 
         getConvoItem(username, function(convo_item){
-            $("#convo-loading").removeClass("is-hidden");
             appendChats(convo_item.chats);
             $("#convo-loading").addClass("is-hidden");
         });
