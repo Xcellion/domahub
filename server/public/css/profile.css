@@ -87,6 +87,12 @@
 #load-more {
   margin-bottom: 10px; }
 
+#resend-icon {
+  color: #f44336;
+  vertical-align: middle; }
+  #resend-icon:hover {
+    cursor: pointer; }
+
 .message_wrapper {
   width: 100%;
   padding: 1px 1px 1px 0;
@@ -104,6 +110,8 @@
 .sender_them > .chat_message {
   background-color: #e0e0e0;
   color: rgba(0, 0, 0, 0.87); }
+  .sender_them > .chat_message.is-disabled {
+    background-color: #f5f5f5; }
 
 .sender_them.message_top > .chat_message {
   border-radius: 10px 10px 10px 0; }
@@ -119,6 +127,8 @@
   .sender_me > .chat_message {
     background-color: #3cbc8d;
     color: white; }
+    .sender_me > .chat_message.is-disabled {
+      background-color: #8ad6ba; }
   .sender_me.message_top > .chat_message {
     border-radius: 10px 10px 0 10px; }
   .sender_me.message_middle > .chat_message {

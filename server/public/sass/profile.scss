@@ -107,6 +107,14 @@
   margin-bottom: 10px;
 }
 
+#resend-icon {
+  color: $danger;
+  vertical-align: middle;
+  &:hover {
+    cursor: pointer;
+  }
+}
+
 .message_wrapper {
   width: 100%;
   padding: 1px 1px 1px 0;
@@ -127,6 +135,9 @@
   & > .chat_message {
     background-color: $grey-light;
     color: $text;
+    &.is-disabled {
+      background-color: $grey-lighter;
+    }
   }
   &.message_top {
     & > .chat_message {
@@ -150,6 +161,9 @@
   & > .chat_message {
     background-color: $primary;
     color: $white;
+    &.is-disabled {
+      background-color: $primary-lighter;
+    }
   }
   &.message_top {
     & > .chat_message {
