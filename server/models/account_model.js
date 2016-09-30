@@ -99,7 +99,10 @@ account_model.prototype.getAccountChats = function(account_id, callback){
 	query = "SELECT \
 				chat_history.message, \
 				chat_history.seen, \
-				max_date.* \
+				max_date.timestamp, \
+				max_date.email, \
+				max_date.username, \
+				max_date.id \
 			FROM chat_history \
 			INNER JOIN ( \
 				SELECT  \

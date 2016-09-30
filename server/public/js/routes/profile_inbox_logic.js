@@ -37,6 +37,11 @@ $(document).ready(function() {
         changeConvo();
     })
 
+    //to remove the error message if it exists
+    $("#msg_receiver_input").focus(function(e){
+        $("#inbox-message").text("");
+    })
+
     //enter to submit, shift-enter for new line
     $("#msg_text_input").keypress(function(e){
         if (e.which == 13 && !event.shiftKey && $("#enter-checkbox")[0].checked){
@@ -60,13 +65,12 @@ $(document).ready(function() {
     			if (data.state == "success"){
                     //change convo to existing if it exists, otherwise change to blank
                     changeConvo(submit_data.msg_receiver);
-
-                    newMsgChatBubble(submit_data.msg_text);
-                    inbox_global_obj.can_submit = true;
-                    $('#chat_wrapper').scrollTop($('#chat_wrapper')[0].scrollHeight);   //scroll to bottom
+                    newMsgChatBubble(submit_data.msg_text, submit_data.msg_receiver);
     			}
     			else if (data.state == "error"){
-                    console.log(data.message);
+                    $("#msg_receiver_input").val("");   //empty the current typed msg
+                    $("#msg_text_input").val("");   //empty the current typed msg
+                    $("#inbox-message").text(data.message);
     			}
     			else {
     				console.log(data);
@@ -104,14 +108,55 @@ function checkSubmitFormat(){
     return false;
 }
 
-//function to correct the chat bubble borders
-function newMsgChatBubble(new_text){
+//get the chat_panels item of the current msg target
+function setChatPanel(username, new_text){
+    for (var x = 0; x < chat_panels.length; x++){
+        if (chat_panels[x].username.toLowerCase() == username.toLowerCase()){
+            chat_panels[x].message = new_text;
+            chat_panels[x].timestamp = moment(new Date()).format("YYYY-MM-DD, HH:mm:ss");;
+            var readd = chat_panels.splice(x, 1);
+            break;
+        }
+    }
+    var temp_array = [];
+    temp_array.push.apply(temp_array, readd);
+    temp_array.push.apply(temp_array, chat_panels);
+    chat_panels = temp_array;
+    createPanel(chat_panels);
+}
+
+//function to append a new chat msg
+function newMsgChatBubble(new_text, username){
+    inbox_global_obj.can_submit = true;
+
     var prev_latest = $($(".message_wrapper")[$(".message_wrapper").length - 1]);
     var new_latest = createConvoMsg({
         message: new_text
     }, false)
 
+    if (prev_latest){
+        if ((prev_latest.hasClass("sender_me") && new_latest.hasClass("sender_me")) || (prev_latest.hasClass("sender_them") && new_latest.hasClass("sender_them"))){
+            if (prev_latest.hasClass("message_bottom") || prev_latest.hasClass("message_middle")){
+                new_latest.addClass("message_bottom");
+                prev_latest.removeClass("message_bottom").addClass("message_middle");
+            }
+            else {
+                prev_latest.addClass("message_top");
+                new_latest.addClass("message_bottom");
+            }
+        }
+        else {
+            if (prev_latest.hasClass("message_bottom") || prev_latest.hasClass("message_middle")){
+                prev_latest.removeClass("message_middle").addClass("message_bottom");
+            }
+        }
+    }
+
+    setChatPanel(username, new_text);
+
+    $("#msg_text_input").val("");   //empty the current typed msg
     $("#chat_wrapper").append(new_latest);
+    $('#chat_wrapper').scrollTop($('#chat_wrapper')[0].scrollHeight);   //scroll to bottom
 }
 
 //--------------------------------------------------------------------------------DISPLAY
@@ -134,6 +179,11 @@ function createPanelConvo(convo_item){
 
     var panel_block = $("<a class='panel-block'></a>");
     panel_block.attr("id", "panel-" + convo_item.username.toLowerCase());
+    if (inbox_global_obj.current_target){
+        if (inbox_global_obj.current_target.toLowerCase() == convo_item.username.toLowerCase()){
+            panel_block.addClass("is-active");
+        }
+    }
 
         var panel_icon = $("<span class='panel-icon'></span>");
             var panel_i = $("<i class='fa fa-user'></i>");
