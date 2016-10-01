@@ -199,6 +199,12 @@ h3 {
 p {
   color: rgba(0, 0, 0, 0.87);
   font-weight: 400; }
+  p.is-white {
+    color: white; }
+  p.is-white-light {
+    color: rgba(255, 255, 255, 0.7); }
+  p.is-light {
+    color: rgba(0, 0, 0, 0.54); }
 
 h2 + p {
   margin-top: 10px; }
@@ -558,9 +564,8 @@ table {
     border: 1px solid rgba(0, 0, 0, 0.12); }
   .box.radius-right-only {
     border-radius: 0 5px 5px 0; }
-  .box.box-accent {
-    background-color: #ff5722;
-    color: white; }
+  .box.is-accent {
+    background-color: #ff5722; }
 
 .box-flip {
   background-color: white;
@@ -1207,8 +1212,8 @@ input:-webkit-autofill {
       border-color: #ffeb3b; }
     .select select.is-danger {
       border-color: #f44336; }
-    .select select:hover {
-      border-color: #ff5722; }
+    .select select:hover, .select select:active, .select select:focus {
+      border-color: #3cbc8d; }
     .select select::ms-expand {
       display: none; }
   .select.is-fullwidth {
@@ -1216,7 +1221,7 @@ input:-webkit-autofill {
     .select.is-fullwidth select {
       width: 100%; }
   .select:after {
-    border: 1px solid #ff5722;
+    border: 1px solid #3cbc8d;
     border-right: 0;
     border-top: 0;
     content: " ";
@@ -1229,10 +1234,8 @@ input:-webkit-autofill {
     margin-top: -6px;
     right: 16px;
     top: 50%; }
-  .select:hover:after {
-    border-color: rgba(0, 0, 0, 0.87); }
   .select:active, .select:focus {
-    border-color: #ff5722; }
+    border-color: #3cbc8d; }
   .select.is-small {
     height: 24px; }
     .select.is-small select {
@@ -3432,7 +3435,7 @@ a.nav-item.is-tab {
   width: 16px;
   color: rgba(0, 0, 0, 0.54);
   float: left;
-  margin: 0 4px 0 -2px; }
+  margin: 0 8px 0 -2px; }
   .panel-icon .fa {
     font-size: 18px;
     line-height: inherit; }
@@ -3441,7 +3444,7 @@ a.nav-item.is-tab {
   background-color: white;
   border-bottom: 1px solid rgba(0, 0, 0, 0.12);
   border-radius: 4px 4px 0 0;
-  color: black;
+  color: #3cbc8d;
   font-size: 18px;
   font-weight: 400;
   padding: 10px; }
@@ -3491,15 +3494,20 @@ a.nav-item.is-tab {
     color: white; }
     .panel-block.is-active > p {
       color: rgba(255, 255, 255, 0.7); }
+    .panel-block.is-active > .panel-icon {
+      color: white; }
   .panel-block:hover:not(.is-active), .panel-block:active:not(.is-active) {
     background-color: rgba(0, 0, 0, 0.12); }
+  .panel-block:hover:last-child, .panel-block:active:last-child {
+    background-color: transparent; }
   .panel-block:not(:last-child) {
     border-bottom: 1px solid rgba(0, 0, 0, 0.12); }
 
 .panel {
   border: 1px solid rgba(0, 0, 0, 0.12);
-  border-right: none;
   border-radius: 5px 0 0 5px; }
+  .panel.no-border-right {
+    border-right: none; }
   .panel:not(:last-child) {
     margin-bottom: 20px; }
 

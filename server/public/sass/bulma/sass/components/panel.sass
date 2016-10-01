@@ -2,7 +2,7 @@
   +fa(14px, 16px)
   color: $black-secondary
   float: left
-  margin: 0 4px 0 -2px
+  margin: 0 8px 0 -2px
   .fa
     font-size: $size-5
     line-height: inherit
@@ -11,7 +11,7 @@
   background-color: $white
   border-bottom: 1px solid $border
   border-radius: 4px 4px 0 0
-  color: $text-strong
+  color: $primary
   font-size: $size-medium
   font-weight: 400
   padding: 10px
@@ -62,16 +62,21 @@
     color: $white-primary
     & > p
       color: $white-secondary
+    & > .panel-icon
+      color: $white
   &:hover,
   &:active
     &:not(.is-active)
       background-color: $border
+    &:last-child
+      background-color: transparent
   &:not(:last-child)
     border-bottom: 1px solid $border
 
 .panel
   border: 1px solid $border
-  border-right: none
   border-radius: $radius-large 0 0 $radius-large
+  &.no-border-right
+    border-right: none
   &:not(:last-child)
     margin-bottom: 20px

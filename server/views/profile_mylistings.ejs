@@ -32,20 +32,20 @@
 
 	<section class="section min-height">
 		<div class="container">
-			<div class="columns">
+			<div class="columns is-gapless">
 				<div class="column is-one-quarter">
 
-					<nav class="panel">
+					<nav class="panel is-hidden-mobile">
 						<p class="panel-heading has-text-centered">
 							Search and Filter
 						</p>
+						<a class="panel-search">
+							<p class="control has-icon">
+								<input id="search-user" class="input" type="text" placeholder="Search listings" />
+								<i class="fa fa-search"></i>
+							</p>
+						</a>
 						<div class="panel-list">
-							<a class="panel-block is-active">
-								<p class="control has-icon has-icon-right">
-									<input id="search-domain" class="input" type="text" placeholder="Search domains" />
-									<i class="fa fa-times is-hidden"></i>
-								</p>
-							</a>
 							<a class="panel-block" href="#">
 								<span class="panel-icon">
 									<i class="fa fa-list-alt"></i>
@@ -71,26 +71,22 @@
 								History
 							</a>
 							<div class="panel-block">
-								<a class="button is-fullwidth">
+								<a class="button is-primary is-outlined is-fullwidth no-shadow">
 									Reset all filters
 								</a>
 							</div>
 						</div>
 					</nav>
 
-					<div class="container bottom-margin-25">
-						<a class="button is-accent is-medium is-fullwidth" href="/listing/create">Create new listing</a>
-					</div>
-
 				</div>
 
 				<div class="column is-three-quarters">
 
-					<div id="no-rows" class="box has-text-centered is-hidden">
+					<div id="no-rows" class="box has-text-centered is-hidden no-shadow radius-right-only">
 						There are no listings!
 					</div>
 
-					<box class="rows-exist box">
+					<div class="rows-exist box no-shadow radius-right-only">
 
 						<nav class="pagination bottom-margin-25">
 							<a id="prev-page" class="button">Previous</a>
@@ -139,7 +135,7 @@
 							<div class="control">
 								<p class="control has-addons has-addons-right">
 									<input id="go-to-page-input" class="input" type="number" min="1" value="1" />
-									<a id="go-to-page-button" class="button is-primary">
+									<a id="go-to-page-button" class="button is-primary no-shadow">
 										Go to page
 									</a>
 								</p>
@@ -147,7 +143,7 @@
 						</nav>
 
 
-					</box>
+					</div>
 				</div>
 
 			</div>

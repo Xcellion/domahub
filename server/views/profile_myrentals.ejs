@@ -32,67 +32,60 @@
 
 	<section class="section min-height">
 		<div class="container">
-			<div class="columns">
+			<div class="columns is-gapless">
 
 				<div class="column is-one-quarter">
-					<nav class="panel">
+					<nav class="panel is-hidden-mobile">
 						<p class="panel-heading has-text-centered">
 							Search and Filter
 						</p>
-						<!-- <p class="panel-tabs">
-						<a class="is-active" href="#">All</a>
-						<a href="#">Public</a>
-						<a href="#">Private</a>
-						<a href="#">Sources</a>
-						<a href="#">Forks</a>
-					</p> -->
-					<div class="panel-list">
-						<a class="panel-block is-active">
+						<a class="panel-search">
 							<p class="control has-icon">
-								<input id="search-domain" class="input" type="text" placeholder="Search" />
+								<input id="search-user" class="input" type="text" placeholder="Search listings" />
 								<i class="fa fa-search"></i>
 							</p>
 						</a>
-						<a class="panel-block" href="#">
-							<span class="panel-icon">
-								<i class="fa fa-list-alt"></i>
-							</span>
-							Currently listed
-						</a>
-						<a class="panel-block" href="#">
-							<span class="panel-icon">
-								<i class="fa fa-ellipsis-h"></i>
-							</span>
-							Pending approval
-						</a>
-						<a class="panel-block" href="#">
-							<span class="panel-icon">
-								<i class="fa fa-exclamation-circle"></i>
-							</span>
-							Expiring soon
-						</a>
-						<a class="panel-block" href="#">
-							<span class="panel-icon">
-								<i class="fa fa-history"></i>
-							</span>
-							History
-						</a>
-						<div class="panel-block">
-							<a class="button is-outlined is-fullwidth">
-								Reset all filters
+						<div class="panel-list">
+							<a class="panel-block" href="#">
+								<span class="panel-icon">
+									<i class="fa fa-list-alt"></i>
+								</span>
+								Currently listed
 							</a>
+							<a class="panel-block" href="#">
+								<span class="panel-icon">
+									<i class="fa fa-ellipsis-h"></i>
+								</span>
+								Pending approval
+							</a>
+							<a class="panel-block" href="#">
+								<span class="panel-icon">
+									<i class="fa fa-exclamation-circle"></i>
+								</span>
+								Expiring soon
+							</a>
+							<a class="panel-block" href="#">
+								<span class="panel-icon">
+									<i class="fa fa-history"></i>
+								</span>
+								History
+							</a>
+							<div class="panel-block">
+								<a class="button is-primary is-outlined is-fullwidth no-shadow">
+									Reset all filters
+								</a>
+							</div>
 						</div>
-					</div>
-				</nav>
-			</div>
+					</nav>
+				</div>
 
 			<div class="column is-three-quarters">
 
-				<div id="no-rows" class="box has-text-centered is-hidden">
+				<div id="no-rows" class="box has-text-centered is-hidden no-shadow radius-right-only">
 					There are no rentals!
 				</div>
 
-				<div class="rows-exist box">
+				<div class="rows-exist box no-shadow radius-right-only">
 
 					<nav class="pagination bottom-margin-25">
 						<a id="prev-page" class="button">Previous</a>
