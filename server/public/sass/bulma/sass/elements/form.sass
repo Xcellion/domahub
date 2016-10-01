@@ -81,8 +81,10 @@ input
     display: block
     outline: none
     padding-right: 36px
-    &:hover
-      border-color: $accent
+    &:hover,
+    &:active,
+    &:focus
+      border-color: $primary
     &::ms-expand
       display: none
   &.is-fullwidth
@@ -90,16 +92,13 @@ input
     select
       width: 100%
   &:after
-    +arrow($link)
+    +arrow($primary)
     margin-top: -6px
     right: 16px
     top: 50%
-  &:hover
-    &:after
-      border-color: $link-hover
   &:active,
   &:focus
-    border-color: $accent
+    border-color: $primary
   &.is-small
     height: 24px
     select
