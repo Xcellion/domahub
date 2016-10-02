@@ -1340,7 +1340,7 @@ input:-webkit-autofill {
       .control.has-addons .input:first-child,
       .control.has-addons .textarea:first-child,
       .control.has-addons .select:first-child {
-        border-radius: 0; }
+        border-radius: 3px 0 0 3px; }
         .control.has-addons .button:first-child select,
         .control.has-addons .input:first-child select,
         .control.has-addons .textarea:first-child select,
@@ -2024,6 +2024,22 @@ input:-webkit-autofill {
   display: inline-block;
   font-size: 18px;
   vertical-align: top; }
+
+.step-number {
+  -webkit-border-radius: 50%;
+    -webkit-border-radius--moz-border-radius: 50%;
+      -webkit-border-radius--moz-border-radius--ms-border-radius: 50%;
+        -webkit-border-radius--moz-border-radius--ms-border-radius-border-radius: 50%;
+  color: white;
+  display: block;
+  height: 32px;
+  line-height: 32px;
+  text-align: center;
+  width: 32px; }
+  .step-number.is-primary {
+    background-color: #3cbc8d; }
+  .step-number.is-accent {
+    background-color: #ff5722; }
 
 .tag {
   align-items: center;
@@ -3498,8 +3514,8 @@ a.nav-item.is-tab {
       color: white; }
   .panel-block:hover:not(.is-active), .panel-block:active:not(.is-active) {
     background-color: rgba(0, 0, 0, 0.12); }
-  .panel-block:hover:last-child, .panel-block:active:last-child {
-    background-color: transparent; }
+    .panel-block:hover:not(.is-active):last-child, .panel-block:active:not(.is-active):last-child {
+      background-color: transparent; }
   .panel-block:not(:last-child) {
     border-bottom: 1px solid rgba(0, 0, 0, 0.12); }
 
