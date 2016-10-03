@@ -297,6 +297,7 @@ listing_model.prototype.newListings = function(listing_info_array, callback){
 				buy_link, \
 				owner_id, \
 				set_price \
+				type \
 			)\
 			 VALUES ? "
 	listing_query(query, "Failed to create " + listing_info_array.length + " new listings!", callback, [listing_info_array]);
