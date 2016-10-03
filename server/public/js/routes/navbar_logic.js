@@ -61,14 +61,14 @@ $(document).ready(function() {
 	$(window).scroll(function(e){
 
 		//before the top
-		if ($(this).scrollTop() <= 0) {
+		if ($(this).scrollTop() <= 0 && $(".nav").hasClass("has-shadow")) {
 			$(".nav").removeClass("has-shadow");
 		}
 		//past the top
-		else if ($(this).scrollTop() > 0){
+		else if ($(this).scrollTop() > 0 && !$(".nav").hasClass("has-shadow")){
 			$(".nav").addClass("has-shadow");
 		}
-	})
+	});
 
 });
 

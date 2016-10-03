@@ -23,7 +23,7 @@ function createRow(rental_info, rownum){
 
     tempRow.append(createArrow(rental_info));
     tempRow.append(createDomain(rental_info));
-    tempRow.append(creatIP(rental_info));
+    tempRow.append(createAddress(rental_info));
     tempRow.append(createView(rental_info));
 
     tempRow.on("click", function(e){
@@ -35,8 +35,8 @@ function createRow(rental_info, rownum){
 }
 
 //function to create the status td
-function creatIP(rental_info){
-    var temp_td = $("<td class='td-visible td-date'>" + rental_info.ip + "</td>");
+function createAddress(rental_info){
+    var temp_td = $("<td class='td-visible td-address'>" + rental_info.address + "</td>");
     return temp_td;
 }
 

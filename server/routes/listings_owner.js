@@ -79,7 +79,8 @@ module.exports = {
 			domain_name : req.body.domain_name,
 			description: req.body.description,
 			owner_id: req.user.id,
-			price_type: 0
+			price_type: 0,
+			type: 0
 		}
 
 		Listing.newListing(listing_info, function(result){
@@ -92,7 +93,8 @@ module.exports = {
 						domain_name: domain_name,
 						id: result.info.insertId,
 						owner_id: req.user.id,
-						price_type: 0
+						price_type: 0,
+						type: 0
 					},
 					message: "Successfully added a new listing!"
 				})
@@ -134,12 +136,12 @@ module.exports = {
 						state: "error",
 						bad_listings: bad_listings,
 						good_listings: good_listings
-					})
+					});
 				}
 				else {
-					//need to add owner id and set_price to the good records
+					//need to add owner id, set_price, and type to the good records
 					for (var x = 0; x < good_listings.length; x++){
-						good_listings[x].push("" + req.user.id + "", "0");
+						good_listings[x].push("" + req.user.id + "", "0", "1");
 					}
 					req.session.good_listings = good_listings;
 					next();

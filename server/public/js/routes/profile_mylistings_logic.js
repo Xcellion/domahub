@@ -110,7 +110,7 @@ function createPriceDrop(listing_info){
 
     for (var x = 0; x < 4; x++){
         var temp_div1 = $("<div class='control is-horizontal'></div>");
-            var temp_div_label = $("<div class='control-label'></div>");
+            var temp_div_label = $("<div class='control-label is-small'></div>");
                 var temp_label = $('<label class="label">' + label_types[x] + '</label>');
             var temp_div_control = $("<div class='control'></div>");
                 var temp_control_p = $("<p class='control has-icon'></p>");
@@ -129,13 +129,13 @@ function createPriceDrop(listing_info){
 //function to create buy link and background image form drop
 function createFormDrop(listing_info){
     var temp_col = $("<div class='column'></div>");
-    var temp_form = $("<form'></form>");
+    var temp_form = $("<form></form>");
 
     var buy_link = (listing_info.buy_link == null) ? "" : listing_info.buy_link;
     var description = (listing_info.description == null) ? "" : listing_info.description;
 
     var temp_div1 = $('<div class="control is-horizontal"></div>');
-        var temp_div1_control = $("<div class='control-label'></div>");
+        var temp_div1_control = $("<div class='control-label is-small'></div>");
             var temp_div1_label = $("<label class='label'>Purchase link</label>")
         var temp_div1_p = $("<p class='control has-icon'></p>");
             var temp_div1_input = $('<input class="input" type="url" placeholder="https://buy-my-website.com" value="' + buy_link + '"/>');
@@ -143,7 +143,7 @@ function createFormDrop(listing_info){
     temp_div1.append(temp_div1_control.append(temp_div1_label), temp_div1_p.append(temp_div1_input, temp_div1_input_i));
 
     var temp_div2 = $('<div class="control is-horizontal"></div>');
-        var temp_div2_control_label = $('<div class="control-label">');
+        var temp_div2_control_label = $('<div class="control-label is-small">');
             var temp_div2_label = $('<label class="label">Description</label>');
         var temp_div2_control = $('<div class="control">');
             var temp_div2_input = $('<textarea class="textarea" placeholder="Rent this website for any time period you please!">' + description + '</textarea>')
@@ -151,7 +151,7 @@ function createFormDrop(listing_info){
 
     var temp_div3 = $('<div class="control is-pulled-right is-grouped"></div>');
         var temp_control1 = $('<div class="control"></div>');
-            var temp_button1 = $('<button class="button is-success">Upgrade to a Premium Listing</button>');
+            var temp_button1 = $('<a href="/listing/upgrade?d=' + listing_info.domain_name + '" class="button is-success">Upgrade to a Premium Listing</a>');
         var temp_control2 = $('<div class="control"></div>');
             var temp_button2 = $('<button class="button is-success">Save Changes</button>');
 
