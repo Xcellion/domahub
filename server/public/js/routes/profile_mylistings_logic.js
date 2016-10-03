@@ -10,6 +10,7 @@ function createRow(listing_info, rownum){
 
     tempRow.append(createArrow(listing_info));
     tempRow.append(createDomain(listing_info));
+    tempRow.append(createType(listing_info));
     tempRow.append(createStatus(listing_info));
     tempRow.append(createDate(listing_info));
     tempRow.append(createView(listing_info));
@@ -20,6 +21,14 @@ function createRow(listing_info, rownum){
 
     tempRow.data("editing", false);
     return tempRow;
+}
+
+//function to create the listing status td
+function createType(listing_info){
+    var text = (listing_info.type != 0) ? "Premium" : "Basic";
+    var temp_td = $("<td class='td-visible td-type'>" + text + "</td>");
+    temp_td.data("type", text);
+    return temp_td;
 }
 
 //function to create the listing status td
@@ -57,7 +66,7 @@ function createView(listing_info){
 //function to create dropdown row
 function createRowDrop(listing_info, rownum){
     temp_drop = $("<tr id='row-drop" + rownum + "' class='row-drop'></tr>");
-    temp_td = $("<td class='row-drop-td' colspan='5'></td>")
+    temp_td = $("<td class='row-drop-td' colspan='6'></td>")
     temp_div_drop = $("<div id='div-drop' class='td-visible container'></div>");
     temp_div_col = $("<div class='columns'></div>");
 
@@ -105,11 +114,13 @@ function createPriceDrop(listing_info){
                 var temp_label = $('<label class="label">' + label_types[x] + '</label>');
             var temp_div_control = $("<div class='control'></div>");
                 var temp_control_p = $("<p class='control has-icon'></p>");
-                    var temp_input = $('<input class="input" type="number" value="' + label_values[x] + '">');
+                    disabled = (listing_info.type == 0) ? "is-disabled" : "";
+                    var temp_input = $('<input class="input ' + disabled + '" type="number" value="' + label_values[x] + '">');
                     var temp_i = $('<i class="fa fa-dollar"></i>');
 
         temp_form.append(temp_div1.append(temp_div_label.append(temp_label), temp_div_control.append(temp_control_p.append(temp_input, temp_i))));
     }
+
     temp_col.append(temp_form);
 
     return temp_col;
@@ -138,8 +149,13 @@ function createFormDrop(listing_info){
             var temp_div2_input = $('<textarea class="textarea" placeholder="Rent this website for any time period you please!">' + description + '</textarea>')
     temp_div2.append(temp_div2_control_label.append(temp_div2_label), temp_div2_control.append(temp_div2_input));
 
-    var temp_div3 = $('<div class="control"></div>');
-        temp_div3.append('<button class="button is-medium is-success is-pulled-right">Save</button>');
+    var temp_div3 = $('<div class="control is-pulled-right is-grouped"></div>');
+        var temp_control1 = $('<div class="control"></div>');
+            var temp_button1 = $('<button class="button is-success">Upgrade to a Premium Listing</button>');
+        var temp_control2 = $('<div class="control"></div>');
+            var temp_button2 = $('<button class="button is-success">Save Changes</button>');
+
+    temp_div3.append(temp_control1.append(temp_button1), temp_control2.append(temp_button2));
 
     temp_col.append(temp_form.append(temp_div1, temp_div2, temp_div3));
 
@@ -167,6 +183,7 @@ function editRow(row){
     dropRow(row, editing);
     editArrow(row, editing);
     editStatus(row, editing);
+    editType(row, editing);
 }
 
 //function to change status column to editable
@@ -193,4 +210,9 @@ function editStatus(row, editing){
         status_td.data("status", status_td.find("select").val())
         status_td.text(status_td.data("status"));
     }
+}
+
+//function to change status column to editable
+function editType(row, editing){
+
 }
