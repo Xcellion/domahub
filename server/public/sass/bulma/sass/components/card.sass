@@ -88,6 +88,9 @@
   max-width: 100%
   position: relative
   width: 300px
+  &.no-shadow
+    border: 1px solid $border
+    +box-shadow(0,0,0,$black,0)
   .media:not(:last-child)
     margin-bottom: 10px
   // Modifiers
