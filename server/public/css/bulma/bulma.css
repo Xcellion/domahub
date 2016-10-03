@@ -619,7 +619,7 @@ a.box {
   .button:active, .button:focus, .button.is-active {
     outline: none; }
   .button[disabled], .button.is-disabled {
-    background-color: white;
+    background-color: rgba(0, 0, 0, 0.12);
     border-color: rgba(0, 0, 0, 0.12);
     cursor: not-allowed;
     pointer-events: none; }
@@ -1086,7 +1086,7 @@ input:-webkit-autofill {
   .input:active, .textarea:active, .input:focus, .textarea:focus, .input.is-active, .is-active.textarea {
     outline: none; }
   .input[disabled], [disabled].textarea, .input.is-disabled, .is-disabled.textarea {
-    background-color: white;
+    background-color: rgba(0, 0, 0, 0.12);
     border-color: rgba(0, 0, 0, 0.12);
     cursor: not-allowed;
     pointer-events: none; }
@@ -1207,7 +1207,7 @@ input:-webkit-autofill {
     .select select:active, .select select:focus, .select select.is-active {
       outline: none; }
     .select select[disabled], .select select.is-disabled {
-      background-color: white;
+      background-color: rgba(0, 0, 0, 0.12);
       border-color: rgba(0, 0, 0, 0.12);
       cursor: not-allowed;
       pointer-events: none; }
