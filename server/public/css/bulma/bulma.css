@@ -1336,8 +1336,16 @@ input:-webkit-autofill {
     flex-grow: 0;
     margin-right: 10px;
     padding-top: 7px;
-    text-align: right;
-    width: 120px; } }
+    text-align: right; } }
+
+.control-label.is-small {
+  width: 100px; }
+
+.control-label.is-medium {
+  width: 120px; }
+
+.control-label.is-large {
+  width: 140px; }
 
 .control {
   position: relative;
