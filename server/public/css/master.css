@@ -1813,10 +1813,8 @@ input:-webkit-autofill {
     color: inherit; }
   .title.is-quote {
     display: inline-block;
-    border-left: 5px solid #3cbc8d;
-    border-right: 5px solid #3cbc8d;
-    padding: 0 15px;
-    font-style: italic; }
+    border-left: 3px solid #3cbc8d;
+    padding-left: 15px; }
   .title.flavor-title {
     font-size: 40px;
     letter-spacing: 1px;
@@ -2252,6 +2250,11 @@ input:-webkit-autofill {
   max-width: 100%;
   position: relative;
   width: 300px; }
+  .card.no-shadow {
+    border: 1px solid rgba(0, 0, 0, 0.12);
+    -webkit-box-shadow: 0 0 0 0 black;
+    -moz-box-shadow: 0 0 0 0 black;
+    box-shadow: 0 0 0 0 black; }
   .card .media:not(:last-child) {
     margin-bottom: 10px; }
   @media screen and (max-width: 768px) {
@@ -3152,6 +3155,10 @@ input:-webkit-autofill {
   background-color: white;
   border-radius: 3px;
   box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12); }
+  .message.no-shadow {
+    -webkit-box-shadow: 0 0 0 0 black;
+    -moz-box-shadow: 0 0 0 0 black;
+    box-shadow: 0 0 0 0 black; }
   .message.is-white {
     background-color: white; }
     .message.is-white .message-header {
