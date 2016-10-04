@@ -38,7 +38,7 @@ function createRow(rental_info, rownum){
 //function to create the status td
 function createStatus(rental_info){
     var text = (rental_info.active == 0) ? "Inactive" : "Active"
-    var temp_td = $("<td class='td-visible td-type'>" + text + "</td>");
+    var temp_td = $("<td class='td-visible td-status'>" + text + "</td>");
     return temp_td;
 }
 
