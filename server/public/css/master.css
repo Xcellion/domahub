@@ -1546,6 +1546,11 @@ input:-webkit-autofill {
     height: 128px;
     width: 128px; }
 
+.image + p,
+.image + h2,
+.image + h3 {
+  margin-top: 10px; }
+
 .notification {
   background-color: white;
   border-radius: 3px;
@@ -2080,16 +2085,14 @@ input:-webkit-autofill {
     -webkit-border-radius--moz-border-radius: 50%;
       -webkit-border-radius--moz-border-radius--ms-border-radius: 50%;
         -webkit-border-radius--moz-border-radius--ms-border-radius-border-radius: 50%;
-  color: white;
+  border: 2px solid rgba(0, 0, 0, 0.54);
+  color: rgba(0, 0, 0, 0.87);
   display: block;
   height: 32px;
-  line-height: 32px;
+  line-height: 30px;
+  margin-bottom: 10px;
   text-align: center;
   width: 32px; }
-  .step-number.is-primary {
-    background-color: #3cbc8d; }
-  .step-number.is-accent {
-    background-color: #ff5722; }
 
 .tag {
   align-items: center;
@@ -3155,9 +3158,8 @@ input:-webkit-autofill {
   .message-header + .message-body {
     border-radius: 0 0 3px 3px;
     border-top: none; }
-
-.is-primary {
-  background-color: #3cbc8d; }
+  .message-header.is-primary {
+    background-color: #3cbc8d; }
 
 .message {
   background-color: white;
@@ -3582,10 +3584,12 @@ a.nav-item.is-tab {
       color: rgba(255, 255, 255, 0.7); }
     .panel-block.is-active > .panel-icon {
       color: white; }
-  .panel-block:hover:not(.is-active), .panel-block:active:not(.is-active) {
+    .panel-block.is-active:hover, .panel-block.is-active:active {
+      background-color: #3cbc8d; }
+  .panel-block.has-button:hover, .panel-block.has-button:active {
+    background-color: transparent; }
+  .panel-block:hover, .panel-block:active {
     background-color: rgba(0, 0, 0, 0.12); }
-    .panel-block:hover:not(.is-active):last-child, .panel-block:active:not(.is-active):last-child {
-      background-color: transparent; }
   .panel-block:not(:last-child) {
     border-bottom: 1px solid rgba(0, 0, 0, 0.12); }
 
@@ -4534,6 +4538,9 @@ a.nav-item.is-tab {
 
 .bottom-margin-25 {
   margin-bottom: 25px; }
+
+.vertical-align-bottom {
+  vertical-align: bottom; }
 
 @media screen and (min-width: 769px) {
   .has-borderRight {
