@@ -165,15 +165,8 @@ function checkSubmit(){
 	var bool = true;
 
 	if (!user){
-		bool = "Please log in!";
-		$("#login-modal").css({
-			"border-color": "red",
-			"color": "red"
-		});
-		$("#login-modal").addClass("shake").one('webkitAnimationEnd oanimationend msAnimationEnd animationend',
-        function (e) {
-            $("#login-modal").removeClass('shake');
-        });
+		bool = "Invalid user!";
+		$('#login-modal').click();
 	}
 	else if (!rental_info && (!newEvents || newEvents.length == 0)){
 		bool = "Invalid dates!";

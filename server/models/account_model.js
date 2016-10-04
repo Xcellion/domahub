@@ -126,14 +126,15 @@ account_model.prototype.getAccountChats = function(account_id, callback){
 }
 
 //gets all rental info belonging to specific account
-account_model.prototype.getStripeId = function(domain_name, callback){
-	console.log("Attempting to get the Stripe ID of the owner of: " + domain_name + "...");
+account_model.prototype.getStripeAndType = function(domain_name, callback){
+	console.log("Attempting to get the listing type and Stripe ID of the owner of: " + domain_name + "...");
 	query = "SELECT \
-				stripe_user_id\
+				accounts_stripe.stripe_user_id,\
+				listings.type \
 			FROM accounts_stripe \
 			JOIN listings ON listings.owner_id = accounts_stripe.account_id \
 			WHERE domain_name = ? ";
-	account_query(query, "Failed to get the Stripe ID of the owner of: " + domain_name + "!", callback, domain_name);
+	account_query(query, "Failed to get the listing type and Stripe ID of the owner of: " + domain_name + "!", callback, domain_name);
 }
 
 //----------------------------------------------------------------------SETS----------------------------------------------------------

@@ -3,7 +3,13 @@ var	data_model = require('../models/data_model.js');
 var listings_renter = require("./listings_renter");
 var listings_owner = require("./listings_owner");
 
-var stripe = require("stripe")("sk_test_PHd0TEZT5ytlF0qCNvmgAThp");		//stripe API
+var node_env = process.env.NODE_ENV || 'dev'; 	//dev or prod bool
+if (node_env == "dev"){
+	var stripe = require("stripe")("sk_test_PHd0TEZT5ytlF0qCNvmgAThp");		//stripe API development key
+}
+else {
+	var stripe = require("stripe")("sk_test_PHd0TEZT5ytlF0qCNvmgAThp");		//stripe API production key
+}
 
 var dns = require("dns");
 var validator = require("validator");
@@ -11,7 +17,6 @@ var whois = require("whois");
 var parser = require('parse-whois');
 
 module.exports = function(app, db, auth, e){
-	//models
 	Listing = new listing_model(db);
 	Data = new data_model(db);
 
@@ -109,7 +114,9 @@ module.exports = function(app, db, auth, e){
 		checkDomain,
 		listings_renter.getListing,
 		checkNewRentalInfo,
-		listings_renter.createRental
+		listings_renter.createRental,
+		chargeMoney,
+		listings_renter.toggleActivateRental
 	]);
 
 	//editing an existing rental
@@ -246,7 +253,7 @@ function checkRental(req, res, next){
 function checkNewRentalInfo(req, res, next){
 	domain_name = req.params.domain_name;
 	times = req.body.events;
-	address = req.body.address;
+	address = addProtocol(req.body.address);
 	price = calculatePrice(times, req.session.listing_info);
 	stripeToken = req.body.stripeToken;
 
@@ -289,32 +296,19 @@ function checkNewRentalInfo(req, res, next){
 					if (invalid_times.length > 0 || (formatted_times.length == 0 && to_update.length == 0)){
 						res.send({unavailable : invalid_times})
 					}
+					//all checks are good!
 					else {
-						//get the stripe id of the listing owner
-						Account.getStripeId(domain_name, function(result){
-							if (result.state == "error"){error.handler(req, res, result.info);}
-							else {
-								stripe_id = result.info[0].stripe_user_id;
-
-								//check pricing since new times exist
-								payCheck(stripe_id, stripeToken, price, domain_name, function(bool){
-									if (bool){
-										req.session.new_rental_info = {
-											account_id: req.user.id,
-											listing_id: req.session.listing_info.id,
-											formatted_times : formatted_times,
-											to_update: to_update,
-											delete_stuff: delete_stuff,
-											address: address
-										};
-										next();
-									}
-									else {
-										error.handler(req, res, "Invalid price!");
-									}
-								});
-							}
-						});
+						req.session.new_rental_info = {
+							account_id: req.user.id,
+							listing_id: req.session.listing_info.id,
+							formatted_times : formatted_times,
+							to_update: to_update,
+							delete_stuff: delete_stuff,
+							address: address,
+							price: price,
+							stripeToken: stripeToken
+						};
+						next();
 					}
 				});
 			}
@@ -331,6 +325,33 @@ function checkNewRentalInfo(req, res, next){
 			next();
 		}
 	}
+}
+
+//function to charge account
+function chargeMoney(req, res, next){
+	domain_name = req.params.domain_name;
+	price = req.session.new_rental_info.price;
+	stripeToken = req.session.new_rental_info.stripeToken;
+	rental_id = req.session.new_rental_info.rental_id;
+
+	//get the stripe id of the listing owner
+	Account.getStripeAndType(domain_name, function(result){
+		if (result.state == "error"){error.handler(req, res, result.info);}
+		else {
+			stripe_id = result.info[0].stripe_user_id;
+			type = result.info[0].type;
+
+			//check pricing
+			payCheck(stripe_id, stripeToken, price, domain_name, type, function(bool){
+				if (bool){
+					next();
+				}
+				else {
+					error.handler(req, res, "Invalid price!");
+				}
+			});
+		}
+	});
 }
 
 //function to check database for availability
@@ -398,48 +419,25 @@ function calculatePrice(times, listing_info){
 	else {return false;}
 }
 
-//function to get stripe account id for transferring via stripe
-function getStripeId(domain_name, stripeToken, price, next){
-	Account.getStripeId(domain_name, function(result){
-		if (result.state == "error"){error.handler(req, res, result.info);}
-		else {
-			stripe_id = result.info[0].stripe_user_id;
-			//check pricing since new times exist
-			payCheck(stripe_id, stripeToken, price, domain_name, function(bool){
-				if (bool){
-					req.session.new_rental_info = {
-						account_id: req.user.id,
-						listing_id: req.session.listing_info.id,
-						formatted_times : formatted_times,
-						address: address
-					};
-					next();
-				}
-				else {
-					error.handler(req, res, "Invalid price!");
-				}
-			});
-		}
-	});
-}
-
 //function to pay via stripe
-function payCheck(stripe_id, stripeToken, price, domain_name, cb){
-	console.log("Stripe token is - " + stripeToken);
-
-	//prices
-	var total_price = price * 100;
-	var application_fee = total_price / 10;
+function payCheck(stripe_id, stripeToken, price, domain_name, type, cb){
+	var total_price = price * 100;		//USD in cents
+	var application_fee = (type == 1) ? total_price / 10 : 0;		//application fee if the listing is basic
 	var customer_pays = total_price - application_fee;
 
-	//charge the end user, transfer to the owner, take 10%
-	stripe.charges.create({
+	var stripeOptions = {
 		amount: customer_pays, // amount in cents
 		currency: "usd",
 		source: stripeToken,
-		description: "Rental for " + domain_name,
-		//application_fee: application_fee
-	}, {
+		description: "Rental for " + domain_name
+	}
+
+	if (application_fee > 0){
+		stripeOptions.application_fee = application_fee;
+	}
+
+	//charge the end user, transfer to the owner, take 10% if its a basic listing
+	stripe.charges.create(stripeOptions, {
 		stripe_account: stripe_id
 	}, function(err, charge) {
 		if (err) {
@@ -447,6 +445,7 @@ function payCheck(stripe_id, stripeToken, price, domain_name, cb){
 			cb(false);
 		}
 		else {
+			console.log("Payment processed! " + stripe_id + " has been paid " + customer_pays + " with " + application_fee + " in Doma fees.")
 			cb(true);
 		}
 	});
