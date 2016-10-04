@@ -14,41 +14,50 @@ module.exports = function(app, db, auth, e, pp){
 	//redirect profile to dashboard
 	app.get("/profile", function(req, res){ res.redirect("/profile/dashboard") });
 
-	//myrentals and mylistings pages
+	//mylistings pages
 	app.get([
-		"/profile/mylistings/:page",
-		"/profile/myrentals/:page",
+		"/profile/mylistings",
+		"/profile/mylistings/:page"
 	], [
 		checkPageNum,
 		isLoggedIn,
 		getAccountListings,
-		getAccountRentals,
-		renderListingOrRental
+		renderMyListings
 	]);
 
-	//check if user is legit, get all listings, get all rentals, then renders the appropriate page
+	//myrentals pages
 	app.get([
-			"/profile/mylistings",
-			"/profile/myrentals",
-			"/profile/dashboard",
-		], [
+		"/profile/myrentals",
+		"/profile/myrentals/:page"
+	], [
+		checkPageNum,
+		isLoggedIn,
+		getAccountRentals,
+		renderMyRentals
+	]);
+
+	//check if user is legit, get all listings, get all rentals
+	app.get("/profile/dashboard", [
 		isLoggedIn,
 		getAccountListings,
 		getAccountRentals,
-		renderProfile
+		renderDashboard
 	]);
+
+	//inbox
+	app.get([
+		"/profile/inbox",
+		"/profile/inbox/:target_username"
+	], [
+		isLoggedIn,
+		getAccountChats,
+		renderInbox
+	])
 
 	//settings
 	app.get("/profile/settings", [
 		isLoggedIn,
-		renderProfile
-	])
-
-	//inbox
-	app.get("/profile/inbox", [
-		isLoggedIn,
-		getAccountChats,
-		renderProfile
+		renderSettings
 	])
 
 	//connect stripe
@@ -153,8 +162,7 @@ function getAccountRentals(req, res, next){
 //gets all chats for a user
 function getAccountChats(req, res, next){
 	//if we dont already have the list of chats or if we need to refresh them
-	if (!req.user.convo_list || req.user.refresh_chat){
-		delete req.user.refresh_chat;
+	if (!req.user.convo_list){
 		account_id = req.user.id;
 
 		Account.getAccountChats(account_id, function(result){
@@ -173,7 +181,7 @@ function getAccountChats(req, res, next){
 //check page number
 function checkPageNum(req, res, next){
 	page = req.params.page;
-	if (page && (parseFloat(page) >>> 0) && (Number.isInteger(parseFloat(page))) && (parseFloat(page) > 0)){
+	if (!page || ((parseFloat(page) >>> 0) && (Number.isInteger(parseFloat(page))) && (parseFloat(page) > 0))){
 		next();
 	}
 	else {
@@ -182,33 +190,50 @@ function checkPageNum(req, res, next){
 	}
 }
 
-//renders regular profile pages
-function renderProfile(req, res){
-	account_id = req.user.id;
+//----------------------------------------------------------------------RENDERS----------------------------------------------------------
 
-	ejs_name = req.path.slice(1, req.path.length).split("/").join("_") + ".ejs";
-
-	res.render(ejs_name, {
+function renderDashboard(req, res){
+	res.render("profile_dashboard", {
 		message: Auth.messageReset(req),
 		user: req.user,
-		listings: req.user.listings || false,
 		rentals: req.user.rentals || false,
+		listings: req.user.listings || false
+	});
+}
+
+function renderInbox(req, res){
+	res.render("profile_inbox", {
+		message: Auth.messageReset(req),
+		user: req.user,
 		convo_list: req.user.convo_list || false
 	});
 }
 
-//renders profile page
-function renderListingOrRental(req, res){
-	account_id = req.user.id;
-	ejs_name = req.path.includes("listing") ? "mylistings" : "myrentals";
-
-	res.render("profile_" + ejs_name, {
+function renderMyListings(req, res){
+	res.render("profile_mylistings", {
 		message: Auth.messageReset(req),
 		user: req.user,
-		listings: req.user.listings || false,
+		listings: req.user.listings || false
+	});
+}
+
+
+function renderMyRentals(req, res){
+	res.render("profile_myrentals", {
+		message: Auth.messageReset(req),
+		user: req.user,
 		rentals: req.user.rentals || false
 	});
 }
+
+function renderSettings(req, res){
+	res.render("profile_settings", {
+		message: Auth.messageReset(req),
+		user: req.user
+	});
+}
+
+//----------------------------------------------------------------------PROFILE----------------------------------------------------------
 
 //authorize stripe
 function authorizeStripe(req, res){

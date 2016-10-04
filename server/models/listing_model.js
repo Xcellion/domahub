@@ -141,9 +141,9 @@ listing_model.prototype.getAllListings = function(callback){
 	listing_query(query, "Failed to get all listing info!", callback);
 }
 
-//gets all non-default rentals times and their owners for a specific listing
+//gets all rentals times and their owners for a specific listing
 listing_model.prototype.getListingRentalsInfo = function(listing_id, callback){
-	console.log("Attempting to get all existing rentals for listing #" + listing_id + "...");
+	console.log("Attempting to get all existing active rentals for listing #" + listing_id + "...");
 	query = "SELECT \
 				rentals.account_id, \
 				rentals.rental_id, \
@@ -156,6 +156,7 @@ listing_model.prototype.getListingRentalsInfo = function(listing_id, callback){
 			INNER JOIN rental_times ON rentals.rental_id = rental_times.rental_id \
 			INNER JOIN accounts ON rentals.account_id = accounts.id \
 			WHERE rentals.listing_id = ? \
+			AND rentals.active = 1 \
 			ORDER BY rental_times.date ASC "
 	listing_query(query, "Failed to get all non-default rental info for listing #" + listing_id + "!", callback, listing_id);
 }
@@ -167,17 +168,6 @@ listing_model.prototype.getRentalInfo = function(rental_id, callback){
 			FROM rentals \
 			WHERE rental_id = ?"
 	listing_query(query, "Failed to get all info for rental #" + rental_id + "!", callback, rental_id);
-}
-
-//get all rental information for the default rental
-listing_model.prototype.getDefaultRental = function(listing_id, callback){
-	console.log("Attempting to get all default rental info for listing #" + listing_id + "...");
-	query = "SELECT * \
-			FROM rentals \
-			WHERE listing_id = ? \
-			ORDER BY rental_id \
-			ASC LIMIT 1";
-	listing_query(query, "Failed to get default rental for listing #" + listing_id + "!", callback, listing_id);
 }
 
 //gets all rental information for the current rental
@@ -195,6 +185,7 @@ listing_model.prototype.getCurrentRental = function(domain_name, callback){
 			LEFT OUTER JOIN rental_times \
 			ON rentals.rental_id = rental_times.rental_id \
 			WHERE listings.domain_name = ? \
+			AND rentals.active = 1 \
 			ORDER BY rentals.rental_id ASC";
 	listing_query(query, "Failed to get current rental info for domain " + domain_name + "!", function(result){
 		if (result.state == "success" && result.info.length){
@@ -259,14 +250,15 @@ listing_model.prototype.getRentalTimes = function(rental_id, callback){
 	listing_query(query, "Failed to get rental times for rental #" + rental_id + "!", callback, rental_id);
 }
 
-//gets all rental times for a specific listing
+//gets all rental times for a specific listing to cross check against a new rental (see checkRentalTime)
 listing_model.prototype.getListingRentalTimes = function(listing_id, callback){
 	console.log("Attempting to get rental times for listing #" + listing_id + "...");
 	query = "SELECT \
 				rental_times.* \
 			FROM rental_times \
 			INNER JOIN rentals ON rentals.rental_id = rental_times.rental_id \
-			WHERE rentals.listing_id = ?\
+			WHERE rentals.listing_id = ? \
+			AND rentals.active = 1 \
 			ORDER BY rental_times.date ASC "
 	listing_query(query, "Failed to get rental times for listing #" + listing_id + "!", callback, listing_id);
 }
@@ -297,6 +289,7 @@ listing_model.prototype.newListings = function(listing_info_array, callback){
 				buy_link, \
 				owner_id, \
 				set_price \
+				type \
 			)\
 			 VALUES ? "
 	listing_query(query, "Failed to create " + listing_info_array.length + " new listings!", callback, [listing_info_array]);
@@ -340,6 +333,15 @@ listing_model.prototype.updateRentalTime = function(new_rental_times, callback){
 			SET duration = ? \
 			WHERE id = ?"
 	listing_query(query, "Failed to update rental #" + rental_id + "!", callback, new_rental_times);
+}
+
+//toggles the rental active or inactive
+listing_model.prototype.toggleActivateRental = function(rental_id, callback){
+	console.log("Attempting to toggle activation on rental #" + rental_id + "...");
+	query = "UPDATE rentals \
+			SET active = !active \
+			WHERE rental_id = ?"
+	listing_query(query, "Failed to toggle activation on rental #" + rental_id + "!", callback, rental_id);
 }
 
 //----------------------------------------------------------------------DELETE----------------------------------------------------------

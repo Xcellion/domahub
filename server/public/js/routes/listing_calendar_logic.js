@@ -63,7 +63,10 @@ $(document).ready(function() {
 	$('#calendar').fullCalendar('option', 'height', $("#calendar_wrapper").height() - $("#calendar_top_wrapper").height() - $("#navbar").height());
 
 	//create existing rentals
-	if (listing_info.rentals){
+	if (rental_info){
+		createExisting(rental_info.times, true);
+	}
+	else if (listing_info.rentals){
 		createExisting(listing_info.rentals);
 	}
 
@@ -94,7 +97,7 @@ $(document).ready(function() {
 });
 
 //helper function to create pre-existing rentals
-function createExisting(rentals){
+function createExisting(rentals, bool){
 	for (var x = 0; x < rentals.length; x++){
 		var start = new Date(rentals[x].date + "Z");
 		var end = new Date(start.getTime() + rentals[x].duration);
@@ -107,7 +110,7 @@ function createExisting(rentals){
 		};
 
 		//came from editing an existing rental, color that one orange
-		if (rentals[x].rental_id == rental_info.rental_id){
+		if (bool){
 			eventData.title = "Original time";
 			eventData.color = "orange";
 			eventData.editing = true;

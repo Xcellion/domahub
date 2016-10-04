@@ -94,7 +94,7 @@
 								</div>
 								<div class="control is-horizontal">
 									<div class="control-label is-medium">
-										<label id="pw-label" class="label">Password</label>
+										<label id="pw-label" class="label">New Password</label>
 									</div>
 									<p class="control">
 										<input id="new-pw-input" class="input account-input" type="password"/>
@@ -280,11 +280,6 @@
 									<div class="control is-grouped">
 										<p class="control">
 											<input class="input account-input" type="text" value="<%= user.phone %>">
-										</p>
-										<p class="control input-to-hide">
-											<a class="button is-primary">
-												&#43 Add a number
-											</a>
 										</p>
 									</div>
 								</div>
@@ -520,9 +515,9 @@
 							</p>
 						</header>
 						<div class="card-content">
-							<p>
+							<a href="/authorizestripe">
 								All payments are handled through Stripe. Click here to access your Stripe account.
-							</p>
+							</a>
 						</div>
 					</div>
 				</div>
