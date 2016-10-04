@@ -64,12 +64,16 @@
       color: $white-secondary
     & > .panel-icon
       color: $white
+    &:hover,
+    &:active
+      background-color: $primary
+  &.has-button
+    &:hover,
+    &:active
+      background-color: transparent
   &:hover,
   &:active
-    &:not(.is-active)
-      background-color: $border
-      &:last-child
-        background-color: transparent
+    background-color: $border
   &:not(:last-child)
     border-bottom: 1px solid $border
 
