@@ -9,7 +9,8 @@ var pool = mysql.createPool({
 		database: 'w3bbi',
 		multipleStatements: true,
 		dateStrings: true,
-		timezone: '+0:00'
+		timezone: '+0:00',
+		charset: "utf8_unicode_ci"
 	});
 
 module.exports = {

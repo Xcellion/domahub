@@ -162,8 +162,7 @@ function getAccountRentals(req, res, next){
 //gets all chats for a user
 function getAccountChats(req, res, next){
 	//if we dont already have the list of chats or if we need to refresh them
-	if (!req.user.convo_list || req.user.refresh_chat){
-		delete req.user.refresh_chat;
+	if (!req.user.convo_list){
 		account_id = req.user.id;
 
 		Account.getAccountChats(account_id, function(result){
@@ -182,7 +181,7 @@ function getAccountChats(req, res, next){
 //check page number
 function checkPageNum(req, res, next){
 	page = req.params.page;
-	if (page && (parseFloat(page) >>> 0) && (Number.isInteger(parseFloat(page))) && (parseFloat(page) > 0)){
+	if (!page || ((parseFloat(page) >>> 0) && (Number.isInteger(parseFloat(page))) && (parseFloat(page) > 0))){
 		next();
 	}
 	else {

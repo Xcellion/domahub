@@ -30,7 +30,7 @@ app.set('views', __dirname + '/views');
 //which session store to use depending on DEV or PROD
 if (node_env == "dev"){
 	console.log("Development environment! Using memory for sessions store.");
-	
+
 	//express session in memory
 	app.use(session({
 		secret: 'domahub_market',

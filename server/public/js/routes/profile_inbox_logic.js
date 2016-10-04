@@ -5,12 +5,32 @@ var inbox_global_obj = {
 }
 var chat_panels = convo_list.slice();
 
+//function that runs when back button is pressed
+window.onpopstate = function(event) {
+    //username in URL
+    if (window.location.pathname.split("/").length == 4){
+        changeConvo(window.location.pathname.split("/").pop(), true);
+    }
+    else {
+        changeConvo(null, true);
+    }
+}
+
 $(document).ready(function() {
 
     createPanel(chat_panels);     //create the convo list panel on the left
-    if (convo_list){
-        changeConvo(convo_list[0].username);
+    if (convo_list.length > 0){
+
+        //username in URL
+        if (window.location.pathname.split("/").length == 4){
+            changeConvo(window.location.pathname.split("/").pop(), true);
+        }
+        else {
+            history.replaceState(null, "Domahub - " + convo_list[0].username, "/profile/inbox/" + convo_list[0].username);
+            changeConvo(convo_list[0].username, true);
+        }
     }
+
     //for searching for a specific user
     $("#search-user").keyup(function(e){
         var needle = $(this).val();
@@ -79,12 +99,10 @@ function checkSubmitFormat(){
     msg_text = $("#msg_text_input").val();
 
     if (!msg_receiver){
-        console.log("invalid person");
-        //todo
+        $("#inbox-message").text("Please enter a username to send the message to!");
     }
-    else if (!msg_text){
-        console.log("no message");
-        //todo
+    else if (!$.trim(msg_text)){
+        //no message, prevent sending
     }
     else {
         return {
@@ -109,6 +127,9 @@ function submitMessage(submit_data){
 
         if (data.state == "success"){
             latest.find(".chat_message").removeClass("is-disabled");
+            chat_panels = data.convo_list;
+            convo_list = data.convo_list;
+            createPanel(chat_panels);
         }
         //if errored show the resend button
         else if (data.state == "error"){
@@ -126,7 +147,9 @@ function submitMessage(submit_data){
 
             if (data.message){
                 $("#inbox-message").text(data.message);
-                $("#msg_receiver_input").val("").focus();
+                $("#msg_receiver_input").removeClass("is-disabled").val("").focus();
+                $("#chat_wrapper").find("*").not("#convo-loading").remove();
+                $("#new-message-controls").addClass("is-hidden");
             }
         }
         else {
@@ -137,18 +160,31 @@ function submitMessage(submit_data){
 
 //get the chat_panels item of the current msg target
 function setChatPanel(username, new_text){
+    var panel_exists = false;
     for (var x = 0; x < chat_panels.length; x++){
         if (chat_panels[x].username.toLowerCase() == username.toLowerCase()){
             chat_panels[x].message = new_text;
-            chat_panels[x].timestamp = moment(new Date()).format("YYYY-MM-DD, HH:mm:ss");;
+            chat_panels[x].timestamp = false;
             var readd = chat_panels.splice(x, 1);
+            panel_exists = true;
             break;
         }
     }
-    var temp_array = [];
-    temp_array.push.apply(temp_array, readd);
-    temp_array.push.apply(temp_array, chat_panels);
-    chat_panels = temp_array;
+
+    if (panel_exists){
+        var temp_array = [];
+        temp_array.push.apply(temp_array, readd);
+        temp_array.push.apply(temp_array, chat_panels);
+        chat_panels = temp_array;
+    }
+    else {
+        chat_panels.unshift({
+            message: new_text,
+            seen: 0,
+            timestamp: false,
+            username: username
+        })
+    }
     createPanel(chat_panels);
 }
 
@@ -200,12 +236,17 @@ function createPanel(chat_panels){
 
 //function to display a single chat convo on the left
 function createPanelConvo(convo_item){
-    var latest_time = moment(new Date(convo_item.timestamp + "Z"));
+    if (!convo_item.timestamp){
+        var latest_time = moment(new Date());
+    }
+    else {
+        var latest_time = moment(new Date(convo_item.timestamp + "Z"));
+    }
     disp_time = formatTimestamp(latest_time);
     disp_msg = (convo_item.message.length > 30) ? convo_item.message.substr(0,30) + "..." : convo_item.message;
 
     var panel_block = $("<a class='panel-block'></a>");
-    panel_block.attr("id", "panel-" + convo_item.username.toLowerCase());
+    panel_block.data("username", convo_item.username.toLowerCase());
     if (inbox_global_obj.current_target){
         if (inbox_global_obj.current_target.toLowerCase() == convo_item.username.toLowerCase()){
             panel_block.addClass("is-active");
@@ -227,8 +268,13 @@ function createPanelConvo(convo_item){
 }
 
 //function to change selected convo
-function changeConvo(username){
-    if (!username){
+function changeConvo(username, history_bool){
+    //if trying to message yourself
+    if (username && (username.toLowerCase() == user.username.toLowerCase())){
+        history.replaceState(null, "", "/profile/inbox");
+    }
+
+    if (!username || username.toLowerCase() == user.username.toLowerCase()){
         $("#msg_text_input").val("");   //empty the current typed msg
         $(".panel-block").removeClass('is-active');     //remove all selected left panel green
         $("#chat_wrapper").find("*").not("#convo-loading").remove();
@@ -248,11 +294,28 @@ function changeConvo(username){
         $("#new-message-controls").removeClass("is-hidden");    //show new msg controls
         $("#msg_receiver_input").val(username).addClass("is-disabled");
         inbox_global_obj.current_target = username.toLowerCase();
-        $("#panel-" + username.toLowerCase()).addClass("is-active");
+
+        //add active to correct side panel
+        $(".panel-block").each(function(e){
+            if ($(this).data("username") == username.toLowerCase()){
+                $(this).addClass("is-active");
+                return false;
+            }
+        });
+
+        if (!history_bool){
+            history.pushState(null, "Domahub - " + username, "/profile/inbox/" + username);
+        }
 
         getConvoItem(username, function(convo_item){
-            appendChats(convo_item.chats);
-            $("#convo-loading").addClass("is-hidden");
+            if (convo_item){
+                appendChats(convo_item.chats);
+                $("#convo-loading").addClass("is-hidden");
+            }
+
+            if (!username){
+                $("#convo-loading").addClass("is-hidden");
+            }
         });
     }
 }
@@ -299,7 +362,7 @@ function appendChats(chats){
     }
 
     //load more messages button
-    if (chats.length % 20 == 0){
+    if (chats.length % 20 == 0 && chats.length != 0){
         var load_more_div = $("<div id='load-more' class='has-text-centered'></div>")
             var load_more_button = $("<a class='button no-shadow load-more'></a>");
                 var load_more_icon = $("<span class='icon'></span>");
@@ -410,6 +473,9 @@ function getConvoItem(username, cb){
             }
         }
     }
+
+    //doesnt exist in left panel, new convo!
+    cb(false);
 }
 
 //function to AJAX call for more msgs and appends them to the convo_item
