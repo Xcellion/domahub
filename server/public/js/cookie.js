@@ -15,8 +15,8 @@ function storeCookies(type){
 			cookie.push(temp_event);
 		}
 	}
-	else if (type == "ip"){
-		cookie = $("#ip_form_input").val();
+	else if (type == "address"){
+		cookie = $("#address_form_input").val();
 	}
 	else if (type == "rental_info"){
 		cookie = rental_info;

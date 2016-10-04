@@ -1,4 +1,4 @@
-var env = process.env.NODE_ENV || 'dev'; 	//dev or prod bool
+var node_env = process.env.NODE_ENV || 'dev'; 	//dev or prod bool
 
 var express = require('express'),
 	app = express(),
@@ -28,8 +28,9 @@ app.set('view engine', 'ejs');
 app.set('views', __dirname + '/views');
 
 //which session store to use depending on DEV or PROD
-if (env == "dev"){
+if (node_env == "dev"){
 	console.log("Development environment! Using memory for sessions store.");
+	
 	//express session in memory
 	app.use(session({
 		secret: 'domahub_market',
