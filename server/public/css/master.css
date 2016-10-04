@@ -1546,6 +1546,11 @@ input:-webkit-autofill {
     height: 128px;
     width: 128px; }
 
+.image + p,
+.image + h2,
+.image + h3 {
+  margin-top: 10px; }
+
 .notification {
   background-color: white;
   border-radius: 3px;
@@ -3579,10 +3584,12 @@ a.nav-item.is-tab {
       color: rgba(255, 255, 255, 0.7); }
     .panel-block.is-active > .panel-icon {
       color: white; }
-  .panel-block:hover:not(.is-active), .panel-block:active:not(.is-active) {
+    .panel-block.is-active:hover, .panel-block.is-active:active {
+      background-color: #3cbc8d; }
+  .panel-block.has-button:hover, .panel-block.has-button:active {
+    background-color: transparent; }
+  .panel-block:hover, .panel-block:active {
     background-color: rgba(0, 0, 0, 0.12); }
-    .panel-block:hover:not(.is-active):last-child, .panel-block:active:not(.is-active):last-child {
-      background-color: transparent; }
   .panel-block:not(:last-child) {
     border-bottom: 1px solid rgba(0, 0, 0, 0.12); }
 
