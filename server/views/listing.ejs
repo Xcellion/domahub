@@ -39,8 +39,8 @@
 				<div id="listing_info_wrapper">
 					<!-- information about the current listing -->
 					<div id="listing_info_title" class="listing_info_center">
-						<h2 class="listing_info_text green_text"><%= listing_info.domain_name %></h2>
-						<p id="domain_owner" class="listing_info_text listing_info_text_white">Owned by: <a class="green_text" href="mailto:<%= listing_info.email %>"><%= listing_info.username %></a></p>
+						<h2 class="listing_info_text"><a href="/listing/<%= listing_info.domain_name %>" class="green_text"><%= listing_info.domain_name %></a></h2>
+						<p id="domain_owner" class="listing_info_text listing_info_text_white">Owned by: <a class="green_text" href="/profile/inbox/<%= listing_info.username %>"><%= listing_info.username %></a></p>
 						<% if (listing_info.price_type) { %>
 							<div id="pricing_wrapper">
 								<p class="listing_info_text listing_info_text_white">Hour <span class="green_text">$<%=listing_info.hour_price%></span> | </p>

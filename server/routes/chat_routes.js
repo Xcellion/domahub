@@ -52,22 +52,38 @@ function checkMessage(req, res, next){
 function getOtherId(req, res, next){
 	other_name = req.params.account || req.body.msg_receiver;
 
-	if (!other_name || other_name == req.user.username || other_name.includes(" ")){
-		res.redirect("/profile/inbox");
+	if (!other_name || other_name.includes(" ")){
+		res.json({
+			state: "error",
+			message: "Please enter a valid username to send the message to!"
+		});
+	}
+	else if (other_name.toLowerCase() == req.user.username.toLowerCase()){
+		res.json({
+			state: "error",
+			message: "You can't message yourself!"
+		});
 	}
 	else {
 		Account.getAccount(undefined, other_name, function(result){
 			if (result.state=="error"){error.handler(req, res, result.info);}
 			else {
-				if (result.info.length > 0 && result.info[0].id != req.user.id){
+				if (result.info.length > 0){
 					req.other_id = result.info[0].id;
+					req.username = result.info[0].username;
 					next();
+				}
+				else if (result.info[0].id != req.user.id){
+					res.json({
+						state: "error",
+						message: "You can't message yourself!"
+					});
 				}
 				else {
 					res.json({
 						state: "error",
 						message: "No such account exists!"
-					})
+					});
 				}
 			}
 		});
@@ -77,15 +93,42 @@ function getOtherId(req, res, next){
 //function to create a new message
 function createMessage(req, res, next){
 	req.message_item.receiver_account_id = req.other_id;
+
 	Chat.newChatMessage(req.message_item, function(result){
 		if (result.state=="error"){error.handler(req, res, result.info);}
 		else {
-			req.user.refresh_chat = true;
+			req.message_item.username = req.username;
+			refreshConvos(req.user.convo_list, req.message_item);
 			res.json({
-				state: "success"
-			})
+				state: "success",
+				convo_list: req.user.convo_list
+			});
 		}
 	})
+}
+
+//function to refresh user.convos object, bringing newest message_item to the front;
+function refreshConvos(convo_list, message_item, username){
+	var move_to_front = false;
+	for (var x = 0; x < convo_list.length; x++){
+		if (convo_list[x].id == message_item.receiver_account_id){
+			convo_list[x].message = message_item.message;
+			convo_list[x].timestamp = false;
+			var move_to_front = convo_list.splice(x, 1);
+			break;
+		}
+	}
+	if (move_to_front){
+		convo_list.unshift(move_to_front[0]);
+	}
+	else {
+		convo_list.unshift({
+			message: message_item.message,
+			seen: 0,
+			timestamp: false,
+			username: message_item.username
+		})
+	}
 }
 
 //function to get the convo of two people

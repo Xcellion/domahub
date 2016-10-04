@@ -103,26 +103,32 @@ module.exports = {
 			listing_id: new_rental_info.listing_id,
 			address: new_rental_info.address,
 		};
-		
+
 		newListingRental(req, res, new_rental_info.listing_id, raw_info, function(rental_id){
 
 			//format any new times
 			formatted_times = formatNewRentalTimes(rental_id, new_rental_info.formatted_times);
 
-			newRentalTimes(req, res, rental_id, new_rental_info.formatted_times, function(state){
-				if (state == "error"){
-					Listing.deleteRental(rental_id, function(){
-						error.handler(req, res, "Invalid rental times!", "json");
-					});
-				}
-				else {
-					delete req.session.new_rental_info;
-					res.send({
-						state: "success",
-						rental_id: rental_id
-					});
-				}
+			newRentalTimes(req, res, rental_id, new_rental_info.formatted_times, function(){
+				req.session.new_rental_info.rental_id = rental_id;
+				next();
 			});
+		});
+	},
+
+	//activate the rental once its good
+	toggleActivateRental: function(req, res, next){
+		rental_id = req.session.new_rental_info.rental_id;
+
+		Listing.toggleActivateRental(rental_id, function(result){
+			if (result.state != "success"){error.handler(req, res, result.description);}
+			else {
+				delete req.session.new_rental_info;
+				res.send({
+					state: "success",
+					rental_id: rental_id
+				});
+			}
 		});
 	}
 
@@ -152,7 +158,6 @@ function getRental(req, res, rental_id, callback){
 function newListingRental(req, res, listing_id, raw_info, callback){
 	Listing.newListingRental(new_rental_info.listing_id, raw_info, function(result){
 		if (result.state != "success"){error.handler(req, res, result.description);}
-		//create the rental times
 		else {
 			callback(result.info.insertId);
 		}
@@ -172,9 +177,7 @@ function formatNewRentalTimes(rental_id, times){
 //function to create new rental times
 function newRentalTimes(req, res, rental_id, times, callback){
 	Listing.newRentalTimes(rental_id, times, function(result){
-		if (result.state != "success"){
-			callback("error");
-		}
+		if (result.state != "success"){error.handler(req, res, result.description);}
 		else {
 			callback();
 		}

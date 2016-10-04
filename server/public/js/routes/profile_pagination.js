@@ -147,7 +147,7 @@ function setupControls(total_pages, row_per_page, current_page, rows_to_disp){
             createPaginationPages(total_pages, row_per_page, current_page);
             paginateRows(total_pages, current_page);
         }
-        else {
+        else if (page_val != current_page){
             $("#go-to-page-input").val(1);
         }
     });
