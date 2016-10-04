@@ -38,6 +38,10 @@
   margin-bottom: 25px;
 }
 
+.vertical-align-bottom {
+  vertical-align: bottom;
+}
+
 .has-borderRight {
   @include tablet {
     border-right: 1px solid $border;
