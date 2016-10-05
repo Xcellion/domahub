@@ -127,7 +127,7 @@ module.exports = {
 	},
 
 	//helper functions related to authentication
-	isLoggedIn: isLoggedIn,
+	checkLoggedIn: checkLoggedIn,
 	isNotLoggedIn : isNotLoggedIn,
 	checkToken : checkToken,
 	messageReset: messageReset,
@@ -153,7 +153,7 @@ module.exports = {
 }
 
 //make sure user is logged in before doing anything
-function isLoggedIn(req, res, next) {
+function checkLoggedIn(req, res, next) {
 	var route = req.path;
 
 	//if user is authenticated in the session, carry on

@@ -4,6 +4,7 @@ var validator = require("validator");
 var multer = require("multer");
 var parse = require("csv-parse");
 var fs = require('fs')
+var dns = require("dns");
 
 var upload = multer({
 	dest:'./uploads',
@@ -31,14 +32,6 @@ module.exports = {
 	init : function(e, l){
 		error = e;
 		Listing = l;
-	},
-
-	//function to display the create listing page
-	renderCreateListing : function(req, res, next){
-		res.render("listing_create.ejs", {
-			message: Auth.messageReset(req),
-			user: req.user,
-		});
 	},
 
 	//function to format the listing info
@@ -71,46 +64,6 @@ module.exports = {
 		else {
 			next();
 		}
-	},
-
-	//function to create a new listing
-	createListing : function(req, res, next){
-		listing_info = {
-			domain_name : req.body.domain_name,
-			description: req.body.description,
-			owner_id: req.user.id,
-			price_type: 0,
-			type: 0
-		}
-
-		Listing.newListing(listing_info, function(result){
-			if (result.state=="error"){error.handler(req, res, result.info);}
-			else {
-				req.user.refresh_listing = true;		//to refresh the user object's list of listings
-				res.send({
-					state: "success",
-					listing_info: {
-						domain_name: domain_name,
-						id: result.info.insertId,
-						owner_id: req.user.id,
-						price_type: 0,
-						type: 0
-					},
-					message: "Successfully added a new listing!"
-				})
-			}
-		});
-	},
-
-	uploadSizeCheck : function(req, res, next){
-		upload(req, res, function(err){
-			if (err){
-				error.handler(req, res, "File too large!");
-			}
-			else {
-				next();
-			}
-		});
 	},
 
 	//function to check the format of the batch CSV file
@@ -150,6 +103,75 @@ module.exports = {
 		}
 	},
 
+	//function to check if the user can create new listings
+	checkAccountListingPriv : function(req, res, next){
+		if (req.user.type >= 2){
+			next();
+		}
+		else {
+			res.render("stripeconnect.ejs");
+		}
+	},
+
+	//function to check the size of the upload
+	checkUploadSize : function(req, res, next){
+		upload(req, res, function(err){
+			if (err){
+				error.handler(req, res, "File too large!");
+			}
+			else {
+				next();
+			}
+		});
+	},
+
+	//function to check that the user owns the listing
+	checkListingOwner : function(req, res, next){
+		Listing.checkListingOwner(req.user.id, req.params.domain_name, function(result){
+			if (result.state=="error"){error.handler(req, res, result.info);}
+			else {
+				next();
+			}
+		})
+	},
+
+	//function to display the create listing page
+	renderCreateListing : function(req, res, next){
+		res.render("listing_create.ejs", {
+			message: Auth.messageReset(req),
+			user: req.user,
+		});
+	},
+
+	//function to create a new listing
+	createListing : function(req, res, next){
+		listing_info = {
+			domain_name : req.body.domain_name,
+			description: req.body.description,
+			owner_id: req.user.id,
+			status: 0,
+			type: 0
+		}
+
+		Listing.newListing(listing_info, function(result){
+			if (result.state=="error"){error.handler(req, res, result.info);}
+			else {
+				req.user.refresh_listing = true;		//to refresh the user object's list of listings
+				res.send({
+					state: "success",
+					listing_info: {
+						domain_name: domain_name,
+						id: result.info.insertId,
+						owner_id: req.user.id,
+						status: 0,
+						type: 0
+					},
+					message: "Successfully added a new listing!"
+				})
+			}
+		});
+	},
+
 	//function to create the batch listings once done
 	createListingBatch : function(req, res, next){
 		req.user.refresh_listing = true;
@@ -168,8 +190,52 @@ module.exports = {
 				})
 			}
 		});
-	}
+	},
 
+	//function to update a listing
+	updateListing: function(req, res, next){
+		if (!req.new_listing_info){
+			error.handler(req, res, "Invalid listing information!");
+		}
+		else {
+			domain_name = req.new_listing_info.domain_name;
+			delete req.new_listing_info.domain_name;
+			Listing.updateListing(domain_name, req.new_listing_info, function(result){
+				if (result.state=="error"){error.handler(req, res, result.info);}
+				else {
+					updateUserListingsObject(req, domain_name);
+					res.json({
+						state: "success",
+						listings: req.user.listings
+					});
+				}
+			});
+		}
+	},
+
+	//function to verify ownership of a listing
+	verifyListing: function(req, res, next){
+		domain_name = req.params.domain_name;
+		dns.lookup(domain_name, function (err, address, family) {
+			if (err){error.handler(req, res, "DNS error!")};
+
+			domain_ip = address;
+			dns.lookup("domahub.com", function (err, address, family) {
+				if (domain_ip == address){
+					req.new_listing_info = {
+						domain_name: domain_name,
+						status: 1
+					}
+					next();
+				}
+				else {
+					res.json({
+						state: "error"
+					})
+				}
+			});
+		});
+	}
 }
 //----------------------------------------------------------------helper functions----------------------------------------------------------------
 
@@ -280,4 +346,15 @@ function parseCSVFile(sourceFilePath, errorHandler, done){
     });
 
     source.pipe(parser);
+}
+
+//helper function to update req.user.listings after updating a listing
+function updateUserListingsObject(req, domain_name){
+	for (var x = 0; x < req.user.listings.length; x++){
+		if (req.user.listings[x].domain_name.toLowerCase() == domain_name.toLowerCase()){
+			req.user.listings[x] = Object.assign({}, req.user.listings[x], req.new_listing_info);
+			delete req.new_listing_info;
+			break;
+		}
+	}
 }

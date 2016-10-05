@@ -44,6 +44,13 @@ listing_model.prototype.checkAccountRental = function(account_id, rental_id, cal
 	listing_query(query, "Account does not own the rental!", callback, [account_id, rental_id]);
 }
 
+//check if an account owns a listing
+listing_model.prototype.checkListingOwner = function(account_id, domain_name, callback){
+	console.log("Checking to see if account #" + account_id + " owns domain " + domain_name + "...");
+	query = 'SELECT 1 AS "exist" FROM listings WHERE owner_id = ? AND domain_name = ?'
+	listing_query(query, "Account does not own the domain" + domain_name + "!", callback, [account_id, domain_name]);
+}
+
 //check if an rental belongs to a specific listing
 listing_model.prototype.checkListingRental = function(rental_id, domain_name, callback){
 	console.log("Checking to see if rental #" + rental_id + " is listed under " + domain_name + "...");
@@ -137,7 +144,7 @@ listing_model.prototype.getAllListings = function(callback){
 				accounts.email\
 			FROM listings \
 			JOIN accounts ON listings.owner_id = accounts.id \
-			WHERE listings.price_type != 0'
+			WHERE listings.status != 0'
 	listing_query(query, "Failed to get all listing info!", callback);
 }
 
@@ -317,7 +324,16 @@ listing_model.prototype.newRentalTimes = function(rental_id, rental_times, callb
 
 //----------------------------------------------------------------------UPDATE----------------------------------------------------------
 
-//updates a rental info
+//updates listing info
+listing_model.prototype.updateListing = function(domain_name, listing_info, callback){
+	console.log("Attempting to update domain " + domain_name + "...");
+	query = "UPDATE listings \
+			SET ? \
+			WHERE domain_name = ?"
+	listing_query(query, "Failed to update domain" + domain_name + "!", callback, [listing_info, domain_name]);
+}
+
+//updates rental info
 listing_model.prototype.updateRental = function(rental_id, rental_info, callback){
 	console.log("Attempting to update rental #" + rental_id + "...");
 	query = "UPDATE rentals \

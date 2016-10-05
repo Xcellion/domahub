@@ -10,13 +10,13 @@ module.exports = function(app, db, auth, e){
 
 	Chat = new chat_model(db);
 	Account = new account_model(db);
-	isLoggedIn = Auth.isLoggedIn;
+	checkLoggedIn = Auth.checkLoggedIn;
 
 	//new message
 	app.post([
 		"/messages/new"
 	], [
-		isLoggedIn,
+		checkLoggedIn,
 		checkMessage,
 		getOtherId,
 		createMessage
@@ -26,7 +26,7 @@ module.exports = function(app, db, auth, e){
 	app.post([
 		"/messages/:account"
 	], [
-		isLoggedIn,
+		checkLoggedIn,
 		getOtherId,
 		getConvo
 	]);

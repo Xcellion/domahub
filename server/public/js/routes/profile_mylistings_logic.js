@@ -6,17 +6,14 @@ $(document).ready(function() {
 
 //function to create a listing row
 function createRow(listing_info, rownum){
-    tempRow = $("<tr class='row-disp' id='row" + rownum + "'></tr>");
+    var tempRow = $("<tr class='row-disp' id='row" + rownum + "'></tr>");
+    var verified = listing_info.status != 0;
 
     tempRow.append(createArrow(listing_info));
     tempRow.append(createDomain(listing_info));
     tempRow.append(createType(listing_info));
-    if (listing_info.price_type == 0){
-        tempRow.append(createVerify(listing_info));
-    }
-    else {
-        tempRow.append(createStatus(listing_info));
-    }
+    tempRow.append(createVerify(listing_info, verified));
+    tempRow.append(createStatus(listing_info, verified));
     tempRow.append(createDate(listing_info));
     tempRow.append(createView(listing_info));
 
@@ -30,25 +27,36 @@ function createRow(listing_info, rownum){
 
 //function to create the listing status td
 function createType(listing_info){
-    var text = (listing_info.type != 0) ? "Premium" : "Basic";
+    var text = (listing_info.price_type != 0) ? "Premium" : "Basic";
     var temp_td = $("<td class='td-visible td-type'>" + text + "</td>");
     temp_td.data("type", text);
     return temp_td;
 }
 
 //function to create a button to verify the listing
-function createVerify(listing_info){
-    var temp_td = $("<td class='td-visible td-view'></td>");
-        var temp_a = $("<a class='button' target='_blank' style='target-new: tab;'' href='/listing/" + listing_info.domain_name + "/verify'></a>");
+function createVerify(listing_info, bool){
+    var temp_td = $("<td class='td-visible td-verify'></td>");
+        var temp_a = $("<a class='verify-link'></a>");
+            temp_a.data("href", '/listing/' + listing_info.domain_name + '/verify');
             var temp_span2 = $("<span>Unverified</span>");
+
+    //hide if verified
+    if (bool){
+        temp_td.addClass("is-hidden");
+    }
     temp_td.append(temp_a.append(temp_span2));
     return temp_td;
 }
 
 //function to create the listing status td
-function createStatus(listing_info){
-    var text = (listing_info.price_type != 0) ? "Active" : "Inactive";
+function createStatus(listing_info, bool){
+    var text = (listing_info.status == 1) ? "Inactive" : "Active";
     var temp_td = $("<td class='td-visible td-status'>" + text + "</td>");
+
+    //hide if not verified
+    if (!bool){
+        temp_td.addClass("is-hidden");
+    }
     temp_td.data("status", text);
     return temp_td;
 }
@@ -79,16 +87,24 @@ function createView(listing_info){
 
 //function to create dropdown row
 function createRowDrop(listing_info, rownum){
-    temp_drop = $("<tr id='row-drop" + rownum + "' class='row-drop'></tr>");
-    temp_td = $("<td class='row-drop-td' colspan='6'></td>")
-    temp_div_drop = $("<div id='div-drop' class='td-visible container'></div>");
-    temp_div_col = $("<div class='columns'></div>");
+    var temp_drop = $("<tr id='row-drop" + rownum + "' class='row-drop'></tr>");
+    var temp_td = $("<td class='row-drop-td' colspan='6'></td>")
+    var temp_div_drop = $("<div id='div-drop' class='td-visible container'></div>");
+    var temp_div_col = $("<div class='columns'></div>");
 
     temp_drop.append(temp_td.append(temp_div_drop.append(temp_div_col.append(
         createImgDrop(listing_info),
         createPriceDrop(listing_info),
         createFormDrop(listing_info)
     ))));
+
+    temp_drop.find(".drop-form .changeable-input").bind("input", function(e){
+        var save_button = temp_drop.find(".save-changes-button");
+        if (save_button.hasClass("is-disabled")){
+            save_button.removeClass('is-disabled');
+        }
+    });
+
     temp_div_drop.hide();
 
     return temp_drop;
@@ -117,7 +133,7 @@ function createImgDrop(listing_info){
 //function to create the price drop column
 function createPriceDrop(listing_info){
     var temp_col = $("<div class='column is-3'></div>");
-    var temp_form = $("<form'></form>");
+    var temp_form = $("<form class='drop-form'></form>");
 
     var label_types = ["Hourly", "Daily", "Weekly", "Monthly"];
     var label_values = [listing_info.hour_price, listing_info.day_price, listing_info.week_price,listing_info.month_price];
@@ -128,8 +144,9 @@ function createPriceDrop(listing_info){
                 var temp_label = $('<label class="label">' + label_types[x] + '</label>');
             var temp_div_control = $("<div class='control'></div>");
                 var temp_control_p = $("<p class='control has-icon'></p>");
-                    disabled = (listing_info.type == 0) ? "is-disabled" : "";
-                    var temp_input = $('<input class="input ' + disabled + '" type="number" value="' + label_values[x] + '">');
+                    disabled = (listing_info.price_type == 0) ? "is-disabled" : "";
+                    var temp_input = $('<input class="input changeable-input ' + disabled + '" type="number" value="' + label_values[x] + '">');
+
                     var temp_i = $('<i class="fa fa-dollar"></i>');
 
         temp_form.append(temp_div1.append(temp_div_label.append(temp_label), temp_div_control.append(temp_control_p.append(temp_input, temp_i))));
@@ -143,7 +160,7 @@ function createPriceDrop(listing_info){
 //function to create buy link and background image form drop
 function createFormDrop(listing_info){
     var temp_col = $("<div class='column'></div>");
-    var temp_form = $("<form></form>");
+    var temp_form = $("<form class='drop-form'></form>");
 
     var buy_link = (listing_info.buy_link == null) ? "" : listing_info.buy_link;
     var description = (listing_info.description == null) ? "" : listing_info.description;
@@ -152,7 +169,7 @@ function createFormDrop(listing_info){
         var temp_div1_control = $("<div class='control-label is-small'></div>");
             var temp_div1_label = $("<label class='label'>Purchase link</label>")
         var temp_div1_p = $("<p class='control has-icon'></p>");
-            var temp_div1_input = $('<input class="input" type="url" placeholder="https://buy-my-website.com" value="' + buy_link + '"/>');
+            var temp_div1_input = $('<input class="input changeable-input" type="url" placeholder="https://buy-my-website.com" value="' + buy_link + '"/>');
             var temp_div1_input_i = $('<i class="fa fa-link"></i>');
     temp_div1.append(temp_div1_control.append(temp_div1_label), temp_div1_p.append(temp_div1_input, temp_div1_input_i));
 
@@ -160,14 +177,14 @@ function createFormDrop(listing_info){
         var temp_div2_control_label = $('<div class="control-label is-small">');
             var temp_div2_label = $('<label class="label">Description</label>');
         var temp_div2_control = $('<div class="control">');
-            var temp_div2_input = $('<textarea class="textarea" placeholder="Rent this website for any time period you please!">' + description + '</textarea>')
+            var temp_div2_input = $('<textarea class="textarea changeable-input" placeholder="Rent this website for any time period you please!">' + description + '</textarea>')
     temp_div2.append(temp_div2_control_label.append(temp_div2_label), temp_div2_control.append(temp_div2_input));
 
     var temp_div3 = $('<div class="control is-pulled-right is-grouped"></div>');
         var temp_control1 = $('<div class="control"></div>');
             var temp_button1 = $('<a href="/listing/upgrade?d=' + listing_info.domain_name + '" class="button is-success">Upgrade to a Premium Listing</a>');
         var temp_control2 = $('<div class="control"></div>');
-            var temp_button2 = $('<button class="button is-success">Save Changes</button>');
+            var temp_button2 = $('<button class="save-changes-button button is-disabled is-success">Save Changes</button>');
 
     temp_div3.append(temp_control1.append(temp_button1), temp_control2.append(temp_button2));
 
@@ -187,6 +204,7 @@ function editRow(row){
             dropRow($(this), false);
             editArrow($(this), false);
             editStatus($(this), false);
+            editVerify($(this), false);
         }
     });
 
@@ -197,21 +215,22 @@ function editRow(row){
     dropRow(row, editing);
     editArrow(row, editing);
     editStatus(row, editing);
-    editType(row, editing);
+    editVerify(row, editing);
 }
 
 //function to change status column to editable
 function editStatus(row, editing){
     status_td = row.find(".td-status");
 
-    if (editing){
+    if (editing && !status_td.hasClass("is-hidden")){
         new_td = $("<td class='td-visible td-status'></td>");
             temp_span = $("<span class='select status-span'></span>");
-            temp_select = $("<select class='status-select'></select>");
+            temp_form = $("<form class='drop-form'></form>");
+            temp_select = $("<select class='status-select changeable-input'></select>");
                 temp_select.append("<option value='Active'>Active</option");
                 temp_select.append("<option value='Inactive'>Inactive</option");
                 temp_select.val(status_td.data('status'));
-        new_td.append(temp_span.append(temp_select));
+        new_td.append(temp_span.append(temp_form.append(temp_select)));
 
         //prevent clicking status from dropping down row
         temp_select.click(function(e) {
@@ -226,7 +245,40 @@ function editStatus(row, editing){
     }
 }
 
-//function to change status column to editable
-function editType(row, editing){
+//function to change verify column to editable
+function editVerify(row, editing){
+    verify_td = row.find(".td-verify");
+    status_td = row.find(".td-status");
+    verify_a = verify_td.find(".verify-link");
 
+    if (editing){
+        verify_a.addClass("button");
+        verify_a.text("Verify?");
+
+        //bind a click to verify the listing
+        verify_a.unbind().click(function(e){
+            e.preventDefault();
+            e.stopPropagation();
+            verify_a.addClass('is-loading').removeClass("is-danger");
+            $.ajax({
+                url: verify_a.data("href"),
+                method: "GET"
+            }).done(function(data){
+                verify_a.removeClass('is-loading');
+                if (data.state == "success"){
+                    status_td.removeClass("is-hidden");
+                    verify_td.addClass("is-hidden");
+                    editStatus(row, editing);
+                    listings = data.listings;
+                }
+                else {
+                    verify_a.addClass('is-danger');
+                    verify_a.text("Failed");
+                }
+            });
+        });
+    }
+    else {
+        verify_a.unbind().removeClass("button is-danger").text("Unverified");
+    }
 }

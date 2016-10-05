@@ -9,7 +9,7 @@ module.exports = function(app, db, auth, e, pp){
 	error = e;
 
 	Account = new account_model(db);
-	isLoggedIn = Auth.isLoggedIn;
+	checkLoggedIn = Auth.checkLoggedIn;
 
 	//redirect profile to dashboard
 	app.get("/profile", function(req, res){ res.redirect("/profile/dashboard") });
@@ -20,7 +20,7 @@ module.exports = function(app, db, auth, e, pp){
 		"/profile/mylistings/:page"
 	], [
 		checkPageNum,
-		isLoggedIn,
+		checkLoggedIn,
 		getAccountListings,
 		renderMyListings
 	]);
@@ -31,14 +31,14 @@ module.exports = function(app, db, auth, e, pp){
 		"/profile/myrentals/:page"
 	], [
 		checkPageNum,
-		isLoggedIn,
+		checkLoggedIn,
 		getAccountRentals,
 		renderMyRentals
 	]);
 
 	//check if user is legit, get all listings, get all rentals
 	app.get("/profile/dashboard", [
-		isLoggedIn,
+		checkLoggedIn,
 		getAccountListings,
 		getAccountRentals,
 		renderDashboard
@@ -49,20 +49,20 @@ module.exports = function(app, db, auth, e, pp){
 		"/profile/inbox",
 		"/profile/inbox/:target_username"
 	], [
-		isLoggedIn,
+		checkLoggedIn,
 		getAccountChats,
 		renderInbox
 	])
 
 	//settings
 	app.get("/profile/settings", [
-		isLoggedIn,
+		checkLoggedIn,
 		renderSettings
 	])
 
 	//connect stripe
 	app.get("/connectstripe", [
-		isLoggedIn,
+		checkLoggedIn,
 		connectStripe
 	]);
 
@@ -75,7 +75,7 @@ module.exports = function(app, db, auth, e, pp){
 
 	//authorize stripe
 	app.get("/authorizestripe", [
-		isLoggedIn,
+		checkLoggedIn,
 		authorizeStripe
 	]);
 
@@ -84,7 +84,7 @@ module.exports = function(app, db, auth, e, pp){
 
 	//post to change account settings
 	app.post("/profile/settings", [
-		isLoggedIn,
+		checkLoggedIn,
 		Auth.checkAccountSettings,
 		Auth.updateAccountSettings
 	])
@@ -94,8 +94,7 @@ module.exports = function(app, db, auth, e, pp){
 function getAccountListings(req, res, next){
 
 	//if we dont already have the list of listings or if we need to refresh them
-	if (!req.user.listings || req.user.refresh_listing){
-		delete req.user.refresh_listing;
+	if (!req.user.listings){
 		account_id = req.user.id;
 
 		Account.getAccountListings(account_id, function(result){
@@ -115,8 +114,7 @@ function getAccountListings(req, res, next){
 function getAccountRentals(req, res, next){
 
 	//if we dont already have the list of rentals or if we need to refresh them
-	if (!req.user.rentals || req.user.refresh_rental){
-		delete req.user.refresh_rental;
+	if (!req.user.rentals){
 		account_id = req.user.id;
 
 		Account.getAccountRentals(account_id, function(result){
