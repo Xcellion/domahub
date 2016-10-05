@@ -543,7 +543,7 @@ function createEvent(start, end){
 
 //server side helper function to get correct price of events
 function eventPrices(){
-	if (listing_info.price_type){
+	if (listing_info.status){
 		var myevents = $('#calendar').fullCalendar('clientEvents', filterMine);
 		if (myevents.length){
 			$("#calendar_next").addClass("is-primary");

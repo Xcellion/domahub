@@ -161,7 +161,7 @@ function sortRows(method, sorted){
         toggleSort("domain_name", sorted);
     }
     else if (method == "status"){
-        toggleSort("price_type", sorted);
+        toggleSort("status", sorted);
     }
     else if (method == "date"){
         toggleSort("date_created", sorted);
@@ -289,8 +289,9 @@ function createAllRows(row_per_page, current_page){
     row_start = row_per_page * (current_page - 1);
     for (var x = 0; x < row_per_page; x++){
         if (row_display[row_start]){
-            $("#table_body").append(createRow(row_display[row_start], row_start));
-            $("#table_body").append(createRowDrop(row_display[row_start], row_start));
+            var temp_row = createRow(row_display[row_start], row_start);
+            var temp_row_drop = createRowDrop(row_display[row_start], row_start);
+            $("#table_body").append(temp_row, temp_row_drop);
         }
         row_start++;
     }

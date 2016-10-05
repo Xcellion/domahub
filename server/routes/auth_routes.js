@@ -1,5 +1,5 @@
 module.exports = function(app, auth){
-	app.get('/login', auth.isLoggedIn);
+	app.get('/login', auth.checkLoggedIn);
 	app.get('/logout', auth.logout);
 
 	//cant access these routes if they are logged in
@@ -27,7 +27,7 @@ module.exports = function(app, auth){
 
 	//to render the request verify page
 	app.get("/verify", [
-		auth.isLoggedIn,
+		auth.checkLoggedIn,
 		function(req, res){
 			res.redirect('/profile');
 		}

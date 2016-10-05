@@ -41,7 +41,7 @@
 					<div id="listing_info_title" class="listing_info_center">
 						<h2 class="listing_info_text"><a href="/listing/<%= listing_info.domain_name %>" class="green_text"><%= listing_info.domain_name %></a></h2>
 						<p id="domain_owner" class="listing_info_text listing_info_text_white">Owned by: <a class="green_text" href="/profile/inbox/<%= listing_info.username %>"><%= listing_info.username %></a></p>
-						<% if (listing_info.price_type) { %>
+						<% if (listing_info.status) { %>
 							<div id="pricing_wrapper">
 								<p class="listing_info_text listing_info_text_white">Hour <span class="green_text">$<%=listing_info.hour_price%></span> | </p>
 								<p class="listing_info_text listing_info_text_white">Day <span class="green_text">$<%=listing_info.day_price%></span> | </p>
@@ -89,7 +89,7 @@
 
 				<div id="calendar_top_wrapper">
 					<div id="calendar_price_wrapper">
-						<% if (listing_info.price_type) { %>
+						<% if (listing_info.status) { %>
 							<p class="listing_info_text">Hour <span class="green_text">$<%=listing_info.hour_price%></span> | </p>
 							<p class="listing_info_text">Day <span class="green_text">$<%=listing_info.day_price%></span> | </p>
 							<p class="listing_info_text">Week <span class="green_text">$<%=listing_info.week_price%></span> | </p>
@@ -106,7 +106,7 @@
 					</div>
 
 					<div id="calendar_right_wrapper" class="info_wrapper_block">
-						<% if (listing_info.price_type) { %>
+						<% if (listing_info.status) { %>
 							<h1 id="price">$0</h1>
 						<% } else {%>
 							<h1 id="price">$?</h1>
