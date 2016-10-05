@@ -163,11 +163,11 @@ function sortRows(method, sorted){
     else if (method == "status"){
         toggleSort("price_type", sorted);
     }
-    else if (method == "date_created"){
+    else if (method == "date"){
         toggleSort("date_created", sorted);
     }
-    else if (method == "start_date"){
-        toggleSort("date", sorted);
+    else if (method == "type"){
+        toggleSort("type", sorted);
     }
 }
 
