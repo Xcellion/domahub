@@ -75,10 +75,12 @@
         border-color: $color
         color: $color
         &:hover,
-        &:focus
+        &:focus,
+        &.is-active
           background-color: $color
           border-color: $color
           color: $color-invert
+
   &.is-blank
     +box-shadow(0,0,0,$black,0)
     background-color: transparent
