@@ -174,6 +174,9 @@
   padding-right: 10px
   vertical-align: top
   white-space: nowrap
+  &:hover,
+  &:active
+    cursor: pointer
   &.is-uppercase
     text-transform: uppercase
   .delete
@@ -189,6 +192,12 @@
     &.is-#{$name}
       background-color: $color
       color: $color-invert
+      &:hover,
+      &:focus,
+      &.is-active
+        background-color: darken($color, 10%)
+        border-color: transparent
+        color: $color-invert
   // Sizes
   &.is-small
     font-size: $size-small
@@ -209,6 +218,12 @@
     .delete
       margin-left: 4px
       margin-right: -8px
+
+.tag + .tag
+  +mobile
+    margin-top: 10px
+  +tablet
+    margin-left: 10px
 
 .unselectable
   -webkit-touch-callout: none
