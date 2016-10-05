@@ -11,152 +11,133 @@
 
   <%- include("templates/navbar", {user: user}); %>
 
-  <section id="sec1" class="section min-height flex-column-justify-center is-fullheight">
-    <div class="container flex-justify-center">
-      <div class="column">
-        <div class="content bottom-margin-25 has-text-centered">
-          <h1 class="question is-accent">What can we help you with?</h1>
-          <p>
-            Please select one of the options below:
-          </p>
-        </div>
-      </div>
-    </div>
-    <div class="container flex-justify-center">
-      <div class="columns">
-        <div class="column">
-          <a class="box">
-            <div class="content has-text-centered">
-              <h2 class="selection">I want to <strong>rent</strong> a domain</h2>
-            </div>
-          </a>
-        </div>
-        <div class="column">
-          <a class="box">
-            <div class="content has-text-centered">
-              <h2 class="selection">I want to <strong>list</strong> my domain(s)</h2>
-            </div>
-          </a>
+  <section id="gs1" class="hero is-large clear-nav">
+    <div class="hero-body">
+      <div class="container has-text-centered">
+        <h1 class="title is-2 is-accent">What can we help you with?</h1>
+        <h2 class="subtitle is-4 is-light">Please select one of the options below:</h2>
+        <div class="hero-buttons">
+          <a id="gs-choice-rent" class="button is-large">I want to rent a domain</a>
+          <a id="gs-choice-list" class="button is-large">I want to list my domain(s)</a>
         </div>
       </div>
     </div>
   </section>
 
-  <section id="sec2" class="section min-height flex-column-justify-center is-fullheight is-hidden">
-    <div class="container flex-justify-center">
-      <div class="column">
-        <div class="content bottom-margin-25 has-text-centered">
-          <h1 class="question is-accent">What type of domain are you looking for?</h1>
-          <p>
-            Please select one of the options below:
-          </p>
-        </div>
-      </div>
-    </div>
-    <div class="container flex-justify-center">
-      <div class="columns">
-        <div class="column">
-          <a class="box">
-            <div class="content has-text-centered">
-              <h2 class="selection">Start-Up</h2>
-            </div>
-          </a>
-        </div>
-        <div class="column">
-          <a class="box">
-            <div class="content has-text-centered">
-              <h2 class="selection">Business</h2>
-            </div>
-          </a>
-        </div>
-        <div class="column">
-          <a class="box">
-            <div class="content has-text-centered">
-              <h2 class="selection">Event</h2>
-            </div>
-          </a>
-        </div>
-        <div class="column">
-          <a class="box">
-            <div class="content has-text-centered">
-              <h2 class="selection">Invitation</h2>
-            </div>
-          </a>
-        </div>
-        <div class="column">
-          <a class="box">
-            <div class="content has-text-centered">
-              <h2 class="selection">I don&#39t know</h2>
-            </div>
-          </a>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section id="sec3" class="section min-height flex-column-justify-center is-fullheight is-hidden">
-    <div class="container flex-justify-center">
-      <div class="column">
-        <div class="content bottom-margin-25 has-text-centered">
-          <h1 class="question is-accent">How long will you need it for?</h1>
-          <p>
-            Please input the time desired below (enter 0 if you're not sure):
-          </p>
-        </div>
-      </div>
-    </div>
-    <div class="container flex-justify-center">
-      <div class="columns">
-        <div class="column">
-          <p class="control has-addons has-addons-centered">
-            <span class="select">
-              <select>
-                <option>Hours</option>
-                <option>Days</option>
-                <option>Months</option>
-                <option>Years</option>
-              </select>
+  <section id="gs2" class="hero is-large clear-nav is-hidden">
+    <div class="hero-body">
+      <div class="container has-text-centered">
+        <h1 class="title is-2 is-accent">What type of domain are you looking for?</h1>
+        <h2 class="subtitle is-4 is-light">Please select all that apply:</h2>
+        <div class="hero-buttons">
+          <a class="button gsb is-large no-shadow is-outlined is-primary">
+            <span class="icon">
+              <i class="fa fa-laptop"></i>
             </span>
-            <input class="input" type="text" placeholder="Enter a number">
-            <a class="selection button is-success">
-              Submit
-            </a>
-          </p>
+            <span>Start-Up</span>
+          </a>
+          <a class="button gsb is-large no-shadow is-outlined is-info">
+            <span class="icon">
+              <i class="fa fa-building"></i>
+            </span>
+            <span>Business</span>
+          </a>
+          <a class="button gsb is-large no-shadow is-outlined is-accent">
+            <span class="icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span>Event</span>
+          </a>
+          <a class="button gsb is-large no-shadow is-outlined is-purple">
+            <span class="icon">
+              <i class="fa fa-money"></i>
+            </span>
+            <span>Promotion</span>
+          </a>
+          <a class="button gsb is-large no-shadow is-outlined is-danger">
+            <span class="icon">
+              <i class="fa fa-gift"></i>
+            </span>
+            <span>Holiday</span>
+          </a>
+          <a class="button gsb is-large no-shadow is-outlined is-dark">
+            <span class="icon">
+              <i class="fa fa-industry"></i>
+            </span>
+            <span>Industry</span>
+          </a>
+          <a class="button gsb is-large is-light no-shadow">
+            I'm not sure
+          </a>
+        </div>
+        <div class="hero-buttons">
+          <a class="button next-button is-success is-medium">
+            <span>Next</span>
+            <span class="icon">
+              <i class="fa fa-arrow-circle-o-right"></i>
+            </span>
+          </a>
         </div>
       </div>
     </div>
   </section>
 
-  <section id="sec4" class="section min-height flex-column-justify-center is-fullheight is-hidden">
-    <div class="container flex-justify-center">
-      <div class="column">
-        <div class="content bottom-margin-25 has-text-centered">
-          <h1 class="question is-accent">What is your budget?</h1>
-          <p>
-            Please input your budget below (enter 0 if you're not sure):
-          </p>
+  <section id="gs3" class="hero is-large clear-nav is-hidden">
+    <div class="hero-body">
+      <div class="container has-text-centered">
+        <h1 class="title is-2 is-accent">How long will you need it for?</h1>
+        <h2 class="subtitle is-4 is-light">Please input the time desired below (enter 0 if you're not sure):</h2>
+        <div class="columns">
+          <div class="column">
+            <p class="control has-addons has-addons-centered">
+              <span class="select">
+                <select>
+                  <option>Hours</option>
+                  <option>Days</option>
+                  <option>Months</option>
+                  <option>Years</option>
+                </select>
+              </span>
+              <input class="input" type="text" placeholder="Enter a number">
+              <a class="button next-button is-success">
+                Submit
+              </a>
+            </p>
+          </div>
         </div>
       </div>
     </div>
-    <div class="container flex-justify-center">
-      <div class="columns">
+  </section>
+
+  <section id="gs4" class="hero is-large clear-nav is-hidden">
+    <div class="hero-body">
+      <div class="container has-text-centered">
+        <h1 class="title is-2 is-accent">What is your budget?</h1>
+        <h2 class="subtitle is-4 is-light">Please input your budget below (enter 0 if you're not sure):</h2>
+        <div class="columns">
+          <div class="column">
+            <p class="control has-addons has-addons-centered">
+              <span class="icon is-medium">
+                <i class="fa fa-dollar"></i>
+              </span>
+              <input class="input" type="text" placeholder="Enter a number">
+              <a class="button next-button is-success">
+                Submit
+              </a>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="gs5" class="hero is-large clear-nav is-hidden">
+    <div class="hero-body">
+      <div class="container">
         <div class="column">
-          <p class="control has-addons has-addons-centered">
-            <input class="input" type="text" placeholder="Enter a number">
-            <a class="selection button is-success">
-              Submit
-            </a>
-          </p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section id="sec5" class="section min-height flex-column-justify-center is-fullheight is-hidden">
-    <div class="container flex-justify-center">
-      <div class="column">
-        <div class="content bottom-margin-25 has-text-centered">
-          <h1 class="question is-accent">Hold on ... loading domains according to your inputs!</h1>
+          <div class="content bottom-margin-25 has-text-centered">
+            <h1 class="question is-accent">Hold on ... loading domains according to your inputs!</h1>
+          </div>
         </div>
       </div>
     </div>
