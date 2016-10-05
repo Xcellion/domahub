@@ -130,6 +130,7 @@ function submitMessage(submit_data){
             chat_panels = data.convo_list;
             convo_list = data.convo_list;
             createPanel(chat_panels);
+            $("#msg_receiver_input").val(data.target_username);
         }
         //if errored show the resend button
         else if (data.state == "error"){
@@ -197,6 +198,7 @@ function newMsgChatBubble(new_text, username){
         message: new_text
     }, false)
 
+    //rounder corners logic
     if (prev_latest){
         if ((prev_latest.hasClass("sender_me") && new_latest.hasClass("sender_me")) || (prev_latest.hasClass("sender_them") && new_latest.hasClass("sender_them"))){
             if (prev_latest.hasClass("message_bottom") || prev_latest.hasClass("message_middle")){
@@ -215,6 +217,7 @@ function newMsgChatBubble(new_text, username){
         }
     }
 
+    //create a new left chat panel if necessary
     setChatPanel(username, new_text);
 
     $("#msg_text_input").val("");   //empty the current typed msg
@@ -287,7 +290,6 @@ function changeConvo(username, history_bool){
     else if (username.toLowerCase() != inbox_global_obj.current_target){
         $("#msg_text_input").val("");   //empty the current typed msg
         $(".panel-block").removeClass('is-active');     //remove all selected left panel green
-        $("#convo-loading").removeClass("is-hidden");
         $("#chat_wrapper").find("*").not("#convo-loading").remove();
 
         $("#msg_text_input").focus();       //focus the message textarea
@@ -310,11 +312,6 @@ function changeConvo(username, history_bool){
         getConvoItem(username, function(convo_item){
             if (convo_item){
                 appendChats(convo_item.chats);
-                $("#convo-loading").addClass("is-hidden");
-            }
-
-            if (!username){
-                $("#convo-loading").addClass("is-hidden");
             }
         });
     }
@@ -460,9 +457,12 @@ function getConvoItem(username, cb){
     for (var x = 0; x < convo_list.length; x++){
         if (convo_list[x].username.toLowerCase() == username.toLowerCase()){
             //get chats if it doesnt exist;
-            if (!convo_list[x].chats){
+            if (!convo_list[x].chats || convo_list[x].chats.length == 0){
+                $("#convo-loading").removeClass("is-hidden");
+
                 getMsgsAjax(convo_list[x], function(data){
                     convo_list[x].chats = data.chats;
+                    $("#convo-loading").addClass("is-hidden");
                     cb(convo_list[x]);
                 });
                 break;

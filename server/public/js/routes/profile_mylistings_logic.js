@@ -11,7 +11,12 @@ function createRow(listing_info, rownum){
     tempRow.append(createArrow(listing_info));
     tempRow.append(createDomain(listing_info));
     tempRow.append(createType(listing_info));
-    tempRow.append(createStatus(listing_info));
+    if (listing_info.price_type == 0){
+        tempRow.append(createVerify(listing_info));
+    }
+    else {
+        tempRow.append(createStatus(listing_info));
+    }
     tempRow.append(createDate(listing_info));
     tempRow.append(createView(listing_info));
 
@@ -28,6 +33,15 @@ function createType(listing_info){
     var text = (listing_info.type != 0) ? "Premium" : "Basic";
     var temp_td = $("<td class='td-visible td-type'>" + text + "</td>");
     temp_td.data("type", text);
+    return temp_td;
+}
+
+//function to create a button to verify the listing
+function createVerify(listing_info){
+    var temp_td = $("<td class='td-visible td-view'></td>");
+        var temp_a = $("<a class='button' target='_blank' style='target-new: tab;'' href='/listing/" + listing_info.domain_name + "/verify'></a>");
+            var temp_span2 = $("<span>Unverified</span>");
+    temp_td.append(temp_a.append(temp_span2));
     return temp_td;
 }
 

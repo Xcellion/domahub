@@ -97,10 +97,10 @@ function createMessage(req, res, next){
 	Chat.newChatMessage(req.message_item, function(result){
 		if (result.state=="error"){error.handler(req, res, result.info);}
 		else {
-			req.message_item.username = req.username;
-			refreshConvos(req.user.convo_list, req.message_item);
+			refreshConvos(req.user.convo_list, req.message_item, req.username);
 			res.json({
 				state: "success",
+				target_username: req.username,
 				convo_list: req.user.convo_list
 			});
 		}
@@ -111,7 +111,7 @@ function createMessage(req, res, next){
 function refreshConvos(convo_list, message_item, username){
 	var move_to_front = false;
 	for (var x = 0; x < convo_list.length; x++){
-		if (convo_list[x].id == message_item.receiver_account_id){
+		if (convo_list[x].username.toLowerCase() == username.toLowerCase()){
 			convo_list[x].message = message_item.message;
 			convo_list[x].timestamp = false;
 			var move_to_front = convo_list.splice(x, 1);
@@ -126,8 +126,25 @@ function refreshConvos(convo_list, message_item, username){
 			message: message_item.message,
 			seen: 0,
 			timestamp: false,
-			username: message_item.username
+			username: username
 		})
+	}
+}
+
+//function to add chats to req.user.convo_list
+function addToConvoList(convo_list, username, chats){
+	for (var x = 0; x < convo_list.length; x++){
+		if (convo_list[x].username.toLowerCase() == username.toLowerCase()){
+			if (convo_list[x].chats){
+				var temp_array = [];
+		        temp_array.push.apply(temp_array, convo_list[x].chats);
+		        temp_array.push.apply(temp_array, chats);
+		        convo_list[x].chats = temp_array;
+			}
+			else {
+				convo_list[x].chats = chats;
+			}
+		}
 	}
 }
 
@@ -146,6 +163,7 @@ function getConvo(req, res, next){
 			if (result.state=="error"){error.handler(req, res, result.info);}
 			else {
 				if (result.state == "success"){
+					addToConvoList(req.user.convo_list, req.params.account, result.info)
 					res.json({
 						username: req.params.account,
 						chats: result.info
