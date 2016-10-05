@@ -1,6 +1,6 @@
 .panel-icon
   +fa(14px, 16px)
-  color: $black-secondary
+  color: $black-disabled
   float: left
   margin: 0 8px 0 -2px
   .fa
@@ -10,18 +10,14 @@
 .panel-heading
   background-color: $white
   border-bottom: 1px solid $border
-  border-radius: 4px 4px 0 0
+  border-radius: $radius-large $radius-large 0 0
   color: $primary
   font-size: $size-medium
-  font-weight: 400
   padding: 10px
 
 .panel-list
   a
     +transition(all 0s)
-    color: $text
-    font-weight: 300
-    &:hover
 
 .panel-tabs
   display: flex

@@ -1,7 +1,15 @@
 $(document).ready(function() {
-    $(".box").click(function(e){
-        $(this).parents(".section").addClass("is-hidden");
-        $(this).parents(".section").next(".section").removeClass("is-hidden");
-    })
+    $("#gs-choice-rent").click(function(e){
+        $("#gs1").addClass("is-hidden");
+        $("#gs2").removeClass("is-hidden");
+    });
 
+    $(".gsb").click(function() {
+        $(this).toggleClass("is-active");
+    });
+
+    $(".next-button").click(function() {
+        $(this).parents(".hero").addClass("is-hidden");
+        $(this).parents(".hero").next(".hero").removeClass("is-hidden");
+    });
 });
