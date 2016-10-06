@@ -146,14 +146,11 @@ function createPriceDrop(listing_info){
                     var temp_i = $('<i class="fa fa-dollar"></i>');
         temp_form.append(temp_div1.append(temp_div_label.append(temp_label), temp_div_control.append(temp_control_p.append(temp_input, temp_i))));
     }
-    var temp_div4 = $('<div class="column is-grouped"></div>');
-            var temp_control3 = $('<div class="control"></div>');
-                var temp_button3 = $('<a href="/listing/upgrade?d=' + listing_info.domain_name + '" class="button is-accent">Upgrade to Premium</a>');
-        temp_div4.append(temp_control3.append(temp_button3));
+    var temp_button3 = $('<a href="/listing/' + listing_info.domain_name + 'upgrade" class="button is-accent">Upgrade to Premium</a>');
 
     var temp_msg = $("<p class='listing-msg column'></p>");
 
-    temp_col.append(temp_form, temp_div4, temp_msg);
+    temp_col.append(temp_form, temp_button3, temp_msg);
 
     return temp_col;
 }
