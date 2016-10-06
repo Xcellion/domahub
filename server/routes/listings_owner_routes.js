@@ -138,7 +138,7 @@ module.exports = {
 
 	//function to check and reformat new listings details
 	checkListingDetails : function(req, res, next){
-		var status = parseFloat(req.body.status);
+ 		var status = parseFloat(req.body.status);
         var buy_link = req.body.buy_link;
         var description = sanitize(req.body.description);
         var hour_price = parseFloat(req.body.hour_price);
@@ -147,19 +147,22 @@ module.exports = {
         var month_price = parseFloat(req.body.month_price);
 		//todo - picture
 
-		if (status != 1 && status != 2){
+		//if status exists and is not 1 or 2
+		if (req.body.status && status != 1 && status != 2){
 			error.handler(req, res, "Invalid listing status!", "json");
 		}
-		else if (buy_link && !validator.isURL(buy_link, { protocols: ["http", "https"]})){
+		//if buy_link exists and is not a valid url
+		else if (req.body.buy_link && !validator.isURL(buy_link, { protocols: ["http", "https"]})){
 			error.handler(req, res, "Invalid listing purchase link!", "json");
 		}
-		else if (!description){
+		//if description exists and is not a valid url
+		else if (req.body.description && description.length == 0){
 			error.handler(req, res, "Invalid listing description!", "json");
 		}
-		else if ((hour_price != hour_price >>> 0) ||
-				 (day_price != day_price >>> 0) ||
-				 (week_price != week_price >>> 0) ||
-				 (month_price != month_price >>> 0)){
+		else if (req.body.hour_price && (hour_price != hour_price >>> 0) ||
+				 req.body.day_price && (day_price != day_price >>> 0) ||
+				 req.body.week_price && (week_price != week_price >>> 0) ||
+				 req.body.month_price && (month_price != month_price >>> 0)){
 			error.handler(req, res, "Invalid listing prices!", "json");
 		}
 		//todo - picture
@@ -169,7 +172,6 @@ module.exports = {
 		// }
 		else {
 			req.new_listing_info = {
-				domain_name : req.params.domain_name,
 				status : status,
 				buy_link : buy_link,
 				description : description,
@@ -178,18 +180,38 @@ module.exports = {
 				week_price : week_price,
 				month_price : month_price
 			}
+
+			//delete anything that doesnt exist
+			for (var x in req.new_listing_info){
+				if (!req.body[x]){
+					delete req.new_listing_info[x];
+				}
+			}
 			next();
 		}
 	},
 
 	//function to make sure that if they're changing the pricing, that they can change it
 	checkListingPriceType : function(req, res, next){
-		if (req.new_listing.info.hour_price || req.new_listing.info.day_price || req.new_listing.info.week_price || req.new_listing.info.month_price){
-			
+		if (req.new_listing_info.hour_price || req.new_listing_info.day_price || req.new_listing_info.week_price || req.new_listing_info.month_price){
+			var listing_info = getUserListingObj(req.user.listings, req.params.domain_name)
+
+			//the listing is premium, all good to edit!
+			if (listing_info.price_type == 1){
+				next();
+			}
+			else {
+				error.handler(req, res, "You cannot change the pricing for this listing!", "json");
+			}
 		}
 		else {
 			next();
 		}
+	},
+
+	//function to make sure that its different from the existing listing info
+	checkListingsExisting : function(req, res, next){
+		
 	},
 
 	//function to display the create listing page
@@ -255,8 +277,7 @@ module.exports = {
 			error.handler(req, res, "Invalid listing information!");
 		}
 		else {
-			domain_name = req.new_listing_info.domain_name;
-			delete req.new_listing_info.domain_name;
+			domain_name = req.params.domain_name;
 			Listing.updateListing(domain_name, req.new_listing_info, function(result){
 				if (result.state=="error"){error.handler(req, res, result.info);}
 				else {
@@ -412,6 +433,15 @@ function updateUserListingsObject(req, domain_name){
 			req.user.listings[x] = Object.assign({}, req.user.listings[x], req.new_listing_info);
 			delete req.new_listing_info;
 			break;
+		}
+	}
+}
+
+//helper function to get the req.user listings object for a specific domain
+function getUserListingObj(listings, domain_name){
+	for (var x = 0; x < listings.length; x++){
+		if (listings[x].domain_name.toLowerCase() == domain_name.toLowerCase()){
+			return listings[x];
 		}
 	}
 }
