@@ -26,11 +26,11 @@ body{
 #background_image{
 	object-fit:cover;
 	object-position:bottom;
-	-webkit-filter: blur(1px) grayscale(25%) brightness(50%);
+	/*-webkit-filter: blur(1px) grayscale(25%) brightness(50%);
 	-moz-filter: blur(1px) grayscale(25%) brightness(50%);
 	-o-filter: blur(1px) grayscale(25%) brightness(50%);
 	-ms-filter: blur(1px) grayscale(25%) brightness(50%);
-	filter: blur(1px) grayscale(25%) brightness(50%);
+	filter: blur(1px) grayscale(25%) brightness(50%);*/
 }
 
 .info_wrapper{
