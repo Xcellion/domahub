@@ -330,7 +330,7 @@ listing_model.prototype.updateListing = function(domain_name, listing_info, call
 	query = "UPDATE listings \
 			SET ? \
 			WHERE domain_name = ?"
-	listing_query(query, "Failed to update domain" + domain_name + "!", callback, [listing_info, domain_name]);
+	listing_query(query, "Failed to update domain " + domain_name + "!", callback, [listing_info, domain_name]);
 }
 
 //updates rental info
