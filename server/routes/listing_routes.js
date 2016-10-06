@@ -66,7 +66,8 @@ module.exports = function(app, db, auth, e){
 		checkDomainListed,
 		listings_owner.checkListingOwner,
 		listings_owner.checkListingDetails,
-		//listings_owner.checkListingPriceType,
+		listings_owner.checkListingPriceType,
+		//listings_owner.checkListingsExisting,
 		listings_owner.updateListing
 	]);
 

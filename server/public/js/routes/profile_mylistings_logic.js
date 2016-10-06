@@ -342,7 +342,7 @@ function refreshSubmitBindings(success_button, cancel_button, listings, domain_n
                 var row_drop = $(this).closest('.row-drop');
                 var row = row_drop.prev(".row-disp");
 
-                submitListingChanges(row, row_drop, $(this), listing_info);
+                submitListingChanges(row, row_drop, $(this), listings[x]);
             });
 
             break;
@@ -392,6 +392,13 @@ function submitListingChanges(row, row_drop, success_button, listing_info){
         week_price : row_drop.find(".weekly-price-input").val(),
         month_price : row_drop.find(".monthly-price-input").val()
         //todo - picture
+    }
+
+    //delete anything that didn't change
+    for (var x in submit_data){
+        if (submit_data[x] == listing_info[x]){
+            delete submit_data[x];
+        }
     }
 
     success_button.addClass("is-loading");
