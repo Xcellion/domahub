@@ -47,6 +47,20 @@ $(document).ready(function() {
         $(this).data("sorted", sorted);
         sortRows($(this).attr('class').split("-").pop(), sorted);
         createAllRows(row_per_page, current_page);
+
+        //reset other headers
+        $(".sort-asc, .sort-desc").addClass("is-hidden");
+        $(".sort-none").removeClass("is-hidden");
+        
+        $(this).find('.sort-none').addClass('is-hidden');
+        if (sorted == -1){
+            $(this).find('.sort-asc').addClass('is-hidden');
+            $(this).find('.sort-desc').removeClass('is-hidden');
+        }
+        else {
+            $(this).find('.sort-desc').addClass('is-hidden');
+            $(this).find('.sort-asc').removeClass('is-hidden');
+        }
     });
 
     //select all when clicking an input

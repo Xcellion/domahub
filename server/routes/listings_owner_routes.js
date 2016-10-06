@@ -210,8 +210,8 @@ module.exports = {
 	},
 
 	//function to make sure that its different from the existing listing info
-	checkListingsExisting : function(req, res, next){
-		
+	checkListingExisting : function(req, res, next){
+
 	},
 
 	//function to display the create listing page
