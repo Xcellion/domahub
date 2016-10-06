@@ -147,14 +147,11 @@ function createPriceDrop(listing_info){
         temp_form.append(temp_div1.append(temp_div_label.append(temp_label), temp_div_control.append(temp_control_p.append(temp_input, temp_i))));
     }
     var temp_upgrade_control = $("<div class='control is-horizontal'></div>");
-        var temp_upgrade_button = $('<a href="/listing/' + listing_info.domain_name + '/upgrade" class="button is-accent">Upgrade to Premium</a>');
+        var premium_text = (listing_info.price_type == 0) ? "Upgrade to Premium" : "Revert to Basic"
+        var temp_upgrade_button = $('<a href="/listing/' + listing_info.domain_name + '/upgrade" class="button is-accent">' + premium_text + '</a>');
     temp_form.append(temp_upgrade_control.append(temp_upgrade_button));
 
-    var temp_msg = $("<p class='listing-msg notification'></p>");
-        var temp_msg_delete = $("<button class='delete'></button>");
-        temp_msg.append(temp_msg_delete);
-
-    temp_col.append(temp_form, temp_msg);
+    temp_col.append(temp_form);
 
     return temp_col;
 }
@@ -188,6 +185,11 @@ function createFormDrop(listing_info){
         var temp_control2 = $('<div class="control"></div>');
             var temp_button2 = $('<a class="cancel-changes-button button is-hidden is-danger">Cancel Changes</a>');
 
+    var temp_msg = $("<p class='listing-msg is-hidden notification'></p>");
+        var temp_msg_delete = $("<button class='delete'></button>");
+        temp_msg.append(temp_msg_delete);
+
+
     //to submit form changes
     temp_button1.click(function(e){
         var row_drop = $(this).closest('.row-drop');
@@ -206,7 +208,7 @@ function createFormDrop(listing_info){
 
     temp_div3.append(temp_control1.append(temp_button1), temp_control2.append(temp_button2));
 
-    temp_col.append(temp_form.append(temp_div1, temp_div2, temp_div3));
+    temp_col.append(temp_form.append(temp_div1, temp_div2, temp_div3, temp_msg));
 
     return temp_col;
 }
@@ -348,6 +350,9 @@ function cancelListingChanges(row, row_drop, cancel_button, listing_info){
     success_button = cancel_button.closest(".control").prev(".control").find(".save-changes-button");
     success_button.removeClass("is-loading is-success is-danger").addClass('is-disabled').text("Save Changes");
 
+    var listing_msg = row_drop.find(".listing-msg");
+    listing_msg.addClass('is-hidden');
+
     //revert back to the old status
     var old_status = (listing_info.status == 1) ? "Inactive" : "Active"
     row.find(".status-select").val(old_status);
@@ -396,7 +401,9 @@ function submitListingChanges(row, row_drop, success_button, listing_info){
             refreshCancel(cancel_button, listings, domain_name);
         }
         else {
-            listing_msg.text(data.message);
+            listing_msg.removeClass('is-hidden');
+            listing_msg.find("p").empty();
+            listing_msg.append("<p>" + data.message + "</p>");
         }
     });
 }
