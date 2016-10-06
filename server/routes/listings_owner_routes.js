@@ -1,6 +1,7 @@
 var	listing_model = require('../models/listing_model.js');
 
 var validator = require("validator");
+var sanitize = require("sanitize-html");
 var multer = require("multer");
 var parse = require("csv-parse");
 var fs = require('fs')
@@ -133,6 +134,52 @@ module.exports = {
 				next();
 			}
 		})
+	},
+
+	//function to check and reformat new listings details
+	checkListingDetails : function(req, res, next){
+		var status = parseFloat(req.body.status);
+        var buy_link = req.body.buy_link;
+        var description = sanitize(req.body.description);
+        var hour_price = parseFloat(req.body.hour_price);
+        var day_price = parseFloat(req.body.day_price);
+        var week_price = parseFloat(req.body.week_price);
+        var month_price = parseFloat(req.body.month_price);
+		//todo - picture
+
+		if (status != 1 && status != 2){
+			error.handler(req, res, "Invalid listing status!", "json");
+		}
+		else if (buy_link && !validator.isURL(buy_link, { protocols: ["http", "https"]})){
+			error.handler(req, res, "Invalid listing purchase link!", "json");
+		}
+		else if (!description){
+			error.handler(req, res, "Invalid listing description!", "json");
+		}
+		else if ((hour_price != hour_price >>> 0) ||
+				 (day_price != day_price >>> 0) ||
+				 (week_price != week_price >>> 0) ||
+				 (month_price != month_price >>> 0)){
+			error.handler(req, res, "Invalid listing prices!", "json");
+		}
+		//todo - picture
+		// else if (){
+		//error.handler(req, res, "Invalid listing background image!", "json");
+		//
+		// }
+		else {
+			req.new_listing_info = {
+				domain_name : req.params.domain_name,
+				status : status,
+				buy_link : buy_link,
+				description : description,
+				hour_price : hour_price,
+				day_price : day_price,
+				week_price : week_price,
+				month_price : month_price
+			}
+			next();
+		}
 	},
 
 	//function to display the create listing page

@@ -1,4 +1,6 @@
 var	listing_model = require('../models/listing_model.js');
+
+var validator = require("validator");
 var node_env = process.env.NODE_ENV || 'dev'; 	//dev or prod bool
 if (node_env == "dev"){
 	var stripe = require("stripe")("sk_test_PHd0TEZT5ytlF0qCNvmgAThp");		//stripe API development key
