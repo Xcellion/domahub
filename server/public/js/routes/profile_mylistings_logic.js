@@ -150,7 +150,7 @@ function createPriceDrop(listing_info){
         var temp_upgrade_button = $('<a href="/listing/' + listing_info.domain_name + '/upgrade" class="button is-accent">Upgrade to Premium</a>');
     temp_form.append(temp_upgrade_control.append(temp_upgrade_button));
 
-    var temp_msg = $("<p class='listing-msg column'></p>");
+    var temp_msg = $("<p class='listing-msg is-danger column'></p>");
 
     temp_col.append(temp_form, temp_msg);
 
@@ -389,7 +389,8 @@ function submitListingChanges(row, row_drop, success_button, listing_info){
         success_button.removeClass("is-loading");
         if (data.state == "success"){
             listings = data.listings;
-            success_button.text("Success!").addClass("is-success");
+            success_button.addClass("is-disabled");
+            cancel_button.addClass('is-hidden');
             refreshCancel(cancel_button, listings, domain_name);
         }
         else {
