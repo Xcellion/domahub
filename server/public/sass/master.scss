@@ -42,6 +42,10 @@
   vertical-align: bottom;
 }
 
+.vertical-align-middle {
+  line-height: 20px;
+}
+
 .has-borderRight {
   @include tablet {
     border-right: 1px solid $border;

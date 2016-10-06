@@ -1270,10 +1270,15 @@ input:-webkit-autofill {
       border-color: #ffeb3b; }
     .select select.is-danger {
       border-color: #f44336; }
-    .select select:hover, .select select:active, .select select:focus {
+    .select select:hover, .select select:active {
       border-color: #3cbc8d; }
+    .select select:focus {
+      border-color: #3cbc8d;
+      border-radius: 3px 3px 0 0; }
     .select select::ms-expand {
       display: none; }
+  .select::ms-expand {
+    display: none; }
   .select.is-fullwidth {
     width: 100%; }
     .select.is-fullwidth select {
@@ -1446,7 +1451,7 @@ input:-webkit-autofill {
     height: 24px;
     line-height: 24px;
     text-align: center;
-    vertical-align: top;
+    vertical-align: middle;
     width: 24px;
     color: rgba(0, 0, 0, 0.38);
     pointer-events: none;
@@ -1754,7 +1759,7 @@ input:-webkit-autofill {
         height: 24px;
         line-height: 24px;
         text-align: center;
-        vertical-align: top;
+        vertical-align: middle;
         width: 24px; }
       .table td.is-icon.is-link,
       .table th.is-icon.is-link {
@@ -1995,7 +2000,7 @@ input:-webkit-autofill {
   height: 24px;
   line-height: 24px;
   text-align: center;
-  vertical-align: top;
+  vertical-align: middle;
   width: 24px; }
   .icon .fa {
     color: inherit;
@@ -2011,7 +2016,7 @@ input:-webkit-autofill {
     height: 16px;
     line-height: 16px;
     text-align: center;
-    vertical-align: top;
+    vertical-align: middle;
     width: 16px; }
   .icon.is-medium {
     display: inline-block;
@@ -2019,7 +2024,7 @@ input:-webkit-autofill {
     height: 32px;
     line-height: 32px;
     text-align: center;
-    vertical-align: top;
+    vertical-align: middle;
     width: 32px; }
   .icon.is-large {
     display: inline-block;
@@ -2027,12 +2032,14 @@ input:-webkit-autofill {
     height: 48px;
     line-height: 48px;
     text-align: center;
-    vertical-align: top;
+    vertical-align: middle;
     width: 48px; }
   .icon.is-active {
     color: #3cbc8d; }
   .icon.is-active-accent {
     color: #ff5722; }
+  .icon.is-disabled {
+    color: rgba(0, 0, 0, 0.38); }
 
 .hamburger, .nav-toggle {
   cursor: pointer;
@@ -3628,7 +3635,7 @@ a.nav-item.is-tab {
   height: 16px;
   line-height: 16px;
   text-align: center;
-  vertical-align: top;
+  vertical-align: middle;
   width: 16px;
   color: rgba(0, 0, 0, 0.38);
   float: left;
