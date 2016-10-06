@@ -211,7 +211,21 @@ module.exports = {
 
 	//function to make sure that its different from the existing listing info
 	checkListingExisting : function(req, res, next){
+		var listing_info = getUserListingObj(req.user.listings, req.params.domain_name)
 
+		for (var x in req.new_listing_info){
+			if (req.new_listing_info[x] == listing_info[x]){
+				delete req.new_listing_info[x];
+			}
+		}
+
+		if (Object.keys(req.new_listing_info).length === 0 && req.new_listing_info.constructor === Object){
+			error.handler(req, res, "Invalid listing information!", "json");
+		}
+		//only go next if the object has anything
+		else {
+			next();
+		}
 	},
 
 	//function to display the create listing page
@@ -274,7 +288,7 @@ module.exports = {
 	//function to update a listing
 	updateListing: function(req, res, next){
 		if (!req.new_listing_info){
-			error.handler(req, res, "Invalid listing information!");
+			error.handler(req, res, "Invalid listing information!", "json");
 		}
 		else {
 			domain_name = req.params.domain_name;
