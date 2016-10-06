@@ -138,7 +138,7 @@ module.exports = {
 
 	//function to check and reformat new listings details
 	checkListingDetails : function(req, res, next){
-		var status = parseFloat(req.body.status);
+ 		var status = parseFloat(req.body.status);
         var buy_link = req.body.buy_link;
         var description = sanitize(req.body.description);
         var hour_price = parseFloat(req.body.hour_price);
@@ -147,19 +147,19 @@ module.exports = {
         var month_price = parseFloat(req.body.month_price);
 		//todo - picture
 
-		if (status != 1 && status != 2){
+		if (status && status != 1 && status != 2){
 			error.handler(req, res, "Invalid listing status!", "json");
 		}
 		else if (buy_link && !validator.isURL(buy_link, { protocols: ["http", "https"]})){
 			error.handler(req, res, "Invalid listing purchase link!", "json");
 		}
-		else if (!description){
+		else if (description && description.length == 0){
 			error.handler(req, res, "Invalid listing description!", "json");
 		}
-		else if ((hour_price != hour_price >>> 0) ||
-				 (day_price != day_price >>> 0) ||
-				 (week_price != week_price >>> 0) ||
-				 (month_price != month_price >>> 0)){
+		else if (hour_price && (hour_price != hour_price >>> 0) ||
+				 day_price && (day_price != day_price >>> 0) ||
+				 week_price && (week_price != week_price >>> 0) ||
+				 month_price && (month_price != month_price >>> 0)){
 			error.handler(req, res, "Invalid listing prices!", "json");
 		}
 		//todo - picture
@@ -169,7 +169,6 @@ module.exports = {
 		// }
 		else {
 			req.new_listing_info = {
-				domain_name : req.params.domain_name,
 				status : status,
 				buy_link : buy_link,
 				description : description,
@@ -178,14 +177,20 @@ module.exports = {
 				week_price : week_price,
 				month_price : month_price
 			}
+
+			for (var x in req.new_listing_info){
+				if (!req.new_listing_info[x] || req.new_listing_info[x] == "undefined" || typeof req.new_listing_info[x] == "undefined"){
+					delete req.new_listing_info[x];
+				}
+			}
 			next();
 		}
 	},
 
 	//function to make sure that if they're changing the pricing, that they can change it
 	checkListingPriceType : function(req, res, next){
-		if (req.new_listing.info.hour_price || req.new_listing.info.day_price || req.new_listing.info.week_price || req.new_listing.info.month_price){
-			
+		if (req.new_listing_info.hour_price || req.new_listing_info.day_price || req.new_listing_info.week_price || req.new_listing_info.month_price){
+
 		}
 		else {
 			next();
@@ -255,8 +260,7 @@ module.exports = {
 			error.handler(req, res, "Invalid listing information!");
 		}
 		else {
-			domain_name = req.new_listing_info.domain_name;
-			delete req.new_listing_info.domain_name;
+			domain_name = req.params.domain_name;
 			Listing.updateListing(domain_name, req.new_listing_info, function(result){
 				if (result.state=="error"){error.handler(req, res, result.info);}
 				else {
