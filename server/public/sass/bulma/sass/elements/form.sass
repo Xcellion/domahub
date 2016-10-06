@@ -82,11 +82,15 @@ input
     outline: none
     padding-right: 36px
     &:hover,
-    &:active,
+    &:active
+      border-color: $primary
     &:focus
       border-color: $primary
+      border-radius: $radius $radius 0 0
     &::ms-expand
       display: none
+  &::ms-expand
+    display: none
   &.is-fullwidth
     width: 100%
     select
