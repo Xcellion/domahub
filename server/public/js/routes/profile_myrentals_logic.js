@@ -69,7 +69,7 @@ function createView(rental_info){
 function createRowDrop(rental_info, rownum){
     temp_drop = $("<tr id='row-drop" + rownum + "' class='row-drop'></tr>");
     temp_td = $("<td class='row-drop-td' colspan='5'></td>")
-    temp_div_drop = $("<div id='div-drop' class='td-visible container'></div>");
+    temp_div_drop = $("<div id='div-drop" + rownum + "' class='div-drop td-visible container'></div>");
     temp_div_col = $("<div class='columns'></div>");
 
     temp_drop.append(temp_td.append(temp_div_drop.append(temp_div_col.append(
