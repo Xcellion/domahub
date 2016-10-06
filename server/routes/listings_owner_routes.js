@@ -185,7 +185,7 @@ module.exports = {
 	//function to make sure that if they're changing the pricing, that they can change it
 	checkListingPriceType : function(req, res, next){
 		if (req.new_listing.info.hour_price || req.new_listing.info.day_price || req.new_listing.info.week_price || req.new_listing.info.month_price){
-
+			
 		}
 		else {
 			next();
