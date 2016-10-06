@@ -59,6 +59,16 @@ module.exports = function(app, db, auth, e){
 		listings_owner.updateListing
 	]);
 
+	//update listing information
+	app.post('/listing/:domain_name/update', [
+		checkLoggedIn,
+		listings_owner.checkAccountListingPriv,
+		checkDomainListed,
+		listings_owner.checkListingOwner,
+		listings_owner.checkListingDetails,
+		listings_owner.updateListing
+	]);
+
 	//------------------------------------------------------------------------------------------------ RENTAL RELATED
 
 	//render the 404 listing page

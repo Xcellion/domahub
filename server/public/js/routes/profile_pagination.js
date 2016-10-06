@@ -209,7 +209,7 @@ function createPaginationPages(total_pages, row_per_page, current_page){
         }
         var temp_li = createPaginationPage(x, text);
         temp_li.find(".page-button").click(function(e){
-            button_page = ($(this).text() == "...") ? current_page : $(this).text();
+            var button_page = ($(this).text() == "...") ? current_page : $(this).text();
             if (button_page != current_page) {
 
                 current_page = button_page;
@@ -224,9 +224,9 @@ function createPaginationPages(total_pages, row_per_page, current_page){
 
 //function to create a single page on paginate list
 function createPaginationPage(page_num, text){
-    page_text = text || page_num;
-    temp_li = $("<li></li>");
-    temp_button = $("<a id='page-" + page_num + "' class='page-button button'>" + page_text + "</a>")
+    var page_text = text || page_num;
+    var temp_li = $("<li></li>");
+    var temp_button = $("<a id='page-" + page_num + "' class='page-button button'>" + page_text + "</a>")
     temp_li.append(temp_button);
     return temp_li;
 }
@@ -286,11 +286,29 @@ function paginateRows(total_pages, current_page){
 //function to create all the rows
 function createAllRows(row_per_page, current_page){
     $("#table_body").empty();
-    row_start = row_per_page * (current_page - 1);
+    var row_start = row_per_page * (current_page - 1);
     for (var x = 0; x < row_per_page; x++){
         if (row_display[row_start]){
             var temp_row = createRow(row_display[row_start], row_start);
             var temp_row_drop = createRowDrop(row_display[row_start], row_start);
+            var both_rows = temp_row.add(temp_row_drop);
+
+            //to remove disabled on save changes button
+            both_rows.find(".drop-form .changeable-input").bind("input", function(e){
+                var closest_row = $(this).closest(".row-drop, .row-disp");
+                var save_button = (closest_row.hasClass("row-drop")) ? closest_row.find(".save-changes-button") : closest_row.next(".row-drop").find(".save-changes-button");
+                var cancel_button = (closest_row.hasClass("row-drop")) ? closest_row.find(".cancel-changes-button") : closest_row.next(".row-drop").find(".cancel-changes-button");
+                if (save_button.hasClass("is-disabled")){
+                    save_button.removeClass("is-disabled");
+                }
+                else if (save_button.hasClass("is-success")){
+                    save_button.removeClass("is-success").text("Save Changes");
+                }
+                if (cancel_button.hasClass("is-hidden")){
+                    cancel_button.removeClass("is-hidden");
+                }
+            });
+
             $("#table_body").append(temp_row, temp_row_drop);
         }
         row_start++;
@@ -317,19 +335,19 @@ function createArrow(){
 
 //function to drop down a row
 function dropRow(row, editing){
-    row_drop = row.next(".row-drop");
+    var row_drop = row.next(".row-drop");
     row.toggleClass("is-active");
     if (editing){
-        row_drop.find("#div-drop").stop().slideDown("fast");
+        row_drop.find(".div-drop").stop().slideDown("fast");
     }
     else {
-        row_drop.find("#div-drop").stop().slideUp("fast");
+        row_drop.find(".div-drop").stop().slideUp("fast");
     }
 }
 
 //function to change edit arrow
 function editArrow(row, editing){
-    edit_td = row.find(".td-arrow").find("i");
+    var edit_td = row.find(".td-arrow").find("i");
     if (editing){
         edit_td.addClass("fa-rotate-90");
         edit_td.parent("span").addClass("is-active");
