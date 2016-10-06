@@ -1514,7 +1514,8 @@ input:-webkit-autofill {
       justify-content: flex-end; }
   @media screen and (min-width: 769px) {
     .control.is-horizontal {
-      display: flex; }
+      display: flex;
+      justify-content: flex-end; }
       .control.is-horizontal > .control {
         display: flex;
         flex-grow: 5; } }
@@ -1583,7 +1584,7 @@ input:-webkit-autofill {
   margin-top: 10px; }
 
 .notification {
-  background-color: white;
+  background-color: rgba(0, 0, 0, 0.12);
   border-radius: 3px;
   padding: 16px 20px;
   position: relative; }
