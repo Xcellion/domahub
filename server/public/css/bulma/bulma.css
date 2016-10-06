@@ -1952,7 +1952,7 @@ input:-webkit-autofill {
 .delete, .modal-close {
   -moz-appearance: none;
   -webkit-appearance: none;
-  background-color: rgba(0, 0, 0, 0.2);
+  background-color: rgba(0, 0, 0, 0.38);
   border: none;
   border-radius: 290486px;
   cursor: pointer;
@@ -1976,8 +1976,9 @@ input:-webkit-autofill {
     transform: rotate(45deg); }
   .delete:after, .modal-close:after {
     transform: rotate(-45deg); }
-  .delete:hover, .modal-close:hover {
-    background-color: rgba(0, 0, 0, 0.5); }
+  .delete:hover, .modal-close:hover, .delete:focus, .modal-close:focus, .delete:active, .modal-close:active {
+    outline: none;
+    background-color: rgba(0, 0, 0, 0.54); }
   .delete.is-small, .tag:not(.is-large) .delete, .tag:not(.is-large) .modal-close, .is-small.modal-close {
     height: 16px;
     width: 16px; }
