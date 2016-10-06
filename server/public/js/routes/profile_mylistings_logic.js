@@ -327,8 +327,8 @@ function editVerify(row, editing){
     }
 }
 
-//function to refresh listing_info on cancel button after AJAX success
-function refreshCancel(cancel_button, listings, domain_name){
+//function to refresh listing_info on cancel and submit button after AJAX success
+function refreshSubmitBindings(success_button, cancel_button, listings, domain_name){
     for (var x = 0; x < listings.length; x++){
         if (listings[x].domain_name == domain_name){
             cancel_button.unbind().click(function(e){
@@ -337,6 +337,14 @@ function refreshCancel(cancel_button, listings, domain_name){
 
                 cancelListingChanges(row, row_drop, $(this), listings[x]);
             });
+
+            success_button.unbind().click(function(e){
+                var row_drop = $(this).closest('.row-drop');
+                var row = row_drop.prev(".row-disp");
+
+                submitListingChanges(row, row_drop, $(this), listing_info);
+            });
+
             break;
         }
     }
@@ -398,7 +406,7 @@ function submitListingChanges(row, row_drop, success_button, listing_info){
             listings = data.listings;
             success_button.addClass("is-disabled");
             cancel_button.addClass('is-hidden');
-            refreshCancel(cancel_button, listings, domain_name);
+            refreshSubmitBindings(success_button, cancel_button, listings, domain_name);
         }
         else {
             listing_msg.removeClass('is-hidden');
