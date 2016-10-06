@@ -1448,10 +1448,10 @@ input:-webkit-autofill {
   .control.has-icon > .fa {
     display: inline-block;
     font-size: 14px;
-    height: 24px;
-    line-height: 24px;
+    height: 28px;
+    line-height: 28px;
     text-align: center;
-    vertical-align: middle;
+    vertical-align: top;
     width: 24px;
     color: rgba(0, 0, 0, 0.38);
     pointer-events: none;
@@ -1756,10 +1756,10 @@ input:-webkit-autofill {
       .table th.is-icon .fa {
         display: inline-block;
         font-size: 21px;
-        height: 24px;
-        line-height: 24px;
+        height: 28px;
+        line-height: 28px;
         text-align: center;
-        vertical-align: middle;
+        vertical-align: top;
         width: 24px; }
       .table td.is-icon.is-link,
       .table th.is-icon.is-link {
@@ -1997,10 +1997,10 @@ input:-webkit-autofill {
 .icon {
   display: inline-block;
   font-size: 21px;
-  height: 24px;
-  line-height: 24px;
+  height: 28px;
+  line-height: 28px;
   text-align: center;
-  vertical-align: middle;
+  vertical-align: top;
   width: 24px; }
   .icon .fa {
     color: inherit;
@@ -2013,26 +2013,26 @@ input:-webkit-autofill {
   .icon.is-small {
     display: inline-block;
     font-size: 14px;
-    height: 16px;
-    line-height: 16px;
+    height: 20px;
+    line-height: 20px;
     text-align: center;
-    vertical-align: middle;
+    vertical-align: top;
     width: 16px; }
   .icon.is-medium {
     display: inline-block;
     font-size: 28px;
-    height: 32px;
-    line-height: 32px;
+    height: 36px;
+    line-height: 36px;
     text-align: center;
-    vertical-align: middle;
+    vertical-align: top;
     width: 32px; }
   .icon.is-large {
     display: inline-block;
     font-size: 42px;
-    height: 48px;
-    line-height: 48px;
+    height: 52px;
+    line-height: 52px;
     text-align: center;
-    vertical-align: middle;
+    vertical-align: top;
     width: 48px; }
   .icon.is-active {
     color: #3cbc8d; }
@@ -3632,10 +3632,10 @@ a.nav-item.is-tab {
 .panel-icon {
   display: inline-block;
   font-size: 14px;
-  height: 16px;
-  line-height: 16px;
+  height: 20px;
+  line-height: 20px;
   text-align: center;
-  vertical-align: middle;
+  vertical-align: top;
   width: 16px;
   color: rgba(0, 0, 0, 0.38);
   float: left;
