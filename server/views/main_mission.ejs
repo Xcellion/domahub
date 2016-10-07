@@ -11,12 +11,12 @@
 
   <%- include("templates/navbar", {user: user}); %>
 
-  <section id="mission-img" class="hero is-primary is-large clear-nav landing-img">
+  <section id="mission-img" class="hero is-primary is-medium clear-nav landing-img">
     <div class="img-wrapper">
       <div class="hero-body">
         <div class="container has-text-centered">
           <h1 class="title is-normal">
-            <!-- From the heart of New York City -->
+            From Mordor
           </h1>
         </div>
       </div>
@@ -32,31 +32,29 @@
     </div>
   </section>
 
-  <section class="hero is-white is-small">
-    <div class="hero-body">
-      <div class="container">
-        <nav class="level company-level">
-          <div class="level-item company-level-item has-text-centered">
-            <p class="heading">Founded</p>
-            <p class="subtitle is-4">2016</p>
+  <section class="section is-medium">
+    <div class="container">
+      <div class="columns">
+        <div class="column is-half">
+          <div class="content">
+            <h1 class="title is-quote is-primary is-3 is-normal">
+              Doing old things in new ways
+            </h1>
+            <h2 class="subtitle is-blacklight is-5">
+              The simple principle we at DomaHub live by.
+            </h2>
+            <!-- <h2 class="has-text-centered">Thinking differently at
+              <span class="logo-text large-logo primary-logo">DomaHub</span></h2> -->
+            <p>
+              DomaHub is committed to providing consumers with an alternative method
+              of acquiring domain names that is both inexpensive and efficient while
+              also generating a new revenue stream for domain owners.
+            </p>
           </div>
-          <div class="level-item company-level-item has-text-centered">
-            <p class="heading">Headquarters</p>
-            <p class="subtitle is-4">New York City</p>
-          </div>
-          <div class="level-item company-level-item has-text-centered">
-            <p class="heading">Employees</p>
-            <p class="subtitle is-4">68</p>
-          </div>
-          <div class="level-item company-level-item has-text-centered">
-            <p class="heading">Domains Rented</p>
-            <p class="subtitle is-4">4 Million &#43</p>
-          </div>
-        </nav>
+        </div>
       </div>
     </div>
   </section>
-
 
   <%- include("templates/footer"); %>
 
