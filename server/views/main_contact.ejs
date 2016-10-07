@@ -11,25 +11,48 @@
 
   <%- include("templates/navbar", {user: user}); %>
 
-  <section id="contact-img" class="hero is-primary is-medium landing-img clear-nav">
-    <div class="img-wrapper">
-      <div class="hero-body">
-        <div class="container has-text-centered">
-          <h1 class="title">
-            Let us work with you
-          </h1>
+  <section class="section is-medium">
+    <div class="container">
+      <div class="columns">
+        <div class="column is-one-third">
+          <div class="content">
+            <h1 class="is-primary">Contact Us</h1>
+            <p>
+              Feel free to use the form below to send us any questions,
+              inquiries, suggestions, bug reports, and anything else
+              you wish to share (however, be nice please)!
+            </p>
+          </div>
+          <form id="contact-form">
+            <label class="label is-medium">Name</label>
+            <p class="control">
+              <input class="input is-medium" type="text" placeholder="Your Name">
+            </p>
+            <label class="label is-medium">Email Address</label>
+            <p class="control">
+              <input class="input is-medium" type="email" placeholder="Your Email">
+            </p>
+            <label class="label is-medium">Message</label>
+            <p class="control">
+              <textarea class="textarea is-medium" placeholder="Type your message here"></textarea>
+            </p>
+            <a class="button is-accent is-medium">Submit</a>
+          </form>
         </div>
       </div>
     </div>
   </section>
 
-  <section class="section min-height">
+  <section class="section is-medium is-primary">
     <div class="container">
       <div class="columns">
-        <div class="column is-half is-offset-3 has-text-centered">
+        <div class="column is-one-quarter">
           <div class="content">
-            <h2>Support Email</h2>
-            <a class="orange-link" href="mailto:support@domahub.com" title="Support Email">support@domahub.com</a>
+            <h3 class="heading is-white">Residence</h3>
+            <p class="is-whitelight">
+              420 Blaze Lane <br />
+              New York City, NY 10020
+            </p>
           </div>
         </div>
       </div>

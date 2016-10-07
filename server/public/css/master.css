@@ -179,6 +179,10 @@ h3 {
   h2.is-blacklight,
   h3.is-blacklight {
     color: rgba(0, 0, 0, 0.54); }
+  h1.is-whitelight,
+  h2.is-whitelight,
+  h3.is-whitelight {
+    color: rgba(255, 255, 255, 0.7); }
   h1.is-light,
   h2.is-light,
   h3.is-light {
@@ -243,6 +247,8 @@ p {
     color: black; }
   p.is-blacklight {
     color: rgba(0, 0, 0, 0.54); }
+  p.is-whitelight {
+    color: rgba(255, 255, 255, 0.7); }
   p.is-light {
     color: #f5f5f5; }
   p.is-dark {
@@ -776,6 +782,31 @@ a.box {
         background-color: rgba(0, 0, 0, 0.54);
         border-color: rgba(0, 0, 0, 0.54);
         color: rgba(255, 255, 255, 0.7); }
+  .button.is-whitelight {
+    background-color: rgba(255, 255, 255, 0.7);
+    border-color: transparent;
+    color: rgba(0, 0, 0, 0.54); }
+    .button.is-whitelight:hover, .button.is-whitelight:focus, .button.is-whitelight.is-active {
+      background-color: rgba(230, 230, 230, 0.7);
+      border-color: transparent;
+      color: rgba(0, 0, 0, 0.54); }
+    .button.is-whitelight:active {
+      border-color: transparent; }
+    .button.is-whitelight.is-inverted {
+      background-color: rgba(0, 0, 0, 0.54);
+      color: rgba(255, 255, 255, 0.7); }
+      .button.is-whitelight.is-inverted:hover {
+        background-color: rgba(0, 0, 0, 0.54); }
+    .button.is-whitelight.is-loading:after {
+      border-color: transparent transparent rgba(0, 0, 0, 0.54) rgba(0, 0, 0, 0.54) !important; }
+    .button.is-whitelight.is-outlined {
+      background-color: transparent;
+      border-color: rgba(255, 255, 255, 0.7);
+      color: rgba(255, 255, 255, 0.7); }
+      .button.is-whitelight.is-outlined:hover, .button.is-whitelight.is-outlined:focus, .button.is-whitelight.is-outlined.is-active {
+        background-color: rgba(255, 255, 255, 0.7);
+        border-color: rgba(255, 255, 255, 0.7);
+        color: rgba(0, 0, 0, 0.54); }
   .button.is-light {
     background-color: #f5f5f5;
     border-color: transparent;
@@ -1205,6 +1236,8 @@ input:-webkit-autofill {
     border-color: black; }
   .input.is-blacklight, .is-blacklight.textarea {
     border-color: rgba(0, 0, 0, 0.54); }
+  .input.is-whitelight, .is-whitelight.textarea {
+    border-color: rgba(255, 255, 255, 0.7); }
   .input.is-light, .is-light.textarea {
     border-color: #f5f5f5; }
   .input.is-dark, .is-dark.textarea {
@@ -1263,7 +1296,7 @@ input:-webkit-autofill {
   line-height: 1.2;
   max-height: 600px;
   max-width: 100%;
-  min-height: 120px;
+  min-height: 150px;
   min-width: 100%;
   padding: 10px;
   resize: none; }
@@ -1330,6 +1363,8 @@ input:-webkit-autofill {
       border-color: black; }
     .select select.is-blacklight {
       border-color: rgba(0, 0, 0, 0.54); }
+    .select select.is-whitelight {
+      border-color: rgba(255, 255, 255, 0.7); }
     .select select.is-light {
       border-color: #f5f5f5; }
     .select select.is-dark {
@@ -1413,6 +1448,10 @@ input:-webkit-autofill {
   display: block; }
   .label:not(:last-child) {
     margin-bottom: 5px; }
+  .label.is-medium {
+    font-size: 18px; }
+  .label.is-large {
+    font-size: 28px; }
 
 .help {
   display: block;
@@ -1424,6 +1463,8 @@ input:-webkit-autofill {
     color: black; }
   .help.is-blacklight {
     color: rgba(0, 0, 0, 0.54); }
+  .help.is-whitelight {
+    color: rgba(255, 255, 255, 0.7); }
   .help.is-light {
     color: #f5f5f5; }
   .help.is-dark {
@@ -1530,8 +1571,8 @@ input:-webkit-autofill {
   .control.has-icon > .fa {
     display: inline-block;
     font-size: 14px;
-    height: 28px;
-    line-height: 28px;
+    height: 24px;
+    line-height: 24px;
     text-align: center;
     vertical-align: top;
     width: 24px;
@@ -1695,6 +1736,9 @@ input:-webkit-autofill {
   .notification.is-blacklight {
     background-color: rgba(0, 0, 0, 0.54);
     color: rgba(255, 255, 255, 0.7); }
+  .notification.is-whitelight {
+    background-color: rgba(255, 255, 255, 0.7);
+    color: rgba(0, 0, 0, 0.54); }
   .notification.is-light {
     background-color: #f5f5f5;
     color: #212121; }
@@ -1754,6 +1798,10 @@ input:-webkit-autofill {
     background-color: rgba(0, 0, 0, 0.54); }
   .progress.is-blacklight::-moz-progress-bar {
     background-color: rgba(0, 0, 0, 0.54); }
+  .progress.is-whitelight::-webkit-progress-value {
+    background-color: rgba(255, 255, 255, 0.7); }
+  .progress.is-whitelight::-moz-progress-bar {
+    background-color: rgba(255, 255, 255, 0.7); }
   .progress.is-light::-webkit-progress-value {
     background-color: #f5f5f5; }
   .progress.is-light::-moz-progress-bar {
@@ -1845,8 +1893,8 @@ input:-webkit-autofill {
       .table th.is-icon .fa {
         display: inline-block;
         font-size: 21px;
-        height: 28px;
-        line-height: 28px;
+        height: 24px;
+        line-height: 24px;
         text-align: center;
         vertical-align: top;
         width: 24px; }
@@ -1997,6 +2045,8 @@ input:-webkit-autofill {
     color: black; }
   .title.is-blacklight {
     color: rgba(0, 0, 0, 0.54); }
+  .title.is-whitelight {
+    color: rgba(255, 255, 255, 0.7); }
   .title.is-light {
     color: #f5f5f5; }
   .title.is-dark {
@@ -2112,8 +2162,8 @@ input:-webkit-autofill {
 .icon {
   display: inline-block;
   font-size: 21px;
-  height: 28px;
-  line-height: 28px;
+  height: 24px;
+  line-height: 24px;
   text-align: center;
   vertical-align: top;
   width: 24px; }
@@ -2128,24 +2178,24 @@ input:-webkit-autofill {
   .icon.is-small {
     display: inline-block;
     font-size: 14px;
-    height: 20px;
-    line-height: 20px;
+    height: 18px;
+    line-height: 18px;
     text-align: center;
     vertical-align: top;
-    width: 16px; }
+    width: 18px; }
   .icon.is-medium {
     display: inline-block;
     font-size: 28px;
-    height: 36px;
-    line-height: 36px;
+    height: 32px;
+    line-height: 32px;
     text-align: center;
     vertical-align: top;
     width: 32px; }
   .icon.is-large {
     display: inline-block;
     font-size: 42px;
-    height: 52px;
-    line-height: 52px;
+    height: 48px;
+    line-height: 48px;
     text-align: center;
     vertical-align: top;
     width: 48px; }
@@ -2298,6 +2348,13 @@ input:-webkit-autofill {
       background-color: rgba(0, 0, 0, 0.54);
       border-color: transparent;
       color: rgba(255, 255, 255, 0.7); }
+  .tag.is-whitelight {
+    background-color: rgba(255, 255, 255, 0.7);
+    color: rgba(0, 0, 0, 0.54); }
+    .tag.is-whitelight:hover, .tag.is-whitelight:focus, .tag.is-whitelight.is-active {
+      background-color: rgba(230, 230, 230, 0.7);
+      border-color: transparent;
+      color: rgba(0, 0, 0, 0.54); }
   .tag.is-light {
     background-color: #f5f5f5;
     color: #212121; }
@@ -3423,6 +3480,14 @@ input:-webkit-autofill {
     .message.is-blacklight .message-body {
       border-color: rgba(0, 0, 0, 0.54);
       color: rgba(128, 128, 128, 0.54); }
+  .message.is-whitelight {
+    background-color: rgba(255, 255, 255, 0.7); }
+    .message.is-whitelight .message-header {
+      background-color: rgba(255, 255, 255, 0.7);
+      color: rgba(0, 0, 0, 0.54); }
+    .message.is-whitelight .message-body {
+      border-color: rgba(255, 255, 255, 0.7);
+      color: rgba(102, 102, 102, 0.7); }
   .message.is-light {
     background-color: whitesmoke; }
     .message.is-light .message-header {
@@ -3762,8 +3827,8 @@ a.nav-item.is-tab {
 .panel-icon {
   display: inline-block;
   font-size: 14px;
-  height: 20px;
-  line-height: 20px;
+  height: 16px;
+  line-height: 16px;
   text-align: center;
   vertical-align: top;
   width: 16px;
@@ -3915,8 +3980,7 @@ a.nav-item.is-tab {
     -moz-box-shadow: 0 0 0 0 rgba(0, 0, 0, 0.12);
     box-shadow: 0 0 0 0 rgba(0, 0, 0, 0.12);
     background-color: white;
-    border-color: rgba(0, 0, 0, 0.12);
-    border-bottom-color: transparent !important; }
+    border-bottom-color: transparent; }
   .tabs.is-fullwidth li {
     flex-grow: 1; }
   .tabs.is-toggle a {
@@ -4098,7 +4162,7 @@ a.nav-item.is-tab {
     .hero.is-white .tabs.is-boxed a, .hero.is-white .tabs.is-toggle a {
       color: black; }
       .hero.is-white .tabs.is-boxed a:hover, .hero.is-white .tabs.is-toggle a:hover {
-        background-color: rgba(0, 0, 0, 0.1); }
+        background-color: rgba(0, 0, 0, 0.12); }
     .hero.is-white .tabs.is-boxed li.is-active a, .hero.is-white .tabs.is-boxed li.is-active a:hover, .hero.is-white .tabs.is-toggle li.is-active a, .hero.is-white .tabs.is-toggle li.is-active a:hover {
       background-color: black;
       border-color: black;
@@ -4151,7 +4215,7 @@ a.nav-item.is-tab {
     .hero.is-black .tabs.is-boxed a, .hero.is-black .tabs.is-toggle a {
       color: white; }
       .hero.is-black .tabs.is-boxed a:hover, .hero.is-black .tabs.is-toggle a:hover {
-        background-color: rgba(0, 0, 0, 0.1); }
+        background-color: rgba(0, 0, 0, 0.12); }
     .hero.is-black .tabs.is-boxed li.is-active a, .hero.is-black .tabs.is-boxed li.is-active a:hover, .hero.is-black .tabs.is-toggle li.is-active a, .hero.is-black .tabs.is-toggle li.is-active a:hover {
       background-color: white;
       border-color: white;
@@ -4204,7 +4268,7 @@ a.nav-item.is-tab {
     .hero.is-blacklight .tabs.is-boxed a, .hero.is-blacklight .tabs.is-toggle a {
       color: rgba(255, 255, 255, 0.7); }
       .hero.is-blacklight .tabs.is-boxed a:hover, .hero.is-blacklight .tabs.is-toggle a:hover {
-        background-color: rgba(0, 0, 0, 0.1); }
+        background-color: rgba(0, 0, 0, 0.12); }
     .hero.is-blacklight .tabs.is-boxed li.is-active a, .hero.is-blacklight .tabs.is-boxed li.is-active a:hover, .hero.is-blacklight .tabs.is-toggle li.is-active a, .hero.is-blacklight .tabs.is-toggle li.is-active a:hover {
       background-color: rgba(255, 255, 255, 0.7);
       border-color: rgba(255, 255, 255, 0.7);
@@ -4222,6 +4286,59 @@ a.nav-item.is-tab {
         background-color: rgba(255, 255, 255, 0.7); }
       .hero.is-blacklight .nav-menu .nav-item {
         border-top-color: rgba(255, 255, 255, 0.2); } }
+  .hero.is-whitelight {
+    background-color: rgba(255, 255, 255, 0.7);
+    color: rgba(0, 0, 0, 0.54); }
+    .hero.is-whitelight .title {
+      color: rgba(0, 0, 0, 0.54); }
+      .hero.is-whitelight .title a,
+      .hero.is-whitelight .title strong {
+        color: inherit; }
+    .hero.is-whitelight .subtitle {
+      color: rgba(0, 0, 0, 0.7); }
+      .hero.is-whitelight .subtitle a,
+      .hero.is-whitelight .subtitle strong {
+        color: rgba(0, 0, 0, 0.54); }
+    .hero.is-whitelight .nav {
+      box-shadow: 0 1px 0 rgba(0, 0, 0, 0.2); }
+    @media screen and (max-width: 768px) {
+      .hero.is-whitelight .nav-menu {
+        background-color: rgba(255, 255, 255, 0.7); } }
+    .hero.is-whitelight a.nav-item,
+    .hero.is-whitelight .nav-item a:not(.button) {
+      color: rgba(0, 0, 0, 0.5); }
+      .hero.is-whitelight a.nav-item:hover, .hero.is-whitelight a.nav-item.is-active,
+      .hero.is-whitelight .nav-item a:not(.button):hover,
+      .hero.is-whitelight .nav-item a:not(.button).is-active {
+        color: rgba(0, 0, 0, 0.54); }
+    .hero.is-whitelight .tabs a {
+      color: rgba(0, 0, 0, 0.54);
+      opacity: 0.5; }
+      .hero.is-whitelight .tabs a:hover {
+        opacity: 1; }
+    .hero.is-whitelight .tabs li.is-active a {
+      opacity: 1; }
+    .hero.is-whitelight .tabs.is-boxed a, .hero.is-whitelight .tabs.is-toggle a {
+      color: rgba(0, 0, 0, 0.54); }
+      .hero.is-whitelight .tabs.is-boxed a:hover, .hero.is-whitelight .tabs.is-toggle a:hover {
+        background-color: rgba(0, 0, 0, 0.12); }
+    .hero.is-whitelight .tabs.is-boxed li.is-active a, .hero.is-whitelight .tabs.is-boxed li.is-active a:hover, .hero.is-whitelight .tabs.is-toggle li.is-active a, .hero.is-whitelight .tabs.is-toggle li.is-active a:hover {
+      background-color: rgba(0, 0, 0, 0.54);
+      border-color: rgba(0, 0, 0, 0.54);
+      color: rgba(255, 255, 255, 0.7); }
+    .hero.is-whitelight.gradient-left-right {
+      background-image: linear-gradient(141deg, rgba(230, 230, 230, 0.7) 0%, rgba(255, 255, 255, 0.7) 71%, rgba(255, 255, 255, 0.7) 100%); }
+    .hero.is-whitelight.gradient-right-left {
+      background-image: linear-gradient(141deg, rgba(255, 255, 255, 0.7) 0%, rgba(255, 255, 255, 0.7) 71%, rgba(230, 230, 230, 0.7) 100%); }
+    @media screen and (max-width: 768px) {
+      .hero.is-whitelight .nav-toggle span {
+        background-color: rgba(0, 0, 0, 0.54); }
+      .hero.is-whitelight .nav-toggle:hover {
+        background-color: rgba(0, 0, 0, 0.1); }
+      .hero.is-whitelight .nav-toggle.is-active span {
+        background-color: rgba(0, 0, 0, 0.54); }
+      .hero.is-whitelight .nav-menu .nav-item {
+        border-top-color: rgba(0, 0, 0, 0.2); } }
   .hero.is-light {
     background-color: #f5f5f5;
     color: #212121; }
@@ -4257,7 +4374,7 @@ a.nav-item.is-tab {
     .hero.is-light .tabs.is-boxed a, .hero.is-light .tabs.is-toggle a {
       color: #212121; }
       .hero.is-light .tabs.is-boxed a:hover, .hero.is-light .tabs.is-toggle a:hover {
-        background-color: rgba(0, 0, 0, 0.1); }
+        background-color: rgba(0, 0, 0, 0.12); }
     .hero.is-light .tabs.is-boxed li.is-active a, .hero.is-light .tabs.is-boxed li.is-active a:hover, .hero.is-light .tabs.is-toggle li.is-active a, .hero.is-light .tabs.is-toggle li.is-active a:hover {
       background-color: #212121;
       border-color: #212121;
@@ -4310,7 +4427,7 @@ a.nav-item.is-tab {
     .hero.is-dark .tabs.is-boxed a, .hero.is-dark .tabs.is-toggle a {
       color: #f5f5f5; }
       .hero.is-dark .tabs.is-boxed a:hover, .hero.is-dark .tabs.is-toggle a:hover {
-        background-color: rgba(0, 0, 0, 0.1); }
+        background-color: rgba(0, 0, 0, 0.12); }
     .hero.is-dark .tabs.is-boxed li.is-active a, .hero.is-dark .tabs.is-boxed li.is-active a:hover, .hero.is-dark .tabs.is-toggle li.is-active a, .hero.is-dark .tabs.is-toggle li.is-active a:hover {
       background-color: #f5f5f5;
       border-color: #f5f5f5;
@@ -4363,7 +4480,7 @@ a.nav-item.is-tab {
     .hero.is-purple .tabs.is-boxed a, .hero.is-purple .tabs.is-toggle a {
       color: white; }
       .hero.is-purple .tabs.is-boxed a:hover, .hero.is-purple .tabs.is-toggle a:hover {
-        background-color: rgba(0, 0, 0, 0.1); }
+        background-color: rgba(0, 0, 0, 0.12); }
     .hero.is-purple .tabs.is-boxed li.is-active a, .hero.is-purple .tabs.is-boxed li.is-active a:hover, .hero.is-purple .tabs.is-toggle li.is-active a, .hero.is-purple .tabs.is-toggle li.is-active a:hover {
       background-color: white;
       border-color: white;
@@ -4416,7 +4533,7 @@ a.nav-item.is-tab {
     .hero.is-primary .tabs.is-boxed a, .hero.is-primary .tabs.is-toggle a {
       color: white; }
       .hero.is-primary .tabs.is-boxed a:hover, .hero.is-primary .tabs.is-toggle a:hover {
-        background-color: rgba(0, 0, 0, 0.1); }
+        background-color: rgba(0, 0, 0, 0.12); }
     .hero.is-primary .tabs.is-boxed li.is-active a, .hero.is-primary .tabs.is-boxed li.is-active a:hover, .hero.is-primary .tabs.is-toggle li.is-active a, .hero.is-primary .tabs.is-toggle li.is-active a:hover {
       background-color: white;
       border-color: white;
@@ -4469,7 +4586,7 @@ a.nav-item.is-tab {
     .hero.is-primarydark .tabs.is-boxed a, .hero.is-primarydark .tabs.is-toggle a {
       color: #309670; }
       .hero.is-primarydark .tabs.is-boxed a:hover, .hero.is-primarydark .tabs.is-toggle a:hover {
-        background-color: rgba(0, 0, 0, 0.1); }
+        background-color: rgba(0, 0, 0, 0.12); }
     .hero.is-primarydark .tabs.is-boxed li.is-active a, .hero.is-primarydark .tabs.is-boxed li.is-active a:hover, .hero.is-primarydark .tabs.is-toggle li.is-active a, .hero.is-primarydark .tabs.is-toggle li.is-active a:hover {
       background-color: #309670;
       border-color: #309670;
@@ -4522,7 +4639,7 @@ a.nav-item.is-tab {
     .hero.is-info .tabs.is-boxed a, .hero.is-info .tabs.is-toggle a {
       color: white; }
       .hero.is-info .tabs.is-boxed a:hover, .hero.is-info .tabs.is-toggle a:hover {
-        background-color: rgba(0, 0, 0, 0.1); }
+        background-color: rgba(0, 0, 0, 0.12); }
     .hero.is-info .tabs.is-boxed li.is-active a, .hero.is-info .tabs.is-boxed li.is-active a:hover, .hero.is-info .tabs.is-toggle li.is-active a, .hero.is-info .tabs.is-toggle li.is-active a:hover {
       background-color: white;
       border-color: white;
@@ -4575,7 +4692,7 @@ a.nav-item.is-tab {
     .hero.is-accent .tabs.is-boxed a, .hero.is-accent .tabs.is-toggle a {
       color: white; }
       .hero.is-accent .tabs.is-boxed a:hover, .hero.is-accent .tabs.is-toggle a:hover {
-        background-color: rgba(0, 0, 0, 0.1); }
+        background-color: rgba(0, 0, 0, 0.12); }
     .hero.is-accent .tabs.is-boxed li.is-active a, .hero.is-accent .tabs.is-boxed li.is-active a:hover, .hero.is-accent .tabs.is-toggle li.is-active a, .hero.is-accent .tabs.is-toggle li.is-active a:hover {
       background-color: white;
       border-color: white;
@@ -4628,7 +4745,7 @@ a.nav-item.is-tab {
     .hero.is-success .tabs.is-boxed a, .hero.is-success .tabs.is-toggle a {
       color: white; }
       .hero.is-success .tabs.is-boxed a:hover, .hero.is-success .tabs.is-toggle a:hover {
-        background-color: rgba(0, 0, 0, 0.1); }
+        background-color: rgba(0, 0, 0, 0.12); }
     .hero.is-success .tabs.is-boxed li.is-active a, .hero.is-success .tabs.is-boxed li.is-active a:hover, .hero.is-success .tabs.is-toggle li.is-active a, .hero.is-success .tabs.is-toggle li.is-active a:hover {
       background-color: white;
       border-color: white;
@@ -4681,7 +4798,7 @@ a.nav-item.is-tab {
     .hero.is-warning .tabs.is-boxed a, .hero.is-warning .tabs.is-toggle a {
       color: rgba(0, 0, 0, 0.5); }
       .hero.is-warning .tabs.is-boxed a:hover, .hero.is-warning .tabs.is-toggle a:hover {
-        background-color: rgba(0, 0, 0, 0.1); }
+        background-color: rgba(0, 0, 0, 0.12); }
     .hero.is-warning .tabs.is-boxed li.is-active a, .hero.is-warning .tabs.is-boxed li.is-active a:hover, .hero.is-warning .tabs.is-toggle li.is-active a, .hero.is-warning .tabs.is-toggle li.is-active a:hover {
       background-color: rgba(0, 0, 0, 0.5);
       border-color: rgba(0, 0, 0, 0.5);
@@ -4734,7 +4851,7 @@ a.nav-item.is-tab {
     .hero.is-danger .tabs.is-boxed a, .hero.is-danger .tabs.is-toggle a {
       color: white; }
       .hero.is-danger .tabs.is-boxed a:hover, .hero.is-danger .tabs.is-toggle a:hover {
-        background-color: rgba(0, 0, 0, 0.1); }
+        background-color: rgba(0, 0, 0, 0.12); }
     .hero.is-danger .tabs.is-boxed li.is-active a, .hero.is-danger .tabs.is-boxed li.is-active a:hover, .hero.is-danger .tabs.is-toggle li.is-active a, .hero.is-danger .tabs.is-toggle li.is-active a:hover {
       background-color: white;
       border-color: white;
@@ -4793,6 +4910,8 @@ a.nav-item.is-tab {
     background-color: black; }
   .section.is-blacklight {
     background-color: rgba(0, 0, 0, 0.54); }
+  .section.is-whitelight {
+    background-color: rgba(255, 255, 255, 0.7); }
   .section.is-light {
     background-color: #f5f5f5; }
   .section.is-dark {
