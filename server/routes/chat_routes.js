@@ -3,6 +3,7 @@ var	account_model = require('../models/account_model.js');
 
 var sanitizeHtml = require("sanitize-html");
 var validator = require("validator");
+var dateFormat = require('dateformat');
 
 module.exports = function(app, db, auth, e){
 	Auth = auth;
@@ -97,7 +98,12 @@ function createMessage(req, res, next){
 	Chat.newChatMessage(req.message_item, function(result){
 		if (result.state=="error"){error.handler(req, res, result.info);}
 		else {
+			req.message_item.id = result.info.insertId;
+			req.message_item.seen = 0;
+			req.message_item.timestamp = dateFormat(new Date(), "yyyy-mm-dd h:MM:ss", true);
+
 			refreshConvos(req.user.convo_list, req.message_item, req.username);
+			delete req.message_item;
 			res.json({
 				state: "success",
 				target_username: req.username,
@@ -113,7 +119,16 @@ function refreshConvos(convo_list, message_item, username){
 	for (var x = 0; x < convo_list.length; x++){
 		if (convo_list[x].username.toLowerCase() == username.toLowerCase()){
 			convo_list[x].message = message_item.message;
-			convo_list[x].timestamp = false;
+			convo_list[x].timestamp = dateFormat(new Date(), "yyyy-mm-dd h:MM:ss", true);
+
+			//if chats doesnt exist, create it
+			if (!convo_list[x].chats){
+				convo_list[x].chats = [];
+			}
+
+			//add to the chats field
+			convo_list[x].chats.unshift(message_item);
+
 			var move_to_front = convo_list.splice(x, 1);
 			break;
 		}
@@ -125,7 +140,7 @@ function refreshConvos(convo_list, message_item, username){
 		convo_list.unshift({
 			message: message_item.message,
 			seen: 0,
-			timestamp: false,
+			timestamp: dateFormat(new Date(), "yyyy-mm-dd h:MM:ss", true),
 			username: username
 		})
 	}

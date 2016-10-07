@@ -259,8 +259,8 @@ function createPanelConvo(convo_item){
         var panel_icon = $("<span class='panel-icon'></span>");
             var panel_i = $("<i class='fa fa-user'></i>");
         var name = (convo_item.username.length > 20) ? convo_item.username.substr(0, 20) + "..." : convo_item.username;
-        var panel_p = $("<p class='is-pulled-right is-light'>" + disp_time + "</p>");
-        var panel_msg = $("<p class='panel-msg is-light'>" + disp_msg + "</p>");
+        var panel_p = $("<p class='is-pulled-right is-blacklight'>" + disp_time + "</p>");
+        var panel_msg = $("<p class='panel-msg is-blacklight'>" + disp_msg + "</p>");
 
     //to change the convo by clicking the panel of convos on the left
     panel_block.click(function(e){

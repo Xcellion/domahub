@@ -44,7 +44,7 @@ function createStatus(rental_info){
 
 //function to create the address td
 function createAddress(rental_info){
-    var temp_td = $("<td class='td-visible td-address'><a href='" + rental_info.address + "'>" + rental_info.address + "</a></td>");
+    var temp_td = $("<td class='td-visible td-address'><a class='orange-link' href='" + rental_info.address + "'>" + rental_info.address + "</a></td>");
     return temp_td;
 }
 
