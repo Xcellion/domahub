@@ -7,27 +7,6 @@ var parse = require("csv-parse");
 var fs = require('fs')
 var dns = require("dns");
 
-var upload = multer({
-	dest:'./uploads',
-	limits: { fileSize: 50000 },
-	fileFilter: function (req, file, cb) {
-		var allowedMimeTypes = [
-			"text/csv",
-			"application/csv",
-			"application/excel",
-			"application/vnd.ms-excel",
-			"application/vnd.msexcel",
-			"text/comma-separated-values"
-		];
-
-		if (allowedMimeTypes.indexOf(file.mimetype) <= -1) {
-			req.fileValidationError = 'Wrong file type!';
-			return cb(null, false, new Error('Wrong file type'));
-		}
-		cb(null, true);
-	}
-}).single("csv");
-
 module.exports = {
 
 	init : function(e, l){
@@ -114,8 +93,31 @@ module.exports = {
 		}
 	},
 
-	//function to check the size of the upload
-	checkUploadSize : function(req, res, next){
+	//function to check the size of the CSV file uploaded
+	checkCSVUploadSize : function(req, res, next){
+		var upload = multer({
+			dest:'./uploads/csv',
+			limits: { fileSize: 50000 },
+			fileFilter: function (req, file, cb) {
+				var allowedMimeTypes = [
+					"text/csv",
+					"application/csv",
+					"application/excel",
+					"application/vnd.ms-excel",
+					"application/vnd.msexcel",
+					"text/comma-separated-values"
+				];
+
+				if (allowedMimeTypes.indexOf(file.mimetype) <= -1) {
+					req.fileValidationError = 'Wrong file type!';
+					return cb(null, false, new Error('Wrong file type'));
+				}
+				else {
+					cb(null, true);
+				}
+			}
+		}).single("csv");
+
 		upload(req, res, function(err){
 			if (err){
 				error.handler(req, res, "File too large!");
@@ -126,18 +128,63 @@ module.exports = {
 		});
 	},
 
-	//function to check that the user owns the listing
-	checkListingOwner : function(req, res, next){
-		Listing.checkListingOwner(req.user.id, req.params.domain_name, function(result){
-			if (result.state=="error"){error.handler(req, res, result.info);}
+	//function to check the size of the image uploaded
+	checkImageUploadSize : function(req, res, next){
+		var upload = multer({
+			dest:'./uploads/images',
+			limits: { fileSize: 2500000 },
+			fileFilter: function (req, file, cb) {
+				var allowedMimeTypes = [
+					"image/jpeg",
+					"image/png",
+					"image/gif"
+				];
+
+				if (allowedMimeTypes.indexOf(file.mimetype) <= -1) {
+					req.fileValidationError = 'Wrong file type!';
+					return cb(null, false, new Error('Wrong file type'));
+				}
+				else {
+					cb(null, true);
+				}
+			}
+		}).single("image");
+
+		upload(req, res, function(err){
+			if (err){
+				error.handler(req, res, "File too large!");
+			}
 			else {
 				next();
 			}
-		})
+		});
+	},
+
+	//function to check that the listing is verified
+	checkListingVerified : function(req, res, next){
+		var listing_info = getUserListingObj(req.user.listings, req.params.domain_name);
+		if (listing_info.status == 0){
+			error.handler(req, res, "Please verify that you own this domain!", "json");
+		}
+		else {
+			next();
+		}
+	},
+
+	//function to check that the user owns the listing
+	checkListingOwner : function(req, res, next){
+		var listing_info = getUserListingObj(req.user.listings, req.params.domain_name);
+		if (listing_info.owner_id != req.user.id){
+			error.handler(req, res, "You do not own this domain!", "json");
+		}
+		else {
+			next();
+		}
 	},
 
 	//function to check and reformat new listings details
 	checkListingDetails : function(req, res, next){
+		console.log(req.body);
  		var status = parseFloat(req.body.status);
         var buy_link = req.body.buy_link;
         var description = sanitize(req.body.description);
@@ -194,7 +241,7 @@ module.exports = {
 	//function to make sure that if they're changing the pricing, that they can change it
 	checkListingPriceType : function(req, res, next){
 		if (req.new_listing_info.hour_price || req.new_listing_info.day_price || req.new_listing_info.week_price || req.new_listing_info.month_price){
-			var listing_info = getUserListingObj(req.user.listings, req.params.domain_name)
+			var listing_info = getUserListingObj(req.user.listings, req.params.domain_name);
 
 			//the listing is premium, all good to edit!
 			if (listing_info.price_type == 1){

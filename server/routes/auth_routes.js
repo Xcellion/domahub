@@ -1,3 +1,7 @@
+var bodyParser = require('body-parser')
+var jsonParser = bodyParser.json()
+var urlencodedParser = bodyParser.urlencoded({ extended: false })
+
 module.exports = function(app, auth){
 	app.get('/login', auth.checkLoggedIn);
 	app.get('/logout', auth.logout);
@@ -39,6 +43,7 @@ module.exports = function(app, auth){
 		"/login",
 		"/forgot"
 	], [
+		urlencodedParser,
 		auth.isNotLoggedIn,
 		function(req, res, next){
 			var path_name = req.path.slice(1, req.path.length) + "Post";
@@ -48,6 +53,7 @@ module.exports = function(app, auth){
 
 	//to reset password
 	app.post("/reset/:token", [
+		urlencodedParser,
 		auth.isNotLoggedIn,
 		auth.checkToken,
 		auth.resetPost
@@ -55,11 +61,13 @@ module.exports = function(app, auth){
 
 	//to resend verification email
 	app.post("/verify", [
+		urlencodedParser,
 		auth.requestVerify
 	]);
 
 	//to verify email
 	app.post("/verify/:token", [
+		urlencodedParser,
 		auth.checkToken,
 		auth.verifyPost
 	]);

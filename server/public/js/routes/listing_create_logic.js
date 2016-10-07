@@ -135,7 +135,7 @@ function submitListings(){
 function submitListingsBatch(){
 	if (can_submit){
 		var formData = new FormData();
-		formData.append('csv', $('#mult-csv')[0].files[0]);
+		formData.append('csv', $('#mult-form')[0].files[0]);
 
         $.ajax({
 			url: "/listing/create/batch",
