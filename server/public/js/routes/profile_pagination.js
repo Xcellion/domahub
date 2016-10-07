@@ -51,7 +51,7 @@ $(document).ready(function() {
         //reset other headers
         $(".sort-asc, .sort-desc").addClass("is-hidden");
         $(".sort-none").removeClass("is-hidden");
-        
+
         $(this).find('.sort-none').addClass('is-hidden');
         if (sorted == -1){
             $(this).find('.sort-asc').addClass('is-hidden');
@@ -307,21 +307,14 @@ function createAllRows(row_per_page, current_page){
             var temp_row_drop = createRowDrop(row_display[row_start], row_start);
             var both_rows = temp_row.add(temp_row_drop);
 
-            //to remove disabled on save changes button
-            both_rows.find(".drop-form .changeable-input").bind("input", function(e){
-                var closest_row = $(this).closest(".row-drop, .row-disp");
-                var save_button = (closest_row.hasClass("row-drop")) ? closest_row.find(".save-changes-button") : closest_row.next(".row-drop").find(".save-changes-button");
-                var cancel_button = (closest_row.hasClass("row-drop")) ? closest_row.find(".cancel-changes-button") : closest_row.next(".row-drop").find(".cancel-changes-button");
-                if (save_button.hasClass("is-disabled")){
-                    save_button.removeClass("is-disabled");
-                }
-                else if (save_button.hasClass("is-success")){
-                    save_button.removeClass("is-success").text("Save Changes");
-                }
-                if (cancel_button.hasClass("is-hidden")){
-                    cancel_button.removeClass("is-hidden");
-                }
-            });
+            //JS closure magic
+            (function(listing_info){
+                //to remove disabled on save changes button
+                both_rows.find(".drop-form .changeable-input").bind("input", function(e){
+                    changedListingValue($(this), listing_info);
+                });
+            }(row_display[row_start]))
+
 
             $("#table_body").append(temp_row, temp_row_drop);
         }
@@ -346,6 +339,32 @@ function createArrow(){
 }
 
 // --------------------------------------------------------------------------------- EDIT ROW
+
+//helper function to bind to inputs to listen for any changes from existing listing info
+function changedListingValue(input_elem, listing_info){
+    var name_of_attr = input_elem.data("name");
+    var closest_row = input_elem.closest(".row-drop, .row-disp");
+    var save_button = (closest_row.hasClass("row-drop")) ? closest_row.find(".save-changes-button") : closest_row.next(".row-drop").find(".save-changes-button");
+    var cancel_button = (closest_row.hasClass("row-drop")) ? closest_row.find(".cancel-changes-button") : closest_row.next(".row-drop").find(".cancel-changes-button");
+
+    //only change if the value changed from existing
+    if (input_elem.val() != listing_info[name_of_attr]){
+        if (save_button.hasClass("is-disabled")){
+            save_button.removeClass("is-disabled");
+        }
+        else if (save_button.hasClass("is-success")){
+            save_button.removeClass("is-success").text("Save Changes");
+        }
+        if (cancel_button.hasClass("is-hidden")){
+            cancel_button.removeClass("is-hidden");
+        }
+    }
+    //hide the cancel, disable the save
+    else {
+        save_button.removeClass("is-success").addClass("is-disabled").text("Save Changes");
+        cancel_button.addClass("is-hidden");
+    }
+}
 
 //function to drop down a row
 function dropRow(row, editing){
