@@ -1,7 +1,11 @@
 var	account_model = require('../models/account_model.js');
 var	validator = require('validator');
 var	request = require('request');
+var bodyParser = require('body-parser')
+var jsonParser = bodyParser.json()
+var urlencodedParser = bodyParser.urlencoded({ extended: false })
 
+// create application/x-www-form-urlencoded parser
 module.exports = function(app, db, auth, e){
 	Auth = auth;
 	error = e;
@@ -29,7 +33,10 @@ module.exports = function(app, db, auth, e){
 	app.get(main_page_routes, mainPageLinksRender);
 
 	//to check email and sign up for beta
-	app.post("/beta", signupBeta);
+	app.post("/beta", [
+		urlencodedParser,
+		signupBeta
+	]);
 }
 
 //display main page

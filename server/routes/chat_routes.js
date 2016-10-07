@@ -1,6 +1,10 @@
 var	chat_model = require('../models/chat_model.js');
 var	account_model = require('../models/account_model.js');
 
+var bodyParser = require('body-parser')
+var jsonParser = bodyParser.json()
+var urlencodedParser = bodyParser.urlencoded({ extended: false })
+
 var sanitizeHtml = require("sanitize-html");
 var validator = require("validator");
 var dateFormat = require('dateformat');
@@ -17,6 +21,7 @@ module.exports = function(app, db, auth, e){
 	app.post([
 		"/messages/new"
 	], [
+		urlencodedParser,
 		checkLoggedIn,
 		checkMessage,
 		getOtherId,
@@ -27,6 +32,7 @@ module.exports = function(app, db, auth, e){
 	app.post([
 		"/messages/:account"
 	], [
+		urlencodedParser,
 		checkLoggedIn,
 		getOtherId,
 		getConvo

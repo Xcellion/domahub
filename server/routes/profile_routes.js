@@ -1,5 +1,9 @@
 var	account_model = require('../models/account_model.js');
 
+var bodyParser = require('body-parser')
+var jsonParser = bodyParser.json()
+var urlencodedParser = bodyParser.urlencoded({ extended: false })
+
 var request = require('request');
 var validator = require('validator');
 var qs = require('qs');
@@ -84,6 +88,7 @@ module.exports = function(app, db, auth, e, pp){
 
 	//post to change account settings
 	app.post("/profile/settings", [
+		urlencodedParser,
 		checkLoggedIn,
 		Auth.checkAccountSettings,
 		Auth.updateAccountSettings

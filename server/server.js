@@ -80,10 +80,6 @@ else {
 require('./lib/api.js')(app, db, error);
 
 app.use(cookieParser());
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({
-	extended: true
-}));
 
 //for routing of static files
 app.use(express.static(__dirname + '/public'));

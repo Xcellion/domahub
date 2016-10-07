@@ -3,9 +3,18 @@ var	data_model = require('../models/data_model.js');
 var listings_renter = require("./listings_renter_routes");
 var listings_owner = require("./listings_owner_routes");
 
+var bodyParser = require('body-parser')
+var jsonParser = bodyParser.json()
+var urlencodedParser = bodyParser.urlencoded({ extended: false })
+
 var validator = require("validator");
 var whois = require("whois");
 var parser = require('parse-whois');
+var imgur = require('imgur');
+var multer = require("multer");
+var upload = multer();
+
+imgur.setCredentials('cumin@domahub.com', 'password', 'IzF23!@7n');
 
 module.exports = function(app, db, auth, e){
 	Listing = new listing_model(db);
@@ -34,6 +43,7 @@ module.exports = function(app, db, auth, e){
 
 	//create a single listing
 	app.post('/listing/create', [
+		urlencodedParser,
 		checkLoggedIn,
 		listings_owner.checkAccountListingPriv,
 		listings_owner.checkListingCreate,
@@ -42,9 +52,10 @@ module.exports = function(app, db, auth, e){
 
 	//create multiple listings
 	app.post('/listing/create/batch', [
+		urlencodedParser,
 		checkLoggedIn,
 		listings_owner.checkAccountListingPriv,
-		listings_owner.checkUploadSize,
+		listings_owner.checkCSVUploadSize,
 		listings_owner.checkListingBatch,
 		listings_owner.createListingBatch
 	]);
@@ -65,6 +76,8 @@ module.exports = function(app, db, auth, e){
 		listings_owner.checkAccountListingPriv,
 		checkDomainListed,
 		listings_owner.checkListingOwner,
+		listings_owner.checkListingVerified,
+		upload.array(),			//multer upload for multi-part forms
 		listings_owner.checkListingDetails,
 		listings_owner.checkListingPriceType,
 		listings_owner.checkListingExisting,
@@ -105,6 +118,7 @@ module.exports = function(app, db, auth, e){
 
 	//create a new rental
 	app.post('/listing/:domain_name/rent', [
+		urlencodedParser,
 		checkLoggedIn,
 		checkDomainListed,
 		listings_renter.getListing,
@@ -116,6 +130,7 @@ module.exports = function(app, db, auth, e){
 
 	//editing an existing rental
 	app.post('/listing/:domain_name/:rental_id', [
+		urlencodedParser,
 		checkLoggedIn,
 		checkDomainListed,
 		listings_renter.checkRental,
