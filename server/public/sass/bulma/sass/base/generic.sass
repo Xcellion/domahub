@@ -25,16 +25,13 @@ h1,
 h2,
 h3
   color: $text
-  &.is-white
-    color: $white
   &.is-white-light
     color: $white-secondary
-  &.is-light
-    color: $text-light
-  &.is-primary
-    color: $primary
-  &.is-accent
-    color: $accent
+  @each $name, $pair in $colors
+    $color: nth($pair, 1)
+    $color-invert: nth($pair, 2)
+    &.is-#{$name}
+      color: $color
 h1
   font-size: $size-2
   font-weight: bold
@@ -47,12 +44,13 @@ h3
 p
   color: $text
   font-weight: 400
-  &.is-white
-    color: $white
   &.is-white-light
     color: $white-secondary
-  &.is-light
-    color: $text-light
+  @each $name, $pair in $colors
+    $color: nth($pair, 1)
+    $color-invert: nth($pair, 2)
+    &.is-#{$name}
+      color: $color
 
 h2 + p
   margin-top: 10px
@@ -77,24 +75,22 @@ a
   text-decoration: none
   &:active
     outline: none
-.is-underlined
-  color: inherit
-  text-decoration: underline
-.black-link
-  color: $text
-.primary-link
-  color: $primary
-.white-link
-  color: $white
-  &-underlined
+  &.is-underlined
+    color: inherit
+    text-decoration: underline
+  &.primary-link
+    color: $primary
+  &.white-link
     color: $white
-    +box-shadow(0,-2px,0,0,$white,inset)
-.orange-link
-  color: $accent
-  &:hover
-    -moz-box-shadow: inset 0 -2px 0 $accent
-    -webkit-box-shadow: inset 0 -2px 0 $accent
-    box-shadow: inset 0 -2px 0 $accent
+    &-underlined
+      color: $white
+      +box-shadow(0,-2px,0,0,$white,inset)
+  &.orange-link
+    color: $accent
+    &:hover
+      -moz-box-shadow: inset 0 -2px 0 $accent
+      -webkit-box-shadow: inset 0 -2px 0 $accent
+      box-shadow: inset 0 -2px 0 $accent
 
 
 code
