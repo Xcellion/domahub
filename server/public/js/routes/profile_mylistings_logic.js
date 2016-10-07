@@ -129,8 +129,9 @@ function createPriceDrop(listing_info){
     var temp_col = $("<div class='column is-3'></div>");
     var temp_form = $("<form class='drop-form'></form>");
 
-    var label_types = ["Hourly", "Daily", "Weekly", "Monthly"];
-    var label_values = [listing_info.hour_price, listing_info.day_price, listing_info.week_price,listing_info.month_price];
+    var label_types = ["Hourly", "Daily", "Weekly", "Monthly"];     //for display
+    var label_names = ["hour_price", "day_price", "week_price", "month_price"];     //for data for input listener
+    var label_values = [listing_info.hour_price, listing_info.day_price, listing_info.week_price,listing_info.month_price];     //for values
 
     for (var x = 0; x < 4; x++){
         var hourly_hidden = (listing_info.price_type == 0 && x == 0) ? "is-hidden" : "";
@@ -142,6 +143,7 @@ function createPriceDrop(listing_info){
 
                     var disabled = (listing_info.price_type == 0) ? "is-disabled" : "";
                     var temp_input = $('<input class="' + label_types[x].toLowerCase() + '-price-input input changeable-input ' + disabled + '" type="number" value="' + label_values[x] + '">');
+                        temp_input.data("name", label_names[x]);
 
                     var temp_i = $('<i class="fa fa-dollar"></i>');
         temp_form.append(temp_div1.append(temp_div_label.append(temp_label), temp_div_control.append(temp_control_p.append(temp_input, temp_i))));
@@ -169,6 +171,7 @@ function createFormDrop(listing_info){
             var temp_div1_label = $("<label class='label'>Purchase link</label>")
         var temp_div1_p = $("<p class='control has-icon'></p>");
             var temp_div1_input = $('<input class="purchase-link-input input changeable-input" type="url" placeholder="https://buy-my-website.com" value="' + buy_link + '"/>');
+                temp_div1_input.data("name", "buy_link");
             var temp_div1_input_i = $('<i class="fa fa-link"></i>');
     temp_div1.append(temp_div1_control.append(temp_div1_label), temp_div1_p.append(temp_div1_input, temp_div1_input_i));
 
@@ -177,6 +180,8 @@ function createFormDrop(listing_info){
             var temp_div2_label = $('<label class="label">Description</label>');
         var temp_div2_control = $('<div class="control">');
             var temp_div2_input = $('<textarea class="description-input textarea changeable-input" placeholder="Rent this website for any time period you please!">' + description + '</textarea>')
+                temp_div2_input.data("name", "description");
+
     temp_div2.append(temp_div2_control_label.append(temp_div2_label), temp_div2_control.append(temp_div2_input));
 
     var temp_div3 = $('<div class="control is-grouped"></div>');
@@ -215,15 +220,14 @@ function createFormDrop(listing_info){
 
 //function to create the select dropdown for listing status
 function createStatusDrop(listing_info){
-    var status = (listing_info.status == 1) ? "Inactive" : "Active";
-
     var new_td = $("<td class='td-visible td-status td-status-drop is-hidden'></td>");
         var temp_span = $("<span class='select status-span'></span>");
         var temp_form = $("<form class='drop-form'></form>");
         var temp_select = $("<select class='status-select changeable-input'></select>");
-            temp_select.append("<option value='Active'>Active</option");
-            temp_select.append("<option value='Inactive'>Inactive</option");
-            temp_select.val(status);
+            temp_select.append("<option value='1'>Inactive</option");
+            temp_select.append("<option value='2'>Active</option");
+            temp_select.val(listing_info.status);
+            temp_select.data("name", "status");
     new_td.append(temp_span.append(temp_form.append(temp_select)));
 
     //prevent clicking status from dropping down row
@@ -363,7 +367,7 @@ function cancelListingChanges(row, row_drop, cancel_button, listing_info){
 
     //revert back to the old status
     var old_status = (listing_info.status == 1) ? "Inactive" : "Active"
-    row.find(".status-select").val(old_status);
+    row.find(".status-select").val(listing_info.status);
     row.find(".td-status").not(".td-status-drop").text(old_status);
 
     //revert all other inputs
@@ -384,7 +388,7 @@ function submitListingChanges(row, row_drop, success_button, listing_info){
     var domain_name = listing_info.domain_name;
 
     var submit_data = {
-        status : (row.find(".status-select").val() == "Inactive") ? 1 : 2,
+        status : row.find(".status-select").val(),
         buy_link : row_drop.find(".purchase-link-input").val(),
         description : row_drop.find(".description-input").val(),
         hour_price : row_drop.find(".hourly-price-input").val(),
