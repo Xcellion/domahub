@@ -95,14 +95,9 @@ function createRowDrop(listing_info, rownum){
     var temp_div_drop = $("<div id='div-drop" + rownum + "' class='div-drop " + unverified_opacity + " td-visible container'></div>");
     var temp_div_col = $("<div class='columns'></div>");
 
-    temp_drop.append(temp_td.append(temp_div_drop.append(temp_div_col.append(
-        createFormDrop(listing_info),
-        createPriceDrop(listing_info),
-        createImgDrop(listing_info)
-    ))));
-
+    //if unverified, gray out the controls in the background
     if (listing_info.status == 0){
-        var unverified_div = $("<div class='unverified_div div-drop'></div>");
+        var unverified_div = $("<div class='unverified-div div-drop'></div>");
             var unverified_a = $("<a class='button verify-link'></a>");
                 unverified_a.data("href", '/listing/' + listing_info.domain_name + '/verify');
                 var unverified_span2 = $("<span>Please verify that you own this domain</span>");
@@ -110,15 +105,28 @@ function createRowDrop(listing_info, rownum){
 
         unverified_a.unbind().click(function(e){
             e.preventDefault();
-            e.stopPropagation();
-            unverified_a.addClass('is-loading').removeClass("is-danger");
+            unverified_a.removeClass("is-danger").addClass('is-loading');
             $.ajax({
                 url: unverified_a.data("href"),
                 method: "GET"
             }).done(function(data){
-                unverified_a.removeClass('is-loading');
+                unverified_a.removeClass('is-loading').addClass("is-success").text("Success!");
                 if (data.state == "success"){
-                    //todo
+
+                    //show all inputs except price
+                    var row_drop = unverified_div.closest(".row-drop");
+                    row_drop.find(".is-disabled").not(".premium-input").removeClass("is-disabled");
+                    row_drop.find(".save-changes-button").removeClass("is-hidden");
+
+                    //show status button
+                    var row = row_drop.prev(".row-disp");
+                    row.find(".td-verify").addClass("is-hidden");
+                    row.find(".td-status").removeClass("is-hidden");
+                    row.find(".status-input").val(1);
+
+                    unverified_div.addClass('is-hidden');
+                    editStatus(row, true);
+                    listings = data.listings;
                 }
                 else {
                     unverified_a.addClass('is-danger');
@@ -127,9 +135,15 @@ function createRowDrop(listing_info, rownum){
             });
         });
 
-        temp_td.append(unverified_div.append(unverified_a));
+        temp_div_drop.append(unverified_div.append(unverified_a));
         unverified_div.hide();
     }
+
+    temp_drop.append(temp_td.append(temp_div_drop.append(temp_div_col.append(
+        createFormDrop(listing_info),
+        createPriceDrop(listing_info),
+        createImgDrop(listing_info)
+    ))));
 
     temp_div_drop.hide();
 
@@ -178,8 +192,9 @@ function createPriceDrop(listing_info){
             var temp_div_control = $("<div class='control'></div>");
                 var temp_control_p = $("<p class='control has-icon'></p>");
 
+                    //disabled if listing is not verified
                     var disabled = (listing_info.price_type == 0) ? "is-disabled" : "";
-                    var temp_input = $('<input class="' + label_types[x].toLowerCase() + '-price-input input changeable-input ' + disabled + '" type="number" value="' + label_values[x] + '">');
+                    var temp_input = $('<input class="' + label_types[x].toLowerCase() + '-price-input premium-input input changeable-input ' + disabled + '" type="number" value="' + label_values[x] + '">');
                         temp_input.data("name", label_names[x]);
 
                     var temp_i = $('<i class="fa fa-dollar"></i>');
