@@ -1,6 +1,11 @@
-.unverified_div {
+.unverified-div {
+  z-index: 1;
   position: absolute;
-  top: 0; }
+  left: 30%;
+  top: 25px; }
+
+.is-unverified > .columns {
+  opacity: 0.3; }
 
 #messenger_form {
   width: 100%;
