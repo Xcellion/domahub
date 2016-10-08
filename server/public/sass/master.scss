@@ -57,7 +57,7 @@
 
 .has-styleBorder {
   @include tablet {
-    border-left: 5px solid $primary;
+    border-left: 5px solid $primary-lighter;
     padding-left: 15px;
   }
   @include mobile {
