@@ -313,6 +313,13 @@ function createAllRows(row_per_page, current_page){
                 both_rows.find(".drop-form .changeable-input").bind("input", function(e){
                     changedListingValue($(this), listing_info);
                 });
+
+                //file change
+                both_rows.find(".drop-form-file .changeable-input").bind("change", function(e){
+                    var file_name = $(this).val().replace(/^.*[\\\/]/, '');
+                    $(this).next(".button").find(".file-label").text(file_name);
+                    changedListingValue($(this), listing_info);
+                });
             }(row_display[row_start]))
 
 
