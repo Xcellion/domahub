@@ -3411,6 +3411,9 @@ input:-webkit-autofill {
   text-transform: uppercase;
   margin-top: 20px; }
 
+.menu.is-fixed {
+  position: fixed; }
+
 .message-body {
   border: 1px solid rgba(0, 0, 0, 0.12);
   border-radius: 3px;
@@ -5066,6 +5069,27 @@ a.nav-item.is-tab {
     height: 100vh;
     justify-content: center;
     width: 100%; } }
+
+/********************* FILE UPLOAD BUTTON *************/
+.input-number {
+  width: 100px; }
+
+.input-file {
+  width: 0.1px;
+  height: 0.1px;
+  opacity: 0;
+  overflow: hidden;
+  position: absolute;
+  z-index: -1; }
+
+.input-file + label {
+  cursor: pointer; }
+  .input-file + label > .fa {
+    margin-right: 5px; }
+
+.input-file:focus + label {
+  outline: 1px dotted #000;
+  outline: -webkit-focus-ring-color auto 3px; }
 
 /********************** LINEBREAK ******************/
 #linebreak {
