@@ -12,7 +12,11 @@ var bodyParser 	= require('body-parser'),
 	session = require('express-session'),
 	passport = require('passport'),
 	db = require('./lib/database.js'),
-	error = require('./lib/error.js');
+	error = require('./lib/error.js'),
+	autoReap  = require('multer-autoreap');
+	autoReap.options = {
+	    reapOnError: true
+	};
 
 db.connect();	//connect to the database
 
@@ -80,6 +84,7 @@ else {
 require('./lib/api.js')(app, db, error);
 
 app.use(cookieParser());
+app.use(autoReap);		//to delete any temporary uploaded files left
 
 //for routing of static files
 app.use(express.static(__dirname + '/public'));

@@ -10,11 +10,6 @@ var urlencodedParser = bodyParser.urlencoded({ extended: false })
 var validator = require("validator");
 var whois = require("whois");
 var parser = require('parse-whois');
-var imgur = require('imgur');
-var multer = require("multer");
-var upload = multer();
-
-imgur.setCredentials('cumin@domahub.com', 'password', 'IzF23!@7n');
 
 module.exports = function(app, db, auth, e){
 	Listing = new listing_model(db);
@@ -52,7 +47,6 @@ module.exports = function(app, db, auth, e){
 
 	//create multiple listings
 	app.post('/listing/create/batch', [
-		urlencodedParser,
 		checkLoggedIn,
 		listings_owner.checkAccountListingPriv,
 		listings_owner.checkCSVUploadSize,
@@ -77,8 +71,8 @@ module.exports = function(app, db, auth, e){
 		checkDomainListed,
 		listings_owner.checkListingOwner,
 		listings_owner.checkListingVerified,
-		upload.array(),			//multer upload for multi-part forms
 		listings_owner.checkImageUploadSize,
+		listings_owner.checkListingImage,
 		listings_owner.checkListingDetails,
 		listings_owner.checkListingPriceType,
 		listings_owner.checkListingExisting,
