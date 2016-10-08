@@ -78,6 +78,7 @@ module.exports = function(app, db, auth, e){
 		listings_owner.checkListingOwner,
 		listings_owner.checkListingVerified,
 		upload.array(),			//multer upload for multi-part forms
+		listings_owner.checkImageUploadSize,
 		listings_owner.checkListingDetails,
 		listings_owner.checkListingPriceType,
 		listings_owner.checkListingExisting,

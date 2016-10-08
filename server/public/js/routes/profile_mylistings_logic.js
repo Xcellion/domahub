@@ -98,44 +98,54 @@ function createRowDrop(listing_info, rownum){
     //if unverified, gray out the controls in the background
     if (listing_info.status == 0){
         var unverified_div = $("<div class='unverified-div div-drop'></div>");
-            var unverified_a = $("<a class='button verify-link'></a>");
+            var unverified_a = $("<a class='bottom-margin-25 button is-primary verify-link'></a>");
                 unverified_a.data("href", '/listing/' + listing_info.domain_name + '/verify');
                 var unverified_span2 = $("<span>Please verify that you own this domain</span>");
                 unverified_a.append(unverified_span2);
+        var unverified_faq = $("<div class='has-text-centered'><a class='orange-link' href='/faq#verifying'>Unsure how to verify?</a></div>");
 
         unverified_a.unbind().click(function(e){
             e.preventDefault();
-            unverified_a.removeClass("is-danger").addClass('is-loading');
+            var unverified_a = $(this);
+            unverified_a.addClass('is-loading');
             $.ajax({
                 url: unverified_a.data("href"),
                 method: "GET"
             }).done(function(data){
-                unverified_a.removeClass('is-loading').addClass("is-success").text("Success!");
+                unverified_a.removeClass('is-loading is-danger');
                 if (data.state == "success"){
+                    unverified_a.addClass("is-success").text("Verification was successful!");
 
-                    //show all inputs except price
-                    var row_drop = unverified_div.closest(".row-drop");
-                    row_drop.find(".is-disabled").not(".premium-input").removeClass("is-disabled");
-                    row_drop.find(".save-changes-button").removeClass("is-hidden");
+                    window.setTimeout(function(){
+                        //show all inputs except price
+                        var div_drop = unverified_a.closest(".is-unverified");
+                        div_drop.removeClass("is-unverified");
+                        div_drop.find(".is-disabled").not(".premium-input, .save-changes-button").removeClass("is-disabled");
+                        var success_button = div_drop.find(".save-changes-button")
+                        var cancel_button = div_drop.find(".cancel-changes-button")
+                        success_button.removeClass("is-hidden");
 
-                    //show status button
-                    var row = row_drop.prev(".row-disp");
-                    row.find(".td-verify").addClass("is-hidden");
-                    row.find(".td-status").removeClass("is-hidden");
-                    row.find(".status-input").val(1);
+                        //show status button
+                        var row = unverified_a.closest(".row-drop").prev(".row-disp");
+                        row.find(".td-verify").addClass("is-hidden");
+                        row.find(".td-status").removeClass("is-hidden");
+                        row.find(".td-status-drop").find(".status_input").val(1);
 
-                    unverified_div.addClass('is-hidden');
-                    editStatus(row, true);
-                    listings = data.listings;
+                        unverified_div.addClass("is-hidden");
+                        editStatus(row, true);
+                        listings = data.listings;
+                        domain_name = listing_info.domain_name;
+                        refreshSubmitBindings(success_button, cancel_button, listings, domain_name)
+                    }, 1000);
                 }
                 else {
                     unverified_a.addClass('is-danger');
-                    unverified_a.text("Failed");
+                    unverified_a.text("Failed to verify the domain!");
                 }
             });
         });
 
-        temp_div_drop.append(unverified_div.append(unverified_a));
+        temp_div_drop.append(unverified_div.append(unverified_a, unverified_faq));
         unverified_div.hide();
     }
 
@@ -161,9 +171,9 @@ function createImgDrop(listing_info){
                 var temp_figure = $("<figure class='image listing-img is-256x256'></figure>");
                     var temp_img = $("<img class='is-listing' alt='Image not found' src=" + background_image + " />");
                 var temp_footer = $("<footer class='card-footer'></div>");
-                    var temp_form = $('<form id="mult-form" class="card-footer-item" action="/listing/create/batch" method="post" enctype="multipart/form-data"></form>')
-                    var temp_input = $('<input type="file" name="image" id="file" accept="image/png, image/gif, image/jpeg" class="is-hidden input-file" />');
-                    var temp_input_label = $('<label for="file" class="' + verified_disabled + ' button"><i class="fa fa-upload"></i>Change Picture</label>');
+                    var temp_form = $('<form id="mult-form" class="drop-form-file card-footer-item" action="/listing/create/batch" method="post" enctype="multipart/form-data"></form>')
+                    var temp_input = $('<input type="file" name="image" id="file" accept="image/png, image/gif, image/jpeg" class="changeable-input input-file" />');
+                    var temp_input_label = $('<label for="file" class="' + verified_disabled + ' button"><i class="fa fa-upload"></i><p class="file-label">Change Picture</p></label>');
 
     temp_col.append(temp_div.append(temp_div_image.append(temp_figure.append(temp_img), temp_footer.append(temp_form.append(temp_input, temp_input_label)))));
 

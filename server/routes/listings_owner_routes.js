@@ -339,16 +339,17 @@ module.exports = {
 		}
 		else {
 			domain_name = req.params.domain_name;
-			Listing.updateListing(domain_name, req.new_listing_info, function(result){
-				if (result.state=="error"){error.handler(req, res, result.info);}
-				else {
-					updateUserListingsObject(req, domain_name);
-					res.json({
-						state: "success",
-						listings: req.user.listings
-					});
-				}
+			updateUserListingsObject(req, domain_name);
+			res.json({
+				state: "success",
+				listings: req.user.listings
 			});
+			// Listing.updateListing(domain_name, req.new_listing_info, function(result){
+			// 	if (result.state=="error"){error.handler(req, res, result.info);}
+			// 	else {
+			//
+			// 	}
+			// });
 		}
 	},
 
