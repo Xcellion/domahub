@@ -152,7 +152,7 @@ function createRowDrop(listing_info, rownum){
     temp_drop.append(temp_td.append(temp_div_drop.append(temp_div_col.append(
         createFormDrop(listing_info),
         createPriceDrop(listing_info),
-        createImgDrop(listing_info)
+        createImgDrop(listing_info, rownum)
     ))));
 
     temp_div_drop.hide();
@@ -161,7 +161,7 @@ function createRowDrop(listing_info, rownum){
 }
 
 //function to create the image drop column
-function createImgDrop(listing_info){
+function createImgDrop(listing_info, rownum){
     var background_image = (listing_info.background_image == null || listing_info.background_image == undefined) ? "https://placeholdit.imgix.net/~text?txtsize=40&txt=2000x1000&w=200&h=200" : listing_info.background_image;
     var verified_disabled = (listing_info.status == 0) ? "is-disabled" : "";
 
@@ -172,11 +172,12 @@ function createImgDrop(listing_info){
                     var temp_img = $("<img class='is-listing' alt='Image not found' src=" + background_image + " />");
                 var temp_footer = $("<footer class='card-footer'></div>");
                     var temp_form = $('<form id="mult-form" class="drop-form-file card-footer-item" action="/listing/create/batch" method="post" enctype="multipart/form-data"></form>')
-                    var temp_input = $('<input type="file" name="image" id="file" accept="image/png, image/gif, image/jpeg" class="changeable-input input-file" />');
-                    var temp_input_label = $('<label for="file" class="' + verified_disabled + ' button"><i class="fa fa-upload"></i><p class="file-label">Change Picture</p></label>');
-
+                    var temp_input = $('<input type="file" id="file' + rownum + '" name="image" accept="image/png, image/gif, image/jpeg" class="picture-file changeable-input input-file" />');
+                    var temp_input_label = $('<label for="file' + rownum + '" class="' + verified_disabled + ' button"><i class="fa fa-upload"></i><p class="file-label">Change Picture</p></label>');
+                        temp_input.data("name", "image");
     temp_col.append(temp_div.append(temp_div_image.append(temp_figure.append(temp_img), temp_footer.append(temp_form.append(temp_input, temp_input_label)))));
 
+    //if theres an error in getting the image, remove the link
     temp_img.error(function() {
         $(this).attr("src", "");
     });
@@ -412,9 +413,11 @@ function submitListingChanges(row, row_drop, success_button, listing_info){
     var domain_name = listing_info.domain_name;
 
     var formData = new FormData();
+
+    //only add changed inputs
     row.add(row_drop).find(".changeable-input").each(function(e){
         var input_name = $(this).data("name");
-        var input_val =$(this).val();
+        var input_val = (input_name == "image") ? $(this)[0].files[0] : $(this).val();
 
         //if null or undefined
         listing_info[input_name] = (listing_info[input_name] == null || listing_info[input_name] == undefined) ? "" : listing_info[input_name];
@@ -423,24 +426,24 @@ function submitListingChanges(row, row_drop, success_button, listing_info){
         }
     });
 
-    //formData.append('image', $('#mult-form')[0].files[0]);
     success_button.addClass("is-loading");
 
     $.ajax({
         url: "/listing/" + domain_name + "/update",
-        method: "POST",
+        type: "POST",
         data: formData,
         // Options to tell jQuery not to process data or worry about the content-type
         cache: false,
         contentType: false,
         processData: false
-    }).done(function(data){
+    }, 'json').done(function(data){
         success_button.removeClass("is-loading");
         if (data.state == "success"){
             listings = data.listings;
             success_button.addClass("is-disabled");
             cancel_button.addClass('is-hidden');
             refreshSubmitBindings(success_button, cancel_button, listings, domain_name);
+            row_drop.find("img.is-listing").attr("src", data.new_background_image);
         }
         else {
             listing_msg.removeClass('is-hidden');
