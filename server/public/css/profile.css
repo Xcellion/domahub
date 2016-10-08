@@ -1,11 +1,16 @@
 .unverified-div {
   z-index: 1;
   position: absolute;
-  left: 30%;
-  top: 25px; }
+  top: 30%;
+  left: 50%;
+  -moz-transform: translate(-50%, -50%);
+  -o-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  -webkit-transform: translate(-50%, -50%);
+    -webkit-transform-transform: translate(-50%, -50%); }
 
 .is-unverified > .columns {
-  opacity: 0.3; }
+  opacity: 0.2; }
 
 #messenger_form {
   width: 100%;
