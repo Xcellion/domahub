@@ -3411,6 +3411,9 @@ input:-webkit-autofill {
   text-transform: uppercase;
   margin-top: 20px; }
 
+.menu.is-fixed {
+  position: fixed; }
+
 .message-body {
   border: 1px solid rgba(0, 0, 0, 0.12);
   border-radius: 3px;
