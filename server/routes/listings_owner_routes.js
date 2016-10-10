@@ -1,11 +1,13 @@
 var	listing_model = require('../models/listing_model.js');
 
+var request = require("request");
+var dns = require("dns");
 var validator = require("validator");
 var sanitize = require("sanitize-html");
+
 var multer = require("multer");
 var parse = require("csv-parse");
 var fs = require('fs')
-var dns = require("dns");
 
 module.exports = {
 
@@ -48,39 +50,27 @@ module.exports = {
 
 	//function to check the format of the batch CSV file
 	checkListingBatch : function(req, res, next){
-		if (!req.file){
-			error.handler(req, res, "No file!");
+		onError = function(req, res){
+			error.handler(req, res, "CSV parser error!");
 		}
-		else if (req.fileToolarge){
-			error.handler(req, res, "File too large!");
-		}
-		else if (req.fileValidationError) {
-			error.handler(req, res, "Wrong file type!");
-		}
-		else {
 
-			onError = function(req, res){
-				error.handler(req, res, "CSV parser error!");
+	    parseCSVFile(req.file.path, onError, function(bad_listings, good_listings){
+			if (bad_listings.length > 0){
+				res.send({
+					state: "error",
+					bad_listings: bad_listings,
+					good_listings: good_listings
+				});
 			}
-
-		    parseCSVFile(req.file.path, onError, function(bad_listings, good_listings){
-				if (bad_listings.length > 0){
-					res.send({
-						state: "error",
-						bad_listings: bad_listings,
-						good_listings: good_listings
-					});
+			else {
+				//need to add owner id, set_price, and type to the good records
+				for (var x = 0; x < good_listings.length; x++){
+					good_listings[x].push("" + req.user.id + "", "0", "1");
 				}
-				else {
-					//need to add owner id, set_price, and type to the good records
-					for (var x = 0; x < good_listings.length; x++){
-						good_listings[x].push("" + req.user.id + "", "0", "1");
-					}
-					req.session.good_listings = good_listings;
-					next();
-				}
-			});
-		}
+				req.session.good_listings = good_listings;
+				next();
+			}
+		});
 	},
 
 	//function to check if the user can create new listings
@@ -95,8 +85,17 @@ module.exports = {
 
 	//function to check the size of the CSV file uploaded
 	checkCSVUploadSize : function(req, res, next){
+		var storage = multer.diskStorage({
+			destination: function (req, file, cb) {
+				cb(null, './uploads/csv');
+			},
+			filename: function (req, file, cb) {
+				cb(null, Date.now() + "-" + req.user.username + "-" + file.fieldname);
+			}
+		});
+
 		var upload = multer({
-			dest:'./uploads/csv',
+			storage: storage,
 			limits: { fileSize: 50000 },
 			fileFilter: function (req, file, cb) {
 				var allowedMimeTypes = [
@@ -109,8 +108,7 @@ module.exports = {
 				];
 
 				if (allowedMimeTypes.indexOf(file.mimetype) <= -1) {
-					req.fileValidationError = 'Wrong file type!';
-					return cb(null, false, new Error('Wrong file type'));
+					cb(new Error('FILE_TYPE_WRONG'));
 				}
 				else {
 					cb(null, true);
@@ -118,11 +116,21 @@ module.exports = {
 			}
 		}).single("csv");
 
+		console.log(req.user.username + " is uploading a CSV file for parsing...");
+
 		upload(req, res, function(err){
 			if (err){
-				error.handler(req, res, "File too large!");
+				if (err.code == "LIMIT_FILE_SIZE"){
+					error.handler(req, res, 'File is too big!', "json");
+				}
+				else if (err.message == "FILE_TYPE_WRONG"){
+					error.handler(req, res, 'Wrong file type!', "json");
+				}
+				else {
+					error.handler(req, res, 'Something went wrong with the upload!', "json");
+				}
 			}
-			else {
+			else if (!err && req.file) {
 				next();
 			}
 		});
@@ -130,19 +138,30 @@ module.exports = {
 
 	//function to check the size of the image uploaded
 	checkImageUploadSize : function(req, res, next){
-		var upload = multer({
-			dest:'./uploads/images',
+		var storage = multer.diskStorage({
+			destination: function (req, file, cb) {
+				cb(null, './uploads/images');
+			},
+			filename: function (req, file, cb) {
+				cb(null, Date.now() + "_" + req.params.domain_name + "_" + req.user.username);
+			}
+		});
+
+		var upload_img = multer({
+			storage: storage,
 			limits: { fileSize: 2500000 },
+
+			//to check for file type
 			fileFilter: function (req, file, cb) {
 				var allowedMimeTypes = [
 					"image/jpeg",
+					"image/jpg",
 					"image/png",
 					"image/gif"
 				];
 
 				if (allowedMimeTypes.indexOf(file.mimetype) <= -1) {
-					req.fileValidationError = 'Wrong file type!';
-					return cb(null, false, new Error('Wrong file type'));
+					cb(new Error('FILE_TYPE_WRONG'));
 				}
 				else {
 					cb(null, true);
@@ -150,12 +169,51 @@ module.exports = {
 			}
 		}).single("image");
 
-		upload(req, res, function(err){
+		console.log(req.user.username + " is uploading an image file for parsing...");
+
+		upload_img(req, res, function(err){
 			if (err){
-				error.handler(req, res, "File too large!");
+				if (err.code == "LIMIT_FILE_SIZE"){
+					error.handler(req, res, 'File is too big!', "json");
+				}
+				else if (err.message == "FILE_TYPE_WRONG"){
+					error.handler(req, res, 'Wrong file type!', "json");
+				}
+				else {
+					console.log(err);
+					error.handler(req, res, 'Something went wrong with the upload!', "json");
+				}
+			}
+			else if (!err && req.file) {
+				next();
+			}
+		});
+	},
+
+	checkListingImage : function(req, res, next){
+		var formData = {
+			title: req.file.filename,
+			image: fs.createReadStream("./uploads/images/" + req.file.filename)
+		}
+
+		console.log(req.user.username + " is uploading an image to Imgur...");
+		request.post({
+			url: "https://imgur-apiv3.p.mashape.com/3/image",
+			headers: {
+				'X-Mashape-Key' : "72Ivh0ASpImsh02oTqa4gJe0fD3Dp1iZagojsn1Yt1hWAaIzX3",
+				'Authorization' : 'Client-ID 730e9e6f4471d64'
+			},
+			formData: formData
+		}, function (error, response, body) {
+			if (!error){
+				if (!req.new_listing_info) {
+					req.new_listing_info = {};
+				}
+				req.new_listing_info.background_image = JSON.parse(body).data.link;
+				next();
 			}
 			else {
-				next();
+				console.log(error);
 			}
 		});
 	},
@@ -184,7 +242,6 @@ module.exports = {
 
 	//function to check and reformat new listings details
 	checkListingDetails : function(req, res, next){
-		console.log(req.body);
  		var status = parseFloat(req.body.status);
         var buy_link = req.body.buy_link;
         var description = sanitize(req.body.description);
@@ -206,31 +263,28 @@ module.exports = {
 		else if (req.body.description && description.length == 0){
 			error.handler(req, res, "Invalid listing description!", "json");
 		}
+		//if prices exist but are not legit
 		else if (req.body.hour_price && (hour_price != hour_price >>> 0) ||
 				 req.body.day_price && (day_price != day_price >>> 0) ||
 				 req.body.week_price && (week_price != week_price >>> 0) ||
 				 req.body.month_price && (month_price != month_price >>> 0)){
 			error.handler(req, res, "Invalid listing prices!", "json");
 		}
-		//todo - picture
-		// else if (){
-		//error.handler(req, res, "Invalid listing background image!", "json");
-		//
-		// }
 		else {
-			req.new_listing_info = {
-				status : status,
-				buy_link : buy_link,
-				description : description,
-				hour_price : hour_price,
-				day_price : day_price,
-				week_price : week_price,
-				month_price : month_price
+			if (!req.new_listing_info) {
+				req.new_listing_info = {};
 			}
+			req.new_listing_info.status = status;
+			req.new_listing_info.buy_link = buy_link;
+			req.new_listing_info.description = description;
+			req.new_listing_info.hour_price = hour_price;
+			req.new_listing_info.day_price = day_price;
+			req.new_listing_info.week_price = week_price;
+			req.new_listing_info.month_price = month_price;
 
 			//delete anything that doesnt exist
 			for (var x in req.new_listing_info){
-				if (!req.body[x]){
+				if (!req.body[x] && x != "background_image"){
 					delete req.new_listing_info[x];
 				}
 			}
@@ -339,17 +393,18 @@ module.exports = {
 		}
 		else {
 			domain_name = req.params.domain_name;
-			updateUserListingsObject(req, domain_name);
-			res.json({
-				state: "success",
-				listings: req.user.listings
+			Listing.updateListing(domain_name, req.new_listing_info, function(result){
+				if (result.state=="error"){error.handler(req, res, result.info);}
+				else {
+					var new_background_image = req.new_listing_info.background_image || false;
+					updateUserListingsObject(req, domain_name);
+					res.json({
+						state: "success",
+						listings: req.user.listings,
+						new_background_image : new_background_image
+					});
+				}
 			});
-			// Listing.updateListing(domain_name, req.new_listing_info, function(result){
-			// 	if (result.state=="error"){error.handler(req, res, result.info);}
-			// 	else {
-			//
-			// 	}
-			// });
 		}
 	},
 
