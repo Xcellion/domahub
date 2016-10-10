@@ -153,6 +153,8 @@ module.exports = {
 
 			//to check for file type
 			fileFilter: function (req, file, cb) {
+				console.log(req.user.username + " is uploading an image file for parsing...");
+
 				var allowedMimeTypes = [
 					"image/jpeg",
 					"image/jpg",
@@ -169,8 +171,6 @@ module.exports = {
 			}
 		}).single("image");
 
-		console.log(req.user.username + " is uploading an image file for parsing...");
-
 		upload_img(req, res, function(err){
 			if (err){
 				if (err.code == "LIMIT_FILE_SIZE"){
@@ -184,38 +184,44 @@ module.exports = {
 					error.handler(req, res, 'Something went wrong with the upload!', "json");
 				}
 			}
-			else if (!err && req.file) {
+			else if (!err) {
 				next();
 			}
 		});
 	},
 
 	checkListingImage : function(req, res, next){
-		var formData = {
-			title: req.file.filename,
-			image: fs.createReadStream("./uploads/images/" + req.file.filename)
-		}
+		if (req.file){
+			var formData = {
+				title: req.file.filename,
+				image: fs.createReadStream("./uploads/images/" + req.file.filename)
+			}
 
-		console.log(req.user.username + " is uploading an image to Imgur...");
-		request.post({
-			url: "https://imgur-apiv3.p.mashape.com/3/image",
-			headers: {
-				'X-Mashape-Key' : "72Ivh0ASpImsh02oTqa4gJe0fD3Dp1iZagojsn1Yt1hWAaIzX3",
-				'Authorization' : 'Client-ID 730e9e6f4471d64'
-			},
-			formData: formData
-		}, function (error, response, body) {
-			if (!error){
-				if (!req.new_listing_info) {
-					req.new_listing_info = {};
+			console.log(req.user.username + " is uploading an image to Imgur...");
+			request.post({
+				url: "https://imgur-apiv3.p.mashape.com/3/image",
+				headers: {
+					'X-Mashape-Key' : "72Ivh0ASpImsh02oTqa4gJe0fD3Dp1iZagojsn1Yt1hWAaIzX3",
+					'Authorization' : 'Client-ID 730e9e6f4471d64'
+				},
+				formData: formData
+			}, function (error, response, body) {
+				if (!error){
+					if (!req.new_listing_info) {
+						req.new_listing_info = {};
+					}
+					req.new_listing_info.background_image = JSON.parse(body).data.link;
+					next();
 				}
-				req.new_listing_info.background_image = JSON.parse(body).data.link;
-				next();
-			}
-			else {
-				console.log(error);
-			}
-		});
+				else {
+					console.log(error);
+					error.handler(req, res, 'Something went wrong with the upload!', "json");
+				}
+			});
+		}
+		else {
+			next();
+		}
 	},
 
 	//function to check that the listing is verified
