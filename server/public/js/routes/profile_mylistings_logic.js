@@ -104,7 +104,7 @@ function createRowDrop(listing_info, rownum){
                 unverified_a.append(unverified_span2);
         var unverified_faq = $("<div class='has-text-centered'><a class='orange-link' href='/faq#verifying'>Unsure how to verify?</a></div>");
 
-        unverified_a.unbind().click(function(e){
+        unverified_a.off().click(function(e){
             e.preventDefault();
             var unverified_a = $(this);
             unverified_a.addClass('is-loading');
@@ -135,7 +135,7 @@ function createRowDrop(listing_info, rownum){
                         editStatus(row, true);
                         listings = data.listings;
                         domain_name = listing_info.domain_name;
-                        refreshSubmitBindings(success_button, cancel_button, listings, domain_name)
+                        refreshSubmitbindings(success_button, cancel_button, listings, domain_name)
                     }, 1000);
                 }
                 else {
@@ -356,22 +356,32 @@ function editStatus(row, editing){
     }
 }
 
-//function to refresh listing_info on cancel and submit button after AJAX success
-function refreshSubmitBindings(success_button, cancel_button, listings, domain_name){
+//function to refresh listing_info on cancel, submit, input event listeners after AJAX success
+function refreshSubmitbindings(success_button, cancel_button, listings, domain_name){
     for (var x = 0; x < listings.length; x++){
         if (listings[x].domain_name == domain_name){
-            cancel_button.unbind().click(function(e){
-                var row_drop = $(this).closest('.row-drop');
-                var row = row_drop.prev(".row-disp");
+            var row_drop = success_button.closest('.row-drop');
+            var row = row_drop.prev(".row-disp");
+            var both_rows = row.add(row_drop);
 
+            cancel_button.off().click(function(e){
                 cancelListingChanges(row, row_drop, $(this), listings[x]);
             });
 
-            success_button.unbind().click(function(e){
-                var row_drop = $(this).closest('.row-drop');
-                var row = row_drop.prev(".row-disp");
-
+            success_button.off().click(function(e){
                 submitListingChanges(row, row_drop, $(this), listings[x]);
+            });
+
+            both_rows.find(".drop-form .changeable-input").unbind("input").on("input", function(e){
+                changedListingValue($(this), listings[x]);
+            });
+
+            both_rows.find(".drop-form-file .changeable-input").off().on("change", function(e){
+                var file_name = ($(this).val()) ? $(this).val().replace(/^.*[\\\/]/, '') : "Change Picture";
+                file_name = (file_name.length > 14) ? "..." + file_name.substr(file_name.length - 14) : file_name;
+                $(this).next(".button").find(".file-label").text(file_name);
+
+                changedListingValue($(this), listings[x]);
             });
 
             break;
@@ -442,8 +452,12 @@ function submitListingChanges(row, row_drop, success_button, listing_info){
             listings = data.listings;
             success_button.addClass("is-disabled");
             cancel_button.addClass('is-hidden');
-            refreshSubmitBindings(success_button, cancel_button, listings, domain_name);
-            row_drop.find("img.is-listing").attr("src", data.new_background_image);
+            refreshSubmitbindings(success_button, cancel_button, listings, domain_name);
+
+            //change background image if its changed
+            if (data.new_background_image){
+                row_drop.find("img.is-listing").attr("src", data.new_background_image);
+            }
         }
         else {
             listing_msg.removeClass('is-hidden');
