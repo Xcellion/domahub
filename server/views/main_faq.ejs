@@ -3,7 +3,7 @@
 
 <head>
   <title>DomaHub - FAQ</title>
-  <link rel="stylesheet" type="text/css" href="/css/main_careers.css" />
+  <link rel="stylesheet" type="text/css" href="/css/main_faq.css" />
   <%- include("templates/head_links"); %>
 </head>
 
@@ -11,11 +11,11 @@
 
   <%- include("templates/navbar", {user: user}); %>
 
-  <section class="section is-medium min-height">
+  <section class="section clear-nav is-medium min-height">
     <div class="container">
       <div class="columns">
         <div class="column is-one-quarter is-hidden-mobile">
-          <aside class="menu is-fixed">
+          <aside class="menu">
             <ul class="menu-list">
               <p class="control has-icon">
 								<input id="search-faq" class="input" type="text" placeholder="Search FAQ" />
@@ -23,35 +23,74 @@
 							</p>
             </ul>
             <p class="menu-label">
-              Administration
+              General
             </p>
             <ul class="menu-list">
-              <li><a href="#">Team Settings</a></li>
-              <li>
-                <a class="is-active" href="#">Manage Your Team</a>
-                <ul>
-                  <li><a href="#">Members</a></li>
-                  <li><a href="#">Plugins</a></li>
-                  <li><a href="#">Add a member</a></li>
-                </ul>
-              </li>
+              <li><a class="is-active" href="#">About DomaHub</a></li>
+            </ul>
+            <p class="menu-label">
+              Renters
+            </p>
+            <ul class="menu-list">
+              <li><a href="#">Manage Your Team</a></li>
               <li><a href="#">Invitations</a></li>
               <li><a href="#">Authentication</a></li>
             </ul>
             <p class="menu-label">
-              Transactions
+              Sellers
             </p>
             <ul class="menu-list">
-              <li><a href="#">Payments</a></li>
-              <li><a href="#">Transfers</a></li>
-              <li><a href="#">Balance</a></li>
+              <li><a href="#">Manage Your Team</a></li>
+              <li><a href="#">Invitations</a></li>
+              <li><a href="#">Authentication</a></li>
+            </ul>
+            <p class="menu-label">
+              Technical
+            </p>
+            <ul class="menu-list">
+              <li><a href="#">Manage Your Team</a></li>
+              <li><a href="#">Invitations</a></li>
+              <li><a href="#">Authentication</a></li>
             </ul>
           </aside>
         </div>
-        <div class="column is-three-quarters">
-          <div class="content">
-          <h1 class="title is-normal">Frequently asked questions</h1>
-
+        <div class="column is-two-thirds">
+          <h2 class="title is-normal has-borderBottom">General</h2>
+          <div class="faq-div">
+            <a class="faq-question">About DomaHub</a>
+            <p class="faq-answer is-hidden">
+              Put simply, DomaHub is a platform allowing domain name
+              owners to rent out their domains to prospective renters.
+              It's a communication and advertising platform for sellers,
+              and a browse and shop marketplace for renters.
+            </p>
+          </div>
+          <div class="faq-div">
+            <a class="faq-question">What about the snails?</a>
+            <p class="faq-answer is-hidden">
+              Put simply, DomaHub is a platform allowing domain name
+              owners to rent out their domains to prospective renters.
+              It's a communication and advertising platform for sellers,
+              and a browse and shop marketplace for renters.
+            </p>
+          </div>
+          <div class="faq-div">
+            <a class="faq-question">What about the snails?</a>
+            <p class="faq-answer is-hidden">
+              Put simply, DomaHub is a platform allowing domain name
+              owners to rent out their domains to prospective renters.
+              It's a communication and advertising platform for sellers,
+              and a browse and shop marketplace for renters.
+            </p>
+          </div>
+          <div class="faq-div">
+            <a class="faq-question">What about the snails?</a>
+            <p class="faq-answer is-hidden">
+              Put simply, DomaHub is a platform allowing domain name
+              owners to rent out their domains to prospective renters.
+              It's a communication and advertising platform for sellers,
+              and a browse and shop marketplace for renters.
+            </p>
           </div>
         </div>
       </div>
@@ -60,7 +99,7 @@
 
 
   <%- include("templates/footer"); %>
-
+  <script src="/js/routes/faq_logic.js" type="text/javascript"></script>
 </body>
 
 </html>

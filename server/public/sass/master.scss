@@ -55,6 +55,11 @@
   }
 }
 
+.has-borderBottom {
+  border-bottom: 2px solid $border;
+  padding-bottom: 10px;
+}
+
 .has-styleBorder {
   @include tablet {
     border-left: 5px solid $primary-lighter;
