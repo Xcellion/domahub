@@ -106,7 +106,7 @@ function setupTable(total_pages, row_per_page, current_page, rows_to_disp){
 //function to refresh the controls
 function setupControls(total_pages, row_per_page, current_page, rows_to_disp){
     //on changing of domains per page
-    $("#domains-per-page").unbind().change(function(e){
+    $("#domains-per-page").off().change(function(e){
         row_per_page = parseFloat($(this).val());
         total_pages = Math.ceil(row_display.length / row_per_page);
         current_page = 1;
@@ -114,7 +114,7 @@ function setupControls(total_pages, row_per_page, current_page, rows_to_disp){
     });
 
     //right and left keyboard click
-    $(document).unbind('keydown').bind('keydown', function(event) {
+    $(document).off('keydown').on('keydown', function(event) {
         if ($(event.target).is("input")){
             return true;
         }
@@ -128,7 +128,7 @@ function setupControls(total_pages, row_per_page, current_page, rows_to_disp){
         }
     });
 
-    $("#next-page").unbind().click(function(e){
+    $("#next-page").off().click(function(e){
         current_page++;
         if (current_page > total_pages){
             current_page = total_pages;
@@ -140,7 +140,7 @@ function setupControls(total_pages, row_per_page, current_page, rows_to_disp){
         }
     });
 
-    $("#prev-page").unbind().click(function(e){
+    $("#prev-page").off().click(function(e){
         current_page--;
         if (current_page < 1){
             current_page = 1;
@@ -153,7 +153,7 @@ function setupControls(total_pages, row_per_page, current_page, rows_to_disp){
     });
 
     //go to a specific page
-    $("#go-to-page-button").unbind().click(function(e){
+    $("#go-to-page-button").off().click(function(e){
         page_val = $("#go-to-page-input").val();
         if (page_val > 0 && page_val <= total_pages && page_val != current_page){
             current_page = page_val;
@@ -310,15 +310,16 @@ function createAllRows(row_per_page, current_page){
             //JS closure magic
             (function(listing_info){
                 //to remove disabled on save changes button
-                both_rows.find(".drop-form .changeable-input").bind("input", function(e){
+                both_rows.find(".drop-form .changeable-input").on("input", function(e){
                     changedListingValue($(this), listing_info);
                 });
 
                 //on file change
-                both_rows.find(".drop-form-file .changeable-input").bind("change", function(e){
+                both_rows.find(".drop-form-file .changeable-input").off().on("change", function(e){
                     var file_name = ($(this).val()) ? $(this).val().replace(/^.*[\\\/]/, '') : "Change Picture";
                     file_name = (file_name.length > 14) ? "..." + file_name.substr(file_name.length - 14) : file_name;
                     $(this).next(".button").find(".file-label").text(file_name);
+
                     changedListingValue($(this), listing_info);
                 });
             }(row_display[row_start]))
