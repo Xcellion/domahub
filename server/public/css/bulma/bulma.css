@@ -3404,7 +3404,7 @@ input:-webkit-autofill {
   padding-left: 10px; }
 
 .menu-label {
-  color: rgba(0, 0, 0, 0.87);
+  color: rgba(0, 0, 0, 0.54);
   font-size: 12px;
   letter-spacing: 1px;
   margin-bottom: 5px;
@@ -3883,7 +3883,7 @@ a.nav-item.is-tab {
   .panel-block.has-button:hover, .panel-block.has-button:active {
     background-color: transparent; }
   .panel-block:hover, .panel-block:active {
-    background-color: rgba(0, 0, 0, 0.12); }
+    background-color: #f5f5f5; }
   .panel-block:not(:last-child) {
     border-bottom: 1px solid rgba(0, 0, 0, 0.12); }
 
