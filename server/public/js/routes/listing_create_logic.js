@@ -135,14 +135,18 @@ function submitListings(){
 function submitListingsBatch(){
 	if (can_submit){
 		var formData = new FormData();
-		formData.append('csv', $('#mult-form')[0].files[0]);
+		formData.append('csv', $('#mult-csv')[0].files[0]);
 
         $.ajax({
 			url: "/listing/create/batch",
             type: 'POST',
 			data: formData,
-
-            success: function(data) {
+            // Options to tell jQuery not to process data or worry about the content-type
+            cache: false,
+            contentType: false,
+            processData: false
+        }, 'json').done(function(data){
+			if (data.state == "success"){
 				can_submit = true;
 				if (data.state == "success"){
 					$("#mult-message").text("Success!")
@@ -164,17 +168,12 @@ function submitListingsBatch(){
 						}
 					}
 				}
-            },
-            error: function(data) {
+			}
+			else {
 				can_submit = true;
 				console.log(data);
 				$("#mult-message").text("Something went wrong!")
-            },
-
-            // Options to tell jQuery not to process data or worry about the content-type
-            cache: false,
-            contentType: false,
-            processData: false
-        }, 'json');
+			}
+		});
 	}
 }
