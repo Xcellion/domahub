@@ -1,18 +1,26 @@
 @import 'vars';
 @import 'mixins';
 
-.faq-div {
-  & + .faq-div {
+.qa-wrapper {
+  & + .qa-wrapper {
     margin-top: 25px;
   }
+  h3 {
+    color: $text-light;
+  }
+  p,
   a {
     font-size: $size-5;
+    line-height: 1.4;
   }
-  p {
-    font-size: $size-5;
-  }
-  a + p {
+  h3 + p {
     margin-top: 15px;
+  }
+}
+
+.faq-section {
+  & + .faq-section {
+    margin-top: 40px;
   }
 }
 
@@ -20,7 +28,7 @@
   @include transition(all 0.25s ease);
   cursor: pointer;
   display: inline-flex;
-  padding: 5px 10px;
+  padding: 5px 2px;
   position: relative;
   &::before {
     @include transition(all 0.25s ease);
@@ -29,55 +37,56 @@
     position: absolute;
     left: 0;
     top: 100%;
-    height: 3px;
-    width: 0;
+    height: 0;
+    width: 100%;
   }
-  &::after {
-    @include transition(width 0.25s linear);
-    content:"";
-    background: $black-secondary;
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 3px;
-    height: 100%;
-  }
-  &:hover {
+  // &::after {
+  //   @include transition(width 0.25s linear);
+  //   content:"";
+  //   background: $black-secondary;
+  //   position: absolute;
+  //   top: 0;
+  //   left: 0;
+  //   width: 3px;
+  //   height: 100%;
+  // }
+  &:hover,
+  &:focus {
     color: $primary-lighter;
-    padding: 5px 0;
+    outline: none;
     &::before {
-      width: 100%;
+      height: 3px;
     }
-    &::after {
-      background: $primary-lighter;
-      width: 0;
-      opacity: 0;
-    }
+    // &::after {
+    //   background: $primary-lighter;
+    //   width: 0;
+    //   opacity: 0;
+    // }
   }
   &.is-active {
     color: $primary;
-    padding: 5px 0;
     &::before {
       background: $primary;
-      width: 100%;
+      height: 3px;
     }
-    &::after {
-      background: $primary;
-      width: 0;
-      opacity: 0;
-    }
-    &:hover {
-      color: $primary-darker;
+    // &::after {
+    //   background: $primary;
+    //   width: 0;
+    //   opacity: 0;
+    // }
+    &:hover,
+    &:focus {
+      color: $primary-dark;
       &::before {
-        background: $primary-darker;
+        background: $primary-dark;
       }
-      &::after {
-        background: $primary-darker;
-      }
+      // &::after {
+      //   background: $primary-darker;
+      // }
     }
   }
 }
 
 .faq-answer {
-
+  padding-left: 2px;
 }

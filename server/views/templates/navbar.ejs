@@ -4,13 +4,13 @@
   <div class="container">
     <div class="nav-left">
       <div class="nav-item">
-        <a class="logo-text primary-logo" title="Home" href="/">DomaHub</a>
+        <a class="logo-text primary-logo" tabindex="1" title="Home" href="/">DomaHub</a>
       </div>
     </div>
     <div class="nav-center">
       <form id="searchbar-form" class="nav-item is-transparent" novalidate>
         <p class="control has-icon">
-          <input id="domain-name" class="input search-input" type="url" placeholder="Search websites" name="domain-name" autocomplete="off">
+          <input id="domain-name" tabindex="2" class="input search-input" type="url" placeholder="Search websites" name="domain-name" autocomplete="off">
           <i class="fa fa-search"></i>
         </p>
       </form>
@@ -22,26 +22,26 @@
     </span>
     <div class="nav-right nav-menu">
       <div class="nav-item">
-        <a class="nav-link" title="Renters" href="/listings">Browse</a>
+        <a class="nav-link" tabindex="3" title="Renters" href="/listings">Browse</a>
       </div>
       <div class="nav-item">
-        <a class="nav-link" title="Sellers" href="/listing/create">List</a>
+        <a class="nav-link" tabindex="4" title="Sellers" href="/listing/create">Sell</a>
       </div>
 
 <%# navbar checks for a user variable, if it doesnt exist, then display the login button %>
 <% if (!user) { %>
     <div class="nav-item">
-      <a id="signup" class="nav-link" title="Sign Up" href="/signup">Sign Up</a>
+      <a id="signup" tabindex="5" class="nav-link" title="Sign Up" href="/signup">Sign Up</a>
     </div>
     <div class="nav-item">
-      <a id="login-modal" class="button is-primary modal-button" title="Log In" data-object="#modal-login">Log In</a>
+      <a id="login-modal" tabindex="6" class="button is-primary modal-button" title="Log In" data-object="#modal-login">Log In</a>
     </div>
     <div id="modal-login" class="modal">
       <div class="modal-background"></div>
       <div class="modal-container">
         <div class="modal-content">
             <div id="login-dropdown">
-              <div id="message" class="has-text-centered bottom-margin-25">Please log in below</div>
+              <div id="message" class="has-text-centered margin-bottom-25">Please log in below</div>
               <form id="target" action="/login" method="post">
                 <p class="control has-icon">
                   <input id="email" autofocus class="input is-medium" name="email" type="email" placeholder="Email" spellcheck="false">
@@ -86,7 +86,7 @@
 <!-- or else display the user profile as logged in -->
 <% } else { %>
     <div class="nav-item">
-      <a id="profile-button" class="button is-primary is-outlined" title="Profile">
+      <a id="profile-button" tabindex="6" class="button is-primary is-outlined" title="Profile">
         <span><%= (user.username.length > 6) ? user.username.slice(0,6) + "..." : user.username %></span>
         <span class="icon">
           <i class="fa fa-angle-down"></i>
