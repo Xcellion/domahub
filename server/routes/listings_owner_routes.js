@@ -9,6 +9,14 @@ var multer = require("multer");
 var parse = require("csv-parse");
 var fs = require('fs')
 
+var node_env = process.env.NODE_ENV || 'dev'; 	//dev or prod bool
+if (node_env == "dev"){
+	var stripe = require("stripe")("sk_test_PHd0TEZT5ytlF0qCNvmgAThp");		//stripe API development key
+}
+else {
+	var stripe = require("stripe")("sk_test_PHd0TEZT5ytlF0qCNvmgAThp");		//stripe API production key
+}
+
 module.exports = {
 
 	init : function(e, l){
@@ -80,6 +88,25 @@ module.exports = {
 		}
 		else {
 			res.render("stripeconnect.ejs");
+		}
+	},
+
+	//check if stripe info is attached to the user obj
+	checkStripeInfo : function(req, res, next){
+		if (!req.user.stripe_info){
+			Account.getStripeInfo(req.user.id, function(result){
+				if (result.state == "error" || result.info.length == 0){
+					res.render("stripeconnect.ejs");
+				}
+				else {
+					delete result.info[0].account_id;
+					req.user.stripe_info = result.info[0];
+					next();
+				}
+			});
+		}
+		else {
+			next();
 		}
 	},
 
@@ -341,6 +368,31 @@ module.exports = {
 			message: Auth.messageReset(req),
 			user: req.user,
 		});
+	},
+
+	//function to create a monthly subscription for a listing
+	createStripeSubscription : function(req, res, next){
+		if (req.body.stripeEmail != req.user.email){
+			error.handler(req, res, "Please use the same email for payments as your Domahub account!", "json");
+		}
+		else {
+			stripe.customers.create({
+				source: req.body.stripeToken,
+				plan: "premium",
+				email: req.user.email,
+				metadata: {
+					"domain_name" : req.params.domain_name
+				}
+			}, function(err, customer) {
+				if (err){
+					console.log(err);
+					error.handler(req, res, "Something went wrong with the payment!", "json");
+				}
+				else {
+					console.log(customer);
+				}
+			});
+		}
 	},
 
 	//function to create a new listing
