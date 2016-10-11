@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>DomaHub - About Us</title>
+  <link rel="stylesheet" type="text/css" href="/css/main_about.css" />
+  <%- include("templates/head_links"); %>
+</head>
+
+<body>
+
+  <%- include("templates/navbar", {user: user}); %>
+
+  <section id="mission-img" class="hero is-info is-medium clear-nav landing-img">
+    <div class="img-wrapper">
+      <div class="hero-body">
+        <div class="container has-text-centered">
+          <h1 class="title is-normal">
+            Press and Media
+          </h1>
+        </div>
+      </div>
+      <div class="hero-foot">
+        <nav class="tabs is-boxed is-centered">
+          <ul>
+            <li class="tab"><a href="/about">About Us</a></li>
+            <li class="tab"><a href="/mission">Our Mission</a></li>
+            <li class="tab is-active"><a href="/press">Press</a></li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </section>
+
+  <section class="section is-medium">
+    <div class="container">
+      <div class="columns">
+        <div class="column">
+          <div class="content">
+            <h1 class="title is-3 is-normal">Press and Media Resources</h1>
+            <h2 class="subtitle is-5 is-blacklight">
+              Please use these resources when writing about or mentioning DomaHub.
+            </h2>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section is-medium">
+    <div class="container">
+      <div class="columns">
+        <div class="column">
+          <div class="content margin-bottom-25">
+            <h1 class="title is-3 is-normal">DomaHub Descriptions</h1>
+          </div>
+        </div>
+      </div>
+      <div class="columns">
+        <div class="column is-one-quarter">
+          <div class="content">
+            <h3 class="heading is-blacklight">Short and quick</h3>
+            <p class="">
+              DomaHub is an online platform for domain name rentals.
+            </p>
+          </div>
+        </div>
+        <div class="column is-one-quarter">
+          <div class="content">
+            <h3 class="heading is-blacklight">A little longer</h3>
+            <p class="">
+              DomaHub is an online platform for domain name rentals
+              focused on providing accessible and affordable domain names
+              for end-users.
+            </p>
+          </div>
+        </div>
+        <div class="column is-two-quarters">
+          <div class="content">
+            <h3 class="heading is-blacklight">Long long</h3>
+            <p class="">
+              DomaHub is an online platform for domain name rentals
+              focused on providing accessible and affordable domain names
+              for end-users. By restructuring the conventional marketplace,
+              DomaHub creates new revenue streams for owners and creative
+              opportunities for renters. Our platform allows quick and simple
+              transactions over thousands of domain name rentals daily.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="columns">
+        <div class="column">
+          <div class="content">
+            <h1 class="title is-3 is-normal">Brand Materials</h1>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <%- include("templates/footer"); %>
+
+</body>
+
+</html>
