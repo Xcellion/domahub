@@ -1,8 +1,6 @@
 var row_display = listings.slice(0);
 
-$(document).ready(function() {
-
-});
+// --------------------------------------------------------------------------------- CREATE ROW
 
 //function to create a listing row
 function createRow(listing_info, rownum){
@@ -85,6 +83,8 @@ function createView(listing_info){
 
     return temp_td;
 }
+
+// --------------------------------------------------------------------------------- CREATE DROP
 
 //function to create dropdown row
 function createRowDrop(listing_info, rownum){
@@ -212,8 +212,47 @@ function createPriceDrop(listing_info){
         temp_form.append(temp_div1.append(temp_div_label.append(temp_label), temp_div_control.append(temp_control_p.append(temp_input, temp_i))));
     }
     var temp_upgrade_control = $("<div class='control is-horizontal'></div>");
-        var premium_text = (listing_info.price_type == 0) ? "Upgrade to Premium" : "Revert to Basic"
-        var temp_upgrade_button = $('<a href="/listing/' + listing_info.domain_name + '/upgrade" class="' + verified_disabled + ' button is-accent">' + premium_text + '</a>');
+        var premium_text = (listing_info.price_type == 0) ? "Upgrade to Premium" : "Revert to Basic";
+        var temp_upgrade_button = $('<a href="/listing/' + listing_info.domain_name + '/upgrade" class="' + verified_disabled + ' stripe-button button is-accent">' + premium_text + '</a>');
+
+    //stripe upgrade button
+    temp_upgrade_button.click(function(e){
+        e.preventDefault();
+        upgrade_button = $(this);
+        upgrade_button.addClass("is-loading");
+
+        //stripe configuration
+        handler = StripeCheckout.configure({
+            key: 'pk_test_kcmOEkkC3QtULG5JiRMWVODJ',
+            name: 'Monthly Subscription',
+            image: '/images/d-logo.PNG',
+            panelLabel: 'Pay Monthly',
+            zipCode : true,
+            locale: 'auto',
+            email: user.email,
+            token: function(token) {
+                if (token.email != user.email){
+                    var listing_msg = upgrade_button.closest(".row-drop").find(".listing-msg");
+                    errorMessage(listing_msg, "Please use the same email for payments as your Domahub account!");
+                    upgrade_button.removeClass("is-loading");
+                }
+                else {
+                    submitSubscription(upgrade_button, listing_info.domain_name, token.id, token.email);
+                }
+            }
+        });
+
+        handler.open({
+            amount: 500,
+            description: "Upgrading to a Premium listing."
+        });
+
+        //close Checkout on page navigation
+        window.addEventListener('popstate', function() {
+            handler.close();
+        });
+    });
+
     temp_form.append(temp_upgrade_control.append(temp_upgrade_button));
 
     temp_col.append(temp_form);
@@ -460,9 +499,37 @@ function submitListingChanges(row, row_drop, success_button, listing_info){
             }
         }
         else {
-            listing_msg.removeClass('is-hidden');
-            listing_msg.find("p").empty();
-            listing_msg.append("<p>" + data.message + "</p>");
+            errorMessage(listing_msg, data.message);
+        }
+    });
+}
+
+//helper function to display error messages per listing
+function errorMessage(msg_elem, message){
+    msg_elem.removeClass('is-hidden');
+    msg_elem.find("p").empty();
+    msg_elem.append("<p>" + message + "</p>");
+}
+
+// --------------------------------------------------------------------------------- STRIPE SUBMISSION
+
+function submitSubscription(upgrade_button, domain_name, stripeToken, stripeEmail){
+    $.ajax({
+        type: "POST",
+        url: "/listing/" + domain_name + "/upgrade",
+        data: {
+            stripeToken: stripeToken,
+            stripeEmail: stripeEmail
+        }
+    }).done(function(data){
+        upgrade_button.removeClass('is-loading');
+        if (data.state == "error"){
+            upgrade_button.addClass("is-danger");
+            var listing_msg = upgrade_button.closest(".row-drop").find(".listing-msg");
+            errorMessage(listing_msg, data.message);
+        }
+        else {
+            upgrade_button.addClass('is-success');
         }
     });
 }

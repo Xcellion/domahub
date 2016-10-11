@@ -123,7 +123,7 @@ account_model.prototype.getAccountChats = function(account_id, callback){
 	account_query(query, "Failed to get all chat info for account #" + account_id + "!", callback, [account_id, account_id]);
 }
 
-//gets all rental info belonging to specific account
+//gets the stripe ID and listing type of a listing owner
 account_model.prototype.getStripeAndType = function(domain_name, callback){
 	console.log("Attempting to get the listing type and Stripe ID of the owner of: " + domain_name + "...");
 	query = "SELECT \
@@ -133,6 +133,16 @@ account_model.prototype.getStripeAndType = function(domain_name, callback){
 			JOIN listings ON listings.owner_id = accounts_stripe.account_id \
 			WHERE domain_name = ? ";
 	account_query(query, "Failed to get the listing type and Stripe ID of the owner of: " + domain_name + "!", callback, domain_name);
+}
+
+//gets all stripe info for an account
+account_model.prototype.getStripeInfo = function(account_id, callback){
+	console.log("Attempting to get all Stripe information for user #" + account_id + "...");
+	query = "SELECT \
+				accounts_stripe.* \
+			FROM accounts_stripe \
+			WHERE account_id = ? ";
+	account_query(query, "Failed to get all Stripe information for user #" + account_id + "!", callback, account_id);
 }
 
 //----------------------------------------------------------------------SETS----------------------------------------------------------
