@@ -13,7 +13,7 @@ var urlencodedParser = bodyParser.urlencoded({ extended: false })
 
 module.exports = function(app){
 	app.post('/stripe/webhook/arbitrary/woohoo', [
-		urlencodedParser,
+		jsonParser,
 		stripeWebhookEventCatcher
 	]);
 }
