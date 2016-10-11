@@ -7,18 +7,25 @@ else {
 	var stripe = require("stripe")("sk_live_Nqq1WW2x9JmScHxNbnFlORoh");		//stripe API production key
 }
 
+var bodyParser = require('body-parser')
+var jsonParser = bodyParser.json()
+var urlencodedParser = bodyParser.urlencoded({ extended: false })
+
 module.exports = function(app){
-	//create multiple listings
-	app.post('/stripe/webhook/arbitrary/woohoo', function(request, response){
-		console.log(request);
-		var event_json = JSON.parse(request.body);
-		console.log(event_json);
+	app.post('/stripe/webhook/arbitrary/woohoo', [
+		urlencodedParser,
+		stripeWebhookEventCatcher
+	]);
+}
 
-		//Verify the event by fetching it from Stripe
-		stripe.events.retrieve(event_json.id, function(err, event) {
-			// Do something with event
-			response.send(200);
-		});
+//to catch all stripe web hook events
+function stripeWebhookEventCatcher(req, res){
+	var event_json = JSON.parse(req.body);
+	console.log(event_json);
+
+	//Verify the event by fetching it from Stripe
+	stripe.events.retrieve(event_json.id, function(err, event) {
+		// Do something with event
+		res.send(200);
 	});
-
 }
