@@ -25,7 +25,8 @@ function stripeWebhookEventCatcher(req, res){
 
 	//Verify the event by fetching it from Stripe
 	stripe.events.retrieve(event_json.id, function(err, event) {
+		console.log(event);
 		// Do something with event
-		res.send(200);
+		res.sendStatus(200);
 	});
 }
