@@ -20,9 +20,8 @@ module.exports = function(app){
 
 //to catch all stripe web hook events
 function stripeWebhookEventCatcher(req, res){
-	console.log(req.body);
-	var event_json = JSON.parse(req.body);
-	console.log(event_json);
+	var event_json = req.body;
+	console.log(event_json.id);
 
 	//Verify the event by fetching it from Stripe
 	stripe.events.retrieve(event_json.id, function(err, event) {
