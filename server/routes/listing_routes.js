@@ -79,6 +79,18 @@ module.exports = function(app, db, auth, e){
 		listings_owner.updateListing
 	]);
 
+	//update listing to premium
+	app.post('/listing/:domain_name/upgrade', [
+		urlencodedParser,
+		checkLoggedIn,
+		listings_owner.checkAccountListingPriv,
+		checkDomainListed,
+		listings_owner.checkListingOwner,
+		listings_owner.checkListingVerified,
+		listings_owner.createStripeSubscription,
+		listings_owner.updateListing
+	]);
+
 	//------------------------------------------------------------------------------------------------ RENTAL RELATED
 
 	//render the 404 listing page

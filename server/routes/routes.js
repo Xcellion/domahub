@@ -4,4 +4,5 @@ module.exports = function(app, db, auth, error){
 	require('./listing_routes.js')(app, db, auth, error); 			// for website listings
 	require('./profile_routes.js')(app, db, auth, error); 			// for individual user profiles
 	require('./chat_routes.js')(app, db, auth, error); 				// for messaging
+	require('./stripe_routes.js')(app); 							// for stripe web hooks
 }
