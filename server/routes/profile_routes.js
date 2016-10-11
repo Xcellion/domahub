@@ -252,7 +252,7 @@ function authorizeStripe(req, res){
 	}));
 }
 
-//connect to stripe
+//connect to stripe and get the stripe account info to store on our db
 function connectStripe(req, res){
 	scope = req.query.scope;
 	code = req.query.code;
@@ -280,6 +280,7 @@ function connectStripe(req, res){
 				//all good with stripe!
 				if (!body.error && response.statusCode == 200 && body.access_token) {
 					account_info = body;
+					req.user.stripe_info = body;
 					account_info.account_id = req.user.id;
 					Account.newAccountStripe(account_info, function(result){
 						if (result.state=="error"){error.handler(req, res, result.info);}

@@ -1,4 +1,5 @@
 var	listing_model = require('../models/listing_model.js');
+var node_env = process.env.NODE_ENV || 'dev'; 	//dev or prod bool
 
 var validator = require("validator");
 var	request = require('request');
@@ -8,7 +9,12 @@ module.exports = function(app, db, e){
 	error = e;
 	Listing = new listing_model(db);
 
-	app.all("*", checkHost);
+	if (node_env == "dev"){
+		app.all("*", checkHost);
+	}
+	else {
+		app.all("/", checkHost);
+	}
 	app.get("/error", renderError);
 }
 
@@ -62,7 +68,7 @@ function getCurrentRental(req, res, domain_name){
 				else {
 					console.log("Not rented! Redirecting to listing page");
 					delete req.session.rented;
-					res.redirect("http://domahub.com/listing/" + domain_name)
+					res.redirect("https://domahub.com/listing/" + domain_name)
 				}
 			}
 		});
