@@ -8,13 +8,12 @@ module.exports = function(app, db, e){
 	error = e;
 	Listing = new listing_model(db);
 
-	app.all("/", checkHost);
+	app.all("*", checkHost);
 	app.get("/error", renderError);
 }
 
 //function to check if the requested host is not for domahub
 function checkHost(req, res, next){
-	console.log(req.headers.host, req.url, req.path);
 	if (req.headers.host){
 	    domain_name = req.headers.host.replace(/^(https?:\/\/)?(www\.)?/,'');
 		//requested domahub website, not domain
