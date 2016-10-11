@@ -62,7 +62,7 @@ function getCurrentRental(req, res, domain_name){
 				else {
 					console.log("Not rented! Redirecting to listing page");
 					delete req.session.rented;
-					res.redirect("http://domahub.com/listing/" + domain_name)
+					res.redirect("https://domahub.com/listing/" + domain_name)
 				}
 			}
 		});
