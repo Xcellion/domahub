@@ -53,10 +53,9 @@ if (node_env == "dev"){
 else {
 	console.log("Production environment! Using redis for sessions store.");
 	var redisStore = require('connect-redis')(session);
-	prod_app = express(),
 
 	//redis store session
-	prod_app.use(session({
+	app.use(session({
 		store: new redisStore({
 			host:'127.0.0.1',
 			port: 6379,
