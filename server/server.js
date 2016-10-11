@@ -69,9 +69,9 @@ else {
 		resave: true
 	}));
 
-	app.get("/", function(req, res){
-		res.render("under_construction");
-	})
+	// app.get("/", function(req, res){
+	// 	res.render("under_construction");
+	// })
 
 	//HTTP website on port 8080
 	serverHTTP(app).listen(8080, function(){
