@@ -1,10 +1,17 @@
 .footer
-  background-color: $grey-dark
-  padding: 60px 20px 80px
+  background-color: $white
+  padding: 80px 0
   +mobile
     .columns
       & > .column
         text-align: center
+
+.linebreak
+  position: relative
+  margin: 0 auto 50px auto
+  width: 25%
+  height: 2px
+  background-color: $border
 
 .footer-list
   display: flex
@@ -17,15 +24,15 @@
     align-items: center
 
 .footer-header
-  color: $white-primary
-  font-weight: 300
+  color: $primary
+  font-weight: 400
   margin-bottom: 10px
   +mobile
     margin-bottom: 0
     display: none
 
 .footer-item
-  color: $white-disabled
+  color: $text-light
   &:not(:first-child)
     margin-top: 10px
   +mobile
@@ -33,9 +40,9 @@
     &:not(:last-child)
       margin-right: 15px
   a
-    color: $white-disabled
+    color: $text-light
     &:hover
-      color: $white-secondary
+      color: $text
 
 .social-icon
   color: $white-primary
@@ -43,16 +50,16 @@
 
 #facebook-icon
   &:hover
-    color: #3b5998;
+    color: #3b5998
 
 #twitter-icon
   &:hover
-    color: #00aced;
+    color: #00aced
 
 #linkedin-icon
   &:hover
-    color: #0077B5;
+    color: #0077B5
 
 #youtube-icon
   &:hover
-    color: #cd201f;
+    color: #cd201f

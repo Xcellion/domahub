@@ -4937,11 +4937,18 @@ a.nav-item.is-tab {
       padding: 240px 20px; } }
 
 .footer {
-  background-color: #444;
-  padding: 60px 20px 80px; }
+  background-color: white;
+  padding: 80px 0; }
   @media screen and (max-width: 768px) {
     .footer .columns > .column {
       text-align: center; } }
+
+.linebreak {
+  position: relative;
+  margin: 0 auto 50px auto;
+  width: 25%;
+  height: 2px;
+  background-color: rgba(0, 0, 0, 0.12); }
 
 .footer-list {
   display: flex;
@@ -4955,8 +4962,8 @@ a.nav-item.is-tab {
       align-items: center; } }
 
 .footer-header {
-  color: white;
-  font-weight: 300;
+  color: #3cbc8d;
+  font-weight: 400;
   margin-bottom: 10px; }
   @media screen and (max-width: 768px) {
     .footer-header {
@@ -4964,7 +4971,7 @@ a.nav-item.is-tab {
       display: none; } }
 
 .footer-item {
-  color: rgba(255, 255, 255, 0.5); }
+  color: rgba(0, 0, 0, 0.54); }
   .footer-item:not(:first-child) {
     margin-top: 10px; }
   @media screen and (max-width: 768px) {
@@ -4973,9 +4980,9 @@ a.nav-item.is-tab {
       .footer-item:not(:last-child) {
         margin-right: 15px; } }
   .footer-item a {
-    color: rgba(255, 255, 255, 0.5); }
+    color: rgba(0, 0, 0, 0.54); }
     .footer-item a:hover {
-      color: rgba(255, 255, 255, 0.7); }
+      color: rgba(0, 0, 0, 0.87); }
 
 .social-icon {
   color: white;
