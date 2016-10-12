@@ -121,25 +121,25 @@ function createMessage(req, res, next){
 
 //function to refresh user.convos object, bringing newest message_item to the front;
 function refreshConvos(convo_list, message_item, username){
-	var move_to_front = false;
-	for (var x = 0; x < convo_list.length; x++){
-		if (convo_list[x].username.toLowerCase() == username.toLowerCase()){
-			convo_list[x].message = message_item.message;
-			convo_list[x].timestamp = dateFormat(new Date(), "yyyy-mm-dd h:MM:ss", true);
+	//if convo doesnt exist, loop through to find the correct one
+	if (convo_list.length > 0){
+		for (var x = 0; x < convo_list.length; x++){
+			if (convo_list[x].username.toLowerCase() == username.toLowerCase()){
+				convo_list[x].message = message_item.message;
+				convo_list[x].timestamp = message_item.timestamp;
 
-			//if chats doesnt exist, create it
-			if (!convo_list[x].chats){
-				convo_list[x].chats = [];
+				//if chats doesnt exist, create it
+				if (!convo_list[x].chats){
+					convo_list[x].chats = [];
+				}
+
+				//add to the chats field
+				convo_list[x].chats.unshift(message_item);
+
+				var move_to_front = convo_list.splice(x, 1);
+				break;
 			}
-
-			//add to the chats field
-			convo_list[x].chats.unshift(message_item);
-
-			var move_to_front = convo_list.splice(x, 1);
-			break;
 		}
-	}
-	if (move_to_front){
 		convo_list.unshift(move_to_front[0]);
 	}
 	else {
@@ -147,7 +147,8 @@ function refreshConvos(convo_list, message_item, username){
 			message: message_item.message,
 			seen: 0,
 			timestamp: dateFormat(new Date(), "yyyy-mm-dd h:MM:ss", true),
-			username: username
+			username: username,
+			chats: [message_item]
 		})
 	}
 }

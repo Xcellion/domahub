@@ -206,7 +206,7 @@ function createPriceDrop(listing_info){
                 var temp_control_p = $("<p class='control has-icon'></p>");
 
                     //disabled if listing is not verified
-                    var disabled = (premium) ? "" : "is-disabled";
+                    var disabled = (premium) ? "" : 'is-disabled" tabindex="-1"';
                     var temp_input = $('<input class="' + label_types[x].toLowerCase() + '-price-input premium-input input changeable-input ' + disabled + '" type="number" min="1" value="' + label_values[x] + '">');
                         temp_input.data("name", label_names[x]);
 
