@@ -162,25 +162,37 @@ function createRowDrop(listing_info, rownum){
 
 //function to create the image drop column
 function createImgDrop(listing_info, rownum){
-    var background_image = (listing_info.background_image == null || listing_info.background_image == undefined) ? "https://placeholdit.imgix.net/~text?txtsize=40&txt=2000x1000&w=200&h=200" : listing_info.background_image;
+    var background_image = (listing_info.background_image == null || listing_info.background_image == undefined) ? "https://placeholdit.imgix.net/~text?txtsize=40&txt=RANDOM%20PHOTO&w=200&h=200" : listing_info.background_image;
     var verified_disabled = (listing_info.status == 0) ? "is-disabled" : "";
 
     var temp_col = $("<div class='column is-one-quarter'></div>");
         var temp_div = $("<div class='card'></div>");
             var temp_div_image = $("<div class='card-image'></div>")
                 var temp_figure = $("<figure class='image listing-img is-256x256'></figure>");
+                    var temp_x = $('<i class="fa fa-times-circle"></i>');
                     var temp_img = $("<img class='is-listing' alt='Image not found' src=" + background_image + " />");
                 var temp_footer = $("<footer class='card-footer'></div>");
-                    var temp_form = $('<form id="mult-form" class="drop-form-file card-footer-item" action="/listing/create/batch" method="post" enctype="multipart/form-data"></form>')
+                    var temp_form = $('<form id="mult-form' + rownum + '" class="drop-form-file card-footer-item" action="/listing/create/batch" method="post" enctype="multipart/form-data"></form>')
                     var temp_input = $('<input type="file" id="file' + rownum + '" name="image" accept="image/png, image/gif, image/jpeg" class="picture-file changeable-input input-file" />');
                     var temp_input_label = $('<label for="file' + rownum + '" class="' + verified_disabled + ' button"><i class="fa fa-upload"></i><p class="file-label">Change Picture</p></label>');
                         temp_input.data("name", "image");
-    temp_col.append(temp_div.append(temp_div_image.append(temp_figure.append(temp_img), temp_footer.append(temp_form.append(temp_input, temp_input_label)))));
+    temp_col.append(temp_div.append(temp_div_image.append(temp_figure.append(temp_x, temp_img), temp_footer.append(temp_form.append(temp_input, temp_input_label)))));
 
     //if theres an error in getting the image, remove the link
     temp_img.error(function() {
         $(this).attr("src", "");
     });
+
+    //click X to delete image
+    temp_x.click(function(e){
+        var old_src = temp_img.attr("src");
+        temp_img.data("old_src", old_src);
+        temp_img.attr("src", "https://placeholdit.imgix.net/~text?txtsize=40&txt=RANDOM%20PHOTO&w=200&h=200");
+        temp_input.data("deleted", true);
+        temp_input.val("");
+        temp_form.find(".file-label").text("Change Picture");
+        changedListingValue($(this), listing_info);
+    })
 
     return temp_col;
 }
@@ -324,6 +336,11 @@ function createFormDrop(listing_info){
         var temp_msg_delete = $("<button class='delete'></button>");
         temp_msg.append(temp_msg_delete);
 
+    //to hide the message
+    temp_msg_delete.click(function(e){
+        e.preventDefault();
+        temp_msg.addClass('is-hidden');
+    });
 
     //to submit form changes
     temp_button1.click(function(e){
@@ -478,7 +495,11 @@ function cancelListingChanges(row, row_drop, cancel_button, listing_info){
     row_drop.find(".weekly-price-input").val(listing_info.week_price);
     row_drop.find(".monthly-price-input").val(listing_info.month_price);
 
-    //todo - picture
+    //image
+    var img_elem = row_drop.find("img.is-listing");
+    img_elem.attr("src", img_elem.data("old_src"));
+    row_drop.find(".file-label").text("Change Picture");
+    row_drop.find(".input-file").val("");
 }
 
 //function to submit any changes to a listing
@@ -526,6 +547,8 @@ function submitListingChanges(row, row_drop, success_button, listing_info){
             //change background image if its changed
             if (data.new_background_image){
                 row_drop.find("img.is-listing").attr("src", data.new_background_image);
+                row_drop.find(".file-label").text("Change Picture");
+                row_drop.find(".picture-file").val("");
             }
         }
         else {
