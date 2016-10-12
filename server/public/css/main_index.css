@@ -16,4 +16,8 @@
   -moz-box-shadow: 0 -2px 0 #ff5722 0;
   box-shadow: 0 -2px 0 #ff5722 0; }
 
+#beta-form-success {
+  display: inline-flex;
+  text-transform: uppercase; }
+
 /*********************** MAIN ************************/
