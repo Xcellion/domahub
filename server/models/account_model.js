@@ -192,3 +192,15 @@ account_model.prototype.updateAccount = function(account_info, email, callback){
 			WHERE email = ?"
 	account_query(query, "Failed to update account!", callback, [account_info, email]);
 }
+
+//updates new customer id into account stripe
+account_model.prototype.updateAccountStripeCustomerID = function(account_id, account_info, callback){
+	console.log("Updating Stripe customer ID for account: " + account_id + "...");
+	query = "UPDATE accounts_stripe \
+			SET ? \
+			WHERE account_id = ?"
+	account_query(query, "Failed to update Stripe customer ID for account: " + account_id + "!", callback, [
+		account_info,
+		account_id
+	]);
+}

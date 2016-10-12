@@ -11,7 +11,7 @@ var validator = require("validator");
 var whois = require("whois");
 var parser = require('parse-whois');
 
-module.exports = function(app, db, auth, e){
+module.exports = function(app, db, auth, e, stripe){
 	Listing = new listing_model(db);
 	Data = new data_model(db);
 
@@ -22,7 +22,7 @@ module.exports = function(app, db, auth, e){
 	listings_owner.init(e, Listing);
 	listings_renter.init(e, Listing);
 
-	//------------------------------------------------------------------------------------------------ OWNER RELATED
+	//-------------------------------------------------------------------------------------------------------------------- OWNER RELATED
 
 	//render create listing page
 	app.get('/listing/create', [
@@ -87,11 +87,24 @@ module.exports = function(app, db, auth, e){
 		checkDomainListed,
 		listings_owner.checkListingOwner,
 		listings_owner.checkListingVerified,
-		listings_owner.createStripeSubscription,
+		stripe.getStripeInfo,
+		stripe.createStripeCustomer,
+		stripe.createStripeSubscription,
+		listings_owner.updateListing	//only if we're renewing a subscription
+	]);
+
+	//degrade listing to basic
+	app.post('/listing/:domain_name/downgrade', [
+		checkLoggedIn,
+		listings_owner.checkAccountListingPriv,
+		checkDomainListed,
+		listings_owner.checkListingOwner,
+		listings_owner.checkListingVerified,
+		stripe.cancelStripeSubscription,
 		listings_owner.updateListing
 	]);
 
-	//------------------------------------------------------------------------------------------------ RENTAL RELATED
+	//-------------------------------------------------------------------------------------------------------------------- RENTAL RELATED
 
 	//render the 404 listing page
 	app.get('/listing', [
