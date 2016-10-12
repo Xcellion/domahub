@@ -18,14 +18,21 @@
     margin-bottom: -1px
     padding: 6px 12px
     vertical-align: top
-    &:hover
+    &:hover,
+    &:focus
       color: $primary-lighter
+      outline: none
   li
     display: block
     &.is-active
       a
         +box-shadow(0,-3px,0,$primary,0,inset)
         color: $primary
+        &:hover,
+        &:focus
+          +box-shadow(0,-3px,0,$primary-darker,0,inset)
+          color: $primary-darker
+          outline: none
   ul
     align-items: center
     display: flex

@@ -3924,8 +3924,9 @@ a.nav-item.is-tab {
     margin-bottom: -1px;
     padding: 6px 12px;
     vertical-align: top; }
-    .tabs a:hover {
-      color: #8ad6ba; }
+    .tabs a:hover, .tabs a:focus {
+      color: #8ad6ba;
+      outline: none; }
   .tabs li {
     display: block; }
     .tabs li.is-active a {
@@ -3933,6 +3934,12 @@ a.nav-item.is-tab {
       -moz-box-shadow: inset 0 -3px 0 0 #3cbc8d;
       box-shadow: inset 0 -3px 0 0 #3cbc8d;
       color: #3cbc8d; }
+      .tabs li.is-active a:hover, .tabs li.is-active a:focus {
+        -webkit-box-shadow: inset 0 -3px 0 0 #247054;
+        -moz-box-shadow: inset 0 -3px 0 0 #247054;
+        box-shadow: inset 0 -3px 0 0 #247054;
+        color: #247054;
+        outline: none; }
   .tabs ul {
     align-items: center;
     display: flex;

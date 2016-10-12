@@ -16,6 +16,15 @@
   }
 }
 
+// listing image delete button
+.listing-img {
+   .delete {
+     border-radius: 0 $radius;
+     position: absolute;
+     right:0;
+   }
+}
+
 // For messaging
 #messenger_form {
   width: 100%;
