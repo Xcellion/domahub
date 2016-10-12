@@ -316,6 +316,9 @@ function createAllRows(row_per_page, current_page){
 
                 //on file change
                 both_rows.find(".drop-form-file .changeable-input").off().on("change", function(e){
+                    if ($(this).data("deleted")){
+                        $(this).data("deleted", false);
+                    }
                     var file_name = ($(this).val()) ? $(this).val().replace(/^.*[\\\/]/, '') : "Change Picture";
                     file_name = (file_name.length > 14) ? "..." + file_name.substr(file_name.length - 14) : file_name;
                     $(this).next(".button").find(".file-label").text(file_name);
