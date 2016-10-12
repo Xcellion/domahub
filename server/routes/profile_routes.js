@@ -1,5 +1,8 @@
 var	account_model = require('../models/account_model.js');
 
+var node_env = process.env.NODE_ENV || 'dev'; 	//dev or prod bool
+var stripe_key = (node_env == "dev") ? "sk_test_PHd0TEZT5ytlF0qCNvmgAThp" : "sk_live_Nqq1WW2x9JmScHxNbnFlORoh";
+
 var bodyParser = require('body-parser')
 var jsonParser = bodyParser.json()
 var urlencodedParser = bodyParser.urlencoded({ extended: false })
@@ -271,7 +274,7 @@ function connectStripe(req, res){
 				grant_type: "authorization_code",
 				client_id: "ca_997O55c2IqFxXDmgI9B0WhmpPgoh28s3",
 				code: code,
-				client_secret: "sk_test_PHd0TEZT5ytlF0qCNvmgAThp"
+				client_secret: stripe_key
 			}
 		},
 			function (err, response, body) {
@@ -285,7 +288,6 @@ function connectStripe(req, res){
 					Account.newAccountStripe(account_info, function(result){
 						if (result.state=="error"){error.handler(req, res, result.info);}
 						else {
-
 							//successfully connected, now update the type
 							account_info = {
 								type: 2

@@ -91,25 +91,6 @@ module.exports = {
 		}
 	},
 
-	//check if stripe info is attached to the user obj
-	checkStripeInfo : function(req, res, next){
-		if (!req.user.stripe_info){
-			Account.getStripeInfo(req.user.id, function(result){
-				if (result.state == "error" || result.info.length == 0){
-					res.render("stripeconnect.ejs");
-				}
-				else {
-					delete result.info[0].account_id;
-					req.user.stripe_info = result.info[0];
-					next();
-				}
-			});
-		}
-		else {
-			next();
-		}
-	},
-
 	//function to check the size of the CSV file uploaded
 	checkCSVUploadSize : function(req, res, next){
 		var storage = multer.diskStorage({
@@ -297,10 +278,10 @@ module.exports = {
 			error.handler(req, res, "Invalid listing description!", "json");
 		}
 		//if prices exist but are not legit
-		else if (req.body.hour_price && (hour_price != hour_price >>> 0) ||
-				 req.body.day_price && (day_price != day_price >>> 0) ||
-				 req.body.week_price && (week_price != week_price >>> 0) ||
-				 req.body.month_price && (month_price != month_price >>> 0)){
+		else if (req.body.hour_price && (hour_price != hour_price >>> 0) && hour_price > 0 ||
+				 req.body.day_price && (day_price != day_price >>> 0) && day_price > 0 ||
+				 req.body.week_price && (week_price != week_price >>> 0) && week_price > 0 ||
+				 req.body.month_price && (month_price != month_price >>> 0) && month_price > 0){
 			error.handler(req, res, "Invalid listing prices!", "json");
 		}
 		else {
@@ -330,8 +311,8 @@ module.exports = {
 		if (req.new_listing_info.hour_price || req.new_listing_info.day_price || req.new_listing_info.week_price || req.new_listing_info.month_price){
 			var listing_info = getUserListingObj(req.user.listings, req.params.domain_name);
 
-			//the listing is premium, all good to edit!
-			if (listing_info.price_type == 1){
+			//the listing is still premium, all good to edit!
+			if (listing_info.exp_date >= new Date().getTime()){
 				next();
 			}
 			else {
@@ -368,31 +349,6 @@ module.exports = {
 			message: Auth.messageReset(req),
 			user: req.user,
 		});
-	},
-
-	//function to create a monthly subscription for a listing
-	createStripeSubscription : function(req, res, next){
-		if (req.body.stripeEmail != req.user.email){
-			error.handler(req, res, "Please use the same email for payments as your Domahub account!", "json");
-		}
-		else {
-			stripe.customers.create({
-				source: req.body.stripeToken,
-				plan: "premium",
-				email: req.user.email,
-				metadata: {
-					"domain_name" : req.params.domain_name
-				}
-			}, function(err, customer) {
-				if (err){
-					console.log(err);
-					error.handler(req, res, "Something went wrong with the payment!", "json");
-				}
-				else {
-					console.log(customer);
-				}
-			});
-		}
 	},
 
 	//function to create a new listing
@@ -446,24 +402,19 @@ module.exports = {
 
 	//function to update a listing
 	updateListing: function(req, res, next){
-		if (!req.new_listing_info){
-			error.handler(req, res, "Invalid listing information!", "json");
-		}
-		else {
-			domain_name = req.params.domain_name;
-			Listing.updateListing(domain_name, req.new_listing_info, function(result){
-				if (result.state=="error"){error.handler(req, res, result.info);}
-				else {
-					var new_background_image = req.new_listing_info.background_image || false;
-					updateUserListingsObject(req, domain_name);
-					res.json({
-						state: "success",
-						listings: req.user.listings,
-						new_background_image : new_background_image
-					});
-				}
-			});
-		}
+		domain_name = req.params.domain_name;
+		Listing.updateListing(domain_name, req.new_listing_info, function(result){
+			if (result.state=="error"){error.handler(req, res, result.info);}
+			else {
+				var new_background_image = req.new_listing_info.background_image || false;
+				updateUserListingsObject(req, domain_name);
+				res.json({
+					state: "success",
+					listings: req.user.listings,
+					new_background_image : new_background_image
+				});
+			}
+		});
 	},
 
 	//function to verify ownership of a listing
@@ -619,4 +570,17 @@ function getUserListingObj(listings, domain_name){
 			return listings[x];
 		}
 	}
+}
+
+//helper function to add a month to a date
+function addMonthsUTC(date, count) {
+	if (date && count) {
+		var m, d = (date = new Date(+date)).getUTCDate();
+
+		date.setUTCMonth(date.getUTCMonth() + count, 1);
+		m = date.getUTCMonth();
+		date.setUTCDate(d);
+		if (date.getUTCMonth() !== m) date.setUTCDate(0);
+	}
+	return date
 }
