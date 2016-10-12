@@ -185,13 +185,15 @@ function createImgDrop(listing_info, rownum){
 
     //click X to delete image
     temp_x.click(function(e){
-        var old_src = temp_img.attr("src");
-        temp_img.data("old_src", old_src);
-        temp_img.attr("src", "https://placeholdit.imgix.net/~text?txtsize=40&txt=RANDOM%20PHOTO&w=200&h=200");
-        temp_input.data("deleted", true);
-        temp_input.val("");
-        temp_form.find(".file-label").text("Change Picture");
-        changedListingValue($(this), listing_info);
+        if (temp_img.attr("src") != "https://placeholdit.imgix.net/~text?txtsize=40&txt=RANDOM%20PHOTO&w=200&h=200"){
+            var old_src = temp_img.attr("src");
+            temp_img.data("old_src", old_src);
+            temp_img.attr("src", "https://placeholdit.imgix.net/~text?txtsize=40&txt=RANDOM%20PHOTO&w=200&h=200");
+            temp_input.data("deleted", true);
+            temp_input.val("");
+            temp_form.find(".file-label").text("Change Picture");
+        }
+        changedListingValue(temp_input, listing_info);
     })
 
     return temp_col;
@@ -240,54 +242,14 @@ function createPriceDrop(listing_info){
 
     if (!premium || expiring){
         //stripe upgrade button
-        temp_upgrade_button.click(function(e){
-        e.preventDefault();
-        upgrade_button = $(this);
-
-        //stripe configuration
-        handler = StripeCheckout.configure({
-            key: 'pk_test_kcmOEkkC3QtULG5JiRMWVODJ',
-            name: 'Domahub Domain Rentals',
-            image: '/images/d-logo.PNG',
-            panelLabel: 'Pay Monthly',
-            zipCode : true,
-            locale: 'auto',
-            email: user.email,
-            token: function(token) {
-                if (token.email != user.email){
-                    var listing_msg = upgrade_button.closest(".row-drop").find(".listing-msg");
-                    errorMessage(listing_msg, "Please use the same email for payments as your Domahub account!");
-                    upgrade_button.removeClass("is-loading");
-                }
-                else {
-                    upgrade_button.addClass("is-loading");
-                    submitSubscription(upgrade_button, token.id, token.email);
-                }
-            }
+        temp_upgrade_button.off().on("click", function(e){
+            premiumBind(e. $(this));
         });
-
-        handler.open({
-            amount: 500,
-            description: "Upgrading to a Premium listing."
-        });
-
-        //close Checkout on page navigation
-        window.addEventListener('popstate', function() {
-            handler.close();
-        });
-    });
     }
     else {
         //downgrade button
-        temp_upgrade_button.click(function(e){
-            e.preventDefault();
-            if ($(this).text() == "Are you sure?"){
-                $(this).addClass('is-loading');
-                submitCancellation($(this));
-            }
-            else {
-                $(this).text("Are you sure?");
-            }
+        temp_upgrade_button.off().on("click", function(e){
+            basicBind(e, $(this));
         })
     }
 
@@ -609,6 +571,9 @@ function upgradeToPremium(upgrade_button){
     var new_src = old_src.replace("/upgrade", "/downgrade");
     upgrade_button.attr("href", new_src);
     upgrade_button.html('Revert to Basic');
+    upgrade_button.off().on("click", function(e){
+        basicBind(e, $(this));
+    });
 }
 
 //function to submit request to downgrade
@@ -645,4 +610,55 @@ function downgradeToBasic(upgrade_button){
     var new_src = old_src.replace("/downgrade", "/upgrade");
     upgrade_button.attr("href", new_src);
     upgrade_button.html('Renew Premium');
+    upgrade_button.off().on("click", function(e){
+        premiumBind(e, $(this));
+    });
+}
+
+//event binder for reverting to basic
+function basicBind(e, upgrade_button){
+    if (upgrade_button.text() == "Are you sure?"){
+        upgrade_button.addClass('is-loading');
+        submitCancellation(upgrade_button);
+    }
+    else {
+        upgrade_button.text("Are you sure?");
+    }
+}
+
+//event binder for upgrading to premium
+function premiumBind(e, upgrade_button){
+    e.preventDefault();
+
+    //stripe configuration
+    handler = StripeCheckout.configure({
+        key: 'pk_test_kcmOEkkC3QtULG5JiRMWVODJ',
+        name: 'Domahub Domain Rentals',
+        image: '/images/d-logo.PNG',
+        panelLabel: 'Pay Monthly',
+        zipCode : true,
+        locale: 'auto',
+        email: user.email,
+        token: function(token) {
+            if (token.email != user.email){
+                var listing_msg = upgrade_button.closest(".row-drop").find(".listing-msg");
+                errorMessage(listing_msg, "Please use the same email for payments as your Domahub account!");
+                upgrade_button.removeClass("is-loading");
+            }
+            else {
+                upgrade_button.addClass("is-loading");
+                submitSubscription(upgrade_button, token.id, token.email);
+            }
+        }
+    });
+
+    handler.open({
+        amount: 500,
+        description: "Upgrading to a Premium listing."
+    });
+
+    //close Checkout on page navigation
+    window.addEventListener('popstate', function() {
+        handler.close();
+    });
 }
