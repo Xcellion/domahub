@@ -358,7 +358,7 @@ function changedListingValue(input_elem, listing_info){
     var closest_row = input_elem.closest(".row-drop, .row-disp");
     var save_button = (closest_row.hasClass("row-drop")) ? closest_row.find(".save-changes-button") : closest_row.next(".row-drop").find(".save-changes-button");
     var cancel_button = (closest_row.hasClass("row-drop")) ? closest_row.find(".cancel-changes-button") : closest_row.next(".row-drop").find(".cancel-changes-button");
-
+    console.log(name_of_attr, input_elem.val())
     //only change if the value changed from existing or if image exists
     if ((name_of_attr != "image" && input_elem.val() != listing_info[name_of_attr])
      || (name_of_attr == "image" && input_elem.val())){
