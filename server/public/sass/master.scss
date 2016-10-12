@@ -34,7 +34,7 @@
   padding-top: 68px;
 }
 
-.bottom-margin-25 {
+.margin-bottom-25 {
   margin-bottom: 25px;
 }
 
@@ -44,6 +44,19 @@
 
 .vertical-align-middle {
   line-height: 20px;
+}
+
+.hover-scale {
+  @include transition(all 0.25s ease);
+  & > .image {
+    @include transition(all 0.25s ease);
+    @include scale(1);
+  }
+  &:hover {
+    & > .image {
+      @include scale(1.15);
+    }
+  }
 }
 
 .has-borderRight {
