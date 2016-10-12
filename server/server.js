@@ -20,8 +20,10 @@ var bodyParser 	= require('body-parser'),
 
 db.connect();	//connect to the database
 
-require('./lib/auth.js').auth(db, passport, error);
+require('./lib/auth.js').init(db, passport, error);
+require('./lib/stripe.js').init(db, error);
 var auth = require('./lib/auth.js');
+var stripe = require('./lib/stripe.js');
 
 /**************************************************
 ** SERVER INITIALIZATION
@@ -69,6 +71,7 @@ else {
 		resave: true
 	}));
 
+	//remove once live
 	app.get("/", function(req, res){
 		res.render("under_construction");
 	})
@@ -93,7 +96,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 //main routes
-require('./routes/routes.js')(app, db, auth, error);
+require('./routes/routes.js')(app, db, auth, error, stripe);
 
 //favicon requests
 app.get('*.ico', function(){})
