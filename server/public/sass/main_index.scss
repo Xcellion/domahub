@@ -19,17 +19,4 @@
   @include box-shadow(0,-2px,0,$accent,0);
 }
 
-.hover-scale {
-  @include transition(all 0.25s ease);
-  & > .image {
-    @include transition(all 0.25s ease);
-    @include scale(1);
-  }
-  &:hover {
-    & > .image {
-      @include scale(1.15);
-    }
-  }
-}
-
 /*********************** MAIN ************************/
