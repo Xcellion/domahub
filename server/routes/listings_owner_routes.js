@@ -215,10 +215,9 @@ module.exports = {
 				formData: formData
 			}, function (error, response, body) {
 				if (!error){
-					if (!req.new_listing_info) {
-						req.new_listing_info = {};
-					}
-					req.new_listing_info.background_image = JSON.parse(body).data.link;
+					req.new_listing_info = {
+						background_image : JSON.parse(body).data.link
+					};
 					next();
 				}
 				else {
@@ -226,6 +225,13 @@ module.exports = {
 					error.handler(req, res, 'Something went wrong with the upload!', "json");
 				}
 			});
+		}
+		//removing image
+		else if (req.body.image){
+			req.new_listing_info = {
+				background_image : ""
+			};
+			next();
 		}
 		else {
 			next();
@@ -278,10 +284,10 @@ module.exports = {
 			error.handler(req, res, "Invalid listing description!", "json");
 		}
 		//if prices exist but are not legit
-		else if (req.body.hour_price && (hour_price != hour_price >>> 0) && hour_price > 0 ||
-				 req.body.day_price && (day_price != day_price >>> 0) && day_price > 0 ||
-				 req.body.week_price && (week_price != week_price >>> 0) && week_price > 0 ||
-				 req.body.month_price && (month_price != month_price >>> 0) && month_price > 0){
+		else if (req.body.hour_price && (hour_price != hour_price >>> 0) && hour_price <= 0 ||
+				 req.body.day_price && (day_price != day_price >>> 0) && day_price <= 0 ||
+				 req.body.week_price && (week_price != week_price >>> 0) && week_price <= 0 ||
+				 req.body.month_price && (month_price != month_price >>> 0) && month_price <= 0){
 			error.handler(req, res, "Invalid listing prices!", "json");
 		}
 		else {
