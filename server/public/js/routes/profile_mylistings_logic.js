@@ -162,14 +162,14 @@ function createRowDrop(listing_info, rownum){
 
 //function to create the image drop column
 function createImgDrop(listing_info, rownum){
-    var background_image = (listing_info.background_image == null || listing_info.background_image == undefined) ? "https://placeholdit.imgix.net/~text?txtsize=40&txt=RANDOM%20PHOTO&w=200&h=200" : listing_info.background_image;
+    var background_image = (listing_info.background_image == null || listing_info.background_image == undefined || listing_info.background_image == "") ? "https://placeholdit.imgix.net/~text?txtsize=40&txt=RANDOM%20PHOTO&w=200&h=200" : listing_info.background_image;
     var verified_disabled = (listing_info.status == 0) ? "is-disabled" : "";
 
     var temp_col = $("<div class='column is-one-quarter'></div>");
         var temp_div = $("<div class='card'></div>");
             var temp_div_image = $("<div class='card-image'></div>")
                 var temp_figure = $("<figure class='image listing-img is-256x256'></figure>");
-                    var temp_x = $('<i class="fa fa-times-circle"></i>');
+                    var temp_x = $('<button class="delete"></button>');
                     var temp_img = $("<img class='is-listing' alt='Image not found' src=" + background_image + " />");
                 var temp_footer = $("<footer class='card-footer'></div>");
                     var temp_form = $('<form id="mult-form' + rownum + '" class="drop-form-file card-footer-item" action="/listing/create/batch" method="post" enctype="multipart/form-data"></form>')
