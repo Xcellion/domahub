@@ -229,7 +229,7 @@ module.exports = {
 		//removing image
 		else if (req.body.image){
 			req.new_listing_info = {
-				background_image : ""
+				background_image : null
 			};
 			next();
 		}
@@ -269,7 +269,6 @@ module.exports = {
         var day_price = parseFloat(req.body.day_price);
         var week_price = parseFloat(req.body.week_price);
         var month_price = parseFloat(req.body.month_price);
-		//todo - picture
 
 		//if status exists and is not 1 or 2
 		if (req.body.status && status != 1 && status != 2){
