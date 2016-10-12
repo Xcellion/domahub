@@ -1115,6 +1115,9 @@ button {
     .content.index-padded:first-child {
       padding-bottom: 20px; } }
 
+.content + .content {
+  margin-top: 25px; }
+
 .content h1 + p,
 .content h2 + p,
 .content h3 + p {
