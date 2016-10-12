@@ -1641,6 +1641,9 @@ input:-webkit-autofill {
   display: block;
   position: relative;
   margin: 0 auto; }
+  .image.left-aligned {
+    margin-left: 0;
+    margin-right: 0; }
   .image.listing-img {
     height: 193.75px; }
   .image img {
@@ -5025,6 +5028,28 @@ a.nav-item.is-tab {
 
 .vertical-align-middle {
   line-height: 20px; }
+
+.hover-scale {
+  -moz-transition: all 0.25s ease;
+  -o-transition: all 0.25s ease;
+  -webkit-transition: all 0.25s ease;
+  transition: all 0.25s ease; }
+  .hover-scale > .image {
+    -moz-transition: all 0.25s ease;
+    -o-transition: all 0.25s ease;
+    -webkit-transition: all 0.25s ease;
+    transition: all 0.25s ease;
+    -moz-transform: scale(1);
+    -o-transform: scale(1);
+    -ms-transform: scale(1);
+    -webkit-transform: scale(1);
+      -webkit-transform-transform: scale(1); }
+  .hover-scale:hover > .image {
+    -moz-transform: scale(1.15);
+    -o-transform: scale(1.15);
+    -ms-transform: scale(1.15);
+    -webkit-transform: scale(1.15);
+      -webkit-transform-transform: scale(1.15); }
 
 @media screen and (min-width: 769px) {
   .has-borderRight {

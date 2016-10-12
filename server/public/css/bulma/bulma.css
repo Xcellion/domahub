@@ -1641,6 +1641,9 @@ input:-webkit-autofill {
   display: block;
   position: relative;
   margin: 0 auto; }
+  .image.left-aligned {
+    margin-left: 0;
+    margin-right: 0; }
   .image.listing-img {
     height: 193.75px; }
   .image img {

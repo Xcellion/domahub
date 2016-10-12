@@ -16,26 +16,4 @@
   -moz-box-shadow: 0 -2px 0 #ff5722 0;
   box-shadow: 0 -2px 0 #ff5722 0; }
 
-.hover-scale {
-  -moz-transition: all 0.25s ease;
-  -o-transition: all 0.25s ease;
-  -webkit-transition: all 0.25s ease;
-  transition: all 0.25s ease; }
-  .hover-scale > .image {
-    -moz-transition: all 0.25s ease;
-    -o-transition: all 0.25s ease;
-    -webkit-transition: all 0.25s ease;
-    transition: all 0.25s ease;
-    -moz-transform: scale(1);
-    -o-transform: scale(1);
-    -ms-transform: scale(1);
-    -webkit-transform: scale(1);
-      -webkit-transform-transform: scale(1); }
-  .hover-scale:hover > .image {
-    -moz-transform: scale(1.15);
-    -o-transform: scale(1.15);
-    -ms-transform: scale(1.15);
-    -webkit-transform: scale(1.15);
-      -webkit-transform-transform: scale(1.15); }
-
 /*********************** MAIN ************************/
