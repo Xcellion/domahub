@@ -359,7 +359,7 @@ function appendChats(chats){
     }
 
     //load more messages button
-    if (chats.length % 20 == 0 && chats.length != 0){
+    if (chats.length / 20 > 1 && chats.length != 0){
         var load_more_div = $("<div id='load-more' class='has-text-centered'></div>")
             var load_more_button = $("<a class='button no-shadow load-more'></a>");
                 var load_more_icon = $("<span class='icon'></span>");
