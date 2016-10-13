@@ -69,9 +69,12 @@ account_model.prototype.getAccountByToken = function(token, callback){
 account_model.prototype.getAccountListings = function(account_id, callback){
 	console.log("Attempting to get all listings belonging to account " + account_id + "...");
 	query = "SELECT \
-				listings.*\
+				listings.*, \
+				listing_categories.category \
 			FROM listings \
-			WHERE owner_id = ? ";
+			LEFT JOIN listing_categories ON listing_categories.listing_id = listings.id \
+			WHERE owner_id = ? \
+			ORDER BY listings.id ASC";
 	account_query(query, "Failed to get all listings belonging to account " + account_id + "!", callback, account_id);
 }
 
@@ -95,7 +98,6 @@ account_model.prototype.getAccountRentals = function(account_id, callback){
 //gets all chats for an account
 account_model.prototype.getAccountChats = function(account_id, callback){
 	console.log("Attempting to get all chat info for account #" + account_id + "...");
-
 	query = "SELECT \
 				chat_history.message, \
 				chat_history.seen, \

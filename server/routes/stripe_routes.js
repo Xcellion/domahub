@@ -5,12 +5,12 @@ if (node_env == "dev"){
 	var stripe = require("stripe")("sk_test_PHd0TEZT5ytlF0qCNvmgAThp");		//stripe API development key
 }
 else {
-	var stripe = require("stripe")("sk_live_Nqq1WW2x9JmScHxNbnFlORoh");		//stripe API production key
+	var stripe = require("stripe")("sk_test_PHd0TEZT5ytlF0qCNvmgAThp");		//stripe API development key
+	//var stripe = require("stripe")("sk_live_Nqq1WW2x9JmScHxNbnFlORoh");		//stripe API production key
 }
 
-var bodyParser = require('body-parser')
-var jsonParser = bodyParser.json()
-var urlencodedParser = bodyParser.urlencoded({ extended: false })
+var bodyParser = require('body-parser');
+var jsonParser = bodyParser.json();
 
 module.exports = function(app, db){
 	Listing = new listing_model(db);
@@ -28,7 +28,7 @@ function stripeWebhookEventCatcher(req, res){
 	}
 	else {
 		//Verify the event by fetching it from Stripe
-		stripe.events.retrieve(event_json.id, function(err, event) {
+		stripe.events.retrieve(req.body.id, function(err, event) {
 			switchEvents(event, res)
 		});
 	}
@@ -121,7 +121,8 @@ function updateListing(subscription, bool, object){
 	else {
 		var new_listing_info = {
 			stripe_subscription_id: "",
-			exp_date: 0
+			exp_date: 0,
+			expiring: false
 		}
 		var console_msg = {
 			success: "Premium status for listing #" + listing_id + " has expired after cancellation...",
