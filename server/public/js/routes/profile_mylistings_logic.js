@@ -243,7 +243,7 @@ function createPriceDrop(listing_info){
     if (!premium || expiring){
         //stripe upgrade button
         temp_upgrade_button.off().on("click", function(e){
-            premiumBind(e. $(this));
+            premiumBind(e, $(this));
         });
     }
     else {
@@ -617,6 +617,8 @@ function downgradeToBasic(upgrade_button){
 
 //event binder for reverting to basic
 function basicBind(e, upgrade_button){
+    e.preventDefault();
+    
     if (upgrade_button.text() == "Are you sure?"){
         upgrade_button.addClass('is-loading');
         submitCancellation(upgrade_button);
