@@ -28,7 +28,7 @@ function stripeWebhookEventCatcher(req, res){
 	}
 	else {
 		//Verify the event by fetching it from Stripe
-		stripe.events.retrieve(event_json.id, function(err, event) {
+		stripe.events.retrieve(req.body.id, function(err, event) {
 			switchEvents(event, res)
 		});
 	}
