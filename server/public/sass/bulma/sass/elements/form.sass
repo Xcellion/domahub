@@ -120,6 +120,11 @@ input
 .label
   color: $text
   display: block
+  &.has-icon
+    display: inline-flex
+    & + i
+      display: inline-flex
+      vertical-align: baseline
   &:not(:last-child)
     margin-bottom: 5px
   &.is-medium
