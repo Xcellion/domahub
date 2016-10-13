@@ -189,14 +189,13 @@ function createStatusDrop(listing_info){
 function createFormDrop(listing_info){
     var temp_col = $("<div class='column'></div>");
     var temp_form = $("<form class='drop-form'></form>");
+
+    //variables to hide or disable things based on verification status
     var verified_hidden = (listing_info.status == 0) ? 'is-hidden" tabindex="-1"' : "";
     var verified_disabled = (listing_info.status == 0) ? 'is-disabled" tabindex="-1"' : "";
 
-    var buy_link = (listing_info.buy_link == null) ? "" : listing_info.buy_link;
-    var description = (listing_info.description == null) ? "" : listing_info.description;
-    var categories = listing_info.categories.join(", ");
-
     //purchase link
+    var buy_link = (listing_info.buy_link == null) ? "" : listing_info.buy_link;
     var temp_div1 = $('<div class="control is-horizontal"></div>');
         var temp_div1_control = $("<div class='control-label is-small'></div>");
             var temp_div1_label = $("<label class='label'>Purchase link</label>")
@@ -207,6 +206,7 @@ function createFormDrop(listing_info){
     temp_div1.append(temp_div1_control.append(temp_div1_label), temp_div1_p.append(temp_div1_input, temp_div1_input_i));
 
     //description
+    var description = (listing_info.description == null) ? "" : listing_info.description;
     var temp_div2 = $('<div class="control is-horizontal"></div>');
         var temp_div2_control_label = $('<div class="control-label is-small">');
             var temp_div2_label = $('<label class="label">Description</label>');
@@ -217,6 +217,7 @@ function createFormDrop(listing_info){
     temp_div2.append(temp_div2_control_label.append(temp_div2_label), temp_div2_control.append(temp_div2_input));
 
     //categories
+    var categories = listing_info.categories.join(" ");
     var temp_div3 = $('<div class="control is-horizontal"></div>');
         var temp_div3_control_label = $('<div class="control-label is-small">');
             var temp_div3_label = $('<label class="label">Categories</label>');

@@ -6,7 +6,7 @@ var pool = mysql.createPool({
 		//host: 'localhost',
 		user: 'administrator',
 		password: 'Password01',
-		database: 'w3bbi',
+		database: 'domahub',
 		multipleStatements: true,
 		dateStrings: true,
 		timezone: '+0:00',
