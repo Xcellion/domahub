@@ -190,7 +190,8 @@ function stripeSubscriptionHandler(subscription, req, res, listing_info){
 	listing_info.exp_date = subscription.current_period_end * 1000		//stripe doesnt count the time, only days
 	res.json({
 		state: "success",
-		listings: req.user.listings
+		listings: req.user.listings,
+		new_exp_date: listing_info.exp_date
 	});
 }
 
