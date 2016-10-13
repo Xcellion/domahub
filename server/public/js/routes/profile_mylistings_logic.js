@@ -268,7 +268,9 @@ function createFormDrop(listing_info){
 
     var buy_link = (listing_info.buy_link == null) ? "" : listing_info.buy_link;
     var description = (listing_info.description == null) ? "" : listing_info.description;
+    var categories = listing_info.categories.join(", ");
 
+    //purchase link
     var temp_div1 = $('<div class="control is-horizontal"></div>');
         var temp_div1_control = $("<div class='control-label is-small'></div>");
             var temp_div1_label = $("<label class='label'>Purchase link</label>")
@@ -278,6 +280,7 @@ function createFormDrop(listing_info){
             var temp_div1_input_i = $('<i class="fa fa-link"></i>');
     temp_div1.append(temp_div1_control.append(temp_div1_label), temp_div1_p.append(temp_div1_input, temp_div1_input_i));
 
+    //description
     var temp_div2 = $('<div class="control is-horizontal"></div>');
         var temp_div2_control_label = $('<div class="control-label is-small">');
             var temp_div2_label = $('<label class="label">Description</label>');
@@ -287,15 +290,31 @@ function createFormDrop(listing_info){
 
     temp_div2.append(temp_div2_control_label.append(temp_div2_label), temp_div2_control.append(temp_div2_input));
 
-    var temp_div3 = $('<div class="control is-grouped"></div>');
-        var temp_control1 = $('<div class="control"></div>');
-            var temp_button1 = $('<a class="save-changes-button ' + verified_hidden + ' button is-disabled is-primary">Save Changes</a>');
-        var temp_control2 = $('<div class="control"></div>');
-            var temp_button2 = $('<a class="cancel-changes-button ' + verified_hidden + ' button is-hidden is-danger">Cancel Changes</a>');
+    //categories
+    var temp_div3 = $('<div class="control is-horizontal"></div>');
+        var temp_div3_control_label = $('<div class="control-label is-small">');
+            var temp_div3_label = $('<label class="label">Categories</label>');
+        var temp_div3_control = $('<div class="control">');
+            var temp_div3_input = $('<input class="categories-input input ' + verified_disabled + ' changeable-input" placeholder="Categories">' + categories + '</textarea>')
+                temp_div3_input.data("name", "categories");
 
+    temp_div3.append(temp_div3_control_label.append(temp_div3_label), temp_div3_control.append(temp_div3_input));
+
+    //buttons for submit/cancel
+    var temp_div4 = $('<div class="control is-grouped"></div>');
+        var temp_submit_control = $('<div class="control"></div>');
+            var temp_submit_button = $('<a class="save-changes-button ' + verified_hidden + ' button is-disabled is-primary">Save Changes</a>');
+        var temp_cancel_control = $('<div class="control"></div>');
+            var temp_cancel_button = $('<a class="cancel-changes-button ' + verified_hidden + ' button is-hidden is-danger">Cancel Changes</a>');
+
+    temp_div4.append(temp_submit_control.append(temp_submit_button), temp_cancel_control.append(temp_cancel_button));
+
+    //error message
     var temp_msg = $("<p class='listing-msg is-hidden notification'></p>");
         var temp_msg_delete = $("<button class='delete'></button>");
         temp_msg.append(temp_msg_delete);
+
+    temp_col.append(temp_form.append(temp_div1, temp_div2, temp_div3, temp_div4, temp_msg));
 
     //to hide the message
     temp_msg_delete.click(function(e){
@@ -304,7 +323,7 @@ function createFormDrop(listing_info){
     });
 
     //to submit form changes
-    temp_button1.click(function(e){
+    temp_submit_button.click(function(e){
         var row_drop = $(this).closest('.row-drop');
         var row = row_drop.prev(".row-disp");
 
@@ -312,16 +331,12 @@ function createFormDrop(listing_info){
     });
 
     //to cancel form changes
-    temp_button2.click(function(e){
+    temp_cancel_button.click(function(e){
         var row_drop = $(this).closest('.row-drop');
         var row = row_drop.prev(".row-disp");
 
         cancelListingChanges(row, row_drop, $(this), listing_info);
     });
-
-    temp_div3.append(temp_control1.append(temp_button1), temp_control2.append(temp_button2));
-
-    temp_col.append(temp_form.append(temp_div1, temp_div2, temp_div3, temp_msg));
 
     return temp_col;
 }
@@ -551,28 +566,8 @@ function submitSubscription(upgrade_button, stripeToken, stripeEmail){
         }
         else {
             listings = data.listings;
-            upgradeToPremium(upgrade_button);
+            upgradeToPremium(upgrade_button, data.new_exp_date);
         }
-    });
-}
-
-//function to run to remove basic restrictions
-function upgradeToPremium(upgrade_button){
-    var row_drop = upgrade_button.closest(".row-drop");
-    row_drop.find(".premium-input").removeClass("is-disabled");
-    row_drop.find(".premium-control").removeClass("is-hidden");
-
-    var exp_date_elem = row_drop.find(".premium-exp-date");
-    var old_text = exp_date_elem.text().replace("Expiring", "Renewing");
-    exp_date_elem.text(old_text);
-    exp_date_elem.removeClass('is-hidden');
-
-    var old_src = upgrade_button.attr("href");
-    var new_src = old_src.replace("/upgrade", "/downgrade");
-    upgrade_button.attr("href", new_src);
-    upgrade_button.html('Revert to Basic');
-    upgrade_button.off().on("click", function(e){
-        basicBind(e, $(this));
     });
 }
 
@@ -599,13 +594,43 @@ function submitCancellation(upgrade_button){
     });
 }
 
-//function to run to remove basic restrictions
+//stuff to run after upgrading to premium
+function upgradeToPremium(upgrade_button, new_exp_date){
+    var row_drop = upgrade_button.closest(".row-drop");
+    var row = row_drop.prev(".row-disp");
+
+    row.find(".td-type").text("Premium");       //type TD
+
+    //remove all hidden or disabled inputs
+    row_drop.find(".premium-input").removeClass("is-disabled");
+    row_drop.find(".premium-control").removeClass("is-hidden");
+
+    //change expiry date
+    var exp_date_elem = row_drop.find(".premium-exp-date");
+    exp_date_elem.text("Renewing on " + moment(new_exp_date).format("YYYY-MM-DD")).removeClass('is-hidden');
+
+    //change the button
+    var old_src = upgrade_button.attr("href");
+    var new_src = old_src.replace("/upgrade", "/downgrade");
+    upgrade_button.attr("href", new_src);
+    upgrade_button.html('Revert to Basic');
+    upgrade_button.off().on("click", function(e){
+        basicBind(e, $(this));
+    });
+}
+
+//stuff to run after downgrading to basic
 function downgradeToBasic(upgrade_button){
     var row_drop = upgrade_button.closest(".row-drop");
+
+    ///dont change type TD or disable/hide buttons because cancellation happens at end of period
+
+    //change expiry date
     var exp_date_elem = row_drop.find(".premium-exp-date");
     var old_text = exp_date_elem.text().replace("Renewing", "Expiring");
     exp_date_elem.text(old_text);
 
+    //change the button
     var old_src = upgrade_button.attr("href");
     var new_src = old_src.replace("/downgrade", "/upgrade");
     upgrade_button.attr("href", new_src);
