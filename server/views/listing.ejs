@@ -39,7 +39,7 @@
 				<div id="listing_info_wrapper">
 					<!-- information about the current listing -->
 					<div id="listing_info_title" class="listing_info_center">
-						<h2 class="listing_info_text"><a href="/listing/<%= listing_info.domain_name %>" class="green_text"><%= listing_info.domain_name %></a></h2>
+						<h2 class="listing_info_text"><a href="http://<%= listing_info.domain_name %>" class="green_text"><%= listing_info.domain_name %></a></h2>
 						<p id="domain_owner" class="listing_info_text listing_info_text_white">Owned by: <a class="green_text" href="/profile/inbox/<%= listing_info.username %>"><%= listing_info.username %></a></p>
 						<% if (listing_info.status) { %>
 							<div id="pricing_wrapper">
@@ -60,7 +60,7 @@
 					<% } %>
 
 					<% if (listing_info.buy_link != null && listing_info.buy_link.length > 0) { %>
-						<p id="buy_link" class="listing_info_margin_top listing_info_center"><a class="orange_link" href="<%= listing_info.buy_link %>">Interested in buying this domain?</a></p>
+						<p id="buy_link" class="listing_info_margin_top listing_info_center"><a class="orange-link" href="<%= listing_info.buy_link %>">Interested in buying this domain?</a></p>
 					<% } %>
 				</div>
 

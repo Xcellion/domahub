@@ -160,211 +160,6 @@ function createRowDrop(listing_info, rownum){
     return temp_drop;
 }
 
-//function to create the image drop column
-function createImgDrop(listing_info, rownum){
-    var background_image = (listing_info.background_image == null || listing_info.background_image == undefined || listing_info.background_image == "") ? "https://placeholdit.imgix.net/~text?txtsize=40&txt=RANDOM%20PHOTO&w=200&h=200" : listing_info.background_image;
-    var verified_disabled = (listing_info.status == 0) ? "is-disabled" : "";
-
-    var temp_col = $("<div class='column is-one-quarter'></div>");
-        var temp_div = $("<div class='card'></div>");
-            var temp_div_image = $("<div class='card-image'></div>")
-                var temp_figure = $("<figure class='image listing-img is-256x256'></figure>");
-                    var temp_x = $('<button class="delete"></button>');
-                    var temp_img = $("<img class='is-listing' alt='Image not found' src=" + background_image + " />");
-                var temp_footer = $("<footer class='card-footer'></div>");
-                    var temp_form = $('<form id="mult-form' + rownum + '" class="drop-form-file card-footer-item" action="/listing/create/batch" method="post" enctype="multipart/form-data"></form>')
-                    var temp_input = $('<input type="file" id="file' + rownum + '" name="image" accept="image/png, image/gif, image/jpeg" class="picture-file changeable-input input-file" />');
-                    var temp_input_label = $('<label for="file' + rownum + '" class="' + verified_disabled + ' button"><i class="fa fa-upload"></i><p class="file-label">Change Picture</p></label>');
-                        temp_input.data("name", "image");
-    temp_col.append(temp_div.append(temp_div_image.append(temp_figure.append(temp_x, temp_img), temp_footer.append(temp_form.append(temp_input, temp_input_label)))));
-
-    //if theres an error in getting the image, remove the link
-    temp_img.error(function() {
-        $(this).attr("src", "");
-    });
-
-    //click X to delete image
-    temp_x.click(function(e){
-        var old_src = temp_img.attr("src");
-        temp_img.data("old_src", old_src);
-        temp_img.attr("src", "https://placeholdit.imgix.net/~text?txtsize=40&txt=RANDOM%20PHOTO&w=200&h=200");
-        temp_input.data("deleted", true);
-        temp_input.val("");
-        temp_form.find(".file-label").text("Change Picture");
-        changedListingValue($(this), listing_info);
-    })
-
-    return temp_col;
-}
-
-//function to create the price drop column
-function createPriceDrop(listing_info){
-    var temp_col = $("<div class='column is-3'></div>");
-    var temp_form = $("<form class='drop-form'></form>");
-    var verified_disabled = (listing_info.status == 0) ? "is-disabled" : "";
-
-    var label_types = ["Hourly", "Daily", "Weekly", "Monthly"];     //for display
-    var label_names = ["hour_price", "day_price", "week_price", "month_price"];     //for data for input listener
-    var label_values = [listing_info.hour_price, listing_info.day_price, listing_info.week_price,listing_info.month_price];     //for values
-    var premium = listing_info.exp_date >= new Date().getTime();
-    var expiring = (listing_info.expiring == 0) ? false : true;
-
-    for (var x = 0; x < 4; x++){
-        var hourly_hidden = (!premium && x == 0) ? "is-hidden" : "";
-        var temp_div1 = $("<div class='premium-control control " + hourly_hidden + " is-horizontal'></div>");
-            var temp_div_label = $("<div class='control-label is-small'></div>");
-                var temp_label = $('<label class="label">' + label_types[x] + '</label>');
-            var temp_div_control = $("<div class='control'></div>");
-                var temp_control_p = $("<p class='control has-icon'></p>");
-
-                    //disabled if listing is not verified
-                    var disabled = (premium) ? "" : 'is-disabled" tabindex="-1"';
-                    var temp_input = $('<input class="' + label_types[x].toLowerCase() + '-price-input premium-input input changeable-input ' + disabled + '" type="number" min="1" value="' + label_values[x] + '">');
-                        temp_input.data("name", label_names[x]);
-
-                    var temp_i = $('<i class="fa fa-dollar"></i>');
-        temp_form.append(temp_div1.append(temp_div_label.append(temp_label), temp_div_control.append(temp_control_p.append(temp_input, temp_i))));
-    }
-    var temp_upgrade_control = $("<div class='control is-horizontal'></div>");
-        var premium_text = (premium) ? "Revert to Basic" : "Upgrade to Premium";
-            premium_text = (expiring) ? "Renew Premium" : premium_text;
-        var premium_src = (premium) ? "/downgrade" : "/upgrade";
-            premium_src = (expiring) ? "/upgrade" : premium_src;
-        var temp_upgrade_button = $('<a href="/listing/' + listing_info.domain_name + premium_src + '" class="' + verified_disabled + ' stripe-button button is-accent">' + premium_text + '</a>');
-
-        //show an expiration or renewal date if this is a premium listing
-        if (premium){
-            var expiring_text = (expiring) ? "Expiring" : "Renewing";
-            var expiry_date = $("<div class='has-text-right premium-exp-date'>" + expiring_text + " on " + moment(listing_info.exp_date).format("YYYY-MM-DD") + "</div>");
-        }
-
-    if (!premium || expiring){
-        //stripe upgrade button
-        temp_upgrade_button.click(function(e){
-        e.preventDefault();
-        upgrade_button = $(this);
-
-        //stripe configuration
-        handler = StripeCheckout.configure({
-            key: 'pk_test_kcmOEkkC3QtULG5JiRMWVODJ',
-            name: 'Domahub Domain Rentals',
-            image: '/images/d-logo.PNG',
-            panelLabel: 'Pay Monthly',
-            zipCode : true,
-            locale: 'auto',
-            email: user.email,
-            token: function(token) {
-                if (token.email != user.email){
-                    var listing_msg = upgrade_button.closest(".row-drop").find(".listing-msg");
-                    errorMessage(listing_msg, "Please use the same email for payments as your Domahub account!");
-                    upgrade_button.removeClass("is-loading");
-                }
-                else {
-                    upgrade_button.addClass("is-loading");
-                    submitSubscription(upgrade_button, token.id, token.email);
-                }
-            }
-        });
-
-        handler.open({
-            amount: 500,
-            description: "Upgrading to a Premium listing."
-        });
-
-        //close Checkout on page navigation
-        window.addEventListener('popstate', function() {
-            handler.close();
-        });
-    });
-    }
-    else {
-        //downgrade button
-        temp_upgrade_button.click(function(e){
-            e.preventDefault();
-            if ($(this).text() == "Are you sure?"){
-                $(this).addClass('is-loading');
-                submitCancellation($(this));
-            }
-            else {
-                $(this).text("Are you sure?");
-            }
-        })
-    }
-
-    temp_form.append(temp_upgrade_control.append(temp_upgrade_button), expiry_date);
-
-    temp_col.append(temp_form);
-
-    return temp_col;
-}
-
-//function to create buy link and background image form drop
-function createFormDrop(listing_info){
-    var temp_col = $("<div class='column'></div>");
-    var temp_form = $("<form class='drop-form'></form>");
-    var verified_hidden = (listing_info.status == 0) ? "is-hidden" : "";
-    var verified_disabled = (listing_info.status == 0) ? "is-disabled" : "";
-
-    var buy_link = (listing_info.buy_link == null) ? "" : listing_info.buy_link;
-    var description = (listing_info.description == null) ? "" : listing_info.description;
-
-    var temp_div1 = $('<div class="control is-horizontal"></div>');
-        var temp_div1_control = $("<div class='control-label is-small'></div>");
-            var temp_div1_label = $("<label class='label'>Purchase link</label>")
-        var temp_div1_p = $("<p class='control has-icon'></p>");
-            var temp_div1_input = $('<input class="buy-link-input ' + verified_disabled + ' input changeable-input" type="url" placeholder="https://buy-my-website.com" value="' + buy_link + '"/>');
-                temp_div1_input.data("name", "buy_link");
-            var temp_div1_input_i = $('<i class="fa fa-link"></i>');
-    temp_div1.append(temp_div1_control.append(temp_div1_label), temp_div1_p.append(temp_div1_input, temp_div1_input_i));
-
-    var temp_div2 = $('<div class="control is-horizontal"></div>');
-        var temp_div2_control_label = $('<div class="control-label is-small">');
-            var temp_div2_label = $('<label class="label">Description</label>');
-        var temp_div2_control = $('<div class="control">');
-            var temp_div2_input = $('<textarea class="description-input ' + verified_disabled + ' textarea changeable-input" placeholder="Rent this website for any time period you please!">' + description + '</textarea>')
-                temp_div2_input.data("name", "description");
-
-    temp_div2.append(temp_div2_control_label.append(temp_div2_label), temp_div2_control.append(temp_div2_input));
-
-    var temp_div3 = $('<div class="control is-grouped"></div>');
-        var temp_control1 = $('<div class="control"></div>');
-            var temp_button1 = $('<a class="save-changes-button ' + verified_hidden + ' button is-disabled is-primary">Save Changes</a>');
-        var temp_control2 = $('<div class="control"></div>');
-            var temp_button2 = $('<a class="cancel-changes-button ' + verified_hidden + ' button is-hidden is-danger">Cancel Changes</a>');
-
-    var temp_msg = $("<p class='listing-msg is-hidden notification'></p>");
-        var temp_msg_delete = $("<button class='delete'></button>");
-        temp_msg.append(temp_msg_delete);
-
-    //to hide the message
-    temp_msg_delete.click(function(e){
-        e.preventDefault();
-        temp_msg.addClass('is-hidden');
-    });
-
-    //to submit form changes
-    temp_button1.click(function(e){
-        var row_drop = $(this).closest('.row-drop');
-        var row = row_drop.prev(".row-disp");
-
-        submitListingChanges(row, row_drop, $(this), listing_info);
-    });
-
-    //to cancel form changes
-    temp_button2.click(function(e){
-        var row_drop = $(this).closest('.row-drop');
-        var row = row_drop.prev(".row-disp");
-
-        cancelListingChanges(row, row_drop, $(this), listing_info);
-    });
-
-    temp_div3.append(temp_control1.append(temp_button1), temp_control2.append(temp_button2));
-
-    temp_col.append(temp_form.append(temp_div1, temp_div2, temp_div3, temp_msg));
-
-    return temp_col;
-}
-
 //function to create the select dropdown for listing status
 function createStatusDrop(listing_info){
     var new_td = $("<td class='td-visible td-status td-status-drop is-hidden'></td>");
@@ -388,6 +183,188 @@ function createStatusDrop(listing_info){
     });
 
     return new_td;
+}
+
+//function to create buy link and background image form drop
+function createFormDrop(listing_info){
+    var temp_col = $("<div class='column'></div>");
+    var temp_form = $("<form class='drop-form'></form>");
+
+    //variables to hide or disable things based on verification status
+    var verified_hidden = (listing_info.status == 0) ? 'is-hidden" tabindex="-1"' : "";
+    var verified_disabled = (listing_info.status == 0) ? 'is-disabled" tabindex="-1"' : "";
+
+    //purchase link
+    var buy_link = (listing_info.buy_link == null) ? "" : listing_info.buy_link;
+    var temp_div1 = $('<div class="control is-horizontal"></div>');
+        var temp_div1_control = $("<div class='control-label is-small'></div>");
+            var temp_div1_label = $("<label class='label'>Purchase link</label>")
+        var temp_div1_p = $("<p class='control has-icon'></p>");
+            var temp_div1_input = $('<input class="buy-link-input input changeable-input ' + verified_disabled + '" type="url" placeholder="https://buy-my-website.com" value="' + buy_link + '"/>');
+                temp_div1_input.data("name", "buy_link");
+            var temp_div1_input_i = $('<i class="fa fa-link"></i>');
+    temp_div1.append(temp_div1_control.append(temp_div1_label), temp_div1_p.append(temp_div1_input, temp_div1_input_i));
+
+    //description
+    var description = (listing_info.description == null) ? "" : listing_info.description;
+    var temp_div2 = $('<div class="control is-horizontal"></div>');
+        var temp_div2_control_label = $('<div class="control-label is-small">');
+            var temp_div2_label = $('<label class="label">Description</label>');
+        var temp_div2_control = $('<div class="control">');
+            var temp_div2_input = $('<textarea class="description-input textarea changeable-input ' + verified_disabled + '" placeholder="Rent this website for any time period you please!">' + description + '</textarea>')
+                temp_div2_input.data("name", "description");
+
+    temp_div2.append(temp_div2_control_label.append(temp_div2_label), temp_div2_control.append(temp_div2_input));
+
+    //categories
+    var categories = listing_info.categories.join(" ");
+    var temp_div3 = $('<div class="control is-horizontal"></div>');
+        var temp_div3_control_label = $('<div class="control-label is-small">');
+            var temp_div3_label = $('<label class="label">Categories</label>');
+        var temp_div3_control = $('<div class="control">');
+            var temp_div3_input = $('<input class="categories-input input changeable-input ' + verified_disabled + '" placeholder="Categories">' + categories + '</textarea>')
+                temp_div3_input.data("name", "categories");
+
+    temp_div3.append(temp_div3_control_label.append(temp_div3_label), temp_div3_control.append(temp_div3_input));
+
+    //buttons for submit/cancel
+    var temp_div4 = $('<div class="control is-grouped"></div>');
+        var temp_submit_control = $('<div class="control"></div>');
+            var temp_submit_button = $('<a class="save-changes-button button is-disabled is-primary ' + verified_hidden + '">Save Changes</a>');
+        var temp_cancel_control = $('<div class="control"></div>');
+            var temp_cancel_button = $('<a class="cancel-changes-button button is-hidden is-danger ' + verified_hidden + '">Cancel Changes</a>');
+
+    temp_div4.append(temp_submit_control.append(temp_submit_button), temp_cancel_control.append(temp_cancel_button));
+
+    //error message
+    var temp_msg = $("<p class='listing-msg is-hidden notification'></p>");
+        var temp_msg_delete = $("<button class='delete'></button>");
+        temp_msg.append(temp_msg_delete);
+
+    temp_col.append(temp_form.append(temp_div1, temp_div2, temp_div3, temp_div4, temp_msg));
+
+    //to hide the message
+    temp_msg_delete.click(function(e){
+        e.preventDefault();
+        temp_msg.addClass('is-hidden');
+    });
+
+    //to submit form changes
+    temp_submit_button.click(function(e){
+        var row_drop = $(this).closest('.row-drop');
+        var row = row_drop.prev(".row-disp");
+
+        submitListingChanges(row, row_drop, $(this), listing_info);
+    });
+
+    //to cancel form changes
+    temp_cancel_button.click(function(e){
+        var row_drop = $(this).closest('.row-drop');
+        var row = row_drop.prev(".row-disp");
+
+        cancelListingChanges(row, row_drop, $(this), listing_info);
+    });
+
+    return temp_col;
+}
+
+//function to create the price drop column
+function createPriceDrop(listing_info){
+    var temp_col = $("<div class='column is-3'></div>");
+    var temp_form = $("<form class='drop-form'></form>");
+    var verified_disabled = (listing_info.status == 0) ? 'is-disabled" tabindex="-1"' : "";
+
+    var label_types = ["Hourly", "Daily", "Weekly", "Monthly"];     //for display
+    var label_names = ["hour_price", "day_price", "week_price", "month_price"];     //for data for input listener
+    var label_values = [listing_info.hour_price, listing_info.day_price, listing_info.week_price,listing_info.month_price];     //for values
+    var premium = listing_info.exp_date >= new Date().getTime();
+    var expiring = (listing_info.expiring == 0) ? false : true;
+
+    for (var x = 0; x < 4; x++){
+        var hourly_hidden = (!premium && x == 0) ? "is-hidden" : "";
+        var temp_div1 = $("<div class='premium-control control " + hourly_hidden + " is-horizontal'></div>");
+        var temp_div_label = $("<div class='control-label is-small'></div>");
+        var temp_label = $('<label class="label">' + label_types[x] + '</label>');
+        var temp_div_control = $("<div class='control'></div>");
+        var temp_control_p = $("<p class='control has-icon'></p>");
+
+        //disabled if listing is not verified
+        var disabled = (premium) ? "" : 'is-disabled" tabindex="-1"';
+        var temp_input = $('<input class="' + label_types[x].toLowerCase() + '-price-input premium-input input changeable-input ' + disabled + '" type="number" min="1" value="' + label_values[x] + '">');
+        temp_input.data("name", label_names[x]);
+
+        var temp_i = $('<i class="fa fa-dollar"></i>');
+        temp_form.append(temp_div1.append(temp_div_label.append(temp_label), temp_div_control.append(temp_control_p.append(temp_input, temp_i))));
+    }
+    var temp_upgrade_control = $("<div class='control is-horizontal'></div>");
+    var premium_text = (premium) ? "Revert to Basic" : "Upgrade to Premium";
+    premium_text = (expiring) ? "Renew Premium" : premium_text;
+    var premium_src = (premium) ? "/downgrade" : "/upgrade";
+    premium_src = (expiring) ? "/upgrade" : premium_src;
+    var temp_upgrade_button = $('<a href="/listing/' + listing_info.domain_name + premium_src + '" class="stripe-button button is-accent ' + verified_disabled + '">' + premium_text + '</a>');
+
+    //show an expiration or renewal date if this is a premium listing
+    var expiring_text = (expiring) ? "Expiring" : "Renewing";
+    var premium_hidden = (premium) ? "" : "is-hidden";
+    var expiry_date = $('<div class="' + premium_hidden + ' has-text-right premium-exp-date">' + expiring_text + " on " + moment(listing_info.exp_date).format("YYYY-MM-DD") + "</div>");
+
+    if (!premium || expiring){
+        //stripe upgrade button
+        temp_upgrade_button.off().on("click", function(e){
+            premiumBind(e, $(this));
+        });
+    }
+    else {
+        //downgrade button
+        temp_upgrade_button.off().on("click", function(e){
+            basicBind(e, $(this));
+        })
+    }
+
+    temp_form.append(temp_upgrade_control.append(temp_upgrade_button), expiry_date);
+
+    temp_col.append(temp_form);
+
+    return temp_col;
+}
+
+//function to create the image drop column
+function createImgDrop(listing_info, rownum){
+    var background_image = (listing_info.background_image == null || listing_info.background_image == undefined || listing_info.background_image == "") ? "https://placeholdit.imgix.net/~text?txtsize=40&txt=RANDOM%20PHOTO&w=200&h=200" : listing_info.background_image;
+    var verified_disabled = (listing_info.status == 0) ? 'is-disabled" tabindex="-1"' : "";
+
+    var temp_col = $("<div class='column is-one-quarter'></div>");
+    var temp_div = $("<div class='card'></div>");
+    var temp_div_image = $("<div class='card-image'></div>")
+    var temp_figure = $("<figure class='image listing-img is-256x256'></figure>");
+    var temp_x = $('<button class="delete ' + verified_disabled + '"></button>');
+    var temp_img = $("<img class='is-listing' alt='Image not found' src=" + background_image + " />");
+    var temp_footer = $("<footer class='card-footer'></div>");
+    var temp_form = $('<form id="mult-form' + rownum + '" class="drop-form-file card-footer-item" action="/listing/create/batch" method="post" enctype="multipart/form-data"></form>')
+    var temp_input = $('<input type="file" id="file' + rownum + '" name="image" accept="image/png, image/gif, image/jpeg" class="picture-file changeable-input input-file ' + verified_disabled + '" />');
+    var temp_input_label = $('<label for="file' + rownum + '" class="button ' + verified_disabled + '"><i class="fa fa-upload"></i><p class="file-label">Change Picture</p></label>');
+    temp_input.data("name", "image");
+    temp_col.append(temp_div.append(temp_div_image.append(temp_figure.append(temp_x, temp_img), temp_footer.append(temp_form.append(temp_input, temp_input_label)))));
+
+    //if theres an error in getting the image, remove the link
+    temp_img.error(function() {
+        $(this).attr("src", "");
+    });
+
+    //click X to delete image
+    temp_x.click(function(e){
+        if (temp_img.attr("src") != "https://placeholdit.imgix.net/~text?txtsize=40&txt=RANDOM%20PHOTO&w=200&h=200"){
+            var old_src = temp_img.attr("src");
+            temp_img.data("old_src", old_src);
+            temp_img.attr("src", "https://placeholdit.imgix.net/~text?txtsize=40&txt=RANDOM%20PHOTO&w=200&h=200");
+            temp_input.data("deleted", true);
+            temp_input.val("");
+            temp_form.find(".file-label").text("Change Picture");
+        }
+        changedListingValue(temp_input, listing_info);
+    })
+
+    return temp_col;
 }
 
 // --------------------------------------------------------------------------------- EDIT ROW
@@ -590,25 +567,9 @@ function submitSubscription(upgrade_button, stripeToken, stripeEmail){
         }
         else {
             listings = data.listings;
-            upgradeToPremium(upgrade_button);
+            upgradeToPremium(upgrade_button, data.new_exp_date);
         }
     });
-}
-
-//function to run to remove basic restrictions
-function upgradeToPremium(upgrade_button){
-    var row_drop = upgrade_button.closest(".row-drop");
-    row_drop.find(".premium-input").removeClass("is-disabled");
-    row_drop.find(".premium-control").removeClass("is-hidden");
-
-    var exp_date_elem = row_drop.find(".premium-exp-date");
-    var old_text = exp_date_elem.text().replace("Expiring", "Renewing");
-    exp_date_elem.text(old_text);
-
-    var old_src = upgrade_button.attr("href");
-    var new_src = old_src.replace("/upgrade", "/downgrade");
-    upgrade_button.attr("href", new_src);
-    upgrade_button.html('Revert to Basic');
 }
 
 //function to submit request to downgrade
@@ -634,15 +595,98 @@ function submitCancellation(upgrade_button){
     });
 }
 
-//function to run to remove basic restrictions
+//stuff to run after upgrading to premium
+function upgradeToPremium(upgrade_button, new_exp_date){
+    var row_drop = upgrade_button.closest(".row-drop");
+    var row = row_drop.prev(".row-disp");
+
+    row.find(".td-type").text("Premium");       //type TD
+
+    //remove all hidden or disabled inputs
+    row_drop.find(".premium-input").removeClass("is-disabled");
+    row_drop.find(".premium-control").removeClass("is-hidden");
+
+    //change expiry date
+    var exp_date_elem = row_drop.find(".premium-exp-date");
+    exp_date_elem.text("Renewing on " + moment(new_exp_date).format("YYYY-MM-DD")).removeClass('is-hidden');
+
+    //change the button
+    var old_src = upgrade_button.attr("href");
+    var new_src = old_src.replace("/upgrade", "/downgrade");
+    upgrade_button.attr("href", new_src);
+    upgrade_button.html('Revert to Basic');
+    upgrade_button.off().on("click", function(e){
+        basicBind(e, $(this));
+    });
+}
+
+//stuff to run after downgrading to basic
 function downgradeToBasic(upgrade_button){
     var row_drop = upgrade_button.closest(".row-drop");
+
+    ///dont change type TD or disable/hide buttons because cancellation happens at end of period
+
+    //change expiry date
     var exp_date_elem = row_drop.find(".premium-exp-date");
     var old_text = exp_date_elem.text().replace("Renewing", "Expiring");
     exp_date_elem.text(old_text);
 
+    //change the button
     var old_src = upgrade_button.attr("href");
     var new_src = old_src.replace("/downgrade", "/upgrade");
     upgrade_button.attr("href", new_src);
     upgrade_button.html('Renew Premium');
+    upgrade_button.off().on("click", function(e){
+        premiumBind(e, $(this));
+    });
+}
+
+//event binder for reverting to basic
+function basicBind(e, upgrade_button){
+    e.preventDefault();
+
+    if (upgrade_button.text() == "Are you sure?"){
+        upgrade_button.addClass('is-loading');
+        submitCancellation(upgrade_button);
+    }
+    else {
+        upgrade_button.text("Are you sure?");
+    }
+}
+
+//event binder for upgrading to premium
+function premiumBind(e, upgrade_button){
+    e.preventDefault();
+
+    //stripe configuration
+    handler = StripeCheckout.configure({
+        key: 'pk_test_kcmOEkkC3QtULG5JiRMWVODJ',
+        name: 'Domahub Domain Rentals',
+        image: '/images/d-logo.PNG',
+        panelLabel: 'Pay Monthly',
+        zipCode : true,
+        locale: 'auto',
+        email: user.email,
+        token: function(token) {
+            if (token.email != user.email){
+                var listing_msg = upgrade_button.closest(".row-drop").find(".listing-msg");
+                errorMessage(listing_msg, "Please use the same email for payments as your Domahub account!");
+                upgrade_button.removeClass("is-loading");
+            }
+            else {
+                upgrade_button.addClass("is-loading");
+                submitSubscription(upgrade_button, token.id, token.email);
+            }
+        }
+    });
+
+    handler.open({
+        amount: 500,
+        description: "Upgrading to a Premium listing."
+    });
+
+    //close Checkout on page navigation
+    window.addEventListener('popstate', function() {
+        handler.close();
+    });
 }
