@@ -218,11 +218,13 @@ h3 {
   h1.is-danger,
   h2.is-danger,
   h3.is-danger {
-    color: #f44336; }
+    color: #EF5350; }
 
 h1 {
   font-size: 40px;
   font-weight: bold; }
+  h1.is-normal {
+    font-weight: 400; }
 
 h2 {
   font-size: 24px;
@@ -263,10 +265,7 @@ p {
   p.is-warning {
     color: #ffeb3b; }
   p.is-danger {
-    color: #f44336; }
-
-h2 + p {
-  margin-top: 10px; }
+    color: #EF5350; }
 
 code,
 pre {
@@ -314,7 +313,7 @@ a {
 
 code {
   background-color: white;
-  color: #f44336;
+  color: #EF5350;
   font-size: 12px;
   font-weight: normal;
   padding: 1px 2px 2px; }
@@ -1033,29 +1032,29 @@ a.box {
         border-color: #ffeb3b;
         color: rgba(0, 0, 0, 0.5); }
   .button.is-danger {
-    background-color: #f44336;
+    background-color: #EF5350;
     border-color: transparent;
     color: white; }
     .button.is-danger:hover, .button.is-danger:focus, .button.is-danger.is-active {
-      background-color: #ea1c0d;
+      background-color: #eb2521;
       border-color: transparent;
       color: white; }
     .button.is-danger:active {
       border-color: transparent; }
     .button.is-danger.is-inverted {
       background-color: white;
-      color: #f44336; }
+      color: #EF5350; }
       .button.is-danger.is-inverted:hover, .button.is-danger.is-inverted:active, .button.is-danger.is-inverted:focus {
         background-color: #e6e6e6; }
     .button.is-danger.is-loading:after {
       border-color: transparent transparent white white !important; }
     .button.is-danger.is-outlined {
       background-color: transparent;
-      border-color: #f44336;
-      color: #f44336; }
+      border-color: #EF5350;
+      color: #EF5350; }
       .button.is-danger.is-outlined:hover, .button.is-danger.is-outlined:focus, .button.is-danger.is-outlined.is-active {
-        background-color: #f44336;
-        border-color: #f44336;
+        background-color: #EF5350;
+        border-color: #EF5350;
         color: white; }
   .button.is-blank {
     -webkit-box-shadow: 0 0 0 0 black;
@@ -1244,7 +1243,7 @@ input:-webkit-autofill {
   .input.is-warning, .is-warning.textarea {
     border-color: #ffeb3b; }
   .input.is-danger, .is-danger.textarea {
-    border-color: #f44336; }
+    border-color: #EF5350; }
   .input:hover, .textarea:hover {
     outline: none; }
   .input:focus, .textarea:focus {
@@ -1372,7 +1371,7 @@ input:-webkit-autofill {
     .select select.is-warning {
       border-color: #ffeb3b; }
     .select select.is-danger {
-      border-color: #f44336; }
+      border-color: #EF5350; }
     .select select:hover, .select select:active {
       border-color: #3cbc8d; }
     .select select:focus {
@@ -1434,6 +1433,11 @@ input:-webkit-autofill {
 .label {
   color: rgba(0, 0, 0, 0.87);
   display: block; }
+  .label.has-icon {
+    display: inline-flex; }
+    .label.has-icon + i {
+      display: inline-flex;
+      vertical-align: baseline; }
   .label:not(:last-child) {
     margin-bottom: 5px; }
   .label.is-medium {
@@ -1472,7 +1476,7 @@ input:-webkit-autofill {
   .help.is-warning {
     color: #ffeb3b; }
   .help.is-danger {
-    color: #f44336; }
+    color: #EF5350; }
 
 @media screen and (max-width: 768px) {
   .control-label {
@@ -1570,7 +1574,7 @@ input:-webkit-autofill {
     top: 4px;
     z-index: 4; }
     .control.has-icon > .fa.is-danger {
-      color: #f44336; }
+      color: #EF5350; }
     .control.has-icon > .fa.is-success {
       color: #81c784; }
   .control.has-icon .input:focus + .fa, .control.has-icon .textarea:focus + .fa {
@@ -1758,7 +1762,7 @@ input:-webkit-autofill {
     background-color: #ffeb3b;
     color: rgba(0, 0, 0, 0.5); }
   .notification.is-danger {
-    background-color: #f44336;
+    background-color: #EF5350;
     color: white; }
 
 .progress {
@@ -1830,9 +1834,9 @@ input:-webkit-autofill {
   .progress.is-warning::-moz-progress-bar {
     background-color: #ffeb3b; }
   .progress.is-danger::-webkit-progress-value {
-    background-color: #f44336; }
+    background-color: #EF5350; }
   .progress.is-danger::-moz-progress-bar {
-    background-color: #f44336; }
+    background-color: #EF5350; }
   .progress.is-small {
     height: 8px; }
   .progress.is-medium {
@@ -1853,7 +1857,7 @@ input:-webkit-autofill {
     padding: 8px 10px; }
     .table td.is-danger,
     .table th.is-danger {
-      color: #f44336;
+      color: #EF5350;
       font-weight: 400;
       text-transform: uppercase; }
     .table td.is-success,
@@ -2058,7 +2062,7 @@ input:-webkit-autofill {
   .title.is-warning {
     color: #ffeb3b; }
   .title.is-danger {
-    color: #f44336; }
+    color: #EF5350; }
   .title.is-normal {
     font-weight: 400; }
     .title.is-normal strong {
@@ -2411,10 +2415,10 @@ input:-webkit-autofill {
       border-color: transparent;
       color: rgba(0, 0, 0, 0.5); }
   .tag.is-danger {
-    background-color: #f44336;
+    background-color: #EF5350;
     color: white; }
     .tag.is-danger:hover, .tag.is-danger:focus, .tag.is-danger.is-active {
-      background-color: #ea1c0d;
+      background-color: #eb2521;
       border-color: transparent;
       color: white; }
   .tag.is-small {
@@ -3556,12 +3560,12 @@ input:-webkit-autofill {
       border-color: #ffeb3b;
       color: #666666; }
   .message.is-danger {
-    background-color: #feedec; }
+    background-color: #fdedec; }
     .message.is-danger .message-header {
-      background-color: #f44336;
+      background-color: #EF5350;
       color: white; }
     .message.is-danger .message-body {
-      border-color: #f44336;
+      border-color: #EF5350;
       color: gray; }
 
 .modal-background {
@@ -4819,7 +4823,7 @@ a.nav-item.is-tab {
       .hero.is-warning .nav-menu .nav-item {
         border-top-color: rgba(0, 0, 0, 0.2); } }
   .hero.is-danger {
-    background-color: #f44336;
+    background-color: #EF5350;
     color: white; }
     .hero.is-danger .title {
       color: white; }
@@ -4835,7 +4839,7 @@ a.nav-item.is-tab {
       box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2); }
     @media screen and (max-width: 768px) {
       .hero.is-danger .nav-menu {
-        background-color: #f44336; } }
+        background-color: #EF5350; } }
     .hero.is-danger a.nav-item,
     .hero.is-danger .nav-item a:not(.button) {
       color: rgba(255, 255, 255, 0.5); }
@@ -4857,11 +4861,11 @@ a.nav-item.is-tab {
     .hero.is-danger .tabs.is-boxed li.is-active a, .hero.is-danger .tabs.is-boxed li.is-active a:hover, .hero.is-danger .tabs.is-toggle li.is-active a, .hero.is-danger .tabs.is-toggle li.is-active a:hover {
       background-color: white;
       border-color: white;
-      color: #f44336; }
+      color: #EF5350; }
     .hero.is-danger.gradient-left-right {
-      background-image: linear-gradient(141deg, #f70019 0%, #f44336 71%, #fa734a 100%); }
+      background-image: linear-gradient(141deg, #f71537 0%, #EF5350 71%, #f57e63 100%); }
     .hero.is-danger.gradient-right-left {
-      background-image: linear-gradient(141deg, #fa734a 0%, #f44336 71%, #f70019 100%); }
+      background-image: linear-gradient(141deg, #f57e63 0%, #EF5350 71%, #f71537 100%); }
     @media screen and (max-width: 768px) {
       .hero.is-danger .nav-toggle span {
         background-color: white; }
@@ -4933,7 +4937,7 @@ a.nav-item.is-tab {
   .section.is-warning {
     background-color: #ffeb3b; }
   .section.is-danger {
-    background-color: #f44336; }
+    background-color: #EF5350; }
   .section.is-full {
     padding: 60px 0;
     position: relative;

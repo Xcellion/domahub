@@ -25,7 +25,7 @@ $orange: #ff5722 !default
 $orange-light: #ff8a65 !default
 $orange-dark: #e64a19 !default
 $purple: #9c27b0 !default
-$red: #f44336 !default
+$red: #EF5350 !default
 $turquoise: #3cbc8d !default
 $turquoise-light: #62c9a3 !default
 $turquoise-lighter: #8ad6ba !default
@@ -102,6 +102,7 @@ $accent-invert: findColorInvert($accent) !default
 $success-invert: findColorInvert($success) !default
 $warning-invert: findColorInvert($warning) !default
 $danger-invert: findColorInvert($danger) !default
+$purple-invert: findColorInvert($purple) !default
 
 $light-invert: $dark !default
 $dark-invert: $light !default
@@ -173,6 +174,6 @@ $size-huge: $size-1 !default
 
 // 4. Lists and maps
 
-$colors: (white: ($white, $black), black: ($black, $white), light: ($light, $light-invert), dark: ($dark, $dark-invert), primary: ($primary, $primary-invert), info: ($info, $info-invert), accent: ($accent, $accent-invert), success: ($success, $success-invert), warning: ($warning, $warning-invert), danger: ($danger, $danger-invert)) !default
+$colors: (white: ($white, $black), black: ($black, $white), blacklight: ($black-secondary, $white-secondary), whitelight: ($white-secondary, $black-secondary), light: ($light, $light-invert), dark: ($dark, $dark-invert), purple: ($purple, $purple-invert), primary: ($primary, $primary-invert), primarydark: ($primary-dark, $primary-dark), info: ($info, $info-invert), accent: ($accent, $accent-invert), success: ($success, $success-invert), warning: ($warning, $warning-invert), danger: ($danger, $danger-invert)) !default
 
 $sizes: $size-1 $size-2 $size-3 $size-4 $size-5 $size-6 !default

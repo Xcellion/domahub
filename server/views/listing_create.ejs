@@ -5,7 +5,7 @@
 <html>
 
 <head>
-	<title>domahub</title>
+	<title>Create Listing - DomaHub</title>
 	<%- include("templates/head_links"); %>
 	<link rel="stylesheet" href="/css/listing_create.css" type="text/css" />
 	<script type="text/javascript">
@@ -19,7 +19,46 @@
 
 	<%- include("templates/navbar", {user: user}); %>
 
-	<section class="section is-medium clear-nav min-height">
+	<section class="section is-medium">
+		<div class="container">
+			<div class="columns">
+				<div class="column is-half">
+					<div class="content">
+						<h1 class="is-normal">Follow these steps to create a listing on DomaHub.</h1>
+					</div>
+					<div class="content">
+						<a class="button is-danger" tabindex="7">
+							<span class="icon">
+								<i class="fa fa-check-circle-o"></i>
+							</span>
+							<span>I have multiple domains to upload.</span>
+						</a>
+					</div>
+					<div class="content">
+						<h2 class="heading is-blacklight">Step 1</h2>
+						<h2>Basic Domain Information</h2>
+					</div>
+					<form>
+						<p class="control">
+							<label class="label is-medium">Domain Name</label>
+							<input id="sing-domain" class="input is-medium" type="url" placeholder="MyDomain.com"/>
+						</p>
+						<p class="control">
+							<label class="label is-medium has-icon">Description</label>
+							<i class="fa fa-question-circle-o"></i>
+							<textarea id="sing-description" class="textarea is-medium" placeholder="This is a premium domain name with over a million visits per month!"></textarea>
+						</p>
+						<p class="control">
+							<label class="label is-medium">Purchase Link</label>
+							<input id="sing-purchase" class="input is-medium" type="url" placeholder="godaddy.com/myDomainName"/>
+						</p>
+					</form>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<!-- <section class="section is-medium clear-nav">
 		<div class="container">
 			<div class="columns">
 				<div class="column is-half is-offset-3">
@@ -177,7 +216,7 @@
 				</div>
 			</div>
 		</div>
-	</section>
+	</section> -->
 
 	<%- include("templates/footer"); %>
 
