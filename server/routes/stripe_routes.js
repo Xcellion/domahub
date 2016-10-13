@@ -121,7 +121,8 @@ function updateListing(subscription, bool, object){
 	else {
 		var new_listing_info = {
 			stripe_subscription_id: "",
-			exp_date: 0
+			exp_date: 0,
+			expiring: false
 		}
 		var console_msg = {
 			success: "Premium status for listing #" + listing_id + " has expired after cancellation...",

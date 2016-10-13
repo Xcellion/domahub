@@ -235,10 +235,9 @@ function createPriceDrop(listing_info){
         var temp_upgrade_button = $('<a href="/listing/' + listing_info.domain_name + premium_src + '" class="' + verified_disabled + ' stripe-button button is-accent">' + premium_text + '</a>');
 
         //show an expiration or renewal date if this is a premium listing
-        if (premium){
-            var expiring_text = (expiring) ? "Expiring" : "Renewing";
-            var expiry_date = $("<div class='has-text-right premium-exp-date'>" + expiring_text + " on " + moment(listing_info.exp_date).format("YYYY-MM-DD") + "</div>");
-        }
+        var expiring_text = (expiring) ? "Expiring" : "Renewing";
+        var premium_hidden = (premium) ? "" : "is-hidden";
+        var expiry_date = $("<div class='" + premium_hidden + " has-text-right premium-exp-date'>" + expiring_text + " on " + moment(listing_info.exp_date).format("YYYY-MM-DD") + "</div>");
 
     if (!premium || expiring){
         //stripe upgrade button
@@ -566,6 +565,7 @@ function upgradeToPremium(upgrade_button){
     var exp_date_elem = row_drop.find(".premium-exp-date");
     var old_text = exp_date_elem.text().replace("Expiring", "Renewing");
     exp_date_elem.text(old_text);
+    exp_date_elem.removeClass('is-hidden');
 
     var old_src = upgrade_button.attr("href");
     var new_src = old_src.replace("/upgrade", "/downgrade");
@@ -618,7 +618,7 @@ function downgradeToBasic(upgrade_button){
 //event binder for reverting to basic
 function basicBind(e, upgrade_button){
     e.preventDefault();
-    
+
     if (upgrade_button.text() == "Are you sure?"){
         upgrade_button.addClass('is-loading');
         submitCancellation(upgrade_button);
