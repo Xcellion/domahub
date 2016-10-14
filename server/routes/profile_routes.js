@@ -101,14 +101,12 @@ module.exports = function(app, db, auth, e, pp){
 //gets all listings for a user
 function getAccountListings(req, res, next){
 
-	//if we dont already have the list of listings or if we need to refresh them
+	//if we dont already have the list of listings
 	if (!req.user.listings){
-		account_id = req.user.id;
-
-		Account.getAccountListings(account_id, function(result){
+		Account.getAccountListings(req.user.id, function(result){
 			if (result.state=="error"){error.handler(req, res, result.info);}
 			else {
-				req.user.listings = combineListingCategories(result.info);
+				req.user.listings = result.info;
 				next();
 			}
 		});
@@ -116,35 +114,6 @@ function getAccountListings(req, res, next){
 	else {
 		next();
 	}
-}
-
-//helper function to iterate through listings results and combine all categories
-function combineListingCategories(listings){
-	var temp_listings = listings.slice(0);
-	var new_listings = [];
-
-	//iterate once backwards
-	var prev_needle = null;
-	for (var x = 0; x < temp_listings.length; x++){
-		var categories = [];
-
-		//iterate twice to find all the categories
-		for (var y = x; y < temp_listings.length; y++){
-			if (temp_listings[x].id == temp_listings[y].id){
-				categories.push(temp_listings[y].category);
-			}
-		}
-
-		//only add to the temp array if the previous needle id is different (works cuz data is sorted ASC)
-		if (prev_needle != temp_listings[x].id){
-			temp_listings[x].categories = categories;
-			delete temp_listings[x].category;
-			new_listings.push(temp_listings[x]);
-			prev_needle = temp_listings[x].id;
-		}
-	}
-
-	return new_listings;
 }
 
 //gets all rentals for a user

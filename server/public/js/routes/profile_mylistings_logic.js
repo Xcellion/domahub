@@ -217,12 +217,12 @@ function createFormDrop(listing_info){
     temp_div2.append(temp_div2_control_label.append(temp_div2_label), temp_div2_control.append(temp_div2_input));
 
     //categories
-    var categories = listing_info.categories.join(" ");
+    var categories = listing_info.categories;
     var temp_div3 = $('<div class="control is-horizontal"></div>');
         var temp_div3_control_label = $('<div class="control-label is-small">');
             var temp_div3_label = $('<label class="label">Categories</label>');
         var temp_div3_control = $('<div class="control">');
-            var temp_div3_input = $('<input class="categories-input input changeable-input ' + verified_disabled + '" placeholder="Categories">' + categories + '</textarea>')
+            var temp_div3_input = $('<input class="categories-input input changeable-input ' + verified_disabled + '" placeholder="Categories" value="' + categories + '"></input>')
                 temp_div3_input.data("name", "categories");
 
     temp_div3.append(temp_div3_control_label.append(temp_div3_label), temp_div3_control.append(temp_div3_input));
@@ -341,9 +341,9 @@ function createImgDrop(listing_info, rownum){
     var temp_img = $("<img class='is-listing' alt='Image not found' src=" + background_image + " />");
     var temp_footer = $("<footer class='card-footer'></div>");
     var temp_form = $('<form id="mult-form' + rownum + '" class="drop-form-file card-footer-item" action="/listing/create/batch" method="post" enctype="multipart/form-data"></form>')
-    var temp_input = $('<input type="file" id="file' + rownum + '" name="image" accept="image/png, image/gif, image/jpeg" class="picture-file changeable-input input-file ' + verified_disabled + '" />');
+    var temp_input = $('<input type="file" id="file' + rownum + '" name="background_image" accept="image/png, image/gif, image/jpeg" class="picture-file changeable-input input-file ' + verified_disabled + '" />');
     var temp_input_label = $('<label for="file' + rownum + '" class="button ' + verified_disabled + '"><i class="fa fa-upload"></i><p class="file-label">Change Picture</p></label>');
-    temp_input.data("name", "image");
+    temp_input.data("name", "background_image");
     temp_col.append(temp_div.append(temp_div_image.append(temp_figure.append(temp_x, temp_img), temp_footer.append(temp_form.append(temp_input, temp_input_label)))));
 
     //if theres an error in getting the image, remove the link
@@ -443,6 +443,8 @@ function refreshSubmitbindings(success_button, cancel_button, listings, domain_n
                 changedListingValue($(this), listings[x]);
             });
 
+            row_drop.find(".categories-input").val(listings[x].categories);
+
             break;
         }
     }
@@ -467,6 +469,7 @@ function cancelListingChanges(row, row_drop, cancel_button, listing_info){
     //revert all other inputs
     row_drop.find(".buy-link-input").val(listing_info.buy_link);
     row_drop.find(".description-input").val(listing_info.description);
+    row_drop.find(".categories-input").val(listing_info.categories);
     row_drop.find(".hourly-price-input").val(listing_info.hour_price);
     row_drop.find(".daily-price-input").val(listing_info.day_price);
     row_drop.find(".weekly-price-input").val(listing_info.week_price);
@@ -494,7 +497,12 @@ function submitListingChanges(row, row_drop, success_button, listing_info){
     //only add changed inputs
     row.add(row_drop).find(".changeable-input").each(function(e){
         var input_name = $(this).data("name");
-        var input_val = (input_name == "image") ? $(this)[0].files[0] : $(this).val();
+        var input_val = (input_name == "background_image") ? $(this)[0].files[0] : $(this).val();
+
+        //if image is being deleted
+        if (input_name == "background_image" && $(this).data("deleted")){
+            var input_val = "";
+        }
 
         //if null or undefined
         listing_info[input_name] = (listing_info[input_name] == null || listing_info[input_name] == undefined) ? "" : listing_info[input_name];
