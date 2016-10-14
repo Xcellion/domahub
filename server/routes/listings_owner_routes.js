@@ -177,7 +177,7 @@ module.exports = {
 					cb(null, true);
 				}
 			}
-		}).single("image");
+		}).single("background_image");
 
 		upload_img(req, res, function(err){
 			if (err){
@@ -227,7 +227,7 @@ module.exports = {
 			});
 		}
 		//removing image
-		else if (req.body.image){
+		else if (req.body.background_image == ""){
 			req.new_listing_info = {
 				background_image : null
 			};
@@ -240,8 +240,11 @@ module.exports = {
 
 	//function to check that the listing is verified
 	checkListingVerified : function(req, res, next){
-		var listing_info = getUserListingObj(req.user.listings, req.params.domain_name);
-		if (listing_info.status == 0){
+		if (!req.listing_info){
+			req.listing_info = getUserListingObj(req.user.listings, req.params.domain_name);
+		}
+
+		if (req.listing_info.status == 0){
 			error.handler(req, res, "Please verify that you own this domain!", "json");
 		}
 		else {
@@ -251,8 +254,11 @@ module.exports = {
 
 	//function to check that the user owns the listing
 	checkListingOwner : function(req, res, next){
-		var listing_info = getUserListingObj(req.user.listings, req.params.domain_name);
-		if (listing_info.owner_id != req.user.id){
+		if (!req.listing_info){
+			req.listing_info = getUserListingObj(req.user.listings, req.params.domain_name);
+		}
+
+		if (req.listing_info.owner_id != req.user.id){
 			error.handler(req, res, "You do not own this domain!", "json");
 		}
 		else {
@@ -269,6 +275,7 @@ module.exports = {
         var day_price = parseFloat(req.body.day_price);
         var week_price = parseFloat(req.body.week_price);
         var month_price = parseFloat(req.body.month_price);
+        var categories = (req.body.categories) ? sanitize(req.body.categories.replace(/\s\s+/g, ' ').toLowerCase()) : "";
 
 		//if status exists and is not 1 or 2
 		if (req.body.status && status != 1 && status != 2){
@@ -289,6 +296,10 @@ module.exports = {
 				 req.body.month_price && (month_price != month_price >>> 0) && month_price <= 0){
 			error.handler(req, res, "Invalid listing prices!", "json");
 		}
+		//if categories exist but less than 1 total
+		else if (categories.length <= 0){
+			error.handler(req, res, "You need at least 1 category!", "json");
+		}
 		else {
 			if (!req.new_listing_info) {
 				req.new_listing_info = {};
@@ -300,6 +311,7 @@ module.exports = {
 			req.new_listing_info.day_price = day_price;
 			req.new_listing_info.week_price = week_price;
 			req.new_listing_info.month_price = month_price;
+			req.new_listing_info.categories = categories;
 
 			//delete anything that doesnt exist
 			for (var x in req.new_listing_info){
@@ -409,14 +421,14 @@ module.exports = {
 	updateListing: function(req, res, next){
 		domain_name = req.params.domain_name;
 		Listing.updateListing(domain_name, req.new_listing_info, function(result){
-			if (result.state=="error"){error.handler(req, res, result.info);}
+			if (result.state=="error"){error.handler(req, res, result.info, "json")}
 			else {
-				var new_background_image = req.new_listing_info.background_image || false;
-				updateUserListingsObject(req, domain_name);
+				var background_image = req.new_listing_info.background_image || false;
+				updateUserListingsObject(req, res, domain_name);
 				res.json({
 					state: "success",
 					listings: req.user.listings,
-					new_background_image : new_background_image
+					new_background_image : background_image
 				});
 			}
 		});
@@ -558,7 +570,7 @@ function parseCSVFile(sourceFilePath, errorHandler, done){
 }
 
 //helper function to update req.user.listings after updating a listing
-function updateUserListingsObject(req, domain_name){
+function updateUserListingsObject(req, res, domain_name){
 	for (var x = 0; x < req.user.listings.length; x++){
 		if (req.user.listings[x].domain_name.toLowerCase() == domain_name.toLowerCase()){
 			req.user.listings[x] = Object.assign({}, req.user.listings[x], req.new_listing_info);

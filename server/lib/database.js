@@ -1,6 +1,4 @@
-var mysql = require('mysql'),
-	os = require('os');
-
+var mysql = require('mysql');
 var pool = mysql.createPool({
 		host: 'p3plcpnl0172.prod.phx3.secureserver.net',
 		//host: 'localhost',
