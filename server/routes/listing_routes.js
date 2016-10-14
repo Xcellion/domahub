@@ -22,6 +22,10 @@ module.exports = function(app, db, auth, e, stripe){
 	listings_owner.init(e, Listing);
 	listings_renter.init(e, Listing);
 
+	app.get("/listing/random/:category", [
+		getRandomListingByCategory
+	]);
+
 	//-------------------------------------------------------------------------------------------------------------------- OWNER RELATED
 
 	//render create listing page
@@ -176,5 +180,27 @@ function checkDomainListed(req, res, next){
 				next();
 			}
 		});
+	}
+}
+
+//returns a random listing by category
+function getRandomListingByCategory(req, res, next){
+	var category = req.params.category.toLowerCase();
+
+	//if not a legit category
+	var category_list = ["ecard", "personal", "startup", "business", "event", "promotion", "holiday", "industry"];
+	if (category_list.indexOf(category) != -1){
+		category = "%" + category + "%";
+		Listing.getRandomListingByCategory(category, function(result){
+			if (!result.info.length || result.state == "error"){
+				res.redirect("/");
+			}
+			else {
+				res.redirect("http://" + result.info[0].domain_name);
+			}
+		});
+	}
+	else {
+		res.redirect("/");
 	}
 }

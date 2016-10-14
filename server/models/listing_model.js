@@ -4,6 +4,7 @@ listing_model = function(database){
 	listing_query = function(query, error_description, callback, params){
 		database.query(query, function(result, err){
 			if (err){
+				console.log(err);
 				callback({
 					state : "error",
 					info : error_description,
@@ -268,6 +269,17 @@ listing_model.prototype.getListingRentalTimes = function(listing_id, callback){
 			AND rentals.active = 1 \
 			ORDER BY rental_times.date ASC "
 	listing_query(query, "Failed to get rental times for listing #" + listing_id + "!", callback, listing_id);
+}
+
+//gets all rental times for a specific listing to cross check against a new rental (see checkRentalTime)
+listing_model.prototype.getRandomListingByCategory = function(category, callback){
+	console.log("Attempting to get a random listing with category: " + category + "...");
+	query = "SELECT \
+				listings.domain_name \
+			FROM listings \
+			WHERE categories LIKE ? \
+			ORDER BY RAND() LIMIT 1"
+	listing_query(query, "Failed to get a random listing with category: " + category + "!", callback, category);
 }
 
 //----------------------------------------------------------------------SETS----------------------------------------------------------
