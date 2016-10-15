@@ -1,0 +1,58 @@
+.checkbox-wrapper {
+  border: 1px solid rgba(0, 0, 0, 0.12); }
+  .checkbox-wrapper > li {
+    box-sizing: border-box;
+    padding: 0 10px;
+    position: relative; }
+    .checkbox-wrapper > li:not(:first-child) {
+      border-top: 2px solid rgba(0, 0, 0, 0.12); }
+
+.ac-custom label {
+  -moz-transition: all 0.25s ease;
+  -o-transition: all 0.25s ease;
+  -webkit-transition: all 0.25s ease;
+  transition: all 0.25s ease;
+  color: rgba(0, 0, 0, 0.38);
+  cursor: pointer;
+  display: inline-block;
+  position: relative;
+  box-sizing: border-box;
+  font-size: 18px;
+  padding: 12px 0 10px 40px;
+  width: 100%; }
+  .ac-custom label:hover {
+    color: #62c9a3; }
+
+.ac-custom input[type="checkbox"],
+.ac-custom input[type="radio"],
+.ac-custom label::before {
+  left: 0;
+  top: 0;
+  width: 18px;
+  height: 18px;
+  margin-top: 12px;
+  position: absolute;
+  cursor: pointer; }
+
+.ac-custom input[type="checkbox"],
+.ac-custom input[type="radio"] {
+  opacity: 0;
+  -webkit-appearance: none;
+  display: inline-block;
+  vertical-align: middle;
+  z-index: 100; }
+
+.ac-custom label::before {
+  content: url(/images/lib/material/unchecked-box.svg);
+  -moz-transition: all 0.5s ease;
+  -o-transition: all 0.5s ease;
+  -webkit-transition: all 0.5s ease;
+  transition: all 0.5s ease; }
+
+.ac-custom input[type="checkbox"]:checked + label,
+.ac-custom input[type="radio"]:checked + label {
+  color: rgba(0, 0, 0, 0.87); }
+
+.ac-custom input[type="checkbox"]:checked + label::before,
+.ac-custom input[type="radio"]:checked + label::before {
+  content: url(/images/lib/material/checked-box.svg); }
