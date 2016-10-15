@@ -155,7 +155,7 @@ button,
 input,
 select,
 textarea {
-  font-family: "Roboto Condensed", Helvetica, sans-serif;
+  font-family: "robotocondensed", Helvetica, sans-serif;
   font-size: 16px;
   font-size: 1rem; }
 
@@ -307,9 +307,6 @@ a {
       -moz-box-shadow: inset 0 -2px 0 #ff5722;
       -webkit-box-shadow: inset 0 -2px 0 #ff5722;
       box-shadow: inset 0 -2px 0 #ff5722; }
-
-:focus {
-  outline: 1px solid #3cbc8d; }
 
 code {
   background-color: white;
@@ -5017,9 +5014,18 @@ a.nav-item.is-tab {
 #youtube-icon:hover {
   color: #cd201f; }
 
+/**font**/
+@font-face {
+  font-family: 'robotocondensed';
+  src: url("/fonts/roboto-condensed/rc400.ttf"); }
+
+@font-face {
+  font-family: 'sharetech';
+  src: url("/fonts/share-tech/st400.ttf"); }
+
 /********************** CUSTOM STYLES ******************/
 .logo-text {
-  font-family: 'Share Tech';
+  font-family: "sharetech", "Lucida Console", monospace;
   font-size: 1.5rem;
   font-weight: bold; }
   .logo-text.primary-logo {

@@ -1,9 +1,20 @@
 @import 'bulma/bulma.sass';
 
+/**font**/
+@font-face {
+  font-family: 'robotocondensed';
+  src: url("/fonts/roboto-condensed/rc400.ttf");
+}
+
+@font-face {
+  font-family: 'sharetech';
+  src: url("/fonts/share-tech/st400.ttf");
+}
+
 /********************** CUSTOM STYLES ******************/
 .logo-text {
   font: {
-    family: 'Share Tech';
+    family: $sharetech;
     size: 1.5rem;
     weight: bold;
   }

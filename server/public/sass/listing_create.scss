@@ -1,2 +1,65 @@
 @import 'vars';
 @import 'mixins';
+
+.checkbox-wrapper {
+  border: 1px solid $border;
+  & > li {
+    box-sizing: border-box;
+    padding: 0 10px;
+    position: relative;
+    &:not(:first-child) {
+      border-top: 2px solid $border;
+    }
+  }
+}
+
+.ac-custom label {
+	@include transition(all 0.25s ease);
+	color: $text-disabled;
+	cursor: pointer;
+	display: inline-block;
+	position: relative;
+  box-sizing: border-box;
+  font-size: $size-5;
+  padding: 12px 0 10px 40px;
+  width: 100%;
+  &:hover {
+    color: $primary-light
+  }
+}
+
+.ac-custom input[type="checkbox"],
+.ac-custom input[type="radio"],
+.ac-custom label::before {
+	left: 0;
+  top: 0;
+  width: 18px;
+  height: 18px;
+  margin-top: 12px;
+	position: absolute;
+	cursor: pointer;
+}
+
+.ac-custom input[type="checkbox"],
+.ac-custom input[type="radio"] {
+	opacity: 0;
+  -webkit-appearance: none;
+	display: inline-block;
+	vertical-align: middle;
+	z-index: 100;
+}
+
+.ac-custom label::before {
+  content: url(/images/lib/material/unchecked-box.svg);
+	@include transition(all 0.5s ease);
+}
+
+.ac-custom input[type="checkbox"]:checked + label,
+.ac-custom input[type="radio"]:checked + label {
+	color: $text;
+}
+
+.ac-custom input[type="checkbox"]:checked + label::before,
+.ac-custom input[type="radio"]:checked + label::before {
+  content: url(/images/lib/material/checked-box.svg);
+}
