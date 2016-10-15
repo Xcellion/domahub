@@ -4,8 +4,6 @@
 .checkbox-wrapper {
   border: 1px solid $border;
   & > li {
-    box-sizing: border-box;
-    padding: 0 10px;
     position: relative;
     &:not(:first-child) {
       border-top: 2px solid $border;
@@ -13,53 +11,62 @@
   }
 }
 
-.ac-custom label {
+.checkbox-form {
+  & > p {
+    margin-top: 15px;
+  }
+}
+
+.checkbox-form label {
 	@include transition(all 0.25s ease);
-	color: $text-disabled;
+	color: $text-light;
 	cursor: pointer;
 	display: inline-block;
 	position: relative;
   box-sizing: border-box;
   font-size: $size-5;
-  padding: 12px 0 10px 40px;
+  padding: 12px 0 12px 50px;
   width: 100%;
   &:hover {
-    color: $primary-light
+    color: $primary
   }
 }
 
-.ac-custom input[type="checkbox"],
-.ac-custom input[type="radio"],
-.ac-custom label::before {
-	left: 0;
-  top: 0;
-  width: 18px;
+.checkbox-form input[type="checkbox"],
+.checkbox-form input[type="radio"],
+.checkbox-form label::before {
+	cursor: pointer;
+	left: 10px;
+	position: absolute;
   height: 18px;
   margin-top: 12px;
-	position: absolute;
-	cursor: pointer;
+  top: 0;
+  width: 18px;
 }
 
-.ac-custom input[type="checkbox"],
-.ac-custom input[type="radio"] {
-	opacity: 0;
-  -webkit-appearance: none;
+.checkbox-form input[type="checkbox"],
+.checkbox-form input[type="radio"] {
 	display: inline-block;
+	opacity: 0;
 	vertical-align: middle;
 	z-index: 100;
+  -webkit-appearance: none;
+  left: 10px;
 }
 
-.ac-custom label::before {
+.checkbox-form label::before {
   content: url(/images/lib/material/unchecked-box.svg);
+  opacity: 0.7;
 	@include transition(all 0.5s ease);
 }
 
-.ac-custom input[type="checkbox"]:checked + label,
-.ac-custom input[type="radio"]:checked + label {
+.checkbox-form input[type="checkbox"]:checked + label,
+.checkbox-form input[type="radio"]:checked + label {
 	color: $text;
 }
 
-.ac-custom input[type="checkbox"]:checked + label::before,
-.ac-custom input[type="radio"]:checked + label::before {
+.checkbox-form input[type="checkbox"]:checked + label::before,
+.checkbox-form input[type="radio"]:checked + label::before {
   content: url(/images/lib/material/checked-box.svg);
+  opacity: 1;
 }
