@@ -163,6 +163,10 @@ h1,
 h2,
 h3 {
   color: rgba(0, 0, 0, 0.87); }
+  h1.is-bold,
+  h2.is-bold,
+  h3.is-bold {
+    font-weight: bold; }
   h1.is-white,
   h2.is-white,
   h3.is-white {
@@ -636,12 +640,11 @@ table {
   .box-footer > .button {
     align-self: flex-end; }
 
-a.box {
-  width: 300px; }
-  a.box:focus {
-    box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1), 0 0 0 1px #ff5722; }
-  a.box:active {
-    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.2), 0 0 0 1px #ff5722; }
+a.box:active, a.box:focus {
+  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1), 0 0 0 1px #ff5722; }
+
+a.box.is-active {
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.2), 0 0 0 1px #ff5722; }
 
 .button {
   -moz-appearance: none;
@@ -2239,7 +2242,6 @@ input:-webkit-autofill {
 
 .heading {
   display: block;
-  font-size: 1.2rem;
   font-weight: 400;
   letter-spacing: 1px;
   margin-bottom: 5px; }
@@ -4948,18 +4950,11 @@ a.nav-item.is-tab {
       padding: 240px 20px; } }
 
 .footer {
-  background-color: white;
+  background-color: #444;
   padding: 80px 0; }
   @media screen and (max-width: 768px) {
     .footer .columns > .column {
       text-align: center; } }
-
-.linebreak {
-  position: relative;
-  margin: 0 auto 50px auto;
-  width: 25%;
-  height: 2px;
-  background-color: rgba(0, 0, 0, 0.12); }
 
 .footer-list {
   display: flex;
@@ -4982,7 +4977,7 @@ a.nav-item.is-tab {
       display: none; } }
 
 .footer-item {
-  color: rgba(0, 0, 0, 0.54); }
+  color: rgba(255, 255, 255, 0.7); }
   .footer-item:not(:first-child) {
     margin-top: 10px; }
   @media screen and (max-width: 768px) {
@@ -4991,12 +4986,11 @@ a.nav-item.is-tab {
       .footer-item:not(:last-child) {
         margin-right: 15px; } }
   .footer-item a {
-    color: rgba(0, 0, 0, 0.54); }
+    color: rgba(255, 255, 255, 0.7); }
     .footer-item a:hover {
-      color: rgba(0, 0, 0, 0.87); }
+      color: white; }
 
 .social-icon {
-  color: white;
   -moz-transition: all 0s;
   -o-transition: all 0s;
   -webkit-transition: all 0s;
@@ -5101,6 +5095,18 @@ a.nav-item.is-tab {
     -moz-box-shadow: inset 0 -1px 0 0 rgba(0, 0, 0, 0.12);
     box-shadow: inset 0 -1px 0 0 rgba(0, 0, 0, 0.12);
     padding-bottom: 15px; } }
+
+.has-styleborderBottom {
+  position: relative;
+  display: inline-block; }
+  .has-styleborderBottom::before {
+    content: "";
+    position: absolute;
+    height: 2px;
+    width: 35px;
+    background: rgba(0, 0, 0, 0.87);
+    bottom: -25px;
+    left: 0; }
 
 @media screen and (min-width: 769px) {
   .landing-img {
