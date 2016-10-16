@@ -25,7 +25,7 @@
 			<div class="columns">
 				<div class="column is-half">
 					<div class="content">
-						<h1 class="is-normal">Tell us more about your domain name.</h1>
+						<h1 class="is-normal">Choose listing type.</h1>
 					</div>
 					<div class="content">
 						<a class="button is-accent" tabindex="7">
@@ -37,7 +37,68 @@
 					</div>
 					<div class="content">
 						<h2 class="heading is-blacklight">Step 1</h2>
-						<h2>Basic Domain Information</h2>
+						<h2>Please select one of the options below</h2>
+					</div>
+					<p class="control">
+						<label class="label is-medium has-icon">Basic vs Premium</label>
+						<i class="fa fa-question-circle-o"></i>
+					</p>
+					<div class="columns">
+						<div class="column">
+							<a class="box">
+								<h2 class="margin-bottom-25">Basic Listing</h2>
+								<ul>
+									<li>Free to list</li>
+									<li>15% commission taken</li>
+									<li>Flat, fixed pricing</li>
+									<li>No hourly pricing</li>
+								</ul>
+							</a>
+						</div>
+						<div class="column">
+							<a class="box">
+								<h2 class="margin-bottom-25">Premium Listing</h2>
+								<ul>
+									<li>$5 per month to list</li>
+									<li>NO commission taken</li>
+									<li>Custom, flexible pricing</li>
+									<li>Hourly pricing available</li>
+								</ul>
+							</a>
+						</div>
+					</div>
+					<p class="control has-addons has-addons-right">
+						<a class="button is-primary next-button">
+							<span>Next</span>
+							<span class="icon">
+								<i class="fa fa-angle-right"></i>
+							</span>
+						</a>
+					</p>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<section class="section is-medium is-hidden">
+		<div class="container">
+			<progress class="progress is-small is-primary" value="25" max="100"></progress>
+			<div class="columns">
+				<div class="column is-half">
+					<div class="content">
+						<h1 class="is-normal">Tell us more about your domain name.</h1>
+					</div>
+					<div class="content">
+						<a class="button is-accent" tabindex="7">
+							<span class="icon">
+								<i class="fa fa-check-circle-o"></i>
+							</span>
+							<span>I have multiple domains to upload.</span>
+						</a>
+					</div>
+					<div class="content">
+						<h2 class="heading is-blacklight">Step 2</h2>
+						<h2>Enter basic domain information</h2>
 					</div>
 					<form>
 						<p class="control">
@@ -53,6 +114,11 @@
 							<label class="label is-medium has-icon">Purchase Link</label>
 							<i class="fa fa-question-circle-o"></i>
 							<input id="sing-purchase" class="input is-medium" type="url" placeholder="godaddy.com/myDomainName"/>
+						</p>
+						<p class="control">
+							<label class="label is-medium has-icon">Background Image</label>
+							<i class="fa fa-question-circle-o"></i>
+							<input id="sing-background" class="input is-medium" type="url" placeholder="backgroundImage.com/image.png"/>
 						</p>
 						<p class="control has-addons has-addons-right">
 							<a class="button is-primary next-button">
@@ -70,11 +136,11 @@
 
 	<section class="section is-medium is-hidden">
 		<div class="container">
-			<progress class="progress is-small is-primary" value="33" max="100"></progress>
+			<progress class="progress is-small is-primary" value="50" max="100"></progress>
 			<div class="columns">
 				<div class="column is-half">
 					<div class="content">
-						<h1 class="is-normal">Add Categories to your domain.</h1>
+						<h1 class="is-normal">Categories help the right users find your domain.</h1>
 					</div>
 					<div class="content">
 						<a class="button is-accent" tabindex="7">
@@ -85,8 +151,8 @@
 						</a>
 					</div>
 					<div class="content">
-						<h2 class="heading is-blacklight">Step 2</h2>
-						<h2>You must choose at least one category</h2>
+						<h2 class="heading is-blacklight">Step 3</h2>
+						<h2>Choose at least one Category</h2>
 					</div>
 					<form class="checkbox-form">
 						<h3 class="heading">Categories</h3>
@@ -136,7 +202,7 @@
 
 	<section class="section is-medium is-hidden">
 		<div class="container">
-			<progress class="progress is-small is-primary" value="66" max="100"></progress>
+			<progress class="progress is-small is-primary" value="75" max="100"></progress>
 			<div class="columns">
 				<div class="column is-half">
 					<div class="content">
@@ -151,9 +217,56 @@
 						</a>
 					</div>
 					<div class="content">
-						<h2 class="heading is-blacklight">Step 2</h2>
-						<h2>You must choose at least one category</h2>
+						<h2 class="heading is-blacklight">Step 4</h2>
+						<h2>Pricing options are based on listing type</h2>
 					</div>
+					<form>
+						<div class="control is-horizontal">
+							<div class="control-label is-small">
+								<label class="label">Minute</label>
+							</div>
+							<div class="control has-icon">
+								<input id="minute-price" class="input input-number" type="number" value="1" min="1"/>
+								<i class="fa fa-dollar"></i>
+							</div>
+						</div>
+						<div class="control is-horizontal">
+							<div class="control-label is-small">
+								<label class="label">Hour</label>
+							</div>
+							<div class="control has-icon">
+								<input id="hour-price" class="input input-number" type="number" value="1" min="1"/>
+								<i class="fa fa-dollar"></i>
+							</div>
+						</div>
+						<div class="control is-horizontal">
+							<div class="control-label is-small">
+								<label class="label">Day</label>
+							</div>
+							<div class="control has-icon">
+								<input id="day-price" class="input input-number" type="number" value="10" min="10"/>
+								<i class="fa fa-dollar"></i>
+							</div>
+						</div>
+						<div class="control is-horizontal">
+							<div class="control-label is-small">
+								<label class="label">Week</label>
+							</div>
+							<div class="control has-icon">
+								<input id="week-price" class="input input-number" type="number" value="25" min="25"/>
+								<i class="fa fa-dollar"></i>
+							</div>
+						</div>
+						<div class="control is-horizontal">
+							<div class="control-label is-small">
+								<label class="label">Month</label>
+							</div>
+							<div class="control has-icon">
+								<input id="month-price" class="input input-number" type="number" value="50" min="50"/>
+								<i class="fa fa-dollar"></i>
+							</div>
+						</div>
+					</form>
 					<p class="control has-addons has-addons-right">
 						<a class="button is-primary next-button">
 							<span>Next</span>
@@ -162,6 +275,19 @@
 							</span>
 						</a>
 					</p>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<section class="section is-medium is-hidden">
+		<div class="container">
+			<progress class="progress is-small is-primary" value="100" max="100"></progress>
+			<div class="columns">
+				<div class="column is-half">
+					<div class="content">
+						<h1 class="is-normal">Listing Preview</h1>
+					</div>
 				</div>
 			</div>
 		</div>

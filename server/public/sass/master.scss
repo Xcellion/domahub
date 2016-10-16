@@ -3,7 +3,7 @@
 /**font**/
 @font-face {
   font-family: 'robotocondensed';
-  src: url("/fonts/roboto-condensed/rc400.ttf");
+  src: url("/fonts/roboto-condensed/rc400.ttf"),
 }
 
 @font-face {
@@ -92,6 +92,20 @@
   @include mobile {
     @include box-shadow(0,-1px,0,$border,0,inset)
     padding-bottom: 15px;
+  }
+}
+
+.has-styleborderBottom {
+  position: relative;
+  display: inline-block;
+  &::before {
+    content:"";
+    position: absolute;
+    height: 2px;
+    width: 35px;
+    background: $black-primary;
+    bottom: -25px;
+    left:0;
   }
 }
 

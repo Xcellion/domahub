@@ -11,9 +11,21 @@
   }
 }
 
-.checkbox-form {
-  & > p {
-    margin-top: 15px;
+.next-button {
+  margin-top: 25px;
+}
+
+.control-label {
+  &.is-small {
+    width: 40px;
+  }
+}
+
+.control {
+  & > .input {
+    &.input-number {
+      width: 100%;
+    }
   }
 }
 

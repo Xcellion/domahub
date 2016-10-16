@@ -5,8 +5,14 @@
     .checkbox-wrapper > li:not(:first-child) {
       border-top: 2px solid rgba(0, 0, 0, 0.12); }
 
-.checkbox-form > p {
-  margin-top: 15px; }
+.next-button {
+  margin-top: 25px; }
+
+.control-label.is-small {
+  width: 40px; }
+
+.control > .input.input-number {
+  width: 100%; }
 
 .checkbox-form label {
   -moz-transition: all 0.25s ease;
