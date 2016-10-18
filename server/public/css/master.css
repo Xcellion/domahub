@@ -650,6 +650,9 @@ a.box {
     box-shadow: 3px 10px 10px 0 rgba(0, 0, 0, 0.14), 0 -1px 5px -2px rgba(0, 0, 0, 0.2), -3px 10px 10px 0 rgba(0, 0, 0, 0.12); }
 
 .button {
+  -webkit-box-shadow: 3px 3px 5px 0 rgba(0, 0, 0, 0.12);
+  -moz-box-shadow: 3px 3px 5px 0 rgba(0, 0, 0, 0.12);
+  box-shadow: 3px 3px 5px 0 rgba(0, 0, 0, 0.12);
   -moz-appearance: none;
   -webkit-appearance: none;
   align-items: center;
@@ -666,12 +669,11 @@ a.box {
   padding-right: 8px;
   position: relative;
   vertical-align: top;
-  -webkit-box-shadow: 3px 3px 5px 0 rgba(0, 0, 0, 0.12);
-  -moz-box-shadow: 3px 3px 5px 0 rgba(0, 0, 0, 0.12);
-  box-shadow: 3px 3px 5px 0 rgba(0, 0, 0, 0.12);
+  -moz-transition: all 0.25s;
+  -o-transition: all 0.25s;
+  -webkit-transition: all 0.25s;
+  transition: all 0.25s;
   justify-content: center;
-  padding-left: 10px;
-  padding-right: 10px;
   text-align: center;
   white-space: nowrap; }
   .button:active, .button:focus, .button.is-active {
@@ -4970,7 +4972,7 @@ a.nav-item.is-tab {
       align-items: center; } }
 
 .footer-header {
-  color: #3cbc8d;
+  color: #62c9a3;
   font-weight: 400;
   margin-bottom: 10px; }
   @media screen and (max-width: 768px) {
