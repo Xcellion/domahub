@@ -11,10 +11,8 @@
   #index-img {
     background-image: url("http://i.imgur.com/dG0Y78S.png"); } }
 
-.title-index {
-  -webkit-box-shadow: 0 -2px 0 #ff5722 0;
-  -moz-box-shadow: 0 -2px 0 #ff5722 0;
-  box-shadow: 0 -2px 0 #ff5722 0; }
+.title-p {
+  width: 425px; }
 
 #beta-form-success {
   display: inline-flex;

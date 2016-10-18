@@ -29,12 +29,13 @@
     flex-direction: column
     justify-content: center
     align-items: center
-
   +tablet
     display: flex
     justify-content: center
     .button:not(:last-child)
       margin-right: 20px
+  &.left-aligned
+    justify-content: flex-start
 
 // Containers
 
@@ -179,8 +180,8 @@
   &.is-carousel
     +tablet
       .hero-body
-        padding-bottom: 15px
-        padding-top: 40px
+        padding-bottom: 25px
+        padding-top: 60px
   &.is-small
     +tablet
       .hero-body

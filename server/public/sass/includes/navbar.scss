@@ -3,21 +3,7 @@
 
 /********************************* NAVBAR ***********************************/
 #searchbar-form {
-  width: 100%;
-  // &.is-transparent {
-  //   .control {
-  //     &.has-icon {
-  //       input {
-  //         &:focus + .fa {
-  //           color: $white;
-  //         }
-  //       }
-  //     }
-  //   }
-  //   input {
-  //     color: $white;
-  //   }
-  // }
+  width: 50%;
   & > .control {
     width: 100%;
   }
@@ -25,14 +11,18 @@
     font-family: $sharetech;
     border: none;
     border-radius: 0;
-    background-color: transparent;
     @include box-shadow(0,0,0,$black,0);
-    @include transition(all 0.5s);
+    @include transition(all 0.25s);
     color: $text;
-    width: 100%;
-    &:focus {
+    &:focus,
+    &:active {
+      @include box-shadow(0,-2px,0,$primary-light, inset);
     }
   }
+}
+
+.nav-item {
+  position: relative;
 }
 
 .nav-link {
@@ -42,8 +32,7 @@
     color: $white;
   }
   &:hover {
-    color: $primary;
-    @include box-shadow(0,-3px,0,$primary, inset);
+    @include box-shadow(0,-2px,0,$primary-light, inset);
     @include mobile {
       @include box-shadow(0,0,0,$black,0);
       align-self: flex-end;
@@ -69,6 +58,7 @@
 }
 
 #profile-button {
+  position: static;
   width: 110px;
   &.is-active {
     border-radius: 3px 3px 0px 0px;
@@ -85,6 +75,7 @@
   position: absolute;
   width: 110px;
   top: 46px;
+  right: 0;
 }
 
 // Logout button on profile dropdown

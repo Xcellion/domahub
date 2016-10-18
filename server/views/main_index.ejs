@@ -12,24 +12,36 @@
 <body>
 
   <%- include("templates/navbar", {user: user}); %>
-  <section class="hero is-large is-primary clear-nav">
-    <div class="hero-body">
-      <div class="container has-text-centered">
-        <h1 class="title is-normal">
-          Domains working for you, on your schedule
-        </h1>
-        <h2 class="subtitle is-whitelight">
-          DomaHub is the one-stop marketplace for domain name rentals.
-        </h2>
-        <div class="hero-buttons">
-          <a id="get-started" class="button is-accent is-large" href='/getstarted'>Learn More</a>
-          <a class="button is-primary is-inverted is-large" href='/signup'>Create Account</a>
+  <section class="section is-large clear-nav">
+    <div class="container">
+      <div class="columns">
+        <div class="column is-half">
+          <div class="content">
+            <h1 class="is-bold margin-bottom-50">
+              Domains that work for you. <br />On your schedule.<br /> Always.
+            </h1>
+            <h2 class="heading is-blacklight">
+              Introducing DomaHub
+            </h2>
+            <p class="title-p">
+              DomaHub is an online marketplace for domain name rentals focused
+              on providing high quality domains at low, affordable prices.
+            </p>
+            <p class="title-p">
+              A rental of any one of our listed domains is highly accessible and flexible
+              based on your needs and your schedule.
+            </p>
+          </div>
+          <div class="hero-buttons left-aligned">
+            <a id="get-started" class="button is-primary is-large" href='/getstarted'>Learn More</a>
+            <a class="button is-primary is-inverted is-large" href='/signup'>Create Account</a>
+          </div>
         </div>
       </div>
     </div>
   </section>
 
-  <section class="hero is-light is-carousel">
+  <!-- <section class="hero is-light is-carousel">
     <div class="hero-body">
       <div class="container">
           <div class="carousel-wrapper">
@@ -38,7 +50,7 @@
                 <nav class="level">
                   <div class="level-left">
                     <div class="level-item">
-                      <span class="tag is-primary is-medium is-uppercase">News</span>
+                      <span class="tag is-info is-medium is-uppercase">News</span>
                     </div>
                     <div class="level-item">
                       <div class="content">
@@ -56,7 +68,7 @@
                 <nav class="level">
                   <div class="level-left">
                     <div class="level-item">
-                      <span class="tag is-accent is-medium is-uppercase">Learn</span>
+                      <span class="tag is-info is-medium is-uppercase">Learn</span>
                     </div>
                     <div class="level-item">
                       <div class="content">
@@ -91,24 +103,20 @@
           </div>
       </div>
     </div>
-  </section>
+  </section> -->
 
-
-  <section class="hero is-header">
-    <div class="hero-body">
-      <div class="container has-text-centered">
-        <h1 class="title is-3 is-normal">
-          A Brand New Marketplace
-        </h1>
-        <h2 class="subtitle is-blacklight is-5">
-          DomaHub is simple, accessible, and user-friendly.
-        </h2>
-      </div>
-    </div>
-  </section>
-
-  <section class="section is-medium">
+  <section class="section is-light is-medium">
     <div class="container">
+      <div class="columns">
+        <div class="column margin-bottom-50">
+          <h1 class="title is-3">
+            A Brand New Marketplace
+          </h1>
+          <h2 class="subtitle is-5 is-blacklight">
+            DomaHub is simple, accessible, and user-friendly.
+          </h2>
+        </div>
+      </div>
       <div class="columns">
         <div class="column hover-scale">
           <figure class="image is-64x64 margin-bottom-25">
@@ -116,7 +124,7 @@
           </figure>
           <div class="content has-text-centered">
             <h2 class="heading">Completely Free</h2>
-            <p class="is-blacklight">
+            <p>
               Just <a class="orange-link" href="/signup">create an account</a> and start browsing or listing!
             </p>
           </div>
@@ -127,7 +135,7 @@
           </figure>
           <div class="content has-text-centered">
             <h2 class="heading">Flexible Schedules</h2>
-            <p class="is-blacklight">
+            <p>
               Rentals are tailored to your preferences and needs.
             </p>
           </div>
@@ -138,7 +146,7 @@
           </figure>
           <div class="content has-text-centered">
             <h2 class="heading">Secure Payments</h2>
-            <p class="is-blacklight">
+            <p>
               All transactions are powered by
               <a href="https://www.stripe.com" target="_blank" rel="author" title="Stripe">
                 <span class="icon is-medium stripe-logo">
@@ -151,7 +159,7 @@
     </div>
   </section>
 
-  <section class="hero is-light is-header">
+  <section class="hero is-header">
     <div class="hero-body">
       <div class="container has-text-centered">
         <h1 class="title is-3 is-normal">
@@ -164,12 +172,12 @@
     </div>
   </section>
 
-  <section class="section is-light is-medium">
+  <section class="section is-medium">
     <div class="container">
       <div class="columns">
         <div class="column">
           <div class="content index-padded has-borderRight">
-            <h2 class="heading is-primary">New Revenue Stream</h2>
+            <h2 class="heading is-accent">New Revenue Stream</h2>
             <p>
               DomaHub is an active living space for all of your domains.
               Each listing is tailored to your preferences and settings, fit
@@ -182,7 +190,7 @@
         </div>
         <div class="column">
           <div class="content index-padded has-text-right">
-            <h2 class="heading is-accent">Limitless Opportunities</h2>
+            <h2 class="heading is-primary">Limitless Opportunities</h2>
             <p>
               A domain rental allows you to redirect anything on the web
               to a domain name. Send e-cards and e-invitations, create
@@ -199,7 +207,7 @@
   <section class="hero is-small">
     <div class="hero-body">
       <div class="container has-text-centered">
-        <h2 class="title is-3">
+        <h2 class="title is-3 is-normal">
           Join the beta waiting list!
         </h2>
         <form id="beta-form" action="/beta" method="post">
