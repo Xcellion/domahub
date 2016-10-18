@@ -166,6 +166,49 @@ module.exports = {
 		else {
 			error.handler(req, res, "This isn't a Premium listing!", "json")
 		}
+	},
+
+	//function to pay for a rental via stripe
+	chargeMoney : function(req, res, next){
+		if (req.body.stripeToken){
+			var owner_stripe_id = req.session.new_rental_info.owner_stripe_id;
+
+			var total_price = req.session.new_rental_info.price * 100;		//USD in cents
+			//application fee if the listing is basic (aka premium hasn't expired)
+			var application_fee = (req.session.new_rental_info.listing_exp_date < (new Date).getTime()) ? total_price / 10 : 0;
+			var customer_pays = total_price - application_fee;
+
+			var stripeOptions = {
+				amount: customer_pays, // amount in cents
+				currency: "usd",
+				source: req.body.stripeToken,
+				description: "Rental for " + req.params.domain_name
+			}
+
+			//application fee if the listing is basic
+			if (application_fee > 0){
+				stripeOptions.application_fee = application_fee;
+			}
+
+			//charge the end user, transfer to the owner, take 10% if its a basic listing
+			stripe.charges.create(stripeOptions, {
+				stripe_account: owner_stripe_id
+			}, function(err, charge) {
+				if (err) {
+					console.log(err);
+					error.handler(req, res, "Invalid price!");
+				}
+				else {
+					console.log("Payment processed! " + owner_stripe_id + " has been paid " + customer_pays + " with " + application_fee + " in Doma fees.")
+					next();
+				}
+			});
+		}
+
+		//if stripetoken doesnt exist
+		else {
+			stripeErrorHandler(req, res, {message: "Invalid Stripe token! Please log out and try again."});
+		}
 	}
 
 }

@@ -375,7 +375,8 @@ module.exports = {
 			description: req.body.description,
 			owner_id: req.user.id,
 			status: 0,
-			type: 0
+			type: 0,
+			date_created: (new Date()).getTime()
 		}
 
 		Listing.newListing(listing_info, function(result){

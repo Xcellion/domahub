@@ -48,7 +48,7 @@ function database_connect() {
 
 	//timezone
 	pool.on('connection', function onConnection(connection) {
-		console.log("Setting MYSQL timezone to UTC");
+		console.log("Setting MYSQL session timezone settings to UTC...");
 		connection.query('SET time_zone = ?', '+0:00');
 	});
 }

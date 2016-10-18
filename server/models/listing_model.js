@@ -59,81 +59,19 @@ listing_model.prototype.checkListingRental = function(rental_id, domain_name, ca
 	listing_query(query, "Rental does not belong to this listing!", callback, [rental_id, domain_name]);
 }
 
-//checks to see if a rental is available at that time slot
-listing_model.prototype.checkRentalTime = function(listing_id, user_times, callback){
-	this.getListingRentalTimes(listing_id, function(result){
-		var unavailable = [];		//array of all unavailable events
-		var formatted = [];
-		if (result.state == "success"){
-
-			//loop through all posted rental times
-			for (var y = 0; y < user_times.length; y++){
-				var tempStart = new Date(user_times[y].start);
-				var tempEnd = new Date(user_times[y].end);
-
-				var user_offset = user_times[y].offset;
-				var user_start = toUTC(tempStart, user_offset);
-				var user_end = toUTC(tempEnd, user_offset);
-				var user_duration = user_end - user_start;
-
-				var totally_new = true;
-
-				//cross reference with all existing times in the database
-				if (result.info && result.info.length > 0){
-					for (var x = 0; x < result.info.length; x++){
-						var db_start = new Date(result.info[x].date + "Z");
-						var db_duration = result.info[x].duration;
-						var db_end = db_start.getTime() + db_duration;
-
-						//check for any overlaps that prevent it from being created
-						if (checkOverlap(user_start, user_duration, db_start, db_duration)){
-							totally_new = false;
-							unavailable.push(user_times[y]);
-						}
-					}
-				}
-
-				var tempValue = [];
-
-				//totally available! format the time for DB entry
-				if (totally_new){
-					tempValue.push(
-						user_start,
-						user_duration
-					);
-					formatted.push(tempValue);
-				}
-			}
-
-			//send back unavailable and formatted events
-			callback({
-				state: "success",
-				unavailable: unavailable,
-				formatted: formatted
-			});
-		}
-		else {
-			callback({
-				state: "error",
-				info: result.info
-			});
-		}
-	});
-}
-
 //----------------------------------------------------------------------GETS----------------------------------------------------------
 
-//gets all info for a listing including owner name and email
-listing_model.prototype.getListing = function(domain_name, callback){
-	console.log("Attempting to get all listing information for " + domain_name + "...");
+//gets all info for an active listing including owner name and email
+listing_model.prototype.getActiveListing = function(domain_name, callback){
+	console.log("Attempting to get active listing information for " + domain_name + "...");
 	query = "SELECT \
 				listings.*,\
 				accounts.username,\
 				accounts.email\
 			FROM listings \
 			JOIN accounts ON listings.owner_id = accounts.id \
-			WHERE listings.domain_name = ? ";
-	listing_query(query, "Failed to get listing info for " + domain_name + "!", callback, domain_name);
+			WHERE listings.domain_name = ? AND listings.status = 2";
+	listing_query(query, "Failed to get active listing info for " + domain_name + "!", callback, domain_name);
 }
 
 //gets all 'active' listing information including owner name and email
@@ -197,17 +135,15 @@ listing_model.prototype.getCurrentRental = function(domain_name, callback){
 			ORDER BY rentals.rental_id ASC";
 	listing_query(query, "Failed to get current rental info for domain " + domain_name + "!", function(result){
 		if (result.state == "success" && result.info.length){
-			var now = new Date();
-			now = toUTC(now, now.getTimezoneOffset());
+			var now = new Date().getTime();
 			var bool = true;
 
 			//loop through to see if any overlap
 			for (var x = 0; x < result.info.length; x++){
-				event_date = result.info[x].date + "Z";
-				var existingStart = new Date(event_date);
+				var existingStart = result.info[x].date;
 
-				if (now.getTime() < existingStart.getTime() + result.info[x].duration
-				&& now.getTime() >= existingStart.getTime())
+				if (now < existingStart + result.info[x].duration
+				&& now >= existingStart)
 				{
 					bool = false;
 					callback({
@@ -383,11 +319,6 @@ listing_model.prototype.deleteRental = function(rental_id, callback){
 }
 
 //----------------------------------------------------------------------HELPER----------------------------------------------------------
-
-//helper function to check if dates overlap
-function checkOverlap(dateX, durationX, dateY, durationY){
-	return ((dateX.getTime() < dateY.getTime() + durationY) && (dateY.getTime() < dateX.getTime() + durationX));
-}
 
 //helper function to change a date to UTC
 function toUTC(date, offset){
