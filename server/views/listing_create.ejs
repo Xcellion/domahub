@@ -45,7 +45,7 @@
 					</p>
 					<div class="columns">
 						<div class="column">
-							<a class="box">
+							<a data-listing-type="basic" class="box">
 								<div class="content">
 									<h2 class="is-bold is-accent margin-bottom-25">Basic Listing</h2>
 									<ul>
@@ -58,7 +58,7 @@
 							</a>
 						</div>
 						<div class="column">
-							<a class="box">
+							<a data-listing-type="premium" class="box">
 								<div class="content">
 									<h2 class="is-bold is-primary margin-bottom-25">Premium Listing</h2>
 									<ul>
@@ -96,27 +96,25 @@
 						<h2 class="heading is-blacklight">Step 2</h2>
 						<h2>Enter basic domain information</h2>
 					</div>
-					<form>
-						<p class="control">
-							<label id="domain-error-message" class="label is-medium">Domain Name</label>
-							<input id="sing-domain" class="input required-input is-medium" type="url" placeholder="MyDomain.com"/>
-						</p>
-						<p class="control">
-							<label id="description-error-message" class="label is-medium has-icon">Description</label>
-							<i class="fa fa-question-circle-o"></i>
-							<textarea id="sing-description" class="textarea required-input is-medium" placeholder="This is a premium domain name with over a million visits per month!"></textarea>
-						</p>
-						<p class="control">
-							<label class="label is-medium has-icon">Purchase Link</label>
-							<i class="fa fa-question-circle-o"></i>
-							<input id="sing-purchase" class="input is-medium" type="url" placeholder="godaddy.com/myDomainName"/>
-						</p>
-						<p class="control">
-							<label class="label is-medium has-icon">Background Image</label>
-							<i class="fa fa-question-circle-o"></i>
-							<input id="sing-background" class="input is-medium" type="url" placeholder="backgroundImage.com/image.png"/>
-						</p>
-					</form>
+					<p class="control">
+						<label id="domain-error-message" class="label is-medium">Domain Name</label>
+						<input id="sing-domain" class="input required-input is-medium" type="url" placeholder="MyDomain.com"/>
+					</p>
+					<p class="control">
+						<label id="description-error-message" class="label is-medium has-icon">Description</label>
+						<i class="fa fa-question-circle-o"></i>
+						<textarea id="sing-description" class="textarea required-input is-medium" placeholder="This is a premium domain name with over a million visits per month!"></textarea>
+					</p>
+					<p class="control">
+						<label class="label is-medium has-icon">Purchase Link</label>
+						<i class="fa fa-question-circle-o"></i>
+						<input id="sing-purchase" class="input is-medium" type="url" placeholder="godaddy.com/myDomainName"/>
+					</p>
+					<p class="control">
+						<label class="label is-medium has-icon">Background Image</label>
+						<i class="fa fa-question-circle-o"></i>
+						<input id="sing-background" class="input is-medium" type="url" placeholder="backgroundImage.com/image.png"/>
+					</p>
 				</div>
 			</div>
 		</div>
@@ -146,32 +144,32 @@
 						<h3 class="heading">Categories</h3>
 						<ul class="checkbox-wrapper">
 							<li>
-								<input id="cb1" type="checkbox" />
-								<label for="cb1">Start-Up</label>
+								<input class="cat-checkbox" id="cb1" type="checkbox" />
+								<label class="checkbox-label" for="cb1">Start-Up</label>
 							</li>
 							<li>
-								<input id="cb2" type="checkbox" />
-								<label for="cb2">Business</label>
+								<input class="cat-checkbox" id="cb2" type="checkbox" />
+								<label class="checkbox-label" for="cb2">Business</label>
 							</li>
 							<li>
-								<input id="cb3" type="checkbox" />
-								<label for="cb3">Event</label>
+								<input class="cat-checkbox" id="cb3" type="checkbox" />
+								<label class="checkbox-label" for="cb3">Event</label>
 							</li>
 							<li>
-								<input id="cb4" type="checkbox" />
-								<label for="cb4">Promotion</label>
+								<input class="cat-checkbox" id="cb4" type="checkbox" />
+								<label class="checkbox-label" for="cb4">Promotion</label>
 							</li>
 							<li>
-								<input id="cb5" type="checkbox" />
-								<label for="cb5">Holiday</label>
+								<input class="cat-checkbox" id="cb5" type="checkbox" />
+								<label class="checkbox-label" for="cb5">Holiday</label>
 							</li>
 							<li>
-								<input id="cb6" type="checkbox" />
-								<label for="cb6">Industry</label>
+								<input class="cat-checkbox" id="cb6" type="checkbox" />
+								<label class="checkbox-label" for="cb6">Industry</label>
 							</li>
 							<li>
-								<input id="cb7" type="checkbox" />
-								<label for="cb7">I'm not sure.</label>
+								<input class="cat-checkbox" id="cb7" type="checkbox" />
+								<label class="cat-checkbox-label" for="cb7">I'm not sure.</label>
 							</li>
 						</ul>
 					</form>
@@ -180,7 +178,7 @@
 		</div>
 	</section>
 
-	<section data-pagenum="4" class="section is-medium is-hidden clear-nav">
+	<section id="pricing-section" data-pageskip="true" data-pagenum="4" class="section is-medium is-hidden">
 		<div class="container">
 			<progress class="progress is-small is-primary" value="75" max="100"></progress>
 			<div class="columns">
@@ -224,7 +222,7 @@
 								<label class="label">Day</label>
 							</div>
 							<div class="control has-icon">
-								<input id="day-price" class="input input-number" type="number" value="10" min="10"/>
+								<input id="day-price" class="input input-number" type="number" value="10" min="1"/>
 								<i class="fa fa-dollar"></i>
 							</div>
 						</div>
@@ -233,7 +231,7 @@
 								<label class="label">Week</label>
 							</div>
 							<div class="control has-icon">
-								<input id="week-price" class="input input-number" type="number" value="25" min="25"/>
+								<input id="week-price" class="input input-number" type="number" value="25" min="1"/>
 								<i class="fa fa-dollar"></i>
 							</div>
 						</div>
@@ -242,7 +240,7 @@
 								<label class="label">Month</label>
 							</div>
 							<div class="control has-icon">
-								<input id="month-price" class="input input-number" type="number" value="50" min="50"/>
+								<input id="month-price" class="input input-number" type="number" value="50" min="1"/>
 								<i class="fa fa-dollar"></i>
 							</div>
 						</div>
@@ -259,13 +257,23 @@
 				<div class="column is-half">
 					<div class="content">
 						<h1 class="is-normal">Listing Preview</h1>
+						<img id="preview_image" class="" width="100%" height="100%" src="https://source.unsplash.com/category/people">
+						<h2 id="preview_domain" class=""><aclass="green_text">Domain Name</a></h2>
+						<p id="preview_description" class="">Domain Description</p>
+						<p class="">Owned by: <a class="green_text"><%= user.username %></a></p>
+						<%# <p id="preview_minute_price" class="">Minute <span class="green_text">$1</span> | </p>%>
+						<p id="preview_hour_price" class="">Hour <span class="green_text">$1</span> | </p>
+						<p id="preview_day_price" class="">Day <span class="green_text">$10</span> | </p>
+						<p id="preview_week_price" class="">Week <span class="green_text">$25</span> | </p>
+						<p id="preview_month_price" class="">Month <span class="green_text">$50</span></p>
+						<p class=""><a class="orange-link">Interested in buying this domain?</a></p>
 					</div>
 				</div>
 			</div>
 		</div>
 	</section>
 
-	<section class="section is-small">
+	<section id="buttons-section" class="section is-small">
 		<div class="container">
 			<div class="columns">
 				<div class="column is-half-desktop">
@@ -279,7 +287,15 @@
 							</a>
 						</p>
 						<p class="control">
-							<a id="next-button" class="button is-primary next-button">
+							<a id="submit-button" class="is-hidden button is-primary">
+								<span class="icon">
+									<i class="fa fa-angle-down"></i>
+								</span>
+								<span>Submit</span>
+							</a>
+						</p>
+						<p class="control">
+							<a id="next-button" class="is-disabled button is-primary next-button">
 								<span>Next</span>
 								<span class="icon">
 									<i class="fa fa-angle-right"></i>
