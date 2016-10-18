@@ -130,7 +130,7 @@ function displayRental(){
 
 	for (var x = 0; x < rental_info.times.length; x++){
 
-		start = moment(new Date(rental_info.times[x].date + "Z"));
+		start = moment(new Date(rental_info.times[x].date));
 		disp_end = moment(new Date(start._d.getTime() + rental_info.times[x].duration)).format('YYYY/MM/D, h:mmA');
 		disp_start = start.format('YYYY/MM/D, h:mmA');
 
@@ -205,16 +205,14 @@ function submitRentals(){
 			var start = new Date(newEvents[x].start._d);
 			var offset = start.getTimezoneOffset();
 			minEvents.push({
-				start: newEvents[x].start._d,
-				end: newEvents[x].end._d,
-				offset: offset,
+				start: newEvents[x].start._d.getTime(),
+				end: newEvents[x].end._d.getTime(),
 				_id: newEvents[x]._id
 			});
 		}
 
 		//to edit or create a new rental
 		var url = rental_info ? rental_info.rental_id : "rent"
-
 		$.ajax({
 			type: "POST",
 			url: "/listing/" + listing_info.domain_name + "/" + url,
@@ -232,15 +230,6 @@ function submitRentals(){
 					$("#listing_message").text("Some time slots were unavailable! They have been removed.");
 					$('#calendar').fullCalendar('removeEvents', data.unavailable[x]._id);
 				}
-				// $.ajax({
-				// 	type: "GET",
-				// 	url: "/listing/" + listing_info.domain_name,
-				// 	headers: {
-				// 		"page-or-data" : "data"
-				// 	}
-				// }).done(function(data){
-				// 	createExisting(data.rentals);
-				// });
 			}
 			else if (data.state == "success"){
 				window.location = window.location.origin + "/listing/" + listing_info.domain_name + "/" + data.rental_id;

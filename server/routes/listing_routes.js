@@ -5,7 +5,7 @@ var listings_owner = require("./listings_owner_routes");
 
 var bodyParser = require('body-parser')
 var jsonParser = bodyParser.json()
-var urlencodedParser = bodyParser.urlencoded({ extended: false })
+var urlencodedParser = bodyParser.urlencoded({ extended: true })
 
 var validator = require("validator");
 var whois = require("whois");
@@ -126,7 +126,7 @@ module.exports = function(app, db, auth, e, stripe){
 	//render listing page
 	app.get('/listing/:domain_name', [
 		listings_renter.checkDomainAndAddToSearch,
-		listings_renter.getListing,
+		listings_renter.getActiveListing,
 		listings_renter.renderListing
 	]);
 
@@ -135,7 +135,7 @@ module.exports = function(app, db, auth, e, stripe){
 		checkLoggedIn,
 		checkDomainListed,
 		listings_renter.checkRental,
-		listings_renter.getListing,
+		listings_renter.getActiveListing,
 		listings_renter.getRental,
 		listings_renter.renderListing
 	]);
@@ -145,10 +145,13 @@ module.exports = function(app, db, auth, e, stripe){
 		urlencodedParser,
 		checkLoggedIn,
 		checkDomainListed,
-		listings_renter.getListing,
-		listings_renter.checkNewRentalInfo,
+		listings_renter.getActiveListing,
+		listings_renter.checkRentalAddress,
+		listings_renter.checkRentalTimes,
+		listings_renter.checkRentalPrice,
 		listings_renter.createRental,
-		listings_renter.chargeMoney,
+		listings_renter.getOwnerStripe,
+		stripe.chargeMoney,
 		listings_renter.toggleActivateRental
 	]);
 
@@ -158,8 +161,10 @@ module.exports = function(app, db, auth, e, stripe){
 		checkLoggedIn,
 		checkDomainListed,
 		listings_renter.checkRental,
-		listings_renter.getListing,
-		listings_renter.checkNewRentalInfo,
+		listings_renter.getActiveListing,
+		listings_renter.checkRentalAddress,
+		listings_renter.checkRentalTimes,
+		listings_renter.checkRentalPrice,
 		listings_renter.editRental
 	]);
 }

@@ -50,80 +50,79 @@ module.exports = {
 	},
 
 	//function to check the rental info posted
-	checkNewRentalInfo : function(req, res, next){
-		domain_name = req.params.domain_name;
-		times = req.body.events;
-		address = addProtocol(req.body.address);
-		price = calculatePrice(times, req.session.listing_info);
-		stripeToken = req.body.stripeToken;
+	checkRentalAddress : function(req, res, next){
+		var address = addProtocol(req.body.address);
 
-		bool = true;	//bool to check for new or edit
-
-		//if its an entirely new rental
-		if (!req.session.rental_info && !req.body.rental_id){
-			if (!times || times.length <= 0){
-				bool = false;
-				error.handler(req, res, "Invalid date!", "json");
-			}
-			else if (!price){
-				bool = false;
-				error.handler(req, res, "Invalid price!");
-			}
-		}
-		//passed above checks, continue to check for address and times
-		if (bool && !validator.isIP(address) && !validator.isURL(address, {protocols: ["http", "https"], require_protocol: true})){
+		//check for address
+		if (!validator.isIP(address) && !validator.isURL(address, {protocols: ["http", "https"], require_protocol: true})){
 			error.handler(req, res, "Invalid address!", "json");
+		}
+		//all good
+		else {
+			req.session.new_rental_info = {
+				rental_db_info : {
+					account_id: req.user.id,
+					listing_id: req.session.listing_info.id,
+					address: address
+				}
+			};
+			next();
+		}
+	},
+
+	//function to check times
+	checkRentalTimes : function(req, res, next){
+		var times = req.body.events;
+
+		//no times posted
+		if (!times || times.length <= 0){
+			error.handler(req, res, "Invalid dates!", "json");
 		}
 		else {
 			//check if its even a valid JS date
-			if (times){
-				invalid_times = [];
-
-				for (var x = 0; x < times.length; x++){
-					times[x].start = new Date(times[x].start);
-					times[x].end = new Date(times[x].end);
-					if (isNaN(times[x].start) || isNaN(times[x].end)){
-						invalid_times.push(times[x]);
-					}
-				}
-
-				if (invalid_times.length > 0){
-					res.send({unavailable : invalid_times})
-				}
-				//if all are valid dates, check the DB if they're available
-				else {
-					checkRentalTime(req.session.listing_info.id, times, function(invalid_times, formatted_times, to_update, delete_stuff){
-						if (invalid_times.length > 0 || (formatted_times.length == 0 && to_update.length == 0)){
-							res.send({unavailable : invalid_times})
-						}
-						//all checks are good!
-						else {
-							req.session.new_rental_info = {
-								account_id: req.user.id,
-								listing_id: req.session.listing_info.id,
-								formatted_times : formatted_times,
-								to_update: to_update,
-								delete_stuff: delete_stuff,
-								address: address,
-								price: price,
-								stripeToken: stripeToken
-							};
-							next();
-						}
-					});
+			invalid_times = [];
+			var time_now = (new Date()).getTime();
+			for (var x = 0; x < times.length; x++){
+				temp_start = times[x].start;
+				temp_end = times[x].end;
+				if (isNaN(temp_start) || isNaN(temp_end) || temp_end < time_now || temp_start < time_now){
+					invalid_times.push(times[x]);
 				}
 			}
 
-			//no new times exist, just update the rental info
+			//send back any that were unavailable
+			if (invalid_times.length > 0){
+				res.send({unavailable : invalid_times})
+			}
+
 			else {
-				req.session.new_rental_info = {
-					account_id: req.user.id,
-					listing_id: req.session.listing_info.id,
-					formatted_times : false,
-					address: address
-				};
-				next();
+				//helper function, check against the DB for any unavailable times
+				crossCheckRentalTime(req.session.listing_info.rentals, times, function(unavailable_times, available_times){
+					//send back any that were unavailable
+					if (unavailable_times.length > 0){
+						res.send({unavailable : unavailable_times})
+					}
+					//all checks are good!
+					else {
+						req.session.new_rental_info.new_rental_times = available_times;
+						next();
+					}
+				});
 			}
+		}
+	},
+
+	//function to calculate and check for the price
+	checkRentalPrice : function(req, res, next){
+		var price = calculatePrice(req.body.events, req.session.listing_info);
+
+		//check for price
+		if (!price){
+			error.handler(req, res, "Invalid price!", "json");
+		}
+		else {
+			req.session.new_rental_info.price = price;
+			next();
 		}
 	},
 
@@ -163,12 +162,10 @@ module.exports = {
 		}
 	},
 
-	//gets the listing info and all rental info/times belonging to it
-	getListing : function(req, res, next) {
-		domain_name = req.params.domain_name
-
-		Listing.getListing(domain_name, function(result){
-			if (result.state=="error"){error.handler(req, res, result.info);}
+	//gets the listing info and all rental info/times belonging to it for a verified and active listing
+	getActiveListing : function(req, res, next) {
+		Listing.getActiveListing(req.params.domain_name, function(result){
+			if (result.state=="error" || (result.state == "success" && result.info.length <= 0)){error.handler(req, res, "Invalid listing!");}
 			else {
 				listing_info = result.info[0];
 
@@ -204,6 +201,20 @@ module.exports = {
 		}
 	},
 
+	//function to get the stripe id of the listing owner and if listing is premium/basic
+	getOwnerStripe : function(req, res, next){
+		//get the stripe id of the listing owner
+		Account.getStripeAndType(req.params.domain_name, function(result){
+			if (result.state == "error"){error.handler(req, res, result.info);}
+			else {
+				req.session.new_rental_info.owner_stripe_id = result.info[0].stripe_user_id;	//stripe id
+				req.session.new_rental_info.listing_exp_date = (result.info[0].exp_date) ? result.info[0].exp_date : 0;		//premium or basic listing expiration date
+
+				next();
+			}
+		});
+	},
+
 	renderListing404 : function(req, res, next){
 		res.render("listing_404.ejs", {
 			user: req.user
@@ -229,21 +240,15 @@ module.exports = {
 
 	//function to create a new rental
 	createRental : function(req, res, next){
-		domain_name = req.params.domain_name;
-		new_rental_info = req.session.new_rental_info;
 
-		raw_info = {
-			account_id: new_rental_info.account_id,
-			listing_id: new_rental_info.listing_id,
-			address: new_rental_info.address,
-		};
+		//helper function, create a new rental
+		newListingRental(req, res, req.session.new_rental_info.listing_id, req.session.new_rental_info.rental_db_info, function(rental_id){
 
-		newListingRental(req, res, new_rental_info.listing_id, raw_info, function(rental_id){
+			//format it with the new rental_id from above
+			formatNewRentalTimes(rental_id, req.session.new_rental_info.new_rental_times);
 
-			//format any new times
-			formatted_times = formatNewRentalTimes(rental_id, new_rental_info.formatted_times);
-
-			newRentalTimes(req, res, rental_id, new_rental_info.formatted_times, function(){
+			//helper function, create new rental times for the above new rental
+			newRentalTimes(req, res, rental_id, req.session.new_rental_info.new_rental_times, function(){
 				req.session.new_rental_info.rental_id = rental_id;
 				next();
 			});
@@ -287,37 +292,11 @@ module.exports = {
 		});
 	},
 
-	//function to charge account
-	chargeMoney : function(req, res, next){
-		domain_name = req.params.domain_name;
-		price = req.session.new_rental_info.price;
-		stripeToken = req.session.new_rental_info.stripeToken;
-		rental_id = req.session.new_rental_info.rental_id;
-
-		//get the stripe id of the listing owner
-		Account.getStripeAndType(domain_name, function(result){
-			if (result.state == "error"){error.handler(req, res, result.info);}
-			else {
-				stripe_id = result.info[0].stripe_user_id;
-				type = result.info[0].type;
-
-				//check pricing
-				payCheck(stripe_id, stripeToken, price, domain_name, type, function(bool){
-					if (bool){
-						next();
-					}
-					else {
-						error.handler(req, res, "Invalid price!");
-					}
-				});
-			}
-		});
-	},
 }
 
 //----------------------------------------------------------------helper functions----------------------------------------------------------------
 
-//function to get specific rental info, times, and details
+//helper function to get specific rental info, times, and details
 function getRental(req, res, rental_id, callback){
 	Listing.getRentalInfo(rental_id, function(result){
 		if (result.state != "success"){error.handler(req, res, result.description);}
@@ -335,9 +314,9 @@ function getRental(req, res, rental_id, callback){
 	});
 }
 
-//function to create a new rental
+//helper function to create a new rental
 function newListingRental(req, res, listing_id, raw_info, callback){
-	Listing.newListingRental(new_rental_info.listing_id, raw_info, function(result){
+	Listing.newListingRental(req.session.new_rental_info.listing_id, raw_info, function(result){
 		if (result.state != "success"){error.handler(req, res, result.description);}
 		else {
 			callback(result.info.insertId);
@@ -345,27 +324,7 @@ function newListingRental(req, res, listing_id, raw_info, callback){
 	});
 }
 
-//function to format new rental times
-function formatNewRentalTimes(rental_id, times){
-	//add the rental id to the formatted
-	for (var x in times){
-		times[x].unshift(rental_id);
-		times[x].push("");
-	}
-	return times;
-}
-
-//function to create new rental times
-function newRentalTimes(req, res, rental_id, times, callback){
-	Listing.newRentalTimes(rental_id, times, function(result){
-		if (result.state != "success"){error.handler(req, res, result.description);}
-		else {
-			callback();
-		}
-	});
-}
-
-//function to update rental info
+//helper function to update rental info
 function updateRental(req, res, rental_id, raw_info, callback){
 	Listing.updateRental(req.params.rental_id, raw_info, function(result){
 		if (result.state != "success"){error.handler(req, res, result.description);}
@@ -375,22 +334,43 @@ function updateRental(req, res, rental_id, raw_info, callback){
 	});
 }
 
-//function to join all rental times
+//----------------------------------------------------------------RENTAL TIME HELPERS----------------------------------------------------------------
+
+//helper function to format new rental times
+function formatNewRentalTimes(rental_id, times){
+	//add the rental id to the formatted
+	for (var x in times){
+		times[x].unshift(rental_id);
+		times[x].push("");
+	}
+}
+
+//helper function to create new rental times
+function newRentalTimes(req, res, rental_id, times, callback){
+	Listing.newRentalTimes(rental_id, times, function(result){
+		if (result.state != "success"){error.handler(req, res, result.description);}
+		else {
+			callback();
+		}
+	});
+}
+
+//helper function to join all rental times
 function joinRentalTimes(rental_times){
 	var temp_times = rental_times.slice(0);
 
     //loop once
     for (var x = temp_times.length - 1; x >= 0; x--){
-        var orig_start = new Date(temp_times[x].date);
-        var orig_end = new Date(orig_start.getTime() + temp_times[x].duration);
+        var orig_start = temp_times[x].date;
+        var orig_end = orig_start + temp_times[x].duration;
 
         //loop twice to check with all others
         for (var y = temp_times.length - 1; y >= 0; y--){
-            var compare_start = new Date(temp_times[y].date);
-            var compare_end = new Date(compare_start.getTime() + temp_times[y].duration);
+            var compare_start = temp_times[y].date;
+            var compare_end = compare_start + temp_times[y].duration;
 
             //touches bottom
-            if (x != y && orig_start.getTime() == compare_end.getTime()){
+            if (x != y && orig_start == compare_end){
 				temp_times[y].duration = temp_times[y].duration + temp_times[x].duration;
                 temp_times.splice(x, 1);
             }
@@ -400,19 +380,52 @@ function joinRentalTimes(rental_times){
 	return temp_times;
 }
 
-//function to check database for availability
-function checkRentalTime(listing_id, times, callback){
-	Listing.checkRentalTime(listing_id, times, function(result){
-		if (result.state == "error"){error.handler(req, res, result.info);}
-		else {
-			invalid_times = result.unavailable;
-			formatted_times = result.formatted;
-			to_update = result.to_update;
-			delete_stuff = result.delete_stuff;
+//helper function to check database for availability
+function crossCheckRentalTime(existing_times, new_times, callback){
+	var unavailable = [];		//array of all unavailable events
+	var available = [];
 
-			callback(invalid_times, formatted_times, to_update, delete_stuff);
+	//loop through all posted rental times
+	for (var y = 0; y < new_times.length; y++){
+		var user_start = new_times[y].start;
+		var user_duration = new_times[y].end - new_times[y].start;
+
+		var totally_new = true;
+
+		//cross reference with all existing times
+		for (var x = 0; x < existing_times.length; x++){
+			//check for any overlaps that prevent it from being created
+			if (checkOverlap(user_start, user_duration, existing_times[x].date, existing_times[x].duration)){
+				totally_new = false;
+				unavailable.push(user_times[y]);
+			}
 		}
-	});
+
+		var tempValue = [];
+
+		//totally available! format the time for DB entry
+		if (totally_new){
+			tempValue.push(
+				user_start,
+				user_duration
+			);
+			available.push(tempValue);
+		}
+	}
+
+	//send back unavailable and formatted events
+	callback(unavailable, available);
+}
+
+//helper function to check if dates overlap
+function checkOverlap(dateX, durationX, dateY, durationY){
+	return ((dateX.getTime() < dateY.getTime() + durationY) && (dateY.getTime() < dateX.getTime() + durationX));
+}
+
+//helper function to change a date to UTC
+function toUTC(date, offset){
+	date = new Date(date - (offset * 60 * 1000));
+	return new Date(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(),  date.getUTCHours(), date.getUTCMinutes(), date.getUTCSeconds());
 }
 
 //helper function to run whois since domain isn't listed but is a real domain
@@ -456,7 +469,7 @@ function renderWhoIs(req, res, domain_name){
 
 //---------------------------------------------------------------------------------------------------------------------------------
 
-//function to add http or https
+//helper function to add http or https
 function addProtocol(address){
 	if (!validator.isURL(address, {
 		protocols: ["http", "https"],
@@ -478,7 +491,7 @@ function calculatePrice(times, listing_info){
 		var weeks_price = days_price = hours_price = half_hours_price = totalPrice = 0;
 
 		for (var x = 0; x < times.length; x++){
-			var tempDuration = new Date(times[x].end) - new Date(times[x].start);
+			var tempDuration = times[x].end - times[x].start;
 
 			var weeks = divided(tempDuration, 604800000);
 			tempDuration = (weeks > 0) ? tempDuration -= weeks*604800000 : tempDuration;
@@ -503,36 +516,4 @@ function calculatePrice(times, listing_info){
 		return totalPrice;
 	}
 	else {return false;}
-}
-
-//function to pay via stripe
-function payCheck(stripe_id, stripeToken, price, domain_name, type, cb){
-	var total_price = price * 100;		//USD in cents
-	var application_fee = (type == 1) ? total_price / 10 : 0;		//application fee if the listing is basic
-	var customer_pays = total_price - application_fee;
-
-	var stripeOptions = {
-		amount: customer_pays, // amount in cents
-		currency: "usd",
-		source: stripeToken,
-		description: "Rental for " + domain_name
-	}
-
-	if (application_fee > 0){
-		stripeOptions.application_fee = application_fee;
-	}
-
-	//charge the end user, transfer to the owner, take 10% if its a basic listing
-	stripe.charges.create(stripeOptions, {
-		stripe_account: stripe_id
-	}, function(err, charge) {
-		if (err) {
-			console.log(err);
-			cb(false);
-		}
-		else {
-			console.log("Payment processed! " + stripe_id + " has been paid " + customer_pays + " with " + application_fee + " in Doma fees.")
-			cb(true);
-		}
-	});
 }

@@ -15,4 +15,8 @@ $(document).ready(function() {
     $(this).parents(".section").next(".section").removeClass("is-hidden");
   });
 
+  $(".fa-question-circle-o").hover(function(e){
+      console.log("more info pls");
+  })
+
 });

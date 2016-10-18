@@ -62,7 +62,7 @@ function createStatus(listing_info, bool){
 
 //function to create the listing created date
 function createDate(listing_info){
-    var start = moment(new Date(listing_info.date_created + "Z")).format('YYYY/MM/DD, hh:mm A');
+    var start = moment(new Date(listing_info.date_created)).format('YYYY/MM/DD, hh:mm A');
     var temp_td = $("<td class='td-visible td-date'>" + start + "</td>");
     return temp_td;
 }

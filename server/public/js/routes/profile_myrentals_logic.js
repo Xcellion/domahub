@@ -84,7 +84,7 @@ function createRowDrop(rental_info, rownum){
 //function to create the status td
 function createStart(rental_info){
     var earliest = rental_info.date.reduce(function (a, b) { return a < b ? a : b; });
-    var start = moment(new Date(earliest + "Z")).format('YYYY/MM/DD, hh:mm A');
+    var start = moment(new Date(earliest)).format('YYYY/MM/DD, hh:mm A');
     var temp_td = $("<td class='td-visible td-date'>" + start + "</td>");
     return temp_td;
 }
@@ -96,7 +96,7 @@ function createDates(rental_info){
 
     var temp_div = $('<div class="control is-horizontal"></div>');
     for (var x = 0; x < rental_info.date.length; x++){
-        var start = moment(new Date(rental_info.date[x] + "Z"));
+        var start = moment(new Date(rental_info.date[x]));
         var disp_start = start.format('YYYY/MM/DD, hh:mm A');
         var disp_end = moment(start._d.getTime() + rental_info.duration[x]).format('YYYY/MM/DD, hh:mm A');
 
