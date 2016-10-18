@@ -3,7 +3,30 @@
 /**font**/
 @font-face {
   font-family: 'robotocondensed';
-  src: url("/fonts/roboto-condensed/rc400.ttf"),
+  src: url("/fonts/roboto-condensed/rc400.ttf");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'robotocondensed';
+  src: url("/fonts/roboto-condensed/rc700.ttf");
+  font-weight: bold;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'robotocondensed';
+  src: url("/fonts/roboto-condensed/rcitalics.ttf");
+  font-weight: normal;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'robotocondensed';
+  src: url("/fonts/roboto-condensed/rc300.ttf");
+  font-weight: 300;
+  font-style: normal;
 }
 
 @font-face {
@@ -47,6 +70,10 @@
 
 .margin-bottom-25 {
   margin-bottom: 25px;
+}
+
+.margin-bottom-50 {
+  margin-bottom: 50px;
 }
 
 .vertical-align-bottom {
