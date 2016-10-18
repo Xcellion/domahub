@@ -15,58 +15,101 @@
 
   <%- include("templates/navbar", {user: user}); %>
 
-  <div id="mult-form-wrapper" class="is-hidden">
-    <table class="table">
-      <div class="content has-text-centered">
-        <h2>You may upload a .csv file in the format below</h2>
+  <section class="section is-medium clear-nav">
+    <div class="container">
+      <div class="columns">
+        <div class="column">
+          <div class="content">
+            <h1 class="is-normal">Multiple listings.</h1>
+          </div>
+          <div class="content margin-bottom-25">
+            <a class="button is-accent" tabindex="7" href="/listing/create">
+              <span class="icon">
+                <i class="fa fa-angle-left"></i>
+              </span>
+              <span>Back to single listing.</span>
+            </a>
+          </div>
+
+            <!-- <form id="mult-form" action="/listing/create/batch" method="post" enctype="multipart/form-data">
+              <div class="control is-horizontal">
+                <input type="file" name="csv" id="mult-csv" class="input-file" />
+                <label for="mult-csv" class="button is-primary"><i class="fa fa-upload"></i>Upload CSV</label>
+              </div>
+              <progress id="mult-progress" class="progress"></progress>
+              <nav class="level">
+                <div class="level-left">
+                  <div class="level-item">
+                    <a class="mult-toggle orange-link">Single listing?</a>
+                  </div>
+                </div>
+                <div class="level-right">
+                  <div class="level-item">
+                    <input id="mult-submit" class="button is-primary" type="submit" value="Create listings" />
+                  </div>
+                </div>
+              </nav>
+            </form> -->
+        </div>
       </div>
-      <thead>
-        <tr>
-          <th>Domain name*</th>
-          <th>Description*</th>
-          <th>Minute price</th>
-          <th>Hourly price</th>
-          <th>Daily price</th>
-          <th>Weekly price</th>
-          <th>Monthly price</th>
-          <th>Background image</th>
-          <th>Purchase link</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>testdomain.com</td>
-          <td>This is a test description</td>
-          <td>1</td>
-          <td>1</td>
-          <td>10</td>
-          <td>25</td>
-          <td>50</td>
-          <td>http://link-to-image.com/image.png</td>
-          <td>http://link-to-buy.com/testdomain</td>
-        </tr>
-      </tbody>
-    </table>
-    <form id="mult-form" action="/listing/create/batch" method="post" enctype="multipart/form-data">
-      <div class="control is-horizontal">
-        <input type="file" name="csv" id="mult-csv" class="input-file" />
-        <label for="mult-csv" class="button"><i class="fa fa-upload"></i>Upload CSV</label>
-      </div>
-      <progress id="mult-progress" class="progress"></progress>
-      <nav class="level">
-        <div class="level-left">
-          <div class="level-item">
-            <a class="mult-toggle orange-link">Single listing?</a>
+      <div class="columns">
+        <div class="column box margin-bottom-25">
+          <table class="table">
+            <div class="content">
+              <h2>Example .csv file</h2>
+            </div>
+            <thead>
+              <tr>
+                <th>Domain name*</th>
+                <th>Description*</th>
+                <th>Background image</th>
+                <th>Purchase link</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>bestdomain.com</td>
+                <td>We have the greatest domain name ever!</td>
+                <td>http://link-to-image.com/image.png</td>
+                <td>http://link-to-buy.com/testdomain</td>
+              </tr>
+              <tr>
+                <td>worstdomain.com</td>
+                <td>This is the worst domain name in the world.</td>
+                <td>http://link-to-image.com/image.png</td>
+                <td>http://link-to-buy.com/testdomain</td>
+              </tr>
+              <tr>
+                <td>neutraldomain.com</td>
+                <td>I have no feelings regarding this domain.</td>
+                <td>http://link-to-image.com/image.png</td>
+                <td>http://link-to-buy.com/testdomain</td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="content">
+            <a class="button" tabindex="8" href="/downloads/csv/Multiple_Upload_Template.csv" download>
+              <span class="icon">
+                <i class="fa fa-download"></i>
+              </span>
+              <span>Download Template</span>
+            </a>
           </div>
         </div>
-        <div class="level-right">
-          <div class="level-item">
-            <input id="mult-submit" class="button is-primary" type="submit" value="Create listings" />
+      </div>
+      <div class="columns">
+        <div class="column is-half">
+          <div class="content">
+            <h2>Click the button below to upload.</h2>
+            <p class="control">
+              <input type="file" name="csv" id="mult-csv" class="input-file" />
+              <label for="mult-csv" class="button is-large is-primary"><i class="fa fa-upload"></i>Upload CSV</label>
+            </p>
           </div>
         </div>
-      </nav>
-    </form>
-  </div>
+      </div>
+    </div>
+  </section>
 
   <%- include("templates/footer"); %>
 

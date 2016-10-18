@@ -17,12 +17,11 @@
   padding-right: 20px
 
 .button
-  +control
   @extend .unselectable
   +box-shadow(3px,3px,5px,$border,0)
+  +control
+  +transition(all 0.25s)
   justify-content: center
-  padding-left: 10px
-  padding-right: 10px
   text-align: center
   white-space: nowrap
   strong
