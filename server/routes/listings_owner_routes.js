@@ -368,6 +368,14 @@ module.exports = {
 		});
 	},
 
+	//function to display the create listing page
+	renderCreateListingBatch : function(req, res, next){
+		res.render("listing_create_multiple.ejs", {
+			message: Auth.messageReset(req),
+			user: req.user,
+		});
+	},
+
 	//function to create a new listing
 	createListing : function(req, res, next){
 		listing_info = {

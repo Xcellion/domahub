@@ -19,7 +19,7 @@
 
 	<%- include("templates/navbar", {user: user}); %>
 
-	<section class="section is-medium">
+	<section data-pagenum="1" class="section current-section is-medium">
 		<div class="container">
 			<progress class="progress is-small is-primary" value="0" max="100"></progress>
 			<div class="columns">
@@ -37,7 +37,7 @@
 					</div>
 					<div class="content">
 						<h2 class="heading is-blacklight">Step 1</h2>
-						<h2>Please select one of the options below</h2>
+						<h2 class="error-heading">Please select one of the options below</h2>
 					</div>
 					<p class="control">
 						<label class="label is-medium has-icon">Basic vs Premium</label>
@@ -76,7 +76,7 @@
 		</div>
 	</section>
 
-	<section class="section is-medium is-hidden">
+	<section data-pagenum="2" class="section is-medium is-hidden">
 		<div class="container">
 			<progress class="progress is-small is-primary" value="25" max="100"></progress>
 			<div class="columns">
@@ -98,13 +98,13 @@
 					</div>
 					<form>
 						<p class="control">
-							<label class="label is-medium">Domain Name</label>
-							<input id="sing-domain" class="input is-medium" type="url" placeholder="MyDomain.com"/>
+							<label id="domain-error-message" class="label is-medium">Domain Name</label>
+							<input id="sing-domain" class="input required-input is-medium" type="url" placeholder="MyDomain.com"/>
 						</p>
 						<p class="control">
-							<label class="label is-medium has-icon">Description</label>
+							<label id="description-error-message" class="label is-medium has-icon">Description</label>
 							<i class="fa fa-question-circle-o"></i>
-							<textarea id="sing-description" class="textarea is-medium" placeholder="This is a premium domain name with over a million visits per month!"></textarea>
+							<textarea id="sing-description" class="textarea required-input is-medium" placeholder="This is a premium domain name with over a million visits per month!"></textarea>
 						</p>
 						<p class="control">
 							<label class="label is-medium has-icon">Purchase Link</label>
@@ -122,7 +122,7 @@
 		</div>
 	</section>
 
-	<section class="section is-medium is-hidden">
+	<section data-pagenum="3" class="section is-medium is-hidden">
 		<div class="container">
 			<progress class="progress is-small is-primary" value="50" max="100"></progress>
 			<div class="columns">
@@ -180,7 +180,7 @@
 		</div>
 	</section>
 
-	<section class="section is-medium is-hidden">
+	<section data-pagenum="4" class="section is-medium is-hidden">
 		<div class="container">
 			<progress class="progress is-small is-primary" value="75" max="100"></progress>
 			<div class="columns">
@@ -201,7 +201,7 @@
 						<h2>Pricing options are based on listing type</h2>
 					</div>
 					<form>
-						<div class="control is-horizontal">
+						<%# <div class="control is-horizontal">
 							<div class="control-label is-small">
 								<label class="label">Minute</label>
 							</div>
@@ -209,7 +209,7 @@
 								<input id="minute-price" class="input input-number" type="number" value="1" min="1"/>
 								<i class="fa fa-dollar"></i>
 							</div>
-						</div>
+						</div>%>
 						<div class="control is-horizontal">
 							<div class="control-label is-small">
 								<label class="label">Hour</label>
@@ -252,7 +252,7 @@
 		</div>
 	</section>
 
-	<section class="section is-medium is-hidden">
+	<section data-pagenum="5" class="section is-medium is-hidden">
 		<div class="container">
 			<progress class="progress is-small is-primary" value="100" max="100"></progress>
 			<div class="columns">
@@ -265,32 +265,32 @@
 		</div>
 	</section>
 
-<section class="section is-small">
-	<div class="container">
-		<div class="columns">
-			<div class="column is-half-desktop">
-				<div class="control is-grouped is-pulled-right">
-					<p class="control">
-						<a class="button is-primary prev-button">
-							<span class="icon">
-								<i class="fa fa-angle-left"></i>
-							</span>
-							<span>Previous</span>
-						</a>
-					</p>
-					<p class="control">
-						<a class="button is-primary next-button">
-							<span>Next</span>
-							<span class="icon">
-								<i class="fa fa-angle-right"></i>
-							</span>
-						</a>
-					</p>
+	<section class="section is-small">
+		<div class="container">
+			<div class="columns">
+				<div class="column is-half-desktop">
+					<div class="control is-grouped is-pulled-right">
+						<p class="control">
+							<a id="prev-button" class="is-disabled button is-primary prev-button">
+								<span class="icon">
+									<i class="fa fa-angle-left"></i>
+								</span>
+								<span>Previous</span>
+							</a>
+						</p>
+						<p class="control">
+							<a id="next-button" class="button is-primary next-button">
+								<span>Next</span>
+								<span class="icon">
+									<i class="fa fa-angle-right"></i>
+								</span>
+							</a>
+						</p>
+					</div>
 				</div>
 			</div>
 		</div>
-	</div>
-</section>
+	</section>
 
 
 	<%- include("templates/footer"); %>
