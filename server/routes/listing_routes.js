@@ -35,6 +35,13 @@ module.exports = function(app, db, auth, e, stripe){
 		listings_owner.renderCreateListing
 	]);
 
+	//render create listing page
+	app.get('/listing/create/batch', [
+		checkLoggedIn,
+		listings_owner.checkAccountListingPriv,
+		listings_owner.renderCreateListingBatch
+	]);
+
 	//redirect all /create to proper /create
 	app.get('/listing/create*', function(req, res){
 		res.redirect("/listing/create");
