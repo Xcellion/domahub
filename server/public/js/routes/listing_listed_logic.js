@@ -28,7 +28,7 @@ $(document).ready(function() {
 			var index = scroll_elems.indexOf("#" + $(this).attr("id").split("_").shift().toString() + "_wrapper") + 1;
 			index = index >= scroll_elems.length ? 0 : index;
 			$('html, body').stop().animate({
-				scrollTop: $(scroll_elems[index]).offset().top
+				scrollTop: $(scroll_elems[index]).offset().top - 60
 			}, 1000);
 		}
 	})
