@@ -16,18 +16,25 @@ module.exports = {
 			error.handler(req, res, "Invalid dates!", "json");
 		}
 		else {
-			//check if its even a valid JS date
-			valid_times = [];
+			var desired_times_info = [];
+			var user_id = (req.user) ? req.user.id : null;
+			var user_ip = req.ip;
+
 			for (var x = 0; x < times.length; x++){
-				temp_start = new Date(times[x].start);
-				temp_end = new Date(times[x].end);
+				var temp_start = new Date(parseFloat(times[x].start));
+				var temp_end = new Date(parseFloat(times[x].end));
+
+				//check if its even a valid JS date
 				if (!isNaN(temp_start) && !isNaN(temp_end)){
-					valid_times.push(times[x]);
+					var temp_obj = [req.params.domain_name, new Date().getTime()];
+					temp_obj.push(times[x].start, times[x].end - times[x].start, user_id, user_ip);
+					desired_times_info.push(temp_obj);
 				}
 			}
 
-			if (valid_times.length > 0){
-				req.session.stat_info.times = valid_times;
+			//checks are gucci
+			if (desired_times_info.length > 0){
+				req.session.desired_times_info = desired_times_info;
 				next();
 			}
 			else {
@@ -39,8 +46,12 @@ module.exports = {
 		}
 	},
 
-	newWantedTimes : function(req, res, next){
+	//function to keep track of possible desired rental times for unlisted unavailable domains
+	newDesiredTimes : function(req, res, next){
+		Data.newDesiredRentalTimes(req.params.domain_name, req.session.desired_times_info, function(result){
 
+			console.log(result);
+		});
 	}
 
 }

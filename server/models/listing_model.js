@@ -261,7 +261,7 @@ listing_model.prototype.newListingRental = function(listing_id, rental_info, cal
 //creates new rental times for a specific rental
 //BULK INSERT NEEDS TRIPLE NESTED ARRAYS
 listing_model.prototype.newRentalTimes = function(rental_id, rental_times, callback){
-	console.log("Attempting to create a new rental times for rental #" + rental_id + "...");
+	console.log("Attempting to create new rental times for rental #" + rental_id + "...");
 	query = "INSERT INTO rental_times (rental_id, date, duration, id) VALUES ? ON DUPLICATE KEY UPDATE \
 		rental_id = VALUES(rental_id), \
 		date = VALUES(date), \
