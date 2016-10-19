@@ -14,32 +14,11 @@ $(document).ready(function() {
 		height: "auto",
 		contentHeight:'auto', //auto height
 
-		//prevent calendar from going back in past
-		viewRender: function(currentView){
-			var minDate = moment();
-
-			if (minDate >= currentView.start && minDate <= currentView.end) {
-				$(".fc-prev-button").prop('disabled', true);
-				$(".fc-prev-button").addClass('fc-state-disabled');
-
-				//todo - add class to custom buttons to "grey out"
-			}
-			else {
-				$(".fc-prev-button").removeClass('fc-state-disabled');
-				$(".fc-prev-button").prop('disabled', false);
-			}
-		},
-
 		//creating new events
 		select: function(start, end, jsEvent, view){
 			start = moment(start.format());
 			end = moment(end.format());
 			createEvent(start, end);
-		},
-
-		//tag id to HTML DOM for easy access
-		eventAfterRender: function(event, element, view ) {
-			$(element).attr("id", event._id);
 		}
     });
 });
@@ -174,6 +153,11 @@ function removeEventTimeSlot(calEvent, mouseDownSlot, mouseUpSlot){
 		};
 		var newEvent = $('#calendar').fullCalendar('renderEvent', eventData, true);
 	}
+
+	//disable the submit button if there are no events
+	if ($('#calendar').fullCalendar('clientEvents').length <= 0){
+		$("#submit-button").addClass("is-disabled");
+	}
 }
 
 //helper function to merge events
@@ -302,5 +286,10 @@ function createEvent(start, end){
 		};
 
 		var newEvent = $('#calendar').fullCalendar('renderEvent', eventData, true);
+
+		//remove disabled on submit button
+		if ($("#submit-button").hasClass("is-disabled")){
+			$("#submit-button").removeClass("is-disabled");
+		}
 	}
 }

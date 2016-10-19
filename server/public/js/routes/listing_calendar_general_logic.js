@@ -40,3 +40,13 @@ function checkFullOverlap(dateX, durationX, dateY, durationY){
 function filterMine(event) {
     return !event.hasOwnProperty("old") && event.rendering != 'background';
 }
+
+//helper function to find all newly added time
+function filterNew(event){
+	return event.newevent;
+}
+
+//helper function to filter out existing rental for editing
+function filterSame(event, id){
+	return event.rental_id == id;
+}

@@ -89,7 +89,7 @@ app.get('*.ico', function(){})
 //404 not found
 app.get('*', function(req, res){
 	referer = req.header("Referer") || "someone";
-	console.log("404! Unable to find " + req.originalUrl + ", requested by " + referer);
+	console.log("404! Unable to find " + req.originalUrl + ". Coming from " + referer);
 	res.redirect('/');
 });
 
