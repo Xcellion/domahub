@@ -11,12 +11,31 @@
 
 #index-img {
   @include tablet {
-    background-image: url('http://i.imgur.com/dG0Y78S.png');
+    background-image: url('https://images.unsplash.com/photo-1435527173128-983b87201f4d?dpr=1&auto=format&crop=entropy&fit=crop&w=1500&h=1000&q=80&cs=tinysrgb');
   }
 }
 
 .title-p {
-  width: 425px;
+  @include tablet {
+    width: 425px;
+    &.is-medium {
+      width: 650px;
+    }
+  }
+}
+
+#beta-form-email {
+  font-family: $shareTech;
+  background-color: transparent;
+  border: none;
+  border-radius: 0;
+  @include box-shadow(0,0,0,$black,0);
+  @include transition(all 0.25s);
+  color: $white-primary;
+  &:focus,
+  &:active {
+    @include box-shadow(0,-2px,0,$white-primary, inset);
+  }
 }
 
 #beta-form-success {
