@@ -1,14 +1,6 @@
 var unlock = true;
 
 $(document).ready(function() {
-	$('#background_image').on('dragstart', function(event) { event.preventDefault(); });
-
-	//fix 100vh jumping on mobile
-	if ( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
-		var h = $('.height-fix').height();
-		$('.height-fix').height(h);
-	}
-
 	//stripe configuration
 	handler = StripeCheckout.configure({
 		key: 'pk_test_kcmOEkkC3QtULG5JiRMWVODJ',
@@ -62,10 +54,6 @@ $(document).ready(function() {
 	$("#address_form_input").keyup(function(e){
 		addressNextChange();
 	});
-
-	if (user){
-		$("#login_modal").removeAttr("style");
-	}
 
 	//--------------------------------------------------------------------cookies
 

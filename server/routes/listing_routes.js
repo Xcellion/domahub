@@ -8,8 +8,6 @@ var jsonParser = bodyParser.json()
 var urlencodedParser = bodyParser.urlencoded({ extended: true })
 
 var validator = require("validator");
-var whois = require("whois");
-var parser = require('parse-whois');
 
 module.exports = function(app, db, auth, e, stripe){
 	Listing = new listing_model(db);
