@@ -14,42 +14,6 @@ $(document).ready(function() {
 		eventOverlap: false, //prevents overlap of events
 		eventStartEditable: false, //prevents moving of events
 		nowIndicator: true, //red line indicating current time
-		slotDuration: '01:00:00', //how long a slot is,
-		height: "auto",
-		contentHeight:'auto', //auto height
-
-		//red background event to show that you cant select past dates
-		events: [
-			{
-				start: '1970-01-01T00:00:00',
-				end: moment().format("YYYY-MM-DD"),
-				rendering: 'background',
-				title: "You cannot select dates in the past!"
-			},
-			{
-				start: moment().format("YYYY-MM-DD"),
-				end: moment(),
-				rendering: 'background',
-				title: "You cannot select dates in the past!"
-			},
-		],
-
-		//prevent selecting anything before now
-		selectConstraint: {
-			start: moment(new Date().getTime() - 1800000),
-			end: moment(new Date().getTime() + 31556952000)
-		},
-
-		//to create the background title and color
-		eventRender: function (event, element) {
-			if (event.rendering == 'background' && event.title) {
-				element.append("<p class='past-event'>" + event.title + "</p>");
-				element.css({
-					"opacity": "1",
-					"background-color": "rgba(35,35,35,0.5)"
-				});
-			}
-		},
 
 		//prevent calendar from going back in past
 		viewRender: function(currentView){
@@ -309,7 +273,7 @@ function getTimeSlot(calEvent, jsEvent){
 		}
 	}
 	var removeStart = new Date(datetime);
-	var removeEnd = moment(removeStart).add(1, "hour");
+	var removeEnd = moment(removeStart).add(30, "minutes");
 
 	return {
 		start: removeStart,
@@ -371,7 +335,7 @@ function removeEventTimeSlot(calEvent, mouseDownSlot, mouseUpSlot){
 
 //helper function to check if new event overlaps any existing event
 function checkEventOverlap(start, end){
-	var allevents = $('#calendar').fullCalendar('clientEvents', filterMine);
+	var allevents = $('#calendar').fullCalendar('clientEvents');
 	var overlap = false;
 	$.each(allevents, function( index, eventitem ){
 		//overlaps something, cancel creation
@@ -395,7 +359,7 @@ function checkFullOverlap(dateX, durationX, dateY, durationY){
 
 //helper function to merge events
 function createEvent(start, end){
-	var allevents = $('#calendar').fullCalendar('clientEvents', filterMine);
+	var allevents = $('#calendar').fullCalendar('clientEvents');
 	var mergingEvents = [];
 	var overlappingEvents = [];
 	var fullyOverlappingEvents = [];
@@ -636,7 +600,7 @@ function divided(num, den){
 
 //helper function to filter out events that aren't mine
 function filterMine(event) {
-    return !event.hasOwnProperty("old") && event.rendering != 'background';
+    return !event.hasOwnProperty("old");
 }
 
 //helper function to filter out existing rental for editing

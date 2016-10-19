@@ -1,6 +1,8 @@
 var	listing_model = require('../models/listing_model.js');
 
 var validator = require("validator");
+var whois = require("whois");
+var parser = require('parse-whois');
 var node_env = process.env.NODE_ENV || 'dev'; 	//dev or prod bool
 if (node_env == "dev"){
 	var stripe = require("stripe")("sk_test_PHd0TEZT5ytlF0qCNvmgAThp");		//stripe API development key
@@ -431,39 +433,48 @@ function toUTC(date, offset){
 //helper function to run whois since domain isn't listed but is a real domain
 function renderWhoIs(req, res, domain_name){
 	whois.lookup(domain_name, function(err, data){
-		var whoisObj = {};
-		if (!err){
+		if (err){
+			//something went wrong in looking up the domain
+			res.render("listing_404.ejs", {
+				user: req.user
+			});
+		}
+
+		//look up domain owner info
+		else {
+			var whoisObj = {};
 			var array = parser.parseWhoIsData(data);
 			for (var x = 0; x < array.length; x++){
 				whoisObj[array[x].attribute] = array[x].value;
 			}
-		}
-		email = whoisObj["Registrant Email"] || whoisObj["Admin Email"] || whoisObj["Tech Email"] || "";
-		owner_name = whoisObj["Registrant Organization"] || whoisObj["Registrant Name"] || "Nobody";
-		description = "This domain is currently unavailable for rent at domahub. "
 
-		if (owner_name == "Nobody"){
-			description += "However, it's available for purchase at the below links!";
-		}
-		else {
-			description += "However, if you'd like you can fill out the below time slots and we'll let the owner know!";
+			var email = whoisObj["Registrant Email"] || whoisObj["Admin Email"] || whoisObj["Tech Email"] || "";
+			var owner_name = whoisObj["Registrant Organization"] || whoisObj["Registrant Name"] || "Nobody";
+			var description = "This domain is currently unavailable for rent at domahub. ";
+
+			var options = {
+				user: req.user,
+				listing_info: {
+					domain_name: domain_name,
+					email: email,
+					username: owner_name,
+					description: description
+				}
+			}
+
+			//nobody owns it!
+			if (owner_name == "Nobody"){
+				options.listing_info.description += "However, it's available for purchase at the below links!";
+				res.render("listing_unlisted_available.ejs", options);
+			}
+			//someone owns it
+			else {
+				options.listing_info.description += "However, if you'd like you can fill out the below time slots and we'll let the owner know!";
+				res.render("listing_unlisted_unavailable.ejs", options);
+			}
 		}
 
-		res.render("listing.ejs", {
-			user: req.user,
-			message: Auth.messageReset(req),
-			whoisObj: whoisObj,
-			listing_info: {
-				domain_name: domain_name,
-				email: email,
-				username: owner_name,
-				status: false,
-				description: description
-			},
-			new_rental_info : false,
-			rental_info : false,
-			available: (owner_name == "Nobody") ? 1 : 2
-		});
+
 	});
 }
 

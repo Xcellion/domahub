@@ -11,6 +11,7 @@ $(document).ready(function() {
 	//redirect search to the appropriate /listing page
 	$("#searchbar-form").submit(function(e){
 		e.preventDefault();
+		console.log('s')
         window.location = window.location.origin + "/listing/" + $('#domain-name').val();
 	});
 

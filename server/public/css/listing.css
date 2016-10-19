@@ -108,7 +108,7 @@ body{
 }
 
 #calendar_top_wrapper{
-	padding-top:60px;
+	padding-top:15px;
 }
 
 .button{
@@ -125,6 +125,16 @@ body{
 
 #calendar{
 	padding:15px;
+}
+
+.past-event{
+	position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%);
+    margin-right: -50%;
+    color: #FFF;
+    cursor: default;
 }
 
 /*--------------------------------------------------------------------------------------*/
