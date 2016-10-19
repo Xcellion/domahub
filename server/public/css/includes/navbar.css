@@ -4,7 +4,7 @@
   #searchbar-form > .control {
     width: 100%; }
   #searchbar-form input {
-    font-family: "Share Tech", "Lucida Console", monospace;
+    font-family: "sharetech", "Lucida Console", monospace;
     border: none;
     border-radius: 0;
     -webkit-box-shadow: 0 0 0 black 0;
