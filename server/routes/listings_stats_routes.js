@@ -18,7 +18,10 @@ module.exports = {
 		else {
 			var desired_times_info = [];
 			var user_id = (req.user) ? req.user.id : null;
-			var user_ip = req.ip;
+			var user_ip = req.headers['x-forwarded-for'] ||
+					     req.connection.remoteAddress || 
+					     req.socket.remoteAddress ||
+					     req.connection.socket.remoteAddress;
 
 			for (var x = 0; x < times.length; x++){
 				var temp_start = new Date(parseFloat(times[x].start));
