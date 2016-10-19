@@ -152,7 +152,7 @@ module.exports = {
 					else {
 						next();
 					}
-				})
+				});
 			});
 		}
 	},

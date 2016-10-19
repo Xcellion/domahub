@@ -282,7 +282,7 @@ function createEvent(start, end){
 			end: end,
 			newevent: true,
 			color: "#3CBC8D",
-			title: "New rental"
+			title: "Desired Time"
 		};
 
 		var newEvent = $('#calendar').fullCalendar('renderEvent', eventData, true);

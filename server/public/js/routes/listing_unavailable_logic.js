@@ -27,10 +27,12 @@ $(document).ready(function() {
 		$.ajax({
 			url: "/listing/" + listing_info.domain_name + "/timeswanted",
 			type: "POST",
-			data: wantedEvents
+			data: {
+				events: wantedEvents
+			}
 		}).done(function(data){
 			console.log(data);
-			
+
 		})
 	});
 

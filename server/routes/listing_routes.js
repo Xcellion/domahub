@@ -122,11 +122,10 @@ module.exports = function(app, db, auth, e, stripe){
 
 	app.post("/listing/:domain_name/timeswanted", [
 		urlencodedParser,
-		checkLoggedIn,
 		checkDomainValid,
 		checkDomainNotListed,	//make sure the domain isnt listed on doma
-		listings_renter.checkRentalTimes,
-		listings_stats.newWantedTimes
+		listings_stats.checkRentalTimes,
+		listings_stats.newDesiredTimes
 	]);
 
 	//-------------------------------------------------------------------------------------------------------------------- RENTAL RELATED
