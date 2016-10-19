@@ -1,11 +1,9 @@
 var totalPrice = 0;
 
 $(document).ready(function() {
-	var timeNow = new Date();
-
 	//calendar logic
 	 $('#calendar').fullCalendar({
-		scrollTime: moment(timeNow).format("hh:mm:ss"),
+		scrollTime: moment(new Date()).format("hh:mm:ss"),
 		defaultView: "agendaWeek",
 		allDayDefault: false,
 		selectable: true,
@@ -319,35 +317,40 @@ function getTimeSlot(calEvent, jsEvent){
 
 //helper function to remove time slots from an event
 function removeEventTimeSlot(calEvent, mouseDownSlot, mouseUpSlot){
-	var calEvent_start = moment(calEvent.start).format('YYYY-MM-DD HH:mm');
-	var calEvent_end = moment(calEvent.end).format('YYYY-MM-DD HH:mm');
+	var view = $('#calendar').fullCalendar('getView');
 
-	var mouseDown_start = moment(mouseDownSlot.start).format('YYYY-MM-DD HH:mm');
+	var calEvent_start = moment(calEvent.start)._d.getTime();
+	var calEvent_end = moment(calEvent.end)._d.getTime();
 
-	var mouseUp_end = moment(mouseUpSlot.end).format('YYYY-MM-DD HH:mm');
+	var mouseDown_start = moment(mouseDownSlot.start)._d.getTime();
+	var mouseUp_end = moment(mouseUpSlot.end)._d.getTime();
 
 	//event is equal to slot
-	if (calEvent_start == mouseDown_start
-		&& calEvent_end == mouseUp_end){
+	if (calEvent_start >= mouseDown_start
+		&& calEvent_end <= mouseUp_end){
 			$('#calendar').fullCalendar('removeEvents', calEvent._id);
 			$('#calendar').fullCalendar('updateEvent', calEvent);
-			//console.log('event equal to slot');
+			console.log('event equal to slot');
 	}
 	//if clipping starts at top of event
 	else if (calEvent_start == mouseDown_start){
 		calEvent.start = mouseUpSlot.end;
 		$('#calendar').fullCalendar('updateEvent', calEvent);
-		//console.log('clipping at top');
+		console.log('clipping at top');
 	}
 	//if clipping starts at middle of event and goes all the way
 	else if (calEvent_end == mouseUp_end){
 		calEvent.end = mouseDownSlot.start;
 		$('#calendar').fullCalendar('updateEvent', calEvent);
-		//console.log('clipping at bottom');
+		console.log('clipping at bottom');
+	}
+	//removing the event in month view
+	else if (view.type == "month"){
+
 	}
 	//if middle of event
 	else {
-		//console.log('middle of event');
+		console.log('middle of event');
 		var tempEnd = calEvent.end;
 		calEvent.end = mouseDownSlot.start;
 		$('#calendar').fullCalendar('updateEvent', calEvent);
@@ -360,7 +363,6 @@ function removeEventTimeSlot(calEvent, mouseDownSlot, mouseUpSlot){
 				color: calEvent.color,
 				newevent: true
 			};
-			console.log(calEvent);
 			var newEvent = $('#calendar').fullCalendar('renderEvent', eventData, true);
 		}
 		else {
