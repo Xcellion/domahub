@@ -36,6 +36,6 @@ data_model.prototype.newSearchHistory = function(history_info, callback){
 //BULK INSERT NEEDS TRIPLE NESTED ARRAYS
 data_model.prototype.newDesiredRentalTimes = function(domain_name, desired_times_info, callback){
 	console.log("Attempting to create new desired times for domain" + domain_name + "...");
-	query = "INSERT INTO stats_desired_times (domain_name, date_now, start_date, duration, account_id, user_ip) VALUES ? ";
+	query = "INSERT INTO stats_desired_times (domain_name, timestamp, start_date, duration, account_id, user_ip) VALUES ? ";
 	data_query(query, "Failed to add new desired times for domain" + domain_name + "!", callback, [desired_times_info]);
 }

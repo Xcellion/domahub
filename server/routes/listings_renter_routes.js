@@ -130,21 +130,28 @@ module.exports = {
 		}
 		else {
 			Listing.checkListing(domain_name, function(result){
-				listing_result = result;
+				var listing_result = result;
 
 				//add to search history
-				account_id = (typeof req.user == "undefined") ? null : req.user.id;
-				var now = new Date();
-				var now_utc = new Date(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(),  now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds());
+				var account_id = (typeof req.user == "undefined") ? null : req.user.id;
+				var now = new Date().getTime();
+				var user_ip = req.headers['x-forwarded-for'] ||
+							 req.connection.remoteAddress ||
+							 req.socket.remoteAddress ||
+							 req.connection.socket.remoteAddress;
 
 				history_info = {
 					account_id: account_id,			//who searched if who exists
 					domain_name: domain_name.toLowerCase(),		//what they searched for
-					search_timestamp: now_utc		//when they searched for it
+					timestamp: now,		//when they searched for it
+					user_ip : user_ip
 				}
 
-				Data.newSearchHistory(history_info, function(result){
-					//doesnt exist!
+				//add to search history if its not localhost
+				if (user_ip != "::1"){
+					Data.newSearchHistory(history_info, function(result){});
+				}
+				else {
 					if (!listing_result.info.length || listing_result.state == "error"){
 						renderWhoIs(req, res, domain_name);
 					}
@@ -152,7 +159,7 @@ module.exports = {
 					else {
 						next();
 					}
-				});
+				}
 			});
 		}
 	},
