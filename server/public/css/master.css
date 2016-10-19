@@ -647,6 +647,7 @@ table {
 a.box {
   box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12); }
   a.box:active, a.box:focus, a.box.is-active {
+    outline: none;
     box-shadow: 3px 10px 10px 0 rgba(0, 0, 0, 0.14), 0 -1px 5px -2px rgba(0, 0, 0, 0.2), -3px 10px 10px 0 rgba(0, 0, 0, 0.12); }
 
 .button {
@@ -4953,6 +4954,8 @@ a.nav-item.is-tab {
     display: flex;
     flex-direction: row;
     justify-content: center; }
+  .section.is-small {
+    padding: 0 20px 40px 20px; }
   @media screen and (min-width: 980px) {
     .section.is-medium {
       padding: 120px 20px; } }

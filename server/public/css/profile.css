@@ -70,8 +70,6 @@
   align-items: stretch;
   display: flex;
   justify-content: flex-end;
-  border: 1px solid rgba(0, 0, 0, 0.12);
-  border-top: none;
   width: 100%; }
 
 #convo-loading {
