@@ -4072,15 +4072,21 @@ a.nav-item.is-tab {
       .hero-buttons > .button {
         flex-grow: 0.2; }
         .hero-buttons > .button:not(:last-child) {
-          margin-bottom: 10px; } }
+          margin-bottom: 10px; }
+      .hero-buttons.left-aligned {
+        flex-direction: row;
+        justify-content: flex-start; }
+        .hero-buttons.left-aligned .button:not(:last-child) {
+          margin-right: 20px;
+          margin-bottom: 0; } }
   @media screen and (min-width: 769px) {
     .hero-buttons {
       display: flex;
       justify-content: center; }
       .hero-buttons .button:not(:last-child) {
-        margin-right: 20px; } }
-  .hero-buttons.left-aligned {
-    justify-content: flex-start; }
+        margin-right: 20px; }
+      .hero-buttons.left-aligned {
+        justify-content: flex-start; } }
 
 .hero-head,
 .hero-foot {
@@ -4949,9 +4955,16 @@ a.nav-item.is-tab {
     justify-content: center; }
   @media screen and (min-width: 980px) {
     .section.is-medium {
-      padding: 120px 20px; }
+      padding: 120px 20px; } }
+  @media screen and (max-width: 768px) {
+    .section.is-medium {
+      padding: 60px 20px; } }
+  @media screen and (min-width: 980px) {
     .section.is-large {
       padding: 240px 20px; } }
+  @media screen and (max-width: 768px) {
+    .section.is-large {
+      padding: 80px 20px; } }
 
 .footer {
   background-color: #444;

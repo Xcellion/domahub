@@ -29,16 +29,21 @@
     flex-direction: column
     justify-content: center
     align-items: center
+    &.left-aligned
+      flex-direction: row
+      justify-content: flex-start
+      .button:not(:last-child)
+        margin-right: 20px
+        margin-bottom: 0
   +tablet
     display: flex
     justify-content: center
     .button:not(:last-child)
       margin-right: 20px
-  &.left-aligned
-    justify-content: flex-start
+    &.left-aligned
+      justify-content: flex-start
 
 // Containers
-
 .hero-head,
 .hero-foot
   flex-shrink: 0

@@ -37,6 +37,9 @@
             <a class="button is-primary is-inverted is-large" href='/signup'>Create Account</a>
           </div>
         </div>
+        <div id="index-img" class="column landing-img is-hidden-mobile">
+
+        </div>
       </div>
     </div>
   </section>
@@ -105,18 +108,21 @@
     </div>
   </section> -->
 
-  <section class="section is-large">
+  <section class="section is-light is-large">
     <div class="container">
       <div class="columns">
         <div class="column margin-bottom-50">
           <div class="content">
             <h1 class="title is-bold is-3">
-              A new, simple, and user-friendly marketplace <br />
+              A new, simple, and user-friendly marketplace
               designed with you in mind.
             </h1>
-            <p class="title-p">
-              We make it easy to list and rent domain names. Manage all of your
-              listings
+            <p class="title-p is-medium is-blacklight">
+              We are creating opportunities for both owners and renters.
+              For owners, domain rentals become an additional revenue stream,
+              allowing them to generate newfound income. For renters, domains
+              can be acquired according to their schedules, allowing for cheaper
+              and more efficient usage.
             </p>
           </div>
         </div>
@@ -124,23 +130,28 @@
       <div class="columns">
         <div class="column hover-scale">
           <figure class="image is-64x64 margin-bottom-25">
-            <img src="/images/lib/material/money-off.svg" alt="free">
+            <img src="/images/lib/material/calendar.svg" alt="calendar">
           </figure>
-          <div class="content has-text-centered">
-            <h2 class="heading is-bold">Completely Free</h2>
+          <div class="content">
+            <h2 class="heading has-text-centered">Flexible Schedules</h2>
             <p>
-              Just <a class="primary-link" href="/signup">create an account</a> and start browsing or listing!
+              Whether you're a renter or a seller, domain rentals are always
+              tailored to your schedule and preferences. Rentals can be sold
+              by the hour, day, week, month, or even year.
             </p>
           </div>
         </div>
         <div class="column hover-scale">
           <figure class="image is-64x64 margin-bottom-25">
-            <img src="/images/lib/material/calendar.svg" alt="calendar">
+            <img src="/images/lib/material/lineweight.svg" alt="free">
           </figure>
-          <div class="content has-text-centered">
-            <h2 class="heading">Flexible Schedules</h2>
+          <div class="content">
+            <h2 class="heading has-text-centered">Tiered Listing Plans</h2>
             <p>
-              Rentals are tailored to your preferences and needs.
+              We offer two types of listings: Basic and Premium. A Basic listing
+              is free-to-list with commission whereas a Premium listing costs a small
+              monthly fee with zero commission. Learn more about the two types
+              <a class="primary-link">here</a>.
             </p>
           </div>
         </div>
@@ -148,14 +159,13 @@
           <figure class="image is-64x64 margin-bottom-25">
             <img src="/images/lib/material/security.svg" alt="payment">
           </figure>
-          <div class="content has-text-centered">
-            <h2 class="heading">Secure Payments</h2>
+          <div class="content">
+            <h2 class="heading has-text-centered">Protected Process</h2>
             <p>
-              All transactions are powered by
-              <a href="https://www.stripe.com" target="_blank" rel="author" title="Stripe">
-                <span class="icon is-medium stripe-logo">
-                <i class="fa fa-cc-stripe"></i></span>
-              </a>.
+              All rentals are contract binding. You will never have to
+              worry about your rental being sold off or not being paid for.
+              Additionally, we provide options for auto-renewal, auto-payment,
+              and buy-out negotiations.
             </p>
           </div>
         </div>
@@ -163,24 +173,23 @@
     </div>
   </section>
 
-  <section class="hero is-header">
-    <div class="hero-body">
-      <div class="container has-text-centered">
-        <h1 class="title is-3 is-normal">
-          Benefitting Everyone
-        </h1>
-        <h2 class="subtitle is-5">
-          Rentals produce for domain owners and create new opportunities for buyers
-        </h2>
-      </div>
-    </div>
-  </section>
-
-  <section class="section is-medium">
+  <section class="section is-large">
     <div class="container">
       <div class="columns">
+        <div class="column margin-bottom-50">
+          <div class="content">
+            <h1 class="title is-3 is-bold">
+              Benefitting both sides of every transaction.
+            </h1>
+            <h2 class="subtitle is-5 is-blacklight">
+              Rentals produce for domain owners and create new opportunities for buyers.
+            </h2>
+          </div>
+        </div>
+      </div>
+      <div class="columns">
         <div class="column">
-          <div class="content index-padded has-borderRight">
+          <div class="content">
             <h2 class="heading is-accent">New Revenue Stream</h2>
             <p>
               DomaHub is an active living space for all of your domains.
@@ -193,7 +202,7 @@
           </div>
         </div>
         <div class="column">
-          <div class="content index-padded has-text-right">
+          <div class="content">
             <h2 class="heading is-primary">Limitless Opportunities</h2>
             <p>
               A domain rental allows you to redirect anything on the web
@@ -208,14 +217,14 @@
     </div>
   </section>
 
-  <section class="hero is-small">
+  <section class="hero is-primary is-small">
     <div class="hero-body">
-      <div class="container has-text-centered">
-        <h2 class="title is-3 is-normal">
-          Join the beta waiting list!
+      <div class="container">
+        <h2 class="title is-4 is-normal">
+          Sign up for Early Access
         </h2>
         <form id="beta-form" action="/beta" method="post">
-          <p class="control has-addons has-addons-centered">
+          <p class="control has-addons">
             <input id="beta-form-email" class="input is-medium" type="email" name="betaemail" placeholder="Enter your email"/>
             <a id="beta-form-submit" class="button no-shadow is-primary is-medium" href="#mailingsubmitted">Submit</a>
           </p>
