@@ -2,6 +2,7 @@ var	listing_model = require('../models/listing_model.js');
 var	data_model = require('../models/data_model.js');
 var listings_renter = require("./listings_renter_routes");
 var listings_owner = require("./listings_owner_routes");
+var listings_stats = require("./listings_stats_routes");
 
 var bodyParser = require('body-parser')
 var jsonParser = bodyParser.json()
@@ -67,6 +68,7 @@ module.exports = function(app, db, auth, e, stripe){
 	app.get('/listing/:domain_name/verify', [
 		checkLoggedIn,
 		listings_owner.checkAccountListingPriv,
+		checkDomainValid,
 		checkDomainListed,
 		listings_owner.checkListingOwner,
 		listings_owner.verifyListing,
@@ -77,6 +79,7 @@ module.exports = function(app, db, auth, e, stripe){
 	app.post('/listing/:domain_name/update', [
 		checkLoggedIn,
 		listings_owner.checkAccountListingPriv,
+		checkDomainValid,
 		checkDomainListed,
 		listings_owner.checkListingOwner,
 		listings_owner.checkListingVerified,
@@ -93,6 +96,7 @@ module.exports = function(app, db, auth, e, stripe){
 		urlencodedParser,
 		checkLoggedIn,
 		listings_owner.checkAccountListingPriv,
+		checkDomainValid,
 		checkDomainListed,
 		listings_owner.checkListingOwner,
 		listings_owner.checkListingVerified,
@@ -106,6 +110,7 @@ module.exports = function(app, db, auth, e, stripe){
 	app.post('/listing/:domain_name/downgrade', [
 		checkLoggedIn,
 		listings_owner.checkAccountListingPriv,
+		checkDomainValid,
 		checkDomainListed,
 		listings_owner.checkListingOwner,
 		listings_owner.checkListingVerified,
@@ -113,11 +118,22 @@ module.exports = function(app, db, auth, e, stripe){
 		listings_owner.updateListing
 	]);
 
+	//-------------------------------------------------------------------------------------------------------------------- UNAVAILABLE rental_times
+
+	app.post("/listing/:domain_name/timeswanted", [
+		urlencodedParser,
+		checkLoggedIn,
+		checkDomainValid,
+		checkDomainNotListed,	//make sure the domain isnt listed on doma
+		listings_renter.checkRentalTimes,
+		listings_stats.newWantedTimes
+	]);
+
 	//-------------------------------------------------------------------------------------------------------------------- RENTAL RELATED
 
-	//render the 404 listing page
-	app.get('/listing', [
-		listings_renter.renderListing404
+	//render the listing page hub
+	app.get('/listings', [
+		listings_renter.renderListingHub
 	]);
 
 	//domahub easter egg page
@@ -138,6 +154,7 @@ module.exports = function(app, db, auth, e, stripe){
 	//render a specific rental
 	app.get('/listing/:domain_name/:rental_id', [
 		checkLoggedIn,
+		checkDomainValid,
 		checkDomainListed,
 		listings_renter.checkRental,
 		listings_renter.getActiveListing,
@@ -149,6 +166,7 @@ module.exports = function(app, db, auth, e, stripe){
 	app.post('/listing/:domain_name/rent', [
 		urlencodedParser,
 		checkLoggedIn,
+		checkDomainValid,
 		checkDomainListed,
 		listings_renter.getActiveListing,
 		listings_renter.checkRentalAddress,
@@ -164,6 +182,7 @@ module.exports = function(app, db, auth, e, stripe){
 	app.post('/listing/:domain_name/:rental_id', [
 		urlencodedParser,
 		checkLoggedIn,
+		checkDomainValid,
 		checkDomainListed,
 		listings_renter.checkRental,
 		listings_renter.getActiveListing,
@@ -172,25 +191,47 @@ module.exports = function(app, db, auth, e, stripe){
 		listings_renter.checkRentalPrice,
 		listings_renter.editRental
 	]);
+
 }
 
-//function to check if listing is listed on domahub
-function checkDomainListed(req, res, next){
+//function to check validity of domain name
+function checkDomainValid(req, res, next){
 	var domain_name = req.params.domain_name || req.body["domain-name"];
 
 	if (!validator.isFQDN(domain_name)){
 		error.handler(req, res, "Invalid domain name!");
 	}
 	else {
-		Listing.checkListing(domain_name, function(result){
-			if (!result.info.length || result.state == "error"){
-				error.handler(req, res, "Invalid domain name!");
-			}
-			else {
-				next();
-			}
-		});
+		next();
 	}
+}
+
+//function to check if listing is listed on domahub
+function checkDomainListed(req, res, next){
+	var domain_name = req.params.domain_name || req.body["domain-name"];
+
+	Listing.checkListing(domain_name, function(result){
+		if (!result.info.length || result.state == "error"){
+			error.handler(req, res, "Invalid domain name!");
+		}
+		else {
+			next();
+		}
+	});
+}
+
+//function to check if listing is NOT listed on domahub
+function checkDomainNotListed(req, res, next){
+	var domain_name = req.params.domain_name || req.body["domain-name"];
+
+	Listing.checkListing(domain_name, function(result){
+		if (!result.info.length || result.state == "error"){
+			next();
+		}
+		else {
+			error.handler(req, res, "Invalid domain name!");
+		}
+	});
 }
 
 //returns a random listing by category

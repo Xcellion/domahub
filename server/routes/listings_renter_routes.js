@@ -3,13 +3,6 @@ var	listing_model = require('../models/listing_model.js');
 var validator = require("validator");
 var whois = require("whois");
 var parser = require('parse-whois');
-var node_env = process.env.NODE_ENV || 'dev'; 	//dev or prod bool
-if (node_env == "dev"){
-	var stripe = require("stripe")("sk_test_PHd0TEZT5ytlF0qCNvmgAThp");		//stripe API development key
-}
-else {
-	var stripe = require("stripe")("sk_live_Nqq1WW2x9JmScHxNbnFlORoh");		//stripe API production key
-}
 
 module.exports = {
 
@@ -85,9 +78,9 @@ module.exports = {
 			invalid_times = [];
 			var time_now = (new Date()).getTime();
 			for (var x = 0; x < times.length; x++){
-				temp_start = times[x].start;
-				temp_end = times[x].end;
-				if (isNaN(temp_start) || isNaN(temp_end) || temp_end < time_now || temp_start < time_now){
+				temp_start = new Date(times[x].start);
+				temp_end = new Date(times[x].end);
+				if (isNaN(temp_start) || isNaN(temp_end) || temp_end.getTime() < time_now || temp_start.getTime() < time_now){
 					invalid_times.push(times[x]);
 				}
 			}
@@ -217,8 +210,8 @@ module.exports = {
 		});
 	},
 
-	renderListing404 : function(req, res, next){
-		res.render("listing_404.ejs", {
+	renderListingHub : function(req, res, next){
+		res.render("listing_hub.ejs", {
 			user: req.user
 		});
 	},
@@ -283,9 +276,9 @@ module.exports = {
 		rental_id = req.session.new_rental_info.rental_id;
 
 		Listing.toggleActivateRental(rental_id, function(result){
+			delete req.session.new_rental_info;
 			if (result.state != "success"){error.handler(req, res, result.description);}
 			else {
-				delete req.session.new_rental_info;
 				res.send({
 					state: "success",
 					rental_id: rental_id
