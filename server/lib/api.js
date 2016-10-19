@@ -25,12 +25,8 @@ function checkHost(req, res, next){
 			|| domain_name == "localhost"
 			|| domain_name == "localhost:8080"){
 
-			if (node_env == "dev"){
 				next();
-			}
-			else {
-				res.render("under_construction");
-			}
+
 	    }
 		//is not a valid FQDN
 		else if (!validator.isFQDN(domain_name)){
