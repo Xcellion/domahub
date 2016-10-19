@@ -149,16 +149,17 @@ module.exports = {
 
 				//add to search history if its not localhost
 				if (user_ip != "::1"){
-					Data.newSearchHistory(history_info, function(result){});
+					Data.newSearchHistory(history_info, function(result){
+						console.log(result.state);
+					});
 				}
+
+				if (!listing_result.info.length || listing_result.state == "error"){
+					renderWhoIs(req, res, domain_name);
+				}
+				//exists! handle the rest of the route
 				else {
-					if (!listing_result.info.length || listing_result.state == "error"){
-						renderWhoIs(req, res, domain_name);
-					}
-					//exists! handle the rest of the route
-					else {
-						next();
-					}
+					next();
 				}
 			});
 		}
