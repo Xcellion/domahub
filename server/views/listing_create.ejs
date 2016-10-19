@@ -45,7 +45,7 @@
 					</p>
 					<div class="columns">
 						<div class="column">
-							<a data-listing-type="basic" class="box">
+							<a data-listing-type="basic" class="box" tabindex="8">
 								<div class="content">
 									<h2 class="is-bold is-accent margin-bottom-25">Basic Listing</h2>
 									<ul>
@@ -58,7 +58,7 @@
 							</a>
 						</div>
 						<div class="column">
-							<a data-listing-type="premium" class="box">
+							<a data-listing-type="premium" class="box" tabindex="9">
 								<div class="content">
 									<h2 class="is-bold is-primary margin-bottom-25">Premium Listing</h2>
 									<ul>
@@ -98,22 +98,22 @@
 					</div>
 					<p class="control">
 						<label id="domain-error-message" class="label is-medium">Domain Name&#42;</label>
-						<input id="sing-domain" class="input required-input is-medium" type="url" placeholder="MyDomain.com"/>
+						<input id="sing-domain" tabindex="9" class="input required-input is-medium" type="url" placeholder="MyDomain.com"/>
 					</p>
 					<p class="control">
 						<label id="description-error-message" class="label is-medium has-icon">Description&#42;</label>
 						<i class="fa fa-question-circle-o"></i>
-						<textarea id="sing-description" class="textarea required-input is-medium" placeholder="This is a premium domain name with over a million visits per month!"></textarea>
+						<textarea id="sing-description" tabindex="10" class="textarea required-input is-medium" placeholder="This is a premium domain name with over a million visits per month!"></textarea>
 					</p>
 					<p class="control">
 						<label class="label is-medium has-icon">Purchase Link</label>
 						<i class="fa fa-question-circle-o"></i>
-						<input id="sing-purchase" class="input is-medium" type="url" placeholder="godaddy.com/myDomainName"/>
+						<input id="sing-purchase" tabindex="11" class="input is-medium" type="url" placeholder="godaddy.com/myDomainName"/>
 					</p>
 					<p class="control">
 						<label class="label is-medium has-icon">Background Image</label>
 						<i class="fa fa-question-circle-o"></i>
-						<input id="sing-background" class="input is-medium" type="url" placeholder="backgroundImage.com/image.png"/>
+						<input id="sing-background" tabindex="12" class="input is-medium" type="url" placeholder="backgroundImage.com/image.png"/>
 					</p>
 				</div>
 			</div>
@@ -145,31 +145,31 @@
 						<ul class="checkbox-wrapper">
 							<li>
 								<input class="cat-checkbox" id="cb1" type="checkbox" />
-								<label class="checkbox-label" for="cb1">Start-Up</label>
+								<label class="checkbox-label" tabindex="9" for="cb1">Start-Up</label>
 							</li>
 							<li>
 								<input class="cat-checkbox" id="cb2" type="checkbox" />
-								<label class="checkbox-label" for="cb2">Business</label>
+								<label class="checkbox-label" tabindex="10" for="cb2">Business</label>
 							</li>
 							<li>
 								<input class="cat-checkbox" id="cb3" type="checkbox" />
-								<label class="checkbox-label" for="cb3">Event</label>
+								<label class="checkbox-label" tabindex="11" for="cb3">Event</label>
 							</li>
 							<li>
 								<input class="cat-checkbox" id="cb4" type="checkbox" />
-								<label class="checkbox-label" for="cb4">Promotion</label>
+								<label class="checkbox-label" tabindex="12" for="cb4">Promotion</label>
 							</li>
 							<li>
 								<input class="cat-checkbox" id="cb5" type="checkbox" />
-								<label class="checkbox-label" for="cb5">Holiday</label>
+								<label class="checkbox-label" tabindex="13" for="cb5">Holiday</label>
 							</li>
 							<li>
 								<input class="cat-checkbox" id="cb6" type="checkbox" />
-								<label class="checkbox-label" for="cb6">Industry</label>
+								<label class="checkbox-label" tabindex="14" for="cb6">Industry</label>
 							</li>
 							<li>
 								<input class="cat-checkbox" id="cb7" type="checkbox" />
-								<label class="cat-checkbox-label" for="cb7">I'm not sure.</label>
+								<label class="cat-checkbox-label" tabindex="15" for="cb7">I'm not sure.</label>
 							</li>
 						</ul>
 					</form>
@@ -213,7 +213,7 @@
 								<label class="label">Hour</label>
 							</div>
 							<div class="control has-icon">
-								<input id="hour-price" class="input input-number" type="number" value="1" min="1"/>
+								<input id="hour-price" tabindex="9" class="input input-number" type="number" value="1" min="1"/>
 								<i class="fa fa-dollar"></i>
 							</div>
 						</div>
@@ -222,7 +222,7 @@
 								<label class="label">Day</label>
 							</div>
 							<div class="control has-icon">
-								<input id="day-price" class="input input-number" type="number" value="10" min="1"/>
+								<input id="day-price" tabindex="10" class="input input-number" type="number" value="10" min="1"/>
 								<i class="fa fa-dollar"></i>
 							</div>
 						</div>
@@ -231,7 +231,7 @@
 								<label class="label">Week</label>
 							</div>
 							<div class="control has-icon">
-								<input id="week-price" class="input input-number" type="number" value="25" min="1"/>
+								<input id="week-price" tabindex="11" class="input input-number" type="number" value="25" min="1"/>
 								<i class="fa fa-dollar"></i>
 							</div>
 						</div>
@@ -240,7 +240,7 @@
 								<label class="label">Month</label>
 							</div>
 							<div class="control has-icon">
-								<input id="month-price" class="input input-number" type="number" value="50" min="1"/>
+								<input id="month-price" tabindex="12" class="input input-number" type="number" value="50" min="1"/>
 								<i class="fa fa-dollar"></i>
 							</div>
 						</div>
@@ -279,7 +279,7 @@
 				<div class="column is-half-desktop">
 					<div class="control is-grouped is-pulled-right">
 						<p class="control">
-							<a id="prev-button" class="is-disabled button is-primary prev-button">
+							<a id="prev-button" class="is-disabled button is-primary prev-button" tabindex="16">
 								<span class="icon">
 									<i class="fa fa-angle-left"></i>
 								</span>
@@ -287,7 +287,7 @@
 							</a>
 						</p>
 						<p class="control">
-							<a id="submit-button" class="is-hidden button is-primary">
+							<a id="submit-button" class="is-hidden button is-primary" tabindex="17">
 								<span class="icon">
 									<i class="fa fa-angle-down"></i>
 								</span>
@@ -295,7 +295,7 @@
 							</a>
 						</p>
 						<p class="control">
-							<a id="next-button" class="is-disabled button is-primary next-button">
+							<a id="next-button" class="is-disabled button is-primary next-button" tabindex="18">
 								<span>Next</span>
 								<span class="icon">
 									<i class="fa fa-angle-right"></i>
