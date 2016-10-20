@@ -1491,10 +1491,11 @@ input:-webkit-autofill {
 
 @media screen and (min-width: 769px) {
   .control-label {
+    align-self: center;
+    box-sizing: border-box;
     flex-grow: 0;
     margin-right: 10px;
-    padding-top: 7px;
-    text-align: right; } }
+    text-align: left; } }
 
 .control-label.is-small {
   width: 100px; }
@@ -1506,7 +1507,7 @@ input:-webkit-autofill {
   width: 140px; }
 
 .control-label.is-padded {
-  padding-right: 100px; }
+  width: 100px; }
 
 .control {
   position: relative;
