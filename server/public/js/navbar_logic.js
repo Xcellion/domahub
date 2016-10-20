@@ -11,8 +11,14 @@ $(document).ready(function() {
 	//redirect search to the appropriate /listing page
 	$("#searchbar-form").submit(function(e){
 		e.preventDefault();
-		console.log('s')
-        window.location = window.location.origin + "/listing/" + $('#domain-name').val();
+		var domain_name = $('#domain-name').val()
+
+		//default to .com if theres nothing provided
+		if (domain_name.indexOf(".") == -1){
+			domain_name += ".com";
+		}
+
+        window.location = window.location.origin + "/listing/" + domain_name;
 	});
 
 	// adds is-active to login button
