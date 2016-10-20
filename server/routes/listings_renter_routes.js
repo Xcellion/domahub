@@ -75,12 +75,14 @@ module.exports = {
 		}
 		else {
 			//check if its even a valid JS date
-			invalid_times = [];
+			var invalid_times = [];
 			var time_now = (new Date()).getTime();
 			for (var x = 0; x < times.length; x++){
-				temp_start = new Date(times[x].start);
-				temp_end = new Date(times[x].end);
-				if (isNaN(temp_start) || isNaN(temp_end) || temp_end.getTime() < time_now || temp_start.getTime() < time_now){
+				var start_num = parseFloat(times[x].start);
+				var end_num = parseFloat(times[x].end);
+				var temp_start = new Date(start_num);
+				var temp_end = new Date(end_num);
+				if (isNaN(temp_start) || isNaN(temp_end) || start_num <= time_now || end_num <= time_now){
 					invalid_times.push(times[x]);
 				}
 			}
@@ -149,9 +151,7 @@ module.exports = {
 
 				//add to search history if its not localhost
 				if (user_ip != "::1"){
-					Data.newSearchHistory(history_info, function(result){
-						console.log(result.state);
-					});
+					Data.newSearchHistory(history_info, function(result){});	//async
 				}
 
 				if (!listing_result.info.length || listing_result.state == "error"){
@@ -219,7 +219,7 @@ module.exports = {
 	},
 
 	renderListingHub : function(req, res, next){
-		res.render("listing_hub.ejs", {
+		res.render("listings/listing_hub.ejs", {
 			user: req.user
 		});
 	},
@@ -231,7 +231,7 @@ module.exports = {
 			delete req.session.new_rental_info;
 		}
 
-		res.render("listing.ejs", {
+		res.render("listings/listing.ejs", {
 			user: req.user,
 			message: Auth.messageReset(req),
 			listing_info: req.session.listing_info,
@@ -466,12 +466,12 @@ function renderWhoIs(req, res, domain_name){
 			//nobody owns it!
 			if (owner_name == "Nobody"){
 				options.listing_info.description += "However, it's available for purchase at the below links!";
-				res.render("listing_unlisted_available.ejs", options);
+				res.render("listings/listing_unlisted_available.ejs", options);
 			}
 			//someone owns it
 			else {
 				options.listing_info.description += "However, if you'd like you can fill out the below time slots and we'll let the owner know!";
-				res.render("listing_unlisted_unavailable.ejs", options);
+				res.render("listings/listing_unlisted_unavailable.ejs", options);
 			}
 		}
 

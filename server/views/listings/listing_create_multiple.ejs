@@ -2,7 +2,7 @@
 <html>
 <head>
 	<title>Create Listing - DomaHub</title>
-	<%- include("templates/head_links"); %>
+	<%- include("../templates/head_links"); %>
 	<link rel="stylesheet" href="/css/listing_create.css" type="text/css" />
 	<script type="text/javascript">
 		var user = <% if(typeof user != "undefined"){ %><%-JSON.stringify(user)%><% }else{ %>""<% } %>;
@@ -13,7 +13,7 @@
 
 <body>
 
-  <%- include("templates/navbar", {user: user}); %>
+  <%- include("../templates/navbar", {user: user}); %>
 
   <section class="section is-medium clear-nav">
     <div class="container">
@@ -91,7 +91,7 @@
     </div>
   </section>
 
-  <%- include("templates/footer"); %>
+  <%- include("../templates/footer"); %>
 
 </body>
 </html>

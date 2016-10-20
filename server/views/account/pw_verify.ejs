@@ -3,7 +3,7 @@
   <head>
     <title>Verify My Account - DomaHub</title>
     <link rel="stylesheet" type="text/css" href="/css/login_signup.css" />
-    <%- include("templates/head_links"); %>
+    <%- include("../templates/head_links"); %>
   </head>
 
   <body>
@@ -17,7 +17,7 @@
             <% if (typeof message != "undefined") {%>
               <%= message %>
             <% } else {%>
-                Click below to verify your account!
+                Click below to send an email to verify your account!
             <% } %>
         </div>
 
@@ -38,7 +38,7 @@
         </form>
     </div>
 
-    <script src="/js/routes/verify_email_logic.js" type="text/javascript"></script>
+    <script src="/js/routes/verify_request_logic.js" type="text/javascript"></script>
 
   </body>
 

@@ -8,7 +8,7 @@
 		<title>domahub</title>
 		<link rel="stylesheet" href="/css/listing_404.css" type="text/css" />
 		<link rel="stylesheet" href="/css/listing.css" type="text/css" />
-        <%- include("templates/head_links"); %>
+        <%- include("../templates/head_links"); %>
 		<script type="text/javascript">
 			var user = <% if(typeof user != "undefined"){ %><%-JSON.stringify(user)%><% }else{ %>""<% } %>;
 			var available = <% if(typeof available != "undefined"){ %><%-JSON.stringify(available)%><% }else{ %>""<% } %>;
@@ -18,7 +18,7 @@
 
 	<body>
 
-		<%- include("templates/navbar", {user: user}); %>
+		<%- include("../templates/navbar", {user: user}); %>
 
 		<div id="top_wrapper" class="page_wrapper">
 			<div id="image_wrapper">
@@ -36,7 +36,7 @@
 
 		</div>
 
-		<%- include("templates/footer"); %>
+		<%- include("../templates/footer"); %>
 
     </body>
 </html>

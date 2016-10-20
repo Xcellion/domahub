@@ -34,7 +34,7 @@ $(document).ready(function() {
 
 		//prevent selecting anything before now
 		selectConstraint: {
-			start: moment(new Date().getTime() - 1800000),
+			start: moment(new Date().getTime()),
 			end: moment(new Date().getTime() + 31556952000)
 		},
 

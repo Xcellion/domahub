@@ -87,7 +87,7 @@ module.exports = {
 			next();
 		}
 		else {
-			res.render("stripeconnect.ejs");
+			res.render("account/stripeconnect.ejs");
 		}
 	},
 
@@ -362,7 +362,7 @@ module.exports = {
 
 	//function to display the create listing page
 	renderCreateListing : function(req, res, next){
-		res.render("listing_create.ejs", {
+		res.render("listings/listing_create.ejs", {
 			message: Auth.messageReset(req),
 			user: req.user,
 		});
@@ -370,7 +370,7 @@ module.exports = {
 
 	//function to display the create listing page
 	renderCreateListingBatch : function(req, res, next){
-		res.render("listing_create_multiple.ejs", {
+		res.render("listings/listing_create_multiple.ejs", {
 			message: Auth.messageReset(req),
 			user: req.user,
 		});

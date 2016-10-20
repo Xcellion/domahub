@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>FAQ - DomaHub</title>
+  <link rel="stylesheet" type="text/css" href="/css/main_faq.css" />
+  <%- include("../templates/head_links"); %>
+</head>
+
+<body>
+
+  <%- include("../templates/navbar", {user: user}); %>
+
+  <section class="section clear-nav is-medium">
+    <div class="container">
+      <div class="columns">
+        <div class="column is-one-quarter is-hidden-mobile">
+          <aside class="menu">
+            <ul class="menu-list">
+              <p class="control has-icon">
+								<input id="search-faq" tabindex="7" class="input" type="text" placeholder="Search FAQ" />
+								<i class="fa fa-search"></i>
+							</p>
+            </ul>
+            <p class="menu-label">
+              Categories
+            </p>
+            <ul class="menu-list">
+              <li><a class="is-active" tabindex="8" href="#">About DomaHub</a></li>
+              <li><a href="#" tabindex="9">Renting with DomaHub</a></li>
+              <li><a href="#" tabindex="10">Selling on DomaHub</a></li>
+              <li><a href="#" tabindex="11">Payments</a></li>
+              <li><a href="#" tabindex="12">Communicating with users</a></li>
+              <li><a href="#" tabindex="13">Rental contracts</a></li>
+            </ul>
+          </aside>
+        </div>
+        <div class="column is-two-thirds">
+          <div id="faq-about" class="faq-section">
+            <h2 class="title is-normal has-borderBottom">About DomaHub</h2>
+            <div class="qa-wrapper">
+              <h3 class="faq-question" tabindex="14" title="What exactly does DomaHub do?">
+                What exactly does DomaHub do?</h3>
+              <p class="faq-answer is-hidden">
+                Put simply, DomaHub is a platform allowing domain name
+                owners to rent out their domains to prospective renters.
+                It's a communication and advertising platform for sellers,
+                and a browse and shop marketplace for renters.
+              </p>
+            </div>
+            <div class="qa-wrapper">
+              <h3 class="faq-question" tabindex="15" title="How does DomaHub make money?">
+                How does DomaHub make money?</h3>
+              <p class="faq-answer is-hidden">
+                DomaHub receives money every time a Basic listing is rented out
+                as well as when a Premium listing is posted.
+              </p>
+            </div>
+          </div>
+          <div id="faq-renting" class="faq-section">
+            <h2 class="title is-normal has-borderBottom">Renting with DomaHub</h2>
+            <div class="qa-wrapper">
+              <h3 class="faq-question" tabindex="16" title="How can I rent a domain?">
+                How can I rent a domain?</h3>
+              <p class="faq-answer is-hidden">
+                Go to our <a class="orange-link" href="/listings">listings page</a>
+                to browse all current listings.
+              </p>
+            </div>
+            <div class="qa-wrapper">
+              <h3 class="faq-question" tabindex="17" title="How long can I keep the domain?">
+                How long can I keep the domain?</h3>
+              <p class="faq-answer is-hidden">
+                You may only keep the domain for the amount of time you paid for.
+                You will immediately lose ownership and control of the domain the
+                second past your allotted time.
+              </p>
+            </div>
+            <div class="qa-wrapper">
+              <h3 class="faq-question" tabindex="18" title="What if I need it for longer than I originally planned?">
+                What if I need it for longer than I originally planned?</h3>
+              <p class="faq-answer is-hidden">
+                All extensions must be negotiated and purchased prior to your current
+                expiration date(s). However, if the domain has already been rented
+                for the subsequent time slots, you may not steal those times away from
+                others just because you currently have the domain rented.
+              </p>
+            </div>
+            <div class="qa-wrapper">
+              <h3 class="faq-question" tabindex="19" title="Can the domain owner sell the domain while I am renting it?">
+                Can the domain owner sell the domain while I am renting it?</h3>
+              <p class="faq-answer is-hidden">
+                Domain rentals through DomaHub are legally binded by contract
+                and may not - under any circumstances - be sold while a user
+                has rented it.
+              </p>
+            </div>
+            <div class="qa-wrapper">
+              <h3 class="faq-question" tabindex="20" title="Do I have an option to buy-out the domain?">
+                Do I have an option to buy-out the domain?</h3>
+              <p class="faq-answer is-hidden">
+                Answer pending.
+              </p>
+            </div>
+          </div>
+          <div id="faq-selling" class="faq-section">
+            <h2 class="title is-normal has-borderBottom">Selling on DomaHub</h2>
+            <div class="qa-wrapper">
+              <h3 class="faq-question" tabindex="21" title="How do I start listing domains?">
+                How do I start listing domains?</h3>
+              <p class="faq-answer is-hidden">
+                Once you have created an account and <a class="orange-link" href="/authorizestripe">
+                verified Stripe</a> payments, you may create a listing by going to the
+                <a class="orange-link" href="/listing/create">create listing</a> page.
+                DomaHub offers two types of listings: Basic and Premium.
+              </p>
+            </div>
+            <div class="qa-wrapper">
+              <h3 class="faq-question" tabindex="22" title="What are the differences between basic and premium listings?">
+                What are the differences between basic and premium listings?</h3>
+              <p class="faq-answer is-hidden">
+                A Basic listing is free to list, but has an 18% commission on sales.
+                Basic listings have flat, fixed pricing which means DomaHub will decide
+                its price. Additionally, Basic listings cannot be listed for hourly slots.
+                A Premium listing costs &#36;5 a month to list, but DomaHub will not take any commission.
+                Custom pricing as well as hourly pricing are both available to Premium listings.
+              </p>
+            </div>
+            <div class="qa-wrapper">
+              <h3 class="faq-question" tabindex="23" title="What happens if I find a buyer for my domain?">
+                What happens if I find a buyer for my domain?</h3>
+              <p class="faq-answer is-hidden">
+                You may not sell your domain while it is being rented by a DomaHub
+                user. However, if your domain is listed but not currently being rented,
+                you may cancel the listing and sell it as you please.
+              </p>
+            </div>
+            <div class="qa-wrapper">
+              <h3 class="faq-question" tabindex="24" title="Can I cancel my listing while it's being rented?">
+                Can I cancel my listing while it's being rented?</h3>
+              <p class="faq-answer is-hidden">
+                No you cannot immediately cancel any listing that is currently rented by a DomaHub user.
+                However, you may cancel your listing for all dates following the current renters'
+                schedule; effectively removing all future availability.
+              </p>
+            </div>
+            <div class="qa-wrapper">
+              <h3 class="faq-question" tabindex="24" title="How do I get paid?">
+                How do I get paid?</h3>
+              <p class="faq-answer is-hidden">
+                As transactions occur, you will be paid automatically through your
+                Stripe account. Go to your <a class="orange-link" href="/profile">profile</a>
+                page to access more tools.
+              </p>
+            </div>
+          </div>
+          <div id="faq-payments" class="faq-section">
+            <h2 class="title is-normal has-borderBottom">Payments</h2>
+            <div class="qa-wrapper">
+              <h3 class="faq-question" tabindex="25" title="How do I pay for rentals?">
+                How do I pay for rentals?</h3>
+              <p class="faq-answer is-hidden">
+                DomaHub strictly conducts online transactions through
+                Stripe payments, a third-party payments system used by companies
+                like Lyft, Twitter, OpenTable, etc. Simply link a credit or debit
+                card or a bank account to your Stripe account.
+              </p>
+            </div>
+            <div class="qa-wrapper">
+              <h3 class="faq-question" tabindex="26" title="How do I receive payments?">
+                How do I receive payments?</h3>
+              <p class="faq-answer is-hidden">
+                Pending answer.
+              </p>
+            </div>
+            <div class="qa-wrapper">
+              <h3 class="faq-question" tabindex="27" title="What about recurring payments?">
+                What about recurring payments?</h3>
+              <p class="faq-answer is-hidden">
+                Pending answer.
+              </p>
+            </div>
+            <div class="qa-wrapper">
+              <h3 class="faq-question" tabindex="28" title="Can I get a refund?">
+                Can I get a refund?</h3>
+              <p class="faq-answer is-hidden">
+                Pending answer.
+              </p>
+            </div>
+          </div>
+          <div id="faq-communicating" class="faq-section">
+            <h2 class="title is-normal has-borderBottom">Communicating with users</h2>
+            <div class="qa-wrapper">
+              <h3 class="faq-question" tabindex="29" title="Can I communicate with users outside of DomaHub?">
+                Can I communicate with users outside of DomaHub?</h3>
+              <p class="faq-answer is-hidden">
+                Sellers and renters may not communicate regarding DomaHub listings
+                using means of communication that exist outside of the DomaHub
+                web application.
+              </p>
+            </div>
+            <div class="qa-wrapper">
+              <h3 class="faq-question" tabindex="30" title="What about negotiating buy-out pricing?">
+                What about negotiating buy-out pricing?</h3>
+              <p class="faq-answer is-hidden">
+                Answer pending.
+              </p>
+            </div>
+          </div>
+          <div id="faq-contracts" class="faq-section">
+            <h2 class="title is-normal has-borderBottom">Rental contracts</h2>
+            <div class="qa-wrapper">
+              <h3 class="faq-question" tabindex="31">Questions uncertain</h3>
+              <p class="faq-answer is-hidden">
+                Answer pending.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <%- include("../templates/footer"); %>
+  <script src="/js/routes/faq_logic.js" type="text/javascript"></script>
+</body>
+
+</html>
