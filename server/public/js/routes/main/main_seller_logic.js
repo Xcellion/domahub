@@ -4,7 +4,7 @@ $(document).ready(function() {
 
     $(".earnings-input").on('change keyup paste mousewheel',function(e){
         calculateEarnings();
-    })
+    });
 
 });
 
