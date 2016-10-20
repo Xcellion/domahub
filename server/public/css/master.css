@@ -4959,8 +4959,16 @@ a.nav-item.is-tab {
     display: flex;
     flex-direction: row;
     justify-content: center; }
+  @media screen and (min-width: 980px) {
+    .section.is-create {
+      padding: 100px 20px 40px; } }
+  @media screen and (max-width: 768px) {
+    .section.is-create {
+      padding: 60px 20px 20px; } }
+  .section.is-create-button {
+    padding: 0 20px 100px; }
   .section.is-small {
-    padding: 0 20px 40px 20px; }
+    padding: 0 20px 40px; }
   @media screen and (min-width: 980px) {
     .section.is-medium {
       padding: 120px 20px; } }

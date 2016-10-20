@@ -14,21 +14,13 @@
 
 	<%- include("../templates/navbar", {user: user}); %>
 
-	<section data-pagenum="1" class="section current-section is-medium clear-nav">
+	<section data-pagenum="1" class="section current-section is-create">
 		<div class="container">
 			<progress class="progress is-small is-primary" value="0" max="100"></progress>
 			<div class="columns">
 				<div class="column is-half-desktop">
 					<div class="content">
 						<h1 class="is-normal">Single Listing.</h1>
-					</div>
-					<div class="content">
-						<a class="button is-accent" tabindex="7" href="/listing/create/batch">
-							<span class="icon">
-								<i class="fa fa-check-circle-o"></i>
-							</span>
-							<span>I have multiple domains to list.</span>
-						</a>
 					</div>
 					<div class="content">
 						<h2 class="heading is-blacklight">Step 1</h2>
@@ -71,7 +63,7 @@
 		</div>
 	</section>
 
-	<section data-pagenum="2" class="section is-medium is-hidden clear-nav">
+	<section data-pagenum="2" class="section is-hidden is-create ">
 		<div class="container">
 			<progress class="progress is-small is-primary" value="25" max="100"></progress>
 			<div class="columns">
@@ -107,7 +99,7 @@
 		</div>
 	</section>
 
-	<section data-pagenum="3" class="section is-medium is-hidden clear-nav">
+	<section data-pagenum="3" class="section is-hidden is-create ">
 		<div class="container">
 			<progress class="progress is-small is-primary" value="50" max="100"></progress>
 			<div class="columns">
@@ -157,7 +149,7 @@
 		</div>
 	</section>
 
-	<section id="pricing-section" data-pageskip="true" data-pagenum="4" class="section is-medium is-hidden">
+	<section id="pricing-section" data-pageskip="true" data-pagenum="4" class="section is-create  is-hidden">
 		<div class="container">
 			<progress class="progress is-small is-primary" value="75" max="100"></progress>
 			<div class="columns">
@@ -171,47 +163,47 @@
 					</div>
 					<form>
 						<%# <div class="control is-horizontal">
-							<div class="control-label is-small">
-								<label class="label">Minute</label>
+							<div class="control-label is-medium">
+								<label class="label is-medium">Minute</label>
 							</div>
 							<div class="control has-icon">
-								<input id="minute-price" class="input input-number" type="number" value="1" min="1"/>
+								<input id="minute-price" class="input input-number is-medium" type="number" value="1" min="1"/>
 								<i class="fa fa-dollar"></i>
 							</div>
 						</div>%>
 						<div class="control is-horizontal">
-							<div class="control-label is-small">
-								<label class="label">Hour</label>
+							<div class="control-label is-medium">
+								<label class="label is-medium">Hour</label>
 							</div>
 							<div class="control has-icon">
-								<input id="hour-price" tabindex="9" class="input input-number" type="number" value="1" min="1"/>
+								<input id="hour-price" tabindex="9" class="input input-number is-medium" type="number" value="1" min="1"/>
 								<i class="fa fa-dollar"></i>
 							</div>
 						</div>
 						<div class="control is-horizontal">
-							<div class="control-label is-small">
-								<label class="label">Day</label>
+							<div class="control-label is-medium">
+								<label class="label is-medium">Day</label>
 							</div>
 							<div class="control has-icon">
-								<input id="day-price" tabindex="10" class="input input-number" type="number" value="10" min="1"/>
+								<input id="day-price" tabindex="10" class="input input-number is-medium" type="number" value="10" min="1"/>
 								<i class="fa fa-dollar"></i>
 							</div>
 						</div>
 						<div class="control is-horizontal">
-							<div class="control-label is-small">
-								<label class="label">Week</label>
+							<div class="control-label is-medium">
+								<label class="label is-medium">Week</label>
 							</div>
 							<div class="control has-icon">
-								<input id="week-price" tabindex="11" class="input input-number" type="number" value="25" min="1"/>
+								<input id="week-price" tabindex="11" class="input input-number is-medium" type="number" value="25" min="1"/>
 								<i class="fa fa-dollar"></i>
 							</div>
 						</div>
 						<div class="control is-horizontal">
-							<div class="control-label is-small">
-								<label class="label">Month</label>
+							<div class="control-label is-medium">
+								<label class="label is-medium">Month</label>
 							</div>
 							<div class="control has-icon">
-								<input id="month-price" tabindex="12" class="input input-number" type="number" value="50" min="1"/>
+								<input id="month-price" tabindex="12" class="input input-number is-medium" type="number" value="50" min="1"/>
 								<i class="fa fa-dollar"></i>
 							</div>
 						</div>
@@ -221,7 +213,7 @@
 		</div>
 	</section>
 
-	<section data-pagenum="5" class="section is-medium is-hidden clear-nav">
+	<section data-pagenum="5" class="section is-hidden  is-create">
 		<div class="container">
 			<progress class="progress is-small is-primary" value="100" max="100"></progress>
 			<div class="columns">
@@ -246,36 +238,52 @@
 		</div>
 	</section>
 
-	<section id="buttons-section" class="section is-small">
+	<section id="buttons-section" class="section is-create-button">
 		<div class="container">
 			<div class="columns">
 				<div class="column is-half-desktop">
-					<div class="control is-grouped">
-						<p class="control">
-							<a id="prev-button" class="is-disabled button is-primary prev-button" tabindex="16">
+					<nav class="level">
+						<div class="level-left">
+							<a class="button is-accent" tabindex="7" href="/listing/create/batch">
 								<span class="icon">
-									<i class="fa fa-angle-left"></i>
+									<i class="fa fa-check-circle-o"></i>
 								</span>
-								<span>Previous</span>
+								<span>I have multiple domains to list.</span>
 							</a>
-						</p>
-						<p class="control">
-							<a id="submit-button" class="is-hidden button is-primary" tabindex="17">
-								<span class="icon">
-									<i class="fa fa-angle-down"></i>
-								</span>
-								<span>Submit</span>
-							</a>
-						</p>
-						<p class="control">
-							<a id="next-button" class="is-disabled button is-primary next-button" tabindex="18">
-								<span>Next</span>
-								<span class="icon">
-									<i class="fa fa-angle-right"></i>
-								</span>
-							</a>
-						</p>
-					</div>
+						</div>
+						<div class="level-right">
+							<div class="level-item">
+								<p class="control">
+									<a id="prev-button" class="is-disabled button is-primary prev-button" tabindex="16">
+										<span class="icon">
+											<i class="fa fa-angle-left"></i>
+										</span>
+										<span>Previous</span>
+									</a>
+								</p>
+							</div>
+							<div class="level-item">
+								<p class="control">
+									<a id="next-button" class="is-disabled button is-primary next-button" tabindex="18">
+										<span>Next</span>
+										<span class="icon">
+											<i class="fa fa-angle-right"></i>
+										</span>
+									</a>
+								</p>
+							</div>
+							<div class="level-item">
+								<p class="control">
+									<a id="submit-button" class="is-hidden button is-primary" tabindex="17">
+										<span class="icon">
+											<i class="fa fa-angle-down"></i>
+										</span>
+										<span>Submit</span>
+									</a>
+								</p>
+							</div>
+						</div>
+					</nav>
 				</div>
 			</div>
 		</div>
