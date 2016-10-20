@@ -2,9 +2,12 @@ $(document).ready(function() {
 
     //section 1 - basic vs premium
     $(".box").click(function() {
-        $(".box").removeClass("is-active");
-        $(this).addClass("is-active");
-        $("#next-button").removeClass("is-disabled");
+        //styling the two buttons
+        $(".box").removeClass("is-active").addClass("low-opacity");
+        $(this).addClass("is-active").removeClass("low-opacity");
+
+        //setting up next button logic
+        setSectionNext(true);
 
         //to skip the pricing section or not depending on the listing type
         if ($(this).data("listing-type") == "basic"){
@@ -19,14 +22,25 @@ $(document).ready(function() {
     $(".required-input").on("keydown, keyup", function(e){
         e.preventDefault();
         if ($("#sing-domain").val() && $("#sing-description").val()){
-            $("#next-button").removeClass("is-disabled");
+            //can go next when the value exists
+            setSectionNext(true);
 
             //update the listing preview
             $("#preview_domain").text($("#sing-domain").val());
             $("#preview_description").text($("#sing-description").val());
         }
         else {
-            $("#next-button").addClass("is-disabled");
+            setSectionNext(false);
+        }
+    });
+
+    //section 3 - categories
+    $(".cat-checkbox-label, .cat-checkbox").on("click", function(e){
+        if ($('.cat-checkbox:checkbox:checked').length > 0){
+            setSectionNext(true);
+        }
+        else {
+            setSectionNext(false);
         }
     });
 
@@ -35,28 +49,14 @@ $(document).ready(function() {
         $(this).attr("src", "https://source.unsplash.com/category/people");
     });
 
-    //section 3 - categories
-    $(".cat-checkbox-label, .cat-checkbox").on("click", function(e){
-        if ($('.cat-checkbox:checkbox:checked').length > 0){
-            $("#next-button").removeClass("is-disabled");
-        }
-        else {
-            $("#next-button").addClass("is-disabled");
-        }
-    });
-
     //next/prev button for sections
     $(".next-button").click(function() {
-        var current_section = $(".current-section");
-        var next_section = $(".current-section").next(".section");
-        changePage(current_section, next_section, false);
+        changePage(false);
     });
 
     //previous button for sections
     $(".prev-button").click(function() {
-        var current_section = $(".current-section");
-        var prev_section = $(".current-section").prev(".section");
-        changePage(current_section, prev_section, true);
+        changePage(true);
     });
 
     //submit button
@@ -71,8 +71,27 @@ $(document).ready(function() {
 
 });
 
+//function to set the current section as able to go next
+function setSectionNext(bool){
+    $(".current-section").data("can-next", bool)
+    if (bool){
+        $("#next-button").removeClass("is-disabled");
+    }
+    else {
+        $("#next-button").addClass("is-disabled");
+    }
+}
+
 //function to change pages and add disabled to buttons
-function changePage(current_page, upcoming_page, prev){
+function changePage(prev){
+    var current_page = $(".current-section");
+    if (prev){
+        var upcoming_page = $(".current-section").prev(".section");
+    }
+    else {
+        var upcoming_page = $(".current-section").next(".section");
+    }
+
     //skip the price page if its a basic listing
     if (upcoming_page.data("pageskip") == true){
         upcoming_page = (prev) ? upcoming_page.prev(".section") : upcoming_page.next(".section");
@@ -84,8 +103,11 @@ function changePage(current_page, upcoming_page, prev){
     if (nextpagenum == 1){
         $("#prev-button").addClass("is-disabled");
     }
-    else if (nextpagenum != 4){
+    else if (nextpagenum != 4 && upcoming_page.data("can-next") != true){
         $("#next-button").addClass("is-disabled");
+        $("#prev-button").removeClass("is-disabled");
+    }
+    else {
         $("#prev-button").removeClass("is-disabled");
     }
 
