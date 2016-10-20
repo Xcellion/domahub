@@ -41,7 +41,7 @@ module.exports = function(app, db, auth, e){
 
 //display main page
 function renderMainPage(req, res, next){
-	res.render("main_index", {
+	res.render("main/main_index", {
 		message: Auth.messageReset(req),
 		user: req.user
 	});
@@ -52,7 +52,7 @@ function mainPageLinksRender(req, res, next){
 	var view_name = req.path.slice(1, req.path.length);
 
 	//append main_ to the view name
-	res.render("main_" + view_name, {
+	res.render("main/main_" + view_name, {
 		message: Auth.messageReset(req),
 		user: req.user
 	});

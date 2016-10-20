@@ -27,7 +27,7 @@ module.exports = {
 		if (!req.user.stripe_info){
 			Account.getStripeInfo(req.user.id, function(result){
 				if (result.state == "error" || result.info.length == 0){
-					res.render("stripeconnect.ejs");
+					res.render("account/stripeconnect.ejs");
 				}
 				else {
 					req.user.stripe_info = result.info[0];
@@ -199,7 +199,7 @@ module.exports = {
 					error.handler(req, res, "Invalid price!");
 				}
 				else {
-					console.log("Payment processed! " + owner_stripe_id + " has been paid " + customer_pays + " with " + application_fee + " in Doma fees.")
+					console.log("Payment processed! " + owner_stripe_id + " has been paid $" + customer_pays/100 + " with " + application_fee + " in Doma fees.")
 					next();
 				}
 			});

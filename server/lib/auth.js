@@ -139,7 +139,7 @@ module.exports = {
 
 			//no verified email, make them verify
 			if (req.user.type == 0){
-				res.render("verify_request.ejs", {message: messageReset(req)});
+				res.render("account/pw_verify.ejs", {message: messageReset(req)});
 			}
 			else {
 				req.session.touch();	//reset maxAge for session since user did something
@@ -158,11 +158,11 @@ module.exports = {
 					}
 					else if (route.split("/").indexOf("profile") != -1){
 						req.session.redirectBack = route;
-						res.render("login.ejs", {message: messageReset(req)});
+						res.render("account/login.ejs", {message: messageReset(req)});
 					}
 					//redirect to the default login page
 					else {
-						res.render("login.ejs", {message: messageReset(req)});
+						res.render("account/login.ejs", {message: messageReset(req)});
 					}
 					break;
 			}
@@ -213,22 +213,22 @@ module.exports = {
 		if (req.header("Referer") && req.header("Referer").split("/").indexOf("listing") != -1){
 			req.session.redirectBack = req.header("Referer");
 		}
-		res.render("signup.ejs", { message: messageReset(req)});
+		res.render("account/signup.ejs", { message: messageReset(req)});
 	},
 
 	//forgot my password
 	forgot: function(req, res){
-		res.render("pw_forgot.ejs", {message: messageReset(req)});
+		res.render("account/pw_forgot.ejs", {message: messageReset(req)});
 	},
 
 	//function to check token for resetting password
 	renderReset: function(req, res){
-		res.render("pw_reset.ejs", {message: messageReset(req)});
+		res.render("account/pw_reset.ejs", {message: messageReset(req)});
 	},
 
 	//function to check token for verifying account email
 	renderVerify: function(req, res){
-		res.render("verify_email.ejs", {message: messageReset(req)});
+		res.render("account/verify_email.ejs", {message: messageReset(req)});
 	},
 
 	//function to request verification

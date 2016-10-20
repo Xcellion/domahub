@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>DomaHub</title>
+  <link rel="stylesheet" type="text/css" href="/css/main_index.css" />
+  <link rel="stylesheet" type="text/css" href="/css/lib/slick.css"/>
+  <link rel="stylesheet" type="text/css" href="/css/lib/slick-theme.css"/>
+  <%- include("../templates/head_links"); %>
+</head>
+
+<body>
+
+  <%- include("../templates/navbar", {user: user}); %>
+  <section class="section is-large clear-nav">
+    <div class="container">
+      <div class="columns">
+        <div class="column is-half">
+          <div class="content">
+            <h1 class="title is-2 is-bold margin-bottom-50">
+              Domains that work for you. <br />On your schedule.<br /> Always.
+            </h1>
+            <h2 class="heading is-blacklight">
+              Introducing DomaHub
+            </h2>
+            <p class="title-p">
+              DomaHub is an online marketplace for domain name rentals focused
+              on providing high quality domains at low, affordable prices.
+            </p>
+            <p class="title-p">
+              A rental of any one of our listed domains is highly flexible
+              based on your needs and your schedule.
+            </p>
+          </div>
+          <div class="hero-buttons left-aligned">
+            <a id="get-started" class="button is-primary is-large" href='/getstarted'>Learn More</a>
+            <a class="button is-primary is-inverted is-large" href='/signup'>Create Account</a>
+          </div>
+        </div>
+        <!-- <div id="index-img" class="column landing-img is-hidden-mobile">
+
+        </div> -->
+      </div>
+    </div>
+  </section>
+
+  <!-- <section class="hero is-light is-carousel">
+    <div class="hero-body">
+      <div class="container">
+          <div class="carousel-wrapper">
+            <div class="carousel-control">
+              <div class="carousel-item">
+                <nav class="level">
+                  <div class="level-left">
+                    <div class="level-item">
+                      <span class="tag is-info is-medium is-uppercase">News</span>
+                    </div>
+                    <div class="level-item">
+                      <div class="content">
+                        <p>
+                          DomaHub is now in the beta phase.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </nav>
+              </div>
+            </div>
+            <div class="carousel-control">
+              <div class="carousel-item">
+                <nav class="level">
+                  <div class="level-left">
+                    <div class="level-item">
+                      <span class="tag is-info is-medium is-uppercase">Learn</span>
+                    </div>
+                    <div class="level-item">
+                      <div class="content">
+                        <p>
+                          <a href="/renters" class="primary-link">Learn more</a>
+                           about the different ways to utilize a domain.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </nav>
+              </div>
+            </div>
+            <div class="carousel-control">
+              <div class="carousel-item">
+                <nav class="level">
+                  <div class="level-left">
+                    <div class="level-item">
+                      <span class="tag is-info is-medium is-uppercase">Blog</span>
+                    </div>
+                    <div class="level-item">
+                      <div class="content">
+                        <p>
+                          Read about our humble beginnings at our <a class="primary-link" href="https://medium.com/@domahub">blog</a>.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </nav>
+              </div>
+            </div>
+          </div>
+      </div>
+    </div>
+  </section> -->
+
+  <section class="section is-light is-large">
+    <div class="container">
+      <div class="columns">
+        <div class="column margin-bottom-50">
+          <div class="content">
+            <h1 class="title is-bold is-3">
+              A new, simple, and user-friendly marketplace
+              designed with you in mind.
+            </h1>
+            <p class="title-p is-medium is-blacklight">
+              We are creating opportunities for both owners and renters.
+              For owners, domain rentals become an additional revenue stream,
+              allowing them to generate newfound income. For renters, domains
+              can be acquired according to their schedules, allowing for cheaper
+              and more efficient usage.
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="columns">
+        <div class="column hover-scale">
+          <figure class="image is-64x64 margin-bottom-25">
+            <img src="/images/lib/material/calendar.svg" alt="calendar">
+          </figure>
+          <div class="content">
+            <h2 class="heading has-text-centered">Flexible Schedules</h2>
+            <p>
+              Whether you're a renter or a seller, domain rentals are always
+              tailored to your schedule and preferences. Rentals can be sold
+              by the hour, day, week, month, or even year.
+            </p>
+          </div>
+        </div>
+        <div class="column hover-scale">
+          <figure class="image is-64x64 margin-bottom-25">
+            <img src="/images/lib/material/lineweight.svg" alt="free">
+          </figure>
+          <div class="content">
+            <h2 class="heading has-text-centered">Tiered Listing Plans</h2>
+            <p>
+              We offer two types of listings: Basic and Premium. A Basic listing
+              is free-to-list with commission whereas a Premium listing costs a small
+              monthly fee with zero commission. Learn more about the two types
+              <a class="primary-link">here</a>.
+            </p>
+          </div>
+        </div>
+        <div class="column hover-scale">
+          <figure class="image is-64x64 margin-bottom-25">
+            <img src="/images/lib/material/security.svg" alt="payment">
+          </figure>
+          <div class="content">
+            <h2 class="heading has-text-centered">Protected Process</h2>
+            <p>
+              All rentals are contract binding. You will never have to
+              worry about your rental being sold off or not being paid for.
+              Additionally, we provide options for auto-renewal, auto-payment,
+              and buy-out negotiations.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section is-large">
+    <div class="container">
+      <div class="columns">
+        <div class="column margin-bottom-50">
+          <div class="content">
+            <h1 class="title is-3 is-bold">
+              Benefitting both sides of every transaction.
+            </h1>
+            <h2 class="subtitle is-5 is-blacklight">
+              Rentals produce for domain owners and create new opportunities for buyers.
+            </h2>
+          </div>
+        </div>
+      </div>
+      <div class="columns">
+        <div class="column">
+          <div class="content">
+            <h2 class="heading is-accent">New Revenue Stream</h2>
+            <p>
+              DomaHub is an active living space for all of your domains.
+              Each listing is tailored to your preferences and settings, fit
+              to your schedule.
+              We work hard to ensure that redirection and transfer
+              is simple, quick, and hassle-free.
+            </p>
+            <a class="button is-accent is-large" href="/sellers" title="Learn More - Sellers">Learn More</a>
+          </div>
+        </div>
+        <div class="column">
+          <div class="content">
+            <h2 class="heading is-primary">Limitless Opportunities</h2>
+            <p>
+              A domain rental allows you to redirect anything on the web
+              to a domain name. Send e-cards and e-invitations, create
+              beautiful advertisements, or pick out that special domain name
+              for your new business.
+            </p>
+            <a class="button is-primary is-large" href="/renters">Explore</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="hero is-primary is-small">
+    <div class="hero-body">
+      <div class="container">
+        <h2 class="title is-4 is-normal">
+          Sign up for Early Access
+        </h2>
+        <form id="beta-form" action="/beta" method="post">
+          <p class="control has-addons">
+            <input id="beta-form-email" class="input is-medium" type="email" name="betaemail" placeholder="Enter your email"/>
+            <a id="beta-form-submit" class="button no-shadow is-primary is-medium" href="#mailingsubmitted">Submit</a>
+          </p>
+        </form>
+        <div id="beta-form-success" class="notification is-hidden">
+          Success!
+        </div>
+      </div>
+    </div>
+  </section>
+
+    <%- include("../templates/footer"); %>
+    <script type="text/javascript" src="/js/lib/slick.min.js"></script>
+    <script src="/js/routes/main_index_logic.js" type="text/javascript"></script>
+    <script src="/js/routes/beta_signup_logic.js" type="text/javascript"></script>
+  </body>
+</html>

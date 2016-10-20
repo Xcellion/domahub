@@ -6,7 +6,7 @@
 
 	<head>
 		<title>domahub</title>
-		<%- include("templates/head_links"); %>
+		<%- include("../templates/head_links"); %>
 		<link rel="stylesheet" href="/css/lib/fullcalendar.min.css" type="text/css" />
 		<link rel="stylesheet" href="/css/listing.css" type="text/css" />
 		<script src="https://checkout.stripe.com/checkout.js"></script>
@@ -29,7 +29,7 @@
 	</head>
 
 	<body>
-		<%- include("templates/navbar", {user: user}); %>
+		<%- include("../templates/navbar", {user: user}); %>
 
 		<div id="top_wrapper" class="page_wrapper">
 			<div id="image_wrapper">
@@ -160,7 +160,7 @@
 
 		<% } %>
 
-		<%- include("templates/footer"); %>
+		<%- include("../templates/footer"); %>
 
 	</body>
 
