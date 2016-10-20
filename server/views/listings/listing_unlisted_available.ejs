@@ -6,7 +6,7 @@
 	<head>
 		<title>domahub</title>
 		<%- include("../templates/head_links"); %>
-		<link rel="stylesheet" href="/css/listing.css" type="text/css" />
+		<link rel="stylesheet" href="/css/listings.css" type="text/css" />
 		<script type="text/javascript">
 			var user = <% if(typeof user != "undefined"){ %><%-JSON.stringify(user)%><% }else{ %>""<% } %>;
 			var message = <% if(typeof message != "undefined"){ %><%-JSON.stringify(message)%><% }else{ %>""<% } %>;
@@ -18,7 +18,15 @@
 	<body>
 		<%- include("../templates/navbar", {user: user}); %>
 
-		<div id="top_wrapper" class="page_wrapper">
+		<section id="listing-random-img" class="hero is-fullheight clear-nav landing-img">
+			<div class="img-wrapper-100vh">
+				<div class="hero-body">
+
+				</div>
+			</div>
+		</section>
+
+		<!-- <div id="top_wrapper" class="page_wrapper">
 			<div id="image_wrapper">
 				<img id="background_image" class="background_image noselect" width="100%" height="100%" src="<%= listing_info.background_image || 'https://source.unsplash.com/category/people' %>">
 			</div>
@@ -39,8 +47,7 @@
 				</div>
 
 			</div>
-
-		</div>
+		</div> -->
 
 		<%- include("../templates/footer"); %>
 

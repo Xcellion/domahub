@@ -7,7 +7,7 @@
 	<head>
 		<title>domahub</title>
 		<link rel="stylesheet" href="/css/listing_404.css" type="text/css" />
-		<link rel="stylesheet" href="/css/listing.css" type="text/css" />
+		<link rel="stylesheet" href="/css/listings.css" type="text/css" />
         <%- include("../templates/head_links"); %>
 		<script type="text/javascript">
 			var user = <% if(typeof user != "undefined"){ %><%-JSON.stringify(user)%><% }else{ %>""<% } %>;
@@ -20,21 +20,100 @@
 
 		<%- include("../templates/navbar", {user: user}); %>
 
-		<div id="top_wrapper" class="page_wrapper">
-			<div id="image_wrapper">
-				<img id="background_image" class="background_image noselect" width="100%" height="100%" src="https://images.unsplash.com/uploads/14120261075132a3af3d3/4b450460?dpr=1&auto=format&crop=entropy&fit=crop&w=1500&h=892&q=80&cs=tinysrgb">
-			</div>
-			<div class="info_wrapper">
-
-				<div id="listing_info_wrapper">
-					<div id="domain_result_wrapper">
-						<h2 class="green_text">There's nothing here!</h2>
-						<p>Please use the search bar above to look for another domain name!</p>
+		<section class="section is-medium">
+			<div class="container">
+				<div class="columns">
+					<div class="column">
+						<p class="control has-icon">
+							<input class="input is-large" type="text" placeholder="Search domains" />
+							<i class="fa fa-search"></i>
+						</p>
+						<div class="control is-horizontal">
+						  <div class="control-label is-padded">
+						    <label class="label is-medium">Date Range</label>
+						  </div>
+						  <div class="control is-grouped">
+						    <p class="control is-expanded">
+						      <input class="input" type="date" required="required" placeholder="Rental Start Date">
+						    </p>
+						    <p class="control is-expanded">
+						      <input class="input" type="date" required="required" placeholder="Rental End Date">
+						    </p>
+						  </div>
+						</div>
+						<div class="control is-horizontal">
+							<div class="control-label is-padded">
+								<label class="label is-medium">Price Range</label>
+							</div>
+							<div class="control">
+								<input type="range" name="points" min="0" max="10">
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>
+		</section>
 
-		</div>
+		<!-- <section class="hero is-primary is-medium">
+			<div class="hero-body">
+				<div class="container">
+					<div class="columns">
+						<div class="column is-half">
+							<div class="content">
+								<h1 class="title is-2 is-white">Browse Listings</h1>
+								<p class="subtitle is-4 is-whitelight">
+									Use this page to browse all listings.
+								</p>
+							</div>
+						</div>
+						<div class="column is-half">
+							<div class="notification">
+								<div class="content">
+									<h1 class="title is-white is-3">Don't have an account yet?</h1>
+									<p class="is-whitelight">
+										Click the button below to sign up now.
+									</p>
+									<a class="button is-large is-accent" href="/signup" title="Sign Up">Sign Up</a>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<section class="section">
+			<div class="container">
+				<div class="columns">
+					<div class="column">
+						<h1 class="title is-4 is-normal">Browse by Category</h1>
+					</div>
+				</div>
+				<div class="columns">
+					<div class="column">
+						<div class="box">
+							<div class="content">
+								<h2>Start-Up Domains</h2>
+							</div>
+						</div>
+					</div>
+					<div class="column">
+						<div class="box">
+							<div class="content">
+								<h2>Events</h2>
+							</div>
+						</div>
+					</div>
+					<div class="column">
+						<div class="box">
+							<div class="content">
+								<h2>Industry</h2>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section> -->
 
 		<%- include("../templates/footer"); %>
 
