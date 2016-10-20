@@ -21,7 +21,7 @@
 				<div class="columns">
 					<div class="column">
 						<p class="control has-icon">
-							<input class="input is-large" type="text" placeholder="Search domains" />
+							<input class="input is-medium" tabindex="7" type="text" placeholder="Search domains" />
 							<i class="fa fa-search"></i>
 						</p>
 						<div class="control is-horizontal">
@@ -30,19 +30,50 @@
 						  </div>
 						  <div class="control is-grouped">
 						    <p class="control is-expanded">
-						      <input class="input" type="date" required="required" placeholder="Rental Start Date">
+						      <input class="input is-medium" tabindex="8" type="date" required="required" placeholder="Rental Start Date">
 						    </p>
 						    <p class="control is-expanded">
-						      <input class="input" type="date" required="required" placeholder="Rental End Date">
+						      <input class="input is-medium" tabindex="9" type="date" required="required" placeholder="Rental End Date">
 						    </p>
 						  </div>
+						</div>
+						<div class="control is-horizontal">
+							<div class="control-label is-padded">
+								<label class="label is-medium">Categories</label>
+							</div>
+							<div class="control checkbox-form">
+								<div class="checkbox-wrapper">
+									<input class="cat-checkbox" id="cb1" type="checkbox" />
+									<label class="has-border" tabindex="10" for="cb1">Start-Up</label>
+								</div>
+								<div class="checkbox-wrapper">
+									<input class="cat-checkbox" id="cb2" type="checkbox" />
+									<label class="has-border" tabindex="11" for="cb2">Start-Up</label>
+								</div>
+								<div class="checkbox-wrapper">
+									<input class="cat-checkbox" id="cb3" type="checkbox" />
+									<label class="has-border" tabindex="12" for="cb3">Start-Up</label>
+								</div>
+								<div class="checkbox-wrapper">
+									<input class="cat-checkbox" id="cb4" type="checkbox" />
+									<label class="has-border" tabindex="13" for="cb4">Start-Up</label>
+								</div>
+								<div class="checkbox-wrapper">
+									<input class="cat-checkbox" id="cb5" type="checkbox" />
+									<label class="has-border" tabindex="14" for="cb5">Start-Up</label>
+								</div>
+								<div class="checkbox-wrapper">
+									<input class="cat-checkbox" id="cb6" type="checkbox" />
+									<label class="has-border" tabindex="15" for="cb6">Start-Up</label>
+								</div>
+							</div>
 						</div>
 						<div class="control is-horizontal">
 							<div class="control-label is-padded">
 								<label class="label is-medium">Price Range</label>
 							</div>
 							<div class="control">
-								<span class="select">
+								<span class="select is-medium">
 							    <select>
 							      <option disabled>Select Rate</option>
 							      <option>Hourly</option>
@@ -54,11 +85,10 @@
 							  </span>
 							</div>
 						</div>
+						<div id="slider">
+
+						</div>
 					</div>
-				</div>
-
-				<div id="slider">
-
 				</div>
 			</div>
 		</section>

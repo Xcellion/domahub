@@ -36,6 +36,85 @@
   font-style: normal;
 }
 
+/*************************** CHECKBOX ************************/
+.checkbox-list {
+  border: 1px solid $border;
+  & > li {
+    position: relative;
+    &:not(:first-child) {
+      border-top: 2px solid $border;
+    }
+  }
+}
+
+.checkbox-wrapper + .checkbox-wrapper {
+  margin-left: 10px;
+}
+
+.checkbox-form label {
+	@include transition(all 0.25s ease);
+	color: $text-light;
+	cursor: pointer;
+	display: inline-block;
+	position: relative;
+  box-sizing: border-box;
+  font-size: $size-5;
+  padding: 12px 20px 12px 50px;
+  width: 100%;
+  &.has-border {
+    border: 1px solid $border;
+    border-radius: $radius;
+  }
+  &:hover {
+    color: $primary;
+  }
+  &:focus,
+  &:active {
+    outline: none;
+    border-color: $primary;
+  }
+}
+
+.checkbox-form input[type="checkbox"],
+.checkbox-form input[type="radio"],
+.checkbox-form label::before {
+	cursor: pointer;
+	left: 10px;
+	position: absolute;
+  height: 18px;
+  margin-top: 12px;
+  top: 0;
+  width: 18px;
+}
+
+.checkbox-form input[type="checkbox"],
+.checkbox-form input[type="radio"] {
+	display: inline-block;
+	opacity: 0;
+	vertical-align: middle;
+	z-index: 100;
+  -webkit-appearance: none;
+  left: 10px;
+}
+
+.checkbox-form label::before {
+  content: url(/images/lib/material/unchecked-box.svg);
+  opacity: 0.7;
+	@include transition(all 0.5s ease);
+}
+
+.checkbox-form input[type="checkbox"]:checked + label,
+.checkbox-form input[type="radio"]:checked + label {
+	color: $text;
+}
+
+.checkbox-form input[type="checkbox"]:checked + label::before,
+.checkbox-form input[type="radio"]:checked + label::before {
+  content: url(/images/lib/material/checked-box.svg);
+  opacity: 1;
+}
+
+
 /********************** CUSTOM STYLES ******************/
 .logo-text {
   font: {
@@ -82,8 +161,8 @@
   vertical-align: bottom;
 }
 
-.vertical-align-middle {
-  line-height: 20px;
+.low-opacity {
+  opacity: 0.5;
 }
 
 .hover-scale {
