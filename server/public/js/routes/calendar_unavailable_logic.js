@@ -18,7 +18,9 @@ $(document).ready(function() {
 		select: function(start, end, jsEvent, view){
 			start = moment(start.format());
 			end = moment(end.format());
-			createEvent(start, end);
+			if (unlock){
+				createEvent(start, end);
+			}
 		}
     });
 });

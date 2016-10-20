@@ -1,4 +1,9 @@
 $(document).ready(function() {
+    setUpCalendar();
+});
+
+//function to setup the calendar
+function setUpCalendar(){
     //calendar styling
     $(".fc-button").hide();
     $(".button").click(function(e){
@@ -24,7 +29,7 @@ $(document).ready(function() {
             $(this).text("Month");
         }
     });
-});
+}
 
 //helper function to check if date X overlaps any part with date Y
 function checkOverlap(dateX, durationX, dateY, durationY){

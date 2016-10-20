@@ -118,7 +118,7 @@ module.exports = function(app, db, auth, e, stripe){
 		listings_owner.updateListing
 	]);
 
-	//-------------------------------------------------------------------------------------------------------------------- UNAVAILABLE rental_times
+	//-------------------------------------------------------------------------------------------------------------------- DESIRED TIMES
 
 	app.post("/listing/:domain_name/timeswanted", [
 		urlencodedParser,
