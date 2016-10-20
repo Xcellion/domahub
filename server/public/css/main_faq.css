@@ -1,9 +1,6 @@
 .qa-wrapper + .qa-wrapper {
   margin-top: 25px; }
 
-.qa-wrapper h3 {
-  color: rgba(0, 0, 0, 0.54); }
-
 .qa-wrapper p,
 .qa-wrapper a {
   font-size: 18px;
@@ -20,36 +17,8 @@
   -o-transition: all 0.25s ease;
   -webkit-transition: all 0.25s ease;
   transition: all 0.25s ease;
-  cursor: pointer;
   display: inline-flex;
-  padding: 5px 2px;
+  color: rgba(0, 0, 0, 0.87);
+  font-weight: bold;
+  padding: 5px 0;
   position: relative; }
-  .faq-question::before {
-    -moz-transition: all 0.25s ease;
-    -o-transition: all 0.25s ease;
-    -webkit-transition: all 0.25s ease;
-    transition: all 0.25s ease;
-    content: "";
-    background: #8ad6ba;
-    position: absolute;
-    left: 0;
-    top: 100%;
-    height: 0;
-    width: 100%; }
-  .faq-question:hover, .faq-question:focus {
-    color: #8ad6ba;
-    outline: none; }
-    .faq-question:hover::before, .faq-question:focus::before {
-      height: 3px; }
-  .faq-question.is-active {
-    color: #3cbc8d; }
-    .faq-question.is-active::before {
-      background: #3cbc8d;
-      height: 3px; }
-    .faq-question.is-active:hover, .faq-question.is-active:focus {
-      color: #309670; }
-      .faq-question.is-active:hover::before, .faq-question.is-active:focus::before {
-        background: #309670; }
-
-.faq-answer {
-  padding-left: 2px; }

@@ -1,0 +1,13 @@
+@import 'vars';
+@import 'mixins';
+
+#listing-random-img {
+  @include tablet {
+    background-image: url('https://source.unsplash.com/category/people');
+  }
+}
+
+input[type=date]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    display: none;
+}

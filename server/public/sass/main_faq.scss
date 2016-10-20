@@ -5,9 +5,6 @@
   & + .qa-wrapper {
     margin-top: 25px;
   }
-  h3 {
-    color: $text-light;
-  }
   p,
   a {
     font-size: $size-5;
@@ -26,20 +23,21 @@
 
 .faq-question {
   @include transition(all 0.25s ease);
-  cursor: pointer;
   display: inline-flex;
-  padding: 5px 2px;
+  color: $text;
+  font-weight: bold;
+  padding: 5px 0;
   position: relative;
-  &::before {
-    @include transition(all 0.25s ease);
-    content:"";
-    background: $primary-lighter;
-    position: absolute;
-    left: 0;
-    top: 100%;
-    height: 0;
-    width: 100%;
-  }
+  // &::before {
+  //   @include transition(all 0.25s ease);
+  //   content:"";
+  //   background: $primary-lighter;
+  //   position: absolute;
+  //   left: 0;
+  //   top: 100%;
+  //   height: 0;
+  //   width: 100%;
+  // }
   // &::after {
   //   @include transition(width 0.25s linear);
   //   content:"";
@@ -50,43 +48,39 @@
   //   width: 3px;
   //   height: 100%;
   // }
-  &:hover,
-  &:focus {
-    color: $primary-lighter;
-    outline: none;
-    &::before {
-      height: 3px;
-    }
+  // &:hover,
+  // &:focus {
+  //   color: $primary-lighter;
+  //   outline: none;
+  //   &::before {
+  //     height: 3px;
+  //   }
     // &::after {
     //   background: $primary-lighter;
     //   width: 0;
     //   opacity: 0;
     // }
-  }
-  &.is-active {
-    color: $primary;
-    &::before {
-      background: $primary;
-      height: 3px;
-    }
+  // }
+  // &.is-active {
+  //   color: $primary;
+  //   &::before {
+  //     background: $primary;
+  //     height: 3px;
+  //   }
     // &::after {
     //   background: $primary;
     //   width: 0;
     //   opacity: 0;
     // }
-    &:hover,
-    &:focus {
-      color: $primary-dark;
-      &::before {
-        background: $primary-dark;
-      }
+    // &:hover,
+    // &:focus {
+    //   color: $primary-dark;
+    //   &::before {
+    //     background: $primary-dark;
+    //   }
       // &::after {
       //   background: $primary-darker;
       // }
-    }
-  }
-}
-
-.faq-answer {
-  padding-left: 2px;
+  //   }
+  // }
 }
