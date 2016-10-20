@@ -19,7 +19,7 @@
 
 #beta-form-email {
   font-family: "sharetech", "Lucida Console", monospace;
-  background-color: transparent;
+  background-color: white;
   border: none;
   border-radius: 0;
   -webkit-box-shadow: 0 0 0 black 0;
@@ -29,7 +29,7 @@
   -o-transition: all 0.25s;
   -webkit-transition: all 0.25s;
   transition: all 0.25s;
-  color: white; }
+  color: rgba(0, 0, 0, 0.87); }
   #beta-form-email:focus, #beta-form-email:active {
     -webkit-box-shadow: 0 -2px 0 white inset;
     -moz-box-shadow: 0 -2px 0 white inset;

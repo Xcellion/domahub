@@ -1505,6 +1505,9 @@ input:-webkit-autofill {
 .control-label.is-large {
   width: 140px; }
 
+.control-label.is-padded {
+  padding-right: 100px; }
+
 .control {
   position: relative;
   text-align: left; }
@@ -4146,16 +4149,12 @@ a.nav-item.is-tab {
   .hero.is-white {
     background-color: white;
     color: black; }
-    .hero.is-white .title {
+    .hero.is-white .title a,
+    .hero.is-white .title strong {
+      color: inherit; }
+    .hero.is-white .subtitle a,
+    .hero.is-white .subtitle strong {
       color: black; }
-      .hero.is-white .title a,
-      .hero.is-white .title strong {
-        color: inherit; }
-    .hero.is-white .subtitle {
-      color: rgba(0, 0, 0, 0.7); }
-      .hero.is-white .subtitle a,
-      .hero.is-white .subtitle strong {
-        color: black; }
     .hero.is-white .nav {
       box-shadow: 0 1px 0 rgba(0, 0, 0, 0.2); }
     @media screen and (max-width: 768px) {
@@ -4199,16 +4198,12 @@ a.nav-item.is-tab {
   .hero.is-black {
     background-color: black;
     color: white; }
-    .hero.is-black .title {
+    .hero.is-black .title a,
+    .hero.is-black .title strong {
+      color: inherit; }
+    .hero.is-black .subtitle a,
+    .hero.is-black .subtitle strong {
       color: white; }
-      .hero.is-black .title a,
-      .hero.is-black .title strong {
-        color: inherit; }
-    .hero.is-black .subtitle {
-      color: rgba(255, 255, 255, 0.7); }
-      .hero.is-black .subtitle a,
-      .hero.is-black .subtitle strong {
-        color: white; }
     .hero.is-black .nav {
       box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2); }
     @media screen and (max-width: 768px) {
@@ -4252,16 +4247,12 @@ a.nav-item.is-tab {
   .hero.is-blacklight {
     background-color: rgba(0, 0, 0, 0.54);
     color: rgba(255, 255, 255, 0.7); }
-    .hero.is-blacklight .title {
+    .hero.is-blacklight .title a,
+    .hero.is-blacklight .title strong {
+      color: inherit; }
+    .hero.is-blacklight .subtitle a,
+    .hero.is-blacklight .subtitle strong {
       color: rgba(255, 255, 255, 0.7); }
-      .hero.is-blacklight .title a,
-      .hero.is-blacklight .title strong {
-        color: inherit; }
-    .hero.is-blacklight .subtitle {
-      color: rgba(255, 255, 255, 0.7); }
-      .hero.is-blacklight .subtitle a,
-      .hero.is-blacklight .subtitle strong {
-        color: rgba(255, 255, 255, 0.7); }
     .hero.is-blacklight .nav {
       box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2); }
     @media screen and (max-width: 768px) {
@@ -4305,16 +4296,12 @@ a.nav-item.is-tab {
   .hero.is-whitelight {
     background-color: rgba(255, 255, 255, 0.7);
     color: rgba(0, 0, 0, 0.54); }
-    .hero.is-whitelight .title {
+    .hero.is-whitelight .title a,
+    .hero.is-whitelight .title strong {
+      color: inherit; }
+    .hero.is-whitelight .subtitle a,
+    .hero.is-whitelight .subtitle strong {
       color: rgba(0, 0, 0, 0.54); }
-      .hero.is-whitelight .title a,
-      .hero.is-whitelight .title strong {
-        color: inherit; }
-    .hero.is-whitelight .subtitle {
-      color: rgba(0, 0, 0, 0.7); }
-      .hero.is-whitelight .subtitle a,
-      .hero.is-whitelight .subtitle strong {
-        color: rgba(0, 0, 0, 0.54); }
     .hero.is-whitelight .nav {
       box-shadow: 0 1px 0 rgba(0, 0, 0, 0.2); }
     @media screen and (max-width: 768px) {
@@ -4358,16 +4345,12 @@ a.nav-item.is-tab {
   .hero.is-light {
     background-color: #f5f5f5;
     color: #212121; }
-    .hero.is-light .title {
+    .hero.is-light .title a,
+    .hero.is-light .title strong {
+      color: inherit; }
+    .hero.is-light .subtitle a,
+    .hero.is-light .subtitle strong {
       color: #212121; }
-      .hero.is-light .title a,
-      .hero.is-light .title strong {
-        color: inherit; }
-    .hero.is-light .subtitle {
-      color: rgba(33, 33, 33, 0.7); }
-      .hero.is-light .subtitle a,
-      .hero.is-light .subtitle strong {
-        color: #212121; }
     .hero.is-light .nav {
       box-shadow: 0 1px 0 rgba(33, 33, 33, 0.2); }
     @media screen and (max-width: 768px) {
@@ -4411,16 +4394,12 @@ a.nav-item.is-tab {
   .hero.is-dark {
     background-color: #212121;
     color: #f5f5f5; }
-    .hero.is-dark .title {
+    .hero.is-dark .title a,
+    .hero.is-dark .title strong {
+      color: inherit; }
+    .hero.is-dark .subtitle a,
+    .hero.is-dark .subtitle strong {
       color: #f5f5f5; }
-      .hero.is-dark .title a,
-      .hero.is-dark .title strong {
-        color: inherit; }
-    .hero.is-dark .subtitle {
-      color: rgba(245, 245, 245, 0.7); }
-      .hero.is-dark .subtitle a,
-      .hero.is-dark .subtitle strong {
-        color: #f5f5f5; }
     .hero.is-dark .nav {
       box-shadow: 0 1px 0 rgba(245, 245, 245, 0.2); }
     @media screen and (max-width: 768px) {
@@ -4464,16 +4443,12 @@ a.nav-item.is-tab {
   .hero.is-purple {
     background-color: #9c27b0;
     color: white; }
-    .hero.is-purple .title {
+    .hero.is-purple .title a,
+    .hero.is-purple .title strong {
+      color: inherit; }
+    .hero.is-purple .subtitle a,
+    .hero.is-purple .subtitle strong {
       color: white; }
-      .hero.is-purple .title a,
-      .hero.is-purple .title strong {
-        color: inherit; }
-    .hero.is-purple .subtitle {
-      color: rgba(255, 255, 255, 0.7); }
-      .hero.is-purple .subtitle a,
-      .hero.is-purple .subtitle strong {
-        color: white; }
     .hero.is-purple .nav {
       box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2); }
     @media screen and (max-width: 768px) {
@@ -4517,16 +4492,12 @@ a.nav-item.is-tab {
   .hero.is-primary {
     background-color: #3cbc8d;
     color: white; }
-    .hero.is-primary .title {
+    .hero.is-primary .title a,
+    .hero.is-primary .title strong {
+      color: inherit; }
+    .hero.is-primary .subtitle a,
+    .hero.is-primary .subtitle strong {
       color: white; }
-      .hero.is-primary .title a,
-      .hero.is-primary .title strong {
-        color: inherit; }
-    .hero.is-primary .subtitle {
-      color: rgba(255, 255, 255, 0.7); }
-      .hero.is-primary .subtitle a,
-      .hero.is-primary .subtitle strong {
-        color: white; }
     .hero.is-primary .nav {
       box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2); }
     @media screen and (max-width: 768px) {
@@ -4570,16 +4541,12 @@ a.nav-item.is-tab {
   .hero.is-primarydark {
     background-color: #309670;
     color: #309670; }
-    .hero.is-primarydark .title {
+    .hero.is-primarydark .title a,
+    .hero.is-primarydark .title strong {
+      color: inherit; }
+    .hero.is-primarydark .subtitle a,
+    .hero.is-primarydark .subtitle strong {
       color: #309670; }
-      .hero.is-primarydark .title a,
-      .hero.is-primarydark .title strong {
-        color: inherit; }
-    .hero.is-primarydark .subtitle {
-      color: rgba(48, 150, 112, 0.7); }
-      .hero.is-primarydark .subtitle a,
-      .hero.is-primarydark .subtitle strong {
-        color: #309670; }
     .hero.is-primarydark .nav {
       box-shadow: 0 1px 0 rgba(48, 150, 112, 0.2); }
     @media screen and (max-width: 768px) {
@@ -4623,16 +4590,12 @@ a.nav-item.is-tab {
   .hero.is-info {
     background-color: #2196f3;
     color: white; }
-    .hero.is-info .title {
+    .hero.is-info .title a,
+    .hero.is-info .title strong {
+      color: inherit; }
+    .hero.is-info .subtitle a,
+    .hero.is-info .subtitle strong {
       color: white; }
-      .hero.is-info .title a,
-      .hero.is-info .title strong {
-        color: inherit; }
-    .hero.is-info .subtitle {
-      color: rgba(255, 255, 255, 0.7); }
-      .hero.is-info .subtitle a,
-      .hero.is-info .subtitle strong {
-        color: white; }
     .hero.is-info .nav {
       box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2); }
     @media screen and (max-width: 768px) {
@@ -4676,16 +4639,12 @@ a.nav-item.is-tab {
   .hero.is-accent {
     background-color: #ff5722;
     color: white; }
-    .hero.is-accent .title {
+    .hero.is-accent .title a,
+    .hero.is-accent .title strong {
+      color: inherit; }
+    .hero.is-accent .subtitle a,
+    .hero.is-accent .subtitle strong {
       color: white; }
-      .hero.is-accent .title a,
-      .hero.is-accent .title strong {
-        color: inherit; }
-    .hero.is-accent .subtitle {
-      color: rgba(255, 255, 255, 0.7); }
-      .hero.is-accent .subtitle a,
-      .hero.is-accent .subtitle strong {
-        color: white; }
     .hero.is-accent .nav {
       box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2); }
     @media screen and (max-width: 768px) {
@@ -4729,16 +4688,12 @@ a.nav-item.is-tab {
   .hero.is-success {
     background-color: #81c784;
     color: white; }
-    .hero.is-success .title {
+    .hero.is-success .title a,
+    .hero.is-success .title strong {
+      color: inherit; }
+    .hero.is-success .subtitle a,
+    .hero.is-success .subtitle strong {
       color: white; }
-      .hero.is-success .title a,
-      .hero.is-success .title strong {
-        color: inherit; }
-    .hero.is-success .subtitle {
-      color: rgba(255, 255, 255, 0.7); }
-      .hero.is-success .subtitle a,
-      .hero.is-success .subtitle strong {
-        color: white; }
     .hero.is-success .nav {
       box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2); }
     @media screen and (max-width: 768px) {
@@ -4782,16 +4737,12 @@ a.nav-item.is-tab {
   .hero.is-warning {
     background-color: #ffeb3b;
     color: rgba(0, 0, 0, 0.5); }
-    .hero.is-warning .title {
+    .hero.is-warning .title a,
+    .hero.is-warning .title strong {
+      color: inherit; }
+    .hero.is-warning .subtitle a,
+    .hero.is-warning .subtitle strong {
       color: rgba(0, 0, 0, 0.5); }
-      .hero.is-warning .title a,
-      .hero.is-warning .title strong {
-        color: inherit; }
-    .hero.is-warning .subtitle {
-      color: rgba(0, 0, 0, 0.7); }
-      .hero.is-warning .subtitle a,
-      .hero.is-warning .subtitle strong {
-        color: rgba(0, 0, 0, 0.5); }
     .hero.is-warning .nav {
       box-shadow: 0 1px 0 rgba(0, 0, 0, 0.2); }
     @media screen and (max-width: 768px) {
@@ -4835,16 +4786,12 @@ a.nav-item.is-tab {
   .hero.is-danger {
     background-color: #EF5350;
     color: white; }
-    .hero.is-danger .title {
+    .hero.is-danger .title a,
+    .hero.is-danger .title strong {
+      color: inherit; }
+    .hero.is-danger .subtitle a,
+    .hero.is-danger .subtitle strong {
       color: white; }
-      .hero.is-danger .title a,
-      .hero.is-danger .title strong {
-        color: inherit; }
-    .hero.is-danger .subtitle {
-      color: rgba(255, 255, 255, 0.7); }
-      .hero.is-danger .subtitle a,
-      .hero.is-danger .subtitle strong {
-        color: white; }
     .hero.is-danger .nav {
       box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2); }
     @media screen and (max-width: 768px) {
@@ -4910,7 +4857,8 @@ a.nav-item.is-tab {
       padding-top: 250px; } }
   @media screen and (min-width: 769px) {
     .hero.is-fullheight {
-      min-height: 100vh; }
+      min-height: 100vh;
+      max-height: 100vh; }
       .hero.is-fullheight .hero-body {
         align-items: center;
         display: flex; }

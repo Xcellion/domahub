@@ -26,12 +26,12 @@
 
 #beta-form-email {
   font-family: $shareTech;
-  background-color: transparent;
+  background-color: $white;
   border: none;
   border-radius: 0;
   @include box-shadow(0,0,0,$black,0);
   @include transition(all 0.25s);
-  color: $white-primary;
+  color: $text;
   &:focus,
   &:active {
     @include box-shadow(0,-2px,0,$white-primary, inset);

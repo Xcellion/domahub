@@ -5,8 +5,7 @@
     &.is-#{$name}
       border-color: $color
 
-input
-  &:-webkit-autofill
+input:-webkit-autofill
     -webkit-box-shadow: 0 0 0px 1000px white inset
 
 .input
@@ -157,6 +156,8 @@ input
     width: 120px
   &.is-large
     width: 140px
+  &.is-padded
+    padding-right: 100px
 
 .control
   position: relative
