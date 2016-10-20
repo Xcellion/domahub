@@ -4,7 +4,6 @@
 		<title>Sign Up - DomaHub</title>
 		<link rel="stylesheet" href="/css/login_signup.css" type="text/css" />
 		<%- include("../templates/head_links"); %>
-		<script src='https://www.google.com/recaptcha/api.js'></script>
 	</head>
 <body>
 
@@ -72,8 +71,9 @@
 	</form>
 </div>
 
+  <%- include("../templates/js_scripts"); %>
 	<script src="/js/routes/account/account_signup_logic.js" type="text/javascript"></script>
-
+	<script src='https://www.google.com/recaptcha/api.js'></script>
 </body>
 
 </html>
