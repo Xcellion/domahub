@@ -127,7 +127,6 @@
 		<%- include("../templates/footer"); %>
 		<%- include("../templates/js_scripts"); %>
 		<script type="text/javascript">
-			var user = <% if(typeof user != "undefined"){ %><%-JSON.stringify(user)%><% }else{ %>""<% } %>;
 			var available = <% if(typeof available != "undefined"){ %><%-JSON.stringify(available)%><% }else{ %>""<% } %>;
 		</script>
 		<script src="/js/lib/nouislider.min.js"></script>
