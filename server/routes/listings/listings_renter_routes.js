@@ -1,4 +1,4 @@
-var	listing_model = require('../models/listing_model.js');
+var	listing_model = require('../../models/listing_model.js');
 
 var validator = require("validator");
 var whois = require("whois");

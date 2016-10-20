@@ -1,8 +1,8 @@
-var	listing_model = require('../models/listing_model.js');
-var	data_model = require('../models/data_model.js');
-var listings_renter = require("./listings_renter_routes");
-var listings_owner = require("./listings_owner_routes");
-var listings_stats = require("./listings_stats_routes");
+var	listing_model = require('../../models/listing_model.js');
+var	data_model = require('../../models/data_model.js');
+var listings_renter = require("../listings/listings_renter_routes");
+var listings_owner = require("../listings/listings_owner_routes");
+var listings_stats = require("../listings/listings_stats_routes");
 
 var bodyParser = require('body-parser')
 var jsonParser = bodyParser.json()
