@@ -4,7 +4,7 @@
 
 	<head>
 		<title>Inbox - DomaHub</title>
-		<%- include("templates/head_links"); %>
+		<%- include("../templates/head_links"); %>
 		<link rel="stylesheet" href="/css/profile.css" type="text/css" />
 		<script src="/js/lib/moment.min.js" type="text/javascript"></script>
 		<script type="text/javascript">
@@ -15,7 +15,7 @@
 	</head>
 
 <body>
-	<%- include("templates/navbar", {user: user}); %>
+	<%- include("../templates/navbar", {user: user}); %>
 
 	<div class="container clear-nav-profile">
 		<div class="tabs is-centered">
@@ -117,7 +117,7 @@
 		</div>
 	</section>
 
-	<%- include("templates/footer"); %>
+	<%- include("../templates/footer"); %>
 	<script src="/js/routes/profile/profile_inbox_logic.js" type="text/javascript"></script>
 </body>
 </html>

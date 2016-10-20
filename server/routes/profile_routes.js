@@ -197,7 +197,7 @@ function checkPageNum(req, res, next){
 //----------------------------------------------------------------------RENDERS----------------------------------------------------------
 
 function renderDashboard(req, res){
-	res.render("profile_dashboard", {
+	res.render("profile/profile_dashboard", {
 		message: Auth.messageReset(req),
 		user: req.user,
 		rentals: req.user.rentals || false,
@@ -206,7 +206,7 @@ function renderDashboard(req, res){
 }
 
 function renderInbox(req, res){
-	res.render("profile_inbox", {
+	res.render("profile/profile_inbox", {
 		message: Auth.messageReset(req),
 		user: req.user,
 		convo_list: req.user.convo_list || false
@@ -214,7 +214,7 @@ function renderInbox(req, res){
 }
 
 function renderMyListings(req, res){
-	res.render("profile_mylistings", {
+	res.render("profile/profile_mylistings", {
 		message: Auth.messageReset(req),
 		user: req.user,
 		listings: req.user.listings || false
@@ -222,7 +222,7 @@ function renderMyListings(req, res){
 }
 
 function renderMyRentals(req, res){
-	res.render("profile_myrentals", {
+	res.render("profile/profile_myrentals", {
 		message: Auth.messageReset(req),
 		user: req.user,
 		rentals: req.user.rentals || false
@@ -230,7 +230,7 @@ function renderMyRentals(req, res){
 }
 
 function renderSettings(req, res){
-	res.render("profile_settings", {
+	res.render("profile/profile_settings", {
 		message: Auth.messageReset(req),
 		user: req.user
 	});
