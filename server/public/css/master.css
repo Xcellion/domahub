@@ -383,6 +383,19 @@ table {
   @media screen and (min-width: 1260px) {
     .container {
       max-width: 1200px; } }
+  .container-progress {
+    position: relative;
+    margin: 0 auto;
+    padding: 80px 0 20px; }
+    @media screen and (max-width: 768px) {
+      .container-progress {
+        padding: 80px 20px 20px; } }
+    @media screen and (min-width: 980px) {
+      .container-progress {
+        max-width: 960px; } }
+    @media screen and (min-width: 1260px) {
+      .container-progress {
+        max-width: 1200px; } }
 
 .fa {
   font-size: 21px;
@@ -1384,9 +1397,9 @@ input:-webkit-autofill {
     .select select:focus {
       border-color: #3cbc8d;
       border-radius: 3px 3px 0 0; }
-    .select select::ms-expand {
+    .select select::-ms-expand {
       display: none; }
-  .select::ms-expand {
+  .select::-ms-expand {
     display: none; }
   .select.is-fullwidth {
     width: 100%; }
@@ -4959,14 +4972,6 @@ a.nav-item.is-tab {
     display: flex;
     flex-direction: row;
     justify-content: center; }
-  @media screen and (min-width: 980px) {
-    .section.is-create {
-      padding: 100px 20px 40px; } }
-  @media screen and (max-width: 768px) {
-    .section.is-create {
-      padding: 60px 20px 20px; } }
-  .section.is-create-button {
-    padding: 0 20px 100px; }
   .section.is-small {
     padding: 0 20px 40px; }
   @media screen and (min-width: 980px) {
@@ -4974,6 +4979,12 @@ a.nav-item.is-tab {
       padding: 120px 20px; } }
   @media screen and (max-width: 768px) {
     .section.is-medium {
+      padding: 60px 20px; } }
+  @media screen and (min-width: 980px) {
+    .section.is-medium-top {
+      padding: 120px 20px 0; } }
+  @media screen and (max-width: 768px) {
+    .section.is-medium-top {
       padding: 60px 20px; } }
   @media screen and (min-width: 980px) {
     .section.is-large {
@@ -5289,7 +5300,7 @@ a.nav-item.is-tab {
 /********************** LINEBREAK ******************/
 #linebreak {
   border-bottom: 1px solid #e0e0e0;
-  margin: 60px auto 60px auto;
+  margin: 60px auto 20px auto;
   position: relative;
   width: 100%; }
 

@@ -13,10 +13,12 @@
 <body>
 
 	<%- include("../templates/navbar", {user: user}); %>
+	<div class="container-progress">
+		<progress class="progress is-small is-primary" value="0" max="100"></progress>
+	</div>
 
-	<section id="type-section" class="section is-create">
+	<section id="type-section" class="section is-small">
 		<div class="container">
-			<progress class="progress is-small is-primary" value="0" max="100"></progress>
 			<div class="columns">
 				<div class="column is-half-desktop">
 					<div class="content">
@@ -63,9 +65,8 @@
 		</div>
 	</section>
 
-	<section id="info-section" class="section is-hidden is-create ">
+	<section id="info-section" class="section is-hidden is-small">
 		<div class="container">
-			<progress class="progress is-small is-primary" value="25" max="100"></progress>
 			<div class="columns">
 				<div class="column is-half">
 					<div class="content">
@@ -99,9 +100,8 @@
 		</div>
 	</section>
 
-	<section id="category-section" class="section is-hidden is-create ">
+	<section id="category-section" class="section is-hidden is-small">
 		<div class="container">
-			<progress class="progress is-small is-primary" value="50" max="100"></progress>
 			<div class="columns">
 				<div class="column is-half">
 					<div class="content">
@@ -149,9 +149,8 @@
 		</div>
 	</section>
 
-	<section id="pricing-section" data-can-next="true" data-pageskip="true" class="section is-create  is-hidden">
+	<section id="pricing-section" data-can-next="true" data-pageskip="true" class="section is-small is-hidden">
 		<div class="container">
-			<progress class="progress is-small is-primary" value="75" max="100"></progress>
 			<div class="columns">
 				<div class="column is-half">
 					<div class="content">
@@ -159,7 +158,7 @@
 					</div>
 					<div class="content">
 						<h2 class="heading is-blacklight">Step 4</h2>
-						<h2>Pricing options are based on listing type</h2>
+						<h2>These prices can be customized again after creation</h2>
 					</div>
 					<form>
 						<%# <div class="control is-horizontal">
@@ -167,7 +166,7 @@
 								<label id="minute-error-message" class="label is-medium">Minute</label>
 							</div>
 							<div class="control has-icon">
-								<input id="minute-price" class="price-input input input-number is-medium" type="number" defaultValue="1" value="1" min="1"/>
+								<input id="minute-price" class="price-input input is-medium" type="number" defaultValue="1" value="1" min="1"/>
 								<i class="fa fa-dollar"></i>
 							</div>
 						</div>%>
@@ -176,7 +175,7 @@
 								<label id="hour-error-message" class="label is-medium">Hour</label>
 							</div>
 							<div class="control has-icon">
-								<input id="hour-price" tabindex="9" class="price-input input input-number is-medium" type="number" defaultValue="1" value="1" min="1"/>
+								<input id="hour-price" tabindex="9" class="price-input input is-medium" type="number" defaultValue="1" value="1" min="1"/>
 								<i class="fa fa-dollar"></i>
 							</div>
 						</div>
@@ -185,7 +184,7 @@
 								<label id="day-error-message" class="label is-medium">Day</label>
 							</div>
 							<div class="control has-icon">
-								<input id="day-price" tabindex="10" class="price-input input input-number is-medium" type="number" defaultValue="10" value="10" min="1"/>
+								<input id="day-price" tabindex="10" class="price-input input is-medium" type="number" defaultValue="10" value="10" min="1"/>
 								<i class="fa fa-dollar"></i>
 							</div>
 						</div>
@@ -194,7 +193,7 @@
 								<label id="week-error-message" class="label is-medium">Week</label>
 							</div>
 							<div class="control has-icon">
-								<input id="week-price" tabindex="11" class="price-input input input-number is-medium" type="number" defaultValue="25" value="25" min="1"/>
+								<input id="week-price" tabindex="11" class="price-input input is-medium" type="number" defaultValue="25" value="25" min="1"/>
 								<i class="fa fa-dollar"></i>
 							</div>
 						</div>
@@ -203,7 +202,16 @@
 								<label id="month-error-message" class="label is-medium">Month</label>
 							</div>
 							<div class="control has-icon">
-								<input id="month-price" tabindex="12" class="price-input input input-number is-medium" type="number" defaultValue="50" value="50" min="1"/>
+								<input id="month-price" tabindex="12" class="price-input input is-medium" type="number" defaultValue="50" value="50" min="1"/>
+								<i class="fa fa-dollar"></i>
+							</div>
+						</div>
+						<div class="control is-horizontal">
+							<div class="control-label is-medium">
+								<label id="year-error-message" class="label is-medium">Year</label>
+							</div>
+							<div class="control has-icon">
+								<input id="year-price" tabindex="13" class="price-input input is-medium" type="number" defaultValue="50" value="50" min="1"/>
 								<i class="fa fa-dollar"></i>
 							</div>
 						</div>
@@ -213,9 +221,8 @@
 		</div>
 	</section>
 
-	<section id="preview-section" class="section is-hidden is-create">
+	<section id="preview-section" class="section is-hidden is-small">
 		<div class="container">
-			<progress class="progress is-small is-primary" value="100" max="100"></progress>
 			<div class="columns">
 				<div class="column is-half">
 					<div class="content">
@@ -238,7 +245,7 @@
 		</div>
 	</section>
 
-	<section id="buttons-section" class="section is-create-button">
+	<section id="buttons-section" class="section is-small">
 		<div class="container">
 			<div class="columns">
 				<div class="column is-half-desktop">
