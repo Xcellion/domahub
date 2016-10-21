@@ -21,6 +21,7 @@ module.exports = function(app, db, auth, e, stripe){
 	listings_owner.init(e, Listing);
 	listings_renter.init(e, Listing);
 
+	//get a random listing with specific category
 	app.get("/listing/random/:category", [
 		getRandomListingByCategory
 	]);
@@ -46,8 +47,17 @@ module.exports = function(app, db, auth, e, stripe){
 		res.redirect("/listing/create");
 	})
 
-	//create a single listing
-	app.post('/listing/create', [
+	//create a single basic listing
+	app.post('/listing/create/basic', [
+		urlencodedParser,
+		checkLoggedIn,
+		listings_owner.checkAccountListingPriv,
+		listings_owner.checkListingCreate,
+		listings_owner.createListing
+	]);
+
+	//create a single premium listing
+	app.post('/listing/create/premium', [
 		urlencodedParser,
 		checkLoggedIn,
 		listings_owner.checkAccountListingPriv,

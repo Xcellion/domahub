@@ -417,6 +417,7 @@ module.exports = {
 					req.user.listings.push(listing_info);
 				}
 				else {
+					req.user.refresh_listing = true;
 					req.user.listings = [listing_info];
 				}
 

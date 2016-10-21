@@ -102,11 +102,19 @@ module.exports = function(app, db, auth, e, pp){
 function getAccountListings(req, res, next){
 
 	//if we dont already have the list of listings
-	if (!req.user.listings){
+	if (!req.user.listings || req.user.refresh_listing){
+		delete req.user.refresh_listing;
 		Account.getAccountListings(req.user.id, function(result){
 			if (result.state=="error"){error.handler(req, res, result.info);}
 			else {
-				req.user.listings = result.info;
+
+				//combine two arrays of js objects
+				if (req.user.listings){
+
+				}
+				else {
+					req.user.listings = result.info;
+				}
 				next();
 			}
 		});

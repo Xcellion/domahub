@@ -8,42 +8,24 @@ $(document).ready(function() {
         $(".box").removeClass("is-active").addClass("low-opacity");
         $(this).addClass("is-active").removeClass("low-opacity");
 
-        //setting up next button logic
-        setSectionNext(true);
-
-        //to skip the pricing section or not depending on the listing type
-        if ($(this).data("listing-type") == "basic"){
-            $("#pricing-section").data('pageskip', true);
-        }
-        else {
-            $("#pricing-section").data('pageskip', false);
-        }
+        setSectionNext(true);  //setting up next button logic
+        setPremium($(this).data("listing-type") == "basic");  //setting up premium listing logic
     });
 
     //section 2 - listing info
     $(".required-input").on("keydown, keyup", function(e){
         e.preventDefault();
         if ($("#sing-domain").val() && $("#sing-description").val()){
-            //can go next when the value exists
-            setSectionNext(true);
-
             //update the listing preview
             $("#preview_domain").text($("#sing-domain").val());
             $("#preview_description").text($("#sing-description").val());
         }
-        else {
-            setSectionNext(false);
-        }
+        setSectionNext($("#sing-domain").val() && $("#sing-description").val());
     });
 
     //section 3 - categories
     $(".cat-checkbox-label, .cat-checkbox").on("click", function(e){
-        if ($('.cat-checkbox:checkbox:checked').length > 0){
-            setSectionNext(true);
-        }
-        else {
-            setSectionNext(false);
-        }
+        setSectionNext($('.cat-checkbox:checkbox:checked').length > 0);
     });
 
     //if theres an error in getting the image, remove the link
@@ -70,24 +52,27 @@ $(document).ready(function() {
         }
     });
 
-
     //next/prev button for sections
     $(".next-button").click(function() {
-        var next_page = $(".section").not(".is-hidden").next(".section").attr("id").split("-")[0];
-        changePage(next_page);
+        var next_page = $(".section").not(".is-hidden").next(".section");
+        //skip next page if its pricing and we're creating a basic listing
+        if (next_page.data("pageskip")){
+            next_page = next_page.next('.section');
+        }
+        var next_page_id = next_page.attr("id").split("-")[0];
+        changePage(next_page_id);
     });
 
     //previous button for sections
     $(".prev-button").click(function() {
-        var previous_page = $(".section").not(".is-hidden").prev(".section").attr("id").split("-")[0];
-        changePage(previous_page);
+        var previous_page = $(".section").not(".is-hidden").prev(".section");
+        //skip next page if its pricing and we're creating a basic listing
+        if (previous_page.data("pageskip")){
+            previous_page = previous_page.prev('.section');
+        }
+        var previous_page_id = previous_page.attr("id").split("-")[0];
+        changePage(previous_page_id);
     });
-
-    //submit button
-    $("#submit-button").click(function(e){
-		e.preventDefault();
-		submitListings($(this));
-	});
 
     //more info tooltips
     $(".fa-question-circle-o").click(function(e){
@@ -104,6 +89,33 @@ function setSectionNext(bool){
     }
     else {
         $("#next-button").addClass("is-disabled");
+    }
+}
+
+//function to set up premium payment
+function setPremium(basic_bool){
+    //if basic, so skip the pricing
+    $("#pricing-section").data('pageskip', basic_bool);
+
+    if (basic_bool){
+        $("#submit-button-text").text("Submit");
+
+        //submit button basic event binder
+        $("#submit-button").off().on("click", function(e){
+            e.preventDefault();
+            $("#submit-button").addClass('is-loading');
+            submitListing($(this), listingData(), "basic", null);
+        });
+    }
+    else {
+        $("#submit-button-text").text("Pay Now");
+
+        //submit button premium event binder
+        $("#submit-button").off().on("click", function(e){
+            e.preventDefault();
+            $("#submit-button").addClass('is-loading');
+            submitListingsPremium($(this), listingData());
+        });
     }
 }
 
@@ -180,7 +192,7 @@ function listingData(){
 
     //checks
 	if (!listingData.domain_name){
-		 errorHandler("Invalid domain name!");
+        errorHandler("Invalid domain name!");
 	}
 	else if (!listingData.description){
 		errorHandler("Invalid description!");
@@ -209,16 +221,15 @@ function listingData(){
 }
 
 //function to submit listings
-function submitListings(submit_button){
-	var submit_data = listingData();
+function submitListing(submit_button, submit_data, url, stripeToken){
 	if (can_submit && submit_data){
-
-        submit_button.addClass('is-loading');
         can_submit = false;
+
+        submit_data.stripeToken = stripeToken;
 
 		$.ajax({
 			type: "POST",
-			url: "/listing/create",
+			url: "/listing/create/" + url,
 			data: submit_data
 		}).done(function(data){
 			can_submit = true;
@@ -244,17 +255,49 @@ function submitListings(submit_button){
 	}
 }
 
+//function to handler stripe stuff
+function submitListingsPremium(submit_button, submit_data){
+	if (can_submit && submit_data){
+
+        //stripe configuration
+        var handler = StripeCheckout.configure({
+            key: 'pk_test_kcmOEkkC3QtULG5JiRMWVODJ',
+            name: 'Domahub Domain Rentals',
+            image: '/images/d-logo.PNG',
+            panelLabel: 'Pay Monthly',
+            zipCode : true,
+            locale: 'auto',
+            email: user.email,
+            token: function(token) {
+                if (token.email != user.email){
+                    submit_button.removeClass("is-loading");
+                }
+                else {
+                    submitListing(submit_button, "premium", token.id);
+                }
+            }
+        });
+
+        handler.open({
+            amount: 500,
+            description: "Creating a Premium listing."
+        });
+
+        //close Checkout on page navigation
+        window.addEventListener('popstate', function() {
+            handler.close();
+        });
+
+	}
+}
+
 //handling of various errors sent from the server
 function errorHandler(error_selector){
     var error_codes = ["description", "domain", "background", "buy", "category", "minute","hour", "day", "week", "month"];
 
     if (error_codes.indexOf(error_selector) != -1){
-        //hide all sections
-        $(".section").not("#buttons-section").addClass("is-hidden");
-
-        //show the right section and highlight which one is wrong
         var error_msg_elem = $("#" + error_selector + "-error-message");
-        error_msg_elem.closest(".section").removeClass('is-hidden');
+        changePage(error_msg_elem.closest(".section").attr("id").split("-")[0]);
         error_msg_elem.text("Invalid " + error_selector + "!").addClass("is-danger");
     }
 }
