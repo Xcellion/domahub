@@ -1,36 +1,37 @@
 <!DOCTYPE html>
 <html>
-  <head>
+<head>
     <title>Redirecting... - DomaHub</title>
     <link rel="stylesheet" type="text/css" href="/css/login_signup.css" />
     <%- include("templates/head_links"); %>
     <script>
-        var redirect = <% if(typeof redirect != "undefined"){ %><%-JSON.stringify(redirect)%><% }else{ %>""<% } %>;
+    var redirect = <% if(typeof redirect != "undefined"){ %><%-JSON.stringify(redirect)%><% }else{ %>""<% } %>;
     </script>
-  </head>
+</head>
 
-  <body>
+<body>
 
     <div id="login-form" class="form">
-      <form id="target" action="/login" method="post">
-        <div class="has-text-centered logo-login">
-          <a class="logo-text primary-logo logo-large" href="/">DomaHub</a>
-        </div>
-        <p id="message" class="has-text-centered">
-            Please wait...now redirecting you.
-        </p>
+        <form id="target" action="/login" method="post">
+            <div class="has-text-centered logo-login">
+                <a class="logo-text primary-logo logo-large" href="/">DomaHub</a>
+            </div>
+            <p id="message" class="has-text-centered">
+                Please wait...now redirecting you.
+            </p>
 
-        <div id="redirect">
-            <a id="login-button" class="login-button button is-primary is-medium is-fullwidth" href="/">
-              Home
-            </a>
-        </div>
+            <div id="redirect">
+                <a id="login-button" class="login-button button is-primary is-medium is-fullwidth" href="/">
+                    Home
+                </a>
+            </div>
 
-      </form>
+        </form>
     </div>
 
-  <script src="/js/redirect_logic.js" type="text/javascript"></script>
+    <%- include("templates/js_scripts"); %>
+    <script src="/js/redirect_logic.js" type="text/javascript"></script>
 
-  </body>
+</body>
 
 </html>

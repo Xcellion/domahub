@@ -413,13 +413,7 @@ module.exports = {
 				listing_info.id = result.info.insertId;
 
 				//add to the server side users listings object
-				if (req.user.listings){
-					req.user.listings.push(listing_info);
-				}
-				else {
-					req.user.refresh_listing = true;
-					req.user.listings = [listing_info];
-				}
+				req.user.listings.push(listing_info);
 
 				res.send({
 					state: "success",

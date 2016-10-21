@@ -1,13 +1,12 @@
 var	account_model = require('../models/account_model.js');
 var	listing_model = require('../models/listing_model.js');
 
+var qs = require('qs');
+var request = require('request');
+
 var node_env = process.env.NODE_ENV || 'dev'; 	//dev or prod bool
-if (node_env == "dev"){
-	var stripe = require("stripe")("sk_test_PHd0TEZT5ytlF0qCNvmgAThp");		//stripe API development key
-}
-else {
-	var stripe = require("stripe")("sk_live_Nqq1WW2x9JmScHxNbnFlORoh");		//stripe API production key
-}
+var stripe_key = (node_env == "dev") ? "sk_test_PHd0TEZT5ytlF0qCNvmgAThp" : "sk_live_Nqq1WW2x9JmScHxNbnFlORoh";
+var stripe = require("stripe")(stripe_key);
 
 var database, error;
 
@@ -208,6 +207,77 @@ module.exports = {
 		//if stripetoken doesnt exist
 		else {
 			stripeErrorHandler(req, res, {message: "Invalid Stripe token! Please log out and try again."});
+		}
+	},
+
+	//authorize stripe
+	authorizeStripe : function(req, res){
+		// Redirect to Stripe /oauth/authorize endpoint
+		res.redirect("https://connect.stripe.com/oauth/authorize" + "?" + qs.stringify({
+			response_type: "code",
+			scope: "read_write",
+			state: "domahubrules",
+			client_id: "ca_997O55c2IqFxXDmgI9B0WhmpPgoh28s3",
+			stripe_user: {
+				email: req.user.email
+			}
+		}));
+	},
+
+	//connect to stripe and get the stripe account info to store on our db
+	connectStripe : function(req, res){
+		scope = req.query.scope;
+		code = req.query.code;
+
+		//connection errored
+		if (req.query.error){
+			res.send(req.query.error_description);
+		}
+		else if (!scope && !code) {
+			error.handler(req, res, "Invalid stripe token!");
+		}
+		else {
+			request.post({
+				url: 'https://connect.stripe.com/oauth/token',
+				form: {
+					grant_type: "authorization_code",
+					client_id: "ca_997O55c2IqFxXDmgI9B0WhmpPgoh28s3",
+					code: code,
+					client_secret: stripe_key
+				}
+			},
+				function (err, response, body) {
+					body = JSON.parse(body);
+
+					//all good with stripe!
+					if (!body.error && response.statusCode == 200 && body.access_token) {
+						account_info = body;
+						req.user.stripe_info = body;
+						account_info.account_id = req.user.id;
+						Account.newAccountStripe(account_info, function(result){
+							if (result.state=="error"){error.handler(req, res, result.info);}
+							else {
+								//successfully connected, now update the type
+								account_info = {
+									type: 2
+								}
+								Account.updateAccount(account_info, req.user.email, function(result){
+									if (result.state=="error"){error.handler(req, res, result.info);}
+									else {
+										req.user.type = 2;
+										res.render("redirect.ejs", {
+											redirect: "/profile"
+										})
+									}
+								});
+							}
+						});
+					}
+					else {
+						error.handler(req, res, "Invalid stripe token!");
+					}
+				}
+			);
 		}
 	}
 

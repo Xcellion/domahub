@@ -221,11 +221,9 @@ function listingData(){
 }
 
 //function to submit listings
-function submitListing(submit_button, submit_data, url, stripeToken){
+function submitListing(submit_button, submit_data, url){
 	if (can_submit && submit_data){
         can_submit = false;
-
-        submit_data.stripeToken = stripeToken;
 
 		$.ajax({
 			type: "POST",
@@ -273,7 +271,8 @@ function submitListingsPremium(submit_button, submit_data){
                     submit_button.removeClass("is-loading");
                 }
                 else {
-                    submitListing(submit_button, "premium", token.id);
+                    submit_data.stripeToken = token.id;
+                    submitListing(submit_button, submit_data, "premium");
                 }
             }
         });
