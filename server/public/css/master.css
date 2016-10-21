@@ -734,7 +734,7 @@ a.box {
     background-color: white;
     border-color: transparent;
     color: black; }
-    .button.is-white:hover, .button.is-white:focus, .button.is-white.is-active {
+    .button.is-white:hover, .button.is-white.is-active {
       background-color: #e6e6e6;
       border-color: transparent;
       color: black; }
@@ -759,7 +759,7 @@ a.box {
     background-color: black;
     border-color: transparent;
     color: white; }
-    .button.is-black:hover, .button.is-black:focus, .button.is-black.is-active {
+    .button.is-black:hover, .button.is-black.is-active {
       background-color: black;
       border-color: transparent;
       color: white; }
@@ -784,7 +784,7 @@ a.box {
     background-color: #f5f5f5;
     border-color: transparent;
     color: #444; }
-    .button.is-grey:hover, .button.is-grey:focus, .button.is-grey.is-active {
+    .button.is-grey:hover, .button.is-grey.is-active {
       background-color: gainsboro;
       border-color: transparent;
       color: #444; }
@@ -809,7 +809,7 @@ a.box {
     background-color: rgba(0, 0, 0, 0.54);
     border-color: transparent;
     color: rgba(255, 255, 255, 0.7); }
-    .button.is-blacklight:hover, .button.is-blacklight:focus, .button.is-blacklight.is-active {
+    .button.is-blacklight:hover, .button.is-blacklight.is-active {
       background-color: rgba(0, 0, 0, 0.54);
       border-color: transparent;
       color: rgba(255, 255, 255, 0.7); }
@@ -834,7 +834,7 @@ a.box {
     background-color: rgba(255, 255, 255, 0.7);
     border-color: transparent;
     color: rgba(0, 0, 0, 0.54); }
-    .button.is-whitelight:hover, .button.is-whitelight:focus, .button.is-whitelight.is-active {
+    .button.is-whitelight:hover, .button.is-whitelight.is-active {
       background-color: rgba(230, 230, 230, 0.7);
       border-color: transparent;
       color: rgba(0, 0, 0, 0.54); }
@@ -859,7 +859,7 @@ a.box {
     background-color: #f5f5f5;
     border-color: transparent;
     color: #212121; }
-    .button.is-light:hover, .button.is-light:focus, .button.is-light.is-active {
+    .button.is-light:hover, .button.is-light.is-active {
       background-color: gainsboro;
       border-color: transparent;
       color: #212121; }
@@ -884,7 +884,7 @@ a.box {
     background-color: #212121;
     border-color: transparent;
     color: #f5f5f5; }
-    .button.is-dark:hover, .button.is-dark:focus, .button.is-dark.is-active {
+    .button.is-dark:hover, .button.is-dark.is-active {
       background-color: #080808;
       border-color: transparent;
       color: #f5f5f5; }
@@ -909,7 +909,7 @@ a.box {
     background-color: #9c27b0;
     border-color: transparent;
     color: white; }
-    .button.is-purple:hover, .button.is-purple:focus, .button.is-purple.is-active {
+    .button.is-purple:hover, .button.is-purple.is-active {
       background-color: #771e86;
       border-color: transparent;
       color: white; }
@@ -934,7 +934,7 @@ a.box {
     background-color: #3cbc8d;
     border-color: transparent;
     color: white; }
-    .button.is-primary:hover, .button.is-primary:focus, .button.is-primary.is-active {
+    .button.is-primary:hover, .button.is-primary.is-active {
       background-color: #309570;
       border-color: transparent;
       color: white; }
@@ -959,7 +959,7 @@ a.box {
     background-color: #309670;
     border-color: transparent;
     color: #309670; }
-    .button.is-primarydark:hover, .button.is-primarydark:focus, .button.is-primarydark.is-active {
+    .button.is-primarydark:hover, .button.is-primarydark.is-active {
       background-color: #246f53;
       border-color: transparent;
       color: #309670; }
@@ -984,7 +984,7 @@ a.box {
     background-color: #2196f3;
     border-color: transparent;
     color: white; }
-    .button.is-info:hover, .button.is-info:focus, .button.is-info.is-active {
+    .button.is-info:hover, .button.is-info.is-active {
       background-color: #0c7cd5;
       border-color: transparent;
       color: white; }
@@ -1009,7 +1009,7 @@ a.box {
     background-color: #ff5722;
     border-color: transparent;
     color: white; }
-    .button.is-accent:hover, .button.is-accent:focus, .button.is-accent.is-active {
+    .button.is-accent:hover, .button.is-accent.is-active {
       background-color: #ee3900;
       border-color: transparent;
       color: white; }
@@ -1034,7 +1034,7 @@ a.box {
     background-color: #81c784;
     border-color: transparent;
     color: white; }
-    .button.is-success:hover, .button.is-success:focus, .button.is-success.is-active {
+    .button.is-success:hover, .button.is-success.is-active {
       background-color: #5eb762;
       border-color: transparent;
       color: white; }
@@ -1059,7 +1059,7 @@ a.box {
     background-color: #ffeb3b;
     border-color: transparent;
     color: rgba(0, 0, 0, 0.5); }
-    .button.is-warning:hover, .button.is-warning:focus, .button.is-warning.is-active {
+    .button.is-warning:hover, .button.is-warning.is-active {
       background-color: #ffe608;
       border-color: transparent;
       color: rgba(0, 0, 0, 0.5); }
@@ -1084,7 +1084,7 @@ a.box {
     background-color: #EF5350;
     border-color: transparent;
     color: white; }
-    .button.is-danger:hover, .button.is-danger:focus, .button.is-danger.is-active {
+    .button.is-danger:hover, .button.is-danger.is-active {
       background-color: #eb2521;
       border-color: transparent;
       color: white; }
