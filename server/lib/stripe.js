@@ -175,7 +175,7 @@ module.exports = {
 
 			var total_price = req.session.new_rental_info.price * 100;		//USD in cents
 			//application fee if the listing is basic (aka premium hasn't expired)
-			var application_fee = (req.session.new_rental_info.listing_exp_date < (new Date).getTime()) ? total_price / 10 : 0;
+			var application_fee = (req.session.new_rental_info.listing_exp_date < (new Date).getTime()) ? (total_price * 0.15).toFixed(2) : 0;
 			var customer_pays = total_price - application_fee;
 
 			var stripeOptions = {
