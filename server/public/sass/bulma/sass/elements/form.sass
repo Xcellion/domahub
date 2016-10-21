@@ -119,6 +119,11 @@ input:-webkit-autofill
 .label
   color: $text
   display: block
+  @each $name, $pair in $colors
+    $color: nth($pair, 1)
+    $color-invert: nth($pair, 2)
+    &.is-#{$name}
+      color: $color
   &.has-icon
     display: inline-flex
     & + i
