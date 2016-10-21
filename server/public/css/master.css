@@ -5099,11 +5099,13 @@ a.nav-item.is-tab {
   .checkbox-form label.has-border {
     border: 1px solid rgba(0, 0, 0, 0.12);
     border-radius: 3px; }
+    .checkbox-form label.has-border:focus, .checkbox-form label.has-border:active {
+      outline: none;
+      border-color: #3cbc8d; }
   .checkbox-form label:hover {
     color: #3cbc8d; }
   .checkbox-form label:focus, .checkbox-form label:active {
-    outline: none;
-    border-color: #3cbc8d; }
+    outline: 1px solid #3cbc8d; }
 
 .checkbox-form input[type="checkbox"],
 .checkbox-form input[type="radio"],
