@@ -4,6 +4,9 @@
 /********************************* NAVBAR ***********************************/
 #searchbar-form {
   width: 50%;
+  @include mobile {
+    width: 100%;
+  }
   & > .control {
     width: 100%;
   }
