@@ -1,0 +1,306 @@
+<!-- user profile page, should not see unless logged in -->
+
+<!DOCTYPE html>
+
+<html>
+
+<head>
+	<title>Create Listing - DomaHub</title>
+	<%- include("../templates/head_links"); %>
+	<link rel="stylesheet" href="/css/listing_create.css" type="text/css" />
+</head>
+
+<body>
+
+	<%- include("../templates/navbar", {user: user}); %>
+
+	<div class="container-progress">
+		<progress class="progress is-small is-primary" value="0" max="100"></progress>
+	</div>
+
+	<section id="type-section" data-progress-percent="33" class="section is-small">
+		<div class="container">
+			<div class="columns">
+				<div class="column is-half-desktop">
+					<div class="content">
+						<h1 class="is-normal">Single Listing.</h1>
+					</div>
+					<div class="content">
+						<h2 class="heading is-blacklight">Step 1</h2>
+						<h2 class="error-heading has-icon">Please select one of the options below</h2>
+					</div>
+					<p class="control">
+						<label class="label is-medium has-icon">Basic vs Premium</label>
+						<i class="fa fa-question-circle-o"></i>
+					</p>
+					<div class="columns">
+						<div class="column">
+							<a data-listing-type="basic" id="basic-box" class="box" tabindex="8">
+								<div class="content">
+									<h2 class="is-bold is-accent margin-bottom-25">Basic Listing</h2>
+									<ul>
+										<li>Free to list</li>
+										<li>15% commission taken</li>
+										<li>Flat, fixed pricing</li>
+										<li>No hourly pricing</li>
+									</ul>
+								</div>
+							</a>
+						</div>
+						<div class="column">
+							<a data-listing-type="premium" id="premium-box" class="box" tabindex="9">
+								<div class="content">
+									<h2 class="is-bold is-primary margin-bottom-25">Premium Listing</h2>
+									<ul>
+										<li>$5 per month to list</li>
+										<li>NO commission taken</li>
+										<li>Custom, flexible pricing</li>
+										<li>Hourly pricing available</li>
+									</ul>
+								</div>
+							</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<section id="info-section" data-progress-percent="33" class="section is-hidden is-small">
+		<div class="container">
+			<div class="columns">
+				<div class="column is-half">
+					<div class="content">
+						<h1 class="is-normal">Tell us more about your domain name.</h1>
+					</div>
+					<div class="content">
+						<h2 class="heading is-blacklight">Step 2</h2>
+						<h2>Enter basic domain information</h2>
+					</div>
+					<p class="control">
+						<label id="domain-error-message" class="label is-medium">Domain Name&#42;</label>
+						<input id="sing-domain" tabindex="9" class="input required-input is-medium" type="url" placeholder="MyDomain.com"/>
+					</p>
+					<p class="control">
+						<label id="description-error-message" class="label is-medium has-icon">Description&#42;</label>
+						<i class="fa fa-question-circle-o"></i>
+						<textarea id="sing-description" tabindex="10" class="textarea input required-input is-medium" placeholder="This is a premium domain name with over a million visits per month!"></textarea>
+					</p>
+					<p class="control">
+						<label id="buy-error-message" class="label is-medium has-icon">Purchase Link</label>
+						<i class="fa fa-question-circle-o"></i>
+						<input id="sing-purchase" tabindex="11" class="input is-medium" type="url" placeholder="godaddy.com/myDomainName"/>
+					</p>
+					<p class="control">
+						<label id="background-error-message" class="label is-medium has-icon">Background Image</label>
+						<i class="fa fa-question-circle-o"></i>
+						<input id="sing-background" tabindex="12" class="input is-medium" type="url" placeholder="backgroundImage.com/image.png"/>
+					</p>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<section id="category-section" data-progress-percent="60" class="section is-hidden is-small">
+		<div class="container">
+			<div class="columns">
+				<div class="column is-half">
+					<div class="content">
+						<h1 id="category-error-message" class="is-normal">Categories help the right users find your domain.</h1>
+					</div>
+					<div class="content">
+						<h2 class="heading is-blacklight">Step 3</h2>
+						<h2>Choose at least one Category</h2>
+					</div>
+					<form class="checkbox-form">
+						<h3 class="heading">Categories</h3>
+						<ul class="checkbox-list">
+							<li>
+								<input class="cat-checkbox" value="startup" id="cb1" type="checkbox" />
+								<label tabindex="9" for="cb1">Start-Up</label>
+							</li>
+							<li>
+								<input class="cat-checkbox" value="business" id="cb2" type="checkbox" />
+								<label tabindex="10" for="cb2">Business</label>
+							</li>
+							<li>
+								<input class="cat-checkbox" value="event" id="cb3" type="checkbox" />
+								<label tabindex="11" for="cb3">Event</label>
+							</li>
+							<li>
+								<input class="cat-checkbox" value="promotion" id="cb4" type="checkbox" />
+								<label tabindex="12" for="cb4">Promotion</label>
+							</li>
+							<li>
+								<input class="cat-checkbox" value="holiday" id="cb5" type="checkbox" />
+								<label tabindex="13" for="cb5">Holiday</label>
+							</li>
+							<li>
+								<input class="cat-checkbox" value="industry" id="cb6" type="checkbox" />
+								<label tabindex="14" for="cb6">Industry</label>
+							</li>
+							<li>
+								<input class="cat-checkbox" value="notsure" id="cb7" value="not" type="checkbox" />
+								<label class="cat-checkbox-label" tabindex="15" for="cb7">I'm not sure.</label>
+							</li>
+						</ul>
+					</form>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<section id="pricing-section" data-progress-percent="80" data-can-next="true" data-pageskip="true" class="section is-small is-hidden">
+		<div class="container">
+			<div class="columns">
+				<div class="column is-half">
+					<div class="content">
+						<h1 class="is-normal">Decide pricing for your domain.</h1>
+					</div>
+					<div class="content">
+						<h2 class="heading is-blacklight">Step 4</h2>
+						<h2>These prices can be customized again after creation</h2>
+					</div>
+					<form>
+						<%# <div class="control is-horizontal">
+							<div class="control-label is-medium">
+								<label id="minute-error-message" class="label is-medium">Minute</label>
+							</div>
+							<div class="control has-icon">
+								<input id="minute-price" class="price-input input is-medium" type="number" defaultValue="1" value="1" min="1"/>
+								<i class="fa fa-dollar"></i>
+							</div>
+						</div>%>
+						<div class="control is-horizontal">
+							<div class="control-label is-medium">
+								<label id="hour-error-message" class="label is-medium">Hour</label>
+							</div>
+							<div class="control has-icon">
+								<input id="hour-price" tabindex="9" class="price-input input is-medium" type="number" defaultValue="1" value="1" min="1"/>
+								<i class="fa fa-dollar"></i>
+							</div>
+						</div>
+						<div class="control is-horizontal">
+							<div class="control-label is-medium">
+								<label id="day-error-message" class="label is-medium">Day</label>
+							</div>
+							<div class="control has-icon">
+								<input id="day-price" tabindex="10" class="price-input input is-medium" type="number" defaultValue="10" value="10" min="1"/>
+								<i class="fa fa-dollar"></i>
+							</div>
+						</div>
+						<div class="control is-horizontal">
+							<div class="control-label is-medium">
+								<label id="week-error-message" class="label is-medium">Week</label>
+							</div>
+							<div class="control has-icon">
+								<input id="week-price" tabindex="11" class="price-input input is-medium" type="number" defaultValue="25" value="25" min="1"/>
+								<i class="fa fa-dollar"></i>
+							</div>
+						</div>
+						<div class="control is-horizontal">
+							<div class="control-label is-medium">
+								<label id="month-error-message" class="label is-medium">Month</label>
+							</div>
+							<div class="control has-icon">
+								<input id="month-price" tabindex="12" class="price-input input is-medium" type="number" defaultValue="50" value="50" min="1"/>
+								<i class="fa fa-dollar"></i>
+							</div>
+						</div>
+						<div class="control is-horizontal">
+							<div class="control-label is-medium">
+								<label id="year-error-message" class="label is-medium">Year</label>
+							</div>
+							<div class="control has-icon">
+								<input id="year-price" tabindex="13" class="price-input input is-medium" type="number" defaultValue="50" value="50" min="1"/>
+								<i class="fa fa-dollar"></i>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<section id="preview-section" data-progress-percent="100" class="section is-hidden is-small">
+		<div class="container">
+			<div class="columns">
+				<div class="column is-half">
+					<div class="content">
+						<h1 class="is-normal">Listing Preview</h1>
+						<img id="preview_image" class="" width="100%" height="100%" src="https://source.unsplash.com/category/people">
+						<div id="preview_wrapper" class="">
+							<h2 id="preview_domain" class=""><aclass="green_text">Domain Name</a></h2>
+							<p id="preview_description" class="">Domain Description</p>
+							<p class="">Owned by: <span class="green_text"><%= user.username %></span></p>
+							<%# <p id="preview_minute_price" class="">Minute <span class="green_text">$1</span> | </p>%>
+							<p id="preview_hour_price" class="">Hour <span class="green_text">$1</span> | </p>
+							<p id="preview_day_price" class="">Day <span class="green_text">$10</span> | </p>
+							<p id="preview_week_price" class="">Week <span class="green_text">$25</span> | </p>
+							<p id="preview_month_price" class="">Month <span class="green_text">$50</span></p>
+							<p class=""><a class="orange-link">Interested in buying this domain?</a></p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<section id="buttons-section" class="section is-small">
+		<div class="container">
+			<div class="columns">
+				<div class="column is-half-desktop">
+					<nav class="level">
+						<div class="level-left">
+							<a class="button is-accent" tabindex="15" href="/listing/create/batch">
+								<span class="icon">
+									<i class="fa fa-check-circle-o"></i>
+								</span>
+								<span>I have multiple domains to list.</span>
+							</a>
+						</div>
+						<div class="level-right">
+							<div class="level-item">
+								<p class="control">
+									<a id="prev-button" class="is-disabled button is-primary prev-button" tabindex="16">
+										<span class="icon">
+											<i class="fa fa-angle-left"></i>
+										</span>
+										<span>Previous</span>
+									</a>
+								</p>
+							</div>
+							<div class="level-item">
+								<p class="control">
+									<a id="next-button" class="is-disabled button is-primary next-button" tabindex="18">
+										<span>Next</span>
+										<span class="icon">
+											<i class="fa fa-angle-right"></i>
+										</span>
+									</a>
+								</p>
+							</div>
+							<div class="level-item">
+								<p class="control">
+									<a id="submit-button" class="is-hidden button is-primary" tabindex="17">
+										<span class="icon">
+											<i class="fa fa-angle-down"></i>
+										</span>
+										<span>Submit</span>
+									</a>
+								</p>
+							</div>
+						</div>
+					</nav>
+				</div>
+			</div>
+		</div>
+	</section>
+
+
+	<%- include("../templates/footer"); %>
+  	<%- include("../templates/js_scripts"); %>
+	<script src="/js/routes/listings/listing_create_logic.js" type="text/javascript"></script>
+</body>
+
+</html>
