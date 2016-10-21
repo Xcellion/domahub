@@ -1,6 +1,9 @@
 /********************************* NAVBAR ***********************************/
 #searchbar-form {
   width: 50%; }
+  @media screen and (max-width: 768px) {
+    #searchbar-form {
+      width: 100%; } }
   #searchbar-form > .control {
     width: 100%; }
   #searchbar-form input {
