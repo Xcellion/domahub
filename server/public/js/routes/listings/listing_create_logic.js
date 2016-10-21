@@ -1,3 +1,5 @@
+var can_submit = true;
+
 $(document).ready(function() {
 
     //section 1 - basic vs premium
@@ -49,20 +51,42 @@ $(document).ready(function() {
         $(this).attr("src", "https://source.unsplash.com/category/people");
     });
 
+    //section 3 - categories
+    $(".price-input").on("keydown, keyup", function(e){
+        var price_okay = true;
+        //loop through to check
+        $(".price-input").each(function(e){
+            if (parseFloat($(this).val()) <= 0 || !($(this).val())){
+                price_okay = false;
+            }
+        });
+
+        //check prices are all there
+        if (price_okay){
+            setSectionNext(true);
+        }
+        else {
+            setSectionNext(false);
+        }
+    });
+
+
     //next/prev button for sections
     $(".next-button").click(function() {
-        changePage(false);
+        var next_page = $(".section").not(".is-hidden").next(".section").attr("id").split("-")[0];
+        changePage(next_page);
     });
 
     //previous button for sections
     $(".prev-button").click(function() {
-        changePage(true);
+        var previous_page = $(".section").not(".is-hidden").prev(".section").attr("id").split("-")[0];
+        changePage(previous_page);
     });
 
     //submit button
     $("#submit-button").click(function(e){
 		e.preventDefault();
-		submitListings();
+		submitListings($(this));
 	});
 
     //more info tooltips
@@ -74,7 +98,7 @@ $(document).ready(function() {
 
 //function to set the current section as able to go next
 function setSectionNext(bool){
-    $(".current-section").data("can-next", bool)
+    $(".section").not(".is-hidden").data("can-next", bool)
     if (bool){
         $("#next-button").removeClass("is-disabled");
     }
@@ -83,52 +107,37 @@ function setSectionNext(bool){
     }
 }
 
-//function to change pages and add disabled to buttons
-function changePage(prev){
-    var current_page = $(".current-section");
-    if (prev){
-        var upcoming_page = $(".current-section").prev(".section");
+//function to go to a specific page
+function changePage(section_id){
+    $(".section").not("#buttons-section").addClass("is-hidden");  //hide all sections except bottom buttons
+    var section_to_change_to = $("#" + section_id + "-section");
+    section_to_change_to.removeClass('is-hidden');  //show correct one
+
+    //first, disable prev
+    if (section_id == "type"){
+        $("#prev-button").addClass('is-disabled');
     }
     else {
-        var upcoming_page = $(".current-section").next(".section");
+        $("#prev-button").removeClass('is-disabled');
     }
 
-    //skip the price page if its a basic listing
-    if (upcoming_page.data("pageskip") == true){
-        upcoming_page = (prev) ? upcoming_page.prev(".section") : upcoming_page.next(".section");
-    }
-
-    var nextpagenum = upcoming_page.data('pagenum');
-
-    //first page, disable previous
-    if (nextpagenum == 1){
-        $("#prev-button").addClass("is-disabled");
-    }
-    else if (nextpagenum != 4 && upcoming_page.data("can-next") != true){
-        $("#next-button").addClass("is-disabled");
-        $("#prev-button").removeClass("is-disabled");
-    }
-    else {
-        $("#prev-button").removeClass("is-disabled");
-    }
-
-    //remove next disable if we went back
-    if (prev){
-        $("#next-button").removeClass("is-disabled");
-    }
-
-    //last page, hide buttons
-    if (nextpagenum == 5){
-        $("#next-button, #prev-button").addClass('is-hidden');
+    //last, hide next, show submit
+    if (section_id == "preview"){
+        $("#next-button").addClass('is-hidden');
         $("#submit-button").removeClass('is-hidden');
     }
     else {
-        $("#next-button, #prev-button").removeClass('is-hidden');
+        $("#next-button").removeClass('is-hidden');
         $("#submit-button").addClass('is-hidden');
     }
 
-    current_page.addClass("is-hidden").removeClass("current-section");
-    upcoming_page.addClass("current-section").removeClass("is-hidden");
+    //disabled if there isn't any data
+    if (!section_to_change_to.data("can-next")){
+        $("#next-button").addClass("is-disabled");
+    }
+    else {
+        $("#next-button").removeClass("is-disabled");
+    }
 }
 
 //--------------------------------------------------------------------------------------------------------SUBMISSION
@@ -136,37 +145,53 @@ function changePage(prev){
 //function to client-side check form
 function listingData(){
 	var listingData = {
-			domain_name : $("#sing-domain").val(),
-			description : $("#sing-description").val(),
-			minute_price : $("#minute-price").val(),
-			hour_price : $("#hour-price").val(),
-			day_price : $("#day-price").val(),
-			week_price : $("#week-price").val(),
-			month_price : $("#month-price").val(),
-			background_image : $("#sing-background").val(),
-			purchase_link : $("#sing-purchase").val()
-		}
+		domain_name : $("#sing-domain").val(),
+		description : $("#sing-description").val(),
+		background_image : $("#sing-background").val(),
+		purchase_link : $("#sing-purchase").val(),
+        categories: ""
+	}
 
+    //categories string
+    $(".cat-checkbox").each(function(e){
+        if ($(this).prop("checked")){
+            listingData.categories += $(this).val() + " ";
+        }
+    });
+
+    var is_premium = $("#premium-box").hasClass("is-active");
+    if (is_premium){
+        //listingData.minute_price = $("#minute-price").val();
+        listingData.hour_price = $("#hour-price").val();
+        listingData.day_price = $("#day-price").val();
+        listingData.week_price = $("#week-price").val();
+        listingData.month_price = $("#month-price").val();
+    }
+
+    //checks
 	if (!listingData.domain_name){
-		console.log("Invalid domain name!");
+		 errorHandler("Invalid domain name!");
 	}
 	else if (!listingData.description){
-		console.log("Invalid description!");
+		errorHandler("Invalid description!");
 	}
-	else if (parseFloat(listingData.minute_price) != listingData.minute_price >>> 0){
-		console.log("Invalid minute price!");
+    else if (listingData.categories.length <= 0){
+        errorHandler("Invalid categories!");
+    }
+	// else if (parseFloat(listingData.minute_price) != listingData.minute_price >>> 0){
+	// 	console.log("Invalid minute price!");
+	// }
+	else if	(is_premium && parseFloat(listingData.hour_price) != listingData.hour_price >>> 0){
+		errorHandler("Invalid hourly price!");
 	}
-	else if	(parseFloat(listingData.hour_price) != listingData.hour_price >>> 0){
-		console.log("Invalid hourly price!");
+	else if (is_premium && parseFloat(listingData.day_price) != listingData.day_price >>> 0){
+		errorHandler("Invalid daily price!");
 	}
-	else if (parseFloat(listingData.day_price) != listingData.day_price >>> 0){
-		console.log("Invalid daily price!");
+	else if (is_premium && parseFloat(listingData.week_price) != listingData.week_price >>> 0){
+		errorHandler("Invalid weekly price!");
 	}
-	else if (parseFloat(listingData.week_price) != listingData.week_price >>> 0){
-		console.log("Invalid weekly price!");
-	}
-	else if (parseFloat(listingData.month_price) != listingData.month_price >>> 0){
-		console.log("Invalid monthly price!");
+	else if (is_premium && parseFloat(listingData.month_price) != listingData.month_price >>> 0){
+		errorHandler("Invalid monthly price!");
 	}
 	else {
 		return listingData;
@@ -174,32 +199,52 @@ function listingData(){
 }
 
 //function to submit listings
-function submitListings(){
+function submitListings(submit_button){
 	var submit_data = listingData();
 	if (can_submit && submit_data){
+
+        submit_button.addClass('is-loading');
+        can_submit = false;
+
 		$.ajax({
 			type: "POST",
 			url: "/listing/create",
 			data: submit_data
 		}).done(function(data){
-
-			//reset the data to default value
-			$(".input").val("");
-			$(".price-input ").each(function(e){
-				$(this).val($(this).prop("defaultValue"));
-			});
-
 			can_submit = true;
+            submit_button.removeClass('is-loading').addClass('is-hidden');
 
 			if (data.state == "success"){
-				$("#mult-message").text("Success!")
+                //reset the datas to default value
+                $(".box").removeClass("is-active low-opacity");
+                $(".input").val("");
+                $(".cat-checkbox").prop('checked', false);
+                $(".price-input").each(function(e){
+                    $(this).val($(this).prop("defaultValue"));
+                });
+
+                //change to first page
+                changePage("type");
 			}
 			else if (data.state == "error"){
-				$("#mult-message").html(data.message);
-			}
-			else {
 				console.log(data);
+                errorHandler(data.message);
 			}
 		});
 	}
+}
+
+//handling of various errors sent from the server
+function errorHandler(error_selector){
+    var error_codes = ["description", "domain", "background", "buy", "category", "minute","hour", "day", "week", "month"];
+
+    if (error_codes.indexOf(error_selector) != -1){
+        //hide all sections
+        $(".section").not("#buttons-section").addClass("is-hidden");
+
+        //show the right section and highlight which one is wrong
+        var error_msg_elem = $("#" + error_selector + "-error-message");
+        error_msg_elem.closest(".section").removeClass('is-hidden');
+        error_msg_elem.text("Invalid " + error_selector + "!").addClass("is-danger");
+    }
 }
