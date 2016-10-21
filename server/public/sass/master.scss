@@ -64,14 +64,18 @@
   &.has-border {
     border: 1px solid $border;
     border-radius: $radius;
+    &:focus,
+    &:active {
+      outline: none;
+      border-color: $primary;
+    }
   }
   &:hover {
     color: $primary;
   }
   &:focus,
   &:active {
-    outline: none;
-    border-color: $primary;
+    outline: 1px solid $primary;
   }
 }
 
