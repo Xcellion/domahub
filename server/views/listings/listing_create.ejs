@@ -13,10 +13,12 @@
 <body>
 
 	<%- include("../templates/navbar", {user: user}); %>
+	<section class='section is-create'>
+		<progress id='progress-bar' class="progress is-small is-primary" value="0" max="100"></progress>
+	</section>
 
-	<section id="type-section" class="section is-create">
+	<section id="type-section" data-progress-percent="0" class="section is-create">
 		<div class="container">
-			<progress class="progress is-small is-primary" value="0" max="100"></progress>
 			<div class="columns">
 				<div class="column is-half-desktop">
 					<div class="content">
@@ -63,9 +65,8 @@
 		</div>
 	</section>
 
-	<section id="info-section" class="section is-hidden is-create ">
+	<section id="info-section" data-progress-percent="33" class="section is-hidden is-create ">
 		<div class="container">
-			<progress class="progress is-small is-primary" value="25" max="100"></progress>
 			<div class="columns">
 				<div class="column is-half">
 					<div class="content">
@@ -99,9 +100,8 @@
 		</div>
 	</section>
 
-	<section id="category-section" class="section is-hidden is-create ">
+	<section id="category-section" data-progress-percent="60" class="section is-hidden is-create ">
 		<div class="container">
-			<progress class="progress is-small is-primary" value="50" max="100"></progress>
 			<div class="columns">
 				<div class="column is-half">
 					<div class="content">
@@ -149,9 +149,8 @@
 		</div>
 	</section>
 
-	<section id="pricing-section" data-can-next="true" data-pageskip="true" class="section is-create  is-hidden">
+	<section id="pricing-section" data-progress-percent="80" data-can-next="true" data-pageskip="true" class="section is-create  is-hidden">
 		<div class="container">
-			<progress class="progress is-small is-primary" value="75" max="100"></progress>
 			<div class="columns">
 				<div class="column is-half">
 					<div class="content">
@@ -213,9 +212,8 @@
 		</div>
 	</section>
 
-	<section id="preview-section" class="section is-hidden is-create">
+	<section id="preview-section" data-progress-percent="100" class="section is-hidden is-create">
 		<div class="container">
-			<progress class="progress is-small is-primary" value="100" max="100"></progress>
 			<div class="columns">
 				<div class="column is-half">
 					<div class="content">

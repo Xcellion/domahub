@@ -138,6 +138,16 @@ function changePage(section_id){
     else {
         $("#next-button").removeClass("is-disabled");
     }
+
+    //animate the progress bar
+    $('.progress').animate({
+        value: section_to_change_to.data("progress-percent")
+    }, {
+        step: function(current_number){
+            $(this).val(current_number);
+        }
+    });
+
 }
 
 //--------------------------------------------------------------------------------------------------------SUBMISSION
