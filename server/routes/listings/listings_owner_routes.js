@@ -26,30 +26,49 @@ module.exports = {
 
 	//function to format the listing info
 	checkListingCreate : function(req, res, next){
-		domain_name = req.body.domain_name;
-		description = req.body.description;
+		var domain_name = req.body.domain_name;
+		var description = req.body.description;
+		var categories = req.body.categories;
 
-		minute_price = req.body.minute_price || 1;
-		hour_price = req.body.hour_price || 1;
-		day_price = req.body.day_price || 10;
-		week_price = req.body.week_price || 25;
-		month_price = req.body.month_price || 50;
+		var background_image = req.body.background_image;
+		var buy_link = req.body.buy_link;
 
-		background_image = req.body.background_image || null;
-		buy_link = req.body.buy_link || null;
+		//var minute_price = req.body.minute_price || 1;
+		var hour_price = parseFloat(req.body.hour_price) || 1;
+		var day_price = parseFloat(req.body.day_price) || 10;
+		var week_price = parseFloat(req.body.week_price) || 25;
+		var month_price = parseFloat(req.body.month_price) || 50;
 
+		//check the posted info
 		if (!description){
-			error.handler(req, res, "Invalid domain description!");
+			error.handler(req, res, "description", "json");
 		}
 		else if (!validator.isFQDN(req.body.domain_name)){
-			error.handler(req, res, "Invalid domain name!");
+			error.handler(req, res, "domain", "json");
 		}
-		else if ((parseFloat(minute_price) != minute_price >>> 0) ||
-				(parseFloat(hour_price) != hour_price >>> 0) ||
-				(parseFloat(day_price) != day_price >>> 0) ||
-				(parseFloat(week_price) != week_price >>> 0) ||
-				(parseFloat(month_price) != month_price >>> 0)){
-			error.handler(req, res, "Invalid price!");
+		else if (!categories){
+			error.handler(req, res, "category", "json");
+		}
+		else if (buy_link && !validator.isFQDN(buy_link)){
+			error.handler(req, res, "buy", "json");
+		}
+		else if (background_image && !validator.isFQDN(background_image)){
+			error.handler(req, res, "background", "json");
+		}
+		// else if (parseFloat(minute_price) != minute_price >>> 0){
+		// 	error.handler(req, res, "minute", "json");
+		// }
+		else if (hour_price != hour_price >>> 0 || hour_price <= 0){
+			error.handler(req, res, "hour", "json");
+		}
+		else if (day_price != day_price >>> 0 || day_price <= 0){
+			error.handler(req, res, "day", "json");
+		}
+		else if (week_price != week_price >>> 0 || week_price <= 0){
+			error.handler(req, res, "week", "json");
+		}
+		else if (month_price != month_price >>> 0 || month_price <= 0){
+			error.handler(req, res, "month", "json");
 		}
 		else {
 			next();
@@ -198,6 +217,7 @@ module.exports = {
 		});
 	},
 
+	//function to check the user image and upload to imgur
 	checkListingImage : function(req, res, next){
 		if (req.file){
 			var formData = {
@@ -378,28 +398,31 @@ module.exports = {
 
 	//function to create a new listing
 	createListing : function(req, res, next){
-		listing_info = {
+		var listing_info = {
 			domain_name : req.body.domain_name,
 			description: req.body.description,
+			categories: req.body.categories,
 			owner_id: req.user.id,
 			status: 0,
-			type: 0,
 			date_created: (new Date()).getTime()
 		}
 
 		Listing.newListing(listing_info, function(result){
 			if (result.state=="error"){error.handler(req, res, result.info);}
 			else {
-				req.user.refresh_listing = true;		//to refresh the user object's list of listings
+				listing_info.id = result.info.insertId;
+
+				//add to the server side users listings object
+				if (req.user.listings){
+					req.user.listings.push(listing_info);
+				}
+				else {
+					req.user.listings = [listing_info];
+				}
+
 				res.send({
 					state: "success",
-					listing_info: {
-						domain_name: domain_name,
-						id: result.info.insertId,
-						owner_id: req.user.id,
-						status: 0,
-						type: 0
-					},
+					listing_info: listing_info,
 					message: "Successfully added a new listing!"
 				})
 			}

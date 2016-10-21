@@ -222,7 +222,7 @@ function createFormDrop(listing_info){
         var temp_div3_control_label = $('<div class="control-label is-small">');
             var temp_div3_label = $('<label class="label">Categories</label>');
         var temp_div3_control = $('<div class="control">');
-            var temp_div3_input = $('<input class="categories-input input changeable-input ' + verified_disabled + '" placeholder="Categories" value="' + categories + '"></input>')
+            var temp_div3_input = $('<input class="categories-input input changeable-input ' + verified_disabled + '" placeholder="startup industry promotion" value="' + categories + '"></input>')
                 temp_div3_input.data("name", "categories");
 
     temp_div3.append(temp_div3_control_label.append(temp_div3_label), temp_div3_control.append(temp_div3_input));
