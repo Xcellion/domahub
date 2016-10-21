@@ -145,6 +145,10 @@
   min-height: calc(100vh - 320px);
 }
 
+.min-height-half {
+    min-height: calc(50vh - 320px);
+}
+
 .clear-nav {
   padding-top: 60px;
 }

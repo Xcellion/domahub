@@ -36,7 +36,18 @@
 						<div class="column">
 							<a data-listing-type="basic" id="basic-box" class="box" tabindex="8">
 								<div class="content">
-									<h2 class="is-bold is-accent margin-bottom-25">Basic Listing</h2>
+									<nav class="level margin-bottom-25">
+										<div class="level-left">
+											<div class="level-item">
+												<h2 class="is-bold is-accent">Basic Listing</h2>
+											</div>
+										</div>
+										<div class="level-right">
+											<div class="level-item">
+												<span class="tag is-accent is-create">FREE</span>
+											</div>
+										</div>
+									</nav>
 									<ul>
 										<li>Free to list</li>
 										<li>15% commission taken</li>
@@ -49,9 +60,20 @@
 						<div class="column">
 							<a data-listing-type="premium" id="premium-box" class="box" tabindex="9">
 								<div class="content">
-									<h2 class="is-bold is-primary margin-bottom-25">Premium Listing</h2>
+									<nav class="level margin-bottom-25">
+										<div class="level-left">
+											<div class="level-item">
+												<h2 class="is-bold is-primary">Premium Listing</h2>
+											</div>
+										</div>
+										<div class="level-right">
+											<div class="level-item">
+												<span class="tag is-primary is-create">&#36;5 &#47; mo</span>
+											</div>
+										</div>
+									</nav>
 									<ul>
-										<li>$5 per month to list</li>
+										<li>&#36;5 per month to list</li>
 										<li>NO commission taken</li>
 										<li>Custom, flexible pricing</li>
 										<li>Hourly pricing available</li>
@@ -111,8 +133,11 @@
 						<h2 class="heading is-blacklight">Step 3</h2>
 						<h2>Choose at least one Category</h2>
 					</div>
+					<p class="control">
+						<label class="label is-medium has-icon">Categories</label>
+						<i class="fa fa-question-circle-o"></i>
+					</p>
 					<form class="checkbox-form">
-						<h3 class="heading">Categories</h3>
 						<ul class="checkbox-list">
 							<li>
 								<input class="cat-checkbox" value="startup" id="cb1" type="checkbox" />
@@ -160,6 +185,10 @@
 						<h2 class="heading is-blacklight">Step 4</h2>
 						<h2>These prices can be customized again after creation</h2>
 					</div>
+					<p class="control">
+						<label class="label is-medium has-icon">Pricing Options</label>
+						<i class="fa fa-question-circle-o"></i>
+					</p>
 					<form>
 						<%# <div class="control is-horizontal">
 							<div class="control-label is-medium">
@@ -245,7 +274,7 @@
 		</div>
 	</section>
 
-	<section id="buttons-section" class="section is-small">
+	<section id="buttons-section" class="section is-small min-height-half">
 		<div class="container">
 			<div class="columns">
 				<div class="column is-half-desktop">

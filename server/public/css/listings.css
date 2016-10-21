@@ -1,3 +1,12 @@
 @media screen and (min-width: 769px) {
   #listing-random-img {
     background-image: url("https://source.unsplash.com/category/people"); } }
+
+.listing-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  align-items: center;
+  margin-bottom: 10px; }
+  .listing-buttons .button {
+    margin: 0 0 10px 10px; }
