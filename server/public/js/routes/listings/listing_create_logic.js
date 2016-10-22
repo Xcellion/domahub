@@ -17,10 +17,24 @@ $(document).ready(function() {
         e.preventDefault();
         if ($("#sing-domain").val() && $("#sing-description").val()){
             //update the listing preview
-            $("#preview_domain").text($("#sing-domain").val());
-            $("#preview_description").text($("#sing-description").val());
+            $("#preview-domain").text($("#sing-domain").val());
+            $("#preview-description").text($("#sing-description").val());
         }
         setSectionNext($("#sing-domain").val() && $("#sing-description").val());
+    });
+
+    //section 2 - background image
+    $("#sing-background").on("keydown, keyup", function(e){
+        e.preventDefault();
+        if ($("#sing-background").val()){
+            //update the listing preview
+            $("#preview-background").attr("src", $("#sing-background").val());
+        }
+    });
+
+    //if theres an error in getting the image, remove the link
+    $("#preview-background").error(function() {
+        $(this).attr("src", "https://source.unsplash.com/category/people");
     });
 
     //section 3 - categories
@@ -28,20 +42,20 @@ $(document).ready(function() {
         setSectionNext($('.cat-checkbox:checkbox:checked').length > 0);
     });
 
-    //if theres an error in getting the image, remove the link
-    $("#preview_image").error(function() {
-        $(this).attr("src", "https://source.unsplash.com/category/people");
-    });
-
-    //section 3 - categories
+    //section 4 - pricing
     $(".price-input").on("keydown, keyup", function(e){
         var price_okay = true;
         //loop through to check
         $(".price-input").each(function(e){
-            if (parseFloat($(this).val()) <= 0 || !($(this).val())){
+            if (parseFloat($(this).val()) <= 0 || !$(this).val()){
                 price_okay = false;
             }
         });
+
+        //update listing preview
+        if (parseFloat($(this).val()) <= 0 || !$(this).val()){
+            $("#preview-" + $(this).attr("id")).find(".green_text").text("$" + $(this).val());
+        }
 
         //check prices are all there
         if (price_okay){
@@ -304,5 +318,9 @@ function errorHandler(error_selector){
         var error_msg_elem = $("#" + error_selector + "-error-message");
         changePage(error_msg_elem.closest(".section").attr("id").split("-")[0]);
         error_msg_elem.text("Invalid " + error_selector + "!").addClass("is-danger");
+    }
+    //stripe or something else
+    else {
+
     }
 }

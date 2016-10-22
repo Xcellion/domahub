@@ -314,6 +314,7 @@ function stripeSubscriptionHandler(subscription, req, res, listing_info){
 //helper function to get the req.user listings object for a specific domain
 function getUserListingObj(listings, domain_name){
 	for (var x = 0; x < listings.length; x++){
+		console.log(listings[x]);
 		if (listings[x].domain_name.toLowerCase() == domain_name.toLowerCase()){
 			return listings[x];
 		}
