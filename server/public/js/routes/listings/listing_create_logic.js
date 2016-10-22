@@ -246,8 +246,14 @@ function submitListing(submit_button, submit_data, url){
                 changePage("type");
 			}
 			else if (data.state == "error"){
-				console.log(data);
-                errorHandler(data.message);
+                //display error message if there is one
+                if (data.message){
+                    errorHandler(data.message);
+                }
+                //redirect if told to
+                else if (data.redirect){
+                    window.location = window.location.origin + data.redirect;
+                }
 			}
 		});
 	}
