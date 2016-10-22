@@ -13,7 +13,7 @@ $(document).ready(function() {
     });
 
     //section 2 - listing info
-    $(".required-input").on("keydown, keyup", function(e){
+    $(".required-input").on("change keyup paste", function(e){
         e.preventDefault();
         if ($("#sing-domain").val() && $("#sing-description").val()){
             //update the listing preview
@@ -24,7 +24,7 @@ $(document).ready(function() {
     });
 
     //section 2 - background image
-    $("#sing-background").on("keydown, keyup", function(e){
+    $("#sing-background").on("change keyup paste", function(e){
         e.preventDefault();
         if ($("#sing-background").val()){
             //update the listing preview
@@ -43,7 +43,7 @@ $(document).ready(function() {
     });
 
     //section 4 - pricing
-    $(".price-input").on("keydown, keyup", function(e){
+    $(".price-input").on("change keyup paste mousewheel", function(e){
         var price_okay = true;
         //loop through to check
         $(".price-input").each(function(e){
