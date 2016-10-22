@@ -101,22 +101,22 @@
 					</div>
 					<p class="control">
 						<label id="domain-error-message" class="label is-medium">Domain Name&#42;</label>
-						<input id="sing-domain" tabindex="9" class="input required-input is-medium" type="url" placeholder="MyDomain.com"/>
+						<input id="domain_name-input" tabindex="9" class="input required-input is-medium" type="url" placeholder="MyDomain.com"/>
 					</p>
 					<p class="control">
 						<label id="description-error-message" class="label is-medium has-icon">Description&#42;</label>
 						<i class="fa fa-question-circle-o"></i>
-						<textarea id="sing-description" tabindex="10" class="textarea input required-input is-medium" placeholder="This is a premium domain name with over a million visits per month!"></textarea>
+						<textarea id="description-input" tabindex="10" class="textarea input required-input is-medium" placeholder="This is a premium domain name with over a million visits per month!"></textarea>
 					</p>
 					<p class="control">
 						<label id="buy-error-message" class="label is-medium has-icon">Purchase Link</label>
 						<i class="fa fa-question-circle-o"></i>
-						<input id="sing-purchase" tabindex="11" class="input is-medium" type="url" placeholder="godaddy.com/myDomainName"/>
+						<input id="purchase_link-input" tabindex="11" class="input is-medium" type="url" placeholder="godaddy.com/myDomainName"/>
 					</p>
 					<p class="control">
 						<label id="background-error-message" class="label is-medium has-icon">Background Image</label>
 						<i class="fa fa-question-circle-o"></i>
-						<input id="sing-background" tabindex="12" class="input is-medium" type="url" placeholder="backgroundImage.com/image.png"/>
+						<input id="background_image-input" tabindex="12" class="input is-medium" type="url" placeholder="backgroundImage.com/image.png"/>
 					</p>
 				</div>
 			</div>
@@ -142,32 +142,32 @@
 						<h3 class="heading">Categories*</h3>
 						<ul class="checkbox-list">
 							<li>
-								<input class="cat-checkbox" value="startup" id="cb1" type="checkbox" />
-								<label tabindex="9" for="cb1">Start-Up</label>
+								<input class="cat-checkbox" value="startup" id="startup-category" type="checkbox" />
+								<label tabindex="9" for="startup-category">Start-Up</label>
 							</li>
 							<li>
-								<input class="cat-checkbox" value="business" id="cb2" type="checkbox" />
-								<label tabindex="10" for="cb2">Business</label>
+								<input class="cat-checkbox" value="business" id="business-category" type="checkbox" />
+								<label tabindex="10" for="business-category">Business</label>
 							</li>
 							<li>
-								<input class="cat-checkbox" value="event" id="cb3" type="checkbox" />
-								<label tabindex="11" for="cb3">Event</label>
+								<input class="cat-checkbox" value="event" id="event-category" type="checkbox" />
+								<label tabindex="11" for="event-category">Event</label>
 							</li>
 							<li>
-								<input class="cat-checkbox" value="promotion" id="cb4" type="checkbox" />
-								<label tabindex="12" for="cb4">Promotion</label>
+								<input class="cat-checkbox" value="promotion" id="promotion-category" type="checkbox" />
+								<label tabindex="12" for="promotion-category">Promotion</label>
 							</li>
 							<li>
-								<input class="cat-checkbox" value="holiday" id="cb5" type="checkbox" />
-								<label tabindex="13" for="cb5">Holiday</label>
+								<input class="cat-checkbox" value="holiday" id="holiday-category" type="checkbox" />
+								<label tabindex="13" for="holiday-category">Holiday</label>
 							</li>
 							<li>
-								<input class="cat-checkbox" value="industry" id="cb6" type="checkbox" />
-								<label tabindex="14" for="cb6">Industry</label>
+								<input class="cat-checkbox" value="industry" id="industry-category" type="checkbox" />
+								<label tabindex="14" for="industry-category">Industry</label>
 							</li>
 							<li>
-								<input class="cat-checkbox" value="notsure" id="cb7" value="not" type="checkbox" />
-								<label class="cat-checkbox-label" tabindex="15" for="cb7">I'm not sure.</label>
+								<input class="cat-checkbox" value="notsure" id="not-category" value="not" type="checkbox" />
+								<label class="cat-checkbox-label" tabindex="15" for="not-category">I'm not sure.</label>
 							</li>
 						</ul>
 					</form>
@@ -197,7 +197,7 @@
 								<label id="minute-error-message" class="label is-medium">Minute</label>
 							</div>
 							<div class="control has-icon">
-								<input id="minute-price" class="price-input input is-medium" type="number" defaultValue="1" value="1" min="1"/>
+								<input id="minute_price-input" class="price-input input is-medium" type="number" defaultValue="1" value="1" min="1"/>
 								<i class="fa fa-dollar"></i>
 							</div>
 						</div>%>
@@ -206,7 +206,7 @@
 								<label id="hour-error-message" class="label is-medium">Hour</label>
 							</div>
 							<div class="control has-icon">
-								<input id="hour-price" tabindex="9" class="price-input input is-medium" type="number" defaultValue="1" value="1" min="1"/>
+								<input id="hour_price-input" tabindex="9" class="price-input input is-medium" type="number" defaultValue="1" value="1" min="1"/>
 								<i class="fa fa-dollar"></i>
 							</div>
 						</div>
@@ -215,7 +215,7 @@
 								<label id="day-error-message" class="label is-medium">Day</label>
 							</div>
 							<div class="control has-icon">
-								<input id="day-price" tabindex="10" class="price-input input is-medium" type="number" defaultValue="10" value="10" min="1"/>
+								<input id="day_price-input" tabindex="10" class="price-input input is-medium" type="number" defaultValue="10" value="10" min="1"/>
 								<i class="fa fa-dollar"></i>
 							</div>
 						</div>
@@ -224,7 +224,7 @@
 								<label id="week-error-message" class="label is-medium">Week</label>
 							</div>
 							<div class="control has-icon">
-								<input id="week-price" tabindex="11" class="price-input input is-medium" type="number" defaultValue="25" value="25" min="1"/>
+								<input id="week_price-input" tabindex="11" class="price-input input is-medium" type="number" defaultValue="25" value="25" min="1"/>
 								<i class="fa fa-dollar"></i>
 							</div>
 						</div>
@@ -233,7 +233,7 @@
 								<label id="month-error-message" class="label is-medium">Month</label>
 							</div>
 							<div class="control has-icon">
-								<input id="month-price" tabindex="12" class="price-input input is-medium" type="number" defaultValue="50" value="50" min="1"/>
+								<input id="month_price-input" tabindex="12" class="price-input input is-medium" type="number" defaultValue="50" value="50" min="1"/>
 								<i class="fa fa-dollar"></i>
 							</div>
 						</div>
@@ -242,7 +242,7 @@
 								<label id="year-error-message" class="label is-medium">Year</label>
 							</div>
 							<div class="control has-icon">
-								<input id="year-price" tabindex="13" class="price-input input is-medium" type="number" defaultValue="50" value="50" min="1"/>
+								<input id="year_price-input" tabindex="13" class="price-input input is-medium" type="number" defaultValue="50" value="50" min="1"/>
 								<i class="fa fa-dollar"></i>
 							</div>
 						</div>%>

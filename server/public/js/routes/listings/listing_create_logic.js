@@ -2,34 +2,70 @@ var can_submit = true;
 
 $(document).ready(function() {
 
+    //check for any existing cookies and set the data
+    var existing_data = read_cookie("listing_data");
+    if (existing_data){
+        var basic_bool = $("#basic-box");
+        for (var key in existing_data){
+            //other inputs
+            if (existing_data[key] != "" && key != "categories"){
+                $("#" + key + "-input").val(existing_data[key]);
+                if (['hour_price', 'day_price', 'week_price', 'month_price'].indexOf(key) != -1){
+                    var basic_bool = $("#premium-box");;
+                };
+            }
+            //categories
+            else if (key == "categories" && existing_data[key] != ""){
+                var existing_categories = existing_data[key].split(" ");
+                for (var x = 0; x < existing_categories.length; x++){
+                    $("#" + existing_categories[x] + "-category").prop("checked", true);
+                }
+
+                setSectionNext(existing_categories.length > 0, "category");
+            }
+        }
+
+        setSectionNext($("#domain_name-input").val() && $("#description-input").val(), "info");
+
+        //if we selected something
+        if (basic_bool){
+            $(".box").removeClass("is-active").addClass("low-opacity");
+            basic_bool.addClass("is-active").removeClass("low-opacity");
+            setSectionNext(true, "type");
+            setPremium(basic_bool.data("listing-type") == "basic");  //setting up premium listing logic
+            changePage("type");
+        }
+    }
+
     //section 1 - basic vs premium
     $(".box").click(function() {
         //styling the two buttons
         $(".box").removeClass("is-active").addClass("low-opacity");
         $(this).addClass("is-active").removeClass("low-opacity");
 
-        setSectionNext(true);  //setting up next button logic
+        bake_cookie("listing_data", getListingData());
+        setSectionNext(true, "type");  //setting up next button logic
         setPremium($(this).data("listing-type") == "basic");  //setting up premium listing logic
     });
 
     //section 2 - listing info
     $(".required-input").on("change keyup paste", function(e){
-        e.preventDefault();
-        if ($("#sing-domain").val() && $("#sing-description").val()){
+        if ($("#domain_name-input").val() && $("#description-input").val()){
             //update the listing preview
-            $("#preview-domain").text($("#sing-domain").val());
-            $("#preview-description").text($("#sing-description").val());
+            $("#preview-domain").text($("#domain_name-input").val());
+            $("#preview-description").text($("#description-input").val());
         }
-        setSectionNext($("#sing-domain").val() && $("#sing-description").val());
+        bake_cookie("listing_data", getListingData());
+        setSectionNext($("#domain_name-input").val() && $("#description-input").val(), "info");
     });
 
     //section 2 - background image
-    $("#sing-background").on("change keyup paste", function(e){
-        e.preventDefault();
-        if ($("#sing-background").val()){
+    $("#background_image-input").on("change keyup paste", function(e){
+        if ($("#background_image-input").val()){
             //update the listing preview
-            $("#preview-background").attr("src", $("#sing-background").val());
+            $("#preview-background").attr("src", $("#background_image-input").val());
         }
+        bake_cookie("listing_data", getListingData());
     });
 
     //if theres an error in getting the image, remove the link
@@ -39,31 +75,19 @@ $(document).ready(function() {
 
     //section 3 - categories
     $(".cat-checkbox-label, .cat-checkbox").on("click", function(e){
-        setSectionNext($('.cat-checkbox:checkbox:checked').length > 0);
+        bake_cookie("listing_data", getListingData());
+        setSectionNext($('.cat-checkbox:checkbox:checked').length > 0, "category");
     });
 
     //section 4 - pricing
     $(".price-input").on("change keyup paste mousewheel", function(e){
-        var price_okay = true;
-        //loop through to check
-        $(".price-input").each(function(e){
-            if (parseFloat($(this).val()) <= 0 || !$(this).val()){
-                price_okay = false;
-            }
-        });
-
         //update listing preview
         if (parseFloat($(this).val()) > 0){
             $("#preview-" + $(this).attr("id")).find(".green_text").text("$" + $(this).val());
         }
 
-        //check prices are all there
-        if (price_okay){
-            setSectionNext(true);
-        }
-        else {
-            setSectionNext(false);
-        }
+        setSectionNext(checkPrices(), "pricing");
+        bake_cookie("listing_data", getListingData());
     });
 
     //next/prev button for sections
@@ -95,9 +119,21 @@ $(document).ready(function() {
 
 });
 
+//function to check if all prices are good
+function checkPrices(){
+    var price_okay = true;
+    //loop through to check
+    $(".price-input").each(function(e){
+        if (parseFloat($(this).val()) <= 0 || !$(this).val()){
+            price_okay = false;
+        }
+    });
+    return price_okay;
+}
+
 //function to set the current section as able to go next
-function setSectionNext(bool){
-    $(".section").not(".is-hidden").data("can-next", bool)
+function setSectionNext(bool, section_selector){
+    $("#" + section_selector + "-section").data("can-next", bool);
     if (bool){
         $("#next-button").removeClass("is-disabled");
     }
@@ -117,8 +153,7 @@ function setPremium(basic_bool){
         //submit button basic event binder
         $("#submit-button").off().on("click", function(e){
             e.preventDefault();
-            $("#submit-button").addClass('is-loading');
-            submitListing($(this), listingData(), "basic", null);
+            submitListing($(this), checkListingData(), "basic", null);
         });
     }
     else {
@@ -127,8 +162,7 @@ function setPremium(basic_bool){
         //submit button premium event binder
         $("#submit-button").off().on("click", function(e){
             e.preventDefault();
-            $("#submit-button").addClass('is-loading');
-            submitListingsPremium($(this), listingData());
+            submitListingsPremium($(this), checkListingData());
         });
     }
 }
@@ -178,13 +212,13 @@ function changePage(section_id){
 
 //--------------------------------------------------------------------------------------------------------SUBMISSION
 
-//function to client-side check form
-function listingData(){
-	var listingData = {
-		domain_name : $("#sing-domain").val(),
-		description : $("#sing-description").val(),
-		background_image : $("#sing-background").val(),
-		purchase_link : $("#sing-purchase").val(),
+//function to get the current listing data
+function getListingData(){
+    var listingData = {
+		domain_name : $("#domain_name-input").val(),
+		description : $("#description-input").val(),
+		background_image : $("#background_image-input").val(),
+		purchase_link : $("#purchase_link-input").val(),
         categories: ""
 	}
 
@@ -195,14 +229,23 @@ function listingData(){
         }
     });
 
+    //premium prices
     var is_premium = $("#premium-box").hasClass("is-active");
     if (is_premium){
-        //listingData.minute_price = $("#minute-price").val();
-        listingData.hour_price = $("#hour-price").val();
-        listingData.day_price = $("#day-price").val();
-        listingData.week_price = $("#week-price").val();
-        listingData.month_price = $("#month-price").val();
+        //listingData.minute_price = $("#minute_price-input").val();
+        //listingData.year_price = $("#year_price-input").val();
+        listingData.hour_price = $("#hour_price-input").val();
+        listingData.day_price = $("#day_price-input").val();
+        listingData.week_price = $("#week_price-input").val();
+        listingData.month_price = $("#month_price-input").val();
     }
+
+    return listingData;
+}
+
+//function to client-side check form
+function checkListingData(){
+	var listingData = getListingData();
 
     //checks
 	if (!listingData.domain_name){
@@ -236,6 +279,8 @@ function listingData(){
 
 //function to submit listings
 function submitListing(submit_button, submit_data, url){
+    $("#submit-button").addClass('is-loading');
+
 	if (can_submit && submit_data){
         can_submit = false;
 
