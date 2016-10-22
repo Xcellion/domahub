@@ -415,11 +415,18 @@ module.exports = {
 				//add to the server side users listings object
 				req.user.listings.push(listing_info);
 
-				res.send({
-					state: "success",
-					listing_info: listing_info,
-					message: "Successfully added a new listing!"
-				})
+				//if premium, go next to handle stripe stuff
+				if (req.body.stripeToken){
+					next();
+				}
+				//if its basic, send success
+				else {
+					res.send({
+						state: "success",
+						listing_info: listing_info,
+						message: "Successfully added a new listing!"
+					});
+				}
 			}
 		});
 	},
