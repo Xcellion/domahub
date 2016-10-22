@@ -105,13 +105,18 @@ function retrieveSubscription(id, callback){
 
 //helper to renew or remove listing premium subscription on domahub db
 function updateListing(subscription, bool, object){
-	domain_name = subscription.metadata.domain_name;
-	listing_id = subscription.metadata.listing_id;
+	var domain_name = subscription.metadata.domain_name;
+	var listing_id = subscription.metadata.listing_id;
 
 	if (bool){
 		var new_listing_info = {
 			stripe_subscription_id : subscription.id,
-			exp_date : subscription.current_period_end * 1000		//stripe doesnt count the time, only days
+			exp_date : subscription.current_period_end * 1000,		//stripe doesnt count the time, only days
+			//minute_price: subscription.metadata.minute_price || 1,
+			hour_price: subscription.metadata.hour_price || 1,
+			day_price: subscription.metadata.day_price || 10,
+			week_price: subscription.metadata.week_price || 25,
+			month_price: subscription.metadata.month_price || 50
 		}
 		var console_msg = {
 			success: "Premium status for listing #" + listing_id + " has been renewed!",
@@ -122,7 +127,12 @@ function updateListing(subscription, bool, object){
 		var new_listing_info = {
 			stripe_subscription_id: "",
 			exp_date: 0,
-			expiring: false
+			expiring: false,
+			//minute_price: 1,		//reset pricing
+			hour_price: 1,
+			day_price: 10,
+			week_price: 25,
+			month_price: 50
 		}
 		var console_msg = {
 			success: "Premium status for listing #" + listing_id + " has expired after cancellation...",

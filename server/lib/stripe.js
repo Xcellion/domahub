@@ -139,7 +139,12 @@ module.exports = {
 				plan: "premium",
 				metadata: {
 					"domain_name" : domain_name,
-					"listing_id" : listing_info.id
+					"listing_id" : listing_info.id,
+					//"minute_price": req.body.minute_price || 1,
+					"hour_price": req.body.hour_price || 1,
+					"day_price": req.body.day_price || 10,
+					"week_price": req.body.week_price || 25,
+					"month_price": req.body.month_price || 50
 				}
 			}, function(err, subscription) {
 				if (err){stripeErrorHandler(req, res, err)}
