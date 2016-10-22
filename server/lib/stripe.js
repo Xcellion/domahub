@@ -103,7 +103,8 @@ module.exports = {
 
 	//function to create a monthly subscription for a listing
 	createStripeSubscription : function(req, res, next){
-		var listing_info = getUserListingObj(req.user.listings, req.params.domain_name);
+		var domain_name = req.params.domain_name || req.body.domain_name;
+		var listing_info = getUserListingObj(req.user.listings, domain_name);
 
 		//if subscription id exists in our database
 		if (listing_info && listing_info.stripe_subscription_id){
@@ -137,7 +138,7 @@ module.exports = {
 				customer: req.user.stripe_info.stripe_customer_id,
 				plan: "premium",
 				metadata: {
-					"domain_name" : req.params.domain_name,
+					"domain_name" : domain_name,
 					"listing_id" : listing_info.id
 				}
 			}, function(err, subscription) {
@@ -314,7 +315,6 @@ function stripeSubscriptionHandler(subscription, req, res, listing_info){
 //helper function to get the req.user listings object for a specific domain
 function getUserListingObj(listings, domain_name){
 	for (var x = 0; x < listings.length; x++){
-		console.log(listings[x]);
 		if (listings[x].domain_name.toLowerCase() == domain_name.toLowerCase()){
 			return listings[x];
 		}
