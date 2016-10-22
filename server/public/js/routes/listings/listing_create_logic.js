@@ -53,7 +53,7 @@ $(document).ready(function() {
         });
 
         //update listing preview
-        if (parseFloat($(this).val()) <= 0 || !$(this).val()){
+        if (parseFloat($(this).val()) > 0){
             $("#preview-" + $(this).attr("id")).find(".green_text").text("$" + $(this).val());
         }
 
@@ -305,6 +305,7 @@ function submitListingsPremium(submit_button, submit_data){
         //close Checkout on page navigation
         window.addEventListener('popstate', function() {
             handler.close();
+            submit_button.removeClass("is-loading");
         });
 
 	}

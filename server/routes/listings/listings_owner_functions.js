@@ -43,10 +43,10 @@ module.exports = {
 		else if (!categories){
 			error.handler(req, res, "category", "json");
 		}
-		else if (buy_link && !validator.isFQDN(buy_link)){
+		else if (buy_link && !validator.isURL(buy_link, { protocols: ["http", "https"]})){
 			error.handler(req, res, "buy", "json");
 		}
-		else if (background_image && !validator.isFQDN(background_image)){
+		else if (background_image && !validator.isURL(background_image, { protocols: ["http", "https"]})){
 			error.handler(req, res, "background", "json");
 		}
 
@@ -58,7 +58,7 @@ module.exports = {
 	//function to check the pricing of a premium listing
 	checkListingCreatePrice : function(req, res, next){
 		var stripeToken = req.body.stripeToken;
-		
+
 		//var minute_price = req.body.minute_price || 1;
 		var hour_price = parseFloat(req.body.hour_price) || 1;
 		var day_price = parseFloat(req.body.day_price) || 10;
