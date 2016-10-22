@@ -54,7 +54,7 @@ module.exports = function(app, db, auth, e, stripe){
 		urlencodedParser,
 		checkLoggedIn,
 		owner_functions.checkAccountListingPriv,
-		owner_functions.checkListingCreate,
+		owner_functions.checkListingCreateInfo,
 		profile_functions.getAccountListings,
 		owner_functions.createListing
 	]);
@@ -64,7 +64,8 @@ module.exports = function(app, db, auth, e, stripe){
 		urlencodedParser,
 		checkLoggedIn,
 		owner_functions.checkAccountListingPriv,
-		owner_functions.checkListingCreate,
+		owner_functions.checkListingCreateInfo,
+		owner_functions.checkListingCreatePrice,
 		profile_functions.getAccountListings,
 		owner_functions.createListing,
 		stripe.getStripeInfo,

@@ -25,19 +25,13 @@ module.exports = {
 	},
 
 	//function to format the listing info
-	checkListingCreate : function(req, res, next){
+	checkListingCreateInfo : function(req, res, next){
 		var domain_name = req.body.domain_name;
 		var description = req.body.description;
 		var categories = req.body.categories;
 
 		var background_image = req.body.background_image;
 		var buy_link = req.body.buy_link;
-
-		//var minute_price = req.body.minute_price || 1;
-		var hour_price = parseFloat(req.body.hour_price) || 1;
-		var day_price = parseFloat(req.body.day_price) || 10;
-		var week_price = parseFloat(req.body.week_price) || 25;
-		var month_price = parseFloat(req.body.month_price) || 50;
 
 		//check the posted info
 		if (!description){
@@ -54,6 +48,26 @@ module.exports = {
 		}
 		else if (background_image && !validator.isFQDN(background_image)){
 			error.handler(req, res, "background", "json");
+		}
+
+		else {
+			next();
+		}
+	},
+
+	//function to check the pricing of a premium listing
+	checkListingCreatePrice : function(req, res, next){
+		var stripeToken = req.body.stripeToken;
+		
+		//var minute_price = req.body.minute_price || 1;
+		var hour_price = parseFloat(req.body.hour_price) || 1;
+		var day_price = parseFloat(req.body.day_price) || 10;
+		var week_price = parseFloat(req.body.week_price) || 25;
+		var month_price = parseFloat(req.body.month_price) || 50;
+
+		//check posted data
+		if (!stripeToken){
+			error.handler(req, res, "stripe", "json");
 		}
 		// else if (parseFloat(minute_price) != minute_price >>> 0){
 		// 	error.handler(req, res, "minute", "json");
