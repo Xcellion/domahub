@@ -119,7 +119,7 @@ function updateListing(subscription, bool, object){
 			month_price: subscription.metadata.month_price || 50
 		}
 		var console_msg = {
-			success: "Premium status for listing #" + listing_id + " has been renewed!",
+			success: "Premium status for listing #" + listing_id + " has been renewed/created!",
 			error: "Something went wrong with renewing Premium status for listing #" + listing_id + "!"
 		}
 	}
