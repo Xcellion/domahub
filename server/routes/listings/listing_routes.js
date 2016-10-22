@@ -66,12 +66,16 @@ module.exports = function(app, db, auth, e, stripe){
 		owner_functions.checkAccountListingPriv,
 		owner_functions.checkListingCreate,
 		profile_functions.getAccountListings,
-		owner_functions.createListing
+		owner_functions.createListing,
+		stripe.getStripeInfo,
+		stripe.createStripeCustomer,
+		stripe.createStripeSubscription		//end here, and stripe webhooks will update the db
 	]);
 
 	//create multiple listings
 	app.post('/listing/create/batch', [
 		checkLoggedIn,
+		profile_functions.getAccountListings,
 		owner_functions.checkAccountListingPriv,
 		owner_functions.checkCSVUploadSize,
 		owner_functions.checkListingBatch,
@@ -95,6 +99,7 @@ module.exports = function(app, db, auth, e, stripe){
 		owner_functions.checkAccountListingPriv,
 		checkDomainValid,
 		checkDomainListed,
+		profile_functions.getAccountListings,
 		owner_functions.checkListingOwner,
 		owner_functions.checkListingVerified,
 		owner_functions.checkImageUploadSize,
@@ -112,6 +117,7 @@ module.exports = function(app, db, auth, e, stripe){
 		owner_functions.checkAccountListingPriv,
 		checkDomainValid,
 		checkDomainListed,
+		profile_functions.getAccountListings,
 		owner_functions.checkListingOwner,
 		owner_functions.checkListingVerified,
 		stripe.getStripeInfo,
@@ -126,6 +132,7 @@ module.exports = function(app, db, auth, e, stripe){
 		owner_functions.checkAccountListingPriv,
 		checkDomainValid,
 		checkDomainListed,
+		profile_functions.getAccountListings,
 		owner_functions.checkListingOwner,
 		owner_functions.checkListingVerified,
 		stripe.cancelStripeSubscription,

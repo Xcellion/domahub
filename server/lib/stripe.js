@@ -26,7 +26,10 @@ module.exports = {
 		if (!req.user.stripe_info){
 			Account.getStripeInfo(req.user.id, function(result){
 				if (result.state == "error" || result.info.length == 0){
-					res.render("account/stripeconnect.ejs");
+					res.send({
+						state: "error",
+						redirect: "account/stripeconnect.ejs"
+					});
 				}
 				else {
 					req.user.stripe_info = result.info[0];
