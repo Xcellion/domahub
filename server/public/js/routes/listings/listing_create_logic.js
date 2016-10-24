@@ -1,7 +1,11 @@
 var can_submit = true;
 
-$(document).ready(function() {
+//on back button
+window.onpopstate = function(event) {
+    checkHash();
+};
 
+$(document).ready(function() {
     //check for any existing cookies and set the data
     var existing_data = read_cookie("listing_data");
     if (existing_data){
@@ -33,9 +37,11 @@ $(document).ready(function() {
             basic_bool.addClass("is-active").removeClass("low-opacity");
             setSectionNext(true, "type");
             setPremium(basic_bool.data("listing-type") == "basic");  //setting up premium listing logic
-            changePage("type");
         }
     }
+
+    //display the section with the correct hash
+    checkHash();
 
     //section 1 - basic vs premium
     $(".box").click(function() {
@@ -131,17 +137,6 @@ function checkPrices(){
     return price_okay;
 }
 
-//function to set the current section as able to go next
-function setSectionNext(bool, section_selector){
-    $("#" + section_selector + "-section").data("can-next", bool);
-    if (bool){
-        $("#next-button").removeClass("is-disabled");
-    }
-    else {
-        $("#next-button").addClass("is-disabled");
-    }
-}
-
 //function to set up premium payment
 function setPremium(basic_bool){
     //if basic, so skip the pricing
@@ -167,11 +162,26 @@ function setPremium(basic_bool){
     }
 }
 
+//function to set the current section as able to go next
+function setSectionNext(bool, section_selector){
+    $("#" + section_selector + "-section").data("can-next", bool);
+    if (bool){
+        $("#next-button").removeClass("is-disabled");
+    }
+    else {
+        $("#next-button").addClass("is-disabled");
+    }
+}
+
 //function to go to a specific page
-function changePage(section_id){
+function changePage(section_id, page_refresh_bool){
     $(".section").not("#buttons-section").addClass("is-hidden");  //hide all sections except bottom buttons
     var section_to_change_to = $("#" + section_id + "-section");
     section_to_change_to.removeClass('is-hidden');  //show correct one
+
+    if (!page_refresh_bool){
+        history.pushState({}, "", "/listing/create#" + section_id);
+    }
 
     //first, disable prev
     if (section_id == "type"){
@@ -208,6 +218,26 @@ function changePage(section_id){
         }
     });
 
+}
+
+//--------------------------------------------------------------------------------------------------------PAGES AND HISTORY
+
+//function to check for hash in the url
+function checkHash(){
+    var hash = window.location.hash;
+    var hashes = ["#type", "#info", "#categories", "#pricing", "#preview"];
+
+    if (hashes.indexOf(hash) != -1){
+        changePage(hash.substr(1, hash.length), true);
+    }
+    else if (hash == ""){
+        hash = "#type";
+        window.location.hash = hash;
+        changePage(hash.substr(1, hash.length), true);
+    }
+    else {
+        history.replaceState({}, "", "/listing/create");
+    }
 }
 
 //--------------------------------------------------------------------------------------------------------SUBMISSION
