@@ -1,13 +1,12 @@
 var	account_model = require('../models/account_model.js');
 var	listing_model = require('../models/listing_model.js');
 
+var qs = require('qs');
+var request = require('request');
+
 var node_env = process.env.NODE_ENV || 'dev'; 	//dev or prod bool
-if (node_env == "dev"){
-	var stripe = require("stripe")("sk_test_PHd0TEZT5ytlF0qCNvmgAThp");		//stripe API development key
-}
-else {
-	var stripe = require("stripe")("sk_live_Nqq1WW2x9JmScHxNbnFlORoh");		//stripe API production key
-}
+var stripe_key = (node_env == "dev") ? "sk_test_PHd0TEZT5ytlF0qCNvmgAThp" : "sk_live_Nqq1WW2x9JmScHxNbnFlORoh";
+var stripe = require("stripe")(stripe_key);
 
 var database, error;
 
@@ -27,7 +26,10 @@ module.exports = {
 		if (!req.user.stripe_info){
 			Account.getStripeInfo(req.user.id, function(result){
 				if (result.state == "error" || result.info.length == 0){
-					res.render("account/stripeconnect.ejs");
+					res.send({
+						state: "error",
+						redirect: "account/stripeconnect.ejs"
+					});
 				}
 				else {
 					req.user.stripe_info = result.info[0];
@@ -101,7 +103,8 @@ module.exports = {
 
 	//function to create a monthly subscription for a listing
 	createStripeSubscription : function(req, res, next){
-		var listing_info = getUserListingObj(req.user.listings, req.params.domain_name);
+		var domain_name = req.params.domain_name || req.body.domain_name;
+		var listing_info = getUserListingObj(req.user.listings, domain_name);
 
 		//if subscription id exists in our database
 		if (listing_info && listing_info.stripe_subscription_id){
@@ -135,8 +138,13 @@ module.exports = {
 				customer: req.user.stripe_info.stripe_customer_id,
 				plan: "premium",
 				metadata: {
-					"domain_name" : req.params.domain_name,
-					"listing_id" : listing_info.id
+					"domain_name" : domain_name,
+					"listing_id" : listing_info.id,
+					//"minute_price": req.body.minute_price || 1,
+					"hour_price": req.body.hour_price || 1,
+					"day_price": req.body.day_price || 10,
+					"week_price": req.body.week_price || 25,
+					"month_price": req.body.month_price || 50
 				}
 			}, function(err, subscription) {
 				if (err){stripeErrorHandler(req, res, err)}
@@ -208,6 +216,77 @@ module.exports = {
 		//if stripetoken doesnt exist
 		else {
 			stripeErrorHandler(req, res, {message: "Invalid Stripe token! Please log out and try again."});
+		}
+	},
+
+	//authorize stripe
+	authorizeStripe : function(req, res){
+		// Redirect to Stripe /oauth/authorize endpoint
+		res.redirect("https://connect.stripe.com/oauth/authorize" + "?" + qs.stringify({
+			response_type: "code",
+			scope: "read_write",
+			state: "domahubrules",
+			client_id: "ca_997O55c2IqFxXDmgI9B0WhmpPgoh28s3",
+			stripe_user: {
+				email: req.user.email
+			}
+		}));
+	},
+
+	//connect to stripe and get the stripe account info to store on our db
+	connectStripe : function(req, res){
+		scope = req.query.scope;
+		code = req.query.code;
+
+		//connection errored
+		if (req.query.error){
+			res.send(req.query.error_description);
+		}
+		else if (!scope && !code) {
+			error.handler(req, res, "Invalid stripe token!");
+		}
+		else {
+			request.post({
+				url: 'https://connect.stripe.com/oauth/token',
+				form: {
+					grant_type: "authorization_code",
+					client_id: "ca_997O55c2IqFxXDmgI9B0WhmpPgoh28s3",
+					code: code,
+					client_secret: stripe_key
+				}
+			},
+				function (err, response, body) {
+					body = JSON.parse(body);
+
+					//all good with stripe!
+					if (!body.error && response.statusCode == 200 && body.access_token) {
+						account_info = body;
+						req.user.stripe_info = body;
+						account_info.account_id = req.user.id;
+						Account.newAccountStripe(account_info, function(result){
+							if (result.state=="error"){error.handler(req, res, result.info);}
+							else {
+								//successfully connected, now update the type
+								account_info = {
+									type: 2
+								}
+								Account.updateAccount(account_info, req.user.email, function(result){
+									if (result.state=="error"){error.handler(req, res, result.info);}
+									else {
+										req.user.type = 2;
+										res.render("redirect.ejs", {
+											redirect: "/profile"
+										})
+									}
+								});
+							}
+						});
+					}
+					else {
+						error.handler(req, res, "Invalid stripe token!");
+					}
+				}
+			);
 		}
 	}
 

@@ -1,8 +1,10 @@
 var	listing_model = require('../../models/listing_model.js');
 var	data_model = require('../../models/data_model.js');
-var listings_renter = require("../listings/listings_renter_routes");
-var listings_owner = require("../listings/listings_owner_routes");
-var listings_stats = require("../listings/listings_stats_routes");
+
+var renter_functions = require("../listings/listings_renter_functions.js");
+var owner_functions = require("../listings/listings_owner_functions.js");
+var stats_functions = require("../listings/listings_stats_functions.js");
+var profile_functions = require("../profiles/profile_functions.js");
 
 var bodyParser = require('body-parser')
 var jsonParser = bodyParser.json()
@@ -18,9 +20,10 @@ module.exports = function(app, db, auth, e, stripe){
 	checkLoggedIn = auth.checkLoggedIn;
 
 	//initiate the two types of listing routes
-	listings_owner.init(e, Listing);
-	listings_renter.init(e, Listing);
+	owner_functions.init(e, Listing);
+	renter_functions.init(e, Listing);
 
+	//get a random listing with specific category
 	app.get("/listing/random/:category", [
 		getRandomListingByCategory
 	]);
@@ -30,92 +33,112 @@ module.exports = function(app, db, auth, e, stripe){
 	//render create listing page
 	app.get('/listing/create', [
 		checkLoggedIn,
-		listings_owner.checkAccountListingPriv,
-		listings_owner.renderCreateListing
+		owner_functions.checkAccountListingPriv,
+		owner_functions.renderCreateListing
 	]);
 
 	//render create listing page
 	app.get('/listing/create/batch', [
 		checkLoggedIn,
-		listings_owner.checkAccountListingPriv,
-		listings_owner.renderCreateListingBatch
+		owner_functions.checkAccountListingPriv,
+		owner_functions.renderCreateListingBatch
 	]);
 
 	//redirect all /create to proper /create
 	app.get('/listing/create*', function(req, res){
+		console.log('s')
 		res.redirect("/listing/create");
 	})
 
-	//create a single listing
-	app.post('/listing/create', [
+	//create a single basic listing
+	app.post('/listing/create/basic', [
 		urlencodedParser,
 		checkLoggedIn,
-		listings_owner.checkAccountListingPriv,
-		listings_owner.checkListingCreate,
-		listings_owner.createListing
+		owner_functions.checkAccountListingPriv,
+		owner_functions.checkListingCreateInfo,
+		profile_functions.getAccountListings,
+		owner_functions.createListing
+	]);
+
+	//create a single premium listing
+	app.post('/listing/create/premium', [
+		urlencodedParser,
+		checkLoggedIn,
+		owner_functions.checkAccountListingPriv,
+		owner_functions.checkListingCreateInfo,
+		owner_functions.checkListingCreatePrice,
+		profile_functions.getAccountListings,
+		owner_functions.createListing,
+		stripe.getStripeInfo,
+		stripe.createStripeCustomer,
+		stripe.createStripeSubscription		//end here, and stripe webhooks will update the db
 	]);
 
 	//create multiple listings
 	app.post('/listing/create/batch', [
 		checkLoggedIn,
-		listings_owner.checkAccountListingPriv,
-		listings_owner.checkCSVUploadSize,
-		listings_owner.checkListingBatch,
-		listings_owner.createListingBatch
+		profile_functions.getAccountListings,
+		owner_functions.checkAccountListingPriv,
+		owner_functions.checkCSVUploadSize,
+		owner_functions.checkListingBatch,
+		owner_functions.createListingBatch
 	]);
 
 	//verify that someone changed their DNS to point to domahub
 	app.get('/listing/:domain_name/verify', [
 		checkLoggedIn,
-		listings_owner.checkAccountListingPriv,
+		owner_functions.checkAccountListingPriv,
 		checkDomainValid,
 		checkDomainListed,
-		listings_owner.checkListingOwner,
-		listings_owner.verifyListing,
-		listings_owner.updateListing
+		owner_functions.checkListingOwner,
+		owner_functions.verifyListing,
+		owner_functions.updateListing
 	]);
 
 	//update listing information
 	app.post('/listing/:domain_name/update', [
 		checkLoggedIn,
-		listings_owner.checkAccountListingPriv,
+		owner_functions.checkAccountListingPriv,
 		checkDomainValid,
 		checkDomainListed,
-		listings_owner.checkListingOwner,
-		listings_owner.checkListingVerified,
-		listings_owner.checkImageUploadSize,
-		listings_owner.checkListingImage,
-		listings_owner.checkListingDetails,
-		listings_owner.checkListingPriceType,
-		listings_owner.checkListingExisting,
-		listings_owner.updateListing
+		profile_functions.getAccountListings,
+		owner_functions.checkListingOwner,
+		owner_functions.checkListingVerified,
+		owner_functions.checkImageUploadSize,
+		owner_functions.checkListingImage,
+		owner_functions.checkListingDetails,
+		owner_functions.checkListingPriceType,
+		owner_functions.checkListingExisting,
+		owner_functions.updateListing
 	]);
 
 	//update listing to premium
 	app.post('/listing/:domain_name/upgrade', [
 		urlencodedParser,
 		checkLoggedIn,
-		listings_owner.checkAccountListingPriv,
+		owner_functions.checkAccountListingPriv,
 		checkDomainValid,
 		checkDomainListed,
-		listings_owner.checkListingOwner,
-		listings_owner.checkListingVerified,
+		profile_functions.getAccountListings,
+		owner_functions.checkListingOwner,
+		owner_functions.checkListingVerified,
 		stripe.getStripeInfo,
 		stripe.createStripeCustomer,
 		stripe.createStripeSubscription,
-		listings_owner.updateListing	//only if we're renewing a subscription
+		owner_functions.updateListing	//only if we're renewing a subscription
 	]);
 
 	//degrade listing to basic
 	app.post('/listing/:domain_name/downgrade', [
 		checkLoggedIn,
-		listings_owner.checkAccountListingPriv,
+		owner_functions.checkAccountListingPriv,
 		checkDomainValid,
 		checkDomainListed,
-		listings_owner.checkListingOwner,
-		listings_owner.checkListingVerified,
+		profile_functions.getAccountListings,
+		owner_functions.checkListingOwner,
+		owner_functions.checkListingVerified,
 		stripe.cancelStripeSubscription,
-		listings_owner.updateListing
+		owner_functions.updateListing
 	]);
 
 	//-------------------------------------------------------------------------------------------------------------------- DESIRED TIMES
@@ -124,15 +147,15 @@ module.exports = function(app, db, auth, e, stripe){
 		urlencodedParser,
 		checkDomainValid,
 		checkDomainNotListed,	//make sure the domain isnt listed on doma
-		listings_stats.checkRentalTimes,
-		listings_stats.newDesiredTimes
+		stats_functions.checkRentalTimes,
+		stats_functions.newDesiredTimes
 	]);
 
 	//-------------------------------------------------------------------------------------------------------------------- RENTAL RELATED
 
 	//render the listing page hub
 	app.get('/listings', [
-		listings_renter.renderListingHub
+		renter_functions.renderListingHub
 	]);
 
 	//domahub easter egg page
@@ -145,9 +168,9 @@ module.exports = function(app, db, auth, e, stripe){
 
 	//render listing page
 	app.get('/listing/:domain_name', [
-		listings_renter.checkDomainAndAddToSearch,
-		listings_renter.getActiveListing,
-		listings_renter.renderListing
+		renter_functions.checkDomainAndAddToSearch,
+		renter_functions.getActiveListing,
+		renter_functions.renderListing
 	]);
 
 	//render a specific rental
@@ -155,10 +178,10 @@ module.exports = function(app, db, auth, e, stripe){
 		checkLoggedIn,
 		checkDomainValid,
 		checkDomainListed,
-		listings_renter.checkRental,
-		listings_renter.getActiveListing,
-		listings_renter.getRental,
-		listings_renter.renderListing
+		renter_functions.checkRental,
+		renter_functions.getActiveListing,
+		renter_functions.getRental,
+		renter_functions.renderListing
 	]);
 
 	//create a new rental
@@ -167,14 +190,14 @@ module.exports = function(app, db, auth, e, stripe){
 		checkLoggedIn,
 		checkDomainValid,
 		checkDomainListed,
-		listings_renter.getActiveListing,
-		listings_renter.checkRentalAddress,
-		listings_renter.checkRentalTimes,
-		listings_renter.checkRentalPrice,
-		listings_renter.createRental,
-		listings_renter.getOwnerStripe,
+		renter_functions.getActiveListing,
+		renter_functions.checkRentalAddress,
+		renter_functions.checkRentalTimes,
+		renter_functions.checkRentalPrice,
+		renter_functions.createRental,
+		renter_functions.getOwnerStripe,
 		stripe.chargeMoney,
-		listings_renter.toggleActivateRental
+		renter_functions.toggleActivateRental
 	]);
 
 	//editing an existing rental
@@ -183,12 +206,12 @@ module.exports = function(app, db, auth, e, stripe){
 		checkLoggedIn,
 		checkDomainValid,
 		checkDomainListed,
-		listings_renter.checkRental,
-		listings_renter.getActiveListing,
-		listings_renter.checkRentalAddress,
-		listings_renter.checkRentalTimes,
-		listings_renter.checkRentalPrice,
-		listings_renter.editRental
+		renter_functions.checkRental,
+		renter_functions.getActiveListing,
+		renter_functions.checkRentalAddress,
+		renter_functions.checkRentalTimes,
+		renter_functions.checkRentalPrice,
+		renter_functions.editRental
 	]);
 
 }

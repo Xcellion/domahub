@@ -25,19 +25,13 @@ module.exports = {
 	},
 
 	//function to format the listing info
-	checkListingCreate : function(req, res, next){
+	checkListingCreateInfo : function(req, res, next){
 		var domain_name = req.body.domain_name;
 		var description = req.body.description;
 		var categories = req.body.categories;
 
 		var background_image = req.body.background_image;
 		var buy_link = req.body.buy_link;
-
-		//var minute_price = req.body.minute_price || 1;
-		var hour_price = parseFloat(req.body.hour_price) || 1;
-		var day_price = parseFloat(req.body.day_price) || 10;
-		var week_price = parseFloat(req.body.week_price) || 25;
-		var month_price = parseFloat(req.body.month_price) || 50;
 
 		//check the posted info
 		if (!description){
@@ -49,11 +43,31 @@ module.exports = {
 		else if (!categories){
 			error.handler(req, res, "category", "json");
 		}
-		else if (buy_link && !validator.isFQDN(buy_link)){
+		else if (buy_link && !validator.isURL(buy_link, { protocols: ["http", "https"]})){
 			error.handler(req, res, "buy", "json");
 		}
-		else if (background_image && !validator.isFQDN(background_image)){
+		else if (background_image && !validator.isURL(background_image, { protocols: ["http", "https"]})){
 			error.handler(req, res, "background", "json");
+		}
+
+		else {
+			next();
+		}
+	},
+
+	//function to check the pricing of a premium listing
+	checkListingCreatePrice : function(req, res, next){
+		var stripeToken = req.body.stripeToken;
+
+		//var minute_price = req.body.minute_price || 1;
+		var hour_price = parseFloat(req.body.hour_price) || 1;
+		var day_price = parseFloat(req.body.day_price) || 10;
+		var week_price = parseFloat(req.body.week_price) || 25;
+		var month_price = parseFloat(req.body.month_price) || 50;
+
+		//check posted data
+		if (!stripeToken){
+			error.handler(req, res, "stripe", "json");
 		}
 		// else if (parseFloat(minute_price) != minute_price >>> 0){
 		// 	error.handler(req, res, "minute", "json");
@@ -413,18 +427,20 @@ module.exports = {
 				listing_info.id = result.info.insertId;
 
 				//add to the server side users listings object
-				if (req.user.listings){
-					req.user.listings.push(listing_info);
-				}
-				else {
-					req.user.listings = [listing_info];
-				}
+				req.user.listings.push(listing_info);
 
-				res.send({
-					state: "success",
-					listing_info: listing_info,
-					message: "Successfully added a new listing!"
-				})
+				//if premium, go next to handle stripe stuff
+				if (req.body.stripeToken){
+					next();
+				}
+				//if its basic, send success
+				else {
+					res.send({
+						state: "success",
+						listing_info: listing_info,
+						message: "Successfully added a new listing!"
+					});
+				}
 			}
 		});
 	},
