@@ -31,10 +31,9 @@
 .nav-link {
   padding: 5px;
   color: $text;
-  &.is-white {
-    color: $white;
-  }
-  &:hover {
+  &:hover,
+  &:focus {
+    outline: none;
     @include box-shadow(0,-2px,0,$primary-light, inset);
     @include mobile {
       @include box-shadow(0,0,0,$black,0);
@@ -42,10 +41,7 @@
     }
   }
   &.is-active {
-    &:hover {
-      color: $white;
-      @include box-shadow(0,-3px,0,$white, inset);
-    }
+    @include box-shadow(0,-2px,0,$primary-light, inset);
   }
 }
 

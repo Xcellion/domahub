@@ -24,3 +24,12 @@
     }
   }
 }
+
+.box {
+  li {
+    padding-top: 10px;
+    &:not(:first-child) {
+      border-top: 1px solid $border;
+    }
+  }
+}

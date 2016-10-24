@@ -17,7 +17,7 @@
     -o-transition: all 0.25s;
     -webkit-transition: all 0.25s;
     transition: all 0.25s;
-    color: rgba(0, 0, 0, 0.87); }
+    color: rgba(0, 0, 0, 0.9); }
     #searchbar-form input:focus, #searchbar-form input:active {
       -webkit-box-shadow: 0 -2px 0 #62c9a3 inset;
       -moz-box-shadow: 0 -2px 0 #62c9a3 inset;
@@ -28,24 +28,22 @@
 
 .nav-link {
   padding: 5px;
-  color: rgba(0, 0, 0, 0.87); }
-  .nav-link.is-white {
-    color: white; }
-  .nav-link:hover {
+  color: rgba(0, 0, 0, 0.9); }
+  .nav-link:hover, .nav-link:focus {
+    outline: none;
     -webkit-box-shadow: 0 -2px 0 #62c9a3 inset;
     -moz-box-shadow: 0 -2px 0 #62c9a3 inset;
     box-shadow: 0 -2px 0 #62c9a3 inset; }
     @media screen and (max-width: 768px) {
-      .nav-link:hover {
+      .nav-link:hover, .nav-link:focus {
         -webkit-box-shadow: 0 0 0 black 0;
         -moz-box-shadow: 0 0 0 black 0;
         box-shadow: 0 0 0 black 0;
         align-self: flex-end; } }
-  .nav-link.is-active:hover {
-    color: white;
-    -webkit-box-shadow: 0 -3px 0 white inset;
-    -moz-box-shadow: 0 -3px 0 white inset;
-    box-shadow: 0 -3px 0 white inset; }
+  .nav-link.is-active {
+    -webkit-box-shadow: 0 -2px 0 #62c9a3 inset;
+    -moz-box-shadow: 0 -2px 0 #62c9a3 inset;
+    box-shadow: 0 -2px 0 #62c9a3 inset; }
 
 /************************************* LOGIN DROPDOWN *************************/
 #login-dropdown {

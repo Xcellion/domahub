@@ -43,7 +43,7 @@
 #msg_receiver_input {
   border: none;
   border-radius: 0;
-  color: rgba(0, 0, 0, 0.87);
+  color: rgba(0, 0, 0, 0.9);
   padding: 15px 8px;
   width: 100%; }
   #msg_receiver_input:focus {
@@ -126,7 +126,7 @@
 
 .sender_them > .chat_message {
   background-color: #e0e0e0;
-  color: rgba(0, 0, 0, 0.87); }
+  color: rgba(0, 0, 0, 0.9); }
   .sender_them > .chat_message.is-disabled {
     background-color: #f5f5f5; }
 
