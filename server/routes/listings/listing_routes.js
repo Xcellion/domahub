@@ -46,6 +46,7 @@ module.exports = function(app, db, auth, e, stripe){
 
 	//redirect all /create to proper /create
 	app.get('/listing/create*', function(req, res){
+		console.log('s')
 		res.redirect("/listing/create");
 	})
 
