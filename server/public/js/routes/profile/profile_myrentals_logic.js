@@ -80,7 +80,7 @@ function createView(rental_info){
         var temp_a = $("<a class='button' target='_blank' style='target-new: tab;'' href='/listing/" + rental_info.domain_name + "/" + rental_info.rental_id + "'></a>");
             var temp_span = $("<span class='icon'></span>");
                 var temp_i = $("<i class='fa fa-external-link'></i>");
-            var temp_span2 = $("<span>View</span>");
+            var temp_span2 = $("<span>Add Time</span>");
     temp_td.append(temp_a.append(temp_span.append(temp_i), temp_span2));
 
     //prevent clicking view from dropping down row

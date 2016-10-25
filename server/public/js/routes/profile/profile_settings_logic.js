@@ -129,18 +129,18 @@ function checkAccountSubmit(){
         });
         return false;
     }
+    //
+    // //if the old password is not entered
+    // else if ($("#old-pw-input").val().length > 70 || $("#old-pw-input").val().length < 6) {
+    //     $("#basic-message").fadeOut(100, function(){
+    //         $("#basic-message").css("color", "#ed1c24").text("Please enter your password to make any changes!").fadeIn(100);
+    //         $("#old-pw-input").addClass("is-danger").focus();
+    //     });
+    //     return false;
+    // }
 
-    //if no password is entered
-    else if ($("#old-pw-input").val().length > 70 || $("#old-pw-input").val().length < 6) {
-        $("#basic-message").fadeOut(100, function(){
-            $("#basic-message").css("color", "#ed1c24").text("Please enter your password!").fadeIn(100);
-            $("#old-pw-input").addClass("is-danger").focus();
-        });
-        return false;
-    }
-
-    //if password is too short or long
-    else if ($("#new-pw-input").val().length > 70 || $("#new-pw-input").val().length < 6) {
+    //if new password is too short or long
+    else if ($("#new-pw-input").val() && ($("#new-pw-input").val().length > 70 || $("#new-pw-input").val().length < 6)) {
         $("#basic-message").fadeOut(100, function(){
             $("#basic-message").css("color", "#ed1c24").text("Please enter a valid new password!").fadeIn(100);
             $("#new-pw-input").addClass("is-danger").focus();
@@ -148,14 +148,14 @@ function checkAccountSubmit(){
         return false;
     }
 
-    //if passwords do not match
-    else if ($("#new-pw-input").val() != $("#verify-pw-input").val()){
-        $("#basic-message").fadeOut(100, function(){
-            $("#basic-message").css("color", "#ed1c24").text("New passwords do not match!").fadeIn(100);
-            $("#new-pw-input").addClass("is-danger").focus();
-            $("#verify-pw-input").addClass("is-danger");
-        });
-        return false;
+    //if new passwords do not match
+    else if ($("#new-pw-input").val() && $("#new-pw-input").val() != $("#verify-pw-input").val()){
+            $("#basic-message").fadeOut(100, function(){
+                $("#basic-message").css("color", "#ed1c24").text("New passwords do not match!").fadeIn(100);
+                $("#new-pw-input").addClass("is-danger").focus();
+                $("#verify-pw-input").addClass("is-danger");
+            });
+            return false;
     }
     else {
         return {
