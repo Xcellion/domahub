@@ -1,6 +1,10 @@
 @import 'vars';
 @import 'mixins';
 
+#preview-img {
+  background-image: url("https://source.unsplash.com/category/people");
+}
+
 .control-label {
   &.is-small {
     width: 40px;
