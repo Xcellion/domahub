@@ -17,17 +17,13 @@ module.exports = {
 		var rental_id = req.params.rental_id;
 
 		//if already got the info from previous session
-		if (req.session.def_rental_info && req.session.rental_info
-			&& (req.session.rental_info.rental_id == rental_id)
-		){
+		if (req.session.rental_info && req.session.rental_info.rental_id == rental_id){
 			next();
 		}
 		else if ((parseFloat(rental_id) != rental_id >>> 0) && rental_id != "new"){
 			error.handler(req, res, "Invalid rental!");
 		}
 		else {
-			delete req.session.rental_info;
-			delete req.session.def_rental_info;
 			//check if account owns that rental
 			Listing.checkAccountRental(req.user.id, rental_id, function(result){
 				if (result.state == "error" || result.info.length == 0){error.handler(req, res, "Invalid user / rental!");}
@@ -101,7 +97,14 @@ module.exports = {
 					}
 					//all checks are good!
 					else {
-						req.session.new_rental_info.new_rental_times = available_times;
+						if (!req.session.new_rental_info){
+							req.session.new_rental_info = {
+								new_rental_times : available_times
+							}
+						}
+						else {
+							req.session.new_rental_info.new_rental_times = available_times;
+						}
 						next();
 					}
 				});
@@ -258,38 +261,37 @@ module.exports = {
 		});
 	},
 
-	//function to initiate editing a rental
-	editRental : function(req, res, next){
-		domain_name = req.params.domain_name;
-		rental_id = req.params.rental_id;
-		new_rental_info = req.session.new_rental_info;
+	//function to add times to rental
+	editRentalTimes : function(req, res, next){
+		var domain_name = req.params.domain_name;
+		var rental_id = req.params.rental_id;
 
-		raw_info = {
-			address: new_rental_info.address
-		};
+		//format times if it exists
+		formatNewRentalTimes(rental_id, req.session.new_rental_info.new_rental_times);
 
-		formatted_times = formatNewRentalTimes(rental_id, new_rental_info.formatted_times);
-
-		updateRental(req, res, rental_id, raw_info, function(){
-			newRentalTimes(req, res, rental_id, new_rental_info.formatted_times, function(){
-				delete req.session.new_rental_info;
-				req.session.changed = true;
-				res.send({message : "success"});
-			});
+		newRentalTimes(req, res, rental_id, new_rental_info.formatted_times, function(){
+			delete req.session.new_rental_info;
+			req.session.changed = true;
+			res.send({message : "success"});
 		});
 	},
 
 	//activate the rental once its good
 	toggleActivateRental: function(req, res, next){
-		rental_id = req.session.new_rental_info.rental_id;
+		var rental_id = (req.session.new_rental_info) ? req.session.new_rental_info.rental_id : req.params.rental_id;
+		var domain_name = req.params.domain_name;
 
 		Listing.toggleActivateRental(rental_id, function(result){
 			delete req.session.new_rental_info;
 			if (result.state != "success"){error.handler(req, res, result.description);}
 			else {
+
+				//update the req.users.rentals object
+				updateUserRentalsObject(req.user.rentals, domain_name);
 				res.send({
 					state: "success",
-					rental_id: rental_id
+					rental_id: rental_id,
+					rentals: req.user.rentals
 				});
 			}
 		});
@@ -341,10 +343,12 @@ function updateRental(req, res, rental_id, raw_info, callback){
 
 //helper function to format new rental times
 function formatNewRentalTimes(rental_id, times){
-	//add the rental id to the formatted
-	for (var x in times){
-		times[x].unshift(rental_id);
-		times[x].push("");
+	if (times){
+		//add the rental id to the formatted
+		for (var x in times){
+			times[x].unshift(rental_id);
+			times[x].push("");
+		}
 	}
 }
 
@@ -528,4 +532,25 @@ function calculatePrice(times, listing_info){
 		return totalPrice;
 	}
 	else {return false;}
+}
+
+//----------------------------------------------------------------helper functions for user obj----------------------------------------------------------------
+
+//helper function to update req.user.rentals after changing to active
+function updateUserRentalsObject(rentals, domain_name){
+	for (var x = 0; x < rentals.length; x++){
+		if (rentals[x].domain_name.toLowerCase() == domain_name.toLowerCase()){
+			rentals[x].active = (rentals[x].active == 0) ? 1 : 0;
+			break;
+		}
+	}
+}
+
+//helper function to get the req.user listings object for a specific domain
+function getUserRentalObj(rentals, domain_name){
+	for (var x = 0; x < rentals.length; x++){
+		if (rentals[x].domain_name.toLowerCase() == domain_name.toLowerCase()){
+			return rentals[x];
+		}
+	}
 }
