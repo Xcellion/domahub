@@ -24,6 +24,7 @@ module.exports = function(app, auth){
 		auth.checkToken,
 		auth.renderReset
 	]);
+
 	app.get("/verify/:token", [
 		auth.checkToken,
 		auth.renderVerify

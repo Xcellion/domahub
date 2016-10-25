@@ -13,7 +13,7 @@ $(document).ready(function() {
 	});
 
 	//to catch empty emails or empty passwords
-	$('#target').submit(function(event){
+	$('#navbar_form').submit(function(event){
 
 		//re-set cookie for remember
 		remember($("#remember-checkbox").is(":checked"));
