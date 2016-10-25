@@ -149,6 +149,7 @@ function createRowDrop(listing_info, rownum){
         unverified_div.hide();
     }
 
+    //append various stuff to the row drop div
     temp_drop.append(temp_td.append(temp_div_drop.append(temp_div_col.append(
         createFormDrop(listing_info),
         createPriceDrop(listing_info),

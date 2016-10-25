@@ -200,18 +200,28 @@ module.exports = function(app, db, auth, e, stripe){
 		renter_functions.toggleActivateRental
 	]);
 
-	//editing an existing rental
-	app.post('/listing/:domain_name/:rental_id', [
+	//changing rental status
+	app.post('/listing/:domain_name/:rental_id/status', [
 		urlencodedParser,
 		checkLoggedIn,
 		checkDomainValid,
 		checkDomainListed,
 		renter_functions.checkRental,
 		renter_functions.getActiveListing,
-		renter_functions.checkRentalAddress,
+		renter_functions.toggleActivateRental
+	]);
+
+	//adding time to an existing rental
+	app.post('/listing/:domain_name/:rental_id/time', [
+		urlencodedParser,
+		checkLoggedIn,
+		checkDomainValid,
+		checkDomainListed,
+		renter_functions.checkRental,
+		renter_functions.getActiveListing,
 		renter_functions.checkRentalTimes,
 		renter_functions.checkRentalPrice,
-		renter_functions.editRental
+		renter_functions.editRentalTimes
 	]);
 
 }
