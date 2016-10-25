@@ -331,7 +331,7 @@ module.exports = {
 			error.handler(req, res, "Invalid listing prices!", "json");
 		}
 		//if categories exist but less than 1 total
-		else if (categories.length <= 0){
+		else if (req.body.categories && categories.length <= 0){
 			error.handler(req, res, "You need at least 1 category!", "json");
 		}
 		else {
