@@ -98,8 +98,39 @@
 
 		<section class="is-small">
 			<div class="container">
+				<div id="filter-dropdown" class="is-hidden">
+					<div class="control is-horizontal">
+						<div class="control-label is-padded">
+							<label class="label is-medium">Extensions</label>
+						</div>
+						<div class="control has-addons">
+							<input class="input is-medium" tabindex="16" type="text" placeholder="Extensions">
+							<span class="select is-medium">
+						    <select>
+						      <option>.com</option>
+						      <option>.net</option>
+						      <option>.org</option>
+						    </select>
+						  </span>
+						</div>
+					</div>
+					<div class="control is-horizontal">
+						<div class="control-label is-padded">
+							<label class="label is-medium">Domain Length</label>
+						</div>
+						<div class="control">
+							<div id="sliderSmall">
+
+							</div>
+						</div>
+					</div>
+					<div class="listing-buttons jc-flexEnd">
+						<a id="filter-cancel-button" class="button is-medium">Cancel</a>
+						<a id="filter-apply-button" class="button is-medium is-primary">Apply Filters</a>
+					</div>
+				</div>
 				<div class="listing-buttons">
-					<a class="button is-medium no-shadow is-primary">Filters</a>
+					<a id="filter-open-button" class="button is-medium no-shadow is-primary">Filters</a>
 					<a class="button is-medium is-grey no-shadow">
 						<span>4 Characters</span>
 						<span class="icon">
@@ -137,7 +168,7 @@
 						</span>
 					</a>
 				</div>
-				<table class="table">
+				<table id="listings-table" class="table">
 					<thead>
 						<tr>
 							<th>Domain Name</th>
@@ -170,73 +201,13 @@
 			</div>
 		</section>
 
-		<!-- <section class="hero is-primary is-medium">
-			<div class="hero-body">
-				<div class="container">
-					<div class="columns">
-						<div class="column is-half">
-							<div class="content">
-								<h1 class="title is-2 is-white">Browse Listings</h1>
-								<p class="subtitle is-4 is-whitelight">
-									Use this page to browse all listings.
-								</p>
-							</div>
-						</div>
-						<div class="column is-half">
-							<div class="notification">
-								<div class="content">
-									<h1 class="title is-white is-3">Don't have an account yet?</h1>
-									<p class="is-whitelight">
-										Click the button below to sign up now.
-									</p>
-									<a class="button is-large is-accent" href="/signup" title="Sign Up">Sign Up</a>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</section>
-
-		<section class="section">
-			<div class="container">
-				<div class="columns">
-					<div class="column">
-						<h1 class="title is-4 is-normal">Browse by Category</h1>
-					</div>
-				</div>
-				<div class="columns">
-					<div class="column">
-						<div class="box">
-							<div class="content">
-								<h2>Start-Up Domains</h2>
-							</div>
-						</div>
-					</div>
-					<div class="column">
-						<div class="box">
-							<div class="content">
-								<h2>Events</h2>
-							</div>
-						</div>
-					</div>
-					<div class="column">
-						<div class="box">
-							<div class="content">
-								<h2>Industry</h2>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</section> -->
-
 		<%- include("../templates/footer"); %>
 		<%- include("../templates/js_scripts"); %>
 		<script type="text/javascript">
 			var available = <% if(typeof available != "undefined"){ %><%-JSON.stringify(available)%><% }else{ %>""<% } %>;
 		</script>
-		<script src="/js/lib/nouislider.min.js"></script>
+		<script src="/js/lib/nouislider.min.js" type="text/javascript"></script>
+		<script src="/js/lib/wNumb.js" type="text/javascript"></script>
 		<script src="/js/routes/listings/listing_hub_logic.js" type="text/javascript"></script>
 
 		</body>
