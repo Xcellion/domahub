@@ -295,7 +295,8 @@ a {
   cursor: pointer;
   font-size: 16px;
   opacity: 1.0;
-  text-decoration: none; }
+  text-decoration: none;
+  word-break: break-all; }
   a:active {
     outline: none; }
   a.is-underlined {
@@ -2375,9 +2376,9 @@ input:-webkit-autofill {
 
 .step-number {
   -webkit-border-radius: 50%;
-    -webkit-border-radius--moz-border-radius: 50%;
-      -webkit-border-radius--moz-border-radius--ms-border-radius: 50%;
-        -webkit-border-radius--moz-border-radius--ms-border-radius-border-radius: 50%;
+  -moz-border-radius: 50%;
+  -ms-border-radius: 50%;
+  border-radius: 50%;
   border: 2px solid rgba(0, 0, 0, 0.66);
   color: rgba(0, 0, 0, 0.9);
   display: block;
@@ -5424,7 +5425,7 @@ a.nav-item.is-tab {
 
 @media screen and (min-width: 769px) {
   .landing-img {
-    background-position: top center;
+    background-position: center center;
     background-repeat: no-repeat;
     background-size: cover;
     width: 100%; } }
@@ -5448,6 +5449,17 @@ a.nav-item.is-tab {
     height: 100vh;
     justify-content: center;
     width: 100%; } }
+
+.flex-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  height: calc(100vh - 320px);
+  width: 100%; }
+
+.flex-content {
+  align-self: center; }
 
 /********************* FILE UPLOAD BUTTON *************/
 .input-number {

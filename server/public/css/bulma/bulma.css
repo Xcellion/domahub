@@ -295,7 +295,8 @@ a {
   cursor: pointer;
   font-size: 16px;
   opacity: 1.0;
-  text-decoration: none; }
+  text-decoration: none;
+  word-break: break-all; }
   a:active {
     outline: none; }
   a.is-underlined {
@@ -2375,9 +2376,9 @@ input:-webkit-autofill {
 
 .step-number {
   -webkit-border-radius: 50%;
-    -webkit-border-radius--moz-border-radius: 50%;
-      -webkit-border-radius--moz-border-radius--ms-border-radius: 50%;
-        -webkit-border-radius--moz-border-radius--ms-border-radius-border-radius: 50%;
+  -moz-border-radius: 50%;
+  -ms-border-radius: 50%;
+  border-radius: 50%;
   border: 2px solid rgba(0, 0, 0, 0.66);
   color: rgba(0, 0, 0, 0.9);
   display: block;

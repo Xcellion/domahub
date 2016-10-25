@@ -259,7 +259,7 @@
 
 .landing-img {
   @include tablet {
-    background-position: top center;
+    background-position: center center;
     background-repeat: no-repeat;
     background-size: cover;
     width: 100%;
@@ -289,6 +289,19 @@
   @include mobile {
 
   }
+}
+
+.flex-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  height: calc(100vh - 320px);
+  width: 100%;
+}
+
+.flex-content {
+  align-self: center;
 }
 
 /********************* FILE UPLOAD BUTTON *************/
