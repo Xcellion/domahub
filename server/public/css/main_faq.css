@@ -10,7 +10,8 @@
   margin-top: 15px; }
 
 .faq-section + .faq-section {
-  margin-top: 40px; }
+  margin-top: -30px;
+  padding-top: 70px; }
 
 .faq-question {
   -moz-transition: all 0.25s ease;
