@@ -6,14 +6,21 @@ $(document).ready(function() {
   noUiSlider.create(slider, {
   	start: [1, 300],
   	connect: true,
-    margin: 1,
+    margin: 0,
     behaviour: 'drag-snap',
     tooltips: [wNumb({decimals: 0, prefix: '$'}), wNumb({decimals: 0, prefix: '$'})],
     step: 1,
   	range: {
   		'min': 1,
   		'max': 300
-  	}
+  	},
+  });
+
+  slider.noUiSlider.on('slide', function(values, handle, unencoded) {
+
+    if (values[1] - values[0] <= 11) {
+
+    }
   });
 
   noUiSlider.create(sliderSmall, {
