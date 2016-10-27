@@ -1666,7 +1666,7 @@ input:-webkit-autofill {
     .control.has-icon > .fa.is-success {
       color: #81c784; }
   .control.has-icon .input:focus + .fa, .control.has-icon .textarea:focus + .fa {
-    color: rgba(0, 0, 0, 0.66); }
+    color: #3cbc8d; }
   .control.has-icon .input.is-small + .fa, .control.has-icon .is-small.textarea + .fa {
     font-size: 10.5px;
     top: 0; }

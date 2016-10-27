@@ -3,8 +3,9 @@ $(document).ready(function() {
   var slider = document.getElementById('slider');
   var sliderSmall = document.getElementById('sliderSmall');
 
+  // Large price slider
   noUiSlider.create(slider, {
-  	start: [1, 300],
+  	start: [134, 145],
   	connect: true,
     margin: 0,
     behaviour: 'drag-snap',
@@ -16,17 +17,33 @@ $(document).ready(function() {
   	},
   });
 
-  slider.noUiSlider.on('slide', function(values, handle, unencoded) {
-
-    if (values[1] - values[0] <= 11) {
-
+  // Tooltips movement on large slider
+  slider.noUiSlider.on('slide', function(values, handle, unencoded, tap, positions) {
+    console.log(values[1] - values[0]);
+    if ((values[1] - values[0] < 12) && (values[1] !== values[0])) {
+      // if (handle == 1) {
+      //   $($(".noUi-tooltip")[0]).css("left", function(current) {
+      //     return  - 1;
+      //   });
+      // }
+      // else {
+      //   $($(".noUi-tooltip")[1]).css("left");
+      // }
+      $(".noUi-tooltip").addClass("is-hidden");
+    }
+    else if (values[1] == values[0]) {
+      $(".noUi-tooltip").removeClass("is-hidden");
+    }
+    else {
+      $(".noUi-tooltip").removeClass("is-hidden");
     }
   });
 
+  // Small char slider
   noUiSlider.create(sliderSmall, {
     start: [1, 63],
     connect: true,
-    margin: 1,
+    margin: 0,
     behaviour: 'drag-snap',
     tooltips: [wNumb({decimals: 0}), wNumb({decimals: 0})],
     step: 1,
