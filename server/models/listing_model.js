@@ -250,6 +250,22 @@ listing_model.prototype.getListingByFilter = function(filter_name, filter_price,
 	]);
 }
 
+//gets a handful of random listings for the search page
+listing_model.prototype.getRandomListings = function(callback){
+	console.log("Attempting to get 10 random listings...");
+	query = "SELECT \
+				listings.domain_name, \
+				listings.hour_price, \
+				listings.day_price, \
+				listings.week_price, \
+				listings.month_price, \
+				listings.categories \
+			FROM listings \
+			WHERE listings.status >= 1 \
+			ORDER BY rand() \
+			LIMIT 10";
+	listing_query(query, "Failed to get 10 random listings!", callback);
+}
 //----------------------------------------------------------------------SETS----------------------------------------------------------
 
 //creates a new listing
