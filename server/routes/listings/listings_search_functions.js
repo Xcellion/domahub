@@ -1,14 +1,16 @@
-var	listing_model = require('../../models/listing_model.js');
-var category_list = ["ecard", "personal", "startup", "business", "event", "promotion", "holiday", "industry"];
+var category_list = require("../../lib/categories.js").categories_back;
 var price_rate_list = ["hour_price", "day_price", "week_price", "month_price"];
 
 var validator = require("validator");
 
 module.exports = {
 
-	init : function(e, l){
-		error = e;
-		Listing = l;
+	renderListingHub : function(req, res, next){
+		res.render("listings/listing_hub.ejs", {
+			user: req.user,
+			categories_front: require("../../lib/categories.js").categories_front,
+			categories_back: require("../../lib/categories.js").categories_back
+		});
 	},
 
 	//returns a random listing by category
@@ -38,12 +40,15 @@ module.exports = {
 			return category_list.indexOf(v) !== -1;
 		});
 
+		//if the domain is invalid even after adding ".com"
 		if (!validator.isFQDN(req.body.domain_name) && !validator.isFQDN(req.body.domain_name + ".com") && req.body.domain_name != ""){
 			error.handler(req, res, "Invalid domain_name!", "json");
 		}
+		//if categories arent in the global list
 		else if (!all_categories_exist){
 			error.handler(req, res, "Invalid categories!", "json");
 		}
+		//if price_rate isnt in the global list
 		else if (price_rate_list.indexOf(req.body.price_rate) == -1){
 			error.handler(req, res, "Invalid price type!", "json");
 		}
@@ -58,9 +63,6 @@ module.exports = {
 
 	getListingBySearchParams : function(req, res, next){
 		var filter_name = "%" + req.body.domain_name + "%";
-		var posted_categories = req.body.categories.toLowerCase().split(" ").join("&")
-		var filter_categories = posted_categories.substr(0, posted_categories.length - 1);
-		console.log(filter_categories);
 		var filter_price = {
 			type: req.body.price_rate,
 			min: req.body.min_price,
@@ -76,16 +78,29 @@ module.exports = {
 			filter_date.end += 86400000;
 		}
 
-		Listing.getListingByFilter(filter_name, filter_categories, filter_price, filter_date, function(result){
+		//get all domains with domain_name, price_rate
+		Listing.getListingByFilter(filter_name, filter_price, filter_date, function(result){
 			if (result.state == "success" && result.info.length > 0){
+
+				//concatenate all adjacent times
 				var all_listings = joinRentalTimes(result.info);
+
+				//create rental property objects
 				all_listings = createRentalProp(all_listings);
+
+				//check the availability
 				all_listings = checkDateAvailability(filter_date.start, filter_date.end, all_listings);
+				//check category
+				var posted_categories = req.body.categories.toLowerCase().split(" ").filter(function(el) {return el.length != 0});
+				console.log(posted_categories);
+				all_listings = checkAllListingCategories(all_listings, posted_categories)
+
 				res.send({
 					state: "success",
 					listings: all_listings
 				});
 			}
+			//nothing found
 			else if (result.state == "success" && result.info.length == 0){
 				res.send({
 					state: "success",
@@ -187,4 +202,27 @@ function checkDateAvailability(min_date, max_date, listings){
 	}
 
 	return listings;
+}
+
+//function to check for posted categories
+function checkListingCategories(listing_categories, posted_categories){
+	for (var i = 0; i < posted_categories.length; i++){
+		if (listing_categories.indexOf(posted_categories[i]) === -1){
+			return false;
+		}
+	}
+	return true;
+}
+
+//function to loop through all listings and check if the categories are good
+function checkAllListingCategories(listings, posted_categories){
+	var temp_listings = [];
+	for (var x = 0; x < listings.length; x++){
+		var categories = listings[x].categories.split(" ").filter(function(el) {return el.length != 0});
+		if (checkListingCategories(categories, posted_categories)){
+			temp_listings.push(listings[x]);
+		}
+	}
+
+	return temp_listings;
 }

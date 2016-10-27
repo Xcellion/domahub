@@ -1,5 +1,3 @@
-var	listing_model = require('../../models/listing_model.js');
-
 var request = require("request");
 var dns = require("dns");
 var validator = require("validator");
@@ -18,12 +16,6 @@ else {
 }
 
 module.exports = {
-
-	init : function(e, l){
-		error = e;
-		Listing = l;
-	},
-
 	//function to format the listing info
 	checkListingCreateInfo : function(req, res, next){
 		var domain_name = req.body.domain_name;

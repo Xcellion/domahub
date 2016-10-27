@@ -42,30 +42,13 @@
 								<label class="label is-medium">Categories</label>
 							</div>
 							<div class="control checkbox-form">
-								<div class="checkbox-wrapper">
-									<input class="cat-checkbox" value="startup" id="cb1" type="checkbox" />
-									<label class="has-border" tabindex="10" for="cb1">Start-Up</label>
-								</div>
-								<div class="checkbox-wrapper">
-									<input class="cat-checkbox" value="business" id="cb2" type="checkbox" />
-									<label class="has-border" tabindex="11" for="cb2">Business</label>
-								</div>
-								<div class="checkbox-wrapper">
-									<input class="cat-checkbox" value="event" id="cb3" type="checkbox" />
-									<label class="has-border" tabindex="12" for="cb3">Event</label>
-								</div>
-								<div class="checkbox-wrapper">
-									<input class="cat-checkbox" value="promotion" id="cb4" type="checkbox" />
-									<label class="has-border" tabindex="13" for="cb4">Promotion</label>
-								</div>
-								<div class="checkbox-wrapper">
-									<input class="cat-checkbox" value="industry" id="cb5" type="checkbox" />
-									<label class="has-border" tabindex="14" for="cb5">Industry</label>
-								</div>
-								<div class="checkbox-wrapper">
-									<input class="cat-checkbox" value="Personal" id="cb6" type="checkbox" />
-									<label class="has-border" tabindex="15" for="cb6">Personal</label>
-								</div>
+								<%# using for loop to generate all categories %>
+								<% for (var x = 0; x < categories_front.length; x++) {%>
+									<div class="checkbox-wrapper">
+										<input class="cat-checkbox" value="<%= categories_back[x] %>" id="cb<%= x %>" type="checkbox" />
+										<label class="has-border" tabindex="<%= x + 10 %>" for="cb<%= x %>"><%= categories_front[x] %></label>
+									</div>
+								<% } %>
 							</div>
 						</div>
 						<div class="control is-horizontal">
@@ -105,7 +88,7 @@
 							<label class="label is-medium">Extensions</label>
 						</div>
 						<div class="control has-addons">
-							<input class="input is-medium" tabindex="16" type="text" placeholder="Extensions">
+							<input class="input is-medium" type="text" placeholder="Extensions">
 							<span class="select is-medium">
 						    <select>
 						      <option>.com</option>
@@ -214,7 +197,8 @@
 		<%- include("../templates/footer"); %>
 		<%- include("../templates/js_scripts"); %>
 		<script type="text/javascript">
-			var available = <% if(typeof available != "undefined"){ %><%-JSON.stringify(available)%><% }else{ %>""<% } %>;
+			var categories_front = <% if(typeof categories_front != "undefined"){ %><%-JSON.stringify(categories_front)%><% }else{ %>""<% } %>;
+			var categories_back = <% if(typeof categories_back != "undefined"){ %><%-JSON.stringify(categories_back)%><% }else{ %>""<% } %>;
 		</script>
 		<script src="/js/lib/nouislider.min.js" type="text/javascript"></script>
 		<script src="/js/lib/wNumb.js" type="text/javascript"></script>

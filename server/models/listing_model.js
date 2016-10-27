@@ -219,7 +219,7 @@ listing_model.prototype.getRandomListingByCategory = function(category, callback
 }
 
 //gets all active listings with X category, X domain name, X price -- and all active rentals/rental_times for them
-listing_model.prototype.getListingByFilter = function(filter_name, filter_category, filter_price, filter_date, callback){
+listing_model.prototype.getListingByFilter = function(filter_name, filter_price, filter_date, callback){
 	console.log("Attempting to search for a listing...");
 	query = "SELECT \
 				listings.domain_name, \
@@ -227,6 +227,7 @@ listing_model.prototype.getListingByFilter = function(filter_name, filter_catego
 				listings.day_price, \
 				listings.week_price, \
 				listings.month_price, \
+				listings.categories, \
 				rentals.rental_id, \
 				rental_times.date, \
 				rental_times.duration \
@@ -238,12 +239,10 @@ listing_model.prototype.getListingByFilter = function(filter_name, filter_catego
 			WHERE listings.status >= 1 \
 			AND rentals.active >= 1 \
 			AND listings.domain_name LIKE ? \
-			AND listings.categories REGEXP ? \
 			AND listings." + filter_price.type + " BETWEEN ? AND ? \
 			ORDER BY listings.id ASC, rentals.rental_id ASC, rental_times.date DESC";
 	listing_query(query, "Failed to search for listing!", callback, [
 		filter_name,
-		filter_category,
 		filter_price.min,
 		filter_price.max,
 		filter_date.start,
