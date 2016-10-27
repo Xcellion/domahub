@@ -50,6 +50,12 @@
     font-size: inherit
     line-height: inherit
     @include transition(all 0.25s)
+  // Colors
+  @each $name, $pair in $colors
+    $color: nth($pair, 1)
+    $color-invert: nth($pair, 2)
+    &.is-#{$name}
+      color: $color
   // Sizes
   &.is-small
     +fa(14px, 18px)
