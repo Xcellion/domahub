@@ -5,11 +5,15 @@ var validator = require("validator");
 
 module.exports = {
 
+	//render the listing hub with 10 random active listings
 	renderListingHub : function(req, res, next){
-		res.render("listings/listing_hub.ejs", {
-			user: req.user,
-			categories_front: require("../../lib/categories.js").categories_front,
-			categories_back: require("../../lib/categories.js").categories_back
+		Listing.getRandomListings(function(result){
+			res.render("listings/listing_hub.ejs", {
+				user: req.user,
+				categories_front: require("../../lib/categories.js").categories_front,
+				categories_back: require("../../lib/categories.js").categories_back,
+				random_listings: result.info
+			});
 		});
 	},
 
@@ -69,8 +73,8 @@ module.exports = {
 			max: req.body.max_price,
 		}
 		var filter_date = {
-			start: isNaN(req.body.start_date) ? new Date().getTime() : req.body.start_date,
-			end: isNaN(req.body.end_date) ? new Date().getTime() + 31556952000 : req.body.end_date,
+			start: isNaN(req.body.start_date) ? new Date().getTime() : req.body.start_date,			//if nothing specified, today
+			end: isNaN(req.body.end_date) ? new Date().getTime() + 31556952000 : req.body.end_date		//if nothing specified, one year from today
 		}
 
 		//if start and end days are the same, add 1 days worth of milliseconds to end_date
@@ -90,9 +94,9 @@ module.exports = {
 
 				//check the availability
 				all_listings = checkDateAvailability(filter_date.start, filter_date.end, all_listings);
+
 				//check category
 				var posted_categories = req.body.categories.toLowerCase().split(" ").filter(function(el) {return el.length != 0});
-				console.log(posted_categories);
 				all_listings = checkAllListingCategories(all_listings, posted_categories)
 
 				res.send({
