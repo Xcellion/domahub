@@ -1,36 +1,30 @@
 .content
   @extend .block
-  &.index-padded
-    padding: 0 50px
-    +mobile
-      &:first-child
-        padding-bottom: 20px
   & + .content
     margin-top: 25px
-  // Headers
-  h1,
-  h2,
-  h3,
-    & + p
-      margin-top: 10px
 
   // List elements
   li
+    font-size: $size-5
     a
       font-size: $size-6
-  li + li
-    margin-top: 10px
+    &.has-icon
+      span + span
+        margin-left: 5px
+      line-height: 24px
+      &.is-small
+        line-height: 16px
+      &.is-medium
+        line-height: 32px
+      &.is-large
+        line-height: 48px
+    & + li
+      margin-top: 10px
+
   // Paragraphs
   p
     font-size: $size-5
     line-height: 1.5
-    &:not(:last-child)
-      margin-bottom: 10px
-    &.is-accent
-      color: $accent
-
-  a
-    font-size: $size-5
 
   blockquote,
   p,

@@ -40,6 +40,11 @@ p
     $color-invert: nth($pair, 2)
     &.is-#{$name}
       color: $color
+  & + p
+    margin-top: 10px
+  & + a
+    margin-top: 10px
+
 h1
   font-size: $size-2
   font-weight: bold
@@ -69,10 +74,9 @@ a
   +transition(all 0.25s ease)
   color: $text
   cursor: pointer
-  font-size: $size-6
   opacity: 1.0
   text-decoration: none
-  word-break: break-all
+  word-break: break-word
   &:active
     outline: none
   &.is-underlined
