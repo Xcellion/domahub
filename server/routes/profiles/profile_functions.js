@@ -1,5 +1,3 @@
-var	account_model = require('../../models/account_model.js');
-
 var bodyParser = require('body-parser')
 var jsonParser = bodyParser.json()
 var urlencodedParser = bodyParser.urlencoded({ extended: false })

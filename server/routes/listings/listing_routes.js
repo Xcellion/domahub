@@ -13,12 +13,9 @@ var urlencodedParser = bodyParser.urlencoded({ extended: true })
 
 var validator = require("validator");
 
-module.exports = function(app, db, auth, e, stripe){
+module.exports = function(app, db, auth, error, stripe){
 	Listing = new listing_model(db);
 	Data = new data_model(db);
-
-	error = e;
-	checkLoggedIn = auth.checkLoggedIn;
 
 	//-------------------------------------------------------------------------------------------------------------------- DESIRED TIMES
 
@@ -32,9 +29,10 @@ module.exports = function(app, db, auth, e, stripe){
 
 	//-------------------------------------------------------------------------------------------------------------------- SEARCH LISTINGS
 
-	//initiate the two types of listing routes
-	owner_functions.init(e, Listing);
-	renter_functions.init(e, Listing);
+	//render the listing page hub
+	app.get('/listings', [
+		search_functions.renderListingHub
+	]);
 
 	//get a random listing with specific category
 	app.get("/listing/random/:category", [
@@ -52,14 +50,14 @@ module.exports = function(app, db, auth, e, stripe){
 
 	//render create listing page
 	app.get('/listing/create', [
-		checkLoggedIn,
+		auth.checkLoggedIn,
 		owner_functions.checkAccountListingPriv,
 		owner_functions.renderCreateListing
 	]);
 
 	//render create listing page
 	app.get('/listing/create/batch', [
-		checkLoggedIn,
+		auth.checkLoggedIn,
 		owner_functions.checkAccountListingPriv,
 		owner_functions.renderCreateListingBatch
 	]);
@@ -73,7 +71,7 @@ module.exports = function(app, db, auth, e, stripe){
 	//create a single basic listing
 	app.post('/listing/create/basic', [
 		urlencodedParser,
-		checkLoggedIn,
+		auth.checkLoggedIn,
 		owner_functions.checkAccountListingPriv,
 		owner_functions.checkListingCreateInfo,
 		profile_functions.getAccountListings,
@@ -83,7 +81,7 @@ module.exports = function(app, db, auth, e, stripe){
 	//create a single premium listing
 	app.post('/listing/create/premium', [
 		urlencodedParser,
-		checkLoggedIn,
+		auth.checkLoggedIn,
 		owner_functions.checkAccountListingPriv,
 		owner_functions.checkListingCreateInfo,
 		owner_functions.checkListingCreatePrice,
@@ -96,7 +94,7 @@ module.exports = function(app, db, auth, e, stripe){
 
 	//create multiple listings
 	app.post('/listing/create/batch', [
-		checkLoggedIn,
+		auth.checkLoggedIn,
 		profile_functions.getAccountListings,
 		owner_functions.checkAccountListingPriv,
 		owner_functions.checkCSVUploadSize,
@@ -106,7 +104,7 @@ module.exports = function(app, db, auth, e, stripe){
 
 	//verify that someone changed their DNS to point to domahub
 	app.get('/listing/:domain_name/verify', [
-		checkLoggedIn,
+		auth.checkLoggedIn,
 		owner_functions.checkAccountListingPriv,
 		checkDomainValid,
 		checkDomainListed,
@@ -117,7 +115,7 @@ module.exports = function(app, db, auth, e, stripe){
 
 	//update listing information
 	app.post('/listing/:domain_name/update', [
-		checkLoggedIn,
+		auth.checkLoggedIn,
 		owner_functions.checkAccountListingPriv,
 		checkDomainValid,
 		checkDomainListed,
@@ -135,7 +133,7 @@ module.exports = function(app, db, auth, e, stripe){
 	//update listing to premium
 	app.post('/listing/:domain_name/upgrade', [
 		urlencodedParser,
-		checkLoggedIn,
+		auth.checkLoggedIn,
 		owner_functions.checkAccountListingPriv,
 		checkDomainValid,
 		checkDomainListed,
@@ -150,7 +148,7 @@ module.exports = function(app, db, auth, e, stripe){
 
 	//degrade listing to basic
 	app.post('/listing/:domain_name/downgrade', [
-		checkLoggedIn,
+		auth.checkLoggedIn,
 		owner_functions.checkAccountListingPriv,
 		checkDomainValid,
 		checkDomainListed,
@@ -162,11 +160,6 @@ module.exports = function(app, db, auth, e, stripe){
 	]);
 
 	//-------------------------------------------------------------------------------------------------------------------- RENTAL RELATED
-
-	//render the listing page hub
-	app.get('/listings', [
-		renter_functions.renderListingHub
-	]);
 
 	//domahub easter egg page
 	app.get('/listing/domahub.com, /listing/w3bbi.com', function(req, res){
@@ -185,7 +178,7 @@ module.exports = function(app, db, auth, e, stripe){
 
 	//render a specific rental
 	app.get('/listing/:domain_name/:rental_id', [
-		checkLoggedIn,
+		auth.checkLoggedIn,
 		checkDomainValid,
 		checkDomainListed,
 		renter_functions.checkRental,
@@ -197,7 +190,7 @@ module.exports = function(app, db, auth, e, stripe){
 	//create a new rental
 	app.post('/listing/:domain_name/rent', [
 		urlencodedParser,
-		checkLoggedIn,
+		auth.checkLoggedIn,
 		checkDomainValid,
 		checkDomainListed,
 		renter_functions.getActiveListing,
@@ -213,7 +206,7 @@ module.exports = function(app, db, auth, e, stripe){
 	//changing rental status
 	app.post('/listing/:domain_name/:rental_id/status', [
 		urlencodedParser,
-		checkLoggedIn,
+		auth.checkLoggedIn,
 		checkDomainValid,
 		checkDomainListed,
 		renter_functions.checkRental,
@@ -224,7 +217,7 @@ module.exports = function(app, db, auth, e, stripe){
 	//adding time to an existing rental
 	app.post('/listing/:domain_name/:rental_id/time', [
 		urlencodedParser,
-		checkLoggedIn,
+		auth.checkLoggedIn,
 		checkDomainValid,
 		checkDomainListed,
 		renter_functions.checkRental,
