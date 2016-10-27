@@ -35,32 +35,7 @@ module.exports = {
 				else {
 					//combine any adjacent rental times
 					var all_rentals = joinRentalTimes(result.info);
-
-					//iterate once across all results
-					for (var x = 0; x < all_rentals.length; x++){
-						var temp_dates = [];
-						var temp_durations = [];
-
-						//iterate again to look for multiple dates and durations
-						for (var y = 0; y < all_rentals.length; y++){
-							if (!all_rentals[y].checked && all_rentals[x]["rental_id"] == all_rentals[y]["rental_id"]){
-								temp_dates.push(all_rentals[y].date);
-								temp_durations.push(all_rentals[y].duration);
-								all_rentals[y].checked = true;
-							}
-						}
-
-						//combine dates into a property
-						all_rentals[x].date = temp_dates;
-						all_rentals[x].duration = temp_durations;
-					}
-
-					//remove empty date entries
-					all_rentals = all_rentals.filter(function(value, index, array){
-						return value.date.length;
-					});
-
-					req.user.rentals = all_rentals;
+					req.user.rentals = createRentalProp(all_rentals);
 					next();
 				}
 			});
@@ -172,16 +147,16 @@ function joinRentalTimes(rental_times){
 
     //loop once
     for (var x = temp_times.length - 1; x >= 0; x--){
-        var orig_start = new Date(temp_times[x].date);
-        var orig_end = new Date(orig_start.getTime() + temp_times[x].duration);
+        var orig_start = temp_times[x].date;
+        var orig_end = orig_start + temp_times[x].duration;
 
         //loop twice to check with all others
         for (var y = temp_times.length - 1; y >= 0; y--){
-            var compare_start = new Date(temp_times[y].date);
-            var compare_end = new Date(compare_start.getTime() + temp_times[y].duration);
+            var compare_start = temp_times[y].date;
+            var compare_end = compare_start + temp_times[y].duration;
 
             //touches bottom
-            if (x != y && orig_start.getTime() == compare_end.getTime()){
+            if (x != y && orig_start == compare_end && temp_times[x].rental_id == temp_times[y].rental_id){
 				temp_times[y].duration = temp_times[y].duration + temp_times[x].duration;
                 temp_times.splice(x, 1);
             }
@@ -189,4 +164,33 @@ function joinRentalTimes(rental_times){
     }
 
 	return temp_times;
+}
+
+//function to create rental properties inside listing info
+function createRentalProp(all_rentals){
+	//iterate once across all results
+	for (var x = 0; x < all_rentals.length; x++){
+		var temp_dates = [];
+		var temp_durations = [];
+
+		//iterate again to look for multiple dates and durations
+		for (var y = 0; y < all_rentals.length; y++){
+			if (!all_rentals[y].checked && all_rentals[x]["rental_id"] == all_rentals[y]["rental_id"]){
+				temp_dates.push(all_rentals[y].date);
+				temp_durations.push(all_rentals[y].duration);
+				all_rentals[y].checked = true;
+			}
+		}
+
+		//combine dates into a property
+		all_rentals[x].date = temp_dates;
+		all_rentals[x].duration = temp_durations;
+	}
+
+	//remove empty date entries
+	all_rentals = all_rentals.filter(function(value, index, array){
+		return value.date.length;
+	});
+
+	return all_rentals;
 }
