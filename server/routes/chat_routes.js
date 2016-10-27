@@ -9,20 +9,16 @@ var sanitizeHtml = require("sanitize-html");
 var validator = require("validator");
 var dateFormat = require('dateformat');
 
-module.exports = function(app, db, auth, e){
-	Auth = auth;
-	error = e;
-
+module.exports = function(app, db, auth, error){
 	Chat = new chat_model(db);
 	Account = new account_model(db);
-	checkLoggedIn = Auth.checkLoggedIn;
 
 	//new message
 	app.post([
 		"/messages/new"
 	], [
 		urlencodedParser,
-		checkLoggedIn,
+		auth.checkLoggedIn,
 		checkMessage,
 		getOtherId,
 		createMessage
@@ -33,7 +29,7 @@ module.exports = function(app, db, auth, e){
 		"/messages/:account"
 	], [
 		urlencodedParser,
-		checkLoggedIn,
+		auth.checkLoggedIn,
 		getOtherId,
 		getConvo
 	]);

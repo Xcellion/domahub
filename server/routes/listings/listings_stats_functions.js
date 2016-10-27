@@ -1,12 +1,4 @@
-var	listing_model = require('../../models/listing_model.js');
-
 module.exports = {
-
-	init : function(e, l){
-		error = e;
-		Listing = l;
-	},
-
 	//function to check times
 	checkRentalTimes : function(req, res, next){
 		var times = req.body.events;
