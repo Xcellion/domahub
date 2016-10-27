@@ -5,18 +5,16 @@ var bodyParser = require('body-parser')
 var jsonParser = bodyParser.json()
 var urlencodedParser = bodyParser.urlencoded({ extended: false })
 
-// create application/x-www-form-urlencoded parser
-module.exports = function(app, db, auth, e){
+module.exports = function(app, db, auth, error){
 	Auth = auth;
-	error = e;
 	Account = new account_model(db);
 
     //array of all views from the main page
     main_page_routes = [
-		"/about",		//aka company.ejs
-		"/mission",		//aka company.ejs
-		"/press",		//aka company.ejs
-		"/faq",			//aka company.ejs
+		"/about",
+		"/mission",
+		"/press",
+		"/faq",
 		"/careers",
 		"/contact",
 		"/getstarted",

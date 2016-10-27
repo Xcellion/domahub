@@ -1,16 +1,8 @@
-var	listing_model = require('../../models/listing_model.js');
-
 var validator = require("validator");
 var whois = require("whois");
 var parser = require('parse-whois');
 
 module.exports = {
-
-	init : function(e, l){
-		error = e;
-		Listing = l;
-	},
-
 	//check if rental belongs to account and exists
 	checkRental : function(req, res, next){
 		var domain_name = req.params.domain_name;
@@ -218,12 +210,6 @@ module.exports = {
 
 				next();
 			}
-		});
-	},
-
-	renderListingHub : function(req, res, next){
-		res.render("listings/listing_hub.ejs", {
-			user: req.user
 		});
 	},
 

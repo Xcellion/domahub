@@ -12,12 +12,8 @@ var request = require('request');
 var validator = require('validator');
 var qs = require('qs');
 
-module.exports = function(app, db, auth, e, stripe){
-	Auth = auth;
-	error = e;
-
+module.exports = function(app, db, auth, error, stripe){
 	Account = new account_model(db);
-	checkLoggedIn = Auth.checkLoggedIn;
 
 	//redirect profile to dashboard
 	app.get("/profile", function(req, res){ res.redirect("/profile/dashboard") });
@@ -28,7 +24,7 @@ module.exports = function(app, db, auth, e, stripe){
 		"/profile/mylistings/:page"
 	], [
 		profile_functions.checkPageNum,
-		checkLoggedIn,
+		auth.checkLoggedIn,
 		profile_functions.getAccountListings,
 		profile_functions.renderMyListings
 	]);
@@ -39,14 +35,14 @@ module.exports = function(app, db, auth, e, stripe){
 		"/profile/myrentals/:page"
 	], [
 		profile_functions.checkPageNum,
-		checkLoggedIn,
+		auth.checkLoggedIn,
 		profile_functions.getAccountRentals,
 		profile_functions.renderMyRentals
 	]);
 
 	//check if user is legit, get all listings, get all rentals
 	app.get("/profile/dashboard", [
-		checkLoggedIn,
+		auth.checkLoggedIn,
 		profile_functions.getAccountListings,
 		profile_functions.getAccountRentals,
 		profile_functions.renderDashboard
@@ -57,20 +53,20 @@ module.exports = function(app, db, auth, e, stripe){
 		"/profile/inbox",
 		"/profile/inbox/:target_username"
 	], [
-		checkLoggedIn,
+		auth.checkLoggedIn,
 		profile_functions.getAccountChats,
 		profile_functions.renderInbox
 	])
 
 	//settings
 	app.get("/profile/settings", [
-		checkLoggedIn,
+		auth.checkLoggedIn,
 		profile_functions.renderSettings
 	])
 
 	//connect stripe
 	app.get("/connectstripe", [
-		checkLoggedIn,
+		auth.checkLoggedIn,
 		stripe.connectStripe
 	]);
 
@@ -83,7 +79,7 @@ module.exports = function(app, db, auth, e, stripe){
 
 	//authorize stripe
 	app.get("/authorizestripe", [
-		checkLoggedIn,
+		auth.checkLoggedIn,
 		stripe.authorizeStripe
 	]);
 
@@ -93,8 +89,8 @@ module.exports = function(app, db, auth, e, stripe){
 	//post to change account settings
 	app.post("/profile/settings", [
 		urlencodedParser,
-		checkLoggedIn,
-		Auth.checkAccountSettings,
-		Auth.updateAccountSettings
+		auth.checkLoggedIn,
+		auth.checkAccountSettings,
+		auth.updateAccountSettings
 	]);
 }
