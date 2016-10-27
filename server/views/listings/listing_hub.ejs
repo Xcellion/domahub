@@ -21,7 +21,7 @@
 				<div class="columns">
 					<div class="column">
 						<p class="control has-icon">
-							<input class="input is-medium" tabindex="7" type="text" placeholder="Search domains" />
+							<input id="domain_name-input" class="input is-medium" tabindex="7" type="text" placeholder="Search domains" />
 							<i class="fa fa-search"></i>
 						</p>
 						<div class="control is-horizontal">
@@ -30,10 +30,10 @@
 						  </div>
 						  <div class="control is-grouped">
 						    <p class="control is-expanded">
-						      <input class="input is-medium" tabindex="8" type="date" required="required" placeholder="Rental Start Date">
+						      <input id="start_date-input" class="input is-medium" tabindex="8" type="date" required="required" placeholder="Rental Start Date">
 						    </p>
 						    <p class="control is-expanded">
-						      <input class="input is-medium" tabindex="9" type="date" required="required" placeholder="Rental End Date">
+						      <input id="end_date-input" class="input is-medium" tabindex="9" type="date" required="required" placeholder="Rental End Date">
 						    </p>
 						  </div>
 						</div>
@@ -43,28 +43,28 @@
 							</div>
 							<div class="control checkbox-form">
 								<div class="checkbox-wrapper">
-									<input class="cat-checkbox" id="cb1" type="checkbox" />
+									<input class="cat-checkbox" value="startup" id="cb1" type="checkbox" />
 									<label class="has-border" tabindex="10" for="cb1">Start-Up</label>
 								</div>
 								<div class="checkbox-wrapper">
-									<input class="cat-checkbox" id="cb2" type="checkbox" />
+									<input class="cat-checkbox" value="business" id="cb2" type="checkbox" />
 									<label class="has-border" tabindex="11" for="cb2">Business</label>
 								</div>
 								<div class="checkbox-wrapper">
-									<input class="cat-checkbox" id="cb3" type="checkbox" />
+									<input class="cat-checkbox" value="event" id="cb3" type="checkbox" />
 									<label class="has-border" tabindex="12" for="cb3">Event</label>
 								</div>
 								<div class="checkbox-wrapper">
-									<input class="cat-checkbox" id="cb4" type="checkbox" />
+									<input class="cat-checkbox" value="promotion" id="cb4" type="checkbox" />
 									<label class="has-border" tabindex="13" for="cb4">Promotion</label>
 								</div>
 								<div class="checkbox-wrapper">
-									<input class="cat-checkbox" id="cb5" type="checkbox" />
+									<input class="cat-checkbox" value="industry" id="cb5" type="checkbox" />
 									<label class="has-border" tabindex="14" for="cb5">Industry</label>
 								</div>
 								<div class="checkbox-wrapper">
-									<input class="cat-checkbox" id="cb6" type="checkbox" />
-									<label class="has-border" tabindex="15" for="cb6">Start-Up</label>
+									<input class="cat-checkbox" value="Personal" id="cb6" type="checkbox" />
+									<label class="has-border" tabindex="15" for="cb6">Personal</label>
 								</div>
 							</div>
 						</div>
@@ -74,13 +74,14 @@
 							</div>
 							<div class="control">
 								<span class="select is-medium">
-							    <select>
-							      <option disabled>Select Rate</option>
-							      <option>Hourly</option>
-										<option>Daily</option>
-										<option>Weekly</option>
-										<option>Monthly</option>
-										<option>Yearly</option>
+							    <select id="category-input">
+							      	<option disabled>Select Rate</option>
+						      		<%# <option value="minute_price">Minute</option>%>
+						      		<option value="hour_price">Hourly</option>
+									<option value="day_price">Daily</option>
+									<option value="week_price">Weekly</option>
+									<option value="month_price">Monthly</option>
+									<%# <option>Yearly</option>%>
 							    </select>
 							  </span>
 							</div>
@@ -130,8 +131,9 @@
 					</div>
 				</div>
 				<div class="listing-buttons">
+					<a id="submit-button" class="button is-primary is-medium">Submit</a>
 					<a id="filter-open-button" class="button is-medium">Filters</a>
-					<a class="button is-medium is-grey">
+					<%# <a class="button is-medium is-grey">
 						<span>4 Characters</span>
 						<span class="icon">
 							<i class="fa fa-times-circle"></i>
@@ -166,7 +168,7 @@
 						<span class="icon">
 							<i class="fa fa-times-circle"></i>
 						</span>
-					</a>
+					</a>%>
 				</div>
 				<table id="listings-table" class="table">
 					<thead>

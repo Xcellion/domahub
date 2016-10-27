@@ -1,6 +1,7 @@
 var	listing_model = require('../../models/listing_model.js');
 var	data_model = require('../../models/data_model.js');
 
+var search_functions = require("../listings/listings_search_functions.js");
 var renter_functions = require("../listings/listings_renter_functions.js");
 var owner_functions = require("../listings/listings_owner_functions.js");
 var stats_functions = require("../listings/listings_stats_functions.js");
@@ -19,13 +20,32 @@ module.exports = function(app, db, auth, e, stripe){
 	error = e;
 	checkLoggedIn = auth.checkLoggedIn;
 
+	//-------------------------------------------------------------------------------------------------------------------- DESIRED TIMES
+
+	app.post("/listing/:domain_name/timeswanted", [
+		urlencodedParser,
+		checkDomainValid,
+		checkDomainNotListed,	//make sure the domain isnt listed on doma
+		stats_functions.checkRentalTimes,
+		stats_functions.newDesiredTimes
+	]);
+
+	//-------------------------------------------------------------------------------------------------------------------- SEARCH LISTINGS
+
 	//initiate the two types of listing routes
 	owner_functions.init(e, Listing);
 	renter_functions.init(e, Listing);
 
 	//get a random listing with specific category
 	app.get("/listing/random/:category", [
-		getRandomListingByCategory
+		search_functions.getRandomListingByCategory
+	]);
+
+	//search for a listing with specific filters
+	app.post("/testing", [
+		urlencodedParser,
+		search_functions.checkSearchParams,
+		search_functions.getListingBySearchParams
 	]);
 
 	//-------------------------------------------------------------------------------------------------------------------- OWNER RELATED
@@ -141,16 +161,6 @@ module.exports = function(app, db, auth, e, stripe){
 		owner_functions.updateListing
 	]);
 
-	//-------------------------------------------------------------------------------------------------------------------- DESIRED TIMES
-
-	app.post("/listing/:domain_name/timeswanted", [
-		urlencodedParser,
-		checkDomainValid,
-		checkDomainNotListed,	//make sure the domain isnt listed on doma
-		stats_functions.checkRentalTimes,
-		stats_functions.newDesiredTimes
-	]);
-
 	//-------------------------------------------------------------------------------------------------------------------- RENTAL RELATED
 
 	//render the listing page hub
@@ -264,26 +274,4 @@ function checkDomainNotListed(req, res, next){
 			error.handler(req, res, "Invalid domain name!");
 		}
 	});
-}
-
-//returns a random listing by category
-function getRandomListingByCategory(req, res, next){
-	var category = req.params.category.toLowerCase();
-
-	//if not a legit category
-	var category_list = ["ecard", "personal", "startup", "business", "event", "promotion", "holiday", "industry"];
-	if (category_list.indexOf(category) != -1){
-		category = "%" + category + "%";
-		Listing.getRandomListingByCategory(category, function(result){
-			if (!result.info.length || result.state == "error"){
-				res.redirect("/");
-			}
-			else {
-				res.redirect("http://" + result.info[0].domain_name);
-			}
-		});
-	}
-	else {
-		res.redirect("/");
-	}
 }

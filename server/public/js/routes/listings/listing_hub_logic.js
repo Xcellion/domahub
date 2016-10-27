@@ -52,4 +52,43 @@ $(document).ready(function() {
     $("#listings-table").removeClass("is-hidden");
   });
 
+  //submit search
+  $("#submit-button").click(function(e) {
+    e.preventDefault();
+    submitData();
+  });
+
 });
+
+//function to get the submission data
+function getSubmitData(){
+    var searchData = {
+        domain_name : $("#domain_name-input").val(),
+        start_date : new Date($("#start_date-input").val()).getTime(),
+        end_date : new Date($("#end_date-input").val()).getTime(),
+        price_rate : $("#category-input").val(),
+        min_price : slider.noUiSlider.get()[0],
+        max_price : slider.noUiSlider.get()[1],
+        categories : ""
+    }
+
+    //categories string
+    $(".cat-checkbox").each(function(e){
+        if ($(this).prop("checked")){
+            searchData.categories += $(this).val() + " ";
+        }
+    });
+
+    return searchData;
+}
+
+//function to submit
+function submitData(){
+    $.ajax({
+        url: "/testing",
+        method: "POST",
+        data: getSubmitData()
+    }).done(function(data){
+        console.log(data);
+    })
+}
