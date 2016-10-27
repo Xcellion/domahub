@@ -1666,7 +1666,7 @@ input:-webkit-autofill {
     .control.has-icon > .fa.is-success {
       color: #81c784; }
   .control.has-icon .input:focus + .fa, .control.has-icon .textarea:focus + .fa {
-    color: rgba(0, 0, 0, 0.66); }
+    color: #3cbc8d; }
   .control.has-icon .input.is-small + .fa, .control.has-icon .is-small.textarea + .fa {
     font-size: 10.5px;
     top: 0; }
@@ -2554,8 +2554,9 @@ input:-webkit-autofill {
   user-select: none; }
 
 .card-header {
-  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
-  align-items: stretch;
+  -webkit-box-shadow: 0px 2px 5px 0 rgba(0, 0, 0, 0.38);
+  -moz-box-shadow: 0px 2px 5px 0 rgba(0, 0, 0, 0.38);
+  box-shadow: 0px 2px 5px 0 rgba(0, 0, 0, 0.38);
   background-color: rgba(0, 0, 0, 0.12);
   display: flex;
   min-height: 40px; }
@@ -2567,6 +2568,14 @@ input:-webkit-autofill {
       cursor: default; }
   .card-header.is-white {
     background-color: white; }
+  .card-header.is-primary {
+    background-color: #3cbc8d; }
+    .card-header.is-primary > .card-header-title {
+      color: white; }
+  .card-header.is-accent {
+    background-color: #ff5722; }
+    .card-header.is-accent > .card-header-title {
+      color: white; }
 
 @media screen and (max-width: 768px) {
   .card + .card:not(:first-child) {
@@ -2581,6 +2590,8 @@ input:-webkit-autofill {
   display: flex;
   flex-grow: 1;
   padding: 10px; }
+  .card-header-title.has-text-centered {
+    justify-content: center; }
   .card-header-title-index {
     align-items: center;
     display: flex;

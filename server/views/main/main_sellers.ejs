@@ -10,7 +10,7 @@
 
   <%- include("../templates/navbar", {user: user}); %>
 
-  <section class="hero is-accent gradient-left-right is-small clear-nav">
+  <section class="hero is-accent gradient-left-right is-medium clear-nav">
     <div class="hero-body">
       <div class="container">
         <div class="column">
@@ -26,7 +26,7 @@
     </div>
   </section>
 
-  <section class="section">
+  <section class="section is-medium">
     <div class="container">
       <div class="columns">
         <div class="column">
@@ -62,10 +62,10 @@
                   <i class="fa fa-dollar"></i>
                 </p>
               </div>
-              <div class="level-item box has-text-centered">
+              <div class="level-item box is-accent has-text-centered">
                 <div class="content">
-                  <h2 id="earnings-potential" class="is-accent">&#36 0</h2>
-                  <p class="">
+                  <h2 id="earnings-potential" class="is-white is-bold">&#36 0</h2>
+                  <p class="is-white">
                     Per Month!
                   </p>
                 </div>
@@ -77,24 +77,21 @@
     </div>
   </section>
 
-  <section class="section is-light">
+  <section class="section">
     <div class="container">
       <div class="columns">
-        <div class="column margin-bottom-50">
+        <div class="column margin-bottom-25">
           <div class="content">
-            <h1 class="title is-3 is-normal">
+            <h1 class="title has-text-centered is-2">
               How to List on DomaHub
             </h1>
-            <h2 class="subtitle is-blacklight is-5">
-              With detailed, step-by-step instructions!
-            </h2>
           </div>
         </div>
       </div>
       <div class="columns">
         <div class="column">
           <div class="content margin-bottom-25">
-            <h2 class="has-styleborderBottom">Sign up with DomaHub</h2>
+            <h2 class="has-styleborderBottom">Sign up with DomaHub.</h2>
           </div>
         </div>
       </div>
@@ -131,12 +128,12 @@
     </div>
   </section>
 
-  <section class="section is-light">
+  <section class="section">
     <div class="container">
       <div class="columns">
         <div class="column">
           <div class="content margin-bottom-25">
-            <h2 class="has-styleborderBottom">Creating listings</h2>
+            <h2 class="has-styleborderBottom">Creating listings.</h2>
           </div>
         </div>
       </div>
@@ -161,10 +158,9 @@
             </figure>
             <h3 class="is-bold">Choose Basic or Premium</h3>
             <p>
-              A listing can be one of two different types:
-              <a class="orange-link" href="" title="Basic or Premium">Basic or Premium</a>.
-              This must be defined during the listing process. There are many differences
-              between the two.
+              A listing can be one of two different types: <strong>Basic or Premium</strong>.
+              This must be defined during the listing process. Please see section below
+              for a detailed description of the two types.
             </p>
           </div>
         </div>
@@ -186,30 +182,66 @@
     </div>
   </section>
 
-  <section class="section is-light">
+  <section class="section is-medium">
     <div class="container">
       <div class="columns">
-        <div class="column">
-          <div class="content margin-bottom-25">
-            <h2 class="has-styleborderBottom">Payments and transactions</h2>
+        <div class="column margin-bottom-25">
+          <div class="content">
+            <h1 class="title has-text-centered is-2">
+              Basic vs. Premium Listings
+            </h1>
           </div>
         </div>
       </div>
       <div class="columns">
-        <div class="column is-one-quarter">
-          <div class="content">
-            <figure class="image left-aligned is-48x48">
-              <img src="/images/lib/material/money-o.svg"alt="free">
-            </figure>
-            <h3 class="is-bold">Pending</h3>
-            <p>
-              Information on getting paid.
-            </p>
+        <div class="column is-2"></div>
+        <div class="column is-4">
+          <div class="card is-fullwidth">
+            <header class="card-header is-accent">
+              <h2 class="card-header-title has-text-centered">
+                Basic
+              </h2>
+            </header>
+            <div class="card-content">
+              <div class="content">
+                <p>
+
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="column is-4">
+          <div class="card is-fullwidth">
+            <header class="card-header is-primary">
+              <h2 class="card-header-title has-text-centered">
+                Premium
+              </h2>
+            </header>
+            <div class="card-content">
+              <div class="media">
+                <div class="media-left">
+                  <figure class="image is-32x32">
+                    <img src="http://placehold.it/64x64" alt="Image">
+                  </figure>
+                </div>
+                <div class="media-content">
+                  <p class="title is-5">John Smith</p>
+                  <p class="subtitle is-6">@johnsmith</p>
+                </div>
+              </div>
+
+              <div class="content">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                Phasellus nec iaculis mauris. <a href="#">@bulmaio</a>.
+                <a href="#">#css</a> <a href="#">#responsive</a>
+                <br>
+                <small>11:09 PM - 1 Jan 2016</small>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-      </div>
-      </section>
     </div>
   </section>
 
