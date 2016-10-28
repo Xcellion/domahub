@@ -11,35 +11,34 @@
   white-space: nowrap
   a
     align-items: center
-    +box-shadow(0,-3px,0,$border,0,inset)
     color: $text
     display: flex
     justify-content: center
-    margin-bottom: -1px
-    padding: 6px 12px
+    padding: 5px 5px 10px
     vertical-align: top
     &:hover,
     &:focus
-      color: $primary-lighter
       outline: none
+      +box-shadow(0,-2px,0,$black-disabled,0,inset)
   li
     display: block
+    &:not(:first-child)
+      margin-left: 20px
     &.is-active
       a
-        +box-shadow(0,-3px,0,$primary,0,inset)
+        +box-shadow(0,-2px,0,$primary,0,inset)
         color: $primary
         &:hover,
         &:focus
-          +box-shadow(0,-3px,0,$primary-darker,0,inset)
-          color: $primary-darker
+          +box-shadow(0,-2px,0,$primary-lighter,0,inset)
+          color: $primary-lighter
           outline: none
   ul
+    +box-shadow(0,-2px,0,$border,0,inset)
     align-items: center
     display: flex
     flex-grow: 1
     justify-content: flex-start
-    +mobile
-      box-shadow: 0 2px 2px 0 rgba(0,0,0,.14),0 3px 1px -2px rgba(0,0,0,.2),0 1px 5px 0 rgba(0,0,0,.12)
     &.is-left
       padding-right: 10px
     &.is-center
