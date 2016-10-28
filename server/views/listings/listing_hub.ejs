@@ -9,7 +9,7 @@
 		<link rel="stylesheet" href="/css/listing_404.css" type="text/css" />
 		<link rel="stylesheet" href="/css/listings.css" type="text/css" />
 		<link href="/css/lib/nouislider.min.css" rel="stylesheet">
-    <%- include("../templates/head_links"); %>
+    	<%- include("../templates/head_links"); %>
 	</head>
 
 	<body>
@@ -41,7 +41,7 @@
 							<div class="control-label is-padded">
 								<label class="label is-medium">Categories</label>
 							</div>
-							<div class="control checkbox-form">
+							<form class="control checkbox-form">
 								<%# using for loop to generate all categories %>
 								<% for (var x = 0; x < categories_front.length; x++) {%>
 									<div class="checkbox-wrapper">
@@ -49,7 +49,7 @@
 										<label class="has-border" tabindex="<%= x + 10 %>" for="cb<%= x %>"><%= categories_front[x] %></label>
 									</div>
 								<% } %>
-							</div>
+							</form>
 						</div>
 						<div class="control is-horizontal">
 							<div class="control-label is-padded">
@@ -58,8 +58,9 @@
 							<div class="control">
 								<span class="select is-medium">
 							    <select id="category-input">
-							      	<option disabled>Select Rate</option>
+							      	<option selected disabled>Select Rate</option>
 						      		<%# <option value="minute_price">Minute</option>%>
+						      		<option value="none">None</option>
 						      		<option value="hour_price">Hourly</option>
 									<option value="day_price">Daily</option>
 									<option value="week_price">Weekly</option>
@@ -185,6 +186,7 @@
 			var categories_front = <% if(typeof categories_front != "undefined"){ %><%-JSON.stringify(categories_front)%><% }else{ %>""<% } %>;
 			var categories_back = <% if(typeof categories_back != "undefined"){ %><%-JSON.stringify(categories_back)%><% }else{ %>""<% } %>;
 			var random_listings = <% if(typeof random_listings != "undefined"){ %><%-JSON.stringify(random_listings)%><% }else{ %>""<% } %>;
+			var min_max_prices = <% if(typeof min_max_prices != "undefined"){ %><%-JSON.stringify(min_max_prices)%><% }else{ %>""<% } %>;
 		</script>
 		<script src="/js/lib/nouislider.min.js" type="text/javascript"></script>
 		<script src="/js/lib/wNumb.js" type="text/javascript"></script>
