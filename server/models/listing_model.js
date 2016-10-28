@@ -244,9 +244,7 @@ listing_model.prototype.getListingByFilter = function(filter_name, filter_price,
 	listing_query(query, "Failed to search for listing!", callback, [
 		filter_name,
 		filter_price.min,
-		filter_price.max,
-		filter_date.start,
-		filter_date.end
+		filter_price.max
 	]);
 }
 
