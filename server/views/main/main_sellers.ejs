@@ -10,7 +10,7 @@
 
   <%- include("../templates/navbar", {user: user}); %>
 
-  <section class="hero is-accent gradient-left-right is-medium clear-nav">
+  <section class="hero is-accent gradient-left-right is-medium">
     <div class="hero-body">
       <div class="container">
         <div class="column">
@@ -274,14 +274,32 @@
               </div>
             </div>
           </div>
+        </div>
+        <div class="columns">
           <div class="column is-2">
-            <h3 class="is-bold">Which type is right for my domain?</h3>
-            <p>
-              If you are not sure about the quality or value of your domain,
-              it is best to post a Basic listing. On the other hand, if you
-              believe your domain is highly valuable, you will see better
-              benefits from posting a Premium listing.
-            </p>
+
+          </div>
+          <div class="column is-8">
+            <div class="content">
+              <h3 class="is-bold">Which type is right for my domain?</h3>
+              <p>
+                If you are not sure about the quality or value of your domain,
+                it is best to post a Basic listing. On the other hand, if you
+                believe your domain is highly valuable, you will see better
+                benefits from posting a Premium listing.
+              </p>
+              <h3 class="is-bold">What does fixed pricing mean?</h3>
+              <p>
+                It means you will not be able to decide the pricing for
+                a Basic listing. Instead, DomaHub will auto-generate pricing
+                by determining the domain's value.
+              </p>
+              <h3 class="is-bold">What is hourly pricing?</h3>
+              <p>
+                Hourly pricing allows you to rent out a domain name by the hour.
+              </p>
+              <p>If you have any other questions, please check out our <a href="/faq" class="orange-link">FAQ</a>!</p>
+            </div>
           </div>
         </div>
       </div>
@@ -293,14 +311,6 @@
       <div class="content has-text-centered">
         <h2>Ready to get started?</h2>
         <a class="button is-accent is-large" href="/listing/create">Create Listing</a>
-      </div>
-    </div>
-  </section>
-
-  <section class="section">
-    <div class="container">
-      <div class="content">
-        <h2>If you have any more questions, please check out our <a href="/faq" class="orange-link">FAQ</a>!</h2>
       </div>
     </div>
   </section>
