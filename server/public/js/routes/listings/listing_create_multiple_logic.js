@@ -2,7 +2,7 @@ var can_submit = true;
 
 $(document).ready(function() {
 	//multiple submit
-	$("#mult-form").submit(function(e){
+	$("#submit-button").click(function(e){
 		e.preventDefault();
 
 		if (!$('#mult-csv')[0].files[0]){
@@ -13,7 +13,7 @@ $(document).ready(function() {
 		}
 	});
 
-	//file size and type verification
+	//filename label, file size and type verification
 	$(':file').change(function(){
 	    var file = this.files[0];
 		var allowedMimeTypes = [
@@ -25,14 +25,20 @@ $(document).ready(function() {
 			"text/comma-separated-values"
 		];
 
-		if (allowedMimeTypes.indexOf(file.type) <= -1) {
-			$("#message").html('Wrong file type!');
-			$(':file').val("");
+		if (file){
+			if (allowedMimeTypes.indexOf(file.type) <= -1) {
+				$("#message").html('Wrong file type!');
+				$(':file').val("");
+			}
+			else if (file.size > 50000){
+				$("#message").html("File is too large!");
+				$(':file').val("");
+			}
 		}
-		else if (file.size > 50000){
-			$("#message").html("File is too large!");
-			$(':file').val("");
-		}
+
+		//change upload button text label
+		var filename = (!file) ? "Upload CSV" : (file.name.length > 10) ? file.name.substr(0, 8) + "..." : file.name;
+		$(".label-text").text(filename);
 	});
 
 });
@@ -40,6 +46,7 @@ $(document).ready(function() {
 //function to sumibt listings
 function submitListingsBatch(){
 	if (can_submit){
+		$("#submit-button").addClass('is-loading');
 		var formData = new FormData();
 		formData.append('csv', $('#mult-csv')[0].files[0]);
 
@@ -52,6 +59,7 @@ function submitListingsBatch(){
             contentType: false,
             processData: false
         }, 'json').done(function(data){
+			$("#submit-button").removeClass('is-loading');
 			if (data.state == "success"){
 				can_submit = true;
 				if (data.state == "success"){
