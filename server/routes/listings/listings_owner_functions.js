@@ -443,7 +443,7 @@ module.exports = {
 		good_listings = req.session.good_listings;
 
 		Listing.newListings(good_listings, function(result){
-			if (result.state=="error"){error.handler(req, res, result.info);}
+			if (result.state=="error"){error.handler(req, res, result.info, "json");}
 			else {
 				req.user.refresh_listing = true;		//to refresh the user object's list of listings
 				delete req.session.good_listings;
@@ -510,51 +510,46 @@ function checkCSVRow(record, domains_sofar){
 	//at least 2 records required -- domain name and description
 	if (record.length < 2){
 		record_check.state = "error";
-		record_check.reasons.push("Incorrect format");
+		record_check.reasons.push("Missing required fields!");
 	}
 
 	//not a domain name
 	if (!validator.isFQDN(record[0])){
 		record_check.state = "error";
-		record_check.reasons.push("Incorrect domain name");
+		record_check.reasons.push("Incorrect domain name!");
 	}
 
 	//if domain name already exists
 	if (domains_sofar && domains_sofar.indexOf(record[0]) != -1){
 		record_check.state = "error";
-		record_check.reasons.push("Duplicate domain name");
+		record_check.reasons.push("Duplicate domain name!");
 	}
 
 	//no description
-	if (record[1].length = 0 || !record[1]){
+	if (record[1].length = 0 || !record[1] || record[1].replace(/\s/g, '') == ""){
 		record_check.state = "error";
 		record_check.reasons.push("Invalid description");
 	}
 
 	//optionals were supplied
 	if (record.length > 2){
-		//invalid price
-		if ((record[2] && !validator.isInt(record[2])) ||
-			(record[3] && !validator.isInt(record[3])) ||
-			(record[4] && !validator.isInt(record[4])) ||
-			(record[5] && !validator.isInt(record[5])) ||
-			(record[6] && !validator.isInt(record[6]))){
-			record_check.state = "error";
-			record_check.reasons.push("Invalid price");
-		}
-
 		//invalid URL for background image
-		if (record[7] && !validator.isURL(record[7], { protocols: ["http", "https"]})){
+		if (record[2] && !validator.isURL(record[2], { protocols: ["http", "https"]})){
 			record_check.state = "error";
 			record_check.reasons.push("Invalid background image URL");
 		}
 
 		//invalid buy link
-		if (record[8] && !validator.isURL(record[8], { protocols: ["http", "https"]})){
+		if (record[3] && !validator.isURL(record[3], { protocols: ["http", "https"]})){
 			record_check.state = "error";
 			record_check.reasons.push("Invalid buy link URL");
 		}
 
+	}
+
+	if (record.length > 4){
+		record_check.state = "error";
+		record_check.reasons.push("Too many fields!");
 	}
 
 	return record_check;
