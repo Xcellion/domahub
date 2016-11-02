@@ -47,14 +47,36 @@
 
 /************************************* PROFILE DROPDOWN *************************/
 #profile-dropdown {
-  background-color: white;
   -moz-box-shadow: 0 4px 7px rgba(0, 0, 0, 0.1);
   -webkit-box-shadow: 0 4px 7px rgba(0, 0, 0, 0.1);
+  background-color: white;
   box-shadow: 0 4px 7px rgba(0, 0, 0, 0.1);
   position: absolute;
-  width: 110px;
+  right: 0;
+  text-align: left;
   top: 46px;
-  right: 0; }
+  width: 200px; }
+
+.profile-dropdown-menu {
+  padding: 5px 15px;
+  border-radius: 0 0 3px 3px; }
+  .profile-dropdown-menu li {
+    box-sizing: border-box; }
+    .profile-dropdown-menu li:not(:first-child) {
+      border-top: 1px solid rgba(0, 0, 0, 0.12); }
+      .profile-dropdown-menu li:not(:first-child):last-child a {
+        color: #ff5722;
+        font-weight: bold; }
+        .profile-dropdown-menu li:not(:first-child):last-child a:focus {
+          text-decoration: underline; }
+    .profile-dropdown-menu li a {
+      width: 100%;
+      display: inline-block;
+      padding: 15px 0;
+      box-sizing: border-box; }
+      .profile-dropdown-menu li a:hover, .profile-dropdown-menu li a:active, .profile-dropdown-menu li a:focus {
+        outline: none;
+        color: #3cbc8d; }
 
 .logout {
   color: #3cbc8d !important; }

@@ -40,11 +40,6 @@ p
     font-weight: 300
   &.is-italic
     font-style: italic
-  @each $name, $pair in $colors
-    $color: nth($pair, 1)
-    $color-invert: nth($pair, 2)
-    &.is-#{$name}
-      color: $color
   & + a
     margin-top: 10px
 
@@ -86,6 +81,11 @@ span
   &.is-underlined
     color: inherit
     text-decoration: underline
+  @each $name, $pair in $colors
+    $color: nth($pair, 1)
+    $color-invert: nth($pair, 2)
+    &.is-#{$name}
+      color: $color
 
 a
   +transition(all 0.25s ease)
@@ -103,9 +103,9 @@ a
       -webkit-box-shadow: inset 0 -2px 0 $primary
       box-shadow: inset 0 -2px 0 $primary
   &.white-link
-    color: $white-secondary
+    color: $white-primary
     &-underlined
-      color: $white-secondary
+      color: $white-primary
       +box-shadow(0,-2px,0,0,$white,inset)
   &.orange-link
     color: $accent

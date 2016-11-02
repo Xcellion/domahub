@@ -10,7 +10,7 @@
 
   <%- include("../templates/navbar", {user: user}); %>
 
-  <section class="section is-medium clear-nav">
+  <section class="section is-medium clear-nav min-height">
     <div class="container">
       <div class="columns">
         <div class="column">
@@ -79,8 +79,8 @@
             <h2>Click the button below to upload.</h2>
             <p class="control">
               <input type="file" name="csv" id="mult-csv" class="input-file" />
-              <label id="file-label" for="mult-csv" class="button is-large is-primary"><i class="fa fa-upload"></i><span class="label-text">Upload CSV</span></label>
-              <input id="submit-button" type="submit" class="button is-large is-primary"></label>
+              <label id="file-label" for="mult-csv" class="button is-medium is-primary"><i class="fa fa-upload"></i><span class="label-text">Upload CSV</span></label>
+              <input id="submit-button" type="submit" class="button is-medium is-inverted is-primary"></label>
             </p>
           </div>
         </div>
