@@ -1,61 +1,61 @@
 @import 'bulma/bulma.sass';
 
 /**font**/
-@font-face {
-  font-family: 'ptsans';
-  src: url("/fonts/pt-sans/ptsans400.ttf");
-  font-weight: normal;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: 'ptsans';
-  src: url("/fonts/pt-sans/ptsans700.ttf");
-  font-weight: bold;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: 'ptsans';
-  src: url("/fonts/pt-sans/ptsans700italics.ttf");
-  font-weight: bold;
-  font-style: italic;
-}
-
-@font-face {
-  font-family: 'ptsans';
-  src: url("/fonts/pt-sans/ptsans400italics.ttf");
-  font-weight: normal;
-  font-style: italic;
-}
-
-@font-face {
-  font-family: 'ssp';
-  src: url("/fonts/source-sans-pro/ssp400.ttf");
-  font-weight: normal;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: 'ssp';
-  src: url("/fonts/source-sans-pro/ssp700.ttf");
-  font-weight: bold;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: 'ssp';
-  src: url("/fonts/source-sans-pro/ssp400italics.ttf");
-  font-weight: normal;
-  font-style: italic;
-}
-
-@font-face {
-  font-family: 'ssp';
-  src: url("/fonts/source-sans-pro/ssp300.ttf");
-  font-weight: 300;
-  font-style: normal;
-}
+// @font-face {
+//   font-family: 'ptsans';
+//   src: url("/fonts/pt-sans/ptsans400.ttf");
+//   font-weight: normal;
+//   font-style: normal;
+// }
+//
+// @font-face {
+//   font-family: 'ptsans';
+//   src: url("/fonts/pt-sans/ptsans700.ttf");
+//   font-weight: bold;
+//   font-style: normal;
+// }
+//
+// @font-face {
+//   font-family: 'ptsans';
+//   src: url("/fonts/pt-sans/ptsans700italics.ttf");
+//   font-weight: bold;
+//   font-style: italic;
+// }
+//
+// @font-face {
+//   font-family: 'ptsans';
+//   src: url("/fonts/pt-sans/ptsans400italics.ttf");
+//   font-weight: normal;
+//   font-style: italic;
+// }
+//
+// @font-face {
+//   font-family: 'ssp';
+//   src: url("/fonts/source-sans-pro/ssp400.ttf");
+//   font-weight: normal;
+//   font-style: normal;
+// }
+//
+// @font-face {
+//   font-family: 'ssp';
+//   src: url("/fonts/source-sans-pro/ssp700.ttf");
+//   font-weight: bold;
+//   font-style: normal;
+// }
+//
+// @font-face {
+//   font-family: 'ssp';
+//   src: url("/fonts/source-sans-pro/ssp400italics.ttf");
+//   font-weight: normal;
+//   font-style: italic;
+// }
+//
+// @font-face {
+//   font-family: 'ssp';
+//   src: url("/fonts/source-sans-pro/ssp300.ttf");
+//   font-weight: 300;
+//   font-style: normal;
+// }
 
 @font-face {
   font-family: 'roboto';
@@ -215,7 +215,6 @@
   font: {
     family: $shareTech;
     size: 1.5rem;
-    weight: bold;
   }
   &.primary-logo {
     color: $primary;

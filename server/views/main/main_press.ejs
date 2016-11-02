@@ -11,23 +11,14 @@
 
   <%- include("../templates/navbar", {user: user}); %>
 
-  <section id="mission-img" class="hero is-primary is-medium landing-img">
-    <div class="img-wrapper">
-      <div class="hero-body">
-        <div class="container has-text-centered">
-          <h1 class="title is-normal">
-            Press and Media
-          </h1>
-        </div>
-      </div>
-      <div class="hero-foot">
-        <nav class="tabs is-boxed is-centered">
-          <ul>
-            <li class="tab"><a href="/about">About Us</a></li>
-            <li class="tab"><a href="/mission">Our Mission</a></li>
-            <li class="tab is-active"><a href="/press">Press</a></li>
-          </ul>
-        </nav>
+  <section class="is-medium clear-nav">
+    <div class="container">
+      <div class="tabs is-centered">
+        <ul>
+          <li><a href="/about">About Us</a></li>
+          <li><a href="/mission">Our Mission</a></li>
+          <li class="is-active"><a href="/press">Press and Media</a></li>
+        </ul>
       </div>
     </div>
   </section>
@@ -37,22 +28,22 @@
       <div class="columns">
         <div class="column">
           <div class="content margin-bottom-25">
-            <h1 class="title is-quote is-primary is-3 is-normal">
+            <h1 class="title is-3 is-bold">
               Press and Media Resources
             </h1>
-            <h2 class="subtitle is-5 is-blacklight">
+            <p class="is-blacklight">
               Please use the resources on this page when writing about or mentioning DomaHub.
-            </h2>
+            </p>
           </div>
         </div>
       </div>
       <div class="columns">
         <div class="column is-one-quarter hover-scale">
           <figure class="image left-aligned is-64x64 margin-bottom-25">
-            <img src="/images/lib/material/news.svg" alt="free">
+            <img src="/images/lib/material/news.svg" alt="Check out our news.">
           </figure>
           <div class="content">
-            <h2 class="heading is-blacklight">News</h2>
+            <h2 class="is-blacklight is-bold">News</h2>
             <p>
               Head over to our <a class="orange-link" href="/">
               newsroom</a> for a collection of old and recent articles.
@@ -61,10 +52,10 @@
         </div>
         <div class="column is-one-quarter hover-scale">
           <figure class="image left-aligned is-64x64 margin-bottom-25">
-            <img src="/images/lib/material/forum.svg" alt="calendar">
+            <img src="/images/lib/material/forum.svg" alt="Reach out to us.">
           </figure>
           <div class="content">
-            <h2 class="heading is-blacklight">Media Contact</h2>
+            <h2 class="is-blacklight is-bold">Media Contact</h2>
             <p>
               If you have any media related inquiries, reach us at
               <a class="orange-link" href="mailto:press@domahub.com?Subject=Hello&#32;my&#32;name&#32;is&#32;" target="_blank">
@@ -81,14 +72,14 @@
       <div class="columns">
         <div class="column">
           <div class="content margin-bottom-25">
-            <h1 class="title is-quote is-primary is-3 is-normal">DomaHub Descriptions</h1>
+            <h1 class="title is-3 is-bold">DomaHub Descriptions</h1>
           </div>
         </div>
       </div>
       <div class="columns">
         <div class="column is-one-quarter">
           <div class="content">
-            <h3 class="heading is-blacklight">Short and quick</h3>
+            <h3 class="is-bold is-blacklight">Brief, concise, impactful</h3>
             <p class="">
               DomaHub is an online platform for domain name rentals.
             </p>
@@ -96,21 +87,20 @@
         </div>
         <div class="column is-one-quarter">
           <div class="content">
-            <h3 class="heading is-blacklight">A little longer</h3>
+            <h3 class="is-bold is-blacklight">A little flair added</h3>
             <p class="">
-              DomaHub is an online platform for domain name rentals
-              focused on providing accessible and affordable domain names
-              for end-users.
+              DomaHub is an online marketplace for domain name rentals focused on
+              providing high quality domains at low, affordable prices.
             </p>
           </div>
         </div>
         <div class="column is-two-quarters">
           <div class="content">
-            <h3 class="heading is-blacklight">Long long</h3>
+            <h3 class="is-bold is-blacklight">Excessively verbose</h3>
             <p class="">
-              DomaHub is an online platform for domain name rentals
-              focused on providing accessible and affordable domain names
-              for end-users. By restructuring the conventional marketplace,
+              DomaHub is an online marketplace for domain name rentals focused on
+              providing high quality domains at low, affordable prices. By restructuring
+              the conventional marketplace,
               DomaHub creates new revenue streams for owners and creative
               opportunities for renters. Our platform allows quick and simple
               transactions over thousands of domain name rentals daily.
@@ -126,16 +116,18 @@
       <div class="columns">
         <div class="column">
           <div class="content margin-bottom-25">
-            <h1 class="title is-quote is-primary is-3 is-normal">Brand Materials</h1>
+            <h1 class="title is-3 is-bold">Brand Materials</h1>
           </div>
         </div>
       </div>
       <div class="columns">
         <div class="column">
           <div class="content">
-            <h3 class="heading is-blacklight">Text Logo</h3>
+            <h3 class="is-bold is-blacklight">Text Logo</h3>
             <p class="">
-
+              <span class="logo-text primary-logo">DomaHub</span><br />
+              Our current text logo is simply the word DomaHub (capital D and H),
+              in the <a class="is-underlined" href="https://fonts.google.com/specimen/Share+Tech">Share Tech</a> font.
             </p>
           </div>
         </div>
@@ -143,9 +135,25 @@
       <div class="columns">
         <div class="column">
           <div class="content">
-            <h3 class="heading is-blacklight">Flat Logo</h3>
+            <h3 class="is-bold is-blacklight">Flat Logo</h3>
             <p class="">
-
+              We don't have one yet. If you are interested in designing
+              one for us, contact us at <a href="mailto:cumin@domahub.com" class="orange-link">cumin@domahub.com</a>
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="columns">
+        <div class="column">
+          <div class="content">
+            <h3 class="is-bold is-blacklight">Colors</h3>
+            <p>
+              Primary Color&#58; <span class="is-primary">&#35;3CBC8D</span>.
+              Use wherever possible.
+            </p>
+            <p>
+              Secondary Color&#58; <span class="is-accent">&#35;FF5722</span>.
+              Use if primary color does not suit background or style.
             </p>
           </div>
         </div>

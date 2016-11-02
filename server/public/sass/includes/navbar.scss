@@ -62,14 +62,48 @@
 /************************************* PROFILE DROPDOWN *************************/
 
 #profile-dropdown {
-  background-color: $white;
   -moz-box-shadow: 0 4px 7px rgba(0,0,0, 0.1);
   -webkit-box-shadow: 0 4px 7px rgba(0,0,0, 0.1);
+  background-color: $white;
   box-shadow: 0 4px 7px rgba(0,0,0, 0.1);
   position: absolute;
-  width: 110px;
-  top: 46px;
   right: 0;
+  text-align: left;
+  top: 46px;
+  width: 200px;
+}
+
+.profile-dropdown-menu {
+  padding: 5px 15px;
+  border-radius: 0 0 3px 3px;
+  li {
+    box-sizing: border-box;
+    &:not(:first-child) {
+      border-top: 1px solid $border;
+    &:last-child {
+      a {
+        color: $accent;
+        font-weight: bold;
+        &:focus {
+          text-decoration: underline;
+        }
+      }
+    }
+  }
+    a {
+      width: 100%;
+      display: inline-block;
+      padding: 15px 0;
+      box-sizing: border-box;
+      &:hover,
+      &:active,
+      &:focus {
+        outline: none;
+        color: $primary;
+      }
+    }
+
+  }
 }
 
 // Logout button on profile dropdown

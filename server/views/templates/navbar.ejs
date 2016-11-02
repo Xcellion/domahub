@@ -92,30 +92,16 @@
           <i class="fa fa-angle-down"></i>
         </span>
       </a>
-      <aside id="profile-dropdown" class="menu is-hidden">
-        <p class="menu-label">
-          Profile
-        </p>
-        <ul class="menu-list">
-          <li><a href="/profile">Dashboard</a></li>
+      <div id="profile-dropdown" class="is-hidden">
+        <ul class="profile-dropdown-menu">
+          <li><a href="/profile/dashboard">Dashboard</a></li>
           <li><a href="/profile/inbox">Inbox</a></li>
-        </ul>
-        <p class="menu-label">
-          Domains
-        </p>
-        <ul class="menu-list">
           <li><a href="/profile/mylistings">My Listings</a></li>
           <li><a href="/profile/myrentals">My Rentals</a></li>
-          <li><a href="/listing/create">Create Listing</a></li>
+          <li><a href="/profile/settings">Account Settings</a></li>
+          <li><a href="/logout">Log Out</a></li>
         </ul>
-        <p class="menu-label">
-          Account
-        </p>
-        <ul class="menu-list">
-          <li><a href="/profile/settings">Settings</a></li>
-          <li><a class="logout" href="/logout">Log Out</a></li>
-        </ul>
-      </aside>
+      </div>
     </div>
   </div>
 <% } %>
