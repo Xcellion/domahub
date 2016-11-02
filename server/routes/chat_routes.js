@@ -118,6 +118,8 @@ function createMessage(req, res, next){
 //function to refresh user.convos object, bringing newest message_item to the front;
 function refreshConvos(convo_list, message_item, username){
 	//if convo doesnt exist, loop through to find the correct one
+	var move_to_front = false;
+
 	if (convo_list.length > 0){
 		for (var x = 0; x < convo_list.length; x++){
 			if (convo_list[x].username.toLowerCase() == username.toLowerCase()){
@@ -136,6 +138,9 @@ function refreshConvos(convo_list, message_item, username){
 				break;
 			}
 		}
+	}
+
+	if (move_to_front){
 		convo_list.unshift(move_to_front[0]);
 	}
 	else {
