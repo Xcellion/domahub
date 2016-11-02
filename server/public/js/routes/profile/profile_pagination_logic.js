@@ -17,12 +17,12 @@ $(document).ready(function() {
     setupTable(total_pages, row_per_page, current_page, row_display);
     setupControls(total_pages, row_per_page, current_page, row_display);
 
+    //for rentals or listings
+    var data_to_display = (window.location.pathname.indexOf("listings") != -1) ? listings : rentals;
+
     //search for a specific domain
     $("#search-domain").keyup(function(e){
         var needle = $(this).val();
-
-        data_to_display = (window.location.pathname.indexOf("listings") != -1) ? listings : rentals;
-
         if (needle){
             var temp_rows = [];
             for (var x = 0; x < data_to_display.length; x++){
@@ -39,6 +39,25 @@ $(document).ready(function() {
             total_pages = Math.ceil(row_display.length / row_per_page);
             setupTable(total_pages, row_per_page, current_page, row_display);
         }
+    });
+
+    //filter panel
+    $(".filter-local").click(function(e){
+        var panel_id = $(this).attr('id');
+        $(".panel-block").removeClass('is-active');
+        if (panel_id != "reset_filter"){
+            $(this).addClass("is-active");
+        }
+        var temp_rows = [];
+
+        for (var x = 0; x < data_to_display.length; x++){
+            if (filterCheck(panel_id, data_to_display[x])){
+                temp_rows.push(data_to_display[x]);
+            }
+        }
+        row_display = temp_rows;
+        total_pages = Math.ceil(row_display.length / row_per_page);
+        setupTable(total_pages, row_per_page, current_page, row_display);
     });
 
     //sort by header
@@ -68,6 +87,38 @@ $(document).ready(function() {
         $(this).select();
     });
 });
+
+//function to filter listings or rentals
+function filterCheck(type, data){
+    //listings
+    if (type == "premium_filter"){
+        return data.exp_date != 0;
+    }
+    else if (type == "basic_filter"){
+        return data.exp_date == 0;
+    }
+    else if (type == "unverified_filter"){
+        return data.status == 0;
+    }
+    //rentals
+    else if (type == "active_filter"){
+        return data.active == 1;
+    }
+    else if (type == "inactive_filter"){
+        return data.active == 0;
+    }
+    else if (type == "expiring_filter"){
+        var time_now = new Date().getTime();
+        return (data.date[0] + data.duration[0] <= time_now + 86400000) && (data.date[0] + data.duration[0] > time_now);
+    }
+    else if (type == "expired_filter"){
+        var time_now = new Date().getTime();
+        return data.date[0] + data.duration[0] <= time_now;
+    }
+    else {
+        return true;
+    }
+}
 
 //function to prevent high pages
 function calculateCurrentPage(url_page, total_pages, row_per_page){

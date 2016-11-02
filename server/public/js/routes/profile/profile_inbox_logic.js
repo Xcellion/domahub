@@ -26,7 +26,7 @@ $(document).ready(function() {
             changeConvo(window.location.pathname.split("/").pop(), true);
         }
         else {
-            history.replaceState(null, "Domahub - " + convo_list[0].username, "/profile/inbox/" + convo_list[0].username);
+            history.replaceState(null, "DomaHub - " + convo_list[0].username, "/profile/inbox/" + convo_list[0].username);
             changeConvo(convo_list[0].username, true);
         }
     }
@@ -88,7 +88,7 @@ $(document).ready(function() {
         else {
             //please wait
         }
-    })
+    });
 });
 
 //--------------------------------------------------------------------------------SUBMIT
@@ -265,7 +265,7 @@ function createPanelConvo(convo_item){
     //to change the convo by clicking the panel of convos on the left
     panel_block.click(function(e){
         changeConvo(convo_item.username);
-    })
+    });
 
     return panel_block.append(panel_icon.append(panel_i), name, panel_p, panel_msg);
 }
@@ -306,7 +306,7 @@ function changeConvo(username, history_bool){
         });
 
         if (!history_bool){
-            history.pushState(null, "Domahub - " + username, "/profile/inbox/" + username);
+            history.pushState(null, "DomaHub - " + username, "/profile/inbox/" + username);
         }
 
         getConvoItem(username, function(convo_item){
@@ -359,7 +359,7 @@ function appendChats(chats){
     }
 
     //load more messages button
-    if (chats.length / 20 > 1 && chats.length != 0){
+    if (chats.length % 20 == 0 && chats.length != 0){
         var load_more_div = $("<div id='load-more' class='has-text-centered'></div>")
             var load_more_button = $("<a class='button no-shadow load-more'></a>");
                 var load_more_icon = $("<span class='icon'></span>");
@@ -383,7 +383,12 @@ function appendChats(chats){
 
     //scroll back to where we were before adding to the convo
     var cur_height =  $('#chat_wrapper')[0].scrollHeight;
-    $('#chat_wrapper').scrollTop(cur_height - prev_height);
+    $('#chat_wrapper').animate({
+        scrollTop : cur_height - prev_height
+    }, 0.1, function(){
+        var cur_height =  $('#chat_wrapper')[0].scrollHeight;
+        $("#chat_wrapper").scrollTop(cur_height - prev_height);   //scroll to bottom
+    })
 }
 
 //function to create a single msg from a chat convo
