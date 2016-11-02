@@ -40,14 +40,14 @@
 							Payments
 						</p>
 						<ul class="menu-list">
-							<li>
+							<%# <li>
 								<a id="transactions-link" href='#transactions'  class="setting-link">Transactions</a>
 								<ul>
 									<li><a id="history-link" href='#history' class="setting-link">History</a></li>
 									<li><a id="pending-link" href='#pending' class="setting-link">Pending</a></li>
 									<li><a id="earnings-link"href='#earnings' class="setting-link">Earnings</a></li>
 								</ul>
-							</li>
+							</li>%>
 							<li><a id="details-link" href='#details' class="setting-link">Payment Details</a></li>
 						</ul>
 					</aside>
@@ -67,7 +67,6 @@
 										<label class="label">Email Address</label>
 									</div>
 									<p class="control">
-										<input name="email" id="old-email-input" class="input account-input" type="hidden" value="<%= user.email %>" />
 										<input id="email-input" class="input account-input" type="text" value="<%= user.email %>" />
 									</p>
 								</div>
@@ -104,7 +103,7 @@
 									</p>
 								</div>
 
-
+								<!--
 								<div class="control is-horizontal">
 									<div class="control-label is-medium">
 										<label class="label">Gender</label>
@@ -278,6 +277,8 @@
 										</p>
 									</div>
 								</div>
+
+							-->
 
 
 							</form>

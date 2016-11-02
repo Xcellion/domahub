@@ -272,20 +272,36 @@ module.exports = {
 		recaptcha = req.body["g-recaptcha-response"]
 
 		//not a valid email
-		if (!validator.isEmail(email)){
-			error.handler(req, res, "Invalid email!");
+		if (!email || !validator.isEmail(email)){
+			error.handler(req, res, "Invalid email!", "json");
+		}
+		//invalid username
+		else if (!username || /\s/.test(username)){
+			error.handler(req, res, "Invalid name!", "json");
+		}
+		//username is too long
+		else if (username.length > 70){
+			error.handler(req, res, "Username is too long!", "json");
 		}
 		//username is too short
-		else if (70 > username.length > 3 || username.includes(" ")){
-			error.handler(req, res, "Invalid name!");
+		else if (username.length < 3){
+			error.handler(req, res, "Username is too short!", "json");
 		}
-		//password is too short
-		else if (70 > password.length > 3){
-			error.handler(req, res, "Invalid password!");
+		//invalid password
+		else if (!password){
+			error.handler(req, res, "Invalid password!", "json");
+		}
+		//password is too long
+		else if (70 > password.length){
+			error.handler(req, res, "Password is too long!", "json");
+		}
+		//password is too long
+		else if (password.length > 3){
+			error.handler(req, res, "Password is too short!", "json");
 		}
 		//recaptcha is empty
 		else if (!recaptcha){
-			error.handler(req, res, "Invalid captcha!");
+			error.handler(req, res, "Invalid captcha!", "json");
 		}
 		//verify recaptcha with google
 		else {
@@ -329,7 +345,7 @@ module.exports = {
 	},
 
 	//function to login
-	loginPost: function loginPost(req, res, next){
+	loginPost: function(req, res, next){
 		//if coming from a listing, redirect to listing. otherwise redirect to profile
 		redirectTo = (req.header("Referer").split("/").indexOf("listing") != -1) ? req.header("Referer") : "/profile/dashboard";
 		redirectURL = req.session.redirectBack ? req.session.redirectBack : redirectTo;
@@ -415,7 +431,7 @@ module.exports = {
 	},
 
 	//function to reset password
-	resetPost: function resetPost(req, res, next){
+	resetPost: function(req, res, next){
 		var token = req.params.token;
 		var password = req.body.password;
 
@@ -471,7 +487,7 @@ module.exports = {
 	},
 
 	//function to verify account
-	verifyPost: function verifyPost(req, res, next){
+	verifyPost: function(req, res, next){
 		var token = req.params.token;
 
 		Account.getAccountByToken(token, function(result){
@@ -526,25 +542,38 @@ module.exports = {
 	},
 
 	//function to check account settings posted
-	checkAccountSettings: function checkAccountSettings(req, res, next){
-		email = req.body.email;
+	checkAccountSettings: function(req, res, next){
+		new_email = req.body.new_email;
 		username = req.body.username;
-		password = req.body.password;
+		password = req.body.new_password;
 
 		//not a valid email
-		if (!validator.isEmail(email)){
+		if (new_email && !validator.isEmail(new_email)){
 			error.handler(req, res, "Invalid email!", "json");
 		}
-		//username is too short
-		else if (70 > username.length > 3 || username.includes(" ")){
+		//username too long
+		else if (username && username.length > 70){
+			error.handler(req, res, "Username is too long!", "json");
+		}
+		//username too short
+		else if (username && username.length < 3){
+			error.handler(req, res, "Username is too short!", "json");
+		}
+		//username is invalid
+		else if (username && /\s/.test(username)){
 			error.handler(req, res, "Invalid name!", "json");
 		}
-		//password is too short
-		else if (70 > password.length > 3){
-			error.handler(req, res, "Invalid password!", "json");
+		//password is too long
+		else if (password && 70 > password.length){
+			error.handler(req, res, "Password is too long!", "json");
+		}
+		//password is too long
+		else if (password && password.length > 3){
+			error.handler(req, res, "Password is too short!", "json");
 		}
 		//check the pw
 		else {
+			req.body.email = req.body.email || req.user.email;
 			passport.authenticate('local-login', function(err, user, info){
 				if (!user && info){
 					error.handler(req, res, info.message, "json");
@@ -558,28 +587,42 @@ module.exports = {
 
 	//function to update account settings
 	updateAccountSettings : function(req, res, next){
-		new_account_info = {
-			email: req.body.new_email,
-			username: req.body.username,
-			password:  bcrypt.hashSync(req.body.new_password, null, null)
+		new_account_info = {};
+		if (req.body.new_email){
+			new_account_info.email = req.body.new_email;
 		}
-		Account.updateAccount(new_account_info, req.user.email, function(result){
-			if (result.state=="error"){
-				if (result.errcode == "ER_DUP_ENTRY"){
-					error.handler(req, res, "A user with that email/username already exists!", "json");
+		if (req.body.username){
+			new_account_info.username = req.body.username;
+		}
+		if (req.body.new_password){
+			new_account_info.password = bcrypt.hashSync(req.body.new_password, null, null);
+		}
+
+		//update only if theres something to update
+		if (req.body.new_email || req.body.username || req.body.new_password){
+			Account.updateAccount(new_account_info, req.user.email, function(result){
+				if (result.state=="error"){
+					if (result.errcode == "ER_DUP_ENTRY"){
+						error.handler(req, res, "A user with that email/username already exists!", "json");
+					}
+					else {
+						error.handler(req, res, result.info, "json");
+					}
 				}
 				else {
-					error.handler(req, res, result.info, "json");
+					req.user.email = req.body.email;
+					req.user.username = req.body.username;
+					res.json({
+						state: "success",
+						user: req.user
+					});
 				}
-			}
-			else {
-				req.user.email = req.body.new_email;
-				req.user.username = req.body.username;
-				res.json({
-					state: "success"
-				})
-			}
-		})
+			})
+		}
+		else {
+			error.handler(req, res, "Failed to update account settings!", "json");
+		}
+
 	}
 
 }
