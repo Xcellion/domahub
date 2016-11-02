@@ -5,7 +5,7 @@ $(document).ready(function() {
 
 //create all listing rows
 function createListingRows(listings){
-    if (listings){
+    if (listings && listings.length > 0){
         for (var x = 0; x < listings.length; x++){
             var tr = $("<tr></tr");
             tr.append("<td>" + listings[x].domain_name + "</td>");
@@ -27,11 +27,12 @@ function createListingRows(listings){
 
 //create all rental rows
 function createRentalRows(rentals){
-    if (rentals){
+    if (rentals && rentals.length > 0){
         for (var x = 0; x < rentals.length; x++){
             var tr = $("<tr></tr");
-            tr.append("<td>" + rentals[x].domain_name + "</td>");
-            tr.append("<td><a href='/listing/" + rentals[x].domain_name + "/" + rentals[x].rental_id + "'>Edit</a></td>");
+            tr.append("<td><a href='/listing/" + rentals[x].domain_name + "/" + rentals[x].rental_id + "'>" + rentals[x].domain_name + "</a></td>");
+            var active = (rentals[x].active == 1) ? "Active" : "Inactive";
+            tr.append("<td>" + active + "</td>");
             $("#rental_table").append(tr);
         }
     }
