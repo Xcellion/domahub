@@ -40,14 +40,14 @@
 							Payments
 						</p>
 						<ul class="menu-list">
-							<li>
+							<%# <li>
 								<a id="transactions-link" href='#transactions'  class="setting-link">Transactions</a>
 								<ul>
 									<li><a id="history-link" href='#history' class="setting-link">History</a></li>
 									<li><a id="pending-link" href='#pending' class="setting-link">Pending</a></li>
 									<li><a id="earnings-link"href='#earnings' class="setting-link">Earnings</a></li>
 								</ul>
-							</li>
+							</li>%>
 							<li><a id="details-link" href='#details' class="setting-link">Payment Details</a></li>
 						</ul>
 					</aside>
@@ -67,7 +67,6 @@
 										<label class="label">Email Address</label>
 									</div>
 									<p class="control">
-										<input name="email" id="old-email-input" class="input account-input" type="hidden" value="<%= user.email %>" />
 										<input id="email-input" class="input account-input" type="text" value="<%= user.email %>" />
 									</p>
 								</div>
@@ -104,7 +103,7 @@
 									</p>
 								</div>
 
-
+								<!--
 								<div class="control is-horizontal">
 									<div class="control-label is-medium">
 										<label class="label">Gender</label>
@@ -279,6 +278,8 @@
 									</div>
 								</div>
 
+							-->
+
 
 							</form>
 							<div class="container">
@@ -300,7 +301,7 @@
 									<div class="control-label is-medium">
 										<label class="label">Email Address</label>
 									</div>
-									<p class="control">
+									<p class="control is-success">
 										Verified
 									</p>
 								</div>
@@ -309,9 +310,11 @@
 										<label class="label">Stripe Connect</label>
 									</div>
 									<div class="control is-grouped">
-										<p class="control">
-											Verified
-										</p>
+										<% if (user.type >= 2) { %>
+											<p class="control is-success">Verified</p>
+										<% } else { %>
+											<p class="control is-danger">Not Verified</p>
+										<% } %>
 									</div>
 								</div>
 							</form>
