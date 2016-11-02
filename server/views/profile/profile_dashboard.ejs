@@ -34,6 +34,10 @@
 							<figure class="image is-4by3">
 								<img src="https://placeholdit.imgix.net/~text?txtsize=30&bg=9e9e9e&txtclr=ffffff&txt=PROFILE%20IMAGE&w=300&h=200" />
 							</figure>
+							<p class="control">
+				              <input type="file" name="csv" id="profile_pic" class="input-file" />
+				              <label id="profile_pic-label" for="profile_pic" class="button"><i class="fa fa-upload"></i><span class="label-text">Upload Picture</span></label>
+				            </p>
 						</div>
 						<div class="card-content">
 							<h2 class="has-text-centered"><%= user.username %></h2>
@@ -46,32 +50,18 @@
 					</div>
 					<article class="message no-shadow margin-bottom-25">
 						<div class="message-header is-primary has-text-centered">
-							Account Settings
+							Quick Links
 						</div>
 						<div class="message-body has-text-centered">
 							<div class="content">
 								<ul>
 									<li><a class="black-link" href="/authorizestripe" title="Payments">Manage Payments</a></li>
 									<li><a class="black-link" href="/profile/settings" title="Change Email">Change Email Address</a></li>
+									<li><a class="black-link" href="/faq" title="FAQ">Frequently Asked Questions</a></li>
 								</ul>
 							</div>
 						</div>
 					</article>
-					<%# <article class="message no-shadow">
-						<div class="message-header is-primary has-text-centered">
-							Quick Links
-						</div>
-						<div class="message-body has-text-centered">
-							<div class="content">
-								<ul>
-									<li><a class="black-link" href="/faq" title="FAQ">FAQ</a></li>
-									<li><a class="black-link" href="/tos" title="Terms of Service">Terms of Service</a></li>
-									<li><a class="black-link" href="/privacy" title="Privacy Policy">Privacy Policy</a></li>
-									<li><a class="black-link" href="/contact" title="Support Center">Support Center</a></li>
-								</ul>
-							</div>
-						</div>
-					</article>%>
 				</div>
 
 				<div class="column">
@@ -89,7 +79,7 @@
 							<tbody id="listing_table"></tbody>
 						</table>
 
-						<a class="button is-accent" href="/listing/create" title="Create new listing">Create new listing</a>
+						<a class="button is-accent" href="/listing/create" title="Create a new listing">Create a new listing</a>
 					</box>
 					<div class="box no-shadow">
 						<table class="table">
@@ -99,11 +89,13 @@
 							<thead>
 								<tr>
 									<th>Domain Name</th>
-									<th></th>
+									<th>Status</th>
 								</tr>
 							</thead>
 							<tbody id="rental_table"></tbody>
 						</table>
+
+						<a class="button is-accent" href="/listings" title="Browse domain names">Browse domain names</a>
 					</div>
 				</div>
 
@@ -113,7 +105,7 @@
 							<div class="message-body has-text-centered">
 								<div class="content">
 									<p>
-										As a domain owner, you must connect your account with <a href="https://stripe.com/about">Stripe</a> before you can receive payments.
+										You must connect your account with <a href="https://stripe.com/about">Stripe</a> before you can receive payments.
 									</p>
 									<a href="/authorizestripe" class="button is-success">Connect with Stripe</a>
 								</div>
