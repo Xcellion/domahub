@@ -65,7 +65,7 @@ $(document).ready(function() {
 		}
 	});
 
-	var pages_white_nav = ["listing", "faq", "contact", "getstarted"];
+	var pages_white_nav = ["listings", "faq", "contact", "getstarted"];
 	var current_page = (window.location.pathname == "/") ? "/" : window.location.pathname.split("/")[1];
 
 	if (pages_white_nav.indexOf(current_page) != -1){
