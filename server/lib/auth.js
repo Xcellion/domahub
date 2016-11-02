@@ -597,7 +597,7 @@ module.exports = {
 		if (req.body.new_password){
 			new_account_info.password = bcrypt.hashSync(req.body.new_password, null, null);
 		}
-
+		console.log(new_account_info, req.body);
 		//update only if theres something to update
 		if (req.body.new_email || req.body.username || req.body.new_password){
 			Account.updateAccount(new_account_info, req.user.email, function(result){
