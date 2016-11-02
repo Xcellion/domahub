@@ -12,14 +12,9 @@
   }
   input {
     font-family: $shareTech;
-    border: none;
-    border-radius: 0;
-    @include box-shadow(0,0,0,$black,0);
-    @include transition(all 0.25s);
-    color: $text;
     &:focus,
     &:active {
-      @include box-shadow(0,-2px,0,$primary-light, inset);
+
     }
   }
 }

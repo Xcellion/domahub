@@ -1,50 +1,70 @@
 .footer
-  background-color: $grey-dark
-  padding: 80px 0
+  background-color: $grey-light
+  padding: 80px 0 0
+  overflow: hidden
+  & > .container
+    min-height: 120px
   +mobile
     .columns
       & > .column
         text-align: center
 
-// .linebreak
-//   position: relative
-//   margin: 0 auto 50px auto
-//   width: 25%
-//   height: 2px
-//   background-color: $border
-
-.footer-list
+.footer-body
   display: flex
   flex-direction: column
-  text-align: right
-  text-decoration: none
-  +mobile
-    flex-direction: row
-    justify-content: center
+  align-items: center
+  justify-content: center
+
+.footer-list
+  &-column
+    display: flex
+    flex-direction: column
+    text-decoration: none
+  &-row
+    display: flex
+    flex-wrap: wrap
     align-items: center
+    justify-content: center
+    text-decoration: none
 
 .footer-header
-  color: $primary-light
-  font-weight: 400
+  color: $primary-dark
   margin-bottom: 10px
   +mobile
     margin-bottom: 0
     display: none
 
 .footer-item
-  color: $white-secondary
+  color: $text-light
+  font-size: $size-6
   &:not(:first-child)
-    margin-top: 10px
+    margin-left: 15px
   +mobile
-    margin-top: 0
-    &:not(:last-child)
-      margin-right: 15px
+    margin-top: 10px
   a
-    color: $white-secondary
+    color: $text-light
     &:hover
-      color: $white
+      color: $text
+
+.footer-bar
+  padding: 15px 20px
+  background-color: $grey-darker
+
+.footer-bar-content
+  display: flex
+  align-items: center
+  justify-content: center
+
+.footer-bar-item
+  padding: 0
+  margin: 0
+  font-size: $size-7
+  &:not(:first-child)
+    margin-left: 25px
 
 .social-icon
+  &:not(:first-child)
+    margin-left: 10px
   +transition(all 0s)
 
 #facebook-icon
