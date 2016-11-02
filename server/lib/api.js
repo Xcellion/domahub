@@ -16,7 +16,6 @@ module.exports = function(app, db, e){
 //function to check if the requested host is not for domahub
 function checkHost(req, res, next){
 	if (req.headers.host){
-		console.log(req.path);
 	    domain_name = req.headers.host.replace(/^(https?:\/\/)?(www\.)?/,'');
 		//requested domahub website, not domain
 		if (domain_name == "www.w3bbi.com"
@@ -26,7 +25,7 @@ function checkHost(req, res, next){
 			|| domain_name == "localhost"
 			|| domain_name == "localhost:8080"){
 
-			if (node_env == "dev"){
+			if (node_env == "dev" || req.path.indexOf("/listing/" != -1)){
 				next();
 			}
 			else {
