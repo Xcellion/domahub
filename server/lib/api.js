@@ -9,7 +9,7 @@ module.exports = function(app, db, e){
 	error = e;
 	Listing = new listing_model(db);
 
-	app.all("/", checkHost);
+	app.all("*", checkHost);
 	app.get("/error", renderError);
 }
 
