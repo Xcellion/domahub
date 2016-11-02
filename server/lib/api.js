@@ -25,8 +25,7 @@ function checkHost(req, res, next){
 			|| domain_name == "localhost"
 			|| domain_name == "localhost:8080"){
 
-				console.log(req.path, req.path.indexOf("/listing/") != -1);
-
+			//if dev environment or going to a listings page
 			if (node_env == "dev" || req.path.indexOf("/listing/") != -1){
 				next();
 			}
