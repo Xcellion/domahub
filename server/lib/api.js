@@ -9,7 +9,7 @@ module.exports = function(app, db, e){
 	error = e;
 	Listing = new listing_model(db);
 
-	app.all("/", checkHost);
+	app.use(checkHost);
 	app.get("/error", renderError);
 }
 
@@ -25,11 +25,13 @@ function checkHost(req, res, next){
 			|| domain_name == "localhost"
 			|| domain_name == "localhost:8080"){
 
-			if (node_env == "dev"){
+				console.log(req.path, req.path.indexOf("/listing/") != -1);
+
+			if (node_env == "dev" || req.path.indexOf("/listing/") != -1){
 				next();
 			}
 			else {
-				res.render("under_construction");
+				res.render("under_construction.ejs");
 			}
 	    }
 		//is not a valid FQDN

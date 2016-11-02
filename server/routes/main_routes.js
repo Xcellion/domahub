@@ -1,8 +1,7 @@
 var	account_model = require('../models/account_model.js');
 var	validator = require('validator');
 var	request = require('request');
-var bodyParser = require('body-parser')
-var jsonParser = bodyParser.json()
+var bodyParser = require('body-parser');
 var urlencodedParser = bodyParser.urlencoded({ extended: false })
 
 module.exports = function(app, db, auth, error){
@@ -59,33 +58,22 @@ function mainPageLinksRender(req, res, next){
 //to add email to sendgrid beta list
 function signupBeta(req, res, next){
 	if (validator.isEmail(req.body.betaemail)){
-		Account.checkAccount(req.body.betaemail, function(result){
-			if (result.state =="success" && result.info.length == 0){
-				request({
-					url: "https://api.sendgrid.com/v3/contactdb/recipients",
-					method: "POST",
-					'auth': {
-					    'bearer': "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"
-				 	},
-					body: [
-						{
-							email: req.body.betaemail,
-							lists: 622793
-						}
-					],
-					json: true
-				}, function(err, response, body){
-					res.json({
-						state: "success"
-					})
-				});
-			}
-			else {
-				res.json({
-					state: "error",
-					message: "Please enter a valid email address!"
-				})
-			}
+		request({
+			url: "https://api.sendgrid.com/v3/contactdb/recipients",
+			method: "POST",
+			'auth': {
+			    'bearer': "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"
+		 	},
+			body: [
+				{
+					email: req.body.betaemail
+				}
+			],
+			json: true
+		}, function(err, response, body){
+			res.json({
+				state: "success"
+			});
 		});
 	}
 	else {

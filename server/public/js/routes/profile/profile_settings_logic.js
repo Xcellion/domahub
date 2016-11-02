@@ -48,12 +48,11 @@ $(document).ready(function() {
                     $("#basic-message").fadeOut(100, function(){
                         $("#basic-message").css("color", "#97cd76").text("Account information updated!").fadeIn(100);
                     });
-                    user.email = $("#email-input").val();
-                    user.username = $("#username-input").val();
-                    cancelEdit();
+                    user = data.user;
                 }
                 else {
                     console.log(data);
+                    resetInputs();
                     $("#basic-message").fadeOut(100, function(){
                         $("#basic-message").css("color", "#ed1c24").text(data.message).fadeIn(100);
                     });
@@ -129,15 +128,15 @@ function checkAccountSubmit(){
         });
         return false;
     }
-    //
+
     // //if the old password is not entered
-    // else if ($("#old-pw-input").val().length > 70 || $("#old-pw-input").val().length < 6) {
-    //     $("#basic-message").fadeOut(100, function(){
-    //         $("#basic-message").css("color", "#ed1c24").text("Please enter your password to make any changes!").fadeIn(100);
-    //         $("#old-pw-input").addClass("is-danger").focus();
-    //     });
-    //     return false;
-    // }
+    else if ($("#old-pw-input").val().length > 70 || $("#old-pw-input").val().length < 6) {
+        $("#basic-message").fadeOut(100, function(){
+            $("#basic-message").css("color", "#ed1c24").text("Please enter your password to make any changes!").fadeIn(100);
+            $("#old-pw-input").addClass("is-danger").focus();
+        });
+        return false;
+    }
 
     //if new password is too short or long
     else if ($("#new-pw-input").val() && ($("#new-pw-input").val().length > 70 || $("#new-pw-input").val().length < 6)) {
@@ -159,11 +158,10 @@ function checkAccountSubmit(){
     }
     else {
         return {
-            email: $("#old-email-input").val(),
-            new_email: $("#email-input").val(),
-            username: $("#username-input").val(),
+            new_email: (user.email == $("#new_email-input").val()) ? undefined : $("#email-input").val(),
+            username: (user.username == $("#username-input").val()) ? undefined : $("#username-input").val(),
             password: $("#old-pw-input").val(),
-            new_password: $("#new-pw-input").val()
+            new_password: ($("#new-pw-input").val() == "") ? undefined : $("#new-pw-input").val()
             //gender: $("#gender-input").val(),
             //birthday: $("#birthday-year-input").val() + $("#birthday-month-input").val() + $("#birthday-day-input").val(),
             //phone: $("#phone-input").val()
