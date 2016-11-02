@@ -388,7 +388,7 @@ function appendChats(chats){
     }, 0.1, function(){
         var cur_height =  $('#chat_wrapper')[0].scrollHeight;
         $("#chat_wrapper").scrollTop(cur_height - prev_height);   //scroll to bottom
-    })
+    });
 }
 
 //function to create a single msg from a chat convo
