@@ -67,14 +67,15 @@ else {
 	}));
 }
 
+//for routing of static files
+app.use(express.static(__dirname + '/public'));
+
 // API for all domains listed on domahub
 require('./lib/api.js')(app, db, error);
 
 app.use(cookieParser());
 app.use(autoReap);		//to delete any temporary uploaded files left
 
-//for routing of static files
-app.use(express.static(__dirname + '/public'));
 
 //initialize passport for auth
 app.use(passport.initialize());
