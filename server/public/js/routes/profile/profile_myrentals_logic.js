@@ -159,19 +159,20 @@ function createDatesDrop(rental_info){
     var temp_col = $("<div class='column'></div>");
 
     var temp_div = $('<div class="control is-horizontal"></div>');
+
+    var control_wrapper = $("<div class='control is-horizontal'></div>");
+    var start_label = $("<p class=''>Start Date</p>");
+    var end_label = $("<p class=''>End Date</p>");
+    temp_div.append(control_wrapper.append(start_label, end_label));
+
     for (var x = 0; x < rental_info.date.length; x++){
         var start = moment(new Date(rental_info.date[x]));
         var disp_start = start.format('YYYY/MM/DD, hh:mm A');
         var disp_end = moment(start._d.getTime() + rental_info.duration[x]).format('YYYY/MM/DD, hh:mm A');
 
-        var start_label = $("<label class='label'>Start Date</label>")
-        var start_date = $("<p class=''>" + disp_start + "</p>")
-
-        var end_label = $("<label class='label'>End Date</label>")
-        var end_date = $("<p class=''>" + disp_end + "</p>")
-
+        var dates = $("<p class=''>" + disp_start + " - " + disp_end + "</p>");
         var date_wrapper = $("<div class='date-wrapper'></div>");
-        temp_div.append(date_wrapper.append(start_label, start_date, end_label, end_date));
+        temp_div.append(date_wrapper.append(dates));
     }
     temp_col.append(temp_div);
 
