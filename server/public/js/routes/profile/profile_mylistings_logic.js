@@ -670,7 +670,7 @@ function premiumBind(e, upgrade_button){
     //stripe configuration
     handler = StripeCheckout.configure({
         key: 'pk_test_kcmOEkkC3QtULG5JiRMWVODJ',
-        name: 'Domahub Domain Rentals',
+        name: 'DomaHub Domain Rentals',
         image: '/images/d-logo.PNG',
         panelLabel: 'Pay Monthly',
         zipCode : true,
@@ -679,7 +679,7 @@ function premiumBind(e, upgrade_button){
         token: function(token) {
             if (token.email != user.email){
                 var listing_msg = upgrade_button.closest(".row-drop").find(".listing-msg");
-                errorMessage(listing_msg, "Please use the same email for payments as your Domahub account!");
+                errorMessage(listing_msg, "Please use the same email for payments as your DomaHub account!");
                 upgrade_button.removeClass("is-loading");
             }
             else {
