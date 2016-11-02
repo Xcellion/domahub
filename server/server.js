@@ -76,7 +76,6 @@ require('./lib/api.js')(app, db, error);
 app.use(cookieParser());
 app.use(autoReap);		//to delete any temporary uploaded files left
 
-
 //initialize passport for auth
 app.use(passport.initialize());
 app.use(passport.session());
