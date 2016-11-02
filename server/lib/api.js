@@ -29,7 +29,7 @@ function checkHost(req, res, next){
 				next();
 			}
 			else {
-				res.render("under_construction");
+				res.render("under_construction.ejs");
 			}
 	    }
 		//is not a valid FQDN
