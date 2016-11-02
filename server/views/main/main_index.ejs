@@ -12,29 +12,29 @@
 <body>
 
   <%- include("../templates/navbar", {user: user}); %>
-  <section id="index-img" class="section is-large landing-img">
+  <section id="index-img" class="section is-medium landing-img">
     <div class="container">
       <div class="columns">
         <div class="column is-half">
           <div class="content">
-            <h1 class="title is-2 is-bold margin-bottom-50">
+            <h1 class="title is-2 is-bold is-white margin-bottom-50">
               Domains that work for you. <br />On your schedule.<br /> Always.
             </h1>
-            <h2 class="is-blacklight">
+            <h2 class="is-whitelight is-bold">
               Introducing DomaHub
             </h2>
-            <p class="title-p">
+            <p class="title-p is-white">
               DomaHub is an online marketplace for domain name rentals focused
               on providing high quality domains at low, affordable prices.
             </p>
-            <p class="title-p">
+            <p class="title-p is-white">
               A rental of any one of our listed domains is highly flexible
               based on your needs and your schedule.
             </p>
           </div>
           <div class="hero-buttons left-aligned">
-            <a id="get-started" class="button is-primary is-large" href='/getstarted'>Learn More</a>
-            <a class="button is-primary is-inverted is-large" href='/signup'>Create Account</a>
+            <a id="get-started" class="button is-primary is-medium" href='/getstarted'>Learn More</a>
+            <a class="button is-primary is-inverted is-medium" href='/signup'>Create Account</a>
           </div>
         </div>
         <!-- <div id="index-img" class="column landing-img is-hidden-mobile">
@@ -108,7 +108,7 @@
     </div>
   </section> -->
 
-  <section class="section is-light is-large">
+  <section class="section is-large">
     <div class="container">
       <div class="columns">
         <div class="column margin-bottom-50">
@@ -197,10 +197,10 @@
               DomaHub is an active living space for all of your domains.
               Each listing is tailored to your preferences and settings, fit
               to your schedule.
-              We work hard to ensure that redirection and transfer
+              We work hard to ensure that transfer
               is simple, quick, and hassle-free.
             </p>
-            <a class="button is-accent is-large" href="/sellers" title="Learn More - Sellers">Learn More</a>
+            <a class="button is-accent is-medium" href="/sellers" title="Learn More - Sellers">Learn More</a>
           </div>
         </div>
         <div class="column">
@@ -212,27 +212,39 @@
               beautiful advertisements, or pick out that special domain name
               for your new business.
             </p>
-            <a class="button is-primary is-large" href="/renters">Explore</a>
+            <a class="button is-primary is-medium" href="/renters">Explore</a>
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <section class="hero is-primary is-small">
-    <div class="hero-body">
-      <div class="container">
-        <h2 class="title is-4 is-normal">
-          Sign up for Early Access
-        </h2>
-        <form id="beta-form" action="/beta" method="post">
-          <p class="control has-addons">
-            <input id="beta-form-email" class="input is-medium" type="email" name="betaemail" placeholder="Enter your email"/>
-            <a id="beta-form-submit" class="button no-shadow is-accent is-medium" href="#mailingsubmitted">Submit</a>
-          </p>
-        </form>
-        <div id="beta-form-success" class="notification is-hidden">
-          Success!
+  <section class="section is-medium">
+    <div class="container">
+      <div class="columns">
+        <div class="column is-4">
+
+        </div>
+        <div class="column is-4">
+          <div class="content">
+            <h2 class="title is-4 is-bold">
+              We are currently in Closed Beta.
+            </h2>
+            <p>
+              If you would like to participate, please sign up below.
+            </p>
+          </div>
+          <form id="beta-form" action="/beta" method="post">
+            <p class="control has-addons">
+              <input id="beta-form-email" class="input" type="email" name="betaemail" placeholder="Enter your email"/>
+              <a id="beta-form-submit" class="button is-primary" href="#mailingsubmitted">Sign Up</a>
+            </p>
+          </form>
+          <div id="beta-form-success" class="is-hidden">
+            <div class="notification">
+              Success!
+            </div>
+          </div>
         </div>
       </div>
     </div>

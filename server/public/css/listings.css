@@ -2,16 +2,24 @@
   #listing-random-img {
     background-image: url("https://source.unsplash.com/category/people"); } }
 
-.listing-buttons {
+.is-flex-wrap {
   display: flex;
   flex-wrap: wrap;
   flex-direction: row;
   align-items: center;
   margin-bottom: 10px; }
-  .listing-buttons.jc-flexEnd {
+  @media screen and (max-width: 768px) {
+    .is-flex-wrap {
+      flex-wrap: nowrap;
+      flex-direction: column;
+      align-items: flex-start; } }
+  .is-flex-wrap.jc-flexEnd {
     justify-content: flex-end; }
-  .listing-buttons .button {
+  .is-flex-wrap .button {
     margin: 0 0 10px 10px; }
+  @media screen and (max-width: 768px) {
+    .is-flex-wrap .checkbox-wrapper {
+      width: 100%; } }
 
 #filter-dropdown {
   -moz-transition: all 0.5s ease;
