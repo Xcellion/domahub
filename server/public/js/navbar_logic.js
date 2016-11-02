@@ -39,7 +39,7 @@ $(document).ready(function() {
 		}
 	});
 
-	// hamburger toggle button
+	//hamburger toggle button
 	$(".nav-toggle").click(function() {
 	  $(this).toggleClass("is-active");
 	  $(".nav-menu").toggleClass("is-active");
@@ -65,24 +65,36 @@ $(document).ready(function() {
 		}
 	});
 
-	$(window).scroll(function(e){
+	var pages_white_nav = ["listing", "faq", "contact", "getstarted"];
+	var current_page = (window.location.pathname == "/") ? "/" : window.location.pathname.split("/")[1];
 
-		//before the top
-		if ($(this).scrollTop() <= 0 && $(".nav").hasClass("has-shadow")) {
-			$(".nav").removeClass("has-shadow");
-		}
-		//past the top
-		else if ($(this).scrollTop() > 0 && !$(".nav").hasClass("has-shadow")){
-			$(".nav").addClass("has-shadow");
-		}
-	});
+	if (pages_white_nav.indexOf(current_page) != -1){
+		navbar_white(true);
+	}
+	else {
+		$(window).scroll(function(e){
+
+			//before the top
+			if ($(this).scrollTop() <= 0 && $(".nav").hasClass("has-shadow")) {
+				navbar_white(false);
+			}
+			//past the top
+			else if ($(this).scrollTop() > 0 && !$(".nav").hasClass("has-shadow")){
+				navbar_white(true);
+			}
+		});
+	}
 
 });
 
-
-
-//function to toggle navbar background color
-function navbar_color(){
-	$("#navbar").toggleClass();
-
+//function to toggle navbar with white background
+function navbar_white(bool){
+	if (bool){
+		$(".nav").addClass("has-shadow is-white");
+		$(".nav-link").removeClass("white-link");
+	}
+	else {
+		$(".nav").removeClass("has-shadow is-white");
+		$(".nav-link").addClass("white-link");
+	}
 }
