@@ -49,10 +49,10 @@ $(document).ready(function() {
                         $("#basic-message").css("color", "#97cd76").text("Account information updated!").fadeIn(100);
                     });
                     user = data.user;
-                    cancelEdit();
                 }
                 else {
                     console.log(data);
+                    resetInputs();
                     $("#basic-message").fadeOut(100, function(){
                         $("#basic-message").css("color", "#ed1c24").text(data.message).fadeIn(100);
                     });
@@ -158,7 +158,7 @@ function checkAccountSubmit(){
     }
     else {
         return {
-            new_email: (user.email == $("#new_email-input").val()) ? undefined : $("#new_email-input").val(),
+            new_email: (user.email == $("#new_email-input").val()) ? undefined : $("#email-input").val(),
             username: (user.username == $("#username-input").val()) ? undefined : $("#username-input").val(),
             password: $("#old-pw-input").val(),
             new_password: ($("#new-pw-input").val() == "") ? undefined : $("#new-pw-input").val()
