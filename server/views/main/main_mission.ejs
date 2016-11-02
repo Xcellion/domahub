@@ -11,19 +11,30 @@
 
   <%- include("../templates/navbar", {user: user}); %>
 
-  <section class="is-medium clear-nav">
-    <div class="container">
-      <div class="tabs is-centered">
-        <ul>
-          <li><a href="/about">About Us</a></li>
-          <li class="is-active"><a href="/mission">Our Mission</a></li>
-          <li><a href="/press">Press and Media</a></li>
-        </ul>
+  <section class="min-height">
+
+  <section id="mission-img" class="hero is-primary is-medium landing-img">
+    <div class="img-wrapper">
+      <div class="hero-body">
+        <div class="container has-text-centered">
+          <h1 class="title is-normal">
+            Our Mission
+          </h1>
+        </div>
+      </div>
+      <div class="hero-foot">
+        <nav class="tabs is-boxed is-centered">
+          <ul>
+            <li class="tab"><a href="/about">About Us</a></li>
+            <li class="tab is-active"><a href="/mission">Our Mission</a></li>
+            <li class="tab"><a href="/press">Press</a></li>
+          </ul>
+        </nav>
       </div>
     </div>
   </section>
 
-  <section class="section is-medium min-height">
+  <section class="section is-medium">
     <div class="container">
       <div class="columns">
         <div class="column is-half">
@@ -46,6 +57,7 @@
       </div>
     </div>
   </section>
+</section>
 
   <%- include("../templates/footer"); %>
   <%- include("../templates/js_scripts"); %>

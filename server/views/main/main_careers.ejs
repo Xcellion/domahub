@@ -11,7 +11,9 @@
 
   <%- include("../templates/navbar", {user: user}); %>
 
-  <section id="careers-img" class="hero is-primary is-medium clear-nav landing-img">
+  <section class="min-height">
+
+  <section id="careers-img" class="hero is-primary is-medium landing-img">
     <div class="img-wrapper">
       <div class="hero-body">
         <div class="container has-text-centered">
@@ -24,8 +26,8 @@
         <nav class="tabs is-boxed is-centered">
           <ul>
             <li class="tab is-active"><a href="/careers" title="Culture">Our Culture</a></li>
-            <li class="tab"><a href="/benefits" title="Benefits">Benefits</a></li>
-            <li class="tab"><a href="/jobs" title="Job Openings">Current Openings</a></li>
+            <li class="tab"><a href="/careers" title="Benefits">Benefits</a></li>
+            <li class="tab"><a href="/careers" title="Job Openings">Current Openings</a></li>
           </ul>
         </nav>
       </div>
@@ -47,10 +49,11 @@
       </div>
     </div>
   </section>
+</section>
 
   <%- include("../templates/footer"); %>
   <%- include("../templates/js_scripts"); %>
-  
+
 </body>
 
 </html>
