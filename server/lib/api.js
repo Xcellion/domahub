@@ -25,7 +25,9 @@ function checkHost(req, res, next){
 			|| domain_name == "localhost"
 			|| domain_name == "localhost:8080"){
 
-			if (node_env == "dev" || req.path.indexOf("/listing/" != -1)){
+				console.log(req.path, req.path.indexOf("/listing/") != -1);
+
+			if (node_env == "dev" || req.path.indexOf("/listing/") != -1){
 				next();
 			}
 			else {
