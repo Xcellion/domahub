@@ -7,21 +7,7 @@
   #searchbar-form > .control {
     width: 100%; }
   #searchbar-form input {
-    font-family: "sharetech", "Lucida Console", monospace;
-    border: none;
-    border-radius: 0;
-    -webkit-box-shadow: 0 0 0 black 0;
-    -moz-box-shadow: 0 0 0 black 0;
-    box-shadow: 0 0 0 black 0;
-    -moz-transition: all 0.25s;
-    -o-transition: all 0.25s;
-    -webkit-transition: all 0.25s;
-    transition: all 0.25s;
-    color: rgba(0, 0, 0, 0.9); }
-    #searchbar-form input:focus, #searchbar-form input:active {
-      -webkit-box-shadow: 0 -2px 0 #62c9a3 inset;
-      -moz-box-shadow: 0 -2px 0 #62c9a3 inset;
-      box-shadow: 0 -2px 0 #62c9a3 inset; }
+    font-family: "sharetech", "Lucida Console", monospace; }
 
 .nav-item {
   position: relative; }

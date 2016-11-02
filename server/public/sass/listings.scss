@@ -7,17 +7,27 @@
   }
 }
 
-.listing-buttons {
+.is-flex-wrap {
   display: flex;
   flex-wrap: wrap;
   flex-direction: row;
   align-items: center;
   margin-bottom: 10px;
+  @include mobile {
+    flex-wrap: nowrap;
+    flex-direction: column;
+    align-items: flex-start;
+  }
   &.jc-flexEnd {
     justify-content: flex-end;
   }
   .button {
-      margin: 0 0 10px 10px;
+    margin: 0 0 10px 10px;
+  }
+  .checkbox-wrapper {
+    @include mobile {
+      width: 100%;
+    }
   }
 }
 

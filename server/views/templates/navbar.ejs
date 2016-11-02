@@ -1,10 +1,10 @@
 <link rel="stylesheet" type="text/css" href="/css/includes/navbar.css" />
 
-<nav id="navbar" class="nav is-white">
+<nav id="navbar" class="nav is-transparent">
   <div class="container">
     <div class="nav-left">
       <div class="nav-item">
-        <a class="logo-text primary-logo" tabindex="1" title="Home" href="/">DomaHub</a>
+        <a class="logo-text primary-logo-light" tabindex="1" title="Home" href="/">DomaHub</a>
       </div>
     </div>
     <div class="nav-center">
@@ -22,16 +22,16 @@
     </span>
     <div class="nav-right nav-menu">
       <div class="nav-item">
-        <a class="nav-link" tabindex="3" title="Renters" href="/listings">Browse</a>
+        <a class="nav-link white-link" tabindex="3" title="Browse Listings" href="/listings">Browse</a>
       </div>
       <div class="nav-item">
-        <a class="nav-link" tabindex="4" title="Sellers" href="/listing/create">Sell</a>
+        <a class="nav-link white-link" tabindex="4" title="Create Listing" href="/listing/create">Sell</a>
       </div>
 
 <%# navbar checks for a user variable, if it doesnt exist, then display the login button %>
 <% if (!user) { %>
     <div class="nav-item">
-      <a id="signup" tabindex="5" class="nav-link" title="Sign Up" href="/signup">Sign Up</a>
+      <a id="signup" tabindex="5" class="nav-link white-link" title="Sign Up" href="/signup">Sign Up</a>
     </div>
     <div class="nav-item">
       <a id="login-modal" tabindex="6" class="button is-primary modal-button" title="Log In" data-object="#modal-login">Log In</a>
