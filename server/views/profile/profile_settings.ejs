@@ -301,7 +301,7 @@
 									<div class="control-label is-medium">
 										<label class="label">Email Address</label>
 									</div>
-									<p class="control">
+									<p class="control is-success">
 										Verified
 									</p>
 								</div>
@@ -310,9 +310,11 @@
 										<label class="label">Stripe Connect</label>
 									</div>
 									<div class="control is-grouped">
-										<p class="control">
-											Verified
-										</p>
+										<% if (user.type >= 2) { %>
+											<p class="control is-success">Verified</p>
+										<% } else { %>
+											<p class="control is-danger">Not Verified</p>
+										<% } %>
 									</div>
 								</div>
 							</form>
