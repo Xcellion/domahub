@@ -2,6 +2,62 @@
 
 /**font**/
 @font-face {
+  font-family: 'ptsans';
+  src: url("/fonts/pt-sans/ptsans400.ttf");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'ptsans';
+  src: url("/fonts/pt-sans/ptsans700.ttf");
+  font-weight: bold;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'ptsans';
+  src: url("/fonts/pt-sans/ptsans700italics.ttf");
+  font-weight: bold;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'ptsans';
+  src: url("/fonts/pt-sans/ptsans400italics.ttf");
+  font-weight: normal;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'ssp';
+  src: url("/fonts/source-sans-pro/ssp400.ttf");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'ssp';
+  src: url("/fonts/source-sans-pro/ssp700.ttf");
+  font-weight: bold;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'ssp';
+  src: url("/fonts/source-sans-pro/ssp400italics.ttf");
+  font-weight: normal;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'ssp';
+  src: url("/fonts/source-sans-pro/ssp300.ttf");
+  font-weight: 300;
+  font-style: normal;
+}
+
+@font-face {
   font-family: 'roboto';
   src: url("/fonts/roboto/roboto400.ttf");
   font-weight: normal;
@@ -75,11 +131,14 @@
   }
 }
 
-.checkbox-wrapper + .checkbox-wrapper {
-  margin-left: 10px;
-  @include mobile {
-    margin-top: 10px;
-    margin-left: 0;
+.checkbox-wrapper {
+  &:not(:last-child) {
+    @include tablet {
+      margin: 0 10px 5px 0;
+    }
+    @include mobile {
+      margin-bottom: 5px;
+    }
   }
 }
 
@@ -160,6 +219,12 @@
   }
   &.primary-logo {
     color: $primary;
+    &-dark {
+      color: $primary-dark;
+    }
+    &-light {
+      color: $primary-light;
+    }
   }
   &.white-logo {
     color: $white;
@@ -174,11 +239,11 @@
 }
 
 .min-height {
-  min-height: calc(100vh - 320px);
+  min-height: calc(100vh - 272px);
 }
 
 .min-height-half {
-    min-height: calc(50vh - 320px);
+    min-height: calc(50vh - 272px);
 }
 
 .clear-nav {
@@ -265,7 +330,6 @@
     width: 100%;
   }
   @include mobile {
-    background-color: $grey-darker;
     padding-top: 60px;
   }
 }

@@ -9,34 +9,20 @@
 /*********************** LANDING ************************/
 @media screen and (min-width: 769px) {
   #index-img {
-    background-image: url("https://images.unsplash.com/photo-1436076838903-fd4dd41d99c4?dpr=1&auto=format&crop=entropy&fit=crop&w=1500&h=1000&q=80&cs=tinysrgb"); } }
+    background-image: url("/images/main/index_1.jpg"); } }
+
+@media screen and (max-width: 768px) {
+  #index-img {
+    background-color: #444; } }
+
+.note-text {
+  margin-top: 5px;
+  font-size: 11px; }
 
 @media screen and (min-width: 769px) {
   .title-p {
     width: 425px; }
     .title-p.is-medium {
       width: 650px; } }
-
-#beta-form-email {
-  font-family: "sharetech", "Lucida Console", monospace;
-  background-color: white;
-  border: none;
-  border-radius: 0;
-  -webkit-box-shadow: 0 0 0 black 0;
-  -moz-box-shadow: 0 0 0 black 0;
-  box-shadow: 0 0 0 black 0;
-  -moz-transition: all 0.25s;
-  -o-transition: all 0.25s;
-  -webkit-transition: all 0.25s;
-  transition: all 0.25s;
-  color: rgba(0, 0, 0, 0.9); }
-  #beta-form-email:focus, #beta-form-email:active {
-    -webkit-box-shadow: 0 -2px 0 white inset;
-    -moz-box-shadow: 0 -2px 0 white inset;
-    box-shadow: 0 -2px 0 white inset; }
-
-#beta-form-success {
-  display: inline-flex;
-  text-transform: uppercase; }
 
 /*********************** MAIN ************************/

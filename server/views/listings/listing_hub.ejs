@@ -41,7 +41,7 @@
 							<div class="control-label is-padded">
 								<label class="label is-medium">Categories</label>
 							</div>
-							<form class="control checkbox-form">
+							<form class="control checkbox-form is-flex-wrap">
 								<%# using for loop to generate all categories %>
 								<% for (var x = 0; x < categories_front.length; x++) {%>
 									<div class="checkbox-wrapper">
@@ -117,12 +117,12 @@
 							<input class="input is-medium" tabindex="17" type="text" placeholder="Exclude (separate by comma)">
 						</div>
 					</div>
-					<div class="listing-buttons jc-flexEnd">
+					<div class="is-flex-wrap jc-flexEnd">
 						<a id="filter-cancel-button" class="button is-medium">Cancel</a>
 						<a id="filter-apply-button" class="button is-medium is-primary">Apply Filters</a>
 					</div>
 				</div>
-				<div class="listing-buttons">
+				<div class="is-flex-wrap">
 					<a id="submit-button" class="button is-primary is-disabled is-medium">Submit</a>
 					<a id="filter-open-button" class="button is-medium">Filters</a>
 					<%# <a class="button is-medium is-grey">

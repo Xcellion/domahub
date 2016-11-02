@@ -6,12 +6,6 @@
     $color-invert: nth($pair, 2)
     &.is-#{$name}
       background-color: $color
-  &.is-full
-    padding: 60px 0
-    position: relative
-    display: flex
-    flex-direction: row
-    justify-content: center
   // Responsiveness
   +desktop
     // Sizes
@@ -20,6 +14,8 @@
   &.is-medium
     +desktop
       padding: 120px 20px
+    +tablet
+      padding: 90px 20px
     +mobile
       padding: 60px 20px
     &-top
@@ -30,5 +26,16 @@
   &.is-large
     +desktop
       padding: 240px 20px
+    +tablet
+      padding: 150px 20px
     +mobile
       padding: 80px 20px
+  &.is-fullheight
+    height: 100vh
+    +desktop
+      padding: 240px 20px
+    +tablet
+      padding: 150px 20px
+    +mobile
+      padding: 80px 20px
+      height: 100%

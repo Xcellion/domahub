@@ -11,8 +11,16 @@
 
 #index-img {
   @include tablet {
-    background-image: url('https://images.unsplash.com/photo-1436076838903-fd4dd41d99c4?dpr=1&auto=format&crop=entropy&fit=crop&w=1500&h=1000&q=80&cs=tinysrgb');
+    background-image: url('/images/main/index_1.jpg');
   }
+  @include mobile {
+    background-color: $grey-dark;
+  }
+}
+
+.note-text {
+  margin-top: 5px;
+  font-size: 11px;
 }
 
 .title-p {
@@ -25,22 +33,14 @@
 }
 
 #beta-form-email {
-  font-family: $shareTech;
-  background-color: $white;
-  border: none;
-  border-radius: 0;
-  @include box-shadow(0,0,0,$black,0);
-  @include transition(all 0.25s);
-  color: $text;
-  &:focus,
-  &:active {
-    @include box-shadow(0,-2px,0,$white-primary, inset);
-  }
+
 }
 
-#beta-form-success {
-  display: inline-flex;
-  text-transform: uppercase;
-}
+// #beta-form-success {
+//   display: flex;
+//   justify-content: center;
+//   align-items: center;
+//   text-transform: uppercase;
+// }
 
 /*********************** MAIN ************************/
