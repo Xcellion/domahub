@@ -21,6 +21,43 @@ module.exports = {
 		}
 	},
 
+	//gets all listings search history for a user
+	getAccountListingsSearch : function(req, res, next){
+
+		//if we dont already have the list of listings search history
+		if (!req.user.listings_search){
+			Account.getAccountListingsSearch(req.user.id, function(result){
+				if (result.state=="error"){error.handler(req, res, result.info);}
+				else {
+					var temp_listings = [];
+					var temp_obj = {};
+
+					//format the results
+					for (var x = 0; x < result.info.length; x++){
+						if (!temp_obj || temp_obj.domain_name != result.info[x].domain_name){
+							temp_obj = {
+								domain_name : result.info[x].domain_name,
+								count : [result.info[x].count],
+								months_away : [result.info[x].months_away]
+							}
+							temp_listings.push(temp_obj);
+						}
+						else {
+							temp_obj.months_away.push(result.info[x].months_away);
+							temp_obj.count.push(result.info[x].count);
+						}
+					}
+
+					req.user.listings_search = temp_listings;
+					next();
+				}
+			});
+		}
+		else {
+			next();
+		}
+	},
+
 	//gets all rentals for a user
 	getAccountRentals : function(req, res, next){
 
@@ -82,7 +119,7 @@ module.exports = {
 			message: Auth.messageReset(req),
 			user: req.user,
 			rentals: req.user.rentals || false,
-			listings: req.user.listings || false
+			listings_search: req.user.listings_search || false
 		});
 	},
 

@@ -43,7 +43,7 @@ module.exports = function(app, db, auth, error, stripe){
 	//check if user is legit, get all listings, get all rentals
 	app.get("/profile/dashboard", [
 		auth.checkLoggedIn,
-		profile_functions.getAccountListings,
+		profile_functions.getAccountListingsSearch,
 		profile_functions.getAccountRentals,
 		profile_functions.renderDashboard
 	]);

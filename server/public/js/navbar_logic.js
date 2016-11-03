@@ -65,7 +65,7 @@ $(document).ready(function() {
 		}
 	});
 
-	var pages_white_nav = ["listings", "faq", "contact", "getstarted", "profile"];
+	var pages_white_nav = ["listings", "faq", "contact", "getstarted", "profile", "mission", "about", "press"];
 	var current_page = (window.location.pathname == "/") ? "/" : window.location.pathname.split("/")[1];
 
 	//remove white link if not a page that needs it
