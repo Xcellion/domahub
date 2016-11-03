@@ -96,7 +96,7 @@ module.exports = {
 				});
 			}
 			else {
-				error.handler(req, res, "Please use the same email for payments as your Domahub account!", "json");
+				error.handler(req, res, "Please use the same email for payments as your DomaHub account!", "json");
 			}
 		}
 	},

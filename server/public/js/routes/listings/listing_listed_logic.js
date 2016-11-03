@@ -4,7 +4,7 @@ $(document).ready(function() {
 	//stripe configuration
 	handler = StripeCheckout.configure({
 		key: 'pk_test_kcmOEkkC3QtULG5JiRMWVODJ',
-		name: 'Domahub Domain Rental',
+		name: 'DomaHub Domain Rental',
 		image: '/images/d-logo.PNG',
 		panelLabel: 'Pay',
 		zipCode : true,
