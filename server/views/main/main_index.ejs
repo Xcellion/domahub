@@ -107,13 +107,18 @@
   <section class="section is-large">
     <div class="container">
       <div class="columns">
-        <div class="column margin-bottom-50">
+        <div class="column is-2 is-hidden-mobile">
+          <figure class="image left-aligned is-128x128">
+            <img src="/images/lib/material/store.svg" />
+          </figure>
+        </div>
+        <div class="column is-half margin-bottom-50">
           <div class="content">
             <h1 class="title is-bold is-3">
               A new, simple, and user-friendly marketplace
               designed with you in mind.
             </h1>
-            <p class="title-p is-medium is-blacklight">
+            <p class="is-blacklight">
               We are creating opportunities for both owners and renters.
               For owners, domain rentals become an additional revenue stream,
               allowing them to generate newfound income. For renters, domains
@@ -122,6 +127,7 @@
             </p>
           </div>
         </div>
+
       </div>
       <div class="columns">
         <div class="column hover-scale">
@@ -172,12 +178,17 @@
   <section class="section is-large">
     <div class="container">
       <div class="columns">
-        <div class="column margin-bottom-50">
+        <div class="column is-2 is-hidden-mobile">
+          <figure class="image is-128x128">
+            <img src="/images/lib/material/thumb-up.svg" />
+          </figure>
+        </div>
+        <div class="column is-half margin-bottom-50">
           <div class="content">
             <h1 class="title is-3 is-bold">
               Benefitting both sides of every transaction.
             </h1>
-            <p class="title-p is-medium is-blacklight">
+            <p class="is-blacklight">
               Rentals produce for domain owners and create new opportunities for buyers.
               Visit the pages below to learn more about what DomaHub offers as well as
               what you can do with a domain name rental.
@@ -196,7 +207,7 @@
               We work hard to ensure that transfer
               is simple, quick, and hassle-free.
             </p>
-            <a class="button is-accent is-medium" href="/sellers" title="Learn More - Sellers">Learn More</a>
+            <a class="button is-primary is-medium" href="/sellers" title="Learn More - Sellers">Learn More</a>
           </div>
         </div>
         <div class="column">
@@ -222,7 +233,7 @@
 
         </div>
         <div class="column is-4">
-          <div class="content">
+          <div class="content has-text-centered">
             <h2 class="title is-4 is-bold">
               We are currently in Closed Beta.
             </h2>
@@ -231,13 +242,13 @@
             </p>
           </div>
           <form id="beta-form" action="/beta" method="post">
-            <p class="control has-addons">
-              <input id="beta-form-email" class="input" type="email" name="betaemail" placeholder="Enter your email"/>
+            <p class="control has-addons has-addons-centered">
+              <input id="beta-form-email" class="input is-expanded" type="email" name="betaemail" placeholder="Enter your email"/>
               <a id="beta-form-submit" class="button is-primary" href="#mailingsubmitted">Sign Up</a>
             </p>
           </form>
           <div id="beta-form-success" class="is-hidden">
-            <div class="notification">
+            <div class="notification has-text-centered is-primary">
               Success!
             </div>
           </div>
