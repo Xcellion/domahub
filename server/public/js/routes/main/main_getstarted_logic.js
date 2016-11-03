@@ -9,7 +9,7 @@ $(document).ready(function() {
     });
 
     $(".next").click(function() {
-        $(this).parents(".column").addClass("is-hidden");
-        $(this).parents(".column").next(".column").removeClass("is-hidden");
+        $(this).parents(".column").addClass("is-hidden").fadeOut("slow");
+        $(this).parents(".column").next(".column").removeClass("is-hidden").fadeIn("slow");
     });
 });
