@@ -104,9 +104,10 @@ a
       box-shadow: inset 0 -2px 0 $primary
   &.white-link
     color: $white-primary
-    &-underlined
-      color: $white-primary
-      +box-shadow(0,-2px,0,0,$white,inset)
+    &:hover
+      -moz-box-shadow: inset 0 -2px 0 $white-primary
+      -webkit-box-shadow: inset 0 -2px 0 $white-primary
+      box-shadow: inset 0 -2px 0 $white-primary
   &.orange-link
     color: $accent
     &:hover
