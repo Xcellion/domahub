@@ -7,7 +7,6 @@
   }
   p,
   a {
-    font-size: $size-5;
     line-height: 1.4;
   }
   h3 + p {
@@ -27,7 +26,6 @@
 .faq-question {
   @include transition(all 0.25s ease);
   display: inline-flex;
-  color: $text;
   font-weight: bold;
   padding: 5px 0;
   position: relative;

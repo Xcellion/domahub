@@ -3,7 +3,6 @@
 
 .qa-wrapper p,
 .qa-wrapper a {
-  font-size: 18px;
   line-height: 1.4; }
 
 .qa-wrapper h3 + p {
@@ -22,7 +21,6 @@
   -webkit-transition: all 0.25s ease;
   transition: all 0.25s ease;
   display: inline-flex;
-  color: rgba(0, 0, 0, 0.9);
   font-weight: bold;
   padding: 5px 0;
   position: relative; }
