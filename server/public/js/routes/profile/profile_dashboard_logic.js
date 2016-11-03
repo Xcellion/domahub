@@ -23,6 +23,7 @@ $(document).ready(function() {
         chart_dataset.push({
             borderColor: temp_color,
             backgroundColor: temp_color,
+            fill: false,
             label: listings_search[x].domain_name,
             data: listings_search[x].count
         });
@@ -33,6 +34,8 @@ $(document).ready(function() {
         var temp_month = moment(new Date() - (2592000000 * (y+1))).format("MMM");
         monthly_labels.unshift(temp_month);
     }
+
+    Chart.defaults.global.tooltips.mode = "x-axis";
 
     var myChart = new Chart($("#myChart")[0], {
         type: 'line',
