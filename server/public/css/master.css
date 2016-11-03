@@ -5884,21 +5884,3 @@ a.nav-item.is-tab {
 .input-file:focus + label {
   outline: 1px dotted #000;
   outline: -webkit-focus-ring-color auto 3px; }
-
-/********************** LINEBREAK ******************/
-#linebreak {
-  border-bottom: 1px solid #e0e0e0;
-  margin: 60px auto 20px auto;
-  position: relative;
-  width: 100%; }
-
-#linebreak2 {
-  border-bottom: 1px solid #e0e0e0;
-  position: relative;
-  margin: 15px auto 25px auto;
-  width: 100%; }
-
-#linebreak3 {
-  border-bottom: 1px solid #e0e0e0;
-  margin: 5px auto 5px auto;
-  width: 50%; }
