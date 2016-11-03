@@ -70,11 +70,11 @@
 					<box class="box no-shadow">
 						<table id="domain_table" class="table">
 							<caption class="caption">
-								My Listings
+								My Listings View Count
 							</caption>
 						</table>
 
-						<canvas id="myChart" width="400" height="400"></canvas>
+						<canvas id="myChart"></canvas>
 
 						<a class="button is-accent" href="/listing/create" title="Create a new listing">Create a new listing</a>
 					</box>
@@ -121,6 +121,7 @@
 	<%- include("../templates/footer"); %>
 	<%- include("../templates/js_scripts"); %>
 	<script src="/js/lib/moment.min.js" type="text/javascript"></script>
+	<script src="/js/lib/randomColor.js" type="text/javascript"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.3.0/Chart.min.js" type="text/javascript"></script>
 	<script type="text/javascript">
 		//redirect to homepage if user is not defined

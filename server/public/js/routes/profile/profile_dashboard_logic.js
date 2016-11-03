@@ -1,28 +1,24 @@
-function getRandomColor() {
-    var letters = '0123456789ABCDEF'.split('');
-    var color = '#';
-    for (var i = 0; i < 6; i++ ) {
-        color += letters[Math.floor(Math.random() * 16)];
-    }
-    return color;
-}
-
 $(document).ready(function() {
     createListingGraph(listings_search);
     createRentalRows(rentals);
 
     var chart_dataset = [];
     var monthly_labels = [];
+    //random green-ish color
+    var temp_colors = randomColor({
+        hue: 'green',
+        luminosity: 'dark',
+        count: listings_search.length
+    });
 
-    //loop through all listings
+    //loop through all listings to create the dataset
     for (var x = 0; x < listings_search.length; x++){
-        var temp_color = getRandomColor();
         while (listings_search[x].count.length < 6){
             listings_search[x].count.unshift(0);
         }
         chart_dataset.push({
-            borderColor: temp_color,
-            backgroundColor: temp_color,
+            borderColor: temp_colors[x],
+            backgroundColor: temp_colors[x],
             fill: false,
             label: listings_search[x].domain_name,
             data: listings_search[x].count
@@ -35,14 +31,25 @@ $(document).ready(function() {
         monthly_labels.unshift(temp_month);
     }
 
-    Chart.defaults.global.tooltips.mode = "x-axis";
-
+    //create the chart
     var myChart = new Chart($("#myChart")[0], {
         type: 'line',
         data: {
             labels: monthly_labels,
             datasets: chart_dataset
-        }
+        },
+        options: {
+            responsive: true,
+            //tooltip to display all values at a specific X-axis
+            tooltips: {
+                mode: 'x-axis',
+                callbacks: {
+                    label: function(tooltipItems, data) {
+                        return " " + tooltipItems.yLabel + ' Views';
+                    }
+                }
+            },
+         }
     });
 });
 
