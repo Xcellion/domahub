@@ -72,14 +72,9 @@
 							<caption class="caption">
 								My Listings
 							</caption>
-							<thead>
-								<tr>
-									<th>Domain Name</th>
-									<th>Status</th>
-								</tr>
-							</thead>
-							<tbody id="listing_table"></tbody>
 						</table>
+
+						<canvas id="myChart" width="400" height="400"></canvas>
 
 						<a class="button is-accent" href="/listing/create" title="Create a new listing">Create a new listing</a>
 					</box>
@@ -126,10 +121,11 @@
 	<%- include("../templates/footer"); %>
 	<%- include("../templates/js_scripts"); %>
 	<script src="/js/lib/moment.min.js" type="text/javascript"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.3.0/Chart.min.js" type="text/javascript"></script>
 	<script type="text/javascript">
 		//redirect to homepage if user is not defined
 		var user = <% if(typeof user != "undefined"){ %><%-JSON.stringify(user)%><% }else{ %>window.location="/"<% } %>;
-		var listings = <% if(typeof listings != "undefined"){ %><%-JSON.stringify(listings)%><% }else{ %>""<% } %>;
+		var listings_search = <% if(typeof listings_search != "undefined"){ %><%-JSON.stringify(listings_search)%><% }else{ %>""<% } %>;
 		var rentals = <% if(typeof rentals != "undefined"){ %><%-JSON.stringify(rentals)%><% }else{ %>""<% } %>;
 	</script>
 	<script src="/js/routes/profile/profile_dashboard_logic.js" type="text/javascript"></script>
