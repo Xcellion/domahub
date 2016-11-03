@@ -27,21 +27,30 @@
         margin-bottom: 10px
     display: flex
     flex-direction: column
-    justify-content: center
-    align-items: center
+    align-items: flex-start
     &.left-aligned
       flex-direction: row
       justify-content: flex-start
       .button:not(:last-child)
         margin-right: 20px
         margin-bottom: 0
+    &.right-aligned
+      flex-direction: row
+      justify-content: flex-start
+      .button:not(:last-child)
+        margin-left: 20px
+        margin-bottom: 0
   +tablet
     display: flex
-    justify-content: center
+    flex-wrap: wrap
+    .button
+      margin-top: 10px
     .button:not(:last-child)
       margin-right: 20px
     &.left-aligned
       justify-content: flex-start
+    &.right-aligned
+      justify-content: flex-end
 
 // Containers
 .hero-head,
@@ -206,11 +215,10 @@
         padding-bottom: 250px
         padding-top: 250px
   &.is-fullheight
-    +tablet
-      min-height: 100vh
-      max-height: 100vh
-      .hero-body
-        align-items: center
-        display: flex
-        & > .container
-          flex-grow: 1
+    min-height: 100vh
+    .hero-body
+      align-items: center
+      display: flex
+      & > .container
+        flex-grow: 1
+        flex-shrink: 1

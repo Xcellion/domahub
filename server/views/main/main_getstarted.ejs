@@ -11,101 +11,137 @@
 
   <%- include("../templates/navbar", {user: user}); %>
 
-  <section class="min-height">
-
-
-  <section id="gs1" class="hero is-large clear-nav">
+  <section class="hero is-fullheight is-primary">
     <div class="hero-body">
-      <div class="container has-text-centered">
-        <h1 class="title is-2 is-accent">What can we help you with?</h1>
-        <h2 class="subtitle is-4 is-blacklight">Please select one of the options below:</h2>
-        <div class="hero-buttons">
-          <a id="gs-choice-rent" class="button is-large">I want to rent a domain</a>
-          <a id="gs-choice-list" class="button is-large">I want to list my domain(s)</a>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section id="gs2" class="hero is-large clear-nav is-hidden">
-    <div class="hero-body">
-      <div class="container has-text-centered">
-        <h1 class="title is-2 is-accent">What type of domain are you looking for?</h1>
-        <h2 class="subtitle is-4 is-blacklight">Please select all that apply:</h2>
-        <div class="hero-buttons">
-          <a class="button gsb is-large no-shadow is-outlined is-primary">
-            <span class="icon">
-              <i class="fa fa-laptop"></i>
-            </span>
-            <span>Start-Up</span>
-          </a>
-          <a class="button gsb is-large no-shadow is-outlined is-info">
-            <span class="icon">
-              <i class="fa fa-building"></i>
-            </span>
-            <span>Business</span>
-          </a>
-          <a class="button gsb is-large no-shadow is-outlined is-accent">
-            <span class="icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span>Event</span>
-          </a>
-          <a class="button gsb is-large no-shadow is-outlined is-purple">
-            <span class="icon">
-              <i class="fa fa-money"></i>
-            </span>
-            <span>Promotion</span>
-          </a>
-          <a class="button gsb is-large no-shadow is-outlined is-danger">
-            <span class="icon">
-              <i class="fa fa-gift"></i>
-            </span>
-            <span>Holiday</span>
-          </a>
-          <a class="button gsb is-large no-shadow is-outlined is-dark">
-            <span class="icon">
-              <i class="fa fa-industry"></i>
-            </span>
-            <span>Industry</span>
-          </a>
-          <a class="button gsb is-large is-light no-shadow">
-            I'm not sure
-          </a>
-        </div>
-        <div class="hero-buttons">
-          <a class="button next-button is-success is-medium">
-            <span>Next</span>
-            <span class="icon">
-              <i class="fa fa-arrow-circle-o-right"></i>
-            </span>
-          </a>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section id="gs3" class="hero is-large clear-nav is-hidden">
-    <div class="hero-body">
-      <div class="container has-text-centered">
-        <h1 class="title is-2 is-accent">How long will you need it for?</h1>
-        <h2 class="subtitle is-4 is-blacklight">Please input the time desired below (enter 0 if you're not sure):</h2>
+      <div class="container">
         <div class="columns">
-          <div class="column">
-            <p class="control has-addons has-addons-centered">
-              <span class="select">
-                <select>
-                  <option>Hours</option>
-                  <option>Days</option>
-                  <option>Months</option>
-                  <option>Years</option>
-                </select>
-              </span>
-              <input class="input" type="text" placeholder="Enter a number">
-              <a class="button next-button is-success">
-                Submit
+          <div class="column is-3">
+
+          </div>
+          <div class="column is-half">
+            <progress class="progress is-small is-accent" min="0" max="100"></progress>
+          </div>
+        </div>
+        <div class="columns">
+          <div class="column is-3">
+            <h3 class="gs-error-message"></h3>
+          </div>
+          <div id="gs1" class="column is-half">
+            <div class="content">
+              <h1 class="title is-2 is-white">Hello and welcome to DomaHub!</h1>
+              <h2 class="is-white">How can we help you?</h2>
+            </div>
+            <div class="hero-buttons">
+              <a id="gs-choice-rent" class="button is-primary is-inverted is-large" tabindex="7">
+                I want to rent a domain.</a>
+              <a id="gs-choice-list" class="button is-primary is-inverted is-large" tabindex="8">
+                I want to list a domain.</a>
+            </div>
+          </div>
+          <div id="gs2" class="column is-half is-hidden">
+            <div class="content">
+              <h1 class="title is-2 is-white">What type of domain are you looking for?</h1>
+              <h2 class="is-white">Domains fall under various categories. Select
+                the ones you are interested in!</h2>
+            </div>
+            <div class="hero-buttons">
+              <a class="button gsb is-large no-shadow is-white is-outlined" tabindex="7">
+                <span class="icon">
+                  <i class="fa fa-laptop"></i>
+                </span>
+                <span>Start-Up</span>
               </a>
+              <a class="button gsb is-large no-shadow is-white is-outlined" tabindex="7">
+                <span class="icon">
+                  <i class="fa fa-building"></i>
+                </span>
+                <span>Business</span>
+              </a>
+              <a class="button gsb is-large no-shadow is-white is-outlined" tabindex="8">
+                <span class="icon">
+                  <i class="fa fa-calendar-o"></i>
+                </span>
+                <span>Event</span>
+              </a>
+              <a class="button gsb is-large no-shadow is-white is-outlined" tabindex="9">
+                <span class="icon">
+                  <i class="fa fa-money"></i>
+                </span>
+                <span>Promotion</span>
+              </a>
+              <a class="button gsb is-large no-shadow is-white is-outlined" tabindex="10">
+                <span class="icon">
+                  <i class="fa fa-gift"></i>
+                </span>
+                <span>Holiday</span>
+              </a>
+              <a class="button gsb is-large no-shadow is-white is-outlined" tabindex="11">
+                <span class="icon">
+                  <i class="fa fa-industry"></i>
+                </span>
+                <span>Industry</span>
+              </a>
+              <a class="button gsb is-large no-shadow is-white is-outlined" tabindex="12">
+                I'm not sure
+              </a>
+            </div>
+            <div class="hero-buttons right-aligned">
+              <a class="button next is-white is-blank no-shadow" tabindex="13">
+                <span>Next</span>
+                <span class="icon">
+                  <i class="fa fa-angle-right"></i>
+                </span>
+              </a>
+            </div>
+          </div>
+          <div id="gs3" class="column is-half is-hidden">
+            <div class="content">
+              <h1 class="title is-2 is-white">When will you need the domain?</h1>
+              <h2 class="is-white">Use the calendar to select date range. Leave
+              blank if you are not sure.</h2>
+            </div>
+            <div class="control is-grouped">
+              <p class="control is-expanded">
+                <input class="input is-expanded" type="date">
+              </p>
+              <p class="control is-expanded">
+                <input class="input is-expanded" type="date">
+              </p>
+            </div>
+            <div class="hero-buttons right-aligned">
+              <a class="button next is-white is-blank no-shadow" tabindex="13">
+                <span>Next</span>
+                <span class="icon">
+                  <i class="fa fa-angle-right"></i>
+                </span>
+              </a>
+            </div>
+          </div>
+          <div id="gs4" class="column is-half is-hidden">
+            <div class="content">
+              <h1 class="title is-2 is-white">What is your budget?</h1>
+              <h2 class="is-white">Input a number in the field below. Leave blank
+              if you are not sure.</h2>
+            </div>
+            <p class="control has-addons has-addons-centered">
+              <span class="icon is-medium is-white">
+                <i class="fa fa-dollar"></i>
+              </span>
+              <input class="input is-expanded" type="number" min="1" placeholder="Enter a number">
             </p>
+            <div class="hero-buttons right-aligned">
+              <a class="button next is-white is-blank no-shadow" tabindex="13">
+                <span>Next</span>
+                <span class="icon">
+                  <i class="fa fa-angle-right"></i>
+                </span>
+              </a>
+            </div>
+          </div>
+          <div id="gs5" class="column is-half is-hidden">
+            <div class="content">
+              <h1 class="title is-2 is-accent">Review and Submit</h1>
+            </div>
           </div>
         </div>
       </div>
