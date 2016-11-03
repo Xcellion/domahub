@@ -39,32 +39,32 @@
 							</p>
 						</a>
 						<div class="panel-list">
-							<a class="panel-block" href="#">
-								<span class="panel-icon">
-									<i class="fa fa-list-alt"></i>
-								</span>
-								Currently listed
-							</a>
-							<a class="panel-block" href="#">
-								<span class="panel-icon">
-									<i class="fa fa-ellipsis-h"></i>
-								</span>
-								Pending approval
-							</a>
-							<a class="panel-block" href="#">
+							<a class="panel-block filter-local" id="expiring_filter">
 								<span class="panel-icon">
 									<i class="fa fa-exclamation-circle"></i>
 								</span>
 								Expiring soon
 							</a>
-							<a class="panel-block" href="#">
+							<a class="panel-block filter-local" id="expired_filter">
 								<span class="panel-icon">
-									<i class="fa fa-history"></i>
+									<i class="fa fa-calendar-times-o"></i>
 								</span>
-								History
+								Expired
+							</a>
+							<a class="panel-block filter-local" id="active_filter">
+								<span class="panel-icon">
+									<i class="fa fa-check-circle-o"></i>
+								</span>
+								Currently Active
+							</a>
+							<a class="panel-block filter-local" id="inactive_filter">
+								<span class="panel-icon">
+									<i class="fa fa-times-circle-o"></i>
+								</span>
+								Currently Inactive
 							</a>
 							<div class="panel-block has-button">
-								<a class="button is-primary is-outlined is-fullwidth">
+								<a class="button is-primary is-outlined is-fullwidth filter-local" id="reset_filter">
 									Reset all filters
 								</a>
 							</div>
@@ -72,82 +72,82 @@
 					</nav>
 				</div>
 
-			<div class="column is-three-quarters">
+				<div class="column is-three-quarters">
 
-				<div id="no-rows" class="box has-text-centered is-hidden no-shadow radius-right-only">
-					There are no rentals!
-				</div>
+					<div id="no-rows" class="box has-text-centered is-hidden no-shadow radius-right-only">
+						There are no rentals!
+					</div>
 
-				<div class="rows-exist box no-shadow radius-right-only">
+					<div class="rows-exist box no-shadow radius-right-only">
 
-					<nav class="pagination margin-bottom-25">
-						<a id="prev-page" class="button">Previous</a>
-						<a id="next-page" class="button">Next page</a>
-						<ul id="page-list"></ul>
-					</nav>
+						<nav class="pagination margin-bottom-25">
+							<a id="prev-page" class="button">Previous</a>
+							<a id="next-page" class="button">Next page</a>
+							<ul id="page-list"></ul>
+						</nav>
 
-					<table class="table">
-						<thead>
-							<tr>
-								<th class="td-arrow"></th>
-								<th class="td-domain">
-									Domain Name
-									<span class="icon is-small is-disabled"><i class="fa fa-sort"></i></span>
-								</th>
-								<th class="td-status">
-									Status
-									<span class="icon is-small is-disabled"><i class="fa fa-sort"></i></span>
-								</th>
-								<th class="td-address">
-									Address
-									<span class="icon is-small is-disabled"><i class="fa fa-sort"></i></span>
-								</th>
-								<th class="td-view"></th>
-							</tr>
-						</thead>
-						<tbody id="table_body"></tbody>
-					</table>
+						<table class="table">
+							<thead>
+								<tr>
+									<th class="td-arrow"></th>
+									<th class="td-domain">
+										Domain Name
+										<span class="icon is-small is-disabled"><i class="fa fa-sort"></i></span>
+									</th>
+									<th class="td-status">
+										Status
+										<span class="icon is-small is-disabled"><i class="fa fa-sort"></i></span>
+									</th>
+									<th class="td-address">
+										Address
+										<span class="icon is-small is-disabled"><i class="fa fa-sort"></i></span>
+									</th>
+									<th class="td-view"></th>
+								</tr>
+							</thead>
+							<tbody id="table_body"></tbody>
+						</table>
 
-					<nav class="pagination-control">
-						<div class="control is-horizontal">
-							<div class="control-label">
-								<label class="label">Show per page&#58</label>
-							</div>
-							<div class="control">
-								<div class="select">
-									<select id="domains-per-page">
-										<option selected value="5">5</option>
-										<option value="25">25</option>
-										<option value="50">50</option>
-										<option value="100">100</option>
-									</select>
+						<nav class="pagination-control">
+							<div class="control is-horizontal">
+								<div class="control-label">
+									<label class="label">Show per page&#58</label>
+								</div>
+								<div class="control">
+									<div class="select">
+										<select id="domains-per-page">
+											<option selected value="5">5</option>
+											<option value="25">25</option>
+											<option value="50">50</option>
+											<option value="100">100</option>
+										</select>
+									</div>
 								</div>
 							</div>
-						</div>
-						<div class="control">
-							<p class="control has-addons has-addons-right">
-								<input id="go-to-page-input" class="input" type="number" min="1" value="1" />
-								<a id="go-to-page-button" class="button is-primary">
-									Go to page
-								</a>
-							</p>
-						</div>
-					</nav>
+							<div class="control">
+								<p class="control has-addons has-addons-right">
+									<input id="go-to-page-input" class="input" type="number" min="1" value="1" />
+									<a id="go-to-page-button" class="button is-primary">
+										Go to page
+									</a>
+								</p>
+							</div>
+						</nav>
 
+					</div>
 				</div>
-			</div>
 
+			</div>
 		</div>
-	</div>
-</section>
+	</section>
 
 	<%- include("../templates/footer"); %>
 	<%- include("../templates/js_scripts"); %>
 	<script src="/js/lib/moment.min.js" type="text/javascript"></script>
 	<script type="text/javascript">
-		//redirect to homepage if user is not defined
-		var user = <% if(typeof user != "undefined"){ %><%-JSON.stringify(user)%><% }else{ %>window.location="/"<% } %>;
-		var rentals = <% if(typeof rentals != "undefined"){ %><%-JSON.stringify(rentals)%><% }else{ %>""<% } %>;
+	//redirect to homepage if user is not defined
+	var user = <% if(typeof user != "undefined"){ %><%-JSON.stringify(user)%><% }else{ %>window.location="/"<% } %>;
+	var rentals = <% if(typeof rentals != "undefined"){ %><%-JSON.stringify(rentals)%><% }else{ %>""<% } %>;
 	</script>
 	<script src="/js/routes/profile/profile_myrentals_logic.js" type="text/javascript"></script>
 	<script src="/js/routes/profile/profile_pagination_logic.js" type="text/javascript"></script>

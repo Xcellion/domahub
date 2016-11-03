@@ -12,6 +12,8 @@
 
 	<%- include("../templates/navbar", {user: user}); %>
 
+	<section class='min-height'>
+
 	<div class="container clear-nav-profile">
 		<div class="tabs is-centered">
 			<ul>
@@ -24,7 +26,7 @@
 		</div>
 	</div>
 
-  <section class="section min-height">
+  <section class="section">
     <div class="container">
       <div class="columns">
 				<div class="column is-one-quarter">
@@ -55,7 +57,7 @@
 
 				<div class="column">
 					<div id="basic" class="card is-fullwidth margin-bottom-25 is-hidden">
-						<header class="card-header">
+						<header class="card-header no-shadow">
 							<p class="card-header-title">
 								Basic Information &nbsp<span id="basic-message" class="setting-message"></span>
 							</p>
@@ -290,7 +292,7 @@
 
 					</div>
 					<div id="verifications" class="card is-fullwidth margin-bottom-25 is-hidden" >
-						<header class="card-header">
+						<header class="card-header no-shadow">
 							<p class="card-header-title">
 								Account Verifications
 							</p>
@@ -321,7 +323,7 @@
 						</div>
 					</div>
 					<div id="transactions" class="card is-fullwidth margin-bottom-25 is-hidden" >
-						<header class="card-header">
+						<header class="card-header no-shadow">
 							<p class="card-header-title">
 								Transactions
 							</p>
@@ -400,7 +402,7 @@
 						</div>
 					</div>
 					<div id="history" class="card is-fullwidth margin-bottom-25 is-hidden" >
-						<header class="card-header">
+						<header class="card-header no-shadow">
 							<p class="card-header-title">
 								History
 							</p>
@@ -487,7 +489,7 @@
 						</div>
 					</div>
 					<div id="pending" class="card is-fullwidth margin-bottom-25 is-hidden" >
-						<header class="card-header">
+						<header class="card-header no-shadow">
 							<p class="card-header-title">
 								Pending
 							</p>
@@ -497,7 +499,7 @@
 						</div>
 					</div>
 					<div id="earnings" class="card is-fullwidth margin-bottom-25 is-hidden" >
-						<header class="card-header">
+						<header class="card-header no-shadow">
 							<p class="card-header-title">
 								Earnings
 							</p>
@@ -507,7 +509,7 @@
 						</div>
 					</div>
 					<div id="details" class="card is-fullwidth margin-bottom-25 is-hidden" >
-						<header class="card-header">
+						<header class="card-header no-shadow">
 							<p class="card-header-title">
 								Payment Details
 							</p>
@@ -522,6 +524,8 @@
 			</div>
 
 		</div>
+	</section>
+
 	</section>
 
 	<%- include("../templates/footer"); %>

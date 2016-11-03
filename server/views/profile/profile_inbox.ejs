@@ -11,6 +11,8 @@
 <body>
 	<%- include("../templates/navbar", {user: user}); %>
 
+	<section class='min-height'>
+
 	<div class="container clear-nav-profile">
 		<div class="tabs is-centered">
 			<ul>
@@ -28,10 +30,10 @@
 			<div class="columns">
 				<div class="column is-one-quarter">
 					<nav class="panel is-hidden-mobile">
-						<p class="panel-tabs">
+						<%# <p class="panel-tabs">
 							<a class="is-active" href="#">Recent</a>
 							<a href="#">Message Requests</a>
-						</p>
+						</p>%>
 						<a class="panel-search">
 							<p class="control has-icon">
 								<input id="search-user" class="input" type="text" placeholder="Search contacts" />
@@ -63,7 +65,7 @@
 									  <a id="new-message" class="button is-small">
 									    <span>&#43 New Message</span>
 									  </a>
-									  <a class="button is-small">
+									  <%# <a class="button is-small">
 									    <span class="icon is-small is-marginless">
 									      <i class="fa fa-cog"></i>
 									    </span>
@@ -74,7 +76,7 @@
 									      <i class="fa fa-search"></i>
 									    </span>
 											<span></span>
-									  </a>
+									  </a>%>
 									</p>
 								</div>
 							</div>
@@ -86,14 +88,14 @@
 							<div id="msg-text-wrapper">
 								<textarea id="msg_text_input" class="textarea to-reset" name="msg_text" placeholder="Press Enter to send"></textarea>
 								<div id="msg-text-footer">
-									<div class="msg-text-footer-item">
+									<%# <div class="msg-text-footer-item">
 										<a class="button is-small is-blank">
 											<span class="icon">
 												<i class="fa fa-smile-o"></i>
 											</span>
 											<span>Emoji</span>
 										</a>
-									</div>
+									</div>%>
 									<div class="msg-text-footer-item">
 										<p>
 											Press enter to send
@@ -109,6 +111,8 @@
 				</div>
 			</div>
 		</div>
+	</section>
+
 	</section>
 
 	<%- include("../templates/footer"); %>

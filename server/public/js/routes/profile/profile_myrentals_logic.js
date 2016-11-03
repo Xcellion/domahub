@@ -158,7 +158,7 @@ function createFormDrop(rental_info){
 function createDatesDrop(rental_info){
     var temp_col = $("<div class='column'></div>");
 
-    var temp_div = $('<div class="control is-horizontal"></div>');
+    var temp_div = $('<div class="has-text-right is-horizontal"></div>');
 
     var control_wrapper = $("<div class='control is-horizontal'></div>");
     var start_label = $("<p class=''>Start Date</p>");

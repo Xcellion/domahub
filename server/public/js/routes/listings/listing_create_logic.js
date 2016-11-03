@@ -355,7 +355,7 @@ function submitListingsPremium(submit_button, submit_data){
         //stripe configuration
         var handler = StripeCheckout.configure({
             key: 'pk_test_kcmOEkkC3QtULG5JiRMWVODJ',
-            name: 'Domahub Domain Rentals',
+            name: 'DomaHub Domain Rentals',
             image: '/images/d-logo.PNG',
             panelLabel: 'Pay Monthly',
             zipCode : true,

@@ -65,36 +65,31 @@ $(document).ready(function() {
 		}
 	});
 
-	var pages_white_nav = ["listings", "faq", "contact", "getstarted"];
+	var pages_white_nav = ["listings", "faq", "contact", "getstarted", "profile"];
 	var current_page = (window.location.pathname == "/") ? "/" : window.location.pathname.split("/")[1];
 
+	//remove white link if not a page that needs it
 	if (pages_white_nav.indexOf(current_page) != -1){
-		navbar_white(true);
-	}
-	else {
-		$(window).scroll(function(e){
-
-			//before the top
-			if ($(this).scrollTop() <= 0 && $(".nav").hasClass("has-shadow")) {
-				navbar_white(false);
-			}
-			//past the top
-			else if ($(this).scrollTop() > 0 && !$(".nav").hasClass("has-shadow")){
-				navbar_white(true);
-			}
-		});
-	}
-
-});
-
-//function to toggle navbar with white background
-function navbar_white(bool){
-	if (bool){
-		$(".nav").addClass("has-shadow is-white");
 		$(".nav-link").removeClass("white-link");
 	}
-	else {
-		$(".nav").removeClass("has-shadow is-white");
-		$(".nav-link").addClass("white-link");
-	}
-}
+
+	$(window).scroll(function(e){
+
+		//before the top
+		if ($(this).scrollTop() <= 0 && $(".nav").hasClass("has-shadow")) {
+			$(".nav").removeClass("has-shadow is-white");
+			if (pages_white_nav.indexOf(current_page) != -1){
+				$(".nav-link").removeClass("white-link");
+			}
+			else {
+				$(".nav-link").addClass("white-link");
+			}
+		}
+		//past the top
+		else if ($(this).scrollTop() > 0 && !$(".nav").hasClass("has-shadow")){
+			$(".nav").addClass("has-shadow is-white");
+			$(".nav-link").removeClass("white-link");
+		}
+	});
+
+});
