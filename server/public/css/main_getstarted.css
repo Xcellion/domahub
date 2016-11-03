@@ -1,0 +1,33 @@
+@-webkit-keyframes fader {
+  0% {
+    opacity: 0; }
+  100% {
+    opacity: 1; } }
+
+@-moz-keyframes fader {
+  0% {
+    opacity: 0; }
+  100% {
+    opacity: 1; } }
+
+@-o-keyframes fader {
+  0% {
+    opacity: 0; }
+  100% {
+    opacity: 1; } }
+
+@keyframes fader {
+  0% {
+    opacity: 0; }
+  100% {
+    opacity: 1; } }
+
+.column {
+  -webkit-animation: fader 0.5s;
+  /* Safari 4+ */
+  -moz-animation: fader 0.5s;
+  /* Fx 5+ */
+  -o-animation: fader 0.5s;
+  /* Opera 12+ */
+  animation: fader 0.5s;
+  /* IE 10+, Fx 29+ */ }

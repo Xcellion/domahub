@@ -4529,7 +4529,7 @@ a.nav-item.is-tab {
           margin-bottom: 0; }
       .hero-buttons.right-aligned {
         flex-direction: row;
-        justify-content: flex-start; }
+        justify-content: flex-end; }
         .hero-buttons.right-aligned .button:not(:last-child) {
           margin-left: 20px;
           margin-bottom: 0; } }
@@ -5479,13 +5479,31 @@ a.nav-item.is-tab {
       padding: 60px 20px; } }
   @media screen and (min-width: 980px) {
     .section.is-large {
-      padding: 240px 20px; } }
-  @media screen and (min-width: 769px) {
+      padding: 200px 20px; } }
+  @media screen and (min-width: 769px) and (max-width: 979px) {
     .section.is-large {
       padding: 150px 20px; } }
   @media screen and (max-width: 768px) {
     .section.is-large {
       padding: 80px 20px; } }
+  @media screen and (min-width: 980px) {
+    .section.gs-section {
+      padding: 220px 20px 20px; } }
+  @media screen and (min-width: 769px) and (max-width: 979px) {
+    .section.gs-section {
+      padding: 150px 20px 20px; } }
+  @media screen and (max-width: 768px) {
+    .section.gs-section {
+      padding: 100px 20px 0; } }
+  @media screen and (min-width: 980px) {
+    .section.gs-section-small {
+      padding: 0 20px 272px; } }
+  @media screen and (min-width: 769px) and (max-width: 979px) {
+    .section.gs-section-small {
+      padding: 0 20px 272px; } }
+  @media screen and (max-width: 768px) {
+    .section.gs-section-small {
+      padding: 0 20px 200px; } }
   @media screen and (min-width: 980px) {
     .section.is-fullheight {
       padding: 360px 20px; } }
