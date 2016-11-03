@@ -23,39 +23,35 @@ module.exports = {
 
 	//gets all listings search history for a user
 	getAccountListingsSearch : function(req, res, next){
+		Account.getAccountListingsSearch(req.user.id, function(result){
+			if (result.state=="error"){
+				req.user.listings_search = false;
+				next();
+			}
+			else {
+				var temp_listings = [];
+				var temp_obj = {};
 
-		//if we dont already have the list of listings search history
-		if (!req.user.listings_search){
-			Account.getAccountListingsSearch(req.user.id, function(result){
-				if (result.state=="error"){error.handler(req, res, result.info);}
-				else {
-					var temp_listings = [];
-					var temp_obj = {};
-
-					//format the results
-					for (var x = 0; x < result.info.length; x++){
-						if (!temp_obj || temp_obj.domain_name != result.info[x].domain_name){
-							temp_obj = {
-								domain_name : result.info[x].domain_name,
-								count : [result.info[x].count],
-								months_away : [result.info[x].months_away]
-							}
-							temp_listings.push(temp_obj);
+				//format the results
+				for (var x = 0; x < result.info.length; x++){
+					if (!temp_obj || temp_obj.domain_name != result.info[x].domain_name){
+						temp_obj = {
+							domain_name : result.info[x].domain_name,
+							count : [result.info[x].count],
+							months_away : [result.info[x].months_away]
 						}
-						else {
-							temp_obj.months_away.push(result.info[x].months_away);
-							temp_obj.count.push(result.info[x].count);
-						}
+						temp_listings.push(temp_obj);
 					}
-
-					req.user.listings_search = temp_listings;
-					next();
+					else {
+						temp_obj.months_away.push(result.info[x].months_away);
+						temp_obj.count.push(result.info[x].count);
+					}
 				}
-			});
-		}
-		else {
-			next();
-		}
+
+				req.user.listings_search = temp_listings;
+				next();
+			}
+		});
 	},
 
 	//gets all rentals for a user
@@ -112,7 +108,6 @@ module.exports = {
 	},
 
 	//----------------------------------------------------------------------RENDERS----------------------------------------------------------
-
 
 	renderDashboard : function(req, res){
 		res.render("profile/profile_dashboard", {
