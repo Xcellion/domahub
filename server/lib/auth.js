@@ -172,7 +172,7 @@ module.exports = {
 	//function to make sure user is NOT logged in
 	isNotLoggedIn : function(req, res, next) {
 		if (req.isAuthenticated()){
-			res.redirect("/");		//if user is authenticated in the session redirect to main page
+			res.redirect("/profile");		//if user is authenticated in the session redirect to main page
 		}
 		else {
 			next();
