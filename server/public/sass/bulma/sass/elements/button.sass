@@ -45,6 +45,10 @@
     border-color: $control-hover
   &:active
     box-shadow: 0 4px 5px 0 rgba(0,0,0,.14),0 1px 10px 0 rgba(0,0,0,.12),0 2px 4px -1px rgba(0,0,0,.2)
+  // Modifiers
+  &.no-shadow
+    +box-shadow(0,0,0,$black,0)
+
   // Colors
   @each $name, $pair in $colors
     $color: nth($pair, 1)
@@ -72,26 +76,26 @@
         &:after
           border-color: transparent transparent $color-invert $color-invert !important
       &.is-outlined
+        +transition(none)
         background-color: transparent
         border-color: $color
         color: $color
         &:hover,
-        &:focus,
+        &:active,
         &.is-active
           background-color: $color
           border-color: $color
           color: $color-invert
-
-  &.is-blank
-    +box-shadow(0,0,0,$black,0)
-    background-color: transparent
-    border-color: transparent
-    color: $text
-    &:hover,
-    &:focus
-      background-color: $border
-  &.no-shadow
-    +box-shadow(0,0,0,$black,0)
+        &:focus
+          border-color: $color-invert
+        &.is-active
+          +transition(all 0.25s ease)
+      &.is-blank
+        background-color: transparent
+        border-color: transparent
+        color: $color
+        &:focus
+          border-color: $color
 
   // Sizes
   &.is-small

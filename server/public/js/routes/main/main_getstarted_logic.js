@@ -8,8 +8,8 @@ $(document).ready(function() {
         $(this).toggleClass("is-active");
     });
 
-    $(".next-button").click(function() {
-        $(this).parents(".hero").addClass("is-hidden");
-        $(this).parents(".hero").next(".hero").removeClass("is-hidden");
+    $(".next").click(function() {
+        $(this).parents(".column").addClass("is-hidden");
+        $(this).parents(".column").next(".column").removeClass("is-hidden");
     });
 });
