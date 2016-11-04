@@ -5390,6 +5390,12 @@ a.nav-item.is-tab {
   @media screen and (max-width: 768px) {
     .section.is-large {
       padding: 80px 20px; } }
+  @media screen and (min-width: 769px) {
+    .section.listing-section {
+      height: 625px; } }
+  @media screen and (max-width: 768px) {
+    .section.listing-section {
+      height: 500px; } }
   .section.gs-section {
     height: 60vh;
     padding: 200px 20px 0; }
