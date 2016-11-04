@@ -11,11 +11,23 @@
 
   <%- include("../templates/navbar", {user: user}); %>
 
+  <section class="clear-nav">
+    <div class="container">
+      <div class="tabs is-centered">
+        <ul>
+          <li><a href="/about">About Us</a></li>
+          <li><a href="/press">Press and Media</a></li>
+          <li class="is-active"><a href="/faq">FAQ</a></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
   <section class="section clear-nav is-medium">
     <div class="container">
       <div class="columns">
         <div class="column is-one-quarter is-hidden-mobile">
-          <aside class="menu">
+          <aside class="menu is-fixed">
             <ul class="menu-list">
               <p class="control has-icon">
 								<input id="search-faq" tabindex="7" class="input" type="text" placeholder="Search FAQ" />
@@ -36,7 +48,6 @@
           </aside>
         </div>
         <div class="column is-two-thirds">
-          <h1 class="title is-3 is-bold">Frequently Asked Questions</h1>
           <div id="about" class="faq-section">
             <h2 class="title faq-header is-normal has-borderBottom">About DomaHub</h2>
             <div class="qa-wrapper">
