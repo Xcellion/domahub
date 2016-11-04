@@ -100,7 +100,7 @@ function createRowDrop(listing_info, rownum){
         var unverified_div = $("<div class='unverified-div div-drop'></div>");
             var unverified_a = $("<a class='bottom-margin-25 button is-primary verify-link'></a>");
                 unverified_a.data("href", '/listing/' + listing_info.domain_name + '/verify');
-                var unverified_span2 = $("<span>Please verify that you own this domain</span>");
+                var unverified_span2 = $("<span>Please verify that you own this domain</span></a");
                 unverified_a.append(unverified_span2);
         var unverified_faq = $("<div class='has-text-centered'><a class='orange-link' href='/faq#verifying'>Unsure how to verify?</a></div>");
 

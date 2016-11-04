@@ -126,60 +126,15 @@ listing_model.prototype.getCurrentRental = function(domain_name, callback){
 				rental_times.date,\
 				rental_times.duration \
 			FROM rentals \
-			INNER JOIN listings \
+			LEFT JOIN listings \
 			ON rentals.listing_id = listings.id \
 			LEFT OUTER JOIN rental_times \
 			ON rentals.rental_id = rental_times.rental_id \
 			WHERE listings.domain_name = ? \
-			AND rentals.active = 1 \
-			ORDER BY rentals.rental_id ASC";
-	listing_query(query, "Failed to get current rental info for domain " + domain_name + "!", function(result){
-		if (result.state == "success" && result.info.length){
-			var now = new Date().getTime();
-			var bool = true;
-
-			//loop through to see if any overlap
-			for (var x = 0; x < result.info.length; x++){
-				var existingStart = result.info[x].date;
-
-				if (now < existingStart + result.info[x].duration
-				&& now >= existingStart)
-				{
-					bool = false;
-					callback({
-						state: "success",
-						rental_id: result.info[x].rental_id,
-						info: result.info[x]
-					})
-					break;
-				}
-			}
-
-			//none of them are active right now!
-			if (bool){
-				callback({
-					state: "success",
-					rental_id: false
-				})
-			}
-		}
-
-		//no rentals to loop through
-		else if (result.state == "success" && result.info.length == 0){
-			callback({
-				state: "success",
-				rental_id: false
-			})
-		}
-
-		//some sort of error
-		else {
-			callback({
-				state: "error",
-				info: "Failed to get current rental for listing #"
-			});
-		}
-	}, domain_name);
+			AND (UNIX_TIMESTAMP(NOW()) * 1000) BETWEEN rental_times.date AND rental_times.date + rental_times.duration \
+			AND listings.status >= 1 \
+			AND rentals.active = 1";
+	listing_query(query, "Failed to get current rental info for domain " + domain_name + "!", callback, domain_name);
 }
 
 //gets all rental times for a specific rental

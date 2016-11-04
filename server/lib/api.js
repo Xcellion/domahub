@@ -54,23 +54,18 @@ function getCurrentRental(req, res, domain_name){
 	}
 	else {
 		Listing.getCurrentRental(domain_name, function(result){
-			if (result.state != "success"){error.handler(req, res, false, "api");}
+			if (result.state != "success" || result.info.length == 0){
+				console.log("Not rented! Redirecting to listing page");
+				delete req.session.rented;
+				res.redirect("https://domahub.com/listing/" + domain_name)
+			}
 			else {
 				//current rental exists!
-				if (result.rental_id){
-					console.log("Currently rented! Proxying request...");
+				console.log("Currently rented! Proxying request...");
 
-					req.session.hostname = url.parse(result.info.address).hostname;
-					req.session.rented = result.info.address;
-					proxyReq(req, res);
-				}
-
-				//redirect to listing page
-				else {
-					console.log("Not rented! Redirecting to listing page");
-					delete req.session.rented;
-					res.redirect("https://domahub.com/listing/" + domain_name)
-				}
+				req.session.hostname = url.parse(result.info[0].address).hostname;
+				req.session.rented = result.info[0].address;
+				proxyReq(req, res);
 			}
 		});
 	}
