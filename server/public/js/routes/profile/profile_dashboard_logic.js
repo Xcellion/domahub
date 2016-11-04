@@ -45,7 +45,8 @@ $(document).ready(function() {
                 mode: 'x-axis',
                 callbacks: {
                     label: function(tooltipItems, data) {
-                        return " " + tooltipItems.yLabel + ' Views';
+                        var views_plural = (tooltipItems.yLabel == 1) ? " view" : " views"
+                        return data.datasets[tooltipItems.datasetIndex].label + " - " + tooltipItems.yLabel + views_plural;
                     }
                 }
             },

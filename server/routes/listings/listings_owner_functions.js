@@ -292,10 +292,35 @@ module.exports = {
 		}
 	},
 
+	//function to check the posted status change of a listing
+	checkListingStatus : function(req, res, next){
+		var status = parseFloat(req.body.status);
+		var domain_name = req.params.domain_name;
+
+		//if status exists and is not 1 or 2
+		if (req.body.status && status != 1 && status != 2){
+			error.handler(req, res, "Invalid listing status!", "json");
+		}
+		else if (req.body.status){
+			//check to see if its currently rented
+			Listing.getCurrentRental(domain_name, function(result){
+				if (result.state != "success" || result.info.length == 0){
+					next();
+				}
+				else {
+					error.handler(req, res, "This listing is currently being rented!", "json");
+				}
+			});
+		}
+		else {
+			next();
+		}
+	},
+
 	//function to check and reformat new listings details
 	checkListingDetails : function(req, res, next){
- 		var status = parseFloat(req.body.status);
-        var buy_link = req.body.buy_link;
+		var status = parseFloat(req.body.status);
+		var buy_link = req.body.buy_link;
         var description = sanitize(req.body.description);
         var hour_price = parseFloat(req.body.hour_price);
         var day_price = parseFloat(req.body.day_price);
@@ -303,12 +328,8 @@ module.exports = {
         var month_price = parseFloat(req.body.month_price);
         var categories = (req.body.categories) ? sanitize(req.body.categories.replace(/\s\s+/g, ' ').toLowerCase()) : "";
 
-		//if status exists and is not 1 or 2
-		if (req.body.status && status != 1 && status != 2){
-			error.handler(req, res, "Invalid listing status!", "json");
-		}
 		//if buy_link exists and is not a valid url
-		else if (req.body.buy_link && !validator.isURL(buy_link, { protocols: ["http", "https"]})){
+		if (req.body.buy_link && !validator.isURL(buy_link, { protocols: ["http", "https"]})){
 			error.handler(req, res, "Invalid listing purchase link!", "json");
 		}
 		//if description exists and is not a valid url
