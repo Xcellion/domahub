@@ -14,14 +14,21 @@
 	<body>
 		<%- include("../templates/navbar", {user: user}); %>
 
-		<section id="listing-img" class="section is-fullheight landing-img">
+		<section id="listing-img" class="section listing-section landing-img">
+
+		</section>
+
+		<section class="section is-medium">
 			<div class="container">
 				<div class="columns">
 					<div class="column is-half">
 						<div class="content">
 							<a href="http://<%= listing_info.domain_name %>">
-							<h1 class="title is-2 is-bold is-primary is-inline-block">
+							<h1 class="title is-1 is-bold is-primary is-inline-block">
 							<%= listing_info.domain_name %></h1></a>
+							<p>
+								<%= listing_info.description %>
+							</p>
 						</div>
 						<span class="tag is-primary is-large margin-bottom-50 is-uppercase">
 							<% if (listing_info.status) { %>
@@ -40,10 +47,10 @@
 						</div>
 						<% } %>
 					</div>
-					<div class="column is-half">
-						<div class="content">
-							<h1 class="title is-3 is-bold">Owner Information</h1>
-						</div>
+					<div class="column is-1">
+
+					</div>
+					<div class="column">
 						<article class="media">
 							<figure class="media-left">
 								<p class="image profile-image is-64x64">
