@@ -1,8 +1,18 @@
 var	account_model = require('../models/account_model.js');
+
 var	validator = require('validator');
 var	request = require('request');
 var bodyParser = require('body-parser');
 var urlencodedParser = bodyParser.urlencoded({ extended: false })
+var nodemailer = require('nodemailer');
+var sgTransport = require('nodemailer-sendgrid-transport');
+
+var mailOptions = {
+    auth: {
+        api_key: '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'
+    }
+}
+var mailer = nodemailer.createTransport(sgTransport(mailOptions));
 
 module.exports = function(app, db, auth, error){
 	Auth = auth;
@@ -97,7 +107,6 @@ function contactUs(req, res, next){
 	var contact_message = req.body.contact_message;
 
 	if (!contact_name){
-		console.log(error)
 		error.handler(req, res, "Please enter your name!", "json");
 	}
 	else if (!contact_message){
@@ -107,6 +116,20 @@ function contactUs(req, res, next){
 		error.handler(req, res, "Please enter a valid email address!", "json");
 	}
 	else {
-		console.log('w')
+		//email options
+		var email = {
+			from: req.body.contact_email,
+			to: 'general@domahub.com',
+			subject: '[CONTACT FORM] - ' + req.body.contact_name + ' says hello! ',
+			text: req.body.contact_message
+		};
+
+		//send email
+		mailer.sendMail(email, function(err) {
+			if (err) {console.log(err)}
+			res.send({
+				state: "success"
+			});
+		});
 	}
 }

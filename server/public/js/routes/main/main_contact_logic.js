@@ -30,7 +30,7 @@ function submitContact(){
                 console.log('s')
             }
             else {
-
+                
             }
         });
     }
