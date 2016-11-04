@@ -2,7 +2,5 @@
 @import 'mixins';
 
 #listing-img {
-  @include tablet {
-    background-image: url('https://source.unsplash.com/category/people');
-  }
+  background-image: url('https://source.unsplash.com/category/people');
 }
