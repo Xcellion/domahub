@@ -2819,14 +2819,6 @@ input:-webkit-autofill {
     .card-header.is-accent > .card-header-title {
       color: white; }
 
-@media screen and (max-width: 768px) {
-  .card + .card:not(:first-child) {
-    margin-top: 25px; } }
-
-@media screen and (min-width: 769px) {
-  .card + .card:not(:first-child) {
-    margin-left: 25px; } }
-
 .card-header-title {
   align-items: flex-start;
   display: flex;
@@ -4197,7 +4189,7 @@ a.nav-item.is-tab {
   float: left;
   margin: 0 8px 0 -2px; }
   .panel-icon .fa {
-    font-size: 18px;
+    font-size: 16px;
     line-height: inherit; }
 
 .panel-heading {
