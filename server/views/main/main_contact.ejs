@@ -26,25 +26,25 @@
           <form id="contact-form">
             <label class="error_message label is-medium">Name</label>
             <p class="control">
-              <input id="contact_name" class="input is-medium" name="contact_name" type="text" placeholder="Your Name">
+              <input id="contact_name" required class="input is-medium" name="contact_name" type="text" placeholder="Your Name">
             </p>
             <label class="error_message label is-medium">Email Address</label>
             <p class="control">
-              <input id="contact_email" class="input is-medium" name="contact_email" type="email" placeholder="Your Email">
+              <input id="contact_email" required class="input is-medium" name="contact_email" type="email" placeholder="Your Email">
             </p>
             <label class="error_message label is-medium">Message</label>
             <p class="control">
-              <textarea id="contact_message" class="textarea" name="contact_message" placeholder="Type your message here"></textarea>
+              <textarea id="contact_message" required class="textarea" name="contact_message" placeholder="Type your message here"></textarea>
             </p>
             <nav class="level">
               <div class="level-left">
                 <div class="level-item">
-                  <input type="submit" class="button is-primary is-medium"></input>
+                  <input id='submit-button' type="submit" class="button is-primary is-medium"></input>
                 </div>
               </div>
               <div class="level-right">
                 <div class="level-item">
-                  <p id="error-message" class="is-danger">
+                  <p id="error_message" class="is-hidden is-danger">
                     Please fill in all the fields!
                   </p>
                 </div>

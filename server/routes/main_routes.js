@@ -109,12 +109,12 @@ function contactUs(req, res, next){
 	if (!contact_name){
 		error.handler(req, res, "Please enter your name!", "json");
 	}
-	else if (!contact_message){
-		error.handler(req, res, "Please say something!", "json");
-	}
 	else if (!validator.isEmail(contact_email)){
 		error.handler(req, res, "Please enter a valid email address!", "json");
 	}
+    else if (!contact_message){
+        error.handler(req, res, "Please say something!", "json");
+    }
 	else {
 		//email options
 		var email = {
