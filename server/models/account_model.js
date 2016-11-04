@@ -69,8 +69,21 @@ account_model.prototype.getAccountByToken = function(token, callback){
 account_model.prototype.getAccountListings = function(account_id, callback){
 	console.log("Attempting to get all listings belonging to account " + account_id + "...");
 	query = "SELECT \
-				listings.* \
+				listings.*, \
+				rented_table.rented \
 			FROM listings \
+			LEFT JOIN \
+				(SELECT \
+					listings.id AS listing_id, \
+					rentals.rental_id IS NOT NULL AS rented \
+				FROM rental_times \
+				INNER JOIN rentals \
+					ON rental_times.rental_id = rentals.rental_id \
+				INNER JOIN listings \
+					ON listings.id = rentals.listing_id \
+				WHERE (UNIX_TIMESTAMP(NOW())*1000) BETWEEN rental_times.date AND rental_times.date + rental_times.duration \
+			) as rented_table \
+			ON rented_table.listing_id = listings.id \
 			WHERE owner_id = ? \
 			ORDER BY listings.id ASC";
 	account_query(query, "Failed to get all listings belonging to account " + account_id + "!", callback, account_id);

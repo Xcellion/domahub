@@ -91,7 +91,10 @@ $(document).ready(function() {
 //function to filter listings or rentals
 function filterCheck(type, data){
     //listings
-    if (type == "premium_filter"){
+    if (type == "rented_filter"){
+        return data.rented == 1;
+    }
+    else if (type == "premium_filter"){
         return data.exp_date != 0;
     }
     else if (type == "basic_filter"){

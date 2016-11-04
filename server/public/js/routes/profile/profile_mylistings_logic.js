@@ -341,7 +341,7 @@ function createImgDrop(listing_info, rownum){
     var temp_x = $('<button class="delete ' + verified_disabled + '"></button>');
     var temp_img = $("<img class='is-listing' alt='Image not found' src=" + background_image + " />");
     var temp_footer = $("<footer class='card-footer'></div>");
-    var temp_form = $('<form id="mult-form' + rownum + '" class="drop-form-file card-footer-item" action="/listing/create/batch" method="post" enctype="multipart/form-data"></form>')
+    var temp_form = $('<form id="mult-form' + rownum + '" class="drop-form-file card-footer-item" action="/listings/create/batch" method="post" enctype="multipart/form-data"></form>')
     var temp_input = $('<input type="file" id="file' + rownum + '" name="background_image" accept="image/png, image/gif, image/jpeg" class="picture-file changeable-input input-file ' + verified_disabled + '" />');
     var temp_input_label = $('<label for="file' + rownum + '" class="button ' + verified_disabled + '"><i class="fa fa-upload"></i><p class="file-label">Change Picture</p></label>');
     temp_input.data("name", "background_image");
