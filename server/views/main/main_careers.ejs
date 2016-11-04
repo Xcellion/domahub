@@ -11,45 +11,44 @@
 
   <%- include("../templates/navbar", {user: user}); %>
 
-  <section class="min-height">
-
-  <section id="careers-img" class="hero is-primary is-medium landing-img">
-    <div class="img-wrapper">
-      <div class="hero-body">
-        <div class="container has-text-centered">
-          <h1 class="title is-normal">
-            Every journey begins with one step
-          </h1>
-        </div>
-      </div>
-      <div class="hero-foot">
-        <nav class="tabs is-boxed is-centered">
-          <ul>
-            <li class="tab is-active"><a href="/careers" title="Culture">Our Culture</a></li>
-            <li class="tab"><a href="/careers" title="Benefits">Benefits</a></li>
-            <li class="tab"><a href="/careers" title="Job Openings">Current Openings</a></li>
-          </ul>
-        </nav>
+  <section class="is-medium clear-nav">
+    <div class="container">
+      <div class="tabs is-centered">
+        <ul>
+          <li class="is-active"><a href="/careers">Job Openings</a></li>
+          <li><a >Working at DomaHub</a></li>
+          <li><a >Benefits</a></li>
+        </ul>
       </div>
     </div>
   </section>
 
-  <section class="section">
+  <section class="section min-height">
     <div class="container">
       <div class="columns">
-        <div class="column is-half is-offset-3 has-text-centered">
+        <div class="column is-half">
+          <div class="notification is-primary">
+            There are no open positions at this time.
+          </div>
           <div class="content">
-            <h2>Careers</h2>
             <p>
-              DomaHub is not currently hiring. <br />Please come back for
-              possible opportunities in the near future!
+              However, if you would like to contribute to DomaHub in any way,
+              shape or form, please contact us at <a class="orange-link" href="mailto:general@domahub.com">
+              general@domahhub.com</a>.
+            </p>
+            <p>
+              We are especially interested in any graphics and design related
+              contributions. Payment will obviously be discussed...
+              <span class="icon">
+                <i class="fa fa-smile-o"></i>
+              </span>
             </p>
           </div>
         </div>
       </div>
     </div>
   </section>
-</section>
+
 
   <%- include("../templates/footer"); %>
   <%- include("../templates/js_scripts"); %>
