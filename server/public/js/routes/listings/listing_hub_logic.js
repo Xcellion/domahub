@@ -196,7 +196,7 @@ function submitData(){
         can_submit = false;
         $("#submit-button").addClass("is-loading");
         $.ajax({
-            url: "/testing",
+            url: "/listing/search",
             method: "POST",
             data: getSubmitData()
         }).done(function(data){
