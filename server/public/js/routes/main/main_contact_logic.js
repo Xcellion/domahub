@@ -7,13 +7,18 @@ $(document).ready(function() {
         submitContact();
     });
 
+    //hide any existing error messages
+    $("input, textarea").on("keyup", function(e){
+        $("#error_message").addClass("is-hidden");
+    });
+
 });
 
 //function to submit contact form
 function submitContact(){
     if (can_submit) {
         can_submit = false;
-        $("#contact-form").addClass('is-loading');
+        $("#submit-button").addClass('is-loading');
         $.ajax({
             url: "/contact",
             data: {
@@ -24,13 +29,12 @@ function submitContact(){
             method: "POST"
         }).done(function(data){
             can_submit = true;
-            $("#contact-form").removeClass('is-loading');
-
+            $("#submit-button").removeClass('is-loading');
             if (data.state == "error"){
-                console.log('s')
+                $("#error_message").text(data.message).removeClass("is-hidden");
             }
             else {
-                
+                //to do, empty the values and say thank you
             }
         });
     }
