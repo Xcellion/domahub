@@ -24,19 +24,19 @@
             </p>
           </div>
           <form id="contact-form">
-            <label class="label is-medium">Name</label>
+            <label class="error_message label is-medium">Name</label>
             <p class="control">
-              <input class="input is-medium" type="text" placeholder="Your Name">
+              <input id="contact_name" class="input is-medium" name="contact_name" type="text" placeholder="Your Name">
             </p>
-            <label class="label is-medium">Email Address</label>
+            <label class="error_message label is-medium">Email Address</label>
             <p class="control">
-              <input class="input is-medium" type="email" placeholder="Your Email">
+              <input id="contact_email" class="input is-medium" name="contact_email" type="email" placeholder="Your Email">
             </p>
-            <label class="label is-medium">Message</label>
+            <label class="error_message label is-medium">Message</label>
             <p class="control">
-              <textarea class="textarea is-medium" placeholder="Type your message here"></textarea>
+              <textarea id="contact_message" class="textarea is-medium" name="contact_message" placeholder="Type your message here"></textarea>
             </p>
-            <a class="button is-primary is-medium">Submit</a>
+            <input type="submit" class="button is-primary is-medium"></input>
           </form>
         </div>
       </div>
@@ -45,6 +45,7 @@
 
   <%- include("../templates/footer"); %>
   <%- include("../templates/js_scripts"); %>
+  <script src="/js/routes/main/main_contact_logic.js" type="text/javascript"></script>
 
 </body>
 
