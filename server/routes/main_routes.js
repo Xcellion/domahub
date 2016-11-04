@@ -34,6 +34,12 @@ module.exports = function(app, db, auth, error){
 		urlencodedParser,
 		signupBeta
 	]);
+
+	//to contact us
+	app.post("/contact", [
+		urlencodedParser,
+		contactUs
+	]);
 }
 
 //display main page
@@ -81,5 +87,26 @@ function signupBeta(req, res, next){
 			state: "error",
 			message: "Please enter a valid email address!"
 		})
+	}
+}
+
+//function to handle contact us form submission
+function contactUs(req, res, next){
+	var contact_name = req.body.contact_name;
+	var contact_email = req.body.contact_email;
+	var contact_message = req.body.contact_message;
+
+	if (!contact_name){
+		console.log(error)
+		error.handler(req, res, "Please enter your name!", "json");
+	}
+	else if (!contact_message){
+		error.handler(req, res, "Please say something!", "json");
+	}
+	else if (!validator.isEmail(contact_email)){
+		error.handler(req, res, "Please enter a valid email address!", "json");
+	}
+	else {
+		console.log('w')
 	}
 }
