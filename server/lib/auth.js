@@ -8,12 +8,12 @@ var validator = require("validator");
 var crypto = require("crypto");
 var request = require('request');
 
-var options = {
+var mailOptions = {
     auth: {
         api_key: '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'
     }
 }
-var mailer = nodemailer.createTransport(sgTransport(options));
+var mailer = nodemailer.createTransport(sgTransport(mailOptions));
 
 module.exports = {
 
