@@ -82,12 +82,11 @@
         color: $color
         &:hover,
         &:active,
+        &:focus,
         &.is-active
           background-color: $color
           border-color: $color
           color: $color-invert
-        &:focus
-          border-color: $color-invert
         &.is-active
           +transition(all 0.25s ease)
       &.is-blank

@@ -8,11 +8,64 @@
 		<title>DomaHub</title>
 		<%- include("../templates/head_links"); %>
 		<link rel="stylesheet" href="/css/lib/fullcalendar.min.css" type="text/css" />
-		<link rel="stylesheet" href="/css/listing.css" type="text/css" />
+		<link rel="stylesheet" href="/css/listing_unique.css" type="text/css" />
 	</head>
 
 	<body>
 		<%- include("../templates/navbar", {user: user}); %>
+
+		<section id="listing-img" class="section is-fullheight landing-img">
+			<div class="container">
+				<div class="columns">
+					<div class="column is-half">
+						<div class="content">
+							<a href="http://<%= listing_info.domain_name %>">
+							<h1 class="title is-2 is-bold is-primary is-inline-block">
+							<%= listing_info.domain_name %></h1></a>
+						</div>
+						<span class="tag is-primary is-large margin-bottom-50 is-uppercase">
+							<% if (listing_info.status) { %>
+							Available
+							<% } else { %>
+							Unavailable
+							<% } %>
+						</span>
+						<% if (listing_info.status) { %>
+						<div class="content">
+							<h3 class="is-bold is-blacklight is-underlined">Rates</h3>
+							<p>Hourly&#58; &#36;<%=listing_info.hour_price%></p>
+							<p>Daily&#58; &#36;<%=listing_info.day_price%></p>
+							<p>Weekly&#58; &#36;<%=listing_info.week_price%></p>
+							<p>Monthly&#58; &#36;<%=listing_info.month_price%></p>
+						</div>
+						<% } %>
+					</div>
+					<div class="column is-half">
+						<div class="content">
+							<h1 class="title is-3 is-bold">Owner Information</h1>
+						</div>
+						<article class="media">
+							<figure class="media-left">
+								<p class="image profile-image is-64x64">
+						      <img src="http://placehold.it/128x128">
+						    </p>
+							</figure>
+							<div class="media-content">
+								<div class="content">
+									<a href="/profile/inbox/<%= listing_info.username %>">
+									<h2 class="is-bold is-primary is-inline-block"><%= listing_info.username %></h2>
+									</a>
+									<p>
+										Contact
+									</p>
+								</div>
+							</div>
+						</article>
+
+					</div>
+				</div>
+			</div>
+		</section>
 
 		<div id="top_wrapper" class="page_wrapper">
 			<div id="image_wrapper">
@@ -146,7 +199,6 @@
 		<%- include("../templates/footer"); %>
 		<%- include("../templates/js_scripts"); %>
 		<script src="https://checkout.stripe.com/checkout.js"></script>
-		<script src="/js/jquery/jquery-ui.js" type="text/javascript"></script>
 		<script src="/js/lib/moment.min.js" type="text/javascript"></script>
 		<script src="/js/lib/fullcalendar.min.js" type="text/javascript"></script>
 		<script type="text/javascript">
