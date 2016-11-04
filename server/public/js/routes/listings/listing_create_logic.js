@@ -180,7 +180,7 @@ function changePage(section_id, page_refresh_bool){
     section_to_change_to.removeClass('is-hidden');  //show correct one
 
     if (!page_refresh_bool){
-        history.pushState({}, "", "/listing/create#" + section_id);
+        history.pushState({}, "", "/listings/create#" + section_id);
     }
 
     //first, disable prev
@@ -236,7 +236,7 @@ function checkHash(){
         changePage(hash.substr(1, hash.length), true);
     }
     else {
-        history.replaceState({}, "", "/listing/create");
+        history.replaceState({}, "", "/listings/create");
     }
 }
 
@@ -316,7 +316,7 @@ function submitListing(submit_button, submit_data, url){
 
 		$.ajax({
 			type: "POST",
-			url: "/listing/create/" + url,
+			url: "/listings/create/" + url,
 			data: submit_data
 		}).done(function(data){
 			can_submit = true;

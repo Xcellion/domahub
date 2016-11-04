@@ -1,9 +1,5 @@
 var	account_model = require('../models/account_model.js');
 
-var database,
-	passport,
-	error;
-
 var LocalStrategy = require('passport-local').Strategy;
 var bcrypt = require('bcrypt-nodejs');
 var nodemailer = require('nodemailer');
@@ -126,7 +122,6 @@ module.exports = {
 
 	},
 
-	//helper functions related to authentication
 	//make sure user is logged in before doing anything
 	checkLoggedIn : function(req, res, next) {
 		var route = req.path;
@@ -147,24 +142,11 @@ module.exports = {
 			}
 		}
 		else {
-			switch (req.method){
-				case ("POST"):
-					error.handler(req, res, "Invalid username / password!", "json");
-					break;
-				default:
-					//redirect them back to the listing page with message
-					if (route == "/listing/:domain_name/:rental_id"){
-						error.handler(req, res, "Invalid user!");
-					}
-					else if (route.split("/").indexOf("profile") != -1){
-						req.session.redirectBack = route;
-						res.render("account/login.ejs", {message: messageReset(req)});
-					}
-					//redirect to the default login page
-					else {
-						res.render("account/login.ejs", {message: messageReset(req)});
-					}
-					break;
+			if (req.method == "POST"){
+				error.handler(req, res, "Invalid username / password!", "json");
+			}
+			else {
+				res.render("account/login.ejs", {message: messageReset(req)});
 			}
 		}
 	},

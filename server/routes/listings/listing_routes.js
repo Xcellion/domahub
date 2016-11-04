@@ -49,26 +49,26 @@ module.exports = function(app, db, auth, error, stripe){
 	//-------------------------------------------------------------------------------------------------------------------- OWNER RELATED
 
 	//render create listing page
-	app.get('/listing/create', [
+	app.get('/listings/create', [
 		auth.checkLoggedIn,
 		owner_functions.checkAccountListingPriv,
 		owner_functions.renderCreateListing
 	]);
 
 	//render create listing page
-	app.get('/listing/create/batch', [
+	app.get('/listings/create/batch', [
 		auth.checkLoggedIn,
 		owner_functions.checkAccountListingPriv,
 		owner_functions.renderCreateListingBatch
 	]);
 
 	//redirect all /create to proper /create
-	app.get('/listing/create*', function(req, res){
-		res.redirect("/listing/create");
+	app.get('/listings/create*', function(req, res){
+		res.redirect("/listings/create");
 	})
 
 	//create a single basic listing
-	app.post('/listing/create/basic', [
+	app.post('/listings/create/basic', [
 		urlencodedParser,
 		auth.checkLoggedIn,
 		owner_functions.checkAccountListingPriv,
@@ -78,7 +78,7 @@ module.exports = function(app, db, auth, error, stripe){
 	]);
 
 	//create a single premium listing
-	app.post('/listing/create/premium', [
+	app.post('/listings/create/premium', [
 		urlencodedParser,
 		auth.checkLoggedIn,
 		owner_functions.checkAccountListingPriv,
@@ -92,7 +92,7 @@ module.exports = function(app, db, auth, error, stripe){
 	]);
 
 	//create multiple listings
-	app.post('/listing/create/batch', [
+	app.post('/listings/create/batch', [
 		auth.checkLoggedIn,
 		profile_functions.getAccountListings,
 		owner_functions.checkAccountListingPriv,
@@ -162,8 +162,8 @@ module.exports = function(app, db, auth, error, stripe){
 	//-------------------------------------------------------------------------------------------------------------------- RENTAL RELATED
 
 	//domahub easter egg page
-	app.get('/listing/domahub.com, /listing/w3bbi.com', function(req, res){
-		res.render("listing_w3bbi.ejs", {
+	app.get(['/listing/domahub.com', '/listing/w3bbi.com'], function(req, res){
+		res.render("listings/listing_w3bbi.ejs", {
 			user: req.user,
 			message: Auth.messageReset(req)
 		})

@@ -51,7 +51,7 @@ function submitListingsBatch(){
 		formData.append('csv', $('#mult-csv')[0].files[0]);
 
         $.ajax({
-			url: "/listing/create/batch",
+			url: "/listings/create/batch",
             type: 'POST',
 			data: formData,
             // Options to tell jQuery not to process data or worry about the content-type
