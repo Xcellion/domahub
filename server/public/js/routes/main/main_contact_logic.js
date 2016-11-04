@@ -28,13 +28,14 @@ function submitContact(){
             },
             method: "POST"
         }).done(function(data){
-            can_submit = true;
             $("#submit-button").removeClass('is-loading');
             if (data.state == "error"){
+                can_submit = true;
                 $("#error_message").text(data.message).removeClass("is-hidden");
             }
             else {
-                //to do, empty the values and say thank you
+                $("input, textarea").not("#submit-button").val("");
+                $("#submit-button").val("Thank you!").addClass('is-disabled');
             }
         });
     }
