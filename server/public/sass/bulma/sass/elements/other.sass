@@ -186,7 +186,7 @@
   white-space: nowrap
   &:hover,
   &:active
-    cursor: pointer
+    cursor: default
   &.is-uppercase
     text-transform: uppercase
   .delete
@@ -202,12 +202,6 @@
     &.is-#{$name}
       background-color: $color
       color: $color-invert
-      &:hover,
-      &:focus,
-      &.is-active
-        background-color: darken($color, 10%)
-        border-color: transparent
-        color: $color-invert
   // Sizes
   &.is-small
     font-size: $size-small
