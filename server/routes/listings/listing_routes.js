@@ -40,7 +40,7 @@ module.exports = function(app, db, auth, error, stripe){
 	]);
 
 	//search for a listing with specific filters
-	app.post("/testing", [
+	app.post("/listing/search", [
 		urlencodedParser,
 		search_functions.checkSearchParams,
 		search_functions.getListingBySearchParams
@@ -64,7 +64,6 @@ module.exports = function(app, db, auth, error, stripe){
 
 	//redirect all /create to proper /create
 	app.get('/listing/create*', function(req, res){
-		console.log('s')
 		res.redirect("/listing/create");
 	})
 
@@ -124,6 +123,7 @@ module.exports = function(app, db, auth, error, stripe){
 		owner_functions.checkListingVerified,
 		owner_functions.checkImageUploadSize,
 		owner_functions.checkListingImage,
+		owner_functions.checkListingStatus,
 		owner_functions.checkListingDetails,
 		owner_functions.checkListingPriceType,
 		owner_functions.checkListingExisting,
