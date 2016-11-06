@@ -11,16 +11,11 @@
     +box-shadow(0,0,0,$black,0)
     &:hover
       cursor: default
-  &.is-white
-    background-color: $white
-  &.is-primary
-    background-color: $primary
-    & > .card-header-title
-      color: $white
-  &.is-accent
-    background-color: $accent
-    & > .card-header-title
-      color: $white
+  @each $name, $pair in $colors
+    $color: nth($pair, 1)
+    $color-invert: nth($pair, 2)
+    &.is-#{$name}
+      background-color: $color
 
 // .card + .card
 //   &:not(:first-child)
@@ -97,6 +92,8 @@
   max-width: 100%
   position: relative
   width: 300px
+  &:not(:last-child)
+    margin-bottom: 25px
   &.no-shadow
     border: 1px solid $border
     +box-shadow(0,0,0,$black,0)

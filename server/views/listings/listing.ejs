@@ -14,11 +14,11 @@
 	<body>
 		<%- include("../templates/navbar", {user: user}); %>
 
-		<section id="listing-img" class="section listing-section landing-img">
+		<section class="section listing-section landing-img" style="background-image:url('<%= listing_info.background_image || 'https://source.unsplash.com/category/people' %>')">
 
 		</section>
 
-		<section class="section is-medium">
+		<section class="section is-small">
 			<div class="container">
 				<div class="columns">
 					<div class="column is-half">
@@ -37,47 +37,71 @@
 							Unavailable
 							<% } %>
 						</span>
-						<% if (listing_info.status) { %>
-						<div class="content">
-							<h3 class="is-bold is-blacklight is-underlined">Rates</h3>
-							<p>Hourly&#58; &#36;<%=listing_info.hour_price%></p>
-							<p>Daily&#58; &#36;<%=listing_info.day_price%></p>
-							<p>Weekly&#58; &#36;<%=listing_info.week_price%></p>
-							<p>Monthly&#58; &#36;<%=listing_info.month_price%></p>
+						<div class="card is-fullwidth no-shadow">
+							<div class="card-content">
+								<article class="media">
+									<figure class="media-left">
+										<p class="image profile-image is-64x64">
+								      <img src="<%= user.profile_pic || 'https://placeholdit.imgix.net/~text?txtsize=30&bg=9e9e9e&txtclr=ffffff&txt=blank&w=128&h=128' %>">
+								    </p>
+									</figure>
+									<div class="media-content">
+										<div class="content">
+											<a class="primary-link"><%= listing_info.username %></a>
+											<p class="is-blacklight">User since <%= user.date_created.substring(0,7) %></p>
+										</div>
+									</div>
+								</article>
+							</div>
+							<div class="card-footer">
+								<a class="button card-footer-item no-shadow" href="/profile/inbox/<%= listing_info.username %>">
+									<span class="icon is-small is-blacklight">
+										<i class="fa fa-envelope"></i>
+									</span>
+									<span>Message</span>
+								</a>
+							</div>
 						</div>
-						<% } %>
 					</div>
-					<div class="column is-1">
+					<div class="column is-2">
 
 					</div>
 					<div class="column">
-						<article class="media">
-							<figure class="media-left">
-								<p class="image profile-image is-64x64">
-						      <img src="http://placehold.it/128x128">
-						    </p>
-							</figure>
-							<div class="media-content">
+						<div class="card">
+							<div class="card-header no-shadow is-dark">
+
+								<h2 class="card-header-title is-white has-text-centered">
+									$500 Per Month
+								</h2>
+							</div>
+							<div class="card-content">
 								<div class="content">
-									<a href="/profile/inbox/<%= listing_info.username %>">
-									<h2 class="is-bold is-primary is-inline-block"><%= listing_info.username %></h2>
-									</a>
-									<p>
-										Contact
-									</p>
+									<h3 class="is-underlined">Other Rates</h3>
+									<% if (listing_info.status) { %>
+									<p>Hourly&#58; &#36;<%=listing_info.hour_price%></p>
+									<p>Daily&#58; &#36;<%=listing_info.day_price%></p>
+									<p>Weekly&#58; &#36;<%=listing_info.week_price%></p>
+									<p>Monthly&#58; &#36;<%=listing_info.month_price%></p>
+									<% } else { %>
+									<h3>This domain is not listed with DomaHub.</h3>
+									<% } %>
 								</div>
 							</div>
-						</article>
-
+							<div class="card-footer">
+								<% if (listing_info.status) { %>
+								<a class="card-footer-item button is-primary">Rent Now</a>
+								<% } else { %>
+								<a class="card-footer-item button is-primary">Request Listing</a>
+								<% } %>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>
 		</section>
 
 		<div id="top_wrapper" class="page_wrapper">
-			<div id="image_wrapper">
-				<img id="background_image" class="background_image noselect" width="100%" height="100%" src="<%= listing_info.background_image || 'https://source.unsplash.com/category/people' %>">
-			</div>
+
 			<div class="info_wrapper">
 
 				<div id="listing_info_wrapper">
