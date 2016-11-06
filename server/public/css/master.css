@@ -836,7 +836,7 @@ a.box {
       background-color: transparent;
       border-color: transparent;
       color: white; }
-      .button.is-white.is-blank:focus {
+      .button.is-white.is-blank:hover, .button.is-white.is-blank:active, .button.is-white.is-blank:focus {
         border-color: white; }
   .button.is-black {
     background-color: black;
@@ -876,7 +876,7 @@ a.box {
       background-color: transparent;
       border-color: transparent;
       color: black; }
-      .button.is-black.is-blank:focus {
+      .button.is-black.is-blank:hover, .button.is-black.is-blank:active, .button.is-black.is-blank:focus {
         border-color: black; }
   .button.is-grey {
     background-color: #f5f5f5;
@@ -916,7 +916,7 @@ a.box {
       background-color: transparent;
       border-color: transparent;
       color: #f5f5f5; }
-      .button.is-grey.is-blank:focus {
+      .button.is-grey.is-blank:hover, .button.is-grey.is-blank:active, .button.is-grey.is-blank:focus {
         border-color: #f5f5f5; }
   .button.is-blacklight {
     background-color: rgba(0, 0, 0, 0.66);
@@ -956,7 +956,7 @@ a.box {
       background-color: transparent;
       border-color: transparent;
       color: rgba(0, 0, 0, 0.66); }
-      .button.is-blacklight.is-blank:focus {
+      .button.is-blacklight.is-blank:hover, .button.is-blacklight.is-blank:active, .button.is-blacklight.is-blank:focus {
         border-color: rgba(0, 0, 0, 0.66); }
   .button.is-whitelight {
     background-color: rgba(255, 255, 255, 0.7);
@@ -996,7 +996,7 @@ a.box {
       background-color: transparent;
       border-color: transparent;
       color: rgba(255, 255, 255, 0.7); }
-      .button.is-whitelight.is-blank:focus {
+      .button.is-whitelight.is-blank:hover, .button.is-whitelight.is-blank:active, .button.is-whitelight.is-blank:focus {
         border-color: rgba(255, 255, 255, 0.7); }
   .button.is-light {
     background-color: #f5f5f5;
@@ -1036,7 +1036,7 @@ a.box {
       background-color: transparent;
       border-color: transparent;
       color: #f5f5f5; }
-      .button.is-light.is-blank:focus {
+      .button.is-light.is-blank:hover, .button.is-light.is-blank:active, .button.is-light.is-blank:focus {
         border-color: #f5f5f5; }
   .button.is-dark {
     background-color: #212121;
@@ -1076,7 +1076,7 @@ a.box {
       background-color: transparent;
       border-color: transparent;
       color: #212121; }
-      .button.is-dark.is-blank:focus {
+      .button.is-dark.is-blank:hover, .button.is-dark.is-blank:active, .button.is-dark.is-blank:focus {
         border-color: #212121; }
   .button.is-purple {
     background-color: #9c27b0;
@@ -1116,7 +1116,7 @@ a.box {
       background-color: transparent;
       border-color: transparent;
       color: #9c27b0; }
-      .button.is-purple.is-blank:focus {
+      .button.is-purple.is-blank:hover, .button.is-purple.is-blank:active, .button.is-purple.is-blank:focus {
         border-color: #9c27b0; }
   .button.is-primary {
     background-color: #3cbc8d;
@@ -1156,7 +1156,7 @@ a.box {
       background-color: transparent;
       border-color: transparent;
       color: #3cbc8d; }
-      .button.is-primary.is-blank:focus {
+      .button.is-primary.is-blank:hover, .button.is-primary.is-blank:active, .button.is-primary.is-blank:focus {
         border-color: #3cbc8d; }
   .button.is-primarydark {
     background-color: #309670;
@@ -1196,7 +1196,7 @@ a.box {
       background-color: transparent;
       border-color: transparent;
       color: #309670; }
-      .button.is-primarydark.is-blank:focus {
+      .button.is-primarydark.is-blank:hover, .button.is-primarydark.is-blank:active, .button.is-primarydark.is-blank:focus {
         border-color: #309670; }
   .button.is-info {
     background-color: #2196f3;
@@ -1236,7 +1236,7 @@ a.box {
       background-color: transparent;
       border-color: transparent;
       color: #2196f3; }
-      .button.is-info.is-blank:focus {
+      .button.is-info.is-blank:hover, .button.is-info.is-blank:active, .button.is-info.is-blank:focus {
         border-color: #2196f3; }
   .button.is-accent {
     background-color: #ff5722;
@@ -1276,7 +1276,7 @@ a.box {
       background-color: transparent;
       border-color: transparent;
       color: #ff5722; }
-      .button.is-accent.is-blank:focus {
+      .button.is-accent.is-blank:hover, .button.is-accent.is-blank:active, .button.is-accent.is-blank:focus {
         border-color: #ff5722; }
   .button.is-success {
     background-color: #81c784;
@@ -1316,7 +1316,7 @@ a.box {
       background-color: transparent;
       border-color: transparent;
       color: #81c784; }
-      .button.is-success.is-blank:focus {
+      .button.is-success.is-blank:hover, .button.is-success.is-blank:active, .button.is-success.is-blank:focus {
         border-color: #81c784; }
   .button.is-warning {
     background-color: #ffeb3b;
@@ -1356,7 +1356,7 @@ a.box {
       background-color: transparent;
       border-color: transparent;
       color: #ffeb3b; }
-      .button.is-warning.is-blank:focus {
+      .button.is-warning.is-blank:hover, .button.is-warning.is-blank:active, .button.is-warning.is-blank:focus {
         border-color: #ffeb3b; }
   .button.is-danger {
     background-color: #EF5350;
@@ -1396,7 +1396,7 @@ a.box {
       background-color: transparent;
       border-color: transparent;
       color: #EF5350; }
-      .button.is-danger.is-blank:focus {
+      .button.is-danger.is-blank:hover, .button.is-danger.is-blank:active, .button.is-danger.is-blank:focus {
         border-color: #EF5350; }
   .button.is-small {
     border-radius: 2px;
@@ -2810,14 +2810,34 @@ input:-webkit-autofill {
       cursor: default; }
   .card-header.is-white {
     background-color: white; }
+  .card-header.is-black {
+    background-color: black; }
+  .card-header.is-grey {
+    background-color: #f5f5f5; }
+  .card-header.is-blacklight {
+    background-color: rgba(0, 0, 0, 0.66); }
+  .card-header.is-whitelight {
+    background-color: rgba(255, 255, 255, 0.7); }
+  .card-header.is-light {
+    background-color: #f5f5f5; }
+  .card-header.is-dark {
+    background-color: #212121; }
+  .card-header.is-purple {
+    background-color: #9c27b0; }
   .card-header.is-primary {
     background-color: #3cbc8d; }
-    .card-header.is-primary > .card-header-title {
-      color: white; }
+  .card-header.is-primarydark {
+    background-color: #309670; }
+  .card-header.is-info {
+    background-color: #2196f3; }
   .card-header.is-accent {
     background-color: #ff5722; }
-    .card-header.is-accent > .card-header-title {
-      color: white; }
+  .card-header.is-success {
+    background-color: #81c784; }
+  .card-header.is-warning {
+    background-color: #ffeb3b; }
+  .card-header.is-danger {
+    background-color: #EF5350; }
 
 .card-header-title {
   align-items: flex-start;
@@ -2886,6 +2906,8 @@ input:-webkit-autofill {
   max-width: 100%;
   position: relative;
   width: 300px; }
+  .card:not(:last-child) {
+    margin-bottom: 25px; }
   .card.no-shadow {
     border: 1px solid rgba(0, 0, 0, 0.12);
     -webkit-box-shadow: 0 0 0 0 black;
@@ -5365,7 +5387,7 @@ a.nav-item.is-tab {
   .section.is-danger {
     background-color: #EF5350; }
   .section.is-small {
-    padding: 0 20px 40px; }
+    padding: 40px 20px; }
   @media screen and (min-width: 980px) {
     .section.is-medium {
       padding: 130px 20px; } }
@@ -5392,7 +5414,7 @@ a.nav-item.is-tab {
       padding: 80px 20px; } }
   @media screen and (min-width: 769px) {
     .section.listing-section {
-      height: 625px; } }
+      height: 600px; } }
   @media screen and (max-width: 768px) {
     .section.listing-section {
       height: 500px; } }
