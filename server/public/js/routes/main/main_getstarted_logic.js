@@ -9,7 +9,9 @@ $(document).ready(function() {
     });
 
     $(".next").click(function() {
-        $(this).parents(".column").addClass("is-hidden").fadeOut("slow");
-        $(this).parents(".column").next(".column").removeClass("is-hidden").fadeIn("slow");
+        var current_section = $(".current-section");
+        $(".content-section").addClass("is-hidden").fadeOut("slow");
+        current_section.next(".content-section").removeClass("is-hidden").addClass("current-section").fadeIn("slow");
+        current_section.removeClass('current-section');
     });
 });
