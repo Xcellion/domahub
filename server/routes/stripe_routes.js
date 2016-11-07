@@ -36,6 +36,7 @@ function stripeWebhookEventCatcher(req, res){
 
 //helper function to switch between event types
 function switchEvents(event, res){
+	console.log(event);
 	if (event){
 		res.sendStatus(200);
 		switch (event.type){
