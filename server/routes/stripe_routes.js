@@ -23,7 +23,6 @@ module.exports = function(app, db){
 
 //to catch all stripe web hook events
 function stripeWebhookEventCatcher(req, res){
-	console.log(req.body);
 	if (node_env == "dev"){
 		switchEvents(req.body, res)
 	}
