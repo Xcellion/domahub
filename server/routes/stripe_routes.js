@@ -15,7 +15,7 @@ var jsonParser = bodyParser.json();
 module.exports = function(app, db){
 	Listing = new listing_model(db);
 
-	app.post('/stripe/webhook/arbitrary/woohoo', [
+	app.post('/stripe/webhook', [
 		jsonParser,
 		stripeWebhookEventCatcher
 	]);
