@@ -17,7 +17,6 @@ module.exports = function(app, db, e){
 function checkHost(req, res, next){
 	if (req.headers.host){
 	    domain_name = req.headers.host.replace(/^(https?:\/\/)?(www\.)?/,'');
-		console.log(domain_name);
 		//requested domahub website, not domain
 		if (domain_name == "www.w3bbi.com"
 		 	|| domain_name == "w3bbi.com"
