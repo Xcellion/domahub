@@ -97,20 +97,16 @@
 			<div id="calendar_top_wrapper">
 
 				<div id="calendar_left_wrapper" class="info_wrapper_block">
-					<div class="button" id="remove_events">Remove all</div>
-					<div class="button" id="month_button">Month</div>
-					<div class="button" id="prev-button"><</div>
-					<div class="button" id="today-button">Today</div>
-					<div class="button" id="next-button">></div>
+					<a class="button" id="remove_events">Remove all</a>
+					<a class="button" id="month_button">Month</a>
+					<a class="button" id="prev-button"><</a>
+					<a class="button" id="today-button">Today</a>
+					<a class="button" id="next-button">></a>
 				</div>
 
 				<div id="calendar_right_wrapper" class="info_wrapper_block">
-					<% if (listing_info.status) { %>
-						<h1 id="price">$0</h1>
-					<% } else {%>
-						<h1 id="price">$?</h1>
-					<% } %>
-					<div class="button next_button" id="calendar_next">Next</div>
+					<h1 id="price">$0</h1>
+					<a class="button next_button" id="calendar_next">Next</a>
 				</div>
 			</div>
 
@@ -155,7 +151,6 @@
 			var listing_info = <% if(typeof listing_info != "undefined"){ %><%-JSON.stringify(listing_info)%><% }else{ %>""<% } %>;
 			var new_rental_info = <% if(typeof new_rental_info != "undefined"){ %><%-JSON.stringify(new_rental_info)%><% }else{ %>""<% } %>;
 			var rental_info = <% if(typeof rental_info != "undefined"){ %><%-JSON.stringify(rental_info)%><% }else{ %>""<% } %>;
-			var whoisObj = <% if(typeof whoisObj != "undefined"){ %><%-JSON.stringify(whoisObj)%><% }else{ %>""<% } %>;
 		</script>
 		<script src="/js/routes/calendar/calendar_listed_logic.js" type="text/javascript"></script>
 		<script src="/js/routes/calendar/calendar_general_logic.js" type="text/javascript"></script>
