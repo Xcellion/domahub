@@ -162,7 +162,7 @@ textarea {
 h1,
 h2,
 h3 {
-  font-family: "robotocondensed", Helvetica, sans-serif; }
+  font-family: "roboto", Helvetica, sans-serif; }
 
 h1,
 h2,
@@ -1458,7 +1458,6 @@ button {
     margin-top: 10px; }
 
 .content p {
-  font-size: 16px;
   line-height: 1.5; }
 
 .content blockquote:not(:last-child),
@@ -2806,8 +2805,6 @@ input:-webkit-autofill {
     -webkit-box-shadow: 0 0 0 0 black;
     -moz-box-shadow: 0 0 0 0 black;
     box-shadow: 0 0 0 0 black; }
-    .card-header.no-shadow:hover {
-      cursor: default; }
   .card-header.is-white {
     background-color: white; }
   .card-header.is-black {
