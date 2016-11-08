@@ -14,18 +14,18 @@
 	<body>
 		<%- include("../templates/navbar", {user: user}); %>
 
-		<section class="section listing-section landing-img" style="background-image:url('<%= listing_info.background_image || 'https://source.unsplash.com/category/people' %>')">
+		<section id="background_image" class="section listing-section landing-img" style="background-image:url('<%= listing_info.background_image || 'https://source.unsplash.com/category/people' %>')">
 
 		</section>
 
-		<section class="section is-small">
+		<section id="top_wrapper" class="page_wrapper section is-small">
 			<div class="container">
 				<div class="columns">
 					<div class="column is-half">
 						<div class="content">
-							<a href="http://<%= listing_info.domain_name %>">
+							<a class="primary-link" href="http://<%= listing_info.domain_name %>">
 							<h1 class="title is-1 is-bold is-primary is-inline-block">
-							<%= listing_info.domain_name %></h1></a>
+								<%= listing_info.domain_name %></h1></a>
 							<p>
 								<%= listing_info.description %>
 							</p>
@@ -44,7 +44,7 @@
 									</figure>
 									<div class="media-content">
 										<div class="content">
-											<a class="primary-link"><%= listing_info.username %></a>
+											<p class="is-primary"><%= listing_info.username %></p>
 											<p class="is-blacklight">User since <span id='user-since'></span></p>
 										</div>
 									</div>
@@ -80,10 +80,10 @@
 								</div>
 							</div>
 							<div class="card-footer">
-								<% if (listing_info.status) { %>
-								<a class="card-footer-item button is-primary">Rent Now</a>
+								<% if (rental_info && typeof rental_info != undefined) { %>
+									<a id="top_next_rental" class="next_button card-footer-item button is-primary">Add Times</a>
 								<% } else { %>
-								<a class="card-footer-item button is-primary">Request Listing</a>
+									<a id="top_next" class="next_button card-footer-item button is-primary">Rent Now</a>
 								<% } %>
 							</div>
 						</div>
@@ -92,38 +92,9 @@
 			</div>
 		</section>
 
-		<div id="top_wrapper" class="page_wrapper">
-
-			<div class="info_wrapper">
-
-				<div id="listing_info_wrapper">
-					<!-- information about the current listing -->
-
-
-				<div id="start_form_wrapper" class="listing_info_margin_top">
-					<% if (rental_info && typeof rental_info != undefined) { %>
-						<div class="button next_button rental_hide" id="top_next_rental">Add times</div>
-						<div class="button next_button rental_hide" id="calendar_next_rental">Edit website</div>
-					<% } else {%>
-						<div class="button is-primary next_button default_hide" id="top_next">Get started</div>
-					<% } %>
-				</div>
-
-			</div>
-
-		</div>
-
 		<div id="calendar_wrapper" class="has-text-centered">
 
 			<div id="calendar_top_wrapper">
-				<div id="calendar_price_wrapper">
-					<% if (listing_info.status) { %>
-						<p class="listing_info_text">Hour <span class="green_text">$<%=listing_info.hour_price%></span> | </p>
-						<p class="listing_info_text">Day <span class="green_text">$<%=listing_info.day_price%></span> | </p>
-						<p class="listing_info_text">Week <span class="green_text">$<%=listing_info.week_price%></span> | </p>
-						<p class="listing_info_text">Month <span class="green_text">$<%=listing_info.month_price%></span></p>
-					<% } %>
-				</div>
 
 				<div id="calendar_left_wrapper" class="info_wrapper_block">
 					<div class="button" id="remove_events">Remove all</div>
