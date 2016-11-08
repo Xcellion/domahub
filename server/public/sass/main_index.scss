@@ -24,8 +24,9 @@
 }
 
 .title-p {
+  font-size: $size-5;
   @include tablet {
-    width: 425px;
+    width: 550px;
     &.is-medium {
       width: 650px;
     }
