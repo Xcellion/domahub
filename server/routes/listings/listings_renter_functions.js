@@ -213,6 +213,7 @@ module.exports = {
 		});
 	},
 
+	//render a listing that is listed on domahub
 	renderListing : function(req, res, next){
 		//clear out rental_id session if navigating back
 		if (!req.params.rental_id){
@@ -225,8 +226,7 @@ module.exports = {
 			message: Auth.messageReset(req),
 			listing_info: req.session.listing_info,
 			new_rental_info : req.session.new_rental_info || false,
-			rental_info : req.session.rental_info || false,
-			available: 3
+			rental_info : req.session.rental_info || false
 		});
 	},
 
