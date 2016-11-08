@@ -65,8 +65,8 @@
 					</div>
 					<div class="column">
 						<div class="card">
-							<div class="card-header no-shadow is-primary">
-								<h2 class="card-header-title has-text-centered">
+							<div class="card-header no-shadow is-grey">
+								<h2 class="card-header-title is-primary has-text-centered">
 									<% if (listing_info.status) { %>
 									Available
 									<% } else { %>
@@ -98,31 +98,7 @@
 
 				<div id="listing_info_wrapper">
 					<!-- information about the current listing -->
-					<div id="listing_info_title" class="listing_info_center">
-						<h2 class="listing_info_text"><a href="http://<%= listing_info.domain_name %>" class="green_text"><%= listing_info.domain_name %></a></h2>
-						<p id="domain_owner" class="listing_info_text listing_info_text_white">Owned by: <a class="green_text" href="/profile/inbox/<%= listing_info.username %>"><%= listing_info.username %></a></p>
-						<% if (listing_info.status) { %>
-							<div id="pricing_wrapper">
-								<p class="listing_info_text listing_info_text_white">Hour <span class="green_text">$<%=listing_info.hour_price%></span> | </p>
-								<p class="listing_info_text listing_info_text_white">Day <span class="green_text">$<%=listing_info.day_price%></span> | </p>
-								<p class="listing_info_text listing_info_text_white">Week <span class="green_text">$<%=listing_info.week_price%></span> | </p>
-								<p class="listing_info_text listing_info_text_white">Month <span class="green_text">$<%=listing_info.month_price%></span></p>
-							</div>
-						<% } %>
-					</div>
 
-					<% if (rental_info && typeof rental_info != undefined) { %>
-						<div id="domain_description" class="rental_hide">
-							<div id="rental_times">Rented from:</div>
-						</div>
-					<% } else {%>
-						<p id="domain_description" class="default_hide"><%= listing_info.description %></p>
-					<% } %>
-
-					<% if (listing_info.buy_link != null && listing_info.buy_link.length > 0) { %>
-						<p id="buy_link" class="listing_info_margin_top listing_info_center"><a class="orange-link" href="<%= listing_info.buy_link %>">Interested in buying this domain?</a></p>
-					<% } %>
-				</div>
 
 				<div id="start_form_wrapper" class="listing_info_margin_top">
 					<% if (available == 3 || available == 2){ %>
