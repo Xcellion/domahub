@@ -30,13 +30,6 @@
 								<%= listing_info.description %>
 							</p>
 						</div>
-						<span class="tag is-primary is-large margin-bottom-50 is-uppercase">
-							<% if (listing_info.status) { %>
-							Available
-							<% } else { %>
-							Unavailable
-							<% } %>
-						</span>
 						<div class="card is-fullwidth no-shadow">
 							<div class="card-content">
 								<article class="media">
@@ -68,10 +61,14 @@
 					</div>
 					<div class="column">
 						<div class="card">
-							<div class="card-header no-shadow is-gray">
+							<div class="card-header no-shadow is-primary">
 
-								<h2 class="card-header-title has-text-centered">
-									&#36;500 Per Month
+								<h2 class="card-header-title is-white has-text-centered">
+									<% if (listing_info.status) { %>
+									Available
+									<% } else { %>
+									Unavailable
+									<% } %>
 								</h2>
 							</div>
 							<div class="card-content">
