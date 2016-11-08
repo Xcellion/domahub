@@ -9,10 +9,6 @@ $(document).ready(function() {
 	//user since text
 	$("#user-since").text(moment(new Date(listing_info.user_created)).format("MMMM, YYYY"));
 
-	Chart.defaults.global.legend.display = false;
-
-	var total_prices = listing_info.month_price + listing_info.week_price + listing_info.day_price + listing_info.hour_price;
-
 	//create the price chart
 	var myChart = new Chart($("#myChart")[0], {
 		type: 'horizontalBar',
@@ -33,9 +29,12 @@ $(document).ready(function() {
 			]
 		},
 		options: {
-			responsive: true,
+		    responsive: true,
 			tooltips: {
 				enabled: false
+			},
+			legend: {
+				display: false
 			},
 			hover: {animationDuration: 0},
 			animation: {
@@ -69,7 +68,12 @@ $(document).ready(function() {
 					}
 				}],
 				xAxes: [{
-					display: false
+					gridLines: {
+						display: false
+					},
+					ticks: {
+						display: false
+					}
 				}]
 			}
 		}

@@ -75,7 +75,9 @@
 								<a class="button is-danger is-inverted">Request</a>
 							</div>
 						<% } %>
+						<div class="box">
 							<canvas id="myChart"></canvas>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -83,7 +85,7 @@
 
 		<section class="section">
 			<div class="container">
-				
+
 			</div>
 		</section>
 
@@ -141,6 +143,7 @@
 		<script src="/js/lib/moment.min.js" type="text/javascript"></script>
 		<script src="/js/lib/fullcalendar.min.js" type="text/javascript"></script>
 		<script src="/js/lib/chart.min.js" type="text/javascript"></script>
+		<script src="/js/lib/wNumb.js" type="text/javascript"></script>
 		<script type="text/javascript">
 			var listing_message = <% if(typeof listing_message != "undefined"){ %><%-JSON.stringify(listing_message)%><% }else{ %>""<% } %>;
 			var listing_info = <% if(typeof listing_info != "undefined"){ %><%-JSON.stringify(listing_info)%><% }else{ %>""<% } %>;
