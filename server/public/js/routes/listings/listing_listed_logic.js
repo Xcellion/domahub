@@ -1,4 +1,8 @@
 var unlock = true;
+var moneyFormat = wNumb({
+	thousand: ',',
+	prefix: '$'
+});
 
 $(document).ready(function() {
 
@@ -7,24 +11,26 @@ $(document).ready(function() {
 
 	Chart.defaults.global.legend.display = false;
 
+	var total_prices = listing_info.month_price + listing_info.week_price + listing_info.day_price + listing_info.hour_price;
+
 	//create the price chart
 	var myChart = new Chart($("#myChart")[0], {
-		type: 'bar',
+		type: 'horizontalBar',
 		data: {
-			labels: ["Hourly", "Daily", "Weekly", "Monthly"],
+			labels: ["Monthly", "Weekly", "Daily", "Hourly"],
 			datasets: [
-		        {
-		            label: [],
-		            backgroundColor: [
-		                "#ff9a7a", "#ff9a7a", "#ff9a7a", "#ff9a7a"
-		            ],
-		            borderColor: [
-		                "#FF5722", "#FF5722", "#FF5722", "#FF5722"
-		            ],
-		            borderWidth: 1,
-		            data: [listing_info.hour_price, listing_info.day_price, listing_info.week_price, listing_info.month_price],
-		        }
-		    ]
+				{
+					label: [],
+					backgroundColor: [
+						"#ffe6de", "#ffe6de", "#ffe6de", "#ffe6de"
+					],
+					borderColor: [
+						"#FF5722", "#FF5722", "#FF5722", "#FF5722"
+					],
+					borderWidth: 1,
+					data: [listing_info.month_price, listing_info.week_price, listing_info.day_price, listing_info.hour_price],
+				}
+			]
 		},
 		options: {
 			responsive: true,
@@ -34,42 +40,39 @@ $(document).ready(function() {
 			hover: {animationDuration: 0},
 			animation: {
 				duration: 500,
-	            easing: "easeOutQuart",
+				easing: "easeOutQuart",
 				onComplete: function () {
-				    // render the value of the chart above the bar
-				    var ctx = this.chart.ctx;
-				    ctx.font = Chart.helpers.fontString(15, 'normal', Chart.defaults.global.defaultFontFamily);
-				    ctx.fillStyle = this.chart.config.options.defaultFontColor;
-				    ctx.textAlign = 'center';
-				    ctx.textBaseline = 'bottom';
+					// render the value of the chart above the bar
+					var ctx = this.chart.ctx;
+					ctx.font = Chart.helpers.fontString(15, 'bold', "roboto, Helvetica, sans-serif");
+					ctx.fillStyle = this.chart.config.options.defaultFontColor;
+					ctx.textAlign = 'left';
+					ctx.textBaseline = 'bottom';
 					this.data.datasets.forEach(function (dataset) {
-	                    for (var i = 0; i < dataset.data.length; i++) {
-	                        var model = dataset._meta[Object.keys(dataset._meta)[0]].data[i]._model,
-	                            scale_max = dataset._meta[Object.keys(dataset._meta)[0]].data[i]._yScale.maxHeight;
-	                        ctx.fillStyle = '#444';
-	                        var y_pos = model.y - 5;
-	                        // Make sure data value does not get overflown and hidden
-	                        // when the bar's value is too close to max value of scale
-	                        // Note: The y value is reverse, it counts from top down
-	                        if ((scale_max - model.y) / scale_max >= 0.93)
-	                            y_pos = model.y + 20;
-	                        ctx.fillText("$" + dataset.data[i], model.x, y_pos);
-	                    }
-	                });
+						for (var i = 0; i < dataset.data.length; i++) {
+							var model = dataset._meta[Object.keys(dataset._meta)[0]].data[i]._model;
+							var scale_max = dataset._meta[Object.keys(dataset._meta)[0]].data[i]._yScale.maxHeight;
+							var y_pos = model.y + 10;
+							var y_pos = model.y + 10;
+
+							ctx.fillStyle = '#444';
+							ctx.fillText(moneyFormat.to(dataset.data[i]), model.base + 5, model.y + 9);
+						}
+					});
 				}
 			},
 			//tooltip to display all values at a specific X-axis
 			scales: {
-				xAxes: [{
-					gridLines : {
-	                    display : false
-	                }
-			   	}],
 				yAxes: [{
+					gridLines: {
+						display: false
+					}
+				}],
+				xAxes: [{
 					display: false
 				}]
 			}
-		 }
+		}
 	});
 
 	//stripe configuration
@@ -169,7 +172,7 @@ $(document).ready(function() {
 
 // Close Checkout on page navigation
 $(window).on('popstate', function () {
-    handler.close();
+	handler.close();
 });
 
 //function to show rental specific stuff
