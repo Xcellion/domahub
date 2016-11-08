@@ -1,6 +1,78 @@
 var unlock = true;
 
 $(document).ready(function() {
+
+	//user since text
+	$("#user-since").text(moment(new Date(listing_info.user_created)).format("MMMM, YYYY"));
+
+	Chart.defaults.global.legend.display = false;
+
+	//create the price chart
+	var myChart = new Chart($("#myChart")[0], {
+		type: 'bar',
+		data: {
+			labels: ["Hourly", "Daily", "Weekly", "Monthly"],
+			datasets: [
+		        {
+		            label: [],
+		            backgroundColor: [
+		                "#ff9a7a", "#ff9a7a", "#ff9a7a", "#ff9a7a"
+		            ],
+		            borderColor: [
+		                "#FF5722", "#FF5722", "#FF5722", "#FF5722"
+		            ],
+		            borderWidth: 1,
+		            data: [listing_info.hour_price, listing_info.day_price, listing_info.week_price, listing_info.month_price],
+		        }
+		    ]
+		},
+		options: {
+			responsive: true,
+			tooltips: {
+				enabled: false
+			},
+			hover: {animationDuration: 0},
+			animation: {
+				duration: 500,
+	            easing: "easeOutQuart",
+				onComplete: function () {
+				    // render the value of the chart above the bar
+				    var ctx = this.chart.ctx;
+				    ctx.font = Chart.helpers.fontString(15, 'normal', Chart.defaults.global.defaultFontFamily);
+				    ctx.fillStyle = this.chart.config.options.defaultFontColor;
+				    ctx.textAlign = 'center';
+				    ctx.textBaseline = 'bottom';
+					this.data.datasets.forEach(function (dataset) {
+	                    for (var i = 0; i < dataset.data.length; i++) {
+	                        var model = dataset._meta[Object.keys(dataset._meta)[0]].data[i]._model,
+	                            scale_max = dataset._meta[Object.keys(dataset._meta)[0]].data[i]._yScale.maxHeight;
+	                        ctx.fillStyle = '#444';
+	                        var y_pos = model.y - 5;
+	                        // Make sure data value does not get overflown and hidden
+	                        // when the bar's value is too close to max value of scale
+	                        // Note: The y value is reverse, it counts from top down
+	                        if ((scale_max - model.y) / scale_max >= 0.93)
+	                            y_pos = model.y + 20;
+	                        ctx.fillText("$" + dataset.data[i], model.x, y_pos);
+	                    }
+	                });
+				}
+			},
+			//tooltip to display all values at a specific X-axis
+			scales: {
+				xAxes: [{
+					gridLines : {
+	                    display : false
+	                }
+			   	}],
+				yAxes: [{
+					display: false
+				}]
+			}
+		 }
+	});
+
+
 	//stripe configuration
 	handler = StripeCheckout.configure({
 		key: 'pk_test_kcmOEkkC3QtULG5JiRMWVODJ',
