@@ -15,7 +15,7 @@ var jsonParser = bodyParser.json();
 module.exports = function(app, db){
 	Listing = new listing_model(db);
 
-	app.post('/stripe/webhook/arbitrary/woohoo', [
+	app.post('/stripe/webhook', [
 		jsonParser,
 		stripeWebhookEventCatcher
 	]);
@@ -38,6 +38,7 @@ function stripeWebhookEventCatcher(req, res){
 function switchEvents(event, res){
 	if (event){
 		res.sendStatus(200);
+		console.log("Event from Stripe: " + event.type);
 		switch (event.type){
 			case "customer.deleted":
 				handleCustomerDelete(event);
@@ -52,7 +53,6 @@ function switchEvents(event, res){
 				handleSubscriptionPayFail(event);
 				break;
 			default:
-				console.log("Event from Stripe: " + event.type);
 				break;
 		}
 	}
