@@ -26,7 +26,7 @@ module.exports = function(app, db, auth, error){
 		"/faq",
 		"/careers",
 		"/contact",
-		"/getstarted",
+		//"/getstarted",
 		"/privacy",
     "/sellers",
 		"/renters",

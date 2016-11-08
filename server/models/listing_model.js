@@ -67,6 +67,7 @@ listing_model.prototype.getActiveListing = function(domain_name, callback){
 	query = "SELECT \
 				listings.*,\
 				accounts.username,\
+				accounts.date_created AS user_created,\
 				accounts.email\
 			FROM listings \
 			JOIN accounts ON listings.owner_id = accounts.id \
