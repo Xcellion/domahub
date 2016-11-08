@@ -1,6 +1,11 @@
 @import 'vars';
 @import 'mixins';
 
-#listing-img {
+#background_image {
   background-image: url('https://source.unsplash.com/category/people');
+  filter: brightness(75%);
+  -webkit-filter: brightness(75%);
+  -moz-filter: brightness(75%);
+  -o-filter: brightness(75%);
+  -ms-filter: brightness(75%);
 }

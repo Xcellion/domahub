@@ -12,6 +12,13 @@
   .subtitle,
   .title
     color: inherit
+  // With button inside
+  &.has-button
+    span
+      line-height: 32px
+    .button
+      margin-left: 60px
+
   // Colors
   @each $name, $pair in $colors
     $color: nth($pair, 1)

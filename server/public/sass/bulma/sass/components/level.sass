@@ -43,11 +43,12 @@
   @extend .block
   align-items: center
   justify-content: space-between
-  &.company-level
-    padding: 15px 0
-    border: 2px solid $border
-    +mobile
-      padding: 0
+  &.is-white
+    & > .level-left
+      background-color: $white
+      border-radius: 5px 5px 0 0
+      & > .level-item
+        padding: 10px 15px 0
   code
     border-radius: $radius
   img
