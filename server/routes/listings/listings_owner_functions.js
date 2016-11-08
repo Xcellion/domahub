@@ -481,7 +481,6 @@ module.exports = {
 	//function to update a listing
 	updateListing: function(req, res, next){
 		domain_name = req.params.domain_name;
-		console.log(req.new_listing_info);
 		Listing.updateListing(domain_name, req.new_listing_info, function(result){
 			if (result.state=="error"){error.handler(req, res, result.info, "json")}
 			else {
