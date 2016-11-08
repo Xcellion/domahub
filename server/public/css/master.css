@@ -2081,6 +2081,10 @@ input:-webkit-autofill {
   .notification .subtitle,
   .notification .title {
     color: inherit; }
+  .notification.has-button span {
+    line-height: 32px; }
+  .notification.has-button .button {
+    margin-left: 60px; }
   .notification.is-white {
     background-color: white;
     color: black; }
@@ -3673,12 +3677,11 @@ input:-webkit-autofill {
 .level {
   align-items: center;
   justify-content: space-between; }
-  .level.company-level {
-    padding: 15px 0;
-    border: 2px solid rgba(0, 0, 0, 0.12); }
-    @media screen and (max-width: 768px) {
-      .level.company-level {
-        padding: 0; } }
+  .level.is-white > .level-left {
+    background-color: white;
+    border-radius: 5px 5px 0 0; }
+    .level.is-white > .level-left > .level-item {
+      padding: 10px 15px 0; }
   .level code {
     border-radius: 3px; }
   .level img {
