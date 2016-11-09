@@ -39,7 +39,7 @@
 						<% if (listing_info.status) { %>
 							<div class="notification has-button is-primary">
 								<span>This domain is available.</span>
-								<a class="button is-primary is-inverted">Rent Now</a>
+								<a data-can_next="true" class="button next_button is-primary is-inverted">Rent Now</a>
 							</div>
 						<% } else { %>
 							<div class="notification has-button is-danger">
@@ -62,10 +62,10 @@
 				<div class="columns">
 					<div class="column is-2">
 						<figure class="image is-circle is-96x96">
-							<% if (user){ %>
-								<img src="<%= user.profile_pic %>">
+							<% if (listing_info.profile_pic){ %>
+								<img src="<%= listing_info.profile_pic %>">
 							<% } else { %>
-								<img src="https://placeholdit.imgix.net/~text?txtsize=30&bg=9e9e9e&txtclr=ffffff&txt=<%= listing_info.username %>&w=128&h=128">
+								<img src="https://placeholdit.imgix.net/~text?txtsize=25&bg=9e9e9e&txtclr=ffffff&txt=<%= listing_info.username %>&w=128&h=128">
 							<% } %>
 						</figure>
 					</div>
