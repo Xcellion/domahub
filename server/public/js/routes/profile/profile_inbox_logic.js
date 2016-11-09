@@ -26,7 +26,7 @@ $(document).ready(function() {
             changeConvo(window.location.pathname.split("/").pop(), true);
         }
         else {
-            history.replaceState(null, "DomaHub - " + convo_list[0].username, "/profile/inbox/" + convo_list[0].username);
+            history.replaceState(null, "DomaHub - " + convo_list[0].username, "/profile/messages/" + convo_list[0].username);
             changeConvo(convo_list[0].username, true);
         }
     }
@@ -274,7 +274,7 @@ function createPanelConvo(convo_item){
 function changeConvo(username, history_bool){
     //if trying to message yourself
     if (username && (username.toLowerCase() == user.username.toLowerCase())){
-        history.replaceState(null, "", "/profile/inbox");
+        history.replaceState(null, "", "/profile/messages");
     }
 
     if (!username || username.toLowerCase() == user.username.toLowerCase()){
@@ -306,7 +306,7 @@ function changeConvo(username, history_bool){
         });
 
         if (!history_bool){
-            history.pushState(null, "DomaHub - " + username, "/profile/inbox/" + username);
+            history.pushState(null, "DomaHub - " + username, "/profile/messages/" + username);
         }
 
         getConvoItem(username, function(convo_item){
