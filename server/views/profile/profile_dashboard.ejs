@@ -37,18 +37,14 @@
 								<img src="https://placeholdit.imgix.net/~text?txtsize=30&bg=9e9e9e&txtclr=ffffff&txt=<%= user.username %>&w=300&h=200" />
 							</figure>
 							<p class="card-footer-item">
-				              <input type="file" name="csv" id="profile_pic" class="input-file" />
-				              <label id="profile_pic-label" for="profile_pic" class="button"><i class="fa fa-upload"></i><span class="label-text">Upload Picture</span></label>
-				            </p>
+	              <input type="file" name="csv" id="profile_pic" class="input-file" />
+	              <label id="profile_pic-label" for="profile_pic" class="button is-primary"><i class="fa fa-upload"></i><span class="label-text">Upload Picture</span></label>
+	            </p>
 						</div>
 						<div class="card-content">
 							<h2 class="has-text-centered"><%= user.username %></h2>
-							<h3 class="has-text-centered"><%= user.email %></h3>
+							<p class="has-text-centered"><%= user.email %></p>
 						</div>
-
-						<footer class="card-footer">
-							<a class="card-footer-item button is-outlined is-accent" href="/profile/settings">Edit Profile</a>
-						</footer>
 					</div>
 					<article class="message no-shadow margin-bottom-25">
 						<div class="message-header is-primary has-text-centered">
@@ -67,6 +63,24 @@
 				</div>
 
 				<div class="column">
+
+					<% if (user.type != 2){ %>
+						<div class="notification is-danger">
+							<div class="">You must connect your account with Stripe
+								before you can receive payments. Stripe is an online payments system
+								used by companies like Lyft, Twitter, Salesforce, Adidas, Target, etc.
+								You can learn more about Stripe by clicking on the button below.
+							</div>
+							</p>
+							<a href="/authorizestripe">
+								<img class="stripe-button" src="/images/companies/stripe/stripe-button.png" alt="Connect with Stripe" />
+							</a>
+							<a class="button is-danger is-inverted margin-top-10" href="https://stripe.com/about" target="_blank">
+								Learn more about Stripe
+							</a>
+						</div>
+					<% } %>
+
 					<box class="box no-shadow">
 						<table id="domain_table" class="table">
 							<caption class="caption">
@@ -74,9 +88,11 @@
 							</caption>
 						</table>
 
-						<canvas id="myChart"></canvas>
+						<div class="margin-bottom-25">
+							<canvas id="myChart"></canvas>
+						</div>
 
-						<a class="button is-accent" href="/listings/create" title="Create a new listing">Create a new listing</a>
+						<a class="button is-primary" href="/listings/create" title="Create a new listing">Create a new listing</a>
 					</box>
 					<div class="box no-shadow">
 						<table class="table">
@@ -92,24 +108,11 @@
 							<tbody id="rental_table"></tbody>
 						</table>
 
-						<a class="button is-accent" href="/listings" title="Browse domain names">Browse domain names</a>
+						<a class="button is-primary" href="/listings" title="Browse domain names">Browse domain names</a>
 					</div>
 				</div>
 
-				<% if (user.type != 2){ %>
-					<div class="column is-one-quarter">
-						<article class="message">
-							<div class="message-body has-text-centered">
-								<div class="content">
-									<p>
-										You must connect your account with <a href="https://stripe.com/about">Stripe</a> before you can receive payments.
-									</p>
-									<a href="/authorizestripe" class="button is-success">Connect with Stripe</a>
-								</div>
-							</div>
-						</article>
-					</div>
-				<% } %>
+
 
 			</div>
 		</div>
