@@ -2007,6 +2007,8 @@ input:-webkit-autofill {
   display: block;
   position: relative;
   margin: 0 auto; }
+  .image.is-circle > img {
+    border-radius: 100%; }
   .image.left-aligned {
     margin-left: 0;
     margin-right: 0; }
