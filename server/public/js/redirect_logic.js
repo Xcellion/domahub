@@ -20,14 +20,14 @@ $(document).ready(function() {
 
 //redirect after a short delay
 function redirectDelay(path){
-	var seconds = 5;
+	var seconds = 3;
 
 	//add a period every second
 	window.setInterval(function(){
 		seconds--;
 		$("#message").append(".");
 
-		//redirect after 5 seconds
+		//redirect after 3 seconds
 		if (seconds == 0){
 			window.location.href = path;
 		}

@@ -186,14 +186,14 @@
 		<%- include("../templates/footer"); %>
 		<%- include("../templates/js_scripts"); %>
 		<script src="/js/lib/moment.min.js" type="text/javascript"></script>
+		<script src="/js/lib/nouislider.min.js" type="text/javascript"></script>
+		<script src="/js/lib/wNumb.js" type="text/javascript"></script>
 		<script type="text/javascript">
 			var categories_front = <% if(typeof categories_front != "undefined"){ %><%-JSON.stringify(categories_front)%><% }else{ %>""<% } %>;
 			var categories_back = <% if(typeof categories_back != "undefined"){ %><%-JSON.stringify(categories_back)%><% }else{ %>""<% } %>;
 			var random_listings = <% if(typeof random_listings != "undefined"){ %><%-JSON.stringify(random_listings)%><% }else{ %>""<% } %>;
 			var min_max_prices = <% if(typeof min_max_prices != "undefined"){ %><%-JSON.stringify(min_max_prices)%><% }else{ %>""<% } %>;
 		</script>
-		<script src="/js/lib/nouislider.min.js" type="text/javascript"></script>
-		<script src="/js/lib/wNumb.js" type="text/javascript"></script>
 		<script src="/js/routes/listings/listing_hub_logic.js" type="text/javascript"></script>
 
 		</body>

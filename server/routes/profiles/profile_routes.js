@@ -50,8 +50,8 @@ module.exports = function(app, db, auth, error, stripe){
 
 	//inbox
 	app.get([
-		"/profile/inbox",
-		"/profile/inbox/:target_username"
+		"/profile/messages",
+		"/profile/messages/:target_username"
 	], [
 		auth.checkLoggedIn,
 		profile_functions.getAccountChats,

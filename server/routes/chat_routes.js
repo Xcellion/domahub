@@ -193,7 +193,7 @@ function getConvo(req, res, next){
 					});
 				}
 				else {
-					res.redirect("/profile/inbox");
+					res.redirect("/profile/messages");
 				}
 			}
 		})

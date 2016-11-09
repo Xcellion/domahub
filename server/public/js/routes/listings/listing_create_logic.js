@@ -276,6 +276,7 @@ function getListingData(){
 //function to client-side check form
 function checkListingData(){
 	var listingData = getListingData();
+    var is_premium = $("#premium-box").hasClass("is-active");
 
     //checks
 	if (!listingData.domain_name){

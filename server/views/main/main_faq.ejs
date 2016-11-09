@@ -30,15 +30,15 @@
           <aside class="menu is-fixed">
             <ul class="menu-list">
               <p class="control has-icon">
-								<input id="search-faq" tabindex="7" class="input" type="text" placeholder="Search FAQ" />
-								<i class="fa fa-search"></i>
-							</p>
+				<input id="search-faq" tabindex="7" class="input" type="text" placeholder="Search FAQ" />
+				<i class="fa fa-search"></i>
+			  </p>
             </ul>
             <p class="menu-label">
               Categories
             </p>
             <ul class="menu-list">
-              <li><a id="about-menu" class="menu-link" class="is-active" tabindex="8" href="#about">About DomaHub</a></li>
+              <li><a id="about-menu" class="menu-link" tabindex="8" href="#about">About DomaHub</a></li>
               <li><a id="renting-menu" class="menu-link" href="#renting" tabindex="9">Renting with DomaHub</a></li>
               <li><a id="selling-menu" class="menu-link" href="#selling" tabindex="10">Selling on DomaHub</a></li>
               <li><a id="payments-menu" class="menu-link" href="#payments" tabindex="11">Payments</a></li>
@@ -91,9 +91,21 @@
             <div class="qa-wrapper">
               <h3 class="faq-question" title="How long can I keep the domain?">
                 How long can I keep the domain?</h3>
+            <p class="faq-answer">
+              Domains can be rented in increments of one hour. The pricing varies depending on how long you wish to rent it for.
+
+            </p>
+        </br>
               <p class="faq-answer">
                 You may only use the domain for the amount of time you paid for.
                 Any content being redirected from that domain will immediately stop once your time is up.
+              </p>
+            </div>
+            <div class="qa-wrapper">
+              <h3 class="faq-question" title="How can I rent a domain?">
+                How much is a domain?</h3>
+              <p class="faq-answer">
+                Every domain has different rates depending on its value. Please check each listing for the specific rates. 
               </p>
             </div>
             <div class="qa-wrapper">
@@ -133,11 +145,18 @@
               <h3 class="faq-question" title="How do I start listing domains?">
                 How do I start listing domains?</h3>
               <p class="faq-answer">
-                Once you have created DomaHub a account and connected your <a class="orange-link" href="/authorizestripe">
-                Stripe</a> account, you may create a listing by going to the
+                Once you have created DomaHub a account you may create a listing by going to the
                 <a class="orange-link" href="/listings/create">create listing</a> page.
-                DomaHub offers two types of listings: Basic and Premium. Once you have done that, you must point your DNS A records
-                to our servers to verify that you own the domain.
+              </p>
+                </br>
+              <p class="faq-answer">
+                  Your listing will not be active until you have connected your <a class="orange-link" href="/authorizestripe">
+                  Stripe</a> account. This ensures that we can pay you securely in all future rental transactions.
+              </p>
+                </br>
+              <p class="faq-answer">
+                  DomaHub offers two types of listings: Basic and Premium. Once you have created your listing, you must point your DNS A records
+                  to our servers to verify that you own the domain.
               </p>
             </div>
             <div id='verifying' class="qa-wrapper">
@@ -164,7 +183,7 @@
               <p class="faq-answer">
                 A Basic listing is free to list, but has an 15% commission on all rentals.
                 Basic listings have flat, fixed pricing which means DomaHub will decide
-                its price. Additionally, Basic listings cannot be listed for hourly slots.
+                its price.
               </p>
                 </br>
               <p class="faq-answer">
@@ -176,8 +195,18 @@
             </div>
             <div class="qa-wrapper">
               <h3 class="faq-question" title="What are the differences between basic and premium listings?">
+                Why should I use a Premium listing?</h3>
+              <p class="faq-answer">
+                We believe that not all domain names are created equal. However, it's up to you to decide which ones hold the most value.
+                Should you believe that a domain is worth more than the default rental rates offered as a Basic listing, we recommend creating
+                a Premium listing instead.
+              </p>
+            </div>
+            <div class="qa-wrapper">
+              <h3 class="faq-question" title="What are the differences between basic and premium listings?">
                 What are the default price rates for a Basic listing?</h3>
               <p class="faq-answer">
+                <li>$1 / hour.</li>
                 <li>$10 / day.</li>
                 <li>$25 / week.</li>
                 <li>$50 / month.</li>
@@ -216,7 +245,7 @@
               <h3 class="faq-question" title="How do I get paid?">
                 How do I get paid?</h3>
               <p class="faq-answer">
-                As transactions occur, you will be paid automatically through your
+                Once a transaction has occurred, DomaHub will hold the money in escrow until the end of the rental term, upon which you will be paid automatically through your
                 Stripe account.
               </p>
             </div>
@@ -228,9 +257,17 @@
                 How do I pay for rentals?</h3>
               <p class="faq-answer">
                 DomaHub strictly conducts online transactions through
-                Stripe payments, a third-party payments system used by companies
-                like Lyft, Twitter, OpenTable, etc. Simply link a credit or debit
+                <a class='orange-link' href='https://stripe.com/us/payments'>Stripe payments</a>. Simply link a credit or debit
                 card or a bank account to your Stripe account.
+              </p>
+            </div>
+            <div class="qa-wrapper">
+              <h3 class="faq-question" title="What is Stripe?">
+                What is Stripe?</h3>
+              <p class="faq-answer">
+                Stripe payments is a third-party payments system used by companies
+                like Lyft, Twitter, OpenTable, etc. For more information, please
+                visit the <a class='orange-link' href="https://stripe.com/about">Stripe website</a>.
               </p>
             </div>
             <div class="qa-wrapper">
@@ -245,7 +282,8 @@
               <h3 class="faq-question" title="Can I get a refund?">
                 Can I get a refund?</h3>
               <p class="faq-answer">
-                All domain rentals are final and non-refundable.
+                All domain rentals are final and non-refundable. However, if you encounter any technical
+                issues where your content is not being displayed, please contact us at <a class='orange-link' href="mailto:support@domahub.com">support@domahub.com</a>.
               </p>
             </div>
           </div>
