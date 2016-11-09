@@ -156,7 +156,7 @@ module.exports = {
 			res.redirect("/profile/dashboard");
 		}
 		else if (path.includes("inbox")){
-			res.redirect("/profile/inbox");
+			res.redirect("/profile/messages");
 		}
 		else if (path.includes("mylistings")){
 			res.redirect("/profile/mylistings");

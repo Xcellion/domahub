@@ -1,4 +1,8 @@
 var can_submit = false;
+var moneyFormat = wNumb({
+	thousand: ',',
+	prefix: '$'
+});
 
 $(document).ready(function() {
     //default the dates to today and 1 year from now
@@ -222,10 +226,10 @@ function createListingRows(listings){
         for (var x = 0; x < listings.length; x++){
             var temp_tr = $("<tr></tr>");
             var temp_domain = $("<td><a class='orange-link' href='/listing/" + listings[x].domain_name + "'>" + listings[x].domain_name + "</a></td>");
-            var temp_hour = $("<td>" + listings[x].hour_price + "</td>");
-            var temp_day = $("<td>" + listings[x].day_price + "</td>");
-            var temp_week = $("<td>" + listings[x].week_price + "</td>");
-            var temp_month = $("<td>" + listings[x].month_price + "</td>");
+            var temp_hour = $("<td>" + moneyFormat.to(listings[x].hour_price) + "</td>");
+            var temp_day = $("<td>" + moneyFormat.to(listings[x].day_price) + "</td>");
+            var temp_week = $("<td>" + moneyFormat.to(listings[x].week_price) + "</td>");
+            var temp_month = $("<td>" + moneyFormat.to(listings[x].month_price) + "</td>");
             temp_tr.append(temp_domain, temp_hour, temp_day, temp_week, temp_month);
             tbody.append(temp_tr);
         }
