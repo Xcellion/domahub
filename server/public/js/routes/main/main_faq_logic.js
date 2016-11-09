@@ -20,4 +20,29 @@ $(document).ready(function() {
         $(window.location.hash + "-menu").click();
     }
 
+    //change the active as you scroll down
+    $(window).scroll(function(e){
+        changePanelActive($(this).scrollTop());
+    });
+
 });
+
+//function to run as you scroll down to change the panel active
+function changePanelActive(scrolltop){
+    var menu_id;
+
+    if (scrolltop < $("#about").offset().top){
+        menu_id = "about-menu";
+    }
+    else {
+        $(".faq-section").each(function(e){
+            //scrolled past
+            if ($(this).offset().top <= scrolltop){
+                menu_id = $(this).attr("id") + "-menu";
+            }
+        });
+    }
+
+    $(".menu-link").removeClass("is-active");
+    $("#" + menu_id).addClass("is-active");
+}
