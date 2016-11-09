@@ -238,11 +238,11 @@
 }
 
 .min-height {
-  min-height: calc(100vh - 272px);
+  min-height: calc(100vh - 234px);
 }
 
 .min-height-half {
-    min-height: calc(50vh - 272px);
+    min-height: calc(50vh - 234px);
 }
 
 .clear-nav {
@@ -251,6 +251,10 @@
 
 .clear-nav-profile {
   padding-top: 68px;
+}
+
+.margin-top-10 {
+  margin-top: 10px;
 }
 
 .margin-bottom-25 {
@@ -365,6 +369,12 @@
 
 .flex-content {
   align-self: center;
+}
+
+/********** REALLY BAD MAKESHIFT WAY TO DEAL WITH SHIT *****/
+
+.stripe-button {
+  margin-top: 10px;
 }
 
 /********************* FILE UPLOAD BUTTON *************/
