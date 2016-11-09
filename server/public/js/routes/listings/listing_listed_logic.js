@@ -99,7 +99,6 @@ $(document).ready(function() {
 	//--------------------------------------------------------------------buttons
 
 	//page nav next buttons
-	$("#top_next").data("can_next", true);
 	$(".next_button").click(function(e){
 		if ($(this).data("can_next") == true){
 			var scroll_elems = ["#top_wrapper", "#calendar_wrapper", "#address_wrapper", "#pay_wrapper"];
