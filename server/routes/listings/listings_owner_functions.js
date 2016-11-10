@@ -108,12 +108,7 @@ module.exports = {
 
 	//function to check if the user can create new listings
 	checkAccountListingPriv : function(req, res, next){
-		if (req.user.type >= 2){
-			next();
-		}
-		else {
-			res.render("account/stripeconnect.ejs");
-		}
+		next();
 	},
 
 	//function to check the size of the CSV file uploaded
@@ -297,8 +292,8 @@ module.exports = {
 		var status = parseFloat(req.body.status);
 		var domain_name = req.params.domain_name;
 
-		//if status exists and is not 1 or 2
-		if (req.body.status && status != 1 && status != 2){
+		//if status exists and is not 1 or 0
+		if (req.body.status && status != 1 && status != 0){
 			error.handler(req, res, "Invalid listing status!", "json");
 		}
 		else if (req.body.status){
@@ -407,19 +402,27 @@ module.exports = {
 		}
 	},
 
-	//function to display the create listing page
-	renderCreateListing : function(req, res, next){
-		res.render("listings/listing_create.ejs", {
-			message: Auth.messageReset(req),
+	//function to display the create listing choice page
+	renderCreateListingChoice : function(req, res, next){
+		res.render("listings/listing_create_choice.ejs", {
 			user: req.user,
+			message: Auth.messageReset(req)
 		});
 	},
 
-	//function to display the create listing page
-	renderCreateListingBatch : function(req, res, next){
-		res.render("listings/listing_create_multiple.ejs", {
-			message: Auth.messageReset(req),
+	//function to display the create single listing page
+	renderCreateListingSingle : function(req, res, next){
+		res.render("listings/listing_create_single.ejs", {
 			user: req.user,
+			message: Auth.messageReset(req)
+		});
+	},
+
+	//function to display the create multiple listing page
+	renderCreateListingMultiple : function(req, res, next){
+		res.render("listings/listing_create_multiple.ejs", {
+			user: req.user,
+			message: Auth.messageReset(req)
 		});
 	},
 
@@ -430,30 +433,36 @@ module.exports = {
 			description: req.body.description,
 			categories: req.body.categories,
 			owner_id: req.user.id,
-			status: 0,
+			verified: 1,		//create a verified domain to check for existing
 			date_created: (new Date()).getTime()
 		}
 
 		Listing.newListing(listing_info, function(result){
-			if (result.state=="error"){error.handler(req, res, result.info);}
+			if (result.state=="error"){error.handler(req, res, result.info, "json");}
 			else {
 				listing_info.id = result.info.insertId;
 
-				//add to the server side users listings object
-				req.user.listings.push(listing_info);
+				//revert verified if its a legit domain
+				Listing.updateListing(req.body.domain_name, {verified: null}, function(result){
+					if (result.state=="error"){error.handler(req, res, result.info, "json")}
+					else {
+						//add to the server side users listings object
+						req.user.listings.push(listing_info);
 
-				//if premium, go next to handle stripe stuff
-				if (req.body.stripeToken){
-					next();
-				}
-				//if its basic, send success
-				else {
-					res.send({
-						state: "success",
-						listing_info: listing_info,
-						message: "Successfully added a new listing!"
-					});
-				}
+						//if premium, go next to handle stripe stuff
+						if (req.body.stripeToken){
+							next();
+						}
+						//if its basic, send success
+						else {
+							res.send({
+								state: "success",
+								listing_info: listing_info,
+								message: "Successfully added a new listing!"
+							});
+						}
+					}
+				});
 			}
 		});
 	},
@@ -506,14 +515,14 @@ module.exports = {
 				if (domain_ip == address){
 					req.new_listing_info = {
 						domain_name: domain_name,
-						status: 1
+						verified: 1
 					}
 					next();
 				}
 				else {
 					res.json({
 						state: "error"
-					})
+					});
 				}
 			});
 		});

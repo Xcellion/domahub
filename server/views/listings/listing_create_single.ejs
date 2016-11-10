@@ -21,16 +21,9 @@
 			<div class="columns">
 				<div class="column is-half-desktop">
 					<div class="content">
-						<h1 class="is-normal">Create a single listing.</h1>
-					</div>
-					<div class="content">
 						<h2 class="heading is-blacklight">Step 1</h2>
 						<h2 class="error-heading has-icon">Please select one of the options below</h2>
 					</div>
-					<p class="control">
-						<label class="label is-medium has-icon">Basic vs Premium</label>
-						<i class="fa fa-question-circle-o"></i>
-					</p>
 					<div class="columns">
 						<div class="column">
 							<a data-listing-type="basic" id="basic-box" class="box" tabindex="8">
@@ -81,6 +74,9 @@
 							</a>
 						</div>
 					</div>
+					<p class="control">
+						<a href="/faq#basicvspremium" class="orange-link">What is Basic vs. Premium?</a>
+					</p>
 				</div>
 			</div>
 		</div>
@@ -98,15 +94,14 @@
 						<h2>Enter basic domain information</h2>
 					</div>
 					<p class="control">
-						<label id="domain-error-message" class="label is-medium">Domain Name&#42;</label>
+						<label id="domain-error-message" class="label is-medium">Domain Name</label>
 						<input id="domain_name-input" tabindex="9" class="input required-input is-medium" type="url" placeholder="MyDomain.com"/>
 					</p>
 					<p class="control">
-						<label id="description-error-message" class="label is-medium has-icon">Description&#42;</label>
-						<i class="fa fa-question-circle-o"></i>
+						<label id="description-error-message" class="label is-medium has-icon">Description</label>
 						<textarea id="description-input" tabindex="10" class="textarea input required-input is-medium" placeholder="This is a premium domain name with over a million visits per month!"></textarea>
 					</p>
-					<p class="control">
+					<%# <p class="control">
 						<label id="buy-error-message" class="label is-medium has-icon">Purchase Link</label>
 						<i class="fa fa-question-circle-o"></i>
 						<input id="purchase_link-input" tabindex="11" class="input is-medium" type="url" placeholder="godaddy.com/myDomainName"/>
@@ -115,7 +110,7 @@
 						<label id="background-error-message" class="label is-medium has-icon">Background Image</label>
 						<i class="fa fa-question-circle-o"></i>
 						<input id="background_image-input" tabindex="12" class="input is-medium" type="url" placeholder="backgroundImage.com/image.png"/>
-					</p>
+					</p>%>
 				</div>
 			</div>
 		</div>
@@ -161,10 +156,6 @@
 							<li>
 								<input class="cat-checkbox" value="industry" id="industry-category" type="checkbox" />
 								<label tabindex="14" for="industry-category">Industry</label>
-							</li>
-							<li>
-								<input class="cat-checkbox" value="notsure" id="not-category" value="not" type="checkbox" />
-								<label class="cat-checkbox-label" tabindex="15" for="not-category">I'm not sure.</label>
 							</li>
 						</ul>
 					</form>
@@ -283,7 +274,7 @@
 				<div class="column is-half-desktop">
 					<nav class="level">
 						<div class="level-left">
-							<a class="button is-accent" tabindex="15" href="/listings/create/batch">
+							<a class="button is-accent" tabindex="15" href="/listings/create/multiple">
 								<span class="icon">
 									<i class="fa fa-check-circle-o"></i>
 								</span>

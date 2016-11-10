@@ -181,9 +181,12 @@ module.exports = {
 			delete req.session.myrentals;
 			req.logout();
 		}
+
+        //redirect to a listing if we're logging out there
 		if (req.header("Referer")){
 			redirectTo = (req.header("Referer").split("/").indexOf("listing") != -1) ? req.header("Referer") : "/";
 		}
+        //or redirect to main page
 		else {
 			redirectTo = "/";
 		}
@@ -192,9 +195,6 @@ module.exports = {
 
 	//sign up for a new account
 	signup: function(req, res){
-		if (req.header("Referer") && req.header("Referer").split("/").indexOf("listing") != -1){
-			req.session.redirectBack = req.header("Referer");
-		}
 		res.render("account/signup.ejs", { message: messageReset(req)});
 	},
 
@@ -308,10 +308,6 @@ module.exports = {
 							}
 							else {
 								generateVerify(req, res, email, username, function(state){
-									//if coming from a listing, redirect to listing. otherwise redirect to profile
-									redirectTo = (req.header("Referer").split("/").indexOf("listing") != -1) ? req.header("Referer") : "/profile/dashboard";
-									redirectback = req.session.redirectBack;
-									req.session.redirectBack = redirectback || redirectTo;
 									req.session.message = "Success! Please check your email for further instructions!";
 									res.redirect("/login");
 								});
@@ -328,9 +324,15 @@ module.exports = {
 
 	//function to login
 	loginPost: function(req, res, next){
-		//if coming from a listing, redirect to listing. otherwise redirect to profile
-		redirectTo = (req.header("Referer").split("/").indexOf("listing") != -1) ? req.header("Referer") : "/profile/dashboard";
-		redirectURL = req.session.redirectBack ? req.session.redirectBack : redirectTo;
+        var referer = req.header("Referer").split("/");
+        //redirect to profile unless coming from a listing
+		if (referer.indexOf("listing") != -1 || referer.indexOf("listings") != -1 || referer.indexOf("profile") != -1){
+            redirectTo = req.header("Referer");
+        }
+        else {
+            redirectTo = "/profile/dashboard";
+        }
+
 		passport.authenticate('local-login', function(err, user, info){
 			if (!user && info){
 				error.handler(req, res, info.message);
@@ -350,8 +352,7 @@ module.exports = {
 						//update account last accessed
 						console.log("Updating last accessed for account with email: " + req.body.email);
 						Account.updateAccount(account_info, req.body.email, function(result){
-							delete req.session.redirectBack;
-							return res.redirect(redirectURL);
+							return res.redirect(redirectTo);
 						});
 					}
 				});

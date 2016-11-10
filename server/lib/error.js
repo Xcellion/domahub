@@ -42,7 +42,7 @@ function handler(req, res, message, type) {
 				case "Invalid listing!":
 				case "Invalid domain name!":
 				case "Invalid listing activation!":
-					redirectTo = "/listing";
+					redirectTo = "/listings";
 					break;
 				case "DNS error!":
 					redirectTo = "/";

@@ -247,8 +247,6 @@ function getListingData(){
     var listingData = {
 		domain_name : $("#domain_name-input").val(),
 		description : $("#description-input").val(),
-		background_image : $("#background_image-input").val(),
-		purchase_link : $("#purchase_link-input").val(),
         categories: ""
 	}
 
@@ -325,6 +323,7 @@ function submitListing(submit_button, submit_data, url){
 
 			if (data.state == "success"){
                 //reset the datas to default value
+                delete_cookie("listing_data");
                 $(".box").removeClass("is-active low-opacity");
                 $(".input").val("");
                 $(".cat-checkbox").prop('checked', false);
@@ -332,10 +331,10 @@ function submitListing(submit_button, submit_data, url){
                     $(this).val($(this).prop("defaultValue"));
                 });
 
-                //change to first page
                 changePage("type");
 			}
 			else if (data.state == "error"){
+                console.log(data);
                 //display error message if there is one
                 if (data.message){
                     errorHandler(data.message);

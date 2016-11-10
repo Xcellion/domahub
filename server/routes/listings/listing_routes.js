@@ -48,24 +48,31 @@ module.exports = function(app, db, auth, error, stripe){
 
 	//-------------------------------------------------------------------------------------------------------------------- OWNER RELATED
 
-	//render create listing page
-	app.get('/listings/create', [
+	//redirect all /create to proper /create
+	app.get('/listings/create', function(req, res){
 		auth.checkLoggedIn,
 		owner_functions.checkAccountListingPriv,
-		owner_functions.renderCreateListing
+		owner_functions.renderCreateListingChoice
+	});
+
+	//render create listing page
+	app.get('/listings/create/single', [
+		auth.checkLoggedIn,
+		owner_functions.checkAccountListingPriv,
+		owner_functions.renderCreateListingSingle
 	]);
 
 	//render create listing page
-	app.get('/listings/create/batch', [
+	app.get('/listings/create/multiple', [
 		auth.checkLoggedIn,
 		owner_functions.checkAccountListingPriv,
-		owner_functions.renderCreateListingBatch
+		owner_functions.renderCreateListingMultiple
 	]);
 
 	//redirect all /create to proper /create
 	app.get('/listings/create*', function(req, res){
 		res.redirect("/listings/create");
-	})
+	});
 
 	//create a single basic listing
 	app.post('/listings/create/basic', [
@@ -92,7 +99,7 @@ module.exports = function(app, db, auth, error, stripe){
 	]);
 
 	//create multiple listings
-	app.post('/listings/create/batch', [
+	app.post('/listings/create/multiple', [
 		auth.checkLoggedIn,
 		profile_functions.getAccountListings,
 		owner_functions.checkAccountListingPriv,
@@ -172,7 +179,7 @@ module.exports = function(app, db, auth, error, stripe){
 	//render listing page
 	app.get('/listing/:domain_name', [
 		renter_functions.checkDomainAndAddToSearch,
-		renter_functions.getActiveListing,
+		renter_functions.getVerifiedListing,
 		renter_functions.renderListing
 	]);
 
@@ -182,7 +189,7 @@ module.exports = function(app, db, auth, error, stripe){
 		checkDomainValid,
 		checkDomainListed,
 		renter_functions.checkRental,
-		renter_functions.getActiveListing,
+		renter_functions.getVerifiedListing,
 		renter_functions.getRental,
 		renter_functions.renderListing
 	]);
@@ -193,7 +200,7 @@ module.exports = function(app, db, auth, error, stripe){
 		auth.checkLoggedIn,
 		checkDomainValid,
 		checkDomainListed,
-		renter_functions.getActiveListing,
+		renter_functions.getVerifiedListing,
 		renter_functions.checkRentalAddress,
 		renter_functions.checkRentalTimes,
 		renter_functions.checkRentalPrice,
@@ -210,7 +217,7 @@ module.exports = function(app, db, auth, error, stripe){
 		checkDomainValid,
 		checkDomainListed,
 		renter_functions.checkRental,
-		renter_functions.getActiveListing,
+		renter_functions.getVerifiedListing,
 		renter_functions.toggleActivateRental
 	]);
 
@@ -221,7 +228,7 @@ module.exports = function(app, db, auth, error, stripe){
 		checkDomainValid,
 		checkDomainListed,
 		renter_functions.checkRental,
-		renter_functions.getActiveListing,
+		renter_functions.getVerifiedListing,
 		renter_functions.checkRentalTimes,
 		renter_functions.checkRentalPrice,
 		renter_functions.editRentalTimes
