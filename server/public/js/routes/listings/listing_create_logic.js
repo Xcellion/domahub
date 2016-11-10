@@ -2,46 +2,61 @@ var can_submit = true;
 
 //on back button
 window.onpopstate = function(event) {
-    checkHash();
+    changePage(window.location.hash.split("?")[0].replace("#", ""));
 };
 
-$(document).ready(function() {
-    //check for any existing cookies and set the data
-    var existing_data = read_cookie("listing_data");
-    if (existing_data){
-        var basic_bool = $("#basic-box");
-        for (var key in existing_data){
-            //other inputs
-            if (existing_data[key] != "" && key != "categories"){
-                $("#" + key + "-input").val(existing_data[key]);
-                if (['hour_price', 'day_price', 'week_price', 'month_price'].indexOf(key) != -1){
-                    var basic_bool = $("#premium-box");;
-                };
-            }
-            //categories
-            else if (key == "categories" && existing_data[key] != ""){
-                var existing_categories = existing_data[key].split(" ");
-                for (var x = 0; x < existing_categories.length; x++){
-                    $("#" + existing_categories[x] + "-category").prop("checked", true);
-                }
-
-                setSectionNext(existing_categories.length > 0, "category");
-            }
+//function to update the page string query params
+function updateQueryStringParam(key, value) {
+    var uri = window.location.pathname + window.location.hash;
+    var re = new RegExp("([?&])" + key + "=.*?(&|$)", "i");
+    var separator = uri.indexOf('?') !== -1 ? "&" : "?";
+    if (value){
+        if (uri.match(re)) {
+            history.replaceState({}, "", uri.replace(re, '$1' + key + "=" + value + '$2'));
         }
-
-        setSectionNext($("#domain_name-input").val() && $("#description-input").val(), "info");
-
-        //if we selected something
-        if (basic_bool){
-            $(".box").removeClass("is-active").addClass("low-opacity");
-            basic_bool.addClass("is-active").removeClass("low-opacity");
-            setSectionNext(true, "type");
-            setPremium(basic_bool.data("listing-type") == "basic");  //setting up premium listing logic
+        else {
+            history.replaceState({}, "", uri + separator + key + "=" + value);
         }
     }
+    else {
+        // remove key-value pair if value is empty
+        uri = uri.replace(new RegExp("([?&]?)" + key + "=[^&]*", "i"), '');
+        if (uri.slice(-1) === '?') {
+          uri = uri.slice(0, -1);
+        }
+        // replace first occurrence of & by ? if no ? is present
+        if (uri.indexOf('?') === -1) uri = uri.replace(/&/, '?');
+        history.replaceState({}, "", uri);
+    }
+}
 
-    //display the section with the correct hash
-    checkHash();
+//function to add all prices or remove them
+function addRemovePricesQueryString(bool){
+    //add
+    if (bool){
+        updateQueryStringParam("hour_price", $("#hour_price-input").val());
+        updateQueryStringParam("day_price", $("#day_price-input").val());
+        updateQueryStringParam("week_price", $("#week_price-input").val());
+        updateQueryStringParam("month_price", $("#month_price-input").val());
+    }
+    //remove
+    else {
+        updateQueryStringParam("hour_price");
+        updateQueryStringParam("day_price");
+        updateQueryStringParam("week_price");
+        updateQueryStringParam("month_price");
+    }
+}
+
+$(document).ready(function() {
+
+    //if no hash, go to the first page
+    if (window.location.hash == ""){
+        window.location.hash = "type";
+    }
+    else {
+        changePage(window.location.hash.split("?")[0].replace("#", ""));
+    }
 
     //section 1 - basic vs premium
     $(".box").click(function() {
@@ -49,8 +64,8 @@ $(document).ready(function() {
         $(".box").removeClass("is-active").addClass("low-opacity");
         $(this).addClass("is-active").removeClass("low-opacity");
 
-        bake_cookie("listing_data", getListingData());
         setSectionNext(true, "type");  //setting up next button logic
+        updateQueryStringParam("type", $(this).data("listing-type"));
         setPremium($(this).data("listing-type") == "basic");  //setting up premium listing logic
     });
 
@@ -61,28 +76,19 @@ $(document).ready(function() {
             $("#preview-domain").text($("#domain_name-input").val());
             $("#preview-description").text($("#description-input").val());
         }
-        bake_cookie("listing_data", getListingData());
         setSectionNext($("#domain_name-input").val() && $("#description-input").val(), "info");
-    });
-
-    //section 2 - background image
-    $("#background_image-input").on("change keyup paste", function(e){
-        if ($("#background_image-input").val()){
-            //update the listing preview
-            $("#preview-background").attr("src", $("#background_image-input").val());
-        }
-        bake_cookie("listing_data", getListingData());
-    });
-
-    //if theres an error in getting the image, remove the link
-    $("#preview-background").error(function() {
-        $(this).attr("src", "https://source.unsplash.com/category/people");
+        updateQueryStringParam("domain_name", $("#domain_name-input").val());
+        updateQueryStringParam("description", $("#description-input").val());
     });
 
     //section 3 - categories
     $(".cat-checkbox-label, .cat-checkbox").on("click", function(e){
-        bake_cookie("listing_data", getListingData());
         setSectionNext($('.cat-checkbox:checkbox:checked').length > 0, "category");
+        var category_val = "";
+        $('.cat-checkbox:checkbox:checked').each(function(){
+            category_val += $(this).val() + ",";
+        });
+        updateQueryStringParam("categories", category_val);
     });
 
     //section 4 - pricing
@@ -91,9 +97,8 @@ $(document).ready(function() {
         if (parseFloat($(this).val()) > 0){
             $("#preview-" + $(this).attr("id")).find(".green_text").text("$" + $(this).val());
         }
-
         setSectionNext(checkPrices(), "pricing");
-        bake_cookie("listing_data", getListingData());
+        updateQueryStringParam($(this).attr("id").replace("-input", ""), $(this).val());
     });
 
     //next/prev button for sections
@@ -118,11 +123,6 @@ $(document).ready(function() {
         changePage(previous_page_id);
     });
 
-    //more info tooltips
-    $(".fa-question-circle-o").click(function(e){
-        console.log("more info pls");
-    });
-
 });
 
 //function to check if all prices are good
@@ -142,8 +142,12 @@ function setPremium(basic_bool){
     //if basic, so skip the pricing
     $("#pricing-section").data('pageskip', basic_bool);
 
+    //basic
     if (basic_bool){
         $("#submit-button-text").text("Submit");
+
+        //update query strings for all prices
+        addRemovePricesQueryString(false);
 
         //submit button basic event binder
         $("#submit-button").off().on("click", function(e){
@@ -151,8 +155,12 @@ function setPremium(basic_bool){
             submitListing($(this), checkListingData(), "basic", null);
         });
     }
+    //premium
     else {
         $("#submit-button-text").text("Pay Now");
+
+        //update query strings for all prices
+        addRemovePricesQueryString(true);
 
         //submit button premium event binder
         $("#submit-button").off().on("click", function(e){
@@ -179,8 +187,10 @@ function changePage(section_id, page_refresh_bool){
     var section_to_change_to = $("#" + section_id + "-section");
     section_to_change_to.removeClass('is-hidden');  //show correct one
 
+    //wasnt a page refresh
     if (!page_refresh_bool){
-        history.pushState({}, "", "/listings/create#" + section_id);
+        var queries = (window.location.hash.split("?")[1] != undefined) ? "?" + window.location.hash.split("?")[1] : ""
+        history.pushState({}, "", "/listings/create/single#" + section_id + queries);
     }
 
     //first, disable prev
@@ -218,26 +228,6 @@ function changePage(section_id, page_refresh_bool){
         }
     });
 
-}
-
-//--------------------------------------------------------------------------------------------------------PAGES AND HISTORY
-
-//function to check for hash in the url
-function checkHash(){
-    var hash = window.location.hash;
-    var hashes = ["#type", "#info", "#categories", "#pricing", "#preview"];
-
-    if (hashes.indexOf(hash) != -1){
-        changePage(hash.substr(1, hash.length), true);
-    }
-    else if (hash == ""){
-        hash = "#type";
-        window.location.hash = hash;
-        changePage(hash.substr(1, hash.length), true);
-    }
-    else {
-        history.replaceState({}, "", "/listings/create");
-    }
 }
 
 //--------------------------------------------------------------------------------------------------------SUBMISSION
@@ -315,7 +305,7 @@ function submitListing(submit_button, submit_data, url){
 
 		$.ajax({
 			type: "POST",
-			url: "/listings/create/" + url,
+			url: "/listings/create/single/" + url,
 			data: submit_data
 		}).done(function(data){
 			can_submit = true;
