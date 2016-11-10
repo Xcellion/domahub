@@ -1,5 +1,6 @@
 .qa-wrapper + .qa-wrapper {
-  margin-top: 25px; }
+  margin-top: -60px;
+  padding-top: 85px; }
 
 .qa-wrapper p,
 .qa-wrapper a {
