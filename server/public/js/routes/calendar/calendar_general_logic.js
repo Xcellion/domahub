@@ -5,14 +5,11 @@ $(document).ready(function() {
 //function to setup the calendar
 function setUpCalendar(){
     //calendar styling
-    $(".fc-button").hide();
     $(".button").click(function(e){
         id = $(this).attr("id");
         $(".fc-" + id).click();
     });
-    $(".fc-toolbar").prependTo("#calendar_left_wrapper");
-    $('#calendar').fullCalendar('option', 'height', $("#calendar_wrapper").height() - $("#calendar_top_wrapper").height() - $("#navbar").height());
-
+    $(".fc-today-button").hide();
     $("#remove_events").click(function(e){
         $('#calendar').fullCalendar('removeEvents', filterMine);
     });
@@ -22,11 +19,11 @@ function setUpCalendar(){
 
         if (view.name == "agendaWeek"){
             $("#calendar").fullCalendar( 'changeView', "month");
-            $(this).text("Week");
+            $(this).text("Week View");
         }
         else {
             $("#calendar").fullCalendar( 'changeView', "agendaWeek");
-            $(this).text("Month");
+            $(this).text("Month View");
         }
     });
 }

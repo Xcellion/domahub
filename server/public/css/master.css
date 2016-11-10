@@ -234,6 +234,20 @@ h3.is-underlined,
 span.is-underlined {
   color: inherit;
   text-decoration: underline; }
+  a.is-underlined-hover,
+  p.is-underlined-hover,
+  h1.is-underlined-hover,
+  h2.is-underlined-hover,
+  h3.is-underlined-hover,
+  span.is-underlined-hover {
+    color: inherit; }
+    a.is-underlined-hover:hover,
+    p.is-underlined-hover:hover,
+    h1.is-underlined-hover:hover,
+    h2.is-underlined-hover:hover,
+    h3.is-underlined-hover:hover,
+    span.is-underlined-hover:hover {
+      text-decoration: underline; }
 
 a.is-white,
 p.is-white,
@@ -1440,22 +1454,19 @@ button {
 .content + .content {
   margin-top: 25px; }
 
-.content li {
-  font-size: 16px; }
-  .content li a {
-    font-size: 16px; }
-  .content li.has-icon {
-    line-height: 24px; }
-    .content li.has-icon span + span {
-      margin-left: 5px; }
-    .content li.has-icon.is-small {
-      line-height: 16px; }
-    .content li.has-icon.is-medium {
-      line-height: 32px; }
-    .content li.has-icon.is-large {
-      line-height: 48px; }
-  .content li + li {
-    margin-top: 10px; }
+.content li.has-icon {
+  line-height: 24px; }
+  .content li.has-icon span + span {
+    margin-left: 5px; }
+  .content li.has-icon.is-small {
+    line-height: 16px; }
+  .content li.has-icon.is-medium {
+    line-height: 32px; }
+  .content li.has-icon.is-large {
+    line-height: 48px; }
+
+.content li + li {
+  margin-top: 15px; }
 
 .content p {
   line-height: 1.5; }
@@ -3641,15 +3652,6 @@ input:-webkit-autofill {
   .highlight .il {
     color: #2aa198; }
 
-.level-item.company-level-item {
-  padding: 10px; }
-  .level-item.company-level-item:not(:last-child) {
-    border-right: 2px solid rgba(0, 0, 0, 0.12); }
-    @media screen and (max-width: 768px) {
-      .level-item.company-level-item:not(:last-child) {
-        border-right: none;
-        border-bottom: 1px solid rgba(0, 0, 0, 0.12); } }
-
 .level-item .title,
 .level-item .subtitle {
   margin-bottom: 0; }
@@ -3684,6 +3686,11 @@ input:-webkit-autofill {
 .level {
   align-items: center;
   justify-content: space-between; }
+  .level.jc-flex-start {
+    justify-content: flex-start; }
+    @media screen and (min-width: 769px) {
+      .level.jc-flex-start > .level-item:not(:first-child) {
+        margin-left: 10px; } }
   .level.is-white > .level-left {
     background-color: white;
     border-radius: 5px 5px 0 0; }

@@ -1,11 +1,4 @@
 .level-item
-  &.company-level-item
-    padding: 10px
-    &:not(:last-child)
-      border-right: 2px solid $border
-      +mobile
-        border-right: none
-        border-bottom: 1px solid $border
   .title,
   .subtitle
     margin-bottom: 0
@@ -43,6 +36,12 @@
   @extend .block
   align-items: center
   justify-content: space-between
+  &.jc-flex-start
+    justify-content: flex-start
+    & > .level-item
+      +tablet
+        &:not(:first-child)
+          margin-left: 10px
   &.is-white
     & > .level-left
       background-color: $white

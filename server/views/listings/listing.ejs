@@ -81,7 +81,7 @@
 
 		<section class="section">
 			<div class="container">
-				<div id="calendar_wrapper" class="has-text-centered">
+				<!-- <div id="calendar_wrapper" class="has-text-centered">
 
 					<div id="calendar_top_wrapper">
 
@@ -97,11 +97,24 @@
 							<h1 id="price">$0</h1>
 							<a class="button next_button" id="calendar_next">Next</a>
 						</div>
-					</div>
-
+					</div> -->
+					<nav class="level jc-flex-start">
+						<div class="level-item is-narrow">
+							<a class="button is-danger" id="remove_events">Remove Selected</a>
+						</div>
+						<div class="level-item is-narrow">
+							<a class="button is-primary" id="month_button">Month View</a>
+						</div>
+						<div class="level-item is-narrow">
+							<a class="button is-primary" id="today-button">Today</a>
+						</div>
+						<div class="level-item is-narrow">
+							<h1 id="price">$0</h1>
+						</div>
+					</nav>
 					<div id="calendar"></div>
 
-				</div>
+
 			</div>
 		</section>
 
@@ -133,7 +146,7 @@
 				</div>
 			</div>
 		</section>
-
+<!--
 		<div id="address_wrapper" class="page_wrapper">
 
 			<div class="info_wrapper">
@@ -157,7 +170,7 @@
 				</form>
 			</div>
 
-		</div>
+		</div> -->
 
 		<%- include("../templates/footer"); %>
 		<%- include("../templates/js_scripts"); %>

@@ -81,6 +81,10 @@ span
   &.is-underlined
     color: inherit
     text-decoration: underline
+    &-hover
+      color: inherit
+      &:hover
+        text-decoration: underline
   @each $name, $pair in $colors
     $color: nth($pair, 1)
     $color-invert: nth($pair, 2)
