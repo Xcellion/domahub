@@ -34,37 +34,10 @@
 .faq-header {
   position: relative;
   cursor: pointer;
-  padding-left: 30px;
-  &::before {
-    background: $accent;
-    @include transform(rotate(135deg));
-    @include transition(all 0.25s ease);
-    content: "";
-    width: 2px;
-    height: 18px;
-    position: absolute;
-    top: 6px;
-    left: 13px;
-  }
-  &::after {
-    background: $accent;
-    @include transform(rotate(135deg));
-    @include transition(all 0.25s ease);
-    content: "";
-    width: 18px;
-    height: 2px;
-    position: absolute;
-    top: 14px;
-    left: 5px;
-  }
+  color: $primary;
   &.is-active {
-    &::before {
-      background: $primary;
-      @include transform(rotate(90deg));
-    }
-    &::after {
-      background: $primary;
-      @include transform(rotate(90deg));
+    &:hover {
+      color: $primary-darker;
     }
   }
 }
