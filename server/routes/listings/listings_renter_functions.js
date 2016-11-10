@@ -161,22 +161,21 @@ module.exports = {
 	},
 
 	//gets the listing info and all rental info/times belonging to it for a verified and active listing
-	getActiveListing : function(req, res, next) {
-		Listing.getActiveListing(req.params.domain_name, function(result){
-			if (result.state=="error" || (result.state == "success" && result.info.length <= 0)){error.handler(req, res, "Invalid listing!");}
-			else {
-				listing_info = result.info[0];
+	getVerifiedListing : function(req, res, next) {
+		Listing.getVerifiedListing(req.params.domain_name, function(result){
+			if (result.state=="error"){error.handler(req, res, "Invalid listing!");}
 
-				//get rental info for that listing
-				Listing.getListingRentalsInfo(listing_info.id, function(result){
-					if (result.state=="error"){error.handler(req, res, result.info);}
-					else {
-						listing_info.rentals = joinRentalTimes(result.info);
-						req.session.listing_info = listing_info;
-						next();
-					}
-				});
-			}
+			listing_info = result.info[0];
+
+			//get rental info for that listing
+			Listing.getListingRentalsInfo(listing_info.id, function(result){
+				if (result.state=="error"){error.handler(req, res, result.info);}
+				else {
+					listing_info.rentals = joinRentalTimes(result.info);
+					req.session.listing_info = listing_info;
+					next();
+				}
+			});
 		});
 	},
 

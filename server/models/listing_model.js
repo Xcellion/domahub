@@ -4,12 +4,21 @@ listing_model = function(database){
 	listing_query = function(query, error_description, callback, params){
 		database.query(query, function(result, err){
 			if (err){
-				console.log(err);
-				callback({
-					state : "error",
-					info : error_description,
-					errcode : err.code
-				});
+				if (err.code = "ER_DUP_ENTRY"){
+					callback({
+						state : "error",
+						info : "A listing with this name already exists!",
+						errcode : err.code
+					});
+				}
+				else {
+					console.log(err);
+					callback({
+						state : "error",
+						info : error_description,
+						errcode : err.code
+					});
+				}
 			}
 			else {
 				callback({
@@ -62,7 +71,7 @@ listing_model.prototype.checkListingRental = function(rental_id, domain_name, ca
 //----------------------------------------------------------------------GETS----------------------------------------------------------
 
 //gets all info for an active listing including owner name and email
-listing_model.prototype.getActiveListing = function(domain_name, callback){
+listing_model.prototype.getVerifiedListing = function(domain_name, callback){
 	console.log("Attempting to get active listing information for " + domain_name + "...");
 	query = "SELECT \
 				listings.*,\
@@ -72,7 +81,7 @@ listing_model.prototype.getActiveListing = function(domain_name, callback){
 				accounts.email\
 			FROM listings \
 			JOIN accounts ON listings.owner_id = accounts.id \
-			WHERE listings.domain_name = ? AND listings.status = 2";
+			WHERE listings.domain_name = ? AND listings.verified = 1";
 	listing_query(query, "Failed to get active listing info for " + domain_name + "!", callback, domain_name);
 }
 
@@ -85,7 +94,8 @@ listing_model.prototype.getAllListings = function(callback){
 				accounts.email\
 			FROM listings \
 			JOIN accounts ON listings.owner_id = accounts.id \
-			WHERE listings.status != 0'
+			WHERE listings.status = 1 \
+			AND listings.verified = 1'
 	listing_query(query, "Failed to get all listing info!", callback);
 }
 
@@ -134,7 +144,8 @@ listing_model.prototype.getCurrentRental = function(domain_name, callback){
 			ON rentals.rental_id = rental_times.rental_id \
 			WHERE listings.domain_name = ? \
 			AND (UNIX_TIMESTAMP(NOW()) * 1000) BETWEEN rental_times.date AND rental_times.date + rental_times.duration \
-			AND listings.status >= 1 \
+			AND listings.status = 1 \
+			AND listings.verified = 1\
 			AND rentals.active = 1";
 	listing_query(query, "Failed to get current rental info for domain " + domain_name + "!", callback, domain_name);
 }
@@ -193,7 +204,8 @@ listing_model.prototype.getListingByFilter = function(filter_name, filter_price,
 				ON rentals.listing_id = listings.id \
 			LEFT JOIN rental_times \
 				ON rental_times.rental_id = rentals.rental_id \
-			WHERE listings.status >= 1 \
+			WHERE listings.status = 1 \
+			AND listings.verified = 1 \
 			AND rentals.active >= 1 \
 			AND listings.domain_name LIKE ? \
 			AND listings." + filter_price.type + " BETWEEN ? AND ? \
@@ -216,7 +228,8 @@ listing_model.prototype.getRandomListings = function(callback){
 				listings.month_price, \
 				listings.categories \
 			FROM listings \
-			WHERE listings.status >= 1 \
+			WHERE listings.status = 1 \
+			AND listings.verified = 1 \
 			ORDER BY rand() \
 			LIMIT 10";
 	listing_query(query, "Failed to get 10 random listings!", callback);

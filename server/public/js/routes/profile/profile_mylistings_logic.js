@@ -5,7 +5,7 @@ var row_display = listings.slice(0);
 //function to create a listing row
 function createRow(listing_info, rownum){
     var tempRow = $("<tr class='row-disp' id='row" + rownum + "'></tr>");
-    var verified = listing_info.status != 0;
+    var verified = listing_info.verified != null;
 
     tempRow.append(createArrow(listing_info));
     tempRow.append(createDomain(listing_info));
@@ -49,7 +49,7 @@ function createVerify(listing_info, bool){
 
 //function to create the listing status td
 function createStatus(listing_info, bool){
-    var text = (listing_info.status == 1) ? "Inactive" : "Active";
+    var text = (listing_info.status == 0) ? "Inactive" : "Active";
     var temp_td = $("<td class='td-visible td-status'>" + text + "</td>");
 
     //hide if not verified
@@ -62,7 +62,7 @@ function createStatus(listing_info, bool){
 
 //function to create the listing created date
 function createDate(listing_info){
-    var start = moment(new Date(listing_info.date_created)).format('YYYY/MM/DD, hh:mm A');
+    var start = moment(new Date(listing_info.date_created)).format('DD MMMM YYYY');
     var temp_td = $("<td class='td-visible td-date'>" + start + "</td>");
     return temp_td;
 }
@@ -88,7 +88,7 @@ function createView(listing_info){
 
 //function to create dropdown row
 function createRowDrop(listing_info, rownum){
-    var unverified_opacity = (listing_info.status == 0) ? "is-unverified" : "";
+    var unverified_opacity = (listing_info.verified == null) ? "is-unverified" : "";
 
     var temp_drop = $("<tr id='row-drop" + rownum + "' class='row-drop'></tr>");
     var temp_td = $("<td class='row-drop-td' colspan='6'></td>")
@@ -96,7 +96,7 @@ function createRowDrop(listing_info, rownum){
     var temp_div_col = $("<div class='columns'></div>");
 
     //if unverified, gray out the controls in the background
-    if (listing_info.status == 0){
+    if (listing_info.verified == null){
         var unverified_div = $("<div class='unverified-div div-drop'></div>");
             var unverified_a = $("<a class='bottom-margin-25 button is-primary verify-link'></a>");
                 unverified_a.data("href", '/listing/' + listing_info.domain_name + '/verify');
@@ -140,7 +140,7 @@ function createRowDrop(listing_info, rownum){
                 }
                 else {
                     unverified_a.addClass('is-danger');
-                    unverified_a.text("Failed to verify the domain!");
+                    unverified_a.text(data.message);
                 }
             });
         });
@@ -167,8 +167,8 @@ function createStatusDrop(listing_info){
         var temp_span = $("<span class='select status-span'></span>");
         var temp_form = $("<form class='drop-form'></form>");
         var temp_select = $("<select class='status_input changeable-input'></select>");
-            temp_select.append("<option value='1'>Inactive</option");
-            temp_select.append("<option value='2'>Active</option");
+            temp_select.append("<option value='0'>Inactive</option");
+            temp_select.append("<option value='1'>Active</option");
             temp_select.val(listing_info.status);
             temp_select.data("name", "status");
     new_td.append(temp_span.append(temp_form.append(temp_select)));
@@ -192,8 +192,8 @@ function createFormDrop(listing_info){
     var temp_form = $("<form class='drop-form'></form>");
 
     //variables to hide or disable things based on verification status
-    var verified_hidden = (listing_info.status == 0) ? 'is-hidden" tabindex="-1"' : "";
-    var verified_disabled = (listing_info.status == 0) ? 'is-disabled" tabindex="-1"' : "";
+    var verified_hidden = (listing_info.verified == null) ? 'is-hidden" tabindex="-1"' : "";
+    var verified_disabled = (listing_info.verified == null) ? 'is-disabled" tabindex="-1"' : "";
 
     //purchase link
     var buy_link = (listing_info.buy_link == null) ? "" : listing_info.buy_link;
@@ -273,7 +273,7 @@ function createFormDrop(listing_info){
 function createPriceDrop(listing_info){
     var temp_col = $("<div class='column is-3'></div>");
     var temp_form = $("<form class='drop-form'></form>");
-    var verified_disabled = (listing_info.status == 0) ? 'is-disabled" tabindex="-1"' : "";
+    var verified_disabled = (listing_info.verified == null) ? 'is-disabled" tabindex="-1"' : "";
 
     var label_types = ["Hourly", "Daily", "Weekly", "Monthly"];     //for display
     var label_names = ["hour_price", "day_price", "week_price", "month_price"];     //for data for input listener
@@ -332,7 +332,7 @@ function createPriceDrop(listing_info){
 //function to create the image drop column
 function createImgDrop(listing_info, rownum){
     var background_image = (listing_info.background_image == null || listing_info.background_image == undefined || listing_info.background_image == "") ? "https://placeholdit.imgix.net/~text?txtsize=40&txt=RANDOM%20PHOTO&w=200&h=200" : listing_info.background_image;
-    var verified_disabled = (listing_info.status == 0) ? 'is-disabled" tabindex="-1"' : "";
+    var verified_disabled = (listing_info.verified == null) ? 'is-disabled" tabindex="-1"' : "";
 
     var temp_col = $("<div class='column is-one-quarter'></div>");
     var temp_div = $("<div class='card'></div>");
@@ -341,7 +341,7 @@ function createImgDrop(listing_info, rownum){
     var temp_x = $('<button class="delete ' + verified_disabled + '"></button>');
     var temp_img = $("<img class='is-listing' alt='Image not found' src=" + background_image + " />");
     var temp_footer = $("<footer class='card-footer'></div>");
-    var temp_form = $('<form id="mult-form' + rownum + '" class="drop-form-file card-footer-item" action="/listings/create/batch" method="post" enctype="multipart/form-data"></form>')
+    var temp_form = $('<form id="mult-form' + rownum + '" class="drop-form-file card-footer-item" action="/listings/create/multiple" method="post" enctype="multipart/form-data"></form>')
     var temp_input = $('<input type="file" id="file' + rownum + '" name="background_image" accept="image/png, image/gif, image/jpeg" class="picture-file changeable-input input-file ' + verified_disabled + '" />');
     var temp_input_label = $('<label for="file' + rownum + '" class="button ' + verified_disabled + '"><i class="fa fa-upload"></i><p class="file-label">Change Picture</p></label>');
     temp_input.data("name", "background_image");
@@ -463,7 +463,7 @@ function cancelListingChanges(row, row_drop, cancel_button, listing_info){
     listing_msg.addClass('is-hidden');
 
     //revert back to the old status
-    var old_status = (listing_info.status == 1) ? "Inactive" : "Active"
+    var old_status = (listing_info.status == 0) ? "Inactive" : "Active"
     row.find(".status_input").val(listing_info.status);
     row.find(".td-status").not(".td-status-drop").text(old_status);
 

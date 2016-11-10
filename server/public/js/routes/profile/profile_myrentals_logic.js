@@ -263,6 +263,7 @@ function submitRentalChanges(row, row_drop, success_button, rental_info){
             refreshSubmitbindings(success_button, cancel_button, rentals, domain_name);
         }
         else {
+            cancel_button.click();
             errorMessage(rental_msg, data.message);
         }
     });
