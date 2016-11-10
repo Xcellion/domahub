@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+	<title>Create Listing - DomaHub</title>
+	<%- include("../templates/head_links"); %>
+	<link rel="stylesheet" href="/css/listing_create.css" type="text/css" />
+</head>
+
+<body>
+
+	<%- include("../templates/navbar", {user: user}); %>
+
+  <section class="section is-medium min-height">
+    <div class="container">
+      <div class="columns">
+        <div class="column">
+          <div class="content has-text-centered">
+            <h1>Please choose one of the options below:</h1>
+          </div>
+        </div>
+      </div>
+      <div class="columns">
+        <div class="column is-half">
+          <a class="box">
+            <div class="content">
+              <h2>I want to post a single listing.</h2>
+            </div>
+          </a>
+        </div>
+        <div class="column is-half">
+          <a class="box">
+            <div class="content">
+              <h2>I want to post multiple listings.</h2>
+            </div>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <%- include("../templates/footer"); %>
+  <%- include("../templates/js_scripts"); %>
+</body>
+
+</html>
