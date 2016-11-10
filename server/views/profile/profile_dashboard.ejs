@@ -24,27 +24,30 @@
     </div>
 	</div>
 
-	<section class="section">
+	<section class="section min-height">
 		<div class="container">
 			<div class="columns">
 				<div class="column is-one-quarter">
 					<div class="card margin-bottom-25">
 						<div class="card-image">
 							<figure class="image is-4by3">
-								<img src="https://placeholdit.imgix.net/~text?txtsize=30&bg=9e9e9e&txtclr=ffffff&txt=<%= user.username %>&w=300&h=200" />
+								<img src="https://placeholdit.imgix.net/~text?txtsize=30&bg=3cbc8d&txtclr=ffffff&txt=<%= user.username %>&w=300&h=200" />
 							</figure>
-							<p class="card-footer-item">
+							<!-- <p class="card-footer-item">
 	              <input type="file" name="csv" id="profile_pic" class="input-file" />
 	              <label id="profile_pic-label" for="profile_pic" class="button is-primary"><i class="fa fa-upload"></i><span class="label-text">Upload Picture</span></label>
-	            </p>
+	            </p> -->
 						</div>
 						<div class="card-content has-text-centered">
 							<h2><%= user.username %></h2>
 							<p><%= user.email %></p>
 						</div>
+						<div class="card-footer has-text-centered">
+							<a class="is-underlined-hover" href="/profile/settings">Edit Profile</a>
+						</div>
 					</div>
 					<article class="message margin-bottom-25">
-						<div class="message-header is-gray">
+						<div class="message-header is-light">
 							<p>Quick Links</p>
 						</div>
 						<div class="message-body">
@@ -77,18 +80,42 @@
 						</div>
 					<% } %>
 
+					<article class="message margin-bottom-25">
+						<div class="message-header is-light">
+							<p>Notifications (2)</p>
+						</div>
+						<div class="message-body">
+							<div class="content">
+								<ol>
+									<li>Complete your account information in the Settings tab.</li>
+									<li>Upload a profile photo using the button on the left.</li>
+									<li>Complete other verification methods in the Settings tab.</li>
+								</ol>
+							</div>
+						</div>
+					</article>
+
+					<article class="message margin-bottom-25">
+						<div class="message-header is-light">
+							<p>Messages (0)</p>
+						</div>
+						<div class="message-body">
+							New messages will show up here.
+						</div>
+					</article>
+
 					<!-- <article class="message margin-bottom-25">
-						<div class="message-header is-gray">
+						<div class="message-header is-light">
 							<h3>My Listings View Count</h3>
 						</div>
 						<div class="message-body">
 							<canvas id="myChart" class="margin-bottom-25"></canvas>
 							<a class="button is-primary" href="/listings/create" title="Create a new listing">Create a new listing</a>
 						</div>
-					</article> -->
+					</article>
 
 					<article class="message margin-bottom-25">
-						<div class="message-header is-gray">
+						<div class="message-header is-light">
 							<h3>My Rentals</h3>
 						</div>
 						<div class="message-body">
@@ -101,9 +128,9 @@
 								</thead>
 								<tbody id="rental_table"></tbody>
 							</table>
-							<a class="button is-primary" href="/listings" title="Browse domain names">Browse domain names</a>
 						</div>
-					</article>
+					</article> -->
+
 				</div>
 			</div>
 		</div>
