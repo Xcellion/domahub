@@ -31,7 +31,7 @@
 					<div class="card margin-bottom-25">
 						<div class="card-image">
 							<figure class="image is-4by3">
-								<img src="https://placeholdit.imgix.net/~text?txtsize=30&bg=3cbc8d&txtclr=ffffff&txt=<%= user.username %>&w=300&h=200" />
+								<img src="https://placeholdit.imgix.net/~text?txtsize=30&bg=3F51B5&txtclr=ffffff&txt=<%= user.username %>&w=300&h=200" />
 							</figure>
 							<!-- <p class="card-footer-item">
 	              <input type="file" name="csv" id="profile_pic" class="input-file" />
@@ -64,17 +64,15 @@
 
 				<div class="column">
 					<% if (user.type != 2){ %>
-						<div class="notification is-danger">
-							<div class="">You must connect your account with Stripe
-								before you can receive payments. </br></br>Stripe is an online payments system
-								used by companies like Lyft, Twitter, Salesforce, Adidas, Target, etc.
-								You can learn more about Stripe by clicking on the button below.
+						<div class="notification is-primary">
+							<div class="content">
+								<h3 class="is-white">
+									You must connect your account with Stripe
+										before you can receive payments.
+								</h3>
 							</div>
-							</p>
-							<a href="/authorizestripe">
-								<img class="stripe-button" src="/images/companies/stripe/stripe-button.png" alt="Connect with Stripe" />
-							</a>
-							<a class="button is-danger is-inverted margin-top-10" href="https://stripe.com/about" target="_blank">
+							<a class="button is-primary is-inverted" href="/authorizestripe">Connect with Stripe</a>
+							<a class="button is-primary is-inverted" href="https://stripe.com/about" target="_blank">
 								Learn more about Stripe
 							</a>
 						</div>
