@@ -16,6 +16,9 @@ $(document).ready(function() {
 		height: "auto",
 		contentHeight:'auto', //auto height
 
+		// header buttons
+		header: {left:'prev', center:'next', right:'title, today'},
+
 		//red background event to show that you cant select past dates
 		events: [
 			{
@@ -44,7 +47,7 @@ $(document).ready(function() {
 				element.append("<p class='past-event'>" + event.title + "</p>");
 				element.css({
 					"opacity": "1",
-					"background-color": "rgba(35,35,35,0.5)"
+					"background-color": "rgba(0,0,0,.12)"
 				});
 			}
 		},
