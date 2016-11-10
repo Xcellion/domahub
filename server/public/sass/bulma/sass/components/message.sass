@@ -9,14 +9,17 @@
   background-color: $border
   border-radius: $radius $radius 0 0
   color: $text-invert
-  padding: 7px 10px
+  padding: 12px 15px
   strong
     color: inherit
   & + .message-body
     border-radius: 0 0 $radius $radius
     border-top: none
-  &.is-primary
-    background-color: $primary
+  @each $name, $pair in $colors
+    $color: nth($pair, 1)
+    $color-invert: nth($pair, 2)
+    &.is-#{$name}
+      background-color: $color
 
 .message
   @extend .block

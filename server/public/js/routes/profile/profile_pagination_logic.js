@@ -294,7 +294,7 @@ function createPaginationPages(total_pages, row_per_page, current_page){
 function createPaginationPage(page_num, text){
     var page_text = text || page_num;
     var temp_li = $("<li></li>");
-    var temp_button = $("<a id='page-" + page_num + "' class='page-button button'>" + page_text + "</a>")
+    var temp_button = $("<a id='page-" + page_num + "' class='page-button button no-shadow'>" + page_text + "</a>")
     temp_li.append(temp_button);
     return temp_li;
 }

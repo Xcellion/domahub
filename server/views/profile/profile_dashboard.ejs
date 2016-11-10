@@ -12,26 +12,23 @@
 
 	<%- include("../templates/navbar", {user: user}); %>
 
-	<section class='min-height'>
-
 	<div class="container clear-nav-profile">
-	    <div class="tabs is-centered">
-	        <ul>
-	            <li class="is-active"><a href="/profile/dashboard" tabindex="7">Dashboard</a></li>
-	            <li><a href="/profile/messages" tabindex="8">Messages</a></li>
-	            <li><a href="/profile/mylistings" tabindex="9">Listings</a></li>
-	            <li><a href="/profile/myrentals" tabindex="10">Rentals</a></li>
-	            <li><a href="/profile/settings" tabindex="11">Settings</a></li>
-	        </ul>
-	    </div>
+    <div class="tabs is-centered">
+      <ul>
+        <li class="is-active"><a href="/profile/dashboard" tabindex="7">Dashboard</a></li>
+        <li><a href="/profile/messages" tabindex="8">Messages</a></li>
+        <li><a href="/profile/mylistings" tabindex="9">Listings</a></li>
+        <li><a href="/profile/myrentals" tabindex="10">Rentals</a></li>
+        <li><a href="/profile/settings" tabindex="11">Settings</a></li>
+      </ul>
+    </div>
 	</div>
 
 	<section class="section">
 		<div class="container">
 			<div class="columns">
-
 				<div class="column is-one-quarter">
-					<div class="card no-shadow margin-bottom-25">
+					<div class="card margin-bottom-25">
 						<div class="card-image">
 							<figure class="image is-4by3">
 								<img src="https://placeholdit.imgix.net/~text?txtsize=30&bg=9e9e9e&txtclr=ffffff&txt=<%= user.username %>&w=300&h=200" />
@@ -41,21 +38,21 @@
 	              <label id="profile_pic-label" for="profile_pic" class="button is-primary"><i class="fa fa-upload"></i><span class="label-text">Upload Picture</span></label>
 	            </p>
 						</div>
-						<div class="card-content">
-							<h2 class="has-text-centered"><%= user.username %></h2>
-							<p class="has-text-centered"><%= user.email %></p>
+						<div class="card-content has-text-centered">
+							<h2><%= user.username %></h2>
+							<p><%= user.email %></p>
 						</div>
 					</div>
-					<article class="message no-shadow margin-bottom-25">
-						<div class="message-header is-primary has-text-centered">
-							Quick Links
+					<article class="message margin-bottom-25">
+						<div class="message-header is-gray">
+							<p>Quick Links</p>
 						</div>
-						<div class="message-body has-text-centered">
+						<div class="message-body">
 							<div class="content">
 								<ul>
-									<li><a class="black-link" href="/authorizestripe" title="Payments">Manage Payments</a></li>
-									<li><a class="black-link" href="/profile/settings" title="Change Email">Change Email Address</a></li>
-									<li><a class="black-link" href="/faq" title="FAQ">Frequently Asked Questions</a></li>
+									<li><a class="orange-link" href="/authorizestripe" title="Payments">Manage Payments</a></li>
+									<li><a class="orange-link" href="/profile/settings" title="Change Email">Change Email Address</a></li>
+									<li><a class="orange-link" href="/faq" title="FAQ">Frequently Asked Questions</a></li>
 								</ul>
 							</div>
 						</div>
@@ -63,7 +60,6 @@
 				</div>
 
 				<div class="column">
-
 					<% if (user.type != 2){ %>
 						<div class="notification is-danger">
 							<div class="">You must connect your account with Stripe
@@ -81,44 +77,36 @@
 						</div>
 					<% } %>
 
-					<box class="box no-shadow">
-						<table id="domain_table" class="table">
-							<caption class="caption">
-								My Listings View Count
-							</caption>
-						</table>
-
-						<div class="margin-bottom-25">
-							<canvas id="myChart"></canvas>
+					<article class="message margin-bottom-25">
+						<div class="message-header is-gray">
+							<h3>My Listings View Count</h3>
 						</div>
+						<div class="message-body">
+							<canvas id="myChart" class="margin-bottom-25"></canvas>
+							<a class="button is-primary" href="/listings/create" title="Create a new listing">Create a new listing</a>
+						</div>
+					</article>
 
-						<a class="button is-primary" href="/listings/create" title="Create a new listing">Create a new listing</a>
-					</box>
-					<div class="box no-shadow">
-						<table class="table">
-							<caption class="caption">
-								My Rentals
-							</caption>
-							<thead>
-								<tr>
-									<th>Domain Name</th>
-									<th>Status</th>
-								</tr>
-							</thead>
-							<tbody id="rental_table"></tbody>
-						</table>
-
-						<a class="button is-primary" href="/listings" title="Browse domain names">Browse domain names</a>
-					</div>
+					<article class="message margin-bottom-25">
+						<div class="message-header is-gray">
+							<h3>My Rentals</h3>
+						</div>
+						<div class="message-body">
+							<table class="table">
+								<thead>
+									<tr>
+										<th>Domain Name</th>
+										<th>Status</th>
+									</tr>
+								</thead>
+								<tbody id="rental_table"></tbody>
+							</table>
+							<a class="button is-primary" href="/listings" title="Browse domain names">Browse domain names</a>
+						</div>
+					</article>
 				</div>
-
-
-
 			</div>
 		</div>
-
-	</section>
-
 	</section>
 
 	<%- include("../templates/footer"); %>
