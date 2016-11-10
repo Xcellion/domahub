@@ -22,10 +22,7 @@
     </span>
     <div class="nav-right nav-menu">
       <div class="nav-item">
-        <a class="nav-link white-link" tabindex="3" title="Browse Listings" href="/listings">Browse</a>
-      </div>
-      <div class="nav-item">
-        <a class="nav-link white-link" tabindex="4" title="Create Listing" href="/listings/create">Sell</a>
+        <a class="nav-link white-link" tabindex="3" title="Browse Listings" href="/listings">Browse Listings</a>
       </div>
 
 <%# navbar checks for a user variable, if it doesnt exist, then display the login button %>
@@ -85,6 +82,9 @@
 
 <!-- or else display the user profile as logged in -->
 <% } else { %>
+    <div class="nav-item">
+      <a class="nav-link white-link" tabindex="4" title="Create Listing" href="/listings/create">Create Listings</a>
+    </div>
     <div class="nav-item">
       <a id="profile-button" tabindex="6" class="button is-white is-outlined" title="Profile">
         <span><%= (user.username.length > 6) ? user.username.slice(0,6) + "..." : user.username %></span>

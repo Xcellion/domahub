@@ -49,11 +49,11 @@ module.exports = function(app, db, auth, error, stripe){
 	//-------------------------------------------------------------------------------------------------------------------- OWNER RELATED
 
 	//redirect all /create to proper /create
-	app.get('/listings/create', function(req, res){
+	app.get('/listings/create', [
 		auth.checkLoggedIn,
 		owner_functions.checkAccountListingPriv,
 		owner_functions.renderCreateListingChoice
-	});
+	]);
 
 	//render create listing page
 	app.get('/listings/create/single', [
