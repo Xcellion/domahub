@@ -12,22 +12,22 @@
 	<%- include("../templates/navbar", {user: user}); %>
 
 	<div class="container clear-nav-profile">
-	    <div class="tabs is-centered">
-	        <ul>
-	            <li><a href="/profile/dashboard" tabindex="7">Dashboard</a></li>
-	            <li><a href="/profile/messages" tabindex="8">Messages</a></li>
-	            <li><a href="/profile/mylistings" tabindex="9">Listings</a></li>
-	            <li class="is-active"><a href="/profile/myrentals" tabindex="10">Rentals</a></li>
-	            <li><a href="/profile/settings" tabindex="11">Settings</a></li>
-	        </ul>
-	    </div>
+    <div class="tabs is-centered">
+    	<ul>
+        <li><a href="/profile/dashboard" tabindex="7">Dashboard</a></li>
+        <li><a href="/profile/messages" tabindex="8">Messages</a></li>
+        <li><a href="/profile/mylistings" tabindex="9">Listings</a></li>
+        <li class="is-active"><a href="/profile/myrentals" tabindex="10">Rentals</a></li>
+        <li><a href="/profile/settings" tabindex="11">Settings</a></li>
+      </ul>
+    </div>
 	</div>
 
 	<section class="section min-height">
 		<div class="container">
 			<div class="columns">
 
-				<div class="column is-one-quarter">
+				<!-- <div class="column is-one-quarter">
 					<nav class="panel is-hidden-mobile">
 						<p class="panel-heading has-text-centered">
 							Search and Filter
@@ -70,24 +70,24 @@
 							</div>
 						</div>
 					</nav>
-				</div>
+				</div> -->
 
-				<div class="column is-three-quarters">
+				<div class="column">
 
 					<div id="no-rows" class="box has-text-centered is-hidden no-shadow radius-right-only">
 						There are no rentals!
 					</div>
 
-					<div class="rows-exist box no-shadow radius-right-only">
+					<div class="rows-exist">
 
 						<nav class="pagination margin-bottom-25">
-							<a id="prev-page" class="button">Previous</a>
-							<a id="next-page" class="button">Next page</a>
+							<a id="prev-page" class="button no-shadow">Previous page</a>
+							<a id="next-page" class="button no-shadow">Next page</a>
 							<ul id="page-list"></ul>
 						</nav>
 
-						<table class="table">
-							<thead>
+						<table class="table has-shadow">
+							<thead class="has-shadow">
 								<tr>
 									<th class="td-arrow"></th>
 									<th class="td-domain">
