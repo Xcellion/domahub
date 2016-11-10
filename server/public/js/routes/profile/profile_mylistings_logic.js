@@ -35,7 +35,7 @@ function createType(listing_info){
 //function to create a button to verify the listing
 function createVerify(listing_info, bool){
     var temp_td = $("<td class='td-visible td-verify'></td>");
-        var temp_a = $("<a class='verify-link'></a>");
+        var temp_a = $("<a class='is-danger verify-link'></a>");
             temp_a.data("href", '/listing/' + listing_info.domain_name + '/verify');
             var temp_span2 = $("<span>Unverified</span>");
 

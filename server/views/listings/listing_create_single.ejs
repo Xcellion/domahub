@@ -12,6 +12,8 @@
 
 	<%- include("../templates/navbar", {user: user}); %>
 
+	<section class='min-height'>
+
 	<div class="container-progress">
 		<progress class="progress is-small is-primary" min="0" max="100"></progress>
 	</div>
@@ -21,8 +23,7 @@
 			<div class="columns">
 				<div class="column is-half-desktop">
 					<div class="content">
-						<h2 class="heading is-blacklight">Step 1</h2>
-						<h2 class="error-heading has-icon">Please select one of the options below</h2>
+						<h1 id="category-error-message" class="is-normal">Please select one of the options below.</h1>
 					</div>
 					<div class="columns">
 						<div class="column">
@@ -87,11 +88,7 @@
 			<div class="columns">
 				<div class="column is-half">
 					<div class="content">
-						<h1 class="is-normal">Tell us more about your domain name.</h1>
-					</div>
-					<div class="content">
-						<h2 class="heading is-blacklight">Step 2</h2>
-						<h2>Enter basic domain information</h2>
+						<h1 id="category-error-message" class="is-normal">Enter basic domain information.</h1>
 					</div>
 					<p class="control">
 						<label id="domain-error-message" class="label is-medium">Domain Name</label>
@@ -121,16 +118,8 @@
 			<div class="columns">
 				<div class="column is-half">
 					<div class="content">
-						<h1 id="category-error-message" class="is-normal">Categories help the right users find your domain.</h1>
+						<h1 id="category-error-message" class="is-normal">Choose at least one Category.</h1>
 					</div>
-					<div class="content">
-						<h2 class="heading is-blacklight">Step 3</h2>
-						<h2>Choose at least one Category</h2>
-					</div>
-					<p class="control">
-						<label class="label is-medium has-icon">Categories</label>
-						<i class="fa fa-question-circle-o"></i>
-					</p>
 					<form class="checkbox-form">
 						<ul class="checkbox-list">
 							<li>
@@ -171,14 +160,6 @@
 					<div class="content">
 						<h1 class="is-normal">Decide pricing for your domain.</h1>
 					</div>
-					<div class="content">
-						<h2 class="heading is-blacklight">Step 4</h2>
-						<h2>These prices can be customized again after creation</h2>
-					</div>
-					<p class="control">
-						<label class="label is-medium has-icon">Pricing Options</label>
-						<i class="fa fa-question-circle-o"></i>
-					</p>
 					<form>
 						<%# <div class="control is-horizontal">
 							<div class="control-label is-medium">
@@ -235,6 +216,7 @@
 							</div>
 						</div>%>
 					</form>
+					<p>These prices can be customized again after creation</p>
 				</div>
 			</div>
 		</div>
@@ -319,6 +301,7 @@
 		</div>
 	</section>
 
+	</section>
 
 	<%- include("../templates/footer"); %>
   	<%- include("../templates/js_scripts"); %>
