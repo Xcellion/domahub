@@ -11,18 +11,16 @@
 <body>
 	<%- include("../templates/navbar", {user: user}); %>
 
-	<section class='min-height'>
-
 	<div class="container clear-nav-profile">
-	    <div class="tabs is-centered">
-	        <ul>
-	            <li><a href="/profile/dashboard" tabindex="7">Dashboard</a></li>
-	            <li class="is-active"><a href="/profile/messages" tabindex="8">Messages</a></li>
-	            <li><a href="/profile/mylistings" tabindex="9">Listings</a></li>
-	            <li><a href="/profile/myrentals" tabindex="10">Rentals</a></li>
-	            <li><a href="/profile/settings" tabindex="11">Settings</a></li>
-	        </ul>
-	    </div>
+    <div class="tabs is-centered">
+      <ul>
+        <li><a href="/profile/dashboard" tabindex="7">Dashboard</a></li>
+        <li class="is-active"><a href="/profile/messages" tabindex="8">Messages</a></li>
+        <li><a href="/profile/mylistings" tabindex="9">Listings</a></li>
+        <li><a href="/profile/myrentals" tabindex="10">Rentals</a></li>
+        <li><a href="/profile/settings" tabindex="11">Settings</a></li>
+      </ul>
+    </div>
 	</div>
 
 	<section class="section">
@@ -53,7 +51,7 @@
 				</div>%>
 
 				<div class="column is-two-thirds">
-					<div class="box no-shadow radius-right-only">
+					<div class="box">
 						<form action="/messages" method="post" id="messenger_form">
 							<div class="chat-box-header margin-bottom-25">
 								<div class="chat-box-header-item">
@@ -106,13 +104,10 @@
 								</div>
 							</div>
 						</form>
-
 					</div>
 				</div>
 			</div>
 		</div>
-	</section>
-
 	</section>
 
 	<%- include("../templates/footer"); %>
