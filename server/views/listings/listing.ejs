@@ -14,7 +14,7 @@
 	<body>
 		<%- include("../templates/navbar", {user: user}); %>
 
-		<section id="background_image" class="section listing-section landing-img" style="background-image:url('<%= listing_info.background_image || 'https://source.unsplash.com/category/people' %>')">
+		<section id="background_image" class="section listing-section landing-img" style="background-image:url('<%= listing_info.background_image || 'https://source.unsplash.com/category/nature' %>')">
 
 		</section>
 
@@ -37,14 +37,38 @@
 					</div>
 					<div class="column is-4">
 						<% if (listing_info.status == 1) { %>
-							<div class="notification has-button is-primary">
-								<span>This domain is available.</span>
-								<a data-can_next="true" class="button next_button is-primary is-inverted">Rent Now</a>
+							<div class="notification is-primary">
+								<nav class="level">
+									<div class="level-left">
+										<div class="level-item">
+											<p class="is-white">
+												This domain is available.
+											</p>
+										</div>
+									</div>
+									<div class="level-right">
+										<div class="level-item">
+											<a data-can_next="true" class="button next_button is-primary is-inverted">Rent Now</a>
+										</div>
+									</div>
+								</nav>
 							</div>
 						<% } else { %>
 							<div class="notification has-button is-danger">
-								<span>This domain is unavailable.</span>
-								<a class="button is-danger is-inverted">Request</a>
+								<nav class="level">
+									<div class="level-left">
+										<div class="level-item">
+											<p class="is-white">
+												This domain is unavailable.
+											</p>
+										</div>
+									</div>
+									<div class="level-right">
+										<div class="level-item">
+											<a class="button is-danger is-inverted">Request</a>
+										</div>
+									</div>
+								</nav>
 							</div>
 						<% } %>
 						<div class="box">
@@ -52,6 +76,37 @@
 						</div>
 					</div>
 				</div>
+			</div>
+		</section>
+
+		<section class="section">
+			<div class="container">
+				<div id="calendar_wrapper" class="has-text-centered">
+
+					<div id="calendar_top_wrapper">
+
+						<div id="calendar_left_wrapper" class="info_wrapper_block">
+							<a class="button" id="remove_events">Remove all</a>
+							<a class="button" id="month_button">Month</a>
+							<a class="button" id="prev-button"><</a>
+							<a class="button" id="today-button">Today</a>
+							<a class="button" id="next-button">></a>
+						</div>
+
+						<div id="calendar_right_wrapper" class="info_wrapper_block">
+							<h1 id="price">$0</h1>
+							<a class="button next_button" id="calendar_next">Next</a>
+						</div>
+					</div>
+
+					<div id="calendar"></div>
+
+				</div>
+			</div>
+		</section>
+
+		<section class="section">
+			<div class="container">
 				<div class="columns">
 					<div class="column">
 						<div class="content">
@@ -63,9 +118,9 @@
 					<div class="column is-2">
 						<figure class="image is-circle is-96x96">
 							<% if (listing_info.profile_pic){ %>
-								<img src="<%= listing_info.profile_pic %>">
+							<img src="<%= listing_info.profile_pic %>">
 							<% } else { %>
-								<img src="https://placeholdit.imgix.net/~text?txtsize=25&bg=9e9e9e&txtclr=ffffff&txt=<%= listing_info.username %>&w=128&h=128">
+							<img src="https://placeholdit.imgix.net/~text?txtsize=25&bg=9e9e9e&txtclr=ffffff&txt=<%= listing_info.username %>&w=128&h=128">
 							<% } %>
 						</figure>
 					</div>
@@ -78,35 +133,6 @@
 				</div>
 			</div>
 		</section>
-
-		<section class="section">
-			<div class="container">
-
-			</div>
-		</section>
-
-		<div id="calendar_wrapper" class="has-text-centered">
-
-			<div id="calendar_top_wrapper">
-
-				<div id="calendar_left_wrapper" class="info_wrapper_block">
-					<a class="button" id="remove_events">Remove all</a>
-					<a class="button" id="month_button">Month</a>
-					<a class="button" id="prev-button"><</a>
-					<a class="button" id="today-button">Today</a>
-					<a class="button" id="next-button">></a>
-				</div>
-
-				<div id="calendar_right_wrapper" class="info_wrapper_block">
-					<h1 id="price">$0</h1>
-					<a class="button next_button" id="calendar_next">Next</a>
-				</div>
-			</div>
-
-			<div id="calendar"></div>
-
-		</div>
-
 
 		<div id="address_wrapper" class="page_wrapper">
 

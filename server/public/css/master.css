@@ -2086,10 +2086,6 @@ input:-webkit-autofill {
   .notification.has-text-centered > .half-width {
     width: 75%;
     margin: 0 auto; }
-  .notification.has-button span {
-    line-height: 32px; }
-  .notification.has-button .button {
-    margin-left: 60px; }
   .notification.is-white {
     background-color: white;
     color: black; }
@@ -5684,10 +5680,10 @@ a.nav-item.is-tab {
   line-height: normal !important; }
 
 .min-height {
-  min-height: calc(100vh - 234px); }
+  min-height: calc(100vh - 200px); }
 
 .min-height-half {
-  min-height: calc(50vh - 234px); }
+  min-height: calc(50vh - 200px); }
 
 .clear-nav {
   padding-top: 60px; }

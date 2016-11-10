@@ -2086,10 +2086,6 @@ input:-webkit-autofill {
   .notification.has-text-centered > .half-width {
     width: 75%;
     margin: 0 auto; }
-  .notification.has-button span {
-    line-height: 32px; }
-  .notification.has-button .button {
-    margin-left: 60px; }
   .notification.is-white {
     background-color: white;
     color: black; }
