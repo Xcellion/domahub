@@ -44,7 +44,7 @@ $(document).ready(function() {
     //filter panel
     $(".filter-local").click(function(e){
         var panel_id = $(this).attr('id');
-        $(".panel-block").removeClass('is-active');
+        $(".filter-local").removeClass('is-active');
         if (panel_id != "reset_filter"){
             $(this).addClass("is-active");
         }
