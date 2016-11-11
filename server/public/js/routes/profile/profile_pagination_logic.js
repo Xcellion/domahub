@@ -229,13 +229,21 @@ function sortRows(method, sorted){
         toggleSort("domain_name", sorted);
     }
     else if (method == "status"){
-        toggleSort("status", sorted);
+        if (window.location.pathname.indexOf("rentals") != -1){
+            toggleSort("active", sorted);
+        }
+        else {
+            toggleSort("status", sorted);
+        }
     }
     else if (method == "date"){
         toggleSort("date_created", sorted);
     }
     else if (method == "type"){
-        toggleSort("type", sorted);
+        toggleSort("exp_date", sorted);
+    }
+    else if (method == "address"){
+        toggleSort("address", sorted);
     }
 }
 
