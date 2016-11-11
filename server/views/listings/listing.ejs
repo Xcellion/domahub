@@ -19,7 +19,7 @@
 		</section>
 
 		<section id="top_wrapper" class="page_wrapper section is-small has-borderBottom">
-			<div class="container">
+			<div class="container has-borderBottom">
 				<div class="columns">
 					<div class="column is-half">
 						<nav class="level jc-flex-start">
@@ -30,7 +30,10 @@
 							</div>
 							<div class="level-item">
 								<% if (listing_info.status == 1) { %>
-								<span class="tag is-medium is-primary">Available</span>
+
+									<div class="notification is-primary">
+										Available
+									</div>
 								<% } else { %>
 								<span class="tag is-medium is-danger">Unavailable</span>
 								<% } %>
@@ -58,7 +61,7 @@
 								<div class="content">
 									<% if (listing_info.status == 1) { %>
 									<p class="is-bold">Full Pricing Information</p>
-									<nav class="level has-borderBottom">
+									<nav class="level is-mobile has-borderBottom">
 										<div class="level-left">
 											<p class="level-item">
 												Hourly:
@@ -70,7 +73,7 @@
 											</p>
 										</div>
 									</nav>
-									<nav class="level has-borderBottom">
+									<nav class="level is-mobile has-borderBottom">
 										<div class="level-left">
 											<p class="level-item">
 												Daily:
@@ -82,7 +85,7 @@
 											</p>
 										</div>
 									</nav>
-									<nav class="level has-borderBottom">
+									<nav class="level is-mobile has-borderBottom">
 										<div class="level-left">
 											<p class="level-item">
 												Weekly:
@@ -94,7 +97,7 @@
 											</p>
 										</div>
 									</nav>
-									<nav class="level has-borderBottom">
+									<nav class="level is-mobile has-borderBottom">
 										<div class="level-left">
 											<p class="level-item">
 												Monthly:
