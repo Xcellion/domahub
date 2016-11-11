@@ -270,13 +270,12 @@ function setSectionNext(bool, section_selector){
 
 //function to change the top banner text
 function changeBannerText(section_id){
+    $("#multiple-button").addClass("is-hidden");
     switch (section_id){
         case ("type"):
-            $('#banner-title').text("Please select Basic or Premium.");
-            $("#banner-subtitle").empty();
-            var temp_link = $('<a href="/faq#basicvspremium" target="_blank" style="target-new: tab;" class="is-white is-underlined-hover">What is Basic vs. Premium?</a>');
-            var temp_icon = $('<i class="fa fa-question-circle-o"></i>');
-            $("#banner-subtitle").append(temp_link, temp_icon);
+            $('#banner-title').html('Please select <a href="/faq#basicvspremium" target="_blank" style="target-new: tab;" class="is-underlined">Basic or Premium.</a>');
+            $("#banner-subtitle").text('You can also change this after creating the listing.');
+            $("#multiple-button").removeClass("is-hidden");
             break;
         case ("info"):
             $('#banner-title').text("Enter basic domain information.");
