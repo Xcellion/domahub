@@ -2,8 +2,162 @@ var can_submit = true;
 
 //on back button
 window.onpopstate = function(event) {
-    changePage(window.location.hash.split("?")[0].replace("#", ""));
+    fillExistingData();
+    changeViewByHash();
 };
+
+$(document).ready(function() {
+    fillExistingData();
+    changeViewByHash();
+
+    //section 1 - basic vs premium
+    $(".box").click(function() {
+        //styling the two buttons
+        $(".box").removeClass("is-active").addClass("low-opacity");
+        $(this).addClass("is-active").removeClass("low-opacity");
+
+        setSectionNext(true, "type");  //setting up next button logic
+        updateQueryStringParam("type", $(this).data("listing-type"));
+        setPremium($(this).data("listing-type") == "basic");  //setting up premium listing logic
+    });
+
+    //section 2 - listing info
+    $(".required-input").on("change keyup paste", function(e){
+        if ($("#domain_name-input").val() && $("#description-input").val()){
+            //update the listing preview
+            $("#preview-domain").text($("#domain_name-input").val());
+            $("#preview-description").text($("#description-input").val());
+        }
+        setSectionNext($("#domain_name-input").val() && $("#description-input").val(), "info");
+        updateQueryStringParam("domain_name", $("#domain_name-input").val());
+        updateQueryStringParam("description", $("#description-input").val());
+    });
+
+    //section 3 - categories
+    $(".cat-checkbox-label, .cat-checkbox").on("click", function(e){
+        setSectionNext($(".cat-checkbox:checked").length > 0, "category");
+        var category_val = "";
+        $('.cat-checkbox:checkbox:checked').each(function(){
+            category_val += $(this).val() + ",";
+        });
+        updateQueryStringParam("categories", category_val);
+    });
+
+    //section 4 - pricing
+    $(".price-input").on("change keyup paste mousewheel", function(e){
+        //update listing preview
+        if (parseFloat($(this).val()) > 0){
+            $("#preview-" + $(this).attr("id")).find(".green_text").text("$" + $(this).val());
+        }
+        setSectionNext(checkPrices(), "pricing");
+        updateQueryStringParam($(this).attr("id").replace("-input", ""), $(this).val());
+    });
+
+    //next/prev button for sections
+    $(".next-button").click(function() {
+        var next_page = $(".section").not(".is-hidden").next(".section");
+        //skip next page if its pricing and we're creating a basic listing
+        if (next_page.data("pageskip")){
+            next_page = next_page.next('.section');
+        }
+        var next_page_id = next_page.attr("id").split("-")[0];
+        changePage(next_page_id);
+    });
+
+    //previous button for sections
+    $(".prev-button").click(function() {
+        var previous_page = $(".section").not(".is-hidden").prev(".section");
+        //skip next page if its pricing and we're creating a basic listing
+        if (previous_page.data("pageskip")){
+            previous_page = previous_page.prev('.section');
+        }
+        var previous_page_id = previous_page.attr("id").split("-")[0];
+        changePage(previous_page_id);
+    });
+
+});
+
+//--------------------------------------------------------------------------------------------------------PAGE HASH
+
+//function to check the hash and switch to appropriate view
+function changeViewByHash(){
+    var search_queries_exist = window.location.hash.split("?").length > 1;
+    var search_queries = window.location.hash.split("?")[1];
+    var hash_category = (window.location.hash) ? window.location.hash.split("?")[0] : false;
+
+    //if no hash replace the history state and go to first page
+    if (window.location.hash == "" || !search_queries_exist || ["#type", "#info", "#pricing", "#category"].indexOf(hash_category) == -1){
+        $("title").html("Create Single Listing - Type - DomaHub");
+        history.replaceState({}, "", "/listings/create/single#type");
+    }
+    //else search through the search queries and find the appropriate page to change to
+    else if (search_queries_exist){
+        //determine which view we switch to
+        var section_id = "type";
+        $(".section").each(function(){
+            if ($(this).data("can-next") && !$(this).data("pageskip")){
+                section_id = $(this).attr("id").replace("-section", "");
+            }
+        });
+
+        //switch to the appropriate view, replace title
+        $("title").html("Create Single Listing - " + section_id.charAt(0).toUpperCase() + section_id.slice(1) + " - DomaHub");
+        var queries = (window.location.hash.split("?")[1] != undefined) ? "?" + window.location.hash.split("?")[1] : ""
+        history.replaceState({}, "", "/listings/create/single#" + section_id + queries);
+        changePage(section_id, true);
+    }
+}
+
+//function to check for existing data
+function fillExistingData(){
+    //create all pre-existing values based on query strings
+    if (window.location.hash.split("?").length > 1){
+        var search_queries = window.location.hash.split("?")[1];
+        var kv_pairs = search_queries.split("&");
+        for (var x = 0; x < kv_pairs.length; x++){
+            var key = kv_pairs[x].split("=")[0];
+            var value = kv_pairs[x].split("=")[1];
+
+            //basic v premium
+            if (key == "type" && (value == "basic" || value == "premium")){
+                var is_basic = (value == "basic");
+                var bp_elem = (is_basic) ? $("#basic-box") : $("#premium-box");
+                $(".box").removeClass("is-active").addClass("low-opacity");
+                bp_elem.addClass("is-active").removeClass("low-opacity");
+                setSectionNext(true, "type");
+                setPremium(is_basic);
+            }
+            //categories
+            else if (key == "categories" && value != ""){
+                var existing_categories = value.split(",").filter(function(el) {return el.length != 0});
+                for (var y = existing_categories.length - 1; y >= 0; y--){
+                    if ($("#" + existing_categories[y] + "-category").length > 0){
+                        $("#" + existing_categories[y] + "-category").prop("checked", true);
+                    }
+                    else {
+                        existing_categories.splice(y, 1);
+                    }
+                }
+
+                updateQueryStringParam(key, existing_categories.join(","));
+                setSectionNext($(".cat-checkbox:checked").length > 0, "category");
+            }
+            //pricing
+            else if ((key == "hour_price" || key == "day_price" || key == "month_price" || key == "week_price") &&
+                     parseFloat(value) == value >>> 0){
+                $("#" + key + "-input").val(value);
+            }
+            //info
+            else if ((key == "domain_name" || key == "description") && value != ""){
+                $("#" + key + "-input").val(value);
+                setSectionNext($("#domain_name-input").val().length > 0 && $("#description-input").val().length > 0, "info");
+            }
+            else {
+                updateQueryStringParam(key);
+            }
+        }
+    }
+}
 
 //function to update the page string query params
 function updateQueryStringParam(key, value) {
@@ -48,82 +202,7 @@ function addRemovePricesQueryString(bool){
     }
 }
 
-$(document).ready(function() {
-
-    //if no hash, go to the first page
-    if (window.location.hash == ""){
-        window.location.hash = "type";
-    }
-    else {
-        changePage(window.location.hash.split("?")[0].replace("#", ""));
-    }
-
-    //section 1 - basic vs premium
-    $(".box").click(function() {
-        //styling the two buttons
-        $(".box").removeClass("is-active").addClass("low-opacity");
-        $(this).addClass("is-active").removeClass("low-opacity");
-
-        setSectionNext(true, "type");  //setting up next button logic
-        updateQueryStringParam("type", $(this).data("listing-type"));
-        setPremium($(this).data("listing-type") == "basic");  //setting up premium listing logic
-    });
-
-    //section 2 - listing info
-    $(".required-input").on("change keyup paste", function(e){
-        if ($("#domain_name-input").val() && $("#description-input").val()){
-            //update the listing preview
-            $("#preview-domain").text($("#domain_name-input").val());
-            $("#preview-description").text($("#description-input").val());
-        }
-        setSectionNext($("#domain_name-input").val() && $("#description-input").val(), "info");
-        updateQueryStringParam("domain_name", $("#domain_name-input").val());
-        updateQueryStringParam("description", $("#description-input").val());
-    });
-
-    //section 3 - categories
-    $(".cat-checkbox-label, .cat-checkbox").on("click", function(e){
-        setSectionNext($('.cat-checkbox:checkbox:checked').length > 0, "category");
-        var category_val = "";
-        $('.cat-checkbox:checkbox:checked').each(function(){
-            category_val += $(this).val() + ",";
-        });
-        updateQueryStringParam("categories", category_val);
-    });
-
-    //section 4 - pricing
-    $(".price-input").on("change keyup paste mousewheel", function(e){
-        //update listing preview
-        if (parseFloat($(this).val()) > 0){
-            $("#preview-" + $(this).attr("id")).find(".green_text").text("$" + $(this).val());
-        }
-        setSectionNext(checkPrices(), "pricing");
-        updateQueryStringParam($(this).attr("id").replace("-input", ""), $(this).val());
-    });
-
-    //next/prev button for sections
-    $(".next-button").click(function() {
-        var next_page = $(".section").not(".is-hidden").next(".section");
-        //skip next page if its pricing and we're creating a basic listing
-        if (next_page.data("pageskip")){
-            next_page = next_page.next('.section');
-        }
-        var next_page_id = next_page.attr("id").split("-")[0];
-        changePage(next_page_id);
-    });
-
-    //previous button for sections
-    $(".prev-button").click(function() {
-        var previous_page = $(".section").not(".is-hidden").prev(".section");
-        //skip next page if its pricing and we're creating a basic listing
-        if (previous_page.data("pageskip")){
-            previous_page = previous_page.prev('.section');
-        }
-        var previous_page_id = previous_page.attr("id").split("-")[0];
-        changePage(previous_page_id);
-    });
-
-});
+//--------------------------------------------------------------------------------------------------------
 
 //function to check if all prices are good
 function checkPrices(){
@@ -181,6 +260,35 @@ function setSectionNext(bool, section_selector){
     }
 }
 
+//function to change the top banner text
+function changeBannerText(section_id){
+    switch (section_id){
+        case ("type"):
+            $('#banner-title').text("Please select one of the options below.");
+            $("#banner-subtitle").empty();
+            var temp_link = $('<a href="/faq#basicvspremium" target="_blank" style="target-new: tab;" class="is-white is-underlined-hover">What is Basic vs. Premium?</a>');
+            var temp_icon = $('<i class="fa fa-question-circle-o"></i>');
+            $("#banner-subtitle").append(temp_link, temp_icon);
+            break;
+        case ("info"):
+            $('#banner-title').text("Enter basic domain information.");
+            $("#banner-subtitle").text('Descriptions help your listing stand out!');
+            break;
+        case ("category"):
+            $('#banner-title').text("Choose at least one Category.");
+            $("#banner-subtitle").text('These will help potential users search for and find your listing.');
+            break;
+        case ("pricing"):
+            $('#banner-title').text("Decide pricing for your domain.");
+            $("#banner-subtitle").text('These prices can be customized again after creation');
+            break;
+        case ("preview"):
+            $('#banner-title').text("Preview your listing.");
+            $("#banner-subtitle").text('This is how users will see your new listing on DomaHub.');
+            break;
+    }
+}
+
 //function to go to a specific page
 function changePage(section_id, page_refresh_bool){
     $(".section").not("#buttons-section").addClass("is-hidden");  //hide all sections except bottom buttons
@@ -192,6 +300,9 @@ function changePage(section_id, page_refresh_bool){
         var queries = (window.location.hash.split("?")[1] != undefined) ? "?" + window.location.hash.split("?")[1] : ""
         history.pushState({}, "", "/listings/create/single#" + section_id + queries);
     }
+
+    //change title of page
+    $("title").html("Create Single Listing - " + section_id.charAt(0).toUpperCase() + section_id.slice(1) + " - DomaHub");
 
     //first, disable prev
     if (section_id == "type"){
@@ -220,13 +331,16 @@ function changePage(section_id, page_refresh_bool){
     }
 
     //animate the progress bar
-    $('.progress').animate({
+    $('.progress').stop().animate({
         value: section_to_change_to.data("progress-percent")
     }, {
         step: function(current_number){
             $(this).val(current_number);
         }
     });
+
+    //change the text on the top banner
+    changeBannerText(section_id);
 
 }
 
