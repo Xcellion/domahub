@@ -4,7 +4,7 @@
 .qa-wrapper {
   & + .qa-wrapper {
     margin-top: -60px;
-    padding-top: 85px;
+    padding-top: 75px;
   }
   p,
   a {
@@ -16,12 +16,7 @@
 }
 
 .faq-section {
-  margin-top: -70px;
   padding-top: 70px;
-  & + .faq-section {
-    margin-top: -30px;
-    padding-top: 70px;
-  }
 }
 
 .faq-question {
@@ -36,9 +31,7 @@
   position: relative;
   cursor: pointer;
   color: $primary;
-  &.is-active {
-    &:hover {
-      color: $primary-darker;
-    }
+  &:hover {
+    color: $primary-dark;
   }
 }

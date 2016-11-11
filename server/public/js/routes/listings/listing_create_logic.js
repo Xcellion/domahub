@@ -321,11 +321,11 @@ function changePage(section_id, page_refresh_bool){
 
     //last, hide next, show submit
     if (section_id == "preview"){
-        $("#next-button").addClass('is-hidden');
+        $("#next-button").addClass('is-disabled');
         $("#submit-button").removeClass('is-hidden');
     }
     else {
-        $("#next-button").removeClass('is-hidden');
+        $("#next-button").removeClass('is-disabled');
         $("#submit-button").addClass('is-hidden');
     }
 
@@ -386,38 +386,39 @@ function getListingData(){
 function checkListingData(){
 	var listingData = getListingData();
     var is_premium = $("#premium-box").hasClass("is-active");
+    //return listingData;
 
     //checks
 	if (!listingData.domain_name){
-        errorHandler("Invalid domain name!");
+        errorHandler("domain");
 	}
 	else if (!listingData.description){
-		errorHandler("Invalid description!");
+		errorHandler("description");
 	}
     else if (listingData.categories.length <= 0){
-        errorHandler("Invalid categories!");
+        errorHandler("category");
     }
 	// else if (parseFloat(listingData.minute_price) != listingData.minute_price >>> 0){
 	// 	console.log("Invalid minute price!");
 	// }
 	else if	(is_premium && parseFloat(listingData.hour_price) != listingData.hour_price >>> 0){
-		errorHandler("Invalid hourly price!");
+		errorHandler("hour");
 	}
 	else if (is_premium && parseFloat(listingData.day_price) != listingData.day_price >>> 0){
-		errorHandler("Invalid daily price!");
+		errorHandler("day");
 	}
 	else if (is_premium && parseFloat(listingData.week_price) != listingData.week_price >>> 0){
-		errorHandler("Invalid weekly price!");
+		errorHandler("week");
 	}
 	else if (is_premium && parseFloat(listingData.month_price) != listingData.month_price >>> 0){
-		errorHandler("Invalid monthly price!");
+		errorHandler("month");
 	}
 	else {
 		return listingData;
 	}
 }
 
-//function to submit listings
+//function to submit listings basic or premium
 function submitListing(submit_button, submit_data, url){
     $("#submit-button").addClass('is-loading');
 
@@ -426,7 +427,7 @@ function submitListing(submit_button, submit_data, url){
 
 		$.ajax({
 			type: "POST",
-			url: "/listings/create/single/" + url,
+			url: "/listings/create/" + url,
 			data: submit_data
 		}).done(function(data){
 			can_submit = true;
@@ -434,7 +435,6 @@ function submitListing(submit_button, submit_data, url){
 
 			if (data.state == "success"){
                 //reset the datas to default value
-                delete_cookie("listing_data");
                 $(".box").removeClass("is-active low-opacity");
                 $(".input").val("");
                 $(".cat-checkbox").prop('checked', false);
@@ -499,15 +499,16 @@ function submitListingsPremium(submit_button, submit_data){
 
 //handling of various errors sent from the server
 function errorHandler(error_selector){
-    var error_codes = ["description", "domain", "background", "buy", "category", "minute","hour", "day", "week", "month"];
+    var error_codes = ["description", "domain", "background", "buy", "category", "minute", "hour", "day", "week", "month"];
 
     if (error_codes.indexOf(error_selector) != -1){
-        var error_msg_elem = $("#" + error_selector + "-error-message");
-        changePage(error_msg_elem.closest(".section").attr("id").split("-")[0]);
-        error_msg_elem.text("Invalid " + error_selector + "!").addClass("is-danger");
+        var error_msg = "Invalid " + error_selector + "! Please review your listing details.";
+        var error_section = $("#" + error_selector + "-error-message").closest(".section");
+        changePage(error_section.attr("id").split("-")[0]);
+        $("#banner-subtitle").text(error_msg);
     }
     //stripe or something else
     else {
-
+        console.log(error_selector);
     }
 }

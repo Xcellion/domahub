@@ -18,6 +18,7 @@ else {
 module.exports = {
 	//function to format the listing info
 	checkListingCreateInfo : function(req, res, next){
+		console.log(req.body);
 		var domain_name = req.body.domain_name;
 		var description = req.body.description;
 		var categories = req.body.categories;
