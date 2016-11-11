@@ -86,7 +86,7 @@ function changeViewByHash(){
     var hash_category = (window.location.hash) ? window.location.hash.split("?")[0] : false;
 
     //if no hash replace the history state and go to first page
-    if (window.location.hash == "" || !search_queries_exist || ["#type", "#info", "#pricing", "#category"].indexOf(hash_category) == -1){
+    if (window.location.hash == "" || !search_queries_exist){
         $("title").html("Create Single Listing - Type - DomaHub");
         history.replaceState({}, "", "/listings/create/single#type");
     }
@@ -94,11 +94,19 @@ function changeViewByHash(){
     else if (search_queries_exist){
         //determine which view we switch to
         var section_id = "type";
-        $(".section").each(function(){
-            if ($(this).data("can-next") && !$(this).data("pageskip")){
-                section_id = $(this).attr("id").replace("-section", "");
-            }
-        });
+
+        //if the hash is can-next, go there
+        if ($(hash_category + "-section").data("can-next")){
+            section_id = hash_category.substr(1, hash_category.length);
+        }
+        else {
+            $(".section").each(function(){
+                //if we can't go next on this section, then its not complete, so switch to it
+                if (!$(this).data("can-next") && !$(this).data("pageskip")){
+                    section_id = $(this).attr("id").replace("-section", "");
+                }
+            });
+        }
 
         //switch to the appropriate view, replace title
         $("title").html("Create Single Listing - " + section_id.charAt(0).toUpperCase() + section_id.slice(1) + " - DomaHub");
@@ -264,7 +272,7 @@ function setSectionNext(bool, section_selector){
 function changeBannerText(section_id){
     switch (section_id){
         case ("type"):
-            $('#banner-title').text("Please select one of the options below.");
+            $('#banner-title').text("Please select Basic or Premium.");
             $("#banner-subtitle").empty();
             var temp_link = $('<a href="/faq#basicvspremium" target="_blank" style="target-new: tab;" class="is-white is-underlined-hover">What is Basic vs. Premium?</a>');
             var temp_icon = $('<i class="fa fa-question-circle-o"></i>');
@@ -284,7 +292,7 @@ function changeBannerText(section_id){
             break;
         case ("preview"):
             $('#banner-title').text("Preview your listing.");
-            $("#banner-subtitle").text('This is how users will see your new listing on DomaHub.');
+            $("#banner-subtitle").text('This is how users will see your new listing on DomaHub. You can edit it once your listing has been created.');
             break;
     }
 }

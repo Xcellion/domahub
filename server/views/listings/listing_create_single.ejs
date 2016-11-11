@@ -15,12 +15,11 @@
 	<section class='min-height'>
 
 	<div class="container-progress">
-		<progress class="progress is-small is-accent" min="0" max="100"></progress>
 		<div class="container margin-bottom-25">
 			<div class="columns">
 				<div class='column is-full'>
 					<div class="notification is-primary flex-content">
-						<h1 id="banner-title" class="title is-3">Please select one of the options below.</h1>
+						<h1 id="banner-title" class="title is-3">Create a single listing.</h1>
 						<p id="banner-subtitle" class="control is-white">
 							<a href="/faq#basicvspremium" target="_blank" style="target-new: tab;" class="is-white is-underlined-hover">What is Basic vs. Premium?</a>
 							<i class="fa fa-question-circle-o"></i>
@@ -29,6 +28,8 @@
 				</div>
 			</div>
 		</div>
+
+		<progress class="progress is-small is-primary" min="0" max="100"></progress>
 		<div class="container">
 			<nav class="level">
 				<div class="level-right">
@@ -50,14 +51,7 @@
 									<i class="fa fa-angle-right"></i>
 								</span>
 							</a>
-						</p>
-					</div>
-					<div class="level-item">
-						<p class="control">
-							<a id="submit-button" class="is-hidden button is-primary" tabindex="17">
-								<span class="icon">
-									<i class="fa fa-angle-down"></i>
-								</span>
+							<a id="submit-button" class="is-hidden button is-inverted is-primary" tabindex="17">
 								<span id="submit-button-text">Submit</span>
 							</a>
 						</p>
@@ -65,7 +59,6 @@
 				</div>
 			</nav>
 		</div>
-
 	</div>
 
 	<section id="type-section" data-progress-percent="0" class="section is-small">
@@ -133,7 +126,7 @@
 				<div class="column is-half">
 					<p class="control">
 						<label id="domain-error-message" class="label is-medium">Domain Name</label>
-						<input id="domain_name-input" tabindex="9" class="input required-input is-medium" type="url" placeholder="MyDomain.com"/>
+						<input id="domain_name-input" tabindex="9" class="input required-input is-medium" type="url" placeholder="MyPremiumDomain.com"/>
 					</p>
 					<p class="control">
 						<label id="description-error-message" class="label is-medium has-icon">Description</label>
@@ -270,7 +263,6 @@
 							<p id="preview-day-price" class="">Day <span class="green_text">$10</span> | </p>
 							<p id="preview-week-price" class="">Week <span class="green_text">$25</span> | </p>
 							<p id="preview-month-price" class="">Month <span class="green_text">$50</span></p>
-							<p class=""><a class="orange-link">Interested in buying this domain?</a></p>
 						</div>
 					</div>
 				</div>
