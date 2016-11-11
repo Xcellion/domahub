@@ -28,10 +28,9 @@
 			</div>
 		</div>
 
-		<progress class="progress is-small is-primary" min="0" max="100"></progress>
 		<div class="container">
 			<nav class="level">
-				<div class="level-right">
+				<div class="level-left">
 					<div class="level-item">
 						<p class="control">
 							<a id="prev-button" class="is-disabled button is-primary prev-button" tabindex="16">
@@ -50,20 +49,22 @@
 									<i class="fa fa-angle-right"></i>
 								</span>
 							</a>
-							<a id="submit-button" class="is-hidden button is-success" tabindex="17">
-								<span id="submit-button-text">Submit</span>
-							</a>
 						</p>
 					</div>
 					<a id="multiple-button" class="button is-accent" tabindex="7" href="/listings/create/multiple">
-					  <span class="icon">
-						<i class="fa fa-angle-down"></i>
-					  </span>
-					  <span>I have multiple listing to create.</span>
+						<span class="icon">
+							<i class="fa fa-angle-down"></i>
+						</span>
+						<span>I have multiple listing to create.</span>
+					</a>
+					<a id="submit-button" class="is-hidden is-full-width button is-success" tabindex="17">
+						<span id="submit-button-text">Submit</span>
 					</a>
 				</div>
 			</nav>
+			<progress class="progress is-small is-primary" min="0" max="100"></progress>
 		</div>
+
 	</div>
 
 	<section id="type-section" data-progress-percent="0" class="section is-small">
@@ -156,6 +157,7 @@
 		<div class="container">
 			<div class="columns">
 				<div class="column is-half">
+					<label id="category-error-message" class="label is-medium">Categories</label>
 					<form class="checkbox-form">
 						<ul class="checkbox-list">
 							<li>
