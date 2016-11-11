@@ -23,25 +23,14 @@
 //       margin-left: 25px
 
 .card-header-title
-  align-items: flex-start
+  align-items: center
   display: flex
   flex-grow: 1
   padding: 10px
   &.has-text-centered
     justify-content: center
-  &-index
-    align-items: center
-    display: flex
-    flex-grow: 1
-    padding: 20px 0 15px 10px
-    &::after
-      background: $border
-      content: ""
-      height: 3px
-      top: 46px
-      left: 10px
-      position: absolute
-      width: 35px
+  &.jc-flex-end
+    justify-content: flex-end
 
 .card-header-subtitle
   align-items: flex-start
