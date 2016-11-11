@@ -44,16 +44,16 @@
           width: 100%
   &.jc-flex-start
     justify-content: flex-start
+    display: flex
+    +mobile
+      justify-content: space-between
     +tablet
-      display: flex
       & > .level-item
         &:not(.is-narrow)
           flex-grow: 0
     & > .level-item
-      +tablet
-        flex-grow: 0
-        &:not(:first-child)
-          margin-left: 10px
+      &:not(:first-child)
+        margin-left: 10px
   &.is-white
     & > .level-left
       background-color: $white
@@ -68,7 +68,11 @@
   // Modifiers
   &.is-mobile
     display: flex
-    justify-content: center
+    align-items: center
+    justify-content: space-between
+    & > .level-left
+      & + .level-right
+        margin-top: 0
     & > .level-item
       &:not(:last-child)
         margin-bottom: 0
