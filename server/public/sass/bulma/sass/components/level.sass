@@ -36,10 +36,22 @@
   @extend .block
   align-items: center
   justify-content: space-between
+  &.filter-panel
+    margin-bottom: 10px
+    & > .level-item
+      & > .button
+        +mobile
+          width: 100%
   &.jc-flex-start
     justify-content: flex-start
+    +tablet
+      display: flex
+      & > .level-item
+        &:not(.is-narrow)
+          flex-grow: 0
     & > .level-item
       +tablet
+        flex-grow: 0
         &:not(:first-child)
           margin-left: 10px
   &.is-white

@@ -331,7 +331,7 @@ function createPriceDrop(listing_info){
 
 //function to create the image drop column
 function createImgDrop(listing_info, rownum){
-    var background_image = (listing_info.background_image == null || listing_info.background_image == undefined || listing_info.background_image == "") ? "https://placeholdit.imgix.net/~text?txtsize=40&txt=RANDOM%20PHOTO&w=200&h=200" : listing_info.background_image;
+    var background_image = (listing_info.background_image == null || listing_info.background_image == undefined || listing_info.background_image == "") ? "https://placeholdit.imgix.net/~text?txtsize=40&bg=3F51B5&w=200&h=200" : listing_info.background_image;
     var verified_disabled = (listing_info.verified == null) ? 'is-disabled" tabindex="-1"' : "";
 
     var temp_col = $("<div class='column is-one-quarter'></div>");
@@ -343,7 +343,7 @@ function createImgDrop(listing_info, rownum){
     var temp_footer = $("<footer class='card-footer'></div>");
     var temp_form = $('<form id="mult-form' + rownum + '" class="drop-form-file card-footer-item" action="/listings/create/multiple" method="post" enctype="multipart/form-data"></form>')
     var temp_input = $('<input type="file" id="file' + rownum + '" name="background_image" accept="image/png, image/gif, image/jpeg" class="picture-file changeable-input input-file ' + verified_disabled + '" />');
-    var temp_input_label = $('<label for="file' + rownum + '" class="button ' + verified_disabled + '"><i class="fa fa-upload"></i><p class="file-label">Change Picture</p></label>');
+    var temp_input_label = $('<label for="file' + rownum + '" class="button ' + verified_disabled + '"><i class="fa fa-upload"></i><p class="file-label">Upload Picture</p></label>');
     temp_input.data("name", "background_image");
     temp_col.append(temp_div.append(temp_div_image.append(temp_figure.append(temp_x, temp_img), temp_footer.append(temp_form.append(temp_input, temp_input_label)))));
 
