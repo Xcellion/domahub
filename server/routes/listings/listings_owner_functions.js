@@ -434,6 +434,7 @@ module.exports = {
 			categories: req.body.categories,
 			owner_id: req.user.id,
 			verified: 1,		//create a verified domain to check for existing
+			status: null,
 			date_created: (new Date()).getTime()
 		}
 
@@ -515,7 +516,8 @@ module.exports = {
 				if (domain_ip == address){
 					req.new_listing_info = {
 						domain_name: domain_name,
-						verified: 1
+						verified: 1,
+						status: 0
 					}
 					next();
 				}
