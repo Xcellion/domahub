@@ -70,7 +70,7 @@ function createDate(listing_info){
 //function to create the tv icon
 function createView(listing_info){
     var temp_td = $("<td class='td-visible td-view'></td>");
-        var temp_a = $("<a class='button no-shadow' target='_blank' style='target-new: tab;'' href='/listing/" + listing_info.domain_name + "'></a>");
+        var temp_a = $("<a class='button no-shadow' target='_blank' style='target-new: tab;' href='/listing/" + listing_info.domain_name + "'></a>");
             var temp_span = $("<span class='icon'></span>");
                 var temp_i = $("<i class='fa fa-external-link'></i>");
             var temp_span2 = $("<span>View</span>");

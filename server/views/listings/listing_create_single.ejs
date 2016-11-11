@@ -3,7 +3,7 @@
 <html>
 
 <head>
-	<title>Create Listing - DomaHub</title>
+	<title>Create Single Listing - DomaHub</title>
 	<%- include("../templates/head_links"); %>
 	<link rel="stylesheet" href="/css/listing_create.css" type="text/css" />
 </head>
@@ -15,16 +15,63 @@
 	<section class='min-height'>
 
 	<div class="container-progress">
-		<progress class="progress is-small is-primary" min="0" max="100"></progress>
+		<progress class="progress is-small is-accent" min="0" max="100"></progress>
+		<div class="container margin-bottom-25">
+			<div class="columns">
+				<div class='column is-full'>
+					<div class="notification is-primary flex-content">
+						<h1 id="banner-title" class="title is-3">Please select one of the options below.</h1>
+						<p id="banner-subtitle" class="control is-white">
+							<a href="/faq#basicvspremium" target="_blank" style="target-new: tab;" class="is-white is-underlined-hover">What is Basic vs. Premium?</a>
+							<i class="fa fa-question-circle-o"></i>
+						</p>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="container">
+			<nav class="level">
+				<div class="level-right">
+					<div class="level-item">
+						<p class="control">
+							<a id="prev-button" class="is-disabled button is-primary prev-button" tabindex="16">
+								<span class="icon">
+									<i class="fa fa-angle-left"></i>
+								</span>
+								<span>Previous</span>
+							</a>
+						</p>
+					</div>
+					<div class="level-item">
+						<p class="control">
+							<a id="next-button" class="is-disabled button is-primary next-button" tabindex="18">
+								<span>Next</span>
+								<span class="icon">
+									<i class="fa fa-angle-right"></i>
+								</span>
+							</a>
+						</p>
+					</div>
+					<div class="level-item">
+						<p class="control">
+							<a id="submit-button" class="is-hidden button is-primary" tabindex="17">
+								<span class="icon">
+									<i class="fa fa-angle-down"></i>
+								</span>
+								<span id="submit-button-text">Submit</span>
+							</a>
+						</p>
+					</div>
+				</div>
+			</nav>
+		</div>
+
 	</div>
 
 	<section id="type-section" data-progress-percent="0" class="section is-small">
 		<div class="container">
 			<div class="columns">
 				<div class="column is-half-desktop">
-					<div class="content">
-						<h1 id="category-error-message" class="is-normal">Please select one of the options below.</h1>
-					</div>
 					<div class="columns">
 						<div class="column">
 							<a data-listing-type="basic" id="basic-box" class="box" tabindex="8">
@@ -75,9 +122,6 @@
 							</a>
 						</div>
 					</div>
-					<p class="control">
-						<a href="/faq#basicvspremium" class="orange-link">What is Basic vs. Premium?</a>
-					</p>
 				</div>
 			</div>
 		</div>
@@ -87,9 +131,6 @@
 		<div class="container">
 			<div class="columns">
 				<div class="column is-half">
-					<div class="content">
-						<h1 id="category-error-message" class="is-normal">Enter basic domain information.</h1>
-					</div>
 					<p class="control">
 						<label id="domain-error-message" class="label is-medium">Domain Name</label>
 						<input id="domain_name-input" tabindex="9" class="input required-input is-medium" type="url" placeholder="MyDomain.com"/>
@@ -117,9 +158,6 @@
 		<div class="container">
 			<div class="columns">
 				<div class="column is-half">
-					<div class="content">
-						<h1 id="category-error-message" class="is-normal">Choose at least one Category.</h1>
-					</div>
 					<form class="checkbox-form">
 						<ul class="checkbox-list">
 							<li>
@@ -153,13 +191,10 @@
 		</div>
 	</section>
 
-	<section id="pricing-section" data-progress-percent="80" data-can-next="true" data-pageskip="true" class="section is-small is-hidden">
+	<section id="pricing-section" data-progress-percent="80" data-pageskip="true" class="section is-small is-hidden">
 		<div class="container">
 			<div class="columns">
 				<div class="column is-half">
-					<div class="content">
-						<h1 class="is-normal">Decide pricing for your domain.</h1>
-					</div>
 					<form>
 						<%# <div class="control is-horizontal">
 							<div class="control-label is-medium">
@@ -216,7 +251,6 @@
 							</div>
 						</div>%>
 					</form>
-					<p>These prices can be customized again after creation</p>
 				</div>
 			</div>
 		</div>
@@ -226,12 +260,6 @@
 		<div class="container">
 			<div class="columns">
 				<div class="column">
-					<div class="notification is-primary flex-content">
-						<h1 class="title is-3">Listing Preview</h1>
-						<p class="is-white">
-							This is how users will see your listing on DomaHub.
-						</p>
-					</div>
 					<div id="preview-img" class="flex-container landing-img">
 						<div id="preview-wrapper" class="">
 							<a id="preview-domain" class="primary-link">Domain Name</a>
@@ -245,57 +273,6 @@
 							<p class=""><a class="orange-link">Interested in buying this domain?</a></p>
 						</div>
 					</div>
-				</div>
-			</div>
-		</div>
-	</section>
-
-	<section id="buttons-section" class="section min-height-half">
-		<div class="container">
-			<div class="columns">
-				<div class="column is-half-desktop">
-					<nav class="level">
-						<div class="level-left">
-							<a class="button is-accent" tabindex="15" href="/listings/create/multiple">
-								<span class="icon">
-									<i class="fa fa-check-circle-o"></i>
-								</span>
-								<span>I have multiple domains to list.</span>
-							</a>
-						</div>
-						<div class="level-right">
-							<div class="level-item">
-								<p class="control">
-									<a id="prev-button" class="is-disabled button is-primary prev-button" tabindex="16">
-										<span class="icon">
-											<i class="fa fa-angle-left"></i>
-										</span>
-										<span>Previous</span>
-									</a>
-								</p>
-							</div>
-							<div class="level-item">
-								<p class="control">
-									<a id="next-button" class="is-disabled button is-primary next-button" tabindex="18">
-										<span>Next</span>
-										<span class="icon">
-											<i class="fa fa-angle-right"></i>
-										</span>
-									</a>
-								</p>
-							</div>
-							<div class="level-item">
-								<p class="control">
-									<a id="submit-button" class="is-hidden button is-primary" tabindex="17">
-										<span class="icon">
-											<i class="fa fa-angle-down"></i>
-										</span>
-										<span id="submit-button-text">Submit</span>
-									</a>
-								</p>
-							</div>
-						</div>
-					</nav>
 				</div>
 			</div>
 		</div>
