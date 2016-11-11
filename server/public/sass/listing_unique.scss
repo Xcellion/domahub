@@ -7,4 +7,9 @@
   -moz-filter: brightness(75%);
   -o-filter: brightness(75%);
   -ms-filter: brightness(75%);
+  @include mobile {
+    background-image: none !important;
+    height: 0;
+    background-color: transparent;
+  }
 }
