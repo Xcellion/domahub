@@ -37,11 +37,27 @@
   align-items: center
   justify-content: space-between
   &.filter-panel
-    margin-bottom: 10px
+    justify-content: flex-start
+    .filter-local
+      font-size: $size-small
+      color: $text-light
+      &:last-child
+
+      &:hover,
+      &:active,
+      &:focus,
+      &.is-active
+        color: $text
+        outline: none
+        text-decoration: underline
     & > .level-item
-      & > .button
-        +mobile
-          width: 100%
+      +tablet
+        &:not(:first-child)
+          margin-left: 25px
+    +tablet
+      & > .level-item
+        &:not(.is-narrow)
+          flex-grow: 0
   &.jc-flex-start
     justify-content: flex-start
     display: flex
