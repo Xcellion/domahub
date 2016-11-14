@@ -127,9 +127,9 @@ module.exports = {
 				});
 			}
 			else {
-				//need to add owner id and verified
+				//need to add owner id, verified, and date created
 				for (var x = 0; x < good_listings.length; x++){
-					good_listings[x].push("" + req.user.id + "", 1);
+					good_listings[x].push("" + req.user.id + "", 1, new Date().getTime());
 				}
 				req.session.good_listings = good_listings;
 				next();
@@ -473,30 +473,46 @@ module.exports = {
 
 	//function to create the batch listings once done
 	createListingBatch : function(req, res, next){
-		good_listings = req.session.good_listings;
-
-		Listing.newListings(good_listings, function(result){
+		var formatted_listings = req.session.good_listings;
+		Listing.newListings(formatted_listings, function(result){
 			if (result.state=="error"){error.handler(req, res, result.info, "json");}
 			//all created
 			else {
-				var start_id = result.info.insertId;
-
-				//get the IDs of the inserted listings
-				var insert_ids = [];
-				for (var x = 0; x < result.info.affectedRows; x++){
-					insert_ids.push([start_id]);
-					start_id++;
-				}
-
-				//revert verified to null
-				Listing.updateListingsVerified(insert_ids, function(result){
-					delete req.session.good_listings;
+				var affectedRows = result.info.affectedRows;
+				//nothing created
+				if (affectedRows == 0){
 					res.send({
-						state: "success",
-						message: "Successfully added " + good_listings.length + " new listings!"
+						state: "error",
+						bad_listings: formatted_listings
 					});
-				});
+				}
+				else {
+					//figure out what was created
+					Account.getAccountListings(req.user.id, function(result){
+						if (result.state=="error"){error.handler(req, res, result.info, "json");}
+						else {
+							//get the insert IDs of newly inserted listings
+							var newly_inserted_listings = findNewlyMadeListings(req.user.listings, result.info);
+							var inserted_ids = newly_inserted_listings.inserted_ids;
+							var inserted_domains = newly_inserted_listings.inserted_domains;
 
+							//figure out what wasnt created
+							var listings_result = findUncreatedListings(formatted_listings, inserted_domains);
+							var bad_listings = listings_result.bad_listings;
+							var good_listings = listings_result.good_listings;
+
+							//revert the newly made listings verified to null
+							Listing.updateListingsVerified(inserted_ids, function(result){
+								delete req.session.good_listings;
+								res.send({
+									state: "error",
+									bad_listings: bad_listings || false,
+									good_listings: good_listings
+								});
+							});
+						}
+					});
+				}
 			}
 		});
 	},
@@ -555,13 +571,13 @@ function checkCSVRow(record, domains_sofar){
 	//at least 2 records required -- domain name and description
 	if (record.length < 2){
 		record_check.state = "error";
-		record_check.reasons.push("Missing required fields!");
+		record_check.reasons.push("Missing required columns!");
 	}
 
 	//too many fields
 	if (record.length > 2){
 		record_check.state = "error";
-		record_check.reasons.push("Too many fields!");
+		record_check.reasons.push("Too many columns!");
 	}
 
 	//not a domain name
@@ -581,22 +597,22 @@ function checkCSVRow(record, domains_sofar){
 		record_check.state = "error";
 		record_check.reasons.push("Invalid description");
 	}
-
-	//optionals were supplied
-	if (record.length > 2){
-		//invalid URL for background image
-		if (record[2] && !validator.isURL(record[2], { protocols: ["http", "https"]})){
-			record_check.state = "error";
-			record_check.reasons.push("Invalid background image URL");
-		}
-
-		//invalid buy link
-		if (record[3] && !validator.isURL(record[3], { protocols: ["http", "https"]})){
-			record_check.state = "error";
-			record_check.reasons.push("Invalid buy link URL");
-		}
-
-	}
+	//
+	// //optionals were supplied
+	// if (record.length > 2){
+	// 	//invalid URL for background image
+	// 	if (record[2] && !validator.isURL(record[2], { protocols: ["http", "https"]})){
+	// 		record_check.state = "error";
+	// 		record_check.reasons.push("Invalid background image URL");
+	// 	}
+	//
+	// 	//invalid buy link
+	// 	if (record[3] && !validator.isURL(record[3], { protocols: ["http", "https"]})){
+	// 		record_check.state = "error";
+	// 		record_check.reasons.push("Invalid buy link URL");
+	// 	}
+	//
+	// }
 
 	return record_check;
 }
@@ -668,4 +684,66 @@ function getUserListingObj(listings, domain_name){
 			return listings[x];
 		}
 	}
+}
+
+//helper function to check existing req.user listings and compare with any newly made ones to find the insert ID and domain name
+function findNewlyMadeListings(user_listings, new_listings){
+	var inserted_ids = [];
+	var inserted_domains = [];
+
+	//find the insert ids of the newly inserted listings
+	for (var x = 0; x < new_listings.length; x++){
+		var exists = false;
+		for (var y = 0; y < user_listings.length; y++){
+			if (new_listings[x].id == user_listings[y].id){
+				exists = true;
+				break;
+			}
+		}
+
+		if (!exists){
+			inserted_ids.push([new_listings[x].id]);
+			inserted_domains.push(new_listings[x].domain_name);
+		}
+	}
+
+	return {
+		inserted_ids : inserted_ids,
+		inserted_domains : inserted_domains
+	};
+}
+
+//helper function to see if any listings failed
+function findUncreatedListings(posted_listings, new_listings){
+	var bad_listings = [];
+	var good_listings = [];
+
+	//loop through all posted listings
+	for (var x = 0; x < posted_listings.length; x++){
+
+		//figure out if this posted listing was created or not
+		var was_created = false;
+		for (var y = 0; y < new_listings.length; y++){
+			if (posted_listings[x][0] == new_listings[y]){
+				was_created = true;
+				break;
+			}
+		}
+
+		//wasnt created cuz it was a duplicate
+		if (!was_created){
+			bad_listings.push({
+				data: [posted_listings[x][0], posted_listings[x][1]],
+				reasons: ["Duplicate domain name!"]
+			});
+		}
+		else {
+			good_listings.push([posted_listings[x][0], posted_listings[x][1]]);
+		}
+	}
+
+	return {
+		bad_listings: bad_listings,
+		good_listings : good_listings
+	};
 }
