@@ -5,6 +5,11 @@
     <div class="nav-left">
       <div class="nav-item">
         <a class="logo-text is-white" tabindex="1" title="Home" href="/">DomaHub</a>
+        <a href="/" title="Home">
+          <span id="temp-logo-flat" class="icon is-primary is-medium">
+            <i class="fa fa-home"></i>
+          </span>
+        </a>
       </div>
     </div>
     <div class="nav-center">
@@ -15,20 +20,20 @@
         </p>
       </form>
     </div>
-    <span class="nav-toggle">
+    <span class="nav-toggle is-white">
       <span></span>
       <span></span>
       <span></span>
     </span>
-    <div class="nav-right nav-menu">
+    <div class="nav-right nav-menu is-dark">
       <div class="nav-item">
-        <a class="nav-link white-link" tabindex="3" title="Browse Listings" href="/listings">Browse Listings</a>
+        <a class="nav-link is-white" tabindex="3" title="Browse Listings" href="/listings">Browse Listings</a>
       </div>
 
 <%# navbar checks for a user variable, if it doesnt exist, then display the login button %>
 <% if (!user) { %>
     <div class="nav-item">
-      <a id="signup" tabindex="5" class="nav-link white-link" title="Sign Up" href="/signup">Sign Up</a>
+      <a id="signup" tabindex="5" class="nav-link is-white" title="Sign Up" href="/signup">Sign Up</a>
     </div>
     <div class="nav-item">
       <a id="login-modal" tabindex="6" class="button is-white modal-button" title="Log In" data-object="#modal-login">Log In</a>
@@ -83,7 +88,7 @@
 <!-- or else display the user profile as logged in -->
 <% } else { %>
     <div class="nav-item">
-      <a class="nav-link white-link" tabindex="4" title="Create Listing" href="/listings/create">Create Listings</a>
+      <a class="nav-link is-white" tabindex="4" title="Create Listing" href="/listings/create">Create Listings</a>
     </div>
     <div class="nav-item">
       <a id="profile-button" tabindex="6" class="button is-white is-outlined" title="Profile">
@@ -91,6 +96,9 @@
         <span class="icon">
           <i class="fa fa-angle-down"></i>
         </span>
+      </a>
+      <a tabindex="6" class="nav-link is-hidden-tablet is-white" href="/profile/dashboard" title="Profile">
+        Profile
       </a>
       <div id="profile-dropdown" class="is-hidden">
         <ul class="profile-dropdown-menu">
@@ -102,6 +110,11 @@
           <li><a href="/logout">Log Out</a></li>
         </ul>
       </div>
+    </div>
+    <div class="nav-item is-hidden-tablet">
+      <a tabindex="7" class="nav-link is-hidden-tablet is-white" href="/logout" title="Log Out">
+        Log Out
+      </a>
     </div>
   </div>
 <% } %>

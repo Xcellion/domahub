@@ -76,8 +76,19 @@
   height: $nav-height
   position: relative
   width: $nav-height
+  &.is-black
+    span
+      background-color: $black
+    &.is-active
+      span
+        background-color: $black
+  &.is-white
+    span
+      background-color: $white
+    &.is-active
+      span
+        background-color: $white
   span
-    background-color: $black
     display: block
     height: 1px
     left: 50%

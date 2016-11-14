@@ -82,12 +82,6 @@
 
 					<div class="rows-exist">
 
-						<nav class="pagination margin-bottom-25">
-							<a id="prev-page" class="button no-shadow">Previous page</a>
-							<a id="next-page" class="button no-shadow">Next page</a>
-							<ul id="page-list"></ul>
-						</nav>
-
 						<div class="control has-icon">
 							<input id="search-domain" tabindex="12" class="input" type="text" placeholder="Search listings" />
 							<i class="fa fa-search"></i>
@@ -95,34 +89,34 @@
 
 						<nav class="level filter-panel">
 							<div class="level-item">
-								<a class="button no-shadow filter-local" id="rented_filter" tabindex="13">
+								<a class="filter-local" id="rented_filter" tabindex="13">
 									Currently Rented
 								</a>
 							</div>
 							<div class="level-item">
-								<a class="button no-shadow filter-local" id="premium_filter" tabindex="14">
-									Premium Listings
+								<a class="filter-local" id="premium_filter" tabindex="14">
+									Premium
 								</a>
 							</div>
 							<div class="level-item">
-								<a class="button no-shadow filter-local" id="basic_filter" tabindex="15">
-									Basic Listings
+								<a class="filter-local" id="basic_filter" tabindex="15">
+									Basic
 								</a>
 							</div>
 							<div class="level-item">
-								<a class="button no-shadow filter-local" id="unverified_filter" tabindex="16">
-									Unverified Listings
+								<a class="filter-local" id="unverified_filter" tabindex="16">
+									Unverified
 								</a>
 							</div>
 							<div class="level-item">
-								<a class="button no-shadow is-primary is-fullwidth filter-local" id="reset_filter" tabindex="17">
+								<a class="is-fullwidth filter-local" id="reset_filter" tabindex="17">
 									Reset all filters
 								</a>
 							</div>
 						</nav>
 
-						<table class="table has-shadow">
-							<thead class="has-shadow">
+						<table class="table">
+							<thead class="">
 								<tr>
 									<th class="td-arrow"></th>
 									<th class="td-domain">
@@ -154,6 +148,12 @@
 							</thead>
 							<tbody id="table_body"></tbody>
 						</table>
+
+						<nav class="pagination margin-bottom-25">
+							<a id="prev-page" class="button no-shadow">Previous page</a>
+							<a id="next-page" class="button no-shadow">Next page</a>
+							<ul id="page-list"></ul>
+						</nav>
 
 						<nav class="pagination-control">
 							<div class="control is-horizontal">
