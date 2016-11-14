@@ -27,8 +27,7 @@
       display: none; } }
 
 #login-modal {
-  width: auto;
-  align-self: flex-end; }
+  width: auto; }
 
 /************************************* PROFILE DROPDOWN *************************/
 #profile-dropdown {
