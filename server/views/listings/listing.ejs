@@ -19,7 +19,7 @@
 		</section>
 
 		<section id="top_wrapper" class="page_wrapper section is-small has-borderBottom">
-			<div class="container has-borderBottom">
+			<div class="container">
 				<div class="columns">
 					<div class="column is-half">
 						<nav class="level jc-flex-start">
@@ -40,10 +40,43 @@
 							</div>
 						</nav>
 						<div class="content">
-							<h3 class="is-blacklight is-bold">About Listing</h3>
+							<h3 class="is-blacklight is-bold">Listing Description</h3>
 							<p>
 								<%= listing_info.description %>
 							</p>
+						</div>
+						<div class="content">
+							<h3 class="is-blacklight is-bold">Other Information</h3>
+						</div>
+						<% if (listing_info.buy_link) { %>
+						<div class="columns has-borderBottom">
+							<div class="column is-4">
+								<div class="content">
+									<p>
+										Purchase Link
+									</p>
+								</div>
+							</div>
+							<div class="column is-4">
+								<div class="content">
+									<a class="orange-link"><%= listing_info.buy_link %></a>
+								</div>
+							</div>
+						</div>
+						<% } %>
+						<div class="columns has-borderBottom">
+							<div class="column is-4">
+								<div class="content">
+									<p>
+										Date Created
+									</p>
+								</div>
+							</div>
+							<div class="column is-4">
+								<div class="content">
+									<p><%= listing_info.date_created %></p>
+								</div>
+							</div>
 						</div>
 					</div>
 					<div class="column is-2">
@@ -60,7 +93,7 @@
 							<div class="card-content">
 								<div class="content">
 									<% if (listing_info.status == 1) { %>
-									<p class="is-bold">Full Pricing Information</p>
+									<p class="is-bold">Pricing Information</p>
 									<nav class="level is-mobile has-borderBottom">
 										<div class="level-left">
 											<p class="level-item">

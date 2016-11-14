@@ -13,3 +13,9 @@
     background-color: transparent;
   }
 }
+
+.listing-info {
+  &:not(:last-child) {
+    border-bottom: 1px solid $border;
+  }
+}

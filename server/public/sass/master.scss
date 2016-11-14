@@ -212,24 +212,38 @@
 
 /********************** CUSTOM STYLES ******************/
 .logo-text {
-  font: {
-    family: $shareTech;
-    size: $size-4;
-  }
-  &.primary-logo {
-    color: $primary;
-    &-dark {
-      color: $primary-dark;
+  @include tablet {
+    font: {
+      family: $shareTech;
+      size: $size-4;
     }
-    &-light {
-      color: $primary-light;
+    &.primary-logo {
+      color: $primary;
+      &-dark {
+        color: $primary-dark;
+      }
+      &-light {
+        color: $primary-light;
+      }
+    }
+    &.white-logo {
+      color: $white;
+    }
+    &.large-logo {
+      font-size: $size-3;
     }
   }
-  &.white-logo {
-    color: $white;
+  @include mobile {
+    display: none;
   }
-  &.large-logo {
-    font-size: $size-3;
+}
+
+#temp-logo-flat {
+  @include tablet {
+    display:  none;
+  }
+  @include mobile {
+    display: block;
   }
 }
 

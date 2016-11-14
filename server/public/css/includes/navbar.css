@@ -1,6 +1,6 @@
 /********************************* NAVBAR ***********************************/
 #searchbar-form {
-  width: 50%; }
+  width: 75%; }
   @media screen and (max-width: 768px) {
     #searchbar-form {
       width: 100%; } }
@@ -8,28 +8,6 @@
     width: 100%; }
   #searchbar-form input {
     font-family: "sharetech", "Lucida Console", monospace; }
-
-.nav-item {
-  position: relative; }
-
-.nav-link {
-  padding: 5px;
-  color: rgba(0, 0, 0, 0.9); }
-  .nav-link:hover, .nav-link:focus {
-    outline: none;
-    -webkit-box-shadow: 0 -2px 0 #62c9a3 inset;
-    -moz-box-shadow: 0 -2px 0 #62c9a3 inset;
-    box-shadow: 0 -2px 0 #62c9a3 inset; }
-    @media screen and (max-width: 768px) {
-      .nav-link:hover, .nav-link:focus {
-        -webkit-box-shadow: 0 0 0 black 0;
-        -moz-box-shadow: 0 0 0 black 0;
-        box-shadow: 0 0 0 black 0;
-        align-self: flex-end; } }
-  .nav-link.is-active {
-    -webkit-box-shadow: 0 -2px 0 #62c9a3 inset;
-    -moz-box-shadow: 0 -2px 0 #62c9a3 inset;
-    box-shadow: 0 -2px 0 #62c9a3 inset; }
 
 /************************************* LOGIN DROPDOWN *************************/
 #login-dropdown {
@@ -44,6 +22,9 @@
   width: 110px; }
   #profile-button.is-active {
     border-radius: 3px 3px 0px 0px; }
+  @media screen and (max-width: 768px) {
+    #profile-button {
+      display: none; } }
 
 /************************************* PROFILE DROPDOWN *************************/
 #profile-dropdown {
@@ -77,6 +58,3 @@
       .profile-dropdown-menu li a:hover, .profile-dropdown-menu li a:active, .profile-dropdown-menu li a:focus {
         outline: none;
         color: #3cbc8d; }
-
-.logout {
-  color: #3cbc8d !important; }
