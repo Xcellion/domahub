@@ -16,9 +16,32 @@ else {
 }
 
 module.exports = {
-	//function to format the listing info
+	//function to display the create listing choice page
+	renderCreateListingChoice : function(req, res, next){
+		res.render("listings/listing_create_choice.ejs", {
+			user: req.user,
+			message: Auth.messageReset(req)
+		});
+	},
+
+	//function to display the create single listing page
+	renderCreateListingSingle : function(req, res, next){
+		res.render("listings/listing_create_single.ejs", {
+			user: req.user,
+			message: Auth.messageReset(req)
+		});
+	},
+
+	//function to display the create multiple listing page
+	renderCreateListingMultiple : function(req, res, next){
+		res.render("listings/listing_create_multiple.ejs", {
+			user: req.user,
+			message: Auth.messageReset(req)
+		});
+	},
+
+	//function to format the listing info when creating a new listing
 	checkListingCreateInfo : function(req, res, next){
-		console.log(req.body);
 		var domain_name = req.body.domain_name;
 		var description = req.body.description;
 		var categories = req.body.categories;
@@ -33,15 +56,15 @@ module.exports = {
 		else if (!validator.isFQDN(req.body.domain_name)){
 			error.handler(req, res, "domain", "json");
 		}
-		else if (!categories){
+		else if (!categories || categories.split(",").length == 0){
 			error.handler(req, res, "category", "json");
 		}
-		else if (buy_link && !validator.isURL(buy_link, { protocols: ["http", "https"]})){
-			error.handler(req, res, "buy", "json");
-		}
-		else if (background_image && !validator.isURL(background_image, { protocols: ["http", "https"]})){
-			error.handler(req, res, "background", "json");
-		}
+		// else if (buy_link && !validator.isURL(buy_link, { protocols: ["http", "https"]})){
+		// 	error.handler(req, res, "buy", "json");
+		// }
+		// else if (background_image && !validator.isURL(background_image, { protocols: ["http", "https"]})){
+		// 	error.handler(req, res, "background", "json");
+		// }
 
 		else {
 			next();
@@ -82,34 +105,36 @@ module.exports = {
 		}
 	},
 
+	//function to check if the user can create new listings
+	checkAccountListingPriv : function(req, res, next){
+		next();
+	},
+
 	//function to check the format of the batch CSV file
 	checkListingBatch : function(req, res, next){
 		onError = function(req, res){
 			error.handler(req, res, "CSV parser error!");
 		}
 
-	    parseCSVFile(req.file.path, onError, function(bad_listings, good_listings){
+		//loop through and parse the CSV file, check every entry and format it correctly
+	    parseCSVFile(req.file.path, onError, function(bad_listings, good_listings, domains_sofar){
 			if (bad_listings.length > 0){
 				res.send({
 					state: "error",
 					bad_listings: bad_listings,
-					good_listings: good_listings
+					good_listings: good_listings,
+					all_listings: domains_sofar
 				});
 			}
 			else {
-				//need to add owner id, set_price, and type to the good records
+				//need to add owner id and verified
 				for (var x = 0; x < good_listings.length; x++){
-					good_listings[x].push("" + req.user.id + "", "0", "1");
+					good_listings[x].push("" + req.user.id + "", 1);
 				}
 				req.session.good_listings = good_listings;
 				next();
 			}
 		});
-	},
-
-	//function to check if the user can create new listings
-	checkAccountListingPriv : function(req, res, next){
-		next();
 	},
 
 	//function to check the size of the CSV file uploaded
@@ -403,39 +428,15 @@ module.exports = {
 		}
 	},
 
-	//function to display the create listing choice page
-	renderCreateListingChoice : function(req, res, next){
-		res.render("listings/listing_create_choice.ejs", {
-			user: req.user,
-			message: Auth.messageReset(req)
-		});
-	},
-
-	//function to display the create single listing page
-	renderCreateListingSingle : function(req, res, next){
-		res.render("listings/listing_create_single.ejs", {
-			user: req.user,
-			message: Auth.messageReset(req)
-		});
-	},
-
-	//function to display the create multiple listing page
-	renderCreateListingMultiple : function(req, res, next){
-		res.render("listings/listing_create_multiple.ejs", {
-			user: req.user,
-			message: Auth.messageReset(req)
-		});
-	},
-
 	//function to create a new listing
 	createListing : function(req, res, next){
 		var listing_info = {
 			domain_name : req.body.domain_name,
 			description: req.body.description,
-			categories: req.body.categories,
+			categories: (req.body.categories.indexOf("null") != -1) ? null : req.body.categories,
 			owner_id: req.user.id,
 			verified: 1,		//create a verified domain to check for existing
-			status: null,
+			status: 0,
 			date_created: (new Date()).getTime()
 		}
 
@@ -449,6 +450,7 @@ module.exports = {
 					if (result.state=="error"){error.handler(req, res, result.info, "json")}
 					else {
 						//add to the server side users listings object
+						listing_info.verified = null;
 						req.user.listings.push(listing_info);
 
 						//if premium, go next to handle stripe stuff
@@ -471,20 +473,30 @@ module.exports = {
 
 	//function to create the batch listings once done
 	createListingBatch : function(req, res, next){
-		req.user.refresh_listing = true;
 		good_listings = req.session.good_listings;
 
 		Listing.newListings(good_listings, function(result){
 			if (result.state=="error"){error.handler(req, res, result.info, "json");}
+			//all created
 			else {
-				req.user.refresh_listing = true;		//to refresh the user object's list of listings
-				delete req.session.good_listings;
-				delete req.session.bad_listings;
+				var start_id = result.info.insertId;
 
-				res.send({
-					state: "success",
-					message: "Successfully added " + good_listings.length + " new listings!"
-				})
+				//get the IDs of the inserted listings
+				var insert_ids = [];
+				for (var x = 0; x < result.info.affectedRows; x++){
+					insert_ids.push([start_id]);
+					start_id++;
+				}
+
+				//revert verified to null
+				Listing.updateListingsVerified(insert_ids, function(result){
+					delete req.session.good_listings;
+					res.send({
+						state: "success",
+						message: "Successfully added " + good_listings.length + " new listings!"
+					});
+				});
+
 			}
 		});
 	},
@@ -546,8 +558,14 @@ function checkCSVRow(record, domains_sofar){
 		record_check.reasons.push("Missing required fields!");
 	}
 
+	//too many fields
+	if (record.length > 2){
+		record_check.state = "error";
+		record_check.reasons.push("Too many fields!");
+	}
+
 	//not a domain name
-	if (!validator.isFQDN(record[0])){
+	if (!validator.isFQDN(record[0]) || !record[0]){
 		record_check.state = "error";
 		record_check.reasons.push("Incorrect domain name!");
 	}
@@ -578,11 +596,6 @@ function checkCSVRow(record, domains_sofar){
 			record_check.reasons.push("Invalid buy link URL");
 		}
 
-	}
-
-	if (record.length > 4){
-		record_check.state = "error";
-		record_check.reasons.push("Too many fields!");
 	}
 
 	return record_check;
@@ -631,7 +644,7 @@ function parseCSVFile(sourceFilePath, errorHandler, done){
 
 	//pass it back to create session variables
     parser.on("end", function(){
-        done(bad_listings, good_listings);
+        done(bad_listings, good_listings, domains_sofar);
     });
 
     source.pipe(parser);
@@ -655,17 +668,4 @@ function getUserListingObj(listings, domain_name){
 			return listings[x];
 		}
 	}
-}
-
-//helper function to add a month to a date
-function addMonthsUTC(date, count) {
-	if (date && count) {
-		var m, d = (date = new Date(+date)).getUTCDate();
-
-		date.setUTCMonth(date.getUTCMonth() + count, 1);
-		m = date.getUTCMonth();
-		date.setUTCDate(d);
-		if (date.getUTCMonth() !== m) date.setUTCDate(0);
-	}
-	return date
 }

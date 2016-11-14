@@ -10,7 +10,9 @@
 
 	<%- include("../templates/navbar", {user: user}); %>
 
-	<div class="container-progress min-height">
+	<section class='min-height'>
+
+	<div class="container-progress">
 		<div class="container margin-bottom-25">
 			<div class="columns">
 				<div class='column is-full'>
@@ -22,14 +24,19 @@
 					</div>
 				</div>
 			</div>
-			<div class="columns">
-				<div class='column'>
-					<a class="button" tabindex="8" href="/downloads/csv/Multiple_Upload_Template.csv" download>
-						<span class="icon">
-							<i class="fa fa-download"></i>
-						</span>
-						<span>Download Template</span>
-					</a>
+		</div>
+
+		<div class="container">
+			<nav class="level">
+				<div class="level-left">
+					<div class="level-item">
+						<a class="button" tabindex="8" href="/downloads/csv/Multiple_Upload_Template.csv" download>
+							<span class="icon">
+								<i class="fa fa-download"></i>
+							</span>
+							<span>Download Template</span>
+						</a>
+					</div>
 					<a class="button is-accent" tabindex="7" href="/listings/create/single">
 						<span class="icon">
 							<i class="fa fa-angle-down"></i>
@@ -37,10 +44,23 @@
 						<span>I only have one listing to create.</span>
 					</a>
 				</div>
-			</div>
+			</nav>
+			<nav class="level">
+				<div class="level-left">
+					<div class="level-item">
+						<input type="file" name="csv" id="mult-csv" class="input-file" />
+						<label id="file-label" for="mult-csv" class="button is-primary"><i class="fa fa-upload"></i><span class="label-text">Upload CSV</span></label>
+					</div>
+					<input id="submit-button" type="submit" class="button is-success"></label>
+				</div>
+			</nav>
+		</div>
+	</div>
 
-			<div class="column box is-three-quarters margin-bottom-25">
-				<h2>
+	<section class="section is-small">
+		<div class="container">
+			<div class="column box is-three-quarters">
+				<h2 class="margin-bottom-25">
 					CSV Template Format
 				</h2>
 				<table class="table">
@@ -66,20 +86,10 @@
 					</tbody>
 				</table>
 			</div>
-
-			<div class="columns">
-				<div class="column is-half">
-					<div class="content">
-						<p class="control">
-							<input type="file" name="csv" id="mult-csv" class="input-file" />
-							<label id="file-label" for="mult-csv" class="button is-medium is-primary"><i class="fa fa-upload"></i><span class="label-text">Upload CSV</span></label>
-							<input id="submit-button" type="submit" class="button is-medium is-success"></label>
-						</p>
-					</div>
-				</div>
-			</div>
 		</div>
-	</div>
+	</section>
+
+	</section>
 
 	<%- include("../templates/footer"); %>
 	<%- include("../templates/js_scripts"); %>
