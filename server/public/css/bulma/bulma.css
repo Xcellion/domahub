@@ -4115,7 +4115,7 @@ input:-webkit-autofill {
 .nav-item {
   align-items: center;
   display: flex;
-  justify-content: center;
+  justify-content: flex-end;
   padding: 10px;
   position: relative;
   white-space: nowrap; }

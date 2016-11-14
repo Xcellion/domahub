@@ -26,6 +26,10 @@
     #profile-button {
       display: none; } }
 
+#login-modal {
+  width: auto;
+  align-self: flex-end; }
+
 /************************************* PROFILE DROPDOWN *************************/
 #profile-dropdown {
   -moz-box-shadow: 0 4px 7px rgba(0, 0, 0, 0.1);
