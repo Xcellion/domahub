@@ -251,7 +251,8 @@ listing_model.prototype.newListings = function(listing_info_array, callback){
 				domain_name, \
 				description, \
 				owner_id, \
-				verified \
+				verified, \
+				date_created \
 			)\
 			 VALUES ? "
 	listing_query(query, "Failed to create " + listing_info_array.length + " new listings!", callback, [listing_info_array]);

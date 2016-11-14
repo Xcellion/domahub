@@ -15,6 +15,9 @@ $(document).ready(function() {
 
 	//filename label, file size and type verification
 	$(':file').change(function(){
+		can_submit = true;
+		$("#submit-button").removeClass('is-disabled');
+
 	    var file = this.files[0];
 		var allowedMimeTypes = [
 			"text/csv",
@@ -46,6 +49,7 @@ $(document).ready(function() {
 //function to sumibt listings
 function submitListingsBatch(){
 	if (can_submit){
+		can_submit = false;
 		$("#submit-button").addClass('is-loading');
 		var formData = new FormData();
 		formData.append('csv', $('#mult-csv')[0].files[0]);
@@ -59,35 +63,62 @@ function submitListingsBatch(){
             contentType: false,
             processData: false
         }, 'json').done(function(data){
-			$("#submit-button").removeClass('is-loading');
-			if (data.state == "success"){
-				can_submit = true;
-				if (data.state == "success"){
-					$("#mult-message").text("Success!")
-				}
-				else {
-					$("#mult-message").text("Something is wrong with your CSV formatting!")
+			$("#table-e").addClass('is-hidden');
+			$("#submit-button").removeClass('is-loading').addClass('is-disabled');
 
-					//display all the reasons why the upload failed
-					bad_listings = data.bad_listings;
+			goodListingHandler(data.good_listings);
+			badListingHandler(data.bad_listings);
 
-					if (bad_listings){
-						for (var x = 0; x < bad_listings.length; x++){
-							bad_row = $("<div class='bad-row'>Row #" + bad_listings[x].row + "</div>");
-							for (var y = 0; y < bad_listings[x].reasons.length; y++){
-								reason = $("<li class='bad-reason'>" + bad_listings[x].reasons[y] + " </li>");
-								bad_row.append(reason);
-							}
-							$("#mult-message").append(bad_row);
-						}
-					}
-				}
-			}
-			else {
-				can_submit = true;
+			if (data.state != "success"){
 				console.log(data);
-				$("#mult-message").text("Something went wrong!")
 			}
 		});
+	}
+}
+
+//function to handle any good listings
+function goodListingHandler(good_listings){
+	if (good_listings.length > 0){
+		$("#table-body-g").empty();
+		$("#table-g").removeClass('is-hidden');
+
+		for (var x = 0; x < good_listings.length; x++){
+			var temp_tr = $("<tr></tr>");
+			var temp_td_domain = $("<td>" + good_listings[x][0] + "</td>");
+			var temp_td_description = $("<td>" + good_listings[x][1] + "</td>");
+
+			temp_tr.append(temp_td_domain, temp_td_description);
+			$("#table-body-g").append(temp_tr);
+		}
+	}
+	else {
+		$("#table-g").addClass('is-hidden');
+	}
+}
+
+//function to handle any returned bad listings
+function badListingHandler(bad_listings){
+	if (bad_listings.length > 0){
+		$("#table-body-b").empty();
+		$("#table-b").removeClass('is-hidden');
+
+		for (var x = 0; x < bad_listings.length; x++){
+			var temp_tr = $("<tr></tr>");
+			var temp_td_domain = $("<td>" + bad_listings[x].data[0] + "</td>");
+			var temp_td_description = $("<td>" + bad_listings[x].data[1] + "</td>");
+			var temp_td_reasons = $("<td></td>");
+
+			//append all the reasons
+			for (var y = 0; y < bad_listings[x].reasons.length; y++){
+				var temp_reason = "<li>" + bad_listings[x].reasons[y] + "</li>";
+				temp_td_reasons.append(temp_reason);
+			}
+			temp_tr.append(temp_td_domain, temp_td_description, temp_td_reasons);
+
+			$("#table-body-b").append(temp_tr);
+		}
+	}
+	else {
+		$("#table-b").addClass('is-hidden');
 	}
 }
