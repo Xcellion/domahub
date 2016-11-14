@@ -331,7 +331,7 @@ function createPriceDrop(listing_info){
 
 //function to create the image drop column
 function createImgDrop(listing_info, rownum){
-    var background_image = (listing_info.background_image == null || listing_info.background_image == undefined || listing_info.background_image == "") ? "https://placeholdit.imgix.net/~text?txtsize=40&bg=3F51B5&w=200&h=200" : listing_info.background_image;
+    var background_image = (listing_info.background_image == null || listing_info.background_image == undefined || listing_info.background_image == "") ? "https://placeholdit.imgix.net/~text?txtsize=40&txt=RANDOM%20PHOTO&w=200&h=200" : listing_info.background_image;
     var verified_disabled = (listing_info.verified == null) ? 'is-disabled" tabindex="-1"' : "";
 
     var temp_col = $("<div class='column is-one-quarter'></div>");
