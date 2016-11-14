@@ -2643,8 +2643,15 @@ input:-webkit-autofill {
   height: 60px;
   position: relative;
   width: 60px; }
+  .hamburger.is-black span, .is-black.nav-toggle span {
+    background-color: black; }
+  .hamburger.is-black.is-active span, .is-black.is-active.nav-toggle span {
+    background-color: black; }
+  .hamburger.is-white span, .is-white.nav-toggle span {
+    background-color: white; }
+  .hamburger.is-white.is-active span, .is-white.is-active.nav-toggle span {
+    background-color: white; }
   .hamburger span, .nav-toggle span {
-    background-color: black;
     display: block;
     height: 1px;
     left: 50%;
@@ -2661,7 +2668,7 @@ input:-webkit-autofill {
     .hamburger span:nth-child(3), .nav-toggle span:nth-child(3) {
       margin-top: 4px; }
   .hamburger:hover, .nav-toggle:hover {
-    background-color: #e9e9e9; }
+    background-color: rgba(0, 0, 0, 0.12); }
   .hamburger.is-active span, .is-active.nav-toggle span {
     background-color: black; }
     .hamburger.is-active span:nth-child(1), .is-active.nav-toggle span:nth-child(1) {
