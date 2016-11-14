@@ -21,18 +21,16 @@
 					<div class="notification is-primary flex-content">
 						<h1 id="banner-title" class="title is-3">Create a single listing.</h1>
 						<p id="banner-subtitle" class="control is-white">
-							<a href="/faq#basicvspremium" target="_blank" style="target-new: tab;" class="is-white is-underlined-hover">What is Basic vs. Premium?</a>
-							<i class="fa fa-question-circle-o"></i>
+							Please select either <a href="/faq#basicvspremium" target="_blank" style="target-new: tab;" class="is-underlined">Basic or Premium</a>.
 						</p>
 					</div>
 				</div>
 			</div>
 		</div>
 
-		<progress class="progress is-small is-primary" min="0" max="100"></progress>
 		<div class="container">
 			<nav class="level">
-				<div class="level-right">
+				<div class="level-left">
 					<div class="level-item">
 						<p class="control">
 							<a id="prev-button" class="is-disabled button is-primary prev-button" tabindex="16">
@@ -51,14 +49,22 @@
 									<i class="fa fa-angle-right"></i>
 								</span>
 							</a>
-							<a id="submit-button" class="is-hidden button is-inverted is-primary" tabindex="17">
-								<span id="submit-button-text">Submit</span>
-							</a>
 						</p>
 					</div>
+					<a id="multiple-button" class="button is-accent" tabindex="7" href="/listings/create/multiple">
+						<span class="icon">
+							<i class="fa fa-angle-down"></i>
+						</span>
+						<span>I have multiple listing to create.</span>
+					</a>
+					<a id="submit-button" class="is-hidden is-full-width button is-success" tabindex="17">
+						<span id="submit-button-text">Submit</span>
+					</a>
 				</div>
 			</nav>
+			<progress class="progress is-small is-primary" min="0" max="100"></progress>
 		</div>
+
 	</div>
 
 	<section id="type-section" data-progress-percent="0" class="section is-small">
@@ -126,7 +132,7 @@
 				<div class="column is-half">
 					<p class="control">
 						<label id="domain-error-message" class="label is-medium">Domain Name</label>
-						<input id="domain_name-input" tabindex="9" class="input required-input is-medium" type="url" placeholder="MyPremiumDomain.com"/>
+						<input id="domain-input" tabindex="9" class="input required-input is-medium" type="url" placeholder="MyPremiumDomain.com"/>
 					</p>
 					<p class="control">
 						<label id="description-error-message" class="label is-medium has-icon">Description</label>
@@ -151,6 +157,7 @@
 		<div class="container">
 			<div class="columns">
 				<div class="column is-half">
+					<label id="category-error-message" class="label is-medium">Categories</label>
 					<form class="checkbox-form">
 						<ul class="checkbox-list">
 							<li>
@@ -176,6 +183,10 @@
 							<li>
 								<input class="cat-checkbox" value="industry" id="industry-category" type="checkbox" />
 								<label tabindex="14" for="industry-category">Industry</label>
+							</li>
+							<li>
+								<input class="cat-checkbox" value="null" id="null-category" type="checkbox" />
+								<label tabindex="15" for="null-category">I don't know</label>
 							</li>
 						</ul>
 					</form>

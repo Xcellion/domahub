@@ -4,7 +4,7 @@ listing_model = function(database){
 	listing_query = function(query, error_description, callback, params){
 		database.query(query, function(result, err){
 			if (err){
-				if (err.code = "ER_DUP_ENTRY"){
+				if (err.code == "ER_DUP_ENTRY"){
 					callback({
 						state : "error",
 						info : "A listing with this name already exists!",
@@ -12,7 +12,6 @@ listing_model = function(database){
 					});
 				}
 				else {
-					console.log(err);
 					callback({
 						state : "error",
 						info : error_description,
@@ -248,19 +247,11 @@ listing_model.prototype.newListing = function(listing_info, callback){
 //BULK INSERT NEEDS TRIPLE NESTED ARRAYS
 listing_model.prototype.newListings = function(listing_info_array, callback){
 	console.log("Attempting to create " + listing_info_array.length + " new listings...");
-	query = "INSERT INTO listings ( \
+	query = "INSERT IGNORE INTO listings ( \
 				domain_name, \
 				description, \
-				minute_price, \
-				hour_price, \
-				day_price, \
-				week_price, \
-				month_price, \
-				background_image, \
-				buy_link, \
 				owner_id, \
-				set_price \
-				type \
+				verified \
 			)\
 			 VALUES ? "
 	listing_query(query, "Failed to create " + listing_info_array.length + " new listings!", callback, [listing_info_array]);
@@ -295,6 +286,16 @@ listing_model.prototype.updateListing = function(domain_name, listing_info, call
 			SET ? \
 			WHERE domain_name = ?"
 	listing_query(query, "Failed to update domain " + domain_name + "!", callback, [listing_info, domain_name]);
+}
+
+//updates multiple listings, needs to be all created without error, or else cant figure out insert IDs
+listing_model.prototype.updateListingsVerified = function(listing_ids, callback){
+	console.log("Attempting to revert verified status for bulk domain creation...");
+	query = "INSERT INTO listings \
+				(id) \
+			VALUES ? \
+			ON DUPLICATE KEY UPDATE verified=null"
+	listing_query(query, "Failed to revert verified status for bulk domain creation!", callback, [listing_ids]);
 }
 
 //updates rental info
