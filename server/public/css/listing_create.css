@@ -13,8 +13,3 @@
     position: relative; }
     .checkbox-wrapper > li:not(:first-child) {
       border-top: 2px solid rgba(0, 0, 0, 0.12); }
-
-.box li {
-  padding-top: 10px; }
-  .box li:not(:first-child) {
-    border-top: 1px solid rgba(0, 0, 0, 0.12); }
