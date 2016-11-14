@@ -120,10 +120,8 @@ module.exports = {
 	    parseCSVFile(req.file.path, onError, function(bad_listings, good_listings, domains_sofar){
 			if (bad_listings.length > 0){
 				res.send({
-					state: "error",
 					bad_listings: bad_listings,
-					good_listings: good_listings,
-					all_listings: domains_sofar
+					good_listings: good_listings
 				});
 			}
 			else {
@@ -436,7 +434,6 @@ module.exports = {
 			categories: (req.body.categories.indexOf("null") != -1) ? null : req.body.categories,
 			owner_id: req.user.id,
 			verified: 1,		//create a verified domain to check for existing
-			status: 0,
 			date_created: (new Date()).getTime()
 		}
 
@@ -482,8 +479,8 @@ module.exports = {
 				//nothing created
 				if (affectedRows == 0){
 					res.send({
-						state: "error",
-						bad_listings: formatted_listings
+						bad_listings: findUncreatedListings(formatted_listings, []).bad_listings,
+						good_listings: false
 					});
 				}
 				else {
@@ -491,12 +488,12 @@ module.exports = {
 					Account.getAccountListings(req.user.id, function(result){
 						if (result.state=="error"){error.handler(req, res, result.info, "json");}
 						else {
-							//get the insert IDs of newly inserted listings
+							//get the insert IDs and domain names of newly inserted listings
 							var newly_inserted_listings = findNewlyMadeListings(req.user.listings, result.info);
 							var inserted_ids = newly_inserted_listings.inserted_ids;
 							var inserted_domains = newly_inserted_listings.inserted_domains;
 
-							//figure out what wasnt created
+							//figure out what wasnt created and what was
 							var listings_result = findUncreatedListings(formatted_listings, inserted_domains);
 							var bad_listings = listings_result.bad_listings;
 							var good_listings = listings_result.good_listings;
@@ -505,9 +502,8 @@ module.exports = {
 							Listing.updateListingsVerified(inserted_ids, function(result){
 								delete req.session.good_listings;
 								res.send({
-									state: "error",
 									bad_listings: bad_listings || false,
-									good_listings: good_listings
+									good_listings: good_listings || false
 								});
 							});
 						}
@@ -545,8 +541,7 @@ module.exports = {
 				if (domain_ip == address){
 					req.new_listing_info = {
 						domain_name: domain_name,
-						verified: 1,
-						status: 0
+						verified: 1
 					}
 					next();
 				}

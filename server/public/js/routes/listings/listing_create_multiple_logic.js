@@ -40,7 +40,7 @@ $(document).ready(function() {
 		}
 
 		//change upload button text label
-		var filename = (!file) ? "Upload CSV" : (file.name.length > 10) ? file.name.substr(0, 8) + "..." : file.name;
+		var filename = (!file) ? "Upload CSV" : (file.name.length > 10) ? file.name.substr(0, 10) + "..." : file.name;
 		$(".label-text").text(filename);
 	});
 
@@ -63,9 +63,14 @@ function submitListingsBatch(){
             contentType: false,
             processData: false
         }, 'json').done(function(data){
+
+			//reset the form
 			$("#table-e").addClass('is-hidden');
+			$(':file')[0].value = "";
+			$(".label-text").text("Upload CSV");
 			$("#submit-button").removeClass('is-loading').addClass('is-disabled');
 
+			//handle any results
 			goodListingHandler(data.good_listings);
 			badListingHandler(data.bad_listings);
 
