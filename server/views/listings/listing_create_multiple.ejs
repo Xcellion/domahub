@@ -51,7 +51,7 @@
 						<input type="file" name="csv" id="mult-csv" class="input-file" />
 						<label id="file-label" for="mult-csv" class="button is-primary"><i class="fa fa-upload"></i><span class="label-text">Upload CSV</span></label>
 					</div>
-					<input id="submit-button" type="submit" class="button is-success"></label>
+					<input id="submit-button" type="submit" class="button is-disabled is-success"></label>
 				</div>
 			</nav>
 		</div>
@@ -60,31 +60,67 @@
 	<section class="section is-small">
 		<div class="container">
 			<div class="column box is-three-quarters">
-				<h2 class="margin-bottom-25">
-					CSV Template Format
-				</h2>
-				<table class="table">
-					<thead>
-						<tr>
-							<th>Domain name</th>
-							<th>Description</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-							<td>bestdomain.com</td>
-							<td>We have the greatest domain name ever!</td>
-						</tr>
-						<tr>
-							<td>worstdomain.com</td>
-							<td>This is the worst domain name in the world.</td>
-						</tr>
-						<tr>
-							<td>neutraldomain.com</td>
-							<td>I have no strong feelings one way or the other about this domain.</td>
-						</tr>
-					</tbody>
-				</table>
+				<div id="table-e">
+					<h2 id="table-header-e">
+						CSV Template Format
+					</h2>
+					<table class="table">
+						<thead>
+							<tr>
+								<th>Domain name</th>
+								<th>Description</th>
+							</tr>
+						</thead>
+						<tbody id="table-body-e">
+							<tr>
+								<td>bestdomain.com</td>
+								<td>We have the greatest domain name ever!</td>
+							</tr>
+							<tr>
+								<td>worstdomain.com</td>
+								<td>This is the worst domain name in the world.</td>
+							</tr>
+							<tr>
+								<td>neutraldomain.com</td>
+								<td>I have no strong feelings one way or the other about this domain.</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<div id="table-g" class="is-hidden">
+					<h2 id="table-header-g" class="is-success">
+						Successfully created the following listings:
+					</h2>
+					<table class="table">
+						<thead>
+							<tr>
+								<th>Domain name</th>
+								<th>Description</th>
+							</tr>
+						</thead>
+						<tbody id="table-body-g">
+
+						</tbody>
+					</table>
+				</div>
+				<div id="table-b" class='is-hidden'>
+					<h2 id="table-header-b" class="is-danger">
+						There were errors in your CSV file:
+					</h2>
+					<table class="table">
+						<thead>
+							<tr>
+								<th>Domain name</th>
+								<th>Description</th>
+								<th>Reasons</th>
+							</tr>
+						</thead>
+						<tbody id="table-body-b">
+
+						</tbody>
+					</table>
+				</div>
+
 			</div>
 		</div>
 	</section>
