@@ -80,14 +80,41 @@
 
 					<div class="rows-exist">
 
-						<nav class="pagination margin-bottom-25">
-							<a id="prev-page" class="button no-shadow">Previous page</a>
-							<a id="next-page" class="button no-shadow">Next page</a>
-							<ul id="page-list"></ul>
+						<div class="control has-icon">
+							<input id="search-domain" tabindex="12" class="input" type="text" placeholder="Search listings" />
+							<i class="fa fa-search"></i>
+						</div>
+
+						<nav class="level filter-panel">
+							<div class="level-item">
+								<a class="filter-local" id="expiring_filter" tabindex="13">
+									Expiring
+								</a>
+							</div>
+							<div class="level-item">
+								<a class="filter-local" id="expired_filter" tabindex="14">
+									Expired
+								</a>
+							</div>
+							<div class="level-item">
+								<a class="filter-local" id="active_filter" tabindex="15">
+									Active
+								</a>
+							</div>
+							<div class="level-item">
+								<a class="filter-local" id="inactive_filter" tabindex="16">
+									Inactive
+								</a>
+							</div>
+							<div class="level-item">
+								<a class="is-fullwidth filter-local" id="reset_filter" tabindex="17">
+									Reset all filters
+								</a>
+							</div>
 						</nav>
 
-						<table class="table has-shadow">
-							<thead class="has-shadow">
+						<table class="table">
+							<thead class="">
 								<tr>
 									<th class="td-arrow"></th>
 									<th class="td-domain">
@@ -113,6 +140,12 @@
 							</thead>
 							<tbody id="table_body"></tbody>
 						</table>
+
+						<nav class="pagination margin-bottom-25">
+							<a id="prev-page" class="button no-shadow">Previous page</a>
+							<a id="next-page" class="button no-shadow">Next page</a>
+							<ul id="page-list"></ul>
+						</nav>
 
 						<nav class="pagination-control">
 							<div class="control is-horizontal">

@@ -3,7 +3,7 @@
 
 /********************************* NAVBAR ***********************************/
 #searchbar-form {
-  width: 50%;
+  width: 75%;
   @include mobile {
     width: 100%;
   }
@@ -16,27 +16,6 @@
     &:active {
 
     }
-  }
-}
-
-.nav-item {
-  position: relative;
-}
-
-.nav-link {
-  padding: 5px;
-  color: $text;
-  &:hover,
-  &:focus {
-    outline: none;
-    @include box-shadow(0,-2px,0,$primary-light, inset);
-    @include mobile {
-      @include box-shadow(0,0,0,$black,0);
-      align-self: flex-end;
-    }
-  }
-  &.is-active {
-    @include box-shadow(0,-2px,0,$primary-light, inset);
   }
 }
 
@@ -57,7 +36,16 @@
   &.is-active {
     border-radius: 3px 3px 0px 0px;
   }
+  @include mobile {
+    display: none;
+  }
 }
+
+#login-modal {
+  width: auto;
+  align-self: flex-end;
+}
+
 
 /************************************* PROFILE DROPDOWN *************************/
 
@@ -104,9 +92,4 @@
     }
 
   }
-}
-
-// Logout button on profile dropdown
-.logout {
-  color: $primary !important;
 }

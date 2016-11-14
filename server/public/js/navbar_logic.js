@@ -70,7 +70,7 @@ $(document).ready(function() {
 
 	//remove white link if not a page that needs it
 	if (pages_white_nav.indexOf(current_page) != -1){
-		$(".nav-link").removeClass("white-link");
+		$(".nav-link").removeClass("is-white");
 		$(".logo-text").addClass("primary-logo-light").removeClass("is-white");
 		$("#profile-button, #login-modal").addClass("is-primary").removeClass("is-white");
 	}
@@ -81,19 +81,19 @@ $(document).ready(function() {
 		if ($(this).scrollTop() <= 0 && $(".nav").hasClass("has-shadow")) {
 			$(".nav").removeClass("has-shadow is-white");
 			if (pages_white_nav.indexOf(current_page) != -1){
-				$(".nav-link").removeClass("white-link");
+				$(".nav-link").removeClass("is-white");
 				$(".logo-text").addClass("primary-logo-light").removeClass("is-white");
 			}
 			else {
 				$("#profile-button, #login-modal").removeClass("is-primary").addClass("is-white");
 				$(".logo-text").removeClass("primary-logo-light").addClass("is-white");
-				$(".nav-link").addClass("white-link");
+				$(".nav-link").addClass("is-white");
 			}
 		}
 		//past the top
 		else if ($(this).scrollTop() > 0 && !$(".nav").hasClass("has-shadow")){
 			$(".nav").addClass("has-shadow is-white");
-			$(".nav-link").removeClass("white-link");
+			$(".nav-link").removeClass("is-white");
 			$(".logo-text").addClass("primary-logo-light").removeClass("is-white");
 			$("#profile-button, #login-modal").addClass("is-primary").removeClass("is-white");
 		}
