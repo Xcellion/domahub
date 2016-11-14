@@ -23,24 +23,36 @@ $(document).ready(function() {
 
     //section 2 - listing info
     $(".required-input").on("change keyup paste", function(e){
-        if ($("#domain_name-input").val() && $("#description-input").val()){
+        if ($("#domain-input").val() && $("#description-input").val()){
             //update the listing preview
-            $("#preview-domain").text($("#domain_name-input").val());
+            $("#preview-domain").text($("#domain-input").val());
             $("#preview-description").text($("#description-input").val());
         }
-        setSectionNext($("#domain_name-input").val() && $("#description-input").val(), "info");
-        updateQueryStringParam("domain_name", $("#domain_name-input").val());
+        setSectionNext($("#domain-input").val() && $("#description-input").val(), "info");
+
+        //update the search query URL
+        updateQueryStringParam("domain", $("#domain-input").val());
         updateQueryStringParam("description", $("#description-input").val());
     });
 
     //section 3 - categories
-    $(".cat-checkbox-label, .cat-checkbox").on("click", function(e){
+    $(".cat-checkbox").on("change", function(e){
         setSectionNext($(".cat-checkbox:checked").length > 0, "category");
+
+        //update the search query URL
         var category_val = "";
         $('.cat-checkbox:checkbox:checked').each(function(){
             category_val += $(this).val() + ",";
         });
         updateQueryStringParam("categories", category_val);
+
+        //one must be checked
+        if ($(this).attr("id") == "null-category"){
+            $(".cat-checkbox").not("#null-category").prop('checked', false);
+        }
+        else {
+            $("#null-category").prop('checked', false);
+        }
     });
 
     //section 4 - pricing
@@ -156,9 +168,9 @@ function fillExistingData(){
                 $("#" + key + "-input").val(value);
             }
             //info
-            else if ((key == "domain_name" || key == "description") && value != ""){
+            else if ((key == "domain" || key == "description") && value != ""){
                 $("#" + key + "-input").val(value);
-                setSectionNext($("#domain_name-input").val().length > 0 && $("#description-input").val().length > 0, "info");
+                setSectionNext($("#domain-input").val().length > 0 && $("#description-input").val().length > 0, "info");
             }
             else {
                 updateQueryStringParam(key);
@@ -270,20 +282,19 @@ function setSectionNext(bool, section_selector){
 
 //function to change the top banner text
 function changeBannerText(section_id){
+    $("#multiple-button").addClass("is-hidden");
     switch (section_id){
         case ("type"):
-            $('#banner-title').text("Please select Basic or Premium.");
-            $("#banner-subtitle").empty();
-            var temp_link = $('<a href="/faq#basicvspremium" target="_blank" style="target-new: tab;" class="is-white is-underlined-hover">What is Basic vs. Premium?</a>');
-            var temp_icon = $('<i class="fa fa-question-circle-o"></i>');
-            $("#banner-subtitle").append(temp_link, temp_icon);
+            $('#banner-title').html('Please select <a href="/faq#basicvspremium" target="_blank" style="target-new: tab;" class="is-underlined">Basic or Premium.</a>');
+            $("#banner-subtitle").text('You can also change this after creating the listing.');
+            $("#multiple-button").removeClass("is-hidden");
             break;
         case ("info"):
             $('#banner-title').text("Enter basic domain information.");
             $("#banner-subtitle").text('Descriptions help your listing stand out!');
             break;
         case ("category"):
-            $('#banner-title').text("Choose at least one Category.");
+            $('#banner-title').text("Choose appropriate Categories for your listing.");
             $("#banner-subtitle").text('These will help potential users search for and find your listing.');
             break;
         case ("pricing"):
@@ -293,6 +304,10 @@ function changeBannerText(section_id){
         case ("preview"):
             $('#banner-title').text("Preview your listing.");
             $("#banner-subtitle").text('This is how users will see your new listing on DomaHub. You can edit it once your listing has been created.');
+            break;
+        case ("success"):
+            $('#banner-title').text("Successfully created a listing!");
+            $("#banner-subtitle").html('Create another listing or <a class="is-underlined" href="/profile/mylistings">edit</a> the one you just created.');
             break;
     }
 }
@@ -322,11 +337,11 @@ function changePage(section_id, page_refresh_bool){
 
     //last, hide next, show submit
     if (section_id == "preview"){
-        $("#next-button").addClass('is-hidden');
+        $("#next-button").addClass('is-disabled');
         $("#submit-button").removeClass('is-hidden');
     }
     else {
-        $("#next-button").removeClass('is-hidden');
+        $("#next-button").removeClass('is-disabled');
         $("#submit-button").addClass('is-hidden');
     }
 
@@ -357,7 +372,7 @@ function changePage(section_id, page_refresh_bool){
 //function to get the current listing data
 function getListingData(){
     var listingData = {
-		domain_name : $("#domain_name-input").val(),
+		domain_name : $("#domain-input").val(),
 		description : $("#description-input").val(),
         categories: ""
 	}
@@ -387,38 +402,39 @@ function getListingData(){
 function checkListingData(){
 	var listingData = getListingData();
     var is_premium = $("#premium-box").hasClass("is-active");
+    //return listingData;
 
     //checks
 	if (!listingData.domain_name){
-        errorHandler("Invalid domain name!");
+        errorHandler("domain");
 	}
 	else if (!listingData.description){
-		errorHandler("Invalid description!");
+		errorHandler("description");
 	}
     else if (listingData.categories.length <= 0){
-        errorHandler("Invalid categories!");
+        errorHandler("category");
     }
 	// else if (parseFloat(listingData.minute_price) != listingData.minute_price >>> 0){
 	// 	console.log("Invalid minute price!");
 	// }
 	else if	(is_premium && parseFloat(listingData.hour_price) != listingData.hour_price >>> 0){
-		errorHandler("Invalid hourly price!");
+		errorHandler("hour");
 	}
 	else if (is_premium && parseFloat(listingData.day_price) != listingData.day_price >>> 0){
-		errorHandler("Invalid daily price!");
+		errorHandler("day");
 	}
 	else if (is_premium && parseFloat(listingData.week_price) != listingData.week_price >>> 0){
-		errorHandler("Invalid weekly price!");
+		errorHandler("week");
 	}
 	else if (is_premium && parseFloat(listingData.month_price) != listingData.month_price >>> 0){
-		errorHandler("Invalid monthly price!");
+		errorHandler("month");
 	}
 	else {
 		return listingData;
 	}
 }
 
-//function to submit listings
+//function to submit listings basic or premium
 function submitListing(submit_button, submit_data, url){
     $("#submit-button").addClass('is-loading');
 
@@ -427,15 +443,15 @@ function submitListing(submit_button, submit_data, url){
 
 		$.ajax({
 			type: "POST",
-			url: "/listings/create/single/" + url,
+			url: "/listings/create/" + url,
 			data: submit_data
 		}).done(function(data){
 			can_submit = true;
             submit_button.removeClass('is-loading').addClass('is-hidden');
+            $('.section').data("can-next", false);
 
 			if (data.state == "success"){
                 //reset the datas to default value
-                delete_cookie("listing_data");
                 $(".box").removeClass("is-active low-opacity");
                 $(".input").val("");
                 $(".cat-checkbox").prop('checked', false);
@@ -443,7 +459,12 @@ function submitListing(submit_button, submit_data, url){
                     $(this).val($(this).prop("defaultValue"));
                 });
 
+                //reset query string
+                $("title").html("Create Single Listing - Type - DomaHub");
+                history.replaceState({}, "", "/listings/create/single#type");
+
                 changePage("type");
+                changeBannerText("success");
 			}
 			else if (data.state == "error"){
                 console.log(data);
@@ -500,15 +521,28 @@ function submitListingsPremium(submit_button, submit_data){
 
 //handling of various errors sent from the server
 function errorHandler(error_selector){
-    var error_codes = ["description", "domain", "background", "buy", "category", "minute","hour", "day", "week", "month"];
+    var error_codes = ["description", "domain", "background", "buy", "category", "minute", "hour", "day", "week", "month"];
+    var error_msg = "Invalid " + error_selector + "!";
+    var error_msg_banner = error_msg + " Please review your listing details.";
+
+    //domain exists
+    if (error_selector == "A listing with this name already exists!"){
+        error_msg_banner = "Invalid domain! Please review your listing details.";
+        error_msg = error_selector;
+        error_selector = "domain";
+    }
 
     if (error_codes.indexOf(error_selector) != -1){
-        var error_msg_elem = $("#" + error_selector + "-error-message");
-        changePage(error_msg_elem.closest(".section").attr("id").split("-")[0]);
-        error_msg_elem.text("Invalid " + error_selector + "!").addClass("is-danger");
+        var error_section = $("#" + error_selector + "-error-message").closest(".section");
+        changePage(error_section.attr("id").split("-")[0]);
+
+        //change to error mode (display red)
+        $("#banner-subtitle").text(error_msg_banner);
+        $("#" + error_selector + "-error-message").text(error_msg).addClass("is-danger");
+        $("#" + error_selector + "-input").addClass("is-danger");
     }
     //stripe or something else
     else {
-
+        console.log(error_selector);
     }
 }
