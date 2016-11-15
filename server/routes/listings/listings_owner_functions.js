@@ -1,3 +1,5 @@
+var category_list = require("../../lib/categories.js");
+
 var request = require("request");
 var dns = require("dns");
 var validator = require("validator");
@@ -274,7 +276,7 @@ module.exports = {
 				}
 			});
 		}
-		//removing image
+		//removing existing image intentionally
 		else if (req.body.background_image == ""){
 			req.new_listing_info = {
 				background_image : null
@@ -292,7 +294,7 @@ module.exports = {
 			req.listing_info = getUserListingObj(req.user.listings, req.params.domain_name);
 		}
 
-		if (req.listing_info.status == 0){
+		if (req.listing_info.verified != 1){
 			error.handler(req, res, "Please verify that you own this domain!", "json");
 		}
 		else {
@@ -339,16 +341,27 @@ module.exports = {
 		}
 	},
 
-	//function to check and reformat new listings details
+	//function to check and reformat new listings details excluding image
 	checkListingDetails : function(req, res, next){
 		var status = parseFloat(req.body.status);
 		var buy_link = req.body.buy_link;
         var description = sanitize(req.body.description);
-        var hour_price = parseFloat(req.body.hour_price);
+
+		var hour_price = parseFloat(req.body.hour_price);
         var day_price = parseFloat(req.body.day_price);
         var week_price = parseFloat(req.body.week_price);
         var month_price = parseFloat(req.body.month_price);
-        var categories = (req.body.categories) ? sanitize(req.body.categories.replace(/\s\s+/g, ' ').toLowerCase()) : "";
+
+		var categories = (req.body.categories) ? sanitize(req.body.categories.replace(/\s\s+/g, ' ').toLowerCase()).split(" ") : [];
+		var categories_clean = [];
+		//loop through the categories posted
+		for (var x = 0; x < categories.length; x++){
+			//if it exists in our list
+			if (category_list.back.indexOf(categories[x]) != -1){
+				categories_clean.push(categories[x]);
+			}
+		}
+		categories_clean = categories_clean.join(" ");
 
 		//if buy_link exists and is not a valid url
 		if (req.body.buy_link && !validator.isURL(buy_link, { protocols: ["http", "https"]})){
@@ -365,26 +378,26 @@ module.exports = {
 				 req.body.month_price && (month_price != month_price >>> 0) && month_price <= 0){
 			error.handler(req, res, "Invalid listing prices!", "json");
 		}
-		//if categories exist but less than 1 total
-		else if (req.body.categories && categories.length <= 0){
-			error.handler(req, res, "You need at least 1 category!", "json");
+		//invalid categories
+		else if (req.body.categories && categories_clean.length == 0){
+			error.handler(req, res, "Invalid categories!", "json");
 		}
 		else {
 			if (!req.new_listing_info) {
 				req.new_listing_info = {};
 			}
 			req.new_listing_info.status = status;
-			req.new_listing_info.buy_link = buy_link;
+			req.new_listing_info.buy_link = (buy_link == "") ? null : buy_link;
 			req.new_listing_info.description = description;
 			req.new_listing_info.hour_price = hour_price;
 			req.new_listing_info.day_price = day_price;
 			req.new_listing_info.week_price = week_price;
 			req.new_listing_info.month_price = month_price;
-			req.new_listing_info.categories = categories;
+			req.new_listing_info.categories = (categories_clean == "") ? null : categories_clean;
 
-			//delete anything that doesnt exist
+			//delete anything that wasnt posted (except if its "", in which case it was intentional deletion)
 			for (var x in req.new_listing_info){
-				if (!req.body[x] && x != "background_image"){
+				if (!req.body[x] && req.body[x] != ""){
 					delete req.new_listing_info[x];
 				}
 			}
@@ -412,14 +425,17 @@ module.exports = {
 
 	//function to make sure that its different from the existing listing info
 	checkListingExisting : function(req, res, next){
-		var listing_info = getUserListingObj(req.user.listings, req.params.domain_name)
+		if (!req.listing_info){
+			req.listing_info = getUserListingObj(req.user.listings, req.params.domain_name);
+		}
 
 		for (var x in req.new_listing_info){
-			if (req.new_listing_info[x] == listing_info[x]){
+			if (req.new_listing_info[x] == req.listing_info[x]){
 				delete req.new_listing_info[x];
 			}
 		}
 
+		//if nothing is being changed
 		if (Object.keys(req.new_listing_info).length === 0 && req.new_listing_info.constructor === Object){
 			error.handler(req, res, "Invalid listing information!", "json");
 		}

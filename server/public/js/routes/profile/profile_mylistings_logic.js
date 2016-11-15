@@ -97,56 +97,7 @@ function createRowDrop(listing_info, rownum){
 
     //if unverified, gray out the controls in the background
     if (listing_info.verified == null){
-        var unverified_div = $("<div class='unverified-div div-drop'></div>");
-            var unverified_a = $("<a class='bottom-margin-25 button is-primary verify-link'></a>");
-                unverified_a.data("href", '/listing/' + listing_info.domain_name + '/verify');
-                var unverified_span2 = $("<span>Please verify that you own this domain</span></a");
-                unverified_a.append(unverified_span2);
-        var unverified_faq = $("<div class='has-text-centered'><a class='orange-link' href='/faq#verifying'>Unsure how to verify?</a></div>");
-
-        unverified_a.off().click(function(e){
-            e.preventDefault();
-            var unverified_a = $(this);
-            unverified_a.addClass('is-loading');
-            $.ajax({
-                url: unverified_a.data("href"),
-                method: "GET"
-            }).done(function(data){
-                unverified_a.removeClass('is-loading is-danger');
-                if (data.state == "success"){
-                    unverified_a.addClass("is-success").text("Verification was successful!");
-
-                    window.setTimeout(function(){
-                        //show all inputs except price
-                        var div_drop = unverified_a.closest(".is-unverified");
-                        div_drop.removeClass("is-unverified");
-                        div_drop.find(".is-disabled").not(".premium-input, .save-changes-button").removeClass("is-disabled");
-                        var success_button = div_drop.find(".save-changes-button")
-                        var cancel_button = div_drop.find(".cancel-changes-button")
-                        success_button.removeClass("is-hidden");
-
-                        //show status button
-                        var row = unverified_a.closest(".row-drop").prev(".row-disp");
-                        row.find(".td-verify").addClass("is-hidden");
-                        row.find(".td-status").removeClass("is-hidden");
-                        row.find(".td-status-drop").find(".status_input").val(1);
-
-                        unverified_div.addClass("is-hidden");
-                        editStatus(row, true);
-                        listings = data.listings;
-                        domain_name = listing_info.domain_name;
-                        refreshSubmitbindings(success_button, cancel_button, listings, domain_name)
-                    }, 1000);
-                }
-                else {
-                    unverified_a.addClass('is-danger');
-                    unverified_a.text(data.message);
-                }
-            });
-        });
-
-        temp_div_drop.append(unverified_div.append(unverified_a, unverified_faq));
-        unverified_div.hide();
+        temp_div_drop.append(createVerifiedOverlay(listing_info));
     }
 
     //append various stuff to the row drop div
@@ -159,6 +110,61 @@ function createRowDrop(listing_info, rownum){
     temp_div_drop.hide();
 
     return temp_drop;
+}
+
+//function to create the verified overlay
+function createVerifiedOverlay(listing_info){
+    var unverified_div = $("<div class='unverified-div div-drop'></div>");
+        var unverified_h2 = $("<h3>You must verify that you own this domain to rent it out.</h3>")
+        var unverified_a = $("<a class='bottom-margin-25 button is-primary verify-link'></a>");
+            unverified_a.data("href", '/listing/' + listing_info.domain_name + '/verify');
+            var unverified_span2 = $("<span>Verify</span></a");
+            unverified_a.append(unverified_span2);
+    var unverified_faq = $("<div><a target='_blank' style'target-new: tab;' class='orange-link' href='/faq#verifying'>Unsure how to verify?</a></div>");
+
+    unverified_a.off().click(function(e){
+        e.preventDefault();
+        var unverified_a = $(this);
+        unverified_a.addClass('is-loading');
+        $.ajax({
+            url: unverified_a.data("href"),
+            method: "GET"
+        }).done(function(data){
+            unverified_a.removeClass('is-loading is-danger');
+            if (data.state == "success"){
+                unverified_a.addClass("is-success").text("Success!");
+
+                window.setTimeout(function(){
+                    //show all inputs except price
+                    var div_drop = unverified_a.closest(".is-unverified");
+                    div_drop.removeClass("is-unverified");
+                    div_drop.find(".is-disabled").not(".premium-input, .save-changes-button").removeClass("is-disabled");
+                    var success_button = div_drop.find(".save-changes-button")
+                    var cancel_button = div_drop.find(".cancel-changes-button")
+                    success_button.removeClass("is-hidden");
+
+                    //show status button
+                    var row = unverified_a.closest(".row-drop").prev(".row-disp");
+                    row.find(".td-verify").addClass("is-hidden");
+                    row.find(".td-status").removeClass("is-hidden");
+                    row.find(".td-status-drop").find(".status_input").val(1);
+
+                    unverified_div.addClass("is-hidden");
+                    editStatus(row, true);
+                    listings = data.listings;
+                    domain_name = listing_info.domain_name;
+                    refreshSubmitbindings(success_button, cancel_button, listings, domain_name)
+                }, 1000);
+            }
+            else {
+                unverified_a.addClass('is-danger');
+                unverified_a.text("Failed!");
+            }
+        });
+    });
+
+    unverified_div.hide();
+    return unverified_div.append(unverified_h2, unverified_faq, unverified_a);
 }
 
 //function to create the select dropdown for listing status
@@ -218,7 +224,7 @@ function createFormDrop(listing_info){
     temp_div2.append(temp_div2_control_label.append(temp_div2_label), temp_div2_control.append(temp_div2_input));
 
     //categories
-    var categories = listing_info.categories;
+    var categories = (listing_info.categories) ? listing_info.categories : "";
     var temp_div3 = $('<div class="control is-horizontal"></div>');
         var temp_div3_control_label = $('<div class="control-label is-small">');
             var temp_div3_label = $('<label class="label">Categories</label>');
@@ -305,7 +311,7 @@ function createPriceDrop(listing_info){
     var temp_upgrade_button = $('<a href="/listing/' + listing_info.domain_name + premium_src + '" class="stripe-button button is-accent ' + verified_disabled + '">' + premium_text + '</a>');
 
     //show an expiration or renewal date if this is a premium listing
-    var expiring_text = (expiring) ? "Expiring" : "Renewing";
+    var expiring_text = (expiring) ? "Premium expiring" : "Premium renewing";
     var premium_hidden = (premium) ? "" : "is-hidden";
     var expiry_date = $('<div class="' + premium_hidden + ' has-text-right premium-exp-date">' + expiring_text + " on " + moment(listing_info.exp_date).format("YYYY-MM-DD") + "</div>");
 
@@ -617,7 +623,7 @@ function upgradeToPremium(upgrade_button, new_exp_date){
 
     //change expiry date
     var exp_date_elem = row_drop.find(".premium-exp-date");
-    exp_date_elem.text("Renewing on " + moment(new_exp_date).format("YYYY-MM-DD")).removeClass('is-hidden');
+    exp_date_elem.text("Premium renewing on " + moment(new_exp_date).format("YYYY-MM-DD")).removeClass('is-hidden');
 
     //change the button
     var old_src = upgrade_button.attr("href");
@@ -637,7 +643,7 @@ function downgradeToBasic(upgrade_button){
 
     //change expiry date
     var exp_date_elem = row_drop.find(".premium-exp-date");
-    var old_text = exp_date_elem.text().replace("Renewing", "Expiring");
+    var old_text = exp_date_elem.text().replace("renewing", "expiring");
     exp_date_elem.text(old_text);
 
     //change the button

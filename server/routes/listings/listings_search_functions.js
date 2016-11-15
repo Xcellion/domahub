@@ -1,4 +1,4 @@
-var category_list = require("../../lib/categories.js").categories_back;
+var category_list = require("../../lib/categories.js");
 var price_rate_list = ["hour_price", "day_price", "week_price", "month_price", "none"];
 
 var validator = require("validator");
@@ -11,8 +11,8 @@ module.exports = {
 			getMinMaxPrices(function(min_max_prices){
 				res.render("listings/listing_hub.ejs", {
 					user: req.user,
-					categories_front: require("../../lib/categories.js").categories_front,
-					categories_back: require("../../lib/categories.js").categories_back,
+					categories_front: category_list.front,
+					categories_back: category_list.back,
 					random_listings: result.info,
 					min_max_prices: min_max_prices
 				});
