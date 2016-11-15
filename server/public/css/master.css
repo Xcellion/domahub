@@ -241,12 +241,22 @@ span.is-underlined {
   h3.is-underlined-hover,
   span.is-underlined-hover {
     color: inherit; }
-    a.is-underlined-hover:hover,
+    a.is-underlined-hover:hover, a.is-underlined-hover:active, a.is-underlined-hover:focus,
     p.is-underlined-hover:hover,
+    p.is-underlined-hover:active,
+    p.is-underlined-hover:focus,
     h1.is-underlined-hover:hover,
+    h1.is-underlined-hover:active,
+    h1.is-underlined-hover:focus,
     h2.is-underlined-hover:hover,
+    h2.is-underlined-hover:active,
+    h2.is-underlined-hover:focus,
     h3.is-underlined-hover:hover,
-    span.is-underlined-hover:hover {
+    h3.is-underlined-hover:active,
+    h3.is-underlined-hover:focus,
+    span.is-underlined-hover:hover,
+    span.is-underlined-hover:active,
+    span.is-underlined-hover:focus {
       text-decoration: underline; }
 
 a.is-white,
@@ -4138,26 +4148,34 @@ input:-webkit-autofill {
     .nav-item {
       text-align: right; } }
 
-@media screen and (max-width: 768px) {
-  .nav-item a,
-  a.nav-item {
-    width: 100%; } }
-
-.nav-item a.is-tab,
-a.nav-item.is-tab {
-  border-bottom: 1px solid transparent;
-  border-top: 1px solid transparent;
-  padding-left: 12px;
-  padding-right: 12px; }
-  .nav-item a.is-tab:hover,
-  a.nav-item.is-tab:hover {
-    border-bottom: 1px solid #ff5722;
-    border-top: 1px solid transparent; }
-  .nav-item a.is-tab.is-active,
-  a.nav-item.is-tab.is-active {
-    border-bottom: 3px solid #ff5722;
-    border-top: 3px solid transparent;
-    color: #ff5722; }
+.nav-item a,
+a.nav-item {
+  opacity: 0.8; }
+  .nav-item a:hover, .nav-item a:active, .nav-item a:focus, .nav-item a.is-active,
+  a.nav-item:hover,
+  a.nav-item:active,
+  a.nav-item:focus,
+  a.nav-item.is-active {
+    opacity: 1; }
+  @media screen and (max-width: 768px) {
+    .nav-item a,
+    a.nav-item {
+      width: 100%; } }
+  .nav-item a.is-tab,
+  a.nav-item.is-tab {
+    border-bottom: 1px solid transparent;
+    border-top: 1px solid transparent;
+    padding-left: 12px;
+    padding-right: 12px; }
+    .nav-item a.is-tab:hover,
+    a.nav-item.is-tab:hover {
+      border-bottom: 1px solid #ff5722;
+      border-top: 1px solid transparent; }
+    .nav-item a.is-tab.is-active,
+    a.nav-item.is-tab.is-active {
+      border-bottom: 3px solid #ff5722;
+      border-top: 3px solid transparent;
+      color: #ff5722; }
 
 @media screen and (max-width: 768px) {
   .nav-menu {
@@ -5658,11 +5676,11 @@ a.nav-item.is-tab {
       border-top: 2px solid rgba(0, 0, 0, 0.12); }
 
 @media screen and (min-width: 769px) {
-  .checkbox-wrapper:not(:last-child) {
-    margin: 0 10px 5px 0; } }
+  .checkbox-wrapper:not(:first-child) {
+    margin-left: 10px; } }
 
 @media screen and (max-width: 768px) {
-  .checkbox-wrapper:not(:last-child) {
+  .checkbox-wrapper:not(:first-child) {
     margin-bottom: 5px; } }
 
 .checkbox-form label {
@@ -5670,7 +5688,7 @@ a.nav-item.is-tab {
   -o-transition: all 0.25s ease;
   -webkit-transition: all 0.25s ease;
   transition: all 0.25s ease;
-  color: rgba(0, 0, 0, 0.66);
+  color: rgba(0, 0, 0, 0.9);
   cursor: pointer;
   display: inline-block;
   position: relative;
@@ -5688,38 +5706,33 @@ a.nav-item.is-tab {
     color: #3cbc8d; }
   .checkbox-form label:focus, .checkbox-form label:active {
     outline: 1px solid #3cbc8d; }
+  .checkbox-form label.is-small {
+    font-size: 16px;
+    padding: 12px 10px 12px 40px; }
 
 .checkbox-form input[type="checkbox"],
 .checkbox-form input[type="radio"],
 .checkbox-form label::before {
   cursor: pointer;
-  left: 10px;
   position: absolute;
-  height: 18px;
-  margin-top: 12px;
-  top: 0;
-  width: 18px; }
+  height: 24px;
+  width: 24px; }
 
 .checkbox-form input[type="checkbox"],
 .checkbox-form input[type="radio"] {
-  display: inline-block;
   opacity: 0;
-  vertical-align: middle;
   z-index: 100;
-  -webkit-appearance: none;
-  left: 10px; }
+  -webkit-appearance: none; }
 
 .checkbox-form label::before {
   content: url(/images/lib/material/unchecked-box.svg);
   opacity: 0.7;
+  left: 10px;
+  top: 10px;
   -moz-transition: all 0.5s ease;
   -o-transition: all 0.5s ease;
   -webkit-transition: all 0.5s ease;
   transition: all 0.5s ease; }
-
-.checkbox-form input[type="checkbox"]:checked + label,
-.checkbox-form input[type="radio"]:checked + label {
-  color: rgba(0, 0, 0, 0.9); }
 
 .checkbox-form input[type="checkbox"]:checked + label::before,
 .checkbox-form input[type="radio"]:checked + label::before {
@@ -5727,24 +5740,19 @@ a.nav-item.is-tab {
   opacity: 1; }
 
 /********************** CUSTOM STYLES ******************/
-@media screen and (min-width: 769px) {
-  .logo-text {
-    font-family: "sharetech", "Lucida Console", monospace;
-    font-size: 24px; }
-    .logo-text.primary-logo {
-      color: #3cbc8d; }
-      .logo-text.primary-logo-dark {
-        color: #309670; }
-      .logo-text.primary-logo-light {
-        color: #62c9a3; }
-    .logo-text.white-logo {
-      color: white; }
-    .logo-text.large-logo {
-      font-size: 28px; } }
-
-@media screen and (max-width: 768px) {
-  .logo-text {
-    display: none; } }
+.logo-text {
+  font-family: "sharetech", "Lucida Console", monospace;
+  font-size: 24px; }
+  .logo-text.primary-logo {
+    color: #3cbc8d; }
+    .logo-text.primary-logo-dark {
+      color: #309670; }
+    .logo-text.primary-logo-light {
+      color: #62c9a3; }
+  .logo-text.white-logo {
+    color: white; }
+  .logo-text.large-logo {
+    font-size: 28px; }
 
 @media screen and (min-width: 769px) {
   #temp-logo-flat {

@@ -16,60 +16,40 @@
 
 		<%- include("../templates/navbar", {user: user}); %>
 
-		<section class="min-height">
-
 		<section class="section is-medium-top">
 			<div class="container">
 				<div class="columns">
 					<div class="column">
-						<p class="control has-icon">
-							<input id="domain_name-input" class="input is-medium" tabindex="7" type="text" placeholder="Search domains" />
-							<i class="fa fa-search"></i>
-						</p>
 						<div class="control is-horizontal">
 						  <div class="control-label is-padded">
-						    <label class="label is-medium">Date Range</label>
+						    <label class="label">Date Range</label>
 						  </div>
 						  <div class="control is-grouped">
 						    <p class="control is-expanded">
-						      <input id="start_date-input" class="input is-medium" tabindex="8" type="date" required="required" placeholder="Rental Start Date">
+						      <input id="start_date-input" class="input" tabindex="8" type="date" required="required" placeholder="Rental Start Date">
 						    </p>
 						    <p class="control is-expanded">
-						      <input id="end_date-input" class="input is-medium" tabindex="9" type="date" required="required" placeholder="Rental End Date">
+						      <input id="end_date-input" class="input" tabindex="9" type="date" required="required" placeholder="Rental End Date">
 						    </p>
 						  </div>
 						</div>
 						<div class="control is-horizontal">
 							<div class="control-label is-padded">
-								<label class="label is-medium">Categories</label>
-							</div>
-							<form class="control checkbox-form is-flex-wrap">
-								<%# using for loop to generate all categories %>
-								<% for (var x = 0; x < categories_front.length; x++) {%>
-									<div class="checkbox-wrapper">
-										<input class="cat-checkbox" value="<%= categories_back[x] %>" id="cb<%= x %>" type="checkbox" />
-										<label class="has-border" tabindex="<%= x + 10 %>" for="cb<%= x %>"><%= categories_front[x] %></label>
-									</div>
-								<% } %>
-							</form>
-						</div>
-						<div class="control is-horizontal">
-							<div class="control-label is-padded">
-								<label class="label is-medium">Price / Rate</label>
+								<label class="label">Price / Rate</label>
 							</div>
 							<div class="control">
-								<span class="select is-medium">
-							    <select id="category-input">
-							      	<option selected disabled>Select Rate</option>
-						      		<%# <option value="minute_price">Minute</option>%>
-						      		<option value="none">None</option>
-						      		<option value="hour_price">Hourly</option>
+								<span class="select">
+									<select id="category-input">
+											<option selected disabled>Select Rate</option>
+											<%# <option value="minute_price">Minute</option>%>
+											<option value="none">None</option>
+											<option value="hour_price">Hourly</option>
 									<option value="day_price">Daily</option>
 									<option value="week_price">Weekly</option>
 									<option value="month_price">Monthly</option>
 									<%# <option>Yearly</option>%>
-							    </select>
-							  </span>
+									</select>
+								</span>
 							</div>
 						</div>
 						<div id="slider" class="margin-bottom-50">
@@ -80,16 +60,30 @@
 			</div>
 		</section>
 
-		<section class="is-small">
+		<section class="is-small min-height">
 			<div class="container">
 				<div id="filter-dropdown" class="is-hidden">
 					<div class="control is-horizontal">
 						<div class="control-label is-padded">
-							<label class="label is-medium">Extensions</label>
+							<label class="label">Categories</label>
+						</div>
+						<form class="control checkbox-form is-flex-wrap">
+							<%# using for loop to generate all categories %>
+							<% for (var x = 0; x < categories_front.length; x++) {%>
+								<div class="checkbox-wrapper">
+									<input class="cat-checkbox is-small" value="<%= categories_back[x] %>" id="cb<%= x %>" type="checkbox" />
+									<label class="has-border is-small" tabindex="<%= x + 10 %>" for="cb<%= x %>"><%= categories_front[x] %></label>
+								</div>
+							<% } %>
+						</form>
+					</div>
+					<div class="control is-horizontal">
+						<div class="control-label is-padded">
+							<label class="label">Extensions</label>
 						</div>
 						<div class="control has-addons">
-							<input class="input is-medium" type="text" placeholder="Extensions">
-							<span class="select is-medium">
+							<input class="input" type="text" placeholder="Extensions">
+							<span class="select">
 						    <select>
 						      <option>.com</option>
 						      <option>.net</option>
@@ -100,7 +94,7 @@
 					</div>
 					<div class="control is-horizontal">
 						<div class="control-label is-padded">
-							<label class="label is-medium">Domain Length</label>
+							<label class="label">Domain Length</label>
 						</div>
 						<div class="control">
 							<div id="sliderSmall">
@@ -110,20 +104,20 @@
 					</div>
 					<div class="control is-horizontal">
 						<div class="control-label is-padded">
-							<label class="label is-medium">Special Characters</label>
+							<label class="label">Special Characters</label>
 						</div>
 						<div class="control">
-							<input class="input is-medium" tabindex="17" type="text" placeholder="Exclude (separate by comma)">
+							<input class="input" tabindex="17" type="text" placeholder="Exclude (separate by comma)">
 						</div>
 					</div>
 					<div class="is-flex-wrap jc-flexEnd">
-						<a id="filter-cancel-button" class="button is-medium">Cancel</a>
-						<a id="filter-apply-button" class="button is-medium is-primary">Apply Filters</a>
+						<a id="filter-cancel-button" class="button">Cancel</a>
+						<a id="filter-apply-button" class="button is-primary">Apply Filters</a>
 					</div>
 				</div>
 				<div class="is-flex-wrap">
-					<a id="submit-button" class="button is-primary is-disabled is-medium">Submit</a>
-					<a id="filter-open-button" class="button is-medium">Filters</a>
+					<a id="submit-button" class="button is-primary is-disabled">Submit</a>
+					<a id="filter-open-button" class="button">Filters</a>
 					<%# <a class="button is-medium is-grey">
 						<span>4 Characters</span>
 						<span class="icon">
@@ -176,8 +170,6 @@
 					</tbody>
 				</table>
 			</div>
-		</section>
-
 		</section>
 
 		<%- include("../templates/footer"); %>

@@ -132,9 +132,9 @@
 }
 
 .checkbox-wrapper {
-  &:not(:last-child) {
+  &:not(:first-child) {
     @include tablet {
-      margin: 0 10px 5px 0;
+      margin-left: 10px;
     }
     @include mobile {
       margin-bottom: 5px;
@@ -144,7 +144,7 @@
 
 .checkbox-form label {
 	@include transition(all 0.25s ease);
-	color: $text-light;
+	color: $text;
 	cursor: pointer;
 	display: inline-block;
 	position: relative;
@@ -161,6 +161,7 @@
       border-color: $primary;
     }
   }
+  // Hover, focus, active effects
   &:hover {
     color: $primary;
   }
@@ -168,39 +169,40 @@
   &:active {
     outline: 1px solid $primary;
   }
+  // Sizes
+  &.is-small {
+    font-size: $size-6;
+    padding: 12px 10px 12px 40px;
+  }
 }
 
 .checkbox-form input[type="checkbox"],
 .checkbox-form input[type="radio"],
 .checkbox-form label::before {
-	cursor: pointer;
-	left: 10px;
-	position: absolute;
-  height: 18px;
-  margin-top: 12px;
-  top: 0;
-  width: 18px;
+  cursor: pointer;
+  position: absolute;
+  height: 24px;
+  width: 24px;
 }
 
 .checkbox-form input[type="checkbox"],
 .checkbox-form input[type="radio"] {
-	display: inline-block;
 	opacity: 0;
-	vertical-align: middle;
 	z-index: 100;
   -webkit-appearance: none;
-  left: 10px;
 }
 
 .checkbox-form label::before {
   content: url(/images/lib/material/unchecked-box.svg);
   opacity: 0.7;
+  left: 10px;
+  top: 10px;
 	@include transition(all 0.5s ease);
 }
 
 .checkbox-form input[type="checkbox"]:checked + label,
 .checkbox-form input[type="radio"]:checked + label {
-	color: $text;
+	
 }
 
 .checkbox-form input[type="checkbox"]:checked + label::before,
@@ -212,29 +214,24 @@
 
 /********************** CUSTOM STYLES ******************/
 .logo-text {
-  @include tablet {
-    font: {
-      family: $shareTech;
-      size: $size-4;
+  font: {
+    family: $shareTech;
+    size: $size-4;
+  }
+  &.primary-logo {
+    color: $primary;
+    &-dark {
+      color: $primary-dark;
     }
-    &.primary-logo {
-      color: $primary;
-      &-dark {
-        color: $primary-dark;
-      }
-      &-light {
-        color: $primary-light;
-      }
-    }
-    &.white-logo {
-      color: $white;
-    }
-    &.large-logo {
-      font-size: $size-3;
+    &-light {
+      color: $primary-light;
     }
   }
-  @include mobile {
-    display: none;
+  &.white-logo {
+    color: $white;
+  }
+  &.large-logo {
+    font-size: $size-3;
   }
 }
 

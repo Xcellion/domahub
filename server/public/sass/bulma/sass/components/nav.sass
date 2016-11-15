@@ -33,6 +33,12 @@
 
 .nav-item a,
 a.nav-item
+  opacity: 0.8
+  &:hover,
+  &:active,
+  &:focus,
+  &.is-active
+    opacity: 1
   +mobile
     width: 100%
   &.is-tab
