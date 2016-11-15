@@ -72,6 +72,8 @@ $(document).ready(function() {
 	if (pages_white_nav.indexOf(current_page) != -1){
 		$(".nav-link").removeClass("is-white");
 		$(".logo-text").addClass("primary-logo-light").removeClass("is-white");
+		$(".nav-menu").removeClass("is-dark").addClass("is-white");
+		$(".nav-toggle").removeClass("is-white").addClass("is-black");
 		$("#profile-button, #login-modal").addClass("is-primary").removeClass("is-white");
 	}
 
@@ -88,12 +90,16 @@ $(document).ready(function() {
 				$("#profile-button, #login-modal").removeClass("is-primary").addClass("is-white");
 				$(".logo-text").removeClass("primary-logo-light").addClass("is-white");
 				$(".nav-link").addClass("is-white");
+				$(".nav-menu").removeClass("is-white").addClass("is-dark");
+				$(".nav-toggle").removeClass("is-black").addClass("is-white");
 			}
 		}
 		//past the top
 		else if ($(this).scrollTop() > 0 && !$(".nav").hasClass("has-shadow")){
 			$(".nav").addClass("has-shadow is-white");
 			$(".nav-link").removeClass("is-white");
+			$(".nav-menu").removeClass("is-dark").addClass("is-white");
+			$(".nav-toggle").removeClass("is-white").addClass("is-black");
 			$(".logo-text").addClass("primary-logo-light").removeClass("is-white");
 			$("#profile-button, #login-modal").addClass("is-primary").removeClass("is-white");
 		}

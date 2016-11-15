@@ -78,7 +78,7 @@ function initBigSlider(){
     noUiSlider.create(slider, {
         start: [1, 50, 100],
         connect: true,
-        behaviour: 'drag-snap',
+        behaviour: 'snap',
         tooltips: true,
         step: 1,
         format: wNumb({
