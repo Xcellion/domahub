@@ -168,6 +168,8 @@ module.exports = {
 				error.handler(req, res, "Invalid listing!");
 			}
 			else {
+				var listing_info = result.info[0];
+
 				//get rental info for that listing
 				Listing.getListingRentalsInfo(listing_info.id, function(result){
 					if (result.state=="error"){error.handler(req, res, result.info);}

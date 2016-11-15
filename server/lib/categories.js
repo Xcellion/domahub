@@ -1,7 +1,7 @@
 module.exports = {
 
 	//categories that are formatted for the back-end
-	categories_back : [
+	back : [
 		"ecard",
 		"personal",
 		"startup",
@@ -13,7 +13,7 @@ module.exports = {
 	],
 
 	//categories that are formatted for the front-end
-	categories_front : [
+	front : [
 		"E-Card",
 		"Personal",
 		"Start-Up",
