@@ -1,0 +1,4 @@
+* shift click calendar to drag
+* time zone for listings page
+* you're leaving domahub now to go to stripe
+* can create listing before stripe connection, but cant become active until you're connected
