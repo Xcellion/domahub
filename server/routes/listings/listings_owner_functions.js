@@ -117,11 +117,13 @@ module.exports = {
 		}
 
 		//loop through and parse the CSV file, check every entry and format it correctly
-	    parseCSVFile(req.file.path, onError, function(bad_listings, good_listings, domains_sofar){
-			if (bad_listings.length > 0){
+	    parseCSVFile(req.file.path, onError, function(bad_listings, good_listings){
+
+			//none were good
+			if (good_listings.length == 0){
 				res.send({
 					bad_listings: bad_listings,
-					good_listings: good_listings
+					good_listings: false
 				});
 			}
 			else {
@@ -130,6 +132,7 @@ module.exports = {
 					good_listings[x].push("" + req.user.id + "", 1, new Date().getTime());
 				}
 				req.session.good_listings = good_listings;
+				req.session.bad_listings = bad_listings;
 				next();
 			}
 		});
@@ -479,7 +482,7 @@ module.exports = {
 				//nothing created
 				if (affectedRows == 0){
 					res.send({
-						bad_listings: findUncreatedListings(formatted_listings, []).bad_listings,
+						bad_listings: findUncreatedListings(formatted_listings, [], req.session.bad_listings).bad_listings,
 						good_listings: false
 					});
 				}
@@ -494,13 +497,15 @@ module.exports = {
 							var inserted_domains = newly_inserted_listings.inserted_domains;
 
 							//figure out what wasnt created and what was
-							var listings_result = findUncreatedListings(formatted_listings, inserted_domains);
+							var listings_result = findUncreatedListings(formatted_listings, inserted_domains, req.session.bad_listings);
 							var bad_listings = listings_result.bad_listings;
 							var good_listings = listings_result.good_listings;
 
 							//revert the newly made listings verified to null
 							Listing.updateListingsVerified(inserted_ids, function(result){
 								delete req.session.good_listings;
+								delete req.session.bad_listings;
+
 								res.send({
 									bad_listings: bad_listings || false,
 									good_listings: good_listings || false
@@ -655,7 +660,7 @@ function parseCSVFile(sourceFilePath, errorHandler, done){
 
 	//pass it back to create session variables
     parser.on("end", function(){
-        done(bad_listings, good_listings, domains_sofar);
+        done(bad_listings, good_listings);
     });
 
     source.pipe(parser);
@@ -699,6 +704,10 @@ function findNewlyMadeListings(user_listings, new_listings){
 		if (!exists){
 			inserted_ids.push([new_listings[x].id]);
 			inserted_domains.push(new_listings[x].domain_name);
+
+			//add to req.users object
+			new_listings[x].verified = null;
+			user_listings.push(new_listings[x]);
 		}
 	}
 
@@ -709,8 +718,8 @@ function findNewlyMadeListings(user_listings, new_listings){
 }
 
 //helper function to see if any listings failed
-function findUncreatedListings(posted_listings, new_listings){
-	var bad_listings = [];
+function findUncreatedListings(posted_listings, new_listings, existing_bad_listings){
+	var bad_listings = (existing_bad_listings) ? existing_bad_listings : [];
 	var good_listings = [];
 
 	//loop through all posted listings
