@@ -202,7 +202,7 @@
 
 .checkbox-form input[type="checkbox"]:checked + label,
 .checkbox-form input[type="radio"]:checked + label {
-	
+
 }
 
 .checkbox-form input[type="checkbox"]:checked + label::before,
@@ -266,6 +266,10 @@
 
 .margin-top-10 {
   margin-top: 10px;
+}
+
+.margin-top-25 {
+    margin-top: 25px;
 }
 
 .margin-bottom-25 {

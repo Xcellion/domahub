@@ -12,3 +12,6 @@
 
 .listing-info:not(:last-child) {
   border-bottom: 1px solid rgba(0, 0, 0, 0.12); }
+
+.listing-info-wrapper + .listing-info-wrapper {
+  margin-top: 50px; }
