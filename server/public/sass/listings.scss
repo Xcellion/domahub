@@ -35,6 +35,15 @@
   @include transition(all 0.5s ease);
 }
 
+#listings-table {
+  td {
+    white-space: nowrap;
+  }
+  .td-domain, .td-category {
+    width: 100%;
+  }
+}
+
 
 // General primary colored range for stuff like domain length
 input[type=range].primary-range {
