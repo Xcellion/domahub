@@ -25,7 +25,8 @@ $(document).ready(function() {
 
     // Filter dropdown logic
     $("#filter-open-button").click(function() {
-		$("#filter-dropdown").toggleClass("is-hidden");
+			$(this).toggleClass("is-active");
+			$("#filter-dropdown").toggleClass("is-hidden");
     });
 
     //submit search
