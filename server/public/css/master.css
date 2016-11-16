@@ -391,6 +391,12 @@ a {
   word-break: break-word; }
   a:active {
     outline: none; }
+  a.black-link {
+    color: rgba(0, 0, 0, 0.9); }
+    a.black-link:hover, a.black-link:focus {
+      -moz-box-shadow: inset 0 -2px 0 rgba(0, 0, 0, 0.9);
+      -webkit-box-shadow: inset 0 -2px 0 rgba(0, 0, 0, 0.9);
+      box-shadow: inset 0 -2px 0 rgba(0, 0, 0, 0.9); }
   a.primary-link {
     color: #3cbc8d; }
     a.primary-link:hover, a.primary-link:focus {
