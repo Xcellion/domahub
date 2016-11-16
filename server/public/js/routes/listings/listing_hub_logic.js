@@ -87,17 +87,17 @@ function initBigSlider(){
     });
 
     // To disable middle handle
-    $($(".noUi-handle")[1]).css({
+    $($(slider).find(".noUi-handle")[1]).css({
         "border" : "1px solid transparent",
         "box-shadow" : "none",
         "background" : "transparent",
         "z-index" : "0"
     });
-    $($(".noUi-tooltip")[1]).addClass("is-hidden");
+    $($(slider).find(".noUi-tooltip")[1]).addClass("is-hidden");
 
     //tooltip widths
-    var left_width = parseFloat($($(".noUi-tooltip")[0]).css('width')) / 2;
-    var right_width = parseFloat($($(".noUi-tooltip")[2]).css('width')) / 2;
+    var left_width = parseFloat($($(slider).find(".noUi-tooltip")[0]).css('width')) / 2;
+    var right_width = parseFloat($($(slider).find(".noUi-tooltip")[2]).css('width')) / 2;
 
     // Tooltips movement on large slider
     slider.noUiSlider.on('slide', function(values, handle, unencoded, tap, positions) {
@@ -106,31 +106,31 @@ function initBigSlider(){
         slider.noUiSlider.set([null, middle_val, null]);
 
         //update the tooltip widths as long as they aren't hidden
-        if (!$($(".noUi-tooltip")[0]).hasClass("is-hidden")){
-            left_width = parseFloat($($(".noUi-tooltip")[0]).css('width')) / 2;
+        if (!$($(slider).find(".noUi-tooltip")[0]).hasClass("is-hidden")){
+            left_width = parseFloat($($(slider).find(".noUi-tooltip")[0]).css('width')) / 2;
         }
-        if (!$($(".noUi-tooltip")[2]).hasClass("is-hidden")){
-            right_width = parseFloat($($(".noUi-tooltip")[2]).css('width')) / 2;
+        if (!$($(slider).find(".noUi-tooltip")[2]).hasClass("is-hidden")){
+            right_width = parseFloat($($(slider).find(".noUi-tooltip")[2]).css('width')) / 2;
         }
 
         //if left of left handle + half the widths of both tooltips >= left of right handle
         //visual of handle doesn't update until after this callback has completed
-        var handle_0_left = positions[0] * 0.01 * $(".noUi-base").width();
-        var handle_2_left = positions[2] * 0.01 * $(".noUi-base").width();
+        var handle_0_left = positions[0] * 0.01 * $(slider).find(".noUi-base").width();
+        var handle_2_left = positions[2] * 0.01 * $(slider).find(".noUi-base").width();
         var is_close = (handle_0_left + left_width >= handle_2_left - right_width);
 
         //hide the other handle, change moving handle tooltip
         if (is_close && (values[2] !== values[0])) {
-            $(".noUi-tooltip").addClass("is-hidden");
-            $($(".noUi-tooltip")[1]).removeClass("is-hidden");
-            $($(".noUi-tooltip")[1]).text(values[0] + " - " + values[2]);
+            $(slider).find(".noUi-tooltip").addClass("is-hidden");
+            $($(slider).find(".noUi-tooltip")[1]).removeClass("is-hidden");
+            $($(slider).find(".noUi-tooltip")[1]).text(values[0] + " - " + values[2]);
         }
         else if (values[2] == values[0]) {
-            $(".noUi-tooltip").removeClass("is-hidden");
+            $(slider).find(".noUi-tooltip").removeClass("is-hidden");
         }
         else {
-            $(".noUi-tooltip").removeClass("is-hidden");
-            $($(".noUi-tooltip")[1]).addClass("is-hidden");
+            $(slider).find(".noUi-tooltip").removeClass("is-hidden");
+            $($(slider).find(".noUi-tooltip")[1]).addClass("is-hidden");
         }
 
         //can submit
@@ -200,7 +200,7 @@ function submitData(){
             $("#submit-button").removeClass("is-loading").addClass("is-disabled");
             if (data.state == "success"){
                 console.log(data.listings);
-                createListingRows(data.listings);
+                createListingRows(data.listings, true);
             }
             else {
                 console.log(data);
@@ -210,16 +210,24 @@ function submitData(){
 }
 
 //function to add new rows after search
-function createListingRows(listings){
+function createListingRows(listings, avail_bool){
     var tbody = $("#listings-table").find("tbody");
     tbody.empty();
+
+	//the table row header for available
+	var avail_th_text = (avail_bool) ? "Availability" : "";
+	$("#availability-th").text(avail_th_text);
 
     if (listings.length){
         //loop through and create each row
         for (var x = 0; x < listings.length; x++){
             var temp_tr = $("<tr></tr>");
-            var temp_domain = $("<td class='domain-td'><a class='orange-link' href='/listing/" + listings[x].domain_name + "'>" + listings[x].domain_name + "</a></td>");
-            var temp_avail = $("<td>" + listings[x].availability + "</td>");
+
+			//to determine if we display availability or not
+			var colspan_bool = (avail_bool) ? 1 : 2;
+            var temp_domain = $("<td colspan=" + colspan_bool + " class='domain-td'><a class='orange-link' href='/listing/" + listings[x].domain_name + "'>" + listings[x].domain_name + "</a></td>");
+			var temp_avail = (avail_bool) ? $("<td>" + listings[x].overlap + "</td>") : "";
+
             var temp_categories = $("<td>" + listings[x].categories + "</td>");
             var temp_hour = $("<td>" + moneyFormat.to(listings[x].hour_price) + "</td>");
             var temp_day = $("<td>" + moneyFormat.to(listings[x].day_price) + "</td>");
