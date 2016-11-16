@@ -9,11 +9,14 @@ function setUpCalendar(){
         id = $(this).attr("id");
         $(".fc-" + id).click();
     });
+
+    //custom buttons
     $(".fc-today-button").hide();
     $("#remove_events").click(function(e){
         $('#calendar').fullCalendar('removeEvents', filterMine);
     });
 
+    //change to month view
     $("#month_button").click(function(e){
         var view = $('#calendar').fullCalendar('getView');
 

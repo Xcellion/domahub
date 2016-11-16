@@ -20,15 +20,11 @@
 			<div class="container margin-bottom-25">
 				<div class="columns">
 					<div class="column">
-						<p class="control has-icon has-addons">
-							<input id="domain_name-input" class="input is-medium is-expanded" tabindex="7" type="text" placeholder="Search domains" />
+						<p class="control has-icon">
+							<input id="domain_name-input" class="input is-medium" tabindex="7" type="text" placeholder="Search domains" />
 							<i class="fa fa-search"></i>
-							<a id="submit-button" class="button is-primary is-medium">
-								Submit
-							</a>
-						</p>
-						<p class="control">
-							<a id="filter-open-button" class="button">Advanced Search</a>
+							<a id="submit-button" class="button is-primary is-disabled">Submit</a>
+							<a id="filter-open-button" class="button">Filters</a>
 						</p>
 					</div>
 				</div>
@@ -80,14 +76,14 @@
 						<div class="control">
 							<span class="select">
 								<select id="category-input">
-										<option selected disabled>Select Rate</option>
-										<%# <option value="minute_price">Minute</option>%>
-										<option value="none">None</option>
-										<option value="hour_price">Hourly</option>
-								<option value="day_price">Daily</option>
-								<option value="week_price">Weekly</option>
-								<option value="month_price">Monthly</option>
-								<%# <option>Yearly</option>%>
+									<option selected disabled>Select Rate</option>
+									<%# <option value="minute_price">Minute</option>%>
+									<option value="none">None</option>
+									<option value="hour_price">Hourly</option>
+									<option value="day_price">Daily</option>
+									<option value="week_price">Weekly</option>
+									<option value="month_price">Monthly</option>
+									<%# <option>Yearly</option>%>
 								</select>
 							</span>
 						</div>
@@ -121,7 +117,7 @@
 					<thead>
 						<tr>
 							<th>Domain Name</th>
-							<th>Availability</th>
+							<th id="availability-th">Availability</th>
 							<th>Categories</th>
 							<th>Hourly</th>
 							<th>Daily</th>
