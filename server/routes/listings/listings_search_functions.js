@@ -1,4 +1,4 @@
-var category_list = require("../../lib/categories.js");
+var Categories = require("../../lib/categories.js");
 var price_rate_list = ["hour_price", "day_price", "week_price", "month_price", "none"];
 
 var validator = require("validator");
@@ -11,8 +11,8 @@ module.exports = {
 			getMinMaxPrices(function(min_max_prices){
 				res.render("listings/listing_hub.ejs", {
 					user: req.user,
-					categories_front: category_list.front,
-					categories_back: category_list.back,
+					categories_front: Categories.back(),
+					categories_back: Categories.back(),
 					random_listings: result.info,
 					min_max_prices: min_max_prices
 				});
@@ -24,8 +24,8 @@ module.exports = {
 	getRandomListingByCategory : function(req, res, next){
 		var category = req.params.category.toLowerCase();
 
-		//if not a legit category
-		if (category_list.indexOf(category) != -1){
+		//make sure the category is legit
+		if (Categories.existsBack(category)){
 			category = "%" + category + "%";
 			Listing.getRandomListingByCategory(category, function(result){
 				if (!result.info.length || result.state == "error"){
@@ -36,6 +36,7 @@ module.exports = {
 				}
 			});
 		}
+		//if not a legit category
 		else {
 			res.redirect("/");
 		}
@@ -44,8 +45,8 @@ module.exports = {
 	//check the posted search parameters
 	checkSearchParams : function(req, res, next){
 		var posted_categories = (typeof req.body.categories == "string" && req.body.categories.length > 0) ? req.body.categories.toLowerCase().split(" ").filter(function(el) {return el.length != 0}) : [];
-		var all_categories_exist = posted_categories.every(function(v,i) {
-			return category_list.back.indexOf(v) !== -1;
+		var all_categories_exist = posted_categories.every(function(v) {
+			return Categories.existsBack(v);
 		});
 
 		//if the domain is invalid even after adding ".com"
@@ -160,9 +161,10 @@ function createRentalProp(listings){
 		//iterate again to look for multiple dates and durations
 		for (var y = 0; y < listings.length; y++){
 			var temp_rental_obj = {};
-			if (!listings[y].checked && listings[x]["domain_name"] == listings[y]["domain_name"]){
+			if (!listings[y].active && !listings[y].checked && listings[x]["domain_name"] == listings[y]["domain_name"]){
 				temp_rental_obj.rental_id = listings[y].rental_id;
 				temp_rental_obj.date = listings[y].date;
+				temp_rental_obj.date = listings[y].active;
 				temp_rental_obj.duration = listings[y].duration;
 				listings[y].checked = true;
 				temp_rentals.push(temp_rental_obj);
@@ -195,15 +197,15 @@ function checkDateAvailability(min_date, max_date, listings){
 		for (var y = 0; y < listings[x].rentals.length; y++){
 			//if there is a complete overlap (existing start <= posted start && existing end >= posted end)
 			if (listings[x].rentals[y].date <= min_date && listings[x].rentals[y].date + listings[x].rentals[y].duration >= max_date){
-				overlap = "full";
+				overlap = "Unavailable";
 			}
 			//partial overlap (existing start < posted end && posted start < existing end)
 			else if (listings[x].rentals[y].date < max_date && min_date < listings[x].rentals[y].date + listings[x].rentals[y].duration){
-				overlap = (overlap == "" || overlap == "none") ? "partial" : overlap;
+				overlap = (overlap == "" || overlap == "Available") ? "Partially Available" : overlap;
 			}
 			//no overlaps!
 			else {
-				overlap = (overlap == "") ? "none" : overlap;
+				overlap = (overlap == "") ? "Available" : overlap;
 			}
 		}
 		listings[x].overlap = overlap;
