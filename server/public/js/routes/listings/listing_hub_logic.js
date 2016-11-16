@@ -25,15 +25,7 @@ $(document).ready(function() {
 
     // Filter dropdown logic
     $("#filter-open-button").click(function() {
-        $(this).parents(".listing-buttons").addClass("is-hidden");
-        $("#listings-table").addClass("is-hidden");
-        $("#filter-dropdown").removeClass("is-hidden");
-    });
-
-    $("#filter-cancel-button, #filter-apply-button").click(function() {
-        $("#filter-dropdown").addClass("is-hidden");
-        $(this).parents().parents().siblings(".listing-buttons").removeClass("is-hidden");
-        $("#listings-table").removeClass("is-hidden");
+		$("#filter-dropdown").toggleClass("is-hidden");
     });
 
     //submit search
@@ -225,19 +217,21 @@ function createListingRows(listings){
         //loop through and create each row
         for (var x = 0; x < listings.length; x++){
             var temp_tr = $("<tr></tr>");
-            var temp_domain = $("<td><a class='orange-link' href='/listing/" + listings[x].domain_name + "'>" + listings[x].domain_name + "</a></td>");
+            var temp_domain = $("<td class='domain-td'><a class='orange-link' href='/listing/" + listings[x].domain_name + "'>" + listings[x].domain_name + "</a></td>");
+            var temp_avail = $("<td>" + listings[x].availability + "</td>");
+            var temp_categories = $("<td>" + listings[x].categories + "</td>");
             var temp_hour = $("<td>" + moneyFormat.to(listings[x].hour_price) + "</td>");
             var temp_day = $("<td>" + moneyFormat.to(listings[x].day_price) + "</td>");
             var temp_week = $("<td>" + moneyFormat.to(listings[x].week_price) + "</td>");
             var temp_month = $("<td>" + moneyFormat.to(listings[x].month_price) + "</td>");
-            temp_tr.append(temp_domain, temp_hour, temp_day, temp_week, temp_month);
+            temp_tr.append(temp_domain, temp_avail, temp_categories, temp_hour, temp_day, temp_week, temp_month);
             tbody.append(temp_tr);
         }
     }
     //nothing!
     else {
         var temp_tr = $("<tr></tr>");
-        var temp_td = $("<td colspan='5'>There were no listings matching your search criteria!</td>");
+        var temp_td = $("<td colspan='7'>There were no listings matching your search criteria!</td>");
         temp_tr.append(temp_td);
 
         tbody.append(temp_tr);
