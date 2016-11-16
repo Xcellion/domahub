@@ -231,11 +231,11 @@ function createListingRows(listings, avail_bool){
 
 			//to determine if we display availability or not
 			var colspan_bool = (avail_bool) ? 1 : 2;
-            var temp_domain = $("<td colspan=" + colspan_bool + " class='domain-td'><a class='orange-link' href='/listing/" + listings[x].domain_name + "'>" + listings[x].domain_name + "</a></td>");
+            var temp_domain = $("<td colspan=" + colspan_bool + " class='td-domain'>" + listings[x].domain_name + "</td>");
 			var temp_avail = (avail_bool) ? $("<td>" + listings[x].overlap + "</td>") : "";
 
 			var disp_category = (listings[x].categories != null) ? capitalizeWords(listings[x].categories) : "None";
-            var temp_categories = $("<td>" + disp_category + "</td>");
+            var temp_categories = $("<td class='td-categories'>" + disp_category + "</td>");
             var temp_hour = $("<td>" + moneyFormat.to(listings[x].hour_price) + "</td>");
             var temp_day = $("<td>" + moneyFormat.to(listings[x].day_price) + "</td>");
             var temp_week = $("<td>" + moneyFormat.to(listings[x].week_price) + "</td>");
