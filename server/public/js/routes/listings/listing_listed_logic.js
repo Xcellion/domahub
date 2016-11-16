@@ -101,6 +101,24 @@ $(document).ready(function() {
 	else {
 		displayDefault();
 	}
+
+	// Modal for calendar
+	$('#calendar-modal-button').click(function() {
+		$('#calendar-modal').addClass('is-active');
+	});
+
+	// various ways to close calendar modal
+	$('.modal-close, .modal-background').click(function() {
+	  $('#calendar-modal').removeClass('is-active');
+	});
+
+	$(document).keyup(function(e) {
+		if (e.which == 27) {
+			$('#calendar-modal').removeClass('is-active');
+		}
+	});
+
+
 });
 
 // Close Checkout on page navigation
