@@ -1917,6 +1917,8 @@ input:-webkit-autofill {
   text-align: left; }
   .control:not(:last-child) {
     margin-bottom: 15px; }
+  .control.has-slider {
+    padding: 0 10px; }
   .control.has-addons {
     display: flex;
     justify-content: flex-start; }
