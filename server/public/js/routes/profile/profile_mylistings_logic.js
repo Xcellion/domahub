@@ -116,13 +116,16 @@ function createRowDrop(listing_info, rownum){
 function createVerifiedOverlay(listing_info){
     var unverified_div = $("<div class='unverified-div div-drop'></div>");
         var unverified_h2 = $("<h3>You must verify that you own this domain to rent it out.</h3>")
-        var unverified_a = $("<a class='bottom-margin-25 button is-primary verify-link'></a>");
-            unverified_a.data("href", '/listing/' + listing_info.domain_name + '/verify');
-            var unverified_span2 = $("<span>Verify</span></a");
-            unverified_a.append(unverified_span2);
-    var unverified_faq = $("<div><a target='_blank' style'target-new: tab;' class='orange-link' href='/faq#verifying'>Unsure how to verify?</a></div>");
+        var unverified_button = $("<a class='bottom-margin-25 button is-primary verify-link'></a>");
+            unverified_button.data("href", '/listing/' + listing_info.domain_name + '/verify');
+            var unverified_span2 = $("<span>Click to Verify</span></a");
+            unverified_button.append(unverified_span2);
+        var unverified_faq = $("<div>Click <a target='_blank' style'target-new: tab;' class='orange-link' href='/faq#verifying'>here</a> for more information on domain verification.</div>");
+        var unverified_step1 = $("<div><span class='is-primary'>Step 1:</span> Create a new A record for your domain name.</div>");
+        var unverified_step2 = $("<div><span class='is-primary'>Step 2:</span> Point the new A record to 208.68.37.82</div>");
+        var unverified_step3 = $("<div><span class='is-primary'>Step 3:</span> Press the button below to verify!</div>");
 
-    unverified_a.off().click(function(e){
+    unverified_button.off().click(function(e){
         e.preventDefault();
         var unverified_a = $(this);
         unverified_a.addClass('is-loading');
@@ -164,7 +167,7 @@ function createVerifiedOverlay(listing_info){
     });
 
     unverified_div.hide();
-    return unverified_div.append(unverified_h2, unverified_faq, unverified_a);
+    return unverified_div.append(unverified_h2, unverified_faq, unverified_step1, unverified_step2, unverified_step3, unverified_button);
 }
 
 //function to create the select dropdown for listing status
