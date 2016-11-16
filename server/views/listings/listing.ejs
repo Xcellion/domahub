@@ -89,9 +89,11 @@
 									<div class="content">
 										<p>
 											<% var categories_array = listing_info.categories.split(" ");
-											for (var i = 0; i < categories_array.length; i++) { %>
-												<%= categories_array[i] + " " %>
-												<% } %>
+												var display_array = [];
+												for (var i = 0; i < categories_array.length; i++) {
+													 display_array.push(categories_array[i].charAt(0).toUpperCase() + categories_array[i].substr(1)); %>
+											<% } %>
+											<%= display_array.join(", ") %>
 											</p>
 										</div>
 									</div>
