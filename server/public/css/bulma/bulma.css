@@ -4069,7 +4069,8 @@ input:-webkit-autofill {
       width: 400px; } }
   .modal-content.listing-calendar, .listing-calendar.modal-card {
     min-width: 960px;
-    height: auto; }
+    height: auto;
+    background-color: white; }
 
 .modal-close {
   background: none;

@@ -1,17 +1,3 @@
-.unverified-div {
-  z-index: 1;
-  position: absolute;
-  top: 30%;
-  left: 50%;
-  -moz-transform: translate(-50%, -50%);
-  -o-transform: translate(-50%, -50%);
-  -ms-transform: translate(-50%, -50%);
-  -webkit-transform: translate(-50%, -50%);
-    -webkit-transform-transform: translate(-50%, -50%); }
-
-.is-unverified > .columns {
-  opacity: 0.2; }
-
 .listing-img .delete {
   border-radius: 0 3px;
   position: absolute;
