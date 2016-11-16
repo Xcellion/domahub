@@ -12,4 +12,6 @@ $(document).ready(function() {
 	if (user){
 		$("#login_modal").removeAttr("style");
 	}
+
+	$("#date_created").text(moment(new Date(listing_info.date_created)).format("DD MMMM YYYY"));
 });
