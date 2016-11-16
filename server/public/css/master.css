@@ -198,7 +198,7 @@ p {
 h1 + p,
 h2 + p,
 h3 + p {
-  margin-top: 10px; }
+  margin-top: 15px; }
 
 h1 {
   font-size: 28px;
@@ -5546,7 +5546,9 @@ a.nav-item {
       height: 600px; } }
   @media screen and (max-width: 768px) {
     .section.listing-section {
-      height: 100px; } }
+      height: 0;
+      padding: 0;
+      padding-top: 60px; } }
   .section.gs-section {
     height: 60vh;
     padding: 200px 20px 0; }
@@ -5864,10 +5866,6 @@ a.nav-item {
     background-repeat: no-repeat;
     background-size: cover;
     width: 100%; } }
-
-@media screen and (max-width: 768px) {
-  .landing-img {
-    padding-top: 60px; } }
 
 @media screen and (min-width: 769px) {
   .img-wrapper {

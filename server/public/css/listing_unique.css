@@ -7,8 +7,12 @@
   @media screen and (max-width: 768px) {
     #background_image {
       background-image: none !important;
-      height: 0;
-      background-color: transparent; } }
+      background-color: #444;
+      filter: brightness(100%);
+      -webkit-filter: brightness(100%);
+      -moz-filter: brightness(100%);
+      -o-filter: brightness(100%);
+      -ms-filter: brightness(100%); } }
 
 .listing-info:not(:last-child) {
   border-bottom: 1px solid rgba(0, 0, 0, 0.12); }
