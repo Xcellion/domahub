@@ -40,16 +40,20 @@
     justify-content: flex-start
     .filter-local
       font-size: $size-small
-      color: $text-light
-      &:last-child
-
-      &:hover,
+      color: $text
+      &:hover
+        +box-shadow(0,2px,0,$black,0)
       &:active,
       &:focus,
       &.is-active
-        color: $text
+        +box-shadow(0,2px,0,$primary,0)
+        color: $primary
         outline: none
-        text-decoration: underline
+      &.is-active
+        &:hover,
+        &:focus
+          +box-shadow(0,2px,0,$primary-lighter,0)
+          color: $primary-lighter
     & > .level-item
       +tablet
         &:not(:first-child)
