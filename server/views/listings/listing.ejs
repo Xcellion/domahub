@@ -74,27 +74,27 @@
 							</div>
 						</div>
 						<% if (listing_info.categories) { %>
-						<div class="columns">
-							<div class="column is-4">
-								<div class="content">
-									<p>
-										Categories
-									</p>
+							<div class="columns">
+								<div class="column is-4">
+									<div class="content">
+										<p>
+											Categories
+										</p>
+									</div>
+								</div>
+								<div class="column is-8">
+									<div class="content">
+										<p>
+										<% var categories_array = listing_info.categories.split(" ");
+											var display_array = [];
+											for (var i = 0; i < categories_array.length; i++) {
+												 display_array.push(categories_array[i].charAt(0).toUpperCase() + categories_array[i].substr(1)); %>
+										<% } %>
+										<%= display_array.join(", ") %>
+										</p>
+									</div>
 								</div>
 							</div>
-							<div class="column is-8">
-								<div class="content">
-									<p>
-									<% var categories_array = listing_info.categories.split(" ");
-									for (var i = 0; i < categories_array.length; i++) {
-										categories_array[i][0].toUpperCase();
-										%>
-									<%= categories_array[i] + ", "%>
-									<% } %>
-									</p>
-								</div>
-							</div>
-						</div>
 						<% } %>
 					</div>
 					<div class="column is-2">
