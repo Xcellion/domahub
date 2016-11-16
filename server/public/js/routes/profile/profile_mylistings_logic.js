@@ -97,15 +97,18 @@ function createRowDrop(listing_info, rownum){
 
     //if unverified, gray out the controls in the background
     if (listing_info.verified == null){
-        temp_div_drop.append(createVerifiedOverlay(listing_info));
+        temp_drop.append(temp_td.append(temp_div_drop.append(temp_div_col.append(
+            createVerifiedOverlay(listing_info)
+        ))));
     }
-
-    //append various stuff to the row drop div
-    temp_drop.append(temp_td.append(temp_div_drop.append(temp_div_col.append(
-        createFormDrop(listing_info),
-        createPriceDrop(listing_info),
-        createImgDrop(listing_info, rownum)
-    ))));
+    else {
+        //append various stuff to the row drop div
+        temp_drop.append(temp_td.append(temp_div_drop.append(temp_div_col.append(
+            createFormDrop(listing_info),
+            createPriceDrop(listing_info),
+            createImgDrop(listing_info, rownum)
+        ))));
+    }
 
     temp_div_drop.hide();
 
@@ -114,7 +117,7 @@ function createRowDrop(listing_info, rownum){
 
 //function to create the verified overlay
 function createVerifiedOverlay(listing_info){
-    var unverified_div = $("<div class='unverified-div div-drop'></div>");
+    var unverified_div = $("<div class='column'></div>");
         var unverified_h2 = $("<h3>You must verify that you own this domain to rent it out.</h3>")
         var unverified_button = $("<a class='bottom-margin-25 button is-primary verify-link'></a>");
             unverified_button.data("href", '/listing/' + listing_info.domain_name + '/verify');
@@ -165,8 +168,6 @@ function createVerifiedOverlay(listing_info){
             }
         });
     });
-
-    unverified_div.hide();
     return unverified_div.append(unverified_h2, unverified_faq, unverified_step1, unverified_step2, unverified_step3, unverified_button);
 }
 
