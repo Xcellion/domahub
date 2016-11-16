@@ -22,23 +22,18 @@
 			<div class="container">
 				<div class="columns">
 					<div class="column is-half">
-						<nav class="level jc-flex-start">
-							<div class="level-item">
-								<a class="primary-link" href="http://<%= listing_info.domain_name %>">
-								<h1 class="title is-1 is-bold is-primary is-inline-block">
-								<%= listing_info.domain_name %></h1></a>
-							</div>
-							<div class="level-item">
-								<% if (listing_info.status == 1) { %>
-
-									<div class="notification is-primary">
-										Available
-									</div>
-								<% } else { %>
-								<span class="tag is-medium is-danger">Unavailable</span>
-								<% } %>
-							</div>
-						</nav>
+						<div class="content">
+							<a class="primary-link" href="http://<%= listing_info.domain_name %>">
+							<h1 class="title is-1 is-bold is-primary is-inline-block">
+							<%= listing_info.domain_name %></h1></a>
+						</div>
+						<div class="content is-marginless">
+							<% if (listing_info.status == 1) { %>
+							<span class="tag is-medium is-primary">Available</span>
+							<% } else { %>
+							<span class="tag is-medium is-danger">Unavailable</span>
+							<% } %>
+						</div>
 						<div class="content">
 							<h3 class="is-blacklight is-bold">Listing Description</h3>
 							<p>
@@ -78,18 +73,34 @@
 								</div>
 							</div>
 						</div>
+						<% if (listing_info.categories) { %>
+						<div class="columns">
+							<div class="column is-4">
+								<div class="content">
+									<p>
+										Categories
+									</p>
+								</div>
+							</div>
+							<div class="column is-8">
+								<div class="content">
+									<p><%= (listing_info.categories).split(" ") %></p>
+								</div>
+							</div>
+						</div>
+						<% } %>
 					</div>
 					<div class="column is-2">
 
 					</div>
 					<div class="column is-4">
 						<div class="card no-shadow">
+							<% if (listing_info.status == 1) { %>
 							<div class="card-header no-shadow is-light">
-								<% if (listing_info.status == 1) { %>
 								<h2 class="is-bold card-header-title">$<%= listing_info.month_price %></h2>
 								<p class="card-header-title jc-flex-end is-marginless">Per Month</p>
-								<% } %>
 							</div>
+							<% } %>
 							<div class="card-content">
 								<div class="content">
 									<% if (listing_info.status == 1) { %>
