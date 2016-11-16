@@ -19,3 +19,9 @@
     border-bottom: 1px solid $border;
   }
 }
+
+.listing-info-wrapper {
+  & + .listing-info-wrapper {
+    margin-top: 50px;
+  }
+}
