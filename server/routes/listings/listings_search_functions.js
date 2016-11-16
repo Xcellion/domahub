@@ -41,10 +41,11 @@ module.exports = {
 		}
 	},
 
+	//check the posted search parameters
 	checkSearchParams : function(req, res, next){
 		var posted_categories = (typeof req.body.categories == "string" && req.body.categories.length > 0) ? req.body.categories.toLowerCase().split(" ").filter(function(el) {return el.length != 0}) : [];
 		var all_categories_exist = posted_categories.every(function(v,i) {
-			return category_list.indexOf(v) !== -1;
+			return category_list.back.indexOf(v) !== -1;
 		});
 
 		//if the domain is invalid even after adding ".com"
