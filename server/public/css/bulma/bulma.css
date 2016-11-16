@@ -4054,6 +4054,8 @@ input:-webkit-autofill {
   right: 0;
   top: 0;
   background-color: rgba(0, 0, 0, 0.86); }
+  .modal-background.is-white {
+    background-color: rgba(255, 255, 255, 0.66); }
 
 .modal-content, .modal-card {
   max-height: calc(100vh - 160px);
@@ -4065,6 +4067,9 @@ input:-webkit-autofill {
       margin: 0 auto;
       max-height: calc(100vh - 40px);
       width: 400px; } }
+  .modal-content.listing-calendar, .listing-calendar.modal-card {
+    min-width: 960px;
+    height: auto; }
 
 .modal-close {
   background: none;
