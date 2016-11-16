@@ -84,7 +84,14 @@
 							</div>
 							<div class="column is-8">
 								<div class="content">
-									<p><%= (listing_info.categories).split(" ") %></p>
+									<p>
+									<% var categories_array = listing_info.categories.split(" ");
+									for (var i = 0; i < categories_array.length; i++) {
+										categories_array[i][0].toUpperCase();
+										%>
+									<%= categories_array[i] + ", "%>
+									<% } %>
+									</p>
 								</div>
 							</div>
 						</div>

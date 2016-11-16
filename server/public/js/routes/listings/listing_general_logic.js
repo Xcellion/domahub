@@ -13,5 +13,6 @@ $(document).ready(function() {
 		$("#login_modal").removeAttr("style");
 	}
 
+	// Formatting for date created metadata text
 	$("#date_created").text(moment(new Date(listing_info.date_created)).format("DD MMMM YYYY"));
 });
