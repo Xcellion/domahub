@@ -6,7 +6,7 @@ var moneyFormat = wNumb({
 
 $(document).ready(function() {
 
-	//user since text
+	//user since text in about Owner
 	$("#user-since").text(moment(new Date(listing_info.user_created)).format("MMMM, YYYY"));
 
 	//stripe configuration

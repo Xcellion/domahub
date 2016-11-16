@@ -1,6 +1,7 @@
 var totalPrice = 0;
 
 $(document).ready(function() {
+	debugger;
 	//calendar logic
 	 $('#calendar').fullCalendar({
 		scrollTime: moment(new Date()).format("hh:mm:ss"),
