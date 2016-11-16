@@ -45,9 +45,8 @@ $(document).ready(function() {
     $(".filter-local").click(function(e){
         var panel_id = $(this).attr('id');
         $(".filter-local").removeClass('is-active');
-        if (panel_id != "reset_filter"){
-            $(this).addClass("is-active");
-        }
+        $(this).addClass("is-active");
+
         var temp_rows = [];
 
         for (var x = 0; x < data_to_display.length; x++){

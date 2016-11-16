@@ -92,7 +92,7 @@ function createRowDrop(listing_info, rownum){
 
     var temp_drop = $("<tr id='row-drop" + rownum + "' class='row-drop'></tr>");
     var temp_td = $("<td class='row-drop-td' colspan='6'></td>")
-    var temp_div_drop = $("<div id='div-drop" + rownum + "' class='div-drop " + unverified_opacity + " td-visible container'></div>");
+    var temp_div_drop = $("<div id='div-drop" + rownum + "' class='div-drop " + unverified_opacity + " td-visible'></div>");
     var temp_div_col = $("<div class='columns'></div>");
 
     //if unverified, gray out the controls in the background
@@ -117,16 +117,27 @@ function createRowDrop(listing_info, rownum){
 
 //function to create the verified overlay
 function createVerifiedOverlay(listing_info){
-    var unverified_div = $("<div class='column'></div>");
-        var unverified_h2 = $("<h3>You must verify that you own this domain to rent it out.</h3>")
-        var unverified_button = $("<a class='bottom-margin-25 button is-primary verify-link'></a>");
-            unverified_button.data("href", '/listing/' + listing_info.domain_name + '/verify');
-            var unverified_span2 = $("<span>Click to Verify</span></a");
-            unverified_button.append(unverified_span2);
-        var unverified_faq = $("<div>Click <a target='_blank' style'target-new: tab;' class='orange-link' href='/faq#verifying'>here</a> for more information on domain verification.</div>");
-        var unverified_step1 = $("<div><span class='is-primary'>Step 1:</span> Create a new A record for your domain name.</div>");
-        var unverified_step2 = $("<div><span class='is-primary'>Step 2:</span> Point the new A record to 208.68.37.82</div>");
-        var unverified_step3 = $("<div><span class='is-primary'>Step 3:</span> Press the button below to verify!</div>");
+  var unverified_container = $("<div class='verification-container'></div>");
+        var unverified_columns_header = $("<div class='columns'></div>");
+        var unverified_columns_steps = $("<div class='columns'></div>");
+            var unverified_column_step0 = $("<div class='column'></div>");
+            var unverified_column0 = $("<div class='column is-3 flex-column-center'></div>");
+            var unverified_column1 = $("<div class='column is-1 flex-column-center'></div>");
+            var unverified_column2 = $("<div class='column is-3 flex-column-center'></div>");
+            var unverified_column3 = $("<div class='column is-1 flex-column-center'></div>");
+            var unverified_column4 = $("<div class='column is-3 flex-column-center'></div>");
+                var unverified_step0_content = $("<div class='content'></div>");
+                    var unverified_h3 = $("<h3 class='is-bold'>You must first verify that you own this domain.</h3>");
+                    var unverified_button = $("<a class='button is-primary verify-link'></a>");
+                        unverified_button.data("href", '/listing/' + listing_info.domain_name + '/verify');
+                        var unverified_span2 = $("<span>Click here to Verify</span></a>");
+                        unverified_button.append(unverified_span2);
+                    var unverified_faq = $("<p>Click <a target='_blank' style'target-new: tab;' class='orange-link margin-bottom-25' href='/faq#verifying'>here</a> for more information on domain verification.</p>");
+                    var unverified_icon0 = $("<figure class='image is-32x32'><img src='/images/lib/material/arrow-right.svg' /></figure>");
+                    var unverified_icon1 = $("<figure class='image is-32x32'><img src='/images/lib/material/arrow-right.svg' /></figure>");
+                    var unverified_step1 = $("<div class='content'><h3 class='is-blacklight is-bold'>Step 1</h3> <p>Create a new <strong>A Record</strong> for your domain name.</p></div>");
+                    var unverified_step2 = $("<div class='content'><h3 class='is-blacklight is-bold'>Step 2</h3> <p>Point the new <strong>A Record</strong> to our server's IP at 208.68.37.82</p></div>");
+                    var unverified_step3 = $("<div class='content'><h3 class='is-blacklight is-bold'>Step 3</h3> </div>");
 
     unverified_button.off().click(function(e){
         e.preventDefault();
@@ -155,7 +166,7 @@ function createVerifiedOverlay(listing_info){
                     row.find(".td-status").removeClass("is-hidden");
                     row.find(".td-status-drop").find(".status_input").val(1);
 
-                    unverified_div.addClass("is-hidden");
+                    unverified_columns.addClass("is-hidden");
                     editStatus(row, true);
                     listings = data.listings;
                     domain_name = listing_info.domain_name;
@@ -168,7 +179,15 @@ function createVerifiedOverlay(listing_info){
             }
         });
     });
-    return unverified_div.append(unverified_h2, unverified_faq, unverified_step1, unverified_step2, unverified_step3, unverified_button);
+    return unverified_container.append(unverified_columns_header.append(unverified_column_step0.append(unverified_step0_content.append(unverified_h3, unverified_faq))),
+           unverified_columns_steps.append(
+           unverified_column0.append(unverified_step1),
+           unverified_column1.append(unverified_icon0),
+           unverified_column2.append(unverified_step2),
+           unverified_column3.append(unverified_icon1),
+           unverified_column4.append(
+           unverified_step3, unverified_button)
+           ));
 }
 
 //function to create the select dropdown for listing status

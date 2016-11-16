@@ -26,54 +26,6 @@
 	<section class="section min-height">
 		<div class="container">
 			<div class="columns">
-
-				<!-- <div class="column">
-					<div class="box">
-						<nav class="panel">
-							<p class="panel-heading has-text-centered">
-								Search and Filter
-							</p>
-							<a class="panel-search">
-								<p class="control has-icon">
-									<input id="search-domain" tabindex="12" class="input" type="text" placeholder="Search listings" />
-									<i class="fa fa-search"></i>
-								</p>
-							</a>
-							<div class="panel-list">
-								<a class="panel-block filter-local" id="rented_filter" tabindex="13">
-									<span class="panel-icon">
-										<i class="fa fa-list-alt"></i>
-									</span>
-									Currently Rented
-								</a>
-								<a class="panel-block filter-local" id="premium_filter" tabindex="14">
-									<span class="panel-icon">
-										<i class="fa fa-diamond"></i>
-									</span>
-									Premium Listings
-								</a>
-								<a class="button no-shadow is-dark is-blank filter-local" id="basic_filter" tabindex="15">
-									<span class="panel-icon">
-										<i class="fa fa-heart-o"></i>
-									</span>
-									Basic Listings
-								</a>
-								<a class="button no-shadow is-dark is-blank filter-local" id="unverified_filter" tabindex="16">
-									<span class="panel-icon">
-										<i class="fa fa-exclamation-circle"></i>
-									</span>
-									Unverified Listings
-								</a>
-								<div class="button no-shadow is-dark is-blank has-button">
-									<a class="button is-primary is-outlined is-fullwidth filter-local" id="reset_filter" tabindex="17">
-										Reset all filters
-									</a>
-								</div>
-							</div>
-						</nav>
-					</div>
-				</div> -->
-
 				<div class="column">
 
 					<div id="no-rows" class="box has-text-centered is-hidden">
@@ -81,7 +33,6 @@
 					</div>
 
 					<div class="rows-exist">
-
 						<div class="control has-icon">
 							<input id="search-domain" tabindex="12" class="input" type="text" placeholder="Search listings" />
 							<i class="fa fa-search"></i>
@@ -89,28 +40,28 @@
 
 						<nav class="level filter-panel">
 							<div class="level-item">
-								<a class="filter-local" id="rented_filter" tabindex="13">
+								<a class="filter-local" id="reset_filter" tabindex="13">
+									View All
+								</a>
+							</div>
+							<div class="level-item">
+								<a class="filter-local" id="rented_filter" tabindex="14">
 									Currently Rented
 								</a>
 							</div>
 							<div class="level-item">
-								<a class="filter-local" id="premium_filter" tabindex="14">
+								<a class="filter-local" id="premium_filter" tabindex="15">
 									Premium
 								</a>
 							</div>
 							<div class="level-item">
-								<a class="filter-local" id="basic_filter" tabindex="15">
+								<a class="filter-local" id="basic_filter" tabindex="16">
 									Basic
 								</a>
 							</div>
 							<div class="level-item">
-								<a class="filter-local" id="unverified_filter" tabindex="16">
+								<a class="filter-local" id="unverified_filter" tabindex="17">
 									Unverified
-								</a>
-							</div>
-							<div class="level-item">
-								<a class="is-fullwidth filter-local" id="reset_filter" tabindex="17">
-									Reset all filters
 								</a>
 							</div>
 						</nav>
@@ -180,11 +131,8 @@
 								</p>
 							</div>
 						</nav>
-
-
 					</div>
 				</div>
-
 			</div>
 		</div>
 	</section>

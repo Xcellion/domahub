@@ -384,6 +384,12 @@
   align-self: center;
 }
 
+.flex-column-center {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+}
+
 /********** REALLY BAD MAKESHIFT WAY TO DEAL WITH SHIT *****/
 
 .stripe-button {
