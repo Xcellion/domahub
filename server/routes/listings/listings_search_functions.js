@@ -11,7 +11,7 @@ module.exports = {
 			getMinMaxPrices(function(min_max_prices){
 				res.render("listings/listing_hub.ejs", {
 					user: req.user,
-					categories_front: Categories.back(),
+					categories_front: Categories.front(),
 					categories_back: Categories.back(),
 					random_listings: result.info,
 					min_max_prices: min_max_prices

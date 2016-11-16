@@ -38,7 +38,7 @@ module.exports = {
 	//categories that are formatted for the back-end
 	back : function(){
 		var back_array = [];
-		all_categories.every(function(v){
+		all_categories.map(function(v){
 			back_array.push(v.back);
 		});
 		return back_array;
@@ -47,7 +47,7 @@ module.exports = {
 	//categories that are formatted for the back-end
 	front : function(){
 		var front_array = [];
-		all_categories.every(function(v){
+		all_categories.map(function(v){
 			front_array.push(v.front);
 		});
 		return front_array;
