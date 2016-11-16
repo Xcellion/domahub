@@ -205,7 +205,6 @@ listing_model.prototype.getListingByFilter = function(filter_name, filter_price,
 				ON rental_times.rental_id = rentals.rental_id \
 			WHERE listings.status = 1 \
 			AND listings.verified = 1 \
-			AND rentals.active >= 1 \
 			AND listings.domain_name LIKE ? \
 			AND listings." + filter_price.type + " BETWEEN ? AND ? \
 			ORDER BY listings.id ASC, rentals.rental_id ASC, rental_times.date DESC";

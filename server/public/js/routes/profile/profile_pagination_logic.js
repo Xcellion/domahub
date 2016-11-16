@@ -91,13 +91,13 @@ $(document).ready(function() {
 function filterCheck(type, data){
     //listings
     if (type == "rented_filter"){
-        return data.rented == 1;
+        return data.rented == 1 && data.status != 0;
     }
     else if (type == "premium_filter"){
-        return data.exp_date != 0;
+        return data.exp_date != 0 && data.status != 0;
     }
     else if (type == "basic_filter"){
-        return data.exp_date == 0;
+        return data.exp_date == 0 && data.status != 0;
     }
     else if (type == "unverified_filter"){
         return data.status == 0;

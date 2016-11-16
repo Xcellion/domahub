@@ -1,4 +1,4 @@
-var category_list = require("../../lib/categories.js");
+var Categories = require("../../lib/categories.js");
 
 var request = require("request");
 var dns = require("dns");
@@ -357,7 +357,7 @@ module.exports = {
 		//loop through the categories posted
 		for (var x = 0; x < categories.length; x++){
 			//if it exists in our list
-			if (category_list.back.indexOf(categories[x]) != -1){
+			if (Categories.existsBack(categories[x])){
 				categories_clean.push(categories[x]);
 			}
 		}

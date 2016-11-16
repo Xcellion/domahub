@@ -88,26 +88,41 @@ function createView(listing_info){
 
 //function to create dropdown row
 function createRowDrop(listing_info, rownum){
-    var unverified_opacity = (listing_info.verified == null) ? "is-unverified" : "";
-
     var temp_drop = $("<tr id='row-drop" + rownum + "' class='row-drop'></tr>");
     var temp_td = $("<td class='row-drop-td' colspan='6'></td>")
-    var temp_div_drop = $("<div id='div-drop" + rownum + "' class='div-drop " + unverified_opacity + " td-visible'></div>");
+    var temp_div_drop = $("<div id='div-drop" + rownum + "' class='div-drop td-visible'></div>");
     var temp_div_col = $("<div class='columns'></div>");
 
-    //if unverified, gray out the controls in the background
+    temp_drop.append(temp_td.append(temp_div_drop.append(temp_div_col)));
+
+    //if unverified show instructions
     if (listing_info.verified == null){
-        temp_drop.append(temp_td.append(temp_div_drop.append(temp_div_col.append(
-            createVerifiedOverlay(listing_info)
-        ))));
+        temp_div_col.append(
+            //create the unverified instructions, with callback to create regular drop when verified
+            createVerifiedOverlay(listing_info, function(){
+                listing_info.verified = 1;
+
+                //show status button
+                var row = temp_drop.prev(".row-disp");
+                row.find(".td-status-drop").removeClass("is-hidden");
+                row.find(".td-verify").addClass("is-hidden");
+                row.find(".td-status-drop").find(".status_input").val(1);
+
+                temp_div_col.empty().append(
+                    createFormDrop(listing_info),
+                    createPriceDrop(listing_info),
+                    createImgDrop(listing_info, rownum)
+                );
+            })
+        );
     }
     else {
         //append various stuff to the row drop div
-        temp_drop.append(temp_td.append(temp_div_drop.append(temp_div_col.append(
+        temp_div_col.append(
             createFormDrop(listing_info),
             createPriceDrop(listing_info),
             createImgDrop(listing_info, rownum)
-        ))));
+        );
     }
 
     temp_div_drop.hide();
@@ -149,29 +164,7 @@ function createVerifiedOverlay(listing_info){
         }).done(function(data){
             unverified_a.removeClass('is-loading is-danger');
             if (data.state == "success"){
-                unverified_a.addClass("is-success").text("Success!");
-
-                window.setTimeout(function(){
-                    //show all inputs except price
-                    var div_drop = unverified_a.closest(".is-unverified");
-                    div_drop.removeClass("is-unverified");
-                    div_drop.find(".is-disabled").not(".premium-input, .save-changes-button").removeClass("is-disabled");
-                    var success_button = div_drop.find(".save-changes-button")
-                    var cancel_button = div_drop.find(".cancel-changes-button")
-                    success_button.removeClass("is-hidden");
-
-                    //show status button
-                    var row = unverified_a.closest(".row-drop").prev(".row-disp");
-                    row.find(".td-verify").addClass("is-hidden");
-                    row.find(".td-status").removeClass("is-hidden");
-                    row.find(".td-status-drop").find(".status_input").val(1);
-
-                    unverified_columns.addClass("is-hidden");
-                    editStatus(row, true);
-                    listings = data.listings;
-                    domain_name = listing_info.domain_name;
-                    refreshSubmitbindings(success_button, cancel_button, listings, domain_name)
-                }, 1000);
+                cb_when_verified();
             }
             else {
                 unverified_a.addClass('is-danger');

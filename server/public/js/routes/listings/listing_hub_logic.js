@@ -25,8 +25,8 @@ $(document).ready(function() {
 
     // Filter dropdown logic
     $("#filter-open-button").click(function() {
-			$(this).toggleClass("is-active");
-			$("#filter-dropdown").toggleClass("is-hidden");
+		$(this).toggleClass("is-active");
+		$("#filter-dropdown").toggleClass("is-hidden");
     });
 
     //submit search
@@ -36,6 +36,8 @@ $(document).ready(function() {
     });
 
 });
+
+//------------------------------------------------------------------------------------------- SLIDER
 
 //function to initiate the big slider
 function initSmallSlider(){
@@ -159,6 +161,8 @@ function initBigSlider(){
     });
 }
 
+//------------------------------------------------------------------------------------------- SUBMISSION
+
 //function to get the submission data
 function getSubmitData(){
     var searchData = {
@@ -209,6 +213,8 @@ function submitData(){
     }
 }
 
+//------------------------------------------------------------------------------------------- DISPLAY
+
 //function to add new rows after search
 function createListingRows(listings, avail_bool){
     var tbody = $("#listings-table").find("tbody");
@@ -228,7 +234,8 @@ function createListingRows(listings, avail_bool){
             var temp_domain = $("<td colspan=" + colspan_bool + " class='domain-td'><a class='orange-link' href='/listing/" + listings[x].domain_name + "'>" + listings[x].domain_name + "</a></td>");
 			var temp_avail = (avail_bool) ? $("<td>" + listings[x].overlap + "</td>") : "";
 
-            var temp_categories = $("<td>" + listings[x].categories + "</td>");
+			var disp_category = (listings[x].categories != null) ? capitalizeWords(listings[x].categories) : "None";
+            var temp_categories = $("<td>" + disp_category + "</td>");
             var temp_hour = $("<td>" + moneyFormat.to(listings[x].hour_price) + "</td>");
             var temp_day = $("<td>" + moneyFormat.to(listings[x].day_price) + "</td>");
             var temp_week = $("<td>" + moneyFormat.to(listings[x].week_price) + "</td>");
@@ -245,4 +252,13 @@ function createListingRows(listings, avail_bool){
 
         tbody.append(temp_tr);
     }
+}
+
+//------------------------------------------------------------------------------------------- HELPER
+
+//function to capitalize every word in a string
+function capitalizeWords(string){
+	return string.split(" ").map(function(currentValue){
+		return currentValue.charAt(0).toUpperCase() + currentValue.substr(1);
+	}).join(", ");
 }
