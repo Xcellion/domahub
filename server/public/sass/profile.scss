@@ -1,21 +1,6 @@
 @import 'vars';
 @import 'mixins';
 
-// My listings verification divs
-.unverified-div {
-  z-index: 1;
-  position: absolute;
-  top: 30%;
-  left: 50%;
-  @include translate(-50%,-50%);
-}
-
-.is-unverified {
-  & > .columns {
-    opacity: 0.2;
-  }
-}
-
 // listing image delete button
 .listing-img {
    .delete {
