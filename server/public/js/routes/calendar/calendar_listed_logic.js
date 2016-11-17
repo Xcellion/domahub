@@ -90,6 +90,9 @@ $(document).ready(function() {
 		}
     });
 
+	//fix weird issue with modal and fullcalendar not appearing
+	$("#calendar").appendTo("#calendar-modal-content");
+
 	//create existing rentals
 	if (listing_info.rentals){
 		createExisting(listing_info.rentals);
