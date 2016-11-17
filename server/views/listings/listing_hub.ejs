@@ -1,5 +1,3 @@
-<!-- page for listings that dont exist -->
-
 <!DOCTYPE html>
 
 <html>
@@ -21,12 +19,12 @@
 				<div class="columns">
 					<div class="column">
 						<p class="control has-icon has-addons">
-							<input id="domain_name-input" class="input is-medium is-expanded" tabindex="7" type="text" placeholder="Search domains" />
+							<input id="domain_name-input" class="input is-medium" tabindex="7" type="text" placeholder="Search domains" />
 							<i class="fa fa-search"></i>
-							<a id="submit-button" class="button no-shadow is-primary is-medium is-disabled">Submit</a>
-							<a id="filter-open-button" class="button no-shadow is-medium">Advanced Search</a>
+							<a id="submit-button" class="button is-primary is-medium is-disabled">Submit</a>
 						</p>
 						<p class="control">
+							<a id="filter-open-button" class="button">Filters</a>
 						</p>
 					</div>
 				</div>
@@ -67,7 +65,7 @@
 						<div class="control-label is-padded">
 							<label class="label">Domain Length</label>
 						</div>
-						<div class="control has-slider">
+						<div class="control">
 							<div id="sliderSmall" class='margin-bottom-50'></div>
 						</div>
 					</div>
@@ -90,9 +88,7 @@
 							</span>
 						</div>
 					</div>
-					<div class="control has-slider margin-bottom-50">
-						<div id="slider"></div>
-					</div>
+					<div id="slider" class="margin-bottom-50"></div>
 					<%# <div class="control is-horizontal">
 						<div class="control-label is-padded">
 							<label class="label">Extensions</label>
