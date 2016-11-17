@@ -56,10 +56,17 @@
 										<% } %>
 									</figure>
 								</div>
-								<div class="column is-4">
-									<div class="content">
-										<h3 class="is-primary"><%= listing_info.username %></h3>
-										<p class="is-blacklight">User since <span id='user-since'></span></p>
+								<div class="column is-8">
+									<div class="card no-shadow">
+										<div class="card-content">
+											<div class="content">
+												<h3 class="is-primary"><%= listing_info.username %></h3>
+												<p class="is-blacklight">User since <span id='user-since'></span></p>
+											</div>
+										</div>
+										<div class="card-footer">
+											<a href="/profile/messages/<%=listing_info.username %>" class="button is-primary card-footer-item">Message</a>
+										</div>
 									</div>
 								</div>
 							</div>
