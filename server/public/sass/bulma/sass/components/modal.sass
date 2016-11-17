@@ -1,8 +1,17 @@
 .modal-background
   +overlay
   background-color: rgba($black, 0.86)
-  &.is-white
-    background-color: rgba($white, 0.66)
+
+.modal-container
+  &-calendar
+    margin: 0 auto
+    +desktop
+      min-width: 960px
+      max-width: 960px
+    +tablet-only
+      width: 100%
+    +mobile
+      width: 100%
 
 .modal-content
   max-height: calc(100vh - 160px)
@@ -10,12 +19,13 @@
   position: relative
   width: 100%
   // Responsiveness
-  +tablet
-    margin: 0 auto
-    max-height: calc(100vh - 40px)
-    width: 400px
+  &.login-modal
+    +tablet
+      margin: 0 auto
+      max-height: calc(100vh - 40px)
+      width: 400px
   &.listing-calendar
-    min-width: 960px
+    padding: 25px
     height: auto
     background-color: $white
 

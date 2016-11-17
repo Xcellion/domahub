@@ -63,10 +63,11 @@
         &:not(.is-narrow)
           flex-grow: 0
   &.jc-flex-start
-    justify-content: flex-start
     display: flex
+    justify-content: flex-start
     +mobile
-      justify-content: space-between
+      flex-direction: column
+      align-items: flex-start
     +tablet
       & > .level-item
         &:not(.is-narrow)
@@ -74,6 +75,8 @@
     & > .level-item
       &:not(:first-child)
         margin-left: 10px
+        +mobile
+          margin-left: 0
   &.is-white
     & > .level-left
       background-color: $white

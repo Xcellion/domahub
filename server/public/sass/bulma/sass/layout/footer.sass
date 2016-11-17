@@ -3,18 +3,17 @@
   // border-top: 1px solid $border
   padding: 80px 0 0
   overflow: hidden
+  +mobile-360px
+    padding: 20px 0 0
   & > .container
     min-height: 80px
-  +mobile
-    .columns
-      & > .column
-        text-align: center
 
 .footer-body
   display: flex
-  flex-direction: column
   align-items: center
   justify-content: center
+  +mobile-360px
+
 
 .footer-list
   &-column
@@ -32,15 +31,15 @@
   color: $primary-dark
   margin-bottom: 10px
   +mobile
-    margin-bottom: 0
     display: none
+    margin-bottom: 0
 
 .footer-item
   color: $text-light
   font-size: $size-6
   &:not(:first-child)
     margin-left: 15px
-  +mobile
+  +mobile-360px
     margin-top: 10px
   a
     color: $text-light
@@ -50,6 +49,8 @@
 .footer-bar
   padding: 15px 20px
   background-color: $grey-darker
+  +mobile
+    padding: 30px 20px
 
 .footer-bar-content
   display: flex
@@ -66,6 +67,8 @@
 .social-icon
   &:not(:first-child)
     margin-left: 20px
+  +mobile-360px
+    display: none
 
 // #facebook-icon
 //   &:hover
