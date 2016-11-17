@@ -87,7 +87,6 @@ $(document).ready(function() {
 
 	//create existing rentals
 	if (listing_info.rentals){
-		console.log("s")
 		createExisting(listing_info.rentals);
 	}
 
@@ -139,7 +138,6 @@ var mouseDownJsEvent;
 var mouseDownCalEvent;
 
 $(document).on("mousedown", ".fc-event", function(e){
-	console.log(e.which);
 	//only left click
 	if (e.which == 1){
 		mouseDownCalEvent = $("#calendar").fullCalendar('clientEvents', $(this).attr("id"))[0];
@@ -523,13 +521,12 @@ function eventPrices(){
 				$(this).text("$" + Math.floor(now));
 			}
 		});
-
 		//show next button for URL input
 		if (totalPrice){
 			$("#redirect-next-button").removeClass('is-disabled');
 		}
 		else {
-			$("#redirect-next-button").removeClass('is-disabled');
+			$("#redirect-next-button").addClass('is-disabled');
 		}
 	}
 }
