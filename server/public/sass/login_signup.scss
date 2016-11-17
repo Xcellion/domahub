@@ -37,12 +37,25 @@
   right: 0;
   top: 150px;
   width: 400px;
+  @include mobile {
+    width: 90%;
+    form {
+      width: 100%;
+    }
+  }
 }
 
 .g-recaptcha > div {
   margin: auto;
   margin-bottom:15px;
   @include scale(1.19);
+  @include mobile {
+    @include scale(1);
+  }
+  @include mobile-360px {
+    @include scale(0.85);
+    margin-left: -25px;
+  }
 }
 
 #accept, #resend, #home {
