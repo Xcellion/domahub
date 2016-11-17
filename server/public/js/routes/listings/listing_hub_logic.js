@@ -22,13 +22,16 @@ $(document).ready(function() {
 
     //submit search
     $("#submit-button").click(function(e) {
-        $("#search-form").submit();
-    });
-
-	$("#search-form").submit(function(e){
 		e.preventDefault();
 		submitData();
-	})
+	});
+
+	$("#domain_name-input").on("keypress", function(e){
+		if (e.keyCode == 13){
+			e.preventDefault();
+			submitData();
+		}
+	});
 
 });
 
@@ -129,14 +132,10 @@ function initBigSlider(){
             $(slider).find(".noUi-tooltip").removeClass("is-hidden");
             $($(slider).find(".noUi-tooltip")[1]).addClass("is-hidden");
         }
-
-        //can submit
-        allowSubmission();
     });
 
     //change big slider values on changing of price rate
     $("#category-input").on("change", function(e){
-        allowSubmission();
         if ($(this).val() != "none"){
             $(slider).removeClass('is-disabled is-hidden');
             var price_rate = $(this).val();
