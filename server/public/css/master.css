@@ -4133,9 +4133,9 @@ input:-webkit-autofill {
 .modal {
   bottom: 0;
   left: 0;
+  position: absolute;
   right: 0;
   top: 0;
-  position: absolute;
   align-items: center;
   display: none;
   justify-content: center;
@@ -5560,7 +5560,10 @@ a.nav-item {
   @media screen and (max-width: 768px) {
     .section.is-large {
       padding: 80px 20px; } }
-  @media screen and (min-width: 769px) {
+  @media screen and (min-width: 769px) and (max-width: 979px) {
+    .section.listing-section {
+      height: 450px; } }
+  @media screen and (min-width: 980px) {
     .section.listing-section {
       height: 600px; } }
   @media screen and (max-width: 768px) {

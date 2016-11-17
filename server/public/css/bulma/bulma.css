@@ -5560,7 +5560,10 @@ a.nav-item {
   @media screen and (max-width: 768px) {
     .section.is-large {
       padding: 80px 20px; } }
-  @media screen and (min-width: 769px) {
+  @media screen and (min-width: 769px) and (max-width: 979px) {
+    .section.listing-section {
+      height: 450px; } }
+  @media screen and (min-width: 980px) {
     .section.listing-section {
       height: 600px; } }
   @media screen and (max-width: 768px) {
