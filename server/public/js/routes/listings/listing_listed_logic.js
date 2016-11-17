@@ -103,19 +103,25 @@ $(document).ready(function() {
 	}
 
 	// Modal for calendar
-	$('#calendar-modal-button').click(function() {
-		$('#calendar-modal').addClass('is-active');
+	$('#listing-modal-button').click(function() {
+		$('#listing-modal').addClass('is-active');
 	});
 
 	// various ways to close calendar modal
 	$('.modal-close, .modal-background').click(function() {
-	  $('#calendar-modal').removeClass('is-active');
+	  $('#listing-modal').removeClass('is-active');
 	});
 
 	$(document).keyup(function(e) {
 		if (e.which == 27) {
-			$('#calendar-modal').removeClass('is-active');
+			$('#listing-modal').removeClass('is-active');
 		}
+	});
+
+	// Opening and closing redirect-modal
+	$('#redirect-next-button').click(function() {
+		$('#calendar-modal-content').addClass('is-hidden');
+		$('#redirect-modal-content').removeClass('is-hidden');
 	});
 
 
