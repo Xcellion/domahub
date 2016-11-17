@@ -256,7 +256,7 @@
 		<div id="calendar-modal" class="modal">
 			<div class="modal-background"></div>
 			<div class="modal-container">
-				<div class="modal-content listing-calendar">
+				<div id="calendar-modal-content" class="modal-content listing-calendar">
 					<nav class="level jc-flex-start">
 						<div class="level-item is-narrow">
 							<a class="button is-danger" id="remove_events">Remove Selected</a>
@@ -271,11 +271,13 @@
 							<h1 id="price">$0</h1>
 						</div>
 					</nav>
-					<div id="calendar"></div>
 				</div>
 			</div>
 			<button class="modal-close"></button>
 		</div>
+
+		<%# keep calendar outside of modal and move it in with JS to fix weird bug of not appearing%>
+		<div id="calendar"></div>
 
 <!--
 		<div id="address_wrapper" class="page_wrapper">
