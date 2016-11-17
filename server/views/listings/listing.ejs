@@ -211,7 +211,7 @@
 							</div>
 							<div class="card-footer">
 								<% if (listing_info.status == 1) { %>
-								<a id="calendar-modal-button" class="card-footer-item button is-primary" data-object="#calendar-modal">Check Availability</a>
+								<a id="listing-modal-button" class="card-footer-item button is-primary" data-object="#calendar-modal">Check Availability</a>
 								<% } else { %>
 								<a class="card-footer-item button is-primary">Request Listing</a>
 								<% } %>
@@ -222,7 +222,7 @@
 			</div>
 		</section>
 
-		<div id="calendar-modal" class="modal">
+		<div id="listing-modal" class="modal">
 			<div class="modal-background"></div>
 			<div class="modal-container-calendar">
 				<div id="calendar-modal-content" class="modal-content listing-calendar">
@@ -240,13 +240,16 @@
 						</div>
 						<div class="level-right">
 							<div class="level-item">
-								<a class="button no-shadow is-primary is-disabled">Next</a>
+								<a id="#redirect-next-button" class="button no-shadow is-primary is-disabled">Next</a>
 							</div>
 						</div>
 					</nav>
 					<div id="price-ticker" class="has-text-centered">
 						<h1 id="price">$0</h1>
 					</div>
+				</div>
+				<div id="redirect-modal-content" class="modal-content listing-redirect is-hidden">
+
 				</div>
 			</div>
 			<button class="modal-close"></button>
