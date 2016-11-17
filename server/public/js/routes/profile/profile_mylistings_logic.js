@@ -151,7 +151,7 @@ function createVerifiedOverlay(listing_info){
                     var unverified_icon0 = $("<figure class='image is-32x32'><img src='/images/lib/material/arrow-right.svg' /></figure>");
                     var unverified_icon1 = $("<figure class='image is-32x32'><img src='/images/lib/material/arrow-right.svg' /></figure>");
                     var unverified_step1 = $("<div class='content'><h3 class='is-blacklight is-bold'>Step 1</h3> <p>Create a new <strong>A Record</strong> for your domain name.</p></div>");
-                    var unverified_step2 = $("<div class='content'><h3 class='is-blacklight is-bold'>Step 2</h3> <p>Point the new <strong>A Record</strong> to our server's IP at 208.68.37.82</p></div>");
+                    var unverified_step2 = $("<div class='content'><h3 class='is-blacklight is-bold'>Step 2</h3> <p>Point the new <strong>A Record</strong> to DomaHub servers at 208.68.37.82</p></div>");
                     var unverified_step3 = $("<div class='content'><h3 class='is-blacklight is-bold'>Step 3</h3> </div>");
 
     unverified_button.off().click(function(e){

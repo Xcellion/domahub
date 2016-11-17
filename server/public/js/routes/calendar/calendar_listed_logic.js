@@ -523,6 +523,14 @@ function eventPrices(){
 				$(this).text("$" + Math.floor(now));
 			}
 		});
+
+		//show next button for URL input
+		if (totalPrice){
+			$("#redirect-next-button").removeClass('is-disabled');
+		}
+		else {
+			$("#redirect-next-button").removeClass('is-disabled');
+		}
 	}
 }
 

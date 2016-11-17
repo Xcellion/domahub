@@ -107,11 +107,6 @@ module.exports = {
 		}
 	},
 
-	//function to check if the user can create new listings
-	checkAccountListingPriv : function(req, res, next){
-		next();
-	},
-
 	//function to check the format of the batch CSV file
 	checkListingBatch : function(req, res, next){
 		onError = function(req, res){
@@ -326,15 +321,22 @@ module.exports = {
 			error.handler(req, res, "Invalid listing status!", "json");
 		}
 		else if (req.body.status){
-			//check to see if its currently rented
-			Listing.getCurrentRental(domain_name, function(result){
-				if (result.state != "success" || result.info.length == 0){
-					next();
-				}
-				else {
-					error.handler(req, res, "This listing is currently being rented!", "json");
-				}
-			});
+
+			//must connect
+			if (status == 1 && !req.user.stripe_user_id){
+				error.handler(req, res, "You must connect a Stripe account before your listing can go live!", "json");
+			}
+			else {
+				//check to see if its currently rented
+				Listing.getCurrentRental(domain_name, function(result){
+					if (result.state != "success" || result.info.length == 0){
+						next();
+					}
+					else {
+						error.handler(req, res, "This listing is currently being rented!", "json");
+					}
+				});
+			}
 		}
 		else {
 			next();
