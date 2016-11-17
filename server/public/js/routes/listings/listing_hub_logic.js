@@ -227,7 +227,12 @@ function createListingRows(listings, avail_bool){
     if (listings.length){
         //loop through and create each row
         for (var x = 0; x < listings.length; x++){
-            var temp_tr = $("<tr></tr>");
+            var temp_tr = $("<tr data-href='" + listings[x].domain_name + "'></tr>");
+
+			//click to go to that listing
+			temp_tr.click(function(){
+				window.location = "/listing/" + $(this).data('href');
+			});
 
 			//to determine if we display availability or not
 			var colspan_bool = (avail_bool) ? 1 : 2;
