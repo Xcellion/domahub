@@ -51,21 +51,18 @@ module.exports = function(app, db, auth, error, stripe){
 	//redirect all /create to proper /create
 	app.get('/listings/create', [
 		auth.checkLoggedIn,
-		owner_functions.checkAccountListingPriv,
 		owner_functions.renderCreateListingChoice
 	]);
 
 	//render create listing page
 	app.get('/listings/create/single', [
 		auth.checkLoggedIn,
-		owner_functions.checkAccountListingPriv,
 		owner_functions.renderCreateListingSingle
 	]);
 
 	//render create listing page
 	app.get('/listings/create/multiple', [
 		auth.checkLoggedIn,
-		owner_functions.checkAccountListingPriv,
 		owner_functions.renderCreateListingMultiple
 	]);
 
@@ -78,7 +75,6 @@ module.exports = function(app, db, auth, error, stripe){
 	app.post('/listings/create/basic', [
 		urlencodedParser,
 		auth.checkLoggedIn,
-		owner_functions.checkAccountListingPriv,
 		owner_functions.checkListingCreateInfo,
 		profile_functions.getAccountListings,
 		owner_functions.createListing
@@ -88,12 +84,10 @@ module.exports = function(app, db, auth, error, stripe){
 	app.post('/listings/create/premium', [
 		urlencodedParser,
 		auth.checkLoggedIn,
-		owner_functions.checkAccountListingPriv,
 		owner_functions.checkListingCreateInfo,
 		owner_functions.checkListingCreatePrice,
 		profile_functions.getAccountListings,
 		owner_functions.createListing,
-		stripe.getStripeInfo,
 		stripe.createStripeCustomer,
 		stripe.createStripeSubscription		//end here, and stripe webhooks will update the db
 	]);
@@ -102,7 +96,6 @@ module.exports = function(app, db, auth, error, stripe){
 	app.post('/listings/create/multiple', [
 		auth.checkLoggedIn,
 		profile_functions.getAccountListings,
-		owner_functions.checkAccountListingPriv,
 		owner_functions.checkCSVUploadSize,
 		owner_functions.checkListingBatch,
 		owner_functions.createListingBatch
@@ -111,7 +104,6 @@ module.exports = function(app, db, auth, error, stripe){
 	//verify that someone changed their DNS to point to domahub
 	app.get('/listing/:domain_name/verify', [
 		auth.checkLoggedIn,
-		owner_functions.checkAccountListingPriv,
 		checkDomainValid,
 		checkDomainListed,
 		owner_functions.checkListingOwner,
@@ -122,7 +114,6 @@ module.exports = function(app, db, auth, error, stripe){
 	//update listing information
 	app.post('/listing/:domain_name/update', [
 		auth.checkLoggedIn,
-		owner_functions.checkAccountListingPriv,
 		checkDomainValid,
 		checkDomainListed,
 		profile_functions.getAccountListings,
@@ -141,13 +132,11 @@ module.exports = function(app, db, auth, error, stripe){
 	app.post('/listing/:domain_name/upgrade', [
 		urlencodedParser,
 		auth.checkLoggedIn,
-		owner_functions.checkAccountListingPriv,
 		checkDomainValid,
 		checkDomainListed,
 		profile_functions.getAccountListings,
 		owner_functions.checkListingOwner,
 		owner_functions.checkListingVerified,
-		stripe.getStripeInfo,
 		stripe.createStripeCustomer,
 		stripe.createStripeSubscription,
 		owner_functions.updateListing	//only if we're renewing a subscription
@@ -156,7 +145,6 @@ module.exports = function(app, db, auth, error, stripe){
 	//degrade listing to basic
 	app.post('/listing/:domain_name/downgrade', [
 		auth.checkLoggedIn,
-		owner_functions.checkAccountListingPriv,
 		checkDomainValid,
 		checkDomainListed,
 		profile_functions.getAccountListings,
