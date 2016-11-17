@@ -34,6 +34,7 @@ function handler(req, res, message, type) {
 					redirectTo = RemoveLastDirectoryPartOf(req.path);
 					break;
 				case "Cannot activate through URL!":
+				case "Invalid stripe token!":
 					redirectTo = "/profile";
 					break;
 				case "Invalid rental data!":
