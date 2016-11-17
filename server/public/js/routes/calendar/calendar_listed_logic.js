@@ -19,13 +19,19 @@ $(document).ready(function() {
 		// header buttons
 		header: {left:'prev', center:'next', right:'title, today'},
 
-		//red background event to show that you cant select past dates
+		// background event to show that you cant select past dates
 		events: [
 			{
 				start: '1970-01-01T00:00:00',
 				end: moment().format("YYYY-MM-DD"),
+				rendering: 'background'
+			},
+			{
+				start: '1970-01-01T00:00:00',
+				end: moment().format("YYYY-MM-DD"),
 				rendering: 'background',
-				title: "You cannot select dates in the past!"
+				title: "You cannot select dates in the past!",
+				allDay: true
 			},
 			{
 				start: moment().format("YYYY-MM-DD"),
@@ -39,17 +45,6 @@ $(document).ready(function() {
 		selectConstraint: {
 			start: moment(new Date().getTime()),
 			end: moment(new Date().getTime() + 31556952000)
-		},
-
-		//to create the background title and color
-		eventRender: function (event, element) {
-			if (event.rendering == 'background' && event.title) {
-				element.append("<p class='past-event'>" + event.title + "</p>");
-				element.css({
-					"opacity": "1",
-					"background-color": "rgba(0,0,0,.12)"
-				});
-			}
 		},
 
 		//prevent calendar from going back in past
@@ -90,11 +85,9 @@ $(document).ready(function() {
 		}
     });
 
-	//fix weird issue with modal and fullcalendar not appearing
-	$("#calendar").appendTo("#calendar-modal-content");
-
 	//create existing rentals
 	if (listing_info.rentals){
+		console.log("s")
 		createExisting(listing_info.rentals);
 	}
 
@@ -109,6 +102,9 @@ $(document).ready(function() {
 		storeCookies("local_events");
 		eventPrices();
 	});
+
+	//fix weird issue with modal and fullcalendar not appearing
+	$("#calendar").appendTo("#calendar-modal-content");
 });
 
 //helper function to create pre-existing rentals
@@ -143,44 +139,51 @@ var mouseDownJsEvent;
 var mouseDownCalEvent;
 
 $(document).on("mousedown", ".fc-event", function(e){
-	mouseDownCalEvent = $("#calendar").fullCalendar('clientEvents', $(this).attr("id"))[0];
-	if (!mouseDownCalEvent.old){
-		mouseDownJsEvent = e;
+	console.log(e.which);
+	//only left click
+	if (e.which == 1){
+		mouseDownCalEvent = $("#calendar").fullCalendar('clientEvents', $(this).attr("id"))[0];
+		if (!mouseDownCalEvent.old){
+			mouseDownJsEvent = e;
+		}
 	}
 });
 
 $(document).on("mouseup", ".fc-event", function(mouseUpJsEvent){
-	var view = $('#calendar').fullCalendar('getView');
+	//only left click
+	if (mouseUpJsEvent.which == 1){
+		var view = $('#calendar').fullCalendar('getView');
 
-	if (view.type != "month"){
-		var mouseUpCalEvent = $("#calendar").fullCalendar('clientEvents', $(this).attr("id"))[0];
-		if (!mouseUpCalEvent.old){
-			var datetime;
-			//if mousedown exists and the mousedown event is the same as the mouseup event
-			if (mouseDownJsEvent && mouseDownCalEvent._id == mouseUpCalEvent._id){
-				//get the time slots of both mousedown and mouseup
-				var mouseDownSlot = getTimeSlot(mouseUpCalEvent, mouseDownJsEvent);
-				var mouseUpSlot = getTimeSlot(mouseUpCalEvent, mouseUpJsEvent);
+		if (view.type != "month"){
+			var mouseUpCalEvent = $("#calendar").fullCalendar('clientEvents', $(this).attr("id"))[0];
+			if (!mouseUpCalEvent.old){
+				var datetime;
+				//if mousedown exists and the mousedown event is the same as the mouseup event
+				if (mouseDownJsEvent && mouseDownCalEvent._id == mouseUpCalEvent._id){
+					//get the time slots of both mousedown and mouseup
+					var mouseDownSlot = getTimeSlot(mouseUpCalEvent, mouseDownJsEvent);
+					var mouseUpSlot = getTimeSlot(mouseUpCalEvent, mouseUpJsEvent);
 
-				var mouseDown_start = moment(mouseDownSlot.start).format('YYYY-MM-DD HH:mm');
-				var mouseUp_start = moment(mouseUpSlot.start).format('YYYY-MM-DD HH:mm');
+					var mouseDown_start = moment(mouseDownSlot.start).format('YYYY-MM-DD HH:mm');
+					var mouseUp_start = moment(mouseUpSlot.start).format('YYYY-MM-DD HH:mm');
 
-				//moved down or stayed the same
-				if (mouseDown_start <= mouseUp_start){
-					//remove the time slots in between mousedown and mouseup from the event
-					removeEventTimeSlot(mouseUpCalEvent, mouseDownSlot, mouseUpSlot);
+					//moved down or stayed the same
+					if (mouseDown_start <= mouseUp_start){
+						//remove the time slots in between mousedown and mouseup from the event
+						removeEventTimeSlot(mouseUpCalEvent, mouseDownSlot, mouseUpSlot);
+					}
+					//moved up
+					else {
+						//same function, but reversed the mousedown and mouseup, genius
+						removeEventTimeSlot(mouseUpCalEvent, mouseUpSlot, mouseDownSlot);
+					}
 				}
-				//moved up
-				else {
-					//same function, but reversed the mousedown and mouseup, genius
-					removeEventTimeSlot(mouseUpCalEvent, mouseUpSlot, mouseDownSlot);
-				}
+				mouseDownCalEvent = {};
+				mouseDownJsEvent = {};
 			}
-			mouseDownCalEvent = {};
-			mouseDownJsEvent = {};
+			storeCookies("local_events");
+			eventPrices();
 		}
-		storeCookies("local_events");
-		eventPrices();
 	}
 });
 
