@@ -9,15 +9,6 @@ $(document).ready(function() {
     $("#start_date-input").val(moment(new Date()).format("YYYY-MM-DD"));
     $("#end_date-input").val(moment(new Date().getTime() + 31556952000).format("YYYY-MM-DD"));
 
-    //on value change of any input, you can submit
-    $(".input").on("change input keyup", function(e){
-        allowSubmission();
-    });
-
-    $(".cat-checkbox").on('click', function(e){
-        allowSubmission();
-    });
-
     //create the rows for the 10 random listings
     createListingRows(random_listings);
     initBigSlider();
@@ -31,9 +22,13 @@ $(document).ready(function() {
 
     //submit search
     $("#submit-button").click(function(e) {
-        e.preventDefault();
-        submitData();
+        $("#search-form").submit();
     });
+
+	$("#search-form").submit(function(e){
+		e.preventDefault();
+		submitData();
+	})
 
 });
 
@@ -183,12 +178,6 @@ function getSubmitData(){
     });
 
     return searchData;
-}
-
-//function to allow submission
-function allowSubmission(){
-    can_submit = true;
-    $('#submit-button').removeClass("is-disabled");
 }
 
 //function to submit
