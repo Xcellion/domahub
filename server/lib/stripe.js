@@ -21,39 +21,18 @@ module.exports = {
 		Listing = new listing_model(db);
 	},
 
-	//check if stripe info is attached to the user obj, get it if it isnt
-	getStripeInfo : function(req, res, next){
-		if (!req.user.stripe_info){
-			Account.getStripeInfo(req.user.id, function(result){
-				if (result.state == "error" || result.info.length == 0){
-					res.send({
-						state: "error",
-						redirect: "account/stripeconnect.ejs"
-					});
-				}
-				else {
-					req.user.stripe_info = result.info[0];
-					next();
-				}
-			});
-		}
-		else {
-			next();
-		}
-	},
-
 	//check that the stripe customer is legit and has a good payment card
 	createStripeCustomer : function(req, res, next){
-		if (req.user.stripe_info.stripe_customer_id){
+		if (req.user.stripe_customer_id){
 
 			//cross reference with stripe
-			stripe.customers.retrieve(req.user.stripe_info.stripe_customer_id, function(err, customer) {
+			stripe.customers.retrieve(req.user.stripe_customer_id, function(err, customer) {
 				if (err){stripeErrorHandler(req, res, err)}
 				else {
-					req.user.stripe_info.customer_subscriptions = customer.subscriptions;
+					req.user.customer_subscriptions = customer.subscriptions;
 
 					//update the customer default card
-					stripe.customers.update(req.user.stripe_info.stripe_customer_id, {
+					stripe.customers.update(req.user.stripe_customer_id, {
 						source: req.body.stripeToken
 					}, function(err, customer) {
 						if (err){stripeErrorHandler(req, res, err)}
@@ -83,11 +62,11 @@ module.exports = {
 						var new_stripe_cus = {
 							stripe_customer_id: customer.id
 						}
-						Account.updateAccountStripeCustomerID(req.user.id, new_stripe_cus, function(result){
+						Account.updateAccount(new_stripe_cus, req.user.email, function(result){
 							if (result.state=="error"){error.handler(req, res, result.info, "json")}
 							else {
-								req.user.stripe_info.stripe_customer_id = customer.id;
-								req.user.stripe_info.customer_subscriptions = customer.subscriptions;
+								req.user.stripe_customer_id = customer.id;
+								req.user.customer_subscriptions = customer.subscriptions;
 
 								next();
 							}
@@ -135,7 +114,7 @@ module.exports = {
 		}
 		else {
 			stripe.subscriptions.create({
-				customer: req.user.stripe_info.stripe_customer_id,
+				customer: req.user.stripe_customer_id,
 				plan: "premium",
 				metadata: {
 					"domain_name" : domain_name,
@@ -190,7 +169,8 @@ module.exports = {
 				amount: customer_pays, // amount in cents
 				currency: "usd",
 				source: req.body.stripeToken,
-				description: "Rental for " + req.params.domain_name
+				description: "Rental for " + req.params.domain_name,
+				destination: owner_stripe_id
 			}
 
 			//application fee if the listing is basic
@@ -199,12 +179,10 @@ module.exports = {
 			}
 
 			//charge the end user, transfer to the owner, take 10% if its a basic listing
-			stripe.charges.create(stripeOptions, {
-				stripe_account: owner_stripe_id
-			}, function(err, charge) {
+			stripe.charges.create(stripeOptions, function(err, charge) {
 				if (err) {
 					console.log(err);
-					error.handler(req, res, "Invalid price!");
+					error.handler(req, res, "Invalid price!", "json");
 				}
 				else {
 					console.log("Payment processed! " + owner_stripe_id + " has been paid $" + customer_pays/100 + " with " + application_fee + " in Doma fees.")
@@ -224,11 +202,13 @@ module.exports = {
 		// Redirect to Stripe /oauth/authorize endpoint
 		res.redirect("https://connect.stripe.com/oauth/authorize" + "?" + qs.stringify({
 			response_type: "code",
-			scope: "read_write",
+			scope: "read_only",
 			state: "domahubrules",
 			client_id: "ca_997O55c2IqFxXDmgI9B0WhmpPgoh28s3",
 			stripe_user: {
-				email: req.user.email
+				email: req.user.email,
+				physical_product: false,
+				product_description: "DomaHub domain rentals."
 			}
 		}));
 	},
@@ -239,10 +219,7 @@ module.exports = {
 		code = req.query.code;
 
 		//connection errored
-		if (req.query.error){
-			res.send(req.query.error_description);
-		}
-		else if (!scope && !code) {
+		if (req.query.error || !scope || !code || req.query.state != "domahubrules") {
 			error.handler(req, res, "Invalid stripe token!");
 		}
 		else {
@@ -260,24 +237,17 @@ module.exports = {
 
 					//all good with stripe!
 					if (!body.error && response.statusCode == 200 && body.access_token) {
-						account_info = body;
-						req.user.stripe_info = body;
-						account_info.account_id = req.user.id;
-						Account.newAccountStripe(account_info, function(result){
+						var account_info = {
+							stripe_user_id: body.stripe_user_id,
+							type: 2
+						}
+						Account.updateAccount(account_info, req.user.email, function(result){
 							if (result.state=="error"){error.handler(req, res, result.info);}
 							else {
-								//successfully connected, now update the type
-								account_info = {
-									type: 2
-								}
-								Account.updateAccount(account_info, req.user.email, function(result){
-									if (result.state=="error"){error.handler(req, res, result.info);}
-									else {
-										req.user.type = 2;
-										res.render("redirect.ejs", {
-											redirect: "/profile"
-										})
-									}
+								req.user.stripe_user_id = body.stripe_user_id;
+								req.user.type = 2;
+								res.render("redirect.ejs", {
+									redirect: "/profile"
 								});
 							}
 						});

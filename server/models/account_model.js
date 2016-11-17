@@ -156,22 +156,12 @@ account_model.prototype.getAccountChats = function(account_id, callback){
 account_model.prototype.getStripeAndType = function(domain_name, callback){
 	console.log("Attempting to get the listing type and Stripe ID of the owner of: " + domain_name + "...");
 	query = "SELECT \
-				accounts_stripe.stripe_user_id,\
+				accounts.stripe_user_id,\
 				listings.exp_date \
-			FROM accounts_stripe \
-			JOIN listings ON listings.owner_id = accounts_stripe.account_id \
+			FROM accounts \
+			JOIN listings ON listings.owner_id = accounts.id \
 			WHERE listings.domain_name = ? ";
 	account_query(query, "Failed to get the listing type and Stripe ID of the owner of: " + domain_name + "!", callback, domain_name);
-}
-
-//gets all stripe info for an account
-account_model.prototype.getStripeInfo = function(account_id, callback){
-	console.log("Attempting to get all Stripe information for user #" + account_id + "...");
-	query = "SELECT \
-				accounts_stripe.* \
-			FROM accounts_stripe \
-			WHERE account_id = ? ";
-	account_query(query, "Failed to get all Stripe information for user #" + account_id + "!", callback, account_id);
 }
 
 //----------------------------------------------------------------------SETS----------------------------------------------------------
@@ -182,31 +172,6 @@ account_model.prototype.newAccount = function(account_info, callback){
 	query = "INSERT INTO accounts \
 			SET ? "
 	account_query(query, "Failed to create a new account for email: " + account_info.email + "!", callback, account_info);
-}
-
-//inserts new information into account stripe
-account_model.prototype.newAccountStripe = function(account_info, callback){
-	console.log("Creating new Stripe information for account: " + account_info.account_id + "...");
-	query = "INSERT INTO accounts_stripe \
-			SET ? \
-			ON DUPLICATE KEY UPDATE \
-				token_type = ?, \
-				stripe_publishable_key = ?, \
-				scope = ?, \
-				livemode = ?, \
-				stripe_user_id = ?, \
-				refresh_token = ?, \
-				access_token = ? "
-	account_query(query, "Failed to create new Stripe info for account: " + account_info.account_id + "!", callback, [
-		account_info,
-		account_info.token_type,
-		account_info.stripe_publishable_key,
-		account_info.scope,
-		account_info.livemode,
-		account_info.stripe_user_id,
-		account_info.refresh_token,
-		account_info.access_token
-	]);
 }
 
 //----------------------------------------------------------------------UPDATE----------------------------------------------------------
@@ -220,16 +185,4 @@ account_model.prototype.updateAccount = function(account_info, email, callback){
 			SET ? \
 			WHERE email = ?"
 	account_query(query, "Failed to update account!", callback, [account_info, email]);
-}
-
-//updates new customer id into account stripe
-account_model.prototype.updateAccountStripeCustomerID = function(account_id, account_info, callback){
-	console.log("Updating Stripe customer ID for account: " + account_id + "...");
-	query = "UPDATE accounts_stripe \
-			SET ? \
-			WHERE account_id = ?"
-	account_query(query, "Failed to update Stripe customer ID for account: " + account_id + "!", callback, [
-		account_info,
-		account_id
-	]);
 }
