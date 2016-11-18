@@ -19,3 +19,8 @@
 
 .listing-info-wrapper {
   padding: 50px 0 35px; }
+
+.listing-modal-content {
+  padding: 25px;
+  min-height: 850px;
+  background-color: white; }
