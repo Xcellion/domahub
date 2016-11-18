@@ -118,12 +118,16 @@ $(document).ready(function() {
 		}
 	});
 
-	// Opening and closing redirect-modal
-	$('#redirect-next-button').click(function() {
-		$('#calendar-modal-content').addClass('is-hidden');
-		$('#redirect-modal-content').removeClass('is-hidden');
+	// Buttons for cycling through calendar, redirect, and checkout modal views
+	$('#redirect-next-button, #redirect-back-button').click(function() {
+		$('#calendar-modal-content').toggleClass('is-hidden');
+		$('#redirect-modal-content').toggleClass('is-hidden');
 	});
 
+	$('#preview-next-button, #preview-back-button').click(function() {
+		$('#redirect-modal-content').toggleClass('is-hidden');
+		$('#preview-modal-content').toggleClass('is-hidden');
+	});
 
 });
 

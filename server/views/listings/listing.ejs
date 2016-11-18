@@ -13,219 +13,12 @@
 
 	<body>
 		<%- include("../templates/navbar", {user: user}); %>
-
-		<section id="background_image" class="section listing-section landing-img" style="background-image:url('<%= listing_info.background_image || 'https://source.unsplash.com/category/nature' %>')">
-
-		</section>
-
-		<section id="top_wrapper" class="page_wrapper section is-small has-borderBottom">
-			<div class="container">
-				<div class="columns">
-					<div class="column is-half">
-						<div class="content">
-							<a class="primary-link" href="http://<%= listing_info.domain_name %>">
-							<h1 class="title is-1 is-bold is-primary is-inline-block">
-							<%= listing_info.domain_name %></h1></a>
-						</div>
-						<div class="content is-marginless">
-							<% if (listing_info.status == 1) { %>
-							<span class="tag is-medium is-primary">Available</span>
-							<% } else { %>
-							<span class="tag is-medium is-danger">Unavailable</span>
-							<% } %>
-						</div>
-						<div class="listing-info-wrapper">
-							<div class="content">
-								<h3 class="is-bold">Listing Description</h3>
-								<p>
-									<%= listing_info.description %>
-								</p>
-							</div>
-						</div>
-						<div class="listing-info-wrapper is-hidden-mobile">
-							<div class="content">
-								<h3 class="is-bold">Other Information</h3>
-							</div>
-						<% if (listing_info.buy_link) { %>
-						<div class="columns has-borderBottom">
-							<div class="column is-4">
-								<div class="content">
-									<p class="is-blacklight is-bold">
-										Purchase Link
-									</p>
-								</div>
-							</div>
-							<div class="column is-4">
-								<div class="content">
-									<a class="orange-link"><%= listing_info.buy_link %></a>
-								</div>
-							</div>
-						</div>
-						<% } %>
-						<div class="columns has-borderBottom">
-							<div class="column is-4">
-								<div class="content">
-									<p class="is-blacklight is-bold">
-										Date Created
-									</p>
-								</div>
-							</div>
-							<div class="column is-4">
-								<div class="content">
-									<p id="date_created"></p>
-								</div>
-							</div>
-						</div>
-						<% if (listing_info.categories) { %>
-							<div class="columns has-borderBottom">
-								<div class="column is-4">
-									<div class="content">
-										<p class="is-blacklight is-bold">
-											Categories
-										</p>
-									</div>
-								</div>
-								<div class="column is-8">
-									<div class="content">
-										<p>
-											<% var categories_array = listing_info.categories.split(" ");
-												var display_array = [];
-												for (var i = 0; i < categories_array.length; i++) {
-													 display_array.push(categories_array[i].charAt(0).toUpperCase() + categories_array[i].substr(1)); %>
-											<% } %>
-											<%= display_array.join(", ") %>
-											</p>
-										</div>
-									</div>
-								</div>
-								<% } %>
-						</div>
-						<div class="listing-info-wrapper is-hidden-mobile">
-							<div class="content margin-top-25">
-								<h3 class="is-bold">About Owner</h3>
-							</div>
-							<div class="columns">
-								<div class="column">
-									<article class="media">
-									  <figure class="media-left">
-									    <p class="image is-circle is-96x96">
-												<% if (listing_info.profile_pic){ %>
-													<img src="<%= listing_info.profile_pic %>">
-												<% } else { %>
-													<%- "<img src='https://placeholdit.imgix.net/~text?txtsize=25&bg=9e9e9e&txtclr=ffffff&txt=" + listing_info.username + "&w=128&h=128'/>" %>
-												<% } %>
-									    </p>
-									  </figure>
-									  <div class="media-content">
-									    <div class="content">
-												<h3 class="is-blacklight is-bold"><%= listing_info.username %></h3>
-									      <p>
-													<small>User since <span id='user-since'></span></small>
-									      </p>
-									    </div>
-											<p class="control">
-											  <a href="/profile/messages/<%=listing_info.username %>" class="button is-primary no-shadow">
-											    <span class="icon is-small">
-											      <i class="fa fa-envelope"></i>
-											    </span>
-											    <span>Message</span>
-											  </a>
-											</p>
-									  </div>
-									</article>
-								</div>
-							</div>
-						</div>
-					</div>
-
-					<div class="column is-2"></div>
-
-					<div class="column is-4">
-						<div class="card">
-							<% if (listing_info.status == 1) { %>
-							<div class="card-header is-light">
-								<h2 class="is-bold card-header-title">$<%= listing_info.month_price %></h2>
-								<p class="card-header-title jc-flex-end is-marginless">Per Month</p>
-							</div>
-							<% } %>
-							<div class="card-content">
-								<div class="content">
-									<% if (listing_info.status == 1) { %>
-									<p class="is-bold">Pricing Information</p>
-									<nav class="level is-mobile has-borderBottom">
-										<div class="level-left">
-											<p class="level-item">
-												Hourly:
-											</p>
-										</div>
-										<div class="level-right">
-											<p class="level-item">
-												$<%= listing_info.hour_price %>
-											</p>
-										</div>
-									</nav>
-									<nav class="level is-mobile has-borderBottom">
-										<div class="level-left">
-											<p class="level-item">
-												Daily:
-											</p>
-										</div>
-										<div class="level-right">
-											<p class="level-item">
-												$<%= listing_info.day_price %>
-											</p>
-										</div>
-									</nav>
-									<nav class="level is-mobile has-borderBottom">
-										<div class="level-left">
-											<p class="level-item">
-												Weekly:
-											</p>
-										</div>
-										<div class="level-right">
-											<p class="level-item">
-												$<%= listing_info.week_price %>
-											</p>
-										</div>
-									</nav>
-									<nav class="level is-mobile has-borderBottom">
-										<div class="level-left">
-											<p class="level-item">
-												Monthly:
-											</p>
-										</div>
-										<div class="level-right">
-											<p class="level-item">
-												$<%= listing_info.month_price %>
-											</p>
-										</div>
-									</nav>
-									<% } else { %>
-									<p>
-										This domain is currently unavailable. You may request
-										the listing by clicking the button below which will
-										notify both DomaHub and the domain owner.
-									</p>
-									<% } %>
-								</div>
-							</div>
-							<div class="card-footer">
-								<% if (listing_info.status == 1) { %>
-								<a id="listing-modal-button" class="card-footer-item button is-primary" data-object="#calendar-modal">Check Availability</a>
-								<% } else { %>
-								<a class="card-footer-item button is-primary">Request Listing</a>
-								<% } %>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</section>
+		<%- include("../templates/listing_page") %>
 
 		<div id="listing-modal" class="modal">
 			<div class="modal-background"></div>
 			<div class="modal-container-calendar">
-				<div id="calendar-modal-content" class="modal-content listing-calendar">
+				<div id="calendar-modal-content" class="modal-content listing-modal-content">
 					<nav class="level">
 						<div class="level-left">
 							<div class="level-item">
@@ -248,7 +41,63 @@
 						<h1 id="price">$0</h1>
 					</div>
 				</div>
-				<div id="redirect-modal-content" class="modal-content listing-redirect is-hidden">
+				<div id="redirect-modal-content" class="modal-content listing-modal-content is-hidden">
+					<nav class="level">
+						<div class="level-left">
+							<div class="level-item">
+								<a id="redirect-back-button" class="button no-shadow">
+									<span class="icon">
+								    <i class="fa fa-angle-left"></i>
+								  </span>
+								  <span>Go Back</span>
+								</a>
+							</div>
+						</div>
+						<div class="level-right">
+							<div class="level-item">
+								<a id="preview-next-button" class="button is-primary no-shadow">
+									<span>Preview</span>
+									<span class="icon">
+								    <i class="fa fa-angle-right"></i>
+								  </span>
+								</a>
+							</div>
+						</div>
+					</nav>
+					<div class="content">
+						<h1>Now connect your content to <span class="green_text"><%= listing_info.domain_name %></span>.<h1>
+					</div>
+					<p class="control">
+						<input required class="input" id="address_form_input" type="url" placeholder="Enter your URL">
+					</p>
+					<div class="content margin-top-25">
+						<h3 class="is-blacklight is-bold">Need Help?</h3>
+						<p>Here are examples of some things you can connect to your new rental:</p>
+					</div>
+					<div class="columns">
+						<div class="column">
+							Slides
+						</div>
+						<div class="column">
+							Images
+						</div>
+						<div class="column">
+							Resume
+						</div>
+					</div>
+					<div class="columns">
+						<div class="column">
+							Portfolio
+						</div>
+						<div class="column">
+							Marketing
+						</div>
+						<div class="column">
+							Subpages
+						</div>
+					</div>
+				</div>
+				<div id="preview-modal-content" class="modal-content listing-modal-content is-hidden">
 
 				</div>
 			</div>

@@ -4095,10 +4095,6 @@ input:-webkit-autofill {
       margin: 0 auto;
       max-height: calc(100vh - 40px);
       width: 400px; } }
-  .modal-content.listing-calendar, .listing-calendar.modal-card {
-    padding: 25px;
-    height: auto;
-    background-color: white; }
 
 .modal-close {
   background: none;
