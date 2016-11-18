@@ -570,7 +570,13 @@ function errorMessage(msg_elem, message){
     msg_elem.removeClass('is-hidden');
     msg_elem.find("p").empty();
     if (message){
-        msg_elem.append("<p>" + message + "</p>");
+        //connect stripe first!
+        if (message == "stripe-connect-error"){
+            msg_elem.append("<p>You must <a class='orange-link' href='/authorizestripe'>connect your Stripe account</a> before your listing can go live!</p>");
+        }
+        else {
+            msg_elem.append("<p>" + message + "</p>");
+        }
     }
     else {
         msg_elem.addClass('is-hidden');

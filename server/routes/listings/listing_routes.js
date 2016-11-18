@@ -185,7 +185,6 @@ module.exports = function(app, db, auth, error, stripe){
 	//create a new rental
 	app.post('/listing/:domain_name/rent', [
 		urlencodedParser,
-		auth.checkLoggedIn,
 		checkDomainValid,
 		checkDomainListed,
 		renter_functions.getVerifiedListing,
