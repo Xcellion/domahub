@@ -44,7 +44,7 @@ module.exports = {
 		else {
 			req.session.new_rental_info = {
 				rental_db_info : {
-					account_id: req.user.id,
+					account_id: req.user.id || null,
 					listing_id: req.session.listing_info.id,
 					address: address
 				}
@@ -276,11 +276,13 @@ module.exports = {
 			else {
 
 				//update the req.users.rentals object
-				updateUserRentalsObject(req.user.rentals, domain_name);
+				if (req.user){
+					updateUserRentalsObject(req.user.rentals, domain_name);
+				}
 				res.send({
 					state: "success",
 					rental_id: rental_id,
-					rentals: req.user.rentals
+					rentals: req.user.rentals || false
 				});
 			}
 		});
@@ -458,14 +460,10 @@ function renderWhoIs(req, res, domain_name){
 
 			//nobody owns it!
 			if (owner_name == "Nobody"){
-				options.listing_info.description += "However, it's available for purchase at the below links!";
-				res.render("listings/listing_unlisted_available.ejs", options);
+				options.listing_info.available = true;
 			}
-			//someone owns it
-			else {
-				options.listing_info.description += "However, if you'd like you can fill out the below time slots and we'll let the owner know!";
-				res.render("listings/listing_unlisted_unavailable.ejs", options);
-			}
+
+			res.render("listings/listing_unlisted.ejs", options);
 		}
 
 

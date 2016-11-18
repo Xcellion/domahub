@@ -27,9 +27,11 @@
           </div>
         </div>
         <div class="listing-info-wrapper is-hidden-mobile">
+        <% if (listing_info.buy_link || listing_info.categories || listing_info.date_created) { %>
           <div class="content">
             <h3 class="is-bold">Other Information</h3>
           </div>
+        <% } %>
         <% if (listing_info.buy_link) { %>
         <div class="columns has-borderBottom">
           <div class="column is-4">
@@ -46,6 +48,7 @@
           </div>
         </div>
         <% } %>
+        <% if (listing_info.date_created) { %>
         <div class="columns has-borderBottom">
           <div class="column is-4">
             <div class="content">
@@ -60,6 +63,7 @@
             </div>
           </div>
         </div>
+        <% } %>
         <% if (listing_info.categories) { %>
           <div class="columns has-borderBottom">
             <div class="column is-4">
@@ -103,18 +107,23 @@
                 <div class="media-content">
                   <div class="content">
                     <h3 class="is-blacklight is-bold"><%= listing_info.username %></h3>
-                    <p>
-                      <small>User since <span id='user-since'></span></small>
-                    </p>
+                    <% if (listing_info.user_created) { %>
+                        <p>
+                          <small>User since <span id='user-since'></span></small>
+                        </p>
+                    <% } %>
                   </div>
-                  <p class="control">
-                    <a href="/profile/messages/<%=listing_info.username %>" class="button is-primary no-shadow">
-                      <span class="icon is-small">
-                        <i class="fa fa-envelope"></i>
-                      </span>
-                      <span>Message</span>
-                    </a>
-                  </p>
+                  <% if (listing_info.user_created) { %>
+                      <p class="control">
+                        <a href="/profile/messages/<%=listing_info.username %>" class="button is-primary no-shadow">
+                          <span class="icon is-small">
+                            <i class="fa fa-envelope"></i>
+                          </span>
+                          <span>Message</span>
+                        </a>
+                      </p>
+                  <% } %>
+
                 </div>
               </article>
             </div>
@@ -184,20 +193,33 @@
                   </p>
                 </div>
               </nav>
-              <% } else { %>
+              <% } else if (listing_info.status == 0){ %>
               <p>
                 This domain is currently unavailable. You may request
                 the listing by clicking the button below which will
                 notify both DomaHub and the domain owner.
               </p>
+              <% } else if (listing_info.available) { %>
+                <p>
+                    While this domain is unavailable for rent at DomaHub,
+                    it is available for purchase at any of the below links.
+                </p>
+                <p>
+                    Purchase it today for your own use or list it with us to
+                    make some money!
+                </p>
               <% } %>
             </div>
           </div>
           <div class="card-footer">
             <% if (listing_info.status == 1) { %>
-            <a id="listing-modal-button" class="card-footer-item button is-primary" data-object="#calendar-modal">Check Availability</a>
-            <% } else { %>
-            <a class="card-footer-item button is-primary">Request Listing</a>
+                <a id="listing-modal-button" class="card-footer-item button is-primary" data-object="#calendar-modal">Check Availability</a>
+            <% } else if (listing_info.status == 0){ %>
+                <a class="card-footer-item button is-primary">Request Listing</a>
+            <% } else if (listing_info.available) { %>
+                <a id="godaddy_link" class="button card-footer-item" href="https://www.godaddy.com/domains/searchresults.aspx?domainToCheck=<%= listing_info.domain_name %>">GoDaddy</a>
+                <a id="namecheap_link" class="button card-footer-item" href="https://www.namecheap.com/domains/registration/results.aspx?domain=<%= listing_info.domain_name %>">Namecheap</a>
+                <a id="google_link" class="button card-footer-item" href="https://domains.google.com/registrar?s=<%= listing_info.domain_name %>">Google Domains</a>
             <% } %>
           </div>
         </div>
