@@ -181,6 +181,7 @@ function getSubmitData(){
 
 //function to submit
 function submitData(){
+    if (can_submit){
         can_submit = false;
         $("#submit-button").addClass("is-loading");
         $.ajax({
@@ -197,6 +198,7 @@ function submitData(){
                 console.log(data);
             }
         });
+    }
 }
 
 //------------------------------------------------------------------------------------------- DISPLAY
