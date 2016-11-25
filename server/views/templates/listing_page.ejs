@@ -13,7 +13,7 @@
         </div>
         <div class="content is-marginless">
           <% if (listing_info.status == 1) { %>
-          <span class="tag is-medium is-primary">Available</span>
+          <span class="tag is-medium is-light">Available</span>
           <% } else { %>
           <span class="tag is-medium is-danger">Unavailable</span>
           <% } %>
@@ -213,7 +213,7 @@
           </div>
           <div class="card-footer">
             <% if (listing_info.status == 1) { %>
-                <a id="listing-modal-button" class="card-footer-item button is-primary" data-object="#calendar-modal">Check Availability</a>
+                <a id="listing-modal-button" class="card-footer-item button is-primary" data-object="#calendar-modal">Rent Now</a>
             <% } else if (listing_info.status == 0){ %>
                 <a class="card-footer-item button is-primary">Request Listing</a>
             <% } else if (listing_info.available) { %>

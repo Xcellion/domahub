@@ -6,8 +6,9 @@
 		<title>Browse Listings - DomaHub</title>
 		<link rel="stylesheet" href="/css/listing_404.css" type="text/css" />
 		<link rel="stylesheet" href="/css/listing_hub.css" type="text/css" />
-		<link href="/css/lib/nouislider.min.css" rel="stylesheet">
-    	<%- include("../templates/head_links"); %>
+		<link rel="stylesheet" href="/css/lib/flatpickr.min.css" type="text/css" />
+		<link rel="stylesheet" href="/css/lib/nouislider.min.css" type="text/css" />
+  	<%- include("../templates/head_links"); %>
 	</head>
 
 	<body>
@@ -37,12 +38,12 @@
 						<label class="label">Date Range</label>
 					  </div>
 					  <div class="control is-grouped">
-						<p class="control is-expanded">
-						  <input id="start_date-input" class="input" tabindex="8" type="date" required="required" placeholder="Rental Start Date">
+						<p class="control">
+						  <input id="start_date-input" class="flatpickr input" tabindex="8" type="text" placeholder="Rental Start Date">
 						</p>
-						<p class="control is-expanded">
-						  <input id="end_date-input" class="input" tabindex="9" type="date" required="required" placeholder="Rental End Date">
-						</p>
+						<!-- <p class="control">
+						  <input id="end_date-input" class="flatpickr input" tabindex="9" type="text" placeholder="Rental End Date">
+						</p> -->
 					  </div>
 					</div>
 					<div class="control is-horizontal">
@@ -137,6 +138,7 @@
 		<script src="/js/lib/moment.min.js" type="text/javascript"></script>
 		<script src="/js/lib/nouislider.min.js" type="text/javascript"></script>
 		<script src="/js/lib/wNumb.js" type="text/javascript"></script>
+		<script src="/js/lib/flatpickr.min.js" type="text/javascript"></script>
 		<script type="text/javascript">
 			var categories_front = <% if(typeof categories_front != "undefined"){ %><%-JSON.stringify(categories_front)%><% }else{ %>""<% } %>;
 			var categories_back = <% if(typeof categories_back != "undefined"){ %><%-JSON.stringify(categories_back)%><% }else{ %>""<% } %>;
