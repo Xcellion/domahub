@@ -15,14 +15,26 @@
 
 .box-flip
   @extend .block
+  +transition(all 0.25s ease)
   background-color: $white
   border-radius: $radius-large
   box-shadow: 0 2px 2px 0 rgba(0,0,0,.14),0 3px 1px -2px rgba(0,0,0,.2),0 1px 5px 0 rgba(0,0,0,.12)
+  box-sizing: border-box
   display: flex
   flex-direction: column
-  min-height: 325px
-  max-height: 325px
+  height: 300px
+  margin: 0 auto
   padding: 20px
+  width: 345px
+  &:hover
+    cursor: pointer
+    box-shadow: 3px 2px 2px 0 rgba(0,0,0,.14),0 -1px 2px -1px rgba(0,0,0,.2),-3px 5px 5px 0 rgba(0,0,0,.12)
+  &:active,
+  &:focus,
+  &.is-active
+    outline: none
+    box-shadow: 3px 10px 10px 0 rgba(0,0,0,.14),0 -1px 5px -2px rgba(0,0,0,.2),-3px 10px 10px 0 rgba(0,0,0,.12)
+
 
 .box-footer
   display: flex
@@ -33,6 +45,9 @@
 
 a.box
   box-shadow: 0 2px 2px 0 rgba(0,0,0,.14),0 3px 1px -2px rgba(0,0,0,.2),0 1px 5px 0 rgba(0,0,0,.12)
+  &:hover
+    cursor: pointer
+    box-shadow: 3px 2px 2px 0 rgba(0,0,0,.14),0 -1px 2px -1px rgba(0,0,0,.2),-3px 5px 5px 0 rgba(0,0,0,.12)
   &:active,
   &:focus,
   &.is-active

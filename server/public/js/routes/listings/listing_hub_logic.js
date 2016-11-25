@@ -33,6 +33,12 @@ $(document).ready(function() {
 		}
 	});
 
+	//flatpickr
+	flatpickr(".flatpickr", {
+		minDate: new Date(),
+		"mode": "range"
+	});
+
 });
 
 //------------------------------------------------------------------------------------------- SLIDER
