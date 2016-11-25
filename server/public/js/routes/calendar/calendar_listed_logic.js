@@ -101,9 +101,6 @@ $(document).ready(function() {
 		storeCookies("local_events");
 		eventPrices();
 	});
-
-	//fix weird issue with modal and fullcalendar not appearing
-	$("#calendar").appendTo("#calendar-modal-content");
 });
 
 //helper function to create pre-existing rentals
@@ -479,12 +476,12 @@ function eventPrices(){
 		if (myevents.length){
 			$("#calendar_next").addClass("is-primary");
 			$("#calendar_next").data("can_next", true);
-			$("#remove_events").addClass("activeButton");
+			$("#remove_events").removeClass("is-disabled");
 		}
 		else {
 			$("#calendar_next").removeClass("is-primary");
 			$("#calendar_next").data("can_next", false);
-			$("#remove_events").removeClass("activeButton");
+			$("#remove_events").addClass("is-disabled");
 		}
 		var weeks_price = days_price = hours_price = half_hours_price = 0;
 
@@ -521,7 +518,7 @@ function eventPrices(){
 				$(this).text("$" + Math.floor(now));
 			}
 		});
-		
+
 		//show next button for URL input
 		if (totalPrice){
 			$("#redirect-next-button").removeClass('is-disabled');

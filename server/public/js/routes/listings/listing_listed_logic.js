@@ -18,51 +18,11 @@ $(document).ready(function() {
 		zipCode : true,
 		locale: 'auto',
 		token: function(token) {
-			// You can access the token ID with `token.id`.
-			// Get the token ID to your server-side code for use.
-			var $id = $('<input id="stripeToken" type=hidden name=stripeToken />').val(token.id);
-			$('#listing_form').append($id);
-			submitRentals();
+			submitRentals(token.id);
 		}
 	});
 
-	//--------------------------------------------------------------------buttons
-
-	//page nav next buttons
-	$(".next_button").click(function(e){
-		if ($(this).data("can_next") == true){
-			var scroll_elems = ["#top_wrapper", "#calendar_wrapper", "#address_wrapper", "#pay_wrapper"];
-			var index = scroll_elems.indexOf("#" + $(this).attr("id").split("_").shift().toString() + "_wrapper") + 1;
-			index = index >= scroll_elems.length ? 0 : index;
-			$('html, body').stop().animate({
-				scrollTop: $(scroll_elems[index]).offset().top - 60
-			}, 1000);
-		}
-	})
-
-	$("#address_next").click(function(e){
-		storeCookies("address");
-	})
-
-	//stripe buttons
-	$('#stripe-button').click(function(e){
-		e.preventDefault();
-
-		if (checkSubmit() == true && unlock){
-			handler.open({
-				amount: totalPrice * 100,
-				description: 'Renting at ' + listing_info.domain_name
-			});
-
-			$("#submitButton").css("background", "black");
-		}
-	});
-
-	$("#address_form_input").keyup(function(e){
-		addressNextChange();
-	});
-
-	//--------------------------------------------------------------------cookies
+	//---------------------------------------------------------------------------------------------------cookies
 
 	//check if there are cookies for this domain name
 	if (read_cookie("domain_name") == listing_info.domain_name){
@@ -71,19 +31,18 @@ $(document).ready(function() {
 
 			for (var x = 0; x < existing_events.length; x++){
 				$('#calendar').fullCalendar('renderEvent', existing_events[x], true);
-				eventPrices();	//show prices
 			}
 		}
+		eventPrices();	//show prices
 
-		//check if theres a cookie for the rental type
+		//check if theres a cookie for the rental address
 		if (read_cookie("address")){
 			$("#address_form_input").val(read_cookie("address"));
-			addressNextChange();
 		}
 
 		if (!rental_info){
 			//check if theres a cookie for editing an event
-			if (document.cookie.match(new RegExp('rental_info=([^;]+)'))){
+			if (read_cookie("rental_info")){
 				var cookie = read_cookie("rental_info");
 				rental_info = cookie;
 				editingRental();
@@ -102,7 +61,14 @@ $(document).ready(function() {
 		displayDefault();
 	}
 
-	// Modal for calendar
+	//save the URL
+	$("#address_form_input").on("change", function(){
+		storeCookies("address");
+	});
+
+	//---------------------------------------------------------------------------------------------------modals
+
+	// Modal for calendar, url, and preview
 	$('#listing-modal-button').click(function() {
 		$('#listing-modal').addClass('is-active');
 	});
@@ -118,16 +84,46 @@ $(document).ready(function() {
 		}
 	});
 
-	// Buttons for cycling through calendar, redirect, and checkout modal views
+	//---------------------------------------------------------------------------------------------------buttons
+
+	//checkout button
+	$('#checkout-button').click(function(e){
+		e.preventDefault();
+
+		if (checkSubmit() == true && unlock){
+			handler.open({
+				amount: totalPrice * 100,
+				description: 'Renting ' + listing_info.domain_name
+			});
+
+			$("#submitButton").css("background", "black");
+		}
+	});
+
+	//buttons for cycling through calendar, redirect, and checkout modal views
 	$('#redirect-next-button, #redirect-back-button').click(function() {
 		$('#calendar-modal-content').toggleClass('is-hidden');
 		$('#redirect-modal-content').toggleClass('is-hidden');
 	});
 
+	//preview button
 	$('#preview-next-button, #preview-back-button').click(function() {
 		$('#redirect-modal-content').toggleClass('is-hidden');
 		$('#preview-modal-content').toggleClass('is-hidden');
+
+		//set the src of the preview iframe
+		$("#preview-iframe").attr("src", $("#address_form_input").val());
 	});
+
+	//edit dates button
+	$("#edit-dates-button").click(function(){
+		$('#calendar-modal-content').toggleClass('is-hidden');
+		$('#redirect-modal-content').addClass('is-hidden');
+		$('#preview-modal-content').addClass('is-hidden');
+	});
+
+	//fix weird issue with modal and fullcalendar not appearing
+	$("#calendar").appendTo("#calendar-modal-content");
 
 });
 
@@ -187,15 +183,11 @@ function checkSubmit(){
 	var newEvents = $('#calendar').fullCalendar('clientEvents', filterNew);
 	var bool = true;
 
-	if (!user){
-		bool = "Invalid user!";
-		$('#login-modal').click();
-	}
-	else if (!rental_info && (!newEvents || newEvents.length == 0)){
+	if (!rental_info && (!newEvents || newEvents.length == 0)){
 		bool = "Invalid dates!";
-		$('html, body').stop().animate({
-			scrollTop: $("#calendar_wrapper").offset().top
-		}, 1000);
+	}
+	else if (!$("#address_form_input").val()){
+		bool = "Invalid dates!";
 	}
 	else if (newEvents.length > 0){
 		for (var x = 0; x < newEvents.length; x++){
@@ -203,9 +195,6 @@ function checkSubmit(){
 				var start = new Date(newEvents[x].start._d);
 				if (isNaN(start)){
 					bool = "Invalid dates selected!";
-					$('html, body').stop().animate({
-						scrollTop: $("#calendar_wrapper").offset().top
-					}, 1000);
 					break;
 				}
 			}
@@ -217,7 +206,7 @@ function checkSubmit(){
 }
 
 //function to submit new rental info
-function submitRentals(){
+function submitRentals(stripeToken){
 	if (checkSubmit() == true && unlock){
 		var newEvents = $('#calendar').fullCalendar('clientEvents', filterNew);
 		unlock = false;
@@ -241,9 +230,9 @@ function submitRentals(){
 			url: "/listing/" + listing_info.domain_name + "/" + url,
 			data: {
 				events: minEvents,
-				rental_id: rental_info.rental_id,
+				rental_id: rental_info.rental_id || false,
 				address: $("#address_form_input").val(),
-				stripeToken: $("#stripeToken").val()
+				stripeToken: stripeToken
 			}
 		}).done(function(data){
 			delete_cookies();

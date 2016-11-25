@@ -159,36 +159,41 @@ module.exports = {
 	chargeMoney : function(req, res, next){
 		if (req.body.stripeToken){
 			var owner_stripe_id = req.session.new_rental_info.owner_stripe_id;
+			var total_price = parseFloat(req.session.new_rental_info.price) * 100;		//USD in cents
 
-			var total_price = req.session.new_rental_info.price * 100;		//USD in cents
-			//application fee if the listing is basic (aka premium hasn't expired)
-			var application_fee = (req.session.new_rental_info.listing_exp_date < (new Date).getTime()) ? (total_price * 0.15).toFixed(2) : 0;
-			var customer_pays = total_price - application_fee;
+			//doma fee if the listing is basic (aka premium hasn't expired)
+			var doma_fees = (req.session.new_rental_info.premium) ? (total_price * 0.15).toFixed(2) : 0;
+			var stripe_fees = (Math.round((total_price * 0.029) * 100)/100) + 0.3;
+
+			console.log(total_price, doma_fees, stripe_fees);
 
 			var stripeOptions = {
-				amount: customer_pays, // amount in cents
+				amount: total_price,
 				currency: "usd",
 				source: req.body.stripeToken,
 				description: "Rental for " + req.params.domain_name,
-				destination: owner_stripe_id
+				destination: owner_stripe_id,
+				application_fee: stripe_fees + doma_fees
 			}
 
-			//application fee if the listing is basic
-			if (application_fee > 0){
-				stripeOptions.application_fee = application_fee;
+			//something went wrong with the price
+			if (isNaN(total_price) || isNaN(total_price) || isNaN(total_price)){
+				error.handler(req, res, "Invalid pricing!", 'json');
+			}
+			else {
+				//charge the end user, transfer to the owner, take doma fees if its a basic listing
+				stripe.charges.create(stripeOptions, function(err, charge) {
+					if (err) {
+						console.log(err);
+						error.handler(req, res, "Invalid price!", "json");
+					}
+					else {
+						console.log("Payment processed! " + owner_stripe_id + " has been paid $" + customer_pays/100 + " with $" + application_fee/100 + " in Doma fees.")
+						next();
+					}
+				});
 			}
 
-			//charge the end user, transfer to the owner, take 10% if its a basic listing
-			stripe.charges.create(stripeOptions, function(err, charge) {
-				if (err) {
-					console.log(err);
-					error.handler(req, res, "Invalid price!", "json");
-				}
-				else {
-					console.log("Payment processed! " + owner_stripe_id + " has been paid $" + customer_pays/100 + " with " + application_fee + " in Doma fees.")
-					next();
-				}
-			});
 		}
 
 		//if stripetoken doesnt exist

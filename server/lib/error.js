@@ -10,6 +10,7 @@ function handler(req, res, message, type) {
 			res.redirect('http://domahub.com/error');
 			break;
 		case "json":
+			console.log("ERROR: " + message);
 			res.send({
 				state: "error",
 				message: message

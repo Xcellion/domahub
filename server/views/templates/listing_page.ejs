@@ -193,12 +193,6 @@
                   </p>
                 </div>
               </nav>
-              <% } else if (listing_info.status == 0){ %>
-              <p>
-                This domain is currently unavailable. You may request
-                the listing by clicking the button below which will
-                notify both DomaHub and the domain owner.
-              </p>
               <% } else if (listing_info.available) { %>
                 <p>
                     While this domain is unavailable for rent at DomaHub,
@@ -208,18 +202,24 @@
                     Purchase it today for your own use or list it with us to
                     make some money!
                 </p>
+              <% } else { %>
+                  <p>
+                      This domain is currently unavailable. You may request
+                      the listing by clicking the button below which will
+                      notify both DomaHub and the domain owner.
+                  </p>
               <% } %>
             </div>
           </div>
           <div class="card-footer">
             <% if (listing_info.status == 1) { %>
                 <a id="listing-modal-button" class="card-footer-item button is-primary" data-object="#calendar-modal">Check Availability</a>
-            <% } else if (listing_info.status == 0){ %>
-                <a class="card-footer-item button is-primary">Request Listing</a>
             <% } else if (listing_info.available) { %>
                 <a id="godaddy_link" class="button card-footer-item" href="https://www.godaddy.com/domains/searchresults.aspx?domainToCheck=<%= listing_info.domain_name %>">GoDaddy</a>
                 <a id="namecheap_link" class="button card-footer-item" href="https://www.namecheap.com/domains/registration/results.aspx?domain=<%= listing_info.domain_name %>">Namecheap</a>
                 <a id="google_link" class="button card-footer-item" href="https://domains.google.com/registrar?s=<%= listing_info.domain_name %>">Google Domains</a>
+            <% } else { %>
+                <a class="card-footer-item button is-primary">Request Listing</a>
             <% } %>
           </div>
         </div>
