@@ -163,7 +163,7 @@ module.exports = {
 
 			//doma fee if the listing is basic (aka premium hasn't expired)
 			var doma_fees = (req.session.new_rental_info.premium) ? (total_price * 0.15).toFixed(2) : 0;
-			var stripe_fees = (Math.round((total_price * 0.029) * 100)/100) + 0.3;
+			var stripe_fees = (Math.round((total_price * 0.029) * 100)/100) + 0.3
 
 			console.log(total_price, doma_fees, stripe_fees);
 
