@@ -253,35 +253,35 @@ module.exports = {
 
 		//not a valid email
 		if (!email || !validator.isEmail(email)){
-			error.handler(req, res, "Invalid email!", "json");
+			error.handler(req, res, "Invalid email!");
 		}
 		//invalid username
 		else if (!username || /\s/.test(username)){
-			error.handler(req, res, "Invalid name!", "json");
+			error.handler(req, res, "Invalid username!");
 		}
 		//username is too long
 		else if (username.length > 70){
-			error.handler(req, res, "Username is too long!", "json");
+			error.handler(req, res, "Username is too long!");
 		}
 		//username is too short
 		else if (username.length < 3){
-			error.handler(req, res, "Username is too short!", "json");
+			error.handler(req, res, "Username is too short!");
 		}
 		//invalid password
 		else if (!password){
-			error.handler(req, res, "Invalid password!", "json");
+			error.handler(req, res, "Invalid password!");
 		}
 		//password is too long
-		else if (70 > password.length){
-			error.handler(req, res, "Password is too long!", "json");
+		else if (password.length > 70){
+			error.handler(req, res, "Password is too long!");
 		}
-		//password is too long
-		else if (password.length > 3){
-			error.handler(req, res, "Password is too short!", "json");
+		//password is too short
+		else if (password.length < 3){
+			error.handler(req, res, "Password is too short!");
 		}
 		//recaptcha is empty
 		else if (!recaptcha){
-			error.handler(req, res, "Invalid captcha!", "json");
+			error.handler(req, res, "Invalid captcha!");
 		}
 		//verify recaptcha with google
 		else {
