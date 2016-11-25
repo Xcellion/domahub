@@ -44,7 +44,7 @@ module.exports = {
 		else {
 			req.session.new_rental_info = {
 				rental_db_info : {
-					account_id: req.user.id || null,
+					account_id: (req.user) ? req.user.id : null,
 					listing_id: req.session.listing_info.id,
 					address: address
 				}
@@ -208,10 +208,19 @@ module.exports = {
 		Account.getStripeAndType(req.params.domain_name, function(result){
 			if (result.state == "error"){error.handler(req, res, result.info);}
 			else {
-				req.session.new_rental_info.owner_stripe_id = result.info[0].stripe_user_id;	//stripe id
-				req.session.new_rental_info.listing_exp_date = (result.info[0].exp_date) ? result.info[0].exp_date : 0;		//premium or basic listing expiration date
+				if (!result.info[0].stripe_user_id){
+					error.handler(req, res, "Something went wrong with this listing! You have not been charged.", "json");
+				}
+				else {
+					req.session.new_rental_info.owner_stripe_id = result.info[0].stripe_user_id;	//stripe id
 
-				next();
+					//premium or basic listing expiration date
+					if (result.info[0].exp_date && result.info[0].exp_date < (new Date).getTime()){
+						req.session.new_rental_info.premium = true;
+					}
+
+					next();
+				}
 			}
 		});
 	},
@@ -417,13 +426,7 @@ function crossCheckRentalTime(existing_times, new_times, callback){
 
 //helper function to check if dates overlap
 function checkOverlap(dateX, durationX, dateY, durationY){
-	return ((dateX.getTime() < dateY.getTime() + durationY) && (dateY.getTime() < dateX.getTime() + durationX));
-}
-
-//helper function to change a date to UTC
-function toUTC(date, offset){
-	date = new Date(date - (offset * 60 * 1000));
-	return new Date(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(),  date.getUTCHours(), date.getUTCMinutes(), date.getUTCSeconds());
+	return ((dateX < dateY + durationY) && (dateY < dateX + durationX));
 }
 
 //helper function to run whois since domain isn't listed but is a real domain
