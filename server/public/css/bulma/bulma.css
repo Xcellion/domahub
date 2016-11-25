@@ -770,14 +770,26 @@ table {
     background-color: #ff5722; }
 
 .box-flip {
+  -moz-transition: all 0.25s ease;
+  -o-transition: all 0.25s ease;
+  -webkit-transition: all 0.25s ease;
+  transition: all 0.25s ease;
   background-color: white;
   border-radius: 5px;
   box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  min-height: 325px;
-  max-height: 325px;
-  padding: 20px; }
+  height: 300px;
+  margin: 0 auto;
+  padding: 20px;
+  width: 345px; }
+  .box-flip:hover {
+    cursor: pointer;
+    box-shadow: 3px 2px 2px 0 rgba(0, 0, 0, 0.14), 0 -1px 2px -1px rgba(0, 0, 0, 0.2), -3px 5px 5px 0 rgba(0, 0, 0, 0.12); }
+  .box-flip:active, .box-flip:focus, .box-flip.is-active {
+    outline: none;
+    box-shadow: 3px 10px 10px 0 rgba(0, 0, 0, 0.14), 0 -1px 5px -2px rgba(0, 0, 0, 0.2), -3px 10px 10px 0 rgba(0, 0, 0, 0.12); }
 
 .box-footer {
   display: flex;
@@ -788,6 +800,9 @@ table {
 
 a.box {
   box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12); }
+  a.box:hover {
+    cursor: pointer;
+    box-shadow: 3px 2px 2px 0 rgba(0, 0, 0, 0.14), 0 -1px 2px -1px rgba(0, 0, 0, 0.2), -3px 5px 5px 0 rgba(0, 0, 0, 0.12); }
   a.box:active, a.box:focus, a.box.is-active {
     outline: none;
     box-shadow: 3px 10px 10px 0 rgba(0, 0, 0, 0.14), 0 -1px 5px -2px rgba(0, 0, 0, 0.2), -3px 10px 10px 0 rgba(0, 0, 0, 0.12); }
@@ -2044,6 +2059,8 @@ input:-webkit-autofill {
       margin-right: 10px; }
     .control.is-grouped > .control.is-expanded {
       flex-grow: 1; }
+    .control.is-grouped > .control.is-halfwidth {
+      flex-grow: 0.5; }
     .control.is-grouped.is-grouped-centered {
       justify-content: center; }
     .control.is-grouped.is-grouped-right {
@@ -4086,7 +4103,7 @@ input:-webkit-autofill {
       width: 100%; } }
 
 .modal-content, .modal-card {
-  max-height: calc(100vh - 160px);
+  max-height: calc(100vh - 120px);
   overflow: auto;
   position: relative;
   width: 100%; }
