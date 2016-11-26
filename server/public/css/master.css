@@ -2059,8 +2059,6 @@ input:-webkit-autofill {
       margin-right: 10px; }
     .control.is-grouped > .control.is-expanded {
       flex-grow: 1; }
-    .control.is-grouped > .control.is-halfwidth {
-      flex-grow: 0.5; }
     .control.is-grouped.is-grouped-centered {
       justify-content: center; }
     .control.is-grouped.is-grouped-right {
