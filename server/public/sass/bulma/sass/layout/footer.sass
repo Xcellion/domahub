@@ -1,5 +1,5 @@
 .footer
-  background-color: $grey-lighter
+  background-color: $grey-dark
   // border-top: 1px solid $border
   padding: 80px 0 0
   overflow: hidden
@@ -7,13 +7,13 @@
     padding: 20px 0 0
   & > .container
     min-height: 80px
+    border-bottom: 1px solid $border
 
 .footer-body
   display: flex
   align-items: center
   justify-content: center
   +mobile-360px
-
 
 .footer-list
   &-column
@@ -35,20 +35,19 @@
     margin-bottom: 0
 
 .footer-item
-  color: $text-light
   font-size: $size-6
   &:not(:first-child)
     margin-left: 15px
   +mobile-360px
     margin-top: 10px
   a
-    color: $text-light
+    color: $white-secondary
     &:hover
-      color: $text
+      color: $white
 
 .footer-bar
   padding: 15px 20px
-  background-color: $grey-darker
+  background-color: $grey-dark
   +mobile
     padding: 30px 20px
 
@@ -60,13 +59,20 @@
 .footer-bar-item
   padding: 0
   margin: 0
+  color: $white-secondary
   font-size: $size-7
+  &:hover
+    color: $white
   &:not(:first-child)
     margin-left: 15px
 
 .social-icon
   &:not(:first-child)
     margin-left: 20px
+  & > .icon
+    color: $white-secondary
+    &:hover
+      color: $white
   +mobile-360px
     display: none
 
