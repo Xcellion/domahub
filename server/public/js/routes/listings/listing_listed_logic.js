@@ -28,9 +28,22 @@ $(document).ready(function() {
 	if (read_cookie("domain_name") == listing_info.domain_name){
 		if (read_cookie("local_events")){
 			var existing_events = read_cookie("local_events");
+			var changed = false;
 
-			for (var x = 0; x < existing_events.length; x++){
-				$('#calendar').fullCalendar('renderEvent', existing_events[x], true);
+			for (var x = existing_events.length - 1; x >= 0; x--){
+				//if its a new event, make sure it's past current time
+				if (new Date().getTime() < new Date(existing_events[x].start).getTime()){
+					$('#calendar').fullCalendar('renderEvent', existing_events[x], true);
+				}
+				else {
+					changed = true;
+					existing_events.splice(x, 1);
+				}
+			}
+
+			//if we removed any events, change the cookies
+			if (changed){
+				storeCookies("local_events");
 			}
 		}
 		eventPrices();	//show prices
@@ -75,9 +88,10 @@ $(document).ready(function() {
 
 	// various ways to close calendar modal
 	$('.modal-close, .modal-background').click(function() {
-	  $('#listing-modal').removeClass('is-active');
+	  	$('#listing-modal').removeClass('is-active');
 	});
 
+	//esc key to close modal
 	$(document).keyup(function(e) {
 		if (e.which == 27) {
 			$('#listing-modal').removeClass('is-active');
@@ -89,14 +103,19 @@ $(document).ready(function() {
 	//checkout button
 	$('#checkout-button').click(function(e){
 		e.preventDefault();
+		var bool = checkSubmit();
 
-		if (checkSubmit() == true && unlock){
+		if (bool == true && unlock){
 			handler.open({
 				amount: totalPrice * 100,
 				description: 'Renting ' + listing_info.domain_name
 			});
 
 			$("#submitButton").css("background", "black");
+		}
+		else {
+			$("#listing_message").html(bool);
+			console.log(bool);
 		}
 	});
 
@@ -200,8 +219,6 @@ function checkSubmit(){
 			}
 		}
 	}
-
-	$("#listing_message").html(bool);
 	return bool;
 }
 
@@ -244,7 +261,8 @@ function submitRentals(stripeToken){
 				}
 			}
 			else if (data.state == "success"){
-				window.location = window.location.origin + "/listing/" + listing_info.domain_name + "/" + data.rental_id;
+				//if not logged in, ask if they want to create a user
+				//window.location = window.location.origin + "/listing/" + listing_info.domain_name + "/" + data.rental_id;
 			}
 			else if (data.state == "error"){
 				console.log(data);
@@ -254,5 +272,18 @@ function submitRentals(stripeToken){
 				console.log(data);
 			}
 		});
+	}
+}
+
+//function to change modal page using hash and history
+function changeModal(modal){
+	if (modal == "calendar"){
+
+	}
+	else if (modal == "address"){
+
+	}
+	else {
+
 	}
 }

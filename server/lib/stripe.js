@@ -159,13 +159,11 @@ module.exports = {
 	chargeMoney : function(req, res, next){
 		if (req.body.stripeToken){
 			var owner_stripe_id = req.session.new_rental_info.owner_stripe_id;
-			var total_price = parseFloat(req.session.new_rental_info.price) * 100;		//USD in cents
+			var total_price = req.session.new_rental_info.price * 100;		//USD in cents
 
 			//doma fee if the listing is basic (aka premium hasn't expired)
 			var doma_fees = (req.session.new_rental_info.premium) ? (total_price * 0.15).toFixed(2) : 0;
-			var stripe_fees = (Math.round((total_price * 0.029) * 100)/100) + 0.3
-
-			console.log(total_price, doma_fees, stripe_fees);
+			var stripe_fees = (Math.round(total_price * 0.029)) + 30;
 
 			var stripeOptions = {
 				amount: total_price,
@@ -188,7 +186,7 @@ module.exports = {
 						error.handler(req, res, "Invalid price!", "json");
 					}
 					else {
-						console.log("Payment processed! " + owner_stripe_id + " has been paid $" + customer_pays/100 + " with $" + application_fee/100 + " in Doma fees.")
+						console.log("Payment processed! " + owner_stripe_id + " has been paid $" + ((total_price - stripe_fees - doma_fees)/100).toFixed(2) + " with $" + (doma_fees/100).toFixed(2) + " in Doma fees and $" + (stripe_fees/100).toFixed(2) + " in Stripe fees.")
 						next();
 					}
 				});

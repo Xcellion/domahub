@@ -284,14 +284,14 @@ module.exports = {
 			if (result.state != "success"){error.handler(req, res, result.description);}
 			else {
 
-				//update the req.users.rentals object
+				//update the req.users.rentals object if necessary
 				if (req.user){
 					updateUserRentalsObject(req.user.rentals, domain_name);
 				}
 				res.send({
 					state: "success",
 					rental_id: rental_id,
-					rentals: req.user.rentals || false
+					rentals: (req.user) ? req.user.rentals : false
 				});
 			}
 		});
