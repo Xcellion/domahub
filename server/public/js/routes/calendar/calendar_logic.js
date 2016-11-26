@@ -158,6 +158,7 @@ function createExisting(rentals, bool){
 			eventData.color = "#DB7093";
 			eventData.other = true;
 		}
+
 		$('#calendar').fullCalendar('renderEvent', eventData, true);
 	}
 }
