@@ -11,11 +11,12 @@ $(document).ready(function() {
 	//redirect search to the appropriate /listing page
 	$("#searchbar-form").submit(function(e){
 		e.preventDefault();
-		var domain_name = $('#domain-name').val()
+		var domain_name = $('#domain-name').val();
 
 		//default to .com if theres nothing provided
 		if (domain_name.indexOf(".") == -1){
 			domain_name += ".com";
+			$('#domain-name').val(domain_name);
 		}
 
         window.location = window.location.origin + "/listing/" + domain_name;

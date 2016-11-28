@@ -214,8 +214,8 @@ function createFormDrop(listing_info){
     var temp_form = $("<form class='drop-form'></form>");
 
     //variables to hide or disable things based on verification status
-    var verified_hidden = (listing_info.verified == null) ? 'is-hidden" tabindex="-1"' : "";
-    var verified_disabled = (listing_info.verified == null) ? 'is-disabled" tabindex="-1"' : "";
+    var verified_hidden = (listing_info.verified == null) ? 'is-hidden" tabindex="1"' : "";
+    var verified_disabled = (listing_info.verified == null) ? 'is-disabled" tabindex="1"' : "";
 
     //purchase link
     var buy_link = (listing_info.buy_link == null) ? "" : listing_info.buy_link;
@@ -295,7 +295,7 @@ function createFormDrop(listing_info){
 function createPriceDrop(listing_info){
     var temp_col = $("<div class='column is-3'></div>");
     var temp_form = $("<form class='drop-form'></form>");
-    var verified_disabled = (listing_info.verified == null) ? 'is-disabled" tabindex="-1"' : "";
+    var verified_disabled = (listing_info.verified == null) ? 'is-disabled" tabindex="1"' : "";
 
     var label_types = ["Hourly", "Daily", "Weekly", "Monthly"];     //for display
     var label_names = ["hour_price", "day_price", "week_price", "month_price"];     //for data for input listener
@@ -312,7 +312,7 @@ function createPriceDrop(listing_info){
         var temp_control_p = $("<p class='control has-icon'></p>");
 
         //disabled if listing is not verified
-        var disabled = (premium) ? "" : 'is-disabled" tabindex="-1"';
+        var disabled = (premium) ? "" : 'is-disabled" tabindex="1"';
         var temp_input = $('<input class="' + label_types[x].toLowerCase() + '-price-input premium-input input changeable-input ' + disabled + '" type="number" min="1" value="' + label_values[x] + '">');
         temp_input.data("name", label_names[x]);
 
@@ -354,7 +354,7 @@ function createPriceDrop(listing_info){
 //function to create the image drop column
 function createImgDrop(listing_info, rownum){
     var background_image = (listing_info.background_image == null || listing_info.background_image == undefined || listing_info.background_image == "") ? "https://placeholdit.imgix.net/~text?txtsize=40&txt=RANDOM%20PHOTO&w=200&h=200" : listing_info.background_image;
-    var verified_disabled = (listing_info.verified == null) ? 'is-disabled" tabindex="-1"' : "";
+    var verified_disabled = (listing_info.verified == null) ? 'is-disabled" tabindex="1"' : "";
 
     var temp_col = $("<div class='column is-one-quarter'></div>");
     var temp_div = $("<div class='card'></div>");
