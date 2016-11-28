@@ -18,9 +18,9 @@
 		<div class="container margin-bottom-25">
 			<div class="columns">
 				<div class='column is-full'>
-					<div class="notification is-primary flex-content">
-						<h1 id="banner-title" class="title is-3">Create a single listing.</h1>
-						<p id="banner-subtitle" class="control is-white">
+					<div class=" flex-content">
+						<h1 id="banner-title" class="title is-2">Create a single listing.</h1>
+						<p id="banner-subtitle" class="">
 							Please select either <a href="/faq#basicvspremium" target="_blank" style="target-new: tab;" class="is-underlined">Basic or Premium</a>.
 						</p>
 					</div>
@@ -51,11 +51,11 @@
 							</a>
 						</p>
 					</div>
-					<a id="multiple-button" class="button is-accent" tabindex="7" href="/listings/create/multiple">
+					<a id="multiple-button" class="button" tabindex="7" href="/listings/create/multiple">
+						<span>I have multiple listings to create.</span>
 						<span class="icon">
-							<i class="fa fa-angle-down"></i>
+							<i class="fa fa-level-up"></i>
 						</span>
-						<span>I have multiple listing to create.</span>
 					</a>
 					<a id="submit-button" class="is-hidden is-full-width button is-success" tabindex="17">
 						<span id="submit-button-text">Submit</span>
@@ -70,57 +70,93 @@
 	<section id="type-section" data-progress-percent="0" class="section is-small">
 		<div class="container">
 			<div class="columns">
-				<div class="column is-half-desktop">
+				<div class="column is-two-thirds-desktop">
 					<div class="columns">
-						<div class="column">
-							<a data-listing-type="basic" id="basic-box" class="box" tabindex="8">
-								<div class="content">
-									<nav class="level margin-bottom-25">
-										<div class="level-left">
-											<div class="level-item">
-												<h2 class="is-bold is-accent">Basic</h2>
-											</div>
-										</div>
-										<div class="level-right">
-											<div class="level-item">
-												<span class="tag is-accent is-create">FREE</span>
-											</div>
-										</div>
-									</nav>
-									<ul>
-										<li>Free to list</li>
-										<li>15% commission taken</li>
-										<li>Flat, fixed pricing</li>
-										<li>No hourly pricing</li>
-									</ul>
-								</div>
-							</a>
-						</div>
-						<div class="column">
-							<a data-listing-type="premium" id="premium-box" class="box" tabindex="9">
-								<div class="content">
-									<nav class="level margin-bottom-25">
-										<div class="level-left">
-											<div class="level-item">
-												<h2 class="is-bold is-primary">Premium</h2>
-											</div>
-										</div>
-										<div class="level-right">
-											<div class="level-item">
-												<span class="tag is-primary is-create">&#36;5 &#47; mo</span>
-											</div>
-										</div>
-									</nav>
-									<ul>
-										<li>&#36;5 per month to list</li>
-										<li>NO commission taken</li>
-										<li>Custom, flexible pricing</li>
-										<li>Hourly pricing available</li>
-									</ul>
-								</div>
-							</a>
-						</div>
-					</div>
+		        <div class="column">
+		          <div data-listing-type="basic" id="basic-box" tabindex="8" class="card is-fullwidth has-shadow-effect">
+		            <header class="card-header is-accent no-shadow">
+		              <h2 class="card-header-title is-white">
+		                Basic
+		              </h2>
+									<span class="card-header-subtitle">
+										<span class="tag is-white is-uppercase">Free</span>
+									</span>
+		            </header>
+		            <div class="card-content">
+		              <div class="content">
+		                <ul>
+		                  <li class="has-icon is-medium">
+		                    <span class="icon is-medium is-accent">
+		                      <i class="fa fa-gift"></i>
+		                    </span>
+		                    <span>Completely free to list</span>
+		                  </li>
+		                  <li class="has-icon is-medium">
+		                    <span class="icon is-medium is-accent">
+		                      <i class="fa fa-handshake-o"></i>
+		                    </span>
+		                    <span>15% commission taken</span>
+		                  </li>
+		                  <li class="has-icon is-medium">
+		                    <span class="icon is-medium is-accent">
+		                      <i class="fa fa-lock"></i>
+		                    </span>
+		                    <span>Fixed pricing options</span>
+		                  </li>
+		                  <li class="has-icon is-medium">
+		                    <span class="icon is-medium is-accent">
+		                      <i class="fa fa-ban"></i>
+		                    </span>
+		                    <span>Hourly pricing unavailable</span>
+		                  </li>
+		                </ul>
+		              </div>
+		            </div>
+		          </div>
+		        </div>
+		        <div class="column">
+		          <div data-listing-type="premium" id="premium-box" tabindex="9" class="card is-fullwidth has-shadow-effect">
+		            <header class="card-header is-primary no-shadow">
+		              <h2 class="card-header-title is-white">
+		                Premium
+		              </h2>
+									<span class="card-header-subtitle">
+										<span class="tag is-white">&#36;5 &#47; mo</span>
+									</span>
+		            </header>
+	              <div class="card-content">
+	                <div class="content">
+	                  <ul>
+	                    <li class="has-icon is-medium">
+	                      <span class="icon is-medium is-primary">
+	                        <i class="fa fa-usd"></i>
+	                      </span>
+	                      <span>&#36;5 per month to list</span>
+	                    </li>
+	                    <li class="has-icon is-medium">
+	                      <span class="icon is-medium is-primary">
+	                        <i class="fa fa-thumbs-o-up"></i>
+	                      </span>
+	                      <span>NO commission taken</span>
+	                    </li>
+	                    <li class="has-icon is-medium">
+	                      <span class="icon is-medium is-primary">
+	                        <i class="fa fa-circle-o-notch"></i>
+	                      </span>
+	                      <span>Custom, flexible pricing options</span>
+	                    </li>
+	                    <li class="has-icon is-medium">
+	                      <span class="icon is-medium is-primary">
+	                        <i class="fa fa-check"></i>
+	                      </span>
+	                      <span>Hourly pricing available</span>
+	                    </li>
+	                  </ul>
+	                </div>
+	              </div>
+	            </div>
+	          </div>
+	        </div>
 				</div>
 			</div>
 		</div>

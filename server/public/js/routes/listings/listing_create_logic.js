@@ -11,9 +11,9 @@ $(document).ready(function() {
     changeViewByHash();
 
     //section 1 - basic vs premium
-    $(".box").click(function() {
+    $(".card").click(function() {
         //styling the two buttons
-        $(".box").removeClass("is-active").addClass("low-opacity");
+        $(".card").removeClass("is-active").addClass("low-opacity");
         $(this).addClass("is-active").removeClass("low-opacity");
 
         setSectionNext(true, "type");  //setting up next button logic
