@@ -20,7 +20,7 @@
 				<div class="columns">
 					<div class="column">
 						<p class="control has-icon has-addons">
-							<input id="domain_name-input" class="input is-medium is-expanded" tabindex="7" type="text" placeholder="Search domains" />
+							<input id="domain_name-input" class="input is-medium is-expanded" tabindex="1" type="text" placeholder="Search domains" />
 							<i class="fa fa-search"></i>
 							<a id="submit-button" class="button no-shadow is-primary is-medium">Submit</a>
 							<a id="filter-open-button" class="button no-shadow is-medium">Advanced Search</a>
@@ -39,10 +39,10 @@
 					  </div>
 					  <div class="control is-grouped">
 						<p class="control">
-						  <input id="start_date-input" class="flatpickr input" tabindex="8" type="text" placeholder="Rental Start Date">
+						  <input id="start_date-input" class="flatpickr input" tabindex="1" type="text" placeholder="Rental Start Date">
 						</p>
 						<!-- <p class="control">
-						  <input id="end_date-input" class="flatpickr input" tabindex="9" type="text" placeholder="Rental End Date">
+						  <input id="end_date-input" class="flatpickr input" tabindex="1" type="text" placeholder="Rental End Date">
 						</p> -->
 					  </div>
 					</div>
@@ -55,7 +55,7 @@
 							<% for (var x = 0; x < categories_front.length; x++) {%>
 								<div class="checkbox-wrapper">
 									<input class="cat-checkbox is-small" value="<%= categories_back[x] %>" id="cb<%= x %>" type="checkbox" />
-									<label class="has-border is-small" tabindex="<%= x + 10 %>" for="cb<%= x %>"><%= categories_front[x] %></label>
+									<label class="has-border is-small" tabindex="1" for="cb<%= x %>"><%= categories_front[x] %></label>
 								</div>
 							<% } %>
 						</form>
@@ -110,7 +110,7 @@
 							<label class="label">Special Characters</label>
 						</div>
 						<div class="control">
-							<input class="input" tabindex="17" type="text" placeholder="Exclude (separate by comma)">
+							<input class="input" tabindex="1" type="text" placeholder="Exclude (separate by comma)">
 						</div>
 					</div>%>
 				</div>
