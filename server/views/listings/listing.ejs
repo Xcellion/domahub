@@ -18,7 +18,61 @@
 		<div id="listing-modal" class="modal">
 			<div class="modal-background"></div>
 			<div class="modal-container-calendar">
-				<div id="calendar-modal-content" class="modal-content listing-modal-content">
+				<div id="login-modal-content" class="modal-content listing-modal-content">
+					<div class="columns">
+						<div class="column is-half margin-bottom-50">
+							<div class="content">
+								<h3 class="is-bold">Log In / Create Account</h3>
+								<p>
+									You may either log into an existing account or proceed as a guest.
+									If you do not already have a DomaHub account, we strongly recommend
+									<a href="/signup" class="orange-link">signing up</a> before renting.
+								</p>
+							</div>
+						</div>
+					</div>
+					<div class="columns">
+						<div class="column is-one-third">
+							<div class="content">
+								<h3 class="is-bold">Existing User Login</h3>
+								<small>
+									Enter your information below to proceed.
+								</small>
+							</div>
+							<form>
+								<p class="control">
+									<label class="label">Email</label>
+									<input required class="input" autofocus name="email" type="email" id="email-input" spellcheck="false" value="" />
+								</p>
+								<p class="control">
+									<label class="label">Password</label>
+									<input required class="input" name="password" type="password" id="pw-input" autocomplete="new-password" value="" />
+								</p>
+								<p class="control">
+									<a href="/forgot" class="orange-link">Forgot your password?</a>
+								</p>
+								<p class="control">
+									<a class="button is-primary is-medium is-fullwidth">Log In</a>
+								</p>
+							</form>
+						</div>
+						<div class="column is-one-third is-offset-3">
+							<div class="content">
+								<h3 class="is-bold">Continue as a Guest</h3>
+								<small>
+									You may continue your transaction as a guest. However,
+									you will not have access to essential configuration tools
+									until you create a DomaHub account. There will be an option
+									to create an account at the end of this transaction.
+								</small>
+								<p class="control margin-top-25">
+									<a class="button is-primary is-medium is-fullwidth">Proceed as Guest</a>
+								</p>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div id="calendar-modal-content" class="modal-content listing-modal-content is-hidden">
 					<nav class="level">
 						<div class="level-left">
 							<div class="level-item">

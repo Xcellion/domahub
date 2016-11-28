@@ -21,30 +21,28 @@
 	</div>
 
 	<div id="signup-form" class="form">
-
 		<form id="target" action="/signup" method="post" autocomplete="off">
-
 			<label class="label">Email</label>
 				<p class="control has-icon has-icon-right">
-					<input required class="input is-medium" autofocus name="email" type="email" id="email-input" spellcheck="false" value="">
+					<input required class="input is-medium" autofocus name="email" type="email" id="email-input" spellcheck="false" value="" />
 					<i class="fa fa-check is-hidden is-success"></i>
 					<i class="fa fa-warning is-hidden is-danger"></i>
 				</p>
 			<label class="label">Username</label>
 				<p class="control has-icon has-icon-right">
-					<input required class="input is-medium" name="username" type="text" id="username-input" spellcheck="false" value="">
+					<input required class="input is-medium" name="username" type="text" id="username-input" spellcheck="false" value="" />
 					<i class="fa fa-check is-hidden is-success"></i>
 					<i class="fa fa-warning is-hidden is-danger"></i>
 				</p>
 			<label class="label">Password (at least 6 characters)</label>
 				<p class="control has-icon has-icon-right">
-					<input required class="input is-medium" name="password" type="password" id="pw-input" autocomplete="new-password" value="">
+					<input required class="input is-medium" name="password" type="password" id="pw-input" autocomplete="new-password" value="" />
 					<i class="fa fa-check is-hidden is-success"></i>
 					<i class="fa fa-warning is-hidden is-danger"></i>
 				</p>
 			<label class="label">Confirm Password</label>
 				<p class="control has-icon has-icon-right">
-					<input required class="input is-medium" name="verify-pw" type="password" id="verify-pw" value="">
+					<input required class="input is-medium" name="verify-pw" type="password" id="verify-pw" value="" />
 					<i class="fa fa-check is-hidden is-success"></i>
 					<i class="fa fa-warning is-hidden is-danger"></i>
 				</p>
@@ -56,9 +54,6 @@
 					Create Account
 				</button>
 			</p>
-
-			<div id="linebreak2"></div>
-
 			<p class="control">
 				<p class="has-text-centered">
 					Already have an account?
@@ -67,9 +62,8 @@
 					<a class="orange-link" href="/login">Sign In Now</a>
 				</p>
 			</p>
-
-	</form>
-</div>
+		</form>
+	</div>
 
   <%- include("../templates/js_scripts"); %>
 	<script src="/js/routes/account/account_signup_logic.js" type="text/javascript"></script>
