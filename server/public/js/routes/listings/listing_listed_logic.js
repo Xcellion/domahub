@@ -119,6 +119,12 @@ $(document).ready(function() {
 		}
 	});
 
+	//continue as guest button
+	$('#guest-button').click(function() {
+		$('#calendar-modal-content').removeClass('is-hidden');
+		$('#login-modal-content').addClass('is-hidden');
+	});
+
 	//buttons for cycling through calendar, redirect, and checkout modal views
 	$('#redirect-next-button, #redirect-back-button').click(function() {
 		$('#calendar-modal-content').toggleClass('is-hidden');
@@ -261,8 +267,12 @@ function submitRentals(stripeToken){
 				}
 			}
 			else if (data.state == "success"){
-				//if not logged in, ask if they want to create a user
-				//window.location = window.location.origin + "/listing/" + listing_info.domain_name + "/" + data.rental_id;
+				if (data.owner_hash_id){
+					window.location = window.location.origin + "/listing/" + listing_info.domain_name + "/" + data.rental_id + "/" + data.owner_hash_id;
+				}
+				else {
+					window.location = window.location.origin + "/listing/" + listing_info.domain_name + "/" + data.rental_id;
+				}
 			}
 			else if (data.state == "error"){
 				console.log(data);

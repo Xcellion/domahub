@@ -6,34 +6,36 @@ module.exports = {
 	//check if rental belongs to account and exists
 	checkRental : function(req, res, next){
 		var domain_name = req.params.domain_name;
-		var rental_id = req.params.rental_id;
+		var owner_hash_id = req.params.owner_hash_id;
 
-		//if already got the info from previous session
-		if (req.session.rental_info && req.session.rental_info.rental_id == rental_id){
-			next();
-		}
-		else if ((parseFloat(rental_id) != rental_id >>> 0) && rental_id != "new"){
+		//rental doesnt exist!
+		if (!req.session.rental_info){
+			console.log("No such rental exists!");
 			error.handler(req, res, "Invalid rental!");
 		}
+		//invalid rental / listing combo
+		else if (req.session.rental_info.domain_name != domain_name){
+			console.log("Invalid domain name for rental!");
+			error.handler(req, res, "Invalid rental!");
+		}
+		//if no account claimed it yet
+		else if (req.session.rental_info.owner_hash_id == owner_hash_id){
+			console.log(req.user.id);
+			next();
+		}
+		//incorrect owner!
+		else if (req.session.rental_info.account_id != req.user.id){
+			console.log("Invalid rental owner!");
+			error.handler(req, res, "Invalid rental!");
+		}
+		//get the time!
 		else {
-			//check if account owns that rental
-			Listing.checkAccountRental(req.user.id, rental_id, function(result){
-				if (result.state == "error" || result.info.length == 0){error.handler(req, res, "Invalid user / rental!");}
-				else {
-					//check if that rental belongs to that listing
-					Listing.checkListingRental(rental_id, domain_name, function(result){
-						if (result.state == "error" || result.info.length == 0){error.handler(req, res, "Invalid rental!");}
-						else {
-							next();
-						}
-					});
-				}
-			});
+			next();
 		}
 	},
 
 	//function to check the rental info posted
-	checkRentalAddress : function(req, res, next){
+	checkRentalInfo : function(req, res, next){
 		var address = addProtocol(req.body.address);
 
 		//check for address
@@ -44,11 +46,18 @@ module.exports = {
 		else {
 			req.session.new_rental_info = {
 				rental_db_info : {
-					account_id: (req.user) ? req.user.id : null,
 					listing_id: req.session.listing_info.id,
 					address: address
 				}
 			};
+
+			//if user is logged in, otherwise create a token for creation
+			if (req.user){
+				req.session.new_rental_info.rental_db_info.account_id = req.user.id;
+			}
+			else {
+				req.session.new_rental_info.rental_db_info.owner_hash_id = Math.random().toString(36).substr(5,5);
+			}
 			next();
 		}
 	},
@@ -183,23 +192,46 @@ module.exports = {
 		});
 	},
 
-	//gets the rental/listing info and sends user to the rental edit page
+	//gets the rental/listing info
 	getRental : function(req, res, next){
-		domain_name = req.params.domain_name;
-		rental_id = req.params.rental_id;
+		var rental_id = req.params.rental_id;
+		var owner_hash_id = req.params.owner_hash_id;
 
-		//if already got the info from previous session
-		if (req.session.changed || !req.session.rental_info || (req.session.rental_info.rental_id != rental_id)){
-			delete req.session.changed;
-			getRental(req, res, rental_id, function(rental_info){
-				req.session.rental_info = rental_info;
-				next();
-			});
+		//if its a number
+		if ((parseFloat(rental_id) != rental_id >>> 0) && rental_id != "new"){
+			error.handler(req, res, "Invalid rental!");
 		}
 		//get it otherwise
+		else if (req.session.changed || !req.session.rental_info || (req.session.rental_info.rental_id != rental_id)){
+			delete req.session.changed;
+			Listing.getRentalInfo(rental_id, function(result){
+				if (result.state != "success"){error.handler(req, res, result.description);}
+				else {
+					req.session.rental_info = result.info[0];
+					if (req.session.rental_info.owner_hash_id == owner_hash_id){
+						req.session.message = "You must log in to edit this rental!";
+					}
+					next();
+				}
+			});
+		}
+		//if already got the info from previous session
 		else {
 			next()
 		}
+	},
+
+	//gets the rental times info
+	getRentalTimes : function(req, res, next){
+		var rental_id = req.params.rental_id;
+
+		Listing.getRentalTimes(rental_id, function(result){
+			if (result.state != "success"){error.handler(req, res, result.description);}
+			else {
+				req.session.rental_info.times = joinRentalTimes(result.info);
+				next();
+			}
+		});
 	},
 
 	//function to get the stripe id of the listing owner and if listing is premium/basic
@@ -278,19 +310,21 @@ module.exports = {
 	toggleActivateRental: function(req, res, next){
 		var rental_id = (req.session.new_rental_info) ? req.session.new_rental_info.rental_id : req.params.rental_id;
 		var domain_name = req.params.domain_name;
+		var owner_hash_id = req.session.new_rental_info.owner_hash_id;
 
 		Listing.toggleActivateRental(rental_id, function(result){
 			delete req.session.new_rental_info;
 			if (result.state != "success"){error.handler(req, res, result.description);}
 			else {
-
 				//update the req.users.rentals object if necessary
 				if (req.user){
 					updateUserRentalsObject(req.user.rentals, domain_name);
 				}
+
 				res.send({
 					state: "success",
 					rental_id: rental_id,
+					owner_hash_id: owner_hash_id,
 					rentals: (req.user) ? req.user.rentals : false
 				});
 			}
@@ -300,24 +334,6 @@ module.exports = {
 }
 
 //----------------------------------------------------------------helper functions----------------------------------------------------------------
-
-//helper function to get specific rental info, times, and details
-function getRental(req, res, rental_id, callback){
-	Listing.getRentalInfo(rental_id, function(result){
-		if (result.state != "success"){error.handler(req, res, result.description);}
-		else {
-			rental_info = result.info[0];
-
-			Listing.getRentalTimes(rental_id, function(result){
-				if (result.state != "success"){error.handler(req, res, result.description);}
-				else {
-					rental_info.times = joinRentalTimes(result.info);
-					callback(rental_info);
-				}
-			});
-		}
-	});
-}
 
 //helper function to create a new rental
 function newListingRental(req, res, listing_id, raw_info, callback){
