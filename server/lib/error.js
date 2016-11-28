@@ -28,7 +28,6 @@ function handler(req, res, message, type) {
 					break;
 				case "Invalid user / rental!":
 					req.session.message = "Invalid rental!";
-					console.log("Someone tried to access someone else's rental!");
 				case "Invalid rental!":
 				case "No rental information!":
 				case "Invalid rental / listing!":

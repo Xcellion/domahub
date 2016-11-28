@@ -46,25 +46,11 @@ listing_model.prototype.checkListing = function(domain_name, callback){
 	listing_query(query, "Listing does not exist!", callback, domain_name);
 }
 
-//check if an account owns a rental
-listing_model.prototype.checkAccountRental = function(account_id, rental_id, callback){
-	console.log("Checking to see if account #" + account_id + " owns rental #" + rental_id + "...");
-	query = 'SELECT 1 AS "exist" FROM rentals WHERE account_id = ? AND rental_id = ?'
-	listing_query(query, "Account does not own the rental!", callback, [account_id, rental_id]);
-}
-
 //check if an account owns a listing
 listing_model.prototype.checkListingOwner = function(account_id, domain_name, callback){
 	console.log("Checking to see if account #" + account_id + " owns domain " + domain_name + "...");
 	query = 'SELECT 1 AS "exist" FROM listings WHERE owner_id = ? AND domain_name = ?'
 	listing_query(query, "Account does not own the domain" + domain_name + "!", callback, [account_id, domain_name]);
-}
-
-//check if an rental belongs to a specific listing
-listing_model.prototype.checkListingRental = function(rental_id, domain_name, callback){
-	console.log("Checking to see if rental #" + rental_id + " is listed under " + domain_name + "...");
-	query = 'SELECT 1 AS "exist" FROM rentals INNER JOIN listings ON rentals.listing_id = listings.id WHERE rentals.rental_id = ? AND listings.domain_name = ?'
-	listing_query(query, "Rental does not belong to this listing!", callback, [rental_id, domain_name]);
 }
 
 //----------------------------------------------------------------------GETS----------------------------------------------------------
@@ -121,8 +107,12 @@ listing_model.prototype.getListingRentalsInfo = function(listing_id, callback){
 //gets all rental info for a specific rental
 listing_model.prototype.getRentalInfo = function(rental_id, callback){
 	console.log("Attempting to get all rental info for rental #" + rental_id + "...");
-	query = "SELECT * \
+	query = "SELECT \
+				rentals.*, \
+				listings.domain_name \
 			FROM rentals \
+			INNER JOIN listings \
+				ON listings.id = rentals.listing_id \
 			WHERE rental_id = ?"
 	listing_query(query, "Failed to get all info for rental #" + rental_id + "!", callback, rental_id);
 }
