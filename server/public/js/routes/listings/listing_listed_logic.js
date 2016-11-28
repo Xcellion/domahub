@@ -125,6 +125,12 @@ $(document).ready(function() {
 		$('#login-modal-content').addClass('is-hidden');
 	});
 
+	//go back to login modal
+	$("#calendar-back-button").click(function(){
+		$('#calendar-modal-content').addClass('is-hidden');
+		$('#login-modal-content').removeClass('is-hidden');
+	});
+
 	//buttons for cycling through calendar, redirect, and checkout modal views
 	$('#redirect-next-button, #redirect-back-button').click(function() {
 		$('#calendar-modal-content').toggleClass('is-hidden');
@@ -212,7 +218,7 @@ function checkSubmit(){
 		bool = "Invalid dates!";
 	}
 	else if (!$("#address_form_input").val()){
-		bool = "Invalid dates!";
+		bool = "Invalid URL!";
 	}
 	else if (newEvents.length > 0){
 		for (var x = 0; x < newEvents.length; x++){
