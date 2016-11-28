@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+	<title>Create Single Listing - DomaHub</title>
+	<%- include("../templates/head_links"); %>
+	<link rel="stylesheet" href="/css/listing_create.css" type="text/css" />
+</head>
+
+<body>
+
+	<%- include("../templates/navbar", {user: user}); %>
+
+	<section class='min-height'>
+
+	<div class="container-progress">
+		<div class="container margin-bottom-25">
+			<div class="columns">
+				<div class='column is-full'>
+					<div class=" flex-content">
+						<h1 id="banner-title" class="title is-2">Create a single listing.</h1>
+						<p id="banner-subtitle" class="">
+							Please select either <a href="/faq#basicvspremium" target="_blank" style="target-new: tab;" class="is-underlined">Basic or Premium</a>.
+						</p>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="container">
+			<nav class="level">
+				<div class="level-left">
+					<div class="level-item">
+						<p class="control">
+							<a id="prev-button" class="is-disabled button is-primary prev-button" tabindex="1">
+								<span class="icon">
+									<i class="fa fa-angle-left"></i>
+								</span>
+								<span>Previous</span>
+							</a>
+						</p>
+					</div>
+					<div class="level-item">
+						<p class="control">
+							<a id="next-button" class="is-disabled button is-primary next-button" tabindex="1">
+								<span>Next</span>
+								<span class="icon">
+									<i class="fa fa-angle-right"></i>
+								</span>
+							</a>
+						</p>
+					</div>
+					<a id="multiple-button" class="button" tabindex="1" href="/listings/create/multiple">
+						<span>I have multiple listings to create.</span>
+						<span class="icon">
+							<i class="fa fa-level-up"></i>
+						</span>
+					</a>
+					<a id="submit-button" class="is-hidden is-full-width button is-success" tabindex="1">
+						<span id="submit-button-text">Submit</span>
+					</a>
+				</div>
+			</nav>
+			<progress class="progress is-small is-primary" min="0" max="100"></progress>
+		</div>
+
+	</div>
+
+	<section id="type-section" data-progress-percent="0" class="section is-small">
+		<div class="container">
+			<div class="columns">
+				<div class="column is-two-thirds-desktop">
+					<div class="columns">
+		        <div class="column">
+		          <div data-listing-type="basic" id="basic-box" tabindex="1" class="card is-fullwidth has-shadow-effect">
+		            <header class="card-header is-accent no-shadow">
+		              <h2 class="card-header-title is-white">
+		                Basic
+		              </h2>
+									<span class="card-header-subtitle">
+										<span class="tag is-white is-uppercase">Free</span>
+									</span>
+		            </header>
+		            <div class="card-content">
+		              <div class="content">
+		                <ul>
+		                  <li class="has-icon is-medium">
+		                    <span class="icon is-medium is-accent">
+		                      <i class="fa fa-gift"></i>
+		                    </span>
+		                    <span>Completely free to list</span>
+		                  </li>
+		                  <li class="has-icon is-medium">
+		                    <span class="icon is-medium is-accent">
+		                      <i class="fa fa-handshake-o"></i>
+		                    </span>
+		                    <span>15% commission taken</span>
+		                  </li>
+		                  <li class="has-icon is-medium">
+		                    <span class="icon is-medium is-accent">
+		                      <i class="fa fa-lock"></i>
+		                    </span>
+		                    <span>Fixed pricing options</span>
+		                  </li>
+		                  <li class="has-icon is-medium">
+		                    <span class="icon is-medium is-accent">
+		                      <i class="fa fa-ban"></i>
+		                    </span>
+		                    <span>Hourly pricing unavailable</span>
+		                  </li>
+		                </ul>
+		              </div>
+		            </div>
+		          </div>
+		        </div>
+		        <div class="column">
+		          <div data-listing-type="premium" id="premium-box" tabindex="1" class="card is-fullwidth has-shadow-effect">
+		            <header class="card-header is-primary no-shadow">
+		              <h2 class="card-header-title is-white">
+		                Premium
+		              </h2>
+									<span class="card-header-subtitle">
+										<span class="tag is-white">&#36;5 &#47; mo</span>
+									</span>
+		            </header>
+	              <div class="card-content">
+	                <div class="content">
+	                  <ul>
+	                    <li class="has-icon is-medium">
+	                      <span class="icon is-medium is-primary">
+	                        <i class="fa fa-usd"></i>
+	                      </span>
+	                      <span>&#36;5 per month to list</span>
+	                    </li>
+	                    <li class="has-icon is-medium">
+	                      <span class="icon is-medium is-primary">
+	                        <i class="fa fa-thumbs-o-up"></i>
+	                      </span>
+	                      <span>NO commission taken</span>
+	                    </li>
+	                    <li class="has-icon is-medium">
+	                      <span class="icon is-medium is-primary">
+	                        <i class="fa fa-circle-o-notch"></i>
+	                      </span>
+	                      <span>Custom, flexible pricing options</span>
+	                    </li>
+	                    <li class="has-icon is-medium">
+	                      <span class="icon is-medium is-primary">
+	                        <i class="fa fa-check"></i>
+	                      </span>
+	                      <span>Hourly pricing available</span>
+	                    </li>
+	                  </ul>
+	                </div>
+	              </div>
+	            </div>
+	          </div>
+	        </div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<section id="info-section" data-progress-percent="33" class="section is-hidden is-small">
+		<div class="container">
+			<div class="columns">
+				<div class="column is-half">
+					<p class="control">
+						<label id="domain-error-message" class="label is-medium">Domain Name</label>
+						<input id="domain-input" tabindex="1" class="input required-input is-medium" type="url" placeholder="MyPremiumDomain.com"/>
+					</p>
+					<p class="control">
+						<label id="description-error-message" class="label is-medium has-icon">Description</label>
+						<textarea id="description-input" tabindex="1" class="textarea input required-input is-medium" placeholder="This is a premium domain name with over a million visits per month!"></textarea>
+					</p>
+					<%# <p class="control">
+						<label id="buy-error-message" class="label is-medium has-icon">Purchase Link</label>
+						<i class="fa fa-question-circle-o"></i>
+						<input id="purchase_link-input" tabindex="1" class="input is-medium" type="url" placeholder="godaddy.com/myDomainName"/>
+					</p>
+					<p class="control">
+						<label id="background-error-message" class="label is-medium has-icon">Background Image</label>
+						<i class="fa fa-question-circle-o"></i>
+						<input id="background_image-input" tabindex="1" class="input is-medium" type="url" placeholder="backgroundImage.com/image.png"/>
+					</p>%>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<section id="category-section" data-progress-percent="60" class="section is-hidden is-small">
+		<div class="container">
+			<div class="columns">
+				<div class="column is-half">
+					<label id="category-error-message" class="label is-medium">Categories</label>
+					<form class="checkbox-form">
+						<ul class="checkbox-list">
+							<li>
+								<input class="cat-checkbox" value="startup" id="startup-category" type="checkbox" />
+								<label tabindex="1" for="startup-category">Start-Up</label>
+							</li>
+							<li>
+								<input class="cat-checkbox" value="business" id="business-category" type="checkbox" />
+								<label tabindex="1" for="business-category">Business</label>
+							</li>
+							<li>
+								<input class="cat-checkbox" value="event" id="event-category" type="checkbox" />
+								<label tabindex="1" for="event-category">Event</label>
+							</li>
+							<li>
+								<input class="cat-checkbox" value="promotion" id="promotion-category" type="checkbox" />
+								<label tabindex="1" for="promotion-category">Promotion</label>
+							</li>
+							<li>
+								<input class="cat-checkbox" value="holiday" id="holiday-category" type="checkbox" />
+								<label tabindex="1" for="holiday-category">Holiday</label>
+							</li>
+							<li>
+								<input class="cat-checkbox" value="industry" id="industry-category" type="checkbox" />
+								<label tabindex="1" for="industry-category">Industry</label>
+							</li>
+							<li>
+								<input class="cat-checkbox" value="null" id="null-category" type="checkbox" />
+								<label tabindex="1" for="null-category">I don't know</label>
+							</li>
+						</ul>
+					</form>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<section id="pricing-section" data-progress-percent="80" data-pageskip="true" class="section is-small is-hidden">
+		<div class="container">
+			<div class="columns">
+				<div class="column is-half">
+					<form>
+						<%# <div class="control is-horizontal">
+							<div class="control-label is-medium">
+								<label id="minute-error-message" class="label is-medium">Minute</label>
+							</div>
+							<div class="control has-icon">
+								<input id="minute_price-input" class="price-input input is-medium" type="number" defaultValue="1" value="1" min="1"/>
+								<i class="fa fa-dollar"></i>
+							</div>
+						</div>%>
+						<div class="control is-horizontal">
+							<div class="control-label is-medium">
+								<label id="hour-error-message" class="label is-medium">Hour</label>
+							</div>
+							<div class="control has-icon">
+								<input id="hour_price-input" tabindex="1" class="price-input input is-medium" type="number" defaultValue="1" value="1" min="1"/>
+								<i class="fa fa-dollar"></i>
+							</div>
+						</div>
+						<div class="control is-horizontal">
+							<div class="control-label is-medium">
+								<label id="day-error-message" class="label is-medium">Day</label>
+							</div>
+							<div class="control has-icon">
+								<input id="day_price-input" tabindex="1" class="price-input input is-medium" type="number" defaultValue="10" value="10" min="1"/>
+								<i class="fa fa-dollar"></i>
+							</div>
+						</div>
+						<div class="control is-horizontal">
+							<div class="control-label is-medium">
+								<label id="week-error-message" class="label is-medium">Week</label>
+							</div>
+							<div class="control has-icon">
+								<input id="week_price-input" tabindex="1" class="price-input input is-medium" type="number" defaultValue="25" value="25" min="1"/>
+								<i class="fa fa-dollar"></i>
+							</div>
+						</div>
+						<div class="control is-horizontal">
+							<div class="control-label is-medium">
+								<label id="month-error-message" class="label is-medium">Month</label>
+							</div>
+							<div class="control has-icon">
+								<input id="month_price-input" tabindex="1" class="price-input input is-medium" type="number" defaultValue="50" value="50" min="1"/>
+								<i class="fa fa-dollar"></i>
+							</div>
+						</div>
+						<%# <div class="control is-horizontal">
+							<div class="control-label is-medium">
+								<label id="year-error-message" class="label is-medium">Year</label>
+							</div>
+							<div class="control has-icon">
+								<input id="year_price-input" tabindex="1" class="price-input input is-medium" type="number" defaultValue="50" value="50" min="1"/>
+								<i class="fa fa-dollar"></i>
+							</div>
+						</div>%>
+					</form>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<section id="preview-section" data-progress-percent="100" class="section is-hidden is-small">
+		<div class="container">
+			<div class="columns">
+				<div class="column">
+					<div id="preview-img" class="flex-container landing-img">
+						<div id="preview-wrapper" class="">
+							<a id="preview-domain" class="primary-link">Domain Name</a>
+							<p id="preview-description" class="">Domain Description</p>
+							<p class="">Owned by: <span class="green_text"><%= user.username %></span></p>
+							<%# <p id="preview-minute-price" class="">Minute <span class="green_text">$1</span> | </p>%>
+							<p id="preview-hour-price" class="">Hour <span class="green_text">$1</span> | </p>
+							<p id="preview-day-price" class="">Day <span class="green_text">$10</span> | </p>
+							<p id="preview-week-price" class="">Week <span class="green_text">$25</span> | </p>
+							<p id="preview-month-price" class="">Month <span class="green_text">$50</span></p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	</section>
+
+	<%- include("../templates/footer"); %>
+  	<%- include("../templates/js_scripts"); %>
+	<script src="https://checkout.stripe.com/checkout.js"></script>
+	<script src="/js/routes/listings/listing_create_logic.js" type="text/javascript"></script>
+</body>
+
+</html>
