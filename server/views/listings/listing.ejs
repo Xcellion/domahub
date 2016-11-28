@@ -33,45 +33,45 @@
 								</div>
 							</div>
 						</div>
-						<div class="columns">
+					</div>
+					<div class="columns">
 						<div class="column is-5">
-						<div class="content">
-						<h3 class="is-bold">Existing User Login</h3>
-						<small>
-						Enter your information below to proceed.
-						</small>
-						</div>
-						<form>
-						<p class="control">
-						<label class="label">Email</label>
-						<input required class="input" autofocus name="email" type="email" id="email-input" spellcheck="false" value="" />
-						</p>
-						<p class="control">
-						<label class="label">Password</label>
-						<input required class="input" name="password" type="password" id="pw-input" autocomplete="new-password" value="" />
-						</p>
-						<p class="control">
-						<a href="/forgot" class="orange-link">Forgot your password?</a>
-						</p>
-						<p class="control">
-						<a class="button is-primary is-medium is-fullwidth">Log In</a>
-						</p>
-						</form>
+							<div class="content">
+								<h3 class="is-bold">Existing User Login</h3>
+								<small>
+									Enter your information below to proceed.
+								</small>
+							</div>
+							<form>
+								<p class="control">
+									<label class="label">Email</label>
+									<input required class="input" autofocus name="email" type="email" id="email-input" spellcheck="false" value="" />
+								</p>
+								<p class="control">
+									<label class="label">Password</label>
+									<input required class="input" name="password" type="password" id="pw-input" autocomplete="new-password" value="" />
+								</p>
+								<p class="control">
+									<a href="/forgot" class="orange-link">Forgot your password?</a>
+								</p>
+								<p class="control">
+									<a class="button is-primary is-medium is-fullwidth">Log In</a>
+								</p>
+							</form>
 						</div>
 						<div class="column is-5 is-offset-2">
-						<div class="content">
-						<h3 class="is-bold">Continue as a Guest</h3>
-						<small>
-						You may continue your transaction as a guest. However,
-						you will not have access to essential configuration tools
-						until you create a DomaHub account. There will be an option
-						to create an account at the end of this transaction.
-						</small>
-						<p class="control margin-top-25">
-						<a class="button is-primary is-medium is-fullwidth">Proceed as Guest</a>
-						</p>
-						</div>
-						</div>
+							<div class="content">
+								<h3 class="is-bold">Continue as a Guest</h3>
+								<small>
+									You may continue your transaction as a guest. However,
+									you will not have access to essential configuration tools
+									until you create a DomaHub account. There will be an option
+									to create an account at the end of this transaction.
+								</small>
+								<p class="control margin-top-25">
+									<a class="button is-primary is-medium is-fullwidth">Proceed as Guest</a>
+								</p>
+							</div>
 						</div>
 					</div>
 
@@ -81,11 +81,6 @@
 				<% } %>
 					<nav class="level">
 						<div class="level-left">
-							<% if (!user) { %>
-								<div class="level-item">
-									<a class="button is-danger no-shadow" id="remove_events">Login</a>
-								</div>
-							<% } %>
 							<div class="level-item">
 								<a class="button is-danger no-shadow" id="remove_events">Remove Selected</a>
 							</div>
@@ -218,10 +213,10 @@
 						</div>
 					</nav>
 					<div class="columns">
-						<div class="column is-4">
+						<div class="column is-5">
 							<div class="content">
-								<h2 class="is-bold margin-bottom-25">Rental Summary for:</h2>
-								<h2 class="is-primary has-text-centered is-underlined"><%= listing_info.domain_name %></h2>
+								<h2 class="is-bold margin-bottom-25">Rental Summary</h2>
+								<h1 class="is-primary has-text-centered is-underlined"><%= listing_info.domain_name %></h1>
 							</div>
 							<div class="columns">
 								<div class="column is-half">
@@ -281,14 +276,34 @@
 								You may edit any information by pressing the go back button.
 							</small>
 						</div>
-						<div class="column is-8">
+						<div class="column is-5 is-offset-2">
 							<div class="content">
-								<h2 class="is-bold">Rental Preview</h2>
+								<h2 class="is-bold">Payment Information</h2>
 								<p>
-									This is what your rental will look like.
+									You will not be charged yet.
 								</p>
-								<iframe id="preview-iframe"></iframe>
+								<!-- <iframe id="preview-iframe"></iframe> -->
 							</div>
+							<form>
+								<p class="control">
+									<label class="label">Credit or Debit Card Number</label>
+									<input class="input" type="number" placeholder="No spaces required"/>
+								</p>
+								<div class="control is-grouped">
+									<p class="control is-expanded">
+										<label class="label">Expiration Date</label>
+										<input class="input" type="number"/>
+									</p>
+									<p class="control">
+										<label class="label">Security Code</label>
+										<input class="input" type="number"/>
+									</p>
+								</div>
+								<p class="control">
+									<label class="label">Zip Code</label>
+									<input class="input" type="number"/>
+								</p>
+							</form>
 						</div>
 					</div>
 				</div>
