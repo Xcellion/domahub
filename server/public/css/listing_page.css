@@ -22,5 +22,5 @@
 
 .listing-modal-content {
   padding: 25px;
-  min-height: 850px;
-  background-color: white; }
+  background-color: white;
+  height: calc(100vh - 120px); }
