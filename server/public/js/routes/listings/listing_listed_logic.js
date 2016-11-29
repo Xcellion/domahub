@@ -1,8 +1,4 @@
 var unlock = true;
-var moneyFormat = wNumb({
-	thousand: ',',
-	prefix: '$'
-});
 
 $(document).ready(function() {
 
@@ -34,13 +30,12 @@ $(document).ready(function() {
 	//request a token from stripe
 	$("#stripe-form").submit(function(){
     	Stripe.card.createToken($(this), function(status, response){
-			console.log(response);
 			if (response.error){
 				$("#stripe-error-message").text(response.error.message).addClass('is-danger');
 			}
-
 			//all good!
 			else {
+				submitRentals(response.id);
 			}
 		});
 	    return false;
@@ -55,14 +50,11 @@ $(document).ready(function() {
 
 	//checkout button
 	$('#checkout-button').click(function(e){
+		$(this).addClass('is-loading');
 		e.preventDefault();
 		var bool = checkSubmit();
-
 		if (bool == true && unlock){
 			$("#stripe-form").submit();
-		}
-		else {
-			console.log(bool);
 		}
 	});
 
@@ -125,6 +117,7 @@ $(document).ready(function() {
 	$('#listing-modal-button').click(function() {
 		$('#listing-modal').addClass('is-active');
 		showModalContent(read_cookie("modal"));
+		$(this).text("Resume Transaction");
 	});
 
 	//various ways to close calendar modal
@@ -265,12 +258,14 @@ function submitRentals(stripeToken){
 				stripeToken: stripeToken
 			}
 		}).done(function(data){
+			$('#checkout-button').removeClass('is-loading');
 			delete_cookies();
 			unlock = true;
 			if (data.unavailable){
 				for (var x = 0; x < data.unavailable.length; x++){
 					$("#listing_message").text("Some time slots were unavailable! They have been removed.");
 					$('#calendar').fullCalendar('removeEvents', data.unavailable[x]._id);
+					showModalContent("calendar");
 				}
 			}
 			else if (data.state == "success"){
@@ -282,10 +277,6 @@ function submitRentals(stripeToken){
 				}
 			}
 			else if (data.state == "error"){
-				console.log(data);
-				$("#listing_message").html(data.message);
-			}
-			else {
 				console.log(data);
 			}
 		});
