@@ -266,7 +266,6 @@ function submitRentals(stripeToken){
 			}
 		}).done(function(data){
 			$('#checkout-button').removeClass('is-loading');
-			delete_cookies();
 			unlock = true;
 			if (data.unavailable){
 				for (var x = 0; x < data.unavailable.length; x++){
@@ -276,6 +275,7 @@ function submitRentals(stripeToken){
 				}
 			}
 			else if (data.state == "success"){
+				delete_cookies();
 				if (data.owner_hash_id){
 					window.location = window.location.origin + "/listing/" + listing_info.domain_name + "/" + data.rental_id + "/" + data.owner_hash_id;
 				}
