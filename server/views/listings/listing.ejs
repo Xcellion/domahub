@@ -177,8 +177,9 @@
 							</div>
 						</div>
 					</div>
-					<p class="control">
+					<p class="control has-icon">
 						<input required class="input is-medium" id="address_form_input" type="url" placeholder="Enter your URL">
+						<i class="fa fa-link"></i>
 					</p>
 					<div class="content margin-top-50">
 						<h3 class="is-bold">Need Help?</h3>
@@ -332,14 +333,21 @@
 								<!-- <iframe id="preview-iframe"></iframe> -->
 							</div>
 							<form id="stripe-form" autocomplete="on">
-								<p class="control">
-									<label class="label">Credit or Debit Card Number</label>
+								<label class="label">Credit or Debit Card Number</label>
+								<p class="control has-icon">
 									<input id="cc-num" data-stripe="number" class="input stripe-input" type="tel" placeholder="•••• •••• •••• ••••" autocomplete="cc-number"/>
+									<i class="fa fa-credit-card"></i>
+									<i class="fa fa-cc-visa is-hidden"></i>
+									<i class="fa fa-cc-diners-club is-hidden"></i>
+									<i class="fa fa-cc-jcb is-hidden"></i>
+									<i class="fa fa-cc-mastercard is-hidden"></i>
+									<i class="fa fa-cc-amex is-hidden"></i>
+									<i class="fa fa-cc-discover is-hidden"></i>
 								</p>
 								<div class="control is-grouped">
 									<p class="control is-expanded">
 										<label class="label">Expiration Date</label>
-										<input id="cc-exp" maxlength="9" data-stripe="exp" class="input stripe-input" type="tel" placeholder="•• / ••" autocomplete="cc-exp"/>
+										<input id="cc-exp" maxlength="9" data-stripe="exp" class="input stripe-input" type="tel" placeholder="•• / ••••" autocomplete="cc-exp"/>
 									</p>
 									<p class="control">
 										<label class="label">Security Code</label>
