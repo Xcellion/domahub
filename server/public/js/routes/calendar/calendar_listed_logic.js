@@ -1,4 +1,10 @@
 var totalPrice = 0;
+var moneyFormat = wNumb({
+	thousand: ',',
+	prefix: '$',
+	postfix: " USD",
+	decimals: 2
+});
 
 $(document).ready(function() {
 	//calendar logic
@@ -423,7 +429,7 @@ function createEvent(start, end){
 
 	//checked for all cases, create the new event!
 	if (!eventEncompassed && mergingEvents.length == 0 && overlappingEvents.length == 0 && fullyOverlappingEvents.length == 0){
-		//console.log('n');
+		//console.log('new event');
 		var eventData = {
 			start: start,
 			end: end,
@@ -474,39 +480,66 @@ function eventPrices(){
 	if (listing_info.status){
 		var myevents = $('#calendar').fullCalendar('clientEvents', filterMine);
 		if (myevents.length){
-			$("#calendar_next").addClass("is-primary");
-			$("#calendar_next").data("can_next", true);
-			$("#remove_events").removeClass("is-disabled");
+			$("#redirect-next-button").removeClass('is-disabled');
 		}
 		else {
-			$("#calendar_next").removeClass("is-primary");
-			$("#calendar_next").data("can_next", false);
-			$("#remove_events").addClass("is-disabled");
+			$("#redirect-next-button").addClass('is-disabled');
 		}
-		var weeks_price = days_price = hours_price = half_hours_price = 0;
 
+		//empty the preview dates
+		$(".preview-dates").remove();
+
+		//calculate the price
+		var months_price = weeks_price = days_price = hours_price = 0;
+		var total_months = total_weeks = total_days = total_hours = 0;
 		for (var x = 0; x < myevents.length; x++){
 			var tempDuration = myevents[x].end - myevents[x].start;
 
+			var months = divided(tempDuration, 2419200000);
+			total_months += months;
+			tempDuration = (months > 0) ? tempDuration -= months*2419200000 : tempDuration;
+
 			var weeks = divided(tempDuration, 604800000);
+			total_weeks += weeks;
 			tempDuration = (weeks > 0) ? tempDuration -= weeks*604800000 : tempDuration;
 
 			var days = divided(tempDuration, 86400000);
+			total_days += days;
 			tempDuration = (days > 0) ? tempDuration -= days*86400000 : tempDuration;
 
 			var hours = divided(tempDuration, 3600000);
+			total_hours += hours;
 			tempDuration = (hours > 0) ? tempDuration -= hours*3600000 : tempDuration;
 
-			var half_hours = divided(tempDuration, 1800000);
-			tempDuration = (half_hours > 0) ? tempDuration -= half_hours*1800000 : tempDuration;
-
+			months_price += months * listing_info.month_price;
 			weeks_price += weeks * listing_info.week_price;
 			days_price += days * listing_info.day_price;
 			hours_price += hours * listing_info.hour_price;
-			half_hours_price += half_hours * listing_info.hour_price;
+
+			//add to preview modal
+			var start_date = $("<p class='preview-dates'>" + moment(myevents[x].start).format("YYYY-MM-DD hh:mmA") + "</p>");
+			var end_date = $("<p class='preview-dates'>" + moment(myevents[x].end).format("YYYY-MM-DD hh:mmA") + "</p>");
+
+			$("#preview-start-dates").append(start_date);
+			$("#preview-end-dates").append(end_date);
 		}
 
-		totalPrice = weeks_price + days_price + hours_price + half_hours_price;
+		totalPrice = months_price + weeks_price + days_price + hours_price;
+
+		var appendPreviewRates = function(total_units, type, price_rate){
+			if (total_units > 0){
+				var s_or_not = (total_units == 1) ? "" : "s";
+				$("#preview-rates").append($("<p>$" + price_rate + " x " + total_units + " " + type + s_or_not + "</p>"));
+			}
+		}
+
+		//update the preview and calendar price HTML
+		$("#preview-rates").empty();
+		appendPreviewRates(total_months, "Month", listing_info.month_price);
+		appendPreviewRates(total_weeks, "Week", listing_info.week_price);
+		appendPreviewRates(total_days, "Day", listing_info.day_price);
+		appendPreviewRates(total_hours, "Hour", listing_info.hour_price);
+		$("#price-total").text(moneyFormat.to(totalPrice));
 
 		//animation for counting numbers
 		$("#price").prop('Counter', $("#price").prop('Counter')).stop().animate({
@@ -518,14 +551,6 @@ function eventPrices(){
 				$(this).text("$" + Math.floor(now));
 			}
 		});
-
-		//show next button for URL input
-		if (totalPrice){
-			$("#redirect-next-button").removeClass('is-disabled');
-		}
-		else {
-			$("#redirect-next-button").addClass('is-disabled');
-		}
 	}
 }
 

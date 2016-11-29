@@ -242,13 +242,11 @@
 								<div class="column is-half">
 									<p id="preview-start-dates" class="control">
 										<label class="label">Rental Start</label>
-										<input class="input" placeholder="12/15/16" disabled />
 									</p>
 								</div>
 								<div class="column is-half">
 									<p id="preview-end-dates" class="control">
 										<label class="label">Rental End</label>
-										<input class="input" placeholder="5/15/17" disabled />
 									</p>
 								</div>
 							</div>
@@ -268,11 +266,7 @@
 									</div>
 								</div>
 								<div class="column is-half">
-									<div class="content has-text-right">
-										<p id="price-rate">
-											$25 x 5 months
-										</p>
-									</div>
+									<div id="preview-rates" class="content has-text-right"></div>
 								</div>
 							</div>
 							<div class="columns">
@@ -285,9 +279,7 @@
 								</div>
 								<div class="column is-half">
 									<div class="content has-text-right">
-										<p id="price-total">
-											$125
-										</p>
+										<p id="price-total"></p>
 									</div>
 								</div>
 							</div>
@@ -305,7 +297,7 @@
 							<div class="content">
 								<h2 class="is-bold">Payment Information</h2>
 								<p id="stripe-error-message">
-									You will not be charged yet.
+									Please enter your payment information below.
 								</p>
 								<!-- <iframe id="preview-iframe"></iframe> -->
 							</div>
@@ -341,32 +333,6 @@
 
 		<%# keep calendar outside of modal and move it in with JS to fix weird bug of not appearing%>
 		<div id="calendar"></div>
-
-<!--
-		<div id="address_wrapper" class="page_wrapper">
-
-			<div class="info_wrapper">
-				<h2 class="listing_info_text listing_info_text_white">Connect your website to <span class="green_text"><%= listing_info.domain_name %></span><h2>
-				<input required class="input" id="address_form_input" type="url" placeholder="URL">
-				<div class="button next_button" id="address_next">Next</div>
-				<div id="faq_wrapper">
-					<h3>Don&#39;t know how?</h3>
-				</div>
-			</div>
-
-		</div>
-
-		<div id="pay_wrapper" class="page_wrapper">
-
-			<div class="info_wrapper">
-				<form id="listing_form" action="/listing/<%=listing_info.domain_name%>/pay" method="post">
-					<button class="form_submit button btn btn-primary btn-lg" id="stripe-button">
-						Checkout <span class="glyphicon glyphicon-shopping-cart"></span>
-					</button>
-				</form>
-			</div>
-
-		</div> -->
 
 		<%- include("../templates/footer"); %>
 		<%- include("../templates/js_scripts"); %>
