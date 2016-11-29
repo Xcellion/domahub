@@ -18,6 +18,12 @@
   }
 }
 
+#price {
+  border: 1px solid $black-secondary;
+  padding: 10px;
+  border-radius: $radius;
+}
+
 .listing-info {
   &:not(:last-child) {
     border-bottom: 1px solid $border;
