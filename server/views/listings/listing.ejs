@@ -33,44 +33,44 @@
 								</div>
 							</div>
 						</div>
-					</div>
-					<div class="columns">
-						<div class="column is-5">
-							<div class="content">
-								<h3 class="is-bold">Existing User Login</h3>
-								<small>
-									Enter your information below to proceed.
-								</small>
+						<div class="columns">
+							<div class="column is-5">
+								<div class="content">
+									<h3 class="is-bold">Existing User Login</h3>
+									<small>
+										Enter your information below to proceed.
+									</small>
+								</div>
+								<form>
+									<p class="control">
+										<label class="label">Email</label>
+										<input required class="input" autofocus name="email" type="email" id="email-input" spellcheck="false" value="" />
+									</p>
+									<p class="control">
+										<label class="label">Password</label>
+										<input required class="input" name="password" type="password" id="pw-input" autocomplete="new-password" value="" />
+									</p>
+									<p class="control">
+										<a href="/forgot" class="orange-link">Forgot your password?</a>
+									</p>
+									<p class="control">
+										<a class="button is-primary is-medium is-fullwidth">Log In</a>
+									</p>
+								</form>
 							</div>
-							<form>
-								<p class="control">
-									<label class="label">Email</label>
-									<input required class="input" autofocus name="email" type="email" id="email-input" spellcheck="false" value="" />
-								</p>
-								<p class="control">
-									<label class="label">Password</label>
-									<input required class="input" name="password" type="password" id="pw-input" autocomplete="new-password" value="" />
-								</p>
-								<p class="control">
-									<a href="/forgot" class="orange-link">Forgot your password?</a>
-								</p>
-								<p class="control">
-									<a class="button is-primary is-medium is-fullwidth">Log In</a>
-								</p>
-							</form>
-						</div>
-						<div class="column is-5 is-offset-2">
-							<div class="content">
-								<h3 class="is-bold">Continue as a Guest</h3>
-								<small>
-									You may continue your transaction as a guest. However,
-									you will not have access to essential configuration tools
-									until you create a DomaHub account. There will be an option
-									to create an account at the end of this transaction.
-								</small>
-								<p class="control margin-top-25">
-									<a class="button is-primary is-medium is-fullwidth">Proceed as Guest</a>
-								</p>
+							<div class="column is-5 is-offset-2">
+								<div class="content">
+									<h3 class="is-bold">Continue as a Guest</h3>
+									<small>
+										You may continue your transaction as a guest. However,
+										you will not have access to essential configuration tools
+										until you create a DomaHub account. There will be an option
+										to create an account at the end of this transaction.
+									</small>
+									<p class="control margin-top-25">
+										<a id="guest-button" class="button is-primary is-medium is-fullwidth">Proceed as Guest</a>
+									</p>
+								</div>
 							</div>
 						</div>
 					</div>
@@ -81,6 +81,16 @@
 				<% } %>
 					<nav class="level">
 						<div class="level-left">
+							<% if (!user) { %>
+								<div class="level-item">
+									<a id="calendar-back-button" class="button no-shadow">
+										<span class="icon">
+									    <i class="fa fa-angle-left"></i>
+									  </span>
+									  <span>Go Back</span>
+									</a>
+								</div>
+							<% } %>
 							<div class="level-item">
 								<a class="button is-danger no-shadow" id="remove_events">Remove Selected</a>
 							</div>
@@ -93,7 +103,12 @@
 						</div>
 						<div class="level-right">
 							<div class="level-item">
-								<a id="redirect-next-button" class="button no-shadow is-primary is-disabled">Next</a>
+								<a id="redirect-next-button" class="button no-shadow is-primary is-disabled">
+									<span>Next</span>
+									<span class="icon">
+										<i class="fa fa-angle-right"></i>
+								  	</span>
+								</a>
 							</div>
 						</div>
 					</nav>
@@ -116,10 +131,10 @@
 						<div class="level-right">
 							<div class="level-item">
 								<a id="preview-next-button" class="button is-primary no-shadow">
-									<span>Preview</span>
+									<span>Review</span>
 									<span class="icon">
-								    <i class="fa fa-angle-right"></i>
-								  </span>
+								    	<i class="fa fa-angle-right"></i>
+								  	</span>
 								</a>
 							</div>
 						</div>
@@ -284,29 +299,29 @@
 						<div class="column is-5">
 							<div class="content">
 								<h2 class="is-bold">Payment Information</h2>
-								<p>
+								<p id="stripe-error-message">
 									You will not be charged yet.
 								</p>
 								<!-- <iframe id="preview-iframe"></iframe> -->
 							</div>
-							<form>
+							<form id="stripe-form" autocomplete="on">
 								<p class="control">
 									<label class="label">Credit or Debit Card Number</label>
-									<input class="input" type="number" placeholder="No spaces required"/>
+									<input id="cc-num" data-stripe="number" class="input stripe-input" type="tel" placeholder="•••• •••• •••• ••••" autocomplete="cc-number"/>
 								</p>
 								<div class="control is-grouped">
 									<p class="control is-expanded">
 										<label class="label">Expiration Date</label>
-										<input class="input" type="number"/>
+										<input id="cc-exp" maxlength="9" data-stripe="exp" class="input stripe-input" type="tel" placeholder="•• / ••" autocomplete="cc-exp"/>
 									</p>
 									<p class="control">
 										<label class="label">Security Code</label>
-										<input class="input" type="number"/>
+										<input id="cc-cvc" data-stripe="cvc" class="input stripe-input" type="tel" placeholder="•••" autocomplete="off"/>
 									</p>
 								</div>
 								<p class="control">
 									<label class="label">Zip Code</label>
-									<input class="input" type="number"/>
+									<input id="cc-zip" maxlength="6" data-stripe="address_zip" class="input stripe-input" type="tel" placeholder="•••••"/>
 								</p>
 							</form>
 						</div>
@@ -347,10 +362,12 @@
 
 		<%- include("../templates/footer"); %>
 		<%- include("../templates/js_scripts"); %>
-		<script src="https://checkout.stripe.com/checkout.js"></script>
 		<script src="/js/lib/moment.min.js" type="text/javascript"></script>
 		<script src="/js/lib/fullcalendar.min.js" type="text/javascript"></script>
 		<script src="/js/lib/wNumb.js" type="text/javascript"></script>
+		<script type="text/javascript" src="https://js.stripe.com/v2/"></script>
+		<script src="/js/lib/jquery.payment.min.js" type="text/javascript"></script>
+		<script src="https://checkout.stripe.com/checkout.js"></script>
 		<script type="text/javascript">
 			var listing_message = <% if(typeof listing_message != "undefined"){ %><%-JSON.stringify(listing_message)%><% }else{ %>""<% } %>;
 			var listing_info = <% if(typeof listing_info != "undefined"){ %><%-JSON.stringify(listing_info)%><% }else{ %>""<% } %>;
