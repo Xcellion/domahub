@@ -390,10 +390,17 @@
   flex-direction: column;
 }
 
-/********** REALLY BAD MAKESHIFT WAY TO DEAL WITH SHIT *****/
+/********** REALLY BAD MAKESHIFT WAY TO DEAL WITH VARIOUS SHIT *****/
 
 .stripe-button {
   margin-top: 10px;
+}
+
+#linebreak {
+  height: 100%;
+  width: 1px;
+  background-color: $border;
+  margin: 0 auto;
 }
 
 /********************* FILE UPLOAD BUTTON *************/
