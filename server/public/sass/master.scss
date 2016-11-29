@@ -120,99 +120,7 @@
   font-style: normal;
 }
 
-/*************************** CHECKBOX ************************/
-.checkbox-list {
-  border: 1px solid $border;
-  & > li {
-    position: relative;
-    &:not(:first-child) {
-      border-top: 2px solid $border;
-    }
-  }
-}
-
-.checkbox-wrapper {
-  &:not(:first-child) {
-    @include tablet {
-      margin-left: 10px;
-    }
-    @include mobile {
-      margin-bottom: 5px;
-    }
-  }
-}
-
-.checkbox-form label {
-	@include transition(all 0.25s ease);
-	color: $text;
-	cursor: pointer;
-	display: inline-block;
-	position: relative;
-  box-sizing: border-box;
-  font-size: $size-5;
-  padding: 12px 20px 12px 50px;
-  width: 100%;
-  &.has-border {
-    border: 1px solid $border;
-    border-radius: $radius;
-    &:focus,
-    &:active {
-      outline: none;
-      border-color: $primary;
-    }
-  }
-  // Hover, focus, active effects
-  &:hover {
-    color: $primary;
-  }
-  &:focus,
-  &:active {
-    outline: 1px solid $primary;
-  }
-  // Sizes
-  &.is-small {
-    font-size: $size-6;
-    padding: 12px 10px 12px 40px;
-  }
-}
-
-.checkbox-form input[type="checkbox"],
-.checkbox-form input[type="radio"],
-.checkbox-form label::before {
-  cursor: pointer;
-  position: absolute;
-  height: 24px;
-  width: 24px;
-}
-
-.checkbox-form input[type="checkbox"],
-.checkbox-form input[type="radio"] {
-	opacity: 0;
-	z-index: 100;
-  -webkit-appearance: none;
-}
-
-.checkbox-form label::before {
-  content: url(/images/lib/material/unchecked-box.svg);
-  opacity: 0.7;
-  left: 10px;
-  top: 10px;
-	@include transition(all 0.5s ease);
-}
-
-.checkbox-form input[type="checkbox"]:checked + label,
-.checkbox-form input[type="radio"]:checked + label {
-
-}
-
-.checkbox-form input[type="checkbox"]:checked + label::before,
-.checkbox-form input[type="radio"]:checked + label::before {
-  content: url(/images/lib/material/checked-box.svg);
-  opacity: 1;
-}
-
-
-/********************** CUSTOM STYLES ******************/
+/********************** CUSTOM CLASS STYLING ******************/
 .logo-text {
   font: {
     family: $shareTech;
@@ -264,20 +172,14 @@
   padding-top: 68px;
 }
 
-.margin-top-10 {
-  margin-top: 10px;
-}
-
-.margin-top-25 {
-    margin-top: 25px;
-}
-
-.margin-bottom-25 {
-  margin-bottom: 25px;
-}
-
-.margin-bottom-50 {
-  margin-bottom: 50px;
+// margins list contains: 10,15,20,25,50,75,100
+@each $margin in $margins {
+  .margin-top-#{$margin} {
+    margin-top: #{$margin}px;
+  }
+  .margin-bottom-#{$margin}{
+    margin-bottom: #{$margin}px;
+  }
 }
 
 .vertical-align-bottom {
@@ -432,4 +334,95 @@
 .input-file:focus + label {
 	outline: 1px dotted #000;
 	outline: -webkit-focus-ring-color auto 3px;
+}
+
+/*************************** CHECKBOX ************************/
+.checkbox-list {
+  border: 1px solid $border;
+  & > li {
+    position: relative;
+    &:not(:first-child) {
+      border-top: 2px solid $border;
+    }
+  }
+}
+
+.checkbox-wrapper {
+  &:not(:first-child) {
+    @include tablet {
+      margin-left: 10px;
+    }
+    @include mobile {
+      margin-bottom: 5px;
+    }
+  }
+}
+
+.checkbox-form label {
+	@include transition(all 0.25s ease);
+	color: $text;
+	cursor: pointer;
+	display: inline-block;
+	position: relative;
+  box-sizing: border-box;
+  font-size: $size-5;
+  padding: 12px 20px 12px 50px;
+  width: 100%;
+  &.has-border {
+    border: 1px solid $border;
+    border-radius: $radius;
+    &:focus,
+    &:active {
+      outline: none;
+      border-color: $primary;
+    }
+  }
+  // Hover, focus, active effects
+  &:hover {
+    color: $primary;
+  }
+  &:focus,
+  &:active {
+    outline: 1px solid $primary;
+  }
+  // Sizes
+  &.is-small {
+    font-size: $size-6;
+    padding: 12px 10px 12px 40px;
+  }
+}
+
+.checkbox-form input[type="checkbox"],
+.checkbox-form input[type="radio"],
+.checkbox-form label::before {
+  cursor: pointer;
+  position: absolute;
+  height: 24px;
+  width: 24px;
+}
+
+.checkbox-form input[type="checkbox"],
+.checkbox-form input[type="radio"] {
+	opacity: 0;
+	z-index: 100;
+  -webkit-appearance: none;
+}
+
+.checkbox-form label::before {
+  content: url(/images/lib/material/unchecked-box.svg);
+  opacity: 0.7;
+  left: 10px;
+  top: 10px;
+	@include transition(all 0.5s ease);
+}
+
+.checkbox-form input[type="checkbox"]:checked + label,
+.checkbox-form input[type="radio"]:checked + label {
+
+}
+
+.checkbox-form input[type="checkbox"]:checked + label::before,
+.checkbox-form input[type="radio"]:checked + label::before {
+  content: url(/images/lib/material/checked-box.svg);
+  opacity: 1;
 }

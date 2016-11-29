@@ -560,7 +560,7 @@ function eventPrices(){
 			duration: 100,
 			easing: 'swing',
 			step: function (now) {
-				$(this).text("$" + Math.floor(now));
+				$(this).text("$" +  + Math.floor(now));
 			}
 		});
 	}
