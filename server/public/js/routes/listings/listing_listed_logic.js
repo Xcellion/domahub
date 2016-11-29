@@ -4,10 +4,42 @@ var moneyFormat = wNumb({
 	prefix: '$'
 });
 
+stripeResponseHandler = function(status, response){
+	console.log(response);
+	if (response.error){
+		$("#stripe-error-message").text(response.error.message).addClass('is-danger');
+	}
+
+	//all good!
+	else {
+	}
+}
+
 $(document).ready(function() {
 
 	//user since text in about Owner
 	$("#user-since").text(moment(new Date(listing_info.user_created)).format("MMMM, YYYY"));
+
+	//key for stripe
+	Stripe.setPublishableKey('pk_test_kcmOEkkC3QtULG5JiRMWVODJ');
+
+	//format all stripe inputs
+	$('#cc-num').payment('formatCardNumber');
+	$('#cc-exp').payment('formatCardExpiry');
+	$('#cc-cvc').payment('formatCardCVC');
+	$('#cc-zip').payment('restrictNumeric');
+
+	$("#stripe-form").submit(function(){
+		//request a token from Stripe:
+    	Stripe.card.createToken($(this), stripeResponseHandler);
+	    return false;
+	})
+
+	$(".stripe-input").change(function(){
+		if ($("#stripe-error-message").hasClass('is-danger')){
+			$("#stripe-error-message").text("Please enter your payment information.").removeClass('is-danger');
+		}
+	});
 
 	//stripe configuration
 	handler = StripeCheckout.configure({
@@ -106,12 +138,12 @@ $(document).ready(function() {
 		var bool = checkSubmit();
 
 		if (bool == true && unlock){
-			handler.open({
-				amount: totalPrice * 100,
-				description: 'Renting ' + listing_info.domain_name
-			});
+			// handler.open({
+			// 	amount: totalPrice * 100,
+			// 	description: 'Renting ' + listing_info.domain_name
+			// });
 
-			$("#submitButton").css("background", "black");
+			$("#stripe-form").submit();
 		}
 		else {
 			$("#listing_message").html(bool);
