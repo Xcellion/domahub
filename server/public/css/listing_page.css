@@ -14,6 +14,11 @@
       -o-filter: brightness(100%);
       -ms-filter: brightness(100%); } }
 
+#price {
+  border: 1px solid rgba(0, 0, 0, 0.66);
+  padding: 10px;
+  border-radius: 3px; }
+
 .listing-info:not(:last-child) {
   border-bottom: 1px solid rgba(0, 0, 0, 0.12); }
 

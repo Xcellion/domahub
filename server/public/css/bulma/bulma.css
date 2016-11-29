@@ -161,11 +161,6 @@ textarea {
 
 h1,
 h2,
-h3 {
-  font-family: "roboto", Helvetica, sans-serif; }
-
-h1,
-h2,
 h3,
 p {
   color: rgba(0, 0, 0, 0.9); }
@@ -225,6 +220,14 @@ pre {
 
 ul {
   list-style-type: none; }
+
+a.is-bold,
+p.is-bold,
+h1.is-bold,
+h2.is-bold,
+h3.is-bold,
+span.is-bold {
+  font-weight: bold; }
 
 a.is-underlined,
 p.is-underlined,
@@ -2428,11 +2431,6 @@ input:-webkit-autofill {
 .title,
 .subtitle {
   word-break: break-word; }
-  .title em,
-  .title span,
-  .subtitle em,
-  .subtitle span {
-    font-weight: 300; }
   .title strong,
   .subtitle strong {
     font-weight: 500; }
@@ -4091,6 +4089,9 @@ input:-webkit-autofill {
   @media screen and (min-width: 980px) {
     .modal-container-calendar {
       width: 960px; } }
+  @media screen and (min-width: 1260px) {
+    .modal-container-calendar {
+      width: 1240px; } }
   @media screen and (min-width: 769px) and (max-width: 979px) {
     .modal-container-calendar {
       width: 100%; } }

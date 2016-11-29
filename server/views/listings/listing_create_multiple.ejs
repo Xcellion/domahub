@@ -16,11 +16,11 @@
 		<div class="container margin-bottom-25">
 			<div class="columns">
 				<div class='column is-full'>
-					<div class="notification is-primary flex-content">
-						<h1 id="banner-title" class="title is-3">Create multiple listings.</h1>
-						<p id="banner-subtitle" class="control is-white">
-							Use the below template CSV file to upload your listings. You may edit any details anytime after uploading.
+					<div class="content flex-content">
+						<h1 id="banner-title" class="title is-2">Create multiple listings.</h1>
+						<p id="banner-subtitle" class="control">
 						</p>
+						Use the below template CSV file to upload your listings. You may edit any details after uploading.
 					</div>
 				</div>
 			</div>
@@ -30,30 +30,22 @@
 			<nav class="level">
 				<div class="level-left">
 					<div class="level-item">
-						<a class="button" tabindex="1" href="/downloads/csv/Multiple_Upload_Template.csv" download>
-							<span class="icon">
-								<i class="fa fa-download"></i>
-							</span>
-							<span>Download Template</span>
-						</a>
+						<input type="file" name="csv" id="mult-csv" class="input-file" />
+						<label id="file-label" for="mult-csv" class="button is-primary">
+						<i class="fa fa-upload"></i>
+						<span class="label-text">Upload CSV</span></label>
 					</div>
-					<a class="button is-accent" tabindex="1" href="/listings/create/single">
-						<span class="icon">
-							<i class="fa fa-angle-down"></i>
-						</span>
+					<a class="button is-primary" tabindex="1" href="/listings/create/single">
 						<span>I only have one listing to create.</span>
+						<span class="icon">
+							<i class="fa fa-level-up"></i>
+						</span>
 					</a>
 				</div>
 			</nav>
-			<nav class="level">
-				<div class="level-left">
-					<div class="level-item">
-						<input type="file" name="csv" id="mult-csv" class="input-file" />
-						<label id="file-label" for="mult-csv" class="button is-primary"><i class="fa fa-upload"></i><span class="label-text">Upload CSV</span></label>
-					</div>
-					<button id="submit-button" type="submit" class="button is-disabled is-success">Submit</button>
-				</div>
-			</nav>
+			<p class="control">
+				<button id="submit-button" type="submit" class="button is-disabled">Submit</button>
+			</p>
 		</div>
 	</div>
 
@@ -62,7 +54,7 @@
 			<div class="column box is-three-quarters">
 				<div id="table-e">
 					<h2 id="table-header-e">
-						CSV Template Format
+						Example CSV Template Format
 					</h2>
 					<table class="table">
 						<thead>
@@ -120,7 +112,14 @@
 						</tbody>
 					</table>
 				</div>
-
+				<p class="control">
+					<a class="button no-shadow" tabindex="1" href="/downloads/csv/Multiple_Upload_Template.csv" download>
+						<span class="icon">
+							<i class="fa fa-download"></i>
+						</span>
+						<span>Download Template</span>
+					</a>
+				</p>
 			</div>
 		</div>
 	</section>
