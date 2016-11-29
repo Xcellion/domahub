@@ -118,18 +118,21 @@ $(document).ready(function() {
 
 	//open the modal view and switch to appropriate content depending on cookie
 	$('#listing-modal-button').click(function() {
-		showModalContent(read_cookie("modal"));
+		var modal_to_show = read_cookie("modal") || "calendar";
+		showModalContent(modal_to_show);
 	});
 
 	//various ways to close calendar modal
 	$('.modal-close, .modal-background').click(function() {
 	  	$('#listing-modal').removeClass('is-active');
+		delete_cookie("modal");
 	});
 
 	//esc key to close modal
 	$(document).keyup(function(e) {
 		if (e.which == 27) {
 			$('#listing-modal').removeClass('is-active');
+			delete_cookie("modal");
 		}
 	});
 
