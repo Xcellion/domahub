@@ -14,11 +14,6 @@
       -o-filter: brightness(100%);
       -ms-filter: brightness(100%); } }
 
-#price {
-  border: 1px solid rgba(0, 0, 0, 0.66);
-  padding: 10px;
-  border-radius: 3px; }
-
 .listing-info:not(:last-child) {
   border-bottom: 1px solid rgba(0, 0, 0, 0.12); }
 
@@ -29,3 +24,11 @@
   padding: 25px;
   background-color: white;
   height: calc(100vh - 120px); }
+
+.fc-day-header {
+  cursor: pointer; }
+  .fc-day-header:hover {
+    background-color: rgba(60, 188, 141, 0.3); }
+
+.fc-content {
+  text-align: center; }
