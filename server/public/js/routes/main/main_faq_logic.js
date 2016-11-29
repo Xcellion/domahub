@@ -38,7 +38,7 @@ function changePanelActive(scrolltop){
         $(".faq-section").each(function(e){
             //scrolled past
             if ($(this).offset().top <= scrolltop){
-                menu_id = $(this).data("section-id") + "-menu";
+                menu_id = $(this).attr("id") + "-menu";
             }
         });
     }

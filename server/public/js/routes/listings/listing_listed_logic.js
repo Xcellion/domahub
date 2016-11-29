@@ -121,13 +121,13 @@ $(document).ready(function() {
 
 	//---------------------------------------------------------------------------------------------------modals
 
-	// Modal for calendar, url, and preview
+	//open the modal view and switch to appropriate content depending on cookie
 	$('#listing-modal-button').click(function() {
 		$('#listing-modal').addClass('is-active');
 		showModalContent(read_cookie("modal"));
 	});
 
-	// various ways to close calendar modal
+	//various ways to close calendar modal
 	$('.modal-close, .modal-background').click(function() {
 	  	$('#listing-modal').removeClass('is-active');
 	});
@@ -139,22 +139,22 @@ $(document).ready(function() {
 		}
 	});
 
-	//show login modal
+	//show login modal content
 	$("#calendar-back-button").click(function() {
 		showModalContent("login");
 	});
 
-	//show calendar modal
+	//show calendar modal content
 	$('#guest-button, #redirect-back-button, #edit-dates-button').click(function(){
 		showModalContent("calendar");
 	});
 
-	//show redirect modal
+	//show redirect modal content
 	$('#redirect-next-button, #preview-back-button').click(function() {
 		showModalContent("redirect");
 	});
 
-	//show preview modal
+	//show preview modal content
 	$('#preview-next-button').click(function() {
 		showModalContent("preview");
 	});
@@ -172,11 +172,6 @@ function showModalContent(type){
 		storeCookies("modal");
 	}
 }
-
-// Close Checkout on page navigation
-$(window).on('popstate', function () {
-	handler.close();
-});
 
 //function to show rental specific stuff
 function displayRental(){
@@ -212,18 +207,6 @@ function displayDefault(){
 	$(".rental_hide").hide();
 }
 
-//helper function to change next icon to primary color
-function addressNextChange(){
-	if ($(address_form_input).val()){
-		$("#address_next").addClass("is-primary");
-		$("#address_next").data("can_next", true);
-	}
-	else {
-		$("#address_next").removeClass("is-primary");
-		$("#address_next").data("can_next", false);
-	}
-}
-
 //helper function to check if everything is legit
 function checkSubmit(){
 	var newEvents = $('#calendar').fullCalendar('clientEvents', filterNew);
@@ -231,9 +214,11 @@ function checkSubmit(){
 
 	if (!rental_info && (!newEvents || newEvents.length == 0)){
 		bool = "Invalid dates!";
+		showModalContent("calendar");
 	}
 	else if (!$("#address_form_input").val()){
 		bool = "Invalid URL!";
+		showModalContent("redirect");
 	}
 	else if (newEvents.length > 0){
 		for (var x = 0; x < newEvents.length; x++){
@@ -241,6 +226,7 @@ function checkSubmit(){
 				var start = new Date(newEvents[x].start._d);
 				if (isNaN(start)){
 					bool = "Invalid dates selected!";
+					showModalContent("calendar");
 					break;
 				}
 			}
@@ -303,18 +289,5 @@ function submitRentals(stripeToken){
 				console.log(data);
 			}
 		});
-	}
-}
-
-//function to change modal page using hash and history
-function changeModal(modal){
-	if (modal == "calendar"){
-
-	}
-	else if (modal == "address"){
-
-	}
-	else {
-
 	}
 }
