@@ -1,4 +1,3 @@
-var totalPrice = 0;
 var moneyFormat = wNumb({
 	thousand: ',',
 	prefix: '$',
@@ -22,10 +21,14 @@ $(document).ready(function() {
 		slotDuration: '01:00:00', //how long a slot is,
 		height: "auto",
 		contentHeight:'auto', //auto height
+
+		//formatting for labels
 		titleFormat: {
 		   month: 'YYYY MMMM',
 		   week: "YYYY MMMM DD"
 	   	},
+		timeFormat: 'hA',
+		axisFormat: 'hA',
 
 		// header buttons
 		header: {left:'prev', center:'next', right:'title, today'},
@@ -80,7 +83,7 @@ $(document).ready(function() {
 			var end = moment(end.format());
 			var now = new moment();
 
-			//prevent calendar from creating events in the past (except for current 30 minute slot)
+			//prevent calendar from creating events in the past (except for current hour slot)
 			if (start < now - 1800000){
 				$('#calendar').fullCalendar('unselect');
 				return false;
@@ -93,18 +96,27 @@ $(document).ready(function() {
 		//tag id to HTML DOM for easy access
 		eventAfterRender: function(event, element, view ) {
 			$(element).attr("id", event._id);
+			if (view.name == "agendaWeek"){
+				$(element).css("width", "100%");
+				$(element).find(".fc-content").css({
+					left: "50%",
+					top: "50%",
+					position: "absolute",
+					transform: "translate(-50%, -50%)",
+					"margin-right": "-50%"
+				});
+			}
 		}
     });
 
-	var alldayMouseDown, alldayMouseUp;
-
+	//make it unselectable to prevent highlighting annoyance
 	$(".fc-day-header").addClass('is-unselectable');
+	var alldayMouseDown, alldayMouseUp;
 
 	//create all day events
 	$(".fc-day-header").mousedown(function(){
 		alldayMouseDown = moment($(this).data('date'));
 	});
-
 	$(".fc-day-header").mouseup(function(){
 		alldayMouseUp = moment($(this).data('date'));
 
@@ -112,7 +124,15 @@ $(document).ready(function() {
 		var start = (alldayMouseUp < alldayMouseDown) ? alldayMouseUp : alldayMouseDown;
 		var end = (alldayMouseUp < alldayMouseDown) ? moment(alldayMouseDown._d.getTime() + 86400000) : moment(alldayMouseUp._d.getTime() + 86400000);
 
-		createEvent(start, end);
+		var now = new moment();
+		//prevent calendar from creating events in the past (except for current hour slot)
+		if (start < now - 1800000){
+			$('#calendar').fullCalendar('unselect');
+			return false;
+		}
+		else {
+			createEvent(start, end);
+		}
 	});
 
 	//create existing rentals
@@ -271,25 +291,43 @@ function removeEventTimeSlot(calEvent, mouseDownSlot, mouseUpSlot){
 	//if clipping starts at top of event
 	else if (calEvent_start == mouseDown_start){
 		calEvent.start = mouseUpSlot.end;
+		calEvent.title = moneyFormat.to(eventPrice({
+			start: calEvent.start,
+			end: calEvent.end
+		}).totalPrice);
 		$('#calendar').fullCalendar('updateEvent', calEvent);
 		console.log('clipping at top');
 	}
 	//if clipping starts at middle of event and goes all the way
 	else if (calEvent_end == mouseUp_end){
 		calEvent.end = mouseDownSlot.start;
+		calEvent.title = moneyFormat.to(eventPrice({
+			start: calEvent.start,
+			end: calEvent.end
+		}).totalPrice);
 		$('#calendar').fullCalendar('updateEvent', calEvent);
 		console.log('clipping at bottom');
 	}
-	//if middle of event
+	//if middle of event, split event into two
 	else {
 		console.log('middle of event');
+
+		//update existing
 		var tempEnd = calEvent.end;
 		calEvent.end = mouseDownSlot.start;
+		calEvent.title = moneyFormat.to(eventPrice({
+			start: calEvent.start,
+			end: calEvent.end
+		}).totalPrice);
 		$('#calendar').fullCalendar('updateEvent', calEvent);
-		//overlaps something, cancel creation
+
+		//update splitting off
 		if (!checkEventOverlap(mouseUpSlot.end, tempEnd)){
 			var eventData = {
-				title: calEvent.title,
+				title: moneyFormat.to(eventPrice({
+					start: mouseUpSlot.end,
+					end: tempEnd
+				}).totalPrice),
 				start: mouseUpSlot.end,
 				end: tempEnd,
 				color: calEvent.color,
@@ -459,7 +497,10 @@ function createEvent(start, end){
 			end: end,
 			newevent: true,
 			color: "#3CBC8D",
-			title: "New rental"
+			title: moneyFormat.to(eventPrice({
+				start: start,
+				end: end
+			}).totalPrice)
 		};
 
 		var newEvent = $('#calendar').fullCalendar('renderEvent', eventData, true);
@@ -491,6 +532,9 @@ function createEvent(start, end){
 			}
 		}
 
+		//remove highlight
+		$("#calendar").fullCalendar('unselect');
+
 		//store local events as cookie so we dont lose it
 		storeCookies("local_events");
 
@@ -514,31 +558,16 @@ function eventPrices(){
 		$(".preview-dates").remove();
 
 		//calculate the price
-		var months_price = weeks_price = days_price = hours_price = 0;
+		var totalPrice = 0;
 		var total_months = total_weeks = total_days = total_hours = 0;
 		for (var x = 0; x < myevents.length; x++){
-			var tempDuration = myevents[x].end - myevents[x].start;
+			var calculated_prices = eventPrice(myevents[x]);
 
-			var months = divided(tempDuration, 2419200000);
-			total_months += months;
-			tempDuration = (months > 0) ? tempDuration -= months*2419200000 : tempDuration;
-
-			var weeks = divided(tempDuration, 604800000);
-			total_weeks += weeks;
-			tempDuration = (weeks > 0) ? tempDuration -= weeks*604800000 : tempDuration;
-
-			var days = divided(tempDuration, 86400000);
-			total_days += days;
-			tempDuration = (days > 0) ? tempDuration -= days*86400000 : tempDuration;
-
-			var hours = divided(tempDuration, 3600000);
-			total_hours += hours;
-			tempDuration = (hours > 0) ? tempDuration -= hours*3600000 : tempDuration;
-
-			months_price += months * listing_info.month_price;
-			weeks_price += weeks * listing_info.week_price;
-			days_price += days * listing_info.day_price;
-			hours_price += hours * listing_info.hour_price;
+			totalPrice += calculated_prices.totalPrice;
+			total_months += calculated_prices.count_per_rate.total_months;
+			total_weeks += calculated_prices.count_per_rate.total_weeks;
+			total_days += calculated_prices.count_per_rate.total_days;
+			total_hours += calculated_prices.count_per_rate.total_hours;
 
 			//add to preview modal
 			var start_date = $("<p class='preview-dates'>" + moment(myevents[x].start).format("YYYY-MM-DD hh:mmA") + "</p>");
@@ -547,8 +576,6 @@ function eventPrices(){
 			$("#preview-start-dates").append(start_date);
 			$("#preview-end-dates").append(end_date);
 		}
-
-		totalPrice = months_price + weeks_price + days_price + hours_price;
 
 		var appendPreviewRates = function(total_units, type, price_rate){
 			if (total_units > 0){
@@ -578,12 +605,47 @@ function eventPrices(){
 	}
 }
 
+//figure out a price for a specific event
+function eventPrice(event, callback){
+	var tempDuration = event.end - event.start;
+
+	//subtract any whole months
+	var months = divided(tempDuration, 2419200000);
+	tempDuration = (months > 0) ? tempDuration -= months*2419200000 : tempDuration;
+
+	//subtract any whole weeks
+	var weeks = divided(tempDuration, 604800000);
+	tempDuration = (weeks > 0) ? tempDuration -= weeks*604800000 : tempDuration;
+
+	//subtract any whole days
+	var days = divided(tempDuration, 86400000);
+	tempDuration = (days > 0) ? tempDuration -= days*86400000 : tempDuration;
+
+	//remaining all hours
+	var hours = divided(tempDuration, 3600000);
+	tempDuration = (hours > 0) ? tempDuration -= hours*3600000 : tempDuration;
+
+	//calculate price
+	months_price = months * listing_info.month_price;
+	weeks_price = weeks * listing_info.week_price;
+	days_price = days * listing_info.day_price;
+	hours_price = hours * listing_info.hour_price;
+
+	//how many of each rate type are there
+	var count_per_rate = {
+		total_months : months,
+		total_weeks : weeks,
+		total_days : days,
+		total_hours : hours,
+	}
+
+	return {
+		totalPrice : months_price + weeks_price + days_price + hours_price,
+		count_per_rate : count_per_rate
+	}
+}
+
 //helper function to divide number
 function divided(num, den){
     return Math[num > 0 ? 'floor' : 'ceil'](num / den);
-}
-
-//helper function to filter out events that aren't mine
-function filterMine(event) {
-    return !event.hasOwnProperty("old") && event.rendering != 'background';
 }
