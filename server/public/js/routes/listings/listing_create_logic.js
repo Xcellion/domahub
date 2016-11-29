@@ -114,7 +114,7 @@ function changeViewByHash(){
         else {
             $(".section").each(function(){
                 //if we can't go next on this section, then its not complete, so switch to it
-                if (!$(this).data("can-next") && !$(this).data("pageskip")){
+                if ($(this).data("can-next") == false && !$(this).data("pageskip")){
                     section_id = $(this).attr("id").replace("-section", "");
                 }
             });
@@ -142,7 +142,7 @@ function fillExistingData(){
             if (key == "type" && (value == "basic" || value == "premium")){
                 var is_basic = (value == "basic");
                 var bp_elem = (is_basic) ? $("#basic-box") : $("#premium-box");
-                $(".box").removeClass("is-active").addClass("low-opacity");
+                $(".card").removeClass("is-active").addClass("low-opacity");
                 bp_elem.addClass("is-active").removeClass("low-opacity");
                 setSectionNext(true, "type");
                 setPremium(is_basic);
@@ -452,7 +452,7 @@ function submitListing(submit_button, submit_data, url){
 
 			if (data.state == "success"){
                 //reset the datas to default value
-                $(".box").removeClass("is-active low-opacity");
+                $(".card").removeClass("is-active low-opacity");
                 $(".input").val("");
                 $(".cat-checkbox").prop('checked', false);
                 $(".price-input").each(function(e){
