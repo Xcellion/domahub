@@ -25,7 +25,7 @@ $(document).ready(function() {
 		//formatting for labels
 		titleFormat: {
 		   month: 'YYYY MMMM',
-		   week: "YYYY MMMM DD"
+		   week: "MMM DD YYYY"
 	   	},
 		timeFormat: 'hA',
 		axisFormat: 'hA',
@@ -81,10 +81,10 @@ $(document).ready(function() {
 		select: function(start, end, jsEvent, view){
 			var start = moment(start.format());
 			var end = moment(end.format());
-			var now = new moment();
+			var now = moment().add(1, 'hour').startOf('hour');
 
 			//prevent calendar from creating events in the past (except for current hour slot)
-			if (start < now - 1800000){
+			if (start < now){
 				$('#calendar').fullCalendar('unselect');
 				return false;
 			}
@@ -105,7 +105,13 @@ $(document).ready(function() {
 					transform: "translate(-50%, -50%)",
 					"margin-right": "-50%"
 				});
+
+				//remove event title repeat
+				if (!$(element).hasClass('fc-start')){
+					$(element).find('.fc-content').text("");
+				}
 			}
+
 		}
     });
 
@@ -500,7 +506,7 @@ function createEvent(start, end){
 			title: moneyFormat.to(eventPrice({
 				start: start,
 				end: end
-			}).totalPrice)
+			}).totalPrice),
 		};
 
 		var newEvent = $('#calendar').fullCalendar('renderEvent', eventData, true);
