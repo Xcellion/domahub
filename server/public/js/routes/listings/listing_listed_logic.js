@@ -4,21 +4,23 @@ var moneyFormat = wNumb({
 	prefix: '$'
 });
 
-stripeResponseHandler = function(status, response){
-	console.log(response);
-	if (response.error){
-		$("#stripe-error-message").text(response.error.message).addClass('is-danger');
-	}
-
-	//all good!
-	else {
-	}
-}
-
 $(document).ready(function() {
 
-	//user since text in about Owner
+	//user since text in About Owner
 	$("#user-since").text(moment(new Date(listing_info.user_created)).format("MMMM, YYYY"));
+
+	//change the URL, save as cookie and allow next
+	$("#address_form_input").on("change keyup paste", function(){
+		storeCookies("address");
+		if ($(this).val() == ""){
+			$("#preview-next-button").addClass('is-disabled');
+		}
+		else {
+			$("#preview-next-button").removeClass('is-disabled');
+		}
+	});
+
+	//---------------------------------------------------------------------------------------------------stripe
 
 	//key for stripe
 	Stripe.setPublishableKey('pk_test_kcmOEkkC3QtULG5JiRMWVODJ');
@@ -29,28 +31,38 @@ $(document).ready(function() {
 	$('#cc-cvc').payment('formatCardCVC');
 	$('#cc-zip').payment('restrictNumeric');
 
+	//request a token from stripe
 	$("#stripe-form").submit(function(){
-		//request a token from Stripe:
-    	Stripe.card.createToken($(this), stripeResponseHandler);
+    	Stripe.card.createToken($(this), function(status, response){
+			console.log(response);
+			if (response.error){
+				$("#stripe-error-message").text(response.error.message).addClass('is-danger');
+			}
+
+			//all good!
+			else {
+			}
+		});
 	    return false;
 	})
 
+	//to remove any stripe error messages
 	$(".stripe-input").change(function(){
 		if ($("#stripe-error-message").hasClass('is-danger')){
 			$("#stripe-error-message").text("Please enter your payment information.").removeClass('is-danger');
 		}
 	});
 
-	//stripe configuration
-	handler = StripeCheckout.configure({
-		key: 'pk_test_kcmOEkkC3QtULG5JiRMWVODJ',
-		name: 'DomaHub Domain Rental',
-		image: '/images/d-logo.PNG',
-		panelLabel: 'Pay',
-		zipCode : true,
-		locale: 'auto',
-		token: function(token) {
-			submitRentals(token.id);
+	//checkout button
+	$('#checkout-button').click(function(e){
+		e.preventDefault();
+		var bool = checkSubmit();
+
+		if (bool == true && unlock){
+			$("#stripe-form").submit();
+		}
+		else {
+			console.log(bool);
 		}
 	});
 
@@ -83,6 +95,7 @@ $(document).ready(function() {
 		//check if theres a cookie for the rental address
 		if (read_cookie("address")){
 			$("#address_form_input").val(read_cookie("address"));
+			$("#preview-next-button").removeClass('is-disabled');
 		}
 
 		if (!rental_info){
@@ -106,16 +119,12 @@ $(document).ready(function() {
 		displayDefault();
 	}
 
-	//save the URL
-	$("#address_form_input").on("change", function(){
-		storeCookies("address");
-	});
-
 	//---------------------------------------------------------------------------------------------------modals
 
 	// Modal for calendar, url, and preview
 	$('#listing-modal-button').click(function() {
 		$('#listing-modal').addClass('is-active');
+		showModalContent(read_cookie("modal"));
 	});
 
 	// various ways to close calendar modal
@@ -130,65 +139,39 @@ $(document).ready(function() {
 		}
 	});
 
-	//---------------------------------------------------------------------------------------------------buttons
-
-	//checkout button
-	$('#checkout-button').click(function(e){
-		e.preventDefault();
-		var bool = checkSubmit();
-
-		if (bool == true && unlock){
-			// handler.open({
-			// 	amount: totalPrice * 100,
-			// 	description: 'Renting ' + listing_info.domain_name
-			// });
-
-			$("#stripe-form").submit();
-		}
-		else {
-			$("#listing_message").html(bool);
-			console.log(bool);
-		}
+	//show login modal
+	$("#calendar-back-button").click(function() {
+		showModalContent("login");
 	});
 
-	//continue as guest button
-	$('#guest-button').click(function() {
-		$('#calendar-modal-content').removeClass('is-hidden');
-		$('#login-modal-content').addClass('is-hidden');
+	//show calendar modal
+	$('#guest-button, #redirect-back-button, #edit-dates-button').click(function(){
+		showModalContent("calendar");
 	});
 
-	//go back to login modal
-	$("#calendar-back-button").click(function(){
-		$('#calendar-modal-content').addClass('is-hidden');
-		$('#login-modal-content').removeClass('is-hidden');
+	//show redirect modal
+	$('#redirect-next-button, #preview-back-button').click(function() {
+		showModalContent("redirect");
 	});
 
-	//buttons for cycling through calendar, redirect, and checkout modal views
-	$('#redirect-next-button, #redirect-back-button').click(function() {
-		$('#calendar-modal-content').toggleClass('is-hidden');
-		$('#redirect-modal-content').toggleClass('is-hidden');
-	});
-
-	//preview button
-	$('#preview-next-button, #preview-back-button').click(function() {
-		$('#redirect-modal-content').toggleClass('is-hidden');
-		$('#preview-modal-content').toggleClass('is-hidden');
-
-		//set the src of the preview iframe
-		$("#preview-iframe").attr("src", $("#address_form_input").val());
-	});
-
-	//edit dates button
-	$("#edit-dates-button").click(function(){
-		$('#calendar-modal-content').toggleClass('is-hidden');
-		$('#redirect-modal-content').addClass('is-hidden');
-		$('#preview-modal-content').addClass('is-hidden');
+	//show preview modal
+	$('#preview-next-button').click(function() {
+		showModalContent("preview");
 	});
 
 	//fix weird issue with modal and fullcalendar not appearing
 	$("#calendar").appendTo("#calendar-modal-content");
 
 });
+
+//function to show a specific modal content
+function showModalContent(type){
+	if (type){
+		$(".modal-content").addClass('is-hidden');
+		$("#" + type + "-modal-content").removeClass('is-hidden');
+		storeCookies("modal");
+	}
+}
 
 // Close Checkout on page navigation
 $(window).on('popstate', function () {

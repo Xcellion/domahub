@@ -15,8 +15,13 @@ function storeCookies(type){
 			cookie.push(temp_event);
 		}
 	}
+	//store the URL of the listings page
 	else if (type == "address"){
 		cookie = $("#address_form_input").val();
+	}
+	//which modal content is being displayed right now
+	else if (type == "modal"){
+		cookie = $(".modal-content").not('.is-hidden').attr('id').replace("-modal-content", "");
 	}
 	else if (type == "rental_info"){
 		cookie = rental_info;
@@ -50,6 +55,7 @@ function delete_cookies(){
 	delete_cookie("rental_info");
 	delete_cookie("domain_name");
 	delete_cookie("listing_create");
+	delete_cookie("modal");
 }
 
 //helper function to delete a cookie
