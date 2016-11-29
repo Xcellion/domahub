@@ -401,6 +401,11 @@
   width: 1px;
   background-color: $border;
   margin: 0 auto;
+  @include mobile {
+    width: 100%;
+    height: 1px;
+    margin: auto 0;
+  }
 }
 
 /********************* FILE UPLOAD BUTTON *************/
