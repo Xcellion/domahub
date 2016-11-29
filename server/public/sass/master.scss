@@ -174,11 +174,38 @@
 
 // margins list contains: 10,15,20,25,50,75,100
 @each $margin in $margins {
+  .margin-#{$margin} {
+    margin: #{$margin}px;
+  }
   .margin-top-#{$margin} {
     margin-top: #{$margin}px;
   }
   .margin-bottom-#{$margin}{
     margin-bottom: #{$margin}px;
+  }
+  .margin-left-#{$margin}{
+    margin-left: #{$margin}px;
+  }
+  .margin-right-#{$margin}{
+    margin-right: #{$margin}px;
+  }
+}
+
+@each $margin in $margins {
+  .padding-#{$margin} {
+    padding: #{$margin}px;
+  }
+  .padding-top-#{$margin} {
+    padding-top: #{$margin}px;
+  }
+  .padding-bottom-#{$margin}{
+    padding-bottom: #{$margin}px;
+  }
+  .padding-left-#{$margin} {
+    padding-left: #{$margin}px;
+  }
+  .padding-right-#{$margin}{
+    padding-right: #{$margin}px;
   }
 }
 
@@ -214,6 +241,15 @@
 
 .has-borderBottom {
   border-bottom: 1px solid $border;
+}
+
+.has-borderLeft {
+  @include tablet {
+    border-left: 1px solid $border;
+  }
+  @include mobile {
+    border-top: 1px solid $border;
+  }
 }
 
 .has-styleBorder {
