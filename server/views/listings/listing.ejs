@@ -117,9 +117,26 @@
 							</div>
 						</div>
 					</nav>
-					<div id="price-ticker" class="has-text-centered">
-						<h1 id="price">$0</h1>
+					<div class="columns">
+						<div class="column is-half">
+							<div class="content">
+								<h1>Select your desired times.</h1>
+								<p>
+									Click a cell on the calendar to reserve that time slot.
+									You may select whole days by clicking on the "All-Day" cell.
+									Use the buttons at the top to remove all selected cells and
+									change calendar views.
+								</p>
+							</div>
+						</div>
+						<div class="column is-half flex-column-center">
+							<div class="content has-text-centered">
+								<!-- <h2 class="is-inline-block is-underlined">Total: </h2> -->
+								<h1 id="price" class="is-inline-block"></h1>
+							</div>
+						</div>
 					</div>
+
 				</div>
 				<div id="redirect-modal-content" class="modal-content listing-modal-content is-hidden">
 					<nav class="level">
@@ -144,13 +161,21 @@
 							</div>
 						</div>
 					</nav>
-					<div class="content">
-						<h1>Now connect your content to <span class="is-underlined"><%= listing_info.domain_name %></span>.<h1>
+					<h1>Now connect your content to <span class="is-primary is-bold"><%= listing_info.domain_name %></span>.<h1>
+					<div class="columns">
+						<div class="column is-half">
+							<div class="content">
+								<p>
+									The content of the URL you link below will be displayed when anyone
+									goes to your rental domain name. You may change this URL at any time.
+								</p>
+							</div>
+						</div>
 					</div>
 					<p class="control">
-						<input required class="input" id="address_form_input" type="url" placeholder="Enter your URL">
+						<input required class="input is-medium" id="address_form_input" type="url" placeholder="Enter your URL">
 					</p>
-					<div class="content margin-top-25">
+					<div class="content margin-top-50">
 						<h3 class="is-bold">Need Help?</h3>
 						<p>Here are examples of some things you can connect to your new domain rental.</p>
 					</div>
@@ -236,17 +261,17 @@
 						<div class="column is-6">
 							<div class="content">
 								<h2 class="is-bold margin-bottom-25">Rental Summary</h2>
-								<h1 class="is-primary has-text-centered is-underlined"><%= listing_info.domain_name %></h1>
+								<h1 class="title is-3 is-primary has-text-centered"><%= listing_info.domain_name %></h1>
 							</div>
 							<div class="columns">
 								<div class="column is-half">
-									<p id="preview-start-dates" class="control">
-										<label class="label">Rental Start</label>
+									<p id="preview-start-dates" class="is-bold">
+										Rental Start
 									</p>
 								</div>
 								<div class="column is-half">
-									<p id="preview-end-dates" class="control">
-										<label class="label">Rental End</label>
+									<p id="preview-end-dates" class="is-bold">
+										Rental End
 									</p>
 								</div>
 							</div>
