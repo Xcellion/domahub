@@ -12,6 +12,7 @@ $(document).ready(function() {
 		scrollTime: moment(new Date()).format("hh:mm:ss"),
 		defaultView: "agendaWeek",
 		allDayDefault: false,
+		allDaySlot: false,
 		selectable: true,
 		timezone: "local",
 		editable: false, //prevents editing of events
@@ -21,6 +22,10 @@ $(document).ready(function() {
 		slotDuration: '01:00:00', //how long a slot is,
 		height: "auto",
 		contentHeight:'auto', //auto height
+		titleFormat: {
+		   month: 'YYYY MMMM',
+		   week: "YYYY MMMM DD"
+	   	},
 
 		// header buttons
 		header: {left:'prev', center:'next', right:'title, today'},
@@ -71,9 +76,9 @@ $(document).ready(function() {
 
 		//creating new events
 		select: function(start, end, jsEvent, view){
-			start = moment(start.format());
-			end = moment(end.format());
-			now = new moment();
+			var start = moment(start.format());
+			var end = moment(end.format());
+			var now = new moment();
 
 			//prevent calendar from creating events in the past (except for current 30 minute slot)
 			if (start < now - 1800000){
@@ -90,6 +95,13 @@ $(document).ready(function() {
 			$(element).attr("id", event._id);
 		}
     });
+
+	//create all day events
+	$(".fc-day-header").click(function(){
+		var start = moment($(this).data('date'));
+		var end = moment(start._d.getTime() + 86400000);
+		createEvent(start, end);
+	})
 
 	//create existing rentals
 	if (listing_info.rentals){
