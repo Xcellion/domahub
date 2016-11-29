@@ -96,12 +96,24 @@ $(document).ready(function() {
 		}
     });
 
+	var alldayMouseDown, alldayMouseUp;
+
+	$(".fc-day-header").addClass('is-unselectable');
+
 	//create all day events
-	$(".fc-day-header").click(function(){
-		var start = moment($(this).data('date'));
-		var end = moment(start._d.getTime() + 86400000);
+	$(".fc-day-header").mousedown(function(){
+		alldayMouseDown = moment($(this).data('date'));
+	});
+
+	$(".fc-day-header").mouseup(function(){
+		alldayMouseUp = moment($(this).data('date'));
+
+		//if true, you're dragging left
+		var start = (alldayMouseUp < alldayMouseDown) ? alldayMouseUp : alldayMouseDown;
+		var end = (alldayMouseUp < alldayMouseDown) ? moment(alldayMouseDown._d.getTime() + 86400000) : moment(alldayMouseUp._d.getTime() + 86400000);
+
 		createEvent(start, end);
-	})
+	});
 
 	//create existing rentals
 	if (listing_info.rentals){
