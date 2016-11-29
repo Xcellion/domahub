@@ -36,7 +36,8 @@
 
 .fc-day-header {
   cursor: pointer;
-  &:hover {
+  &:hover,
+  &:active {
     background-color: rgba(60,188,141,0.3);
   }
 }
