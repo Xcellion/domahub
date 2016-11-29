@@ -98,6 +98,9 @@ $(document).ready(function() {
 				editingRental();
 			}
 		}
+
+		//display modal if theres a cookie
+		showModalContent(read_cookie("modal"));
 	}
 	else {
 		delete_cookies();
@@ -115,9 +118,7 @@ $(document).ready(function() {
 
 	//open the modal view and switch to appropriate content depending on cookie
 	$('#listing-modal-button').click(function() {
-		$('#listing-modal').addClass('is-active');
 		showModalContent(read_cookie("modal"));
-		$(this).text("Resume Transaction");
 	});
 
 	//various ways to close calendar modal
@@ -160,6 +161,9 @@ $(document).ready(function() {
 //function to show a specific modal content
 function showModalContent(type){
 	if (type){
+		$('#listing-modal').addClass('is-active');
+		$('#listing-modal-button').text("Resume Transaction");
+
 		$(".modal-content").addClass('is-hidden');
 		$("#" + type + "-modal-content").removeClass('is-hidden');
 		storeCookies("modal");
@@ -277,8 +281,21 @@ function submitRentals(stripeToken){
 				}
 			}
 			else if (data.state == "error"){
-				console.log(data);
+				errorHandler(data.message);
 			}
 		});
+	}
+}
+
+//error handler from server
+function errorHandler(message){
+	if (message = "Invalid address!"){
+		showModalContent("redirect");
+	}
+	else if (message = "Invalid dates!"){
+		showModalContent("calendar");
+	}
+	else if (message = "Invalid price!"){
+		showModalContent("preview");
 	}
 }
