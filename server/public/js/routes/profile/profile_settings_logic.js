@@ -1,4 +1,5 @@
 var can_submit = true;
+
 //function that runs when back button is pressed
 window.onpopstate = function(event) {
     showSectionByURL();
@@ -71,7 +72,36 @@ $(document).ready(function() {
         resetInputs();
     });
 
+    //revoke stripe access
+    $("#revoke-stripe-button").on("click", deauthorizeStripe);
+    $("#provide-stripe-button").on("click", function(){
+        $(this).addClass('is-loading');
+    });
+
 });
+
+//function to deauthorize stripe
+function deauthorizeStripe(e){
+    e.preventDefault();
+    var that = $(this);
+
+    that.addClass('is-loading');
+    that.off("click");  //remove click handler
+
+    $.ajax({
+        type: "POST",
+        url: "/deauthorizestripe"
+    }).done(function(data){
+        if (data.state == "success"){
+            that.text("Revoked!");
+        }
+        else {
+            that.on("click", deauthorizeStripe);
+        }
+    }).always(function(){
+        that.removeClass('is-loading');
+    });
+}
 
 //function to show a specific section
 function showSection(section_id){
