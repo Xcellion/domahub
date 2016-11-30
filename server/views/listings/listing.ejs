@@ -28,7 +28,7 @@
 									<p>
 										You may either log into an existing account or proceed as a guest.
 										If you do not already have a DomaHub account, we strongly recommend
-										<a href="/signup" class="orange-link">signing up</a> before renting.
+										<a tabindex="1" href="/signup" class="orange-link">signing up</a> before renting.
 									</p>
 								</div>
 							</div>
@@ -44,17 +44,17 @@
 								<form>
 									<p class="control">
 										<label class="label">Email</label>
-										<input required class="input" autofocus name="email" type="email" id="email-input" spellcheck="false" value="" />
+										<input tabindex="1" required class="input" autofocus name="email" type="email" id="email-input" spellcheck="false" value="" />
 									</p>
 									<p class="control">
 										<label class="label">Password</label>
-										<input required class="input" name="password" type="password" id="pw-input" autocomplete="new-password" value="" />
+										<input tabindex="1" required class="input" name="password" type="password" id="pw-input" autocomplete="new-password" value="" />
 									</p>
 									<p class="control">
-										<a href="/forgot" class="orange-link">Forgot your password?</a>
+										<a tabindex="1" href="/forgot" class="orange-link">Forgot your password?</a>
 									</p>
 									<p class="control">
-										<a class="button is-primary is-medium is-fullwidth">Log In</a>
+										<a tabindex="1" class="button is-primary is-medium is-fullwidth">Log In</a>
 									</p>
 								</form>
 							</div>
@@ -73,7 +73,7 @@
 										to create an account at the end of this transaction.
 									</small>
 									<p class="control margin-top-25">
-										<a id="guest-button" class="button is-primary is-medium is-fullwidth">Proceed as Guest</a>
+										<a tabindex="1" id="guest-button" class="button is-primary is-medium is-fullwidth">Proceed as Guest</a>
 									</p>
 								</div>
 							</div>
@@ -89,7 +89,7 @@
 							<div class="level-left">
 								<% if (!user) { %>
 									<div class="level-item">
-										<a id="calendar-back-button" class="button no-shadow">
+										<a tabindex="1" id="calendar-back-button" class="button no-shadow">
 											<span class="icon">
 										    <i class="fa fa-angle-left"></i>
 										  </span>
@@ -98,18 +98,18 @@
 									</div>
 								<% } %>
 								<div class="level-item">
-									<a class="button is-danger no-shadow" id="remove_events">Remove Selected</a>
+									<a tabindex="1" class="button is-danger no-shadow" id="remove_events">Remove Selected</a>
 								</div>
 								<div class="level-item">
-									<a class="button no-shadow" id="month_button">Month View</a>
+									<a tabindex="1" class="button no-shadow" id="month_button">Month View</a>
 								</div>
 								<div class="level-item">
-									<a class="button no-shadow" id="today-button">Today</a>
+									<a tabindex="1" class="button no-shadow" id="today-button">Today</a>
 								</div>
 							</div>
 							<div class="level-right">
 								<div class="level-item">
-									<a id="redirect-next-button" class="button no-shadow is-primary is-disabled">
+									<a tabindex="1" id="redirect-next-button" class="button no-shadow is-primary is-disabled">
 										<span>Next</span>
 										<span class="icon">
 											<i class="fa fa-angle-right"></i>
@@ -151,7 +151,7 @@
 					<nav class="level">
 						<div class="level-left">
 							<div class="level-item">
-								<a id="redirect-back-button" class="button no-shadow">
+								<a tabindex="1" id="redirect-back-button" class="button no-shadow">
 									<span class="icon">
 								    <i class="fa fa-angle-left"></i>
 								  </span>
@@ -161,7 +161,7 @@
 						</div>
 						<div class="level-right">
 							<div class="level-item">
-								<a id="preview-next-button" class="button is-disabled is-primary no-shadow">
+								<a tabindex="1" id="preview-next-button" class="button is-disabled is-primary no-shadow">
 									<span>Review</span>
 									<span class="icon">
 								    	<i class="fa fa-angle-right"></i>
@@ -182,7 +182,7 @@
 						</div>
 					</div>
 					<p class="control has-icon">
-						<input required class="input is-medium" id="address_form_input" type="url" placeholder="Enter the URL of your content">
+						<input tabindex="1" required class="input is-medium" id="address_form_input" type="url" placeholder="Enter the URL of your content">
 						<i class="fa fa-link"></i>
 					</p>
 					<div class="content margin-top-50">
@@ -258,7 +258,7 @@
 						</div>
 						<div class="level-right">
 							<div class="level-item">
-								<a id="checkout-button" class="button is-primary no-shadow">
+								<a tabindex="1" id="checkout-button" class="button is-primary no-shadow">
 									<span class="icon">
 										<i class="fa fa-shopping-cart"></i>
 									</span>
@@ -268,18 +268,18 @@
 						</div>
 					</nav>
 					<div class="columns">
-						<div class="column is-5">
+						<div class="column is-6">
 							<div class="content">
-								<h2 class="is-bold">Payment Information</h2>
+								<h1 class="title is-3">Payment Information</h1>
 								<p id="stripe-error-message">
 									Please enter your payment information below.
 								</p>
 								<!-- <iframe id="preview-iframe"></iframe> -->
 							</div>
 							<form id="stripe-form" autocomplete="on">
-								<label class="label">Credit or Debit Card Number</label>
+								<label class="label">Credit or Debit Card Number &#42;</label>
 								<p class="control has-icon">
-									<input id="cc-num" data-stripe="number" class="input stripe-input" type="tel" placeholder="•••• •••• •••• ••••" autocomplete="cc-number"/>
+									<input tabindex="1" id="cc-num" data-stripe="number" class="input stripe-input is-medium" type="tel" placeholder="•••• •••• •••• ••••" autocomplete="cc-number"/>
 									<i class="fa fa-credit-card"></i>
 									<i class="fa fa-cc-visa is-hidden"></i>
 									<i class="fa fa-cc-diners-club is-hidden"></i>
@@ -290,26 +290,69 @@
 								</p>
 								<div class="control is-grouped">
 									<p class="control is-expanded">
-										<label class="label">Expiration Date</label>
-										<input id="cc-exp" maxlength="7" data-stripe="exp" class="input stripe-input" type="tel" placeholder="•• / ••" autocomplete="cc-exp"/>
+										<label class="label">Expiration Date &#42;</label>
+										<input tabindex="1" id="cc-exp" maxlength="7" data-stripe="exp" class="input stripe-input is-medium" type="tel" placeholder="•• / ••" autocomplete="cc-exp"/>
 									</p>
 									<p class="control">
-										<label class="label">Security Code</label>
-										<input id="cc-cvc" data-stripe="cvc" class="input stripe-input" type="tel" placeholder="•••" autocomplete="off"/>
+										<label class="label">Security Code &#42;</label>
+										<input tabindex="1" id="cc-cvc" data-stripe="cvc" class="input stripe-input is-medium" type="tel" placeholder="•••" autocomplete="off"/>
 									</p>
 								</div>
 								<p class="control">
-									<label class="label">Zip Code</label>
-									<input id="cc-zip" maxlength="6" data-stripe="address_zip" class="input stripe-input" type="tel" autocomplete="postal-code" placeholder="•••••"/>
+									<label class="label">Zip Code &#42;</label>
+									<input tabindex="1" id="cc-zip" maxlength="6" data-stripe="address_zip" class="input stripe-input is-medium" type="tel" autocomplete="postal-code" placeholder="•••••"/>
+								</p>
+								<p class="control is-bold">
+									&#42; Required fields
+								</p>
+								<% if (!user) { %>
+								<small>
+									You are currently checking out as a GUEST. If you wish to create
+									an account, you may do so by using the form below.
+								</small>
+								<% %>
+							</form>
+							<form class="checkbox-form margin-top-10">
+								<input class="is-small" value="agree-to-terms" id="agree-to-terms" type="checkbox" />
+								<label class="is-small" tabindex="1" for="agree-to-terms">
+									I agree to the Terms & Conditions. I also agree to pay the total amount
+									shown.
+								</label>
+							</form>
+							<p class="control margin-top-20">
+								<a class="button is-primary is-medium">Confirm &#38; Pay</a>
+							</p>
+							<% %>
+							<div class="content margin-top-25">
+								<h3 class="is-bold">Create an Account</h3>
+								<p>
+									We will send you an email with a corresponding link to get your account set up.
+								</p>
+							</div>
+							<form>
+								<label class="label">Email Address</label>
+								<p class="control has-addons">
+									<input tabindex="1" class="input is-medium" type="email" />
+									<a class="button is-primary is-medium">
+								    Submit
+								  </a>
 								</p>
 							</form>
+							<% } %>
 						</div>
 						<div class="column is-1">
 
 						</div>
-						<div class="column is-5">
-							<h2 class="is-bold margin-bottom-25">Rental Summary</h2>
-							<div class="box no-shadow">
+						<div class="column is-4">
+							<div class="content">
+								<h1 class="title is-3">Rental Summary</h1>
+								<p>
+									Please take a moment to review the summary above.
+									You may edit the information on any of the previous
+									pages by clicking the go back button.
+								</p>
+							</div>
+							<div class="box">
 								<div class="rental-summary-section">
 									<div class="content">
 										<h1 class="title is-3 is-primary has-text-centered"><%= listing_info.domain_name %></h1>
@@ -318,18 +361,22 @@
 								<div class="rental-summary-section">
 									<div class="columns">
 										<div class="column is-half">
-											<p id="preview-start-dates" class="is-bold">
-												Rental Start
-											</p>
+											<div class="content">
+												<p id="preview-start-dates" class="is-bold">
+													Rental Start
+												</p>
+											</div>
 										</div>
 										<div class="column is-half">
-											<p id="preview-end-dates" class="is-bold">
-												Rental End
-											</p>
+											<div class="content">
+												<p id="preview-end-dates" class="is-bold">
+													Rental End
+												</p>
+											</div>
 										</div>
 									</div>
 									<p class="control is-expanded">
-										<a id="edit-dates-button" class="button is-primary is-fullwidth">Edit Dates</a>
+										<a tabindex="1" id="edit-dates-button" class="button is-primary is-fullwidth">Edit Dates</a>
 									</p>
 								</div>
 								<div class="rental-summary-section">
@@ -350,29 +397,19 @@
 									<div class="columns">
 										<div class="column is-half">
 											<div class="content">
-												<h3 class="is-bold">
+												<h2 class="is-bold">
 													Total
-												</h3>
+												</h2>
 											</div>
 										</div>
 										<div class="column is-half">
 											<div class="content has-text-right">
-												<h3 id="price-total"></h3>
+												<h2 id="price-total"></h2>
 											</div>
 										</div>
 									</div>
 								</div>
-								<small>
-									Please take a moment to review the summary above.
-									You may edit the information on any of the previous
-									pages by clicking the go back button.
-								</small>
 							</div>
-						</div>
-					</div>
-					<div class="columns">
-						<div class="column">
-
 						</div>
 					</div>
 				</div>
