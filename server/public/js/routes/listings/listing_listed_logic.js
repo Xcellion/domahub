@@ -291,11 +291,12 @@ function submitRentals(stripeToken){
 			}
 			else if (data.state == "success"){
 				delete_cookies();
+				console.log(data);
 				if (data.owner_hash_id){
-					window.location = window.location.origin + "/listing/" + listing_info.domain_name + "/" + data.rental_id + "/" + data.owner_hash_id;
+					//window.location = window.location.origin + "/listing/" + listing_info.domain_name + "/" + data.rental_id + "/" + data.owner_hash_id;
 				}
 				else {
-					window.location = window.location.origin + "/listing/" + listing_info.domain_name + "/" + data.rental_id;
+					//window.location = window.location.origin + "/listing/" + listing_info.domain_name + "/" + data.rental_id;
 				}
 			}
 			else if (data.state == "error"){

@@ -143,7 +143,7 @@ $(document).ready(function() {
 			if (view.name == "agendaWeek"){
 				$(element).css("width", "100%");
 
-				//remove event title repeat
+				//remove event title repeat on other ppl events
 				if (!$(element).hasClass('fc-start') && !event.other){
 					$(element).find('.fc-content').text("");
 				}
