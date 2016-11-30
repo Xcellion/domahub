@@ -164,7 +164,7 @@ $(document).ready(function() {
 
 	//fix weird issue with modal and fullcalendar not appearing
 	$("#calendar").appendTo("#calendar-modal-content");
-	var cal_height = $("#calendar-modal-content").height() - $("#calendar-modal-top").height() - 50;
+	var cal_height = $("#calendar-modal-content").height() - $("#calendar-modal-top").height() - 100;
 	$('#calendar').fullCalendar('option', 'contentHeight', cal_height);
 });
 
@@ -301,7 +301,7 @@ function submitRentals(stripeToken){
 function errorHandler(message){
 	if (message = "Invalid address!"){
 		showModalContent("redirect");
-		$("#address-error-message").addClass('is-danger').text("There is something wrong with the URL you entered! Please fix the error before submitting again. Your credit card has not been charged yet.");
+		$("#address-error-message").addClass('is-danger').html("There is something wrong with the URL you entered!<br />Your credit card has not been charged yet.");
 	}
 	else if (message = "Invalid dates!"){
 		showModalContent("calendar");
