@@ -52,6 +52,9 @@ function switchEvents(event, res){
 			case "invoice.payment_failed":
 				handleSubscriptionPayFail(event);
 				break;
+			case "account.application.deauthorized":
+				handleAccountDeauthorized(event);
+				break;
 			default:
 				break;
 		}
@@ -65,7 +68,7 @@ function switchEvents(event, res){
 
 //deleted a customer
 function handleCustomerDelete(event){
-	updateAccount(event.data.object, false);
+	updateAccountStripeCustomerID(event.data.object, false);
 }
 
 //cancelled subscription (at period end, or immediate)
@@ -85,6 +88,11 @@ function handleSubscriptionPayFail(event){
 	retrieveSubscription(event.data.object.subscription, function(subscription){
 		//todo, email user about failure
 	});
+}
+
+//failed to pay for another month of subscription
+function handleAccountDeauthorized(event){
+	updateAccountStripeUserID(event.user_id);
 }
 
 //-------------------------------------------------------------------------------------------------------------------HELPER FUNCTIONS
@@ -154,7 +162,7 @@ function updateListing(subscription, bool, object){
 }
 
 //helper to update or remove customer ID
-function updateAccount(customer, bool){
+function updateAccountStripeCustomerID(customer, bool){
 	account_id = customer.metadata.account_id;
 
 	if (bool){
@@ -180,6 +188,21 @@ function updateAccount(customer, bool){
 			}
 			else {
 				console.log(console_msg.error);
+			}
+		});
+	}
+}
+
+//customer revoking access to domahub
+function updateAccountStripeUserID(stripe_user_id){
+	if (user_id){
+		//update the domahub DB appropriately
+		Account.updateAccountStripeUserID(stripe_user_id, {stripe_user_id : null}, function(result){
+			if (result.state == "success"){
+				console.log("Stripe user" + stripe_user_id + " has revoked access...");
+			}
+			else {
+				console.log("Something went wrong with Stripe user" + stripe_user_id + " revoking access...");
 			}
 		});
 	}

@@ -217,8 +217,11 @@ listing_model.prototype.getRandomListings = function(callback){
 				listings.month_price, \
 				listings.categories \
 			FROM listings \
+			INNER JOIN accounts \
+				ON accounts.id = listings.owner_id \
 			WHERE listings.status = 1 \
 			AND listings.verified = 1 \
+			AND accounts.stripe_user_id IS NOT NULL \
 			ORDER BY rand() \
 			LIMIT 10";
 	listing_query(query, "Failed to get 10 random listings!", callback);
