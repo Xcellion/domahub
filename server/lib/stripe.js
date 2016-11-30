@@ -216,6 +216,50 @@ module.exports = {
 		}));
 	},
 
+	//deauthorize stripe
+	deauthorizeStripe : function(req, res){
+		if (req.user.stripe_user_id){
+			request.post({
+				url: 'https://connect.stripe.com/oauth/deauthorize',
+				form: {
+					client_id: "ca_997O55c2IqFxXDmgI9B0WhmpPgoh28s3",
+					stripe_user_id: req.user.stripe_user_id,
+					client_secret: stripe_key
+				}
+			},
+				function (err, response, body) {
+					body = JSON.parse(body);
+
+					//all good with stripe!
+					if (!body.error && response.statusCode == 200 && body.stripe_user_id == req.user.stripe_user_id) {
+						var account_info = {
+							stripe_user_id: null,
+							type: 1
+						}
+						Account.updateAccount(account_info, req.user.email, function(result){
+							if (result.state=="error"){error.handler(req, res, result.info);}
+							else {
+								req.user.stripe_user_id = null;
+								req.user.type = 1;
+								res.send({
+									state: "success"
+								})
+							}
+						});
+					}
+					else {
+						error.handler(req, res, "Invalid stripe token!", "json");
+					}
+				}
+			);
+		}
+
+		//isnt authorized
+		else {
+			error.handler(req, res, "Invalid stripe token!", "json");
+		}
+	},
+
 	//connect to stripe and get the stripe account info to store on our db
 	connectStripe : function(req, res){
 		scope = req.query.scope;

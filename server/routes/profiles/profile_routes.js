@@ -83,6 +83,12 @@ module.exports = function(app, db, auth, error, stripe){
 		stripe.authorizeStripe
 	]);
 
+	//authorize stripe
+	app.post("/deauthorizestripe", [
+		auth.checkLoggedIn,
+		stripe.deauthorizeStripe
+	]);
+
 	//redirect anything not caught above to /profile
 	app.get("/profile*", profile_functions.redirectProfile);
 
