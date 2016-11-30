@@ -163,7 +163,7 @@ $(document).ready(function() {
 	});
 
 	//fix weird issue with modal and fullcalendar not appearing
-	$("#calendar").appendTo("#calendar-modal-content");
+	$("#calendar").appendTo("#calendar-modal-bottom");
 	var cal_height = $("#calendar-modal-content").height() - $("#calendar-modal-top").height() - 100;
 	$('#calendar').fullCalendar('option', 'contentHeight', cal_height);
 });
