@@ -168,7 +168,7 @@ function showModalContent(type){
 		$('#listing-modal').addClass('is-active');
 		$('#listing-modal-button').text("Resume Transaction");
 
-		$(".modal-content").addClass('is-hidden');
+		$(".listing-modal-content").addClass('is-hidden');
 		$("#" + type + "-modal-content").removeClass('is-hidden');
 		storeCookies("modal");
 	}

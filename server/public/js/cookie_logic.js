@@ -21,7 +21,7 @@ function storeCookies(type){
 	}
 	//which modal content is being displayed right now
 	else if (type == "modal"){
-		cookie = $(".modal-content").not('.is-hidden').attr('id').replace("-modal-content", "");
+		cookie = $(".listing-modal-content").not('.is-hidden').attr('id').replace("-modal-content", "");
 	}
 	else if (type == "rental_info"){
 		cookie = rental_info;

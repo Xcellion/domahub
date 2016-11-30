@@ -29,9 +29,12 @@
 }
 
 .listing-modal-content {
-  padding: 25px;
   background-color: $white;
   height: calc(100vh - 120px);
+  overflow: auto;
+  padding: 25px 25px 0;
+  position: relative;
+  width: 100%;
 }
 
 .fc-day-header {
