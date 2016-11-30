@@ -84,63 +84,65 @@
 				<% } else { %>
 					<div id="calendar-modal-content" class="modal-content listing-modal-content">
 				<% } %>
-					<nav class="level">
-						<div class="level-left">
-							<% if (!user) { %>
+					<div id="calendar-modal-top">
+						<nav class="level">
+							<div class="level-left">
+								<% if (!user) { %>
+									<div class="level-item">
+										<a id="calendar-back-button" class="button no-shadow">
+											<span class="icon">
+										    <i class="fa fa-angle-left"></i>
+										  </span>
+										  <span>Go Back</span>
+										</a>
+									</div>
+								<% } %>
 								<div class="level-item">
-									<a id="calendar-back-button" class="button no-shadow">
+									<a class="button is-danger no-shadow" id="remove_events">Remove Selected</a>
+								</div>
+								<div class="level-item">
+									<a class="button no-shadow" id="month_button">Month View</a>
+								</div>
+								<div class="level-item">
+									<a class="button no-shadow" id="today-button">Today</a>
+								</div>
+							</div>
+							<div class="level-right">
+								<div class="level-item">
+									<a id="redirect-next-button" class="button no-shadow is-primary is-disabled">
+										<span>Next</span>
 										<span class="icon">
-									    <i class="fa fa-angle-left"></i>
-									  </span>
-									  <span>Go Back</span>
+											<i class="fa fa-angle-right"></i>
+									  	</span>
 									</a>
 								</div>
-							<% } %>
-							<div class="level-item">
-								<a class="button is-danger no-shadow" id="remove_events">Remove Selected</a>
 							</div>
-							<div class="level-item">
-								<a class="button no-shadow" id="month_button">Month View</a>
+						</nav>
+						<div class="columns">
+							<div class="column is-half has-borderRight">
+								<div class="content">
+									<h1>Select your desired times.</h1>
+									<p>
+										Click a cell on the calendar to reserve that time slot.
+										You may select whole days by clicking on date cell.
+										Use the buttons at the top to remove all selected cells or
+										change calendar views.
+									</p>
+								</div>
 							</div>
-							<div class="level-item">
-								<a class="button no-shadow" id="today-button">Today</a>
+							<div class="column is-3">
+								<div class="content padding-5">
+									<%- include("../templates/listing_prices") %>
+								</div>
 							</div>
-						</div>
-						<div class="level-right">
-							<div class="level-item">
-								<a id="redirect-next-button" class="button no-shadow is-primary is-disabled">
-									<span>Next</span>
-									<span class="icon">
-										<i class="fa fa-angle-right"></i>
-								  	</span>
-								</a>
-							</div>
-						</div>
-					</nav>
-					<div class="columns">
-						<div class="column is-half has-borderRight">
-							<div class="content">
-								<h1>Select your desired times.</h1>
-								<p>
-									Click a cell on the calendar to reserve that time slot.
-									You may select whole days by clicking on date cell.
-									Use the buttons at the top to remove all selected cells or
-									change calendar views.
-								</p>
-							</div>
-						</div>
-						<div class="column is-3">
-							<div class="content padding-5">
-								<%- include("../templates/listing_prices") %>
-							</div>
-						</div>
-						<div class="column is-3 flex-column-center">
-							<div class="content has-text-centered">
-								<h1 class="is-inline-block is-normal">Total: </h1>
-								<h1 id="price" class="is-inline-block"></h1>
+							<div class="column is-3 flex-column-center">
+								<div class="content has-text-centered">
+									<h1 id="price" class="is-inline-block"></h1>
+								</div>
 							</div>
 						</div>
 					</div>
+
 
 				</div>
 				<div id="redirect-modal-content" class="modal-content listing-modal-content is-hidden">
@@ -166,7 +168,7 @@
 							</div>
 						</div>
 					</nav>
-					<h1 class="margin-bottom-15">Now connect your content to <span class="is-primary is-bold"><%= listing_info.domain_name %></span>.<h1>
+					<h1>Now connect your content to <span class="is-primary is-bold"><%= listing_info.domain_name %></span>.<h1>
 					<div class="columns">
 						<div class="column is-half">
 							<div class="content">
@@ -177,9 +179,8 @@
 							</div>
 						</div>
 					</div>
-					<p class="control has-icon">
+					<p class="control">
 						<input required class="input is-medium" id="address_form_input" type="url" placeholder="Enter your URL">
-						<i class="fa fa-link"></i>
 					</p>
 					<div class="content margin-top-50">
 						<h3 class="is-bold">Need Help?</h3>
@@ -333,21 +334,14 @@
 								<!-- <iframe id="preview-iframe"></iframe> -->
 							</div>
 							<form id="stripe-form" autocomplete="on">
-								<label class="label">Credit or Debit Card Number</label>
-								<p class="control has-icon">
+								<p class="control">
+									<label class="label">Credit or Debit Card Number</label>
 									<input id="cc-num" data-stripe="number" class="input stripe-input" type="tel" placeholder="•••• •••• •••• ••••" autocomplete="cc-number"/>
-									<i class="fa fa-credit-card"></i>
-									<i class="fa fa-cc-visa is-hidden"></i>
-									<i class="fa fa-cc-diners-club is-hidden"></i>
-									<i class="fa fa-cc-jcb is-hidden"></i>
-									<i class="fa fa-cc-mastercard is-hidden"></i>
-									<i class="fa fa-cc-amex is-hidden"></i>
-									<i class="fa fa-cc-discover is-hidden"></i>
 								</p>
 								<div class="control is-grouped">
 									<p class="control is-expanded">
 										<label class="label">Expiration Date</label>
-										<input id="cc-exp" maxlength="9" data-stripe="exp" class="input stripe-input" type="tel" placeholder="•• / ••••" autocomplete="cc-exp"/>
+										<input id="cc-exp" maxlength="9" data-stripe="exp" class="input stripe-input" type="tel" placeholder="•• / ••" autocomplete="cc-exp"/>
 									</p>
 									<p class="control">
 										<label class="label">Security Code</label>
