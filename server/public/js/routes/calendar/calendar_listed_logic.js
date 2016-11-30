@@ -7,7 +7,7 @@ var moneyFormat = wNumb({
 
 $(document).ready(function() {
 	var alldayMouseDown, alldayMouseUp;
-	
+
 	//calendar logic
 	 $('#calendar').fullCalendar({
 		scrollTime: moment(new Date()).format("hh:mm:ss"),
@@ -22,7 +22,6 @@ $(document).ready(function() {
 		nowIndicator: true, //red line indicating current time
 		slotDuration: '01:00:00', //how long a slot is,
 		height: "parent",
-		contentHeight: 650, //auto height
 
 		//formatting for labels
 		titleFormat: {

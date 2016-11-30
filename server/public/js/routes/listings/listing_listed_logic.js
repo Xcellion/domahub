@@ -8,6 +8,9 @@ $(document).ready(function() {
 	//change the URL, save as cookie and allow next
 	$("#address_form_input").on("change keyup paste", function(){
 		storeCookies("address");
+		if ($("#address-error-message").hasClass('is-danger')){
+			$("#address-error-message").removeClass('is-danger').text("The content of the URL you link below will be displayed when anyone goes to your rental domain name. You may change this URL at any time.")
+		}
 		if ($(this).val() == ""){
 			$("#preview-next-button").addClass('is-disabled');
 		}
@@ -30,7 +33,9 @@ $(document).ready(function() {
 	//request a token from stripe
 	$("#stripe-form").submit(function(){
     	Stripe.card.createToken($(this), function(status, response){
+			unlock = true;
 			if (response.error){
+				$('#checkout-button').removeClass('is-loading');
 				$("#stripe-error-message").text(response.error.message).addClass('is-danger');
 			}
 			//all good!
@@ -54,6 +59,7 @@ $(document).ready(function() {
 		e.preventDefault();
 		var bool = checkSubmit();
 		if (bool == true && unlock){
+			unlock = false;
 			$("#stripe-form").submit();
 		}
 	});
@@ -118,7 +124,7 @@ $(document).ready(function() {
 
 	//open the modal view and switch to appropriate content depending on cookie
 	$('#listing-modal-button').click(function() {
-		var modal_to_show = read_cookie("modal") || "calendar";
+		var modal_to_show = read_cookie("modal") || (user) ? "calendar" : "login";
 		showModalContent(modal_to_show);
 	});
 
@@ -295,6 +301,7 @@ function submitRentals(stripeToken){
 function errorHandler(message){
 	if (message = "Invalid address!"){
 		showModalContent("redirect");
+		$("#address-error-message").addClass('is-danger').text("There is something wrong with the URL you entered! Please fix the error before submitting again. Your credit card has not been charged yet.");
 	}
 	else if (message = "Invalid dates!"){
 		showModalContent("calendar");

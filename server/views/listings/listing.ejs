@@ -172,7 +172,7 @@
 					<div class="columns">
 						<div class="column is-half">
 							<div class="content">
-								<p>
+								<p id="address-error-message">
 									The content of the URL you link below will be displayed when anyone
 									goes to your rental domain name. You may change this URL at any time.
 								</p>
@@ -180,7 +180,7 @@
 						</div>
 					</div>
 					<p class="control">
-						<input required class="input is-medium" id="address_form_input" type="url" placeholder="Enter your URL">
+						<input required class="input is-medium" id="address_form_input" type="url" placeholder="Enter the URL of your content">
 					</p>
 					<div class="content margin-top-50">
 						<h3 class="is-bold">Need Help?</h3>
@@ -341,7 +341,7 @@
 								<div class="control is-grouped">
 									<p class="control is-expanded">
 										<label class="label">Expiration Date</label>
-										<input id="cc-exp" maxlength="9" data-stripe="exp" class="input stripe-input" type="tel" placeholder="•• / ••" autocomplete="cc-exp"/>
+										<input id="cc-exp" maxlength="7" data-stripe="exp" class="input stripe-input" type="tel" placeholder="•• / ••" autocomplete="cc-exp"/>
 									</p>
 									<p class="control">
 										<label class="label">Security Code</label>
