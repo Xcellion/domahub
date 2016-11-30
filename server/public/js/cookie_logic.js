@@ -23,6 +23,10 @@ function storeCookies(type){
 	else if (type == "modal"){
 		cookie = $(".listing-modal-content").not('.is-hidden').attr('id').replace("-modal-content", "");
 	}
+	//is modal being displayed
+	else if (type == "modal-active"){
+		cookie = true;
+	}
 	else if (type == "rental_info"){
 		cookie = rental_info;
 	}
