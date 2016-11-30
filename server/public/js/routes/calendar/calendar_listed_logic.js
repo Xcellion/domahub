@@ -31,10 +31,10 @@ $(document).ready(function() {
 		timeFormat: 'hA',
 		axisFormat: 'hA',
 
-		// header buttons
+		//header buttons
 		header: {left:'prev', center:'next', right:'title, today'},
 
-		// background event to show that you cant select past dates
+		//background event to show that you cant select past dates
 		events: [
 			{
 				start: '1970-01-01T00:00:00',
@@ -131,20 +131,25 @@ $(document).ready(function() {
 		//tag id to HTML DOM for easy access
 		eventAfterRender: function(event, element, view ) {
 			$(element).attr("id", event._id);
+
+			//center title / date / time
+			$(element).find(".fc-content").css({
+				left: "50%",
+				top: "50%",
+				position: "absolute",
+				transform: "translate(-50%, -50%)",
+				"margin-right": "-50%"
+			});
 			if (view.name == "agendaWeek"){
 				$(element).css("width", "100%");
-				$(element).find(".fc-content").css({
-					left: "50%",
-					top: "50%",
-					position: "absolute",
-					transform: "translate(-50%, -50%)",
-					"margin-right": "-50%"
-				});
 
 				//remove event title repeat
-				if (!$(element).hasClass('fc-start')){
+				if (!$(element).hasClass('fc-start') && !event.other){
 					$(element).find('.fc-content').text("");
 				}
+			}
+			else {
+				$(element).css("height", "50px");
 			}
 
 		}
@@ -187,7 +192,7 @@ function createExisting(rentals){
 		}
 		else {
 			eventData.title = "Rented!";
-			eventData.color = "#DB7093";
+			eventData.color = "#ff6b40";
 			eventData.other = true;
 		}
 		$('#calendar').fullCalendar('renderEvent', eventData, true);
@@ -555,6 +560,11 @@ function createEvent(start, end){
 
 		//update the total price of current events
 		eventPrices();
+
+		//if there were any error messages
+		if ($("#calendar-error-message").hasClass('is-danger')){
+			$("#calendar-error-message").removeClass('is-danger').text("Click a cell on the calendar to reserve that time slot. You may select whole days by clicking on the date.	Use the buttons at the top to remove all selected cells or change calendar views.")
+		}
 	}
 }
 

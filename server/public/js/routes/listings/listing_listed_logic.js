@@ -106,7 +106,9 @@ $(document).ready(function() {
 		}
 
 		//display modal if theres a cookie
-		showModalContent(read_cookie("modal"));
+		if (read_cookie("modal-active")){
+			showModalContent(read_cookie("modal"));
+		}
 	}
 	else {
 		delete_cookies();
@@ -124,21 +126,21 @@ $(document).ready(function() {
 
 	//open the modal view and switch to appropriate content depending on cookie
 	$('#listing-modal-button').click(function() {
-		var modal_to_show = read_cookie("modal") || (user) ? "calendar" : "login";
+		var modal_to_show = (read_cookie("modal")) ? read_cookie("modal") : (user) ? "calendar" : "login";
 		showModalContent(modal_to_show);
 	});
 
 	//various ways to close calendar modal
 	$('.modal-close, .modal-background').click(function() {
 	  	$('#listing-modal').removeClass('is-active');
-		delete_cookie("modal");
+		delete_cookie("modal-active");
 	});
 
 	//esc key to close modal
 	$(document).keyup(function(e) {
 		if (e.which == 27) {
 			$('#listing-modal').removeClass('is-active');
-			delete_cookie("modal");
+			delete_cookie("modal-active");
 		}
 	});
 
@@ -164,8 +166,6 @@ $(document).ready(function() {
 
 	//fix weird issue with modal and fullcalendar not appearing
 	$("#calendar").appendTo("#calendar-modal-content");
-	var cal_height = $("#calendar-modal-content").height() - $("#calendar-modal-top").height() - 100;
-	$('#calendar').fullCalendar('option', 'contentHeight', cal_height);
 });
 
 //function to show a specific modal content
@@ -177,6 +177,12 @@ function showModalContent(type){
 		$(".listing-modal-content").addClass('is-hidden');
 		$("#" + type + "-modal-content").removeClass('is-hidden');
 		storeCookies("modal");
+		storeCookies("modal-active");
+
+		if (type == "calendar"){
+			var cal_height = $("#calendar-modal-content").height() - $("#calendar-modal-top").height() - 100;
+			$('#calendar').fullCalendar('option', 'contentHeight', cal_height);
+		}
 	}
 }
 
@@ -221,19 +227,19 @@ function checkSubmit(){
 
 	if (!rental_info && (!newEvents || newEvents.length == 0)){
 		bool = "Invalid dates!";
-		showModalContent("calendar");
+		errorHandler(bool);
 	}
 	else if (!$("#address_form_input").val()){
 		bool = "Invalid URL!";
-		showModalContent("redirect");
+		errorHandler(bool);
 	}
 	else if (newEvents.length > 0){
 		for (var x = 0; x < newEvents.length; x++){
 			if (!newEvents[x].old){
 				var start = new Date(newEvents[x].start._d);
 				if (isNaN(start)){
-					bool = "Invalid dates selected!";
-					showModalContent("calendar");
+					bool = "Invalid dates!";
+					errorHandler(bool);
 					break;
 				}
 			}
@@ -276,9 +282,9 @@ function submitRentals(stripeToken){
 			unlock = true;
 			if (data.unavailable){
 				for (var x = 0; x < data.unavailable.length; x++){
-					$("#listing_message").text("Some time slots were unavailable! They have been removed.");
 					$('#calendar').fullCalendar('removeEvents', data.unavailable[x]._id);
 					showModalContent("calendar");
+					$("#address-error-message").addClass('is-danger').html("Some dates were unavailable! They have been removed from your selection.<br />Your credit card has not been charged yet.");
 				}
 			}
 			else if (data.state == "success"){
@@ -299,14 +305,16 @@ function submitRentals(stripeToken){
 
 //error handler from server
 function errorHandler(message){
-	if (message = "Invalid address!"){
+	if (message == "Invalid address!"){
 		showModalContent("redirect");
-		$("#address-error-message").addClass('is-danger').html("There is something wrong with the URL you entered!<br />Your credit card has not been charged yet.");
+		$("#address-error-message").addClass('is-danger').html("There was something wrong with the URL you entered!<br />Your credit card has not been charged yet.");
 	}
-	else if (message = "Invalid dates!"){
+	else if (message == "Invalid dates!"){
 		showModalContent("calendar");
+		$("#calendar-error-message").addClass('is-danger').html("There was something wrong with the dates you selected!<br />Your credit card has not been charged yet.");
 	}
-	else if (message = "Invalid price!"){
+	else if (message == "Invalid price!"){
 		showModalContent("preview");
+		$("#stripe-error-message").addClass('is-danger').html("There was something wrong with your credit card!<br />Your credit card has not been charged yet.");
 	}
 }
