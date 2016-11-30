@@ -55,11 +55,12 @@ function read_cookie(name) {
 //helper function to delete all cookies
 function delete_cookies(){
 	delete_cookie("local_events");
-	delete_cookie("ip");
+	delete_cookie("address");
 	delete_cookie("rental_info");
 	delete_cookie("domain_name");
 	delete_cookie("listing_create");
 	delete_cookie("modal");
+	delete_cookie("modal-active");
 }
 
 //helper function to delete a cookie
