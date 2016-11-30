@@ -6,6 +6,8 @@ var moneyFormat = wNumb({
 });
 
 $(document).ready(function() {
+	var alldayMouseDown, alldayMouseUp;
+	
 	//calendar logic
 	 $('#calendar').fullCalendar({
 		scrollTime: moment(new Date()).format("hh:mm:ss"),
@@ -19,8 +21,8 @@ $(document).ready(function() {
 		eventStartEditable: false, //prevents moving of events
 		nowIndicator: true, //red line indicating current time
 		slotDuration: '01:00:00', //how long a slot is,
-		height: "auto",
-		contentHeight:'auto', //auto height
+		height: "parent",
+		contentHeight: 650, //auto height
 
 		//formatting for labels
 		titleFormat: {
@@ -68,13 +70,47 @@ $(document).ready(function() {
 			if (minDate >= currentView.start && minDate <= currentView.end) {
 				$(".fc-prev-button").prop('disabled', true);
 				$(".fc-prev-button").addClass('fc-state-disabled');
-
-				//todo - add class to custom buttons to "grey out"
 			}
 			else {
 				$(".fc-prev-button").removeClass('fc-state-disabled');
 				$(".fc-prev-button").prop('disabled', false);
 			}
+
+			//make it unselectable to prevent highlighting annoyance
+			$(".fc-day-header").addClass('is-unselectable');
+
+			//create all day events
+			$(".fc-day-header").mousedown(function(){
+				alldayMouseDown = moment($(this).data('date'));
+				$(this).addClass('is-active');
+			});
+			$(".fc-day-header").mouseup(function(){
+				alldayMouseUp = moment($(this).data('date'));
+
+				//if true, you're dragging left
+				var start = (alldayMouseUp < alldayMouseDown) ? alldayMouseUp : alldayMouseDown;
+				var end = (alldayMouseUp < alldayMouseDown) ? moment(alldayMouseDown._d.getTime() + 86400000) : moment(alldayMouseUp._d.getTime() + 86400000);
+
+				var now = new moment();
+				//prevent calendar from creating events in the past (except for current hour slot)
+				if (start < now - 1800000){
+					$('#calendar').fullCalendar('unselect');
+					return false;
+				}
+				else {
+					createEvent(start, end);
+				}
+			});
+
+			//highlight when dragging
+			$(".fc-day-header").mouseenter(function(e){
+				if (e.which == 1){
+					$(this).addClass('is-active');
+				}
+			});
+			$(document).mouseup(function(e){
+				$(".fc-day-header").removeClass('is-active');
+			});
 		},
 
 		//creating new events
@@ -114,32 +150,6 @@ $(document).ready(function() {
 
 		}
     });
-
-	//make it unselectable to prevent highlighting annoyance
-	$(".fc-day-header").addClass('is-unselectable');
-	var alldayMouseDown, alldayMouseUp;
-
-	//create all day events
-	$(".fc-day-header").mousedown(function(){
-		alldayMouseDown = moment($(this).data('date'));
-	});
-	$(".fc-day-header").mouseup(function(){
-		alldayMouseUp = moment($(this).data('date'));
-
-		//if true, you're dragging left
-		var start = (alldayMouseUp < alldayMouseDown) ? alldayMouseUp : alldayMouseDown;
-		var end = (alldayMouseUp < alldayMouseDown) ? moment(alldayMouseDown._d.getTime() + 86400000) : moment(alldayMouseUp._d.getTime() + 86400000);
-
-		var now = new moment();
-		//prevent calendar from creating events in the past (except for current hour slot)
-		if (start < now - 1800000){
-			$('#calendar').fullCalendar('unselect');
-			return false;
-		}
-		else {
-			createEvent(start, end);
-		}
-	});
 
 	//create existing rentals
 	if (listing_info.rentals){

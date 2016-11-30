@@ -158,7 +158,8 @@ $(document).ready(function() {
 
 	//fix weird issue with modal and fullcalendar not appearing
 	$("#calendar").appendTo("#calendar-modal-content");
-
+	var cal_height = $("#calendar-modal-content").height() - $("#calendar-modal-top").height() - 50;
+	$('#calendar').fullCalendar('option', 'contentHeight', cal_height);
 });
 
 //function to show a specific modal content
