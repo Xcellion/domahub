@@ -605,7 +605,7 @@ function eventPrices(){
 		var appendPreviewRates = function(total_units, type, price_rate){
 			if (total_units > 0){
 				var s_or_not = (total_units == 1) ? "" : "s";
-				$("#preview-rates").append($("<p>$" + price_rate + " x " + total_units + " " + type + s_or_not + "</p>"));
+				$("#preview-rates").append($("<h3>$" + price_rate + " x " + total_units + " " + type + s_or_not + "</h3>"));
 			}
 		}
 

@@ -1,4 +1,4 @@
-@import 'bulma/bulma.sass';
+ @import 'bulma/bulma.sass';
 
 /**font**/
 // @font-face {
@@ -241,6 +241,10 @@
 
 .has-borderBottom {
   border-bottom: 1px solid $border;
+}
+
+.has-borderTop {
+  border-top: 1px solid $border;
 }
 
 .has-borderLeft {
