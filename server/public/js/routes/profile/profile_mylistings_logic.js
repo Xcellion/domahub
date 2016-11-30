@@ -260,7 +260,7 @@ function createFormDrop(listing_info){
     temp_div4.append(temp_submit_control.append(temp_submit_button), temp_cancel_control.append(temp_cancel_button));
 
     //error message
-    var temp_msg = $("<p class='listing-msg is-hidden notification'></p>");
+    var temp_msg = $("<div class='listing-msg is-hidden is-danger notification'></div>");
         var temp_msg_delete = $("<button class='delete'></button>");
         temp_msg.append(temp_msg_delete);
 
@@ -324,7 +324,7 @@ function createPriceDrop(listing_info){
     premium_text = (expiring) ? "Renew Premium" : premium_text;
     var premium_src = (premium) ? "/downgrade" : "/upgrade";
     premium_src = (expiring) ? "/upgrade" : premium_src;
-    var temp_upgrade_button = $('<a href="/listing/' + listing_info.domain_name + premium_src + '" class="stripe-button button is-accent ' + verified_disabled + '">' + premium_text + '</a>');
+    var temp_upgrade_button = $('<a href="/listing/' + listing_info.domain_name + premium_src + '" class="stripe-button button is-primary ' + verified_disabled + '">' + premium_text + '</a>');
 
     //show an expiration or renewal date if this is a premium listing
     var expiring_text = (expiring) ? "Premium expiring" : "Premium renewing";
@@ -572,10 +572,10 @@ function errorMessage(msg_elem, message){
     if (message){
         //connect stripe first!
         if (message == "stripe-connect-error"){
-            msg_elem.append("<p>You must <a class='orange-link' href='/authorizestripe'>connect your Stripe account</a> before your listing can go live!</p>");
+            msg_elem.append("<p class='is-white'>You must <a class='orange-link' href='/authorizestripe'>connect your Stripe account</a> before your listing can go live!</p>");
         }
         else {
-            msg_elem.append("<p>" + message + "</p>");
+            msg_elem.append("<p class='is-white'>" + message + "</p>");
         }
     }
     else {
