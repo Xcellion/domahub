@@ -595,8 +595,8 @@ function eventPrices(){
 			total_hours += calculated_prices.count_per_rate.total_hours;
 
 			//add to preview modal
-			var start_date = $("<p class='preview-dates'>" + moment(myevents[x].start).format("YYYY-MM-DD hh:mmA") + "</p>");
-			var end_date = $("<p class='preview-dates'>" + moment(myevents[x].end).format("YYYY-MM-DD hh:mmA") + "</p>");
+			var start_date = $("<p class='preview-dates'>" + moment(myevents[x].start).format("MMM DD, YYYY hh:mmA") + "</p>");
+			var end_date = $("<p class='preview-dates'>" + moment(myevents[x].end).format("MMM DD, YYYY hh:mmA") + "</p>");
 
 			$("#preview-start-dates").append(start_date);
 			$("#preview-end-dates").append(end_date);

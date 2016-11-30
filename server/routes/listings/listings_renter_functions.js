@@ -241,7 +241,7 @@ module.exports = {
 			if (result.state == "error"){error.handler(req, res, result.info);}
 			else {
 				if (!result.info[0].stripe_user_id){
-					error.handler(req, res, "Something went wrong with this listing! You have not been charged.", "json");
+					error.handler(req, res, "Invalid stripe user account!", "json");
 				}
 				else {
 					req.session.new_rental_info.owner_stripe_id = result.info[0].stripe_user_id;	//stripe id
@@ -259,16 +259,20 @@ module.exports = {
 
 	//render a listing that is listed on domahub
 	renderListing : function(req, res, next){
-		//clear out rental_id session if navigating back
-		if (!req.params.rental_id){
-			delete req.session.rental_info;
-			delete req.session.new_rental_info;
+
+		//remove some sensitive info
+		var clean_listing_info = Object.assign({}, req.session.listing_info);
+		delete clean_listing_info.stripe_subscription_id;
+
+		//stripe not connected, make sure the listing doesnt accept new rentals
+		if (req.session.listing_info.stripe_connected == 0){
+			clean_listing_info.status = 0;
 		}
 
 		res.render("listings/listing.ejs", {
 			user: req.user,
 			message: Auth.messageReset(req),
-			listing_info: req.session.listing_info,
+			listing_info: clean_listing_info,
 			new_rental_info : req.session.new_rental_info || false,
 			rental_info : req.session.rental_info || false
 		});
