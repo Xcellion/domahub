@@ -6,7 +6,7 @@ $(document).ready(function() {
 	$("#user-since").text(moment(new Date(listing_info.user_created)).format("MMMM, YYYY"));
 
 	//change the URL, save as cookie and allow next
-	$("#address_form_input").on("change keyup paste", function(){
+	$("#address_form_input").on("change keyup paste", function(e){
 		storeCookies("address");
 		if ($("#address-error-message").hasClass('is-danger')){
 			$("#address-error-message").removeClass('is-danger').text("The content of the URL you link below will be displayed when anyone goes to your rental domain name. You may change this URL at any time.")
@@ -16,6 +16,11 @@ $(document).ready(function() {
 		}
 		else {
 			$("#preview-next-button").removeClass('is-disabled');
+		}
+
+		//press enter to go next
+		if (e.keyCode == 13){
+			showModalContent("preview");
 		}
 	});
 

@@ -182,7 +182,7 @@
 						</div>
 					</div>
 					<p class="control has-icon">
-						<input tabindex="1" required class="input is-medium" id="address_form_input" type="url" placeholder="Enter the URL of your content">
+						<input tabindex="1" autofocus required class="input is-medium" id="address_form_input" type="url" placeholder="Enter the URL of your content">
 						<i class="fa fa-link"></i>
 					</p>
 					<div class="content margin-top-50">
@@ -231,18 +231,6 @@
 							</div>
 						</div>
 					</div>
-					<%# <div class="columns">
-						<div class="column is-half">
-							<div class="box">
-
-							</div>
-						</div>
-						<div class="column is-half">
-							<div class="box">
-
-							</div>
-						</div>
-					</div>%>
 				</div>
 				<div id="preview-modal-content" class="listing-modal-content is-hidden">
 					<nav class="level">
@@ -274,7 +262,6 @@
 								<p id="stripe-error-message">
 									Please enter your payment information below.
 								</p>
-								<!-- <iframe id="preview-iframe"></iframe> -->
 							</div>
 							<form id="stripe-form" autocomplete="on">
 								<label class="label">Credit or Debit Card Number &#42;</label>
@@ -305,12 +292,6 @@
 								<p class="control is-bold">
 									&#42; Required fields
 								</p>
-								<% if (!user) { %>
-								<small>
-									You are currently checking out as a GUEST. If you wish to create
-									an account, you may do so by using the form below.
-								</small>
-								<% %>
 							</form>
 							<form class="checkbox-form margin-top-10">
 								<input class="is-small" value="agree-to-terms" id="agree-to-terms" type="checkbox" />
@@ -322,20 +303,22 @@
 							<p class="control margin-top-20">
 								<a class="button is-primary is-medium">Confirm &#38; Pay</a>
 							</p>
-							<% %>
+
+							<% if (!user) { %>
 							<div class="content margin-top-25">
 								<h3 class="is-bold">Create an Account</h3>
-								<p>
-									We will send you an email with a corresponding link to get your account set up.
-								</p>
+								</br>
+								<small>
+								You are currently checking out as a guest. If you wish to create
+								an account, enter your email below and we will send you a link to
+								get your account set up. Creating an account allows you to edit
+								your rental at any time.
+								</small>
 							</div>
 							<form>
 								<label class="label">Email Address</label>
 								<p class="control has-addons">
-									<input tabindex="1" class="input is-medium" type="email" />
-									<a class="button is-primary is-medium">
-								    Submit
-								  </a>
+									<input tabindex="1" class="input is-medium" placeholder="Email" type="email" />
 								</p>
 							</form>
 							<% } %>
