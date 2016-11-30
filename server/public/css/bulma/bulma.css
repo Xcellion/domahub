@@ -4084,20 +4084,21 @@ input:-webkit-autofill {
   top: 0;
   background-color: rgba(0, 0, 0, 0.86); }
 
-.modal-container-calendar {
-  margin: 0 auto; }
-  @media screen and (min-width: 980px) {
-    .modal-container-calendar {
-      width: 960px; } }
-  @media screen and (min-width: 1260px) {
-    .modal-container-calendar {
-      width: 1240px; } }
-  @media screen and (min-width: 769px) and (max-width: 979px) {
-    .modal-container-calendar {
-      width: 100%; } }
-  @media screen and (max-width: 768px) {
-    .modal-container-calendar {
-      width: 100%; } }
+@media screen and (min-width: 980px) {
+  .modal-container-calendar {
+    width: 960px; } }
+
+@media screen and (min-width: 1260px) {
+  .modal-container-calendar {
+    width: 1240px; } }
+
+@media screen and (min-width: 769px) and (max-width: 979px) {
+  .modal-container-calendar {
+    width: 100%; } }
+
+@media screen and (max-width: 768px) {
+  .modal-container-calendar {
+    width: 100%; } }
 
 .modal-content, .modal-card {
   max-height: calc(100vh - 120px);

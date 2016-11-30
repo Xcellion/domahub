@@ -28,6 +28,11 @@
   position: relative;
   width: 100%; }
 
+.rental-summary-section {
+  padding: 25px 0; }
+  .rental-summary-section:not(:last-child) {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.12); }
+
 .fc-day-header {
   cursor: pointer; }
   .fc-day-header:hover, .fc-day-header.is-active {

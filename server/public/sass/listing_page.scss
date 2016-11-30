@@ -37,6 +37,14 @@
   width: 100%;
 }
 
+// Rental Summary Box
+.rental-summary-section {
+  padding: 25px 0;
+  &:not(:last-child) {
+    border-bottom: 1px solid $border;
+  }
+}
+
 // Fullcalendar custom styling
 .fc-day-header {
   cursor: pointer;
