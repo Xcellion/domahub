@@ -61,6 +61,7 @@ listing_model.prototype.getVerifiedListing = function(domain_name, callback){
 	query = "SELECT \
 				listings.*,\
 				accounts.username,\
+				!ISNULL(accounts.stripe_user_id) AS stripe_connected,\
 				accounts.profile_pic,\
 				accounts.date_created AS user_created,\
 				accounts.email\

@@ -320,4 +320,8 @@ function errorHandler(message){
 		showModalContent("preview");
 		$("#stripe-error-message").addClass('is-danger').html("There was something wrong with your credit card!<br />Your credit card has not been charged yet.");
 	}
+	else if (message == "Invalid stripe user account!"){
+		showModalContent("preview");
+		$("#summary-error-message").addClass('is-danger').html("There was something wrong with this listing!<br />Your credit card has not been charged yet.");
+	}
 }
