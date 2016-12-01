@@ -94,11 +94,10 @@ listing_model.prototype.getListingRentalsInfo = function(listing_id, callback){
 				rentals.listing_id, \
 				rental_times.date, \
 				rental_times.duration, \
-				accounts.username, \
-				accounts.email \
+				accounts.username \
 			FROM rentals \
 			INNER JOIN rental_times ON rentals.rental_id = rental_times.rental_id \
-			INNER JOIN accounts ON rentals.account_id = accounts.id \
+			LEFT JOIN accounts ON rentals.account_id = accounts.id \
 			WHERE rentals.listing_id = ? \
 			AND rentals.active = 1 \
 			ORDER BY rental_times.date ASC "
