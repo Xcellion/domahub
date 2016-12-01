@@ -30,8 +30,9 @@
 #listings-table td {
   white-space: nowrap; }
 
-#listings-table .td-domain, #listings-table .td-category {
-  width: 100%; }
+@media screen and (min-width: 769px) {
+  #listings-table .td-domain {
+    width: 40%; } }
 
 input[type=range].primary-range {
   -webkit-appearance: none;

@@ -244,16 +244,6 @@
 								</a>
 							</div>
 						</div>
-						<div class="level-right">
-							<div class="level-item">
-								<a tabindex="1" id="checkout-button" class="button is-primary no-shadow">
-									<span class="icon">
-										<i class="fa fa-shopping-cart"></i>
-									</span>
-									<span>Checkout</span>
-								</a>
-							</div>
-						</div>
 					</nav>
 					<div class="columns">
 						<div class="column is-6">
@@ -296,12 +286,17 @@
 							<form class="checkbox-form margin-top-10">
 								<input class="is-small" value="agree-to-terms" id="agree-to-terms" type="checkbox" />
 								<label class="is-small" tabindex="1" for="agree-to-terms">
-									I agree to the Terms & Conditions. I also agree to pay the total amount
+									I agree to the <a class="orange-link">Terms & Conditions</a>. I also agree to pay the total amount
 									shown.
 								</label>
 							</form>
 							<p class="control margin-top-20">
-								<a class="button is-primary is-medium">Confirm &#38; Pay</a>
+								<a id="checkout-button" class="button is-primary is-medium">
+									<span class="icon">
+										<i class="fa fa-check-circle-o"></i>
+									</span>
+									<span>Confirm &#38; Pay</span>
+								</a>
 							</p>
 
 							<% if (!user) { %>
@@ -330,7 +325,7 @@
 							<div class="content">
 								<h1 class="title is-3">Rental Summary</h1>
 								<p>
-									Please take a moment to review the summary above.
+									Please take a moment to review the summary below.
 									You may edit the information on any of the previous
 									pages by clicking the go back button.
 								</p>

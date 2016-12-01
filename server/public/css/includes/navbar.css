@@ -18,7 +18,6 @@
   vertical-align: middle; }
 
 #profile-button {
-  position: static;
   width: 110px; }
   #profile-button.is-active {
     border-radius: 3px 3px 0px 0px; }
@@ -38,7 +37,8 @@
   position: absolute;
   text-align: left;
   top: 46px;
-  width: 200px; }
+  width: 200px;
+  right: 10px; }
 
 .profile-dropdown-menu {
   padding: 5px 15px;
