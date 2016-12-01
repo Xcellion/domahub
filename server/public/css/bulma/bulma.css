@@ -474,7 +474,8 @@ input[type="radio"] {
   vertical-align: baseline; }
 
 small {
-  font-size: 14px; }
+  font-size: 14px;
+  line-height: normal; }
   small.is-white {
     color: white; }
   small.is-black {
@@ -3040,7 +3041,6 @@ input:-webkit-autofill {
     -webkit-transition: all 0.25s ease;
     transition: all 0.25s ease; }
     .card.has-shadow-effect:hover {
-      cursor: pointer;
       box-shadow: 3px 2px 2px 0 rgba(0, 0, 0, 0.14), 0 -1px 2px -1px rgba(0, 0, 0, 0.2), -3px 5px 5px 0 rgba(0, 0, 0, 0.12); }
     .card.has-shadow-effect:active, .card.has-shadow-effect:focus, .card.has-shadow-effect.is-active {
       outline: none;
