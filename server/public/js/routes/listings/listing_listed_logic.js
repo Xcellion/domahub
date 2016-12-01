@@ -59,15 +59,17 @@ $(document).ready(function() {
 
 		var card_type = $.payment.cardType($("#cc-num").val());
 		if (card_type == "dinersclub") { card_type = "diners-club"}
+		if (["maestro", "unionpay", "forbrugsforeningen", "dankort"].indexOf(card_type) != -1){ card_type = null}
 
 		//show appropriate card icon
 		if ($(".fa-cc-" + card_type) && card_type){
-			$(".cc-icon").addClass('is-hidden');
-			$(".fa-cc-" + card_type).removeClass('is-hidden');
+			$("#cc-icon").removeClass();
+			$("#cc-icon").addClass("fa fa-cc-" + card_type);
 		}
+		//or show default
 		else {
-			$(".cc-icon").addClass('is-hidden');
-			$(".fa-credit-card").removeClass('is-hidden');
+			$("#cc-icon").removeClass();
+			$("#cc-icon").addClass("fa fa-credit-card");
 		}
 	});
 	$("#agree-to-terms").on('change', function(){
