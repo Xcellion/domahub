@@ -47,6 +47,7 @@
 
 // Fullcalendar custom styling
 .fc-day-header {
+  cursor: default;
   &.is-active {
     background-color: rgba(60,188,141,0.3);
     cursor: pointer;
