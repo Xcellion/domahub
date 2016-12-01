@@ -39,10 +39,14 @@
   td {
     white-space: nowrap;
   }
+  .td-price {
+    width: 110px;
+  }
+  .td-categories {
+    width: 150px;
+  }
   .td-domain {
-    @include tablet {
-      width: 40%;
-    }
+    width: auto;
   }
 }
 
