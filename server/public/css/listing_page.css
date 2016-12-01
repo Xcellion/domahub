@@ -40,3 +40,6 @@
 
 .fc-content {
   text-align: center; }
+
+.temp-cell:hover {
+  background-color: rgba(60, 188, 141, 0.3); }

@@ -461,7 +461,13 @@ hr {
   margin: 40px 0; }
 
 img {
-  max-width: 100%; }
+  max-width: 100%;
+  user-drag: none;
+  user-select: none;
+  -moz-user-select: none;
+  -webkit-user-drag: none;
+  -webkit-user-select: none;
+  -ms-user-select: none; }
 
 input[type="checkbox"],
 input[type="radio"] {
@@ -2912,7 +2918,9 @@ input:-webkit-autofill {
   box-shadow: 0px 2px 5px 0 rgba(0, 0, 0, 0.38);
   background-color: rgba(0, 0, 0, 0.12);
   display: flex;
-  min-height: 40px; }
+  min-height: 40px;
+  align-items: stretch;
+  justify-content: space-between; }
   .card-header.no-shadow {
     -webkit-box-shadow: 0px 0px 2px 0 rgba(0, 0, 0, 0.38);
     -moz-box-shadow: 0px 0px 2px 0 rgba(0, 0, 0, 0.38);
@@ -2967,9 +2975,13 @@ input:-webkit-autofill {
 .card-header-icon {
   align-items: center;
   cursor: pointer;
+  color: rgba(0, 0, 0, 0.38);
   display: flex;
+  font-size: 20px;
   justify-content: center;
   width: 40px; }
+  .card-header-icon:hover, .card-header-icon:active, .card-header-icon:focus {
+    color: rgba(0, 0, 0, 0.9); }
   .card-header-icon.is-active {
     color: #3cbc8d; }
 
@@ -3008,16 +3020,16 @@ input:-webkit-autofill {
   width: 300px; }
   .card:not(:last-child) {
     margin-bottom: 25px; }
-  .card.no-shadow {
-    border: 1px solid rgba(0, 0, 0, 0.12);
-    -webkit-box-shadow: 0 0 0 0 black;
-    -moz-box-shadow: 0 0 0 0 black;
-    box-shadow: 0 0 0 0 black; }
   .card .media:not(:last-child) {
     margin-bottom: 10px; }
   @media screen and (max-width: 768px) {
     .card {
       margin: auto; } }
+  .card.no-shadow {
+    border: 1px solid rgba(0, 0, 0, 0.12);
+    -webkit-box-shadow: 0 0 0 0 black;
+    -moz-box-shadow: 0 0 0 0 black;
+    box-shadow: 0 0 0 0 black; }
   .card.is-fullwidth {
     width: 100%; }
   .card.is-rounded {
@@ -3033,6 +3045,8 @@ input:-webkit-autofill {
     .card.has-shadow-effect:active, .card.has-shadow-effect:focus, .card.has-shadow-effect.is-active {
       outline: none;
       box-shadow: 3px 10px 10px 0 rgba(0, 0, 0, 0.14), 0 -1px 5px -2px rgba(0, 0, 0, 0.2), -3px 10px 10px 0 rgba(0, 0, 0, 0.12); }
+  .card.min-height {
+    min-height: 350px; }
   .card.is-transparent {
     background-color: transparent;
     box-shadow: none;
