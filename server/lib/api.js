@@ -64,7 +64,8 @@ function getCurrentRental(req, res, domain_name){
 				console.log("Currently rented! Proxying request to " + result.info[0].address);
 				req.session.hostname = url.parse(result.info[0].address).hostname;
 				req.session.rented = result.info[0].address;
-				proxyReq(req, res);
+				//proxyReq(req, res);
+				req.pipe(request(result.info[0].address)).pipe(res);
 			}
 		});
 	}
