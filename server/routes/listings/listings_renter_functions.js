@@ -146,15 +146,14 @@ module.exports = {
 							 req.socket.remoteAddress ||
 							 req.connection.socket.remoteAddress;
 
-				history_info = {
-					account_id: account_id,			//who searched if who exists
-					domain_name: domain_name.toLowerCase(),		//what they searched for
-					timestamp: now,		//when they searched for it
-					user_ip : user_ip
-				}
-
 				//add to search history if its not localhost
-				if (user_ip != "::1"){
+				if (user_ip != "::1" && user_ip != "::ffff:127.0.0.1" && user_ip != "127.0.0.1"){
+					var history_info = {
+						account_id: account_id,			//who searched if who exists
+						domain_name: domain_name.toLowerCase(),		//what they searched for
+						timestamp: now,		//when they searched for it
+						user_ip : user_ip
+					}
 					Data.newSearchHistory(history_info, function(result){});	//async
 				}
 
