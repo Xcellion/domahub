@@ -333,8 +333,6 @@ module.exports = {
 					req.session.listing_info.rentals = joinRentalTimes(req.session.listing_info.rentals);
 				}
 
-				//its being added, but the rental times arent properly formatted so its still bypassing the crosstimecheck
-
 				delete req.session.new_rental_info;
 
 				res.send({

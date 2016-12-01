@@ -61,7 +61,7 @@ function getCurrentRental(req, res, domain_name){
 			}
 			else {
 				//current rental exists!
-				console.log("Currently rented! Proxying request...");
+				console.log("Currently rented! Proxying request to " + result.info[0].address);
 				req.session.hostname = url.parse(result.info[0].address).hostname;
 				req.session.rented = result.info[0].address;
 				proxyReq(req, res);
@@ -98,6 +98,7 @@ function proxyReq(req, res){
 			error.handler(req, res, false, "api");
 		}
 		else {
+			console.log(body);
 			res.setHeader("content-type", response.headers["content-type"]);
 			res.send(body);
 		}
