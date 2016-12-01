@@ -51,7 +51,6 @@ function getCurrentRental(req, res, domain_name){
 	//get the current rental for the listing
 	if (req.session.rented){
 		//proxyReq(req, res, req.session.rented);
-		console.log(req.session.cookie);
 
 		//proxy the request
 		req.pipe(request(req.session.rented)).pipe(res);
@@ -72,6 +71,7 @@ function getCurrentRental(req, res, domain_name){
 
 				//proxy the request
 				req.pipe(request(result.info[0].address)).pipe(res);
+
 				//req.session.hostname = url.parse(result.info[0].address).hostname;
 				//proxyReq(req, res);
 			}
@@ -107,10 +107,8 @@ function proxyReq(req, res){
 			error.handler(req, res, false, "api");
 		}
 		else {
-			console.log(body);
 			res.setHeader("content-type", response.headers["content-type"]);
-			res.write(body,'binary');
-    		res.end(null, 'binary');
+			res.send(body);
 		}
 	});
 }
