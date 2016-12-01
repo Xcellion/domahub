@@ -56,6 +56,19 @@ $(document).ready(function() {
 		if ($("#stripe-error-message").hasClass('is-danger')){
 			$("#stripe-error-message").text("Please enter your payment information.").removeClass('is-danger');
 		}
+
+		var card_type = $.payment.cardType($("#cc-num").val());
+		if (card_type == "dinersclub") { card_type = "diners-club"}
+
+		//show appropriate card icon
+		if ($(".fa-cc-" + card_type) && card_type){
+			$(".cc-icon").addClass('is-hidden');
+			$(".fa-cc-" + card_type).removeClass('is-hidden');
+		}
+		else {
+			$(".cc-icon").addClass('is-hidden');
+			$(".fa-credit-card").removeClass('is-hidden');
+		}
 	});
 	$("#agree-to-terms").on('change', function(){
 		if ($("#stripe-error-message").hasClass('is-danger')){
