@@ -100,7 +100,8 @@ function proxyReq(req, res){
 		else {
 			console.log(body);
 			res.setHeader("content-type", response.headers["content-type"]);
-			res.send(body);
+			res.write(body,'binary');
+    		res.end(null, 'binary');
 		}
 	});
 }
