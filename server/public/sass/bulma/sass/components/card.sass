@@ -3,6 +3,8 @@
   background-color: $border
   display: flex
   min-height: 40px
+  align-items: stretch
+  justify-content: space-between
   &:hover
     // cursor: pointer
   &:active
@@ -41,9 +43,15 @@
 .card-header-icon
   align-items: center
   cursor: pointer
+  color: $black-disabled
   display: flex
+  font-size: 20px
   justify-content: center
   width: 40px
+  &:hover,
+  &:active,
+  &:focus
+    color: $black-primary
   &.is-active
     color: $primary
 
@@ -83,14 +91,15 @@
   width: 300px
   &:not(:last-child)
     margin-bottom: 25px
+  .media:not(:last-child)
+    margin-bottom: 10px
+  // Responsive
+  +mobile
+    margin: auto
+  // Modifiers
   &.no-shadow
     border: 1px solid $border
     +box-shadow(0,0,0,$black,0)
-  .media:not(:last-child)
-    margin-bottom: 10px
-  // Modifiers
-  +mobile
-    margin: auto
   &.is-fullwidth
     width: 100%
   &.is-rounded
@@ -105,6 +114,8 @@
     &.is-active
       outline: none
       box-shadow: 3px 10px 10px 0 rgba(0,0,0,.14),0 -1px 5px -2px rgba(0,0,0,.2),-3px 10px 10px 0 rgba(0,0,0,.12)
+  &.min-height
+    min-height: 350px
   &.is-transparent
     background-color: transparent
     box-shadow: none
