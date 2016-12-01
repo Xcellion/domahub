@@ -50,7 +50,8 @@ function checkHost(req, res, next){
 function getCurrentRental(req, res, domain_name){
 	//get the current rental for the listing
 	if (req.session.rented){
-		proxyReq(req, res, req.session.rented);
+		//proxyReq(req, res, req.session.rented);
+		req.pipe(request(result.info[0].address)).pipe(res);
 	}
 	else {
 		Listing.getCurrentRental(domain_name, function(result){
