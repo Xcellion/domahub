@@ -39,8 +39,10 @@
   td {
     white-space: nowrap;
   }
-  .td-domain, .td-category {
-    width: 100%;
+  .td-domain {
+    @include tablet {
+      width: 40%;
+    }
   }
 }
 

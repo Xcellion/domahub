@@ -867,6 +867,8 @@ a.box {
   justify-content: center;
   text-align: center;
   white-space: nowrap; }
+  .button:focus {
+    outline-color: rgba(0, 0, 0, 0.66); }
   .button[disabled], .button.is-disabled {
     background-color: rgba(0, 0, 0, 0.12);
     border-color: rgba(0, 0, 0, 0.12);
@@ -1620,6 +1622,8 @@ input:-webkit-autofill {
   border-radius: 3px;
   max-width: 100%;
   width: 100%; }
+  .input:focus, .textarea:focus {
+    outline-color: rgba(0, 0, 0, 0.66); }
   .input[disabled], [disabled].textarea, .input.is-disabled, .is-disabled.textarea {
     background-color: rgba(0, 0, 0, 0.12);
     border-color: rgba(0, 0, 0, 0.12);
@@ -1745,6 +1749,8 @@ input:-webkit-autofill {
     display: block;
     outline: none;
     padding-right: 36px; }
+    .select select:focus {
+      outline-color: rgba(0, 0, 0, 0.66); }
     .select select[disabled], .select select.is-disabled {
       background-color: rgba(0, 0, 0, 0.12);
       border-color: rgba(0, 0, 0, 0.12);
@@ -5592,12 +5598,8 @@ a.nav-item {
   @media screen and (max-width: 768px) {
     .section.is-medium {
       padding: 60px 20px; } }
-  @media screen and (min-width: 980px) {
-    .section.is-medium-top {
-      padding: 120px 20px 0; } }
-  @media screen and (max-width: 768px) {
-    .section.is-medium-top {
-      padding: 60px 20px; } }
+  .section.is-medium-top {
+    padding: 120px 20px 0; }
   @media screen and (min-width: 980px) {
     .section.is-large {
       padding: 200px 20px; } }
@@ -5709,7 +5711,7 @@ a.nav-item {
   margin: 0;
   color: rgba(255, 255, 255, 0.7);
   font-size: 14px; }
-  .footer-bar-item:hover {
+  .footer-bar-item:hover:not(:first-child) {
     color: white; }
   .footer-bar-item:not(:first-child) {
     margin-left: 15px; }

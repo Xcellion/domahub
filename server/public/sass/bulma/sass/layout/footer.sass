@@ -62,7 +62,8 @@
   color: $white-secondary
   font-size: $size-7
   &:hover
-    color: $white
+    &:not(:first-child)
+      color: $white
   &:not(:first-child)
     margin-left: 15px
 
