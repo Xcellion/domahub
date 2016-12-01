@@ -50,21 +50,30 @@ function checkHost(req, res, next){
 function getCurrentRental(req, res, domain_name){
 	//get the current rental for the listing
 	if (req.session.rented){
-		proxyReq(req, res, req.session.rented);
+		//proxyReq(req, res, req.session.rented);
+
+		//proxy the request
+		req.pipe(request(req.session.rented)).pipe(res);
 	}
+
+	//rental doesnt exist in the session
 	else {
 		Listing.getCurrentRental(domain_name, function(result){
 			if (result.state != "success" || result.info.length == 0){
 				console.log("Not rented! Redirecting to listing page");
 				delete req.session.rented;
-				res.redirect("https://domahub.com/listing/" + domain_name)
+				res.redirect("https://domahub.com/listing/" + domain_name);
 			}
 			else {
 				//current rental exists!
-				console.log("Currently rented! Proxying request...");
-				req.session.hostname = url.parse(result.info[0].address).hostname;
+				console.log("Currently rented! Proxying request to " + result.info[0].address);
 				req.session.rented = result.info[0].address;
-				proxyReq(req, res);
+
+				//proxy the request
+				req.pipe(request(result.info[0].address)).pipe(res);
+
+				//req.session.hostname = url.parse(result.info[0].address).hostname;
+				//proxyReq(req, res);
 			}
 		});
 	}

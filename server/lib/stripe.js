@@ -162,8 +162,8 @@ module.exports = {
 			var total_price = req.session.new_rental_info.price * 100;		//USD in cents
 
 			//doma fee if the listing is basic (aka premium hasn't expired)
-			var doma_fees = (req.session.new_rental_info.premium) ? (total_price * 0.15).toFixed(2) : 0;
-			var stripe_fees = (Math.round(total_price * 0.029)) + 30;
+			var doma_fees = (req.session.new_rental_info.premium) ? 0 : Math.round(total_price * 0.15);
+			var stripe_fees = Math.round(total_price * 0.029) + 30;
 
 			var stripeOptions = {
 				amount: total_price,
@@ -205,7 +205,7 @@ module.exports = {
 		// Redirect to Stripe /oauth/authorize endpoint
 		res.redirect("https://connect.stripe.com/oauth/authorize" + "?" + qs.stringify({
 			response_type: "code",
-			scope: "read_only",
+			scope: "read_write",
 			state: "domahubrules",
 			client_id: "ca_997O55c2IqFxXDmgI9B0WhmpPgoh28s3",
 			stripe_user: {
