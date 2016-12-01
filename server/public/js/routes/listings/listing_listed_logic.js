@@ -52,7 +52,27 @@ $(document).ready(function() {
 	})
 
 	//to remove any stripe error messages
-	$(".stripe-input").change(function(){
+	$(".stripe-input").on("change keyup paste", function(){
+		if ($("#stripe-error-message").hasClass('is-danger')){
+			$("#stripe-error-message").text("Please enter your payment information.").removeClass('is-danger');
+		}
+
+		var card_type = $.payment.cardType($("#cc-num").val());
+		if (card_type == "dinersclub") { card_type = "diners-club"}
+		if (["maestro", "unionpay", "forbrugsforeningen", "dankort"].indexOf(card_type) != -1){ card_type = null}
+
+		//show appropriate card icon
+		if ($(".fa-cc-" + card_type) && card_type){
+			$("#cc-icon").removeClass();
+			$("#cc-icon").addClass("fa fa-cc-" + card_type);
+		}
+		//or show default
+		else {
+			$("#cc-icon").removeClass();
+			$("#cc-icon").addClass("fa fa-credit-card");
+		}
+	});
+	$("#agree-to-terms").on('change', function(){
 		if ($("#stripe-error-message").hasClass('is-danger')){
 			$("#stripe-error-message").text("Please enter your payment information.").removeClass('is-danger');
 		}
@@ -66,6 +86,9 @@ $(document).ready(function() {
 		if (bool == true && unlock){
 			unlock = false;
 			$("#stripe-form").submit();
+		}
+		else {
+			$(this).removeClass('is-loading');
 		}
 	});
 
@@ -240,6 +263,26 @@ function checkSubmit(){
 		bool = "Invalid URL!";
 		errorHandler(bool);
 	}
+	else if (!$("#cc-num").val()){
+		bool = "Invalid cc number!";
+		$("#stripe-error-message").addClass('is-danger').html("Please provide a credit card to charge.");
+	}
+	else if (!$("#cc-exp").val()){
+		bool = "Invalid cc exp!";
+		$("#stripe-error-message").addClass('is-danger').html("Please provide your credit card expiration date.");
+	}
+	else if (!$("#cc-cvc").val()){
+		bool = "Invalid cvc!";
+		$("#stripe-error-message").addClass('is-danger').html("Please provide your credit card CVC number.");
+	}
+	else if (!$("#cc-zip").val()){
+		bool = "Invalid zip Code!";
+		$("#stripe-error-message").addClass('is-danger').html("Please provide a ZIP code.");
+	}
+	else if (!$("#agree-to-terms").prop('checked')){
+		bool = "Invalid terms!";
+		$("#stripe-error-message").addClass('is-danger').html("You must agree to the terms and conditions.");
+	}
 	else if (newEvents.length > 0){
 		for (var x = 0; x < newEvents.length; x++){
 			if (!newEvents[x].old){
@@ -289,9 +332,9 @@ function submitRentals(stripeToken){
 			unlock = true;
 			if (data.unavailable){
 				for (var x = 0; x < data.unavailable.length; x++){
-					$('#calendar').fullCalendar('removeEvents', data.unavailable[x]._id);
 					showModalContent("calendar");
-					$("#address-error-message").addClass('is-danger').html("Some dates were unavailable! They have been removed from your selection.<br />Your credit card has not been charged yet.");
+					$('#calendar').fullCalendar('removeEvents', data.unavailable[x]._id);
+					$("#calendar-error-message").addClass('is-danger').html("Some dates/times were unavailable! They have been removed from your selection.<br />Your credit card has not been charged yet.");
 				}
 			}
 			else if (data.state == "success"){

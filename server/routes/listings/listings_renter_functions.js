@@ -247,7 +247,7 @@ module.exports = {
 					req.session.new_rental_info.owner_stripe_id = result.info[0].stripe_user_id;	//stripe id
 
 					//premium or basic listing expiration date
-					if (result.info[0].exp_date && result.info[0].exp_date < (new Date).getTime()){
+					if (result.info[0].exp_date != 0 && result.info[0].exp_date > (new Date).getTime()){
 						req.session.new_rental_info.premium = true;
 					}
 
@@ -317,13 +317,23 @@ module.exports = {
 		var owner_hash_id = req.session.new_rental_info.owner_hash_id;
 
 		Listing.toggleActivateRental(rental_id, function(result){
-			delete req.session.new_rental_info;
-			if (result.state != "success"){error.handler(req, res, result.description);}
+			if (result.state != "success"){
+				delete req.session.new_rental_info;
+				error.handler(req, res, result.description);
+			}
 			else {
 				//update the req.users.rentals object if necessary
 				if (req.user){
 					updateUserRentalsObject(req.user.rentals, domain_name);
 				}
+
+				//update the session listing info rentals
+				if (req.session.listing_info.rentals){
+					req.session.listing_info.rentals.push(req.session.new_rental_info);
+					req.session.listing_info.rentals = joinRentalTimes(req.session.listing_info.rentals);
+				}
+
+				delete req.session.new_rental_info;
 
 				res.send({
 					state: "success",
@@ -424,7 +434,7 @@ function crossCheckRentalTime(existing_times, new_times, callback){
 			//check for any overlaps that prevent it from being created
 			if (checkOverlap(user_start, user_duration, existing_times[x].date, existing_times[x].duration)){
 				totally_new = false;
-				unavailable.push(user_times[y]);
+				unavailable.push(new_times[y]);
 			}
 		}
 
