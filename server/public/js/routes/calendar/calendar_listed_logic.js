@@ -186,10 +186,12 @@ function createExisting(rentals){
 			account_id: rentals[x].account_id
 		};
 
-		if (user.id == rentals[x].account_id){
-			eventData.title = user.username || "Guest";
+		//if its your own rental
+		if (user && user.id == rentals[x].account_id){
+			eventData.title = user.username;
 			eventData.color = "#73c8e3";
 		}
+		//someone else rented it
 		else {
 			eventData.title = "Rented!";
 			eventData.color = "#ff6b40";
