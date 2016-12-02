@@ -37,67 +37,75 @@ $(document).ready(function() {
 			//background for all days until today
 			{
 				start: '1970-01-01T00:00:00',
-				end: moment().format("YYYY-MM-DD"),
-				rendering: 'background'
+				end:  moment().endOf("hour"),
+				rendering: 'background',
+				id: "background_today"
 			},
-			//all day background event (for month view)
+			//all day background event (month view)
 			{
 				start: '1970-01-01T00:00:00',
 				end: moment().format("YYYY-MM-DD"),
 				rendering: 'background',
 				allDay: true
 			},
-			//background for today
+			//background for 1 year out
 			{
-				start: moment().format("YYYY-MM-DD"),
-				end: moment(),
+				start: moment().add(1, "year").startOf("hour"),
+				end: moment().add(2, "year"),
+				rendering: 'background'
+			},
+			//all day background event for 1 year out (month view)
+			{
+				start: moment().add(1, "year"),
+				end: moment().add(2, "year"),
 				rendering: 'background',
-				id: "background_today"
-			}
+				allDay: true
+			},
 		],
 
-		//prevent selecting anything before now
+		//prevent selecting anything before current hour, and next year
 		selectConstraint: {
-			start: moment(new Date().getTime()),
-			end: moment(new Date().getTime() + 31556952000)
+			start: moment().endOf("hour"),
+			end: moment().add(1, "year")
 		},
 
-		//prevent calendar from going back in past
+		//callback when view is changed
 		viewRender: function(currentView){
-			var minDate = moment();
+			var minDate = moment();						//prevent calendar from going back in past
+			var maxDate = moment().add(1, "year");		//prevent calendar from going further than 1 year
 
-			if (minDate >= currentView.start && minDate <= currentView.end) {
-				$(".fc-prev-button").prop('disabled', true);
-				$(".fc-prev-button").addClass('fc-state-disabled');
+			//dim today or not
+			if (moment().isBetween(currentView.start, currentView.end)){
+				$("#today-button").addClass('is-disabled');
 			}
 			else {
+				$("#today-button").removeClass('is-disabled');
+			}
+
+			//dim previous button
+			if (currentView.start.isSameOrBefore(minDate)) {
+				$(".fc-prev-button").prop('disabled', true);
+				$(".fc-prev-button").addClass('fc-state-disabled');
+				$(".fc-next-button").removeClass('fc-state-disabled');
+				$(".fc-next-button").prop('disabled', false);
+			}
+			//dim next button
+			else if (currentView.end.isSameOrAfter(maxDate)){
+				$(".fc-next-button").prop('disabled', true);
+				$(".fc-next-button").addClass('fc-state-disabled');
 				$(".fc-prev-button").removeClass('fc-state-disabled');
 				$(".fc-prev-button").prop('disabled', false);
 			}
-
-			if (currentView.name == "agendaWeek"){
-				//day selector event handlers
-				daySelectionHandlers();
-
-				//hover highlight only on agendaweek view
-				$('.fc-widget-content').hover(function(){
-					var temp_height = $(this).height()
-			        if(!$(this).html()){
-			            for(i=0;i<7;i++){
-							var temp_cell = $("<td class='temp-cell'></td>");
-							temp_cell.css({
-								width: $(this).width() / 7,
-								height: temp_height,
-								border: 0
-							});
-			                $(this).append(temp_cell);
-			            }
-			        }
-			    }, function(){
-			        $(this).children('.temp-cell').remove();
-			    });
+			//undim both
+			else {
+				$(".fc-prev-button, .fc-next-button").removeClass('fc-state-disabled');
+				$(".fc-prev-button, .fc-next-button").prop('disabled', false);
 			}
 
+			if (currentView.name == "agendaWeek"){
+				daySelectionHandlers();		//day selector event handlers
+				highlightCellHover();		//highlight cell hover
+			}
 		},
 
 		//creating new events
@@ -122,6 +130,11 @@ $(document).ready(function() {
 		eventAfterRender: function(event, element, view ) {
 			$(element).attr("id", event._id);
 
+			//event handler for event click on non-background events
+			if (!$(element).hasClass("fc-bgevent")){
+				eventSelectionHandlers(element);
+			}
+
 			//center title / date / time
 			$(element).find(".fc-content").css({
 				left: "50%",
@@ -138,6 +151,7 @@ $(document).ready(function() {
 					$(element).find('.fc-content').text("");
 				}
 			}
+			//fatten event height in month view
 			else {
 				$(element).css("height", "50px");
 			}
@@ -170,6 +184,29 @@ $(document).ready(function() {
 	});
 });
 
+//--------------------------------------------------------------------------------------------------------------------------------
+
+//helper function to highlight individual agendaweek cells
+function highlightCellHover(){
+	//hover highlight only on agendaweek view
+	$('.fc-widget-content').hover(function(){
+		var temp_height = $(this).height();
+		if(!$(this).html()){
+			for( i = 0; i < 7; i++){
+				var temp_cell = $("<td class='temp-cell'></td>");
+				temp_cell.css({
+					width: $(this).width() / 7,
+					height: temp_height,
+					border: 0
+				});
+				$(this).append(temp_cell);
+			}
+		}
+	}, function(){
+		$(this).children('.temp-cell').remove();
+	});
+}
+
 //helper function to create pre-existing rentals
 function createExisting(rentals){
 	for (var x = 0; x < rentals.length; x++){
@@ -198,69 +235,22 @@ function createExisting(rentals){
 	}
 }
 
-//--------------------------------------------------------------------------------------------------------------------------------
-
-var mouseDownJsEvent;
-var mouseDownCalEvent;
-var alldayMouseDown, alldayMouseUp, alldayMouseEnter, alldayMouseLeave, alldayMouseLeaveElem, wasActive;
-
-$(document).on("mousedown", ".fc-event", function(e){
-	//only left click
-	if (e.which == 1){
-		mouseDownCalEvent = $("#calendar").fullCalendar('clientEvents', $(this).attr("id"))[0];
-
-		//figure out the index of the <td> within the parent <tr> then we can use that number to figure out which day was picked
-		console.log($(e.target).index(), $(e.target).index($(e.target)));
-		if (!mouseDownCalEvent.old){
-			mouseDownJsEvent = e;
-		}
-	}
-});
-
-$(document).on("mouseup", ".fc-event", function(mouseUpJsEvent){
-	//only left click
-	if (mouseUpJsEvent.which == 1){
-		var view = $('#calendar').fullCalendar('getView');
-
-		if (view.type != "month"){
-			var mouseUpCalEvent = $("#calendar").fullCalendar('clientEvents', $(this).attr("id"))[0];
-
-			//if its my event
-			if (!mouseUpCalEvent.old){
-				//if mousedown exists and the mousedown event is the same as the mouseup event
-				if (mouseDownJsEvent && mouseDownCalEvent._id == mouseUpCalEvent._id){
-					//get the time slots of both mousedown and mouseup
-					var mouseDownSlot = getTimeSlot(mouseUpCalEvent, mouseDownJsEvent);
-					var mouseUpSlot = getTimeSlot(mouseUpCalEvent, mouseUpJsEvent);
-
-					var mouseDown_start = moment(mouseDownSlot.start).format('YYYY-MM-DD HH:mm');
-					var mouseUp_start = moment(mouseUpSlot.start).format('YYYY-MM-DD HH:mm');
-
-					//moved down or stayed the same
-					if (mouseDown_start <= mouseUp_start){
-						//remove the time slots in between mousedown and mouseup from the event
-						removeEventTimeSlot(mouseUpCalEvent, mouseDownSlot, mouseUpSlot);
-					}
-					//moved up
-					else {
-						//same function, but reversed the mousedown and mouseup, genius
-						removeEventTimeSlot(mouseUpCalEvent, mouseUpSlot, mouseDownSlot);
-					}
-				}
-				mouseDownCalEvent = {};
-				mouseDownJsEvent = {};
-			}
-			storeCookies("local_events");
-			eventPrices();
-		}
-	}
-});
-
 //function to handle selection of days
 function daySelectionHandlers(){
+	var alldayMouseDown, alldayMouseUp, alldayMouseEnter, alldayMouseLeave, alldayMouseLeaveElem, wasActive;
 
-	//make it unselectable to prevent highlighting annoyance
-	$(".fc-day-header").addClass('is-unselectable');
+	//make it unselectable to prevent highlighting, gray if its past/future
+	$(".fc-day-header").each(function(){
+		var this_date = moment($(this).data("date"));
+		if (this_date.isBefore(moment().startOf("day"))){
+			$(this).addClass("is-disabled");
+		}
+		else if (this_date.isAfter(moment().add(1, "year").startOf("day"))){
+			$(this).addClass("is-disabled");
+		}
+
+		$(this).addClass('is-unselectable');
+	});
 
 	//create all day events
 	$(".fc-day-header").mousedown(function(e){
@@ -284,8 +274,10 @@ function daySelectionHandlers(){
 			var start = (alldayMouseUp < alldayMouseDown) ? alldayMouseUp : alldayMouseDown;
 			var end = (alldayMouseUp < alldayMouseDown) ? moment(alldayMouseDown._d.getTime() + 86400000) : moment(alldayMouseUp._d.getTime() + 86400000);
 
-			var now = new moment();
-			start = (start <= now) ? moment(now).add(1, "hour").startOf('hour') : start; //to select a partial day entirely
+			var now = moment();
+			var then = moment().add(1, "year");
+			start = (start.isSameOrBefore(now)) ? moment(now).add(1, "hour").startOf('hour') : start; 	//to select a partial day entirely (past)
+			end = (end.isSameOrAfter(then)) ? then.startOf('hour') : end; 								//to select a partial day entirely (future)
 
 			//prevent calendar from creating events in the past
 			if (start <= now || end <= now){
@@ -353,11 +345,75 @@ function daySelectionHandlers(){
 	});
 }
 
+var mouseDownJsEvent;
+var mouseDownCalEvent;
+
+//function to handle selection of events
+function eventSelectionHandlers(element){
+	element.on("mousedown", function(e){
+		//only left click
+		if (e.which == 1){
+			var eventElem = $(e.target).closest(".fc-event");
+			var view = $('#calendar').fullCalendar('getView');
+
+			if (view.type == "agendaWeek"){
+				mouseDownCalEvent = $("#calendar").fullCalendar('clientEvents', eventElem.attr("id"))[0];
+				if (!mouseDownCalEvent.old){
+					mouseDownJsEvent = e;
+				}
+			}
+			else {
+				mouseDownCalEvent = getTimeSlotMonth(e);
+			}
+		}
+	});
+
+	element.on("mouseup", function(mouseUpJsEvent){
+		//only left click
+		if (mouseUpJsEvent.which == 1){
+			var eventElem = $(mouseUpJsEvent.target).closest(".fc-event");
+			var view = $('#calendar').fullCalendar('getView');
+
+			if (view.type == "agendaWeek"){
+				var mouseUpCalEvent = $("#calendar").fullCalendar('clientEvents', eventElem.attr("id"))[0];
+
+				//if its my event
+				if (!mouseUpCalEvent.old){
+					//if mousedown exists and the mousedown event is the same as the mouseup event
+					if (mouseDownJsEvent && mouseDownCalEvent._id == mouseUpCalEvent._id){
+						//get the time slots of both mousedown and mouseup
+						var mouseDownSlot = getTimeSlotAgenda(mouseUpCalEvent, mouseDownJsEvent);
+						var mouseUpSlot = getTimeSlotAgenda(mouseUpCalEvent, mouseUpJsEvent);
+
+						//moved down or stayed the same
+						if (mouseDownSlot.start.isSameOrBefore(mouseUpSlot.start)){
+							//remove the time slots in between mousedown and mouseup from the event
+							removeEventTimeSlot(mouseUpCalEvent, mouseDownSlot, mouseUpSlot);
+						}
+						//moved up
+						else {
+							//same function, but reversed the mousedown and mouseup, genius
+							removeEventTimeSlot(mouseUpCalEvent, mouseUpSlot, mouseDownSlot);
+						}
+					}
+					mouseDownCalEvent = {};
+					mouseDownJsEvent = {};
+				}
+				storeCookies("local_events");
+				eventPrices();
+			}
+			else {
+				mouseUpCalEvent = getTimeSlotMonth(mouseUpJsEvent);
+			}
+		}
+	});
+}
+
 //helper function to determine the time slot of a mouse event
-function getTimeSlot(calEvent, jsEvent){
+function getTimeSlotAgenda(calEvent, jsEvent){
 	var datetime = "";
-	var rows = $(jsEvent.delegateTarget).find("[data-time]");
-	var days = $(jsEvent.delegateTarget).find("[data-date]");
+	var rows = $(document).find("[data-time]");
+	var days = $(document).find("[data-date]");
 
 	//find the day of the clicked on event
 	for (var y = 0; y < days.length; y++){
@@ -385,53 +441,70 @@ function getTimeSlot(calEvent, jsEvent){
 			break;
 		}
 	}
-	var removeStart = new Date(datetime);
-	var removeEnd = moment(removeStart).add(1, "hour");
+	var removeStart = moment(new Date(datetime));
+	var removeEnd = moment(removeStart).add(1, "hour"); //clone the moment before adding an hour
 
+	console.log(removeStart, removeEnd);
 	return {
 		start: removeStart,
 		end: removeEnd
 	}
 }
 
+//helper function to determine the time slot of a mouse event (for month view)
+function getTimeSlotMonth(jsEvent){
+	//figure out the index of the <td> within the parent <tr> then we can use that number to figure out which day was picked
+	var nth_day = $(jsEvent.target).parent("td").index();
+	var num_days =$(jsEvent.target).parent("td").prop("colspan");
+
+	//if the event is longer than a day
+	if (num_days){
+		var width_of_cell = Math.floor($(jsEvent.target).outerWidth() / $(jsEvent.target).parent("td").prop("colspan"));
+
+		for (var x = 0; x < num_days ; x++){
+			if (width_of_cell * x <= jsEvent.offsetX && width_of_cell * (x+1) > jsEvent.offsetX){
+				nth_day += x;
+				break;
+			}
+		}
+	}
+	var day_elem = $($(jsEvent.target).closest(".fc-week").find(".fc-day")[nth_day]).data('date');
+	console.log(day_elem);
+	return day_elem;
+}
+
 //helper function to remove time slots from an event
 function removeEventTimeSlot(calEvent, mouseDownSlot, mouseUpSlot){
-	var calEvent_start = moment(calEvent.start)._d.getTime();
-	var calEvent_end = moment(calEvent.end)._d.getTime();
-
-	var mouseDown_start = moment(mouseDownSlot.start)._d.getTime();
-	var mouseUp_end = moment(mouseUpSlot.end)._d.getTime();
-
 	//event is equal to slot
-	if (calEvent_start >= mouseDown_start
-		&& calEvent_end <= mouseUp_end){
+	if (calEvent.start.isSameOrAfter(mouseDownSlot.start)
+		&& calEvent.end.isSameOrBefore(mouseUpSlot.end)){
 			$('#calendar').fullCalendar('removeEvents', calEvent._id);
 			$('#calendar').fullCalendar('updateEvent', calEvent);
-			//console.log('event equal to slot');
+			console.log('event equal to slot');
 	}
 	//if clipping starts at top of event
-	else if (calEvent_start == mouseDown_start){
+	else if (calEvent.start.isSame(mouseDownSlot.start)){
 		calEvent.start = mouseUpSlot.end;
 		calEvent.title = moneyFormat.to(eventPrice({
 			start: calEvent.start,
 			end: calEvent.end
 		}).totalPrice);
 		$('#calendar').fullCalendar('updateEvent', calEvent);
-		//console.log('clipping at top');
+		console.log('clipping at top');
 	}
 	//if clipping starts at middle of event and goes all the way
-	else if (calEvent_end == mouseUp_end){
+	else if (calEvent.end.isSame(mouseUpSlot.end)){
 		calEvent.end = mouseDownSlot.start;
 		calEvent.title = moneyFormat.to(eventPrice({
 			start: calEvent.start,
 			end: calEvent.end
 		}).totalPrice);
 		$('#calendar').fullCalendar('updateEvent', calEvent);
-		//console.log('clipping at bottom');
+		console.log('clipping at bottom');
 	}
 	//if middle of event, split event into two
 	else {
-		//console.log('middle of event');
+		console.log('middle of event');
 
 		//update existing
 		var tempEnd = calEvent.end;
@@ -471,7 +544,12 @@ function checkOverlapEvent(event){
     var end = new Date(event.end);
 
     var overlap = $('#calendar').fullCalendar('clientEvents', function(ev) {
-        if (ev == event){
+		//dont compare with itself
+		if (ev == event){
+			return false;
+		}
+		//dont compare with background events
+		if (ev.rendering == "background"){
 			return false;
 		}
         var estart = new Date(ev.start);
@@ -491,13 +569,14 @@ function createEvent(start, end){
 	var fullyOverlappingEvents = [];
 	var removeEvents = [];
 	var eventEncompassed = false;
+
 	//check for overlapping events or mergeable events
 	$.each(allevents, function( index, eventitem )
 	{
-		if (eventitem !== null && typeof eventitem != 'undefined')
+		if (eventitem !== null && typeof eventitem != 'undefined' && !eventitem.old && eventitem.rendering != "background")
 		{
 			//event being created is fully overlapped by existing event, so dont create anything new
-			if (checkFullOverlap(start._d, end - start, eventitem.start._d, eventitem.end - eventitem.start) && !eventitem.old){
+			if (checkFullOverlap(start._d, end - start, eventitem.start._d, eventitem.end - eventitem.start)){
 				//console.log('new event is not needed');
 				eventEncompassed = true;
 				removeEventTimeSlot(eventitem, {start: start, end: end}, {start: start, end: end});
@@ -616,7 +695,6 @@ function createEvent(start, end){
 
 	//checked for all cases, create the new event!
 	if (!eventEncompassed && mergingEvents.length == 0 && overlappingEvents.length == 0 && fullyOverlappingEvents.length == 0){
-		//console.log('new event');
 		var eventData = {
 			start: start,
 			end: end,
