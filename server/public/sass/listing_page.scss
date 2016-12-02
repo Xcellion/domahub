@@ -52,6 +52,9 @@
     background-color: rgba(60,188,141,0.3);
     cursor: pointer;
   }
+  &.is-disabled {
+    background-color: $border;
+  }
 }
 
 .fc-content {

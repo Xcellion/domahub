@@ -2977,8 +2977,11 @@ input:-webkit-autofill {
   padding: 0 10px; }
 
 .card-header-icon {
+  -moz-transition: all 0.25s ease;
+  -o-transition: all 0.25s ease;
+  -webkit-transition: all 0.25s ease;
+  transition: all 0.25s ease;
   align-items: center;
-  cursor: pointer;
   color: rgba(0, 0, 0, 0.38);
   display: flex;
   font-size: 20px;
@@ -3022,6 +3025,9 @@ input:-webkit-autofill {
   max-width: 100%;
   position: relative;
   width: 300px; }
+  .card.is-fluid {
+    width: 100%;
+    height: 100%; }
   .card:not(:last-child) {
     margin-bottom: 25px; }
   .card .media:not(:last-child) {
@@ -5604,7 +5610,7 @@ a.nav-item {
   .section.is-danger {
     background-color: #EF5350; }
   .section.is-small {
-    padding: 40px 20px; }
+    padding: 20px; }
   @media screen and (min-width: 980px) {
     .section.is-medium {
       padding: 130px 20px; } }

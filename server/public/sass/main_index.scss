@@ -11,7 +11,7 @@
 
 #index-img {
   @include tablet {
-    background-image: url('/images/main/index_2.jpg');
+    background-image: url('/images/main/index_1.jpg');
   }
   @include mobile {
     background-color: $grey-dark;
