@@ -1,31 +1,28 @@
 .footer
-  background-color: $grey-dark
+  background-color: $grey-darker
   // border-top: 1px solid $border
   padding: 80px 0 0
   overflow: hidden
-  +mobile-360px
+  +mobile-411px
     padding: 20px 0 0
-  & > .container
-    min-height: 80px
-    border-bottom: 1px solid $border
 
 .footer-body
+  padding: 0 20px 80px
+  +mobile-411px
+    padding-bottom: 20px
+
+.footer-list
   display: flex
   align-items: center
   justify-content: center
-  +mobile-360px
-
-.footer-list
-  &-column
-    display: flex
+  text-decoration: none
+  +mobile
+    justify-content: flex-start
+  +mobile-411px
     flex-direction: column
-    text-decoration: none
-  &-row
-    display: flex
-    flex-wrap: wrap
-    align-items: center
-    justify-content: center
-    text-decoration: none
+    align-items: flex-start
+    & > .footer-item
+      p
 
 .footer-header
   color: $primary-dark
@@ -38,43 +35,50 @@
   font-size: $size-6
   &:not(:first-child)
     margin-left: 15px
-  +mobile-360px
+    +mobile-411px
+      margin-left: 0
+  +mobile-411px
     margin-top: 10px
   a
-    color: $white-secondary
+    color: $white
     &:hover
-      color: $white
+      color: $white-disabled
 
 .footer-bar
-  padding: 15px 20px
-  background-color: $grey-dark
+  border-top: 1px solid $black-disabled
+  padding: 20px 0
   +mobile
     padding: 30px 20px
 
 .footer-bar-content
   display: flex
   align-items: center
-  justify-content: center
+  justify-content: space-between
 
 .footer-bar-item
-  padding: 0
-  margin: 0
-  color: $white-secondary
   font-size: $size-7
-  &:hover
-    &:not(:first-child)
-      color: $white
+  margin: 0
+  padding: 0
+  box-sizing: border-box
   &:not(:first-child)
-    margin-left: 15px
+    margin-left: 25px
+
+.footer-bar-right
+  +tablet
+    text-align: right
+  .footer-bar-item
+    color: $white
+    &:hover
+      color: $white-disabled
 
 .social-icon
   &:not(:first-child)
     margin-left: 20px
   & > .icon
-    color: $white-secondary
+    color: $white
     &:hover
-      color: $white
-  +mobile-360px
+      color: $white-disabled
+  +mobile-411px
     display: none
 
 // #facebook-icon
