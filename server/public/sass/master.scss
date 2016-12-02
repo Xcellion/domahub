@@ -157,11 +157,11 @@
 }
 
 .min-height {
-  min-height: calc(100vh - 200px);
+  min-height: calc(100vh - 259px);
 }
 
 .min-height-half {
-    min-height: calc(50vh - 200px);
+    min-height: calc(50vh - 259px);
 }
 
 .clear-nav {
@@ -172,7 +172,7 @@
   padding-top: 68px;
 }
 
-// margins list contains: 10,15,20,25,50,75,100
+// margins list contains: 10,15,20,25,50,75,100,150,200
 @each $margin in $margins {
   .margin-#{$margin} {
     margin: #{$margin}px;
