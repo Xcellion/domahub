@@ -6,8 +6,6 @@ var moneyFormat = wNumb({
 });
 
 $(document).ready(function() {
-	var alldayMouseDown, alldayMouseUp;
-
 	//calendar logic
 	 $('#calendar').fullCalendar({
 		scrollTime: moment(new Date()).format("hh:mm:ss"),
@@ -36,24 +34,26 @@ $(document).ready(function() {
 
 		//background event to show that you cant select past dates
 		events: [
+			//background for all days until today
 			{
 				start: '1970-01-01T00:00:00',
 				end: moment().format("YYYY-MM-DD"),
 				rendering: 'background'
 			},
+			//all day background event (for month view)
 			{
 				start: '1970-01-01T00:00:00',
 				end: moment().format("YYYY-MM-DD"),
 				rendering: 'background',
-				title: "You cannot select dates in the past!",
 				allDay: true
 			},
+			//background for today
 			{
 				start: moment().format("YYYY-MM-DD"),
 				end: moment(),
 				rendering: 'background',
-				title: "You cannot select dates in the past!"
-			},
+				id: "background_today"
+			}
 		],
 
 		//prevent selecting anything before now
@@ -75,48 +75,39 @@ $(document).ready(function() {
 				$(".fc-prev-button").prop('disabled', false);
 			}
 
-			//make it unselectable to prevent highlighting annoyance
-			$(".fc-day-header").addClass('is-unselectable');
+			if (currentView.name == "agendaWeek"){
+				//day selector event handlers
+				daySelectionHandlers();
 
-			//create all day events
-			$(".fc-day-header").mousedown(function(){
-				alldayMouseDown = moment($(this).data('date'));
-				$(this).addClass('is-active');
-			});
-			$(".fc-day-header").mouseup(function(){
-				alldayMouseUp = moment($(this).data('date'));
+				//hover highlight only on agendaweek view
+				$('.fc-widget-content').hover(function(){
+					var temp_height = $(this).height()
+			        if(!$(this).html()){
+			            for(i=0;i<7;i++){
+							var temp_cell = $("<td class='temp-cell'></td>");
+							temp_cell.css({
+								width: $(this).width() / 7,
+								height: temp_height,
+								border: 0
+							});
+			                $(this).append(temp_cell);
+			            }
+			        }
+			    }, function(){
+			        $(this).children('.temp-cell').remove();
+			    });
+			}
 
-				//if true, you're dragging left
-				var start = (alldayMouseUp < alldayMouseDown) ? alldayMouseUp : alldayMouseDown;
-				var end = (alldayMouseUp < alldayMouseDown) ? moment(alldayMouseDown._d.getTime() + 86400000) : moment(alldayMouseUp._d.getTime() + 86400000);
-
-				var now = new moment();
-				//prevent calendar from creating events in the past (except for current hour slot)
-				if (start < now - 1800000){
-					$('#calendar').fullCalendar('unselect');
-					return false;
-				}
-				else {
-					createEvent(start, end);
-				}
-			});
-
-			//highlight when dragging
-			$(".fc-day-header").mouseenter(function(e){
-				if (e.which == 1){
-					$(this).addClass('is-active');
-				}
-			});
-			$(document).mouseup(function(e){
-				$(".fc-day-header").removeClass('is-active');
-			});
 		},
 
 		//creating new events
 		select: function(start, end, jsEvent, view){
 			var start = moment(start.format());
 			var end = moment(end.format());
-			var now = moment().add(1, 'hour').startOf('hour');
+			var now = moment();
+
+			start = (start <= now) ? moment(now).add(1, "hour").startOf('hour') : start; //to select a partial day entirely
+			console.log(start);
 
 			//prevent calendar from creating events in the past (except for current hour slot)
 			if (start < now){
@@ -154,6 +145,13 @@ $(document).ready(function() {
 
 		}
     });
+
+	//every hour, update the background event for today
+	window.setInterval(function(){
+		var background_event = $("#calendar").fullCalendar("clientEvents", "background_today");
+		background_event.end = moment();
+		$('#calendar').fullCalendar('updateEvent', background_event);
+	}, 3600000);
 
 	//create existing rentals
 	if (listing_info.rentals){
@@ -254,6 +252,104 @@ $(document).on("mouseup", ".fc-event", function(mouseUpJsEvent){
 	}
 });
 
+//function to handle selection of days
+function daySelectionHandlers(){
+	var alldayMouseDown, alldayMouseUp, alldayMouseEnter, alldayMouseLeave, alldayMouseLeaveElem, wasActive;
+
+	//make it unselectable to prevent highlighting annoyance
+	$(".fc-day-header").addClass('is-unselectable');
+
+	//create all day events
+	$(".fc-day-header").mousedown(function(e){
+		e.preventDefault();
+
+		if (e.which == 1){
+			alldayMouseDown = moment($(this).data('date'));
+			if (alldayMouseDown >= moment().startOf("day")){
+				$(this).addClass('is-active');
+			}
+		}
+	});
+	$(".fc-day-header").mouseup(function(e){
+		e.preventDefault();
+
+		if (e.which == 1 && alldayMouseDown){
+			alldayMouseUp = moment($(this).data('date'));
+			$(".fc-day-header").not(this).removeClass('is-active');
+
+			//if true, you're dragging left
+			var start = (alldayMouseUp < alldayMouseDown) ? alldayMouseUp : alldayMouseDown;
+			var end = (alldayMouseUp < alldayMouseDown) ? moment(alldayMouseDown._d.getTime() + 86400000) : moment(alldayMouseUp._d.getTime() + 86400000);
+
+			var now = new moment();
+			start = (start <= now) ? moment(now).add(1, "hour").startOf('hour') : start; //to select a partial day entirely
+
+			//prevent calendar from creating events in the past
+			if (start <= now || end <= now){
+				$('#calendar').fullCalendar('unselect');
+				return false;
+			}
+			else {
+				alldayMouseDown = null;
+				alldayMouseUp = null;
+				createEvent(start, end);
+			}
+		}
+	});
+
+	//highlight when mouse hover
+	$(".fc-day-header").mouseenter(function(e){
+		alldayMouseEnter = moment($(this).data('date'));
+		alldayMouseEnter = (alldayMouseEnter.isSameOrBefore(alldayMouseDown)) ? alldayMouseEnter.startOf("day") : alldayMouseEnter.endOf("day");
+		if (e.which == 1){
+
+			if (alldayMouseEnter >= moment().startOf("day")){
+				$(this).addClass('is-active');
+			}
+
+			//if entering from outside and no mousedown
+			if (!alldayMouseDown){
+				alldayMouseDown = moment($(this).data('date'));
+			}
+
+			//isbetween assumes a<b
+			var start_comp = (alldayMouseEnter.isSameOrBefore(alldayMouseDown)) ? alldayMouseEnter : alldayMouseDown;
+			var end_comp = (alldayMouseEnter.isSameOrBefore(alldayMouseDown)) ? alldayMouseDown : alldayMouseEnter;
+
+			//if we're leaving a cell, remove highlight if its not in selection
+			if (alldayMouseLeave && !alldayMouseLeave.isBetween(start_comp, end_comp, null, '[]')){
+				alldayMouseLeaveElem.removeClass('is-active');
+			}
+
+			if (wasActive){
+				wasActive.addClass('is-active');
+				wasActive = null;
+			}
+		}
+		else {
+			if (alldayMouseEnter >= moment().startOf("day")){
+				$(this).addClass('is-active');
+			}
+		}
+	});
+
+	//remove highlight if not selecting
+	$(".fc-day-header").mouseleave(function(e){
+		if (e.which == 1){
+			alldayMouseLeave = moment($(this).data('date'));
+			alldayMouseLeaveElem = $(this);
+		}
+		else {
+			$(this).removeClass('is-active');
+		}
+
+		if (!$(e.toElement).hasClass("fc-day-header")){
+			wasActive = $(".fc-day-header.is-active");
+			$(".fc-day-header").removeClass('is-active');
+		}
+	});
+}
+
 //helper function to determine the time slot of a mouse event
 function getTimeSlot(calEvent, jsEvent){
 	var datetime = "";
@@ -308,7 +404,7 @@ function removeEventTimeSlot(calEvent, mouseDownSlot, mouseUpSlot){
 		&& calEvent_end <= mouseUp_end){
 			$('#calendar').fullCalendar('removeEvents', calEvent._id);
 			$('#calendar').fullCalendar('updateEvent', calEvent);
-			console.log('event equal to slot');
+			//console.log('event equal to slot');
 	}
 	//if clipping starts at top of event
 	else if (calEvent_start == mouseDown_start){
@@ -318,7 +414,7 @@ function removeEventTimeSlot(calEvent, mouseDownSlot, mouseUpSlot){
 			end: calEvent.end
 		}).totalPrice);
 		$('#calendar').fullCalendar('updateEvent', calEvent);
-		console.log('clipping at top');
+		//console.log('clipping at top');
 	}
 	//if clipping starts at middle of event and goes all the way
 	else if (calEvent_end == mouseUp_end){
@@ -328,11 +424,11 @@ function removeEventTimeSlot(calEvent, mouseDownSlot, mouseUpSlot){
 			end: calEvent.end
 		}).totalPrice);
 		$('#calendar').fullCalendar('updateEvent', calEvent);
-		console.log('clipping at bottom');
+		//console.log('clipping at bottom');
 	}
 	//if middle of event, split event into two
 	else {
-		console.log('middle of event');
+		//console.log('middle of event');
 
 		//update existing
 		var tempEnd = calEvent.end;
@@ -344,7 +440,7 @@ function removeEventTimeSlot(calEvent, mouseDownSlot, mouseUpSlot){
 		$('#calendar').fullCalendar('updateEvent', calEvent);
 
 		//update splitting off
-		if (!checkEventOverlap(mouseUpSlot.end, tempEnd)){
+		if (checkOverlapEvent({start: mouseUpSlot.end, end: tempEnd})){
 			var eventData = {
 				title: moneyFormat.to(eventPrice({
 					start: mouseUpSlot.end,
@@ -361,20 +457,27 @@ function removeEventTimeSlot(calEvent, mouseDownSlot, mouseUpSlot){
 			calEvent.end = tempEnd;
 		}
 	}
+
+	//remove highlighting
+	$("#calendar").fullCalendar('unselect');
 }
 
-//helper function to check if new event overlaps any existing event
-function checkEventOverlap(start, end){
-	var allevents = $('#calendar').fullCalendar('clientEvents', filterMine);
-	var overlap = false;
-	$.each(allevents, function( index, eventitem ){
-		//overlaps something, cancel creation
-		if (checkOverlap(start._d, end - start, eventitem.start._d, eventitem.end - eventitem.start)){
-			overlap = true;
+//helper function to make sure theres nothing overlapping this event
+function checkOverlapEvent(event){
+    var start = new Date(event.start);
+    var end = new Date(event.end);
+
+    var overlap = $('#calendar').fullCalendar('clientEvents', function(ev) {
+        if (ev == event){
 			return false;
 		}
-	});
-	return overlap;
+        var estart = new Date(ev.start);
+        var eend = new Date(ev.end);
+
+        return (Math.round(estart)/1000 < Math.round(end)/1000 && Math.round(eend) > Math.round(start));
+    });
+
+	return overlap.length == 0;
 }
 
 //helper function to merge events
@@ -392,29 +495,26 @@ function createEvent(start, end){
 		{
 			//event being created is fully overlapped by existing event, so dont create anything new
 			if (checkFullOverlap(start._d, end - start, eventitem.start._d, eventitem.end - eventitem.start) && !eventitem.old){
-				console.log('new event is not needed');
+				//console.log('new event is not needed');
 				eventEncompassed = true;
-				//check if new event is in multiples of days (i.e. pressed the all-day button)
-				if ((start - end) % 86400000 === 0){
-					removeEventTimeSlot(eventitem, {start: start, end: end}, {start: start, end: end});
-				}
+				removeEventTimeSlot(eventitem, {start: start, end: end}, {start: start, end: end});
 				eventPrices();
 			}
 			//check if existing event is fully overlapped by event being created
 			else if (checkFullOverlap(eventitem.start._d, eventitem.end - eventitem.start, start._d, end - start)){
-				console.log('full overlap');
+				//console.log('full overlap');
 				fullyOverlappingEvents.push(eventitem);
 			}
 			//overlaps something, just not completely
 			else if (checkOverlap(start._d, end - start, eventitem.start._d, eventitem.end - eventitem.start)){
-				console.log('partial overlap');
+				//console.log('partial overlap');
 				overlappingEvents.push(eventitem);
 			}
 
 			//no overlaps, check for merges
 			if (!eventitem.old && !eventEncompassed && (moment(start).format('YYYY-MM-DD HH:mm') == moment(eventitem.end).format('YYYY-MM-DD HH:mm')
 				|| moment(end).format('YYYY-MM-DD HH:mm') == moment(eventitem.start).format('YYYY-MM-DD HH:mm'))){
-				console.log('merge');
+				//console.log('merge');
 				//if start time of new event (2nd slot) is end time of existing event (1st slot)
 				//i.e. if new event is below any existing events
 				if (moment(start).format('YYYY-MM-DD HH:mm') == moment(eventitem.end).format('YYYY-MM-DD HH:mm'))
@@ -525,7 +625,10 @@ function createEvent(start, end){
 			}).totalPrice),
 		};
 
-		var newEvent = $('#calendar').fullCalendar('renderEvent', eventData, true);
+		//make sure it doesnt overlap
+		if (checkOverlapEvent(eventData)){
+			var newEvent = $('#calendar').fullCalendar('renderEvent', eventData, true);
+		}
 
 		if (removeEvents.length){
 
@@ -538,12 +641,12 @@ function createEvent(start, end){
 			for (var x = 0; x < removeEvents.length; x++){
 				//remove the entire chunk of the full existing event from the newly created event
 				if (removeEvents[x].full){
-					console.log('full existing removed');
+					//console.log('full existing removed');
 					removeEventTimeSlot(newEvent[0], removeEvents[x], removeEvents[x]);
 				}
 				//remove only the partially overlapped portion
 				else {
-					console.log('partial existing removed');
+					//console.log('partial existing removed');
 					if (removeEvents[x].bottom){
 						removeEventTimeSlot(newEvent[0], {start: start}, removeEvents[x]);
 					}
@@ -570,7 +673,7 @@ function createEvent(start, end){
 	}
 }
 
-//server side helper function to get correct price of events
+//helper function to get correct price of events
 function eventPrices(){
 	if (listing_info.status){
 		var myevents = $('#calendar').fullCalendar('clientEvents', filterMine);
@@ -632,7 +735,7 @@ function eventPrices(){
 	}
 }
 
-//figure out a price for a specific event
+//function to figure out a price for a specific event
 function eventPrice(event, callback){
 	var tempDuration = event.end - event.start;
 
