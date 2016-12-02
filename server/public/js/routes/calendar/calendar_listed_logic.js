@@ -104,8 +104,8 @@ $(document).ready(function() {
 
 			if (currentView.name == "agendaWeek"){
 				daySelectionHandlers();		//day selector event handlers
-				highlightCellHover();		//highlight cell hover
 			}
+			highlightCellHover(currentView.name);		//highlight cell hover
 		},
 
 		//creating new events
@@ -147,7 +147,6 @@ $(document).ready(function() {
 			});
 			if (view.name == "agendaWeek"){
 				$(element).css("width", "100%");
-
 				//remove event title repeat on other ppl events
 				if (!$(element).hasClass('fc-start') && !event.other){
 					$(element).find('.fc-content').text("");
@@ -156,6 +155,9 @@ $(document).ready(function() {
 			//fatten event height in month view
 			else {
 				$(element).css("height", "50px");
+
+				//attach hover handler since event overlaps the regular one
+				highlightCellHover(view.name);		//highlight cell hover
 			}
 
 		}
@@ -189,16 +191,27 @@ $(document).ready(function() {
 //--------------------------------------------------------------------------------------------------------------------------------
 
 //helper function to highlight individual agendaweek cells
-function highlightCellHover(){
-	//hover highlight only on agendaweek view
+function highlightCellHover(viewname){
 	$('.fc-widget-content').hover(function(){
 		var temp_height = $(this).height();
+		//agendaweek view
 		if(!$(this).html()){
-			for( i = 0; i < 7; i++){
+			if (viewname == "agendaWeek"){
+				for( i = 0; i < 7; i++){
+					var temp_cell = $("<td class='temp-cell'></td>");
+					temp_cell.css({
+						width: $(this).width() / 7,
+						height: temp_height,
+						border: 0
+					});
+					$(this).append(temp_cell);
+				}
+			}
+			else {
 				var temp_cell = $("<td class='temp-cell'></td>");
 				temp_cell.css({
-					width: $(this).width() / 7,
-					height: temp_height,
+					width: $(this).width() + 1,
+					height: temp_height + 1,
 					border: 0
 				});
 				$(this).append(temp_cell);
@@ -370,7 +383,7 @@ function eventSelectionHandlers(element){
 		if (mouseUpJsEvent.which == 1){
 			var eventElem = $(mouseUpJsEvent.target).closest(".fc-event");
 			var view = $('#calendar').fullCalendar('getView');
-			mouseUpCalEvent = $("#calendar").fullCalendar('clientEvents', eventElem.attr("id"))[0];
+			var mouseUpCalEvent = $("#calendar").fullCalendar('clientEvents', eventElem.attr("id"))[0];
 
 			//agendaweek view
 			if (view.type == "agendaWeek"){
