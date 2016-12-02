@@ -3,7 +3,7 @@
   font-size: calculateRem($size)
 
 // Box-shadow mixin
-=box-shadow($top, $left, $blur, $spread, $color, $inset: false)
+=box-shadow($top, $left, $blur, $color, $spread, $inset: false)
   @if $inset
     -webkit-box-shadow: inset $top $left $blur $spread $color
     -moz-box-shadow: inset $top $left $blur $spread $color
@@ -12,6 +12,13 @@
     -webkit-box-shadow: $top $left $blur $spread $color
     -moz-box-shadow: $top $left $blur $spread $color
     box-shadow: $top $left $blur $spread $color
+
+// Keyframes mixin
+=keyframes($keyframe)
+    -webkit-animation: $keyframe
+    -moz-animation:    $keyframe
+    -o-animation:      $keyframe
+    animation:         $keyframe
 
 // Transition mixin
 =transition($transition...)
@@ -47,9 +54,9 @@
 // Border-radius mixin
 =border-radius($radius)
   -webkit-border-radius: $radius
-     -moz-border-radius: $radius
-      -ms-border-radius: $radius
-          border-radius: $radius
+  -moz-border-radius: $radius
+  -ms-border-radius: $radius
+  border-radius: $radius
 
 // Opacity mixin
 =opacity($opacity)
@@ -154,6 +161,10 @@
 
 =mobile-360px
   @media screen and (max-width: 360px)
+    @content
+
+=mobile-411px
+  @media screen and (max-width: 411px)
     @content
 
 =tablet

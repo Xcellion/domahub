@@ -161,8 +161,8 @@ function createDatesDrop(rental_info){
     var temp_div = $('<div class="has-text-right is-horizontal"></div>');
 
     var control_wrapper = $("<div class='control is-horizontal'></div>");
-    var start_label = $("<p class=''>Start Date</p>");
-    var end_label = $("<p class=''>End Date</p>");
+    var start_label = $("<label class='label'>Start Date</label>");
+    var end_label = $("<label class='label'>End Date</label>");
     temp_div.append(control_wrapper.append(start_label, end_label));
 
     for (var x = 0; x < rental_info.date.length; x++){

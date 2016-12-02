@@ -1,11 +1,5 @@
 @import 'vars';
 @import 'mixins';
-/******************** MISC*************************/
-.right-arrow {
-  &.active {
-    @include translate(5px,0);
-  }
-}
 
 /*********************** LANDING ************************/
 
@@ -18,11 +12,6 @@
   }
 }
 
-.note-text {
-  margin-top: 5px;
-  font-size: 11px;
-}
-
 .title-p {
   font-size: $size-5;
   @include tablet {
@@ -33,15 +22,20 @@
   }
 }
 
-#beta-form-email {
-
+/*********************** MAIN ************************/
+@-webkit-keyframes opacity {
+  0%   { opacity: 0; }
+  100% { opacity: 1; }
 }
 
-// #beta-form-success {
-//   display: flex;
-//   justify-content: center;
-//   align-items: center;
-//   text-transform: uppercase;
-// }
+#load1 {
+  @include keyframes(opacity 1s);
+}
 
-/*********************** MAIN ************************/
+#load2 {
+  @include keyframes(opacity 2s);
+}
+
+#load3 {
+  @include keyframes(opacity 3s);
+}

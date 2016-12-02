@@ -13,6 +13,13 @@
     -moz-box-shadow: $top $left $blur $spread $color
     box-shadow: $top $left $blur $spread $color
 
+// Keyframes mixin
+=keyframes($keyframe)
+    -webkit-animation: $keyframe
+    -moz-animation:    $keyframe
+    -o-animation:      $keyframe
+    animation:         $keyframe
+
 // Transition mixin
 =transition($transition...)
     -moz-transition:    $transition

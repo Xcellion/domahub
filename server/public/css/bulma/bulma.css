@@ -545,7 +545,7 @@ table {
   margin: 0 auto; }
   @media screen and (min-width: 769px) {
     .container {
-      max-width: 729px; } }
+      padding: 0 20px; } }
   @media screen and (min-width: 980px) {
     .container {
       max-width: 940px; } }
