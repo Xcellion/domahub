@@ -541,17 +541,20 @@ table {
   margin-bottom: 20px; }
 
 .container {
-  position: relative; }
+  position: relative;
+  margin: 0 auto; }
+  @media screen and (min-width: 769px) {
+    .container {
+      max-width: 729px; } }
   @media screen and (min-width: 980px) {
     .container {
-      margin: 0 auto;
-      max-width: 960px; }
-      .container.is-fluid {
-        margin: 0 20px;
-        max-width: none; } }
+      max-width: 940px; } }
   @media screen and (min-width: 1260px) {
     .container {
       max-width: 1200px; } }
+  .container.is-fluid {
+    margin: 0 20px;
+    max-width: none; }
   .container-progress {
     position: relative;
     margin: 0 auto;
@@ -3035,6 +3038,8 @@ input:-webkit-autofill {
     width: 100%; }
   .card.is-rounded {
     border-radius: 5px; }
+  .card.cursor-pointer {
+    cursor: pointer; }
   .card.has-shadow-effect {
     -moz-transition: all 0.25s ease;
     -o-transition: all 0.25s ease;
@@ -4303,9 +4308,6 @@ a.nav-item {
   overflow: hidden;
   overflow-x: auto;
   white-space: nowrap; }
-  @media screen and (max-width: 979px) {
-    .nav-left {
-      margin-left: 20px; } }
   @media screen and (max-width: 768px) {
     .nav-left {
       margin-left: 0; } }
@@ -5661,32 +5663,31 @@ a.nav-item {
         height: 100%; } }
 
 .footer {
-  background-color: #444;
+  background-color: #212121;
   padding: 80px 0 0;
   overflow: hidden; }
-  @media screen and (max-width: 360px) {
+  @media screen and (max-width: 411px) {
     .footer {
       padding: 20px 0 0; } }
-  .footer > .container {
-    min-height: 80px;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.12); }
 
 .footer-body {
-  display: flex;
-  align-items: center;
-  justify-content: center; }
+  padding: 0 20px 80px; }
+  @media screen and (max-width: 411px) {
+    .footer-body {
+      padding-bottom: 20px; } }
 
-.footer-list-column {
+.footer-list {
   display: flex;
-  flex-direction: column;
-  text-decoration: none; }
-
-.footer-list-row {
-  display: flex;
-  flex-wrap: wrap;
   align-items: center;
   justify-content: center;
   text-decoration: none; }
+  @media screen and (max-width: 768px) {
+    .footer-list {
+      justify-content: flex-start; } }
+  @media screen and (max-width: 411px) {
+    .footer-list {
+      flex-direction: column;
+      align-items: flex-start; } }
 
 .footer-header {
   color: #309670;
@@ -5700,17 +5701,20 @@ a.nav-item {
   font-size: 16px; }
   .footer-item:not(:first-child) {
     margin-left: 15px; }
-  @media screen and (max-width: 360px) {
+    @media screen and (max-width: 411px) {
+      .footer-item:not(:first-child) {
+        margin-left: 0; } }
+  @media screen and (max-width: 411px) {
     .footer-item {
       margin-top: 10px; } }
   .footer-item a {
-    color: rgba(255, 255, 255, 0.7); }
+    color: white; }
     .footer-item a:hover {
-      color: white; }
+      color: rgba(255, 255, 255, 0.5); }
 
 .footer-bar {
-  padding: 15px 20px;
-  background-color: #444; }
+  border-top: 1px solid rgba(0, 0, 0, 0.38);
+  padding: 20px 0; }
   @media screen and (max-width: 768px) {
     .footer-bar {
       padding: 30px 20px; } }
@@ -5718,26 +5722,33 @@ a.nav-item {
 .footer-bar-content {
   display: flex;
   align-items: center;
-  justify-content: center; }
+  justify-content: space-between; }
 
 .footer-bar-item {
-  padding: 0;
+  font-size: 14px;
   margin: 0;
-  color: rgba(255, 255, 255, 0.7);
-  font-size: 14px; }
-  .footer-bar-item:hover:not(:first-child) {
-    color: white; }
+  padding: 0;
+  box-sizing: border-box; }
   .footer-bar-item:not(:first-child) {
-    margin-left: 15px; }
+    margin-left: 25px; }
+
+@media screen and (min-width: 769px) {
+  .footer-bar-right {
+    text-align: right; } }
+
+.footer-bar-right .footer-bar-item {
+  color: white; }
+  .footer-bar-right .footer-bar-item:hover {
+    color: rgba(255, 255, 255, 0.5); }
 
 .social-icon:not(:first-child) {
   margin-left: 20px; }
 
 .social-icon > .icon {
-  color: rgba(255, 255, 255, 0.7); }
+  color: white; }
   .social-icon > .icon:hover {
-    color: white; }
+    color: rgba(255, 255, 255, 0.5); }
 
-@media screen and (max-width: 360px) {
+@media screen and (max-width: 411px) {
   .social-icon {
     display: none; } }
