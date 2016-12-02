@@ -8,7 +8,7 @@ var moneyFormat = wNumb({
 $(document).ready(function() {
 	//calendar logic
 	 $('#calendar').fullCalendar({
-		scrollTime: moment(new Date()).format("hh:mm:ss"),
+		scrollTime: moment().format("hh:mm:ss"),
 		defaultView: "agendaWeek",
 		allDayDefault: false,
 		allDaySlot: false,
@@ -106,8 +106,7 @@ $(document).ready(function() {
 			var end = moment(end.format());
 			var now = moment();
 
-			start = (start <= now) ? moment(now).add(1, "hour").startOf('hour') : start; //to select a partial day entirely
-			console.log(start);
+			start = (start.isSameOrBefore(now)) ? now.add(1, "hour").startOf('hour') : start;  //to select a partial day entirely
 
 			//prevent calendar from creating events in the past (except for current hour slot)
 			if (start < now){
@@ -203,11 +202,15 @@ function createExisting(rentals){
 
 var mouseDownJsEvent;
 var mouseDownCalEvent;
+var alldayMouseDown, alldayMouseUp, alldayMouseEnter, alldayMouseLeave, alldayMouseLeaveElem, wasActive;
 
 $(document).on("mousedown", ".fc-event", function(e){
 	//only left click
 	if (e.which == 1){
 		mouseDownCalEvent = $("#calendar").fullCalendar('clientEvents', $(this).attr("id"))[0];
+
+		//figure out the index of the <td> within the parent <tr> then we can use that number to figure out which day was picked
+		console.log($(e.target).index(), $(e.target).index($(e.target)));
 		if (!mouseDownCalEvent.old){
 			mouseDownJsEvent = e;
 		}
@@ -221,8 +224,9 @@ $(document).on("mouseup", ".fc-event", function(mouseUpJsEvent){
 
 		if (view.type != "month"){
 			var mouseUpCalEvent = $("#calendar").fullCalendar('clientEvents', $(this).attr("id"))[0];
+
+			//if its my event
 			if (!mouseUpCalEvent.old){
-				var datetime;
 				//if mousedown exists and the mousedown event is the same as the mouseup event
 				if (mouseDownJsEvent && mouseDownCalEvent._id == mouseUpCalEvent._id){
 					//get the time slots of both mousedown and mouseup
@@ -254,7 +258,6 @@ $(document).on("mouseup", ".fc-event", function(mouseUpJsEvent){
 
 //function to handle selection of days
 function daySelectionHandlers(){
-	var alldayMouseDown, alldayMouseUp, alldayMouseEnter, alldayMouseLeave, alldayMouseLeaveElem, wasActive;
 
 	//make it unselectable to prevent highlighting annoyance
 	$(".fc-day-header").addClass('is-unselectable');
@@ -678,10 +681,10 @@ function eventPrices(){
 	if (listing_info.status){
 		var myevents = $('#calendar').fullCalendar('clientEvents', filterMine);
 		if (myevents.length){
-			$("#redirect-next-button").removeClass('is-disabled');
+			$("#redirect-next-button, #remove_events").removeClass('is-disabled');
 		}
 		else {
-			$("#redirect-next-button").addClass('is-disabled');
+			$("#redirect-next-button, #remove_events").addClass('is-disabled');
 		}
 
 		//empty the preview dates
