@@ -36,34 +36,6 @@
   font-style: normal;
 }
 
-// @font-face {
-//   font-family: 'robotocondensed';
-//   src: url("/fonts/roboto-condensed/rc400.ttf");
-//   font-weight: normal;
-//   font-style: normal;
-// }
-//
-// @font-face {
-//   font-family: 'robotocondensed';
-//   src: url("/fonts/roboto-condensed/rc700.ttf");
-//   font-weight: bold;
-//   font-style: normal;
-// }
-//
-// @font-face {
-//   font-family: 'robotocondensed';
-//   src: url("/fonts/roboto-condensed/rcitalics.ttf");
-//   font-weight: normal;
-//   font-style: italic;
-// }
-//
-// @font-face {
-//   font-family: 'robotocondensed';
-//   src: url("/fonts/roboto-condensed/rc300.ttf");
-//   font-weight: 300;
-//   font-style: normal;
-// }
-
 @font-face {
   font-family: 'sharetech';
   src: url("/fonts/share-tech/st400.ttf");
@@ -73,9 +45,9 @@
 
 /********************** CUSTOM CLASS STYLING ******************/
 .logo-text {
-  letter-spacing: -2px;
   font: {
-    family: $quicksand;
+    weight: bold;
+    family: $roboto;
     size: $size-3;
   }
   &.primary-logo {
@@ -109,11 +81,11 @@
 }
 
 .min-height {
-  min-height: calc(100vh - 259px);
+  min-height: calc(100vh - 200px);
 }
 
 .min-height-half {
-    min-height: calc(50vh - 259px);
+    min-height: calc(50vh - 200px);
 }
 
 .clear-nav {
