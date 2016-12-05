@@ -324,7 +324,7 @@ function errorHandler(message){
 		$("#calendar-error-message").addClass('is-danger').html("There was something wrong with the dates you selected!<br />Your credit card has not been charged yet.");
 	}
 	else if (message == "Invalid email!"){
-		showModalContent("preview");
+		showModalContent("checkout");
 		$("#new-user-email-error").addClass('is-danger').html("Please enter a valid email address!<br />Your credit card has not been charged yet.");
 	}
 	else if (message == "Invalid price!"){
@@ -335,4 +335,13 @@ function errorHandler(message){
 		showModalContent("checkout");
 		$("#summary-error-message").addClass('is-danger').html("There was something wrong with this listing!<br />Your credit card has not been charged yet.");
 	}
+}
+
+//success handler
+function successHandler(){
+	$("#payment-column").addClass('is-hidden');
+	$("#success-column").removeClass('is-hidden');
+	$(".success-hide").addClass('is-hidden');
+
+	$("#success-message").text("Your credit card was successfully charged!");
 }
