@@ -80,7 +80,6 @@
         &:after
           border-color: transparent transparent $color-invert $color-invert !important
       &.is-outlined
-        +transition(none)
         background-color: transparent
         border-color: $color
         color: $color
@@ -94,7 +93,6 @@
         &.is-active
           +transition(all 0.25s ease)
       &.is-outlined-no-fill
-        +transition(none)
         background-color: transparent
         border-color: $color
         color: $color
@@ -102,8 +100,7 @@
         &:active,
         &:focus,
         &.is-active
-          border-color: $color-invert
-          color: $color-invert
+
         &.is-active
           +transition(all 0.25s ease)
       &.is-blank
