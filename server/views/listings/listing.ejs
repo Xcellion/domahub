@@ -37,9 +37,9 @@
 							<div class="column is-5">
 								<div class="content">
 									<h2 class="is-bold">Existing User Login</h2>
-									<small>
+									<p>
 										Enter your information below to proceed.
-									</small>
+									</p>
 								</div>
 								<form>
 									<p class="control">
@@ -66,12 +66,12 @@
 							<div class="column is-5">
 								<div class="content">
 									<h2 class="is-bold">Continue as a Guest</h2>
-									<small>
+									<p>
 										You may continue your transaction as a guest. However,
 										you will not have access to essential configuration tools
 										until you create a DomaHub account. There will be an option
 										to create an account at the end of this transaction.
-									</small>
+									</p>
 									<p class="control margin-top-25">
 										<a tabindex="1" id="guest-button" class="button is-primary is-medium is-fullwidth">Proceed as Guest</a>
 									</p>
@@ -161,7 +161,7 @@
 						</div>
 						<div class="level-right">
 							<div class="level-item">
-								<a tabindex="1" id="preview-next-button" class="button is-disabled is-primary no-shadow">
+								<a tabindex="1" id="checkout-next-button" class="button is-disabled is-primary no-shadow">
 									<span>Review</span>
 									<span class="icon">
 								    	<i class="fa fa-angle-right"></i>
@@ -209,9 +209,9 @@
 											Slides.com
 										</a>
 									</h3>
-									<div class="card-header-icon is-marginless">
+									<!-- <div class="card-header-icon is-marginless">
 										<i class="fa fa-external-link"></i>
-									</div>
+									</div> -->
 								</header>
 								<div class="card-image">
 									<figure class="image is-3by2">
@@ -237,9 +237,9 @@
 											Kickresume.com
 										</a>
 									</h3>
-									<div class="card-header-icon is-marginless">
+									<!-- <div class="card-header-icon is-marginless">
 										<i class="fa fa-external-link"></i>
-									</div>
+									</div> -->
 								</header>
 								<div class="card-image">
 									<figure class="image is-3by2">
@@ -264,9 +264,9 @@
 									<h3 class="is-bold card-header-title">
 										<a tabindex="1" class="primary-link" href="https://www.openme.com" target="_blank" title="openme.com">Openme.com</a>
 									</h3>
-									<div class="card-header-icon is-marginless">
+									<!-- <div class="card-header-icon is-marginless">
 										<i class="fa fa-external-link"></i>
-									</div>
+									</div> -->
 								</header>
 								<div class="card-image">
 									<figure class="image is-3by2">
@@ -291,9 +291,9 @@
 										<a tabindex="1" class="primary-link" href="https://www.portfoliobox.net" target="_blank" title="openme.com">
 											Portfoliobox.net</a>
 									</h3>
-									<div class="card-header-icon is-marginless">
+									<!-- <div class="card-header-icon is-marginless">
 										<i class="fa fa-external-link"></i>
-									</div>
+									</div> -->
 								</header>
 								<div class="card-image">
 									<figure class="image is-3by2">
@@ -313,11 +313,11 @@
 						</div>
 					</div>
 				</div>
-				<div id="preview-modal-content" class="listing-modal-content is-hidden">
+				<div id="checkout-modal-content" class="listing-modal-content is-hidden">
 					<nav class="level">
 						<div class="level-left">
 							<div class="level-item">
-								<a id="preview-back-button" class="button no-shadow">
+								<a id="checkout-back-button" class="button no-shadow">
 									<span class="icon">
 										<i class="fa fa-angle-left"></i>
 									</span>
@@ -366,7 +366,7 @@
 								</label>
 							</form>
 							<p class="control margin-top-20">
-								<a id="checkout-button" class="button is-primary is-medium">
+								<a id="checkout-button" class="button is-primary is-medium" tabindex="1">
 									<span class="icon">
 										<i class="fa fa-check-circle-o"></i>
 									</span>
@@ -464,6 +464,22 @@
 										</div>
 									</div>
 								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div id="review-modal-content" class="listing-modal-content is-hidden">
+					<div class="columns">
+						<div class="column is-half">
+							<div class="notification is-primary">
+								<h1>Success!</h1>
+							</div>
+							<div class="content">
+								<p>
+									Your transaction was successful. Go to your profile's
+									<a href="/profile/mylistings" class="orange-link">listing page</a>
+									to view and edit your new rental.
+								</p>
 							</div>
 						</div>
 					</div>

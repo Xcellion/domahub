@@ -12,15 +12,15 @@ $(document).ready(function() {
 			$("#address-error-message").removeClass('is-danger').text("The content of the URL you link below will be displayed when anyone goes to your rental domain name. You may change this URL at any time.")
 		}
 		if ($(this).val() == ""){
-			$("#preview-next-button").addClass('is-disabled');
+			$("#checkout-next-button").addClass('is-disabled');
 		}
 		else {
-			$("#preview-next-button").removeClass('is-disabled');
+			$("#checkout-next-button").removeClass('is-disabled');
 		}
 
 		//press enter to go next
 		if (e.keyCode == 13){
-			showModalContent("preview");
+			showModalContent("checkout");
 		}
 	});
 
@@ -121,7 +121,7 @@ $(document).ready(function() {
 		//check if theres a cookie for the rental address
 		if (read_cookie("address")){
 			$("#address_form_input").val(read_cookie("address"));
-			$("#preview-next-button").removeClass('is-disabled');
+			$("#checkout-next-button").removeClass('is-disabled');
 		}
 
 		if (!rental_info){
@@ -183,13 +183,13 @@ $(document).ready(function() {
 	});
 
 	//show redirect modal content
-	$('#redirect-next-button, #preview-back-button').click(function() {
+	$('#redirect-next-button, #checkout-back-button').click(function() {
 		showModalContent("redirect");
 	});
 
-	//show preview modal content
-	$('#preview-next-button').click(function() {
-		showModalContent("preview");
+	//show checkout modal content
+	$('#checkout-next-button').click(function() {
+		showModalContent("checkout");
 	});
 
 	//fix weird issue with modal and fullcalendar not appearing
@@ -365,11 +365,11 @@ function errorHandler(message){
 		$("#calendar-error-message").addClass('is-danger').html("There was something wrong with the dates you selected!<br />Your credit card has not been charged yet.");
 	}
 	else if (message == "Invalid price!"){
-		showModalContent("preview");
+		showModalContent("checkout");
 		$("#stripe-error-message").addClass('is-danger').html("There was something wrong with your credit card!<br />Your credit card has not been charged yet.");
 	}
 	else if (message == "Invalid stripe user account!"){
-		showModalContent("preview");
+		showModalContent("checkout");
 		$("#summary-error-message").addClass('is-danger').html("There was something wrong with this listing!<br />Your credit card has not been charged yet.");
 	}
 }
