@@ -142,14 +142,6 @@ $(document).ready(function() {
 		delete_cookies();
 	}
 
-	//if rental_info exists, change some stuff around
-	if (rental_info){
-		displayRental();
-	}
-	else {
-		displayDefault();
-	}
-
 	//---------------------------------------------------------------------------------------------------modals
 
 	//open the modal view and switch to appropriate content depending on cookie
@@ -214,40 +206,6 @@ function showModalContent(type){
 			$('#calendar').fullCalendar('option', 'contentHeight', cal_height);
 		}
 	}
-}
-
-//function to show rental specific stuff
-function displayRental(){
-	delete_cookies();
-
-	//populate address form with rental info address
-	$("#address_form_input").val(rental_info.address);
-	addressNextChange();
-
-	//go to rental start date
-	$("#calendar").fullCalendar("gotoDate", rental_info.times[0].date);
-
-	//rental top buttons
-	$("#top_next_rental").data("can_next", true);
-	$("#calendar_next_rental").data("can_next", true);
-
-	for (var x = 0; x < rental_info.times.length; x++){
-
-		start = moment(new Date(rental_info.times[x].date));
-		disp_end = moment(new Date(start._d.getTime() + rental_info.times[x].duration)).format('YYYY/MM/D, h:mmA');
-		disp_start = start.format('YYYY/MM/D, h:mmA');
-
-		$("#rental_times").append("<li class='rental_time'>" + disp_start + " - " + disp_end + "</li>")
-	}
-
-	$(".rental_hide").show();
-	$(".default_hide").hide();
-}
-
-//function to reverse display of rental
-function displayDefault(){
-	$(".default_hide").show();
-	$(".rental_hide").hide();
 }
 
 //helper function to check if everything is legit
@@ -323,6 +281,7 @@ function submitRentals(stripeToken){
 			url: "/listing/" + listing_info.domain_name + "/" + url,
 			data: {
 				events: minEvents,
+				new_user_email: $("#new_user_email").val(),
 				rental_id: rental_info.rental_id || false,
 				address: $("#address_form_input").val(),
 				stripeToken: stripeToken
@@ -330,6 +289,7 @@ function submitRentals(stripeToken){
 		}).done(function(data){
 			$('#checkout-button').removeClass('is-loading');
 			unlock = true;
+			console.log(data);
 			if (data.unavailable){
 				for (var x = 0; x < data.unavailable.length; x++){
 					showModalContent("calendar");
@@ -339,7 +299,6 @@ function submitRentals(stripeToken){
 			}
 			else if (data.state == "success"){
 				delete_cookies();
-				console.log(data);
 				if (data.owner_hash_id){
 					//window.location = window.location.origin + "/listing/" + listing_info.domain_name + "/" + data.rental_id + "/" + data.owner_hash_id;
 				}
@@ -364,6 +323,10 @@ function errorHandler(message){
 		showModalContent("calendar");
 		$("#calendar-error-message").addClass('is-danger').html("There was something wrong with the dates you selected!<br />Your credit card has not been charged yet.");
 	}
+	else if (message == "Invalid email!"){
+		showModalContent("checkout");
+		$("#new-user-email-error").addClass('is-danger').html("Please enter a valid email address!<br />Your credit card has not been charged yet.");
+	}
 	else if (message == "Invalid price!"){
 		showModalContent("checkout");
 		$("#stripe-error-message").addClass('is-danger').html("There was something wrong with your credit card!<br />Your credit card has not been charged yet.");
@@ -372,4 +335,13 @@ function errorHandler(message){
 		showModalContent("checkout");
 		$("#summary-error-message").addClass('is-danger').html("There was something wrong with this listing!<br />Your credit card has not been charged yet.");
 	}
+}
+
+//success handler
+function successHandler(){
+	$("#payment-column").addClass('is-hidden');
+	$("#success-column").removeClass('is-hidden');
+	$(".success-hide").addClass('is-hidden');
+
+	$("#success-message").text("Your credit card was successfully charged!");
 }
