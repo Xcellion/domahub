@@ -1,62 +1,6 @@
  @import 'bulma/bulma.sass';
 
 /**font**/
-// @font-face {
-//   font-family: 'ptsans';
-//   src: url("/fonts/pt-sans/ptsans400.ttf");
-//   font-weight: normal;
-//   font-style: normal;
-// }
-//
-// @font-face {
-//   font-family: 'ptsans';
-//   src: url("/fonts/pt-sans/ptsans700.ttf");
-//   font-weight: bold;
-//   font-style: normal;
-// }
-//
-// @font-face {
-//   font-family: 'ptsans';
-//   src: url("/fonts/pt-sans/ptsans700italics.ttf");
-//   font-weight: bold;
-//   font-style: italic;
-// }
-//
-// @font-face {
-//   font-family: 'ptsans';
-//   src: url("/fonts/pt-sans/ptsans400italics.ttf");
-//   font-weight: normal;
-//   font-style: italic;
-// }
-//
-// @font-face {
-//   font-family: 'ssp';
-//   src: url("/fonts/source-sans-pro/ssp400.ttf");
-//   font-weight: normal;
-//   font-style: normal;
-// }
-//
-// @font-face {
-//   font-family: 'ssp';
-//   src: url("/fonts/source-sans-pro/ssp700.ttf");
-//   font-weight: bold;
-//   font-style: normal;
-// }
-//
-// @font-face {
-//   font-family: 'ssp';
-//   src: url("/fonts/source-sans-pro/ssp400italics.ttf");
-//   font-weight: normal;
-//   font-style: italic;
-// }
-//
-// @font-face {
-//   font-family: 'ssp';
-//   src: url("/fonts/source-sans-pro/ssp300.ttf");
-//   font-weight: 300;
-//   font-style: normal;
-// }
-
 @font-face {
   font-family: 'roboto';
   src: url("/fonts/roboto/roboto400.ttf");
@@ -82,6 +26,13 @@
   font-family: 'roboto';
   src: url("/fonts/roboto/roboto300.ttf");
   font-weight: 300;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'quicksand';
+  src: url("/fonts/quicksand/quicksand700.ttf");
+  font-weight: 700;
   font-style: normal;
 }
 
@@ -122,9 +73,10 @@
 
 /********************** CUSTOM CLASS STYLING ******************/
 .logo-text {
+  letter-spacing: -2px;
   font: {
-    family: $shareTech;
-    size: $size-4;
+    family: $quicksand;
+    size: $size-3;
   }
   &.primary-logo {
     color: $primary;
