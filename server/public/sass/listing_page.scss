@@ -57,8 +57,18 @@
   }
 }
 
+.fc-day {
+  & > .temp-cell {
+    background-color: rgba(60,188,141,0.3);
+  }
+}
+
 .fc-content {
   text-align: center;
+}
+
+.fc-day-number {
+  cursor: pointer;
 }
 
 .temp-cell {
