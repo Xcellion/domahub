@@ -195,7 +195,7 @@
 								</p>
 								<small>
 									Know or own something that would be a great fit for this page?
-									<a class="orange-link" href="/contact">Contact us</a>!
+									<a class="orange-link" href="/contact">Let us know</a>!
 								</small>
 							</div>
 						</div>
@@ -327,7 +327,7 @@
 						</div>
 					</nav>
 					<div class="columns">
-						<div class="column is-5">
+						<div id="payment-column" class="column is-5">
 							<div class="content">
 								<h1 class="title is-3">Payment Information</h1>
 								<p id="stripe-error-message">
@@ -386,12 +386,54 @@
 								</small>
 							</div>
 							<form>
-								<label class="label">Email Address</label>
+								<label id="new-user-email-error" class="label">Email Address</label>
 								<p class="control has-addons">
-									<input tabindex="1" class="input is-medium" placeholder="Email" type="email" />
+									<input tabindex="1" id="new_user_email" class="input is-medium" placeholder="Email" type="email" />
 								</p>
 							</form>
 							<% } %>
+						</div>
+						<div id="success-column" class="is-hidden column is-5">
+							<div class="content">
+								<h1 class="title is-3">Successfully Created a New Rental!</h1>
+								<p>
+									Your content will automatically display on
+									<a class="primary-link" href="http://<%= listing_info.domain_name %>"><%= "www." + listing_info.domain_name %></a>
+									at the designated rental time(s).
+								</p>
+								<% if (!user) { %>
+									<h3 class="is-bold">Create an Account</h3>
+									<p>
+										You will need to sign up for a new DomaHub account in order to edit any existing rentals.
+									</p>
+									<p>
+										The below link is unique and can be used to associate this rental with a new DomaHub account.
+										The link has also been emailed to you if you provided us with an email during checkout.
+									</p>
+									<input class='input' placeholder="Save me for later!"/>
+								<% } else { %>
+									<h3 class="is-bold">My Account</h3>
+									<p>
+									Should you need to edit the rental content or add more time, please click the
+									button below to edit your new rental. Or you may go to your My Rentals page to
+									see all of your rentals at once.
+									</p>
+									<p class="control margin-top-20">
+										<a href="" class="button is-primary is-medium" tabindex="1">
+											<span class="icon">
+												<i class="fa fa-pencil-square-o"></i>
+											</span>
+											<span>Edit Rental</span>
+										</a>
+										<a href="/profile/myrentals" class="button is-accent is-medium" tabindex="1">
+											<span class="icon">
+												<i class="fa fa-th-list"></i>
+											</span>
+											<span>My Rentals</span>
+										</a>
+									</p>
+								<% } %>
+							</div>
 						</div>
 						<div class="column is-2">
 							<div id="linebreak">
@@ -401,7 +443,7 @@
 						<div class="column is-4">
 							<div class="content">
 								<h1 class="title is-3">Rental Summary</h1>
-								<p>
+								<p id="success-message">
 									Please take a moment to review the summary below.
 									You may edit the information on any of the previous
 									pages by clicking the go back button.
@@ -430,7 +472,7 @@
 											</div>
 										</div>
 									</div>
-									<p class="control is-expanded">
+									<p class="success-hide control is-expanded">
 										<a tabindex="1" id="edit-dates-button" class="button is-primary is-fullwidth">Edit Dates</a>
 									</p>
 								</div>
@@ -464,22 +506,6 @@
 										</div>
 									</div>
 								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div id="review-modal-content" class="listing-modal-content is-hidden">
-					<div class="columns">
-						<div class="column is-half">
-							<div class="notification is-primary">
-								<h1>Success!</h1>
-							</div>
-							<div class="content">
-								<p>
-									Your transaction was successful. Go to your profile's
-									<a href="/profile/mylistings" class="orange-link">listing page</a>
-									to view and edit your new rental.
-								</p>
 							</div>
 						</div>
 					</div>
