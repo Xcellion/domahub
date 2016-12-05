@@ -155,9 +155,6 @@ $(document).ready(function() {
 			//fatten event height in month view
 			else {
 				$(element).css("height", "50px");
-
-				//attach hover handler since event overlaps the regular one
-				highlightCellHover(view.name);		//highlight cell hover
 			}
 
 		}
@@ -192,34 +189,73 @@ $(document).ready(function() {
 
 //helper function to highlight individual agendaweek cells
 function highlightCellHover(viewname){
-	$('.fc-widget-content').hover(function(){
-		var temp_height = $(this).height();
-		//agendaweek view
-		if(!$(this).html()){
-			if (viewname == "agendaWeek"){
-				for( i = 0; i < 7; i++){
-					var temp_cell = $("<td class='temp-cell'></td>");
-					temp_cell.css({
-						width: $(this).width() / 7,
-						height: temp_height,
-						border: 0
-					});
-					$(this).append(temp_cell);
-				}
+	$('td.fc-widget-content').mouseenter(function(){
+		appendTempCell($(this), viewname);
+	});
+
+	if (viewname == "month"){
+		//month hover on day row
+		$(".fc-day-number").mouseenter(function(e){
+
+			//only when not clicking
+			if (e.which == 0){
+				var day_index = $(this).index();
+				day_cell_elem = $($(this).closest(".fc-content-skeleton").prev(".fc-bg").find(".fc-widget-content")[day_index]);
+				appendTempCell(day_cell_elem, "month");
 			}
-			else {
+		});
+
+		//month hover on day row
+		$(".fc-day-number").mouseleave(function(e){
+			$(".temp-cell").remove();
+		});
+
+		$('td.fc-widget-content').mouseleave(function(){
+			$(".temp-cell").remove();
+		});
+	}
+}
+
+//helper function to append a temp cell for hover effect
+function appendTempCell(element, view){
+	if (!element.html()){
+		if (view == "agendaWeek"){
+			$(".temp-cell").remove();
+			for (i = 0; i < 7; i++){
 				var temp_cell = $("<td class='temp-cell'></td>");
 				temp_cell.css({
-					width: $(this).width() + 1,
-					height: temp_height + 1,
+					width: element.width() / 7,
+					height: element.height(),
 					border: 0
 				});
-				$(this).append(temp_cell);
+				element.append(temp_cell);
 			}
 		}
-	}, function(){
-		$(this).children('.temp-cell').remove();
-	});
+		else{
+			$(".temp-cell").remove();
+			var temp_cell = $("<td class='temp-cell'></td>");
+			temp_cell.css({
+				width: element.width() + 1,
+				height: element.height() + 2,
+				border: 0
+			});
+			element.append(temp_cell);
+		}
+	}
+}
+
+//helper function to highlight day cells in month view
+function highlightMonthDayCell(day_index, day_cell_elem){
+	var temp_height = $(day_cell_elem).height();
+	if (!$(day_cell_elem).html()){
+		var temp_cell = $("<td class='temp-cell'></td>");
+		temp_cell.css({
+			width: $(day_cell_elem).width() + 1,
+			height: temp_height + 1,
+			border: 0
+		});
+		$(day_cell_elem).append(temp_cell);
+	}
 }
 
 //helper function to create pre-existing rentals
