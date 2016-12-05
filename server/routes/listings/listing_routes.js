@@ -168,6 +168,7 @@ module.exports = function(app, db, auth, error, stripe){
 	app.get('/listing/:domain_name', [
 		renter_functions.checkDomainAndAddToSearch,
 		renter_functions.getVerifiedListing,
+		renter_functions.deleteRentalInfo,
 		renter_functions.renderListing
 	]);
 
@@ -181,7 +182,7 @@ module.exports = function(app, db, auth, error, stripe){
 		renter_functions.getRental,
 		auth.checkLoggedIn,
 		renter_functions.checkRental,
-		renter_functions.getRentalTimes,
+		renter_functions.getRentalRentalTimes,
 		renter_functions.getVerifiedListing,
 		renter_functions.renderListing
 	]);
@@ -198,6 +199,7 @@ module.exports = function(app, db, auth, error, stripe){
 		renter_functions.createRental,
 		renter_functions.getOwnerStripe,
 		stripe.chargeMoney,
+		renter_functions.emailToRegister,
 		renter_functions.toggleActivateRental
 	]);
 
@@ -209,7 +211,7 @@ module.exports = function(app, db, auth, error, stripe){
 		checkDomainListed,
 		renter_functions.getRental,
 		renter_functions.checkRental,
-		renter_functions.getRentalTimes,
+		renter_functions.getRentalRentalTimes,
 		renter_functions.getVerifiedListing,
 		renter_functions.toggleActivateRental
 	]);
@@ -222,7 +224,7 @@ module.exports = function(app, db, auth, error, stripe){
 		checkDomainListed,
 		renter_functions.getRental,
 		renter_functions.checkRental,
-		renter_functions.getRentalTimes,
+		renter_functions.getRentalRentalTimes,
 		renter_functions.getVerifiedListing,
 		renter_functions.checkRentalTimes,
 		renter_functions.checkRentalPrice,

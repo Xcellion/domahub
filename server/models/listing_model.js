@@ -41,14 +41,14 @@ module.exports = listing_model;
 
 //check if a listing exists
 listing_model.prototype.checkListing = function(domain_name, callback){
-	console.log("Checking to see if " + domain_name + " is listed on domahub...");
+	console.log("DB: Checking to see if " + domain_name + " is listed on domahub...");
 	query = 'SELECT 1 AS "exist" FROM listings WHERE domain_name = ?'
 	listing_query(query, "Listing does not exist!", callback, domain_name);
 }
 
 //check if an account owns a listing
 listing_model.prototype.checkListingOwner = function(account_id, domain_name, callback){
-	console.log("Checking to see if account #" + account_id + " owns domain " + domain_name + "...");
+	console.log("DB: Checking to see if account #" + account_id + " owns domain " + domain_name + "...");
 	query = 'SELECT 1 AS "exist" FROM listings WHERE owner_id = ? AND domain_name = ?'
 	listing_query(query, "Account does not own the domain" + domain_name + "!", callback, [account_id, domain_name]);
 }
@@ -57,7 +57,7 @@ listing_model.prototype.checkListingOwner = function(account_id, domain_name, ca
 
 //gets all info for an active listing including owner name and email
 listing_model.prototype.getVerifiedListing = function(domain_name, callback){
-	console.log("Attempting to get active listing information for " + domain_name + "...");
+	console.log("DB: Attempting to get active listing information for " + domain_name + "...");
 	query = "SELECT \
 				listings.*,\
 				accounts.username,\
@@ -73,7 +73,7 @@ listing_model.prototype.getVerifiedListing = function(domain_name, callback){
 
 //gets all 'active' listing information including owner name and email
 listing_model.prototype.getAllListings = function(callback){
-	console.log("Attempting to get all listing info...");
+	console.log("DB: Attempting to get all listing info...");
 	query = 'SELECT \
 				listings.*,\
 				accounts.username,\
@@ -87,7 +87,7 @@ listing_model.prototype.getAllListings = function(callback){
 
 //gets all rentals times and their owners for a specific listing
 listing_model.prototype.getListingRentalsInfo = function(listing_id, callback){
-	console.log("Attempting to get all existing active rentals for listing #" + listing_id + "...");
+	console.log("DB: Attempting to get all existing active rentals for listing #" + listing_id + "...");
 	query = "SELECT \
 				rentals.account_id, \
 				rentals.rental_id, \
@@ -106,7 +106,7 @@ listing_model.prototype.getListingRentalsInfo = function(listing_id, callback){
 
 //gets all rental info for a specific rental
 listing_model.prototype.getRentalInfo = function(rental_id, callback){
-	console.log("Attempting to get all rental info for rental #" + rental_id + "...");
+	console.log("DB: Attempting to get all rental info for rental #" + rental_id + "...");
 	query = "SELECT \
 				rentals.*, \
 				listings.domain_name \
@@ -119,7 +119,7 @@ listing_model.prototype.getRentalInfo = function(rental_id, callback){
 
 //gets all rental information for the current rental
 listing_model.prototype.getCurrentRental = function(domain_name, callback){
-	console.log("Attempting to get current rental info for for domain " + domain_name + "...");
+	console.log("DB: Attempting to get current rental info for for domain " + domain_name + "...");
 	query = "SELECT \
 				rentals.*,\
 				listings.domain_name,\
@@ -140,8 +140,8 @@ listing_model.prototype.getCurrentRental = function(domain_name, callback){
 }
 
 //gets all rental times for a specific rental
-listing_model.prototype.getRentalTimes = function(rental_id, callback){
-	console.log("Attempting to get rental times for rental #" + rental_id + "...");
+listing_model.prototype.getRentalRentalTimes = function(rental_id, callback){
+	console.log("DB: Attempting to get rental times for rental #" + rental_id + "...");
 	query = "SELECT \
 				date, \
 				duration \
@@ -153,7 +153,7 @@ listing_model.prototype.getRentalTimes = function(rental_id, callback){
 
 //gets all rental times for a specific listing to cross check against a new rental (see checkRentalTime)
 listing_model.prototype.getListingRentalTimes = function(listing_id, callback){
-	console.log("Attempting to get rental times for listing #" + listing_id + "...");
+	console.log("DB: Attempting to get rental times for listing #" + listing_id + "...");
 	query = "SELECT \
 				rental_times.* \
 			FROM rental_times \
@@ -166,7 +166,7 @@ listing_model.prototype.getListingRentalTimes = function(listing_id, callback){
 
 //gets all rental times for a specific listing to cross check against a new rental (see checkRentalTime)
 listing_model.prototype.getRandomListingByCategory = function(category, callback){
-	console.log("Attempting to get a random listing with category: " + category + "...");
+	console.log("DB: Attempting to get a random listing with category: " + category + "...");
 	query = "SELECT \
 				listings.domain_name \
 			FROM listings \
@@ -177,7 +177,7 @@ listing_model.prototype.getRandomListingByCategory = function(category, callback
 
 //gets all active listings with X category, X domain name, X price -- and all active rentals/rental_times for them
 listing_model.prototype.getListingByFilter = function(filter_name, filter_price, filter_date, callback){
-	console.log("Attempting to search for a listing...");
+	console.log("DB: Attempting to search for a listing...");
 	query = "SELECT \
 				listings.domain_name, \
 				listings.hour_price, \
@@ -207,7 +207,7 @@ listing_model.prototype.getListingByFilter = function(filter_name, filter_price,
 
 //gets a handful of random listings for the search page
 listing_model.prototype.getRandomListings = function(callback){
-	console.log("Attempting to get 10 random listings...");
+	console.log("DB: Attempting to get 10 random listings...");
 	query = "SELECT \
 				listings.domain_name, \
 				listings.hour_price, \
@@ -229,7 +229,7 @@ listing_model.prototype.getRandomListings = function(callback){
 
 //creates a new listing
 listing_model.prototype.newListing = function(listing_info, callback){
-	console.log("Attempting to create a new listing: " + listing_info.domain_name + "...");
+	console.log("DB: Attempting to create a new listing: " + listing_info.domain_name + "...");
 	query = "INSERT INTO listings \
 			SET ? "
 	listing_query(query, "Failed to create a new listing: " + listing_info.domain_name + "!", callback, listing_info);
@@ -238,7 +238,7 @@ listing_model.prototype.newListing = function(listing_info, callback){
 //creates multiple new listings
 //BULK INSERT NEEDS TRIPLE NESTED ARRAYS
 listing_model.prototype.newListings = function(listing_info_array, callback){
-	console.log("Attempting to create " + listing_info_array.length + " new listings...");
+	console.log("DB: Attempting to create " + listing_info_array.length + " new listings...");
 	query = "INSERT IGNORE INTO listings ( \
 				domain_name, \
 				description, \
@@ -252,7 +252,7 @@ listing_model.prototype.newListings = function(listing_info_array, callback){
 
 //creates a new rental under a listing
 listing_model.prototype.newListingRental = function(listing_id, rental_info, callback){
-	console.log("Attempting to create a new rental for listing #" + listing_id + "...");
+	console.log("DB: Attempting to create a new rental for listing #" + listing_id + "...");
 	query = "INSERT INTO rentals \
 			SET ? "
 	listing_query(query, "Failed to add a new rental for listing #" + listing_id + "!", callback, rental_info);
@@ -261,7 +261,7 @@ listing_model.prototype.newListingRental = function(listing_id, rental_info, cal
 //creates new rental times for a specific rental
 //BULK INSERT NEEDS TRIPLE NESTED ARRAYS
 listing_model.prototype.newRentalTimes = function(rental_id, rental_times, callback){
-	console.log("Attempting to create new rental times for rental #" + rental_id + "...");
+	console.log("DB: Attempting to create new rental times for rental #" + rental_id + "...");
 	query = "INSERT INTO rental_times (rental_id, date, duration, id) VALUES ? ON DUPLICATE KEY UPDATE \
 		rental_id = VALUES(rental_id), \
 		date = VALUES(date), \
@@ -274,7 +274,7 @@ listing_model.prototype.newRentalTimes = function(rental_id, rental_times, callb
 
 //updates listing info
 listing_model.prototype.updateListing = function(domain_name, listing_info, callback){
-	console.log("Attempting to update domain " + domain_name + "...");
+	console.log("DB: Attempting to update domain " + domain_name + "...");
 	query = "UPDATE listings \
 			SET ? \
 			WHERE domain_name = ?"
@@ -283,7 +283,7 @@ listing_model.prototype.updateListing = function(domain_name, listing_info, call
 
 //updates multiple listings, needs to be all created without error, or else cant figure out insert IDs
 listing_model.prototype.updateListingsVerified = function(listing_ids, callback){
-	console.log("Attempting to revert verified status for bulk domain creation...");
+	console.log("DB: Attempting to revert verified status for bulk domain creation...");
 	query = "INSERT INTO listings \
 				(id) \
 			VALUES ? \
@@ -293,7 +293,7 @@ listing_model.prototype.updateListingsVerified = function(listing_ids, callback)
 
 //updates rental info
 listing_model.prototype.updateRental = function(rental_id, rental_info, callback){
-	console.log("Attempting to update rental #" + rental_id + "...");
+	console.log("DB: Attempting to update rental #" + rental_id + "...");
 	query = "UPDATE rentals \
 			SET ? \
 			WHERE rental_id = ?"
@@ -302,7 +302,7 @@ listing_model.prototype.updateRental = function(rental_id, rental_info, callback
 
 //updates rental times if for the same rental
 listing_model.prototype.updateRentalTime = function(new_rental_times, callback){
-	console.log("Attempting to update rental time #" + rental_time_id + "...");
+	console.log("DB: Attempting to update rental time #" + rental_time_id + "...");
 	query = "UPDATE rental_times \
 			SET duration = ? \
 			WHERE id = ?"
@@ -311,7 +311,7 @@ listing_model.prototype.updateRentalTime = function(new_rental_times, callback){
 
 //toggles the rental active or inactive
 listing_model.prototype.toggleActivateRental = function(rental_id, callback){
-	console.log("Attempting to toggle activation on rental #" + rental_id + "...");
+	console.log("DB: Attempting to toggle activation on rental #" + rental_id + "...");
 	query = "UPDATE rentals \
 			SET active = !active \
 			WHERE rental_id = ?"
@@ -322,7 +322,7 @@ listing_model.prototype.toggleActivateRental = function(rental_id, callback){
 
 //deletes a specific rental
 listing_model.prototype.deleteRental = function(rental_id, callback){
-	console.log("Attempting to delete rental #" + rental_id + "...");
+	console.log("DB: Attempting to delete rental #" + rental_id + "...");
 	query = "DELETE FROM rentals \
 			WHERE rental_id = ? "
 	listing_query(query, "Failed to delete rental #" + rental_id + "!", callback, rental_id);
