@@ -30,8 +30,8 @@
 }
 
 @font-face {
-  font-family: 'quicksand';
-  src: url("/fonts/quicksand/quicksand700.ttf");
+  font-family: 'ubuntu';
+  src: url("/fonts/ubuntu/ubuntu700.ttf");
   font-weight: 700;
   font-style: normal;
 }
@@ -45,9 +45,9 @@
 
 /********************** CUSTOM CLASS STYLING ******************/
 .logo-text {
+  letter-spacing: -1px;
   font: {
-    weight: bold;
-    family: $roboto;
+    family: 'ubuntu';
     size: $size-3;
   }
   &.primary-logo {
