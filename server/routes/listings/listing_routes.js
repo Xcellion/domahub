@@ -173,18 +173,24 @@ module.exports = function(app, db, auth, error, stripe){
 	]);
 
 	//render a specific rental
-	app.get([
-		'/listing/:domain_name/:rental_id',
-		'/listing/:domain_name/:rental_id/:owner_hash_id'
-	], [
+	app.get('/listing/:domain_name/:rental_id', [
 		checkDomainValid,
 		checkDomainListed,
-		renter_functions.getRental,
 		auth.checkLoggedIn,
+		renter_functions.getRental,
 		renter_functions.checkRental,
 		renter_functions.getRentalRentalTimes,
 		renter_functions.getVerifiedListing,
 		renter_functions.renderListing
+	]);
+
+	//associate a user with a hash rental
+	app.get('/listing/:domain_name/:rental_id/:owner_hash_id', [
+		checkDomainValid,
+		checkDomainListed,
+		renter_functions.getRental,
+		auth.checkLoggedIn,
+		renter_functions.updateRentalOwner
 	]);
 
 	//create a new rental
