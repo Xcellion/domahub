@@ -16,7 +16,6 @@ module.exports = {
 	checkRental : function(req, res, next){
 		console.log("F: Checking if rental exists and belongs to the correct domain / account...");
 		var domain_name = req.params.domain_name;
-		var owner_hash_id = req.params.owner_hash_id;
 
 		//rental doesnt exist!
 		if (!req.session.rental_info){
@@ -27,11 +26,6 @@ module.exports = {
 		else if (req.session.rental_info.domain_name != domain_name){
 			console.log("Invalid domain name for rental!");
 			error.handler(req, res, "Invalid rental!");
-		}
-		//if no account claimed it yet
-		else if (req.session.rental_info.owner_hash_id == owner_hash_id){
-			console.log(req.user.id);
-			next();
 		}
 		//incorrect owner!
 		else if (req.session.rental_info.account_id != req.user.id){
@@ -44,7 +38,7 @@ module.exports = {
 		}
 	},
 
-	//function to check the rental info posted
+	//check the rental info posted
 	checkRentalInfo : function(req, res, next){
 		console.log("F: Checking posted rental info...");
 
@@ -79,7 +73,7 @@ module.exports = {
 		}
 	},
 
-	//function to check times
+	//check times
 	checkRentalTimes : function(req, res, next){
 		console.log("F: Checking posted rental times...");
 
@@ -135,7 +129,7 @@ module.exports = {
 		}
 	},
 
-	//function to calculate and check for the price
+	//calculate and check for the price
 	checkRentalPrice : function(req, res, next){
 		console.log("F: Checking rental price...");
 
@@ -226,13 +220,16 @@ module.exports = {
 		else if (req.session.changed || !req.session.rental_info || (req.session.rental_info.rental_id != rental_id)){
 			delete req.session.changed;
 			Listing.getRentalInfo(rental_id, function(result){
-				if (result.state != "success"){error.handler(req, res, result.description);}
+				if (result.state != "success"){error.handler(req, res, result.info);}
 				else {
 					req.session.rental_info = result.info[0];
 					if (req.session.rental_info.owner_hash_id == owner_hash_id){
 						req.session.message = "Please create an account to edit this rental!";
+						next();
 					}
-					next();
+					else {
+						res.redirect('/listing/' + req.params.domain_name);
+					}
 				}
 			});
 		}
@@ -249,7 +246,7 @@ module.exports = {
 		var rental_id = req.params.rental_id;
 
 		Listing.getRentalRentalTimes(rental_id, function(result){
-			if (result.state != "success"){error.handler(req, res, result.description);}
+			if (result.state != "success"){error.handler(req, res, result.info);}
 			else {
 				req.session.rental_info.times = joinRentalTimes(result.info);
 				next();
@@ -257,7 +254,7 @@ module.exports = {
 		});
 	},
 
-	//function to get the stripe id of the listing owner and if listing is premium/basic
+	//get the stripe id of the listing owner and if listing is premium/basic
 	getOwnerStripe : function(req, res, next){
 		console.log("F: Getting all Stripe info for a listing...");
 
@@ -317,7 +314,7 @@ module.exports = {
 		});
 	},
 
-	//function to create a new rental
+	//create a new rental
 	createRental : function(req, res, next){
 		console.log("F: Creating a new rental...");
 
@@ -335,7 +332,7 @@ module.exports = {
 		});
 	},
 
-	//function to add times to rental
+	//add times to rental
 	editRentalTimes : function(req, res, next){
 		console.log("F: Adding times to an existing rental...");
 
@@ -352,18 +349,21 @@ module.exports = {
 		});
 	},
 
-	//function to email the link to the posted email
-	emailToRegister: function(req, res, next){
-		if (!req.user && req.session.new_rental_info.owner_hash_id && req.session.new_rental_info.new_user_email){
+	//email the link to the posted email
+	emailToRegister : function(req, res, next){
+		var owner_hash_id = req.session.new_rental_info.rental_db_info.owner_hash_id;
+		var new_user_email = req.session.new_rental_info.new_user_email || req.body.new_user_email;
+
+		if (!req.user && owner_hash_id && new_user_email){
 			console.log("F: Emailing registration link to new rental owner...");
 
 			var email = {
 				to: req.session.new_rental_info.new_user_email,
 				from: 'noreply@domahub.com',
-				subject: "Your DomaHub Rental Link.",
+				subject: "Your DomaHub Rental Link",
 				text: 'Here is a link to your recent rental of a DomaHub Domain.\n\n' +
 					  'You may use the following link to create a account that will be associated with this rental.\n\n' +
-					  'https://' + req.params.domain_name + '/listings/' + req.session.new_rental_info.rental_id + "/" + req.session.owner_hash_id + '\n\n'
+					  'https://domahub.com/listing' + req.params.domain_name + req.session.new_rental_info.rental_id + "/" + owner_hash_id + '\n\n'
 			};
 
 			//send email of edit link
@@ -380,7 +380,7 @@ module.exports = {
 	},
 
 	//activate the rental once its good
-	toggleActivateRental: function(req, res, next){
+	toggleActivateRental : function(req, res, next){
 		console.log("F: Activating new rental...");
 
 		var rental_id = (req.session.new_rental_info) ? req.session.new_rental_info.rental_id : req.params.rental_id;
@@ -390,7 +390,7 @@ module.exports = {
 		Listing.toggleActivateRental(rental_id, function(result){
 			if (result.state != "success"){
 				delete req.session.new_rental_info;
-				error.handler(req, res, result.description);
+				error.handler(req, res, result.info);
 			}
 			else {
 				//update the req.users.rentals object if necessary
@@ -416,6 +416,22 @@ module.exports = {
 		});
 	},
 
+	//updates the owner of a rental that has no owner (hash rental)
+	updateRentalOwner : function(req, res, next){
+		console.log("F: Updating the rental owner...");
+		var rental_id = req.params.rental_id;
+		var raw_info = {
+			account_id: req.user.id,
+			owner_hash_id: null
+		}
+
+		//update the DB
+		updateRental(req, res, rental_id, raw_info, function(){
+			console.log("/listing/" + req.params.domain_name + "/" + rental_id);
+			res.redirect("/listing/" + req.params.domain_name + "/" + rental_id);
+		});
+	}
+
 }
 
 //----------------------------------------------------------------helper functions----------------------------------------------------------------
@@ -423,7 +439,7 @@ module.exports = {
 //helper function to create a new rental
 function newListingRental(req, res, raw_info, callback){
 	Listing.newListingRental(req.session.listing_info.id, raw_info, function(result){
-		if (result.state != "success"){error.handler(req, res, result.description, "json");}
+		if (result.state != "success"){error.handler(req, res, result.info, "json");}
 		else {
 			callback(result.info.insertId);
 		}
@@ -433,7 +449,7 @@ function newListingRental(req, res, raw_info, callback){
 //helper function to update rental info
 function updateRental(req, res, rental_id, raw_info, callback){
 	Listing.updateRental(req.params.rental_id, raw_info, function(result){
-		if (result.state != "success"){error.handler(req, res, result.description, "json");}
+		if (result.state != "success"){error.handler(req, res, result.info, "json");}
 		else {
 			callback();
 		}
@@ -456,7 +472,7 @@ function formatNewRentalTimes(rental_id, times){
 //helper function to create new rental times
 function newRentalTimes(req, res, rental_id, times, callback){
 	Listing.newRentalTimes(rental_id, times, function(result){
-		if (result.state != "success"){error.handler(req, res, result.description, "json");}
+		if (result.state != "success"){error.handler(req, res, result.info, "json");}
 		else {
 			callback();
 		}
