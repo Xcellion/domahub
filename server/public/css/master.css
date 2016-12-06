@@ -875,7 +875,8 @@ a.box {
   -webkit-transition: all 0.25s;
   transition: all 0.25s;
   justify-content: center;
-  text-align: center; }
+  text-align: center;
+  white-space: nowrap; }
   .button:focus {
     outline-color: rgba(0, 0, 0, 0.66); }
   .button[disabled], .button.is-disabled {
