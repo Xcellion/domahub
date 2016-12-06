@@ -2432,14 +2432,14 @@ input:-webkit-autofill {
     .table th.row-drop-td {
       padding: 0;
       border: none; }
-    .table td > div,
-    .table th > div {
+    .table td > .div-drop,
+    .table th > .div-drop {
       background-color: white;
       border: 1px solid rgba(0, 0, 0, 0.12);
       border-width: 0 0 1px;
       padding: 30px 0; }
-      .table td > div:hover,
-      .table th > div:hover {
+      .table td > .div-drop:hover,
+      .table th > .div-drop:hover {
         background-color: white;
         cursor: default; }
     .table td.is-icon,
@@ -5853,8 +5853,8 @@ a.nav-item {
   font-style: normal; }
 
 @font-face {
-  font-family: 'quicksand';
-  src: url("/fonts/quicksand/quicksand700.ttf");
+  font-family: 'ubuntu';
+  src: url("/fonts/ubuntu/ubuntu700.ttf");
   font-weight: 700;
   font-style: normal; }
 
@@ -5866,8 +5866,8 @@ a.nav-item {
 
 /********************** CUSTOM CLASS STYLING ******************/
 .logo-text {
-  font-weight: bold;
-  font-family: "roboto", Helvetica, sans-serif;
+  letter-spacing: -1px;
+  font-family: 'ubuntu';
   font-size: 28px; }
   .logo-text.primary-logo {
     color: #3cbc8d; }
