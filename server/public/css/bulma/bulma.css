@@ -1616,6 +1616,10 @@ a.box {
     display: flex;
     width: 100%; }
   .button.is-loading {
+    -moz-transition: none;
+    -o-transition: none;
+    -webkit-transition: none;
+    transition: none;
     color: transparent !important;
     pointer-events: none; }
     .button.is-loading:after {
