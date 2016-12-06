@@ -73,7 +73,7 @@ account_model.prototype.getAccountListings = function(account_id, callback){
 				rented_table.rented \
 			FROM listings \
 			LEFT JOIN \
-				(SELECT \
+				(SELECT DISTINCT\
 					listings.id AS listing_id, \
 					rentals.rental_id IS NOT NULL AS rented \
 				FROM rental_times \

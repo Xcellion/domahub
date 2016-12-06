@@ -1,191 +1,188 @@
-var moneyFormat = wNumb({
-	thousand: ',',
-	prefix: '$',
-	postfix: " USD",
-	decimals: 2
+$(document).ready(function() {
+    setUpCalendar();
 });
 
-$(document).ready(function() {
-	//calendar logic
-	 $('#calendar').fullCalendar({
-		scrollTime: moment().format("hh:mm:ss"),
-		defaultView: "agendaWeek",
-		allDayDefault: false,
-		allDaySlot: false,
-		selectable: true,
-		timezone: "local",
-		editable: false, //prevents editing of events
-		eventOverlap: false, //prevents overlap of events
-		eventStartEditable: false, //prevents moving of events
-		nowIndicator: true, //red line indicating current time
-		slotDuration: '01:00:00', //how long a slot is,
-		height: "parent",
+//----------------------------------------------------------------------------------------------------------------CALENDAR SET UP
 
-		//formatting for labels
-		titleFormat: {
-		   month: 'YYYY MMMM',
-		   week: "MMM DD YYYY"
-	   	},
-		timeFormat: 'hA',
-		axisFormat: 'hA',
+//function to setup the calendar
+function setUpCalendar(){
+    $('#calendar').fullCalendar({
+        scrollTime: moment().format("hh:mm:ss"),
+        defaultView: "agendaWeek",
+        allDayDefault: false,
+        allDaySlot: false,
+        selectable: true,
+        timezone: "local",
+        editable: false, //prevents editing of events
+        eventOverlap: false, //prevents overlap of events
+        eventStartEditable: false, //prevents moving of events
+        nowIndicator: true, //red line indicating current time
+        slotDuration: '01:00:00', //how long a slot is,
+        height: "parent",
 
-		//header buttons
-		header: {left:'prev', center:'next', right:'title, today'},
+        //formatting for labels
+        titleFormat: {
+            month: 'YYYY MMMM',
+            week: "MMM DD YYYY"
+        },
+        timeFormat: 'hA',
+        axisFormat: 'hA',
 
-		//background event to show that you cant select past dates
-		events: [
-			//background for all days until today
-			{
-				start: '1970-01-01T00:00:00',
-				end:  moment().endOf("hour"),
-				rendering: 'background',
-				id: "background_today"
-			},
-			//all day background event (month view)
-			{
-				start: '1970-01-01T00:00:00',
-				end: moment().format("YYYY-MM-DD"),
-				rendering: 'background',
-				allDay: true
-			},
-			//background for 1 year out
-			{
-				start: moment().add(1, "year").startOf("hour"),
-				end: moment().add(2, "year"),
-				rendering: 'background'
-			},
-			//all day background event for 1 year out (month view)
-			{
-				start: moment().add(1, "year"),
-				end: moment().add(2, "year"),
-				rendering: 'background',
-				allDay: true
-			},
-		],
+        //header buttons
+        header: {left:'prev', center:'next', right:'title, today'},
 
-		//prevent selecting anything before current hour, and next year
-		selectConstraint: {
-			start: moment().endOf("hour"),
-			end: moment().add(1, "year")
-		},
+        //background event to show that you cant select past dates
+        events: [
+            //background for all days until today
+            {
+                start: '1970-01-01T00:00:00',
+                end:  moment().endOf("hour"),
+                rendering: 'background',
+                id: "background_today"
+            },
+            //all day background event (month view)
+            {
+                start: '1970-01-01T00:00:00',
+                end: moment().format("YYYY-MM-DD"),
+                rendering: 'background',
+                allDay: true
+            },
+            //background for 1 year out
+            {
+                start: moment().add(1, "year").startOf("hour"),
+                end: moment().add(2, "year"),
+                rendering: 'background'
+            },
+            //all day background event for 1 year out (month view)
+            {
+                start: moment().add(1, "year"),
+                end: moment().add(2, "year"),
+                rendering: 'background',
+                allDay: true
+            },
+        ],
 
-		//callback when view is changed
-		viewRender: function(currentView){
-			var minDate = moment();						//prevent calendar from going back in past
-			var maxDate = moment().add(1, "year");		//prevent calendar from going further than 1 year
+        //prevent selecting anything before current hour, and next year
+        selectConstraint: {
+            start: moment().endOf("hour"),
+            end: moment().add(1, "year")
+        },
 
-			//dim today or not
-			if (moment().isBetween(currentView.start, currentView.end)){
-				$("#today-button").addClass('is-disabled');
-			}
-			else {
-				$("#today-button").removeClass('is-disabled');
-			}
+        //callback when view is changed
+        viewRender: function(currentView){
+            var minDate = moment();						//prevent calendar from going back in past
+            var maxDate = moment().add(1, "year");		//prevent calendar from going further than 1 year
 
-			//dim previous button
-			if (currentView.start.isSameOrBefore(minDate)) {
-				$(".fc-prev-button").prop('disabled', true);
-				$(".fc-prev-button").addClass('fc-state-disabled');
-				$(".fc-next-button").removeClass('fc-state-disabled');
-				$(".fc-next-button").prop('disabled', false);
-			}
-			//dim next button
-			else if (currentView.end.isSameOrAfter(maxDate)){
-				$(".fc-next-button").prop('disabled', true);
-				$(".fc-next-button").addClass('fc-state-disabled');
-				$(".fc-prev-button").removeClass('fc-state-disabled');
-				$(".fc-prev-button").prop('disabled', false);
-			}
-			//undim both
-			else {
-				$(".fc-prev-button, .fc-next-button").removeClass('fc-state-disabled');
-				$(".fc-prev-button, .fc-next-button").prop('disabled', false);
-			}
+            //dim today or not
+            if (moment().isBetween(currentView.start, currentView.end)){
+                $("#today-button").addClass('is-disabled');
+            }
+            else {
+                $("#today-button").removeClass('is-disabled');
+            }
 
-			if (currentView.name == "agendaWeek"){
-				daySelectionHandlers();		//day selector event handlers
-			}
-			highlightCellHover(currentView.name);		//highlight cell hover
-		},
+            //dim previous button
+            if (currentView.start.isSameOrBefore(minDate)) {
+                $(".fc-prev-button").prop('disabled', true);
+                $(".fc-prev-button").addClass('fc-state-disabled');
+                $(".fc-next-button").removeClass('fc-state-disabled');
+                $(".fc-next-button").prop('disabled', false);
+            }
+            //dim next button
+            else if (currentView.end.isSameOrAfter(maxDate)){
+                $(".fc-next-button").prop('disabled', true);
+                $(".fc-next-button").addClass('fc-state-disabled');
+                $(".fc-prev-button").removeClass('fc-state-disabled');
+                $(".fc-prev-button").prop('disabled', false);
+            }
+            //undim both
+            else {
+                $(".fc-prev-button, .fc-next-button").removeClass('fc-state-disabled');
+                $(".fc-prev-button, .fc-next-button").prop('disabled', false);
+            }
 
-		//creating new events
-		select: function(start, end, jsEvent, view){
-			var start = moment(start.format());
-			var end = moment(end.format());
-			var now = moment();
-			var then = moment().add(1, "year");
+            if (currentView.name == "agendaWeek"){
+                daySelectionHandlers();		//day selector event handlers
+            }
+            highlightCellHover(currentView.name);		//highlight cell hover
+        },
 
-			start = (start.isSameOrBefore(now)) ? now.add(1, "hour").startOf('hour') : start;  		//to select a partial day entirely (past)
-			end = (end.isSameOrAfter(then)) ? then.startOf('hour') : end; 							//to select a partial day entirely (future)
+        //creating new events
+        select: function(start, end, jsEvent, view){
+            var start = moment(start.format());
+            var end = moment(end.format());
+            var now = moment();
+            var then = moment().add(1, "year");
 
-			//prevent calendar from creating events in the past (except for current hour slot)
-			if (start < now){
-				$('#calendar').fullCalendar('unselect');
-				return false;
-			}
-			else {
-				createEvent(start, end);
-			}
-		},
+            start = (start.isSameOrBefore(now)) ? now.add(1, "hour").startOf('hour') : start;  		//to select a partial day entirely (past)
+            end = (end.isSameOrAfter(then)) ? then.startOf('hour') : end; 							//to select a partial day entirely (future)
 
-		//tag id to HTML DOM for easy access
-		eventAfterRender: function(event, element, view ) {
-			$(element).attr("id", event._id);
+            //prevent calendar from creating events in the past (except for current hour slot)
+            if (start < now){
+                $('#calendar').fullCalendar('unselect');
+                return false;
+            }
+            else {
+                createEvent(start, end);
+            }
+        },
 
-			//event handler for event click on non-background events
-			if (!$(element).hasClass("fc-bgevent")){
-				eventSelectionHandlers(element);
-			}
+        //tag id to HTML DOM for easy access
+        eventAfterRender: function(event, element, view ) {
+            $(element).attr("id", event._id);
 
-			//center title / date / time
-			$(element).find(".fc-content").css({
-				left: "50%",
-				top: "50%",
-				position: "absolute",
-				transform: "translate(-50%, -50%)",
-				"margin-right": "-50%"
-			});
-			if (view.name == "agendaWeek"){
-				$(element).css("width", "100%");
-				//remove event title repeat on other ppl events
-				if (!$(element).hasClass('fc-start') && !event.other){
-					$(element).find('.fc-content').text("");
-				}
-			}
-			//fatten event height in month view
-			else {
-				$(element).css("height", "50px");
-			}
+            //event handler for event click on non-background events
+            if (!$(element).hasClass("fc-bgevent")){
+                eventSelectionHandlers(element);
+            }
 
-		}
+            //center title / date / time
+            $(element).find(".fc-content").css({
+                left: "50%",
+                top: "50%",
+                position: "absolute",
+                transform: "translate(-50%, -50%)",
+                "margin-right": "-50%"
+            });
+            if (view.name == "agendaWeek"){
+                $(element).css("width", "100%");
+                //remove event title repeat on other ppl events
+                if (!$(element).hasClass('fc-start') && !event.other){
+                    $(element).find('.fc-content').text("");
+                }
+            }
+            //fatten event height in month view
+            else {
+                $(element).css("height", "50px");
+            }
+
+        }
     });
 
-	//every hour, update the background event for today
-	window.setInterval(function(){
-		var background_event = $("#calendar").fullCalendar("clientEvents", "background_today");
-		background_event.end = moment();
-		$('#calendar').fullCalendar('updateEvent', background_event);
-	}, 3600000);
+    //custom buttons for today
+    $(".fc-today-button").hide();
 
-	//create existing rentals
-	if (listing_info.rentals){
-		createExisting(listing_info.rentals);
-	}
-
-	$("#events").click(function(e){
-		$('#calendar').fullCalendar('removeEvents', filterMine);
-		storeCookies("local_events");
-		eventPrices();
-	});
-
+    //remove all events and remember
 	$("#remove_events").click(function(e){
 		$('#calendar').fullCalendar('removeEvents', filterMine);
 		storeCookies("local_events");
-		eventPrices();
+		updatePrices();
 	});
-});
 
-//--------------------------------------------------------------------------------------------------------------------------------
+    //change to month view
+    $("#month_button").click(function(e){
+        var view = $('#calendar').fullCalendar('getView');
+
+        if (view.name == "agendaWeek"){
+            $("#calendar").fullCalendar( 'changeView', "month");
+            $(this).text("Week View");
+        }
+        else {
+            $("#calendar").fullCalendar( 'changeView', "agendaWeek");
+            $(this).text("Month View");
+        }
+    });
+}
 
 //helper function to highlight individual agendaweek cells
 function highlightCellHover(viewname){
@@ -255,34 +252,6 @@ function highlightMonthDayCell(day_index, day_cell_elem){
 			border: 0
 		});
 		$(day_cell_elem).append(temp_cell);
-	}
-}
-
-//helper function to create pre-existing rentals
-function createExisting(rentals){
-	for (var x = 0; x < rentals.length; x++){
-		var start = new Date(rentals[x].date);
-		var end = new Date(start.getTime() + rentals[x].duration);
-		var eventData = {
-			start: start,
-			end: end,
-			old: true,
-			rental_id: rentals[x].rental_id,
-			account_id: rentals[x].account_id
-		};
-
-		//if its your own rental
-		if (user && user.id == rentals[x].account_id){
-			eventData.title = user.username;
-			eventData.color = "#73c8e3";
-		}
-		//someone else rented it
-		else {
-			eventData.title = "Rented!";
-			eventData.color = "#ff6b40";
-			eventData.other = true;
-		}
-		$('#calendar').fullCalendar('renderEvent', eventData, true);
 	}
 }
 
@@ -448,12 +417,14 @@ function eventSelectionHandlers(element){
 				mouseDownCalEvent = {};
 				mouseDownJsEvent = {};
 				storeCookies("local_events");
-				eventPrices();
+				updatePrices();
 			}
 
 		}
 	});
 }
+
+//----------------------------------------------------------------------------------------------------------------CALENDAR FUNCTIONS
 
 //helper function to determine the time slot of a mouse event
 function getTimeSlotAgenda(calEvent, jsEvent){
@@ -542,10 +513,10 @@ function getTimeSlotMonth(jsEvent){
 function removeEventTimeSlot(calEvent, mouseDownSlot, mouseUpSlot){
 	//event is equal to slot
 	if (calEvent.start.isSameOrAfter(mouseDownSlot.start)
-		&& calEvent.end.isSameOrBefore(mouseUpSlot.end)){
-			$('#calendar').fullCalendar('removeEvents', calEvent._id);
-			$('#calendar').fullCalendar('updateEvent', calEvent);
-			//console.log('event equal to slot');
+	&& calEvent.end.isSameOrBefore(mouseUpSlot.end)){
+		$('#calendar').fullCalendar('removeEvents', calEvent._id);
+		$('#calendar').fullCalendar('updateEvent', calEvent);
+		//console.log('event equal to slot');
 	}
 	//if clipping starts at top of event
 	else if (calEvent.start.isSame(mouseDownSlot.start)){
@@ -609,21 +580,51 @@ function checkOverlapEvent(event){
     var end = new Date(event.end);
 
     var overlap = $('#calendar').fullCalendar('clientEvents', function(ev) {
-		//dont compare with itself
-		if (ev == event){
-			return false;
-		}
-		//dont compare with background events
-		if (ev.rendering == "background"){
-			return false;
-		}
+        //dont compare with itself
+        if (ev == event){
+            return false;
+        }
+        //dont compare with background events
+        if (ev.rendering == "background"){
+            return false;
+        }
         var estart = new Date(ev.start);
         var eend = new Date(ev.end);
 
         return (Math.round(estart)/1000 < Math.round(end)/1000 && Math.round(eend) > Math.round(start));
     });
 
-	return overlap.length == 0;
+    return overlap.length == 0;
+}
+
+//helper function to create pre-existing rentals
+function createExisting(rentals){
+	if (rentals){
+		for (var x = 0; x < rentals.length; x++){
+			var start = new Date(rentals[x].date);
+			var end = new Date(start.getTime() + rentals[x].duration);
+			var eventData = {
+				start: start,
+				end: end,
+				old: true,
+				rental_id: rentals[x].rental_id,
+				account_id: rentals[x].account_id
+			};
+
+			//if its your own rental
+			if (user && user.id == rentals[x].account_id){
+				eventData.title = user.username;
+				eventData.color = "#73c8e3";
+			}
+			//someone else rented it
+			else {
+				eventData.title = "Rented!";
+				eventData.color = "#ff6b40";
+				eventData.other = true;
+			}
+			$('#calendar').fullCalendar('renderEvent', eventData, true);
+		}
+	}
 }
 
 //helper function to merge events
@@ -645,7 +646,7 @@ function createEvent(start, end){
 				//console.log('new event is not needed');
 				eventEncompassed = true;
 				removeEventTimeSlot(eventitem, {start: start, end: end}, {start: start, end: end});
-				eventPrices();
+				updatePrices();
 			}
 			//check if existing event is fully overlapped by event being created
 			else if (checkFullOverlap(eventitem.start._d, eventitem.end - eventitem.start, start._d, end - start)){
@@ -660,7 +661,7 @@ function createEvent(start, end){
 
 			//no overlaps, check for merges
 			if (!eventitem.old && !eventEncompassed && (moment(start).format('YYYY-MM-DD HH:mm') == moment(eventitem.end).format('YYYY-MM-DD HH:mm')
-				|| moment(end).format('YYYY-MM-DD HH:mm') == moment(eventitem.start).format('YYYY-MM-DD HH:mm'))){
+			|| moment(end).format('YYYY-MM-DD HH:mm') == moment(eventitem.start).format('YYYY-MM-DD HH:mm'))){
 				//console.log('merge');
 				//if start time of new event (2nd slot) is end time of existing event (1st slot)
 				//i.e. if new event is below any existing events
@@ -810,7 +811,7 @@ function createEvent(start, end){
 		storeCookies("local_events");
 
 		//update the total price of current events
-		eventPrices();
+		updatePrices();
 
 		//if there were any error messages
 		if ($("#calendar-error-message").hasClass('is-danger')){
@@ -819,8 +820,10 @@ function createEvent(start, end){
 	}
 }
 
+//----------------------------------------------------------------------------------------------------------------PRICE CALCULATION
+
 //helper function to get correct price of events
-function eventPrices(){
+function updatePrices(){
 	if (listing_info.status){
 		var myevents = $('#calendar').fullCalendar('clientEvents', filterMine);
 		if (myevents.length){
@@ -923,5 +926,39 @@ function eventPrice(event, callback){
 
 //helper function to divide number
 function divided(num, den){
-    return Math[num > 0 ? 'floor' : 'ceil'](num / den);
+	return Math[num > 0 ? 'floor' : 'ceil'](num / den);
+}
+
+//----------------------------------------------------------------------------------------------------------------HELPERS
+
+var moneyFormat = wNumb({
+	thousand: ',',
+	prefix: '$',
+	postfix: " USD",
+	decimals: 2
+});
+
+//helper function to check if date X overlaps any part with date Y
+function checkOverlap(dateX, durationX, dateY, durationY){
+	return (dateX.getTime() < dateY.getTime() + durationY) && (dateY.getTime() < dateX.getTime() + durationX);
+}
+
+//helper function to check if date X is fully covered by date Y
+function checkFullOverlap(dateX, durationX, dateY, durationY){
+	return (dateY.getTime() <= dateX.getTime()) && (dateX.getTime() + durationX <= dateY.getTime() + durationY);
+}
+
+//helper function to filter out events that aren't mine
+function filterMine(event) {
+    return !event.hasOwnProperty("old") && event.rendering != 'background';
+}
+
+//helper function to find all newly added time
+function filterNew(event){
+	return event.newevent;
+}
+
+//helper function to filter out existing rental for editing
+function filterSame(event, id){
+	return event.rental_id == id;
 }
