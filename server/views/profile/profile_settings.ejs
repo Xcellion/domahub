@@ -75,7 +75,7 @@
 										<label class="label">Username</label>
 									</div>
 									<p class="control">
-										<input id="username-input" class="input account-input" type="text" value="<%= user.username %>" />
+										<input id="username-input" class="input account-input" type="text" value="<%= user.username %>" spellcheck="false"/>
 									</p>
 								</div>
 								<div class="control is-horizontal input-to-hide">
@@ -514,7 +514,7 @@
 						</header>
 						<div class="card-content">
 							All payments are handled through <a class='orange-link' href="https://stripe.com/about">Stripe</a>.</br></br>
-							<a id="provide-stripe-button" class='button is-success' href="/authorizestripe">Provide Access</a>
+							<a id="provide-stripe-button" class='button is-primary' href="/authorizestripe">Provide Access</a>
 							<button id="revoke-stripe-button" class='button is-danger'>Revoke Access</button>
 						</div>
 					</div>
