@@ -65,8 +65,8 @@
     margin-top: -20px
 
 .card-footer
-  // border-top: 1px solid $border
   align-items: stretch
+  border-top: 1px solid $border
   display: flex
   padding: 10px
   &.has-text-centered
@@ -74,12 +74,17 @@
 
 .card-footer-item
   align-items: center
+  box-sizing: border-box
   display: flex
   flex-grow: 1
   justify-content: center
   padding: 10px
+  white-space: nowrap
   &:not(:last-child)
     border-right: 1px solid $border
+  &:hover,
+  &:focus
+    background-color: $border
 
 .card
   background-color: $white
