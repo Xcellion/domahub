@@ -1,0 +1,31 @@
+.listing-img .delete {
+  border-radius: 0 3px;
+  position: absolute;
+  right: 0; }
+
+.verification-container {
+  padding-left: 50px; }
+
+.account-form select {
+  margin-right: 5px; }
+
+.td-status {
+  width: 122px; }
+
+.td-type {
+  width: 77px; }
+
+.td-arrow {
+  width: 10px; }
+
+.td-date {
+  width: 160px; }
+
+.td-view {
+  width: 10px; }
+
+.address-div-wrapper {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  width: 500px; }
