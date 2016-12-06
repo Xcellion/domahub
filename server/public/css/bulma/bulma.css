@@ -937,10 +937,6 @@ a.box {
     .button.is-white.is-loading:after {
       border-color: transparent transparent black black !important; }
     .button.is-white.is-outlined {
-      -moz-transition: none;
-      -o-transition: none;
-      -webkit-transition: none;
-      transition: none;
       background-color: transparent;
       border-color: white;
       color: white; }
@@ -954,16 +950,9 @@ a.box {
         -webkit-transition: all 0.25s ease;
         transition: all 0.25s ease; }
     .button.is-white.is-outlined-no-fill {
-      -moz-transition: none;
-      -o-transition: none;
-      -webkit-transition: none;
-      transition: none;
       background-color: transparent;
       border-color: white;
       color: white; }
-      .button.is-white.is-outlined-no-fill:hover, .button.is-white.is-outlined-no-fill:active, .button.is-white.is-outlined-no-fill:focus, .button.is-white.is-outlined-no-fill.is-active {
-        border-color: black;
-        color: black; }
       .button.is-white.is-outlined-no-fill.is-active {
         -moz-transition: all 0.25s ease;
         -o-transition: all 0.25s ease;
@@ -993,10 +982,6 @@ a.box {
     .button.is-black.is-loading:after {
       border-color: transparent transparent white white !important; }
     .button.is-black.is-outlined {
-      -moz-transition: none;
-      -o-transition: none;
-      -webkit-transition: none;
-      transition: none;
       background-color: transparent;
       border-color: black;
       color: black; }
@@ -1010,16 +995,9 @@ a.box {
         -webkit-transition: all 0.25s ease;
         transition: all 0.25s ease; }
     .button.is-black.is-outlined-no-fill {
-      -moz-transition: none;
-      -o-transition: none;
-      -webkit-transition: none;
-      transition: none;
       background-color: transparent;
       border-color: black;
       color: black; }
-      .button.is-black.is-outlined-no-fill:hover, .button.is-black.is-outlined-no-fill:active, .button.is-black.is-outlined-no-fill:focus, .button.is-black.is-outlined-no-fill.is-active {
-        border-color: white;
-        color: white; }
       .button.is-black.is-outlined-no-fill.is-active {
         -moz-transition: all 0.25s ease;
         -o-transition: all 0.25s ease;
@@ -1049,10 +1027,6 @@ a.box {
     .button.is-grey.is-loading:after {
       border-color: transparent transparent #444 #444 !important; }
     .button.is-grey.is-outlined {
-      -moz-transition: none;
-      -o-transition: none;
-      -webkit-transition: none;
-      transition: none;
       background-color: transparent;
       border-color: #e9e9e9;
       color: #e9e9e9; }
@@ -1066,16 +1040,9 @@ a.box {
         -webkit-transition: all 0.25s ease;
         transition: all 0.25s ease; }
     .button.is-grey.is-outlined-no-fill {
-      -moz-transition: none;
-      -o-transition: none;
-      -webkit-transition: none;
-      transition: none;
       background-color: transparent;
       border-color: #e9e9e9;
       color: #e9e9e9; }
-      .button.is-grey.is-outlined-no-fill:hover, .button.is-grey.is-outlined-no-fill:active, .button.is-grey.is-outlined-no-fill:focus, .button.is-grey.is-outlined-no-fill.is-active {
-        border-color: #444;
-        color: #444; }
       .button.is-grey.is-outlined-no-fill.is-active {
         -moz-transition: all 0.25s ease;
         -o-transition: all 0.25s ease;
@@ -1105,10 +1072,6 @@ a.box {
     .button.is-blacklight.is-loading:after {
       border-color: transparent transparent rgba(255, 255, 255, 0.7) rgba(255, 255, 255, 0.7) !important; }
     .button.is-blacklight.is-outlined {
-      -moz-transition: none;
-      -o-transition: none;
-      -webkit-transition: none;
-      transition: none;
       background-color: transparent;
       border-color: rgba(0, 0, 0, 0.66);
       color: rgba(0, 0, 0, 0.66); }
@@ -1122,16 +1085,9 @@ a.box {
         -webkit-transition: all 0.25s ease;
         transition: all 0.25s ease; }
     .button.is-blacklight.is-outlined-no-fill {
-      -moz-transition: none;
-      -o-transition: none;
-      -webkit-transition: none;
-      transition: none;
       background-color: transparent;
       border-color: rgba(0, 0, 0, 0.66);
       color: rgba(0, 0, 0, 0.66); }
-      .button.is-blacklight.is-outlined-no-fill:hover, .button.is-blacklight.is-outlined-no-fill:active, .button.is-blacklight.is-outlined-no-fill:focus, .button.is-blacklight.is-outlined-no-fill.is-active {
-        border-color: rgba(255, 255, 255, 0.7);
-        color: rgba(255, 255, 255, 0.7); }
       .button.is-blacklight.is-outlined-no-fill.is-active {
         -moz-transition: all 0.25s ease;
         -o-transition: all 0.25s ease;
@@ -1161,10 +1117,6 @@ a.box {
     .button.is-whitelight.is-loading:after {
       border-color: transparent transparent rgba(0, 0, 0, 0.66) rgba(0, 0, 0, 0.66) !important; }
     .button.is-whitelight.is-outlined {
-      -moz-transition: none;
-      -o-transition: none;
-      -webkit-transition: none;
-      transition: none;
       background-color: transparent;
       border-color: rgba(255, 255, 255, 0.7);
       color: rgba(255, 255, 255, 0.7); }
@@ -1178,16 +1130,9 @@ a.box {
         -webkit-transition: all 0.25s ease;
         transition: all 0.25s ease; }
     .button.is-whitelight.is-outlined-no-fill {
-      -moz-transition: none;
-      -o-transition: none;
-      -webkit-transition: none;
-      transition: none;
       background-color: transparent;
       border-color: rgba(255, 255, 255, 0.7);
       color: rgba(255, 255, 255, 0.7); }
-      .button.is-whitelight.is-outlined-no-fill:hover, .button.is-whitelight.is-outlined-no-fill:active, .button.is-whitelight.is-outlined-no-fill:focus, .button.is-whitelight.is-outlined-no-fill.is-active {
-        border-color: rgba(0, 0, 0, 0.66);
-        color: rgba(0, 0, 0, 0.66); }
       .button.is-whitelight.is-outlined-no-fill.is-active {
         -moz-transition: all 0.25s ease;
         -o-transition: all 0.25s ease;
@@ -1217,10 +1162,6 @@ a.box {
     .button.is-light.is-loading:after {
       border-color: transparent transparent #212121 #212121 !important; }
     .button.is-light.is-outlined {
-      -moz-transition: none;
-      -o-transition: none;
-      -webkit-transition: none;
-      transition: none;
       background-color: transparent;
       border-color: #e9e9e9;
       color: #e9e9e9; }
@@ -1234,16 +1175,9 @@ a.box {
         -webkit-transition: all 0.25s ease;
         transition: all 0.25s ease; }
     .button.is-light.is-outlined-no-fill {
-      -moz-transition: none;
-      -o-transition: none;
-      -webkit-transition: none;
-      transition: none;
       background-color: transparent;
       border-color: #e9e9e9;
       color: #e9e9e9; }
-      .button.is-light.is-outlined-no-fill:hover, .button.is-light.is-outlined-no-fill:active, .button.is-light.is-outlined-no-fill:focus, .button.is-light.is-outlined-no-fill.is-active {
-        border-color: #212121;
-        color: #212121; }
       .button.is-light.is-outlined-no-fill.is-active {
         -moz-transition: all 0.25s ease;
         -o-transition: all 0.25s ease;
@@ -1273,10 +1207,6 @@ a.box {
     .button.is-dark.is-loading:after {
       border-color: transparent transparent #e9e9e9 #e9e9e9 !important; }
     .button.is-dark.is-outlined {
-      -moz-transition: none;
-      -o-transition: none;
-      -webkit-transition: none;
-      transition: none;
       background-color: transparent;
       border-color: #212121;
       color: #212121; }
@@ -1290,16 +1220,9 @@ a.box {
         -webkit-transition: all 0.25s ease;
         transition: all 0.25s ease; }
     .button.is-dark.is-outlined-no-fill {
-      -moz-transition: none;
-      -o-transition: none;
-      -webkit-transition: none;
-      transition: none;
       background-color: transparent;
       border-color: #212121;
       color: #212121; }
-      .button.is-dark.is-outlined-no-fill:hover, .button.is-dark.is-outlined-no-fill:active, .button.is-dark.is-outlined-no-fill:focus, .button.is-dark.is-outlined-no-fill.is-active {
-        border-color: #e9e9e9;
-        color: #e9e9e9; }
       .button.is-dark.is-outlined-no-fill.is-active {
         -moz-transition: all 0.25s ease;
         -o-transition: all 0.25s ease;
@@ -1329,10 +1252,6 @@ a.box {
     .button.is-purple.is-loading:after {
       border-color: transparent transparent white white !important; }
     .button.is-purple.is-outlined {
-      -moz-transition: none;
-      -o-transition: none;
-      -webkit-transition: none;
-      transition: none;
       background-color: transparent;
       border-color: #9c27b0;
       color: #9c27b0; }
@@ -1346,16 +1265,9 @@ a.box {
         -webkit-transition: all 0.25s ease;
         transition: all 0.25s ease; }
     .button.is-purple.is-outlined-no-fill {
-      -moz-transition: none;
-      -o-transition: none;
-      -webkit-transition: none;
-      transition: none;
       background-color: transparent;
       border-color: #9c27b0;
       color: #9c27b0; }
-      .button.is-purple.is-outlined-no-fill:hover, .button.is-purple.is-outlined-no-fill:active, .button.is-purple.is-outlined-no-fill:focus, .button.is-purple.is-outlined-no-fill.is-active {
-        border-color: white;
-        color: white; }
       .button.is-purple.is-outlined-no-fill.is-active {
         -moz-transition: all 0.25s ease;
         -o-transition: all 0.25s ease;
@@ -1385,10 +1297,6 @@ a.box {
     .button.is-primary.is-loading:after {
       border-color: transparent transparent white white !important; }
     .button.is-primary.is-outlined {
-      -moz-transition: none;
-      -o-transition: none;
-      -webkit-transition: none;
-      transition: none;
       background-color: transparent;
       border-color: #3cbc8d;
       color: #3cbc8d; }
@@ -1402,16 +1310,9 @@ a.box {
         -webkit-transition: all 0.25s ease;
         transition: all 0.25s ease; }
     .button.is-primary.is-outlined-no-fill {
-      -moz-transition: none;
-      -o-transition: none;
-      -webkit-transition: none;
-      transition: none;
       background-color: transparent;
       border-color: #3cbc8d;
       color: #3cbc8d; }
-      .button.is-primary.is-outlined-no-fill:hover, .button.is-primary.is-outlined-no-fill:active, .button.is-primary.is-outlined-no-fill:focus, .button.is-primary.is-outlined-no-fill.is-active {
-        border-color: white;
-        color: white; }
       .button.is-primary.is-outlined-no-fill.is-active {
         -moz-transition: all 0.25s ease;
         -o-transition: all 0.25s ease;
@@ -1441,10 +1342,6 @@ a.box {
     .button.is-primarydark.is-loading:after {
       border-color: transparent transparent #309670 #309670 !important; }
     .button.is-primarydark.is-outlined {
-      -moz-transition: none;
-      -o-transition: none;
-      -webkit-transition: none;
-      transition: none;
       background-color: transparent;
       border-color: #309670;
       color: #309670; }
@@ -1458,16 +1355,9 @@ a.box {
         -webkit-transition: all 0.25s ease;
         transition: all 0.25s ease; }
     .button.is-primarydark.is-outlined-no-fill {
-      -moz-transition: none;
-      -o-transition: none;
-      -webkit-transition: none;
-      transition: none;
       background-color: transparent;
       border-color: #309670;
       color: #309670; }
-      .button.is-primarydark.is-outlined-no-fill:hover, .button.is-primarydark.is-outlined-no-fill:active, .button.is-primarydark.is-outlined-no-fill:focus, .button.is-primarydark.is-outlined-no-fill.is-active {
-        border-color: #309670;
-        color: #309670; }
       .button.is-primarydark.is-outlined-no-fill.is-active {
         -moz-transition: all 0.25s ease;
         -o-transition: all 0.25s ease;
@@ -1497,10 +1387,6 @@ a.box {
     .button.is-info.is-loading:after {
       border-color: transparent transparent white white !important; }
     .button.is-info.is-outlined {
-      -moz-transition: none;
-      -o-transition: none;
-      -webkit-transition: none;
-      transition: none;
       background-color: transparent;
       border-color: #2196f3;
       color: #2196f3; }
@@ -1514,16 +1400,9 @@ a.box {
         -webkit-transition: all 0.25s ease;
         transition: all 0.25s ease; }
     .button.is-info.is-outlined-no-fill {
-      -moz-transition: none;
-      -o-transition: none;
-      -webkit-transition: none;
-      transition: none;
       background-color: transparent;
       border-color: #2196f3;
       color: #2196f3; }
-      .button.is-info.is-outlined-no-fill:hover, .button.is-info.is-outlined-no-fill:active, .button.is-info.is-outlined-no-fill:focus, .button.is-info.is-outlined-no-fill.is-active {
-        border-color: white;
-        color: white; }
       .button.is-info.is-outlined-no-fill.is-active {
         -moz-transition: all 0.25s ease;
         -o-transition: all 0.25s ease;
@@ -1553,10 +1432,6 @@ a.box {
     .button.is-accent.is-loading:after {
       border-color: transparent transparent white white !important; }
     .button.is-accent.is-outlined {
-      -moz-transition: none;
-      -o-transition: none;
-      -webkit-transition: none;
-      transition: none;
       background-color: transparent;
       border-color: #ff5722;
       color: #ff5722; }
@@ -1570,16 +1445,9 @@ a.box {
         -webkit-transition: all 0.25s ease;
         transition: all 0.25s ease; }
     .button.is-accent.is-outlined-no-fill {
-      -moz-transition: none;
-      -o-transition: none;
-      -webkit-transition: none;
-      transition: none;
       background-color: transparent;
       border-color: #ff5722;
       color: #ff5722; }
-      .button.is-accent.is-outlined-no-fill:hover, .button.is-accent.is-outlined-no-fill:active, .button.is-accent.is-outlined-no-fill:focus, .button.is-accent.is-outlined-no-fill.is-active {
-        border-color: white;
-        color: white; }
       .button.is-accent.is-outlined-no-fill.is-active {
         -moz-transition: all 0.25s ease;
         -o-transition: all 0.25s ease;
@@ -1609,10 +1477,6 @@ a.box {
     .button.is-success.is-loading:after {
       border-color: transparent transparent white white !important; }
     .button.is-success.is-outlined {
-      -moz-transition: none;
-      -o-transition: none;
-      -webkit-transition: none;
-      transition: none;
       background-color: transparent;
       border-color: #81c784;
       color: #81c784; }
@@ -1626,16 +1490,9 @@ a.box {
         -webkit-transition: all 0.25s ease;
         transition: all 0.25s ease; }
     .button.is-success.is-outlined-no-fill {
-      -moz-transition: none;
-      -o-transition: none;
-      -webkit-transition: none;
-      transition: none;
       background-color: transparent;
       border-color: #81c784;
       color: #81c784; }
-      .button.is-success.is-outlined-no-fill:hover, .button.is-success.is-outlined-no-fill:active, .button.is-success.is-outlined-no-fill:focus, .button.is-success.is-outlined-no-fill.is-active {
-        border-color: white;
-        color: white; }
       .button.is-success.is-outlined-no-fill.is-active {
         -moz-transition: all 0.25s ease;
         -o-transition: all 0.25s ease;
@@ -1665,10 +1522,6 @@ a.box {
     .button.is-warning.is-loading:after {
       border-color: transparent transparent rgba(0, 0, 0, 0.5) rgba(0, 0, 0, 0.5) !important; }
     .button.is-warning.is-outlined {
-      -moz-transition: none;
-      -o-transition: none;
-      -webkit-transition: none;
-      transition: none;
       background-color: transparent;
       border-color: #ffeb3b;
       color: #ffeb3b; }
@@ -1682,16 +1535,9 @@ a.box {
         -webkit-transition: all 0.25s ease;
         transition: all 0.25s ease; }
     .button.is-warning.is-outlined-no-fill {
-      -moz-transition: none;
-      -o-transition: none;
-      -webkit-transition: none;
-      transition: none;
       background-color: transparent;
       border-color: #ffeb3b;
       color: #ffeb3b; }
-      .button.is-warning.is-outlined-no-fill:hover, .button.is-warning.is-outlined-no-fill:active, .button.is-warning.is-outlined-no-fill:focus, .button.is-warning.is-outlined-no-fill.is-active {
-        border-color: rgba(0, 0, 0, 0.5);
-        color: rgba(0, 0, 0, 0.5); }
       .button.is-warning.is-outlined-no-fill.is-active {
         -moz-transition: all 0.25s ease;
         -o-transition: all 0.25s ease;
@@ -1721,10 +1567,6 @@ a.box {
     .button.is-danger.is-loading:after {
       border-color: transparent transparent white white !important; }
     .button.is-danger.is-outlined {
-      -moz-transition: none;
-      -o-transition: none;
-      -webkit-transition: none;
-      transition: none;
       background-color: transparent;
       border-color: #EF5350;
       color: #EF5350; }
@@ -1738,16 +1580,9 @@ a.box {
         -webkit-transition: all 0.25s ease;
         transition: all 0.25s ease; }
     .button.is-danger.is-outlined-no-fill {
-      -moz-transition: none;
-      -o-transition: none;
-      -webkit-transition: none;
-      transition: none;
       background-color: transparent;
       border-color: #EF5350;
       color: #EF5350; }
-      .button.is-danger.is-outlined-no-fill:hover, .button.is-danger.is-outlined-no-fill:active, .button.is-danger.is-outlined-no-fill:focus, .button.is-danger.is-outlined-no-fill.is-active {
-        border-color: white;
-        color: white; }
       .button.is-danger.is-outlined-no-fill.is-active {
         -moz-transition: all 0.25s ease;
         -o-transition: all 0.25s ease;
@@ -5934,23 +5769,23 @@ a.nav-item {
       flex-direction: column;
       align-items: flex-start; } }
 
-.footer-item {
-  font-size: 16px; }
-  .footer-item:not(:first-child) {
-    margin-left: 20px; }
-    @media screen and (max-width: 456px) {
-      .footer-item:not(:first-child) {
-        margin-left: 0; } }
+.footer-item:not(:first-child) {
+  margin-left: 20px; }
   @media screen and (max-width: 456px) {
-    .footer-item {
-      margin-top: 10px; } }
-  .footer-item a {
-    padding: 5px 0;
-    color: white; }
-    .footer-item a:hover, .footer-item a:focus {
-      -webkit-box-shadow: 0 1px 0 0 white;
-      -moz-box-shadow: 0 1px 0 0 white;
-      box-shadow: 0 1px 0 0 white; }
+    .footer-item:not(:first-child) {
+      margin-left: 0; } }
+
+@media screen and (max-width: 456px) {
+  .footer-item {
+    margin-top: 10px; } }
+
+.footer-item a {
+  padding: 5px 0;
+  color: white; }
+  .footer-item a:hover, .footer-item a:focus {
+    -webkit-box-shadow: 0 1px 0 0 white;
+    -moz-box-shadow: 0 1px 0 0 white;
+    box-shadow: 0 1px 0 0 white; }
 
 .footer-bar {
   border-top: 1px solid rgba(0, 0, 0, 0.12);
@@ -5965,7 +5800,6 @@ a.nav-item {
   justify-content: space-between; }
 
 .footer-bar-item {
-  font-size: 14px;
   margin: 0;
   padding: 0;
   box-sizing: border-box; }
