@@ -1,8 +1,28 @@
 var row_display = rentals.slice(0);
+var listing_info = {};
 
 $(document).ready(function() {
+	//fix weird issue with modal and fullcalendar not appearing
+	$("#calendar").appendTo("#calendar-modal-bottom");
+	var cal_height = $("#calendar-modal-content").height() - $("#calendar-modal-top").height() - 100;
+	$('#calendar').fullCalendar('option', 'contentHeight', cal_height);
 
+    //various ways to close calendar modal
+	$('.modal-close, .modal-background').click(function() {
+	  	$('#listing-modal').removeClass('is-active');
+		delete_cookie("modal-active");
+	});
+
+	//esc key to close modal
+	$(document).keyup(function(e) {
+		if (e.which == 27) {
+			$('#listing-modal').removeClass('is-active');
+			delete_cookie("modal-active");
+		}
+	});
 });
+
+// --------------------------------------------------------------------------------- CREATE ROW
 
 //function to create all the rows
 function createAllRows(row_per_page, current_page){
@@ -25,8 +45,9 @@ function createRow(rental_info, rownum){
     tempRow.append(createDomain(rental_info));
     tempRow.append(createStatus(rental_info));
     tempRow.append(createStatusDrop(rental_info));
+    tempRow.append(createAddressDrop(rental_info));
     tempRow.append(createAddress(rental_info));
-    tempRow.append(createView(rental_info));
+    tempRow.append(createAddTime(rental_info));
 
     tempRow.on("click", function(e){
         editRow($(this));
@@ -42,6 +63,8 @@ function createStatus(rental_info){
     var temp_td = $("<td class='td-visible td-status'>" + text + "</td>");
     return temp_td;
 }
+
+// --------------------------------------------------------------------------------- CREATE ROW DROP
 
 //function to create the select dropdown for rental status
 function createStatusDrop(rental_info){
@@ -70,22 +93,46 @@ function createStatusDrop(rental_info){
 
 //function to create the address td
 function createAddress(rental_info){
-    var temp_td = $("<td class='td-visible td-address'><a class='orange-link' href='" + rental_info.address + "'>" + rental_info.address + "</a></td>");
+    var temp_td = $("<td class='td-visible td-address'><div class='address-div-wrapper'><a class='orange-link' href='" + rental_info.address + "'>" + rental_info.address + "</a><div></td>");
     return temp_td;
 }
 
-//function to create the tv icon
-function createView(rental_info){
+//function to create the address input dropdown for rental address
+function createAddressDrop(rental_info){
+    var new_td = $("<td class='td-visible td-address td-address-drop is-hidden'></td>");
+        var temp_span = $("<span class='is-fullwidth address-span'></span>");
+        var temp_form = $("<form class='drop-form'></form>");
+        var temp_input = $("<input class='address_input input changeable-input'></input>");
+            temp_input.val(rental_info.address);
+            temp_input.data("name", "address");
+    new_td.append(temp_span.append(temp_form.append(temp_input)));
+
+    //prevent clicking from dropping down row
+    temp_input.click(function(e) {
+        e.stopPropagation();
+    });
+
+    //change the hidden status TD along with dropdown
+    temp_input.change(function(e){
+        $(this).closest(".td-address-drop").prev(".td-address").text($(this).val());
+    });
+
+    return new_td;
+}
+
+//function to create the add time
+function createAddTime(rental_info){
     var temp_td = $("<td class='td-visible td-view'></td>");
-        var temp_a = $("<a class='button no-shadow' target='_blank' style='target-new: tab;'' href='/listing/" + rental_info.domain_name + "/" + rental_info.rental_id + "'></a>");
+        var temp_a = $("<button class='button no-shadow'></button>");
             var temp_span = $("<span class='icon'></span>");
-                var temp_i = $("<i class='fa fa-external-link'></i>");
+                var temp_i = $("<i class='fa fa-clock-o'></i>");
             var temp_span2 = $("<span>Add Time</span>");
     temp_td.append(temp_a.append(temp_span.append(temp_i), temp_span2));
 
-    //prevent clicking view from dropping down row
+    //display calendar modal
     temp_td.click(function(e) {
-        e.stopPropagation();
+        e.stopPropagation();    //prevent clicking view from dropping down row
+        addTimeRental(rental_info, temp_a);
     });
 
     return temp_td;
@@ -96,13 +143,12 @@ function createRowDrop(rental_info, rownum){
     temp_drop = $("<tr id='row-drop" + rownum + "' class='row-drop'></tr>");
     temp_td = $("<td class='row-drop-td' colspan='5'></td>")
     temp_div_drop = $("<div id='div-drop" + rownum + "' class='div-drop td-visible container'></div>");
-    temp_div_col = $("<div class='columns'></div>");
 
     //append various stuff to the row drop div
-    temp_drop.append(temp_td.append(temp_div_drop.append(temp_div_col.append(
-        createFormDrop(rental_info),
-        createDatesDrop(rental_info)
-    ))));
+    temp_drop.append(temp_td.append(temp_div_drop.append(
+        createDatesDrop(rental_info),
+        createFormDrop(rental_info)
+    )));
     temp_div_drop.hide();
 
     return temp_drop;
@@ -110,7 +156,8 @@ function createRowDrop(rental_info, rownum){
 
 //function to create the submit button and error message column
 function createFormDrop(rental_info){
-    var temp_col = $("<div class='column'></div>");
+    var temp_cols = $("<div class='columns'></div>");
+    var temp_col = $("<div class='column is-3'></div>");
     var temp_form = $("<form class='drop-form'></form>");
 
     //buttons for submit/cancel
@@ -127,7 +174,7 @@ function createFormDrop(rental_info){
         var temp_msg_delete = $("<button class='delete'></button>");
         temp_msg.append(temp_msg_delete);
 
-    temp_col.append(temp_form.append(temp_div4, temp_msg));
+    temp_cols.append(temp_col.append(temp_form.append(temp_div4, temp_msg)));
 
     //to hide the message
     temp_msg_delete.click(function(e){
@@ -151,33 +198,58 @@ function createFormDrop(rental_info){
         cancelRentalChanges(row, row_drop, $(this), rental_info);
     });
 
-    return temp_col;
+    return temp_cols;
 }
 
 //function to create start and end dates
 function createDatesDrop(rental_info){
-    var temp_col = $("<div class='column'></div>");
+    var temp_cols = $("<div class='columns'></div>");
+    var temp_col_start = $("<div class='column is-3'></div>");
+    var temp_p_start = $("<p class='is-bold'>Rental Start</p>");
+    temp_col_start.append(temp_p_start);
 
-    var temp_div = $('<div class="has-text-right is-horizontal"></div>');
-
-    var control_wrapper = $("<div class='control is-horizontal'></div>");
-    var start_label = $("<label class='label'>Start Date</label>");
-    var end_label = $("<label class='label'>End Date</label>");
-    temp_div.append(control_wrapper.append(start_label, end_label));
+    var temp_col_end = $("<div class='column is-3'></div>");
+    var temp_p_end = $("<p class='is-bold'>Rental End</p>");
+    temp_col_end.append(temp_p_end);
 
     for (var x = 0; x < rental_info.date.length; x++){
-        var start = moment(new Date(rental_info.date[x]));
-        var disp_start = start.format('YYYY/MM/DD, hh:mm A');
-        var disp_end = moment(start._d.getTime() + rental_info.duration[x]).format('YYYY/MM/DD, hh:mm A');
+        var disp_start = moment(new Date(rental_info.date[x])).format('MMM DD, YYYY hh:mm A');
+        var disp_end = moment(parseFloat(rental_info.date[x]) + parseFloat(rental_info.duration[x])).format('MMM DD, YYYY hh:mm A');
 
-        var dates = $("<p class=''>" + disp_start + " - " + disp_end + "</p>");
-        var date_wrapper = $("<div class='date-wrapper'></div>");
-        temp_div.append(date_wrapper.append(dates));
+        var p_start = $("<p>" + disp_start + "</p>");
+        var p_end = $("<p>" + disp_end + "</p>");
+
+        temp_col_start.append(p_start);
+        temp_col_end.append(p_end);
     }
-    temp_col.append(temp_div);
+    temp_cols.append(temp_col_start, temp_col_end);
 
-    return temp_col;
+    return temp_cols;
 }
+
+// --------------------------------------------------------------------------------- CALENDAR MODAL SET UP
+
+function addTimeRental(rental_info, time_button){
+
+    //do ajax for listing info
+    time_button.addClass('is-loading');
+    // $.ajax({
+    //     url: "/listing/" + rental_info.domain_name + "/times"
+    // }).done(function(data){
+    //     time_button.removeClass('is-loading');
+    //     listing_info = data;
+    //
+    //     //display modal
+    //     $('#listing-modal').addClass('is-active');
+    //     var cal_height = $("#calendar-modal-content").height() - $("#calendar-modal-top").height() - 100;
+    //     $('#calendar').fullCalendar('option', 'contentHeight', cal_height);
+    //
+    //     //change listing info on modal
+    //     $("#rental-domain-name").text(rental_info.domain_name);
+    // });
+}
+
+// --------------------------------------------------------------------------------- EDIT ROW
 
 //function to initiate edit mode
 function editRow(row){
@@ -198,6 +270,7 @@ function editRow(row){
     dropRow(row, editing);
     editArrow(row, editing);
     editStatus(row, editing);
+    editAddress(row, editing);
 
     //cancel any changes if we collapse the row
     if (!editing){
@@ -220,6 +293,21 @@ function editStatus(row, editing){
     }
 }
 
+//function to change address column to editable
+function editAddress(row, editing){
+    var address_drop_td = row.find(".td-address-drop");
+    var address_td = row.find(".td-address");
+
+    if (editing){
+        address_td.addClass("is-hidden");
+        address_drop_td.removeClass("is-hidden");
+    }
+    else {
+        address_td.removeClass("is-hidden");
+        address_drop_td.addClass("is-hidden");
+    }
+}
+
 // --------------------------------------------------------------------------------- SUBMIT RENTAL UPDATES
 
 //function to cancel the rental submit
@@ -235,6 +323,10 @@ function cancelRentalChanges(row, row_drop, cancel_button, rental_info){
     var old_status = (rental_info.active == 0) ? "Inactive" : "Active"
     row.find(".status_input").val(rental_info.active);
     row.find(".td-status").not(".td-status-drop").text(old_status);
+
+    //revert back to the old address
+    row.find(".address_input").val(rental_info.address);
+    row.find(".td-address").not(".td-address-drop").attr("href", rental_info.address);
 }
 
 //function to submit any changes to a rental

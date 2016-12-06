@@ -308,9 +308,7 @@ module.exports = {
 		res.render("listings/listing.ejs", {
 			user: req.user,
 			message: Auth.messageReset(req),
-			listing_info: clean_listing_info,
-			new_rental_info : req.session.new_rental_info || false,
-			rental_info : req.session.rental_info || false
+			listing_info: clean_listing_info
 		});
 	},
 

@@ -116,21 +116,12 @@ $(document).ready(function() {
 				storeCookies("local_events");
 			}
 		}
-		eventPrices();	//show prices
+		updatePrices();	//show prices
 
 		//check if theres a cookie for the rental address
 		if (read_cookie("address")){
 			$("#address_form_input").val(read_cookie("address"));
 			$("#checkout-next-button").removeClass('is-disabled');
-		}
-
-		if (!rental_info){
-			//check if theres a cookie for editing an event
-			if (read_cookie("rental_info")){
-				var cookie = read_cookie("rental_info");
-				rental_info = cookie;
-				editingRental();
-			}
 		}
 
 		//display modal if theres a cookie
@@ -184,15 +175,20 @@ $(document).ready(function() {
 		showModalContent("checkout");
 	});
 
-	//fix weird issue with modal and fullcalendar not appearing
-	$("#calendar").appendTo("#calendar-modal-bottom");
-	var cal_height = $("#calendar-modal-content").height() - $("#calendar-modal-top").height() - 100;
-	$('#calendar').fullCalendar('option', 'contentHeight', cal_height);
-
 	//prevent enter to submit on new emailToRegister
 	$("#new_user_email").submit(function(e){
 		e.preventDefault();
 	});
+
+	//---------------------------------------------------------------------------------------------------CALENDAR
+
+	//create existing rentals
+	createExisting(listing_info.rentals);
+
+	//fix weird issue with modal and fullcalendar not appearing
+	$("#calendar").appendTo("#calendar-modal-bottom");
+	var cal_height = $("#calendar-modal-content").height() - $("#calendar-modal-top").height() - 100;
+	$('#calendar').fullCalendar('option', 'contentHeight', cal_height);
 });
 
 //function to show a specific modal content
@@ -218,7 +214,7 @@ function checkSubmit(){
 	var newEvents = $('#calendar').fullCalendar('clientEvents', filterNew);
 	var bool = true;
 
-	if (!rental_info && (!newEvents || newEvents.length == 0)){
+	if (!newEvents || newEvents.length == 0){
 		bool = "Invalid dates!";
 		errorHandler(bool);
 	}
@@ -279,15 +275,13 @@ function submitRentals(stripeToken){
 			});
 		}
 
-		//to edit or create a new rental
-		var url = rental_info ? rental_info.rental_id : "rent"
+		//create a new rental
 		$.ajax({
 			type: "POST",
-			url: "/listing/" + listing_info.domain_name + "/" + url,
+			url: "/listing/" + listing_info.domain_name + "/rent",
 			data: {
 				events: minEvents,
 				new_user_email: $("#new_user_email").val(),
-				rental_id: rental_info.rental_id || false,
 				address: $("#address_form_input").val(),
 				stripeToken: stripeToken
 			}
@@ -350,9 +344,5 @@ function successHandler(data){
 		$("#rental-link-input").focus(function(){
 			$(this).select();
 		});
-	}
-	else {
-		var url = window.location.origin + "/listing/" + listing_info.domain_name + "/" + data.rental_id;
-		$("#rental-link-href").prop('href', url);
 	}
 }
