@@ -2,12 +2,12 @@
 
 </section>
 
-<section id="top_wrapper" class="page_wrapper section is-small has-borderBottom">
+<section id="top_wrapper" class="page_wrapper section is-small has-borderBottom min-height">
   <div class="container">
     <div class="columns">
       <div class="column is-half">
         <div class="content">
-          <a class="primary-link" href="http://<%= listing_info.domain_name %>">
+          <a class="is-primary" href="http://<%= listing_info.domain_name %>">
           <h1 class="title is-1 is-bold is-primary is-inline-block">
           <%= listing_info.domain_name %></h1></a>
         </div>
@@ -131,15 +131,17 @@
         </div>
       </div>
 
-      <div class="column is-2"></div>
-
-      <div class="column is-4">
-        <div class="card">
+      <div class="column is-4-desktop is-offset-2-desktop is-5-tablet is-offset-1-tablet">
+        <div class="card is-fullwidth">
           <% if (listing_info.status == 1) { %>
           <div class="card-header is-light">
             <h2 class="is-bold card-header-title">$<%= listing_info.month_price %></h2>
             <p class="card-header-title jc-flex-end is-marginless">Per Month</p>
           </div>
+          <% } else { %>
+            <div class="card-header is-primary">
+              <h2 class="is-bold is-white card-header-title has-text-centered">Purchase Links</h2>
+            </div>
           <% } %>
           <div class="card-content">
             <div class="content">
@@ -196,32 +198,32 @@
               <% } else if (listing_info.available) { %>
                 <p>
                     While this domain is unavailable for rent at DomaHub,
-                    it is available for purchase at any of the below links.
+                    it is available for purchase at any of the sites listed below.
                 </p>
                 <p>
                     Purchase it today for your own use or list it with us to
                     make some money!
                 </p>
               <% } else { %>
-                  <p>
-                      This domain is currently unavailable. You may request
-                      the listing by clicking the button below which will
-                      notify both DomaHub and the domain owner.
-                  </p>
+                <p>
+                    This domain is currently unavailable. You may request
+                    the listing by clicking the button below which will
+                    notify both DomaHub and the domain owner.
+                </p>
               <% } %>
             </div>
           </div>
-          <div class="card-footer">
+          <footer class="card-footer">
             <% if (listing_info.status == 1) { %>
-                <a id="listing-modal-button" class="card-footer-item button is-primary" data-object="#calendar-modal">Rent Now</a>
+                <a id="listing-modal-button" tabindex="1" class="button is-fullwidth is-primary" data-object="#calendar-modal">Rent Now</a>
             <% } else if (listing_info.available) { %>
-                <a id="godaddy_link" class="button card-footer-item" href="https://www.godaddy.com/domains/searchresults.aspx?domainToCheck=<%= listing_info.domain_name %>">GoDaddy</a>
-                <a id="namecheap_link" class="button card-footer-item" href="https://www.namecheap.com/domains/registration/results.aspx?domain=<%= listing_info.domain_name %>">Namecheap</a>
-                <a id="google_link" class="button card-footer-item" href="https://domains.google.com/registrar?s=<%= listing_info.domain_name %>">Google Domains</a>
+                <a id="godaddy_link" tabindex="1" class="card-footer-item" href="https://www.godaddy.com/domains/searchresults.aspx?domainToCheck=<%= listing_info.domain_name %>">GoDaddy</a>
+                <a id="namecheap_link" tabindex="1" class="card-footer-item" href="https://www.namecheap.com/domains/registration/results.aspx?domain=<%= listing_info.domain_name %>">Namecheap</a>
+                <a id="google_link" tabindex="1" class="card-footer-item" href="https://domains.google.com/registrar?s=<%= listing_info.domain_name %>">Google</a>
             <% } else { %>
-                <a class="card-footer-item button is-primary">Request Listing</a>
+                <a class="button is-fullwidth is-primary" tabindex="1">Request Listing</a>
             <% } %>
-          </div>
+          </footer>
         </div>
       </div>
     </div>

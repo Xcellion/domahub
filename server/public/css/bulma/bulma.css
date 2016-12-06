@@ -875,8 +875,7 @@ a.box {
   -webkit-transition: all 0.25s;
   transition: all 0.25s;
   justify-content: center;
-  text-align: center;
-  white-space: nowrap; }
+  text-align: center; }
   .button:focus {
     outline-color: rgba(0, 0, 0, 0.66); }
   .button[disabled], .button.is-disabled {
@@ -2437,7 +2436,7 @@ input:-webkit-autofill {
       background-color: white;
       border: 1px solid rgba(0, 0, 0, 0.12);
       border-width: 0 0 1px;
-      padding: 30px 0; }
+      padding: 15px; }
       .table td > .div-drop:hover,
       .table th > .div-drop:hover {
         background-color: white;
@@ -3081,6 +3080,7 @@ input:-webkit-autofill {
 
 .card-footer {
   align-items: stretch;
+  border-top: 1px solid rgba(0, 0, 0, 0.12);
   display: flex;
   padding: 10px; }
   .card-footer.has-text-centered {
@@ -3088,12 +3088,16 @@ input:-webkit-autofill {
 
 .card-footer-item {
   align-items: center;
+  box-sizing: border-box;
   display: flex;
   flex-grow: 1;
   justify-content: center;
-  padding: 10px; }
+  padding: 10px;
+  white-space: nowrap; }
   .card-footer-item:not(:last-child) {
     border-right: 1px solid rgba(0, 0, 0, 0.12); }
+  .card-footer-item:hover, .card-footer-item:focus {
+    background-color: rgba(0, 0, 0, 0.12); }
 
 .card {
   background-color: white;
@@ -5782,10 +5786,6 @@ a.nav-item {
 .footer-item a {
   padding: 5px 0;
   color: white; }
-  .footer-item a:hover, .footer-item a:focus {
-    -webkit-box-shadow: 0 1px 0 0 white;
-    -moz-box-shadow: 0 1px 0 0 white;
-    box-shadow: 0 1px 0 0 white; }
 
 .footer-bar {
   border-top: 1px solid rgba(0, 0, 0, 0.12);
@@ -5800,6 +5800,7 @@ a.nav-item {
   justify-content: space-between; }
 
 .footer-bar-item {
+  font-size: 14px;
   margin: 0;
   padding: 0;
   box-sizing: border-box; }
