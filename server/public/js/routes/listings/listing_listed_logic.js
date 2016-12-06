@@ -188,6 +188,11 @@ $(document).ready(function() {
 	$("#calendar").appendTo("#calendar-modal-bottom");
 	var cal_height = $("#calendar-modal-content").height() - $("#calendar-modal-top").height() - 100;
 	$('#calendar').fullCalendar('option', 'contentHeight', cal_height);
+
+	//prevent enter to submit on new emailToRegister
+	$("#new_user_email").submit(function(e){
+		e.preventDefault();
+	});
 });
 
 //function to show a specific modal content
@@ -289,7 +294,6 @@ function submitRentals(stripeToken){
 		}).done(function(data){
 			$('#checkout-button').removeClass('is-loading');
 			unlock = true;
-			console.log(data);
 			if (data.unavailable){
 				for (var x = 0; x < data.unavailable.length; x++){
 					showModalContent("calendar");
@@ -299,12 +303,7 @@ function submitRentals(stripeToken){
 			}
 			else if (data.state == "success"){
 				delete_cookies();
-				if (data.owner_hash_id){
-					//window.location = window.location.origin + "/listing/" + listing_info.domain_name + "/" + data.rental_id + "/" + data.owner_hash_id;
-				}
-				else {
-					//window.location = window.location.origin + "/listing/" + listing_info.domain_name + "/" + data.rental_id;
-				}
+				successHandler(data);
 			}
 			else if (data.state == "error"){
 				errorHandler(data.message);
@@ -338,10 +337,22 @@ function errorHandler(message){
 }
 
 //success handler
-function successHandler(){
-	$("#payment-column").addClass('is-hidden');
+function successHandler(data){
+	$("#payment-column, .success-hide").addClass('is-hidden');
 	$("#success-column").removeClass('is-hidden');
-	$(".success-hide").addClass('is-hidden');
-
 	$("#success-message").text("Your credit card was successfully charged!");
+
+	if (data.owner_hash_id){
+		var url = window.location.origin + "/listing/" + listing_info.domain_name + "/" + data.rental_id + "/" + data.owner_hash_id;
+		$("#rental-link-input").val(url);
+		$("#rental-link-href").prop('href', url);
+
+		$("#rental-link-input").focus(function(){
+			$(this).select();
+		});
+	}
+	else {
+		var url = window.location.origin + "/listing/" + listing_info.domain_name + "/" + data.rental_id;
+		$("#rental-link-href").prop('href', url);
+	}
 }
