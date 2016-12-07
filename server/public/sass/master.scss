@@ -57,9 +57,17 @@
   font-style: normal;
 }
 
+@font-face {
+  font-family: 'Ubuntu';
+  src: url("/fonts/ubuntu/ubuntu700.ttf");
+  font-weight: bold;
+  font-style: normal;
+}
+
 /********************** CUSTOM CLASS STYLING ******************/
 .logo-text {
   font: {
+    family: $ubuntu;
     size: $size-3;
   }
   &.primary-logo {
