@@ -16,151 +16,153 @@
 		<%- include("../templates/navbar", {user: user}); %>
 
 		<section class="section is-medium-top">
-			<div class="container">
+			<div class="container is-fluid">
 				<div class="columns">
-					<div class="column">
+					<div class="column is-3">
+
+					</div>
+					<div class="column is-9">
 						<p class="control has-icon has-addons">
 							<input id="domain_name-input" class="input is-medium is-expanded" tabindex="1" type="text" placeholder="Search domains" />
 							<i class="fa fa-search"></i>
 							<a id="submit-button" class="button no-shadow is-primary is-medium">Submit</a>
-							<a id="filter-open-button" class="button no-shadow is-medium">Advanced Search</a>
+							<!-- <a id="filter-open-button" class="button no-shadow is-medium">Advanced Search</a> -->
 						</p>
+						<div id="filter-dropdown" class="is-hidden">
+							<div class="control is-horizontal">
+							  <div class="control-label is-padded">
+								<label class="label">Date Range</label>
+							  </div>
+							  <div class="control is-grouped">
+								<p class="control">
+								  <input id="start_date-input" class="flatpickr input" tabindex="1" type="text" placeholder="Rental Start Date">
+								</p>
+								<!-- <p class="control">
+								  <input id="end_date-input" class="flatpickr input" tabindex="1" type="text" placeholder="Rental End Date">
+								</p> -->
+							  </div>
+							</div>
+							<div class="control is-horizontal">
+								<div class="control-label is-padded">
+									<label class="label">Categories</label>
+								</div>
+								<form class="control checkbox-form is-flex-wrap">
+									<%# using for loop to generate all categories %>
+									<% for (var x = 0; x < categories_front.length; x++) {%>
+										<div class="checkbox-wrapper">
+											<input class="cat-checkbox is-small" value="<%= categories_back[x] %>" id="cb<%= x %>" type="checkbox" />
+											<label class="has-border is-small" tabindex="1" for="cb<%= x %>"><%= categories_front[x] %></label>
+										</div>
+									<% } %>
+								</form>
+							</div>
+							<div class="control is-horizontal">
+								<div class="control-label is-padded">
+									<label class="label">Domain Length</label>
+								</div>
+								<div class="control has-slider">
+									<div id="sliderSmall" class='margin-bottom-50'></div>
+								</div>
+							</div>
+							<div class="control is-horizontal">
+								<div class="control-label is-padded">
+									<label class="label">Price / Rate</label>
+								</div>
+								<div class="control">
+									<span class="select">
+										<select id="category-input">
+											<option selected disabled>Select Rate</option>
+											<option value="none">None</option>
+											<option value="hour_price">Hourly</option>
+											<option value="day_price">Daily</option>
+											<option value="week_price">Weekly</option>
+											<option value="month_price">Monthly</option>
+											<%# <option>Yearly</option>%>
+										</select>
+									</span>
+								</div>
+							</div>
+							<div class="control has-slider">
+								<div id="slider" class="margin-bottom-50"></div>
+							</div>
+							<%# <div class="control is-horizontal">
+								<div class="control-label is-padded">
+									<label class="label">Extensions</label>
+								</div>
+								<div class="control has-addons">
+									<input class="input" type="text" placeholder="Extensions">
+									<span class="select">
+									<select>
+									  <option>.com</option>
+									  <option>.net</option>
+									  <option>.org</option>
+									</select>
+								  </span>
+								</div>
+							</div>
+							<div class="control is-horizontal">
+								<div class="control-label is-padded">
+									<label class="label">Special Characters</label>
+								</div>
+								<div class="control">
+									<input class="input" tabindex="1" type="text" placeholder="Exclude (separate by comma)">
+								</div>
+							</div>%>
+						</div>
+						<table id="listings-table" class="table margin-top-15">
+							<thead>
+								<tr>
+									<th>
+										Domain Name
+										<span class="icon is-small is-active sort-desc is-hidden"><i class="fa fa-sort-desc"></i></span>
+										<span class="icon is-small is-active sort-asc is-hidden"><i class="fa fa-sort-asc"></i></span>
+										<span class="icon is-small sort-none is-disabled"><i class="fa fa-sort"></i></span>
+									</th>
+									<th id="availability-th">
+										Availability
+									</th>
+									<th>
+										Categories
+										<span class="icon is-small is-active sort-desc is-hidden"><i class="fa fa-sort-desc"></i></span>
+										<span class="icon is-small is-active sort-asc is-hidden"><i class="fa fa-sort-asc"></i></span>
+										<span class="icon is-small sort-none is-disabled"><i class="fa fa-sort"></i></span>
+									</th>
+									<th class="td-price">
+										Hourly
+										<span class="icon is-small is-active sort-desc is-hidden"><i class="fa fa-sort-desc"></i></span>
+										<span class="icon is-small is-active sort-asc is-hidden"><i class="fa fa-sort-asc"></i></span>
+										<span class="icon is-small sort-none is-disabled"><i class="fa fa-sort"></i></span>
+									</th>
+									<th class="td-price">
+										Daily
+										<span class="icon is-small is-active sort-desc is-hidden"><i class="fa fa-sort-desc"></i></span>
+										<span class="icon is-small is-active sort-asc is-hidden"><i class="fa fa-sort-asc"></i></span>
+										<span class="icon is-small sort-none is-disabled"><i class="fa fa-sort"></i></span>
+									</th>
+									<th class="td-price">
+										Weekly
+										<span class="icon is-small is-active sort-desc is-hidden"><i class="fa fa-sort-desc"></i></span>
+										<span class="icon is-small is-active sort-asc is-hidden"><i class="fa fa-sort-asc"></i></span>
+										<span class="icon is-small sort-none is-disabled"><i class="fa fa-sort"></i></span>
+									</th>
+									<th class="td-price">
+										Monthly
+										<span class="icon is-small is-active sort-desc is-hidden"><i class="fa fa-sort-desc"></i></span>
+										<span class="icon is-small is-active sort-asc is-hidden"><i class="fa fa-sort-asc"></i></span>
+										<span class="icon is-small sort-none is-disabled"><i class="fa fa-sort"></i></span>
+									</th>
+								</tr>
+							</thead>
+							<tbody>
+							</tbody>
+						</table>
 					</div>
 				</div>
 			</div>
 		</section>
 
 		<section class="is-small min-height">
-			<div class="container">
-				<div id="filter-dropdown" class="is-hidden">
-					<div class="control is-horizontal">
-					  <div class="control-label is-padded">
-						<label class="label">Date Range</label>
-					  </div>
-					  <div class="control is-grouped">
-						<p class="control">
-						  <input id="start_date-input" class="flatpickr input" tabindex="1" type="text" placeholder="Rental Start Date">
-						</p>
-						<!-- <p class="control">
-						  <input id="end_date-input" class="flatpickr input" tabindex="1" type="text" placeholder="Rental End Date">
-						</p> -->
-					  </div>
-					</div>
-					<div class="control is-horizontal">
-						<div class="control-label is-padded">
-							<label class="label">Categories</label>
-						</div>
-						<form class="control checkbox-form is-flex-wrap">
-							<%# using for loop to generate all categories %>
-							<% for (var x = 0; x < categories_front.length; x++) {%>
-								<div class="checkbox-wrapper">
-									<input class="cat-checkbox is-small" value="<%= categories_back[x] %>" id="cb<%= x %>" type="checkbox" />
-									<label class="has-border is-small" tabindex="1" for="cb<%= x %>"><%= categories_front[x] %></label>
-								</div>
-							<% } %>
-						</form>
-					</div>
-					<div class="control is-horizontal">
-						<div class="control-label is-padded">
-							<label class="label">Domain Length</label>
-						</div>
-						<div class="control has-slider">
-							<div id="sliderSmall" class='margin-bottom-50'></div>
-						</div>
-					</div>
-					<div class="control is-horizontal">
-						<div class="control-label is-padded">
-							<label class="label">Price / Rate</label>
-						</div>
-						<div class="control">
-							<span class="select">
-								<select id="category-input">
-									<option selected disabled>Select Rate</option>
-									<option value="none">None</option>
-									<option value="hour_price">Hourly</option>
-									<option value="day_price">Daily</option>
-									<option value="week_price">Weekly</option>
-									<option value="month_price">Monthly</option>
-									<%# <option>Yearly</option>%>
-								</select>
-							</span>
-						</div>
-					</div>
-					<div class="control has-slider">
-						<div id="slider" class="margin-bottom-50"></div>
-					</div>
-					<%# <div class="control is-horizontal">
-						<div class="control-label is-padded">
-							<label class="label">Extensions</label>
-						</div>
-						<div class="control has-addons">
-							<input class="input" type="text" placeholder="Extensions">
-							<span class="select">
-							<select>
-							  <option>.com</option>
-							  <option>.net</option>
-							  <option>.org</option>
-							</select>
-						  </span>
-						</div>
-					</div>
-					<div class="control is-horizontal">
-						<div class="control-label is-padded">
-							<label class="label">Special Characters</label>
-						</div>
-						<div class="control">
-							<input class="input" tabindex="1" type="text" placeholder="Exclude (separate by comma)">
-						</div>
-					</div>%>
-				</div>
-				<table id="listings-table" class="table margin-top-15">
-					<thead>
-						<tr>
-							<th>
-								Domain Name
-								<span class="icon is-small is-active sort-desc is-hidden"><i class="fa fa-sort-desc"></i></span>
-								<span class="icon is-small is-active sort-asc is-hidden"><i class="fa fa-sort-asc"></i></span>
-								<span class="icon is-small sort-none is-disabled"><i class="fa fa-sort"></i></span>
-							</th>
-							<th id="availability-th">
-								Availability
-							</th>
-							<th>
-								Categories
-								<span class="icon is-small is-active sort-desc is-hidden"><i class="fa fa-sort-desc"></i></span>
-								<span class="icon is-small is-active sort-asc is-hidden"><i class="fa fa-sort-asc"></i></span>
-								<span class="icon is-small sort-none is-disabled"><i class="fa fa-sort"></i></span>
-							</th>
-							<th class="td-price">
-								Hourly
-								<span class="icon is-small is-active sort-desc is-hidden"><i class="fa fa-sort-desc"></i></span>
-								<span class="icon is-small is-active sort-asc is-hidden"><i class="fa fa-sort-asc"></i></span>
-								<span class="icon is-small sort-none is-disabled"><i class="fa fa-sort"></i></span>
-							</th>
-							<th class="td-price">
-								Daily
-								<span class="icon is-small is-active sort-desc is-hidden"><i class="fa fa-sort-desc"></i></span>
-								<span class="icon is-small is-active sort-asc is-hidden"><i class="fa fa-sort-asc"></i></span>
-								<span class="icon is-small sort-none is-disabled"><i class="fa fa-sort"></i></span>
-							</th>
-							<th class="td-price">
-								Weekly
-								<span class="icon is-small is-active sort-desc is-hidden"><i class="fa fa-sort-desc"></i></span>
-								<span class="icon is-small is-active sort-asc is-hidden"><i class="fa fa-sort-asc"></i></span>
-								<span class="icon is-small sort-none is-disabled"><i class="fa fa-sort"></i></span>
-							</th>
-							<th class="td-price">
-								Monthly
-								<span class="icon is-small is-active sort-desc is-hidden"><i class="fa fa-sort-desc"></i></span>
-								<span class="icon is-small is-active sort-asc is-hidden"><i class="fa fa-sort-asc"></i></span>
-								<span class="icon is-small sort-none is-disabled"><i class="fa fa-sort"></i></span>
-							</th>
-						</tr>
-					</thead>
-					<tbody>
-					</tbody>
-				</table>
-			</div>
+
 		</section>
 
 		<%- include("../templates/footer"); %>

@@ -2237,6 +2237,10 @@ input:-webkit-autofill {
   display: block;
   position: relative;
   margin: 0 auto; }
+  .image.has-shadow > img {
+    -webkit-box-shadow: 1px 1px 5px 0 black;
+    -moz-box-shadow: 1px 1px 5px 0 black;
+    box-shadow: 1px 1px 5px 0 black; }
   .image.is-circle > img {
     border-radius: 100%; }
   .image.left-aligned {
@@ -5918,8 +5922,15 @@ a.nav-item {
   font-weight: 300;
   font-style: normal; }
 
+@font-face {
+  font-family: 'Ubuntu';
+  src: url("/fonts/ubuntu/ubuntu700.ttf");
+  font-weight: bold;
+  font-style: normal; }
+
 /********************** CUSTOM CLASS STYLING ******************/
 .logo-text {
+  font-family: "Ubuntu", serif;
   font-size: 28px; }
   .logo-text.primary-logo {
     color: #3cbc8d; }
