@@ -245,13 +245,11 @@ function addTimeRental(rental_info, time_button){
         var cal_height = $("#calendar-modal-content").height() - $("#calendar-modal-top").height() - 100;
         $('#calendar').fullCalendar('option', 'contentHeight', cal_height);
 
-        //delete all existing cookies / events (except BG events)
-        $('#calendar').fullCalendar('removeEvents', returnNotMineOrBG);
-        updatePrices();
+        //delete all existing listing events (except BG events)
+        $('#calendar').fullCalendar('removeEvents', returnNotMineNotBG);
 
-        //todo - delete cookie events for all non-same domain names
-
-        var domain_cookie = read_cookie("domain");
+        //check for any cookies for the listing being opened
+        var domain_cookie = read_cookie("domain_name");
         if (domain_cookie == rental_info.domain_name){
             var cookie_events = read_cookie("local_events");
             if (cookie_events){

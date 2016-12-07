@@ -599,7 +599,6 @@ function checkOverlapEvent(event){
 
 //helper function to create pre-existing rentals
 function createExisting(rentals){
-    console.log('s')
 	if (rentals){
 		for (var x = 0; x < rentals.length; x++){
 			var start = new Date(rentals[x].date);
@@ -955,6 +954,6 @@ function returnMineNotBG(event) {
 }
 
 //helper function to find all non BG events
-function returnNotMineOrBG(event){
+function returnNotMineNotBG(event){
     return event.hasOwnProperty("old") || event.rendering != 'background';
 }
