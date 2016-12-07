@@ -164,7 +164,7 @@ function setUpCalendar(){
 
     //remove all events and remember
 	$("#remove_events").click(function(e){
-		$('#calendar').fullCalendar('removeEvents', filterMine);
+		$('#calendar').fullCalendar('removeEvents', returnMineNotBG);
 		storeCookies("local_events");
 		updatePrices();
 	});
@@ -599,6 +599,7 @@ function checkOverlapEvent(event){
 
 //helper function to create pre-existing rentals
 function createExisting(rentals){
+    console.log('s')
 	if (rentals){
 		for (var x = 0; x < rentals.length; x++){
 			var start = new Date(rentals[x].date);
@@ -825,7 +826,7 @@ function createEvent(start, end){
 //helper function to get correct price of events
 function updatePrices(){
 	if (listing_info.status){
-		var myevents = $('#calendar').fullCalendar('clientEvents', filterMine);
+		var myevents = $('#calendar').fullCalendar('clientEvents', returnMineNotBG);
 		if (myevents.length){
 			$("#redirect-next-button, #remove_events").removeClass('is-disabled');
 		}
@@ -949,16 +950,11 @@ function checkFullOverlap(dateX, durationX, dateY, durationY){
 }
 
 //helper function to filter out events that aren't mine
-function filterMine(event) {
+function returnMineNotBG(event) {
     return !event.hasOwnProperty("old") && event.rendering != 'background';
 }
 
-//helper function to find all newly added time
-function filterNew(event){
-	return event.newevent;
-}
-
-//helper function to filter out existing rental for editing
-function filterSame(event, id){
-	return event.rental_id == id;
+//helper function to find all non BG events
+function returnNotMineOrBG(event){
+    return event.hasOwnProperty("old") || event.rendering != 'background';
 }

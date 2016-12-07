@@ -2,7 +2,7 @@
 function storeCookies(type){
 	if (type == "local_events"){
 		bake_cookie("domain_name", listing_info.domain_name);
-		local_events = $('#calendar').fullCalendar('clientEvents', filterMine);
+		local_events = $('#calendar').fullCalendar('clientEvents', returnMineNotBG);
 		cookie = [];
 		for (var x = 0; x < local_events.length; x++){
 			temp_event = {

@@ -166,10 +166,20 @@ module.exports = function(app, db, auth, error, stripe){
 
 	//render listing page
 	app.get('/listing/:domain_name', [
-		renter_functions.checkDomainAndAddToSearch,
+		checkDomainValid,
+		renter_functions.checkDomainListedAndAddToSearch,
 		renter_functions.getVerifiedListing,
 		renter_functions.deleteRentalInfo,
 		renter_functions.renderListing
+	]);
+
+	//get listing info / times
+	app.post('/listing/:domain_name/times', [
+		checkDomainValid,
+		checkDomainListed,
+		renter_functions.getVerifiedListing,
+		renter_functions.deleteRentalInfo,
+		renter_functions.getListingRentalTimes
 	]);
 
 	//associate a user with a hash rental
@@ -229,6 +239,8 @@ module.exports = function(app, db, auth, error, stripe){
 
 //function to check validity of domain name
 function checkDomainValid(req, res, next){
+	console.log("F: Checking domain validity...");
+
 	var domain_name = req.params.domain_name || req.body["domain-name"];
 
 	if (!validator.isFQDN(domain_name)){
@@ -241,6 +253,8 @@ function checkDomainValid(req, res, next){
 
 //function to check if listing is listed on domahub
 function checkDomainListed(req, res, next){
+	console.log("F: Checking if domain is listed...");
+
 	var domain_name = req.params.domain_name || req.body["domain-name"];
 
 	Listing.checkListing(domain_name, function(result){
@@ -255,6 +269,8 @@ function checkDomainListed(req, res, next){
 
 //function to check if listing is NOT listed on domahub
 function checkDomainNotListed(req, res, next){
+	console.log("F: Checking if domain is NOT listed...");
+
 	var domain_name = req.params.domain_name || req.body["domain-name"];
 
 	Listing.checkListing(domain_name, function(result){
