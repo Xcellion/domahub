@@ -30,24 +30,36 @@
 }
 
 @font-face {
-  font-family: 'ubuntu';
-  src: url("/fonts/ubuntu/ubuntu700.ttf");
-  font-weight: 700;
+  font-family: 'Roboto Condensed';
+  src: url("/fonts/robotoCondensed/robotoCondensed400.ttf");
+  font-weight: normal;
   font-style: normal;
 }
 
 @font-face {
-  font-family: 'sharetech';
-  src: url("/fonts/share-tech/st400.ttf");
+  font-family: 'Roboto Condensed';
+  src: url("/fonts/robotoCondensed/robotoCondensed700.ttf");
+  font-weight: bold;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Roboto Condensed';
+  src: url("/fonts/robotoCondensed/robotoCondensed400italics.ttf");
   font-weight: normal;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'Roboto Condensed';
+  src: url("/fonts/robotoCondensed/robotoCondensed300.ttf");
+  font-weight: 300;
   font-style: normal;
 }
 
 /********************** CUSTOM CLASS STYLING ******************/
 .logo-text {
-  letter-spacing: -1px;
   font: {
-    family: 'ubuntu';
     size: $size-3;
   }
   &.primary-logo {

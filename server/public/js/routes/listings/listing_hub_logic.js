@@ -16,15 +16,15 @@ $(document).ready(function() {
 
     // Filter dropdown logic
     $("#filter-open-button").click(function() {
-		$(this).toggleClass("is-active");
-		$("#filter-dropdown").toggleClass("is-hidden");
+			$(this).toggleClass("is-active");
+			$("#filter-dropdown").toggleClass("is-hidden");
     });
 
     //submit search
     $("#submit-button").click(function(e) {
-		e.preventDefault();
-		submitData();
-	});
+			e.preventDefault();
+			submitData();
+		});
 
 	$("#domain_name-input").on("keypress", function(e){
 		if (e.keyCode == 13){

@@ -52,3 +52,7 @@
 
 .temp-cell:hover {
   background-color: rgba(60, 188, 141, 0.3); }
+
+.preview-dates {
+  margin: 0 !important;
+  white-space: nowrap; }

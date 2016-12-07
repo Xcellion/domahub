@@ -46,7 +46,12 @@
   &:focus,
   &.is-active
     outline: none
-    border-color: $control-hover
+    border-color: $black-primary
+  &.is-active
+    &:hover,
+    &:focus
+      border-color: $black-disabled
+      color: $black-secondary
   &:active
     box-shadow: 0 5px 8px 0 rgba(0,0,0,.14),0 2px 10px 0 rgba(0,0,0,.12),0 4px 5px -1px rgba(0,0,0,.2)
   // Modifiers
@@ -64,7 +69,7 @@
       &:hover,
       &:focus,
       &.is-active
-        background-color: darken($color, 10%)
+        background-color: darken($color, 16%)
         border-color: transparent
         color: $color-invert
       &:active
@@ -75,7 +80,7 @@
         &:hover,
         &:active,
         &:focus
-          background-color: darken($color-invert, 10%)
+          background-color: darken($color-invert, 16%)
       &.is-loading
         &:after
           border-color: transparent transparent $color-invert $color-invert !important
@@ -92,6 +97,10 @@
           color: $color-invert
         &.is-active
           +transition(all 0.25s ease)
+          &:hover,
+          &:active,
+          &:focus
+            background-color: darken($color, 16%)
       &.is-outlined-no-fill
         background-color: transparent
         border-color: $color
