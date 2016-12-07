@@ -219,13 +219,20 @@ module.exports = {
 				if (result.state != "success"){error.handler(req, res, result.info);}
 				else {
 					req.session.rental_info = result.info[0];
-					if (req.session.rental_info.owner_hash_id == owner_hash_id){
-						req.session.message = "Please create an account to edit this rental!";
-						next();
-					}
-					else {
-						res.redirect('/listing/' + req.params.domain_name);
-					}
+
+                    //if hash exists in URL and its the same as DB, we're good
+                    if (owner_hash_id){
+                        if (req.session.rental_info.owner_hash_id == owner_hash_id){
+                            req.session.message = "Please create an account to edit this rental!";
+                            next();
+                        }
+                        else {
+                            res.redirect('/listing/' + req.params.domain_name);
+                        }
+                    }
+                    else {
+                        next();
+                    }
 				}
 			});
 		}
@@ -374,11 +381,11 @@ module.exports = {
 
 	//activate the rental once its good
 	toggleActivateRental : function(req, res, next){
-		console.log("F: Activating new rental...");
+		console.log("F: Toggling rental activation...");
 
 		var rental_id = (req.session.new_rental_info) ? req.session.new_rental_info.rental_id : req.params.rental_id;
 		var domain_name = req.params.domain_name;
-		var owner_hash_id = req.session.new_rental_info.rental_db_info.owner_hash_id;
+		var owner_hash_id = (req.session.new_rental_info) ? req.session.new_rental_info.rental_db_info.owner_hash_id : false;
 
 		Listing.toggleActivateRental(rental_id, function(result){
 			if (result.state != "success"){
@@ -388,16 +395,16 @@ module.exports = {
 			else {
 				//update the req.users.rentals object if necessary
 				if (req.user){
-					updateUserRentalsObject(req.user.rentals, domain_name);
+					updateUserRentalsObject(req.user.rentals, rental_id);
 				}
 
-				//update the session listing info rentals
-				if (req.session.listing_info.rentals){
+				//update the session listing info rentals if we're creating a new rental
+				if (req.session.listing_info.rentals && req.session.new_rental_info){
 					req.session.listing_info.rentals.push(req.session.new_rental_info);
 					req.session.listing_info.rentals = joinRentalTimes(req.session.listing_info.rentals);
 				}
 
-				delete req.session.new_rental_info;
+                delete req.session.new_rental_info;
 
 				res.send({
 					state: "success",
@@ -657,10 +664,10 @@ function calculatePrice(times, listing_info){
 //----------------------------------------------------------------helper functions for user obj----------------------------------------------------------------
 
 //helper function to update req.user.rentals after changing to active
-function updateUserRentalsObject(rentals, domain_name){
+function updateUserRentalsObject(rentals, rental_id){
 	for (var x = 0; x < rentals.length; x++){
-		if (rentals[x].domain_name.toLowerCase() == domain_name.toLowerCase()){
-			rentals[x].active = (rentals[x].active == 0) ? 1 : 0;
+		if (rentals[x].rental_id == rental_id){
+			rentals[x].status = (rentals[x].status == 0) ? 1 : 0;
 			break;
 		}
 	}

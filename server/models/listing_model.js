@@ -313,7 +313,7 @@ listing_model.prototype.updateRentalTime = function(new_rental_times, callback){
 listing_model.prototype.toggleActivateRental = function(rental_id, callback){
 	console.log("DB: Attempting to toggle activation on rental #" + rental_id + "...");
 	query = "UPDATE rentals \
-			SET active = !active \
+			SET status = !status \
 			WHERE rental_id = ?"
 	listing_query(query, "Failed to toggle activation on rental #" + rental_id + "!", callback, rental_id);
 }
