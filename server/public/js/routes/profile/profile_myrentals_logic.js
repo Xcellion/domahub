@@ -388,7 +388,7 @@ function submitRentalChanges(row, row_drop, success_button, rental_info){
             rentals = data.rentals;
             success_button.addClass("is-disabled");
             cancel_button.addClass('is-hidden');
-            refreshSubmitbindings(success_button, cancel_button, rentals, domain_name);
+            refreshSubmitbindings(success_button, cancel_button, rentals, rental_info.rental_id);
         }
         else {
             cancel_button.click();
@@ -410,9 +410,9 @@ function errorMessage(msg_elem, message){
 }
 
 //function to refresh listing_info on cancel, submit, input event listeners after AJAX success
-function refreshSubmitbindings(success_button, cancel_button, rentals, domain_name){
+function refreshSubmitbindings(success_button, cancel_button, rentals, rental_id){
     for (var x = 0; x < rentals.length; x++){
-        if (rentals[x].domain_name == domain_name){
+        if (rentals[x].rental_id == rental_id){
             var row_drop = success_button.closest('.row-drop');
             var row = row_drop.prev(".row-disp");
             var both_rows = row.add(row_drop);
