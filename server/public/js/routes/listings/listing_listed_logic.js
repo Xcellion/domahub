@@ -97,17 +97,17 @@ $(document).ready(function() {
 	//check if there are cookies for this domain name
 	if (read_cookie("domain_name") == listing_info.domain_name){
 		if (read_cookie("local_events")){
-			var existing_events = read_cookie("local_events");
+			var cookie_events = read_cookie("local_events");
 			var changed = false;
 
-			for (var x = existing_events.length - 1; x >= 0; x--){
+			for (var x = cookie_events.length - 1; x >= 0; x--){
 				//if its a new event, make sure it's past current time
-				if (new Date().getTime() < new Date(existing_events[x].start).getTime()){
-					$('#calendar').fullCalendar('renderEvent', existing_events[x], true);
+				if (new Date().getTime() < new Date(cookie_events[x].start).getTime()){
+					$('#calendar').fullCalendar('renderEvent', cookie_events[x], true);
 				}
 				else {
 					changed = true;
-					existing_events.splice(x, 1);
+					cookie_events.splice(x, 1);
 				}
 			}
 
