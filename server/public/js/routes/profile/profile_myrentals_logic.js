@@ -59,7 +59,7 @@ function createRow(rental_info, rownum){
 
 //function to create the status td
 function createStatus(rental_info){
-    var text = (rental_info.active == 0) ? "Inactive" : "Active"
+    var text = (rental_info.status == 0) ? "Inactive" : "Active"
     var temp_td = $("<td class='td-visible td-status'>" + text + "</td>");
     return temp_td;
 }
@@ -74,7 +74,7 @@ function createStatusDrop(rental_info){
         var temp_select = $("<select class='status_input changeable-input'></select>");
             temp_select.append("<option value='0'>Inactive</option");
             temp_select.append("<option value='1'>Active</option");
-            temp_select.val(rental_info.active);
+            temp_select.val(rental_info.status);
             temp_select.data("name", "status");
     new_td.append(temp_span.append(temp_form.append(temp_select)));
 
@@ -123,7 +123,7 @@ function createAddressDrop(rental_info){
 //function to create the add time
 function createAddTime(rental_info){
     var temp_td = $("<td class='td-visible td-view'></td>");
-        var temp_a = $("<button class='button no-shadow'></button>");
+        var temp_a = $("<a class='button no-shadow'></a>");
             var temp_span = $("<span class='icon'></span>");
                 var temp_i = $("<i class='fa fa-clock-o'></i>");
             var temp_span2 = $("<span>Add Time</span>");
@@ -233,20 +233,56 @@ function addTimeRental(rental_info, time_button){
 
     //do ajax for listing info
     time_button.addClass('is-loading');
-    // $.ajax({
-    //     url: "/listing/" + rental_info.domain_name + "/times"
-    // }).done(function(data){
-    //     time_button.removeClass('is-loading');
-    //     listing_info = data;
-    //
-    //     //display modal
-    //     $('#listing-modal').addClass('is-active');
-    //     var cal_height = $("#calendar-modal-content").height() - $("#calendar-modal-top").height() - 100;
-    //     $('#calendar').fullCalendar('option', 'contentHeight', cal_height);
-    //
-    //     //change listing info on modal
-    //     $("#rental-domain-name").text(rental_info.domain_name);
-    // });
+    $.ajax({
+        method: "POST",
+        url: "/listing/" + rental_info.domain_name + "/times"
+    }).done(function(data){
+        time_button.removeClass('is-loading');
+        listing_info = data.listing_info;
+
+        //display modal
+        $('#listing-modal').addClass('is-active');
+        var cal_height = $("#calendar-modal-content").height() - $("#calendar-modal-top").height() - 100;
+        $('#calendar').fullCalendar('option', 'contentHeight', cal_height);
+
+        //delete all existing listing events (except BG events)
+        $('#calendar').fullCalendar('removeEvents', returnNotMineNotBG);
+
+        //check for any cookies for the listing being opened
+        var domain_cookie = read_cookie("domain_name");
+        if (domain_cookie == rental_info.domain_name){
+            var cookie_events = read_cookie("local_events");
+            if (cookie_events){
+                var changed = false;
+
+                for (var x = cookie_events.length - 1; x >= 0; x--){
+                    //if its a new event, make sure it's past current time
+                    if (new Date().getTime() < new Date(cookie_events[x].start).getTime()){
+                        $('#calendar').fullCalendar('renderEvent', cookie_events[x], true);
+                    }
+                    else {
+                        changed = true;
+                        cookie_events.splice(x, 1);
+                    }
+                }
+
+                //if we removed any events, change the cookies
+                if (changed){
+                    storeCookies("local_events");
+                }
+            }
+            updatePrices();	//show prices
+        }
+        else {
+            delete_cookies();
+        }
+
+        //change listing info on modal
+        $("#rental-domain-name").text(rental_info.domain_name);
+
+        //create existing rentals
+        createExisting(listing_info.rentals);
+    });
 }
 
 // --------------------------------------------------------------------------------- EDIT ROW
@@ -320,8 +356,8 @@ function cancelRentalChanges(row, row_drop, cancel_button, rental_info){
     rental_msg.addClass('is-hidden');
 
     //revert back to the old status
-    var old_status = (rental_info.active == 0) ? "Inactive" : "Active"
-    row.find(".status_input").val(rental_info.active);
+    var old_status = (rental_info.status == 0) ? "Inactive" : "Active"
+    row.find(".status_input").val(rental_info.status);
     row.find(".td-status").not(".td-status-drop").text(old_status);
 
     //revert back to the old address
@@ -352,7 +388,7 @@ function submitRentalChanges(row, row_drop, success_button, rental_info){
             rentals = data.rentals;
             success_button.addClass("is-disabled");
             cancel_button.addClass('is-hidden');
-            refreshSubmitbindings(success_button, cancel_button, rentals, domain_name);
+            refreshSubmitbindings(success_button, cancel_button, rentals, rental_info.rental_id);
         }
         else {
             cancel_button.click();
@@ -374,9 +410,9 @@ function errorMessage(msg_elem, message){
 }
 
 //function to refresh listing_info on cancel, submit, input event listeners after AJAX success
-function refreshSubmitbindings(success_button, cancel_button, rentals, domain_name){
+function refreshSubmitbindings(success_button, cancel_button, rentals, rental_id){
     for (var x = 0; x < rentals.length; x++){
-        if (rentals[x].domain_name == domain_name){
+        if (rentals[x].rental_id == rental_id){
             var row_drop = success_button.closest('.row-drop');
             var row = row_drop.prev(".row-disp");
             var both_rows = row.add(row_drop);
