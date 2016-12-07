@@ -146,46 +146,42 @@ module.exports = {
 	},
 
 	//check if listing is a valid domain name and add it to the search history
-	checkDomainAndAddToSearch : function(req, res, next){
-		console.log("F: Checking domain validity and adding to search history...");
+	checkDomainListedAndAddToSearch : function(req, res, next){
+		console.log("F: Checking domain validity...");
 
 		var domain_name = req.params.domain_name || req.body["domain-name"];
 
-		if (!validator.isFQDN(domain_name)){
-			error.handler(req, res, "Invalid domain name!");
-		}
-		else {
-			Listing.checkListing(domain_name, function(result){
-				var listing_result = result;
+		Listing.checkListing(domain_name, function(result){
+			var listing_result = result;
 
-				//add to search history
-				var account_id = (typeof req.user == "undefined") ? null : req.user.id;
-				var now = new Date().getTime();
-				var user_ip = req.headers['x-forwarded-for'] ||
-							 req.connection.remoteAddress ||
-							 req.socket.remoteAddress ||
-							 req.connection.socket.remoteAddress;
+			var user_ip = req.headers['x-forwarded-for'] ||
+						 req.connection.remoteAddress ||
+						 req.socket.remoteAddress ||
+						 req.connection.socket.remoteAddress;
 
-				//add to search history if its not localhost
-				if (user_ip != "::1" && user_ip != "::ffff:127.0.0.1" && user_ip != "127.0.0.1"){
-					var history_info = {
-						account_id: account_id,			//who searched if who exists
-						domain_name: domain_name.toLowerCase(),		//what they searched for
-						timestamp: now,		//when they searched for it
-						user_ip : user_ip
-					}
-					Data.newSearchHistory(history_info, function(result){});	//async
+			//add to search history if its not localhost
+			if (user_ip != "::1" && user_ip != "::ffff:127.0.0.1" && user_ip != "127.0.0.1"){
+                var account_id = (typeof req.user == "undefined") ? null : req.user.id;
+                var now = new Date().getTime();
+				var history_info = {
+					account_id: account_id,			//who searched if who exists
+					domain_name: domain_name.toLowerCase(),		//what they searched for
+					timestamp: now,		//when they searched for it
+					user_ip : user_ip
 				}
+                console.log("F: Adding to search history...");
 
-				if (!listing_result.info.length || listing_result.state == "error"){
-					renderWhoIs(req, res, domain_name);
-				}
-				//exists! handle the rest of the route
-				else {
-					next();
-				}
-			});
-		}
+				Data.newSearchHistory(history_info, function(result){});	//async
+			}
+
+            //doesnt exist, render the whois EJS
+			if (!listing_result.info.length || listing_result.state == "error"){
+				renderWhoIs(req, res, domain_name);
+			}
+			else {
+				next();     //exists! handle the rest of the route
+			}
+		});
 	},
 
 	//gets the listing info and all rental info/times belonging to it for a verified and active listing
@@ -223,13 +219,20 @@ module.exports = {
 				if (result.state != "success"){error.handler(req, res, result.info);}
 				else {
 					req.session.rental_info = result.info[0];
-					if (req.session.rental_info.owner_hash_id == owner_hash_id){
-						req.session.message = "Please create an account to edit this rental!";
-						next();
-					}
-					else {
-						res.redirect('/listing/' + req.params.domain_name);
-					}
+
+                    //if hash exists in URL and its the same as DB, we're good
+                    if (owner_hash_id){
+                        if (req.session.rental_info.owner_hash_id == owner_hash_id){
+                            req.session.message = "Please create an account to edit this rental!";
+                            next();
+                        }
+                        else {
+                            res.redirect('/listing/' + req.params.domain_name);
+                        }
+                    }
+                    else {
+                        next();
+                    }
 				}
 			});
 		}
@@ -253,6 +256,14 @@ module.exports = {
 			}
 		});
 	},
+
+    getListingRentalTimes : function(req, res, next){
+        console.log("F: Sending all listing times...");
+
+		res.send({
+			listing_info: req.session.listing_info
+		});
+    },
 
 	//get the stripe id of the listing owner and if listing is premium/basic
 	getOwnerStripe : function(req, res, next){
@@ -296,19 +307,10 @@ module.exports = {
 	renderListing : function(req, res, next){
 		console.log("F: Rendering listing...");
 
-		//remove some sensitive info
-		var clean_listing_info = Object.assign({}, req.session.listing_info);
-		delete clean_listing_info.stripe_subscription_id;
-
-		//stripe not connected, make sure the listing doesnt accept new rentals
-		if (req.session.listing_info.stripe_connected == 0){
-			clean_listing_info.status = 0;
-		}
-
 		res.render("listings/listing.ejs", {
 			user: req.user,
 			message: Auth.messageReset(req),
-			listing_info: clean_listing_info
+			listing_info: req.session.listing_info
 		});
 	},
 
@@ -379,11 +381,11 @@ module.exports = {
 
 	//activate the rental once its good
 	toggleActivateRental : function(req, res, next){
-		console.log("F: Activating new rental...");
+		console.log("F: Toggling rental activation...");
 
 		var rental_id = (req.session.new_rental_info) ? req.session.new_rental_info.rental_id : req.params.rental_id;
 		var domain_name = req.params.domain_name;
-		var owner_hash_id = req.session.new_rental_info.rental_db_info.owner_hash_id;
+		var owner_hash_id = (req.session.new_rental_info) ? req.session.new_rental_info.rental_db_info.owner_hash_id : false;
 
 		Listing.toggleActivateRental(rental_id, function(result){
 			if (result.state != "success"){
@@ -393,16 +395,16 @@ module.exports = {
 			else {
 				//update the req.users.rentals object if necessary
 				if (req.user){
-					updateUserRentalsObject(req.user.rentals, domain_name);
+					updateUserRentalsObject(req.user.rentals, rental_id);
 				}
 
-				//update the session listing info rentals
-				if (req.session.listing_info.rentals){
+				//update the session listing info rentals if we're creating a new rental
+				if (req.session.listing_info.rentals && req.session.new_rental_info){
 					req.session.listing_info.rentals.push(req.session.new_rental_info);
 					req.session.listing_info.rentals = joinRentalTimes(req.session.listing_info.rentals);
 				}
 
-				delete req.session.new_rental_info;
+                delete req.session.new_rental_info;
 
 				res.send({
 					state: "success",
@@ -482,6 +484,14 @@ function getListingRentalTimes(req, res, listing_info, callback){
 	Listing.getListingRentalsInfo(listing_info.id, function(result){
 		if (result.state=="error"){error.handler(req, res, result.info);}
 		else {
+            //remove some sensitive info
+            delete listing_info.stripe_subscription_id;
+
+            //stripe not connected, make sure the listing doesnt accept new rentals
+            if (listing_info.stripe_connected == 0){
+                listing_info.status = 0;
+            }
+
 			listing_info.rentals = joinRentalTimes(result.info);
 			req.session.listing_info = listing_info;
 			callback();
@@ -654,10 +664,10 @@ function calculatePrice(times, listing_info){
 //----------------------------------------------------------------helper functions for user obj----------------------------------------------------------------
 
 //helper function to update req.user.rentals after changing to active
-function updateUserRentalsObject(rentals, domain_name){
+function updateUserRentalsObject(rentals, rental_id){
 	for (var x = 0; x < rentals.length; x++){
-		if (rentals[x].domain_name.toLowerCase() == domain_name.toLowerCase()){
-			rentals[x].active = (rentals[x].active == 0) ? 1 : 0;
+		if (rentals[x].rental_id == rental_id){
+			rentals[x].status = (rentals[x].status == 0) ? 1 : 0;
 			break;
 		}
 	}

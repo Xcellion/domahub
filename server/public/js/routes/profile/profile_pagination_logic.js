@@ -228,12 +228,7 @@ function sortRows(method, sorted){
         toggleSort("domain_name", sorted);
     }
     else if (method == "status"){
-        if (window.location.pathname.indexOf("rentals") != -1){
-            toggleSort("active", sorted);
-        }
-        else {
-            toggleSort("status", sorted);
-        }
+        toggleSort("status", sorted);
     }
     else if (method == "date"){
         toggleSort("date_created", sorted);
@@ -369,10 +364,10 @@ function createAllRows(row_per_page, current_page){
             var both_rows = temp_row.add(temp_row_drop);
 
             //JS closure magic
-            (function(listing_info){
+            (function(info){
                 //to remove disabled on save changes button
                 both_rows.find(".drop-form .changeable-input").on("input", function(e){
-                    changedListingValue($(this), listing_info);
+                    changedListingValue($(this), info);
                 });
 
                 //on file change
@@ -384,7 +379,7 @@ function createAllRows(row_per_page, current_page){
                     file_name = (file_name.length > 14) ? "..." + file_name.substr(file_name.length - 14) : file_name;
                     $(this).next(".button").find(".file-label").text(file_name);
 
-                    changedListingValue($(this), listing_info);
+                    changedListingValue($(this), info);
                 });
             }(row_display[row_start]))
 
@@ -414,14 +409,14 @@ function createArrow(){
 // --------------------------------------------------------------------------------- EDIT ROW
 
 //helper function to bind to inputs to listen for any changes from existing listing info
-function changedListingValue(input_elem, listing_info){
+function changedListingValue(input_elem, info){
     var name_of_attr = input_elem.data("name");
     var closest_row = input_elem.closest(".row-drop, .row-disp");
     var save_button = (closest_row.hasClass("row-drop")) ? closest_row.find(".save-changes-button") : closest_row.next(".row-drop").find(".save-changes-button");
     var cancel_button = (closest_row.hasClass("row-drop")) ? closest_row.find(".cancel-changes-button") : closest_row.next(".row-drop").find(".cancel-changes-button");
 
     //only change if the value changed from existing or if image exists
-    if ((name_of_attr != "image" && input_elem.val() != listing_info[name_of_attr])
+    if ((name_of_attr != "image" && input_elem.val() != info[name_of_attr])
      || (name_of_attr == "image" && input_elem.val())
      || (name_of_attr == "image" && input_elem.data("deleted"))){
         if (save_button.hasClass("is-disabled")){

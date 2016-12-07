@@ -99,7 +99,7 @@ listing_model.prototype.getListingRentalsInfo = function(listing_id, callback){
 			INNER JOIN rental_times ON rentals.rental_id = rental_times.rental_id \
 			LEFT JOIN accounts ON rentals.account_id = accounts.id \
 			WHERE rentals.listing_id = ? \
-			AND rentals.active = 1 \
+			AND rentals.status = 1 \
 			ORDER BY rental_times.date ASC "
 	listing_query(query, "Failed to get all non-default rental info for listing #" + listing_id + "!", callback, listing_id);
 }
@@ -135,7 +135,7 @@ listing_model.prototype.getCurrentRental = function(domain_name, callback){
 			AND (UNIX_TIMESTAMP(NOW()) * 1000) BETWEEN rental_times.date AND rental_times.date + rental_times.duration \
 			AND listings.status = 1 \
 			AND listings.verified = 1\
-			AND rentals.active = 1";
+			AND rentals.status = 1";
 	listing_query(query, "Failed to get current rental info for domain " + domain_name + "!", callback, domain_name);
 }
 
@@ -159,7 +159,7 @@ listing_model.prototype.getListingRentalTimes = function(listing_id, callback){
 			FROM rental_times \
 			INNER JOIN rentals ON rentals.rental_id = rental_times.rental_id \
 			WHERE rentals.listing_id = ? \
-			AND rentals.active = 1 \
+			AND rentals.status = 1 \
 			ORDER BY rental_times.date ASC "
 	listing_query(query, "Failed to get rental times for listing #" + listing_id + "!", callback, listing_id);
 }
@@ -313,7 +313,7 @@ listing_model.prototype.updateRentalTime = function(new_rental_times, callback){
 listing_model.prototype.toggleActivateRental = function(rental_id, callback){
 	console.log("DB: Attempting to toggle activation on rental #" + rental_id + "...");
 	query = "UPDATE rentals \
-			SET active = !active \
+			SET status = !status \
 			WHERE rental_id = ?"
 	listing_query(query, "Failed to toggle activation on rental #" + rental_id + "!", callback, rental_id);
 }
