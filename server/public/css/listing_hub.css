@@ -21,6 +21,16 @@
     .is-flex-wrap .checkbox-wrapper {
       width: 100%; } }
 
+#filter-dropdown {
+  padding: 5px 5px 0; }
+  #filter-dropdown > .control {
+    padding: 12px 0;
+    margin-bottom: 0; }
+    #filter-dropdown > .control:not(:last-child) {
+      border-bottom: 1px solid rgba(0, 0, 0, 0.12); }
+    #filter-dropdown > .control:last-child {
+      padding: 20px 10px 0; }
+
 #listings-table td {
   white-space: nowrap; }
 

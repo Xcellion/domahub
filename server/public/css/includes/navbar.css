@@ -6,8 +6,6 @@
       width: 100%; } }
   #searchbar-form > .control {
     width: 100%; }
-  #searchbar-form input {
-    font-family: "sharetech", "Lucida Console", monospace; }
 
 /************************************* LOGIN DROPDOWN *************************/
 #login-dropdown {
