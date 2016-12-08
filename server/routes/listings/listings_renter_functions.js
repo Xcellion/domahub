@@ -73,6 +73,54 @@ module.exports = {
 		}
 	},
 
+    //check posted rental address
+    checkPostedRentalAddress : function(req, res, next){
+        //check for address
+        if (typeof req.body.address != "undefined"){
+            var address = addProtocol(req.body.address);
+            console.log("F: Checking posted rental address...");
+            if (!validator.isIP(address) && !validator.isURL(address, {protocols: ["http", "https"], require_protocol: true})){
+                error.handler(req, res, "Invalid address!", "json");
+            }
+            else {
+                req.session.rental_object.db_object.address = address;
+                next();
+            }
+        }
+        else {
+            next();
+        }
+    },
+
+    //check posted rental status
+    checkPostedRentalStatus : function(req, res, next){
+        var status = req.body.status;
+
+        //check for status
+        if (typeof status != "undefined"){
+            console.log("F: Checking posted rental status...");
+            if (status != "1" && status != "0"){
+                error.handler(req, res, "Invalid status!", "json");
+            }
+            else {
+                req.session.rental_object.db_object.status = status;
+                next();
+            }
+        }
+        else {
+            next();
+        }
+    },
+
+    //create a rental object for checking
+    createRentalObject : function(req, res, next){
+        req.session.rental_object = {
+            db_object: {}
+        };
+
+        next();
+    },
+
 	//check times
 	checkRentalTimes : function(req, res, next){
 		console.log("F: Checking posted rental times...");
@@ -395,7 +443,7 @@ module.exports = {
 			else {
 				//update the req.users.rentals object if necessary
 				if (req.user){
-					updateUserRentalsObject(req.user.rentals, rental_id);
+                    updateUserRentalsObject(req.user.rentals, req.session.new_rental_info.rental_db_info, rental_id);
 				}
 
 				//update the session listing info rentals if we're creating a new rental
@@ -419,18 +467,27 @@ module.exports = {
 	//updates the owner of a rental that has no owner (hash rental)
 	updateRentalOwner : function(req, res, next){
 		console.log("F: Updating the rental owner...");
-		var rental_id = req.params.rental_id;
-		var raw_info = {
+		req.session.edit_rental_info = {
 			account_id: req.user.id,
 			owner_hash_id: null
 		}
 
-		//update the DB
-		updateRental(req, res, rental_id, raw_info, function(){
-			console.log("/listing/" + req.params.domain_name + "/" + rental_id);
-			res.redirect("/listing/" + req.params.domain_name + "/" + rental_id);
-		});
-	}
+        next();
+	},
+
+    //edit the rental
+    editRental : function(req, res, next){
+        console.log("F: Updating rental...");
+
+        updateRental(req, res, req.session.rental_object.db_object, function(){
+            updateUserRentalsObject(req.user.rentals, req.session.rental_object.db_object, req.params.rental_id);
+            delete req.session.rental_object.db_object;
+            res.send({
+                state: "success",
+                rentals: req.user.rentals
+            });
+        });
+    }
 
 }
 
@@ -447,7 +504,7 @@ function newListingRental(req, res, raw_info, callback){
 }
 
 //helper function to update rental info
-function updateRental(req, res, rental_id, raw_info, callback){
+function updateRental(req, res, raw_info, callback){
 	Listing.updateRental(req.params.rental_id, raw_info, function(result){
 		if (result.state != "success"){error.handler(req, res, result.info, "json");}
 		else {
@@ -664,10 +721,12 @@ function calculatePrice(times, listing_info){
 //----------------------------------------------------------------helper functions for user obj----------------------------------------------------------------
 
 //helper function to update req.user.rentals after changing to active
-function updateUserRentalsObject(rentals, rental_id){
+function updateUserRentalsObject(rentals, rental_obj, rental_id){
 	for (var x = 0; x < rentals.length; x++){
 		if (rentals[x].rental_id == rental_id){
-			rentals[x].status = (rentals[x].status == 0) ? 1 : 0;
+			for (y in rental_obj){
+                rentals[x][y] = rental_obj[y];
+            }
 			break;
 		}
 	}

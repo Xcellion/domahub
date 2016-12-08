@@ -188,7 +188,8 @@ module.exports = function(app, db, auth, error, stripe){
 		checkDomainListed,
 		renter_functions.getRental,
 		auth.checkLoggedIn,
-		renter_functions.updateRentalOwner
+		renter_functions.updateRentalOwner,
+		renter_functions.editRental
 	]);
 
 	//create a new rental
@@ -208,16 +209,16 @@ module.exports = function(app, db, auth, error, stripe){
 	]);
 
 	//changing rental status
-	app.post('/listing/:domain_name/:rental_id/status', [
+	app.post('/listing/:domain_name/:rental_id/edit', [
 		urlencodedParser,
 		auth.checkLoggedIn,
 		checkDomainValid,
 		checkDomainListed,
 		renter_functions.getRental,
-		renter_functions.checkRental,
-		renter_functions.getRentalRentalTimes,
-		renter_functions.getVerifiedListing,
-		renter_functions.toggleActivateRental
+		renter_functions.createRentalObject,
+		renter_functions.checkPostedRentalAddress,
+		renter_functions.checkPostedRentalStatus,
+		renter_functions.editRental
 	]);
 
 	//adding time to an existing rental
