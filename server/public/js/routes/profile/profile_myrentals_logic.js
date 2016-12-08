@@ -23,14 +23,12 @@ $(document).ready(function() {
 
 	//show checkout modal content
 	$('#redirect-next-button').click(function() {
-		$("#calendar-modal-content").addClass('is-hidden');
-		$("#checkout-modal-content").removeClass('is-hidden');
+		showModalContent("checkout");
 	});
 
 	//show calendar again (press back on checkout)
 	$('#edit-dates-button, #checkout-back-button').click(function() {
-		$("#calendar-modal-content").removeClass('is-hidden');
-		$("#checkout-modal-content").addClass('is-hidden');
+		showModalContent("calendar");
 	});
 });
 
@@ -243,6 +241,7 @@ function createDatesDrop(rental_info){
 
 //function to display modal on add time button
 function addTimeRental(rental_info, time_a){
+	rental_id = rental_info.rental_id;		//for new time submission
 
 	//take off the handler
 	time_a.off();
@@ -334,6 +333,7 @@ function displayListingInfo(listing_info){
     //change domain name
     $(".rental-domain-name").text(listing_info.domain_name);
 	$("#href-domain").prop("href", "http://www." + listing_info.domain_name);
+	$("#href-domain").text(listing_info.domain_name);
 }
 
 // --------------------------------------------------------------------------------- EDIT ROW
@@ -540,7 +540,7 @@ function checkSubmit(){
 //function to submit new rental info
 function submitRentals(stripeToken){
 	if (checkSubmit() == true && unlock){
-		var newEvents = $('#calendar').fullCalendar('clientEvents', filterNew);
+		var newEvents = $('#calendar').fullCalendar('clientEvents', returnMineNotBG);
 		unlock = false;
 		minEvents = [];
 
@@ -558,10 +558,9 @@ function submitRentals(stripeToken){
 		//create a new rental
 		$.ajax({
 			type: "POST",
-			url: "/listing/" + listing_info.domain_name + "/rent",
+			url: "/listing/" + listing_info.domain_name + "/" + rental_id + "/time",
 			data: {
 				events: minEvents,
-				new_user_email: $("#new_user_email").val(),
 				stripeToken: stripeToken
 			}
 		}).done(function(data){
@@ -606,4 +605,19 @@ function successHandler(data){
 	$("#payment-column, .success-hide").addClass('is-hidden');
 	$("#success-column").removeClass('is-hidden');
 	$("#success-message").text("Your credit card was successfully charged!");
+}
+
+
+//function to show a specific modal content
+function showModalContent(type){
+	if (type == "calendar"){
+		var cal_height = $("#calendar-modal-content").height() - $("#calendar-modal-top").height() - 100;
+		$('#calendar').fullCalendar('option', 'contentHeight', cal_height);
+		$("#calendar-modal-content").removeClass('is-hidden');
+		$("#checkout-modal-content").addClass('is-hidden');
+	}
+	else {
+		$("#calendar-modal-content").addClass('is-hidden');
+		$("#checkout-modal-content").removeClass('is-hidden');
+	}
 }
