@@ -6422,14 +6422,6 @@ a.nav-item {
     .checkbox-list > li:not(:first-child) {
       border-top: 2px solid rgba(0, 0, 0, 0.12); }
 
-@media screen and (min-width: 769px) {
-  .checkbox-wrapper:not(:first-child) {
-    margin-left: 10px; } }
-
-@media screen and (max-width: 768px) {
-  .checkbox-wrapper:not(:first-child) {
-    margin-bottom: 5px; } }
-
 .checkbox-form label {
   -moz-transition: all 0.25s ease;
   -o-transition: all 0.25s ease;
@@ -6476,10 +6468,10 @@ a.nav-item {
   opacity: 0.7;
   left: 10px;
   top: 10px;
-  -moz-transition: all 0.5s ease;
-  -o-transition: all 0.5s ease;
-  -webkit-transition: all 0.5s ease;
-  transition: all 0.5s ease; }
+  -moz-transition: all 0.25s ease;
+  -o-transition: all 0.25s ease;
+  -webkit-transition: all 0.25s ease;
+  transition: all 0.25s ease; }
 
 .checkbox-form input[type="checkbox"]:checked + label::before,
 .checkbox-form input[type="radio"]:checked + label::before {

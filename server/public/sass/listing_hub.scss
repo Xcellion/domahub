@@ -14,7 +14,6 @@
   flex-wrap: wrap;
   flex-direction: row;
   align-items: center;
-  margin-bottom: 10px;
   @include mobile {
     flex-wrap: nowrap;
     flex-direction: column;
@@ -26,29 +25,34 @@
   .button {
     margin: 0 0 10px 10px;
   }
-  .checkbox-wrapper {
-    @include mobile {
-      width: 100%;
-    }
-  }
 }
 
 // filter dropdown menu
-#filter-dropdown {
-  padding: 5px 5px 0;
-  & > .control {
-    padding: 12px 0;
-    margin-bottom: 0;
-    // &:first-child {
-    //   padding-top: 0;
-    // }
-    &:not(:last-child){
-      border-bottom: 1px solid $border;
-    }
-    &:last-child {
-      padding: 20px 10px 0;
-    }
+#filter-dropdown-wrapper {
+  @include width-1160px {
+    display: none;
   }
+  display: inline-block;
+  padding-right: 20px;
+}
+
+#filter-dropdown {
+  box-sizing: border-box;
+  width: 300px;
+  & > .control {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    margin-bottom: 0;
+  }
+}
+
+#table-wrapper {
+  display: inline-block;
+  padding-left: 20px;
+  @include width-1160px {
+    padding-left: 0;
+  }
+  width: 100%;
 }
 
 // table col widths
