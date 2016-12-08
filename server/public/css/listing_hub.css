@@ -6,8 +6,7 @@
   display: flex;
   flex-wrap: wrap;
   flex-direction: row;
-  align-items: center;
-  margin-bottom: 10px; }
+  align-items: center; }
   @media screen and (max-width: 768px) {
     .is-flex-wrap {
       flex-wrap: nowrap;
@@ -17,19 +16,29 @@
     justify-content: flex-end; }
   .is-flex-wrap .button {
     margin: 0 0 10px 10px; }
-  @media screen and (max-width: 768px) {
-    .is-flex-wrap .checkbox-wrapper {
-      width: 100%; } }
+
+#filter-dropdown-wrapper {
+  display: inline-block;
+  padding-right: 20px; }
+  @media screen and (max-width: 1160px) {
+    #filter-dropdown-wrapper {
+      display: none; } }
 
 #filter-dropdown {
-  padding: 5px 5px 0; }
+  box-sizing: border-box;
+  width: 300px; }
   #filter-dropdown > .control {
-    padding: 12px 0;
+    padding-top: 12px;
+    padding-bottom: 12px;
     margin-bottom: 0; }
-    #filter-dropdown > .control:not(:last-child) {
-      border-bottom: 1px solid rgba(0, 0, 0, 0.12); }
-    #filter-dropdown > .control:last-child {
-      padding: 20px 10px 0; }
+
+#table-wrapper {
+  display: inline-block;
+  padding-left: 20px;
+  width: 100%; }
+  @media screen and (max-width: 1160px) {
+    #table-wrapper {
+      padding-left: 0; } }
 
 #listings-table td {
   white-space: nowrap; }

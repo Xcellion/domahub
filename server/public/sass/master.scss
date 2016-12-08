@@ -331,17 +331,6 @@
   }
 }
 
-.checkbox-wrapper {
-  &:not(:first-child) {
-    @include tablet {
-      margin-left: 10px;
-    }
-    @include mobile {
-      margin-bottom: 5px;
-    }
-  }
-}
-
 .checkbox-form label {
 	@include transition(all 0.25s ease);
 	color: $text;
@@ -397,7 +386,7 @@
   opacity: 0.7;
   left: 10px;
   top: 10px;
-	@include transition(all 0.5s ease);
+	@include transition(all 0.25s ease);
 }
 
 .checkbox-form input[type="checkbox"]:checked + label,
