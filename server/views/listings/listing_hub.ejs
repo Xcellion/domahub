@@ -15,59 +15,25 @@
 
 		<%- include("../templates/navbar", {user: user}); %>
 
-		<section class="section is-medium-top">
+		<section class="section is-medium min-height">
 			<div class="container is-fluid">
 				<div class="columns">
-					<div class="column is-3">
-
-					</div>
-					<div class="column is-9">
-						<p class="control has-icon has-addons">
-							<input id="domain_name-input" class="input is-medium is-expanded" tabindex="1" type="text" placeholder="Search domains" />
-							<i class="fa fa-search"></i>
-							<a id="submit-button" class="button no-shadow is-primary is-medium">Submit</a>
-							<!-- <a id="filter-open-button" class="button no-shadow is-medium">Advanced Search</a> -->
-						</p>
-						<div id="filter-dropdown" class="is-hidden">
-							<div class="control is-horizontal">
-							  <div class="control-label is-padded">
+					<div id="filter-dropdown-wrapper" class="has-borderRight">
+						<div id="filter-dropdown">
+							<h2 class="is-bold">Filters</h2>
+							<div class="control has-borderBottom">
 								<label class="label">Date Range</label>
-							  </div>
-							  <div class="control is-grouped">
-								<p class="control">
-								  <input id="start_date-input" class="flatpickr input" tabindex="1" type="text" placeholder="Rental Start Date">
-								</p>
+							  <div class="control">
+									<p class="control">
+									  <input id="start_date-input" class="flatpickr input is-expanded" tabindex="1" type="text" placeholder="Rental Start Date">
+									</p>
 								<!-- <p class="control">
 								  <input id="end_date-input" class="flatpickr input" tabindex="1" type="text" placeholder="Rental End Date">
 								</p> -->
 							  </div>
 							</div>
-							<div class="control is-horizontal">
-								<div class="control-label is-padded">
-									<label class="label">Categories</label>
-								</div>
-								<form class="control checkbox-form is-flex-wrap">
-									<%# using for loop to generate all categories %>
-									<% for (var x = 0; x < categories_front.length; x++) {%>
-										<div class="checkbox-wrapper">
-											<input class="cat-checkbox is-small" value="<%= categories_back[x] %>" id="cb<%= x %>" type="checkbox" />
-											<label class="has-border is-small" tabindex="1" for="cb<%= x %>"><%= categories_front[x] %></label>
-										</div>
-									<% } %>
-								</form>
-							</div>
-							<div class="control is-horizontal">
-								<div class="control-label is-padded">
-									<label class="label">Domain Length</label>
-								</div>
-								<div class="control has-slider">
-									<div id="sliderSmall" class='margin-bottom-50'></div>
-								</div>
-							</div>
-							<div class="control is-horizontal">
-								<div class="control-label is-padded">
-									<label class="label">Price / Rate</label>
-								</div>
+							<div class="control">
+								<label class="label">Price / Rate</label>
 								<div class="control">
 									<span class="select">
 										<select id="category-input">
@@ -82,10 +48,28 @@
 									</span>
 								</div>
 							</div>
-							<div class="control has-slider">
+							<div class="control has-slider has-borderBottom">
 								<div id="slider" class="margin-bottom-50"></div>
 							</div>
-							<%# <div class="control is-horizontal">
+							<div class="control has-borderBottom">
+								<label class="label padding-bottom-5">Domain Length</label>
+								<div class="control has-slider">
+									<div id="sliderSmall" class='margin-bottom-50'></div>
+								</div>
+							</div>
+							<div class="control">
+								<label class="label">Categories</label>
+								<form class="control checkbox-form flex-column-center">
+									<%# using for loop to generate all categories %>
+									<% for (var x = 0; x < categories_front.length; x++) {%>
+										<div class="checkbox-wrapper">
+											<input class="cat-checkbox is-small" value="<%= categories_back[x] %>" id="cb<%= x %>" type="checkbox" />
+											<label class="is-small" tabindex="1" for="cb<%= x %>"><%= categories_front[x] %></label>
+										</div>
+									<% } %>
+								</form>
+							</div>
+							<!-- <div class="control is-horizontal">
 								<div class="control-label is-padded">
 									<label class="label">Extensions</label>
 								</div>
@@ -107,8 +91,16 @@
 								<div class="control">
 									<input class="input" tabindex="1" type="text" placeholder="Exclude (separate by comma)">
 								</div>
-							</div>%>
+							</div> -->
 						</div>
+					</div>
+					<div id="table-wrapper">
+						<p class="control has-icon has-addons">
+							<input id="domain_name-input" class="input is-medium is-expanded" tabindex="1" type="text" placeholder="Search domains" />
+							<i class="fa fa-search"></i>
+							<a id="submit-button" class="button no-shadow is-primary is-medium">Submit</a>
+							<a id="filter-open-button" class="button no-shadow is-medium is-hidden">Filters</a>
+						</p>
 						<table id="listings-table" class="table margin-top-15">
 							<thead>
 								<tr>
@@ -159,10 +151,6 @@
 					</div>
 				</div>
 			</div>
-		</section>
-
-		<section class="is-small min-height">
-
 		</section>
 
 		<%- include("../templates/footer"); %>
