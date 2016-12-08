@@ -28,6 +28,12 @@ function setUpCalendar(){
         timeFormat: 'hA',
         axisFormat: 'hA',
 
+        eventDrop: function(event, delta, revertFunc) {
+
+            console.log('sss');
+
+        },
+
         //header buttons
         header: {left:'prev', center:'next', right:'title, today'},
 
@@ -146,10 +152,6 @@ function setUpCalendar(){
             });
             if (view.name == "agendaWeek"){
                 $(element).css("width", "100%");
-                //remove event title repeat on other ppl events
-                if (!$(element).hasClass('fc-start') && !event.other){
-                    $(element).find('.fc-content').text("");
-                }
             }
             //fatten event height in month view
             else {
@@ -601,8 +603,8 @@ function checkOverlapEvent(event){
 function createExisting(rentals){
 	if (rentals){
 		for (var x = 0; x < rentals.length; x++){
-			var start = new Date(rentals[x].date);
-			var end = new Date(start.getTime() + rentals[x].duration);
+			var start = moment(rentals[x].date);
+			var end = moment(parseFloat(rentals[x].date) + parseFloat(rentals[x].duration));
 			var eventData = {
 				start: start,
 				end: end,
@@ -613,8 +615,8 @@ function createExisting(rentals){
 
 			//if its your own rental
 			if (user && user.id == rentals[x].account_id){
-				eventData.title = user.username;
-				eventData.color = "#73c8e3";
+				eventData.title = "Original Time Slot";
+				eventData.color = "#2196f3";
 			}
 			//someone else rented it
 			else {

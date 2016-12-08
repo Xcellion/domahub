@@ -399,8 +399,8 @@ function createDomain(row_info){
 //function to create the dropdown arrow
 function createArrow(){
     var temp_td = $("<td class='td-visible td-arrow'></td>");
-        var temp_span = $("<span class='icon'></span>");
-            var temp_i = $("<i class='fa fa-angle-right'></i>");
+    var temp_span = $("<span class='icon'></span>");
+    var temp_i = $("<i class='fa fa-angle-right'></i>");
     temp_td.append(temp_span.append(temp_i));
 
     return temp_td;
@@ -417,8 +417,10 @@ function changedListingValue(input_elem, info){
 
     //only change if the value changed from existing or if image exists
     if ((name_of_attr != "image" && input_elem.val() != info[name_of_attr])
-     || (name_of_attr == "image" && input_elem.val())
-     || (name_of_attr == "image" && input_elem.data("deleted"))){
+    || (name_of_attr == "image" && input_elem.val())
+    || (name_of_attr == "image" && input_elem.data("deleted"))){
+        input_elem.data('changed', true);
+
         if (save_button.hasClass("is-disabled")){
             save_button.removeClass("is-disabled");
         }
@@ -431,6 +433,8 @@ function changedListingValue(input_elem, info){
     }
     //hide the cancel, disable the save
     else {
+        input_elem.data('changed', false);
+
         save_button.removeClass("is-success").addClass("is-disabled").text("Save Changes");
         cancel_button.addClass("is-hidden");
     }
