@@ -383,17 +383,20 @@ module.exports = {
 	//add times to rental
 	editRentalTimes : function(req, res, next){
 		console.log("F: Adding times to an existing rental...");
-
-		var domain_name = req.params.domain_name;
 		var rental_id = req.params.rental_id;
 
 		//format times if it exists
 		formatNewRentalTimes(rental_id, req.session.new_rental_info.new_rental_times);
 
-		newRentalTimes(req, res, rental_id, new_rental_info.formatted_times, function(){
+		newRentalTimes(req, res, rental_id, req.session.new_rental_info.new_rental_times, function(){
 			delete req.session.new_rental_info;
-			req.session.changed = true;
-			res.send({message : "success"});
+
+            //updateUserRentalsObject(req.user.rentals, req.session.new_rental_info.rental_db_info, rental_id);
+
+			res.send({
+                state : "success",
+                rentals : req.user.rentals
+            });
 		});
 	},
 
