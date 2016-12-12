@@ -97,7 +97,7 @@ function proxyRequest(req, res, address){
 		res.end(response);
 	});
 
-	req.get(address).on('response', function (response) {
+	request.get(address).on('response', function (response) {
 		//Here you can modify the headers
 		res.writeHead(response.statusCode, response.headers);
 	}).pipe(write);
