@@ -14,7 +14,7 @@ $(document).ready(function() {
 
 		$(this).addClass("is-loading");
 
-		var newEvents = $('#calendar').fullCalendar('clientEvents', filterNew);
+		var newEvents = $('#calendar').fullCalendar('clientEvents', returnMineNotBG);
 		wantedEvents = [];
 
 		//format the events to be sent
