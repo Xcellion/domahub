@@ -106,9 +106,8 @@ function proxyRequest(req, res, address){
 		}
 	});
 
-	//modify the headers
 	request.get(address).on('response', function (response) {
-		res.writeHeader(200, {"Content-Type": "text/html"});
+		res.writeHead(response.statusCode, response.headers);
 	}).pipe(write);
 }
 
