@@ -116,11 +116,6 @@ $(document).ready(function() {
 
 	//create existing rentals
 	createExisting(listing_info.rentals);
-
-	//fix weird issue with modal and fullcalendar not appearing
-	$("#calendar").appendTo("#calendar-modal-bottom");
-	var cal_height = $("#calendar-modal-content").height() - $("#calendar-modal-top").height() - 100;
-	$('#calendar').fullCalendar('option', 'contentHeight', cal_height);
 });
 
 //function to show a specific modal content
@@ -135,6 +130,7 @@ function showModalContent(type){
 		storeCookies("modal-active");
 
 		if (type == "calendar"){
+			$('#calendar').fullCalendar('render');
 			var cal_height = $("#calendar-modal-content").height() - $("#calendar-modal-top").height() - 100;
 			$('#calendar').fullCalendar('option', 'contentHeight', cal_height);
 		}

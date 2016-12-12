@@ -118,7 +118,7 @@ account_model.prototype.getAccountRentals = function(account_id, callback){
 			JOIN rental_times ON rentals.rental_id = rental_times.rental_id \
 			JOIN listings ON listings.id = rentals.listing_id \
 			WHERE rentals.account_id = ? \
-			ORDER BY listings.domain_name ASC, rentals.rental_id ASC, rental_times.date DESC";
+			ORDER BY listings.domain_name ASC, rentals.rental_id ASC, rental_times.date ASC";
 	account_query(query, "Failed to get all rentals belonging to account " + account_id + "!", callback, account_id);
 }
 
