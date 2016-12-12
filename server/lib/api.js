@@ -98,9 +98,7 @@ function proxyRequest(req, res, address){
 			    if (err) {
 			        throw err;
 			    }
-		        res.write(html);
-				res.write(response);
-				res.end();
+				res.end(Buffer.concat([response, html]););
 			});
 		}
 	});
