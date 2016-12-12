@@ -389,14 +389,9 @@ module.exports = {
 		formatNewRentalTimes(rental_id, req.session.new_rental_info.new_rental_times);
 
 		newRentalTimes(req, res, rental_id, req.session.new_rental_info.new_rental_times, function(){
-			delete req.session.new_rental_info;
-
-            //updateUserRentalsObject(req.user.rentals, req.session.new_rental_info.rental_db_info, rental_id);
-
-			res.send({
-                state : "success",
-                rentals : req.user.rentals
-            });
+            delete req.session.new_rental_info;
+			delete req.user.rentals;
+            next();
 		});
 	},
 
@@ -456,13 +451,7 @@ module.exports = {
 				}
 
                 delete req.session.new_rental_info;
-
-				res.send({
-					state: "success",
-					rental_id: rental_id,
-					owner_hash_id: owner_hash_id,
-					rentals: (req.user) ? req.user.rentals : false
-				});
+                next();
 			}
 		});
 	},
@@ -489,6 +478,18 @@ module.exports = {
                 state: "success",
                 rentals: req.user.rentals
             });
+        });
+    },
+
+    sendRentalSuccess : function(req, res, next){
+        var rental_id = (req.session.new_rental_info) ? req.session.new_rental_info.rental_id : req.params.rental_id;
+		var owner_hash_id = (req.session.new_rental_info) ? req.session.new_rental_info.rental_db_info.owner_hash_id : false;
+
+        res.send({
+            state: "success",
+            rental_id: rental_id,
+            owner_hash_id: owner_hash_id || false,
+            rentals: (req.user) ? req.user.rentals : false
         });
     }
 

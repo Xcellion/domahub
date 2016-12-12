@@ -140,7 +140,7 @@
 				<div id="calendar-modal-content" class="listing-modal-content">
 					<div id="calendar-modal-top">
 						<nav class="level">
-							<div class="level-left">
+							<div id="calendar-level-left" class="level-left">
 								<div class="level-item">
 									<a tabindex="1" class="button is-danger no-shadow" id="remove_events">Remove Selected</a>
 								</div>
@@ -149,6 +149,9 @@
 								</div>
 								<div class="level-item">
 									<a tabindex="1" class="button no-shadow" id="today-button">Today</a>
+								</div>
+								<div class="level-item">
+									<a tabindex="1" class="button is-info no-shadow" id="rent-beginning-button">Rental Start</a>
 								</div>
 							</div>
 							<div class="level-right">
@@ -235,7 +238,9 @@
 							</div>
 						</div>
 					</div>
-					<div id="calendar-modal-bottom"></div>
+					<div id="calendar-modal-bottom">
+						<div id="calendar" class="margin-top-25"></div>
+					</div>
 				</div>
 				<div id="checkout-modal-content" class="listing-modal-content is-hidden">
 					<nav class="level">
@@ -388,7 +393,6 @@
 	</section>
 
 	<%# keep calendar outside of modal and move it in with JS to fix weird bug of not appearing%>
-	<div id="calendar" class="margin-top-25"></div>
 
 	<%- include("../templates/footer"); %>
 	<%- include("../templates/js_scripts"); %>
