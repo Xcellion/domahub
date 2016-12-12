@@ -242,6 +242,12 @@ function createDatesDrop(rental_info){
 	var temp_ul_end = $("<ul></ul>");
     temp_col_end.append(temp_p_end, temp_ul_end);
 
+		var temp_col_buttons = $("<div class='column is-3'></div>");
+		var temp_div_buttons = $("<div class='control'></div>");
+		var temp_button1_buttons = $("<a href='/listing/" + rental_info.domain_name + "' class='button margin-right-10 margin-bottom-5 no-shadow'>View Listing</a>");
+		var temp_button2_buttons = $("<a href='https://www." + rental_info.domain_name + "' class='button no-shadow'>Visit Website</a>");
+		temp_col_buttons.append(temp_div_buttons.append(temp_button1_buttons, temp_button2_buttons));
+
     for (var x = 0; x < rental_info.date.length; x++){
         var disp_start = moment(new Date(rental_info.date[x])).format('MMM DD, YYYY hh:mm A');
         var disp_end = moment(parseFloat(rental_info.date[x]) + parseFloat(rental_info.duration[x])).format('MMM DD, YYYY hh:mm A');
@@ -252,7 +258,7 @@ function createDatesDrop(rental_info){
         temp_ul_start.append(p_start);
         temp_ul_end.append(p_end);
     }
-    temp_cols.append(temp_col_start, temp_col_end);
+    temp_cols.append(temp_col_start, temp_col_end, temp_col_buttons);
 
     return temp_cols;
 }

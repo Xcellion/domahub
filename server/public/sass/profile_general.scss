@@ -17,7 +17,12 @@
 
 // table stuff
 .table {
-  min-width: 650px;
+  @include tablet {
+    min-width: 730px;
+  }
+  @include mobile {
+    min-width: 705px;
+  }
 }
 
 .account-form select {
@@ -45,12 +50,22 @@
 }
 
 .td-address {
-  width: 190px;
+  @include tablet {
+    width: 275px;
+  }
+  @include mobile {
+    width: 150px;
+  }
 }
 
 .address-div-wrapper {
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
-  width: 190px;
+  @include mobile {
+    width: 150px;
+  }
+  @include tablet {
+    width: 275px;
+  }
 }
