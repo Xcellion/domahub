@@ -439,9 +439,8 @@ module.exports = {
 				error.handler(req, res, result.info);
 			}
 			else {
-				//update the req.users.rentals object if necessary
 				if (req.user){
-                    updateUserRentalsObject(req.user.rentals, req.session.new_rental_info.rental_db_info, rental_id);
+                    delete req.user.rentals;
 				}
 
 				//update the session listing info rentals if we're creating a new rental
