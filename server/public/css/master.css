@@ -4359,8 +4359,7 @@ input:-webkit-autofill {
   color: rgba(0, 0, 0, 0.9);
   padding: 5px; }
   .nav-link:hover, .nav-link:active, .nav-link:focus, .nav-link.is-active {
-    color: rgba(0, 0, 0, 0.66);
-    opacity: 1; }
+    opacity: 0.5; }
 
 .nav-item {
   align-items: center;
@@ -4655,9 +4654,9 @@ a.nav-item.is-tab {
     .tabs li:not(:first-child) {
       margin-left: 20px; }
     .tabs li.is-active a {
-      -webkit-box-shadow: inset 0 -2px 0 0 #3cbc8d;
-      -moz-box-shadow: inset 0 -2px 0 0 #3cbc8d;
-      box-shadow: inset 0 -2px 0 0 #3cbc8d;
+      -webkit-box-shadow: inset 0 -3px 0 0 #3cbc8d;
+      -moz-box-shadow: inset 0 -3px 0 0 #3cbc8d;
+      box-shadow: inset 0 -3px 0 0 #3cbc8d;
       color: #3cbc8d; }
       .tabs li.is-active a:hover, .tabs li.is-active a:focus {
         -webkit-box-shadow: inset 0 -2px 0 0 #8ad6ba;
