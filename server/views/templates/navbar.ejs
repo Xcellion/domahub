@@ -28,13 +28,13 @@
     </span>
     <div class="nav-right nav-menu is-dark">
       <div class="nav-item">
-        <a class="nav-link is-underlined-hover is-white" tabindex="1" title="Browse Listings" href="/listings">Browse Listings</a>
+        <a class="nav-link  is-white" tabindex="1" title="Browse Listings" href="/listings">Browse Listings</a>
       </div>
 
 <%# navbar checks for a user variable, if it doesnt exist, then display the login button %>
 <% if (!user) { %>
     <div class="nav-item">
-      <a id="signup" tabindex="1" class="nav-link is-white is-underlined-hover" title="Sign Up" href="/signup">Sign Up</a>
+      <a id="signup" tabindex="1" class="nav-link is-white " title="Sign Up" href="/signup">Sign Up</a>
     </div>
     <div class="nav-item">
       <a id="login-modal" tabindex="1" class="button is-white modal-button" title="Log In" data-object="#modal-login">Log In</a>
@@ -89,7 +89,7 @@
 <!-- or else display the user profile as logged in -->
 <% } else { %>
     <div class="nav-item">
-      <a class="nav-link is-white is-underlined-hover" tabindex="1" title="Create Listing" href="/listings/create">Create Listings</a>
+      <a class="nav-link is-white " tabindex="1" title="Create Listing" href="/listings/create">Create Listings</a>
     </div>
     <div class="nav-item">
       <a id="profile-button" tabindex="1" class="button is-white is-outlined" title="Profile">
@@ -98,7 +98,7 @@
           <i class="fa fa-angle-down"></i>
         </span>
       </a>
-      <a tabindex="1" class="nav-link is-underlined-hover is-hidden-tablet is-white" href="/profile/dashboard" title="Profile">
+      <a tabindex="1" class="nav-link  is-hidden-tablet is-white" href="/profile/dashboard" title="Profile">
         Profile
       </a>
       <div id="profile-dropdown" class="is-hidden">
@@ -113,7 +113,7 @@
       </div>
     </div>
     <div class="nav-item is-hidden-tablet">
-      <a tabindex="1" class="nav-link is-underlined-hover is-hidden-tablet is-white" href="/logout" title="Log Out">
+      <a tabindex="1" class="nav-link  is-hidden-tablet is-white" href="/logout" title="Log Out">
         Log Out
       </a>
     </div>

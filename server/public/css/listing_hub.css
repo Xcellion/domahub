@@ -40,17 +40,16 @@
     #table-wrapper {
       padding-left: 0; } }
 
-#listings-table td {
-  white-space: nowrap; }
-
-#listings-table .td-price {
-  width: 110px; }
-
-#listings-table .td-categories {
-  width: 150px; }
-
-#listings-table .td-domain {
-  width: auto; }
+#listings-table {
+  min-width: 700px; }
+  #listings-table td {
+    white-space: nowrap; }
+  #listings-table .td-price {
+    width: 110px; }
+  #listings-table .td-categories {
+    width: 150px; }
+  #listings-table .td-domain {
+    width: auto; }
 
 input[type=range].primary-range {
   -webkit-appearance: none;

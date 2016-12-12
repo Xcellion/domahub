@@ -61,11 +61,7 @@
       border-top: 1px solid $border;
     &:last-child {
       a {
-        color: $accent;
         font-weight: bold;
-        &:focus {
-          text-decoration: underline;
-        }
       }
     }
   }
@@ -79,6 +75,7 @@
       &:focus {
         outline: none;
         color: $primary;
+        padding-left: 5px;
       }
     }
 

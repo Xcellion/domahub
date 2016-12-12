@@ -6,6 +6,9 @@
 .verification-container {
   padding-left: 50px; }
 
+.table {
+  min-width: 650px; }
+
 .account-form select {
   margin-right: 5px; }
 
@@ -22,10 +25,13 @@
   width: 160px; }
 
 .td-view {
-  width: 10px; }
+  width: 133px; }
+
+.td-address {
+  width: 190px; }
 
 .address-div-wrapper {
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
-  width: 600px; }
+  width: 190px; }
