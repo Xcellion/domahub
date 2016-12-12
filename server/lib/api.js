@@ -90,9 +90,11 @@ function renderError(req, res, next){
 
 //function to proxy the request to the rental address
 function proxyRequest(req, res, address){
+
+	//edit the body before responding
 	var write = concat(function(response) {
 		if (response != undefined) {
-			response += "fuckFUCK";
+			console.log(response);
 		}
 		res.end(response);
 	});
