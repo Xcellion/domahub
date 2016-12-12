@@ -4,6 +4,7 @@ var node_env = process.env.NODE_ENV || 'dev'; 	//dev or prod bool
 var validator = require("validator");
 var	request = require('request');
 var url = require('url');
+var fs = require('fs');
 var concat = require('concat-stream')
 
 module.exports = function(app, db, e){
@@ -94,9 +95,13 @@ function proxyRequest(req, res, address){
 	//edit the body before responding
 	var write = concat(function(response) {
 		if (response != undefined) {
-			console.log(response);
-			response.write("Hello world", "utf-8");
-			console.log(response);
+			fs.readFile('./index.html', function (err, html) {
+			    if (err) {
+			        throw err;
+			    }
+		        res.writeHeader(200, {"Content-Type": "text/html"});
+		        res.write(html);
+			});
 		}
 		res.end(response);
 	});
