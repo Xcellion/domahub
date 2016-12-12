@@ -4,6 +4,7 @@ var node_env = process.env.NODE_ENV || 'dev'; 	//dev or prod bool
 var validator = require("validator");
 var	request = require('request');
 var url = require('url');
+var concat = require('concat-stream')
 
 module.exports = function(app, db, e){
 	error = e;
@@ -89,12 +90,12 @@ function renderError(req, res, next){
 
 //function to proxy the request to the rental address
 function proxyRequest(req, res, address){
-	var write = function(response) {
+	var write = concat(function(response) {
 		if (response != undefined) {
 			response += "fuckFUCK";
 		}
 		resp.end(response);
-	}
+	});
 
 	request.get(address).on('response', function (response) {
 		//Here you can modify the headers
