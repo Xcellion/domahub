@@ -105,6 +105,7 @@ function proxyRequest(req, res, address){
 
 	//modify the headers
 	request.get(address).on('response', function (response) {
+		console.log(response.headers("content-type"));
 		res.writeHead(response.statusCode, response.headers);
 	}).pipe(write);
 }
