@@ -52,10 +52,7 @@ function checkHost(req, res, next){
 function getCurrentRental(req, res, domain_name){
 	//get the current rental for the listing
 	if (req.session.rented){
-		//proxyReq(req, res, req.session.rented);
-
-		//proxy the request
-		proxyRequest(req, res, req.session.rented);
+		proxyReq(req, res, req.session.rented, domain_name);
 	}
 
 	//rental doesnt exist in the session
@@ -72,10 +69,7 @@ function getCurrentRental(req, res, domain_name){
 				req.session.rented = result.info[0].address;
 
 				//proxy the request
-				proxyRequest(req, res, result.info[0].address);
-
-				//req.session.hostname = url.parse(result.info[0].address).hostname;
-				//proxyReq(req, res);
+				proxyReq(req, res, result.info[0].address, domain_name)
 			}
 		});
 	}
@@ -89,38 +83,8 @@ function renderError(req, res, next){
 	});
 }
 
-//function to proxy the request to the rental address
-function proxyRequest(req, res, address){
-	//edit the body before responding
-	var write = concat(function(response) {
-		if (response != undefined) {
-			fs.readFile('./index.html', function (err, html) {
-			    if (err) {
-			        throw err;
-			    }
-				res.end(Buffer.concat([response, html]));
-			});
-		}
-	});
-
-	//modify the headers
-	request.get(address).on('response', function (response) {
-		console.log(response.headers['content-type'].indexOf("image"));
-		res.writeHead(response.statusCode, response.headers);
-	}).pipe(write);
-}
-
 //function to proxy request
-function proxyReq(req, res){
-	req.url.replace(req.headers["host"], req.session.hostname)
-
-	if (req.path != "/"){
-		var address = (req.path == "/") ? req.session.hostname : req.session.hostname + req.url;
-	}
-	else {
-		var address = (req.path == "/") ? req.session.rented : req.session.rented + req.url;
-	}
-
+function proxyReq(req, res, address, domain_name){
 	request[req.method.toLowerCase()]({
 		url: addProtocol(address),
 		encoding: null
@@ -130,8 +94,24 @@ function proxyReq(req, res){
 			error.handler(req, res, false, "api");
 		}
 		else {
-			res.setHeader("content-type", response.headers["content-type"]);
-			res.send(body);
+
+			//not an image requested
+			if (response.headers['content-type'].indexOf("image") == -1){
+				fs.readFile('./index.html', function (err, html) {
+					if (err) {
+						error.handler(req, res, false, "api");
+					}
+					else {
+						res.end(Buffer.concat([response, html]));
+					}
+				});
+			}
+			else {
+				res.render("proxy-image", {
+					image: address,
+					domain_name: domain_name
+				})
+			}
 		}
 	});
 }
