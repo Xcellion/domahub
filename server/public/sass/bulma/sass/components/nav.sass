@@ -7,10 +7,14 @@
     display: none
 
 .nav-link
+  color: $text
   padding: 5px
   &:hover,
-  &:focus
-    outline: none
+  &:active,
+  &:focus,
+  &.is-active
+    color: $text-light
+    opacity: 1
 
 .nav-item
   align-items: center
@@ -33,12 +37,6 @@
 
 .nav-item a,
 a.nav-item
-  opacity: 0.8
-  &:hover,
-  &:active,
-  &:focus,
-  &.is-active
-    opacity: 1
   +mobile
     width: 100%
   &.is-tab

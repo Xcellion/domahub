@@ -46,10 +46,7 @@
     .profile-dropdown-menu li:not(:first-child) {
       border-top: 1px solid rgba(0, 0, 0, 0.12); }
       .profile-dropdown-menu li:not(:first-child):last-child a {
-        color: #ff5722;
         font-weight: bold; }
-        .profile-dropdown-menu li:not(:first-child):last-child a:focus {
-          text-decoration: underline; }
     .profile-dropdown-menu li a {
       width: 100%;
       display: inline-block;
@@ -57,4 +54,5 @@
       box-sizing: border-box; }
       .profile-dropdown-menu li a:hover, .profile-dropdown-menu li a:active, .profile-dropdown-menu li a:focus {
         outline: none;
-        color: #3cbc8d; }
+        color: #3cbc8d;
+        padding-left: 5px; }
