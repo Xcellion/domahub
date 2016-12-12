@@ -4,6 +4,8 @@ var node_env = process.env.NODE_ENV || 'dev'; 	//dev or prod bool
 var validator = require("validator");
 var	request = require('request');
 var url = require('url');
+var fs = require('fs');
+var concat = require('concat-stream')
 
 module.exports = function(app, db, e){
 	error = e;
@@ -16,14 +18,14 @@ module.exports = function(app, db, e){
 //function to check if the requested host is not for domahub
 function checkHost(req, res, next){
 	if (req.headers.host){
-	    domain_name = req.headers.host.replace(/^(https?:\/\/)?(www\.)?/,'');
+		domain_name = req.headers.host.replace(/^(https?:\/\/)?(www\.)?/,'');
 		//requested domahub website, not domain
 		if (domain_name == "www.w3bbi.com"
-		 	|| domain_name == "w3bbi.com"
-			|| domain_name == "www.domahub.com"
-			|| domain_name == "domahub.com"
-			|| domain_name == "localhost"
-			|| domain_name == "localhost:8080"){
+		|| domain_name == "w3bbi.com"
+		|| domain_name == "www.domahub.com"
+		|| domain_name == "domahub.com"
+		|| domain_name == "localhost"
+		|| domain_name == "localhost:8080"){
 
 			//if dev environment or going to a listings page
 			if (node_env == "dev" || req.path.indexOf("/listing/") != -1 || req.path == "/stripe/webhook"){
@@ -32,14 +34,14 @@ function checkHost(req, res, next){
 			else {
 				res.render("under_construction.ejs");
 			}
-	    }
+		}
 		//is not a valid FQDN
 		else if (!validator.isFQDN(domain_name)){
 			error.handler(req, res, false, "api");
 		}
-	    else {
+		else {
 			getCurrentRental(req, res, domain_name);
-	    }
+		}
 	}
 	else {
 		error.handler(req, res, false, "api");
@@ -53,7 +55,7 @@ function getCurrentRental(req, res, domain_name){
 		//proxyReq(req, res, req.session.rented);
 
 		//proxy the request
-		req.pipe(request(req.session.rented)).pipe(res);
+		proxyRequest(res, req.session.rented, domain_name);
 	}
 
 	//rental doesnt exist in the session
@@ -70,7 +72,7 @@ function getCurrentRental(req, res, domain_name){
 				req.session.rented = result.info[0].address;
 
 				//proxy the request
-				req.pipe(request(result.info[0].address)).pipe(res);
+				proxyRequest(res, result.info[0].address, domain_name);
 
 				//req.session.hostname = url.parse(result.info[0].address).hostname;
 				//proxyReq(req, res);
@@ -84,6 +86,14 @@ function getCurrentRental(req, res, domain_name){
 function renderError(req, res, next){
 	res.render("error", {
 		user: req.user
+	});
+}
+
+//function to proxy the request to the rental address
+function proxyRequest(res, address, domain_name){
+	res.render("proxy", {
+		proxy : address,
+		domain_name : domain_name
 	});
 }
 

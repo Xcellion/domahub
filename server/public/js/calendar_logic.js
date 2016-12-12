@@ -81,12 +81,14 @@ function setUpCalendar(){
                 $("#today-button").removeClass('is-disabled');
             }
 
-            //dim today or not
-            if (rental_min.isBetween(currentView.start, currentView.end)){
-                $("#rent-beginning-button").addClass('is-disabled');
-            }
-            else {
-                $("#rent-beginning-button").removeClass('is-disabled');
+            if (typeof rental_min != "undefined"){
+                //dim today or not
+                if (rental_min.isBetween(currentView.start, currentView.end)){
+                    $("#rent-beginning-button").addClass('is-disabled');
+                }
+                else {
+                    $("#rent-beginning-button").removeClass('is-disabled');
+                }
             }
 
             //dim previous button
