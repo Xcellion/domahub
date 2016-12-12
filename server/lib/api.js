@@ -89,12 +89,12 @@ function renderError(req, res, next){
 
 //function to proxy the request to the rental address
 function proxyRequest(req, res, address){
-	var write = concat(function(response) {
+	var write = function(response) {
 		if (response != undefined) {
 			response += "fuckFUCK";
 		}
 		resp.end(response);
-	});
+	}
 
 	request.get(address).on('response', function (response) {
 		//Here you can modify the headers
