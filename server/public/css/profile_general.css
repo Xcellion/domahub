@@ -6,8 +6,13 @@
 .verification-container {
   padding-left: 50px; }
 
-.table {
-  min-width: 650px; }
+@media screen and (min-width: 769px) {
+  .table {
+    min-width: 730px; } }
+
+@media screen and (max-width: 768px) {
+  .table {
+    min-width: 705px; } }
 
 .account-form select {
   margin-right: 5px; }
@@ -27,11 +32,21 @@
 .td-view {
   width: 133px; }
 
-.td-address {
-  width: 190px; }
+@media screen and (min-width: 769px) {
+  .td-address {
+    width: 275px; } }
+
+@media screen and (max-width: 768px) {
+  .td-address {
+    width: 150px; } }
 
 .address-div-wrapper {
   text-overflow: ellipsis;
   white-space: nowrap;
-  overflow: hidden;
-  width: 190px; }
+  overflow: hidden; }
+  @media screen and (max-width: 768px) {
+    .address-div-wrapper {
+      width: 150px; } }
+  @media screen and (min-width: 769px) {
+    .address-div-wrapper {
+      width: 275px; } }
