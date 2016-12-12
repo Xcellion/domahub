@@ -94,7 +94,9 @@ function proxyRequest(req, res, address){
 	//edit the body before responding
 	var write = concat(function(response) {
 		if (response != undefined) {
+			console.log(response);
 			response.write("Hello world", "utf-8");
+			console.log(response);
 		}
 		res.end(response);
 	});
