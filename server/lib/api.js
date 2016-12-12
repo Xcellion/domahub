@@ -55,7 +55,7 @@ function getCurrentRental(req, res, domain_name){
 		//proxyReq(req, res, req.session.rented);
 
 		//proxy the request
-		proxyRequest(res, req.session.rented, domain_name);
+		proxyRequest(req, res, req.session.rented);
 	}
 
 	//rental doesnt exist in the session
@@ -72,7 +72,7 @@ function getCurrentRental(req, res, domain_name){
 				req.session.rented = result.info[0].address;
 
 				//proxy the request
-				proxyRequest(res, result.info[0].address, domain_name);
+				proxyRequest(req, res, result.info[0].address);
 
 				//req.session.hostname = url.parse(result.info[0].address).hostname;
 				//proxyReq(req, res);
@@ -90,11 +90,25 @@ function renderError(req, res, next){
 }
 
 //function to proxy the request to the rental address
-function proxyRequest(res, address, domain_name){
-	res.render("proxy", {
-		proxy : address,
-		domain_name : domain_name
+function proxyRequest(req, res, address){
+	//edit the body before responding
+	var write = concat(function(response) {
+		if (response != undefined) {
+			fs.readFile('./index.html', function (err, html) {
+			    if (err) {
+			        throw err;
+			    }
+		        res.write(html);
+				res.write(response);
+				res.end();
+			});
+		}
 	});
+
+	//modify the headers
+	request.get(address).on('response', function (response) {
+		res.writeHead(response.statusCode, response.headers);
+	}).pipe(write);
 }
 
 //function to proxy request
