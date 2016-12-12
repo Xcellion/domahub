@@ -94,12 +94,12 @@ function proxyRequest(req, res, address){
 		if (response != undefined) {
 			response += "fuckFUCK";
 		}
-		resp.end(response);
+		res.end(response);
 	});
 
-	request.get(address).on('response', function (response) {
+	req.get(address).on('response', function (response) {
 		//Here you can modify the headers
-		resp.writeHead(response.statusCode, response.headers);
+		res.writeHead(response.statusCode, response.headers);
 	}).pipe(write);
 }
 
