@@ -91,24 +91,7 @@ function renderError(req, res, next){
 
 //function to proxy the request to the rental address
 function proxyRequest(req, res, address){
-
-	//edit the body before responding
-	var write = concat(function(response) {
-		if (response != undefined) {
-			fs.readFile('./index.html', function (err, html) {
-			    if (err) {
-			        throw err;
-			    }
-		        res.write(html);
-				res.write(response);
-				res.end();
-			});
-		}
-	});
-
-	request.get(address).on('response', function (response) {
-		res.writeHead(response.statusCode, response.headers);
-	}).pipe(write);
+	res.render("proxy", {proxy : address});
 }
 
 //function to proxy request

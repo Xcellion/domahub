@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+
+<html>
+
+	<head>
+		<title>DomaHub</title>
+		<%- include("templates/head_links"); %>
+	</head>
+
+	<body>
+		<%- include("templates/navbar", {user: user}); %>
+
+		<iframe src=<%= proxy %>></iframe>
+
+		<%- include("templates/footer"); %>
+
+	</body>
+
+</html>
