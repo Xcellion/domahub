@@ -1,36 +1,51 @@
 var row_display = rentals.slice(0);
-var listing_info = {};
+var listing_info = false;
+var rental_min = false;
+var refresh_time_submit = false;
 
 $(document).ready(function() {
-	//fix weird issue with modal and fullcalendar not appearing
-	$("#calendar").appendTo("#calendar-modal-bottom");
-	var cal_height = $("#calendar-modal-content").height() - $("#calendar-modal-top").height() - 100;
-	$('#calendar').fullCalendar('option', 'contentHeight', cal_height);
-
     //various ways to close calendar modal
 	$('.modal-close, .modal-background').click(function() {
+
+		//refresh the modal after successful time submission
+		if (refresh_time_submit){
+			successHide(false);
+		}
+
 	  	$('#listing-modal').removeClass('is-active');
+		listing_info = false;
+		rental_min = false;
 		delete_cookie("modal-active");
 	});
 
 	//esc key to close modal
 	$(document).keyup(function(e) {
 		if (e.which == 27) {
+			//refresh the modal after successful time submission
+			if (refresh_time_submit){
+				successHide(false);
+			}
+
+			listing_info = false;
+			rental_min = false;
 			$('#listing-modal').removeClass('is-active');
 			delete_cookie("modal-active");
 		}
 	});
 
+    //go to the rental start date
+    $("#rent-beginning-button").click(function(e){
+        $("#calendar").fullCalendar('gotoDate', rental_min);
+    });
+
 	//show checkout modal content
 	$('#redirect-next-button').click(function() {
-		$("#calendar-modal-content").addClass('is-hidden');
-		$("#checkout-modal-content").removeClass('is-hidden');
+		showModalContent("checkout");
 	});
 
 	//show calendar again (press back on checkout)
 	$('#edit-dates-button, #checkout-back-button').click(function() {
-		$("#calendar-modal-content").removeClass('is-hidden');
-		$("#checkout-modal-content").addClass('is-hidden');
+		showModalContent("calendar");
 	});
 });
 
@@ -52,6 +67,7 @@ function createAllRows(row_per_page, current_page){
 //function to create a rental row
 function createRow(rental_info, rownum){
     tempRow = $("<tr class='row-disp' id='row" + rownum + "'></tr>");
+	tempRow.data("rental_id", rental_info.rental_id);
 
     tempRow.append(createArrow(rental_info));
     tempRow.append(createDomain(rental_info));
@@ -243,6 +259,7 @@ function createDatesDrop(rental_info){
 
 //function to display modal on add time button
 function addTimeRental(rental_info, time_a){
+	rental_id = rental_info.rental_id;		//for new time submission
 
 	//take off the handler
 	time_a.off();
@@ -255,6 +272,7 @@ function addTimeRental(rental_info, time_a){
     }).done(function(data){
         time_a.removeClass('is-loading');
         listing_info = data.listing_info;
+		rental_min = moment(rental_info.date[0]);
 
 		displayListingInfo(listing_info);
 
@@ -266,9 +284,12 @@ function addTimeRental(rental_info, time_a){
 
         //display modal
         $('#listing-modal').addClass('is-active');
-        var cal_height = $("#calendar-modal-content").height() - $("#calendar-modal-top").height() - 100;
-        $('#calendar').fullCalendar('option', 'contentHeight', cal_height)
-		$("#calendar").fullCalendar('gotoDate', moment());
+
+		//render calendar
+		$('#calendar').fullCalendar('render');
+		var cal_height = $("#calendar-modal-content").height() - $("#calendar-modal-top").height() - 100;
+		$('#calendar').fullCalendar('option', 'contentHeight', cal_height);
+		$("#calendar").fullCalendar('gotoDate', rental_info.date[0]);
 
         //delete all existing listing events (except BG events)
         $('#calendar').fullCalendar('removeEvents', returnNotMineNotBG);
@@ -334,6 +355,7 @@ function displayListingInfo(listing_info){
     //change domain name
     $(".rental-domain-name").text(listing_info.domain_name);
 	$("#href-domain").prop("href", "http://www." + listing_info.domain_name);
+	$("#href-domain").text(listing_info.domain_name);
 }
 
 // --------------------------------------------------------------------------------- EDIT ROW
@@ -537,12 +559,12 @@ function checkSubmit(){
 	return bool;
 }
 
-//function to submit new rental info
+//function to submit new rental times
 function submitRentals(stripeToken){
 	if (checkSubmit() == true && unlock){
-		var newEvents = $('#calendar').fullCalendar('clientEvents', filterNew);
+		var newEvents = $('#calendar').fullCalendar('clientEvents', returnMineNotBG);
 		unlock = false;
-		minEvents = [];
+		var minEvents = [];
 
 		//format the events to be sent
 		for (var x = 0; x < newEvents.length; x++){
@@ -558,10 +580,9 @@ function submitRentals(stripeToken){
 		//create a new rental
 		$.ajax({
 			type: "POST",
-			url: "/listing/" + listing_info.domain_name + "/rent",
+			url: "/listing/" + listing_info.domain_name + "/" + rental_id + "/time",
 			data: {
 				events: minEvents,
-				new_user_email: $("#new_user_email").val(),
 				stripeToken: stripeToken
 			}
 		}).done(function(data){
@@ -603,7 +624,38 @@ function errorHandler(message){
 
 //success handler
 function successHandler(data){
-	$("#payment-column, .success-hide").addClass('is-hidden');
-	$("#success-column").removeClass('is-hidden');
-	$("#success-message").text("Your credit card was successfully charged!");
+	refresh_time_submit = true;
+	successHide(true);
+	rentals = data.rentals;
+	row_display = rentals.slice(0);
+	var row_per_page = parseFloat($("#domains-per-page").val());
+	createAllRows(row_per_page, 1);
+}
+
+//function to hide stuff after success
+function successHide(bool){
+	if (bool){
+		$("#payment-column, .success-hide").addClass('is-hidden');
+		$("#success-column").removeClass('is-hidden');
+		$("#success-message").text("Your credit card was successfully charged!");
+	}
+	else {
+		$("#payment-column, .success-hide, #calendar-modal-content").removeClass('is-hidden');
+		$("#checkout-modal-content, #success-column").addClass('is-hidden');
+		$("#success-message").text("Please take a moment to review the summary below. You may edit the information on any of the previous pages by clicking the go back button.");
+	}
+}
+
+//function to show a specific modal content
+function showModalContent(type){
+	if (type == "calendar"){
+		var cal_height = $("#calendar-modal-content").height() - $("#calendar-modal-top").height() - 100;
+		$('#calendar').fullCalendar('option', 'contentHeight', cal_height);
+		$("#calendar-modal-content").removeClass('is-hidden');
+		$("#checkout-modal-content").addClass('is-hidden');
+	}
+	else {
+		$("#calendar-modal-content").addClass('is-hidden');
+		$("#checkout-modal-content").removeClass('is-hidden');
+	}
 }

@@ -28,12 +28,6 @@ function setUpCalendar(){
         timeFormat: 'hA',
         axisFormat: 'hA',
 
-        eventDrop: function(event, delta, revertFunc) {
-
-            console.log('sss');
-
-        },
-
         //header buttons
         header: {left:'prev', center:'next', right:'title, today'},
 
@@ -76,7 +70,7 @@ function setUpCalendar(){
 
         //callback when view is changed
         viewRender: function(currentView){
-            var minDate = moment();						//prevent calendar from going back in past
+            var minDate = (typeof rental_min != "undefined") ? rental_min : moment();		//prevent calendar from going back in past
             var maxDate = moment().add(1, "year");		//prevent calendar from going further than 1 year
 
             //dim today or not
@@ -85,6 +79,14 @@ function setUpCalendar(){
             }
             else {
                 $("#today-button").removeClass('is-disabled');
+            }
+
+            //dim today or not
+            if (rental_min.isBetween(currentView.start, currentView.end)){
+                $("#rent-beginning-button").addClass('is-disabled');
+            }
+            else {
+                $("#rent-beginning-button").removeClass('is-disabled');
             }
 
             //dim previous button
@@ -163,6 +165,9 @@ function setUpCalendar(){
 
     //custom buttons for today
     $(".fc-today-button").hide();
+    $("#today-button").click(function(e){
+        $(".fc-today-button").click();
+    });
 
     //remove all events and remember
 	$("#remove_events").click(function(e){
@@ -392,20 +397,20 @@ function eventSelectionHandlers(element){
 			var view = $('#calendar').fullCalendar('getView');
 			var mouseUpCalEvent = $("#calendar").fullCalendar('clientEvents', eventElem.attr("id"))[0];
 
-			//agendaweek view
-			if (view.type == "agendaWeek"){
-				//get the time slots of both mousedown and mouseup
-				var mouseDownSlot = getTimeSlotAgenda(mouseUpCalEvent, mouseDownJsEvent);
-				var mouseUpSlot = getTimeSlotAgenda(mouseUpCalEvent, mouseUpJsEvent);
-			}
-			//month view
-			else {
-				var mouseUpSlot = getTimeSlotMonth(mouseUpJsEvent);
-				var mouseDownSlot = getTimeSlotMonth(mouseDownJsEvent);
-			}
-
 			//if its my event, mousedown exists and the mousedown event is the same as the mouseup event
-			if (!mouseUpCalEvent.old && mouseDownJsEvent && mouseDownCalEvent._id == mouseUpCalEvent._id){
+			if (mouseUpCalEvent.newevent && mouseDownJsEvent && mouseDownCalEvent._id == mouseUpCalEvent._id){
+    			//agendaweek view
+    			if (view.type == "agendaWeek"){
+    				//get the time slots of both mousedown and mouseup
+    				var mouseDownSlot = getTimeSlotAgenda(mouseUpCalEvent, mouseDownJsEvent);
+    				var mouseUpSlot = getTimeSlotAgenda(mouseUpCalEvent, mouseUpJsEvent);
+    			}
+    			//month view
+    			else {
+    				var mouseUpSlot = getTimeSlotMonth(mouseUpJsEvent);
+    				var mouseDownSlot = getTimeSlotMonth(mouseDownJsEvent);
+    			}
+
 				//moved down / right or stayed the same
 				if (mouseDownSlot.start.isSameOrBefore(mouseUpSlot.start)){
 					//remove the time slots in between mousedown and mouseup from the event
