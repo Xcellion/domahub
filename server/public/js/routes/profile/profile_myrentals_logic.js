@@ -234,21 +234,23 @@ function createDatesDrop(rental_info){
     var temp_cols = $("<div class='columns'></div>");
     var temp_col_start = $("<div class='column is-3'></div>");
     var temp_p_start = $("<p class='is-bold'>Rental Start</p>");
-    temp_col_start.append(temp_p_start);
+	var temp_ul_start = $("<ul></ul>");
+	temp_col_start.append(temp_p_start, temp_ul_start);
 
     var temp_col_end = $("<div class='column is-3'></div>");
     var temp_p_end = $("<p class='is-bold'>Rental End</p>");
-    temp_col_end.append(temp_p_end);
+	var temp_ul_end = $("<ul></ul>");
+    temp_col_end.append(temp_p_end, temp_ul_end);
 
     for (var x = 0; x < rental_info.date.length; x++){
         var disp_start = moment(new Date(rental_info.date[x])).format('MMM DD, YYYY hh:mm A');
         var disp_end = moment(parseFloat(rental_info.date[x]) + parseFloat(rental_info.duration[x])).format('MMM DD, YYYY hh:mm A');
 
-        var p_start = $("<p>" + disp_start + "</p>");
-        var p_end = $("<p>" + disp_end + "</p>");
+        var p_start = $("<li>" + disp_start + "</li>");
+        var p_end = $("<li>" + disp_end + "</li>");
 
-        temp_col_start.append(p_start);
-        temp_col_end.append(p_end);
+        temp_ul_start.append(p_start);
+        temp_ul_end.append(p_end);
     }
     temp_cols.append(temp_col_start, temp_col_end);
 
@@ -368,6 +370,8 @@ function editRow(row){
             $(this).data("editing", false);
             dropRow($(this), false);
             editArrow($(this), false);
+			editStatus($(this), false);
+			editAddress($(this), false);
             $(this).next(".row-drop").find(".cancel-changes-button").click();
         }
     });
