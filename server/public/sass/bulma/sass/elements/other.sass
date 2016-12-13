@@ -76,6 +76,12 @@
   height: $nav-height
   position: relative
   width: $nav-height
+  &.is-filter-menu
+    +width-1160px-max
+      display: block
+    display: none
+    height: 40px
+    width: 40px
   &.is-black
     span
       background-color: $black
