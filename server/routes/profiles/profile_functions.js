@@ -152,13 +152,13 @@ module.exports = {
 	//function to redirect to appropriate profile page
 	redirectProfile : function(req, res, next){
 		path = req.path;
-		if (path.includes("dashboard")){
-			res.redirect("/profile/dashboard");
-		}
-		else if (path.includes("inbox")){
-			res.redirect("/profile/messages");
-		}
-		else if (path.includes("mylistings")){
+		// if (path.includes("dashboard")){
+		// 	res.redirect("/profile/dashboard");
+		// }
+		// else if (path.includes("inbox")){
+		// 	res.redirect("/profile/messages");
+		// }
+		if (path.includes("mylistings")){
 			res.redirect("/profile/mylistings");
 		}
 		else if (path.includes("myrentals")){

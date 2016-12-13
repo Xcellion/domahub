@@ -16,10 +16,11 @@ module.exports = function(app, db, auth, error, stripe){
 	Account = new account_model(db);
 
 	//redirect profile to dashboard
-	app.get("/profile", function(req, res){ res.redirect("/profile/dashboard") });
+	app.get("/profile", function(req, res){ res.redirect("/profile/mylistings") });
 
 	//mylistings pages
 	app.get([
+		"/profile",
 		"/profile/mylistings",
 		"/profile/mylistings/:page"
 	], [
@@ -40,23 +41,23 @@ module.exports = function(app, db, auth, error, stripe){
 		profile_functions.renderMyRentals
 	]);
 
-	//check if user is legit, get all listings, get all rentals
-	app.get("/profile/dashboard", [
-		auth.checkLoggedIn,
-		profile_functions.getAccountListingsSearch,
-		profile_functions.getAccountRentals,
-		profile_functions.renderDashboard
-	]);
+	// //check if user is legit, get all listings, get all rentals
+	// app.get("/profile/dashboard", [
+	// 	auth.checkLoggedIn,
+	// 	profile_functions.getAccountListingsSearch,
+	// 	profile_functions.getAccountRentals,
+	// 	profile_functions.renderDashboard
+	// ]);
 
-	//inbox
-	app.get([
-		"/profile/messages",
-		"/profile/messages/:target_username"
-	], [
-		auth.checkLoggedIn,
-		profile_functions.getAccountChats,
-		profile_functions.renderInbox
-	])
+	// //inbox
+	// app.get([
+	// 	"/profile/messages",
+	// 	"/profile/messages/:target_username"
+	// ], [
+	// 	auth.checkLoggedIn,
+	// 	profile_functions.getAccountChats,
+	// 	profile_functions.renderInbox
+	// ])
 
 	//settings
 	app.get("/profile/settings", [
