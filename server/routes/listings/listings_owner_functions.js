@@ -34,25 +34,43 @@ module.exports = {
 		});
 	},
 
+    //create a listing object for checking
+    createListingObject : function(req, res, next){
+        req.session.listing_object = {
+            db_object: {}
+        };
+
+        next();
+    },
+
+	//function to check posted domain name
+	checkPostedDomain : function(req, res, next){
+		var domain_name = req.body.domain_name;
+		if (!validator.isFQDN(domain_name)){
+			error.handler(req, res, "domain", "json");
+		}
+		else {
+			req.session.listing_object.db_object.domain_name = domain_name;
+			next();
+		}
+	},
+
 	//function to format the listing info when creating a new listing
 	checkListingCreateInfo : function(req, res, next){
 		var domain_name = req.body.domain_name;
-		var description = req.body.description;
-		var categories = req.body.categories;
 
-		var background_image = req.body.background_image;
-		var buy_link = req.body.buy_link;
+		// var description = req.body.description;
+		// var categories = req.body.categories;
+		// var background_image = req.body.background_image;
+		// var buy_link = req.body.buy_link;
 
 		//check the posted info
-		if (!description){
-			error.handler(req, res, "description", "json");
-		}
-		else if (!validator.isFQDN(req.body.domain_name)){
+		if (!validator.isFQDN(req.body.domain_name)){
 			error.handler(req, res, "domain", "json");
 		}
-		else if (!categories || categories.split(",").length == 0){
-			error.handler(req, res, "category", "json");
-		}
+		// else if (!categories || categories.split(",").length == 0){
+		// 	error.handler(req, res, "category", "json");
+		// }
 		// else if (buy_link && !validator.isURL(buy_link, { protocols: ["http", "https"]})){
 		// 	error.handler(req, res, "buy", "json");
 		// }
@@ -443,8 +461,6 @@ module.exports = {
 	createListing : function(req, res, next){
 		var listing_info = {
 			domain_name : req.body.domain_name,
-			description: req.body.description,
-			categories: (req.body.categories.indexOf("null") != -1) ? null : req.body.categories,
 			owner_id: req.user.id,
 			verified: 1,		//create a verified domain to check for existing
 			date_created: (new Date()).getTime()
