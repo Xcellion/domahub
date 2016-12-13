@@ -2826,8 +2826,6 @@ input:-webkit-autofill {
     width: 48px; }
   .icon.is-active {
     color: #3cbc8d; }
-  .icon.is-active-accent {
-    color: #ff5722; }
   .icon.is-disabled {
     color: rgba(0, 0, 0, 0.38); }
 
