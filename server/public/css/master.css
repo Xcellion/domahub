@@ -2460,6 +2460,9 @@ input:-webkit-autofill {
   width: 100%; }
   .table.has-shadow {
     box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12); }
+  .table.no-borders td,
+  .table.no-borders th {
+    border-bottom: none; }
   .table td {
     padding: 8px 10px; }
   .table td,
@@ -2552,6 +2555,9 @@ input:-webkit-autofill {
     cursor: pointer; }
   .table tbody tr.is-active {
     background-color: #efefef; }
+  .table tbody tr.no-hover-effect:hover {
+    background-color: transparent;
+    cursor: default; }
   .table tfoot td,
   .table tfoot th {
     border-width: 2px 0 0;

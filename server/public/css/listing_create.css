@@ -13,3 +13,12 @@
     position: relative; }
     .checkbox-wrapper > li:not(:first-child) {
       border-top: 2px solid rgba(0, 0, 0, 0.12); }
+
+.td-price {
+  width: 110px; }
+
+.td-rate {
+  width: 105px; }
+
+.td-premium {
+  width: 130px; }
