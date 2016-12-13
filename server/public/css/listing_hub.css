@@ -19,10 +19,16 @@
 
 #filter-dropdown-wrapper {
   display: inline-block;
+  border-right: 1px solid rgba(0, 0, 0, 0.12);
   padding-right: 20px; }
   @media screen and (max-width: 1160px) {
     #filter-dropdown-wrapper {
-      display: none; } }
+      position: absolute;
+      left: -400px;
+      -webkit-box-shadow: 2px 0 5px 0 black;
+      -moz-box-shadow: 2px 0 5px 0 black;
+      box-shadow: 2px 0 5px 0 black;
+      z-index: 5; } }
 
 #filter-dropdown {
   box-sizing: border-box;
@@ -35,7 +41,8 @@
 #table-wrapper {
   display: inline-block;
   padding-left: 20px;
-  width: 100%; }
+  width: 100%;
+  z-index: 4; }
   @media screen and (max-width: 1160px) {
     #table-wrapper {
       padding-left: 0; } }

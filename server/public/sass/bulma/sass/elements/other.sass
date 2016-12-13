@@ -63,10 +63,9 @@
     +fa(28px, 32px)
   &.is-large
     +fa(42px, 48px)
+  // Modifiers
   &.is-active
     color: $primary
-  &.is-active-accent
-    color: $accent
   &.is-disabled
     color: $black-disabled
 
@@ -76,6 +75,12 @@
   height: $nav-height
   position: relative
   width: $nav-height
+  &.is-filter-menu
+    +width-1160px-max
+      display: block
+    display: none
+    height: 40px
+    width: 40px
   &.is-black
     span
       background-color: $black
