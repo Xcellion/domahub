@@ -242,9 +242,7 @@ listing_model.prototype.newListings = function(listing_info_array, callback){
 	console.log("DB: Attempting to create " + listing_info_array.length + " new listings...");
 	query = "INSERT IGNORE INTO listings ( \
 				domain_name, \
-				description, \
 				owner_id, \
-				verified, \
 				date_created \
 			)\
 			 VALUES ? "

@@ -17,16 +17,6 @@ module.exports = function(app, db, auth, error, stripe){
 	Listing = new listing_model(db);
 	Data = new data_model(db);
 
-	//-------------------------------------------------------------------------------------------------------------------- DESIRED TIMES
-
-	app.post("/listing/:domain_name/timeswanted", [
-		urlencodedParser,
-		checkDomainValid,
-		checkDomainNotListed,	//make sure the domain isnt listed on doma
-		stats_functions.checkRentalTimes,
-		stats_functions.newDesiredTimes
-	]);
-
 	//-------------------------------------------------------------------------------------------------------------------- SEARCH LISTINGS
 
 	//render the listing page hub
@@ -48,7 +38,7 @@ module.exports = function(app, db, auth, error, stripe){
 
 	//-------------------------------------------------------------------------------------------------------------------- OWNER RELATED
 
-	//redirect all /create to proper /create
+	//render listing create choice
 	app.get('/listings/create', [
 		auth.checkLoggedIn,
 		owner_functions.renderCreateListingChoice
@@ -75,6 +65,8 @@ module.exports = function(app, db, auth, error, stripe){
 	app.post('/listings/create/basic', [
 		urlencodedParser,
 		auth.checkLoggedIn,
+		owner_functions.createListingObject,
+		owner_functions.checkPostedDomain,
 		owner_functions.checkListingCreateInfo,
 		profile_functions.getAccountListings,
 		owner_functions.createListing
