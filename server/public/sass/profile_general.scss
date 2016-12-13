@@ -1,6 +1,16 @@
 @import 'vars';
 @import 'mixins';
 
+// profile card
+.is-profile-card {
+  @include tablet {
+    width: 100%;
+  }
+  @include mobile {
+    width: 275px;
+  }
+}
+
 // listing image delete button
 .listing-img {
    .delete {

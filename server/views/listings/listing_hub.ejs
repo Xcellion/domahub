@@ -18,7 +18,7 @@
 		<section class="section is-medium min-height">
 			<div class="container is-fluid">
 				<div class="columns">
-					<div id="filter-dropdown-wrapper" class="has-borderRight">
+					<div id="filter-dropdown-wrapper">
 						<div id="filter-dropdown">
 							<h2 class="is-bold">Filters</h2>
 							<div class="control has-borderBottom">
@@ -95,8 +95,15 @@
 						</div>
 					</div>
 					<div id="table-wrapper">
-						<div class="columns">
-							<div class="column is-half">
+						<div class="columns is-gapless">
+							<div class="column is-1 is-hidden-1160px-min">
+								<div class="hamburger is-filter-menu is-black">
+									<span></span>
+									<span></span>
+									<span></span>
+								</div>
+							</div>
+							<div class="column is-8-desktop">
 								<p class="control has-icon has-addons">
 									<input id="domain_name-input" class="input is-medium is-expanded" tabindex="1" type="text" placeholder="Search domains" />
 									<i class="fa fa-search"></i>

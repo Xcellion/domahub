@@ -778,6 +778,10 @@ table {
   .is-hidden-touch {
     display: none !important; } }
 
+@media screen and (min-width: 1160px) {
+  .is-hidden-1160px-min {
+    display: none !important; } }
+
 @media screen and (min-width: 980px) {
   .is-hidden-desktop {
     display: none !important; } }
@@ -2833,6 +2837,13 @@ input:-webkit-autofill {
   height: 60px;
   position: relative;
   width: 60px; }
+  .hamburger.is-filter-menu, .is-filter-menu.nav-toggle {
+    display: none;
+    height: 40px;
+    width: 40px; }
+    @media screen and (max-width: 1160px) {
+      .hamburger.is-filter-menu, .is-filter-menu.nav-toggle {
+        display: block; } }
   .hamburger.is-black span, .is-black.nav-toggle span {
     background-color: black; }
   .hamburger.is-black.is-active span, .is-black.is-active.nav-toggle span {
@@ -3169,6 +3180,9 @@ input:-webkit-autofill {
     box-shadow: 0 0 0 0 black; }
   .card.is-fullwidth {
     width: 100%; }
+  .card.is-centered {
+    margin-left: auto;
+    margin-right: auto; }
   .card.is-rounded {
     border-radius: 5px; }
   .card.cursor-pointer {

@@ -27,8 +27,8 @@
 	<section class="section min-height">
 		<div class="container">
 			<div class="columns">
-				<div class="column is-one-quarter">
-					<div class="card margin-bottom-25">
+				<div class="column is-4">
+					<div class="card is-profile-card margin-bottom-25">
 						<div class="card-image">
 							<figure class="image is-4by3">
 								<img src="https://placeholdit.imgix.net/~text?txtsize=30&bg=3cbc8d&txtclr=ffffff&txt=<%= user.username %>&w=300&h=200" />
@@ -62,7 +62,7 @@
 					</article>
 				</div>
 
-				<div class="column">
+				<div class="column is-8">
 					<% if (user.type != 2){ %>
 						<div class="notification is-primary">
 							<div class="content">
