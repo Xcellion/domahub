@@ -1,6 +1,6 @@
 .listing-modal-content {
   background-color: white;
-  height: calc(100vh - 60px);
+  height: calc(100vh - 120px);
   overflow: auto;
   padding: 25px 25px 0;
   position: relative;

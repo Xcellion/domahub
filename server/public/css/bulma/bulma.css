@@ -2963,7 +2963,7 @@ input:-webkit-autofill {
   vertical-align: top;
   white-space: nowrap; }
   .tag:hover, .tag:active {
-    cursor: default; }
+    cursor: pointer; }
   .tag.is-uppercase {
     text-transform: uppercase; }
   .tag .delete, .tag .modal-close {
@@ -3158,6 +3158,8 @@ input:-webkit-autofill {
     border-right: 1px solid rgba(0, 0, 0, 0.12); }
   .card-footer-item:hover, .card-footer-item:focus {
     background-color: rgba(0, 0, 0, 0.12); }
+  .card-footer-item.has-icon > .icon {
+    margin-right: 5px; }
 
 .card {
   background-color: white;
@@ -4299,7 +4301,7 @@ input:-webkit-autofill {
     width: 100%; } }
 
 .modal-content, .modal-card {
-  max-height: calc(100vh - 60px);
+  max-height: calc(100vh - 120px);
   overflow: auto;
   position: relative;
   width: 100%; }
@@ -5767,17 +5769,14 @@ a.nav-item.is-tab {
   @media screen and (max-width: 768px) {
     .section.is-large {
       padding: 80px 20px; } }
-  @media screen and (min-width: 769px) and (max-width: 979px) {
-    .section.listing-section {
-      height: 450px; } }
-  @media screen and (min-width: 980px) {
-    .section.listing-section {
-      height: 600px; } }
-  @media screen and (max-width: 768px) {
-    .section.listing-section {
-      height: 0;
-      padding: 0;
-      padding-top: 60px; } }
+  .section.listing-section {
+    padding: 0; }
+    @media screen and (min-width: 769px) {
+      .section.listing-section {
+        height: 400px; } }
+    @media screen and (max-width: 768px) {
+      .section.listing-section {
+        height: 300px; } }
   .section.gs-section {
     height: 60vh;
     padding: 200px 20px 0; }

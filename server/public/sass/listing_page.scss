@@ -1,29 +1,41 @@
 @import 'vars';
 @import 'mixins';
 
-#background_image {
-  filter: brightness(75%);
-  -webkit-filter: brightness(75%);
-  -moz-filter: brightness(75%);
-  -o-filter: brightness(75%);
-  -ms-filter: brightness(75%);
-  @include mobile {
-    background-image: none !important;
-    background-color: $grey-dark;
-    filter: brightness(100%);
-    -webkit-filter: brightness(100%);
-    -moz-filter: brightness(100%);
-    -o-filter: brightness(100%);
-    -ms-filter: brightness(100%);
+#top_wrapper {
+  padding: 0 20px;
+}
+
+#domain-display {
+  color: $primary-light;
+}
+
+#price-display {
+  align-self: flex-end;
+  background-color: $white;
+  border-radius: $radius $radius 0 0;
+  padding: 10px;
+  width: 325px;
+}
+
+#listing-hero {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+  & > .content {
+    align-self: center;
+  }
+  & > .card {
+    align-self: flex-end;
   }
 }
 
 .listing-info {
-  &:not(:last-child) {
-    border-bottom: 1px solid $border;
-  }
+  padding-bottom: 25px;
+  border-bottom: 1px solid $border;
 }
 
-.listing-info-wrapper {
-  margin: 50px 0;
+#checkout-card {
+  margin-left: auto;
+  width: 325px;
 }

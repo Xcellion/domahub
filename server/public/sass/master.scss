@@ -237,11 +237,9 @@
 }
 
 .img-wrapper {
-  @include tablet {
-    background-color: rgba(0,0,0,0.45);
-    height: 100%;
-    width: 100%;
-  }
+  background-color: rgba(0,0,0,0.5);
+  height: 100%;
+  width: 100%;
   &-100vh {
     @include tablet {
       align-items: center;
@@ -251,9 +249,6 @@
       justify-content: center;
       width: 100%;
     }
-  }
-  @include mobile {
-
   }
 }
 
