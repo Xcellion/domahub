@@ -58,6 +58,14 @@
   -ms-border-radius: $radius
   border-radius: $radius
 
+// Brightness mixin
+=brightness($brightness)
+  filter: brightness($brightness)
+  -webkit-filter: brightness($brightness)
+  -moz-filter: brightness($brightness)
+  -o-filter: brightness($brightness)
+  -ms-filter: brightness($brightness)
+
 // Opacity mixin
 =opacity($opacity)
   opacity: $opacity

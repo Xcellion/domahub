@@ -1,21 +1,30 @@
-#background_image {
-  filter: brightness(75%);
-  -webkit-filter: brightness(75%);
-  -moz-filter: brightness(75%);
-  -o-filter: brightness(75%);
-  -ms-filter: brightness(75%); }
-  @media screen and (max-width: 768px) {
-    #background_image {
-      background-image: none !important;
-      background-color: #444;
-      filter: brightness(100%);
-      -webkit-filter: brightness(100%);
-      -moz-filter: brightness(100%);
-      -o-filter: brightness(100%);
-      -ms-filter: brightness(100%); } }
+#top_wrapper {
+  padding: 0 20px; }
 
-.listing-info:not(:last-child) {
+#domain-display {
+  color: #62c9a3; }
+
+#price-display {
+  align-self: flex-end;
+  background-color: white;
+  border-radius: 3px 3px 0 0;
+  padding: 10px;
+  width: 325px; }
+
+#listing-hero {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%; }
+  #listing-hero > .content {
+    align-self: center; }
+  #listing-hero > .card {
+    align-self: flex-end; }
+
+.listing-info {
+  padding-bottom: 25px;
   border-bottom: 1px solid rgba(0, 0, 0, 0.12); }
 
-.listing-info-wrapper {
-  margin: 50px 0; }
+#checkout-card {
+  margin-left: auto;
+  width: 325px; }

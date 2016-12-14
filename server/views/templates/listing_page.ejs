@@ -1,200 +1,123 @@
 <section id="background_image" class="section listing-section landing-img" style="background-image:url('<%= listing_info.background_image || 'https://source.unsplash.com/category/nature' %>')">
+  <div class="img-wrapper">
+    <div id="listing-hero" class="container">
+      <div>
 
+      </div>
+      <div class="content has-text-centered">
+        <a tabindex="1" href="http://<%= listing_info.domain_name %>">
+        <h1 id="domain-display" class="title is-1 is-bold is-primary is-inline-block">
+        <%= listing_info.domain_name %></h1></a>
+        <h2 class="subtitle is-4 is-white margin-top-15">
+        <% if (listing_info.status == 1) { %>
+          Currently Available
+          <% } else { %>
+          Currently Unavailable
+          <% } %>
+        </h2>
+      </div>
+      <div id="price-display">
+        <% if (listing_info.status == 1) { %>
+        <h2 class="is-black is-bold has-text-centered">
+          $<%= listing_info.month_price %> Per Month
+        </h2>
+        <% } else { %>
+        <h2 class="is-black is-bold has-text-centered">
+          Purchase Links
+        </h2>
+        <% } %>
+      </div>
+    </div>
+  </div>
 </section>
 
-<section id="top_wrapper" class="page_wrapper section is-small has-borderBottom min-height">
+<section id="top_wrapper" class="page_wrapper min-height">
   <div class="container">
     <div class="columns">
       <div class="column is-half">
-        <div class="content">
-          <a class="is-primary" href="http://<%= listing_info.domain_name %>">
-          <h1 class="title is-1 is-bold is-primary is-inline-block">
-          <%= listing_info.domain_name %></h1></a>
+        <div class="content padding-top-25 listing-info">
+          <nav class="level">
+            <div class="level-item has-text-centered">
+              <h3 class="heading">Alexa Ranking</h3>
+              <h3 class="is-bold">#2,003,581</h3>
+            </div>
+            <div class="level-item has-text-centered">
+              <h3 class="heading">DomaHub Ranking</h3>
+              <h3 class="is-bold">#5,608</h3>
+            </div>
+            <div class="level-item has-text-centered">
+              <h3 class="heading">Visits this Month</h3>
+              <h3 class="is-bold">150,000</h3>
+            </div>
+          </nav>
         </div>
-        <div class="content is-marginless">
-          <% if (listing_info.status == 1) { %>
-          <span class="tag is-medium is-light">Available</span>
-          <% } else { %>
-          <span class="tag is-medium is-danger">Unavailable</span>
-          <% } %>
-        </div>
-        <div class="listing-info-wrapper">
-          <div class="content">
-            <h3 class="is-bold">Listing Description</h3>
-            <p>
-              <%= listing_info.description %>
-            </p>
-          </div>
-        </div>
-        <div class="listing-info-wrapper is-hidden-mobile">
-        <% if (listing_info.buy_link || listing_info.categories || listing_info.date_created) { %>
-          <div class="content">
-            <h3 class="is-bold">Other Information</h3>
-          </div>
-        <% } %>
-        <% if (listing_info.buy_link) { %>
-        <div class="columns has-borderBottom">
-          <div class="column is-4">
-            <div class="content">
-              <p class="is-blacklight is-bold">
-                Purchase Link
-              </p>
-            </div>
-          </div>
-          <div class="column is-4">
-            <div class="content">
-              <a class="orange-link"><%= listing_info.buy_link %></a>
-            </div>
-          </div>
-        </div>
-        <% } %>
-        <% if (listing_info.date_created) { %>
-        <div class="columns has-borderBottom">
-          <div class="column is-4">
-            <div class="content">
-              <p class="is-blacklight">
-                Date Created
-              </p>
-            </div>
-          </div>
-          <div class="column is-4">
-            <div class="content">
-              <p id="date_created"></p>
-            </div>
-          </div>
-        </div>
-        <% } %>
-        <% if (listing_info.categories) { %>
-          <div class="columns has-borderBottom">
-            <div class="column is-4">
-              <div class="content">
-                <p class="is-blacklight">
-                  Categories
-                </p>
-              </div>
-            </div>
-            <div class="column is-8">
-              <div class="content">
-                <p>
-                  <% var categories_array = listing_info.categories.split(" ");
-                    var display_array = [];
-                    for (var i = 0; i < categories_array.length; i++) {
-                       display_array.push(categories_array[i].charAt(0).toUpperCase() + categories_array[i].substr(1)); %>
-                  <% } %>
-                  <%= display_array.join(", ") %>
-                  </p>
-                </div>
-              </div>
-            </div>
+        <div class="content listing-info">
+          <h3 class="is-bold">Listing Description</h3>
+          <p>
+            <% if (listing_info.categories) { %>
+            <%= listing_info.description %>
+            <% } else { %>
+            This domain is currently unavailable for rent at DomaHub. Please
+            view the information on the right side of this page for more options.
             <% } %>
+          </p>
         </div>
-        <div class="listing-info-wrapper is-hidden-mobile">
-          <div class="content margin-top-25">
-            <h3 class="is-bold">About Owner</h3>
-          </div>
-          <div class="columns">
-            <div class="column">
-              <article class="media">
-                <figure class="media-left">
-                  <p class="image is-circle is-96x96">
-                    <% if (listing_info.profile_pic){ %>
-                      <img src="<%= listing_info.profile_pic %>">
-                    <% } else { %>
-                      <%- "<img src='https://placeholdit.imgix.net/~text?txtsize=25&bg=9e9e9e&txtclr=ffffff&txt=" + listing_info.username + "&w=128&h=128'/>" %>
-                    <% } %>
+        <% if (listing_info.categories) { %>
+        <div class="content listing-info">
+          <h3 class="is-bold margin-bottom-15">Categories</h3>
+          <span class="tag is-primary is-medium">
+          <% var categories_array = listing_info.categories.split(" ");
+            var display_array = [];
+            for (var i = 0; i < categories_array.length; i++) {
+               display_array.push(categories_array[i].charAt(0).toUpperCase() + categories_array[i].substr(1)); %>
+          <% } %>
+          <%= display_array.join(", ") %>
+          </span>
+        </div>
+        <% } %>
+        <div class="content listing-info">
+          <h3 class="is-bold margin-bottom-15">Listed By</h3>
+          <article class="media">
+            <figure class="media-left">
+              <p class="image is-circle is-64x64">
+                <% if (listing_info.profile_pic){ %>
+                  <img src="<%= listing_info.profile_pic %>">
+                <% } else { %>
+                  <%- "<img src='https://placeholdit.imgix.net/~text?txtsize=25&bg=9e9e9e&txtclr=ffffff&txt=" + listing_info.username + "&w=128&h=128'/>" %>
+                <% } %>
+              </p>
+            </figure>
+            <div class="media-content">
+              <div class="content">
+                <h3 class="is-primary is-bold"><%= listing_info.username %></h3>
+                <% if (listing_info.user_created) { %>
+                  <p>
+                    User since <span id='user-since'></span>
                   </p>
-                </figure>
-                <div class="media-content">
-                  <div class="content">
-                    <h3 class="is-blacklight is-bold"><%= listing_info.username %></h3>
-                    <% if (listing_info.user_created) { %>
-                        <p>
-                          <small>User since <span id='user-since'></span></small>
-                        </p>
-                    <% } %>
-                  </div>
-                  <% if (listing_info.user_created) { %>
-                      <p class="control">
-                        <a href="/profile/messages/<%=listing_info.username %>" class="button is-primary no-shadow is-small">
-                          <span class="icon is-small">
-                            <i class="fa fa-envelope"></i>
-                          </span>
-                          <span>Message</span>
-                        </a>
-                      </p>
-                  <% } %>
-
-                </div>
-              </article>
+                <% } %>
+              </div>
             </div>
-          </div>
+          </article>
         </div>
       </div>
-
-      <div class="column is-4-desktop is-offset-2-desktop is-5-tablet is-offset-1-tablet">
-        <div class="card is-fullwidth">
-          <% if (listing_info.status == 1) { %>
-          <div class="card-header is-light">
-            <h2 class="is-bold card-header-title">$<%= listing_info.month_price %></h2>
-            <p class="card-header-title jc-flex-end is-marginless">Per Month</p>
-          </div>
-          <% } else { %>
-            <div class="card-header is-primary">
-              <h2 class="is-bold is-white card-header-title has-text-centered">Purchase Links</h2>
-            </div>
-          <% } %>
+      <div class="column is-half">
+        <div id="checkout-card" class="card">
           <div class="card-content">
             <div class="content">
               <% if (listing_info.status == 1) { %>
-              <p class="is-bold">Pricing Information</p>
-              <nav class="level is-mobile has-borderBottom">
-                <div class="level-left">
-                  <p class="level-item">
-                    Hourly:
+                <% if (listing_info.date_created) { %>
+                <div class="content">
+                  <p id="date_created">
+
+                  </p>
+                  <p>
+                    Click the button below to see available dates.
                   </p>
                 </div>
-                <div class="level-right">
-                  <p class="level-item">
-                    $<%= listing_info.hour_price %>
-                  </p>
-                </div>
-              </nav>
-              <nav class="level is-mobile has-borderBottom">
-                <div class="level-left">
-                  <p class="level-item">
-                    Daily:
-                  </p>
-                </div>
-                <div class="level-right">
-                  <p class="level-item">
-                    $<%= listing_info.day_price %>
-                  </p>
-                </div>
-              </nav>
-              <nav class="level is-mobile has-borderBottom">
-                <div class="level-left">
-                  <p class="level-item">
-                    Weekly:
-                  </p>
-                </div>
-                <div class="level-right">
-                  <p class="level-item">
-                    $<%= listing_info.week_price %>
-                  </p>
-                </div>
-              </nav>
-              <nav class="level is-mobile has-borderBottom">
-                <div class="level-left">
-                  <p class="level-item">
-                    Monthly:
-                  </p>
-                </div>
-                <div class="level-right">
-                  <p class="level-item">
-                    $<%= listing_info.month_price %>
-                  </p>
-                </div>
-              </nav>
+                <% if (listing_info.status == 1) { %>
+                    <a id="listing-modal-button" tabindex="1" class="button is-fullwidth is-primary" data-object="#calendar-modal">Rent Now</a>
+                <% } %>
+                <% } %>
               <% } else if (listing_info.available) { %>
                 <p>
                     While this domain is unavailable for rent at DomaHub,
@@ -215,7 +138,24 @@
           </div>
           <footer class="card-footer">
             <% if (listing_info.status == 1) { %>
-                <a id="listing-modal-button" tabindex="1" class="button is-fullwidth is-primary" data-object="#calendar-modal">Rent Now</a>
+                <a tabindex="1" class="card-footer-item has-icon">
+                  <span class="icon is-small">
+                    <i class="fa fa-bookmark"></i>
+                  </span>
+                  <span>Save</span>
+                </a>
+                <a tabindex="1" class="card-footer-item has-icon">
+                  <span class="icon is-small">
+                    <i class="fa fa-flag"></i>
+                  </span>
+                  <span>Report</span>
+                </a>
+                <a tabindex="1" class="card-footer-item has-icon">
+                  <span class="icon is-small">
+                    <i class="fa fa-share-alt"></i>
+                  </span>
+                  <span>Share</span>
+                </a>
             <% } else if (listing_info.available) { %>
                 <a id="godaddy_link" tabindex="1" class="card-footer-item" href="https://www.godaddy.com/domains/searchresults.aspx?domainToCheck=<%= listing_info.domain_name %>">GoDaddy</a>
                 <a id="namecheap_link" tabindex="1" class="card-footer-item" href="https://www.namecheap.com/domains/registration/results.aspx?domain=<%= listing_info.domain_name %>">Namecheap</a>
