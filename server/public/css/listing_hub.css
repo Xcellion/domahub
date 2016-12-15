@@ -58,6 +58,9 @@
   #listings-table .td-domain {
     width: auto; }
 
+.domain-name {
+  word-break: break-all; }
+
 input[type=range].primary-range {
   -webkit-appearance: none;
   width: 100%;

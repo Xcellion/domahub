@@ -77,6 +77,10 @@
   }
 }
 
+.domain-name {
+  word-break: break-all;
+}
+
 
 // General primary colored range for stuff like domain length
 input[type=range].primary-range {
