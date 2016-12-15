@@ -112,18 +112,31 @@ module.exports = {
 		for (var x = 0; x < posted_domains.length; x++){
 			var bad_reasons = [];
 
-			//check all three
+			//check domain
 			if (!validator.isFQDN(posted_domains[x].domain_name)){
 				bad_reasons.push("Invalid domain name!");
 			}
-			if (["month", "week", "day", "hour"].indexOf(posted_domains[x].price_type) == -1){
-				bad_reasons.push("Invalid type!");
-			}
-			if (!validator.isInt(posted_domains[x].price_rate, {min: 1})){
-				bad_reasons.push("Invalid rate!");
-			}
+
+			//check for duplicates among valid FQDN domains
 			if (domains_sofar.indexOf(posted_domains[x].domain_name) != -1){
 				bad_reasons.push("Duplicate domain name!");
+			}
+
+			//check price type
+			if (
+				(["month", "week", "day", "hour"].indexOf(posted_domains[x].price_type) == -1) ||
+				(posted_domains[x].premium != "true" && (posted_domains[x].price_type == "day" || posted_domains[x].price_type == "hour"))
+			){
+				bad_reasons.push("Invalid type!");
+			}
+
+			//check price rate
+			if (
+				(!validator.isInt(posted_domains[x].price_rate, {min: 1})) ||
+				(posted_domains[x].premium != "true" && posted_domains[x].price_type == "month" && posted_domains[x].price_rate != "25") ||
+				(posted_domains[x].premium != "true" && posted_domains[x].price_type == "week" && posted_domains[x].price_rate != "10")
+			){
+				bad_reasons.push("Invalid rate!");
 			}
 
 			//some were messed up
@@ -135,15 +148,7 @@ module.exports = {
 			}
 			//all good! format the db array
 			else {
-				if (posted_domains[x].premium == "false"){
-					if (posted_domains[x].price_type == "month"){
-						posted_domains[x].price_rate = 25;
-					}
-					else {
-						posted_domains[x].price_rate = 10;
-					}
-				}
-				else {
+				if (posted_domains[x].premium == "true"){
 					premium_count++;
 				}
 				domains_sofar.push(posted_domains[x].domain_name);
@@ -225,6 +230,7 @@ module.exports = {
 								if (req.body.stripeToken){
 									req.session.good_listings = good_listings;
 									req.session.bad_listings = bad_listings;
+									req.session.inserted_ids = inserted_ids;
 									next();
 								}
 								else {

@@ -27,7 +27,7 @@
 						<div id="table-helptext" class='content-wrapper is-hidden'>
 							<h1 class="title is-3">Review and Edit</h1>
 							<p>
-								Review your domains and add pricing information.
+								Review your domains and edit rental pricing.
 							</p>
 						</div>
 						<div id="payment-helptext" class='content-wrapper is-hidden'>
@@ -106,7 +106,7 @@
 									</div>
 								</td>
 								<td class="td-rate v-align-top">
-									<input class="is-disabled price-rate-input input" type="number" tabindex="-1" value="25" min="1" />
+									<input class="is-disabled price-rate-input input" type="number" tabindex="-1" step="1" value="25" min="1" />
 								</td>
 								<td class="td-premium v-align-top">
 									<form class="checkbox-form">
@@ -119,7 +119,7 @@
 						<tfoot>
 							<tr>
 								<th colspan='2'><a class="add-domain-button button no-shadow">+ Add another domain</a></th>
-								<th colspan='2' class='has-text-right'><a class="orange-link" href="/sellers/#basicvpremium">What is a Premium listing?</a></th>
+								<th colspan='2' class='has-text-right'><a class="orange-link" target='_blank' href="/sellers#basicvpremium">What is a Premium listing?</a></th>
 							</tr>
 						</tfoot>
 					</table>
@@ -130,27 +130,24 @@
 
 				<div id="payment-column" class="is-hidden column is-7">
 					<form id="stripe-form" autocomplete="on">
-						<label class="label">Credit or Debit Card Number *</label>
+						<label class="label">Credit or Debit Card Number</label>
 						<p class="control has-icon">
 							<input tabindex="1" id="cc-num" data-stripe="number" class="input stripe-input is-medium" type="tel" placeholder="•••• •••• •••• ••••" autocomplete="cc-number"/>
 							<i id="cc-icon" class="fa fa-credit-card"></i>
 						</p>
 						<div class="control is-grouped">
 							<p class="control is-expanded">
-								<label class="label">Expiration Date *</label>
+								<label class="label">Expiration Date</label>
 								<input tabindex="1" id="cc-exp" maxlength="7" data-stripe="exp" class="input stripe-input is-medium" type="tel" placeholder="•• / ••" autocomplete="cc-exp"/>
 							</p>
 							<p class="control">
-								<label class="label">Security Code *</label>
+								<label class="label">Security Code</label>
 								<input tabindex="1" id="cc-cvc" data-stripe="cvc" class="input stripe-input is-medium" type="tel" placeholder="•••" autocomplete="off"/>
 							</p>
 						</div>
 						<p class="control">
-							<label class="label">Zip Code *</label>
+							<label class="label">Zip Code</label>
 							<input tabindex="1" id="cc-zip" maxlength="6" data-stripe="address_zip" class="input stripe-input is-medium" type="tel" autocomplete="postal-code" placeholder="•••••"/>
-						</p>
-						<p class="control is-bold">
-							* Required fields
 						</p>
 					</form>
 					<form class="checkbox-form margin-top-10">
