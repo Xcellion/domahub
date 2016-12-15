@@ -2569,8 +2569,7 @@ input:-webkit-autofill {
     border: 1px solid rgba(0, 0, 0, 0.12);
     color: rgba(0, 0, 0, 0.9);
     font-weight: bold;
-    padding: 12px 10px;
-    text-align: left; }
+    padding: 12px 10px; }
   .table thead {
     border-bottom: 2px solid rgba(0, 0, 0, 0.12); }
     .table thead.has-shadow {
