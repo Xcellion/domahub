@@ -204,7 +204,7 @@ function updateAccountStripeCustomerID(customer, bool){
 
 	if (account_id){
 		//update the domahub DB appropriately
-		Account.updateAccountStripeCustomerID(account_id, new_account_info, function(result){
+		Account.updateAccount(account_id, new_account_info, function(result){
 			if (result.state == "success"){
 				console.log(console_msg.success);
 			}

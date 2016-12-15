@@ -318,7 +318,7 @@ module.exports = {
 }
 
 //helper function to create a new stripe customer
-function newStripecustomer(req, res){
+function newStripecustomer(req, res, next){
 	stripe.customers.create({
 		source: req.body.stripeToken,
 		email: req.user.email,
