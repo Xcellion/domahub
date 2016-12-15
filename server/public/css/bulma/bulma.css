@@ -923,7 +923,6 @@ a.box {
     margin-right: 4px; }
   .button .icon:last-child,
   .button .tag:last-child {
-    margin-left: 4px;
     margin-right: -2px; }
   .button:hover, .button:focus {
     box-shadow: 0 4px 5px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 2px 4px -1px rgba(0, 0, 0, 0.2); }
@@ -1688,7 +1687,7 @@ button {
   transition: all 0.25s; }
 
 .content + .content {
-  margin-top: 25px; }
+  margin-top: 20px; }
 
 .content li.has-icon {
   line-height: 24px; }
