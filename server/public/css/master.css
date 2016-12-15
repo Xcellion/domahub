@@ -923,7 +923,6 @@ a.box {
     margin-right: 4px; }
   .button .icon:last-child,
   .button .tag:last-child {
-    margin-left: 4px;
     margin-right: -2px; }
   .button:hover, .button:focus {
     box-shadow: 0 4px 5px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 2px 4px -1px rgba(0, 0, 0, 0.2); }
@@ -1688,7 +1687,7 @@ button {
   transition: all 0.25s; }
 
 .content + .content {
-  margin-top: 25px; }
+  margin-top: 20px; }
 
 .content li.has-icon {
   line-height: 24px; }
@@ -6474,8 +6473,8 @@ a.nav-item.is-tab {
   display: inline-block;
   position: relative;
   box-sizing: border-box;
-  font-size: 18px;
-  padding: 12px 20px 12px 50px;
+  font-size: 16px;
+  padding: 6px 5px 6px 34px;
   width: 100%; }
   .checkbox-form label.has-border {
     border: 1px solid rgba(0, 0, 0, 0.12);
@@ -6483,13 +6482,8 @@ a.nav-item.is-tab {
     .checkbox-form label.has-border:focus, .checkbox-form label.has-border:active {
       outline: none;
       border-color: #3cbc8d; }
-  .checkbox-form label:hover {
-    color: #3cbc8d; }
   .checkbox-form label:focus, .checkbox-form label:active {
     outline: 1px solid #3cbc8d; }
-  .checkbox-form label.is-small {
-    font-size: 16px;
-    padding: 12px 10px 12px 40px; }
 
 .checkbox-form input[type="checkbox"],
 .checkbox-form input[type="radio"],
@@ -6508,8 +6502,8 @@ a.nav-item.is-tab {
 .checkbox-form label::before {
   content: url(/images/lib/material/unchecked-box.svg);
   opacity: 0.7;
-  left: 10px;
-  top: 10px;
+  left: 5px;
+  top: 4px;
   -moz-transition: all 0.25s ease;
   -o-transition: all 0.25s ease;
   -webkit-transition: all 0.25s ease;
