@@ -12,53 +12,69 @@
 
 	<%- include("../templates/navbar", {user: user}); %>
 
-  <section class="section is-medium min-height">
-    <div class="container">
-      <div class="columns">
+	<section class="section is-medium min-height">
+		<div class="container">
+			<div class="columns">
 				<div class="column is-half">
 					<div class="content">
-						<h1>1. Create Listings</h1>
-						<p>
-							Enter your domain name(s) in the box below. Separate
-							multiple domain names by comma. You must include
-							the TLD extension at the end.
-						</p>
-						<h1>2. Review and Edit</h1>
-						<p>
-							Review the domains you are listing and add pricing information.
-							If you wish to create a Premium listing, click the checkbox at
-							the end of the row.
-						</p>
-						<p>
-							<a class="orange-link" href="/sellers/#basicvpremium">What is a Premium listing?</a>
-						</p>
+						<div id="textarea-helptext" class='content-wrapper'>
+							<h1 class="title is-3">Create Listings</h1>
+							<p>
+								Enter your domain name(s) in the box below separated
+								by commas. You must include the TLD extension at the end.
+							</p>
+						</div>
+						<div id="table-helptext" class='content-wrapper is-hidden'>
+							<h1 class="title is-3">Review and Edit</h1>
+							<p>
+								Review your domains and add pricing information.
+							</p>
+						</div>
+						<div id="payment-helptext" class='content-wrapper is-hidden'>
+							<h1 class="title is-3">Payment Information</h1>
+							<p id="stripe-error-message">
+								Please enter your payment information below.
+							</p>
+						</div>
+						<div id="success-helptext" class='content-wrapper is-hidden'>
+							<h1 class="title is-3">Success!</h1>
+							<p>
+								You have successfully created <span id="success-total"></span> domains!
+								Please click the button below to view/edit them.
+							</p>
+							<a href="/profile/mylistings" class="button is-primary">
+								<span class="icon">
+									<i class="fa fa-list-alt"></i>
+								</span>
+								<span>My Listings</span>
+							</a>
+						</div>
 					</div>
-					<progress class="progress is-small is-primary" min="0" max="100"></progress>
-					<div class="notification is-danger">
-						You entered an invalid domain name! Check below.
-						<button class="delete"></button>
-					</div>
-					<div class="notification is-primary">
-						Successfully entered 2 domain names!
+					<div id="domain-error-message" class="is-hidden notification is-danger">
+						Some domain names were invalid! See below.
 						<button class="delete"></button>
 					</div>
 				</div>
 			</div>
-			<div class="columns">
+			<div id="domain-input-form" class="columns">
 				<div class="column is-half">
-					<form id="domain-input-form">
-						<p class="control">
-							<textarea class="textarea" placeholder="e.g. butterflies.com, tigers.net, oysters.org"></textarea>
-						</p>
-						<p class="control">
-							<a class="button is-primary is-medium">Submit</a>
-						</p>
-					</form>
+					<p class="control">
+						<textarea autofocus id="domain-names" class="textarea" placeholder="e.g. butterflies.com, tigers.net, oysters.org"></textarea>
+					</p>
+					<p class="control">
+						<a id="domain-names-submit" class="button is-primary is-medium">Submit</a>
+					</p>
 				</div>
 			</div>
-			<div class="columns">
-				<div class="column is-9">
-					<table class="table has-shadow no-borders" id="domain-input-table">
+			<div id="table-columns" class="is-hidden columns">
+				<div id="table-column" class="column is-9">
+					<table class="table has-shadow no-borders">
+						<thead id="top-header-row" class='is-hidden'>
+							<tr>
+								<th colspan='2'><a class="add-domain-button button no-shadow">+ Add another domain</a></th>
+								<th colspan='2' class='has-text-right'><a class="orange-link" href="/sellers/#basicvpremium">What is a Premium listing?</a></th>
+							</tr>
+						</thead>
 						<thead class="has-shadow">
 							<tr>
 								<th>Domain Name</th>
@@ -67,125 +83,52 @@
 								<th>Listing Type</th>
 							</tr>
 						</thead>
-						<tbody>
-							<tr class="no-hover-effect">
-								<td>
-									<input class="input" type="text" value="fuck.com"/>
+						<tbody id="domain-input-table" data-rows="0">
+							<tr id="clone-row" class="table-row no-hover-effect">
+								<td class="v-align-top">
+									<div class='control has-addons'>
+										<a class="button no-shadow">
+											<span class='icon delete-icon'>
+												<i class='fa fa-trash-o'></i>
+											</span>
+										</a>
+										<input class="domain-name-input input is-expanded" type="text" value=""/>
+									</div>
 								</td>
-								<td class="td-price">
+								<td class="td-price v-align-top">
 									<div class="select">
-										<select>
-											<option selected value="Hour">Hour</option>
-											<option value="Day">Day</option>
-											<option value="Week">Week</option>
-											<option value="Month">Month</option>
+										<select class='price-type-input'>
+											<option value="month">Month</option>
+											<option value="week">Week</option>
+											<option disabled class='day-type' value="day">Day</option>
+											<option disabled class='hour-type' value="hour">Hour</option>
 										</select>
 									</div>
 								</td>
-								<td class="td-rate">
-									<input class="input" type="number" value="1" min="1" />
+								<td class="td-rate v-align-top">
+									<input class="is-disabled price-rate-input input" type="number" tabindex="-1" value="25" min="1" />
 								</td>
-								<td class="td-premium">
+								<td class="td-premium v-align-top">
 									<form class="checkbox-form">
-										<input class="cat-checkbox" value="premium" id="cb1" type="checkbox" />
-										<label class="is-small" tabindex="1" for="cb1">Premium</label>
-									</form>
-								</td>
-							</tr>
-							<tr class="no-hover-effect">
-								<td>
-									<input class="input" type="text" value="cluck.com"/>
-								</td>
-								<td class="td-price">
-									<div class="select">
-										<select>
-											<option selected value="Hour">Hour</option>
-											<option value="Day">Day</option>
-											<option value="Week">Week</option>
-											<option value="Month">Month</option>
-										</select>
-									</div>
-								</td>
-								<td class="td-rate">
-									<input class="input" type="number" value="1" min="1" />
-								</td>
-								<td class="td-premium">
-									<form class="checkbox-form">
-										<input class="cat-checkbox" value="premium" id="cb2" type="checkbox" />
-										<label class="is-small" tabindex="1" for="cb2">Premium</label>
+										<input class="cat-checkbox" value="premium" type="checkbox" />
+										<label class="cat-checkbox-label is-small">Premium</label>
 									</form>
 								</td>
 							</tr>
 						</tbody>
 						<tfoot>
 							<tr>
-					      <th><a class="button no-shadow">+ Add another domain</a></th>
-					      <th></th>
-					      <th></th>
-					      <th></th>
-					    </tr>
+								<th colspan='2'><a class="add-domain-button button no-shadow">+ Add another domain</a></th>
+								<th colspan='2' class='has-text-right'><a class="orange-link" href="/sellers/#basicvpremium">What is a Premium listing?</a></th>
+							</tr>
 						</tfoot>
 					</table>
 					<p class="control">
-						<a class="button is-primary is-medium">Confirm</a>
+						<a id='domains-submit'class="button is-primary is-medium">Confirm</a>
 					</p>
 				</div>
-				<div class="column is-3">
-					<div class="card">
-						<div class="card-header">
-							<h3 class="card-header-title is-bold">Listing Summary</h3>
-						</div>
-						<div class="card-content">
-							<div class="content">
-	              <nav class="level is-mobile">
-	                <div class="level-left">
-	                  <p class="level-item">
-	                    2 Premium Domains
-	                  </p>
-	                </div>
-	                <div class="level-right">
-	                  <p class="level-item">
-											$10
-	                  </p>
-	                </div>
-	              </nav>
-								<nav class="level is-mobile has-borderBottom">
-	                <div class="level-left">
-	                  <p class="level-item">
-	                    1 Basic Domains
-	                  </p>
-	                </div>
-	                <div class="level-right">
-	                  <p class="level-item">
-											$0
-	                  </p>
-	                </div>
-	              </nav>
-								<nav class="level is-mobile">
-	                <div class="level-left">
-	                  <h3 class="level-item is-bold">
-	                    Total
-	                  </h3>
-	                </div>
-	                <div class="level-right">
-	                  <h3 class="level-item is-bold">
-											$10
-	                  </h3>
-	                </div>
-	              </nav>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="columns">
-				<div id="payment-column" class="column is-5">
-					<div class="content">
-						<h1 class="title is-3">Payment Information</h1>
-						<p id="stripe-error-message">
-							Please enter your payment information below.
-						</p>
-					</div>
+
+				<div id="payment-column" class="is-hidden column is-7">
 					<form id="stripe-form" autocomplete="on">
 						<label class="label">Credit or Debit Card Number *</label>
 						<p class="control has-icon">
@@ -225,30 +168,69 @@
 							<span>Confirm & Pay</span>
 						</a>
 					</p>
+				</div>
 
-					<% if (!user) { %>
-					<div class="content margin-top-25">
-						<h3 class="is-bold">Create an Account</h3>
-						</br>
-						<small>
-							You are currently checking out as a guest. If you wish to create
-							an account, enter your email below and we will send you a link to
-							get your account set up. Creating an account allows you to edit
-							your rental at any time.
-						</small>
+				<div id="summary-column" class="column is-3">
+					<div class="card is-fullwidth">
+						<div class="card-header">
+							<h3 class="card-header-title is-bold">Listing Summary</h3>
+						</div>
+						<div class="card-content">
+							<div id="review-table-button" class="is-hidden content">
+								<a class='button is-primary is-fullwidth'>Edit Listing Details</a>
+							</div>
+							<div class="content">
+								<nav id="premium-summary-row" class="level is-hidden is-mobile">
+									<div class="level-left">
+										<p class="level-item">
+											<span id="premium-count-total"></span> Premium Domain<span id="premium-count-plural"></span>
+										</p>
+									</div>
+									<div class="level-right">
+										<p id="premium-price-total" class="level-item">
+											$5
+										</p>
+									</div>
+								</nav>
+								<nav id="basic-summary-row" class="level is-mobile">
+									<div class="level-left">
+										<p class="level-item">
+											<span id="basic-count-total"></span> Basic Domain<span id="basic-count-plural"></span>
+										</p>
+									</div>
+									<div class="level-right">
+										<p id="basic-count-total" class="level-item">
+											FREE
+										</p>
+									</div>
+								</nav>
+								<nav class="level is-mobile padding-top-25 has-borderTop">
+									<div class="level-left">
+										<h3 class="level-item is-bold">
+											Total
+										</h3>
+									</div>
+									<div class="level-right">
+										<h3 id="summary-total-price" class="level-item is-bold">
+											FREE
+										</h3>
+									</div>
+								</nav>
+							</div>
+						</div>
 					</div>
-					<label id="new-user-email-error" class="label">Email Address</label>
-					<p class="control has-addons">
-						<input tabindex="1" id="new_user_email" class="input is-medium" placeholder="Email" type="email" />
-					</p>
-					<% } %>
 				</div>
 			</div>
-    </div>
-  </section>
+		</section>
 
-  <%- include("../templates/footer"); %>
-  <%- include("../templates/js_scripts"); %>
-</body>
+		<%- include("../templates/footer"); %>
+		<%- include("../templates/js_scripts"); %>
+		<script type="text/javascript" src="https://js.stripe.com/v2/"></script>
+		<script src="/js/lib/jquery.payment.min.js" type="text/javascript"></script>
+		<script src="/js/lib/wNumb.js" type="text/javascript"></script>
+		<script src="/js/routes/listings/listing_create_logic2.js" type="text/javascript"></script>
+		<script src="/js/checkout_logic.js" type="text/javascript"></script>
+
+	</body>
 
 </html>

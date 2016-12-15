@@ -570,7 +570,7 @@ function checkSubmit(){
 }
 
 //function to submit new rental times
-function submitRentals(stripeToken){
+function submitStripe(stripeToken){
 	if (checkSubmit() == true && unlock){
 		var newEvents = $('#calendar').fullCalendar('clientEvents', returnMineNotBG);
 		unlock = false;

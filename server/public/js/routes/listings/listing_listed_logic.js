@@ -186,7 +186,7 @@ function checkSubmit(){
 }
 
 //function to submit new rental info
-function submitRentals(stripeToken){
+function submitStripe(stripeToken){
 	if (checkSubmit() == true && unlock){
 		var newEvents = $('#calendar').fullCalendar('clientEvents', returnMineNotBG);
 		unlock = false;

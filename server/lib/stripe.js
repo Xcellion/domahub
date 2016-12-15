@@ -27,7 +27,9 @@ module.exports = {
 
 			//cross reference with stripe
 			stripe.customers.retrieve(req.user.stripe_customer_id, function(err, customer) {
-				if (err){stripeErrorHandler(req, res, err)}
+				if (err){
+					newStripecustomer(req, res, next);
+				}
 				else {
 					req.user.customer_subscriptions = customer.subscriptions;
 
@@ -46,42 +48,12 @@ module.exports = {
 
 		//no customer exists, create a new stripe customer
 		else {
-			if (req.body.stripeEmail == req.user.email){
-				stripe.customers.create({
-					source: req.body.stripeToken,
-					email: req.user.email,
-					metadata: {
-						"account_id" : req.user.id,
-						"stripe_user_id" : req.user.stripe_user_id
-					}
-				}, function(err, customer) {
-					if (err){stripeErrorHandler(req, res, err)}
-					else {
-
-						//update the customer id in the DB
-						var new_stripe_cus = {
-							stripe_customer_id: customer.id
-						}
-						Account.updateAccount(new_stripe_cus, req.user.email, function(result){
-							if (result.state=="error"){error.handler(req, res, result.info, "json")}
-							else {
-								req.user.stripe_customer_id = customer.id;
-								req.user.customer_subscriptions = customer.subscriptions;
-
-								next();
-							}
-						});
-					}
-				});
-			}
-			else {
-				error.handler(req, res, "Please use the same email for payments as your DomaHub account!", "json");
-			}
+			newStripecustomer(req, res, next);
 		}
 	},
 
 	//function to create a monthly subscription for a listing
-	createStripeSubscription : function(req, res, next){
+	createSingleStripeSubscription : function(req, res, next){
 		var domain_name = req.params.domain_name || req.body.domain_name;
 		var listing_info = getUserListingObj(req.user.listings, domain_name);
 
@@ -132,6 +104,36 @@ module.exports = {
 				}
 			});
 		}
+	},
+
+	//function to create multiple monthly subscriptions
+	createMultipleStripeSubscriptions : function(req, res, next){
+
+		//create a metadata of domain names to update exp date on via webhook
+		var domain_names = [];
+		for (var x = 0; x < req.body.domains.length; x++){
+			if (req.body.domains[x].premium){
+				domain_names.push(req.body.domains[x].domain_name);
+			}
+		}
+		domain_names = domain_names.join(" ");
+
+		stripe.subscriptions.create({
+			customer: req.user.stripe_customer_id,
+			plan: "premium",
+			quantity: req.session.new_listings.premium_count,
+			metadata: {
+				"domains" : domain_names
+			}
+		}, function(err, subscription) {
+			if (err){stripeErrorHandler(req, res, err)}
+			else {
+				res.send({
+					good_listings: req.session.good_listings,
+					bad_listings: req.session.bad_listings
+				});
+			}
+		});
 	},
 
 	//check that stripe subscription exists
@@ -307,6 +309,36 @@ module.exports = {
 		}
 	}
 
+}
+
+//helper function to create a new stripe customer
+function newStripecustomer(req, res){
+	stripe.customers.create({
+		source: req.body.stripeToken,
+		email: req.user.email,
+		metadata: {
+			"account_id" : req.user.id,
+			"stripe_user_id" : req.user.stripe_user_id
+		}
+	}, function(err, customer) {
+		if (err){stripeErrorHandler(req, res, err)}
+		else {
+
+			//update the customer id in the DB
+			var new_stripe_cus = {
+				stripe_customer_id: customer.id
+			}
+			Account.updateAccount(new_stripe_cus, req.user.email, function(result){
+				if (result.state=="error"){error.handler(req, res, result.info, "json")}
+				else {
+					req.user.stripe_customer_id = customer.id;
+					req.user.customer_subscriptions = customer.subscriptions;
+
+					next();
+				}
+			});
+		}
+	});
 }
 
 //helper function for handling stripe errors

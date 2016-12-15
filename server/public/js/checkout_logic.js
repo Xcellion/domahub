@@ -22,7 +22,7 @@ $(document).ready(function() {
 			}
 			//all good!
 			else {
-				submitRentals(response.id);
+				submitStripe(response.id);
 			}
 		});
 	    return false;
