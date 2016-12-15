@@ -110,15 +110,12 @@ module.exports = {
 	createMultipleStripeSubscriptions : function(req, res, next){
 
 		//create a metadata of domain names to update exp date on via webhook
-		var domain_names = [];
 		var price_types = [];
 		for (var x = 0; x < req.body.domains.length; x++){
 			if (req.body.domains[x].premium){
-				domain_names.push(req.body.domains[x].domain_name);
 				price_types.push(req.body.domains[x].price_type);
 			}
 		}
-		domain_names = domain_names.join(" ");
 		price_types = price_types.join(" ");
 
 		//create multiple premium subscriptions
@@ -127,9 +124,8 @@ module.exports = {
 			plan: "premium",
 			quantity: req.session.new_listings.premium_count,
 			metadata: {
-				"domain_names" : domain_names,
 				"price_types" : price_types,
-				"inserted_ids" : req.session.inserted_ids
+				"inserted_ids" : req.session.inserted_ids.join(" ")
 			}
 		}, function(err, subscription) {
 			if (err){stripeErrorHandler(req, res, err)}
