@@ -161,6 +161,18 @@
   opacity: 0.5;
 }
 
+.v-align-top {
+  vertical-align: top;
+}
+
+.v-align-bottom {
+  vertical-align: bottom;
+}
+
+.v-align-middle {
+  vertical-align: middle;
+}
+
 .hover-scale {
   @include transition(all 0.25s ease);
   & > .image {
