@@ -2492,6 +2492,9 @@ input:-webkit-autofill {
     .table td.v-align-top,
     .table th.v-align-top {
       vertical-align: top; }
+      .table td.v-align-top:first-child,
+      .table th.v-align-top:first-child {
+        padding-top: 10px; }
     .table td.is-danger,
     .table th.is-danger {
       color: #EF5350;
