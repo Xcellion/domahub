@@ -73,13 +73,13 @@ function handleCustomerDelete(event){
 
 //cancelled subscription (at period end, or immediate)
 function handleSubscriptionCancel(event){
-	updateListing(event.data.object, false);
+	updateListingsBasic(event.data.object);
 }
 
 //paid another month of subscription
 function handleSubscriptionPay(event){
 	retrieveSubscription(event.data.object.subscription, function(subscription){
-		updateListing(subscription, true);
+		updateListingsPremium(subscription);
 	});
 }
 
@@ -111,51 +111,73 @@ function retrieveSubscription(id, callback){
 	}
 }
 
-//helper to renew or remove listing premium subscription on domahub db
-function updateListing(subscription, bool, object){
-	var domain_name = subscription.metadata.domain_name;
-	var listing_id = subscription.metadata.listing_id;
+//helper function to upgrade to premium bulk
+function updateListingsPremium(subscription){
+	var inserted_ids = subscription.metadata.inserted_ids;
 
-	if (bool){
-		var new_listing_info = {
-			stripe_subscription_id : subscription.id,
-			exp_date : subscription.current_period_end * 1000,		//stripe doesnt count the time, only days
-			//minute_price: subscription.metadata.minute_price || 1,
-			hour_price: subscription.metadata.hour_price || 1,
-			day_price: subscription.metadata.day_price || 10,
-			week_price: subscription.metadata.week_price || 25,
-			month_price: subscription.metadata.month_price || 50
-		}
-		var console_msg = {
-			success: "Premium status for listing #" + listing_id + " has been renewed/created!",
-			error: "Something went wrong with renewing Premium status for listing #" + listing_id + "!"
-		}
-	}
-	else {
-		var new_listing_info = {
-			stripe_subscription_id: "",
-			exp_date: 0,
-			expiring: false,
-			//minute_price: 1,		//reset pricing
-			hour_price: 1,
-			day_price: 10,
-			week_price: 25,
-			month_price: 50
-		}
-		var console_msg = {
-			success: "Premium status for listing #" + listing_id + " has expired after cancellation...",
-			error: "Something went wrong with cancelling Premium status for listing #" + listing_id + "!"
-		}
-	}
+	//multi-premium
+	if (inserted_ids){
 
-	//update the domahub DB appropriately
-	if (domain_name && listing_id){
-		Listing.updateListing(domain_name, new_listing_info, function(result){
+		//create the DB query
+		var formatted_db_query = [];
+		for (var x = 0; x < inserted_ids.length; x++){
+			var temp_row = [];
+			temp_row.push(
+				inserted_ids[x],
+				subscription.id,
+				subscription.current_period_end * 1000
+			);
+			formatted_db_query.push(temp_row);
+		}
+
+		//update the domahub DB appropriately
+		Listing.updateListingsPremium(formatted_db_query, function(result){
 			if (result.state == "success"){
-				console.log(console_msg.success);
+				console.log("Premium status for " + formatted_db_query.length + " listings has been renewed/created!");
 			}
 			else {
-				console.log(console_msg.error);
+				console.log("Something went wrong with renewing " + formatted_db_query.length + " Premium statuses!");
+			}
+		});
+	}
+}
+
+//helper to renew or remove listing premium subscription on domahub db
+function updateListingsBasic(subscription, bool, object){
+
+	var price_types = subscription.metadata.price_types;
+	var inserted_ids = subscription.metadata.inserted_ids;
+
+	//multi-premium
+	if (inserted_ids.length == price_types.length){
+
+		//create the DB query
+		var formatted_db_query = [];
+		for (var x = 0; x < inserted_ids.length; x++){
+			var temp_row = [];
+
+			//revert to basic prices only
+			var temp_rate = (price_types[x] == "month") ? 25 : 10;
+			price_types[x] = (price_types[x] == "month") ? "month" : "week";
+
+			temp_row.push(
+				inserted_ids[x],		//listing id
+				price_types[x],			//price type (make sure its month or week)
+				temp_rate,				//25 or 10
+				"",						//remove stripe subscription id
+				0,						//remove exp date
+				false					//its not "expiring", but "expired"
+			);
+			formatted_db_query.push(temp_row);
+		}
+
+		//update the domahub DB appropriately
+		Listing.updateListingsBasic(formatted_db_query, function(result){
+			if (result.state == "success"){
+				console.log("Premium status for " + formatted_db_query.length + " listings have expired after cancellation...");
+			}
+			else {
+				console.log("Something went wrong with cancelling " + formatted_db_query.length + " Premium statuses!");
 			}
 		});
 	}

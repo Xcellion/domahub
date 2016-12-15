@@ -111,19 +111,25 @@ module.exports = {
 
 		//create a metadata of domain names to update exp date on via webhook
 		var domain_names = [];
+		var price_types = [];
 		for (var x = 0; x < req.body.domains.length; x++){
 			if (req.body.domains[x].premium){
 				domain_names.push(req.body.domains[x].domain_name);
+				price_types.push(req.body.domains[x].price_type);
 			}
 		}
 		domain_names = domain_names.join(" ");
+		price_types = price_types.join(" ");
 
+		//create multiple premium subscriptions
 		stripe.subscriptions.create({
 			customer: req.user.stripe_customer_id,
 			plan: "premium",
 			quantity: req.session.new_listings.premium_count,
 			metadata: {
-				"domains" : domain_names
+				"domain_names" : domain_names,
+				"price_types" : price_types,
+				"inserted_ids" : req.session.inserted_ids
 			}
 		}, function(err, subscription) {
 			if (err){stripeErrorHandler(req, res, err)}

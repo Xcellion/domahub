@@ -282,6 +282,46 @@ listing_model.prototype.updateListing = function(domain_name, listing_info, call
 	listing_query(query, "Failed to update domain " + domain_name + "!", callback, [listing_info, domain_name]);
 }
 
+//updates bulk listings to premium
+//BULK INSERT NEEDS TRIPLE NESTED ARRAYS
+listing_model.prototype.updateListingsPremium = function(listing_info_array, callback){
+	console.log("DB: Attempting to upgrade " + listing_info_array.length + " listings to Premium...");
+	query = "INSERT INTO listings ( \
+				id, \
+				stripe_subscription_id, \
+				exp_date \
+			)\
+			 VALUES ? \
+			 ON DUPLICATE KEY UPDATE \
+				 id = VALUES(id), \
+				 stripe_subscription_id = VALUES(stripe_subscription_id), \
+				 exp_date = VALUES(exp_date) "
+	listing_query(query, "Failed to upgrade " + listing_info_array.length + " listings to Premium!", callback, [listing_info_array]);
+}
+
+//reverts bulk listings to basic
+//BULK INSERT NEEDS TRIPLE NESTED ARRAYS
+listing_model.prototype.updateListingsBasic = function(listing_info_array, callback){
+	console.log("DB: Attempting to revert " + listing_info_array.length + " listings to Basic...");
+	query = "INSERT INTO listings ( \
+				id, \
+				price_type, \
+				price_rate, \
+				stripe_subscription_id, \
+				exp_date, \
+				expiring \
+			)\
+			 VALUES ? \
+			 ON DUPLICATE KEY UPDATE \
+				 id = VALUES(id), \
+				 price_type = VALUES(price_type), \
+				 price_rate = VALUES(price_rate), \
+				 stripe_subscription_id = VALUES(stripe_subscription_id), \
+				 exp_date = VALUES(exp_date), \
+				 expiring = VALUES(expiring) "
+	listing_query(query, "Failed to revert " + listing_info_array.length + " listings to Basic!", callback, [listing_info_array]);
+}
+
 //updates multiple listings, needs to be all created without error, or else cant figure out insert IDs
 listing_model.prototype.updateListingsVerified = function(listing_ids, callback){
 	console.log("DB: Attempting to revert verified status for bulk domain creation...");
