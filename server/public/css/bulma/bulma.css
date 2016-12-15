@@ -2501,9 +2501,6 @@ input:-webkit-autofill {
   .table th {
     vertical-align: middle;
     border-bottom: 1px solid rgba(0, 0, 0, 0.12); }
-    .table td.is-premium,
-    .table th.is-premium {
-      padding-top: 5px !important; }
     .table td.is-danger,
     .table th.is-danger {
       color: #EF5350;

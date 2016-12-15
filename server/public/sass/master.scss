@@ -119,37 +119,37 @@
 // margins list contains: 10,15,20,25,50,75,100,150,200
 @each $margin in $margins {
   .margin-#{$margin} {
-    margin: #{$margin}px;
+    margin: #{$margin}px !important;
   }
   .margin-top-#{$margin} {
-    margin-top: #{$margin}px;
+    margin-top: #{$margin}px !important;
   }
   .margin-bottom-#{$margin}{
-    margin-bottom: #{$margin}px;
+    margin-bottom: #{$margin}px !important;
   }
   .margin-left-#{$margin}{
-    margin-left: #{$margin}px;
+    margin-left: #{$margin}px !important;
   }
   .margin-right-#{$margin}{
-    margin-right: #{$margin}px;
+    margin-right: #{$margin}px !important;
   }
 }
 
 @each $margin in $margins {
   .padding-#{$margin} {
-    padding: #{$margin}px;
+    padding: #{$margin}px !important;
   }
   .padding-top-#{$margin} {
-    padding-top: #{$margin}px;
+    padding-top: #{$margin}px !important;
   }
   .padding-bottom-#{$margin}{
-    padding-bottom: #{$margin}px;
+    padding-bottom: #{$margin}px !important;
   }
   .padding-left-#{$margin} {
-    padding-left: #{$margin}px;
+    padding-left: #{$margin}px !important;
   }
   .padding-right-#{$margin}{
-    padding-right: #{$margin}px;
+    padding-right: #{$margin}px !important;
   }
 }
 
