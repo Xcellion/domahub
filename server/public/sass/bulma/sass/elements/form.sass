@@ -97,6 +97,23 @@ input:-webkit-autofill
   &:active,
   &:focus
     border-color: $primary
+  // danger modifier
+  &.is-danger
+    &:after
+      +arrow($danger)
+    select
+      border-color: $danger
+      &:hover,
+      &:active
+        border-color: $danger
+      &:focus
+        border-color: $danger
+        border-radius: $radius $radius 0 0
+    &:active,
+    &:hover,
+    &:focus
+      border-color: $danger
+  // Sizes
   &.is-small
     height: 24px
     select

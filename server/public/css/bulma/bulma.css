@@ -1956,6 +1956,26 @@ input:-webkit-autofill {
     top: 50%; }
   .select:active, .select:focus {
     border-color: #3cbc8d; }
+  .select.is-danger:after {
+    border: 1px solid #EF5350;
+    border-right: 0;
+    border-top: 0;
+    content: " ";
+    display: block;
+    height: 7px;
+    pointer-events: none;
+    position: absolute;
+    transform: rotate(-45deg);
+    width: 7px; }
+  .select.is-danger select {
+    border-color: #EF5350; }
+    .select.is-danger select:hover, .select.is-danger select:active {
+      border-color: #EF5350; }
+    .select.is-danger select:focus {
+      border-color: #EF5350;
+      border-radius: 3px 3px 0 0; }
+  .select.is-danger:active, .select.is-danger:hover, .select.is-danger:focus {
+    border-color: #EF5350; }
   .select.is-small {
     height: 24px; }
     .select.is-small select {

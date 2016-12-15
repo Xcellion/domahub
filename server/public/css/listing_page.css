@@ -1,5 +1,6 @@
-#top_wrapper {
-  padding: 0 20px; }
+@media screen and (max-width: 768px) {
+  #top_wrapper {
+    padding: 0 20px; } }
 
 #domain-display {
   color: #62c9a3; }
