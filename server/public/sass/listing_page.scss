@@ -3,7 +3,26 @@
 
 #top_wrapper {
   @include mobile {
-    padding: 0 20px;
+    padding: 0 20px 40px;
+  }
+}
+
+#test {
+  @include mobile {
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+#one {
+  @include mobile {
+    order: 2;
+  }
+}
+
+#two {
+  @include mobile {
+    order: 1;
   }
 }
 
@@ -17,6 +36,9 @@
   border-radius: $radius $radius 0 0;
   padding: 10px;
   width: 325px;
+  @include mobile {
+    align-self: center;
+  }
 }
 
 #listing-hero {

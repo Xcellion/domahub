@@ -2489,6 +2489,9 @@ input:-webkit-autofill {
   .table th {
     vertical-align: middle;
     border-bottom: 1px solid rgba(0, 0, 0, 0.12); }
+    .table td.v-align-top,
+    .table th.v-align-top {
+      vertical-align: top; }
     .table td.is-danger,
     .table th.is-danger {
       color: #EF5350;

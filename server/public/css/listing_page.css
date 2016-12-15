@@ -1,6 +1,19 @@
 @media screen and (max-width: 768px) {
   #top_wrapper {
-    padding: 0 20px; } }
+    padding: 0 20px 40px; } }
+
+@media screen and (max-width: 768px) {
+  #test {
+    display: flex;
+    flex-direction: column; } }
+
+@media screen and (max-width: 768px) {
+  #one {
+    order: 2; } }
+
+@media screen and (max-width: 768px) {
+  #two {
+    order: 1; } }
 
 #domain-display {
   color: #62c9a3; }
@@ -11,6 +24,9 @@
   border-radius: 3px 3px 0 0;
   padding: 10px;
   width: 325px; }
+  @media screen and (max-width: 768px) {
+    #price-display {
+      align-self: center; } }
 
 #listing-hero {
   display: flex;
