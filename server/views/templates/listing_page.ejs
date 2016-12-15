@@ -34,7 +34,7 @@
 <section id="top_wrapper" class="page_wrapper min-height">
   <div class="container">
     <div class="columns">
-      <div class="column is-half">
+      <div class="column">
         <div class="content padding-top-25 listing-info">
           <nav class="level">
             <div class="level-item has-text-centered">
@@ -76,6 +76,14 @@
         </div>
         <% } %>
         <div class="content listing-info">
+          <span class="select is-danger">
+             <select>
+               <option>Select dropdown</option>
+               <option>With options</option>
+             </select>
+           </span>
+        </div>
+        <div class="content listing-info">
           <h3 class="is-bold margin-bottom-15">Listed By</h3>
           <article class="media">
             <figure class="media-left">
@@ -100,15 +108,17 @@
           </article>
         </div>
       </div>
-      <div class="column is-half">
+      <div class="column">
         <div id="checkout-card" class="card">
           <div class="card-content">
             <div class="content">
               <% if (listing_info.status == 1) { %>
                 <% if (listing_info.date_created) { %>
                 <div class="content">
-                  <p id="date_created">
-
+                  <p class="is-inline-block is-bold">
+                    Date Listed:
+                  </p>
+                  <p class="is-inline-block" id="date_created">
                   </p>
                   <p>
                     Click the button below to see available dates.
