@@ -101,9 +101,9 @@
 								<div class="level-item">
 									<a tabindex="1" class="button is-danger no-shadow" id="remove_events">Remove Selected</a>
 								</div>
-								<div class="level-item">
+								<!-- <div class="level-item">
 									<a tabindex="1" class="button no-shadow" id="month_button">Month View</a>
-								</div>
+								</div> -->
 								<div class="level-item">
 									<a tabindex="1" class="button no-shadow" id="today-button">Today</a>
 								</div>
@@ -120,72 +120,18 @@
 							</div>
 						</nav>
 						<div class="columns">
-							<div class="column is-half has-borderRight">
+							<div class="column is-half">
 								<div class="content">
-									<h1>Select your desired times.</h1>
+									<h2 class="is-bold">Click on a cell to reserve that time slot.</h2>
 									<p id="calendar-error-message">
-										Click a cell on the calendar to reserve that time slot.
-										You may select whole days by clicking on the date.
-										Use the buttons at the top to remove all selected cells or
-										change calendar views.
 									</p>
 								</div>
 							</div>
-							<div class="column is-3">
-								<div class="content padding-5">
-								<h3 class="is-bold">Pricing Information</h3>
-								<nav class="level is-mobile has-borderBottom is-marginless">
-								  <div class="level-left">
-									<p class="level-item">
-									  Hourly:
-									</p>
-								  </div>
-								  <div class="level-right">
-									<p class="level-item">
-									  $<%= listing_info.hour_price %>
-									</p>
-								  </div>
-								</nav>
-								<nav class="level is-mobile has-borderBottom is-marginless">
-								  <div class="level-left">
-									<p class="level-item">
-									  Daily:
-									</p>
-								  </div>
-								  <div class="level-right">
-									<p class="level-item">
-									  $<%= listing_info.day_price %>
-									</p>
-								  </div>
-								</nav>
-								<nav class="level is-mobile has-borderBottom is-marginless">
-								  <div class="level-left">
-									<p class="level-item">
-									  Weekly:
-									</p>
-								  </div>
-								  <div class="level-right">
-									<p class="level-item">
-									  $<%= listing_info.week_price %>
-									</p>
-								  </div>
-								</nav>
-								<nav class="level is-mobile has-borderBottom is-marginless">
-								  <div class="level-left">
-									<p class="level-item">
-									  Monthly:
-									</p>
-								  </div>
-								  <div class="level-right">
-									<p class="level-item">
-									  $<%= listing_info.month_price %>
-									</p>
-								  </div>
-								</nav>
-								</div>
-							</div>
-							<div class="column is-3 flex-column-center">
+							<div class="column flex-column-center">
 								<div class="content has-text-centered">
+									<h1 class="is-inline-block">
+										Total:
+									</h1>
 									<h1 id="price" class="is-inline-block">$0</h1>
 								</div>
 							</div>
