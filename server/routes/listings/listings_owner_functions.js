@@ -36,23 +36,209 @@ module.exports = {
 
     //create a listing object for checking
     createListingObject : function(req, res, next){
-        req.session.listing_object = {
-            db_object: {}
-        };
+		var db_object = [];
+		var date_now = new Date().getTime();
 
-        next();
+		for (var x = 0; x < req.body.domain_names.length; x++){
+			db_object.push([
+				req.user.id,
+				date_now,
+				req.body.domain_names[x],
+				req.body.price_types[x],
+				req.body.price_rates[x]
+			]);
+		}
+		req.session.listing_db_object = db_object;
+		next();
     },
 
-	//function to check posted domain name
-	checkPostedDomain : function(req, res, next){
-		var domain_name = req.body.domain_name;
-		if (!validator.isFQDN(domain_name)){
-			error.handler(req, res, "domain", "json");
+	//function to check all posted domain names
+	checkPostedDomains : function(req, res, next){
+		console.log("F: Checking all posted domain names...");
+		var domain_names = req.body.domain_names;
+
+		if (!domain_names || domain_names.length <= 0){
+			error.handler(req, res, "domain_names", "json");
 		}
 		else {
-			req.session.listing_object.db_object.domain_name = domain_name;
+			//loop through and check all posted domain names
+			var bad_listings = [];
+			var good_listings = [];
+			var domains_sofar = [];
+			for (var x = 0; x < domain_names.length; x++){
+				if (!validator.isFQDN(domain_names[x])){
+					bad_listings.push({
+						domain_name: domain_names[x],
+						reasons: [
+							"Invalid domain name!"
+						]
+					});
+				}
+				else if (domains_sofar.indexOf(domain_names[x]) != -1){
+					bad_listings.push({
+						domain_name: domain_names[x],
+						reasons: [
+							"Duplicate domain name!"
+						]
+					});
+				}
+				else {
+					domains_sofar.push(domain_names[x]);
+					good_listings.push({
+						index: x,
+						domain_name: domain_names[x]
+					});
+				}
+			}
+
+			res.send({
+				bad_listings : bad_listings,
+				good_listings : good_listings
+			});
+		}
+	},
+
+	//function to check all posted listing info
+	checkPostedListingInfo : function(req, res, next){
+		console.log("F: Checking all posted listing info...");
+
+		var posted_domains = req.body.domains;
+		var bad_listings = [];
+		var good_listings = [];
+		var date_now = new Date().getTime();
+		var premium_count = 0;
+		var domains_sofar = [];
+
+		for (var x = 0; x < posted_domains.length; x++){
+			var bad_reasons = [];
+
+			//check all three
+			if (!validator.isFQDN(posted_domains[x].domain_name)){
+				bad_reasons.push("Invalid domain name!");
+			}
+			if (["month", "week", "day", "hour"].indexOf(posted_domains[x].price_type) == -1){
+				bad_reasons.push("Invalid type!");
+			}
+			if (!validator.isInt(posted_domains[x].price_rate, {min: 1})){
+				bad_reasons.push("Invalid rate!");
+			}
+			if (domains_sofar.indexOf(posted_domains[x].domain_name) != -1){
+				bad_reasons.push("Duplicate domain name!");
+			}
+
+			//some were messed up
+			if (bad_reasons.length > 0){
+				bad_listings.push({
+					index: x,
+					reasons: bad_reasons
+				});
+			}
+			//all good! format the db array
+			else {
+				if (posted_domains[x].premium == "false"){
+					if (posted_domains[x].price_type == "month"){
+						posted_domains[x].price_rate = 25;
+					}
+					else {
+						posted_domains[x].price_rate = 10;
+					}
+				}
+				else {
+					premium_count++;
+				}
+				domains_sofar.push(posted_domains[x].domain_name);
+				good_listings.push([
+					req.user.id,
+					date_now,
+					posted_domains[x].domain_name,
+					posted_domains[x].price_type,
+					posted_domains[x].price_rate
+				]);
+			}
+		}
+
+		//send back the messed up ones
+		if (bad_listings.length > 0){
+			res.send({
+				bad_listings : bad_listings
+			});
+		}
+		else {
+			req.session.new_listings = {
+				premium_count : premium_count,
+				db_object : good_listings
+			}
 			next();
 		}
+	},
+
+	//function to send back how many premium domains
+	checkPostedPremium : function(req, res, next){
+		if (req.session.new_listings.premium_count > 0){
+			if (req.body.stripeToken){
+				next();
+			}
+			else {
+				res.send({
+					premium_count : req.session.new_listings.premium_count
+				});
+			}
+		}
+		else {
+			next();
+		}
+	},
+
+	//function to create the batch listings once done
+	createListings : function(req, res, next){
+		var formatted_listings = req.session.new_listings.db_object;
+		Listing.newListings(formatted_listings, function(result){
+			if (result.state=="error"){error.handler(req, res, result.info, "json");}
+			else {
+				var affectedRows = result.info.affectedRows;
+				//nothing created
+				if (affectedRows == 0){
+					res.send({
+						bad_listings: findFailedListings(formatted_listings, []).bad_listings,
+						good_listings: false
+					});
+				}
+				else {
+					//figure out what was created
+					Account.getAccountListings(req.user.id, function(result){
+						if (result.state=="error"){error.handler(req, res, result.info, "json");}
+						else {
+							//get the insert IDs and domain names of newly inserted listings
+							var newly_inserted_listings = findNewlyMadeListings(req.user.listings, result.info);
+							var inserted_ids = newly_inserted_listings.inserted_ids;
+							var inserted_domains = newly_inserted_listings.inserted_domains;
+
+							//figure out what wasnt created and what was
+							var listings_result = findFailedListings(formatted_listings, inserted_domains);
+							var bad_listings = listings_result.bad_listings;
+							var good_listings = listings_result.good_listings;
+
+							//revert the newly made listings verified to null
+							Listing.updateListingsVerified(inserted_ids, function(result){
+								delete req.user.listings;
+
+								if (req.body.stripeToken){
+									req.session.good_listings = good_listings;
+									req.session.bad_listings = bad_listings;
+									next();
+								}
+								else {
+									res.send({
+										bad_listings: bad_listings || false,
+										good_listings: good_listings || false
+									});
+								}
+							});
+						}
+					});
+				}
+			}
+		});
 	},
 
 	//function to format the listing info when creating a new listing
@@ -459,26 +645,20 @@ module.exports = {
 
 	//function to create a new listing
 	createListing : function(req, res, next){
-		var listing_info = {
-			domain_name : req.body.domain_name,
-			owner_id: req.user.id,
-			verified: 1,		//create a verified domain to check for existing
-			date_created: (new Date()).getTime()
-		}
 
-		Listing.newListing(listing_info, function(result){
+		//set account owner and date created
+		req.session.listing_object.db_object.owner_id = req.user.id;
+		req.session.listing_object.db_object.date_created = (new Date()).getTime();
+
+		//create new listing
+		Listing.newListing(req.session.listing_object.db_object, function(result){
 			if (result.state=="error"){error.handler(req, res, result.info, "json");}
 			else {
-				listing_info.id = result.info.insertId;
 
-				//revert verified if its a legit domain
+				//revert verified if its a non-duplicate domain
 				Listing.updateListing(req.body.domain_name, {verified: null}, function(result){
 					if (result.state=="error"){error.handler(req, res, result.info, "json")}
 					else {
-						//add to the server side users listings object
-						listing_info.verified = null;
-						req.user.listings.push(listing_info);
-
 						//if premium, go next to handle stripe stuff
 						if (req.body.stripeToken){
 							next();
@@ -486,9 +666,7 @@ module.exports = {
 						//if its basic, send success
 						else {
 							res.send({
-								state: "success",
-								listing_info: listing_info,
-								message: "Successfully added a new listing!"
+								state: "success"
 							});
 						}
 					}
@@ -730,10 +908,6 @@ function findNewlyMadeListings(user_listings, new_listings){
 		if (!exists){
 			inserted_ids.push([new_listings[x].id]);
 			inserted_domains.push(new_listings[x].domain_name);
-
-			//add to req.users object
-			new_listings[x].verified = null;
-			user_listings.push(new_listings[x]);
 		}
 	}
 
@@ -754,7 +928,7 @@ function findUncreatedListings(posted_listings, new_listings, existing_bad_listi
 		//figure out if this posted listing was created or not
 		var was_created = false;
 		for (var y = 0; y < new_listings.length; y++){
-			if (posted_listings[x][0] == new_listings[y]){
+			if (posted_listings[x][2] == new_listings[y]){
 				was_created = true;
 				break;
 			}
@@ -763,12 +937,49 @@ function findUncreatedListings(posted_listings, new_listings, existing_bad_listi
 		//wasnt created cuz it was a duplicate
 		if (!was_created){
 			bad_listings.push({
-				data: [posted_listings[x][0], posted_listings[x][1]],
+				data: [posted_listings[x][2]],
 				reasons: ["Duplicate domain name!"]
 			});
 		}
 		else {
-			good_listings.push([posted_listings[x][0], posted_listings[x][1]]);
+			good_listings.push([posted_listings[x][2]]);
+		}
+	}
+
+	return {
+		bad_listings: bad_listings,
+		good_listings : good_listings
+	};
+}
+
+//helper function to see if any listings failed
+function findFailedListings(formatted_listings, inserted_domains){
+	var bad_listings = [];
+	var good_listings = [];
+
+	//loop through all formatted listings
+	for (var x = 0; x < formatted_listings.length; x++){
+
+		//figure out if this formatted listing was inserted or not
+		var was_created = false;
+		for (var y = 0; y < inserted_domains.length; y++){
+			if (formatted_listings[x][2] == inserted_domains[y]){
+				was_created = true;
+				break;
+			}
+		}
+
+		//wasnt created cuz it was a duplicate
+		if (!was_created){
+			bad_listings.push({
+				index: x,
+				reasons: ["This domain name already exists!"]
+			});
+		}
+		else {
+			good_listings.push({
+				index: x
+			});
 		}
 	}
 

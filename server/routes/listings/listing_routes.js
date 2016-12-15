@@ -44,33 +44,41 @@ module.exports = function(app, db, auth, error, stripe){
 		owner_functions.renderCreateListingChoice
 	]);
 
-	//render create listing page
+	//check all posted textarea domains to render table
+	app.post("/listings/create/table", [
+		urlencodedParser,
+		auth.checkLoggedIn,
+		owner_functions.checkPostedDomains
+	]);
+
+	//create new domains from table
+	app.post("/listings/create", [
+		urlencodedParser,
+		auth.checkLoggedIn,
+		owner_functions.checkPostedListingInfo,
+		owner_functions.checkPostedPremium,
+		profile_functions.getAccountListings,		//to find out which listings were not created in multi-create
+		owner_functions.createListings,
+		stripe.createStripeCustomer,
+		stripe.createMultipleStripeSubscriptions		//end here, and stripe webhooks will update the db
+	]);
+
+	//render create listing table
 	app.get('/listings/create/single', [
 		auth.checkLoggedIn,
 		owner_functions.renderCreateListingSingle
 	]);
 
-	//render create listing page
-	app.get('/listings/create/multiple', [
-		auth.checkLoggedIn,
-		owner_functions.renderCreateListingMultiple
-	]);
+	// //render create listing page
+	// app.get('/listings/create/multiple', [
+	// 	auth.checkLoggedIn,
+	// 	owner_functions.renderCreateListingMultiple
+	// ]);
 
 	//redirect all /create to proper /create
 	app.get('/listings/create*', function(req, res){
 		res.redirect("/listings/create");
 	});
-
-	//create a single basic listing
-	app.post('/listings/create/basic', [
-		urlencodedParser,
-		auth.checkLoggedIn,
-		owner_functions.createListingObject,
-		owner_functions.checkPostedDomain,
-		owner_functions.checkListingCreateInfo,
-		profile_functions.getAccountListings,
-		owner_functions.createListing
-	]);
 
 	//create a single premium listing
 	app.post('/listings/create/premium', [
@@ -81,7 +89,7 @@ module.exports = function(app, db, auth, error, stripe){
 		profile_functions.getAccountListings,
 		owner_functions.createListing,
 		stripe.createStripeCustomer,
-		stripe.createStripeSubscription		//end here, and stripe webhooks will update the db
+		stripe.createSingleStripeSubscription		//end here, and stripe webhooks will update the db
 	]);
 
 	//create multiple listings
@@ -130,7 +138,7 @@ module.exports = function(app, db, auth, error, stripe){
 		owner_functions.checkListingOwner,
 		owner_functions.checkListingVerified,
 		stripe.createStripeCustomer,
-		stripe.createStripeSubscription,
+		stripe.createSingleStripeSubscription,
 		owner_functions.updateListing	//only if we're renewing a subscription
 	]);
 
