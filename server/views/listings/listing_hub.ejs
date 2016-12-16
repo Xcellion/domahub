@@ -15,85 +15,9 @@
 
 		<%- include("../templates/navbar", {user: user}); %>
 
-		<section class="section is-medium min-height">
-			<div class="container is-fluid">
+		<section class="section is-medium-top">
+			<!-- <div class="container is-fluid">
 				<div class="columns">
-					<div id="filter-dropdown-wrapper" class="is-hidden">
-						<div id="filter-dropdown">
-							<h2 class="is-bold">Filters</h2>
-							<div class="control has-borderBottom">
-								<label class="label">Date Range</label>
-							  <div class="control">
-									<p class="control">
-									  <input id="start_date-input" class="flatpickr input is-expanded" tabindex="1" type="text" placeholder="Rental Start Date">
-									</p>
-								<!-- <p class="control">
-								  <input id="end_date-input" class="flatpickr input" tabindex="1" type="text" placeholder="Rental End Date">
-								</p> -->
-							  </div>
-							</div>
-							<div class="control">
-								<label class="label">Price / Rate</label>
-								<div class="control">
-									<span class="select">
-										<select id="category-input">
-											<option selected disabled>Select Rate</option>
-											<option value="none">None</option>
-											<option value="hour_price">Hourly</option>
-											<option value="day_price">Daily</option>
-											<option value="week_price">Weekly</option>
-											<option value="month_price">Monthly</option>
-											<%# <option>Yearly</option>%>
-										</select>
-									</span>
-								</div>
-							</div>
-							<div class="control has-slider has-borderBottom">
-								<div id="slider" class="margin-bottom-50"></div>
-							</div>
-							<div class="control has-borderBottom">
-								<label class="label padding-bottom-5">Domain Length</label>
-								<div class="control has-slider">
-									<div id="sliderSmall" class='margin-bottom-50'></div>
-								</div>
-							</div>
-							<div class="control">
-								<label class="label">Categories</label>
-								<form class="control checkbox-form flex-column-center">
-									<%# using for loop to generate all categories %>
-									<% for (var x = 0; x < categories_front.length; x++) {%>
-										<div class="checkbox-wrapper">
-											<input class="cat-checkbox is-small" value="<%= categories_back[x] %>" id="cb<%= x %>" type="checkbox" />
-											<label class="is-small" tabindex="1" for="cb<%= x %>"><%= categories_front[x] %></label>
-										</div>
-									<% } %>
-								</form>
-							</div>
-							<!-- <div class="control is-horizontal">
-								<div class="control-label is-padded">
-									<label class="label">Extensions</label>
-								</div>
-								<div class="control has-addons">
-									<input class="input" type="text" placeholder="Extensions">
-									<span class="select">
-									<select>
-									  <option>.com</option>
-									  <option>.net</option>
-									  <option>.org</option>
-									</select>
-								  </span>
-								</div>
-							</div>
-							<div class="control is-horizontal">
-								<div class="control-label is-padded">
-									<label class="label">Special Characters</label>
-								</div>
-								<div class="control">
-									<input class="input" tabindex="1" type="text" placeholder="Exclude (separate by comma)">
-								</div>
-							</div> -->
-						</div>
-					</div>
 					<div id="table-wrapper" class="is-hidden">
 						<div class="columns is-gapless">
 							<div class="column is-1 is-hidden-1160px-min">
@@ -160,23 +84,150 @@
 							</tbody>
 						</table>
 					</div>
+				</div> -->
+				<div class="container">
+					<div class="content">
+						<h1 class="is-title">
+							Featured Domains
+						</h1>
+					</div>
+					<div class="domain-tile-wrapper">
+						<div tabindex="1" class="domain-tile">
+							<div class="img-wrapper">
+								<div class="flex-column-center">
+									<h1 class="domain-title is-white">1qlee.com</h1>
+									<span class="tag is-primary is-medium is-bold">$25 / mo</span>
+									<p class="category-tag is-white">
+										Personal
+									</p>
+								</div>
+							</div>
+						</div>
+						<div tabindex="1" class="domain-tile">
+							<div class="img-wrapper">
+								<div class="flex-column-center">
+									<h1 class="domain-title is-white">imsorryimdumb.com</h1>
+									<span class="tag is-primary is-medium is-bold">$10 / wk</span>
+									<p class="category-tag is-white">
+										Card
+									</p>
+								</div>
+							</div>
+						</div>
+						<div tabindex="1" class="domain-tile">
+							<div class="img-wrapper">
+								<div class="flex-column-center">
+									<h1 class="domain-title is-white">happybirthday.com</h1>
+									<span class="tag is-primary is-medium is-bold">$10 / hr</span>
+									<p class="category-tag is-white">
+										Event
+									</p>
+								</div>
+							</div>
+						</div>
+						<div tabindex="1" class="domain-tile">
+							<div class="img-wrapper">
+								<div class="flex-column-center">
+									<h1 class="domain-title is-white">monkeyfuckers.com</h1>
+									<span class="tag is-primary is-medium is-bold">$10 / hr</span>
+									<p class="category-tag is-white">
+										Event
+									</p>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<section class="section min-height is-light">
+			<div class="container">
+				<div class="columns">
 					<div class="column">
-						<p class="control has-icon has-addons">
-							<input id="domain_name-input" class="input is-medium is-expanded" tabindex="1" type="text" placeholder="Search domains" />
+						<p class="control has-icon has-addons margin-bottom-0">
+							<input id="domain-name-input" class="input is-medium" tabindex="1" type="text" placeholder="Press enter to search domains" />
 							<i class="fa fa-search"></i>
-							<a class="button is-primary is-medium no-shadow">Submit</a>
-							<a class="button is-medium no-shadow">Advanced Search</a>
+							<a tabindex="1" class="button is-primary is-medium no-shadow is-hidden-mobile">Search</a>
+							<a tabindex="1" id="filter-open-button" class="button is-medium no-shadow is-hidden-mobile">
+								<span>Apply Filters</span>
+								<span class="icon">
+									<i class="fa fa-angle-down"></i>
+								</span>
+							</a>
+							<a tabindex="1" id="filter-open-button-mobile" class="button is-primary no-shadow is-medium is-hidden-tablet">
+								<span class="icon">
+									<i class="fa fa-bars"></i>
+								</span>
+							</a>
 						</p>
-						<nav class="level">
+
+						<div id="filter-dropdown" class="is-hidden">
+							<div class="control is-horizontal has-borderBottom">
+								<div class="control is-grouped">
+									<div class="control is-horizontal">
+										<div class="control-label is-medium">
+											<label class="label">Date Range</label>
+										</div>
+										<input id="start_date-input" class="flatpickr input is-expanded" tabindex="1" type="text" placeholder="Rental Start Date">
+									</div>
+								</div>
+							</div>
+							<div class="control is-horizontal has-borderBottom">
+								<div class="control-label">
+									<label class="label">Price / Rate</label>
+								</div>
+								<div id="slider-control" class="control is-grouped">
+									<div class="control">
+										<span class="select">
+											<select id="category-input">
+												<option selected disabled>Select Rate</option>
+												<option value="none">None</option>
+												<option value="hour_price">Hourly</option>
+												<option value="day_price">Daily</option>
+												<option value="week_price">Weekly</option>
+												<option value="month_price">Monthly</option>
+												<%# <option>Yearly</option>%>
+											</select>
+										</span>
+									</div>
+									<div class="control has-slider">
+										<div id="slider" class="margin-bottom-50"></div>
+									</div>
+								</div>
+							</div>
+							<div class="control is-horizontal has-borderBottom">
+								<div class="control-label is-large">
+									<label class="label">Domain Length</label>
+								</div>
+								<div class="control has-slider">
+									<div id="sliderSmall" class="margin-bottom-35"></div>
+								</div>
+							</div>
+							<div class="control">
+								<label class="label">Categories</label>
+								<form class="control checkbox-form is-flex-wrap">
+									<%# using for loop to generate all categories %>
+									<% for (var x = 0; x < categories_front.length; x++) {%>
+										<div class="checkbox-wrapper">
+											<input class="cat-checkbox" value="<%= categories_back[x] %>" id="cb<%= x %>" type="checkbox" />
+											<label class="label" tabindex="1" for="cb<%= x %>"><%= categories_front[x] %></label>
+										</div>
+									<% } %>
+								</form>
+							</div>
+						</div>
+
+						<nav class="level margin-top-10">
 							<div class="level-left">
-								<h3 class="level-item is-bold">
+								<p class="level-item is-bold">
 									2 Domains
-								</h3>
+								</p>
 							</div>
 							<div class="level-right">
 								<div class="level-item">
-									<span class="select">
-										<select>
+									<span class="select is-medium">
+										<select tabindex="1">
 											<option>Sort By</option>
 											<option>Name: A - Z</option>
 											<option>Name: Z - A</option>
@@ -189,30 +240,51 @@
 								</div>
 							</div>
 						</nav>
+
+						<nav class="level">
+							<div class="level-right">
+								<div class="level-item">
+									<span class="tag filter-tag">
+										Month
+										<button tabindex="1" class="delete is-small"></button>
+									</span>
+									<span class="tag filter-tag">
+										$5 - 25
+										<button tabindex="1" class="delete is-small"></button>
+									</span>
+									<span class="tag filter-tag">
+										Business
+										<button tabindex="1" class="delete is-small"></button>
+									</span>
+								</div>
+							</div>
+						</nav>
+
 					</div>
 				</div>
+
 				<div class="columns">
 					<div class="column">
 						<div class="box is-domain-listing" tabindex="1">
 							<div class="columns">
-								<div class="column is-7">
+								<div class="column is-6">
 									<div class="content">
 										<h3 class="is-bold is-primary domain-name">whatsup.com</h3>
 									</div>
 								</div>
 								<div class="column is-3">
 									<div class="content">
-										<h3 class="is-bold">$10 / day</h3>
+										<h3 class="is-bold">$10 / mo</h3>
 									</div>
 								</div>
-								<div class="column is-2">
-									<span class="tag is-accent">Personal</span>
+								<div class="column is-3">
+									<span class="tag is-accent">Business</span>
 								</div>
 							</div>
 						</div>
 						<div class="box is-domain-listing" tabindex="1">
 							<div class="columns">
-								<div class="column is-7">
+								<div class="column is-6">
 									<div class="content">
 										<h3 class="is-bold is-primary domain-name">coffee.com</h3>
 									</div>
@@ -222,7 +294,7 @@
 										<h3 class="is-bold">$25 / mo</h3>
 									</div>
 								</div>
-								<div class="column is-2">
+								<div class="column is-3">
 									<span class="tag is-accent">Business</span>
 								</div>
 							</div>
