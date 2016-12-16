@@ -60,7 +60,8 @@ module.exports = function(app, db, auth, error, stripe){
 		profile_functions.getAccountListings,		//to find out which listings were not created in multi-create
 		owner_functions.createListings,
 		stripe.createStripeCustomer,
-		stripe.createMultipleStripeSubscriptions		//end here, and stripe webhooks will update the db
+		stripe.createStripeSubscriptions,
+		owner_functions.updatePremium
 	]);
 
 	//render create listing table

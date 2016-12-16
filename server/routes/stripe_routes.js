@@ -43,15 +43,6 @@ function switchEvents(event, res){
 			case "customer.deleted":
 				handleCustomerDelete(event);
 				break;
-			case "customer.subscription.deleted":
-				handleSubscriptionCancel(event);
-				break;
-			case "invoice.payment_succeeded":
-				handleSubscriptionPay(event);
-				break;
-			case "invoice.payment_failed":
-				handleSubscriptionPayFail(event);
-				break;
 			case "account.application.deauthorized":
 				handleAccountDeauthorized(event);
 				break;
@@ -66,122 +57,17 @@ function switchEvents(event, res){
 
 //-------------------------------------------------------------------------------------------------------------------HANDLERS
 
-//deleted a customer
-function handleCustomerDelete(event){
-	updateAccountStripeCustomerID(event.data.object, false);
-}
-
-//cancelled subscription (at period end, or immediate)
-function handleSubscriptionCancel(event){
-	updateListingsBasic(event.data.object);
-}
-
-//paid another month of subscription
-function handleSubscriptionPay(event){
-	retrieveSubscription(event.data.object.subscription, function(subscription){
-		updateListingsPremium(subscription);
-	});
-}
-
-//failed to pay for another month of subscription
-function handleSubscriptionPayFail(event){
-	retrieveSubscription(event.data.object.subscription, function(subscription){
-		//todo, email user about failure
-	});
-}
-
 //failed to pay for another month of subscription
 function handleAccountDeauthorized(event){
 	updateAccountStripeUserID(event.user_id);
 }
 
+//deleted a customer
+function handleCustomerDelete(event){
+	updateAccountStripeCustomerID(event.data.object, false);
+}
+
 //-------------------------------------------------------------------------------------------------------------------HELPER FUNCTIONS
-
-//helper function to retrieve subscription
-function retrieveSubscription(id, callback){
-	if (id){
-		stripe.subscriptions.retrieve(id, function(err, subscription) {
-			if (err){
-				console.log(err);
-			}
-			else {
-				callback(subscription);
-			}
-		});
-	}
-}
-
-//helper function to upgrade to premium bulk
-function updateListingsPremium(subscription){
-	var inserted_ids = subscription.metadata.inserted_ids;
-
-	//multi-premium
-	if (inserted_ids){
-
-		//create the DB query
-		var formatted_db_query = [];
-		for (var x = 0; x < inserted_ids.length; x++){
-			var temp_row = [];
-			temp_row.push(
-				inserted_ids[x],
-				subscription.id,
-				subscription.current_period_end * 1000
-			);
-			formatted_db_query.push(temp_row);
-		}
-
-		//update the domahub DB appropriately
-		Listing.updateListingsPremium(formatted_db_query, function(result){
-			if (result.state == "success"){
-				console.log("Premium status for " + formatted_db_query.length + " listings has been renewed/created!");
-			}
-			else {
-				console.log("Something went wrong with renewing " + formatted_db_query.length + " Premium statuses!");
-			}
-		});
-	}
-}
-
-//helper to renew or remove listing premium subscription on domahub db
-function updateListingsBasic(subscription, bool, object){
-
-	var price_types = subscription.metadata.price_types;
-	var inserted_ids = subscription.metadata.inserted_ids;
-
-	//multi-premium
-	if (inserted_ids.length == price_types.length){
-
-		//create the DB query
-		var formatted_db_query = [];
-		for (var x = 0; x < inserted_ids.length; x++){
-			var temp_row = [];
-
-			//revert to basic prices only
-			var temp_rate = (price_types[x] == "month") ? 25 : 10;
-			price_types[x] = (price_types[x] == "month") ? "month" : "week";
-
-			temp_row.push(
-				inserted_ids[x],		//listing id
-				price_types[x],			//price type (make sure its month or week)
-				temp_rate,				//25 or 10
-				"",						//remove stripe subscription id
-				0,						//remove exp date
-				false					//its not "expiring", but "expired"
-			);
-			formatted_db_query.push(temp_row);
-		}
-
-		//update the domahub DB appropriately
-		Listing.updateListingsBasic(formatted_db_query, function(result){
-			if (result.state == "success"){
-				console.log("Premium status for " + formatted_db_query.length + " listings have expired after cancellation...");
-			}
-			else {
-				console.log("Something went wrong with cancelling " + formatted_db_query.length + " Premium statuses!");
-			}
-		});
-	}
-}
 
 //helper to update or remove customer ID
 function updateAccountStripeCustomerID(customer, bool){

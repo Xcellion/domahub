@@ -36,22 +36,13 @@
 								Please enter your payment information below.
 							</p>
 						</div>
-						<div id="success-helptext" class='content-wrapper is-hidden'>
-							<h1 class="title is-3">Success!</h1>
-							<p>
-								You have successfully created <span id="success-total"></span> domains!
-								Please click the button below to view/edit them.
-							</p>
-							<a href="/profile/mylistings" class="button is-primary">
-								<span class="icon">
-									<i class="fa fa-list-alt"></i>
-								</span>
-								<span>My Listings</span>
-							</a>
-						</div>
 					</div>
 					<div id="domain-error-message" class="is-hidden notification is-danger">
 						Some domain names were invalid! See below.
+						<button class="delete"></button>
+					</div>
+					<div id="domain-success-message" class="is-hidden notification is-success">
+						Successfully created <span id="success-total"></span> domains! Click <a class="is-white is-underlined" href="/profile/mylistings">here</a> to view/edit them.
 						<button class="delete"></button>
 					</div>
 				</div>
@@ -97,7 +88,7 @@
 								</td>
 								<td class="td-price v-align-top">
 									<div class="select">
-										<select class='price-type-input'>
+										<select tabindex="-1" class='price-type-input'>
 											<option value="month">Month</option>
 											<option value="week">Week</option>
 											<option disabled class='day-type' value="day">Day</option>
@@ -110,7 +101,7 @@
 								</td>
 								<td class="td-premium v-align-top">
 									<form class="checkbox-form">
-										<input class="cat-checkbox" value="premium" type="checkbox" />
+										<input tabindex="-1" class="cat-checkbox" value="premium" type="checkbox" />
 										<label class="cat-checkbox-label">Premium</label>
 									</form>
 								</td>
@@ -118,8 +109,8 @@
 						</tbody>
 						<tfoot>
 							<tr>
-								<th colspan='2'><a class="add-domain-button button no-shadow">+ Add another domain</a></th>
-								<th colspan='2' class='has-text-right'><a class="orange-link" target='_blank' href="/sellers#basicvpremium">What is a Premium listing?</a></th>
+								<th colspan='2'><a tabindex="0" class="add-domain-button button no-shadow">+ Add another domain</a></th>
+								<th colspan='2' class='has-text-right'><a tabindex="-1" class="orange-link" target='_blank' href="/sellers#basicvpremium">What is a Premium listing?</a></th>
 							</tr>
 						</tfoot>
 					</table>
