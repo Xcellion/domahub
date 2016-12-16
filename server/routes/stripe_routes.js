@@ -43,15 +43,6 @@ function switchEvents(event, res){
 			case "customer.deleted":
 				handleCustomerDelete(event);
 				break;
-			case "customer.subscription.deleted":
-				handleSubscriptionCancel(event);
-				break;
-			case "invoice.payment_succeeded":
-				handleSubscriptionPay(event);
-				break;
-			case "invoice.payment_failed":
-				handleSubscriptionPayFail(event);
-				break;
 			case "account.application.deauthorized":
 				handleAccountDeauthorized(event);
 				break;
@@ -66,100 +57,17 @@ function switchEvents(event, res){
 
 //-------------------------------------------------------------------------------------------------------------------HANDLERS
 
-//deleted a customer
-function handleCustomerDelete(event){
-	updateAccountStripeCustomerID(event.data.object, false);
-}
-
-//cancelled subscription (at period end, or immediate)
-function handleSubscriptionCancel(event){
-	updateListing(event.data.object, false);
-}
-
-//paid another month of subscription
-function handleSubscriptionPay(event){
-	retrieveSubscription(event.data.object.subscription, function(subscription){
-		updateListing(subscription, true);
-	});
-}
-
-//failed to pay for another month of subscription
-function handleSubscriptionPayFail(event){
-	retrieveSubscription(event.data.object.subscription, function(subscription){
-		//todo, email user about failure
-	});
-}
-
 //failed to pay for another month of subscription
 function handleAccountDeauthorized(event){
 	updateAccountStripeUserID(event.user_id);
 }
 
+//deleted a customer
+function handleCustomerDelete(event){
+	updateAccountStripeCustomerID(event.data.object, false);
+}
+
 //-------------------------------------------------------------------------------------------------------------------HELPER FUNCTIONS
-
-//helper function to retrieve subscription
-function retrieveSubscription(id, callback){
-	if (id){
-		stripe.subscriptions.retrieve(id, function(err, subscription) {
-			if (err){
-				console.log(err);
-			}
-			else {
-				callback(subscription);
-			}
-		});
-	}
-}
-
-//helper to renew or remove listing premium subscription on domahub db
-function updateListing(subscription, bool, object){
-	var domain_name = subscription.metadata.domain_name;
-	var listing_id = subscription.metadata.listing_id;
-
-	if (bool){
-		var new_listing_info = {
-			stripe_subscription_id : subscription.id,
-			exp_date : subscription.current_period_end * 1000,		//stripe doesnt count the time, only days
-			//minute_price: subscription.metadata.minute_price || 1,
-			hour_price: subscription.metadata.hour_price || 1,
-			day_price: subscription.metadata.day_price || 10,
-			week_price: subscription.metadata.week_price || 25,
-			month_price: subscription.metadata.month_price || 50
-		}
-		var console_msg = {
-			success: "Premium status for listing #" + listing_id + " has been renewed/created!",
-			error: "Something went wrong with renewing Premium status for listing #" + listing_id + "!"
-		}
-	}
-	else {
-		var new_listing_info = {
-			stripe_subscription_id: "",
-			exp_date: 0,
-			expiring: false,
-			//minute_price: 1,		//reset pricing
-			hour_price: 1,
-			day_price: 10,
-			week_price: 25,
-			month_price: 50
-		}
-		var console_msg = {
-			success: "Premium status for listing #" + listing_id + " has expired after cancellation...",
-			error: "Something went wrong with cancelling Premium status for listing #" + listing_id + "!"
-		}
-	}
-
-	//update the domahub DB appropriately
-	if (domain_name && listing_id){
-		Listing.updateListing(domain_name, new_listing_info, function(result){
-			if (result.state == "success"){
-				console.log(console_msg.success);
-			}
-			else {
-				console.log(console_msg.error);
-			}
-		});
-	}
-}
 
 //helper to update or remove customer ID
 function updateAccountStripeCustomerID(customer, bool){
@@ -182,7 +90,7 @@ function updateAccountStripeCustomerID(customer, bool){
 
 	if (account_id){
 		//update the domahub DB appropriately
-		Account.updateAccountStripeCustomerID(account_id, new_account_info, function(result){
+		Account.updateAccount(account_id, new_account_info, function(result){
 			if (result.state == "success"){
 				console.log(console_msg.success);
 			}

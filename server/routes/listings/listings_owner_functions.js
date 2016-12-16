@@ -103,27 +103,44 @@ module.exports = {
 		console.log("F: Checking all posted listing info...");
 
 		var posted_domains = req.body.domains;
+
 		var bad_listings = [];
-		var good_listings = [];
-		var date_now = new Date().getTime();
-		var premium_count = 0;
 		var domains_sofar = [];
+		var date_now = new Date().getTime();
+		var db_object = [];
+
+		//object to keep track of premium domains
+		var premium_obj = {
+			count : 0,
+			indexes : [],
+			domain_names : []
+		};
 
 		for (var x = 0; x < posted_domains.length; x++){
 			var bad_reasons = [];
 
-			//check all three
+			//check domain
 			if (!validator.isFQDN(posted_domains[x].domain_name)){
 				bad_reasons.push("Invalid domain name!");
 			}
-			if (["month", "week", "day", "hour"].indexOf(posted_domains[x].price_type) == -1){
-				bad_reasons.push("Invalid type!");
-			}
-			if (!validator.isInt(posted_domains[x].price_rate, {min: 1})){
-				bad_reasons.push("Invalid rate!");
-			}
+			//check for duplicates among valid FQDN domains
 			if (domains_sofar.indexOf(posted_domains[x].domain_name) != -1){
 				bad_reasons.push("Duplicate domain name!");
+			}
+			//check price type
+			if (
+				(["month", "week", "day", "hour"].indexOf(posted_domains[x].price_type) == -1) ||
+				(posted_domains[x].premium != "true" && (posted_domains[x].price_type == "day" || posted_domains[x].price_type == "hour"))
+			){
+				bad_reasons.push("Invalid type!");
+			}
+			//check price rate
+			if (
+				(!validator.isInt(posted_domains[x].price_rate, {min: 1})) ||
+				(posted_domains[x].premium != "true" && posted_domains[x].price_type == "month" && posted_domains[x].price_rate != "25") ||
+				(posted_domains[x].premium != "true" && posted_domains[x].price_type == "week" && posted_domains[x].price_rate != "10")
+			){
+				bad_reasons.push("Invalid rate!");
 			}
 
 			//some were messed up
@@ -135,19 +152,16 @@ module.exports = {
 			}
 			//all good! format the db array
 			else {
-				if (posted_domains[x].premium == "false"){
-					if (posted_domains[x].price_type == "month"){
-						posted_domains[x].price_rate = 25;
-					}
-					else {
-						posted_domains[x].price_rate = 10;
-					}
-				}
-				else {
-					premium_count++;
+
+				//update the premium object if its premium
+				if (posted_domains[x].premium == "true"){
+					premium_obj.count++;
+					premium_obj.domain_names.push([posted_domains[x].domain_name]);
 				}
 				domains_sofar.push(posted_domains[x].domain_name);
-				good_listings.push([
+
+				//format the object for DB insert
+				db_object.push([
 					req.user.id,
 					date_now,
 					posted_domains[x].domain_name,
@@ -157,16 +171,18 @@ module.exports = {
 			}
 		}
 
-		//send back the messed up ones
 		if (bad_listings.length > 0){
 			res.send({
-				bad_listings : bad_listings
+				bad_listings: bad_listings
 			});
 		}
 		else {
+			//create an object for the session
 			req.session.new_listings = {
-				premium_count : premium_count,
-				db_object : good_listings
+				premium_obj : premium_obj,
+				db_object : db_object,
+				good_listings : [],
+				bad_listings : bad_listings
 			}
 			next();
 		}
@@ -174,13 +190,14 @@ module.exports = {
 
 	//function to send back how many premium domains
 	checkPostedPremium : function(req, res, next){
-		if (req.session.new_listings.premium_count > 0){
+		console.log("F: Checking for any Premium listings...");
+		if (req.session.new_listings.premium_obj.count > 0){
 			if (req.body.stripeToken){
 				next();
 			}
 			else {
 				res.send({
-					premium_count : req.session.new_listings.premium_count
+					premium_count : req.session.new_listings.premium_obj.count
 				});
 			}
 		}
@@ -191,15 +208,18 @@ module.exports = {
 
 	//function to create the batch listings once done
 	createListings : function(req, res, next){
-		var formatted_listings = req.session.new_listings.db_object;
-		Listing.newListings(formatted_listings, function(result){
+		console.log("F: Creating listings to check for any existing...");
+
+		var db_object = req.session.new_listings.db_object;
+		Listing.newListings(db_object, function(result){
 			if (result.state=="error"){error.handler(req, res, result.info, "json");}
 			else {
 				var affectedRows = result.info.affectedRows;
 				//nothing created
 				if (affectedRows == 0){
+					sortListings(req.session.new_listings, db_object, []);
 					res.send({
-						bad_listings: findFailedListings(formatted_listings, []).bad_listings,
+						bad_listings: req.session.new_listings.bad_listings,
 						good_listings: false
 					});
 				}
@@ -210,27 +230,33 @@ module.exports = {
 						else {
 							//get the insert IDs and domain names of newly inserted listings
 							var newly_inserted_listings = findNewlyMadeListings(req.user.listings, result.info);
-							var inserted_ids = newly_inserted_listings.inserted_ids;
-							var inserted_domains = newly_inserted_listings.inserted_domains;
+							var inserted_ids = newly_inserted_listings.inserted_ids				//insert ids of all inserted domains
+							var inserted_domains = newly_inserted_listings.inserted_domains		//domain names of all inserted domains
 
-							//figure out what wasnt created and what was
-							var listings_result = findFailedListings(formatted_listings, inserted_domains);
-							var bad_listings = listings_result.bad_listings;
-							var good_listings = listings_result.good_listings;
+							//sort all the listings
+							sortListings(
+								req.session.new_listings,									//session listing object
+								db_object,													//db object used to insert
+								inserted_domains,											//domain names of all inserted domains
+								req.session.new_listings.premium_obj.domain_names,			//domain names of premium listings
+								inserted_ids
+							);
+
+							req.session.new_listings.inserted_ids = inserted_ids;
+							req.session.new_listings.inserted_domains = inserted_domains;
 
 							//revert the newly made listings verified to null
 							Listing.updateListingsVerified(inserted_ids, function(result){
 								delete req.user.listings;
 
 								if (req.body.stripeToken){
-									req.session.good_listings = good_listings;
-									req.session.bad_listings = bad_listings;
 									next();
 								}
 								else {
+									console.log(req.session.new_listings);
 									res.send({
-										bad_listings: bad_listings || false,
-										good_listings: good_listings || false
+										bad_listings: req.session.new_listings.bad_listings,
+										good_listings: req.session.new_listings.good_listings
 									});
 								}
 							});
@@ -239,6 +265,28 @@ module.exports = {
 				}
 			}
 		});
+	},
+
+	//function to update to premium since stripe stuff worked
+	updatePremium : function(req, res, next){
+		console.log("F: Updating Premium listings...");
+
+		//update the domahub DB appropriately
+		if (req.session.new_listings.premium_obj.db_success_obj.length > 0){
+			Listing.updateListingsPremium(req.session.new_listings.premium_obj.db_success_obj, function(result){
+			});
+		}
+
+		if (req.session.new_listings.premium_obj.db_failed_obj.length > 0){
+			Listing.updateListingsBasic(req.session.new_listings.premium_obj.db_failed_obj, function(result){
+			});
+		}
+
+		res.send({
+			bad_listings: req.session.new_listings.bad_listings,
+			good_listings: req.session.new_listings.good_listings
+		});
+		delete req.session.new_listings;
 	},
 
 	//function to format the listing info when creating a new listing
@@ -891,23 +939,23 @@ function getUserListingObj(listings, domain_name){
 }
 
 //helper function to check existing req.user listings and compare with any newly made ones to find the insert ID and domain name
-function findNewlyMadeListings(user_listings, new_listings){
+function findNewlyMadeListings(user_listings, inserted_listings){
 	var inserted_ids = [];
 	var inserted_domains = [];
 
 	//find the insert ids of the newly inserted listings
-	for (var x = 0; x < new_listings.length; x++){
+	for (var x = 0; x < inserted_listings.length; x++){
 		var exists = false;
 		for (var y = 0; y < user_listings.length; y++){
-			if (new_listings[x].id == user_listings[y].id){
+			if (inserted_listings[x].id == user_listings[y].id){
 				exists = true;
 				break;
 			}
 		}
 
 		if (!exists){
-			inserted_ids.push([new_listings[x].id]);
-			inserted_domains.push(new_listings[x].domain_name);
+			inserted_ids.push([inserted_listings[x].id]);
+			inserted_domains.push(inserted_listings[x].domain_name);
 		}
 	}
 
@@ -952,10 +1000,12 @@ function findUncreatedListings(posted_listings, new_listings, existing_bad_listi
 	};
 }
 
-//helper function to see if any listings failed
-function findFailedListings(formatted_listings, inserted_domains){
-	var bad_listings = [];
+//helper function to see if any listings failed, figure out any premium domains
+function sortListings(new_listings, formatted_listings, inserted_domains, premium_domains, inserted_ids){
+	var bad_listings = new_listings.bad_listings;
 	var good_listings = [];
+	var premium_inserted_ids = [];
+	var premium_indexes = [];
 
 	//loop through all formatted listings
 	for (var x = 0; x < formatted_listings.length; x++){
@@ -963,28 +1013,54 @@ function findFailedListings(formatted_listings, inserted_domains){
 		//figure out if this formatted listing was inserted or not
 		var was_created = false;
 		for (var y = 0; y < inserted_domains.length; y++){
+			//if domain name of formatted input is same as domain name of result
 			if (formatted_listings[x][2] == inserted_domains[y]){
+				//was created!
 				was_created = true;
+
+				//find the insert ids of the inserted premium domains
+				if (premium_domains.length > 0){
+					var not_premium = true;
+					for (var z = 0; z < premium_domains.length; z++){
+
+						//if premium domain name is same as inserted domain name
+						if (premium_domains[z] == inserted_domains[y]){
+							premium_inserted_ids.push(inserted_ids[y][0]);
+							premium_indexes.push(x);
+							not_premium = false;
+							break;
+						}
+					}
+
+					//this was a basic listing (premium and basic submitted)
+					if (not_premium){
+						good_listings.push({
+							index: x
+						});
+					}
+				}
+
+				//this was a basic listing (no premium submitted)
+				else {
+					good_listings.push({
+						index: x
+					});
+				}
+
 				break;
 			}
 		}
 
-		//wasnt created cuz it was a duplicate
+		//wasnt created cuz it was already existing
 		if (!was_created){
 			bad_listings.push({
 				index: x,
 				reasons: ["This domain name already exists!"]
 			});
 		}
-		else {
-			good_listings.push({
-				index: x
-			});
-		}
 	}
 
-	return {
-		bad_listings: bad_listings,
-		good_listings : good_listings
-	};
+	new_listings.good_listings = good_listings;
+	new_listings.premium_obj.inserted_ids = premium_inserted_ids;
+	new_listings.premium_obj.indexes = premium_indexes;
 }
