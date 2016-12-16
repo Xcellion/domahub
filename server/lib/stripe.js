@@ -1,6 +1,7 @@
 var	account_model = require('../models/account_model.js');
 var	listing_model = require('../models/listing_model.js');
 
+var Q = require('q');
 var qs = require('qs');
 var request = require('request');
 
@@ -23,6 +24,7 @@ module.exports = {
 
 	//check that the stripe customer is legit and has a good payment card
 	createStripeCustomer : function(req, res, next){
+		console.log("SF: Trying to create or update a Stripe customer...");
 		if (req.user.stripe_customer_id){
 
 			//cross reference with stripe
@@ -107,35 +109,10 @@ module.exports = {
 	},
 
 	//function to create multiple monthly subscriptions
-	createMultipleStripeSubscriptions : function(req, res, next){
+	createStripeSubscriptions : function(req, res, next){
+		console.log("SF: Trying to create or update a Stripe subscription...");
 
-		//create a metadata of domain names to update exp date on via webhook
-		var price_types = [];
-		for (var x = 0; x < req.body.domains.length; x++){
-			if (req.body.domains[x].premium){
-				price_types.push(req.body.domains[x].price_type);
-			}
-		}
-		price_types = price_types.join(" ");
-
-		//create multiple premium subscriptions
-		stripe.subscriptions.create({
-			customer: req.user.stripe_customer_id,
-			plan: "premium",
-			quantity: req.session.new_listings.premium_count,
-			metadata: {
-				"price_types" : price_types,
-				"inserted_ids" : req.session.inserted_ids.join(" ")
-			}
-		}, function(err, subscription) {
-			if (err){stripeErrorHandler(req, res, err)}
-			else {
-				res.send({
-					good_listings: req.session.good_listings,
-					bad_listings: req.session.bad_listings
-				});
-			}
-		});
+		newStripeSubscription(req, res, next);
 	},
 
 	//check that stripe subscription exists
@@ -147,8 +124,15 @@ module.exports = {
 			stripe.subscriptions.del(listing_info.stripe_subscription_id, { at_period_end: true }, function(err, confirmation) {
 				if (err){stripeErrorHandler(req, res, err)}
 				else {
+
+					//revert to basic prices
+					var temp_price_rate = (listing_info.price_type == "month") ? 25 : 10;
+					var temp_price_type = (listing_info.price_type == "month") ? "month" : "week";
+
 					req.new_listing_info = {
-						expiring: true
+						expiring: true,
+						price_type : temp_price_type,
+						price_rate : temp_price_rate
 					}
 					next();
 				}
@@ -341,6 +325,74 @@ function newStripecustomer(req, res, next){
 			});
 		}
 	});
+}
+
+//helper function to create a new stripe subscription
+function newStripeSubscription(req, res, next){
+
+	//create the array of promises
+	var promises = [];
+	for (var x = 0; x < req.session.new_listings.premium_obj.inserted_ids.length; x++){
+		var promise = stripe.subscriptions.create({
+			customer: req.user.stripe_customer_id,
+			plan: "premium",
+			metadata: {
+				insert_id : req.session.new_listings.premium_obj.inserted_ids[x],
+				index : req.session.new_listings.premium_obj.indexes[x]
+			}
+		});
+		promises.push(promise);
+	}
+
+	//wait for all promises to finish
+	Q.allSettled(promises)
+	 .then(function(results) {
+		var premium_db_query_success = [];
+		var premium_db_query_failed = [];
+
+		//figure out which promises failed / passed
+		for (var y = 0; y < results.length; y++){
+			if (results[y].state == "fulfilled"){
+				var subscription = results[y].value;
+				//create the formatted db query to update premium ID
+				premium_db_query_success.push([
+					subscription.metadata.insert_id,
+					subscription.id,
+					subscription.current_period_end * 1000
+				]);
+
+				//add to good listings
+				req.session.new_listings.good_listings.push({
+					index: subscription.metadata.index
+				});
+			}
+			else {
+				//revert pricing for failed premium listings
+				premium_db_query_failed.push([
+					req.session.new_listings.premium_obj.inserted_ids[y],		//insert id
+					"month",														//price type
+					25,																//price rate
+					"",																//subscription id
+					0,																//exp date
+					false															//expiring
+				]);
+
+				//add to bad listings
+				req.session.new_listings.bad_listings.push({
+					index: req.session.new_listings.premium_obj.indexes[y],
+					reasons: [
+						"Premium upgrade failed! Your card was not charged for this domain."
+					]
+				});
+			}
+		}
+
+		req.session.new_listings.premium_obj.db_success_obj = premium_db_query_success;
+		req.session.new_listings.premium_obj.db_failed_obj = premium_db_query_failed;
+		next();
+
+	});
+
 }
 
 //helper function for handling stripe errors

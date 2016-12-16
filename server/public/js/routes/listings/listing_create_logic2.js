@@ -15,10 +15,12 @@ $(document).ready(function() {
 	});
 
 	//add row to table
-	$(".add-domain-button").on("click", function(e){
-		e.preventDefault();
-		createTableRow("");
-		calculateSummaryRows();
+	$(".add-domain-button").on("click keypress", function(e){
+		if (e.which == 1 || e.which == 13 || e.which == 32){
+			e.preventDefault();
+			createTableRow("");
+			calculateSummaryRows();
+		}
 	});
 
 	//submit to create listings
@@ -67,19 +69,7 @@ function submitDomainNames(submit_elem){
 	}
 }
 
-//--------------------------------------------------------------------------------TABLE
-
-//function to show the table
-function showTable(old_submit){
-	showHelpText("table");
-	$("#domains-submit").removeClass('is-hidden is-disabled');
-	$("#payment-column").addClass('is-hidden');
-	$("#table-column").removeClass('is-hidden');
-	$("#summary-column").removeClass('is-offset-2');
-	$("#review-table-button").addClass('is-hidden');
-}
-
-//function to create the listing table from server info
+//function to create the listing table from server info after initial textarea
 function createTable(bad_listings, good_listings){
 	$("#domain-input-form").addClass('is-hidden');
 	$("#table-columns").removeClass('is-hidden');
@@ -101,14 +91,25 @@ function createTable(bad_listings, good_listings){
 	calculateSummaryRows();
 }
 
+//--------------------------------------------------------------------------------TABLE
+
+//function to show the table
+function showTable(old_submit){
+	showHelpText("table");
+	$("#domains-submit").removeClass('is-hidden is-disabled');
+	$("#payment-column").addClass('is-hidden');
+	$("#table-column").removeClass('is-hidden');
+	$("#summary-column").removeClass('is-offset-2');
+	$("#review-table-button").addClass('is-hidden');
+}
+
 //function to create table row
 function createTableRow(data){
 	var temp_table_row = $("#clone-row").removeClass('is-hidden').clone();		//clone row
 	var num = $(".table-row").not('#clone-row').length + 1;
-	var domain_name = data.domain_name;
 
 	temp_table_row.removeAttr('id');
-	temp_table_row.find(".domain-name-input").val(domain_name);
+	temp_table_row.find(".domain-name-input").val(data.domain_name)
 	temp_table_row.find(".cat-checkbox-label").prop("for", "id" + num);
 
 	//click handler for premium checkbox
@@ -136,72 +137,15 @@ function createTableRow(data){
 
 	handleTopAddDomainButton();
 
-	//if there are more than 10 rows, add the add-domain button to the top as well
-	if ($(".table-row").length > 10){
-		$("#top-header-row").removeClass('is-hidden');
-	}
-	else {
-		$("#top-header-row").addClass('is-hidden');
-	}
-
 	//reasons for why it was a bad listing
-	handleReasons(data.reasons, temp_table_row);
+	handleBadReasons(data.reasons, temp_table_row);
 
 	$("#clone-row").addClass("is-hidden");
 	temp_table_row.appendTo("#domain-input-table");
+	temp_table_row.find(".domain-name-input").focus();
 }
 
-//function to handle bad reasons
-function handleReasons(reasons, row){
-	if (reasons){
-
-		//refresh the row
-		row.find("small").remove();
-		row.find('.is-danger').removeClass("is-danger");
-
-		//append latest one
-		for (var x = 0; x < reasons.length; x++){
-			var explanation = $("<small class='is-danger is-pulled-right'>" + reasons[x] + "</small>")
-			if (reasons[x] == "Invalid domain name!" || reasons[x] == "Duplicate domain name!" || reasons[x] == "This domain name already exists!"){
-				var reason_input = ".domain-name-input";
-			}
-			else if (reasons[x] == "Invalid type!"){
-				var reason_input = ".price-type-input";
-			}
-			else if (reasons[x] == "Invalid rate!"){
-				var reason_input = ".price-rate-input";
-			}
-
-			//handler to clear reasons and append the reason
-			row.find(reason_input).addClass('is-danger').on("input change", function(){
-				$(this).removeClass('is-danger');
-				$(this).closest("td").find("small").remove();
-				refreshNotification();
-			}).closest('td').append(explanation);
-		}
-	}
-}
-
-//if there are more than 10 rows, add the add-domain button to the top as well
-function handleTopAddDomainButton(){
-	if ($(".table-row").length > 10){
-		$("#top-header-row").removeClass('is-hidden');
-	}
-	else {
-		$("#top-header-row").addClass('is-hidden');
-	}
-}
-
-//function to delete empty table rows
-function deleteEmptyTableRows(){
-	var empty_domain_inputs = $(".domain-name-input").filter(function() { return $(this).val() == ""; });
-	empty_domain_inputs.closest("tr").not("#clone-row").remove();
-	if ($(".table-row").length == 1){
-		createTableRow("");
-	}
-}
-
-//function to calculate the summary rows
+//function to calculate/refresh the summary rows
 function calculateSummaryRows(){
 	var total_rows = $(".domain-name-input").not(".is-disabled").length - 1;
 	var premium_domains = $("td .cat-checkbox:checked").not("#clone-row .cat-checkbox").length;
@@ -234,7 +178,26 @@ function calculateSummaryRows(){
 	$("#summary-total-price").text(total_price);
 }
 
-//function to check the table row is legit premium
+//function to delete empty table rows
+function deleteEmptyTableRows(){
+	var empty_domain_inputs = $(".domain-name-input").filter(function() { return $(this).val() == ""; });
+	empty_domain_inputs.closest("tr").not("#clone-row").remove();
+	if ($(".table-row").length == 1){
+		createTableRow("");
+	}
+}
+
+//if there are more than 10 rows, add the add-domain button to the top as well
+function handleTopAddDomainButton(){
+	if ($(".table-row").length > 10){
+		$("#top-header-row").removeClass('is-hidden');
+	}
+	else {
+		$("#top-header-row").addClass('is-hidden');
+	}
+}
+
+//function to set values of price type/price rate according to premium checkbox
 function checkPremiumRow(row_elem){
 	var price_input = row_elem.find(".price-rate-input");
 	var price_select = row_elem.find("select");
@@ -262,69 +225,7 @@ function checkPremiumRow(row_elem){
 	}
 }
 
-//function to refresh error messages on rows
-function refreshNotification(){
-	if ($(".is-danger").length == 1){
-		$("#domain-error-message").addClass("is-hidden");		//hide error notification
-		$("td small").remove();
-		$("td .is-danger").removeClass("is-danger");
-	}
-}
-
-//function to refresh rows on ajax return
-function refreshRows(bad_listings, good_listings){
-	refreshNotification();
-
-	if (bad_listings && bad_listings.length > 0){
-		showTable();
-		badTableRows(bad_listings);
-	}
-
-	if (good_listings && good_listings.length > 0){
-		showTable();
-		goodTableRows(good_listings);
-
-		//all successful!
-		if (!bad_listings || bad_listings.length == 0){
-			showHelpText("success");
-			$("#success-total").text(good_listings.length);
-		}
-	}
-}
-
-//label the incorrect table rows
-function badTableRows(bad_listings){
-	$("#domain-error-message").removeClass("is-hidden");
-	for (var x = 0; x < bad_listings.length; x++){
-		var table_row = $($(".table-row").not("#clone-row")[bad_listings[x].index]);
-		handleReasons(bad_listings[x].reasons, table_row);
-	}
-}
-
-//label the correct table rows
-function goodTableRows(good_listings){
-	for (var x = 0; x < good_listings.length; x++){
-		var table_row = $($(".table-row").not("#clone-row")[good_listings[x].index]);
-		var explanation = $("<small class='is-success is-pulled-right'>Successfully added!</small>")
-		table_row.find(".domain-name-input").addClass('is-success').closest('td').append(explanation);
-		table_row.find(".domain-name-input, .price-type-input, .price-rate-input").addClass('is-disabled');
-
-		//revert checkbox to text
-		var premium_text = (table_row.find(".cat-checkbox").prop("checked")) ? "Premium" : "Basic";
-		table_row.find(".td-premium").addClass("padding-top-15").empty().html("<strong>" + premium_text + "</strong>");
-	}
-}
-
-//find the row with a specified domain name
-function findRowDomainName(domain_name){
-	$(".table-row").not("#clone-row").each(function(){
-		if ($(this).find(".domain-name-input").val() == domain_name){
-			return $(this);
-		}
-	});
-}
-
-//--------------------------------------------------------------------------------SUBMIT
+//--------------------------------------------------------------------------------TABLE SUBMIT
 
 //function to submit textarea domains
 function submitDomains(submit_elem){
@@ -332,7 +233,7 @@ function submitDomains(submit_elem){
 	//only if there are no error messages currently
 	if ($("#domain-error-message").hasClass("is-hidden") && $("td .is-danger").length == 0){
 		deleteEmptyTableRows();
-		var domains = getTableRowVals(".domain-name-input");
+		var domains = getTableListingInfo(".domain-name-input");
 
 		if (domains.length > 0){
 			submit_elem.off();		//remove handler
@@ -344,8 +245,28 @@ function submitDomains(submit_elem){
 
 }
 
+//helper function to get the table row values for ajax submission
+function getTableListingInfo(){
+	var temp_array = [];
+	$(".table-row").not("#clone-row").each(function(idx, elem) {
+		var temp_row = $(this);
+		//if domain name is not empty and not disabled
+		if (temp_row.find(".domain-name-input").val() && !temp_row.find(".domain-name-input").hasClass('is-disabled')){
+			var row_obj = {
+				domain_name : temp_row.find(".domain-name-input").val(),
+				price_type : temp_row.find(".price-type-input").val(),
+				price_rate : temp_row.find(".price-rate-input").val(),
+				premium : temp_row.find(".cat-checkbox").prop("checked")
+			};
+			temp_array.push(row_obj);
+		}
+	});
+	return temp_array;
+}
+
 //function to send ajax to server for domain creation
 function submitDomainsAjax(domains, submit_elem, stripeToken){
+	deleteGoodTableRows();
 	$.ajax({
 		url: "/listings/create",
 		method: "POST",
@@ -380,26 +301,122 @@ function submitDomainsAjax(domains, submit_elem, stripeToken){
 	});
 }
 
-//helper function to get the table row values for ajax submission
-function getTableRowVals(){
-	var temp_array = [];
-	$(".table-row").not("#clone-row").each(function(idx, elem) {
-		var temp_row = $(this);
-		//if domain name is not empty and not disabled
-		if (temp_row.find(".domain-name-input").val() && !temp_row.find(".domain-name-input").hasClass('is-disabled')){
-			var row_obj = {
-				domain_name : temp_row.find(".domain-name-input").val(),
-				price_type : temp_row.find(".price-type-input").val(),
-				price_rate : temp_row.find(".price-rate-input").val(),
-				premium : temp_row.find(".cat-checkbox").prop("checked")
-			};
-			temp_array.push(row_obj);
-		}
-	});
-	return temp_array;
+//--------------------------------------------------------------------------------TABLE UPDATE
+
+//function to refresh rows on ajax return
+function refreshRows(bad_listings, good_listings){
+	clearDangerSuccess();
+
+	//show which rows were bad
+	if (bad_listings && bad_listings.length > 0){
+		showTable();
+		badTableRows(bad_listings);
+	}
+
+	//show which rows were good
+	if (good_listings && good_listings.length > 0){
+		showTable();
+		goodTableRows(good_listings);
+
+		//how many were created successfully
+		$("#success-total").text(good_listings.length);
+		$("#domain-success-message").removeClass("is-hidden");
+	}
 }
 
-//--------------------------------------------------------------------------------PAYMENT
+//function to refresh notifications if there are no relative rows
+function refreshNotification(){
+	//hide error notification
+	if ($(".is-danger").length == 1){
+		$("#domain-error-message").addClass("is-hidden");
+		$("td small.is-danger").remove();
+		$("td .is-danger").removeClass("is-danger");
+	}
+
+	//hide success notification
+	if ($("tr .td-price .is-disabled").not("#clone-row").length == 0){
+		$("#domain-success-message").addClass("is-hidden");
+	}
+}
+
+//function to remove all success/error messages
+function clearDangerSuccess(){
+	//notifications
+	$("#domain-error-message").addClass("is-hidden");
+	$("#domain-success-message").addClass("is-hidden");
+
+	//remove small error reasons
+	$("td small").remove();
+	$("td .is-danger").removeClass("is-danger");
+
+	//remove disabled success rows
+	$("td .is-success").closest("tr").remove();
+}
+
+//label the incorrect table rows
+function badTableRows(bad_listings){
+	$("#domain-error-message").removeClass("is-hidden");
+	for (var x = 0; x < bad_listings.length; x++){
+		var table_row = $($(".table-row").not("#clone-row")[bad_listings[x].index]);
+		handleBadReasons(bad_listings[x].reasons, table_row);
+	}
+}
+
+//function to edit the rows to append any bad reasons
+function handleBadReasons(reasons, row){
+	if (reasons){
+
+		//refresh the row
+		row.find("small").remove();
+		row.find('.is-danger').removeClass("is-danger");
+
+		//append latest one
+		for (var x = 0; x < reasons.length; x++){
+			var explanation = $("<small class='is-danger has-text-right is-pulled-right'>" + reasons[x] + "</small>")
+			if (reasons[x] == "Invalid domain name!" || reasons[x] == "Duplicate domain name!" || reasons[x] == "This domain name already exists!"){
+				var reason_input = ".domain-name-input";
+			}
+			else if (reasons[x] == "Invalid type!"){
+				var reason_input = ".price-type-input";
+			}
+			else if (reasons[x] == "Invalid rate!"){
+				var reason_input = ".price-rate-input";
+			}
+
+			//handler to clear reasons and append the reason
+			row.find(reason_input).addClass('is-danger').on("input change", function(){
+				$(this).removeClass('is-danger');
+				$(this).closest("td").find("small").remove();
+				refreshNotification();
+			}).closest('td').append(explanation);
+		}
+	}
+}
+
+//label the correct table rows
+function goodTableRows(good_listings){
+	for (var x = 0; x < good_listings.length; x++){
+		var table_row = $($(".table-row").not("#clone-row")[good_listings[x].index]);
+		var explanation = $("<small class='is-success is-pulled-right'>Successfully added!</small>")
+		table_row.find(".domain-name-input").addClass('is-success').closest('td').append(explanation);
+		table_row.find(".domain-name-input, .price-type-input, .price-rate-input").addClass('is-disabled');
+
+		//revert checkbox to text
+		var premium_text = (table_row.find(".cat-checkbox").prop("checked")) ? "Premium" : "Basic";
+		table_row.find(".td-premium").addClass("has-text-centered padding-top-15").empty().html("<strong>" + premium_text + "</strong>");
+	}
+}
+
+//function to delete empty table rows
+function deleteGoodTableRows(){
+	var good_domain_inputs = $(".domain-name-input").filter(function() { return $(this).hasClass("is-disabled");});
+	good_domain_inputs.closest("tr").not("#clone-row").remove();
+	if ($(".table-row").length == 1){
+		createTableRow("");
+	}
+}
+
+//--------------------------------------------------------------------------------PAYMENT SUBMIT
 
 //function to show the CC payment form
 function showCCForm(old_submit){
@@ -441,6 +458,6 @@ function checkSubmit(){
 }
 
 function submitStripe(stripeToken){
-	var domains = getTableRowVals(".domain-name-input");
+	var domains = getTableListingInfo(".domain-name-input");
 	submitDomainsAjax(domains, $("#checkout-button"), stripeToken);
 }
