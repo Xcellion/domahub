@@ -7,15 +7,52 @@
   flex-wrap: wrap;
   flex-direction: row;
   align-items: center; }
-  @media screen and (max-width: 768px) {
-    .is-flex-wrap {
-      flex-wrap: nowrap;
-      flex-direction: column;
-      align-items: flex-start; } }
-  .is-flex-wrap.jc-flexEnd {
-    justify-content: flex-end; }
-  .is-flex-wrap .button {
-    margin: 0 0 10px 10px; }
+  .is-flex-wrap > .checkbox-wrapper {
+    margin: 5px 2px 5px 0; }
+
+.domain-tile-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  height: 100%;
+  width: 100%;
+  padding-bottom: 25px; }
+
+.domain-tile {
+  background-image: url("https://source.unsplash.com/category/nature");
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  border-radius: 5px;
+  margin: 5px;
+  flex-grow: 1;
+  -moz-transition: all 0.25s ease;
+  -o-transition: all 0.25s ease;
+  -webkit-transition: all 0.25s ease;
+  transition: all 0.25s ease; }
+  .domain-tile:hover {
+    cursor: pointer;
+    box-shadow: 3px 2px 2px 0 rgba(0, 0, 0, 0.14), 0 -1px 2px -1px rgba(0, 0, 0, 0.2), -3px 5px 5px 0 rgba(0, 0, 0, 0.12); }
+  .domain-tile:active, .domain-tile:focus, .domain-tile.is-active {
+    outline-width: 2px;
+    outline-style: solid;
+    outline-color: Highlight;
+    box-shadow: 3px 10px 10px 0 rgba(0, 0, 0, 0.14), 0 -1px 5px -2px rgba(0, 0, 0, 0.2), -3px 10px 10px 0 rgba(0, 0, 0, 0.12); }
+    @media (-webkit-min-device-pixel-ratio: 0) {
+      .domain-tile:active .unreal-focus, .domain-tile:focus .unreal-focus, .domain-tile.is-active .unreal-focus {
+        outline-color: -webkit-focus-ring-color;
+        outline-style: auto; } }
+  .domain-tile > .img-wrapper {
+    border-radius: 5px;
+    box-sizing: border-box;
+    padding: 25px; }
+  .domain-tile .flex-column-center > .tag {
+    margin-top: 5px; }
+  .domain-tile .flex-column-center > .category-tag {
+    align-self: flex-end;
+    margin-top: 5px; }
+
+.domain-title {
+  word-break: break-all; }
 
 #filter-dropdown-wrapper {
   display: inline-block;
@@ -31,32 +68,40 @@
       z-index: 5; } }
 
 #filter-dropdown {
+  background-color: white;
+  border-radius: 3px;
   box-sizing: border-box;
-  width: 300px; }
+  width: 100%;
+  z-index: 10; }
+  #filter-dropdown.is-active {
+    padding: 0 10px;
+    border: 1px solid rgba(0, 0, 0, 0.38);
+    border-top: none;
+    border-radius: 0 0 3px 3px; }
   #filter-dropdown > .control {
     padding-top: 12px;
     padding-bottom: 12px;
     margin-bottom: 0; }
 
-#table-wrapper {
-  display: inline-block;
-  padding-left: 20px;
-  width: 100%;
-  z-index: 4; }
-  @media screen and (max-width: 1160px) {
-    #table-wrapper {
-      padding-left: 0; } }
+.filter-tag {
+  margin: 5px 0; }
 
-#listings-table {
-  min-width: 700px; }
-  #listings-table td {
-    white-space: nowrap; }
-  #listings-table .td-price {
-    width: 110px; }
-  #listings-table .td-categories {
-    width: 150px; }
-  #listings-table .td-domain {
-    width: auto; }
+@media screen and (min-width: 769px) {
+  #domain-name-input {
+    flex-grow: 1; } }
+
+@media screen and (max-width: 768px) {
+  #domain-name-input {
+    width: 100%; } }
+
+#slider-control.is-active {
+  padding-top: 30px; }
+  @media screen and (max-width: 768px) {
+    #slider-control.is-active {
+      padding-top: 0; } }
+
+#sliderSmall {
+  width: 60%; }
 
 .domain-name {
   word-break: break-all; }

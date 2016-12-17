@@ -15,9 +15,10 @@ $(document).ready(function() {
     initSmallSlider();
 
     // Filter dropdown logic
-    $("#filter-open-button").click(function() {
+    $("#filter-open-button, #filter-open-button-mobile").click(function() {
 			$(this).toggleClass("is-active");
 			$("#filter-dropdown").toggleClass("is-hidden");
+			$("#filter-dropdown").toggleClass("is-active");
     });
 
     //submit search
@@ -142,6 +143,7 @@ function initBigSlider(){
 
     //change big slider values on changing of price rate
     $("#category-input").on("change", function(e){
+				$("#slider-control").addClass("is-active");
         if ($(this).val() != "none"){
             $(slider).removeClass('is-disabled is-hidden');
             var price_rate = $(this).val();
@@ -157,6 +159,7 @@ function initBigSlider(){
         }
         else {
             $(slider).addClass('is-disabled is-hidden');
+						$("#slider-control").removeClass("is-active");
         }
     });
 }

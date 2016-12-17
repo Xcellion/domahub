@@ -14,17 +14,69 @@
   flex-wrap: wrap;
   flex-direction: row;
   align-items: center;
-  @include mobile {
-    flex-wrap: nowrap;
-    flex-direction: column;
-    align-items: flex-start;
+  & > .checkbox-wrapper {
+    margin: 5px 2px 5px 0;
   }
-  &.jc-flexEnd {
-    justify-content: flex-end;
+}
+
+// tile view prototype
+.domain-tile-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  height: 100%;
+  width: 100%;
+  padding-bottom: 25px;
+}
+
+.domain-tile {
+  background-image: url('https://source.unsplash.com/category/nature');
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  border-radius: $radius-large;
+  margin: 5px;
+  flex-grow: 1;
+  @include transition(all 0.25s ease);
+  @include desktop {
   }
-  .button {
-    margin: 0 0 10px 10px;
+  @include tablet-only {
   }
+  &:hover {
+    cursor: pointer;
+    box-shadow: 3px 2px 2px 0 rgba(0,0,0,.14),0 -1px 2px -1px rgba(0,0,0,.2),-3px 5px 5px 0 rgba(0,0,0,.12);
+  }
+  &:active,
+  &:focus,
+  &.is-active {
+    outline-width: 2px;
+    outline-style: solid;
+    outline-color: Highlight;
+    @media (-webkit-min-device-pixel-ratio:0) {
+      .unreal-focus {
+        outline-color: -webkit-focus-ring-color;
+        outline-style: auto;
+      }
+    }
+    box-shadow: 3px 10px 10px 0 rgba(0,0,0,.14),0 -1px 5px -2px rgba(0,0,0,.2),-3px 10px 10px 0 rgba(0,0,0,.12);
+  }
+  & > .img-wrapper {
+    border-radius: $radius-large;
+    box-sizing: border-box;
+    padding: 25px;
+  }
+  .flex-column-center {
+    & > .tag {
+      margin-top: 5px;
+    }
+    & > .category-tag {
+      align-self: flex-end;
+      margin-top: 5px;
+    }
+  }
+}
+
+.domain-title {
+  word-break: break-all;
 }
 
 // filter dropdown menu
@@ -41,8 +93,17 @@
 }
 
 #filter-dropdown {
+  background-color: $white;
+  border-radius: $radius;
   box-sizing: border-box;
-  width: 300px;
+  width: 100%;
+  z-index: 10;
+  &.is-active {
+    padding: 0 10px;
+    border: 1px solid $black-disabled;
+    border-top: none;
+    border-radius: 0 0 $radius $radius;
+  }
   & > .control {
     padding-top: 12px;
     padding-bottom: 12px;
@@ -50,31 +111,31 @@
   }
 }
 
-#table-wrapper {
-  display: inline-block;
-  padding-left: 20px;
-  @include width-1160px-max {
-    padding-left: 0;
-  }
-  width: 100%;
-  z-index: 4;
+.filter-tag {
+  margin: 5px 0;
 }
 
-// table col widths
-#listings-table {
-  min-width: 700px;
-  td {
-    white-space: nowrap;
+// Input and control custom styling
+#domain-name-input {
+  @include tablet {
+    flex-grow: 1;
   }
-  .td-price {
-    width: 110px;
+  @include mobile {
+    width: 100%;
   }
-  .td-categories {
-    width: 150px;
+}
+
+#slider-control {
+  &.is-active {
+    padding-top: 30px;
+    @include mobile {
+      padding-top: 0;
+    }
   }
-  .td-domain {
-    width: auto;
-  }
+}
+
+#sliderSmall {
+  width: 60%;
 }
 
 .domain-name {
