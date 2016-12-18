@@ -144,12 +144,9 @@ function calculateCurrentPage(url_page, total_pages, row_per_page){
 //refresh table (pagination and rows)
 function setupTable(total_pages, row_per_page, current_page, rows_to_disp){
     if (!rows_to_disp.length){
-        $("#no-rows").removeClass("is-hidden");
-        $(".rows-exist").addClass("is-hidden");
+        emptyRows();
     }
     else {
-        $(".rows-exist").removeClass("is-hidden");
-        $("#no-rows").addClass("is-hidden");
         createPaginationPages(total_pages, row_per_page, current_page);
         paginateRows(total_pages, current_page);
         createAllRows(row_per_page, current_page);
@@ -165,7 +162,7 @@ function setupControls(total_pages, row_per_page, current_page, rows_to_disp){
         current_page = 1;
         setupTable(total_pages, row_per_page, current_page, row_display);
     });
-
+    
     //right and left keyboard click
     $(document).off('keydown').on('keydown', function(event) {
         if ($(event.target).is("input")){
@@ -269,26 +266,29 @@ function createPaginationPages(total_pages, row_per_page, current_page){
 
     var pages_to_create = (total_pages > 7) ? 7 : total_pages;
 
-    for (var x = 1; x <= pages_to_create; x++){
-        var text;
-        if (x == 6){
-            text = "...";
-        }
-        if (x == 7){
-            text = total_pages;
-        }
-        var temp_li = createPaginationPage(x, text);
-        temp_li.find(".page-button").click(function(e){
-            var button_page = ($(this).text() == "...") ? current_page : $(this).text();
-            if (button_page != current_page) {
-
-                current_page = button_page;
-                changePage(total_pages, row_per_page, current_page);
-                setupControls(total_pages, row_per_page, current_page, row_display);
+    //only create page button if there are actually more than 1 page to display
+    if (pages_to_create > 1){
+        for (var x = 1; x <= pages_to_create; x++){
+            var text;
+            if (x == 6){
+                text = "...";
             }
+            if (x == 7){
+                text = total_pages;
+            }
+            var temp_li = createPaginationPage(x, text);
+            temp_li.find(".page-button").click(function(e){
+                var button_page = ($(this).text() == "...") ? current_page : $(this).text();
+                if (button_page != current_page) {
 
-        })
-        $("#page-list").append(temp_li);
+                    current_page = button_page;
+                    changePage(total_pages, row_per_page, current_page);
+                    setupControls(total_pages, row_per_page, current_page, row_display);
+                }
+
+            })
+            $("#page-list").append(temp_li);
+        }
     }
 }
 
@@ -305,53 +305,69 @@ function createPaginationPage(page_num, text){
 function paginateRows(total_pages, current_page){
     current_page = parseFloat(current_page);
 
-    //grey out next/prev buttons if first or last page
-    if (current_page == total_pages){
-        $("#next-page").addClass("is-disabled");
-    }
-    else {
-        $("#next-page").removeClass("is-disabled");
-    }
-    if (current_page == 1){
-        $("#prev-page").addClass("is-disabled");
-    }
-    else {
-        $("#prev-page").removeClass("is-disabled");
-    }
+    if (total_pages > 1){
+        $("#next-page, #prev-page, #go-to-page-control").removeClass("is-hidden");
 
-    $(".page-button").removeClass("is-primary");
-    if (total_pages > 7){
-        if (current_page < 5){
-            $("#page-2").text(2);
-            $("#page-3").text(3);
-            $("#page-4").text(4);
-            $("#page-5").text(5);
-            $("#page-6").text("...");
-            $("#page-" + current_page).addClass("is-primary");
-        }
-        else if (current_page >= total_pages - 3){
-            current_page_id = 7 - (total_pages - current_page);
-            $("#page-" + current_page_id).addClass("is-primary");
-            $("#page-3").text(total_pages - 4);
-            $("#page-4").text(total_pages - 3);
-            $("#page-5").text(total_pages - 2);
-            $("#page-6").text(total_pages - 1);
+        //grey out next/prev buttons if first or last page
+        if (current_page == total_pages){
+            $("#next-page").addClass("is-disabled");
         }
         else {
-            $("#page-2").text("...");
-            $("#page-3").text(current_page - 1);
-            $("#page-4").text(current_page);
-            $("#page-4").addClass("is-primary");
-            $("#page-5").text(current_page + 1);
-            $("#page-6").text("...");
+            $("#next-page").removeClass("is-disabled");
+        }
+        if (current_page == 1){
+            $("#prev-page").addClass("is-disabled");
+        }
+        else {
+            $("#prev-page").removeClass("is-disabled");
+        }
+
+        $(".page-button").removeClass("is-primary");
+        if (total_pages > 7){
+            if (current_page < 5){
+                $("#page-2").text(2);
+                $("#page-3").text(3);
+                $("#page-4").text(4);
+                $("#page-5").text(5);
+                $("#page-6").text("...");
+                $("#page-" + current_page).addClass("is-primary");
+            }
+            else if (current_page >= total_pages - 3){
+                current_page_id = 7 - (total_pages - current_page);
+                $("#page-" + current_page_id).addClass("is-primary");
+                $("#page-3").text(total_pages - 4);
+                $("#page-4").text(total_pages - 3);
+                $("#page-5").text(total_pages - 2);
+                $("#page-6").text(total_pages - 1);
+            }
+            else {
+                $("#page-2").text("...");
+                $("#page-3").text(current_page - 1);
+                $("#page-4").text(current_page);
+                $("#page-4").addClass("is-primary");
+                $("#page-5").text(current_page + 1);
+                $("#page-6").text("...");
+            }
+        }
+        else {
+            $("#page-" + current_page).addClass("is-primary");
         }
     }
     else {
-        $("#page-" + current_page).addClass("is-primary");
+        $("#next-page, #prev-page, #go-to-page-control").addClass("is-hidden");
     }
+
 }
 
 // --------------------------------------------------------------------------------- CREATE ROWS
+
+//function to create an empty row
+function emptyRows(){
+    $("#table_body").empty();
+    var listing_or_rental = window.location.pathname.indexOf("listings") != -1 ? "listings" : "rentals";
+    var tempRow = $("<tr><td class='has-text-centered' colspan='99'>There are no matching " + listing_or_rental + "!</td></tr>");
+    $("#table_body").append(tempRow);
+}
 
 //function to create all the rows
 function createAllRows(row_per_page, current_page){
