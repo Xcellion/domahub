@@ -159,31 +159,23 @@ textarea {
   font-size: 16px;
   font-size: 1rem; }
 
+.is-bold {
+  font-weight: bold; }
+
+.is-normal {
+  font-weight: 400; }
+
+.is-lite {
+  font-weight: 300; }
+
+.is-italic {
+  font-style: italic; }
+
 h1,
 h2,
 h3,
 p {
   color: rgba(0, 0, 0, 0.9); }
-  h1.is-bold,
-  h2.is-bold,
-  h3.is-bold,
-  p.is-bold {
-    font-weight: bold; }
-  h1.is-normal,
-  h2.is-normal,
-  h3.is-normal,
-  p.is-normal {
-    font-weight: 400; }
-  h1.is-lite,
-  h2.is-lite,
-  h3.is-lite,
-  p.is-lite {
-    font-weight: 300; }
-  h1.is-italic,
-  h2.is-italic,
-  h3.is-italic,
-  p.is-italic {
-    font-style: italic; }
   h1 + a,
   h2 + a,
   h3 + a,
