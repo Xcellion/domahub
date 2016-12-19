@@ -56,6 +56,9 @@
 .td-price-type {
   width: 112px; }
 
+.td-price-type-drop {
+  padding-left: 1px !important; }
+
 @media screen and (min-width: 769px) {
   .td-address {
     width: 275px; } }
