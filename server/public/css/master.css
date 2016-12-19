@@ -171,6 +171,10 @@ textarea {
 .is-italic {
   font-style: italic; }
 
+.is-underlined {
+  color: inherit;
+  text-decoration: underline; }
+
 h1,
 h2,
 h3,
@@ -212,14 +216,6 @@ pre {
 
 ul {
   list-style-type: none; }
-
-a.is-bold,
-p.is-bold,
-h1.is-bold,
-h2.is-bold,
-h3.is-bold,
-span.is-bold {
-  font-weight: bold; }
 
 a.is-underlined,
 p.is-underlined,
