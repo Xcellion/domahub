@@ -41,8 +41,20 @@ module.exports = function(app, db, auth, error, stripe){
 	//render listing create choice
 	app.get('/listings/create', [
 		auth.checkLoggedIn,
-		owner_functions.renderCreateListingChoice
+		owner_functions.renderCreateListing
 	]);
+
+	// //render create listing single
+	// app.get('/listings/create/single', [
+	// 	auth.checkLoggedIn,
+	// 	owner_functions.renderCreateListingSingle
+	// ]);
+
+	// //render create listing multiple
+	// app.get('/listings/create/multiple', [
+	// 	auth.checkLoggedIn,
+	// 	owner_functions.renderCreateListingMultiple
+	// ]);
 
 	//check all posted textarea domains to render table
 	app.post("/listings/create/table", [
@@ -63,18 +75,6 @@ module.exports = function(app, db, auth, error, stripe){
 		stripe.createStripeSubscriptions,
 		owner_functions.updatePremium
 	]);
-
-	//render create listing table
-	app.get('/listings/create/single', [
-		auth.checkLoggedIn,
-		owner_functions.renderCreateListingSingle
-	]);
-
-	// //render create listing page
-	// app.get('/listings/create/multiple', [
-	// 	auth.checkLoggedIn,
-	// 	owner_functions.renderCreateListingMultiple
-	// ]);
 
 	//redirect all /create to proper /create
 	app.get('/listings/create*', function(req, res){

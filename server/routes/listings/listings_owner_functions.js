@@ -11,8 +11,8 @@ var fs = require('fs')
 
 module.exports = {
 	//function to display the create listing choice page
-	renderCreateListingChoice : function(req, res, next){
-		res.render("listings/listing_create_choice.ejs", {
+	renderCreateListing : function(req, res, next){
+		res.render("listings/listing_create.ejs", {
 			user: req.user,
 			message: Auth.messageReset(req)
 		});
