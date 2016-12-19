@@ -28,6 +28,9 @@
 .td-status {
   width: 122px; }
 
+.td-status-drop {
+  padding-left: 1px !important; }
+
 .td-type {
   width: 77px; }
 
