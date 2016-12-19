@@ -79,6 +79,10 @@
   width: 112px;
 }
 
+.td-price-type-drop {
+  padding-left: 1px !important;
+}
+
 .td-address {
   @include tablet {
     width: 275px;
