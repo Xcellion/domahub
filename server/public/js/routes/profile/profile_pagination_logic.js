@@ -100,7 +100,7 @@ function filterCheck(type, data){
         return data.exp_date == 0 && data.status != 0;
     }
     else if (type == "unverified_filter"){
-        return data.status == 0;
+        return data.verified == null;
     }
     //rentals
     else if (type == "active_filter"){
@@ -162,7 +162,16 @@ function setupControls(total_pages, row_per_page, current_page, rows_to_disp){
         current_page = 1;
         setupTable(total_pages, row_per_page, current_page, row_display);
     });
-    
+
+    //show per page
+    var data_to_display = (window.location.pathname.indexOf("listings") != -1) ? listings : rentals;
+    if (data_to_display.length > 25){
+        $("#domains-per-page-control").removeClass('is-hidden');
+    }
+    else {
+        $("#domains-per-page-control").addClass('is-hidden');
+    }
+
     //right and left keyboard click
     $(document).off('keydown').on('keydown', function(event) {
         if ($(event.target).is("input")){
@@ -472,11 +481,21 @@ function dropRow(row, editing){
 function editArrow(row, editing){
     var edit_td = row.find(".td-arrow").find("i");
     if (editing){
+        if (row.hasClass('unverified-row')){
+            edit_td.parent("span").addClass("is-danger");
+        }
+        else {
+            edit_td.parent("span").addClass("is-active");
+        }
         edit_td.addClass("fa-rotate-90");
-        edit_td.parent("span").addClass("is-active");
     }
     else {
         edit_td.removeClass("fa-rotate-90");
-        edit_td.parent("span").removeClass("is-active");
+        if (row.hasClass('unverified-row')){
+            edit_td.parent("span").removeClass("is-danger");
+        }
+        else {
+            edit_td.parent("span").removeClass("is-active");
+        }
     }
 }
