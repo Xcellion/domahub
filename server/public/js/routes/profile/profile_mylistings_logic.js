@@ -4,17 +4,25 @@ var row_display = listings.slice(0);
 
 //function to create a listing row
 function createRow(listing_info, rownum){
-    var tempRow = $("<tr class='row-disp' id='row" + rownum + "'></tr>");
     var verified = listing_info.verified != null;
+    var verified_row = (listing_info.verified != null) ? "" : " unverified-row";
 
+    var tempRow = $("<tr class='row-disp" + verified_row + "' id='row" + rownum + "'></tr>");
     tempRow.append(createArrow(listing_info));
     tempRow.append(createDomain(listing_info));
+    if (verified){
+        tempRow.append(createView(listing_info));
+    }
+    else {
+        tempRow.append("<td></td>")
+    }
     tempRow.append(createType(listing_info));
     tempRow.append(createVerify(listing_info, verified));
     tempRow.append(createStatus(listing_info, verified));
     tempRow.append(createStatusDrop(listing_info));
-    tempRow.append(createDate(listing_info));
-    tempRow.append(createView(listing_info));
+    tempRow.append(createPriceRate(listing_info));
+    tempRow.append(createPriceType(listing_info));
+
 
     tempRow.on("click", function(e){
         editRow($(this));
@@ -35,7 +43,7 @@ function createType(listing_info){
 //function to create a button to verify the listing
 function createVerify(listing_info, bool){
     var temp_td = $("<td class='td-visible td-verify'></td>");
-        var temp_a = $("<a class='is-danger verify-link'></a>");
+        var temp_a = $("<p class='is-danger verify-link'></p>");
             temp_a.data("href", '/listing/' + listing_info.domain_name + '/verify');
             var temp_span2 = $("<span>Unverified</span>");
 
@@ -61,9 +69,14 @@ function createStatus(listing_info, bool){
 }
 
 //function to create the listing created date
-function createDate(listing_info){
-    var start = moment(new Date(listing_info.date_created)).format('DD MMMM YYYY');
-    var temp_td = $("<td class='td-visible td-date'>" + start + "</td>");
+function createPriceRate(listing_info){
+    var temp_td = $("<td class='td-visible has-text-right td-price-rate'>$ " + listing_info.price_rate + "</td>");
+    return temp_td;
+}
+
+//function to create the listing created date
+function createPriceType(listing_info){
+    var temp_td = $("<td class='td-visible td-price-type'>" + listing_info.price_type.charAt(0).toUpperCase() + listing_info.price_type.substr(1) + "</td>");
     return temp_td;
 }
 
@@ -89,7 +102,7 @@ function createView(listing_info){
 //function to create dropdown row
 function createRowDrop(listing_info, rownum){
     var temp_drop = $("<tr id='row-drop" + rownum + "' class='row-drop'></tr>");
-    var temp_td = $("<td class='row-drop-td' colspan='6'></td>")
+    var temp_td = $("<td class='row-drop-td' colspan='7'></td>")
     var temp_div_drop = $("<div id='div-drop" + rownum + "' class='div-drop td-visible'></div>");
     var temp_div_col = $("<div class='columns'></div>");
 
@@ -97,9 +110,9 @@ function createRowDrop(listing_info, rownum){
 
     //if unverified show instructions
     if (listing_info.verified == null){
-        temp_div_col.append(
+        temp_div_drop.append(
             //create the unverified instructions, with callback to create regular drop when verified
-            createVerifiedOverlay(listing_info, function(){
+            createVerifiedDrop(listing_info, function(){
                 listing_info.verified = 1;
 
                 //show status button
@@ -109,8 +122,8 @@ function createRowDrop(listing_info, rownum){
                 row.find(".td-status-drop").find(".status_input").val(1);
 
                 temp_div_col.empty().append(
-                    createFormDrop(listing_info),
-                    createPriceDrop(listing_info),
+                    createInfoDrop(listing_info),
+                    createPremiumDrop(listing_info),
                     createImgDrop(listing_info, rownum)
                 );
             })
@@ -119,9 +132,9 @@ function createRowDrop(listing_info, rownum){
     else {
         //append various stuff to the row drop div
         temp_div_col.append(
-            createFormDrop(listing_info),
-            createPriceDrop(listing_info),
-            createImgDrop(listing_info, rownum)
+            createInfoDrop(listing_info),
+            createImgDrop(listing_info, rownum),
+            createPremiumDrop(listing_info)
         );
     }
 
@@ -131,7 +144,7 @@ function createRowDrop(listing_info, rownum){
 }
 
 //function to create the verified overlay
-function createVerifiedOverlay(listing_info){
+function createVerifiedDrop(listing_info){
   var unverified_container = $("<div class='verification-container'></div>");
         var unverified_columns_header = $("<div class='columns'></div>");
         var unverified_columns_steps = $("<div class='columns'></div>");
@@ -185,7 +198,7 @@ function createVerifiedOverlay(listing_info){
 
 //function to create the select dropdown for listing status
 function createStatusDrop(listing_info){
-    var new_td = $("<td class='td-visible td-status td-status-drop is-hidden'></td>");
+    var new_td = $("<td class='td-visible td-status-drop is-hidden'></td>");
         var temp_span = $("<span class='select status-span'></span>");
         var temp_form = $("<form class='drop-form'></form>");
         var temp_select = $("<select class='status_input changeable-input'></select>");
@@ -208,8 +221,8 @@ function createStatusDrop(listing_info){
     return new_td;
 }
 
-//function to create buy link and background image form drop
-function createFormDrop(listing_info){
+//function to create the listing info form drop
+function createInfoDrop(listing_info){
     var temp_col = $("<div class='column'></div>");
     var temp_form = $("<form class='drop-form'></form>");
 
@@ -217,16 +230,13 @@ function createFormDrop(listing_info){
     var verified_hidden = (listing_info.verified == null) ? 'is-hidden" tabindex="1"' : "";
     var verified_disabled = (listing_info.verified == null) ? 'is-disabled" tabindex="1"' : "";
 
-    //purchase link
-    var buy_link = (listing_info.buy_link == null) ? "" : listing_info.buy_link;
+    //date created
     var temp_div1 = $('<div class="control is-horizontal"></div>');
         var temp_div1_control = $("<div class='control-label is-small'></div>");
-            var temp_div1_label = $("<label class='label'>Purchase link</label>")
-        var temp_div1_p = $("<p class='control has-icon'></p>");
-            var temp_div1_input = $('<input class="buy-link-input input changeable-input ' + verified_disabled + '" type="url" placeholder="https://buy-my-website.com" value="' + buy_link + '"/>');
-                temp_div1_input.data("name", "buy_link");
-            var temp_div1_input_i = $('<i class="fa fa-link"></i>');
-    temp_div1.append(temp_div1_control.append(temp_div1_label), temp_div1_p.append(temp_div1_input, temp_div1_input_i));
+            var temp_div1_label = $("<label class='label'>Date created</label>")
+        var temp_div1_p = $("<p class='control'></p>");
+            var temp_div1_input = $("<div>" + moment(listing_info.date_created).format("MMMM DD, YYYY - HH:MM A") + "</div>");
+    temp_div1.append(temp_div1_control.append(temp_div1_label), temp_div1_p.append(temp_div1_input));
 
     //description
     var description = (listing_info.description == null) ? "" : listing_info.description;
@@ -291,34 +301,15 @@ function createFormDrop(listing_info){
     return temp_col;
 }
 
-//function to create the price drop column
-function createPriceDrop(listing_info){
-    var temp_col = $("<div class='column is-3'></div>");
+//function to create the premium drop down column
+function createPremiumDrop(listing_info){
+    var temp_col = $("<div class='column is-2'></div>");
     var temp_form = $("<form class='drop-form'></form>");
     var verified_disabled = (listing_info.verified == null) ? 'is-disabled" tabindex="1"' : "";
 
-    var label_types = ["Hourly", "Daily", "Weekly", "Monthly"];     //for display
-    var label_names = ["hour_price", "day_price", "week_price", "month_price"];     //for data for input listener
-    var label_values = [listing_info.hour_price, listing_info.day_price, listing_info.week_price,listing_info.month_price];     //for values
     var premium = listing_info.exp_date >= new Date().getTime();
     var expiring = (listing_info.expiring == 0) ? false : true;
 
-    for (var x = 0; x < 4; x++){
-        var hourly_hidden = (!premium && x == 0) ? "is-hidden" : "";
-        var temp_div1 = $("<div class='premium-control control " + hourly_hidden + " is-horizontal'></div>");
-        var temp_div_label = $("<div class='control-label is-small'></div>");
-        var temp_label = $('<label class="label">' + label_types[x] + '</label>');
-        var temp_div_control = $("<div class='control'></div>");
-        var temp_control_p = $("<p class='control has-icon'></p>");
-
-        //disabled if listing is not verified
-        var disabled = (premium) ? "" : 'is-disabled" tabindex="1"';
-        var temp_input = $('<input class="' + label_types[x].toLowerCase() + '-price-input premium-input input changeable-input ' + disabled + '" type="number" min="1" value="' + label_values[x] + '">');
-        temp_input.data("name", label_names[x]);
-
-        var temp_i = $('<i class="fa fa-dollar"></i>');
-        temp_form.append(temp_div1.append(temp_div_label.append(temp_label), temp_div_control.append(temp_control_p.append(temp_input, temp_i))));
-    }
     var temp_upgrade_control = $("<div class='control is-horizontal'></div>");
     var premium_text = (premium) ? "Revert to Basic" : "Upgrade to Premium";
     premium_text = (expiring) ? "Renew Premium" : premium_text;
@@ -344,7 +335,16 @@ function createPriceDrop(listing_info){
         })
     }
 
-    temp_form.append(temp_upgrade_control.append(temp_upgrade_button), expiry_date);
+    //buttons for submit/cancel
+    var temp_div4 = $('<div class="control has-text-right"></div>');
+        var temp_submit_control = $('<div class="control"></div>');
+            var temp_submit_button = $('<a class="save-changes-button button is-disabled is-primary">Save Changes</a>');
+        var temp_cancel_control = $('<div class="control"></div>');
+            var temp_cancel_button = $('<a class="cancel-changes-button button is-hidden is-danger">Cancel Changes</a>');
+
+    temp_div4.append(temp_submit_control.append(temp_submit_button), temp_cancel_control.append(temp_cancel_button));
+
+    temp_form.append(temp_upgrade_control.append(temp_upgrade_button), expiry_date, temp_div4);
 
     temp_col.append(temp_form);
 
