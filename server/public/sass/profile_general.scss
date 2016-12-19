@@ -56,7 +56,17 @@
 }
 
 .td-view {
-  width: 133px;
+  width: 80px;
+}
+
+.td-price-rate {
+  white-space: nowrap;
+  border-left: 1px solid $border;
+  width: 75px;
+}
+
+.td-price-type {
+  width: 60px;
 }
 
 .td-address {
