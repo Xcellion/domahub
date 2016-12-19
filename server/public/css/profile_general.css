@@ -48,6 +48,11 @@
   border-left: 1px solid rgba(0, 0, 0, 0.12);
   width: 75px; }
 
+.td-price-rate-drop {
+  padding-left: 8px !important;
+  border-left: 1px solid rgba(0, 0, 0, 0.12);
+  padding-right: 0 !important; }
+
 .td-price-type {
   width: 60px; }
 
