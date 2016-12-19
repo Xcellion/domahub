@@ -106,7 +106,7 @@ function showTable(old_submit){
 //function to create table row
 function createTableRow(data){
 	var temp_table_row = $("#clone-row").removeClass('is-hidden').clone();		//clone row
-	var num = $(".table-row").not('#clone-row').length + 1;
+	var num = parseFloat($("td .cat-checkbox:last").attr('id').replace("id", "")) + 1 || 0;
 
 	temp_table_row.removeAttr('id');
 	temp_table_row.find(".domain-name-input").val(data.domain_name)
