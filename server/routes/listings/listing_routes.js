@@ -19,10 +19,10 @@ module.exports = function(app, db, auth, error, stripe){
 
 	//-------------------------------------------------------------------------------------------------------------------- SEARCH LISTINGS
 
-	//render the listing page hub
-	app.get('/listings', [
-		search_functions.renderListingHub
-	]);
+	// //render the listing page hub
+	// app.get('/listings', [
+	// 	search_functions.renderListingHub
+	// ]);
 
 	//get a random listing with specific category
 	app.get("/listing/random/:category", [
