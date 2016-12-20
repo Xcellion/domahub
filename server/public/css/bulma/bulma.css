@@ -2164,6 +2164,12 @@ input:-webkit-autofill {
     margin-right: 10px;
     text-align: left; } }
 
+.control-label.is-aligned-top {
+  align-self: flex-start; }
+
+.control-label.is-aligned-bottom {
+  align-self: flex-end; }
+
 .control-label.is-small {
   width: 100px; }
 
