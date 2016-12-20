@@ -15,12 +15,6 @@
       .title-p.is-medium {
         width: 650px; } }
 
-.bam {
-  padding-bottom: 8px;
-  -moz-box-shadow: inset 0 -5px 0 #3cbc8d;
-  -webkit-box-shadow: inset 0 -5px 0 #3cbc8d;
-  box-shadow: inset 0 -5px 0 #3cbc8d; }
-
 /*********************** MAIN ************************/
 @-webkit-keyframes opacity {
   0% {

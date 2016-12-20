@@ -894,8 +894,9 @@ a.box {
   justify-content: center;
   text-align: center;
   white-space: nowrap; }
-  .button:focus {
-    outline-color: rgba(0, 0, 0, 0.66); }
+  .button:active, .button:focus, .button.is-active {
+    border-color: rgba(0, 0, 0, 0.9);
+    outline: none; }
   .button[disabled], .button.is-disabled {
     background-color: rgba(0, 0, 0, 0.12);
     border-color: rgba(0, 0, 0, 0.12);
@@ -1813,8 +1814,9 @@ input:-webkit-autofill {
   border-radius: 3px;
   max-width: 100%;
   width: 100%; }
-  .input:focus, .textarea:focus {
-    outline-color: rgba(0, 0, 0, 0.66); }
+  .input:active, .textarea:active, .input:focus, .textarea:focus, .input.is-active, .is-active.textarea {
+    border-color: rgba(0, 0, 0, 0.9);
+    outline: none; }
   .input[disabled], [disabled].textarea, .input.is-disabled, .is-disabled.textarea {
     background-color: rgba(0, 0, 0, 0.12);
     border-color: rgba(0, 0, 0, 0.12);
@@ -1941,8 +1943,9 @@ input:-webkit-autofill {
     display: block;
     outline: none;
     padding-right: 36px; }
-    .select select:focus {
-      outline-color: rgba(0, 0, 0, 0.66); }
+    .select select:active, .select select:focus, .select select.is-active {
+      border-color: rgba(0, 0, 0, 0.9);
+      outline: none; }
     .select select[disabled], .select select.is-disabled {
       background-color: rgba(0, 0, 0, 0.12);
       border-color: rgba(0, 0, 0, 0.12);
@@ -4495,7 +4498,7 @@ input:-webkit-autofill {
   color: rgba(0, 0, 0, 0.9);
   padding: 5px; }
   .nav-link:hover, .nav-link:active, .nav-link:focus, .nav-link.is-active {
-    opacity: 0.5; }
+    color: #3cbc8d; }
 
 .nav-item {
   align-items: center;
@@ -5050,6 +5053,8 @@ a.nav-item.is-tab {
       background-image: linear-gradient(141deg, #e6e6e6 0%, white 71%, white 100%); }
     .hero.is-white.gradient-right-left {
       background-image: linear-gradient(141deg, white 0%, white 71%, #e6e6e6 100%); }
+    .hero.is-white.gradient-top-bottom {
+      background-image: linear-gradient(#e6e6e6, white); }
     @media screen and (max-width: 768px) {
       .hero.is-white .nav-toggle span {
         background-color: black; }
@@ -5103,6 +5108,8 @@ a.nav-item.is-tab {
       background-image: linear-gradient(141deg, black 0%, black 71%, #0d0d0d 100%); }
     .hero.is-black.gradient-right-left {
       background-image: linear-gradient(141deg, #0d0d0d 0%, black 71%, black 100%); }
+    .hero.is-black.gradient-top-bottom {
+      background-image: linear-gradient(black, #1a1a1a); }
     @media screen and (max-width: 768px) {
       .hero.is-black .nav-toggle span {
         background-color: white; }
@@ -5156,6 +5163,8 @@ a.nav-item.is-tab {
       background-image: linear-gradient(141deg, #beafaf 0%, #d0d0d0 71%, #dedbdb 100%); }
     .hero.is-grey.gradient-right-left {
       background-image: linear-gradient(141deg, #dedbdb 0%, #d0d0d0 71%, #beafaf 100%); }
+    .hero.is-grey.gradient-top-bottom {
+      background-image: linear-gradient(#beafaf, #ece7e7); }
     @media screen and (max-width: 768px) {
       .hero.is-grey .nav-toggle span {
         background-color: #444; }
@@ -5209,6 +5218,8 @@ a.nav-item.is-tab {
       background-image: linear-gradient(141deg, rgba(0, 0, 0, 0.66) 0%, rgba(0, 0, 0, 0.66) 71%, rgba(13, 13, 13, 0.66) 100%); }
     .hero.is-blacklight.gradient-right-left {
       background-image: linear-gradient(141deg, rgba(13, 13, 13, 0.66) 0%, rgba(0, 0, 0, 0.66) 71%, rgba(0, 0, 0, 0.66) 100%); }
+    .hero.is-blacklight.gradient-top-bottom {
+      background-image: linear-gradient(rgba(0, 0, 0, 0.66), rgba(26, 26, 26, 0.66)); }
     @media screen and (max-width: 768px) {
       .hero.is-blacklight .nav-toggle span {
         background-color: rgba(255, 255, 255, 0.7); }
@@ -5262,6 +5273,8 @@ a.nav-item.is-tab {
       background-image: linear-gradient(141deg, rgba(230, 230, 230, 0.7) 0%, rgba(255, 255, 255, 0.7) 71%, rgba(255, 255, 255, 0.7) 100%); }
     .hero.is-whitelight.gradient-right-left {
       background-image: linear-gradient(141deg, rgba(255, 255, 255, 0.7) 0%, rgba(255, 255, 255, 0.7) 71%, rgba(230, 230, 230, 0.7) 100%); }
+    .hero.is-whitelight.gradient-top-bottom {
+      background-image: linear-gradient(rgba(230, 230, 230, 0.7), rgba(255, 255, 255, 0.7)); }
     @media screen and (max-width: 768px) {
       .hero.is-whitelight .nav-toggle span {
         background-color: rgba(0, 0, 0, 0.66); }
@@ -5315,6 +5328,8 @@ a.nav-item.is-tab {
       background-image: linear-gradient(141deg, #d4cbcb 0%, #e9e9e9 71%, #f6f5f5 100%); }
     .hero.is-light.gradient-right-left {
       background-image: linear-gradient(141deg, #f6f5f5 0%, #e9e9e9 71%, #d4cbcb 100%); }
+    .hero.is-light.gradient-top-bottom {
+      background-image: linear-gradient(#d4cbcb, white); }
     @media screen and (max-width: 768px) {
       .hero.is-light .nav-toggle span {
         background-color: #212121; }
@@ -5368,6 +5383,8 @@ a.nav-item.is-tab {
       background-image: linear-gradient(141deg, #080707 0%, #212121 71%, #302b2b 100%); }
     .hero.is-dark.gradient-right-left {
       background-image: linear-gradient(141deg, #302b2b 0%, #212121 71%, #080707 100%); }
+    .hero.is-dark.gradient-top-bottom {
+      background-image: linear-gradient(#080707, #403535); }
     @media screen and (max-width: 768px) {
       .hero.is-dark .nav-toggle span {
         background-color: #e9e9e9; }
@@ -5421,6 +5438,8 @@ a.nav-item.is-tab {
       background-image: linear-gradient(141deg, #69168e 0%, #9c27b0 71%, #cb26c7 100%); }
     .hero.is-purple.gradient-right-left {
       background-image: linear-gradient(141deg, #cb26c7 0%, #9c27b0 71%, #69168e 100%); }
+    .hero.is-purple.gradient-top-bottom {
+      background-image: linear-gradient(#69168e, #df2bdb); }
     @media screen and (max-width: 768px) {
       .hero.is-purple .nav-toggle span {
         background-color: white; }
@@ -5474,6 +5493,8 @@ a.nav-item.is-tab {
       background-image: linear-gradient(141deg, #269f5e 0%, #3cbc8d 71%, #46ccb1 100%); }
     .hero.is-primary.gradient-right-left {
       background-image: linear-gradient(141deg, #46ccb1 0%, #3cbc8d 71%, #269f5e 100%); }
+    .hero.is-primary.gradient-top-bottom {
+      background-image: linear-gradient(#269f5e, #54d7bc); }
     @media screen and (max-width: 768px) {
       .hero.is-primary .nav-toggle span {
         background-color: white; }
@@ -5527,6 +5548,8 @@ a.nav-item.is-tab {
       background-image: linear-gradient(141deg, #1c7746 0%, #309670 71%, #31af95 100%); }
     .hero.is-primarydark.gradient-right-left {
       background-image: linear-gradient(141deg, #31af95 0%, #309670 71%, #1c7746 100%); }
+    .hero.is-primarydark.gradient-top-bottom {
+      background-image: linear-gradient(#1c7746, #30c9aa); }
     @media screen and (max-width: 768px) {
       .hero.is-primarydark .nav-toggle span {
         background-color: #309670; }
@@ -5580,6 +5603,8 @@ a.nav-item.is-tab {
       background-image: linear-gradient(141deg, #33c577 0%, #62c9a3 71%, #70d4c0 100%); }
     .hero.is-primarylight.gradient-right-left {
       background-image: linear-gradient(141deg, #70d4c0 0%, #62c9a3 71%, #33c577 100%); }
+    .hero.is-primarylight.gradient-top-bottom {
+      background-image: linear-gradient(#33c577, #80decb); }
     @media screen and (max-width: 768px) {
       .hero.is-primarylight .nav-toggle span {
         background-color: #62c9a3; }
@@ -5633,6 +5658,8 @@ a.nav-item.is-tab {
       background-image: linear-gradient(141deg, #00a3e1 0%, #2196f3 71%, #3481fa 100%); }
     .hero.is-info.gradient-right-left {
       background-image: linear-gradient(141deg, #3481fa 0%, #2196f3 71%, #00a3e1 100%); }
+    .hero.is-info.gradient-top-bottom {
+      background-image: linear-gradient(#00a3e1, #4890ff); }
     @media screen and (max-width: 768px) {
       .hero.is-info .nav-toggle span {
         background-color: white; }
@@ -5686,6 +5713,8 @@ a.nav-item.is-tab {
       background-image: linear-gradient(141deg, #ee1100 0%, #ff5722 71%, #ff8b3c 100%); }
     .hero.is-accent.gradient-right-left {
       background-image: linear-gradient(141deg, #ff8b3c 0%, #ff5722 71%, #ee1100 100%); }
+    .hero.is-accent.gradient-top-bottom {
+      background-image: linear-gradient(#ee1100, #ff9a55); }
     @media screen and (max-width: 768px) {
       .hero.is-accent .nav-toggle span {
         background-color: white; }
@@ -5739,6 +5768,8 @@ a.nav-item.is-tab {
       background-image: linear-gradient(141deg, #60c352 0%, #81c784 71%, #8fd39d 100%); }
     .hero.is-success.gradient-right-left {
       background-image: linear-gradient(141deg, #8fd39d 0%, #81c784 71%, #60c352 100%); }
+    .hero.is-success.gradient-top-bottom {
+      background-image: linear-gradient(#60c352, #9eddab); }
     @media screen and (max-width: 768px) {
       .hero.is-success .nav-toggle span {
         background-color: white; }
@@ -5792,6 +5823,8 @@ a.nav-item.is-tab {
       background-image: linear-gradient(141deg, #ffbd08 0%, #ffeb3b 71%, #f4ff55 100%); }
     .hero.is-warning.gradient-right-left {
       background-image: linear-gradient(141deg, #f4ff55 0%, #ffeb3b 71%, #ffbd08 100%); }
+    .hero.is-warning.gradient-top-bottom {
+      background-image: linear-gradient(#ffbd08, #f6ff6e); }
     @media screen and (max-width: 768px) {
       .hero.is-warning .nav-toggle span {
         background-color: rgba(0, 0, 0, 0.5); }
@@ -5845,6 +5878,8 @@ a.nav-item.is-tab {
       background-image: linear-gradient(141deg, #f71537 0%, #EF5350 71%, #f57e63 100%); }
     .hero.is-danger.gradient-right-left {
       background-image: linear-gradient(141deg, #f57e63 0%, #EF5350 71%, #f71537 100%); }
+    .hero.is-danger.gradient-top-bottom {
+      background-image: linear-gradient(#f71537, #fa9078); }
     @media screen and (max-width: 768px) {
       .hero.is-danger .nav-toggle span {
         background-color: white; }
