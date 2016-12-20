@@ -60,7 +60,8 @@
   width: 112px; }
 
 .td-price-type-drop {
-  padding-left: 1px !important; }
+  padding-left: 1px !important;
+  width: 112px; }
 
 @media screen and (min-width: 769px) {
   .td-address {
