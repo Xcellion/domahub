@@ -1890,15 +1890,14 @@ input:-webkit-autofill {
     width: auto; }
 
 .textarea {
-  border: 1px solid rgba(0, 0, 0, 0.12);
   border-radius: 3px;
+  border: 1px solid rgba(0, 0, 0, 0.12);
   display: block;
   line-height: 1.2;
   max-height: 600px;
-  max-width: 100%;
-  min-height: 150px;
-  min-width: 100%;
+  min-height: 100px;
   padding: 10px;
+  width: 100%;
   resize: none; }
 
 .checkbox, .radio {
