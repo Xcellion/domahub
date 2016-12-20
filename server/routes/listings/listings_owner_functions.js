@@ -593,10 +593,9 @@ module.exports = {
 		var buy_link = req.body.buy_link;
         var description = sanitize(req.body.description);
 
-		var hour_price = parseFloat(req.body.hour_price);
-        var day_price = parseFloat(req.body.day_price);
-        var week_price = parseFloat(req.body.week_price);
-        var month_price = parseFloat(req.body.month_price);
+		//prices
+		var price_rate = parseFloat(req.body.price_rate);
+		var price_type = req.body.price_type;
 
 		var categories = (req.body.categories) ? sanitize(req.body.categories.replace(/\s\s+/g, ' ').toLowerCase()).split(" ") : [];
 		var categories_clean = [];
@@ -617,16 +616,16 @@ module.exports = {
 		else if (req.body.description && description.length == 0){
 			error.handler(req, res, "Invalid listing description!", "json");
 		}
-		//if prices exist but are not legit
-		else if (req.body.hour_price && (hour_price != hour_price >>> 0) && hour_price <= 0 ||
-				 req.body.day_price && (day_price != day_price >>> 0) && day_price <= 0 ||
-				 req.body.week_price && (week_price != week_price >>> 0) && week_price <= 0 ||
-				 req.body.month_price && (month_price != month_price >>> 0) && month_price <= 0){
-			error.handler(req, res, "Invalid listing prices!", "json");
-		}
 		//invalid categories
 		else if (req.body.categories && categories_clean.length == 0){
 			error.handler(req, res, "Invalid categories!", "json");
+		}
+		//invalid price type
+		else if (req.body.price_type && ["month", "week", "day", "hour"].indexOf(price_type) == -1){
+			error.handler(req, res, "Invalid price type!", "json");
+		}
+		else if (req.body.price_rate && !validator.isInt(price_rate)){
+			error.handler(req, res, "Invalid price!", "json");
 		}
 		else {
 			if (!req.new_listing_info) {
@@ -635,10 +634,8 @@ module.exports = {
 			req.new_listing_info.status = status;
 			req.new_listing_info.buy_link = (buy_link == "") ? null : buy_link;
 			req.new_listing_info.description = description;
-			req.new_listing_info.hour_price = hour_price;
-			req.new_listing_info.day_price = day_price;
-			req.new_listing_info.week_price = week_price;
-			req.new_listing_info.month_price = month_price;
+			req.new_listing_info.price_type = price_type;
+			req.new_listing_info.price_rate = price_rate;
 			req.new_listing_info.categories = (categories_clean == "") ? null : categories_clean;
 
 			//delete anything that wasnt posted (except if its "", in which case it was intentional deletion)
@@ -653,7 +650,7 @@ module.exports = {
 
 	//function to make sure that if they're changing the pricing, that they can change it
 	checkListingPriceType : function(req, res, next){
-		if (req.new_listing_info.hour_price || req.new_listing_info.day_price || req.new_listing_info.week_price || req.new_listing_info.month_price){
+		if (req.body.price_rate){
 			var listing_info = getUserListingObj(req.user.listings, req.params.domain_name);
 
 			//the listing is still premium, all good to edit!

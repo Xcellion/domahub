@@ -6,6 +6,7 @@ var row_display = listings.slice(0);
 function createRow(listing_info, rownum){
     var verified = listing_info.verified != null;
     var verified_row = (listing_info.verified != null) ? "" : " unverified-row";
+    var premium = listing_info.exp_date >= new Date().getTime();
 
     var tempRow = $("<tr class='row-disp" + verified_row + "' id='row" + rownum + "'></tr>");
     tempRow.append(createArrow(listing_info));
@@ -21,8 +22,12 @@ function createRow(listing_info, rownum){
     tempRow.append(createStatus(listing_info, verified));
     tempRow.append(createStatusDrop(listing_info));
     tempRow.append(createPriceRate(listing_info));
-    tempRow.append(createPriceType(listing_info));
 
+    if (premium){
+        tempRow.append(createPriceRateDrop(listing_info));
+    }
+    tempRow.append(createPriceType(listing_info));
+    tempRow.append(createPriceTypeDrop(listing_info));
 
     tempRow.on("click", function(e){
         editRow($(this));
@@ -70,7 +75,7 @@ function createStatus(listing_info, bool){
 
 //function to create the listing created date
 function createPriceRate(listing_info){
-    var temp_td = $("<td class='td-visible has-text-right td-price-rate'>$ " + listing_info.price_rate + "</td>");
+    var temp_td = $("<td class='td-visible has-text-right td-price-rate is-bold'>$ " + listing_info.price_rate + "</td>");
     return temp_td;
 }
 
@@ -122,9 +127,8 @@ function createRowDrop(listing_info, rownum){
                 row.find(".td-status-drop").find(".status_input").val(1);
 
                 temp_div_col.empty().append(
-                    createInfoDrop(listing_info),
-                    createPremiumDrop(listing_info),
-                    createImgDrop(listing_info, rownum)
+                    createImgDrop(listing_info, rownum),
+                    createInfoDrop(listing_info)
                 );
             })
         );
@@ -132,9 +136,8 @@ function createRowDrop(listing_info, rownum){
     else {
         //append various stuff to the row drop div
         temp_div_col.append(
-            createInfoDrop(listing_info),
             createImgDrop(listing_info, rownum),
-            createPremiumDrop(listing_info)
+            createInfoDrop(listing_info)
         );
     }
 
@@ -202,8 +205,8 @@ function createStatusDrop(listing_info){
         var temp_span = $("<span class='select status-span'></span>");
         var temp_form = $("<form class='drop-form'></form>");
         var temp_select = $("<select class='status_input changeable-input'></select>");
-            temp_select.append("<option value='0'>Inactive</option");
             temp_select.append("<option value='1'>Active</option");
+            temp_select.append("<option value='0'>Inactive</option");
             temp_select.val(listing_info.status);
             temp_select.data("name", "status");
     new_td.append(temp_span.append(temp_form.append(temp_select)));
@@ -235,7 +238,7 @@ function createInfoDrop(listing_info){
         var temp_div1_control = $("<div class='control-label is-small'></div>");
             var temp_div1_label = $("<label class='label'>Date created</label>")
         var temp_div1_p = $("<p class='control'></p>");
-            var temp_div1_input = $("<div>" + moment(listing_info.date_created).format("MMMM DD, YYYY - HH:MM A") + "</div>");
+            var temp_div1_input = $("<div>" + moment(listing_info.date_created).format("MMMM DD, YYYY") + "</div>");
     temp_div1.append(temp_div1_control.append(temp_div1_label), temp_div1_p.append(temp_div1_input));
 
     //description
@@ -260,61 +263,51 @@ function createInfoDrop(listing_info){
 
     temp_div3.append(temp_div3_control_label.append(temp_div3_label), temp_div3_control.append(temp_div3_input));
 
-    //buttons for submit/cancel
-    var temp_div4 = $('<div class="control is-grouped"></div>');
-        var temp_submit_control = $('<div class="control"></div>');
-            var temp_submit_button = $('<a class="save-changes-button button is-disabled is-primary ' + verified_hidden + '">Save Changes</a>');
-        var temp_cancel_control = $('<div class="control"></div>');
-            var temp_cancel_button = $('<a class="cancel-changes-button button is-hidden is-danger ' + verified_hidden + '">Cancel Changes</a>');
-
-    temp_div4.append(temp_submit_control.append(temp_submit_button), temp_cancel_control.append(temp_cancel_button));
+    //error message
+    var temp_msg_error = $("<div class='listing-msg-error is-hidden is-danger notification'></div>");
+        var temp_msg_delete_e = $("<button class='delete'></button>");
+        temp_msg_error.append(temp_msg_delete_e);
 
     //error message
-    var temp_msg = $("<div class='listing-msg is-hidden is-danger notification'></div>");
-        var temp_msg_delete = $("<button class='delete'></button>");
-        temp_msg.append(temp_msg_delete);
+    var temp_msg_success = $("<div class='listing-msg-success is-hidden is-success notification'></div>");
+        var temp_msg_delete_s = $("<button class='delete'></button>");
+        temp_msg_success.append(temp_msg_delete_s);
 
-    temp_col.append(temp_form.append(temp_div1, temp_div2, temp_div3, temp_div4, temp_msg));
+    temp_col.append(temp_form.append(temp_div1, temp_div2, temp_div3, createButtonsDrop(listing_info), temp_msg_error, temp_msg_success));
 
-    //to hide the message
-    temp_msg_delete.click(function(e){
+    //to hide the message (error)
+    temp_msg_delete_e.click(function(e){
         e.preventDefault();
-        temp_msg.addClass('is-hidden');
+        temp_msg_error.addClass('is-hidden');
     });
 
-    //to submit form changes
-    temp_submit_button.click(function(e){
-        var row_drop = $(this).closest('.row-drop');
-        var row = row_drop.prev(".row-disp");
-
-        submitListingChanges(row, row_drop, $(this), listing_info);
-    });
-
-    //to cancel form changes
-    temp_cancel_button.click(function(e){
-        var row_drop = $(this).closest('.row-drop');
-        var row = row_drop.prev(".row-disp");
-
-        cancelListingChanges(row, row_drop, $(this), listing_info);
+    //to hide the message (success)
+    temp_msg_delete_s.click(function(e){
+        e.preventDefault();
+        temp_msg_success.addClass('is-hidden');
     });
 
     return temp_col;
 }
 
 //function to create the premium drop down column
-function createPremiumDrop(listing_info){
-    var temp_col = $("<div class='column is-2'></div>");
+function createButtonsDrop(listing_info){
     var temp_form = $("<form class='drop-form'></form>");
     var verified_disabled = (listing_info.verified == null) ? 'is-disabled" tabindex="1"' : "";
+
+    //delete button
+    var temp_delete_control = $("<div class='control'></div>");
+        var temp_delete_button = $('<a href="/listing/' + listing_info.domain_name + '/delete" class="button is-danger">Delete Listing</a>');
+    temp_delete_control.append(temp_delete_button);
 
     var premium = listing_info.exp_date >= new Date().getTime();
     var expiring = (listing_info.expiring == 0) ? false : true;
 
-    var temp_upgrade_control = $("<div class='control is-horizontal'></div>");
+    var temp_upgrade_control = $("<div class='control'></div>");
     var premium_text = (premium) ? "Revert to Basic" : "Upgrade to Premium";
-    premium_text = (expiring) ? "Renew Premium" : premium_text;
+        premium_text = (expiring) ? "Renew Premium" : premium_text;
     var premium_src = (premium) ? "/downgrade" : "/upgrade";
-    premium_src = (expiring) ? "/upgrade" : premium_src;
+        premium_src = (expiring) ? "/upgrade" : premium_src;
     var temp_upgrade_button = $('<a href="/listing/' + listing_info.domain_name + premium_src + '" class="stripe-button button is-primary ' + verified_disabled + '">' + premium_text + '</a>');
 
     //show an expiration or renewal date if this is a premium listing
@@ -336,19 +329,33 @@ function createPremiumDrop(listing_info){
     }
 
     //buttons for submit/cancel
-    var temp_div4 = $('<div class="control has-text-right"></div>');
-        var temp_submit_control = $('<div class="control"></div>');
-            var temp_submit_button = $('<a class="save-changes-button button is-disabled is-primary">Save Changes</a>');
-        var temp_cancel_control = $('<div class="control"></div>');
-            var temp_cancel_button = $('<a class="cancel-changes-button button is-hidden is-danger">Cancel Changes</a>');
+    var temp_submit_control = $('<div class="control"></div>');
+        var temp_submit_button = $('<a class="save-changes-button button is-disabled is-primary">Save Changes</a>');
+    var temp_cancel_control = $('<div class="control"></div>');
+        var temp_cancel_button = $('<a class="cancel-changes-button button is-hidden is-danger">Cancel Changes</a>');
 
-    temp_div4.append(temp_submit_control.append(temp_submit_button), temp_cancel_control.append(temp_cancel_button));
+    temp_submit_control.append(temp_submit_button);
+    temp_cancel_control.append(temp_cancel_button);
 
-    temp_form.append(temp_upgrade_control.append(temp_upgrade_button), expiry_date, temp_div4);
+    //to submit form changes
+    temp_submit_button.click(function(e){
+        var row_drop = $(this).closest('.row-drop');
+        var row = row_drop.prev(".row-disp");
 
-    temp_col.append(temp_form);
+        submitListingChanges(row, row_drop, $(this), listing_info);
+    });
 
-    return temp_col;
+    //to cancel form changes
+    temp_cancel_button.click(function(e){
+        var row_drop = $(this).closest('.row-drop');
+        var row = row_drop.prev(".row-disp");
+
+        cancelListingChanges(row, row_drop, $(this), listing_info);
+    });
+
+    temp_form.append(temp_upgrade_control.append(temp_upgrade_button), expiry_date, temp_delete_control, temp_submit_control, temp_cancel_control);
+
+    return temp_form;
 }
 
 //function to create the image drop column
@@ -390,6 +397,69 @@ function createImgDrop(listing_info, rownum){
     return temp_col;
 }
 
+//function to create input price rate drop
+function createPriceRateDrop(listing_info){
+    var new_td = $("<td class='td-visible td-price-rate-drop is-hidden'></td>");
+        var temp_form = $("<form class='drop-form'></form>");
+        var temp_input = $("<input class='price-rate-input has-text-right input changeable-input'></input>");
+            temp_input.val(listing_info.price_rate);
+            temp_input.data("name", "price_rate");
+    new_td.append(temp_form.append(temp_input));
+
+    //prevent clicking status from dropping down row
+    temp_input.click(function(e) {
+        e.stopPropagation();
+    });
+
+    //change the hidden price rate TD along with dropdown
+    temp_input.change(function(e){
+        $(this).closest(".td-price-rate").prev(".td-price-rate").text("$" + $(this).val());
+    });
+
+    return new_td;
+}
+
+//function to create select price type drop
+function createPriceTypeDrop(listing_info){
+    var premium = listing_info.exp_date >= new Date().getTime();
+
+    var new_td = $("<td class='td-visible td-price-type-drop is-hidden'></td>");
+        var temp_span = $("<span class='select price-type-span'></span>");
+        var temp_form = $("<form class='drop-form'></form>");
+        var temp_select = $("<select class='price-type-input changeable-input'></select>");
+            temp_select.append("<option value='month'>Month</option");
+            temp_select.append("<option value='week'>Week</option");
+
+            if (premium){
+                temp_select.append("<option value='day'>Day</option");
+                temp_select.append("<option value='hour'>Hour</option");
+            }
+            temp_select.val(listing_info.price_type);
+            temp_select.data("name", "price_type");
+    new_td.append(temp_span.append(temp_form.append(temp_select)));
+
+    //prevent clicking price type from dropping down row
+    temp_select.click(function(e) {
+        e.stopPropagation();
+    });
+
+    //change the hidden price type TD along with dropdown
+    temp_select.change(function(e){
+        $(this).closest(".td-price-type-drop").prev(".td-price-type").text($(this).val());
+
+        if (!premium){
+            if ($(this).val() == "month"){
+                $(this).closest(".td-price-type-drop").siblings(".td-price-rate").text("$" + 25);
+            }
+            else {
+                $(this).closest(".td-price-type-drop").siblings(".td-price-rate").text("$" + 10);
+            }
+        }
+    });
+
+    return new_td;
+}
+
 // --------------------------------------------------------------------------------- EDIT ROW
 
 //function to initiate edit mode
@@ -401,6 +471,8 @@ function editRow(row){
             dropRow($(this), false);
             editArrow($(this), false);
             editStatus($(this), false);
+            editPriceRate($(this), false);
+            editPriceType($(this), false);
             $(this).next(".row-drop").find(".cancel-changes-button").click();
         }
     });
@@ -412,6 +484,8 @@ function editRow(row){
     dropRow(row, editing);
     editArrow(row, editing);
     editStatus(row, editing);
+    editPriceRate(row, editing);
+    editPriceType(row, editing);
 
     //cancel any changes if we collapse the row
     if (!editing){
@@ -434,6 +508,44 @@ function editStatus(row, editing){
         else {
             status_td.removeClass("is-hidden");
             status_drop_td.addClass("is-hidden");
+        }
+    }
+}
+
+//function to change price rate column to editable only for premium
+function editPriceRate(row, editing){
+    var price_rate_drop_td = row.find(".td-price-rate-drop");
+    var price_rate_td = row.find(".td-price-rate");
+    var verify_td = row.find(".td-verify");
+
+    //only show status stuff when the listing is verified
+    if (verify_td.hasClass("is-hidden") && price_rate_drop_td.length){
+        if (editing){
+            price_rate_td.addClass("is-hidden");
+            price_rate_drop_td.removeClass("is-hidden");
+        }
+        else {
+            price_rate_td.removeClass("is-hidden");
+            price_rate_drop_td.addClass("is-hidden");
+        }
+    }
+}
+
+//function to change price rate column to editable only for premium
+function editPriceType(row, editing){
+    var price_type_drop_td = row.find(".td-price-type-drop");
+    var price_type_td = row.find(".td-price-type");
+    var verify_td = row.find(".td-verify");
+
+    //only show status stuff when the listing is verified
+    if (verify_td.hasClass("is-hidden")){
+        if (editing){
+            price_type_td.addClass("is-hidden");
+            price_type_drop_td.removeClass("is-hidden");
+        }
+        else {
+            price_type_td.removeClass("is-hidden");
+            price_type_drop_td.addClass("is-hidden");
         }
     }
 }
@@ -489,20 +601,27 @@ function cancelListingChanges(row, row_drop, cancel_button, listing_info){
     row.find(".status_input").val(listing_info.status);
     row.find(".td-status").not(".td-status-drop").text(old_status);
 
+    //revert prices
+    row.find(".price-rate-input").val(listing_info.price_rate);
+    row.find(".td-price-rate").text("$" + listing_info.price_rate);
+
+    row.find(".price-type-input").val(listing_info.price_type);
+    row.find(".td-price-type").text(listing_info.price_type.charAt(0).toUpperCase() + listing_info.price_type.slice(1));
+
     //revert all other inputs
-    row_drop.find(".buy-link-input").val(listing_info.buy_link);
     row_drop.find(".description-input").val(listing_info.description);
     row_drop.find(".categories-input").val(listing_info.categories);
-    row_drop.find(".hourly-price-input").val(listing_info.hour_price);
-    row_drop.find(".daily-price-input").val(listing_info.day_price);
-    row_drop.find(".weekly-price-input").val(listing_info.week_price);
-    row_drop.find(".monthly-price-input").val(listing_info.month_price);
 
     //image
     var img_elem = row_drop.find("img.is-listing");
     img_elem.attr("src", img_elem.data("old_src"));
-    row_drop.find(".file-label").text("Change Picture");
+    row_drop.find(".file-label").text("Upload Picture");
     row_drop.find(".input-file").val("");
+
+    var listing_msg_error = row_drop.find(".listing-msg-error");
+    var listing_msg_success = row_drop.find(".listing-msg-success");
+    errorMessage(listing_msg_error);
+    successMessage(listing_msg_success);
 }
 
 //function to submit any changes to a listing
@@ -510,8 +629,10 @@ function submitListingChanges(row, row_drop, success_button, listing_info){
     var cancel_button = success_button.closest(".control").next(".control").find(".cancel-changes-button");
 
     //clear any existing messages
-    var listing_msg = row_drop.find(".listing-msg");
-    errorMessage(listing_msg);
+    var listing_msg_error = row_drop.find(".listing-msg-error");
+    var listing_msg_success = row_drop.find(".listing-msg-success");
+    errorMessage(listing_msg_error);
+    successMessage(listing_msg_error);
 
     var domain_name = listing_info.domain_name;
 
@@ -547,6 +668,7 @@ function submitListingChanges(row, row_drop, success_button, listing_info){
     }, 'json').done(function(data){
         success_button.removeClass("is-loading");
         if (data.state == "success"){
+            successMessage(listing_msg_success, true);
             listings = data.listings;
             success_button.addClass("is-disabled");
             cancel_button.addClass('is-hidden');
@@ -560,7 +682,7 @@ function submitListingChanges(row, row_drop, success_button, listing_info){
             }
         }
         else {
-            errorMessage(listing_msg, data.message);
+            errorMessage(listing_msg_error, data.message);
         }
     });
 }
@@ -583,11 +705,24 @@ function errorMessage(msg_elem, message){
     }
 }
 
+//helper function to display success messages per listing
+function successMessage(msg_elem, message){
+    msg_elem.removeClass('is-hidden');
+    msg_elem.find("p").empty();
+    if (message){
+        msg_elem.append("<p class='is-white'>Successfully updated this listing!</p>");
+    }
+    else {
+        msg_elem.addClass('is-hidden');
+    }
+}
+
 // --------------------------------------------------------------------------------- PREMIUM/BASIC SUBMISSION
 
 //function to submit request to upgrade
 function submitSubscription(upgrade_button, stripeToken, stripeEmail){
     var listing_msg = upgrade_button.closest(".row-drop").find(".listing-msg");
+    var listing_msg_success = row_drop.find(".listing-msg-success");
     errorMessage(listing_msg);
 
     $.ajax({
@@ -603,6 +738,7 @@ function submitSubscription(upgrade_button, stripeToken, stripeEmail){
             errorMessage(listing_msg, data.message);
         }
         else {
+            successMessage(listing_msg_success, true);
             listings = data.listings;
             upgradeToPremium(upgrade_button, data.new_exp_date);
         }
@@ -612,6 +748,7 @@ function submitSubscription(upgrade_button, stripeToken, stripeEmail){
 //function to submit request to downgrade
 function submitCancellation(upgrade_button){
     var listing_msg = upgrade_button.closest(".row-drop").find(".listing-msg");
+    var listing_msg_success = row_drop.find(".listing-msg-success");
     errorMessage(listing_msg);
 
     $.ajax({
@@ -626,6 +763,7 @@ function submitCancellation(upgrade_button){
             errorMessage(listing_msg, data.message);
         }
         else {
+            successMessage(listing_msg_success, true);
             listings = data.listings;
             downgradeToBasic(upgrade_button);
         }
