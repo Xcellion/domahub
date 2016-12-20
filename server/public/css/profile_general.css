@@ -6,6 +6,9 @@
   .is-profile-card {
     width: 275px; } }
 
+.drop-form-file {
+  width: 100%; }
+
 .listing-img .delete {
   border-radius: 0 3px;
   position: absolute;
