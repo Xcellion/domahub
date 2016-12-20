@@ -594,7 +594,7 @@ module.exports = {
         var description = sanitize(req.body.description);
 
 		//prices
-		var price_rate = parseFloat(req.body.price_rate);
+		var price_rate = req.body.price_rate;
 		var price_type = req.body.price_type;
 
 		var categories = (req.body.categories) ? sanitize(req.body.categories.replace(/\s\s+/g, ' ').toLowerCase()).split(" ") : [];
