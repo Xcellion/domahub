@@ -32,8 +32,8 @@ function checkHost(req, res, next){
 				next();
 			}
 			else {
-				next();
-				// res.render("under_construction.ejs");
+				//next();
+				res.render("under_construction.ejs");
 			}
 		}
 		//is not a valid FQDN
