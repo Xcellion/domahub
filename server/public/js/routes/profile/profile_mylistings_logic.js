@@ -17,10 +17,7 @@ function createRow(listing_info, rownum){
     tempRow.append(createStatus(listing_info, verified));
     tempRow.append(createStatusDrop(listing_info));
     tempRow.append(createPriceRate(listing_info));
-
-    if (premium){
-        tempRow.append(createPriceRateDrop(listing_info));
-    }
+    tempRow.append(createPriceRateDrop(listing_info));
     tempRow.append(createPriceType(listing_info));
     tempRow.append(createPriceTypeDrop(listing_info));
 
@@ -135,16 +132,10 @@ function createRowDrop(listing_info, rownum){
             createVerifiedDrop(listing_info, function(){
                 listing_info.verified = 1;
 
-                //show status button
+                //recreate the rows
                 var row = temp_drop.prev(".row-disp");
-                row.find(".td-status-drop").removeClass("is-hidden");
-                row.find(".td-verify").addClass("is-hidden");
-                row.find(".td-status-drop").find(".status_input").val(1);
-
-                temp_div_col.empty().append(
-                    createInfoDrop(listing_info),
-                    createImgDrop(listing_info, rownum)
-                );
+                row.replaceWith(createRow(listing_info, rownum));
+                temp_drop.replaceWith(createRowDrop(listing_info, rownum));
             })
         );
     }
@@ -307,7 +298,16 @@ function createInfoDrop(listing_info){
             var temp_div1_label = $("<label class='label'>Date created</label>")
         var temp_div1_p = $("<p class='control is-grouped'></p>");
             var temp_div1_input = $("<p class='control is-expanded'>" + moment(listing_info.date_created).format("MMMM DD, YYYY") + "</p>");
-    temp_div1.append(temp_div1_control.append(temp_div1_label), temp_div1_p.append(temp_div1_input), createPremiumButton(listing_info));
+
+    //show an expiration or renewal date if this is a premium listing
+    var premium = listing_info.exp_date >= new Date().getTime();
+    var expiring = (listing_info.expiring == 0) ? false : true;
+
+    var expiring_text = (expiring) ? "Premium expiring" : "Premium renewing";
+    var premium_hidden = (premium) ? "" : "is-hidden";
+    var expiry_date = $('<div class="' + premium_hidden + ' margin-right-10 premium-exp-date">' + expiring_text + " on " + moment(listing_info.exp_date).format("YYYY-MM-DD") + "</div>");
+
+    temp_div1.append(temp_div1_control.append(temp_div1_label), temp_div1_p.append(temp_div1_input), expiry_date, createPremiumButton(listing_info));
 
     //description
     var description = (listing_info.description == null) ? "" : listing_info.description;
@@ -406,11 +406,6 @@ function createPremiumButton(listing_info){
         premium_src = (expiring) ? "/upgrade" : premium_src;
     var temp_upgrade_button = $('<a href="/listing/' + listing_info.domain_name + premium_src + '" class="margin-right-10 button ' + verified_disabled + '">' + premium_text + '</a>');
 
-    //show an expiration or renewal date if this is a premium listing
-    var expiring_text = (expiring) ? "Premium expiring" : "Premium renewing";
-    var premium_hidden = (premium) ? "" : "is-hidden";
-    var expiry_date = $('<div class="' + premium_hidden + ' has-text-right premium-exp-date">' + expiring_text + " on " + moment(listing_info.exp_date).format("YYYY-MM-DD") + "</div>");
-
     if (!premium || expiring){
         //stripe upgrade button
         temp_upgrade_button.off().on("click", function(e){
@@ -424,7 +419,7 @@ function createPremiumButton(listing_info){
         })
     }
 
-    temp_upgrade_control.append(temp_form.append(temp_upgrade_button, createDeleteButton(listing_info)), expiry_date);
+    temp_form.append(temp_upgrade_button, createDeleteButton(listing_info));
 
     return temp_form;
 }
@@ -614,10 +609,11 @@ function editStatus(row, editing){
 function editPriceRate(row, editing){
     var price_rate_drop_td = row.find(".td-price-rate-drop");
     var price_rate_td = row.find(".td-price-rate");
-    var verify_td = row.find(".td-verify");
+    var verified = row.find(".td-verify").hasClass("is-hidden");
+    var premium = row.find(".td-type").text() == "Premium";
 
-    //only show status stuff when the listing is verified
-    if (verify_td.hasClass("is-hidden") && price_rate_drop_td.length){
+    //only show price rate input when the listing is verified
+    if (verified && premium){
         if (editing){
             price_rate_td.addClass("is-hidden");
             price_rate_drop_td.removeClass("is-hidden");
@@ -821,7 +817,7 @@ function successMessage(msg_elem, message){
 //function to submit request to upgrade
 function submitSubscription(upgrade_button, stripeToken, stripeEmail){
     var listing_msg = upgrade_button.closest(".row-drop").find(".listing-msg");
-    var listing_msg_success = row_drop.find(".listing-msg-success");
+    var listing_msg_success = upgrade_button.closest(".row-drop").find(".listing-msg-success");
     errorMessage(listing_msg);
 
     $.ajax({
@@ -847,15 +843,12 @@ function submitSubscription(upgrade_button, stripeToken, stripeEmail){
 //function to submit request to downgrade
 function submitCancellation(upgrade_button){
     var listing_msg = upgrade_button.closest(".row-drop").find(".listing-msg");
-    var listing_msg_success = row_drop.find(".listing-msg-success");
+    var listing_msg_success = upgrade_button.closest(".row-drop").find(".listing-msg-success");
     errorMessage(listing_msg);
 
     $.ajax({
         type: "POST",
-        url: upgrade_button.attr("href"),
-        data: {
-
-        }
+        url: upgrade_button.attr("href")
     }).done(function(data){
         upgrade_button.removeClass('is-loading');
         if (data.state == "error"){
@@ -874,7 +867,12 @@ function upgradeToPremium(upgrade_button, new_exp_date){
     var row_drop = upgrade_button.closest(".row-drop");
     var row = row_drop.prev(".row-disp");
 
-    row.find(".td-type").text("Premium");       //type TD
+    console.log(new_exp_date);
+
+    //edit the various TDs
+    row.find(".td-type").text("Premium");
+    editPriceRate(row, true);
+    editPriceType(row, true);
 
     //remove all hidden or disabled inputs
     row_drop.find(".premium-input").removeClass("is-disabled");
@@ -882,7 +880,7 @@ function upgradeToPremium(upgrade_button, new_exp_date){
 
     //change expiry date
     var exp_date_elem = row_drop.find(".premium-exp-date");
-    exp_date_elem.text("Premium renewing on " + moment(new_exp_date).format("YYYY-MM-DD")).removeClass('is-hidden');
+    exp_date_elem.text("Premium renewing on " + moment().add("1", "month").format("YYYY-MM-DD")).removeClass('is-hidden');
 
     //change the button
     var old_src = upgrade_button.attr("href");
