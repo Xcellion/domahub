@@ -6683,25 +6683,25 @@ a.nav-item.is-tab {
       -webkit-transform-transform: scale(1.15); }
 
 @media screen and (min-width: 769px) {
-  .has-borderRight {
+  .has-border-right {
     border-right: 1px solid rgba(0, 0, 0, 0.12); } }
 
 @media screen and (max-width: 768px) {
-  .has-borderRight {
+  .has-border-right {
     border-bottom: 1px solid rgba(0, 0, 0, 0.12); } }
 
-.has-borderBottom {
+.has-border-bottom {
   border-bottom: 1px solid rgba(0, 0, 0, 0.12); }
 
-.has-borderTop {
+.has-border-top {
   border-top: 1px solid rgba(0, 0, 0, 0.12); }
 
 @media screen and (min-width: 769px) {
-  .has-borderLeft {
+  .has-border-left {
     border-left: 1px solid rgba(0, 0, 0, 0.12); } }
 
 @media screen and (max-width: 768px) {
-  .has-borderLeft {
+  .has-border-left {
     border-top: 1px solid rgba(0, 0, 0, 0.12); } }
 
 @media screen and (min-width: 769px) {
