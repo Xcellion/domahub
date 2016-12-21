@@ -99,8 +99,8 @@ function createPriceType(listing_info){
 function createView(listing_info){
     if (listing_info.verified){
         var temp_td = $("<td class='td-visible td-view'></td>");
-        var temp_a = $("<a class='button no-shadow' target='_blank' style='target-new: tab;' href='/listing/" + listing_info.domain_name + "'></a>");
-        var temp_span = $("<span class='icon'></span>");
+        var temp_a = $("<a class='button no-shadow' target='_blank' title='Open listing in new tab' style='target-new: tab;' href='/listing/" + listing_info.domain_name + "'></a>");
+        var temp_span = $("<span class='icon is-small'></span>");
         var temp_i = $("<i class='fa fa-external-link'></i>");
         var temp_span2 = $("<span>View</span>");
         temp_td.append(temp_a.append(temp_span.append(temp_i), temp_span2));
@@ -177,10 +177,10 @@ function createVerifiedDrop(listing_info, cb_when_verified){
 
     var unverified_step1 = $("<div class='content'><h3 class='is-blacklight is-bold'>Step 1</h3></div>");
     var step1_text = $("<p>Go to your registrar and log in.</p>");
-    var step1_button = $("<a class='margin-right-10 button is-accent' target='_blank' href='https://whois.icann.org/en/lookup?name=" + listing_info.domain_name + "'><span class='is-small icon'><i class='fa fa-search'></i></span><span>Find my registrar.</span></a>");
+    var step1_button = $("<a class='margin-right-10 button is-accent' target='_blank' title='Open registrar website in new tab' href='https://whois.icann.org/en/lookup?name=" + listing_info.domain_name + "'><span class='is-small icon'><i class='fa fa-search'></i></span><span>Find my registrar.</span></a>");
 
     var unverified_step2 = $("<div class='content margin-top-0 is-hidden'><h3 class='is-blacklight is-bold'>Step 2</h3><p>Create a new <strong>A Record</strong> for your domain.</div>");
-    var step2_button = $("<a class='button is-accent margin-right-10' href='https://www.google.com/search?q=create+a+record&btnI'><span class='icon is-small'><i class='fa fa-question-circle-o'></i></span><span>How do I create an A Record?</span></a>");
+    var step2_button = $("<a class='button is-accent margin-right-10' target='_blank' title='Open registrar website in new tab' href='https://www.google.com/search?q=create+a+record&btnI'><span class='icon is-small'><i class='fa fa-question-circle-o'></i></span><span>How do I create an A Record?</span></a>");
 
     var unverified_step3 = $("<div class='content margin-top-0 is-hidden'><h3 class='is-blacklight is-bold'>Step 3</h3><p>Point the new <strong>A Record</strong> to DomaHub servers at <strong>208.68.37.82</strong></p></div>");
     var step3_button = $("<input style='width:110px' value='208.68.37.82' class='input is-accent margin-right-10'></input>");
@@ -197,18 +197,18 @@ function createVerifiedDrop(listing_info, cb_when_verified){
 
     //step 1 - login
     var step1_control = $("<div class='control is-grouped'></div>");
-    var step1_button_next = $("<a class='button is-primary'><span>Okay, I'm logged in.</span><span class='icon'><i class='fa fa-angle-right'></i></span></a>");
+    var step1_button_next = $("<a class='button is-primary' title='Go to the next step'><span>Okay, I'm logged in.</span><span class='icon'><i class='fa fa-angle-right'></i></span></a>");
         unverified_step1.append(step1_text, step1_control.append(step1_button, step1_button_next));
 
     //step 2 - create A record
     var step2_control = $("<div class='control is-grouped'></div>");
-    var step2_button_next = $("<button class='button is-primary'><span>Okay, I made a new A Record.</span><span class='icon'><i class='fa fa-angle-right'></i></span></button>");
+    var step2_button_next = $("<button class='button is-primary' title='Go to the next step'><span>Okay, I made a new A Record.</span><span class='icon'><i class='fa fa-angle-right'></i></span></button>");
         unverified_step2.append(step2_control.append(step2_button, step2_button_next));
 
     //step 3 - point A record
     var step3_control = $("<div class='control has-addons is-grouped'></div>");
-        step3_copy_button = $("<button class='button no-shadow is-accent'><span class='is-small icon'><i class='fa fa-clipboard'></i></span></button>");
-    var step3_button_next = $("<a class='button is-primary'><span>Okay, I've pointed the A Record.</span><span class='icon'><i class='fa fa-angle-right'></i></span></a>");
+        step3_copy_button = $("<button class='button no-shadow is-accent' title='Copy to Clipboard'><span class='is-small icon'><i class='fa fa-clipboard'></i></span></button>");
+    var step3_button_next = $("<a class='button is-primary' title='Go to the next step'><span>Okay, I've pointed the A Record.</span><span class='icon'><i class='fa fa-angle-right'></i></span></a>");
         unverified_step3.append(step3_control.append(step3_copy_button, step3_button, step3_button_next));
 
     step3_copy_button.click(function(){
@@ -220,7 +220,7 @@ function createVerifiedDrop(listing_info, cb_when_verified){
 
     //step 4 - verify
     var step4_control = $("<div class='control is-grouped'></div>");
-    var step4_button_next = $("<a class='button margin-right-10 is-primary verify-link'><span>Verify this domain.</span><span class='is-small icon'><i class='fa fa-check-square'></i></span></a>");
+    var step4_button_next = $("<a class='button margin-right-10 is-primary verify-link'><span class='is-small icon'><i class='fa fa-check-circle-o'></i></span><span>Verify this domain.</span></a>");
         unverified_step4.append(step4_control.append(step4_button_next));
 
     //click to next
@@ -315,7 +315,7 @@ function createInfoDrop(listing_info){
         var temp_div2_control_label = $('<div class="control-label is-aligned-top padding-top-10 is-small">');
             var temp_div2_label = $('<label class="label">Description</label>');
         var temp_div2_control = $('<div class="control">');
-            var temp_div2_input = $('<textarea class="description-input textarea changeable-input ' + verified_disabled + '" placeholder="Rent this website for any time period you please!">' + description + '</textarea>')
+            var temp_div2_input = $('<textarea tabindex="1" class="description-input textarea changeable-input ' + verified_disabled + '" placeholder="Rent this website for any time period you please!">' + description + '</textarea>')
                 temp_div2_input.data("name", "description");
 
     temp_div2.append(temp_div2_control_label.append(temp_div2_label), temp_div2_control.append(temp_div2_input));
@@ -326,7 +326,7 @@ function createInfoDrop(listing_info){
         var temp_div3_control_label = $('<div class="control-label is-small">');
             var temp_div3_label = $('<label class="label">Categories</label>');
         var temp_div3_control = $('<div class="control">');
-            var temp_div3_input = $('<input class="categories-input input changeable-input ' + verified_disabled + '" placeholder="startup industry promotion" value="' + categories + '"></input>')
+            var temp_div3_input = $('<input tabindex="1" class="categories-input input changeable-input ' + verified_disabled + '" placeholder="startup industry promotion" value="' + categories + '"></input>')
                 temp_div3_input.data("name", "categories");
 
     temp_div3.append(temp_div3_control_label.append(temp_div3_label), temp_div3_control.append(temp_div3_input));
@@ -360,7 +360,7 @@ function createInfoDrop(listing_info){
 
 //function to create the delete button
 function createDeleteButton(listing_info){
-    var temp_delete_button = $('<a class="button is-danger">Delete Listing</a>');
+    var temp_delete_button = $('<a tabindex="1" title="Delete Listing" class="button is-danger">Delete Listing</a>');
 
     //click to delete
     temp_delete_button.on("click", function(){
@@ -404,7 +404,7 @@ function createPremiumButton(listing_info){
         premium_text = (expiring) ? "Renew Premium" : premium_text;
     var premium_src = (premium) ? "/downgrade" : "/upgrade";
         premium_src = (expiring) ? "/upgrade" : premium_src;
-    var temp_upgrade_button = $('<a href="/listing/' + listing_info.domain_name + premium_src + '" class="margin-right-10 button ' + verified_disabled + '">' + premium_text + '</a>');
+    var temp_upgrade_button = $('<a tabindex="1" title="Upgrade Listing" href="/listing/' + listing_info.domain_name + premium_src + '" class="margin-right-10 button ' + verified_disabled + '">' + premium_text + '</a>');
 
     //show an expiration or renewal date if this is a premium listing
     var expiring_text = (expiring) ? "Premium expiring" : "Premium renewing";
@@ -432,8 +432,8 @@ function createPremiumButton(listing_info){
 //function to create submit / cancel buttons
 function createSubmitCancelButton(listing_info){
     var temp_control = $('<div class="control"></div>');
-        var temp_submit_button = $('<a class="save-changes-button margin-right-10 button is-disabled is-primary">Save Changes</a>');
-        var temp_cancel_button = $('<a class="cancel-changes-button button is-hidden is-danger">Cancel Changes</a>');
+        var temp_submit_button = $('<a tabindex="1" title="Save Changes" class="save-changes-button margin-right-10 button is-disabled is-primary">Save Changes</a>');
+        var temp_cancel_button = $('<a tabindex="1" title="Cancel Changes" class="cancel-changes-button button is-hidden is-danger">Cancel Changes</a>');
 
     temp_control.append(temp_submit_button, temp_cancel_button);
 
@@ -465,10 +465,10 @@ function createImgDrop(listing_info, rownum){
     var temp_div = $("<div class='card'></div>");
     var temp_div_image = $("<div class='card-image'></div>")
     var temp_figure = $("<figure class='image listing-img is-256x256'></figure>");
-    var temp_x = $('<button class="delete ' + verified_disabled + '"></button>');
+    var temp_x = $('<button tabindex="1" class="delete ' + verified_disabled + '"></button>');
     var temp_img = $("<img class='is-listing' alt='Image not found' src=" + background_image + " />");
     var temp_footer = $("<footer class='card-footer'></div>");
-    var temp_form = $('<form id="mult-form' + rownum + '" class="drop-form-file" action="/listings/create/multiple" method="post" enctype="multipart/form-data"></form>')
+    var temp_form = $('<form tabindex="1" id="mult-form' + rownum + '" class="drop-form-file" action="/listings/create/multiple" method="post" enctype="multipart/form-data"></form>')
     var temp_input = $('<input type="file" id="file' + rownum + '" name="background_image" accept="image/png, image/gif, image/jpeg" class="picture-file changeable-input input-file ' + verified_disabled + '" />');
     var temp_input_label = $('<label for="file' + rownum + '" class="button is-fullwidth no-shadow' + verified_disabled + '"><i class="fa fa-upload"></i><p class="file-label">Upload Picture</p></label>');
     temp_input.data("name", "background_image");
