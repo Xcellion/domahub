@@ -109,3 +109,10 @@
     width: 275px;
   }
 }
+
+.selected-row {
+  background-color: $primary-lighter;
+  &:hover {
+    background-color: $primary-dark;
+  }
+}

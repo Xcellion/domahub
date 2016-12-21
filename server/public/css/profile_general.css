@@ -81,3 +81,8 @@
   @media screen and (min-width: 769px) {
     .address-div-wrapper {
       width: 275px; } }
+
+.selected-row {
+  background-color: #8ad6ba; }
+  .selected-row:hover {
+    background-color: #309670; }
