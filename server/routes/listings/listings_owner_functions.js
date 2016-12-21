@@ -688,7 +688,7 @@ module.exports = {
 			if (err){error.handler(req, res, "DNS error!", "json")};
 
 			domain_ip = address;
-			dns.lookup("domain_name", function (err, address, family) {
+			dns.lookup("domahub.com", function (err, address, family) {
 				if (domain_ip == address){
 					req.new_listing_info = {
 						domain_name: domain_name,

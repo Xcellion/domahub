@@ -177,21 +177,21 @@ function createVerifiedDrop(listing_info, cb_when_verified){
 
     var unverified_step1 = $("<div class='content'><h3 class='is-blacklight is-bold'>Step 1</h3></div>");
     var step1_text = $("<p>Go to your registrar and log in.</p>");
-    var step1_button = $("<a class='margin-right-10 button is-accent' target='_blank' href='https://whois.icann.org/en/lookup?name=" + listing_info.domain_name + "'><span class='is-small icon'><i class='fa fa-search'></i></span><span>Help me find my registrar</span></a>");
+    var step1_button = $("<a class='margin-right-10 button is-accent' target='_blank' href='https://whois.icann.org/en/lookup?name=" + listing_info.domain_name + "'><span class='is-small icon'><i class='fa fa-search'></i></span><span>Find my registrar.</span></a>");
 
     var unverified_step2 = $("<div class='content margin-top-0 is-hidden'><h3 class='is-blacklight is-bold'>Step 2</h3><p>Create a new <strong>A Record</strong> for your domain.</div>");
-    var step2_button = $("<a class='button is-accent margin-right-10' href='https://www.google.com/search?q=create+a+record&btnI'><span class='icon is-small'><i class='fa fa-question-circle-o'></i></span><span>How do I create a new A Record?</span></a>");
+    var step2_button = $("<a class='button is-accent margin-right-10' href='https://www.google.com/search?q=create+a+record&btnI'><span class='icon is-small'><i class='fa fa-question-circle-o'></i></span><span>How do I create an A Record?</span></a>");
 
     var unverified_step3 = $("<div class='content margin-top-0 is-hidden'><h3 class='is-blacklight is-bold'>Step 3</h3><p>Point the new <strong>A Record</strong> to DomaHub servers at <strong>208.68.37.82</strong></p></div>");
-    var step3_button = $("<input value='208.68.37.82' class='input is-accent margin-right-10'></input>");
+    var step3_button = $("<input style='width:110px' value='208.68.37.82' class='input is-accent margin-right-10'></input>");
 
-    var unverified_step4 = $("<div class='content margin-top-0 is-hidden'><h3 class='is-blacklight is-bold'>Step 4</h3><p>Click the button below to verify your domain.</p></div>");
+    var unverified_step4 = $("<div class='content margin-top-0 margin-bottom-10 is-hidden'><h3 class='is-blacklight is-bold'>Step 4</h3><p>Click the button below to verify your domain.</p></div>");
     steps_column.append(unverified_step1, unverified_step2, unverified_step3, unverified_step4);
 
     //if there is a whois object
     if (listing_info.whois && listing_info.whois.Registrar){
         step1_text.text("Go to your registrar (" + listing_info.whois.Registrar + ") and log in.");
-        step1_button.attr('href', listing_info.whois["Registrar URL"]).html("<span class='icon is-small'><i class='fa fa-external-link'></i></span><span>Open my registrar</span>");
+        step1_button.attr('href', listing_info.whois["Registrar URL"]).html("<span class='icon is-small'><i class='fa fa-external-link'></i></span><span>Open my registrar.</span>");
         step2_button.attr('href', "https://www.google.com/search?q=create+a+record+" + listing_info.whois.Registrar + "&btnI");
     }
 
@@ -206,18 +206,21 @@ function createVerifiedDrop(listing_info, cb_when_verified){
         unverified_step2.append(step2_control.append(step2_button, step2_button_next));
 
     //step 3 - point A record
-    var step3_control = $("<div class='control has-icon is-grouped'></div>");
-        step3_copy_button = $("<i class='has-border-right fa fa-clipboard'></i>");
+    var step3_control = $("<div class='control has-addons is-grouped'></div>");
+        step3_copy_button = $("<button class='button no-shadow is-accent'><span class='is-small icon'><i class='fa fa-clipboard'></i></span></button>");
     var step3_button_next = $("<a class='button is-primary'><span>Okay, I've pointed the A Record.</span><span class='icon'><i class='fa fa-angle-right'></i></span></a>");
-        unverified_step3.append(step3_control.append(step3_button, step3_button_next));
+        unverified_step3.append(step3_control.append(step3_copy_button, step3_button, step3_button_next));
 
     step3_copy_button.click(function(){
-        console.log('s')
+        $(this).next("input").select();
+        document.execCommand("copy");
+        $(this).next("input").blur();
+        $(this).find("i").removeClass("fa-clipboard").addClass('fa-check-square-o');
     });
 
     //step 4 - verify
     var step4_control = $("<div class='control is-grouped'></div>");
-    var step4_button_next = $("<a class='button is-primary verify-link'><span>Verify this domain</span><span class='icon'><i class='fa fa-angle-down'></i></span></a>");
+    var step4_button_next = $("<a class='button margin-right-10 is-primary verify-link'><span>Verify this domain.</span><span class='is-small icon'><i class='fa fa-check-square'></i></span></a>");
         unverified_step4.append(step4_control.append(step4_button_next));
 
     //click to next
@@ -243,7 +246,19 @@ function createVerifiedDrop(listing_info, cb_when_verified){
             }
             else {
                 unverified_a.addClass('is-danger');
-                unverified_a.text("Failed to verify! Please try again later.");
+                unverified_a.text("Failed to verify! Please try again.");
+
+                //back to step 1
+                var back_to_step1 = $("<a class='button is-primary'><span>Go back to step 1.</span><span class='is-small icon'><i class='fa fa-undo'></i></span></a>");
+                back_to_step1.click(function(){
+                    var current_step = $(this).closest(".content").addClass("is-hidden");
+                    var next_step = $(this).closest(".column").find(">:first-child").removeClass('is-hidden');
+                    unverified_a.removeClass('is-danger');
+                    unverified_a.html("<span>Verify this domain.</span><span class='is-small icon'><i class='fa fa-check-square'></i></span>");
+                    $(this).remove();
+                });
+
+                unverified_a.after(back_to_step1);
             }
         });
     });
