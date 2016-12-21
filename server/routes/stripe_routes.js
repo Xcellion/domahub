@@ -43,6 +43,9 @@ function switchEvents(event, res){
 			case "customer.deleted":
 				handleCustomerDelete(event);
 				break;
+			case "customer.subscription.deleted":
+				handleSubscriptionCancel(event);
+				break;
 			case "account.application.deauthorized":
 				handleAccountDeauthorized(event);
 				break;
@@ -65,6 +68,11 @@ function handleAccountDeauthorized(event){
 //deleted a customer
 function handleCustomerDelete(event){
 	updateAccountStripeCustomerID(event.data.object, false);
+}
+
+//cancelled subscription (at period end, or immediate)
+function handleSubscriptionCancel(event){
+	updateListingBasic(event.data.object);
 }
 
 //-------------------------------------------------------------------------------------------------------------------HELPER FUNCTIONS
@@ -111,6 +119,32 @@ function updateAccountStripeUserID(stripe_user_id){
 			}
 			else {
 				console.log("Something went wrong with Stripe user" + stripe_user_id + " revoking access...");
+			}
+		});
+	}
+}
+
+//helper to renew or remove listing premium subscription on domahub db
+function updateListingBasic(subscription){
+	var listing_id = subscription.metadata.insert_id;
+
+	var new_listing_info = [[
+		listing_id,
+		"month",
+		25,
+		"",
+		0,
+		false
+	]]
+
+	//update the domahub DB appropriately
+	if (listing_id){
+		Listing.updateListingsBasic(new_listing_info, function(result){
+			if (result.state == "success"){
+				console.log("Reverting listing #" + listing_id + " to basic...");
+			}
+			else {
+				console.log("Something went wrong with renewing Premium status for listing #" + listing_id + "!");
 			}
 		});
 	}
