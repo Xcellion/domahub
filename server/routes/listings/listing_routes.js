@@ -126,7 +126,7 @@ module.exports = function(app, db, auth, error, stripe){
 		owner_functions.checkListingVerified,
 		stripe.createStripeCustomer,
 		stripe.createSingleStripeSubscription,
-		owner_functions.updateListing	//only if we're renewing a subscription
+		owner_functions.updateListing
 	]);
 
 	//degrade listing to basic
