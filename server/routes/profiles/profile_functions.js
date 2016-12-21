@@ -51,9 +51,6 @@ module.exports = {
 					//wait for all promises
 					Q.allSettled(whois_promises)
 					 .then(function(results) {
-						 for (var y = 0; y < results.length; y++){
-							 console.log(req.user[y]);
-						 };
 						 next();
 					 });
 

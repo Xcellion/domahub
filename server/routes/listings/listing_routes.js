@@ -80,7 +80,7 @@ module.exports = function(app, db, auth, error, stripe){
 	]);
 
 	//verify that someone changed their DNS to point to domahub
-	app.get('/listing/:domain_name/verify', [
+	app.post('/listing/:domain_name/verify', [
 		auth.checkLoggedIn,
 		checkDomainValid,
 		checkDomainListed,

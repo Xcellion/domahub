@@ -681,12 +681,14 @@ module.exports = {
 
 	//function to verify ownership of a listing
 	verifyListing: function(req, res, next){
+		console.log("F: Attempting to verify this listing...");
+
 		domain_name = req.params.domain_name;
 		dns.lookup(domain_name, function (err, address, family) {
 			if (err){error.handler(req, res, "DNS error!", "json")};
 
 			domain_ip = address;
-			dns.lookup("domahub.com", function (err, address, family) {
+			dns.lookup("domain_name", function (err, address, family) {
 				if (domain_ip == address){
 					req.new_listing_info = {
 						domain_name: domain_name,
