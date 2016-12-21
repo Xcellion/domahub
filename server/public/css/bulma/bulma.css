@@ -801,9 +801,11 @@ table {
   margin: 0 !important; }
 
 .box {
+  -webkit-box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+  -moz-box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
   background-color: white;
   border-radius: 5px;
-  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
   display: block;
   padding: 20px; }
   .box.no-shadow {
@@ -824,9 +826,13 @@ table {
       margin-bottom: 15px; }
     .box.is-domain-listing:hover {
       cursor: pointer;
+      -webkit-box-shadow: 3px 2px 2px 0 rgba(0, 0, 0, 0.14), 0 -1px 2px -1px rgba(0, 0, 0, 0.2), -3px 5px 5px 0 rgba(0, 0, 0, 0.12);
+      -moz-box-shadow: 3px 2px 2px 0 rgba(0, 0, 0, 0.14), 0 -1px 2px -1px rgba(0, 0, 0, 0.2), -3px 5px 5px 0 rgba(0, 0, 0, 0.12);
       box-shadow: 3px 2px 2px 0 rgba(0, 0, 0, 0.14), 0 -1px 2px -1px rgba(0, 0, 0, 0.2), -3px 5px 5px 0 rgba(0, 0, 0, 0.12); }
     .box.is-domain-listing:active, .box.is-domain-listing:focus, .box.is-domain-listing.is-active {
       outline: none;
+      -webkit-box-shadow: 3px 10px 10px 0 rgba(0, 0, 0, 0.14), 0 -1px 5px -2px rgba(0, 0, 0, 0.2), -3px 10px 10px 0 rgba(0, 0, 0, 0.12);
+      -moz-box-shadow: 3px 10px 10px 0 rgba(0, 0, 0, 0.14), 0 -1px 5px -2px rgba(0, 0, 0, 0.2), -3px 10px 10px 0 rgba(0, 0, 0, 0.12);
       box-shadow: 3px 10px 10px 0 rgba(0, 0, 0, 0.14), 0 -1px 5px -2px rgba(0, 0, 0, 0.2), -3px 10px 10px 0 rgba(0, 0, 0, 0.12); }
 
 .box-flip {
@@ -834,9 +840,11 @@ table {
   -o-transition: all 0.25s ease;
   -webkit-transition: all 0.25s ease;
   transition: all 0.25s ease;
+  -webkit-box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+  -moz-box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
   background-color: white;
   border-radius: 5px;
-  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
@@ -846,9 +854,13 @@ table {
   width: 345px; }
   .box-flip:hover {
     cursor: pointer;
+    -webkit-box-shadow: 3px 2px 2px 0 rgba(0, 0, 0, 0.14), 0 -1px 2px -1px rgba(0, 0, 0, 0.2), -3px 5px 5px 0 rgba(0, 0, 0, 0.12);
+    -moz-box-shadow: 3px 2px 2px 0 rgba(0, 0, 0, 0.14), 0 -1px 2px -1px rgba(0, 0, 0, 0.2), -3px 5px 5px 0 rgba(0, 0, 0, 0.12);
     box-shadow: 3px 2px 2px 0 rgba(0, 0, 0, 0.14), 0 -1px 2px -1px rgba(0, 0, 0, 0.2), -3px 5px 5px 0 rgba(0, 0, 0, 0.12); }
   .box-flip:active, .box-flip:focus, .box-flip.is-active {
     outline: none;
+    -webkit-box-shadow: 3px 10px 10px 0 rgba(0, 0, 0, 0.14), 0 -1px 5px -2px rgba(0, 0, 0, 0.2), -3px 10px 10px 0 rgba(0, 0, 0, 0.12);
+    -moz-box-shadow: 3px 10px 10px 0 rgba(0, 0, 0, 0.14), 0 -1px 5px -2px rgba(0, 0, 0, 0.2), -3px 10px 10px 0 rgba(0, 0, 0, 0.12);
     box-shadow: 3px 10px 10px 0 rgba(0, 0, 0, 0.14), 0 -1px 5px -2px rgba(0, 0, 0, 0.2), -3px 10px 10px 0 rgba(0, 0, 0, 0.12); }
 
 .box-footer {
@@ -2562,6 +2574,8 @@ input:-webkit-autofill {
   margin-bottom: 20px;
   width: 100%; }
   .table.has-shadow {
+    -webkit-box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+    -moz-box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
     box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12); }
   .table.no-borders td,
   .table.no-borders th {
@@ -3271,9 +3285,11 @@ input:-webkit-autofill {
     margin-right: 5px; }
 
 .card {
+  -webkit-box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+  -moz-box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
   background-color: white;
   border-radius: 3px;
-  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
   color: rgba(0, 0, 0, 0.9);
   max-width: 100%;
   position: relative;
@@ -3308,9 +3324,13 @@ input:-webkit-autofill {
     -webkit-transition: all 0.25s ease;
     transition: all 0.25s ease; }
     .card.has-shadow-effect:hover {
+      -webkit-box-shadow: 3px 2px 2px 0 rgba(0, 0, 0, 0.14), 0 -1px 2px -1px rgba(0, 0, 0, 0.2), -3px 5px 5px 0 rgba(0, 0, 0, 0.12);
+      -moz-box-shadow: 3px 2px 2px 0 rgba(0, 0, 0, 0.14), 0 -1px 2px -1px rgba(0, 0, 0, 0.2), -3px 5px 5px 0 rgba(0, 0, 0, 0.12);
       box-shadow: 3px 2px 2px 0 rgba(0, 0, 0, 0.14), 0 -1px 2px -1px rgba(0, 0, 0, 0.2), -3px 5px 5px 0 rgba(0, 0, 0, 0.12); }
     .card.has-shadow-effect:active, .card.has-shadow-effect:focus, .card.has-shadow-effect.is-active {
       outline: none;
+      -webkit-box-shadow: 3px 10px 10px 0 rgba(0, 0, 0, 0.14), 0 -1px 5px -2px rgba(0, 0, 0, 0.2), -3px 10px 10px 0 rgba(0, 0, 0, 0.12);
+      -moz-box-shadow: 3px 10px 10px 0 rgba(0, 0, 0, 0.14), 0 -1px 5px -2px rgba(0, 0, 0, 0.2), -3px 10px 10px 0 rgba(0, 0, 0, 0.12);
       box-shadow: 3px 10px 10px 0 rgba(0, 0, 0, 0.14), 0 -1px 5px -2px rgba(0, 0, 0, 0.2), -3px 10px 10px 0 rgba(0, 0, 0, 0.12); }
   .card.min-height {
     min-height: 350px; }
@@ -4258,9 +4278,11 @@ input:-webkit-autofill {
     background-color: #EF5350; }
 
 .message {
+  -webkit-box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+  -moz-box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
   background-color: white;
-  border-radius: 3px;
-  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12); }
+  border-radius: 3px; }
   .message.no-shadow {
     -webkit-box-shadow: 0 0 0 0 black;
     -moz-box-shadow: 0 0 0 0 black;
@@ -4763,6 +4785,8 @@ a.nav-item.is-tab {
 .panel {
   border: 1px solid rgba(0, 0, 0, 0.12);
   border-radius: 5px;
+  -webkit-box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+  -moz-box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
   box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12); }
   .panel.no-shadow {
     -webkit-box-shadow: 0 0 0 0 black;
@@ -4862,7 +4886,6 @@ a.nav-item.is-tab {
       -webkit-box-shadow: 0 0 0 0 black;
       -moz-box-shadow: 0 0 0 0 black;
       box-shadow: 0 0 0 0 black;
-      background-color: white;
       border-color: rgba(0, 0, 0, 0.9);
       z-index: 2; }
   .tabs.is-toggle li + li {
@@ -4882,8 +4905,7 @@ a.nav-item.is-tab {
     .tabs.is-toggle li.is-active a:hover, .tabs.is-toggle li.is-active a:focus {
       -webkit-box-shadow: 0 0 0 0 black;
       -moz-box-shadow: 0 0 0 0 black;
-      box-shadow: 0 0 0 0 black;
-      background-color: #247054; }
+      box-shadow: 0 0 0 0 black; }
   .tabs.is-toggle ul {
     border-bottom: none; }
   .tabs.is-small {
