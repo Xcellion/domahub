@@ -13,63 +13,54 @@
 <body>
 	<%- include("../templates/navbar", {user: user}); %>
 
-	<div class="container clear-nav-profile">
-    <%# <div class="tabs is-centered">
-    	<ul>
-        <li><a href="/profile/dashboard" tabindex="1">Dashboard</a></li>
-        <li><a href="/profile/messages" tabindex="1">Messages</a></li>
-        <li><a href="/profile/mylistings" tabindex="1">Listings</a></li>
-        <li class="is-active"><a href="/profile/myrentals" tabindex="1">Rentals</a></li>
-        <li><a href="/profile/settings" tabindex="1">Settings</a></li>
-      </ul>
-    </div>%>
-	</div>
-
-	<section class="section min-height">
+	<section class="section is-medium min-height">
 		<div class="container">
 			<div class="columns">
-				<div class="column">
+				<div class="column is-half">
+					<h1 class="title is-3">My Rentals</h1>
+					<div class="control has-icon">
+						<input id="search-domain" tabindex="1" class="input" type="text" placeholder="Search my rentals" />
+						<i class="fa fa-search"></i>
+					</div>
 
-					<div id="no-rows" class="box has-text-centered is-hidden">
+					<nav class="level filter-panel">
+						<div class="level-item">
+							<a class="is-active filter-local" id="reset_filter" tabindex="1">
+								View All
+							</a>
+						</div>
+						<div class="level-item">
+							<a class="filter-local" id="expiring_filter" tabindex="1">
+								Expiring
+							</a>
+						</div>
+						<div class="level-item">
+							<a class="filter-local" id="expired_filter" tabindex="1">
+								Expired
+							</a>
+						</div>
+						<div class="level-item">
+							<a class="filter-local" id="active_filter" tabindex="1">
+								Active
+							</a>
+						</div>
+						<div class="level-item">
+							<a class="filter-local" id="inactive_filter" tabindex="1">
+								Inactive
+							</a>
+						</div>
+					</nav>
+				</div>
+			</div>
+			<div class="columns">
+				<div class="column is-12">
+
+					<div id="no-rows" class="has-text-centered is-hidden padding-20">
 						There are no rentals!
 					</div>
 
 					<div class="rows-exist">
-
-						<div class="control has-icon">
-							<input id="search-domain" tabindex="1" class="input" type="text" placeholder="Search rentals" />
-							<i class="fa fa-search"></i>
-						</div>
-
-						<nav class="level filter-panel">
-							<div class="level-item">
-								<a class="is-active filter-local" id="reset_filter" tabindex="1">
-									View All
-								</a>
-							</div>
-							<div class="level-item">
-								<a class="filter-local" id="expiring_filter" tabindex="1">
-									Expiring
-								</a>
-							</div>
-							<div class="level-item">
-								<a class="filter-local" id="expired_filter" tabindex="1">
-									Expired
-								</a>
-							</div>
-							<div class="level-item">
-								<a class="filter-local" id="active_filter" tabindex="1">
-									Active
-								</a>
-							</div>
-							<div class="level-item">
-								<a class="filter-local" id="inactive_filter" tabindex="1">
-									Inactive
-								</a>
-							</div>
-						</nav>
-
-						<table class="table has-shadow margin-top-20">
+						<table class="table has-shadow">
 							<thead class="has-shadow">
 								<tr>
 									<th class="td-arrow"></th>
