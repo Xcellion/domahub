@@ -4497,7 +4497,14 @@ input:-webkit-autofill {
   color: rgba(0, 0, 0, 0.9);
   padding: 5px; }
   .nav-link:hover, .nav-link:active, .nav-link:focus, .nav-link.is-active {
-    color: rgba(0, 0, 0, 0.66); }
+    opacity: 0.5; }
+  @media screen and (max-width: 768px) {
+    .nav-link:hover, .nav-link:focus {
+      -moz-transform: translate(-8px, 0);
+      -o-transform: translate(-8px, 0);
+      -ms-transform: translate(-8px, 0);
+      -webkit-transform: translate(-8px, 0);
+        -webkit-transform-transform: translate(-8px, 0); } }
 
 .nav-item {
   align-items: center;

@@ -13,7 +13,11 @@
   &:active,
   &:focus,
   &.is-active
-    color: $text-light
+    opacity: 0.5
+  +mobile
+    &:hover,
+    &:focus
+      +translate(-8px,0)
 
 .nav-item
   align-items: center
