@@ -11,12 +11,7 @@ function createRow(listing_info, rownum){
     var tempRow = $("<tr class='row-disp" + verified_row + "' id='row" + rownum + "'></tr>");
     tempRow.append(createArrow(listing_info));
     tempRow.append(createDomain(listing_info));
-    if (verified){
-        tempRow.append(createView(listing_info));
-    }
-    else {
-        tempRow.append("<td></td>")
-    }
+    tempRow.append(createView(listing_info));
     tempRow.append(createType(listing_info));
     tempRow.append(createVerify(listing_info, verified));
     tempRow.append(createStatus(listing_info, verified));
@@ -37,7 +32,23 @@ function createRow(listing_info, rownum){
     return tempRow;
 }
 
-//function to create the listing price type td
+//function to create the dropdown arrow
+function createArrow(listing_info){
+    var temp_td = $("<td class='td-visible td-arrow'></td>");
+    if (listing_info.verified){
+        var temp_span = $("<span class='icon'></span>");
+        var temp_i = $("<i class='fa fa-angle-right'></i>");
+    }
+    else {
+        var temp_span = $("<span class='icon is-small is-danger'></span>");
+        var temp_i = $("<i class='fa fa-exclamation-triangle'></i>");
+    }
+    temp_td.append(temp_span.append(temp_i));
+
+    return temp_td;
+}
+
+//function to create the listing type td
 function createType(listing_info){
     var text = (listing_info.exp_date >= new Date().getTime()) ? "Premium" : "Basic";
     var temp_td = $("<td class='td-visible td-type'>" + text + "</td>");
@@ -49,7 +60,6 @@ function createType(listing_info){
 function createVerify(listing_info, bool){
     var temp_td = $("<td class='td-visible td-verify'></td>");
         var temp_a = $("<p class='is-danger verify-link'></p>");
-            temp_a.data("href", '/listing/' + listing_info.domain_name + '/verify');
             var temp_span2 = $("<span>Unverified</span>");
 
     //hide if verified
@@ -87,19 +97,24 @@ function createPriceType(listing_info){
 
 //function to create the tv icon
 function createView(listing_info){
-    var temp_td = $("<td class='td-visible td-view'></td>");
+    if (listing_info.verified){
+        var temp_td = $("<td class='td-visible td-view'></td>");
         var temp_a = $("<a class='button no-shadow' target='_blank' style='target-new: tab;' href='/listing/" + listing_info.domain_name + "'></a>");
-            var temp_span = $("<span class='icon'></span>");
-                var temp_i = $("<i class='fa fa-external-link'></i>");
-            var temp_span2 = $("<span>View</span>");
-    temp_td.append(temp_a.append(temp_span.append(temp_i), temp_span2));
+        var temp_span = $("<span class='icon'></span>");
+        var temp_i = $("<i class='fa fa-external-link'></i>");
+        var temp_span2 = $("<span>View</span>");
+        temp_td.append(temp_a.append(temp_span.append(temp_i), temp_span2));
 
-    //prevent clicking view from dropping down row
-    temp_td.click(function(e) {
-        e.stopPropagation();
-    });
+        //prevent clicking view from dropping down row
+        temp_td.click(function(e) {
+            e.stopPropagation();
+        });
 
-    return temp_td;
+        return temp_td;
+    }
+    else {
+        return "<td></td>";
+    }
 }
 
 // --------------------------------------------------------------------------------- CREATE DROP
@@ -147,29 +162,56 @@ function createRowDrop(listing_info, rownum){
 }
 
 //function to create the verified overlay
-function createVerifiedDrop(listing_info){
-  var unverified_container = $("<div class='verification-container'></div>");
-        var unverified_columns_header = $("<div class='columns'></div>");
-        var unverified_columns_steps = $("<div class='columns'></div>");
-            var unverified_column_step0 = $("<div class='column'></div>");
-            var unverified_column0 = $("<div class='column is-3 flex-column-center'></div>");
-            var unverified_column1 = $("<div class='column is-1 flex-column-center'></div>");
-            var unverified_column2 = $("<div class='column is-3 flex-column-center'></div>");
-            var unverified_column3 = $("<div class='column is-1 flex-column-center'></div>");
-            var unverified_column4 = $("<div class='column is-3 flex-column-center'></div>");
-                var unverified_step0_content = $("<div class='content'></div>");
-                    var unverified_h3 = $("<h3 class='is-bold'>You must first verify that you own this domain.</h3>");
-                    var unverified_button = $("<a class='button is-primary verify-link'></a>");
-                        unverified_button.data("href", '/listing/' + listing_info.domain_name + '/verify');
-                        var unverified_span2 = $("<span>Click here to Verify</span></a>");
-                        unverified_button.append(unverified_span2);
-                    var unverified_faq = $("<p>Click <a target='_blank' style'target-new: tab;' class='orange-link margin-bottom-25' href='/faq#verifying'>here</a> for more information on domain verification.</p>");
-                    var unverified_icon0 = $("<figure class='image is-32x32'><img src='/images/lib/material/arrow-right.svg' /></figure>");
-                    var unverified_icon1 = $("<figure class='image is-32x32'><img src='/images/lib/material/arrow-right.svg' /></figure>");
-                    var unverified_step1 = $("<div class='content'><h3 class='is-blacklight is-bold'>Step 1</h3> <p>Create a new <strong>A Record</strong> for your domain name.</p></div>");
-                    var unverified_step2 = $("<div class='content'><h3 class='is-blacklight is-bold'>Step 2</h3> <p>Point the new <strong>A Record</strong> to DomaHub servers at 208.68.37.82</p></div>");
-                    var unverified_step3 = $("<div class='content'><h3 class='is-blacklight is-bold'>Step 3</h3> </div>");
+function createVerifiedDrop(listing_info, cb_when_verified){
+    var unverified_container = $("<div class='verification-container'></div>");
+    var unverified_columns_header = $("<div class='columns'></div>");
+    var unverified_columns_steps = $("<div class='columns'></div>");
+    var unverified_column_step0 = $("<div class='column'></div>");
 
+    //columns for the steps
+    var unverified_column1 = $("<div class='column is-2 flex-column-center'></div>");
+    var unverified_column2 = $("<div class='column is-2 flex-column-center'></div>");
+    var unverified_column3 = $("<div class='column is-2 flex-column-center'></div>");
+    var unverified_column4 = $("<div class='column is-2 flex-column-center'></div>");
+
+    //columns for the arrows
+    var unverified_column_arrow1 = $("<div class='column is-1 flex-column-center'></div>");
+        unverified_column_arrow1.append("<figure class='image is-32x32'><img src='/images/lib/material/arrow-right.svg' /></figure>");
+    var unverified_column_arrow2 = $("<div class='column is-1 flex-column-center'></div>");
+        unverified_column_arrow2.append("<figure class='image is-32x32'><img src='/images/lib/material/arrow-right.svg' /></figure>");
+    var unverified_column_arrow3 = $("<div class='column is-1 flex-column-center'></div>");
+        unverified_column_arrow3.append("<figure class='image is-32x32'><img src='/images/lib/material/arrow-right.svg' /></figure>");
+
+    var unverified_step0_content = $("<div class='content'></div>");
+    var unverified_h3 = $("<h3 class='is-bold'>You must verify that you own this domain.</h3>");
+    var unverified_faq = $("<p>Click <a target='_blank' style'target-new: tab;' class='orange-link margin-bottom-25' href='/faq#verifying'>here</a> for more information on domain verification.</p>");
+
+    var unverified_step1 = $("<div class='content'><h3 class='is-blacklight is-bold'>Step 1<a class='button'>Done</a></h3></div>");
+    var unverified_step2 = $("<div class='content'><h3 class='is-blacklight is-bold'>Step 2</h3><p>Create a new <strong>A Record</strong> for your domain.</div>");
+    var unverified_step3 = $("<div class='content'><h3 class='is-blacklight is-bold'>Step 3</h3><p>Point the new <strong>A Record</strong> to DomaHub servers at <strong>208.68.37.82</strong></p></div>");
+    var unverified_step4 = $("<div class='content'><h3 class='is-blacklight is-bold'>Step 4</h3></div>");
+
+    //button to verify
+    var unverified_button = $("<a class='button is-primary verify-link'></a>");
+        unverified_button.data("href", '/listing/' + listing_info.domain_name + '/verify');
+    var unverified_span2 = $("<span>Click here to Verify</span></a>");
+        unverified_button.append(unverified_span2);
+
+    //if there is a whois object
+    if (listing_info.whois && listing_info.whois.Registrar){
+        unverified_step1.append("<p>Go to your registrar (" + listing_info.whois.Registrar + ") and log in.")
+        unverified_step1.append($("<a target='_blank' href=" + listing_info.whois["Registrar URL"] + " class='button is-primary'>Open my registrar</a>"));
+
+        unverified_step2.append("<a class='orange-link' href='https://www.google.com/search?q=create+a+record+" + listing_info.whois.Registrar + "&btnI'>How do I create a new A Record?</a>");
+    }
+    else {
+        unverified_step1.append("<p>Go to your registrar and log in.")
+        unverified_step1.append($("<a class='button is-primary' target='_blank' href='https://whois.icann.org/en/lookup?name=" + listing_info.domain_name + "'>Help me find my registrar</a>"));
+
+
+    }
+
+    //ajax to make sure it's all done, then display a regular row if verified
     unverified_button.off().click(function(e){
         e.preventDefault();
         var unverified_a = $(this);
@@ -188,15 +230,17 @@ function createVerifiedDrop(listing_info){
             }
         });
     });
+
     return unverified_container.append(unverified_columns_header.append(unverified_column_step0.append(unverified_step0_content.append(unverified_h3, unverified_faq))),
            unverified_columns_steps.append(
-           unverified_column0.append(unverified_step1),
-           unverified_column1.append(unverified_icon0),
+           unverified_column1.append(unverified_step1),
+           unverified_column_arrow1,
            unverified_column2.append(unverified_step2),
-           unverified_column3.append(unverified_icon1),
-           unverified_column4.append(
-           unverified_step3, unverified_button)
-           ));
+           unverified_column_arrow2,
+           unverified_column3.append(unverified_step3),
+           unverified_column_arrow3,
+           unverified_column4.append(unverified_step4, unverified_button)
+       ));
 }
 
 //function to create the select dropdown for listing status
@@ -293,7 +337,34 @@ function createInfoDrop(listing_info){
 
 //function to create the delete button
 function createDeleteButton(listing_info){
-    return $('<a href="/listing/' + listing_info.domain_name + '/delete" class="button is-danger">Delete Listing</a>');
+    var temp_delete_button = $('<a class="button is-danger">Delete Listing</a>');
+
+    //click to delete
+    temp_delete_button.on("click", function(){
+        var delete_button = $(this);
+        delete_button.text("Are you sure?");
+        delete_button.off().on('click', function(){
+
+            $.ajax({
+                url: "/listing/" + listing_info.domain_name + "/delete",
+                method: "POST"
+            }).done(function(data){
+                var row_drop = delete_button.closest(".row-drop");
+                var row = row_drop.prev(".row-disp");
+
+                if (data.state == "success"){
+                    listings = data.listings;
+                    row_drop.remove();
+                    row.remove();
+                }
+                else {
+                    errorMessage(row_drop.find(".listing-msg-error"), data.message);
+                }
+            });
+        });
+    });
+
+    return temp_delete_button;
 }
 
 //function to create the premium drop down column
@@ -405,7 +476,7 @@ function createImgDrop(listing_info, rownum){
 function createPriceRateDrop(listing_info){
     var new_td = $("<td class='td-visible td-price-rate-drop is-hidden'></td>");
         var temp_form = $("<form class='drop-form'></form>");
-        var temp_input = $("<input class='price-rate-input has-text-right input changeable-input'></input>");
+        var temp_input = $("<input type='number' min='1' step='1' class='price-rate-input has-text-right input changeable-input'></input>");
             temp_input.val(listing_info.price_rate);
             temp_input.data("name", "price_rate");
     new_td.append(temp_form.append(temp_input));

@@ -47,6 +47,10 @@ $(document).ready(function() {
         $(".filter-local").removeClass('is-active');
         $(this).addClass("is-active");
 
+        //remove any sort
+        $(".sort-asc, .sort-desc").addClass("is-hidden");
+        $(".sort-none").removeClass("is-hidden");
+
         var temp_rows = [];
 
         for (var x = 0; x < data_to_display.length; x++){
@@ -91,13 +95,13 @@ $(document).ready(function() {
 function filterCheck(type, data){
     //listings
     if (type == "rented_filter"){
-        return data.rented == 1 && data.status != 0;
+        return data.rented == 1 && data.verified;
     }
     else if (type == "premium_filter"){
-        return data.exp_date != 0 && data.status != 0;
+        return data.exp_date != 0 && data.verified;
     }
     else if (type == "basic_filter"){
-        return data.exp_date == 0 && data.status != 0;
+        return data.exp_date == 0 && data.verified;
     }
     else if (type == "unverified_filter"){
         return data.verified == null;
@@ -421,16 +425,6 @@ function createDomain(row_info){
     return temp_td;
 }
 
-//function to create the dropdown arrow
-function createArrow(){
-    var temp_td = $("<td class='td-visible td-arrow'></td>");
-    var temp_span = $("<span class='icon'></span>");
-    var temp_i = $("<i class='fa fa-angle-right'></i>");
-    temp_td.append(temp_span.append(temp_i));
-
-    return temp_td;
-}
-
 // --------------------------------------------------------------------------------- EDIT ROW
 
 //helper function to bind to inputs to listen for any changes from existing listing info
@@ -481,20 +475,14 @@ function dropRow(row, editing){
 function editArrow(row, editing){
     var edit_td = row.find(".td-arrow").find("i");
     if (editing){
-        if (row.hasClass('unverified-row')){
-            edit_td.parent("span").addClass("is-danger");
-        }
-        else {
+        if (!row.hasClass('unverified-row')){
             edit_td.parent("span").addClass("is-active");
+            edit_td.addClass("fa-rotate-90");
         }
-        edit_td.addClass("fa-rotate-90");
     }
     else {
         edit_td.removeClass("fa-rotate-90");
-        if (row.hasClass('unverified-row')){
-            edit_td.parent("span").removeClass("is-danger");
-        }
-        else {
+        if (!row.hasClass('unverified-row')){
             edit_td.parent("span").removeClass("is-active");
         }
     }
