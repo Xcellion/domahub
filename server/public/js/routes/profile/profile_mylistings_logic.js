@@ -376,7 +376,7 @@ function createImgDrop(listing_info, rownum){
     var temp_footer = $("<footer class='card-footer'></div>");
     var temp_form = $('<form id="mult-form' + rownum + '" class="drop-form-file" action="/listings/create/multiple" method="post" enctype="multipart/form-data"></form>')
     var temp_input = $('<input type="file" id="file' + rownum + '" name="background_image" accept="image/png, image/gif, image/jpeg" class="picture-file changeable-input input-file ' + verified_disabled + '" />');
-    var temp_input_label = $('<label for="file' + rownum + '" class="button is-fullwidth ' + verified_disabled + '"><i class="fa fa-upload"></i><p class="file-label">Upload Picture</p></label>');
+    var temp_input_label = $('<label for="file' + rownum + '" class="button is-fullwidth no-shadow' + verified_disabled + '"><i class="fa fa-upload"></i><p class="file-label">Upload Picture</p></label>');
     temp_input.data("name", "background_image");
     temp_col.append(temp_div.append(temp_div_image.append(temp_figure.append(temp_x, temp_img)), temp_footer.append(temp_form.append(temp_input, temp_input_label))));
 
