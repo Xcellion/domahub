@@ -72,6 +72,8 @@ module.exports = {
 							if (err){stripeErrorHandler(req, res, err)}
 							else {
 								req.new_listing_info = {
+									stripe_subscription_id : subscription.id,
+									exp_date : subscription.current_period_end * 1000,
 									expiring: false
 								}
 								next();
@@ -91,18 +93,17 @@ module.exports = {
 				customer: req.user.stripe_customer_id,
 				plan: "premium",
 				metadata: {
-					"domain_name" : domain_name,
-					"listing_id" : listing_info.id,
-					//"minute_price": req.body.minute_price || 1,
-					"hour_price": req.body.hour_price || 1,
-					"day_price": req.body.day_price || 10,
-					"week_price": req.body.week_price || 25,
-					"month_price": req.body.month_price || 50
+					"insert_id" : listing_info.id
 				}
 			}, function(err, subscription) {
 				if (err){stripeErrorHandler(req, res, err)}
 				else {
-					stripeSubscriptionHandler(subscription, req, res, listing_info);
+					req.new_listing_info = {
+						stripe_subscription_id : subscription.id,
+						exp_date : subscription.current_period_end * 1000,
+						expiring: false
+					}
+					next();
 				}
 			});
 		}
@@ -125,14 +126,9 @@ module.exports = {
 				if (err){stripeErrorHandler(req, res, err)}
 				else {
 
-					//revert to basic prices
-					var temp_price_rate = (listing_info.price_type == "month") ? 25 : 10;
-					var temp_price_type = (listing_info.price_type == "month") ? "month" : "week";
-
+					//set expiring flag
 					req.new_listing_info = {
-						expiring: true,
-						price_type : temp_price_type,
-						price_rate : temp_price_rate
+						expiring: true
 					}
 					next();
 				}
@@ -411,8 +407,10 @@ function stripeErrorHandler(req, res, err){
 
 //helper function to handle successful stripe subscriptions
 function stripeSubscriptionHandler(subscription, req, res, listing_info){
-	listing_info.stripe_subscription_id = subscription.id;
-	listing_info.exp_date = subscription.current_period_end * 1000		//stripe doesnt count the time, only days
+	req.new_listing_info = {
+		stripe_subscription_id : subscription.id,
+		exp_date : subscription.current_period_end * 1000
+	}
 	res.json({
 		state: "success",
 		listings: req.user.listings,
