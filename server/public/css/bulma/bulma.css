@@ -4052,11 +4052,12 @@ input:-webkit-autofill {
     .level.filter-panel .filter-local {
       font-size: 14px;
       color: rgba(0, 0, 0, 0.9); }
-      .level.filter-panel .filter-local:hover {
+      .level.filter-panel .filter-local:focus, .level.filter-panel .filter-local:hover {
         -webkit-box-shadow: 0 2px 0 0 black;
         -moz-box-shadow: 0 2px 0 0 black;
-        box-shadow: 0 2px 0 0 black; }
-      .level.filter-panel .filter-local:active, .level.filter-panel .filter-local:focus, .level.filter-panel .filter-local.is-active {
+        box-shadow: 0 2px 0 0 black;
+        outline: none; }
+      .level.filter-panel .filter-local.is-active {
         -webkit-box-shadow: 0 2px 0 0 #3cbc8d;
         -moz-box-shadow: 0 2px 0 0 #3cbc8d;
         box-shadow: 0 2px 0 0 #3cbc8d;
