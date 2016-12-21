@@ -369,6 +369,14 @@ listing_model.prototype.deleteRental = function(rental_id, callback){
 	listing_query(query, "Failed to delete rental #" + rental_id + "!", callback, rental_id);
 }
 
+//deletes a specific listing
+listing_model.prototype.deleteListing = function(listing_id, callback){
+	console.log("DB: Attempting to delete listing #" + listing_id + "...");
+	query = "DELETE FROM listings \
+			WHERE id = ? "
+	listing_query(query, "Failed to delete listing #" + listing_id + "!", callback, listing_id);
+}
+
 //----------------------------------------------------------------------HELPER----------------------------------------------------------
 
 //helper function to change a date to UTC
