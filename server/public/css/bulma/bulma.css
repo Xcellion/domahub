@@ -2866,7 +2866,6 @@ input:-webkit-autofill {
   .delete:after, .modal-close:after {
     transform: rotate(-45deg); }
   .delete:hover, .modal-close:hover, .delete:focus, .modal-close:focus, .delete:active, .modal-close:active {
-    outline: none;
     background-color: rgba(0, 0, 0, 0.66); }
   .delete.is-small, .tag:not(.is-large) .delete, .tag:not(.is-large) .modal-close, .is-small.modal-close {
     height: 16px;
@@ -4452,12 +4451,13 @@ input:-webkit-autofill {
       width: 400px; } }
 
 .modal-close {
-  background: none;
-  height: 40px;
+  border: 2px solid white;
+  border-radius: 290486px;
+  height: 30px;
   position: fixed;
   right: 20px;
   top: 20px;
-  width: 40px; }
+  width: 30px; }
 
 .modal-card {
   background-color: white;
