@@ -186,7 +186,7 @@
   }
 }
 
-.has-borderRight {
+.has-border-right {
   @include tablet {
     border-right: 1px solid $border;
   }
@@ -195,15 +195,15 @@
   }
 }
 
-.has-borderBottom {
+.has-border-bottom {
   border-bottom: 1px solid $border;
 }
 
-.has-borderTop {
+.has-border-top {
   border-top: 1px solid $border;
 }
 
-.has-borderLeft {
+.has-border-left {
   @include tablet {
     border-left: 1px solid $border;
   }
