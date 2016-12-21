@@ -92,6 +92,16 @@ function createStatus(rental_info){
     return temp_td;
 }
 
+//function to create the dropdown arrow
+function createArrow(){
+    var temp_td = $("<td class='td-visible td-arrow'></td>");
+    var temp_span = $("<span class='icon'></span>");
+    var temp_i = $("<i class='fa fa-angle-right'></i>");
+    temp_td.append(temp_span.append(temp_i));
+
+    return temp_td;
+}
+
 // --------------------------------------------------------------------------------- CREATE ROW DROP
 
 //function to create the select dropdown for rental status

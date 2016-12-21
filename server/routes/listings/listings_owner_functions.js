@@ -7,20 +7,15 @@ var sanitize = require("sanitize-html");
 
 var multer = require("multer");
 var parse = require("csv-parse");
-var fs = require('fs')
+var fs = require('fs');
 
 module.exports = {
+
+	//------------------------------------------------------------------------------------------------------RENDERS
+
 	//function to display the create listing choice page
 	renderCreateListing : function(req, res, next){
 		res.render("listings/listing_create.ejs", {
-			user: req.user,
-			message: Auth.messageReset(req)
-		});
-	},
-
-	//function to display the create single listing page
-	renderCreateListingSingle : function(req, res, next){
-		res.render("listings/listing_create_single.ejs", {
 			user: req.user,
 			message: Auth.messageReset(req)
 		});
@@ -34,23 +29,7 @@ module.exports = {
 		});
 	},
 
-    //create a listing object for checking
-    createListingObject : function(req, res, next){
-		var db_object = [];
-		var date_now = new Date().getTime();
-
-		for (var x = 0; x < req.body.domain_names.length; x++){
-			db_object.push([
-				req.user.id,
-				date_now,
-				req.body.domain_names[x],
-				req.body.price_types[x],
-				req.body.price_rates[x]
-			]);
-		}
-		req.session.listing_db_object = db_object;
-		next();
-    },
+	//------------------------------------------------------------------------------------------------------CHECKS
 
 	//function to check all posted domain names
 	checkPostedDomains : function(req, res, next){
@@ -200,151 +179,6 @@ module.exports = {
 					premium_count : req.session.new_listings.premium_obj.count
 				});
 			}
-		}
-		else {
-			next();
-		}
-	},
-
-	//function to create the batch listings once done
-	createListings : function(req, res, next){
-		console.log("F: Creating listings to check for any existing...");
-
-		var db_object = req.session.new_listings.db_object;
-		Listing.newListings(db_object, function(result){
-			if (result.state=="error"){error.handler(req, res, result.info, "json");}
-			else {
-				var affectedRows = result.info.affectedRows;
-				//nothing created
-				if (affectedRows == 0){
-					sortListings(req.session.new_listings, db_object, []);
-					res.send({
-						bad_listings: req.session.new_listings.bad_listings,
-						good_listings: false
-					});
-				}
-				else {
-					//figure out what was created
-					Account.getAccountListings(req.user.id, function(result){
-						if (result.state=="error"){error.handler(req, res, result.info, "json");}
-						else {
-							//get the insert IDs and domain names of newly inserted listings
-							var newly_inserted_listings = findNewlyMadeListings(req.user.listings, result.info);
-							var inserted_ids = newly_inserted_listings.inserted_ids				//insert ids of all inserted domains
-							var inserted_domains = newly_inserted_listings.inserted_domains		//domain names of all inserted domains
-
-							//sort all the listings
-							sortListings(
-								req.session.new_listings,									//session listing object
-								db_object,													//db object used to insert
-								inserted_domains,											//domain names of all inserted domains
-								req.session.new_listings.premium_obj.domain_names,			//domain names of premium listings
-								inserted_ids
-							);
-
-							req.session.new_listings.inserted_ids = inserted_ids;
-							req.session.new_listings.inserted_domains = inserted_domains;
-
-							//revert the newly made listings verified to null
-							Listing.updateListingsVerified(inserted_ids, function(result){
-								delete req.user.listings;
-
-								if (req.body.stripeToken){
-									next();
-								}
-								else {
-									console.log(req.session.new_listings);
-									res.send({
-										bad_listings: req.session.new_listings.bad_listings,
-										good_listings: req.session.new_listings.good_listings
-									});
-								}
-							});
-						}
-					});
-				}
-			}
-		});
-	},
-
-	//function to update to premium since stripe stuff worked
-	updatePremium : function(req, res, next){
-		console.log("F: Updating Premium listings...");
-
-		//update the domahub DB appropriately
-		if (req.session.new_listings.premium_obj.db_success_obj.length > 0){
-			Listing.updateListingsPremium(req.session.new_listings.premium_obj.db_success_obj, function(result){
-			});
-		}
-
-		if (req.session.new_listings.premium_obj.db_failed_obj.length > 0){
-			Listing.updateListingsBasic(req.session.new_listings.premium_obj.db_failed_obj, function(result){
-			});
-		}
-
-		res.send({
-			bad_listings: req.session.new_listings.bad_listings,
-			good_listings: req.session.new_listings.good_listings
-		});
-		delete req.session.new_listings;
-	},
-
-	//function to format the listing info when creating a new listing
-	checkListingCreateInfo : function(req, res, next){
-		var domain_name = req.body.domain_name;
-
-		// var description = req.body.description;
-		// var categories = req.body.categories;
-		// var background_image = req.body.background_image;
-		// var buy_link = req.body.buy_link;
-
-		//check the posted info
-		if (!validator.isFQDN(req.body.domain_name)){
-			error.handler(req, res, "domain", "json");
-		}
-		// else if (!categories || categories.split(",").length == 0){
-		// 	error.handler(req, res, "category", "json");
-		// }
-		// else if (buy_link && !validator.isURL(buy_link, { protocols: ["http", "https"]})){
-		// 	error.handler(req, res, "buy", "json");
-		// }
-		// else if (background_image && !validator.isURL(background_image, { protocols: ["http", "https"]})){
-		// 	error.handler(req, res, "background", "json");
-		// }
-
-		else {
-			next();
-		}
-	},
-
-	//function to check the pricing of a premium listing
-	checkListingCreatePrice : function(req, res, next){
-		var stripeToken = req.body.stripeToken;
-
-		//var minute_price = req.body.minute_price || 1;
-		var hour_price = parseFloat(req.body.hour_price) || 1;
-		var day_price = parseFloat(req.body.day_price) || 10;
-		var week_price = parseFloat(req.body.week_price) || 25;
-		var month_price = parseFloat(req.body.month_price) || 50;
-
-		//check posted data
-		if (!stripeToken){
-			error.handler(req, res, "stripe", "json");
-		}
-		// else if (parseFloat(minute_price) != minute_price >>> 0){
-		// 	error.handler(req, res, "minute", "json");
-		// }
-		else if (hour_price != hour_price >>> 0 || hour_price <= 0){
-			error.handler(req, res, "hour", "json");
-		}
-		else if (day_price != day_price >>> 0 || day_price <= 0){
-			error.handler(req, res, "day", "json");
-		}
-		else if (week_price != week_price >>> 0 || week_price <= 0){
-			error.handler(req, res, "week", "json");
-		}
-		else if (month_price != month_price >>> 0 || month_price <= 0){
-			error.handler(req, res, "month", "json");
 		}
 		else {
 			next();
@@ -590,7 +424,6 @@ module.exports = {
 	//function to check and reformat new listings details excluding image
 	checkListingDetails : function(req, res, next){
 		var status = parseFloat(req.body.status);
-		var buy_link = req.body.buy_link;
         var description = sanitize(req.body.description);
 
 		//prices
@@ -608,12 +441,7 @@ module.exports = {
 		}
 		categories_clean = categories_clean.join(" ");
 
-		//if buy_link exists and is not a valid url
-		if (req.body.buy_link && !validator.isURL(buy_link, { protocols: ["http", "https"]})){
-			error.handler(req, res, "Invalid listing purchase link!", "json");
-		}
-		//if description exists and is not a valid url
-		else if (req.body.description && description.length == 0){
+		if (req.body.description && description.length == 0){
 			error.handler(req, res, "Invalid listing description!", "json");
 		}
 		//invalid categories
@@ -625,14 +453,13 @@ module.exports = {
 			error.handler(req, res, "Invalid price type!", "json");
 		}
 		else if (req.body.price_rate && !validator.isInt(price_rate)){
-			error.handler(req, res, "Invalid price!", "json");
+			error.handler(req, res, "Price must be a whole number!", "json");
 		}
 		else {
 			if (!req.new_listing_info) {
 				req.new_listing_info = {};
 			}
 			req.new_listing_info.status = status;
-			req.new_listing_info.buy_link = (buy_link == "") ? null : buy_link;
 			req.new_listing_info.description = description;
 			req.new_listing_info.price_type = price_type;
 			req.new_listing_info.price_rate = price_rate;
@@ -688,34 +515,65 @@ module.exports = {
 		}
 	},
 
-	//function to create a new listing
-	createListing : function(req, res, next){
+	//------------------------------------------------------------------------------------------------------CREATES/UPDATES
 
-		//set account owner and date created
-		req.session.listing_object.db_object.owner_id = req.user.id;
-		req.session.listing_object.db_object.date_created = (new Date()).getTime();
+	//function to create the batch listings once done
+	createListings : function(req, res, next){
+		console.log("F: Creating listings to check for any existing...");
 
-		//create new listing
-		Listing.newListing(req.session.listing_object.db_object, function(result){
+		var db_object = req.session.new_listings.db_object;
+		Listing.newListings(db_object, function(result){
 			if (result.state=="error"){error.handler(req, res, result.info, "json");}
 			else {
-
-				//revert verified if its a non-duplicate domain
-				Listing.updateListing(req.body.domain_name, {verified: null}, function(result){
-					if (result.state=="error"){error.handler(req, res, result.info, "json")}
-					else {
-						//if premium, go next to handle stripe stuff
-						if (req.body.stripeToken){
-							next();
-						}
-						//if its basic, send success
+				var affectedRows = result.info.affectedRows;
+				//nothing created
+				if (affectedRows == 0){
+					sortListings(req.session.new_listings, db_object, []);
+					res.send({
+						bad_listings: req.session.new_listings.bad_listings,
+						good_listings: false
+					});
+				}
+				else {
+					//figure out what was created
+					Account.getAccountListings(req.user.id, function(result){
+						if (result.state=="error"){error.handler(req, res, result.info, "json");}
 						else {
-							res.send({
-								state: "success"
+							//get the insert IDs and domain names of newly inserted listings
+							var newly_inserted_listings = findNewlyMadeListings(req.user.listings, result.info);
+							var inserted_ids = newly_inserted_listings.inserted_ids				//insert ids of all inserted domains
+							var inserted_domains = newly_inserted_listings.inserted_domains		//domain names of all inserted domains
+
+							//sort all the listings
+							sortListings(
+								req.session.new_listings,									//session listing object
+								db_object,													//db object used to insert
+								inserted_domains,											//domain names of all inserted domains
+								req.session.new_listings.premium_obj.domain_names,			//domain names of premium listings
+								inserted_ids
+							);
+
+							req.session.new_listings.inserted_ids = inserted_ids;
+							req.session.new_listings.inserted_domains = inserted_domains;
+
+							//revert the newly made listings verified to null
+							Listing.updateListingsVerified(inserted_ids, function(result){
+								delete req.user.listings;
+
+								if (req.body.stripeToken){
+									next();
+								}
+								else {
+									console.log(req.session.new_listings);
+									res.send({
+										bad_listings: req.session.new_listings.bad_listings,
+										good_listings: req.session.new_listings.good_listings
+									});
+								}
 							});
 						}
-					}
-				});
+					});
+				}
 			}
 		});
 	},
@@ -784,11 +642,48 @@ module.exports = {
 		});
 	},
 
+	//function to delet a listing
+	deleteListing: function(req, res, next){
+		var listing_info = getUserListingObj(req.user.listings, req.params.domain_name);
+		Listing.deleteListing(listing_info.id, function(result){
+			if (result.state=="error"){error.handler(req, res, result.info, "json")}
+			else {
+				deleteUserListingsObject(req, res, req.params.domain_name);
+				res.json({
+					state: "success",
+					listings: req.user.listings
+				});
+			}
+		});
+	},
+
+	//function to update to premium since stripe stuff worked
+	updateListingPremium : function(req, res, next){
+		console.log("F: Updating Premium listings...");
+
+		//update the domahub DB appropriately
+		if (req.session.new_listings.premium_obj.db_success_obj.length > 0){
+			Listing.updateListingsPremium(req.session.new_listings.premium_obj.db_success_obj, function(result){
+			});
+		}
+
+		if (req.session.new_listings.premium_obj.db_failed_obj.length > 0){
+			Listing.updateListingsBasic(req.session.new_listings.premium_obj.db_failed_obj, function(result){
+			});
+		}
+
+		res.send({
+			bad_listings: req.session.new_listings.bad_listings,
+			good_listings: req.session.new_listings.good_listings
+		});
+		delete req.session.new_listings;
+	},
+
 	//function to verify ownership of a listing
 	verifyListing: function(req, res, next){
 		domain_name = req.params.domain_name;
 		dns.lookup(domain_name, function (err, address, family) {
-			if (err){error.handler(req, res, "DNS error!")};
+			if (err){error.handler(req, res, "DNS error!", "json")};
 
 			domain_ip = address;
 			dns.lookup("domahub.com", function (err, address, family) {
@@ -921,6 +816,16 @@ function updateUserListingsObject(req, res, domain_name){
 		if (req.user.listings[x].domain_name.toLowerCase() == domain_name.toLowerCase()){
 			req.user.listings[x] = Object.assign({}, req.user.listings[x], req.new_listing_info);
 			delete req.new_listing_info;
+			break;
+		}
+	}
+}
+
+//helper function to update req.user.listings after deleting a listing
+function deleteUserListingsObject(req, res, domain_name){
+	for (var x = 0; x < req.user.listings.length; x++){
+		if (req.user.listings[x].domain_name.toLowerCase() == domain_name.toLowerCase()){
+			req.user.listings.splice(x, 1);
 			break;
 		}
 	}

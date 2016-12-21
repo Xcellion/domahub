@@ -19,11 +19,6 @@ module.exports = function(app, db, auth, error, stripe){
 
 	//-------------------------------------------------------------------------------------------------------------------- SEARCH LISTINGS
 
-	// //render the listing page hub
-	// app.get('/listings', [
-	// 	search_functions.renderListingHub
-	// ]);
-
 	//get a random listing with specific category
 	app.get("/listing/random/:category", [
 		search_functions.getRandomListingByCategory
@@ -38,17 +33,11 @@ module.exports = function(app, db, auth, error, stripe){
 
 	//-------------------------------------------------------------------------------------------------------------------- OWNER RELATED
 
-	//render listing create choice
+	//render listing create
 	app.get('/listings/create', [
 		auth.checkLoggedIn,
 		owner_functions.renderCreateListing
 	]);
-
-	// //render create listing single
-	// app.get('/listings/create/single', [
-	// 	auth.checkLoggedIn,
-	// 	owner_functions.renderCreateListingSingle
-	// ]);
 
 	// //render create listing multiple
 	// app.get('/listings/create/multiple', [
@@ -73,25 +62,13 @@ module.exports = function(app, db, auth, error, stripe){
 		owner_functions.createListings,
 		stripe.createStripeCustomer,
 		stripe.createStripeSubscriptions,
-		owner_functions.updatePremium
+		owner_functions.updateListingPremium
 	]);
 
 	//redirect all /create to proper /create
 	app.get('/listings/create*', function(req, res){
 		res.redirect("/listings/create");
 	});
-
-	//create a single premium listing
-	app.post('/listings/create/premium', [
-		urlencodedParser,
-		auth.checkLoggedIn,
-		owner_functions.checkListingCreateInfo,
-		owner_functions.checkListingCreatePrice,
-		profile_functions.getAccountListings,
-		owner_functions.createListing,
-		stripe.createStripeCustomer,
-		stripe.createSingleStripeSubscription		//end here, and stripe webhooks will update the db
-	]);
 
 	//create multiple listings
 	app.post('/listings/create/multiple', [
@@ -110,6 +87,15 @@ module.exports = function(app, db, auth, error, stripe){
 		owner_functions.checkListingOwner,
 		owner_functions.verifyListing,
 		owner_functions.updateListing
+	]);
+
+	//to delete a listing
+	app.post('/listing/:domain_name/delete', [
+		auth.checkLoggedIn,
+		checkDomainValid,
+		checkDomainListed,
+		owner_functions.checkListingOwner,
+		owner_functions.deleteListing
 	]);
 
 	//update listing information
@@ -165,7 +151,7 @@ module.exports = function(app, db, auth, error, stripe){
 		})
 	});
 
-	//render listing page
+	//render specific listing page
 	app.get('/listing/:domain_name', [
 		checkDomainValid,
 		renter_functions.checkDomainListedAndAddToSearch,
