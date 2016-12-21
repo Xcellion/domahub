@@ -41,10 +41,10 @@
     .filter-local
       font-size: $size-small
       color: $text
+      &:focus,
       &:hover
         +box-shadow(0,2px,0,$black,0)
-      &:active,
-      &:focus,
+        outline: none
       &.is-active
         +box-shadow(0,2px,0,$primary,0)
         color: $primary

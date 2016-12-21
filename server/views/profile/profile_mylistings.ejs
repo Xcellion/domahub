@@ -11,121 +11,110 @@
 <body>
 	<%- include("../templates/navbar", {user: user}); %>
 
-	<div class="container clear-nav-profile">
-    <%# <div class="tabs is-centered">
-      <ul>
-        <li><a href="/profile/dashboard" tabindex="1">Dashboard</a></li>
-        <li><a href="/profile/messages" tabindex="1">Messages</a></li>
-        <li class="is-active"><a href="/profile/mylistings" tabindex="1">Listings</a></li>
-        <li><a href="/profile/myrentals" tabindex="1">Rentals</a></li>
-        <li><a href="/profile/settings" tabindex="1">Settings</a></li>
-      </ul>
-    </div>%>
-	</div>
-
-	<section class="section min-height">
+	<section class="section is-medium min-height">
 		<div class="container">
 			<div class="columns">
-				<div class="column">
-					<div>
-						<div class="control has-icon">
-							<input id="search-domain" tabindex="1" class="input" type="text" placeholder="Search listings" />
-							<i class="fa fa-search"></i>
-						</div>
-
-						<nav class="level filter-panel">
-							<div class="level-item">
-								<a class="is-active filter-local" id="reset_filter" tabindex="1">
-									View All
-								</a>
-							</div>
-							<div class="level-item">
-								<a class="filter-local" id="rented_filter" tabindex="1">
-									Currently Rented
-								</a>
-							</div>
-							<div class="level-item">
-								<a class="filter-local" id="premium_filter" tabindex="1">
-									Premium
-								</a>
-							</div>
-							<div class="level-item">
-								<a class="filter-local" id="basic_filter" tabindex="1">
-									Basic
-								</a>
-							</div>
-							<div class="level-item">
-								<a class="filter-local" id="unverified_filter" tabindex="1">
-									Unverified
-								</a>
-							</div>
-						</nav>
-
-						<table class="table has-shadow margin-top-20">
-							<thead class="has-shadow">
-								<tr>
-									<th class="td-arrow"></th>
-									<th class="td-domain">
-										Domain Name
-										<span class="icon is-small is-active sort-desc is-hidden"><i class="fa fa-sort-desc"></i></span>
-										<span class="icon is-small is-active sort-asc is-hidden"><i class="fa fa-sort-asc"></i></span>
-										<span class="icon is-small sort-none is-disabled"><i class="fa fa-sort"></i></span>
-									</th>
-									<th class="td-view"></th>
-									<th class="td-type">
-										Type
-										<span class="icon is-small is-active sort-desc is-hidden"><i class="fa fa-sort-desc"></i></span>
-										<span class="icon is-small is-active sort-asc is-hidden"><i class="fa fa-sort-asc"></i></span>
-										<span class="icon is-small sort-none is-disabled"><i class="fa fa-sort"></i></span>
-									</th>
-									<th class="td-status">
-										Status
-										<span class="icon is-small is-active sort-desc is-hidden"><i class="fa fa-sort-desc"></i></span>
-										<span class="icon is-small is-active sort-asc is-hidden"><i class="fa fa-sort-asc"></i></span>
-										<span class="icon is-small sort-none is-disabled"><i class="fa fa-sort"></i></span>
-									</th>
-									<th colspan='2' class="has-text-centered td-price-rate">
-										Price
-										<span class="icon is-small is-active sort-desc is-hidden"><i class="fa fa-sort-desc"></i></span>
-										<span class="icon is-small is-active sort-asc is-hidden"><i class="fa fa-sort-asc"></i></span>
-										<span class="icon is-small sort-none is-disabled"><i class="fa fa-sort"></i></span>
-									</th>
-								</tr>
-							</thead>
-							<tbody id="table_body"></tbody>
-						</table>
-
-						<nav class="pagination margin-bottom-25">
-							<a id="prev-page" class="button no-shadow">Previous page</a>
-							<a id="next-page" class="button no-shadow">Next page</a>
-							<ul id="page-list"></ul>
-						</nav>
-
-						<nav class="pagination-control">
-							<div id='domains-per-page-control' class="is-hidden control is-horizontal">
-								<div class="control-label">
-									<label class="label">Show per page:</label>
-								</div>
-								<div class="control">
-									<div class="select">
-										<select id="domains-per-page">
-											<option selected value="25">25</option>
-											<option value="50">50</option>
-											<option value="100">100</option>
-										</select>
-									</div>
-								</div>
-							</div>
-							<div id="go-to-page-control" class="control">
-								<p class="control has-addons has-addons-right">
-									<input id="go-to-page-input" class="input" type="number" min="1" value="1" />
-									<a id="go-to-page-button" class="button is-primary no-shadow">
-										Go to page
-									</a>
-								</p>
-							</div>
-						</nav>
+				<div class="column is-half">
+					<h1 class="title is-3">My Listings</h1>
+					<div class="control has-icon">
+						<input id="search-domain" tabindex="1" class="input" type="text" placeholder="Search my listings" />
+						<i class="fa fa-search"></i>
 					</div>
+					<nav class="level filter-panel">
+						<div class="level-item">
+							<a class="is-active filter-local" id="reset_filter" tabindex="1">
+								View All
+							</a>
+						</div>
+						<div class="level-item">
+							<a class="filter-local" id="rented_filter" tabindex="1">
+								Currently Rented
+							</a>
+						</div>
+						<div class="level-item">
+							<a class="filter-local" id="premium_filter" tabindex="1">
+								Premium
+							</a>
+						</div>
+						<div class="level-item">
+							<a class="filter-local" id="basic_filter" tabindex="1">
+								Basic
+							</a>
+						</div>
+						<div class="level-item">
+							<a class="filter-local" id="unverified_filter" tabindex="1">
+								Unverified
+							</a>
+						</div>
+					</nav>
+				</div>
+			</div>
+			<div class="columns">
+				<div class="column is-12">
+					<table class="table has-shadow">
+						<thead class="has-shadow">
+							<tr>
+								<th class="td-arrow"></th>
+								<th class="td-domain">
+									Domain Name
+									<span class="icon is-small is-active sort-desc is-hidden"><i class="fa fa-sort-desc"></i></span>
+									<span class="icon is-small is-active sort-asc is-hidden"><i class="fa fa-sort-asc"></i></span>
+									<span class="icon is-small sort-none is-disabled"><i class="fa fa-sort"></i></span>
+								</th>
+								<th class="td-view"></th>
+								<th class="td-type">
+									Type
+									<span class="icon is-small is-active sort-desc is-hidden"><i class="fa fa-sort-desc"></i></span>
+									<span class="icon is-small is-active sort-asc is-hidden"><i class="fa fa-sort-asc"></i></span>
+									<span class="icon is-small sort-none is-disabled"><i class="fa fa-sort"></i></span>
+								</th>
+								<th class="td-status">
+									Status
+									<span class="icon is-small is-active sort-desc is-hidden"><i class="fa fa-sort-desc"></i></span>
+									<span class="icon is-small is-active sort-asc is-hidden"><i class="fa fa-sort-asc"></i></span>
+									<span class="icon is-small sort-none is-disabled"><i class="fa fa-sort"></i></span>
+								</th>
+								<th colspan='2' class="has-text-centered td-price-rate">
+									Price
+									<span class="icon is-small is-active sort-desc is-hidden"><i class="fa fa-sort-desc"></i></span>
+									<span class="icon is-small is-active sort-asc is-hidden"><i class="fa fa-sort-asc"></i></span>
+									<span class="icon is-small sort-none is-disabled"><i class="fa fa-sort"></i></span>
+								</th>
+							</tr>
+						</thead>
+						<tbody id="table_body"></tbody>
+					</table>
+
+					<nav class="pagination margin-bottom-25">
+						<a id="prev-page" class="button no-shadow">Previous page</a>
+						<a id="next-page" class="button no-shadow">Next page</a>
+						<ul id="page-list"></ul>
+					</nav>
+
+					<nav class="pagination-control">
+						<div id='domains-per-page-control' class="is-hidden control is-horizontal">
+							<div class="control-label">
+								<label class="label">Show per page:</label>
+							</div>
+							<div class="control">
+								<div class="select">
+									<select id="domains-per-page">
+										<option selected value="25">25</option>
+										<option value="50">50</option>
+										<option value="100">100</option>
+									</select>
+								</div>
+							</div>
+						</div>
+						<div id="go-to-page-control" class="control">
+							<p class="control has-addons has-addons-right">
+								<input id="go-to-page-input" class="input" type="number" min="1" value="1" />
+								<a id="go-to-page-button" class="button is-primary no-shadow">
+									Go to page
+								</a>
+							</p>
+						</div>
+					</nav>
 				</div>
 			</div>
 		</div>
