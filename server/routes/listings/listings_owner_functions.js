@@ -564,7 +564,6 @@ module.exports = {
 									next();
 								}
 								else {
-									console.log(req.session.new_listings);
 									res.send({
 										bad_listings: req.session.new_listings.bad_listings,
 										good_listings: req.session.new_listings.good_listings

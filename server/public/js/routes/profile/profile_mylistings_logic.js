@@ -5,36 +5,42 @@ var row_display = listings.slice(0);
 //function to create a listing row
 function createRow(listing_info, rownum){
     var verified = listing_info.verified != null;
-    var verified_row = (listing_info.verified != null) ? "" : " unverified-row";
+    var verified_row = (listing_info.verified != null) ? " verified-row" : "";
     var premium = listing_info.exp_date >= new Date().getTime();
 
     var tempRow = $("<tr class='row-disp" + verified_row + "' id='row" + rownum + "'></tr>");
-    tempRow.append(createArrow(listing_info));
-    tempRow.append(createDomain(listing_info));
-    tempRow.append(createView(listing_info));
-    tempRow.append(createType(listing_info));
-    tempRow.append(createVerify(listing_info, verified));
-    tempRow.append(createStatus(listing_info, verified));
-    tempRow.append(createStatusDrop(listing_info));
-    tempRow.append(createPriceRate(listing_info));
-    tempRow.append(createPriceRateDrop(listing_info));
-    tempRow.append(createPriceType(listing_info));
-    tempRow.append(createPriceTypeDrop(listing_info));
-
-    tempRow.on("click", function(e){
-        editRow($(this));
-    });
+    tempRow.append(
+        createArrow(listing_info),
+        createDomain(listing_info),
+        createView(listing_info),
+        createType(listing_info),
+        createVerify(listing_info, verified),
+        createStatus(listing_info, verified),
+        createStatusDrop(listing_info),
+        createPriceRate(listing_info),
+        createPriceRateDrop(listing_info),
+        createPriceType(listing_info),
+        createPriceTypeDrop(listing_info),
+        createEdit(listing_info)
+    );
 
     tempRow.data("editing", false);
+    tempRow.data("selected", false);
+
+    if (verified){
+        tempRow.click(function(e){
+            selectRow($(this));
+        });
+    }
     return tempRow;
 }
 
 //function to create the dropdown arrow
 function createArrow(listing_info){
-    var temp_td = $("<td class='td-visible td-arrow'></td>");
+    var temp_td = $("<td class='td-arrow'></td>");
     if (listing_info.verified){
-        var temp_span = $("<span class='icon'></span>");
-        var temp_i = $("<i class='fa fa-angle-right'></i>");
+        var temp_span = $("<span class='icon is-small'></span>");
+        var temp_i = $("<i class='fa fa-square-o'></i>");
     }
     else {
         var temp_span = $("<span class='icon is-small is-danger'></span>");
@@ -48,14 +54,14 @@ function createArrow(listing_info){
 //function to create the listing type td
 function createType(listing_info){
     var text = (listing_info.exp_date >= new Date().getTime()) ? "Premium" : "Basic";
-    var temp_td = $("<td class='td-visible td-type'>" + text + "</td>");
+    var temp_td = $("<td class='td-type'>" + text + "</td>");
     temp_td.data("type", text);
     return temp_td;
 }
 
 //function to create a button to verify the listing
 function createVerify(listing_info, bool){
-    var temp_td = $("<td class='td-visible td-verify'></td>");
+    var temp_td = $("<td class='td-verify'></td>");
         var temp_a = $("<p class='is-danger verify-link'></p>");
             var temp_span2 = $("<span>Unverified</span>");
 
@@ -70,7 +76,7 @@ function createVerify(listing_info, bool){
 //function to create the listing status td
 function createStatus(listing_info, bool){
     var text = (listing_info.status == 0) ? "Inactive" : "Active";
-    var temp_td = $("<td class='td-visible td-status'>" + text + "</td>");
+    var temp_td = $("<td class='td-status'>" + text + "</td>");
 
     //hide if not verified
     if (!bool){
@@ -82,20 +88,20 @@ function createStatus(listing_info, bool){
 
 //function to create the listing created date
 function createPriceRate(listing_info){
-    var temp_td = $("<td class='td-visible has-text-right td-price-rate is-bold'>$" + listing_info.price_rate + "</td>");
+    var temp_td = $("<td class='has-text-right td-price-rate is-bold'>$" + listing_info.price_rate + "</td>");
     return temp_td;
 }
 
 //function to create the listing created date
 function createPriceType(listing_info){
-    var temp_td = $("<td class='td-visible td-price-type'>" + toUpperCase(listing_info.price_type) + "</td>");
+    var temp_td = $("<td class='td-price-type'>" + toUpperCase(listing_info.price_type) + "</td>");
     return temp_td;
 }
 
 //function to create the tv icon
 function createView(listing_info){
     if (listing_info.verified){
-        var temp_td = $("<td class='td-visible td-view'></td>");
+        var temp_td = $("<td class='td-view'></td>");
         var temp_a = $("<a class='button no-shadow' target='_blank' title='Open listing in new tab' style='target-new: tab;' href='/listing/" + listing_info.domain_name + "'></a>");
         var temp_span = $("<span class='icon is-small'></span>");
         var temp_i = $("<i class='fa fa-external-link'></i>");
@@ -114,13 +120,30 @@ function createView(listing_info){
     }
 }
 
+//function to create the edit button
+function createEdit(listing_info){
+    var temp_td = $("<td class='td-view'></td>");
+    var temp_a = $("<a class='button no-shadow'></a>");
+    var temp_span = $("<span class='icon is-small'></span>");
+    var temp_i = $("<i class='fa fa-cog'></i>");
+    var temp_span2 = $("<span>Edit</span>");
+    temp_td.append(temp_a.append(temp_span.append(temp_i), temp_span2));
+
+    //prevent clicking view from dropping down row
+    temp_td.click(function(e) {
+        editRow($(this).closest('.row-disp'));
+    });
+
+    return temp_td;
+}
+
 // --------------------------------------------------------------------------------- CREATE DROP
 
 //function to create dropdown row
 function createRowDrop(listing_info, rownum){
     var temp_drop = $("<tr id='row-drop" + rownum + "' class='row-drop'></tr>");
-    var temp_td = $("<td class='row-drop-td' colspan='7'></td>")
-    var temp_div_drop = $("<div id='div-drop" + rownum + "' class='div-drop td-visible'></div>");
+    var temp_td = $("<td class='row-drop-td' colspan='8'></td>")
+    var temp_div_drop = $("<div id='div-drop" + rownum + "' class='div-drop'></div>");
     var temp_div_col = $("<div class='columns'></div>");
 
     temp_drop.append(temp_td.append(temp_div_drop.append(temp_div_col)));
@@ -259,7 +282,7 @@ function createVerifiedDrop(listing_info, cb_when_verified){
 
 //function to create the select dropdown for listing status
 function createStatusDrop(listing_info){
-    var new_td = $("<td class='td-visible td-status-drop is-hidden'></td>");
+    var new_td = $("<td class='td-status-drop is-hidden'></td>");
         var temp_span = $("<span class='select status-span'></span>");
         var temp_form = $("<form class='drop-form'></form>");
         var temp_select = $("<select class='status_input changeable-input'></select>");
@@ -492,7 +515,7 @@ function createImgDrop(listing_info, rownum){
 
 //function to create input price rate drop
 function createPriceRateDrop(listing_info){
-    var new_td = $("<td class='td-visible td-price-rate-drop is-hidden'></td>");
+    var new_td = $("<td class='td-price-rate-drop is-hidden'></td>");
         var temp_form = $("<form class='drop-form'></form>");
         var temp_input = $("<input type='number' min='1' step='1' class='price-rate-input has-text-right input changeable-input'></input>");
             temp_input.val(listing_info.price_rate);
@@ -516,7 +539,7 @@ function createPriceRateDrop(listing_info){
 function createPriceTypeDrop(listing_info){
     var premium = listing_info.exp_date >= new Date().getTime();
 
-    var new_td = $("<td class='td-visible td-price-type-drop is-hidden'></td>");
+    var new_td = $("<td class='td-price-type-drop is-hidden'></td>");
         var temp_span = $("<span class='select price-type-span'></span>");
         var temp_form = $("<form class='drop-form'></form>");
         var temp_select = $("<select class='price-type-input changeable-input'></select>");
@@ -676,6 +699,23 @@ function refreshSubmitbindings(success_button, cancel_button, listings, domain_n
 
             break;
         }
+    }
+}
+
+// --------------------------------------------------------------------------------- SELECT ROW
+
+//function to select a row
+function selectRow(row){
+    var selected = (row.data("selected") == false) ? true : false;
+    row.data("selected", selected);
+
+    if (selected){
+        row.find(".td-arrow i").removeClass('fa-square-o').addClass("fa-check-square-o");
+        row.find(".td-arrow .icon").addClass('is-success');
+    }
+    else {
+        row.find(".td-arrow i").addClass('fa-square-o').removeClass("fa-check-square-o");
+        row.find(".td-arrow .icon").removeClass('is-success');
     }
 }
 
