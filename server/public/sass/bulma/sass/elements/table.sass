@@ -75,13 +75,25 @@
         cursor: pointer
   tbody
     tr
+      &::after
+        background: $primary
+        position: absolute
+        content: ""
+        height: 0
+        width: 0
       &:last-child
         td,
         th
           border-bottom-width: 0
       &:hover
-        background-color: #efefef
         cursor: pointer
+        &::after
+          background: $primary
+          position: absolute
+          content: ""
+          height: 48px
+          width: 4px
+          left: 19px
       &.is-active
         background-color: #efefef
       &.no-hover-effect
