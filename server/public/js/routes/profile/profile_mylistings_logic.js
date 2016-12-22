@@ -27,11 +27,9 @@ function createRow(listing_info, rownum){
     tempRow.data("editing", false);
     tempRow.data("selected", false);
 
-    if (verified){
-        tempRow.click(function(e){
-            selectRow($(this));
-        });
-    }
+    tempRow.click(function(e){
+        selectRow($(this), verified);
+    });
     return tempRow;
 }
 
@@ -40,11 +38,11 @@ function createArrow(listing_info){
     var temp_td = $("<td class='td-arrow'></td>");
     if (listing_info.verified){
         var temp_span = $("<span class='icon is-small'></span>");
-        var temp_i = $("<i class='fa fa-square-o'></i>");
+        var temp_i = $("<i class='no-transition fa fa-square-o'></i>");
     }
     else {
         var temp_span = $("<span class='icon is-small is-danger'></span>");
-        var temp_i = $("<i class='fa fa-exclamation-triangle'></i>");
+        var temp_i = $("<i class='no-transition fa fa-exclamation-triangle'></i>");
     }
     temp_td.append(temp_span.append(temp_i));
 
@@ -122,7 +120,7 @@ function createView(listing_info){
 
 //function to create the edit button
 function createEdit(listing_info){
-    var temp_td = $("<td class='td-view'></td>");
+    var temp_td = $("<td class='td-edit padding-left-0'></td>");
     var temp_a = $("<a class='button no-shadow'></a>");
     var temp_span = $("<span class='icon is-small'></span>");
     var temp_i = $("<i class='fa fa-cog'></i>");
@@ -131,6 +129,7 @@ function createEdit(listing_info){
 
     //prevent clicking view from dropping down row
     temp_td.click(function(e) {
+        e.stopPropagation();
         editRow($(this).closest('.row-disp'));
     });
 
@@ -539,7 +538,7 @@ function createPriceRateDrop(listing_info){
 function createPriceTypeDrop(listing_info){
     var premium = listing_info.exp_date >= new Date().getTime();
 
-    var new_td = $("<td class='td-price-type-drop is-hidden'></td>");
+    var new_td = $("<td class='td-price-type-drop padding-right-0 is-hidden'></td>");
         var temp_span = $("<span class='select price-type-span'></span>");
         var temp_form = $("<form class='drop-form'></form>");
         var temp_select = $("<select class='price-type-input changeable-input'></select>");
@@ -606,6 +605,17 @@ function editRow(row){
     //cancel any changes if we collapse the row
     if (!editing){
         row.next(".row-drop").find(".cancel-changes-button").click();
+    }
+}
+
+//function to change edit arrow
+function editArrow(row, editing){
+    var edit_i = row.find(".td-edit .icon");
+    if (editing){
+        edit_i.addClass("is-active");
+    }
+    else {
+        edit_i.removeClass("is-active");
     }
 }
 
@@ -705,17 +715,31 @@ function refreshSubmitbindings(success_button, cancel_button, listings, domain_n
 // --------------------------------------------------------------------------------- SELECT ROW
 
 //function to select a row
-function selectRow(row){
+function selectRow(row, verified){
     var selected = (row.data("selected") == false) ? true : false;
     row.data("selected", selected);
 
+    var icon_i = row.find(".td-arrow i");
+    var icon_span = row.find(".td-arrow .icon");
+
     if (selected){
-        row.find(".td-arrow i").removeClass('fa-square-o').addClass("fa-check-square-o");
-        row.find(".td-arrow .icon").addClass('is-success');
+        if (!verified){
+            icon_i.removeClass('fa-exclamation-triangle');
+            icon_span.removeClass('is-danger');
+        }
+        icon_i.removeClass('fa-square-o').addClass("fa-check-square-o box-checked");
+        icon_span.addClass('is-primary');
     }
     else {
-        row.find(".td-arrow i").addClass('fa-square-o').removeClass("fa-check-square-o");
-        row.find(".td-arrow .icon").removeClass('is-success');
+        if (!verified){
+            icon_i.addClass('fa-exclamation-triangle');
+            icon_span.addClass('is-danger');
+        }
+        else {
+            icon_i.addClass('fa-square-o');
+        }
+        icon_i.removeClass("fa-check-square-o box-checked");
+        icon_span.removeClass('is-primary');
     }
 }
 

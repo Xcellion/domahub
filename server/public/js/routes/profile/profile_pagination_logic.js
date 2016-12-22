@@ -240,8 +240,11 @@ function sortRows(method, sorted){
     else if (method == "status"){
         toggleSort("status", sorted);
     }
-    else if (method == "date"){
-        toggleSort("date_created", sorted);
+    else if (method == "price-type"){
+        toggleSort("price_type", sorted);
+    }
+    else if (method == "price-rate"){
+        toggleSort("price_rate", sorted);
     }
     else if (method == "type"){
         toggleSort("exp_date", sorted);
@@ -378,7 +381,7 @@ function paginateRows(total_pages, current_page){
 function emptyRows(){
     $("#table_body").empty();
     var listing_or_rental = window.location.pathname.indexOf("listings") != -1 ? "listings" : "rentals";
-    var tempRow = $("<tr><td class='has-text-centered' colspan='99'>There are no matching " + listing_or_rental + "!</td></tr>");
+    var tempRow = $("<tr><td class='padding-25 has-text-centered' colspan='99'>There are no matching " + listing_or_rental + "!</td></tr>");
     $("#table_body").append(tempRow);
 }
 
@@ -468,22 +471,5 @@ function dropRow(row, editing){
     }
     else {
         row_drop.find(".div-drop").stop().slideUp("fast");
-    }
-}
-
-//function to change edit arrow
-function editArrow(row, editing){
-    var edit_td = row.find(".td-arrow").find("i");
-    if (editing){
-        if (!row.hasClass('unverified-row')){
-            edit_td.parent("span").addClass("is-active");
-            edit_td.addClass("fa-rotate-90");
-        }
-    }
-    else {
-        edit_td.removeClass("fa-rotate-90");
-        if (!row.hasClass('unverified-row')){
-            edit_td.parent("span").removeClass("is-active");
-        }
     }
 }

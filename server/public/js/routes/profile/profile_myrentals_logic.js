@@ -407,6 +407,23 @@ function editRow(row){
     }
 }
 
+//function to change edit arrow
+function editArrow(row, editing){
+    var edit_td = row.find(".td-arrow").find("i");
+    if (editing){
+        if (!row.hasClass('unverified-row')){
+            edit_td.parent("span").addClass("is-active");
+            edit_td.addClass("fa-rotate-90");
+        }
+    }
+    else {
+        edit_td.removeClass("fa-rotate-90");
+        if (!row.hasClass('unverified-row')){
+            edit_td.parent("span").removeClass("is-active");
+        }
+    }
+}
+
 //function to change status column to editable
 function editStatus(row, editing){
     var status_drop_td = row.find(".td-status-drop");
