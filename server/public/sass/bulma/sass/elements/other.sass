@@ -48,13 +48,33 @@
     color: inherit
     font-size: inherit
     line-height: inherit
-    @include transition(all 0.25s)
+    +transition(all 0.25s)
+    &.no-transition
+      +transition(none)
   // Colors
   @each $name, $pair in $colors
     $color: nth($pair, 1)
     $color-invert: nth($pair, 2)
     &.is-#{$name}
       color: $color
+      &.is-circle
+        border: 2px solid $color
+        background: $color
+        border-radius: 100%
+        color: $color-invert
+        width: 32px
+        height: 32px
+        padding-top: 2px
+        // Sizes
+        &.is-small
+          width: 24px
+          height: 24px
+          padding-top: 0
+        &.is-medium
+          width: 42px
+          height: 42px
+          padding-top: 2px
+        &.is-large
   // Sizes
   &.is-small
     +fa(14px, 18px)
