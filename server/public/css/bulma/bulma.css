@@ -2663,12 +2663,24 @@ input:-webkit-autofill {
       border: none; }
       .table thead th:hover {
         cursor: pointer; }
+  .table tbody tr::after {
+    background: #3cbc8d;
+    position: absolute;
+    content: "";
+    height: 0;
+    width: 0; }
   .table tbody tr:last-child td,
   .table tbody tr:last-child th {
     border-bottom-width: 0; }
   .table tbody tr:hover {
-    background-color: #efefef;
     cursor: pointer; }
+    .table tbody tr:hover::after {
+      background: #3cbc8d;
+      position: absolute;
+      content: "";
+      height: 48px;
+      width: 4px;
+      left: 19px; }
   .table tbody tr.is-active {
     background-color: #efefef; }
   .table tbody tr.no-hover-effect:hover {
@@ -2913,9 +2925,12 @@ input:-webkit-autofill {
         height: 24px;
         padding-top: 0; }
       .icon.is-white.is-circle.is-medium {
-        width: 42px;
-        height: 42px;
-        padding-top: 2px; }
+        width: 45px;
+        height: 45px;
+        padding-top: 4px; }
+      .icon.is-white.is-circle.is-large {
+        width: 60px;
+        height: 60px; }
   .icon.is-black {
     color: black; }
     .icon.is-black.is-circle {
@@ -2931,9 +2946,12 @@ input:-webkit-autofill {
         height: 24px;
         padding-top: 0; }
       .icon.is-black.is-circle.is-medium {
-        width: 42px;
-        height: 42px;
-        padding-top: 2px; }
+        width: 45px;
+        height: 45px;
+        padding-top: 4px; }
+      .icon.is-black.is-circle.is-large {
+        width: 60px;
+        height: 60px; }
   .icon.is-grey {
     color: #d0d0d0; }
     .icon.is-grey.is-circle {
@@ -2949,9 +2967,12 @@ input:-webkit-autofill {
         height: 24px;
         padding-top: 0; }
       .icon.is-grey.is-circle.is-medium {
-        width: 42px;
-        height: 42px;
-        padding-top: 2px; }
+        width: 45px;
+        height: 45px;
+        padding-top: 4px; }
+      .icon.is-grey.is-circle.is-large {
+        width: 60px;
+        height: 60px; }
   .icon.is-blacklight {
     color: rgba(0, 0, 0, 0.66); }
     .icon.is-blacklight.is-circle {
@@ -2967,9 +2988,12 @@ input:-webkit-autofill {
         height: 24px;
         padding-top: 0; }
       .icon.is-blacklight.is-circle.is-medium {
-        width: 42px;
-        height: 42px;
-        padding-top: 2px; }
+        width: 45px;
+        height: 45px;
+        padding-top: 4px; }
+      .icon.is-blacklight.is-circle.is-large {
+        width: 60px;
+        height: 60px; }
   .icon.is-whitelight {
     color: rgba(255, 255, 255, 0.7); }
     .icon.is-whitelight.is-circle {
@@ -2985,9 +3009,12 @@ input:-webkit-autofill {
         height: 24px;
         padding-top: 0; }
       .icon.is-whitelight.is-circle.is-medium {
-        width: 42px;
-        height: 42px;
-        padding-top: 2px; }
+        width: 45px;
+        height: 45px;
+        padding-top: 4px; }
+      .icon.is-whitelight.is-circle.is-large {
+        width: 60px;
+        height: 60px; }
   .icon.is-light {
     color: #e9e9e9; }
     .icon.is-light.is-circle {
@@ -3003,9 +3030,12 @@ input:-webkit-autofill {
         height: 24px;
         padding-top: 0; }
       .icon.is-light.is-circle.is-medium {
-        width: 42px;
-        height: 42px;
-        padding-top: 2px; }
+        width: 45px;
+        height: 45px;
+        padding-top: 4px; }
+      .icon.is-light.is-circle.is-large {
+        width: 60px;
+        height: 60px; }
   .icon.is-dark {
     color: #212121; }
     .icon.is-dark.is-circle {
@@ -3021,9 +3051,12 @@ input:-webkit-autofill {
         height: 24px;
         padding-top: 0; }
       .icon.is-dark.is-circle.is-medium {
-        width: 42px;
-        height: 42px;
-        padding-top: 2px; }
+        width: 45px;
+        height: 45px;
+        padding-top: 4px; }
+      .icon.is-dark.is-circle.is-large {
+        width: 60px;
+        height: 60px; }
   .icon.is-purple {
     color: #9c27b0; }
     .icon.is-purple.is-circle {
@@ -3039,9 +3072,12 @@ input:-webkit-autofill {
         height: 24px;
         padding-top: 0; }
       .icon.is-purple.is-circle.is-medium {
-        width: 42px;
-        height: 42px;
-        padding-top: 2px; }
+        width: 45px;
+        height: 45px;
+        padding-top: 4px; }
+      .icon.is-purple.is-circle.is-large {
+        width: 60px;
+        height: 60px; }
   .icon.is-primary {
     color: #3cbc8d; }
     .icon.is-primary.is-circle {
@@ -3057,9 +3093,12 @@ input:-webkit-autofill {
         height: 24px;
         padding-top: 0; }
       .icon.is-primary.is-circle.is-medium {
-        width: 42px;
-        height: 42px;
-        padding-top: 2px; }
+        width: 45px;
+        height: 45px;
+        padding-top: 4px; }
+      .icon.is-primary.is-circle.is-large {
+        width: 60px;
+        height: 60px; }
   .icon.is-primarydark {
     color: #309670; }
     .icon.is-primarydark.is-circle {
@@ -3075,9 +3114,12 @@ input:-webkit-autofill {
         height: 24px;
         padding-top: 0; }
       .icon.is-primarydark.is-circle.is-medium {
-        width: 42px;
-        height: 42px;
-        padding-top: 2px; }
+        width: 45px;
+        height: 45px;
+        padding-top: 4px; }
+      .icon.is-primarydark.is-circle.is-large {
+        width: 60px;
+        height: 60px; }
   .icon.is-primarylight {
     color: #62c9a3; }
     .icon.is-primarylight.is-circle {
@@ -3093,9 +3135,12 @@ input:-webkit-autofill {
         height: 24px;
         padding-top: 0; }
       .icon.is-primarylight.is-circle.is-medium {
-        width: 42px;
-        height: 42px;
-        padding-top: 2px; }
+        width: 45px;
+        height: 45px;
+        padding-top: 4px; }
+      .icon.is-primarylight.is-circle.is-large {
+        width: 60px;
+        height: 60px; }
   .icon.is-info {
     color: #2196f3; }
     .icon.is-info.is-circle {
@@ -3111,9 +3156,12 @@ input:-webkit-autofill {
         height: 24px;
         padding-top: 0; }
       .icon.is-info.is-circle.is-medium {
-        width: 42px;
-        height: 42px;
-        padding-top: 2px; }
+        width: 45px;
+        height: 45px;
+        padding-top: 4px; }
+      .icon.is-info.is-circle.is-large {
+        width: 60px;
+        height: 60px; }
   .icon.is-accent {
     color: #ff5722; }
     .icon.is-accent.is-circle {
@@ -3129,9 +3177,12 @@ input:-webkit-autofill {
         height: 24px;
         padding-top: 0; }
       .icon.is-accent.is-circle.is-medium {
-        width: 42px;
-        height: 42px;
-        padding-top: 2px; }
+        width: 45px;
+        height: 45px;
+        padding-top: 4px; }
+      .icon.is-accent.is-circle.is-large {
+        width: 60px;
+        height: 60px; }
   .icon.is-success {
     color: #81c784; }
     .icon.is-success.is-circle {
@@ -3147,9 +3198,12 @@ input:-webkit-autofill {
         height: 24px;
         padding-top: 0; }
       .icon.is-success.is-circle.is-medium {
-        width: 42px;
-        height: 42px;
-        padding-top: 2px; }
+        width: 45px;
+        height: 45px;
+        padding-top: 4px; }
+      .icon.is-success.is-circle.is-large {
+        width: 60px;
+        height: 60px; }
   .icon.is-warning {
     color: #ffeb3b; }
     .icon.is-warning.is-circle {
@@ -3165,9 +3219,12 @@ input:-webkit-autofill {
         height: 24px;
         padding-top: 0; }
       .icon.is-warning.is-circle.is-medium {
-        width: 42px;
-        height: 42px;
-        padding-top: 2px; }
+        width: 45px;
+        height: 45px;
+        padding-top: 4px; }
+      .icon.is-warning.is-circle.is-large {
+        width: 60px;
+        height: 60px; }
   .icon.is-danger {
     color: #EF5350; }
     .icon.is-danger.is-circle {
@@ -3183,9 +3240,12 @@ input:-webkit-autofill {
         height: 24px;
         padding-top: 0; }
       .icon.is-danger.is-circle.is-medium {
-        width: 42px;
-        height: 42px;
-        padding-top: 2px; }
+        width: 45px;
+        height: 45px;
+        padding-top: 4px; }
+      .icon.is-danger.is-circle.is-large {
+        width: 60px;
+        height: 60px; }
   .icon.is-small {
     display: inline-block;
     font-size: 14px;
