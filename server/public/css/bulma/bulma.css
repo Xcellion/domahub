@@ -2663,29 +2663,29 @@ input:-webkit-autofill {
       border: none; }
       .table thead th:hover {
         cursor: pointer; }
-  .table tbody tr::after {
-    background: #3cbc8d;
-    position: absolute;
-    content: "";
-    height: 0;
-    width: 0; }
   .table tbody tr:last-child td,
   .table tbody tr:last-child th {
     border-bottom-width: 0; }
   .table tbody tr:hover {
     cursor: pointer; }
-    .table tbody tr:hover::after {
-      background: #3cbc8d;
-      position: absolute;
-      content: "";
-      height: 48px;
-      width: 4px;
-      left: 19px; }
   .table tbody tr.is-active {
     background-color: #efefef; }
   .table tbody tr.no-hover-effect:hover {
     background-color: transparent;
     cursor: default; }
+  .table tbody tr.row-disp::after {
+    background: #3cbc8d;
+    position: absolute;
+    content: "";
+    height: 0;
+    width: 0; }
+  .table tbody tr.row-disp:hover::after {
+    background: #3cbc8d;
+    position: absolute;
+    content: "";
+    height: 48px;
+    width: 4px;
+    left: 19px; }
   .table tfoot td,
   .table tfoot th {
     border-width: 2px 0 0;
