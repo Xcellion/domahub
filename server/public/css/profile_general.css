@@ -75,7 +75,7 @@
   width: 80px; }
 
 .box-checked {
-  margin-left: -2px; }
+  margin-left: 2px; }
 
 .address-div-wrapper {
   text-overflow: ellipsis;

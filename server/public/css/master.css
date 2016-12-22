@@ -2893,38 +2893,299 @@ input:-webkit-autofill {
     -o-transition: all 0.25s;
     -webkit-transition: all 0.25s;
     transition: all 0.25s; }
+    .icon .fa.no-transition {
+      -moz-transition: none;
+      -o-transition: none;
+      -webkit-transition: none;
+      transition: none; }
   .icon.is-white {
     color: white; }
+    .icon.is-white.is-circle {
+      border: 2px solid white;
+      background: white;
+      border-radius: 100%;
+      color: black;
+      width: 32px;
+      height: 32px;
+      padding-top: 2px; }
+      .icon.is-white.is-circle.is-small {
+        width: 24px;
+        height: 24px;
+        padding-top: 0; }
+      .icon.is-white.is-circle.is-medium {
+        width: 42px;
+        height: 42px;
+        padding-top: 2px; }
   .icon.is-black {
     color: black; }
+    .icon.is-black.is-circle {
+      border: 2px solid black;
+      background: black;
+      border-radius: 100%;
+      color: white;
+      width: 32px;
+      height: 32px;
+      padding-top: 2px; }
+      .icon.is-black.is-circle.is-small {
+        width: 24px;
+        height: 24px;
+        padding-top: 0; }
+      .icon.is-black.is-circle.is-medium {
+        width: 42px;
+        height: 42px;
+        padding-top: 2px; }
   .icon.is-grey {
     color: #d0d0d0; }
+    .icon.is-grey.is-circle {
+      border: 2px solid #d0d0d0;
+      background: #d0d0d0;
+      border-radius: 100%;
+      color: #444;
+      width: 32px;
+      height: 32px;
+      padding-top: 2px; }
+      .icon.is-grey.is-circle.is-small {
+        width: 24px;
+        height: 24px;
+        padding-top: 0; }
+      .icon.is-grey.is-circle.is-medium {
+        width: 42px;
+        height: 42px;
+        padding-top: 2px; }
   .icon.is-blacklight {
     color: rgba(0, 0, 0, 0.66); }
+    .icon.is-blacklight.is-circle {
+      border: 2px solid rgba(0, 0, 0, 0.66);
+      background: rgba(0, 0, 0, 0.66);
+      border-radius: 100%;
+      color: rgba(255, 255, 255, 0.7);
+      width: 32px;
+      height: 32px;
+      padding-top: 2px; }
+      .icon.is-blacklight.is-circle.is-small {
+        width: 24px;
+        height: 24px;
+        padding-top: 0; }
+      .icon.is-blacklight.is-circle.is-medium {
+        width: 42px;
+        height: 42px;
+        padding-top: 2px; }
   .icon.is-whitelight {
     color: rgba(255, 255, 255, 0.7); }
+    .icon.is-whitelight.is-circle {
+      border: 2px solid rgba(255, 255, 255, 0.7);
+      background: rgba(255, 255, 255, 0.7);
+      border-radius: 100%;
+      color: rgba(0, 0, 0, 0.66);
+      width: 32px;
+      height: 32px;
+      padding-top: 2px; }
+      .icon.is-whitelight.is-circle.is-small {
+        width: 24px;
+        height: 24px;
+        padding-top: 0; }
+      .icon.is-whitelight.is-circle.is-medium {
+        width: 42px;
+        height: 42px;
+        padding-top: 2px; }
   .icon.is-light {
     color: #e9e9e9; }
+    .icon.is-light.is-circle {
+      border: 2px solid #e9e9e9;
+      background: #e9e9e9;
+      border-radius: 100%;
+      color: #212121;
+      width: 32px;
+      height: 32px;
+      padding-top: 2px; }
+      .icon.is-light.is-circle.is-small {
+        width: 24px;
+        height: 24px;
+        padding-top: 0; }
+      .icon.is-light.is-circle.is-medium {
+        width: 42px;
+        height: 42px;
+        padding-top: 2px; }
   .icon.is-dark {
     color: #212121; }
+    .icon.is-dark.is-circle {
+      border: 2px solid #212121;
+      background: #212121;
+      border-radius: 100%;
+      color: #e9e9e9;
+      width: 32px;
+      height: 32px;
+      padding-top: 2px; }
+      .icon.is-dark.is-circle.is-small {
+        width: 24px;
+        height: 24px;
+        padding-top: 0; }
+      .icon.is-dark.is-circle.is-medium {
+        width: 42px;
+        height: 42px;
+        padding-top: 2px; }
   .icon.is-purple {
     color: #9c27b0; }
+    .icon.is-purple.is-circle {
+      border: 2px solid #9c27b0;
+      background: #9c27b0;
+      border-radius: 100%;
+      color: white;
+      width: 32px;
+      height: 32px;
+      padding-top: 2px; }
+      .icon.is-purple.is-circle.is-small {
+        width: 24px;
+        height: 24px;
+        padding-top: 0; }
+      .icon.is-purple.is-circle.is-medium {
+        width: 42px;
+        height: 42px;
+        padding-top: 2px; }
   .icon.is-primary {
     color: #3cbc8d; }
+    .icon.is-primary.is-circle {
+      border: 2px solid #3cbc8d;
+      background: #3cbc8d;
+      border-radius: 100%;
+      color: white;
+      width: 32px;
+      height: 32px;
+      padding-top: 2px; }
+      .icon.is-primary.is-circle.is-small {
+        width: 24px;
+        height: 24px;
+        padding-top: 0; }
+      .icon.is-primary.is-circle.is-medium {
+        width: 42px;
+        height: 42px;
+        padding-top: 2px; }
   .icon.is-primarydark {
     color: #309670; }
+    .icon.is-primarydark.is-circle {
+      border: 2px solid #309670;
+      background: #309670;
+      border-radius: 100%;
+      color: #309670;
+      width: 32px;
+      height: 32px;
+      padding-top: 2px; }
+      .icon.is-primarydark.is-circle.is-small {
+        width: 24px;
+        height: 24px;
+        padding-top: 0; }
+      .icon.is-primarydark.is-circle.is-medium {
+        width: 42px;
+        height: 42px;
+        padding-top: 2px; }
   .icon.is-primarylight {
     color: #62c9a3; }
+    .icon.is-primarylight.is-circle {
+      border: 2px solid #62c9a3;
+      background: #62c9a3;
+      border-radius: 100%;
+      color: #62c9a3;
+      width: 32px;
+      height: 32px;
+      padding-top: 2px; }
+      .icon.is-primarylight.is-circle.is-small {
+        width: 24px;
+        height: 24px;
+        padding-top: 0; }
+      .icon.is-primarylight.is-circle.is-medium {
+        width: 42px;
+        height: 42px;
+        padding-top: 2px; }
   .icon.is-info {
     color: #2196f3; }
+    .icon.is-info.is-circle {
+      border: 2px solid #2196f3;
+      background: #2196f3;
+      border-radius: 100%;
+      color: white;
+      width: 32px;
+      height: 32px;
+      padding-top: 2px; }
+      .icon.is-info.is-circle.is-small {
+        width: 24px;
+        height: 24px;
+        padding-top: 0; }
+      .icon.is-info.is-circle.is-medium {
+        width: 42px;
+        height: 42px;
+        padding-top: 2px; }
   .icon.is-accent {
     color: #ff5722; }
+    .icon.is-accent.is-circle {
+      border: 2px solid #ff5722;
+      background: #ff5722;
+      border-radius: 100%;
+      color: white;
+      width: 32px;
+      height: 32px;
+      padding-top: 2px; }
+      .icon.is-accent.is-circle.is-small {
+        width: 24px;
+        height: 24px;
+        padding-top: 0; }
+      .icon.is-accent.is-circle.is-medium {
+        width: 42px;
+        height: 42px;
+        padding-top: 2px; }
   .icon.is-success {
     color: #81c784; }
+    .icon.is-success.is-circle {
+      border: 2px solid #81c784;
+      background: #81c784;
+      border-radius: 100%;
+      color: white;
+      width: 32px;
+      height: 32px;
+      padding-top: 2px; }
+      .icon.is-success.is-circle.is-small {
+        width: 24px;
+        height: 24px;
+        padding-top: 0; }
+      .icon.is-success.is-circle.is-medium {
+        width: 42px;
+        height: 42px;
+        padding-top: 2px; }
   .icon.is-warning {
     color: #ffeb3b; }
+    .icon.is-warning.is-circle {
+      border: 2px solid #ffeb3b;
+      background: #ffeb3b;
+      border-radius: 100%;
+      color: rgba(0, 0, 0, 0.5);
+      width: 32px;
+      height: 32px;
+      padding-top: 2px; }
+      .icon.is-warning.is-circle.is-small {
+        width: 24px;
+        height: 24px;
+        padding-top: 0; }
+      .icon.is-warning.is-circle.is-medium {
+        width: 42px;
+        height: 42px;
+        padding-top: 2px; }
   .icon.is-danger {
     color: #EF5350; }
+    .icon.is-danger.is-circle {
+      border: 2px solid #EF5350;
+      background: #EF5350;
+      border-radius: 100%;
+      color: white;
+      width: 32px;
+      height: 32px;
+      padding-top: 2px; }
+      .icon.is-danger.is-circle.is-small {
+        width: 24px;
+        height: 24px;
+        padding-top: 0; }
+      .icon.is-danger.is-circle.is-medium {
+        width: 42px;
+        height: 42px;
+        padding-top: 2px; }
   .icon.is-small {
     display: inline-block;
     font-size: 14px;
