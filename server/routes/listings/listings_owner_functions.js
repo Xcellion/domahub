@@ -456,18 +456,27 @@ module.exports = {
 			error.handler(req, res, "Price must be a whole number!", "json");
 		}
 		else {
+			var listing_info = getUserListingObj(req.user.listings, req.params.domain_name);
+
 			if (!req.new_listing_info) {
 				req.new_listing_info = {};
 			}
 			req.new_listing_info.status = status;
 			req.new_listing_info.description = description;
 			req.new_listing_info.price_type = price_type;
-			req.new_listing_info.price_rate = price_rate;
+
+			//premium
+			if (listing_info.exp_date >= new Date().getTime()){
+				req.new_listing_info.price_rate = price_rate;
+			}
+			else {
+				req.new_listing_info.price_rate = (price_type == "month") ? 25 : 10;
+			}
 			req.new_listing_info.categories = (categories_clean == "") ? null : categories_clean;
 
 			//delete anything that wasnt posted (except if its "", in which case it was intentional deletion)
 			for (var x in req.new_listing_info){
-				if (!req.body[x] && req.body[x] != ""){
+				if (!req.body[x] && req.body[x] != "" && x != "price_rate"){
 					delete req.new_listing_info[x];
 				}
 			}
@@ -476,8 +485,10 @@ module.exports = {
 	},
 
 	//function to make sure that if they're changing the pricing, that they can change it
-	checkListingPriceType : function(req, res, next){
-		if (req.body.price_rate){
+	checkListingPrice : function(req, res, next){
+		var price_rate = parseFloat(req.body.price_rate);
+
+		if (price_rate){
 			var listing_info = getUserListingObj(req.user.listings, req.params.domain_name);
 
 			//the listing is still premium, all good to edit!

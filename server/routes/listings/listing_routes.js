@@ -109,8 +109,8 @@ module.exports = function(app, db, auth, error, stripe){
 		owner_functions.checkImageUploadSize,
 		owner_functions.checkListingImage,
 		owner_functions.checkListingStatus,
+		owner_functions.checkListingPrice,
 		owner_functions.checkListingDetails,
-		owner_functions.checkListingPriceType,
 		owner_functions.checkListingExisting,
 		owner_functions.updateListing
 	]);
