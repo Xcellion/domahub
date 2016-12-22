@@ -17,9 +17,6 @@ $(document).ready(function() {
     setupTable(total_pages, row_per_page, current_page, row_display);
     setupControls(total_pages, row_per_page, current_page, row_display);
 
-    //for rentals or listings
-    var data_to_display = (window.location.pathname.indexOf("listings") != -1) ? listings : rentals;
-
     //search for a specific domain
     $("#search-domain").keyup(function(e){
         var needle = $(this).val();
@@ -44,6 +41,9 @@ $(document).ready(function() {
     //filter panel
     $(".filter-local").click(function(e){
         var panel_id = $(this).attr('id');
+        //for rentals or listings
+        var data_to_display = (window.location.pathname.indexOf("listings") != -1) ? listings : rentals;
+
         $(".filter-local").removeClass('is-active');
         $(this).addClass("is-active");
 
@@ -240,10 +240,10 @@ function sortRows(method, sorted){
     else if (method == "status"){
         toggleSort("status", sorted);
     }
-    else if (method == "price-type"){
+    else if (method == "type"){
         toggleSort("price_type", sorted);
     }
-    else if (method == "price-rate"){
+    else if (method == "rate"){
         toggleSort("price_rate", sorted);
     }
     else if (method == "type"){
@@ -465,7 +465,6 @@ function changedListingValue(input_elem, info){
 //function to drop down a row
 function dropRow(row, editing){
     var row_drop = row.next(".row-drop");
-    row.toggleClass("is-active");
     if (editing){
         row_drop.find(".div-drop").stop().slideDown("fast");
     }

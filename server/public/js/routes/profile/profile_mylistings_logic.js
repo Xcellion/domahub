@@ -399,6 +399,7 @@ function createDeleteButton(listing_info){
 
                 if (data.state == "success"){
                     listings = data.listings;
+                    row_display = listings.slice(0);
                     row_drop.remove();
                     row.remove();
                 }
@@ -722,13 +723,14 @@ function selectRow(row, verified){
     var icon_i = row.find(".td-arrow i");
     var icon_span = row.find(".td-arrow .icon");
 
+    row.toggleClass('is-active');
+    icon_span.toggleClass('is-primary');
     if (selected){
         if (!verified){
             icon_i.removeClass('fa-exclamation-triangle');
             icon_span.removeClass('is-danger');
         }
         icon_i.removeClass('fa-square-o').addClass("fa-check-square-o box-checked");
-        icon_span.addClass('is-primary');
     }
     else {
         if (!verified){
@@ -739,7 +741,6 @@ function selectRow(row, verified){
             icon_i.addClass('fa-square-o');
         }
         icon_i.removeClass("fa-check-square-o box-checked");
-        icon_span.removeClass('is-primary');
     }
 }
 
@@ -828,6 +829,8 @@ function submitListingChanges(row, row_drop, success_button, listing_info){
         if (data.state == "success"){
             successMessage(listing_msg_success, true);
             listings = data.listings;
+            row_display = listings.slice(0);
+
             success_button.addClass("is-disabled");
             cancel_button.addClass('is-hidden');
             refreshSubmitbindings(success_button, cancel_button, listings, domain_name);
@@ -899,6 +902,7 @@ function submitSubscription(upgrade_button, stripeToken, stripeEmail){
         else {
             successMessage(listing_msg_success, true);
             listings = data.listings;
+            row_display = listings.slice(0);
             upgradeToPremium(upgrade_button, data.new_exp_date);
         }
     });
@@ -921,6 +925,7 @@ function submitCancellation(upgrade_button){
         else {
             successMessage(listing_msg_success, true);
             listings = data.listings;
+            row_display = listings.slice(0);
             downgradeToBasic(upgrade_button);
         }
     });
