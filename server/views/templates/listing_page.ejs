@@ -19,7 +19,7 @@
       <div id="price-display">
         <% if (listing_info.status == 1) { %>
         <h2 class="is-black is-bold has-text-centered">
-          $<%= listing_info.month_price %> Per Month
+          $<%= listing_info.price_rate %> Per <%= listing_info.price_type.charAt(0).toUpperCase() + listing_info.price_type.substr(1) %>
         </h2>
         <% } else { %>
         <h2 class="is-black is-bold has-text-centered">
@@ -39,20 +39,35 @@
           <nav class="level">
             <div class="level-item has-text-centered">
               <h3 class="heading">Alexa Ranking</h3>
-              <h3 class="is-bold">#2,003,581</h3>
+              <h3 class="is-bold"><%= listing_info.alexa.globalRank %></h3>
             </div>
             <div class="level-item has-text-centered">
+              <h3 class="heading">Daily Time on Site</h3>
+              <h3 class="is-bold"><%= listing_info.alexa.engagement.dailyTimeOnSite %></h3>
+            </div>
+            <div class="level-item has-text-centered">
+              <h3 class="heading">Daily Pageviews per Visitor</h3>
+              <h3 class="is-bold"><%= listing_info.alexa.engagement.dailyPageViewPerVisitor %></h3>
+            </div>
+            <div class="level-item has-text-centered">
+                <h3 class="heading">Bounce Rate</h3>
+                <h3 class="is-bold"><%= listing_info.alexa.engagement.bounceRate %></h3>
+            </div>
+            <%# <div class="level-item has-text-centered">
               <h3 class="heading">DomaHub Ranking</h3>
               <h3 class="is-bold">#5,608</h3>
-            </div>
-            <div class="level-item has-text-centered">
+            </div>%>
+            <%# <div class="level-item has-text-centered">
               <h3 class="heading">Visits this Month</h3>
               <h3 class="is-bold">150,000</h3>
-            </div>
+            </div>%>
+          </nav>
+          <nav class='has-text-right'>
+              For more information, visit <a class='orange-link' href="http://www.alexa.com/siteinfo/<%= listing_info.domain_name %>">Alexa.com</a>
           </nav>
         </div>
         <div class="content listing-info">
-          <h3 class="is-bold">Listing Description</h3>
+          <h3 class="is-bold">Description</h3>
           <p>
             <% if (listing_info.categories) { %>
             <%= listing_info.description %>
@@ -76,7 +91,11 @@
         </div>
         <% } %>
         <div class="content listing-info">
-          <h3 class="is-bold margin-bottom-15">Listed By</h3>
+            <% if (listing_info.owner_id){ %>
+                <h3 class="is-bold margin-bottom-15">Listed By</h3>
+            <% } else { %>
+                <h3 class="is-bold margin-bottom-15">Owned By</h3>
+            <% } %>
           <article class="media">
             <figure class="media-left">
               <p class="image is-circle is-64x64">

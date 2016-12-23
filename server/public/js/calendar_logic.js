@@ -1,24 +1,21 @@
-$(document).ready(function() {
-    setUpCalendar();
-});
-
 //----------------------------------------------------------------------------------------------------------------CALENDAR SET UP
 
 //function to setup the calendar
-function setUpCalendar(){
+function setUpCalendar(listing_info){
     $('#calendar').fullCalendar({
         scrollTime: moment().format("hh:mm:ss"),
-        defaultView: "agendaWeek",
+        defaultView: (listing_info.price_type == "month" || listing_info.price_type == "week") ? "month" : "agendaWeek",
         allDayDefault: false,
-        allDaySlot: false,
         selectable: true,
         timezone: "local",
         editable: false, //prevents editing of events
         eventOverlap: false, //prevents overlap of events
         eventStartEditable: false, //prevents moving of events
-        nowIndicator: true, //red line indicating current time
-        slotDuration: '01:00:00', //how long a slot is,
         height: "parent",
+
+        allDaySlot: false,
+        slotDuration: '01:00:00', //how long a slot is,
+        nowIndicator: true, //red line indicating current time
 
         //formatting for labels
         titleFormat: {
@@ -43,7 +40,7 @@ function setUpCalendar(){
             //all day background event (month view)
             {
                 start: '1970-01-01T00:00:00',
-                end: moment().format("YYYY-MM-DD"),
+                end: moment().endOf("hour"),
                 rendering: 'background',
                 allDay: true
             },
@@ -64,7 +61,7 @@ function setUpCalendar(){
 
         //prevent selecting anything before current hour, and next year
         selectConstraint: {
-            start: moment().endOf("hour"),
+            start: moment().startOf("day"),
             end: moment().add(1, "year")
         },
 
@@ -114,27 +111,23 @@ function setUpCalendar(){
             if (currentView.name == "agendaWeek"){
                 daySelectionHandlers();		//day selector event handlers
             }
-            highlightCellHover(currentView.name);		//highlight cell hover
+            //highlightCellHover(currentView.name);		//highlight cell hover
         },
 
         //creating new events
         select: function(start, end, jsEvent, view){
-            var start = moment(start.format());
-            var end = moment(end.format());
-            var now = moment();
-            var then = moment().add(1, "year");
-
-            start = (start.isSameOrBefore(now)) ? now.add(1, "hour").startOf('hour') : start;  		//to select a partial day entirely (past)
-            end = (end.isSameOrAfter(then)) ? then.startOf('hour') : end; 							//to select a partial day entirely (future)
-
-            //prevent calendar from creating events in the past (except for current hour slot)
-            if (start < now){
-                $('#calendar').fullCalendar('unselect');
-                return false;
+            if (view.name == "month"){
+                start = moment(start.startOf("day").format("YYYY-MM-DD"));
+                end = moment(end.subtract(1, "day").format("YYYY-MM-DD"));
             }
-            else {
-                createEvent(start, end);
-            }
+
+            start = start.startOf(listing_info.price_type);
+            end = end.endOf(listing_info.price_type).add(1, "millisecond");
+
+            partial_days = handlePartialDays(start, end);
+            start = partial_days.start;
+            end = partial_days.end;
+            createEvent(start, end);
         },
 
         //tag id to HTML DOM for easy access
@@ -512,9 +505,20 @@ function getTimeSlotMonth(jsEvent){
 		}
 	}
 	var day_elem = $($(jsEvent.target).closest(".fc-week").find(".fc-day")[nth_day]).data('date');
+
+    var now = moment();
+    var then = moment().add(1, "year");
+
+    var remove_start = moment(day_elem).startOf(listing_info.price_type);
+    var remove_end = moment(day_elem).endOf(listing_info.price_type).add(1, "millisecond");
+
+    partial_days = handlePartialDays(remove_start, remove_end);
+    remove_start = partial_days.start;
+    remove_end = partial_days.end;
+
 	return {
-		start : moment(day_elem),
-		end : moment(day_elem).add(1, "day")
+		start : remove_start,
+		end : remove_end
 	}
 }
 
@@ -525,7 +529,7 @@ function removeEventTimeSlot(calEvent, mouseDownSlot, mouseUpSlot){
 	&& calEvent.end.isSameOrBefore(mouseUpSlot.end)){
 		$('#calendar').fullCalendar('removeEvents', calEvent._id);
 		$('#calendar').fullCalendar('updateEvent', calEvent);
-		//console.log('event equal to slot');
+		//consolelog('event equal to slot');
 	}
 	//if clipping starts at top of event
 	else if (calEvent.start.isSame(mouseDownSlot.start)){
@@ -533,9 +537,9 @@ function removeEventTimeSlot(calEvent, mouseDownSlot, mouseUpSlot){
 		calEvent.title = moneyFormat.to(eventPrice({
 			start: calEvent.start,
 			end: calEvent.end
-		}).totalPrice);
+		}));
 		$('#calendar').fullCalendar('updateEvent', calEvent);
-		//console.log('clipping at top');
+		//consolelog('clipping at top');
 	}
 	//if clipping starts at middle of event and goes all the way
 	else if (calEvent.end.isSame(mouseUpSlot.end)){
@@ -543,13 +547,13 @@ function removeEventTimeSlot(calEvent, mouseDownSlot, mouseUpSlot){
 		calEvent.title = moneyFormat.to(eventPrice({
 			start: calEvent.start,
 			end: calEvent.end
-		}).totalPrice);
+		}));
 		$('#calendar').fullCalendar('updateEvent', calEvent);
-		//console.log('clipping at bottom');
+		//consolelog('clipping at bottom');
 	}
 	//if middle of event, split event into two
 	else {
-		//console.log('middle of event');
+		//consolelog('middle of event');
 
 		//update existing
 		var tempEnd = calEvent.end;
@@ -557,7 +561,7 @@ function removeEventTimeSlot(calEvent, mouseDownSlot, mouseUpSlot){
 		calEvent.title = moneyFormat.to(eventPrice({
 			start: calEvent.start,
 			end: calEvent.end
-		}).totalPrice);
+		}));
 		$('#calendar').fullCalendar('updateEvent', calEvent);
 
 		//update splitting off
@@ -566,7 +570,7 @@ function removeEventTimeSlot(calEvent, mouseDownSlot, mouseUpSlot){
 				title: moneyFormat.to(eventPrice({
 					start: mouseUpSlot.end,
 					end: tempEnd
-				}).totalPrice),
+				})),
 				start: mouseUpSlot.end,
 				end: tempEnd,
 				color: calEvent.color,
@@ -638,7 +642,7 @@ function createExisting(rentals){
 
 //helper function to merge events
 function createEvent(start, end){
-	var allevents = $('#calendar').fullCalendar('clientEvents');
+	var allevents = $('#calendar').fullCalendar('clientEvents', returnNotMineNotBG);
 	var mergingEvents = [];
 	var overlappingEvents = [];
 	var fullyOverlappingEvents = [];
@@ -648,42 +652,42 @@ function createEvent(start, end){
 	//check for overlapping events or mergeable events
 	$.each(allevents, function( index, eventitem )
 	{
-		if (eventitem !== null && typeof eventitem != 'undefined' && !eventitem.old && eventitem.rendering != "background")
-		{
-			//event being created is fully overlapped by existing event, so dont create anything new
-			if (checkFullOverlap(start._d, end - start, eventitem.start._d, eventitem.end - eventitem.start)){
-				//console.log('new event is not needed');
-				eventEncompassed = true;
-				removeEventTimeSlot(eventitem, {start: start, end: end}, {start: start, end: end});
-				updatePrices();
-			}
-			//check if existing event is fully overlapped by event being created
-			else if (checkFullOverlap(eventitem.start._d, eventitem.end - eventitem.start, start._d, end - start)){
-				//console.log('full overlap');
-				fullyOverlappingEvents.push(eventitem);
-			}
-			//overlaps something, just not completely
-			else if (checkOverlap(start._d, end - start, eventitem.start._d, eventitem.end - eventitem.start)){
-				//console.log('partial overlap');
-				overlappingEvents.push(eventitem);
-			}
+		//event being created is fully overlapped by existing event, so dont create anything new
+		if (eventitem.start.isSameOrBefore(start) && eventitem.end.isSameOrAfter(end)){
+			//consolelog('new event is not needed');
+			eventEncompassed = true;
+			removeEventTimeSlot(eventitem, {start: start, end: end}, {start: start, end: end});
+			updatePrices();
+		}
+		//check if existing event is fully overlapped by event being created
+		else if (start.isSameOrBefore(eventitem.start) && end.isSameOrAfter(eventitem.end)){
+			//consolelog('full overlap');
+			fullyOverlappingEvents.push(eventitem);
+		}
+		//overlaps something, just not completely
+		else if (
+            (end.isAfter(eventitem.end) && start.isBefore(eventitem.end)) ||
+            (start.isBefore(eventitem.start) && end.isAfter(eventitem.start))
+        ){
+			//consolelog('partial overlap');
+			overlappingEvents.push(eventitem);
+		}
 
-			//no overlaps, check for merges
-			if (!eventitem.old && !eventEncompassed && (moment(start).format('YYYY-MM-DD HH:mm') == moment(eventitem.end).format('YYYY-MM-DD HH:mm')
-			|| moment(end).format('YYYY-MM-DD HH:mm') == moment(eventitem.start).format('YYYY-MM-DD HH:mm'))){
-				//console.log('merge');
-				//if start time of new event (2nd slot) is end time of existing event (1st slot)
-				//i.e. if new event is below any existing events
-				if (moment(start).format('YYYY-MM-DD HH:mm') == moment(eventitem.end).format('YYYY-MM-DD HH:mm'))
-				{
-					mergingEvents.push(eventitem);
-				}
-				//if end time of new event (1st slot) is start time of existing event (2nd slot)
-				//i.e. if new event is above any existing events
-				else if (moment(end).format('YYYY-MM-DD HH:mm') == moment(eventitem.start).format('YYYY-MM-DD HH:mm'))
-				{
-					mergingEvents.push(eventitem);
-				}
+		//no overlaps, check for merges
+		if (!eventitem.old && !eventEncompassed && (moment(start).format('YYYY-MM-DD HH:mm') == moment(eventitem.end).format('YYYY-MM-DD HH:mm')
+		|| moment(end).format('YYYY-MM-DD HH:mm') == moment(eventitem.start).format('YYYY-MM-DD HH:mm'))){
+			//consolelog('merge');
+			//if start time of new event (2nd slot) is end time of existing event (1st slot)
+			//i.e. if new event is below any existing events
+			if (moment(start).format('YYYY-MM-DD HH:mm') == moment(eventitem.end).format('YYYY-MM-DD HH:mm'))
+			{
+				mergingEvents.push(eventitem);
+			}
+			//if end time of new event (1st slot) is start time of existing event (2nd slot)
+			//i.e. if new event is above any existing events
+			else if (moment(end).format('YYYY-MM-DD HH:mm') == moment(eventitem.start).format('YYYY-MM-DD HH:mm'))
+			{
+				mergingEvents.push(eventitem);
 			}
 		}
 	});
@@ -778,7 +782,7 @@ function createEvent(start, end){
 			title: moneyFormat.to(eventPrice({
 				start: start,
 				end: end
-			}).totalPrice),
+			})),
 		};
 
 		//make sure it doesnt overlap
@@ -797,12 +801,12 @@ function createEvent(start, end){
 			for (var x = 0; x < removeEvents.length; x++){
 				//remove the entire chunk of the full existing event from the newly created event
 				if (removeEvents[x].full){
-					//console.log('full existing removed');
+					//consolelog('full existing removed');
 					removeEventTimeSlot(newEvent[0], removeEvents[x], removeEvents[x]);
 				}
 				//remove only the partially overlapped portion
 				else {
-					//console.log('partial existing removed');
+					//consolelog('partial existing removed');
 					if (removeEvents[x].bottom){
 						removeEventTimeSlot(newEvent[0], {start: start}, removeEvents[x]);
 					}
@@ -847,15 +851,10 @@ function updatePrices(){
 
 		//calculate the price
 		var totalPrice = 0;
-		var total_months = total_weeks = total_days = total_hours = 0;
 		for (var x = 0; x < myevents.length; x++){
 			var calculated_prices = eventPrice(myevents[x]);
 
-			totalPrice += calculated_prices.totalPrice;
-			total_months += calculated_prices.count_per_rate.total_months;
-			total_weeks += calculated_prices.count_per_rate.total_weeks;
-			total_days += calculated_prices.count_per_rate.total_days;
-			total_hours += calculated_prices.count_per_rate.total_hours;
+			totalPrice += calculated_prices;
 
 			//add to preview modal
 			var start_date = $("<p class='preview-dates'>" + moment(myevents[x].start).format("MMM DD, YYYY hh:mmA") + "</p>");
@@ -874,10 +873,6 @@ function updatePrices(){
 
 		//update the preview and calendar price HTML
 		$("#preview-rates").empty();
-		appendPreviewRates(total_months, "Month", listing_info.month_price);
-		appendPreviewRates(total_weeks, "Week", listing_info.week_price);
-		appendPreviewRates(total_days, "Day", listing_info.day_price);
-		appendPreviewRates(total_hours, "Hour", listing_info.hour_price);
 		$("#price-total").text(moneyFormat.to(totalPrice));
 
 		//animation for counting numbers
@@ -887,50 +882,26 @@ function updatePrices(){
 			duration: 100,
 			easing: 'swing',
 			step: function (now) {
-				$(this).text("$" +  + Math.floor(now));
+				$(this).text("$" + Number(Math.round(now+'e2')+'e-2').toFixed(2));
 			}
 		});
 	}
 }
 
 //function to figure out a price for a specific event
-function eventPrice(event, callback){
-	var tempDuration = event.end - event.start;
+function eventPrice(event){
 
-	//subtract any whole months
-	var months = divided(tempDuration, 2419200000);
-	tempDuration = (months > 0) ? tempDuration -= months*2419200000 : tempDuration;
+    //get total number of price type units
+    var tempDuration = moment.duration(event.end.diff(event.start));
+    if (listing_info.price_type == "month"){
+        tempDuration = tempDuration.asDays() / 30;
+    }
+    else {
+        tempDuration = tempDuration.as(listing_info.price_type);
+        tempDuration = Number(Math.round(tempDuration+'e2')+'e-2');
+    }
 
-	//subtract any whole weeks
-	var weeks = divided(tempDuration, 604800000);
-	tempDuration = (weeks > 0) ? tempDuration -= weeks*604800000 : tempDuration;
-
-	//subtract any whole days
-	var days = divided(tempDuration, 86400000);
-	tempDuration = (days > 0) ? tempDuration -= days*86400000 : tempDuration;
-
-	//remaining all hours
-	var hours = divided(tempDuration, 3600000);
-	tempDuration = (hours > 0) ? tempDuration -= hours*3600000 : tempDuration;
-
-	//calculate price
-	months_price = months * listing_info.month_price;
-	weeks_price = weeks * listing_info.week_price;
-	days_price = days * listing_info.day_price;
-	hours_price = hours * listing_info.hour_price;
-
-	//how many of each rate type are there
-	var count_per_rate = {
-		total_months : months,
-		total_weeks : weeks,
-		total_days : days,
-		total_hours : hours,
-	}
-
-	return {
-		totalPrice : months_price + weeks_price + days_price + hours_price,
-		count_per_rate : count_per_rate
-	}
+	return tempDuration * listing_info.price_rate;
 }
 
 //helper function to divide number
@@ -965,4 +936,15 @@ function returnMineNotBG(event) {
 //helper function to find all non BG events
 function returnNotMineNotBG(event){
     return event.hasOwnProperty("old") || event.rendering != 'background';
+}
+
+//helper function to handle partial days
+function handlePartialDays(start, end){
+    var now = moment();
+    var then = moment().add(1, "year");
+
+    return {
+        start: (start.isSameOrBefore(now)) ? now.add(1, "hour").startOf('hour') : start,
+        end: (end.isSameOrAfter(then)) ? then.startOf('hour') : end
+    }
 }

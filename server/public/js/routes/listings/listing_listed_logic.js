@@ -1,6 +1,7 @@
 var unlock = true;
 
 $(document).ready(function() {
+	setUpCalendar(listing_info);
 
 	//user since text in About Owner
 	$("#user-since").text(moment(new Date(listing_info.user_created)).format("MMMM, YYYY"));
