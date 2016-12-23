@@ -111,7 +111,43 @@ function setUpCalendar(listing_info){
             if (currentView.name == "agendaWeek"){
                 daySelectionHandlers();		//day selector event handlers
             }
-            //highlightCellHover(currentView.name);		//highlight cell hover
+
+            //dim prev / next month
+            else {
+                $('#calendar').fullCalendar('removeEvents', "prev-next");
+
+                //if its not a month in the past
+                if (currentView.start.isSameOrAfter(moment())){
+                    if (currentView.start.date() != 1){
+                        var prevData = {
+                            start: moment(currentView.start.format("YYYY-MM-DD")).startOf("day").add(1, "millisecond"),
+                            end: moment(currentView.start.format("YYYY-MM-DD")).endOf("month").add(1, "millisecond"),
+                            rendering: 'background',
+                            color: "rgba(0,0,0,0.05)",
+                            allDay: true,
+                            id: "prev-next"
+                        };
+                        $('#calendar').fullCalendar('renderEvent', prevData, true);
+                    }
+                }
+
+                //if its not a month in the future (past 1 year)
+                if (currentView.end.isSameOrBefore(moment().add(1, "year"))){
+                    if (currentView.end.date() != currentView.end.daysInMonth()){
+                        var nextData = {
+                            start: moment(currentView.end.format("YYYY-MM-DD")).startOf("month").add(1, "millisecond"),
+                            end: moment(currentView.end.format("YYYY-MM-DD")).endOf("month").add(1, "millisecond"),
+                            rendering: 'background',
+                            color: "rgba(0,0,0,0.05)",
+                            allDay: true,
+                            id: "prev-next"
+                        };
+                        $('#calendar').fullCalendar('renderEvent', nextData, true);
+                    }
+                }
+            }
+
+            highlightCellHover(currentView.name);		//highlight cell hover
         },
 
         //creating new events
@@ -152,7 +188,10 @@ function setUpCalendar(listing_info){
             }
             //fatten event height in month view
             else {
-                $(element).css("height", "50px");
+                $(element).css("height", "75px");
+                if ($(element).hasClass("fc-not-start")){
+                    $(element).find(".fc-content").remove();
+                }
             }
 
         }
@@ -189,28 +228,39 @@ function setUpCalendar(listing_info){
 //helper function to highlight individual agendaweek cells
 function highlightCellHover(viewname){
 	$('td.fc-widget-content').mouseenter(function(){
-		appendTempCell($(this), viewname);
+
+        if (viewname == "month"){
+            if ($(this).data("date") && moment($(this).data("date")).isSameOrAfter(moment().startOf("day"))){
+                var start = moment($(this).data("date")).startOf(listing_info.price_type);
+                var end = moment($(this).data("date")).endOf(listing_info.price_type).add(1, "millisecond");
+                var partial_days = handlePartialDays(start, end);
+                start = partial_days.start;
+                end = partial_days.end;
+
+                var eventData = {
+                    start: start,
+                    end: end,
+                    rendering: 'background',
+                    color: "rgba(60, 188, 141, 0.3)",
+                    allDay: true,
+                    id : "hover"
+                };
+                $('#calendar').fullCalendar('renderEvent', eventData);
+            }
+        }
+        else {
+            appendTempCell($(this), viewname);
+        }
 	});
 
 	if (viewname == "month"){
 		//month hover on day row
-		$(".fc-day-number").mouseenter(function(e){
-
-			//only when not clicking
-			if (e.which == 0){
-				var day_index = $(this).index();
-				day_cell_elem = $($(this).closest(".fc-content-skeleton").prev(".fc-bg").find(".fc-widget-content")[day_index]);
-				appendTempCell(day_cell_elem, "month");
-			}
-		});
-
-		//month hover on day row
 		$(".fc-day-number").mouseleave(function(e){
-			$(".temp-cell").remove();
+            $('#calendar').fullCalendar('removeEvents', "hover");
 		});
 
 		$('td.fc-widget-content').mouseleave(function(){
-			$(".temp-cell").remove();
+            $('#calendar').fullCalendar('removeEvents', "hover");
 		});
 	}
 }
@@ -234,8 +284,11 @@ function appendTempCell(element, view){
 			$(".temp-cell").remove();
 			var temp_cell = $("<td class='temp-cell'></td>");
 			temp_cell.css({
-				width: element.width() + 1,
+				width: "100%",
+                left: 0,
 				height: element.height() + 2,
+                position: "absolute",
+                "z-index": -1,
 				border: 0
 			});
 			element.append(temp_cell);
@@ -537,7 +590,7 @@ function removeEventTimeSlot(calEvent, mouseDownSlot, mouseUpSlot){
 		calEvent.title = moneyFormat.to(eventPrice({
 			start: calEvent.start,
 			end: calEvent.end
-		}));
+		}).price);
 		$('#calendar').fullCalendar('updateEvent', calEvent);
 		//consolelog('clipping at top');
 	}
@@ -547,7 +600,7 @@ function removeEventTimeSlot(calEvent, mouseDownSlot, mouseUpSlot){
 		calEvent.title = moneyFormat.to(eventPrice({
 			start: calEvent.start,
 			end: calEvent.end
-		}));
+		}).price);
 		$('#calendar').fullCalendar('updateEvent', calEvent);
 		//consolelog('clipping at bottom');
 	}
@@ -561,7 +614,7 @@ function removeEventTimeSlot(calEvent, mouseDownSlot, mouseUpSlot){
 		calEvent.title = moneyFormat.to(eventPrice({
 			start: calEvent.start,
 			end: calEvent.end
-		}));
+		}).price);
 		$('#calendar').fullCalendar('updateEvent', calEvent);
 
 		//update splitting off
@@ -570,7 +623,7 @@ function removeEventTimeSlot(calEvent, mouseDownSlot, mouseUpSlot){
 				title: moneyFormat.to(eventPrice({
 					start: mouseUpSlot.end,
 					end: tempEnd
-				})),
+				}).price),
 				start: mouseUpSlot.end,
 				end: tempEnd,
 				color: calEvent.color,
@@ -692,37 +745,37 @@ function createEvent(start, end){
 		}
 	});
 
-	//there are mergable events, merge them!
-	if (mergingEvents.length){
-		if (mergingEvents.length == 2){
-			//if the first merge event is above second merge event
-			if (mergingEvents[0].start < mergingEvents[1].start){
-				start = mergingEvents[0].start;
-				end = mergingEvents[1].end;
-			}
-			else {
-				start = mergingEvents[1].start;
-				end = mergingEvents[0].end;
-			}
-			$('#calendar').fullCalendar('removeEvents', mergingEvents[1]._id);
-			$('#calendar').fullCalendar('removeEvents', mergingEvents[0]._id);
-		}
-		//only 1 merge
-		else if (mergingEvents.length == 1){
-			//if new event is below any existing events
-			if (moment(start).format('YYYY-MM-DD HH:mm') == moment(mergingEvents[0].end).format('YYYY-MM-DD HH:mm'))
-			{
-				start = mergingEvents[0].start;
-			}
-			//if new event is above any existing events
-			else if (moment(end).format('YYYY-MM-DD HH:mm') == moment(mergingEvents[0].start).format('YYYY-MM-DD HH:mm'))
-			{
-				end = mergingEvents[0].end;
-			}
-			$('#calendar').fullCalendar('removeEvents', mergingEvents[0]._id);
-		}
-		mergingEvents = [];
-	}
+	// //there are mergable events, merge them!
+	// if (mergingEvents.length){
+	// 	if (mergingEvents.length == 2){
+	// 		//if the first merge event is above second merge event
+	// 		if (mergingEvents[0].start < mergingEvents[1].start){
+	// 			start = mergingEvents[0].start;
+	// 			end = mergingEvents[1].end;
+	// 		}
+	// 		else {
+	// 			start = mergingEvents[1].start;
+	// 			end = mergingEvents[0].end;
+	// 		}
+	// 		$('#calendar').fullCalendar('removeEvents', mergingEvents[1]._id);
+	// 		$('#calendar').fullCalendar('removeEvents', mergingEvents[0]._id);
+	// 	}
+	// 	//only 1 merge
+	// 	else if (mergingEvents.length == 1){
+	// 		//if new event is below any existing events
+	// 		if (moment(start).format('YYYY-MM-DD HH:mm') == moment(mergingEvents[0].end).format('YYYY-MM-DD HH:mm'))
+	// 		{
+	// 			start = mergingEvents[0].start;
+	// 		}
+	// 		//if new event is above any existing events
+	// 		else if (moment(end).format('YYYY-MM-DD HH:mm') == moment(mergingEvents[0].start).format('YYYY-MM-DD HH:mm'))
+	// 		{
+	// 			end = mergingEvents[0].end;
+	// 		}
+	// 		$('#calendar').fullCalendar('removeEvents', mergingEvents[0]._id);
+	// 	}
+	// 	mergingEvents = [];
+	// }
 
 	//there are fully overlapping events
 	if (fullyOverlappingEvents.length){
@@ -773,7 +826,7 @@ function createEvent(start, end){
 	}
 
 	//checked for all cases, create the new event!
-	if (!eventEncompassed && mergingEvents.length == 0 && overlappingEvents.length == 0 && fullyOverlappingEvents.length == 0){
+	if (!eventEncompassed && overlappingEvents.length == 0 && fullyOverlappingEvents.length == 0){
 		var eventData = {
 			start: start,
 			end: end,
@@ -782,7 +835,7 @@ function createEvent(start, end){
 			title: moneyFormat.to(eventPrice({
 				start: start,
 				end: end
-			})),
+			}).price),
 		};
 
 		//make sure it doesnt overlap
@@ -851,10 +904,12 @@ function updatePrices(){
 
 		//calculate the price
 		var totalPrice = 0;
+        var totalUnits = 0;
 		for (var x = 0; x < myevents.length; x++){
 			var calculated_prices = eventPrice(myevents[x]);
 
-			totalPrice += calculated_prices;
+			totalPrice += calculated_prices.price;
+            totalUnits += calculated_prices.units;
 
 			//add to preview modal
 			var start_date = $("<p class='preview-dates'>" + moment(myevents[x].start).format("MMM DD, YYYY hh:mmA") + "</p>");
@@ -864,15 +919,11 @@ function updatePrices(){
 			$("#preview-end-dates").append(end_date);
 		}
 
-		var appendPreviewRates = function(total_units, type, price_rate){
-			if (total_units > 0){
-				var s_or_not = (total_units == 1) ? "" : "s";
-				$("#preview-rates").append($("<h3>$" + price_rate + " x " + total_units + " " + type + s_or_not + "</h3>"));
-			}
-		}
+        var s_or_not = (totalUnits > 1) ? "s" : "";
 
 		//update the preview and calendar price HTML
 		$("#preview-rates").empty();
+        $("#preview-rates").append($("<h3>$" + listing_info.price_rate + " x " + totalUnits.toFixed(4) + " " + listing_info.price_type + s_or_not + "</h3>"));
 		$("#price-total").text(moneyFormat.to(totalPrice));
 
 		//animation for counting numbers
@@ -901,7 +952,10 @@ function eventPrice(event){
         tempDuration = Number(Math.round(tempDuration+'e2')+'e-2');
     }
 
-	return tempDuration * listing_info.price_rate;
+    return {
+        price: tempDuration * listing_info.price_rate,
+        units: tempDuration
+    }
 }
 
 //helper function to divide number
