@@ -10,6 +10,7 @@ var mailOptions = {
     }
 }
 var mailer = nodemailer.createTransport(sgTransport(mailOptions));
+var alexaData = require('alexa-traffic-rank');
 
 module.exports = {
 	//check if rental belongs to account and exists
@@ -243,7 +244,13 @@ module.exports = {
 			}
 			else {
 				getListingRentalTimes(req, res, result.info[0], function(){
-					next();
+
+                    //get alexa traffic info
+                    alexaData.AlexaWebData(req.params.domain_name, function(error, result) {
+                        req.session.listing_info.alexa = result;
+                        next();
+                    });
+
 				});
 			}
 		});
@@ -663,7 +670,12 @@ function renderWhoIs(req, res, domain_name){
 				options.listing_info.available = true;
 			}
 
-			res.render("listings/listing_unlisted.ejs", options);
+            //get alexa traffic info
+            alexaData.AlexaWebData(req.params.domain_name, function(error, result) {
+                options.listing_info.alexa = result;
+                res.render("listings/listing_unlisted.ejs", options);
+            });
+
 		}
 
 
