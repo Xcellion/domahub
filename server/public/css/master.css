@@ -815,6 +815,8 @@ table {
     border: 1px solid rgba(0, 0, 0, 0.12); }
   .box.radius-right-only {
     border-radius: 0 5px 5px 0; }
+  .box.no-border-radius {
+    border-radius: 0; }
   .box.is-domain-listing {
     -moz-transition: all 0.25s ease;
     -o-transition: all 0.25s ease;
@@ -936,6 +938,7 @@ a.box {
     margin-right: 4px; }
   .button .icon:last-child,
   .button .tag:last-child {
+    margin-left: 4px;
     margin-right: -2px; }
   .button:hover, .button:focus {
     box-shadow: 0 4px 5px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 2px 4px -1px rgba(0, 0, 0, 0.2); }
@@ -2201,6 +2204,8 @@ input:-webkit-autofill {
   text-align: left; }
   .control:not(:last-child) {
     margin-bottom: 15px; }
+  .control.has-text-centered {
+    text-align: center; }
   .control.has-slider {
     padding: 5px 20px 0;
     width: 100%; }
@@ -2808,10 +2813,9 @@ input:-webkit-autofill {
     color: #EF5350; }
 
 .subtitle {
-  line-height: 1.125; }
+  line-height: 1.3; }
   @media screen and (max-width: 768px) {
     .subtitle {
-      font-size: 1.2rem;
       width: 100%; } }
   .subtitle code {
     border-radius: 3px;
@@ -4391,8 +4395,9 @@ input:-webkit-autofill {
     justify-content: flex-start; }
     .level.filter-panel .filter-local {
       font-size: 14px;
-      color: rgba(0, 0, 0, 0.9); }
-      .level.filter-panel .filter-local:focus, .level.filter-panel .filter-local:hover {
+      color: rgba(0, 0, 0, 0.9);
+      padding: 2px; }
+      .level.filter-panel .filter-local:hover {
         -webkit-box-shadow: 0 2px 0 0 black;
         -moz-box-shadow: 0 2px 0 0 black;
         box-shadow: 0 2px 0 0 black; }
@@ -4902,7 +4907,7 @@ a.nav-item.is-tab {
       padding: 10px;
       width: 100%; }
     .nav-menu.is-dark {
-      background-color: #444; }
+      background-color: #212121; }
     .nav-menu.is-white {
       background-color: white; }
     .nav-menu.is-active {

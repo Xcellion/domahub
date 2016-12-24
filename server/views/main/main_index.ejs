@@ -13,18 +13,36 @@
   <section id="index-img" class="section is-large landing-img">
     <div class="container">
       <div class="columns">
-        <div class="column">
+        <div class="column is-6-desktop is-offset-3-desktop is-8-tablet is-offset-2-tablet">
           <div class="content">
-            <h1 class="title is-2 is-white margin-bottom-25">
+            <h1 class="title is-1 is-white margin-bottom-25">
               An online marketplace for <span class="bam">renting domain names.</span>
             </h1>
             <h2 class="subtitle is-5 is-white">
-              DomaHub provides domain name rentals at low, affordable prices and flexible dates.
+              DomaHub provides domain name rentals at low, affordable prices and flexible time slots.
             </h2>
           </div>
-          <p class="control margin-top-50">
-            <a class="button is-primary is-large" href='/signup'>Create Account</a>
-          </p>
+          <div class="content margin-top-50">
+            <p class="is-white">
+              We are currently in a closed beta as we continue to test and tweak some of our
+              features. You can sign up for the beta by entering your email address below.
+            </p>
+          </div>
+          <form id="beta-form" action="/beta" method="post">
+            <div class="control is-grouped">
+              <p class="control is-expanded">
+                <input tabindex="1" id="beta-form-email" class="input is-expanded is-medium" type="email" name="betaemail" placeholder="Enter your email"/>
+              </p>
+              <p class="control">
+                <a tabindex="1" id="beta-form-submit" class="button is-primary is-medium" href="#mailingsubmitted">Sign Up</a>
+              </p>
+            </div>
+          </form>
+          <div id="beta-form-success" class="is-hidden">
+            <div class="notification has-text-centered is-primary">
+              <h3 class="is-white is-bold">Success!</h3>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -35,31 +53,103 @@
       <div class="columns">
         <div class="column margin-bottom-50">
           <div class="content">
-            <h1 class="title is-bold is-2 has-text-centered">Don't let your domains rot away.</h1>
+            <p class="is-grey is-bold heading is">
+              DOMAIN OWNERS
+            </p>
+          </div>
+          <div class="content">
+            <h1 class="title is-bold is-2 has-text-centered has-style-underline">Don't let your domains rot away.</h1>
           </div>
         </div>
       </div>
       <div class="columns">
-        <div class="column">
+        <div class="column is-5">
           <div class="content">
             <h2 class="is-bold">Create a listing and start generating revenue!</h2>
             <p>
               List your domains on DomaHub and allow other users to rent it out.
-              This way, your unused domain doesn't just sit there - it helps someone
-              out and puts some money in your pocket!
-            </p>
-            <p>
-              We offer two types of listings: Basic and Premium. Basic listings are
-              free to list but lack the great perks that Premium offers.
+              This way your unused domains don't just sit there - they help someone
+              out while putting money in your pocket!
             </p>
           </div>
+          <div class="content">
+            <p class="is-bold">Flexible Listing Types</p>
+            <p>
+              Create a Premium listing for $5/mo and we won't take any commission
+              from your sales. At all. You keep everything you earn.
+            </p>
+            <p>
+              Can't afford it? Create a Basic listing for free and we'll only take
+              15% commission on rentals.
+            </p>
+            <a tabindex="1" href="/sellers#basicvpremium" class="orange-link">
+              Learn more about Basic and Premium Listings
+              <span class="icon is-small">
+                <i class="fa fa-angle-right"></i>
+              </span>
+            </a>
+          </div>
         </div>
-        <div class="column">
-          <div class="icon-link">
-            <span class="icon is-primary is-medium">
-              <i class="fa fa-smile-o"></i>
-            </span>
-            <span class="margin-left-10">Listings are free to list</span>
+        <div class="column is-5 is-offset-2">
+          <div class="content margin-bottom-15">
+            <h2 class="has-text-centered is-bold">DomaHub Benefits</h2>
+            <p class="has-text-centered">
+              Click on each slider below to learn more.
+            </p>
+          </div>
+          <div class="slider-box">
+            <div class="slider-item">
+              <div class="slider-content">
+                <span class="icon is-primary">
+                  <i class="fa fa-gears"></i>
+                </span>
+                <span>Custom pricing options</span>
+              </div>
+              <div class="slider-icon">
+                <span class="icon is-primary">
+                  <i class="fa fa-angle-down"></i>
+                </span>
+              </div>
+            </div>
+            <div class="slider-item">
+              <div class="slider-content">
+                <span class="icon is-primary">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span>Flexible rental scheduling</span>
+              </div>
+              <div class="slider-icon">
+                <span class="icon is-primary">
+                  <i class="fa fa-angle-down"></i>
+                </span>
+              </div>
+            </div>
+            <div class="slider-item">
+              <div class="slider-content">
+                <span class="icon is-primary">
+                  <i class="fa fa-window-maximize"></i>
+                </span>
+                <span>Featured listings showcase</span>
+              </div>
+              <div class="slider-icon">
+                <span class="icon is-primary">
+                  <i class="fa fa-angle-down"></i>
+                </span>
+              </div>
+            </div>
+            <div class="slider-item">
+              <div class="slider-content">
+                <span class="icon is-primary">
+                  <i class="fa fa-credit-card"></i>
+                </span>
+                <span>Quick, secure payments</span>
+              </div>
+              <div class="slider-icon">
+                <span class="icon is-primary">
+                  <i class="fa fa-angle-down"></i>
+                </span>
+              </div>
+            </div>
           </div>
         </div>
         <!-- <div class="column hover-scale">
@@ -99,14 +189,14 @@
           </div>
         </div> -->
       </div>
-      <p class="control has-addons has-addons-centered margin-top-50">
+      <!-- <p class="control has-addons has-addons-centered margin-top-50">
         <a class="button is-accent is-large" href="/renters" title="Examples of domain name rentals">
           <span>Learn More</span>
           <span class="icon">
             <i class="fa fa-angle-right"></i>
           </span>
         </a>
-      </p>
+      </p> -->
     </div>
   </section>
 
@@ -169,7 +259,7 @@
     </div>
   </section>
 
-  <section class="hero is-small is-primary is-medium">
+  <!-- <section class="hero is-small is-primary is-medium">
     <div class="hero-body">
       <div class="container">
         <div class="columns">
@@ -197,7 +287,7 @@
         </div>
       </div>
     </div>
-  </section>
+  </section> -->
 
     <%- include("../templates/footer"); %>
     <%- include("../templates/js_scripts"); %>
