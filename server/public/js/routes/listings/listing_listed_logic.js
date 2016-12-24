@@ -32,10 +32,13 @@ $(document).ready(function() {
 		if (read_cookie("local_events")){
 			var cookie_events = read_cookie("local_events");
 			var changed = false;
-
 			for (var x = cookie_events.length - 1; x >= 0; x--){
-				//if its a new event, make sure it's past current time and doesnt overlap
-				if (new Date().getTime() > new Date(cookie_events[x].start).getTime() || checkOverlapEvent(cookie_events[x])){
+				var partial_days = handlePartialDays(moment(cookie_events[x].start), moment(cookie_events[x].end));
+				cookie_events[x].start = partial_days.start;
+				cookie_events[x].end = partial_days.end;
+
+				//if its a new event, make sure it doesnt overlap
+				if (checkOverlapEvent({start: partial_days.start, end: partial_days.end})){
 					changed = true;
 					cookie_events.splice(x, 1);
 				}
