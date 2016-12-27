@@ -7,6 +7,7 @@ function storeCookies(type){
 		for (var x = 0; x < local_events.length; x++){
 			temp_event = {
 				title: local_events[x].title,
+				_id: local_events[x]._id,
 				start: local_events[x].start,
 				end: local_events[x].end,
 				color: local_events[x].color,
