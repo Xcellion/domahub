@@ -39,6 +39,11 @@ $(document).ready(function() {
 		}
 	});
 
+	//close modal if user is logged in
+	if (user){
+		$("#login_modal").removeAttr("style");
+	}
+
 	//hamburger toggle button
 	$(".nav-toggle").click(function() {
 	  $(this).toggleClass("is-active");
