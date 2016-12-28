@@ -3406,10 +3406,8 @@ input:-webkit-autofill {
   padding-right: 10px;
   vertical-align: top;
   white-space: nowrap; }
-  .tag:hover, .tag:active {
-    cursor: pointer; }
-    .tag:hover .delete, .tag:hover .modal-close, .tag:active .delete, .tag:active .modal-close {
-      background-color: rgba(0, 0, 0, 0.66); }
+  .tag:hover .delete, .tag:hover .modal-close, .tag:active .delete, .tag:active .modal-close {
+    background-color: rgba(0, 0, 0, 0.66); }
   .tag.is-uppercase {
     text-transform: uppercase; }
   .tag .delete, .tag .modal-close {
