@@ -103,7 +103,8 @@ function proxyReq(req, res, address, domain_name){
 						error.handler(req, res, false, "api");
 					}
 					else {
-						console.log(html);
+						console.log(html.body, "dfjkasfja");
+						console.log(response.body, "FUCK");
 						res.send(Buffer.concat([body, html]));
 					}
 				});
