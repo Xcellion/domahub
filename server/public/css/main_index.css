@@ -22,10 +22,11 @@
   display: block; }
 
 .slider-item {
-  display: flex;
   align-items: center;
+  display: flex;
   justify-content: space-between;
-  padding: 20px 10px; }
+  padding: 20px 10px;
+  text-transform: capitalize; }
   .slider-item span + span {
     margin-left: 10px; }
   .slider-item:not(:first-child) {
@@ -36,6 +37,14 @@
   .slider-item .slider-content {
     display: flex;
     align-items: center; }
+
+.checklist-item {
+  display: inline-flex;
+  align-items: center; }
+  .checklist-item span + span {
+    margin-left: 5px; }
+  .checklist-item + .coocoo {
+    margin-left: 10px; }
 
 .has-style-underline {
   position: relative; }
