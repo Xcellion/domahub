@@ -363,6 +363,8 @@ module.exports = {
 
 	//function to check that the listing is verified
 	checkListingVerified : function(req, res, next){
+		console.log("F: Checking if listing is a verified listing...");
+
 		if (!req.listing_info){
 			req.listing_info = getUserListingObj(req.user.listings, req.params.domain_name);
 		}
@@ -377,6 +379,8 @@ module.exports = {
 
 	//function to check that the user owns the listing
 	checkListingOwner : function(req, res, next){
+		console.log("F: Checking if current user is listing owner...");
+
 		if (!req.listing_info){
 			req.listing_info = getUserListingObj(req.user.listings, req.params.domain_name);
 		}
@@ -391,6 +395,8 @@ module.exports = {
 
 	//function to check the posted status change of a listing
 	checkListingStatus : function(req, res, next){
+		console.log("F: Checking posted listing status...");
+
 		var status = parseFloat(req.body.status);
 		var domain_name = req.params.domain_name;
 
@@ -423,6 +429,8 @@ module.exports = {
 
 	//function to check and reformat new listings details excluding image
 	checkListingDetails : function(req, res, next){
+		console.log("F: Checking posted listing details...");
+
 		var status = parseFloat(req.body.status);
         var description = sanitize(req.body.description);
 
@@ -476,7 +484,7 @@ module.exports = {
 
 			//delete anything that wasnt posted (except if its "", in which case it was intentional deletion)
 			for (var x in req.new_listing_info){
-				if (!req.body[x] && req.body[x] != "" && x != "price_rate"){
+				if (!req.body[x] && req.body[x] != "" && x != "price_rate" && x != "background_image"){
 					delete req.new_listing_info[x];
 				}
 			}
@@ -489,6 +497,7 @@ module.exports = {
 		var price_rate = parseFloat(req.body.price_rate);
 
 		if (price_rate){
+			console.log("F: Checking if listing price can be edited...");
 			var listing_info = getUserListingObj(req.user.listings, req.params.domain_name);
 
 			//the listing is still premium, all good to edit!
@@ -506,6 +515,8 @@ module.exports = {
 
 	//function to make sure that its different from the existing listing info
 	checkListingExisting : function(req, res, next){
+		console.log("F: Checking if listing details are being changed...");
+
 		if (!req.listing_info){
 			req.listing_info = getUserListingObj(req.user.listings, req.params.domain_name);
 		}

@@ -675,49 +675,37 @@ function checkOverlap(dateX, durationX, dateY, durationY){
 //helper function to run whois since domain isn't listed but is a real domain
 function renderWhoIs(req, res, domain_name){
 	whois.lookup(domain_name, function(err, data){
-		if (err){
-			//something went wrong in looking up the domain
-			res.render("listing_404.ejs", {
-				user: req.user
-			});
-		}
-
 		//look up domain owner info
-		else {
-			var whoisObj = {};
-			var array = parser.parseWhoIsData(data);
-			for (var x = 0; x < array.length; x++){
-				whoisObj[array[x].attribute] = array[x].value;
-			}
-
-			var email = whoisObj["Registrant Email"] || whoisObj["Admin Email"] || whoisObj["Tech Email"] || "";
-			var owner_name = whoisObj["Registrant Organization"] || whoisObj["Registrant Name"] || "Nobody";
-			var description = "This domain is currently unavailable for rent at domahub. ";
-
-			var options = {
-				user: req.user,
-				listing_info: {
-					domain_name: domain_name,
-					email: email,
-					username: owner_name,
-					description: description
-				}
-			}
-
-			//nobody owns it!
-			if (owner_name == "Nobody"){
-				options.listing_info.available = true;
-			}
-
-            //get alexa traffic info
-            alexaData.AlexaWebData(req.params.domain_name, function(error, result) {
-                options.listing_info.alexa = result;
-                res.render("listings/listing_unlisted.ejs", options);
-            });
-
+		var whoisObj = {};
+		var array = parser.parseWhoIsData(data);
+		for (var x = 0; x < array.length; x++){
+			whoisObj[array[x].attribute] = array[x].value;
 		}
 
+		var email = whoisObj["Registrant Email"] || whoisObj["Admin Email"] || whoisObj["Tech Email"] || "";
+		var owner_name = whoisObj["Registrant Organization"] || whoisObj["Registrant Name"] || "Nobody";
+		var description = "This domain is currently unavailable for rent at domahub. ";
 
+		var options = {
+			user: req.user,
+			listing_info: {
+				domain_name: domain_name,
+				email: email,
+				username: owner_name,
+				description: description
+			}
+		}
+
+		//nobody owns it!
+		if (owner_name == "Nobody"){
+			options.listing_info.available = true;
+		}
+
+        //get alexa traffic info
+        alexaData.AlexaWebData(req.params.domain_name, function(error, result) {
+            options.listing_info.alexa = result;
+            res.render("listings/listing_unlisted.ejs", options);
+        });
 	});
 }
 
