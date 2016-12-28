@@ -26,15 +26,7 @@ function checkHost(req, res, next){
 		|| domain_name == "domahub.com"
 		|| domain_name == "localhost"
 		|| domain_name == "localhost:8080"){
-
-			//if dev environment or going to a listings page
-			if (node_env == "dev" || req.path.indexOf("/listing/") != -1 || req.path == "/stripe/webhook"){
-				next();
-			}
-			else {
-				//next();
-				res.render("under_construction.ejs");
-			}
+			next();
 		}
 		//is not a valid FQDN
 		else if (!validator.isFQDN(domain_name)){
