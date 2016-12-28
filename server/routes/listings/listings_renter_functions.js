@@ -12,6 +12,7 @@ var mailOptions = {
 var mailer = nodemailer.createTransport(sgTransport(mailOptions));
 var alexaData = require('alexa-traffic-rank');
 var moment = require('moment');
+var request = require('request');
 
 module.exports = {
 	//check if rental belongs to account and exists
@@ -54,24 +55,33 @@ module.exports = {
 		else if (!req.user && req.body.new_user_email && !validator.isEmail(req.body.new_user_email)){
 			error.handler(req, res, "Invalid email!", "json");
 		}
-		//all good
 		else {
-			req.session.new_rental_info = {
-				rental_db_info : {
-					listing_id: req.session.listing_info.id,
-					address: address
-				},
-				new_user_email : req.body.new_user_email
-			};
+            //check if its a valid HTTP address and that theres a response
+            request(address, function (error, response, body) {
+                //all good
+                if (!error && response.statusCode == 200) {
+                    req.session.new_rental_info = {
+                        rental_db_info : {
+                            listing_id: req.session.listing_info.id,
+                            address: address
+                        },
+                        new_user_email : req.body.new_user_email
+                    };
 
-			//if user is logged in, otherwise create a token for creation
-			if (req.user){
-				req.session.new_rental_info.rental_db_info.account_id = req.user.id;
-			}
-			else {
-				req.session.new_rental_info.rental_db_info.owner_hash_id = Math.random().toString(36).substr(5,5);
-			}
-			next();
+                    //if user is logged in, otherwise create a token for creation
+                    if (req.user){
+                        req.session.new_rental_info.rental_db_info.account_id = req.user.id;
+                    }
+                    else {
+                        req.session.new_rental_info.rental_db_info.owner_hash_id = Math.random().toString(36).substr(5,5);
+                    }
+                    next();
+                }
+                else {
+                    error.handler(req, res, "Invalid address!", "json");
+                }
+            });
+
 		}
 	},
 
