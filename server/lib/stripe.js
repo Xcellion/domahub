@@ -143,7 +143,7 @@ module.exports = {
 	chargeMoney : function(req, res, next){
 		if (req.body.stripeToken){
 			var owner_stripe_id = req.session.new_rental_info.owner_stripe_id;
-			var total_price = req.session.new_rental_info.price * 100;		//USD in cents
+			var total_price = Math.round(req.session.new_rental_info.price * 100);		//USD in cents
 
 			//doma fee if the listing is basic (aka premium hasn't expired)
 			var doma_fees = (req.session.new_rental_info.premium) ? 0 : Math.round(total_price * 0.15);

@@ -618,7 +618,7 @@ function removeEventTimeSlot(calEvent, mouseDownSlot, mouseUpSlot){
 		$('#calendar').fullCalendar('updateEvent', calEvent);
 
 		//update splitting off
-		if (checkOverlapEvent({start: mouseUpSlot.end, end: tempEnd})){
+		if (checkIfNotOverlapped({start: mouseUpSlot.end, end: tempEnd})){
 			var eventData = {
 				title: moneyFormat.to(eventPrice({
 					start: mouseUpSlot.end,
@@ -641,26 +641,16 @@ function removeEventTimeSlot(calEvent, mouseDownSlot, mouseUpSlot){
 }
 
 //helper function to make sure theres nothing overlapping this event
-function checkOverlapEvent(event){
-    var start = new Date(event.start);
-    var end = new Date(event.end);
+function checkIfNotOverlapped(event){
+    var existing = $('#calendar').fullCalendar('clientEvents', returnNotMineNotBG);
+    var overlap = 0;
 
-    var overlap = $('#calendar').fullCalendar('clientEvents', function(ev) {
-        //dont compare with itself
-        if (ev == event){
-            return false;
+    for (var x = 0; x < existing.length; x++){
+        if (moment(event.start).isBefore(existing[x].end) && existing[x].end.isAfter(moment(event.start))){
+            overlap++;
         }
-        //dont compare with background events
-        if (ev.rendering == "background"){
-            return false;
-        }
-        var estart = new Date(ev.start);
-        var eend = new Date(ev.end);
-
-        return (Math.round(estart)/1000 < Math.round(end)/1000 && Math.round(eend) > Math.round(start));
-    });
-
-    return overlap.length == 0;
+    }
+    return overlap == 0;
 }
 
 //helper function to create pre-existing rentals
@@ -695,7 +685,7 @@ function createExisting(rentals){
 
 //helper function to merge events
 function createEvent(start, end){
-	var allevents = $('#calendar').fullCalendar('clientEvents', returnNotMineNotBG);
+	var allevents = $('#calendar').fullCalendar('clientEvents', returnNotBG);
 	var mergingEvents = [];
 	var overlappingEvents = [];
 	var fullyOverlappingEvents = [];
@@ -839,7 +829,7 @@ function createEvent(start, end){
 		};
 
 		//make sure it doesnt overlap
-		if (checkOverlapEvent(eventData)){
+		if (checkIfNotOverlapped(eventData)){
 			var newEvent = $('#calendar').fullCalendar('renderEvent', eventData, true);
 		}
 
@@ -972,24 +962,19 @@ var moneyFormat = wNumb({
 	decimals: 2
 });
 
-//helper function to check if date X overlaps any part with date Y
-function checkOverlap(dateX, durationX, dateY, durationY){
-	return (dateX.getTime() < dateY.getTime() + durationY) && (dateY.getTime() < dateX.getTime() + durationX);
-}
-
-//helper function to check if date X is fully covered by date Y
-function checkFullOverlap(dateX, durationX, dateY, durationY){
-	return (dateY.getTime() <= dateX.getTime()) && (dateX.getTime() + durationX <= dateY.getTime() + durationY);
-}
-
 //helper function to filter out events that aren't mine
 function returnMineNotBG(event) {
     return !event.hasOwnProperty("old") && event.rendering != 'background';
 }
 
 //helper function to find all non BG events
+function returnNotBG(event){
+    return event.rendering != 'background';
+}
+
+//helper function to find all non BG events that are also not mine
 function returnNotMineNotBG(event){
-    return event.hasOwnProperty("old") || event.rendering != 'background';
+    return !event.newevent && event.rendering != 'background';
 }
 
 //helper function to handle partial days

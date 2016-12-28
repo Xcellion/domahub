@@ -42,7 +42,7 @@ module.exports = listing_model;
 
 //check if a listing exists
 listing_model.prototype.checkListing = function(domain_name, callback){
-	console.log("DB: Checking to see if " + domain_name + " is listed on domahub...");
+	console.log("DB: Checking to see if " + domain_name + " is listed on DomaHub...");
 	query = 'SELECT 1 AS "exist" FROM listings WHERE domain_name = ?'
 	listing_query(query, "Listing does not exist!", callback, domain_name);
 }
