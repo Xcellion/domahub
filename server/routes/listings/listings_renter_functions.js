@@ -11,6 +11,8 @@ var mailOptions = {
 }
 var mailer = nodemailer.createTransport(sgTransport(mailOptions));
 var alexaData = require('alexa-traffic-rank');
+var moment = require('moment');
+var request = require('request');
 
 module.exports = {
 	//check if rental belongs to account and exists
@@ -53,24 +55,33 @@ module.exports = {
 		else if (!req.user && req.body.new_user_email && !validator.isEmail(req.body.new_user_email)){
 			error.handler(req, res, "Invalid email!", "json");
 		}
-		//all good
 		else {
-			req.session.new_rental_info = {
-				rental_db_info : {
-					listing_id: req.session.listing_info.id,
-					address: address
-				},
-				new_user_email : req.body.new_user_email
-			};
+            //check if its a valid HTTP address and that theres a response
+            request(address, function (error, response, body) {
+                //all good
+                if (!error && response.statusCode == 200) {
+                    req.session.new_rental_info = {
+                        rental_db_info : {
+                            listing_id: req.session.listing_info.id,
+                            address: address
+                        },
+                        new_user_email : req.body.new_user_email
+                    };
 
-			//if user is logged in, otherwise create a token for creation
-			if (req.user){
-				req.session.new_rental_info.rental_db_info.account_id = req.user.id;
-			}
-			else {
-				req.session.new_rental_info.rental_db_info.owner_hash_id = Math.random().toString(36).substr(5,5);
-			}
-			next();
+                    //if user is logged in, otherwise create a token for creation
+                    if (req.user){
+                        req.session.new_rental_info.rental_db_info.account_id = req.user.id;
+                    }
+                    else {
+                        req.session.new_rental_info.rental_db_info.owner_hash_id = Math.random().toString(36).substr(5,5);
+                    }
+                    next();
+                }
+                else {
+                    error.handler(req, res, "Invalid address!", "json");
+                }
+            });
+
 		}
 	},
 
@@ -141,9 +152,37 @@ module.exports = {
 				var end_num = parseFloat(times[x].end);
 				var temp_start = new Date(start_num);
 				var temp_end = new Date(end_num);
+
+                //check if its a legit date
 				if (isNaN(temp_start) || isNaN(temp_end) || start_num <= time_now || end_num <= time_now){
-					invalid_times.push(times[x]);
+                    invalid_times.push(times[x]);
 				}
+
+                //not divisible by hour blocks
+                else if (moment(end_num).diff(moment(start_num)) % 3600000 != 0){
+                    invalid_times.push(times[x]);
+                }
+
+                //start time in the past
+                else if (moment(start_num).isBefore(moment())){
+                    invalid_times.push(times[x]);
+                }
+
+                //end date further than 1 year
+                else if (moment(end_num).isAfter(moment().add(1, "year"))){
+                    invalid_times.push(times[x]);
+                }
+
+                //invalid time slot end
+                else if (!moment(end_num).isSame(moment(end_num).subtract(1, "millisecond").endOf(req.session.listing_info.price_type).add(1, "millisecond"))){
+                    invalid_times.push(times[x]);
+                }
+
+                //invalid time slot start
+                else if (moment(start_num).diff(moment()) > 3600000 && !moment(start_num).isSame(moment(start_num).startOf(req.session.listing_info.price_type))){
+                    invalid_times.push(times[x]);
+                }
+
 			}
 
 			//send back any that were unavailable
@@ -196,7 +235,7 @@ module.exports = {
 
 	//check if listing is a valid domain name and add it to the search history
 	checkDomainListedAndAddToSearch : function(req, res, next){
-		console.log("F: Checking domain validity...");
+		console.log("F: Checking if domain is listed on DomaHub...");
 
 		var domain_name = req.params.domain_name || req.body["domain-name"];
 
@@ -456,7 +495,6 @@ module.exports = {
 					req.session.listing_info.rentals = joinRentalTimes(req.session.listing_info.rentals);
 				}
 
-                delete req.session.new_rental_info;
                 next();
 			}
 		});
@@ -490,6 +528,7 @@ module.exports = {
     sendRentalSuccess : function(req, res, next){
         var rental_id = (req.session.new_rental_info) ? req.session.new_rental_info.rental_id : req.params.rental_id;
 		var owner_hash_id = (req.session.new_rental_info) ? req.session.new_rental_info.rental_db_info.owner_hash_id : false;
+        delete req.session.new_rental_info;
 
         res.send({
             state: "success",
@@ -636,49 +675,37 @@ function checkOverlap(dateX, durationX, dateY, durationY){
 //helper function to run whois since domain isn't listed but is a real domain
 function renderWhoIs(req, res, domain_name){
 	whois.lookup(domain_name, function(err, data){
-		if (err){
-			//something went wrong in looking up the domain
-			res.render("listing_404.ejs", {
-				user: req.user
-			});
-		}
-
 		//look up domain owner info
-		else {
-			var whoisObj = {};
-			var array = parser.parseWhoIsData(data);
-			for (var x = 0; x < array.length; x++){
-				whoisObj[array[x].attribute] = array[x].value;
-			}
-
-			var email = whoisObj["Registrant Email"] || whoisObj["Admin Email"] || whoisObj["Tech Email"] || "";
-			var owner_name = whoisObj["Registrant Organization"] || whoisObj["Registrant Name"] || "Nobody";
-			var description = "This domain is currently unavailable for rent at domahub. ";
-
-			var options = {
-				user: req.user,
-				listing_info: {
-					domain_name: domain_name,
-					email: email,
-					username: owner_name,
-					description: description
-				}
-			}
-
-			//nobody owns it!
-			if (owner_name == "Nobody"){
-				options.listing_info.available = true;
-			}
-
-            //get alexa traffic info
-            alexaData.AlexaWebData(req.params.domain_name, function(error, result) {
-                options.listing_info.alexa = result;
-                res.render("listings/listing_unlisted.ejs", options);
-            });
-
+		var whoisObj = {};
+		var array = parser.parseWhoIsData(data);
+		for (var x = 0; x < array.length; x++){
+			whoisObj[array[x].attribute] = array[x].value;
 		}
 
+		var email = whoisObj["Registrant Email"] || whoisObj["Admin Email"] || whoisObj["Tech Email"] || "";
+		var owner_name = whoisObj["Registrant Organization"] || whoisObj["Registrant Name"] || "Nobody";
+		var description = "This domain is currently unavailable for rent at domahub. ";
 
+		var options = {
+			user: req.user,
+			listing_info: {
+				domain_name: domain_name,
+				email: email,
+				username: owner_name,
+				description: description
+			}
+		}
+
+		//nobody owns it!
+		if (owner_name == "Nobody"){
+			options.listing_info.available = true;
+		}
+
+        //get alexa traffic info
+        alexaData.AlexaWebData(req.params.domain_name, function(error, result) {
+            options.listing_info.alexa = result;
+            res.render("listings/listing_unlisted.ejs", options);
+        });
 	});
 }
 
@@ -703,32 +730,23 @@ function divided(num, den){
 //helper function to get price of events
 function calculatePrice(times, listing_info){
 	if (times && listing_info){
-		var weeks_price = days_price = hours_price = half_hours_price = totalPrice = 0;
+		var totalPrice = 0;
 
 		for (var x = 0; x < times.length; x++){
-			var tempDuration = times[x].end - times[x].start;
+            //get total number of price type units
+            var tempPrice = moment.duration(moment(parseFloat(times[x].end)).diff(moment(parseFloat(times[x].start))));
+            if (listing_info.price_type == "month"){
+                tempPrice = tempPrice.asDays() / 30;
+            }
+            else {
+                tempPrice = tempPrice.as(listing_info.price_type);
+                tempPrice = Number(Math.round(tempPrice+'e2')+'e-2');
+            }
 
-			var weeks = divided(tempDuration, 604800000);
-			tempDuration = (weeks > 0) ? tempDuration -= weeks*604800000 : tempDuration;
-
-			var days = divided(tempDuration, 86400000);
-			tempDuration = (days > 0) ? tempDuration -= days*86400000 : tempDuration;
-
-			var hours = divided(tempDuration, 3600000);
-			tempDuration = (hours > 0) ? tempDuration -= hours*3600000 : tempDuration;
-
-			var half_hours = divided(tempDuration, 1800000);
-			tempDuration = (half_hours > 0) ? tempDuration -= half_hours*1800000 : tempDuration;
-
-			weeks_price += weeks * listing_info.week_price;
-			days_price += days * listing_info.day_price;
-			hours_price += hours * listing_info.hour_price;
-			half_hours_price += half_hours * listing_info.hour_price;
+            totalPrice += tempPrice;
 		}
 
-		totalPrice = weeks_price + days_price + hours_price + half_hours_price;
-
-		return totalPrice;
+		return totalPrice * listing_info.price_rate;
 	}
 	else {return false;}
 }

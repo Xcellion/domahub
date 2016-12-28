@@ -233,7 +233,7 @@ module.exports = function(app, db, auth, error, stripe){
 
 //function to check validity of domain name
 function checkDomainValid(req, res, next){
-	console.log("F: Checking domain validity...");
+	console.log("F: Checking domain FQDN validity...");
 
 	var domain_name = req.params.domain_name || req.body["domain-name"];
 

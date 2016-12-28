@@ -30,9 +30,9 @@
 
 <%# navbar checks for a user variable, if it doesnt exist, then display the login button %>
 <% if (!user) { %>
-    <div class="nav-item">
+    <%# <div class="nav-item">
       <a id="signup" tabindex="1" class="nav-link is-white " title="Sign Up" href="/signup">Sign Up</a>
-    </div>
+    </div> %>
     <div class="nav-item">
       <a id="login-modal" tabindex="1" class="button is-white modal-button" title="Log In" data-object="#modal-login">Log In</a>
     </div>
@@ -68,14 +68,14 @@
                   </p>
                 </div>
 
-              <p class="control">
+              <%# <p class="control">
                 <p class="has-text-centered">
-                  Don't have an account?
+                  Don&#146;t have an account?
                 </p>
                 <div class="has-text-centered">
                   <a class="signup orange-link" href="/signup">Sign Up Now</a>
                 </div>
-              </p>
+              </p> %>
               </form>
             </div>
         </div>

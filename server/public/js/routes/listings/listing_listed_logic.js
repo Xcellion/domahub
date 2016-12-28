@@ -36,14 +36,13 @@ $(document).ready(function() {
 				var partial_days = handlePartialDays(moment(cookie_events[x].start), moment(cookie_events[x].end));
 				cookie_events[x].start = partial_days.start;
 				cookie_events[x].end = partial_days.end;
-
 				//if its a new event, make sure it doesnt overlap
-				if (checkOverlapEvent({start: partial_days.start, end: partial_days.end})){
-					changed = true;
-					cookie_events.splice(x, 1);
+				if (checkIfNotOverlapped(cookie_events[x])){
+					$('#calendar').fullCalendar('renderEvent', cookie_events[x], true);
 				}
 				else {
-					$('#calendar').fullCalendar('renderEvent', cookie_events[x], true);
+					changed = true;
+					cookie_events.splice(x, 1);
 				}
 			}
 
@@ -114,6 +113,14 @@ $(document).ready(function() {
 	//prevent enter to submit on new emailToRegister
 	$("#new_user_email").submit(function(e){
 		e.preventDefault();
+	});
+
+	//copy ownership url
+	$("#rental-link-button").click(function(){
+		$(this).prev("input").select();
+		document.execCommand("copy");
+		$(this).prev("input").blur();
+		$(this).find("i").removeClass("fa-clipboard").addClass('fa-check-square-o');
 	});
 
 	//---------------------------------------------------------------------------------------------------CALENDAR
@@ -268,10 +275,11 @@ function successHandler(data){
 	$("#success-column").removeClass('is-hidden');
 	$("#success-message").text("Your credit card was successfully charged!");
 
+	//if theres a link for ownership claiming
 	if (data.owner_hash_id){
-		var url = window.location.origin + "/listing/" + listing_info.domain_name + "/" + data.rental_id + "/" + data.owner_hash_id;
+		var url = "https://www.domahub.com/listing/" + listing_info.domain_name + "/" + data.rental_id + "/" + data.owner_hash_id;
 		$("#rental-link-input").val(url);
-		$("#rental-link-href").prop('href', url);
+		//$("#rental-link-href").prop('href', url);
 
 		$("#rental-link-input").focus(function(){
 			$(this).select();
