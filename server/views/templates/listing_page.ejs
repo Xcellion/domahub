@@ -17,15 +17,15 @@
         </h2>
       </div>
       <div id="price-display">
-        <% if (listing_info.status == 1) { %>
-        <h2 class="is-black is-bold has-text-centered">
-          $<%= listing_info.price_rate %> Per <%= listing_info.price_type.charAt(0).toUpperCase() + listing_info.price_type.substr(1) %>
-        </h2>
-        <% } else { %>
-        <h2 class="is-black is-bold has-text-centered">
-          Purchase Links
-        </h2>
-        <% } %>
+          <h2 class="is-black is-bold has-text-centered">
+            <% if (listing_info.status == 1) { %>
+                $<%= listing_info.price_rate %> Per <%= listing_info.price_type.charAt(0).toUpperCase() + listing_info.price_type.substr(1) %>
+            <% } else if (listing_info.available){ %>
+                Available for Purchase
+            <% } else { %>
+                Request Listing
+            <% } %>
+          </h2>
       </div>
     </div>
   </div>
@@ -62,7 +62,7 @@
               <h3 class="is-bold">150,000</h3>
             </div>%>
           </nav>
-          <nav class='has-text-right'>
+          <nav class=''>
               For more information, visit <a class='orange-link' href="http://www.alexa.com/siteinfo/<%= listing_info.domain_name %>">Alexa.com</a>
           </nav>
         </div>
@@ -178,9 +178,9 @@
                   <span>Share</span>
                 </a>
             <% } else if (listing_info.available) { %>
-                <a id="godaddy_link" tabindex="1" class="card-footer-item" href="https://www.godaddy.com/domains/searchresults.aspx?domainToCheck=<%= listing_info.domain_name %>">GoDaddy</a>
-                <a id="namecheap_link" tabindex="1" class="card-footer-item" href="https://www.namecheap.com/domains/registration/results.aspx?domain=<%= listing_info.domain_name %>">Namecheap</a>
                 <a id="google_link" tabindex="1" class="card-footer-item" href="https://domains.google.com/registrar?s=<%= listing_info.domain_name %>">Google</a>
+                <a id="namecheap_link" tabindex="1" class="card-footer-item" href="https://www.namecheap.com/domains/registration/results.aspx?domain=<%= listing_info.domain_name %>&aff=108189">Namecheap</a>
+                <a id="godaddy_link" tabindex="1" class="card-footer-item" href="https://www.godaddy.com/domains/searchresults.aspx?domainToCheck=<%= listing_info.domain_name %>">GoDaddy</a>
             <% } else { %>
                 <a class="button is-fullwidth is-primary" tabindex="1">Request Listing</a>
             <% } %>
