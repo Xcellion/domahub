@@ -104,7 +104,6 @@ function proxyReq(req, res, address, domain_name){
 					}
 					else {
 						console.log(response);
-						console.log(html);
 						res.send(Buffer.concat([response, html]));
 					}
 				});
