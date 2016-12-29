@@ -4,14 +4,14 @@
 function setUpCalendar(listing_info){
     $('#calendar').fullCalendar({
         scrollTime: moment().format("hh:mm:ss"),
-        defaultView: (listing_info.price_type == "month" || listing_info.price_type == "week") ? "month" : "agendaWeek",
+        defaultView: (listing_info.price_type == "hour") ? "agendaWeek" : "month",
         allDayDefault: false,
         selectable: true,
         timezone: "local",
         editable: false, //prevents editing of events
         eventOverlap: false, //prevents overlap of events
         eventStartEditable: false, //prevents moving of events
-        height: "parent",
+        contentHeight: "auto",
 
         allDaySlot: false,
         slotDuration: '01:00:00', //how long a slot is,
@@ -158,7 +158,9 @@ function setUpCalendar(listing_info){
             }
 
             start = start.startOf(listing_info.price_type);
-            end = end.endOf(listing_info.price_type).add(1, "millisecond");
+            if (listing_info.price_type != "hour"){
+                end = end.endOf(listing_info.price_type).add(1, "millisecond");
+            }
 
             partial_days = handlePartialDays(start, end);
             start = partial_days.start;
@@ -209,104 +211,73 @@ function setUpCalendar(listing_info){
 		storeCookies("local_events");
 		updatePrices();
 	});
-
-    //change to month view
-    $("#month_button").click(function(e){
-        var view = $('#calendar').fullCalendar('getView');
-
-        if (view.name == "agendaWeek"){
-            $("#calendar").fullCalendar( 'changeView', "month");
-            $(this).text("Week View");
-        }
-        else {
-            $("#calendar").fullCalendar( 'changeView', "agendaWeek");
-            $(this).text("Month View");
-        }
-    });
 }
 
 //helper function to highlight individual agendaweek cells
 function highlightCellHover(viewname){
-	$('td.fc-widget-content').mouseenter(function(){
-
-        if (viewname == "month"){
-            if ($(this).data("date") && moment($(this).data("date")).isSameOrAfter(moment().startOf("day"))){
-                var start = moment($(this).data("date")).startOf(listing_info.price_type);
-                var end = moment($(this).data("date")).endOf(listing_info.price_type).add(1, "millisecond");
-                var partial_days = handlePartialDays(start, end);
-                start = partial_days.start;
-                end = partial_days.end;
-
-                var eventData = {
-                    start: start,
-                    end: end,
-                    rendering: 'background',
-                    color: "rgba(60, 188, 141, 0.3)",
-                    allDay: true,
-                    id : "hover"
-                };
-                $('#calendar').fullCalendar('renderEvent', eventData);
-            }
+	$('td.fc-widget-content').not(".fc-axis").mouseenter(function(e){
+        if ($(this).data("date") && moment($(this).data("date")).isSameOrAfter(moment().startOf("day"))){
+            highlightCell($(this).data("date"), viewname);
+            $($(this).attr("class")
+                .replace("fc-day fc-widget-content", ".fc-day-header fc-widget-header")
+                .replace("fc-future", "is-unselectable")
+                .split(" ").join(".")).addClass('is-active');
         }
-        else {
-            appendTempCell($(this), viewname);
+        else if (listing_info.price_type == "hour"){
+            appendTempCell($(this));
         }
 	});
 
-	if (viewname == "month"){
-		//month hover on day row
-		$(".fc-day-number").mouseleave(function(e){
-            $('#calendar').fullCalendar('removeEvents', "hover");
-		});
+	//remove highlight on mouseleave
+	$(".fc-day-number").mouseleave(function(e){
+        $('#calendar').fullCalendar('removeEvents', "hover");
+	});
 
-		$('td.fc-widget-content').mouseleave(function(){
-            $('#calendar').fullCalendar('removeEvents', "hover");
-		});
-	}
+    $('td.fc-widget-content').not(".fc-axis").mouseout(function(e){
+        $('#calendar').fullCalendar('removeEvents', "hover");
+
+        //remove day hover only if the mouse is moving out (check for header move in)
+        if (listing_info.price_type == "hour" && $(e.toElement).attr("class") != 'fc-widget-content'){
+            $(".fc-day-header.is-active").removeClass('is-active');
+        }
+	});
+
+}
+
+//helper function to highlight
+function highlightCell(date, viewname){
+    var start = moment(date).startOf(listing_info.price_type);
+    var end = moment(date).endOf(listing_info.price_type).add(1, "millisecond");
+    var partial_days = handlePartialDays(start, end);
+    start = partial_days.start;
+    end = partial_days.end;
+    var eventData = {
+        start: start,
+        end: end,
+        rendering: 'background',
+        color: "rgba(60, 188, 141, 0.3)",
+        id : "hover"
+    };
+    if (viewname == "month"){
+        eventData.allDay = true;
+    }
+    $('#calendar').fullCalendar('renderEvent', eventData);
 }
 
 //helper function to append a temp cell for hover effect
-function appendTempCell(element, view){
+function appendTempCell(element){
 	if (!element.html()){
-		if (view == "agendaWeek"){
-			$(".temp-cell").remove();
-			for (i = 0; i < 7; i++){
-				var temp_cell = $("<td class='temp-cell'></td>");
-				temp_cell.css({
-					width: element.width() / 7,
-					height: element.height(),
-					border: 0
-				});
-				element.append(temp_cell);
-			}
-		}
-		else{
-			$(".temp-cell").remove();
+        //append the temporary highlight cells
+		$(".temp-cell").remove();
+		for (i = 0; i < 7; i++){
 			var temp_cell = $("<td class='temp-cell'></td>");
 			temp_cell.css({
-				width: "100%",
-                left: 0,
-				height: element.height() + 2,
-                position: "absolute",
-                "z-index": -1,
+				width: element.width() / 7,
+				height: element.height(),
 				border: 0
 			});
 			element.append(temp_cell);
 		}
-	}
-}
-
-//helper function to highlight day cells in month view
-function highlightMonthDayCell(day_index, day_cell_elem){
-	var temp_height = $(day_cell_elem).height();
-	if (!$(day_cell_elem).html()){
-		var temp_cell = $("<td class='temp-cell'></td>");
-		temp_cell.css({
-			width: $(day_cell_elem).width() + 1,
-			height: temp_height + 1,
-			border: 0
-		});
-		$(day_cell_elem).append(temp_cell);
 	}
 }
 
@@ -399,23 +370,26 @@ function daySelectionHandlers(){
 		else {
 			if (alldayMouseEnter >= moment().startOf("day")){
 				$(this).addClass('is-active');
+                highlightCell($(this).data("date"), "day");
 			}
 		}
 	});
 
 	//remove highlight if not selecting
-	$(".fc-day-header").mouseleave(function(e){
+	$(".fc-day-header").mouseout(function(e){
 		if (e.which == 1){
 			alldayMouseLeave = moment($(this).data('date'));
 			alldayMouseLeaveElem = $(this);
 		}
-		else {
+		else if ($(e.toElement).attr("class") != "fc-widget-content"){
 			$(this).removeClass('is-active');
+            $('#calendar').fullCalendar('removeEvents', "hover");
 		}
 
-		if (!$(e.toElement).hasClass("fc-day-header")){
+		if (!$(e.toElement).hasClass("fc-day-header") && $(e.toElement).attr("class") != "fc-widget-content"){
 			wasActive = $(".fc-day-header.is-active");
 			$(".fc-day-header").removeClass('is-active');
+            $('#calendar').fullCalendar('removeEvents', "hover");
 		}
 	});
 }
@@ -513,8 +487,15 @@ function getTimeSlotAgenda(calEvent, jsEvent){
 			break;
 		}
 	}
-	var removeStart = moment(new Date(datetime));
-	var removeEnd = moment(removeStart).add(1, "hour"); //clone the moment before adding an hour
+
+    if (listing_info.price_type == "day"){
+        var removeStart = moment(new Date(datetime)).startOf('day');
+        var removeEnd = removeStart.clone().endOf('day').add(1, "millisecond");
+    }
+    else {
+        var removeStart = moment(new Date(datetime));
+        var removeEnd = moment(removeStart).add(1, "hour");      //clone the moment before adding an hour
+    }
 
 	return {
 		start: removeStart,
