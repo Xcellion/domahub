@@ -14,11 +14,12 @@
     color: $text
     display: flex
     justify-content: center
-    padding: 5px 5px 10px
+    padding: 5px
     vertical-align: top
     &:hover,
     &:focus
-      +box-shadow(0,-2px,0,$black-disabled,0,inset)
+      +box-shadow(0,-3px,0,$black-disabled,0,inset)
+      border: none
   li
     display: block
     &:not(:first-child)
@@ -31,6 +32,7 @@
         &:focus
           +box-shadow(0,-2px,0,$primary-lighter,0,inset)
           color: $primary-lighter
+          border: none
   ul
     +box-shadow(0,-2px,0,$border,0,inset)
     align-items: center

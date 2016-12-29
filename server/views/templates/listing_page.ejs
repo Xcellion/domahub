@@ -38,33 +38,33 @@
         <div class="content padding-top-25 listing-info">
           <nav class="level">
             <div class="level-item has-text-centered">
-              <h3 class="heading">Alexa Ranking</h3>
+              <h3>Alexa Ranking</h3>
               <h3 class="is-bold"><%= listing_info.alexa.globalRank %></h3>
             </div>
             <div class="level-item has-text-centered">
-              <h3 class="heading">Daily Time on Site</h3>
+              <h3>Daily Time on Site</h3>
               <h3 class="is-bold"><%= listing_info.alexa.engagement.dailyTimeOnSite %></h3>
             </div>
             <div class="level-item has-text-centered">
-              <h3 class="heading">Daily Pageviews per Visitor</h3>
+              <h3>Daily Pageviews per Visitor</h3>
               <h3 class="is-bold"><%= listing_info.alexa.engagement.dailyPageViewPerVisitor %></h3>
             </div>
             <div class="level-item has-text-centered">
-                <h3 class="heading">Bounce Rate</h3>
+                <h3>Bounce Rate</h3>
                 <h3 class="is-bold"><%= listing_info.alexa.engagement.bounceRate %></h3>
             </div>
             <%# <div class="level-item has-text-centered">
-              <h3 class="heading">DomaHub Ranking</h3>
+              <h3>DomaHub Ranking</h3>
               <h3 class="is-bold">#5,608</h3>
             </div>%>
             <%# <div class="level-item has-text-centered">
-              <h3 class="heading">Visits this Month</h3>
+              <h3>Visits this Month</h3>
               <h3 class="is-bold">150,000</h3>
             </div>%>
           </nav>
-          <nav class=''>
-              For more information, visit <a class='orange-link' href="http://www.alexa.com/siteinfo/<%= listing_info.domain_name %>">Alexa.com</a>
-          </nav>
+          <p>
+              For more information, visit <a title="Link to respective Alexa website" target="_blank" class='orange-link' href="http://www.alexa.com/siteinfo/<%= listing_info.domain_name %>">Alexa.com</a>
+          </p>
         </div>
         <div class="content listing-info">
           <h3 class="is-bold">Description</h3>
