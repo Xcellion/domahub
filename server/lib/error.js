@@ -5,10 +5,7 @@ module.exports = {
 //handle errors, either send them back json, or redirect the page
 function handler(req, res, message, type) {
 	switch (type){
-		//errors for api
-		case "api":
-			res.redirect('http://domahub.com/error');
-			break;
+		//send direct message or redirect page
 		case "json":
 			console.log("ERROR: " + message);
 			res.send({
@@ -16,7 +13,7 @@ function handler(req, res, message, type) {
 				message: message
 			});
 			break;
-		//all other errors
+		//redirect page
 		default:
 			var redirectTo = req.header("Referer") || "/login";
 			req.session.message = message;

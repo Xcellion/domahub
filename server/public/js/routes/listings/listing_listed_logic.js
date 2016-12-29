@@ -142,8 +142,11 @@ function showModalContent(type){
 
 		if (type == "calendar"){
 			$('#calendar').fullCalendar('render');
-			var cal_height = $("#calendar-modal-content").height() - $("#calendar-modal-top").height() - 100;
-			$('#calendar').fullCalendar('option', 'contentHeight', cal_height);
+
+			if (listing_info.price_type != "hour"){
+				var cal_height = $(".modal-container-calendar").height() - $("#calendar-modal-top").height() - 90;
+				$('#calendar').fullCalendar('option', 'contentHeight', cal_height);
+			}
 		}
 	}
 }

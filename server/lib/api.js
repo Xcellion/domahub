@@ -84,7 +84,7 @@ function proxyReq(req, res, address, domain_name){
 	}, function (err, response, body) {
 		if (err) {
 			console.log(err);
-			error.handler(req, res, false, "api");
+			res.redirect("https://domahub.com/listing/" + domain_name);
 		}
 		else {
 
@@ -104,7 +104,7 @@ function proxyReq(req, res, address, domain_name){
 				res.render("proxy-image", {
 					image: address,
 					domain_name: domain_name
-				})
+				});
 			}
 		}
 	});
