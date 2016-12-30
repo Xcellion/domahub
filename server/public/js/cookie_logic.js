@@ -1,7 +1,7 @@
 //helper function to store local events as a cookie
 function storeCookies(type){
+	bake_cookie("domain_name", listing_info.domain_name);
 	if (type == "local_events"){
-		bake_cookie("domain_name", listing_info.domain_name);
 		local_events = $('#calendar').fullCalendar('clientEvents', returnMineNotBG);
 		cookie = [];
 		for (var x = 0; x < local_events.length; x++){

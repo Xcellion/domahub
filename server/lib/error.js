@@ -5,10 +5,7 @@ module.exports = {
 //handle errors, either send them back json, or redirect the page
 function handler(req, res, message, type) {
 	switch (type){
-		//errors for api
-		case "api":
-			res.redirect('http://domahub.com/error');
-			break;
+		//send direct message or redirect page
 		case "json":
 			console.log("ERROR: " + message);
 			res.send({
@@ -16,7 +13,7 @@ function handler(req, res, message, type) {
 				message: message
 			});
 			break;
-		//all other errors
+		//redirect page
 		default:
 			var redirectTo = req.header("Referer") || "/login";
 			req.session.message = message;
@@ -31,6 +28,8 @@ function handler(req, res, message, type) {
 				case "Invalid rental!":
 				case "No rental information!":
 				case "Invalid rental / listing!":
+				case "Invalid rental owner!":
+				case "Invalid domain name for rental!":
 					redirectTo = RemoveLastDirectoryPartOf(req.path);
 					break;
 				case "Cannot activate through URL!":
@@ -43,8 +42,6 @@ function handler(req, res, message, type) {
 				case "Invalid listing!":
 				case "Invalid domain name!":
 				case "Invalid listing activation!":
-					redirectTo = "/listings";
-					break;
 				case "DNS error!":
 					redirectTo = "/";
 					break;
@@ -54,7 +51,7 @@ function handler(req, res, message, type) {
 					break;
 			}
 
-			console.log(message + " Sending back to " + redirectTo);
+			console.log("ERROR: " + message + " Sending back to " + redirectTo);
 			res.redirect(redirectTo);
 			break;
 	}

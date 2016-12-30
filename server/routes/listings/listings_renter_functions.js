@@ -13,6 +13,7 @@ var mailer = nodemailer.createTransport(sgTransport(mailOptions));
 var alexaData = require('alexa-traffic-rank');
 var moment = require('moment');
 var request = require('request');
+var fs = require('fs');
 
 module.exports = {
 	//check if rental belongs to account and exists
@@ -20,22 +21,14 @@ module.exports = {
 		console.log("F: Checking if rental exists and belongs to the correct domain / account...");
 		var domain_name = req.params.domain_name;
 
-		//rental doesnt exist!
-		if (!req.session.rental_info){
-			console.log("No such rental exists!");
-			error.handler(req, res, "Invalid rental!");
-		}
-		//invalid rental / listing combo
-		else if (req.session.rental_info.domain_name != domain_name){
-			console.log("Invalid domain name for rental!");
-			error.handler(req, res, "Invalid rental!");
+        //invalid domain name for rental
+		if (req.session.rental_info.domain_name != domain_name){
+			error.handler(req, res, "Invalid domain name for rental!");
 		}
 		//incorrect owner!
 		else if (req.session.rental_info.account_id != req.user.id){
-			console.log("Invalid rental owner!");
-			error.handler(req, res, "Invalid rental!");
+			error.handler(req, res, "Invalid rental owner!");
 		}
-		//get the time!
 		else {
 			next();
 		}
@@ -237,38 +230,38 @@ module.exports = {
 	checkDomainListedAndAddToSearch : function(req, res, next){
 		console.log("F: Checking if domain is listed on DomaHub...");
 
-		var domain_name = req.params.domain_name || req.body["domain-name"];
+		var domain_name = req.params.domain_name;
 
 		Listing.checkListing(domain_name, function(result){
-			var listing_result = result;
 
-			var user_ip = req.headers['x-forwarded-for'] ||
-						 req.connection.remoteAddress ||
-						 req.socket.remoteAddress ||
-						 req.connection.socket.remoteAddress;
+            var listing_result = result;
+            var user_ip = req.headers['x-forwarded-for'] ||
+            req.connection.remoteAddress ||
+            req.socket.remoteAddress ||
+            req.connection.socket.remoteAddress;
 
-			//add to search history if its not localhost
-			if (user_ip != "::1" && user_ip != "::ffff:127.0.0.1" && user_ip != "127.0.0.1"){
+            //add to search history if its not localhost
+            if (user_ip != "::1" && user_ip != "::ffff:127.0.0.1" && user_ip != "127.0.0.1"){
                 var account_id = (typeof req.user == "undefined") ? null : req.user.id;
                 var now = new Date().getTime();
-				var history_info = {
-					account_id: account_id,			//who searched if who exists
-					domain_name: domain_name.toLowerCase(),		//what they searched for
-					timestamp: now,		//when they searched for it
-					user_ip : user_ip
-				}
+                var history_info = {
+                    account_id: account_id,			//who searched if who exists
+                    domain_name: domain_name.toLowerCase(),		//what they searched for
+                    timestamp: now,		//when they searched for it
+                    user_ip : user_ip
+                }
                 console.log("F: Adding to search history...");
 
-				Data.newSearchHistory(history_info, function(result){});	//async
-			}
+                Data.newSearchHistory(history_info, function(result){});	//async
+            }
 
             //doesnt exist, render the whois EJS
-			if (!listing_result.info.length || listing_result.state == "error"){
-				renderWhoIs(req, res, domain_name);
-			}
-			else {
-				next();     //exists! handle the rest of the route
-			}
+            if (!listing_result.info.length || listing_result.state == "error"){
+                renderWhoIs(req, res, domain_name);
+            }
+            else {
+                next();     //exists! handle the rest of the route
+            }
 		});
 	},
 
@@ -307,10 +300,13 @@ module.exports = {
 			error.handler(req, res, "Invalid rental!");
 		}
 		//get it otherwise
-		else if (req.session.changed || !req.session.rental_info || (req.session.rental_info.rental_id != rental_id)){
-			delete req.session.changed;
+		else if (!req.session.rental_info || (req.session.rental_info.rental_id != rental_id)){
 			Listing.getRentalInfo(rental_id, function(result){
 				if (result.state != "success"){error.handler(req, res, result.info);}
+                //no rental exists
+                else if (result.info.length == 0){
+                    error.handler(req, res, "Invalid rental!");
+                }
 				else {
 					req.session.rental_info = result.info[0];
 
@@ -321,7 +317,7 @@ module.exports = {
                             next();
                         }
                         else {
-                            res.redirect('/listing/' + req.params.domain_name);
+                            res.redirect('/listing/' + req.params.domain_name + "/" + req.params.rental_id);
                         }
                     }
                     else {
@@ -407,6 +403,44 @@ module.exports = {
 			listing_info: req.session.listing_info
 		});
 	},
+
+    //render a rental edit page
+	renderRental : function(req, res, next){
+		console.log("F: Rendering rental...");
+
+        var address = req.session.rental_info.address;
+        var domain_name = req.session.listing_info.domain_name;
+
+        req.pipe(request(addProtocol(address))).pipe(res);
+
+        // request[req.method.toLowerCase()]({
+    	// 	url: addProtocol(address),
+    	// 	encoding: null
+    	// }, function (err, response, body) {
+    	// 	if (err) {error.handler(req, res, "Invalid rental!");}
+    	// 	else {
+        //
+    	// 		//not an image requested
+    	// 		if (response.headers['content-type'].indexOf("image") == -1){
+    	// 			fs.readFile('./server/views/proxy-index.ejs', function (err, html) {
+    	// 				if (err) {error.handler(req, res, "Invalid rental!");}
+    	// 				else {
+    	// 					res.setHeader('Content-Type', 'text/html');
+    	// 					//res.end(Buffer.concat([response.body, html]));
+    	// 					res.end(response.body);
+    	// 				}
+    	// 			});
+    	// 		}
+    	// 		else {
+    	// 			res.render("proxy-image.ejs", {
+    	// 				image: address,
+    	// 				domain_name: domain_name
+    	// 			});
+    	// 		}
+    	// 	}
+    	// });
+	},
+
 
 	//create a new rental
 	createRental : function(req, res, next){
@@ -503,26 +537,38 @@ module.exports = {
 	//updates the owner of a rental that has no owner (hash rental)
 	updateRentalOwner : function(req, res, next){
 		console.log("F: Updating the rental owner...");
-		req.session.edit_rental_info = {
-			account_id: req.user.id,
-			owner_hash_id: null
-		}
-
+		req.session.rental_object = {
+            db_object : {
+    			account_id: req.user.id,
+    			owner_hash_id: null
+    		}
+        }
         next();
 	},
+
+    updateRentalObject : function(req, res, next){
+        updateUserRentalsObject(req.user.rentals, req.session.rental_object.db_object, req.params.rental_id);
+        delete req.session.rental_object.db_object;
+        res.send({
+            state: "success",
+            rentals: req.user.rentals
+        });
+    },
 
     //edit the rental
     editRental : function(req, res, next){
         console.log("F: Updating rental...");
 
         updateRental(req, res, req.session.rental_object.db_object, function(){
-            updateUserRentalsObject(req.user.rentals, req.session.rental_object.db_object, req.params.rental_id);
-            delete req.session.rental_object.db_object;
-            res.send({
-                state: "success",
-                rentals: req.user.rentals
-            });
+            next();
         });
+    },
+
+    //redirect to rental page after updating its owner
+    redirectRental: function(req, res, next){
+        delete req.session.rental_object.db_object;
+        delete req.rental_info;
+        res.redirect("/listing/" + req.params.domain_name + "/" + req.params.rental_id);
     },
 
     sendRentalSuccess : function(req, res, next){
@@ -677,10 +723,12 @@ function renderWhoIs(req, res, domain_name){
 	whois.lookup(domain_name, function(err, data){
 		//look up domain owner info
 		var whoisObj = {};
-		var array = parser.parseWhoIsData(data);
-		for (var x = 0; x < array.length; x++){
-			whoisObj[array[x].attribute] = array[x].value;
-		}
+        if (data){
+            var array = parser.parseWhoIsData(data);
+            for (var x = 0; x < array.length; x++){
+                whoisObj[array[x].attribute] = array[x].value;
+            }
+        }
 
 		var email = whoisObj["Registrant Email"] || whoisObj["Admin Email"] || whoisObj["Tech Email"] || "";
 		var owner_name = whoisObj["Registrant Organization"] || whoisObj["Registrant Name"] || "Nobody";
@@ -697,13 +745,15 @@ function renderWhoIs(req, res, domain_name){
 		}
 
 		//nobody owns it!
-		if (owner_name == "Nobody"){
+		if (owner_name == "Nobody" && data){
 			options.listing_info.available = true;
 		}
 
         //get alexa traffic info
         alexaData.AlexaWebData(req.params.domain_name, function(error, result) {
-            options.listing_info.alexa = result;
+            if (!error){
+                options.listing_info.alexa = result;
+            }
             res.render("listings/listing_unlisted.ejs", options);
         });
 	});

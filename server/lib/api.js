@@ -5,7 +5,7 @@ var validator = require("validator");
 var	request = require('request');
 var url = require('url');
 var fs = require('fs');
-var concat = require('concat-stream')
+var concat = require('concat-stream');
 
 module.exports = function(app, db, e){
 	error = e;
@@ -62,7 +62,7 @@ function getCurrentRental(req, res, domain_name){
 				req.session.rented = result.info[0].address;
 
 				//proxy the request
-				proxyReq(req, res, result.info[0].address, domain_name)
+				proxyReq(req, res, result.info[0].address, domain_name);
 			}
 		});
 	}
@@ -84,15 +84,15 @@ function proxyReq(req, res, address, domain_name){
 	}, function (err, response, body) {
 		if (err) {
 			console.log(err);
-			error.handler(req, res, false, "api");
+			res.redirect("https://domahub.com/listing/" + domain_name);
 		}
 		else {
 
 			//not an image requested
 			if (response.headers['content-type'].indexOf("image") == -1){
-				fs.readFile('./index.html', function (err, html) {
+				fs.readFile('./server/views/proxy-index.html', function (err, html) {
 					if (err) {
-						error.handler(req, res, false, "api");
+						res.redirect("https://domahub.com/listing/" + domain_name);
 					}
 					else {
 						res.setHeader('Content-Type', 'text/html');
@@ -101,10 +101,10 @@ function proxyReq(req, res, address, domain_name){
 				});
 			}
 			else {
-				res.render("proxy-image", {
+				res.render("proxy-image.ejs", {
 					image: address,
 					domain_name: domain_name
-				})
+				});
 			}
 		}
 	});
