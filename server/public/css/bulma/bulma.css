@@ -909,8 +909,7 @@ a.box {
   text-align: center;
   white-space: nowrap; }
   .button:active, .button:focus, .button.is-active {
-    border-color: rgba(0, 0, 0, 0.9);
-    outline: none; }
+    border-color: rgba(0, 0, 0, 0.9); }
   .button[disabled], .button.is-disabled {
     background-color: rgba(0, 0, 0, 0.12);
     border-color: rgba(0, 0, 0, 0.12);
@@ -1830,8 +1829,7 @@ input:-webkit-autofill {
   max-width: 100%;
   width: 100%; }
   .input:active, .textarea:active, .input:focus, .textarea:focus, .input.is-active, .is-active.textarea {
-    border-color: rgba(0, 0, 0, 0.9);
-    outline: none; }
+    border-color: rgba(0, 0, 0, 0.9); }
   .input[disabled], [disabled].textarea, .input.is-disabled, .is-disabled.textarea {
     background-color: rgba(0, 0, 0, 0.12);
     border-color: rgba(0, 0, 0, 0.12);
@@ -1956,11 +1954,9 @@ input:-webkit-autofill {
     vertical-align: top;
     cursor: pointer;
     display: block;
-    outline: none;
     padding-right: 36px; }
     .select select:active, .select select:focus, .select select.is-active {
-      border-color: rgba(0, 0, 0, 0.9);
-      outline: none; }
+      border-color: rgba(0, 0, 0, 0.9); }
     .select select[disabled], .select select.is-disabled {
       background-color: rgba(0, 0, 0, 0.12);
       border-color: rgba(0, 0, 0, 0.12);
@@ -4905,7 +4901,7 @@ a.nav-item.is-tab {
       padding: 10px;
       width: 100%; }
     .nav-menu.is-dark {
-      background-color: #212121; }
+      background-color: #444; }
     .nav-menu.is-white {
       background-color: white; }
     .nav-menu.is-active {
@@ -5135,7 +5131,7 @@ a.nav-item.is-tab {
     color: rgba(0, 0, 0, 0.9);
     display: flex;
     justify-content: center;
-    padding: 5px;
+    padding: 5px 5px 8px;
     vertical-align: top; }
     .tabs a:hover, .tabs a:focus {
       -webkit-box-shadow: inset 0 -3px 0 0 rgba(0, 0, 0, 0.38);
