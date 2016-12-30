@@ -92,7 +92,7 @@ function proxyReq(req, res, address, domain_name){
 			if (response.headers['content-type'].indexOf("image") == -1){
 				fs.readFile('./server/views/proxy-index.html', function (err, html) {
 					if (err) {
-						error.handler(req, res, false, "api");
+						res.redirect("https://domahub.com/listing/" + domain_name);
 					}
 					else {
 						res.setHeader('Content-Type', 'text/html');
