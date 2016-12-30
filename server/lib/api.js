@@ -43,7 +43,7 @@ function checkHost(req, res, next){
 function getCurrentRental(req, res, domain_name){
 	//requesting something besides main page, pipe the request
 	if (req.session.rented){
-		req.pipe(request(req.session.rented)).pipe(resp)
+		req.pipe(request(req.session.rented)).pipe(res);
 	}
 	else {
 		Listing.getCurrentRental(domain_name, function(result){
