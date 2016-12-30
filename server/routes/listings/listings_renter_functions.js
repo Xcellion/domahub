@@ -237,38 +237,38 @@ module.exports = {
 	checkDomainListedAndAddToSearch : function(req, res, next){
 		console.log("F: Checking if domain is listed on DomaHub...");
 
-		var domain_name = req.params.domain_name || req.body["domain-name"];
+		var domain_name = req.params.domain_name;
 
 		Listing.checkListing(domain_name, function(result){
-			var listing_result = result;
 
-			var user_ip = req.headers['x-forwarded-for'] ||
-						 req.connection.remoteAddress ||
-						 req.socket.remoteAddress ||
-						 req.connection.socket.remoteAddress;
+            var listing_result = result;
+            var user_ip = req.headers['x-forwarded-for'] ||
+            req.connection.remoteAddress ||
+            req.socket.remoteAddress ||
+            req.connection.socket.remoteAddress;
 
-			//add to search history if its not localhost
-			if (user_ip != "::1" && user_ip != "::ffff:127.0.0.1" && user_ip != "127.0.0.1"){
+            //add to search history if its not localhost
+            if (user_ip != "::1" && user_ip != "::ffff:127.0.0.1" && user_ip != "127.0.0.1"){
                 var account_id = (typeof req.user == "undefined") ? null : req.user.id;
                 var now = new Date().getTime();
-				var history_info = {
-					account_id: account_id,			//who searched if who exists
-					domain_name: domain_name.toLowerCase(),		//what they searched for
-					timestamp: now,		//when they searched for it
-					user_ip : user_ip
-				}
+                var history_info = {
+                    account_id: account_id,			//who searched if who exists
+                    domain_name: domain_name.toLowerCase(),		//what they searched for
+                    timestamp: now,		//when they searched for it
+                    user_ip : user_ip
+                }
                 console.log("F: Adding to search history...");
 
-				Data.newSearchHistory(history_info, function(result){});	//async
-			}
+                Data.newSearchHistory(history_info, function(result){});	//async
+            }
 
             //doesnt exist, render the whois EJS
-			if (!listing_result.info.length || listing_result.state == "error"){
-				renderWhoIs(req, res, domain_name);
-			}
-			else {
-				next();     //exists! handle the rest of the route
-			}
+            if (!listing_result.info.length || listing_result.state == "error"){
+                renderWhoIs(req, res, domain_name);
+            }
+            else {
+                next();     //exists! handle the rest of the route
+            }
 		});
 	},
 
@@ -677,10 +677,12 @@ function renderWhoIs(req, res, domain_name){
 	whois.lookup(domain_name, function(err, data){
 		//look up domain owner info
 		var whoisObj = {};
-		var array = parser.parseWhoIsData(data);
-		for (var x = 0; x < array.length; x++){
-			whoisObj[array[x].attribute] = array[x].value;
-		}
+        if (data){
+            var array = parser.parseWhoIsData(data);
+            for (var x = 0; x < array.length; x++){
+                whoisObj[array[x].attribute] = array[x].value;
+            }
+        }
 
 		var email = whoisObj["Registrant Email"] || whoisObj["Admin Email"] || whoisObj["Tech Email"] || "";
 		var owner_name = whoisObj["Registrant Organization"] || whoisObj["Registrant Name"] || "Nobody";
@@ -697,13 +699,15 @@ function renderWhoIs(req, res, domain_name){
 		}
 
 		//nobody owns it!
-		if (owner_name == "Nobody"){
+		if (owner_name == "Nobody" && data){
 			options.listing_info.available = true;
 		}
 
         //get alexa traffic info
         alexaData.AlexaWebData(req.params.domain_name, function(error, result) {
-            options.listing_info.alexa = result;
+            if (!error){
+                options.listing_info.alexa = result;
+            }
             res.render("listings/listing_unlisted.ejs", options);
         });
 	});
