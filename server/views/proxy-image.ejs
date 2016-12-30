@@ -8,11 +8,11 @@
       a,a:visited,a:focus{text-decoration:none;color:#3cbc8d;}
       a:hover{text-decoration:none;color:#fff;}
       body{margin:0px;padding:0px;overflow:hidden;height:100vh;width:100vw;}
-      #proxy-iframe{overflow:hidden;height:100%;width:100%;left:50%;transform:translateX(-50%);margin-right:50%;position:absolute;}
+      #proxy-iframe{top:50%;left:50%;transform:translate(-50%,-50%);margin-right:50%;position:absolute;}
     </style>
 </head>
 <body>
-    <img id="proxy-iframe" src="<%= image %>" frameborder="0" style="" height="100%" width="100%"/>
+    <img id="proxy-iframe" src="<%= image %>"/>
     <a href="https://www.domahub.com" class="domahub_overlay">DomaHub.com</a>
 </body>
 </html>
