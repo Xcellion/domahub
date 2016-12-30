@@ -19,16 +19,16 @@ function checkHost(req, res, next){
 		domain_name = req.headers.host.replace(/^(https?:\/\/)?(www\.)?/,'');
 
 		//requested domahub website, not domain
-		if (domain_name == "www.w3bbi.com"
+		if ((domain_name == "www.w3bbi.com"
 		|| domain_name == "w3bbi.com"
 		|| domain_name == "www.domahub.com"
 		|| domain_name == "domahub.com"
 		|| domain_name == "localhost"
-		|| domain_name == "localhost:8080"){
+		|| domain_name == "localhost:8080")){
 			next();
 		}
 		else if (!validator.isFQDN(domain_name)){
-			error.handler(req, res, false, "api");
+			error.handler(req, res, "Invalid rental!");
 		}
 		else {
 			getCurrentRental(req, res, domain_name);
@@ -43,7 +43,10 @@ function checkHost(req, res, next){
 function getCurrentRental(req, res, domain_name){
 	//requesting something besides main page, pipe the request
 	if (req.session.rented){
-		req.pipe(request(req.session.rented)).pipe(res);
+		req.pipe(request({
+			url: req.session.rented + req.path,
+			headers: req.session.rented_headers
+		})).pipe(res);
 	}
 	else {
 		Listing.getCurrentRental(domain_name, function(result){
@@ -76,7 +79,7 @@ function proxyReq(req, res, address, domain_name){
 			fs.readFile('./server/views/proxy-index.ejs', function (err, html) {
 				if (err) {error.handler(req, res, "Invalid rental!");}
 				else {
-					res.setHeader('Content-Type', 'text/html');
+					req.session.rented_headers = response.headers;
 					res.end(Buffer.concat([body, html]));
 				}
 			});
