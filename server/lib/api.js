@@ -5,7 +5,7 @@ var validator = require("validator");
 var	request = require('request');
 var url = require('url');
 var fs = require('fs');
-var concat = require('concat-stream')
+var concat = require('concat-stream');
 
 module.exports = function(app, db, e){
 	error = e;
