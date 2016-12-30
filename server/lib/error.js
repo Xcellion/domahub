@@ -28,6 +28,8 @@ function handler(req, res, message, type) {
 				case "Invalid rental!":
 				case "No rental information!":
 				case "Invalid rental / listing!":
+				case "Invalid rental owner!":
+				case "Invalid domain name for rental!":
 					redirectTo = RemoveLastDirectoryPartOf(req.path);
 					break;
 				case "Cannot activate through URL!":

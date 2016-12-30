@@ -20,22 +20,14 @@ module.exports = {
 		console.log("F: Checking if rental exists and belongs to the correct domain / account...");
 		var domain_name = req.params.domain_name;
 
-		//rental doesnt exist!
-		if (!req.session.rental_info){
-			console.log("No such rental exists!");
-			error.handler(req, res, "Invalid rental!");
-		}
-		//invalid rental / listing combo
-		else if (req.session.rental_info.domain_name != domain_name){
-			console.log("Invalid domain name for rental!");
-			error.handler(req, res, "Invalid rental!");
+        //invalid domain name for rental
+		if (req.session.rental_info.domain_name != domain_name){
+			error.handler(req, res, "Invalid domain name for rental!");
 		}
 		//incorrect owner!
 		else if (req.session.rental_info.account_id != req.user.id){
-			console.log("Invalid rental owner!");
-			error.handler(req, res, "Invalid rental!");
+			error.handler(req, res, "Invalid rental owner!");
 		}
-		//get the time!
 		else {
 			next();
 		}
@@ -307,10 +299,13 @@ module.exports = {
 			error.handler(req, res, "Invalid rental!");
 		}
 		//get it otherwise
-		else if (req.session.changed || !req.session.rental_info || (req.session.rental_info.rental_id != rental_id)){
-			delete req.session.changed;
+		else if (!req.session.rental_info || (req.session.rental_info.rental_id != rental_id)){
 			Listing.getRentalInfo(rental_id, function(result){
 				if (result.state != "success"){error.handler(req, res, result.info);}
+                //no rental exists
+                else if (result.info.length == 0){
+                    error.handler(req, res, "Invalid rental!");
+                }
 				else {
 					req.session.rental_info = result.info[0];
 
@@ -408,6 +403,19 @@ module.exports = {
 		});
 	},
 
+    //render a rental edit page
+	renderRental : function(req, res, next){
+		console.log("F: Rendering rental...");
+
+		res.render("listings/listing.ejs", {
+			user: req.user,
+			message: Auth.messageReset(req),
+			listing_info: req.session.listing_info,
+            rental_info: req.session.rental_info
+		});
+	},
+
+
 	//create a new rental
 	createRental : function(req, res, next){
 		console.log("F: Creating a new rental...");
@@ -503,26 +511,38 @@ module.exports = {
 	//updates the owner of a rental that has no owner (hash rental)
 	updateRentalOwner : function(req, res, next){
 		console.log("F: Updating the rental owner...");
-		req.session.edit_rental_info = {
-			account_id: req.user.id,
-			owner_hash_id: null
-		}
-
+		req.session.rental_object = {
+            db_object : {
+    			account_id: req.user.id,
+    			owner_hash_id: null
+    		}
+        }
         next();
 	},
+
+    updateRentalObject : function(req, res, next){
+        updateUserRentalsObject(req.user.rentals, req.session.rental_object.db_object, req.params.rental_id);
+        delete req.session.rental_object.db_object;
+        res.send({
+            state: "success",
+            rentals: req.user.rentals
+        });
+    },
 
     //edit the rental
     editRental : function(req, res, next){
         console.log("F: Updating rental...");
 
         updateRental(req, res, req.session.rental_object.db_object, function(){
-            updateUserRentalsObject(req.user.rentals, req.session.rental_object.db_object, req.params.rental_id);
-            delete req.session.rental_object.db_object;
-            res.send({
-                state: "success",
-                rentals: req.user.rentals
-            });
+            next();
         });
+    },
+
+    //redirect to rental page after updating its owner
+    redirectRental: function(req, res, next){
+        delete req.session.rental_object.db_object;
+        delete req.rental_info;
+        res.redirect("/listing/" + req.params.domain_name + "/" + req.params.rental_id);
     },
 
     sendRentalSuccess : function(req, res, next){

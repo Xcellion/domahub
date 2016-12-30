@@ -169,14 +169,28 @@ module.exports = function(app, db, auth, error, stripe){
 		renter_functions.getListingRentalTimes
 	]);
 
+	//render rental page
+	app.get('/listing/:domain_name/:rental_id', [
+		checkDomainValid,
+		checkDomainListed,
+		auth.checkLoggedIn,
+		renter_functions.getRental,
+		renter_functions.checkRental,
+		renter_functions.getRentalRentalTimes,
+		renter_functions.getVerifiedListing,
+		renter_functions.renderRental
+	]);
+
 	//associate a user with a hash rental
 	app.get('/listing/:domain_name/:rental_id/:owner_hash_id', [
 		checkDomainValid,
 		checkDomainListed,
 		renter_functions.getRental,
 		auth.checkLoggedIn,
+		renter_functions.createRentalObject,
 		renter_functions.updateRentalOwner,
-		renter_functions.editRental
+		renter_functions.editRental,
+		renter_functions.redirectRental
 	]);
 
 	//create a new rental
@@ -207,7 +221,8 @@ module.exports = function(app, db, auth, error, stripe){
 		renter_functions.createRentalObject,
 		renter_functions.checkPostedRentalAddress,
 		renter_functions.checkPostedRentalStatus,
-		renter_functions.editRental
+		renter_functions.editRental,
+		renter_functions.updateRentalObject
 	]);
 
 	//adding time to an existing rental
