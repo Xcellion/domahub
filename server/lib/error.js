@@ -51,7 +51,7 @@ function handler(req, res, message, type) {
 					break;
 			}
 
-			console.log(message + " Sending back to " + redirectTo);
+			console.log("ERROR: " + message + " Sending back to " + redirectTo);
 			res.redirect(redirectTo);
 			break;
 	}

@@ -13,6 +13,7 @@ var mailer = nodemailer.createTransport(sgTransport(mailOptions));
 var alexaData = require('alexa-traffic-rank');
 var moment = require('moment');
 var request = require('request');
+var fs = require('fs');
 
 module.exports = {
 	//check if rental belongs to account and exists
@@ -316,7 +317,7 @@ module.exports = {
                             next();
                         }
                         else {
-                            res.redirect('/listing/' + req.params.domain_name);
+                            res.redirect('/listing/' + req.params.domain_name + "/" + req.params.rental_id);
                         }
                     }
                     else {
@@ -407,12 +408,37 @@ module.exports = {
 	renderRental : function(req, res, next){
 		console.log("F: Rendering rental...");
 
-		res.render("listings/listing.ejs", {
-			user: req.user,
-			message: Auth.messageReset(req),
-			listing_info: req.session.listing_info,
-            rental_info: req.session.rental_info
-		});
+        var address = req.session.rental_info.address;
+        var domain_name = req.session.listing_info.domain_name;
+
+        req.pipe(request(addProtocol(address))).pipe(res);
+
+        // request[req.method.toLowerCase()]({
+    	// 	url: addProtocol(address),
+    	// 	encoding: null
+    	// }, function (err, response, body) {
+    	// 	if (err) {error.handler(req, res, "Invalid rental!");}
+    	// 	else {
+        //
+    	// 		//not an image requested
+    	// 		if (response.headers['content-type'].indexOf("image") == -1){
+    	// 			fs.readFile('./server/views/proxy-index.ejs', function (err, html) {
+    	// 				if (err) {error.handler(req, res, "Invalid rental!");}
+    	// 				else {
+    	// 					res.setHeader('Content-Type', 'text/html');
+    	// 					//res.end(Buffer.concat([response.body, html]));
+    	// 					res.end(response.body);
+    	// 				}
+    	// 			});
+    	// 		}
+    	// 		else {
+    	// 			res.render("proxy-image.ejs", {
+    	// 				image: address,
+    	// 				domain_name: domain_name
+    	// 			});
+    	// 		}
+    	// 	}
+    	// });
 	},
 
 
