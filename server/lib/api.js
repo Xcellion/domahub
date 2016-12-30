@@ -1,5 +1,4 @@
 var	listing_model = require('../models/listing_model.js');
-var node_env = process.env.NODE_ENV || 'dev'; 	//dev or prod bool
 
 var validator = require("validator");
 var	request = require('request');
@@ -12,13 +11,13 @@ module.exports = function(app, db, e){
 	Listing = new listing_model(db);
 
 	app.use(checkHost);
-	app.get("/error", renderError);
 }
 
 //function to check if the requested host is not for domahub
 function checkHost(req, res, next){
 	if (req.headers.host){
 		domain_name = req.headers.host.replace(/^(https?:\/\/)?(www\.)?/,'');
+
 		//requested domahub website, not domain
 		if (domain_name == "www.w3bbi.com"
 		|| domain_name == "w3bbi.com"
@@ -28,16 +27,12 @@ function checkHost(req, res, next){
 		|| domain_name == "localhost:8080"){
 			next();
 		}
-		//is not a valid FQDN
-		else if (!validator.isFQDN(domain_name)){
-			error.handler(req, res, false, "api");
-		}
 		else {
 			getCurrentRental(req, res, domain_name);
 		}
 	}
 	else {
-		error.handler(req, res, false, "api");
+		res.redirect('/');
 	}
 }
 
@@ -45,6 +40,7 @@ function checkHost(req, res, next){
 function getCurrentRental(req, res, domain_name){
 	//get the current rental for the listing
 	if (req.session.rented){
+		console.log(req.path);
 		proxyReq(req, res, req.session.rented, domain_name);
 	}
 
@@ -69,44 +65,30 @@ function getCurrentRental(req, res, domain_name){
 
 }
 
-//display the error page
-function renderError(req, res, next){
-	res.render("error", {
-		user: req.user
-	});
-}
-
 //function to proxy request
 function proxyReq(req, res, address, domain_name){
 	request[req.method.toLowerCase()]({
 		url: addProtocol(address),
 		encoding: null
 	}, function (err, response, body) {
-		if (err) {
-			console.log(err);
-			res.redirect("https://domahub.com/listing/" + domain_name);
+		//not an image requested
+		if (response.headers['content-type'].indexOf("image") == -1){
+			fs.readFile('./server/views/proxy-index.ejs', function (err, html) {
+				if (err) {error.handler(req, res, "Invalid rental!");}
+				else {
+					res.setHeader('Content-Type', 'text/html');
+					res.end(Buffer.concat([body, html]));
+				}
+			});
 		}
 		else {
-
-			//not an image requested
-			if (response.headers['content-type'].indexOf("image") == -1){
-				fs.readFile('./server/views/proxy-index.html', function (err, html) {
-					if (err) {
-						res.redirect("https://domahub.com/listing/" + domain_name);
-					}
-					else {
-						res.setHeader('Content-Type', 'text/html');
-						res.end(Buffer.concat([response.body, html]));
-					}
-				});
-			}
-			else {
-				res.render("proxy-image.ejs", {
-					image: address,
-					domain_name: domain_name
-				});
-			}
+			res.render("proxy-image.ejs", {
+				image: address,
+				domain_name: domain_name
+			});
 		}
+	}).on('error', function(err){
+		error.handler(req, res, "Invalid rental!");
 	});
 }
 

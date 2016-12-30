@@ -411,34 +411,29 @@ module.exports = {
         var address = req.session.rental_info.address;
         var domain_name = req.session.listing_info.domain_name;
 
-        req.pipe(request(addProtocol(address))).pipe(res);
-
-        // request[req.method.toLowerCase()]({
-    	// 	url: addProtocol(address),
-    	// 	encoding: null
-    	// }, function (err, response, body) {
-    	// 	if (err) {error.handler(req, res, "Invalid rental!");}
-    	// 	else {
-        //
-    	// 		//not an image requested
-    	// 		if (response.headers['content-type'].indexOf("image") == -1){
-    	// 			fs.readFile('./server/views/proxy-index.ejs', function (err, html) {
-    	// 				if (err) {error.handler(req, res, "Invalid rental!");}
-    	// 				else {
-    	// 					res.setHeader('Content-Type', 'text/html');
-    	// 					//res.end(Buffer.concat([response.body, html]));
-    	// 					res.end(response.body);
-    	// 				}
-    	// 			});
-    	// 		}
-    	// 		else {
-    	// 			res.render("proxy-image.ejs", {
-    	// 				image: address,
-    	// 				domain_name: domain_name
-    	// 			});
-    	// 		}
-    	// 	}
-    	// });
+        var address_request = request[req.method.toLowerCase()]({
+    		url: addProtocol(address),
+    		encoding: null
+    	}, function (err, response, body) {
+			//not an image requested
+			if (response.headers['content-type'].indexOf("image") == -1){
+				fs.readFile('./server/views/proxy-index.ejs', function (err, html) {
+					if (err) {error.handler(req, res, "Invalid rental!");}
+					else {
+						res.setHeader('Content-Type', 'text/html');
+						res.end(Buffer.concat([body, html]));
+					}
+				});
+			}
+			else {
+				res.render("proxy-image.ejs", {
+					image: address,
+					domain_name: domain_name
+				});
+			}
+    	}).on('error', function(err){
+            error.handler(req, res, "Invalid rental!");
+        });
 	},
 
 
