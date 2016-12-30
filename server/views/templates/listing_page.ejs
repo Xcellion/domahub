@@ -33,25 +33,26 @@
 
 <section id="top_wrapper" class="page_wrapper min-height">
   <div class="container">
-    <div id="test" class="columns">
-      <div id="one" class="column is-half">
+    <div class="columns">
+      <div class="column is-half">
+          <% if (typeof listing_info.alexa != "undefined"){ %>
         <div class="content padding-top-25 listing-info">
           <nav class="level">
             <div class="level-item has-text-centered">
               <h3>Alexa Ranking</h3>
-              <h3 class="is-bold"><%= listing_info.alexa.globalRank %></h3>
+              <h3 class="is-bold"><%= listing_info.alexa.globalRank || "-" %></h3>
             </div>
             <div class="level-item has-text-centered">
               <h3>Daily Time on Site</h3>
-              <h3 class="is-bold"><%= listing_info.alexa.engagement.dailyTimeOnSite %></h3>
+              <h3 class="is-bold"><%= listing_info.alexa.engagement.dailyTimeOnSite || "-" %></h3>
             </div>
             <div class="level-item has-text-centered">
               <h3>Daily Pageviews per Visitor</h3>
-              <h3 class="is-bold"><%= listing_info.alexa.engagement.dailyPageViewPerVisitor %></h3>
+              <h3 class="is-bold"><%= listing_info.alexa.engagement.dailyPageViewPerVisitor || "-" %></h3>
             </div>
             <div class="level-item has-text-centered">
                 <h3>Bounce Rate</h3>
-                <h3 class="is-bold"><%= listing_info.alexa.engagement.bounceRate %></h3>
+                <h3 class="is-bold"><%= listing_info.alexa.engagement.bounceRate || "-" %></h3>
             </div>
             <%# <div class="level-item has-text-centered">
               <h3>DomaHub Ranking</h3>
@@ -66,6 +67,7 @@
               For more information, visit <a title="Link to respective Alexa website" target="_blank" class='orange-link' href="http://www.alexa.com/siteinfo/<%= listing_info.domain_name %>">Alexa.com</a>
           </p>
         </div>
+        <% } %>
         <div class="content listing-info">
           <h3 class="is-bold">Description</h3>
           <p>

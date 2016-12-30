@@ -2,7 +2,7 @@ $(document).ready(function() {
 	//used to display the message sent from the server
 	if (typeof message != "undefined" && message){
 		$("#message").text(message);
-		if (message == "Invalid username / password!"){
+		if (message == "Invalid username / password!" || message == "Login error!"){
 			$('#modal-login').addClass('is-active');
 			$("#message").css("color", "#ed1c24");
 		}
