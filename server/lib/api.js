@@ -27,6 +27,9 @@ function checkHost(req, res, next){
 		|| domain_name == "localhost:8080"){
 			next();
 		}
+		else if (!validator.isFQDN(domain_name)){
+			error.handler(req, res, false, "api");
+		}
 		else {
 			getCurrentRental(req, res, domain_name);
 		}
@@ -38,13 +41,10 @@ function checkHost(req, res, next){
 
 //send the current rental details and information for a listing
 function getCurrentRental(req, res, domain_name){
-	//get the current rental for the listing
+	//requesting something besides main page, pipe the request
 	if (req.session.rented){
-		console.log(req.path);
-		proxyReq(req, res, req.session.rented, domain_name);
+		req.pipe(request(req.session.rented)).pipe(resp)
 	}
-
-	//rental doesnt exist in the session
 	else {
 		Listing.getCurrentRental(domain_name, function(result){
 			if (result.state != "success" || result.info.length == 0){
