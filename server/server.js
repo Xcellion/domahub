@@ -13,6 +13,7 @@ var bodyParser 	= require('body-parser'),
 	passport = require('passport'),
 	db = require('./lib/database.js'),
 	error = require('./lib/error.js'),
+	request = require('request'),
 	autoReap  = require('multer-autoreap');
 	autoReap.options = {
 	    reapOnError: true
@@ -85,6 +86,16 @@ require('./routes/routes.js')(app, db, auth, error, stripe);
 
 //favicon requests
 app.get('*.ico', function(){})
+
+//catch future requests if rented
+app.use("/", function(req, res){
+	if (req.session.rented){
+		req.pipe(request({
+			url: req.session.rented + req.path,
+			headers: req.session.rented_headers
+		})).pipe(res);
+	}
+});
 
 //404 not found
 app.get('*', function(req, res){

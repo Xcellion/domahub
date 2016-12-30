@@ -390,6 +390,12 @@ module.exports = {
 		if (req.session.new_rental_info){
 			delete req.session.new_rental_info;
 		}
+        if (req.session.rented){
+            delete req.session.rented;
+        }
+        if (req.session.rented_headers){
+            delete req.session.rented_headers;
+        }
 		next();
 	},
 
@@ -410,6 +416,11 @@ module.exports = {
 
         var address = req.session.rental_info.address;
         var domain_name = req.session.listing_info.domain_name;
+        req.session.rented = req.session.rental_info.address;
+
+
+        //set request headers!!!
+
 
         var address_request = request[req.method.toLowerCase()]({
     		url: addProtocol(address),
@@ -420,7 +431,7 @@ module.exports = {
 				fs.readFile('./server/views/proxy-index.ejs', function (err, html) {
 					if (err) {error.handler(req, res, "Invalid rental!");}
 					else {
-						res.setHeader('Content-Type', 'text/html');
+                        req.session.rented_headers = response.headers;
 						res.end(Buffer.concat([body, html]));
 					}
 				});
