@@ -17,13 +17,14 @@ function setUpCalendar(listing_info){
         slotDuration: '01:00:00', //how long a slot is,
         nowIndicator: true, //red line indicating current time
 
-        //formatting for labels
+        //formatting for labels and events
         titleFormat: {
             month: 'YYYY MMMM',
             week: "MMM DD YYYY"
         },
-        timeFormat: 'hA',
+        timeFormat: 'MMM D',
         axisFormat: 'hA',
+        displayEventEnd: true,
 
         //header buttons
         header: {left:'prev', center:'next', right:'title, today'},
@@ -171,6 +172,11 @@ function setUpCalendar(listing_info){
         //tag id to HTML DOM for easy access
         eventAfterRender: function(event, element, view ) {
             $(element).attr("id", event._id);
+
+            //if price type is a day, format the event to not show end date
+            if (listing_info.price_type == "day"){
+                $(element).find(".fc-time").text(event.start.format("MMM D"));
+            }
 
             //event handler for event click on non-background events
             if (!$(element).hasClass("fc-bgevent")){
