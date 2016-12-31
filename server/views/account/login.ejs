@@ -12,11 +12,9 @@
       <div class="has-text-centered logo-login">
         <a class="logo-text primary-logo large-logo" href="/">DomaHub</a>
       </div>
-      <p id="message" class="is-bold">
         <% if (typeof message != "undefined") {%>
-          <%= message %>
+            <p id="message" class="is-bold"><%= message %></p>
         <% } %>
-      </p>
     </div>
     <div id="login-form" class="form">
       <form id="target" action="/login" method="post">
