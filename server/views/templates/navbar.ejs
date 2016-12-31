@@ -41,7 +41,9 @@
       <div class="modal-container">
         <div class="modal-content login-modal">
             <div id="login-dropdown">
-              <div id="message" class="has-text-centered margin-bottom-25">Please log in below</div>
+            <% if (typeof message != "undefined") {%>
+                <div id="message" class="has-text-centered margin-bottom-25"><%= message %></div>
+            <% } %>
               <form id="navbar_form" action="/login" method="post">
                 <p class="control has-icon">
                   <input id="email" autofocus class="input is-medium" name="email" type="email" placeholder="Email" spellcheck="false">
