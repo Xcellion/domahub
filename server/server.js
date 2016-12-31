@@ -88,12 +88,16 @@ require('./routes/routes.js')(app, db, auth, error, stripe);
 app.get('*.ico', function(){})
 
 //catch future requests if rented
-app.use("/", function(req, res){
+app.use("/", function(req, res, next){
 	if (req.session.rented){
 		req.pipe(request({
 			url: req.session.rented + req.path,
 			headers: req.session.rented_headers
 		})).pipe(res);
+	}
+	//404
+	else {
+		next();
 	}
 });
 
