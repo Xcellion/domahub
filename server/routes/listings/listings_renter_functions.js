@@ -418,10 +418,6 @@ module.exports = {
         var domain_name = req.session.listing_info.domain_name;
         req.session.rented = req.session.rental_info.address;
 
-
-        //set request headers!!!
-
-
         var address_request = request[req.method.toLowerCase()]({
     		url: addProtocol(address),
     		encoding: null
