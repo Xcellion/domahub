@@ -17,14 +17,19 @@ module.exports = function(app, db, e){
 function checkHost(req, res, next){
 	if (req.headers.host){
 		domain_name = req.headers.host.replace(/^(https?:\/\/)?(www\.)?/,'');
-
 		//requested domahub website, not domain
-		if ((domain_name == "www.w3bbi.com"
+		if (req.session.rented && req.session.rental_info && req.path == "/listing/" + req.session.rental_info.domain_name + "/" + req.session.rental_info.rental_id){
+			req.pipe(request({
+				url: req.session.rented + req.path,
+				headers: req.session.rented_headers
+			})).pipe(res);
+		}
+		else if (domain_name == "www.w3bbi.com"
 		|| domain_name == "w3bbi.com"
 		|| domain_name == "www.domahub.com"
 		|| domain_name == "domahub.com"
 		|| domain_name == "localhost"
-		|| domain_name == "localhost:8080")){
+		|| domain_name == "localhost:8080"){
 			next();
 		}
 		else if (!validator.isFQDN(domain_name)){

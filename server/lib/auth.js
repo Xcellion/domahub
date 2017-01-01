@@ -348,7 +348,7 @@ module.exports = {
 						};
 
 						//update account last accessed
-						console.log("Updating last accessed for account with email: " + req.body.email);
+						console.log("F: Updating last accessed for account with email: " + req.body.email);
 						Account.updateAccount(account_info, req.body.email, function(result){
 							return res.redirect(redirectTo);
 						});
@@ -578,7 +578,6 @@ module.exports = {
 		if (req.body.new_password){
 			new_account_info.password = bcrypt.hashSync(req.body.new_password, null, null);
 		}
-		console.log(new_account_info, req.body);
 		//update only if theres something to update
 		if (req.body.new_email || req.body.username || req.body.new_password){
 			Account.updateAccount(new_account_info, req.user.email, function(result){

@@ -226,7 +226,7 @@ module.exports = {
 
 		var upload = multer({
 			storage: storage,
-			limits: { fileSize: 50000 },
+			limits: { fileSize: 1000000 },
 			fileFilter: function (req, file, cb) {
 				var allowedMimeTypes = [
 					"text/csv",
@@ -251,7 +251,7 @@ module.exports = {
 		upload(req, res, function(err){
 			if (err){
 				if (err.code == "LIMIT_FILE_SIZE"){
-					error.handler(req, res, 'File is too big!', "json");
+					error.handler(req, res, 'File is bigger than 1 MB!', "json");
 				}
 				else if (err.message == "FILE_TYPE_WRONG"){
 					error.handler(req, res, 'Wrong file type!', "json");
@@ -304,7 +304,7 @@ module.exports = {
 		upload_img(req, res, function(err){
 			if (err){
 				if (err.code == "LIMIT_FILE_SIZE"){
-					error.handler(req, res, 'File is too big!', "json");
+					error.handler(req, res, 'File is bigger than 1 MB!', "json");
 				}
 				else if (err.message == "FILE_TYPE_WRONG"){
 					error.handler(req, res, 'Wrong file type!', "json");
@@ -478,13 +478,14 @@ module.exports = {
 				req.new_listing_info.price_rate = price_rate;
 			}
 			else {
+				req.body.price_rate = "defined";
 				req.new_listing_info.price_rate = (price_type == "month") ? 25 : 10;
 			}
 			req.new_listing_info.categories = (categories_clean == "") ? null : categories_clean;
 
 			//delete anything that wasnt posted (except if its "", in which case it was intentional deletion)
 			for (var x in req.new_listing_info){
-				if (!req.body[x] && req.body[x] != "" && x != "price_rate" && x != "background_image"){
+				if (!req.body[x] && req.body[x] != "" && x != "background_image"){
 					delete req.new_listing_info[x];
 				}
 			}
@@ -494,18 +495,16 @@ module.exports = {
 
 	//function to make sure that if they're changing the pricing, that they can change it
 	checkListingPrice : function(req, res, next){
-		var price_rate = parseFloat(req.body.price_rate);
-
-		if (price_rate){
+		if (req.body.price_rate){
 			console.log("F: Checking if listing price can be edited...");
 			var listing_info = getUserListingObj(req.user.listings, req.params.domain_name);
 
-			//the listing is still premium, all good to edit!
-			if (listing_info.exp_date >= new Date().getTime()){
-				next();
+			//if pricing is not default
+			if ((req.body.price_rate != "10" && req.body.price_type == "week") || (req.body.price_rate != "25" && req.body.price_type == "month")){
+				error.handler(req, res, "You cannot change the pricing for this listing!", "json");
 			}
 			else {
-				error.handler(req, res, "You cannot change the pricing for this listing!", "json");
+				next();
 			}
 		}
 		else {

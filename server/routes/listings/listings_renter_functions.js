@@ -309,9 +309,8 @@ module.exports = {
                 }
 				else {
 					req.session.rental_info = result.info[0];
-
                     //if hash exists in URL and its the same as DB, we're good
-                    if (owner_hash_id){
+                    if (typeof owner_hash_id != "undefined"){
                         if (req.session.rental_info.owner_hash_id == owner_hash_id){
                             req.session.message = "Please create an account to edit this rental!";
                             next();
@@ -328,7 +327,19 @@ module.exports = {
 		}
 		//if already got the info from previous session
 		else {
-			next()
+            //if hash exists in URL and its the same as DB, we're good
+            if (typeof owner_hash_id != "undefined"){
+                if (req.session.rental_info.owner_hash_id == owner_hash_id){
+                    req.session.message = "Please create an account to edit this rental!";
+                    next();
+                }
+                else {
+                    res.redirect('/listing/' + req.params.domain_name + "/" + req.params.rental_id);
+                }
+            }
+            else {
+                next();
+            }
 		}
 	},
 
@@ -568,6 +579,8 @@ module.exports = {
 
     //redirect to rental page after updating its owner
     redirectRental: function(req, res, next){
+        console.log("F: Redirecting to rental page...");
+
         delete req.session.rental_object.db_object;
         delete req.rental_info;
         res.redirect("/listing/" + req.params.domain_name + "/" + req.params.rental_id);
