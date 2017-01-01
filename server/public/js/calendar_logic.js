@@ -45,6 +45,14 @@ function setUpCalendar(listing_info){
                 rendering: 'background',
                 allDay: true
             },
+            //today
+            {
+                start: moment().startOf("day"),
+                end: moment().endOf("day"),
+                rendering: 'background',
+                color: "rgba(255,0,0,0.15)",
+                allDay: true
+            },
             //background for 1 year out
             {
                 start: moment().add(1, "year").startOf("hour"),
@@ -173,8 +181,8 @@ function setUpCalendar(listing_info){
         eventAfterRender: function(event, element, view ) {
             $(element).attr("id", event._id);
 
-            //if price type is a day, format the event to not show end date
-            if (listing_info.price_type == "day"){
+            //if event length is less than a day, change the event title
+            if (event.end && moment.duration(event.end.diff(event.start)).as("day") <= 1){
                 $(element).find(".fc-time").text(event.start.format("MMM D"));
             }
 
