@@ -168,7 +168,7 @@ module.exports = function(app, db, auth, error, stripe){
 		renter_functions.deleteRentalInfo,
 		renter_functions.getListingRentalTimes
 	]);
-	
+
 	//associate a user with a hash rental
 	app.get('/listing/:domain_name/:rental_id/:owner_hash_id', [
 		checkDomainValid,
@@ -190,6 +190,13 @@ module.exports = function(app, db, auth, error, stripe){
 		renter_functions.checkRental,
 		renter_functions.getRentalRentalTimes,
 		renter_functions.getVerifiedListing,
+		renter_functions.redirectToPreview
+	]);
+
+	//render rental page
+	app.get('/rentalpreview', [
+		auth.checkLoggedIn,
+		renter_functions.checkForPreview,
 		renter_functions.renderRental
 	]);
 

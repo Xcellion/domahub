@@ -421,39 +421,47 @@ module.exports = {
 		});
 	},
 
-    //render a rental edit page
-	renderRental : function(req, res, next){
+    //redirect to rental preview route
+	redirectToPreview : function(req, res, next){
 		console.log("F: Rendering rental...");
-
-        var address = req.session.rental_info.address;
-        var domain_name = req.session.listing_info.domain_name;
-        req.session.rented = req.session.rental_info.address;
-
-        var address_request = request[req.method.toLowerCase()]({
-    		url: addProtocol(address),
-    		encoding: null
-    	}, function (err, response, body) {
-			//not an image requested
-			if (response.headers['content-type'].indexOf("image") == -1){
-				fs.readFile('./server/views/proxy-index.ejs', function (err, html) {
-					if (err) {error.handler(req, res, "Invalid rental!");}
-					else {
-                        req.session.rented_headers = response.headers;
-						res.end(Buffer.concat([body, html]));
-					}
-				});
-			}
-			else {
-				res.render("proxy-image.ejs", {
-					image: address,
-					domain_name: domain_name
-				});
-			}
-    	}).on('error', function(err){
-            error.handler(req, res, "Invalid rental!");
-        });
+        res.redirect('/rentalpreview');
 	},
 
+    checkForPreview : function(req, res, next){
+        if (!req.session.rental_info){
+            res.redirect("/profile/myrentals");
+        }
+        else {
+            next();
+        }
+    },
+
+    //render a rental edit page
+    renderRental : function(req, res, next){
+        req.session.rented = req.session.rental_info.address;
+        var address_request = request({
+            url: addProtocol(req.session.rented),
+            encoding: null
+        }, function (err, response, body) {
+            //not an image requested
+            if (response.headers['content-type'].indexOf("image") == -1){
+                fs.readFile('./server/views/proxy-index.ejs', function (err, html) {
+                    if (err) {error.handler(req, res, "Invalid rental!");}
+                    else {
+                        res.end(Buffer.concat([body, html]));
+                    }
+                });
+            }
+            else {
+                res.render("proxy-image.ejs", {
+                    image: address,
+                    domain_name: domain_name
+                });
+            }
+        }).on('error', function(err){
+            error.handler(req, res, "Invalid rental!");
+        });
+    },
 
 	//create a new rental
 	createRental : function(req, res, next){
