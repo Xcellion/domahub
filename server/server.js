@@ -89,10 +89,9 @@ app.get('*.ico', function(){})
 
 //catch future requests if rented
 app.use("/", function(req, res, next){
-	if (req.session.rented){
+	if (req.header("Referer") && req.header("Referer").indexOf("rentalpreview") != -1){
 		req.pipe(request({
-			url: req.session.rented + req.path,
-			headers: req.session.rented_headers
+			url: req.session.rented + req.originalUrl
 		})).pipe(res);
 	}
 	//404
