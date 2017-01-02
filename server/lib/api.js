@@ -6,29 +6,6 @@ var url = require('url');
 var fs = require('fs');
 var concat = require('concat-stream');
 
-function shit(req,res){
-	console.log(req.method);
-	if (req.session.rented){
-		req.pipe(request({
-			url: req.session.rented
-		})).pipe(res);
-	}
-	else {
-		req.session.rented = "https://instagram.com/lisakongram";
-		var address_request = request({
-			url: req.session.rented,
-			encoding: null
-		}, function (err, response, body) {
-			fs.readFile('./server/views/proxy-index.ejs', function (err, html) {
-				if (err) {console.log(err)}
-				else {
-					res.end(Buffer.concat([body, html]));
-				}
-			});
-		});
-	}
-}
-
 module.exports = function(app, db, e){
 	error = e;
 	Listing = new listing_model(db);
@@ -41,14 +18,7 @@ function checkHost(req, res, next){
 	if (req.headers.host){
 		var domain_name = req.headers.host.replace(/^(https?:\/\/)?(www\.)?/,'');
 
-		//redirect any future requests to rentalpreview
-		if (req.session.rented && req.session.rental_info && req.originalUrl == "/rentalpreview"){
-			req.pipe(request({
-				url: req.session.rented
-			})).pipe(res);
-		}
-		//requested domahub website, not domain
-		else if (domain_name == "www.w3bbi.com"
+		if (domain_name == "www.w3bbi.com"
 		|| domain_name == "w3bbi.com"
 		|| domain_name == "www.domahub.com"
 		|| domain_name == "domahub.com"
@@ -72,6 +42,7 @@ function checkHost(req, res, next){
 function getCurrentRental(req, res, domain_name){
 	//requesting something besides main page, pipe the request
 	if (req.session.rented){
+		console.log("Proxying!...");
 		req.pipe(request({
 			url: req.session.rented + req.path,
 			headers: req.session.rented_headers
