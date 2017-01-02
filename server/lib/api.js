@@ -6,24 +6,48 @@ var url = require('url');
 var fs = require('fs');
 var concat = require('concat-stream');
 
+function shit(req,res){
+	console.log(req.method);
+	if (req.session.rented){
+		req.pipe(request({
+			url: req.session.rented
+		})).pipe(res);
+	}
+	else {
+		req.session.rented = "https://instagram.com/lisakongram";
+		var address_request = request({
+			url: req.session.rented,
+			encoding: null
+		}, function (err, response, body) {
+			fs.readFile('./server/views/proxy-index.ejs', function (err, html) {
+				if (err) {console.log(err)}
+				else {
+					res.end(Buffer.concat([body, html]));
+				}
+			});
+		});
+	}
+}
+
 module.exports = function(app, db, e){
 	error = e;
 	Listing = new listing_model(db);
 
-	app.use(checkHost);
+	app.use("*", checkHost);
 }
 
 //function to check if the requested host is not for domahub
 function checkHost(req, res, next){
 	if (req.headers.host){
-		domain_name = req.headers.host.replace(/^(https?:\/\/)?(www\.)?/,'');
-		//requested domahub website, not domain
-		if (req.session.rented && req.session.rental_info && req.path == "/listing/" + req.session.rental_info.domain_name + "/" + req.session.rental_info.rental_id){
+		var domain_name = req.headers.host.replace(/^(https?:\/\/)?(www\.)?/,'');
+
+		//redirect any future requests to rentalpreview
+		if (req.session.rented && req.session.rental_info && req.originalUrl == "/rentalpreview"){
 			req.pipe(request({
-				url: req.session.rented + req.path,
-				headers: req.session.rented_headers
+				url: req.session.rented
 			})).pipe(res);
 		}
+		//requested domahub website, not domain
 		else if (domain_name == "www.w3bbi.com"
 		|| domain_name == "w3bbi.com"
 		|| domain_name == "www.domahub.com"
