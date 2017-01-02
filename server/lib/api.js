@@ -44,8 +44,7 @@ function getCurrentRental(req, res, domain_name){
 	if (req.session.rented){
 		console.log("Proxying!...");
 		req.pipe(request({
-			url: req.session.rented + req.path,
-			headers: req.session.rented_headers
+			url: req.session.rented + req.originalUrl
 		})).pipe(res);
 	}
 	else {

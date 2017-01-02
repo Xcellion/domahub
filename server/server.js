@@ -87,7 +87,7 @@ require('./routes/routes.js')(app, db, auth, error, stripe);
 //favicon requests
 app.get('*.ico', function(){})
 
-//catch future requests if rented
+//catch future requests if rented (for dev enviroment)
 app.use("/", function(req, res, next){
 	if (req.header("Referer") && req.header("Referer").indexOf("rentalpreview") != -1){
 		req.pipe(request({

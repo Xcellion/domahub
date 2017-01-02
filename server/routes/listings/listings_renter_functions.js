@@ -423,11 +423,12 @@ module.exports = {
 
     //redirect to rental preview route
 	redirectToPreview : function(req, res, next){
-		console.log("F: Rendering rental...");
+		console.log("F: Redirecting to rental preview...");
         res.redirect('/rentalpreview');
 	},
 
     checkForPreview : function(req, res, next){
+        console.log("F: Checking if preview is defined...");
         if (!req.session.rental_info){
             res.redirect("/profile/myrentals");
         }
@@ -438,6 +439,7 @@ module.exports = {
 
     //render a rental edit page
     renderRental : function(req, res, next){
+        console.log("F: Rendering rental...");
         req.session.rented = req.session.rental_info.address;
         var address_request = request({
             url: addProtocol(req.session.rented),
