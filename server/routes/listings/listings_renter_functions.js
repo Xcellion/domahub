@@ -450,6 +450,7 @@ module.exports = {
                 fs.readFile('./server/views/proxy-index.ejs', function (err, html) {
                     if (err) {error.handler(req, res, "Invalid rental!");}
                     else {
+                        res.set("content-type", response.headers["content-type"]);
                         res.end(Buffer.concat([body, html]));
                     }
                 });
