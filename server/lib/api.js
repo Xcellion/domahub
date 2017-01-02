@@ -42,7 +42,7 @@ function checkHost(req, res, next){
 function getCurrentRental(req, res, domain_name){
 	//requesting something besides main page, pipe the request
 	if (req.session.rented){
-		console.log("Proxying!...");
+		console.log("Proxying request!");
 		req.pipe(request({
 			url: req.session.rented + req.originalUrl
 		})).pipe(res);

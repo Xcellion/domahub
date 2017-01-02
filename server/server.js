@@ -87,14 +87,14 @@ require('./routes/routes.js')(app, db, auth, error, stripe);
 //favicon requests
 app.get('*.ico', function(){})
 
-//catch future requests if rented (for dev enviroment)
+//catch future requests if rented (for dev enviroment and for rental preview)
 app.use("/", function(req, res, next){
 	if (req.header("Referer") && req.header("Referer").indexOf("rentalpreview") != -1){
 		req.pipe(request({
 			url: req.session.rented + req.originalUrl
 		})).pipe(res);
 	}
-	//404
+	//go next to 404
 	else {
 		next();
 	}
