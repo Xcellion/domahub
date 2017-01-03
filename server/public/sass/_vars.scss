@@ -3,8 +3,8 @@
 // Colors
 
 $black: rgba(0,0,0,1) !default
-$black-primary: rgba(0,0,0,0.88) !default
-$black-secondary: rgba(0,0,0,0.6) !default
+$black-primary: rgba(0,0,0,0.9) !default
+$black-secondary: rgba(0,0,0,0.66) !default
 $black-disabled: rgba(0,0,0,0.38) !default
 $grey-darker: #212121 !default
 $grey-dark: #444 !default
@@ -35,12 +35,12 @@ $yellow: #ffeb3b !default
 
 // Typography
 $roboto: 'roboto', Helvetica, sans-serif !default
-$robotoCondensed: 'Roboto Condensed', Tahoma, sans-serif !default
+$robotoCondensed: 'Roboto Condensed', Tahoma, Geneva, sans-serif !default
 $ubuntu: 'Ubuntu', serif !default
-$monospace: "Source Code Pro", "Monaco", "Inconsolata", monospace !default
+$monospace: "Lucida Console", Monaco, monospace !default
 
-$family-sans-serif: $roboto !default
-$family-monospace: $monospace !default
+$family-primary: $roboto !default
+$family-code: $monospace !default
 
 $size-1: 48px !default
 $size-2: 40px !default
@@ -161,9 +161,6 @@ $control-active-background-invert: $link-invert !default
 $control-active-border: $link !default
 
 // Typography
-
-$family-primary: $family-sans-serif !default
-$family-code: $family-monospace !default
 
 $size-small: $size-7 !default
 $size-normal: $size-6 !default
