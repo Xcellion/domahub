@@ -6,21 +6,6 @@
     family: $ubuntu;
     size: $size-3;
   }
-  &.primary-logo {
-    color: $primary;
-    &-dark {
-      color: $primary-dark;
-    }
-    &-light {
-      color: $primary-light;
-    }
-  }
-  &.white-logo {
-    color: $white;
-  }
-  &.large-logo {
-    font-size: $size-3;
-  }
 }
 
 .min-height {

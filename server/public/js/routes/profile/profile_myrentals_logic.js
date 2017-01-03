@@ -107,7 +107,7 @@ function createArrow(){
 
 //function to create the address td
 function createAddress(rental_info){
-    var temp_td = $("<td class='td-visible td-address'><div class='address-div-wrapper'><a class='orange-link' href='" + rental_info.address + "'>" + rental_info.address + "</a><div></td>");
+    var temp_td = $("<td class='td-visible td-address'><div class='address-div-wrapper'><a class='is-accent' href='" + rental_info.address + "'>" + rental_info.address + "</a><div></td>");
 	return temp_td;
 }
 

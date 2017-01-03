@@ -147,7 +147,7 @@ function createVerifiedDrop(listing_info, cb_when_verified){
     var unverified_columns_header = $("<div class='columns'></div>");
     var header_column = $("<div class='column'></div>");
     var unverified_h3 = $("<h3 class='is-bold'>You must verify that you own this domain.</h3>");
-    var unverified_faq = $("<p>Click <a target='_blank' style'target-new: tab;' class='orange-link margin-bottom-25' href='/faq#verifying'>here</a> for more information on domain verification.</p>");
+    var unverified_faq = $("<p>Click <a target='_blank' style'target-new: tab;' class='is-accent margin-bottom-25' href='/faq#verifying'>here</a> for more information on domain verification.</p>");
         unverified_columns_header.append(header_column.append(unverified_h3, unverified_faq));
 
     var unverified_columns_steps = $("<div class='columns'></div>");
@@ -811,7 +811,7 @@ function errorMessage(msg_elem, message){
     if (message){
         //connect stripe first!
         if (message == "stripe-connect-error"){
-            msg_elem.append("<p class='is-white'>You must <a class='orange-link' href='/authorizestripe'>connect your Stripe account</a> before your listing can go live!</p>");
+            msg_elem.append("<p class='is-white'>You must <a class='is-accent' href='/authorizestripe'>connect your Stripe account</a> before your listing can go live!</p>");
         }
         else {
             msg_elem.append("<p class='is-white'>" + message + "</p>");
