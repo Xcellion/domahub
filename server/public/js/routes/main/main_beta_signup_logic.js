@@ -1,23 +1,28 @@
 $(document).ready(function() {
-    $("#beta-form-submit").click(function(e){
-        $('#beta-form').submit();
+    $(".beta-submit").click(function(e){
+        e.preventDefault();
+        $(this).closest(".beta-form").submit();
     });
 
-    $('#beta-form').submit(function(e){
+    $('.beta-form').submit(function(e){
         e.preventDefault();
 
-        $('#beta-form-submit').addClass("is-loading");
+        var beta_email = $(this).serialize().split("=")[1];
+        var beta_form = $(this);
+        if (beta_email){
+            $(this).find(".beta-submit").addClass("is-loading");
 
-        $.ajax({
-            type: "POST",
-            url: "/beta",
-            data: {
-                betaemail: $('#beta-form-email').val()
-            }
-        }).done(function(data){
-            $('#beta-form').addClass("is-hidden");
-            $('#beta-form-success').removeClass("is-hidden");
-        });
+            $.ajax({
+                type: "POST",
+                url: "/beta",
+                data: {
+                    betaemail: beta_email
+                }
+            }).done(function(data){
+                beta_form.addClass("is-hidden");
+                beta_form.next().removeClass("is-hidden");
+            });
+        }
     });
 
 });
