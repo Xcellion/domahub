@@ -95,17 +95,23 @@
 									<th class="td-view"></th>
 								</tr>
 							</thead>
-							<tbody id="table_body"></tbody>
+							<tbody id="table_body">
+								<tr>
+									<td colspan="999" class="is-loading has-text-centered padding-20">
+										Loading rentals...
+									</td>
+								</tr>
+							</tbody>
 						</table>
 
 						<nav class="pagination margin-bottom-25">
-							<a id="prev-page" class="button no-shadow">Previous page</a>
-							<a id="next-page" class="button no-shadow">Next page</a>
+							<a id="prev-page" class="button no-shadow is-hidden">Previous page</a>
+							<a id="next-page" class="button no-shadow is-hidden">Next page</a>
 							<ul id="page-list"></ul>
 						</nav>
 
 						<nav class="pagination-control">
-							<div id="domains-per-page-control" class="control is-horizontal">
+							<div id="domains-per-page-control" class="is-hidden control is-horizontal">
 								<div class="control-label">
 									<label class="label">Show per page:</label>
 								</div>
@@ -120,7 +126,7 @@
 									</div>
 								</div>
 							</div>
-							<div id="go-to-page-control" class="control">
+							<div id="go-to-page-control" class="is-hidden control">
 								<p class="control has-addons has-addons-right">
 									<input id="go-to-page-input" class="input" type="number" min="1" value="1" />
 									<a id="go-to-page-button" class="button is-primary">
