@@ -167,7 +167,7 @@ function setupControls(total_pages, row_per_page, current_page, rows_to_disp){
         setupTable(total_pages, row_per_page, current_page, row_display);
     });
 
-    //show per page
+    //show per page, hide if unnecessary
     var data_to_display = (window.location.pathname.indexOf("listings") != -1) ? listings : rentals;
     if (data_to_display.length > 25){
         $("#domains-per-page-control").removeClass('is-hidden');
