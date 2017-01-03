@@ -16,23 +16,31 @@ var request = require('request');
 var fs = require('fs');
 
 module.exports = {
-	//check if rental belongs to account and exists
-	checkRental : function(req, res, next){
-		console.log("F: Checking if rental exists and belongs to the correct domain / account...");
+	//check domain name for rental
+	checkRentalDomain : function(req, res, next){
+		console.log("F: Checking if belongs to the correct domain...");
 		var domain_name = req.params.domain_name;
 
-        //invalid domain name for rental
 		if (req.session.rental_info.domain_name != domain_name){
 			error.handler(req, res, "Invalid domain name for rental!");
-		}
-		//incorrect owner!
-		else if (req.session.rental_info.account_id != req.user.id){
-			error.handler(req, res, "Invalid rental owner!");
 		}
 		else {
 			next();
 		}
 	},
+
+    //check if rental belongs to account
+    checkRentalOwner : function(req, res, next){
+        console.log("F: Checking rental owner...");
+
+        //incorrect owner!
+        if (req.session.rental_info.account_id != req.user.id){
+            error.handler(req, res, "Invalid rental owner!");
+        }
+        else {
+            next();
+        }
+    },
 
 	//check the rental info posted
 	checkRentalInfo : function(req, res, next){
@@ -457,8 +465,8 @@ module.exports = {
             }
             else {
                 res.render("proxy-image.ejs", {
-                    image: address,
-                    domain_name: domain_name
+                    image: req.session.rental_info.address,
+                    domain_name: req.params.domain_name
                 });
             }
         }).on('error', function(err){
