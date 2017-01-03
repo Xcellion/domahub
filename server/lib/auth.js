@@ -55,7 +55,7 @@ module.exports = {
 				passReqToCallback : true // allows us to pass back the entire request to the callback
 			},
 			function(req, email, password, done) {
-				//check if account already exists
+				//check if account exists
 				Account.getAccount(email, username, function(result){
 					if (result.state=="error"){ done(false, { message: result.info}); }
 

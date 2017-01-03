@@ -21,6 +21,7 @@ function handler(req, res, message, type) {
 			switch (message){
 				case "Invalid user!":
 				case "Invalid password!":
+				case "Missing credentials!":
 					req.session.message = "Invalid username / password!";
 					break;
 				case "Invalid user / rental!":

@@ -108,10 +108,8 @@ function filterCheck(type, data){
     }
     //rentals
     else if (type == "active_filter"){
-        return data.active == 1;
-    }
-    else if (type == "inactive_filter"){
-        return data.active == 0;
+        var time_now = new Date().getTime();
+        return !(data.date[0] + data.duration[0] <= time_now + 86400000) && (data.date[0] + data.duration[0] > time_now);
     }
     else if (type == "expiring_filter"){
         var time_now = new Date().getTime();
@@ -147,10 +145,18 @@ function calculateCurrentPage(url_page, total_pages, row_per_page){
 
 //refresh table (pagination and rows)
 function setupTable(total_pages, row_per_page, current_page, rows_to_disp){
+    var listing_or_rental = window.location.pathname.indexOf("listings") != -1 ? listings : rentals;
     if (!rows_to_disp.length){
+        $("#table_body").empty();
         emptyRows();
+        if (listing_or_rental.length == 0){
+            $("#filters").addClass('is-hidden');
+        }
     }
     else {
+        if (listing_or_rental.length){
+            $("#filters").removeClass('is-hidden');
+        }
         createPaginationPages(total_pages, row_per_page, current_page);
         paginateRows(total_pages, current_page);
         createAllRows(row_per_page, current_page);
@@ -377,12 +383,13 @@ function paginateRows(total_pages, current_page){
 
 // --------------------------------------------------------------------------------- CREATE ROWS
 
-//function to create an empty row
+//function to create an empty row if there are no more applicable rentals/listings
 function emptyRows(){
-    $("#table_body").empty();
-    var listing_or_rental = window.location.pathname.indexOf("listings") != -1 ? "listings" : "rentals";
-    var tempRow = $("<tr><td class='padding-25 has-text-centered' colspan='99'>There are no matching " + listing_or_rental + "!</td></tr>");
-    $("#table_body").append(tempRow);
+    var listing_or_rental_text = window.location.pathname.indexOf("listings") != -1 ? "listings" : "rentals";
+    if (row_display == 0){
+        var tempRow = $("<tr><td class='padding-50 has-text-centered' colspan='99'>There are no " + listing_or_rental_text + "! </td></tr>");
+        $("#table_body").append(tempRow);
+    }
 }
 
 //function to create all the rows

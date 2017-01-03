@@ -1,4 +1,10 @@
-var row_display = rentals.slice(0);
+//show active ones first
+var row_display = rentals.slice(0)
+row_display = row_display.filter(function(rental){
+	var time_now = new Date().getTime();
+	return !(rental.date[0] + rental.duration[0] <= time_now + 86400000) && (rental.date[0] + rental.duration[0] > time_now);
+});
+
 var listing_info = false;
 var rental_min = false;
 var refresh_time_submit = false;
@@ -88,7 +94,12 @@ function createRow(rental_info, rownum){
 
 //function to create the status td
 function createStatus(rental_info){
-    var text = (rental_info.status == 0) ? "Inactive" : "Active"
+	var text = "Active";
+	for (var x = rental_info.date.length - 1; x >= 0; x--){
+		if (new Date().getTime() >= parseInt(rental_info.date[x]) + parseInt(rental_info.duration[x])){
+			text = "Expired";
+		}
+	}
     var temp_td = $("<td class='td-visible td-status'>" + text + "</td>");
     return temp_td;
 }
@@ -126,26 +137,12 @@ function createAddressDrop(rental_info){
         e.stopPropagation();
     });
 
-    //change the hidden status TD along with dropdown
+    //change the hidden address TD along with dropdown
     temp_input.on("input", function(e){
         $(this).closest(".td-address-drop").prev(".td-address").prop("href", $(this).val());
     });
 
     return new_td;
-}
-
-//function to create the add time
-function createAddTime(rental_info){
-    var temp_td = $("<td class='td-visible td-view'></td>");
-        var temp_a = $("<a class='button no-shadow'></a>");
-            var temp_span = $("<span class='icon'></span>");
-                var temp_i = $("<i class='fa fa-clock-o'></i>");
-            var temp_span2 = $("<span>Add Time</span>");
-    temp_td.append(temp_a.append(temp_span.append(temp_i), temp_span2));
-
-
-
-    return temp_td;
 }
 
 //function to create dropdown row
@@ -239,7 +236,7 @@ function createDatesDrop(rental_info){
     return temp_cols;
 }
 
-//various buttons (add time, view listing, view rental, visit website)
+//various buttons (add time, view listing, view rental, delete rental)
 function createButtons(rental_info){
 	var temp_col_buttons = $("<div class='column is-3'></div>");
 	var temp_div_buttons = $("<div class='control'></div>");
@@ -251,6 +248,11 @@ function createButtons(rental_info){
 	//display calendar modal
 	temp_button3.on("click", function(e) {
 		addTimeRental(rental_info, temp_button3);
+	});
+
+	//are you sure?
+	temp_button4.on("click", function(e) {
+		areYouSure($(this), rental_info)
 	});
 
 	temp_col_buttons.append(temp_div_buttons.append(temp_button1, temp_button2, temp_button3, temp_button4));
@@ -337,20 +339,6 @@ function addTimeRental(rental_info, time_a){
 
         //create existing rentals
         createExisting(listing_info.rentals);
-
-		//create the current rental if its not active
-		if (rental_info.status == 0){
-			var temp_dates = [];
-			for (var x = 0; x < rental_info.date.length; x++){
-				temp_dates.push({
-					date: rental_info.date[x],
-					duration: rental_info.duration[x],
-					account_id: rental_info.account_id,
-					rental_id: rental_info.rental_id
-				});
-			}
-			createExisting(temp_dates);
-		}
     });
 }
 
@@ -367,6 +355,42 @@ function displayListingInfo(listing_info){
     $(".rental-domain-name").text(listing_info.domain_name);
 	$("#href-domain").prop("href", "http://www." + listing_info.domain_name);
 	$("#href-domain").text(listing_info.domain_name);
+}
+
+// --------------------------------------------------------------------------------- DELETE RENTAL
+
+//function to make sure of deletion
+function areYouSure(delete_button, rental_info){
+	delete_button.off().text("Are you sure?").addClass('is-danger');
+ 	//freeze for 500ms to prevent dbl click
+	setTimeout(function() {
+		delete_button.on('click', function(){
+			delete_button.off();
+			deleteRental(rental_info, delete_button);
+		});
+    }, 500);
+}
+
+//function to delete rental
+function deleteRental(rental_info, delete_button){
+	$.ajax({
+		url: "/listing/" + rental_info.domain_name + "/" + rental_info.rental_id + "/delete",
+		method: "POST"
+	}).done(function(data){
+		var row_drop = delete_button.closest(".row-drop");
+		var row = row_drop.prev(".row-disp");
+
+		if (data.state == "success"){
+			rentals = data.rentals;
+			row_display = rentals.slice(0);
+			row_drop.remove();
+			row.remove();
+			emptyRows();
+		}
+		else {
+			errorMessage(row_drop.find(".listing-msg-error"), data.message);
+		}
+	});
 }
 
 // --------------------------------------------------------------------------------- EDIT ROW
@@ -444,11 +468,6 @@ function cancelRentalChanges(row, row_drop, cancel_button, rental_info){
     var rental_msg = row_drop.find(".rental-msg");
     rental_msg.addClass('is-hidden');
 
-    //revert back to the old status
-    var old_status = (rental_info.status == 0) ? "Inactive" : "Active"
-    row.find(".status_input").val(rental_info.status);
-    row.find(".td-status").not(".td-status-drop").text(old_status);
-
     //revert back to the old address
     row.find(".address_input").val(rental_info.address);
     row.find(".td-address").not(".td-address-drop").attr("href", rental_info.address);
@@ -466,9 +485,6 @@ function submitRentalChanges(row, row_drop, success_button, rental_info){
     success_button.addClass("is-loading");
 
 	var posted_data = {};
-	if (row.find(".status_input").data("changed")){
-		posted_data.status = row.find(".status_input").val();
-	}
 	if (row.find(".address_input").data("changed")){
 		posted_data.address = row.find(".address_input").val();
 	}
