@@ -24,7 +24,7 @@
 #msg_receiver_input {
   border: none;
   border-radius: 0;
-  color: rgba(0, 0, 0, 0.88);
+  color: rgba(0, 0, 0, 0.9);
   padding: 15px 8px;
   width: 100%; }
   #msg_receiver_input:focus {
@@ -107,7 +107,7 @@
 
 .sender_them > .chat_message {
   background-color: #d0d0d0;
-  color: rgba(0, 0, 0, 0.88); }
+  color: rgba(0, 0, 0, 0.9); }
   .sender_them > .chat_message.is-disabled {
     background-color: #e9e9e9; }
 

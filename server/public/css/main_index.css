@@ -45,7 +45,7 @@
     position: absolute;
     height: 3px;
     width: 100px;
-    background: rgba(0, 0, 0, 0.88);
+    background: rgba(0, 0, 0, 0.9);
     bottom: -20px;
     left: 50%;
     -moz-transform: translate(-50%, -50%);
