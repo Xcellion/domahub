@@ -148,6 +148,7 @@ function calculateCurrentPage(url_page, total_pages, row_per_page){
 //refresh table (pagination and rows)
 function setupTable(total_pages, row_per_page, current_page, rows_to_disp){
     if (!rows_to_disp.length){
+        $("#table_body").empty();
         emptyRows();
     }
     else {
@@ -377,11 +378,10 @@ function paginateRows(total_pages, current_page){
 
 // --------------------------------------------------------------------------------- CREATE ROWS
 
-//function to create an empty row
+//function to create an empty row if there are no more applicable rentals/listings
 function emptyRows(){
-    $("#table_body").empty();
     var listing_or_rental = window.location.pathname.indexOf("listings") != -1 ? "listings" : "rentals";
-    var tempRow = $("<tr><td class='padding-25 has-text-centered' colspan='99'>There are no matching " + listing_or_rental + "!</td></tr>");
+    var tempRow = $("<tr><td class='padding-50 has-text-centered' colspan='99'>There are no " + listing_or_rental + "! </td></tr>");
     $("#table_body").append(tempRow);
 }
 

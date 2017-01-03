@@ -353,27 +353,30 @@ function createDeleteButton(listing_info){
     //click to delete
     temp_delete_button.on("click", function(){
         var delete_button = $(this);
-        delete_button.text("Are you sure?");
-        delete_button.off().on('click', function(){
+        delete_button.off().text("Are you sure?");
 
-            $.ajax({
-                url: "/listing/" + listing_info.domain_name + "/delete",
-                method: "POST"
-            }).done(function(data){
-                var row_drop = delete_button.closest(".row-drop");
-                var row = row_drop.prev(".row-disp");
+        //freeze 500ms
+        setTimeout(function() {
+            delete_button.on('click', function(){
+                $.ajax({
+                    url: "/listing/" + listing_info.domain_name + "/delete",
+                    method: "POST"
+                }).done(function(data){
+                    var row_drop = delete_button.closest(".row-drop");
+                    var row = row_drop.prev(".row-disp");
 
-                if (data.state == "success"){
-                    listings = data.listings;
-                    row_display = listings.slice(0);
-                    row_drop.remove();
-                    row.remove();
-                }
-                else {
-                    errorMessage(row_drop.find(".listing-msg-error"), data.message);
-                }
+                    if (data.state == "success"){
+                        listings = data.listings;
+                        row_display = listings.slice(0);
+                        row_drop.remove();
+                        row.remove();
+                    }
+                    else {
+                        errorMessage(row_drop.find(".listing-msg-error"), data.message);
+                    }
+                });
             });
-        });
+        }, 500);
     });
 
     return temp_delete_button;

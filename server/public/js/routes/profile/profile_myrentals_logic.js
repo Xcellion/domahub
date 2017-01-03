@@ -134,20 +134,6 @@ function createAddressDrop(rental_info){
     return new_td;
 }
 
-//function to create the add time
-function createAddTime(rental_info){
-    var temp_td = $("<td class='td-visible td-view'></td>");
-        var temp_a = $("<a class='button no-shadow'></a>");
-            var temp_span = $("<span class='icon'></span>");
-                var temp_i = $("<i class='fa fa-clock-o'></i>");
-            var temp_span2 = $("<span>Add Time</span>");
-    temp_td.append(temp_a.append(temp_span.append(temp_i), temp_span2));
-
-
-
-    return temp_td;
-}
-
 //function to create dropdown row
 function createRowDrop(rental_info, rownum){
     temp_drop = $("<tr id='row-drop" + rownum + "' class='row-drop'></tr>");
@@ -239,7 +225,7 @@ function createDatesDrop(rental_info){
     return temp_cols;
 }
 
-//various buttons (add time, view listing, view rental, visit website)
+//various buttons (add time, view listing, view rental, delete rental)
 function createButtons(rental_info){
 	var temp_col_buttons = $("<div class='column is-3'></div>");
 	var temp_div_buttons = $("<div class='control'></div>");
@@ -251,6 +237,11 @@ function createButtons(rental_info){
 	//display calendar modal
 	temp_button3.on("click", function(e) {
 		addTimeRental(rental_info, temp_button3);
+	});
+
+	//are you sure?
+	temp_button4.on("click", function(e) {
+		areYouSure($(this), rental_info)
 	});
 
 	temp_col_buttons.append(temp_div_buttons.append(temp_button1, temp_button2, temp_button3, temp_button4));
@@ -367,6 +358,42 @@ function displayListingInfo(listing_info){
     $(".rental-domain-name").text(listing_info.domain_name);
 	$("#href-domain").prop("href", "http://www." + listing_info.domain_name);
 	$("#href-domain").text(listing_info.domain_name);
+}
+
+// --------------------------------------------------------------------------------- DELETE RENTAL
+
+//function to make sure of deletion
+function areYouSure(delete_button, rental_info){
+	delete_button.off().text("Are you sure?").addClass('is-danger');
+ 	//freeze for 500ms to prevent dbl click
+	setTimeout(function() {
+		delete_button.on('click', function(){
+			delete_button.off();
+			deleteRental(rental_info, delete_button);
+		});
+    }, 500);
+}
+
+//function to delete rental
+function deleteRental(rental_info, delete_button){
+	$.ajax({
+		url: "/listing/" + rental_info.domain_name + "/" + rental_info.rental_id + "/delete",
+		method: "POST"
+	}).done(function(data){
+		var row_drop = delete_button.closest(".row-drop");
+		var row = row_drop.prev(".row-disp");
+
+		if (data.state == "success"){
+			rentals = data.rentals;
+			row_display = rentals.slice(0);
+			row_drop.remove();
+			row.remove();
+			emptyRows();
+		}
+		else {
+			errorMessage(row_drop.find(".listing-msg-error"), data.message);
+		}
+	});
 }
 
 // --------------------------------------------------------------------------------- EDIT ROW
