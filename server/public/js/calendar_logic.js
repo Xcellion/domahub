@@ -79,8 +79,11 @@ function setUpCalendar(listing_info){
             var minDate = (typeof rental_min != "undefined") ? rental_min : moment();		//prevent calendar from going back in past
             var maxDate = moment().add(1, "year");		//prevent calendar from going further than 1 year
 
+            var currentViewStart = moment(currentView.start.format());
+            var currentViewEnd = moment(currentView.end.format());
+
             //dim today or not
-            if (moment().isBetween(currentView.start, currentView.end)){
+            if (moment().isBetween(currentViewStart, currentViewEnd)){
                 $("#today-button").addClass('is-disabled');
             }
             else {
@@ -89,7 +92,7 @@ function setUpCalendar(listing_info){
 
             if (typeof rental_min != "undefined"){
                 //dim today or not
-                if (rental_min.isBetween(currentView.start, currentView.end)){
+                if (rental_min.isBetween(currentViewStart, currentViewEnd, null, '[)')){
                     $("#rent-beginning-button").addClass('is-disabled');
                 }
                 else {
@@ -98,14 +101,14 @@ function setUpCalendar(listing_info){
             }
 
             //dim previous button
-            if (currentView.start.isSameOrBefore(minDate)) {
+            if (currentViewStart.isSameOrBefore(minDate)) {
                 $(".fc-prev-button").prop('disabled', true);
                 $(".fc-prev-button").addClass('fc-state-disabled');
                 $(".fc-next-button").removeClass('fc-state-disabled');
                 $(".fc-next-button").prop('disabled', false);
             }
             //dim next button
-            else if (currentView.end.isSameOrAfter(maxDate)){
+            else if (currentViewEnd.isSameOrAfter(maxDate)){
                 $(".fc-next-button").prop('disabled', true);
                 $(".fc-next-button").addClass('fc-state-disabled');
                 $(".fc-prev-button").removeClass('fc-state-disabled');
@@ -121,16 +124,16 @@ function setUpCalendar(listing_info){
                 daySelectionHandlers();		//day selector event handlers
             }
 
-            //dim prev / next month
+            //slightly dim prev / next month days
             else {
                 $('#calendar').fullCalendar('removeEvents', "prev-next");
 
                 //if its not a month in the past
-                if (currentView.start.isSameOrAfter(moment())){
-                    if (currentView.start.date() != 1){
+                if (currentViewStart.isSameOrAfter(moment())){
+                    if (currentViewStart.date() != 1){
                         var prevData = {
-                            start: moment(currentView.start.format("YYYY-MM-DD")).startOf("day").add(1, "millisecond"),
-                            end: moment(currentView.start.format("YYYY-MM-DD")).endOf("month").add(1, "millisecond"),
+                            start: moment(currentViewStart.format("YYYY-MM-DD")).startOf("day").add(1, "millisecond"),
+                            end: moment(currentViewStart.format("YYYY-MM-DD")).endOf("month").add(1, "millisecond"),
                             rendering: 'background',
                             color: "rgba(0,0,0,0.05)",
                             allDay: true,
@@ -141,11 +144,11 @@ function setUpCalendar(listing_info){
                 }
 
                 //if its not a month in the future (past 1 year)
-                if (currentView.end.isSameOrBefore(moment().add(1, "year"))){
-                    if (currentView.end.date() != currentView.end.daysInMonth()){
+                if (currentViewEnd.isSameOrBefore(moment().add(1, "year"))){
+                    if (currentViewEnd.date() != currentViewEnd.daysInMonth()){
                         var nextData = {
-                            start: moment(currentView.end.format("YYYY-MM-DD")).startOf("month").add(1, "millisecond"),
-                            end: moment(currentView.end.format("YYYY-MM-DD")).endOf("month").add(1, "millisecond"),
+                            start: moment(currentViewEnd.format("YYYY-MM-DD")).startOf("month").add(1, "millisecond"),
+                            end: moment(currentViewEnd.format("YYYY-MM-DD")).endOf("month").add(1, "millisecond"),
                             rendering: 'background',
                             color: "rgba(0,0,0,0.05)",
                             allDay: true,
@@ -156,7 +159,7 @@ function setUpCalendar(listing_info){
                 }
             }
 
-            highlightCellHover(currentView.name);		//highlight cell hover
+            highlightCellHover(currentView.name);
         },
 
         //creating new events
@@ -662,12 +665,12 @@ function createExisting(rentals){
 				account_id: rentals[x].account_id
 			};
 
-			//if its your own rental
-			if (user && user.id == rentals[x].account_id){
+			//if its this rental
+			if (rental_id == rentals[x].rental_id){
 				eventData.title = "Original Time Slot";
 				eventData.color = "#2196f3";
 			}
-			//someone else rented it
+			//spot is already rented
 			else {
 				eventData.title = "Rented!";
 				eventData.color = "#ff6b40";
@@ -926,7 +929,6 @@ function updatePrices(){
 
 //function to figure out a price for a specific event
 function eventPrice(event){
-        console.log(event);
 
     //get total number of price type units
     var tempDuration = moment.duration(event.end.diff(event.start));
