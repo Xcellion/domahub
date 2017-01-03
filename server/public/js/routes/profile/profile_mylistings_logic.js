@@ -10,7 +10,7 @@ function createRow(listing_info, rownum){
 
     var tempRow = $("<tr class='row-disp" + verified_row + "' id='row" + rownum + "'></tr>");
     tempRow.append(
-        createArrow(listing_info),
+        createIcon(listing_info),
         createDomain(listing_info),
         createView(listing_info),
         createType(listing_info),
@@ -31,22 +31,6 @@ function createRow(listing_info, rownum){
         selectRow($(this), verified);
     });
     return tempRow;
-}
-
-//function to create the dropdown arrow
-function createArrow(listing_info){
-    var temp_td = $("<td class='td-arrow'></td>");
-    if (listing_info.verified){
-        var temp_span = $("<span class='icon is-small'></span>");
-        var temp_i = $("<i class='no-transition fa fa-square-o'></i>");
-    }
-    else {
-        var temp_span = $("<span class='icon is-small is-danger'></span>");
-        var temp_i = $("<i class='no-transition fa fa-exclamation-triangle'></i>");
-    }
-    temp_td.append(temp_span.append(temp_i));
-
-    return temp_td;
 }
 
 //function to create the listing type td
@@ -116,24 +100,6 @@ function createView(listing_info){
     else {
         return "<td></td>";
     }
-}
-
-//function to create the edit button
-function createEdit(listing_info){
-    var temp_td = $("<td class='td-edit padding-left-0'></td>");
-    var temp_a = $("<a class='button no-shadow'></a>");
-    var temp_span = $("<span class='icon is-small'></span>");
-    var temp_i = $("<i class='fa fa-cog'></i>");
-    var temp_span2 = $("<span>Edit</span>");
-    temp_td.append(temp_a.append(temp_span.append(temp_i), temp_span2));
-
-    //prevent clicking view from dropping down row
-    temp_td.click(function(e) {
-        e.stopPropagation();
-        editRow($(this).closest('.row-disp'));
-    });
-
-    return temp_td;
 }
 
 // --------------------------------------------------------------------------------- CREATE DROP
@@ -585,7 +551,7 @@ function editRow(row){
         if ($(this).data('editing') == true && $(this).attr("id") != row.attr("id")){
             $(this).data("editing", false);
             dropRow($(this), false);
-            editArrow($(this), false);
+            editEditIcon($(this), false);
             editStatus($(this), false);
             editPriceRate($(this), false);
             editPriceType($(this), false);
@@ -598,7 +564,7 @@ function editRow(row){
     row.data("editing", editing);
 
     dropRow(row, editing);
-    editArrow(row, editing);
+    editEditIcon(row, editing);
     editStatus(row, editing);
     editPriceRate(row, editing);
     editPriceType(row, editing);
@@ -606,17 +572,6 @@ function editRow(row){
     //cancel any changes if we collapse the row
     if (!editing){
         row.next(".row-drop").find(".cancel-changes-button").click();
-    }
-}
-
-//function to change edit arrow
-function editArrow(row, editing){
-    var edit_i = row.find(".td-edit .icon");
-    if (editing){
-        edit_i.addClass("is-active");
-    }
-    else {
-        edit_i.removeClass("is-active");
     }
 }
 

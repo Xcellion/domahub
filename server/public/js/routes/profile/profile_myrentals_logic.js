@@ -69,19 +69,21 @@ function createRow(rental_info, rownum){
     tempRow = $("<tr class='row-disp' id='row" + rownum + "'></tr>");
 	tempRow.data("rental_id", rental_info.rental_id);
 
-    tempRow.append(createArrow(rental_info));
+    tempRow.append(createIcon(rental_info));
     tempRow.append(createDomain(rental_info));
     tempRow.append(createStatus(rental_info));
     tempRow.append(createStatusDrop(rental_info));
     tempRow.append(createAddress(rental_info));
 	tempRow.append(createAddressDrop(rental_info));
-    tempRow.append(createAddTime(rental_info));
-
-    tempRow.on("click", function(e){
-        editRow($(this));
-    });
+    tempRow.append(createEdit(rental_info));
 
     tempRow.data("editing", false);
+	tempRow.data("selected", false);
+
+	tempRow.click(function(e){
+		selectRow($(this));
+	});
+
     return tempRow;
 }
 
@@ -167,11 +169,7 @@ function createAddTime(rental_info){
             var temp_span2 = $("<span>Add Time</span>");
     temp_td.append(temp_a.append(temp_span.append(temp_i), temp_span2));
 
-    //display calendar modal
-    temp_a.on("click", function(e) {
-        e.stopPropagation();    //prevent clicking view from dropping down row
-        addTimeRental(rental_info, temp_a);
-    });
+
 
     return temp_td;
 }
@@ -252,12 +250,6 @@ function createDatesDrop(rental_info){
 	var temp_ul_end = $("<ul></ul>");
     temp_col_end.append(temp_p_end, temp_ul_end);
 
-		var temp_col_buttons = $("<div class='column is-3'></div>");
-		var temp_div_buttons = $("<div class='control'></div>");
-		var temp_button1_buttons = $("<a href='/listing/" + rental_info.domain_name + "' class='button margin-right-10 margin-bottom-5 no-shadow'>View Listing</a>");
-		var temp_button2_buttons = $("<a href='https://www." + rental_info.domain_name + "' class='button no-shadow'>Visit Website</a>");
-		temp_col_buttons.append(temp_div_buttons.append(temp_button1_buttons, temp_button2_buttons));
-
     for (var x = 0; x < rental_info.date.length; x++){
         var disp_start = moment(new Date(rental_info.date[x])).format('MMM DD, YYYY hh:mm A');
         var disp_end = moment(parseFloat(rental_info.date[x]) + parseFloat(rental_info.duration[x])).format('MMM DD, YYYY hh:mm A');
@@ -268,9 +260,27 @@ function createDatesDrop(rental_info){
         temp_ul_start.append(p_start);
         temp_ul_end.append(p_end);
     }
-    temp_cols.append(temp_col_start, temp_col_end, temp_col_buttons);
+    temp_cols.append(temp_col_start, temp_col_end, createButtons(rental_info));
 
     return temp_cols;
+}
+
+//various buttons (add time, view listing, view rental, visit website)
+function createButtons(rental_info){
+	var temp_col_buttons = $("<div class='column is-5'></div>");
+	var temp_div_buttons = $("<div class='control'></div>");
+	var temp_button1_buttons = $("<a href='/listing/" + rental_info.domain_name + "' class='button margin-right-10 no-shadow'>View Listing</a>");
+	var temp_button2_buttons = $("<a href='/listing/" + rental_info.domain_name + "/" + rental_info.rental_id + "' class='button margin-right-10 no-shadow'>Rental Preview</a>");
+	var temp_button3_buttons = $("<a class='button no-shadow'>Add Time</a>");
+
+	//display calendar modal
+	temp_button3_buttons.on("click", function(e) {
+		addTimeRental(rental_info, temp_button3_buttons);
+	});
+
+	temp_col_buttons.append(temp_div_buttons.append(temp_button1_buttons, temp_button2_buttons, temp_button3_buttons));
+
+	return temp_col_buttons;
 }
 
 // --------------------------------------------------------------------------------- CALENDAR MODAL SET UP
@@ -290,7 +300,7 @@ function addTimeRental(rental_info, time_a){
     }).done(function(data){
         time_a.removeClass('is-loading');
         listing_info = data.listing_info;
-		rental_min = moment(rental_info.date[0]);
+		rental_min = moment(rental_info.date[0]).startOf('week');
 
 		displayListingInfo(listing_info);
 
@@ -304,6 +314,7 @@ function addTimeRental(rental_info, time_a){
         $('#listing-modal').addClass('is-active');
 
 		//render calendar
+		setUpCalendar(listing_info);
 		$('#calendar').fullCalendar('render');
 		var cal_height = $("#calendar-modal-content").height() - $("#calendar-modal-top").height() - 100;
 		$('#calendar').fullCalendar('option', 'contentHeight', cal_height);
@@ -312,33 +323,35 @@ function addTimeRental(rental_info, time_a){
         //delete all existing listing events (except BG events)
         $('#calendar').fullCalendar('removeEvents', returnNotMineNotBG);
 
-        //check for any cookies for the listing being opened
-        var domain_cookie = read_cookie("domain_name");
-        if (domain_cookie == rental_info.domain_name){
-            var cookie_events = read_cookie("local_events");
-            if (cookie_events){
-                var changed = false;
-
-                for (var x = cookie_events.length - 1; x >= 0; x--){
-					//if its a new event, make sure it's past current time and doesnt overlap
-                    if (new Date().getTime() > new Date(cookie_events[x].start).getTime() || checkOverlapEvent(cookie_events[x])){
+		//check if there are cookies for this domain name
+		if (read_cookie("domain_name") == listing_info.domain_name){
+			if (read_cookie("local_events")){
+				var cookie_events = read_cookie("local_events");
+				var changed = false;
+				for (var x = cookie_events.length - 1; x >= 0; x--){
+					var partial_days = handlePartialDays(moment(cookie_events[x].start), moment(cookie_events[x].end));
+					cookie_events[x].start = partial_days.start;
+					cookie_events[x].end = partial_days.end;
+					//if its a new event, make sure it doesnt overlap
+					if (checkIfNotOverlapped(cookie_events[x])){
+						$('#calendar').fullCalendar('renderEvent', cookie_events[x], true);
+					}
+					else {
 						changed = true;
 						cookie_events.splice(x, 1);
-                    }
-                    else {
-						$('#calendar').fullCalendar('renderEvent', cookie_events[x], true);
-                    }
-                }
+					}
+				}
 
-                //if we removed any events, change the cookies
-                if (changed){
-                    storeCookies("local_events");
-                }
-            }
-        }
-        else {
-            delete_cookies();
-        }
+				//if we removed any events, change the cookies
+				if (changed){
+					storeCookies("local_events");
+				}
+			}
+			updatePrices();	//show prices
+		}
+		else {
+			delete_cookies();
+		}
 
 		updatePrices();	//show prices
 
@@ -385,7 +398,7 @@ function editRow(row){
         if ($(this).data('editing') == true && $(this).attr("id") != row.attr("id")){
             $(this).data("editing", false);
             dropRow($(this), false);
-            editArrow($(this), false);
+            editEditIcon($(this), false);
 			editStatus($(this), false);
 			editAddress($(this), false);
             $(this).next(".row-drop").find(".cancel-changes-button").click();
@@ -397,30 +410,13 @@ function editRow(row){
     row.data("editing", editing);
 
     dropRow(row, editing);
-    editArrow(row, editing);
+    editEditIcon(row, editing);
     editStatus(row, editing);
     editAddress(row, editing);
 
     //cancel any changes if we collapse the row
     if (!editing){
         row.next(".row-drop").find(".cancel-changes-button").click();
-    }
-}
-
-//function to change edit arrow
-function editArrow(row, editing){
-    var edit_td = row.find(".td-arrow").find("i");
-    if (editing){
-        if (!row.hasClass('unverified-row')){
-            edit_td.parent("span").addClass("is-active");
-            edit_td.addClass("fa-rotate-90");
-        }
-    }
-    else {
-        edit_td.removeClass("fa-rotate-90");
-        if (!row.hasClass('unverified-row')){
-            edit_td.parent("span").removeClass("is-active");
-        }
     }
 }
 
@@ -451,6 +447,26 @@ function editAddress(row, editing){
     else {
         address_td.removeClass("is-hidden");
         address_drop_td.addClass("is-hidden");
+    }
+}
+
+// --------------------------------------------------------------------------------- SELECT ROW
+
+//function to select a row
+function selectRow(row){
+    var selected = (row.data("selected") == false) ? true : false;
+    row.data("selected", selected);
+
+    var icon_i = row.find(".td-arrow i");
+    var icon_span = row.find(".td-arrow .icon");
+
+    row.toggleClass('is-active');
+    icon_span.toggleClass('is-primary');
+    if (selected){
+        icon_i.removeClass('fa-square-o').addClass("fa-check-square-o box-checked");
+    }
+    else {
+        icon_i.addClass('fa-square-o').removeClass("fa-check-square-o box-checked");
     }
 }
 
