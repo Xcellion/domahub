@@ -972,6 +972,8 @@ a.box {
     margin-left: 4px;
     margin-right: -2px; }
   .button:hover, .button:focus {
+    -webkit-box-shadow: 0 4px 5px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
+    -moz-box-shadow: 0 4px 5px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
     box-shadow: 0 4px 5px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 2px 4px -1px rgba(0, 0, 0, 0.2); }
   .button:hover, .button:focus, .button.is-active {
     outline: none;
@@ -980,6 +982,8 @@ a.box {
     border-color: rgba(0, 0, 0, 0.38);
     color: rgba(0, 0, 0, 0.66); }
   .button:active {
+    -webkit-box-shadow: 0 5px 8px 0 rgba(0, 0, 0, 0.14), 0 2px 10px 0 rgba(0, 0, 0, 0.12), 0 4px 5px -1px rgba(0, 0, 0, 0.2);
+    -moz-box-shadow: 0 5px 8px 0 rgba(0, 0, 0, 0.14), 0 2px 10px 0 rgba(0, 0, 0, 0.12), 0 4px 5px -1px rgba(0, 0, 0, 0.2);
     box-shadow: 0 5px 8px 0 rgba(0, 0, 0, 0.14), 0 2px 10px 0 rgba(0, 0, 0, 0.12), 0 4px 5px -1px rgba(0, 0, 0, 0.2); }
   .button.no-shadow {
     -webkit-box-shadow: 0 0 0 0 black;
