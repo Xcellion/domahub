@@ -1,4 +1,10 @@
-var row_display = rentals.slice(0);
+//show active ones first
+var row_display = rentals.slice(0)
+row_display = row_display.filter(function(rental){
+	var time_now = new Date().getTime();
+	return !(rental.date[0] + rental.duration[0] <= time_now + 86400000) && (rental.date[0] + rental.duration[0] > time_now);
+});
+
 var listing_info = false;
 var rental_min = false;
 var refresh_time_submit = false;
@@ -88,7 +94,12 @@ function createRow(rental_info, rownum){
 
 //function to create the status td
 function createStatus(rental_info){
-    var text = (rental_info.status == 0) ? "Inactive" : "Active"
+	var text = "Active";
+	for (var x = rental_info.date.length - 1; x >= 0; x--){
+		if (new Date().getTime() >= parseInt(rental_info.date[x]) + parseInt(rental_info.duration[x])){
+			text = "Expired";
+		}
+	}
     var temp_td = $("<td class='td-visible td-status'>" + text + "</td>");
     return temp_td;
 }
@@ -126,7 +137,7 @@ function createAddressDrop(rental_info){
         e.stopPropagation();
     });
 
-    //change the hidden status TD along with dropdown
+    //change the hidden address TD along with dropdown
     temp_input.on("input", function(e){
         $(this).closest(".td-address-drop").prev(".td-address").prop("href", $(this).val());
     });
@@ -328,20 +339,6 @@ function addTimeRental(rental_info, time_a){
 
         //create existing rentals
         createExisting(listing_info.rentals);
-
-		//create the current rental if its not active
-		if (rental_info.status == 0){
-			var temp_dates = [];
-			for (var x = 0; x < rental_info.date.length; x++){
-				temp_dates.push({
-					date: rental_info.date[x],
-					duration: rental_info.duration[x],
-					account_id: rental_info.account_id,
-					rental_id: rental_info.rental_id
-				});
-			}
-			createExisting(temp_dates);
-		}
     });
 }
 
@@ -471,11 +468,6 @@ function cancelRentalChanges(row, row_drop, cancel_button, rental_info){
     var rental_msg = row_drop.find(".rental-msg");
     rental_msg.addClass('is-hidden');
 
-    //revert back to the old status
-    var old_status = (rental_info.status == 0) ? "Inactive" : "Active"
-    row.find(".status_input").val(rental_info.status);
-    row.find(".td-status").not(".td-status-drop").text(old_status);
-
     //revert back to the old address
     row.find(".address_input").val(rental_info.address);
     row.find(".td-address").not(".td-address-drop").attr("href", rental_info.address);
@@ -493,9 +485,6 @@ function submitRentalChanges(row, row_drop, success_button, rental_info){
     success_button.addClass("is-loading");
 
 	var posted_data = {};
-	if (row.find(".status_input").data("changed")){
-		posted_data.status = row.find(".status_input").val();
-	}
 	if (row.find(".address_input").data("changed")){
 		posted_data.address = row.find(".address_input").val();
 	}

@@ -141,10 +141,7 @@ function setUpCalendar(listing_info){
                         };
                         $('#calendar').fullCalendar('renderEvent', prevData, true);
                     }
-                }
 
-                //if its not a month in the future (past 1 year)
-                if (currentViewEnd.isSameOrBefore(moment().add(1, "year"))){
                     if (currentViewEnd.date() != currentViewEnd.daysInMonth()){
                         var nextData = {
                             start: moment(currentViewEnd.format("YYYY-MM-DD")).startOf("month").add(1, "millisecond"),
