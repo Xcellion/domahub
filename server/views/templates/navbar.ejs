@@ -4,7 +4,7 @@
   <div class="container">
     <div class="nav-left">
       <div class="nav-item">
-        <a class="logo-text is-white is-hidden-mobile" tabindex="1" title="Home" href="/">DomaHub</a>
+        <a id="nav-logo" class="logo-text is-white is-hidden-mobile" tabindex="1" title="Home" href="/">DomaHub</a>
         <a class="is-hidden-tablet" tabindex="1" href="/" title="Home">
           <img src="/images/d-logo.PNG" />
         </a>
@@ -42,7 +42,7 @@
         <div class="modal-content login-modal">
             <div id="login-dropdown">
               <h2 class="margin-bottom-25 has-text-centered">
-                <a class="logo-text" tabindex="1" title="Home" href="/">DomaHub</a>
+                <a class="logo-text is-primary" tabindex="1" title="Home" href="/">DomaHub</a>
               </h2>
             <% if (typeof message != "undefined") {%>
               <p id="message" class="has-text-centered margin-bottom-25"><%= message %></p>
@@ -69,7 +69,7 @@
                     </label>
                   </p>
                   <p class="control">
-                      <a class="forgot orange-link" href="/forgot">Forgot password?</a>
+                      <a class="forgot is-accent" href="/forgot">Forgot password?</a>
                   </p>
                 </div>
 
@@ -78,7 +78,7 @@
                   Don&#146;t have an account?
                 </p>
                 <div class="has-text-centered">
-                  <a class="signup orange-link" href="/signup">Sign Up Now</a>
+                  <a class="signup is-accent" href="/signup">Sign Up Now</a>
                 </div>
               </p> %>
               </form>

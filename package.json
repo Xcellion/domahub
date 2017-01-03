@@ -39,7 +39,9 @@
   },
   "author": "domahub",
   "license": "ISC",
-  "devDependencies": {},
+  "devDependencies": {
+    "gulp": "^3.9.1"
+  },
   "scripts": {
     "start": "node server/server.js"
   },
