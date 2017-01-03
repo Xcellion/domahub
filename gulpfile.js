@@ -1,12 +1,19 @@
 var gulp = require('gulp');
 var sass = require('gulp-sass');
+var cleanCSS = require('gulp-clean-css');
 
 gulp.task('sass', function() {
-  return gulp.src('server/public/sass/**/*.+(scss|sass)')
+  return gulp.src('server/public/sass/**/*.scss')
     .pipe(sass()) // gulp-sass module - converts sass to css
     .pipe(gulp.dest('server/public/css'));
 });
 
 gulp.task('watch', function() {
-  gulp.watch('server/public/sass/**/*.+(scss|sass)', ['sass']);
+  gulp.watch('server/public/sass/**/*.scss', ['sass']);
+})
+
+gulp.task('minify-css', function() {
+  return gulp.src('server/public/css/*.css')
+    .pipe(cleanCSS())
+    .pipe(gulp.dest('server/public/css/min'));
 })
