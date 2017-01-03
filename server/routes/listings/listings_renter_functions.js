@@ -88,10 +88,9 @@ module.exports = {
 
     //check posted rental address
     checkPostedRentalAddress : function(req, res, next){
-        //check for address
         if (typeof req.body.address != "undefined"){
-            var address = addProtocol(req.body.address);
             console.log("F: Checking posted rental address...");
+            var address = addProtocol(req.body.address);
             if (!validator.isIP(address) && !validator.isURL(address, {protocols: ["http", "https"], require_protocol: true})){
                 error.handler(req, res, "Invalid address!", "json");
             }
@@ -105,24 +104,11 @@ module.exports = {
         }
     },
 
-    //check posted rental status
-    checkPostedRentalStatus : function(req, res, next){
-        var status = req.body.status;
-
-        //check for status
-        if (typeof status != "undefined"){
-            console.log("F: Checking posted rental status...");
-            if (status != "1" && status != "0"){
-                error.handler(req, res, "Invalid status!", "json");
-            }
-            else {
-                req.session.rental_object.db_object.status = status;
-                next();
-            }
-        }
-        else {
-            next();
-        }
+    //function to deactivate a rental
+    deactivateRental : function(req, res, next){
+        console.log("F: Deactivating rental...");
+        req.session.rental_object.db_object.status = 0;
+        next();
     },
 
     //create a rental object for checking
@@ -838,11 +824,19 @@ function calculatePrice(times, listing_info){
 //----------------------------------------------------------------helper functions for user obj----------------------------------------------------------------
 
 //helper function to update req.user.rentals after changing to active
-function updateUserRentalsObject(rentals, rental_obj, rental_id){
-	for (var x = 0; x < rentals.length; x++){
-		if (rentals[x].rental_id == rental_id){
-			for (y in rental_obj){
-                rentals[x][y] = rental_obj[y];
+function updateUserRentalsObject(user_rentals, db_rentals, rental_id){
+	for (var x = 0; x < user_rentals.length; x++){
+		if (user_rentals[x].rental_id == rental_id){
+
+            //delete rental
+            if (db_rentals.status == 0){
+                user_rentals.splice(x, 1);
+            }
+            //copy changed settings
+            else {
+                for (y in db_rentals){
+                    user_rentals[x][y] = db_rentals[y];
+                }
             }
 			break;
 		}

@@ -25,12 +25,12 @@
 					</div>
 				</div>
 			</div>
-			<div class="columns">
+			<div id="filters" class="is-hidden columns">
 				<div class="column">
 					<nav class="level filter-panel">
 						<div class="level-item">
-							<a class="is-active filter-local" id="reset_filter" tabindex="1">
-								View All
+							<a class="is-active filter-local" id="active_filter" tabindex="1">
+								Active
 							</a>
 						</div>
 						<div class="level-item">
@@ -44,13 +44,8 @@
 							</a>
 						</div>
 						<div class="level-item">
-							<a class="filter-local" id="active_filter" tabindex="1">
-								Active
-							</a>
-						</div>
-						<div class="level-item">
-							<a class="filter-local" id="inactive_filter" tabindex="1">
-								Inactive
+							<a class="filter-local" id="reset_filter" tabindex="1">
+								View All
 							</a>
 						</div>
 						<div class="level-item">
@@ -64,11 +59,6 @@
 			</div>
 			<div class="columns">
 				<div class="column is-12">
-
-					<div id="no-rows" class="has-text-centered is-hidden padding-20">
-						There are no rentals!
-					</div>
-
 					<div class="rows-exist">
 						<table class="table has-shadow">
 							<thead class="has-shadow">
@@ -97,7 +87,7 @@
 							</thead>
 							<tbody id="table_body">
 								<tr>
-									<td colspan="999" class="is-loading has-text-centered padding-20">
+									<td colspan="999" class="is-loading has-text-centered padding-50">
 										Loading rentals...
 									</td>
 								</tr>

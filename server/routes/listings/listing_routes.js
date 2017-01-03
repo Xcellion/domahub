@@ -215,7 +215,7 @@ module.exports = function(app, db, auth, error, stripe){
 		renter_functions.sendRentalSuccess
 	]);
 
-	//changing rental status
+	//changing rental information
 	app.post('/listing/:domain_name/:rental_id/edit', [
 		urlencodedParser,
 		auth.checkLoggedIn,
@@ -226,7 +226,6 @@ module.exports = function(app, db, auth, error, stripe){
 		renter_functions.checkRentalOwner,
 		renter_functions.createRentalObject,
 		renter_functions.checkPostedRentalAddress,
-		renter_functions.checkPostedRentalStatus,
 		renter_functions.editRental,
 		renter_functions.updateRentalObject
 	]);
@@ -249,6 +248,21 @@ module.exports = function(app, db, auth, error, stripe){
 		renter_functions.editRentalTimes,
 		profile_functions.getAccountRentals,
 		renter_functions.sendRentalSuccess
+	]);
+
+	//delete a rental
+	app.post('/listing/:domain_name/:rental_id/delete', [
+		urlencodedParser,
+		auth.checkLoggedIn,
+		checkDomainValid,
+		checkDomainListed,
+		renter_functions.getRental,
+		renter_functions.checkRentalDomain,
+		renter_functions.checkRentalOwner,
+		renter_functions.createRentalObject,
+		renter_functions.deactivateRental,
+		renter_functions.editRental,
+		renter_functions.updateRentalObject
 	]);
 
 }
