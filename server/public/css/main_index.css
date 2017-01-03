@@ -7,14 +7,6 @@
   #index-img {
     background-color: #444; } }
 
-.title-p {
-  font-size: 18px; }
-  @media screen and (min-width: 769px) {
-    .title-p {
-      width: 550px; }
-      .title-p.is-medium {
-        width: 650px; } }
-
 .slider-box {
   -webkit-box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
   -moz-box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
@@ -61,28 +53,3 @@
     -ms-transform: translate(-50%, -50%);
     -webkit-transform: translate(-50%, -50%);
       -webkit-transform-transform: translate(-50%, -50%); }
-
-/*********************** MAIN ************************/
-@-webkit-keyframes opacity {
-  0% {
-    opacity: 0; }
-  100% {
-    opacity: 1; } }
-
-#load1 {
-  -webkit-animation: opacity 1s;
-  -moz-animation: opacity 1s;
-  -o-animation: opacity 1s;
-  animation: opacity 1s; }
-
-#load2 {
-  -webkit-animation: opacity 2s;
-  -moz-animation: opacity 2s;
-  -o-animation: opacity 2s;
-  animation: opacity 2s; }
-
-#load3 {
-  -webkit-animation: opacity 3s;
-  -moz-animation: opacity 3s;
-  -o-animation: opacity 3s;
-  animation: opacity 3s; }
