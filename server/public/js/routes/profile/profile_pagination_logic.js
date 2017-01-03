@@ -422,9 +422,43 @@ function createAllRows(row_per_page, current_page){
     }
 }
 
+//function to create the icon in front
+function createIcon(listing_info){
+    var temp_td = $("<td class='td-arrow'></td>");
+    if (typeof listing_info.verified != "undefined" && listing_info.verified == null){
+        var temp_span = $("<span class='icon is-small is-danger'></span>");
+        var temp_i = $("<i class='no-transition fa fa-exclamation-triangle'></i>");
+    }
+    else {
+        var temp_span = $("<span class='icon is-small'></span>");
+        var temp_i = $("<i class='no-transition fa fa-square-o'></i>");
+    }
+    temp_td.append(temp_span.append(temp_i));
+
+    return temp_td;
+}
+
 //function to create the domain name td
 function createDomain(row_info){
     var temp_td = $("<td class='td-visible td-domain'>" + row_info.domain_name + "</td>");
+    return temp_td;
+}
+
+//function to create the edit button
+function createEdit(listing_info){
+    var temp_td = $("<td class='td-edit padding-left-0'></td>");
+    var temp_a = $("<a class='button no-shadow'></a>");
+    var temp_span = $("<span class='icon is-small'></span>");
+    var temp_i = $("<i class='fa fa-cog'></i>");
+    var temp_span2 = $("<span>Edit</span>");
+    temp_td.append(temp_a.append(temp_span.append(temp_i), temp_span2));
+
+    //prevent clicking view from dropping down row
+    temp_td.click(function(e) {
+        e.stopPropagation();
+        editRow($(this).closest('.row-disp'));
+    });
+
     return temp_td;
 }
 
@@ -470,5 +504,16 @@ function dropRow(row, editing){
     }
     else {
         row_drop.find(".div-drop").stop().slideUp("fast");
+    }
+}
+
+//function to change edit arrow
+function editEditIcon(row, editing){
+    var edit_i = row.find(".td-edit .icon");
+    if (editing){
+        edit_i.addClass("is-active");
+    }
+    else {
+        edit_i.removeClass("is-active");
     }
 }

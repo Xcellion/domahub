@@ -50,7 +50,7 @@ function setUpCalendar(listing_info){
                 start: moment().startOf("day"),
                 end: moment().endOf("day"),
                 rendering: 'background',
-                color: "rgba(255,0,0,0.15)",
+                color: "rgba(255, 87, 34, 0.15)",
                 allDay: true
             },
             //background for 1 year out
@@ -926,6 +926,7 @@ function updatePrices(){
 
 //function to figure out a price for a specific event
 function eventPrice(event){
+        console.log(event);
 
     //get total number of price type units
     var tempDuration = moment.duration(event.end.diff(event.start));
