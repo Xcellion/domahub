@@ -41,8 +41,11 @@
       <div class="modal-container">
         <div class="modal-content login-modal">
             <div id="login-dropdown">
+              <h2 class="margin-bottom-25 has-text-centered">
+                <a class="logo-text" tabindex="1" title="Home" href="/">DomaHub</a>
+              </h2>
             <% if (typeof message != "undefined") {%>
-                <div id="message" class="has-text-centered margin-bottom-25"><%= message %></div>
+              <p id="message" class="has-text-centered margin-bottom-25"><%= message %></p>
             <% } %>
               <form id="navbar_form" action="/login" method="post">
                 <p class="control has-icon">

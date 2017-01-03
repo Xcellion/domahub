@@ -165,12 +165,6 @@ textarea {
 .is-normal {
   font-weight: 400; }
 
-.is-lite {
-  font-weight: 300; }
-
-.is-italic {
-  font-style: italic; }
-
 .is-underlined {
   color: inherit;
   text-decoration: underline; }
@@ -389,7 +383,8 @@ a {
   text-decoration: none;
   word-break: break-word; }
   a:active {
-    outline: none; }
+    outline: none;
+    cursor: pointer; }
   a.black-link {
     color: rgba(0, 0, 0, 0.9); }
     a.black-link:hover, a.black-link:focus {

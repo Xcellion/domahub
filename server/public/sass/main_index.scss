@@ -12,16 +12,6 @@
   }
 }
 
-.title-p {
-  font-size: $size-5;
-  @include tablet {
-    width: 550px;
-    &.is-medium {
-      width: 650px;
-    }
-  }
-}
-
 .slider-box {
   @include box-shadows(0 2px 2px 0 rgba(0,0,0,.14),0 3px 1px -2px rgba(0,0,0,.2),0 1px 5px 0 rgba(0,0,0,.12));
   display: block;
@@ -49,13 +39,6 @@
   }
 }
 
-// .coocoo-wrapper {
-//   border: 2px solid $border;
-//   border-radius: $radius;
-//   padding: 10px;
-//   box-sizing: border-box;
-// }
-
 .checklist-item {
   display: inline-flex;
   align-items: center;
@@ -79,22 +62,4 @@
     left: 50%;
     @include translate(-50%, -50%);
   }
-}
-
-/*********************** MAIN ************************/
-@-webkit-keyframes opacity {
-  0%   { opacity: 0; }
-  100% { opacity: 1; }
-}
-
-#load1 {
-  @include keyframes(opacity 1s);
-}
-
-#load2 {
-  @include keyframes(opacity 2s);
-}
-
-#load3 {
-  @include keyframes(opacity 3s);
 }

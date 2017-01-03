@@ -1,4 +1,4 @@
- @import 'bulma/bulma.sass';
+@import 'bulma/bulma.sass';
 
 /**font**/
 @font-face {
@@ -12,48 +12,6 @@
   font-family: 'roboto';
   src: url("/fonts/roboto/roboto700.ttf");
   font-weight: bold;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: 'roboto';
-  src: url("/fonts/roboto/robotoitalics.ttf");
-  font-weight: normal;
-  font-style: italic;
-}
-
-@font-face {
-  font-family: 'roboto';
-  src: url("/fonts/roboto/roboto300.ttf");
-  font-weight: 300;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: 'Roboto Condensed';
-  src: url("/fonts/robotoCondensed/robotoCondensed400.ttf");
-  font-weight: normal;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: 'Roboto Condensed';
-  src: url("/fonts/robotoCondensed/robotoCondensed700.ttf");
-  font-weight: bold;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: 'Roboto Condensed';
-  src: url("/fonts/robotoCondensed/robotoCondensed400italics.ttf");
-  font-weight: normal;
-  font-style: italic;
-}
-
-@font-face {
-  font-family: 'Roboto Condensed';
-  src: url("/fonts/robotoCondensed/robotoCondensed300.ttf");
-  font-weight: 300;
   font-style: normal;
 }
 
@@ -87,36 +45,15 @@
   }
 }
 
-#temp-logo-flat {
-  @include tablet {
-    display:  none;
-  }
-  @include mobile {
-    display: block;
-  }
-}
-
-.stripe-logo {
-  line-height: normal !important;
-}
-
 .min-height {
   min-height: calc(100vh - 200px);
-}
-
-.min-height-half {
-    min-height: calc(50vh - 200px);
 }
 
 .clear-nav {
   padding-top: 60px;
 }
 
-.clear-nav-profile {
-  padding-top: 68px;
-}
-
-// margins list contains: 10,15,20,25,50,75,100,150,200
+// margins list contains 0-100 (mults of 5), 150, and 200
 @each $margin in $margins {
   .margin-#{$margin} {
     margin: #{$margin}px !important;
@@ -153,10 +90,6 @@
   }
 }
 
-.vertical-align-bottom {
-  vertical-align: bottom;
-}
-
 .low-opacity {
   opacity: 0.5;
 }
@@ -171,19 +104,6 @@
 
 .v-align-middle {
   vertical-align: middle !important;
-}
-
-.hover-scale {
-  @include transition(all 0.25s ease);
-  & > .image {
-    @include transition(all 0.25s ease);
-    @include scale(1);
-  }
-  &:hover {
-    & > .image {
-      @include scale(1.15);
-    }
-  }
 }
 
 .has-border-right {
@@ -212,31 +132,6 @@
   }
 }
 
-.has-styleBorder {
-  @include tablet {
-    border-left: 5px solid $primary-lighter;
-    padding-left: 15px;
-  }
-  @include mobile {
-    @include box-shadow(0,-1px,0,$border,0,inset)
-    padding-bottom: 15px;
-  }
-}
-
-.has-styleborderBottom {
-  position: relative;
-  display: inline-block;
-  &::before {
-    content:"";
-    position: absolute;
-    height: 2px;
-    width: 35px;
-    background: $black-primary;
-    bottom: -25px;
-    left:0;
-  }
-}
-
 .landing-img {
   @include tablet {
     background-position: center center;
@@ -262,19 +157,6 @@
       width: 100%;
     }
   }
-}
-
-.flex-container {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  height: calc(100vh - 320px);
-  width: 100%;
-}
-
-.flex-content {
-  align-self: center;
 }
 
 .flex-column-center {
