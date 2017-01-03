@@ -72,7 +72,6 @@ function createRow(rental_info, rownum){
     tempRow.append(createIcon(rental_info));
     tempRow.append(createDomain(rental_info));
     tempRow.append(createStatus(rental_info));
-    tempRow.append(createStatusDrop(rental_info));
     tempRow.append(createAddress(rental_info));
 	tempRow.append(createAddressDrop(rental_info));
     tempRow.append(createEdit(rental_info));
@@ -105,31 +104,6 @@ function createArrow(){
 }
 
 // --------------------------------------------------------------------------------- CREATE ROW DROP
-
-//function to create the select dropdown for rental status
-function createStatusDrop(rental_info){
-    var new_td = $("<td class='td-visible td-status td-status-drop is-hidden'></td>");
-        var temp_span = $("<span class='select status-span'></span>");
-        var temp_form = $("<form class='drop-form'></form>");
-        var temp_select = $("<select class='status_input changeable-input'></select>");
-            temp_select.append("<option value='0'>Inactive</option");
-            temp_select.append("<option value='1'>Active</option");
-            temp_select.val(rental_info.status);
-            temp_select.data("name", "status");
-    new_td.append(temp_span.append(temp_form.append(temp_select)));
-
-    //prevent clicking status from dropping down row
-    temp_select.click(function(e) {
-        e.stopPropagation();
-    });
-
-    //change the hidden status TD along with dropdown
-    temp_select.change(function(e){
-        $(this).closest(".td-status-drop").prev(".td-status").text($(this).val());
-    });
-
-    return new_td;
-}
 
 //function to create the address td
 function createAddress(rental_info){
@@ -251,8 +225,8 @@ function createDatesDrop(rental_info){
     temp_col_end.append(temp_p_end, temp_ul_end);
 
     for (var x = 0; x < rental_info.date.length; x++){
-        var disp_start = moment(new Date(rental_info.date[x])).format('MMM DD, YYYY hh:mm A');
-        var disp_end = moment(parseFloat(rental_info.date[x]) + parseFloat(rental_info.duration[x])).format('MMM DD, YYYY hh:mm A');
+        var disp_start = moment(new Date(rental_info.date[x])).format('MMMM DD, YYYY h:mm A');
+        var disp_end = moment(parseFloat(rental_info.date[x]) + parseFloat(rental_info.duration[x])).format('MMMM DD, YYYY h:mm A');
 
         var p_start = $("<li>" + disp_start + "</li>");
         var p_end = $("<li>" + disp_end + "</li>");
@@ -260,25 +234,26 @@ function createDatesDrop(rental_info){
         temp_ul_start.append(p_start);
         temp_ul_end.append(p_end);
     }
-    temp_cols.append(temp_col_start, temp_col_end, createButtons(rental_info));
+    temp_cols.append(createButtons(rental_info), temp_col_start, temp_col_end);
 
     return temp_cols;
 }
 
 //various buttons (add time, view listing, view rental, visit website)
 function createButtons(rental_info){
-	var temp_col_buttons = $("<div class='column is-5'></div>");
+	var temp_col_buttons = $("<div class='column is-3'></div>");
 	var temp_div_buttons = $("<div class='control'></div>");
-	var temp_button1_buttons = $("<a href='/listing/" + rental_info.domain_name + "' class='button margin-right-10 no-shadow'>View Listing</a>");
-	var temp_button2_buttons = $("<a href='/listing/" + rental_info.domain_name + "/" + rental_info.rental_id + "' class='button margin-right-10 no-shadow'>Rental Preview</a>");
-	var temp_button3_buttons = $("<a class='button no-shadow'>Add Time</a>");
+	var temp_button1 = $("<a href='/listing/" + rental_info.domain_name + "' class='button margin-right-10 margin-bottom-5 no-shadow'>View Listing</a>");
+	var temp_button2 = $("<a href='/listing/" + rental_info.domain_name + "/" + rental_info.rental_id + "' class='button margin-right-10 no-shadow'>Preview Rental</a>");
+	var temp_button3 = $("<a class='button margin-right-10 no-shadow'>Add Time</a>");
+	var temp_button4 = $("<a class='button no-shadow'>Delete Rental</a>");
 
 	//display calendar modal
-	temp_button3_buttons.on("click", function(e) {
-		addTimeRental(rental_info, temp_button3_buttons);
+	temp_button3.on("click", function(e) {
+		addTimeRental(rental_info, temp_button3);
 	});
 
-	temp_col_buttons.append(temp_div_buttons.append(temp_button1_buttons, temp_button2_buttons, temp_button3_buttons));
+	temp_col_buttons.append(temp_div_buttons.append(temp_button1, temp_button2, temp_button3, temp_button4));
 
 	return temp_col_buttons;
 }
@@ -316,8 +291,13 @@ function addTimeRental(rental_info, time_a){
 		//render calendar
 		setUpCalendar(listing_info);
 		$('#calendar').fullCalendar('render');
-		var cal_height = $("#calendar-modal-content").height() - $("#calendar-modal-top").height() - 100;
-		$('#calendar').fullCalendar('option', 'contentHeight', cal_height);
+
+		//fix calendar height for month view
+		if (listing_info.price_type != "hour"){
+			var cal_height = $(".modal-container-calendar").height() - $("#calendar-modal-top").height() - 90;
+			$('#calendar').fullCalendar('option', 'contentHeight', cal_height);
+		}
+
 		$("#calendar").fullCalendar('gotoDate', rental_info.date[0]);
 
         //delete all existing listing events (except BG events)
@@ -399,7 +379,6 @@ function editRow(row){
             $(this).data("editing", false);
             dropRow($(this), false);
             editEditIcon($(this), false);
-			editStatus($(this), false);
 			editAddress($(this), false);
             $(this).next(".row-drop").find(".cancel-changes-button").click();
         }
@@ -411,27 +390,11 @@ function editRow(row){
 
     dropRow(row, editing);
     editEditIcon(row, editing);
-    editStatus(row, editing);
     editAddress(row, editing);
 
     //cancel any changes if we collapse the row
     if (!editing){
         row.next(".row-drop").find(".cancel-changes-button").click();
-    }
-}
-
-//function to change status column to editable
-function editStatus(row, editing){
-    var status_drop_td = row.find(".td-status-drop");
-    var status_td = row.find(".td-status");
-
-    if (editing){
-        status_td.addClass("is-hidden");
-        status_drop_td.removeClass("is-hidden");
-    }
-    else {
-        status_td.removeClass("is-hidden");
-        status_drop_td.addClass("is-hidden");
     }
 }
 
