@@ -82,32 +82,10 @@ $(document).ready(function() {
 		$("#profile-button, #login-modal").addClass("is-primary").removeClass("is-white");
 	}
 
+	//change navbar based on scroll
+	navbarChange($(window), pages_white_nav, current_page);
 	$(window).scroll(function(e){
-
-		//before the top
-		if ($(this).scrollTop() <= 0 && $(".nav").hasClass("has-shadow")) {
-			$(".nav").removeClass("has-shadow is-white");
-			if (pages_white_nav.indexOf(current_page) != -1){
-				$(".nav-link").removeClass("is-white");
-				$("#nav-logo").addClass("is-primary").removeClass("is-white");
-			}
-			else {
-				$("#profile-button, #login-modal").removeClass("is-primary").addClass("is-white");
-				$("#nav-logo").removeClass("is-primary").addClass("is-white");
-				$(".nav-link").addClass("is-white");
-				$(".nav-menu").removeClass("is-white").addClass("is-dark");
-				$(".nav-toggle").removeClass("is-black").addClass("is-white");
-			}
-		}
-		//past the top
-		else if ($(this).scrollTop() > 0 && !$(".nav").hasClass("has-shadow")){
-			$(".nav").addClass("has-shadow is-white");
-			$(".nav-link").removeClass("is-white");
-			$(".nav-menu").removeClass("is-dark").addClass("is-white");
-			$(".nav-toggle").removeClass("is-white").addClass("is-black");
-			$("#nav-logo").addClass("is-primary").removeClass("is-white");
-			$("#profile-button, #login-modal").addClass("is-primary").removeClass("is-white");
-		}
+		navbarChange($(this), pages_white_nav, current_page);
 	});
 
 	//delete notifications button
@@ -117,3 +95,31 @@ $(document).ready(function() {
 	});
 
 });
+
+//function to change navbar on scroll
+function navbarChange(windowelem, pages_white_nav, current_page){
+	//before the top
+	if (windowelem.scrollTop() <= 0 && $(".nav").hasClass("has-shadow")) {
+		$(".nav").removeClass("has-shadow is-white");
+		if (pages_white_nav.indexOf(current_page) != -1){
+			$(".nav-link").removeClass("is-white");
+			$("#nav-logo").addClass("is-primary").removeClass("is-white");
+		}
+		else {
+			$("#profile-button, #login-modal").removeClass("is-primary").addClass("is-white");
+			$("#nav-logo").removeClass("is-primary").addClass("is-white");
+			$(".nav-link").addClass("is-white");
+			$(".nav-menu").removeClass("is-white").addClass("is-dark");
+			$(".nav-toggle").removeClass("is-black").addClass("is-white");
+		}
+	}
+	//past the top
+	else if (windowelem.scrollTop() > 0 && !$(".nav").hasClass("has-shadow")){
+		$(".nav").addClass("has-shadow is-white");
+		$(".nav-link").removeClass("is-white");
+		$(".nav-menu").removeClass("is-dark").addClass("is-white");
+		$(".nav-toggle").removeClass("is-white").addClass("is-black");
+		$("#nav-logo").addClass("is-primary").removeClass("is-white");
+		$("#profile-button, #login-modal").addClass("is-primary").removeClass("is-white");
+	}
+}
