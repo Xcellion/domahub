@@ -663,7 +663,7 @@ function createExisting(rentals){
 			};
 
 			//if its this rental
-			if (rental_id == rentals[x].rental_id){
+			if (typeof rental_id != "undefined" && rental_id == rentals[x].rental_id){
 				eventData.title = "Original Time Slot";
 				eventData.color = "#2196f3";
 			}
@@ -866,7 +866,7 @@ function createEvent(start, end){
 
 		//if there were any error messages
 		if ($("#calendar-error-message").hasClass('is-danger')){
-			$("#calendar-error-message").removeClass('is-danger').text("Click a cell on the calendar to reserve that time slot. You may select whole days by clicking on the date.	Use the buttons at the top to remove all selected cells or change calendar views.")
+			$("#calendar-error-message").removeClass('is-danger').text("");
 		}
 	}
 }
