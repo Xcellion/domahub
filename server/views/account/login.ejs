@@ -2,21 +2,21 @@
 <html>
   <head>
     <title>Log in - DomaHub</title>
-    <link rel="stylesheet" type="text/css" href="/css/login_signup.css" />
+    <link rel="stylesheet" type="text/css" href="/css/min/login_signup.min.css" />
     <%- include("../templates/head_links"); %>
   </head>
 
   <body>
 
     <div class="content has-text-centered clear-nav">
-      <div class="has-text-centered logo-login">
-        <a class="logo-text primary-logo large-logo" href="/">DomaHub</a>
-      </div>
+      <h2 class="has-text-centered">
+        <a class="logo-text is-primary" href="/">DomaHub</a>
+      </h2>
         <% if (typeof message != "undefined") {%>
             <p id="message" class="is-bold"><%= message %></p>
         <% } %>
     </div>
-    <div id="login-form" class="form">
+    <div id="login-form" class="account-form">
       <form id="target" action="/login" method="post">
         <label class="label">Email</label>
         <p class="control">

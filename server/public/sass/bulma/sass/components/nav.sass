@@ -37,6 +37,15 @@
       margin-left: 5px
   +mobile
     text-align: right
+  &.searchbar
+    +tablet
+      width: 50%
+      & > .control
+        width: 100%
+    +mobile
+      width: 100%
+      & > .control
+        width: 100%
 
 .nav-item a,
 a.nav-item
@@ -155,3 +164,45 @@ a.nav-item
       & > .nav-left
         & > .nav-item.is-brand:first-child
           padding-left: 20px
+
+// profile button styling
+#profile-button
+  width: 110px
+  &.is-active
+    border-radius: 3px 3px 0px 0px
+  +mobile
+    display: none
+
+// modal login box
+#login-dropdown
+  background-color: $white
+
+// profile dropdown menu
+#profile-dropdown
+  +box-shadow(0,4px,7px,$black-disabled,0)
+  background-color: $white
+  position: absolute
+  right: 0
+  text-align: left
+  top: 46px
+  width: 200px
+
+.profile-dropdown-menu
+  padding: 5px 15px
+  border-radius: 0 0 3px 3px
+  li
+    box-sizing: border-box
+    &:not(:first-child)
+      border-top: 1px solid $border
+    &:last-child
+      a
+        font-weight: bold
+  a
+    width: 100%
+    display: inline-block
+    padding: 15px 5px
+    box-sizing: border-box
+    &:hover,
+    &:active,
+    &:focus
+      +translate(8px,0)

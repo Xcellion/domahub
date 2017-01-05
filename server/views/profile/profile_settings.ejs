@@ -5,26 +5,14 @@
 <head>
 	<title>Account Settings - DomaHub</title>
 	<%- include("../templates/head_links"); %>
-	<link rel="stylesheet" href="/css/profile_general.css" type="text/css" />
+	<link rel="stylesheet" href="/css/min/profile_general.min.css" type="text/css" />
 </head>
 
 <body>
 
 	<%- include("../templates/navbar", {user: user}); %>
 
-	<div class="container clear-nav-profile">
-    <%# <div class="tabs is-centered">
-      <ul>
-        <li><a href="/profile/dashboard" tabindex="1">Dashboard</a></li>
-        <li><a href="/profile/messages" tabindex="1">Messages</a></li>
-        <li><a href="/profile/mylistings" tabindex="1">Listings</a></li>
-        <li><a href="/profile/myrentals" tabindex="1">Rentals</a></li>
-        <li class="is-active"><a href="/profile/settings" tabindex="1">Settings</a></li>
-      </ul>
-    </div>%>
-	</div>
-
-  <section class="section min-height">
+  <section class="section min-height is-medium">
     <div class="container">
       <div class="columns">
 				<div class="column is-one-quarter">
