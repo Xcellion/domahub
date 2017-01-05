@@ -27,34 +27,39 @@
 				<div class="column">
 					<nav class="level filter-panel">
 						<div class="level-item">
-							<a class="is-active filter-local padding-5" id="reset_filter" tabindex="1">
+							<a class="is-active filter-local is-hidden-mobile" id="reset_filter" tabindex="1">
 								View All
 							</a>
 						</div>
 						<div class="level-item">
-							<a class="filter-local padding-5" id="rented_filter" tabindex="1">
+							<a class="filter-local is-hidden-mobile" id="rented_filter" tabindex="1">
 								Currently Rented
 							</a>
 						</div>
 						<div class="level-item">
-							<a class="filter-local padding-5" id="premium_filter" tabindex="1">
+							<a class="filter-local is-hidden-mobile" id="premium_filter" tabindex="1">
 								Premium
 							</a>
 						</div>
 						<div class="level-item">
-							<a class="filter-local padding-5" id="basic_filter" tabindex="1">
+							<a class="filter-local is-hidden-mobile" id="basic_filter" tabindex="1">
 								Basic
 							</a>
 						</div>
 						<div class="level-item">
-							<a class="filter-local padding-5" id="unverified_filter" tabindex="1">
+							<a class="filter-local is-hidden-mobile" id="unverified_filter" tabindex="1">
 								Unverified
 							</a>
 						</div>
 						<div class="level-item">
-							<div class="control has-icon">
-								<input id="search-domain" tabindex="1" class="input" type="text" placeholder="Search my listings" />
+							<div class="control is-expanded has-icon has-addons">
 								<i class="fa fa-search"></i>
+								<input id="search-domain" tabindex="1" class="input is-expanded" type="text" placeholder="Search my listings" />
+								<a class="button is-primary no-shadow is-hidden-tablet">
+									<span class="icon">
+										<i class="fa fa-bars"></i>
+									</span>
+								</a>
 							</div>
 						</div>
 					</nav>

@@ -29,29 +29,34 @@
 				<div class="column">
 					<nav class="level filter-panel">
 						<div class="level-item">
-							<a class="is-active padding-5 filter-local" id="active_filter" tabindex="1">
+							<a class="is-active filter-local is-hidden-mobile" id="active_filter" tabindex="1">
 								Active
 							</a>
 						</div>
 						<div class="level-item">
-							<a class="filter-local padding-5" id="expiring_filter" tabindex="1">
+							<a class="filter-local is-hidden-mobile" id="expiring_filter" tabindex="1">
 								Expiring
 							</a>
 						</div>
 						<div class="level-item">
-							<a class="filter-local padding-5" id="expired_filter" tabindex="1">
+							<a class="filter-local is-hidden-mobile" id="expired_filter" tabindex="1">
 								Expired
 							</a>
 						</div>
 						<div class="level-item">
-							<a class="filter-local padding-5" id="reset_filter" tabindex="1">
+							<a class="filter-local is-hidden-mobile" id="reset_filter" tabindex="1">
 								View All
 							</a>
 						</div>
 						<div class="level-item">
-							<div class="control has-icon">
-								<input id="search-domain" tabindex="1" class="input" type="text" placeholder="Search my rentals" />
+							<div class="control is-expanded has-icon has-addons">
 								<i class="fa fa-search"></i>
+								<input id="search-domain" tabindex="1" class="input is-expanded" type="text" placeholder="Search my rentals" />
+								<a class="button is-primary no-shadow is-hidden-tablet">
+									<span class="icon">
+										<i class="fa fa-bars"></i>
+									</span>
+								</a>
 							</div>
 						</div>
 					</nav>
