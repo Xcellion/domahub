@@ -38,12 +38,11 @@
   justify-content: space-between
   &.filter-panel
     justify-content: flex-start
+    // each filter tab
     .filter-local
       font-size: $size-small
       color: $text
       padding: 2px
-      &:hover
-        +box-shadow(0,2px,0,$black,0)
       &.is-active
         +box-shadow(0,2px,0,$primary,0)
         color: $primary
@@ -52,35 +51,16 @@
         &:focus
           +box-shadow(0,2px,0,$primary-lighter,0)
           color: $primary-lighter
+    // level item containers for filters
     & > .level-item
       +tablet
         &:not(:first-child)
           margin-left: 25px
+    // responsiveness
     +tablet
       & > .level-item
         &:not(.is-narrow)
           flex-grow: 0
-  &.jc-flex-start
-    display: flex
-    justify-content: flex-start
-    +mobile
-      flex-direction: column
-      align-items: flex-start
-    +tablet
-      & > .level-item
-        &:not(.is-narrow)
-          flex-grow: 0
-    & > .level-item
-      &:not(:first-child)
-        margin-left: 10px
-        +mobile
-          margin-left: 0
-  &.is-white
-    & > .level-left
-      background-color: $white
-      border-radius: 5px 5px 0 0
-      & > .level-item
-        padding: 10px 15px 0
   code
     border-radius: $radius
   img
