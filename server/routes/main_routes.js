@@ -30,7 +30,8 @@ module.exports = function(app, db, auth, error){
 		"/privacy",
     "/sellers",
 		"/renters",
-		"/terms"
+		"/terms",
+    "/404"
     ]
 
 	//default page
