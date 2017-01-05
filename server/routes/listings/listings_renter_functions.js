@@ -49,7 +49,7 @@ module.exports = {
 		var address = addProtocol(req.body.address);
 
 		//check for address
-		if (!validator.isIP(address) && !validator.isURL(address, {protocols: ["http", "https"], require_protocol: true})){
+		if (address && !validator.isIP(address) && !validator.isURL(address, {protocols: ["http", "https"], require_protocol: true})){
 			error.handler(req, res, "Invalid address!", "json");
 		}
 		//check for email if it was posted
@@ -398,8 +398,8 @@ module.exports = {
         if (req.session.rented){
             delete req.session.rented;
         }
-        if (req.session.rented_headers){
-            delete req.session.rented_headers;
+        if (req.session.proxy_edit){
+            delete req.session.proxy_edit;
         }
 		next();
 	},
@@ -421,12 +421,20 @@ module.exports = {
         res.redirect('/rentalpreview');
 	},
 
+    //check to make sure we should display edit overlay
     checkForPreview : function(req, res, next){
         console.log("F: Checking if preview is defined...");
         if (!req.session.rental_info){
-            res.redirect("/profile/myrentals");
+            res.redirect("/");
         }
         else {
+            //check if we should display the preview edit menu
+            if (req.user && req.user.id == req.session.rental_info.account_id){
+                req.session.proxy_edit = true;
+            }
+            else {
+                req.session.proxy_edit = false;
+            }
             next();
         }
     },
@@ -441,18 +449,27 @@ module.exports = {
         }, function (err, response, body) {
             //not an image requested
             if (response.headers['content-type'].indexOf("image") == -1){
-                fs.readFile('./server/views/proxy-index.ejs', function (err, html) {
-                    if (err) {error.handler(req, res, "Invalid rental!");}
-                    else {
-                        res.set("content-type", response.headers["content-type"]);
-                        res.end(Buffer.concat([body, html]));
-                    }
-                });
+                var proxy_index = fs.readFileSync('./server/views/proxy-index.ejs');
+                var buffer_array = [body, proxy_index];
+
+                //if authenticated to edit the rental preview
+                if (req.session.proxy_edit){
+                    var proxy_preview = fs.readFileSync('./server/views/proxy-edit.ejs');
+                    buffer_array.push(proxy_preview);
+                }
+
+                if (!proxy_index || (req.session.proxy_edit && !proxy_preview)) {
+                    error.handler(req, res, "Invalid rental!");
+                }
+                else {
+                    res.set("content-type", response.headers["content-type"]);
+                    res.end(Buffer.concat(buffer_array));
+                }
             }
             else {
                 res.render("proxy-image.ejs", {
                     image: req.session.rental_info.address,
-                    domain_name: req.params.domain_name
+                    preview: req.session.proxy_edit
                 });
             }
         }).on('error', function(err){
