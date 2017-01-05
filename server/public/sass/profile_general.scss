@@ -92,6 +92,7 @@
 .td-address {
   @include tablet {
     width: 275px;
+    padding-left:0 !important
   }
   @include mobile {
     width: 150px;
@@ -115,6 +116,8 @@
   }
   @include tablet {
     width: 255px;
+    margin-top: 1px;
+    margin-left: 9px !important;
   }
 }
 

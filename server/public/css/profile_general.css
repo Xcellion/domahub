@@ -65,7 +65,8 @@
 
 @media screen and (min-width: 769px) {
   .td-address {
-    width: 275px; } }
+    width: 275px;
+    padding-left: 0 !important; } }
 
 @media screen and (max-width: 768px) {
   .td-address {
@@ -86,7 +87,9 @@
       width: 150px; } }
   @media screen and (min-width: 769px) {
     .address-div-wrapper {
-      width: 255px; } }
+      width: 255px;
+      margin-top: 1px;
+      margin-left: 9px !important; } }
 
 .selected-row {
   background-color: #8ad6ba; }
