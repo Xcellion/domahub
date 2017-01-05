@@ -2632,8 +2632,7 @@ input:-webkit-autofill {
     .table td.is-danger,
     .table th.is-danger {
       color: #EF5350;
-      font-weight: 400;
-      text-transform: uppercase; }
+      font-weight: 400; }
     .table td.is-success,
     .table th.is-success {
       color: #81c784;

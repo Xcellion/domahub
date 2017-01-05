@@ -95,12 +95,14 @@ function createRow(rental_info, rownum){
 //function to create the status td
 function createStatus(rental_info){
 	var text = "Active";
+	var expired_danger = "";
 	for (var x = rental_info.date.length - 1; x >= 0; x--){
 		if (new Date().getTime() >= parseInt(rental_info.date[x]) + parseInt(rental_info.duration[x])){
 			text = "Expired";
+			expired_danger = " is-danger";
 		}
 	}
-    var temp_td = $("<td class='td-visible td-status'>" + text + "</td>");
+    var temp_td = $("<td class='td-visible td-status" + expired_danger + "'>" + text + "</td>");
     return temp_td;
 }
 
@@ -118,8 +120,15 @@ function createArrow(){
 
 //function to create the address td
 function createAddress(rental_info){
-    var temp_td = $("<td class='td-visible td-address'><div class='address-div-wrapper'><a class='is-accent' href='" + rental_info.address + "'>" + rental_info.address + "</a><div></td>");
-	return temp_td;
+    var temp_td = $("<td class='td-visible td-address'></td>");
+    var temp_td_div = $("<div class='address-div-wrapper'><div>");
+	var temp_address = $("<a target='_blank' class='is-accent' href='" + rental_info.address + "'>" + rental_info.address + "</a>");
+
+	//prevent link click from selecting row
+	temp_address.click(function(e){
+		e.stopPropagation();
+	})
+	return temp_td.append(temp_td_div.append(temp_address));
 }
 
 //function to create the address input dropdown for rental address
@@ -240,8 +249,8 @@ function createDatesDrop(rental_info){
 function createButtons(rental_info){
 	var temp_col_buttons = $("<div class='column is-3'></div>");
 	var temp_div_buttons = $("<div class='control'></div>");
-	var temp_button1 = $("<a href='/listing/" + rental_info.domain_name + "' class='button margin-right-10 margin-bottom-5 no-shadow'>View Listing</a>");
-	var temp_button2 = $("<a href='/listing/" + rental_info.domain_name + "/" + rental_info.rental_id + "' class='button margin-right-10 no-shadow'>Preview Rental</a>");
+	var temp_button1 = $("<a target='_blank' href='/listing/" + rental_info.domain_name + "' class='button margin-right-10 margin-bottom-5 no-shadow'>View Listing</a>");
+	var temp_button2 = $("<a target='_blank' href='/listing/" + rental_info.domain_name + "/" + rental_info.rental_id + "' class='button margin-right-10 no-shadow'>Preview Rental</a>");
 	var temp_button3 = $("<a class='button margin-right-10 no-shadow'>Add Time</a>");
 	var temp_button4 = $("<a class='button no-shadow'>Delete Rental</a>");
 

@@ -13,6 +13,7 @@ $(document).ready(function() {
     var total_pages = Math.ceil(row_display.length / row_per_page);
     var url_page = parseFloat(window.location.pathname.split('/').pop()) >>> 0;
     var current_page = calculateCurrentPage(url_page, total_pages, row_per_page);
+    var data_to_display = (window.location.pathname.indexOf("listings") != -1) ? listings : rentals;
 
     setupTable(total_pages, row_per_page, current_page, row_display);
     setupControls(total_pages, row_per_page, current_page, row_display);
@@ -33,6 +34,10 @@ $(document).ready(function() {
         }
         else {
             row_display = data_to_display.slice(0);
+            row_display = row_display.filter(function(rental){
+            	var time_now = new Date().getTime();
+            	return !(rental.date[0] + rental.duration[0] <= time_now + 86400000) && (rental.date[0] + rental.duration[0] > time_now);
+            });
             total_pages = Math.ceil(row_display.length / row_per_page);
             setupTable(total_pages, row_per_page, current_page, row_display);
         }
@@ -42,7 +47,6 @@ $(document).ready(function() {
     $(".filter-local").click(function(e){
         var panel_id = $(this).attr('id');
         //for rentals or listings
-        var data_to_display = (window.location.pathname.indexOf("listings") != -1) ? listings : rentals;
 
         $(".filter-local").removeClass('is-active');
         $(this).addClass("is-active");
