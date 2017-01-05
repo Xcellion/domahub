@@ -40,16 +40,18 @@
     justify-content: flex-start
     // each filter tab
     .filter-local
-      font-size: $size-small
       color: $text
+      font-size: $size-small
       padding: 2px
+      &:hover,
+      &:focus
+        opacity: 0.7
       &.is-active
-        +box-shadow(0,2px,0,$primary,0)
+        +box-shadow(0,-2px,0,$primary,0,inset)
         color: $primary
-      &.is-active
         &:hover,
         &:focus
-          +box-shadow(0,2px,0,$primary-lighter,0)
+          +box-shadow(0,-1px,0,$primary-lighter,0,inset)
           color: $primary-lighter
     // level item containers for filters
     & > .level-item
