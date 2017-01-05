@@ -84,14 +84,10 @@
         <% if (listing_info.categories) { %>
         <div class="content listing-info">
           <h3 class="is-bold margin-bottom-15">Categories</h3>
-          <span class="tag is-accent is-medium">
-          <% var categories_array = listing_info.categories.split(" ");
-            var display_array = [];
-            for (var i = 0; i < categories_array.length; i++) {
-               display_array.push(categories_array[i].charAt(0).toUpperCase() + categories_array[i].substr(1)); %>
+          <% var categories_array = listing_info.categories.split(" ")
+          for (var i = 0; i < categories_array.length; i++) { %>
+               <span class="tag is-accent is-medium"><%= categories_array[i].charAt(0).toUpperCase() + categories_array[i].substr(1); %></span>
           <% } %>
-          <%= display_array.join(", ") %>
-          </span>
         </div>
         <% } %>
         <div class="content listing-info">
