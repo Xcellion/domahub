@@ -1,30 +1,43 @@
 @import 'vars';
 @import 'mixins';
 
-#top_wrapper {
+#top-wrapper {
   @include mobile {
     padding: 0 20px 40px;
   }
 }
 
-#test {
+.flex-column-mobile {
   @include mobile {
     display: flex;
     flex-direction: column;
   }
 }
 
-#one {
+.order-1-mobile {
+  @include mobile {
+    order: 1;
+  }
+}
+
+.order-2-mobile {
   @include mobile {
     order: 2;
   }
 }
 
-#two {
-  @include mobile {
-    order: 1;
-  }
+.circle-display {
+  @include box-shadows(0 2px 2px 0 rgba(0,0,0,.14),0 3px 1px -2px rgba(0,0,0,.2),0 1px 5px 0 rgba(0,0,0,.12));
+  width: 80px;
+  height: 80px;
+  border-radius: 100%;
+  // padding: 30px 12px 30px;
+  display: flex;
+  align-self: center;
+  justify-content: center;
+  margin: 0 auto;
 }
+
 
 #domain-display {
   color: $primary-light;
