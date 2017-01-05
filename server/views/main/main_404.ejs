@@ -1,0 +1,42 @@
+<html>
+
+<head>
+	<title>404 Error - Not Found!</title>
+	<%- include("../templates/head_links"); %>
+</head>
+
+<body>
+	<%- include("../templates/navbar", {user: user}); %>
+
+  <section class="section is-medium min-height">
+    <div class="container">
+      <div class="columns">
+        <div class="column is-6">
+          <div class="content">
+            <h1 class="title is-danger is-inline-block">
+              404 Error.
+            </h1>
+						<h2 class="subtitle">You tried to visit a page that doesn't exist on DomaHub!</h2>
+          </div>
+					<div class="content">
+						<span class="icon is-large margin-bottom-20">
+							<i class="fa fa-frown-o"></i>
+						</span>
+						<p>
+							We're sad about that, too.
+						</p>
+						<p>
+							<a class="is-primary" href="/contact">Let us know</a> if you think something went wrong!
+						</p>
+					</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+	<%- include("../templates/footer"); %>
+	<%- include("../templates/js_scripts"); %>
+
+</body>
+
+</html>
