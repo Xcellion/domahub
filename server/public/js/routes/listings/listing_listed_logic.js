@@ -234,7 +234,7 @@ function submitStripe(stripeToken){
 				for (var x = 0; x < data.unavailable.length; x++){
 					showModalContent("calendar");
 					$('#calendar').fullCalendar('removeEvents', data.unavailable[x]._id);
-					$("#calendar-error-message").addClass('is-danger').html("Some dates/times were unavailable! They have been removed from your selection.<br />Your credit card has not been charged yet.");
+					$("#calendar-error-message").addClass('is-danger').html("Invalid slots have been removed from your selection!<br />Your credit card has not been charged yet.");
 				}
 			}
 			else if (data.state == "success"){
@@ -252,23 +252,23 @@ function submitStripe(stripeToken){
 function errorHandler(message){
 	if (message == "Invalid address!"){
 		showModalContent("redirect");
-		$("#address-error-message").addClass('is-danger').html("There was something wrong with the URL you entered!<br />Your credit card has not been charged yet.");
+		$("#address-error-message").addClass('is-danger').html("Invalid URL entered!<br />Your credit card has not been charged yet.");
 	}
 	else if (message == "Invalid dates!"){
 		showModalContent("calendar");
-		$("#calendar-error-message").addClass('is-danger').html("There was something wrong with the dates you selected!<br />Your credit card has not been charged yet.");
+		$("#calendar-error-message").addClass('is-danger').html("Invalid dates selected!<br />Your credit card has not been charged yet.");
 	}
 	else if (message == "Invalid email!"){
 		showModalContent("checkout");
-		$("#new-user-email-error").addClass('is-danger').html("Please enter a valid email address!<br />Your credit card has not been charged yet.");
+		$("#new-user-email-error").addClass('is-danger').html("Invalid email address!<br />Your credit card has not been charged yet.");
 	}
 	else if (message == "Invalid price!"){
 		showModalContent("checkout");
-		$("#stripe-error-message").addClass('is-danger').html("There was something wrong with your credit card!<br />Your credit card has not been charged yet.");
+		$("#stripe-error-message").addClass('is-danger').html("Payment error!<br />Your credit card has not been charged yet.");
 	}
 	else if (message == "Invalid stripe user account!"){
 		showModalContent("checkout");
-		$("#summary-error-message").addClass('is-danger').html("There was something wrong with this listing!<br />Your credit card has not been charged yet.");
+		$("#summary-error-message").addClass('is-danger').html("Listing error! Please try again later!<br />Your credit card has not been charged yet.");
 	}
 }
 
@@ -277,7 +277,7 @@ function successHandler(data){
 	$("#payment-column, .success-hide").addClass('is-hidden');
 	$("#success-column").removeClass('is-hidden');
 	$("#success-message").text("Your credit card was successfully charged!");
-
+	console.log(data);
 	//if theres a link for ownership claiming
 	if (data.owner_hash_id){
 		var url = "https://www.domahub.com/listing/" + listing_info.domain_name + "/" + data.rental_id + "/" + data.owner_hash_id;
