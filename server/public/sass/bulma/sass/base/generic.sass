@@ -96,10 +96,6 @@ a
   word-break: break-word
   &:active
     outline: none
-  &:hover,
-  &:active
-    &:not(.button)
-      opacity: 0.6
   @each $name, $pair in $colors
     $color: nth($pair, 1)
     $color-invert: nth($pair, 2)
