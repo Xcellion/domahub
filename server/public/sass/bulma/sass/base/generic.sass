@@ -91,10 +91,15 @@ span
 a
   +transition(all 0.25s ease)
   cursor: pointer
+  color: $text
   text-decoration: none
   word-break: break-word
   &:active
     outline: none
+  &:hover,
+  &:active
+    &:not(.button)
+      opacity: 0.75
   @each $name, $pair in $colors
     $color: nth($pair, 1)
     $color-invert: nth($pair, 2)

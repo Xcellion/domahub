@@ -2,14 +2,8 @@
 @import 'mixins';
 
 /*************************** REGISTER ***************************/
-#message {
-  margin: 10px 0 20px 0;
-}
 
-.logo-login {
-  margin-bottom: 10px;
-}
-
+// signing up user, makes checks for good inputs
 .control {
   &.has-icon {
     .input {
@@ -20,6 +14,7 @@
   }
 }
 
+// fixes position of error icon for bad inputs
 .control {
   &.has-icon > .fa-warning {
     font-size: 21px !important;
@@ -27,9 +22,9 @@
   }
 }
 
-.form {
+.account-form {
+  @include box-shadows(0 2px 2px 0 rgba(0,0,0,.14),0 3px 1px -2px rgba(0,0,0,.2),0 1px 5px 0 rgba(0,0,0,.12));
   background-color: #fff;
-  box-shadow: 0 2px 2px 0 rgba(0,0,0,.14),0 3px 1px -2px rgba(0,0,0,.2),0 1px 5px 0 rgba(0,0,0,.12);
   left: 0;
   margin: 0 auto;
   padding: 20px;
@@ -37,16 +32,6 @@
   right: 0;
   top: 150px;
   width: 400px;
-  &.include {
-    width: 100%;
-    position: relative;
-    top: 0;
-    margin: 0;
-  }
-  &.no-shadow {
-    box-shadow: none;
-    border: 1px solid $border
-  }
   @include mobile {
     width: 90%;
     form {
