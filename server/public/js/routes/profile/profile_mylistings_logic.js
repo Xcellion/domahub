@@ -36,14 +36,14 @@ function createRow(listing_info, rownum){
 //function to create the listing type td
 function createType(listing_info){
     var text = (listing_info.exp_date >= new Date().getTime()) ? "Premium" : "Basic";
-    var temp_td = $("<td class='td-type'>" + text + "</td>");
+    var temp_td = $("<td class='td-type is-hidden-mobile'>" + text + "</td>");
     temp_td.data("type", text);
     return temp_td;
 }
 
 //function to create a button to verify the listing
 function createVerify(listing_info, bool){
-    var temp_td = $("<td class='td-verify'></td>");
+    var temp_td = $("<td class='td-verify is-hidden-mobile'></td>");
         var temp_a = $("<p class='is-danger verify-link'></p>");
             var temp_span2 = $("<span>Unverified</span>");
 
@@ -58,7 +58,7 @@ function createVerify(listing_info, bool){
 //function to create the listing status td
 function createStatus(listing_info, bool){
     var text = (listing_info.status == 0) ? "Inactive" : "Active";
-    var temp_td = $("<td class='td-status'>" + text + "</td>");
+    var temp_td = $("<td class='td-status is-hidden-mobile'>" + text + "</td>");
 
     //hide if not verified
     if (!bool){
@@ -70,20 +70,20 @@ function createStatus(listing_info, bool){
 
 //function to create the listing created date
 function createPriceRate(listing_info){
-    var temp_td = $("<td class='has-text-right td-price-rate is-bold'>$" + listing_info.price_rate + "</td>");
+    var temp_td = $("<td class='has-text-right td-price-rate is-bold is-hidden-mobile'>$" + listing_info.price_rate + "</td>");
     return temp_td;
 }
 
 //function to create the listing created date
 function createPriceType(listing_info){
-    var temp_td = $("<td class='td-price-type'>" + toUpperCase(listing_info.price_type) + "</td>");
+    var temp_td = $("<td class='td-price-type is-hidden-mobile'>" + toUpperCase(listing_info.price_type) + "</td>");
     return temp_td;
 }
 
 //function to create the tv icon
 function createView(listing_info){
     if (listing_info.verified){
-        var temp_td = $("<td class='td-view'></td>");
+        var temp_td = $("<td class='td-view is-hidden-mobile'></td>");
         var temp_a = $("<a class='button no-shadow' target='_blank' title='Open listing in new tab' style='target-new: tab;' href='/listing/" + listing_info.domain_name + "'></a>");
         var temp_span = $("<span class='icon is-small'></span>");
         var temp_i = $("<i class='fa fa-external-link'></i>");

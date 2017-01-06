@@ -457,7 +457,7 @@ function createDomain(row_info){
 
 //function to create the edit button
 function createEdit(listing_info){
-    var temp_td = $("<td class='td-edit padding-left-0'></td>");
+    var temp_td = $("<td class='td-edit padding-left-0 is-hidden-mobile'></td>");
     var temp_a = $("<a class='button no-shadow'></a>");
     var temp_span = $("<span class='icon is-small'></span>");
     var temp_i = $("<i class='fa fa-cog'></i>");
