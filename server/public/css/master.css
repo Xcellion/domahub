@@ -2694,7 +2694,7 @@ input:-webkit-autofill {
     border: 1px solid rgba(0, 0, 0, 0.12);
     color: rgba(0, 0, 0, 0.9);
     font-weight: bold;
-    padding: 6px; }
+    padding: 12px 6px; }
     @media screen and (max-width: 768px) {
       .table th {
         padding: 12px 8px; } }
