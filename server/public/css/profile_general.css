@@ -23,7 +23,7 @@
 
 @media screen and (max-width: 768px) {
   .table {
-    min-width: 705px; } }
+    width: 100%; } }
 
 .account-form select {
   margin-right: 5px; }

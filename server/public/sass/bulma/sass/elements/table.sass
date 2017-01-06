@@ -10,7 +10,7 @@
     th
       border-bottom: none
   td
-    padding: 8px 10px
+    padding: 6px
   td,
   th
     vertical-align: middle
@@ -62,7 +62,7 @@
     border: 1px solid $border
     color: $text
     font-weight: bold
-    padding: 12px 10px
+    padding: 6px
   thead
     border-bottom: 2px solid $border
     &.has-shadow
@@ -99,9 +99,12 @@
             background: $primary
             position: absolute
             content: ""
-            height: 48px
+            height: 44px
             width: 4px
             left: 19px
+            +mobile
+              height: 32px
+              left: 0
       td
 
   tfoot

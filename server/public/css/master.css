@@ -2622,7 +2622,7 @@ input:-webkit-autofill {
   .table.no-borders th {
     border-bottom: none; }
   .table td {
-    padding: 8px 10px; }
+    padding: 6px; }
   .table td,
   .table th {
     vertical-align: middle;
@@ -2691,7 +2691,7 @@ input:-webkit-autofill {
     border: 1px solid rgba(0, 0, 0, 0.12);
     color: rgba(0, 0, 0, 0.9);
     font-weight: bold;
-    padding: 12px 10px; }
+    padding: 6px; }
   .table thead {
     border-bottom: 2px solid rgba(0, 0, 0, 0.12); }
     .table thead.has-shadow {
@@ -2723,9 +2723,13 @@ input:-webkit-autofill {
     background: #3cbc8d;
     position: absolute;
     content: "";
-    height: 48px;
+    height: 44px;
     width: 4px;
     left: 19px; }
+    @media screen and (max-width: 768px) {
+      .table tbody tr.row-disp:hover::after {
+        height: 32px;
+        left: 0; } }
   .table tfoot td,
   .table tfoot th {
     border-width: 2px 0 0;
