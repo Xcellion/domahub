@@ -85,8 +85,7 @@ function proxyReq(req, res, address, domain_name){
 		}
 		else {
 			res.render("proxy-image.ejs", {
-				image: address,
-				domain_name: domain_name
+				image: address
 			});
 		}
 	}).on('error', function(err){

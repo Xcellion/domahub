@@ -12,12 +12,6 @@ $(document).ready(function() {
 		if ($("#address-error-message").hasClass('is-danger')){
 			$("#address-error-message").removeClass('is-danger').text("The content of the URL you link below will be displayed when anyone goes to your rental domain name. You may change this URL at any time.")
 		}
-		if ($(this).val() == ""){
-			$("#checkout-next-button").addClass('is-disabled');
-		}
-		else {
-			$("#checkout-next-button").removeClass('is-disabled');
-		}
 
 		//press enter to go next
 		if (e.keyCode == 13){
@@ -160,10 +154,6 @@ function checkSubmit(){
 		bool = "Invalid dates!";
 		errorHandler(bool);
 	}
-	else if (!$("#address_form_input").val()){
-		bool = "Invalid URL!";
-		errorHandler(bool);
-	}
 	else if (!$("#cc-num").val()){
 		bool = "Invalid cc number!";
 		$("#stripe-error-message").addClass('is-danger').html("Please provide a credit card to charge.");
@@ -234,7 +224,7 @@ function submitStripe(stripeToken){
 				for (var x = 0; x < data.unavailable.length; x++){
 					showModalContent("calendar");
 					$('#calendar').fullCalendar('removeEvents', data.unavailable[x]._id);
-					$("#calendar-error-message").addClass('is-danger').html("Invalid slots have been removed from your selection!<br />Your credit card has not been charged yet.");
+					$("#calendar-error-message").addClass('is-danger').html("Invalid slots have been removed from your selection! Your credit card has not been charged yet.");
 				}
 			}
 			else if (data.state == "success"){
@@ -252,23 +242,23 @@ function submitStripe(stripeToken){
 function errorHandler(message){
 	if (message == "Invalid address!"){
 		showModalContent("redirect");
-		$("#address-error-message").addClass('is-danger').html("Invalid URL entered!<br />Your credit card has not been charged yet.");
+		$("#address-error-message").addClass('is-danger').html("Invalid URL entered! Your credit card has not been charged yet.");
 	}
 	else if (message == "Invalid dates!"){
 		showModalContent("calendar");
-		$("#calendar-error-message").addClass('is-danger').html("Invalid dates selected!<br />Your credit card has not been charged yet.");
+		$("#calendar-error-message").addClass('is-danger').html("Invalid dates selected! Your credit card has not been charged yet.");
 	}
 	else if (message == "Invalid email!"){
 		showModalContent("checkout");
-		$("#new-user-email-error").addClass('is-danger').html("Invalid email address!<br />Your credit card has not been charged yet.");
+		$("#new-user-email-error").addClass('is-danger').html("Invalid email address! Your credit card has not been charged yet.");
 	}
 	else if (message == "Invalid price!"){
 		showModalContent("checkout");
-		$("#stripe-error-message").addClass('is-danger').html("Payment error!<br />Your credit card has not been charged yet.");
+		$("#stripe-error-message").addClass('is-danger').html("Payment error! Your credit card has not been charged yet.");
 	}
 	else if (message == "Invalid stripe user account!"){
 		showModalContent("checkout");
-		$("#summary-error-message").addClass('is-danger').html("Listing error! Please try again later!<br />Your credit card has not been charged yet.");
+		$("#summary-error-message").addClass('is-danger').html("Listing error! Please try again later! Your credit card has not been charged yet.");
 	}
 }
 
