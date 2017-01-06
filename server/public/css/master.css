@@ -2623,6 +2623,9 @@ input:-webkit-autofill {
     border-bottom: none; }
   .table td {
     padding: 6px; }
+    @media screen and (max-width: 768px) {
+      .table td {
+        padding: 12px 8px; } }
   .table td,
   .table th {
     vertical-align: middle;
@@ -2692,6 +2695,9 @@ input:-webkit-autofill {
     color: rgba(0, 0, 0, 0.9);
     font-weight: bold;
     padding: 6px; }
+    @media screen and (max-width: 768px) {
+      .table th {
+        padding: 12px 8px; } }
   .table thead {
     border-bottom: 2px solid rgba(0, 0, 0, 0.12); }
     .table thead.has-shadow {
@@ -2728,7 +2734,7 @@ input:-webkit-autofill {
     left: 19px; }
     @media screen and (max-width: 768px) {
       .table tbody tr.row-disp:hover::after {
-        height: 32px;
+        height: 43px;
         left: 0; } }
   .table tfoot td,
   .table tfoot th {
