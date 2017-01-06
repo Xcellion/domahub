@@ -122,7 +122,9 @@ function createArrow(){
 function createAddress(rental_info){
     var temp_td = $("<td class='td-visible td-address'></td>");
     var temp_td_div = $("<div class='address-div-wrapper'><div>");
-	var temp_address = $("<a target='_blank' class='is-accent' href='" + rental_info.address + "'>" + rental_info.address + "</a>");
+	var address_text = (rental_info.address == "") ? "Nothing is being displayed!" : rental_info.address;
+	var address_text_class = (rental_info.address == "") ? "" : "is-accent has-bs-underline";
+	var temp_address = $("<a target='_blank' class='" + address_text_class + "' href='" + rental_info.address + "'>" + address_text + "</a>");
 
 	//prevent link click from selecting row
 	temp_address.click(function(e){
@@ -136,7 +138,7 @@ function createAddressDrop(rental_info){
     var new_td = $("<td class='td-visible td-address td-address-drop is-hidden'></td>");
         var temp_span = $("<span class='is-fullwidth address-span'></span>");
         var temp_form = $("<form class='drop-form'></form>");
-        var temp_input = $("<input class='address_input input changeable-input'></input>");
+        var temp_input = $("<input placeholder='Nothing is being displayed!' class='address_input input changeable-input'></input>");
             temp_input.val(rental_info.address);
             temp_input.data("name", "address");
     new_td.append(temp_span.append(temp_form.append(temp_input)));

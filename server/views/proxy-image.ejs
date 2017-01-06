@@ -5,11 +5,20 @@
 </head>
 <body>
     <%- include("proxy-index.ejs"); %>
-    <img id="proxy-image" style="top:50%;left:50%;transform:translate(-50%,-50%);margin-right:50%;position:absolute;" src="<%= image %>"/>
-    <script>
+    <% if (image != "") { %>
+        <img id="proxy-image" style="top:50%;left:50%;transform:translate(-50%,-50%);margin-right:50%;position:absolute;" src="<%= image %>"/>
+        <script>
         document.getElementById('proxy-image').ondragstart = function() { return false; };
-    </script>
-    <% if (typeof preview != "undefined") { %>
+        </script>
+    <% } else { %>
+        <div style="font-size:20px;text-align:center;top:50%;left:50%;transform:translate(-50%,-50%);position:absolute;font-family:helvetica,sans-serif;">
+            <h1 >There&#146;s nothing here! Move along now.</h1>
+            <% if (preview == "false") { %>
+                <h3>Press the menu button to edit this rental.</h3>
+            <% } %>
+        </div>
+    <% } %>
+    <% if (preview == "false") { %>
         <%- include("proxy-edit.ejs"); %>
     <% } %>
 </body>
