@@ -149,7 +149,6 @@ function setupTable(total_pages, row_per_page, current_page, rows_to_disp){
 function setupControls(total_pages, row_per_page, current_page, rows_to_disp){
     //on changing of domains per page
     $("#domains-per-page").off().change(function(e){
-        console.log($(this).val())
         row_per_page = parseFloat($(this).val());
         total_pages = Math.ceil(row_display.length / row_per_page);
         current_page = 1;
@@ -157,7 +156,7 @@ function setupControls(total_pages, row_per_page, current_page, rows_to_disp){
     });
 
     //show per page, hide if unnecessary
-    if (rows_to_disp.length > 5){
+    if (rows_to_disp.length > 25){
         $("#domains-per-page-control").removeClass('is-hidden');
     }
     else {
@@ -297,7 +296,6 @@ function createPaginationPages(total_pages, row_per_page, current_page){
     $("#page-list").empty();
 
     var pages_to_create = (total_pages > 7) ? 7 : total_pages;
-    console.log(pages_to_create);
 
     //only create page button if there are actually more than 1 page to display
     if (pages_to_create > 1){
@@ -415,13 +413,21 @@ function createAllRows(row_per_page, current_page){
 
             //JS closure magic
             (function(info){
+
+                //prevent enter to submit
+                both_rows.find(".drop-form").on("submit", function(e){
+                    e.preventDefault();
+                });
+
                 //to remove disabled on save changes button
                 both_rows.find(".drop-form .changeable-input").on("input", function(e){
+                    e.preventDefault();
                     changedListingValue($(this), info);
                 });
 
                 //on file change
                 both_rows.find(".drop-form-file .changeable-input").off().on("change", function(e){
+                    e.preventDefault();
                     if ($(this).data("deleted")){
                         $(this).data("deleted", false);
                     }
