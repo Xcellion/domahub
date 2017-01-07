@@ -14,20 +14,50 @@
       position: absolute;
       right: 20px;
     }
-    .action-button {
+    .heading-wrapper {
       background-color: #3cbc8d;
-      border-radius: 3px;
-      border: 1px solid #3cbc8d;
       color: #fff;
+      padding: 12px 8px;
+      border-radius: 5px 5px 0 0;
+    }
+    .heading {
+      margin: 0 0 10px
+    }
+    .rental-dates {
+      margin: 0 0 10px;
+    }
+    .status-info {
+      background-color: #ff5722;
+      border-radius: 12px;
+      color: #fff;
+      display: inline-block;
+      margin: 10px;
+      padding: 10px 0;
+      text-align: center;
+    }
+    .domahub-menu {
+      background-color: #fff;
+      border-radius: 5px;
+      box-shadow: 3px 3px 4px 0 rgba(0,0,0,.14),0 -2px 5px -3px rgba(0,0,0,.2),0 3px 5px 0 rgba(0,0,0,.12);
+      display: flex;
+      flex-direction: column;
       margin-bottom: 20px;
-      padding: 6px 8px;
+      width: 200px;
+    }
+    .action-button {
+      border-bottom: 1px solid rgba(0,0,0,0.12);
+      color: #3cbc8d;
+      padding: 10px 8px;
       text-decoration: none;
       transition: all 0.25s ease;
     }
     .action-button:hover {
-      background-color: #fff;
-      color: #3cbc8d;
+      background-color: #3cbc8d;
+      color: #fff;
       border-color: #3cbc8d;
+    }
+    .action-button:last-child {
+      border-radius: 0 0 5px 5px;
     }
     .domahub-button {
       background-color:#3cbc8d;
@@ -36,6 +66,7 @@
       box-sizing: border-box;
       color: #fff;
       font-size: 24px;
+      font-family:'Ubuntu';
       line-height: 18px;
       padding: 16px;
       height: 50px;
@@ -54,9 +85,20 @@
 <body>
 
 <div class="wrapper">
-  <a class="action-button" href="">View Listing</a>
-  <a class="action-button" href="">Add Time</a>
-  <a class="action-button" href="">Delete Rental</a>
+  <div class="domahub-menu">
+    <div class="heading-wrapper">
+      <h3 class="heading">Rental Duration:</h3>
+      <p class="rental-dates">
+        1/5/16 - 4/5/16
+      </p>
+    </div>
+    <span class="status-info">
+      Active
+    </span>
+    <a class="action-button" href="">Edit Address</a>
+    <a class="action-button" href="">Add Time</a>
+    <a class="action-button" href="">View Listing</a>
+  </div>
   <a class="domahub-button" href="https://www.domahub.com">
     D
   </a>
