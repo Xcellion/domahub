@@ -650,6 +650,7 @@ function checkIfNotOverlapped(event){
 
 //helper function to create pre-existing rentals
 function createExisting(rentals){
+    console.log(rentals.length);
 	if (rentals){
 		for (var x = 0; x < rentals.length; x++){
 			var start = moment(rentals[x].date);
