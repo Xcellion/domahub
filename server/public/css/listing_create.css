@@ -18,6 +18,7 @@
   width: 110px; }
 
 .td-rate {
+  min-width: 105px;
   width: 105px; }
 
 .td-premium {
