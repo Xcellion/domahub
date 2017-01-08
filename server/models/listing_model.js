@@ -102,7 +102,7 @@ listing_model.prototype.getListingRentalsInfo = function(listing_id, callback){
 			WHERE rentals.listing_id = ? \
 			AND rentals.status = 1 \
 			ORDER BY rental_times.date ASC "
-	listing_query(query, "Failed to get all non-default rental info for listing #" + listing_id + "!", callback, listing_id);
+	listing_query(query, "Failed to get all existing active rentals for listing #" + listing_id + "!", callback, listing_id);
 }
 
 //gets all rental info for a specific rental

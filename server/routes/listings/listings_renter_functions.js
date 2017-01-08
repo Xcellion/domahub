@@ -99,11 +99,11 @@ module.exports = {
         if (typeof req.body.address != "undefined"){
             console.log("F: Checking posted rental address...");
             var address = addProtocol(req.body.address);
-            if (!validator.isIP(address) && !validator.isURL(address, {protocols: ["http", "https"], require_protocol: true})){
+            if (req.body.address != "" & !validator.isIP(address) && !validator.isURL(address, {protocols: ["http", "https"], require_protocol: true})){
                 error.handler(req, res, "Invalid address!", "json");
             }
             else {
-                req.session.rental_object.db_object.address = address;
+                req.session.rental_object.db_object.address = (req.body.address == "") ? "" : address;
                 next();
             }
         }
@@ -724,7 +724,7 @@ function joinRentalTimes(rental_times){
             var compare_end = compare_start + temp_times[y].duration;
 
             //touches bottom
-            if (x != y && orig_start == compare_end){
+            if (temp_times[y].rental_id == temp_times[x].rental_id && x != y && orig_start == compare_end){
 				temp_times[y].duration = temp_times[y].duration + temp_times[x].duration;
                 temp_times.splice(x, 1);
             }

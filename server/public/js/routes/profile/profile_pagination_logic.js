@@ -40,31 +40,8 @@ $(document).ready(function() {
             });
             total_pages = Math.ceil(row_display.length / row_per_page);
             setupTable(total_pages, row_per_page, current_page, row_display);
+            setupControls(total_pages, row_per_page, current_page, row_display);
         }
-    });
-
-    //filter panel
-    $(".filter-local").click(function(e){
-        var panel_id = $(this).attr('id');
-        //for rentals or listings
-
-        $(".filter-local").removeClass('is-active');
-        $(this).addClass("is-active");
-
-        //remove any sort
-        $(".sort-asc, .sort-desc").addClass("is-hidden");
-        $(".sort-none").removeClass("is-hidden");
-
-        var temp_rows = [];
-
-        for (var x = 0; x < data_to_display.length; x++){
-            if (filterCheck(panel_id, data_to_display[x])){
-                temp_rows.push(data_to_display[x]);
-            }
-        }
-        row_display = temp_rows;
-        total_pages = Math.ceil(row_display.length / row_per_page);
-        setupTable(total_pages, row_per_page, current_page, row_display);
     });
 
     //sort by header
@@ -161,10 +138,11 @@ function setupTable(total_pages, row_per_page, current_page, rows_to_disp){
         if (listing_or_rental.length){
             $("#filters").removeClass('is-hidden');
         }
-        createPaginationPages(total_pages, row_per_page, current_page);
-        paginateRows(total_pages, current_page);
         createAllRows(row_per_page, current_page);
     }
+
+    createPaginationPages(total_pages, row_per_page, current_page);
+    paginateRows(total_pages, current_page);
 }
 
 //function to refresh the controls
@@ -178,8 +156,7 @@ function setupControls(total_pages, row_per_page, current_page, rows_to_disp){
     });
 
     //show per page, hide if unnecessary
-    var data_to_display = (window.location.pathname.indexOf("listings") != -1) ? listings : rentals;
-    if (data_to_display.length > 25){
+    if (rows_to_disp.length > 25){
         $("#domains-per-page-control").removeClass('is-hidden');
     }
     else {
@@ -227,16 +204,42 @@ function setupControls(total_pages, row_per_page, current_page, rows_to_disp){
 
     //go to a specific page
     $("#go-to-page-button").off().click(function(e){
-        page_val = $("#go-to-page-input").val();
-        if (page_val > 0 && page_val <= total_pages && page_val != current_page){
+        var page_val = $("#go-to-page-input").val();
+        if (page_val <= 0 || page_val > total_pages){
+            page_val = 1;
+            $("#go-to-page-input").val(page_val);
+        }
+
+        if (page_val != current_page){
             current_page = page_val;
             changePage(total_pages, row_per_page, current_page);
             createPaginationPages(total_pages, row_per_page, current_page);
             paginateRows(total_pages, current_page);
         }
-        else if (page_val != current_page){
-            $("#go-to-page-input").val(1);
+    });
+
+    //filter panel
+    $(".filter-local").off().click(function(e){
+
+        //set active css
+        $(".filter-local").removeClass('is-active');
+        $(this).addClass("is-active");
+
+        //remove any sort
+        $(".sort-asc, .sort-desc").addClass("is-hidden");
+        $(".sort-none").removeClass("is-hidden");
+
+        var temp_rows = [];
+        var data_to_display = (window.location.pathname.indexOf("listings") != -1) ? listings : rentals;
+        for (var x = 0; x < data_to_display.length; x++){
+            if (filterCheck($(this).attr('id'), data_to_display[x])){
+                temp_rows.push(data_to_display[x]);
+            }
         }
+        row_display = temp_rows;
+        total_pages = Math.ceil(row_display.length / parseInt($("#domains-per-page").val()));
+        setupTable(total_pages, row_per_page, current_page, temp_rows);
+        setupControls(total_pages, row_per_page, current_page, temp_rows);
     });
 }
 
@@ -275,12 +278,14 @@ function toggleSort(attr, bool){
 
 //function to change pages
 function changePage(total_pages, row_per_page, current_page, bool){
+    var url_text = (window.location.pathname.indexOf("listings") != -1) ? '/profile/mylistings/' : "/profile/myrentals/";
+
     if (!bool || typeof bool == "undefined"){
         history.pushState({
             current_page: current_page,
             total_pages: total_pages,
             row_per_page: row_per_page
-        }, document.title + " - Page " + current_page, "/profile/mylistings/" + current_page);
+        }, document.title + " - Page " + current_page, url_text + current_page);
     }
     createAllRows(row_per_page, current_page);
     paginateRows(total_pages, current_page);
@@ -332,7 +337,7 @@ function paginateRows(total_pages, current_page){
     current_page = parseFloat(current_page);
 
     if (total_pages > 1){
-        $("#next-page, #prev-page, #go-to-page-control").removeClass("is-hidden");
+        $("#page-control, #go-to-page-control").removeClass("is-hidden");
 
         //grey out next/prev buttons if first or last page
         if (current_page == total_pages){
@@ -380,7 +385,7 @@ function paginateRows(total_pages, current_page){
         }
     }
     else {
-        $("#next-page, #prev-page, #go-to-page-control").addClass("is-hidden");
+        $("#page-control, #go-to-page-control").addClass("is-hidden");
     }
 
 }
@@ -408,13 +413,21 @@ function createAllRows(row_per_page, current_page){
 
             //JS closure magic
             (function(info){
+
+                //prevent enter to submit
+                both_rows.find(".drop-form").on("submit", function(e){
+                    e.preventDefault();
+                });
+
                 //to remove disabled on save changes button
                 both_rows.find(".drop-form .changeable-input").on("input", function(e){
+                    e.preventDefault();
                     changedListingValue($(this), info);
                 });
 
                 //on file change
                 both_rows.find(".drop-form-file .changeable-input").off().on("change", function(e){
+                    e.preventDefault();
                     if ($(this).data("deleted")){
                         $(this).data("deleted", false);
                     }

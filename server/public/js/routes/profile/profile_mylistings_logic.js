@@ -497,7 +497,8 @@ function createPriceRateDrop(listing_info){
     });
 
     //change the hidden price rate TD along with dropdown
-    temp_input.change(function(e){
+    temp_input.on("change", function(e){
+        e.preventDefault();
         $(this).closest(".td-price-rate").prev(".td-price-rate").text("$" + $(this).val());
     });
 
@@ -652,11 +653,18 @@ function refreshSubmitbindings(success_button, cancel_button, listings, domain_n
                 submitListingChanges(row, row_drop, $(this), listings[x]);
             });
 
+            //prevent enter to submit
+            both_rows.find(".drop-form").on("submit", function(e){
+                e.preventDefault();
+            });
+
             both_rows.find(".drop-form .changeable-input").unbind("input").on("input", function(e){
+                e.preventDefault();
                 changedListingValue($(this), listings[x]);
             });
 
             both_rows.find(".drop-form-file .changeable-input").off().on("change", function(e){
+                e.preventDefault();
                 var file_name = ($(this).val()) ? $(this).val().replace(/^.*[\\\/]/, '') : "Change Picture";
                 file_name = (file_name.length > 14) ? "..." + file_name.substr(file_name.length - 14) : file_name;
                 $(this).next(".button").find(".file-label").text(file_name);
