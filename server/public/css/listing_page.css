@@ -3,7 +3,8 @@
     padding: 0 20px 40px; } }
 
 #domain-display {
-  color: #62c9a3; }
+  color: #62c9a3;
+  padding: 0 12px; }
 
 #price-display {
   align-self: flex-end;
@@ -24,6 +25,9 @@
     align-self: center; }
   #listing-hero > .card {
     align-self: flex-end; }
+  @media screen and (max-width: 768px) {
+    #listing-hero {
+      padding-top: 70px; } }
 
 .listing-info {
   padding-bottom: 25px;
