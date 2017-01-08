@@ -28,7 +28,33 @@
 			<div id="filters" class="is-hidden columns">
 				<div class="column">
 					<nav class="level filter-panel">
-						<div class="level-item">
+						<div class="level-left">
+							<div class="level-item">
+								<div class="control has-addons">
+									<span class="select" tabindex="1">
+										<select>
+											<option id="reset_filter">Active</option>
+											<option id="expiring_filter">Expiring</option>
+											<option id="expired_filter">Expired</option>
+											<option id="active_filter">View All</option>
+										</select>
+									</span>
+									<a class="button no-shadow" tabindex="1" title="Delete Rental(s)">
+										<span class="icon is-small">
+											<i class="fa fa-trash-o"></i>
+										</span>
+										<span>Delete</span>
+									</a>
+								</div>
+							</div>
+							<div class="level-item">
+								<div class="control is-expanded has-icon">
+									<i class="fa fa-search"></i>
+									<input id="search-domain" tabindex="1" class="input is-expanded" type="text" placeholder="Search my rentals" />
+								</div>
+							</div>
+						</div>
+						<!-- <div class="level-item">
 							<a class="is-active filter-local is-hidden-mobile" id="active_filter" tabindex="1">
 								Active
 							</a>
@@ -47,18 +73,7 @@
 							<a class="filter-local is-hidden-mobile" id="reset_filter" tabindex="1">
 								View All
 							</a>
-						</div>
-						<div class="level-item">
-							<div class="control is-expanded has-icon has-addons">
-								<i class="fa fa-search"></i>
-								<input id="search-domain" tabindex="1" class="input is-expanded" type="text" placeholder="Search my rentals" />
-								<a class="button is-primary no-shadow is-hidden-tablet">
-									<span class="icon">
-										<i class="fa fa-bars"></i>
-									</span>
-								</a>
-							</div>
-						</div>
+						</div> -->
 					</nav>
 				</div>
 			</div>

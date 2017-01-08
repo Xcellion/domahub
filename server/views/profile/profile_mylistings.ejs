@@ -25,8 +25,40 @@
 			</div>
 			<div id="filters" class="is-hidden columns">
 				<div class="column">
-					<nav class="level filter-panel">
-						<div class="level-item">
+					<nav class="level">
+						<div class="level-left">
+							<div class="level-item">
+								<div class="control has-addons">
+									<span class="select" tabindex="1">
+										<select>
+											<option id="reset_filter">View All</option>
+											<option id="rented_filter">Rented</option>
+											<option id="premium_filter">Premium</option>
+											<option id="basic_filter">Basic</option>
+										</select>
+									</span>
+									<a class="button no-shadow" tabindex="1" title="Verify Listing(s)">
+										<span class="icon is-small">
+											<i class="fa fa-check-circle-o"></i>
+										</span>
+										<span>Verify</span>
+									</a>
+									<a class="button no-shadow" tabindex="1" title="Delete Listing(s)">
+										<span class="icon is-small">
+											<i class="fa fa-trash-o"></i>
+										</span>
+										<span>Delete</span>
+									</a>
+								</div>
+							</div>
+							<div class="level-item">
+								<div class="control is-expanded has-icon">
+									<i class="fa fa-search"></i>
+									<input id="search-domain" tabindex="1" class="input is-expanded" type="text" placeholder="Search my listings" />
+								</div>
+							</div>
+						</div>
+						<!-- <div class="level-item">
 							<a class="is-active filter-local is-hidden-mobile" id="reset_filter" tabindex="1">
 								View All
 							</a>
@@ -50,18 +82,7 @@
 							<a class="filter-local is-hidden-mobile" id="unverified_filter" tabindex="1">
 								Unverified
 							</a>
-						</div>
-						<div class="level-item">
-							<div class="control is-expanded has-icon has-addons">
-								<i class="fa fa-search"></i>
-								<input id="search-domain" tabindex="1" class="input is-expanded" type="text" placeholder="Search my listings" />
-								<a class="button is-primary no-shadow is-hidden-tablet">
-									<span class="icon">
-										<i class="fa fa-bars"></i>
-									</span>
-								</a>
-							</div>
-						</div>
+						</div> -->
 					</nav>
 				</div>
 			</div>
