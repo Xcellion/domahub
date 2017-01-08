@@ -21,6 +21,7 @@
 
 #domain-display {
   color: $primary-light;
+  padding: 0 12px;
 }
 
 #price-display {
@@ -44,6 +45,9 @@
   }
   & > .card {
     align-self: flex-end;
+  }
+  @include mobile {
+    padding-top: 70px;
   }
 }
 
