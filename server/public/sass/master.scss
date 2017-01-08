@@ -95,15 +95,30 @@
   }
 }
 
-.landing-img {
-  @include tablet {
-    background-position: center center;
-    background-repeat: no-repeat;
-    background-size: cover;
-    width: 100%;
-  }
+.flex-column-mobile {
   @include mobile {
+    display: flex;
+    flex-direction: column;
   }
+}
+
+.order-1-mobile {
+  @include mobile {
+    order: 1;
+  }
+}
+
+.order-2-mobile {
+  @include mobile {
+    order: 2;
+  }
+}
+
+.landing-img {
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  width: 100%;
 }
 
 .img-wrapper {

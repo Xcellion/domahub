@@ -68,6 +68,8 @@ input:-webkit-autofill
   height: 32px
   position: relative
   vertical-align: top
+  &.has-shadow
+    +box-shadow(3px,3px,5px,$border,0)
   select
     +form-control
     cursor: pointer
@@ -75,9 +77,9 @@ input:-webkit-autofill
     padding-right: 36px
     &:hover,
     &:active
-      border-color: $primary
+      border-color: $black-secondary
     &:focus
-      border-color: $primary
+      border-color: $black-secondary
       border-radius: $radius $radius 0 0
     &::-ms-expand
       display: none
@@ -88,13 +90,13 @@ input:-webkit-autofill
     select
       width: 100%
   &:after
-    +arrow($primary)
+    +arrow($black-primary)
     margin-top: -6px
     right: 16px
     top: 50%
   &:active,
   &:focus
-    border-color: $primary
+    border-color: $black-secondary
   // danger modifier
   &.is-danger
     &:after

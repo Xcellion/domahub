@@ -1975,6 +1975,10 @@ input:-webkit-autofill {
   height: 32px;
   position: relative;
   vertical-align: top; }
+  .select.has-shadow {
+    -webkit-box-shadow: 3px 3px 5px 0 rgba(0, 0, 0, 0.12);
+    -moz-box-shadow: 3px 3px 5px 0 rgba(0, 0, 0, 0.12);
+    box-shadow: 3px 3px 5px 0 rgba(0, 0, 0, 0.12); }
   .select select {
     -moz-appearance: none;
     -webkit-appearance: none;
@@ -2044,9 +2048,9 @@ input:-webkit-autofill {
     .select select.is-danger {
       border-color: #EF5350; }
     .select select:hover, .select select:active {
-      border-color: #3cbc8d; }
+      border-color: rgba(0, 0, 0, 0.66); }
     .select select:focus {
-      border-color: #3cbc8d;
+      border-color: rgba(0, 0, 0, 0.66);
       border-radius: 3px 3px 0 0; }
     .select select::-ms-expand {
       display: none; }
@@ -2057,7 +2061,7 @@ input:-webkit-autofill {
     .select.is-fullwidth select {
       width: 100%; }
   .select:after {
-    border: 1px solid #3cbc8d;
+    border: 1px solid rgba(0, 0, 0, 0.9);
     border-right: 0;
     border-top: 0;
     content: " ";
@@ -2071,7 +2075,7 @@ input:-webkit-autofill {
     right: 16px;
     top: 50%; }
   .select:active, .select:focus {
-    border-color: #3cbc8d; }
+    border-color: rgba(0, 0, 0, 0.66); }
   .select.is-danger:after {
     border: 1px solid #EF5350;
     border-right: 0;
@@ -7259,12 +7263,24 @@ a.nav-item.is-tab {
   .has-border-left {
     border-top: 1px solid rgba(0, 0, 0, 0.12); } }
 
-@media screen and (min-width: 769px) {
-  .landing-img {
-    background-position: center center;
-    background-repeat: no-repeat;
-    background-size: cover;
-    width: 100%; } }
+@media screen and (max-width: 768px) {
+  .flex-column-mobile {
+    display: flex;
+    flex-direction: column; } }
+
+@media screen and (max-width: 768px) {
+  .order-1-mobile {
+    order: 1; } }
+
+@media screen and (max-width: 768px) {
+  .order-2-mobile {
+    order: 2; } }
+
+.landing-img {
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  width: 100%; }
 
 .img-wrapper {
   background-color: rgba(0, 0, 0, 0.5);
