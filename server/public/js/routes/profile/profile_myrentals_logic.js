@@ -77,6 +77,7 @@ function createRow(rental_info, rownum){
 
     tempRow.append(createIcon(rental_info));
     tempRow.append(createDomain(rental_info));
+    tempRow.append(createPreview(rental_info));
     tempRow.append(createStatus(rental_info));
     tempRow.append(createAddress(rental_info));
 	tempRow.append(createAddressDrop(rental_info));
@@ -106,12 +107,19 @@ function createStatus(rental_info){
     return temp_td;
 }
 
-//function to create the dropdown arrow
-function createArrow(){
-    var temp_td = $("<td class='td-visible td-arrow'></td>");
-    var temp_span = $("<span class='icon'></span>");
-    var temp_i = $("<i class='fa fa-angle-right'></i>");
-    temp_td.append(temp_span.append(temp_i));
+//function to create the tv icon
+function createPreview(rental_info){
+    var temp_td = $("<td class='td-view is-hidden-mobile'></td>");
+    var temp_a = $("<a class='button no-shadow' target='_blank' title='Preview this rental' style='target-new: tab;' href='/listing/" + rental_info.domain_name + "/" + rental_info.rental_id + "'></a>");
+    var temp_span = $("<span class='icon is-small'></span>");
+    var temp_i = $("<i class='fa fa-external-link'></i>");
+    var temp_span2 = $("<span>Preview</span>");
+    temp_td.append(temp_a.append(temp_span.append(temp_i), temp_span2));
+
+    //prevent clicking view from dropping down row
+    temp_td.click(function(e) {
+        e.stopPropagation();
+    });
 
     return temp_td;
 }
@@ -122,14 +130,18 @@ function createArrow(){
 function createAddress(rental_info){
     var temp_td = $("<td class='td-visible td-address is-hidden-mobile'></td>");
     var temp_td_div = $("<div class='address-div-wrapper'><div>");
-	var address_text = (rental_info.address == "") ? "Nothing is being displayed!" : rental_info.address;
-	var address_text_class = (rental_info.address == "") ? "" : "is-accent has-bs-underline";
-	var temp_address = $("<a target='_blank' class='" + address_text_class + "' href='" + rental_info.address + "'>" + address_text + "</a>");
 
-	//prevent link click from selecting row
-	temp_address.click(function(e){
-		e.stopPropagation();
-	})
+	if (rental_info.address == ""){
+		var temp_address = $("<p>Nothing is being displayed!</p>");
+	}
+	else {
+		var temp_address = $("<a target='_blank' class='is-accent has-bs-underline' href='" + rental_info.address + "'>" + rental_info.address + "</a>");
+		//prevent link click from selecting row
+		temp_address.click(function(e){
+			e.stopPropagation();
+		})
+	}
+
 	return temp_td.append(temp_td_div.append(temp_address));
 }
 
@@ -150,7 +162,13 @@ function createAddressDrop(rental_info){
 
     //change the hidden address TD along with dropdown
     temp_input.on("input", function(e){
-        $(this).closest(".td-address-drop").prev(".td-address").prop("href", $(this).val());
+		var address_wrapper = $(this).closest(".td-address-drop").prev(".td-address").find(".address-div-wrapper").empty();
+		if ($(this).val() == ""){
+			address_wrapper.append($("<p>Nothing is being displayed!</p>"));
+		}
+		else {
+			address_wrapper.append($("<a target='_blank' class='is-accent has-bs-underline' href='" + $(this).val() + "'>" + $(this).val() + "</a>"));
+		}
     });
 
     return new_td;
@@ -159,7 +177,7 @@ function createAddressDrop(rental_info){
 //function to create dropdown row
 function createRowDrop(rental_info, rownum){
     temp_drop = $("<tr id='row-drop" + rownum + "' class='row-drop'></tr>");
-    temp_td = $("<td class='row-drop-td' colspan='5'></td>")
+    temp_td = $("<td class='row-drop-td' colspan='6'></td>")
     temp_div_drop = $("<div id='div-drop" + rownum + "' class='div-drop td-visible container'></div>");
 
     //append various stuff to the row drop div
@@ -252,21 +270,20 @@ function createButtons(rental_info){
 	var temp_col_buttons = $("<div class='column is-3'></div>");
 	var temp_div_buttons = $("<div class='control'></div>");
 	var temp_button1 = $("<a target='_blank' href='/listing/" + rental_info.domain_name + "' class='button margin-right-10 margin-bottom-5 no-shadow'>View Listing</a>");
-	var temp_button2 = $("<a target='_blank' href='/listing/" + rental_info.domain_name + "/" + rental_info.rental_id + "' class='button margin-right-10 no-shadow'>Preview Rental</a>");
-	var temp_button3 = $("<a class='button margin-right-10 no-shadow'>Add Time</a>");
-	var temp_button4 = $("<a class='button no-shadow'>Delete Rental</a>");
+	var temp_button2 = $("<a class='button margin-right-10 no-shadow'>Add Time</a>");
+	var temp_button3 = $("<a class='button no-shadow'>Delete Rental</a>");
 
 	//display calendar modal
-	temp_button3.on("click", function(e) {
-		addTimeRental(rental_info, temp_button3);
+	temp_button2.on("click", function(e) {
+		addTimeRental(rental_info, temp_button2);
 	});
 
 	//are you sure?
-	temp_button4.on("click", function(e) {
+	temp_button3.on("click", function(e) {
 		areYouSure($(this), rental_info)
 	});
 
-	temp_col_buttons.append(temp_div_buttons.append(temp_button1, temp_button2, temp_button3, temp_button4));
+	temp_col_buttons.append(temp_div_buttons.append(temp_button1, temp_button2, temp_button3));
 
 	return temp_col_buttons;
 }
@@ -481,7 +498,19 @@ function cancelRentalChanges(row, row_drop, cancel_button, rental_info){
 
     //revert back to the old address
     row.find(".address_input").val(rental_info.address);
-    row.find(".td-address").not(".td-address-drop").attr("href", rental_info.address);
+    var address_wrapper = row.find(".td-address").find(".address-div-wrapper").empty();
+	if (rental_info.address == ""){
+		address_wrapper.append($("<p>Nothing is being displayed!</p>"));
+	}
+	else {
+		var temp_address = $("<a target='_blank' class='is-accent has-bs-underline' href='" + rental_info.address + "'>" + rental_info.address + "</a>")
+		address_wrapper.append(temp_address);
+
+		//prevent link click from selecting row
+		temp_address.click(function(e){
+			e.stopPropagation();
+		});
+	}
 }
 
 //function to submit any changes to a rental
@@ -545,6 +574,11 @@ function refreshSubmitbindings(success_button, cancel_button, rentals, rental_id
 
             success_button.off().click(function(e){
                 submitRentalChanges(row, row_drop, $(this), rentals[x]);
+            });
+
+			//prevent enter to submit
+            both_rows.find(".drop-form").on("submit", function(e){
+                e.preventDefault();
             });
 
             both_rows.find(".drop-form .changeable-input").unbind("input").on("input", function(e){
