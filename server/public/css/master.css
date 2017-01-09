@@ -792,6 +792,10 @@ table {
 .has-text-right {
   text-align: right; }
 
+@media screen and (max-width: 768px) {
+  .has-text-centered-mobile {
+    text-align: center; } }
+
 .is-hidden {
   display: none !important; }
 
@@ -4870,7 +4874,7 @@ input:-webkit-autofill {
   color: rgba(0, 0, 0, 0.9);
   padding: 5px; }
   .nav-link:hover, .nav-link:active, .nav-link:focus, .nav-link.is-active {
-    opacity: 0.5; }
+    color: rgba(0, 0, 0, 0.66); }
   @media screen and (max-width: 768px) {
     .nav-link:hover, .nav-link:focus {
       -moz-transform: translate(-8px, 0);
@@ -4887,7 +4891,7 @@ input:-webkit-autofill {
   position: relative;
   white-space: nowrap; }
   .nav-item img {
-    max-height: 24px; }
+    max-height: 30px; }
   .nav-item .button + .button {
     margin-left: 10px; }
   .nav-item .tag:first-child {
@@ -4897,6 +4901,8 @@ input:-webkit-autofill {
   @media screen and (max-width: 768px) {
     .nav-item {
       text-align: right; } }
+  .nav-item:last-child a {
+    font-weight: bold; }
   @media screen and (min-width: 769px) {
     .nav-item.searchbar {
       width: 75%; }
@@ -4931,6 +4937,8 @@ a.nav-item.is-tab {
 
 @media screen and (max-width: 768px) {
   .nav-menu {
+    -webkit-box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+    -moz-box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
     box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
     left: 0;
     display: none;
@@ -5016,6 +5024,8 @@ a.nav-item.is-tab {
   .container > .nav > .nav-right > .nav-item:last-child:not(.is-tab) {
     padding-right: 0; }
   .nav.has-shadow {
+    -webkit-box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+    -moz-box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
     box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12); }
   @media screen and (max-width: 979px) {
     .nav > .container > .nav-left > .nav-item.is-brand:first-child,
@@ -5030,13 +5040,16 @@ a.nav-item.is-tab {
     #profile-button {
       display: none; } }
 
+#login-modal {
+  width: auto; }
+
 #login-dropdown {
   background-color: white; }
 
 #profile-dropdown {
-  -webkit-box-shadow: 0 4px 7px 0 rgba(0, 0, 0, 0.38);
-  -moz-box-shadow: 0 4px 7px 0 rgba(0, 0, 0, 0.38);
-  box-shadow: 0 4px 7px 0 rgba(0, 0, 0, 0.38);
+  -webkit-box-shadow: 0 5px 3px 0 rgba(0, 0, 0, 0.14), 0 4px 3px -2px rgba(0, 0, 0, 0.2), 0 3px 5px 0 rgba(0, 0, 0, 0.12);
+  -moz-box-shadow: 0 5px 3px 0 rgba(0, 0, 0, 0.14), 0 4px 3px -2px rgba(0, 0, 0, 0.2), 0 3px 5px 0 rgba(0, 0, 0, 0.12);
+  box-shadow: 0 5px 3px 0 rgba(0, 0, 0, 0.14), 0 4px 3px -2px rgba(0, 0, 0, 0.2), 0 3px 5px 0 rgba(0, 0, 0, 0.12);
   background-color: white;
   position: absolute;
   right: 0;
@@ -6486,6 +6499,8 @@ a.nav-item.is-tab {
 .footer-item a {
   padding: 5px 0;
   color: white; }
+  .footer-item a:hover, .footer-item a:focus {
+    color: rgba(255, 255, 255, 0.5); }
 
 .footer-bar {
   border-top: 1px solid rgba(0, 0, 0, 0.12);
