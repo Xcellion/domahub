@@ -54,7 +54,9 @@
 .td-price-rate-drop {
   padding-left: 8px !important;
   border-left: 1px solid rgba(0, 0, 0, 0.12);
-  padding-right: 0 !important; }
+  padding-right: 0 !important;
+  width: 75px;
+  min-width: 75px; }
 
 .td-price-type {
   width: 112px; }
