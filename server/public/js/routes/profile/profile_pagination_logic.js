@@ -20,28 +20,26 @@ $(document).ready(function() {
 
     //search for a specific domain
     $("#search-domain").keyup(function(e){
+        //make sure it obeys filter
+        row_display = data_to_display.slice(0);
+        row_display = row_display.filter(function(row){
+            return filterCheck($("#filter-select").val(), row);
+        });
+
         var needle = $(this).val();
         if (needle){
             var temp_rows = [];
-            for (var x = 0; x < data_to_display.length; x++){
-                if (data_to_display[x].domain_name.includes(needle)){
-                    temp_rows.push(data_to_display[x]);
+            for (var x = 0; x < row_display.length; x++){
+                if (row_display[x].domain_name.includes(needle)){
+                    temp_rows.push(row_display[x]);
                 }
             }
             row_display = temp_rows;
-            total_pages = Math.ceil(row_display.length / row_per_page);
-            setupTable(total_pages, row_per_page, current_page, row_display);
         }
-        else {
-            row_display = data_to_display.slice(0);
-            row_display = row_display.filter(function(rental){
-            	var time_now = new Date().getTime();
-            	return !(rental.date[0] + rental.duration[0] <= time_now + 86400000) && (rental.date[0] + rental.duration[0] > time_now);
-            });
-            total_pages = Math.ceil(row_display.length / row_per_page);
-            setupTable(total_pages, row_per_page, current_page, row_display);
-            setupControls(total_pages, row_per_page, current_page, row_display);
-        }
+
+        total_pages = Math.ceil(row_display.length / row_per_page);
+        setupTable(total_pages, row_per_page, current_page, row_display);
+        setupControls(total_pages, row_per_page, current_page, row_display);
     });
 
     //sort by header
@@ -219,11 +217,10 @@ function setupControls(total_pages, row_per_page, current_page, rows_to_disp){
     });
 
     //filter panel
-    $(".filter-local").off().click(function(e){
+    $("#filter-select").off().change(function(e){
 
-        //set active css
-        $(".filter-local").removeClass('is-active');
-        $(this).addClass("is-active");
+        //remove any search query
+        $("#search-domain").val("");
 
         //remove any sort
         $(".sort-asc, .sort-desc").addClass("is-hidden");
@@ -232,7 +229,7 @@ function setupControls(total_pages, row_per_page, current_page, rows_to_disp){
         var temp_rows = [];
         var data_to_display = (window.location.pathname.indexOf("listings") != -1) ? listings : rentals;
         for (var x = 0; x < data_to_display.length; x++){
-            if (filterCheck($(this).attr('id'), data_to_display[x])){
+            if (filterCheck($(this).val(), data_to_display[x])){
                 temp_rows.push(data_to_display[x]);
             }
         }
@@ -395,7 +392,7 @@ function paginateRows(total_pages, current_page){
 //function to create an empty row if there are no more applicable rentals/listings
 function emptyRows(){
     var listing_or_rental_text = window.location.pathname.indexOf("listings") != -1 ? "listings" : "rentals";
-    if (row_display == 0){
+    if ($(".row-disp").length == 0){
         var tempRow = $("<tr><td class='padding-50 has-text-centered' colspan='99'>There are no " + listing_or_rental_text + "! </td></tr>");
         $("#table_body").append(tempRow);
     }
@@ -450,11 +447,11 @@ function createAllRows(row_per_page, current_page){
 function createIcon(listing_info){
     var temp_td = $("<td class='td-arrow'></td>");
     if (typeof listing_info.verified != "undefined" && listing_info.verified == null){
-        var temp_span = $("<span class='icon is-small is-danger'></span>");
+        var temp_span = $("<span class='v-align-bottom icon is-small is-danger'></span>");
         var temp_i = $("<i class='no-transition fa fa-exclamation-triangle'></i>");
     }
     else {
-        var temp_span = $("<span class='icon is-small'></span>");
+        var temp_span = $("<span class='v-align-bottom icon is-small'></span>");
         var temp_i = $("<i class='no-transition fa fa-square-o'></i>");
     }
     temp_td.append(temp_span.append(temp_i));
@@ -539,5 +536,19 @@ function editEditIcon(row, editing){
     }
     else {
         edit_i.removeClass("is-active");
+    }
+}
+
+// --------------------------------------------------------------------------------- SELECT ROW
+
+//helper function to handle multi-select action buttons
+function multiSelectButtons(){
+    var selected_rows = $(".row-disp").filter(function(){ return $(this).data("selected") == true });
+
+    if (selected_rows.length > 0){
+        $(".multi-button").removeClass("is-disabled");
+    }
+    else {
+        $(".multi-button").addClass("is-disabled");
     }
 }
