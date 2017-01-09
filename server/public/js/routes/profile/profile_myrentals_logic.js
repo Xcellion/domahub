@@ -53,6 +53,11 @@ $(document).ready(function() {
 	$('#edit-dates-button, #checkout-back-button').click(function() {
 		showModalContent("calendar");
 	});
+
+	//multiple delete rentals
+	$("#multi-delete").on("click", function(e){
+		multiDeleteRental($(this));
+	});
 });
 
 // --------------------------------------------------------------------------------- CREATE ROW
@@ -85,6 +90,7 @@ function createRow(rental_info, rownum){
 
     tempRow.data("editing", false);
 	tempRow.data("selected", false);
+	tempRow.data("rental_id", rental_info.rental_id);
 
 	tempRow.click(function(e){
 		selectRow($(this));
@@ -421,6 +427,38 @@ function deleteRental(rental_info, delete_button){
 	});
 }
 
+//function to multi delete rentals
+function multiDeleteRental(delete_button){
+	delete_button.off();
+
+	var deleting_rental_ids = [];
+	var selected_rows = $(".row-disp").filter(function(){
+		if ($(this).data('selected') == true){
+			deleting_rental_ids.push($(this).data('rental_id'));
+			return true;
+		}
+	});
+
+	$.ajax({
+		url: "/profile/myrentals/delete",
+		method: "POST",
+		data: {
+			deleting_rental_ids: deleting_rental_ids
+		}
+	}).done(function(data){
+		delete_button.on("click", function(){
+			multiDeleteRental(delete_button)
+		});
+
+		if (data.state == "success"){
+			rentals = data.rentals;
+			row_display = rentals.slice(0);
+			selected_rows.remove();
+			emptyRows();
+		}
+	});
+}
+
 // --------------------------------------------------------------------------------- EDIT ROW
 
 //function to initiate edit mode
@@ -483,6 +521,8 @@ function selectRow(row){
     else {
         icon_i.addClass('fa-square-o').removeClass("fa-check-square-o box-checked");
     }
+
+	multiSelectButtons();
 }
 
 // --------------------------------------------------------------------------------- SUBMIT RENTAL UPDATES

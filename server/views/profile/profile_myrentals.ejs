@@ -32,14 +32,14 @@
 							<div class="level-item">
 								<div class="control has-addons">
 									<span class="select" tabindex="1">
-										<select>
-											<option id="reset_filter">Active</option>
-											<option id="expiring_filter">Expiring</option>
-											<option id="expired_filter">Expired</option>
-											<option id="active_filter">View All</option>
+										<select id="filter-select">
+											<option value="active_filter">Active</option>
+											<option value="expiring_filter">Expiring</option>
+											<option value="expired_filter">Expired</option>
+											<option value="reset_filter">View All</option>
 										</select>
 									</span>
-									<a class="button no-shadow" tabindex="1" title="Delete Rental(s)">
+									<a id="multi-delete" class="multi-button is-disabled button no-shadow" tabindex="1" title="Delete Rental(s)">
 										<span class="icon is-small">
 											<i class="fa fa-trash-o"></i>
 										</span>

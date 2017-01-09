@@ -30,20 +30,20 @@
 							<div class="level-item">
 								<div class="control has-addons">
 									<span class="select" tabindex="1">
-										<select>
-											<option id="reset_filter">View All</option>
-											<option id="rented_filter">Rented</option>
-											<option id="premium_filter">Premium</option>
-											<option id="basic_filter">Basic</option>
+										<select id="filter-select">
+											<option value="reset_filter">View All</option>
+											<option value="rented_filter">Rented</option>
+											<option value="premium_filter">Premium</option>
+											<option value="basic_filter">Basic</option>
 										</select>
 									</span>
-									<a class="button no-shadow" tabindex="1" title="Verify Listing(s)">
+									<a id="multi-verify" class="multi-button is-disabled button no-shadow" tabindex="1" title="Verify Listing(s)">
 										<span class="icon is-small">
 											<i class="fa fa-check-circle-o"></i>
 										</span>
 										<span>Verify</span>
 									</a>
-									<a class="button no-shadow" tabindex="1" title="Delete Listing(s)">
+									<a id="multi-delete" class="multi-button is-disabled button no-shadow" tabindex="1" title="Delete Listing(s)">
 										<span class="icon is-small">
 											<i class="fa fa-trash-o"></i>
 										</span>
