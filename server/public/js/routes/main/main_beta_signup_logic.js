@@ -25,4 +25,16 @@ $(document).ready(function() {
         }
     });
 
+    // slider dropdown
+    $(".slider-item").click(function() {
+      $(".slider-item-dropdown").slideUp(300, function() {
+        $(".slider-item-dropdown").removeClass("is-active");
+      });
+      $(".slider-item").removeClass("is-active");
+      $(this).toggleClass("is-active");
+      $(this).next().slideDown(300, function() {
+        $(this).toggleClass("is-active");
+      });
+    });
+
 });
