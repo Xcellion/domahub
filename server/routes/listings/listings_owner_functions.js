@@ -269,9 +269,6 @@ module.exports = {
 	//function to check the size of the image uploaded
 	checkImageUploadSize : function(req, res, next){
 		var storage = multer.diskStorage({
-			destination: function (req, file, cb) {
-				cb(null, '/uploads/images');
-			},
 			filename: function (req, file, cb) {
 				cb(null, Date.now() + "_" + req.params.domain_name + "_" + req.user.username);
 			}
