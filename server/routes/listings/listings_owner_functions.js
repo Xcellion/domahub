@@ -288,7 +288,6 @@ module.exports = {
 					"image/png",
 					"image/gif"
 				];
-				console.log(file);
 
 				if (allowedMimeTypes.indexOf(file.mimetype) <= -1) {
 					cb(new Error('FILE_TYPE_WRONG'));
@@ -322,6 +321,7 @@ module.exports = {
 	//function to check the user image and upload to imgur
 	checkListingImage : function(req, res, next){
 		if (req.file){
+			console.log(req.file);
 			var formData = {
 				title: req.file.filename,
 				image: fs.createReadStream("./uploads/images/" + req.file.filename)
