@@ -269,6 +269,9 @@ module.exports = {
 	//function to check the size of the image uploaded
 	checkImageUploadSize : function(req, res, next){
 		var storage = multer.diskStorage({
+			destination: function (req, file, cb) {
+				cb(null, './uploads/images');
+			},
 			filename: function (req, file, cb) {
 				cb(null, Date.now() + "_" + req.params.domain_name + "_" + req.user.username);
 			}
@@ -324,7 +327,7 @@ module.exports = {
 			console.log(req.file);
 			var formData = {
 				title: req.file.filename,
-				image: fs.createReadStream("./uploads/images/" + req.file.filename)
+				image: fs.createReadStream(req.file.path)
 			}
 
 			console.log(req.user.username + " is uploading an image to Imgur...");
