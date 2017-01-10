@@ -26,9 +26,17 @@
   .slider-item:hover {
     background-color: #efefef;
     cursor: pointer; }
+  .slider-item.is-active {
+    background-color: #efefef; }
   .slider-item .slider-content {
     display: flex;
     align-items: center; }
+
+.slider-item-dropdown {
+  display: none;
+  padding: 10px 20px; }
+  .slider-item-dropdown.is-active {
+    display: block; }
 
 .checklist-item {
   display: inline-flex;
