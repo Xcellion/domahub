@@ -288,6 +288,7 @@ module.exports = {
 					"image/png",
 					"image/gif"
 				];
+				console.log(file);
 
 				if (allowedMimeTypes.indexOf(file.mimetype) <= -1) {
 					cb(new Error('FILE_TYPE_WRONG'));
