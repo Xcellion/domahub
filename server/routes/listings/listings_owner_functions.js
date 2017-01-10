@@ -1,3 +1,4 @@
+var node_env = process.env.NODE_ENV || 'dev'; 	//dev or prod bool
 var Categories = require("../../lib/categories.js");
 
 var request = require("request");
@@ -8,6 +9,7 @@ var sanitize = require("sanitize-html");
 var multer = require("multer");
 var parse = require("csv-parse");
 var fs = require('fs');
+
 
 module.exports = {
 
@@ -215,6 +217,7 @@ module.exports = {
 
 	//function to check the size of the CSV file uploaded
 	checkCSVUploadSize : function(req, res, next){
+		var upload_path = (node_env == "dev") ? "./uploads/csv" : '/var/www/w3bbi/uploads/csv';
 		var storage = multer.diskStorage({
 			destination: function (req, file, cb) {
 				cb(null, './uploads/csv');
@@ -268,9 +271,10 @@ module.exports = {
 
 	//function to check the size of the image uploaded
 	checkImageUploadSize : function(req, res, next){
+		var upload_path = (node_env == "dev") ? "./uploads/images" : '/var/www/w3bbi/uploads/images';
 		var storage = multer.diskStorage({
 			destination: function (req, file, cb) {
-				cb(null, '/var/www/w3bbi/uploads/images');
+				cb(null, upload_path);
 			},
 			filename: function (req, file, cb) {
 				cb(null, Date.now() + "_" + req.params.domain_name + "_" + req.user.username);
@@ -324,7 +328,6 @@ module.exports = {
 	//function to check the user image and upload to imgur
 	checkListingImage : function(req, res, next){
 		if (req.file){
-			console.log(req.file);
 			var formData = {
 				title: req.file.filename,
 				image: fs.createReadStream(req.file.path)
