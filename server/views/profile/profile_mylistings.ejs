@@ -32,22 +32,22 @@
 									<span class="select" tabindex="1">
 										<select id="filter-select">
 											<option value="reset_filter">View All</option>
-											<option value="rented_filter">Rented</option>
+											<option value="rented_filter">Currently Rented</option>
 											<option value="premium_filter">Premium</option>
 											<option value="basic_filter">Basic</option>
 										</select>
 									</span>
+									<a id="multi-delete" class="multi-button is-disabled button no-shadow" tabindex="1" title="Delete Listing(s)">
+										<span class="icon is-small">
+											<i class="fa fa-ban"></i>
+										</span>
+										<span>Deactivate</span>
+									</a>
 									<a id="multi-verify" class="multi-button is-disabled button no-shadow" tabindex="1" title="Verify Listing(s)">
 										<span class="icon is-small">
 											<i class="fa fa-check-circle-o"></i>
 										</span>
 										<span>Verify</span>
-									</a>
-									<a id="multi-delete" class="multi-button is-disabled button no-shadow" tabindex="1" title="Delete Listing(s)">
-										<span class="icon is-small">
-											<i class="fa fa-trash-o"></i>
-										</span>
-										<span>Delete</span>
 									</a>
 								</div>
 							</div>
@@ -91,8 +91,8 @@
 					<table class="table has-shadow">
 						<thead class="has-shadow">
 							<tr>
-								<th class="td-arrow">
-									<span class="icon is-small"><i class="fa fa-square-o"></i></span>
+								<th id="select-all" class="td-arrow">
+									<span class="icon is-small"><i class="no-transition fa fa-square-o"></i></span>
 								</th>
 								<th class="td-domain">
 									Domain Name
@@ -136,7 +136,7 @@
 						</tbody>
 					</table>
 
-					<nav id="page-control" class="pagination margin-bottom-10">
+					<nav id="page-control" class="is-hidden pagination margin-bottom-10">
 						<a id="prev-page" class="button no-shadow">Previous page</a>
 						<a id="next-page" class="button no-shadow">Next page</a>
 						<ul id="page-list"></ul>

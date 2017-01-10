@@ -1,15 +1,14 @@
-//show active ones first
 var row_display = rentals.slice(0)
-row_display = row_display.filter(function(rental){
-	var time_now = new Date().getTime();
-	return !(rental.date[0] + rental.duration[0] <= time_now + 86400000) && (rental.date[0] + rental.duration[0] > time_now);
-});
-
 var listing_info = false;
 var rental_min = false;
 var refresh_time_submit = false;
 
 $(document).ready(function() {
+	//show active ones first
+	row_display = row_display.filter(function(rental){
+		return filterCheck("active_filter", rental);
+	});
+
     //various ways to close calendar modal
 	$('.modal-close, .modal-background').click(function() {
 
@@ -56,7 +55,7 @@ $(document).ready(function() {
 
 	//multiple delete rentals
 	$("#multi-delete").on("click", function(e){
-		multiDeleteRental($(this));
+		multiDelete($(this));
 	});
 });
 
@@ -90,7 +89,7 @@ function createRow(rental_info, rownum){
 
     tempRow.data("editing", false);
 	tempRow.data("selected", false);
-	tempRow.data("rental_id", rental_info.rental_id);
+	tempRow.data("deletion_id", rental_info.rental_id);
 
 	tempRow.click(function(e){
 		selectRow($(this));
@@ -130,7 +129,7 @@ function createPreview(rental_info){
     return temp_td;
 }
 
-// --------------------------------------------------------------------------------- CREATE ROW DROP
+// ------------------------------------------------------------------------------------------------------------------------------ CREATE ROW DROP
 
 //function to create the address td
 function createAddress(rental_info){
@@ -294,7 +293,7 @@ function createButtons(rental_info){
 	return temp_col_buttons;
 }
 
-// --------------------------------------------------------------------------------- CALENDAR MODAL SET UP
+// ------------------------------------------------------------------------------------------------------------------------------ CALENDAR MODAL SET UP
 
 //function to display modal on add time button
 function addTimeRental(rental_info, time_a){
@@ -391,7 +390,7 @@ function displayListingInfo(listing_info){
 	$("#href-domain").text(listing_info.domain_name);
 }
 
-// --------------------------------------------------------------------------------- DELETE RENTAL
+// ------------------------------------------------------------------------------------------------------------------------------ DELETE RENTAL
 
 //function to make sure of deletion
 function areYouSure(delete_button, rental_info){
@@ -427,39 +426,15 @@ function deleteRental(rental_info, delete_button){
 	});
 }
 
-//function to multi delete rentals
-function multiDeleteRental(delete_button){
-	delete_button.off();
-
-	var deleting_rental_ids = [];
-	var selected_rows = $(".row-disp").filter(function(){
-		if ($(this).data('selected') == true){
-			deleting_rental_ids.push($(this).data('rental_id'));
-			return true;
-		}
-	});
-
-	$.ajax({
-		url: "/profile/myrentals/delete",
-		method: "POST",
-		data: {
-			deleting_rental_ids: deleting_rental_ids
-		}
-	}).done(function(data){
-		delete_button.on("click", function(){
-			multiDeleteRental(delete_button)
-		});
-
-		if (data.state == "success"){
-			rentals = data.rentals;
-			row_display = rentals.slice(0);
-			selected_rows.remove();
-			emptyRows();
-		}
-	});
+//function to handle post-deletion of multi rentals
+function deletionHandler(rows, selected_rows){
+	rentals = rows;
+	row_display = rentals.slice(0);
+	selected_rows.remove();
+	emptyRows();
 }
 
-// --------------------------------------------------------------------------------- EDIT ROW
+// ------------------------------------------------------------------------------------------------------------------------------ EDIT ROW
 
 //function to initiate edit mode
 function editRow(row){
@@ -503,29 +478,47 @@ function editAddress(row, editing){
     }
 }
 
-// --------------------------------------------------------------------------------- SELECT ROW
+// ------------------------------------------------------------------------------------------------------------------------------ SELECT ROW
 
 //function to select a row
 function selectRow(row){
     var selected = (row.data("selected") == false) ? true : false;
     row.data("selected", selected);
 
-    var icon_i = row.find(".td-arrow i");
     var icon_span = row.find(".td-arrow .icon");
+	var icon_i = row.find(".td-arrow i");
 
-    row.toggleClass('is-active');
-    icon_span.toggleClass('is-primary');
     if (selected){
+		row.addClass('is-active');
+		icon_span.addClass('is-primary');
         icon_i.removeClass('fa-square-o').addClass("fa-check-square-o box-checked");
     }
     else {
+		row.removeClass('is-active');
+		icon_span.removeClass('is-primary');
         icon_i.addClass('fa-square-o').removeClass("fa-check-square-o box-checked");
     }
 
 	multiSelectButtons();
 }
 
-// --------------------------------------------------------------------------------- SUBMIT RENTAL UPDATES
+//function to select all rows
+function selectAllRows(){
+	$(".row-disp").addClass('is-active').data('selected', true);
+	$(".row-disp>.td-arrow .icon, #select-all>span").addClass('is-primary');
+	$(".row-disp>.td-arrow i, #select-all>span>i").removeClass("fa-square-o").addClass('fa-check-square-o box-checked');
+	multiSelectButtons();
+}
+
+//function to deselect all rows
+function deselectAllRows(){
+	$(".row-disp").removeClass('is-active').data('selected', false);
+	$(".row-disp>.td-arrow .icon, #select-all>span").removeClass('is-primary');
+	$(".row-disp>.td-arrow i, #select-all>span>i").addClass("fa-square-o").removeClass('fa-check-square-o box-checked');
+	multiSelectButtons();
+}
+
+// ------------------------------------------------------------------------------------------------------------------------------ SUBMIT RENTAL UPDATES
 
 //function to cancel the rental submit
 function cancelRentalChanges(row, row_drop, cancel_button, rental_info){
@@ -630,7 +623,7 @@ function refreshSubmitbindings(success_button, cancel_button, rentals, rental_id
     }
 }
 
-// --------------------------------------------------------------------------------- SUBMIT NEW RENTAL TIMES
+// ------------------------------------------------------------------------------------------------------------------------------ SUBMIT NEW RENTAL TIMES
 
 //helper function to check if everything is legit
 function checkSubmit(){

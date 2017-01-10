@@ -34,7 +34,7 @@
 									<span class="select" tabindex="1">
 										<select id="filter-select">
 											<option value="active_filter">Active</option>
-											<option value="expiring_filter">Expiring</option>
+											<option value="upcoming_filter">Upcoming</option>
 											<option value="expired_filter">Expired</option>
 											<option value="reset_filter">View All</option>
 										</select>
@@ -83,7 +83,9 @@
 						<table class="table has-shadow">
 							<thead class="has-shadow">
 								<tr>
-									<th class="td-arrow"></th>
+									<th id="select-all" class="td-arrow">
+										<span class="icon is-small"><i class="no-transition fa fa-square-o"></i></span>
+									</th>
 									<th class="td-domain">
 										Domain Name
 										<span class="icon is-small is-active sort-desc is-hidden"><i class="fa fa-sort-desc"></i></span>

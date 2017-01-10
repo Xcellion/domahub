@@ -150,20 +150,27 @@ module.exports = {
 
 	//----------------------------------------------------------------------RENTAL----------------------------------------------------------
 
-	checkPostedRentals : function(req, res, next){
+	checkPostedDeletionRows : function(req, res, next){
+		console.log("F: Checking posted IDs for deletion...");
 		var to_delete_formatted = [];
-		if (req.body.deleting_rental_ids){
-			for (var x = 0; x < req.body.deleting_rental_ids.length; x++){
-				for (var y = 0; y < req.user.rentals.length; y++){
-					if (req.user.rentals[y].rental_id == req.body.deleting_rental_ids[x]){
-						to_delete_formatted.push([req.user.rentals[y].rental_id, 0]);
+		var listing_or_rental = (req.path.indexOf("mylistings") != -1) ? req.user.listings : req.user.rentals;
+		var listing_or_rental_id = (req.path.indexOf("mylistings") != -1) ? "id" : "rental_id";
+		var listing_or_rental_bool = req.path.indexOf("mylistings") != -1;
+
+		if (req.body.deletion_ids){
+			for (var x = 0; x < req.body.deletion_ids.length; x++){
+				for (var y = 0; y < listing_or_rental.length; y++){
+					if (listing_or_rental[y][listing_or_rental_id] == req.body.deletion_ids[x]){
+						if (!listing_or_rental_bool || (listing_or_rental_bool && listing_or_rental[y].verified && listing_or_rental[y].status == 1)){
+							to_delete_formatted.push([listing_or_rental[y][listing_or_rental_id], 0]);
+						}
 						break;
 					}
 				}
 			}
 		}
 		if (to_delete_formatted.length > 0){
-			req.session.rental_object = to_delete_formatted;
+			req.session.deletion_object = to_delete_formatted;
 			next();
 		}
 		else {
@@ -173,13 +180,14 @@ module.exports = {
 
 	//multi-delete rentals
 	deleteRentals : function(req, res, next){
-		Listing.deleteRentals(req.session.rental_object, function(result){
+		console.log("F: Deleting rentals...");
+		Listing.deleteRentals(req.session.deletion_object, function(result){
 			if (result.state == "success"){
-				updateUserRentalsObject(req.user.rentals, req.session.rental_object);
-				delete req.session.rental_object;
+				updateUserRentalsObject(req.user.rentals, req.session.deletion_object);
+				delete req.session.deletion_object;
 				res.send({
 					state: "success",
-					rentals: req.user.rentals
+					rows: req.user.rentals
 				});
 			}
 			else {
@@ -188,14 +196,22 @@ module.exports = {
 		});
 	},
 
-	//----------------------------------------------------------------------LISTING----------------------------------------------------------
-
-	checkPostedListings : function(req, res, next){
-
-	},
-
+	//multi-delete listings
 	deleteListings : function(req, res, next){
-
+		console.log("F: Deactivating listings...");
+		Listing.deleteListings(req.session.deletion_object, function(result){
+			if (result.state == "success"){
+				updateUserListingsObject(req.user.listings, req.session.deletion_object);
+				delete req.session.deletion_object;
+				res.send({
+					state: "success",
+					rows: req.user.listings
+				});
+			}
+			else {
+				res.send({state: "error"});
+			}
+		});
 	},
 
 	//----------------------------------------------------------------------RENDERS----------------------------------------------------------
@@ -322,6 +338,18 @@ function updateUserRentalsObject(user_rentals, to_delete_formatted){
 		for (var y = 0; y < to_delete_formatted.length; y++){
 			if (user_rentals[x].rental_id == to_delete_formatted[y][0]){
 				user_rentals.splice(x, 1);
+				break;
+			}
+		}
+	}
+}
+
+//helper function to update req.user.rentals after deleting
+function updateUserListingsObject(user_listings, to_delete_formatted){
+	for (var x = user_listings.length - 1; x >= 0; x--){
+		for (var y = 0; y < to_delete_formatted.length; y++){
+			if (user_listings[x].id == to_delete_formatted[y][0]){
+				user_listings[x].status = 0;
 				break;
 			}
 		}

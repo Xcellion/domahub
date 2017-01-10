@@ -68,6 +68,16 @@ $(document).ready(function() {
     $("input[type=text], input[type=number]").click(function(e){
         $(this).select();
     });
+
+    //select all rows
+    $("#select-all").off().on("click", function(e){
+        if ($(".row-disp").not('.is-active').length != 0){
+            selectAllRows($(this));
+        }
+        else {
+            deselectAllRows();
+        }
+    });
 });
 
 //function to filter listings or rentals
@@ -88,11 +98,11 @@ function filterCheck(type, data){
     //rentals
     else if (type == "active_filter"){
         var time_now = new Date().getTime();
-        return !(data.date[0] + data.duration[0] <= time_now + 86400000) && (data.date[0] + data.duration[0] > time_now);
+        return data.date[0] + data.duration[0] > time_now;
     }
-    else if (type == "expiring_filter"){
+    else if (type == "upcoming_filter"){
         var time_now = new Date().getTime();
-        return (data.date[0] + data.duration[0] <= time_now + 86400000) && (data.date[0] + data.duration[0] > time_now);
+        return data.date[0] > time_now;
     }
     else if (type == "expired_filter"){
         var time_now = new Date().getTime();
@@ -125,17 +135,17 @@ function calculateCurrentPage(url_page, total_pages, row_per_page){
 //refresh table (pagination and rows)
 function setupTable(total_pages, row_per_page, current_page, rows_to_disp){
     var listing_or_rental = window.location.pathname.indexOf("listings") != -1 ? listings : rentals;
+    if (listing_or_rental.length == 0){
+        $("#filters").addClass('is-hidden');
+    }
+    else {
+        $("#filters").removeClass('is-hidden');
+    }
     if (!rows_to_disp.length){
         $("#table_body").empty();
         emptyRows();
-        if (listing_or_rental.length == 0){
-            $("#filters").addClass('is-hidden');
-        }
     }
     else {
-        if (listing_or_rental.length){
-            $("#filters").removeClass('is-hidden');
-        }
         createAllRows(row_per_page, current_page);
     }
 
@@ -544,11 +554,49 @@ function editEditIcon(row, editing){
 //helper function to handle multi-select action buttons
 function multiSelectButtons(){
     var selected_rows = $(".row-disp").filter(function(){ return $(this).data("selected") == true });
+    var verified_selected_rows = selected_rows.filter(function(){ return $(this).data("verified") == false});
 
     if (selected_rows.length > 0){
-        $(".multi-button").removeClass("is-disabled");
+        $("#multi-delete").removeClass("is-disabled");
     }
     else {
-        $(".multi-button").addClass("is-disabled");
+        $("#multi-delete").addClass("is-disabled");
     }
+
+    if (verified_selected_rows.length > 0){
+        $("#multi-verify").removeClass("is-disabled");
+    }
+    else {
+        $("#multi-verify").addClass("is-disabled");
+    }
+}
+
+//function to delete multiple rows
+function multiDelete(delete_button){
+    delete_button.off();
+
+	var deletion_ids = [];
+	var selected_rows = $(".row-disp").filter(function(){
+		if ($(this).data('selected') == true){
+			deletion_ids.push($(this).data('deletion_id'));
+			return true;
+		}
+	});
+
+    var listing_or_rental_url = window.location.pathname.indexOf("listings") != -1 ? "mylistings" : "myrentals";
+	$.ajax({
+		url: "/profile/" + listing_or_rental_url + "/delete",
+		method: "POST",
+		data: {
+			deletion_ids: deletion_ids
+		}
+	}).done(function(data){
+		delete_button.on("click", function(){
+			multiDelete(delete_button);
+		});
+
+		if (data.state == "success"){
+            deletionHandler(data.rows, selected_rows);
+		}
+	});
 }
