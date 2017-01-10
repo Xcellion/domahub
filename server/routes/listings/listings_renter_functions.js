@@ -722,11 +722,11 @@ function joinRentalTimes(rental_times){
         for (var y = temp_times.length - 1; y >= 0; y--){
             var compare_start = temp_times[y].date;
             var compare_end = compare_start + temp_times[y].duration;
-
             //touches bottom
             if (temp_times[y].rental_id == temp_times[x].rental_id && x != y && orig_start == compare_end){
 				temp_times[y].duration = temp_times[y].duration + temp_times[x].duration;
                 temp_times.splice(x, 1);
+                break;
             }
         }
     }
