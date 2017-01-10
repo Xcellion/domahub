@@ -90,13 +90,8 @@ $(document).ready(function() {
 	});
 
 	//show calendar modal content
-	$('#guest-button, #redirect-back-button, #edit-dates-button').click(function(){
+	$('#guest-button, #checkout-back-button, #edit-dates-button').click(function(){
 		showModalContent("calendar");
-	});
-
-	//show redirect modal content
-	$('#redirect-next-button, #checkout-back-button').click(function() {
-		showModalContent("redirect");
 	});
 
 	//show checkout modal content
