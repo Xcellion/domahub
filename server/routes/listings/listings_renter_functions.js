@@ -863,7 +863,7 @@ function calculatePrice(times, listing_info){
 
 //helper function to update req.user.rentals after changing to active
 function updateUserRentalsObject(user_rentals, db_rentals, rental_id){
-	for (var x = 0; x < user_rentals.length; x++){
+	for (var x = user_rentals.length - 1; x >= 0; x--){
 		if (user_rentals[x].rental_id == rental_id){
 
             //delete rental

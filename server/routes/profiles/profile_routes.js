@@ -6,7 +6,7 @@ var stripe_key = (node_env == "dev") ? "sk_test_PHd0TEZT5ytlF0qCNvmgAThp" : "sk_
 
 var bodyParser = require('body-parser')
 var jsonParser = bodyParser.json()
-var urlencodedParser = bodyParser.urlencoded({ extended: false })
+var urlencodedParser = bodyParser.urlencoded({ extended: true })
 
 var request = require('request');
 var validator = require('validator');
@@ -30,6 +30,12 @@ module.exports = function(app, db, auth, error, stripe){
 		profile_functions.renderMyListings
 	]);
 
+	//mylistings multi delete
+	app.post("/profile/mylistings/delete", [
+		urlencodedParser,
+		auth.checkLoggedIn,
+	]);
+
 	//myrentals pages
 	app.get([
 		"/profile/myrentals",
@@ -39,6 +45,15 @@ module.exports = function(app, db, auth, error, stripe){
 		auth.checkLoggedIn,
 		profile_functions.getAccountRentals,
 		profile_functions.renderMyRentals
+	]);
+
+	//myrentals multi delete
+	app.post("/profile/myrentals/delete", [
+		urlencodedParser,
+		auth.checkLoggedIn,
+		profile_functions.getAccountRentals,
+		profile_functions.checkPostedRentals,
+		profile_functions.deleteRentals
 	]);
 
 	// //check if user is legit, get all listings, get all rentals

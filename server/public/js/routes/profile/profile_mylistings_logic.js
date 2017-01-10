@@ -708,6 +708,8 @@ function selectRow(row, verified){
         }
         icon_i.removeClass("fa-check-square-o box-checked");
     }
+
+    multiSelectButtons();
 }
 
 // --------------------------------------------------------------------------------- SUBMIT LISTING UPDATES

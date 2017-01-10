@@ -359,6 +359,21 @@ listing_model.prototype.toggleActivateRental = function(rental_id, callback){
 	listing_query(query, "Failed to toggle activation on rental #" + rental_id + "!", callback, rental_id);
 }
 
+//sets multiple rentals to inactive
+//BULK INSERT NEEDS TRIPLE NESTED ARRAYS
+listing_model.prototype.deleteRentals = function(rentals_to_delete, callback){
+	console.log("DB: Attempting to delete " + rentals_to_delete.length + " rentals...");
+	query = "INSERT INTO rentals ( \
+				rental_id, \
+				status \
+			)\
+			 VALUES ? \
+			 ON DUPLICATE KEY UPDATE \
+				 rental_id = VALUES(rental_id), \
+				 status = VALUES(status) "
+	listing_query(query, "Failed to delete " + rentals_to_delete.length + " rentals!", callback, [rentals_to_delete]);
+}
+
 //----------------------------------------------------------------------DELETE----------------------------------------------------------
 
 //deletes a specific rental
