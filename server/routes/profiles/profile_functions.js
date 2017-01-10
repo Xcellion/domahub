@@ -148,6 +148,56 @@ module.exports = {
 		}
 	},
 
+	//----------------------------------------------------------------------RENTAL----------------------------------------------------------
+
+	checkPostedRentals : function(req, res, next){
+		var to_delete_formatted = [];
+		if (req.body.deleting_rental_ids){
+			for (var x = 0; x < req.body.deleting_rental_ids.length; x++){
+				for (var y = 0; y < req.user.rentals.length; y++){
+					if (req.user.rentals[y].rental_id == req.body.deleting_rental_ids[x]){
+						to_delete_formatted.push([req.user.rentals[y].rental_id, 0]);
+						break;
+					}
+				}
+			}
+		}
+		if (to_delete_formatted.length > 0){
+			req.session.rental_object = to_delete_formatted;
+			next();
+		}
+		else {
+			res.send({state: "error"});
+		}
+	},
+
+	//multi-delete rentals
+	deleteRentals : function(req, res, next){
+		Listing.deleteRentals(req.session.rental_object, function(result){
+			if (result.state == "success"){
+				updateUserRentalsObject(req.user.rentals, req.session.rental_object);
+				delete req.session.rental_object;
+				res.send({
+					state: "success",
+					rentals: req.user.rentals
+				});
+			}
+			else {
+				res.send({state: "error"});
+			}
+		});
+	},
+
+	//----------------------------------------------------------------------LISTING----------------------------------------------------------
+
+	checkPostedListings : function(req, res, next){
+
+	},
+
+	deleteListings : function(req, res, next){
+
+	},
+
 	//----------------------------------------------------------------------RENDERS----------------------------------------------------------
 
 	renderDashboard : function(req, res){
@@ -264,4 +314,16 @@ function createRentalProp(all_rentals){
 	});
 
 	return all_rentals;
+}
+
+//helper function to update req.user.rentals after deleting
+function updateUserRentalsObject(user_rentals, to_delete_formatted){
+	for (var x = user_rentals.length - 1; x >= 0; x--){
+		for (var y = 0; y < to_delete_formatted.length; y++){
+			if (user_rentals[x].rental_id == to_delete_formatted[y][0]){
+				user_rentals.splice(x, 1);
+				break;
+			}
+		}
+	}
 }
