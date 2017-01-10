@@ -302,6 +302,7 @@ module.exports = {
 		}).single("background_image");
 
 		upload_img(req, res, function(err){
+			console.log("Image file is being uploaded...");
 			if (err){
 				if (err.code == "LIMIT_FILE_SIZE"){
 					error.handler(req, res, 'File is bigger than 1 MB!', "json");
