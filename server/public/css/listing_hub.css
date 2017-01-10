@@ -2,14 +2,6 @@
   #listing-random-img {
     background-image: url("https://source.unsplash.com/category/people"); } }
 
-.is-flex-wrap {
-  display: flex;
-  flex-wrap: wrap;
-  flex-direction: row;
-  align-items: center; }
-  .is-flex-wrap > .checkbox-wrapper {
-    margin: 5px 2px 5px 0; }
-
 .domain-tile-wrapper {
   display: flex;
   flex-wrap: wrap;
