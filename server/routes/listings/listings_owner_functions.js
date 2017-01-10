@@ -334,15 +334,15 @@ module.exports = {
 					'Authorization' : 'Client-ID 730e9e6f4471d64'
 				},
 				formData: formData
-			}, function (error, response, body) {
-				if (!error){
+			}, function (err, response, body) {
+				if (!err){
 					req.new_listing_info = {
 						background_image : JSON.parse(body).data.link.replace("http", "https")
 					};
 					next();
 				}
 				else {
-					console.log(error);
+					console.log(err);
 					error.handler(req, res, 'Something went wrong with the upload!', "json");
 				}
 			});
