@@ -8,17 +8,6 @@
   }
 }
 
-// pesky flexbox solution
-.is-flex-wrap {
-  display: flex;
-  flex-wrap: wrap;
-  flex-direction: row;
-  align-items: center;
-  & > .checkbox-wrapper {
-    margin: 5px 2px 5px 0;
-  }
-}
-
 // tile view prototype
 .domain-tile-wrapper {
   display: flex;
