@@ -246,6 +246,7 @@ function createVerifiedDrop(listing_info, cb_when_verified){
                     $(this).remove();
                 });
 
+				unverified_a.next(".button").remove();
                 unverified_a.after(back_to_step1);
             }
         });

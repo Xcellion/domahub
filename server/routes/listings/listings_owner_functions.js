@@ -1,3 +1,4 @@
+var node_env = process.env.NODE_ENV || 'dev'; 	//dev or prod bool
 var Categories = require("../../lib/categories.js");
 
 var request = require("request");
@@ -8,6 +9,7 @@ var sanitize = require("sanitize-html");
 var multer = require("multer");
 var parse = require("csv-parse");
 var fs = require('fs');
+
 
 module.exports = {
 
@@ -215,6 +217,7 @@ module.exports = {
 
 	//function to check the size of the CSV file uploaded
 	checkCSVUploadSize : function(req, res, next){
+		var upload_path = (node_env == "dev") ? "./uploads/csv" : '/var/www/w3bbi/uploads/csv';
 		var storage = multer.diskStorage({
 			destination: function (req, file, cb) {
 				cb(null, './uploads/csv');
@@ -268,9 +271,10 @@ module.exports = {
 
 	//function to check the size of the image uploaded
 	checkImageUploadSize : function(req, res, next){
+		var upload_path = (node_env == "dev") ? "./uploads/images" : '/var/www/w3bbi/uploads/images';
 		var storage = multer.diskStorage({
 			destination: function (req, file, cb) {
-				cb(null, './uploads/images');
+				cb(null, upload_path);
 			},
 			filename: function (req, file, cb) {
 				cb(null, Date.now() + "_" + req.params.domain_name + "_" + req.user.username);
@@ -302,6 +306,7 @@ module.exports = {
 		}).single("background_image");
 
 		upload_img(req, res, function(err){
+			console.log("Image file is being uploaded...");
 			if (err){
 				if (err.code == "LIMIT_FILE_SIZE"){
 					error.handler(req, res, 'File is bigger than 1 MB!', "json");
@@ -325,7 +330,7 @@ module.exports = {
 		if (req.file){
 			var formData = {
 				title: req.file.filename,
-				image: fs.createReadStream("./uploads/images/" + req.file.filename)
+				image: fs.createReadStream(req.file.path)
 			}
 
 			console.log(req.user.username + " is uploading an image to Imgur...");
@@ -336,15 +341,15 @@ module.exports = {
 					'Authorization' : 'Client-ID 730e9e6f4471d64'
 				},
 				formData: formData
-			}, function (error, response, body) {
-				if (!error){
+			}, function (err, response, body) {
+				if (!err){
 					req.new_listing_info = {
-						background_image : JSON.parse(body).data.link
+						background_image : JSON.parse(body).data.link.replace("http", "https")
 					};
 					next();
 				}
 				else {
-					console.log(error);
+					console.log(err);
 					error.handler(req, res, 'Something went wrong with the upload!', "json");
 				}
 			});
