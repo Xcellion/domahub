@@ -34,6 +34,9 @@ module.exports = function(app, db, auth, error, stripe){
 	app.post("/profile/mylistings/delete", [
 		urlencodedParser,
 		auth.checkLoggedIn,
+		profile_functions.getAccountListings,
+		profile_functions.checkPostedDeletionRows,
+		profile_functions.deleteListings
 	]);
 
 	//myrentals pages
@@ -52,7 +55,7 @@ module.exports = function(app, db, auth, error, stripe){
 		urlencodedParser,
 		auth.checkLoggedIn,
 		profile_functions.getAccountRentals,
-		profile_functions.checkPostedRentals,
+		profile_functions.checkPostedDeletionRows,
 		profile_functions.deleteRentals
 	]);
 

@@ -1,6 +1,13 @@
 var row_display = listings.slice(0);
 
-// --------------------------------------------------------------------------------- CREATE ROW
+$(document).ready(function(){
+	//multiple delete listings
+	$("#multi-delete").on("click", function(e){
+		multiDelete($(this));
+	});
+});
+
+// ------------------------------------------------------------------------------------------------------------------------------ CREATE ROW
 
 //function to create a listing row
 function createRow(listing_info, rownum){
@@ -26,9 +33,11 @@ function createRow(listing_info, rownum){
 
     tempRow.data("editing", false);
     tempRow.data("selected", false);
+    tempRow.data("verified", verified);
+    tempRow.data("deletion_id", listing_info.id);
 
     tempRow.click(function(e){
-        selectRow($(this), verified);
+        selectRow($(this));
     });
     return tempRow;
 }
@@ -102,7 +111,7 @@ function createView(listing_info){
     }
 }
 
-// --------------------------------------------------------------------------------- CREATE DROP
+// ------------------------------------------------------------------------------------------------------------------------------ CREATE DROP
 
 //function to create dropdown row
 function createRowDrop(listing_info, rownum){
@@ -142,12 +151,12 @@ function createRowDrop(listing_info, rownum){
 
 //function to create the verified overlay
 function createVerifiedDrop(listing_info, cb_when_verified){
-    var unverified_container = $("<div class='verification-container'></div>");
+    var unverified_container = $("<div></div>");
 
     var unverified_columns_header = $("<div class='columns'></div>");
     var header_column = $("<div class='column'></div>");
     var unverified_h3 = $("<h3 class='is-bold'>You must verify that you own this domain.</h3>");
-    var unverified_faq = $("<p>Click <a target='_blank' style'target-new: tab;' class='is-accent margin-bottom-25' href='/faq#verifying'>here</a> for more information on domain verification.</p>");
+    var unverified_faq = $("<p>Click <a target='_blank' style'target-new: tab;' class='is-accent margin-bottom-25' href='/faq#verifying'>here</a> for more information on domain verification.</br>Any unverified domains will be automatically deleted each week.</p>");
         unverified_columns_header.append(header_column.append(unverified_h3, unverified_faq));
 
     var unverified_columns_steps = $("<div class='columns'></div>");
@@ -346,41 +355,41 @@ function createInfoDrop(listing_info){
     return temp_col;
 }
 
-//function to create the delete button
-function createDeleteButton(listing_info){
-    var temp_delete_button = $('<a tabindex="1" title="Delete Listing" class="button is-danger">Delete Listing</a>');
-
-    //click to delete
-    temp_delete_button.on("click", function(){
-        var delete_button = $(this);
-        delete_button.off().text("Are you sure?");
-
-        //freeze 500ms
-        setTimeout(function() {
-            delete_button.on('click', function(){
-                $.ajax({
-                    url: "/listing/" + listing_info.domain_name + "/delete",
-                    method: "POST"
-                }).done(function(data){
-                    var row_drop = delete_button.closest(".row-drop");
-                    var row = row_drop.prev(".row-disp");
-
-                    if (data.state == "success"){
-                        listings = data.listings;
-                        row_display = listings.slice(0);
-                        row_drop.remove();
-                        row.remove();
-                    }
-                    else {
-                        errorMessage(row_drop.find(".listing-msg-error"), data.message);
-                    }
-                });
-            });
-        }, 500);
-    });
-
-    return temp_delete_button;
-}
+// //function to create the delete button
+// function createDeleteButton(listing_info){
+//     var temp_delete_button = $('<a tabindex="1" title="Delete Listing" class="button is-danger">Delete Listing</a>');
+//
+//     //click to delete
+//     temp_delete_button.on("click", function(){
+//         var delete_button = $(this);
+//         delete_button.off().text("Are you sure?");
+//
+//         //freeze 500ms
+//         setTimeout(function() {
+//             delete_button.on('click', function(){
+//                 $.ajax({
+//                     url: "/listing/" + listing_info.domain_name + "/delete",
+//                     method: "POST"
+//                 }).done(function(data){
+//                     var row_drop = delete_button.closest(".row-drop");
+//                     var row = row_drop.prev(".row-disp");
+//
+//                     if (data.state == "success"){
+//                         listings = data.listings;
+//                         row_display = listings.slice(0);
+//                         row_drop.remove();
+//                         row.remove();
+//                     }
+//                     else {
+//                         errorMessage(row_drop.find(".listing-msg-error"), data.message);
+//                     }
+//                 });
+//             });
+//         }, 500);
+//     });
+//
+//     return temp_delete_button;
+// }
 
 //function to create the premium drop down column
 function createPremiumButton(listing_info){
@@ -411,7 +420,7 @@ function createPremiumButton(listing_info){
         })
     }
 
-    temp_form.append(temp_upgrade_button, createDeleteButton(listing_info));
+    temp_form.append(temp_upgrade_button);
 
     return temp_form;
 }
@@ -546,7 +555,7 @@ function createPriceTypeDrop(listing_info){
     return new_td;
 }
 
-// --------------------------------------------------------------------------------- EDIT ROW
+// ------------------------------------------------------------------------------------------------------------------------------ EDIT ROW
 
 //function to initiate edit mode
 function editRow(row){
@@ -638,52 +647,63 @@ function editPriceType(row, editing){
 }
 
 //function to refresh listing_info on cancel, submit, input event listeners after AJAX success
-function refreshSubmitbindings(success_button, cancel_button, listings, domain_name){
-    for (var x = 0; x < listings.length; x++){
-        if (listings[x].domain_name == domain_name){
-            var row_drop = success_button.closest('.row-drop');
-            var row = row_drop.prev(".row-disp");
-            var both_rows = row.add(row_drop);
+function refreshSubmitbindings(bool_for_status_td){
+    for (var x = 0; x < $(".row-disp").length; x++){
+        for (var y = 0; y < listings.length; y++){
+            if (listings[y].id == $($(".row-disp")[x]).data("deletion_id")){
+                (function(info, row){
+                    var row_drop = row.next('.row-drop');
+                    var both_rows = row.add(row_drop);
+                    var cancel_button = row_drop.find(".cancel-changes-button");
+                    var success_button = row_drop.find(".save-changes-button");
 
-            cancel_button.off().on("click", function(e){
-                cancelListingChanges(row, row_drop, $(this), listings[x]);
-            });
+                    cancel_button.off().on("click", function(e){
+                        cancelListingChanges(row, row_drop, $(this), info);
+                    });
 
-            success_button.off().on("click", function(e){
-                submitListingChanges(row, row_drop, $(this), listings[x]);
-            });
+                    success_button.off().on("click", function(e){
+                        submitListingChanges(row, row_drop, $(this), info);
+                    });
 
-            //prevent enter to submit
-            both_rows.find(".drop-form").on("submit", function(e){
-                e.preventDefault();
-            });
+                    //prevent enter to submit
+                    both_rows.find(".drop-form").on("submit", function(e){
+                        e.preventDefault();
+                    });
 
-            both_rows.find(".drop-form .changeable-input").unbind("input").on("input", function(e){
-                e.preventDefault();
-                changedListingValue($(this), listings[x]);
-            });
+                    both_rows.find(".drop-form .changeable-input").unbind("input").on("input", function(e){
+                        e.preventDefault();
+                        changedListingValue($(this), info);
+                    });
 
-            both_rows.find(".drop-form-file .changeable-input").off().on("change", function(e){
-                e.preventDefault();
-                var file_name = ($(this).val()) ? $(this).val().replace(/^.*[\\\/]/, '') : "Change Picture";
-                file_name = (file_name.length > 14) ? "..." + file_name.substr(file_name.length - 14) : file_name;
-                $(this).next(".button").find(".file-label").text(file_name);
+                    both_rows.find(".drop-form-file .changeable-input").off().on("change", function(e){
+                        e.preventDefault();
+                        var file_name = ($(this).val()) ? $(this).val().replace(/^.*[\\\/]/, '') : "Change Picture";
+                        file_name = (file_name.length > 14) ? "..." + file_name.substr(file_name.length - 14) : file_name;
+                        $(this).next(".button").find(".file-label").text(file_name);
 
-                changedListingValue($(this), listings[x]);
-            });
+                        changedListingValue($(this), info);
+                    });
 
-            row_drop.find(".categories-input").val(listings[x].categories);
+                    row_drop.find(".categories-input").val(info.categories);
 
-            break;
+                    //update the status td text
+                    if (bool_for_status_td){
+                        row.find(".td-status").text("Inactive");
+                    }
+                }(listings[y], $($(".row-disp")[x])));
+                break;
+            }
         }
     }
 }
 
-// --------------------------------------------------------------------------------- SELECT ROW
+
+// ------------------------------------------------------------------------------------------------------------------------------ SELECT ROW
 
 //function to select a row
-function selectRow(row, verified){
+function selectRow(row){
     var selected = (row.data("selected") == false) ? true : false;
+    var verified = row.data("verified");
     row.data("selected", selected);
 
     var icon_i = row.find(".td-arrow i");
@@ -712,7 +732,40 @@ function selectRow(row, verified){
     multiSelectButtons();
 }
 
-// --------------------------------------------------------------------------------- SUBMIT LISTING UPDATES
+//function to handle post-deletion of multi listings
+function deletionHandler(rows){
+	listings = rows;
+	row_display = listings.slice(0);
+    refreshSubmitbindings(true);
+}
+
+//function to select all rows
+function selectAllRows(){
+	$(".row-disp").addClass('is-active').data('selected', true);
+	$(".row-disp>.td-arrow .icon, #select-all>span").addClass('is-primary');
+	$(".row-disp>.td-arrow i, #select-all>span>i").removeClass("fa-square-o").addClass('fa-check-square-o box-checked');
+
+	var unverified_icon = $(".row-disp>.td-arrow i.fa-exclamation-triangle");
+	var unverified_span = $(".row-disp>.td-arrow .icon.is-danger");
+	unverified_icon.removeClass('fa-exclamation-triangle').addClass('unverified-icon');
+	unverified_span.removeClass('is-danger').addClass('unverified-span');
+
+	multiSelectButtons();
+}
+
+//function to deselect all rows
+function deselectAllRows(){
+	$(".row-disp").removeClass('is-active').data('selected', false);
+	$(".row-disp>.td-arrow .icon, #select-all>span").removeClass('is-primary');
+	$(".row-disp>.td-arrow i, #select-all>span>i").addClass("fa-square-o").removeClass('fa-check-square-o box-checked');
+
+	$(".unverified-icon").addClass("fa-exclamation-triangle").removeClass('fa-square-o');
+	$(".unverified-span").addClass("is-danger");
+
+	multiSelectButtons();
+}
+
+// ------------------------------------------------------------------------------------------------------------------------------ SUBMIT LISTING UPDATES
 
 //function to cancel the listing submit
 function cancelListingChanges(row, row_drop, cancel_button, listing_info){
@@ -762,7 +815,6 @@ function submitListingChanges(row, row_drop, success_button, listing_info){
     successMessage(listing_msg_error);
 
     var domain_name = listing_info.domain_name;
-
     var formData = new FormData();
 
     //only add changed inputs
@@ -801,7 +853,7 @@ function submitListingChanges(row, row_drop, success_button, listing_info){
 
             success_button.addClass("is-disabled");
             cancel_button.addClass('is-hidden');
-            refreshSubmitbindings(success_button, cancel_button, listings, domain_name);
+            refreshSubmitbindings();
 
             //change background image if its changed
             if (data.new_background_image){
@@ -847,7 +899,7 @@ function successMessage(msg_elem, message){
     }
 }
 
-// --------------------------------------------------------------------------------- PREMIUM/BASIC SUBMISSION
+// ------------------------------------------------------------------------------------------------------------------------------ PREMIUM/BASIC SUBMISSION
 
 //function to submit request to upgrade
 function submitSubscription(upgrade_button, stripeToken, stripeEmail){
@@ -903,8 +955,6 @@ function submitCancellation(upgrade_button){
 function upgradeToPremium(upgrade_button, new_exp_date){
     var row_drop = upgrade_button.closest(".row-drop");
     var row = row_drop.prev(".row-disp");
-
-    console.log(new_exp_date);
 
     //edit the various TDs
     row.find(".td-type").text("Premium");

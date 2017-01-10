@@ -89,14 +89,14 @@ module.exports = function(app, db, auth, error, stripe){
 		owner_functions.updateListing
 	]);
 
-	//to delete a listing
-	app.post('/listing/:domain_name/delete', [
-		auth.checkLoggedIn,
-		checkDomainValid,
-		checkDomainListed,
-		owner_functions.checkListingOwner,
-		owner_functions.deleteListing
-	]);
+	// //to delete a listing
+	// app.post('/listing/:domain_name/delete', [
+	// 	auth.checkLoggedIn,
+	// 	checkDomainValid,
+	// 	checkDomainListed,
+	// 	owner_functions.checkListingOwner,
+	// 	owner_functions.deleteListing
+	// ]);
 
 	//update listing information
 	app.post('/listing/:domain_name/update', [

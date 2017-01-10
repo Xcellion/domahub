@@ -790,7 +790,7 @@ function renderWhoIs(req, res, domain_name){
 
 		var email = whoisObj["Registrant Email"] || whoisObj["Admin Email"] || whoisObj["Tech Email"] || "";
 		var owner_name = whoisObj["Registrant Organization"] || whoisObj["Registrant Name"] || "Nobody";
-		var description = "This domain is currently unavailable for rent at domahub. ";
+		var description = "This domain is currently unavailable for rent at DomaHub. ";
 
 		var options = {
 			user: req.user,
