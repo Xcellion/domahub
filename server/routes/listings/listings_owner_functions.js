@@ -270,7 +270,7 @@ module.exports = {
 	checkImageUploadSize : function(req, res, next){
 		var storage = multer.diskStorage({
 			destination: function (req, file, cb) {
-				cb(null, './uploads/images');
+				cb(null, '../uploads/images');
 			},
 			filename: function (req, file, cb) {
 				cb(null, Date.now() + "_" + req.params.domain_name + "_" + req.user.username);
@@ -339,7 +339,7 @@ module.exports = {
 			}, function (error, response, body) {
 				if (!error){
 					req.new_listing_info = {
-						background_image : JSON.parse(body).data.link
+						background_image : JSON.parse(body).data.link.replace("http", "https")
 					};
 					next();
 				}
