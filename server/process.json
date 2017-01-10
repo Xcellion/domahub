@@ -1,7 +1,17 @@
 {
-  "watch": ["server"],
-  "ignore_watch" : ["node_modules", "uploads"],
-  "watch_options": {
-    "followSymlinks": false
-  }
+  apps : [{
+    name        : "DomaHub",
+    script      : "./server.js",
+    env: {
+      "NODE_ENV": "development",
+    },
+    env_production : {
+       "NODE_ENV": "production"
+    },
+	"watch": ["server"],
+	"ignore_watch" : ["node_modules", "uploads"],
+	"watch_options": {
+	"followSymlinks": false
+	}
+  }]
 }
