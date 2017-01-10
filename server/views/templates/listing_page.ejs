@@ -17,16 +17,16 @@
         </h2>
       </div>
       <div id="price-display">
-          <h2 class="is-black is-bold has-text-centered">
-            <% if (listing_info.status == 1) { %>
-                $<%= listing_info.price_rate %> Per <%= listing_info.price_type.charAt(0).toUpperCase() + listing_info.price_type.substr(1) %>
-            <% } else if (listing_info.available){ %>
-                Available for Purchase
-            <% } else { %>
-                Request Listing
-            <% } %>
-          </h2>
-      </div>
+        <h2 class="is-black is-bold has-text-centered">
+          <% if (listing_info.status == 1) { %>
+              $<%= listing_info.price_rate %> Per <%= listing_info.price_type.charAt(0).toUpperCase() + listing_info.price_type.substr(1) %>
+          <% } else if (listing_info.available){ %>
+              Available for Purchase
+          <% } else { %>
+              Request Listing
+          <% } %>
+        </h2>
+    </div>
     </div>
   </div>
 </section>
@@ -35,87 +35,7 @@
   <div class="container">
     <div class="columns flex-column-mobile">
       <div class="column is-half order-2-mobile">
-          <% if (typeof listing_info.alexa != "undefined"){ %>
-        <div class="content padding-top-25 listing-info">
-          <nav class="level">
-            <div class="level-item has-text-centered">
-              <p>Alexa Ranking</p>
-              <p class="circle-display is-bold"><%= listing_info.alexa.globalRank || "-" %></p>
-            </div>
-            <div class="level-item has-text-centered">
-              <p>Daily Time on Site</p>
-              <p class="circle-display is-bold"><%= listing_info.alexa.engagement.dailyTimeOnSite || "-" %></p>
-            </div>
-            <div class="level-item has-text-centered">
-              <p>Daily Pageviews per Visitor</p>
-              <p class="circle-display is-bold"><%= listing_info.alexa.engagement.dailyPageViewPerVisitor || "-" %></p>
-            </div>
-            <div class="level-item has-text-centered">
-                <p>Bounce Rate</p>
-                <p class="circle-display is-bold"><%= listing_info.alexa.engagement.bounceRate || "-" %></p>
-            </div>
-            <%# <div class="level-item has-text-centered">
-              <p>DomaHub Ranking</p>
-              <p class="is-bold">#5,608</p>
-            </div>%>
-            <%# <div class="level-item has-text-centered">
-              <h3>Visits this Month</h3>
-              <h3 class="is-bold">150,000</h3>
-            </div>%>
-          </nav>
-          <small class="margin-top-10">
-              For more information, visit <a title="Link to respective Alexa website" target="_blank" class='is-accent' href="http://www.alexa.com/siteinfo/<%= listing_info.domain_name %>">Alexa.com</a>
-          </small>
-        </div>
-        <% } %>
-        <div class="content listing-info">
-          <h3 class="is-bold">Description</h3>
-          <p>
-            <% if (listing_info.categories) { %>
-            <%= listing_info.description %>
-            <% } else { %>
-            This domain is currently unavailable for rent at DomaHub. Please
-            view the information on the right side of this page for more options.
-            <% } %>
-          </p>
-        </div>
-        <% if (listing_info.categories) { %>
-        <div class="content listing-info">
-          <h3 class="is-bold margin-bottom-15">Categories</h3>
-          <% var categories_array = listing_info.categories.split(" ")
-          for (var i = 0; i < categories_array.length; i++) { %>
-               <span class="tag is-accent is-medium"><%= categories_array[i].charAt(0).toUpperCase() + categories_array[i].substr(1); %></span>
-          <% } %>
-        </div>
-        <% } %>
-        <div class="content listing-info">
-            <% if (listing_info.owner_id){ %>
-                <h3 class="is-bold margin-bottom-15">Listed By</h3>
-            <% } else { %>
-                <h3 class="is-bold margin-bottom-15">Owned By</h3>
-            <% } %>
-          <article class="media">
-            <figure class="media-left">
-              <p class="image is-circle is-64x64">
-                <% if (listing_info.profile_pic){ %>
-                  <img src="<%= listing_info.profile_pic %>">
-                <% } else { %>
-                  <%- "<img src='https://placeholdit.imgix.net/~text?txtsize=25&bg=9e9e9e&txtclr=ffffff&txt=" + listing_info.username + "&w=128&h=128'/>" %>
-                <% } %>
-              </p>
-            </figure>
-            <div class="media-content">
-              <div class="content">
-                <h3 class="is-primary is-bold"><%= listing_info.username %></h3>
-                <% if (listing_info.user_created) { %>
-                  <p>
-                    User since <span id='user-since'></span>
-                  </p>
-                <% } %>
-              </div>
-            </div>
-          </article>
-        </div>
+
       </div>
       <div class="column is-half order-1-mobile">
         <div id="checkout-card" class="card">
@@ -183,6 +103,94 @@
                 <a id="request_link" class="button is-fullwidth is-primary" tabindex="1">Request Listing</a>
             <% } %>
           </footer>
+        </div>
+        <div id="description-card" class="card margin-bottom-25">
+          <div class="card-content">
+            <% if (listing_info.description) { %>
+            <div class="content listing-info">
+              <h3 class="is-bold">Description</h3>
+              <p>
+                <%= listing_info.description %>
+              </p>
+            </div>
+            <% } %>
+            <div class="content listing-info">
+              <nav class="level">
+                <div class="level-left">
+                  <p class="level-item">Alexa Ranking</p>
+                </div>
+                <div class="level-right">
+                  <p class="level-item is-bold"><%= listing_info.alexa.globalRank || "-" %></p>
+                </div>
+              </nav>
+              <nav class="level">
+                <div class="level-left">
+                  <p class="level-item">Daily Time on Site</p>
+                </div>
+                <div class="level-right">
+                  <p class="level-item is-bold"><%= listing_info.alexa.engagement.dailyTimeOnSite || "-" %></p>
+                </div>
+              </nav>
+              <nav class="level">
+                <div class="level-left">
+                  <p class="level-item">Daily Pageviews per Visitor</p>
+                </div>
+                <div class="level-right">
+                  <p class="level-item is-bold"><%= listing_info.alexa.engagement.dailyPageViewPerVisitor || "-" %></p>
+                </div>
+              </nav>
+              <nav class="level">
+                <div class="level-left">
+                  <p class="level-item">Bounce Rate</p>
+                </div>
+                <div class="level-right">
+                  <p class="level-item is-bold"><%= listing_info.alexa.engagement.bounceRate || "-" %></p>
+                </div>
+              </nav>
+              <small class="margin-top-10">
+                  For more information, visit <a title="Link to respective Alexa website" target="_blank" class='is-accent' href="http://www.alexa.com/siteinfo/<%= listing_info.domain_name %>">Alexa.com</a>
+              </small>
+            </div>
+            <% if (listing_info.categories) { %>
+            <div class="content listing-info">
+              <h3 class="is-bold margin-bottom-15">Categories</h3>
+              <div class="is-flex-wrap">
+                <% var categories_array = listing_info.categories.split(" ")
+                for (var i = 0; i < categories_array.length; i++) { %>
+                     <span class="tag is-accent is-medium"><%= categories_array[i].charAt(0).toUpperCase() + categories_array[i].substr(1); %></span>
+              <% } %>
+            </div>
+            </div>
+            <% } %>
+            <div class="content">
+              <% if (listing_info.owner_id){ %>
+                  <h3 class="is-bold margin-bottom-15">Listed By</h3>
+              <% } else { %>
+                  <h3 class="is-bold margin-bottom-15">Owned By</h3>
+              <% } %>
+              <article class="media">
+                <figure class="media-left">
+                  <p class="image is-circle is-64x64">
+                    <% if (listing_info.profile_pic){ %>
+                      <img src="<%= listing_info.profile_pic %>">
+                    <% } else { %>
+                      <%- "<img src='https://placeholdit.imgix.net/~text?txtsize=25&bg=9e9e9e&txtclr=ffffff&txt=" + listing_info.username + "&w=128&h=128'/>" %>
+                    <% } %>
+                  </p>
+                </figure>
+                <div class="media-content">
+                  <div class="content">
+                    <h3><%= listing_info.username %></h3>
+                    <% if (listing_info.user_created) { %>
+                      <p>
+                        User since <span id='user-since'></span>
+                      </p>
+                    <% } %>
+                  </div>
+                </div>
+              </article>
+            </div>
+          </div>
         </div>
       </div>
     </div>

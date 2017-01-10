@@ -143,6 +143,16 @@
   flex-direction: column;
 }
 
+.is-flex-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  align-items: center;
+  & > .checkbox-wrapper {
+    margin: 5px 2px 5px 0;
+  }
+}
+
 /********** REALLY BAD MAKESHIFT WAY TO DEAL WITH VARIOUS SHIT *****/
 #linebreak {
   height: 100%;

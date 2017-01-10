@@ -37,6 +37,7 @@ function submitContact(){
                 $("input, textarea").not("#submit-button").val("");
                 $("#submit-button").val("Thank you!").addClass('is-disabled');
             }
+            $("#message-success").removeClass("is-hidden");
         });
     }
 }

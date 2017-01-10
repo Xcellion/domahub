@@ -34,5 +34,7 @@
   border-bottom: 1px solid rgba(0, 0, 0, 0.12); }
 
 #checkout-card {
-  margin-left: auto;
-  width: 325px; }
+  margin-left: auto; }
+
+#description-card {
+  margin-left: auto; }

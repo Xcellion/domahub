@@ -70,8 +70,8 @@
     vertical-align: top
   // Modifiers
   &.is-mobile
+    align-items: flex-start
     display: flex
-    align-items: center
     justify-content: space-between
     & > .level-left
       & + .level-right
@@ -79,6 +79,9 @@
     & > .level-item
       &:not(:last-child)
         margin-bottom: 0
+    .level-item
+      &:not(:last-child)
+        margin-bottom: 10px
       &:not(.is-narrow)
         flex-grow: 1
   // Responsiveness
