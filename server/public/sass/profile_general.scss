@@ -103,7 +103,6 @@
 
 .td-edit {
   width: 80px;
-  text-align:right;
 }
 
 .box-checked {
@@ -128,20 +127,5 @@
   background-color: $primary-lighter;
   &:hover {
     background-color: $primary-dark;
-  }
-}
-
-.unverified-row {
-  &::after {
-    background: $danger;
-    position: absolute;
-    content: "";
-    height: 44px;
-    width: 4px;
-    left: 19px;
-    @include mobile {
-      height: 43px;
-      left: 0;
-    }
   }
 }

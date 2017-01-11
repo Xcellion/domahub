@@ -92,15 +92,27 @@
           cursor: default
       // a little tab appears on the left side for hovering over tr
       &.row-disp
-        &::after
-          background: $primary
-          position: absolute
-          content: ""
-          height: 0
-          width: 0
-        &:hover
+        &.verified-row
           &::after
             background: $primary
+            position: absolute
+            content: ""
+            height: 0
+            width: 0
+          &:hover
+            &::after
+              background: $primary
+              position: absolute
+              content: ""
+              height: 44px
+              width: 4px
+              left: 19px
+              +mobile
+                height: 43px
+                left: 0
+        &.unverified-row
+          &::after
+            background: $danger
             position: absolute
             content: ""
             height: 44px
@@ -109,7 +121,6 @@
             +mobile
               height: 43px
               left: 0
-      td
 
   tfoot
     td,
