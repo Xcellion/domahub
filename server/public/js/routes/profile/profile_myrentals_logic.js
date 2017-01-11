@@ -82,14 +82,14 @@ function createRow(rental_info, rownum){
     tempRow.append(createIcon(rental_info));
     tempRow.append(createDomain(rental_info));
     tempRow.append(createPreview(rental_info));
+	tempRow.append(createEdit(rental_info));
     tempRow.append(createStatus(rental_info));
     tempRow.append(createAddress(rental_info));
 	tempRow.append(createAddressDrop(rental_info));
-    tempRow.append(createEdit(rental_info));
 
     tempRow.data("editing", false);
 	tempRow.data("selected", false);
-	tempRow.data("deletion_id", rental_info.rental_id);
+	tempRow.data("id", rental_info.rental_id);
 
 	tempRow.click(function(e){
 		selectRow($(this));

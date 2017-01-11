@@ -485,7 +485,7 @@ function createEdit(listing_info){
     temp_td.append(temp_a.append(temp_span.append(temp_i), temp_span2));
 
     //prevent clicking view from dropping down row
-    temp_td.click(function(e) {
+    temp_a.click(function(e) {
         e.stopPropagation();
         editRow($(this).closest('.row-disp'));
     });
@@ -575,10 +575,10 @@ function multiSelectButtons(){
 function multiDelete(delete_button){
     delete_button.off();
 
-	var deletion_ids = [];
+	var ids = [];
 	var selected_rows = $(".row-disp").filter(function(){
 		if ($(this).data('selected') == true){
-			deletion_ids.push($(this).data('deletion_id'));
+			ids.push($(this).data('id'));
 			return true;
 		}
 	});
@@ -588,7 +588,7 @@ function multiDelete(delete_button){
 		url: "/profile/" + listing_or_rental_url + "/delete",
 		method: "POST",
 		data: {
-			deletion_ids: deletion_ids
+			ids: ids
 		}
 	}).done(function(data){
 		delete_button.on("click", function(){

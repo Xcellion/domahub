@@ -5,6 +5,7 @@ var urlencodedParser = bodyParser.urlencoded({ extended: false })
 var Q = require('q');
 var whois = require("whois");
 var parser = require('parse-whois');
+var dns = require("dns");
 
 module.exports = {
 	//gets all listings for a user
@@ -34,7 +35,6 @@ module.exports = {
 									resolve(whoisObj)
 								}
 							});
-
 						})
 					}
 
@@ -157,10 +157,10 @@ module.exports = {
 		var listing_or_rental_id = (req.path.indexOf("mylistings") != -1) ? "id" : "rental_id";
 		var listing_or_rental_bool = req.path.indexOf("mylistings") != -1;
 
-		if (req.body.deletion_ids){
-			for (var x = 0; x < req.body.deletion_ids.length; x++){
+		if (req.body.ids){
+			for (var x = 0; x < req.body.ids.length; x++){
 				for (var y = 0; y < listing_or_rental.length; y++){
-					if (listing_or_rental[y][listing_or_rental_id] == req.body.deletion_ids[x]){
+					if (listing_or_rental[y][listing_or_rental_id] == req.body.ids[x]){
 						if (!listing_or_rental_bool || (listing_or_rental_bool && listing_or_rental[y].verified && listing_or_rental[y].status == 1)){
 							to_delete_formatted.push([listing_or_rental[y][listing_or_rental_id], 0]);
 						}
@@ -172,6 +172,83 @@ module.exports = {
 		if (to_delete_formatted.length > 0){
 			req.session.deletion_object = to_delete_formatted;
 			next();
+		}
+		else {
+			res.send({state: "error"});
+		}
+	},
+
+	//check that the requesting user owns the domain to be verified
+	checkPostedVerificationRows : function(req, res, next){
+		console.log("F: Checking posted IDs for verification...");
+		var to_verify_formatted = [];
+		var to_verify_promises = [];
+		var bad_listings = [];
+
+		//custom promise creation, get ip address of domain
+		var q_function = function(listing_obj){
+			return Q.Promise(function(resolve, reject, notify){
+				dns.lookup(listing_obj.domain_name, function(err, address, family){
+					if (err) {reject(err)}
+					else {
+						resolve({
+							domain_name : listing_obj.domain_name,
+							listing_id : listing_obj.listing_id,
+							address : address
+						});
+					}
+				});
+			})
+		}
+
+		if (req.body.ids){
+			for (var x = 0; x < req.body.ids.length; x++){
+				for (var y = 0; y < req.user.listings.length; y++){
+					//user object has the same listing id as the listing being verified
+					if (req.user.listings[y].id == req.body.ids[x]){
+						if (req.user.listings[y].verified != 1){
+							//add to list of promises
+							to_verify_promises.push(q_function({
+								domain_name : req.user.listings[y].domain_name,
+								listing_id : req.user.listings[y].id
+							}))
+						}
+						break;
+					}
+				}
+			}
+		}
+		if (to_verify_promises.length > 0){
+			dns.lookup("domahub.com", function (err, address, family) {
+				var doma_ip = address;
+
+				//wait for all promises to finish
+				Q.allSettled(to_verify_promises)
+				 .then(function(results) {
+					 for (var x = 0; x < results.length; x++){
+						 if (results[x].state == "fulfilled"){
+							 if (results[x].value.address == doma_ip){
+								 //format the db query
+								 to_verify_formatted.push([results[x].value.listing_id, 1]);
+							 }
+							 else {
+								 bad_listings.push(results[x].value.listing_id);
+							 }
+						 }
+					 }
+
+					 if (to_verify_formatted.length > 0){
+						 req.session.verification_object = to_verify_formatted;
+						 next();
+					 }
+					 else {
+						 res.send({
+							 state: "error",
+							 bad_listings : bad_listings
+						 });
+					 }
+				 });
+			});
 		}
 		else {
 			res.send({state: "error"});
@@ -201,8 +278,26 @@ module.exports = {
 		console.log("F: Deactivating listings...");
 		Listing.deleteListings(req.session.deletion_object, function(result){
 			if (result.state == "success"){
-				updateUserListingsObject(req.user.listings, req.session.deletion_object);
+				updateUserListingsObjectDelete(req.user.listings, req.session.deletion_object);
 				delete req.session.deletion_object;
+				res.send({
+					state: "success",
+					rows: req.user.listings
+				});
+			}
+			else {
+				res.send({state: "error"});
+			}
+		});
+	},
+
+	//multi-verify listings
+	verifyListings : function(req, res, next){
+		console.log("F: Updating verified listings...");
+		Listing.verifyListings(req.session.verification_object, function(result){
+			if (result.state == "success"){
+				updateUserListingsObjectVerify(req.user.listings, req.session.verification_object);
+				delete req.session.verification_object;
 				res.send({
 					state: "success",
 					rows: req.user.listings
@@ -345,11 +440,23 @@ function updateUserRentalsObject(user_rentals, to_delete_formatted){
 }
 
 //helper function to update req.user.rentals after deleting
-function updateUserListingsObject(user_listings, to_delete_formatted){
+function updateUserListingsObjectDelete(user_listings, to_delete_formatted){
 	for (var x = user_listings.length - 1; x >= 0; x--){
 		for (var y = 0; y < to_delete_formatted.length; y++){
 			if (user_listings[x].id == to_delete_formatted[y][0]){
 				user_listings[x].status = 0;
+				break;
+			}
+		}
+	}
+}
+
+//helper function to update req.user.rentals after deleting
+function updateUserListingsObjectVerify(user_listings, to_verify_formatted){
+	for (var x = user_listings.length - 1; x >= 0; x--){
+		for (var y = 0; y < to_verify_formatted.length; y++){
+			if (user_listings[x].id == to_verify_formatted[y][0]){
+				user_listings[x].verified = 1;
 				break;
 			}
 		}

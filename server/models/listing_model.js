@@ -144,6 +144,7 @@ listing_model.prototype.getCurrentRental = function(domain_name, callback){
 listing_model.prototype.getRentalRentalTimes = function(rental_id, callback){
 	console.log("DB: Attempting to get rental times for rental #" + rental_id + "...");
 	query = "SELECT \
+				rental_id, \
 				date, \
 				duration \
 			FROM rental_times \
