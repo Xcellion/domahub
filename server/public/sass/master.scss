@@ -151,6 +151,11 @@
   & > .checkbox-wrapper {
     margin: 5px 2px 5px 0;
   }
+  @include mobile {
+    & > .tag {
+      margin: 5px;
+    }
+  }
 }
 
 /********** REALLY BAD MAKESHIFT WAY TO DEAL WITH VARIOUS SHIT *****/

@@ -4480,8 +4480,6 @@ input:-webkit-autofill {
       margin-top: 0; }
     .level.is-mobile > .level-item:not(:last-child) {
       margin-bottom: 0; }
-    .level.is-mobile .level-item:not(:last-child) {
-      margin-bottom: 10px; }
     .level.is-mobile .level-item:not(.is-narrow) {
       flex-grow: 1; }
   @media screen and (min-width: 769px) {
@@ -7325,6 +7323,9 @@ a.nav-item.is-tab {
   align-items: center; }
   .is-flex-wrap > .checkbox-wrapper {
     margin: 5px 2px 5px 0; }
+  @media screen and (max-width: 768px) {
+    .is-flex-wrap > .tag {
+      margin: 5px; } }
 
 /********** REALLY BAD MAKESHIFT WAY TO DEAL WITH VARIOUS SHIT *****/
 #linebreak {
