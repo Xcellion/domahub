@@ -29,7 +29,11 @@
   margin-right: 5px; }
 
 .td-status {
-  width: 122px; }
+  width: 122px;
+  padding-left: 10px !important; }
+
+.td-verify {
+  padding-left: 10px !important; }
 
 .td-status-drop {
   padding-left: 1px !important; }
@@ -49,7 +53,9 @@
 .td-price-rate {
   white-space: nowrap;
   border-left: 1px solid rgba(0, 0, 0, 0.12);
-  width: 75px; }
+  width: 75px;
+  padding-right: 24px !important;
+  padding-top: 7px !important; }
 
 .td-price-rate-drop {
   padding-left: 8px !important;
@@ -59,7 +65,8 @@
   min-width: 75px; }
 
 .td-price-type {
-  width: 112px; }
+  width: 112px;
+  padding-left: 10px !important; }
 
 .td-price-type-drop {
   padding-left: 1px !important;
@@ -75,7 +82,8 @@
     width: 150px; } }
 
 .td-edit {
-  width: 80px; }
+  width: 80px;
+  text-align: right; }
 
 .box-checked {
   margin-left: 2px; }
