@@ -92,7 +92,7 @@ function createRow(rental_info, rownum){
 	tempRow.data("id", rental_info.rental_id);
 
 	tempRow.click(function(e){
-		selectRow($(this));
+		editRow($(this));
 	});
 
     return tempRow;

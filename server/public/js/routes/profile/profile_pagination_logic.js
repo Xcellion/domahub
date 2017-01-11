@@ -460,6 +460,11 @@ function createIcon(listing_info){
     var temp_i = $("<i class='no-transition fa fa-square-o'></i>");
     temp_td.append(temp_span.append(temp_i));
 
+    temp_td.on('click', function(e){
+        e.stopPropagation();
+        selectRow($(this.closest(".row-disp")));
+    });
+
     return temp_td;
 }
 
