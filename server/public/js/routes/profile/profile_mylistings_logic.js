@@ -42,7 +42,7 @@ function createRow(listing_info, rownum){
     tempRow.data("id", listing_info.id);
 
     tempRow.click(function(e){
-        selectRow($(this));
+        editRow($(this));
     });
     return tempRow;
 }
@@ -114,6 +114,27 @@ function createView(listing_info){
     else {
         return "<td></td>";
     }
+}
+
+//function to create the edit button
+function createEdit(listing_info){
+	var verified_text = (listing_info.verified) ? "Edit" : "Verify";
+	var verified_text_fa = (listing_info.verified) ? "fa-cog" : "fa-check-circle-o";
+
+    var temp_td = $("<td class='td-edit padding-left-0 is-hidden-mobile'></td>");
+    var temp_a = $("<a class='button no-shadow'></a>");
+    var temp_span = $("<span class='icon is-small'></span>");
+    var temp_i = $("<i class='fa " + verified_text_fa + "'></i>");
+    var temp_span2 = $("<span>" + verified_text + "</span>");
+    temp_td.append(temp_a.append(temp_span.append(temp_i), temp_span2));
+
+    //prevent clicking view from dropping down row
+    temp_a.click(function(e) {
+        e.stopPropagation();
+        editRow($(this).closest('.row-disp'));
+    });
+
+    return temp_td;
 }
 
 // ------------------------------------------------------------------------------------------------------------------------------ CREATE DROP
@@ -579,7 +600,6 @@ function editRow(row){
         if ($(this).data('editing') == true && $(this).attr("id") != row.attr("id")){
             $(this).data("editing", false);
             dropRow($(this), false);
-            editEditIcon($(this), false);
             editStatus($(this), false);
             editPriceRate($(this), false);
             editPriceType($(this), false);
@@ -592,7 +612,6 @@ function editRow(row){
     row.data("editing", editing);
 
     dropRow(row, editing);
-    editEditIcon(row, editing);
     editStatus(row, editing);
     editPriceRate(row, editing);
     editPriceType(row, editing);
@@ -735,7 +754,8 @@ function selectRow(row){
     row.toggleClass('is-active');
     icon_span.toggleClass('is-primary');
     if (selected){
-        icon_i.removeClass('fa-square-o').addClass("fa-check-square-o box-checked");
+		icon_span.removeClass('is-danger');
+        icon_i.removeClass("fa-exclamation-triangle").removeClass('fa-square-o').addClass("fa-check-square-o box-checked");
     }
     else {
         icon_i.addClass('fa-square-o');
@@ -806,14 +826,17 @@ function multiVerify(verify_button){
 		}
 		else {
 			if (data.bad_listings){
+				deselectAllRows();
+
+				//add danger to failed rows
 				for (var x = 0; x < data.bad_listings.length; x++){
 					$(".row-disp").each(function(){
 						if ($(this).data('id') == data.bad_listings[x]){
-							selectRow($(this));
+							$(this).find(".td-edit>.button").addClass('is-danger');
 							$(this).find(".td-arrow>.icon").addClass('is-danger');
-							$(this).find(".td-arrow>.icon>.fa").removeClass('fa-square-o').addClass('fa-exclamation-triangle');
+							$(this).find(".td-arrow .fa").removeClass('fa-square-o').addClass('fa-exclamation-triangle');
 						}
-					})
+					});
 				}
 			}
 		}

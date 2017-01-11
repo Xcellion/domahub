@@ -92,7 +92,7 @@ function createRow(rental_info, rownum){
 	tempRow.data("id", rental_info.rental_id);
 
 	tempRow.click(function(e){
-		selectRow($(this));
+		editRow($(this));
 	});
 
     return tempRow;
@@ -124,6 +124,24 @@ function createPreview(rental_info){
     //prevent clicking view from dropping down row
     temp_td.click(function(e) {
         e.stopPropagation();
+    });
+
+    return temp_td;
+}
+
+//function to create the edit button
+function createEdit(listing_info){
+    var temp_td = $("<td class='td-edit padding-left-0 is-hidden-mobile'></td>");
+    var temp_a = $("<a class='button no-shadow'></a>");
+    var temp_span = $("<span class='icon is-small'></span>");
+    var temp_i = $("<i class='fa fa-cog'></i>");
+    var temp_span2 = $("<span>Edit</span>");
+    temp_td.append(temp_a.append(temp_span.append(temp_i), temp_span2));
+
+    //prevent clicking view from dropping down row
+    temp_a.click(function(e) {
+        e.stopPropagation();
+        editRow($(this).closest('.row-disp'));
     });
 
     return temp_td;
@@ -443,7 +461,6 @@ function editRow(row){
         if ($(this).data('editing') == true && $(this).attr("id") != row.attr("id")){
             $(this).data("editing", false);
             dropRow($(this), false);
-            editEditIcon($(this), false);
 			editAddress($(this), false);
             $(this).next(".row-drop").find(".cancel-changes-button").click();
         }
@@ -454,7 +471,6 @@ function editRow(row){
     row.data("editing", editing);
 
     dropRow(row, editing);
-    editEditIcon(row, editing);
     editAddress(row, editing);
 
     //cancel any changes if we collapse the row
