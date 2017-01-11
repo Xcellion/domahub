@@ -456,14 +456,8 @@ function createAllRows(row_per_page, current_page){
 //function to create the icon in front
 function createIcon(listing_info){
     var temp_td = $("<td class='td-arrow'></td>");
-    if (typeof listing_info.verified != "undefined" && listing_info.verified == null){
-        var temp_span = $("<span class='v-align-bottom icon is-small is-danger'></span>");
-        var temp_i = $("<i class='no-transition fa fa-exclamation-triangle'></i>");
-    }
-    else {
-        var temp_span = $("<span class='v-align-bottom icon is-small'></span>");
-        var temp_i = $("<i class='no-transition fa fa-square-o'></i>");
-    }
+    var temp_span = $("<span class='v-align-bottom icon is-small'></span>");
+    var temp_i = $("<i class='no-transition fa fa-square-o'></i>");
     temp_td.append(temp_span.append(temp_i));
 
     return temp_td;

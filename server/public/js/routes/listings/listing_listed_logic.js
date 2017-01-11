@@ -262,7 +262,6 @@ function successHandler(data){
 	$("#payment-column, .success-hide").addClass('is-hidden');
 	$("#success-column").removeClass('is-hidden');
 	$("#success-message").text("Your credit card was successfully charged!");
-	console.log(data);
 	//if theres a link for ownership claiming
 	if (data.owner_hash_id){
 		var url = "https://www.domahub.com/listing/" + listing_info.domain_name + "/" + data.rental_id + "/" + data.owner_hash_id;
