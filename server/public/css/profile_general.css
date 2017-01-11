@@ -97,15 +97,3 @@
   background-color: #8ad6ba; }
   .selected-row:hover {
     background-color: #309670; }
-
-.unverified-row::after {
-  background: #EF5350;
-  position: absolute;
-  content: "";
-  height: 44px;
-  width: 4px;
-  left: 19px; }
-  @media screen and (max-width: 768px) {
-    .unverified-row::after {
-      height: 43px;
-      left: 0; } }

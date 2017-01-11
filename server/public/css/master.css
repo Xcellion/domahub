@@ -2727,13 +2727,13 @@ input:-webkit-autofill {
   .table tbody tr.no-hover-effect:hover {
     background-color: transparent;
     cursor: default; }
-  .table tbody tr.row-disp::after {
+  .table tbody tr.row-disp.verified-row::after {
     background: #3cbc8d;
     position: absolute;
     content: "";
     height: 0;
     width: 0; }
-  .table tbody tr.row-disp:hover::after {
+  .table tbody tr.row-disp.verified-row:hover::after {
     background: #3cbc8d;
     position: absolute;
     content: "";
@@ -2741,7 +2741,18 @@ input:-webkit-autofill {
     width: 4px;
     left: 19px; }
     @media screen and (max-width: 768px) {
-      .table tbody tr.row-disp:hover::after {
+      .table tbody tr.row-disp.verified-row:hover::after {
+        height: 43px;
+        left: 0; } }
+  .table tbody tr.row-disp.unverified-row::after {
+    background: #EF5350;
+    position: absolute;
+    content: "";
+    height: 44px;
+    width: 4px;
+    left: 19px; }
+    @media screen and (max-width: 768px) {
+      .table tbody tr.row-disp.unverified-row::after {
         height: 43px;
         left: 0; } }
   .table tfoot td,
