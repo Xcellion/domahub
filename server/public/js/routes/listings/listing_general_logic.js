@@ -10,7 +10,7 @@ $(document).ready(function() {
 
 		//button doesnt do anything, but dont worry, loading the page already stored the info we needed
 		window.setTimeout(function(){
-			request_link.removeClass('is-loading').text("Request Submitted.").off();
+			request_link.removeClass('is-loading').text("Request Submitted!").off();
 		}, 200);
 	});
 

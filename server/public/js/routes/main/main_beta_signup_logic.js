@@ -25,16 +25,20 @@ $(document).ready(function() {
         }
     });
 
-    // slider dropdown
-    $(".slider-item").click(function() {
-      $(".slider-item-dropdown").slideUp(300, function() {
-        $(".slider-item-dropdown").removeClass("is-active");
-      });
-      $(".slider-item").removeClass("is-active");
-      $(this).toggleClass("is-active");
-      $(this).next().slideDown(300, function() {
-        $(this).toggleClass("is-active");
-      });
+    //slider dropdown
+    $(".slider-item").on("click", function() {
+        //remove all active from other slider-items
+        $(".slider-item").not(this).removeClass('is-active');
+
+        //give only clicked on slider-item active class
+        $(this).toggleClass('is-active');
+
+        //toggle the slide for clicked on slide-dropdown
+        $(this).next(".slider-item-dropdown").stop().slideToggle(300, function(){
+            $(this).addClass('is-active');
+        }).siblings(".slider-item-dropdown").stop().slideUp(300, function(){
+            $(this).removeClass('is-active');
+        });
     });
 
 });
