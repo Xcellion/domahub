@@ -46,6 +46,11 @@
 
 .td-status {
   width: 122px;
+  padding-left: 10px !important;
+}
+
+.td-verify {
+  padding-left: 10px !important;
 }
 
 .td-status-drop {
@@ -72,6 +77,8 @@
   white-space: nowrap;
   border-left: 1px solid $border;
   width: 75px;
+  padding-right: 24px !important;
+  padding-top: 7px !important;
 }
 
 .td-price-rate-drop {
@@ -84,6 +91,7 @@
 
 .td-price-type {
   width: 112px;
+  padding-left: 10px !important;
 }
 
 .td-price-type-drop {
