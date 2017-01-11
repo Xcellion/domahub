@@ -42,7 +42,7 @@ function createRow(listing_info, rownum){
     tempRow.data("id", listing_info.id);
 
     tempRow.click(function(e){
-        selectRow($(this));
+        editRow($(this));
     });
     return tempRow;
 }
@@ -826,15 +826,17 @@ function multiVerify(verify_button){
 		}
 		else {
 			if (data.bad_listings){
+				deselectAllRows();
+
+				//add danger to failed rows
 				for (var x = 0; x < data.bad_listings.length; x++){
 					$(".row-disp").each(function(){
 						if ($(this).data('id') == data.bad_listings[x]){
-							selectRow($(this));
 							$(this).find(".td-edit>.button").addClass('is-danger');
 							$(this).find(".td-arrow>.icon").addClass('is-danger');
-							$(this).find(".td-arrow>.icon>.fa").removeClass('fa-square-o').addClass('fa-exclamation-triangle');
+							$(this).find(".td-arrow .fa").removeClass('fa-square-o').addClass('fa-exclamation-triangle');
 						}
-					})
+					});
 				}
 			}
 		}
