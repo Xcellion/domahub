@@ -197,7 +197,6 @@ a.nav-item
   width: 200px
 
 .profile-dropdown-menu
-  padding: 5px 15px
   border-radius: 0 0 3px 3px
   li
     box-sizing: border-box
@@ -209,9 +208,11 @@ a.nav-item
   a
     width: 100%
     display: inline-block
-    padding: 15px 5px
+    padding: 15px
     box-sizing: border-box
+    span + span
+      margin-left: 5px
     &:hover,
     &:active,
     &:focus
-      +translate(8px,0)
+      background-color: $border
