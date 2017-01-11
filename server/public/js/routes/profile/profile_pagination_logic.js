@@ -469,24 +469,6 @@ function createDomain(row_info){
     return temp_td;
 }
 
-//function to create the edit button
-function createEdit(listing_info){
-    var temp_td = $("<td class='td-edit padding-left-0 is-hidden-mobile'></td>");
-    var temp_a = $("<a class='button no-shadow'></a>");
-    var temp_span = $("<span class='icon is-small'></span>");
-    var temp_i = $("<i class='fa fa-cog'></i>");
-    var temp_span2 = $("<span>Edit</span>");
-    temp_td.append(temp_a.append(temp_span.append(temp_i), temp_span2));
-
-    //prevent clicking view from dropping down row
-    temp_a.click(function(e) {
-        e.stopPropagation();
-        editRow($(this).closest('.row-disp'));
-    });
-
-    return temp_td;
-}
-
 // --------------------------------------------------------------------------------- EDIT ROW
 
 //helper function to bind to inputs to listen for any changes from existing listing info
@@ -529,17 +511,6 @@ function dropRow(row, editing){
     }
     else {
         row_drop.find(".div-drop").stop().slideUp("fast");
-    }
-}
-
-//function to change edit arrow
-function editEditIcon(row, editing){
-    var edit_i = row.find(".td-edit .icon");
-    if (editing){
-        edit_i.addClass("is-active");
-    }
-    else {
-        edit_i.removeClass("is-active");
     }
 }
 
