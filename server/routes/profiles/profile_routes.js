@@ -39,6 +39,15 @@ module.exports = function(app, db, auth, error, stripe){
 		profile_functions.deleteListings
 	]);
 
+	//mylistings multi verify
+	app.post("/profile/mylistings/verify", [
+		urlencodedParser,
+		auth.checkLoggedIn,
+		profile_functions.getAccountListings,
+		profile_functions.checkPostedVerificationRows,
+		profile_functions.verifyListings
+	]);
+
 	//myrentals pages
 	app.get([
 		"/profile/myrentals",

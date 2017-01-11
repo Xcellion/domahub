@@ -5,6 +5,11 @@ $(document).ready(function(){
 	$("#multi-delete").on("click", function(e){
 		multiDelete($(this));
 	});
+
+	//multiple verify listings
+	$("#multi-verify").on("click", function(e){
+		multiVerify($(this));
+	});
 });
 
 // ------------------------------------------------------------------------------------------------------------------------------ CREATE ROW
@@ -20,6 +25,7 @@ function createRow(listing_info, rownum){
         createIcon(listing_info),
         createDomain(listing_info),
         createView(listing_info),
+		createEdit(listing_info),
         createType(listing_info),
         createVerify(listing_info, verified),
         createStatus(listing_info, verified),
@@ -27,14 +33,13 @@ function createRow(listing_info, rownum){
         createPriceRate(listing_info),
         createPriceRateDrop(listing_info),
         createPriceType(listing_info),
-        createPriceTypeDrop(listing_info),
-        createEdit(listing_info)
+        createPriceTypeDrop(listing_info)
     );
 
     tempRow.data("editing", false);
     tempRow.data("selected", false);
     tempRow.data("verified", verified);
-    tempRow.data("deletion_id", listing_info.id);
+    tempRow.data("id", listing_info.id);
 
     tempRow.click(function(e){
         selectRow($(this));
@@ -462,7 +467,7 @@ function createImgDrop(listing_info, rownum){
     var temp_div = $("<div class='card'></div>");
     var temp_div_image = $("<div class='card-image'></div>")
     var temp_figure = $("<figure class='image listing-img is-256x256'></figure>");
-    var temp_x = $('<button tabindex="1" class="delete ' + verified_disabled + '"></button>');
+    var temp_x = $('<button tabindex="1" class="delete-img delete ' + verified_disabled + '"></button>');
     var temp_img = $("<img class='is-listing' alt='Image not found' src=" + background_image + " />");
     var temp_footer = $("<footer class='card-footer'></div>");
     var temp_form = $('<form tabindex="1" id="mult-form' + rownum + '" class="drop-form-file" action="/listings/create/multiple" method="post" enctype="multipart/form-data"></form>')
@@ -477,19 +482,28 @@ function createImgDrop(listing_info, rownum){
     });
 
     //click X to delete image
-    temp_x.click(function(e){
-        if (temp_img.attr("src") != "https://placeholdit.imgix.net/~text?txtsize=40&txt=RANDOM%20PHOTO&w=200&h=200"){
-            var old_src = temp_img.attr("src");
-            temp_img.data("old_src", old_src);
-            temp_img.attr("src", "https://placeholdit.imgix.net/~text?txtsize=40&txt=RANDOM%20PHOTO&w=200&h=200");
-            temp_input.data("deleted", true);
-            temp_input.val("");
-            temp_form.find(".file-label").text("Change Picture");
-        }
-        changedListingValue(temp_input, listing_info);
-    })
+    temp_x.on("click", function(e){
+        deleteBackgroundImg(temp_x, listing_info);
+    });
 
     return temp_col;
+}
+
+//function to handle deletion of background img
+function deleteBackgroundImg(temp_x, listing_info){
+	var temp_img = temp_x.next('img');
+	var temp_input = temp_x.closest(".card-image").next('.card-footer').find(".input-file");
+	var temp_form = temp_x.closest(".card-image").next('.card-footer').find(".drop-form-file");
+
+	if (temp_img.attr("src") != "https://placeholdit.imgix.net/~text?txtsize=40&txt=RANDOM%20PHOTO&w=200&h=200"){
+		var old_src = temp_img.attr("src");
+		temp_img.data("old_src", old_src);
+		temp_img.attr("src", "https://placeholdit.imgix.net/~text?txtsize=40&txt=RANDOM%20PHOTO&w=200&h=200");
+		temp_input.data("deleted", true);
+		temp_input.val("");
+		temp_form.find(".file-label").text("Change Picture");
+	}
+	changedListingValue(temp_input, listing_info);
 }
 
 //function to create input price rate drop
@@ -651,7 +665,7 @@ function editPriceType(row, editing){
 function refreshSubmitbindings(bool_for_status_td){
     for (var x = 0; x < $(".row-disp").length; x++){
         for (var y = 0; y < listings.length; y++){
-            if (listings[y].id == $($(".row-disp")[x]).data("deletion_id")){
+            if (listings[y].id == $($(".row-disp")[x]).data("id")){
                 (function(info, row){
                     var row_drop = row.next('.row-drop');
                     var both_rows = row.add(row_drop);
@@ -671,11 +685,13 @@ function refreshSubmitbindings(bool_for_status_td){
                         e.preventDefault();
                     });
 
+					//all other inputs handler
                     both_rows.find(".drop-form .changeable-input").unbind("input").on("input", function(e){
                         e.preventDefault();
                         changedListingValue($(this), info);
                     });
 
+					//upload image button handler
                     both_rows.find(".drop-form-file .changeable-input").off().on("change", function(e){
                         e.preventDefault();
                         var file_name = ($(this).val()) ? $(this).val().replace(/^.*[\\\/]/, '') : "Change Picture";
@@ -684,6 +700,12 @@ function refreshSubmitbindings(bool_for_status_td){
 
                         changedListingValue($(this), info);
                     });
+
+					//click X to delete image
+					row_drop.find(".delete-img").off().on("click", function(e){
+						e.preventDefault();
+						deleteBackgroundImg($(this), info);
+					})
 
                     row_drop.find(".categories-input").val(info.categories);
 
@@ -766,6 +788,47 @@ function deselectAllRows(){
 	multiSelectButtons();
 }
 
+//function to multi-verify listings
+function multiVerify(verify_button){
+    verify_button.off();
+
+	var ids = [];
+	var selected_rows = $(".row-disp").filter(function(){
+		if ($(this).data('selected') == true){
+			ids.push($(this).data('id'));
+			return true;
+		}
+	});
+
+	$.ajax({
+		url: "/profile/mylistings/verify",
+		method: "POST",
+		data: {
+			ids: ids
+		}
+	}).done(function(data){
+		verify_button.on("click", function(){
+			multiVerify(verify_button);
+		});
+
+		if (data.state == "success"){
+            verificationHandler(data.rows, selected_rows);
+		}
+		else {
+			if (data.bad_listings){
+				for (var x = 0; x < data.bad_listings.length; x++){
+					$(".row-disp").each(function(){
+						if ($(this).data('id') == data.bad_listings[x]){
+							selectRow($(this));
+							$(this).find(".td-edit>.button").addClass('is-danger').text("Error!");
+						}
+					})
+				}
+			}
+		}
+	});
+}
+
 // ------------------------------------------------------------------------------------------------------------------------------ SUBMIT LISTING UPDATES
 
 //function to cancel the listing submit
@@ -795,7 +858,8 @@ function cancelListingChanges(row, row_drop, cancel_button, listing_info){
 
     //image
     var img_elem = row_drop.find("img.is-listing");
-    img_elem.attr("src", img_elem.data("old_src"));
+	var background_image = (listing_info.background_image == null || listing_info.background_image == undefined || listing_info.background_image == "") ? "https://placeholdit.imgix.net/~text?txtsize=40&txt=RANDOM%20PHOTO&w=200&h=200" : listing_info.background_image;
+    img_elem.attr("src", background_image);
     row_drop.find(".file-label").text("Upload Picture");
     row_drop.find(".input-file").val("");
 
@@ -826,6 +890,7 @@ function submitListingChanges(row, row_drop, success_button, listing_info){
         //if image is being deleted
         if (input_name == "background_image" && $(this).data("deleted")){
             var input_val = "";
+			$(this).data('deleted', false);
         }
 
         //if null or undefined
