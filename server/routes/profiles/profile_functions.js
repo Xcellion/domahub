@@ -183,7 +183,7 @@ module.exports = {
 		console.log("F: Checking posted IDs for verification...");
 		var to_verify_formatted = [];
 		var to_verify_promises = [];
-		var bad_listings = [];
+		var unverified_listings = [];
 
 		//custom promise creation, get ip address of domain
 		var q_function = function(listing_obj){
@@ -229,22 +229,23 @@ module.exports = {
 						 if (results[x].state == "fulfilled"){
 							 if (results[x].value.address == doma_ip){
 								 //format the db query
-								 to_verify_formatted.push([results[x].value.listing_id, 1]);
+								 to_verify_formatted.push([results[x].value.listing_id, null]);
 							 }
 							 else {
-								 bad_listings.push(results[x].value.listing_id);
+								 unverified_listings.push(results[x].value.listing_id);
 							 }
 						 }
 					 }
 
 					 if (to_verify_formatted.length > 0){
 						 req.session.verification_object = to_verify_formatted;
+						 req.session.unverified_listings = unverified_listings;
 						 next();
 					 }
 					 else {
 						 res.send({
 							 state: "error",
-							 bad_listings : bad_listings
+							 unverified_listings : unverified_listings
 						 });
 					 }
 				 });

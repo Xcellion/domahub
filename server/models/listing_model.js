@@ -333,6 +333,21 @@ listing_model.prototype.updateListingsVerified = function(listing_ids, callback)
 	listing_query(query, "Failed to revert verified status for bulk domain creation!", callback, [listing_ids]);
 }
 
+//verifies multiple listings
+//BULK INSERT NEEDS TRIPLE NESTED ARRAYS
+listing_model.prototype.verifyListings = function(listings_to_verify, callback){
+	console.log("DB: Attempting to verify " + listings_to_verify.length + " listings...");
+	query = "INSERT INTO listings ( \
+		id, \
+		verified \
+	)\
+	VALUES ? \
+	ON DUPLICATE KEY UPDATE \
+	id = VALUES(id), \
+	verified = VALUES(verified) "
+	listing_query(query, "Failed to deactivate " + listings_to_verify.length + " listings!", callback, [listings_to_verify]);
+}
+
 //updates rental info
 listing_model.prototype.updateRental = function(rental_id, rental_info, callback){
 	console.log("DB: Attempting to update rental #" + rental_id + "...");
