@@ -17,7 +17,7 @@ $(document).ready(function(){
 //function to create a listing row
 function createRow(listing_info, rownum){
     var verified = listing_info.verified != null;
-    var verified_row = (listing_info.verified != null) ? " verified-row" : "";
+    var verified_row = (listing_info.verified != null) ? " verified-row" : " unverified-row";
     var premium = listing_info.exp_date >= new Date().getTime();
 
     var tempRow = $("<tr class='row-disp" + verified_row + "' id='row" + rownum + "'></tr>");
@@ -735,20 +735,10 @@ function selectRow(row){
     row.toggleClass('is-active');
     icon_span.toggleClass('is-primary');
     if (selected){
-        if (!verified){
-            icon_i.removeClass('fa-exclamation-triangle');
-            icon_span.removeClass('is-danger');
-        }
         icon_i.removeClass('fa-square-o').addClass("fa-check-square-o box-checked");
     }
     else {
-        if (!verified){
-            icon_i.addClass('fa-exclamation-triangle');
-            icon_span.addClass('is-danger');
-        }
-        else {
-            icon_i.addClass('fa-square-o');
-        }
+        icon_i.addClass('fa-square-o');
         icon_i.removeClass("fa-check-square-o box-checked");
     }
 
@@ -820,7 +810,8 @@ function multiVerify(verify_button){
 					$(".row-disp").each(function(){
 						if ($(this).data('id') == data.bad_listings[x]){
 							selectRow($(this));
-							$(this).find(".td-edit>.button").addClass('is-danger').text("Error!");
+							$(this).find(".td-arrow>.icon").addClass('is-danger');
+							$(this).find(".td-arrow>.icon>.fa").removeClass('fa-square-o').addClass('fa-exclamation-triangle');
 						}
 					})
 				}
