@@ -16,4 +16,9 @@ $(document).ready(function() {
 
 	//formatting for date created metadata text
 	$("#date_created").text(moment(new Date(listing_info.date_created)).format("DD MMMM YYYY"));
+
+	//show more information on domain
+	$("#more-info-button").click(function() {
+		$("#description-card").toggleClass("is-hidden");
+	});
 });
