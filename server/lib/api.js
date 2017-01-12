@@ -74,9 +74,8 @@ function proxyReq(req, res, rental_info){
 	}, function (err, response, body) {
 		//not an image requested
 		if (response.headers['content-type'].indexOf("image") == -1){
-			console.log("wtfs");
-			var proxy_index = fs.readFileSync('./server/views/proxy/proxy-index.ejs');
-			var proxy_noedit = fs.readFileSync('./server/views/proxy/proxy-noedit.ejs');
+			var proxy_index = fs.readFileSync('../server/views/proxy/proxy-index.ejs');
+			var proxy_noedit = fs.readFileSync('../server/views/proxy/proxy-noedit.ejs');
 			var buffer_array = [body, proxy_index, proxy_noedit];
 			req.session.rented_headers = response.headers;
 			res.end(Buffer.concat(buffer_array));
