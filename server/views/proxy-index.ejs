@@ -1,25 +1,32 @@
 <link rel="icon" type="image/png" href="/images/favicon.ico" />
 <style>
-.domahub_overlay {
-    font-family:helvetica,sans-serif;
-    position:fixed;
+.domahub-button {
+    align-items:flex-end;
     bottom:20px;
+    display:flex;
+    flex-direction:column;
+    position:fixed;
     right:20px;
-    font-weight:bold;
-    border:1px solid #3cbc8d;
-    border-radius:3px;
-    padding:5px;
-    font-size:20px;
-    z-index:99999999999;
-    background-color:#FFF;
-}
-.domahub_overlay:hover {
+    z-index:9999999999999;
     background-color:#3cbc8d;
-    color:#fff !important;
-}
-.domahub_overlay,.domahub_overlay:visited,.domahub_overlay:focus {
+    border-radius:100%;
+    box-shadow:0 3px 4px 0 rgba(0,0,0,.14),0 -2px 5px -3px rgba(0,0,0,.2),0 3px 5px 0 rgba(0,0,0,.12);
+    box-sizing:border-box;
+    color:#fff;
+    font-size:24px;
+    font-family:'Ubuntu',helvetica,sans-serif;
+    line-height:18px;
+    padding:16px;
+    height:50px;
+    width:50px;
     text-decoration:none;
+    transition:all 0.25s ease;
+    z-index:66;
+}
+.domahub-button:hover,
+.domahub-button:focus {
+    background-color:#fff;
     color:#3cbc8d;
 }
 </style>
-<a href="https://www.domahub.com" class="domahub_overlay">DomaHub.com</a>
+<a class="domahub-button" href="https://www.domahub.com">D</a>
