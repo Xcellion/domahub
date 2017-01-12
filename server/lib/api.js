@@ -65,7 +65,7 @@ function getCurrentRental(req, res, domain_name){
 				}
 				else {
 					console.log("No address associated with rental! Display default empty page...");
-					res.render("proxy/proxy-image.ejs", {
+					res.render("../views/proxy/proxy-image.ejs", {
 						image: "",
 						preview: false,
 						doma_rental_info : result.info[0]
@@ -92,7 +92,7 @@ function proxyReq(req, res, rental_info){
 			res.end(Buffer.concat(buffer_array));
 		}
 		else {
-			res.render("proxy/proxy-image.ejs", {
+			res.render("../views/proxy/proxy-image.ejs", {
 				image: rental_info.address,
 				preview: false,
 				doma_rental_info : rental_info
