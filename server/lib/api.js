@@ -48,6 +48,7 @@ function getCurrentRental(req, res, domain_name){
 		})).pipe(res);
 	}
 	else {
+		console.log("WTkfjdkalsfjdasf")
 		Listing.getCurrentRental(domain_name, function(result){
 			if (result.state != "success" || result.info.length == 0){
 				console.log("Not rented! Redirecting to listing page");
@@ -58,7 +59,6 @@ function getCurrentRental(req, res, domain_name){
 				//current rental exists!
 				console.log("Currently rented! Proxying request to " + result.info[0].address);
 				req.session.rented = result.info[0].address;
-				console.log("WTkfjdkalsfjdasf")
 				//proxy the request
 				proxyReq(req, res, result.info[0]);
 			}
