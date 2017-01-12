@@ -184,6 +184,7 @@ module.exports = {
 		var to_verify_formatted = [];
 		var to_verify_promises = [];
 		var unverified_listings = [];
+		var verified_listings = [];
 
 		//custom promise creation, get ip address of domain
 		var q_function = function(listing_obj){
@@ -219,6 +220,8 @@ module.exports = {
 			}
 		}
 		if (to_verify_promises.length > 0){
+			console.log("F: Checking domain name IP addresses...");
+
 			dns.lookup("domahub.com", function (err, address, family) {
 				var doma_ip = address;
 
@@ -229,7 +232,8 @@ module.exports = {
 						 if (results[x].state == "fulfilled"){
 							 if (results[x].value.address == doma_ip){
 								 //format the db query
-								 to_verify_formatted.push([results[x].value.listing_id, null]);
+								 to_verify_formatted.push([results[x].value.listing_id, 1]);
+								 verified_listings.push(results[x].value.listing_id);
 							 }
 							 else {
 								 unverified_listings.push(results[x].value.listing_id);
@@ -238,8 +242,11 @@ module.exports = {
 					 }
 
 					 if (to_verify_formatted.length > 0){
-						 req.session.verification_object = to_verify_formatted;
-						 req.session.unverified_listings = unverified_listings;
+						 req.session.verification_object = {
+							 to_verify_formatted : to_verify_formatted,
+							 unverified_listings : unverified_listings,
+						 	 verified_listings : verified_listings
+						 }
 						 next();
 					 }
 					 else {
@@ -295,13 +302,17 @@ module.exports = {
 	//multi-verify listings
 	verifyListings : function(req, res, next){
 		console.log("F: Updating verified listings...");
-		Listing.verifyListings(req.session.verification_object, function(result){
+		Listing.verifyListings(req.session.verification_object.to_verify_formatted, function(result){
 			if (result.state == "success"){
-				updateUserListingsObjectVerify(req.user.listings, req.session.verification_object);
+				updateUserListingsObjectVerify(req.user.listings, req.session.verification_object.to_verify_formatted);
+				var unverified_listings =  req.session.verification_object.unverified_listings;
+				var verified_listings =  req.session.verification_object.verified_listings;
 				delete req.session.verification_object;
 				res.send({
 					state: "success",
-					rows: req.user.listings
+					rows: req.user.listings,
+					unverified_listings: unverified_listings,
+					verified_listings: verified_listings
 				});
 			}
 			else {
