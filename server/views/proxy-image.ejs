@@ -2,6 +2,9 @@
 <html>
 <head>
     <link rel="icon" type="image/png" href="/images/favicon.ico" />
+    <script>
+        var doma_rental_info = <%-JSON.stringify(doma_rental_info)%>;
+    </script>
 </head>
 <body>
     <%- include("proxy-index.ejs"); %>
@@ -18,7 +21,7 @@
             <% } %>
         </div>
     <% } %>
-    <% if (preview == "false") { %>
+    <% if (preview) { %>
         <%- include("proxy-edit.ejs"); %>
     <% } %>
 </body>

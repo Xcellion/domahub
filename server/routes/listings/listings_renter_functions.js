@@ -461,7 +461,8 @@ module.exports = {
                 //not an image requested
                 if (response.headers['content-type'].indexOf("image") == -1){
                     var proxy_index = fs.readFileSync('./server/views/proxy-index.ejs');
-                    var buffer_array = [body, proxy_index];
+                    var rental_info_buffer = new Buffer("<script>var doma_rental_info = " + JSON.stringify(req.session.rental_info) + "</script>");
+                    var buffer_array = [body, proxy_index, rental_info_buffer];
 
                     //if authenticated to edit the rental preview
                     if (req.session.proxy_edit){
@@ -480,7 +481,8 @@ module.exports = {
                 else {
                     res.render("proxy-image.ejs", {
                         image: req.session.rental_info.address,
-                        preview: req.session.proxy_edit
+                        preview: req.session.proxy_edit,
+                        rental_info : req.session.rental_info
                     });
                 }
             }).on('error', function(err){
@@ -492,7 +494,8 @@ module.exports = {
         else {
             res.render("proxy-image.ejs", {
                 image: "",
-                preview: req.session.proxy_edit
+                preview: req.session.proxy_edit,
+                rental_info : req.session.rental_info
             });
         }
 
