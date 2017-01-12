@@ -361,7 +361,7 @@ function createInfoDrop(listing_info){
         temp_msg_error.append(temp_msg_delete_e);
 
     //error message
-    var temp_msg_success = $("<div class='listing-msg-success is-hidden is-success notification'></div>");
+    var temp_msg_success = $("<div class='listing-msg-success is-hidden is-primary notification'></div>");
         var temp_msg_delete_s = $("<button class='delete'></button>");
         temp_msg_success.append(temp_msg_delete_s);
 
@@ -485,7 +485,7 @@ function createImgDrop(listing_info, rownum){
     var verified_disabled = (listing_info.verified == null) ? 'is-disabled" tabindex="1"' : "";
 
     var temp_col = $("<div class='column is-one-quarter'></div>");
-    var temp_div = $("<div class='card'></div>");
+    var temp_div = $("<div class='card no-shadow'></div>");
     var temp_div_image = $("<div class='card-image'></div>")
     var temp_figure = $("<figure class='image listing-img is-256x256'></figure>");
     var temp_x = $('<button tabindex="1" class="delete-img delete ' + verified_disabled + '"></button>');
