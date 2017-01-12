@@ -1,6 +1,6 @@
-<link rel="icon" type="image/png" href="/images/favicon.ico" />
+<link href="https://fonts.googleapis.com/css?family=Ubuntu:700" rel="stylesheet">
 <style>
-.domahub-button {
+#domahub-button {
     align-items:flex-end;
     bottom:20px;
     display:flex;
@@ -21,12 +21,19 @@
     width:50px;
     text-decoration:none;
     transition:all 0.25s ease;
-    z-index:66;
+    cursor:pointer;
 }
-.domahub-button:hover,
-.domahub-button:focus {
+#domahub-button:hover,
+#domahub-button:focus {
     background-color:#fff;
     color:#3cbc8d;
 }
 </style>
-<a class="domahub-button" href="https://www.domahub.com">D</a>
+<a id="domahub-button">D</a>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script>
+    $("#domahub-button").on("click", function(e){
+        $(".domahub-wrapper").slideToggle(300);
+    });
+</script>
