@@ -2,6 +2,23 @@
   #top-wrapper {
     padding: 0 20px 40px; } }
 
+.circle-display {
+  -webkit-box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+  -moz-box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+  width: 90px;
+  height: 90px;
+  border-radius: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto; }
+
+.bordered-display {
+  border: 3px solid #3cbc8d;
+  padding: 10px;
+  border-radius: 3px; }
+
 #domain-display {
   color: #62c9a3;
   padding: 0 12px; }

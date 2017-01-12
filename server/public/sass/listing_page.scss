@@ -7,17 +7,22 @@
   }
 }
 
-// .circle-display {
-//   @include box-shadows(0 2px 2px 0 rgba(0,0,0,.14),0 3px 1px -2px rgba(0,0,0,.2),0 1px 5px 0 rgba(0,0,0,.12));
-//   width: 90px;
-//   height: 90px;
-//   border-radius: 100%;
-//   display: flex;
-//   align-items: center;
-//   justify-content: center;
-//   margin: 0 auto;
-// }
+.circle-display {
+  @include box-shadows(0 2px 2px 0 rgba(0,0,0,.14),0 3px 1px -2px rgba(0,0,0,.2),0 1px 5px 0 rgba(0,0,0,.12));
+  width: 90px;
+  height: 90px;
+  border-radius: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+}
 
+.bordered-display {
+  border: 3px solid $primary;
+  padding: 10px;
+  border-radius: $radius;
+}
 
 #domain-display {
   color: $primary-light;
