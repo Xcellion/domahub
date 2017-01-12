@@ -59,6 +59,7 @@ function getCurrentRental(req, res, domain_name){
 
 				//proxy the request
 				if (result.info[0].address){
+					console.log(process.cwd());
 					console.log("Proxying request to " + result.info[0].address + "...");
 					req.session.rented = result.info[0].address;
 					proxyReq(req, res, result.info[0]);
