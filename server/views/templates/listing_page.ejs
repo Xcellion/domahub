@@ -36,29 +36,30 @@
     <div class="columns flex-column-mobile">
       <div class="column is-half order-2-mobile">
         <div class="content listing-info margin-top-25">
-          <div class="content">
-            <h2 class="is-bold margin-bottom-15">Current Rental Status</h2>
-            <span class="tag is-medium is-primary">
-              Rented
-            </span>
-            <span class="tag is-white is-medium">Until 3/7/16</span>
+          <h2 class="is-bold margin-bottom-15">Rental Status</h2>
+          <span class="tag is-medium is-primary">
+            Currently Rented
+          </span>
+          <!-- <span class="tag is-white is-medium">Until 3/7/16</span> -->
+        </div>
+        <div class="columns">
+          <div class="column">
+            <div class="content">
+              <h3 class="is-bold margin-bottom-15">Current Website View</h3>
+              <figure class="image is-2by1">
+                <img src="/images/main/index_1.jpg" />
+              </figure>
+            </div>
           </div>
-          <div class="content">
-            <h3 class="is-bold margin-bottom-15">Website Display</h3>
-            <figure class="image is-2by1">
-              <img src="/images/main/index_1.jpg" />
-            </figure>
-          </div>
-          <div class="content">
-            <h3 class="is-bold">Rental Information</h3>
-            <p>
-              <span class="is-underlined">Redirect Link:</span>
-              <a class="is-accent" href="#">www.somewhere.com</a>
-            </p>
-            <p>
-              <span class="is-underlined">Total Views:</span>
-              4,604
-            </p>
+          <div class="column">
+            <div class="content">
+              <h3 class="is-bold margin-bottom-15">Quick Info</h3>
+              <label class="label is-underlined">Redirecting From</label>
+              <a class="is-accent" href="#">www.slides.com/youreacutie</a>
+
+              <label class="label is-underlined">Total Views</label>
+              <p>4,604</p>
+            </div>
           </div>
         </div>
         <div class="content listing-info">
@@ -207,7 +208,7 @@
               <div class="is-flex-wrap">
                 <% var categories_array = listing_info.categories.split(" ")
                 for (var i = 0; i < categories_array.length; i++) { %>
-                     <span class="tag is-accent is-medium"><%= categories_array[i].charAt(0).toUpperCase() + categories_array[i].substr(1); %></span>
+                     <span class="tag is-accent"><%= categories_array[i].charAt(0).toUpperCase() + categories_array[i].substr(1); %></span>
               <% } %>
             </div>
             </div>
