@@ -55,11 +55,22 @@ function getCurrentRental(req, res, domain_name){
 				res.redirect("https://domahub.com/listing/" + domain_name);
 			}
 			else {
-				//current rental exists!
-				console.log("Currently rented! Proxying request to " + result.info[0].address);
-				req.session.rented = result.info[0].address;
+				console.log("Currently rented!");
+
 				//proxy the request
-				proxyReq(req, res, result.info[0]);
+				if (result.info[0].address){
+					console.log("Proxying request to " + result.info[0].address + "...");
+					req.session.rented = result.info[0].address;
+					proxyReq(req, res, result.info[0]);
+				}
+				else {
+					console.log("No address associated with rental! Display default empty page...");
+					res.render("proxy/proxy-image.ejs", {
+						image: "",
+						preview: false,
+						doma_rental_info : rental_info
+					});
+				}
 			}
 		});
 	}
@@ -74,8 +85,8 @@ function proxyReq(req, res, rental_info){
 	}, function (err, response, body) {
 		//not an image requested
 		if (response.headers['content-type'].indexOf("image") == -1){
-			var proxy_index = fs.readFileSync('../server/views/proxy/proxy-index.ejs');
-			var proxy_noedit = fs.readFileSync('../server/views/proxy/proxy-noedit.ejs');
+			var proxy_index = fs.readFileSync('../views/proxy/proxy-index.ejs');
+			var proxy_noedit = fs.readFileSync('../views/proxy/proxy-noedit.ejs');
 			var buffer_array = [body, proxy_index, proxy_noedit];
 			req.session.rented_headers = response.headers;
 			res.end(Buffer.concat(buffer_array));
