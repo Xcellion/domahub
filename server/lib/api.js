@@ -68,7 +68,7 @@ function getCurrentRental(req, res, domain_name){
 					res.render("proxy/proxy-image.ejs", {
 						image: "",
 						preview: false,
-						doma_rental_info : rental_info
+						doma_rental_info : result.info[0]
 					});
 				}
 			}
