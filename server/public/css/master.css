@@ -169,6 +169,12 @@ textarea {
   color: inherit;
   text-decoration: underline; }
 
+.is-uppercase {
+  text-transform: uppercase; }
+
+.is-capitalized {
+  text-transform: capitalize; }
+
 h1,
 h2,
 h3,
@@ -4962,7 +4968,7 @@ a.nav-item.is-tab {
       padding: 10px;
       width: 100%; }
     .nav-menu.is-dark {
-      background-color: #444; }
+      background-color: #212121; }
     .nav-menu.is-white {
       background-color: white; }
     .nav-menu.is-active {
