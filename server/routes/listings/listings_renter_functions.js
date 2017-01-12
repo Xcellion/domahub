@@ -460,14 +460,16 @@ module.exports = {
             }, function (err, response, body) {
                 //not an image requested
                 if (response.headers['content-type'].indexOf("image") == -1){
-                    var proxy_index = fs.readFileSync('./server/views/proxy-index.ejs');
+                    var proxy_index = fs.readFileSync('./server/views/proxy/proxy-index.ejs');
                     var rental_info_buffer = new Buffer("<script>var doma_rental_info = " + JSON.stringify(req.session.rental_info) + "</script>");
                     var buffer_array = [body, proxy_index, rental_info_buffer];
 
                     //if authenticated to edit the rental preview
                     if (req.session.proxy_edit){
-                        var proxy_preview = fs.readFileSync('./server/views/proxy-edit.ejs');
-                        buffer_array.push(proxy_preview);
+                        buffer_array.push(fs.readFileSync('./server/views/proxy/proxy-edit.ejs'));
+                    }
+                    else {
+                        buffer_array.push(fs.readFileSync('./server/views/proxy/proxy-noedit.ejs'));
                     }
 
                     if (!proxy_index || (req.session.proxy_edit && !proxy_preview)) {
@@ -479,10 +481,10 @@ module.exports = {
                     }
                 }
                 else {
-                    res.render("proxy-image.ejs", {
+                    res.render("proxy/proxy-image.ejs", {
                         image: req.session.rental_info.address,
                         preview: req.session.proxy_edit,
-                        rental_info : req.session.rental_info
+                        doma_rental_info : req.session.rental_info
                     });
                 }
             }).on('error', function(err){
@@ -492,10 +494,10 @@ module.exports = {
 
         //render the blank template
         else {
-            res.render("proxy-image.ejs", {
+            res.render("proxy/proxy-image.ejs", {
                 image: "",
                 preview: req.session.proxy_edit,
-                rental_info : req.session.rental_info
+                doma_rental_info : req.session.rental_info
             });
         }
 
