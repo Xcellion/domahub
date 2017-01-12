@@ -460,16 +460,16 @@ module.exports = {
             }, function (err, response, body) {
                 //not an image requested
                 if (response.headers['content-type'].indexOf("image") == -1){
-                    var proxy_index = fs.readFileSync('./server/views/proxy/proxy-index.ejs');
+                    var proxy_index = fs.readFileSync('./views/proxy/proxy-index.ejs');
                     var rental_info_buffer = new Buffer("<script>var doma_rental_info = " + JSON.stringify(req.session.rental_info) + "</script>");
                     var buffer_array = [body, proxy_index, rental_info_buffer];
 
                     //if authenticated to edit the rental preview
                     if (req.session.proxy_edit){
-                        buffer_array.push(fs.readFileSync('./server/views/proxy/proxy-edit.ejs'));
+                        buffer_array.push(fs.readFileSync('./views/proxy/proxy-edit.ejs'));
                     }
                     else {
-                        buffer_array.push(fs.readFileSync('./server/views/proxy/proxy-noedit.ejs'));
+                        buffer_array.push(fs.readFileSync('./views/proxy/proxy-noedit.ejs'));
                     }
 
                     if (!proxy_index || (req.session.proxy_edit && !proxy_preview)) {
