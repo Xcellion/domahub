@@ -60,7 +60,7 @@ function getCurrentRental(req, res, domain_name){
 				req.session.rented = result.info[0].address;
 
 				//proxy the request
-				proxyReq(req, res, result.info[0].address, domain_name);
+				proxyReq(req, res, result.info[0]);
 			}
 		});
 	}
@@ -68,24 +68,25 @@ function getCurrentRental(req, res, domain_name){
 }
 
 //function to proxy request
-function proxyReq(req, res, address, domain_name){
-	request[req.method.toLowerCase()]({
-		url: addProtocol(address),
+function proxyReq(req, res, rental_info){
+	request({
+		url: addProtocol(rental_info.address),
 		encoding: null
 	}, function (err, response, body) {
 		//not an image requested
 		if (response.headers['content-type'].indexOf("image") == -1){
-			fs.readFile('./server/views/proxy/proxy-index.ejs', function (err, html) {
-				if (err) {error.handler(req, res, "Invalid rental!");}
-				else {
-					req.session.rented_headers = response.headers;
-					res.end(Buffer.concat([body, html]));
-				}
-			});
+			var proxy_index = fs.readFileSync('./server/views/proxy/proxy-index.ejs');
+			var proxy_noedit = fs.readFileSync('./server/views/proxy/proxy-noedit.ejs');
+			var buffer_array = [body, proxy_index, proxy_noedit];
+
+			req.session.rented_headers = response.headers;
+			res.end(Buffer.concat(buffer_array));
 		}
 		else {
-			res.render("proxy-image.ejs", {
-				image: address
+			res.render("proxy/proxy-image.ejs", {
+				image: rental_info.address,
+				preview: false,
+				doma_rental_info : rental_info
 			});
 		}
 	}).on('error', function(err){
