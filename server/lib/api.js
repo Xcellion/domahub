@@ -95,8 +95,9 @@ function proxyReq(req, res, rental_info){
 		//an image was requested
 		else {
 			var proxy_index = fs.readFileSync(path_server + '/views/proxy/proxy-index.ejs');
+			var rental_info_buffer = new Buffer("<script>var doma_rental_info = " + JSON.stringify(rental_info) + "</script>");
 			var proxy_noedit = fs.readFileSync(path_server + '/views/proxy/proxy-noedit.ejs');
-			var buffer_array = [body, proxy_index, proxy_noedit];
+			var buffer_array = [body, rental_info_buffer, proxy_index, proxy_noedit];
 			req.session.rented_headers = response.headers;
 			res.end(Buffer.concat(buffer_array));
 		}

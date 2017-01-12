@@ -466,13 +466,15 @@ module.exports = {
 
                     //if authenticated to edit the rental preview
                     if (req.session.proxy_edit){
-                        buffer_array.push(fs.readFileSync('./views/proxy/proxy-edit.ejs'));
+                        var proxy_preview = fs.readFileSync('./views/proxy/proxy-edit.ejs');
+                        buffer_array.push(proxy_preview);
                     }
                     else {
-                        buffer_array.push(fs.readFileSync('./views/proxy/proxy-noedit.ejs'));
+                        var proxy_nopreview = fs.readFileSync('./views/proxy/proxy-edit.ejs');
+                        buffer_array.push(proxy_nopreview);
                     }
 
-                    if (!proxy_index || (req.session.proxy_edit && !proxy_preview)) {
+                    if (!proxy_index || (req.session.proxy_edit && !proxy_preview) || (!req.session.proxy_edit && !proxy_nopreview)) {
                         error.handler(req, res, "Invalid rental!");
                     }
                     else {
