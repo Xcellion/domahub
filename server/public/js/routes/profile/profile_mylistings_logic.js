@@ -191,10 +191,10 @@ function createVerifiedDrop(listing_info, cb_when_verified){
 
     var unverified_step1 = $("<div class='content'><h3 class='is-blacklight is-bold'>Step 1</h3></div>");
     var step1_text = $("<p>Go to your registrar and log in.</p>");
-    var step1_button = $("<a class='margin-right-10 button is-accent' target='_blank' title='Open registrar website in new tab' href='https://whois.icann.org/en/lookup?name=" + listing_info.domain_name + "'><span class='is-small icon'><i class='fa fa-search'></i></span><span>Find my registrar.</span></a>");
+    var step1_button = $("<a class='margin-right-10 button is-accent no-shadow' target='_blank' title='Open registrar website in new tab' href='https://whois.icann.org/en/lookup?name=" + listing_info.domain_name + "'><span class='is-small icon'><i class='fa fa-search'></i></span><span>Find my registrar.</span></a>");
 
     var unverified_step2 = $("<div class='content margin-top-0 is-hidden'><h3 class='is-blacklight is-bold'>Step 2</h3><p>Create a new <strong>A Record</strong> for your domain.</div>");
-    var step2_button = $("<a class='button is-accent margin-right-10' target='_blank' title='Open registrar website in new tab' href='https://www.google.com/search?q=create+a+record&btnI'><span class='icon is-small'><i class='fa fa-question-circle-o'></i></span><span>How do I create an A Record?</span></a>");
+    var step2_button = $("<a class='button is-accent margin-right-10 no-shadow' target='_blank' title='Open registrar website in new tab' href='https://www.google.com/search?q=create+a+record&btnI'><span class='icon is-small'><i class='fa fa-question-circle-o'></i></span><span>How do I create an A Record?</span></a>");
 
     var unverified_step3 = $("<div class='content margin-top-0 is-hidden'><h3 class='is-blacklight is-bold'>Step 3</h3><p>Point the new <strong>A Record</strong> to DomaHub servers at <strong>208.68.37.82</strong></p></div>");
     var step3_button = $("<input style='width:110px' value='208.68.37.82' class='input is-accent margin-right-10'></input>");
@@ -211,18 +211,18 @@ function createVerifiedDrop(listing_info, cb_when_verified){
 
     //step 1 - login
     var step1_control = $("<div class='control is-grouped'></div>");
-    var step1_button_next = $("<a class='button is-primary' title='Go to the next step'><span>Okay, I'm logged in.</span><span class='icon'><i class='fa fa-angle-right'></i></span></a>");
+    var step1_button_next = $("<a class='button is-primary no-shadow' title='Go to the next step'><span>Okay, I'm logged in.</span><span class='icon'><i class='fa fa-angle-right'></i></span></a>");
         unverified_step1.append(step1_text, step1_control.append(step1_button, step1_button_next));
 
     //step 2 - create A record
     var step2_control = $("<div class='control is-grouped'></div>");
-    var step2_button_next = $("<button class='button is-primary' title='Go to the next step'><span>Okay, I made a new A Record.</span><span class='icon'><i class='fa fa-angle-right'></i></span></button>");
+    var step2_button_next = $("<button class='button is-primary no-shadow' title='Go to the next step'><span>Okay, I made a new A Record.</span><span class='icon'><i class='fa fa-angle-right'></i></span></button>");
         unverified_step2.append(step2_control.append(step2_button, step2_button_next));
 
     //step 3 - point A record
     var step3_control = $("<div class='control has-addons is-grouped'></div>");
         step3_copy_button = $("<button class='button no-shadow is-accent' title='Copy to Clipboard'><span class='is-small icon'><i class='fa fa-clipboard'></i></span></button>");
-    var step3_button_next = $("<a class='button is-primary' title='Go to the next step'><span>Okay, I've pointed the A Record.</span><span class='icon'><i class='fa fa-angle-right'></i></span></a>");
+    var step3_button_next = $("<a class='button is-primary no-shadow' title='Go to the next step'><span>Okay, I've pointed the A Record.</span><span class='icon'><i class='fa fa-angle-right'></i></span></a>");
         unverified_step3.append(step3_control.append(step3_copy_button, step3_button, step3_button_next));
 
     step3_copy_button.click(function(){
@@ -234,7 +234,7 @@ function createVerifiedDrop(listing_info, cb_when_verified){
 
     //step 4 - verify
     var step4_control = $("<div class='control is-grouped'></div>");
-    var step4_button_next = $("<a class='button margin-right-10 is-primary verify-link'><span class='is-small icon'><i class='fa fa-check-circle-o'></i></span><span>Verify this domain.</span></a>");
+    var step4_button_next = $("<a class='button margin-right-10 is-primary verify-link no-shadow' title='Verify this Domain'><span class='is-small icon'><i class='fa fa-check-circle-o'></i></span><span>Verify this domain.</span></a>");
         unverified_step4.append(step4_control.append(step4_button_next));
 
     //click to next
@@ -432,7 +432,7 @@ function createPremiumButton(listing_info){
         premium_text = (expiring) ? "Renew Premium" : premium_text;
     var premium_src = (premium) ? "/downgrade" : "/upgrade";
         premium_src = (expiring) ? "/upgrade" : premium_src;
-    var temp_upgrade_button = $('<a tabindex="1" title="Upgrade Listing" href="/listing/' + listing_info.domain_name + premium_src + '" class="margin-right-10 button ' + verified_disabled + '">' + premium_text + '</a>');
+    var temp_upgrade_button = $('<a tabindex="1" title="Upgrade Listing" href="/listing/' + listing_info.domain_name + premium_src + '" class="margin-right-10 button no-shadow is-accent' + verified_disabled + '">' + premium_text + '</a>');
 
     if (!premium || expiring){
         //stripe upgrade button
@@ -455,8 +455,8 @@ function createPremiumButton(listing_info){
 //function to create submit / cancel buttons
 function createSubmitCancelButton(listing_info){
     var temp_control = $('<div class="control"></div>');
-        var temp_submit_button = $('<a tabindex="1" title="Save Changes" class="save-changes-button margin-right-10 button is-disabled is-primary">Save Changes</a>');
-        var temp_cancel_button = $('<a tabindex="1" title="Cancel Changes" class="cancel-changes-button button is-hidden is-danger">Cancel Changes</a>');
+        var temp_submit_button = $('<a tabindex="1" title="Save Changes" class="save-changes-button margin-right-10 button is-disabled is-primary no-shadow">Save Changes</a>');
+        var temp_cancel_button = $('<a tabindex="1" title="Cancel Changes" class="cancel-changes-button button is-hidden is-danger no-shadow">Cancel Changes</a>');
 
     temp_control.append(temp_submit_button, temp_cancel_button);
 

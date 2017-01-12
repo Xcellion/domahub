@@ -5,10 +5,11 @@
 
 #index-img {
   @include tablet {
-    background-image: url('/images/main/index_1.jpg');
+    // background-image: url('/images/main/index_1.jpg');
+    background-color: $grey-darker;
   }
   @include mobile {
-    background-color: $grey-dark;
+    background-color: $grey-darker;
   }
 }
 
