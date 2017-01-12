@@ -65,7 +65,7 @@ function getCurrentRental(req, res, domain_name){
 				}
 				else {
 					console.log("No address associated with rental! Display default empty page...");
-					res.render(process.cwd() + "/views/proxy/proxy-image.ejs", {
+					res.render("./views/proxy/proxy-image.ejs", {
 						image: "",
 						preview: false,
 						doma_rental_info : result.info[0]
@@ -86,7 +86,7 @@ function proxyReq(req, res, rental_info){
 		encoding: null
 	}, function (err, response, body) {
 		if (response.headers['content-type'].indexOf("image") != -1){
-			res.render(path_server + "/views/proxy/proxy-image.ejs", {
+			res.render("./views/proxy/proxy-image.ejs", {
 				image: rental_info.address,
 				preview: false,
 				doma_rental_info : rental_info
@@ -94,9 +94,9 @@ function proxyReq(req, res, rental_info){
 		}
 		//an image was requested
 		else {
-			var proxy_index = fs.readFileSync(path_server + '/views/proxy/proxy-index.ejs');
+			var proxy_index = fs.readFileSync('./views/proxy/proxy-index.ejs');
 			var rental_info_buffer = new Buffer("<script>var doma_rental_info = " + JSON.stringify(rental_info) + "</script>");
-			var proxy_noedit = fs.readFileSync(path_server + '/views/proxy/proxy-noedit.ejs');
+			var proxy_noedit = fs.readFileSync('./views/proxy/proxy-noedit.ejs');
 			var buffer_array = [body, rental_info_buffer, proxy_index, proxy_noedit];
 			req.session.rented_headers = response.headers;
 			res.end(Buffer.concat(buffer_array));
