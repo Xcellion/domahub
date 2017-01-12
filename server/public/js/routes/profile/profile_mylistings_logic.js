@@ -739,7 +739,6 @@ function refreshSubmitbindings(bool_for_status_td){
     }
 }
 
-
 // ------------------------------------------------------------------------------------------------------------------------------ SELECT ROW
 
 //function to select a row
@@ -821,26 +820,52 @@ function multiVerify(verify_button){
 			multiVerify(verify_button);
 		});
 
-		if (data.state == "success"){
-            verificationHandler(data.rows, selected_rows);
+		deselectAllRows();
+		//unverified listings error
+		if (data.unverified_listings){
+			//add danger to failed rows
+			for (var x = 0; x < data.unverified_listings.length; x++){
+				$(".row-disp").each(function(){
+					if ($(this).data('id') == data.unverified_listings[x]){
+						$(this).find(".td-edit>.button").addClass('is-danger');
+						$(this).find(".td-arrow>.icon").addClass('is-danger');
+						$(this).find(".td-arrow .fa").removeClass('fa-square-o').addClass('fa-exclamation-triangle');
+					}
+				});
+			}
 		}
-		else {
-			if (data.bad_listings){
-				deselectAllRows();
 
-				//add danger to failed rows
-				for (var x = 0; x < data.bad_listings.length; x++){
+		//success rows
+		if (data.state == "success"){
+            verificationHandler(data);
+		}
+	});
+}
+
+//function to handle post-verification of multi listings
+function verificationHandler(data){
+	listings = data.rows;
+	row_display = listings.slice(0);
+
+	//verified listings change
+	if (data.verified_listings){
+		for (var x = 0; x < data.verified_listings.length; x++){
+			for (var y = 0; y < listings.length; y++){
+				if (data.verified_listings[x] == listings[y].id){
 					$(".row-disp").each(function(){
-						if ($(this).data('id') == data.bad_listings[x]){
-							$(this).find(".td-edit>.button").addClass('is-danger');
-							$(this).find(".td-arrow>.icon").addClass('is-danger');
-							$(this).find(".td-arrow .fa").removeClass('fa-square-o').addClass('fa-exclamation-triangle');
+						if ($(this).data('id') == data.verified_listings[x]){
+							//recreate the rows
+							var row_drop = $(this).next(".row-drop");
+							$(this).replaceWith(createRow(listings[y], $(this).attr('id').replace("row", "")));
+							row_drop.replaceWith(createRowDrop(listings[y], $(this).attr('id').replace("row", "")));
+							return false;
 						}
 					});
 				}
 			}
 		}
-	});
+	}
+	refreshSubmitbindings();
 }
 
 // ------------------------------------------------------------------------------------------------------------------------------ SUBMIT LISTING UPDATES
