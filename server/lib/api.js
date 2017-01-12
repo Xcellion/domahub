@@ -75,7 +75,7 @@ function proxyReq(req, res, address, domain_name){
 	}, function (err, response, body) {
 		//not an image requested
 		if (response.headers['content-type'].indexOf("image") == -1){
-			fs.readFile('./server/views/proxy-index.ejs', function (err, html) {
+			fs.readFile('./server/views/proxy/proxy-index.ejs', function (err, html) {
 				if (err) {error.handler(req, res, "Invalid rental!");}
 				else {
 					req.session.rented_headers = response.headers;

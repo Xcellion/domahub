@@ -23,6 +23,8 @@
     <% } %>
     <% if (preview) { %>
         <%- include("proxy-edit.ejs"); %>
+    <% } else { %>
+        <%- include("proxy-noedit.ejs"); %>
     <% } %>
 </body>
 </html>
