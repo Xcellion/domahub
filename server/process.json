@@ -8,10 +8,10 @@
     env_production : {
        "NODE_ENV": "production"
     },
-	watch: ["server"],
-	ignore_watch : ["node_modules", "uploads"],
+	watch: ["../server"],
+	ignore_watch : ["../node_modules", "../uploads"],
 	watch_options: {
-	followSymlinks: false
+		followSymlinks: false
 	}
   }]
 }
