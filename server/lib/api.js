@@ -4,6 +4,7 @@ var validator = require("validator");
 var	request = require('request');
 var url = require('url');
 var fs = require('fs');
+var path = require('path');
 var concat = require('concat-stream');
 
 module.exports = function(app, db, e){
@@ -79,8 +80,6 @@ function getCurrentRental(req, res, domain_name){
 
 //function to proxy request
 function proxyReq(req, res, rental_info){
-	var path_server = process.cwd(); //var/www/w3bbi/server
-
 	request({
 		url: addProtocol(rental_info.address),
 		encoding: null
@@ -94,9 +93,9 @@ function proxyReq(req, res, rental_info){
 		}
 		//an image was requested
 		else {
-			var proxy_index = fs.readFileSync('./views/proxy/proxy-index.ejs');
+			var proxy_index = fs.readFileSync(path.resolve(process.cwd(), 'server', 'views', 'proxy', 'proxy-index.ejs'));
 			var rental_info_buffer = new Buffer("<script>var doma_rental_info = " + JSON.stringify(rental_info) + "</script>");
-			var proxy_noedit = fs.readFileSync('./views/proxy/proxy-noedit.ejs');
+			var proxy_noedit = fs.readFileSync(path.resolve(process.cwd(), 'server', 'views', 'proxy', 'proxy-noedit.ejs'));
 			var buffer_array = [body, rental_info_buffer, proxy_index, proxy_noedit];
 			req.session.rented_headers = response.headers;
 			res.end(Buffer.concat(buffer_array));

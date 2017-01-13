@@ -14,6 +14,7 @@ var alexaData = require('alexa-traffic-rank');
 var moment = require('moment');
 var request = require('request');
 var fs = require('fs');
+var path = require("path");
 
 module.exports = {
 	//check domain name for rental
@@ -443,7 +444,19 @@ module.exports = {
             else {
                 req.session.proxy_edit = false;
             }
-            next();
+
+            //coming from /rentalpreview (endless loop)
+            if (req.header("Referer") && req.header("Referer").indexOf("rentalpreview") != -1){
+                console.log("F: Something went wrong and triggered an endless loop!");
+                res.render("proxy/proxy-error.ejs", {
+                    image: "",
+                    preview: req.session.proxy_edit,
+                    doma_rental_info : req.session.rental_info
+                });
+            }
+            else {
+                next();
+            }
         }
     },
 
@@ -460,17 +473,17 @@ module.exports = {
             }, function (err, response, body) {
                 //not an image requested
                 if (response.headers['content-type'].indexOf("image") == -1){
-                    var proxy_index = fs.readFileSync('./views/proxy/proxy-index.ejs');
+                    var proxy_index = fs.readFileSync(path.resolve(process.cwd(), 'server', 'views', 'proxy', 'proxy-index.ejs'));
                     var rental_info_buffer = new Buffer("<script>var doma_rental_info = " + JSON.stringify(req.session.rental_info) + "</script>");
                     var buffer_array = [body, proxy_index, rental_info_buffer];
 
                     //if authenticated to edit the rental preview
                     if (req.session.proxy_edit){
-                        var proxy_preview = fs.readFileSync('./views/proxy/proxy-edit.ejs');
+                        var proxy_preview = fs.readFileSync(path.resolve(process.cwd(), 'server', 'views', 'proxy', 'proxy-edit.ejs'));
                         buffer_array.push(proxy_preview);
                     }
                     else {
-                        var proxy_nopreview = fs.readFileSync('./views/proxy/proxy-edit.ejs');
+                        var proxy_nopreview = fs.readFileSync(path.resolve(process.cwd(), 'server', 'views', 'proxy', 'proxy-noedit.ejs'));
                         buffer_array.push(proxy_nopreview);
                     }
 
