@@ -124,6 +124,7 @@ module.exports = {
 
 	//make sure user is logged in before doing anything
 	checkLoggedIn : function(req, res, next) {
+        console.log("F: Checking if authenticated...");
 		//if user is authenticated in the session, carry on
 		if (req.isAuthenticated()){
 			res.header('Cache-Control', 'private, no-cache, no-store, must-revalidate');

@@ -1,0 +1,106 @@
+/*--------------------------------------------------------PROXY INDEX--------------------------------------------------------------*/
+
+#domahub-button {
+    align-items:flex-end;
+    bottom:20px;
+    display:flex;
+    flex-direction:column;
+    position:fixed;
+    right:20px;
+    z-index:9999999999999;
+    background-color:#3cbc8d;
+    border-radius:100%;
+    box-shadow:0 3px 4px 0 rgba(0,0,0,.14),0 -2px 5px -3px rgba(0,0,0,.2),0 3px 5px 0 rgba(0,0,0,.12);
+    box-sizing:border-box;
+    color:#fff;
+    font-size:24px;
+    font-family:'Ubuntu',helvetica,sans-serif;
+    line-height:18px;
+    padding:16px;
+    height:50px;
+    width:50px;
+    text-decoration:none;
+    transition:all 0.25s ease;
+    cursor:pointer;
+}
+#domahub-button:hover,
+#domahub-button:focus {
+    background-color:#fff;
+    color:#3cbc8d;
+}
+
+/*--------------------------------------------------------PROXY EDIT--------------------------------------------------------------*/
+
+.domahub-wrapper h1,.domahub-wrapper h2,.domahub-wrapper h3,.domahub-wrapper a{
+    font-family: "Ubuntu",helvetica,sans-serif;
+}
+.domahub-wrapper {
+    align-items:flex-end;
+    bottom:80px;
+    display:flex;
+    flex-direction:column;
+    position:fixed;
+    right:20px;
+    z-index:9999999999999;
+    text-align:right;
+}
+.domahub-menu {
+    background-color:#fff;
+    border-radius:5px;
+    box-shadow:3px 3px 4px 0 rgba(0,0,0,.14),0 -2px 5px -3px rgba(0,0,0,.2),0 3px 5px 0 rgba(0,0,0,.12);
+    display:flex;
+    flex-direction:column;
+    width:200px;
+}
+
+.domahub-heading-wrapper {
+    background-color:#3cbc8d;
+    color:#fff;
+    padding:10px;
+    border-radius:5px 5px 0 0;
+}
+.domahub-heading {
+    margin:0;
+    font-size:18px;
+}
+
+.domahub-info-wrapper{
+    border-bottom:1px solid #D3D3D3;
+    font-family: helvetica,sans-serif;
+}
+.domahub-status-info {
+    color:#ff5722;
+    margin:10px;
+    margin-bottom:5px;
+    font-size:15px;
+    font-weight:bold;
+}
+.domahub-rental-dates {
+    margin:5px 10px 5px 10px;
+    font-size:15px;
+}
+.domahub-rental-dates:last-child {
+    margin-bottom:10px;
+}
+
+.domahub-action-button {
+    border-bottom:1px solid rgba(0,0,0,0.12);
+    color:#3cbc8d;
+    padding:10px 8px;
+    text-decoration:none;
+    transition:all 0.25s ease;
+    cursor:pointer;
+    font-size:15px;
+}
+.domahub-action-button:hover {
+    background-color:#3cbc8d;
+    color:#fff;
+    border-color:#3cbc8d;
+}
+.domahub-action-button:last-child {
+    border-radius:0 0 5px 5px;
+}
+
+.domahub-action-input{
+    margin:5px;
+}
