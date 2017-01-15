@@ -90,6 +90,7 @@ app.get('*.ico', function(){})
 //catch future requests if rented (for dev enviroment and for rental preview)
 app.use("/", function(req, res, next){
 	if (req.header("Referer") && req.header("Referer").indexOf("rentalpreview") != -1){
+		console.log("F: Proxying future request for " + req.originalUrl + " along to " + req.session.rented);
 		req.pipe(request({
 			url: req.session.rented + req.originalUrl
 		})).pipe(res);
