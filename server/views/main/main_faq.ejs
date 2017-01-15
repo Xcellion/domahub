@@ -15,9 +15,9 @@
     <div class="container">
       <div class="tabs is-centered">
         <ul>
-          <li><a href="/about">About Us</a></li>
-          <li><a href="/press">Press and Media</a></li>
-          <li class="is-active"><a href="/faq">FAQ</a></li>
+          <li><a tabindex="1" href="/about" title="About Us">About Us</a></li>
+          <li><a tabindex="1" href="/press" title="Press and Media">Press and Media</a></li>
+          <li class="is-active"><a tabindex="1" href="/faq" title="Frequently Asked Questions">FAQ</a></li>
         </ul>
       </div>
     </div>
@@ -140,11 +140,11 @@
                 How do I start listing domains?</h3>
               <p class="faq-answer">
                 Once you have created a DomaHub account you may create a listing by going to the
-                <a class="is-accent" href="/listings/create">create listing</a> page.
+                <a tabindex="1" class="is-accent" href="/listings/create" title="Create Listing Page">create listing</a> page.
               </p>
                 </br>
               <p class="faq-answer">
-                  Your listing will not be active until you have connected your <a class="is-accent" href="/authorizestripe">
+                  Your listing will not be active until you have connected your <a tabindex="1" class="is-accent" href="/authorizestripe" title="Authorize Stripe Page">
                   Stripe</a> account. This ensures that we can pay you securely in all future rental transactions.
               </p>
                 </br>
@@ -163,14 +163,23 @@
               <p>
                   Registrars:
               </p>
-              <li><a class="is-accent" href="https://www.godaddy.com/help/change-an-a-record-19239">GoDaddy</a></li>
-              <li><a class="is-accent" href="https://www.namecheap.com/support/knowledgebase/article.aspx/319/78/how-can-i-setup-an-a-address-record-for-my-domain">NameCheap</a></li>
-              <li><a class="is-accent" href="https://www.name.com/support/articles/205188538-Pointing-your-domain-to-hosting-with-A-records">Name.com</a></li>
-              <li><a class="is-accent" href="http://www.ipage.com/knowledgebase/beta/article.bml?ArticleID=1919">iPage</a></li>
-              <li><a class="is-accent" href="http://www.networksolutions.com/support/a-records-ip-addresses-2/">Network Solutions</a></li>
-              <li><a class="is-accent" href="https://my.bluehost.com/cgi/help/559">bluehost</a></li>
-              <li><a class="is-accent" href="https://help.hover.com/hc/en-us/articles/217282477-How-to-Change-your-domain-name-servers-DNS-servers-Updated-Aug-2015-">Hover</a></li>
-              <li><a class="is-accent" href="http://bfy.tw/8YZW">I don't know</a></li>
+              <ul class="padding-left-20 has-disc">
+                <li><a class="is-accent" href="https://www.godaddy.com/help/change-an-a-record-19239" title="GoDaddy Website">GoDaddy</a></li>
+                <li><a class="is-accent"
+                  href="https://www.namecheap.com/support/knowledgebase/article.aspx/319/78/how-can-i-setup-an-a-address-record-for-my-domain"
+                  title="NameCheap Website">NameCheap</a></li>
+                <li><a class="is-accent" href="https://www.name.com/support/articles/205188538-Pointing-your-domain-to-hosting-with-A-records"
+                   title="Name Website">Name.com</a></li>
+                <li><a class="is-accent" href="http://www.ipage.com/knowledgebase/beta/article.bml?ArticleID=1919"
+                   title="iPage Website">iPage</a></li>
+                <li><a class="is-accent" href="http://www.networksolutions.com/support/a-records-ip-addresses-2/"
+                   title="Network Solutions Website">Network Solutions</a></li>
+                <li><a class="is-accent" href="https://my.bluehost.com/cgi/help/559"
+                   title="Bluehost Website">Bluehost</a></li>
+                <li><a class="is-accent" href="https://help.hover.com/hc/en-us/articles/217282477-How-to-Change-your-domain-name-servers-DNS-servers-Updated-Aug-2015-"
+                   title="Hover Website">Hover</a></li>
+                <li><a class="is-accent" href="http://bfy.tw/8YZW" title="Click here if you are not sure">I don't know</a></li>
+              </ul>
             </div>
 
             <div class="qa-wrapper">
@@ -210,12 +219,10 @@
             <div class="qa-wrapper">
               <h3 class="faq-question" title="What are the default price rates for a Basic listing?">
                 What are the default price rates for a Basic listing?</h3>
-              <p class="faq-answer">
-                <li>$1 / hour.</li>
-                <li>$5 / day.</li>
-                <li>$15 / week.</li>
-                <li>$25 / month.</li>
-              </p>
+              <ul class="faq-answer margin-top-20 padding-left-20 has-disc">
+                <li>$10 / week.</li>
+                <li>$20 / month.</li>
+              </ul>
             </div>
             <div class="qa-wrapper">
               <h3 class="faq-question" title="What happens if I find a buyer for my domain?">
@@ -242,7 +249,8 @@
               <h3 class="faq-question" title="How can I cancel a listing?">
                 How can I cancel a listing?</h3>
               <p class="faq-answer">
-                Simply go to your <a class="is-accent" href="/profile/mylistings">My Listings</a> page and select your listing. In the dropdown options menu, select "Inactive"
+                Simply go to your <a tabindex="1" class="is-accent" href="/profile/mylistings" title="My Listings Page">My Listings</a>
+                 page and select your listing. In the dropdown options menu, select "Inactive"
                 to cancel your listing. This will cause the listing to not show up in any user searches.
               </p>
             </div>
@@ -271,7 +279,7 @@
                 How do I pay for rentals?</h3>
               <p class="faq-answer">
                 DomaHub strictly conducts online transactions through
-                <a class='is-accent' href='https://stripe.com/us/payments'>Stripe payments</a>. Simply link a credit or debit
+                <a tabindex="1" class='is-accent' href='https://stripe.com/us/payments' title="Stripe Website: Payments">Stripe payments</a>. Simply link a credit or debit
                 card or a bank account to your Stripe account.
               </p>
             </div>
@@ -281,7 +289,7 @@
               <p class="faq-answer">
                 Stripe payments is a third-party payments system used by companies
                 like Lyft, Twitter, OpenTable, etc. For more information, please
-                visit the <a class='is-accent' href="https://stripe.com/about">Stripe website</a>.
+                visit the <a tabindex="1" class='is-accent' href="https://stripe.com/about" title="Stripe Website: About">Stripe website</a>.
               </p>
             </div>
             <div class="qa-wrapper">
@@ -298,7 +306,7 @@
               <p class="faq-answer">
                 All domain rentals are final and non-refundable. However, if you encounter any technical
                 issues where your content is not being displayed, please contact us at
-                <a class='is-accent' href="mailto:support@domahub.com">support@domahub.com</a>.
+                <a tabindex="1" class='is-accent' href="mailto:support@domahub.com" title="Email us at support@domahub.com">support@domahub.com</a>.
               </p>
             </div>
             <div class="qa-wrapper">
@@ -339,7 +347,7 @@
           </div>%>
           <div class="faq-section padding-bottom-50 margin-top-50">
             <p>
-              Still have questions? Feel free to <a href="/contact" class="is-accent">Contact Us</a>.
+              Still have questions? Feel free to <a tabindex="1" href="/contact" class="is-accent" title="Contact Us">Contact Us</a>.
             </p>
           </div>
         </div>

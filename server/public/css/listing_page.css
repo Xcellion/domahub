@@ -14,11 +14,6 @@
   justify-content: center;
   margin: 0 auto; }
 
-.bordered-display {
-  border: 3px solid #3cbc8d;
-  padding: 10px;
-  border-radius: 3px; }
-
 #domain-display {
   color: #62c9a3;
   padding: 0 12px; }
@@ -49,6 +44,21 @@
 .listing-info {
   padding-bottom: 25px;
   border-bottom: 1px solid rgba(0, 0, 0, 0.12); }
+
+.listing-previous {
+  display: flex;
+  justify-content: space-between;
+  padding: 25px 0; }
+  .listing-previous + .listing-previous {
+    border-top: 1px solid rgba(0, 0, 0, 0.12); }
+  .listing-previous .previous-left {
+    width: 50%; }
+  .listing-previous .previous-right {
+    width: 47%; }
+    .listing-previous .previous-right .listing-stat + .listing-stat {
+      margin-top: 20px; }
+    .listing-previous .previous-right .listing-stat p + p {
+      margin-top: 5px; }
 
 #checkout-card {
   margin-left: auto; }
