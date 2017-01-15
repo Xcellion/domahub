@@ -21,4 +21,5 @@ $(document).ready(function() {
 	$("#more-info-button").click(function() {
 		$("#description-card").toggleClass("is-hidden");
 	});
+
 });
