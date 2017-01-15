@@ -185,6 +185,7 @@ module.exports = function(app, db, auth, error, stripe){
 	app.get('/listing/:domain_name/:rental_id', [
 		checkDomainValid,
 		checkDomainListed,
+		renter_functions.deleteRentalInfo,
 		renter_functions.getRental,
 		renter_functions.checkRentalDomain,
 		renter_functions.getRentalRentalTimes,
