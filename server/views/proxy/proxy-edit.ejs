@@ -18,16 +18,40 @@
     $(document).ready(function(){
         $(".domahub-action-input").on("keypress", function(e){
             if (e.keyCode == 13){
-                $.ajax({
-                    url: "/listing/" + doma_rental_info.domain_name + "/" + doma_rental_info.rental_id + "/edit",
-                    method: "POST",
-                    data: {
-                        address: $('.domahub-action-input').val()
-                    }
-                }).done(function(data){
-                    console.log(data);
-                });
+                change_address($(this));
             }
         });
+
+        //rental times
+        for (var x = 0 ; x < doma_rental_info.times.length; x++){
+            var temp_start = moment(doma_rental_info.times[x].date).format("MMM D YYYY");
+            var temp_end = moment(doma_rental_info.times[x].date).add(doma_rental_info.times[x].duration, "millisecond").format("MMM D YYYY");;
+            $(".domahub-info-wrapper").append("<p class='domahub-rental-dates'>" + temp_start + " - " + temp_end + "</p>");
+        }
     });
+
+    //function to submit address change
+    function change_address(elem){
+        elem.off();
+        $.ajax({
+            url: "/listing/" + doma_rental_info.domain_name + "/" + doma_rental_info.rental_id + "/edit",
+            method: "POST",
+            data: {
+                address: $('.domahub-action-input').val()
+            }
+        }).done(function(data){
+            elem.on("keypress", function(){
+                if (e.keyCode == 13){
+                    change_address(elem);
+                }
+            });
+            console.log(data);
+            if (data.state == "error"){
+                $('.domahub-action-input').val("");
+            }
+            else {
+                window.location = window.location.host + "/listing/" + doma_rental_info.domain_name + "/" + doma_rental_info.rental_id;
+            }
+        });
+    }
 </script>
