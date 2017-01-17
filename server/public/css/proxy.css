@@ -62,6 +62,7 @@
 .domahub-heading {
     margin:0;
     font-size:18px;
+    cursor:default;
 }
 
 .domahub-info-wrapper{
