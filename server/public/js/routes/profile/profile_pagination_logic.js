@@ -432,6 +432,11 @@ function createAllRows(row_per_page, current_page){
                     changedListingValue($(this), info);
                 });
 
+                //to select all text
+                both_rows.find(".drop-form .changeable-input").on("focus", function(e){
+                    $(this).select();
+                });
+
                 //on file change
                 both_rows.find(".drop-form-file .changeable-input").off().on("change", function(e){
                     e.preventDefault();
