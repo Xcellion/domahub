@@ -15,6 +15,8 @@ var moment = require('moment');
 var request = require('request');
 var fs = require('fs');
 var path = require("path");
+var dns = require("dns");
+var url = require("url");
 
 module.exports = {
 	//check domain name for rental
@@ -104,8 +106,27 @@ module.exports = {
                 error.handler(req, res, "Invalid address!", "json");
             }
             else {
-                req.session.rental_object.db_object.address = (req.body.address == "") ? "" : address;
-                next();
+                //make sure theres something there listening
+                whois.lookup(url.parse(address).hostname, function(err, data){
+                    if (err || !data){error.handler(req, res, "Invalid address!", "json");}
+                    else {
+                        var whoisObj = {};
+                        if (data){
+                            var array = parser.parseWhoIsData(data);
+                            for (var x = 0; x < array.length; x++){
+                                whoisObj[array[x].attribute] = array[x].value;
+                            }
+                        }
+
+                        if (whoisObj["Domain Name"]){
+                            req.session.rental_object.db_object.address = (req.body.address == "") ? "" : address;
+                            next();
+                        }
+                        else {
+                            error.handler(req, res, "There's nothing to display on that page!", "json");
+                        }
+                    }
+                });
             }
         }
         else {

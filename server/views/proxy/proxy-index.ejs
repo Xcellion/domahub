@@ -11,13 +11,6 @@
             $(".domahub-wrapper").slideToggle(300);
         });
 
-        //rental times
-        for (var x = 0 ; x < doma_rental_info.times.length; x++){
-            var temp_start = moment(doma_rental_info.times[x].date).format("MMM D YYYY");
-            var temp_end = moment(doma_rental_info.times[x].date).add(doma_rental_info.times[x].duration, "millisecond").format("MMM D YYYY");;
-            $(".domahub-info-wrapper").append("<p class='domahub-rental-dates'>" + temp_start + " - " + temp_end + "</p>");
-        }
-
         //set listing link
         $("#domahub-listing-button").attr("href", "https://www.domahub.com/listing/" + doma_rental_info.domain_name);
     });
