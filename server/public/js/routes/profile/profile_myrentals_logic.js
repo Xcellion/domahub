@@ -216,7 +216,7 @@ function createRowDrop(rental_info, rownum){
 //function to create the submit button and error message column
 function createFormDrop(rental_info){
     var temp_cols = $("<div class='columns'></div>");
-    var temp_col = $("<div class='column is-3'></div>");
+    var temp_col = $("<div class='column is-5'></div>");
     var temp_form = $("<form class='drop-form'></form>");
 
     //buttons for submit/cancel
