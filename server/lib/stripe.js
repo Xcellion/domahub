@@ -24,8 +24,8 @@ module.exports = {
 
 	//check that the stripe customer is legit and has a good payment card
 	createStripeCustomer : function(req, res, next){
-		console.log("SF: Trying to create or update a Stripe customer...");
 		if (req.user.stripe_customer_id){
+			console.log("SF: Trying to update an existing Stripe customer...");
 
 			//cross reference with stripe
 			stripe.customers.retrieve(req.user.stripe_customer_id, function(err, customer) {
@@ -39,7 +39,9 @@ module.exports = {
 					stripe.customers.update(req.user.stripe_customer_id, {
 						source: req.body.stripeToken
 					}, function(err, customer) {
-						if (err){stripeErrorHandler(req, res, err)}
+						if (err){
+							revertPremiumListings(req, res, err);
+						}
 						else {
 							next();
 						}
@@ -50,6 +52,7 @@ module.exports = {
 
 		//no customer exists, create a new stripe customer
 		else {
+			console.log("SF: Trying to create a new Stripe customer...");
 			newStripecustomer(req, res, next);
 		}
 	},
@@ -303,7 +306,9 @@ function newStripecustomer(req, res, next){
 			"stripe_user_id" : req.user.stripe_user_id
 		}
 	}, function(err, customer) {
-		if (err){stripeErrorHandler(req, res, err)}
+		if (err){
+			revertPremiumListings(req, res, err);
+		}
 		else {
 
 			//update the customer id in the DB
@@ -365,7 +370,7 @@ function newStripeSubscription(req, res, next){
 			else {
 				//revert pricing for failed premium listings
 				premium_db_query_failed.push([
-					req.session.new_listings.premium_obj.inserted_ids[y],		//insert id
+					req.session.new_listings.premium_obj.inserted_ids[y],			//insert id
 					"month",														//price type
 					25,																//price rate
 					"",																//subscription id
@@ -405,17 +410,44 @@ function stripeErrorHandler(req, res, err){
 	}
 }
 
-//helper function to handle successful stripe subscriptions
-function stripeSubscriptionHandler(subscription, req, res, listing_info){
-	req.new_listing_info = {
-		stripe_subscription_id : subscription.id,
-		exp_date : subscription.current_period_end * 1000
+//helper function to handle unsuccessful stripe card, revert premium
+function revertPremiumListings(req, res, err){
+	if (req.path == "/listings/create"){
+		var premium_db_query_failed = [];
+
+		for (var x = 0; x < req.session.new_listings.premium_obj.inserted_ids.length; x++){
+			premium_db_query_failed.push([
+				req.session.new_listings.premium_obj.inserted_ids[x],			//insert id
+				"month",														//price type
+				25,																//price rate
+				"",																//subscription id
+				0,																//exp date
+				false															//expiring
+			]);
+
+			//add to bad listings
+			req.session.new_listings.bad_listings.push({
+				index: req.session.new_listings.premium_obj.indexes[x],
+				reasons: [
+					"Premium purchase error! This domain was created as a basic domain instead."
+				]
+			});
+		}
+
+		//revert pricing for failed premium listings
+		if (premium_db_query_failed.length > 0){
+			Listing.updateListingsBasic(premium_db_query_failed, function(result){
+			});
+			res.send({
+				bad_listings: req.session.new_listings.bad_listings,
+				good_listings: req.session.new_listings.good_listings
+			});
+			delete req.session.new_listings;
+		}
 	}
-	res.json({
-		state: "success",
-		listings: req.user.listings,
-		new_exp_date: listing_info.exp_date
-	});
+	else {
+		stripeErrorHandler(req, res, err);
+	}
 }
 
 //helper function to get the req.user listings object for a specific domain
