@@ -107,7 +107,6 @@ module.exports = {
             }
             else {
                 var parsed_url = parseDomain(address);
-                console.log(parsed_url);
 
                 if (parsed_url == null){
                     error.handler(req, res, "Invalid address!", "json");
