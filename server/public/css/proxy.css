@@ -99,7 +99,7 @@
 }
 .domahub-action-button:hover {
     background-color:#3cbc8d;
-    color:#fff;
+    color:#fff !important;
     border-color:#3cbc8d;
     text-decoration:none;
 }
