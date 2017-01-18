@@ -93,6 +93,7 @@
     transition:all 0.25s ease;
     cursor:pointer;
     font-size:15px;
+    line-height:1;
 }
 .domahub-action-button:hover {
     background-color:#3cbc8d;
@@ -105,4 +106,5 @@
 
 .domahub-action-input{
     margin:5px;
+    line-height:1;
 }

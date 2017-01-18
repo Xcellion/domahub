@@ -17,7 +17,9 @@ var bodyParser 	= require('body-parser'),
 	autoReap  = require('multer-autoreap');
 	autoReap.options = {
 	    reapOnError: true
-	};
+	},
+	parseDomain = require('parse-domain'),
+	url = require('url');
 
 db.connect();	//connect to the database
 
@@ -90,9 +92,11 @@ app.get('*.ico', function(){})
 //catch future requests if rented (for dev enviroment and for rental preview)
 app.use("/", function(req, res, next){
 	if (req.header("Referer") && req.header("Referer").indexOf("rentalpreview") != -1){
-		console.log("F: Proxying future request for " + req.originalUrl + " along to " + req.session.rented);
+		var domain_url = parseDomain(req.session.rented);
+		var protocol = url.parse(req.session.rented).protocol;
+		console.log("F: Proxying future request for " + req.originalUrl + " along to " + protocol + "//" + domain_url.domain + "." + domain_url.tld);
 		req.pipe(request({
-			url: req.session.rented + req.originalUrl
+			url: protocol + "//" + domain_url.domain + "." + domain_url.tld + req.originalUrl
 		})).pipe(res);
 	}
 	//go next to 404
