@@ -7,8 +7,7 @@
             <p class="domahub-status-info">Currently Active</p>
         </div>
 
-        <a class="domahub-action-button">Edit Address</a>
-        <input class="domahub-action-input input"></input>
+        <input placeholder="Edit Address" class="domahub-action-input input"></input>
         <a class="domahub-action-button">Add Time</a>
         <a id="domahub-listing-button" class="domahub-action-button">View Listing</a>
         <a href="https://domahub.com/contact" class="domahub-action-button">Something wrong?</a>
@@ -22,6 +21,8 @@
             if (e.keyCode == 13){
                 change_address($(this));
             }
+        }).val(doma_rental_info.address).on("focus", function(e){
+            $(this).select();
         });
 
         //rental times
