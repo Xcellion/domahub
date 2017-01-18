@@ -72,12 +72,14 @@
 }
 .domahub-status-info {
     color:#ff5722;
+    padding:0;
     margin:10px;
     margin-bottom:5px;
     font-size:15px;
     font-weight:bold;
 }
 .domahub-rental-dates {
+    padding:0;
     margin:5px 10px 5px 10px;
     font-size:15px;
     color:black;
@@ -99,6 +101,10 @@
     background-color:#3cbc8d;
     color:#fff;
     border-color:#3cbc8d;
+    text-decoration:none;
+}
+.domahub-action-button:visited {
+    color:#fff;
 }
 .domahub-action-button:last-child {
     border-radius:0 0 5px 5px;
@@ -107,4 +113,6 @@
 .domahub-action-input{
     margin:5px;
     line-height:1;
+    height:25px;
+    padding:0;
 }
