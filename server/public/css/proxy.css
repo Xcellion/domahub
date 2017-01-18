@@ -43,6 +43,7 @@
     right:20px;
     z-index:9999999999999;
     text-align:right;
+    line-height:1;
 }
 .domahub-menu {
     background-color:#fff;
@@ -93,7 +94,6 @@
     transition:all 0.25s ease;
     cursor:pointer;
     font-size:15px;
-    line-height:1;
 }
 .domahub-action-button:hover {
     background-color:#3cbc8d;
