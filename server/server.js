@@ -94,9 +94,9 @@ app.use("/", function(req, res, next){
 	if (req.header("Referer") && req.header("Referer").indexOf("rentalpreview") != -1){
 		var domain_url = parseDomain(req.session.rented);
 		var protocol = url.parse(req.session.rented).protocol;
-		console.log("F: Proxying future request for " + req.originalUrl + " along to " + protocol + "//" + domain_url.domain + "." + domain_url.tld);
+		console.log("F: Proxying future request for " + req.originalUrl + " along to " + protocol + "//www." + domain_url.domain + "." + domain_url.tld);
 		req.pipe(request({
-			url: protocol + "//" + domain_url.domain + "." + domain_url.tld + req.originalUrl
+			url: protocol + "//www." + domain_url.domain + "." + domain_url.tld + req.originalUrl
 		})).pipe(res);
 	}
 	//go next to 404
