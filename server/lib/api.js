@@ -44,46 +44,49 @@ function checkHost(req, res, next){
 //send the current rental details and information for a listing
 function getCurrentRental(req, res, domain_name){
 	//requesting something besides main page, pipe the request
-	if (req.session.rented){
-		console.log("Proxying request!");
-		req.pipe(request({
-			url: req.session.rented + req.originalUrl
-		})).pipe(res);
+	if (req.session.rented_info){
+		console.log("Proxying rental request for an existing session for " + domain_name + "!");
+		searchAndDirect(req.session.rental_info, req);
 	}
 	else {
 		Listing.getCurrentRental(domain_name, function(result){
 			if (result.state != "success" || result.info.length == 0){
 				console.log("Not rented! Redirecting to listing page");
-				delete req.session.rented;
+				delete req.session.rented_info;
 				res.redirect("https://domahub.com/listing/" + domain_name);
 			}
 			else {
-				console.log("Currently rented!");
-				//add it to stats
-				search_functions.newRentalHistory(result.info[0].rental_id, req);
-
-				//proxy the request
-				if (result.info[0].address){
-					console.log("Proxying request to " + result.info[0].address + "...");
-					req.session.rented = result.info[0].address;
-					proxyReq(req, res, result.info[0]);
-				}
-				else {
-					console.log("No address associated with rental! Display default empty page...");
-					res.render("./views/proxy/proxy-image.ejs", {
-						image: "",
-						preview: false,
-						doma_rental_info : result.info[0]
-					});
-				}
+				searchAndDirect(result.info[0], req);
 			}
 		});
 	}
 
 }
 
+//function to add to search and decide where to proxy
+function searchAndDirect(rental_info, req){
+	console.log("Currently rented!");
+	//add it to stats
+	search_functions.newRentalHistory(rental_info.rental_id, req);
+
+	//proxy the request
+	if (rental_info.address){
+		console.log("Proxying request to " + rental_info.address + "...");
+		req.session.rented_info = rental_info;
+		requestProxy(req, res, rental_info);
+	}
+	else {
+		console.log("No address associated with rental! Display default empty page...");
+		res.render("./views/proxy/proxy-image.ejs", {
+			image: "",
+			preview: false,
+			doma_rental_info : rental_info
+		});
+	}
+}
+
 //function to proxy request
-function proxyReq(req, res, rental_info){
+function requestProxy(req, res, rental_info){
 	request({
 		url: addProtocol(rental_info.address),
 		encoding: null

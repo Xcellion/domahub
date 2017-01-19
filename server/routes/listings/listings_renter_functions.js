@@ -435,8 +435,8 @@ module.exports = {
 		if (req.session.new_rental_info){
 			delete req.session.new_rental_info;
 		}
-        if (req.session.rented){
-            delete req.session.rented;
+        if (req.session.rented_info){
+            delete req.session.rented_info;
         }
         if (req.session.proxy_edit){
             delete req.session.proxy_edit;
@@ -497,9 +497,9 @@ module.exports = {
 
         //render the appropriate address
         if (req.session.rental_info.address){
-            req.session.rented = req.session.rental_info.address;
+            req.session.rented_info = req.session.rental_info;
             var address_request = request({
-                url: addProtocol(req.session.rented),
+                url: addProtocol(req.session.rented_info.address),
                 encoding: null
             }, function (err, response, body) {
                 //not an image requested
