@@ -52,7 +52,7 @@ function handler(req, res, message, type) {
 					break;
 			}
 
-			console.log("ERROR: " + message + " Sending back to " + redirectTo);
+			console.log("ERROR: " + message + " Sending back to " + redirectTo + "(Came from " + req.originalUrl + ")");
 			res.redirect(redirectTo);
 			break;
 	}
