@@ -7,6 +7,7 @@ var url = require('url');
 var fs = require('fs');
 var path = require('path');
 var concat = require('concat-stream');
+var node_env = process.env.NODE_ENV || 'dev'; 	//dev or prod bool
 
 module.exports = function(app, db, e){
 	error = e;
@@ -98,14 +99,15 @@ function proxyReq(req, res, rental_info){
 		}
 		else {
 			console.log("F: Requested rental address was a website!");
-			console.log(path.resolve(process.cwd(), 'server', 'views', 'proxy', 'proxy-index.ejs'));
-			console.log("fjkdaf");
-			console.log(process.cwd());
-			var proxy_index = fs.readFileSync(path.resolve(process.cwd(), 'server', 'views', 'proxy', 'proxy-index.ejs'));
+
+			//pathes for the domahub overlay
+			var index_path = (node_env == "dev") ? path.resolve(process.cwd(), 'server', 'views', 'proxy', 'proxy-index.ejs') : path.resolve(process.cwd(), 'views', 'proxy', 'proxy-index.ejs');
+			var noedit_path = (node_env == "dev") ? path.resolve(process.cwd(), 'server', 'views', 'proxy', 'proxy-noedit.ejs') : path.resolve(process.cwd(), 'views', 'proxy', 'proxy-noedit.ejs');
 			var rental_info_buffer = new Buffer("<script>var doma_rental_info = " + JSON.stringify(rental_info) + "</script>");
-			var proxy_noedit = fs.readFileSync(path.resolve(process.cwd(), 'server', 'views', 'proxy', 'proxy-noedit.ejs'));
+
+			var proxy_index = fs.readFileSync(index_path);
+			var proxy_noedit = fs.readFileSync(noedit_path);
 			var buffer_array = [body, rental_info_buffer, proxy_index, proxy_noedit];
-			req.session.rented_headers = response.headers;
 			res.end(Buffer.concat(buffer_array));
 		}
 	}).on('error', function(err){
