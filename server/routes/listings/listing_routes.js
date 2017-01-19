@@ -274,7 +274,7 @@ function checkDomainValid(req, res, next){
 
 	var domain_name = req.params.domain_name || req.body["domain-name"];
 
-	if (!validator.isFQDN(domain_name)){
+	if (!validator.isAscii(domain_name) || !validator.isFQDN(domain_name)){
 		error.handler(req, res, "Invalid domain name!");
 	}
 	else {
