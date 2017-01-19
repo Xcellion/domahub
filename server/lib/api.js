@@ -46,7 +46,7 @@ function getCurrentRental(req, res, domain_name){
 	//requesting something besides main page, pipe the request
 	if (req.session.rented_info){
 		console.log("Proxying rental request for an existing session for " + domain_name + "!");
-		searchAndDirect(req.session.rental_info, req);
+		searchAndDirect(req.session.rental_info, req, res);
 	}
 	else {
 		Listing.getCurrentRental(domain_name, function(result){
@@ -56,7 +56,7 @@ function getCurrentRental(req, res, domain_name){
 				res.redirect("https://domahub.com/listing/" + domain_name);
 			}
 			else {
-				searchAndDirect(result.info[0], req);
+				searchAndDirect(result.info[0], req, res);
 			}
 		});
 	}
@@ -64,7 +64,7 @@ function getCurrentRental(req, res, domain_name){
 }
 
 //function to add to search and decide where to proxy
-function searchAndDirect(rental_info, req){
+function searchAndDirect(rental_info, req, res){
 	console.log("Currently rented!");
 	//add it to stats
 	search_functions.newRentalHistory(rental_info.rental_id, req);
