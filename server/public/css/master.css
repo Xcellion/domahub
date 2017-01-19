@@ -189,7 +189,7 @@ p {
 h1 + p,
 h2 + p,
 h3 + p {
-  margin-top: 15px; }
+  margin-top: 10px; }
 
 h1 {
   font-size: 28px;
@@ -850,6 +850,8 @@ table {
   border-radius: 5px;
   display: block;
   padding: 20px; }
+  .box.is-primary {
+    background-color: #3cbc8d; }
   .box.no-shadow {
     -webkit-box-shadow: 0 0 0 0 black;
     -moz-box-shadow: 0 0 0 0 black;
@@ -6569,6 +6571,35 @@ a.nav-item.is-tab {
 
 .clear-nav {
   padding-top: 60px; }
+
+.has-style-underline {
+  position: relative; }
+  .has-style-underline::before {
+    content: "";
+    position: absolute;
+    height: 3px;
+    width: 100px;
+    background: rgba(0, 0, 0, 0.9);
+    bottom: -20px;
+    left: 50%;
+    -moz-transform: translate(-50%, -50%);
+    -o-transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    -webkit-transform: translate(-50%, -50%);
+      -webkit-transform-transform: translate(-50%, -50%); }
+  .has-style-underline.is-white::before {
+    content: "";
+    position: absolute;
+    height: 3px;
+    width: 100px;
+    background: white;
+    bottom: -20px;
+    left: 50%;
+    -moz-transform: translate(-50%, -50%);
+    -o-transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    -webkit-transform: translate(-50%, -50%);
+      -webkit-transform-transform: translate(-50%, -50%); }
 
 .margin-0 {
   margin: 0px !important; }

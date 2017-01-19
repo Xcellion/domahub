@@ -199,7 +199,7 @@ function createVerifiedDrop(listing_info, cb_when_verified){
     var unverified_step3 = $("<div class='content margin-top-0 is-hidden'><h3 class='is-blacklight is-bold'>Step 3</h3><p>Point the new <strong>A Record</strong> to DomaHub servers at <strong>208.68.37.82</strong></p></div>");
     var step3_button = $("<input style='width:110px' value='208.68.37.82' class='input is-accent margin-right-10'></input>");
 
-    var unverified_step4 = $("<div class='content margin-top-0 margin-bottom-10 is-hidden'><h3 class='is-blacklight is-bold'>Step 4</h3><p>Click the button below to verify your domain.</p></div>");
+    var unverified_step4 = $("<div class='content margin-top-0 margin-bottom-10 is-hidden'><h3 class='is-blacklight is-bold'>Step 4</h3><p>Click the button below to verify your domain. <br>NOTE: It may take up to 72 hours for <strong>A Record</strong> changes to take effect.</p></div>");
     steps_column.append(unverified_step1, unverified_step2, unverified_step3, unverified_step4);
 
     //if there is a whois object
