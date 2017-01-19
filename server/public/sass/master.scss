@@ -16,6 +16,33 @@
   padding-top: 60px;
 }
 
+.has-style-underline {
+  position: relative;
+  &::before {
+    content:"";
+    position: absolute;
+    height: 3px;
+    width: 100px;
+    background: $black-primary;
+    bottom: -20px;
+    left: 50%;
+    @include translate(-50%, -50%);
+  }
+  &.is-white {
+    &::before {
+      content:"";
+      position: absolute;
+      height: 3px;
+      width: 100px;
+      background: $white-primary;
+      bottom: -20px;
+      left: 50%;
+      @include translate(-50%, -50%);
+    }
+  }
+}
+
+
 // margins list contains 0-100 (mults of 5), 150, and 200
 @each $margin in $margins {
   .margin-#{$margin} {
