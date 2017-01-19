@@ -134,7 +134,7 @@ module.exports = {
 		//add to search history if its not localhost
 		if (user_ip != "::1" && user_ip != "::ffff:127.0.0.1" && user_ip != "127.0.0.1"){
 			var view_info = {
-				rental_id: domain_name.toLowerCase(),									//what rental they went to
+				rental_id: rental_id,													//what rental they went to
 				account_id: (typeof req.user == "undefined") ? null : req.user.id,		//who searched if who exists
 				timestamp: new Date().getTime(),										//when they searched for it
 				user_ip : user_ip														//their ip address
