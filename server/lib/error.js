@@ -44,7 +44,8 @@ function handler(req, res, message, type) {
 				case "Invalid domain name!":
 				case "Invalid listing activation!":
 				case "DNS error!":
-					redirectTo = "/";
+					delete req.session.message;
+					redirectTo = "/nothinghere";
 					break;
 				case "Signup error!":
 				case "Invalid price!":

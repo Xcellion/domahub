@@ -109,7 +109,7 @@ app.use("/", function(req, res, next){
 app.get('*', function(req, res){
 	referer = req.header("Referer") || "someone";
 	console.log("404! Unable to find " + req.originalUrl + ". Coming from " + referer);
-	res.redirect('/');
+	res.redirect('/nothinghere');
 });
 
 //HTTP website on port 8080
