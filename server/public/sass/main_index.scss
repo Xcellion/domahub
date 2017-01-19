@@ -61,17 +61,3 @@
     margin-left: 10px;
   }
 }
-
-.has-style-underline {
-  position: relative;
-  &::before {
-    content:"";
-    position: absolute;
-    height: 3px;
-    width: 100px;
-    background: $black-primary;
-    bottom: -20px;
-    left: 50%;
-    @include translate(-50%, -50%);
-  }
-}
