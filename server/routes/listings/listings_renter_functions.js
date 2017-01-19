@@ -286,7 +286,7 @@ module.exports = {
                 }
                 console.log("F: Adding to search history...");
 
-                Data.newListingHistory(history_info, function(result){});	//async
+                Data.newListingHistory(history_info, function(result){if (result.state == "error") {console.log(result)}});	//async
             }
 
             //doesnt exist, render the whois EJS

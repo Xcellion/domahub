@@ -141,7 +141,7 @@ module.exports = {
 			}
 			console.log("F: Adding to rental view stats...");
 
-			Data.newRentalHistory(history_info, function(result){console.log(result)});					//async
+			Data.newRentalHistory(history_info, function(result){if (result.state == "error") {console.log(result)}});					//async
 		}
 	}
 }
