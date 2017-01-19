@@ -70,7 +70,7 @@ $(document).ready(function() {
 		}
 	});
 
-	var pages_white_nav = ["listings", "faq", "contact", "profile", "mission", "about", "press", "careers", "terms", "privacy", "404"];
+	var pages_white_nav = ["listings", "faq", "contact", "profile", "mission", "about", "press", "careers", "terms", "privacy", "nothinghere"];
 	var current_page = (window.location.pathname == "/") ? "/" : window.location.pathname.split("/")[1];
 
 	//remove white link if not a page that needs it
