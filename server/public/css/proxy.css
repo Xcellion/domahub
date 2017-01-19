@@ -43,6 +43,7 @@
     right:20px;
     z-index:9999999999999;
     text-align:right;
+    line-height:1;
 }
 .domahub-menu {
     background-color:#fff;
@@ -71,14 +72,17 @@
 }
 .domahub-status-info {
     color:#ff5722;
+    padding:0;
     margin:10px;
     margin-bottom:5px;
     font-size:15px;
     font-weight:bold;
 }
 .domahub-rental-dates {
+    padding:0;
     margin:5px 10px 5px 10px;
     font-size:15px;
+    color:black;
 }
 .domahub-rental-dates:last-child {
     margin-bottom:10px;
@@ -95,8 +99,12 @@
 }
 .domahub-action-button:hover {
     background-color:#3cbc8d;
-    color:#fff;
+    color:#fff !important;
     border-color:#3cbc8d;
+    text-decoration:none;
+}
+.domahub-action-button:visited {
+    color:#3cbc8d;
 }
 .domahub-action-button:last-child {
     border-radius:0 0 5px 5px;
@@ -104,4 +112,8 @@
 
 .domahub-action-input{
     margin:5px;
+    line-height:1;
+    height:25px;
+    padding:0;
+    font-size:15px;
 }

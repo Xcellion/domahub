@@ -19,6 +19,7 @@ $(document).ready(function() {
 		if (e.which == 1 || e.which == 13 || e.which == 32){
 			e.preventDefault();
 			createTableRow("");
+			handleSubmitDisabled();
 			calculateSummaryRows();
 		}
 	});
@@ -59,6 +60,7 @@ function submitDomainNames(submit_elem){
 				domain_names: domain_names
 			}
 		}).done(function(data){
+			console.log(data);
 			createTable(data.bad_listings, data.good_listings);
 			submit_elem.removeClass('is-loading');
 			submit_elem.on("click", function(e){
@@ -110,7 +112,9 @@ function createTableRow(data){
 	var num = parseFloat($("td .cat-checkbox:last").attr('id').replace("id", "")) + 1 || 0;
 
 	temp_table_row.removeAttr('id');
-	temp_table_row.find(".domain-name-input").val(data.domain_name)
+	temp_table_row.find(".domain-name-input").val(data.domain_name).on("keyup change", function(){
+		handleSubmitDisabled();
+	})
 	temp_table_row.find(".cat-checkbox-label").prop("for", "id" + num);
 
 	//click handler for premium checkbox
@@ -131,6 +135,7 @@ function createTableRow(data){
 		if ($(".delete-icon").length == 1){
 			createTableRow("");
 		}
+		handleSubmitDisabled();
 		handleTopAddDomainButton();
 		refreshNotification();
 		calculateSummaryRows();
@@ -177,6 +182,16 @@ function calculateSummaryRows(){
 
 	var total_price = (premium_domains > 0) ? "$" + (premium_domains * 5) : "FREE";
 	$("#summary-total-price").text(total_price);
+}
+
+//function to show or disable submit
+function handleSubmitDisabled(){
+	if ($(".domain-name-input").filter(function(){ return $(this).val() == ""}).length == 1 && $(".is-danger").length == 1){
+		$("#domains-submit").removeClass('is-disabled');
+	}
+	else {
+		$("#domains-submit").addClass('is-disabled');
+	}
 }
 
 //function to delete empty table rows
@@ -288,8 +303,9 @@ function submitDomainsAjax(domains, submit_elem, stripeToken){
 		}
 
 		if (data.state == "error"){
-
+			$("#stripe-error-message").addClass('is-danger').html("Your credit card was declined.");
 		}
+
 		submit_elem.removeClass('is-loading');
 
 		//regular submit without paying
@@ -374,14 +390,14 @@ function handleBadReasons(reasons, row){
 		//append latest one
 		for (var x = 0; x < reasons.length; x++){
 			var explanation = $("<small class='is-danger has-text-right is-pulled-right'>" + reasons[x] + "</small>")
-			if (reasons[x] == "Invalid domain name!" || reasons[x] == "Duplicate domain name!" || reasons[x] == "This domain name already exists!"){
-				var reason_input = ".domain-name-input";
-			}
-			else if (reasons[x] == "Invalid type!"){
+			if (reasons[x] == "Invalid type!"){
 				var reason_input = ".price-type-input";
 			}
 			else if (reasons[x] == "Invalid rate!"){
 				var reason_input = ".price-rate-input";
+			}
+			else {
+				var reason_input = ".domain-name-input";
 			}
 
 			//handler to clear reasons and append the reason

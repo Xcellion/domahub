@@ -32,7 +32,7 @@ module.exports = {
 					res.redirect("/");
 				}
 				else {
-					res.redirect("http://" + result.info[0].domain_name);
+					res.redirect("/listing/" + result.info[0].domain_name);
 				}
 			});
 		}
@@ -122,9 +122,28 @@ module.exports = {
 				})
 			}
 		});
+	},
+
+	//new view for a specific rental
+	newRentalHistory : function(rental_id, req){
+		var user_ip = req.headers['x-forwarded-for'] ||
+		req.connection.remoteAddress ||
+		req.socket.remoteAddress ||
+		req.connection.socket.remoteAddress;
+
+		//add to search history if its not localhost
+		if (user_ip != "::1" && user_ip != "::ffff:127.0.0.1" && user_ip != "127.0.0.1"){
+			var history_info = {
+				rental_id: rental_id,													//what rental they went to
+				account_id: (typeof req.user == "undefined") ? null : req.user.id,		//who searched if who exists
+				timestamp: new Date().getTime(),										//when they searched for it
+				user_ip : user_ip														//their ip address
+			}
+			console.log("F: Adding to rental view stats...");
+
+			Data.newRentalHistory(history_info, function(result){});					//async
+		}
 	}
-
-
 }
 
 //function to join all rental times

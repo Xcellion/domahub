@@ -1,6 +1,6 @@
 var validator = require("validator");
 var whois = require("whois");
-var parser = require('parse-whois');
+var dns = require("dns");
 
 var nodemailer = require('nodemailer');
 var sgTransport = require('nodemailer-sendgrid-transport');
@@ -10,13 +10,17 @@ var mailOptions = {
     }
 }
 var mailer = nodemailer.createTransport(sgTransport(mailOptions));
+
 var alexaData = require('alexa-traffic-rank');
+var parser = require('parse-whois');
 var moment = require('moment');
+
 var request = require('request');
 var fs = require('fs');
 var path = require("path");
-var dns = require("dns");
-var url = require("url");
+var parseDomain = require("parse-domain");
+
+var node_env = process.env.NODE_ENV || 'dev'; 	//dev or prod bool
 
 module.exports = {
 	//check domain name for rental
@@ -106,27 +110,34 @@ module.exports = {
                 error.handler(req, res, "Invalid address!", "json");
             }
             else {
-                //make sure theres something there listening
-                whois.lookup(url.parse(address).hostname, function(err, data){
-                    if (err || !data){error.handler(req, res, "Invalid address!", "json");}
-                    else {
-                        var whoisObj = {};
-                        if (data){
-                            var array = parser.parseWhoIsData(data);
-                            for (var x = 0; x < array.length; x++){
-                                whoisObj[array[x].attribute] = array[x].value;
+                var parsed_url = parseDomain(address);
+
+                if (parsed_url == null){
+                    error.handler(req, res, "Invalid address!", "json");
+                }
+                else {
+                    //make sure theres something there listening
+                    whois.lookup(parsed_url.domain + "." + parsed_url.tld, function(err, data){
+                        if (err || !data){error.handler(req, res, "Invalid address!", "json");}
+                        else {
+                            var whoisObj = {};
+                            if (data){
+                                var array = parser.parseWhoIsData(data);
+                                for (var x = 0; x < array.length; x++){
+                                    whoisObj[array[x].attribute] = array[x].value;
+                                }
+                            }
+
+                            if (whoisObj["Domain Name"]){
+                                req.session.rental_object.db_object.address = (req.body.address == "") ? "" : address;
+                                next();
+                            }
+                            else {
+                                error.handler(req, res, "There's nothing to display on that page!", "json");
                             }
                         }
-
-                        if (whoisObj["Domain Name"]){
-                            req.session.rental_object.db_object.address = (req.body.address == "") ? "" : address;
-                            next();
-                        }
-                        else {
-                            error.handler(req, res, "There's nothing to display on that page!", "json");
-                        }
-                    }
-                });
+                    });
+                }
             }
         }
         else {
@@ -257,7 +268,6 @@ module.exports = {
 		var domain_name = req.params.domain_name;
 
 		Listing.checkListing(domain_name, function(result){
-
             var listing_result = result;
             var user_ip = req.headers['x-forwarded-for'] ||
             req.connection.remoteAddress ||
@@ -276,7 +286,7 @@ module.exports = {
                 }
                 console.log("F: Adding to search history...");
 
-                Data.newSearchHistory(history_info, function(result){});	//async
+                Data.newListingHistory(history_info, function(result){});	//async
             }
 
             //doesnt exist, render the whois EJS
@@ -494,17 +504,20 @@ module.exports = {
             }, function (err, response, body) {
                 //not an image requested
                 if (response.headers['content-type'].indexOf("image") == -1){
-                    var proxy_index = fs.readFileSync(path.resolve(process.cwd(), 'server', 'views', 'proxy', 'proxy-index.ejs'));
+                    var index_path = (node_env == "dev") ? path.resolve(process.cwd(), 'server', 'views', 'proxy', 'proxy-index.ejs') : path.resolve(process.cwd(), 'views', 'proxy', 'proxy-index.ejs');
+                    var proxy_index = fs.readFileSync(index_path);
                     var rental_info_buffer = new Buffer("<script>var doma_rental_info = " + JSON.stringify(req.session.rental_info) + "</script>");
                     var buffer_array = [body, proxy_index, rental_info_buffer];
 
                     //if authenticated to edit the rental preview
                     if (req.session.proxy_edit){
-                        var proxy_preview = fs.readFileSync(path.resolve(process.cwd(), 'server', 'views', 'proxy', 'proxy-edit.ejs'));
+                        var edit_path = (node_env == "dev") ? path.resolve(process.cwd(), 'server', 'views', 'proxy', 'proxy-edit.ejs') : path.resolve(process.cwd(), 'views', 'proxy', 'proxy-edit.ejs');
+                        var proxy_preview = fs.readFileSync(edit_path);
                         buffer_array.push(proxy_preview);
                     }
                     else {
-                        var proxy_nopreview = fs.readFileSync(path.resolve(process.cwd(), 'server', 'views', 'proxy', 'proxy-noedit.ejs'));
+                        var noedit_path = (node_env == "dev") ? path.resolve(process.cwd(), 'server', 'views', 'proxy', 'proxy-noedit.ejs') : path.resolve(process.cwd(), 'views', 'proxy', 'proxy-noedit.ejs');
+                        var proxy_nopreview = fs.readFileSync(noedit_path);
                         buffer_array.push(proxy_nopreview);
                     }
 
@@ -849,7 +862,7 @@ function renderWhoIs(req, res, domain_name){
 		}
 
         //get alexa traffic info
-        alexaData.AlexaWebData(req.params.domain_name, function(error, result) {
+        alexaData.AlexaWebData(domain_name, function(error, result) {
             if (!error){
                 options.listing_info.alexa = result;
             }

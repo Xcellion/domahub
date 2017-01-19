@@ -24,12 +24,20 @@ module.exports = data_model;
 
 //----------------------------------------------------------------------SETS----------------------------------------------------------
 
-//creates a new listing
-data_model.prototype.newSearchHistory = function(history_info, callback){
+//creates a new entry for a listing data row
+data_model.prototype.newListingHistory = function(history_info, callback){
 	console.log("Adding new search history item for " + history_info.domain_name + "...");
 	query = "INSERT INTO stats_search_history \
 			SET ? "
 	data_query(query, "Failed to add search history for " + history_info.domain_name + "!", callback, history_info);
+}
+
+//creates a new entry for a rental data row
+data_model.prototype.newRentalHistory = function(history_info, callback){
+	console.log("Adding new rental history item for rental #" + history_info.rental_id + "...");
+	query = "INSERT INTO stats_rental_history \
+			SET ? "
+	data_query(query, "Failed to add rental view history for rental #" + history_info.rental_id + "!", callback, history_info);
 }
 
 //creates new rental times for unavailable listings
