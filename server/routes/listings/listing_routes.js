@@ -24,12 +24,12 @@ module.exports = function(app, db, auth, error, stripe){
 		search_functions.getRandomListingByCategory
 	]);
 
-	//search for a listing with specific filters
-	app.post("/listing/search", [
-		urlencodedParser,
-		search_functions.checkSearchParams,
-		search_functions.getListingBySearchParams
-	]);
+	// //search for a listing with specific filters
+	// app.post("/listing/search", [
+	// 	urlencodedParser,
+	// 	search_functions.checkSearchParams,
+	// 	search_functions.getListingBySearchParams
+	// ]);
 
 	//-------------------------------------------------------------------------------------------------------------------- OWNER RELATED
 
@@ -70,14 +70,14 @@ module.exports = function(app, db, auth, error, stripe){
 		res.redirect("/listings/create");
 	});
 
-	//create multiple listings
-	app.post('/listings/create/multiple', [
-		auth.checkLoggedIn,
-		profile_functions.getAccountListings,
-		owner_functions.checkCSVUploadSize,
-		owner_functions.checkListingBatch,
-		owner_functions.createListingBatch
-	]);
+	// //create multiple listings
+	// app.post('/listings/create/multiple', [
+	// 	auth.checkLoggedIn,
+	// 	profile_functions.getAccountListings,
+	// 	owner_functions.checkCSVUploadSize,
+	// 	owner_functions.checkListingBatch,
+	// 	owner_functions.createListingBatch
+	// ]);
 
 	//verify that someone changed their DNS to point to domahub
 	app.post('/listing/:domain_name/verify', [
@@ -274,7 +274,7 @@ function checkDomainValid(req, res, next){
 
 	var domain_name = req.params.domain_name || req.body["domain-name"];
 
-	if (!validator.isFQDN(domain_name)){
+	if (!validator.isAscii(domain_name) || !validator.isFQDN(domain_name)){
 		error.handler(req, res, "Invalid domain name!");
 	}
 	else {
