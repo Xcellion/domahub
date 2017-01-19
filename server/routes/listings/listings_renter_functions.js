@@ -268,7 +268,6 @@ module.exports = {
 		var domain_name = req.params.domain_name;
 
 		Listing.checkListing(domain_name, function(result){
-
             var listing_result = result;
             var user_ip = req.headers['x-forwarded-for'] ||
             req.connection.remoteAddress ||
@@ -863,7 +862,7 @@ function renderWhoIs(req, res, domain_name){
 		}
 
         //get alexa traffic info
-        alexaData.AlexaWebData(req.params.domain_name, function(error, result) {
+        alexaData.AlexaWebData(domain_name, function(error, result) {
             if (!error){
                 options.listing_info.alexa = result;
             }
