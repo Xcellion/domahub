@@ -46,7 +46,7 @@ function getCurrentRental(req, res, domain_name){
 	//requesting something besides main page, pipe the request
 	if (req.session.rented_info){
 		console.log("Proxying rental request for an existing session for " + domain_name + "!");
-		searchAndDirect(req.session.rental_info, req, res);
+		searchAndDirect(req.session.rented_info, req, res);
 	}
 	else {
 		Listing.getCurrentRental(domain_name, function(result){
