@@ -283,7 +283,7 @@ module.exports = {
                 }
                 console.log("F: Adding to search history...");
 
-                Data.newSearchHistory(history_info, function(result){});	//async
+                Data.newListingHistory(history_info, function(result){});	//async
             }
 
             //doesnt exist, render the whois EJS

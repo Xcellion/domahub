@@ -1,4 +1,5 @@
 var	listing_model = require('../models/listing_model.js');
+var search_functions = require("../routes/listings/listings_search_functions.js");
 
 var validator = require("validator");
 var	request = require('request');
@@ -57,6 +58,8 @@ function getCurrentRental(req, res, domain_name){
 			}
 			else {
 				console.log("Currently rented!");
+				//add it to stats
+				search_functions.newRentalHistory(result.info[0].rental_id, req);
 
 				//proxy the request
 				if (result.info[0].address){
