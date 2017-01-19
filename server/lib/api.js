@@ -87,15 +87,20 @@ function proxyReq(req, res, rental_info){
 		url: addProtocol(rental_info.address),
 		encoding: null
 	}, function (err, response, body) {
+		//an image was requested
 		if (response.headers['content-type'].indexOf("image") != -1){
+			console.log("F: Requested rental address was an image!");
 			res.render("./views/proxy/proxy-image.ejs", {
 				image: rental_info.address,
 				preview: false,
 				doma_rental_info : rental_info
 			});
 		}
-		//an image was requested
 		else {
+			console.log("F: Requested rental address was a website!");
+			console.log(path.resolve(process.cwd(), 'server', 'views', 'proxy', 'proxy-index.ejs'));
+			console.log("fjkdaf");
+			console.log(process.cwd());
 			var proxy_index = fs.readFileSync(path.resolve(process.cwd(), 'server', 'views', 'proxy', 'proxy-index.ejs'));
 			var rental_info_buffer = new Buffer("<script>var doma_rental_info = " + JSON.stringify(rental_info) + "</script>");
 			var proxy_noedit = fs.readFileSync(path.resolve(process.cwd(), 'server', 'views', 'proxy', 'proxy-noedit.ejs'));
