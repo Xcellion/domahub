@@ -45,13 +45,14 @@ function checkHost(req, res, next){
 function getCurrentRental(req, res, domain_name){
 	//requesting something besides main page, pipe the request
 	if (req.session.rented_info){
-		console.log("Proxying rental request for an existing session for " + domain_name + "!");
+		console.log("F: Proxying rental request for an existing session for " + domain_name + "!");
 		searchAndDirect(req.session.rented_info, req, res);
 	}
 	else {
+		console.log("F: Attempting to check current rental status for " + domain_name + "!");
 		Listing.getCurrentRental(domain_name, function(result){
 			if (result.state != "success" || result.info.length == 0){
-				console.log("Not rented! Redirecting to listing page");
+				console.log("F: Not rented! Redirecting to listing page");
 				delete req.session.rented_info;
 				res.redirect("https://domahub.com/listing/" + domain_name);
 			}
@@ -65,18 +66,18 @@ function getCurrentRental(req, res, domain_name){
 
 //function to add to search and decide where to proxy
 function searchAndDirect(rental_info, req, res){
-	console.log("Currently rented!");
+	console.log("F: Currently rented!");
 	//add it to stats
 	search_functions.newRentalHistory(rental_info.rental_id, req);
 
 	//proxy the request
 	if (rental_info.address){
-		console.log("Proxying request to " + rental_info.address + "...");
+		console.log("F: Proxying request to " + rental_info.address + "...");
 		req.session.rented_info = rental_info;
 		requestProxy(req, res, rental_info);
 	}
 	else {
-		console.log("No address associated with rental! Display default empty page...");
+		console.log("F: No address associated with rental! Displaying default empty page...");
 		res.render("./views/proxy/proxy-image.ejs", {
 			image: "",
 			preview: false,
