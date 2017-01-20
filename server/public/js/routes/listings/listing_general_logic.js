@@ -18,7 +18,8 @@ $(document).ready(function() {
 	$("#date_created").text(moment(new Date(listing_info.date_created)).format("DD MMMM YYYY"));
 
 	//show more information on domain
-	$("#more-info-button").click(function() {
+	$("#more-info-button, #less-info-button").click(function() {
+		$("#more-info-button, #less-info-button").toggleClass("is-hidden");
 		$("#description-card").toggleClass("is-hidden");
 	});
 
