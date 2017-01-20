@@ -116,6 +116,12 @@ $(document).ready(function() {
 
 	//create existing rentals
 	createExisting(listing_info.rentals);
+
+	//---------------------------------------------------------------------------------------------------DISPLAY RENTALS
+
+	//function to create 2 random rentals for example
+	createExampleRentals();
+
 });
 
 //function to show a specific modal content
@@ -271,5 +277,57 @@ function successHandler(data){
 		$("#rental-link-input").focus(function(){
 			$(this).select();
 		});
+	}
+}
+
+//function to create multiple random rentals for example
+function createExampleRentals(){
+	if (listing_info.rentals.length){
+		var rentals_index_arr = [];
+		var rentals_id_arr = [];
+		var num_examples = Math.min(2, listing_info.rentals.length);
+
+		while(rentals_id_arr.length < num_examples){
+			var randomnumber = Math.ceil(Math.random() * (listing_info.rentals.length - 1))
+			if (rentals_id_arr.indexOf(randomnumber) > -1) continue;
+			else if (rentals_index_arr.indexOf(listing_info.rentals[randomnumber].rental_id) > -1) continue;
+			rentals_id_arr.push(randomnumber);
+			rentals_index_arr.push(listing_info.rentals[randomnumber].rental_id);
+			console.log("sdass")
+		}
+		console.log("s")
+
+		for (var x = 0; x < num_examples; x++){
+			createExampleRental(rentals_id_arr[x], x);
+		}
+	}
+}
+
+//function to create a single random example rental
+function createExampleRental(index_rental, index){
+	var example_rental = listing_info.rentals[index_rental];
+	console.log("views", example_rental.views);
+	console.log("rental_id", example_rental.rental_id);
+	console.log("address", example_rental.address);
+
+	var time_info = aggregateDateDuration(example_rental.rental_id);
+	console.log(time_info);
+
+	$($('.test-img')[index]).attr('src', "/screenshot?rental_address=" + example_rental.address);
+}
+
+//function to find start time, end time, and total duration of a rental
+function aggregateDateDuration(rental_id){
+	var startDate = 0;
+	var totalDuration = 0;
+	for (var x = 0; x < listing_info.rentals.length; x++){
+		if (listing_info.rentals[x].rental_id == rental_id){
+			startDate = (startDate == 0 || listing_info.rentals[x].date < startDate) ? listing_info.rentals[x].date : startDate;
+			totalDuration += listing_info.rentals[x].duration;
+		}
+	}
+	return {
+		startDate: startDate,
+		totalDuration: totalDuration
 	}
 }
