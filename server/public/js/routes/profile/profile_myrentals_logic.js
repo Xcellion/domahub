@@ -83,7 +83,7 @@ function createRow(rental_info, rownum){
     tempRow.append(createDomain(rental_info));
     tempRow.append(createPreview(rental_info));
 	tempRow.append(createEdit(rental_info));
-    tempRow.append(createStatus(rental_info));
+    tempRow.append(createStatus(rental_info, rownum));
     tempRow.append(createAddress(rental_info));
 	tempRow.append(createAddressDrop(rental_info));
 
@@ -99,13 +99,16 @@ function createRow(rental_info, rownum){
 }
 
 //function to create the status td
-function createStatus(rental_info){
+function createStatus(rental_info, rownum){
 	var text = "Active";
 	var expired_danger = "";
+	row_display[rownum].expired = 0;
 	for (var x = rental_info.date.length - 1; x >= 0; x--){
 		if (new Date().getTime() >= parseInt(rental_info.date[x]) + parseInt(rental_info.duration[x])){
 			text = "Expired";
 			expired_danger = " is-danger";
+			row_display[rownum].expired = 1;
+			break;
 		}
 	}
     var temp_td = $("<td class='td-visible td-status is-hidden-mobile" + expired_danger + "'>" + text + "</td>");
