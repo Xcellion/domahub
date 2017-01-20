@@ -2,11 +2,6 @@
 @import 'mixins';
 
 #sellers-img {
-  @include tablet {
-    background-image: url('/images/main/sellers_1.jpg');
-    background-position: bottom;
-  }
-  @include mobile {
-    background-color: $grey-darker;
-  }
+  background-image: url('/images/main/sellers_1.jpg');
+  background-position: bottom;
 }
