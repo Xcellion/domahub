@@ -30,8 +30,6 @@
             var temp_end = moment(doma_rental_info.times[x].date).add(doma_rental_info.times[x].duration, "millisecond").format("MMM D YYYY");;
             $(".domahub-info-wrapper").append("<p class='domahub-rental-dates'>" + temp_start + " - " + temp_end + "</p>");
         }
-
-        $("#domahub-button").click();
     });
 
     //function to submit address change

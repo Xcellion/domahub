@@ -8,7 +8,7 @@
     $(document).ready(function(){
         $("#domahub-button").on("click", function(e){
             $(".domahub-wrapper").slideToggle(300);
-        });
+        }).click();
 
         //set listing link
         $("#domahub-listing-button").attr("href", "https://www.domahub.com/listing/" + doma_rental_info.domain_name);

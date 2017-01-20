@@ -92,8 +92,8 @@ app.get('*.ico', function(){})
 //catch future requests if rented (for dev enviroment and for rental preview)
 app.use("/", function(req, res, next){
 	if (req.header("Referer") && req.header("Referer").indexOf("rentalpreview") != -1){
-		var domain_url = parseDomain(req.session.rented);
-		var protocol = url.parse(req.session.rented).protocol;
+		var domain_url = parseDomain(req.session.rented_info.address);
+		var protocol = url.parse(req.session.rented_info.address).protocol;
 		console.log("F: Proxying future request for " + req.originalUrl + " along to " + protocol + "//www." + domain_url.domain + "." + domain_url.tld);
 		req.pipe(request({
 			url: protocol + "//www." + domain_url.domain + "." + domain_url.tld + req.originalUrl
