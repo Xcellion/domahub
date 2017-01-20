@@ -91,17 +91,18 @@ listing_model.prototype.getListingRentalsInfo = function(listing_id, callback){
 	console.log("DB: Attempting to get all existing active rentals for listing #" + listing_id + "...");
 	query = "SELECT \
 				rentals.account_id, \
+				rentals.address, \
 				rentals.rental_id, \
 				rentals.listing_id, \
 				rental_times.date, \
 				rental_times.duration, \
 				accounts.username, \
-				rental_s.views \
+				IFNULL(rental_s.views, 0) as views \
 			FROM rentals \
 			INNER JOIN rental_times ON rentals.rental_id = rental_times.rental_id \
 			LEFT JOIN accounts ON rentals.account_id = accounts.id \
-			LEFT JOIN ( \
-				SELECT rental_id, COUNT(rental_id) AS views FROM stats_rental_history \
+			LEFT OUTER JOIN ( \
+				SELECT rental_id, COUNT(rental_id) AS views FROM stats_rental_history GROUP BY rental_id \
 			) AS rental_s \
 			ON rental_s.rental_id = rentals.rental_id \
 			WHERE rentals.listing_id = ? \
