@@ -20,12 +20,15 @@ var fs = require('fs');
 var path = require("path");
 var parseDomain = require("parse-domain");
 
+var webshot = require("webshot");
+var url = require("url");
+
 var node_env = process.env.NODE_ENV || 'dev'; 	//dev or prod bool
 
 module.exports = {
 	//check domain name for rental
 	checkRentalDomain : function(req, res, next){
-		console.log("F: Checking if belongs to the correct domain...");
+		console.log("F: Checking if rental belongs to the correct domain...");
 		var domain_name = req.params.domain_name;
 
 		if (req.session.rental_info.domain_name != domain_name){
@@ -68,7 +71,7 @@ module.exports = {
                 req.session.new_rental_info = {
                     rental_db_info : {
                         listing_id: req.session.listing_info.id,
-                        address: (req.body.address == "") ? "" : address    //empty address or not
+                        address: (req.body.address == "" || !req.body.address) ? "" : address    //empty address or not
                     },
                     new_user_email : req.body.new_user_email
                 };
@@ -552,6 +555,48 @@ module.exports = {
 
     },
 
+    //render screenshot of a rental, only if coming from a listing page
+    renderRentalScreenshot : function(req, res, next){
+        var screenshot_address = addProtocol(req.query.rental_address);
+        var originating_hostname = (req.header("Referer")) ? url.parse(req.header("Referer")).hostname : "";
+
+        //if we're originating from domahub or localhost
+        if ((originating_hostname == "localhost" || originating_hostname == "domahub") || node_env == "dev"){
+            if (screenshot_address && validator.isURL(screenshot_address)){
+                console.log('F: Capturing screenshot of rental ...');
+                var screenshot_options = {
+                    windowSize: {
+                        width: 400,
+                        height: 200
+                    },
+                    quality: 25,
+                    shotSize: {
+                        width: "all",
+                        height: 200
+                    },
+                }
+                webshot(screenshot_address, screenshot_options, function(err, renderStream) {
+                    if (err) {
+                        console.log('F: Screenshot of ' + screenshot_address + ' not found!');
+                        res.sendStatus(404);
+                    }
+                    else {
+                        renderStream.pipe(res);
+                    }
+                });
+            }
+            else {
+                console.log('F: Screenshot of ' + screenshot_address + ' not found!');
+                res.sendStatus(404);
+            }
+        }
+        //redirect to domahub home page
+        else {
+            res.redirect("/");
+        }
+
+    },
+
 	//create a new rental
 	createRental : function(req, res, next){
 		console.log("F: Creating a new rental...");
@@ -875,13 +920,18 @@ function renderWhoIs(req, res, domain_name){
 
 //helper function to add http or https
 function addProtocol(address){
-	if (!validator.isURL(address, {
-		protocols: ["http", "https"],
-		require_protocol: true
-	})){
-		address = "http://" + address;
-	}
-	return address;
+    if (address){
+        if (!validator.isURL(address, {
+            protocols: ["http", "https"],
+            require_protocol: true
+        })){
+            address = "http://" + address;
+        }
+        return address;
+    }
+    else {
+        return false;
+    }
 }
 
 //helper function to divide number

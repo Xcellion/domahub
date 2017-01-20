@@ -151,6 +151,11 @@ module.exports = function(app, db, auth, error, stripe){
 		})
 	});
 
+	//render a rental screenshot
+	app.get('/screenshot', [
+		renter_functions.renderRentalScreenshot
+	]);
+
 	//render specific listing page
 	app.get('/listing/:domain_name', [
 		checkDomainValid,
