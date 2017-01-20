@@ -16,13 +16,13 @@
     "ejs": "2.4.2",
     "express": "4.14.0",
     "express-session": "1.13.0",
-    "moment": "^2.17.1",
+    "moment": "2.17.1",
     "multer": "1.1.0",
     "multer-autoreap": "0.1.2",
     "mysql": "2.11.1",
     "nodemailer": "2.5.0",
     "nodemailer-sendgrid-transport": "0.2.0",
-    "parse-domain": "^1.0.0",
+    "parse-domain": "1.0.0",
     "parse-whois": "1.0.0",
     "passport": "0.3.2",
     "passport-local": "1.0.0",
@@ -32,6 +32,7 @@
     "sanitize-html": "1.13.0",
     "stripe": "4.9.0",
     "validator": "5.5.0",
+    "webshot": "0.18.0",
     "whois": "2.3.2"
   },
   "repository": {
@@ -41,11 +42,11 @@
   "author": "domahub",
   "license": "ISC",
   "devDependencies": {
-    "gulp": "^3.9.1",
-    "gulp-clean-css": "^2.3.2",
-    "gulp-imagemin": "^3.1.1",
-    "gulp-rename": "^1.2.2",
-    "gulp-sass": "^3.0.0"
+    "gulp": "3.9.1",
+    "gulp-clean-css": "2.3.2",
+    "gulp-imagemin": "3.1.1",
+    "gulp-rename": "1.2.2",
+    "gulp-sass": "3.0.0"
   },
   "scripts": {
     "start": "node server/server.js"
