@@ -260,6 +260,9 @@ function sortRows(method, sorted){
     else if (method == "status"){
         toggleSort("status", sorted);
     }
+    else if (method == "rentalstatus"){
+        toggleSort("expired", sorted);
+    }
     else if (method == "type"){
         toggleSort("price_type", sorted);
     }
@@ -277,6 +280,7 @@ function sortRows(method, sorted){
 //function to toggle the sorting by header
 function toggleSort(attr, bool){
     row_display.sort(function(a,b) {
+        console.log(a[attr]);
         return (bool * ((a[attr] > b[attr]) ? 1 : ((b[attr] > a[attr]) ? -1 : 0)));
     });
 }
