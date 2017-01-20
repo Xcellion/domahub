@@ -878,10 +878,10 @@ function updatePrices(){
 	if (listing_info.status){
 		var myevents = $('#calendar').fullCalendar('clientEvents', returnMineNotBG);
 		if (myevents.length){
-			$("#checkout-next-button, #remove_events").removeClass('is-disabled');
+			$("#redirect-next-button, #remove_events").removeClass('is-disabled');
 		}
 		else {
-			$("#checkout-next-button, #remove_events").addClass('is-disabled');
+			$("#redirect-next-button, #remove_events").addClass('is-disabled');
 		}
 
 		//empty the preview dates
