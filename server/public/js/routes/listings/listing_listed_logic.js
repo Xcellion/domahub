@@ -288,8 +288,9 @@ function successHandler(data){
 //---------------------------------------------------------------------------------------------------RENTAL EXAMPLES MODULE
 
 //function to create multiple random rentals for example
-function createExampleRentals(){
+function createExampleRentalsModule(){
 	if (listing_info.rentals.length){
+		$("#rental-example-module").removeClass('is-hidden');
 		var rentals_index_arr = [];
 		var rentals_id_arr = [];
 
