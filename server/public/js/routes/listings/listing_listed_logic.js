@@ -285,11 +285,15 @@ function successHandler(data){
 	}
 }
 
+//---------------------------------------------------------------------------------------------------RENTAL EXAMPLES MODULE
+
 //function to create multiple random rentals for example
 function createExampleRentals(){
 	if (listing_info.rentals.length){
 		var rentals_index_arr = [];
 		var rentals_id_arr = [];
+
+		//2 random rentals or minimun amount of existing rentals
 		var num_examples = Math.min(2, listing_info.rentals.length);
 
 		while(rentals_id_arr.length < num_examples){
@@ -298,10 +302,9 @@ function createExampleRentals(){
 			else if (rentals_index_arr.indexOf(listing_info.rentals[randomnumber].rental_id) > -1) continue;
 			rentals_id_arr.push(randomnumber);
 			rentals_index_arr.push(listing_info.rentals[randomnumber].rental_id);
-			console.log("sdass")
 		}
-		console.log("s")
 
+		//create the rental examples
 		for (var x = 0; x < num_examples; x++){
 			createExampleRental(rentals_id_arr[x], x);
 		}
@@ -311,14 +314,25 @@ function createExampleRentals(){
 //function to create a single random example rental
 function createExampleRental(index_rental, index){
 	var example_rental = listing_info.rentals[index_rental];
-	console.log("views", example_rental.views);
-	console.log("rental_id", example_rental.rental_id);
-	console.log("address", example_rental.address);
-
 	var time_info = aggregateDateDuration(example_rental.rental_id);
-	console.log(time_info);
+	var temp_example = $("#rental-example").clone().removeClass('is-hidden');
 
-	$($('.test-img')[index]).attr('src', "/screenshot?rental_address=" + example_rental.address);
+	//duration
+	temp_example.find(".rental-example-duration").text("For " + moment.duration(time_info.totalDuration).humanize());
+
+	//views
+	temp_example.find(".rental-example-views").text(example_rental.views + " since " + moment(time_info.startDate).format("MMMM DD, YYYY"));
+
+	//address
+	temp_example.find(".rental-example-address").text(example_rental.address || "Nothing!");
+	temp_example.find(".rental-example-preview").attr("href", "/listing/" + listing_info.domain_name + "/" + example_rental.rental_id);
+
+	//screenshot
+	temp_example.find(".rental-example-screenshot").attr('src', "/screenshot?rental_address=" + example_rental.address).error(function() {
+        $(this).attr("src", "");
+    });
+
+	$("#rental-example-module").append(temp_example);
 }
 
 //function to find start time, end time, and total duration of a rental
