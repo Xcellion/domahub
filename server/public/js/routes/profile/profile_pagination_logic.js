@@ -48,6 +48,7 @@ $(document).ready(function() {
         $(this).data("sorted", sorted);
         sortRows($(this).attr('class').split("-").pop(), sorted);
         createAllRows(row_per_page, current_page);
+        emptyRows();
 
         //reset other headers
         $(".sort-asc, .sort-desc").addClass("is-hidden");
