@@ -124,8 +124,8 @@ $(document).ready(function() {
 
 	//---------------------------------------------------------------------------------------------------DISPLAY RENTALS
 
-	//function to create 2 random rentals for example
-	createExampleRentals();
+	//function to create random rentals module for example
+	createExampleRentalsModule();
 
 });
 
