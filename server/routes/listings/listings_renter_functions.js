@@ -565,14 +565,10 @@ module.exports = {
             if (screenshot_address && validator.isURL(screenshot_address)){
                 console.log('F: Capturing screenshot of rental ...');
                 var screenshot_options = {
-                    windowSize: {
-                        width: 400,
-                        height: 200
-                    },
                     quality: 25,
                     shotSize: {
                         width: "all",
-                        height: 200
+                        height: "all"
                     },
                 }
                 webshot(screenshot_address, screenshot_options, function(err, renderStream) {
