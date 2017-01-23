@@ -2453,6 +2453,12 @@ input:-webkit-autofill {
   .image.is-128x128 {
     height: 128px;
     width: 128px; }
+  .image.is-256x256 {
+    height: 256px;
+    width: 256px; }
+  .image.is-512x512 {
+    height: 512px;
+    width: 512px; }
 
 .image + p,
 .image + h2,
@@ -3664,6 +3670,8 @@ input:-webkit-autofill {
   white-space: nowrap; }
   .card-footer-item:not(:last-child) {
     border-right: 1px solid rgba(0, 0, 0, 0.12); }
+    .card-footer-item:not(:last-child).no-border {
+      border: none; }
   .card-footer-item:hover, .card-footer-item:focus {
     background-color: rgba(0, 0, 0, 0.12); }
   .card-footer-item.has-icon > .icon {

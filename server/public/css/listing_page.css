@@ -60,6 +60,41 @@
     .listing-previous .previous-right .listing-stat p + p {
       margin-top: 5px; }
 
+.mu {
+  -webkit-box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+  -moz-box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+  background-image: url("https://scstylecaster.files.wordpress.com/2016/08/tom-hiddleston.gif?w=1024&h=730");
+  background-position: top center;
+  background-size: cover;
+  border-radius: 5px;
+  height: 300px;
+  width: 100%;
+  margin: 25px 0; }
+
+.mumu {
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.4);
+  border-radius: 5px 5px 0 0;
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+  width: 100%; }
+
+.rental-table-item {
+  padding: 20px 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+  display: flex;
+  justify-content: space-between;
+  align-items: center; }
+
+.mon {
+  padding: 25px 0;
+  height: 300px;
+  width: 100%; }
+  .mon + .mon {
+    margin-top: 10px; }
+
 #checkout-card {
   margin-left: auto; }
 
