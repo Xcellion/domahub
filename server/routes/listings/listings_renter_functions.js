@@ -565,7 +565,7 @@ module.exports = {
             if (screenshot_address && validator.isURL(screenshot_address)){
                 console.log('F: Capturing screenshot of rental ...');
                 var screenshot_options = {
-                    quality: 25,
+                    quality: 1,
                     shotSize: {
                         width: "all",
                         height: "all"
@@ -898,7 +898,7 @@ function renderWhoIs(req, res, domain_name){
 		}
 
 		//nobody owns it!
-		if (owner_name == "Nobody" && data){
+		if (owner_name == "Nobody" && data && whoisObj.source != "IANA"){
 			options.listing_info.available = true;
 		}
 
