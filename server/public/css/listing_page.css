@@ -45,55 +45,16 @@
   padding-bottom: 25px;
   border-bottom: 1px solid rgba(0, 0, 0, 0.12); }
 
-.listing-previous {
-  display: flex;
-  justify-content: space-between;
+.card-holder {
   padding: 25px 0; }
-  .listing-previous + .listing-previous {
-    border-top: 1px solid rgba(0, 0, 0, 0.12); }
-  .listing-previous .previous-left {
-    width: 50%; }
-  .listing-previous .previous-right {
-    width: 47%; }
-    .listing-previous .previous-right .listing-stat + .listing-stat {
-      margin-top: 20px; }
-    .listing-previous .previous-right .listing-stat p + p {
-      margin-top: 5px; }
 
-.mu {
-  -webkit-box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
-  -moz-box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
-  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
-  background-image: url("https://scstylecaster.files.wordpress.com/2016/08/tom-hiddleston.gif?w=1024&h=730");
-  background-position: top center;
-  background-size: cover;
-  border-radius: 5px;
-  height: 300px;
-  width: 100%;
-  margin: 25px 0; }
-
-.mumu {
-  align-items: center;
-  background-color: rgba(0, 0, 0, 0.4);
-  border-radius: 5px 5px 0 0;
+.card-slider {
   display: flex;
-  justify-content: space-between;
-  padding: 10px;
-  width: 100%; }
-
-.rental-table-item {
-  padding: 20px 0;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
-  display: flex;
-  justify-content: space-between;
-  align-items: center; }
-
-.mon {
-  padding: 25px 0;
-  height: 300px;
-  width: 100%; }
-  .mon + .mon {
-    margin-top: 10px; }
+  justify-content: space-around; }
+  .card-slider .card {
+    margin: 0; }
+    .card-slider .card + .card {
+      margin-left: 15px; }
 
 #checkout-card {
   margin-left: auto; }

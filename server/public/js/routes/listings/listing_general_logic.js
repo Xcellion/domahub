@@ -23,4 +23,9 @@ $(document).ready(function() {
 		$("#description-card").toggleClass("is-hidden");
 	});
 
+	//toggle previous rental view
+	$("#previous-rentals-view-toggle").click(function() {
+		$(this).find('.icon').toggleClass('is-hidden');
+	});
+
 });
