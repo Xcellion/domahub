@@ -382,7 +382,7 @@ function createInfoDrop(listing_info){
 
 //function to create the categories selectors
 function createCategorySelections(listing_info){
-	var temp_div3_control = $('<div class="control">');
+	var temp_div3_control = $('<div class="control category-control">');
 	var temp_div3_input = $('<input tabindex="1" class="is-hidden categories-input input changeable-input value="' + listing_info.categories + '"></input>').val(listing_info.categories).data('name', "categories");
 	temp_div3_control.append(temp_div3_input);
 	clickHandler(temp_div3_control, listing_info);
@@ -401,7 +401,7 @@ function clickHandler(control, listing_info){
 		var temp_div3_input = control.find(".categories-input");
 
 		//click to add this category
-		temp_category.on("click", function(e){
+		temp_category.off().on("click", function(e){
 			$(this).toggleClass('is-accent');
 			var joined_categories = $(this).siblings(".category-selector.is-accent").addBack(".category-selector.is-accent").map(function() {
 				return $(this).data("category");
@@ -736,6 +736,9 @@ function refreshSubmitbindings(bool_for_status_td){
                     both_rows.find(".drop-form").on("submit", function(e){
                         e.preventDefault();
                     });
+
+                    //refresh category click handlers
+					clickHandler(row_drop.find(".category-control"), info);
 
 					//all other inputs handler
                     both_rows.find(".drop-form .changeable-input").unbind("input").on("input", function(e){
