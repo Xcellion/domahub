@@ -321,7 +321,7 @@ function createInfoDrop(listing_info){
         var temp_div1_control = $("<div class='control-label is-aligned-top is-small'></div>");
             var temp_div1_label = $("<label class='label'>Date created</label>")
         var temp_div1_p = $("<p class='control is-grouped'></p>");
-            var temp_div1_input = $("<p class='control is-expanded'>" + moment(listing_info.date_created).format("MMMM DD, YYYY") + "</p>");
+            var temp_div1_input = $("<p class='margin-left-10 control is-expanded'>" + moment(listing_info.date_created).format("MMMM DD, YYYY") + "</p>");
 
     //show an expiration or renewal date if this is a premium listing
     var premium = listing_info.exp_date >= new Date().getTime();
@@ -349,11 +349,9 @@ function createInfoDrop(listing_info){
     var temp_div3 = $('<div class="control is-horizontal"></div>');
         var temp_div3_control_label = $('<div class="control-label is-small">');
             var temp_div3_label = $('<label class="label">Categories</label>');
-        var temp_div3_control = $('<div class="control">');
-            var temp_div3_input = $('<input tabindex="1" class="categories-input input changeable-input ' + verified_disabled + '" placeholder="startup industry promotion" value="' + categories + '"></input>')
-                temp_div3_input.data("name", "categories");
+            var temp_category_selectors = createCategorySelections(listing_info);
 
-    temp_div3.append(temp_div3_control_label.append(temp_div3_label), temp_div3_control.append(temp_div3_input));
+    temp_div3.append(temp_div3_control_label.append(temp_div3_label), temp_category_selectors);
 
     //error message
     var temp_msg_error = $("<div class='listing-msg-error is-hidden is-danger notification'></div>");
@@ -380,6 +378,41 @@ function createInfoDrop(listing_info){
     });
 
     return temp_col;
+}
+
+//function to create the categories selectors
+function createCategorySelections(listing_info){
+	var temp_div3_control = $('<div class="control">');
+	var temp_div3_input = $('<input tabindex="1" class="is-hidden categories-input input changeable-input value="' + listing_info.categories + '"></input>').val(listing_info.categories).data('name', "categories");
+	temp_div3_control.append(temp_div3_input);
+	clickHandler(temp_div3_control, listing_info);
+
+	return temp_div3_control;
+}
+
+//function to add click handler for each category
+function clickHandler(control, listing_info){
+	control.find(".category-selector").remove();
+
+	for (var x = 0; x < categories.length; x++){
+		var listing_categories = (listing_info.categories) ? listing_info.categories.split(" ") : [];
+		var selected = (listing_categories.indexOf(categories[x].back) != -1) ? " is-accent" : ""
+		var temp_category = $("<a class='button is-outlined category-selector no-shadow margin-right-5" + selected + "'>" + categories[x].front + "</a>").data("category", categories[x].back);
+		var temp_div3_input = control.find(".categories-input");
+
+		//click to add this category
+		temp_category.on("click", function(e){
+			$(this).toggleClass('is-accent');
+			var joined_categories = $(this).siblings(".category-selector.is-accent").addBack(".category-selector.is-accent").map(function() {
+				return $(this).data("category");
+			}).toArray().sort().join(" ");
+			joined_categories = (joined_categories == "") ? null : joined_categories;
+			temp_div3_input.val(joined_categories);
+			changedListingValue(temp_div3_input, listing_info);
+		});
+
+		control.append(temp_category);
+	}
 }
 
 // //function to create the delete button
