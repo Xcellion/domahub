@@ -181,6 +181,7 @@
 		//redirect to homepage if user is not defined
 		var user = <% if(typeof user != "undefined"){ %><%-JSON.stringify(user)%><% }else{ %>window.location="/"<% } %>;
 		var listings = <% if(typeof listings != "undefined"){ %><%-JSON.stringify(listings)%><% }else{ %>""<% } %>;
+		var categories = <% if(typeof categories != "undefined"){ %><%-JSON.stringify(categories)%><% }else{ %>""<% } %>;
 	</script>
 	<script src="/js/routes/profile/profile_mylistings_logic.js" type="text/javascript"></script>
 	<script src="/js/routes/profile/profile_pagination_logic.js" type="text/javascript"></script>

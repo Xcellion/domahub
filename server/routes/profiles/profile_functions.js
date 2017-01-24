@@ -1,3 +1,4 @@
+var Categories = require("../../lib/categories.js");
 var bodyParser = require('body-parser')
 var jsonParser = bodyParser.json()
 var urlencodedParser = bodyParser.urlencoded({ extended: false })
@@ -344,7 +345,8 @@ module.exports = {
 		res.render("profile/profile_mylistings", {
 			message: Auth.messageReset(req),
 			user: req.user,
-			listings: req.user.listings || false
+			listings: req.user.listings || false,
+			categories: Categories.all()
 		});
 	},
 
