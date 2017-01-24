@@ -1,27 +1,16 @@
+//alphabetical please
 var all_categories = [
-	{
-		back: "ecard",
-		front: "E-Card"
-	},
-	{
-		back: "personal",
-		front: "Personal"
-	},
-	{
-		back: "startup",
-		front: "Start-Up"
-	},
 	{
 		back: "business",
 		front: "Business"
 	},
 	{
-		back: "event",
-		front: "Event"
+		back: "ecard",
+		front: "E-Card"
 	},
 	{
-		back: "promotion",
-		front: "Promotion"
+		back: "event",
+		front: "Event"
 	},
 	{
 		back: "holiday",
@@ -30,10 +19,27 @@ var all_categories = [
 	{
 		back: "industry",
 		front: "Industry"
+	},
+	{
+		back: "personal",
+		front: "Personal"
+	},
+	{
+		back: "promotion",
+		front: "Promotion"
+	},
+	{
+		back: "startup",
+		front: "Start-Up"
 	}
 ]
 
 module.exports = {
+
+	//return all possible categories
+	all : function(){
+		return all_categories;
+	},
 
 	//categories that are formatted for the back-end
 	back : function(){
