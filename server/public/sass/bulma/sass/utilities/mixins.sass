@@ -3,15 +3,15 @@
   font-size: calculateRem($size)
 
 // Box-shadow mixin
-=box-shadow($top, $left, $blur, $color, $spread, $inset: false)
+=box-shadow($h-shadow, $v-shadow, $blur, $color, $spread, $inset: false)
   @if $inset
-    -webkit-box-shadow: inset $top $left $blur $spread $color
-    -moz-box-shadow: inset $top $left $blur $spread $color
-    box-shadow: inset $top $left $blur $spread $color
+    -webkit-box-shadow: inset $h-shadow $v-shadow $blur $spread $color
+    -moz-box-shadow: inset $h-shadow $v-shadow $blur $spread $color
+    box-shadow: inset $h-shadow $v-shadow $blur $spread $color
   @else
-    -webkit-box-shadow: $top $left $blur $spread $color
-    -moz-box-shadow: $top $left $blur $spread $color
-    box-shadow: $top $left $blur $spread $color
+    -webkit-box-shadow: $h-shadow $v-shadow $blur $spread $color
+    -moz-box-shadow: $h-shadow $v-shadow $blur $spread $color
+    box-shadow: $h-shadow $v-shadow $blur $spread $color
 
 =box-shadows($shadow1,$shadow2,$shadow3)
     -webkit-box-shadow: $shadow1,$shadow2,$shadow3
