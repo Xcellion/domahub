@@ -109,8 +109,13 @@ module.exports = {
         if (typeof req.body.address != "undefined"){
             console.log("F: Checking posted rental address...");
             var address = addProtocol(req.body.address);
-            if (req.body.address != "" & !validator.isIP(address) && !validator.isURL(address, {protocols: ["http", "https"], require_protocol: true})){
+            if (req.body.address != "" && !validator.isIP(address) && !validator.isURL(address, {protocols: ["http", "https"], require_protocol: true})){
                 error.handler(req, res, "Invalid address!", "json");
+            }
+            //set to nothing
+            else if (req.body.address == ""){
+                req.session.rental_object.db_object.address = (req.body.address == "") ? "" : address;
+                next();
             }
             else {
                 var parsed_url = parseDomain(address);
@@ -566,17 +571,23 @@ module.exports = {
                 console.log('F: Capturing screenshot of rental ...');
                 var screenshot_options = {
                     quality: 1,
-                    // screenSize: {
-                    //     width: 320,
-                    //     height: 480
-                    // },
+                    screenSize: {},
                     streamType: "jpeg",
                     shotSize: {
                         width: "window",
                         height: "window"
                     },
-                    //userAgent: 'Mozilla/5.0 (iPhone; U; CPU iPhone OS 3_2 like Mac OS X; en-us) AppleWebKit/531.21.20 (KHTML, like Gecko) Mobile/7B298g'
+                    userAgent: 'Mozilla/5.0 (iPhone; U; CPU iPhone OS 3_2 like Mac OS X; en-us) AppleWebKit/531.21.20 (KHTML, like Gecko) Mobile/7B298g'
                 }
+
+                //queries for screensize
+                if (req.query.width && validator.isInt(req.query.width)){
+                    screenshot_options.screenSize.width = parseInt(req.query.width);
+                }
+                if (req.query.height && validator.isInt(req.query.height)){
+                    screenshot_options.screenSize.height = parseInt(req.query.height);
+                }
+
                 webshot(screenshot_address, screenshot_options, function(err, renderStream) {
                     if (err) {
                         console.log('F: Screenshot of ' + screenshot_address + ' not found!');
@@ -932,7 +943,7 @@ function addProtocol(address){
         return address;
     }
     else {
-        return false;
+        return "";
     }
 }
 
