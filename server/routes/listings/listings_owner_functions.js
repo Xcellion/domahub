@@ -442,7 +442,7 @@ module.exports = {
 		var price_rate = req.body.price_rate;
 		var price_type = req.body.price_type;
 
-		var categories = (req.body.categories) ? sanitize(req.body.categories.replace(/\s\s+/g, ' ').toLowerCase()).split(" ") : [];
+		var categories = (req.body.categories) ? sanitize(req.body.categories.replace(/\s\s+/g, ' ').toLowerCase()).split(" ").sort() : [];
 		var categories_clean = [];
 		//loop through the categories posted
 		for (var x = 0; x < categories.length; x++){
