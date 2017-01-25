@@ -2166,12 +2166,10 @@ input:-webkit-autofill {
   .image.left-aligned {
     margin-left: 0;
     margin-right: 0; }
-  .image.listing-img {
-    height: 193.75px; }
-    .image.listing-img img {
-      height: 100%;
-      width: 100%;
-      object-fit: cover; }
+  .image.listing-img img {
+    height: 100%;
+    width: 100%;
+    object-fit: cover; }
   .image img {
     display: block;
     height: auto;
