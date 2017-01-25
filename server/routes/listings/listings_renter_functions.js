@@ -571,6 +571,7 @@ module.exports = {
                 console.log('F: Capturing screenshot of rental ...');
                 var screenshot_options = {
                     quality: 1,
+                    renderDelay: 50,
                     screenSize: {},
                     streamType: "jpeg",
                     shotSize: {
