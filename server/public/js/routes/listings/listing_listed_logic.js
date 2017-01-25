@@ -122,10 +122,11 @@ $(document).ready(function() {
 	//create existing rentals
 	createExisting(listing_info.rentals);
 
-	//---------------------------------------------------------------------------------------------------DISPLAY RENTALS
+	//---------------------------------------------------------------------------------------------------MODULES
 
 	//function to create random rentals module for example
 	createExampleRentalsModule();
+	createPopularRentalModule();
 
 });
 
@@ -287,6 +288,15 @@ function successHandler(data){
 
 //---------------------------------------------------------------------------------------------------RENTAL EXAMPLES MODULE
 
+//function to create popular rentals module
+function createPopularRentalModule(){
+	var popular_rental_id = $("#popular-rental-module").data("rental_id");
+	if (popular_rental_id){
+		var timeInfo = aggregateDateDuration(popular_rental_id);
+		$("#popular-rental-duration").text(moment.duration(timeInfo.totalDuration).as(listing_info.price_type) + " " + listing_info.price_type.capitalizeFirstLetter() + " Rental");
+	}
+}
+
 //function to create multiple random rentals for example
 function createExampleRentalsModule(){
 	if (listing_info.rentals.length){
@@ -350,4 +360,25 @@ function aggregateDateDuration(rental_id){
 		startDate: startDate,
 		totalDuration: totalDuration
 	}
+}
+
+//function to find start time, end time, and total duration of a rental
+function capitalizeFirst(rental_id){
+	var startDate = 0;
+	var totalDuration = 0;
+	for (var x = 0; x < listing_info.rentals.length; x++){
+		if (listing_info.rentals[x].rental_id == rental_id){
+			startDate = (startDate == 0 || listing_info.rentals[x].date < startDate) ? listing_info.rentals[x].date : startDate;
+			totalDuration += listing_info.rentals[x].duration;
+		}
+	}
+	return {
+		startDate: startDate,
+		totalDuration: totalDuration
+	}
+}
+
+//to cap the first letter
+String.prototype.capitalizeFirstLetter = function() {
+    return this.charAt(0).toUpperCase() + this.slice(1);
 }
