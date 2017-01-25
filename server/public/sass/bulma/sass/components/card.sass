@@ -1,5 +1,4 @@
 .card-header
-  +box-shadow(0px,2px,5px,$black-disabled,0)
   background-color: $border
   display: flex
   min-height: 40px
@@ -83,6 +82,8 @@
   white-space: nowrap
   &:not(:last-child)
     border-right: 1px solid $border
+    &.no-border
+      border: none
   &:hover,
   &:focus
     background-color: $border
@@ -116,6 +117,8 @@
     +box-shadow(0,0,0,$black,0)
   &.is-fullwidth
     width: 100%
+  &.is-wide
+    width: 500px
   &.is-centered
     margin-left: auto
     margin-right: auto
@@ -126,7 +129,7 @@
   &.has-shadow-effect
     +transition(all 0.25s ease)
     &:hover
-      +box-shadows(3px 2px 2px 0 rgba(0,0,0,.14),0 -1px 2px -1px rgba(0,0,0,.2),-3px 5px 5px 0 rgba(0,0,0,.12))
+      +box-shadows(2px 5px 3px 0 rgba(0,0,0,.14),-2px 5px 3px -2px rgba(0,0,0,.2),0 3px 3px 0 rgba(0,0,0,.12))
     &:active,
     &:focus,
     &.is-active

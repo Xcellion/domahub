@@ -23,4 +23,10 @@ $(document).ready(function() {
 		$("#description-card").toggleClass("is-hidden");
 	});
 
+	//show preview button on previous listing
+	// $(".previous-listing").hover(function() {
+	// 	$(this).find(".button").toggleClass("is-hidden");
+	// 	$(this).find(".previous-listing-title").toggleClass("is-hidden");
+	// });
+
 });
