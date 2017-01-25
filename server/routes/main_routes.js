@@ -3,7 +3,7 @@ var	account_model = require('../models/account_model.js');
 var	validator = require('validator');
 var	request = require('request');
 var bodyParser = require('body-parser');
-var urlencodedParser = bodyParser.urlencoded({ extended: false })
+var urlencodedParser = bodyParser.urlencoded({ extended: true })
 var nodemailer = require('nodemailer');
 var sgTransport = require('nodemailer-sendgrid-transport');
 
@@ -74,6 +74,7 @@ function mainPageLinksRender(req, res, next){
 
 //to add email to sendgrid beta list
 function signupBeta(req, res, next){
+    console.log("F: Checking posted email for beta signup...");
 	if (validator.isEmail(req.body.betaemail)){
 		request({
 			url: "https://api.sendgrid.com/v3/contactdb/recipients",
@@ -88,21 +89,53 @@ function signupBeta(req, res, next){
 			],
 			json: true
 		}, function(err, response, body){
-			res.json({
-				state: "success"
-			});
+            if (!err){
+                console.log("F: Beta email is good! Sending welcome email...");
+
+                //email options
+        		var email = {
+        			to: req.body.betaemail,
+        			from: 'general@domahub.com',
+        			subject: 'Thank you for signing up at DomaHub!',
+        			html: "This email is to let you know that you have successfully signed up for DomaHub beta testing! \
+                    We'll be sure to let you know once we begin the next phase of the beta process. Thank you!</br></br>-- DomaHub"
+        		};
+
+        		//send email
+        		mailer.sendMail(email, function(err) {
+                    if (err) {
+                        res.json({
+                            state: "error",
+                            message: "Please enter a valid email address!"
+                        });
+                    }
+                    else {
+                        res.send({
+                            state: "success"
+                        });
+                    }
+        		});
+            }
+            else {
+                res.json({
+                    state: "error",
+                    message: "Please enter a valid email address!"
+                });
+            }
 		});
 	}
 	else {
 		res.json({
 			state: "error",
 			message: "Please enter a valid email address!"
-		})
+		});
 	}
 }
 
 //function to handle contact us form submission
 function contactUs(req, res, next){
+    console.log("F: Checking posted email for beta signup...");
+
 	var contact_name = req.body.contact_name;
 	var contact_email = req.body.contact_email;
 	var contact_message = req.body.contact_message;
