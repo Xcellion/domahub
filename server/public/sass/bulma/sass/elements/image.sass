@@ -14,15 +14,14 @@ $dimensions: 16 24 32 48 64 96 128 256 512
     margin-left: 0
     margin-right: 0
   &.listing-img
-    height: 193.75px
+    img
+      height: 100%
+      width: 100%
+      object-fit: cover
   img
     display: block
     height: auto
     width: 100%
-    &.is-listing
-      height: 100%
-      width: 100%
-      object-fit: cover
 
   // Ratio
   &.is-square,
