@@ -11,7 +11,274 @@
 
 	<body>
 		<%- include("../templates/navbar", {user: user}); %>
-		<%- include("../templates/listing_page") %>
+
+		<section id="background_image" class="section listing-section landing-img" style="background-image:url('<%= listing_info.background_image || 'https://source.unsplash.com/category/nature' %>')">
+		  <div class="img-wrapper">
+		    <div id="listing-hero" class="container">
+		      <div>
+
+		      </div>
+		      <div class="content has-text-centered">
+		        <a tabindex="1" href="http://<%= listing_info.domain_name %>">
+		        <h1 id="domain-display" class="title is-1 is-bold is-primary is-inline-block">
+		        <%= listing_info.domain_name %></h1></a>
+		        <h2 class="subtitle is-4 is-white margin-top-15">
+		        <% if (listing_info.status == 1) { %>
+		          Currently Available
+		          <% } else { %>
+		          Currently Unavailable
+		          <% } %>
+		        </h2>
+		      </div>
+		      <div class="columns is-mobile">
+		        <div class="column is-8-tablet is-hidden-mobile">
+
+		        </div>
+		        <div class="column is-4-tablet">
+		          <div id="price-display">
+		            <h2 class="is-black is-bold has-text-centered">
+		              <% if (listing_info.status == 1) { %>
+		                  $<%= listing_info.price_rate %> Per <%= listing_info.price_type.charAt(0).toUpperCase() + listing_info.price_type.substr(1) %>
+		              <% } else if (listing_info.available){ %>
+		                  Available for Purchase
+		              <% } else { %>
+		                  Request Listing
+		              <% } %>
+		            </h2>
+		          </div>
+		        </div>
+		      </div>
+		    </div>
+		  </div>
+		</section>
+
+		<section id="top-wrapper" class="min-height">
+		  <div class="container">
+		    <div class="columns flex-column-mobile">
+		      <div class="column is-8 order-2-mobile">
+						<% if (!listing_info.available) { %>
+						<div class="notification is-primary margin-top-25">
+							<div class="content">
+								<h2 class="is-bold is-white">Do you own this domain?</h2>
+								<p class="is-white">
+									List your domain on DomaHub and start making
+									money today! Sign up below.
+								</p>
+							</div>
+							<div class="content">
+		            <form class="beta-form">
+		              <div class="control is-grouped">
+		                <p class="control is-expanded">
+		                  <input tabindex="1" class="input is-expanded is-medium" type="email" name="betaemail" placeholder="Enter your email"/>
+		                </p>
+		                <p class="control">
+		                  <a tabindex="1" class="beta-submit button is-primary is-inverted is-medium">Sign Up</a>
+		                </p>
+		              </div>
+		            </form>
+		            <div class="beta-form-success is-hidden">
+		              <div class="notification has-text-centered is-white">
+		                <h3 class="is-primary is-bold">Success! You have been put on the waiting list.</h3>
+		              </div>
+		            </div>
+		          </div>
+						</div>
+						<% } %>
+						<div id="similar-domains" class="listing-module">
+		          <div class="content margin-bottom-25">
+		            <h2>Similar Domains</h2>
+		          </div>
+		          <div class="columns">
+		            <div class="column is-4">
+		              <figure class="image is-4by3">
+		                <h3 class="price-tag">$15 / mo</h3>
+		                <img src="https://images.unsplash.com/photo-1450205205793-95358d4d18c0?ixlib=rb-0.3.5&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=1080&fit=max&s=d783586b9be94f799b01c31051e7279e" />
+		              </figure>
+		              <h3 class="is-bold">sorrymonkeys.com</h3>
+		              <p>
+		                Currently available
+		              </p>
+		            </div>
+		            <div class="column is-4">
+		              <figure class="image is-4by3">
+		                <h3 class="price-tag">$15 / mo</h3>
+		                <img src="https://scstylecaster.files.wordpress.com/2016/08/tom-hiddleston.gif?w=1024&h=730" />
+		              </figure>
+		              <h3 class="is-bold">sorrymonkeys.com</h3>
+		              <p>
+		                Currently available
+		              </p>
+		            </div>
+		            <div class="column is-4">
+		              <figure class="image is-4by3">
+		                <h3 class="price-tag">$15 / mo</h3>
+		                <img src="https://images.unsplash.com/photo-1440658172029-9d9e5cdc127c?ixlib=rb-0.3.5&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=1080&fit=max&s=2402725c9073b6f801a082bffb09e9d5" />
+		              </figure>
+		              <h3 class="is-bold">sorrymonkeys.com</h3>
+		              <p>
+		                Currently available
+		              </p>
+		            </div>
+		          </div>
+		        </div>
+					</div>
+					<div class="column is-4 order-1-mobile">
+		        <div id="checkout-card" class="card">
+		          <div class="card-content">
+		            <div class="content">
+		              <% if (listing_info.available) { %>
+		                <p>
+		                    While this domain is unavailable for rent at DomaHub,
+		                    it is available for purchase at any of the sites listed below.
+		                </p>
+		                <p>
+		                    Purchase it today for your own use or list it with us to
+		                    make some money!
+		                </p>
+		              <% } else { %>
+		                <p>
+		                    This domain is currently unavailable. You may request
+		                    the listing by clicking the button below which will
+		                    notify both DomaHub and the domain owner.
+		                </p>
+		              <% } %>
+		            </div>
+		          </div>
+		          <footer class="card-footer">
+		            <% if (listing_info.status == 1) { %>
+		              <a id="more-info-button" tabindex="1" class="card-footer-item no-border has-icon">
+		                <span>Show More Information</span>
+		                <span class="icon is-small">
+		                  <i class="fa fa-angle-down"></i>
+		                </span>
+		              </a>
+		              <a id="less-info-button" tabindex="1" class="card-footer-item has-icon is-hidden">
+		                <span>Hide Information</span>
+		                <span class="icon is-small">
+		                  <i class="fa fa-angle-up"></i>
+		                </span>
+		              </a>
+		                <!-- <a tabindex="1" class="card-footer-item has-icon">
+		                  <span class="icon is-small">
+		                    <i class="fa fa-bookmark"></i>
+		                  </span>
+		                  <span>Save</span>
+		                </a>
+		                <a tabindex="1" class="card-footer-item has-icon">
+		                  <span class="icon is-small">
+		                    <i class="fa fa-flag"></i>
+		                  </span>
+		                  <span>Report</span>
+		                </a>
+		                <a tabindex="1" class="card-footer-item has-icon">
+		                  <span class="icon is-small">
+		                    <i class="fa fa-share-alt"></i>
+		                  </span>
+		                  <span>Share</span>
+		                </a> -->
+		            <% } else if (listing_info.available) { %>
+		                <a id="google_link" tabindex="1" class="card-footer-item" href="https://domains.google.com/registrar?s=<%= listing_info.domain_name %>">Google</a>
+		                <a id="namecheap_link" tabindex="1" class="card-footer-item" href="https://www.namecheap.com/domains/registration/results.aspx?domain=<%= listing_info.domain_name %>&aff=108189">Namecheap</a>
+		                <a id="godaddy_link" tabindex="1" class="card-footer-item" href="https://www.godaddy.com/domains/searchresults.aspx?domainToCheck=<%= listing_info.domain_name %>">GoDaddy</a>
+		            <% } else { %>
+		                <a id="request_link" class="button is-fullwidth is-primary" tabindex="1">Request Listing</a>
+		            <% } %>
+		          </footer>
+		        </div>
+		        <div id="description-card" class="card margin-bottom-25 is-hidden">
+		          <div class="card-content">
+		            <% if (listing_info.description) { %>
+		            <div class="content listing-info">
+		              <h3 class="is-bold">Description</h3>
+		              <p>
+		                <%= listing_info.description %>
+		              </p>
+		            </div>
+		            <% } %>
+		            <div class="content listing-info">
+		              <nav class="level">
+		                <div class="level-left">
+		                  <p class="level-item">Alexa Ranking</p>
+		                </div>
+		                <div class="level-right">
+		                  <p class="level-item is-bold"><%= listing_info.alexa.globalRank || "-" %></p>
+		                </div>
+		              </nav>
+		              <nav class="level">
+		                <div class="level-left">
+		                  <p class="level-item">Daily Time on Site</p>
+		                </div>
+		                <div class="level-right">
+		                  <p class="level-item is-bold"><%= listing_info.alexa.engagement.dailyTimeOnSite || "-" %></p>
+		                </div>
+		              </nav>
+		              <nav class="level">
+		                <div class="level-left">
+		                  <p class="level-item">Daily Pageviews per Visitor</p>
+		                </div>
+		                <div class="level-right">
+		                  <p class="level-item is-bold"><%= listing_info.alexa.engagement.dailyPageViewPerVisitor || "-" %></p>
+		                </div>
+		              </nav>
+		              <nav class="level">
+		                <div class="level-left">
+		                  <p class="level-item">Bounce Rate</p>
+		                </div>
+		                <div class="level-right">
+		                  <p class="level-item is-bold"><%= listing_info.alexa.engagement.bounceRate || "-" %></p>
+		                </div>
+		              </nav>
+		              <small class="margin-top-10">
+		                  For more information, visit <a title="Link to respective Alexa website" target="_blank" class='is-accent' href="http://www.alexa.com/siteinfo/<%= listing_info.domain_name %>">Alexa.com</a>
+		              </small>
+		            </div>
+		            <% if (listing_info.categories) { %>
+		            <div class="content listing-info">
+		              <h3 class="is-bold margin-bottom-15">Categories</h3>
+		              <div class="is-flex-wrap">
+		                <% var categories_array = listing_info.categories.split(" ")
+		                for (var i = 0; i < categories_array.length; i++) { %>
+		                     <span class="tag is-accent"><%= categories_array[i].charAt(0).toUpperCase() + categories_array[i].substr(1); %></span>
+		              <% } %>
+		            </div>
+		            </div>
+		            <% } %>
+		            <div class="content">
+		              <% if (listing_info.owner_id){ %>
+		                  <h3 class="is-bold margin-bottom-15">Listed By</h3>
+		              <% } else { %>
+		                  <h3 class="is-bold margin-bottom-15">Owned By</h3>
+		              <% } %>
+		              <article class="media">
+		                <figure class="media-left">
+		                  <p class="image is-circle is-64x64">
+		                    <% if (listing_info.profile_pic){ %>
+		                      <img src="<%= listing_info.profile_pic %>">
+		                    <% } else { %>
+		                      <%- "<img src='https://placeholdit.imgix.net/~text?txtsize=25&bg=9e9e9e&txtclr=ffffff&txt=" + listing_info.username + "&w=128&h=128'/>" %>
+		                    <% } %>
+		                  </p>
+		                </figure>
+		                <div class="media-content">
+		                  <div class="content">
+		                    <h3><%= listing_info.username %></h3>
+		                    <% if (listing_info.user_created) { %>
+		                      <p>
+		                        User since <span id='user-since'></span>
+		                      </p>
+		                    <% } %>
+		                  </div>
+		                </div>
+		              </article>
+		            </div>
+		          </div>
+		        </div>
+		      </div>
+				</div>
+			</div>
+		</section>
+
+
 		<%- include("../templates/footer"); %>
 		<%- include("../templates/js_scripts"); %>
 		<script type="text/javascript">
