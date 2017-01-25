@@ -47,7 +47,6 @@
   &:hover,
   &:focus,
   &.is-active
-    outline: none
     border-color: $black-primary
   &.is-active
     &:hover,
@@ -59,6 +58,9 @@
   // Modifiers
   &.no-shadow
     +box-shadow(0,0,0,$black,0)
+  &.is-icon
+    border: none
+    border-radius: 0
 
   // Colors
   @each $name, $pair in $colors
@@ -103,25 +105,6 @@
           &:active,
           &:focus
             background-color: darken($color, 16%)
-      &.is-outlined-no-fill
-        background-color: transparent
-        border-color: $color
-        color: $color
-        &:hover,
-        &:active,
-        &:focus,
-        &.is-active
-
-        &.is-active
-          +transition(all 0.25s ease)
-      &.is-blank
-        background-color: transparent
-        border-color: transparent
-        color: $color
-        &:hover,
-        &:active,
-        &:focus
-          border-color: $color
 
   // Sizes
   &.is-small
