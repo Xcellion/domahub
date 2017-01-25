@@ -128,13 +128,10 @@
     cursor: pointer
   &.has-shadow-effect
     +transition(all 0.25s ease)
-    &:hover
-      +box-shadows(2px 5px 3px 0 rgba(0,0,0,.14),-2px 5px 3px -2px rgba(0,0,0,.2),0 3px 3px 0 rgba(0,0,0,.12))
+    &:hover,
     &:active,
-    &:focus,
-    &.is-active
-      outline: none
-      +box-shadows(3px 10px 10px 0 rgba(0,0,0,.14),0 -1px 5px -2px rgba(0,0,0,.2),-3px 10px 10px 0 rgba(0,0,0,.12))
+    &:focus
+      +box-shadow(0,5px,10px,$black-disabled,0)
   &.min-height
     min-height: 350px
   &.is-transparent

@@ -20,14 +20,11 @@
     border: 1px solid $border
     &:not(:last-child)
       margin-bottom: 15px
-    &:hover
-      cursor: pointer
-      +box-shadows(3px 2px 2px 0 rgba(0,0,0,.14),0 -1px 2px -1px rgba(0,0,0,.2),-3px 5px 5px 0 rgba(0,0,0,.12))
+    &:hover,
     &:active,
-    &:focus,
-    &.is-active
-      outline: none
-      +box-shadows(3px 10px 10px 0 rgba(0,0,0,.14),0 -1px 5px -2px rgba(0,0,0,.2),-3px 10px 10px 0 rgba(0,0,0,.12))
+    &:focus
+      cursor: pointer
+      +box-shadow(0,5px,10px,$black-disabled,0)
 
 .box-flip
   @extend .block
@@ -42,15 +39,11 @@
   margin: 0 auto
   padding: 20px
   width: 345px
-  // &:hover
-  //   cursor: pointer
-  //   +box-shadows(3px 2px 2px 0 rgba(0,0,0,.14),0 -1px 2px -1px rgba(0,0,0,.2),-3px 5px 5px 0 rgba(0,0,0,.12))
-  // &:active,
-  // &:focus,
-  // &.is-active
-  //   outline: none
-  //   +box-shadows(3px 10px 10px 0 rgba(0,0,0,.14),0 -1px 5px -2px rgba(0,0,0,.2),-3px 10px 10px 0 rgba(0,0,0,.12))
-
+  &:hover,
+  &:active,
+  &:focus
+    cursor: pointer
+    +box-shadow(0,5px,10px,$black-disabled,0)
 
 .box-footer
   display: flex
