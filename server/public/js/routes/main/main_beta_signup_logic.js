@@ -7,11 +7,11 @@ $(document).ready(function() {
     $('.beta-form').submit(function(e){
         e.preventDefault();
 
-        var beta_email = $(this).serialize().split("=")[1];
+        var beta_email = $(this).find(".input").val();
         var beta_form = $(this);
         if (beta_email){
-            $(this).find(".beta-submit").addClass("is-loading");
-
+            var beta_submit = $(this).find(".beta-submit");
+            beta_submit.addClass("is-loading");
             $.ajax({
                 type: "POST",
                 url: "/beta",
@@ -19,8 +19,11 @@ $(document).ready(function() {
                     betaemail: beta_email
                 }
             }).done(function(data){
-                beta_form.addClass("is-hidden");
-                beta_form.next().removeClass("is-hidden");
+                beta_submit.removeClass("is-loading");
+                if (data.state == "success"){
+                    beta_form.addClass("is-hidden");
+                    beta_form.next().removeClass("is-hidden");
+                }
             });
         }
     });
