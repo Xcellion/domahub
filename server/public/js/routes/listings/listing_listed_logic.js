@@ -291,7 +291,7 @@ function successHandler(data){
 function editPopularRentalModule(){
 	var popular_rental_id = $("#popular-rental-module").data("rental_id");
 	if (popular_rental_id){
-		$("#popular-rental-duration").text(aggregateDateDuration(popular_rental_id.rental_id));
+		$("#popular-rental-duration").text(aggregateDateDuration(popular_rental_id));
 	}
 }
 
