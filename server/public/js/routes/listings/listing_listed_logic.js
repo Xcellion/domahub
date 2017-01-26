@@ -291,8 +291,7 @@ function successHandler(data){
 function editPopularRentalModule(){
 	var popular_rental_id = $("#popular-rental-module").data("rental_id");
 	if (popular_rental_id){
-		var timeInfo = aggregateDateDuration(popular_rental_id);
-		$("#popular-rental-duration").text(Math.ceil(moment.duration(timeInfo.totalDuration).as(listing_info.price_type)) + " " + listing_info.price_type.capitalizeFirstLetter() + " Rental");
+		$("#popular-rental-duration").text(aggregateDateDuration(popular_rental_id.rental_id));
 	}
 }
 
@@ -300,8 +299,7 @@ function editPopularRentalModule(){
 function editPreviousRentalModule(){
 	if ($("#previous-listings-table")){
 		$(".previous-rental-duration").each(function(){
-			var timeInfo = aggregateDateDuration($(this).data("rental_id"));
-			$(this).text(Math.ceil(moment.duration(timeInfo.totalDuration).as(listing_info.price_type)) + " " + listing_info.price_type.capitalizeFirstLetter() + " Rental");
+			$(this).text(aggregateDateDuration($(this).data("rental_id")));
 		});
 	}
 }
@@ -316,10 +314,7 @@ function aggregateDateDuration(rental_id){
 			totalDuration += listing_info.rentals[x].duration;
 		}
 	}
-	return {
-		startDate: startDate,
-		totalDuration: totalDuration
-	}
+	return Math.ceil(moment.duration(totalDuration).as(listing_info.price_type)) + " " + listing_info.price_type.capitalizeFirstLetter() + " Rental";
 }
 
 //to cap the first letter
