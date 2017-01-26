@@ -42,27 +42,37 @@
   <div class="container">
     <div class="columns flex-column-mobile">
       <div class="column is-8 order-2-mobile">
-        <div class="listing-module">
+
+      <% if (listing_info.rentals){ %>
+          <% var popular_rental; %>
+          <% for (var x = 0; x < listing_info.rentals.length; x++){ %>
+              <% var max_views = 0;
+              if (listing_info.rentals[x].views > max_views){
+                  popular_rental = listing_info.rentals[x];
+              } %>
+          <% } %>
+          <% var background_image = (popular_rental.address == "") ? "https://placeholdit.imgix.net/~text?txtsize=40&txt=NO%20PREVIEW" : "/screenshot?rental_address=" + popular_rental.address; %>
+          <% background_image = (popular_rental.address.match(/\.(jpeg|jpg|gif|png)$/) != null) ? popular_rental.address : background_image; %>
+        <div id="popular-rental-module" data-rental_id="<%= popular_rental.rental_id %>" class="listing-module">
           <div class="content margin-bottom-25">
-            <h2>Most Popular Rental</h2>
+            <h2>Trending Rental</h2>
           </div>
           <div class="card is-fullwidth no-shadow">
             <div class="card-image">
-              <figure id="trending-rental-image" class="image">
+              <figure class="image">
+                <img id="popular-rental-img" src="<%= background_image %>" alt="Image">
               </figure>
             </div>
             <div class="card-content">
               <nav class="level">
                 <div class="level-left">
                   <div class="content level-item">
-                    <h3 class="is-bold">
-                      3 Day Rental
-                    </h3>
-                    <p>45 Views</p>
+                    <h3 id="popular-rental-duration" class="is-bold"></h3>
+                    <p id="popular-rental-views"><%= popular_rental.views %> Views</p>
                   </div>
                 </div>
                 <div class="level-right">
-                  <a class="button is-primary level-item">
+                  <a  target="_blank" id="popular-rental-preview" href="/listing/<%= listing_info.domain_name + '/' + popular_rental.rental_id %>" class="button is-primary level-item">
                     <span>View</span>
                     <span class="icon is-small">
                       <i class="fa fa-external-link-square"></i>
@@ -74,58 +84,58 @@
           </div>
         </div>
 
-        <div id="previous-listings-table" class="listing-module">
-          <div class="content margin-bottom-25">
-            <h2>Previous Rentals</h2>
-          </div>
-          <div class="previous-listing">
-            <div class="previous-stats">
-              <h3 class="previous-listing-title">
-                3 Day Rental · 56 Views
-              </h3>
-              <a class="button is-primary is-inverted">
-                <span>View</span>
-                <span class="icon is-small">
-                  <i class="fa fa-external-link-square"></i>
-                </span>
-              </a>
+        <% if (listing_info.rentals.length > 1) { %>
+            <div id="previous-listings-table" class="listing-module">
+              <div class="content margin-bottom-25">
+                <h2>Latest Rentals</h2>
+              </div>
+              <div id="previous-listing-clone" class="is-hidden previous-listing">
+                  <div class="previous-stats">
+                      <h3 class="previous-listing-title">
+                        <span class='previous-rental-duration'></span> · <span class='previous-rental-views'></span> Views
+                      </h3>
+                      <a target="_blank" class="button is-primary is-inverted">
+                          <span>View</span>
+                          <span class="icon is-small">
+                            <i class="fa fa-external-link-square"></i>
+                          </span>
+                      </a>
+                  </div>
+              </div>
+              <% var existing_array = [popular_rental.rental_id] %>
+              <% var index_counter = listing_info.rentals.length; %>
+
+              <%# TOTAL NUMBER OF LATEST RENTALS TO SHOW %>
+              <% var total_existing = 5; %>
+
+              <% for (var x = 0; x < Math.min(listing_info.rentals.length, total_existing); x++){ %>
+                  <% index_counter-- %>
+                  <% if (existing_array.indexOf(listing_info.rentals[index_counter].rental_id) == -1) { %>
+                      <% var temp_rental = listing_info.rentals[index_counter]; %>
+                      <% var temp_background = (temp_rental.address == "") ? "https://placeholdit.imgix.net/~text?txtsize=40&txt=NO%20PREVIEW" : "/screenshot?rental_address=" + temp_rental.address; %>
+                      <% temp_background = (temp_rental.address.match(/\.(jpeg|jpg|gif|png)$/) != null) ? temp_rental.address : temp_background; %>
+                      <div class="previous-listing" style="background-image: url(<%= temp_background %>)">
+                          <div class="previous-stats">
+                              <h3 class="previous-listing-title">
+                                <span data-rental_id="<%= temp_rental.rental_id %>" class='previous-rental-duration'></span> · <%= temp_rental.views %> Views
+                              </h3>
+                              <a target="_blank" href="/listing/<%= listing_info.domain_name + '/' + temp_rental.rental_id%>" class="button is-primary is-inverted">
+                                  <span>View</span>
+                                  <span class="icon is-small">
+                                    <i class="fa fa-external-link-square"></i>
+                                  </span>
+                              </a>
+                          </div>
+                      </div>
+                      <% existing_array.push(temp_rental.rental_id) %>
+                  <% } else { %>
+                      <% total_existing++ %>
+                  <% } %>
+              <% } %>
             </div>
-          </div>
-          <div class="previous-listing">
-            <div class="previous-stats">
-              <h3 class="previous-listing-title">
-                3 Day Rental · 56 Views
-              </h3>
-              <a class="button is-primary is-inverted">
-                <span>View</span>
-                <span class="icon is-small">
-                  <i class="fa fa-external-link-square"></i>
-                </span>
-              </a>
-            </div>
-          </div>
-          <div class="previous-listing">
-            <div class="previous-stats">
-              <h3 class="previous-listing-title">
-                3 Day Rental · 56 Views
-              </h3>
-              <a class="button is-primary is-inverted">
-                <span>View</span>
-                <span class="icon is-small">
-                  <i class="fa fa-external-link-square"></i>
-                </span>
-              </a>
-            </div>
-          </div>
-          <div class="content margin-bottom-25">
-            <a class="button no-shadow is-fullwidth">
-              <span>Load More</span>
-              <span class="icon">
-                <i class="fa fa-angle-down"></i>
-              </span>
-            </a>
-          </div>
-        </div>
+        <% } %>
+
+        <% } %>
         <div id="similar-domains" class="listing-module">
           <div class="content margin-bottom-25">
             <h2>Similar Domains</h2>
