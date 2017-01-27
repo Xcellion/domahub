@@ -24,6 +24,12 @@ module.exports = function(app, db, auth, error, stripe){
 		search_functions.getRandomListingByCategory
 	]);
 
+	//get a random listing with specific category
+	app.post("/listing/related", [
+		urlencodedParser,
+		search_functions.getRelatedListings
+	]);
+
 	// //search for a listing with specific filters
 	// app.post("/listing/search", [
 	// 	urlencodedParser,
@@ -278,9 +284,11 @@ function checkDomainValid(req, res, next){
 	console.log("F: Checking domain FQDN validity...");
 
 	var domain_name = req.params.domain_name || req.body["domain-name"];
-
 	if (!validator.isAscii(domain_name) || !validator.isFQDN(domain_name)){
 		error.handler(req, res, "Invalid domain name!");
+	}
+	else if (req.params.domain_name != req.params.domain_name.toLowerCase()){
+		res.redirect("/listing/" + req.params.domain_name.toLowerCase());
 	}
 	else {
 		next();
