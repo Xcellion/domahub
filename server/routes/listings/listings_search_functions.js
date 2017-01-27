@@ -22,6 +22,7 @@ module.exports = {
 
 	//returns a random listing by category
 	getRandomListingByCategory : function(req, res, next){
+		console.log("F: Finding a random listing based on category...");
 		var category = req.params.category.toLowerCase();
 
 		//make sure the category is legit
@@ -39,6 +40,39 @@ module.exports = {
 		//if not a legit category
 		else {
 			res.redirect("/");
+		}
+	},
+
+	//returns three related listing by category
+	getRelatedListings : function(req, res, next){
+		console.log("F: Finding related listings...");
+		var categories = req.body.categories.split(" ");
+		var domain_name_exclude = req.body.domain_name_exclude;
+
+		var categories_clean = [];
+		for (var x = 0; x < categories.length; x++){
+			if (Categories.existsBack(categories[x])){
+				categories_clean.push(categories[x]);
+			}
+		}
+		categories_clean = (categories_clean.length == 0) ? [" ", " "] : categories_clean;
+
+		//make sure the domain it's coming from is legit first
+		if (validator.isFQDN(domain_name_exclude)){
+			categories_clean = categories_clean.join("|");
+			Listing.getRelatedListings(categories_clean, domain_name_exclude, function(result){
+				if (!result.info.length || result.state == "error"){
+					res.send({
+						state: "error"
+					});
+				}
+				else {
+					res.send({
+						state: "success",
+						listings: result.info
+					});
+				}
+			});
 		}
 	},
 

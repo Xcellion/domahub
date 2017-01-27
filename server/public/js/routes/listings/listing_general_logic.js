@@ -23,10 +23,39 @@ $(document).ready(function() {
 		$("#description-card").toggleClass("is-hidden");
 	});
 
-	//show preview button on previous listing
-	// $(".previous-listing").hover(function() {
-	// 	$(this).find(".button").toggleClass("is-hidden");
-	// 	$(this).find(".previous-listing-title").toggleClass("is-hidden");
-	// });
+	//related domains module
+	findRelatedDomains();
 
 });
+
+//related domains
+function findRelatedDomains(){
+	var categories_to_post = listing_info.categories || "";
+
+	$.ajax({
+		url: "/listing/related",
+		method: "POST",
+		data: {
+			categories: categories_to_post,
+			domain_name_exclude: listing_info.domain_name
+		}
+	}).done(function(data){
+		console.log(data);
+		if (data.state == "success"){
+			$("#similar-domains").removeClass('is-hidden');
+			for (var x = 0; x < data.listings.length; x++){
+				var cloned_similar_listing = $("#similar-domain-clone").clone();
+				cloned_similar_listing.removeAttr("id").removeClass('is-hidden');
+
+				//edit it based on new listing info
+				cloned_similar_listing.find(".similar-domain-price").text(data.listings[x].price_rate + " / " + data.listings[x].price_type);
+				var random_sig = Math.floor(Math.random()*1000);
+				var background_image = data.listings[x].background_image || "https://source.unsplash.com/category/nature?sig=" + random_sig;
+				cloned_similar_listing.find(".similar-domain-img").attr("src", background_image);
+				cloned_similar_listing.find(".similar-domain-name").text(data.listings[x].domain_name);
+				cloned_similar_listing.find(".similar-domain-name").text(data.listings[x].domain_name);
+				$("#similar-domain-table").append(cloned_similar_listing);
+			}
+		}
+	})
+}
