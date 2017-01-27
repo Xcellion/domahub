@@ -11,11 +11,6 @@
   }
 }
 
-// file upload button
-.drop-form-file {
-  width: 100%;
-}
-
 // listing image delete button
 .listing-img {
    .delete {
@@ -25,9 +20,38 @@
    }
 }
 
+// listing modules
+.listing-module {
+  padding: 10px 0;
+  &:not(:last-child) {
+    border-bottom: 1px solid $border;
+  }
+}
+
+// listing image size
+.listing-img {
+  margin: 0 auto;
+  width: 250px;
+  img {
+    height: 250px;
+    width: 250px;
+  }
+}
+
+// card-footer-item form full width
+.drop-form-file {
+  width: 100%;
+}
+
 // listings and rentals page stuff
 .verification-container {
   padding-left: 50px;
+}
+
+// category buttons
+.category-selector {
+  margin-right: 8px;
+  margin-bottom: 8px
 }
 
 // table stuff

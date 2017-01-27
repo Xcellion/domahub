@@ -848,8 +848,7 @@ table {
   box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
   background-color: white;
   border-radius: 5px;
-  display: block;
-  padding: 20px; }
+  display: block; }
   .box.is-primary {
     background-color: #3cbc8d; }
   .box.no-shadow {
@@ -1509,7 +1508,6 @@ a.box {
         .button.is-danger.is-outlined.is-active:hover, .button.is-danger.is-outlined.is-active:active, .button.is-danger.is-outlined.is-active:focus {
           background-color: #da1814; }
   .button.is-small {
-    border-radius: 2px;
     font-size: 14px;
     height: 24px;
     line-height: 13px;
@@ -1709,7 +1707,7 @@ input:-webkit-autofill {
 
 .textarea {
   border-radius: 3px;
-  border: 1px solid rgba(0, 0, 0, 0.12);
+  border: 1px solid rgba(0, 0, 0, 0.38);
   display: block;
   line-height: 1.2;
   max-height: 600px;
@@ -2166,10 +2164,6 @@ input:-webkit-autofill {
   .image.left-aligned {
     margin-left: 0;
     margin-right: 0; }
-  .image.listing-img img {
-    height: 100%;
-    width: 100%;
-    object-fit: cover; }
   .image img {
     display: block;
     height: auto;
@@ -2417,13 +2411,9 @@ input:-webkit-autofill {
     .table td > .div-drop,
     .table th > .div-drop {
       background-color: white;
-      border: 1px solid rgba(0, 0, 0, 0.12);
-      border-width: 0 0 1px;
-      padding: 15px; }
-      .table td > .div-drop:hover,
-      .table th > .div-drop:hover {
-        background-color: white;
-        cursor: default; }
+      border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+      padding: 10px;
+      cursor: auto; }
     .table td.is-icon,
     .table th.is-icon {
       padding: 5px;

@@ -165,8 +165,8 @@ function createRowDrop(listing_info, rownum){
     else {
         //append various stuff to the row drop div
         temp_div_col.append(
-            createInfoDrop(listing_info),
-            createImgDrop(listing_info, rownum)
+					createInfoDrop(listing_info),
+					createImgDrop(listing_info, rownum)
         );
     }
 
@@ -309,49 +309,61 @@ function createStatusDrop(listing_info){
 
 //function to create the listing info form drop
 function createInfoDrop(listing_info){
-    var temp_col = $("<div class='column'></div>");
-    var temp_form = $("<form class='drop-form'></form>");
+	var temp_form = $("<form class='drop-form column is-8'></form>");
+    	var temp_cols1 = $("<div class='columns listing-module'></div>");
+						var temp_col1 = $("<div class='column is-4'></div>");
+						var temp_col2 = $("<div class='column is-8'></div>");
+			var temp_cols2 = $("<div class='columns listing-module'></div>");
+						var temp_col3 = $("<div class='column is-4'></div>");
+						var temp_col4 = $("<div class='column is-8'></div>");
+			var temp_cols3 = $("<div class='columns listing-module'></div>");
+						var temp_col5 = $("<div class='column is-4'></div>");
+						var temp_col6 = $("<div class='column is-8'></div>");
 
     //variables to hide or disable things based on verification status
     var verified_hidden = (listing_info.verified == null) ? 'is-hidden" tabindex="1"' : "";
     var verified_disabled = (listing_info.verified == null) ? 'is-disabled" tabindex="1"' : "";
 
     //date created
-    var temp_div1 = $('<div class="control is-horizontal"></div>');
-        var temp_div1_control = $("<div class='control-label is-aligned-top is-small'></div>");
-            var temp_div1_label = $("<label class='label'>Date created</label>")
-        var temp_div1_p = $("<p class='control is-grouped'></p>");
-            var temp_div1_input = $("<p class='margin-left-10 control is-expanded'>" + moment(listing_info.date_created).format("MMMM DD, YYYY") + "</p>");
+    var temp_div1 = $('<div class="content"></div>');
+        var temp_div1_input = $("<p>Created " + moment(listing_info.date_created).format("MMMM DD, YYYY") + "</p>");
+
+		//headers on left column
+		var temp_header1 = $('<p class="is-bold">Premium Status</p>')
+		var temp_header2 = $('<p class="is-bold">Listing Description</p>')
+		var temp_header3 = $('<p class="is-bold">Categories</p>')
+
+		//premium status
+		var temp_level = $('<nav class="level"></nav>');
+				var temp_level_left = $('<div class="level-left"></div>');
+				var temp_level_right = $('<div class="level-right"></div>');
 
     //show an expiration or renewal date if this is a premium listing
     var premium = listing_info.exp_date >= new Date().getTime();
     var expiring = (listing_info.expiring == 0) ? false : true;
 
-    var expiring_text = (expiring) ? "Premium expiring" : "Premium renewing";
+    var expiring_text = (expiring) ? "Expiring" : "Renewing";
     var premium_hidden = (premium) ? "" : "is-hidden";
-    var expiry_date = $('<div class="' + premium_hidden + ' margin-right-10 premium-exp-date">' + expiring_text + " on " + moment(listing_info.exp_date).format("YYYY-MM-DD") + "</div>");
+    var expiry_date = $('<p class="' + premium_hidden + ' is-inline-block premium-exp-date">' + expiring_text + " on " + moment(listing_info.exp_date).format("DD/MM/YY") + "</p>");
 
-    temp_div1.append(temp_div1_control.append(temp_div1_label), temp_div1_p.append(temp_div1_input), expiry_date, createPremiumButton(listing_info));
+    temp_div1.append(temp_div1_input);
+		temp_level.append(temp_level.append(temp_level_left.append(expiry_date), temp_level_right.append(createPremiumButton(listing_info))));
 
     //description
     var description = (listing_info.description == null) ? "" : listing_info.description;
-    var temp_div2 = $('<div class="control is-horizontal"></div>');
-        var temp_div2_control_label = $('<div class="control-label is-aligned-top padding-top-10 is-small">');
-            var temp_div2_label = $('<label class="label">Description</label>');
+    var temp_div2 = $('<div class="control"></div>');
         var temp_div2_control = $('<div class="control">');
             var temp_div2_input = $('<textarea tabindex="1" class="description-input textarea changeable-input ' + verified_disabled + '" placeholder="Rent this website for any time period you please!">' + description + '</textarea>')
                 temp_div2_input.data("name", "description");
 
-    temp_div2.append(temp_div2_control_label.append(temp_div2_label), temp_div2_control.append(temp_div2_input));
+    temp_div2.append(temp_div2_control.append(temp_div2_input));
 
     //categories
     var categories = (listing_info.categories) ? listing_info.categories : "";
-    var temp_div3 = $('<div class="control is-horizontal"></div>');
-        var temp_div3_control_label = $('<div class="control-label is-small">');
-            var temp_div3_label = $('<label class="label">Categories</label>');
-            var temp_category_selectors = createCategorySelections(listing_info);
+    var temp_div3 = $('<div class="control"></div>');
+        var temp_category_selectors = createCategorySelections(listing_info);
 
-    temp_div3.append(temp_div3_control_label.append(temp_div3_label), temp_category_selectors);
+    temp_div3.append(temp_category_selectors);
 
     //error message
     var temp_msg_error = $("<div class='listing-msg-error is-hidden is-danger notification'></div>");
@@ -363,7 +375,9 @@ function createInfoDrop(listing_info){
         var temp_msg_delete_s = $("<button class='delete'></button>");
         temp_msg_success.append(temp_msg_delete_s);
 
-    temp_col.append(temp_form.append(temp_div1, temp_div2, temp_div3, createSubmitCancelButton(listing_info), temp_msg_error, temp_msg_success));
+    temp_form.append(temp_cols1.append(temp_col1.append(temp_header1), temp_col2.append(temp_level)),
+										 temp_cols2.append(temp_col3.append(temp_header2), temp_col4.append(temp_div2)),
+									   temp_cols3.append(temp_col5.append(temp_header3), temp_col6.append(temp_div3, createSubmitCancelButton(listing_info), temp_msg_error, temp_msg_success)));
 
     //to hide the message (error)
     temp_msg_delete_e.click(function(e){
@@ -377,12 +391,12 @@ function createInfoDrop(listing_info){
         temp_msg_success.addClass('is-hidden');
     });
 
-    return temp_col;
+    return temp_form;
 }
 
 //function to create the categories selectors
 function createCategorySelections(listing_info){
-	var temp_div3_control = $('<div class="control category-control">');
+	var temp_div3_control = $('<div class="is-flex-wrap category-control">');
 	var temp_div3_input = $('<input tabindex="1" class="is-hidden categories-input input changeable-input value="' + listing_info.categories + '"></input>').val(listing_info.categories).data('name', "categories");
 	temp_div3_control.append(temp_div3_input);
 	clickHandler(temp_div3_control, listing_info);
@@ -397,7 +411,7 @@ function clickHandler(control, listing_info){
 	for (var x = 0; x < categories.length; x++){
 		var listing_categories = (listing_info.categories) ? listing_info.categories.split(" ") : [];
 		var selected = (listing_categories.indexOf(categories[x].back) != -1) ? " is-accent" : ""
-		var temp_category = $("<a class='button is-outlined category-selector no-shadow margin-right-5" + selected + "'>" + categories[x].front + "</a>").data("category", categories[x].back);
+		var temp_category = $("<a class='button category-selector no-shadow" + selected + "'>" + categories[x].front + "</a>").data("category", categories[x].back);
 		var temp_div3_input = control.find(".categories-input");
 
 		//click to add this category
@@ -453,7 +467,7 @@ function clickHandler(control, listing_info){
 
 //function to create the premium drop down column
 function createPremiumButton(listing_info){
-    var temp_form = $("<form class='drop-form'></form>");
+    var temp_form = $("<form class='drop-form is-inline-block v-align-top'></form>");
     var verified_disabled = (listing_info.verified == null) ? 'is-disabled" tabindex="1"' : "";
 
     var premium = listing_info.exp_date >= new Date().getTime();
@@ -465,7 +479,7 @@ function createPremiumButton(listing_info){
         premium_text = (expiring) ? "Renew Premium" : premium_text;
     var premium_src = (premium) ? "/downgrade" : "/upgrade";
         premium_src = (expiring) ? "/upgrade" : premium_src;
-    var temp_upgrade_button = $('<a tabindex="1" title="Upgrade Listing" href="/listing/' + listing_info.domain_name + premium_src + '" class="margin-right-10 button no-shadow is-accent' + verified_disabled + '">' + premium_text + '</a>');
+    var temp_upgrade_button = $('<a tabindex="1" title="Upgrade Listing" href="/listing/' + listing_info.domain_name + premium_src + '" class="button is-small no-shadow is-accent' + verified_disabled + '">' + premium_text + '</a>');
 
     if (!premium || expiring){
         //stripe upgrade button
@@ -517,16 +531,16 @@ function createImgDrop(listing_info, rownum){
     var background_image = (listing_info.background_image == null || listing_info.background_image == undefined || listing_info.background_image == "") ? "https://placeholdit.imgix.net/~text?txtsize=40&txt=RANDOM%20PHOTO&w=200&h=200" : listing_info.background_image;
     var verified_disabled = (listing_info.verified == null) ? 'is-disabled" tabindex="1"' : "";
 
-    var temp_col = $("<div class='column is-one-quarter'></div>");
-    var temp_div = $("<div class='card no-shadow'></div>");
+    var temp_col = $("<div class='column is-4'></div>");
+    var temp_div = $("<div class='card listing-img no-shadow'></div>");
     var temp_div_image = $("<div class='card-image'></div>")
-    var temp_figure = $("<figure class='image listing-img is-256x256'></figure>");
+    var temp_figure = $("<figure class='image listing-img'></figure>");
     var temp_x = $('<button tabindex="1" class="delete-img delete ' + verified_disabled + '"></button>');
-    var temp_img = $("<img class='is-listing' alt='Image not found' src=" + background_image + " />");
+    var temp_img = $("<img alt='Image not found' src=" + background_image + " />");
     var temp_footer = $("<footer class='card-footer'></div>");
     var temp_form = $('<form tabindex="1" id="mult-form' + rownum + '" class="drop-form-file" action="/listings/create/multiple" method="post" enctype="multipart/form-data"></form>')
     var temp_input = $('<input type="file" id="file' + rownum + '" name="background_image" accept="image/png, image/gif, image/jpeg" class="picture-file changeable-input input-file ' + verified_disabled + '" />');
-    var temp_input_label = $('<label for="file' + rownum + '" class="button is-fullwidth no-shadow' + verified_disabled + '"><i class="fa fa-upload"></i><p class="file-label">Upload Picture</p></label>');
+    var temp_input_label = $('<label for="file' + rownum + '" class="card-footer-item' + verified_disabled + '"><i class="fa fa-upload"></i><p class="file-label">Upload Picture</p></label>');
     temp_input.data("name", "background_image");
     temp_col.append(temp_div.append(temp_div_image.append(temp_figure.append(temp_x, temp_img)), temp_footer.append(temp_form.append(temp_input, temp_input_label))));
 
@@ -751,7 +765,7 @@ function refreshSubmitbindings(bool_for_status_td){
                         e.preventDefault();
                         var file_name = ($(this).val()) ? $(this).val().replace(/^.*[\\\/]/, '') : "Change Picture";
                         file_name = (file_name.length > 14) ? "..." + file_name.substr(file_name.length - 14) : file_name;
-                        $(this).next(".button").find(".file-label").text(file_name);
+                        $(this).next(".card-footer-item").find(".file-label").text(file_name);
 
                         changedListingValue($(this), info);
                     });

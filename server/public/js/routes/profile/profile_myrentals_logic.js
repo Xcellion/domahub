@@ -322,9 +322,9 @@ function createImgDrop(rental_info){
 	}
 
     var temp_col = $("<div class='column is-4'></div>");
-    var temp_div = $("<div class='card is-pulled-right no-shadow'></div>");
+    var temp_div = $("<div class='card is-pulled-right no-shadow listing-img'></div>");
     var temp_div_image = $("<div class='card-image'></div>")
-    var temp_figure = $("<figure class='image listing-img is-256x256'></figure>");
+    var temp_figure = $("<figure class='image listing-img'></figure>");
     var temp_img = $("<img class='is-listing' alt='Image not found' src=" + background_image + " />");
     var temp_footer = $("<footer class='card-footer has-text-centered'></div>");
     var temp_preview_button = $("<a href='' class='button'>Click to Preview</a>");
