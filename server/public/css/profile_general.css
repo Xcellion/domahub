@@ -6,16 +6,32 @@
   .is-profile-card {
     width: 275px; } }
 
-.drop-form-file {
-  width: 100%; }
-
 .listing-img .delete {
   border-radius: 0 3px;
   position: absolute;
   right: 0; }
 
+.listing-module {
+  padding: 10px 0; }
+  .listing-module:not(:last-child) {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.12); }
+
+.listing-img {
+  margin: 0 auto;
+  width: 250px; }
+  .listing-img img {
+    height: 250px;
+    width: 250px; }
+
+.drop-form-file {
+  width: 100%; }
+
 .verification-container {
   padding-left: 50px; }
+
+.category-selector {
+  margin-right: 8px;
+  margin-bottom: 8px; }
 
 @media screen and (min-width: 769px) {
   .table {
