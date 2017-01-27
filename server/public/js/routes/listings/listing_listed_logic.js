@@ -95,7 +95,7 @@ $(document).ready(function() {
 	});
 
 	//show redirect modal content
-	$('#existing-login-button, #redirect-next-button, #checkout-back-button').click(function() {
+	$('#redirect-next-button, #checkout-back-button').click(function() {
 		showModalContent("redirect");
 	});
 

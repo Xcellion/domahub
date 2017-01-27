@@ -10,7 +10,7 @@
         <%= listing_info.domain_name %></h1></a>
         <h2 class="subtitle is-4 is-white margin-top-15">
         <% if (listing_info.status == 1) { %>
-          Currently Available
+          Currently Available for Rent
           <% } else { %>
           Currently Unavailable
           <% } %>
@@ -43,7 +43,7 @@
     <div class="columns flex-column-mobile">
       <div class="column is-8 order-2-mobile">
 
-      <% if (listing_info.rentals){ %>
+      <% if (listing_info.rentals.length > 0){ %>
           <% var popular_rental; %>
           <% for (var x = 0; x < listing_info.rentals.length; x++){ %>
               <% var max_views = 0;
@@ -112,7 +112,7 @@
                   <% index_counter-- %>
                   <% if (existing_array.indexOf(listing_info.rentals[index_counter].rental_id) == -1) { %>
                       <% var temp_rental = listing_info.rentals[index_counter]; %>
-                      <% var temp_background = (temp_rental.address == "") ? "https://placeholdit.imgix.net/~text?txtsize=40&txt=NO%20PREVIEW" : "/screenshot?rental_address=" + temp_rental.address; %>
+                      <% var temp_background = (temp_rental.address == "") ? "https://placeholdit.imgix.net/~text?txtsize=40&txt=NO%20PREVIEW" : "/screenshot?rental_address=" + temp_rental.address + "&width=700&height=100"; %>
                       <% temp_background = (temp_rental.address.match(/\.(jpeg|jpg|gif|png)$/) != null) ? temp_rental.address : temp_background; %>
                       <div class="previous-listing" style="background-image: url(<%= temp_background %>)">
                           <div class="previous-stats">
@@ -136,40 +136,18 @@
         <% } %>
 
         <% } %>
-        <div id="similar-domains" class="listing-module">
+        <div id="similar-domains" class="is-hidden listing-module">
           <div class="content margin-bottom-25">
-            <h2>Similar Domains</h2>
+            <h2 id="similar-domains-title">Other Domains</h2>
           </div>
-          <div class="columns">
-            <div class="column is-4">
+          <div id="similar-domain-table" class="columns">
+            <div id="similar-domain-clone" class="is-hidden column is-4">
               <figure class="image is-4by3">
-                <h3 class="price-tag">$15 / mo</h3>
-                <img src="https://images.unsplash.com/photo-1450205205793-95358d4d18c0?ixlib=rb-0.3.5&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=1080&fit=max&s=d783586b9be94f799b01c31051e7279e" />
+                <h3 class="similar-domain-price price-tag"></h3>
+                <img class="similar-domain-img" src="" />
               </figure>
-              <h3 class="is-bold">sorrymonkeys.com</h3>
-              <p>
-                Currently available
-              </p>
-            </div>
-            <div class="column is-4">
-              <figure class="image is-4by3">
-                <h3 class="price-tag">$15 / mo</h3>
-                <img src="https://scstylecaster.files.wordpress.com/2016/08/tom-hiddleston.gif?w=1024&h=730" />
-              </figure>
-              <h3 class="is-bold">sorrymonkeys.com</h3>
-              <p>
-                Currently available
-              </p>
-            </div>
-            <div class="column is-4">
-              <figure class="image is-4by3">
-                <h3 class="price-tag">$15 / mo</h3>
-                <img src="https://images.unsplash.com/photo-1440658172029-9d9e5cdc127c?ixlib=rb-0.3.5&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=1080&fit=max&s=2402725c9073b6f801a082bffb09e9d5" />
-              </figure>
-              <h3 class="is-bold">sorrymonkeys.com</h3>
-              <p>
-                Currently available
-              </p>
+              <h3 class="similar-domain-name" class="is-bold"></h3>
+              <p class="similar-domain-available">Now available!</p>
             </div>
           </div>
         </div>
@@ -257,10 +235,10 @@
           <div class="card-content">
             <% if (listing_info.description) { %>
             <div class="content listing-info">
-              <h3 class="is-bold">Description</h3>
-              <p>
+              <h3 class="is-bold margin-bottom-15">Description</h3>
+              <div>
                 <%= listing_info.description %>
-              </p>
+              </div>
             </div>
             <% } %>
             <div class="content listing-info">

@@ -945,6 +945,9 @@ function cancelListingChanges(row, row_drop, cancel_button, listing_info){
     row_drop.find(".description-input").val(listing_info.description);
     row_drop.find(".categories-input").val(listing_info.categories);
 
+	//revert categories
+	clickHandler(row_drop.find(".category-control"), listing_info);
+
     //image
     var img_elem = row_drop.find("img.is-listing");
 	var background_image = (listing_info.background_image == null || listing_info.background_image == undefined || listing_info.background_image == "") ? "https://placeholdit.imgix.net/~text?txtsize=40&txt=RANDOM%20PHOTO&w=200&h=200" : listing_info.background_image;

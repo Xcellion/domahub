@@ -183,6 +183,23 @@ listing_model.prototype.getRandomListingByCategory = function(category, callback
 	listing_query(query, "Failed to get a random listing with category: " + category + "!", callback, category);
 }
 
+//gets listings related to specific categories
+listing_model.prototype.getRelatedListings = function(categories, domain_name_exclude, callback){
+	console.log("DB: Attempting to get related listings with categories: " + categories + "...");
+	query = "SELECT \
+				listings.domain_name, \
+				listings.background_image, \
+				listings.price_type, \
+				listings.price_rate \
+			FROM listings \
+			WHERE categories REGEXP ? \
+			AND listings.domain_name != ? \
+			AND listings.status = 1 \
+			ORDER BY RAND() \
+			LIMIT 3"
+	listing_query(query, "Failed to get related listings with categories: " + categories + "!", callback, [categories, domain_name_exclude]);
+}
+
 //gets all active listings with X category, X domain name, X price -- and all active rentals/rental_times for them
 listing_model.prototype.getListingByFilter = function(filter_name, filter_price, filter_date, callback){
 	console.log("DB: Attempting to search for a listing...");
