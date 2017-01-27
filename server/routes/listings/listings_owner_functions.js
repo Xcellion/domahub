@@ -282,7 +282,7 @@ module.exports = {
 
 		var upload_img = multer({
 			storage: storage,
-			limits: { fileSize: 2500000 },
+			limits: { fileSize: 250000 },
 
 			//to check for file type
 			fileFilter: function (req, file, cb) {
