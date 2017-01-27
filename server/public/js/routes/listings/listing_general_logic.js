@@ -30,7 +30,14 @@ $(document).ready(function() {
 
 //related domains
 function findRelatedDomains(){
-	var categories_to_post = listing_info.categories || "";
+	if (listing_info.categories){
+		var categories_to_post = listing_info.categories;
+		$("#similar-domains-title").text('Similar Domains');
+	}
+	else {
+		var categories_to_post = "";
+		$("#similar-domains-title").text('Other Domains');
+	}
 
 	$.ajax({
 		url: "/listing/related",
@@ -40,7 +47,6 @@ function findRelatedDomains(){
 			domain_name_exclude: listing_info.domain_name
 		}
 	}).done(function(data){
-		console.log(data);
 		if (data.state == "success"){
 			$("#similar-domains").removeClass('is-hidden');
 			for (var x = 0; x < data.listings.length; x++){
@@ -50,7 +56,7 @@ function findRelatedDomains(){
 				//edit it based on new listing info
 				cloned_similar_listing.find(".similar-domain-price").text(data.listings[x].price_rate + " / " + data.listings[x].price_type);
 				var random_sig = Math.floor(Math.random()*1000);
-				var background_image = data.listings[x].background_image || "https://source.unsplash.com/category/nature?sig=" + random_sig;
+				var background_image = data.listings[x].background_image || "https://source.unsplash.com/category/nature/250x200?sig=" + random_sig;
 				cloned_similar_listing.find(".similar-domain-img").attr("src", background_image);
 				cloned_similar_listing.find(".similar-domain-name").text(data.listings[x].domain_name);
 				cloned_similar_listing.find(".similar-domain-name").text(data.listings[x].domain_name);

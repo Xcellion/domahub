@@ -297,9 +297,9 @@ function createDatesDrop(rental_info){
 	temp_col.append(temp_control_labels.append(temp_p_start, temp_ol));
 
     for (var x = 0; x < rental_info.date.length; x++){
-        var disp_start = moment(new Date(rental_info.date[x])).format('MMMM DD, YYYY h:mmA');
+        var disp_start = moment(new Date(rental_info.date[x])).format('MMMM D, YYYY h:mmA');
         var disp_duration = moment.duration(rental_info.duration[x]).humanize();
-        var disp_end = moment(parseFloat(rental_info.date[x]) + parseFloat(rental_info.duration[x])).format('MMMM DD, YYYY h:mmA');
+        var disp_end = moment(parseFloat(rental_info.date[x]) + parseFloat(rental_info.duration[x])).format('MMMM D, YYYY h:mmA');
 
         var p_date = $("<li>" + disp_start + " - " + disp_end + " <span class='is-accent'>(" + disp_duration + ")</span></li>");
 
