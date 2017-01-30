@@ -2387,10 +2387,7 @@ input:-webkit-autofill {
   .table.no-borders th {
     border-bottom: none; }
   .table td {
-    padding: 6px; }
-    @media screen and (max-width: 768px) {
-      .table td {
-        padding: 12px 8px; } }
+    padding: 8px; }
   .table td,
   .table th {
     vertical-align: middle;
@@ -2456,9 +2453,6 @@ input:-webkit-autofill {
     color: rgba(0, 0, 0, 0.9);
     font-weight: bold;
     padding: 12px 6px; }
-    @media screen and (max-width: 768px) {
-      .table th {
-        padding: 12px 8px; } }
   .table thead {
     border-bottom: 2px solid rgba(0, 0, 0, 0.12); }
     .table thead.has-shadow {
@@ -2490,16 +2484,16 @@ input:-webkit-autofill {
     background: #3cbc8d;
     position: absolute;
     content: "";
-    height: 44px;
+    height: 48px;
     width: 4px;
     left: 19px; }
     @media screen and (max-width: 768px) {
       .table tbody tr.row-disp.verified-row:hover::after {
-        height: 43px;
+        height: 36px;
         left: 0; } }
   @media screen and (max-width: 768px) {
     .table tbody tr.row-disp.verified-row.is-expanded {
-      height: 56px; } }
+      height: 48px; } }
   .table tbody tr.row-disp.unverified-row::after {
     background: #EF5350;
     position: absolute;
@@ -6308,10 +6302,6 @@ a.nav-item.is-tab {
     display: none; } }
 
 /********************** CUSTOM CLASS STYLING ******************/
-.logo-text {
-  font-family: "Ubuntu", serif;
-  font-size: 28px; }
-
 .min-height {
   min-height: calc(100vh - 200px); }
 

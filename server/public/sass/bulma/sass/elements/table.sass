@@ -10,9 +10,7 @@
     th
       border-bottom: none
   td
-    padding: 6px
-    +mobile
-      padding: 12px 8px
+    padding: 8px
   td,
   th
     vertical-align: middle
@@ -62,8 +60,6 @@
     color: $text
     font-weight: bold
     padding: 12px 6px
-    +mobile
-      padding: 12px 8px
   thead
     border-bottom: 2px solid $border
     &.has-shadow
@@ -101,15 +97,18 @@
               background: $primary
               position: absolute
               content: ""
-              height: 44px
+              height: 48px
               width: 4px
               left: 19px
               +mobile
-                height: 43px
+                height: 36px
                 left: 0
+          // fix for dropdown on mobile
           &.is-expanded
-            +mobile
-              height: 56px
+            &:hover
+              &::after
+                +mobile
+                  height: 48px
 
         &.unverified-row
           &::after
