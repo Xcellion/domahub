@@ -2387,7 +2387,7 @@ input:-webkit-autofill {
   .table.no-borders th {
     border-bottom: none; }
   .table td {
-    padding: 8px; }
+    padding: 8px 6px; }
   .table td,
   .table th {
     vertical-align: middle;
@@ -2492,7 +2492,7 @@ input:-webkit-autofill {
         height: 36px;
         left: 0; } }
   @media screen and (max-width: 768px) {
-    .table tbody tr.row-disp.verified-row.is-expanded {
+    .table tbody tr.row-disp.verified-row.is-expanded:hover::after {
       height: 48px; } }
   .table tbody tr.row-disp.unverified-row::after {
     background: #EF5350;
