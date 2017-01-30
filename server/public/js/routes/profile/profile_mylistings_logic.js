@@ -344,7 +344,7 @@ function createInfoDrop(listing_info){
 
     var expiring_text = (expiring) ? "Expiring" : "Renewing";
     var premium_hidden = (premium) ? "" : "is-hidden";
-    var expiry_date = $('<p class="' + premium_hidden + ' is-inline-block premium-exp-date">' + expiring_text + " on " + moment(listing_info.exp_date).format("DD/MM/YY") + "</p>");
+    var expiry_date = $('<p class="' + premium_hidden + ' is-inline-block premium-exp-date">' + expiring_text + " on " + moment(listing_info.exp_date).format("MMM DD, YYYY") + "</p>");
 
     temp_div1.append(temp_div1_input);
 		temp_level.append(temp_level.append(temp_level_left.append(expiry_date), temp_level_right.append(createPremiumButton(listing_info))));
