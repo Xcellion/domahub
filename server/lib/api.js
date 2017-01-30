@@ -80,6 +80,7 @@ function searchAndDirect(rental_info, req, res){
 		console.log("F: No address associated with rental! Displaying default empty page...");
 		res.render("./views/proxy/proxy-image.ejs", {
 			image: "",
+			edit: false,
 			preview: false,
 			doma_rental_info : rental_info
 		});
@@ -97,6 +98,7 @@ function requestProxy(req, res, rental_info){
 			console.log("F: Requested rental address was an image!");
 			res.render("./views/proxy/proxy-image.ejs", {
 				image: rental_info.address,
+				edit: false,
 				preview: false,
 				doma_rental_info : rental_info
 			});

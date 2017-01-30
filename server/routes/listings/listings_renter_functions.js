@@ -513,9 +513,12 @@ module.exports = {
                 //not an image requested
                 if (response.headers['content-type'].indexOf("image") == -1){
                     var index_path = (node_env == "dev") ? path.resolve(process.cwd(), 'server', 'views', 'proxy', 'proxy-index.ejs') : path.resolve(process.cwd(), 'views', 'proxy', 'proxy-index.ejs');
+                    var preview_path = (node_env == "dev") ? path.resolve(process.cwd(), 'server', 'views', 'proxy', 'proxy-preview.ejs') : path.resolve(process.cwd(), 'views', 'proxy', 'proxy-preview.ejs');
+
                     var proxy_index = fs.readFileSync(index_path);
+                    var proxy_preview = fs.readFileSync(preview_path);
                     var rental_info_buffer = new Buffer("<script>var doma_rental_info = " + JSON.stringify(req.session.rental_info) + "</script>");
-                    var buffer_array = [body, proxy_index, rental_info_buffer];
+                    var buffer_array = [body, proxy_index, proxy_preview, rental_info_buffer];
 
                     //if authenticated to edit the rental preview
                     if (req.session.proxy_edit){
@@ -540,7 +543,8 @@ module.exports = {
                 else {
                     res.render("proxy/proxy-image.ejs", {
                         image: req.session.rental_info.address,
-                        preview: req.session.proxy_edit,
+                        edit: req.session.proxy_edit,
+                        preview: true,
                         doma_rental_info : req.session.rental_info
                     });
                 }
@@ -553,7 +557,8 @@ module.exports = {
         else {
             res.render("proxy/proxy-image.ejs", {
                 image: "",
-                preview: req.session.proxy_edit,
+                edit: req.session.proxy_edit,
+                preview: true,
                 doma_rental_info : req.session.rental_info
             });
         }
