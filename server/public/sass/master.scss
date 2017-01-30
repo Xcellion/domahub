@@ -1,12 +1,6 @@
 @import 'bulma/bulma.sass';
 
 /********************** CUSTOM CLASS STYLING ******************/
-.logo-text {
-  font: {
-    family: $ubuntu;
-    size: $size-3;
-  }
-}
 
 .min-height {
   min-height: calc(100vh - 200px);
