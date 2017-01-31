@@ -52,7 +52,7 @@
 		  </div>
 		</section>
 
-		<section id="top-wrapper" class="min-height">
+		<section id="top-wrapper" class=" min-height">
 		  <div class="container">
 		    <div class="columns flex-column-mobile">
 		      <div class="column is-8 order-2-mobile">
@@ -90,12 +90,13 @@
 				          </div>
 				          <div id="similar-domain-table" class="columns">
 				            <div id="similar-domain-clone" class="is-hidden column is-4">
-				              <figure class="image is-4by3">
-				                <h3 class="similar-domain-price price-tag"></h3>
-				                <img class="similar-domain-img" src="" />
-				              </figure>
-				              <h3 class="similar-domain-name" class="is-bold"></h3>
-				              <p class="similar-domain-available">Now available!</p>
+											<div class="similar-domain-box">
+				                <h3>
+				                  <a class="similar-domain-name is-accent"></a>
+				                </h3>
+				                <p class="similar-domain-price is-bold"></p>
+				                <p class="similar-domain-available">Now available!</p>
+				              </div>
 				            </div>
 				          </div>
 				        </div>
@@ -107,7 +108,7 @@
 		              <% if (listing_info.available) { %>
 		                <p>
 		                    While this domain is unavailable for rent at DomaHub,
-		                    it is available for purchase at any of the sites listed below.
+		                    it may be available for purchase at any of the sites listed below.
 		                </p>
 		                <p>
 		                    Purchase it today for your own use or list it with us to
