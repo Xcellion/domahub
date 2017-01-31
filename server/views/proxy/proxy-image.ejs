@@ -21,8 +21,10 @@
             <% } %>
         </div>
     <% } %>
-    <% if (preview) { %>
+    <% if (edit) { %>
         <%- include("proxy-edit.ejs"); %>
+    <% } else if (preview) { %>
+        <%- include("proxy-preview.ejs"); %>
     <% } else { %>
         <%- include("proxy-noedit.ejs"); %>
     <% } %>
