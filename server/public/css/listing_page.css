@@ -1,6 +1,8 @@
-@media screen and (max-width: 768px) {
-  #top-wrapper {
-    padding: 0 20px 40px; } }
+#top-wrapper {
+  margin-bottom: 50px; }
+  @media screen and (max-width: 768px) {
+    #top-wrapper {
+      padding: 0 20px 40px; } }
 
 #domain-display {
   color: #62c9a3;
@@ -43,15 +45,6 @@
 
 .listing-module {
   padding: 25px 0; }
-
-.price-tag {
-  background-color: #212121;
-  top: 0;
-  color: white;
-  font-weight: bold;
-  padding: 5px;
-  position: absolute;
-  z-index: 5; }
 
 #previous-listings-cards {
   display: flex;

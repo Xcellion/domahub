@@ -5,6 +5,7 @@
   @include mobile {
     padding: 0 20px 40px;
   }
+  margin-bottom: 50px;
 }
 
 #domain-display {
@@ -57,15 +58,6 @@
   padding: 25px 0;
 }
 
-.price-tag {
-  background-color: $grey-darker;
-  top: 0;
-  color: $white-primary;
-  font-weight: bold;
-  padding: 5px;
-  position: absolute;
-  z-index: 5;
-}
 
 #previous-listings-cards {
   display: flex;
