@@ -40,13 +40,13 @@ h3,
 p
   color: $text
   & + a
-    margin-top: 5px
+    margin-top: 10px
 
 h1,
 h2,
 h3,
   & + p
-    margin-top: 5px
+    margin-top: 10px
 
 h1
   font-size: $size-3
@@ -143,6 +143,8 @@ input[type="radio"]
 small
   font-size: $size-small
   line-height: normal
+  & + small
+    margin-top: 5px
   @each $name, $pair in $colors
     $color: nth($pair, 1)
     $color-invert: nth($pair, 2)

@@ -11,32 +11,39 @@
 <body>
 
   <%- include("../templates/navbar", {user: user}); %>
-  <section id="index-img" class="section is-large landing-img">
+  <section id="index-img" class="hero is-medium is-primary gradient-left-right">
     <div class="container">
-      <div class="columns">
-        <div class="column is-6-desktop is-offset-3-desktop is-8-tablet is-offset-2-tablet">
-          <div class="content">
-            <h1 class="title is-1 is-white margin-bottom-25">
-                The <span class="\">Hub</span> for renting <span class="">Doma</span>in names.
-            </h1>
-            <h2 class="subtitle is-5 is-white margin-bottom-25">
-              DomaHub provides domain name rentals at low, affordable prices and flexible time slots.
-            </h2>
+      <div class="hero-body">
+        <div class="columns">
+          <div class="column is-6">
+            <div class="content">
+              <h1 class="title is-1 is-white margin-bottom-25">
+                  The Hub for renting Domain names.
+              </h1>
+              <p class="subtitle is-5 is-white margin-bottom-25">
+                DomaHub is a marketplace for domain name rentals offering
+                quality domain names at flexible time slots.
+              </p>
+            </div>
           </div>
-          <div class="content">
-            <form class="beta-form">
-              <div class="control is-grouped">
-                <p class="control is-expanded">
-                  <input tabindex="1" class="input is-expanded is-medium" type="email" name="betaemail" placeholder="Enter your email"/>
-                </p>
-                <p class="control">
-                  <a tabindex="1" class="beta-submit button is-primary is-medium">Sign Up for Beta</a>
-                </p>
+          <div class="column is-6">
+            <div class="card is-centered is-rounded">
+              <div class="card-header is-white is-rounded has-shadow">
+                <h3 class="card-header-title is-bold has-text-centered">Sign Up for Beta</h3>
               </div>
-            </form>
-            <div class="beta-form-success is-hidden">
-              <div class="notification has-text-centered is-white">
-                <h3 class="is-primary is-bold">Success! You have been put on the waiting list.</h3>
+              <div class="card-content">
+                <form class="beta-form">
+                    <p class="control is-expanded">
+                      <label class="label is-medium">Email Address</label>
+                      <input tabindex="1" class="input is-expanded is-medium" type="email" name="betaemail" placeholder="Press Enter to Submit"/>
+                    </p>
+                </form>
+                <div class="beta-form-success is-hidden">
+                  <h3 class="is-bold">Success! You have been put on the waiting list.</h3>
+                </div>
+              </div>
+              <div class="card-footer">
+                <a tabindex="1" class="beta-submit card-footer-item button is-primary is-medium" title="Sign Up">Submit Email</a>
               </div>
             </div>
           </div>
@@ -70,35 +77,49 @@
             </p>
           </div>
           <div class="content margin-top-25">
-            <h2 class="margin-bottom-15">Two types of listings</h2>
-            <div class="columns">
-              <div class="column">
-                <div class="content">
-                  <h3 class="is-bold is-accent tag is-medium">Basic</h3>
-                  <p>
-                    Free to list with a
-                    15% commission on all successful rentals.
-                  </p>
-                </div>
-              </div>
-              <div class="column">
-                <div class="content">
-                  <h3 class="is-bold is-primary tag is-medium">Premium</h3>
-                  <p>
-                    $5 / month per listing with no commission
-                    on your sales. You keep everything you earn.
-                  </p>
-                </div>
-              </div>
-            </div>
-            <a tabindex="1" href="/sellers#basicvpremium" class="is-accent">
-              Learn more about Basic and Premium Listings
+            <h2 class="margin-bottom-15">Tiered commission system</h2>
+            <p>
+              We offer a commission based system with three tiers applied on a
+              listing-to-listing basis. Every listing starts off with 15% commission
+              which decreases with each successive level.
+            </p>
+            <table class="table has-shadow">
+              <thead>
+                <th>Level</th>
+                <th>Rental Rate</th>
+                <th>Commission</th>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>1</td>
+                  <td>0 - 25%</td>
+                  <td>15%</td>
+                </tr>
+                <tr>
+                  <td>2</td>
+                  <td>25 - 50%</td>
+                  <td>13.5%</td>
+                </tr>
+                <tr>
+                  <td>3</td>
+                  <td>50% +</td>
+                  <td>12%</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="content">
+            <a tabindex="1" href="/sellers" class="is-accent" title="Selling on DomaHub">
+              <span>Learn more about selling on DomaHub</span>
+              <span class="icon is-small v-align-bottom">
+                <i class="fa fa-caret-right"></i>
+              </span>
             </a>
           </div>
         </div>
         <div class="column is-6 is-offset-1">
           <div class="content margin-bottom-15">
-            <h2>DomaHub benefits</h2>
+            <h2>DomaHub Benefits</h2>
             <p>
               Click on each slider below to learn more.
             </p>
@@ -332,7 +353,7 @@
                     <input tabindex="1" class="input is-expanded is-medium" type="email" name="betaemail" placeholder="Enter your email"/>
                   </p>
                   <p class="control">
-                    <a tabindex="1" class="beta-submit button is-primary is-medium">Sign Up for Beta</a>
+                    <a tabindex="1" class="beta-submit button is-primary is-medium">Sign Up</a>
                   </p>
                 </div>
               </form>
