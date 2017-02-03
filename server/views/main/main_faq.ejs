@@ -56,16 +56,16 @@
                 What exactly does DomaHub do?</h3>
               <p class="faq-answer">
                 DomaHub is a marketplace that allows domain name
-                owners to rent out their domains to prospective renters.
-                We aim to connect previously unused domains with potential users.
+                owners to rent out their domains. Our foremost goal is to
+                make all domains - especially those that are unused - more
+                accessible to everyone.
               </p>
             </div>
             <div class="qa-wrapper">
               <h3 class="faq-question" title="How does DomaHub make money?">
                 How does DomaHub make money?</h3>
               <p class="faq-answer">
-                DomaHub receives money every time a Basic listing is rented out
-                as well as when a Premium listing is posted.
+                DomaHub takes a percentage based commission from every successful rental.
               </p>
             </div>
           </div>
@@ -83,8 +83,15 @@
               <h3 class="faq-question" title="How long can I keep the domain?">
                 Who owns the domain?</h3>
               <p class="faq-answer">
-                Technically, the domain never leaves the ownership of the owner. Through DNS
-                and proxying, we can point the domain name to whatever content you wish to display.
+                The domain never leaves the ownership of its original owner.
+              </p>
+            </div>
+            <div class="qa-wrapper">
+              <h3 class="faq-question" title="How can I use the domain?">
+                Then how do I use the domain?</h3>
+              <p class="faq-answer">
+                Through DNS and proxying, we can point the domain name to whatever content you wish to display.
+                All you have to do is provide a URL and it will be redirected to the domain rental.
               </p>
             </div>
             <div class="qa-wrapper">
@@ -94,8 +101,6 @@
                 You may only use the domain for the amount of time you paid for.
                 Any content being redirected to that domain will immediately stop once your time is up.
               </p>
-              <small class="is-block">* Rental rate is the number of successful rentals divided by the total number of available rentals.</small>
-              <small class="is-block">** Regardless of level, all transactions have a 2.9% processing fee.</small>
             </div>
             <div class="qa-wrapper">
               <h3 class="faq-question" title="How can I rent a domain?">
@@ -111,7 +116,6 @@
                     You may add more time slots to your rental after your initial purchase. However, all rentals are final once paid for.
                     Please make sure to select the correct times before paying!
                 </p>
-                </br>
                 <p class="faq-answer">
                     Once your rental expires, if the domain has already been rented for the subsequent time slots,
                     you may not steal those times away from others just because you currently have the domain rented.
@@ -130,8 +134,7 @@
               <h3 class="faq-question" title="Do I have an option to buy-out the domain?">
                 Do I have an option to buy-out the domain?</h3>
               <p class="faq-answer">
-                Buy-out options are currently not available through DomaHub. However, some listings may have
-                links where you can inquire about potentially purchasing the domain.
+                Buy-out options are currently not available through DomaHub.
               </p>
             </div>
           </div>
@@ -143,25 +146,20 @@
               <p class="faq-answer">
                 Once you have created a DomaHub account you may create a listing by going to the
                 <a tabindex="1" class="is-accent" href="/listings/create" title="Create Listing Page">create listing</a> page.
+                You must verify every domain name you list with us by pointing your DNS A records to our servers.
               </p>
-                </br>
               <p class="faq-answer">
-                  Your listing will not be active until you have connected your <a tabindex="1" class="is-accent" href="/authorizestripe" title="Authorize Stripe Page">
-                  Stripe</a> account. This ensures that we can pay you securely in all future rental transactions.
-              </p>
-                </br>
-              <p class="faq-answer">
-                  DomaHub offers two types of listings: Basic and Premium. Once you have created your listing, you must point your DNS A records
-                  to our servers to verify that you own the domain.
+                  You will not be allowed to collect payments however until you have connected your <a tabindex="1" class="is-accent" href="/authorizestripe" title="Authorize Stripe Page">
+                  Stripe</a> account.
               </p>
             </div>
             <div id='verifying' class="qa-wrapper">
               <h3 class="faq-question" title="How do I verify my domain?">
                 How do I verify my domain?</h3>
               <p class="faq-answer">
-                You must point your DNS A records to our server. For more information on how to do this, please check with your domain registrar.
+                You must point your DNS A records to our servers. For more information on how to do this, please check with your domain registrar.
               </p>
-          </br>
+
               <p>
                   Registrars:
               </p>
@@ -193,38 +191,63 @@
               </p>
             </div>
 
-            <div id="basicvspremium" class="qa-wrapper">
+            <div class="qa-wrapper">
               <h3 class="faq-question" title="What are the differences between Basic and Premium listings?">
-                What are the differences between Basic and Premium listings?</h3>
+                What are the commission fees?</h3>
               <p class="faq-answer">
-                A Basic listing is free to list, but has an 15% commission on all rentals.
-                Basic listings have flat, fixed pricing which means DomaHub will decide
-                its price.
+                DomaHub takes a percentage based commission from each successful rental.
+                Each listing falls under one of three levels with varying commission rates
+                for each listing. Commission rates are based on the "Rental Rate" of the
+                listing - the number of successful rentals divided by the number of total
+                available rentals from the date it was created. Please refer to the table below.
               </p>
-                </br>
               <p class="faq-answer">
-                  A Premium listing costs $5 a month to list, but DomaHub will not take any commission from rentals.
-                  Custom pricing as well as hourly pricing are available to Premium listings. Once a listing is Premium,
-                  you will be charged monthly to maintain its Premium status. You may cancel the subscription at any point, however,
-                  the initial month charge cannot be refunded.
+                For example, if <a class="is-accent">example.com</a> has been available for
+                60 days and has been rented out for 31 days, it has achieved Level 3.
+                DomaHub will only take 12% commission from those rentals from that point onwards.
+                Logically, all listings start at Level 1.
+              </p>
+              <table class="table has-shadow margin-top-25">
+                <thead>
+                  <th>Level</th>
+                  <th>Rental Rate</th>
+                  <th>Commission*</th>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>1</td>
+                    <td>0 - 25%</td>
+                    <td>15%</td>
+                  </tr>
+                  <tr>
+                    <td>2</td>
+                    <td>25 - 50%</td>
+                    <td>13.5%</td>
+                  </tr>
+                  <tr>
+                    <td>3</td>
+                    <td>50% +</td>
+                    <td>12%</td>
+                  </tr>
+                </tbody>
+              </table>
+              <small class="is-block">* All transactions have a processing fee regardless of level. The fee is 2.9% + $0.30.</small>
+            </div>
+            <div class="qa-wrapper">
+              <h3 class="faq-question" title="Do the listing levels get reset at any point?">
+                Do the listing levels get reset at any point?
+                </h3>
+              <p class="faq-answer">
+                Yes, all listings' levels get reset at the end of the calendar year.
               </p>
             </div>
             <div class="qa-wrapper">
-              <h3 class="faq-question" title="Why should I use a Premium listing?">
-                Why should I use a Premium listing?</h3>
+              <h3 class="faq-question" title="Are there any other ways to lower the commission fee?">
+                Are there any other ways to lower the commission fee?</h3>
               <p class="faq-answer">
-                We believe that not all domain names are created equal. However, it's up to you to decide which ones hold the most value.
-                Should you believe that a domain is worth more than the default rental rates offered as a Basic listing, we recommend creating
-                a Premium listing instead.
+                Currently, no. However, we are interested in rolling out rewards programs in the
+                future.
               </p>
-            </div>
-            <div class="qa-wrapper">
-              <h3 class="faq-question" title="What are the default price rates for a Basic listing?">
-                What are the default price rates for a Basic listing?</h3>
-              <ul class="faq-answer margin-top-20 padding-left-20 has-disc">
-                <li>$10 / week.</li>
-                <li>$20 / month.</li>
-              </ul>
             </div>
             <div class="qa-wrapper">
               <h3 class="faq-question" title="What happens if I find a buyer for my domain?">
@@ -262,15 +285,6 @@
               <p class="faq-answer">
                 Once a transaction has occurred, DomaHub will hold the money in escrow until the end of the rental term, upon which you will be paid automatically through your
                 Stripe account.
-              </p>
-            </div>
-            <div class="qa-wrapper">
-              <h3 class="faq-question" title="What are the fees?">
-                What are the fees?</h3>
-              <p class="faq-answer">
-                DomaHub collects a 15% commission fee from successful Basic Listing rentals, and 0% from Premium Listings.
-                Regardless of listing type, our payments processor will take a processing fee (2.9% + $0.30) for every
-                successful transaction from the domain seller.
               </p>
             </div>
           </div>
