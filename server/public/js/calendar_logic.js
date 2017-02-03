@@ -42,12 +42,12 @@ function setUpCalendar(listing_info){
                 rendering: 'background',
                 allDay: true
             },
-            //today
+            //background event for today
             {
                 start: moment().startOf("day"),
                 end: moment().endOf("day"),
                 rendering: 'background',
-                color: "rgba(255, 87, 34, 0.15)",
+                color: "rgba(34, 87, 255, 0.15)",
                 allDay: true
             },
             //background for 1 year out
