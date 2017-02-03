@@ -41,9 +41,6 @@
   & > .content {
     align-self: center;
   }
-  & > .card {
-    align-self: flex-end;
-  }
   @include mobile {
     padding-top: 70px;
   }

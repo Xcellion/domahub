@@ -1,4 +1,4 @@
-<section id="background_image" class="section listing-section landing-img" style="background-image:url('<%= listing_info.background_image || 'https://source.unsplash.com/category/nature' %>')">
+<section id="background_image" class="section listing-section landing-img" style="background-image:url('<%= listing_info.background_image || 'https://source.unsplash.com/category/nature/800x600' %>')">
   <div class="img-wrapper">
     <div id="listing-hero" class="container">
       <div>
@@ -16,11 +16,8 @@
           <% } %>
         </h2>
       </div>
-      <div class="columns is-mobile">
-        <div class="column is-8-tablet is-hidden-mobile">
-
-        </div>
-        <div class="column is-4-tablet">
+      <div id="price-display-column" class="columns margin-right-0">
+        <div class="column is-4-tablet is-offset-8-tablet">
           <div id="price-display">
             <h2 class="is-black is-bold has-text-centered">
               <% if (listing_info.status == 1) { %>
@@ -40,7 +37,7 @@
 
 <section id="top-wrapper" class="min-height">
   <div class="container">
-    <div class="columns flex-column-mobile">
+    <div class="columns flex-column-mobile margin-right-0">
       <div class="column is-8 order-2-mobile">
 
       <% if (listing_info.rentals.length > 0){ %>
@@ -224,11 +221,11 @@
                   <span>Share</span>
                 </a> -->
             <% } else if (listing_info.available) { %>
-                <a id="google_link" tabindex="1" class="card-footer-item" href="https://domains.google.com/registrar?s=<%= listing_info.domain_name %>">Google</a>
-                <a id="namecheap_link" tabindex="1" class="card-footer-item" href="https://www.namecheap.com/domains/registration/results.aspx?domain=<%= listing_info.domain_name %>&aff=108189">Namecheap</a>
-                <a id="godaddy_link" tabindex="1" class="card-footer-item" href="https://www.godaddy.com/domains/searchresults.aspx?domainToCheck=<%= listing_info.domain_name %>">GoDaddy</a>
+              <a id="google_link" tabindex="1" class="card-footer-item" href="https://domains.google.com/registrar?s=<%= listing_info.domain_name %>">Google</a>
+              <a id="namecheap_link" tabindex="1" class="card-footer-item" href="https://www.namecheap.com/domains/registration/results.aspx?domain=<%= listing_info.domain_name %>&aff=108189">Namecheap</a>
+              <a id="godaddy_link" tabindex="1" class="card-footer-item" href="https://www.godaddy.com/domains/searchresults.aspx?domainToCheck=<%= listing_info.domain_name %>">GoDaddy</a>
             <% } else { %>
-                <a id="request_link" class="button is-fullwidth is-primary" tabindex="1">Request Listing</a>
+              <a id="request_link" class="button card-footer-item is-fullwidth is-primary" tabindex="1">Request Listing</a>
             <% } %>
           </footer>
         </div>

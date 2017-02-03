@@ -367,7 +367,7 @@ function clearDangerSuccess(){
 	$("td .is-danger").removeClass("is-danger");
 
 	//remove disabled success rows
-	$("td .is-success").closest("tr").remove();
+	$("td .is-primary").closest("tr").remove();
 }
 
 //label the incorrect table rows
@@ -414,8 +414,8 @@ function handleBadReasons(reasons, row){
 function goodTableRows(good_listings){
 	for (var x = 0; x < good_listings.length; x++){
 		var table_row = $($(".table-row").not("#clone-row")[good_listings[x].index]);
-		var explanation = $("<small class='is-success is-pulled-right'>Successfully added!</small>")
-		table_row.find(".domain-name-input").addClass('is-success').closest('td').append(explanation);
+		var explanation = $("<small class='is-primary is-pulled-right'>Successfully added!</small>")
+		table_row.find(".domain-name-input").addClass('is-primary').closest('td').append(explanation);
 		table_row.find(".domain-name-input, .price-type-input, .price-rate-input").addClass('is-disabled');
 
 		//revert checkbox to text
