@@ -547,7 +547,7 @@ function deleteBackgroundImg(temp_x, listing_info){
 function createPriceRateDrop(listing_info){
     var new_td = $("<td class='td-price-rate-drop is-hidden'></td>");
         var temp_form = $("<form class='drop-form'></form>");
-        var temp_input = $("<input type='number' min='1' step='1' class='price-rate-input has-text-right input changeable-input'></input>");
+        var temp_input = $("<input type='number' min='1' step='1' class='padding-top-0 price-rate-input has-text-right input changeable-input'></input>");
             temp_input.val(listing_info.price_rate);
             temp_input.data("name", "price_rate");
     new_td.append(temp_form.append(temp_input));
