@@ -454,7 +454,7 @@ module.exports = {
 			error.handler(req, res, "Invalid categories!", "json");
 		}
 		//invalid price type
-		else if (req.body.price_type && ["month", "week", "day", "hour"].indexOf(price_type) == -1){
+		else if (req.body.price_type && ["month", "week", "day"].indexOf(price_type) == -1){
 			error.handler(req, res, "Invalid price type!", "json");
 		}
 		else if (req.body.price_rate && !validator.isInt(price_rate)){
@@ -469,15 +469,7 @@ module.exports = {
 			req.new_listing_info.status = status;
 			req.new_listing_info.description = description;
 			req.new_listing_info.price_type = price_type;
-
-			//premium
-			if (listing_info.exp_date >= new Date().getTime()){
-				req.new_listing_info.price_rate = price_rate;
-			}
-			else {
-				req.body.price_rate = "defined";
-				req.new_listing_info.price_rate = (price_type == "month") ? 25 : 10;
-			}
+			req.new_listing_info.price_rate = price_rate;
 			req.new_listing_info.categories = (categories_clean == "") ? null : categories_clean;
 
 			//delete anything that wasnt posted (except if its "", in which case it was intentional deletion)
