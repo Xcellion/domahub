@@ -568,19 +568,13 @@ function createPriceRateDrop(listing_info){
 
 //function to create select price type drop
 function createPriceTypeDrop(listing_info){
-    var premium = listing_info.exp_date >= new Date().getTime();
-
     var new_td = $("<td class='td-price-type-drop padding-right-0 is-hidden'></td>");
         var temp_span = $("<span class='select price-type-span'></span>");
         var temp_form = $("<form class='drop-form'></form>");
         var temp_select = $("<select class='price-type-input changeable-input'></select>");
             temp_select.append("<option value='month'>Month</option");
             temp_select.append("<option value='week'>Week</option");
-
-            if (premium){
-                temp_select.append("<option value='day'>Day</option");
-                temp_select.append("<option value='hour'>Hour</option");
-            }
+            temp_select.append("<option value='day'>Day</option");
             temp_select.val(listing_info.price_type);
             temp_select.data("name", "price_type");
     new_td.append(temp_span.append(temp_form.append(temp_select)));
@@ -593,15 +587,6 @@ function createPriceTypeDrop(listing_info){
     //change the hidden price type TD along with dropdown
     temp_select.change(function(e){
         $(this).closest(".td-price-type-drop").prev(".td-price-type").text($(this).val());
-
-        if (!premium){
-            if ($(this).val() == "month"){
-                $(this).closest(".td-price-type-drop").siblings(".td-price-rate").text("$" + 25);
-            }
-            else {
-                $(this).closest(".td-price-type-drop").siblings(".td-price-rate").text("$" + 10);
-            }
-        }
     });
 
     return new_td;
@@ -657,15 +642,14 @@ function editStatus(row, editing){
     }
 }
 
-//function to change price rate column to editable only for premium
+//function to change price rate column to editable
 function editPriceRate(row, editing){
     var price_rate_drop_td = row.find(".td-price-rate-drop");
     var price_rate_td = row.find(".td-price-rate");
     var verified = row.find(".td-verify").hasClass("is-hidden");
-    var premium = row.find(".td-type").text() == "Premium";
 
     //only show price rate input when the listing is verified
-    if (verified && premium){
+    if (verified){
         if (editing){
             price_rate_td.addClass("is-hidden");
             price_rate_drop_td.removeClass("is-hidden");
@@ -677,7 +661,7 @@ function editPriceRate(row, editing){
     }
 }
 
-//function to change price rate column to editable only for premium
+//function to change price rate column to editable
 function editPriceType(row, editing){
     var price_type_drop_td = row.find(".td-price-type-drop");
     var price_type_td = row.find(".td-price-type");
@@ -1028,154 +1012,154 @@ function successMessage(msg_elem, message){
 
 // ------------------------------------------------------------------------------------------------------------------------------ PREMIUM/BASIC SUBMISSION
 
-//function to submit request to upgrade
-function submitSubscription(upgrade_button, stripeToken, stripeEmail){
-    var listing_msg = upgrade_button.closest(".row-drop").find(".listing-msg");
-    var listing_msg_success = upgrade_button.closest(".row-drop").find(".listing-msg-success");
-    errorMessage(listing_msg);
-
-    $.ajax({
-        type: "POST",
-        url: upgrade_button.attr("href"),
-        data: {
-            stripeToken: stripeToken,
-            stripeEmail: stripeEmail
-        }
-    }).done(function(data){
-        upgrade_button.removeClass('is-loading');
-        if (data.state == "error"){
-            errorMessage(listing_msg, data.message);
-        }
-        else {
-            successMessage(listing_msg_success, true);
-            listings = data.listings;
-            row_display = listings.slice(0);
-            upgradeToPremium(upgrade_button, data.new_exp_date);
-        }
-    });
-}
-
-//function to submit request to downgrade
-function submitCancellation(upgrade_button){
-    var listing_msg = upgrade_button.closest(".row-drop").find(".listing-msg");
-    var listing_msg_success = upgrade_button.closest(".row-drop").find(".listing-msg-success");
-    errorMessage(listing_msg);
-
-    $.ajax({
-        type: "POST",
-        url: upgrade_button.attr("href")
-    }).done(function(data){
-        upgrade_button.removeClass('is-loading');
-        if (data.state == "error"){
-            errorMessage(listing_msg, data.message);
-        }
-        else {
-            successMessage(listing_msg_success, true);
-            listings = data.listings;
-            row_display = listings.slice(0);
-            downgradeToBasic(upgrade_button);
-        }
-    });
-}
-
-//stuff to run after upgrading to premium
-function upgradeToPremium(upgrade_button, new_exp_date){
-    var row_drop = upgrade_button.closest(".row-drop");
-    var row = row_drop.prev(".row-disp");
-
-    //edit the various TDs
-    row.find(".td-type").text("Premium");
-    editPriceRate(row, true);
-    editPriceType(row, true);
-
-    //remove all hidden or disabled inputs
-    row_drop.find(".premium-input").removeClass("is-disabled");
-    row_drop.find(".premium-control").removeClass("is-hidden");
-
-    //change expiry date
-    var exp_date_elem = row_drop.find(".premium-exp-date");
-    exp_date_elem.text("Premium renewing on " + moment().add("1", "month").format("YYYY-MM-DD")).removeClass('is-hidden');
-
-    //change the button
-    var old_src = upgrade_button.attr("href");
-    var new_src = old_src.replace("/upgrade", "/downgrade");
-    upgrade_button.attr("href", new_src);
-    upgrade_button.html('Revert to Basic');
-    upgrade_button.off().on("click", function(e){
-        basicBind(e, $(this));
-    });
-}
-
-//stuff to run after downgrading to basic
-function downgradeToBasic(upgrade_button){
-    var row_drop = upgrade_button.closest(".row-drop");
-
-    ///dont change type TD or disable/hide buttons because cancellation happens at end of period
-
-    //change expiry date
-    var exp_date_elem = row_drop.find(".premium-exp-date");
-    var old_text = exp_date_elem.text().replace("renewing", "expiring");
-    exp_date_elem.text(old_text);
-
-    //change the button
-    var old_src = upgrade_button.attr("href");
-    var new_src = old_src.replace("/downgrade", "/upgrade");
-    upgrade_button.attr("href", new_src);
-    upgrade_button.html('Renew Premium');
-    upgrade_button.off().on("click", function(e){
-        premiumBind(e, $(this));
-    });
-}
-
-//event binder for reverting to basic
-function basicBind(e, upgrade_button){
-    e.preventDefault();
-
-    if (upgrade_button.text() == "Are you sure?"){
-        upgrade_button.addClass('is-loading');
-        submitCancellation(upgrade_button);
-    }
-    else {
-        upgrade_button.text("Are you sure?");
-    }
-}
-
-//event binder for upgrading to premium
-function premiumBind(e, upgrade_button){
-    e.preventDefault();
-
-    //stripe configuration
-    handler = StripeCheckout.configure({
-        key: 'pk_test_kcmOEkkC3QtULG5JiRMWVODJ',
-        name: 'DomaHub Domain Rentals',
-        image: '/images/d-logo.PNG',
-        panelLabel: 'Pay Monthly',
-        zipCode : true,
-        locale: 'auto',
-        email: user.email,
-        token: function(token) {
-            if (token.email != user.email){
-                var listing_msg = upgrade_button.closest(".row-drop").find(".listing-msg");
-                errorMessage(listing_msg, "Please use the same email for payments as your DomaHub account!");
-                upgrade_button.removeClass("is-loading");
-            }
-            else {
-                upgrade_button.addClass("is-loading");
-                submitSubscription(upgrade_button, token.id, token.email);
-            }
-        }
-    });
-
-    handler.open({
-        amount: 500,
-        description: "Upgrading to a Premium listing."
-    });
-
-    //close Checkout on page navigation
-    window.addEventListener('popstate', function() {
-        handler.close();
-    });
-}
+// //function to submit request to upgrade
+// function submitSubscription(upgrade_button, stripeToken, stripeEmail){
+//     var listing_msg = upgrade_button.closest(".row-drop").find(".listing-msg");
+//     var listing_msg_success = upgrade_button.closest(".row-drop").find(".listing-msg-success");
+//     errorMessage(listing_msg);
+//
+//     $.ajax({
+//         type: "POST",
+//         url: upgrade_button.attr("href"),
+//         data: {
+//             stripeToken: stripeToken,
+//             stripeEmail: stripeEmail
+//         }
+//     }).done(function(data){
+//         upgrade_button.removeClass('is-loading');
+//         if (data.state == "error"){
+//             errorMessage(listing_msg, data.message);
+//         }
+//         else {
+//             successMessage(listing_msg_success, true);
+//             listings = data.listings;
+//             row_display = listings.slice(0);
+//             upgradeToPremium(upgrade_button, data.new_exp_date);
+//         }
+//     });
+// }
+//
+// //function to submit request to downgrade
+// function submitCancellation(upgrade_button){
+//     var listing_msg = upgrade_button.closest(".row-drop").find(".listing-msg");
+//     var listing_msg_success = upgrade_button.closest(".row-drop").find(".listing-msg-success");
+//     errorMessage(listing_msg);
+//
+//     $.ajax({
+//         type: "POST",
+//         url: upgrade_button.attr("href")
+//     }).done(function(data){
+//         upgrade_button.removeClass('is-loading');
+//         if (data.state == "error"){
+//             errorMessage(listing_msg, data.message);
+//         }
+//         else {
+//             successMessage(listing_msg_success, true);
+//             listings = data.listings;
+//             row_display = listings.slice(0);
+//             downgradeToBasic(upgrade_button);
+//         }
+//     });
+// }
+//
+// //stuff to run after upgrading to premium
+// function upgradeToPremium(upgrade_button, new_exp_date){
+//     var row_drop = upgrade_button.closest(".row-drop");
+//     var row = row_drop.prev(".row-disp");
+//
+//     //edit the various TDs
+//     row.find(".td-type").text("Premium");
+//     editPriceRate(row, true);
+//     editPriceType(row, true);
+//
+//     //remove all hidden or disabled inputs
+//     row_drop.find(".premium-input").removeClass("is-disabled");
+//     row_drop.find(".premium-control").removeClass("is-hidden");
+//
+//     //change expiry date
+//     var exp_date_elem = row_drop.find(".premium-exp-date");
+//     exp_date_elem.text("Premium renewing on " + moment().add("1", "month").format("YYYY-MM-DD")).removeClass('is-hidden');
+//
+//     //change the button
+//     var old_src = upgrade_button.attr("href");
+//     var new_src = old_src.replace("/upgrade", "/downgrade");
+//     upgrade_button.attr("href", new_src);
+//     upgrade_button.html('Revert to Basic');
+//     upgrade_button.off().on("click", function(e){
+//         basicBind(e, $(this));
+//     });
+// }
+//
+// //stuff to run after downgrading to basic
+// function downgradeToBasic(upgrade_button){
+//     var row_drop = upgrade_button.closest(".row-drop");
+//
+//     ///dont change type TD or disable/hide buttons because cancellation happens at end of period
+//
+//     //change expiry date
+//     var exp_date_elem = row_drop.find(".premium-exp-date");
+//     var old_text = exp_date_elem.text().replace("renewing", "expiring");
+//     exp_date_elem.text(old_text);
+//
+//     //change the button
+//     var old_src = upgrade_button.attr("href");
+//     var new_src = old_src.replace("/downgrade", "/upgrade");
+//     upgrade_button.attr("href", new_src);
+//     upgrade_button.html('Renew Premium');
+//     upgrade_button.off().on("click", function(e){
+//         premiumBind(e, $(this));
+//     });
+// }
+//
+// //event binder for reverting to basic
+// function basicBind(e, upgrade_button){
+//     e.preventDefault();
+//
+//     if (upgrade_button.text() == "Are you sure?"){
+//         upgrade_button.addClass('is-loading');
+//         submitCancellation(upgrade_button);
+//     }
+//     else {
+//         upgrade_button.text("Are you sure?");
+//     }
+// }
+//
+// //event binder for upgrading to premium
+// function premiumBind(e, upgrade_button){
+//     e.preventDefault();
+//
+//     //stripe configuration
+//     handler = StripeCheckout.configure({
+//         key: 'pk_test_kcmOEkkC3QtULG5JiRMWVODJ',
+//         name: 'DomaHub Domain Rentals',
+//         image: '/images/d-logo.PNG',
+//         panelLabel: 'Pay Monthly',
+//         zipCode : true,
+//         locale: 'auto',
+//         email: user.email,
+//         token: function(token) {
+//             if (token.email != user.email){
+//                 var listing_msg = upgrade_button.closest(".row-drop").find(".listing-msg");
+//                 errorMessage(listing_msg, "Please use the same email for payments as your DomaHub account!");
+//                 upgrade_button.removeClass("is-loading");
+//             }
+//             else {
+//                 upgrade_button.addClass("is-loading");
+//                 submitSubscription(upgrade_button, token.id, token.email);
+//             }
+//         }
+//     });
+//
+//     handler.open({
+//         amount: 500,
+//         description: "Upgrading to a Premium listing."
+//     });
+//
+//     //close Checkout on page navigation
+//     window.addEventListener('popstate', function() {
+//         handler.close();
+//     });
+// }
 
 function toUpperCase(string){
     return string.charAt(0).toUpperCase() + string.substr(1);
