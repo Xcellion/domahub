@@ -171,9 +171,3 @@ body{
 .rental_time{
 	text-align:right;
 }
-
-#popular-rental-img{
-	min-width:600px;
-	min-height:400px;
-	background-color:black;
-}
