@@ -27,6 +27,8 @@
     $i: index($sizes, $size)
     &.is-#{$i}
       font-size: $size
+      +mobile
+        font-size: $size - 8
       code
         font-size: nth($sizes, min($i + 1, 6))
   @each $name, $pair in $colors
