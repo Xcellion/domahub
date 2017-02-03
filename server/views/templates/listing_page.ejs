@@ -48,7 +48,7 @@
                   popular_rental = listing_info.rentals[x];
               } %>
           <% } %>
-          <% var background_image = (popular_rental.address == "") ? "https://placeholdit.imgix.net/~text?txtsize=20&txt=NO%20PREVIEW&w=800&h=100" : "/screenshot?rental_address=" + popular_rental.address; %>
+          <% var background_image = (popular_rental.address == "") ? "https://placeholdit.imgix.net/~text?txtsize=20&txt=NO%20PREVIEW&w=800&h=400" : "/screenshot?rental_address=" + popular_rental.address; %>
           <% background_image = (popular_rental.address.match(/\.(jpeg|jpg|gif|png)$/) != null) ? popular_rental.address : background_image; %>
         <div id="popular-rental-module" data-rental_id="<%= popular_rental.rental_id %>" class="listing-module">
           <div class="content margin-bottom-25">
@@ -109,7 +109,7 @@
                   <% index_counter-- %>
                   <% if (existing_array.indexOf(listing_info.rentals[index_counter].rental_id) == -1) { %>
                       <% var temp_rental = listing_info.rentals[index_counter]; %>
-                      <% var temp_background = (temp_rental.address == "") ? "https://placeholdit.imgix.net/~text?txtsize=40&txt=NO%20PREVIEW" : "/screenshot?rental_address=" + temp_rental.address + "&width=700&height=100"; %>
+                      <% var temp_background = (temp_rental.address == "") ? "https://placeholdit.imgix.net/~text?txtsize=40&txt=NO%20PREVIEW&w=800&h=100" : "/screenshot?rental_address=" + temp_rental.address + "&width=700&height=100"; %>
                       <% temp_background = (temp_rental.address.match(/\.(jpeg|jpg|gif|png)$/) != null) ? temp_rental.address : temp_background; %>
                       <div class="previous-listing" style="background-image: url(<%= temp_background %>)">
                           <div class="previous-stats">
