@@ -10,7 +10,7 @@ $(document).ready(function() {
         var beta_email = $(this).find(".input").val();
         var beta_form = $(this);
         if (beta_email){
-            var beta_submit = $(this).find(".beta-submit");
+            var beta_submit = $(".beta-submit");
             beta_submit.addClass("is-loading");
             $.ajax({
                 type: "POST",
