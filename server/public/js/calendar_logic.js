@@ -87,6 +87,18 @@ function setUpCalendar(listing_info){
                 $("#today-button").removeClass('is-disabled');
             }
 
+            //dim next available or not
+            if (listing_info.rentals.length){
+                var last_rental = listing_info.rentals[listing_info.rentals.length - 1];
+
+                if (moment(last_rental.date + last_rental.duration).isBetween(currentViewStart, currentViewEnd)){
+                    $("#next-available-button").addClass('is-disabled');
+                }
+                else {
+                    $("#next-available-button").removeClass('is-disabled');
+                }
+            }
+
             if (typeof rental_min != "undefined"){
                 //dim today or not
                 if (rental_min.isBetween(currentViewStart, currentViewEnd, null, '[)')){
@@ -218,6 +230,12 @@ function setUpCalendar(listing_info){
     $(".fc-today-button").hide();
     $("#today-button").click(function(e){
         $(".fc-today-button").click();
+    });
+    $("#next-available-button").click(function(e){
+        if (listing_info.rentals.length){
+            var last_rental = listing_info.rentals[listing_info.rentals.length - 1];
+            $("#calendar").fullCalendar('gotoDate', last_rental.date + last_rental.duration);
+        }
     });
 
     //remove all events and remember
