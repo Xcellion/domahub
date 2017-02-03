@@ -108,18 +108,11 @@ module.exports = {
 				bad_reasons.push("Duplicate domain name!");
 			}
 			//check price type
-			if (
-				(["month", "week", "day", "hour"].indexOf(posted_domains[x].price_type) == -1) ||
-				(posted_domains[x].premium != "true" && (posted_domains[x].price_type == "day" || posted_domains[x].price_type == "hour"))
-			){
+			if (["month", "week", "day"].indexOf(posted_domains[x].price_type) == -1){
 				bad_reasons.push("Invalid type!");
 			}
 			//check price rate
-			if (
-				(!validator.isInt(posted_domains[x].price_rate, {min: 1})) ||
-				(posted_domains[x].premium != "true" && posted_domains[x].price_type == "month" && posted_domains[x].price_rate != "25") ||
-				(posted_domains[x].premium != "true" && posted_domains[x].price_type == "week" && posted_domains[x].price_rate != "10")
-			){
+			if (!validator.isInt(posted_domains[x].price_rate, {min: 1})){
 				bad_reasons.push("Invalid rate!");
 			}
 
