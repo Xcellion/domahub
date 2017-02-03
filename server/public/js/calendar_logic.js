@@ -17,14 +17,11 @@ function setUpCalendar(listing_info){
         slotDuration: '01:00:00', //how long a slot is,
         nowIndicator: true, //red line indicating current time
 
-        //formatting for labels and events
-        titleFormat: {
-            month: 'YYYY MMMM',
-            week: "MMM DD YYYY"
-        },
+        titleFormat: "",
         timeFormat: 'MMM D',
         axisFormat: 'hA',
         displayEventEnd: true,
+
 
         //header buttons
         header: {left:'prev', center:'next', right:'title, today'},
@@ -141,18 +138,17 @@ function setUpCalendar(listing_info){
                         };
                         $('#calendar').fullCalendar('renderEvent', prevData, true);
                     }
-
-                    if (currentViewEnd.date() != currentViewEnd.daysInMonth()){
-                        var nextData = {
-                            start: moment(currentViewEnd.format("YYYY-MM-DD")).startOf("month").add(1, "millisecond"),
-                            end: moment(currentViewEnd.format("YYYY-MM-DD")).endOf("month").add(1, "millisecond"),
-                            rendering: 'background',
-                            color: "rgba(0,0,0,0.05)",
-                            allDay: true,
-                            id: "prev-next"
-                        };
-                        $('#calendar').fullCalendar('renderEvent', nextData, true);
-                    }
+                }
+                if (currentViewEnd.date() != currentViewEnd.daysInMonth()){
+                    var nextData = {
+                        start: moment(currentViewEnd.format("YYYY-MM-DD")).startOf("month").add(1, "millisecond"),
+                        end: moment(currentViewEnd.format("YYYY-MM-DD")).endOf("month").add(1, "millisecond"),
+                        rendering: 'background',
+                        color: "rgba(0,0,0,0.05)",
+                        allDay: true,
+                        id: "prev-next"
+                    };
+                    $('#calendar').fullCalendar('renderEvent', nextData, true);
                 }
             }
 
@@ -204,7 +200,12 @@ function setUpCalendar(listing_info){
             }
             //fatten event height in month view
             else {
-                $(element).css("height", "75px");
+                $(element).find(".fc-time").remove();
+                $(element).css({
+                    "height": "20px",
+                    // "margin": 0,
+                    // "border" : 0
+                });
                 if ($(element).hasClass("fc-not-start")){
                     $(element).find(".fc-content").remove();
                 }
@@ -641,7 +642,7 @@ function checkIfNotOverlapped(event){
     var overlap = 0;
 
     for (var x = 0; x < existing.length; x++){
-        if (moment(event.start).isBefore(existing[x].end) && existing[x].end.isAfter(moment(event.start))){
+        if (moment(event.start).isBefore(existing[x].end) && moment(event.end).isAfter(existing[x].start)){
             overlap++;
         }
     }
@@ -664,13 +665,11 @@ function createExisting(rentals){
 
 			//if its this rental
 			if (typeof rental_id != "undefined" && rental_id == rentals[x].rental_id){
-				eventData.title = "Original Time Slot";
 				eventData.color = "#2196f3";
 			}
 			//spot is already rented
 			else {
-				eventData.title = "Rented!";
-				eventData.color = "#ff6b40";
+				eventData.color = "#EF5350";
 				eventData.other = true;
 			}
 			$('#calendar').fullCalendar('renderEvent', eventData, true);
@@ -897,8 +896,8 @@ function updatePrices(){
             totalUnits += calculated_prices.units;
 
 			//add to preview modal
-			var start_date = $("<p class='preview-dates'>" + moment(myevents[x].start).format("MMM DD, YYYY hh:mmA") + "</p>");
-			var end_date = $("<p class='preview-dates'>" + moment(myevents[x].end).format("MMM DD, YYYY hh:mmA") + "</p>");
+			var start_date = $("<p class='preview-dates'>" + moment(myevents[x].start).format("MMM DD, YYYY") + "</p>");
+			var end_date = $("<p class='preview-dates'>" + moment(myevents[x].end).format("MMM DD, YYYY") + "</p>");
 
 			$("#preview-start-dates").append(start_date);
 			$("#preview-end-dates").append(end_date);
@@ -906,21 +905,25 @@ function updatePrices(){
 
         var s_or_not = (totalUnits > 1) ? "s" : "";
 
-		//update the preview and calendar price HTML
-		$("#preview-rates").empty();
-        $("#preview-rates").append($("<h3>$" + listing_info.price_rate + " x " + totalUnits.toFixed(4) + " " + listing_info.price_type + s_or_not + "</h3>"));
-		$("#price-total").text(moneyFormat.to(totalPrice));
+        //price or price per day
+        if (totalPrice == 0){
+            $("#price").text("$" + listing_info.price_rate + " Per " + listing_info.price_type.capitalizeFirstLetter());
+        }
+        else {
+            //show calendar card if already set in cookies
+            showCalendar();
 
-		//animation for counting numbers
-		$("#price").prop('Counter', $("#price").prop('Counter')).stop().animate({
-			Counter: totalPrice
-		}, {
-			duration: 100,
-			easing: 'swing',
-			step: function (now) {
-				$(this).text("$" + Number(Math.round(now+'e2')+'e-2').toFixed(2));
-			}
-		});
+            //animation for counting numbers
+            $("#price").prop('Counter', $("#price").prop('Counter')).stop().animate({
+                Counter: totalPrice
+            }, {
+                duration: 100,
+                easing: 'swing',
+                step: function (now) {
+                    $(this).text("Total: $" + Number(Math.round(now+'e2')+'e-2').toFixed(2));
+                }
+            });
+        }
 	}
 }
 
@@ -953,8 +956,7 @@ function divided(num, den){
 var moneyFormat = wNumb({
 	thousand: ',',
 	prefix: '$',
-	postfix: " USD",
-	decimals: 2
+	decimals: 0
 });
 
 //helper function to filter out events that aren't mine

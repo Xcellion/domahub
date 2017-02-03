@@ -15,7 +15,7 @@ $(document).ready(function() {
 
 		//press enter to go next
 		if (e.keyCode == 13){
-			showModalContent("checkout");
+			showCardContent("checkout");
 		}
 	});
 
@@ -52,11 +52,6 @@ $(document).ready(function() {
 			$("#address_form_input").val(read_cookie("address"));
 			$("#checkout-next-button").removeClass('is-disabled');
 		}
-
-		//display modal if theres a cookie
-		if (read_cookie("modal-active")){
-			showModalContent(read_cookie("modal"));
-		}
 	}
 	else {
 		delete_cookies();
@@ -64,45 +59,16 @@ $(document).ready(function() {
 
 	//---------------------------------------------------------------------------------------------------modals
 
-	//open the modal view and switch to appropriate content depending on cookie
-	$('#listing-modal-button').click(function() {
-		var modal_to_show = (read_cookie("modal")) ? read_cookie("modal") : (user) ? "calendar" : "login";
-		showModalContent(modal_to_show);
+	//changes the cards for calendar, address, and checkout
+	$('.card-button-next').click(function() {
+		showNextCard();
 	});
 
-	//various ways to close calendar modal
-	$('.modal-close, .modal-background').click(function() {
-	  	$('#listing-modal').removeClass('is-active');
-		delete_cookie("modal-active");
+	$('.card-button-prev').click(function() {
+		showPrevCard();
 	});
 
-	//esc key to close modal
-	$(document).keyup(function(e) {
-		if (e.which == 27) {
-			$('#listing-modal').removeClass('is-active');
-			delete_cookie("modal-active");
-		}
-	});
-
-	//show login modal content
-	$("#calendar-back-button").click(function() {
-		showModalContent("login");
-	});
-
-	//show calendar modal content
-	$('#guest-button, #redirect-back-button, #edit-dates-button').click(function(){
-		showModalContent("calendar");
-	});
-
-	//show redirect modal content
-	$('#redirect-next-button, #checkout-back-button').click(function() {
-		showModalContent("redirect");
-	});
-
-	//show checkout modal content
-	$('#checkout-next-button').click(function() {
-		showModalContent("checkout");
-	});
+	//---------------------------------------------------------------------------------------------------CALENDAR
 
 	//prevent enter to submit on new emailToRegister
 	$("#new_user_email").submit(function(e){
@@ -129,25 +95,33 @@ $(document).ready(function() {
 
 });
 
-//function to show a specific modal content
-function showModalContent(type){
-	if (type){
-		$('#listing-modal').addClass('is-active');
-		$('#listing-modal-button').text("Resume Transaction");
+//functions to show different cards
 
-		$(".listing-modal-content").addClass('is-hidden');
-		$("#" + type + "-modal-content").removeClass('is-hidden');
-		storeCookies("modal");
-		storeCookies("modal-active");
+function showCalendar(){
+	$(".checkout-card-content").addClass('is-hidden')
+	$("#calendar-card-content").removeClass('is-hidden');
+	$('#calendar').fullCalendar('render');
+}
 
-		if (type == "calendar"){
-			$('#calendar').fullCalendar('render');
+function showNextCard(){
+	var current_card = $(".checkout-card-content:not(.is-hidden)");
+	current_card.addClass('is-hidden')
+	var next_card = current_card.next(".checkout-card-content");
+	next_card.removeClass('is-hidden');
 
-			if (listing_info.price_type != "hour"){
-				var cal_height = $(".modal-container-calendar").height() - $("#calendar-modal-top").height() - 90;
-				$('#calendar').fullCalendar('option', 'contentHeight', cal_height);
-			}
-		}
+	if (next_card.attr('id') == "calendar-card-content"){
+		$('#calendar').fullCalendar('render');
+	}
+}
+
+function showPrevCard(){
+	var current_card = $(".checkout-card-content:not(.is-hidden)");
+	current_card.addClass('is-hidden')
+	var prev_card = current_card.prev(".checkout-card-content");
+	prev_card.removeClass('is-hidden');
+
+	if (prev_card.attr('id') == "calendar-card-content"){
+		$('#calendar').fullCalendar('render');
 	}
 }
 
@@ -228,7 +202,7 @@ function submitStripe(stripeToken){
 			unlock = true;
 			if (data.unavailable){
 				for (var x = 0; x < data.unavailable.length; x++){
-					showModalContent("calendar");
+					showCardContent("calendar");
 					$('#calendar').fullCalendar('removeEvents', data.unavailable[x]._id);
 					$("#calendar-error-message").addClass('is-danger').html("Invalid slots have been removed from your selection! Your credit card has not been charged yet.");
 				}
@@ -247,30 +221,30 @@ function submitStripe(stripeToken){
 //error handler from server
 function errorHandler(message){
 	if (message == "Invalid address!"){
-		showModalContent("redirect");
+		showCardContent("redirect");
 		$("#address-error-message").addClass('is-danger').html("Invalid URL entered! Your credit card has not been charged yet.");
 	}
 	else if (message == "Invalid dates!"){
-		showModalContent("calendar");
+		showCardContent("calendar");
 		$("#calendar-error-message").addClass('is-danger').html("Invalid dates selected! Your credit card has not been charged yet.");
 	}
 	else if (message == "Invalid email!"){
-		showModalContent("checkout");
+		showCardContent("checkout");
 		$("#new-user-email-error").addClass('is-danger').html("Invalid email address! Your credit card has not been charged yet.");
 	}
 	else if (message == "Invalid price!"){
-		showModalContent("checkout");
+		showCardContent("checkout");
 		$("#stripe-error-message").addClass('is-danger').html("Payment error! Your credit card has not been charged yet.");
 	}
 	else if (message == "Invalid stripe user account!"){
-		showModalContent("checkout");
+		showCardContent("checkout");
 		$("#summary-error-message").addClass('is-danger').html("Listing error! Please try again later! Your credit card has not been charged yet.");
 	}
 }
 
 //success handler
 function successHandler(data){
-	$("#payment-column, .success-hide").addClass('is-hidden');
+	$(".success-hide").addClass('is-hidden');
 	$("#success-column").removeClass('is-hidden');
 	$("#success-message").text("Your credit card was successfully charged!");
 	//if theres a link for ownership claiming
