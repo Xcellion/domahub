@@ -20,7 +20,7 @@ $(document).ready(function() {
 			e.preventDefault();
 			createTableRow("");
 			handleSubmitDisabled();
-			calculateSummaryRows();
+			//calculateSummaryRows();
 		}
 	});
 
@@ -90,7 +90,7 @@ function createTable(bad_listings, good_listings){
 	}
 
 	showHelpText("table");
-	calculateSummaryRows();
+	//calculateSummaryRows();
 	window.scrollTo(0, 0);		//scroll to top so we can see the help text
 }
 
@@ -109,24 +109,16 @@ function showTable(old_submit){
 //function to create table row
 function createTableRow(data){
 	var temp_table_row = $("#clone-row").removeClass('is-hidden').clone();		//clone row
-	var num = parseFloat($("td .cat-checkbox:last").attr('id').replace("id", "")) + 1 || 0;
 
 	temp_table_row.removeAttr('id');
 	temp_table_row.find(".domain-name-input").val(data.domain_name).on("keyup change", function(){
 		handleSubmitDisabled();
 	})
-	temp_table_row.find(".cat-checkbox-label").prop("for", "id" + num);
-
-	//click handler for premium checkbox
-	temp_table_row.find(".cat-checkbox").prop("id", "id" + num).on("change", function(){
-		calculateSummaryRows();
-		checkPremiumRow($(this).closest(".table-row"));
-	});
 
 	//click handler for price type select
 	temp_table_row.find("select").on("change", function(){
-		calculateSummaryRows();
-		checkPremiumRow($(this).closest(".table-row"));
+		//calculateSummaryRows();
+		//checkPremiumRow($(this).closest(".table-row"));
 	});
 
 	//click handler for row delete
@@ -138,7 +130,7 @@ function createTableRow(data){
 		handleSubmitDisabled();
 		handleTopAddDomainButton();
 		refreshNotification();
-		calculateSummaryRows();
+		//calculateSummaryRows();
 	});
 
 	handleTopAddDomainButton();
@@ -151,38 +143,38 @@ function createTableRow(data){
 	temp_table_row.find(".domain-name-input").focus();
 }
 
-//function to calculate/refresh the summary rows
-function calculateSummaryRows(){
-	var total_rows = $(".domain-name-input").not(".is-disabled").length - 1;
-	var premium_domains = $("td .cat-checkbox:checked").not("#clone-row .cat-checkbox").length;
-	var basic_domains = total_rows - premium_domains;
-
-	$("#basic-count-total").text(basic_domains);
-	$("#premium-count-total").text(premium_domains);
-
-	//plural or not
-	var basic_plural = (basic_domains > 1) ? "s" : "";
-	$("#basic-count-plural").text(basic_plural);
-	var premium_plural = (premium_domains > 1) ? "s" : "";
-	$("#premium-count-plural").text(premium_plural);
-
-	if (premium_domains){
-		$("#premium-summary-row").removeClass('is-hidden');
-	}
-	else {
-		$("#premium-summary-row").addClass('is-hidden');
-	}
-
-	if (basic_domains){
-		$("#basic-summary-row").removeClass('is-hidden');
-	}
-	else {
-		$("#basic-summary-row").addClass('is-hidden');
-	}
-
-	var total_price = (premium_domains > 0) ? "$" + (premium_domains * 5) : "FREE";
-	$("#summary-total-price").text(total_price);
-}
+// //function to calculate/refresh the summary rows
+// function calculateSummaryRows(){
+// 	var total_rows = $(".domain-name-input").not(".is-disabled").length - 1;
+// 	var premium_domains = $("td .cat-checkbox:checked").not("#clone-row .cat-checkbox").length;
+// 	var basic_domains = total_rows - premium_domains;
+//
+// 	$("#basic-count-total").text(basic_domains);
+// 	$("#premium-count-total").text(premium_domains);
+//
+// 	//plural or not
+// 	var basic_plural = (basic_domains > 1) ? "s" : "";
+// 	$("#basic-count-plural").text(basic_plural);
+// 	var premium_plural = (premium_domains > 1) ? "s" : "";
+// 	$("#premium-count-plural").text(premium_plural);
+//
+// 	if (premium_domains){
+// 		$("#premium-summary-row").removeClass('is-hidden');
+// 	}
+// 	else {
+// 		$("#premium-summary-row").addClass('is-hidden');
+// 	}
+//
+// 	if (basic_domains){
+// 		$("#basic-summary-row").removeClass('is-hidden');
+// 	}
+// 	else {
+// 		$("#basic-summary-row").addClass('is-hidden');
+// 	}
+//
+// 	var total_price = (premium_domains > 0) ? "$" + (premium_domains * 5) : "FREE";
+// 	$("#summary-total-price").text(total_price);
+// }
 
 //function to show or disable submit
 function handleSubmitDisabled(){
@@ -212,34 +204,34 @@ function handleTopAddDomainButton(){
 		$("#top-header-row").addClass('is-hidden');
 	}
 }
-
-//function to set values of price type/price rate according to premium checkbox
-function checkPremiumRow(row_elem){
-	var price_input = row_elem.find(".price-rate-input");
-	var price_select = row_elem.find("select");
-	var price_checkbox = row_elem.find(".cat-checkbox");
-	refreshNotification();
-
-	if (price_checkbox.prop('checked')){
-		price_select.find(".day-type").removeProp('disabled');
-		price_select.find(".hour-type").removeProp('disabled');
-		price_input.removeClass('is-disabled');
-	}
-	else {
-		if (price_select.val() == "week"){
-			price_input.attr("value", 10);
-			price_input.val(10);
-		}
-		else {
-			price_select.val("month");
-			price_input.attr("value", 25);
-			price_input.val(25);
-		}
-		price_select.find(".day-type").prop('disabled', true);
-		price_select.find(".hour-type").prop('disabled', true);
-		price_input.addClass('is-disabled');
-	}
-}
+//
+// //function to set values of price type/price rate according to premium checkbox
+// function checkPremiumRow(row_elem){
+// 	var price_input = row_elem.find(".price-rate-input");
+// 	var price_select = row_elem.find("select");
+// 	var price_checkbox = row_elem.find(".cat-checkbox");
+// 	refreshNotification();
+//
+// 	if (price_checkbox.prop('checked')){
+// 		price_select.find(".day-type").removeProp('disabled');
+// 		price_select.find(".hour-type").removeProp('disabled');
+// 		price_input.removeClass('is-disabled');
+// 	}
+// 	else {
+// 		if (price_select.val() == "week"){
+// 			price_input.attr("value", 10);
+// 			price_input.val(10);
+// 		}
+// 		else {
+// 			price_select.val("month");
+// 			price_input.attr("value", 25);
+// 			price_input.val(25);
+// 		}
+// 		price_select.find(".day-type").prop('disabled', true);
+// 		price_select.find(".hour-type").prop('disabled', true);
+// 		price_input.addClass('is-disabled');
+// 	}
+// }
 
 //--------------------------------------------------------------------------------TABLE SUBMIT
 
@@ -295,7 +287,7 @@ function submitDomainsAjax(domains, submit_elem, stripeToken){
 
 		//handle any good or bad listings
 		refreshRows(data.bad_listings, data.good_listings);
-		calculateSummaryRows();
+		//calculateSummaryRows();
 
 		//handle payment
 		if (data.premium_count){
