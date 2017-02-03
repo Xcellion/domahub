@@ -13,12 +13,28 @@ var all_categories = [
 		front: "Event"
 	},
 	{
+		back: "hightraffic",
+		front: "High-Traffic"
+	},
+	{
 		back: "holiday",
 		front: "Holiday"
 	},
 	{
 		back: "industry",
 		front: "Industry"
+	},
+	{
+		back: "niche",
+		front: "Niche",
+	},
+	{
+		back: "marketing",
+		front: "Marketing"
+	},
+	{
+		back: "other",
+		front: "Other"
 	},
 	{
 		back: "personal",
