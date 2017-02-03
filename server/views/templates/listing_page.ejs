@@ -22,7 +22,7 @@
         </div>
         <div class="column is-4-tablet">
           <div id="price-display">
-            <h2 class="is-black is-bold has-text-centered">
+            <h2 id="price" class="is-black is-bold has-text-centered">
               <% if (listing_info.status == 1) { %>
                   $<%= listing_info.price_rate %> Per <%= listing_info.price_type.charAt(0).toUpperCase() + listing_info.price_type.substr(1) %>
               <% } else if (listing_info.available){ %>
@@ -51,7 +51,7 @@
                   popular_rental = listing_info.rentals[x];
               } %>
           <% } %>
-          <% var background_image = (popular_rental.address == "") ? "https://placeholdit.imgix.net/~text?txtsize=40&txt=NO%20PREVIEW" : "/screenshot?rental_address=" + popular_rental.address; %>
+          <% var background_image = (popular_rental.address == "") ? "https://placeholdit.imgix.net/~text?txtsize=20&txt=NO%20PREVIEW&w=800&h=100" : "/screenshot?rental_address=" + popular_rental.address; %>
           <% background_image = (popular_rental.address.match(/\.(jpeg|jpg|gif|png)$/) != null) ? popular_rental.address : background_image; %>
         <div id="popular-rental-module" data-rental_id="<%= popular_rental.rental_id %>" class="listing-module">
           <div class="content margin-bottom-25">
@@ -158,21 +158,171 @@
           <div class="card-content">
             <div class="content">
               <% if (listing_info.status == 1) { %>
-                <% if (listing_info.date_created) { %>
-                <div class="content">
-                  <p class="is-inline-block is-bold">
-                    Date Listed:
-                  </p>
-                  <p class="is-inline-block" id="date_created">
-                  </p>
-                  <p>
-                    Click the button below to see available dates.
-                  </p>
-                </div>
-                <% if (listing_info.status == 1) { %>
-                    <a id="listing-modal-button" tabindex="1" class="button is-fullwidth is-primary" data-object="#calendar-modal">Rent Now</a>
-                <% } %>
-                <% } %>
+                    <div class='checkout-card-content'>
+                        <div class="content">
+                            <p>
+                                Click the button below to see available rental dates.
+                            </p>
+                        </div>
+                        <a id="start-card-button" tabindex="1" class="card-button-next button is-fullwidth is-primary">Rent Now</a>
+                    </div>
+
+                    <div id="calendar-card-content" class="is-hidden checkout-card-content">
+                        <div class="content">
+                            <p>Choose your desired rental time slot.</p>
+                            <p id="calendar-error-message"></p>
+                        </div>
+                        <div id="calendar" class=""></div>
+                        <div class="margin-top-15 level-item">
+                            <a tabindex="1" class="button is-danger is-disabled no-shadow" id="remove_events">Clear</a>
+                            <a tabindex="1" class="button no-shadow is-disabled" id="today-button">Today</a>
+                            <a tabindex="1" class="button no-shadow is-disabled" id="next-available-button">Next Available</a>
+                        </div>
+                        <a tabindex="1" class="card-button-next button is-fullwidth is-primary margin-top-15">Next</a>
+                    </div>
+
+                    <div id="address-card-content" class="is-hidden checkout-card-content">
+                        <div class="content">
+                            <p>
+                                The content in this link will be displayed to everyone viewing this domain during your rental time slot.
+                            </p>
+                            <p>
+                                You may change this URL at any time with your DomaHub account.
+                            </p>
+                            <p id="address-error-message"></p>
+                        </div>
+                        <p class="control">
+                            <input tabindex="1" autofocus required class="input is-medium" id="address_form_input" type="url" placeholder="Enter a link to your content">
+                        </p>
+                        <p class="control margin-top-15">
+                            <a tabindex="1" class="card-button-prev button">Back</a>
+                            <a tabindex="1" class="card-button-next button is-primary">Checkout</a>
+                        </p>
+                    </div>
+
+                    <% if (!user){ %>
+                        <div id="nouser-card-content" class="is-hidden checkout-card-content">
+                            <p>
+                                You are currently checking out as a guest.
+                            </p>
+                            <p>
+                                You may optionally enter your email below to create a DomaHub account afterwards to edit your rental.
+                            </p>
+                            <p class='is-accent'>
+                                NOTE: You cannot edit this rental after purchase without a DomaHub account.
+                            </p>
+                            <form>
+                                <label id="new-user-email-error" class="label">Email Address</label>
+                                <p class="control has-icon has-addons">
+                                    <input tabindex="1" id="new_user_email" class="input is-medium" placeholder="This is optional" type="email" />
+                                    <i class="fa fa-envelope"></i>
+                                </p>
+                            </form>
+                            <p class="control margin-top-15">
+                                <a tabindex="1" class="card-button-prev button">Back</a>
+                                <a tabindex="1" class="card-button-next button is-primary">Checkout</a>
+                            </p>
+                        </div>
+                    <% } %>
+
+                    <div id="checkout-card-content" class="success-hide is-hidden checkout-card-content">
+                        <div class="content">
+                            <p id="stripe-error-message">
+                                Please enter your payment information.
+                            </p>
+                        </div>
+                        <form id="stripe-form" autocomplete="on">
+                            <label class="label">Credit or Debit Card Number</label>
+                            <p class="control has-icon">
+                                <input tabindex="1" id="cc-num" data-stripe="number" class="input stripe-input is-medium" type="tel" placeholder="•••• •••• •••• ••••" autocomplete="cc-number"/>
+                                <i id="cc-icon" class="fa fa-credit-card"></i>
+                            </p>
+                            <div class="control is-grouped">
+                                <p class="control is-expanded">
+                                    <label class="label">Expiration Date</label>
+                                    <input tabindex="1" id="cc-exp" maxlength="7" data-stripe="exp" class="input stripe-input is-medium" type="tel" placeholder="•• / ••" autocomplete="cc-exp"/>
+                                </p>
+                                <p class="control">
+                                    <label class="label">Security Code</label>
+                                    <input tabindex="1" id="cc-cvc" data-stripe="cvc" class="input stripe-input is-medium" type="tel" placeholder="•••" autocomplete="off"/>
+                                </p>
+                            </div>
+                            <p class="control">
+                                <label class="label">Zip Code</label>
+                                <input tabindex="1" id="cc-zip" maxlength="6" data-stripe="address_zip" class="input stripe-input is-medium" type="tel" autocomplete="postal-code" placeholder="•••••"/>
+                            </p>
+                        </form>
+                        <form class="checkbox-form margin-top-10">
+                            <input class="is-small" value="agree-to-terms" id="agree-to-terms" type="checkbox" />
+                            <label class="is-small" tabindex="1" for="agree-to-terms">
+                                I agree to the <a target="_blank" href="/terms" class="is-accent">DomaHub Terms & Conditions</a>.
+                            </label>
+                        </form>
+                        <p class='control margin-top-15'>
+                            <a tabindex="1" class="card-button-prev button">Back</a>
+                            <a id="checkout-button" tabindex="1" class="button is-primary">Confirm & Pay</a>
+                        </p>
+                    </div>
+
+                    <div id="success-column" class="is-hidden checkout-card-content">
+                        <div class="notification is-primary">
+                            <h1 class="title is-3 is-white">Rental Successful!</h1>
+                        </div>
+                        <div class="content">
+                            <p>
+                                Your content will automatically display on
+                                <a class="is-primary" href="http://<%= listing_info.domain_name %>"><%= listing_info.domain_name %></a>
+                                at the below rental time(s).
+                            </p>
+                            <div class="columns">
+                                <div class="column is-half">
+                                    <div class="content">
+                                        <p id="preview-start-dates" class="is-bold">
+                                            Rental Start
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="column is-half">
+                                    <div class="content">
+                                        <p id="preview-end-dates" class="is-bold">
+                                            Rental End
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <% if (!user) { %>
+                                <h3 class="is-bold">Create an Account</h3>
+                                <p>
+                                    You will need to sign up for a new DomaHub account in order to edit any existing rentals.
+                                </p>
+                                <p>
+                                    The below link is unique and can be used to associate this rental with a new DomaHub account.
+                                    The link has also been emailed to you if you provided us with an email during checkout.
+                                </p>
+                                <div class="control has-addons">
+                                    <input id="rental-link-input" class='input is-expanded' placeholder="Save me for later!"/>
+                                    <a id="rental-link-button" class="button is-primary no-shadow">
+                                        <i class="fa fa-clipboard"></i>
+                                    </a>
+                                </div>
+                            <% } else { %>
+                                <h3 class="is-bold">My Account</h3>
+                                <p>
+                                Should you need to edit the rental content or add more time, please click the
+                                button below to go to your My Rentals page.
+                                </p>
+                                <p class="control margin-top-20">
+                                    <a href="/profile/myrentals" class="button is-accent is-medium" tabindex="1">
+                                        <span class="icon is-small">
+                                            <i class="fa fa-th-list"></i>
+                                        </span>
+                                        <span>My Rentals</span>
+                                    </a>
+                                </p>
+                            <% } %>
+                        </div>
+                    </div>
+
               <% } else if (listing_info.available) { %>
                 <p>
                     While this domain is unavailable for rent at DomaHub,
@@ -194,13 +344,13 @@
           <footer class="card-footer">
             <% if (listing_info.status == 1) { %>
               <a id="more-info-button" tabindex="1" class="card-footer-item no-border has-icon">
-                <span>Show More Information</span>
+                <span>Show Listing Details</span>
                 <span class="icon is-small">
                   <i class="fa fa-angle-down"></i>
                 </span>
               </a>
               <a id="less-info-button" tabindex="1" class="card-footer-item has-icon is-hidden">
-                <span>Hide Information</span>
+                <span>Hide Listing Details</span>
                 <span class="icon is-small">
                   <i class="fa fa-angle-up"></i>
                 </span>
@@ -290,6 +440,12 @@
             </div>
             </div>
             <% } %>
+            <% if (listing_info.date_created) { %>
+                <div class="content listing-info">
+                    <h3 class="is-bold margin-bottom-15">Date Listed</h3>
+                    <p class="is-flex-wrap" id="date_created"></p>
+                </div>
+            <% } %>
             <div class="content">
               <% if (listing_info.owner_id){ %>
                   <h3 class="is-bold margin-bottom-15">Listed By</h3>
@@ -319,6 +475,14 @@
               </article>
             </div>
           </div>
+          <footer class="card-footer">
+              <a id="less-info-button" tabindex="1" class="card-footer-item has-icon is-hidden">
+                  <span>Hide Listing Details</span>
+                  <span class="icon is-small">
+                      <i class="fa fa-angle-up"></i>
+                  </span>
+              </a>
+          </footer>
         </div>
       </div>
     </div>

@@ -19,12 +19,14 @@
     <div id="login-form" class="account-form">
       <form id="target" action="/login" method="post">
         <label class="label">Email</label>
-        <p class="control">
-          <input id="email" autofocus name="email" class="input is-medium" type="email" value="" spellcheck="false">
+        <p class="control has-icon">
+          <input id="email" autofocus class="input is-medium" name="email" type="email" placeholder="Email" spellcheck="false">
+          <i class="fa fa-envelope"></i>
         </p>
         <label class="label">Password</label>
-        <p class="control">
-          <input id="password" name="password" class="input is-medium" type="password" value="">
+        <p class="control has-icon">
+          <input id="password" class="input is-medium" name="password" type="password" placeholder="Password">
+          <i class="fa fa-lock"></i>
         </p>
         <p class="control">
           <button id="login-button" class="login-button button is-primary is-medium is-fullwidth">

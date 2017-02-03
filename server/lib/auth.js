@@ -546,11 +546,11 @@ module.exports = {
 			error.handler(req, res, "Invalid name!", "json");
 		}
 		//password is too long
-		else if (password && 70 > password.length){
+		else if (password && 70 < password.length){
 			error.handler(req, res, "Password is too long!", "json");
 		}
-		//password is too long
-		else if (password && password.length > 3){
+		//password is too short
+		else if (password && password.length < 6){
 			error.handler(req, res, "Password is too short!", "json");
 		}
 		//check the pw

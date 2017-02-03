@@ -171,7 +171,7 @@ function checkAccountSubmit(){
     //if new password is too short or long
     else if ($("#new-pw-input").val() && ($("#new-pw-input").val().length > 70 || $("#new-pw-input").val().length < 6)) {
         $("#basic-message").fadeOut(100, function(){
-            $("#basic-message").css("color", "#ed1c24").text("Please enter a valid new password!").fadeIn(100);
+            $("#basic-message").css("color", "#ed1c24").text("Please enter a password at least 6 characters long!").fadeIn(100);
             $("#new-pw-input").addClass("is-danger").focus();
         });
         return false;
