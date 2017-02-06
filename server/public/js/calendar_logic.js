@@ -165,6 +165,11 @@ function setUpCalendar(listing_info){
             }
 
             highlightCellHover(currentView.name);
+
+            //change h2 to h3
+            $(".fc-right").find("h2").replaceWith(function () {
+                return "<h3>" + currentView.title + "</h3>";
+            });
         },
 
         //creating new events
