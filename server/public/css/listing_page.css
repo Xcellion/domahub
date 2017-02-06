@@ -44,6 +44,18 @@
 .listing-module {
   padding: 25px 0; }
 
+.calendar-control {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap; }
+  .calendar-control .button {
+    margin-bottom: 5px;
+    margin-right: 5px;
+    flex-grow: 1; }
+    .calendar-control .button:last-child {
+      margin-right: 0; }
+
 #previous-listings-cards {
   display: flex;
   justify-content: space-around; }

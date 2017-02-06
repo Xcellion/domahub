@@ -55,6 +55,20 @@
   padding: 25px 0;
 }
 
+.calendar-control {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  .button {
+    margin-bottom: 5px;
+    margin-right: 5px;
+    flex-grow: 1;
+    &:last-child {
+      margin-right: 0;
+    }
+  }
+}
 
 #previous-listings-cards {
   display: flex;
