@@ -209,8 +209,7 @@ function createRowDrop(rental_info, rownum){
 
     //append various stuff to the row drop div
     temp_drop.append(temp_td.append(temp_div_drop.append(temp_cols.append(
-        createFormDrop(rental_info),
-		createDatesDrop(rental_info),
+		createDatesDrop(rental_info).append(createFormDrop(rental_info)),
 		createImgDrop(rental_info)
     ))));
     temp_div_drop.hide();
@@ -219,8 +218,8 @@ function createRowDrop(rental_info, rownum){
 }
 
 //function to create the submit button and error message column
-function createFormDrop(rental_info){
-    var temp_col = $("<div class='column is-3'></div>");
+function createFormDrop(rental_info){``
+    var temp_col = $("<div class='control'></div>");
     var temp_form = $("<form class='drop-form'></form>");
 
     //buttons for submit/cancel
@@ -266,9 +265,9 @@ function createFormDrop(rental_info){
 
 //various buttons (add time, view listing, view rental, delete rental)
 function createButtons(rental_info){
-	var temp_div_buttons = $("<div class='control'></div>");
-	var temp_button1 = $("<a target='_blank' href='/listing/" + rental_info.domain_name + "' class='button margin-right-10 margin-bottom-5 no-shadow'>View Listing</a>");
-	var temp_button2 = $("<a class='button margin-right-10 no-shadow'>Add Time</a>");
+	var temp_div_buttons = $("<div class='is-flex-wrap margin-bottom-10'></div>");
+	var temp_button1 = $("<a target='_blank' href='/listing/" + rental_info.domain_name + "' class='button no-shadow'>View Listing</a>");
+	var temp_button2 = $("<a class='button no-shadow'>Add Time</a>");
 	var temp_button3 = $("<a class='button no-shadow'>Delete Rental</a>");
 
 	//display calendar modal
@@ -288,11 +287,11 @@ function createButtons(rental_info){
 
 //function to create start and end dates
 function createDatesDrop(rental_info){
-    var temp_col = $("<div class='column is-5'></div>");
+    var temp_col = $("<div class='column is-9'></div>");
 
 	var temp_control_labels = $("<div class='control'></div>")
     var temp_p_start = $("<p class='is-inline-block margin-bottom-5 is-bold'>Rental Dates</p>");
-	var temp_ol = $("<ol></ol>");
+	var temp_ol = $("<ol class='padding-left-20'></ol>");
 
 	temp_col.append(temp_control_labels.append(temp_p_start, temp_ol));
 
@@ -321,13 +320,13 @@ function createImgDrop(rental_info){
 		var background_image =  "/screenshot?rental_address=" + rental_info.address + "&width=200&height=200";
 	}
 
-    var temp_col = $("<div class='column is-4'></div>");
+    var temp_col = $("<div class='column is-3'></div>");
     var temp_div = $("<div class='card is-pulled-right no-shadow listing-img'></div>");
     var temp_div_image = $("<div class='card-image'></div>")
     var temp_figure = $("<figure class='image listing-img'></figure>");
     var temp_img = $("<img class='is-listing' alt='Image not found' src=" + background_image + " />");
     var temp_footer = $("<footer class='card-footer has-text-centered'></div>");
-    var temp_preview_button = $("<a href='' class='button'>Click to Preview</a>");
+    var temp_preview_button = $("<a href='' class='card-footer-item no-border'>Click to Preview</a>");
     temp_col.append(temp_div.append(temp_div_image.append(temp_figure.append(temp_img)), temp_footer.append(temp_preview_button)));
 
     //if theres an error in getting the image, remove the link
