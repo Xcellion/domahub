@@ -10,7 +10,7 @@
         <%= listing_info.domain_name %></h1></a>
         <h2 class="subtitle is-4 is-white margin-top-15">
         <% if (listing_info.status == 1) { %>
-          Currently Available for Rent
+          Currently Available
           <% } else { %>
           Currently Unavailable
           <% } %>
@@ -111,7 +111,8 @@
                       <% var temp_rental = listing_info.rentals[index_counter]; %>
                       <% var temp_background = (temp_rental.address == "") ? "https://placeholdit.imgix.net/~text?txtsize=40&txt=NO%20PREVIEW&w=800&h=100" : "/screenshot?rental_address=" + temp_rental.address + "&width=700&height=100"; %>
                       <% temp_background = (temp_rental.address.match(/\.(jpeg|jpg|gif|png)$/) != null) ? temp_rental.address : temp_background; %>
-                      <div class="previous-listing" style="background-image: url(<%= temp_background %>)">
+                      <div class="previous-listing">
+                         <!-- style="background-image: url(<%= temp_background %>)" -->
                           <div class="previous-stats">
                               <h3 class="previous-listing-title">
                                 <span data-rental_id="<%= temp_rental.rental_id %>" class='previous-rental-duration'></span> · <%= temp_rental.views %> Views
@@ -161,21 +162,20 @@
                                 Click the button below to see available rental dates.
                             </p>
                         </div>
-                        <a id="start-card-button" tabindex="1" class="card-button-next button is-fullwidth is-primary">Rent Now</a>
+                        <a id="start-card-button" tabindex="1" class="card-button-next button no-shadow is-medium is-fullwidth is-primary">Rent Now</a>
                     </div>
 
                     <div id="calendar-card-content" class="is-hidden checkout-card-content">
                         <div class="content">
-                            <p>Choose your desired rental time slot.</p>
                             <p id="calendar-error-message"></p>
                         </div>
                         <div id="calendar" class=""></div>
-                        <div class="margin-top-15 level-item">
+                        <div class="calendar-control margin-top-10">
                             <a tabindex="1" class="button is-danger is-disabled no-shadow" id="remove_events">Clear</a>
                             <a tabindex="1" class="button no-shadow is-disabled" id="today-button">Today</a>
                             <a tabindex="1" class="button no-shadow" id="next-available-button">Next Available</a>
                         </div>
-                        <a tabindex="1" class="card-button-next button is-fullwidth is-primary margin-top-15">Next</a>
+                        <a tabindex="1" class="card-button-next button no-shadow is-fullwidth is-primary margin-top-10">Next</a>
                     </div>
 
                     <div id="address-card-content" class="is-hidden checkout-card-content">
@@ -188,12 +188,12 @@
                             </p>
                             <p id="address-error-message"></p>
                         </div>
-                        <p class="control">
-                            <input tabindex="1" autofocus required class="input is-medium" id="address_form_input" type="url" placeholder="Enter a link to your content">
+                        <p class="control is-expanded">
+                            <input tabindex="1" autofocus required class="input is-expanded is-medium" id="address_form_input" type="url" placeholder="Enter a link to your content">
                         </p>
-                        <p class="control margin-top-15">
-                            <a tabindex="1" class="card-button-prev button">Back</a>
-                            <a tabindex="1" class="card-button-next button is-primary">Checkout</a>
+                        <p class="calendar-control margin-top-10">
+                            <a tabindex="1" class="card-button-prev button no-shadow">Back</a>
+                            <a tabindex="1" class="card-button-next button is-primary no-shadow">Checkout</a>
                         </p>
                     </div>
 
@@ -210,14 +210,13 @@
                             </p>
                             <form>
                                 <label id="new-user-email-error" class="label">Email Address</label>
-                                <p class="control has-icon has-addons">
-                                    <input tabindex="1" id="new_user_email" class="input is-medium" placeholder="This is optional" type="email" />
-                                    <i class="fa fa-envelope"></i>
+                                <p class="control is-expanded has-addons">
+                                    <input tabindex="1" id="new_user_email" class="input is-expanded is-medium" placeholder="This is optional" type="email" />
                                 </p>
                             </form>
-                            <p class="control margin-top-15">
-                                <a tabindex="1" class="card-button-prev button">Back</a>
-                                <a tabindex="1" class="card-button-next button is-primary">Checkout</a>
+                            <p class="calendar-control margin-top-10">
+                                <a tabindex="1" class="card-button-prev button no-shadow">Back</a>
+                                <a tabindex="1" class="card-button-next button is-primary no-shadow">Checkout</a>
                             </p>
                         </div>
                     <% } %>
@@ -255,15 +254,15 @@
                                 I agree to the <a target="_blank" href="/terms" class="is-accent">DomaHub Terms & Conditions</a>.
                             </label>
                         </form>
-                        <p class='control margin-top-15'>
-                            <a tabindex="1" class="card-button-prev button">Back</a>
-                            <a id="checkout-button" tabindex="1" class="button is-primary">Confirm & Pay</a>
+                        <p class="calendar-control margin-top-10">
+                            <a tabindex="1" class="card-button-prev button no-shadow">Back</a>
+                            <a id="checkout-button" tabindex="1" class="button is-primary no-shadow">Confirm & Pay</a>
                         </p>
                     </div>
 
                     <div id="success-column" class="is-hidden checkout-card-content">
                         <div class="notification is-primary">
-                            <h1 class="title is-3 is-white">Rental Successful!</h1>
+                            <h2 class="is-white has-text-centered">Rental Successful!</h2>
                         </div>
                         <div class="content">
                             <p>
