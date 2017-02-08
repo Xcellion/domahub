@@ -189,12 +189,14 @@ module.exports = {
 
 	//authorize stripe
 	authorizeStripe : function(req, res){
+		var client_id = (node_env == "dev") ? "ca_997O55c2IqFxXDmgI9B0WhmpPgoh28s3" : "ca_997OlLjHwTzo6hMT8VGbot4OF6l3v1V0";
+
 		// Redirect to Stripe /oauth/authorize endpoint
 		res.redirect("https://connect.stripe.com/oauth/authorize" + "?" + qs.stringify({
 			response_type: "code",
 			scope: "read_write",
 			state: "domahubrules",
-			client_id: "ca_997O55c2IqFxXDmgI9B0WhmpPgoh28s3",
+			client_id: client_id,
 			stripe_user: {
 				email: req.user.email,
 				physical_product: false,
