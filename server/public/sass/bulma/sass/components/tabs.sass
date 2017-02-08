@@ -21,8 +21,6 @@
       +box-shadow(0,-3px,0,$black-disabled,0,inset)
   li
     display: block
-    &:not(:first-child)
-      margin-left: 20px
     &.is-active
       a
         +box-shadow(0,-3px,0,$primary,0,inset)
@@ -62,20 +60,20 @@
   // Styles
   &.is-boxed
     a
-      +box-shadow(0,0,0,$border,0)
       border: 1px solid transparent
       border-radius: $radius $radius 0 0
-      padding-bottom: 5px
-      padding-top: 5px
       &:hover
-        background-color: $white-primary
+        +box-shadow(0,0,0,$black,0)
+        background-color: $grey-lighter
         border-bottom-color: $border
     li
       &.is-active
         a
-          +box-shadow(0,0,0,$border,0)
-          background-color: $white
-          border-bottom-color: transparent
+          +box-shadow(0,0,0,$black,0)
+          background-color: $primary
+          border-color: $border
+          border-bottom-color: transparent !important
+          color: $white
   &.is-fullwidth
     li
       flex-grow: 1
