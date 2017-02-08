@@ -13,7 +13,6 @@
   display: flex;
   justify-content: space-between;
   padding: 20px 10px;
-  text-transform: capitalize;
   span + span {
     margin-left: 10px;
   }
@@ -36,9 +35,6 @@
 .slider-item-dropdown {
   display: none;
   padding: 15px 45px;
-  &.is-active {
-    display: block;
-  }
 }
 
 .checklist-item {
@@ -46,8 +42,5 @@
   align-items: center;
   span + span {
     margin-left: 5px;
-  }
-  & + .coocoo {
-    margin-left: 10px;
   }
 }

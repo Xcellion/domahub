@@ -93,8 +93,8 @@ a.nav-item
       border-top: 1px solid $border
       padding: 10px
       width: 100%
-    &.is-dark
-      background-color: $grey-darker
+    &.is-primary
+      background-color: $primary
     &.is-white
       background-color: $white
     &.is-active
@@ -136,12 +136,12 @@ a.nav-item
 
 // Main container
 .nav
+  +transition(all 0.25s)
   align-items: stretch
   background-color: transparent
   display: flex
   min-height: $nav-height
   position: fixed
-  +transition(all 0.25s)
   width: 100%
   z-index: 999
   &.is-white
