@@ -6,15 +6,25 @@
   +tablet
     display: none
 
-.flat-logo
-  width: 131px
-  height: 32px
-  background-size: cover
-  background-position: center center
+.circle-logo
+  background-image: url("/images/dh-assets/circle-logo/dh-circle-logo-sprite.png")
+  background-repeat: no-repeat
+  width: 30px !important
+  height: 30px !important
   &.is-primary
-    background-image: url("/images/dh-flat-logo-primary.png")
+    background-position: 0 0
   &.is-white
-    background-image: url("/images/dh-flat-logo-white.png")
+    background-position: 0 -30px
+
+.flat-logo
+  background-image: url("/images/dh-assets/flat-logo/dh-flat-logo-sprite.png")
+  background-repeat: no-repeat
+  width: 131px !important
+  height: 32px !important
+  &.is-primary
+    background-position: 0 0
+  &.is-white
+    background-position: 0 -32px
 
 .nav-link
   color: $text
@@ -136,7 +146,7 @@ a.nav-item
 
 // Main container
 .nav
-  +transition(all 0.25s)
+  +transition(all 0.1s)
   align-items: stretch
   background-color: transparent
   display: flex
