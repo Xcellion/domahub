@@ -332,7 +332,8 @@ module.exports = {
                                 if (req.params.code){
                                     Account.useSignupCode(req.params.code, {
                                         account_id : user.id,
-                                        code : null
+                                        code : null,
+                                        date_accessed : new Date()
                                     }, function(){
                                         console.log("Successfully used code!")
                                     });
