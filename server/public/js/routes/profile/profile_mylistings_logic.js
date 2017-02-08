@@ -1,10 +1,10 @@
 var row_display = listings.slice(0);
 
 $(document).ready(function(){
-	//multiple delete listings
-	$("#multi-delete").on("click", function(e){
-		multiDelete($(this));
-	});
+	// //multiple delete listings
+	// $("#multi-delete").on("click", function(e){
+	// 	multiDelete($(this));
+	// });
 
 	//multiple verify listings
 	$("#multi-verify").on("click", function(e){
