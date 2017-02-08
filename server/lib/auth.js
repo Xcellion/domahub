@@ -122,6 +122,27 @@ module.exports = {
 
 	},
 
+    //check if signup beta code is legit
+    checkCode : function(req, res, next){
+        if (!req.params.code){
+            res.redirect('/');
+        }
+        else {
+            Account.checkSignupCode(req.params.code, function(result){
+                if (result.state == "error" || result.info.length == 0){
+                    res.redirect('/');
+                }
+                else {
+                    next();
+                }
+            });
+        }
+    },
+
+    signupCode : function(req, res, next){
+        console.log("Logged in, do something");
+    },
+
 	//make sure user is logged in before doing anything
 	checkLoggedIn : function(req, res, next) {
         console.log("F: Checking if authenticated...");
@@ -298,14 +319,25 @@ module.exports = {
 
 					//all good with google!
 					if (!err && response.statusCode == 200 && body.success) {
+                        var redirectUrl = (req.params.code) ? "/signup/" + req.params.code : "/signup";
 
 						passport.authenticate('local-signup', {
-							failureRedirect : '/signup', // redirect back to the signup page if there is an error
+							failureRedirect : redirectUrl, // redirect back to the signup page if there is an error
 						}, function(user, info){
 							if (!user && info){
 								error.handler(req, res, info.message);
 							}
 							else {
+                                //if code, update
+                                if (req.params.code){
+                                    Account.useSignupCode(req.params.code, {
+                                        account_id : user.id,
+                                        code : null
+                                    }, function(){
+                                        console.log("Successfully used code!")
+                                    });
+                                }
+
 								generateVerify(req, res, email, username, function(state){
 									req.session.message = "Success! Please check your email for further instructions!";
 									res.redirect("/login");

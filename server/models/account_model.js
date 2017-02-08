@@ -32,9 +32,16 @@ module.exports = account_model;
 
 //check if an account exists
 account_model.prototype.checkAccount = function(email, callback){
-	console.log("Checking to see if account with email " + email + " exists on domahub...");
+	console.log("Checking to see if account with email " + email + " exists on DomaHub...");
 	query = 'SELECT 1 AS "exist" FROM accounts WHERE email = ?'
 	account_query(query, "Account does not exist!", callback, email);
+}
+
+//check if a signup code exists
+account_model.prototype.checkSignupCode = function(code, callback){
+	console.log("Checking to see if sign-up code " + code + " exists...");
+	query = 'SELECT 1 AS "exist" FROM signup_codes WHERE code = ?'
+	account_query(query, "Code does not exist!", callback, code);
 }
 
 //----------------------------------------------------------------------GETS----------------------------------------------------------
@@ -173,6 +180,15 @@ account_model.prototype.newAccount = function(account_info, callback){
 	query = "INSERT INTO accounts \
 			SET ? "
 	account_query(query, "Failed to create a new account for email: " + account_info.email + "!", callback, account_info);
+}
+
+//uses a sign up code
+account_model.prototype.useSignupCode = function(signup_code, code_obj, callback){
+	console.log("Using signup code: " + signup_code + "...");
+	query = "UPDATE signup_codes \
+			SET ? \
+			WHERE code = ?"
+	account_query(query, "Failed to use signup code: " + signup_code + "!", callback, [code_obj, signup_code]);
 }
 
 //----------------------------------------------------------------------UPDATE----------------------------------------------------------
