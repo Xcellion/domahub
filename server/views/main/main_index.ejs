@@ -11,24 +11,34 @@
 <body>
 
   <%- include("../templates/navbar", {user: user}); %>
-  <section id="index-img" class="hero is-medium is-primary gradient-left-right">
+  <section id="index-img" class="hero is-medium is-primary has-border-bottom">
     <div class="container">
       <div class="hero-body">
         <div class="columns">
-          <div class="column is-6">
+          <div class="column is-8 is-offset-2">
             <div class="content">
-              <h1 class="title is-1 is-white margin-bottom-25">
+              <h1 class="title is-1 margin-bottom-25">
                   The Hub for renting Domain names.
               </h1>
-              <p class="subtitle is-5 is-white margin-bottom-25">
+              <p class="subtitle is-5 margin-bottom-25">
                 DomaHub is a marketplace for domain name rentals offering
                 quality domain names at flexible time slots.
               </p>
             </div>
+            <form class="beta-form">
+              <div class="control is-grouped">
+                <p class="control is-expanded">
+                  <input tabindex="1" class="input is-medium" type="email" name="betaemail" placeholder="Enter your email"/>
+                </p>
+                <p class="control">
+                  <a tabindex="1" class="beta-submit button is-primary is-inverted is-medium" title="Sign Up">Sign Up Now</a>
+                </p>
+              </div>
+            </form>
           </div>
-          <div class="column is-6">
+          <!-- <div class="column is-6">
             <div class="card is-centered is-rounded">
-              <div class="card-header is-white is-rounded has-shadow">
+              <div class="card-header is-white is-rounded">
                 <h3 class="card-header-title is-bold has-text-centered">Sign Up for Beta</h3>
               </div>
               <div class="card-content">
@@ -46,7 +56,7 @@
                 <a tabindex="1" class="beta-submit card-footer-item button is-primary is-medium" title="Sign Up">Submit Email</a>
               </div>
             </div>
-          </div>
+          </div> -->
         </div>
       </div>
     </div>
@@ -130,7 +140,7 @@
                 <span class="icon is-primary">
                   <i class="fa fa-id-card-o"></i>
                 </span>
-                <span>No ownership transfer</span>
+                <span>Ownership never leaves your hand</span>
               </div>
               <div class="slider-icon">
                 <span class="icon is-primary">
@@ -151,9 +161,9 @@
             <div class="slider-item" tabindex="1">
               <div class="slider-content">
                 <span class="icon is-primary">
-                  <i class="fa fa-gears"></i>
+                  <i class="fa fa-dollar"></i>
                 </span>
-                <span>Custom pricing options</span>
+                <span>Full control over your prices</span>
               </div>
               <div class="slider-icon">
                 <span class="icon is-primary">
@@ -164,10 +174,8 @@
             <div class="slider-item-dropdown">
               <div class="content">
                 <p>
-                  Premium Listings have variable pricing. You decide how much
-                  to rent out your domains for. On the other hand, Basic Listings
-                  have fixed, default pricing. For more information on listing
-                  pricing, please <a href="/sellers#basicvpremium" class="is-accent">click here.</a>
+                  You get to decide the pricing for all of your listings - no limits enforced!
+                  The minimum price for all time rates is one dollar.
                 </p>
               </div>
             </div>
@@ -176,7 +184,7 @@
                 <span class="icon is-primary">
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
-                <span>Flexible rental scheduling</span>
+                <span>Rent according to your schedule</span>
               </div>
               <div class="slider-icon">
                 <span class="icon is-primary">
@@ -187,9 +195,9 @@
             <div class="slider-item-dropdown">
               <div class="content">
                 <p>
-                  Listings can be rented by the hour, day, week, or month. Basic
-                  Listings are limited to weekly or monthly rentals whereas Premium
-                  Listings can be rented for any of the four time rates.
+                  Listings can be rented out by the day, week, or month.
+                  Find the best time rate for your listing and feel free to change
+                  it whenever you want!
                 </p>
               </div>
             </div>
@@ -198,7 +206,7 @@
                 <span class="icon is-primary">
                   <i class="fa fa-credit-card"></i>
                 </span>
-                <span>Quick, secure payments</span>
+                <span>Never worry about payments</span>
               </div>
               <div class="slider-icon">
                 <span class="icon is-primary">
@@ -241,8 +249,9 @@
           <div class="content">
             <h2 class="is-bold">Why rent a domain?</h2>
             <p>
-              Domain rentals are cost-effective and always fit your schedule.
-              Rent one today and see what you can create!
+              The opportunities and possibilities are limitless with domain rentals.
+              Use unique domain names to display online projects and portfolios,
+              advertisements and marketing material, or even eCards and event pages.
             </p>
           </div>
         </div>

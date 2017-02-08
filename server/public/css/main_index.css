@@ -9,8 +9,7 @@
   align-items: center;
   display: flex;
   justify-content: space-between;
-  padding: 20px 10px;
-  text-transform: capitalize; }
+  padding: 20px 10px; }
   .slider-item span + span {
     margin-left: 10px; }
   .slider-item:not(:first-child) {
@@ -27,13 +26,9 @@
 .slider-item-dropdown {
   display: none;
   padding: 15px 45px; }
-  .slider-item-dropdown.is-active {
-    display: block; }
 
 .checklist-item {
   display: inline-flex;
   align-items: center; }
   .checklist-item span + span {
     margin-left: 5px; }
-  .checklist-item + .coocoo {
-    margin-left: 10px; }

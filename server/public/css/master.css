@@ -2506,7 +2506,7 @@ input:-webkit-autofill {
     left: 19px; }
     @media screen and (max-width: 768px) {
       .table tbody tr.row-disp.unverified-row::after {
-        height: 43px;
+        height: 36px;
         left: 0; } }
   .table tfoot td,
   .table tfoot th {
@@ -3340,10 +3340,9 @@ input:-webkit-autofill {
   .card-header.is-rounded {
     border-radius: 5px 5px 0 0; }
   .card-header.has-shadow {
-    -webkit-box-shadow: 0px 1px 5px 0 rgba(0, 0, 0, 0.38);
-    -moz-box-shadow: 0px 1px 5px 0 rgba(0, 0, 0, 0.38);
-    box-shadow: 0px 1px 5px 0 rgba(0, 0, 0, 0.38);
-    border-bottom: 1px solid rgba(0, 0, 0, 0.12); }
+    -webkit-box-shadow: 0px 1px 1px 0 rgba(0, 0, 0, 0.38);
+    -moz-box-shadow: 0px 1px 1px 0 rgba(0, 0, 0, 0.38);
+    box-shadow: 0px 1px 1px 0 rgba(0, 0, 0, 0.38); }
   .card-header.is-white {
     background-color: white; }
   .card-header.is-black {
@@ -4744,8 +4743,8 @@ a.nav-item.is-tab {
       border-top: 1px solid rgba(0, 0, 0, 0.12);
       padding: 10px;
       width: 100%; }
-    .nav-menu.is-dark {
-      background-color: #212121; }
+    .nav-menu.is-primary {
+      background-color: #3cbc8d; }
     .nav-menu.is-white {
       background-color: white; }
     .nav-menu.is-active {
@@ -4786,15 +4785,15 @@ a.nav-item.is-tab {
     justify-content: flex-end; } }
 
 .nav {
+  -moz-transition: all 0.25s;
+  -o-transition: all 0.25s;
+  -webkit-transition: all 0.25s;
+  transition: all 0.25s;
   align-items: stretch;
   background-color: transparent;
   display: flex;
   min-height: 60px;
   position: fixed;
-  -moz-transition: all 0.25s;
-  -o-transition: all 0.25s;
-  -webkit-transition: all 0.25s;
-  transition: all 0.25s;
   width: 100%;
   z-index: 999; }
   .nav.is-white {
@@ -6541,66 +6540,6 @@ a.nav-item.is-tab {
 .margin-right-50 {
   margin-right: 50px !important; }
 
-.margin-55 {
-  margin: 55px !important; }
-
-.margin-top-55 {
-  margin-top: 55px !important; }
-
-.margin-bottom-55 {
-  margin-bottom: 55px !important; }
-
-.margin-left-55 {
-  margin-left: 55px !important; }
-
-.margin-right-55 {
-  margin-right: 55px !important; }
-
-.margin-60 {
-  margin: 60px !important; }
-
-.margin-top-60 {
-  margin-top: 60px !important; }
-
-.margin-bottom-60 {
-  margin-bottom: 60px !important; }
-
-.margin-left-60 {
-  margin-left: 60px !important; }
-
-.margin-right-60 {
-  margin-right: 60px !important; }
-
-.margin-65 {
-  margin: 65px !important; }
-
-.margin-top-65 {
-  margin-top: 65px !important; }
-
-.margin-bottom-65 {
-  margin-bottom: 65px !important; }
-
-.margin-left-65 {
-  margin-left: 65px !important; }
-
-.margin-right-65 {
-  margin-right: 65px !important; }
-
-.margin-70 {
-  margin: 70px !important; }
-
-.margin-top-70 {
-  margin-top: 70px !important; }
-
-.margin-bottom-70 {
-  margin-bottom: 70px !important; }
-
-.margin-left-70 {
-  margin-left: 70px !important; }
-
-.margin-right-70 {
-  margin-right: 70px !important; }
-
 .margin-75 {
   margin: 75px !important; }
 
@@ -6616,66 +6555,6 @@ a.nav-item.is-tab {
 .margin-right-75 {
   margin-right: 75px !important; }
 
-.margin-80 {
-  margin: 80px !important; }
-
-.margin-top-80 {
-  margin-top: 80px !important; }
-
-.margin-bottom-80 {
-  margin-bottom: 80px !important; }
-
-.margin-left-80 {
-  margin-left: 80px !important; }
-
-.margin-right-80 {
-  margin-right: 80px !important; }
-
-.margin-85 {
-  margin: 85px !important; }
-
-.margin-top-85 {
-  margin-top: 85px !important; }
-
-.margin-bottom-85 {
-  margin-bottom: 85px !important; }
-
-.margin-left-85 {
-  margin-left: 85px !important; }
-
-.margin-right-85 {
-  margin-right: 85px !important; }
-
-.margin-90 {
-  margin: 90px !important; }
-
-.margin-top-90 {
-  margin-top: 90px !important; }
-
-.margin-bottom-90 {
-  margin-bottom: 90px !important; }
-
-.margin-left-90 {
-  margin-left: 90px !important; }
-
-.margin-right-90 {
-  margin-right: 90px !important; }
-
-.margin-95 {
-  margin: 95px !important; }
-
-.margin-top-95 {
-  margin-top: 95px !important; }
-
-.margin-bottom-95 {
-  margin-bottom: 95px !important; }
-
-.margin-left-95 {
-  margin-left: 95px !important; }
-
-.margin-right-95 {
-  margin-right: 95px !important; }
-
 .margin-100 {
   margin: 100px !important; }
 
@@ -6690,36 +6569,6 @@ a.nav-item.is-tab {
 
 .margin-right-100 {
   margin-right: 100px !important; }
-
-.margin-150 {
-  margin: 150px !important; }
-
-.margin-top-150 {
-  margin-top: 150px !important; }
-
-.margin-bottom-150 {
-  margin-bottom: 150px !important; }
-
-.margin-left-150 {
-  margin-left: 150px !important; }
-
-.margin-right-150 {
-  margin-right: 150px !important; }
-
-.margin-200 {
-  margin: 200px !important; }
-
-.margin-top-200 {
-  margin-top: 200px !important; }
-
-.margin-bottom-200 {
-  margin-bottom: 200px !important; }
-
-.margin-left-200 {
-  margin-left: 200px !important; }
-
-.margin-right-200 {
-  margin-right: 200px !important; }
 
 .padding-0 {
   padding: 0px !important; }
@@ -6886,66 +6735,6 @@ a.nav-item.is-tab {
 .padding-right-50 {
   padding-right: 50px !important; }
 
-.padding-55 {
-  padding: 55px !important; }
-
-.padding-top-55 {
-  padding-top: 55px !important; }
-
-.padding-bottom-55 {
-  padding-bottom: 55px !important; }
-
-.padding-left-55 {
-  padding-left: 55px !important; }
-
-.padding-right-55 {
-  padding-right: 55px !important; }
-
-.padding-60 {
-  padding: 60px !important; }
-
-.padding-top-60 {
-  padding-top: 60px !important; }
-
-.padding-bottom-60 {
-  padding-bottom: 60px !important; }
-
-.padding-left-60 {
-  padding-left: 60px !important; }
-
-.padding-right-60 {
-  padding-right: 60px !important; }
-
-.padding-65 {
-  padding: 65px !important; }
-
-.padding-top-65 {
-  padding-top: 65px !important; }
-
-.padding-bottom-65 {
-  padding-bottom: 65px !important; }
-
-.padding-left-65 {
-  padding-left: 65px !important; }
-
-.padding-right-65 {
-  padding-right: 65px !important; }
-
-.padding-70 {
-  padding: 70px !important; }
-
-.padding-top-70 {
-  padding-top: 70px !important; }
-
-.padding-bottom-70 {
-  padding-bottom: 70px !important; }
-
-.padding-left-70 {
-  padding-left: 70px !important; }
-
-.padding-right-70 {
-  padding-right: 70px !important; }
-
 .padding-75 {
   padding: 75px !important; }
 
@@ -6961,66 +6750,6 @@ a.nav-item.is-tab {
 .padding-right-75 {
   padding-right: 75px !important; }
 
-.padding-80 {
-  padding: 80px !important; }
-
-.padding-top-80 {
-  padding-top: 80px !important; }
-
-.padding-bottom-80 {
-  padding-bottom: 80px !important; }
-
-.padding-left-80 {
-  padding-left: 80px !important; }
-
-.padding-right-80 {
-  padding-right: 80px !important; }
-
-.padding-85 {
-  padding: 85px !important; }
-
-.padding-top-85 {
-  padding-top: 85px !important; }
-
-.padding-bottom-85 {
-  padding-bottom: 85px !important; }
-
-.padding-left-85 {
-  padding-left: 85px !important; }
-
-.padding-right-85 {
-  padding-right: 85px !important; }
-
-.padding-90 {
-  padding: 90px !important; }
-
-.padding-top-90 {
-  padding-top: 90px !important; }
-
-.padding-bottom-90 {
-  padding-bottom: 90px !important; }
-
-.padding-left-90 {
-  padding-left: 90px !important; }
-
-.padding-right-90 {
-  padding-right: 90px !important; }
-
-.padding-95 {
-  padding: 95px !important; }
-
-.padding-top-95 {
-  padding-top: 95px !important; }
-
-.padding-bottom-95 {
-  padding-bottom: 95px !important; }
-
-.padding-left-95 {
-  padding-left: 95px !important; }
-
-.padding-right-95 {
-  padding-right: 95px !important; }
-
 .padding-100 {
   padding: 100px !important; }
 
@@ -7035,36 +6764,6 @@ a.nav-item.is-tab {
 
 .padding-right-100 {
   padding-right: 100px !important; }
-
-.padding-150 {
-  padding: 150px !important; }
-
-.padding-top-150 {
-  padding-top: 150px !important; }
-
-.padding-bottom-150 {
-  padding-bottom: 150px !important; }
-
-.padding-left-150 {
-  padding-left: 150px !important; }
-
-.padding-right-150 {
-  padding-right: 150px !important; }
-
-.padding-200 {
-  padding: 200px !important; }
-
-.padding-top-200 {
-  padding-top: 200px !important; }
-
-.padding-bottom-200 {
-  padding-bottom: 200px !important; }
-
-.padding-left-200 {
-  padding-left: 200px !important; }
-
-.padding-right-200 {
-  padding-right: 200px !important; }
 
 .low-opacity {
   opacity: 0.5; }
