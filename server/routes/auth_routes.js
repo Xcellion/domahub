@@ -16,6 +16,12 @@ module.exports = function(app, auth){
 			var path_name = req.path.slice(1, req.path.length);
 			auth[path_name](req, res, next);
 		}
+	]);
+
+	app.get("/signup/:code", [
+		auth.checkCode,
+		auth.signup,
+		auth.signupCode
 	])
 
 	//to render reset/verify page
@@ -50,7 +56,14 @@ module.exports = function(app, auth){
 			var path_name = req.path.slice(1, req.path.length) + "Post";
 			auth[path_name](req, res, next);
 		}
-	])
+	]);
+
+	//signup with code
+	app.post("/signup/:code", [
+		urlencodedParser,
+		auth.isNotLoggedIn,
+		auth.signupPost
+	]);
 
 	//to reset password
 	app.post("/reset/:token", [
