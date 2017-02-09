@@ -11,6 +11,8 @@
       border-bottom: none
   td
     padding: 8px 6px
+    +mobile
+      padding: 14px 6px
   td,
   th
     vertical-align: middle
@@ -101,7 +103,6 @@
               width: 4px
               left: 19px
               +mobile
-                height: 36px
                 left: 0
           // fix for dropdown on mobile
           &.is-expanded
@@ -119,7 +120,6 @@
             width: 4px
             left: 19px
             +mobile
-              height: 36px
               left: 0
 
   tfoot

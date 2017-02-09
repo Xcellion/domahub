@@ -1,11 +1,3 @@
-@media screen and (min-width: 769px) {
-  .is-profile-card {
-    width: 100%; } }
-
-@media screen and (max-width: 768px) {
-  .is-profile-card {
-    width: 275px; } }
-
 .listing-img .delete {
   border-radius: 0 3px;
   position: absolute;
@@ -16,18 +8,8 @@
   .listing-module:not(:last-child) {
     border-bottom: 1px solid rgba(0, 0, 0, 0.12); }
 
-.listing-img {
-  margin: 0 auto;
-  width: 250px; }
-  .listing-img img {
-    height: 250px;
-    width: 250px; }
-
 .drop-form-file {
   width: 100%; }
-
-.verification-container {
-  padding-left: 50px; }
 
 .category-selector {
   margin-right: 8px;
@@ -40,9 +22,6 @@
 @media screen and (max-width: 768px) {
   .table {
     width: 100%; } }
-
-.account-form select {
-  margin-right: 5px; }
 
 .td-status {
   width: 122px;
@@ -76,8 +55,7 @@
   padding-left: 8px !important;
   border-left: 1px solid rgba(0, 0, 0, 0.12);
   padding-right: 0 !important;
-  width: 75px;
-  min-width: 75px; }
+  width: 75px; }
 
 .td-price-type {
   width: 112px;

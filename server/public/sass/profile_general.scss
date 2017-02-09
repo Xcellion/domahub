@@ -1,17 +1,7 @@
 @import 'vars';
 @import 'mixins';
 
-// profile card
-.is-profile-card {
-  @include tablet {
-    width: 100%;
-  }
-  @include mobile {
-    width: 275px;
-  }
-}
-
-// listing image delete button
+// listing image
 .listing-img {
    .delete {
      border-radius: 0 $radius;
@@ -28,24 +18,9 @@
   }
 }
 
-// listing image size
-.listing-img {
-  margin: 0 auto;
-  width: 250px;
-  img {
-    height: 250px;
-    width: 250px;
-  }
-}
-
-// card-footer-item form full width
+// file upload button form full width
 .drop-form-file {
   width: 100%;
-}
-
-// listings and rentals page stuff
-.verification-container {
-  padding-left: 50px;
 }
 
 // category buttons
@@ -62,10 +37,6 @@
   @include mobile {
     width: 100%;
   }
-}
-
-.account-form select {
-  margin-right: 5px;
 }
 
 .td-status {
@@ -109,7 +80,6 @@
   border-left: 1px solid $border;
   padding-right: 0 !important;
   width: 75px;
-  min-width: 75px;
 }
 
 .td-price-type {

@@ -2391,6 +2391,9 @@ input:-webkit-autofill {
     border-bottom: none; }
   .table td {
     padding: 8px 6px; }
+    @media screen and (max-width: 768px) {
+      .table td {
+        padding: 14px 6px; } }
   .table td,
   .table th {
     vertical-align: middle;
@@ -2492,7 +2495,6 @@ input:-webkit-autofill {
     left: 19px; }
     @media screen and (max-width: 768px) {
       .table tbody tr.row-disp.verified-row:hover::after {
-        height: 36px;
         left: 0; } }
   @media screen and (max-width: 768px) {
     .table tbody tr.row-disp.verified-row.is-expanded:hover::after {
@@ -2506,7 +2508,6 @@ input:-webkit-autofill {
     left: 19px; }
     @media screen and (max-width: 768px) {
       .table tbody tr.row-disp.unverified-row::after {
-        height: 36px;
         left: 0; } }
   .table tfoot td,
   .table tfoot th {
@@ -5149,12 +5150,6 @@ a.nav-item.is-tab {
     .tabs.is-large.is-boxed a, .tabs.is-large.is-toggle a {
       padding-bottom: 13px;
       padding-top: 13px; }
-  @media screen and (max-width: 768px) {
-    .tabs {
-      font-size: 16px; }
-      .tabs.is-boxed a, .tabs.is-toggle a {
-        padding-bottom: 1px;
-        padding-top: 1px; } }
 
 .hero-video {
   bottom: 0;
