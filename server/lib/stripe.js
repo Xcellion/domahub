@@ -163,7 +163,7 @@ module.exports = {
 
 			//something went wrong with the price
 			if (isNaN(total_price) || isNaN(total_price) || isNaN(total_price)){
-				error.handler(req, res, "Invalid pricing!", 'json');
+				error.handler(req, res, "Invalid price!", 'json');
 			}
 			else {
 				//charge the end user, transfer to the owner, take doma fees if its a basic listing

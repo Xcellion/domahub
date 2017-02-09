@@ -394,7 +394,7 @@
                   <p class="level-item">Alexa Ranking</p>
                 </div>
                 <div class="level-right">
-                  <p class="level-item is-bold"><%= listing_info.alexa.globalRank || "-" %></p>
+                  <p class="level-item is-bold"><%= (listing_info.alexa.globalRank == "-" || !listing_info.alexa.globalRank) ? "N/A" : listing_info.alexa.globalRank %></p>
                 </div>
               </nav>
               <nav class="level">
@@ -402,7 +402,7 @@
                   <p class="level-item">Daily Time on Site</p>
                 </div>
                 <div class="level-right">
-                  <p class="level-item is-bold"><%= listing_info.alexa.engagement.dailyTimeOnSite || "-" %></p>
+                    <p class="level-item is-bold"><%= (listing_info.alexa.engagement.dailyTimeOnSite == "-" || !listing_info.alexa.engagement.dailyTimeOnSite) ? "N/A" : listing_info.alexa.engagement.dailyTimeOnSite %></p>
                 </div>
               </nav>
               <nav class="level">
@@ -410,7 +410,7 @@
                   <p class="level-item">Daily Pageviews per Visitor</p>
                 </div>
                 <div class="level-right">
-                  <p class="level-item is-bold"><%= listing_info.alexa.engagement.dailyPageViewPerVisitor || "-" %></p>
+                    <p class="level-item is-bold"><%= (listing_info.alexa.engagement.dailyPageViewPerVisitor == "-" || !listing_info.alexa.engagement.dailyPageViewPerVisitor) ? "N/A" : listing_info.alexa.engagement.dailyPageViewPerVisitor %></p>
                 </div>
               </nav>
               <nav class="level">
@@ -418,7 +418,7 @@
                   <p class="level-item">Bounce Rate</p>
                 </div>
                 <div class="level-right">
-                  <p class="level-item is-bold"><%= listing_info.alexa.engagement.bounceRate || "-" %></p>
+                    <p class="level-item is-bold"><%= (listing_info.alexa.engagement.bounceRate == "-" || !listing_info.alexa.engagement.bounceRate) ? "N/A" : listing_info.alexa.engagement.bounceRate %></p>
                 </div>
               </nav>
               <small class="margin-top-10">
