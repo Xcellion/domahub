@@ -1,3 +1,4 @@
 {
-	"ignore": ["server/public/*", "uploads/*"]
+	"ignore": ["server/public/*", "uploads/*"],
+	"exec" : "node server/server.js"
 }
