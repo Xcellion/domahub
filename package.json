@@ -1,5 +1,5 @@
 {
-  "name": "domahub",
+  "name": "DomaHub",
   "version": "0.0.1",
   "description": "A domain rental marketplace",
   "main": "server/server.js",
@@ -46,7 +46,7 @@
     "gulp-clean-css": "2.3.2",
     "gulp-rename": "1.2.2",
     "gulp-sass": "3.0.0",
-    "gulp-uncss": "^1.0.6",
+    "gulp-uncss": "1.0.6",
   },
   "scripts": {
     "start": "node server/server.js"
@@ -55,6 +55,6 @@
     "node": "0.12.6"
   },
   "keywords": [
-    "domahub"
+    "DomaHub"
   ]
 }
