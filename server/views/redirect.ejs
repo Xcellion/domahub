@@ -2,8 +2,8 @@
 <html>
 <head>
     <title>Redirecting... - DomaHub</title>
-    <link rel="stylesheet" type="text/css" href="/css/login_signup.css" />
-    <%- include("templates/head_links"); %>
+    <%- include("../templates/head_links"); %>
+    <link rel="stylesheet" type="text/css" href="/css/login_signup.min.css" />
     <script>
     var redirect = <% if(typeof redirect != "undefined"){ %><%-JSON.stringify(redirect)%><% }else{ %>""<% } %>;
     </script>

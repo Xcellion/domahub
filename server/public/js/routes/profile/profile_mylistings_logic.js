@@ -501,7 +501,7 @@ function createImgDrop(listing_info, rownum){
     var background_image = (listing_info.background_image == null || listing_info.background_image == undefined || listing_info.background_image == "") ? "https://placeholdit.imgix.net/~text?txtsize=40&txt=RANDOM%20PHOTO&w=200&h=200" : listing_info.background_image;
 
     var temp_col = $("<div class='column is-3'></div>");
-    var temp_div = $("<div class='card is-pulled-right listing-img no-shadow'></div>");
+    var temp_div = $("<div class='card listing-img no-shadow'></div>");
     var temp_div_image = $("<div class='card-image'></div>")
     var temp_figure = $("<figure class='image listing-img'></figure>");
     var temp_x = $('<button tabindex="1" class="delete-img delete"></button>');
