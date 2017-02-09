@@ -2,6 +2,7 @@ var	listing_model = require('../models/listing_model.js');
 
 var node_env = process.env.NODE_ENV || 'dev'; 	//dev or prod bool
 var stripe_key = (node_env == "dev") ? "sk_test_PHd0TEZT5ytlF0qCNvmgAThp" : "sk_live_Nqq1WW2x9JmScHxNbnFlORoh";
+var stripe = require("stripe")(stripe_key);
 
 var bodyParser = require('body-parser');
 var jsonParser = bodyParser.json();
