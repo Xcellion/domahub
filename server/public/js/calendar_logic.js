@@ -67,7 +67,7 @@ function setUpCalendar(listing_info){
 
         //prevent selecting anything before current hour, and next year
         selectConstraint: {
-            start: moment().startOf("day"),
+            start: moment().endOf("day").add(1, "millisecond"),
             end: moment().add(1, "year")
         },
 
