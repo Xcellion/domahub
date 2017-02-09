@@ -66,7 +66,7 @@ function submitDomainNames(submit_elem){
 				domain_names: domain_names
 			}
 		}).done(function(data){
-			console.log(data);
+			//console.log(data);
 			createTable(data.bad_listings, data.good_listings);
 			submit_elem.removeClass('is-loading');
 			submit_elem.on("click", function(e){
@@ -289,7 +289,7 @@ function submitDomainsAjax(domains, submit_elem, stripeToken){
 			stripeToken : stripeToken
 		}
 	}).done(function(data){
-		console.log(data);
+		//console.log(data);
 
 		//handle any good or bad listings
 		refreshRows(data.bad_listings, data.good_listings);
