@@ -15,6 +15,19 @@ $(document).ready(function() {
 
 		//press enter to go next
 		if (e.keyCode == 13){
+			if (user){
+				showCardContent("checkout");
+			}
+			else {
+				showCardContent("nouser");
+			}
+		}
+	});
+
+	//press enter to go next for no user email
+	$("#new_user_email").on("change keyup paste", function(e){
+		e.preventDefault();
+		if (e.keyCode == 13){
 			showCardContent("checkout");
 		}
 	});
@@ -96,11 +109,12 @@ $(document).ready(function() {
 });
 
 //functions to show different cards
-
-function showCalendar(){
-	$(".checkout-card-content").addClass('is-hidden')
-	$("#calendar-card-content").removeClass('is-hidden');
-	$('#calendar').fullCalendar('render');
+function showCardContent(type){
+	$(".checkout-card-content").addClass('is-hidden');
+	$("#" + type + "-card-content").removeClass('is-hidden');
+	if (type == "calendar"){
+		$('#calendar').fullCalendar('render');
+	}
 }
 
 function showNextCard(){
@@ -221,7 +235,7 @@ function submitStripe(stripeToken){
 //error handler from server
 function errorHandler(message){
 	if (message == "Invalid address!"){
-		showCardContent("redirect");
+		showCardContent("address");
 		$("#address-error-message").addClass('is-danger').html("Invalid URL entered! Your credit card has not been charged yet.");
 	}
 	else if (message == "Invalid dates!"){

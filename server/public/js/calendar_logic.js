@@ -934,7 +934,7 @@ function updatePrices(){
         }
         else {
             //show calendar card if already set in cookies
-            showCalendar();
+            showCardContent("calendar");
 
             //animation for counting numbers
             $("#price").prop('Counter', $("#price").prop('Counter')).stop().animate({
