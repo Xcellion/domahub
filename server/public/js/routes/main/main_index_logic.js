@@ -1,4 +1,5 @@
 $(document).ready(function() {
+
     $(".beta-submit").click(function(e){
         e.preventDefault();
         $(this).closest(".beta-form").submit();
@@ -28,6 +29,10 @@ $(document).ready(function() {
         }
     });
 
+    $(".beta-form-success").find(".delete").click(function() {
+      $(".beta-form").removeClass("is-hidden");
+    });
+
     //slider dropdown
     $(".slider-item").on("click", function() {
         //remove all active from other slider-items
@@ -42,6 +47,11 @@ $(document).ready(function() {
         }).siblings(".slider-item-dropdown").stop().slideUp(300, function(){
             $(this).removeClass('is-active');
         });
+    });
+
+    $("#welcome").addClass("is-active").delay(4000).queue(function(next){
+      $(this).removeClass("is-active");
+      next();
     });
 
 });
