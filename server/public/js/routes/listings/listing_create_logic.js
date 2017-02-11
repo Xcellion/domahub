@@ -36,6 +36,12 @@ $(document).ready(function() {
 		showTable();
 	});
 
+	//agree to terms show submit button
+	$("#agree-to-terms").on("click", function(e){
+		handleSubmitDisabled();
+	});
+
+
 });
 
 //helper function to show next help text
@@ -60,7 +66,7 @@ function submitDomainNames(submit_elem){
 				domain_names: domain_names
 			}
 		}).done(function(data){
-			console.log(data);
+			//console.log(data);
 			createTable(data.bad_listings, data.good_listings);
 			submit_elem.removeClass('is-loading');
 			submit_elem.on("click", function(e){
@@ -178,7 +184,7 @@ function createTableRow(data){
 
 //function to show or disable submit
 function handleSubmitDisabled(){
-	if ($(".domain-name-input").filter(function(){ return $(this).val() == ""}).length == 1 && $(".is-danger").length == 1){
+	if ($(".domain-name-input").filter(function(){ return $(this).val() == ""}).length == 1 && $(".is-danger").length == 1 && $("#agree-to-terms:checked").length > 0){
 		$("#domains-submit").removeClass('is-disabled');
 	}
 	else {
@@ -283,7 +289,7 @@ function submitDomainsAjax(domains, submit_elem, stripeToken){
 			stripeToken : stripeToken
 		}
 	}).done(function(data){
-		console.log(data);
+		//console.log(data);
 
 		//handle any good or bad listings
 		refreshRows(data.bad_listings, data.good_listings);
