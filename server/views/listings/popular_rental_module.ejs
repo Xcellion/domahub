@@ -1,0 +1,40 @@
+<% var popular_rental; %>
+<% for (var x = 0; x < listing_info.rentals.length; x++){ %>
+    <% var max_views = 0;
+    if (listing_info.rentals[x].views > max_views){
+        popular_rental = listing_info.rentals[x];
+    } %>
+<% } %>
+<% var background_image = (popular_rental.address == "") ? "https://placeholdit.imgix.net/~text?txtsize=20&txt=NO%20PREVIEW&w=800&h=400" : "/screenshot?rental_address=" + popular_rental.address; %>
+<% background_image = (popular_rental.address.match(/\.(jpeg|jpg|gif|png)$/) != null) ? popular_rental.address : background_image; %>
+
+<div id="popular-rental-module" data-rental_id="<%= popular_rental.rental_id %>" class="listing-module">
+  <div class="content margin-bottom-25">
+    <h2>Trending Rental</h2>
+  </div>
+  <div class="card is-fullwidth no-shadow">
+    <div class="card-image">
+      <figure class="image">
+        <img id="popular-rental-img" src="<%= background_image %>" alt="Image">
+      </figure>
+    </div>
+    <div class="card-content">
+      <nav class="level">
+        <div class="level-left">
+          <div class="content level-item">
+            <h3 id="popular-rental-duration" class="is-bold"></h3>
+            <p id="popular-rental-views"><%= popular_rental.views %> Views</p>
+          </div>
+        </div>
+        <div class="level-right">
+          <a  target="_blank" id="popular-rental-preview" href="/listing/<%= listing_info.domain_name + '/' + popular_rental.rental_id %>" class="button is-primary level-item">
+            <span>View</span>
+            <span class="icon is-small">
+              <i class="fa fa-external-link-square"></i>
+            </span>
+          </a>
+        </div>
+      </nav>
+    </div>
+  </div>
+</div>

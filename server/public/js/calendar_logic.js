@@ -22,7 +22,6 @@ function setUpCalendar(listing_info){
         axisFormat: 'hA',
         displayEventEnd: true,
 
-
         //header buttons
         header: {left:'prev', center:'next', right:'title, today'},
 
@@ -90,8 +89,9 @@ function setUpCalendar(listing_info){
             //dim next available or not
             if (listing_info.rentals.length){
                 var last_rental = listing_info.rentals[listing_info.rentals.length - 1];
+                last_rental = (moment().isSameOrAfter(moment(last_rental.date + last_rental.duration))) ? moment() : last_rental;
 
-                if (moment(last_rental.date + last_rental.duration).isBetween(currentViewStart, currentViewEnd)){
+                if (last_rental.isBetween(currentViewStart, currentViewEnd)){
                     $("#next-available-button").addClass('is-disabled');
                 }
                 else {
@@ -239,7 +239,8 @@ function setUpCalendar(listing_info){
     $("#next-available-button").click(function(e){
         if (listing_info.rentals.length){
             var last_rental = listing_info.rentals[listing_info.rentals.length - 1];
-            $("#calendar").fullCalendar('gotoDate', last_rental.date + last_rental.duration);
+            last_rental = (moment().isSameOrAfter(moment(last_rental.date + last_rental.duration))) ? moment() : last_rental;
+            $("#calendar").fullCalendar('gotoDate', last_rental);
         }
     });
 
