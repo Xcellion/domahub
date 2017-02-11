@@ -78,7 +78,8 @@ p,
 h1,
 h2,
 h3,
-span
+span,
+small
   &.is-underlined
     color: inherit
     text-decoration: underline
@@ -144,11 +145,6 @@ small
   line-height: normal
   & + small
     margin-top: 5px
-  @each $name, $pair in $colors
-    $color: nth($pair, 1)
-    $color-invert: nth($pair, 2)
-    &.is-#{$name}
-      color: $color
 
 span
   font-style: inherit

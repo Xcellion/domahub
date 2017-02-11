@@ -8,6 +8,13 @@
   margin-bottom: 50px;
 }
 
+#domain-modules-column,
+#domain-info-column {
+  @include width-1215px-max {
+    display: block;
+  }
+}
+
 #domain-display {
   color: $primary-light;
   padding: 0 12px;

@@ -4,6 +4,11 @@
     #top-wrapper {
       padding: 0 20px 40px; } }
 
+@media screen and (max-width: 1215px) {
+  #domain-modules-column,
+  #domain-info-column {
+    display: block; } }
+
 #domain-display {
   color: #62c9a3;
   padding: 0 12px; }
