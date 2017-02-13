@@ -1,6 +1,5 @@
 .qa-wrapper + .qa-wrapper {
-  margin-top: -60px;
-  padding-top: 75px; }
+  margin-top: 25px; }
 
 .qa-wrapper p,
 .qa-wrapper a {
@@ -13,18 +12,12 @@
   padding-top: 70px; }
 
 .faq-question {
-  -moz-transition: all 0.25s ease;
-  -o-transition: all 0.25s ease;
-  -webkit-transition: all 0.25s ease;
-  transition: all 0.25s ease;
-  display: inline-flex;
-  font-weight: bold;
-  padding: 5px 0;
-  position: relative; }
+  font-weight: bold; }
 
 .faq-header {
-  position: relative;
   cursor: pointer;
-  color: #3cbc8d; }
+  color: #3cbc8d;
+  font-weight: bold;
+  margin-bottom: 20px; }
   .faq-header:hover {
     color: #309670; }

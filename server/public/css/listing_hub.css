@@ -98,6 +98,25 @@
 .domain-name {
   word-break: break-all; }
 
+.img-wrapper {
+  background-color: rgba(0, 0, 0, 0.5);
+  height: 100%;
+  width: 100%; }
+
+.is-flex-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  align-items: center; }
+  .is-flex-wrap .button {
+    margin-bottom: 8px;
+    margin-right: 8px; }
+  .is-flex-wrap > .checkbox-wrapper {
+    margin: 5px 2px 5px 0; }
+  @media screen and (max-width: 768px) {
+    .is-flex-wrap > .tag {
+      margin: 5px; } }
+
 input[type=range].primary-range {
   -webkit-appearance: none;
   width: 100%;

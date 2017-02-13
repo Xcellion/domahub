@@ -3,8 +3,7 @@
 
 .qa-wrapper {
   & + .qa-wrapper {
-    margin-top: -60px;
-    padding-top: 75px;
+    margin-top: 25px;
   }
   p,
   a {
@@ -20,17 +19,14 @@
 }
 
 .faq-question {
-  @include transition(all 0.25s ease);
-  display: inline-flex;
   font-weight: bold;
-  padding: 5px 0;
-  position: relative;
 }
 
 .faq-header {
-  position: relative;
   cursor: pointer;
   color: $primary;
+  font-weight: bold;
+  margin-bottom: 20px;
   &:hover {
     color: $primary-dark;
   }
