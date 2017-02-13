@@ -95,10 +95,9 @@ function signupBeta(req, res, next){
                 //email options
         		var email = {
         			to: req.body.betaemail,
-        			from: 'general@domahub.com',
+        			from: '"DomaHub Beta" <general@domahub.com>',
         			subject: 'Thank you for signing up at DomaHub!',
-        			html: "This email is to let you know that you have successfully signed up for DomaHub beta testing! \
-                    We'll be sure to let you know once we begin the next phase of the beta process. Thank you!</br></br>-- DomaHub"
+        			html: "<p>This email is to let you know that you have successfully signed up for DomaHub beta testing!</p><p>We'll be sure to let you know once we begin the next phase of the beta process.</p><p>Thank you!</p></br><p>-- DomaHub</p>"
         		};
 
         		//send email
