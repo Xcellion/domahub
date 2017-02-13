@@ -77,6 +77,54 @@
   }
 }
 
+.landing-img {
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  width: 100%;
+}
+
+.img-wrapper {
+  background-color: rgba(0,0,0,0.5);
+  height: 100%;
+  width: 100%;
+}
+
+.is-flex-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  align-items: center;
+  .button {
+    margin-bottom: 8px;
+    margin-right: 8px;
+  }
+  @include mobile {
+    & > .tag {
+      margin: 5px;
+    }
+  }
+}
+
+.flex-column-mobile {
+  @include mobile {
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+.order-1-mobile {
+  @include mobile {
+    order: 1;
+  }
+}
+
+.order-2-mobile {
+  @include mobile {
+    order: 2;
+  }
+}
+
 #previous-listings-cards {
   display: flex;
   justify-content: space-around;

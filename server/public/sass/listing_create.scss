@@ -29,6 +29,13 @@
   }
 }
 
+.flex-column-mobile {
+  @include mobile {
+    display: flex;
+    flex-direction: column;
+  }
+}
+
 // Table columns
 .td-price {
   width: 110px;

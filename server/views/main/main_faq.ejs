@@ -10,47 +10,13 @@
 <body>
 
   <%- include("../templates/navbar", {user: user}); %>
-
-  <section class="clear-nav">
-    <div class="container">
-      <div class="tabs is-centered">
-        <ul>
-          <li class="margin-right-20"><a tabindex="1" href="/about" title="About Us">About Us</a></li>
-          <li class="margin-right-20"><a tabindex="1" href="/press" title="Press and Media">Press and Media</a></li>
-          <li class="is-active"><a tabindex="1" href="/faq" title="Frequently Asked Questions">FAQ</a></li>
-        </ul>
-      </div>
-    </div>
-  </section>
-
-  <section class="section clear-nav is-small">
+  <section class="section is-medium">
     <div class="container">
       <div class="columns">
-        <div class="column is-one-quarter is-hidden-mobile">
-          <aside class="menu is-fixed">
-        <%# <ul class="menu-list">
-              <p class="control has-icon">
-      				<input id="search-faq" tabindex="1" class="input" type="text" placeholder="Search FAQ" />
-      				<i class="fa fa-search"></i>
-      			  </p>
-            </ul>%>
-            <p class="menu-label">
-              Categories
-            </p>
-            <ul class="menu-list">
-              <li><a id="about-menu" class="menu-link is-active" tabindex="1" href="#about">About DomaHub</a></li>
-              <li><a id="renting-menu" class="menu-link" href="#renting" tabindex="1">Renting with DomaHub</a></li>
-              <li><a id="selling-menu" class="menu-link" href="#selling" tabindex="1">Selling on DomaHub</a></li>
-              <li><a id="payments-menu" class="menu-link" href="#payments" tabindex="1">Payments</a></li>
-              <%# <li><a id="communicating-menu" class="menu-link" href="#communicating" tabindex="1">Communicating with users</a></li>%>
-              <%# <li><a id="contracts-menu" class="menu-link" href="#contracts" tabindex="1">Rental contracts</a></li>%>
-            </ul>
-          </aside>
-        </div>
-        <div class="column is-two-thirds">
-          <h1 class="title is-bold is-3 is-marginless">Frequently Asked Questions</h1>
+        <div class="column is-8">
+          <h1 class="title is-bold is-3">Frequently Asked Questions</h1>
           <div id="about" class="faq-section">
-            <h2 class="title faq-header is-normal has-border-bottom">About DomaHub</h2>
+            <h2 class="faq-header">About DomaHub</h2>
             <div class="qa-wrapper">
               <h3 class="faq-question" title="What exactly does DomaHub do?">
                 What exactly does DomaHub do?</h3>
@@ -70,7 +36,7 @@
             </div>
           </div>
           <div id="renting" class="faq-section">
-            <h2 class="title faq-header is-normal has-border-bottom">Renting with DomaHub</h2>
+            <h2 class="faq-header">Renting with DomaHub</h2>
             <!-- <div class="qa-wrapper">
               <h3 class="faq-question" title="How can I rent a domain?">
                 How can I rent a domain?</h3>
@@ -139,7 +105,7 @@
             </div>
           </div>
           <div id="selling" class="faq-section">
-            <h2 class="title faq-header is-normal has-border-bottom">Selling on DomaHub</h2>
+            <h2 class="faq-header">Selling on DomaHub</h2>
             <div class="qa-wrapper">
               <h3 class="faq-question" title="How do I start listing domains?">
                 How do I start listing domains?</h3>
@@ -289,7 +255,7 @@
             </div>
           </div>
           <div id="payments" class="faq-section">
-            <h2 class="title faq-header is-normal has-border-bottom">Payments</h2>
+            <h2 class="faq-header">Payments</h2>
             <div class="qa-wrapper">
               <h3 class="faq-question" title="How do I pay for rentals?">
                 How do I pay for rentals?</h3>
@@ -334,7 +300,7 @@
             </div>
           </div>
           <%# <div id="communicating" class="faq-section">
-            <h2 class="title faq-header is-normal has-border-bottom">Communicating with users</h2>
+            <h2 class="faq-header">Communicating with users</h2>
             <div class="qa-wrapper">
               <h3 class="faq-question" title="Can I communicate with users outside of DomaHub?">
                 Can I communicate with users outside of DomaHub?</h3>
@@ -353,7 +319,7 @@
             </div>
           </div>
           <div id="contracts" class="faq-section">
-            <h2 class="title faq-header is-normal has-border-bottom">Rental contracts</h2>
+            <h2 class="faq-header">Rental contracts</h2>
             <div class="qa-wrapper">
               <h3 class="faq-question">Questions uncertain</h3>
               <p class="faq-answer">
@@ -366,6 +332,27 @@
               Still have questions? Feel free to <a tabindex="1" href="/contact" class="is-accent" title="Contact Us">Contact Us</a>.
             </p>
           </div>
+        </div>
+        <div class="column is-4 is-hidden-mobile">
+          <aside class="menu is-fixed">
+        <%# <ul class="menu-list">
+              <p class="control has-icon">
+              <input id="search-faq" tabindex="1" class="input" type="text" placeholder="Search FAQ" />
+              <i class="fa fa-search"></i>
+              </p>
+            </ul>%>
+            <p class="menu-label">
+              Categories
+            </p>
+            <ul class="menu-list">
+              <li><a id="about-menu" class="menu-link is-active" tabindex="1" href="#about">About DomaHub</a></li>
+              <li><a id="renting-menu" class="menu-link" href="#renting" tabindex="1">Renting with DomaHub</a></li>
+              <li><a id="selling-menu" class="menu-link" href="#selling" tabindex="1">Selling on DomaHub</a></li>
+              <li><a id="payments-menu" class="menu-link" href="#payments" tabindex="1">Payments</a></li>
+              <%# <li><a id="communicating-menu" class="menu-link" href="#communicating" tabindex="1">Communicating with users</a></li>%>
+              <%# <li><a id="contracts-menu" class="menu-link" href="#contracts" tabindex="1">Rental contracts</a></li>%>
+            </ul>
+          </aside>
         </div>
       </div>
     </div>

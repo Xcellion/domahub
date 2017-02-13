@@ -61,6 +61,42 @@
     .calendar-control .button:last-child {
       margin-right: 0; }
 
+.landing-img {
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  width: 100%; }
+
+.img-wrapper {
+  background-color: rgba(0, 0, 0, 0.5);
+  height: 100%;
+  width: 100%; }
+
+.is-flex-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  align-items: center; }
+  .is-flex-wrap .button {
+    margin-bottom: 8px;
+    margin-right: 8px; }
+  @media screen and (max-width: 768px) {
+    .is-flex-wrap > .tag {
+      margin: 5px; } }
+
+@media screen and (max-width: 768px) {
+  .flex-column-mobile {
+    display: flex;
+    flex-direction: column; } }
+
+@media screen and (max-width: 768px) {
+  .order-1-mobile {
+    order: 1; } }
+
+@media screen and (max-width: 768px) {
+  .order-2-mobile {
+    order: 2; } }
+
 #previous-listings-cards {
   display: flex;
   justify-content: space-around; }

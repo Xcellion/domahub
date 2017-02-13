@@ -131,6 +131,31 @@
   word-break: break-all;
 }
 
+// misc
+.img-wrapper {
+  background-color: rgba(0,0,0,0.5);
+  height: 100%;
+  width: 100%;
+}
+
+.is-flex-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  align-items: center;
+  .button {
+    margin-bottom: 8px;
+    margin-right: 8px;
+  }
+  & > .checkbox-wrapper {
+    margin: 5px 2px 5px 0;
+  }
+  @include mobile {
+    & > .tag {
+      margin: 5px;
+    }
+  }
+}
 
 // General primary colored range for stuff like domain length
 input[type=range].primary-range {
