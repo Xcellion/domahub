@@ -9,50 +9,6 @@ $(document).ready(function() {
 		return filterCheck("active_filter", rental);
 	});
 
-    //various ways to close calendar modal
-	$('.modal-close, .modal-background').click(function() {
-
-		//refresh the modal after successful time submission
-		if (refresh_time_submit){
-			successHide(false);
-		}
-
-	  	$('#listing-modal').removeClass('is-active');
-		listing_info = false;
-		rental_min = false;
-		delete_cookie("modal-active");
-	});
-
-	//esc key to close modal
-	$(document).keyup(function(e) {
-		if (e.which == 27) {
-			//refresh the modal after successful time submission
-			if (refresh_time_submit){
-				successHide(false);
-			}
-
-			listing_info = false;
-			rental_min = false;
-			$('#listing-modal').removeClass('is-active');
-			delete_cookie("modal-active");
-		}
-	});
-
-    //go to the rental start date
-    $("#rent-beginning-button").click(function(e){
-        $("#calendar").fullCalendar('gotoDate', rental_min);
-    });
-
-	//show checkout modal content
-	$('#redirect-next-button').click(function() {
-		showModalContent("checkout");
-	});
-
-	//show calendar again (press back on checkout)
-	$('#edit-dates-button, #checkout-back-button').click(function() {
-		showModalContent("calendar");
-	});
-
 	//multiple delete rentals
 	$("#multi-delete").on("click", function(e){
 		multiDelete($(this));
@@ -267,20 +223,14 @@ function createFormDrop(rental_info){``
 function createButtons(rental_info){
 	var temp_div_buttons = $("<div class='is-flex-wrap margin-bottom-10'></div>");
 	var temp_button1 = $("<a target='_blank' href='/listing/" + rental_info.domain_name + "' class='button no-shadow'>View Listing</a>");
-	var temp_button2 = $("<a class='button no-shadow'>Add Time</a>");
-	var temp_button3 = $("<a class='button no-shadow'>Delete Rental</a>");
-
-	//display calendar modal
-	temp_button2.on("click", function(e) {
-		addTimeRental(rental_info, temp_button2);
-	});
+	var temp_button2 = $("<a class='button no-shadow'>Delete Rental</a>");
 
 	//are you sure?
-	temp_button3.on("click", function(e) {
+	temp_button2.on("click", function(e) {
 		areYouSure($(this), rental_info)
 	});
 
-	temp_div_buttons.append(temp_button1, temp_button2, temp_button3);
+	temp_div_buttons.append(temp_button1, temp_button2);
 
 	return temp_div_buttons;
 }
@@ -335,103 +285,6 @@ function createImgDrop(rental_info){
     });
 
     return temp_col;
-}
-
-// ------------------------------------------------------------------------------------------------------------------------------ CALENDAR MODAL SET UP
-
-//function to display modal on add time button
-function addTimeRental(rental_info, time_a){
-	rental_id = rental_info.rental_id;		//for new time submission
-
-	//take off the handler
-	time_a.off();
-
-    //do ajax for listing info
-    time_a.addClass('is-loading');
-    $.ajax({
-        method: "POST",
-        url: "/listing/" + rental_info.domain_name + "/times"
-    }).done(function(data){
-        time_a.removeClass('is-loading');
-        listing_info = data.listing_info;
-		rental_min = moment(rental_info.date[0]).startOf('week');
-
-		displayListingInfo(listing_info);
-
-		//put handler back
-		time_a.on("click", function(e) {
-	        e.stopPropagation();    //prevent clicking view from dropping down row
-	        addTimeRental(rental_info, time_a);
-	    });
-
-        //display modal
-        $('#listing-modal').addClass('is-active');
-
-		//render calendar
-		setUpCalendar(listing_info);
-		$('#calendar').fullCalendar('render');
-
-		//fix calendar height for month view
-		if (listing_info.price_type != "hour"){
-			var cal_height = $(".modal-container-calendar").height() - $("#calendar-modal-top").height() - 90;
-			$('#calendar').fullCalendar('option', 'contentHeight', cal_height);
-		}
-
-		$("#calendar").fullCalendar('gotoDate', rental_info.date[0]);
-
-        //delete all existing listing events (except BG events)
-        $('#calendar').fullCalendar('removeEvents', returnNotMineNotBG);
-
-		//check if there are cookies for this domain name
-		if (read_cookie("domain_name") == listing_info.domain_name){
-			if (read_cookie("local_events")){
-				var cookie_events = read_cookie("local_events");
-				var changed = false;
-				for (var x = cookie_events.length - 1; x >= 0; x--){
-					var partial_days = handlePartialDays(moment(cookie_events[x].start), moment(cookie_events[x].end));
-					cookie_events[x].start = partial_days.start;
-					cookie_events[x].end = partial_days.end;
-					//if its a new event, make sure it doesnt overlap
-					if (checkIfNotOverlapped(cookie_events[x])){
-						$('#calendar').fullCalendar('renderEvent', cookie_events[x], true);
-					}
-					else {
-						changed = true;
-						cookie_events.splice(x, 1);
-					}
-				}
-
-				//if we removed any events, change the cookies
-				if (changed){
-					storeCookies("local_events");
-				}
-			}
-			updatePrices();	//show prices
-		}
-		else {
-			delete_cookies();
-		}
-
-		updatePrices();	//show prices
-
-        //create existing rentals
-        createExisting(listing_info.rentals);
-    });
-}
-
-//function to update various listing info in add time modal
-function displayListingInfo(listing_info){
-
-	//update pricing
-	$("#listing-hour-price").text("$" + listing_info.hour_price);
-	$("#listing-day-price").text("$" + listing_info.day_price);
-	$("#listing-week-price").text("$" + listing_info.week_price);
-	$("#listing-month-price").text("$" + listing_info.month_price);
-
-    //change domain name
-    $(".rental-domain-name").text(listing_info.domain_name);
-	$("#href-domain").prop("href", "http://www." + listing_info.domain_name);
-	$("#href-domain").text(listing_info.domain_name);
 }
 
 // ------------------------------------------------------------------------------------------------------------------------------ DELETE RENTAL
@@ -663,151 +516,4 @@ function refreshSubmitbindings(success_button, cancel_button, rentals, rental_id
             break;
         }
     }
-}
-
-// ------------------------------------------------------------------------------------------------------------------------------ SUBMIT NEW RENTAL TIMES
-
-//helper function to check if everything is legit
-function checkSubmit(){
-	var newEvents = $('#calendar').fullCalendar('clientEvents', returnMineNotBG);
-	var bool = true;
-
-	if (!newEvents || newEvents.length == 0){
-		bool = "Invalid dates!";
-		errorHandler(bool);
-	}
-	else if (!$("#cc-num").val()){
-		bool = "Invalid cc number!";
-		$("#stripe-error-message").addClass('is-danger').html("Please provide a credit card to charge.");
-	}
-	else if (!$("#cc-exp").val()){
-		bool = "Invalid cc exp!";
-		$("#stripe-error-message").addClass('is-danger').html("Please provide your credit card expiration date.");
-	}
-	else if (!$("#cc-cvc").val()){
-		bool = "Invalid cvc!";
-		$("#stripe-error-message").addClass('is-danger').html("Please provide your credit card CVC number.");
-	}
-	else if (!$("#cc-zip").val()){
-		bool = "Invalid zip Code!";
-		$("#stripe-error-message").addClass('is-danger').html("Please provide a ZIP code.");
-	}
-	else if (!$("#agree-to-terms").prop('checked')){
-		bool = "Invalid terms!";
-		$("#stripe-error-message").addClass('is-danger').html("You must agree to the terms and conditions.");
-	}
-	else if (newEvents.length > 0){
-		for (var x = 0; x < newEvents.length; x++){
-			if (!newEvents[x].old){
-				var start = new Date(newEvents[x].start._d);
-				if (isNaN(start)){
-					bool = "Invalid dates!";
-					errorHandler(bool);
-					break;
-				}
-			}
-		}
-	}
-	return bool;
-}
-
-//function to submit new rental times
-function submitStripe(stripeToken){
-	if (checkSubmit() == true && unlock){
-		var newEvents = $('#calendar').fullCalendar('clientEvents', returnMineNotBG);
-		unlock = false;
-		var minEvents = [];
-
-		//format the events to be sent
-		for (var x = 0; x < newEvents.length; x++){
-			var start = new Date(newEvents[x].start._d);
-			var offset = start.getTimezoneOffset();
-			minEvents.push({
-				start: newEvents[x].start._d.getTime(),
-				end: newEvents[x].end._d.getTime(),
-				_id: newEvents[x]._id
-			});
-		}
-
-		//create a new rental
-		$.ajax({
-			type: "POST",
-			url: "/listing/" + listing_info.domain_name + "/" + rental_id + "/time",
-			data: {
-				events: minEvents,
-				stripeToken: stripeToken
-			}
-		}).done(function(data){
-			$('#checkout-button').removeClass('is-loading');
-			unlock = true;
-			if (data.unavailable){
-				for (var x = 0; x < data.unavailable.length; x++){
-					showModalContent("calendar");
-					$('#calendar').fullCalendar('removeEvents', data.unavailable[x]._id);
-					$("#calendar-error-message").addClass('is-danger').html("Some dates/times were unavailable! They have been removed from your selection.<br />Your credit card has not been charged yet.");
-				}
-			}
-			else if (data.state == "success"){
-				delete_cookies();
-				successHandler(data);
-			}
-			else if (data.state == "error"){
-				errorHandler(data.message);
-			}
-		});
-	}
-}
-
-//error handler from server
-function errorHandler(message){
-	if (message == "Invalid dates!"){
-		showModalContent("calendar");
-		$("#calendar-error-message").addClass('is-danger').html("There was something wrong with the dates you selected!<br />Your credit card has not been charged yet.");
-	}
-	else if (message == "Invalid price!"){
-		showModalContent("checkout");
-		$("#stripe-error-message").addClass('is-danger').html("There was something wrong with your credit card!<br />Your credit card has not been charged yet.");
-	}
-	else if (message == "Invalid stripe user account!"){
-		showModalContent("checkout");
-		$("#summary-error-message").addClass('is-danger').html("There was something wrong with this listing!<br />Your credit card has not been charged yet.");
-	}
-}
-
-//success handler
-function successHandler(data){
-	refresh_time_submit = true;
-	successHide(true);
-	rentals = data.rentals;
-	row_display = rentals.slice(0);
-	var row_per_page = parseFloat($("#domains-per-page").val());
-	createAllRows(row_per_page, 1);
-}
-
-//function to hide stuff after success
-function successHide(bool){
-	if (bool){
-		$("#payment-column, .success-hide").addClass('is-hidden');
-		$("#success-column").removeClass('is-hidden');
-		$("#success-message").text("Your credit card was successfully charged!");
-	}
-	else {
-		$("#payment-column, .success-hide, #calendar-modal-content").removeClass('is-hidden');
-		$("#checkout-modal-content, #success-column").addClass('is-hidden');
-		$("#success-message").text("Please take a moment to review the summary below. You may edit the information on any of the previous pages by clicking the go back button.");
-	}
-}
-
-//function to show a specific modal content
-function showModalContent(type){
-	if (type == "calendar"){
-		var cal_height = $("#calendar-modal-content").height() - $("#calendar-modal-top").height() - 100;
-		$('#calendar').fullCalendar('option', 'contentHeight', cal_height);
-		$("#calendar-modal-content").removeClass('is-hidden');
-		$("#checkout-modal-content").addClass('is-hidden');
-	}
-	else {
-		$("#calendar-modal-content").addClass('is-hidden');
-		$("#checkout-modal-content").removeClass('is-hidden');
-	}
 }
