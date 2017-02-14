@@ -834,9 +834,9 @@ table {
   margin: 0 !important; }
 
 .box {
-  -webkit-box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
-  -moz-box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
-  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+  -webkit-box-shadow: 0 3px 5px 0 rgba(0, 0, 0, 0.14), 0 3px 6px -2px rgba(0, 0, 0, 0.2), 0 3px 7px 0 rgba(0, 0, 0, 0.12);
+  -moz-box-shadow: 0 3px 5px 0 rgba(0, 0, 0, 0.14), 0 3px 6px -2px rgba(0, 0, 0, 0.2), 0 3px 7px 0 rgba(0, 0, 0, 0.12);
+  box-shadow: 0 3px 5px 0 rgba(0, 0, 0, 0.14), 0 3px 6px -2px rgba(0, 0, 0, 0.2), 0 3px 7px 0 rgba(0, 0, 0, 0.12);
   background-color: white;
   border-radius: 5px;
   display: block;
@@ -2223,16 +2223,17 @@ input:-webkit-autofill {
     -ms-transform: translate(-50%, 0);
     -webkit-transform: translate(-50%, 0);
       -webkit-transform-transform: translate(-50%, 0);
-    left: 50%;
-    width: 300px;
     box-sizing: border-box;
+    left: 50%;
     position: fixed;
     top: -100%;
+    width: 300px;
     z-index: 100; }
     .notification.is-popup.is-active {
       top: 70px; }
       @media screen and (max-width: 768px) {
         .notification.is-popup.is-active {
+          border-radius: 0;
           top: 0;
           width: 100%; } }
   .notification .delete, .notification .modal-close {
@@ -3449,12 +3450,11 @@ input:-webkit-autofill {
     margin-right: 5px; }
 
 .card {
-  -webkit-box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
-  -moz-box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
-  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+  -webkit-box-shadow: 0 3px 5px 0 rgba(0, 0, 0, 0.14), 0 3px 6px -2px rgba(0, 0, 0, 0.2), 0 3px 7px 0 rgba(0, 0, 0, 0.12);
+  -moz-box-shadow: 0 3px 5px 0 rgba(0, 0, 0, 0.14), 0 3px 6px -2px rgba(0, 0, 0, 0.2), 0 3px 7px 0 rgba(0, 0, 0, 0.12);
+  box-shadow: 0 3px 5px 0 rgba(0, 0, 0, 0.14), 0 3px 6px -2px rgba(0, 0, 0, 0.2), 0 3px 7px 0 rgba(0, 0, 0, 0.12);
   background-color: white;
   border-radius: 3px;
-  color: rgba(0, 0, 0, 0.9);
   max-width: 100%;
   position: relative;
   width: 325px; }
@@ -3495,15 +3495,6 @@ input:-webkit-autofill {
       box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.38); }
   .card.min-height {
     min-height: 350px; }
-  .card.is-transparent {
-    background-color: transparent;
-    box-shadow: none;
-    border-bottom: 5px solid;
-    color: white; }
-    .card.is-transparent h1 {
-      color: white;
-      font-weight: bold;
-      padding-top: 0; }
 
 .column {
   flex-basis: 0;
