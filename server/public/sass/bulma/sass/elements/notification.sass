@@ -7,18 +7,19 @@
   position: relative
   &.is-popup
     +transition(top 0.5s ease, width 0s ease)
-    +translate(-50%,0)
+    // +translate(-50%,0)
+    // left: 50%
+    left: 20px
     box-sizing: border-box
-    left: 50%
     position: fixed
-    top: -100%
+    bottom: -100%
     width: 300px
     z-index: 100
     &.is-active
-      top: 70px
+      bottom: 20px
       +mobile
         border-radius: 0
-        top: 0
+        bottom: 0
         width: 100%
   .delete
     border-radius: 0 $radius
