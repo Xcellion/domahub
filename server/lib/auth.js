@@ -4,7 +4,6 @@ var LocalStrategy = require('passport-local').Strategy;
 var bcrypt = require('bcrypt-nodejs');
 var validator = require("validator");
 var crypto = require("crypto");
-const intercom_hmac = crypto.createHmac('sha256', 'y8Qjb0WvQh6wCPKvPUSPGkkTmQEoVEBPP8ffJfq0');
 
 var request = require('request');
 
@@ -116,6 +115,7 @@ module.exports = {
 
 					else {
 						user = result.info[0];
+                        var intercom_hmac = crypto.createHmac('sha256', 'y8Qjb0WvQh6wCPKvPUSPGkkTmQEoVEBPP8ffJfq0');
                         intercom_hmac.update(user.id.toString());
                         user.intercomHash = intercom_hmac.digest('hex');
 						return done(null, user);
