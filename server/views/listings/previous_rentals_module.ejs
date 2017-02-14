@@ -1,4 +1,4 @@
-<div id="previous-listings-table" class="listing-module">
+<div class="listing-module">
   <div class="content margin-bottom-25">
     <h2>Latest Rentals</h2>
   </div>
@@ -20,30 +20,30 @@
 
   <%# TOTAL NUMBER OF LATEST RENTALS TO SHOW %>
   <% var total_existing = 5; %>
-
+  <div id="previous-listings-table">
   <% for (var x = 0; x < Math.min(listing_info.rentals.length, total_existing); x++){ %>
       <% index_counter-- %>
       <% if (existing_array.indexOf(listing_info.rentals[index_counter].rental_id) == -1) { %>
           <% var temp_rental = listing_info.rentals[index_counter]; %>
-          <% var temp_background = (temp_rental.address == "") ? "https://placeholdit.imgix.net/~text?txtsize=40&txt=NO%20PREVIEW&w=800&h=100" : "/screenshot?rental_address=" + temp_rental.address + "&width=700&height=100"; %>
-          <% temp_background = (temp_rental.address.match(/\.(jpeg|jpg|gif|png)$/) != null) ? temp_rental.address : temp_background; %>
-          <div class="previous-listing">
-             <!-- style="background-image: url(<%= temp_background %>)" -->
-              <div class="previous-stats">
-                  <h3 class="previous-listing-title">
-                    <span data-rental_id="<%= temp_rental.rental_id %>" class='previous-rental-duration'></span> · <%= temp_rental.views %> Views
-                  </h3>
-                  <a target="_blank" href="/listing/<%= listing_info.domain_name + '/' + temp_rental.rental_id%>" class="button is-primary is-inverted">
-                      <span>View</span>
-                      <span class="icon is-small">
-                        <i class="fa fa-external-link-square"></i>
-                      </span>
-                  </a>
-              </div>
-          </div>
+          <!-- <% var temp_background = (temp_rental.address == "") ? "https://placeholdit.imgix.net/~text?txtsize=40&txt=NO%20PREVIEW&w=800&h=100" : "/screenshot?rental_address=" + temp_rental.address + "&width=700&height=100"; %>
+          <% temp_background = (temp_rental.address.match(/\.(jpeg|jpg|gif|png)$/) != null) ? temp_rental.address : temp_background; %> -->
+          <a class="previous-listing" tabindex="1" target="_blank" href="/listing/<%= listing_info.domain_name + '/' + temp_rental.rental_id%>" title="Click to Preview">
+            <div>
+               <!-- style="background-image: url(<%= temp_background %>)" -->
+                <div class="previous-stats">
+                    <p class="previous-listing-title is-bold">
+                      <span data-rental_id="<%= temp_rental.rental_id %>" class='previous-rental-duration'></span>
+                    </p>
+                    <p>
+                      · <%= temp_rental.views %> Views
+                    </p>
+                </div>
+            </div>
+          </a>
           <% existing_array.push(temp_rental.rental_id) %>
       <% } else { %>
           <% total_existing++ %>
       <% } %>
   <% } %>
+  </div>
 </div>

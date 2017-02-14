@@ -8,15 +8,16 @@
   &.is-popup
     +transition(top 0.5s ease, width 0s ease)
     +translate(-50%,0)
-    left: 50%
-    width: 300px
     box-sizing: border-box
+    left: 50%
     position: fixed
     top: -100%
+    width: 300px
     z-index: 100
     &.is-active
       top: 70px
       +mobile
+        border-radius: 0
         top: 0
         width: 100%
   .delete

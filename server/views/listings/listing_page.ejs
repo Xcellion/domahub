@@ -16,8 +16,8 @@
           <% } %>
         </h2>
       </div>
-      <div id="price-display-column" class="columns margin-right-0">
-        <div class="column is-4-tablet is-offset-8-tablet">
+      <div class="columns margin-right-0">
+        <div id="price-display-column" class="column is-4-tablet is-offset-8-tablet">
           <div id="price-display">
             <h2 id="price" class="is-black is-bold has-text-centered">
               <% if (listing_info.status == 1) { %>
@@ -38,8 +38,15 @@
 <section id="top-wrapper" class="min-height">
   <div class="container">
     <div class="columns flex-column-mobile margin-right-0">
-      <div class="column is-8 order-2-mobile">
-
+      <div id="domain-modules-column" class="column is-8 order-2-mobile">
+        <% if (listing_info.description) { %>
+        <div class="content listing-module">
+          <h2 class="margin-bottom-25">Description</h2>
+          <p>
+            <%= listing_info.description %>
+          </p>
+        </div>
+        <% } %>
           <% if (listing_info.rentals.length > 0){ %>
 
               <% var popular_rental; %>
@@ -61,8 +68,7 @@
             <% if (listing_info.rentals.length > 1) { %>
                 <%- include("previous_rentals_module.ejs", {
                     listing_info : listing_info,
-                    popular_rental: popular_rental,
-                    background_image: background_image
+                    popular_rental: popular_rental
                 }); %>
             <% } %>
 
@@ -74,7 +80,7 @@
 
       </div>
 
-      <div class="column is-4 order-1-mobile">
+      <div id="domain-info-column" class="column is-4 order-1-mobile">
         <div id="checkout-card" class="card">
           <div class="card-content">
             <div class="content">
@@ -146,14 +152,6 @@
         </div>
         <div id="description-card" class="card margin-bottom-25 is-hidden">
           <div class="card-content">
-            <% if (listing_info.description) { %>
-            <div class="content listing-info">
-              <h3 class="is-bold margin-bottom-15">Description</h3>
-              <p>
-                <%= listing_info.description %>
-              </p>
-            </div>
-            <% } %>
             <div class="content listing-info">
               <nav class="level">
                 <div class="level-left">

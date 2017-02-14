@@ -6,8 +6,15 @@
 
 @media screen and (max-width: 1215px) {
   #domain-modules-column,
-  #domain-info-column {
-    display: block; } }
+  #domain-info-column,
+  #price-display-column {
+    flex-basis: 0;
+    flex-grow: 1;
+    flex-shrink: 1; } }
+
+@media screen and (max-width: 1215px) {
+  #price-display-column {
+    margin-left: auto; } }
 
 #domain-display {
   color: #62c9a3;
@@ -18,7 +25,7 @@
   border-radius: 3px 3px 0 0;
   padding: 10px;
   margin-left: auto;
-  max-width: 325px; }
+  width: 325px; }
   @media screen and (max-width: 768px) {
     #price-display {
       margin-right: auto; } }
@@ -105,26 +112,23 @@
     #previous-listings-cards .card + .card {
       margin-left: 15px; }
 
-#previous-listings-table .previous-listing {
-  background-position: center center;
-  background-size: cover;
-  border-radius: 3px;
-  height: 100px;
-  margin-bottom: 10px; }
-
-#previous-listings-table .previous-listing-title {
-  align-self: flex-end;
-  color: white;
-  font-weight: bold; }
-
-#previous-listings-table .previous-stats {
-  background-color: rgba(0, 0, 0, 0.3);
-  border-radius: 3px;
+#previous-listings-table {
   display: flex;
-  height: 100%;
-  justify-content: space-between;
-  align-items: flex-end;
-  padding: 20px; }
+  flex-wrap: wrap; }
+  #previous-listings-table .previous-listing {
+    border-radius: 3px;
+    border: 1px solid rgba(0, 0, 0, 0.12);
+    margin-bottom: 10px;
+    padding: 20px; }
+    #previous-listings-table .previous-listing:not(:last-child) {
+      margin-right: 5px; }
+    #previous-listings-table .previous-listing:hover {
+      border-color: rgba(0, 0, 0, 0.66); }
+  #previous-listings-table .previous-stats {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start; }
 
 #checkout-card {
   margin-left: auto; }
