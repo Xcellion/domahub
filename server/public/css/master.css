@@ -2218,23 +2218,18 @@ input:-webkit-autofill {
     -o-transition: top 0.5s ease, width 0s ease;
     -webkit-transition: top 0.5s ease, width 0s ease;
     transition: top 0.5s ease, width 0s ease;
-    -moz-transform: translate(-50%, 0);
-    -o-transform: translate(-50%, 0);
-    -ms-transform: translate(-50%, 0);
-    -webkit-transform: translate(-50%, 0);
-      -webkit-transform-transform: translate(-50%, 0);
+    left: 20px;
     box-sizing: border-box;
-    left: 50%;
     position: fixed;
-    top: -100%;
+    bottom: -100%;
     width: 300px;
     z-index: 100; }
     .notification.is-popup.is-active {
-      top: 70px; }
+      bottom: 20px; }
       @media screen and (max-width: 768px) {
         .notification.is-popup.is-active {
           border-radius: 0;
-          top: 0;
+          bottom: 0;
           width: 100%; } }
   .notification .delete, .notification .modal-close {
     border-radius: 0 3px;
@@ -4792,39 +4787,6 @@ a.nav-item.is-tab {
   @media screen and (max-width: 768px) {
     .section.is-large {
       padding: 80px 20px; } }
-  .section.listing-section {
-    padding: 0; }
-    @media screen and (min-width: 769px) {
-      .section.listing-section {
-        height: 400px; } }
-    @media screen and (max-width: 768px) {
-      .section.listing-section {
-        height: 300px; } }
-  .section.gs-section {
-    height: 60vh;
-    padding: 200px 20px 0; }
-    @media screen and (max-width: 768px) {
-      .section.gs-section {
-        height: auto;
-        padding-top: 50px; } }
-    .section.gs-section-small {
-      height: 40vh;
-      padding-bottom: 20px; }
-      @media screen and (max-width: 768px) {
-        .section.gs-section-small {
-          height: auto; } }
-  .section.is-fullheight {
-    height: 100vh; }
-    @media screen and (min-width: 980px) {
-      .section.is-fullheight {
-        padding: 200px 20px; } }
-    @media screen and (min-width: 769px) and (max-width: 979px) {
-      .section.is-fullheight {
-        padding: 150px 20px; } }
-    @media screen and (max-width: 768px) {
-      .section.is-fullheight {
-        padding: 80px 20px;
-        height: 100%; } }
 
 .footer {
   background-color: #212121;
