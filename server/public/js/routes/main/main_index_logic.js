@@ -17,8 +17,8 @@ $(document).ready(function() {
     });
 
     //notification pop-up delay
-    $("#welcome").addClass("is-active").delay(4000).queue(function(){
-        $(this).removeClass("is-active");
-    });
+    // $("#welcome").addClass("is-active").delay(4000).queue(function(){
+    //     $(this).removeClass("is-active");
+    // });
 
 });
