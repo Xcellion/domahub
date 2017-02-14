@@ -34,8 +34,10 @@
     else {
         Intercom("shutdown");
         delete_cookie("intercom-session-yzwejsq6");
-        window.Intercom('boot', {
-            app_id: "yzwejsq6"
-        });
+        setTimeout(function(){
+            window.Intercom('boot', {
+                app_id: "yzwejsq6"
+            });
+        }, 3000);
     }
 </script>
