@@ -32,12 +32,8 @@
         });
     }
     else {
-        Intercom("shutdown");
-        delete_cookie("intercom-session-yzwejsq6");
-        setTimeout(function(){
-            window.Intercom('boot', {
-                app_id: "yzwejsq6"
-            });
-        }, 300);
+        window.Intercom('boot', {
+            app_id: "yzwejsq6"
+        });
     }
 </script>
