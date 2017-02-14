@@ -32,6 +32,7 @@
         });
     }
     else {
+        Intercom("shutdown");
         delete_cookie("intercom-session-yzwejsq6");
         window.Intercom('boot', {
             app_id: "yzwejsq6"
