@@ -13,6 +13,8 @@ function setUpCalendar(listing_info){
         eventStartEditable: false, //prevents moving of events
         contentHeight: "auto",
 
+        longPressDelay: 0,  //touch delay for selection of date
+
         allDaySlot: false,
         slotDuration: '01:00:00', //how long a slot is,
         nowIndicator: true, //red line indicating current time
@@ -232,8 +234,6 @@ function setUpCalendar(listing_info){
 
         }
     });
-
-    $("#calendar").addTouch(); //jquery UI touch for tablet/phone
 
     //custom buttons for today
     $(".fc-today-button").hide();
