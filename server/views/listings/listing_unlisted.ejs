@@ -12,7 +12,7 @@
 	<body>
 		<%- include("../templates/navbar", {user: user}); %>
 
-		<section id="background_image" class="section listing-section landing-img" style="background-image:url('<%= listing_info.background_image || 'https://source.unsplash.com/category/nature/800x600' %>')">
+		<section id="background_image" class="section listing-section landing-img" style="background-image:url('<%= listing_info.background_image %>')">
 		  <div class="img-wrapper">
 		    <div id="listing-hero" class="container">
 		      <div>
@@ -30,9 +30,9 @@
 		          <% } %>
 		        </h2>
 		      </div>
-					<div id="price-display-column" class="columns margin-right-0">
+					<div class="columns margin-right-0">
 		        <div class="column is-4-tablet is-offset-8-tablet">
-		          <div id="price-display">
+		          <div id="unlisted-display">
 		            <h2 class="is-black is-bold has-text-centered">
 		              <% if (listing_info.status == 1) { %>
 		                  $<%= listing_info.price_rate %> Per <%= listing_info.price_type.charAt(0).toUpperCase() + listing_info.price_type.substr(1) %>
