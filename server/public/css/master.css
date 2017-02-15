@@ -3094,18 +3094,20 @@ input:-webkit-autofill {
       margin-top: 4px; }
   .hamburger:hover, .nav-toggle:hover {
     background-color: rgba(0, 0, 0, 0.12); }
-  .hamburger.is-active span, .is-active.nav-toggle span {
-    background-color: black; }
-    .hamburger.is-active span:nth-child(1), .is-active.nav-toggle span:nth-child(1) {
-      margin-left: -5px;
-      transform: rotate(45deg);
-      transform-origin: left top; }
-    .hamburger.is-active span:nth-child(2), .is-active.nav-toggle span:nth-child(2) {
-      opacity: 0; }
-    .hamburger.is-active span:nth-child(3), .is-active.nav-toggle span:nth-child(3) {
-      margin-left: -5px;
-      transform: rotate(-45deg);
-      transform-origin: left bottom; }
+  .hamburger.is-active, .is-active.nav-toggle {
+    background-color: rgba(0, 0, 0, 0.12); }
+    .hamburger.is-active span, .is-active.nav-toggle span {
+      background-color: rgba(0, 0, 0, 0.12); }
+      .hamburger.is-active span:nth-child(1), .is-active.nav-toggle span:nth-child(1) {
+        margin-left: -5px;
+        transform: rotate(45deg);
+        transform-origin: left top; }
+      .hamburger.is-active span:nth-child(2), .is-active.nav-toggle span:nth-child(2) {
+        opacity: 0; }
+      .hamburger.is-active span:nth-child(3), .is-active.nav-toggle span:nth-child(3) {
+        margin-left: -5px;
+        transform: rotate(-45deg);
+        transform-origin: left bottom; }
 
 .heading {
   display: block;
@@ -4170,11 +4172,11 @@ input:-webkit-autofill {
     opacity: 0.5; }
   @media screen and (max-width: 768px) {
     .nav-link:hover, .nav-link:focus {
-      -moz-transform: translate(-8px, 0);
-      -o-transform: translate(-8px, 0);
-      -ms-transform: translate(-8px, 0);
-      -webkit-transform: translate(-8px, 0);
-        -webkit-transform-transform: translate(-8px, 0); } }
+      -moz-transform: translate(6px, 0);
+      -o-transform: translate(6px, 0);
+      -ms-transform: translate(6px, 0);
+      -webkit-transform: translate(6px, 0);
+        -webkit-transform-transform: translate(6px, 0); } }
 
 .nav-item {
   align-items: center;
@@ -4187,13 +4189,6 @@ input:-webkit-autofill {
     max-height: 30px; }
   .nav-item .button + .button {
     margin-left: 10px; }
-  .nav-item .tag:first-child {
-    margin-right: 5px; }
-  .nav-item .tag:last-child {
-    margin-left: 5px; }
-  @media screen and (max-width: 768px) {
-    .nav-item {
-      text-align: right; } }
   .nav-item:last-child a {
     font-weight: bold; }
   @media screen and (min-width: 769px) {
@@ -4212,40 +4207,19 @@ input:-webkit-autofill {
   a.nav-item {
     width: 100%; } }
 
-.nav-item a.is-tab,
-a.nav-item.is-tab {
-  border-bottom: 1px solid transparent;
-  border-top: 1px solid transparent;
-  padding-left: 12px;
-  padding-right: 12px; }
-  .nav-item a.is-tab:hover,
-  a.nav-item.is-tab:hover {
-    border-bottom: 1px solid #ff5722;
-    border-top: 1px solid transparent; }
-  .nav-item a.is-tab.is-active,
-  a.nav-item.is-tab.is-active {
-    border-bottom: 3px solid #ff5722;
-    border-top: 3px solid transparent;
-    color: #ff5722; }
-
 @media screen and (max-width: 768px) {
   .nav-menu {
-    -webkit-box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
-    -moz-box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
-    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
-    left: 0;
+    -webkit-box-shadow: 0 3px 5px 0 rgba(0, 0, 0, 0.14), 0 3px 6px -2px rgba(0, 0, 0, 0.2), 0 3px 7px 0 rgba(0, 0, 0, 0.12);
+    -moz-box-shadow: 0 3px 5px 0 rgba(0, 0, 0, 0.14), 0 3px 6px -2px rgba(0, 0, 0, 0.2), 0 3px 7px 0 rgba(0, 0, 0, 0.12);
+    box-shadow: 0 3px 5px 0 rgba(0, 0, 0, 0.14), 0 3px 6px -2px rgba(0, 0, 0, 0.2), 0 3px 7px 0 rgba(0, 0, 0, 0.12);
+    background-color: white;
     display: none;
+    position: absolute;
     right: 0;
-    top: 100%;
-    position: absolute; }
+    top: 100%; }
     .nav-menu .nav-item {
-      border-top: 1px solid rgba(0, 0, 0, 0.12);
       padding: 10px;
       width: 100%; }
-    .nav-menu.is-primary {
-      background-color: #3cbc8d; }
-    .nav-menu.is-white {
-      background-color: white; }
     .nav-menu.is-active {
       display: flex;
       flex-direction: column;

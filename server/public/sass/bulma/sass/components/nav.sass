@@ -37,7 +37,7 @@
   +mobile
     &:hover,
     &:focus
-      +translate(-8px,0)
+      +translate(6px,0)
 
 .nav-item
   align-items: center
@@ -50,14 +50,6 @@
     max-height: 30px
   .button + .button
     margin-left: 10px
-  .tag
-    &:first-child
-      margin-right: 5px
-    &:last-child
-      margin-left: 5px
-  // responsiveness
-  +mobile
-    text-align: right
   // modifiers
   &:last-child
     a
@@ -76,37 +68,20 @@
 a.nav-item
   +mobile
     width: 100%
-  &.is-tab
-    border-bottom: 1px solid transparent
-    border-top: 1px solid transparent
-    padding-left: 12px
-    padding-right: 12px
-    &:hover
-      border-bottom: 1px solid $link
-      border-top: 1px solid transparent
-    &.is-active
-      border-bottom: 3px solid $link
-      border-top: 3px solid transparent
-      color: $link
 
 // Containers
 .nav-menu
   // Responsiveness
   +mobile
-    +box-shadows(0 2px 2px 0 rgba(0,0,0,.14),0 3px 1px -2px rgba(0,0,0,.2),0 1px 5px 0 rgba(0,0,0,.12))
-    left: 0
+    +box-shadows(0 3px 5px 0 rgba(0,0,0,.14),0 3px 6px -2px rgba(0,0,0,.2),0 3px 7px 0 rgba(0,0,0,.12))
+    background-color: $white
     display: none
+    position: absolute
     right: 0
     top: 100%
-    position: absolute
     .nav-item
-      border-top: 1px solid $border
       padding: 10px
       width: 100%
-    &.is-primary
-      background-color: $primary
-    &.is-white
-      background-color: $white
     &.is-active
       display: flex
       flex-direction: column

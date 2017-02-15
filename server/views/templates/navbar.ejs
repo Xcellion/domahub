@@ -22,13 +22,13 @@
     </span>
     <div class="nav-right nav-menu is-primary">
       <%# <div class="nav-item">
-        <a class="nav-link is-white" tabindex="1" title="Browse Listings" href="/listings">Browse Listings</a>
+        <a class="nav-link" tabindex="1" title="Browse Listings" href="/listings">Browse Listings</a>
       </div>%>
 
 <%# navbar checks for a user variable, if it doesnt exist, then display the login button %>
 <% if (!user) { %>
     <%# <div class="nav-item">
-      <a id="signup" tabindex="1" class="nav-link is-white " title="Sign Up" href="/signup">Sign Up</a>
+      <a id="signup" tabindex="1" class="nav-link" title="Sign Up" href="/signup">Sign Up</a>
     </div> %>
     <div class="nav-item">
       <a id="login-modal" tabindex="1" class="button is-white modal-button" title="Log In" data-object="#modal-login">Log In</a>
@@ -89,16 +89,16 @@
 <!-- or else display the user profile as logged in -->
 <% } else { %>
     <div class="nav-item">
-      <a class="nav-link is-white " tabindex="1" title="Create Listing" href="/listings/create">Create Listings</a>
+      <a class="nav-link" tabindex="1" title="Create Listing" href="/listings/create">Create Listings</a>
     </div>
     <div class="nav-item">
-      <a id="profile-button" tabindex="1" class="button is-white is-outlined" title="Profile">
+      <a id="profile-button" tabindex="1" class="button is-white is-primary is-outlined" title="Profile">
         <span><%= (user.username.length > 6) ? user.username.slice(0,6) + "..." : user.username %></span>
         <span class="icon">
           <i class="fa fa-angle-down"></i>
         </span>
       </a>
-      <a tabindex="1" class="nav-link is-hidden-tablet is-white" href="/profile/mylistings" title="My Listings">
+      <a tabindex="1" class="nav-link is-hidden-tablet" href="/profile/mylistings" title="My Listings">
         My Listings
       </a>
       <div id="profile-dropdown" class="is-hidden is-hidden-mobile">
@@ -131,17 +131,17 @@
       </div>
     </div>
     <div class="nav-item is-hidden-tablet">
-      <a tabindex="1" class="nav-link is-hidden-tablet is-white" href="/profile/myrentals" title="My Rentals">
+      <a tabindex="1" class="nav-link is-hidden-tablet" href="/profile/myrentals" title="My Rentals">
         My Rentals
       </a>
     </div>
     <div class="nav-item is-hidden-tablet">
-      <a tabindex="1" class="nav-link is-hidden-tablet is-white" href="/profile/settings" title="Account Settings">
+      <a tabindex="1" class="nav-link is-hidden-tablet" href="/profile/settings" title="Account Settings">
         Account Settings
       </a>
     </div>
     <div class="nav-item is-hidden-tablet">
-      <a tabindex="1" class="nav-link is-hidden-tablet is-white" href="/logout" title="Log Out">
+      <a tabindex="1" class="nav-link is-hidden-tablet" href="/logout" title="Log Out">
         Log Out
       </a>
     </div>
