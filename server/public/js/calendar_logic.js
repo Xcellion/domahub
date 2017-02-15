@@ -89,7 +89,7 @@ function setUpCalendar(listing_info){
             //dim next available or not
             if (listing_info.rentals.length){
                 var last_rental = listing_info.rentals[listing_info.rentals.length - 1];
-                last_rental = (moment().isSameOrAfter(moment(last_rental.date + last_rental.duration))) ? moment() : last_rental;
+                last_rental = (moment().isSameOrAfter(moment(last_rental.date + last_rental.duration))) ? moment() : moment(last_rental.date + last_rental.duration);
 
                 if (last_rental.isBetween(currentViewStart, currentViewEnd)){
                     $("#next-available-button").addClass('is-disabled');
@@ -193,6 +193,7 @@ function setUpCalendar(listing_info){
         //tag id to HTML DOM for easy access
         eventAfterRender: function(event, element, view ) {
             $(element).attr("id", event._id);
+            $(element).addTouch(); //jquery UI touch for tablet/phone
 
             //if event length is less than a day, change the event title
             if (event.end && moment.duration(event.end.diff(event.start)).as("day") <= 1){
@@ -239,7 +240,7 @@ function setUpCalendar(listing_info){
     $("#next-available-button").click(function(e){
         if (listing_info.rentals.length){
             var last_rental = listing_info.rentals[listing_info.rentals.length - 1];
-            last_rental = (moment().isSameOrAfter(moment(last_rental.date + last_rental.duration))) ? moment() : last_rental;
+            last_rental = (moment().isSameOrAfter(moment(last_rental.date + last_rental.duration))) ? moment() : moment(last_rental.date + last_rental.duration);
             $("#calendar").fullCalendar('gotoDate', last_rental);
         }
     });
