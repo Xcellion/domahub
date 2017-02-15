@@ -43,6 +43,16 @@
     #price-display {
       margin-right: auto; } }
 
+#unlisted-display {
+  background-color: white;
+  border-radius: 3px 3px 0 0;
+  padding: 10px;
+  margin-left: auto;
+  max-width: 325px; }
+  @media screen and (max-width: 768px) {
+    #unlisted-display {
+      margin-right: auto; } }
+
 #trending-rental-image {
   background-image: url("");
   background-position: top center;
