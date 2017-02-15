@@ -204,17 +204,9 @@ module.exports = {
 			delete req.session.mylistings;
 			delete req.session.myrentals;
 			req.logout();
+            redirectTo = "/redirect";
+            res.redirect(redirectTo);
 		}
-
-        //redirect to a listing if we're logging out there
-		if (req.header("Referer")){
-			redirectTo = (req.header("Referer").split("/").indexOf("listing") != -1) ? req.header("Referer") : "/";
-		}
-        //or redirect to main page
-		else {
-			redirectTo = "/";
-		}
-		res.redirect(redirectTo);
 	},
 
 	//sign up for a new account
