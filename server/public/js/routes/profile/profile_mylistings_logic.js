@@ -381,14 +381,14 @@ function clickHandler(control, listing_info){
 
 	for (var x = 0; x < categories.length; x++){
 		var listing_categories = (listing_info.categories) ? listing_info.categories.split(" ") : [];
-		var selected = (listing_categories.indexOf(categories[x].back) != -1) ? " is-accent" : ""
+		var selected = (listing_categories.indexOf(categories[x].back) != -1) ? " is-dark" : ""
 		var temp_category = $("<a class='button category-selector no-shadow" + selected + "'>" + categories[x].front + "</a>").data("category", categories[x].back);
 		var temp_div3_input = control.find(".categories-input");
 
 		//click to add this category
 		temp_category.off().on("click", function(e){
-			$(this).toggleClass('is-accent');
-			var joined_categories = $(this).siblings(".category-selector.is-accent").addBack(".category-selector.is-accent").map(function() {
+			$(this).toggleClass('is-dark');
+			var joined_categories = $(this).siblings(".category-selector.is-dark").addBack(".category-selector.is-dark").map(function() {
 				return $(this).data("category");
 			}).toArray().sort().join(" ");
 			joined_categories = (joined_categories == "") ? null : joined_categories;
