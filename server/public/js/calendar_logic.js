@@ -193,7 +193,6 @@ function setUpCalendar(listing_info){
         //tag id to HTML DOM for easy access
         eventAfterRender: function(event, element, view ) {
             $(element).attr("id", event._id);
-            $(element).addTouch(); //jquery UI touch for tablet/phone
 
             //if event length is less than a day, change the event title
             if (event.end && moment.duration(event.end.diff(event.start)).as("day") <= 1){
@@ -231,6 +230,8 @@ function setUpCalendar(listing_info){
 
         }
     });
+
+    $("#calendar").addTouch(); //jquery UI touch for tablet/phone
 
     //custom buttons for today
     $(".fc-today-button").hide();
