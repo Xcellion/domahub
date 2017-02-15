@@ -118,6 +118,11 @@
   border-left: 1px solid $border;
   padding-right: 0 !important;
   width: 75px;
+  min-width: 75px;
+}
+
+.td-price-rate-input {
+  width: 75px;
 }
 
 .td-price-type {

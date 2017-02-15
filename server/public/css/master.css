@@ -1820,26 +1820,6 @@ input:-webkit-autofill {
     top: 50%; }
   .select:active, .select:focus {
     border-color: rgba(0, 0, 0, 0.66); }
-  .select.is-danger:after {
-    border: 1px solid #EF5350;
-    border-right: 0;
-    border-top: 0;
-    content: " ";
-    display: block;
-    height: 7px;
-    pointer-events: none;
-    position: absolute;
-    transform: rotate(-45deg);
-    width: 7px; }
-  .select.is-danger select {
-    border-color: #EF5350; }
-    .select.is-danger select:hover, .select.is-danger select:active {
-      border-color: #EF5350; }
-    .select.is-danger select:focus {
-      border-color: #EF5350;
-      border-radius: 3px 3px 0 0; }
-  .select.is-danger:active, .select.is-danger:hover, .select.is-danger:focus {
-    border-color: #EF5350; }
   .select.is-small {
     height: 24px; }
     .select.is-small select {
@@ -1915,43 +1895,6 @@ input:-webkit-autofill {
     font-size: 18px; }
   .label.is-large {
     font-size: 28px; }
-
-.help {
-  display: block;
-  font-size: 14px;
-  margin-top: 5px; }
-  .help.is-white {
-    color: white; }
-  .help.is-black {
-    color: black; }
-  .help.is-grey {
-    color: #d0d0d0; }
-  .help.is-blacklight {
-    color: rgba(0, 0, 0, 0.66); }
-  .help.is-whitelight {
-    color: rgba(255, 255, 255, 0.7); }
-  .help.is-light {
-    color: #d0d0d0; }
-  .help.is-dark {
-    color: #444; }
-  .help.is-purple {
-    color: #9c27b0; }
-  .help.is-primary {
-    color: #3cbc8d; }
-  .help.is-primarydark {
-    color: #309670; }
-  .help.is-primarylight {
-    color: #62c9a3; }
-  .help.is-info {
-    color: #2196f3; }
-  .help.is-accent {
-    color: #ff5722; }
-  .help.is-success {
-    color: #81c784; }
-  .help.is-warning {
-    color: #ffeb3b; }
-  .help.is-danger {
-    color: #EF5350; }
 
 @media screen and (max-width: 768px) {
   .control-label {
@@ -2412,7 +2355,7 @@ input:-webkit-autofill {
     .table th > .div-drop {
       background-color: white;
       border-bottom: 1px solid rgba(0, 0, 0, 0.12);
-      padding: 10px;
+      padding: 10px 18px 10px 35px;
       cursor: auto; }
     .table td.is-icon,
     .table th.is-icon {
@@ -2495,7 +2438,7 @@ input:-webkit-autofill {
         left: 0; } }
   @media screen and (max-width: 768px) {
     .table tbody tr.row-disp.verified-row.is-expanded:hover::after {
-      height: 48px; } }
+      height: 60px; } }
   .table tbody tr.row-disp.unverified-row::after {
     background: #EF5350;
     position: absolute;

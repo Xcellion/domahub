@@ -11,7 +11,7 @@
 <body>
 
   <%- include("../templates/navbar", {user: user}); %>
-  <section id="index-img" class="section is-large is-primary has-border-bottom">
+  <section id="index-img" class="section is-large has-border-bottom">
     <div class="container">
       <div class="columns">
         <div class="column is-6 is-offset-3">
@@ -30,13 +30,13 @@
                 <input tabindex="1" class="input is-medium" type="email" name="betaemail" placeholder="Enter your email"/>
               </p>
               <p class="control">
-                <a tabindex="1" class="beta-submit button is-primary is-inverted is-medium" title="Sign Up">Sign Up Now</a>
+                <a tabindex="1" class="beta-submit button is-primary is-medium" title="Sign Up">Sign Up Now</a>
               </p>
             </div>
           </form>
           <div class="beta-form-success notification is-white is-hidden">
             <span class="delete"></span>
-            <p class="is-bold is-primary has-text-centered">Success! You have been put on the waiting list.</p>
+            <p class="is-primary has-text-centered">Success! You have been put on the waiting list.</p>
           </div>
         </div>
       </div>

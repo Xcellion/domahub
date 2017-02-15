@@ -2,7 +2,11 @@
 @import 'mixins';
 
 #index-img {
-  @include box-shadow(0,5px,15px,$black-disabled,0);
+  background-image: url('https://images.unsplash.com/photo-1483389127117-b6a2102724ae?dpr=1&auto=format&fit=crop&w=1080&h=800&q=80&cs=tinysrgb');
+  background-position: center center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  width: 100%;
 }
 
 .slider-box {
