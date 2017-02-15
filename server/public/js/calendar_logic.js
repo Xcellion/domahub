@@ -344,6 +344,7 @@ function daySelectionHandlers(){
 	//create all day events
 	$(".fc-day-header").mousedown(function(e){
 		e.preventDefault();
+        console.log('s')
 
 		if (e.which == 1){
 			alldayMouseDown = moment($(this).data('date'));
