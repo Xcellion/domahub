@@ -86,6 +86,10 @@
   padding-left: 8px !important;
   border-left: 1px solid rgba(0, 0, 0, 0.12);
   padding-right: 0 !important;
+  width: 75px;
+  min-width: 75px; }
+
+.td-price-rate-input {
   width: 75px; }
 
 .td-price-type {
