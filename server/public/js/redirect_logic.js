@@ -1,4 +1,6 @@
 $(document).ready(function() {
+	Intercom('shutdown');
+	
 	if (redirect){
 		//message to change depending on where to redirect
 		switch (redirect){
