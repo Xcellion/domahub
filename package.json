@@ -34,7 +34,7 @@
     "validator": "5.5.0",
     "webshot": "0.18.0",
     "whois": "2.3.2",
-    "compression": "~1.6.2"
+    "compression": "1.6.2"
   },
   "repository": {
     "type": "git",
