@@ -30,8 +30,9 @@
         </p>
         <p id="address-error-message"></p>
     </div>
-    <p class="control is-expanded">
+    <p class="control has-icon is-expanded">
         <input tabindex="1" autofocus required class="input is-expanded" id="address_form_input" type="url" placeholder="Enter a link to your content">
+        <i class="fa fa-link"></i>
     </p>
     <p class="calendar-control margin-top-10">
         <a tabindex="1" class="card-button-prev button no-shadow">Back</a>
@@ -52,8 +53,10 @@
         </p>
         <form>
             <label id="new-user-email-error" class="label">Email Address</label>
-            <p class="control is-expanded has-addons">
-                <input tabindex="1" id="new_user_email" class="input is-expanded is-medium" placeholder="This is optional" type="email" />
+            <p class="control is-expanded has-icon has-addons">
+
+                <input tabindex="1" id="new_user_email" class="input is-expanded" placeholder="This is optional" type="email" />
+                <i class="fa fa-envelope"></i>
             </p>
         </form>
         <p class="calendar-control margin-top-10">
@@ -72,22 +75,22 @@
     <form id="stripe-form" autocomplete="on">
         <label class="label">Credit or Debit Card Number</label>
         <p class="control has-icon">
-            <input tabindex="1" id="cc-num" data-stripe="number" class="input stripe-input is-medium" type="tel" placeholder="•••• •••• •••• ••••" autocomplete="cc-number"/>
+            <input tabindex="1" id="cc-num" data-stripe="number" class="input stripe-input" type="tel" placeholder="•••• •••• •••• ••••" autocomplete="cc-number"/>
             <i id="cc-icon" class="fa fa-credit-card"></i>
         </p>
         <div class="control is-grouped">
             <p class="control is-expanded">
                 <label class="label">Expiration Date</label>
-                <input tabindex="1" id="cc-exp" maxlength="7" data-stripe="exp" class="input stripe-input is-medium" type="tel" placeholder="•• / ••" autocomplete="cc-exp"/>
+                <input tabindex="1" id="cc-exp" maxlength="7" data-stripe="exp" class="input stripe-input" type="tel" placeholder="•• / ••" autocomplete="cc-exp"/>
             </p>
             <p class="control">
                 <label class="label">Security Code</label>
-                <input tabindex="1" id="cc-cvc" data-stripe="cvc" class="input stripe-input is-medium" type="tel" placeholder="•••" autocomplete="off"/>
+                <input tabindex="1" id="cc-cvc" data-stripe="cvc" class="input stripe-input" type="tel" placeholder="•••" autocomplete="off"/>
             </p>
         </div>
         <p class="control">
             <label class="label">Zip Code</label>
-            <input tabindex="1" id="cc-zip" maxlength="6" data-stripe="address_zip" class="input stripe-input is-medium" type="tel" autocomplete="postal-code" placeholder="•••••"/>
+            <input tabindex="1" id="cc-zip" maxlength="6" data-stripe="address_zip" class="input stripe-input" type="tel" autocomplete="postal-code" placeholder="•••••"/>
         </p>
     </form>
     <form class="checkbox-form margin-top-10">
