@@ -1,6 +1,6 @@
 $(document).ready(function() {
 	Intercom('shutdown');
-	
+
 	if (redirect){
 		//message to change depending on where to redirect
 		switch (redirect){
@@ -15,7 +15,7 @@ $(document).ready(function() {
 
 		var message = "Please wait. Redirecting you to the " + path_msg + " page."
 		$("#message").text(message);
-		$("#redirect-button").text(path_msg.charAt(0).toUpperCase() + path_msg.substr(1)).attr("href", "/" + path_msg);
+		$("#redirect-button").text(path_msg.charAt(0).toUpperCase() + path_msg.substr(1)).attr("href", "/");
 		redirectDelay(redirect);
 	}
 });
