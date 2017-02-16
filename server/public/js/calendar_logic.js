@@ -39,16 +39,8 @@ function setUpCalendar(listing_info){
             //all day background event (month view)
             {
                 start: '1970-01-01T00:00:00',
-                end: moment().endOf("hour"),
+                end: moment().endOf("day").add(1, "millisecond"),
                 rendering: 'background',
-                allDay: true
-            },
-            //background event for today
-            {
-                start: moment().startOf("day"),
-                end: moment().endOf("day"),
-                rendering: 'background',
-                color: "rgba(34, 87, 255, 0.15)",
                 allDay: true
             },
             //background for 1 year out
@@ -344,7 +336,7 @@ function daySelectionHandlers(){
 	//create all day events
 	$(".fc-day-header").mousedown(function(e){
 		e.preventDefault();
-        console.log('s')
+        //console.log('s')
 
 		if (e.which == 1){
 			alldayMouseDown = moment($(this).data('date'));
