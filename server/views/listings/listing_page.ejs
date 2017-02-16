@@ -40,11 +40,10 @@
     <div class="columns flex-column-mobile margin-right-0">
       <div id="domain-modules-column" class="column is-8 order-2-mobile">
         <% if (listing_info.description) { %>
-        <div class="content listing-module">
-          <h2 class="margin-bottom-25">Description</h2>
-          <p>
-            <%= listing_info.description %>
-          </p>
+        <div class="content listing-module margin-bottom-0">
+          <blockquote>
+            <i><%= listing_info.description %></i>
+          </blockquote>
         </div>
         <% } %>
           <% if (listing_info.rentals.length > 0){ %>
