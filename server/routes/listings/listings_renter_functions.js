@@ -571,7 +571,7 @@ module.exports = {
         var originating_hostname = (req.header("Referer")) ? url.parse(req.header("Referer")).hostname : "";
         console.log(originating_hostname);
         //if we're originating from domahub or localhost
-        if ((originating_hostname == "localhost" || originating_hostname == "domahub") || node_env == "dev"){
+        if ((originating_hostname == "localhost" || originating_hostname.indexOf("domahub") != -1 || node_env == "dev"){
             if (screenshot_address && validator.isURL(screenshot_address)){
                 console.log('F: Capturing screenshot of rental ...');
                 var screenshot_options = {
