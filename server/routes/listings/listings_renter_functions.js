@@ -571,7 +571,7 @@ module.exports = {
         var originating_hostname = (req.header("Referer")) ? url.parse(req.header("Referer")).hostname : "";
 
         //if we're originating from domahub or localhost
-        if ((originating_hostname == "localhost" || originating_hostname.indexOf("domahub") != -1) || node_env == "dev"){
+        if (originating_hostname.indexOf("domahub") != -1 || node_env == "dev"){
             if (screenshot_address && validator.isURL(screenshot_address)){
                 console.log('F: Capturing screenshot of rental ...');
                 var screenshot_options = {
@@ -584,6 +584,10 @@ module.exports = {
                         height: "window"
                     },
                     userAgent: 'Mozilla/5.0 (iPhone; U; CPU iPhone OS 3_2 like Mac OS X; en-us) AppleWebKit/531.21.20 (KHTML, like Gecko) Mobile/7B298g'
+                }
+
+                if (node_env != "dev"){
+                    screenshot_options.phantomPath = "/opt/node/lib/node_modules/phantomjs"
                 }
 
                 //queries for screensize
