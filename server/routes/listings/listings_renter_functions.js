@@ -587,7 +587,7 @@ module.exports = {
                 }
 
                 if (node_env != "dev"){
-                    screenshot_options.phantomPath = "/opt/node/lib/node_modules/phantomjs/lib"
+                    screenshot_options.phantomPath = "/var/www/w3bbi/node_modules/phantomjs"
                 }
 
                 //queries for screensize
