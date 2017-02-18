@@ -589,7 +589,7 @@ module.exports = {
                 console.log("fjdsfjlkasdf", require('phantomjs').path);
 
                 if (node_env != "dev"){
-                    screenshot_options.phantomPath = "/var/www/w3bbi/phantomjs/bin"
+                    screenshot_options.phantomPath = "/var/www/w3bbi/phantomjs/bin/phantomjs"
                 }
 
                 //queries for screensize
