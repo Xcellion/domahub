@@ -27,16 +27,14 @@
     "parse-whois": "1.0.0",
     "passport": "0.3.2",
     "passport-local": "1.0.0",
-    "phantom": "4.0.0",
     "phantomjs": "^2.1.7",
-    "phantomjs2": "^2.2.0",
     "q": "1.4.1",
     "qs": "6.2.1",
     "request": "2.73.0",
     "sanitize-html": "1.13.0",
     "stripe": "4.9.0",
     "validator": "5.5.0",
-    "webshot": "0.18.0",
+    "webshot": "^0.18.0",
     "whois": "2.3.2"
   },
   "repository": {

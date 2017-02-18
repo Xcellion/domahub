@@ -586,10 +586,10 @@ module.exports = {
                     userAgent: 'Mozilla/5.0 (iPhone; U; CPU iPhone OS 3_2 like Mac OS X; en-us) AppleWebKit/531.21.20 (KHTML, like Gecko) Mobile/7B298g'
                 }
 
-                console.log("fjdsfjlkasdf", require('phantomjs2').path);
+                console.log("fjdsfjlkasdf", require('phantomjs').path);
 
                 if (node_env != "dev"){
-                    screenshot_options.phantomPath = require('phantomjs2').path;
+                    screenshot_options.phantomPath = "/var/www/w3bbi/phantomjs/bin"
                 }
 
                 //queries for screensize
