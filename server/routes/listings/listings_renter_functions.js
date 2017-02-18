@@ -586,10 +586,6 @@ module.exports = {
                     userAgent: 'Mozilla/5.0 (iPhone; U; CPU iPhone OS 3_2 like Mac OS X; en-us) AppleWebKit/531.21.20 (KHTML, like Gecko) Mobile/7B298g'
                 }
 
-                if (node_env != "dev"){
-                    screenshot_options.phantomPath = "/var/www/w3bbi/node_modules/phantomjs"
-                }
-
                 //queries for screensize
                 if (req.query.width && validator.isInt(req.query.width)){
                     screenshot_options.screenSize.width = parseInt(req.query.width);
