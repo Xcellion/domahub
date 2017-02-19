@@ -3,7 +3,7 @@
 // Colors
 
 $black: rgba(0,0,0,1) !default
-$black-primary: rgba(0,0,0,0.9) !default
+$black-primary: rgba(0,0,0,0.88) !default
 $black-secondary: rgba(0,0,0,0.66) !default
 $black-disabled: rgba(0,0,0,0.38) !default
 $grey-darker: #212121 !default
@@ -171,7 +171,7 @@ $size-huge: $size-1 !default
 
 // 4. Lists and maps
 
-$colors: (white: ($white, $black), black: ($black, $white), grey: ($grey-light, $grey-dark), blacklight: ($black-secondary, $white-secondary), whitelight: ($white-secondary, $black-secondary), light: ($light, $light-invert), dark: ($dark, $dark-invert), purple: ($purple, $purple-invert), primary: ($primary, $primary-invert), primarydark: ($primary-dark, $primary-dark), primarylight: ($primary-light, $primary-light), info: ($info, $info-invert), accent: ($accent, $accent-invert), success: ($success, $success-invert), warning: ($warning, $warning-invert), danger: ($danger, $danger-invert)) !default
+$colors: (white: ($white, $black), black: ($black, $white), grey: ($grey-light, $grey-dark), blacklight: ($black-secondary, $white-secondary), whitelight: ($white-secondary, $black-secondary), light: ($light, $light-invert), dark: ($dark, $dark-invert), purple: ($purple, $purple-invert), primary: ($primary, $primary-invert), primarydark: ($primary-dark, $primary-dark), primarylight: ($primary-light, $primary-light), primarylighter: ($primary-lighter, $primary-lighter), info: ($info, $info-invert), accent: ($accent, $accent-invert), success: ($success, $success-invert), warning: ($warning, $warning-invert), danger: ($danger, $danger-invert)) !default
 
 $sizes: $size-1 $size-2 $size-3 $size-4 $size-5 $size-6 !default
 
