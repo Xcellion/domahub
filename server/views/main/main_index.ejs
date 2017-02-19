@@ -11,36 +11,28 @@
 <body>
 
   <%- include("../templates/navbar", {user: user}); %>
-  <section id="index-img" class="section is-large has-border-bottom">
-    <div class="container">
-      <div class="columns">
-        <div class="column is-6 is-offset-3">
-          <div class="content">
-            <h1 class="title is-1 is-white margin-bottom-25">
-              Rent Domain Names.
-            </h1>
-            <p class="subtitle is-5 is-white margin-bottom-25">
-              DomaHub is the marketplace for domain rentals offering
-              quality domain names at flexible time slots.
-            </p>
-          </div>
-          <form class="beta-form">
-            <div class="control is-grouped">
-              <p class="control is-expanded">
-                <input tabindex="1" class="input is-medium" type="email" name="betaemail" placeholder="Enter your email"/>
-              </p>
-              <p class="control">
-                <a tabindex="1" class="beta-submit button is-primary is-medium" title="Sign Up">Sign Up Now</a>
-              </p>
-            </div>
-          </form>
-          <div class="beta-form-success notification is-white is-hidden">
-            <span class="delete"></span>
-            <p class="is-primary has-text-centered">Success! You have been put on the waiting list.</p>
-          </div>
-        </div>
+  <section id="index-img" class="section is-index-img">
+    <div>
+
+    </div>
+    <div class="container flex-column-center">
+      <div class="content has-text-centered">
+        <h1 class="title is-1 is-white">
+          Rent domain names.
+        </h1>
+        <p class="subtitle is-4 is-white">
+          DomaHub is the marketplace for domain rentals offering
+          quality domain names at flexible time slots.
+        </p>
+      </div>
+      <div class="content has-text-centered margin-top-50">
+        <a tabindex="1" class="beta-submit button is-primary is-large margin-10" title="Sign Up">I have domains</a>
+        <a tabindex="1" class="beta-submit button is-primary is-inverted is-large margin-10" title="Sign Up">I want domains</a>
       </div>
     </div>
+    <span class="icon is-large is-white">
+      <i class="fa fa-angle-down"></i>
+    </span>
   </section>
 
   <section class="section is-medium">
@@ -48,7 +40,7 @@
       <div class="columns">
         <div class="column margin-bottom-75">
           <div class="content">
-            <p class="is-grey is-bold heading">
+            <p class="is-blacklight is-bold heading">
               DOMAIN OWNERS
             </p>
           </div>
@@ -60,15 +52,19 @@
       <div class="columns">
         <div class="column is-5">
           <div class="content">
-            <h2 class="is-bold">Create a listing and start generating revenue!</h2>
+            <h2>Create a new revenue stream.</h2>
             <p>
-              List your domains on DomaHub and allow other users to rent it out.
-              This way your unused domains don't just sit there - they help someone
-              out while putting money in your pocket!
+              You don't have to park ads or put
+              effort into building value from the ground up.
+              By listing your domain with us, you'll simply make money every time
+              someone rents your domain.
             </p>
           </div>
-          <div class="content margin-top-25">
-            <h2 class="is-bold">Tiered commission system</h2>
+          <div class="content">
+            <h2>Your domains are valuable assets</h2>
+          </div>
+          <div class="content">
+            <h2>Tiered commission system.</h2>
             <p>
               We offer a commission based system with three tiers applied on a
               listing-to-listing basis. Every listing starts off with 15% commission
@@ -110,7 +106,7 @@
         </div>
         <div class="column is-6 is-offset-1">
           <div class="content margin-bottom-15">
-            <h2 class="is-bold">DomaHub Benefits</h2>
+            <h2>DomaHub Benefits</h2>
             <p>
               Click on each slider below to learn more.
             </p>
@@ -216,7 +212,7 @@
       <div class="columns">
         <div class="column margin-bottom-75">
           <div class="content">
-            <p class="is-grey is-bold heading">
+            <p class="is-blacklight is-bold heading">
               DOMAIN RENTERS
             </p>
           </div>
@@ -228,7 +224,7 @@
       <div class="columns">
         <div class="column is-5">
           <div class="content">
-            <h2 class="is-bold">Why rent a domain?</h2>
+            <h2>Why rent a domain?</h2>
             <p>
               The possibilities are limitless with domain rentals.
               Use unique domain names to display online projects and portfolios,
@@ -278,7 +274,7 @@
       <div class="columns">
         <div class="column is-5">
           <div class="content margin-top-25">
-            <h2 class="is-bold">Domain rental examples</h2>
+            <h2>Domain rental examples</h2>
           </div>
         </div>
       </div>
@@ -288,7 +284,7 @@
             <img src="/images/lib/material/web.svg" alt="Advertisements">
           </figure>
           <div class="content">
-            <h3 class="is-blacklight is-bold has-text-centered">Advertisements</h3>
+            <h3 class="is-bold has-text-centered">Advertisements</h3>
             <p>
               High traffic domains are perfect places to display advertisements
               to reach new audiences.
@@ -300,7 +296,7 @@
             <img src="/images/lib/material/chart.svg" alt="Marketing Campaigns">
           </figure>
           <div class="content">
-            <h3 class="is-blacklight is-bold has-text-centered">Marketing Campaigns</h3>
+            <h3 class="is-bold has-text-centered">Marketing Campaigns</h3>
             <p>
               Use a domain name to host your next marketing campaign.
               Renting ensures you only use the domain for as long as you need.
@@ -312,7 +308,7 @@
             <img src="/images/lib/material/users.svg" alt="Personal or Business">
           </figure>
           <div class="content">
-            <h3 class="is-blacklight is-bold has-text-centered">Personal or Business</h3>
+            <h3 class="is-bold has-text-centered">Personal or Business</h3>
             <p>
               Use a custom domain name to display your resume, portfolio, business
               page, or even an eCard or invitation.
@@ -323,7 +319,7 @@
     </div>
   </section>
 
-  <section class="section is-medium">
+  <section class="section is-large">
     <div class="container">
       <div class="columns">
         <div class="column is-6 is-offset-3">
