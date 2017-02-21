@@ -98,7 +98,8 @@ $(document).ready(function() {
 //function to change navbar on scroll
 function navbarChange(windowelem, pages_white_nav, current_page){
 	//before the top
-	if (windowelem.scrollTop() <= 0 && $(".nav").hasClass("has-shadow")) {
+	if (windowelem.scrollTop() <= 0) {
+		console.log('s')
 		$(".nav").removeClass("has-shadow is-white");
 		if (pages_white_nav.indexOf(current_page) != -1){
 			// $(".nav-link").removeClass("is-white");
@@ -107,7 +108,7 @@ function navbarChange(windowelem, pages_white_nav, current_page){
 		else {
 			$("#profile-button, #login-modal").removeClass("is-primary").addClass("is-white");
 			$("#nav-logo, .circle-logo").removeClass("is-primary").addClass("is-white");
-			// $(".nav-link").addClass("is-white");
+			$(".nav-link").addClass("is-white");
 			// $(".nav-menu").removeClass("is-white").addClass("is-primary");
 			$(".nav-toggle").removeClass("is-black").addClass("is-white");
 		}
@@ -115,7 +116,7 @@ function navbarChange(windowelem, pages_white_nav, current_page){
 	//past the top
 	else if (windowelem.scrollTop() > 0 && !$(".nav").hasClass("has-shadow")){
 		$(".nav").addClass("has-shadow is-white");
-		// $(".nav-link").removeClass("is-white");
+		$(".nav-link").removeClass("is-white");
 		// $(".nav-menu").removeClass("is-primary").addClass("is-white");
 		$(".nav-toggle").removeClass("is-white").addClass("is-black");
 		$("#nav-logo, .circle-logo").addClass("is-primary").removeClass("is-white");
