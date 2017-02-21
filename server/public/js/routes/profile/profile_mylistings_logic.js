@@ -553,8 +553,8 @@ function createImgDrop(listing_info, rownum){
     var temp_form = $('<form tabindex="1" id="mult-form' + rownum + '" class="drop-form-file" action="/listings/create/multiple" method="post" enctype="multipart/form-data"></form>')
     var temp_input = $('<input type="file" id="file' + rownum + '" name="background_image" accept="image/png, image/gif, image/jpeg" class="picture-file changeable-input input-file" />');
     var temp_input_label = $('<label for="file' + rownum + '" class="card-footer-item"><i class="fa fa-upload"></i><p class="file-label">Upload Picture</p></label>');
-    temp_input.data("name", "background_image");
-    temp_col.append(temp_div.append(temp_div_image.append(temp_figure.append(temp_x, temp_img)), temp_footer.append(temp_form.append(temp_input, temp_input_label))));
+    	temp_input.data("name", "background_image");
+    	temp_col.append(temp_div.append(temp_div_image.append(temp_figure.append(temp_x, temp_img)), temp_footer.append(temp_form.append(temp_input, temp_input_label))));
 
     //if theres an error in getting the image, remove the link
     temp_img.error(function() {
@@ -762,7 +762,6 @@ function refreshSubmitbindings(bool_for_status_td){
                         var file_name = ($(this).val()) ? $(this).val().replace(/^.*[\\\/]/, '') : "Change Picture";
                         file_name = (file_name.length > 14) ? "..." + file_name.substr(file_name.length - 14) : file_name;
                         $(this).next(".card-footer-item").find(".file-label").text(file_name);
-
                         changedListingValue($(this), info);
                     });
 

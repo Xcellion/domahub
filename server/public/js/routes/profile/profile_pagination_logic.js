@@ -442,19 +442,16 @@ function createAllRows(row_per_page, current_page){
                     $(this).select();
                 });
 
-                //on file change
+                //upload image button handler
                 both_rows.find(".drop-form-file .changeable-input").off().on("change", function(e){
                     e.preventDefault();
-                    if ($(this).data("deleted")){
-                        $(this).data("deleted", false);
-                    }
                     var file_name = ($(this).val()) ? $(this).val().replace(/^.*[\\\/]/, '') : "Change Picture";
                     file_name = (file_name.length > 14) ? "..." + file_name.substr(file_name.length - 14) : file_name;
-                    $(this).next(".button").find(".file-label").text(file_name);
-
+                    $(this).next(".card-footer-item").find(".file-label").text(file_name);
                     changedListingValue($(this), info);
                 });
-            }(row_display[row_start]))
+
+            }(row_display[row_start]));
 
 
             $("#table_body").append(temp_row, temp_row_drop);
