@@ -19,6 +19,7 @@ $divider: rgba(0,0,0,0.12) !default
 
 $brown: #795548 !default
 $blue: #2196f3 !default
+$blue-darker: #1b2835 !default
 $indigo: #3F51B5 !default
 $green: #81c784 !default
 $orange: #ff5722 !default
@@ -43,7 +44,7 @@ $family-primary: $roboto !default
 $family-code: $monospace !default
 
 $size-1: 48px !default
-$size-2: 40px !default
+$size-2: 36px !default
 $size-3: 28px !default
 $size-4: 22px !default
 $size-5: 18px !default
@@ -90,6 +91,7 @@ $success: $green !default
 $warning: $yellow !default
 $danger: $red !default
 $light: $grey-light !default
+$lighter: $grey-lighter !default
 $dark: $grey-dark !default
 
 // 3. Generated variables
@@ -171,8 +173,8 @@ $size-huge: $size-1 !default
 
 // 4. Lists and maps
 
-$colors: (white: ($white, $black), black: ($black, $white), grey: ($grey-light, $grey-dark), blacklight: ($black-secondary, $white-secondary), whitelight: ($white-secondary, $black-secondary), light: ($light, $light-invert), dark: ($dark, $dark-invert), purple: ($purple, $purple-invert), primary: ($primary, $primary-invert), primarydark: ($primary-dark, $primary-dark), primarylight: ($primary-light, $primary-light), primarylighter: ($primary-lighter, $primary-lighter), info: ($info, $info-invert), accent: ($accent, $accent-invert), success: ($success, $success-invert), warning: ($warning, $warning-invert), danger: ($danger, $danger-invert)) !default
+$colors: (white: ($white, $black), black: ($black, $white), grey: ($grey-light, $grey-dark), blacklight: ($black-secondary, $white-secondary), whitelight: ($white-secondary, $black-secondary), light: ($light, $light-invert), lighter: ($lighter, $lighter), dark: ($dark, $dark-invert), purple: ($purple, $purple-invert), primary: ($primary, $primary-invert), primarydark: ($primary-dark, $primary-dark), primarylight: ($primary-light, $primary-light), primarylighter: ($primary-lighter, $primary-lighter), info: ($info, $info-invert), bluedarker: ($blue-darker,$blue-darker), accent: ($accent, $accent-invert), success: ($success, $success-invert), warning: ($warning, $warning-invert), danger: ($danger, $danger-invert)) !default
 
 $sizes: $size-1 $size-2 $size-3 $size-4 $size-5 $size-6 !default
 
-$margins: 0 5 10 15 20 25 30 35 40 45 50 75 100 !default
+$margins: 0 5 10 15 20 25 30 35 40 45 50 75 100 125 !default
