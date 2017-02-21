@@ -68,6 +68,10 @@ else {
 		saveUninitialized: false,
 		resave: true
 	}));
+
+	//compression for production traffic
+	var compression = require("compression");
+	app.use(compression());
 }
 
 //for routing of static files

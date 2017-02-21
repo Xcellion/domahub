@@ -98,7 +98,8 @@ $(document).ready(function() {
 //function to change navbar on scroll
 function navbarChange(windowelem, pages_white_nav, current_page){
 	//before the top
-	if (windowelem.scrollTop() <= 0 && $(".nav").hasClass("has-shadow")) {
+	if (windowelem.scrollTop() <= 0) {
+		console.log('s')
 		$(".nav").removeClass("has-shadow is-white");
 		if (pages_white_nav.indexOf(current_page) != -1){
 			$(".nav-link").removeClass("is-white");

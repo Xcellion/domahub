@@ -26,14 +26,14 @@ function createRow(listing_info, rownum){
         createDomain(listing_info),
         createView(listing_info),
 		createEdit(listing_info),
-        // createType(listing_info),
+        //createType(listing_info),
         createVerify(listing_info, verified),
         createStatus(listing_info, verified),
         createStatusDrop(listing_info),
         createPriceRate(listing_info),
-        createPriceRateDrop(listing_info),
-        createPriceType(listing_info),
-        createPriceTypeDrop(listing_info)
+		createPriceType(listing_info)
+        //createPriceRateDrop(listing_info),
+        //createPriceTypeDrop(listing_info)
     );
 
     tempRow.data("editing", false);
@@ -310,16 +310,23 @@ function createStatusDrop(listing_info){
 //function to create the listing info form drop
 function createInfoDrop(listing_info){
 	var temp_form = $("<form class='drop-form column is-9'></form>");
-			var temp_cols2 = $("<div class='columns listing-module'></div>");
-						var temp_col3 = $("<div class='column is-3'></div>");
-						var temp_col4 = $("<div class='column is-9'></div>");
-			var temp_cols3 = $("<div class='columns listing-module'></div>");
-						var temp_col5 = $("<div class='column is-3'></div>");
-						var temp_col6 = $("<div class='column is-9'></div>");
+		var temp_cols1 = $("<div class='columns listing-module'></div>");
+			var temp_col1 = $("<div class='column is-3'></div>");
+			var temp_col2 = $("<div class='column is-9'></div>");
+		var temp_cols2 = $("<div class='columns listing-module'></div>");
+			var temp_col3 = $("<div class='column is-3'></div>");
+			var temp_col4 = $("<div class='column is-9'></div>");
+		var temp_cols3 = $("<div class='columns listing-module'></div>");
+			var temp_col5 = $("<div class='column is-3'></div>");
+			var temp_col6 = $("<div class='column is-9'></div>");
 
 	//headers on left column
-	var temp_header2 = $('<p class="is-bold">Listing Description</p>')
-	var temp_header3 = $('<p class="is-bold">Categories</p>')
+	var temp_header1 = $('<p class="is-bold">Pricing Details</p>');
+	var temp_header2 = $('<p class="is-bold">Listing Description</p>');
+	var temp_header3 = $('<p class="is-bold">Categories</p>');
+
+	//pricing
+	temp_cols1.append(temp_col1.append(temp_header1), temp_col2.append(createPriceInfo(listing_info)));
 
     //description
     var description = (listing_info.description == null) ? "" : listing_info.description;
@@ -329,6 +336,7 @@ function createInfoDrop(listing_info){
                 temp_div2_input.data("name", "description");
 
     temp_div2.append(temp_div2_control.append(temp_div2_input));
+	temp_cols2.append(temp_col3.append(temp_header2), temp_col4.append(temp_div2));
 
     //categories
     var categories = (listing_info.categories) ? listing_info.categories : "";
@@ -342,13 +350,12 @@ function createInfoDrop(listing_info){
         var temp_msg_delete_e = $("<button class='delete'></button>");
         temp_msg_error.append(temp_msg_delete_e);
 
-    //error message
+    //success message
     var temp_msg_success = $("<div class='listing-msg-success is-hidden is-primary notification'></div>");
         var temp_msg_delete_s = $("<button class='delete'></button>");
         temp_msg_success.append(temp_msg_delete_s);
 
-    temp_form.append(temp_cols2.append(temp_col3.append(temp_header2), temp_col4.append(temp_div2)),
-					 temp_cols3.append(temp_col5.append(temp_header3), temp_col6.append(temp_div3, createSubmitCancelButton(listing_info), temp_msg_error, temp_msg_success)));
+	temp_cols3.append(temp_col5.append(temp_header3), temp_col6.append(temp_div3, createSubmitCancelButton(listing_info), temp_msg_error, temp_msg_success));
 
     //to hide the message (error)
     temp_msg_delete_e.click(function(e){
@@ -362,7 +369,43 @@ function createInfoDrop(listing_info){
         temp_msg_success.addClass('is-hidden');
     });
 
+	temp_form.append(temp_cols1, temp_cols2, temp_cols3);
     return temp_form;
+}
+
+//function to create input price rate drop
+function createPriceInfo(listing_info){
+
+	//price rate input
+    var temp_div = $('<div class="control has-addons"></div>');
+		var temp_input = $("<input type='number' min='1' step='1' class='padding-top-0 price-rate-input has-text-right input changeable-input'></input>");
+			temp_input.val(listing_info.price_rate);
+			temp_input.data("name", "price_rate");
+
+	//price type selector
+	var temp_span = $("<span class='select price-type-span'></span>");
+	var temp_form = $("<form class='drop-form'></form>");
+	var temp_select = $("<select class='price-type-input changeable-input'></select>");
+		temp_select.append("<option value='month'>Month</option");
+		temp_select.append("<option value='week'>Week</option");
+		temp_select.append("<option value='day'>Day</option");
+		temp_select.val(listing_info.price_type);
+		temp_select.data("name", "price_type");
+
+    temp_div.append(temp_input, temp_span.append(temp_form.append(temp_select)));
+
+    //change the hidden price rate TD along with dropdown
+    temp_input.on("change", function(e){
+        e.preventDefault();
+        $(this).closest(".td-price-rate").prev(".td-price-rate").text("$" + $(this).val());
+    });
+
+	//change the hidden price type TD along with dropdown
+	temp_select.change(function(e){
+		$(this).closest(".td-price-type-drop").prev(".td-price-type").text($(this).val());
+	});
+
+    return temp_div;
 }
 
 //function to create the categories selectors
@@ -510,8 +553,8 @@ function createImgDrop(listing_info, rownum){
     var temp_form = $('<form tabindex="1" id="mult-form' + rownum + '" class="drop-form-file" action="/listings/create/multiple" method="post" enctype="multipart/form-data"></form>')
     var temp_input = $('<input type="file" id="file' + rownum + '" name="background_image" accept="image/png, image/gif, image/jpeg" class="picture-file changeable-input input-file" />');
     var temp_input_label = $('<label for="file' + rownum + '" class="card-footer-item"><i class="fa fa-upload"></i><p class="file-label">Upload Picture</p></label>');
-    temp_input.data("name", "background_image");
-    temp_col.append(temp_div.append(temp_div_image.append(temp_figure.append(temp_x, temp_img)), temp_footer.append(temp_form.append(temp_input, temp_input_label))));
+    	temp_input.data("name", "background_image");
+    	temp_col.append(temp_div.append(temp_div_image.append(temp_figure.append(temp_x, temp_img)), temp_footer.append(temp_form.append(temp_input, temp_input_label))));
 
     //if theres an error in getting the image, remove the link
     temp_img.error(function() {
@@ -543,54 +586,54 @@ function deleteBackgroundImg(temp_x, listing_info){
 	changedListingValue(temp_input, listing_info);
 }
 
-//function to create input price rate drop
-function createPriceRateDrop(listing_info){
-    var new_td = $("<td class='td-price-rate-drop is-hidden'></td>");
-        var temp_form = $("<form class='drop-form'></form>");
-        var temp_input = $("<input type='number' min='1' step='1' class='padding-top-0 price-rate-input has-text-right input changeable-input'></input>");
-            temp_input.val(listing_info.price_rate);
-            temp_input.data("name", "price_rate");
-    new_td.append(temp_form.append(temp_input));
-
-    //prevent clicking status from dropping down row
-    temp_input.click(function(e) {
-        e.stopPropagation();
-    });
-
-    //change the hidden price rate TD along with dropdown
-    temp_input.on("change", function(e){
-        e.preventDefault();
-        $(this).closest(".td-price-rate").prev(".td-price-rate").text("$" + $(this).val());
-    });
-
-    return new_td;
-}
-
-//function to create select price type drop
-function createPriceTypeDrop(listing_info){
-    var new_td = $("<td class='td-price-type-drop padding-right-0 is-hidden'></td>");
-        var temp_span = $("<span class='select price-type-span'></span>");
-        var temp_form = $("<form class='drop-form'></form>");
-        var temp_select = $("<select class='price-type-input changeable-input'></select>");
-            temp_select.append("<option value='month'>Month</option");
-            temp_select.append("<option value='week'>Week</option");
-            temp_select.append("<option value='day'>Day</option");
-            temp_select.val(listing_info.price_type);
-            temp_select.data("name", "price_type");
-    new_td.append(temp_span.append(temp_form.append(temp_select)));
-
-    //prevent clicking price type from dropping down row
-    temp_select.click(function(e) {
-        e.stopPropagation();
-    });
-
-    //change the hidden price type TD along with dropdown
-    temp_select.change(function(e){
-        $(this).closest(".td-price-type-drop").prev(".td-price-type").text($(this).val());
-    });
-
-    return new_td;
-}
+// //function to create input price rate drop
+// function createPriceRateDrop(listing_info){
+//     var new_td = $("<td class='td-price-rate-drop is-hidden'></td>");
+//         var temp_form = $("<form class='drop-form'></form>");
+//         var temp_input = $("<input type='number' min='1' step='1' class='padding-top-0 price-rate-input has-text-right input changeable-input'></input>");
+//             temp_input.val(listing_info.price_rate);
+//             temp_input.data("name", "price_rate");
+//     new_td.append(temp_form.append(temp_input));
+//
+//     //prevent clicking status from dropping down row
+//     temp_input.click(function(e) {
+//         e.stopPropagation();
+//     });
+//
+//     //change the hidden price rate TD along with dropdown
+//     temp_input.on("change", function(e){
+//         e.preventDefault();
+//         $(this).closest(".td-price-rate").prev(".td-price-rate").text("$" + $(this).val());
+//     });
+//
+//     return new_td;
+// }
+//
+// //function to create select price type drop
+// function createPriceTypeDrop(listing_info){
+//     var new_td = $("<td class='td-price-type-drop padding-right-0 is-hidden'></td>");
+//         var temp_span = $("<span class='select price-type-span'></span>");
+//         var temp_form = $("<form class='drop-form'></form>");
+//         var temp_select = $("<select class='price-type-input changeable-input'></select>");
+//             temp_select.append("<option value='month'>Month</option");
+//             temp_select.append("<option value='week'>Week</option");
+//             temp_select.append("<option value='day'>Day</option");
+//             temp_select.val(listing_info.price_type);
+//             temp_select.data("name", "price_type");
+//     new_td.append(temp_span.append(temp_form.append(temp_select)));
+//
+//     //prevent clicking price type from dropping down row
+//     temp_select.click(function(e) {
+//         e.stopPropagation();
+//     });
+//
+//     //change the hidden price type TD along with dropdown
+//     temp_select.change(function(e){
+//         $(this).closest(".td-price-type-drop").prev(".td-price-type").text($(this).val());
+//     });
+//
+//     return new_td;
+// }
 
 // ------------------------------------------------------------------------------------------------------------------------------ EDIT ROW
 
@@ -602,8 +645,8 @@ function editRow(row){
             $(this).data("editing", false);
             dropRow($(this), false);
             editStatus($(this), false);
-            editPriceRate($(this), false);
-            editPriceType($(this), false);
+            //editPriceRate($(this), false);
+            //editPriceType($(this), false);
             $(this).next(".row-drop").find(".cancel-changes-button").click();
         }
     });
@@ -614,8 +657,8 @@ function editRow(row){
 
     dropRow(row, editing);
     editStatus(row, editing);
-    editPriceRate(row, editing);
-    editPriceType(row, editing);
+    //editPriceRate(row, editing);
+    //editPriceType(row, editing);
 
     //cancel any changes if we collapse the row
     if (!editing){
@@ -642,43 +685,43 @@ function editStatus(row, editing){
     }
 }
 
-//function to change price rate column to editable
-function editPriceRate(row, editing){
-    var price_rate_drop_td = row.find(".td-price-rate-drop");
-    var price_rate_td = row.find(".td-price-rate");
-    var verified = row.find(".td-verify").hasClass("is-hidden");
+// //function to change price rate column to editable
+// function editPriceRate(row, editing){
+//     var price_rate_drop_td = row.find(".td-price-rate-drop");
+//     var price_rate_td = row.find(".td-price-rate");
+//     var verified = row.find(".td-verify").hasClass("is-hidden");
+//
+//     //only show price rate input when the listing is verified
+//     if (verified){
+//         if (editing){
+//             price_rate_td.addClass("is-hidden");
+//             price_rate_drop_td.removeClass("is-hidden");
+//         }
+//         else {
+//             price_rate_td.removeClass("is-hidden");
+//             price_rate_drop_td.addClass("is-hidden");
+//         }
+//     }
+// }
 
-    //only show price rate input when the listing is verified
-    if (verified){
-        if (editing){
-            price_rate_td.addClass("is-hidden");
-            price_rate_drop_td.removeClass("is-hidden");
-        }
-        else {
-            price_rate_td.removeClass("is-hidden");
-            price_rate_drop_td.addClass("is-hidden");
-        }
-    }
-}
-
-//function to change price rate column to editable
-function editPriceType(row, editing){
-    var price_type_drop_td = row.find(".td-price-type-drop");
-    var price_type_td = row.find(".td-price-type");
-    var verify_td = row.find(".td-verify");
-
-    //only show status stuff when the listing is verified
-    if (verify_td.hasClass("is-hidden")){
-        if (editing){
-            price_type_td.addClass("is-hidden");
-            price_type_drop_td.removeClass("is-hidden");
-        }
-        else {
-            price_type_td.removeClass("is-hidden");
-            price_type_drop_td.addClass("is-hidden");
-        }
-    }
-}
+// //function to change price rate column to editable
+// function editPriceType(row, editing){
+//     var price_type_drop_td = row.find(".td-price-type-drop");
+//     var price_type_td = row.find(".td-price-type");
+//     var verify_td = row.find(".td-verify");
+//
+//     //only show status stuff when the listing is verified
+//     if (verify_td.hasClass("is-hidden")){
+//         if (editing){
+//             price_type_td.addClass("is-hidden");
+//             price_type_drop_td.removeClass("is-hidden");
+//         }
+//         else {
+//             price_type_td.removeClass("is-hidden");
+//             price_type_drop_td.addClass("is-hidden");
+//         }
+//     }
+// }
 
 //function to refresh listing_info on cancel, submit, input event listeners after AJAX success
 function refreshSubmitbindings(bool_for_status_td){
@@ -719,7 +762,6 @@ function refreshSubmitbindings(bool_for_status_td){
                         var file_name = ($(this).val()) ? $(this).val().replace(/^.*[\\\/]/, '') : "Change Picture";
                         file_name = (file_name.length > 14) ? "..." + file_name.substr(file_name.length - 14) : file_name;
                         $(this).next(".card-footer-item").find(".file-label").text(file_name);
-
                         changedListingValue($(this), info);
                     });
 

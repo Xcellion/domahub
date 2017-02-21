@@ -23,6 +23,7 @@ function setUpCalendar(listing_info){
         timeFormat: 'MMM D',
         axisFormat: 'hA',
         displayEventEnd: true,
+        disableDragging: true,
 
         //header buttons
         header: {left:'prev', center:'next', right:'title, today'},
@@ -39,16 +40,8 @@ function setUpCalendar(listing_info){
             //all day background event (month view)
             {
                 start: '1970-01-01T00:00:00',
-                end: moment().endOf("hour"),
+                end: moment().endOf("day").add(1, "millisecond"),
                 rendering: 'background',
-                allDay: true
-            },
-            //background event for today
-            {
-                start: moment().startOf("day"),
-                end: moment().endOf("day"),
-                rendering: 'background',
-                color: "rgba(34, 87, 255, 0.15)",
                 allDay: true
             },
             //background for 1 year out
@@ -196,42 +189,45 @@ function setUpCalendar(listing_info){
 
         //tag id to HTML DOM for easy access
         eventAfterRender: function(event, element, view ) {
-            $(element).attr("id", event._id);
+            if (event.start.isBetween(view.start, view.end)){
+                $(element).attr("id", event._id);
 
-            //if event length is less than a day, change the event title
-            if (event.end && moment.duration(event.end.diff(event.start)).as("day") <= 1){
-                $(element).find(".fc-time").text(event.start.format("MMM D"));
-            }
+                //if event length is less than a day, change the event title
+                if (event.end && moment.duration(event.end.diff(event.start)).as("day") <= 1){
+                    $(element).find(".fc-time").text(event.start.format("MMM D"));
+                }
 
-            //event handler for event click on non-background events
-            if (!$(element).hasClass("fc-bgevent")){
-                eventSelectionHandlers(element);
-            }
-
-            //center title / date / time
-            $(element).find(".fc-content").css({
-                left: "50%",
-                top: "50%",
-                position: "absolute",
-                transform: "translate(-50%, -50%)",
-                "margin-right": "-50%"
-            });
-            if (view.name == "agendaWeek"){
-                $(element).css("width", "100%");
-            }
-            //fatten event height in month view
-            else {
-                $(element).find(".fc-time").remove();
-                $(element).css({
-                    "height": "20px",
-                    // "margin": 0,
-                    // "border" : 0
+                //center title / date / time
+                $(element).find(".fc-content").css({
+                    left: "50%",
+                    top: "50%",
+                    position: "absolute",
+                    transform: "translate(-50%, -50%)",
+                    "margin-right": "-50%"
                 });
-                if ($(element).hasClass("fc-not-start")){
-                    $(element).find(".fc-content").remove();
+                if (view.name == "agendaWeek"){
+                    $(element).css("width", "100%");
+                }
+                //fatten event height in month view
+                else {
+                    $(element).find(".fc-time").remove();
+                    $(element).css({
+                        "height": "20px",
+                        // "margin": 0,
+                        // "border" : 0
+                    });
+                    if ($(element).hasClass("fc-not-start")){
+                        $(element).find(".fc-content").remove();
+                    }
+                }
+
+                //event handler for event click on non-background events
+                if (!$(element).hasClass("fc-bgevent")){
+
+                    //set time out hack for mobile tap
+                    setTimeout(function(){ eventSelectionHandlers(element); }, 10);
                 }
             }
-
         }
     });
 
@@ -455,7 +451,6 @@ function eventSelectionHandlers(element){
 			}
 		}
 	});
-
 	element.on("mouseup", function(mouseUpJsEvent){
 		//only left click
 		if (mouseUpJsEvent.which == 1){
@@ -607,7 +602,7 @@ function removeEventTimeSlot(calEvent, mouseDownSlot, mouseUpSlot){
 	&& calEvent.end.isSameOrBefore(mouseUpSlot.end)){
 		$('#calendar').fullCalendar('removeEvents', calEvent._id);
 		$('#calendar').fullCalendar('updateEvent', calEvent);
-		//console.log('event equal to slot');
+		console.log('event equal to slot');
 	}
 	//if clipping starts at top of event
 	else if (calEvent.start.isSame(mouseDownSlot.start)){
@@ -617,7 +612,7 @@ function removeEventTimeSlot(calEvent, mouseDownSlot, mouseUpSlot){
 			end: calEvent.end
 		}).price);
 		$('#calendar').fullCalendar('updateEvent', calEvent);
-		//console.log('clipping at top');
+		console.log('clipping at top');
 	}
 	//if clipping starts at middle of event and goes all the way
 	else if (calEvent.end.isSame(mouseUpSlot.end)){
@@ -627,11 +622,11 @@ function removeEventTimeSlot(calEvent, mouseDownSlot, mouseUpSlot){
 			end: calEvent.end
 		}).price);
 		$('#calendar').fullCalendar('updateEvent', calEvent);
-		//console.log('clipping at bottom');
+		console.log('clipping at bottom');
 	}
 	//if middle of event, split event into two
 	else {
-		//console.log('middle of event');
+		console.log('middle of event');
 
 		//update existing
 		var tempEnd = calEvent.end;
@@ -720,14 +715,14 @@ function createEvent(start, end){
 	{
 		//event being created is fully overlapped by existing event, so dont create anything new
 		if (eventitem.start.isSameOrBefore(start) && eventitem.end.isSameOrAfter(end)){
-			//console.log('new event is not needed');
+			console.log('new event is not needed');
 			eventEncompassed = true;
 			removeEventTimeSlot(eventitem, {start: start, end: end}, {start: start, end: end});
 			updatePrices();
 		}
 		//check if existing event is fully overlapped by event being created
 		else if (start.isSameOrBefore(eventitem.start) && end.isSameOrAfter(eventitem.end)){
-			//console.log('full overlap');
+			console.log('full overlap');
 			fullyOverlappingEvents.push(eventitem);
 		}
 		//overlaps something, just not completely
@@ -735,14 +730,14 @@ function createEvent(start, end){
             (end.isAfter(eventitem.end) && start.isBefore(eventitem.end)) ||
             (start.isBefore(eventitem.start) && end.isAfter(eventitem.start))
         ){
-			//console.log('partial overlap');
+			console.log('partial overlap');
 			overlappingEvents.push(eventitem);
 		}
 
 		//no overlaps, check for merges
 		if (!eventitem.old && !eventEncompassed && (moment(start).format('YYYY-MM-DD HH:mm') == moment(eventitem.end).format('YYYY-MM-DD HH:mm')
 		|| moment(end).format('YYYY-MM-DD HH:mm') == moment(eventitem.start).format('YYYY-MM-DD HH:mm'))){
-			//console.log('merge');
+			console.log('merge');
 			//if start time of new event (2nd slot) is end time of existing event (1st slot)
 			//i.e. if new event is below any existing events
 			if (moment(start).format('YYYY-MM-DD HH:mm') == moment(eventitem.end).format('YYYY-MM-DD HH:mm'))
@@ -867,12 +862,12 @@ function createEvent(start, end){
 			for (var x = 0; x < removeEvents.length; x++){
 				//remove the entire chunk of the full existing event from the newly created event
 				if (removeEvents[x].full){
-					//console.log('full existing removed');
+					console.log('full existing removed');
 					removeEventTimeSlot(newEvent[0], removeEvents[x], removeEvents[x]);
 				}
 				//remove only the partially overlapped portion
 				else {
-					//console.log('partial existing removed');
+					console.log('partial existing removed');
 					if (removeEvents[x].bottom){
 						removeEventTimeSlot(newEvent[0], {start: start}, removeEvents[x]);
 					}

@@ -149,7 +149,7 @@ module.exports = {
 			var total_price = Math.round(req.session.new_rental_info.price * 100);		//USD in cents
 
 			//doma fee if the listing is basic (aka premium hasn't expired)
-			var doma_fees = (req.session.new_rental_info.premium) ? 0 : Math.round(total_price * 0.15);
+			var doma_fees = Math.round(total_price * 0.18);
 			var stripe_fees = Math.round(total_price * 0.029) + 30;
 
 			var stripeOptions = {
