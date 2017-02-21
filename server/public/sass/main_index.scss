@@ -6,14 +6,15 @@
   justify-content: space-between;
   flex-direction: column;
   align-items: center;
-  padding: 0 !important;
   @include tablet {
     background-image: url('/images/main/index_1.jpg');
     height: 867px;
+    padding: 0 !important;
   }
   @include mobile {
     background-image: url('/images/main/index_1_mobile.jpg');
     height: 504px;
+    padding: 0 20px;
   }
   background-position: center center;
   background-size: cover;
@@ -21,9 +22,6 @@
   width: 100%;
   .subtitle {
     max-width: 600px;
-  }
-  .icon {
-    margin-bottom: 10px;
   }
 }
 
@@ -71,4 +69,20 @@
 .slider-item-dropdown {
   display: none;
   padding: 20px;
+}
+
+.card-flex-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  align-items: center;
+  .card {
+    width: 200px;
+    height: 250px;
+    margin: 10px !important;
+    @include mobile {
+      width: 100%;
+      height: auto;
+    }
+  }
 }

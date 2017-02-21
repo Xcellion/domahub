@@ -1,28 +1,25 @@
 .footer
   background-color: $blue-darker
   overflow: hidden
-
-.footer-body
   padding: 40px 0
   +mobile
     padding: 40px 20px
-  +mobile-456px
-    padding: 20px
+
+.footer-form
+  margin: 25px auto
+  max-width: 500px
 
 .footer-list
   display: flex
   align-items: center
   text-decoration: none
-  justify-content: flex-start
+  justify-content: center
   +mobile-456px
     flex-direction: column
-    align-items: flex-start
+    align-items: center
 
 .footer-item
-  &:not(:first-child)
-    margin-left: 20px
-    +mobile-456px
-      margin-left: 0
+  margin-left: 20px
   +mobile-456px
     margin-top: 10px
   a
@@ -33,10 +30,14 @@
       color: $primary
 
 .footer-bar
-  border-top: 1px solid $border
-  padding: 40px 0
+  display: flex
+  justify-content: space-between
+  align-items: center
+  margin-top: 40px
   +mobile
     padding: 30px 20px
+    flex-direction: column
+    justify-content: flex-start
 
 .footer-bar-content
   display: flex
@@ -71,24 +72,3 @@
       color: $primary
   +mobile-456px
     display: none
-
-//
-// #facebook-icon
-//   & > .icon
-//     &:hover
-//       color: #3b5998
-//
-// #twitter-icon
-//   & > .icon
-//     &:hover
-//       color: #00aced
-//
-// #linkedin-icon
-//   & > .icon
-//     &:hover
-//       color: #0077B5
-//
-// #youtube-icon
-//   & > .icon
-//     &:hover
-//       color: #cd201f
