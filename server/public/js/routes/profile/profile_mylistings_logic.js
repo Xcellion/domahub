@@ -377,8 +377,8 @@ function createInfoDrop(listing_info){
 function createPriceInfo(listing_info){
 
 	//price rate input
-    var temp_div = $('<div class="control has-addons"></div>');
-		var temp_input = $("<input type='number' min='1' step='1' class='padding-top-0 price-rate-input has-text-right input changeable-input'></input>");
+    var temp_div = $('<div class="control is-grouped"></div>');
+		var temp_input = $("<p class='control'><input type='number' min='1' step='1' class='padding-top-0 price-rate-input input changeable-input'></input></p>");
 			temp_input.val(listing_info.price_rate);
 			temp_input.data("name", "price_rate");
 

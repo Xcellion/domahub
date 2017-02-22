@@ -794,7 +794,7 @@ pre {
   -webkit-appearance: none;
   align-items: center;
   background-color: white;
-  border: 1px solid rgba(0, 0, 0, 0.12);
+  border: 1px solid rgba(0, 0, 0, 0.38);
   border-radius: 3px;
   color: black;
   display: inline-flex;
@@ -813,7 +813,9 @@ pre {
   justify-content: center;
   text-align: center;
   white-space: nowrap; }
-  .button:active, .button:focus, .button.is-active {
+  .button:hover {
+    border-color: rgba(0, 0, 0, 0.66); }
+  .button:focus, .button.is-active {
     border-color: rgba(0, 0, 0, 0.88); }
   .button[disabled], .button.is-disabled {
     background-color: rgba(0, 0, 0, 0.12);
@@ -1583,7 +1585,7 @@ input:-webkit-autofill {
   -webkit-appearance: none;
   align-items: center;
   background-color: white;
-  border: 1px solid rgba(0, 0, 0, 0.12);
+  border: 1px solid rgba(0, 0, 0, 0.38);
   border-radius: 3px;
   color: black;
   display: inline-flex;
@@ -1599,7 +1601,9 @@ input:-webkit-autofill {
   border-radius: 3px;
   max-width: 100%;
   width: 100%; }
-  .input:active, .textarea:active, .input:focus, .textarea:focus, .input.is-active, .is-active.textarea {
+  .input:hover, .textarea:hover {
+    border-color: rgba(0, 0, 0, 0.66); }
+  .input:focus, .textarea:focus, .input.is-active, .is-active.textarea {
     border-color: rgba(0, 0, 0, 0.88); }
   .input[disabled], [disabled].textarea, .input.is-disabled, .is-disabled.textarea {
     background-color: rgba(0, 0, 0, 0.12);
@@ -1653,8 +1657,8 @@ input:-webkit-autofill {
     border-color: #ffeb3b; }
   .input.is-danger, .is-danger.textarea {
     border-color: #EF5350; }
-  .input:focus, .textarea:focus {
-    border-color: rgba(0, 0, 0, 0.88); }
+  .input:hover, .textarea:hover {
+    border-color: rgba(0, 0, 0, 0.66); }
   .input.is-small, .is-small.textarea {
     border-radius: 2px;
     font-size: 11px;
@@ -1664,7 +1668,7 @@ input:-webkit-autofill {
     padding-right: 6px; }
   .input.is-medium, .is-medium.textarea {
     font-size: 16px;
-    height: 40px;
+    height: 42px;
     line-height: 32px;
     padding-left: 10px;
     padding-right: 10px; }
@@ -1696,8 +1700,7 @@ input:-webkit-autofill {
   cursor: pointer;
   display: inline-block;
   line-height: 16px;
-  position: relative;
-  vertical-align: top; }
+  position: relative; }
   .is-disabled.checkbox, .is-disabled.radio {
     color: rgba(0, 0, 0, 0.38);
     pointer-events: none; }
@@ -1721,7 +1724,7 @@ input:-webkit-autofill {
     -webkit-appearance: none;
     align-items: center;
     background-color: white;
-    border: 1px solid rgba(0, 0, 0, 0.12);
+    border: 1px solid rgba(0, 0, 0, 0.38);
     border-radius: 3px;
     color: black;
     display: inline-flex;
@@ -1735,8 +1738,11 @@ input:-webkit-autofill {
     vertical-align: top;
     cursor: pointer;
     display: block;
-    padding-right: 36px; }
-    .select select:active, .select select:focus, .select select.is-active {
+    padding-right: 36px;
+    border-color: rgba(0, 0, 0, 0.38); }
+    .select select:hover {
+      border-color: rgba(0, 0, 0, 0.66); }
+    .select select:focus, .select select.is-active {
       border-color: rgba(0, 0, 0, 0.88); }
     .select select[disabled], .select select.is-disabled {
       background-color: rgba(0, 0, 0, 0.12);
@@ -1833,7 +1839,7 @@ input:-webkit-autofill {
     height: 40px; }
     .select.is-medium select {
       font-size: 16px;
-      height: 40px;
+      height: 42px;
       line-height: 32px;
       padding-left: 10px;
       padding-right: 10px;
