@@ -5,6 +5,7 @@ var	request = require('request');
 var bodyParser = require('body-parser');
 var urlencodedParser = bodyParser.urlencoded({ extended: true })
 var nodemailer = require('nodemailer');
+var fs = require('fs');
 var sgTransport = require('nodemailer-sendgrid-transport');
 
 var mailOptions = {
@@ -92,12 +93,17 @@ function signupBeta(req, res, next){
             if (!err){
                 console.log("F: Beta email is good! Sending welcome email...");
 
+                var email_contents = fs.readFileSync('server/views/email/email_verify.html');
+                if (!email_contents){
+                    email_contents = "<p>This email is to let you know that you have successfully signed up for DomaHub beta testing!</p><p>We'll be sure to let you know once we begin the next phase of the beta process.</p><p>Thank you!</p></br><p>-- DomaHub</p>"
+                }
+
                 //email options
         		var email = {
         			to: req.body.betaemail,
         			from: '"DomaHub Beta" <general@domahub.com>',
         			subject: 'Thank you for signing up at DomaHub!',
-        			html: "<p>This email is to let you know that you have successfully signed up for DomaHub beta testing!</p><p>We'll be sure to let you know once we begin the next phase of the beta process.</p><p>Thank you!</p></br><p>-- DomaHub</p>"
+        			html: email_contents
         		};
 
         		//send email
