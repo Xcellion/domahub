@@ -58,7 +58,6 @@
     min-width: 50px !important;
     line-height: 46px !important;
     margin-right: 20px;
-    &:hover,
     &.is-active {
       color: $white !important;
       background-color: $primary;
@@ -75,12 +74,13 @@
   flex-wrap: wrap;
   flex-direction: row;
   align-items: center;
+  justify-content: center;
   .card {
-    flex-grow: 1;
     width: 200px;
     height: 250px;
     margin: 10px !important;
-    @include mobile {
+    .card-image {
+      padding: 20px;
     }
   }
 }

@@ -52,7 +52,7 @@
     min-width: 50px !important;
     line-height: 46px !important;
     margin-right: 20px; }
-    .slider-content .slider-icon:hover, .slider-content .slider-icon.is-active {
+    .slider-content .slider-icon.is-active {
       color: white !important;
       background-color: #3cbc8d; }
 
@@ -63,12 +63,14 @@
   display: flex;
   flex-wrap: wrap;
   flex-direction: row;
-  align-items: center; }
+  align-items: center;
+  justify-content: center; }
   .card-flex-wrap .card {
-    flex-grow: 1;
     width: 200px;
     height: 250px;
     margin: 10px !important; }
+    .card-flex-wrap .card .card-image {
+      padding: 20px; }
 
 @media screen and (max-width: 456px) {
   .slider-icon {
