@@ -1,13 +1,19 @@
 $(document).ready(function() {
 
     //slider dropdown
-    $(".slider-icon, .slider-learn").on("click", function() {
-        var slider_item = $(this).closest(".slider-item");
+    $(".slider-icon, .slider-learn, .slider-arrow").on("click", function() {
+        var slider_content = $(this).closest(".slider-content");
+        var slider_box = $(this).closest(".slider-box");
+
+        // if ($(this) == ".slider-icon") {
+        //   $(this).toggleClass('is-active');
+        // }
+
         $(".slider-text").finish();
-        var hidden_content = slider_item.find(".slider-text:hidden");
-        slider_item.find(".slider-text:visible").finish().fadeToggle(200, "linear", function(){
+        var hidden_content = slider_content.find(".slider-text:hidden");
+        slider_content.find(".slider-text:visible").finish().fadeToggle(200, "linear", function(){
             hidden_content.finish().fadeToggle(200, "linear");
-            slider_item.find(".slider-icon .icon .fa").toggleClass('fa-rotate-90');
+            slider_box.find(".slider-arrow .icon .fa").toggleClass('fa-rotate-90');
         });
     });
 
