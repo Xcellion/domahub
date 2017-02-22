@@ -1,10 +1,9 @@
 $(document).ready(function() {
 
     //slider dropdown
-    $(".slider-icon, .slider-learn, .slider-arrow").on("click", function() {
-        var slider_box = $(this).closest(".slider-box");
+    $(".slider-box").on("click", function() {
+        var slider_box = $(this);
         var slider_content = slider_box.find(".slider-content");
-
         slider_box.find(".slider-icon").toggleClass('is-active');
 
         $(".slider-text").finish();
@@ -13,6 +12,11 @@ $(document).ready(function() {
             hidden_content.finish().fadeToggle(200, "linear");
             slider_box.find(".slider-arrow .icon .fa").toggleClass('fa-rotate-90');
         });
+    });
+
+    //prevents stripe/faq links from triggering dropdown
+    $(".slider-no-trigger").on("click", function(e){
+        e.stopPropagation();
     });
 
     //two button scroll
