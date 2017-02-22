@@ -107,7 +107,7 @@ function navbarChange(windowelem, pages_white_nav, current_page){
 		else {
 			$("#profile-button, #login-modal").removeClass("is-primary").addClass("is-white");
 			$("#nav-logo, .circle-logo").removeClass("is-primary").addClass("is-white");
-			$(".nav-link").addClass("is-white");
+			$("#create_listing_link").addClass("is-white");
 			// $(".nav-menu").removeClass("is-white").addClass("is-primary");
 			$(".nav-toggle").removeClass("is-black").addClass("is-white");
 		}
@@ -115,7 +115,7 @@ function navbarChange(windowelem, pages_white_nav, current_page){
 	//past the top
 	else if (windowelem.scrollTop() > 0 && !$(".nav").hasClass("has-shadow")){
 		$(".nav").addClass("has-shadow is-white");
-		$(".nav-link").removeClass("is-white");
+		$("#create_listing_link").removeClass("is-white");
 		// $(".nav-menu").removeClass("is-primary").addClass("is-white");
 		$(".nav-toggle").removeClass("is-white").addClass("is-black");
 		$("#nav-logo, .circle-logo").addClass("is-primary").removeClass("is-white");
