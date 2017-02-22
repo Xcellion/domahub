@@ -1491,6 +1491,24 @@ pre {
     height: 48px;
     padding-left: 20px;
     padding-right: 20px; }
+  .button.is-stylish {
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 700;
+    font-size: 14px;
+    height: 42px;
+    padding-left: 21px;
+    padding-right: 21px; }
+    .button.is-stylish.is-small {
+      font-size: 12px;
+      height: 36px;
+      padding-left: 18px;
+      padding-right: 18px; }
+    .button.is-stylish.is-large {
+      font-size: 16px;
+      height: 48px;
+      padding-left: 24px;
+      padding-right: 24px; }
   .button[disabled], .button.is-disabled {
     opacity: 0.5; }
   .button.is-fullwidth {
@@ -1645,13 +1663,13 @@ input:-webkit-autofill {
     padding-left: 6px;
     padding-right: 6px; }
   .input.is-medium, .is-medium.textarea {
-    font-size: 18px;
+    font-size: 16px;
     height: 40px;
     line-height: 32px;
     padding-left: 10px;
     padding-right: 10px; }
   .input.is-large, .is-large.textarea {
-    font-size: 24px;
+    font-size: 16px;
     height: 48px;
     line-height: 40px;
     padding-left: 12px;
@@ -1814,7 +1832,7 @@ input:-webkit-autofill {
   .select.is-medium {
     height: 40px; }
     .select.is-medium select {
-      font-size: 18px;
+      font-size: 16px;
       height: 40px;
       line-height: 32px;
       padding-left: 10px;
@@ -1823,7 +1841,7 @@ input:-webkit-autofill {
   .select.is-large {
     height: 48px; }
     .select.is-large select {
-      font-size: 24px;
+      font-size: 16px;
       height: 48px;
       line-height: 40px;
       padding-left: 12px;
@@ -4549,7 +4567,7 @@ input:-webkit-autofill {
       -moz-box-shadow: 0 0 0 0 black;
       box-shadow: 0 0 0 0 black;
       z-index: 2;
-      background-color: rgba(0, 0, 0, 0.12); }
+      background-color: #efefef; }
   .tabs.is-toggle li + li {
     margin-left: -1px; }
   .tabs.is-toggle li:first-child a {
