@@ -14,7 +14,7 @@
   @include mobile {
     background-image: url('/images/main/index_1_mobile.jpg');
     height: 504px;
-    padding: 0 20px;
+    padding: 40px 20px 0;
   }
   background-position: center center;
   background-size: cover;
@@ -76,12 +76,11 @@
   flex-direction: row;
   align-items: center;
   .card {
+    flex-grow: 1;
     width: 200px;
     height: 250px;
     margin: 10px !important;
     @include mobile {
-      width: 100%;
-      height: auto;
     }
   }
 }
@@ -96,5 +95,31 @@
 .slider-icon {
   &:hover {
     cursor: pointer;
+  }
+}
+
+.button-wrapper {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 25px;
+  &.is-left-aligned {
+    justify-content: flex-start;
+  }
+  .button {
+    &:not(:last-child) {
+      margin-right: 10px;
+    }
+  }
+  @include mobile-456px {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    .button {
+      &:not(:last-child) {
+        margin-right: 0;
+        margin-bottom: 10px;
+      }
+    }
   }
 }
