@@ -55,11 +55,10 @@ function findRelatedDomains(){
 
 				//edit it based on new listing info
 				cloned_similar_listing.find(".similar-domain-price").text("$" + data.listings[x].price_rate + " / " + data.listings[x].price_type);
-				var random_sig = Math.floor(Math.random()*1000);
-				var background_image = data.listings[x].background_image || "https://source.unsplash.com/category/nature/250x200?sig=" + random_sig;
+				// var random_sig = Math.floor(Math.random()*1000);
+				// var background_image = data.listings[x].background_image || "https://source.unsplash.com/category/nature/250x200?sig=" + random_sig;
 				// cloned_similar_listing.find(".similar-domain-img").attr("src", background_image);
-				cloned_similar_listing.find(".similar-domain-name").text(data.listings[x].domain_name);
-				cloned_similar_listing.find(".similar-domain-name").text(data.listings[x].domain_name);
+				cloned_similar_listing.find(".similar-domain-name").text(data.listings[x].domain_name).attr("href", "/listing/" + data.listings[x].domain_name);
 				$("#similar-domain-table").append(cloned_similar_listing);
 			}
 		}
