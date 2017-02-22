@@ -2,12 +2,10 @@ $(document).ready(function() {
 
     //slider dropdown
     $(".slider-icon, .slider-learn, .slider-arrow").on("click", function() {
-        var slider_content = $(this).closest(".slider-content");
         var slider_box = $(this).closest(".slider-box");
+        var slider_content = slider_box.find(".slider-content");
 
-        // if ($(this) == ".slider-icon") {
-        //   $(this).toggleClass('is-active');
-        // }
+        slider_box.find(".slider-icon").toggleClass('is-active');
 
         $(".slider-text").finish();
         var hidden_content = slider_content.find(".slider-text:hidden");
@@ -18,7 +16,7 @@ $(document).ready(function() {
     });
 
     //two button scroll
-    $("#have_domains_button").on("click", function(){
+    $("#have_domains_button, #learn_more_wrapper").on("click", function(){
         $('html, body').stop().animate({
             scrollTop: $("#have_domains_section").offset().top - $("#navbar").height()
         }, 500);
