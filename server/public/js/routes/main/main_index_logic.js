@@ -14,12 +14,12 @@ $(document).ready(function() {
     //two button scroll
     $("#have_domains_button").on("click", function(){
         $('html, body').stop().animate({
-            scrollTop: $("#have_domains_section").offset().top
+            scrollTop: $("#have_domains_section").offset().top - $("#navbar").height()
         }, 500);
     });
     $("#want_domains_button").on("click", function(){
         $('html, body').stop().animate({
-            scrollTop: $("#want_domains_section").offset().top
+            scrollTop: $("#want_domains_section").offset().top - $("#navbar").height()
         }, 500);
     });
 
@@ -27,5 +27,10 @@ $(document).ready(function() {
     $('#learn_more_text').stop().animate({
         opacity: 1
     }, 3000);
+
+    //click to chat with us
+    $('#chat_with_us_button').on("click", function(){
+        Intercom("show");
+    });
 
 });
