@@ -3262,8 +3262,10 @@ input:-webkit-autofill {
   padding-right: 10px;
   vertical-align: top;
   white-space: nowrap; }
-  .tag:hover .delete, .tag:hover .modal-close, .tag:active .delete, .tag:active .modal-close {
-    background-color: rgba(0, 0, 0, 0.66); }
+  .tag:hover, .tag:active {
+    background-color: #efefef; }
+    .tag:hover .delete, .tag:hover .modal-close, .tag:active .delete, .tag:active .modal-close {
+      background-color: rgba(0, 0, 0, 0.66); }
   .tag.is-uppercase {
     text-transform: uppercase; }
   .tag .delete, .tag .modal-close {
@@ -3349,10 +3351,6 @@ input:-webkit-autofill {
     font-size: 16px;
     justify-content: flex-end;
     height: 24px; }
-
-@media screen and (min-width: 769px) {
-  .tag + .tag {
-    margin-left: 10px; } }
 
 .unselectable, .is-unselectable, .button, .delete, .modal-close, .tabs {
   -webkit-touch-callout: none;
@@ -4304,6 +4302,7 @@ input:-webkit-autofill {
     -webkit-box-shadow: 0 3px 5px 0 rgba(0, 0, 0, 0.14), 0 3px 6px -2px rgba(0, 0, 0, 0.2), 0 3px 7px 0 rgba(0, 0, 0, 0.12);
     -moz-box-shadow: 0 3px 5px 0 rgba(0, 0, 0, 0.14), 0 3px 6px -2px rgba(0, 0, 0, 0.2), 0 3px 7px 0 rgba(0, 0, 0, 0.12);
     box-shadow: 0 3px 5px 0 rgba(0, 0, 0, 0.14), 0 3px 6px -2px rgba(0, 0, 0, 0.2), 0 3px 7px 0 rgba(0, 0, 0, 0.12);
+    background-color: white;
     display: none;
     position: absolute;
     right: 0;
@@ -4311,8 +4310,6 @@ input:-webkit-autofill {
     .nav-menu .nav-item {
       padding: 10px;
       width: 100%; }
-    .nav-menu.is-white {
-      background-color: white; }
     .nav-menu.is-black {
       background-color: rgba(0, 0, 0, 0.88); }
     .nav-menu.is-active {

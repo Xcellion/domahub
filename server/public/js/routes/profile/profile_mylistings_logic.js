@@ -425,7 +425,7 @@ function clickHandler(control, listing_info){
 	for (var x = 0; x < categories.length; x++){
 		var listing_categories = (listing_info.categories) ? listing_info.categories.split(" ") : [];
 		var selected = (listing_categories.indexOf(categories[x].back) != -1) ? " is-dark" : ""
-		var temp_category = $("<a class='button category-selector no-shadow" + selected + "'>" + categories[x].front + "</a>").data("category", categories[x].back);
+		var temp_category = $("<a class='tag category-selector has-shadow" + selected + "'>" + categories[x].front + "</a>").data("category", categories[x].back);
 		var temp_div3_input = control.find(".categories-input");
 
 		//click to add this category
@@ -515,8 +515,8 @@ function createPremiumButton(listing_info){
 //function to create submit / cancel buttons
 function createSubmitCancelButton(listing_info){
     var temp_control = $('<div class="control"></div>');
-        var temp_submit_button = $('<a tabindex="1" title="Save Changes" class="save-changes-button margin-right-10 button is-disabled is-primary no-shadow">Save Changes</a>');
-        var temp_cancel_button = $('<a tabindex="1" title="Cancel Changes" class="cancel-changes-button button is-hidden is-danger no-shadow">Cancel Changes</a>');
+        var temp_submit_button = $('<a tabindex="1" title="Save Changes" class="save-changes-button margin-right-10 button is-disabled is-small is-stylish is-primary no-shadow">Save Changes</a>');
+        var temp_cancel_button = $('<a tabindex="1" title="Cancel Changes" class="cancel-changes-button button is-hidden is-danger is-small is-stylish no-shadow">Cancel Changes</a>');
 
     temp_control.append(temp_submit_button, temp_cancel_button);
 
