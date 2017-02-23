@@ -11,9 +11,13 @@
 .drop-form-file {
   width: 100%; }
 
+.is-flex-wrap {
+  display: flex;
+  flex-wrap: wrap; }
+
 .category-selector {
-  margin-right: 8px;
-  margin-bottom: 8px; }
+  margin-right: 10px;
+  margin-bottom: 10px; }
 
 #linebreak {
   height: 100%;

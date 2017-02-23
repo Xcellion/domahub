@@ -76,6 +76,7 @@ $(document).ready(function() {
 	//remove white link if not a page that needs it
 	if (pages_white_nav.indexOf(current_page) != -1){
 		$(".nav-link").removeClass("is-white");
+		$(".nav-menu").removeClass("is-black");
 		$("#nav-logo, .circle-logo").addClass("is-primary").removeClass("is-white");
 		$(".nav-toggle").removeClass("is-white").addClass("is-black");
 		$("#profile-button, #login-modal").addClass("is-primary").removeClass("is-white");
@@ -101,22 +102,22 @@ function navbarChange(windowelem, pages_white_nav, current_page){
 	if (windowelem.scrollTop() <= 0) {
 		$(".nav").removeClass("has-shadow is-white");
 		if (pages_white_nav.indexOf(current_page) != -1){
-			// $(".nav-link").removeClass("is-white");
+			$(".nav-link").removeClass("is-white");
 			$("#nav-logo, .circle-logo").addClass("is-primary").removeClass("is-white");
 		}
 		else {
 			$("#profile-button, #login-modal").removeClass("is-primary").addClass("is-white");
 			$("#nav-logo, .circle-logo").removeClass("is-primary").addClass("is-white");
-			$("#create_listing_link").addClass("is-white");
-			// $(".nav-menu").removeClass("is-white").addClass("is-primary");
+			$(".nav-link").addClass("is-white");
+			$(".nav-menu").addClass("is-black");
 			$(".nav-toggle").removeClass("is-black").addClass("is-white");
 		}
 	}
 	//past the top
 	else if (windowelem.scrollTop() > 0 && !$(".nav").hasClass("has-shadow")){
 		$(".nav").addClass("has-shadow is-white");
-		$("#create_listing_link").removeClass("is-white");
-		// $(".nav-menu").removeClass("is-primary").addClass("is-white");
+		$(".nav-link").removeClass("is-white");
+		$(".nav-menu").removeClass("is-black");
 		$(".nav-toggle").removeClass("is-white").addClass("is-black");
 		$("#nav-logo, .circle-logo").addClass("is-primary").removeClass("is-white");
 		$("#profile-button, #login-modal").addClass("is-primary").removeClass("is-white");
