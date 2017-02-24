@@ -4436,7 +4436,7 @@ input:-webkit-autofill {
     .profile-dropdown-menu a span + span {
       margin-left: 5px; }
     .profile-dropdown-menu a:hover, .profile-dropdown-menu a:active, .profile-dropdown-menu a:focus {
-      background-color: rgba(0, 0, 0, 0.12); }
+      background-color: #efefef; }
 
 .pagination {
   align-items: center;
