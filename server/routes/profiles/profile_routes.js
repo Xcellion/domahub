@@ -6,7 +6,7 @@ var stripe_key = (node_env == "dev") ? "sk_test_PHd0TEZT5ytlF0qCNvmgAThp" : "sk_
 
 var bodyParser = require('body-parser')
 var jsonParser = bodyParser.json()
-var urlencodedParser = bodyParser.urlencoded({ extended: true })
+var urlencodedParser = bodyParser.urlencoded({ extended: false })
 
 var request = require('request');
 var validator = require('validator');
@@ -126,5 +126,14 @@ module.exports = function(app, db, auth, error, stripe){
 		auth.checkLoggedIn,
 		auth.checkAccountSettings,
 		auth.updateAccountSettings
+	]);
+
+	//post to create new stripe managed account
+	app.post("/profile/settings/payout", [
+		urlencodedParser,
+		auth.checkLoggedIn,
+		stripe.checkManagedAccountInfo,
+		stripe.createManagedAccount,
+		auth.updateAccountStripe
 	]);
 }

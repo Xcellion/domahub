@@ -79,10 +79,27 @@ $(document).ready(function() {
     });
 
     //payout address submit - show and hide for next step
-    // $("#payout-address-submit").submit(e) {
-    //   e.preventDefault();
-    //
-    // }
+    $("#payout-address-submit").on("click", function(e){
+        e.preventDefault();
+        $.ajax({
+            url: "/profile/settings/payout",
+            data: $("#payout-address").serialize(),
+            method: "POST"
+        }).done(function(data){
+            if (data.state == "success"){
+                $("#payment-message").fadeOut(100, function(){
+                    $("#payment-message").css("color", "#97cd76").text("Account information updated!").fadeIn(100);
+                });
+                user = data.user;
+            }
+            else {
+                console.log(data);
+                $("#payment-message").fadeOut(100, function(){
+                    $("#payment-message").css("color", "#ed1c24").text(data.message).fadeIn(100);
+                });
+            }
+        });
+    });
 
 });
 
