@@ -33,10 +33,11 @@
 								<ul>
 									<li><a id="history-link" href='#history' class="setting-link">History</a></li>
 									<li><a id="pending-link" href='#pending' class="setting-link">Pending</a></li>
-									<li><a id="earnings-link"href='#earnings' class="setting-link">Earnings</a></li>
+									<li><a id="earnings-link" href='#earnings' class="setting-link">Earnings</a></li>
 								</ul>
 							</li>%>
-							<li><a id="details-link" href='#details' class="setting-link">Payment Details</a></li>
+							<li><a id="details-link" href='#details' class="setting-link">Stripe Payments</a></li>
+							<li><a id="payout-link" href="#paysettings" class="setting-link">Payout Settings</a></li>
 						</ul>
 					</aside>
 				</div>
@@ -49,7 +50,7 @@
 							</p>
 						</header>
 						<div class="card-content">
-							<form id="account-settings" class="account-form margin-bottom-25">
+							<form id="account-settings" class="margin-bottom-25">
 								<div class="control is-horizontal">
 									<div class="control-label is-medium is-medium">
 										<label class="label">Email Address</label>
@@ -391,7 +392,7 @@
 							</nav>
 						</div>
 					</div>
-					<div id="history" class="card is-fullwidth margin-bottom-25 is-hidden" >
+					<div id="history" class="card is-fullwidth is-hidden" >
 						<header class="card-header">
 							<p class="card-header-title">
 								History
@@ -478,7 +479,7 @@
 							</nav>
 						</div>
 					</div>
-					<div id="pending" class="card is-fullwidth margin-bottom-25 is-hidden" >
+					<div id="pending" class="card is-fullwidth is-hidden" >
 						<header class="card-header">
 							<p class="card-header-title">
 								Pending
@@ -488,7 +489,7 @@
 							stuff
 						</div>
 					</div>
-					<div id="earnings" class="card is-fullwidth margin-bottom-25 is-hidden" >
+					<div id="earnings" class="card is-fullwidth is-hidden" >
 						<header class="card-header">
 							<p class="card-header-title">
 								Earnings
@@ -498,7 +499,7 @@
 							stuff
 						</div>
 					</div>
-					<div id="details" class="card is-fullwidth margin-bottom-25 is-hidden" >
+					<div id="details" class="card is-fullwidth is-hidden" >
 						<header class="card-header">
 							<p class="card-header-title">
 								Payment Details
@@ -508,6 +509,70 @@
 							All payments are handled through <a class='is-accent' href="https://stripe.com/about">Stripe</a>.</br></br>
 							<a id="provide-stripe-button" class='button no-shadow' href="/authorizestripe">Provide Access</a>
 							<button id="revoke-stripe-button" class='button is-danger no-shadow'>Revoke Access</button>
+						</div>
+					</div>
+					<div id="payout" class="card is-fullwidth is-hidden">
+						<header class="card-header">
+							<p class="card-header-title">
+								Payout Settings
+							</p>
+						</header>
+						<div class="card-content">
+							<form>
+								<label class="label">Country</label>
+									<div class="control">
+										<span class="select is-fullwidth">
+											<select required name="country" id="country-input">
+												<option value="AT">Austria</option>
+												<option value="AU">Australia</option>
+												<option value="BE">Belgium</option>
+												<option value="CA">Canada</option>
+												<option value="CH">Switzerland</option>
+												<option value="DE">Germany</option>
+												<option value="DK">Denmark</option>
+												<option value="ES">Spain</option>
+												<option value="FI">Finland</option>
+												<option value="FR">France</option>
+												<option value="GB">United Kingdom</option>
+												<option value="HK">Hong Kong</option>
+												<option value="IE">Ireland</option>
+												<option value="IT">Italy</option>
+												<option value="JP">Japan</option>
+												<option value="LU">Luxembourg</option>
+												<option value="NL">Netherlands</option>
+												<option value="NO">Norway</option>
+												<option value="NZ">New Zealand</option>
+												<option value="PT">Portugal</option>
+												<option value="SE">Sweden</option>
+												<option value="SG">Singapore</option>
+												<option value="US" selected>United States</option>
+											</select>
+										</span>
+									</div>
+								<label for="addressline1-input" class="label">Address Line 1</label>
+									<div class="control">
+										<input id="addressline1-input" class="input" type="text" name="addressline1" autocomplete=""/>
+									</div>
+								<label for="addressline2-input" class="label">Address Line 2</label>
+									<div class="control">
+										<input id="addressline2-input" class="input" type="text" name="addressline2" autocomplete=""/>
+									</div>
+								<label for="city-input" class="label">City</label>
+									<div class="control">
+										<input id="city-input" class="input" type="text" name="city" autocomplete=""/>
+									</div>
+								<label for="state-input" class="label">State / Province</label>
+									<div class="control">
+										<input id="state-input" class="input" type="text" name="state" autocomplete=""/>
+									</div>
+								<label for="zip-input" class="label">Zip Code / Postal Code</label>
+									<div class="control">
+										<input id="zip-input" class="input" type="text" name="zip" autocomplete=""/>
+									</div>
+								<div class="control">
+									<a tabindex="1" class="button is-stylish is-small is-primary">Next</a>
+								</div>
+							</form>
 						</div>
 					</div>
 				</div>

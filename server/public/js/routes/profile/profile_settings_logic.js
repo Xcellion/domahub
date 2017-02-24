@@ -108,7 +108,7 @@ function showSection(section_id){
     $(".setting-link").removeClass("is-active");
     $("#" + section_id + "-link").addClass("is-active");
     temp_section = $("#" + section_id);
-    $(".card, .is-fullwidth").not(temp_section).addClass("is-hidden");
+    $(".card").not(temp_section).addClass("is-hidden");
     temp_section.removeClass("is-hidden");
 }
 
