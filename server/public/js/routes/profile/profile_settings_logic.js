@@ -78,6 +78,12 @@ $(document).ready(function() {
         $(this).addClass('is-loading');
     });
 
+    //payout address submit - show and hide for next step
+    // $("#payout-address-submit").submit(e) {
+    //   e.preventDefault();
+    //
+    // }
+
 });
 
 //function to deauthorize stripe
@@ -115,7 +121,7 @@ function showSection(section_id){
 function showSectionByURL(){
     temp_hash = location.hash.split("#")[1];
     array_of_ids = [];
-    $(".card, .is-fullwidth").each(function(index) {
+    $(".card").each(function(index) {
         array_of_ids.push($(this).attr("id"));
     });
 
