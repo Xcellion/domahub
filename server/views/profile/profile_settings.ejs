@@ -20,25 +20,25 @@
 						<p class="menu-label">
 							Profile
 						</p>
-						<ul class="menu-list">
-							<li><a id="basic-link" href='#basic' class="setting-link is-active">Basic Information</a></li>
-							<li><a id="verifications-link" href='#verification' class="setting-link">Account Verifications</a></li>
-						</ul>
+							<ul class="menu-list">
+								<li><a id="basic-link" href='#basic' class="setting-link is-active">Basic Information</a></li>
+								<li><a id="verifications-link" href='#verification' class="setting-link">Account Verifications</a></li>
+							</ul>
 						<p class="menu-label">
 							Payments
 						</p>
-						<ul class="menu-list">
-							<%# <li>
-								<a id="transactions-link" href='#transactions'  class="setting-link">Transactions</a>
-								<ul>
-									<li><a id="history-link" href='#history' class="setting-link">History</a></li>
-									<li><a id="pending-link" href='#pending' class="setting-link">Pending</a></li>
-									<li><a id="earnings-link" href='#earnings' class="setting-link">Earnings</a></li>
-								</ul>
-							</li>%>
-							<li><a id="details-link" href='#details' class="setting-link">Stripe Payments</a></li>
-							<li><a id="payout-link" href="#paysettings" class="setting-link">Payout Settings</a></li>
-						</ul>
+							<ul class="menu-list">
+								<%# <li>
+									<a id="transactions-link" href='#transactions'  class="setting-link">Transactions</a>
+									<ul>
+										<li><a id="history-link" href='#history' class="setting-link">History</a></li>
+										<li><a id="pending-link" href='#pending' class="setting-link">Pending</a></li>
+										<li><a id="earnings-link" href='#earnings' class="setting-link">Earnings</a></li>
+									</ul>
+								</li>%>
+								<li><a id="details-link" href='#details' class="setting-link">Stripe Payments</a></li>
+								<li><a id="payout-link" href="#paysettings" class="setting-link">Payout Settings</a></li>
+							</ul>
 					</aside>
 				</div>
 
@@ -518,7 +518,7 @@
 							</p>
 						</header>
 						<div class="card-content">
-							<form>
+							<form id="payout-address">
 								<label class="label">Country</label>
 									<div class="control">
 										<span class="select is-fullwidth">
@@ -570,8 +570,31 @@
 										<input id="zip-input" class="input" type="text" name="zip" autocomplete=""/>
 									</div>
 								<div class="control">
-									<a tabindex="1" class="button is-stylish is-small is-primary">Next</a>
+									<button tabindex="1" id="payout-address-submit" class="button is-stylish is-small is-primary">Next</button>
 								</div>
+							</form>
+							<form id="payout-bank">
+								<label for="account-name-input" class="label">Account Holder Name</label>
+									<div class="control">
+										<input id="account-name-input" class="input" type="text" name="account name" />
+									</div>
+								<label for="account-type-input" class="label">Account Type</label>
+									<div id="account-type-input" class="control">
+										<span class="select is-fullwidth">
+											<select>
+												<option value="individual">Individual</option>
+												<option value="company">Company</option>
+											</select>
+										</span>
+									</div>
+								<label for="account-routing-input" class="label">Routing Number</label>
+									<div class="control">
+										<input id="account-routing-input" class="input" type="text" name="account name" />
+									</div>
+								<label for="account-number-input" class="label">Account Number</label>
+									<div class="control">
+										<input id="account-number-input" class="input" type="text" name="account name" />
+									</div>
 							</form>
 						</div>
 					</div>
