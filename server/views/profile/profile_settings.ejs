@@ -37,7 +37,8 @@
 									</ul>
 								</li>%>
 								<li><a id="details-link" href='#details' class="setting-link">Stripe Payments</a></li>
-								<li><a id="payout-link" href="#paysettings" class="setting-link">Payout Settings</a></li>
+								<li><a id="address-link" href="#address" class="setting-link">Payout Address</a></li>
+								<li><a id="banking-link" href="#banking" class="setting-link">Banking Information</a></li>
 							</ul>
 					</aside>
 				</div>
@@ -511,10 +512,10 @@
 							<button id="revoke-stripe-button" class='button is-danger no-shadow'>Revoke Access</button>
 						</div>
 					</div>
-					<div id="payout" class="card is-fullwidth is-hidden">
+					<div id="address" class="card is-fullwidth is-hidden">
 						<header class="card-header">
 							<p class="card-header-title">
-								Payout Settings
+								Payout Address
 							</p>
 						</header>
 						<div class="card-content">
@@ -570,9 +571,19 @@
 										<input id="zip-input" class="input" type="text" name="zip" autocomplete=""/>
 									</div>
 								<div class="control">
-									<button tabindex="1" id="payout-address-submit" class="button is-stylish is-small is-primary">Next</button>
+									<button tabindex="1" id="payout-address-submit" class="button is-stylish is-small is-primary no-shadow">Save Changes</button>
+									<button tabindex="1" id="payout-address-cancel" class="button is-stylish is-small is-danger no-shadow">Cancel</button>
 								</div>
 							</form>
+						</div>
+					</div>
+					<div id="banking" class="card is-fullwidth is-hidden">
+						<header class="card-header">
+							<p class="card-header-title">
+								Banking Information
+							</p>
+						</header>
+						<div class="card-content">
 							<form id="payout-bank">
 								<label for="account-name-input" class="label">Account Holder Name</label>
 									<div class="control">
@@ -595,6 +606,10 @@
 									<div class="control">
 										<input id="account-number-input" class="input" type="text" name="account name" />
 									</div>
+								<div class="control">
+									<button tabindex="1" id="banking-submit" class="button is-stylish is-small is-primary no-shadow">Save Changes</button>
+									<button tabindex="1" id="banking-cancel" class="button is-stylish is-small is-danger no-shadow">Cancel</button>
+								</div>
 							</form>
 						</div>
 					</div>

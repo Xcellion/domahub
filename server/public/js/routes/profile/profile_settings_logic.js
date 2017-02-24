@@ -78,11 +78,6 @@ $(document).ready(function() {
         $(this).addClass('is-loading');
     });
 
-    //payout address submit - show and hide for next step
-    // $("#payout-address-submit").submit(e) {
-    //   e.preventDefault();
-    //
-    // }
 
 });
 
