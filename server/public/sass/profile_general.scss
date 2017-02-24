@@ -24,9 +24,14 @@
 }
 
 // category buttons
+.is-flex-wrap {
+  display: flex;
+  flex-wrap: wrap;
+}
+
 .category-selector {
-  margin-right: 8px;
-  margin-bottom: 8px
+  margin-right: 10px;
+  margin-bottom: 10px;
 }
 
 // misc
