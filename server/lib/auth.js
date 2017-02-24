@@ -29,6 +29,8 @@ module.exports = {
 		// used to serialize the user for the session
 		passport.serializeUser(function(user, done) {
 			delete user.password;
+			delete user.stripe_secret;
+			delete user.stripe_public;
 			done(null, user);
 		});
 
@@ -627,13 +629,34 @@ module.exports = {
 						user: req.user
 					});
 				}
-			})
+			});
 		}
 		else {
 			error.handler(req, res, "Failed to update account settings!", "json");
 		}
 
-	}
+	},
+
+    //function to update for managed stripe
+    updateAccountStripe : function(req, res, next){
+        Account.updateAccount({
+            stripe_account : req.session.stripe_results.id,
+            stripe_secret : req.session.stripe_results.keys.secret,
+            stripe_public : req.session.stripe_results.keys.publishable
+        }, req.user.email, function(result){
+            if (result.state=="error"){
+                error.handler(req, res, result.info, "json");
+            }
+            else {
+                delete req.session.stripe_results;
+                req.user.stripe_account = req.body.stripe_account;
+                res.json({
+                    state: "success",
+                    user: req.user
+                });
+            }
+        })
+    }
 
 }
 
