@@ -222,6 +222,7 @@
   white-space: nowrap
   &:hover,
   &:active
+    background-color: $grey-lighter
     .delete
       background-color: $black-secondary
   &.is-uppercase
@@ -263,12 +264,6 @@
     font-size: $size-6
     justify-content: flex-end
     height: 24px
-
-.tag + .tag
-  // +mobile
-  //   margin-top: 10px
-  +tablet
-    margin-left: 10px
 
 .unselectable
   -webkit-touch-callout: none

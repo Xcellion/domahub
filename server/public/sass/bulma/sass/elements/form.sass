@@ -14,8 +14,8 @@ input:-webkit-autofill
   border-radius: $radius
   max-width: 100%
   width: 100%
-  &:focus
-    border-color: $black-primary
+  &:hover
+    border-color: $black-secondary
   // Sizes
   &.is-small
     +control-small
@@ -48,7 +48,6 @@ input:-webkit-autofill
   display: inline-block
   line-height: 16px
   position: relative
-  vertical-align: top
   &.is-disabled
     color: $text-disabled
     pointer-events: none
@@ -75,6 +74,7 @@ input:-webkit-autofill
     cursor: pointer
     display: block
     padding-right: 36px
+    border-color: $black-disabled
     &:hover,
     &:active
       border-color: $black-secondary

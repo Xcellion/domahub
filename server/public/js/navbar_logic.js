@@ -76,6 +76,7 @@ $(document).ready(function() {
 	//remove white link if not a page that needs it
 	if (pages_white_nav.indexOf(current_page) != -1){
 		$(".nav-link").removeClass("is-white");
+		$(".nav-menu").removeClass("is-black");
 		$("#nav-logo, .circle-logo").addClass("is-primary").removeClass("is-white");
 		$(".nav-toggle").removeClass("is-white").addClass("is-black");
 		$("#profile-button, #login-modal").addClass("is-primary").removeClass("is-white");
@@ -98,7 +99,7 @@ $(document).ready(function() {
 //function to change navbar on scroll
 function navbarChange(windowelem, pages_white_nav, current_page){
 	//before the top
-	if (windowelem.scrollTop() <= 0 && $(".nav").hasClass("has-shadow")) {
+	if (windowelem.scrollTop() <= 0) {
 		$(".nav").removeClass("has-shadow is-white");
 		if (pages_white_nav.indexOf(current_page) != -1){
 			$(".nav-link").removeClass("is-white");
@@ -108,7 +109,7 @@ function navbarChange(windowelem, pages_white_nav, current_page){
 			$("#profile-button, #login-modal").removeClass("is-primary").addClass("is-white");
 			$("#nav-logo, .circle-logo").removeClass("is-primary").addClass("is-white");
 			$(".nav-link").addClass("is-white");
-			$(".nav-menu").removeClass("is-white").addClass("is-black");
+			$(".nav-menu").addClass("is-black");
 			$(".nav-toggle").removeClass("is-black").addClass("is-white");
 		}
 	}
@@ -116,7 +117,7 @@ function navbarChange(windowelem, pages_white_nav, current_page){
 	else if (windowelem.scrollTop() > 0 && !$(".nav").hasClass("has-shadow")){
 		$(".nav").addClass("has-shadow is-white");
 		$(".nav-link").removeClass("is-white");
-		$(".nav-menu").removeClass("is-black").addClass("is-white");
+		$(".nav-menu").removeClass("is-black");
 		$(".nav-toggle").removeClass("is-white").addClass("is-black");
 		$("#nav-logo, .circle-logo").addClass("is-primary").removeClass("is-white");
 		$("#profile-button, #login-modal").addClass("is-primary").removeClass("is-white");

@@ -6,14 +6,16 @@
   justify-content: space-between;
   flex-direction: column;
   align-items: center;
-  padding: 0 !important;
   @include tablet {
     background-image: url('/images/main/index_1.jpg');
-    height: 867px;
+    min-height: 504px;
+    height: calc(100vh - 120px);
+    padding: 0 !important;
   }
   @include mobile {
     background-image: url('/images/main/index_1_mobile.jpg');
     height: 504px;
+    padding: 40px 20px 0;
   }
   background-position: center center;
   background-size: cover;
@@ -22,49 +24,128 @@
   .subtitle {
     max-width: 600px;
   }
-  .icon {
-    margin-bottom: 10px;
+}
+
+#learn_more_wrapper {
+  &:hover {
+    cursor: pointer;
+    #learn_more_text {
+      @include transition(none);
+      color: $primary !important;
+    }
+    .icon {
+      color: $primary !important;
+      .fa {
+        @include transition(none);
+      }
+    }
   }
+}
+
+#learn_more_text {
+  font-size: $size-small;
+  opacity: 0;
 }
 
 .slider-box {
-  @include box-shadows(0 3px 5px 0 rgba(0,0,0,.14),0 3px 6px -2px rgba(0,0,0,.2),0 3px 7px 0 rgba(0,0,0,.12));
-  display: block;
-}
-
-.slider-item {
-  align-items: center;
+  @include box-shadows(0 2px 10px 0 rgba(0,0,0,.14),0 2px 12px -2px rgba(0,0,0,.2),0 3px 10px 0 rgba(0,0,0,.12));
+  background-color: #fff;
+  position: relative;
+  padding: 10px 15px;
+  min-height: 169px;
   display: flex;
+  align-items: center;
   justify-content: space-between;
-  padding: 20px 10px;
-  span + span {
-    margin-left: 10px;
-  }
-  &:not(:first-child) {
-    border-top: 1px solid $border;
+  & + .slider-box {
+    margin-top: 20px;
   }
   &:hover {
-    background-color: #efefef;
+    cursor: pointer;
+    .slider-icon {
+      background-color: $primary;
+      color: $white !important;
+    }
+  }
+  @include tablet-only {
+    min-height: 181px;
+  }
+}
+
+.slider-content {
+  display: flex;
+  align-items: center;
+  h3 {
+    font-weight: 700;
+  }
+  .slider-icon {
+    border: 2px solid $primary;
+    border-radius: 100%;
+    min-height: 50px !important;
+    min-width: 50px !important;
+    line-height: 46px !important;
+    margin-right: 20px;
+    &.is-active {
+      color: $white !important;
+      background-color: $primary;
+    }
+  }
+}
+
+.slider-hidden-content {
+  display: none;
+}
+
+.card-flex-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  .card {
+    width: 200px;
+    height: 250px;
+    margin: 10px !important;
+    .card-image {
+      padding: 20px;
+    }
+  }
+}
+
+.slider-icon {
+  @include mobile-456px {
+    display: none !important;
+  }
+}
+
+.slider-arrow,
+.slider-icon {
+  &:hover {
     cursor: pointer;
   }
-  &.is-active {
-    background-color: #efefef;
+}
+
+.button-wrapper {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 25px;
+  &.is-left-aligned {
+    justify-content: flex-start;
   }
-  .slider-content {
-    display: flex;
+  .button {
+    &:not(:last-child) {
+      margin-right: 10px;
+    }
+  }
+  @include mobile-456px {
+    flex-direction: column;
+    justify-content: center;
     align-items: center;
-  }
-}
-
-.slider-item-dropdown {
-  display: none;
-  padding: 15px 45px;
-}
-
-.checklist-item {
-  display: inline-flex;
-  align-items: center;
-  span + span {
-    margin-left: 5px;
+    .button {
+      &:not(:last-child) {
+        margin-right: 0;
+        margin-bottom: 10px;
+      }
+    }
   }
 }
