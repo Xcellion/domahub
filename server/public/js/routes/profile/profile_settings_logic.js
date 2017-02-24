@@ -78,6 +78,7 @@ $(document).ready(function() {
         $(this).addClass('is-loading');
     });
 
+<<<<<<< HEAD
     //payout address submit - show and hide for next step
     $("#payout-address-submit").on("click", function(e){
         e.preventDefault();
@@ -100,6 +101,8 @@ $(document).ready(function() {
             }
         });
     });
+=======
+>>>>>>> f5380a9b12985f43fae84254f9f025dc8c184b85
 
 });
 
