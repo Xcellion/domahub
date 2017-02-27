@@ -21,7 +21,6 @@ function showSectionByURL(){
 
     if (array_of_ids.indexOf(temp_hash) == -1){
         showSection("basic");
-        window.location.hash = "#basic";
     }
     else {
         showSection(temp_hash);
@@ -47,11 +46,35 @@ $(document).ready(function() {
         showSection(temp_id);
     });
 
-    //to highlight submit when data changes
-    $(".account-form").bind("input", function(e){
-        if ($(this).find(".button.is-primary").hasClass("is-disabled")){
-            $(this).find(".button.is-primary").removeClass("is-disabled");
-            $(this).find(".button.is-danger").removeClass("is-hidden");
+    //to highlight submit when data changes for account form
+    $(".account-form .account-input").bind("input", function(e){
+        var account_form = $(this).closest(".account-form");
+        var success_button = account_form.find(".button.is-primary");
+        var cancel_button = account_form.find(".button.is-danger");
+
+        if ($(this).val() != user[$(this).attr("id").replace("-input", "")]){
+            success_button.removeClass("is-disabled");
+            cancel_button.removeClass("is-hidden");
+        }
+        else {
+            success_button.addClass("is-disabled");
+            cancel_button.addClass("is-hidden");
+        }
+    });
+
+    //to highlight submit when data changes for stripe form
+    $(".stripe-form .stripe-input").bind("input", function(e){
+        var stripe_form = $(this).closest(".stripe-form");
+        var success_button = stripe_form.find(".button.is-primary");
+        var cancel_button = stripe_form.find(".button.is-danger");
+
+        if ($(this).val() != user.stripe_info[$(this).attr("id").replace("-input", "")]){
+            success_button.removeClass("is-disabled");
+            cancel_button.removeClass("is-hidden");
+        }
+        else {
+            success_button.addClass("is-disabled");
+            cancel_button.addClass("is-hidden");
         }
     });
 
@@ -166,6 +189,7 @@ $(document).ready(function() {
     //remove hidden stripe sections if stripe account is made
     if (user.stripe_account){
         $(".hide-stripe").removeClass('is-hidden');
+        prefillStripeInfo();
     }
 
     //to cancel any changes
@@ -193,6 +217,16 @@ $(document).ready(function() {
     });
 
 });
+
+//function to pre-fill existing stripe information
+function prefillStripeInfo(){
+    for (var x in user.stripe_info){
+        if (user.stripe_info[x]){
+            $("#" + x + "-input").val(user.stripe_info[x]);
+        }
+    }
+}
+
 
 //function to deauthorize stripe
 function deauthorizeStripe(e){
