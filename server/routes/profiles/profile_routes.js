@@ -89,6 +89,7 @@ module.exports = function(app, db, auth, error, stripe){
 	//settings
 	app.get("/profile/settings", [
 		auth.checkLoggedIn,
+		stripe.getAccountInfo,
 		profile_functions.renderSettings
 	])
 
@@ -128,11 +129,21 @@ module.exports = function(app, db, auth, error, stripe){
 		auth.updateAccountSettings
 	]);
 
-	//post to create new stripe managed account
-	app.post("/profile/settings/payout", [
+	//post to create new stripe managed account or update address of old
+	app.post("/profile/settings/payout/address", [
 		urlencodedParser,
 		auth.checkLoggedIn,
-		stripe.checkManagedAccountInfo,
+		stripe.checkPayoutAddress,
+		stripe.createManagedAccount,
+		auth.updateAccountStripe
+	]);
+
+	//post to update personal info of old stripe managed account
+	app.post("/profile/settings/payout/personal", [
+		urlencodedParser,
+		auth.checkLoggedIn,
+		stripe.checkManagedAccount,
+		stripe.checkPayoutPersonal,
 		stripe.createManagedAccount,
 		auth.updateAccountStripe
 	]);
