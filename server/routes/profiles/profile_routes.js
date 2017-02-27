@@ -6,7 +6,7 @@ var stripe_key = (node_env == "dev") ? "sk_test_PHd0TEZT5ytlF0qCNvmgAThp" : "sk_
 
 var bodyParser = require('body-parser')
 var jsonParser = bodyParser.json()
-var urlencodedParser = bodyParser.urlencoded({ extended: true })
+var urlencodedParser = bodyParser.urlencoded({ extended: false })
 
 var request = require('request');
 var validator = require('validator');
@@ -89,6 +89,7 @@ module.exports = function(app, db, auth, error, stripe){
 	//settings
 	app.get("/profile/settings", [
 		auth.checkLoggedIn,
+		stripe.getAccountInfo,
 		profile_functions.renderSettings
 	])
 
@@ -126,5 +127,24 @@ module.exports = function(app, db, auth, error, stripe){
 		auth.checkLoggedIn,
 		auth.checkAccountSettings,
 		auth.updateAccountSettings
+	]);
+
+	//post to create new stripe managed account or update address of old
+	app.post("/profile/settings/payout/address", [
+		urlencodedParser,
+		auth.checkLoggedIn,
+		stripe.checkPayoutAddress,
+		stripe.createManagedAccount,
+		auth.updateAccountStripe
+	]);
+
+	//post to update personal info of old stripe managed account
+	app.post("/profile/settings/payout/personal", [
+		urlencodedParser,
+		auth.checkLoggedIn,
+		stripe.checkManagedAccount,
+		stripe.checkPayoutPersonal,
+		stripe.createManagedAccount,
+		auth.updateAccountStripe
 	]);
 }

@@ -20,24 +20,27 @@
 						<p class="menu-label">
 							Profile
 						</p>
-						<ul class="menu-list">
-							<li><a id="basic-link" href='#basic' class="setting-link is-active">Basic Information</a></li>
-							<li><a id="verifications-link" href='#verification' class="setting-link">Account Verifications</a></li>
-						</ul>
+							<ul class="menu-list">
+								<li><a id="basic-link" href='#basic' class="setting-link is-active">Basic Information</a></li>
+								<li><a id="verifications-link" href='#verification' class="setting-link">Verifications</a></li>
+							</ul>
 						<p class="menu-label">
-							Payments
+							Payment
 						</p>
-						<ul class="menu-list">
-							<%# <li>
-								<a id="transactions-link" href='#transactions'  class="setting-link">Transactions</a>
-								<ul>
-									<li><a id="history-link" href='#history' class="setting-link">History</a></li>
-									<li><a id="pending-link" href='#pending' class="setting-link">Pending</a></li>
-									<li><a id="earnings-link"href='#earnings' class="setting-link">Earnings</a></li>
-								</ul>
-							</li>%>
-							<li><a id="details-link" href='#details' class="setting-link">Payment Details</a></li>
-						</ul>
+							<ul class="menu-list">
+								<%# <li>
+									<a id="transactions-link" href='#transactions'  class="setting-link">Transactions</a>
+									<ul>
+										<li><a id="history-link" href='#history' class="setting-link">History</a></li>
+										<li><a id="pending-link" href='#pending' class="setting-link">Pending</a></li>
+										<li><a id="earnings-link" href='#earnings' class="setting-link">Earnings</a></li>
+									</ul>
+								</li>%>
+								<%# <li><a id="details-link" href='#details' class="setting-link">Stripe Payments</a></li>%>
+								<li><a id="payout-address-link" href="#payout" class="setting-link">Payout Settings</a></li>
+								<li><a id="payout-personal-link" href="#payout-personal" class="hide-stripe is-hidden setting-link">Personal Information</a></li>
+								<li><a id="payout-bank-link" href="#payout-bank" class="hide-stripe is-hidden setting-link">Bank Information</a></li>
+							</ul>
 					</aside>
 				</div>
 
@@ -49,7 +52,7 @@
 							</p>
 						</header>
 						<div class="card-content">
-							<form id="account-settings" class="account-form margin-bottom-25">
+							<form id="account-settings" class="account-form">
 								<div class="control is-horizontal">
 									<div class="control-label is-medium is-medium">
 										<label class="label">Email Address</label>
@@ -107,13 +110,362 @@
 										</div>
 									</div>
 								</div>
+								</div>
 								<div class="control is-horizontal">
 									<div class="control-label is-medium">
-										<label class="label">Birth Date</label>
+										<label class="label">Phone Number</label>
 									</div>
+									<div class="control is-grouped">
+										<p class="control">
+											<input class="input account-input" type="text" value="<%= user.phone %>">
+										</p>
+									</div>
+								</div>
+
+							-->
+								<div class="control">
+									<button id="change-account-submit" class="button is-disabled is-primary no-shadow">Save Changes</button>
+									<button id="change-account-cancel" class="button is-hidden is-danger no-shadow">Cancel Changes</button>
+								</div>
+							</form>
+						</div>
+
+					</div>
+					<div id="verifications" class="card is-fullwidth is-hidden" >
+						<header class="card-header">
+							<p class="card-header-title">
+								Account Verifications
+							</p>
+						</header>
+						<div class="card-content">
+							<form class="account-form">
+								<div class="control is-horizontal">
+									<div class="control-label is-medium">
+										<label class="label">Email Address</label>
+									</div>
+									<p class="control">
+										<span class="tag is-primary">Verified</span>
+									</p>
+								</div>
+								<div class="control is-horizontal">
+									<div class="control-label is-medium">
+										<label class="label">Bank Account</label>
+									</div>
+									<div class="control is-grouped">
+										<% if (user.type >= 2) { %>
+											<p class="control is-success">
+												<span class="tag is-primary">Connected</span>
+											</p>
+										<% } else { %>
+											<p class="control is-danger">
+												<span class="tag is-danger">Not Connected</span>
+											</p>
+										<% } %>
+									</div>
+								</div>
+								<div class="control is-horizontal">
+									<div class="control-label is-medium">
+										<label class="label">Account Standing</label>
+									</div>
+									<div class="control is-grouped">
+										<% if (user.type >= 2) { %>
+											<p class="control is-success">
+												<span class="tag is-primary">Good</span>
+											</p>
+										<% } else { %>
+											<p class="control is-danger">
+												<span class="tag is-danger">Not Good</span>
+											</p>
+										<% } %>
+									</div>
+								</div>
+							</form>
+						</div>
+					</div>
+					<%# <div id="transactions" class="card is-fullwidth is-hidden" >
+						<header class="card-header">
+							<p class="card-header-title">
+								Transactions
+							</p>
+						</header>
+						<div class="card-content">
+							<table class="table">
+								<thead>
+									<tr>
+										<th>Dates</th>
+										<th>Domain</th>
+										<th>Renter</th>
+										<th>Rate</th>
+										<th>Received</th>
+									</tr>
+								</thead>
+								<tfoot>
+									<tr>
+										<td></td>
+										<td></td>
+										<td></td>
+										<td>Total</td>
+										<td>$3075.38</td>
+									</tr>
+								</tfoot>
+								<tbody>
+									<tr>
+										<td>01/13/16 - 09/13/16</td>
+										<td>www.domainterest.com</td>
+										<td><a href="">Ted Montague</a></td>
+										<td>$25 M</td>
+										<td>$206.85</td>
+									</tr>
+									<tr>
+										<td>09/10/16 - 09/13/16</td>
+										<td>www.domains.com</td>
+										<td><a href="">Fred Kirkland</a></td>
+										<td>$1 D</td>
+										<td>$2.20</td>
+									</tr>
+									<tr>
+										<td>09/13/10 - Today</td>
+										<td>www.dominus.com</td>
+										<td><a href="">Dominic Selzer</a></td>
+										<td>$500 Y</td>
+										<td>$2866.33</td>
+									</tr>
+								</tbody>
+							</table>
+							<nav class="pagination">
+								<a class="button">Previous</a>
+								<a class="button">Next page</a>
+								<ul>
+									<li>
+										<a class="button">1</a>
+									</li>
+									<li>
+										<span>...</span>
+									</li>
+									<li>
+										<a class="button">45</a>
+									</li>
+									<li>
+										<a class="button is-primary">46</a>
+									</li>
+									<li>
+										<a class="button">47</a>
+									</li>
+									<li>
+										<span>...</span>
+									</li>
+									<li>
+										<a class="button">86</a>
+									</li>
+								</ul>
+							</nav>
+						</div>
+					</div>
+					<div id="history" class="card is-fullwidth is-hidden" >
+						<header class="card-header">
+							<p class="card-header-title">
+								History
+							</p>
+						</header>
+						<div class="card-content">
+							<table class="table">
+								<thead>
+									<tr>
+										<th>Date Initiated</th>
+										<th>Domain</th>
+										<th>Renter</th>
+										<th>Status</th>
+										<th>Contact</th>
+									</tr>
+								</thead>
+								<tfoot>
+								</tfoot>
+								<tbody>
+									<tr>
+										<td>01/13/16</td>
+										<td>www.domainterest.com</td>
+										<td><a href="">Ted Montague</a></td>
+										<td class="is-success">Paid</td>
+										<td><a class="button" href="">
+											<span class="icon">
+												<i class="fa fa-envelope-o"></i>
+											</span>
+											<span>Message</span></a>
+										</td>
+									</tr>
+									<tr>
+										<td>09/10/16</td>
+										<td>www.domains.com</td>
+										<td><a href="">Fred Kirkland</a></td>
+										<td class="is-danger">Not Paid</td>
+										<td><a class="button" href="">
+											<span class="icon">
+												<i class="fa fa-envelope-o"></i>
+											</span>
+											<span>Message</span></a>
+										</td>
+									</tr>
+									<tr>
+										<td>09/13/10</td>
+										<td>www.dominus.com</td>
+										<td><a href="">Dominic Selzer</a></td>
+										<td class="is-success">Paid</td>
+										<td><a class="button" href="">
+											<span class="icon">
+												<i class="fa fa-envelope-o"></i>
+											</span>
+											<span>Message</span></a>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+							<nav class="pagination">
+								<a class="button">Previous</a>
+								<a class="button">Next page</a>
+								<ul>
+									<li>
+										<a class="button">1</a>
+									</li>
+									<li>
+										<span>...</span>
+									</li>
+									<li>
+										<a class="button">45</a>
+									</li>
+									<li>
+										<a class="button is-primary">46</a>
+									</li>
+									<li>
+										<a class="button">47</a>
+									</li>
+									<li>
+										<span>...</span>
+									</li>
+									<li>
+										<a class="button">86</a>
+									</li>
+								</ul>
+							</nav>
+						</div>
+					</div>
+					<div id="pending" class="card is-fullwidth is-hidden" >
+						<header class="card-header">
+							<p class="card-header-title">
+								Pending
+							</p>
+						</header>
+						<div class="card-content">
+							stuff
+						</div>
+					</div>
+					<div id="earnings" class="card is-fullwidth is-hidden" >
+						<header class="card-header">
+							<p class="card-header-title">
+								Earnings
+							</p>
+						</header>
+						<div class="card-content">
+							stuff
+						</div>
+					</div>
+					<div id="details" class="card is-fullwidth is-hidden" >
+						<header class="card-header">
+							<p class="card-header-title">
+								Payment Details
+							</p>
+						</header>
+						<div class="card-content">
+							All payments are handled through <a class='is-accent' href="https://stripe.com/about">Stripe</a>.</br></br>
+							<a id="provide-stripe-button" class='button no-shadow' href="/authorizestripe">Provide Access</a>
+							<button id="revoke-stripe-button" class='button is-danger no-shadow'>Revoke Access</button>
+						</div>
+					</div>%>
+					<div id="payout-address" class="card is-fullwidth is-hidden">
+						<header class="card-header">
+							<p class="card-header-title">
+								Payout Address &nbsp<span id="payout-address-message" class="setting-message"></span>
+							</p>
+						</header>
+						<div class="card-content">
+							<form id="payout-address-form" class="payout-form account-form">
+								<label class="label">Country</label>
+									<div class="control">
+										<span class="select is-fullwidth">
+											<select required name="country" id="country-input" class="address-input">
+												<option value="AT">Austria</option>
+												<option value="AU">Australia</option>
+												<option value="BE">Belgium</option>
+												<option value="CA">Canada</option>
+												<option value="CH">Switzerland</option>
+												<option value="DE">Germany</option>
+												<option value="DK">Denmark</option>
+												<option value="ES">Spain</option>
+												<option value="FI">Finland</option>
+												<option value="FR">France</option>
+												<option value="GB">United Kingdom</option>
+												<option value="HK">Hong Kong</option>
+												<option value="IE">Ireland</option>
+												<option value="IT">Italy</option>
+												<option value="JP">Japan</option>
+												<option value="LU">Luxembourg</option>
+												<option value="NL">Netherlands</option>
+												<option value="NO">Norway</option>
+												<option value="NZ">New Zealand</option>
+												<option value="PT">Portugal</option>
+												<option value="SE">Sweden</option>
+												<option value="SG">Singapore</option>
+												<option value="US" selected>United States</option>
+											</select>
+										</span>
+									</div>
+								<label for="addressline1-input" class="label">Address Line 1</label>
+									<div class="control">
+										<input id="addressline1-input" class="input address-input" type="text" name="addressline1" autocomplete=""/>
+									</div>
+								<label for="addressline2-input" class="label">Address Line 2</label>
+									<div class="control">
+										<input id="addressline2-input" class="input address-input" type="text" name="addressline2" autocomplete=""/>
+									</div>
+								<label for="city-input" class="label">City</label>
+									<div class="control">
+										<input id="city-input" class="input address-input" type="text" name="city" autocomplete=""/>
+									</div>
+								<label for="state-input" class="label">State / Province</label>
+									<div class="control">
+										<input id="state-input" class="input address-input" type="text" name="state" autocomplete=""/>
+									</div>
+								<label for="zip-input" class="label">Zip Code / Postal Code</label>
+									<div class="control">
+										<input id="zip-input" class="input address-input" type="text" name="zip" autocomplete=""/>
+									</div>
+								<div class="control">
+									<button tabindex="1" id="payout-address-submit" class="submit-payout button is-stylish is-small is-primary no-shadow is-disabled">Save Changes</button>
+									<button tabindex="1" id="payout-address-cancel" class="button is-stylish is-small is-danger no-shadow is-hidden">Cancel Changes</button>
+									<button tabindex="1" id="payout-address-next" class="is-hidden button is-stylish is-small is-primary is-pulled-right no-shadow is-hidden">Personal Information</button>
+								</div>
+							</form>
+						</div>
+					</div>
+					<div id="payout-personal" class="is-hidden card is-fullwidth is-hidden">
+						<header class="card-header">
+							<p class="card-header-title">
+								Personal Information &nbsp<span id="payout-personal-message" class="setting-message"></span>
+							</p>
+						</header>
+						<div class="card-content">
+							<form id="payout-personal-form" class="payout-form account-form">
+								<label for="account-name-input" class="label">First Name</label>
+									<div class="control">
+										<input id="first-name-input" class="input" type="text" name="first_name" />
+									</div>
+								<label for="account-name-input" class="label">Last Name</label>
+									<div class="control">
+										<input id="last-name-input" class="input" type="text" name="last_name" />
+									</div>
+								<label class="label">Birth Date</label>
 									<div class="control">
 										<div class="select">
-											<select id="birthday-year-input" class="account-input">
+											<select id="birthday-year-input" name="birthday_year" class="account-input">
 												<option selected disabled>Year</option>
 												<option value="1998">1998</option>
 												<option value="1997">1997</option>
@@ -201,7 +553,7 @@
 											</select>
 										</div>
 										<div class="select">
-											<select id="birthday-month-input" class="account-input">
+											<select id="birthday-month-input" name="birthday_month" class="account-input">
 												<option selected disabled>Month</option>
 												<option value="1">January</option>
 												<option value="2">February</option>
@@ -218,7 +570,7 @@
 											</select>
 										</div>
 										<div class="select">
-											<select id="birthday-day-input" class="account-input">
+											<select id="birthday-day-input" name="birthday_day" class="account-input">
 												<option selected disabled>Day</option>
 												<option value="1">1</option>
 												<option value="2">2</option>
@@ -254,260 +606,61 @@
 											</select>
 										</div>
 									</div>
-								</div>
-								<div class="control is-horizontal">
-									<div class="control-label is-medium">
-										<label class="label">Phone Number</label>
-									</div>
-									<div class="control is-grouped">
-										<p class="control">
-											<input class="input account-input" type="text" value="<%= user.phone %>">
-										</p>
-									</div>
-								</div>
-
-							-->
-
-
-							</form>
-							<div class="control">
-								<button id="change-account-save" class="button is-disabled is-primary no-shadow">Save Changes</button>
-								<button id="change-account-cancel" class="button is-hidden is-danger no-shadow">Cancel Changes</button>
-							</div>
-						</div>
-
-					</div>
-					<div id="verifications" class="card is-fullwidth is-hidden" >
-						<header class="card-header">
-							<p class="card-header-title">
-								Account Verifications
-							</p>
-						</header>
-						<div class="card-content">
-							<form class="account-form">
-								<div class="control is-horizontal">
-									<div class="control-label is-medium">
-										<label class="label">Email Address</label>
-									</div>
-									<p class="control">
-										<span class="tag is-primary">Verified</span>
-									</p>
-								</div>
-								<div class="control is-horizontal">
-									<div class="control-label is-medium">
-										<label class="label">Stripe Connect</label>
-									</div>
-									<div class="control is-grouped">
-										<% if (user.type >= 2) { %>
-											<p class="control is-success">
-												<span class="tag is-primary">Verified</span>
-											</p>
-										<% } else { %>
-											<p class="control is-danger">
-												<span class="tag is-danger">Not Verified</span>
-											</p>
-										<% } %>
-									</div>
+								<div class="control">
+									<button tabindex="1" id="payout-personal-submit" class="submit-payout button is-stylish is-small is-primary no-shadow is-disabled">Save Changes</button>
+									<button tabindex="1" id="payout-personal-cancel" class="button is-stylish is-small is-danger no-shadow is-hidden">Cancel Changes</button>
 								</div>
 							</form>
 						</div>
 					</div>
-					<div id="transactions" class="card is-fullwidth is-hidden" >
+					<div id="payout-bank" class="is-hidden card is-fullwidth is-hidden">
 						<header class="card-header">
 							<p class="card-header-title">
-								Transactions
+								Bank Information &nbsp<span id="payout-bank-message" class="setting-message"></span>
 							</p>
 						</header>
 						<div class="card-content">
-							<table class="table">
-								<thead>
-									<tr>
-										<th>Dates</th>
-										<th>Domain</th>
-										<th>Renter</th>
-										<th>Rate</th>
-										<th>Received</th>
-									</tr>
-								</thead>
-								<tfoot>
-									<tr>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td>Total</td>
-										<td>$3075.38</td>
-									</tr>
-								</tfoot>
-								<tbody>
-									<tr>
-										<td>01/13/16 - 09/13/16</td>
-										<td>www.domainterest.com</td>
-										<td><a href="">Ted Montague</a></td>
-										<td>$25 M</td>
-										<td>$206.85</td>
-									</tr>
-									<tr>
-										<td>09/10/16 - 09/13/16</td>
-										<td>www.domains.com</td>
-										<td><a href="">Fred Kirkland</a></td>
-										<td>$1 D</td>
-										<td>$2.20</td>
-									</tr>
-									<tr>
-										<td>09/13/10 - Today</td>
-										<td>www.dominus.com</td>
-										<td><a href="">Dominic Selzer</a></td>
-										<td>$500 Y</td>
-										<td>$2866.33</td>
-									</tr>
-								</tbody>
-							</table>
-							<nav class="pagination">
-								<a class="button">Previous</a>
-								<a class="button">Next page</a>
-								<ul>
-									<li>
-										<a class="button">1</a>
-									</li>
-									<li>
-										<span>...</span>
-									</li>
-									<li>
-										<a class="button">45</a>
-									</li>
-									<li>
-										<a class="button is-primary">46</a>
-									</li>
-									<li>
-										<a class="button">47</a>
-									</li>
-									<li>
-										<span>...</span>
-									</li>
-									<li>
-										<a class="button">86</a>
-									</li>
-								</ul>
-							</nav>
-						</div>
-					</div>
-					<div id="history" class="card is-fullwidth margin-bottom-25 is-hidden" >
-						<header class="card-header">
-							<p class="card-header-title">
-								History
-							</p>
-						</header>
-						<div class="card-content">
-							<table class="table">
-								<thead>
-									<tr>
-										<th>Date Initiated</th>
-										<th>Domain</th>
-										<th>Renter</th>
-										<th>Status</th>
-										<th>Contact</th>
-									</tr>
-								</thead>
-								<tfoot>
-								</tfoot>
-								<tbody>
-									<tr>
-										<td>01/13/16</td>
-										<td>www.domainterest.com</td>
-										<td><a href="">Ted Montague</a></td>
-										<td class="is-success">Paid</td>
-										<td><a class="button" href="">
-											<span class="icon">
-												<i class="fa fa-envelope-o"></i>
-											</span>
-											<span>Message</span></a>
-										</td>
-									</tr>
-									<tr>
-										<td>09/10/16</td>
-										<td>www.domains.com</td>
-										<td><a href="">Fred Kirkland</a></td>
-										<td class="is-danger">Not Paid</td>
-										<td><a class="button" href="">
-											<span class="icon">
-												<i class="fa fa-envelope-o"></i>
-											</span>
-											<span>Message</span></a>
-										</td>
-									</tr>
-									<tr>
-										<td>09/13/10</td>
-										<td>www.dominus.com</td>
-										<td><a href="">Dominic Selzer</a></td>
-										<td class="is-success">Paid</td>
-										<td><a class="button" href="">
-											<span class="icon">
-												<i class="fa fa-envelope-o"></i>
-											</span>
-											<span>Message</span></a>
-										</td>
-									</tr>
-								</tbody>
-							</table>
-							<nav class="pagination">
-								<a class="button">Previous</a>
-								<a class="button">Next page</a>
-								<ul>
-									<li>
-										<a class="button">1</a>
-									</li>
-									<li>
-										<span>...</span>
-									</li>
-									<li>
-										<a class="button">45</a>
-									</li>
-									<li>
-										<a class="button is-primary">46</a>
-									</li>
-									<li>
-										<a class="button">47</a>
-									</li>
-									<li>
-										<span>...</span>
-									</li>
-									<li>
-										<a class="button">86</a>
-									</li>
-								</ul>
-							</nav>
-						</div>
-					</div>
-					<div id="pending" class="card is-fullwidth margin-bottom-25 is-hidden" >
-						<header class="card-header">
-							<p class="card-header-title">
-								Pending
-							</p>
-						</header>
-						<div class="card-content">
-							stuff
-						</div>
-					</div>
-					<div id="earnings" class="card is-fullwidth margin-bottom-25 is-hidden" >
-						<header class="card-header">
-							<p class="card-header-title">
-								Earnings
-							</p>
-						</header>
-						<div class="card-content">
-							stuff
-						</div>
-					</div>
-					<div id="details" class="card is-fullwidth margin-bottom-25 is-hidden" >
-						<header class="card-header">
-							<p class="card-header-title">
-								Payment Details
-							</p>
-						</header>
-						<div class="card-content">
-							All payments are handled through <a class='is-accent' href="https://stripe.com/about">Stripe</a>.</br></br>
-							<a id="provide-stripe-button" class='button no-shadow' href="/authorizestripe">Provide Access</a>
-							<button id="revoke-stripe-button" class='button is-danger no-shadow'>Revoke Access</button>
+							<form id="payout-bank-form" class="payout-form account-form">
+								<label for="account-holder-input" class="label">Account Holder Name</label>
+									<div class="control">
+										<input id="account-holder-input" class="input" type="text" name="account_holder_name" />
+									</div>
+								<label for="account-type-input" class="label">Account Type</label>
+									<div id="account-type-input" class="control">
+										<span class="select is-fullwidth">
+											<select name="account_type">
+												<option value="individual">Individual</option>
+												<option value="company">Company</option>
+											</select>
+										</span>
+									</div>
+								<label for="account-routing-input" class="label">Routing Number</label>
+									<div class="control">
+										<input id="account-routing-input" class="input" type="number" pattern="[0-9]*" inputmode="numeric" name="account_routing" />
+									</div>
+								<label for="account-number-input" class="label">Account Number</label>
+									<div class="control">
+										<input id="account-number-input" class="input" type="number" pattern="[0-9]*" inputmode="numeric" name="account_number" />
+									</div>
+								<label class="label">DomaHub Terms of Service</label>
+									<div class="control checkbox-form">
+										<input class="is-small" value="agree-to-terms" id="agree-to-terms-doma" type="checkbox" />
+										<label class="is-small" tabindex="1" for="agree-to-terms-doma">
+											I agree to the <a target="_blank" href="/terms" class="is-accent">DomaHub Terms & Conditions</a>.
+										</label>
+									</div>
+								<label class="label">Stripe Terms of Service</label>
+									<div id="account-type-input" class="control checkbox-form">
+										<input class="is-small" value="agree-to-terms" id="agree-to-terms-stripe" type="checkbox" />
+										<label class="is-small" tabindex="1" for="agree-to-terms-stripe">
+											I agree to the <a target="_blank" href="https://stripe.com/us/connect/legal" class="is-accent">Stripe Terms & Conditions</a>.
+										</label>
+									</div>
+								<div class="control">
+									<button tabindex="1" id="payout-banking-submit" class="submit-payout button is-stylish is-small is-primary no-shadow is-disabled">Save Changes</button>
+									<button tabindex="1" id="payout-banking-cancel" class="button is-stylish is-small is-danger no-shadow is-hidden">Cancel Changes</button>
+								</div>
+							</form>
 						</div>
 					</div>
 				</div>

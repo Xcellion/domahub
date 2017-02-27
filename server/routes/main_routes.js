@@ -27,12 +27,11 @@ module.exports = function(app, db, auth, error){
 		"/faq",
 		"/careers",
 		"/contact",
-		//"/getstarted",
 		"/privacy",
-        "/sellers",
+    "/sellers",
 		"/renters",
 		"/terms",
-        "/nothinghere"
+    "/nothinghere"
     ]
 
 	//default page
