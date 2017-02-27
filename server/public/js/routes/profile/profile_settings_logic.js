@@ -28,6 +28,13 @@ function showSectionByURL(){
 }
 
 $(document).ready(function() {
+    if (window.location.hostname == "localhost"){
+        Stripe.setPublishableKey('pk_test_kcmOEkkC3QtULG5JiRMWVODJ');
+    }
+    else {
+        Stripe.setPublishableKey('pk_live_506Yzo8MYppeCnLZkW9GEm13 ');
+    }
+
     //function to show section depending on url
     showSectionByURL();
 
@@ -155,8 +162,14 @@ $(document).ready(function() {
         showSection("payout-personal");
     });
 
-    //payout form submission
-    $(".submit-payout").on("click", function(e){
+    //stripe form submit button click
+    $("#payout-address-submit, #payout-personal-submit").on("click", function(e){
+        e.preventDefault();
+        $(this).closest(".stripe-form").submit();
+    });
+
+    //stripe form submit
+    $(".stripe-form").on("submit", function(e){
         e.preventDefault();
         var which_form = $(this).attr('id').split("-")[1];
         if (which_form == "address"){
@@ -214,6 +227,20 @@ $(document).ready(function() {
         $("#payout-banking-submit").addClass("is-disabled");
         $("#payout-banking-cancel").addClass("is-hidden");
         $("#payout-bank-form").find("input").val("").removeClass('is-danger');
+    });
+
+    $("#payout-banking-submit").on("click", function(e){
+        e.preventDefault();
+        Stripe.bankAccount.createToken({
+            country: $('#country-input').val(),
+            currency: "USD", //$('.currency').val(),
+            routing_number: $('#account-routing-input').val(),
+            account_number: $('#account-number-input').val()
+        }, function(status, response){
+            console.log(status, response);
+        });
+
+        //$(this).closest(".stripe-form").submit();
     });
 
 });
