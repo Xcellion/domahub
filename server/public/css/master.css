@@ -3499,7 +3499,7 @@ input:-webkit-autofill {
     .card {
       margin: auto; } }
   .card.no-shadow {
-    border: 1px solid rgba(0, 0, 0, 0.12);
+    border: 1px solid rgba(0, 0, 0, 0.66);
     -webkit-box-shadow: 0 0 0 0 black;
     -moz-box-shadow: 0 0 0 0 black;
     box-shadow: 0 0 0 0 black; }
@@ -4810,7 +4810,7 @@ input:-webkit-autofill {
     padding: 20px; }
   @media screen and (min-width: 769px) {
     .section.is-medium {
-      padding: 120px 20px; } }
+      padding: 130px 20px; } }
   @media screen and (max-width: 768px) {
     .section.is-medium {
       padding: 60px 20px; } }
