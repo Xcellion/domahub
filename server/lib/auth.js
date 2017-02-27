@@ -648,8 +648,8 @@ module.exports = {
                 error.handler(req, res, result.info, "json");
             }
             else {
+                req.user.stripe_account = req.session.stripe_results.id;
                 delete req.session.stripe_results;
-                req.user.stripe_account = req.body.stripe_account;
                 res.json({
                     state: "success",
                     user: req.user
