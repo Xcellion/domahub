@@ -22,6 +22,179 @@ module.exports = {
 		Listing = new listing_model(db);
 	},
 
+	//gets the stripe managed account info
+	getAccountInfo : function(req, res, next){
+		if (req.user.stripe_account){
+			console.log('F: Retrieving exiting Stripe managed account information...');
+			stripe.accounts.retrieve(req.user.stripe_account, function(err, account) {
+				if (!err){
+					req.user.stripe_info = {
+						country : account.legal_entity.address.country,
+						addressline1 : account.legal_entity.address.line1,
+						addressline2 : account.legal_entity.address.line2,
+						city : account.legal_entity.address.city,
+						state : account.legal_entity.address.state,
+						zip : account.legal_entity.address.postal_code,
+						birthday_year : account.legal_entity.dob.year,
+						birthday_month : account.legal_entity.dob.month,
+						birthday_day : account.legal_entity.dob.day,
+						first_name : account.legal_entity.first_name,
+						last_name : account.legal_entity.last_name
+					}
+					if (account.external_accounts.total_count > 0){
+						req.user.stripe_info.account_holder_name = account.external_accounts.data[0].account_holder_name;
+						req.user.stripe_info.account_number = account.external_accounts.data[0].last4;
+						req.user.stripe_info.account_routing = account.external_accounts.data[0].routing_number;
+						req.user.stripe_info.account_type = account.external_accounts.data[0].account_holder_type;
+					}
+					next();
+				}
+			});
+		}
+		else {
+			next();
+		}
+	},
+
+	checkManagedAccount : function(req, res, next){
+		if (!req.user.stripe_account){
+			error.handler(req, res, "Please first enter your payout address!", "json");
+		}
+		else {
+			next();
+		}
+	},
+
+	//function to check posted info
+	checkPayoutAddress : function(req, res, next){
+		console.log('F: Checking posted Stripe managed account address information...');
+		var country_codes = [
+			"AU",		//Australia
+			"US",		//United States
+			"CA",		//Canada
+			"AT",		//Austria
+			"DK",		//Denmark
+			"BE",		//Belgium
+			"FI",		//Finland
+			"DE",		//Germany
+			"FR",		//France
+			"HK",		//Hong Kong
+			"IE",		//Ireland
+			"IT",		//Italy
+			"JP",		//Japan
+			"LU",		//Luxembourg
+			"NO",		//Norway
+			"NL",		//Netherlands
+			"SG",		//Singapore
+			"NZ",		//New Zealand
+			"ES",		//Spain
+			"PT",		//Portugal
+			"SE",		//Sweden
+			"CH",		//Switzerland
+			"GB",		//United Kingdom
+			"BR",		//Brazil
+			"MX"		//Mexico
+		];
+
+		if (country_codes.indexOf(req.body.country) == -1){
+			error.handler(req, res, "Invalid country!", "json");
+		}
+		else if (!req.body.addressline1){
+			error.handler(req, res, "Invalid address!", "json");
+		}
+		else if (!req.body.city){
+			error.handler(req, res, "Invalid city!", "json");
+		}
+		else if (!req.body.state && req.body.country == "US"){
+			error.handler(req, res, "Invalid state!", "json");
+		}
+		else if (!req.body.zip){
+			error.handler(req, res, "Invalid postal code!", "json");
+		}
+		else {
+			next();
+		}
+	},
+
+	//function to check posted info
+	checkPayoutPersonal : function(req, res, next){
+		console.log('F: Checking posted Stripe managed account personal information...');
+
+		if (!req.body.first_name){
+			error.handler(req, res, "Invalid first name!", "json");
+		}
+		else if (!req.body.last_name){
+			error.handler(req, res, "Invalid last name!", "json");
+		}
+		else if (!req.body.birthday_year){
+			error.handler(req, res, "Invalid birthday year!", "json");
+		}
+		else if ([1,2,3,4,5,6,7,8,9,10,11,12].indexOf(req.body.birthday_month) == -1){
+			error.handler(req, res, "Invalid birthday month!", "json");
+		}
+		else if ([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31].indexOf(req.body.birthday_month) == -1){
+			error.handler(req, res, "Invalid birthday date!", "json");
+		}
+		else {
+			next();
+		}
+	},
+
+	//function to create a new managed account with stripe
+	createManagedAccount : function(req, res, next){
+		if (req.user.stripe_account){
+			console.log('F: Updating existing Stripe managed account...');
+			stripe.accounts.update(req.user.stripe_account, {
+				legal_entity: {
+					"address": {
+						"city": req.body.city,
+						"country": req.body.country,
+						"line1": req.body.addressline1,
+						"line2": req.body.addressline2,
+						"postal_code": req.body.zip,
+						"state": req.body.state
+					}
+				}
+			}, function(err, result){
+				if (result){
+					console.log(result);
+					req.session.stripe_results = result;
+					next();
+				}
+				else {
+					console.log(err);
+					error.handler(req, res, "Failed to update your account!", "json");
+				}
+			});
+		}
+		else {
+			console.log('F: Creating a new Stripe managed account...');
+			stripe.accounts.create({
+				country: req.body.country,
+				email: req.user.email,
+				legal_entity: {
+					"address": {
+						"city": req.body.city,
+						"country": req.body.country,
+						"line1": req.body.addressline1,
+						"line2": req.body.addressline2,
+						"postal_code": req.body.zip,
+						"state": req.body.state
+					},
+				},
+				managed: true
+			}, function(err, result){
+				if (result){
+					req.session.stripe_results = result;
+					next();
+				}
+				else {
+					error.handler(req, res, err.message, "json");
+				}
+			});
+		}
+	},
+
 	//check that the stripe customer is legit and has a good payment card
 	createStripeCustomer : function(req, res, next){
 		if (req.user.stripe_customer_id){
