@@ -21,43 +21,46 @@
 	<div id="signup-form" class="account-form">
 		<form id="target" method="post" autocomplete="off">
 			<label class="label">Email</label>
-				<p class="control has-icon has-icon-right">
+				<div class="control has-icon has-icon-right">
 					<input required class="input is-medium" autofocus name="email" type="email" id="email-input" spellcheck="false" value="" />
 					<i class="fa fa-check is-hidden is-success"></i>
 					<i class="fa fa-warning is-hidden is-danger"></i>
-				</p>
+				</div>
 			<label class="label">Username</label>
-				<p class="control has-icon has-icon-right">
+				<div class="control has-icon has-icon-right">
 					<input required class="input is-medium" name="username" type="text" id="username-input" spellcheck="false" value="" />
 					<i class="fa fa-check is-hidden is-success"></i>
 					<i class="fa fa-warning is-hidden is-danger"></i>
-				</p>
+				</div>
 			<label class="label">Password (at least 6 characters)</label>
-				<p class="control has-icon has-icon-right">
+				<div class="control has-icon has-icon-right">
 					<input required class="input is-medium" name="password" type="password" id="pw-input" autocomplete="new-password" value="" />
 					<i class="fa fa-check is-hidden is-success"></i>
 					<i class="fa fa-warning is-hidden is-danger"></i>
-				</p>
+				</div>
 			<label class="label">Confirm Password</label>
-				<p class="control has-icon has-icon-right">
+				<div class="control has-icon has-icon-right">
 					<input required class="input is-medium" name="verify-pw" type="password" id="verify-pw" value="" />
 					<i class="fa fa-check is-hidden is-success"></i>
 					<i class="fa fa-warning is-hidden is-danger"></i>
-				</p>
+				</div>
 			<div class="g-recaptcha" data-sitekey="6LdwpykTAAAAAEaTl3u4-xDCSqH7-Aj-YDImCQXI"></div>
-			<p class="control">
-				<button id="signup-login-button" class="login-button button is-primary is-stylish is-fullwidth">
+			<div class="control">
+				<button id="signup-login-button" class="login-button button is-primary is-stylish is-fullwidth margin-bottom-10">
 					Create Account
 				</button>
-			</p>
-			<p class="control has-text-centered">
+				<small>By signing up, you agree to our
+					<a class="is-accent">Terms of Service</a> and
+					<a class="is-accent">Privacy Policy</a>.</small>
+			</div>
+			<div class="control has-text-right">
 				<p>
 					Already have an account?
 				</p>
 				<p>
 					<a class="is-accent" href="/login">Sign In Now</a>
 				</p>
-			</p>
+			</div>
 		</form>
 	</div>
 
