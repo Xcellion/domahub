@@ -129,8 +129,8 @@ module.exports = {
 	checkPayoutBank : function(req, res, next){
 		console.log('F: Checking posted Stripe managed account bank information...');
 
-		if (!req.body.first_name || !validator.isAlpha(req.body.first_name)){
-			error.handler(req, res, "Invalid first name!", "json");
+		if (!req.body.stripe_token){
+			error.handler(req, res, "Invalid bank information!", "json");
 		}
 		else {
 			next();
@@ -225,19 +225,19 @@ module.exports = {
 	//function to update managed account bank info
 	updateStripeBank : function(req, res, next){
 		console.log('F: Updating existing Stripe managed account bank information...');
+
 		stripe.accounts.update(req.user.stripe_account, {
+			external_account: req.body.stripe_token,
 			legal_entity: {
-				"first_name": req.body.first_name,
-				"last_name": req.body.last_name,
-				"dob" : {
-					"day" : req.body.birthday_day,
-					"month" : req.body.birthday_month,
-					"year" : req.body.birthday_year
-				}
+				"type" : req.body.account_type
+			},
+			"tos_acceptance" : {
+				date: Math.floor(Date.now() / 1000),
+				ip: req.connection.remoteAddress
 			}
 		}, function(err, result){
 			if (result){
-				updateUserStripeInfo(req.user, result);
+				console.log(result);
 				res.json({
                     state: "success",
                     user: req.user
@@ -543,13 +543,14 @@ function updateUserStripeInfo(user, stripe_results){
 		birthday_month : stripe_results.legal_entity.dob.month || "",
 		birthday_day : stripe_results.legal_entity.dob.day || "",
 		first_name : stripe_results.legal_entity.first_name || "",
-		last_name : stripe_results.legal_entity.last_name || ""
+		last_name : stripe_results.legal_entity.last_name || "",
+		account_type : stripe_results.legal_entity.type || "",
+		transfers_enabled : stripe_results.transfers_enabled
 	}
 	if (stripe_results.external_accounts.total_count > 0){
 		user.stripe_info.account_holder_name = stripe_results.external_accounts.data[0].account_holder_name || "";
 		user.stripe_info.account_number = stripe_results.external_accounts.data[0].last4 || "";
 		user.stripe_info.account_routing = stripe_results.external_accounts.data[0].routing_number || "";
-		user.stripe_info.account_type = stripe_results.external_accounts.data[0].account_holder_type || "";
 	}
 }
 
