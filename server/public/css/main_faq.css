@@ -1,13 +1,3 @@
-.qa-wrapper + .qa-wrapper {
-  margin-top: 25px; }
-
-.qa-wrapper p,
-.qa-wrapper a {
-  line-height: 1.4; }
-
-.qa-wrapper p + p {
-  margin-top: 10px; }
-
 .faq-section {
   padding-top: 70px; }
 
