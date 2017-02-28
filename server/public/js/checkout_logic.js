@@ -4,7 +4,12 @@ $(document).ready(function() {
 	//---------------------------------------------------------------------------------------------------stripe
 
 	//key for stripe
-	Stripe.setPublishableKey('pk_test_kcmOEkkC3QtULG5JiRMWVODJ');
+	if (window.location.hostname == "localhost"){
+        Stripe.setPublishableKey('pk_test_kcmOEkkC3QtULG5JiRMWVODJ');
+    }
+    else {
+        Stripe.setPublishableKey('pk_live_506Yzo8MYppeCnLZkW9GEm13 ');
+    }
 
 	//format all stripe inputs
 	$('#cc-num').payment('formatCardNumber');

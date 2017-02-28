@@ -144,7 +144,25 @@ module.exports = function(app, db, auth, error, stripe){
 		auth.checkLoggedIn,
 		stripe.checkManagedAccount,
 		stripe.checkPayoutPersonal,
-		stripe.createManagedAccount,
+		stripe.updateStripePersonal,
 		auth.updateAccountStripe
+	]);
+
+	//post to update personal info of existing stripe managed account
+	app.post("/profile/settings/payout/personal", [
+		urlencodedParser,
+		auth.checkLoggedIn,
+		stripe.checkManagedAccount,
+		stripe.checkPayoutPersonal,
+		stripe.updateStripePersonal
+	]);
+
+	//post to update bank info of existing stripe managed account
+	app.post("/profile/settings/payout/bank", [
+		urlencodedParser,
+		auth.checkLoggedIn,
+		stripe.checkManagedAccount,
+		stripe.checkPayoutBank,
+		stripe.updateStripeBank
 	]);
 }
