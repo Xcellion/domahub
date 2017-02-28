@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>FAQ - DomaHub</title>
+  <link rel="stylesheet" type="text/css" href="/css/min/main_faq.min.css" />
+  <%- include("../templates/head_links"); %>
+</head>
+
+<body>
+
+  <%- include("../templates/navbar", {user: user}); %>
+  <section class="section is-medium">
+    <div class="container">
+      <div class="columns">
+        <div class="column is-8">
+          <h1 class="title is-bold is-3">Frequently Asked Questions</h1>
+          <div id="about" class="faq-section">
+            <h2 class="faq-header">About DomaHub</h2>
+            <div class="content">
+              <h3 class="faq-question" title="What exactly does DomaHub do?">
+                What exactly does DomaHub do?</h3>
+              <p>
+                DomaHub is a marketplace that allows domain name
+                owners to rent out their domains. Our foremost goal is to
+                make all domains - especially those that are unused - more
+                accessible to everyone.
+              </p>
+            </div>
+            <div class="content">
+              <h3 class="faq-question" title="How does DomaHub make money?">
+                How does DomaHub make money?</h3>
+              <p>
+                DomaHub takes a percentage based commission from every successful rental.
+              </p>
+            </div>
+          </div>
+          <div id="renting" class="faq-section">
+            <h2 class="faq-header">Renting with DomaHub</h2>
+            <div class="content">
+              <h3 class="faq-question" title="How long can I keep the domain?">
+                Who owns the domain?</h3>
+              <p>
+                The domain never leaves the ownership of its original owner.
+              </p>
+            </div>
+            <div class="content">
+              <h3 class="faq-question" title="How can I use the domain?">
+                Then how do I use the domain?</h3>
+              <p>
+                Through DNS and proxying, we can point the domain name to whatever content you wish to display.
+                All you have to do is provide a URL and it will be redirected to the domain rental.
+              </p>
+            </div>
+            <div class="content">
+              <h3 class="faq-question" title="How long can I keep the domain?">
+                How long can I keep the domain?</h3>
+              <p>
+                You may only use the domain for the amount of time you paid for.
+                Any content being redirected to that domain will immediately stop once your time is up.
+              </p>
+            </div>
+            <div class="content">
+              <h3 class="faq-question" title="How can I rent a domain?">
+                How much is a domain?</h3>
+              <p>
+                Every domain has different rates depending on its value. Please check each listing for the specific rates.
+              </p>
+            </div>
+            <div class="content">
+              <h3 class="faq-question" title="What if I need it for longer than I originally planned?">
+                What if I need it for longer than I originally planned?</h3>
+                <p>
+                    All rentals are final once paid for. Please make sure to select the correct times before paying!
+                </p>
+                <p>
+                    Once your rental expires, if the domain has already been rented for the subsequent time slots,
+                    you may not steal those times away from others just because you currently have the domain rented.
+                </p>
+            </div>
+            <div class="content">
+              <h3 class="faq-question" title="Can the domain owner sell the domain while I am renting it?">
+                Can the domain owner sell the domain while I am renting it?</h3>
+              <p>
+                Domain rentals through DomaHub are legally binded by contract
+                and may not - under any circumstances - be sold while a user
+                has rented it.
+              </p>
+            </div>
+            <div class="content">
+              <h3 class="faq-question" title="Do I have an option to buy-out the domain?">
+                Do I have an option to buy-out the domain?</h3>
+              <p>
+                Buy-out options are currently not available through DomaHub.
+              </p>
+            </div>
+            <!-- <div class="content">
+              <h3 class="faq-question" title="Do I have an option to buy-out the domain?">
+                How do I get rid of the DomaHub pop-up on my rental?</h3>
+              <p>
+                Currently, there is no way to get rid of the pop-up. We are exploring the possibility of
+                a premium rental system that will be pop-up-less.
+              </p>
+            </div> -->
+          </div>
+          <div id="selling" class="faq-section">
+            <h2 class="faq-header">Selling on DomaHub</h2>
+            <div class="content">
+              <h3 class="faq-question" title="How do I start listing domains?">
+                How do I start listing domains?</h3>
+              <p>
+                Once you have created a DomaHub account you may create a listing by going to the
+                <a tabindex="1" class="is-accent" href="/listings/create" title="Create Listing Page">create listing</a> page.
+                You must verify every domain name you list with us by pointing your DNS A records to our servers.
+              </p>
+              <p>
+                  You will not be allowed to collect payments however until you have connected your <a tabindex="1" class="is-accent" href="/authorizestripe" title="Authorize Stripe Page">
+                  Stripe</a> account.
+              </p>
+            </div>
+            <div id='verifying' class="content">
+              <h3 class="faq-question" title="How do I verify my domain?">
+                How do I verify my domain?</h3>
+              <p>
+                You must point your DNS A records to our servers. For more information on how to do this, please check with your domain registrar.
+              </p>
+
+              <p>
+                  Registrars:
+              </p>
+              <ul class="padding-left-20 has-disc">
+                <li><a class="is-accent" href="https://www.godaddy.com/help/change-an-a-record-19239" title="GoDaddy Website">GoDaddy</a></li>
+                <li><a class="is-accent"
+                  href="https://www.namecheap.com/support/knowledgebase/article.aspx/319/78/how-can-i-setup-an-a-address-record-for-my-domain"
+                  title="NameCheap Website">NameCheap</a></li>
+                <li><a class="is-accent" href="https://www.name.com/support/articles/205188538-Pointing-your-domain-to-hosting-with-A-records"
+                   title="Name Website">Name.com</a></li>
+                <li><a class="is-accent" href="http://www.ipage.com/knowledgebase/beta/article.bml?ArticleID=1919"
+                   title="iPage Website">iPage</a></li>
+                <li><a class="is-accent" href="http://www.networksolutions.com/support/a-records-ip-addresses-2/"
+                   title="Network Solutions Website">Network Solutions</a></li>
+                <li><a class="is-accent" href="https://my.bluehost.com/cgi/help/559"
+                   title="Bluehost Website">Bluehost</a></li>
+                <li><a class="is-accent" href="https://help.hover.com/hc/en-us/articles/217282477-How-to-Change-your-domain-name-servers-DNS-servers-Updated-Aug-2015-"
+                   title="Hover Website">Hover</a></li>
+                <li><a class="is-accent" href="http://bfy.tw/8YZW" title="Click here if you are not sure">I don't know</a></li>
+              </ul>
+            </div>
+
+            <div class="content">
+              <h3 class="faq-question" title="Why do I have to verify my domain?">
+                Why do I have to verify my domain?</h3>
+              <p>
+                By pointing your domain name to our servers, we can verify that you are indeed the owner of the domain
+                and that you are agreeing to our terms and services by listing it on DomaHub.
+              </p>
+            </div>
+            <div class="content">
+              <h3 class="faq-question" title="What are the differences between Basic and Premium listings?">
+                What are the commission fees?</h3>
+              <p>
+                DomaHub takes a percentage based commission from each successful rental.
+                Each listing falls under one of three levels with varying commission rates
+                for each listing. Commission rates are based on the "Rental Rate" of the
+                listing - the number of successful rentals divided by the number of total
+                available rentals from the date it was created. In addition to this fee,
+                the seller must also pay a processing fee for every successful transaction
+                (2.9% + $0.30) which we pay directly to our payments processor.
+              </p>
+              <p>
+                For example, if <a class="is-accent">example.com</a> has been available for
+                60 days and has been rented out for 31 days, it has achieved Level 3.
+                DomaHub will only take 18% commission from those rentals from that point onwards.
+                Logically, all listings start at Level 1.
+              </p>
+              <table class="table has-shadow margin-top-25">
+                <thead>
+                  <th>Level</th>
+                  <th>Rental Rate</th>
+                  <th>Commission*</th>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>1</td>
+                    <td>0 - 25%</td>
+                    <td>18%</td>
+                  </tr>
+                  <tr>
+                    <td>2</td>
+                    <td>25 - 50%</td>
+                    <td>16.5%</td>
+                  </tr>
+                  <tr>
+                    <td>3</td>
+                    <td>50% +</td>
+                    <td>15%</td>
+                  </tr>
+                </tbody>
+              </table>
+              <small class="is-block">* All transactions have a processing fee regardless of level.
+                The fee is 2.9% + $0.30 paid by the owner.</small>
+            </div>
+            <div class="content">
+              <h3 class="faq-question" title="Do the listing levels get reset at any point?">
+                Do the listing levels get reset at any point?
+                </h3>
+              <p>
+                Yes, all listings' levels get reset at the end of the calendar year.
+              </p>
+            </div>
+            <div class="content">
+              <h3 class="faq-question" title="What happens if I find a buyer for my domain?">
+                What happens if I find a buyer for my domain?</h3>
+              <p>
+                You may not sell your domain while it is being rented by a DomaHub
+                user. However, if your domain is listed but not currently being rented,
+                you may cancel the listing and sell it as you please.
+              </p>
+            </div>
+            <div class="content">
+              <h3 class="faq-question" title="Can I cancel my listing while it's being rented?">
+                Can I cancel my listing while it's being rented?</h3>
+              <p>
+                No, you cannot immediately cancel any listing that is currently rented by a DomaHub user.
+                However, you may cancel your listing for all dates following the current renters'
+                schedule; effectively removing all future availability.
+              </p>
+            </div>
+            <div class="content">
+              <h3 class="faq-question" title="How can I cancel a listing?">
+                How can I cancel a listing?</h3>
+              <p>
+                Simply go to your <a tabindex="1" class="is-accent" href="/profile/mylistings" title="My Listings Page">My Listings</a>
+                 page and select your listing. In the dropdown options menu, select "Inactive"
+                to cancel your listing.
+              </p>
+            </div>
+            <div class="content">
+              <h3 class="faq-question" title="How do I get paid?">
+                How do I get paid?</h3>
+              <p>
+                Once a transaction has occurred, DomaHub will directly deposit the money
+                into your linked bank account after a few business days.
+              </p>
+            </div>
+          </div>
+          <div id="payments" class="faq-section">
+            <h2 class="faq-header">Payments</h2>
+            <div class="content">
+              <h3 class="faq-question" title="How do I pay for rentals?">
+                How do I pay for rentals?</h3>
+              <p>
+                Simply enter a credit or debit card during checkout and DomaHub will process the
+                transaction automatically.
+              </p>
+            </div>
+            <div class="content">
+              <h3 class="faq-question" title="What about recurring payments?">
+                What about recurring payments?</h3>
+              <p>
+                Currently, there is no system in place to set up recurring rentals.
+                The rental period must be selected in full prior to purchase.
+              </p>
+            </div>
+            <div class="content">
+              <h3 class="faq-question" title="Can I get a refund?">
+                Can I get a refund?</h3>
+              <p>
+                All domain rentals are final and non-refundable. However, if you encounter any technical
+                issues where your content is not being displayed, please contact us at
+                <a tabindex="1" class='is-accent' href="mailto:support@domahub.com" title="Email us at support@domahub.com">support@domahub.com</a>.
+              </p>
+            </div>
+            <div class="content">
+              <h3 class="faq-question" title="Are there any fees?">
+                Are there any renting fees?</h3>
+              <p>
+                The renter does not pay any additional fees outside of the domain's listed price.
+              </p>
+            </div>
+          </div>
+          <div class="faq-section padding-bottom-50 margin-top-50">
+            <p>
+              Still have questions? Feel free to <a tabindex="1" href="/contact" class="is-accent" title="Contact Us">Contact Us</a>.
+            </p>
+          </div>
+        </div>
+        <div class="column is-4 is-hidden-mobile">
+          <aside class="menu is-fixed">
+        <%# <ul class="menu-list">
+              <p class="control has-icon">
+              <input id="search-faq" tabindex="1" class="input" type="text" placeholder="Search FAQ" />
+              <i class="fa fa-search"></i>
+              </p>
+            </ul>%>
+            <p class="menu-label">
+              Categories
+            </p>
+            <ul class="menu-list">
+              <li><a id="about-menu" class="menu-link is-active" tabindex="1" href="#about">About DomaHub</a></li>
+              <li><a id="renting-menu" class="menu-link" href="#renting" tabindex="1">Renting with DomaHub</a></li>
+              <li><a id="selling-menu" class="menu-link" href="#selling" tabindex="1">Selling on DomaHub</a></li>
+              <li><a id="payments-menu" class="menu-link" href="#payments" tabindex="1">Payments</a></li>
+            </ul>
+          </aside>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <%- include("../templates/footer"); %>
+  <%- include("../templates/js_scripts"); %>
+  <script type="text/javascript" src="/js/routes/main/main_faq_logic.js"></script>
+</body>
+
+</html>
