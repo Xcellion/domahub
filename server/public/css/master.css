@@ -1571,6 +1571,10 @@ button {
 
 .content ul {
   list-style: none; }
+  .content ul.has-disc {
+    list-style-type: disc; }
+    .content ul.has-disc li {
+      margin: 10px 0; }
   .content ul ul {
     list-style-type: circle;
     margin-top: 0.5em; }
@@ -4392,6 +4396,10 @@ input:-webkit-autofill {
       padding-left: 20px; } }
 
 #profile-button {
+  -moz-transition: none;
+  -o-transition: none;
+  -webkit-transition: none;
+  transition: none;
   width: 110px; }
   #profile-button.is-active {
     border-radius: 3px 3px 0px 0px; }
@@ -4813,7 +4821,7 @@ input:-webkit-autofill {
       padding: 130px 20px; } }
   @media screen and (max-width: 768px) {
     .section.is-medium {
-      padding: 60px 20px; } }
+      padding: 80px 20px; } }
   .section.is-medium-top {
     padding: 120px 20px 0; }
   @media screen and (min-width: 980px) {
@@ -4824,7 +4832,7 @@ input:-webkit-autofill {
       padding: 150px 20px; } }
   @media screen and (max-width: 768px) {
     .section.is-large {
-      padding: 60px 20px; } }
+      padding: 80px 20px; } }
 
 .footer {
   background-color: #1b2835;

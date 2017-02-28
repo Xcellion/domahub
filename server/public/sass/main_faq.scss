@@ -1,19 +1,6 @@
 @import 'vars';
 @import 'mixins';
 
-.qa-wrapper {
-  & + .qa-wrapper {
-    margin-top: 25px;
-  }
-  p,
-  a {
-    line-height: 1.4;
-  }
-  p + p {
-    margin-top: 10px;
-  }
-}
-
 .faq-section {
   padding-top: 70px;
 }
