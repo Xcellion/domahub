@@ -80,7 +80,8 @@
       background-color: #3cbc8d; }
 
 .slider-hidden-content {
-  display: none; }
+  display: none;
+  margin-right: 25px; }
 
 .card-flex-wrap {
   display: flex;

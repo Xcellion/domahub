@@ -31,7 +31,7 @@
       <a id="signup" tabindex="1" class="nav-link is-white" title="Sign Up" href="/signup">Sign Up</a>
     </div> %>
     <div class="nav-item">
-      <a id="login-modal" tabindex="1" class="button is-white modal-button" title="Log In" data-object="#modal-login">Log In</a>
+      <a id="login-modal" tabindex="1" class="button is-white is-stylish is-small modal-button" title="Log In" data-object="#modal-login">Log In</a>
     </div>
     <div id="modal-login" class="modal">
       <div class="modal-background"></div>
@@ -92,7 +92,7 @@
       <a class="nav-link is-white" tabindex="1" title="Create Listing" href="/listings/create">Create Listings</a>
     </div>
     <div class="nav-item">
-      <a id="profile-button" tabindex="1" class="button is-white is-outlined" title="Profile">
+      <a id="profile-button" tabindex="1" class="button is-white is-stylish is-small" title="Profile">
         <span><%= (user.username.length > 6) ? user.username.slice(0,6) + "..." : user.username %></span>
         <span class="icon">
           <i class="fa fa-angle-down"></i>
