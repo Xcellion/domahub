@@ -21,7 +21,6 @@ function showSectionByURL(){
 
     if (array_of_ids.indexOf(temp_hash) == -1){
         showSection("basic");
-        window.location.hash = "#basic";
     }
     else {
         showSection(temp_hash);
@@ -29,6 +28,13 @@ function showSectionByURL(){
 }
 
 $(document).ready(function() {
+    if (window.location.hostname == "localhost"){
+        Stripe.setPublishableKey('pk_test_kcmOEkkC3QtULG5JiRMWVODJ');
+    }
+    else {
+        Stripe.setPublishableKey('pk_live_506Yzo8MYppeCnLZkW9GEm13 ');
+    }
+
     //function to show section depending on url
     showSectionByURL();
 
@@ -47,11 +53,35 @@ $(document).ready(function() {
         showSection(temp_id);
     });
 
-    //to highlight submit when data changes
-    $(".account-form").bind("input", function(e){
-        if ($(this).find(".button.is-primary").hasClass("is-disabled")){
-            $(this).find(".button.is-primary").removeClass("is-disabled");
-            $(this).find(".button.is-danger").removeClass("is-hidden");
+    //to highlight submit when data changes for account form
+    $(".account-form .account-input").bind("input", function(e){
+        var account_form = $(this).closest(".account-form");
+        var success_button = account_form.find(".button.is-primary");
+        var cancel_button = account_form.find(".button.is-danger");
+
+        if ($(this).val() != user[$(this).attr("id").replace("-input", "")]){
+            success_button.removeClass("is-disabled");
+            cancel_button.removeClass("is-hidden");
+        }
+        else {
+            success_button.addClass("is-disabled");
+            cancel_button.addClass("is-hidden");
+        }
+    });
+
+    //to highlight submit when data changes for stripe form
+    $(".stripe-form .stripe-input").bind("input", function(e){
+        var stripe_form = $(this).closest(".stripe-form");
+        var success_button = stripe_form.find(".button.is-primary");
+        var cancel_button = stripe_form.find(".button.is-danger");
+
+        if ($(this).val() != user.stripe_info[$(this).attr("id").replace("-input", "")]){
+            success_button.removeClass("is-disabled");
+            cancel_button.removeClass("is-hidden");
+        }
+        else {
+            success_button.addClass("is-disabled");
+            cancel_button.addClass("is-hidden");
         }
     });
 
@@ -132,8 +162,14 @@ $(document).ready(function() {
         showSection("payout-personal");
     });
 
-    //payout form submission
-    $(".submit-payout").on("click", function(e){
+    //stripe form submit button click
+    $("#payout-address-submit, #payout-personal-submit").on("click", function(e){
+        e.preventDefault();
+        $(this).closest(".stripe-form").submit();
+    });
+
+    //stripe form submit
+    $(".stripe-form").on("submit", function(e){
         e.preventDefault();
         var which_form = $(this).attr('id').split("-")[1];
         if (which_form == "address"){
@@ -166,6 +202,7 @@ $(document).ready(function() {
     //remove hidden stripe sections if stripe account is made
     if (user.stripe_account){
         $(".hide-stripe").removeClass('is-hidden');
+        prefillStripeInfo();
     }
 
     //to cancel any changes
@@ -192,7 +229,31 @@ $(document).ready(function() {
         $("#payout-bank-form").find("input").val("").removeClass('is-danger');
     });
 
+    $("#payout-banking-submit").on("click", function(e){
+        e.preventDefault();
+        Stripe.bankAccount.createToken({
+            country: $('#country-input').val(),
+            currency: "USD", //$('.currency').val(),
+            routing_number: $('#account-routing-input').val(),
+            account_number: $('#account-number-input').val()
+        }, function(status, response){
+            console.log(status, response);
+        });
+
+        //$(this).closest(".stripe-form").submit();
+    });
+
 });
+
+//function to pre-fill existing stripe information
+function prefillStripeInfo(){
+    for (var x in user.stripe_info){
+        if (user.stripe_info[x]){
+            $("#" + x + "-input").val(user.stripe_info[x]);
+        }
+    }
+}
+
 
 //function to deauthorize stripe
 function deauthorizeStripe(e){
