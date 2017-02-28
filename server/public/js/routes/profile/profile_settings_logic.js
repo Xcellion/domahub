@@ -5,6 +5,7 @@ window.onpopstate = function(event) {
 
 //function to show a specific section
 function showSection(section_id){
+    //resetErrorSuccess();
     $(".setting-link").removeClass("is-active");
     $("#" + section_id + "-link").addClass("is-active");
     temp_section = $("#" + section_id);
@@ -99,17 +100,12 @@ $(document).ready(function() {
                 data: submit_data
             }).done(function(data){
                 if (data.state == "success"){
-                    $("#basic-message").fadeOut(100, function(){
-                        $("#basic-message").css("color", "#97cd76").text("Account information updated!").fadeIn(100);
-                    });
+                    flashSuccess($("#basic-message"));
                     user = data.user;
                 }
                 else {
-                    console.log(data);
                     resetInputs();
-                    $("#basic-message").fadeOut(100, function(){
-                        $("#basic-message").css("color", "#ed1c24").text(data.message).fadeIn(100);
-                    });
+                    flashError($("#basic-message"), data.message);
                 }
             })
         }
@@ -151,9 +147,7 @@ $(document).ready(function() {
     //to cancel any changes
     $("#payout-address-cancel").click(function(e){
         e.preventDefault();
-        $("#payout-address-submit").addClass("is-disabled");
-        $("#payout-address-cancel").addClass("is-hidden");
-        $("#payout-address-form").find("input").val("").removeClass('is-danger');
+        cancelForm($("#payout-address-form"));
     });
 
     //go next on address to personal info
@@ -176,25 +170,24 @@ $(document).ready(function() {
             $("#payout-address-next").removeClass('is-hidden');
         }
 
-        $.ajax({
-            url: "/profile/settings/payout/" + which_form,
-            data: $("#payout-" + which_form + "-form").serialize(),
-            method: "POST"
-        }).done(function(data){
-            if (data.state == "success"){
-                $(".hide-stripe").removeClass('is-hidden');
-                $("#payout-" + which_form + "-message").fadeOut(100, function(){
-                    $("#payout-" + which_form + "-message").css("color", "#97cd76").text("Account information updated!").fadeIn(100);
-                });
-                user = data.user;
-            }
-            else {
-                console.log(data);
-                $("#payout-" + which_form + "-message").fadeOut(100, function(){
-                    $("#payout-" + which_form + "-message").css("color", "#ed1c24").text(data.message).fadeIn(100);
-                });
-            }
-        });
+        //make sure all required fields are good
+        if (checkRequiredFields($(this), which_form)){
+            $.ajax({
+                url: "/profile/settings/payout/" + which_form,
+                data: $("#payout-" + which_form + "-form").serialize(),
+                method: "POST"
+            }).done(function(data){
+                if (data.state == "success"){
+                    $(".hide-stripe").removeClass('is-hidden');
+                    flashSuccess($("#payout-" + which_form + "-message"));
+                    user = data.user;
+                }
+                else {
+                    flashError($("#payout-" + which_form + "-message"), data.message);
+                }
+            });
+        }
+
     });
 
     //------------------------------------------------------------------------------------ PAY OUT PERSONAL INFO
@@ -208,9 +201,7 @@ $(document).ready(function() {
     //to cancel any changes
     $("#payout-personal-cancel").click(function(e){
         e.preventDefault();
-        $("#payout-personal-submit").addClass("is-disabled");
-        $("#payout-personal-cancel").addClass("is-hidden");
-        $("#payout-personal-form").find("input").val("").removeClass('is-danger');
+        cancelForm($("#payout-personal-form"));
     });
 
     //go next on personal to bank info
@@ -219,31 +210,62 @@ $(document).ready(function() {
         showSection("payout-bank");
     });
 
-    //------------------------------------------------------------------------------------ PAY OUT BANKING INFO
+    //------------------------------------------------------------------------------------ PAY OUT bank INFO
 
     //to cancel any changes
-    $("#payout-banking-cancel").click(function(e){
+    $("#payout-bank-cancel").click(function(e){
         e.preventDefault();
-        $("#payout-banking-submit").addClass("is-disabled");
-        $("#payout-banking-cancel").addClass("is-hidden");
-        $("#payout-bank-form").find("input").val("").removeClass('is-danger');
+        cancelForm($("#payout-bank-form"));
     });
 
-    $("#payout-banking-submit").on("click", function(e){
-        e.preventDefault();
-        Stripe.bankAccount.createToken({
-            country: $('#country-input').val(),
-            currency: "USD", //$('.currency').val(),
-            routing_number: $('#account-routing-input').val(),
-            account_number: $('#account-number-input').val()
-        }, function(status, response){
-            console.log(status, response);
-        });
+    //submit bank information
+    $("#payout-bank-submit").on("click", function(e){
 
-        //$(this).closest(".stripe-form").submit();
+        //check if all required fields are filled
+        if (checkRequiredFields($(this), "bank")){
+            e.preventDefault();
+
+            //create stripe token
+            Stripe.bankAccount.createToken({
+                country: $('#country-input').val(),
+                routing_number: $('#account-routing-input').val(),
+                account_number: $('#account-number-input').val()
+            }, function(status, response){
+                console.log(status, response);
+                if (status != 200){
+                    flashError($("#payout-bank-message"), response.error.message);
+                }
+                else {
+                    //submit to server
+                    submitBank(response.id);
+                }
+            });
+        }
     });
 
 });
+
+//check if any required field is blank
+function checkRequiredFields(form_elem, which_form){
+    //clear pre-existing missing
+    $(".is-danger").removeClass('is-danger');
+
+    var required_missing = form_elem.find(".stripe-input").filter('[required]');
+    var required_missing_vals = required_missing.map(function(value){ return $(this).val() }).toArray();
+    var required_missing_idx = required_missing_vals.indexOf("");
+    if (required_missing_idx > 0){
+        $(required_missing[required_missing_idx]).addClass('is-danger');
+        flashError($("#payout-" + which_form + "-message"), "Missing " + which_form + " information!");
+        return false;
+    }
+    else if (which_form == "bank" && $("input[type=checkbox]:checked").length == 0){
+        flashError($("#payout-" + which_form + "-message"), "Please accept the terms of service!");
+        return false;
+    }
+    else {
+        return true;
+    }
+}
 
 //function to pre-fill existing stripe information
 function prefillStripeInfo(){
@@ -254,6 +276,63 @@ function prefillStripeInfo(){
     }
 }
 
+//function to submit stripe token for bank info
+function submitBank(stripe_token){
+    $.ajax({
+        url: "/profile/settings/payout/bank",
+        data: {
+            stripe_token: stripe_token,
+            account_type: $("#account-type-input").val()
+        },
+        method: "POST"
+    }).done(function(data){
+        if (data.state == "success"){
+            $(".hide-stripe").removeClass('is-hidden');
+            $("#payout-bank-message").fadeOut(100, function(){
+                $("#payout-bank-message").css("color", "#97cd76").text("Account information updated!").fadeIn(100);
+            });
+            user = data.user;
+        }
+        else {
+            console.log(data);
+            $("#payout-bank-message").fadeOut(100, function(){
+                $("#payout-bank-message").css("color", "#ed1c24").text(data.message).fadeIn(100);
+            });
+        }
+    });
+}
+
+//flash error
+function flashError(elem, message){
+    elem.fadeOut(100, function(){
+        elem.addClass('is-danger').text(message).fadeIn(100);
+    });
+}
+
+//flash success
+function flashSuccess(elem){
+    elem.fadeOut(100, function(){
+        elem.addClass("is-success").text("Account information updated!").fadeIn(100);
+    });
+}
+
+//reset error success flashes
+function resetErrorSuccess(){
+    cancelForm($("#payout-address-form"));
+    cancelForm($("#payout-personal-form"));
+    cancelForm($("#payout-bank-form"));
+    $("#payout-personal-cancel").click();
+    $("#payout-bank-cancel").click();
+    $(".is-danger").removeClass('is-danger');
+    $(".is-success").removeClass('is-success');
+}
+
+//cancel form submit
+function cancelForm(form){
+    //form.find("input").val("").removeClass('is-danger');
+    form.find(".cancel-payout ").addClass("is-hidden");
+    form.find(".submit-payout ").addClass("is-disabled");
+}
 
 //function to deauthorize stripe
 function deauthorizeStripe(e){
