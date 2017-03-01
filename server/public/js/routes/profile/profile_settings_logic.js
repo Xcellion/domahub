@@ -250,6 +250,22 @@ $(document).ready(function() {
 
 });
 
+//function to reset account inputs upon cancel
+function resetInputs(){
+    $("#change-account-save").addClass("is-disabled");
+    $("#change-account-cancel").addClass("is-hidden");
+    $("#email-input").val(user.email).removeClass("is-danger");
+    $("#username-input").val(user.username).removeClass("is-danger");
+    $("#old-pw-input").val("").removeClass("is-danger");
+    $("#new-pw-input").val("").removeClass("is-danger");
+    $("#verify-pw-input").val("").removeClass("is-danger");
+    //$("#gender-input").val(user.gender).removeClass("is-danger");
+    //$("#birthday-year-input").val(user.birthday.year).removeClass("is-danger");
+    //$("#birthday-month-input-input").val(user.birthday.month).removeClass("is-danger");
+    //$("#birthday-day-input").val(user.birthday.day).removeClass("is-danger");
+    //$("#phone-input").val(user.phone).removeClass("is-danger");
+}
+
 //function to check if all fields are filled out
 function checkFieldsFilled(form_elem){
     var can_submit = false;
@@ -391,69 +407,69 @@ function cancelFormEdit(form){
 //         that.removeClass('is-loading');
 //     });
 // }
-//
-// //function to check new account settings
-// function checkAccountSubmit(){
-//     //if no email is entered
-//     if (!validateEmail($("#email-input").val())) {
-//         $("#basic-message").fadeOut(100, function(){
-//             $("#basic-message").css("color", "#ed1c24").text("Please enter your email address!").fadeIn(100);
-//             $("#email-input").addClass("is-danger").focus();
-//         });
-//         return false;
-//     }
-//
-//     //if username is not legit
-//     else if (!$("#username-input").val() || $("#username-input").val().length > 70 || $("#username-input").val().includes(" ")) {
-//         $("#basic-message").fadeOut(100, function(){
-//             $("#basic-message").css("color", "#ed1c24").text("Please enter a valid username!").fadeIn(100);
-//             $("#username-input").addClass("is-danger").focus();
-//         });
-//         return false;
-//     }
-//
-//     // //if the old password is not entered
-//     else if ($("#old-pw-input").val().length > 70 || $("#old-pw-input").val().length < 6) {
-//         $("#basic-message").fadeOut(100, function(){
-//             $("#basic-message").css("color", "#ed1c24").text("Please enter your password to make any changes!").fadeIn(100);
-//             $("#old-pw-input").addClass("is-danger").focus();
-//         });
-//         return false;
-//     }
-//
-//     //if new password is too short or long
-//     else if ($("#new-pw-input").val() && ($("#new-pw-input").val().length > 70 || $("#new-pw-input").val().length < 6)) {
-//         $("#basic-message").fadeOut(100, function(){
-//             $("#basic-message").css("color", "#ed1c24").text("Please enter a password at least 6 characters long!").fadeIn(100);
-//             $("#new-pw-input").addClass("is-danger").focus();
-//         });
-//         return false;
-//     }
-//
-//     //if new passwords do not match
-//     else if ($("#new-pw-input").val() && $("#new-pw-input").val() != $("#verify-pw-input").val()){
-//         $("#basic-message").fadeOut(100, function(){
-//             $("#basic-message").css("color", "#ed1c24").text("New passwords do not match!").fadeIn(100);
-//             $("#new-pw-input").addClass("is-danger").focus();
-//             $("#verify-pw-input").addClass("is-danger");
-//         });
-//         return false;
-//     }
-//     else {
-//         return {
-//             new_email: (user.email == $("#new_email-input").val()) ? undefined : $("#email-input").val(),
-//             username: (user.username == $("#username-input").val()) ? undefined : $("#username-input").val(),
-//             password: $("#old-pw-input").val(),
-//             new_password: ($("#new-pw-input").val() == "") ? undefined : $("#new-pw-input").val()
-//             //gender: $("#gender-input").val(),
-//             //birthday: $("#birthday-year-input").val() + $("#birthday-month-input").val() + $("#birthday-day-input").val(),
-//             //phone: $("#phone-input").val()
-//         };
-//     }
-// }
-//
-// //helper function to validate email address
-// function validateEmail(email) {
-//     var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-//     return re.test(email);
-// }
+
+//function to check new account settings
+function checkAccountSubmit(){
+    //if no email is entered
+    if (!validateEmail($("#email-input").val())) {
+        $("#basic-message").fadeOut(100, function(){
+            $("#basic-message").css("color", "#ed1c24").text("Please enter your email address!").fadeIn(100);
+            $("#email-input").addClass("is-danger").focus();
+        });
+        return false;
+    }
+
+    //if username is not legit
+    else if (!$("#username-input").val() || $("#username-input").val().length > 70 || $("#username-input").val().includes(" ")) {
+        $("#basic-message").fadeOut(100, function(){
+            $("#basic-message").css("color", "#ed1c24").text("Please enter a valid username!").fadeIn(100);
+            $("#username-input").addClass("is-danger").focus();
+        });
+        return false;
+    }
+
+    // //if the old password is not entered
+    else if ($("#old-pw-input").val().length > 70 || $("#old-pw-input").val().length < 6) {
+        $("#basic-message").fadeOut(100, function(){
+            $("#basic-message").css("color", "#ed1c24").text("Please enter your password to make any changes!").fadeIn(100);
+            $("#old-pw-input").addClass("is-danger").focus();
+        });
+        return false;
+    }
+
+    //if new password is too short or long
+    else if ($("#new-pw-input").val() && ($("#new-pw-input").val().length > 70 || $("#new-pw-input").val().length < 6)) {
+        $("#basic-message").fadeOut(100, function(){
+            $("#basic-message").css("color", "#ed1c24").text("Please enter a password at least 6 characters long!").fadeIn(100);
+            $("#new-pw-input").addClass("is-danger").focus();
+        });
+        return false;
+    }
+
+    //if new passwords do not match
+    else if ($("#new-pw-input").val() && $("#new-pw-input").val() != $("#verify-pw-input").val()){
+        $("#basic-message").fadeOut(100, function(){
+            $("#basic-message").css("color", "#ed1c24").text("New passwords do not match!").fadeIn(100);
+            $("#new-pw-input").addClass("is-danger").focus();
+            $("#verify-pw-input").addClass("is-danger");
+        });
+        return false;
+    }
+    else {
+        return {
+            new_email: (user.email == $("#new_email-input").val()) ? undefined : $("#email-input").val(),
+            username: (user.username == $("#username-input").val()) ? undefined : $("#username-input").val(),
+            password: $("#old-pw-input").val(),
+            new_password: ($("#new-pw-input").val() == "") ? undefined : $("#new-pw-input").val()
+            //gender: $("#gender-input").val(),
+            //birthday: $("#birthday-year-input").val() + $("#birthday-month-input").val() + $("#birthday-day-input").val(),
+            //phone: $("#phone-input").val()
+        };
+    }
+}
+
+//helper function to validate email address
+function validateEmail(email) {
+    var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(email);
+}
