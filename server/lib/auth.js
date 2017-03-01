@@ -566,28 +566,28 @@ module.exports = {
 		password = req.body.new_password;
 
 		//not a valid email
-		if (new_email && !validator.isEmail(new_email)){
+		if (!validator.isEmail(new_email)){
 			error.handler(req, res, "Invalid email!", "json");
 		}
 		//username too long
-		else if (username && username.length > 70){
+		else if (username.length > 70){
 			error.handler(req, res, "Username is too long!", "json");
 		}
 		//username too short
-		else if (username && username.length < 3){
+		else if (username.length < 3){
 			error.handler(req, res, "Username is too short!", "json");
 		}
 		//username is invalid
-		else if (username && /\s/.test(username)){
+		else if (/\s/.test(username)){
 			error.handler(req, res, "Invalid name!", "json");
 		}
 		//password is too long
 		else if (password && 70 < password.length){
-			error.handler(req, res, "Password is too long!", "json");
+			error.handler(req, res, "The new password is too long!", "json");
 		}
 		//password is too short
 		else if (password && password.length < 6){
-			error.handler(req, res, "Password is too short!", "json");
+			error.handler(req, res, "The new password is too short!", "json");
 		}
 		//check the pw
 		else {
