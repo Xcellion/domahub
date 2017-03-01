@@ -62,7 +62,7 @@ listing_model.prototype.getVerifiedListing = function(domain_name, callback){
 	query = "SELECT \
 				listings.*,\
 				accounts.username,\
-				!ISNULL(accounts.stripe_user_id) AS stripe_connected,\
+				!ISNULL(accounts.stripe_account) AS stripe_connected,\
 				accounts.profile_pic,\
 				accounts.date_created AS user_created,\
 				accounts.email\
@@ -245,7 +245,7 @@ listing_model.prototype.getRandomListings = function(callback){
 				ON accounts.id = listings.owner_id \
 			WHERE listings.status = 1 \
 			AND listings.verified = 1 \
-			AND accounts.stripe_user_id IS NOT NULL \
+			AND accounts.stripe_account IS NOT NULL \
 			ORDER BY rand() \
 			LIMIT 10";
 	listing_query(query, "Failed to get 10 random listings!", callback);

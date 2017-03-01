@@ -93,12 +93,6 @@ module.exports = function(app, db, auth, error, stripe){
 		profile_functions.renderSettings
 	])
 
-	//connect stripe
-	app.get("/connectstripe", [
-		auth.checkLoggedIn,
-		stripe.connectStripe
-	]);
-
 	//temporary to test /redirect page
 	app.get("/redirect", function(req, res){
 		res.render("redirect.ejs", {
@@ -106,20 +100,10 @@ module.exports = function(app, db, auth, error, stripe){
 		})
 	});
 
-	//authorize stripe
-	app.get("/authorizestripe", [
-		auth.checkLoggedIn,
-		stripe.authorizeStripe
-	]);
-
-	//authorize stripe
-	app.post("/deauthorizestripe", [
-		auth.checkLoggedIn,
-		stripe.deauthorizeStripe
-	]);
-
 	//redirect anything not caught above to /profile
 	app.get("/profile*", profile_functions.redirectProfile);
+
+	//------------------------------------------------------------------------------------------ STRIPE MANAGED
 
 	//post to change account settings
 	app.post("/profile/settings", [
@@ -165,4 +149,24 @@ module.exports = function(app, db, auth, error, stripe){
 		stripe.checkPayoutBank,
 		stripe.updateStripeBank
 	]);
+
+	//------------------------------------------------------------------------------------------ STRIPE STANDALONE (deprecated)
+
+	//connect stripe
+	// app.get("/connectstripe", [
+	// 	auth.checkLoggedIn,
+	// 	stripe.connectStripe
+	// ]);
+
+	//authorize stripe
+	// app.get("/authorizestripe", [
+	// 	auth.checkLoggedIn,
+	// 	stripe.authorizeStripe
+	// ]);
+
+	//deauthorize stripe
+	// app.post("/deauthorizestripe", [
+	// 	auth.checkLoggedIn,
+	// 	stripe.deauthorizeStripe
+	// ]);
 }
