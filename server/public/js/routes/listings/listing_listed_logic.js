@@ -271,6 +271,10 @@ function successHandler(data){
 			$(this).select();
 		});
 	}
+	else {
+		var url = "https://www.domahub.com/listing/" + listing_info.domain_name + "/" + data.rental_id;
+		$("#rental-preview-button").href(url);
+	}
 }
 
 //---------------------------------------------------------------------------------------------------RENTAL EXAMPLES MODULE
