@@ -5,22 +5,24 @@
   border-radius: $radius
   padding: 16px 20px
   position: relative
-  &.is-popup
-    +transition(top 0.5s ease, width 0s ease)
-    // +translate(-50%,0)
-    // left: 50%
-    left: 20px
-    box-sizing: border-box
-    position: fixed
-    bottom: -100%
-    width: 300px
-    z-index: 100
-    &.is-active
-      bottom: 20px
-      +mobile
-        border-radius: 0
-        bottom: 0
-        width: 100%
+  &.no-shadow
+    @include box-shadows(0 0 0 0 $white,0 0 0 0 $white,0 0 0 0 $white)
+  // &.is-popup
+  //   +transition(top 0.5s ease, width 0s ease)
+  //   +translate(-50%,0)
+  //   left: 50%
+  //   left: 20px
+  //   box-sizing: border-box
+  //   position: fixed
+  //   bottom: -100%
+  //   width: 300px
+  //   z-index: 100
+  //   &.is-active
+  //     bottom: 20px
+  //     +mobile
+  //       border-radius: 0
+  //       bottom: 0
+  //       width: 100%
   .delete
     border-radius: 0 $radius
     float: right

@@ -152,7 +152,7 @@
 										<label class="label">Bank Account</label>
 									</div>
 									<div class="control is-grouped">
-										<% if (user.stripe_info.transfers_enabled) { %>
+										<% if (user.stripe_info && user.stripe_info.transfers_enabled) { %>
 											<p class="control is-success">
 												<span class="tag is-primary">Connected</span>
 											</p>
@@ -418,23 +418,23 @@
 											</select>
 										</span>
 									</div>
-								<label for="addressline1-input" class="label">Address Line 1</label>
+								<label class="label">Address Line 1</label>
 									<div class="control">
 										<input required id="addressline1-input" class="input stripe-input" type="text" name="addressline1" autocomplete=""/>
 									</div>
-								<label for="addressline2-input" class="label">Address Line 2</label>
+								<label class="label">Address Line 2</label>
 									<div class="control">
 										<input id="addressline2-input" class="input stripe-input" type="text" name="addressline2" autocomplete=""/>
 									</div>
-								<label for="city-input" class="label">City</label>
+								<label class="label">City</label>
 									<div class="control">
 										<input required id="city-input" class="input stripe-input" type="text" name="city" autocomplete=""/>
 									</div>
-								<label for="state-input" class="label">State / Province</label>
+								<label class="label">State / Province</label>
 									<div class="control">
 										<input required id="state-input" class="input stripe-input" type="text" name="state" autocomplete=""/>
 									</div>
-								<label for="zip-input" class="label">Zip Code / Postal Code</label>
+								<label class="label">Zip Code / Postal Code</label>
 									<div class="control">
 										<input required id="zip-input" class="input stripe-input" type="text" name="zip" autocomplete=""/>
 									</div>
@@ -454,11 +454,11 @@
 						</header>
 						<div class="card-content">
 							<form id="payout-personal-form" class="payout-form stripe-form">
-								<label for="account-name-input" class="label">First Name</label>
+								<label class="label">First Name</label>
 									<div class="control">
 										<input required id="first_name-input" class="input stripe-input" type="text" name="first_name" />
 									</div>
-								<label for="account-name-input" class="label">Last Name</label>
+								<label class="label">Last Name</label>
 									<div class="control">
 										<input required id="last_name-input" class="input stripe-input" type="text" name="last_name" />
 									</div>
@@ -466,7 +466,7 @@
 									<div class="control">
 										<div class="select">
 											<select required id="birthday_year-input" name="birthday_year" class="stripe-input">
-												<option selected disabled>Year</option>
+												<option selected value="" disabled>Year</option>
 												<option value="1998">1998</option>
 												<option value="1997">1997</option>
 												<option value="1996">1996</option>
@@ -621,7 +621,7 @@
 						</header>
 						<div class="card-content">
 							<form id="payout-bank-form" class="payout-form stripe-form">
-								<label for="account-type-input" class="label">Account Type</label>
+								<label class="label">Account Type</label>
 									<div class="control">
 										<span class="select is-fullwidth">
 											<select required id="account_type-input" name="account_type" class="stripe-input">
@@ -630,24 +630,24 @@
 											</select>
 										</span>
 									</div>
-								<label for="account-routing-input" class="label">Routing Number</label>
+								<label class="label">Routing Number</label>
 									<div class="control">
 										<input required id="account_routing-input" class="input stripe-input" type="number" pattern="[0-9]*" inputmode="numeric" name="account_routing" />
 									</div>
-								<label for="account-number-input" class="label">Account Number</label>
+								<label class="label">Account Number</label>
 									<div class="control">
 										<input required id="account_number-input" class="input stripe-input" type="number" pattern="[0-9]*" inputmode="numeric" name="account_number" />
 									</div>
 								<label class="label">DomaHub Terms of Service</label>
 									<div class="control checkbox-form">
-										<input class="is-small" id="agree-to-terms-doma" type="checkbox" />
+										<input class="stripe-input is-small" id="agree-to-terms-doma" type="checkbox" />
 										<label class="is-small" tabindex="1" for="agree-to-terms-doma">
 											I agree to the <a target="_blank" href="/terms" class="is-accent">DomaHub Terms & Conditions</a>.
 										</label>
 									</div>
 								<label class="label">Stripe Terms of Service</label>
 									<div id="account-type-input" class="control checkbox-form">
-										<input class="is-small" id="agree-to-terms-stripe" type="checkbox" />
+										<input class="stripe-input is-small" id="agree-to-terms-stripe" type="checkbox" />
 										<label class="is-small" tabindex="1" for="agree-to-terms-stripe">
 											I agree to the <a target="_blank" href="https://stripe.com/us/connect/legal" class="is-accent">Stripe Terms & Conditions</a>.
 										</label>

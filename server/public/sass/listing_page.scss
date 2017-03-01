@@ -122,14 +122,9 @@
   flex-wrap: wrap;
   flex-direction: row;
   align-items: center;
-  .button {
-    margin-bottom: 8px;
-    margin-right: 8px;
-  }
-  @include mobile {
-    & > .tag {
-      margin: 5px;
-    }
+  .tag {
+    margin-bottom: 10px;
+    margin-right: 10px;
   }
 }
 

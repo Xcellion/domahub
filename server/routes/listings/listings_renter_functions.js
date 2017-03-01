@@ -416,11 +416,11 @@ module.exports = {
         Account.getStripeAndType(req.params.domain_name, function(result){
             if (result.state == "error"){error.handler(req, res, result.info);}
             else {
-                if (!result.info[0].stripe_user_id){
+                if (!result.info[0].stripe_account){
                     error.handler(req, res, "Invalid stripe user account!", "json");
                 }
                 else {
-                    req.session.new_rental_info.owner_stripe_id = result.info[0].stripe_user_id;	//stripe id
+                    req.session.new_rental_info.owner_stripe_id = result.info[0].stripe_account;	//stripe id
 
                     //premium or basic listing expiration date
                     if (result.info[0].exp_date != 0 && result.info[0].exp_date > (new Date).getTime()){
