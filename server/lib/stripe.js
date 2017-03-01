@@ -34,6 +34,10 @@ module.exports = {
 					updateUserStripeInfo(req.user, account);
 					next();
 				}
+				else {
+					console.log(err.message);
+					next();
+				}
 			});
 		}
 		else {
@@ -142,7 +146,7 @@ module.exports = {
 		if (req.user.stripe_account){
 			console.log('F: Updating existing Stripe managed account address...');
 			stripe.accounts.update(req.user.stripe_account, {
-				legal_entity: {
+				"legal_entity": {
 					"address": {
 						"city": req.body.city,
 						"country": req.body.country,
@@ -151,6 +155,9 @@ module.exports = {
 						"postal_code": req.body.zip,
 						"state": req.body.state
 					}
+				},
+				"transfer_schedule": {
+					"interval": "manual"
 				}
 			}, function(err, result){
 				if (result){
@@ -185,9 +192,11 @@ module.exports = {
 			}, function(err, result){
 				if (result){
 					req.session.stripe_results = result;
+					updateUserStripeInfo(req.user, result);
 					next();
 				}
 				else {
+					console.log(err);
 					error.handler(req, res, err.message, "json");
 				}
 			});
@@ -237,7 +246,6 @@ module.exports = {
 			}
 		}, function(err, result){
 			if (result){
-				console.log(result);
 				res.json({
                     state: "success",
                     user: req.user
@@ -252,125 +260,118 @@ module.exports = {
 
 	//------------------------------------------------------------------------------------------ STRIPE STANDALONE
 
-	//check that the stripe customer is legit and has a good payment card
-	createStripeCustomer : function(req, res, next){
-		if (req.user.stripe_customer_id){
-			console.log("SF: Trying to update an existing Stripe customer...");
+	// //authorize stripe
+	// authorizeStripe : function(req, res){
+	// 	var client_id = (node_env == "dev") ? "ca_997O55c2IqFxXDmgI9B0WhmpPgoh28s3" : "ca_997OlLjHwTzo6hMT8VGbot4OF6l3v1V0";
+	//
+	// 	// Redirect to Stripe /oauth/authorize endpoint
+	// 	res.redirect("https://connect.stripe.com/oauth/authorize" + "?" + qs.stringify({
+	// 		response_type: "code",
+	// 		scope: "read_write",
+	// 		state: "domahubrules",
+	// 		client_id: client_id,
+	// 		stripe_user: {
+	// 			email: req.user.email,
+	// 			physical_product: false,
+	// 			product_description: "DomaHub domain rentals."
+	// 		}
+	// 	}));
+	// },
+	//
+	// //deauthorize stripe
+	// deauthorizeStripe : function(req, res){
+	// 	if (req.user.stripe_account){
+	// 		request.post({
+	// 			url: 'https://connect.stripe.com/oauth/deauthorize',
+	// 			form: {
+	// 				client_id: "ca_997O55c2IqFxXDmgI9B0WhmpPgoh28s3",
+	// 				stripe_account: req.user.stripe_account,
+	// 				client_secret: stripe_key
+	// 			}
+	// 		},
+	// 			function (err, response, body) {
+	// 				body = JSON.parse(body);
+	//
+	// 				//all good with stripe!
+	// 				if (!body.error && response.statusCode == 200 && body.stripe_account == req.user.stripe_account) {
+	// 					var account_info = {
+	// 						stripe_account: null,
+	// 						type: 1
+	// 					}
+	// 					Account.updateAccount(account_info, req.user.email, function(result){
+	// 						if (result.state=="error"){error.handler(req, res, result.info);}
+	// 						else {
+	// 							req.user.stripe_account = null;
+	// 							req.user.type = 1;
+	// 							res.send({
+	// 								state: "success"
+	// 							})
+	// 						}
+	// 					});
+	// 				}
+	// 				else {
+	// 					error.handler(req, res, "Invalid stripe token!", "json");
+	// 				}
+	// 			}
+	// 		);
+	// 	}
+	//
+	// 	//isnt authorized
+	// 	else {
+	// 		error.handler(req, res, "Invalid stripe token!", "json");
+	// 	}
+	// },
+	//
+	// //connect to stripe and get the stripe account info to store on our db
+	// connectStripe : function(req, res){
+	// 	scope = req.query.scope;
+	// 	code = req.query.code;
+	//
+	// 	//connection errored
+	// 	if (req.query.error || !scope || !code || req.query.state != "domahubrules") {
+	// 		error.handler(req, res, "Invalid stripe token!");
+	// 	}
+	// 	else {
+	// 		var client_id = (node_env == "dev") ? "ca_997O55c2IqFxXDmgI9B0WhmpPgoh28s3" : "ca_997OlLjHwTzo6hMT8VGbot4OF6l3v1V0";
+	//
+	// 		request.post({
+	// 			url: 'https://connect.stripe.com/oauth/token',
+	// 			form: {
+	// 				grant_type: "authorization_code",
+	// 				client_id: client_id,
+	// 				code: code,
+	// 				client_secret: stripe_key
+	// 			}
+	// 		},
+	// 			function (err, response, body) {
+	// 				body = JSON.parse(body);
+	//
+	// 				//all good with stripe!
+	// 				if (!body.error && response.statusCode == 200 && body.access_token) {
+	// 					var account_info = {
+	// 						stripe_account: body.stripe_account,
+	// 						type: 2
+	// 					}
+	// 					Account.updateAccount(account_info, req.user.email, function(result){
+	// 						if (result.state=="error"){error.handler(req, res, result.info);}
+	// 						else {
+	// 							req.user.stripe_account = body.stripe_account;
+	// 							req.user.type = 2;
+	// 							res.render("redirect.ejs", {
+	// 								redirect: "/profile"
+	// 							});
+	// 						}
+	// 					});
+	// 				}
+	// 				else {
+	// 					error.handler(req, res, "Invalid stripe token!");
+	// 				}
+	// 			}
+	// 		);
+	// 	}
+	// },
 
-			//cross reference with stripe
-			stripe.customers.retrieve(req.user.stripe_customer_id, function(err, customer) {
-				if (err){
-					newStripecustomer(req, res, next);
-				}
-				else {
-					req.user.customer_subscriptions = customer.subscriptions;
-
-					//update the customer default card
-					stripe.customers.update(req.user.stripe_customer_id, {
-						source: req.body.stripeToken
-					}, function(err, customer) {
-						if (err){
-							revertPremiumListings(req, res, err);
-						}
-						else {
-							next();
-						}
-					});
-				}
-			});
-		}
-
-		//no customer exists, create a new stripe customer
-		else {
-			console.log("SF: Trying to create a new Stripe customer...");
-			newStripecustomer(req, res, next);
-		}
-	},
-
-	//function to create a monthly subscription for a listing
-	createSingleStripeSubscription : function(req, res, next){
-		var domain_name = req.params.domain_name || req.body.domain_name;
-		var listing_info = getUserListingObj(req.user.listings, domain_name);
-
-		//if subscription id exists in our database
-		if (listing_info && listing_info.stripe_subscription_id){
-
-			//check it against stripe
-			stripe.subscriptions.retrieve(listing_info.stripe_subscription_id, function(err, subscription) {
-				if (err){stripeErrorHandler(req, res, err)}
-				else {
-					//subscription was cancelled, re-subscribe
-					if (subscription.cancel_at_period_end){
-						stripe.subscriptions.update(listing_info.stripe_subscription_id, function(err, subscription) {
-							if (err){stripeErrorHandler(req, res, err)}
-							else {
-								req.new_listing_info = {
-									stripe_subscription_id : subscription.id,
-									exp_date : subscription.current_period_end * 1000,
-									expiring: false
-								}
-								next();
-							}
-						});
-					}
-
-					//subscription is still active, all gucci
-					else {
-						error.handler(req, res, "This listing is already a Premium listing!", "json");
-					}
-				}
-			});
-		}
-		else {
-			stripe.subscriptions.create({
-				customer: req.user.stripe_customer_id,
-				plan: "premium",
-				metadata: {
-					"insert_id" : listing_info.id
-				}
-			}, function(err, subscription) {
-				if (err){stripeErrorHandler(req, res, err)}
-				else {
-					req.new_listing_info = {
-						stripe_subscription_id : subscription.id,
-						exp_date : subscription.current_period_end * 1000,
-						expiring: false
-					}
-					next();
-				}
-			});
-		}
-	},
-
-	//function to create multiple monthly subscriptions
-	createStripeSubscriptions : function(req, res, next){
-		console.log("SF: Trying to create or update a Stripe subscription...");
-
-		newStripeSubscription(req, res, next);
-	},
-
-	//check that stripe subscription exists
-	cancelStripeSubscription : function(req, res, next){
-		var listing_info = getUserListingObj(req.user.listings, req.params.domain_name);
-
-		//if subscription id exists in our database
-		if (listing_info && listing_info.stripe_subscription_id){
-			stripe.subscriptions.del(listing_info.stripe_subscription_id, { at_period_end: true }, function(err, confirmation) {
-				if (err){stripeErrorHandler(req, res, err)}
-				else {
-
-					//set expiring flag
-					req.new_listing_info = {
-						expiring: true
-					}
-					next();
-				}
-			});
-		}
-		else {
-			error.handler(req, res, "This isn't a Premium listing!", "json")
-		}
-	},
+	//------------------------------------------------------------------------------------------ STRIPE PAYMENTS
 
 	//function to pay for a rental via stripe
 	chargeMoney : function(req, res, next){
@@ -417,116 +418,127 @@ module.exports = {
 		}
 	},
 
-	//authorize stripe
-	authorizeStripe : function(req, res){
-		var client_id = (node_env == "dev") ? "ca_997O55c2IqFxXDmgI9B0WhmpPgoh28s3" : "ca_997OlLjHwTzo6hMT8VGbot4OF6l3v1V0";
+	//------------------------------------------------------------------------------------------ STRIPE SUBSCRIPTIONS (deprecated)
 
-		// Redirect to Stripe /oauth/authorize endpoint
-		res.redirect("https://connect.stripe.com/oauth/authorize" + "?" + qs.stringify({
-			response_type: "code",
-			scope: "read_write",
-			state: "domahubrules",
-			client_id: client_id,
-			stripe_user: {
-				email: req.user.email,
-				physical_product: false,
-				product_description: "DomaHub domain rentals."
-			}
-		}));
-	},
-
-	//deauthorize stripe
-	deauthorizeStripe : function(req, res){
-		if (req.user.stripe_user_id){
-			request.post({
-				url: 'https://connect.stripe.com/oauth/deauthorize',
-				form: {
-					client_id: "ca_997O55c2IqFxXDmgI9B0WhmpPgoh28s3",
-					stripe_user_id: req.user.stripe_user_id,
-					client_secret: stripe_key
-				}
-			},
-				function (err, response, body) {
-					body = JSON.parse(body);
-
-					//all good with stripe!
-					if (!body.error && response.statusCode == 200 && body.stripe_user_id == req.user.stripe_user_id) {
-						var account_info = {
-							stripe_user_id: null,
-							type: 1
-						}
-						Account.updateAccount(account_info, req.user.email, function(result){
-							if (result.state=="error"){error.handler(req, res, result.info);}
-							else {
-								req.user.stripe_user_id = null;
-								req.user.type = 1;
-								res.send({
-									state: "success"
-								})
-							}
-						});
-					}
-					else {
-						error.handler(req, res, "Invalid stripe token!", "json");
-					}
-				}
-			);
-		}
-
-		//isnt authorized
-		else {
-			error.handler(req, res, "Invalid stripe token!", "json");
-		}
-	},
-
-	//connect to stripe and get the stripe account info to store on our db
-	connectStripe : function(req, res){
-		scope = req.query.scope;
-		code = req.query.code;
-
-		//connection errored
-		if (req.query.error || !scope || !code || req.query.state != "domahubrules") {
-			error.handler(req, res, "Invalid stripe token!");
-		}
-		else {
-			var client_id = (node_env == "dev") ? "ca_997O55c2IqFxXDmgI9B0WhmpPgoh28s3" : "ca_997OlLjHwTzo6hMT8VGbot4OF6l3v1V0";
-
-			request.post({
-				url: 'https://connect.stripe.com/oauth/token',
-				form: {
-					grant_type: "authorization_code",
-					client_id: client_id,
-					code: code,
-					client_secret: stripe_key
-				}
-			},
-				function (err, response, body) {
-					body = JSON.parse(body);
-
-					//all good with stripe!
-					if (!body.error && response.statusCode == 200 && body.access_token) {
-						var account_info = {
-							stripe_user_id: body.stripe_user_id,
-							type: 2
-						}
-						Account.updateAccount(account_info, req.user.email, function(result){
-							if (result.state=="error"){error.handler(req, res, result.info);}
-							else {
-								req.user.stripe_user_id = body.stripe_user_id;
-								req.user.type = 2;
-								res.render("redirect.ejs", {
-									redirect: "/profile"
-								});
-							}
-						});
-					}
-					else {
-						error.handler(req, res, "Invalid stripe token!");
-					}
-				}
-			);
-		}
-	}
+	// //check that the stripe customer is legit and has a good payment card
+	// createStripeCustomer : function(req, res, next){
+	// 	if (req.user.stripe_customer_id){
+	// 		console.log("SF: Trying to update an existing Stripe customer...");
+	//
+	// 		//cross reference with stripe
+	// 		stripe.customers.retrieve(req.user.stripe_customer_id, function(err, customer) {
+	// 			if (err){
+	// 				newStripecustomer(req, res, next);
+	// 			}
+	// 			else {
+	// 				req.user.customer_subscriptions = customer.subscriptions;
+	//
+	// 				//update the customer default card
+	// 				stripe.customers.update(req.user.stripe_customer_id, {
+	// 					source: req.body.stripeToken
+	// 				}, function(err, customer) {
+	// 					if (err){
+	// 						revertPremiumListings(req, res, err);
+	// 					}
+	// 					else {
+	// 						next();
+	// 					}
+	// 				});
+	// 			}
+	// 		});
+	// 	}
+	//
+	// 	//no customer exists, create a new stripe customer
+	// 	else {
+	// 		console.log("SF: Trying to create a new Stripe customer...");
+	// 		newStripecustomer(req, res, next);
+	// 	}
+	// },
+	//
+	// //function to create a monthly subscription for a listing
+	// createSingleStripeSubscription : function(req, res, next){
+	// 	var domain_name = req.params.domain_name || req.body.domain_name;
+	// 	var listing_info = getUserListingObj(req.user.listings, domain_name);
+	//
+	// 	//if subscription id exists in our database
+	// 	if (listing_info && listing_info.stripe_subscription_id){
+	//
+	// 		//check it against stripe
+	// 		stripe.subscriptions.retrieve(listing_info.stripe_subscription_id, function(err, subscription) {
+	// 			if (err){stripeErrorHandler(req, res, err)}
+	// 			else {
+	// 				//subscription was cancelled, re-subscribe
+	// 				if (subscription.cancel_at_period_end){
+	// 					stripe.subscriptions.update(listing_info.stripe_subscription_id, function(err, subscription) {
+	// 						if (err){stripeErrorHandler(req, res, err)}
+	// 						else {
+	// 							req.new_listing_info = {
+	// 								stripe_subscription_id : subscription.id,
+	// 								exp_date : subscription.current_period_end * 1000,
+	// 								expiring: false
+	// 							}
+	// 							next();
+	// 						}
+	// 					});
+	// 				}
+	//
+	// 				//subscription is still active, all gucci
+	// 				else {
+	// 					error.handler(req, res, "This listing is already a Premium listing!", "json");
+	// 				}
+	// 			}
+	// 		});
+	// 	}
+	// 	else {
+	// 		stripe.subscriptions.create({
+	// 			customer: req.user.stripe_customer_id,
+	// 			plan: "premium",
+	// 			metadata: {
+	// 				"insert_id" : listing_info.id
+	// 			}
+	// 		}, function(err, subscription) {
+	// 			if (err){stripeErrorHandler(req, res, err)}
+	// 			else {
+	// 				req.new_listing_info = {
+	// 					stripe_subscription_id : subscription.id,
+	// 					exp_date : subscription.current_period_end * 1000,
+	// 					expiring: false
+	// 				}
+	// 				next();
+	// 			}
+	// 		});
+	// 	}
+	// },
+	//
+	// //function to create multiple monthly subscriptions
+	// createStripeSubscriptions : function(req, res, next){
+	// 	console.log("SF: Trying to create or update a Stripe subscription...");
+	//
+	// 	newStripeSubscription(req, res, next);
+	// },
+	//
+	// //check that stripe subscription exists
+	// cancelStripeSubscription : function(req, res, next){
+	// 	var listing_info = getUserListingObj(req.user.listings, req.params.domain_name);
+	//
+	// 	//if subscription id exists in our database
+	// 	if (listing_info && listing_info.stripe_subscription_id){
+	// 		stripe.subscriptions.del(listing_info.stripe_subscription_id, { at_period_end: true }, function(err, confirmation) {
+	// 			if (err){stripeErrorHandler(req, res, err)}
+	// 			else {
+	//
+	// 				//set expiring flag
+	// 				req.new_listing_info = {
+	// 					expiring: true
+	// 				}
+	// 				next();
+	// 			}
+	// 		});
+	// 	}
+	// 	else {
+	// 		error.handler(req, res, "This isn't a Premium listing!", "json")
+	// 	}
+	// }
 
 }
 
@@ -548,6 +560,8 @@ function updateUserStripeInfo(user, stripe_results){
 		transfers_enabled : stripe_results.transfers_enabled
 	}
 	if (stripe_results.external_accounts.total_count > 0){
+		user.stripe_info.object = stripe_results.external_accounts.data[0].object || "";
+		user.stripe_info.bank_name = stripe_results.external_accounts.data[0].bank_name || "";
 		user.stripe_info.account_holder_name = stripe_results.external_accounts.data[0].account_holder_name || "";
 		user.stripe_info.account_number = stripe_results.external_accounts.data[0].last4 || "";
 		user.stripe_info.account_routing = stripe_results.external_accounts.data[0].routing_number || "";
@@ -561,7 +575,7 @@ function newStripecustomer(req, res, next){
 		email: req.user.email,
 		metadata: {
 			"account_id" : req.user.id,
-			"stripe_user_id" : req.user.stripe_user_id
+			"stripe_account" : req.user.stripe_account
 		}
 	}, function(err, customer) {
 		if (err){
@@ -654,20 +668,6 @@ function newStripeSubscription(req, res, next){
 
 }
 
-//helper function for handling stripe errors
-function stripeErrorHandler(req, res, err){
-	console.log(err);
-	switch (err.message){
-		case ("Your card was declined!"):
-		case ("Your card's expiration year is invalid."):
-			error.handler(req, res, err.message, "json");
-			break;
-		default:
-			error.handler(req, res, "Something went wrong with the payment!", "json");
-			break;
-	}
-}
-
 //helper function to handle unsuccessful stripe card, revert premium
 function revertPremiumListings(req, res, err){
 	if (req.path == "/listings/create"){
@@ -705,6 +705,20 @@ function revertPremiumListings(req, res, err){
 	}
 	else {
 		stripeErrorHandler(req, res, err);
+	}
+}
+
+//helper function for handling stripe errors
+function stripeErrorHandler(req, res, err){
+	console.log(err);
+	switch (err.message){
+		case ("Your card was declined!"):
+		case ("Your card's expiration year is invalid."):
+		error.handler(req, res, err.message, "json");
+		break;
+		default:
+		error.handler(req, res, "Something went wrong with the payment!", "json");
+		break;
 	}
 }
 

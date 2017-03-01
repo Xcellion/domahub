@@ -66,8 +66,8 @@ module.exports = function(app, db, auth, error, stripe){
 		owner_functions.checkPostedPremium,
 		profile_functions.getAccountListings,		//to find out which listings were not created in multi-create
 		owner_functions.createListings,
-		stripe.createStripeCustomer,
-		stripe.createStripeSubscriptions,
+		//stripe.createStripeCustomer,
+		//stripe.createStripeSubscriptions,
 		owner_functions.updateListingPremium
 	]);
 
@@ -76,7 +76,7 @@ module.exports = function(app, db, auth, error, stripe){
 		res.redirect("/listings/create");
 	});
 
-	// //create multiple listings
+	//create multiple listings
 	// app.post('/listings/create/multiple', [
 	// 	auth.checkLoggedIn,
 	// 	profile_functions.getAccountListings,
@@ -122,30 +122,30 @@ module.exports = function(app, db, auth, error, stripe){
 	]);
 
 	//update listing to premium
-	app.post('/listing/:domain_name/upgrade', [
-		urlencodedParser,
-		auth.checkLoggedIn,
-		checkDomainValid,
-		checkDomainListed,
-		profile_functions.getAccountListings,
-		owner_functions.checkListingOwner,
-		owner_functions.checkListingVerified,
-		stripe.createStripeCustomer,
-		stripe.createSingleStripeSubscription,
-		owner_functions.updateListing
-	]);
+	// app.post('/listing/:domain_name/upgrade', [
+	// 	urlencodedParser,
+	// 	auth.checkLoggedIn,
+	// 	checkDomainValid,
+	// 	checkDomainListed,
+	// 	profile_functions.getAccountListings,
+	// 	owner_functions.checkListingOwner,
+	// 	owner_functions.checkListingVerified,
+	// 	stripe.createStripeCustomer,
+	// 	stripe.createSingleStripeSubscription,
+	// 	owner_functions.updateListing
+	// ]);
 
 	//degrade listing to basic
-	app.post('/listing/:domain_name/downgrade', [
-		auth.checkLoggedIn,
-		checkDomainValid,
-		checkDomainListed,
-		profile_functions.getAccountListings,
-		owner_functions.checkListingOwner,
-		owner_functions.checkListingVerified,
-		stripe.cancelStripeSubscription,
-		owner_functions.updateListing
-	]);
+	// app.post('/listing/:domain_name/downgrade', [
+	// 	auth.checkLoggedIn,
+	// 	checkDomainValid,
+	// 	checkDomainListed,
+	// 	profile_functions.getAccountListings,
+	// 	owner_functions.checkListingOwner,
+	// 	owner_functions.checkListingVerified,
+	// 	stripe.cancelStripeSubscription,
+	// 	owner_functions.updateListing
+	// ]);
 
 	//-------------------------------------------------------------------------------------------------------------------- RENTAL RELATED
 
