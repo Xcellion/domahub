@@ -222,7 +222,7 @@ function createFormDrop(rental_info){``
 //various buttons (add time, view listing, view rental, delete rental)
 function createButtons(rental_info){
 	var temp_div_buttons = $("<div class='is-flex-wrap margin-bottom-10'></div>");
-	var temp_button1 = $("<a target='_blank' href='/listing/" + rental_info.domain_name + "' class='button no-shadow'>View Listing</a>");
+	var temp_button1 = $("<a target='_blank' href='/listing/" + rental_info.domain_name + "' class='button margin-right-5 no-shadow'>View Listing</a>");
 	var temp_button2 = $("<a class='button no-shadow'>Delete Rental</a>");
 
 	//are you sure?

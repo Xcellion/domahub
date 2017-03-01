@@ -110,7 +110,7 @@
           </div>
           <footer class="card-footer">
             <% if (listing_info.status == 1) { %>
-              <a id="more-info-button" tabindex="1" class="card-footer-item no-border has-icon">
+              <a id="more-info-button" tabindex="1" class="card-footer-item no-border has-icon is-hidden-desktop">
                 <span>Show Listing Details</span>
                 <span class="icon is-small">
                   <i class="fa fa-angle-down"></i>
@@ -149,7 +149,7 @@
             <% } %>
           </footer>
         </div>
-        <div id="description-card" class="card margin-bottom-25 is-hidden">
+        <div id="description-card" class="card margin-bottom-25 is-hidden-mobile">
           <div class="card-content">
             <div class="content listing-info">
               <nav class="level">
