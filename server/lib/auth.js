@@ -393,6 +393,7 @@ module.exports = {
 	//function to change password
 	forgotPost: function(req, res, next){
 		email = req.body.email;
+        console.log('F: Sending account password forgot email...');
 
 		if (!validator.isEmail(email)){
 			error.handler(req, res, "Invalid email!", "json");
@@ -447,6 +448,7 @@ module.exports = {
 	resetPost: function(req, res, next){
 		var token = req.params.token;
 		var password = req.body.password;
+        console.log('F: Resetting account password...');
 
 		if (!password){
 			error.handler(req, res, "Invalid password!", "json");
@@ -502,6 +504,7 @@ module.exports = {
 	//function to verify account
 	verifyPost: function(req, res, next){
 		var token = req.params.token;
+        console.log('F: Verifying account...');
 
 		Account.getAccountByToken(token, function(result){
 			if (result.state=="error"){error.handler(req, res, result.info);}
@@ -556,6 +559,8 @@ module.exports = {
 
 	//function to check account settings posted
 	checkAccountSettings: function(req, res, next){
+        console.log('F: Checking posted account settings...');
+
 		new_email = req.body.new_email;
 		username = req.body.username;
 		password = req.body.new_password;
@@ -600,6 +605,8 @@ module.exports = {
 
 	//function to update account settings
 	updateAccountSettings : function(req, res, next){
+        console.log('F: Updating account settings...');
+
 		new_account_info = {};
 		if (req.body.new_email){
 			new_account_info.email = req.body.new_email;
@@ -639,6 +646,8 @@ module.exports = {
 
     //function to update for managed stripe
     updateAccountStripe : function(req, res, next){
+        console.log('F: Updating account Stripe settings...');
+
         Account.updateAccount({
             stripe_account : req.session.stripe_results.id,
             stripe_secret : req.session.stripe_results.keys.secret,

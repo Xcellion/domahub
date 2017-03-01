@@ -105,15 +105,15 @@ function updateAccountStripeCustomerID(customer, bool){
 }
 
 //customer revoking access to domahub
-function updateAccountStripeUserID(stripe_user_id){
+function updateAccountStripeUserID(stripe_account){
 	if (user_id){
 		//update the domahub DB appropriately
-		Account.updateAccountStripeUserID(stripe_user_id, {stripe_user_id : null}, function(result){
+		Account.updateAccountStripeUserID(stripe_account, {stripe_account : null}, function(result){
 			if (result.state == "success"){
-				console.log("Stripe user" + stripe_user_id + " has revoked access...");
+				console.log("Stripe user" + stripe_account + " has revoked access...");
 			}
 			else {
-				console.log("Something went wrong with Stripe user" + stripe_user_id + " revoking access...");
+				console.log("Something went wrong with Stripe user" + stripe_account + " revoking access...");
 			}
 		});
 	}

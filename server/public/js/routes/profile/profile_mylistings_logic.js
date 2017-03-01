@@ -1029,7 +1029,7 @@ function errorMessage(msg_elem, message){
     if (message){
         //connect stripe first!
         if (message == "stripe-connect-error"){
-            msg_elem.append("<p class='is-white'>You must <a class='is-accent' href='/authorizestripe'>connect your Stripe account</a> before your listing can go live!</p>");
+            msg_elem.append("<p class='is-white'>You must <a class='is-underlined' href='/profile/settings#payout-address'>enter your payment information</a> before your listing can go live!</p>");
         }
         else {
             msg_elem.append("<p class='is-white'>" + message + "</p>");

@@ -164,7 +164,7 @@ account_model.prototype.getAccountChats = function(account_id, callback){
 account_model.prototype.getStripeAndType = function(domain_name, callback){
 	console.log("Attempting to get the listing type and Stripe ID of the owner of: " + domain_name + "...");
 	query = "SELECT \
-				accounts.stripe_user_id,\
+				accounts.stripe_account,\
 				listings.exp_date \
 			FROM accounts \
 			JOIN listings ON listings.owner_id = accounts.id \
