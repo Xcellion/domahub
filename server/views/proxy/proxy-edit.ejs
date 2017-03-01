@@ -24,6 +24,9 @@
             $(this).select();
         });
 
+        //auto show menu if editing
+        $("#domahub-button").click();
+
         //rental times
         for (var x = 0 ; x < doma_rental_info.times.length; x++){
             var temp_start = moment(doma_rental_info.times[x].date).format("MMM D YYYY");
