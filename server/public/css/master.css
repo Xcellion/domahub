@@ -4633,7 +4633,7 @@ input:-webkit-autofill {
     .section.is-white.gradient-top-bottom {
       background-image: linear-gradient(#e6e6e6, white); }
     .section.is-white.gradient-bottom-top {
-      background-image: linear-gradient(#e6e6e6, white); }
+      background-image: linear-gradient(white, #e6e6e6); }
   .section.is-black {
     background-color: black; }
     .section.is-black.gradient-left-right {
@@ -4643,7 +4643,7 @@ input:-webkit-autofill {
     .section.is-black.gradient-top-bottom {
       background-image: linear-gradient(black, #1a1a1a); }
     .section.is-black.gradient-bottom-top {
-      background-image: linear-gradient(black, #1a1a1a); }
+      background-image: linear-gradient(#1a1a1a, black); }
   .section.is-grey {
     background-color: #d0d0d0; }
     .section.is-grey.gradient-left-right {
@@ -4653,7 +4653,7 @@ input:-webkit-autofill {
     .section.is-grey.gradient-top-bottom {
       background-image: linear-gradient(#beafb2, #ece8e7); }
     .section.is-grey.gradient-bottom-top {
-      background-image: linear-gradient(#beafb2, #ece8e7); }
+      background-image: linear-gradient(#ece8e7, #beafb2); }
   .section.is-blacklight {
     background-color: rgba(0, 0, 0, 0.66); }
     .section.is-blacklight.gradient-left-right {
@@ -4663,7 +4663,7 @@ input:-webkit-autofill {
     .section.is-blacklight.gradient-top-bottom {
       background-image: linear-gradient(rgba(0, 0, 0, 0.66), rgba(26, 26, 26, 0.66)); }
     .section.is-blacklight.gradient-bottom-top {
-      background-image: linear-gradient(rgba(0, 0, 0, 0.66), rgba(26, 26, 26, 0.66)); }
+      background-image: linear-gradient(rgba(26, 26, 26, 0.66), rgba(0, 0, 0, 0.66)); }
   .section.is-whitelight {
     background-color: rgba(255, 255, 255, 0.7); }
     .section.is-whitelight.gradient-left-right {
@@ -4673,7 +4673,7 @@ input:-webkit-autofill {
     .section.is-whitelight.gradient-top-bottom {
       background-image: linear-gradient(rgba(230, 230, 230, 0.7), rgba(255, 255, 255, 0.7)); }
     .section.is-whitelight.gradient-bottom-top {
-      background-image: linear-gradient(rgba(230, 230, 230, 0.7), rgba(255, 255, 255, 0.7)); }
+      background-image: linear-gradient(rgba(255, 255, 255, 0.7), rgba(230, 230, 230, 0.7)); }
   .section.is-light {
     background-color: #d0d0d0; }
     .section.is-light.gradient-left-right {
@@ -4683,7 +4683,7 @@ input:-webkit-autofill {
     .section.is-light.gradient-top-bottom {
       background-image: linear-gradient(#beafb2, #ece8e7); }
     .section.is-light.gradient-bottom-top {
-      background-image: linear-gradient(#beafb2, #ece8e7); }
+      background-image: linear-gradient(#ece8e7, #beafb2); }
   .section.is-lighter {
     background-color: #efefef; }
     .section.is-lighter.gradient-left-right {
@@ -4693,7 +4693,7 @@ input:-webkit-autofill {
     .section.is-lighter.gradient-top-bottom {
       background-image: linear-gradient(#dad1d3, white); }
     .section.is-lighter.gradient-bottom-top {
-      background-image: linear-gradient(#dad1d3, white); }
+      background-image: linear-gradient(white, #dad1d3); }
   .section.is-dark {
     background-color: #444; }
     .section.is-dark.gradient-left-right {
@@ -4703,7 +4703,7 @@ input:-webkit-autofill {
     .section.is-dark.gradient-top-bottom {
       background-image: linear-gradient(#2f2628, #675754); }
     .section.is-dark.gradient-bottom-top {
-      background-image: linear-gradient(#2f2628, #675754); }
+      background-image: linear-gradient(#675754, #2f2628); }
   .section.is-purple {
     background-color: #9c27b0; }
     .section.is-purple.gradient-left-right {
@@ -4713,7 +4713,7 @@ input:-webkit-autofill {
     .section.is-purple.gradient-top-bottom {
       background-image: linear-gradient(#69168e, #df2bdb); }
     .section.is-purple.gradient-bottom-top {
-      background-image: linear-gradient(#69168e, #df2bdb); }
+      background-image: linear-gradient(#df2bdb, #69168e); }
   .section.is-primary {
     background-color: #3cbc8d; }
     .section.is-primary.gradient-left-right {
@@ -4723,7 +4723,7 @@ input:-webkit-autofill {
     .section.is-primary.gradient-top-bottom {
       background-image: linear-gradient(#269f5e, #54d7bc); }
     .section.is-primary.gradient-bottom-top {
-      background-image: linear-gradient(#269f5e, #54d7bc); }
+      background-image: linear-gradient(#54d7bc, #269f5e); }
   .section.is-primarydark {
     background-color: #309670; }
     .section.is-primarydark.gradient-left-right {
@@ -4733,7 +4733,7 @@ input:-webkit-autofill {
     .section.is-primarydark.gradient-top-bottom {
       background-image: linear-gradient(#1c7746, #30c9aa); }
     .section.is-primarydark.gradient-bottom-top {
-      background-image: linear-gradient(#1c7746, #30c9aa); }
+      background-image: linear-gradient(#30c9aa, #1c7746); }
   .section.is-primarylight {
     background-color: #62c9a3; }
     .section.is-primarylight.gradient-left-right {
@@ -4743,7 +4743,7 @@ input:-webkit-autofill {
     .section.is-primarylight.gradient-top-bottom {
       background-image: linear-gradient(#33c577, #80decb); }
     .section.is-primarylight.gradient-bottom-top {
-      background-image: linear-gradient(#33c577, #80decb); }
+      background-image: linear-gradient(#80decb, #33c577); }
   .section.is-primarylighter {
     background-color: #8ad6ba; }
     .section.is-primarylighter.gradient-left-right {
@@ -4753,7 +4753,7 @@ input:-webkit-autofill {
     .section.is-primarylighter.gradient-top-bottom {
       background-image: linear-gradient(#5ad392, #aae9dc); }
     .section.is-primarylighter.gradient-bottom-top {
-      background-image: linear-gradient(#5ad392, #aae9dc); }
+      background-image: linear-gradient(#aae9dc, #5ad392); }
   .section.is-info {
     background-color: #2196f3; }
     .section.is-info.gradient-left-right {
@@ -4763,7 +4763,7 @@ input:-webkit-autofill {
     .section.is-info.gradient-top-bottom {
       background-image: linear-gradient(#00a3e1, #4890ff); }
     .section.is-info.gradient-bottom-top {
-      background-image: linear-gradient(#00a3e1, #4890ff); }
+      background-image: linear-gradient(#4890ff, #00a3e1); }
   .section.is-bluedarker {
     background-color: #1b2835; }
     .section.is-bluedarker.gradient-left-right {
@@ -4773,7 +4773,7 @@ input:-webkit-autofill {
     .section.is-bluedarker.gradient-top-bottom {
       background-image: linear-gradient(#081115, #26385d); }
     .section.is-bluedarker.gradient-bottom-top {
-      background-image: linear-gradient(#081115, #26385d); }
+      background-image: linear-gradient(#26385d, #081115); }
   .section.is-accent {
     background-color: #ff5722; }
     .section.is-accent.gradient-left-right {
@@ -4783,7 +4783,7 @@ input:-webkit-autofill {
     .section.is-accent.gradient-top-bottom {
       background-image: linear-gradient(#ee1100, #ff9a55); }
     .section.is-accent.gradient-bottom-top {
-      background-image: linear-gradient(#ee1100, #ff9a55); }
+      background-image: linear-gradient(#ff9a55, #ee1100); }
   .section.is-success {
     background-color: #81c784; }
     .section.is-success.gradient-left-right {
@@ -4793,7 +4793,7 @@ input:-webkit-autofill {
     .section.is-success.gradient-top-bottom {
       background-image: linear-gradient(#60c352, #9eddab); }
     .section.is-success.gradient-bottom-top {
-      background-image: linear-gradient(#60c352, #9eddab); }
+      background-image: linear-gradient(#9eddab, #60c352); }
   .section.is-warning {
     background-color: #ffeb3b; }
     .section.is-warning.gradient-left-right {
@@ -4803,7 +4803,7 @@ input:-webkit-autofill {
     .section.is-warning.gradient-top-bottom {
       background-image: linear-gradient(#ffbd08, #f6ff6e); }
     .section.is-warning.gradient-bottom-top {
-      background-image: linear-gradient(#ffbd08, #f6ff6e); }
+      background-image: linear-gradient(#f6ff6e, #ffbd08); }
   .section.is-danger {
     background-color: #EF5350; }
     .section.is-danger.gradient-left-right {
@@ -4813,7 +4813,7 @@ input:-webkit-autofill {
     .section.is-danger.gradient-top-bottom {
       background-image: linear-gradient(#f71537, #fa9078); }
     .section.is-danger.gradient-bottom-top {
-      background-image: linear-gradient(#f71537, #fa9078); }
+      background-image: linear-gradient(#fa9078, #f71537); }
   .section.is-small {
     padding: 20px; }
   @media screen and (min-width: 769px) {
@@ -4853,8 +4853,7 @@ input:-webkit-autofill {
   justify-content: center; }
   @media screen and (max-width: 456px) {
     .footer-list {
-      flex-direction: column;
-      align-items: center; } }
+      flex-wrap: wrap; } }
 
 .footer-item {
   margin-left: 20px; }
