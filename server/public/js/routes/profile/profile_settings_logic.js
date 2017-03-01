@@ -100,12 +100,12 @@ $(document).ready(function() {
                 method: "POST",
                 data: submit_data
             }).done(function(data){
+                resetInputs();
                 if (data.state == "success"){
                     flashSuccess($("#basic-message"));
                     user = data.user;
                 }
                 else {
-                    resetInputs();
                     flashError($("#basic-message"), data.message);
                 }
             })
@@ -129,6 +129,7 @@ $(document).ready(function() {
 
     //to toggle account changes
     $("#change-account-submit").click(function(e){
+        e.preventDefault();
         $("#account-settings").submit();
     });
 
@@ -259,25 +260,23 @@ function resetInputs(){
     $("#old-pw-input").val("").removeClass("is-danger");
     $("#new-pw-input").val("").removeClass("is-danger");
     $("#verify-pw-input").val("").removeClass("is-danger");
-    //$("#gender-input").val(user.gender).removeClass("is-danger");
-    //$("#birthday-year-input").val(user.birthday.year).removeClass("is-danger");
-    //$("#birthday-month-input-input").val(user.birthday.month).removeClass("is-danger");
-    //$("#birthday-day-input").val(user.birthday.day).removeClass("is-danger");
-    //$("#phone-input").val(user.phone).removeClass("is-danger");
 }
 
 //function to check if all fields are filled out
 function checkFieldsFilled(form_elem){
-    var can_submit = false;
-    var empty = false;
-    form_elem.find(".stripe-input").each(function(){
-        if ($(this).val() && user.stripe_info && $(this).val() != user.stripe_info[$(this).attr("id").replace("-input", "")]){
-            can_submit = true;
+    var required = form_elem.find(".stripe-input[required]");
+    var required_count = required.length;
+    var required_filled = required.filter(function(){
+        //if stripe info exists, make sure it's new
+        if (user.stripe_info){
+            return $(this).val() != user.stripe_info[$(this).attr("id").replace("-input", "")];
         }
-        else if (!$(this).val() && $(this).prop('required')){
-            empty = true;
+        //else make sure it's not blank
+        else if ($(this).val() != ""){
+            return true;
         }
-    });
+    }).toArray();
+    var required_filled_count = required_filled.length;
 
     if (form_elem.attr('id') == "payout-bank-form"){
         if ($("input[type=checkbox]:checked").length != 2){
@@ -285,7 +284,7 @@ function checkFieldsFilled(form_elem){
         }
     }
 
-    return (can_submit && !empty);
+    return required_count == required_filled_count;
 }
 
 //check if any required field is blank
@@ -374,8 +373,8 @@ function cancelFormSubmit(form){
         form.find("input").val("").removeClass('is-danger');
         prefillStripeInfo();
     }
-    form.find(".cancel-payout ").addClass("is-hidden");
-    form.find(".submit-payout ").addClass("is-disabled");
+    form.find(".cancel-payout").addClass("is-hidden");
+    form.find(".submit-payout").addClass("is-disabled");
 }
 
 //cancel form edit
@@ -457,13 +456,10 @@ function checkAccountSubmit(){
     }
     else {
         return {
-            new_email: (user.email == $("#new_email-input").val()) ? undefined : $("#email-input").val(),
-            username: (user.username == $("#username-input").val()) ? undefined : $("#username-input").val(),
+            new_email: $("#email-input").val(),
+            username: $("#username-input").val(),
             password: $("#old-pw-input").val(),
             new_password: ($("#new-pw-input").val() == "") ? undefined : $("#new-pw-input").val()
-            //gender: $("#gender-input").val(),
-            //birthday: $("#birthday-year-input").val() + $("#birthday-month-input").val() + $("#birthday-day-input").val(),
-            //phone: $("#phone-input").val()
         };
     }
 }
