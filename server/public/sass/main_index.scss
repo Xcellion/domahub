@@ -52,7 +52,7 @@
   background-color: #fff;
   position: relative;
   padding: 10px 15px;
-  min-height: 169px;
+  min-height: 145px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -62,12 +62,12 @@
   &:hover {
     cursor: pointer;
     .slider-icon {
-      background-color: $primary;
+      background-color: $blue-darker;
       color: $white !important;
     }
   }
   @include tablet-only {
-    min-height: 181px;
+    min-height: 212px;
   }
 }
 
@@ -78,7 +78,7 @@
     font-weight: 700;
   }
   .slider-icon {
-    border: 2px solid $primary;
+    border: 2px solid $blue-darker;
     border-radius: 100%;
     min-height: 50px !important;
     min-width: 50px !important;
@@ -86,7 +86,7 @@
     margin-right: 20px;
     &.is-active {
       color: $white !important;
-      background-color: $primary;
+      background-color: $blue-darker;
     }
   }
 }
