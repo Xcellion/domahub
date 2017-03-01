@@ -2171,24 +2171,10 @@ input:-webkit-autofill {
     clear: both;
     content: " ";
     display: table; }
-  .notification.is-popup {
-    -moz-transition: top 0.5s ease, width 0s ease;
-    -o-transition: top 0.5s ease, width 0s ease;
-    -webkit-transition: top 0.5s ease, width 0s ease;
-    transition: top 0.5s ease, width 0s ease;
-    left: 20px;
-    box-sizing: border-box;
-    position: fixed;
-    bottom: -100%;
-    width: 300px;
-    z-index: 100; }
-    .notification.is-popup.is-active {
-      bottom: 20px; }
-      @media screen and (max-width: 768px) {
-        .notification.is-popup.is-active {
-          border-radius: 0;
-          bottom: 0;
-          width: 100%; } }
+  .notification.no-shadow {
+    -webkit-box-shadow: 0 0 0 0 white, 0 0 0 0 white, 0 0 0 0 white;
+    -moz-box-shadow: 0 0 0 0 white, 0 0 0 0 white, 0 0 0 0 white;
+    box-shadow: 0 0 0 0 white, 0 0 0 0 white, 0 0 0 0 white; }
   .notification .delete, .notification .modal-close {
     border-radius: 0 3px;
     float: right;

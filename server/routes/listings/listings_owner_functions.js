@@ -404,7 +404,7 @@ module.exports = {
 		else if (req.body.status){
 
 			//must connect
-			if (status == 1 && !req.user.stripe_user_id){
+			if (status == 1 && !req.user.stripe_account){
 				error.handler(req, res, "stripe-connect-error", "json");
 			}
 			else {

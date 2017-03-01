@@ -222,7 +222,7 @@ function createFormDrop(rental_info){``
 //various buttons (add time, view listing, view rental, delete rental)
 function createButtons(rental_info){
 	var temp_div_buttons = $("<div class='is-flex-wrap margin-bottom-10'></div>");
-	var temp_button1 = $("<a target='_blank' href='/listing/" + rental_info.domain_name + "' class='button no-shadow'>View Listing</a>");
+	var temp_button1 = $("<a target='_blank' href='/listing/" + rental_info.domain_name + "' class='button margin-right-5 no-shadow'>View Listing</a>");
 	var temp_button2 = $("<a class='button no-shadow'>Delete Rental</a>");
 
 	//are you sure?
@@ -276,7 +276,7 @@ function createImgDrop(rental_info){
     var temp_figure = $("<figure class='image listing-img'></figure>");
     var temp_img = $("<img class='is-listing' alt='Image not found' src=" + background_image + " />");
     var temp_footer = $("<footer class='card-footer has-text-centered'></div>");
-    var temp_preview_button = $("<a href='' class='card-footer-item no-border'>Click to Preview</a>");
+    var temp_preview_button = $("<a target='_blank' href='/listing/" + rental_info.domain_name + "/" + rental_info.rental_id + "' class='card-footer-item no-border'>Click to Preview</a>");
     temp_col.append(temp_div.append(temp_div_image.append(temp_figure.append(temp_img)), temp_footer.append(temp_preview_button)));
 
     //if theres an error in getting the image, remove the link

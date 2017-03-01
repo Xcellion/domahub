@@ -5,7 +5,7 @@ window.onpopstate = function(event) {
 
 //function to show a specific section
 function showSection(section_id){
-    //resetErrorSuccess();
+    resetErrorSuccess();
     $(".setting-link").removeClass("is-active");
     $("#" + section_id + "-link").addClass("is-active");
     temp_section = $("#" + section_id);
@@ -29,6 +29,7 @@ function showSectionByURL(){
 }
 
 $(document).ready(function() {
+    window.scrollTo(0,0);
     if (window.location.hostname == "localhost"){
         Stripe.setPublishableKey('pk_test_kcmOEkkC3QtULG5JiRMWVODJ');
     }
@@ -71,12 +72,12 @@ $(document).ready(function() {
     });
 
     //to highlight submit when data changes for stripe form
-    $(".stripe-form .stripe-input").bind("input", function(e){
+    $(".stripe-form").find(".stripe-input").bind("input click", function(e){
         var stripe_form = $(this).closest(".stripe-form");
         var success_button = stripe_form.find(".button.is-primary");
         var cancel_button = stripe_form.find(".button.is-danger");
 
-        if ($(this).val() != user.stripe_info[$(this).attr("id").replace("-input", "")]){
+        if (checkFieldsFilled(stripe_form)){
             success_button.removeClass("is-disabled");
             cancel_button.removeClass("is-hidden");
         }
@@ -131,11 +132,11 @@ $(document).ready(function() {
         $("#account-settings").submit();
     });
 
-    //revoke stripe access
-    $("#revoke-stripe-button").on("click", deauthorizeStripe);
-    $("#provide-stripe-button").on("click", function(){
-        $(this).addClass('is-loading');
-    });
+    // //revoke stripe access
+    // $("#revoke-stripe-button").on("click", deauthorizeStripe);
+    // $("#provide-stripe-button").on("click", function(){
+    //     $(this).addClass('is-loading');
+    // });
 
     //------------------------------------------------------------------------------------ PAY OUT ADDRESS
 
@@ -147,7 +148,7 @@ $(document).ready(function() {
     //to cancel any changes
     $("#payout-address-cancel").click(function(e){
         e.preventDefault();
-        cancelForm($("#payout-address-form"));
+        cancelFormSubmit($("#payout-address-form"));
     });
 
     //go next on address to personal info
@@ -163,12 +164,9 @@ $(document).ready(function() {
     });
 
     //stripe form submit
-    $(".stripe-form").on("submit", function(e){
+    $(".stripe-form").not("#payout-bank-form").on("submit", function(e){
         e.preventDefault();
         var which_form = $(this).attr('id').split("-")[1];
-        if (which_form == "address"){
-            $("#payout-address-next").removeClass('is-hidden');
-        }
 
         //make sure all required fields are good
         if (checkRequiredFields($(this), which_form)){
@@ -178,9 +176,16 @@ $(document).ready(function() {
                 method: "POST"
             }).done(function(data){
                 if (data.state == "success"){
+
+                    //show hidden forms
+                    if (which_form == "address"){
+                        $("#payout-address-next").removeClass('is-hidden');
+                    }
                     $(".hide-stripe").removeClass('is-hidden');
+
                     flashSuccess($("#payout-" + which_form + "-message"));
                     user = data.user;
+                    cancelFormSubmit($("#payout-" + which_form + "-form"));
                 }
                 else {
                     flashError($("#payout-" + which_form + "-message"), data.message);
@@ -201,7 +206,7 @@ $(document).ready(function() {
     //to cancel any changes
     $("#payout-personal-cancel").click(function(e){
         e.preventDefault();
-        cancelForm($("#payout-personal-form"));
+        cancelFormSubmit($("#payout-personal-form"));
     });
 
     //go next on personal to bank info
@@ -215,7 +220,7 @@ $(document).ready(function() {
     //to cancel any changes
     $("#payout-bank-cancel").click(function(e){
         e.preventDefault();
-        cancelForm($("#payout-bank-form"));
+        cancelFormSubmit($("#payout-bank-form"));
     });
 
     //submit bank information
@@ -228,11 +233,11 @@ $(document).ready(function() {
             //create stripe token
             Stripe.bankAccount.createToken({
                 country: $('#country-input').val(),
-                routing_number: $('#account-routing-input').val(),
-                account_number: $('#account-number-input').val()
+                routing_number: $('#account_routing-input').val(),
+                account_number: $('#account_number-input').val()
             }, function(status, response){
-                console.log(status, response);
                 if (status != 200){
+                    console.log(status, response);
                     flashError($("#payout-bank-message"), response.error.message);
                 }
                 else {
@@ -245,10 +250,32 @@ $(document).ready(function() {
 
 });
 
+//function to check if all fields are filled out
+function checkFieldsFilled(form_elem){
+    var can_submit = false;
+    var empty = false;
+    form_elem.find(".stripe-input").each(function(){
+        if ($(this).val() && user.stripe_info && $(this).val() != user.stripe_info[$(this).attr("id").replace("-input", "")]){
+            can_submit = true;
+        }
+        else if (!$(this).val() && $(this).prop('required')){
+            empty = true;
+        }
+    });
+
+    if (form_elem.attr('id') == "payout-bank-form"){
+        if ($("input[type=checkbox]:checked").length != 2){
+            return false;
+        }
+    }
+
+    return (can_submit && !empty);
+}
+
 //check if any required field is blank
 function checkRequiredFields(form_elem, which_form){
     //clear pre-existing missing
-    $(".is-danger").removeClass('is-danger');
+    $(".stripe-input.is-danger").removeClass('is-danger');
 
     var required_missing = form_elem.find(".stripe-input").filter('[required]');
     var required_missing_vals = required_missing.map(function(value){ return $(this).val() }).toArray();
@@ -258,7 +285,7 @@ function checkRequiredFields(form_elem, which_form){
         flashError($("#payout-" + which_form + "-message"), "Missing " + which_form + " information!");
         return false;
     }
-    else if (which_form == "bank" && $("input[type=checkbox]:checked").length == 0){
+    else if (which_form == "bank" && $("input[type=checkbox]:checked").length != 2){
         flashError($("#payout-" + which_form + "-message"), "Please accept the terms of service!");
         return false;
     }
@@ -282,22 +309,18 @@ function submitBank(stripe_token){
         url: "/profile/settings/payout/bank",
         data: {
             stripe_token: stripe_token,
-            account_type: $("#account-type-input").val()
+            account_type: $("#account_type-input").val()
         },
         method: "POST"
     }).done(function(data){
         if (data.state == "success"){
             $(".hide-stripe").removeClass('is-hidden');
-            $("#payout-bank-message").fadeOut(100, function(){
-                $("#payout-bank-message").css("color", "#97cd76").text("Account information updated!").fadeIn(100);
-            });
+            flashSuccess($("#payout-bank-message"));
             user = data.user;
+            cancelFormSubmit($("#payout-bank-form"));
         }
         else {
-            console.log(data);
-            $("#payout-bank-message").fadeOut(100, function(){
-                $("#payout-bank-message").css("color", "#ed1c24").text(data.message).fadeIn(100);
-            });
+            flashError($("#payout-bank-message"), data.message);
         }
     });
 }
@@ -305,120 +328,132 @@ function submitBank(stripe_token){
 //flash error
 function flashError(elem, message){
     elem.fadeOut(100, function(){
-        elem.addClass('is-danger').text(message).fadeIn(100);
+        elem.removeClass('is-success').addClass('is-danger').text(message).fadeIn(100);
     });
 }
 
 //flash success
 function flashSuccess(elem){
     elem.fadeOut(100, function(){
-        elem.addClass("is-success").text("Account information updated!").fadeIn(100);
+        elem.removeClass('is-danger').addClass("is-success").text("Account information updated!").fadeIn(100);
     });
 }
 
 //reset error success flashes
 function resetErrorSuccess(){
-    cancelForm($("#payout-address-form"));
-    cancelForm($("#payout-personal-form"));
-    cancelForm($("#payout-bank-form"));
-    $("#payout-personal-cancel").click();
-    $("#payout-bank-cancel").click();
-    $(".is-danger").removeClass('is-danger');
-    $(".is-success").removeClass('is-success');
+    cancelFormSubmit($("#payout-address-form"));
+    cancelFormSubmit($("#payout-personal-form"));
+    cancelFormSubmit($("#payout-bank-form"));
+    $(".stripe-input.is-danger").removeClass('is-danger');
+    $(".stripe-input.is-success").removeClass('is-success');
+    $(".setting-message").hide();
 }
 
 //cancel form submit
-function cancelForm(form){
-    //form.find("input").val("").removeClass('is-danger');
+function cancelFormSubmit(form){
+    if (!user.stripe_info){
+        form.find("input").val("").removeClass('is-danger');
+    }
+    else {
+        form.find("input").val("").removeClass('is-danger');
+        prefillStripeInfo();
+    }
     form.find(".cancel-payout ").addClass("is-hidden");
     form.find(".submit-payout ").addClass("is-disabled");
 }
 
-//function to deauthorize stripe
-function deauthorizeStripe(e){
-    e.preventDefault();
-    var that = $(this);
-
-    that.addClass('is-loading');
-    that.off("click");  //remove click handler
-
-    $.ajax({
-        type: "POST",
-        url: "/deauthorizestripe"
-    }).done(function(data){
-        if (data.state == "success"){
-            that.text("Revoked!");
-        }
-        else {
-            that.on("click", deauthorizeStripe);
-        }
-    }).always(function(){
-        that.removeClass('is-loading');
-    });
+//cancel form edit
+function cancelFormEdit(form){
+    form.find(".stripe-input").addClass('is-disabled');
+    form.find(".cancel-payout ").addClass("is-hidden");
+    form.find(".submit-payout ").addClass("is-disabled");
 }
 
-//function to check new account settings
-function checkAccountSubmit(){
-    //if no email is entered
-    if (!validateEmail($("#email-input").val())) {
-        $("#basic-message").fadeOut(100, function(){
-            $("#basic-message").css("color", "#ed1c24").text("Please enter your email address!").fadeIn(100);
-            $("#email-input").addClass("is-danger").focus();
-        });
-        return false;
-    }
-
-    //if username is not legit
-    else if (!$("#username-input").val() || $("#username-input").val().length > 70 || $("#username-input").val().includes(" ")) {
-        $("#basic-message").fadeOut(100, function(){
-            $("#basic-message").css("color", "#ed1c24").text("Please enter a valid username!").fadeIn(100);
-            $("#username-input").addClass("is-danger").focus();
-        });
-        return false;
-    }
-
-    // //if the old password is not entered
-    else if ($("#old-pw-input").val().length > 70 || $("#old-pw-input").val().length < 6) {
-        $("#basic-message").fadeOut(100, function(){
-            $("#basic-message").css("color", "#ed1c24").text("Please enter your password to make any changes!").fadeIn(100);
-            $("#old-pw-input").addClass("is-danger").focus();
-        });
-        return false;
-    }
-
-    //if new password is too short or long
-    else if ($("#new-pw-input").val() && ($("#new-pw-input").val().length > 70 || $("#new-pw-input").val().length < 6)) {
-        $("#basic-message").fadeOut(100, function(){
-            $("#basic-message").css("color", "#ed1c24").text("Please enter a password at least 6 characters long!").fadeIn(100);
-            $("#new-pw-input").addClass("is-danger").focus();
-        });
-        return false;
-    }
-
-    //if new passwords do not match
-    else if ($("#new-pw-input").val() && $("#new-pw-input").val() != $("#verify-pw-input").val()){
-        $("#basic-message").fadeOut(100, function(){
-            $("#basic-message").css("color", "#ed1c24").text("New passwords do not match!").fadeIn(100);
-            $("#new-pw-input").addClass("is-danger").focus();
-            $("#verify-pw-input").addClass("is-danger");
-        });
-        return false;
-    }
-    else {
-        return {
-            new_email: (user.email == $("#new_email-input").val()) ? undefined : $("#email-input").val(),
-            username: (user.username == $("#username-input").val()) ? undefined : $("#username-input").val(),
-            password: $("#old-pw-input").val(),
-            new_password: ($("#new-pw-input").val() == "") ? undefined : $("#new-pw-input").val()
-            //gender: $("#gender-input").val(),
-            //birthday: $("#birthday-year-input").val() + $("#birthday-month-input").val() + $("#birthday-day-input").val(),
-            //phone: $("#phone-input").val()
-        };
-    }
-}
-
-//helper function to validate email address
-function validateEmail(email) {
-    var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    return re.test(email);
-}
+// //function to deauthorize stripe
+// function deauthorizeStripe(e){
+//     e.preventDefault();
+//     var that = $(this);
+//
+//     that.addClass('is-loading');
+//     that.off("click");  //remove click handler
+//
+//     $.ajax({
+//         type: "POST",
+//         url: "/deauthorizestripe"
+//     }).done(function(data){
+//         if (data.state == "success"){
+//             that.text("Revoked!");
+//         }
+//         else {
+//             that.on("click", deauthorizeStripe);
+//         }
+//     }).always(function(){
+//         that.removeClass('is-loading');
+//     });
+// }
+//
+// //function to check new account settings
+// function checkAccountSubmit(){
+//     //if no email is entered
+//     if (!validateEmail($("#email-input").val())) {
+//         $("#basic-message").fadeOut(100, function(){
+//             $("#basic-message").css("color", "#ed1c24").text("Please enter your email address!").fadeIn(100);
+//             $("#email-input").addClass("is-danger").focus();
+//         });
+//         return false;
+//     }
+//
+//     //if username is not legit
+//     else if (!$("#username-input").val() || $("#username-input").val().length > 70 || $("#username-input").val().includes(" ")) {
+//         $("#basic-message").fadeOut(100, function(){
+//             $("#basic-message").css("color", "#ed1c24").text("Please enter a valid username!").fadeIn(100);
+//             $("#username-input").addClass("is-danger").focus();
+//         });
+//         return false;
+//     }
+//
+//     // //if the old password is not entered
+//     else if ($("#old-pw-input").val().length > 70 || $("#old-pw-input").val().length < 6) {
+//         $("#basic-message").fadeOut(100, function(){
+//             $("#basic-message").css("color", "#ed1c24").text("Please enter your password to make any changes!").fadeIn(100);
+//             $("#old-pw-input").addClass("is-danger").focus();
+//         });
+//         return false;
+//     }
+//
+//     //if new password is too short or long
+//     else if ($("#new-pw-input").val() && ($("#new-pw-input").val().length > 70 || $("#new-pw-input").val().length < 6)) {
+//         $("#basic-message").fadeOut(100, function(){
+//             $("#basic-message").css("color", "#ed1c24").text("Please enter a password at least 6 characters long!").fadeIn(100);
+//             $("#new-pw-input").addClass("is-danger").focus();
+//         });
+//         return false;
+//     }
+//
+//     //if new passwords do not match
+//     else if ($("#new-pw-input").val() && $("#new-pw-input").val() != $("#verify-pw-input").val()){
+//         $("#basic-message").fadeOut(100, function(){
+//             $("#basic-message").css("color", "#ed1c24").text("New passwords do not match!").fadeIn(100);
+//             $("#new-pw-input").addClass("is-danger").focus();
+//             $("#verify-pw-input").addClass("is-danger");
+//         });
+//         return false;
+//     }
+//     else {
+//         return {
+//             new_email: (user.email == $("#new_email-input").val()) ? undefined : $("#email-input").val(),
+//             username: (user.username == $("#username-input").val()) ? undefined : $("#username-input").val(),
+//             password: $("#old-pw-input").val(),
+//             new_password: ($("#new-pw-input").val() == "") ? undefined : $("#new-pw-input").val()
+//             //gender: $("#gender-input").val(),
+//             //birthday: $("#birthday-year-input").val() + $("#birthday-month-input").val() + $("#birthday-day-input").val(),
+//             //phone: $("#phone-input").val()
+//         };
+//     }
+// }
+//
+// //helper function to validate email address
+// function validateEmail(email) {
+//     var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+//     return re.test(email);
+// }
