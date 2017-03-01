@@ -101,12 +101,9 @@
   flex-wrap: wrap;
   flex-direction: row;
   align-items: center; }
-  .is-flex-wrap .button {
-    margin-bottom: 8px;
-    margin-right: 8px; }
-  @media screen and (max-width: 768px) {
-    .is-flex-wrap > .tag {
-      margin: 5px; } }
+  .is-flex-wrap .tag {
+    margin-bottom: 10px;
+    margin-right: 10px; }
 
 @media screen and (max-width: 768px) {
   .flex-column-mobile {
