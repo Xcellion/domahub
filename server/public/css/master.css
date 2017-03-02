@@ -4808,8 +4808,12 @@ input:-webkit-autofill {
   @media screen and (max-width: 768px) {
     .section.is-medium {
       padding: 80px 20px; } }
-  .section.is-medium-top {
-    padding: 130px 20px 0; }
+  @media screen and (min-width: 769px) {
+    .section.is-medium-top {
+      padding: 130px 20px 0; } }
+  @media screen and (max-width: 768px) {
+    .section.is-medium-top {
+      padding: 80px 20px; } }
   @media screen and (min-width: 980px) {
     .section.is-large {
       padding: 200px 20px; } }

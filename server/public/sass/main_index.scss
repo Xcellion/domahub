@@ -57,26 +57,28 @@
     padding: 5px;
     li {
       @include transition(all 0.25s ease);
-      padding: 15px;
+      box-sizing: border-box;
+      padding: 15px 0;
       &:first-child {
         margin-right: 20px;
       }
-      &:hover {
-        @include box-shadow(0,5px,0,$black-disabled,0);
-        cursor: pointer;
-        a {
-          color: $black-disabled;
-        }
-      }
-      &.is-active {
-        @include box-shadow(0,5px,0,$primary,0);
-        a {
-          color: $primary;
-        }
-      }
       a {
+        @include transition(all 0.25s ease);
         font-weight: 700;
         text-transform: uppercase;
+        padding: 15px;
+        &.is-active {
+          @include box-shadow(0,5px,0,$primary,0);
+          color: $primary;
+        }
+        &:hover,
+        &:focus {
+          outline: none;
+          &:not(.is-active) {
+            @include box-shadow(0,5px,0,$black-disabled,0);
+            color: $black-disabled;
+          }
+        }
       }
     }
   }
