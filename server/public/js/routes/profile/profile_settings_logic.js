@@ -265,26 +265,27 @@ function resetInputs(){
 //function to check if all fields are filled out
 function checkFieldsFilled(form_elem){
     var required = form_elem.find(".stripe-input[required]");
-    var required_count = required.length;
-    var required_filled = required.filter(function(){
-        //if stripe info exists, make sure it's new
-        if (user.stripe_info){
-            return $(this).val() != user.stripe_info[$(this).attr("id").replace("-input", "")];
-        }
-        //else make sure it's not blank
-        else if ($(this).val() != ""){
-            return true;
-        }
-    }).toArray();
-    var required_filled_count = required_filled.length;
 
+    //make sure all required are filled
+    var required_filled = required.filter(function(){
+        return $(this).val();
+    }).toArray();
+
+    //if stripe info exists, make sure it's changed
+    if (user.stripe_info){
+        var changed = form_elem.find(".stripe-input").filter(function(){
+            return $(this).val() != user.stripe_info[$(this).attr("id").replace("-input", "")];
+        });
+    }
+
+    //make sure terms are selected
     if (form_elem.attr('id') == "payout-bank-form"){
         if ($("input[type=checkbox]:checked").length != 2){
             return false;
         }
     }
 
-    return required_count == required_filled_count;
+    return (user.stripe_info) ? required.length == required_filled.length && changed.length > 0 : required.length == required_filled.length;
 }
 
 //check if any required field is blank
@@ -367,10 +368,10 @@ function resetErrorSuccess(){
 //cancel form submit
 function cancelFormSubmit(form){
     if (!user.stripe_info){
-        form.find("input").val("").removeClass('is-danger');
+        form.find(".stripe-input").val("").removeClass('is-danger');
     }
     else {
-        form.find("input").val("").removeClass('is-danger');
+        form.find(".stripe-input").val("").removeClass('is-danger');
         prefillStripeInfo();
     }
     form.find(".cancel-payout").addClass("is-hidden");
