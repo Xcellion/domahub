@@ -168,7 +168,7 @@ module.exports = {
 	                });
 				}
 				else {
-					console.log(err);
+					console.log(err.message);
 					error.handler(req, res, "Failed to update your account!", "json");
 				}
 			});
@@ -196,7 +196,7 @@ module.exports = {
 					next();
 				}
 				else {
-					console.log(err);
+					console.log(err.message);
 					error.handler(req, res, err.message, "json");
 				}
 			});
@@ -225,7 +225,7 @@ module.exports = {
                 });
 			}
 			else {
-				console.log(err);
+				console.log(err.message);
 				error.handler(req, res, "Failed to update your account!", "json");
 			}
 		});
@@ -252,7 +252,7 @@ module.exports = {
                 });
 			}
 			else {
-				console.log(err);
+				console.log(err.message);
 				error.handler(req, res, "Failed to update your account!", "json");
 			}
 		});
@@ -400,7 +400,7 @@ module.exports = {
 				//charge the end user, transfer to the owner, take doma fees if its a basic listing
 				stripe.charges.create(stripeOptions, function(err, charge) {
 					if (err) {
-						console.log(err);
+						console.log(err.message);
 						error.handler(req, res, "Invalid price!", "json");
 					}
 					else {
@@ -710,7 +710,7 @@ function revertPremiumListings(req, res, err){
 
 //helper function for handling stripe errors
 function stripeErrorHandler(req, res, err){
-	console.log(err);
+	console.log(err.message);
 	switch (err.message){
 		case ("Your card was declined!"):
 		case ("Your card's expiration year is invalid."):
