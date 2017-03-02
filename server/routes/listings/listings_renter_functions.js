@@ -309,7 +309,7 @@ module.exports = {
 
     //gets the listing info and all rental info/times belonging to it for a verified and active listing
     getVerifiedListing : function(req, res, next) {
-        console.log("F: Getting all listing info for the verified listing...");
+        console.log("F: Getting all listing info for the verified listing + " + req.params.domain_name + "...");
 
         Listing.getVerifiedListing(req.params.domain_name, function(result){
             if (result.state=="error"){error.handler(req, res, "Invalid listing!");}
