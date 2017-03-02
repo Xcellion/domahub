@@ -651,7 +651,8 @@ module.exports = {
         Account.updateAccount({
             stripe_account : req.session.stripe_results.id,
             stripe_secret : req.session.stripe_results.keys.secret,
-            stripe_public : req.session.stripe_results.keys.publishable
+            stripe_public : req.session.stripe_results.keys.publishable,
+            type: 2
         }, req.user.email, function(result){
             if (result.state=="error"){
                 error.handler(req, res, result.info, "json");
@@ -664,7 +665,7 @@ module.exports = {
                     user: req.user
                 });
             }
-        })
+        });
     }
 
 }

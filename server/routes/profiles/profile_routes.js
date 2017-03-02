@@ -97,7 +97,7 @@ module.exports = function(app, db, auth, error, stripe){
 	app.get("/redirect", function(req, res){
 		res.render("redirect.ejs", {
 			redirect: "/"
-		})
+		});
 	});
 
 	//redirect anything not caught above to /profile
