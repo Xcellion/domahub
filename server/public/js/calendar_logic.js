@@ -1004,7 +1004,7 @@ function handlePartialDays(start, end){
     var then = moment().add(1, "year");
 
     return {
-        start: (start.isSameOrBefore(now)) ? now.add(1, "hour").startOf('hour') : start,
+        start: (start.isSameOrBefore(now)) ? now.endOf('day').add(1, "millisecond") : start,
         end: (end.isSameOrAfter(then)) ? then.startOf('hour') : end
     }
 }
