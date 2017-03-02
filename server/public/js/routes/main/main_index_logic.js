@@ -20,23 +20,27 @@ $(document).ready(function() {
     });
 
     //two button scroll
-    $("#learn-more-button").on("click", function(){
+    $("#learn-more-button").on("click", function(e){
+        e.preventDefault();
         $('html, body').stop().animate({
             scrollTop: $("#decision-section").offset().top - $("#navbar").height()
         }, 500);
     });
-    $("#want-domains-button").on("click", function(){
+    $("#want-domains-button").on("click", function(e){
+        e.preventDefault();
         $('html, body').stop().animate({
             scrollTop: $("#want-domains-section").offset().top - $("#navbar").height()
         }, 500);
     });
-    $("#have-domains-tab").on("click", function(){
+    $("#have-domains-tab").on("click", function(e){
+        e.preventDefault();
         $(".d-owner").removeClass("is-hidden");
         $(".d-renter").addClass("is-hidden");
         $(this).addClass("is-active");
         $("#want-domains-tab").removeClass("is-active");
     })
-    $("#want-domains-tab").on("click", function(){
+    $("#want-domains-tab").on("click", function(e){
+        e.preventDefault();
         $(".d-renter").removeClass("is-hidden");
         $(".d-owner").addClass("is-hidden");
         $(this).addClass("is-active");
