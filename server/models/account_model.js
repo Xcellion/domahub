@@ -203,3 +203,12 @@ account_model.prototype.updateAccount = function(account_info, email, callback){
 			WHERE email = ?"
 	account_query(query, "Failed to update account!", callback, [account_info, email]);
 }
+
+//updates specific stripe account (for deletion)
+account_model.prototype.updateAccountStripe = function(account_info, stripe_account, callback){
+	console.log("Updating account with Stripe account id: " + stripe_account + "...");
+	query = "UPDATE accounts \
+			SET ? \
+			WHERE stripe_account = ?"
+	account_query(query, "Failed to update account with Stripe account id: " + stripe_account + "!", callback, [account_info, stripe_account]);
+}
