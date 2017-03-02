@@ -34,7 +34,7 @@ $(document).ready(function() {
         Stripe.setPublishableKey('pk_test_kcmOEkkC3QtULG5JiRMWVODJ');
     }
     else {
-        Stripe.setPublishableKey('pk_live_506Yzo8MYppeCnLZkW9GEm13 ');
+        Stripe.setPublishableKey('pk_live_506Yzo8MYppeCnLZkW9GEm13');
     }
 
     //function to show section depending on url
@@ -356,7 +356,7 @@ function flashSuccess(elem){
 }
 
 //reset error success flashes
-function resetErrorSuccess(){
+function resetErrorSuccess(leaving_form){
     cancelFormSubmit($("#payout-address-form"));
     cancelFormSubmit($("#payout-personal-form"));
     cancelFormSubmit($("#payout-bank-form"));
