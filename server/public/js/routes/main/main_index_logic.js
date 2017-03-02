@@ -20,24 +20,36 @@ $(document).ready(function() {
     });
 
     //two button scroll
-    $("#have_domains_button, #learn_more_wrapper").on("click", function(){
+    $("#learn-more-button").on("click", function(){
         $('html, body').stop().animate({
-            scrollTop: $("#have_domains_section").offset().top - $("#navbar").height()
+            scrollTop: $("#decision-section").offset().top - $("#navbar").height()
         }, 500);
     });
-    $("#want_domains_button").on("click", function(){
+    $("#want-domains-button").on("click", function(){
         $('html, body').stop().animate({
-            scrollTop: $("#want_domains_section").offset().top - $("#navbar").height()
+            scrollTop: $("#want-domains-section").offset().top - $("#navbar").height()
         }, 500);
     });
+    $("#have-domains-tab").on("click", function(){
+        $(".d-owner").removeClass("is-hidden");
+        $(".d-renter").addClass("is-hidden");
+        $(this).addClass("is-active");
+        $("#want-domains-tab").removeClass("is-active");
+    })
+    $("#want-domains-tab").on("click", function(){
+        $(".d-renter").removeClass("is-hidden");
+        $(".d-owner").addClass("is-hidden");
+        $(this).addClass("is-active");
+        $("#have-domains-tab").removeClass("is-active");
+    })
 
     //fade in learn more
-    $('#learn_more_text').stop().animate({
+    $('#learn-more-text').stop().animate({
         opacity: 1
     }, 3000);
 
     //click to chat with us
-    $('#chat_with_us_button').on("click", function(){
+    $('#chat-with-us-button').on("click", function(){
         Intercom("show");
     });
 
