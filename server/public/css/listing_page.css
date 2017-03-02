@@ -85,7 +85,6 @@
   align-items: center;
   flex-wrap: wrap; }
   .calendar-control .button {
-    margin-bottom: 5px;
     margin-right: 5px;
     flex-grow: 1; }
     .calendar-control .button:last-child {
