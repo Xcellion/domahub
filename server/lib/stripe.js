@@ -53,6 +53,9 @@ module.exports = {
 				destination: req.user.stripe_account
 			}, function(err, charges) {
 				if (err) { console.log(err.message); }
+				if (node_env == "dev"){
+					req.user.dev_charges = charges;
+				}
 				updateUserStripeCharges(req.user, charges.data);
 				next();
 			});
@@ -586,6 +589,7 @@ function updateUserStripeInfo(user, stripe_results){
 	}
 	if (stripe_results.external_accounts.total_count > 0){
 		user.stripe_info.object = stripe_results.external_accounts.data[0].object || "";
+		user.stripe_info.currency = stripe_results.external_accounts.data[0].currency || "";
 		user.stripe_info.bank_name = stripe_results.external_accounts.data[0].bank_name || "";
 		user.stripe_info.account_holder_name = stripe_results.external_accounts.data[0].account_holder_name || "";
 		user.stripe_info.account_number = stripe_results.external_accounts.data[0].last4 || "";
@@ -599,6 +603,7 @@ function updateUserStripeCharges(user, stripe_charges){
 	for (var x = 0; x < stripe_charges.length; x++){
 		var temp_charge = {
 			amount: stripe_charges[x].amount,
+			amount_refunded: stripe_charges[x].amount_refunded,
 			created: stripe_charges[x].created,
 			currency: stripe_charges[x].currency,
 			description: stripe_charges[x].description,
