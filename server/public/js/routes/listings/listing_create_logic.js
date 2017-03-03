@@ -322,10 +322,11 @@ function refreshRows(bad_listings, good_listings){
 		goodTableRows(good_listings);
 
 		//how many were created successfully
-		$("#success-total").text(good_listings.length);
+		var success_amount = (good_listings.length == 1) ? "1 domain" : good_listings.length + " domains"
+		$("#success-total").text(success_amount);
 		$("#domain-success-message").removeClass("is-hidden");
 	}
-	
+
 	//disable submit and unclick terms
 	$("#domains-submit").addClass('is-disabled');
 	$("#agree-to-terms").click();
