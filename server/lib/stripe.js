@@ -45,18 +45,17 @@ module.exports = {
 		}
 	},
 
-	//function to get all transactions made to account
+	//function to get all charges made to account
 	getTransactions : function(req, res, next){
 		if (req.user.stripe_account){
 			console.log('F: Retrieving all Stripe transactions...');
-			stripe.transfers.list(
-				{
-					destination: req.user.stripe_account
-				}, function(err, transfers) {
-					console.log(transfers);
-					next();
-				}
-			);
+			stripe.charges.list({
+				destination: req.user.stripe_account
+			}, function(err, charges) {
+				if (err) { console.log(err.message); }
+				updateUserStripeCharges(req.user, charges.data);
+				next();
+			});
 		}
 		else {
 			next();
@@ -279,6 +278,58 @@ module.exports = {
 		});
 	},
 
+	//------------------------------------------------------------------------------------------ STRIPE PAYMENTS
+
+	//function to pay for a rental via stripe
+	chargeMoney : function(req, res, next){
+		if (req.body.stripeToken){
+			var owner_stripe_id = req.session.new_rental_info.owner_stripe_id;
+			var total_price = Math.round(req.session.new_rental_info.price * 100);		//USD in cents
+
+			//doma fee if the listing is basic (aka premium hasn't expired)
+			var doma_fees = Math.round(total_price * 0.18);
+			var stripe_fees = Math.round(total_price * 0.029) + 30;
+
+			var stripeOptions = {
+				amount: total_price,
+				currency: "usd",
+				source: req.body.stripeToken,
+				description: "Rental for " + req.params.domain_name,
+				destination: owner_stripe_id,
+				application_fee: stripe_fees + doma_fees,
+				metadata: {
+					"domain_name" : req.params.domain_name,
+					"renter_name" : (req.user) ? req.user.username : "Guest",
+					"rental_id" : req.session.new_rental_info.rental_id
+				}
+			}
+
+			//something went wrong with the price
+			if (isNaN(total_price) || isNaN(total_price) || isNaN(total_price)){
+				error.handler(req, res, "Invalid price!", 'json');
+			}
+			else {
+				//charge the end user, transfer to the owner, take doma fees if its a basic listing
+				stripe.charges.create(stripeOptions, function(err, charge) {
+					if (err) {
+						console.log(err.message);
+						error.handler(req, res, "Invalid price!", "json");
+					}
+					else {
+						console.log("Payment processed! " + owner_stripe_id + " has been paid $" + ((total_price - stripe_fees - doma_fees)/100).toFixed(2) + " with $" + (doma_fees/100).toFixed(2) + " in Doma fees and $" + (stripe_fees/100).toFixed(2) + " in Stripe fees.")
+						next();
+					}
+				});
+			}
+
+		}
+
+		//if stripetoken doesnt exist
+		else {
+			stripeErrorHandler(req, res, {message: "Invalid Stripe token! Please log out and try again."});
+		}
+	},
+
 	//------------------------------------------------------------------------------------------ STRIPE STANDALONE
 
 	// //authorize stripe
@@ -391,58 +442,6 @@ module.exports = {
 	// 		);
 	// 	}
 	// },
-
-	//------------------------------------------------------------------------------------------ STRIPE PAYMENTS
-
-	//function to pay for a rental via stripe
-	chargeMoney : function(req, res, next){
-		if (req.body.stripeToken){
-			var owner_stripe_id = req.session.new_rental_info.owner_stripe_id;
-			var total_price = Math.round(req.session.new_rental_info.price * 100);		//USD in cents
-
-			//doma fee if the listing is basic (aka premium hasn't expired)
-			var doma_fees = Math.round(total_price * 0.18);
-			var stripe_fees = Math.round(total_price * 0.029) + 30;
-
-			var stripeOptions = {
-				amount: total_price,
-				currency: "usd",
-				source: req.body.stripeToken,
-				description: "Rental for " + req.params.domain_name,
-				destination: owner_stripe_id,
-				application_fee: stripe_fees + doma_fees,
-				metadata: {
-					"domain_name" : req.params.domain_name,
-					"renter" : (req.user) ? req.user.username : "Guest",
-					"rental_id" : req.session.new_rental_info.rental_id
-				}
-			}
-
-			//something went wrong with the price
-			if (isNaN(total_price) || isNaN(total_price) || isNaN(total_price)){
-				error.handler(req, res, "Invalid price!", 'json');
-			}
-			else {
-				//charge the end user, transfer to the owner, take doma fees if its a basic listing
-				stripe.charges.create(stripeOptions, function(err, charge) {
-					if (err) {
-						console.log(err.message);
-						error.handler(req, res, "Invalid price!", "json");
-					}
-					else {
-						console.log("Payment processed! " + owner_stripe_id + " has been paid $" + ((total_price - stripe_fees - doma_fees)/100).toFixed(2) + " with $" + (doma_fees/100).toFixed(2) + " in Doma fees and $" + (stripe_fees/100).toFixed(2) + " in Stripe fees.")
-						next();
-					}
-				});
-			}
-
-		}
-
-		//if stripetoken doesnt exist
-		else {
-			stripeErrorHandler(req, res, {message: "Invalid Stripe token! Please log out and try again."});
-		}
-	},
 
 	//------------------------------------------------------------------------------------------ STRIPE SUBSCRIPTIONS (deprecated)
 
@@ -594,145 +593,165 @@ function updateUserStripeInfo(user, stripe_results){
 	}
 }
 
-//helper function to create a new stripe customer
-function newStripecustomer(req, res, next){
-	stripe.customers.create({
-		source: req.body.stripeToken,
-		email: req.user.email,
-		metadata: {
-			"account_id" : req.user.id,
-			"stripe_account" : req.user.stripe_account
+//function to update req.user with stripe charges
+function updateUserStripeCharges(user, stripe_charges){
+	var temp_charges = [];
+	for (var x = 0; x < stripe_charges.length; x++){
+		var temp_charge = {
+			amount: stripe_charges[x].amount,
+			created: stripe_charges[x].created,
+			currency: stripe_charges[x].currency,
+			description: stripe_charges[x].description,
 		}
-	}, function(err, customer) {
-		if (err){
-			revertPremiumListings(req, res, err);
+		if (stripe_charges[x].metadata){
+			temp_charge.rental_id = stripe_charges[x].metadata.rental_id;
+			temp_charge.renter_name = stripe_charges[x].metadata.renter_name;
+			temp_charge.domain_name = stripe_charges[x].metadata.domain_name;
 		}
-		else {
-
-			//update the customer id in the DB
-			var new_stripe_cus = {
-				stripe_customer_id: customer.id
-			}
-			Account.updateAccount(new_stripe_cus, req.user.email, function(result){
-				if (result.state=="error"){error.handler(req, res, result.info, "json")}
-				else {
-					req.user.stripe_customer_id = customer.id;
-					req.user.customer_subscriptions = customer.subscriptions;
-
-					next();
-				}
-			});
-		}
-	});
+		temp_charges.push(temp_charge);
+	}
+	user.stripe_charges = temp_charges;
 }
 
-//helper function to create a new stripe subscription
-function newStripeSubscription(req, res, next){
-
-	//create the array of promises
-	var promises = [];
-	for (var x = 0; x < req.session.new_listings.premium_obj.inserted_ids.length; x++){
-		var promise = stripe.subscriptions.create({
-			customer: req.user.stripe_customer_id,
-			plan: "premium",
-			metadata: {
-				insert_id : req.session.new_listings.premium_obj.inserted_ids[x],
-				index : req.session.new_listings.premium_obj.indexes[x]
-			}
-		});
-		promises.push(promise);
-	}
-
-	//wait for all promises to finish
-	Q.allSettled(promises)
-	 .then(function(results) {
-		var premium_db_query_success = [];
-		var premium_db_query_failed = [];
-
-		//figure out which promises failed / passed
-		for (var y = 0; y < results.length; y++){
-			if (results[y].state == "fulfilled"){
-				var subscription = results[y].value;
-				//create the formatted db query to update premium ID
-				premium_db_query_success.push([
-					subscription.metadata.insert_id,
-					subscription.id,
-					subscription.current_period_end * 1000
-				]);
-
-				//add to good listings
-				req.session.new_listings.good_listings.push({
-					index: subscription.metadata.index
-				});
-			}
-			else {
-				//revert pricing for failed premium listings
-				premium_db_query_failed.push([
-					req.session.new_listings.premium_obj.inserted_ids[y],			//insert id
-					"month",														//price type
-					25,																//price rate
-					"",																//subscription id
-					0,																//exp date
-					false															//expiring
-				]);
-
-				//add to bad listings
-				req.session.new_listings.bad_listings.push({
-					index: req.session.new_listings.premium_obj.indexes[y],
-					reasons: [
-						"Premium upgrade failed! Your card was not charged for this domain."
-					]
-				});
-			}
-		}
-
-		req.session.new_listings.premium_obj.db_success_obj = premium_db_query_success;
-		req.session.new_listings.premium_obj.db_failed_obj = premium_db_query_failed;
-		next();
-
-	});
-
-}
-
-//helper function to handle unsuccessful stripe card, revert premium
-function revertPremiumListings(req, res, err){
-	if (req.path == "/listings/create"){
-		var premium_db_query_failed = [];
-
-		for (var x = 0; x < req.session.new_listings.premium_obj.inserted_ids.length; x++){
-			premium_db_query_failed.push([
-				req.session.new_listings.premium_obj.inserted_ids[x],			//insert id
-				"month",														//price type
-				25,																//price rate
-				"",																//subscription id
-				0,																//exp date
-				false															//expiring
-			]);
-
-			//add to bad listings
-			req.session.new_listings.bad_listings.push({
-				index: req.session.new_listings.premium_obj.indexes[x],
-				reasons: [
-					"Premium purchase error! This domain was created as a basic domain instead."
-				]
-			});
-		}
-
-		//revert pricing for failed premium listings
-		if (premium_db_query_failed.length > 0){
-			Listing.updateListingsBasic(premium_db_query_failed, function(result){
-			});
-			res.send({
-				bad_listings: req.session.new_listings.bad_listings,
-				good_listings: req.session.new_listings.good_listings
-			});
-			delete req.session.new_listings;
-		}
-	}
-	else {
-		stripeErrorHandler(req, res, err);
-	}
-}
+// //helper function to create a new stripe customer
+// function newStripecustomer(req, res, next){
+// 	stripe.customers.create({
+// 		source: req.body.stripeToken,
+// 		email: req.user.email,
+// 		metadata: {
+// 			"account_id" : req.user.id,
+// 			"stripe_account" : req.user.stripe_account
+// 		}
+// 	}, function(err, customer) {
+// 		if (err){
+// 			revertPremiumListings(req, res, err);
+// 		}
+// 		else {
+//
+// 			//update the customer id in the DB
+// 			var new_stripe_cus = {
+// 				stripe_customer_id: customer.id
+// 			}
+// 			Account.updateAccount(new_stripe_cus, req.user.email, function(result){
+// 				if (result.state=="error"){error.handler(req, res, result.info, "json")}
+// 				else {
+// 					req.user.stripe_customer_id = customer.id;
+// 					req.user.customer_subscriptions = customer.subscriptions;
+//
+// 					next();
+// 				}
+// 			});
+// 		}
+// 	});
+// }
+//
+// //helper function to create a new stripe subscription
+// function newStripeSubscription(req, res, next){
+//
+// 	//create the array of promises
+// 	var promises = [];
+// 	for (var x = 0; x < req.session.new_listings.premium_obj.inserted_ids.length; x++){
+// 		var promise = stripe.subscriptions.create({
+// 			customer: req.user.stripe_customer_id,
+// 			plan: "premium",
+// 			metadata: {
+// 				insert_id : req.session.new_listings.premium_obj.inserted_ids[x],
+// 				index : req.session.new_listings.premium_obj.indexes[x]
+// 			}
+// 		});
+// 		promises.push(promise);
+// 	}
+//
+// 	//wait for all promises to finish
+// 	Q.allSettled(promises)
+// 	 .then(function(results) {
+// 		var premium_db_query_success = [];
+// 		var premium_db_query_failed = [];
+//
+// 		//figure out which promises failed / passed
+// 		for (var y = 0; y < results.length; y++){
+// 			if (results[y].state == "fulfilled"){
+// 				var subscription = results[y].value;
+// 				//create the formatted db query to update premium ID
+// 				premium_db_query_success.push([
+// 					subscription.metadata.insert_id,
+// 					subscription.id,
+// 					subscription.current_period_end * 1000
+// 				]);
+//
+// 				//add to good listings
+// 				req.session.new_listings.good_listings.push({
+// 					index: subscription.metadata.index
+// 				});
+// 			}
+// 			else {
+// 				//revert pricing for failed premium listings
+// 				premium_db_query_failed.push([
+// 					req.session.new_listings.premium_obj.inserted_ids[y],			//insert id
+// 					"month",														//price type
+// 					25,																//price rate
+// 					"",																//subscription id
+// 					0,																//exp date
+// 					false															//expiring
+// 				]);
+//
+// 				//add to bad listings
+// 				req.session.new_listings.bad_listings.push({
+// 					index: req.session.new_listings.premium_obj.indexes[y],
+// 					reasons: [
+// 						"Premium upgrade failed! Your card was not charged for this domain."
+// 					]
+// 				});
+// 			}
+// 		}
+//
+// 		req.session.new_listings.premium_obj.db_success_obj = premium_db_query_success;
+// 		req.session.new_listings.premium_obj.db_failed_obj = premium_db_query_failed;
+// 		next();
+//
+// 	});
+//
+// }
+//
+// //helper function to handle unsuccessful stripe card, revert premium
+// function revertPremiumListings(req, res, err){
+// 	if (req.path == "/listings/create"){
+// 		var premium_db_query_failed = [];
+//
+// 		for (var x = 0; x < req.session.new_listings.premium_obj.inserted_ids.length; x++){
+// 			premium_db_query_failed.push([
+// 				req.session.new_listings.premium_obj.inserted_ids[x],			//insert id
+// 				"month",														//price type
+// 				25,																//price rate
+// 				"",																//subscription id
+// 				0,																//exp date
+// 				false															//expiring
+// 			]);
+//
+// 			//add to bad listings
+// 			req.session.new_listings.bad_listings.push({
+// 				index: req.session.new_listings.premium_obj.indexes[x],
+// 				reasons: [
+// 					"Premium purchase error! This domain was created as a basic domain instead."
+// 				]
+// 			});
+// 		}
+//
+// 		//revert pricing for failed premium listings
+// 		if (premium_db_query_failed.length > 0){
+// 			Listing.updateListingsBasic(premium_db_query_failed, function(result){
+// 			});
+// 			res.send({
+// 				bad_listings: req.session.new_listings.bad_listings,
+// 				good_listings: req.session.new_listings.good_listings
+// 			});
+// 			delete req.session.new_listings;
+// 		}
+// 	}
+// 	else {
+// 		stripeErrorHandler(req, res, err);
+// 	}
+// }
 
 //helper function for handling stripe errors
 function stripeErrorHandler(req, res, err){

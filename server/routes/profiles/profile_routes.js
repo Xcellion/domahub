@@ -92,7 +92,7 @@ module.exports = function(app, db, auth, error, stripe){
 		stripe.getAccountInfo,
 		stripe.getTransactions,
 		profile_functions.renderSettings
-	])
+	]);
 
 	//temporary to test /redirect page
 	app.get("/redirect", function(req, res){
