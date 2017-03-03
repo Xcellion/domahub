@@ -1,5 +1,6 @@
 var node_env = process.env.NODE_ENV || 'dev'; 	//dev or prod bool
 var Categories = require("../../lib/categories.js");
+var default_descriptions = require("../../lib/default_descriptions.js");
 
 var request = require("request");
 var dns = require("dns");
@@ -125,7 +126,6 @@ module.exports = {
 			}
 			//all good! format the db array
 			else {
-
 				//update the premium object if its premium
 				if (posted_domains[x].premium == "true"){
 					premium_obj.count++;
@@ -139,8 +139,10 @@ module.exports = {
 					date_now,
 					posted_domains[x].domain_name,
 					posted_domains[x].price_type,
-					posted_domains[x].price_rate
+					posted_domains[x].price_rate,
+					default_descriptions.random()		//random default description
 				]);
+
 			}
 		}
 

@@ -18,29 +18,29 @@
 				<div class="column is-3">
 					<aside class="menu">
 						<p class="menu-label">
-							Profile
+							Profile Settings
 						</p>
-							<ul class="menu-list">
-								<li><a id="basic-link" href='#basic' class="setting-link is-active">Basic Information</a></li>
-								<li><a id="verifications-link" href='#verification' class="setting-link">Verifications</a></li>
-							</ul>
+						<ul class="menu-list">
+							<li><a id="basic-link" href='#basic' class="setting-link is-active">Basic Information</a></li>
+							<li><a id="verifications-link" href='#verification' class="setting-link">Verifications</a></li>
+						</ul>
 						<p class="menu-label">
-							Payment
+							Payment Settings
 						</p>
+						<ul class="menu-list">
+							<li><a id="payout-address-link" href="#payout" class="setting-link">Payout Settings</a></li>
+							<li><a id="payout-personal-link" href="#payout-personal" class="hide-stripe is-hidden setting-link">Personal Information</a></li>
+							<li><a id="payout-bank-link" href="#payout-bank" class="hide-stripe is-hidden setting-link">Bank Information</a></li>
+						</ul>
+						<p class="menu-label">
+							Transactions
+						</p>
+						<% if (user.stripe_charges) { %>
 							<ul class="menu-list">
-								<%# <li>
-									<a id="transactions-link" href='#transactions'  class="setting-link">Transactions</a>
-									<ul>
-										<li><a id="history-link" href='#history' class="setting-link">History</a></li>
-										<li><a id="pending-link" href='#pending' class="setting-link">Pending</a></li>
-										<li><a id="earnings-link" href='#earnings' class="setting-link">Earnings</a></li>
-									</ul>
-								</li>%>
-								<%# <li><a id="details-link" href='#details' class="setting-link">Stripe Payments</a></li>%>
-								<li><a id="payout-address-link" href="#payout" class="setting-link">Payout Settings</a></li>
-								<li><a id="payout-personal-link" href="#payout-personal" class="hide-stripe is-hidden setting-link">Personal Information</a></li>
-								<li><a id="payout-bank-link" href="#payout-bank" class="hide-stripe is-hidden setting-link">Bank Information</a></li>
+								<li><a id="transactions-link" href='#transactions' class="setting-link">Transactions</a></li>
+								<li><a id="pending-link" href='#pending' class="setting-link">Pending</a></li>
 							</ul>
+						<% } %>
 					</aside>
 				</div>
 
@@ -182,204 +182,6 @@
 							</form>
 						</div>
 					</div>
-					<%# <div id="transactions" class="card is-fullwidth is-hidden" >
-						<header class="card-header">
-							<p class="card-header-title">
-								Transactions
-							</p>
-						</header>
-						<div class="card-content">
-							<table class="table">
-								<thead>
-									<tr>
-										<th>Dates</th>
-										<th>Domain</th>
-										<th>Renter</th>
-										<th>Rate</th>
-										<th>Received</th>
-									</tr>
-								</thead>
-								<tfoot>
-									<tr>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td>Total</td>
-										<td>$3075.38</td>
-									</tr>
-								</tfoot>
-								<tbody>
-									<tr>
-										<td>01/13/16 - 09/13/16</td>
-										<td>www.domainterest.com</td>
-										<td><a href="">Ted Montague</a></td>
-										<td>$25 M</td>
-										<td>$206.85</td>
-									</tr>
-									<tr>
-										<td>09/10/16 - 09/13/16</td>
-										<td>www.domains.com</td>
-										<td><a href="">Fred Kirkland</a></td>
-										<td>$1 D</td>
-										<td>$2.20</td>
-									</tr>
-									<tr>
-										<td>09/13/10 - Today</td>
-										<td>www.dominus.com</td>
-										<td><a href="">Dominic Selzer</a></td>
-										<td>$500 Y</td>
-										<td>$2866.33</td>
-									</tr>
-								</tbody>
-							</table>
-							<nav class="pagination">
-								<a class="button">Previous</a>
-								<a class="button">Next page</a>
-								<ul>
-									<li>
-										<a class="button">1</a>
-									</li>
-									<li>
-										<span>...</span>
-									</li>
-									<li>
-										<a class="button">45</a>
-									</li>
-									<li>
-										<a class="button is-primary">46</a>
-									</li>
-									<li>
-										<a class="button">47</a>
-									</li>
-									<li>
-										<span>...</span>
-									</li>
-									<li>
-										<a class="button">86</a>
-									</li>
-								</ul>
-							</nav>
-						</div>
-					</div>
-					<div id="history" class="card is-fullwidth is-hidden" >
-						<header class="card-header">
-							<p class="card-header-title">
-								History
-							</p>
-						</header>
-						<div class="card-content">
-							<table class="table">
-								<thead>
-									<tr>
-										<th>Date Initiated</th>
-										<th>Domain</th>
-										<th>Renter</th>
-										<th>Status</th>
-										<th>Contact</th>
-									</tr>
-								</thead>
-								<tfoot>
-								</tfoot>
-								<tbody>
-									<tr>
-										<td>01/13/16</td>
-										<td>www.domainterest.com</td>
-										<td><a href="">Ted Montague</a></td>
-										<td class="is-success">Paid</td>
-										<td><a class="button" href="">
-											<span class="icon">
-												<i class="fa fa-envelope-o"></i>
-											</span>
-											<span>Message</span></a>
-										</td>
-									</tr>
-									<tr>
-										<td>09/10/16</td>
-										<td>www.domains.com</td>
-										<td><a href="">Fred Kirkland</a></td>
-										<td class="is-danger">Not Paid</td>
-										<td><a class="button" href="">
-											<span class="icon">
-												<i class="fa fa-envelope-o"></i>
-											</span>
-											<span>Message</span></a>
-										</td>
-									</tr>
-									<tr>
-										<td>09/13/10</td>
-										<td>www.dominus.com</td>
-										<td><a href="">Dominic Selzer</a></td>
-										<td class="is-success">Paid</td>
-										<td><a class="button" href="">
-											<span class="icon">
-												<i class="fa fa-envelope-o"></i>
-											</span>
-											<span>Message</span></a>
-										</td>
-									</tr>
-								</tbody>
-							</table>
-							<nav class="pagination">
-								<a class="button">Previous</a>
-								<a class="button">Next page</a>
-								<ul>
-									<li>
-										<a class="button">1</a>
-									</li>
-									<li>
-										<span>...</span>
-									</li>
-									<li>
-										<a class="button">45</a>
-									</li>
-									<li>
-										<a class="button is-primary">46</a>
-									</li>
-									<li>
-										<a class="button">47</a>
-									</li>
-									<li>
-										<span>...</span>
-									</li>
-									<li>
-										<a class="button">86</a>
-									</li>
-								</ul>
-							</nav>
-						</div>
-					</div>
-					<div id="pending" class="card is-fullwidth is-hidden" >
-						<header class="card-header">
-							<p class="card-header-title">
-								Pending
-							</p>
-						</header>
-						<div class="card-content">
-							stuff
-						</div>
-					</div>
-					<div id="earnings" class="card is-fullwidth is-hidden" >
-						<header class="card-header">
-							<p class="card-header-title">
-								Earnings
-							</p>
-						</header>
-						<div class="card-content">
-							stuff
-						</div>
-					</div>
-					<div id="details" class="card is-fullwidth is-hidden" >
-						<header class="card-header">
-							<p class="card-header-title">
-								Payment Details
-							</p>
-						</header>
-						<div class="card-content">
-							All payments are handled through <a class='is-accent' href="https://stripe.com/about">Stripe</a>.</br></br>
-							<a id="provide-stripe-button" class='button no-shadow' href="/authorizestripe">Provide Access</a>
-							<button id="revoke-stripe-button" class='button is-danger no-shadow'>Revoke Access</button>
-						</div>
-					</div>%>
 					<div id="payout-address" class="card is-fullwidth is-hidden">
 						<header class="card-header">
 							<p class="card-header-title">
@@ -659,6 +461,10 @@
 							</form>
 						</div>
 					</div>
+
+					<% if (user.stripe_charges) { %>
+						<%- include("profile_transactions", {user: user}); %>
+					<% } %>
 				</div>
 			</div>
 
@@ -668,13 +474,16 @@
 	<%- include("../templates/footer"); %>
 	<%- include("../templates/js_scripts"); %>
 	<script src="/js/lib/moment.min.js" type="text/javascript"></script>
+	<script src="/js/lib/wNumb.js" type="text/javascript"></script>
 	<script type="text/javascript">
 		//redirect to homepage if user is not defined
 		var user = <% if(typeof user != "undefined"){ %><%-JSON.stringify(user)%><% }else{ %>window.location="/"<% } %>;
 	</script>
 	<script src="https://js.stripe.com/v2/" type="text/javascript" ></script>
 	<script src="/js/routes/profile/profile_settings_logic.js" type="text/javascript"></script>
-
+	<% if (user.stripe_charges) { %>
+		<script src="/js/routes/profile/profile_transactions_logic.js" type="text/javascript"></script>
+	<% } %>
 </body>
 
 </html>
