@@ -188,3 +188,48 @@
     }
   }
 }
+
+.image-stack {
+  max-width: 440px;
+  padding: 0;
+  position: relative;
+  margin: 0 auto;
+  img {
+    position: absolute;
+    max-width: 100%;
+    top: 0;
+    left: 0;
+    @include box-shadow(2px,12px,20px,$grey-light,0);
+    &:first-child {
+      @include translate(40px,0);
+      z-index: 5;
+    }
+    &:nth-child(2) {
+      @include translate(-40px,0);
+      z-index: 6;
+    }
+    &:last-child {
+      position: relative;
+      z-index: 7;
+    }
+  }
+}
+
+.flex-column-mobile {
+  @include mobile {
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+.order-1-mobile {
+  @include mobile {
+    order: 1;
+  }
+}
+
+.order-2-mobile {
+  @include mobile {
+    order: 2;
+  }
+}
