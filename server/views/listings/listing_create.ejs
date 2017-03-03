@@ -30,20 +30,22 @@
 								Review your domains and edit rental pricing.
 							</p>
 						</div>
-						<div id="payment-helptext" class='content-wrapper is-hidden'>
-							<h1 class="title is-3">Payment Information</h1>
-							<p id="stripe-error-message">
-								Please enter your payment information below.
-							</p>
-						</div>
 					</div>
 					<div id="domain-error-message" class="is-hidden notification is-danger">
 						<button class="delete"></button>
-						Some domain names were invalid! See below.
+						Some domain names were invalid! See below for more details.
 					</div>
 					<div id="domain-success-message" class="is-hidden notification is-primary">
 						<button class="delete"></button>
-						Successfully created <span id="success-total"></span> domains! Please click <a class="is-white is-underlined" href="/profile/mylistings">here</a> to verify that you own them. Any unverified domains will be deleted every week.
+						Successfully created <span id="success-total"></span> domains! Please click the button below to view your newly created listings!
+						<p class="control margin-top-15">
+							<a tabindex="1" href="/profile/mylistings" class="button is-stylish" title="My Listings">
+								<span class="icon is-small">
+									<i class="fa fa-tasks" aria-hidden="true"></i>
+								</span>
+								<span>My Listings</span>
+							</a>
+						</p>
 					</div>
 				</div>
 			</div>
