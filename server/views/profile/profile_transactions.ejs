@@ -10,41 +10,39 @@
                 <tr>
                     <th>Dates</th>
                     <th>Domain</th>
-                    <th>Renter</th>
-                    <th>Rate</th>
                     <th>Received</th>
+                    <th>Fees Paid</th>
+                    <th>Profit</th>
+                    <th>Preview</th>
                 </tr>
             </thead>
             <tfoot>
                 <tr>
+                    <td colspan="3"></td>
+                    <td class='is-bold'>Total</td>
+                    <td id="total-earnings" class='is-bold'>$0.00</td>
                     <td></td>
-                    <td></td>
-                    <td></td>
-                    <td>Total</td>
-                    <td>$3075.38</td>
                 </tr>
             </tfoot>
-            <tbody>
-                <tr>
-                    <td>01/13/16 - 09/13/16</td>
-                    <td>www.domainterest.com</td>
-                    <td><a href="">Ted Montague</a></td>
-                    <td>$25 M</td>
-                    <td>$206.85</td>
+            <tbody class="earnings-table">
+                <tr id="earnings-row-clone" class="earning-row is-hidden">
+                    <td class="earnings-row-date"></td>
+                    <td class="earnings-row-domain"></td>
+                    <td class="earnings-row-amount"></td>
+                    <td class="earnings-row-fees"></td>
+                    <td class="earnings-row-profit"></td>
+                    <td class="earnings-row-preview">
+                        <a target="_blank" class="button earnings-row-preview-button" tabindex="1">
+                            <span class="icon is-small">
+                                <i class="fa fa-external-link"></i>
+                            </span>
+                        </a>
+                    </td>
                 </tr>
-                <tr>
-                    <td>09/10/16 - 09/13/16</td>
-                    <td>www.domains.com</td>
-                    <td><a href="">Fred Kirkland</a></td>
-                    <td>$1 D</td>
-                    <td>$2.20</td>
-                </tr>
-                <tr>
-                    <td>09/13/10 - Today</td>
-                    <td>www.dominus.com</td>
-                    <td><a href="">Dominic Selzer</a></td>
-                    <td>$500 Y</td>
-                    <td>$2866.33</td>
+                <tr id="no-earnings-row">
+                    <td colspan="6">
+                        There are no transactions!
+                    </td>
                 </tr>
             </tbody>
         </table>
