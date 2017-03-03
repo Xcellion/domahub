@@ -28,7 +28,7 @@ module.exports = {
 	//gets the stripe managed account info
 	getAccountInfo : function(req, res, next){
 		if (req.user.stripe_account){
-			console.log('F: Retrieving exiting Stripe managed account information...');
+			console.log('F: Retrieving existing Stripe managed account information...');
 			stripe.accounts.retrieve(req.user.stripe_account, function(err, account) {
 				if (!err){
 					updateUserStripeInfo(req.user, account);
@@ -39,6 +39,24 @@ module.exports = {
 					next();
 				}
 			});
+		}
+		else {
+			next();
+		}
+	},
+
+	//function to get all transactions made to account
+	getTransactions : function(req, res, next){
+		if (req.user.stripe_account){
+			console.log('F: Retrieving all Stripe transactions...');
+			stripe.transfers.list(
+				{
+					destination: req.user.stripe_account
+				}, function(err, transfers) {
+					console.log(transfers);
+					next();
+				}
+			);
 		}
 		else {
 			next();
@@ -168,7 +186,7 @@ module.exports = {
 	                });
 				}
 				else {
-					console.log(err);
+					console.log(err.message);
 					error.handler(req, res, "Failed to update your account!", "json");
 				}
 			});
@@ -188,6 +206,9 @@ module.exports = {
 						"state": req.body.state
 					},
 				},
+				"transfer_schedule": {
+					"interval": "manual"
+				},
 				managed: true
 			}, function(err, result){
 				if (result){
@@ -196,7 +217,7 @@ module.exports = {
 					next();
 				}
 				else {
-					console.log(err);
+					console.log(err.message);
 					error.handler(req, res, err.message, "json");
 				}
 			});
@@ -225,7 +246,7 @@ module.exports = {
                 });
 			}
 			else {
-				console.log(err);
+				console.log(err.message);
 				error.handler(req, res, "Failed to update your account!", "json");
 			}
 		});
@@ -252,7 +273,7 @@ module.exports = {
                 });
 			}
 			else {
-				console.log(err);
+				console.log(err.message);
 				error.handler(req, res, "Failed to update your account!", "json");
 			}
 		});
@@ -389,7 +410,12 @@ module.exports = {
 				source: req.body.stripeToken,
 				description: "Rental for " + req.params.domain_name,
 				destination: owner_stripe_id,
-				application_fee: stripe_fees + doma_fees
+				application_fee: stripe_fees + doma_fees,
+				metadata: {
+					"domain_name" : req.params.domain_name,
+					"renter" : (req.user) ? req.user.username : "Guest",
+					"rental_id" : req.session.new_rental_info.rental_id
+				}
 			}
 
 			//something went wrong with the price
@@ -400,7 +426,7 @@ module.exports = {
 				//charge the end user, transfer to the owner, take doma fees if its a basic listing
 				stripe.charges.create(stripeOptions, function(err, charge) {
 					if (err) {
-						console.log(err);
+						console.log(err.message);
 						error.handler(req, res, "Invalid price!", "json");
 					}
 					else {
@@ -710,7 +736,7 @@ function revertPremiumListings(req, res, err){
 
 //helper function for handling stripe errors
 function stripeErrorHandler(req, res, err){
-	console.log(err);
+	console.log(err.message);
 	switch (err.message){
 		case ("Your card was declined!"):
 		case ("Your card's expiration year is invalid."):
