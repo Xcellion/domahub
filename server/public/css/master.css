@@ -2097,9 +2097,9 @@ input:-webkit-autofill {
   position: relative;
   margin: 0 auto; }
   .image.has-shadow > img {
-    -webkit-box-shadow: 1px 1px 5px 0 black;
-    -moz-box-shadow: 1px 1px 5px 0 black;
-    box-shadow: 1px 1px 5px 0 black; }
+    -webkit-box-shadow: 0 8px 25px 0 #d0d0d0;
+    -moz-box-shadow: 0 8px 25px 0 #d0d0d0;
+    box-shadow: 0 8px 25px 0 #d0d0d0; }
   .image.is-circle > img {
     border-radius: 100%; }
   .image.left-aligned {
