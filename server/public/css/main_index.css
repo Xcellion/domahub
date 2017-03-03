@@ -161,3 +161,47 @@
       .button-wrapper .button:not(:last-child) {
         margin-right: 0;
         margin-bottom: 10px; } }
+
+.image-stack {
+  max-width: 440px;
+  padding: 0;
+  position: relative;
+  margin: 0 auto; }
+  .image-stack img {
+    position: absolute;
+    max-width: 100%;
+    top: 0;
+    left: 0;
+    -webkit-box-shadow: 2px 12px 20px 0 #d0d0d0;
+    -moz-box-shadow: 2px 12px 20px 0 #d0d0d0;
+    box-shadow: 2px 12px 20px 0 #d0d0d0; }
+    .image-stack img:first-child {
+      -moz-transform: translate(40px, 0);
+      -o-transform: translate(40px, 0);
+      -ms-transform: translate(40px, 0);
+      -webkit-transform: translate(40px, 0);
+        -webkit-transform-transform: translate(40px, 0);
+      z-index: 5; }
+    .image-stack img:nth-child(2) {
+      -moz-transform: translate(-40px, 0);
+      -o-transform: translate(-40px, 0);
+      -ms-transform: translate(-40px, 0);
+      -webkit-transform: translate(-40px, 0);
+        -webkit-transform-transform: translate(-40px, 0);
+      z-index: 6; }
+    .image-stack img:last-child {
+      position: relative;
+      z-index: 7; }
+
+@media screen and (max-width: 768px) {
+  .flex-column-mobile {
+    display: flex;
+    flex-direction: column; } }
+
+@media screen and (max-width: 768px) {
+  .order-1-mobile {
+    order: 1; } }
+
+@media screen and (max-width: 768px) {
+  .order-2-mobile {
+    order: 2; } }
