@@ -2097,14 +2097,18 @@ input:-webkit-autofill {
   position: relative;
   margin: 0 auto; }
   .image.has-shadow > img {
-    -webkit-box-shadow: 0 8px 25px 0 #d0d0d0;
-    -moz-box-shadow: 0 8px 25px 0 #d0d0d0;
-    box-shadow: 0 8px 25px 0 #d0d0d0; }
+    -webkit-box-shadow: 0 10px 30px 0 #d0d0d0;
+    -moz-box-shadow: 0 10px 30px 0 #d0d0d0;
+    box-shadow: 0 10px 30px 0 #d0d0d0; }
   .image.is-circle > img {
     border-radius: 100%; }
   .image.left-aligned {
     margin-left: 0;
     margin-right: 0; }
+  .image.right-aligned img {
+    margin-left: auto; }
+  .image.is-real-ratio img {
+    width: auto; }
   .image img {
     display: block;
     height: auto;
@@ -3473,9 +3477,9 @@ input:-webkit-autofill {
     margin-right: 5px; }
 
 .card {
-  -webkit-box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.14), 0 2px 12px -2px rgba(0, 0, 0, 0.2), 0 3px 10px 0 rgba(0, 0, 0, 0.12);
-  -moz-box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.14), 0 2px 12px -2px rgba(0, 0, 0, 0.2), 0 3px 10px 0 rgba(0, 0, 0, 0.12);
-  box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.14), 0 2px 12px -2px rgba(0, 0, 0, 0.2), 0 3px 10px 0 rgba(0, 0, 0, 0.12);
+  -webkit-box-shadow: 0 3px 10px 0 #d0d0d0;
+  -moz-box-shadow: 0 3px 10px 0 #d0d0d0;
+  box-shadow: 0 3px 10px 0 #d0d0d0;
   background-color: white;
   border-radius: 3px;
   max-width: 100%;
@@ -3858,7 +3862,7 @@ input:-webkit-autofill {
   .columns:last-child {
     margin-bottom: -10px; }
   .columns:not(:last-child) {
-    margin-bottom: 10px; }
+    margin-bottom: 20px; }
   .columns.is-centered {
     justify-content: center; }
   .columns.is-gapless {
