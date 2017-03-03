@@ -6,13 +6,19 @@ $dimensions: 16 24 32 48 64 96 128 256 512
   margin: 0 auto
   &.has-shadow
     & > img
-      +box-shadow(0,8px,25px,$grey-light,0)
+      +box-shadow(0,10px,30px,$grey-light,0)
   &.is-circle
     & > img
       border-radius: 100%
   &.left-aligned
     margin-left: 0
     margin-right: 0
+  &.right-aligned
+    img
+      margin-left: auto
+  &.is-real-ratio
+    img
+      width: auto
   img
     display: block
     height: auto
