@@ -48,7 +48,7 @@
         <% } %>
           <% if (listing_info.rentals.length > 0){ %>
 
-              <% var popular_rental; %>
+              <% var popular_rental = listing_info.rentals[0]; %>
               <% for (var x = 0; x < listing_info.rentals.length; x++){ %>
                   <% var max_views = 0;
                   if (listing_info.rentals[x].views > max_views){

@@ -8,7 +8,7 @@ $(document).ready(function() {
         Stripe.setPublishableKey('pk_test_kcmOEkkC3QtULG5JiRMWVODJ');
     }
     else {
-        Stripe.setPublishableKey('pk_live_506Yzo8MYppeCnLZkW9GEm13 ');
+        Stripe.setPublishableKey('pk_live_506Yzo8MYppeCnLZkW9GEm13');
     }
 
 	//format all stripe inputs
