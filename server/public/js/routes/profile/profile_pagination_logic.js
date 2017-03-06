@@ -557,10 +557,10 @@ function multiSelectButtons(){
 function multiDelete(delete_button){
     delete_button.off();
 
-	var ids = [];
+	var deletion_ids = [];
 	var selected_rows = $(".row-disp").filter(function(){
 		if ($(this).data('selected') == true){
-			ids.push($(this).data('id'));
+			deletion_ids.push($(this).data('id'));
 			return true;
 		}
 	});
@@ -570,7 +570,7 @@ function multiDelete(delete_button){
 		url: "/profile/" + listing_or_rental_url + "/delete",
 		method: "POST",
 		data: {
-			ids: ids
+			ids: deletion_ids
 		}
 	}).done(function(data){
 		delete_button.on("click", function(){
@@ -580,5 +580,8 @@ function multiDelete(delete_button){
 		if (data.state == "success"){
             deletionHandler(data.rows, selected_rows);
 		}
+        else {
+            console.log(data);
+        }
 	});
 }
