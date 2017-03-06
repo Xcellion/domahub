@@ -378,7 +378,8 @@ function createPriceInfo(listing_info){
 
 	//price rate input
     var temp_div = $('<div class="control is-grouped"></div>');
-		var temp_input = $("<p class='control'><input type='number' min='1' step='1' class='padding-top-0 price-rate-input input changeable-input'></input></p>");
+		var temp_control = $("<p class='control'></p>")
+		var temp_input = $("<input type='number' min='1' step='1' class='padding-top-0 price-rate-input input changeable-input'></input>");
 			temp_input.val(listing_info.price_rate);
 			temp_input.data("name", "price_rate");
 
@@ -392,7 +393,7 @@ function createPriceInfo(listing_info){
 		temp_select.val(listing_info.price_type);
 		temp_select.data("name", "price_type");
 
-    temp_div.append(temp_input, temp_span.append(temp_form.append(temp_select)));
+    temp_div.append(temp_control.append(temp_input), temp_span.append(temp_form.append(temp_select)));
 
     //change the hidden price rate TD along with dropdown
     temp_input.on("change", function(e){
@@ -413,13 +414,13 @@ function createCategorySelections(listing_info){
 	var temp_div3_control = $('<div class="is-flex-wrap category-control">');
 	var temp_div3_input = $('<input tabindex="1" class="is-hidden categories-input input changeable-input value="' + listing_info.categories + '"></input>').val(listing_info.categories).data('name', "categories");
 	temp_div3_control.append(temp_div3_input);
-	clickHandler(temp_div3_control, listing_info);
+	categoryClickHandler(temp_div3_control, listing_info);
 
 	return temp_div3_control;
 }
 
 //function to add click handler for each category
-function clickHandler(control, listing_info){
+function categoryClickHandler(control, listing_info){
 	control.find(".category-selector").remove();
 
 	for (var x = 0; x < categories.length; x++){
@@ -478,39 +479,39 @@ function clickHandler(control, listing_info){
 //
 //     return temp_delete_button;
 // }
-
-//function to create the premium drop down column
-function createPremiumButton(listing_info){
-    var temp_form = $("<form class='drop-form is-inline-block v-align-top'></form>");
-
-    var premium = listing_info.exp_date >= new Date().getTime();
-    var expiring = (listing_info.expiring == 0) ? false : true;
-
-    var temp_upgrade_control = $("<div class='control'></div>");
-
-    var premium_text = (premium) ? "Revert to Basic" : "Upgrade to Premium";
-        premium_text = (expiring) ? "Renew Premium" : premium_text;
-    var premium_src = (premium) ? "/downgrade" : "/upgrade";
-        premium_src = (expiring) ? "/upgrade" : premium_src;
-    var temp_upgrade_button = $('<a tabindex="1" title="Upgrade Listing" href="/listing/' + listing_info.domain_name + premium_src + '" class="button is-small no-shadow is-accent">' + premium_text + '</a>');
-
-    if (!premium || expiring){
-        //stripe upgrade button
-        temp_upgrade_button.off().on("click", function(e){
-            premiumBind(e, $(this));
-        });
-    }
-    else {
-        //downgrade button
-        temp_upgrade_button.off().on("click", function(e){
-            basicBind(e, $(this));
-        })
-    }
-
-    temp_form.append(temp_upgrade_button);
-
-    return temp_form;
-}
+//
+// //function to create the premium drop down column
+// function createPremiumButton(listing_info){
+//     var temp_form = $("<form class='drop-form is-inline-block v-align-top'></form>");
+//
+//     var premium = listing_info.exp_date >= new Date().getTime();
+//     var expiring = (listing_info.expiring == 0) ? false : true;
+//
+//     var temp_upgrade_control = $("<div class='control'></div>");
+//
+//     var premium_text = (premium) ? "Revert to Basic" : "Upgrade to Premium";
+//         premium_text = (expiring) ? "Renew Premium" : premium_text;
+//     var premium_src = (premium) ? "/downgrade" : "/upgrade";
+//         premium_src = (expiring) ? "/upgrade" : premium_src;
+//     var temp_upgrade_button = $('<a tabindex="1" title="Upgrade Listing" href="/listing/' + listing_info.domain_name + premium_src + '" class="button is-small no-shadow is-accent">' + premium_text + '</a>');
+//
+//     if (!premium || expiring){
+//         //stripe upgrade button
+//         temp_upgrade_button.off().on("click", function(e){
+//             premiumBind(e, $(this));
+//         });
+//     }
+//     else {
+//         //downgrade button
+//         temp_upgrade_button.off().on("click", function(e){
+//             basicBind(e, $(this));
+//         })
+//     }
+//
+//     temp_form.append(temp_upgrade_button);
+//
+//     return temp_form;
+// }
 
 //function to create submit / cancel buttons
 function createSubmitCancelButton(listing_info){
@@ -748,7 +749,7 @@ function refreshSubmitbindings(bool_for_status_td){
                     });
 
                     //refresh category click handlers
-					clickHandler(row_drop.find(".category-control"), info);
+					categoryClickHandler(row_drop.find(".category-control"), info);
 
 					//all other inputs handler
                     both_rows.find(".drop-form .changeable-input").unbind("input").on("input", function(e){
@@ -941,7 +942,7 @@ function cancelListingChanges(row, row_drop, cancel_button, listing_info){
     row_drop.find(".categories-input").val(listing_info.categories);
 
 	//revert categories
-	clickHandler(row_drop.find(".category-control"), listing_info);
+	categoryClickHandler(row_drop.find(".category-control"), listing_info);
 
     //image
     var img_elem = row_drop.find("img.is-listing");
@@ -988,7 +989,6 @@ function submitListingChanges(row, row_drop, success_button, listing_info){
     });
 
     success_button.addClass("is-loading");
-
     $.ajax({
         url: "/listing/" + domain_name + "/update",
         type: "POST",
