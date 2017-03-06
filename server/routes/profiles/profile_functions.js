@@ -233,7 +233,8 @@ module.exports = {
 						 if (results[x].state == "fulfilled"){
 							 if (results[x].value.address == doma_ip){
 								 //format the db query
-								 to_verify_formatted.push([results[x].value.listing_id, 1]);
+								 var mark_active_if_stripe = (req.user.stripe_info && req.user.stripe_info.charges_enabled) ? 1 : 0;
+								 to_verify_formatted.push([results[x].value.listing_id, 1, mark_active_if_stripe]);
 								 verified_listings.push(results[x].value.listing_id);
 							 }
 							 else {
@@ -311,7 +312,7 @@ module.exports = {
 				delete req.session.verification_object;
 				res.send({
 					state: "success",
-					rows: req.user.listings,
+					listings: req.user.listings,
 					unverified_listings: unverified_listings,
 					verified_listings: verified_listings
 				});
@@ -470,7 +471,8 @@ function updateUserListingsObjectVerify(user_listings, to_verify_formatted){
 	for (var x = user_listings.length - 1; x >= 0; x--){
 		for (var y = 0; y < to_verify_formatted.length; y++){
 			if (user_listings[x].id == to_verify_formatted[y][0]){
-				user_listings[x].verified = 1;
+				user_listings[x].verified = 1;		//set it to verified;
+				user_listings[x].status = to_verify_formatted[y][2];		//if user is good with stripe, then set it to active
 				break;
 			}
 		}
