@@ -115,29 +115,11 @@
   white-space: nowrap;
   border-left: 1px solid $border;
   width: 75px;
-  padding-right: 24px !important;
-}
-
-.td-price-rate-drop {
-  padding-left: 8px !important;
-  border-left: 1px solid $border;
-  padding-right: 0 !important;
-  width: 75px;
-  min-width: 75px;
-}
-
-.td-price-rate-input {
-  width: 75px;
+  text-align: right !important;
 }
 
 .td-price-type {
-  width: 112px;
-  padding-left: 10px !important;
-}
-
-.td-price-type-drop {
-  padding-left: 1px !important;
-  width: 112px;
+  width: 75px;
 }
 
 .td-address {
