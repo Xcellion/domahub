@@ -216,14 +216,16 @@ function createVerifiedDrop(listing_info, cb_when_verified){
 
     //step 2 - create A record
     var step2_control = $("<div class='control is-grouped'></div>");
+	var step2_button_prev = $("<a class='button no-shadow margin-right-10' title='Back'><span class='icon'><i class='fa fa-angle-left'></i></span></a>");
     var step2_button_next = $("<button class='button is-primary no-shadow' title='Go to the next step'><span>Okay, I made a new A Record.</span><span class='icon'><i class='fa fa-angle-right'></i></span></button>");
-        unverified_step2.append(step2_control.append(step2_button, step2_button_next));
+        unverified_step2.append(step2_control.append(step2_button_prev, step2_button, step2_button_next));
 
     //step 3 - point A record
     var step3_control = $("<div class='control has-addons is-grouped'></div>");
         step3_copy_button = $("<button class='button no-shadow is-accent' title='Copy to Clipboard'><span class='is-small icon'><i class='fa fa-clipboard'></i></span></button>");
+	var step3_button_prev = $("<a class='button no-shadow margin-right-10' title='Back'><span class='icon'><i class='fa fa-angle-left'></i></span></a>");
     var step3_button_next = $("<a class='button is-primary no-shadow' title='Go to the next step'><span>Okay, I've pointed the A Record.</span><span class='icon'><i class='fa fa-angle-right'></i></span></a>");
-        unverified_step3.append(step3_control.append(step3_copy_button, step3_button, step3_button_next));
+        unverified_step3.append(step3_control.append(step3_button_prev, step3_copy_button, step3_button, step3_button_next));
 
     step3_copy_button.click(function(){
         $(this).next("input").select();
@@ -234,14 +236,23 @@ function createVerifiedDrop(listing_info, cb_when_verified){
 
     //step 4 - verify
     var step4_control = $("<div class='control is-grouped'></div>");
+	var step4_button_prev = $("<a class='button no-shadow margin-right-10' title='Back'><span class='icon'><i class='fa fa-angle-left'></i></span></a>");
     var step4_button_next = $("<a class='button margin-right-10 is-primary verify-link no-shadow' title='Verify this Domain'><span class='is-small icon'><i class='fa fa-check-circle-o'></i></span><span>Verify this domain.</span></a>");
-        unverified_step4.append(step4_control.append(step4_button_next));
+        unverified_step4.append(step4_control.append(step4_button_prev, step4_button_next));
 
     //click to next
     step1_button_next.add(step2_button_next).add(step3_button_next).click(function(){
         var current_step = $(this).closest(".content").not(".is-hidden");
         if (current_step.next(".content").length){
             current_step.addClass('is-hidden').next(".content").removeClass('is-hidden');
+        }
+    });
+
+    //click to next
+    step2_button_prev.add(step3_button_prev).add(step4_button_prev).click(function(){
+        var current_step = $(this).closest(".content").not(".is-hidden");
+        if (current_step.prev(".content").length){
+            current_step.addClass('is-hidden').prev(".content").removeClass('is-hidden');
         }
     });
 
