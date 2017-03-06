@@ -281,7 +281,6 @@ function sortRows(method, sorted){
 //function to toggle the sorting by header
 function toggleSort(attr, bool){
     row_display.sort(function(a,b) {
-        console.log(a[attr]);
         return (bool * ((a[attr] > b[attr]) ? 1 : ((b[attr] > a[attr]) ? -1 : 0)));
     });
 }
@@ -430,32 +429,7 @@ function createAllRows(row_per_page, current_page){
 
             //JS closure magic
             (function(info){
-
-                //prevent enter to submit
-                both_rows.find(".drop-form").on("submit", function(e){
-                    e.preventDefault();
-                });
-
-                //to remove disabled on save changes button
-                both_rows.find(".drop-form .changeable-input").on("input", function(e){
-                    e.preventDefault();
-                    changedListingValue($(this), info);
-                });
-
-                //to select all text
-                both_rows.find(".drop-form .changeable-input").on("focus", function(e){
-                    $(this).select();
-                });
-
-                //upload image button handler
-                both_rows.find(".drop-form-file .changeable-input").off().on("change", function(e){
-                    e.preventDefault();
-                    var file_name = ($(this).val()) ? $(this).val().replace(/^.*[\\\/]/, '') : "Change Picture";
-                    file_name = (file_name.length > 14) ? "..." + file_name.substr(file_name.length - 14) : file_name;
-                    $(this).next(".card-footer-item").find(".file-label").text(file_name);
-                    changedListingValue($(this), info);
-                });
-
+                changedValueHandlers(both_rows, info);
             }(row_display[row_start]));
 
 
@@ -488,8 +462,36 @@ function createDomain(row_info){
 
 // --------------------------------------------------------------------------------- EDIT ROW
 
+//function to handle all changed value handlers (for submit/cancel)
+function changedValueHandlers(both_rows, info){
+    //prevent enter to submit
+    both_rows.find(".drop-form").on("submit", function(e){
+        e.preventDefault();
+    });
+
+    //to remove disabled on save changes button
+    both_rows.find(".drop-form .changeable-input").on("input", function(e){
+        e.preventDefault();
+        changedValue($(this), info);
+    });
+
+    //to select all text
+    both_rows.find(".drop-form .changeable-input").on("focus", function(e){
+        $(this).select();
+    });
+
+    //upload image button handler
+    both_rows.find(".drop-form-file .changeable-input").off().on("change", function(e){
+        e.preventDefault();
+        var file_name = ($(this).val()) ? $(this).val().replace(/^.*[\\\/]/, '') : "Change Picture";
+        file_name = (file_name.length > 14) ? "..." + file_name.substr(file_name.length - 14) : file_name;
+        $(this).next(".card-footer-item").find(".file-label").text(file_name);
+        changedValue($(this), info);
+    });
+}
+
 //helper function to bind to inputs to listen for any changes from existing listing info
-function changedListingValue(input_elem, info){
+function changedValue(input_elem, info){
     var name_of_attr = input_elem.data("name");
     var closest_row = input_elem.closest(".row-drop, .row-disp");
     var save_button = (closest_row.hasClass("row-drop")) ? closest_row.find(".save-changes-button") : closest_row.next(".row-drop").find(".save-changes-button");

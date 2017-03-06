@@ -32,6 +32,9 @@ module.exports = {
 			stripe.accounts.retrieve(req.user.stripe_account, function(err, account) {
 				if (!err){
 					updateUserStripeInfo(req.user, account);
+					if (node_env == "dev"){
+						req.user.dev_stripe_info = account;
+					}
 					next();
 				}
 				else {
@@ -585,7 +588,8 @@ function updateUserStripeInfo(user, stripe_results){
 		first_name : stripe_results.legal_entity.first_name || "",
 		last_name : stripe_results.legal_entity.last_name || "",
 		account_type : stripe_results.legal_entity.type || "",
-		transfers_enabled : stripe_results.transfers_enabled
+		transfers_enabled : stripe_results.transfers_enabled,
+		charges_enabled : stripe_results.charges_enabled
 	}
 	if (stripe_results.external_accounts.total_count > 0){
 		user.stripe_info.object = stripe_results.external_accounts.data[0].object || "";

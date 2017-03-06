@@ -72,7 +72,8 @@ function createVerify(listing_info, bool){
 //function to create the listing status td
 function createStatus(listing_info, bool){
     var text = (listing_info.status == 0) ? "Inactive" : "Active";
-    var temp_td = $("<td class='td-status is-hidden-mobile'>" + text + "</td>");
+    var inactive_danger = (listing_info.status == 0) ? " is-danger" : "";
+    var temp_td = $("<td class='td-status is-hidden-mobile" + inactive_danger + "'>" + text + "</td>");
 
     //hide if not verified
     if (!bool){
@@ -150,12 +151,17 @@ function createRowDrop(listing_info, rownum){
         temp_div_drop.append(
             //create the unverified instructions, with callback to create regular drop when verified
             createVerifiedDrop(listing_info, function(){
-                listing_info.verified = 1;
+				listing_info.verified = 1;
+
+				if (user.stripe_info && user.stripe_info.charges_enabled){
+					listing_info.status = 1;
+				}
 
                 //recreate the rows
                 var row = temp_drop.prev(".row-disp");
                 row.replaceWith(createRow(listing_info, rownum));
                 temp_drop.replaceWith(createRowDrop(listing_info, rownum));
+				refreshSubmitbindings();
             })
         );
     }
@@ -308,8 +314,15 @@ function createStatusDrop(listing_info){
 
     //change the hidden status TD along with dropdown
     temp_select.change(function(e){
-        var text = ($(this).val() == 0) ? "Inactive" : "Active";
-        $(this).closest(".td-status-drop").prev(".td-status").text(text);
+        var status_text = ($(this).val() == 0) ? "Inactive" : "Active";
+        var current_status = $(this).closest(".td-status-drop").prev(".td-status")
+		current_status.text(status_text);
+		if ($(this).val() == 0){
+			current_status.addClass('is-danger');
+		}
+		else {
+			current_status.removeClass('is-danger');
+		}
     });
 
     return new_td;
@@ -445,7 +458,7 @@ function categoryClickHandler(control, listing_info){
 			}).toArray().sort().join(" ");
 			joined_categories = (joined_categories == "") ? null : joined_categories;
 			temp_div3_input.val(joined_categories);
-			changedListingValue(temp_div3_input, listing_info);
+			changedValue(temp_div3_input, listing_info);
 		});
 
 		control.append(temp_category);
@@ -592,7 +605,7 @@ function deleteBackgroundImg(temp_x, listing_info){
 		temp_input.val("");
 		temp_form.find(".file-label").text("Change Picture");
 	}
-	changedListingValue(temp_input, listing_info);
+	changedValue(temp_input, listing_info);
 }
 
 // //function to create input price rate drop
@@ -762,7 +775,7 @@ function refreshSubmitbindings(bool_for_status_td){
 					//all other inputs handler
                     both_rows.find(".drop-form .changeable-input").unbind("input").on("input", function(e){
                         e.preventDefault();
-                        changedListingValue($(this), info);
+                        changedValue($(this), info);
                     });
 
 					//upload image button handler
@@ -771,7 +784,7 @@ function refreshSubmitbindings(bool_for_status_td){
                         var file_name = ($(this).val()) ? $(this).val().replace(/^.*[\\\/]/, '') : "Change Picture";
                         file_name = (file_name.length > 14) ? "..." + file_name.substr(file_name.length - 14) : file_name;
                         $(this).next(".card-footer-item").find(".file-label").text(file_name);
-                        changedListingValue($(this), info);
+                        changedValue($(this), info);
                     });
 
 					//click X to delete image
@@ -783,9 +796,12 @@ function refreshSubmitbindings(bool_for_status_td){
                     row_drop.find(".categories-input").val(info.categories);
 
                     //update the status td text
-                    if (bool_for_status_td){
-                        row.find(".td-status").text("Inactive");
+                    if (info.status == 0){
+                        row.find(".td-status").text("Inactive").addClass('is-danger');
                     }
+					else {
+						row.find(".td-status").text("Active").removeClass('is-danger');
+					}
                 }(listings[y], $($(".row-disp")[x])));
                 break;
             }
@@ -819,10 +835,10 @@ function selectRow(row){
 }
 
 //function to handle post-deletion of multi listings
-function deletionHandler(rows){
+function listingRefreshHandler(rows){
 	listings = rows;
 	row_display = listings.slice(0);
-    refreshSubmitbindings(true);
+    refreshSubmitbindings();
 }
 
 //function to select all rows
@@ -898,7 +914,7 @@ function multiVerify(verify_button){
 
 //function to handle post-verification of multi listings
 function verificationHandler(data){
-	listings = data.rows;
+	listings = data.listings;
 	row_display = listings.slice(0);
 
 	//verified listings change
@@ -934,9 +950,16 @@ function cancelListingChanges(row, row_drop, cancel_button, listing_info){
     listing_msg.addClass('is-hidden');
 
     //revert back to the old status
-    var old_status = (listing_info.status == 0) ? "Inactive" : "Active"
     row.find(".status_input").val(listing_info.status);
-    row.find(".td-status").not(".td-status-drop").text(old_status);
+	var current_status = row.find(".td-status").not(".td-status-drop");
+	if (listing_info.status == 0){
+		current_status.text("Inactive");
+		current_status.addClass('is-danger');
+	}
+	else {
+		current_status.text("Active");
+		current_status.removeClass('is-danger');
+	}
 
     //revert prices
     row.find(".price-rate-input").val(listing_info.price_rate);
