@@ -37,8 +37,8 @@
 						</p>
 						<% if (user.stripe_charges) { %>
 							<ul class="menu-list">
-								<li><a id="transactions-link" href='#transactions' class="setting-link">Transactions</a></li>
-								<li><a id="pending-link" href='#pending' class="setting-link">Pending</a></li>
+								<li><a id="transactions-link" href='#transactions' class="setting-link">History</a></li>
+								<%# <li><a id="pending-link" href='#pending' class="setting-link">Pending</a></li> %>
 							</ul>
 						<% } %>
 					</aside>
@@ -243,7 +243,7 @@
 								<div class="control">
 									<button tabindex="1" id="payout-address-submit" class="submit-payout button is-stylish is-small is-primary no-shadow is-disabled">Save Changes</button>
 									<button tabindex="1" id="payout-address-cancel" class="cancel-payout button is-stylish is-small is-danger no-shadow is-hidden">Cancel Changes</button>
-									<button tabindex="1" id="payout-address-next" class="is-hidden button is-stylish is-small is-primary is-pulled-right no-shadow is-hidden">Personal Information</button>
+									<button tabindex="1" id="payout-address-next" class="payout-next-button is-hidden button is-stylish is-small is-primary is-pulled-right no-shadow is-hidden">Personal Information</button>
 								</div>
 							</form>
 						</div>
@@ -411,6 +411,7 @@
 								<div class="control">
 									<button tabindex="1" id="payout-personal-submit" class="submit-payout button is-stylish is-small is-primary no-shadow is-disabled">Save Changes</button>
 									<button tabindex="1" id="payout-personal-cancel" class="cancel-payout button is-stylish is-small is-danger no-shadow is-hidden">Cancel Changes</button>
+									<button tabindex="1" id="payout-personal-next" class="payout-next-button is-hidden button is-stylish is-small is-primary is-pulled-right no-shadow is-hidden">Bank Information</button>
 								</div>
 							</form>
 						</div>
