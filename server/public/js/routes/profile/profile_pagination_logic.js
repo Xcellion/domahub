@@ -281,7 +281,6 @@ function sortRows(method, sorted){
 //function to toggle the sorting by header
 function toggleSort(attr, bool){
     row_display.sort(function(a,b) {
-        console.log(a[attr]);
         return (bool * ((a[attr] > b[attr]) ? 1 : ((b[attr] > a[attr]) ? -1 : 0)));
     });
 }
@@ -408,7 +407,12 @@ function paginateRows(total_pages, current_page){
 function emptyRows(){
     var listing_or_rental_text = window.location.pathname.indexOf("listings") != -1 ? "listings" : "rentals";
     if ($(".row-disp").length == 0){
-        var tempRow = $("<tr><td class='padding-50 has-text-centered' colspan='99'>There are no " + listing_or_rental_text + "! </td></tr>");
+        if (listings && listings.length == 0){
+            var tempRow = $("<tr><td class='padding-50 has-text-centered' colspan='99'>There are no listings! <a href='/listings/create' class='is-accent'>Create one now!</a></td></tr>");
+        }
+        else {
+            var tempRow = $("<tr><td class='padding-50 has-text-centered' colspan='99'>There are no matching " + listing_or_rental_text + "! </td></tr>");
+        }
         $("#table_body").append(tempRow);
     }
 }
@@ -425,32 +429,7 @@ function createAllRows(row_per_page, current_page){
 
             //JS closure magic
             (function(info){
-
-                //prevent enter to submit
-                both_rows.find(".drop-form").on("submit", function(e){
-                    e.preventDefault();
-                });
-
-                //to remove disabled on save changes button
-                both_rows.find(".drop-form .changeable-input").on("input", function(e){
-                    e.preventDefault();
-                    changedListingValue($(this), info);
-                });
-
-                //to select all text
-                both_rows.find(".drop-form .changeable-input").on("focus", function(e){
-                    $(this).select();
-                });
-
-                //upload image button handler
-                both_rows.find(".drop-form-file .changeable-input").off().on("change", function(e){
-                    e.preventDefault();
-                    var file_name = ($(this).val()) ? $(this).val().replace(/^.*[\\\/]/, '') : "Change Picture";
-                    file_name = (file_name.length > 14) ? "..." + file_name.substr(file_name.length - 14) : file_name;
-                    $(this).next(".card-footer-item").find(".file-label").text(file_name);
-                    changedListingValue($(this), info);
-                });
-
+                changedValueHandlers(both_rows, info);
             }(row_display[row_start]));
 
 
@@ -483,8 +462,36 @@ function createDomain(row_info){
 
 // --------------------------------------------------------------------------------- EDIT ROW
 
+//function to handle all changed value handlers (for submit/cancel)
+function changedValueHandlers(both_rows, info){
+    //prevent enter to submit
+    both_rows.find(".drop-form").on("submit", function(e){
+        e.preventDefault();
+    });
+
+    //to remove disabled on save changes button
+    both_rows.find(".drop-form .changeable-input").on("input", function(e){
+        e.preventDefault();
+        changedValue($(this), info);
+    });
+
+    //to select all text
+    both_rows.find(".drop-form .changeable-input").on("focus", function(e){
+        $(this).select();
+    });
+
+    //upload image button handler
+    both_rows.find(".drop-form-file .changeable-input").off().on("change", function(e){
+        e.preventDefault();
+        var file_name = ($(this).val()) ? $(this).val().replace(/^.*[\\\/]/, '') : "Change Picture";
+        file_name = (file_name.length > 14) ? "..." + file_name.substr(file_name.length - 14) : file_name;
+        $(this).next(".card-footer-item").find(".file-label").text(file_name);
+        changedValue($(this), info);
+    });
+}
+
 //helper function to bind to inputs to listen for any changes from existing listing info
-function changedListingValue(input_elem, info){
+function changedValue(input_elem, info){
     var name_of_attr = input_elem.data("name");
     var closest_row = input_elem.closest(".row-drop, .row-disp");
     var save_button = (closest_row.hasClass("row-drop")) ? closest_row.find(".save-changes-button") : closest_row.next(".row-drop").find(".save-changes-button");
@@ -552,10 +559,10 @@ function multiSelectButtons(){
 function multiDelete(delete_button){
     delete_button.off();
 
-	var ids = [];
+	var deletion_ids = [];
 	var selected_rows = $(".row-disp").filter(function(){
 		if ($(this).data('selected') == true){
-			ids.push($(this).data('id'));
+			deletion_ids.push($(this).data('id'));
 			return true;
 		}
 	});
@@ -565,7 +572,7 @@ function multiDelete(delete_button){
 		url: "/profile/" + listing_or_rental_url + "/delete",
 		method: "POST",
 		data: {
-			ids: ids
+			ids: deletion_ids
 		}
 	}).done(function(data){
 		delete_button.on("click", function(){
@@ -575,5 +582,8 @@ function multiDelete(delete_button){
 		if (data.state == "success"){
             deletionHandler(data.rows, selected_rows);
 		}
+        else {
+            console.log(data);
+        }
 	});
 }

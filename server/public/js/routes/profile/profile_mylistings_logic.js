@@ -72,7 +72,8 @@ function createVerify(listing_info, bool){
 //function to create the listing status td
 function createStatus(listing_info, bool){
     var text = (listing_info.status == 0) ? "Inactive" : "Active";
-    var temp_td = $("<td class='td-status is-hidden-mobile'>" + text + "</td>");
+    var inactive_danger = (listing_info.status == 0) ? " is-danger" : "";
+    var temp_td = $("<td class='td-status is-hidden-mobile" + inactive_danger + "'>" + text + "</td>");
 
     //hide if not verified
     if (!bool){
@@ -118,14 +119,11 @@ function createView(listing_info){
 
 //function to create the edit button
 function createEdit(listing_info){
-	var verified_text = (listing_info.verified) ? "Edit" : "Verify";
-	var verified_text_fa = (listing_info.verified) ? "fa-cog" : "fa-check-circle-o";
-
     var temp_td = $("<td class='td-edit padding-left-0 is-hidden-mobile'></td>");
     var temp_a = $("<a class='button no-shadow'></a>");
     var temp_span = $("<span class='icon is-small'></span>");
-    var temp_i = $("<i class='fa " + verified_text_fa + "'></i>");
-    var temp_span2 = $("<span>" + verified_text + "</span>");
+    var temp_i = $("<i class='fa fa-cog'></i>");
+    var temp_span2 = $("<span>Edit</span>");
     temp_td.append(temp_a.append(temp_span.append(temp_i), temp_span2));
 
     //prevent clicking view from dropping down row
@@ -153,12 +151,17 @@ function createRowDrop(listing_info, rownum){
         temp_div_drop.append(
             //create the unverified instructions, with callback to create regular drop when verified
             createVerifiedDrop(listing_info, function(){
-                listing_info.verified = 1;
+				listing_info.verified = 1;
+
+				if (user.stripe_info && user.stripe_info.charges_enabled){
+					listing_info.status = 1;
+				}
 
                 //recreate the rows
                 var row = temp_drop.prev(".row-disp");
                 row.replaceWith(createRow(listing_info, rownum));
                 temp_drop.replaceWith(createRowDrop(listing_info, rownum));
+				refreshSubmitbindings();
             })
         );
     }
@@ -216,14 +219,16 @@ function createVerifiedDrop(listing_info, cb_when_verified){
 
     //step 2 - create A record
     var step2_control = $("<div class='control is-grouped'></div>");
+	var step2_button_prev = $("<a class='button no-shadow margin-right-10' title='Back'><span class='icon'><i class='fa fa-angle-left'></i></span></a>");
     var step2_button_next = $("<button class='button is-primary no-shadow' title='Go to the next step'><span>Okay, I made a new A Record.</span><span class='icon'><i class='fa fa-angle-right'></i></span></button>");
-        unverified_step2.append(step2_control.append(step2_button, step2_button_next));
+        unverified_step2.append(step2_control.append(step2_button_prev, step2_button, step2_button_next));
 
     //step 3 - point A record
     var step3_control = $("<div class='control has-addons is-grouped'></div>");
         step3_copy_button = $("<button class='button no-shadow is-accent' title='Copy to Clipboard'><span class='is-small icon'><i class='fa fa-clipboard'></i></span></button>");
+	var step3_button_prev = $("<a class='button no-shadow margin-right-10' title='Back'><span class='icon'><i class='fa fa-angle-left'></i></span></a>");
     var step3_button_next = $("<a class='button is-primary no-shadow' title='Go to the next step'><span>Okay, I've pointed the A Record.</span><span class='icon'><i class='fa fa-angle-right'></i></span></a>");
-        unverified_step3.append(step3_control.append(step3_copy_button, step3_button, step3_button_next));
+        unverified_step3.append(step3_control.append(step3_button_prev, step3_copy_button, step3_button, step3_button_next));
 
     step3_copy_button.click(function(){
         $(this).next("input").select();
@@ -234,14 +239,23 @@ function createVerifiedDrop(listing_info, cb_when_verified){
 
     //step 4 - verify
     var step4_control = $("<div class='control is-grouped'></div>");
+	var step4_button_prev = $("<a class='button no-shadow margin-right-10' title='Back'><span class='icon'><i class='fa fa-angle-left'></i></span></a>");
     var step4_button_next = $("<a class='button margin-right-10 is-primary verify-link no-shadow' title='Verify this Domain'><span class='is-small icon'><i class='fa fa-check-circle-o'></i></span><span>Verify this domain.</span></a>");
-        unverified_step4.append(step4_control.append(step4_button_next));
+        unverified_step4.append(step4_control.append(step4_button_prev, step4_button_next));
 
     //click to next
     step1_button_next.add(step2_button_next).add(step3_button_next).click(function(){
         var current_step = $(this).closest(".content").not(".is-hidden");
         if (current_step.next(".content").length){
             current_step.addClass('is-hidden').next(".content").removeClass('is-hidden');
+        }
+    });
+
+    //click to next
+    step2_button_prev.add(step3_button_prev).add(step4_button_prev).click(function(){
+        var current_step = $(this).closest(".content").not(".is-hidden");
+        if (current_step.prev(".content").length){
+            current_step.addClass('is-hidden').prev(".content").removeClass('is-hidden');
         }
     });
 
@@ -300,8 +314,15 @@ function createStatusDrop(listing_info){
 
     //change the hidden status TD along with dropdown
     temp_select.change(function(e){
-        var text = ($(this).val() == 0) ? "Inactive" : "Active";
-        $(this).closest(".td-status-drop").prev(".td-status").text(text);
+        var status_text = ($(this).val() == 0) ? "Inactive" : "Active";
+        var current_status = $(this).closest(".td-status-drop").prev(".td-status")
+		current_status.text(status_text);
+		if ($(this).val() == 0){
+			current_status.addClass('is-danger');
+		}
+		else {
+			current_status.removeClass('is-danger');
+		}
     });
 
     return new_td;
@@ -378,7 +399,8 @@ function createPriceInfo(listing_info){
 
 	//price rate input
     var temp_div = $('<div class="control is-grouped"></div>');
-		var temp_input = $("<p class='control'><input type='number' min='1' step='1' class='padding-top-0 price-rate-input input changeable-input'></input></p>");
+		var temp_control = $("<p class='control'></p>")
+		var temp_input = $("<input type='number' min='1' step='1' class='padding-top-0 price-rate-input input changeable-input'></input>");
 			temp_input.val(listing_info.price_rate);
 			temp_input.data("name", "price_rate");
 
@@ -392,7 +414,7 @@ function createPriceInfo(listing_info){
 		temp_select.val(listing_info.price_type);
 		temp_select.data("name", "price_type");
 
-    temp_div.append(temp_input, temp_span.append(temp_form.append(temp_select)));
+    temp_div.append(temp_control.append(temp_input), temp_span.append(temp_form.append(temp_select)));
 
     //change the hidden price rate TD along with dropdown
     temp_input.on("change", function(e){
@@ -413,13 +435,13 @@ function createCategorySelections(listing_info){
 	var temp_div3_control = $('<div class="is-flex-wrap category-control">');
 	var temp_div3_input = $('<input tabindex="1" class="is-hidden categories-input input changeable-input value="' + listing_info.categories + '"></input>').val(listing_info.categories).data('name', "categories");
 	temp_div3_control.append(temp_div3_input);
-	clickHandler(temp_div3_control, listing_info);
+	categoryClickHandler(temp_div3_control, listing_info);
 
 	return temp_div3_control;
 }
 
 //function to add click handler for each category
-function clickHandler(control, listing_info){
+function categoryClickHandler(control, listing_info){
 	control.find(".category-selector").remove();
 
 	for (var x = 0; x < categories.length; x++){
@@ -436,7 +458,7 @@ function clickHandler(control, listing_info){
 			}).toArray().sort().join(" ");
 			joined_categories = (joined_categories == "") ? null : joined_categories;
 			temp_div3_input.val(joined_categories);
-			changedListingValue(temp_div3_input, listing_info);
+			changedValue(temp_div3_input, listing_info);
 		});
 
 		control.append(temp_category);
@@ -478,39 +500,39 @@ function clickHandler(control, listing_info){
 //
 //     return temp_delete_button;
 // }
-
-//function to create the premium drop down column
-function createPremiumButton(listing_info){
-    var temp_form = $("<form class='drop-form is-inline-block v-align-top'></form>");
-
-    var premium = listing_info.exp_date >= new Date().getTime();
-    var expiring = (listing_info.expiring == 0) ? false : true;
-
-    var temp_upgrade_control = $("<div class='control'></div>");
-
-    var premium_text = (premium) ? "Revert to Basic" : "Upgrade to Premium";
-        premium_text = (expiring) ? "Renew Premium" : premium_text;
-    var premium_src = (premium) ? "/downgrade" : "/upgrade";
-        premium_src = (expiring) ? "/upgrade" : premium_src;
-    var temp_upgrade_button = $('<a tabindex="1" title="Upgrade Listing" href="/listing/' + listing_info.domain_name + premium_src + '" class="button is-small no-shadow is-accent">' + premium_text + '</a>');
-
-    if (!premium || expiring){
-        //stripe upgrade button
-        temp_upgrade_button.off().on("click", function(e){
-            premiumBind(e, $(this));
-        });
-    }
-    else {
-        //downgrade button
-        temp_upgrade_button.off().on("click", function(e){
-            basicBind(e, $(this));
-        })
-    }
-
-    temp_form.append(temp_upgrade_button);
-
-    return temp_form;
-}
+//
+// //function to create the premium drop down column
+// function createPremiumButton(listing_info){
+//     var temp_form = $("<form class='drop-form is-inline-block v-align-top'></form>");
+//
+//     var premium = listing_info.exp_date >= new Date().getTime();
+//     var expiring = (listing_info.expiring == 0) ? false : true;
+//
+//     var temp_upgrade_control = $("<div class='control'></div>");
+//
+//     var premium_text = (premium) ? "Revert to Basic" : "Upgrade to Premium";
+//         premium_text = (expiring) ? "Renew Premium" : premium_text;
+//     var premium_src = (premium) ? "/downgrade" : "/upgrade";
+//         premium_src = (expiring) ? "/upgrade" : premium_src;
+//     var temp_upgrade_button = $('<a tabindex="1" title="Upgrade Listing" href="/listing/' + listing_info.domain_name + premium_src + '" class="button is-small no-shadow is-accent">' + premium_text + '</a>');
+//
+//     if (!premium || expiring){
+//         //stripe upgrade button
+//         temp_upgrade_button.off().on("click", function(e){
+//             premiumBind(e, $(this));
+//         });
+//     }
+//     else {
+//         //downgrade button
+//         temp_upgrade_button.off().on("click", function(e){
+//             basicBind(e, $(this));
+//         })
+//     }
+//
+//     temp_form.append(temp_upgrade_button);
+//
+//     return temp_form;
+// }
 
 //function to create submit / cancel buttons
 function createSubmitCancelButton(listing_info){
@@ -583,7 +605,7 @@ function deleteBackgroundImg(temp_x, listing_info){
 		temp_input.val("");
 		temp_form.find(".file-label").text("Change Picture");
 	}
-	changedListingValue(temp_input, listing_info);
+	changedValue(temp_input, listing_info);
 }
 
 // //function to create input price rate drop
@@ -748,12 +770,12 @@ function refreshSubmitbindings(bool_for_status_td){
                     });
 
                     //refresh category click handlers
-					clickHandler(row_drop.find(".category-control"), info);
+					categoryClickHandler(row_drop.find(".category-control"), info);
 
 					//all other inputs handler
                     both_rows.find(".drop-form .changeable-input").unbind("input").on("input", function(e){
                         e.preventDefault();
-                        changedListingValue($(this), info);
+                        changedValue($(this), info);
                     });
 
 					//upload image button handler
@@ -762,7 +784,7 @@ function refreshSubmitbindings(bool_for_status_td){
                         var file_name = ($(this).val()) ? $(this).val().replace(/^.*[\\\/]/, '') : "Change Picture";
                         file_name = (file_name.length > 14) ? "..." + file_name.substr(file_name.length - 14) : file_name;
                         $(this).next(".card-footer-item").find(".file-label").text(file_name);
-                        changedListingValue($(this), info);
+                        changedValue($(this), info);
                     });
 
 					//click X to delete image
@@ -774,9 +796,12 @@ function refreshSubmitbindings(bool_for_status_td){
                     row_drop.find(".categories-input").val(info.categories);
 
                     //update the status td text
-                    if (bool_for_status_td){
-                        row.find(".td-status").text("Inactive");
+                    if (info.status == 0){
+                        row.find(".td-status").text("Inactive").addClass('is-danger');
                     }
+					else {
+						row.find(".td-status").text("Active").removeClass('is-danger');
+					}
                 }(listings[y], $($(".row-disp")[x])));
                 break;
             }
@@ -810,10 +835,10 @@ function selectRow(row){
 }
 
 //function to handle post-deletion of multi listings
-function deletionHandler(rows){
+function listingRefreshHandler(rows){
 	listings = rows;
 	row_display = listings.slice(0);
-    refreshSubmitbindings(true);
+    refreshSubmitbindings();
 }
 
 //function to select all rows
@@ -889,7 +914,7 @@ function multiVerify(verify_button){
 
 //function to handle post-verification of multi listings
 function verificationHandler(data){
-	listings = data.rows;
+	listings = data.listings;
 	row_display = listings.slice(0);
 
 	//verified listings change
@@ -925,9 +950,16 @@ function cancelListingChanges(row, row_drop, cancel_button, listing_info){
     listing_msg.addClass('is-hidden');
 
     //revert back to the old status
-    var old_status = (listing_info.status == 0) ? "Inactive" : "Active"
     row.find(".status_input").val(listing_info.status);
-    row.find(".td-status").not(".td-status-drop").text(old_status);
+	var current_status = row.find(".td-status").not(".td-status-drop");
+	if (listing_info.status == 0){
+		current_status.text("Inactive");
+		current_status.addClass('is-danger');
+	}
+	else {
+		current_status.text("Active");
+		current_status.removeClass('is-danger');
+	}
 
     //revert prices
     row.find(".price-rate-input").val(listing_info.price_rate);
@@ -941,7 +973,7 @@ function cancelListingChanges(row, row_drop, cancel_button, listing_info){
     row_drop.find(".categories-input").val(listing_info.categories);
 
 	//revert categories
-	clickHandler(row_drop.find(".category-control"), listing_info);
+	categoryClickHandler(row_drop.find(".category-control"), listing_info);
 
     //image
     var img_elem = row_drop.find("img.is-listing");
@@ -988,7 +1020,6 @@ function submitListingChanges(row, row_drop, success_button, listing_info){
     });
 
     success_button.addClass("is-loading");
-
     $.ajax({
         url: "/listing/" + domain_name + "/update",
         type: "POST",

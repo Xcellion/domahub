@@ -90,6 +90,7 @@ module.exports = function(app, db, auth, error, stripe){
 		auth.checkLoggedIn,
 		checkDomainValid,
 		checkDomainListed,
+		stripe.getAccountInfo,
 		owner_functions.checkListingOwner,
 		owner_functions.verifyListing,
 		owner_functions.updateListing

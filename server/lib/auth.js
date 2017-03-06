@@ -209,6 +209,9 @@ module.exports = {
             redirectTo = "/redirect";
             res.redirect(redirectTo);
 		}
+        else {
+            res.redirect('/');
+        }
 	},
 
 	//sign up for a new account

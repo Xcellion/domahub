@@ -705,6 +705,11 @@ module.exports = {
 						domain_name: domain_name,
 						verified: 1
 					}
+
+					//if bank account is accepting charges, then set it to live
+					if (req.user.stripe_info && req.user.stripe_info.charges_enabled){
+						req.new_listing_info.status = 1;
+					}
 					next();
 				}
 				else {
