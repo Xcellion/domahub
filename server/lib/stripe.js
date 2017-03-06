@@ -129,10 +129,10 @@ module.exports = {
 	checkPayoutPersonal : function(req, res, next){
 		console.log('F: Checking posted Stripe managed account personal information...');
 
-		if (!req.body.first_name || !validator.isAlpha(req.body.first_name)){
+		if (!req.body.first_name){
 			error.handler(req, res, "Invalid first name!", "json");
 		}
-		else if (!req.body.last_name || !validator.isAlpha(req.body.last_name)){
+		else if (!req.body.last_name){
 			error.handler(req, res, "Invalid last name!", "json");
 		}
 		else if (!req.body.birthday_year || !validator.isInt(req.body.birthday_year, { min: 1900 })){
