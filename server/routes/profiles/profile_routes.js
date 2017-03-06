@@ -1,12 +1,9 @@
 var	account_model = require('../../models/account_model.js');
 var	profile_functions = require('../profiles/profile_functions.js');
 
-var node_env = process.env.NODE_ENV || 'dev'; 	//dev or prod bool
-var stripe_key = (node_env == "dev") ? "sk_test_PHd0TEZT5ytlF0qCNvmgAThp" : "sk_live_Nqq1WW2x9JmScHxNbnFlORoh";
-
 var bodyParser = require('body-parser')
 var jsonParser = bodyParser.json()
-var urlencodedParser = bodyParser.urlencoded({ extended: false })
+var urlencodedParser = bodyParser.urlencoded({ extended: true })
 
 var request = require('request');
 var validator = require('validator');
@@ -27,6 +24,7 @@ module.exports = function(app, db, auth, error, stripe){
 		profile_functions.checkPageNum,
 		auth.checkLoggedIn,
 		profile_functions.getAccountListings,
+		stripe.getAccountInfo,
 		profile_functions.renderMyListings
 	]);
 
@@ -44,6 +42,7 @@ module.exports = function(app, db, auth, error, stripe){
 		urlencodedParser,
 		auth.checkLoggedIn,
 		profile_functions.getAccountListings,
+		stripe.getAccountInfo,
 		profile_functions.checkPostedVerificationRows,
 		profile_functions.verifyListings
 	]);
