@@ -118,14 +118,11 @@ function createView(listing_info){
 
 //function to create the edit button
 function createEdit(listing_info){
-	var verified_text = (listing_info.verified) ? "Edit" : "Verify";
-	var verified_text_fa = (listing_info.verified) ? "fa-cog" : "fa-check-circle-o";
-
     var temp_td = $("<td class='td-edit padding-left-0 is-hidden-mobile'></td>");
     var temp_a = $("<a class='button no-shadow'></a>");
     var temp_span = $("<span class='icon is-small'></span>");
-    var temp_i = $("<i class='fa " + verified_text_fa + "'></i>");
-    var temp_span2 = $("<span>" + verified_text + "</span>");
+    var temp_i = $("<i class='fa fa-cog'></i>");
+    var temp_span2 = $("<span>Edit</span>");
     temp_td.append(temp_a.append(temp_span.append(temp_i), temp_span2));
 
     //prevent clicking view from dropping down row
