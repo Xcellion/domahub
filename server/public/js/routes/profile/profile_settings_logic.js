@@ -167,6 +167,7 @@ $(document).ready(function() {
     //stripe form submit
     $(".stripe-form").not("#payout-bank-form").on("submit", function(e){
         e.preventDefault();
+        var stripe_form = $(this);
         var which_form = $(this).attr('id').split("-")[1];
 
         //make sure all required fields are good
@@ -178,10 +179,8 @@ $(document).ready(function() {
             }).done(function(data){
                 if (data.state == "success"){
 
-                    //show hidden forms
-                    if (which_form == "address"){
-                        $("#payout-address-next").removeClass('is-hidden');
-                    }
+                    //show hidden next button
+                    stripe_form.find(".payout-next-button").removeClass('is-hidden');
                     $(".hide-stripe").removeClass('is-hidden');
 
                     flashSuccess($("#payout-" + which_form + "-message"));
