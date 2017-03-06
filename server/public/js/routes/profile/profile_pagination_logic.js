@@ -408,7 +408,12 @@ function paginateRows(total_pages, current_page){
 function emptyRows(){
     var listing_or_rental_text = window.location.pathname.indexOf("listings") != -1 ? "listings" : "rentals";
     if ($(".row-disp").length == 0){
-        var tempRow = $("<tr><td class='padding-50 has-text-centered' colspan='99'>There are no " + listing_or_rental_text + "! </td></tr>");
+        if (listings && listings.length == 0){
+            var tempRow = $("<tr><td class='padding-50 has-text-centered' colspan='99'>There are no listings! <a href='/listings/create' class='is-accent'>Create one now!</a></td></tr>");
+        }
+        else {
+            var tempRow = $("<tr><td class='padding-50 has-text-centered' colspan='99'>There are no matching " + listing_or_rental_text + "! </td></tr>");
+        }
         $("#table_body").append(tempRow);
     }
 }
