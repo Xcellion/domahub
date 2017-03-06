@@ -267,7 +267,8 @@ listing_model.prototype.newListings = function(listing_info_array, callback){
 				date_created, \
 				domain_name, \
 				price_type, \
-				price_rate \
+				price_rate, \
+				description \
 			)\
 			 VALUES ? "
 	listing_query(query, "Failed to create " + listing_info_array.length + " new listings!", callback, [listing_info_array]);

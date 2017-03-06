@@ -201,6 +201,7 @@ $(document).ready(function() {
     //remove hidden stripe sections if stripe account is made
     if (user.stripe_account){
         $(".hide-stripe").removeClass('is-hidden');
+        $("#payout-address-link").text('Payout Address');
         prefillStripeInfo();
     }
 

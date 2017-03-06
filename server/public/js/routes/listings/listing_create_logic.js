@@ -289,30 +289,18 @@ function submitDomainsAjax(domains, submit_elem, stripeToken){
 			stripeToken : stripeToken
 		}
 	}).done(function(data){
-		//console.log(data);
-
 		//handle any good or bad listings
 		refreshRows(data.bad_listings, data.good_listings);
-		//calculateSummaryRows();
-
-		//handle payment
-		if (data.premium_count){
-			showCCForm(submit_elem);
-		}
 
 		if (data.state == "error"){
 			$("#stripe-error-message").addClass('is-danger').html("Your credit card was declined.");
 		}
 
 		submit_elem.removeClass('is-loading');
-
-		//regular submit without paying
-		if (!stripeToken){
-			submit_elem.on("click", function(e){
-				e.preventDefault();
-				submitDomains(submit_elem);
-			});
-		}
+		submit_elem.on("click", function(e){
+			e.preventDefault();
+			submitDomains(submit_elem);
+		});
 	});
 }
 
@@ -334,9 +322,14 @@ function refreshRows(bad_listings, good_listings){
 		goodTableRows(good_listings);
 
 		//how many were created successfully
-		$("#success-total").text(good_listings.length);
+		var success_amount = (good_listings.length == 1) ? "1 domain" : good_listings.length + " domains"
+		$("#success-total").text(success_amount);
 		$("#domain-success-message").removeClass("is-hidden");
 	}
+
+	//disable submit and unclick terms
+	$("#domains-submit").addClass('is-disabled');
+	$("#agree-to-terms").click();
 }
 
 //function to refresh notifications if there are no relative rows
@@ -431,49 +424,49 @@ function deleteGoodTableRows(){
 	}
 }
 
-//--------------------------------------------------------------------------------PAYMENT SUBMIT
-
-//function to show the CC payment form
-function showCCForm(old_submit){
-	old_submit.addClass('is-hidden').removeClass('is-disabled');
-	$("#payment-column").removeClass('is-hidden');
-	$("#table-column").addClass('is-hidden');
-	$("#summary-column").addClass('is-offset-2');
-	$("#review-table-button").removeClass('is-hidden');
-
-	showHelpText("payment");
-	window.scrollTo(0, 0);		//scroll to top so we can see the help text
-}
-
-//helper function to check if everything is legit on payment form
-function checkSubmit(){
-	var bool = true;
-
-	if (!$("#cc-num").val()){
-		bool = "Invalid cc number!";
-		$("#stripe-error-message").addClass('is-danger').html("Please provide a credit card to charge.");
-	}
-	else if (!$("#cc-exp").val()){
-		bool = "Invalid cc exp!";
-		$("#stripe-error-message").addClass('is-danger').html("Please provide your credit card expiration date.");
-	}
-	else if (!$("#cc-cvc").val()){
-		bool = "Invalid cvc!";
-		$("#stripe-error-message").addClass('is-danger').html("Please provide your credit card CVC number.");
-	}
-	else if (!$("#cc-zip").val()){
-		bool = "Invalid zip Code!";
-		$("#stripe-error-message").addClass('is-danger').html("Please provide a ZIP code.");
-	}
-	else if (!$("#agree-to-terms").prop('checked')){
-		bool = "Invalid terms!";
-		$("#stripe-error-message").addClass('is-danger').html("You must agree to the terms and conditions.");
-	}
-
-	return bool;
-}
-
-function submitStripe(stripeToken){
-	var domains = getTableListingInfo(".domain-name-input");
-	submitDomainsAjax(domains, $("#checkout-button"), stripeToken);
-}
+// //--------------------------------------------------------------------------------PAYMENT SUBMIT
+//
+// //function to show the CC payment form
+// function showCCForm(old_submit){
+// 	old_submit.addClass('is-hidden').removeClass('is-disabled');
+// 	$("#payment-column").removeClass('is-hidden');
+// 	$("#table-column").addClass('is-hidden');
+// 	$("#summary-column").addClass('is-offset-2');
+// 	$("#review-table-button").removeClass('is-hidden');
+//
+// 	showHelpText("payment");
+// 	window.scrollTo(0, 0);		//scroll to top so we can see the help text
+// }
+//
+// //helper function to check if everything is legit on payment form
+// function checkSubmit(){
+// 	var bool = true;
+//
+// 	if (!$("#cc-num").val()){
+// 		bool = "Invalid cc number!";
+// 		$("#stripe-error-message").addClass('is-danger').html("Please provide a credit card to charge.");
+// 	}
+// 	else if (!$("#cc-exp").val()){
+// 		bool = "Invalid cc exp!";
+// 		$("#stripe-error-message").addClass('is-danger').html("Please provide your credit card expiration date.");
+// 	}
+// 	else if (!$("#cc-cvc").val()){
+// 		bool = "Invalid cvc!";
+// 		$("#stripe-error-message").addClass('is-danger').html("Please provide your credit card CVC number.");
+// 	}
+// 	else if (!$("#cc-zip").val()){
+// 		bool = "Invalid zip Code!";
+// 		$("#stripe-error-message").addClass('is-danger').html("Please provide a ZIP code.");
+// 	}
+// 	else if (!$("#agree-to-terms").prop('checked')){
+// 		bool = "Invalid terms!";
+// 		$("#stripe-error-message").addClass('is-danger').html("You must agree to the terms and conditions.");
+// 	}
+//
+// 	return bool;
+// }
+//
+// function submitStripe(stripeToken){
+// 	var domains = getTableListingInfo(".domain-name-input");
+// 	submitDomainsAjax(domains, $("#checkout-button"), stripeToken);
+// }
