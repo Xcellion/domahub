@@ -340,7 +340,7 @@ function daySelectionHandlers(){
 	//create all day events
 	$(".fc-day-header").mousedown(function(e){
 		e.preventDefault();
-        console.log('s')
+        //console.log('s')
 
 		if (e.which == 1){
 			alldayMouseDown = moment($(this).data('date'));
@@ -602,7 +602,7 @@ function removeEventTimeSlot(calEvent, mouseDownSlot, mouseUpSlot){
 	&& calEvent.end.isSameOrBefore(mouseUpSlot.end)){
 		$('#calendar').fullCalendar('removeEvents', calEvent._id);
 		$('#calendar').fullCalendar('updateEvent', calEvent);
-		console.log('event equal to slot');
+		//console.log('event equal to slot');
 	}
 	//if clipping starts at top of event
 	else if (calEvent.start.isSame(mouseDownSlot.start)){
@@ -612,7 +612,7 @@ function removeEventTimeSlot(calEvent, mouseDownSlot, mouseUpSlot){
 			end: calEvent.end
 		}).price);
 		$('#calendar').fullCalendar('updateEvent', calEvent);
-		console.log('clipping at top');
+		//console.log('clipping at top');
 	}
 	//if clipping starts at middle of event and goes all the way
 	else if (calEvent.end.isSame(mouseUpSlot.end)){
@@ -622,11 +622,11 @@ function removeEventTimeSlot(calEvent, mouseDownSlot, mouseUpSlot){
 			end: calEvent.end
 		}).price);
 		$('#calendar').fullCalendar('updateEvent', calEvent);
-		console.log('clipping at bottom');
+		//console.log('clipping at bottom');
 	}
 	//if middle of event, split event into two
 	else {
-		console.log('middle of event');
+		//console.log('middle of event');
 
 		//update existing
 		var tempEnd = calEvent.end;
@@ -715,14 +715,14 @@ function createEvent(start, end){
 	{
 		//event being created is fully overlapped by existing event, so dont create anything new
 		if (eventitem.start.isSameOrBefore(start) && eventitem.end.isSameOrAfter(end)){
-			console.log('new event is not needed');
+			//console.log('new event is not needed');
 			eventEncompassed = true;
 			removeEventTimeSlot(eventitem, {start: start, end: end}, {start: start, end: end});
 			updatePrices();
 		}
 		//check if existing event is fully overlapped by event being created
 		else if (start.isSameOrBefore(eventitem.start) && end.isSameOrAfter(eventitem.end)){
-			console.log('full overlap');
+			//console.log('full overlap');
 			fullyOverlappingEvents.push(eventitem);
 		}
 		//overlaps something, just not completely
@@ -730,14 +730,14 @@ function createEvent(start, end){
             (end.isAfter(eventitem.end) && start.isBefore(eventitem.end)) ||
             (start.isBefore(eventitem.start) && end.isAfter(eventitem.start))
         ){
-			console.log('partial overlap');
+			//console.log('partial overlap');
 			overlappingEvents.push(eventitem);
 		}
 
 		//no overlaps, check for merges
 		if (!eventitem.old && !eventEncompassed && (moment(start).format('YYYY-MM-DD HH:mm') == moment(eventitem.end).format('YYYY-MM-DD HH:mm')
 		|| moment(end).format('YYYY-MM-DD HH:mm') == moment(eventitem.start).format('YYYY-MM-DD HH:mm'))){
-			console.log('merge');
+			//console.log('merge');
 			//if start time of new event (2nd slot) is end time of existing event (1st slot)
 			//i.e. if new event is below any existing events
 			if (moment(start).format('YYYY-MM-DD HH:mm') == moment(eventitem.end).format('YYYY-MM-DD HH:mm'))
@@ -862,12 +862,12 @@ function createEvent(start, end){
 			for (var x = 0; x < removeEvents.length; x++){
 				//remove the entire chunk of the full existing event from the newly created event
 				if (removeEvents[x].full){
-					console.log('full existing removed');
+					//console.log('full existing removed');
 					removeEventTimeSlot(newEvent[0], removeEvents[x], removeEvents[x]);
 				}
 				//remove only the partially overlapped portion
 				else {
-					console.log('partial existing removed');
+					//console.log('partial existing removed');
 					if (removeEvents[x].bottom){
 						removeEventTimeSlot(newEvent[0], {start: start}, removeEvents[x]);
 					}
