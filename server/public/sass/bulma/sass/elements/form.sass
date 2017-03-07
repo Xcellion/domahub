@@ -89,6 +89,11 @@ input:-webkit-autofill
     width: 100%
     select
       width: 100%
+  &.is-disabled
+    select
+      background-color: $border
+      color: $text-disabled
+      border-color: $border
   &:after
     +arrow($black-primary)
     margin-top: -6px
