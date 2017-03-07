@@ -50,6 +50,15 @@
 							<p class="card-header-title">
 								Basic Information &nbsp<span id="basic-message" class="setting-message"></span>
 							</p>
+
+							<a class='margin-top-0 control button has-icon is-accent is-pulled-right'>
+								<span class="icon">
+									<i class="fa fa-pencil-square-o"></i>
+								</span>
+								<span>
+									Edit
+								</span>
+							</a>
 						</header>
 						<div class="card-content">
 							<form id="account-settings" class="account-form">
@@ -482,6 +491,7 @@
 	</script>
 	<script src="https://js.stripe.com/v2/" type="text/javascript" ></script>
 	<script src="/js/routes/profile/profile_settings_logic.js" type="text/javascript"></script>
+	<script src="/js/routes/profile/profile_settings_stripe_logic.js" type="text/javascript"></script>
 	<% if (user.stripe_charges) { %>
 		<script src="/js/routes/profile/profile_transactions_logic.js" type="text/javascript"></script>
 	<% } %>
