@@ -50,14 +50,11 @@
 							<p class="card-header-title">
 								Basic Information &nbsp<span id="basic-message" class="setting-message"></span>
 							</p>
-
-							<a class='margin-top-0 control button has-icon is-accent is-pulled-right'>
+							<a class='edit-section-button margin-top-0 control button has-icon no-shadow is-accent is-pulled-right'>
 								<span class="icon">
 									<i class="fa fa-pencil-square-o"></i>
 								</span>
-								<span>
-									Edit
-								</span>
+								<span>Edit</span>
 							</a>
 						</header>
 						<div class="card-content">
@@ -67,7 +64,7 @@
 										<label class="label">Email Address</label>
 									</div>
 									<p class="control">
-										<input id="email-input" class="input account-input" type="text" value="<%= user.email %>" />
+										<input id="email-input" class="is-disabled input account-input" type="text" value="<%= user.email %>" />
 									</p>
 								</div>
 								<div class="control is-horizontal">
@@ -75,31 +72,31 @@
 										<label class="label">Username</label>
 									</div>
 									<p class="control">
-										<input id="username-input" class="input account-input" type="text" value="<%= user.username %>" spellcheck="false"/>
-									</p>
-								</div>
-								<div class="control is-horizontal input-to-hide">
-									<div class="control-label is-medium">
-										<label class="label">Current Password</label>
-									</div>
-									<p class="control">
-										<input id="old-pw-input" class="input account-input" name="password" type="password" autocomplete="new-password" value="">
+										<input id="username-input" class="is-disabled input account-input" type="text" value="<%= user.username %>" spellcheck="false"/>
 									</p>
 								</div>
 								<div class="control is-horizontal">
 									<div class="control-label is-medium">
+										<label class="label">Current Password</label>
+									</div>
+									<p class="control">
+										<input id="old-pw-input" class="is-disabled input account-input" name="password" type="password" autocomplete="new-password" value="">
+									</p>
+								</div>
+								<div class="control is-horizontal hidden-edit is-hidden">
+									<div class="control-label is-medium">
 										<label id="pw-label" class="label">New Password</label>
 									</div>
 									<p class="control">
-										<input id="new-pw-input" class="input account-input" type="password"/>
+										<input id="new-pw-input" class="is-disabled input account-input" type="password"/>
 									</p>
 								</div>
-								<div class="control is-horizontal input-to-hide">
+								<div class="control is-horizontal hidden-edit is-hidden">
 									<div class="control-label is-medium">
 										<label class="label">Confirm Password</label>
 									</div>
 									<p class="control">
-										<input id="verify-pw-input" class="input account-input" type="password">
+										<input id="verify-pw-input" class="is-disabled input account-input" type="password">
 									</p>
 								</div>
 
@@ -132,7 +129,7 @@
 								</div>
 
 							-->
-								<div class="control">
+								<div class="control hidden-edit is-hidden">
 									<button id="change-account-submit" class="button is-disabled is-primary no-shadow">Save Changes</button>
 									<button id="change-account-cancel" class="button is-hidden is-danger no-shadow">Cancel Changes</button>
 								</div>
@@ -196,12 +193,18 @@
 							<p class="card-header-title">
 								Payout Address &nbsp<span id="payout-address-message" class="setting-message"></span>
 							</p>
+							<a class='edit-section-button margin-top-0 control button has-icon no-shadow is-accent is-pulled-right'>
+								<span class="icon">
+									<i class="fa fa-pencil-square-o"></i>
+								</span>
+								<span>Edit</span>
+							</a>
 						</header>
 						<div class="card-content">
 							<form id="payout-address-form" class="payout-form stripe-form">
 								<label class="label">Country</label>
 									<div class="control">
-										<span class="select is-fullwidth">
+										<span class="select is-disabled is-fullwidth">
 											<select required name="country" id="country-input" class="stripe-input">
 												<option value="AT">Austria</option>
 												<option value="AU">Australia</option>
@@ -231,25 +234,25 @@
 									</div>
 								<label class="label">Address Line 1</label>
 									<div class="control">
-										<input required id="addressline1-input" class="input stripe-input" type="text" name="addressline1" autocomplete=""/>
+										<input required id="addressline1-input" class="input is-disabled stripe-input" type="text" name="addressline1" autocomplete=""/>
 									</div>
 								<label class="label">Address Line 2</label>
 									<div class="control">
-										<input id="addressline2-input" class="input stripe-input" type="text" name="addressline2" autocomplete=""/>
+										<input id="addressline2-input" class="input is-disabled stripe-input" type="text" name="addressline2" autocomplete=""/>
 									</div>
 								<label class="label">City</label>
 									<div class="control">
-										<input required id="city-input" class="input stripe-input" type="text" name="city" autocomplete=""/>
+										<input required id="city-input" class="input is-disabled stripe-input" type="text" name="city" autocomplete=""/>
 									</div>
 								<label class="label">State / Province</label>
 									<div class="control">
-										<input required id="state-input" class="input stripe-input" type="text" name="state" autocomplete=""/>
+										<input required id="state-input" class="input is-disabled stripe-input" type="text" name="state" autocomplete=""/>
 									</div>
 								<label class="label">Zip Code / Postal Code</label>
 									<div class="control">
-										<input required id="zip-input" class="input stripe-input" type="text" name="zip" autocomplete=""/>
+										<input required id="zip-input" class="input is-disabled stripe-input" type="text" name="zip" autocomplete=""/>
 									</div>
-								<div class="control">
+								<div class="control hidden-edit is-hidden">
 									<button tabindex="1" id="payout-address-submit" class="submit-payout button is-stylish is-small is-primary no-shadow is-disabled">Save Changes</button>
 									<button tabindex="1" id="payout-address-cancel" class="cancel-payout button is-stylish is-small is-danger no-shadow is-hidden">Cancel Changes</button>
 									<button tabindex="1" id="payout-address-next" class="payout-next-button is-hidden button is-stylish is-small is-primary is-pulled-right no-shadow is-hidden">Personal Information</button>
@@ -262,20 +265,26 @@
 							<p class="card-header-title">
 								Personal Information &nbsp<span id="payout-personal-message" class="setting-message"></span>
 							</p>
+							<a class='edit-section-button margin-top-0 no-shadow control button has-icon is-accent is-pulled-right'>
+								<span class="icon">
+									<i class="fa fa-pencil-square-o"></i>
+								</span>
+								<span>Edit</span>
+							</a>
 						</header>
 						<div class="card-content">
 							<form id="payout-personal-form" class="payout-form stripe-form">
 								<label class="label">First Name</label>
 									<div class="control">
-										<input required id="first_name-input" class="input stripe-input" type="text" name="first_name" />
+										<input required id="first_name-input" class="input is-disabled stripe-input" type="text" name="first_name" />
 									</div>
 								<label class="label">Last Name</label>
 									<div class="control">
-										<input required id="last_name-input" class="input stripe-input" type="text" name="last_name" />
+										<input required id="last_name-input" class="input is-disabled stripe-input" type="text" name="last_name" />
 									</div>
 								<label class="label">Birth Date</label>
 									<div class="control">
-										<div class="select">
+										<div class="select is-disabled">
 											<select required id="birthday_year-input" name="birthday_year" class="stripe-input">
 												<option selected value="" disabled>Year</option>
 												<option value="1998">1998</option>
@@ -363,7 +372,7 @@
 												<option value="1916">1916</option>
 											</select>
 										</div>
-										<div class="select">
+										<div class="select is-disabled">
 											<select required id="birthday_month-input" name="birthday_month" class="stripe-input">
 												<option selected value="" disabled>Month</option>
 												<option value="1">January</option>
@@ -380,7 +389,7 @@
 												<option value="12">December</option>
 											</select>
 										</div>
-										<div class="select">
+										<div class="select is-disabled">
 											<select required id="birthday_day-input" name="birthday_day" class="stripe-input">
 												<option selected value="" disabled>Day</option>
 												<option value="1">1</option>
@@ -417,7 +426,7 @@
 											</select>
 										</div>
 									</div>
-								<div class="control">
+								<div class="control hidden-edit is-hidden">
 									<button tabindex="1" id="payout-personal-submit" class="submit-payout button is-stylish is-small is-primary no-shadow is-disabled">Save Changes</button>
 									<button tabindex="1" id="payout-personal-cancel" class="cancel-payout button is-stylish is-small is-danger no-shadow is-hidden">Cancel Changes</button>
 									<button tabindex="1" id="payout-personal-next" class="payout-next-button is-hidden button is-stylish is-small is-primary is-pulled-right no-shadow is-hidden">Bank Information</button>
@@ -430,12 +439,18 @@
 							<p class="card-header-title">
 								Bank Information &nbsp<span id="payout-bank-message" class="setting-message"></span>
 							</p>
+							<a class='edit-section-button no-shadow margin-top-0 control button has-icon is-accent is-pulled-right'>
+								<span class="icon">
+									<i class="fa fa-pencil-square-o"></i>
+								</span>
+								<span>Edit</span>
+							</a>
 						</header>
 						<div class="card-content">
 							<form id="payout-bank-form" class="payout-form stripe-form">
 								<label class="label">Account Type</label>
 									<div class="control">
-										<span class="select is-fullwidth">
+										<span class="select is-disabled is-fullwidth">
 											<select required id="account_type-input" name="account_type" class="stripe-input">
 												<option selected value="individual">Individual</option>
 												<option value="company">Company</option>
@@ -444,27 +459,13 @@
 									</div>
 								<label class="label">Routing Number</label>
 									<div class="control">
-										<input required id="account_routing-input" class="input stripe-input" type="number" pattern="[0-9]*" inputmode="numeric" name="account_routing" />
+										<input required id="account_routing-input" class="input is-disabled stripe-input" type="number" pattern="[0-9]*" inputmode="numeric" name="account_routing" />
 									</div>
 								<label class="label">Account Number</label>
 									<div class="control">
-										<input required id="account_number-input" class="input stripe-input" type="number" pattern="[0-9]*" inputmode="numeric" name="account_number" />
+										<input required id="account_number-input" class="input is-disabled stripe-input" type="number" pattern="[0-9]*" inputmode="numeric" name="account_number" />
 									</div>
-								<label class="label">DomaHub Terms of Service</label>
-									<div class="control checkbox-form">
-										<input class="stripe-input is-small" id="agree-to-terms-doma" type="checkbox" />
-										<label class="is-small" tabindex="1" for="agree-to-terms-doma">
-											I agree to the <a target="_blank" href="/terms" class="is-accent">DomaHub Terms & Conditions</a>.
-										</label>
-									</div>
-								<label class="label">Stripe Terms of Service</label>
-									<div id="account-type-input" class="control checkbox-form">
-										<input class="stripe-input is-small" id="agree-to-terms-stripe" type="checkbox" />
-										<label class="is-small" tabindex="1" for="agree-to-terms-stripe">
-											I agree to the <a target="_blank" href="https://stripe.com/us/connect/legal" class="is-accent">Stripe Terms & Conditions</a>.
-										</label>
-									</div>
-								<div class="control">
+								<div class="control hidden-edit is-hidden">
 									<button tabindex="1" id="payout-bank-submit" class="submit-payout button is-stylish is-small is-primary no-shadow is-disabled">Save Changes</button>
 									<button tabindex="1" id="payout-bank-cancel" class="cancel-payout button is-stylish is-small is-danger no-shadow is-hidden">Cancel Changes</button>
 								</div>

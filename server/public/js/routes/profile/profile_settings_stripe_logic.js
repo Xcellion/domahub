@@ -150,13 +150,6 @@ function checkFieldsFilled(form_elem){
         });
     }
 
-    //make sure terms are selected
-    if (form_elem.attr('id') == "payout-bank-form"){
-        if ($("input[type=checkbox]:checked").length != 2){
-            return false;
-        }
-    }
-
     return (user.stripe_info) ? required.length == required_filled.length && changed.length > 0 : required.length == required_filled.length;
 }
 
@@ -171,10 +164,6 @@ function checkRequiredFields(form_elem, which_form){
     if (required_missing_idx > 0){
         $(required_missing[required_missing_idx]).addClass('is-danger');
         flashError($("#payout-" + which_form + "-message"), "Missing " + which_form + " information!");
-        return false;
-    }
-    else if (which_form == "bank" && $("input[type=checkbox]:checked").length != 2){
-        flashError($("#payout-" + which_form + "-message"), "Please accept the terms of service!");
         return false;
     }
     else {

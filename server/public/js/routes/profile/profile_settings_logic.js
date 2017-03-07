@@ -6,6 +6,7 @@ window.onpopstate = function(event) {
 //function to show a specific section
 function showSection(section_id){
     resetErrorSuccess();
+    cancelEdits();
     $(".setting-link").removeClass("is-active");
     $("#" + section_id + "-link").addClass("is-active");
     temp_section = $("#" + section_id);
@@ -91,7 +92,7 @@ $(document).ready(function() {
     });
 
     //to cancel any changes
-    $("#change-account-cancel").click(function(e){
+    $("#change-account-cancel").on("click", function(e){
         e.preventDefault();
         $("#change-account-submit").addClass("is-disabled");
         $("#change-account-cancel").addClass("is-hidden");
@@ -106,18 +107,28 @@ $(document).ready(function() {
     });
 
     //to toggle account changes
-    $("#change-account-submit").click(function(e){
+    $("#change-account-submit").on("click", function(e){
         e.preventDefault();
         $("#account-settings").submit();
     });
 
-    // //revoke stripe access
-    // $("#revoke-stripe-button").on("click", deauthorizeStripe);
-    // $("#provide-stripe-button").on("click", function(){
-    //     $(this).addClass('is-loading');
-    // });
+    //------------------------------------------------------------------------------------ EDIT INFO
+
+    //to edit the current section
+    $(".edit-section-button").on("click", function(e){
+        var current_section = $(this).closest(".card");
+
+        current_section.find(".input, .select").toggleClass('is-disabled');
+        current_section.find(".hidden-edit").toggleClass('is-hidden');
+    });
 
 });
+
+//function to cancel edit mode
+function cancelEdits(){
+    $(".input, .select").addClass('is-disabled');
+    $(".hidden-edit").addClass('is-hidden');
+}
 
 //function to reset account inputs upon cancel
 function resetInputs(){
