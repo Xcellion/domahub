@@ -193,6 +193,9 @@
   max-width: 440px;
   padding: 0;
   position: relative;
+  @include tablet {
+    margin-right: 40px;
+  }
   @include mobile {
     max-width: 220px;
     margin: 0 auto;

@@ -1813,6 +1813,10 @@ input:-webkit-autofill {
     width: 100%; }
     .select.is-fullwidth select {
       width: 100%; }
+  .select.is-disabled select {
+    background-color: rgba(0, 0, 0, 0.12);
+    color: rgba(0, 0, 0, 0.38);
+    border-color: rgba(0, 0, 0, 0.12); }
   .select:after {
     border: 1px solid rgba(0, 0, 0, 0.88);
     border-right: 0;
@@ -3431,11 +3435,9 @@ input:-webkit-autofill {
   -webkit-transition: all 0.25s ease;
   transition: all 0.25s ease;
   align-items: center;
-  color: rgba(0, 0, 0, 0.38);
   display: flex;
-  font-size: 20px;
   justify-content: center;
-  width: 40px; }
+  margin: 0 !important; }
   .card-header-icon:hover, .card-header-icon:active, .card-header-icon:focus {
     color: rgba(0, 0, 0, 0.88); }
   .card-header-icon.is-active {
