@@ -126,8 +126,8 @@ $(document).ready(function() {
 
 //function to cancel edit mode
 function cancelEdits(){
-    $(".input, .select").addClass('is-disabled');
-    $(".hidden-edit").addClass('is-hidden');
+    $(".card").find(".input, .select").addClass('is-disabled');
+    $(".card").find(".hidden-edit").addClass('is-hidden');
 }
 
 //function to reset account inputs upon cancel
