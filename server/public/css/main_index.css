@@ -166,6 +166,9 @@
   max-width: 440px;
   padding: 0;
   position: relative; }
+  @media screen and (min-width: 769px) {
+    .image-stack {
+      margin-right: 40px; } }
   @media screen and (max-width: 768px) {
     .image-stack {
       max-width: 220px;
