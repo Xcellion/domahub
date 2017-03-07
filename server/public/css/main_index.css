@@ -165,8 +165,11 @@
 .image-stack {
   max-width: 440px;
   padding: 0;
-  position: relative;
-  margin: 0 auto; }
+  position: relative; }
+  @media screen and (max-width: 768px) {
+    .image-stack {
+      max-width: 220px;
+      margin: 0 auto; } }
   .image-stack img {
     position: absolute;
     max-width: 100%;

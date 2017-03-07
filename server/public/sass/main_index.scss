@@ -193,7 +193,10 @@
   max-width: 440px;
   padding: 0;
   position: relative;
-  margin: 0 auto;
+  @include mobile {
+    max-width: 220px;
+    margin: 0 auto;
+  }
   img {
     position: absolute;
     max-width: 100%;
