@@ -207,9 +207,9 @@
             <% } %>
             <% if (listing_info.traffic){ %>
                 <div class="content listing-info">
-                  <h3 class="is-bold margin-bottom-15">Traffic</h3>
-                  <p class="is-flex-wrap">This listing has been viewed <span id="traffic-views"></span> times in the last <span id="traffic-timespan"></span>.</p>
-              </div>
+                  <h3 class="is-bold margin-bottom-15">Listing Views</h3>
+                  <canvas id="traffic-chart"></canvas>
+                </div>
             <% } %>
             <div class="content">
               <% if (listing_info.owner_id){ %>
