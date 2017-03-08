@@ -205,6 +205,12 @@
                     <p class="is-flex-wrap" id="date_created"></p>
                 </div>
             <% } %>
+            <% if (listing_info.traffic){ %>
+                <div class="content listing-info">
+                  <h3 class="is-bold margin-bottom-15">Traffic</h3>
+                  <p class="is-flex-wrap">This listing has been viewed <span id="traffic-views"></span> times in the last <span id="traffic-timespan"></span>.</p>
+              </div>
+            <% } %>
             <div class="content">
               <% if (listing_info.owner_id){ %>
                   <h3 class="is-bold margin-bottom-15">Listed By</h3>

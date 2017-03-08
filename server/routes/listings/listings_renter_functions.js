@@ -309,7 +309,7 @@ module.exports = {
 
     //gets the listing info and all rental info/times belonging to it for a verified and active listing
     getVerifiedListing : function(req, res, next) {
-        console.log("F: Getting all listing info for the verified listing + " + req.params.domain_name + "...");
+        console.log("F: Getting all listing info for the verified listing: " + req.params.domain_name + "...");
 
         Listing.getVerifiedListing(req.params.domain_name, function(result){
             if (result.state=="error"){error.handler(req, res, "Invalid listing!");}
@@ -319,12 +319,16 @@ module.exports = {
             else {
                 getListingRentalTimes(req, res, result.info[0], function(){
 
-                    //get alexa traffic info
-                    alexaData.AlexaWebData(req.params.domain_name, function(error, result) {
-                        req.session.listing_info.alexa = result;
-                        next();
-                    });
+                    //get listing traffic
+                    Data.getListingTraffic(req.params.domain_name, function(result){
+                        req.session.listing_info.traffic = result.info;
 
+                        //get alexa traffic info
+                        alexaData.AlexaWebData(req.params.domain_name, function(error, result) {
+                            req.session.listing_info.alexa = result;
+                            next();
+                        });
+                    });
                 });
             }
         });

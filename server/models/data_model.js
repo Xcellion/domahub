@@ -24,6 +24,19 @@ module.exports = data_model;
 
 //----------------------------------------------------------------------SETS----------------------------------------------------------
 
+//gets all search traffic for a particular domain name
+data_model.prototype.getListingTraffic = function(domain_name, callback){
+	console.log("DB: Attempting to get traffic for domain " + domain_name + "...");
+	query = "SELECT \
+				stats_search_history.timestamp \
+			FROM stats_search_history \
+			WHERE stats_search_history.domain_name = ? \
+			ORDER BY stats_search_history.timestamp ASC "
+	data_query(query, "Failed to get traffic for domain " + domain_name + "!", callback, domain_name);
+}
+
+//----------------------------------------------------------------------SETS----------------------------------------------------------
+
 //creates a new entry for a listing data row
 data_model.prototype.newListingHistory = function(history_info, callback){
 	console.log("DB: Adding new search history item for " + history_info.domain_name + "...");
