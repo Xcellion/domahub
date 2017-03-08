@@ -8,7 +8,7 @@ module.exports = function(app, auth){
 
 	//cant access these routes if they are logged in
 	app.get([
-		'/signup',
+		// '/signup',
 		'/forgot'
 	], [
 		auth.isNotLoggedIn,
