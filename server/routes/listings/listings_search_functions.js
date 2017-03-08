@@ -55,24 +55,41 @@ module.exports = {
 				categories_clean.push(categories[x]);
 			}
 		}
-		categories_clean = (categories_clean.length == 0) ? [" ", " "] : categories_clean;
 
 		//make sure the domain it's coming from is legit first
 		if (validator.isFQDN(domain_name_exclude)){
-			categories_clean = categories_clean.join("|");
-			Listing.getRelatedListings(categories_clean, domain_name_exclude, function(result){
-				if (!result.info.length || result.state == "error"){
-					res.send({
-						state: "error"
-					});
-				}
-				else {
-					res.send({
-						state: "success",
-						listings: result.info
-					});
-				}
-			});
+
+			if (categories_clean.length == 0){
+				Listing.getThreeRandomListings(domain_name_exclude, function(result){
+					if (!result.info.length || result.state == "error"){
+						res.send({
+							state: "error"
+						});
+					}
+					else {
+						res.send({
+							state: "success",
+							listings: result.info
+						});
+					}
+				});
+			}
+			else {
+				categories_clean = categories_clean.join("|");
+				Listing.getRelatedListings(categories_clean, domain_name_exclude, function(result){
+					if (!result.info.length || result.state == "error"){
+						res.send({
+							state: "error"
+						});
+					}
+					else {
+						res.send({
+							state: "success",
+							listings: result.info
+						});
+					}
+				});
+			}
 		}
 	},
 
