@@ -8,6 +8,42 @@ window.mobilecheck = function() {
 };
 
 $(document).ready(function() {
+	if (listing_info.traffic){
+		var traffic_day = 0,
+		 	traffic_week = 0,
+			traffic_month = 0;
+
+		var day_ago = moment().subtract(1, "day").valueOf();
+		var week_ago = moment().subtract(1, "week").valueOf();
+		var month_ago = moment().subtract(1, "month").valueOf();
+
+		for (var x = 0; x  < listing_info.traffic.length; x++){
+			if (listing_info.traffic[x].timestamp > day_ago){
+				traffic_day++;
+			}
+			if (listing_info.traffic[x].timestamp > week_ago){
+				traffic_week++;
+			}
+			if (listing_info.traffic[x].timestamp > month_ago){
+				traffic_month
+			}
+		}
+
+		if (traffic_day > traffic_week && traffic_day > traffic_month){
+			var timespan = "day";
+		}
+		else if (traffic_week > traffic_month && traffic_week > traffic_day){
+			var timespan = "week";
+		}
+		else {
+			var timespan = "month";
+		}
+
+		$("#traffic-views").text(Math.max(traffic_day, traffic_week, traffic_month));
+		$("#traffic-timespan").text(timespan);
+	}
+
+
 	setUpCalendar(listing_info);
 
 	if (window.mobilecheck()){
