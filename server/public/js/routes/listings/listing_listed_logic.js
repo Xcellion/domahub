@@ -9,6 +9,7 @@ window.mobilecheck = function() {
 
 $(document).ready(function() {
 	if (listing_info.traffic){
+		createTrafficChart();
 		var traffic_day = 0,
 		 	traffic_week = 0,
 			traffic_month = 0;
@@ -17,15 +18,16 @@ $(document).ready(function() {
 		var week_ago = moment().subtract(1, "week").valueOf();
 		var month_ago = moment().subtract(1, "month").valueOf();
 
+		//traffic info
 		for (var x = 0; x  < listing_info.traffic.length; x++){
 			if (listing_info.traffic[x].timestamp > day_ago){
 				traffic_day++;
 			}
-			if (listing_info.traffic[x].timestamp > week_ago){
+			else if (listing_info.traffic[x].timestamp > week_ago){
 				traffic_week++;
 			}
-			if (listing_info.traffic[x].timestamp > month_ago){
-				traffic_month
+			else if (listing_info.traffic[x].timestamp > month_ago){
+				traffic_month++;
 			}
 		}
 
@@ -154,6 +156,72 @@ $(document).ready(function() {
 	editPreviousRentalModule();
 
 });
+
+//function to create the traffic chart
+function createTrafficChart(){
+	//past six months
+	var dataset = [0,0,0,0,0,0];
+	var months_away = [moment().subtract(5, "month").valueOf(),
+					   moment().subtract(4, "month").valueOf(),
+					   moment().subtract(3, "month").valueOf(),
+					   moment().subtract(2, "month").valueOf(),
+					   moment().subtract(1, "month").valueOf(),
+					   moment().valueOf()]
+	for (var x = 0; x < listing_info.traffic.length; x++){
+		for (var y = 0; y < 6; y++){
+			if (listing_info.traffic[x].timestamp < months_away[y]){
+				dataset[y]++;
+				break;
+			}
+		}
+	}
+
+	//create the labels array
+	var monthly_labels = [];
+	for (var y = 0; y < 6; y++){
+		var temp_month = moment().subtract(y, "month").format("MMM");
+		monthly_labels.unshift(temp_month);
+	}
+
+	//create the chart
+	var myChart = new Chart($("#traffic-chart")[0], {
+		type: 'line',
+		data: {
+			labels: monthly_labels,
+			datasets: [{
+				borderColor: "#3CBC8D",
+				backgroundColor: "#3CBC8D",
+				fill: false,
+				data: dataset
+			}]
+		},
+		options: {
+			legend: {
+				display: false
+			},
+			responsive: true,
+			//tooltip to display all values at a specific X-axis
+			tooltips: {
+				mode: 'x-axis',
+				callbacks: {
+					label: function(tooltipItems, data) {
+						var views_plural = (tooltipItems.yLabel == 1) ? " view" : " views"
+						return tooltipItems.yLabel + views_plural;
+					}
+				}
+			},
+			scales: {
+				yAxes: [{
+					display: true,
+					ticks: {
+						suggestedMax: 100,
+						beginAtZero: true   // minimum value will be 0.
+					}
+				}]
+			}
+		 }
+	});
+}
 
 //functions to show different cards
 function showCardContent(type){
