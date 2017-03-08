@@ -7,13 +7,13 @@
   flex-direction: column;
   align-items: center;
   @include tablet {
-    background-image: url('/images/main/index_1.jpg');
+    background-image: linear-gradient($primary, $blue-darker);
     min-height: 504px;
     height: calc(100vh - 130px);
     padding: 0 !important;
   }
   @include mobile {
-    background-image: url('/images/main/index_1_mobile.jpg');
+    background-image: linear-gradient($primary, $blue-darker);
     height: 504px;
     padding: 40px 20px 0;
   }
@@ -55,6 +55,10 @@
     display: flex;
     justify-content: center;
     padding: 5px;
+    @include mobile-360px {
+      flex-direction: column;
+      text-align: center;
+    }
     li {
       @include transition(all 0.25s ease);
       box-sizing: border-box;
@@ -62,11 +66,25 @@
       &:first-child {
         margin-right: 20px;
       }
+      @include mobile-360px {
+        width: 100%;
+        &:first-child {
+          border-bottom: 1px solid $border;
+          margin-right: 0;
+          padding-bottom: 20px;
+        }
+      }
       a {
         @include transition(all 0.25s ease);
         font-weight: 700;
         text-transform: uppercase;
         padding: 15px;
+        @include mobile {
+          padding: 15px 0;
+        }
+        @include mobile-360px {
+          width: 100%;
+        }
         &.is-active {
           @include box-shadow(0,5px,0,$primary,0);
           color: $primary;
