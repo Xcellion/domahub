@@ -214,7 +214,6 @@ function createTrafficChart(){
 				yAxes: [{
 					display: true,
 					ticks: {
-						suggestedMax: 100,
 						beginAtZero: true   // minimum value will be 0.
 					}
 				}]
