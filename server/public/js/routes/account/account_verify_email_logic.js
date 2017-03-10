@@ -17,15 +17,14 @@ $(document).ready(function() {
 					$("#accept").show();
 				}
 				//token was wrong
-				else if (data.message == "Invalid token! Please click here to verify your account again!"){
-					$("#message").text("Invalid token! Please login and resend the verification email.");
-					$("#form_to_hide").hide();
-					$("#accept").show();
-				}
 				else {
-					console.log(data);
-					can_submit = true;
-					$("#message").text(data.message);
+					$("#message").text("Failed to verify!");
+					$("#error-assistance").removeClass('is-hidden');
+					$("#form_to_hide").hide();
+					$("#contact-us-wrapper").removeClass('is-hidden');
+					$("#contact-us-button").on("click", function(){
+						Intercom("show");
+					});
 				}
 			});
 		}
