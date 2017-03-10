@@ -124,6 +124,21 @@ $(document).ready(function() {
 
 });
 
+//flash error
+function flashError(elem, message){
+    var error_msg = message || "Something went wrong!";
+    elem.fadeOut(100, function(){
+        elem.removeClass('is-success').addClass('is-danger').text(error_msg).fadeIn(100);
+    });
+}
+
+//flash success
+function flashSuccess(elem){
+    elem.fadeOut(100, function(){
+        elem.removeClass('is-danger').addClass("is-success").text("Account information updated!").fadeIn(100);
+    });
+}
+
 //function to cancel edit mode
 function cancelEdits(){
     $(".card").find(".input, .select").addClass('is-disabled');

@@ -32,14 +32,14 @@ module.exports = account_model;
 
 //check if an account exists
 account_model.prototype.checkAccount = function(email, callback){
-	console.log("Checking to see if account with email " + email + " exists on DomaHub...");
+	console.log("DB: Checking to see if account with email " + email + " exists on DomaHub...");
 	query = 'SELECT 1 AS "exist" FROM accounts WHERE email = ?'
 	account_query(query, "Account does not exist!", callback, email);
 }
 
 //check if a signup code exists
 account_model.prototype.checkSignupCode = function(code, callback){
-	console.log("Checking to see if sign-up code " + code + " exists...");
+	console.log("DB: Checking to see if sign-up code " + code + " exists...");
 	query = 'SELECT 1 AS "exist" FROM signup_codes WHERE code = ?'
 	account_query(query, "Code does not exist!", callback, code);
 }
@@ -49,10 +49,10 @@ account_model.prototype.checkSignupCode = function(code, callback){
 //gets all account info
 account_model.prototype.getAccount = function(email, username, callback){
 	if (email){
-		console.log("Attempting to get all account information for email: " + email + "...");
+		console.log("DB: Attempting to get all account information for email: " + email + "...");
 	}
 	else {
-		console.log("Attempting to get all account information for username " + username + "...");
+		console.log("DB: Attempting to get all account information for username " + username + "...");
 	}
 	query = "SELECT * FROM accounts WHERE email = ? OR username = ?"
 	account_query(query, "Failed to get all account information for email: " + email + "!", callback, [email, username]);
@@ -60,21 +60,21 @@ account_model.prototype.getAccount = function(email, username, callback){
 
 //gets all account info
 account_model.prototype.getAccountByUsername = function(username, callback){
-	console.log("Attempting to get all account information for username: " + username + "...");
+	console.log("DB: Attempting to get all account information for username: " + username + "...");
 	query = "SELECT * FROM accounts WHERE username = ?"
 	account_query(query, "Failed to get all account information for username: " + username + "!", callback, username);
 }
 
 //gets account by token
 account_model.prototype.getAccountByToken = function(token, callback){
-	console.log("Attempting to get account information for token: " + token + "...");
+	console.log("DB: Attempting to get account information for token: " + token + "...");
 	query = "SELECT email, token, token_exp FROM accounts WHERE token = ?"
 	account_query(query, "Failed to get account information for token: " + token + "!", callback, token);
 }
 
 //gets all listing info belonging to specific account
 account_model.prototype.getAccountListings = function(account_id, callback){
-	console.log("Attempting to get all listings belonging to account " + account_id + "...");
+	console.log("DB: Attempting to get all listings belonging to account " + account_id + "...");
 	query = "SELECT \
 				listings.*, \
 				rented_table.rented \
@@ -98,7 +98,7 @@ account_model.prototype.getAccountListings = function(account_id, callback){
 
 //gets all listing search info belonging to specific account
 account_model.prototype.getAccountListingsSearch = function(account_id, callback){
-	console.log("Attempting to get search history for listings belonging to account " + account_id + "...");
+	console.log("DB: Attempting to get search history for listings belonging to account " + account_id + "...");
 	query = "SELECT \
 				(UNIX_TIMESTAMP(NOW()) DIV 2592000 - IFNULL(timestamp DIV 2592000000, 0)) AS months_away, \
 				COUNT(stats_search_history.timestamp) as count, \
@@ -114,7 +114,7 @@ account_model.prototype.getAccountListingsSearch = function(account_id, callback
 
 //gets all rental info belonging to specific account
 account_model.prototype.getAccountRentals = function(account_id, callback){
-	console.log("Attempting to get all rentals belonging to account " + account_id + "...");
+	console.log("DB: Attempting to get all rentals belonging to account " + account_id + "...");
 	query = "SELECT \
 				rentals.*,\
 				rental_times.date,\
@@ -132,7 +132,7 @@ account_model.prototype.getAccountRentals = function(account_id, callback){
 
 //gets all chats for an account
 account_model.prototype.getAccountChats = function(account_id, callback){
-	console.log("Attempting to get all chat info for account #" + account_id + "...");
+	console.log("DB: Attempting to get all chat info for account #" + account_id + "...");
 	query = "SELECT \
 				chat_history.message, \
 				chat_history.seen, \
@@ -162,7 +162,7 @@ account_model.prototype.getAccountChats = function(account_id, callback){
 
 //gets the stripe ID and listing type of a listing owner
 account_model.prototype.getStripeAndType = function(domain_name, callback){
-	console.log("Attempting to get the listing type and Stripe ID of the owner of: " + domain_name + "...");
+	console.log("DB: Attempting to get the listing type and Stripe ID of the owner of: " + domain_name + "...");
 	query = "SELECT \
 				accounts.stripe_account,\
 				listings.exp_date \
@@ -176,7 +176,7 @@ account_model.prototype.getStripeAndType = function(domain_name, callback){
 
 //creates a new account
 account_model.prototype.newAccount = function(account_info, callback){
-	console.log("Creating a new account for email: " + account_info.email + "...");
+	console.log("DB: Creating a new account for email: " + account_info.email + "...");
 	query = "INSERT INTO accounts \
 			SET ? "
 	account_query(query, "Failed to create a new account for email: " + account_info.email + "!", callback, account_info);
@@ -184,7 +184,7 @@ account_model.prototype.newAccount = function(account_info, callback){
 
 //uses a sign up code
 account_model.prototype.useSignupCode = function(signup_code, code_obj, callback){
-	console.log("Using signup code: " + signup_code + "...");
+	console.log("DB: Using signup code: " + signup_code + "...");
 	query = "UPDATE signup_codes \
 			SET ? \
 			WHERE code = ?"
@@ -196,7 +196,7 @@ account_model.prototype.useSignupCode = function(signup_code, code_obj, callback
 //updates a new account
 account_model.prototype.updateAccount = function(account_info, email, callback){
 	if (!account_info.date_accessed){
-		console.log("Updating account with email: " + email + "...");
+		console.log("DB: Updating account with email: " + email + "...");
 	}
 	query = "UPDATE accounts \
 			SET ? \
@@ -206,7 +206,7 @@ account_model.prototype.updateAccount = function(account_info, email, callback){
 
 //updates specific stripe account (for deletion)
 account_model.prototype.updateAccountStripe = function(account_info, stripe_account, callback){
-	console.log("Updating account with Stripe account id: " + stripe_account + "...");
+	console.log("DB: Updating account with Stripe account id: " + stripe_account + "...");
 	query = "UPDATE accounts \
 			SET ? \
 			WHERE stripe_account = ?"

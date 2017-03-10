@@ -202,20 +202,6 @@ function submitBank(stripe_token){
     });
 }
 
-//flash error
-function flashError(elem, message){
-    elem.fadeOut(100, function(){
-        elem.removeClass('is-success').addClass('is-danger').text(message).fadeIn(100);
-    });
-}
-
-//flash success
-function flashSuccess(elem){
-    elem.fadeOut(100, function(){
-        elem.removeClass('is-danger').addClass("is-success").text("Account information updated!").fadeIn(100);
-    });
-}
-
 //reset error success flashes
 function resetErrorSuccess(leaving_form){
     cancelFormSubmit($("#payout-address-form"));

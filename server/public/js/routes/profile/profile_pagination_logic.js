@@ -407,7 +407,7 @@ function paginateRows(total_pages, current_page){
 function emptyRows(){
     var listing_or_rental_text = window.location.pathname.indexOf("listings") != -1 ? "listings" : "rentals";
     if ($(".row-disp").length == 0){
-        if (listings && listings.length == 0){
+        if (listing_or_rental_text == "listings" && listings.length == 0){
             var tempRow = $("<tr><td class='padding-50 has-text-centered' colspan='99'>There are no listings! <a href='/listings/create' class='is-accent'>Create one now!</a></td></tr>");
         }
         else {

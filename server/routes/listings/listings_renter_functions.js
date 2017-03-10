@@ -52,6 +52,21 @@ module.exports = {
         }
     },
 
+    //check if domain belongs to account
+    checkDomainOwner : function(req, res, next){
+        console.log("F: Checking domain owner...");
+
+        Listing.checkListingOwner(req.user.id, req.params.domain_name, function(result){
+            //incorrect owner!
+            if (result.state == "error" || result.info.length == 0){
+                error.handler(req, res, "Invalid domain owner!");
+            }
+            else {
+                next();
+            }
+        });
+    },
+
     //check the rental info posted
     checkRentalInfo : function(req, res, next){
         console.log("F: Checking posted rental info...");
