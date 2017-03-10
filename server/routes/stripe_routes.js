@@ -6,6 +6,7 @@ var stripe = require("stripe")(stripe_key);
 
 var bodyParser = require('body-parser');
 var jsonParser = bodyParser.json();
+var urlencodedParser = bodyParser.urlencoded({ extended: true })
 
 module.exports = function(app, db){
 	Listing = new listing_model(db);
@@ -15,6 +16,8 @@ module.exports = function(app, db){
 		stripeWebhookEventCatcher
 	]);
 }
+
+//-------------------------------------------------------------------------------------------------------------------WEBHOOK LISTENER
 
 //to catch all stripe web hook events
 function stripeWebhookEventCatcher(req, res){
@@ -59,16 +62,6 @@ function switchEvents(event, res){
 function handleAccountDeauthorized(event){
 	updateAccountStripe(event.user_id);
 }
-
-// //deleted a customer
-// function handleCustomerDelete(event){
-// 	updateAccountStripeCustomerID(event.data.object, false);
-// }
-//
-// //cancelled subscription (at period end, or immediate)
-// function handleSubscriptionCancel(event){
-// 	updateListingBasic(event.data.object);
-// }
 
 //-------------------------------------------------------------------------------------------------------------------HELPER FUNCTIONS
 
