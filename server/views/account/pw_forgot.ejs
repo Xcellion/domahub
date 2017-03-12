@@ -8,29 +8,30 @@
 
   <body>
 
-    <div class="content has-text-centered clear-nav">
-      <h2 class="has-text-centered">
-        <a class="logo-text is-primary" href="/">DomaHub</a>
-      </h2>
-      <p id="message" class="">
+      <div class="content has-text-centered clear-nav">
+        <h2 class="margin-bottom-5 has-text-centered">
+            <a class='is-inline-block flat-logo is-primary' tabindex="1" title="Home" href="/">
+                <div class='is-inline-block flat-logo is-primary'></div>
+            </a>
+        </h2>
         <% if (typeof message != "undefined") {%>
           <%= message %>
         <% } else {%>
             Enter your email to reset your password
         <% } %>
-      </p>
-    </div>
+      </div>
 
     <div id="login-form" class="account-form">
       <form id="target" action="/forgot" method="post" autocomplete="off">
 
       <div id="form_to_hide">
           <label class="label">Email</label>
-          <p class="control">
-              <input id="email" name="email" class="input is-medium" type="email" autcomplete="new-password" spellcheck="false">
+          <p class="control has-icon">
+            <input id="email" autofocus class="input is-medium" name="email" type="email" placeholder="Email" spellcheck="false">
+            <i class="fa fa-envelope"></i>
           </p>
           <p class="control">
-              <button id="login-button" class="login-button button is-primary is-medium is-fullwidth">
+              <button id="login-button" class="is-stylish login-button button is-primary is-medium is-fullwidth">
                   Change your password
               </button>
           </p>
@@ -40,7 +41,7 @@
                   Remember your password?
               </p>
               <div class="has-text-centered">
-                  <a class="signup is-accent" href="/login">Log In Now</a>
+                  <a class="signup is-accent" href="/login">Log in now</a>
               </div>
           </p>
       </div>

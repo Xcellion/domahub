@@ -6,6 +6,7 @@ var renter_functions = require("../listings/listings_renter_functions.js");
 var owner_functions = require("../listings/listings_owner_functions.js");
 var stats_functions = require("../listings/listings_stats_functions.js");
 var profile_functions = require("../profiles/profile_functions.js");
+var general_functions = require("../general_functions.js");
 
 var bodyParser = require('body-parser')
 var jsonParser = bodyParser.json()
@@ -276,6 +277,22 @@ module.exports = function(app, db, auth, error, stripe){
 		renter_functions.deactivateRental,
 		renter_functions.editRental,
 		renter_functions.updateRentalObject
+	]);
+
+	//delete a rental
+	app.post('/listing/:domain_name/:rental_id/refund', [
+		urlencodedParser,
+		auth.checkLoggedIn,
+		checkDomainValid,
+		checkDomainListed,
+		renter_functions.getRental,
+		renter_functions.checkRentalDomain,
+		renter_functions.checkDomainOwner,
+		stripe.refundRental,
+		renter_functions.createRentalObject,
+		renter_functions.deactivateRental,
+		renter_functions.editRental,
+		general_functions.sendSuccess
 	]);
 
 }

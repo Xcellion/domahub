@@ -421,10 +421,11 @@ listing_model.prototype.toggleActivateRental = function(rental_id, callback){
 
 //deletes a specific rental
 listing_model.prototype.deleteRental = function(rental_id, callback){
-	console.log("DB: Attempting to delete rental #" + rental_id + "...");
-	query = "DELETE FROM rentals \
+	console.log("DB: Attempting to de-activate rental #" + rental_id + "...");
+	query = "UPDATE rentals \
+			SET status = 0 \
 			WHERE rental_id = ? "
-	listing_query(query, "Failed to delete rental #" + rental_id + "!", callback, rental_id);
+	listing_query(query, "Failed to de-activate rental #" + rental_id + "!", callback, rental_id);
 }
 
 //sets multiple rentals to inactive

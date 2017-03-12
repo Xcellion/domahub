@@ -1,7 +1,7 @@
 <div id="transactions" class="card is-fullwidth is-hidden" >
     <header class="card-header">
         <p class="card-header-title">
-            Transactions
+            Transactions &nbsp<span id="transaction-message" class="setting-message"></span>
         </p>
     </header>
     <div class="card-content">
@@ -13,7 +13,7 @@
                     <th>Received</th>
                     <th>Fees Paid</th>
                     <th>Profit</th>
-                    <th>Preview</th>
+                    <th></th>
                 </tr>
             </thead>
             <tfoot>
@@ -31,11 +31,18 @@
                     <td class="earnings-row-amount"></td>
                     <td class="earnings-row-fees"></td>
                     <td class="earnings-row-profit"></td>
-                    <td class="earnings-row-preview">
+                    <td class="earnings-row-buttons">
                         <a target="_blank" class="button earnings-row-preview-button" tabindex="1">
                             <span class="icon is-small">
                                 <i class="fa fa-external-link"></i>
                             </span>
+                            <span>Preview</span>
+                        </a>
+                        <a target="_blank" class="button earnings-row-refund-button" tabindex="1">
+                            <span class="icon is-small">
+                                <i class="fa fa-undo"></i>
+                            </span>
+                            <span>Refund</span>
                         </a>
                     </td>
                 </tr>

@@ -12,6 +12,10 @@ $(document).ready(function() {
         $("#error_message").addClass("is-hidden");
     });
 
+    $("#contact-us-button").on('click', function(){
+        Intercom("show");
+    });
+
 });
 
 //function to submit contact form
