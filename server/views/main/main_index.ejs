@@ -11,27 +11,42 @@
 <body>
 
   <%- include("../templates/navbar", {user: user}); %>
-<!-- Background image source - https://unsplash.com/@avirichards -->
   <section id="index-img" class="section is-index-img">
-    <div>
-
-    </div>
-    <div class="container flex-column-center">
-      <div class="content has-text-centered">
+    <span></span>
+    <div class="container">
+      <div class="content has-text-centered margin-bottom-25">
         <h1 class="title is-1 is-white">
-          Rent domain names.
+          Rent out your exceptional domains.
         </h1>
         <h2 class="subtitle is-4 is-white">
-          DomaHub is a marketplace for domain rentals offering
-          quality domain names at flexible time slots.
+          DomaHub is a marketplace for renting domain names by the
+          day, week, or month.
         </h2>
       </div>
-      <div class="button-wrapper has-text-centered">
-        <a tabindex="1" href="#decision-section" id="learn-more-button" class="button is-primary is-stylish is-large" title="Learn More">Learn More</a>
+      <form class="beta-form">
+        <div class="control is-grouped-center margin-bottom-0">
+          <p class="control margin-right-5">
+            <input tabindex="1" class="input is-medium" type="email" name="betaemail" placeholder="Enter your email"/>
+          </p>
+          <p class="control">
+            <button tabindex="1" class="beta-submit button is-primary is-stylish">Sign Up</button>
+          </p>
+        </div>
+        <p class="signup-text">We are looking for users
+        with exceptional domain names to participate in our closed beta.</p>
+      </form>
+      <div class="beta-form-success is-hidden">
+        <div class="notification has-text-centered is-white">
+          <p>You have been put on the waiting list!</p>
+        </div>
       </div>
     </div>
-    <div>
-
+    <div class="learn-more-arrow">
+      <a tabindex="1" href="#decision-section" id="learn-more-button" title="Learn More">
+        <span class="icon is-medium is-white">
+          <i class="fa fa-angle-down"></i>
+        </span>
+      </a>
     </div>
   </section>
 
@@ -53,72 +68,152 @@
   <section id="have-domains-section" class="section is-medium d-owner">
     <div class="container">
       <div class="content">
-        <h1 class="title is-2 has-text-centered margin-bottom-50">Don't let your domains rot away.</h1>
+        <h1 class="title is-2 has-text-centered margin-bottom-50">Listing with DomaHub.</h1>
       </div>
       <div class="columns">
         <div class="column is-5">
-          <div class="content">
-            <h2>Create a new revenue stream.</h2>
+          <div class="content margin-bottom-20">
+            <h2>What makes a domain name exceptional?</h2>
             <p>
-              Why let your domains sit unused while you're looking for buyers?
-              List them with us and you'll simply make money every time
-              someone rents your domains.
+              These are the types of domains that are successful on DomaHub. They provide
+              value and usability to other people, businesses, and companies in the world
+              throughout the year.
             </p>
           </div>
-          <div class="content">
-            <h2>Generate meaningful traffic.</h2>
-            <p>
-              You don't have to park ads or break your back trying to generate
-              traffic. Let someone else utilize your domain name and reach greater,
-              larger audiences than ever before.
-            </p>
-            <a tabindex="1" href="/sellers" class="is-accent" title="Selling on DomaHub">
-              <span>Learn more about selling on DomaHub</span>
-              <span class="icon is-small v-align-bottom">
-                <i class="fa fa-caret-right"></i>
-              </span>
-            </a>
+          <div class="columns">
+            <div class="column">
+              <div class="content">
+                <p class="heading is-bold is-uppercase">Unique</p>
+                <p>
+                  Common phrases or words related to
+                  holidays, events, emotions, etc.
+                </p>
+              </div>
+            </div>
+            <div class="column">
+              <div class="content">
+                <p class="heading is-bold is-uppercase">Memorable</p>
+                <p>
+                  A marketable tag line, slogan, motto, expression,
+                  or saying.
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="columns">
+            <div class="column">
+              <div class="content">
+                <p class="heading is-bold is-uppercase">Searchable</p>
+                <p>
+                  Shows up in common keyword searches and
+                  has significant traffic.
+                </p>
+              </div>
+            </div>
+            <div class="column">
+              <div class="content">
+                <p class="heading is-bold is-uppercase">Versatile</p>
+                <p>
+                  Can have multiple meanings and use cases
+                  for different audiences.
+                </p>
+              </div>
+            </div>
           </div>
         </div>
-        <div class="column is-6 is-offset-1">
+        <div class="column is-5 is-offset-1">
+          <div class="content box">
+            <h2 class="has-text-centered margin-bottom-25">What are the benefits of renting?</h2>
+            <ul class="flex-list">
+              <li>
+                <span class="icon is-accent">
+                  <i class="fa fa-check"></i>
+                </span>
+                <span>Earns money and creates a new revenue stream from unused domains
+                while you wait for buyers</span>
+              </li>
+              <li>
+                <span class="icon is-accent">
+                  <i class="fa fa-check"></i>
+                </span>
+                <span>Reaches new markets and audiences organically through renters who use
+                your domain for various purposes</span>
+              </li>
+              <li>
+                <span class="icon is-accent">
+                  <i class="fa fa-check"></i>
+                </span>
+                <span>Increases the likelihood of a sale or buy-out down the road by
+                both renters and visitors</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section is-medium d-owner">
+    <div class="container">
+      <div class="columns">
+        <div class="column is-6 is-offset-3">
           <div class="content">
-            <h2>A commission system that rewards you.</h2>
+            <h1 class="title is-2 has-text-centered margin-bottom-50">How it works.</h1>
             <p>
-              We offer a commission system with three tiers applied on a
-              listing-to-listing basis. Every listing starts off with 18% commission
-              which decreases with each successive level. The more popular your
-              domain is, the lower its commission!
+              Our platform introduces your domain to potential renters. We create the listing page,
+              set rental terms, manage payments and transactions, and handle the process of
+              redirecting renter's content to the domain. This process is detailed below.
             </p>
-            <table class="table has-shadow">
-              <thead>
-                <th>Level</th>
-                <th>Rental Rate</th>
-                <th>Commission</th>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>1</td>
-                  <td>0 - 25%</td>
-                  <td>18%</td>
-                </tr>
-                <tr>
-                  <td>2</td>
-                  <td>25 - 50%</td>
-                  <td>16.5%</td>
-                </tr>
-                <tr>
-                  <td>3</td>
-                  <td>50%+</td>
-                  <td>15%</td>
-                </tr>
-              </tbody>
-            </table>
-            <a tabindex="1" href="/faq#selling" class="is-accent" title="Go to FAQ">
-              <span>Have questions? Consult our FAQ!</span>
-              <span class="icon is-small v-align-bottom">
-                <i class="fa fa-caret-right"></i>
+          </div>
+        </div>
+      </div>
+      <div class="columns">
+        <div class="column is-4">
+          <div class="content box has-stripe is-1">
+            <p class="is-blacklight">Step One</p>
+            <div class="step-box">
+              <span class="icon is-medium is-bluedarker">
+                <i class="fa fa-list-alt"></i>
               </span>
-            </a>
+              <h3 class="is-bold">You List Your Domain</h3>
+            </div>
+            <p>
+              Simply create listings by inserting domains into our upload tool.
+              Once you have created listings on DomaHub you will have to verify that you own them
+              by pointing an A Record to our servers.
+            </p>
+          </div>
+        </div>
+        <div class="column is-4">
+          <div class="content box has-stripe is-2">
+            <p class="is-blacklight">Step Two</p>
+            <div class="step-box">
+              <span class="icon is-medium is-bluedarker">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              <h3 class="is-bold">Someone Rents It</h3>
+            </div>
+            <p>
+              We handle the transaction and pay you directly into a bank account you've linked
+              with DomaHub after a few business days. The rental is not complete
+              until we confirm payment.
+            </p>
+          </div>
+        </div>
+        <div class="column is-4">
+          <div class="content box has-stripe is-3">
+            <p class="is-blacklight">Step Three</p>
+            <div class="step-box">
+              <span class="icon is-medium is-bluedarker">
+                <i class="fa fa-share-square-o"></i>
+              </span>
+              <h3 class="is-bold">We Redirect Web Content</h3>
+            </div>
+            <p>
+              The renter provides a link to some web content they wish to display
+              on their new rental. We utilize your domain's A Record pointed to our servers
+              to complete the redirection. The renter does not control hosting.
+            </p>
           </div>
         </div>
       </div>
@@ -140,20 +235,20 @@
           <div class="slider-box">
             <div class="slider-content">
               <span class="slider-icon icon is-primary is-medium">
-                <i class="fa fa-id-card-o"></i>
+                <i class="fa fa-server"></i>
               </span>
               <div class="content slider-text">
-                <h3>Always maintain ownership</h3>
+                <h3>Never transfer domains</h3>
                 <p>
-                  Don't worry about transferring ownership.
+                  You maintain the nameservers.
                 </p>
                 <a class="slider-learn is-accent">Click to learn more.</a>
               </div>
               <div class="slider-hidden-content margin-right-25 slider-text">
                 <p>
-                  You don't have to deal with the hassle of transferring ownership.
-                  We will redirect the renter's web content to your domain automatically -
-                  quick and simple.
+                  Your domain never transfers ownership. The renter doesn't get to
+                  use their own nameservers. We simply use an A Record to redirect
+                  content to the domain rental.
                 </p>
               </div>
             </div>
@@ -166,19 +261,19 @@
           <div class="slider-box">
             <div class="slider-content">
               <span class="slider-icon icon is-primary is-medium">
-                <i class="fa fa-dollar"></i>
+                <i class="fa fa-gears"></i>
               </span>
               <div class="content slider-text">
-                <h3>Full control over pricing</h3>
+                <h3>Control pricing and scheduling</h3>
                 <p>
-                  Configure pricing for each domain name.
+                  You have full control over both.
                 </p>
                 <a class="slider-learn is-accent">Click to learn more.</a>
               </div>
               <div class="slider-hidden-content margin-right-25 slider-text">
                 <p>
-                  You get to decide the pricing for all of your domains. The
-                  minimum price is one USD and there is no maximum price limit.
+                  You get to decide the pricing for all of your domains (minimum one USD).
+                  You also decide the time rate it is available for: daily, weekly, or monthly.
                 </p>
               </div>
             </div>
@@ -193,20 +288,20 @@
           <div class="slider-box">
             <div class="slider-content">
               <span class="slider-icon icon is-primary is-medium">
-                <i class="fa fa-calendar-check-o"></i>
+                <i class="fa fa-book"></i>
               </span>
               <div class="content slider-text">
-                <h3>Flexible scheduling options</h3>
+                <h3>Secure rental contracts</h3>
                 <p>
-                  Decide when your domains are available.
+                  All rentals are bounded by our terms.
                 </p>
                 <a class="slider-learn is-accent">Click to learn more.</a>
               </div>
               <div class="slider-hidden-content margin-right-25 slider-text">
                 <p>
-                  Listings can be rented out by the day, week, or month.
-                  Find the best time rate for your listing and feel free to change
-                  it whenever you want!
+                  Every rental is subject to our <a href="/terms" class="is-accent">Terms</a>.
+                  We reserve the right to remove any inappropriate rental on DomaHub.
+                  Additionally, users can flag and report any rentals themselves.
                 </p>
               </div>
             </div>
@@ -316,7 +411,7 @@
   <section class="section is-medium d-renter is-hidden">
     <div class="container">
       <div class="content">
-        <h1 class="title is-2 has-text-centered margin-bottom-50">How it Works.</h1>
+        <h1 class="title is-2 has-text-centered margin-bottom-50">How it works.</h1>
       </div>
       <div class="columns flex-column-mobile">
         <div class="column is-5 is-offset-1 order-2-mobile">
@@ -364,7 +459,7 @@
           <div class="content">
             <h2>3. Redirect Content</h2>
             <p>
-              Prior to checkout, you will have an optional to provide a link
+              Prior to checkout, you will have an option to provide a link
               to whatever web content you wish to redirect to your new domain
               rental. You may provide it at that time, or enter it later in your
               <a class="is-accent" href="/profile/myrentals">rentals page</a>.
