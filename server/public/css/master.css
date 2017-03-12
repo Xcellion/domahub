@@ -221,6 +221,7 @@ ul {
   ul.has-disc {
     list-style-type: disc; }
     ul.has-disc li {
+      color: rgba(0, 0, 0, 0.88);
       margin: 10px 0; }
 
 a.is-white,
@@ -457,7 +458,7 @@ pre {
     overflow-x: auto;
     padding: 16px 20px; }
 
-.block:not(:last-child), .box:not(:last-child), .box-flip:not(:last-child), .content:not(:last-child), .notification:not(:last-child), .progress:not(:last-child), .title:not(:last-child),
+.block:not(:last-child), .box:not(:last-child), .content:not(:last-child), .notification:not(:last-child), .progress:not(:last-child), .title:not(:last-child),
 .subtitle:not(:last-child), .highlight:not(:last-child), .level:not(:last-child), .tabs:not(:last-child) {
   margin-bottom: 10px; }
 
@@ -723,9 +724,9 @@ pre {
   margin: 0 !important; }
 
 .box {
-  -webkit-box-shadow: 0 10px 30px 0 #d0d0d0;
-  -moz-box-shadow: 0 10px 30px 0 #d0d0d0;
-  box-shadow: 0 10px 30px 0 #d0d0d0;
+  -webkit-box-shadow: 0 8px 20px 0 #d0d0d0;
+  -moz-box-shadow: 0 8px 20px 0 #d0d0d0;
+  box-shadow: 0 8px 20px 0 #d0d0d0;
   background-color: white;
   border-radius: 5px;
   display: block;
@@ -755,36 +756,6 @@ pre {
       -webkit-box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.38);
       -moz-box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.38);
       box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.38); }
-
-.box-flip {
-  -moz-transition: all 0.25s ease;
-  -o-transition: all 0.25s ease;
-  -webkit-transition: all 0.25s ease;
-  transition: all 0.25s ease;
-  -webkit-box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.14), 0 2px 12px -2px rgba(0, 0, 0, 0.2), 0 3px 10px 0 rgba(0, 0, 0, 0.12);
-  -moz-box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.14), 0 2px 12px -2px rgba(0, 0, 0, 0.2), 0 3px 10px 0 rgba(0, 0, 0, 0.12);
-  box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.14), 0 2px 12px -2px rgba(0, 0, 0, 0.2), 0 3px 10px 0 rgba(0, 0, 0, 0.12);
-  background-color: white;
-  border-radius: 5px;
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  height: 300px;
-  margin: 0 auto;
-  padding: 20px;
-  width: 345px; }
-  .box-flip:hover, .box-flip:active, .box-flip:focus {
-    cursor: pointer;
-    -webkit-box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.38);
-    -moz-box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.38);
-    box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.38); }
-
-.box-footer {
-  display: flex;
-  justify-content: center;
-  flex-grow: 1; }
-  .box-footer > .button {
-    align-self: flex-end; }
 
 .button {
   -webkit-box-shadow: 3px 3px 5px 0 rgba(0, 0, 0, 0.12);
@@ -1552,7 +1523,7 @@ button {
     line-height: 48px; }
 
 .content li + li {
-  margin-top: 15px; }
+  margin-top: 10px; }
 
 .content blockquote:not(:last-child),
 .content p:not(:last-child),
@@ -1572,8 +1543,10 @@ button {
 .content ul {
   list-style: none; }
   .content ul.has-disc {
-    list-style-type: disc; }
+    list-style-type: disc;
+    padding-left: 20px; }
     .content ul.has-disc li {
+      line-height: 1.5;
       margin: 10px 0; }
   .content ul ul {
     list-style-type: circle;
@@ -2080,10 +2053,12 @@ input:-webkit-autofill {
       margin-right: 10px; }
     .control.is-grouped > .control.is-expanded {
       flex-grow: 1; }
-    .control.is-grouped.is-grouped-centered {
-      justify-content: center; }
-    .control.is-grouped.is-grouped-right {
-      justify-content: flex-end; }
+  .control.is-grouped-center {
+    display: flex;
+    justify-content: center; }
+  .control.is-grouped-right {
+    display: flex;
+    justify-content: flex-end; }
   @media screen and (min-width: 769px) {
     .control.is-horizontal {
       display: flex;

@@ -273,10 +273,12 @@ input:-webkit-autofill
         margin-right: 10px
       &.is-expanded
         flex-grow: 1
-    &.is-grouped-centered
-      justify-content: center
-    &.is-grouped-right
-      justify-content: flex-end
+  &.is-grouped-center
+    display: flex
+    justify-content: center
+  &.is-grouped-right
+    display: flex
+    justify-content: flex-end
   &.is-horizontal
     +tablet
       display: flex

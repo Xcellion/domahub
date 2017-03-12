@@ -28,9 +28,4 @@ $(document).ready(function() {
             });
         }
     });
-
-    $(".beta-form-success").find(".delete").click(function() {
-        $(".beta-form").removeClass("is-hidden");
-    });
-
 });
