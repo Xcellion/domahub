@@ -34,17 +34,44 @@ function createEarningsRow(stripe_charge){
     var stripe_fees = Math.round(stripe_charge.amount * 0.029) + 30;
     var earnings = stripe_charge.amount - doma_fees - stripe_fees;
     total_earnings += earnings;
-    temp_row.find(".earnings-row-fees").text(number_format.to((doma_fees + stripe_fees) / 100));
 
     //was refunded completely
     if (stripe_charge.amount == stripe_charge.amount_refunded){
-        temp_row.find(".earnings-row-amount").text("Refunded").addClass('is-danger');
-        temp_row.find(".earnings-row-profit").text("-" + number_format.to((doma_fees + stripe_fees) / 100)).addClass('is-danger');
+        refundedRow(temp_row);
     }
     else {
         temp_row.find(".earnings-row-amount").text(number_format.to(stripe_charge.amount / 100));
+        temp_row.find(".earnings-row-fees").text(number_format.to((doma_fees + stripe_fees) / 100));
         temp_row.find(".earnings-row-profit").text(number_format.to(earnings / 100));
+
+        //refund button
+        temp_row.find(".earnings-row-refund-button").on("click", function(){
+            $(this).off();
+            $.ajax({
+                url: "/listing/" + stripe_charge.domain_name + "/" + stripe_charge.rental_id + "/refund",
+                method: "POST",
+                data: {
+                    stripe_id : stripe_charge.id
+                }
+            }).done(function(data){
+                if (data.state == "success"){
+                    refundedRow(temp_row);
+                }
+                else {
+                    flashError($("#transaction-message"), data.message);
+                }
+            });
+        });
     }
 
+
     return temp_row;
+}
+
+//function when a charge is refunded
+function refundedRow(row){
+    row.find(".earnings-row-amount").text("Refunded");
+    row.find(".earnings-row-profit").text("Refunded");
+    row.find(".earnings-row-fees").text("Refunded");
+    row.find(".earnings-row-refund-button").remove();
 }

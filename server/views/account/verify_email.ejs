@@ -22,18 +22,35 @@
       </div>
     </div>
 
+      <div class="content has-text-centered clear-nav">
+        <h2 class="margin-bottom-5 has-text-centered">
+            <a class='is-inline-block flat-logo is-primary' tabindex="1" title="Home" href="/">
+                <div class='is-inline-block flat-logo is-primary'></div>
+            </a>
+        </h2>
+      </div>
     <div id="login-form" class="account-form">
       <form id="target" method="post">
+        <div id="message" class="margin-bottom-15 has-text-centered">Click below to verify your account!</div>
+        <div id="error-assistance" class="is-hidden margin-bottom-15 has-text-centered">Click the button below for assistance.</div>
         <div id="form_to_hide">
-          <p class="control">
-            <button id="login-button" class="login-button button is-primary is-stylish is-fullwidth">
-                Verify your account
-            </button>
-          </p>
+            <p class="control">
+                <button id="login-button" class="login-button button is-stylish is-primary is-medium is-fullwidth">
+                    Verify your account
+                </button>
+            </p>
         </div>
         <div id="accept">
-            <a id="login-button" class="login-button button is-primary is-stylish is-fullwidth" href="/login">
+            <a id="login-button" class="login-button button is-stylish is-primary is-medium is-fullwidth" href="/login">
                 Log in
+            </a>
+        </div>
+        <div id="contact-us-wrapper" class='is-hidden'>
+            <a id="contact-us-button" tabindex="1" class="button is-primary is-stylish is-medium is-fullwidth">
+              <span class="icon">
+                <i class="fa fa-commenting" aria-hidden="true"></i>
+              </span>
+              <span>Chat with Us</span>
             </a>
         </div>
       </form>

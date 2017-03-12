@@ -336,7 +336,7 @@ module.exports = {
                                         code : null,
                                         date_accessed : new Date()
                                     }, function(){
-                                        console.log("Successfully used code!")
+                                        console.log("Successfully used code!");
                                     });
                                 }
 

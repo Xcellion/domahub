@@ -205,6 +205,12 @@
                     <p class="is-flex-wrap" id="date_created"></p>
                 </div>
             <% } %>
+            <% if (listing_info.traffic){ %>
+                <div class="content listing-info">
+                  <h3 class="is-bold margin-bottom-15">Listing Views</h3>
+                  <canvas id="traffic-chart"></canvas>
+                </div>
+            <% } %>
             <div class="content">
               <% if (listing_info.owner_id){ %>
                   <h3 class="is-bold margin-bottom-15">Listed By</h3>

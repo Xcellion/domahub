@@ -336,6 +336,32 @@ module.exports = {
 		}
 	},
 
+	//function to refund a rental
+	refundRental : function(req, res, next){
+		console.log("F: Refunding with Stripe...");
+		if (req.body.stripe_id){
+			stripe.refunds.create({
+				charge: req.body.stripe_id
+			}, function(err, refund) {
+				if (!err){
+					next();
+				}
+				else {
+					res.send({
+						state: "error",
+						message: err.message
+					});
+				}
+			});
+		}
+		else {
+			res.send({
+				state: "error",
+				message: "Invalid charge!"
+			});
+		}
+	},
+
 	//------------------------------------------------------------------------------------------ STRIPE STANDALONE
 
 	// //authorize stripe
@@ -611,6 +637,7 @@ function updateUserStripeCharges(user, stripe_charges){
 			created: stripe_charges[x].created,
 			currency: stripe_charges[x].currency,
 			description: stripe_charges[x].description,
+			id: stripe_charges[x].id
 		}
 		if (stripe_charges[x].metadata){
 			temp_charge.rental_id = stripe_charges[x].metadata.rental_id;
