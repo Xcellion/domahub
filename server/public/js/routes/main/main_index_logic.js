@@ -34,17 +34,17 @@ $(document).ready(function() {
     });
     $("#have-domains-tab").on("click", function(e){
         e.preventDefault();
+        $("#want-domains-tab").removeClass("is-active");
+        $(this).addClass("is-active");
         $(".d-owner").removeClass("is-hidden");
         $(".d-renter").addClass("is-hidden");
-        $(this).addClass("is-active");
-        $("#want-domains-tab").removeClass("is-active");
     })
     $("#want-domains-tab").on("click", function(e){
         e.preventDefault();
+        $("#have-domains-tab").removeClass("is-active");
+        $(this).addClass("is-active");
         $(".d-renter").removeClass("is-hidden");
         $(".d-owner").addClass("is-hidden");
-        $(this).addClass("is-active");
-        $("#have-domains-tab").removeClass("is-active");
     })
 
     //fade in learn more
