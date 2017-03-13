@@ -59,36 +59,45 @@ module.exports = {
 			},
 			function(req, email, password, done) {
 				//check if account exists
-				Account.getAccount(email, username, function(result){
-					if (result.state=="error"){ done(false, { message: result.info}); }
-
-					//account exists
-					else if (result.info.length){
-						return done(false, {message: 'User exists!'});
+				Account.checkAccountEmail(email, function(result){
+                    //email exists
+					if (result.state=="error" || result.info.length){
+						return done(false, {message: 'User with that email exists!'});
 					}
 
-					//account doesnt exist
 					else {
-						var now = new Date();
-						var now_utc = new Date(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(),  now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds());
+                        //check if username exists
+        				Account.checkAccountUsername(username, function(result){
+                            //username exists
+        					if (result.state=="error" || result.info.length){
+        						return done(false, {message: 'User with that username exists!'});
+        					}
 
-						var account_info = {
-							email: email,
-							username: username,
-							password: bcrypt.hashSync(password, null, null),
-							date_created: now_utc,
-							date_accessed: now_utc
-						}
+                            else {
+                                var now = new Date();
+        						var now_utc = new Date(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(),  now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds());
 
-						//create the new account
-						Account.newAccount(account_info, function(result){
-							if (result.state=="error"){ done(false, { message: result.info}); }
-							else {
-								account_info.id = result.info.insertId;
-								account_info.type = 0;
-								return done(account_info);
-							}
-						});
+        						var account_info = {
+        							email: email,
+        							username: username,
+        							password: bcrypt.hashSync(password, null, null),
+        							date_created: now_utc,
+        							date_accessed: now_utc
+        						}
+
+        						//create the new account
+        						Account.newAccount(account_info, function(result){
+        							if (result.state=="error"){ done(false, { message: result.info}); }
+        							else {
+        								account_info.id = result.info.insertId;
+        								account_info.type = 0;
+        								return done(account_info);
+        							}
+        						});
+                            }
+
+                        });
+
 					}
 				});
 			})
