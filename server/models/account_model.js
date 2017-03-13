@@ -30,11 +30,18 @@ module.exports = account_model;
 
 //--------------------------------------------------------------------CHECKS------------------------------------------------------------
 
-//check if an account exists
-account_model.prototype.checkAccount = function(email, callback){
+//check if an account email exists
+account_model.prototype.checkAccountEmail = function(email, callback){
 	console.log("DB: Checking to see if account with email " + email + " exists on DomaHub...");
 	query = 'SELECT 1 AS "exist" FROM accounts WHERE email = ?'
 	account_query(query, "Account does not exist!", callback, email);
+}
+
+//check if an account username exists
+account_model.prototype.checkAccountUsername = function(username, callback){
+	console.log("DB: Checking to see if account with username " + username + " exists on DomaHub...");
+	query = 'SELECT 1 AS "exist" FROM accounts WHERE username = ?'
+	account_query(query, "Account does not exist!", callback, username);
 }
 
 //check if a signup code exists
