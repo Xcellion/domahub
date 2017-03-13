@@ -7,13 +7,20 @@
   </head>
 
   <body>
+      <div class="content has-text-centered clear-nav">
+        <h2 class="margin-bottom-5 has-text-centered">
+            <a class='is-inline-block flat-logo is-primary' tabindex="1" title="Home" href="/">
+                <div class='is-inline-block flat-logo is-primary'></div>
+            </a>
+        </h2>
+          <% if (typeof message != "undefined") {%>
+              <p id="message" class="has-text-centered margin-top-0 margin-bottom-15"><%= message %></p>
+          <% } %>
+      </div>
 
     <div id="login-form" class="account-form">
         <form id="target" method="post">
-          <div class="has-text-centered logo-login">
-            <a class="logo-text primary-logo" href="/">DomaHub</a>
-          </div>
-          <div id="message" class="has-text-centered">
+          <div id="message" class="has-text-centered margin-bottom-15">
             <% if (typeof message != "undefined") {%>
               <%= message %>
             <% } else {%>
