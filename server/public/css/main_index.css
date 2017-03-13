@@ -71,7 +71,8 @@
       -webkit-transition: all 0.25s ease;
       transition: all 0.25s ease;
       box-sizing: border-box;
-      padding: 15px 0; }
+      padding: 15px 0;
+      min-width: 160px; }
       .tabs-box ul li:first-child {
         margin-right: 20px; }
       @media screen and (max-width: 360px) {
