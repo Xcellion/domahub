@@ -19,6 +19,7 @@ var request = require('request');
 var fs = require('fs');
 var path = require("path");
 var parseDomain = require("parse-domain");
+var safe_browse_key = "AIzaSyDjjsGtrO_4QwFDBA1cq9rCweeO4v3YLfs";
 
 var webshot = require("webshot");
 var url = require("url");
@@ -82,40 +83,66 @@ module.exports = {
             error.handler(req, res, "Invalid email!", "json");
         }
         else {
-            var create_new_listing_info = function(){
-                req.session.new_rental_info = {
-                    rental_db_info : {
-                        listing_id: req.session.listing_info.id,
-                        address: (req.body.address == "" || !req.body.address) ? "" : address    //empty address or not
-                    },
-                    new_user_email : req.body.new_user_email
-                };
 
-                //if user is logged in, otherwise create a token for creation
-                if (req.user){
-                    req.session.new_rental_info.rental_db_info.account_id = req.user.id;
+            //check against google safe browsing
+            request({
+                url: "https://safebrowsing.googleapis.com/v4/threatMatches:find?key=" + safe_browse_key,
+                method: "POST",
+                body: {
+                    "client": {
+                        "clientId": "domahub",
+                        "clientVersion": "1.0"
+                    },
+                    "threatInfo": {
+                        "threatTypes": ["MALWARE", "SOCIAL_ENGINEERING", "UNWANTED_SOFTWARE", "POTENTIALLY_HARMFUL_APPLICATION"],
+                        "threatEntryTypes": ["URL"],
+                        "threatEntries": [
+                            {"url": address}
+                        ]
+                    }
+                },
+                json: true
+            }, function (err, response, body) {
+                if (err || response.body.matches){
+                    error.handler(req, res, "Malicious address!", "json");
                 }
                 else {
-                    req.session.new_rental_info.rental_db_info.owner_hash_id = Math.random().toString(36).substr(5,5);
-                }
-                next();
-            }
+                    var create_new_listing_info = function(){
+                        req.session.new_rental_info = {
+                            rental_db_info : {
+                                listing_id: req.session.listing_info.id,
+                                address: (req.body.address == "" || !req.body.address) ? "" : address    //empty address or not
+                            },
+                            new_user_email : req.body.new_user_email
+                        };
 
-            if (req.body.address){
-                //check if its a valid HTTP address and that theres a response
-                request(address, function (err, response, body) {
-                    if (!err && response.statusCode == 200) {
-                        create_new_listing_info();
+                        //if user is logged in, otherwise create a token for creation
+                        if (req.user){
+                            req.session.new_rental_info.rental_db_info.account_id = req.user.id;
+                        }
+                        else {
+                            req.session.new_rental_info.rental_db_info.owner_hash_id = Math.random().toString(36).substr(5,5);
+                        }
+                        next();
+                    }
+
+                    if (req.body.address){
+                        //check if its a valid HTTP address and that theres a response
+                        request(address, function (err, response, body) {
+                            if (!err && response.statusCode == 200) {
+                                create_new_listing_info();
+                            }
+                            else {
+                                error.handler(req, res, "Invalid address!", "json");
+                            }
+                        });
                     }
                     else {
-                        error.handler(req, res, "Invalid address!", "json");
+                        create_new_listing_info();
                     }
-                });
-            }
-            else {
-                create_new_listing_info();
-            }
+                }
 
+            });
         }
     },
 
