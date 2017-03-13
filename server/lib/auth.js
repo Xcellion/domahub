@@ -6,6 +6,7 @@ var validator = require("validator");
 var crypto = require("crypto");
 
 var request = require('request');
+var moment = require('moment');
 
 var nodemailer = require('nodemailer');
 var sgTransport = require('nodemailer-sendgrid-transport');
@@ -245,7 +246,7 @@ module.exports = {
 
 	//function to request verification
 	requestVerify: function(req, res){
-		if (req.isAuthenticated() && req.user.type == 0 && !req.user.requested && req.header("x-requested-with") == "XMLHttpRequest"){
+		if (!req.user.token_exp && req.isAuthenticated() && req.user.type == 0 && !req.user.requested && req.header("x-requested-with") == "XMLHttpRequest"){
 			req.user.requested = true;
 			generateVerify(req, res, req.user.email, req.user.username, function(state){
 				if (state == "success"){
@@ -268,8 +269,20 @@ module.exports = {
 		else if (req.user.type == 1){
 			error.handler(req, res, "Account is already verified!", "json");
 		}
-		else if (req.user.requested){
-			error.handler(req, res, "Please check your email for further instructions!", "json");
+		else if (req.user.requested || (req.user.token_exp && (new Date().getTime() < new Date(req.user.token_exp)))){
+            resendVerify(req.user, function(state){
+                if (state == "success"){
+					req.logout();
+					res.send({
+						state: "success"
+					});
+				}
+				else {
+					res.send({
+						state: "error"
+					});
+				}
+            });
 		}
 		else {
 			error.handler(req, res, "Something went wrong with account verification!", "json");
@@ -691,8 +704,33 @@ function messageReset(req){
 	}
 }
 
+//function to resend same verification email link
+function resendVerify(user, cb){
+    console.log("F: Resending the same verification link...");
+    var email_message = {
+        to: user.email,
+        from: 'noreply@domahub.com',
+        subject: 'Verify your account at domahub!',
+        text: 'Hello, ' + user.username + '.\n\n' +
+              'Please click on the following link, or paste this into your browser to verify your email.\n\n' +
+              'http://domahub.com/verify/' + user.token + '\n\n' +
+              'The link above will expire in 1 hour.'
+    };
+
+    //send email
+    mailer.sendMail(email_message, function(err) {
+        if (err) {
+            cb(err);
+        }
+        else {
+            cb("success");
+        }
+    });
+}
+
 //helper function to verify account
 function generateVerify(req, res, email, username, cb){
+    console.log("F: Creating a new verification link...");
 	//generate token to email to user
 	crypto.randomBytes(20, function(err, buf) {
 		var verify_token = buf.toString('hex');
