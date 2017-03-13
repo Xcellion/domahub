@@ -16,7 +16,7 @@
   @media screen and (max-width: 768px) {
     #index-img {
       background-image: linear-gradient(#3cbc8d, #23415f);
-      height: 600px;
+      height: 550px;
       padding: 40px 20px 0; } }
   #index-img .subtitle {
     max-width: 600px;
@@ -184,24 +184,6 @@
     background: #3cbc8d;
     left: 0;
     top: 0; }
-
-.button-wrapper {
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  margin-top: 25px; }
-  .button-wrapper.is-left-aligned {
-    justify-content: flex-start; }
-  .button-wrapper .button:not(:last-child) {
-    margin-right: 10px; }
-  @media screen and (max-width: 456px) {
-    .button-wrapper {
-      flex-direction: column;
-      justify-content: center;
-      align-items: center; }
-      .button-wrapper .button:not(:last-child) {
-        margin-right: 0;
-        margin-bottom: 10px; } }
 
 .image-stack {
   max-width: 440px;
