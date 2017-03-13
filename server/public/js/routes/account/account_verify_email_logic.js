@@ -12,7 +12,7 @@ $(document).ready(function() {
 				url: window.location.pathname
 			}).done(function(data){
 				if (data.state == "success"){
-					$("#message").text("Success! You account has been verified!");
+					$("#message").text("Success! Your account has been verified!");
 					$("#form_to_hide").hide();
 					$("#accept").show();
 				}

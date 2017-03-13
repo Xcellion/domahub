@@ -10,7 +10,7 @@
   }
   @include mobile {
     background-image: linear-gradient($primary, $blue-darker);
-    height: 600px;
+    height: 550px;
     padding: 40px 20px 0;
   }
   background-position: center center;
@@ -211,32 +211,6 @@
     background: $primary;
     left: 0;
     top: 0;
-  }
-}
-
-.button-wrapper {
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  margin-top: 25px;
-  &.is-left-aligned {
-    justify-content: flex-start;
-  }
-  .button {
-    &:not(:last-child) {
-      margin-right: 10px;
-    }
-  }
-  @include mobile-456px {
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    .button {
-      &:not(:last-child) {
-        margin-right: 0;
-        margin-bottom: 10px;
-      }
-    }
   }
 }
 // .card-flex-wrap {
