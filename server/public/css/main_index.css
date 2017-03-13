@@ -66,15 +66,14 @@
         flex-direction: column;
         text-align: center; } }
     .tabs-box ul li {
-      -moz-transition: all 0.25s ease;
-      -o-transition: all 0.25s ease;
-      -webkit-transition: all 0.25s ease;
-      transition: all 0.25s ease;
       box-sizing: border-box;
       padding: 15px 0;
       min-width: 160px; }
       .tabs-box ul li:first-child {
         margin-right: 20px; }
+      @media screen and (max-width: 768px) {
+        .tabs-box ul li {
+          min-width: 130px; } }
       @media screen and (max-width: 360px) {
         .tabs-box ul li {
           width: 100%; }
@@ -83,10 +82,6 @@
             margin-right: 0;
             padding-bottom: 20px; } }
       .tabs-box ul li a {
-        -moz-transition: all 0.25s ease;
-        -o-transition: all 0.25s ease;
-        -webkit-transition: all 0.25s ease;
-        transition: all 0.25s ease;
         font-weight: 700;
         text-transform: uppercase;
         padding: 15px; }
@@ -97,16 +92,10 @@
           .tabs-box ul li a {
             width: 100%; } }
         .tabs-box ul li a.is-active {
-          -webkit-box-shadow: 0 5px 0 0 #3cbc8d;
-          -moz-box-shadow: 0 5px 0 0 #3cbc8d;
-          box-shadow: 0 5px 0 0 #3cbc8d;
           color: #3cbc8d; }
         .tabs-box ul li a:hover, .tabs-box ul li a:focus {
           outline: none; }
           .tabs-box ul li a:hover:not(.is-active), .tabs-box ul li a:focus:not(.is-active) {
-            -webkit-box-shadow: 0 5px 0 0 rgba(0, 0, 0, 0.38);
-            -moz-box-shadow: 0 5px 0 0 rgba(0, 0, 0, 0.38);
-            box-shadow: 0 5px 0 0 rgba(0, 0, 0, 0.38);
             color: rgba(0, 0, 0, 0.38); }
 
 .slider-box {
@@ -116,7 +105,7 @@
   background-color: #fff;
   position: relative;
   padding: 10px 15px;
-  min-height: 145px;
+  height: 145px;
   display: flex;
   align-items: center;
   justify-content: space-between; }
@@ -159,13 +148,12 @@
 .slider-icon:hover {
   cursor: pointer; }
 
-.flex-list li {
-  display: flex;
-  align-items: center; }
-  .flex-list li span:first-child {
-    margin-right: 10px; }
-  .flex-list li span:nth-child(2) {
-    line-height: 1.5; }
+.flex-list li span {
+  margin-right: 10px;
+  display: inline; }
+
+.flex-list li p {
+  display: inline; }
 
 .step-box {
   display: flex;
