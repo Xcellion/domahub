@@ -395,9 +395,26 @@ function successHandler(data){
 
 //function to create popular rentals module
 function editPopularRentalModule(){
-	var popular_rental_id = $("#popular-rental-module").data("rental_id");
-	if (popular_rental_id){
-		$("#popular-rental-duration").text(aggregateDateDuration(popular_rental_id));
+	var popular_rental;
+	for (var x = 0; x < listing_info.rentals.length; x++){
+		var max_views = 0;
+		if (listing_info.rentals[x].views > max_views){
+			popular_rental = listing_info.rentals[x];
+		}
+	}
+	if (popular_rental){
+		$("#popular-rental-duration").text(aggregateDateDuration(popular_rental.rental_id));
+		$("#popular-rental-views").text(popular_rental.views + " Views");
+
+		//async image load
+		var popular_screenshot = new Image();
+		popular_screenshot.onload = function(){
+			$("#popular-rental-img").attr("src", this.src);
+		}
+
+		var background_image = (popular_rental.address == "") ? "https://placeholdit.imgix.net/~text?txtsize=20&txt=NO%20PREVIEW&w=800&h=400" : "/screenshot?rental_address=" + popular_rental.address;
+		background_image = (popular_rental.address.match(/\.(jpeg|jpg|gif|png)$/) != null) ? popular_rental.address : background_image;
+		popular_screenshot.src = background_image;
 	}
 }
 
