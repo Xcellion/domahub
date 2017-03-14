@@ -193,6 +193,7 @@ listing_model.prototype.getThreeRandomListings = function(domain_name_exclude, c
 			WHERE listings.domain_name != ? \
 			AND listings.status = 1 \
 			AND listings.verified = 1 \
+			AND listings.categories NOT LIKE '%adult%' \
 			ORDER BY RAND() \
 			LIMIT 3"
 	listing_query(query, "Failed to get related 3 random listings!", callback, domain_name_exclude);
