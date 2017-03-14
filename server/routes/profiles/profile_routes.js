@@ -28,14 +28,14 @@ module.exports = function(app, db, auth, error, stripe){
 		profile_functions.renderMyListings
 	]);
 
-	// //mylistings multi delete
-	// app.post("/profile/mylistings/delete", [
-	// 	urlencodedParser,
-	// 	auth.checkLoggedIn,
-	// 	profile_functions.getAccountListings,
-	// 	profile_functions.checkPostedDeletionRows,
-	// 	profile_functions.deleteListings
-	// ]);
+	//mylistings multi delete
+	app.post("/profile/mylistings/delete", [
+		urlencodedParser,
+		auth.checkLoggedIn,
+		profile_functions.getAccountListings,
+		profile_functions.checkPostedDeletionRows,
+		profile_functions.deleteListings
+	]);
 
 	//mylistings multi verify
 	app.post("/profile/mylistings/verify", [
