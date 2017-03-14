@@ -1,16 +1,27 @@
 var row_display = listings.slice(0);
 
 $(document).ready(function(){
-	// //multiple delete listings
-	// $("#multi-delete").on("click", function(e){
-	// 	multiDelete($(this));
-	// });
+	//multiple delete listings
+	$("#multi-delete").on("click", function(e){
+		multiDelete($(this));
+	});
 
 	//multiple verify listings
 	$("#multi-verify").on("click", function(e){
 		multiVerify($(this));
 	});
 });
+
+//function to handle post-deletion of multi listings
+function deletionHandler(rows, selected_rows){
+	listings = rows;
+	row_display = listings.slice(0);
+	for (var x = 0; x < selected_rows.length; x++){
+		$(selected_rows[x]).next(".row-drop").remove();
+		$(selected_rows[x]).remove();
+	}
+	emptyRows();
+}
 
 // ------------------------------------------------------------------------------------------------------------------------------ CREATE ROW
 
@@ -185,7 +196,7 @@ function createVerifiedDrop(listing_info, cb_when_verified){
     var unverified_columns_header = $("<div class='columns'></div>");
     var header_column = $("<div class='column'></div>");
     var unverified_h3 = $("<h3 class='is-bold'>You must verify that you own this domain.</h3>");
-    var unverified_faq = $("<p>Click <a target='_blank' style'target-new: tab;' class='is-accent margin-bottom-25' href='/faq#verifying'>here</a> for more information on domain verification.</br>Any unverified domains will be automatically deleted each week.</p>");
+    var unverified_faq = $("<p>Click <a target='_blank' style'target-new: tab;' class='is-accent margin-bottom-25' href='/faq#verifying'>here</a> for more information on domain verification.</p>");
         unverified_columns_header.append(header_column.append(unverified_h3, unverified_faq));
 
     var unverified_columns_steps = $("<div class='columns'></div>");

@@ -156,15 +156,14 @@ module.exports = {
 		var to_delete_formatted = [];
 		var listing_or_rental = (req.path.indexOf("mylistings") != -1) ? req.user.listings : req.user.rentals;
 		var listing_or_rental_id = (req.path.indexOf("mylistings") != -1) ? "id" : "rental_id";
-		var listing_or_rental_bool = req.path.indexOf("mylistings") != -1;
 
 		if (req.body.ids){
 			for (var x = 0; x < req.body.ids.length; x++){
 				for (var y = 0; y < listing_or_rental.length; y++){
+
+					//check if user owns the listing / rental
 					if (listing_or_rental[y][listing_or_rental_id] == req.body.ids[x]){
-						if (!listing_or_rental_bool || (listing_or_rental_bool && listing_or_rental[y].verified && listing_or_rental[y].status == 1)){
-							to_delete_formatted.push([listing_or_rental[y][listing_or_rental_id], 0]);
-						}
+						to_delete_formatted.push([listing_or_rental[y][listing_or_rental_id]]);
 						break;
 					}
 				}
@@ -459,7 +458,7 @@ function updateUserListingsObjectDelete(user_listings, to_delete_formatted){
 	for (var x = user_listings.length - 1; x >= 0; x--){
 		for (var y = 0; y < to_delete_formatted.length; y++){
 			if (user_listings[x].id == to_delete_formatted[y][0]){
-				user_listings[x].status = 0;
+				user_listings.splice(x, 1);
 				break;
 			}
 		}

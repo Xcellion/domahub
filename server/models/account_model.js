@@ -99,6 +99,7 @@ account_model.prototype.getAccountListings = function(account_id, callback){
 			) as rented_table \
 			ON rented_table.listing_id = listings.id \
 			WHERE owner_id = ? \
+			AND listings.deleted IS NULL \
 			ORDER BY listings.id ASC";
 	account_query(query, "Failed to get all listings belonging to account " + account_id + "!", callback, account_id);
 }
@@ -114,6 +115,7 @@ account_model.prototype.getAccountListingsSearch = function(account_id, callback
 			LEFT JOIN stats_search_history \
 				ON listings.domain_name = stats_search_history.domain_name \
 			WHERE listings.owner_id = ? \
+			AND listings.deleted IS NULL \
 			GROUP BY listings.domain_name, timestamp DIV 2592000000 \
 			ORDER BY listings.domain_name ASC, months_away DESC";
 	account_query(query, "Failed to get  search history for listings belonging to account " + account_id + "!", callback, account_id);
