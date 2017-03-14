@@ -120,6 +120,11 @@ $(document).ready(function() {
 
         current_section.find(".input, .select").toggleClass('is-disabled');
         current_section.find(".hidden-edit").toggleClass('is-hidden');
+        if (current_section.attr("id") == "payout-bank"){
+            $("#account_number-last4").toggleClass("is-hidden")
+        }
+        resetInputs();
+        prefillStripeInfo();
     });
 
 });
