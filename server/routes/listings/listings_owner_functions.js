@@ -696,8 +696,6 @@ module.exports = {
 
 		domain_name = req.params.domain_name;
 		dns.lookup(domain_name, function (err, address, family) {
-			if (err){error.handler(req, res, "DNS error!", "json")};
-
 			domain_ip = address;
 			dns.lookup("domahub.com", function (err, address, family) {
 				if (domain_ip == address){

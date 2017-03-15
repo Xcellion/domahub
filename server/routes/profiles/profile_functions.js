@@ -21,7 +21,7 @@ module.exports = {
 
 					var whois_promises = [];
 
-					//custom promise creation, get whois data about a unverified domain
+					//custom promise creation, get whois data about an unverified domain
 					var q_function = function(listing_obj){
 						return Q.Promise(function(resolve, reject, notify){
 							whois.lookup(listing_obj.domain_name, function(err, data){
@@ -33,7 +33,14 @@ module.exports = {
 										whoisObj[array[x].attribute] = array[x].value;
 									}
 									listing_obj.whois = whoisObj;
-									resolve(whoisObj)
+
+									//look up any existing DNS A Records
+									dns.lookup(listing_obj.domain_name, "A", function(err, addresses){
+										if (addresses){
+											listing_obj.a_records = addresses;
+										}
+										resolve();
+									});
 								}
 							});
 						})
