@@ -38,7 +38,7 @@ function createRow(listing_info, rownum){
         createDomain(listing_info),
         createRowButtons(listing_info),
         //createType(listing_info),
-        createVerify(listing_info, verified),
+        createVerifyText(listing_info, verified),
         createStatus(listing_info, verified),
         createStatusDrop(listing_info),
         createPriceRate(listing_info),
@@ -67,7 +67,7 @@ function createType(listing_info){
 }
 
 //function to create a button to verify the listing
-function createVerify(listing_info, bool){
+function createVerifyText(listing_info, bool){
     var temp_td = $("<td class='td-verify is-hidden-mobile'></td>");
         var temp_a = $("<p class='is-danger verify-link'></p>");
             var temp_span2 = $("<span>Unverified</span>");
@@ -110,7 +110,7 @@ function createPriceType(listing_info){
 function createRowButtons(listing_info){
 	var temp_td = $("<td class='td-buttons is-hidden-mobile'></td>");
 
-	var edit_or_verify_danger = (listing_info.verified) ? "" : " is-danger"
+	var edit_or_verify_danger = (listing_info.verified) ? "" : " verify-button is-danger"
 	var edit_temp_a = $("<a class='is-pulled-right button no-shadow " + edit_or_verify_danger + "'></a>");
 	var edit_temp_span = $("<span class='icon is-small'></span>");
 
@@ -164,7 +164,7 @@ function createRowDrop(listing_info, rownum){
     var temp_div_drop = $("<div id='div-drop" + rownum + "' class='div-drop'></div>");
     var temp_div_col = $("<div class='columns'></div>");
 
-    temp_drop.append(temp_td.append(temp_div_drop.append(temp_div_col)));
+    temp_drop.append(temp_td.append(temp_div_drop));
 
     //if unverified show instructions
     if (listing_info.verified == null){
@@ -186,11 +186,11 @@ function createRowDrop(listing_info, rownum){
         );
     }
     else {
-        //append various stuff to the row drop div
-        temp_div_col.append(
+		//append various stuff to the row drop div
+		temp_div_drop.append(temp_div_col.append(
 			createInfoDrop(listing_info),
 			createImgDrop(listing_info, rownum)
-        );
+        ));
     }
 
     temp_div_drop.hide();
@@ -198,8 +198,69 @@ function createRowDrop(listing_info, rownum){
     return temp_drop;
 }
 
-//function to create the verified overlay
 function createVerifiedDrop(listing_info, cb_when_verified){
+	var unverified_container = $("<div class='padding-top-10 padding-bottom-10'></div>");
+
+	var unverified_columns = $("<div class='columns'></div>");
+    var unverified_column = $("<div class='column'></div>");
+
+    var header_text = $("<h3 class='is-bold'>You must verify that you own this domain.</h3>");
+	var registrar_url = (listing_info.whois && listing_info.whois.Registrar) ? "<a class='is-accent' href='" + listing_info.whois["Registrar URL"] + "'>log in to your domain provider</a> (" + listing_info.whois.Registrar + ") " : "log in to your domain provider";
+    var top_text = $("<p>The table below details the DNS entries that are needed to verify this domain. \
+					Please " + registrar_url + " to create these entries. If you require any assistance \
+					in managing your DNS records, please refer to our <a target='_blank' style'target-new: tab;'\
+					class='is-accent margin-bottom-25' href='https://intercom.help/domahub/how-to-verify-your-domain-on-domahub'>\
+					step-by-step guide</a> on domain verification.</p>");
+
+	var dns_table = $("<table class='table is-bordered margin-top-15'></table>");
+	dns_table.append("<th>Host</th>");
+	dns_table.append("<th>Record</th>");
+	dns_table.append("<th>Required Data</th>");
+	dns_table.append("<th>Current Data</th>");
+
+	var dns_row = $("<tr></tr>");
+	dns_row.append("<td>@</td>");
+	dns_row.append("<td>A</td>");
+	dns_row.append("<td>208.68.37.82</td>");
+	var existing_a_record = listing_info.a_records || "Not found!";
+	dns_row.append("<td class='is-danger'>" + existing_a_record + "</td>");
+	dns_table.append(dns_row);
+
+	var bottom_text = $("<p>Please delete any existing A Records on your domain. </p>")
+
+	var refresh_button = $("<a class='button is-primary verify-link no-shadow' title='I've made the changes, please verify this domain'><span class='is-small icon'><i class='fa fa-check-circle-o'></i></span><span>I've made the changes, please verify this domain.</span></a>");
+	//ajax to make sure it's all done, then display a regular row if verified
+	refresh_button.off().click(function(e){
+		e.preventDefault();
+		var unverified_a = $(this);
+		unverified_a.addClass('is-loading');
+		$.ajax({
+			url: "/listing/" + listing_info.domain_name + "/verify",
+			method: "POST"
+		}).done(function(data){
+			unverified_a.removeClass('is-loading is-danger');
+			if (data.state == "success"){
+				cb_when_verified();
+			}
+			else {
+				unverified_a.addClass('is-danger');
+				unverified_a.text("Failed to verify! Please check the above table and try again.");
+			}
+		});
+	});
+
+	unverified_columns.append(unverified_column.append(
+		header_text,
+		top_text,
+		dns_table,
+		refresh_button
+	));
+	unverified_container.append(unverified_columns);
+	return unverified_container;
+}
+
+//function to create the verified overlay
+function createVerifiedDrop2(listing_info, cb_when_verified){
     var unverified_container = $("<div></div>");
 
     var unverified_columns_header = $("<div class='columns'></div>");
@@ -690,6 +751,7 @@ function editRow(row){
             editStatus($(this), false);
             //editPriceRate($(this), false);
             //editPriceType($(this), false);
+			editVerifyButton($(this), false);
             $(this).next(".row-drop").find(".cancel-changes-button").click();
         }
     });
@@ -702,6 +764,7 @@ function editRow(row){
     editStatus(row, editing);
     //editPriceRate(row, editing);
     //editPriceType(row, editing);
+	editVerifyButton(row, editing);
 
     //cancel any changes if we collapse the row
     if (!editing){
@@ -726,6 +789,16 @@ function editStatus(row, editing){
             status_drop_td.addClass("is-hidden");
         }
     }
+}
+
+//function to hide verification button in row
+function editVerifyButton(row, editing){
+	if (editing){
+		row.find(".verify-button").addClass('is-hidden');
+	}
+	else {
+		row.find(".verify-button").removeClass('is-hidden');
+	}
 }
 
 // //function to change price rate column to editable
