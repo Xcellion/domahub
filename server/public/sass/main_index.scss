@@ -67,7 +67,7 @@
     display: flex;
     justify-content: center;
     padding: 5px;
-    @include mobile-360px {
+    @include mobile-365px {
       flex-direction: column;
       text-align: center;
     }
@@ -97,7 +97,7 @@
       @include mobile {
         min-width: 130px;
       }
-      @include mobile-360px {
+      @include mobile-365px {
         width: 150px;
         margin-right: auto !important;
         margin-left: auto;
@@ -113,7 +113,7 @@
         @include mobile {
           padding: 15px 0;
         }
-        @include mobile-360px {
+        @include mobile-365px {
           width: 100%;
         }
         &:hover,
