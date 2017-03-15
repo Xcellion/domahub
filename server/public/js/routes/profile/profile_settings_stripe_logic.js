@@ -117,11 +117,11 @@ $(document).ready(function() {
             //create stripe token
             Stripe.bankAccount.createToken({
                 country: $('#country-input').val(),
+                currency: $('#currency-input').val(),
                 routing_number: $('#account_routing-input').val(),
                 account_number: $('#account_number-input').val()
             }, function(status, response){
                 if (status != 200){
-                    console.log(status, response);
                     flashError($("#payout-bank-message"), response.error.message);
                 }
                 else {

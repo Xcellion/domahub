@@ -1,16 +1,28 @@
 var row_display = listings.slice(0);
 
 $(document).ready(function(){
-	// //multiple delete listings
-	// $("#multi-delete").on("click", function(e){
-	// 	multiDelete($(this));
-	// });
+	//multiple delete listings
+	$("#multi-delete").on("click", function(e){
+		multiDelete($(this));
+	});
 
 	//multiple verify listings
 	$("#multi-verify").on("click", function(e){
 		multiVerify($(this));
 	});
 });
+
+//function to handle post-deletion of multi listings
+function deletionHandler(rows, selected_rows){
+	listings = rows;
+	row_display = listings.slice(0);
+	for (var x = 0; x < selected_rows.length; x++){
+		$(selected_rows[x]).next(".row-drop").remove();
+		$(selected_rows[x]).remove();
+	}
+	deselectAllRows();
+	emptyRows();
+}
 
 // ------------------------------------------------------------------------------------------------------------------------------ CREATE ROW
 
@@ -24,8 +36,7 @@ function createRow(listing_info, rownum){
     tempRow.append(
         createIcon(listing_info),
         createDomain(listing_info),
-        createView(listing_info),
-		createEdit(listing_info),
+        createRowButtons(listing_info),
         //createType(listing_info),
         createVerify(listing_info, verified),
         createStatus(listing_info, verified),
@@ -95,42 +106,51 @@ function createPriceType(listing_info){
     return temp_td;
 }
 
+//function to create the buttons for view and edit
+function createRowButtons(listing_info){
+	var temp_td = $("<td class='td-buttons is-hidden-mobile'></td>");
+
+	var edit_or_verify_danger = (listing_info.verified) ? "" : " is-danger"
+	var edit_temp_a = $("<a class='is-pulled-right button no-shadow " + edit_or_verify_danger + "'></a>");
+	var edit_temp_span = $("<span class='icon is-small'></span>");
+
+	var edit_or_verify_icon = (listing_info.verified) ? " fa-cog" : " fa-check-circle-o"
+	var edit_temp_i = $("<i class='fa" + edit_or_verify_icon + "'></i>");
+
+	var edit_or_verify = (listing_info.verified) ? "Edit" : "Click here to verify this domain"
+	var edit_temp_span2 = $("<span>" + edit_or_verify + "</span>");
+	temp_td.append(edit_temp_a.append(edit_temp_span.append(edit_temp_i), edit_temp_span2));
+
+	//prevent clicking view from dropping down row
+	edit_temp_a.click(function(e) {
+		e.stopPropagation();
+		editRow($(this).closest('.row-disp'));
+	});
+
+	if (listing_info.verified){
+		var temp_a = $("<a class='button is-pulled-right margin-right-5 no-shadow' target='_blank' title='Open listing in new tab' style='target-new: tab;' href='/listing/" + listing_info.domain_name + "'></a>");
+		var temp_span = $("<span class='icon is-small'></span>");
+		var temp_i = $("<i class='fa fa-external-link'></i>");
+		var temp_span2 = $("<span>View</span>");
+		temp_td.append(temp_a.append(temp_span.append(temp_i), temp_span2));
+
+		//prevent clicking view from dropping down row
+		temp_td.click(function(e) {
+			e.stopPropagation();
+		});
+	}
+
+	return temp_td;
+}
+
 //function to create the tv icon
 function createView(listing_info){
-    if (listing_info.verified){
-        var temp_td = $("<td class='td-view is-hidden-mobile'></td>");
-        var temp_a = $("<a class='button no-shadow' target='_blank' title='Open listing in new tab' style='target-new: tab;' href='/listing/" + listing_info.domain_name + "'></a>");
-        var temp_span = $("<span class='icon is-small'></span>");
-        var temp_i = $("<i class='fa fa-external-link'></i>");
-        var temp_span2 = $("<span>View</span>");
-        temp_td.append(temp_a.append(temp_span.append(temp_i), temp_span2));
 
-        //prevent clicking view from dropping down row
-        temp_td.click(function(e) {
-            e.stopPropagation();
-        });
-
-        return temp_td;
-    }
-    else {
-        return "<td></td>";
-    }
 }
 
 //function to create the edit button
 function createEdit(listing_info){
     var temp_td = $("<td class='td-edit padding-left-0 is-hidden-mobile'></td>");
-    var temp_a = $("<a class='button no-shadow'></a>");
-    var temp_span = $("<span class='icon is-small'></span>");
-    var temp_i = $("<i class='fa fa-cog'></i>");
-    var temp_span2 = $("<span>Edit</span>");
-    temp_td.append(temp_a.append(temp_span.append(temp_i), temp_span2));
-
-    //prevent clicking view from dropping down row
-    temp_a.click(function(e) {
-        e.stopPropagation();
-        editRow($(this).closest('.row-disp'));
-    });
 
     return temp_td;
 }
@@ -185,8 +205,9 @@ function createVerifiedDrop(listing_info, cb_when_verified){
     var unverified_columns_header = $("<div class='columns'></div>");
     var header_column = $("<div class='column'></div>");
     var unverified_h3 = $("<h3 class='is-bold'>You must verify that you own this domain.</h3>");
-    var unverified_faq = $("<p>Click <a target='_blank' style'target-new: tab;' class='is-accent margin-bottom-25' href='/faq#verifying'>here</a> for more information on domain verification.</br>Any unverified domains will be automatically deleted each week.</p>");
-        unverified_columns_header.append(header_column.append(unverified_h3, unverified_faq));
+    var unverified_p = $("<p>Follow the steps listed below to verify that you own this domain.</h3>");
+    var unverified_faq = $("<p>Not sure what to do? <a target='_blank' style'target-new: tab;' class='is-accent margin-bottom-25' href='https://intercom.help/domahub/how-to-verify-your-domain-on-domahub'>Click here</a> for a step-by-step guide on domain verification.</p>");
+        unverified_columns_header.append(header_column.append(unverified_h3, unverified_p, unverified_faq));
 
     var unverified_columns_steps = $("<div class='columns'></div>");
     var steps_column = $("<div class='column'></div>");
@@ -199,7 +220,7 @@ function createVerifiedDrop(listing_info, cb_when_verified){
     var unverified_step2 = $("<div class='content margin-top-0 is-hidden'><h3 class='is-blacklight is-bold'>Step 2</h3><p>Create a new <strong>A Record</strong> for your domain.</div>");
     var step2_button = $("<a class='button is-accent margin-right-10 no-shadow' target='_blank' title='Open registrar website in new tab' href='https://www.google.com/search?q=create+a+record&btnI'><span class='icon is-small'><i class='fa fa-question-circle-o'></i></span><span>How do I create an A Record?</span></a>");
 
-    var unverified_step3 = $("<div class='content margin-top-0 is-hidden'><h3 class='is-blacklight is-bold'>Step 3</h3><p>Point the new <strong>A Record</strong> to DomaHub servers at <strong>208.68.37.82</strong></p></div>");
+    var unverified_step3 = $("<div class='content margin-top-0 is-hidden'><h3 class='is-blacklight is-bold'>Step 3</h3><p>Point the new <strong>A Record</strong> to DomaHub servers at <strong>208.68.37.82</strong><br>You must point the root of the domain (@) to our servers.</p></div>");
     var step3_button = $("<input style='width:110px' value='208.68.37.82' class='input is-accent margin-right-10'></input>");
 
     var unverified_step4 = $("<div class='content margin-top-0 margin-bottom-10 is-hidden'><h3 class='is-blacklight is-bold'>Step 4</h3><p>Click the button below to verify your domain. <br>NOTE: It may take up to 72 hours for <strong>A Record</strong> changes to take effect.</p></div>");

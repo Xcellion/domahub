@@ -619,7 +619,7 @@ function updateUserStripeInfo(user, stripe_results){
 	}
 	if (stripe_results.external_accounts.total_count > 0){
 		user.stripe_info.object = stripe_results.external_accounts.data[0].object || "";
-		user.stripe_info.currency = stripe_results.external_accounts.data[0].currency || "";
+		user.stripe_info.currency = stripe_results.external_accounts.data[0].currency.toUpperCase() || "";
 		user.stripe_info.bank_name = stripe_results.external_accounts.data[0].bank_name || "";
 		user.stripe_info.account_holder_name = stripe_results.external_accounts.data[0].account_holder_name || "";
 		user.stripe_info.account_number = stripe_results.external_accounts.data[0].last4 || "";
