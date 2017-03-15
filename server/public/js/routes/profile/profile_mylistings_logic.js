@@ -228,7 +228,7 @@ function createVerifiedDrop(listing_info, cb_when_verified){
 
 	var bottom_text = $("<p>Please delete any existing A Records on your domain. </p>")
 
-	var refresh_button = $("<a class='button is-primary verify-link no-shadow' title='I've made the changes, please verify this domain'><span class='is-small icon'><i class='fa fa-check-circle-o'></i></span><span>I've made the changes, please verify this domain.</span></a>");
+	var refresh_button = $("<a class='button is-primary verify-link no-shadow' title='Verify this domain'><span class='is-small icon'><i class='fa fa-check-circle-o'></i></span><span>I have made the changes, please verify this domain.</span></a>");
 	//ajax to make sure it's all done, then display a regular row if verified
 	refresh_button.off().click(function(e){
 		e.preventDefault();
@@ -257,124 +257,6 @@ function createVerifiedDrop(listing_info, cb_when_verified){
 	));
 	unverified_container.append(unverified_columns);
 	return unverified_container;
-}
-
-//function to create the verified overlay
-function createVerifiedDrop2(listing_info, cb_when_verified){
-    var unverified_container = $("<div></div>");
-
-    var unverified_columns_header = $("<div class='columns'></div>");
-    var header_column = $("<div class='column'></div>");
-    var unverified_h3 = $("<h3 class='is-bold'>You must verify that you own this domain.</h3>");
-    var unverified_p = $("<p>Follow the steps listed below to verify that you own this domain.</h3>");
-    var unverified_faq = $("<p>Not sure what to do? <a target='_blank' style'target-new: tab;' class='is-accent margin-bottom-25' href='https://intercom.help/domahub/how-to-verify-your-domain-on-domahub'>Click here</a> for a step-by-step guide on domain verification.</p>");
-        unverified_columns_header.append(header_column.append(unverified_h3, unverified_p, unverified_faq));
-
-    var unverified_columns_steps = $("<div class='columns'></div>");
-    var steps_column = $("<div class='column'></div>");
-        unverified_columns_steps.append(steps_column);
-
-    var unverified_step1 = $("<div class='content'><h3 class='is-blacklight is-bold'>Step 1</h3></div>");
-    var step1_text = $("<p>Go to your registrar and log in.</p>");
-    var step1_button = $("<a class='margin-right-10 button is-accent no-shadow' target='_blank' title='Open registrar website in new tab' href='https://whois.icann.org/en/lookup?name=" + listing_info.domain_name + "'><span class='is-small icon'><i class='fa fa-search'></i></span><span>Find my registrar.</span></a>");
-
-    var unverified_step2 = $("<div class='content margin-top-0 is-hidden'><h3 class='is-blacklight is-bold'>Step 2</h3><p>Create a new <strong>A Record</strong> for your domain.</div>");
-    var step2_button = $("<a class='button is-accent margin-right-10 no-shadow' target='_blank' title='Open registrar website in new tab' href='https://www.google.com/search?q=create+a+record&btnI'><span class='icon is-small'><i class='fa fa-question-circle-o'></i></span><span>How do I create an A Record?</span></a>");
-
-    var unverified_step3 = $("<div class='content margin-top-0 is-hidden'><h3 class='is-blacklight is-bold'>Step 3</h3><p>Point the new <strong>A Record</strong> to DomaHub servers at <strong>208.68.37.82</strong><br>You must point the root of the domain (@) to our servers.</p></div>");
-    var step3_button = $("<input style='width:110px' value='208.68.37.82' class='input is-accent margin-right-10'></input>");
-
-    var unverified_step4 = $("<div class='content margin-top-0 margin-bottom-10 is-hidden'><h3 class='is-blacklight is-bold'>Step 4</h3><p>Click the button below to verify your domain. <br>NOTE: It may take up to 72 hours for <strong>A Record</strong> changes to take effect.</p></div>");
-    steps_column.append(unverified_step1, unverified_step2, unverified_step3, unverified_step4);
-
-    //if there is a whois object
-    if (listing_info.whois && listing_info.whois.Registrar){
-        step1_text.text("Go to your registrar (" + listing_info.whois.Registrar + ") and log in.");
-        step1_button.attr('href', listing_info.whois["Registrar URL"]).html("<span class='icon is-small'><i class='fa fa-external-link'></i></span><span>Open my registrar.</span>");
-        step2_button.attr('href', "https://www.google.com/search?q=create+a+record+" + listing_info.whois.Registrar + "&btnI");
-    }
-
-    //step 1 - login
-    var step1_control = $("<div class='control is-grouped'></div>");
-    var step1_button_next = $("<a class='button is-primary no-shadow' title='Go to the next step'><span>Okay, I'm logged in.</span><span class='icon'><i class='fa fa-angle-right'></i></span></a>");
-        unverified_step1.append(step1_text, step1_control.append(step1_button, step1_button_next));
-
-    //step 2 - create A record
-    var step2_control = $("<div class='control is-grouped'></div>");
-	var step2_button_prev = $("<a class='button no-shadow margin-right-10' title='Back'><span class='icon'><i class='fa fa-angle-left'></i></span></a>");
-    var step2_button_next = $("<button class='button is-primary no-shadow' title='Go to the next step'><span>Okay, I made a new A Record.</span><span class='icon'><i class='fa fa-angle-right'></i></span></button>");
-        unverified_step2.append(step2_control.append(step2_button_prev, step2_button, step2_button_next));
-
-    //step 3 - point A record
-    var step3_control = $("<div class='control has-addons is-grouped'></div>");
-        step3_copy_button = $("<button class='button no-shadow is-accent' title='Copy to Clipboard'><span class='is-small icon'><i class='fa fa-clipboard'></i></span></button>");
-	var step3_button_prev = $("<a class='button no-shadow margin-right-10' title='Back'><span class='icon'><i class='fa fa-angle-left'></i></span></a>");
-    var step3_button_next = $("<a class='button is-primary no-shadow' title='Go to the next step'><span>Okay, I've pointed the A Record.</span><span class='icon'><i class='fa fa-angle-right'></i></span></a>");
-        unverified_step3.append(step3_control.append(step3_button_prev, step3_copy_button, step3_button, step3_button_next));
-
-    step3_copy_button.click(function(){
-        $(this).next("input").select();
-        document.execCommand("copy");
-        $(this).next("input").blur();
-        $(this).find("i").removeClass("fa-clipboard").addClass('fa-check-square-o');
-    });
-
-    //step 4 - verify
-    var step4_control = $("<div class='control is-grouped'></div>");
-	var step4_button_prev = $("<a class='button no-shadow margin-right-10' title='Back'><span class='icon'><i class='fa fa-angle-left'></i></span></a>");
-    var step4_button_next = $("<a class='button margin-right-10 is-primary verify-link no-shadow' title='Verify this Domain'><span class='is-small icon'><i class='fa fa-check-circle-o'></i></span><span>Verify this domain.</span></a>");
-        unverified_step4.append(step4_control.append(step4_button_prev, step4_button_next));
-
-    //click to next
-    step1_button_next.add(step2_button_next).add(step3_button_next).click(function(){
-        var current_step = $(this).closest(".content").not(".is-hidden");
-        if (current_step.next(".content").length){
-            current_step.addClass('is-hidden').next(".content").removeClass('is-hidden');
-        }
-    });
-
-    //click to next
-    step2_button_prev.add(step3_button_prev).add(step4_button_prev).click(function(){
-        var current_step = $(this).closest(".content").not(".is-hidden");
-        if (current_step.prev(".content").length){
-            current_step.addClass('is-hidden').prev(".content").removeClass('is-hidden');
-        }
-    });
-
-    //ajax to make sure it's all done, then display a regular row if verified
-    step4_button_next.off().click(function(e){
-        e.preventDefault();
-        var unverified_a = $(this);
-        unverified_a.addClass('is-loading');
-        $.ajax({
-            url: "/listing/" + listing_info.domain_name + "/verify",
-            method: "POST"
-        }).done(function(data){
-            unverified_a.removeClass('is-loading is-danger');
-            if (data.state == "success"){
-                cb_when_verified();
-            }
-            else {
-                unverified_a.addClass('is-danger');
-                unverified_a.text("Failed to verify! Please try again.");
-
-                //back to step 1
-                var back_to_step1 = $("<a class='button is-primary'><span>Go back to step 1.</span><span class='is-small icon'><i class='fa fa-undo'></i></span></a>");
-                back_to_step1.click(function(){
-                    var current_step = $(this).closest(".content").addClass("is-hidden");
-                    var next_step = $(this).closest(".column").find(">:first-child").removeClass('is-hidden');
-                    unverified_a.removeClass('is-danger');
-                    unverified_a.html("<span>Verify this domain.</span><span class='is-small icon'><i class='fa fa-check-square'></i></span>");
-                    $(this).remove();
-                });
-
-				unverified_a.next(".button").remove();
-                unverified_a.after(back_to_step1);
-            }
-        });
-    });
-
-    return unverified_container.append(unverified_columns_header, unverified_columns_steps);
 }
 
 //function to create the select dropdown for listing status

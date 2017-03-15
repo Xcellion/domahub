@@ -216,7 +216,7 @@ module.exports = {
 			delete req.session.mylistings;
 			delete req.session.myrentals;
 			req.logout();
-            redirectTo = "/redirect";
+            redirectTo = "/login";
             res.redirect(redirectTo);
 		}
         else {

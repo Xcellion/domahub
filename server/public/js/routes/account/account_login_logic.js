@@ -1,5 +1,4 @@
 $(document).ready(function() {
-
 	//if remember me is set in the cookie
 	var remember_cookie = read_cookie("remember");
 	if (remember_cookie){
