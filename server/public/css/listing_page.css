@@ -148,3 +148,10 @@
 
 #description-card {
   margin-left: auto; }
+
+#popular-rental-img {
+  background: url("/images/loading.svg");
+  background-repeat: no-repeat;
+  background-position: center center;
+  min-width: 250px;
+  min-height: 250px; }

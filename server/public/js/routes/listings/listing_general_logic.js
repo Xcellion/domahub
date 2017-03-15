@@ -32,11 +32,11 @@ $(document).ready(function() {
 function findRelatedDomains(){
 	if (listing_info.categories){
 		var categories_to_post = listing_info.categories;
-		$("#similar-domains-title").text('Similar Domains');
+		$("#similar-domains-title").text('Similar Listings');
 	}
 	else {
 		var categories_to_post = "";
-		$("#similar-domains-title").text('Other Domains');
+		$("#similar-domains-title").text('Other Listings');
 	}
 
 	$.ajax({

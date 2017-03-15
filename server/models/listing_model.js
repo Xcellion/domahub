@@ -42,14 +42,14 @@ module.exports = listing_model;
 //check if a listing exists
 listing_model.prototype.checkListing = function(domain_name, callback){
 	console.log("DB: Checking to see if " + domain_name + " is listed on DomaHub...");
-	query = 'SELECT 1 AS "exist" FROM listings WHERE domain_name = ?'
+	query = 'SELECT 1 AS "exist" FROM listings WHERE domain_name = ? AND listings.deleted IS NULL'
 	listing_query(query, "Listing does not exist!", callback, domain_name);
 }
 
 //check if an account owns a listing
 listing_model.prototype.checkListingOwner = function(account_id, domain_name, callback){
 	console.log("DB: Checking to see if account #" + account_id + " owns domain " + domain_name + "...");
-	query = 'SELECT 1 AS "exist" FROM listings WHERE owner_id = ? AND domain_name = ?'
+	query = 'SELECT 1 AS "exist" FROM listings WHERE owner_id = ? AND domain_name = ? AND listings.deleted IS NULL'
 	listing_query(query, "Account does not own the domain" + domain_name + "!", callback, [account_id, domain_name]);
 }
 
@@ -66,7 +66,9 @@ listing_model.prototype.getVerifiedListing = function(domain_name, callback){
 				accounts.email\
 			FROM listings \
 			JOIN accounts ON listings.owner_id = accounts.id \
-			WHERE listings.domain_name = ? AND listings.verified = 1";
+			WHERE listings.domain_name = ? \
+			AND listings.verified = 1 \
+			AND listings.deleted IS NULL";
 	listing_query(query, "Failed to get active listing info for " + domain_name + "!", callback, domain_name);
 }
 
@@ -80,7 +82,8 @@ listing_model.prototype.getAllListings = function(callback){
 			FROM listings \
 			JOIN accounts ON listings.owner_id = accounts.id \
 			WHERE listings.status = 1 \
-			AND listings.verified = 1'
+			AND listings.verified = 1 \
+			AND listings.deleted IS NULL'
 	listing_query(query, "Failed to get all listing info!", callback);
 }
 
@@ -139,7 +142,8 @@ listing_model.prototype.getCurrentRental = function(domain_name, callback){
 			WHERE listings.domain_name = ? \
 			AND (UNIX_TIMESTAMP(NOW()) * 1000) BETWEEN rental_times.date AND rental_times.date + rental_times.duration \
 			AND listings.status = 1 \
-			AND listings.verified = 1\
+			AND listings.verified = 1 \
+			AND listings.deleted IS NULL \
 			AND rentals.status = 1";
 	listing_query(query, "Failed to get current rental info for domain " + domain_name + "!", callback, domain_name);
 }
@@ -193,6 +197,8 @@ listing_model.prototype.getThreeRandomListings = function(domain_name_exclude, c
 			WHERE listings.domain_name != ? \
 			AND listings.status = 1 \
 			AND listings.verified = 1 \
+			AND listings.deleted IS NULL \
+			AND listings.categories NOT LIKE '%adult%' \
 			ORDER BY RAND() \
 			LIMIT 3"
 	listing_query(query, "Failed to get related 3 random listings!", callback, domain_name_exclude);
@@ -211,6 +217,7 @@ listing_model.prototype.getRelatedListings = function(categories, domain_name_ex
 			AND listings.domain_name != ? \
 			AND listings.status = 1 \
 			AND listings.verified = 1 \
+			AND listings.deleted IS NULL \
 			ORDER BY RAND() \
 			LIMIT 3"
 	listing_query(query, "Failed to get related listings with categories: " + categories + "!", callback, [categories, domain_name_exclude]);
@@ -236,6 +243,7 @@ listing_model.prototype.getListingByFilter = function(filter_name, filter_price,
 				ON rental_times.rental_id = rentals.rental_id \
 			WHERE listings.status = 1 \
 			AND listings.verified = 1 \
+			AND listings.deleted IS NULL \
 			AND listings.domain_name LIKE ? \
 			AND listings." + filter_price.type + " BETWEEN ? AND ? \
 			ORDER BY listings.id ASC, rentals.rental_id ASC, rental_times.date DESC";
@@ -261,6 +269,7 @@ listing_model.prototype.getRandomListings = function(callback){
 				ON accounts.id = listings.owner_id \
 			WHERE listings.status = 1 \
 			AND listings.verified = 1 \
+			AND listings.deleted IS NULL \
 			AND accounts.stripe_account IS NOT NULL \
 			ORDER BY rand() \
 			LIMIT 10";
@@ -433,20 +442,19 @@ listing_model.prototype.deleteRental = function(rental_id, callback){
 listing_model.prototype.deleteRentals = function(rentals_to_delete, callback){
 	console.log("DB: Attempting to delete " + rentals_to_delete.length + " rentals...");
 	query = "INSERT INTO rentals ( \
-		rental_id, \
-		status \
+		rental_id \
 	)\
 	VALUES ? \
 	ON DUPLICATE KEY UPDATE \
-	rental_id = VALUES(rental_id), \
-	status = VALUES(status) "
+		status = 0"
 	listing_query(query, "Failed to delete " + rentals_to_delete.length + " rentals!", callback, [rentals_to_delete]);
 }
 
 //deletes a specific listing
 listing_model.prototype.deleteListing = function(listing_id, callback){
 	console.log("DB: Attempting to delete listing #" + listing_id + "...");
-	query = "DELETE FROM listings \
+	query = "UPDATE listings \
+			SET deleted = 1 \
 			WHERE id = ? "
 	listing_query(query, "Failed to delete listing #" + listing_id + "!", callback, listing_id);
 }
@@ -456,13 +464,12 @@ listing_model.prototype.deleteListing = function(listing_id, callback){
 listing_model.prototype.deleteListings = function(listings_to_delete, callback){
 	console.log("DB: Attempting to deactivate " + listings_to_delete.length + " listings...");
 	query = "INSERT INTO listings ( \
-		id, \
-		status \
+		id \
 	)\
 	VALUES ? \
 	ON DUPLICATE KEY UPDATE \
-	id = VALUES(id), \
-	status = VALUES(status) "
+		deleted = 1, \
+		status = NULL "
 	listing_query(query, "Failed to deactivate " + listings_to_delete.length + " listings!", callback, [listings_to_delete]);
 }
 
