@@ -469,7 +469,7 @@ listing_model.prototype.deleteListings = function(listings_to_delete, callback){
 	VALUES ? \
 	ON DUPLICATE KEY UPDATE \
 		deleted = 1, \
-		status = 0 "
+		status = NULL "
 	listing_query(query, "Failed to deactivate " + listings_to_delete.length + " listings!", callback, [listings_to_delete]);
 }
 

@@ -93,6 +93,7 @@
 
 .td-status-drop {
   padding-left: 1px !important;
+  width: 122px;
 }
 
 .td-type {
@@ -107,8 +108,8 @@
   width: 160px;
 }
 
-.td-view {
-  width: 80px;
+.td-buttons {
+  width: 160px;
 }
 
 .td-price-rate {
@@ -130,11 +131,6 @@
   @include mobile {
     width: 150px;
   }
-}
-
-.td-edit {
-  width: 60px;
-  text-align:right;
 }
 
 .box-checked {
