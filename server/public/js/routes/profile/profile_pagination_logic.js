@@ -312,7 +312,10 @@ function createPaginationPages(total_pages, row_per_page, current_page){
     if (pages_to_create > 1){
         for (var x = 1; x <= pages_to_create; x++){
             var text;
-            if (x == 6){
+            if (x == 2 && (current_page >= total_pages - 3) && pages_to_create > 7){
+                text = "...";
+            }
+            if (x == 6 && current_page < 5 && pages_to_create > 7){
                 text = "...";
             }
             if (x == 7){
@@ -321,8 +324,9 @@ function createPaginationPages(total_pages, row_per_page, current_page){
             var temp_li = createPaginationPage(x, text);
             temp_li.find(".page-button").click(function(e){
                 var button_page = ($(this).text() == "...") ? current_page : $(this).text();
-                if (button_page != current_page) {
 
+                //only change page if not current page
+                if (button_page != current_page) {
                     current_page = button_page;
                     changePage(total_pages, row_per_page, current_page);
                     setupControls(total_pages, row_per_page, current_page, row_display);
@@ -367,28 +371,29 @@ function paginateRows(total_pages, current_page){
         $(".page-button").removeClass("is-primary");
         if (total_pages > 7){
             if (current_page < 5){
-                $("#page-2").text(2);
+                $("#page-2").text(2).addClass("button");
                 $("#page-3").text(3);
                 $("#page-4").text(4);
                 $("#page-5").text(5);
-                $("#page-6").text("...");
+                $("#page-6").text("...").removeClass('button');
                 $("#page-" + current_page).addClass("is-primary");
             }
             else if (current_page >= total_pages - 3){
                 current_page_id = 7 - (total_pages - current_page);
+                $("#page-2").text("...").removeClass('button');
                 $("#page-" + current_page_id).addClass("is-primary");
                 $("#page-3").text(total_pages - 4);
                 $("#page-4").text(total_pages - 3);
                 $("#page-5").text(total_pages - 2);
-                $("#page-6").text(total_pages - 1);
+                $("#page-6").text(total_pages - 1).addClass("button");
             }
             else {
-                $("#page-2").text("...");
+                $("#page-2").text("...").removeClass('button');
                 $("#page-3").text(current_page - 1);
                 $("#page-4").text(current_page);
                 $("#page-4").addClass("is-primary");
                 $("#page-5").text(current_page + 1);
-                $("#page-6").text("...");
+                $("#page-6").text("...").removeClass('button');
             }
         }
         else {
