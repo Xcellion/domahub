@@ -24,6 +24,17 @@ $(document).ready(function() {
 		}
 	});
 
+	//delete all rows
+	$(".delete-domains-button").on("click keypress", function(e){
+		if (e.which == 1 || e.which == 13 || e.which == 32){
+			e.preventDefault();
+			deleteAllRows();
+			handleSubmitDisabled();
+			handleTopAddDomainButton();
+			refreshNotification();
+		}
+	});
+
 	//submit to create listings
 	$("#domains-submit").on("click", function(e){
 		e.preventDefault();
@@ -201,6 +212,14 @@ function deleteEmptyTableRows(){
 	}
 }
 
+//function to delete all rows
+function deleteAllRows(){
+	$(".table-row").not("#clone-row").remove();
+	if ($(".table-row").length == 1){
+		createTableRow("");
+	}
+}
+
 //if there are more than 10 rows, add the add-domain button to the top as well
 function handleTopAddDomainButton(){
 	if ($(".table-row").length > 7){
@@ -309,6 +328,7 @@ function submitDomainsAjax(domains, submit_elem, stripeToken){
 //function to refresh rows on ajax return
 function refreshRows(bad_listings, good_listings){
 	clearDangerSuccess();
+	window.scrollTo(0, 0);		//scroll to top so we can see the notification
 
 	//show which rows were bad
 	if (bad_listings && bad_listings.length > 0){
