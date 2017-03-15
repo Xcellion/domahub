@@ -4,20 +4,17 @@ var	listing_model = require('../models/listing_model.js');
 var	validator = require('validator');
 var	request = require('request');
 var bodyParser = require('body-parser');
-var urlencodedParser = bodyParser.urlencoded({ extended: true })
-
-var node_env = process.env.NODE_ENV || 'dev'; 	//dev or prod bool
+var urlencodedParser = bodyParser.urlencoded({ extended: true });
+var dns = require("dns");
 
 module.exports = function(app, db, auth, error){
     Auth = auth;
     Account = new account_model(db);
     Listing = new listing_model(db);
 
-    if (node_env == "dev"){
-        //google safe browsing test
-        app.get("/googlesafe", googleSafe);
-    }
-
+    //google safe browsing test
+    app.get("/googlesafe", googleSafe);
+    app.get("/dnsrecords", dnsRecords)
 }
 
 //testing google safe browsing
@@ -41,5 +38,12 @@ function googleSafe(){
         json: true
     }, function (err, response, body) {
         console.log(response.body);
+    });
+}
+
+//testing dns records look up
+function dnsRecords(){
+    dns.resolve("unverifieddomain.com", "A", function(err, addresses){
+        console.log(err);
     });
 }

@@ -319,10 +319,10 @@ module.exports = {
 
         Listing.checkListing(domain_name, function(result){
             var listing_result = result;
-            var user_ip = req.headers['x-forwarded-for'] ||
-            req.connection.remoteAddress ||
-            req.socket.remoteAddress ||
-            req.connection.socket.remoteAddress;
+            var user_ip = req.connection.remoteAddress ||
+    		req.headers['x-forwarded-for'] ||
+    		req.socket.remoteAddress ||
+    		req.connection.socket.remoteAddress;
 
             //add to search history if its not localhost
             if (user_ip != "::1" && user_ip != "::ffff:127.0.0.1" && user_ip != "127.0.0.1"){
