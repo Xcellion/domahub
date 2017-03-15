@@ -30,7 +30,7 @@
     margin-left: auto; } }
 
 #domain-display {
-  color: #62c9a3;
+  color: #3cbc8d;
   padding: 0 12px; }
 
 #price-display {
@@ -83,15 +83,19 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  flex-wrap: wrap; }
+  flex-wrap: wrap;
+  margin: 10px 0; }
   .calendar-control .button {
     margin-right: 5px;
     flex-grow: 1; }
     .calendar-control .button:last-child {
       margin-right: 0; }
+    @media screen and (max-width: 360px) {
+      .calendar-control .button:nth-child(2) {
+        margin-right: 0; } }
 
 .img-wrapper {
-  background-color: rgba(0, 0, 0, 0.88);
+  background-color: rgba(0, 0, 0, 0.7);
   height: 100%;
   width: 100%; }
 

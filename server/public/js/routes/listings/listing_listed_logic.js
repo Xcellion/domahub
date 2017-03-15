@@ -278,10 +278,6 @@ function checkSubmit(){
 		bool = "Invalid zip Code!";
 		$("#stripe-error-message").addClass('is-danger').html("Please provide a ZIP code.");
 	}
-	else if (!$("#agree-to-terms").prop('checked')){
-		bool = "Invalid terms!";
-		$("#stripe-error-message").addClass('is-danger').html("You must agree to the terms and conditions.");
-	}
 	else if (newEvents.length > 0){
 		for (var x = 0; x < newEvents.length; x++){
 			if (!newEvents[x].old){

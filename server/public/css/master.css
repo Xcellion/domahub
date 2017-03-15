@@ -1474,9 +1474,9 @@ pre {
     padding-right: 21px; }
     .button.is-stylish.is-small {
       font-size: 12px;
-      height: 36px;
-      padding-left: 18px;
-      padding-right: 18px; }
+      height: 32px;
+      padding-left: 6px;
+      padding-right: 6px; }
     .button.is-stylish.is-large {
       font-size: 16px;
       height: 48px;
