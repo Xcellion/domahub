@@ -530,34 +530,31 @@ module.exports = {
 		}
 	},
 
-	//------------------------------------------------------------------------------------------------------CREATES/UPDATES
+	//------------------------------------------------------------------------------------------------------GETS
 
 	//gets unverified A Record and domain who is info
 	getDNSRecordAndWhois : function(req, res, next){
-		console.log("F: Finding the existing A Record and WHOIS information...");
+		console.log("F: Finding the existing A Record and WHOIS information for an unverified domain...");
 
 		listing_obj = getUserListingObj(req.user.listings, req.params.domain_name);
 		whois.lookup(listing_obj.domain_name, function(err, data){
-			if (err) {error.handler("Failed to get DNS information")}
-			else {
-				var whoisObj = {};
+			var whoisObj = {};
+			if (!err){
 				var array = parser.parseWhoIsData(data);
 				for (var x = 0; x < array.length; x++){
 					whoisObj[array[x].attribute] = array[x].value;
 				}
-				listing_obj.whois = whoisObj;
-
-				//look up any existing DNS A Records
-				dns.lookup(listing_obj.domain_name, "A", function(err, addresses){
-					if (addresses){
-						listing_obj.a_records = addresses;
-						res.send({
-							state: "success",
-							listing: listing_obj
-						});
-					}
-				});
 			}
+			listing_obj.whois = whoisObj;
+
+			//look up any existing DNS A Records
+			dns.lookup(listing_obj.domain_name, "A", function(err, addresses){
+				listing_obj.a_records = addresses || false;
+				res.send({
+					state: "success",
+					listing: listing_obj
+				});
+			});
 		});
 
 	},
@@ -572,9 +569,12 @@ module.exports = {
 		Listing.newListings(db_object, function(result){
 			if (result.state=="error"){error.handler(req, res, result.info, "json");}
 			else {
+				console.log(result);
 				var affectedRows = result.info.affectedRows;
 				//nothing created
 				if (affectedRows == 0){
+					console.log('lol')
+					console.log(req.user.listings);
 					sortListings(req.session.new_listings, db_object, []);
 					res.send({
 						bad_listings: req.session.new_listings.bad_listings,
