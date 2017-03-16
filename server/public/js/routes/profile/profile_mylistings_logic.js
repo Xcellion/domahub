@@ -647,11 +647,23 @@ function editRow(row){
     //editPriceRate(row, editing);
     //editPriceType(row, editing);
 	editVerifyButton(row, editing);
+	getDNSRecordAndWhois(row.find(".td-domain").text());
 
     //cancel any changes if we collapse the row
     if (!editing){
         row.next(".row-drop").find(".cancel-changes-button").click();
     }
+}
+
+//function to get A Record and Whois info for unverified domain
+function getDNSRecordAndWhois(domain_name){
+	$.ajax({
+		url: "/listing/" + domain_name + "/unverifiedInfo",
+		method: "POST"
+	}).done(function(data){
+		console.log(data);
+		//to do, update the table
+	});
 }
 
 //function to change status column to editable

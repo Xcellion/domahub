@@ -7,6 +7,9 @@ var dns = require("dns");
 var validator = require("validator");
 var sanitize = require("sanitize-html");
 
+var whois = require("whois");
+var parser = require('parse-whois');
+
 var multer = require("multer");
 var parse = require("csv-parse");
 var fs = require('fs');
@@ -137,7 +140,7 @@ module.exports = {
 				db_object.push([
 					req.user.id,
 					date_now,
-					posted_domains[x].domain_name,
+					posted_domains[x].domain_name.toLowerCase(),
 					posted_domains[x].price_type,
 					posted_domains[x].price_rate,
 					default_descriptions.random()		//random default description
@@ -525,6 +528,38 @@ module.exports = {
 		else {
 			next();
 		}
+	},
+
+	//------------------------------------------------------------------------------------------------------CREATES/UPDATES
+
+	//gets unverified A Record and domain who is info
+	getDNSRecordAndWhois : function(req, res, next){
+		console.log("F: Finding the existing A Record and WHOIS information...");
+
+		listing_obj = getUserListingObj(req.user.listings, req.params.domain_name);
+		whois.lookup(listing_obj.domain_name, function(err, data){
+			if (err) {error.handler("Failed to get DNS information")}
+			else {
+				var whoisObj = {};
+				var array = parser.parseWhoIsData(data);
+				for (var x = 0; x < array.length; x++){
+					whoisObj[array[x].attribute] = array[x].value;
+				}
+				listing_obj.whois = whoisObj;
+
+				//look up any existing DNS A Records
+				dns.lookup(listing_obj.domain_name, "A", function(err, addresses){
+					if (addresses){
+						listing_obj.a_records = addresses;
+						res.send({
+							state: "success",
+							listing: listing_obj
+						});
+					}
+				});
+			}
+		});
+
 	},
 
 	//------------------------------------------------------------------------------------------------------CREATES/UPDATES
