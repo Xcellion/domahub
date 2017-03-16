@@ -97,6 +97,15 @@ module.exports = function(app, db, auth, error, stripe){
 		owner_functions.updateListing
 	]);
 
+	//verify that someone changed their DNS to point to domahub
+	app.post('/listing/:domain_name/unverifiedInfo', [
+		auth.checkLoggedIn,
+		checkDomainValid,
+		checkDomainListed,
+		owner_functions.checkListingOwner,
+		owner_functions.getDNSRecordAndWhois
+	]);
+
 	// //to delete a listing
 	// app.post('/listing/:domain_name/delete', [
 	// 	auth.checkLoggedIn,
