@@ -18,50 +18,49 @@ module.exports = {
 				if (result.state=="error"){error.handler(req, res, result.info);}
 				else {
 					req.user.listings = result.info;
-
-					var whois_promises = [];
-
-					//custom promise creation, get whois data about an unverified domain
-					var q_function = function(listing_obj){
-						return Q.Promise(function(resolve, reject, notify){
-							whois.lookup(listing_obj.domain_name, function(err, data){
-								if (err) {reject(err)}
-								else {
-									var whoisObj = {};
-									var array = parser.parseWhoIsData(data);
-									for (var x = 0; x < array.length; x++){
-										whoisObj[array[x].attribute] = array[x].value;
-									}
-									listing_obj.whois = whoisObj;
-
-									//look up any existing DNS A Records
-									dns.lookup(listing_obj.domain_name, "A", function(err, addresses){
-										if (addresses){
-											listing_obj.a_records = addresses;
-										}
-										resolve();
-									});
-								}
-							});
-						})
-					}
-
-					//figure out domain registrar of unverified domains
-					for (var x = 0; x < req.user.listings.length; x++){
-						if (!req.user.listings[x].verified){
-
-							//add to promises
-							var promise = q_function(req.user.listings[x]);
-							whois_promises.push(promise);
-						}
-					}
-
-					//wait for all promises
-					Q.allSettled(whois_promises)
-					 .then(function(results) {
-						 next();
-					 });
-
+					next();
+					// //THIS TAKES TOO LONG WITH MANY DOMAINS
+					// var whois_promises = [];
+					//
+					// //custom promise creation, get whois data about an unverified domain
+					// var q_function = function(listing_obj){
+					// 	return Q.Promise(function(resolve, reject, notify){
+					// 		whois.lookup(listing_obj.domain_name, function(err, data){
+					// 			if (err) {reject(err)}
+					// 			else {
+					// 				var whoisObj = {};
+					// 				var array = parser.parseWhoIsData(data);
+					// 				for (var x = 0; x < array.length; x++){
+					// 					whoisObj[array[x].attribute] = array[x].value;
+					// 				}
+					// 				listing_obj.whois = whoisObj;
+					//
+					// 				//look up any existing DNS A Records
+					// 				dns.lookup(listing_obj.domain_name, "A", function(err, addresses){
+					// 					if (addresses){
+					// 						listing_obj.a_records = addresses;
+					// 					}
+					// 					resolve();
+					// 				});
+					// 			}
+					// 		});
+					// 	})
+					// }
+					//
+					// //figure out domain registrar of unverified domains
+					// for (var x = 0; x < req.user.listings.length; x++){
+					// 	if (!req.user.listings[x].verified){
+					// 		//add to promises
+					// 		var promise = q_function(req.user.listings[x]);
+					// 		whois_promises.push(promise);
+					// 	}
+					// }
+					//
+					// //wait for all promises
+					// Q.allSettled(whois_promises)
+					// .then(function(results) {
+					// 	next();
+					// });
 				}
 			});
 		}
