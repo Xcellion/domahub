@@ -49,8 +49,13 @@ function createRow(listing_info, rownum){
 
     tempRow.data("editing", false);
     tempRow.data("selected", false);
-    tempRow.data("verified", verified);
     tempRow.data("id", listing_info.id);
+
+	tempRow.data("verified", verified);
+	//already got the dns and a records for unverified domain
+	if (listing_info.a_records && listing_info.whois){
+		tempRow.data("record_got", true);
+	}
 
     tempRow.click(function(e){
         editRow($(this));
@@ -143,11 +148,6 @@ function createRowButtons(listing_info){
 	return temp_td;
 }
 
-//function to create the tv icon
-function createView(listing_info){
-
-}
-
 //function to create the edit button
 function createEdit(listing_info){
     var temp_td = $("<td class='td-edit padding-left-0 is-hidden-mobile'></td>");
@@ -205,10 +205,21 @@ function createVerifiedDrop(listing_info, cb_when_verified){
     var unverified_column = $("<div class='column'></div>");
 
     var header_text = $("<h3 class='is-bold'>You must verify that you own this domain.</h3>");
-	var registrar_url = (listing_info.whois && listing_info.whois.Registrar) ? "<a class='is-accent' href='" + listing_info.whois["Registrar URL"] + "'>log in to your domain provider</a> (" + listing_info.whois.Registrar + ") " : "log in to your domain provider";
-    var top_text = $("<p>The table below details the DNS entries that are needed to verify this domain. \
-					Please " + registrar_url + " to create these entries. If you require any assistance \
-					in managing your DNS records, please refer to our <a target='_blank' style'target-new: tab;'\
+
+	if (listing_info.whois && (listing_info.whois.Registrar || listing_info.whois["Sponsoring Registrar"])){
+		var reg_name = listing_info.whois.Registrar || listing_info.whois["Sponsoring Registrar"];
+		var reg_url = listing_info.whois["Registrar URL"] || listing_info.whois["Registrar URL (registration services)"];
+		var regex_url = /^((http|https):\/\/)/;
+		if (!regex_url.test(reg_url)) { reg_url = "http://" + reg_url; }
+		registrar_url = "<a class='registrar_url is-accent' href='" + reg_url + "'>log in to your domain provider</a> (" + reg_name + ") ";
+	}
+	else {
+		registrar_url = "<a class='registrar_url'>log in to your domain provider</a>";
+	}
+
+    var top_text = $("<p>The table below details the DNS entries that are needed to verify this domain.</p>\
+					<p>Please " + registrar_url + " to create these entries.</p><p>If you require any assistance, \
+					please refer to our <a target='_blank' style'target-new: tab;'\
 					class='is-accent margin-bottom-25' href='https://intercom.help/domahub/how-to-verify-your-domain-on-domahub'>\
 					step-by-step guide</a> on domain verification.</p>");
 
@@ -223,12 +234,12 @@ function createVerifiedDrop(listing_info, cb_when_verified){
 	dns_row.append("<td>A</td>");
 	dns_row.append("<td>208.68.37.82</td>");
 	var existing_a_record = listing_info.a_records || "Not found!";
-	dns_row.append("<td class='is-danger'>" + existing_a_record + "</td>");
+	dns_row.append("<td class='existing_a_record is-danger'>" + existing_a_record + "</td>");
 	dns_table.append(dns_row);
 
 	var bottom_text = $("<p>Please delete any existing A Records on your domain. </p>")
+	var refresh_button = $("<a class='button is-primary verify-link no-shadow' title='Verify this domain'><span class='is-small icon'><i class='fa fa-check-circle-o'></i></span><span>I have made the above changes, please verify this domain.</span></a>");
 
-	var refresh_button = $("<a class='button is-primary verify-link no-shadow' title='Verify this domain'><span class='is-small icon'><i class='fa fa-check-circle-o'></i></span><span>I have made the changes, please verify this domain.</span></a>");
 	//ajax to make sure it's all done, then display a regular row if verified
 	refresh_button.off().click(function(e){
 		e.preventDefault();
@@ -647,7 +658,11 @@ function editRow(row){
     //editPriceRate(row, editing);
     //editPriceType(row, editing);
 	editVerifyButton(row, editing);
-	getDNSRecordAndWhois(row.find(".td-domain").text());
+
+	//get the current who is and A record if unverified row
+	if (!row.data('verified') && editing && !row.data('record_got')){
+		getDNSRecordAndWhois(row.find(".td-domain").text(), row);
+	}
 
     //cancel any changes if we collapse the row
     if (!editing){
@@ -656,13 +671,30 @@ function editRow(row){
 }
 
 //function to get A Record and Whois info for unverified domain
-function getDNSRecordAndWhois(domain_name){
+function getDNSRecordAndWhois(domain_name, row){
 	$.ajax({
 		url: "/listing/" + domain_name + "/unverifiedInfo",
 		method: "POST"
 	}).done(function(data){
-		console.log(data);
+		console.log('ajax called');
+		$(row).data("record_got", true);
+
 		//to do, update the table
+		var unverified_domain = getUserListingObj(listings, domain_name);
+		unverified_domain.a_records = data.listing.a_records;
+		unverified_domain.whois = data.listing.whois;
+
+		if (data.listing.whois && (data.listing.whois.Registrar || data.listing.whois["Sponsoring Registrar"])){
+			var reg_name = data.listing.whois.Registrar || data.listing.whois["Sponsoring Registrar"];
+			var reg_url = data.listing.whois["Registrar URL"] || data.listing.whois["Registrar URL (registration services)"];
+			var regex_url = /^((http|https):\/\/)/;
+			if (!regex_url.test(reg_url)) { reg_url = "http://" + reg_url; }
+			row.next(".row-drop").find(".registrar_url").replaceWith("<a class='registrar_url is-accent' href='" + reg_url + "'>log in to your domain provider</a> (" + reg_name + ") ");
+		}
+
+		if (data.listing.a_records){
+			row.next(".row-drop").find(".existing_a_record").text(data.listing.a_records);
+		}
 	});
 }
 
@@ -1224,4 +1256,13 @@ function successMessage(msg_elem, message){
 
 function toUpperCase(string){
     return string.charAt(0).toUpperCase() + string.substr(1);
+}
+
+//helper function to get the user listings object for a specific domain
+function getUserListingObj(listings, domain_name){
+	for (var x = 0; x < listings.length; x++){
+		if (listings[x].domain_name.toLowerCase() == domain_name.toLowerCase()){
+			return listings[x];
+		}
+	}
 }

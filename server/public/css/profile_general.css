@@ -58,6 +58,10 @@
   .table {
     width: 100%; } }
 
+.table.is-bordered tr {
+  border-left: 1px solid rgba(0, 0, 0, 0.12);
+  border-right: 1px solid rgba(0, 0, 0, 0.12); }
+
 .row-disp {
   height: 48px; }
 

@@ -43,7 +43,8 @@ function googleSafe(){
 
 //testing dns records look up
 function dnsRecords(){
-    dns.resolve("unverifieddomain.com", "A", function(err, addresses){
+    dns.resolve("fgajlfhjjhjkahdsksdjdsakjfhdsflhsafjdhsflkjsahfd.com", "A", function(err, addresses){
         console.log(err);
+        console.log(addresses);
     });
 }
