@@ -4,7 +4,6 @@ listing_model = function(database){
 	listing_query = function(query, error_description, callback, params){
 		database.query(query, function(result, err){
 			if (err){
-				console.log(err);
 				if (err.code == "ER_DUP_ENTRY"){
 					callback({
 						state : "error",
