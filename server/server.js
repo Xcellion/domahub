@@ -62,7 +62,8 @@ else {
 			pass:"wonmin33"
 		}),
 		cookie: {
-			maxAge: 1800000 //30 minutes
+			maxAge: 1800000, //30 minutes
+			secure: true
 		},
 		secret: 'domahub_market',
 		saveUninitialized: false,

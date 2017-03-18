@@ -584,6 +584,7 @@ function multiDelete(delete_button){
 			multiDelete(delete_button);
 		});
 
+        deselectAllRows();
 		if (data.state == "success"){
             deletionHandler(data.rows, selected_rows);
 		}

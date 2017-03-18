@@ -169,8 +169,11 @@ module.exports = {
 
 					//check if user owns the listing / rental
 					if (listing_or_rental[y][listing_or_rental_id] == req.body.ids[x]){
-						to_delete_formatted.push([listing_or_rental[y][listing_or_rental_id]]);
-						break;
+						//only if not currently rented or a rental
+						if ((listing_or_rental_id == "id" && !listing_or_rental[y].rented) || listing_or_rental_id == "rental_id"){
+							to_delete_formatted.push([listing_or_rental[y][listing_or_rental_id]]);
+							break;
+						}
 					}
 				}
 			}
@@ -180,7 +183,10 @@ module.exports = {
 			next();
 		}
 		else {
-			res.send({state: "error"});
+			res.send({
+				state: "error",
+				message: "Nothing was deleted!"
+			});
 		}
 	},
 

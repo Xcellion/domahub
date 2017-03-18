@@ -104,7 +104,7 @@ module.exports = {
 			var bad_reasons = [];
 
 			//check domain
-			if (!validator.isFQDN(posted_domains[x].domain_name)){
+			if (!validator.isFQDN(posted_domains[x].domain_name) || !validator.isAscii(posted_domains[x].domain_name)){
 				bad_reasons.push("Invalid domain name!");
 			}
 			//check for duplicates among valid FQDN domains
