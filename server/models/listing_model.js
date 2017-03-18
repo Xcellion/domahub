@@ -387,7 +387,7 @@ listing_model.prototype.updateListingsBasic = function(listing_info_array, callb
 listing_model.prototype.updateListingsVerified = function(listing_ids, callback){
 	console.log("DB: Attempting to revert verified status for bulk domain creation...");
 	query = "INSERT INTO listings \
-				id \
+				(id) \
 			VALUES ? \
 			ON DUPLICATE KEY UPDATE verified = NULL"
 	listing_query(query, "Failed to revert verified status for bulk domain creation!", callback, [listing_ids]);

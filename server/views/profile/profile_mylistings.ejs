@@ -118,6 +118,68 @@
 								<td colspan="999" class="is-loading has-text-centered padding-50">
 									Loading listings...
 								</td>
+
+								<%# TO DO, make row drop clones %>
+								
+								<tr class="row-disp verified-row" id="verified-clone-row">
+									<td class="td-arrow">
+										<span class="v-align-bottom icon is-small">
+											<i class="no-transition fa fa-square-o" aria-hidden="true"></i>
+										</span>
+									</td>
+									<td class="td-visible td-domain"></td>
+									<td class="td-buttons is-hidden-mobile">
+										<a class="is-pulled-right button no-shadow ">
+											<span class="icon is-small">
+												<i class="fa fa-cog" aria-hidden="true"></i>
+											</span>
+											<span>Edit</span>
+										</a>
+										<a class="button is-pulled-right margin-right-5 no-shadow" target="_blank" title="Open listing in new tab" style="target-new: tab;" href="/listing/imsorryimdumb.com">
+											<span class="icon is-small">
+												<i class="fa fa-external-link" aria-hidden="true"></i>
+											</span>
+											<span>View</span>
+										</a>
+									</td>
+									<td class="td-status is-hidden-mobile"></td>
+									<td class="td-status-drop is-hidden">
+										<span class="select status-span">
+											<form class="drop-form">
+												<select class="status_input changeable-input">
+													<option value="1">Active</option>
+													<option value="0">Inactive</option>
+												</select>
+											</form>
+										</span>
+									</td>
+									<td class="has-text-right td-price-rate is-bold is-hidden-mobile"></td>
+									<td class="td-price-type is-hidden-mobile"></td>
+								</tr>
+								<tr class="row-disp unverified-row" id="unverified-clone-row">
+									<td class="td-arrow">
+										<span class="v-align-bottom icon is-small">
+											<i class="no-transition fa fa-square-o" aria-hidden="true">
+											</i>
+										</span>
+									</td>
+									<td class="td-visible td-domain"></td>
+									<td class="td-buttons is-hidden-mobile">
+										<a class="is-pulled-right button no-shadow  verify-button is-danger">
+											<span class="icon is-small">
+												<i class="fa fa-check-circle-o" aria-hidden="true"></i>
+											</span>
+											<span>Click here to verify this domain</span>
+										</a>
+									</td>
+									<td class="td-verify is-hidden-mobile">
+										<p class="is-danger">
+											<span>Unverified</span>
+										</p>
+									</td>
+									<td></td>
+									<td></td>
+								</tr>
 							</tr>
 						</tbody>
 					</table>
