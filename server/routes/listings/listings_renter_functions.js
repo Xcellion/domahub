@@ -103,45 +103,44 @@ module.exports = {
                 },
                 json: true
             }, function (err, response, body) {
-                // if (err || response.body.matches){
+                if (err || response.body.matches){
                     error.handler(req, res, "Malicious address!", "json");
-                // }
-                // else {
-                //     var create_new_listing_info = function(){
-                //         req.session.new_rental_info = {
-                //             rental_db_info : {
-                //                 listing_id: req.session.listing_info.id,
-                //                 address: (req.body.address == "" || !req.body.address) ? "" : address    //empty address or not
-                //             },
-                //             new_user_email : req.body.new_user_email
-                //         };
-                //
-                //         //if user is logged in, otherwise create a token for creation
-                //         if (req.user){
-                //             req.session.new_rental_info.rental_db_info.account_id = req.user.id;
-                //         }
-                //         else {
-                //             req.session.new_rental_info.rental_db_info.owner_hash_id = Math.random().toString(36).substr(5,5);
-                //         }
-                //         next();
-                //     }
-                //
-                //     if (req.body.address){
-                //         //check if its a valid HTTP address and that theres a response
-                //         request(address, function (err, response, body) {
-                //             if (!err && response.statusCode == 200) {
-                //                 create_new_listing_info();
-                //             }
-                //             else {
-                //                 error.handler(req, res, "Invalid address!", "json");
-                //             }
-                //         });
-                //     }
-                //     else {
-                //         create_new_listing_info();
-                //     }
-                // }
+                }
+                else {
+                    var create_new_listing_info = function(){
+                        req.session.new_rental_info = {
+                            rental_db_info : {
+                                listing_id: req.session.listing_info.id,
+                                address: (req.body.address == "" || !req.body.address) ? "" : address    //empty address or not
+                            },
+                            new_user_email : req.body.new_user_email
+                        };
 
+                        //if user is logged in, otherwise create a token for creation
+                        if (req.user){
+                            req.session.new_rental_info.rental_db_info.account_id = req.user.id;
+                        }
+                        else {
+                            req.session.new_rental_info.rental_db_info.owner_hash_id = Math.random().toString(36).substr(5,5);
+                        }
+                        next();
+                    }
+
+                    if (req.body.address){
+                        //check if its a valid HTTP address and that theres a response
+                        request(address, function (err, response, body) {
+                            if (!err && response.statusCode == 200) {
+                                create_new_listing_info();
+                            }
+                            else {
+                                error.handler(req, res, "Invalid address!", "json");
+                            }
+                        });
+                    }
+                    else {
+                        create_new_listing_info();
+                    }
+                }
             });
         }
     },
@@ -320,10 +319,18 @@ module.exports = {
 			dns.lookup("domahub.com", function (err, address, family) {
 				if (domain_ip != address){
                     console.log("F: Listing is not pointed to DomaHub anymore! Reverting verification...");
-					req.session.listing_info.verified = null;
-                    Listing.updateListing(domain_name, { verified: null }, function(result){});
+                    Listing.updateListing(domain_name, {
+                        verified: null,
+                        status: 0
+                    }, function(result){
+                        req.session.listing_info.verified = null;
+                        req.session.listing_info.status = 0;
+                        renderWhoIs(req, res, domain_name);
+                    });
 				}
-                next();
+                else {
+                    next();
+                }
 			});
 		});
 	},
@@ -484,10 +491,10 @@ module.exports = {
                 else {
                     req.session.new_rental_info.owner_stripe_id = result.info[0].stripe_account;	//stripe id
 
-                    //premium or basic listing expiration date
-                    if (result.info[0].exp_date != 0 && result.info[0].exp_date > (new Date).getTime()){
-                        req.session.new_rental_info.premium = true;
-                    }
+                    // //premium or basic listing expiration date
+                    // if (result.info[0].exp_date != 0 && result.info[0].exp_date > (new Date).getTime()){
+                    //     req.session.new_rental_info.premium = true;
+                    // }
 
                     next();
                 }

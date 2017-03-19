@@ -931,9 +931,11 @@ function updatePrices(){
 
         //price or price per day
         if (totalPrice == 0){
+            $("#calendar-card-content").find(".card-button-next").addClass('is-disabled');
             $("#price").text("$" + listing_info.price_rate + " Per " + listing_info.price_type.capitalizeFirstLetter());
         }
         else {
+            $("#calendar-card-content").find(".card-button-next").removeClass('is-disabled');
             //show calendar card if already set in cookies
             showCardContent("calendar");
 
