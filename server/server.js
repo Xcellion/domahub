@@ -53,10 +53,7 @@ if (node_env == "dev"){
 else {
 	console.log("Production environment! Using redis for sessions store.");
 	var redisStore = require('connect-redis')(session);
-	app.set('trust proxy', function (ip) {
-		console.log(ip);
-		return true;
-	});
+	app.set('trust proxy', "loopback");
 
 	//redis store session
 	app.use(session({
