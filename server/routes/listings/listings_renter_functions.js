@@ -311,6 +311,23 @@ module.exports = {
         }
     },
 
+    //checks to make sure listing is still verified
+	checkStillVerified : function(req, res, next){
+        console.log("F: Checking to see if domain is still pointed to DomaHub...");
+		domain_name = req.params.domain_name;
+		dns.lookup(domain_name, function (err, address, family) {
+			domain_ip = address;
+			dns.lookup("domahub.com", function (err, address, family) {
+				if (domain_ip != address){
+                    console.log("F: Listing is not pointed to DomaHub anymore! Reverting verification...");
+					req.session.listing_info.verified = null;
+                    Listing.updateListing(domain_name, { verified: null }, function(result){});
+				}
+                next();
+			});
+		});
+	},
+
     //check if listing is a valid domain name and add it to the search history
     checkDomainListedAndAddToSearch : function(req, res, next){
         console.log("F: Checking if domain is listed on DomaHub...");
@@ -321,8 +338,7 @@ module.exports = {
             var listing_result = result;
             var user_ip = req.connection.remoteAddress ||
     		req.headers['x-forwarded-for'] ||
-    		req.socket.remoteAddress ||
-    		req.connection.socket.remoteAddress;
+    		req.socket.remoteAddress;
 
             //add to search history if its not localhost
             if (user_ip != "::1" && user_ip != "::ffff:127.0.0.1" && user_ip != "127.0.0.1"){

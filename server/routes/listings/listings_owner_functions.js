@@ -569,12 +569,9 @@ module.exports = {
 		Listing.newListings(db_object, function(result){
 			if (result.state=="error"){error.handler(req, res, result.info, "json");}
 			else {
-				console.log(result);
 				var affectedRows = result.info.affectedRows;
 				//nothing created
 				if (affectedRows == 0){
-					console.log('lol')
-					console.log(req.user.listings);
 					sortListings(req.session.new_listings, db_object, []);
 					res.send({
 						bad_listings: req.session.new_listings.bad_listings,
