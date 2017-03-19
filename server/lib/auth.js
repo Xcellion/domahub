@@ -178,6 +178,7 @@ module.exports = {
 			}
 		}
 		else {
+            console.log(req.isAuthenticated())
 			if (req.method == "POST"){
 				error.handler(req, res, "Invalid username / password!", "json");
 			}

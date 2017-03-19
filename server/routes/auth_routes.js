@@ -36,13 +36,13 @@ module.exports = function(app, auth){
 		auth.renderVerify
 	]);
 
-	//to render the request verify page
-	app.get("/verify", [
-		auth.checkLoggedIn,
-		function(req, res){
-			res.redirect('/profile');
-		}
-	]);
+	// //to render the request verify page
+	// app.get("/verify", [
+	// 	auth.checkLoggedIn,
+	// 	function(req, res){
+	// 		res.redirect('/profile');
+	// 	}
+	// ]);
 
 	//post routes for authentication
 	app.post([
