@@ -66,7 +66,7 @@ $(document).ready(function() {
 				$("#verify-pw").val("");
 
 				if (data.state == "success"){
-					$("#message").text("Success! You may log in with your new password!");
+					$("#message").removeAttr("style").text("Success! You may log in with your new password!");
 					$("#form_to_hide").hide();
 					$("#accept").show();
 				}
