@@ -676,7 +676,6 @@ function getDNSRecordAndWhois(domain_name, row){
 		url: "/listing/" + domain_name + "/unverifiedInfo",
 		method: "POST"
 	}).done(function(data){
-		console.log('ajax called');
 		$(row).data("record_got", true);
 
 		//to do, update the table
