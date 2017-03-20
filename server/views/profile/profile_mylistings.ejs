@@ -118,10 +118,6 @@
 								<td colspan="999" class="is-loading has-text-centered padding-50">
 									Loading listings...
 								</td>
-
-								<%# TO DO, make row drop clones %>
-
-
 							</tr>
 							<tr class="clone-row row-disp verified-row is-hidden" id="verified-clone-row">
 								<td class="td-arrow">
@@ -148,7 +144,7 @@
 								<td class="td-status-drop is-hidden">
 									<span class="select status-span">
 										<form class="drop-form">
-											<select class="status_input changeable-input">
+											<select data-name="status" class="status_input changeable-input">
 												<option value="1">Active</option>
 												<option value="0">Inactive</option>
 											</select>
@@ -165,22 +161,34 @@
 											<form class="drop-form column is-9">
 												<div class="columns listing-module">
 													<div class="column is-3">
-														<p class="is-bold">Pricing Details</p>
+														<p class="is-bold">Rental Pricing</p>
 													</div>
 													<div class="column is-9">
 														<div class="control is-grouped">
 															<p class="control">
-																<input type="number" min="1" step="1" class="padding-top-0 price-rate-input input changeable-input">
+																<input data-name="price_rate" type="number" min="1" step="1" class="padding-top-0 price-rate-input input changeable-input">
 															</p>
 															<span class="select price-type-span">
-																<form class="drop-form">
-																	<select class="price-type-input changeable-input">
+																<div class="drop-form">
+																	<select data-name="price_type" class="price-type-input changeable-input">
 																		<option value="month">Month</option>
 																		<option value="week">Week</option>
 																		<option value="day">Day</option>
 																	</select>
-																</form>
+																</div>
 															</span>
+														</div>
+													</div>
+												</div>
+												<div class="columns listing-module">
+													<div class="column is-3">
+														<p class="is-bold">Min. Purchase Price</p>
+													</div>
+													<div class="column is-9">
+														<div class="control is-grouped">
+															<p class="control">
+																<input data-name="buy_price" placeholder="Empty for no buy-outs" type="number" min="1" step="1" class="padding-top-0 buy-price-input input changeable-input">
+															</p>
 														</div>
 													</div>
 												</div>
@@ -191,7 +199,7 @@
 													<div class="column is-9">
 														<div class="control">
 															<div class="control">
-																<textarea tabindex="1" class="description-input textarea changeable-input" placeholder="Rent this website for any time period you please!"></textarea>
+																<textarea data-name="description" tabindex="1" class="description-input textarea changeable-input" placeholder="Rent this website for any time period you please!"></textarea>
 															</div>
 														</div>
 													</div>
@@ -202,20 +210,12 @@
 													</div><div class="column is-9">
 														<div class="control">
 															<div class="is-flex-wrap category-control">
-																<input tabindex="1" class="is-hidden categories-input input changeable-input" value="" business="" ecard="" marketing="" niche="" personal="" promotion="">
-																<a class="tag category-selector has-shadow">Adult</a>
-																<a class="tag category-selector has-shadow">Business</a>
-																<a class="tag category-selector has-shadow">E-Card</a>
-																<a class="tag category-selector has-shadow">Event</a>
-																<a class="tag category-selector has-shadow">High-Traffic</a>
-																<a class="tag category-selector has-shadow">Holiday</a>
-																<a class="tag category-selector has-shadow">Industry</a>
-																<a class="tag category-selector has-shadow">Niche</a>
-																<a class="tag category-selector has-shadow">Marketing</a>
-																<a class="tag category-selector has-shadow">Other</a>
-																<a class="tag category-selector has-shadow">Personal</a>
-																<a class="tag category-selector has-shadow">Promotion</a>
-																<a class="tag category-selector has-shadow">Start-Up</a>
+																<input data-name="categories" onchange=""tabindex="1" class="is-hidden categories-input input changeable-input" value="" business="" ecard="" marketing="" niche="" personal="" promotion="">
+
+																<%# make all the categories %>
+																<% for (var x = 0; x < categories.length; x++){ %>
+																	<a data-category="<%= categories[x].back %>" class="<%= categories[x].back %>-category tag category-selector has-shadow"><%= categories[x].front %></a>
+																<% } %>
 															</div>
 														</div>
 														<div class="control">
@@ -236,13 +236,13 @@
 													<div class="card-image">
 														<figure class="image listing-img">
 															<button tabindex="1" class="delete-img delete"></button>
-															<img class="is-listing" alt="Image not found" src="">
+															<img class="background_image is-listing" alt="Image not found" src="">
 														</figure>
 													</div>
 													<footer class="card-footer">
 														<form tabindex="1" class="drop-form-file" action="/listings/create/multiple" method="post" enctype="multipart/form-data">
-															<input type="file" name="background_image" accept="image/png, image/gif, image/jpeg" class="picture-file changeable-input input-file">
-															<label for="file0" class="card-footer-item">
+															<input data-name="background_image" type="file" name="background_image" accept="image/png, image/gif, image/jpeg" class="picture-file changeable-input input-file">
+															<label for="" class="picture-label card-footer-item">
 																<i class="fa fa-upload" aria-hidden="true"></i>
 																<p class="file-label">Background Image</p>
 															</label>
@@ -303,7 +303,7 @@
 															</tr>
 														</tbody>
 													</table>
-													<a class="button is-primary verify-link no-shadow" title="Verify this domain">
+													<a class="verify-button button is-primary no-shadow" title="Verify this domain">
 														<span class="is-small icon">
 															<i class="fa fa-check-circle-o" aria-hidden="true"></i>
 														</span>
@@ -363,8 +363,8 @@
 		var listings = <% if(typeof listings != "undefined"){ %><%-JSON.stringify(listings)%><% }else{ %>""<% } %>;
 		var categories = <% if(typeof categories != "undefined"){ %><%-JSON.stringify(categories)%><% }else{ %>""<% } %>;
 	</script>
-	<script src="/js/routes/profile/profile_mylistings_logic.js" type="text/javascript"></script>
-	<%# <script src="/js/routes/profile/profile_mylistings_logic2.js" type="text/javascript"></script>%>
+	<%# <script src="/js/routes/profile/profile_mylistings_logic.js" type="text/javascript"></script>%>
+	<script src="/js/routes/profile/profile_mylistings_logic2.js" type="text/javascript"></script>
 	<script src="/js/routes/profile/profile_pagination_logic.js" type="text/javascript"></script>
 </body>
 
