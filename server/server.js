@@ -66,6 +66,7 @@ else {
 			maxAge: 1800000, //30 minutes
 			secure: true
 		},
+		proxy: true,
 		secret: 'domahub_market',
 		saveUninitialized: false,
 		resave: true
