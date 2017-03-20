@@ -478,6 +478,14 @@ module.exports = {
 		if (!password){
 			error.handler(req, res, "Invalid password!", "json");
 		}
+        //password is too long
+        else if (password.length > 70){
+            error.handler(req, res, "Password is too long!", "json");
+        }
+        //password is too short
+        else if (password.length < 3){
+            error.handler(req, res, "Password is too short!", "json");
+        }
 		else {
 			Account.getAccountByToken(token, function(result){
 				if (result.state=="error"){error.handler(req, res, result.info);}

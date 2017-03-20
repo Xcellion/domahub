@@ -28,174 +28,116 @@ function deletionHandler(rows, selected_rows){
 
 //function to create a listing row
 function createRow(listing_info, rownum){
-    var verified = listing_info.verified != null;
-    var verified_row = (listing_info.verified != null) ? " verified-row" : " unverified-row";
-    var premium = listing_info.exp_date >= new Date().getTime();
+	//choose a row to clone
+	if (listing_info.verified){
+		var tempRow = $("#verified-clone-row").clone();
+		updateView(tempRow, listing_info);
+		updateStatus(tempRow, listing_info);
+		updatePriceRate(tempRow, listing_info);
+		updatePriceType(tempRow, listing_info);
+	}
+	else {
+		var tempRow = $("#unverified-clone-row").clone();
+		tempRow.data("verified", false);
+	}
 
-    var tempRow = $("<tr class='row-disp" + verified_row + "' id='row" + rownum + "'></tr>");
-    tempRow.append(
-        createIcon(listing_info),
-        createDomain(listing_info),
-        createRowButtons(listing_info),
-        //createType(listing_info),
-        createVerifyText(listing_info, verified),
-        createStatus(listing_info, verified),
-        createStatusDrop(listing_info),
-        createPriceRate(listing_info),
-		createPriceType(listing_info)
-        //createPriceRateDrop(listing_info),
-        //createPriceTypeDrop(listing_info)
-    );
+	//update row specifics and add handlers
+    updateDomainName(tempRow, listing_info);
+    updateIcon(tempRow, listing_info);
 
-    tempRow.data("editing", false);
-    tempRow.data("selected", false);
-    tempRow.data("id", listing_info.id);
+	tempRow.click(function(e){
+		editRow($(this));
+	});
 
-	tempRow.data("verified", verified);
+	tempRow.removeClass('is-hidden').attr("id", "row" + rownum);
+
+	tempRow.data("editing", false);
+	tempRow.data("selected", false);
+	tempRow.data("id", listing_info.id);
+
 	//already got the dns and a records for unverified domain
 	if (listing_info.a_records && listing_info.whois){
 		tempRow.data("record_got", true);
 	}
 
-    tempRow.click(function(e){
-        editRow($(this));
-    });
     return tempRow;
 }
 
-//function to create the listing type td
-function createType(listing_info){
-    var text = (listing_info.exp_date >= new Date().getTime()) ? "Premium" : "Basic";
-    var temp_td = $("<td class='td-type is-hidden-mobile'>" + text + "</td>");
-    temp_td.data("type", text);
-    return temp_td;
+//update the clone row with row specifics
+
+function updateDomainName(tempRow, listing_info){
+	tempRow.find(".td-domain").text(listing_info.domain_name);
 }
-
-//function to create a button to verify the listing
-function createVerifyText(listing_info, bool){
-    var temp_td = $("<td class='td-verify is-hidden-mobile'></td>");
-        var temp_a = $("<p class='is-danger verify-link'></p>");
-            var temp_span2 = $("<span>Unverified</span>");
-
-    //hide if verified
-    if (bool){
-        temp_td.addClass("is-hidden");
-    }
-    temp_td.append(temp_a.append(temp_span2));
-    return temp_td;
-}
-
-//function to create the listing status td
-function createStatus(listing_info, bool){
-    var text = (listing_info.status == 0) ? "Inactive" : "Active";
-    var inactive_danger = (listing_info.status == 0) ? " is-danger" : "";
-    var temp_td = $("<td class='td-status is-hidden-mobile" + inactive_danger + "'>" + text + "</td>");
-
-    //hide if not verified
-    if (!bool){
-        temp_td.addClass("is-hidden");
-    }
-    temp_td.data("status", text);
-    return temp_td;
-}
-
-//function to create the listing created date
-function createPriceRate(listing_info){
-    var temp_td = $("<td class='has-text-right td-price-rate is-bold is-hidden-mobile'>$" + listing_info.price_rate + "</td>");
-    return temp_td;
-}
-
-//function to create the listing created date
-function createPriceType(listing_info){
-    var temp_td = $("<td class='td-price-type is-hidden-mobile'>" + toUpperCase(listing_info.price_type) + "</td>");
-    return temp_td;
-}
-
-//function to create the buttons for view and edit
-function createRowButtons(listing_info){
-	var temp_td = $("<td class='td-buttons is-hidden-mobile'></td>");
-
-	var edit_or_verify_danger = (listing_info.verified) ? "" : " verify-button is-danger"
-	var edit_temp_a = $("<a class='is-pulled-right button no-shadow " + edit_or_verify_danger + "'></a>");
-	var edit_temp_span = $("<span class='icon is-small'></span>");
-
-	var edit_or_verify_icon = (listing_info.verified) ? " fa-cog" : " fa-check-circle-o"
-	var edit_temp_i = $("<i class='fa" + edit_or_verify_icon + "'></i>");
-
-	var edit_or_verify = (listing_info.verified) ? "Edit" : "Click here to verify this domain"
-	var edit_temp_span2 = $("<span>" + edit_or_verify + "</span>");
-	temp_td.append(edit_temp_a.append(edit_temp_span.append(edit_temp_i), edit_temp_span2));
-
-	//prevent clicking view from dropping down row
-	edit_temp_a.click(function(e) {
+function updateIcon(tempRow, listing_info){
+	tempRow.find(".td-arrow").on('click', function(e){
 		e.stopPropagation();
-		editRow($(this).closest('.row-disp'));
+		selectRow(tempRow);
 	});
-
-	if (listing_info.verified){
-		var temp_a = $("<a class='button is-pulled-right margin-right-5 no-shadow' target='_blank' title='Open listing in new tab' style='target-new: tab;' href='/listing/" + listing_info.domain_name + "'></a>");
-		var temp_span = $("<span class='icon is-small'></span>");
-		var temp_i = $("<i class='fa fa-external-link'></i>");
-		var temp_span2 = $("<span>View</span>");
-		temp_td.append(temp_a.append(temp_span.append(temp_i), temp_span2));
-
-		//prevent clicking view from dropping down row
-		temp_td.click(function(e) {
-			e.stopPropagation();
-		});
-	}
-
-	return temp_td;
 }
+function updateView(tempRow, listing_info){
+	tempRow.find(".view-button").attr('href', "/listing/" + listing_info.domain_name).on('click', function(e) {
+		e.stopPropagation();
+	});
+}
+function updateStatus(tempRow, listing_info){
+	var status_text = (listing_info.status == 0) ? "Inactive" : "Active";
+	tempRow.find(".td-status").text(status_text);
 
-//function to create the edit button
-function createEdit(listing_info){
-    var temp_td = $("<td class='td-edit padding-left-0 is-hidden-mobile'></td>");
-
-    return temp_td;
+	tempRow.find(".td-status-drop").find('.drop-form').val(listing_info.status).on('click', function(e) {
+		e.stopPropagation();
+	});
+}
+function updatePriceRate(tempRow, listing_info){
+	tempRow.find(".td-price-rate").text("$" + listing_info.price_rate);
+}
+function updatePriceType(tempRow, listing_info){
+	tempRow.find(".td-price-type").text(toUpperCase(listing_info.price_type));
 }
 
 // ------------------------------------------------------------------------------------------------------------------------------ CREATE DROP
 
 //function to create dropdown row
 function createRowDrop(listing_info, rownum){
-    var temp_drop = $("<tr id='row-drop" + rownum + "' class='row-drop'></tr>");
-    var temp_td = $("<td class='row-drop-td' colspan='7'></td>")
-    var temp_div_drop = $("<div id='div-drop" + rownum + "' class='div-drop'></div>");
-    var temp_div_col = $("<div class='columns'></div>");
+	//choose a row to clone
+	if (listing_info.verified){
+		var tempRow = $("#verified-clone-row-drop").clone();
+	}
+	else {
+		var tempRow = $("#unverified-clone-row-drop").clone();
+	}
 
-    temp_drop.append(temp_td.append(temp_div_drop));
+    // //if unverified show instructions
+    // if (listing_info.verified == null){
+    //     temp_div_drop.append(
+    //         //create the unverified instructions, with callback to create regular drop when verified
+    //         createVerifiedDrop(listing_info, function(){
+	// 			listing_info.verified = 1;
+	//
+	// 			if (user.stripe_info && user.stripe_info.charges_enabled){
+	// 				listing_info.status = 1;
+	// 			}
+	//
+    //             //recreate the rows
+    //             var row = temp_drop.prev(".row-disp");
+    //             row.replaceWith(createRow(listing_info, rownum));
+    //             temp_drop.replaceWith(createRowDrop(listing_info, rownum));
+	// 			refreshSubmitbindings();
+    //         })
+    //     );
+    // }
+    // else {
+	// 	//append various stuff to the row drop div
+	// 	temp_div_drop.append(temp_div_col.append(
+	// 		createInfoDrop(listing_info),
+	// 		createImgDrop(listing_info, rownum)
+    //     ));
+    // }
+	//
+    // temp_div_drop.hide();
 
-    //if unverified show instructions
-    if (listing_info.verified == null){
-        temp_div_drop.append(
-            //create the unverified instructions, with callback to create regular drop when verified
-            createVerifiedDrop(listing_info, function(){
-				listing_info.verified = 1;
+	tempRow.removeClass('is-hidden').attr("id", "row" + rownum);
 
-				if (user.stripe_info && user.stripe_info.charges_enabled){
-					listing_info.status = 1;
-				}
-
-                //recreate the rows
-                var row = temp_drop.prev(".row-disp");
-                row.replaceWith(createRow(listing_info, rownum));
-                temp_drop.replaceWith(createRowDrop(listing_info, rownum));
-				refreshSubmitbindings();
-            })
-        );
-    }
-    else {
-		//append various stuff to the row drop div
-		temp_div_drop.append(temp_div_col.append(
-			createInfoDrop(listing_info),
-			createImgDrop(listing_info, rownum)
-        ));
-    }
-
-    temp_div_drop.hide();
-
-    return temp_drop;
+    return tempRow;
 }
 
 function createVerifiedDrop(listing_info, cb_when_verified){
@@ -701,18 +643,13 @@ function getDNSRecordAndWhois(domain_name, row){
 function editStatus(row, editing){
     var status_drop_td = row.find(".td-status-drop");
     var status_td = row.find(".td-status");
-    var verify_td = row.find(".td-verify");
-
-    //only show status stuff when the listing is verified
-    if (verify_td.hasClass("is-hidden")){
-        if (editing){
-            status_td.addClass("is-hidden");
-            status_drop_td.removeClass("is-hidden");
-        }
-        else {
-            status_td.removeClass("is-hidden");
-            status_drop_td.addClass("is-hidden");
-        }
+    if (editing){
+        status_td.addClass("is-hidden");
+        status_drop_td.removeClass("is-hidden");
+    }
+    else {
+        status_td.removeClass("is-hidden");
+        status_drop_td.addClass("is-hidden");
     }
 }
 

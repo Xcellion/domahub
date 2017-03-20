@@ -179,8 +179,7 @@ module.exports = {
 	newRentalHistory : function(rental_id, req){
 		var user_ip = req.connection.remoteAddress ||
 		req.headers['x-forwarded-for'] ||
-		req.socket.remoteAddress ||
-		req.connection.socket.remoteAddress;
+		req.socket.remoteAddress;
 
 		//add to search history if its not localhost
 		if (user_ip != "::1" && user_ip != "::ffff:127.0.0.1" && user_ip != "127.0.0.1"){

@@ -424,7 +424,7 @@ function emptyRows(){
 
 //function to create all the rows
 function createAllRows(row_per_page, current_page){
-    $("#table_body").empty();
+    $("#table_body").children().not(".clone-row").empty();
     var row_start = row_per_page * (current_page - 1);
     for (var x = 0; x < row_per_page; x++){
         if (row_display[row_start]){
@@ -584,6 +584,7 @@ function multiDelete(delete_button){
 			multiDelete(delete_button);
 		});
 
+        deselectAllRows();
 		if (data.state == "success"){
             deletionHandler(data.rows, selected_rows);
 		}

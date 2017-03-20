@@ -53,6 +53,7 @@ if (node_env == "dev"){
 else {
 	console.log("Production environment! Using redis for sessions store.");
 	var redisStore = require('connect-redis')(session);
+	app.set('trust proxy', "loopback");
 
 	//redis store session
 	app.use(session({
@@ -62,8 +63,10 @@ else {
 			pass:"wonmin33"
 		}),
 		cookie: {
-			maxAge: 1800000 //30 minutes
+			maxAge: 1800000, //30 minutes
+			secure: true
 		},
+		proxy: true,
 		secret: 'domahub_market',
 		saveUninitialized: false,
 		resave: true

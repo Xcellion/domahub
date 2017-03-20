@@ -178,6 +178,7 @@ module.exports = function(app, db, auth, error, stripe){
 		checkDomainValid,
 		renter_functions.checkDomainListedAndAddToSearch,
 		renter_functions.getVerifiedListing,
+		renter_functions.checkStillVerified,
 		renter_functions.deleteRentalInfo,
 		renter_functions.renderListing
 	]);
