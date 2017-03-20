@@ -45,7 +45,6 @@ $(document).ready(function() {
 		$("#traffic-timespan").text(timespan);
 	}
 
-
 	setUpCalendar(listing_info);
 
 	if (window.mobilecheck()){
@@ -75,7 +74,6 @@ $(document).ready(function() {
 
 	//press enter to go next for no user email
 	$("#new_user_email").on("change keyup paste", function(e){
-		e.preventDefault();
 		if (e.keyCode == 13){
 			showCardContent("checkout");
 		}
@@ -348,6 +346,10 @@ function errorHandler(message){
 		showCardContent("address");
 		$("#address-error-message").addClass('is-danger').html("Invalid URL entered! Your credit card has not been charged yet.");
 	}
+	else if (message == "Malicious address!"){
+		showCardContent("address");
+		$("#address-error-message").addClass('is-danger').html("Your URL has been deemed malicious! Please enter a different URL. Your credit card has not been charged yet.");
+	}
 	else if (message == "Invalid dates!"){
 		showCardContent("calendar");
 		$("#calendar-error-message").addClass('is-danger').html("Invalid dates selected! Your credit card has not been charged yet.");
@@ -364,6 +366,11 @@ function errorHandler(message){
 		showCardContent("checkout");
 		$("#summary-error-message").addClass('is-danger').html("Listing error! Please try again later! Your credit card has not been charged yet.");
 	}
+	else {
+		showCardContent("checkout");
+		$("#summary-error-message").addClass('is-danger').html("Rental error! Please try again later! Your credit card has not been charged yet.");
+	}
+
 }
 
 //success handler

@@ -2,13 +2,14 @@ var can_submit = true;
 
 $(document).ready(function() {
 
-	//verify username
+	//verify password input
 	$("#pw-input").keyup(function() {
-		//if not blank
-		if ($(this).val().length > 0) {
+		pw_length = $(this).val().length;
+
+		if (70 > pw_length && pw_length >= 6) {
 			showSuccessDanger($(this), true);
 		}
-		else if ($(this).val().length == 0){
+		else if (pw_length == 0){
 			showSuccessDanger($(this));
 		}
 		else {
@@ -66,7 +67,7 @@ $(document).ready(function() {
 				$("#verify-pw").val("");
 
 				if (data.state == "success"){
-					$("#message").text("Success! You may log in with your new password!");
+					$("#message").removeAttr("style").text("Success! You may log in with your new password!");
 					$("#form_to_hide").hide();
 					$("#accept").show();
 				}
@@ -76,7 +77,7 @@ $(document).ready(function() {
 				else {
 					console.log(data);
 					can_submit = true;
-					$("#message").text(data.message);
+					$("#message").html(data.message);
 				}
 			});
 		}
