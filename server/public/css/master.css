@@ -1475,8 +1475,8 @@ pre {
     .button.is-stylish.is-small {
       font-size: 12px;
       height: 32px;
-      padding-left: 6px;
-      padding-right: 6px; }
+      padding-left: 8px;
+      padding-right: 8px; }
     .button.is-stylish.is-large {
       font-size: 16px;
       height: 48px;
@@ -2340,9 +2340,6 @@ input:-webkit-autofill {
     border-bottom: none; }
   .table td {
     padding: 8px 6px; }
-    @media screen and (max-width: 768px) {
-      .table td {
-        padding: 14px 6px; } }
   .table td,
   .table th {
     text-align: left;
@@ -4254,8 +4251,6 @@ input:-webkit-autofill {
     max-height: 30px; }
   .nav-item .button + .button {
     margin-left: 10px; }
-  .nav-item:last-child a {
-    font-weight: bold; }
   @media screen and (min-width: 769px) {
     .nav-item.searchbar {
       width: 75%; }

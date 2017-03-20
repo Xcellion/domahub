@@ -1,5 +1,6 @@
 @import 'vars';
 @import 'mixins';
+@import 'balloon';
 
 #index-img {
   @include tablet {
@@ -189,12 +190,10 @@
 
 .flex-list {
   li {
+    display: flex;
+    align-items: center;
     span {
-      margin-right: 10px;
-      display: inline;
-    }
-    p {
-      display: inline;
+      padding-right: 30px;
     }
   }
 }
@@ -236,6 +235,7 @@
 //     }
 //   }
 // }
+
 .image-stack {
   max-width: 440px;
   padding: 0;
