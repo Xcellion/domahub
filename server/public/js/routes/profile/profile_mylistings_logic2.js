@@ -106,34 +106,36 @@ function createRowDrop(listing_info, rownum){
 		var tempRow = $("#unverified-clone-row-drop").clone();
 	}
 
-    //if unverified show instructions
-    if (listing_info.verified == null){
-        temp_div_drop.append(
-            //create the unverified instructions, with callback to create regular drop when verified
-            createVerifiedDrop(listing_info, function(){
-				listing_info.verified = 1;
+    // //if unverified show instructions
+    // if (listing_info.verified == null){
+    //     temp_div_drop.append(
+    //         //create the unverified instructions, with callback to create regular drop when verified
+    //         createVerifiedDrop(listing_info, function(){
+	// 			listing_info.verified = 1;
+	//
+	// 			if (user.stripe_info && user.stripe_info.charges_enabled){
+	// 				listing_info.status = 1;
+	// 			}
+	//
+    //             //recreate the rows
+    //             var row = temp_drop.prev(".row-disp");
+    //             row.replaceWith(createRow(listing_info, rownum));
+    //             temp_drop.replaceWith(createRowDrop(listing_info, rownum));
+	// 			refreshSubmitbindings();
+    //         })
+    //     );
+    // }
+    // else {
+	// 	//append various stuff to the row drop div
+	// 	temp_div_drop.append(temp_div_col.append(
+	// 		createInfoDrop(listing_info),
+	// 		createImgDrop(listing_info, rownum)
+    //     ));
+    // }
+	//
+    // temp_div_drop.hide();
 
-				if (user.stripe_info && user.stripe_info.charges_enabled){
-					listing_info.status = 1;
-				}
-
-                //recreate the rows
-                var row = temp_drop.prev(".row-disp");
-                row.replaceWith(createRow(listing_info, rownum));
-                temp_drop.replaceWith(createRowDrop(listing_info, rownum));
-				refreshSubmitbindings();
-            })
-        );
-    }
-    else {
-		//append various stuff to the row drop div
-		temp_div_drop.append(temp_div_col.append(
-			createInfoDrop(listing_info),
-			createImgDrop(listing_info, rownum)
-        ));
-    }
-
-    temp_div_drop.hide();
+	tempRow.removeClass('is-hidden').attr("id", "row" + rownum);
 
     return tempRow;
 }
