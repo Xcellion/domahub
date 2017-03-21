@@ -135,4 +135,5 @@
 .preview-image {
   background: url("/images/loading.svg");
   background-repeat: no-repeat;
-  background-position: center center; }
+  background-position: center center;
+  min-height: 200px; }

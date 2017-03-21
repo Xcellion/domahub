@@ -19,7 +19,7 @@ $(document).ready(function() {
 
 //function to create all the rows
 function createAllRows(row_per_page, current_page){
-    $("#table_body").empty();
+	$("#table_body").children().not(".clone-row").remove();
     var rental_start = row_per_page * (current_page - 1);
     for (var x = 0; x < row_per_page; x++){
         if (row_display[rental_start]){
@@ -32,17 +32,17 @@ function createAllRows(row_per_page, current_page){
 
 //function to create a rental row
 function createRow(rental_info, rownum){
-    tempRow = $("<tr class='row-disp verified-row' id='row" + rownum + "'></tr>");
+	$("#row" + rownum).remove();
+
+    tempRow = $("#clone-row").clone();
+    tempRow.removeClass('is-hidden clone-row').attr("id", "row" + rownum);
+
+	updateDomainName(tempRow, rental_info);
+	updateStatus(tempRow, rental_info);
+	updateAddress(tempRow, rental_info);
+	updatePreview(tempRow, rental_info);
+
 	tempRow.data("rental_id", rental_info.rental_id);
-
-    tempRow.append(createIcon(rental_info));
-    tempRow.append(createDomain(rental_info));
-    tempRow.append(createPreview(rental_info));
-	tempRow.append(createEdit(rental_info));
-    tempRow.append(createStatus(rental_info, rownum));
-    tempRow.append(createAddress(rental_info));
-	tempRow.append(createAddressDrop(rental_info));
-
     tempRow.data("editing", false);
 	tempRow.data("selected", false);
 	tempRow.data("id", rental_info.rental_id);
@@ -54,212 +54,99 @@ function createRow(rental_info, rownum){
     return tempRow;
 }
 
-//function to create the status td
-function createStatus(rental_info, rownum){
-	var text = "Active";
-	var expired_danger = "";
-	row_display[rownum].expired = 0;
-	for (var x = rental_info.date.length - 1; x >= 0; x--){
-		if (new Date().getTime() >= parseInt(rental_info.date[x]) + parseInt(rental_info.duration[x])){
-			text = "Expired";
-			expired_danger = " is-danger";
-			row_display[rownum].expired = 1;
-			break;
-		}
+//update the clone row with row specifics
+function updateDomainName(tempRow, rental_info){
+	tempRow.find(".td-domain").text(rental_info.domain_name);
+}
+function updatePreview(tempRow, rental_info){
+	tempRow.find(".preview-button").attr("href", "/listing/" + rental_info.domain_name + "/" + rental_info.rental_id).on("click", function(e){
+		e.stopPropagation();
+	});
+}
+function updateStatus(tempRow, rental_info){
+	var expired = rental_info.date[0] + rental_info.duration[0] <= new Date().getTime();
+	var status_text = (rental_info.status == 0) ? "Inactive" : "Active";
+	if (expired){
+		status_text = "Expired";
 	}
-    var temp_td = $("<td class='td-visible td-status is-hidden-mobile" + expired_danger + "'>" + text + "</td>");
-    return temp_td;
+	tempRow.find(".td-status").text(status_text);
 }
+function updateAddress(tempRow, rental_info){
+	if (!rental_info.address){
+		tempRow.find(".address-link").removeAttr("href").text("Nothing is being displayed!").removeClass('is-accent');
+	}
+	else {
+		tempRow.find(".address-link").attr("href", rental_info.address).text(rental_info.address).addClass('is-accent');
+	}
 
-//function to create the tv icon
-function createPreview(rental_info){
-    var temp_td = $("<td class='td-view is-hidden-mobile'></td>");
-    var temp_a = $("<a class='button no-shadow' target='_blank' title='Preview this rental' style='target-new: tab;' href='/listing/" + rental_info.domain_name + "/" + rental_info.rental_id + "'></a>");
-    var temp_span = $("<span class='icon is-small'></span>");
-    var temp_i = $("<i class='fa fa-external-link'></i>");
-    var temp_span2 = $("<span>Preview</span>");
-    temp_td.append(temp_a.append(temp_span.append(temp_i), temp_span2));
-
-    //prevent clicking view from dropping down row
-    temp_td.click(function(e) {
-        e.stopPropagation();
+	//address input change
+	tempRow.find(".address_input").val(rental_info.address).on("click", function(e){
+		e.stopPropagation();
+	}).on("input", function(e){
+		if (!$(this).val()){
+			tempRow.find(".address-link").removeAttr("href").text("Nothing is being displayed!").removeClass('is-accent');
+		}
+		else {
+			tempRow.find(".address-link").attr("href", $(this).val()).text($(this).val()).addClass('is-accent');
+		}
     });
-
-    return temp_td;
-}
-
-//function to create the edit button
-function createEdit(listing_info){
-    var temp_td = $("<td class='td-edit padding-left-0 is-hidden-mobile'></td>");
-    var temp_a = $("<a class='button no-shadow'></a>");
-    var temp_span = $("<span class='icon is-small'></span>");
-    var temp_i = $("<i class='fa fa-cog'></i>");
-    var temp_span2 = $("<span>Edit</span>");
-    temp_td.append(temp_a.append(temp_span.append(temp_i), temp_span2));
-
-    //prevent clicking view from dropping down row
-    temp_a.click(function(e) {
-        e.stopPropagation();
-        editRow($(this).closest('.row-disp'));
-    });
-
-    return temp_td;
 }
 
 // ------------------------------------------------------------------------------------------------------------------------------ CREATE ROW DROP
 
-//function to create the address td
-function createAddress(rental_info){
-    var temp_td = $("<td class='td-visible td-address is-hidden-mobile'></td>");
-    var temp_td_div = $("<div class='address-div-wrapper'><div>");
-
-	if (rental_info.address == ""){
-		var temp_address = $("<p>Nothing is being displayed!</p>");
-	}
-	else {
-		var temp_address = $("<a target='_blank' class='is-accent has-bs-underline' href='" + rental_info.address + "'>" + rental_info.address + "</a>");
-		//prevent link click from selecting row
-		temp_address.click(function(e){
-			e.stopPropagation();
-		})
-	}
-
-	return temp_td.append(temp_td_div.append(temp_address));
-}
-
-//function to create the address input dropdown for rental address
-function createAddressDrop(rental_info){
-    var new_td = $("<td class='td-visible td-address td-address-drop is-hidden is-hidden-mobile'></td>");
-        var temp_span = $("<span class='is-fullwidth address-span'></span>");
-        var temp_form = $("<form class='drop-form'></form>");
-        var temp_input = $("<input placeholder='Nothing is being displayed!' class='address_input input changeable-input'></input>");
-            temp_input.val(rental_info.address);
-            temp_input.data("name", "address");
-    new_td.append(temp_span.append(temp_form.append(temp_input)));
-
-    //prevent clicking from dropping down row
-    temp_input.click(function(e) {
-        e.stopPropagation();
-    });
-
-    //change the hidden address TD along with dropdown
-    temp_input.on("input", function(e){
-		var address_wrapper = $(this).closest(".td-address-drop").prev(".td-address").find(".address-div-wrapper").empty();
-		if ($(this).val() == ""){
-			address_wrapper.append($("<p>Nothing is being displayed!</p>"));
-		}
-		else {
-			address_wrapper.append($("<a target='_blank' class='is-accent has-bs-underline' href='" + $(this).val() + "'>" + $(this).val() + "</a>"));
-		}
-    });
-
-    return new_td;
-}
-
 //function to create dropdown row
 function createRowDrop(rental_info, rownum){
-    var temp_drop = $("<tr id='row-drop" + rownum + "' class='row-drop'></tr>");
-    var temp_td = $("<td class='row-drop-td' colspan='6'></td>")
-    var temp_div_drop = $("<div id='div-drop" + rownum + "' class='div-drop td-visible container'></div>");
-	var temp_cols = $("<div class='columns'></div>");
+	$("#row-drop" + rownum).remove();
 
-    //append various stuff to the row drop div
-    temp_drop.append(temp_td.append(temp_div_drop.append(temp_cols.append(
-		createDatesDrop(rental_info).append(createFormDrop(rental_info)),
-		createImgDrop(rental_info)
-    ))));
-    temp_div_drop.hide();
+	tempRow_drop = $("#clone-row-drop").clone();
+	updateDates(tempRow_drop, rental_info);
+	updateViewListing(tempRow_drop, rental_info);
+	updateRentalDelete(tempRow_drop, rental_info);
+	updateSaveCancelButtons(tempRow_drop, rental_info);
+	updateDeleteMessagesX(tempRow_drop);
+	updatePreviewImage(tempRow_drop, rental_info);
 
-    return temp_drop;
+	tempRow_drop.removeClass('is-hidden clone-row').attr("id", "row-drop" + rownum);
+    return tempRow_drop;
 }
 
-//function to create the submit button and error message column
-function createFormDrop(rental_info){``
-    var temp_col = $("<div class='control'></div>");
-    var temp_form = $("<form class='drop-form'></form>");
+//update the clone row drop with row specifics
+function updateDates(tempRow_drop, rental_info){
+	for (var x = 0; x < rental_info.date.length; x++){
+		var disp_start = moment(new Date(rental_info.date[x])).format('MMMM D, YYYY h:mmA');
+		var disp_duration = moment.duration(rental_info.duration[x]).humanize();
+		var disp_end = moment(parseFloat(rental_info.date[x]) + parseFloat(rental_info.duration[x])).format('MMMM D, YYYY h:mmA');
 
-    //buttons for submit/cancel
-    var temp_div4 = $('<div class="control is-grouped"></div>');
-        var temp_submit_control = $('<div class="control"></div>');
-            var temp_submit_button = $('<a class="save-changes-button button is-disabled is-primary">Save Changes</a>');
-        var temp_cancel_control = $('<div class="control"></div>');
-            var temp_cancel_button = $('<a class="cancel-changes-button button is-hidden is-danger">Cancel Changes</a>');
-
-    temp_div4.append(temp_submit_control.append(temp_submit_button), temp_cancel_control.append(temp_cancel_button));
-
-    //error message
-    var temp_msg = $("<p class='rental-msg is-hidden notification'></p>");
-        var temp_msg_delete = $("<button class='delete'></button>");
-        temp_msg.append(temp_msg_delete);
-
-    temp_col.append(createButtons(rental_info), temp_form.append(temp_div4, temp_msg));
-
-    //to hide the message
-    temp_msg_delete.click(function(e){
-        e.preventDefault();
-        temp_msg.addClass('is-hidden');
-    });
-
-    //to submit form changes
-    temp_submit_button.click(function(e){
-        var row_drop = $(this).closest('.row-drop');
-        var row = row_drop.prev(".row-disp");
-
-        submitRentalChanges(row, row_drop, $(this), rental_info);
-    });
-
-    //to cancel form changes
-    temp_cancel_button.click(function(e){
-        var row_drop = $(this).closest('.row-drop');
-        var row = row_drop.prev(".row-disp");
-
-        cancelRentalChanges(row, row_drop, $(this), rental_info);
-    });
-
-    return temp_col;
+		var temp_date = tempRow_drop.find("#rental-dates-clone").clone().removeClass('is-hidden').attr('id', "");
+		temp_date.text(disp_start + " - " + disp_end + " (" + disp_duration + ")");
+		tempRow_drop.find(".rental-dates").append(temp_date);
+	}
 }
-
-//various buttons (add time, view listing, view rental, delete rental)
-function createButtons(rental_info){
-	var temp_div_buttons = $("<div class='is-flex-wrap margin-bottom-10'></div>");
-	var temp_button1 = $("<a target='_blank' href='/listing/" + rental_info.domain_name + "' class='button margin-right-5 no-shadow'>View Listing</a>");
-	var temp_button2 = $("<a class='button no-shadow'>Delete Rental</a>");
-
-	//are you sure?
-	temp_button2.on("click", function(e) {
-		areYouSure($(this), rental_info)
+function updateViewListing(tempRow_drop, rental_info){
+	tempRow_drop.find(".view-rental").attr('href', "/listing/" + rental_info.domain_name);
+}
+function updateSaveCancelButtons(tempRow_drop, rental_info){
+	//to submit form changes
+	tempRow_drop.find(".save-changes-button").click(function(e){
+		submitRentalChanges(tempRow_drop.prev(".row-disp"), tempRow_drop, $(this), rental_info);
 	});
 
-	temp_div_buttons.append(temp_button1, temp_button2);
-
-	return temp_div_buttons;
+	//to cancel form changes
+	tempRow_drop.find(".cancel-changes-button").click(function(e){
+		cancelRentalChanges(tempRow_drop.prev(".row-disp"), tempRow_drop, $(this), rental_info);
+	});
 }
-
-//function to create start and end dates
-function createDatesDrop(rental_info){
-    var temp_col = $("<div class='column is-9'></div>");
-
-	var temp_control_labels = $("<div class='control'></div>")
-    var temp_p_start = $("<p class='is-inline-block margin-bottom-5 is-bold'>Rental Dates</p>");
-	var temp_ol = $("<ol class='padding-left-20'></ol>");
-
-	temp_col.append(temp_control_labels.append(temp_p_start, temp_ol));
-
-    for (var x = 0; x < rental_info.date.length; x++){
-        var disp_start = moment(new Date(rental_info.date[x])).format('MMMM D, YYYY h:mmA');
-        var disp_duration = moment.duration(rental_info.duration[x]).humanize();
-        var disp_end = moment(parseFloat(rental_info.date[x]) + parseFloat(rental_info.duration[x])).format('MMMM D, YYYY h:mmA');
-
-        var p_date = $("<li>" + disp_start + " - " + disp_end + " <span class='is-accent'>(" + disp_duration + ")</span></li>");
-
-		temp_ol.append(p_date);
-    }
-
-    return temp_col;
+function updateDeleteMessagesX(tempRow_drop){
+	tempRow_drop.find(".notification").find(".delete").on("click", function(){
+		$(this).closest(".notification").addClass('is-hidden');
+	});
 }
-
-//function to create the image drop column
-function createImgDrop(rental_info){
+function updateRentalDelete(tempRow_drop, rental_info){
+	tempRow_drop.find(".delete-rental").on("click", function(e) {
+		areYouSure($(this), rental_info);
+	});
+}
+function updatePreviewImage(tempRow_drop, rental_info){
 	if (rental_info.address == ""){
 		var background_image = "https://placeholdit.imgix.net/~text?txtsize=40&txt=NO%20PREVIEW&w=200&h=200";
 	}
@@ -270,21 +157,13 @@ function createImgDrop(rental_info){
 		var background_image =  "/screenshot?rental_address=" + rental_info.address + "&width=200&height=200";
 	}
 
-    var temp_col = $("<div class='column is-3'></div>");
-    var temp_div = $("<div class='card is-pulled-right no-shadow listing-img'></div>");
-    var temp_div_image = $("<div class='card-image'></div>")
-    var temp_figure = $("<figure class='image listing-img'></figure>");
-    var temp_img = $("<img class='is-listing' alt='Image not found' src=" + background_image + " />");
-    var temp_footer = $("<footer class='card-footer has-text-centered'></div>");
-    var temp_preview_button = $("<a target='_blank' href='/listing/" + rental_info.domain_name + "/" + rental_info.rental_id + "' class='card-footer-item no-border'>Click to Preview</a>");
-    temp_col.append(temp_div.append(temp_div_image.append(temp_figure.append(temp_img)), temp_footer.append(temp_preview_button)));
+	tempRow_drop.data('background_image', background_image);
+	tempRow_drop.find(".preview-image").error(function() {
+		$(this).attr("src", "");
+	});
 
-    //if theres an error in getting the image, remove the link
-    temp_img.error(function() {
-        $(this).attr("src", "");
-    });
-
-    return temp_col;
+	//preview link
+	tempRow_drop.find(".preview-link").attr('href', "/listing/" + rental_info.domain_name + "/" + rental_info.rental_id);
 }
 
 // ------------------------------------------------------------------------------------------------------------------------------ DELETE RENTAL
@@ -351,6 +230,7 @@ function editRow(row){
 
     dropRow(row, editing);
     editAddress(row, editing);
+	editImage(row.next('.row-drop'), editing);
 
     //cancel any changes if we collapse the row
     if (!editing){
@@ -371,6 +251,13 @@ function editAddress(row, editing){
         address_td.removeClass("is-hidden");
         address_drop_td.addClass("is-hidden");
     }
+}
+
+//funciton to update the preview image
+function editImage(tempRow_drop, editing){
+	if (editing && !tempRow_drop.find('.preview-image').attr("src")){
+		tempRow_drop.find('.preview-image').attr("src", tempRow_drop.data("background_image"));
+	}
 }
 
 // ------------------------------------------------------------------------------------------------------------------------------ SELECT ROW
@@ -446,9 +333,11 @@ function submitRentalChanges(row, row_drop, success_button, rental_info){
     var cancel_button = success_button.closest(".control").next(".control").find(".cancel-changes-button");
     var domain_name = rental_info.domain_name;
 
-    //clear any existing messages
-    var rental_msg = row_drop.find(".rental-msg");
-    errorMessage(rental_msg);
+	//clear any existing messages
+    var rental_msg_error = row_drop.find(".listing-msg-error");
+    var rental_msg_success = row_drop.find(".listing-msg-success");
+    errorMessage(rental_msg_error);
+    successMessage(rental_msg_success);
 
     success_button.addClass("is-loading");
 
@@ -464,6 +353,7 @@ function submitRentalChanges(row, row_drop, success_button, rental_info){
     }).done(function(data){
         success_button.removeClass("is-loading");
         if (data.state == "success"){
+			successMessage(rental_msg_success, true);
             rentals = data.rentals;
             success_button.addClass("is-disabled");
             cancel_button.addClass('is-hidden');
@@ -471,17 +361,31 @@ function submitRentalChanges(row, row_drop, success_button, rental_info){
         }
         else {
             cancel_button.click();
-            errorMessage(rental_msg, data.message);
+            errorMessage(rental_msg_error, data.message);
         }
     });
 }
 
-//helper function to display error messages per listing
+//helper function to display success messages per rental
+function successMessage(msg_elem, message){
+	$(".notification").addClass('is-hidden');
+    msg_elem.removeClass('is-hidden');
+	msg_elem.find("p").empty();
+    if (message){
+        msg_elem.append("<p class='is-white'>Successfully updated this rental!</p>");
+    }
+    else {
+        msg_elem.addClass('is-hidden');
+    }
+}
+
+//helper function to display error messages per rental
 function errorMessage(msg_elem, message){
+	$(".notification").addClass('is-hidden');
     msg_elem.removeClass('is-hidden');
     msg_elem.find("p").empty();
     if (message){
-        msg_elem.append("<p>" + message + "</p>");
+        msg_elem.append("<p class='is-white'>" + message + "</p>");
     }
     else {
         msg_elem.addClass('is-hidden');
@@ -510,8 +414,12 @@ function refreshSubmitbindings(success_button, cancel_button, rentals, rental_id
             });
 
             both_rows.find(".drop-form .changeable-input").unbind("input").on("input", function(e){
-                changedListingValue($(this), rentals[x]);
+                changedValue($(this), rentals[x]);
             });
+
+			updatePreviewImage(row_drop, rentals[x]);
+			row_drop.find('.preview-image').removeAttr("src");
+			editImage(row_drop, true);
 
             break;
         }
