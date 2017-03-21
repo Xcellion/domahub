@@ -122,7 +122,7 @@ function createRowButtons(listing_info){
 	var edit_or_verify_icon = (listing_info.verified) ? " fa-cog" : " fa-check-circle-o"
 	var edit_temp_i = $("<i class='fa" + edit_or_verify_icon + "'></i>");
 
-	var edit_or_verify = (listing_info.verified) ? "Edit" : "Click here to verify this domain"
+	var edit_or_verify = (listing_info.verified) ? "Edit" : "Verify Now"
 	var edit_temp_span2 = $("<span>" + edit_or_verify + "</span>");
 	temp_td.append(edit_temp_a.append(edit_temp_span.append(edit_temp_i), edit_temp_span2));
 
@@ -238,7 +238,7 @@ function createVerifiedDrop(listing_info, cb_when_verified){
 	dns_table.append(dns_row);
 
 	var bottom_text = $("<p>Please delete any existing A Records on your domain. </p>")
-	var refresh_button = $("<a class='button is-primary verify-link no-shadow' title='Verify this domain'><span class='is-small icon'><i class='fa fa-check-circle-o'></i></span><span>I have made the above changes, please verify this domain.</span></a>");
+	var refresh_button = $("<a class='is-accent verify-link' title='Verify this domain'>I have made the above changes, please verify this domain.</a>");
 
 	//ajax to make sure it's all done, then display a regular row if verified
 	refresh_button.off().click(function(e){
@@ -688,7 +688,7 @@ function getDNSRecordAndWhois(domain_name, row){
 			var reg_url = data.listing.whois["Registrar URL"] || data.listing.whois["Registrar URL (registration services)"];
 			var regex_url = /^((http|https):\/\/)/;
 			if (!regex_url.test(reg_url)) { reg_url = "http://" + reg_url; }
-			row.next(".row-drop").find(".registrar_url").replaceWith("<a class='registrar_url is-accent' href='" + reg_url + "'>log in to your domain provider</a> (" + reg_name + ") ");
+			row.next(".row-drop").find(".registrar_url").replaceWith("<a class='registrar_url is-accent' target='_blank' href='" + reg_url + "'>log in to your domain provider</a> (" + reg_name + ") ");
 		}
 
 		if (data.listing.a_records){

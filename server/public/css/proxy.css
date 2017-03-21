@@ -14,7 +14,7 @@
     box-sizing:border-box;
     color:#fff;
     font-size:24px;
-    font-family:'Ubuntu',helvetica,sans-serif;
+    font-family: Helvetica,sans-serif;
     line-height:18px;
     padding:16px;
     height:50px;
@@ -32,7 +32,7 @@
 /*--------------------------------------------------------PROXY EDIT--------------------------------------------------------------*/
 
 .domahub-wrapper h1,.domahub-wrapper h2,.domahub-wrapper h3,.domahub-wrapper a{
-    font-family: "Ubuntu",helvetica,sans-serif;
+    font-family: Helvetica,sans-serif;
 }
 .domahub-wrapper {
     align-items:flex-end;
@@ -63,12 +63,12 @@
 .domahub-heading {
     margin:0;
     font-size:18px;
-    cursor:default;
+    text-align: center;
 }
 
 .domahub-info-wrapper{
     border-bottom:1px solid #D3D3D3;
-    font-family: helvetica,sans-serif;
+    font-family: Helvetica,sans-serif;
 }
 .domahub-status-info {
     color:#ff5722;
@@ -76,7 +76,6 @@
     margin:10px;
     margin-bottom:5px;
     font-size:15px;
-    font-weight:bold;
 }
 .domahub-rental-dates {
     padding:0;
