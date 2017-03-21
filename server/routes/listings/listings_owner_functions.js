@@ -435,10 +435,12 @@ module.exports = {
 
 		var status = parseFloat(req.body.status);
         var description = sanitize(req.body.description);
+		console.log(req.body);
 
 		//prices
 		var price_rate = req.body.price_rate;
 		var price_type = req.body.price_type;
+		var buy_price = req.body.buy_price;
 
 		var categories = (req.body.categories) ? sanitize(req.body.categories.replace(/\s\s+/g, ' ').toLowerCase()).split(" ").sort() : [];
 		var categories_clean = [];
@@ -460,10 +462,13 @@ module.exports = {
 		}
 		//invalid price type
 		else if (req.body.price_type && ["month", "week", "day"].indexOf(price_type) == -1){
-			error.handler(req, res, "Invalid price type!", "json");
+			error.handler(req, res, "Invalid rental price type!", "json");
 		}
 		else if (req.body.price_rate && !validator.isInt(price_rate)){
-			error.handler(req, res, "Price must be a whole number!", "json");
+			error.handler(req, res, "Rental price must be a whole number!", "json");
+		}
+		else if (req.body.buy_price && !validator.isInt(buy_price) && buy_price != 0){
+			error.handler(req, res, "Purchase price must be a whole number!", "json");
 		}
 		else {
 			var listing_info = getUserListingObj(req.user.listings, req.params.domain_name);
@@ -475,6 +480,7 @@ module.exports = {
 			req.new_listing_info.description = description;
 			req.new_listing_info.price_type = price_type;
 			req.new_listing_info.price_rate = price_rate;
+			req.new_listing_info.buy_price = (buy_price == "" || buy_price == 0) ? "" : buy_price;
 			req.new_listing_info.categories = (categories_clean == "") ? null : categories_clean;
 
 			//delete anything that wasnt posted (except if its "", in which case it was intentional deletion)
@@ -534,7 +540,7 @@ module.exports = {
 
 	//gets unverified A Record and domain who is info
 	getDNSRecordAndWhois : function(req, res, next){
-		console.log("F: Finding the existing A Record and WHOIS information for an unverified domain...");
+		console.log("F: Finding the existing A Record and WHOIS information for" + req.params.domain_name + "...");
 
 		listing_obj = getUserListingObj(req.user.listings, req.params.domain_name);
 		whois.lookup(listing_obj.domain_name, function(err, data){

@@ -143,7 +143,7 @@ function setupTable(total_pages, row_per_page, current_page, rows_to_disp){
         $("#filters").removeClass('is-hidden');
     }
     if (!rows_to_disp.length){
-        $("#table_body").empty();
+        $("#table_body").children().not(".clone-row").remove();
         emptyRows();
     }
     else {
@@ -411,7 +411,7 @@ function paginateRows(total_pages, current_page){
 //function to create an empty row if there are no more applicable rentals/listings
 function emptyRows(){
     var listing_or_rental_text = window.location.pathname.indexOf("listings") != -1 ? "listings" : "rentals";
-    if ($(".row-disp").length == 0){
+    if ($(".row-disp").not('.clone-row').length == 0){
         if (listing_or_rental_text == "listings" && listings.length == 0){
             var tempRow = $("<tr><td class='padding-50 has-text-centered' colspan='99'>There are no listings! <a href='/listings/create' class='is-accent'>Create one now!</a></td></tr>");
         }
@@ -424,7 +424,7 @@ function emptyRows(){
 
 //function to create all the rows
 function createAllRows(row_per_page, current_page){
-    $("#table_body").children().not(".clone-row").empty();
+    $("#table_body").children().not(".clone-row").remove();
     var row_start = row_per_page * (current_page - 1);
     for (var x = 0; x < row_per_page; x++){
         if (row_display[row_start]){
