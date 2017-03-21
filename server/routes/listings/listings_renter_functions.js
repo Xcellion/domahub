@@ -894,6 +894,7 @@ function getListingRentalTimes(req, res, listing_info, callback){
             }
 
             listing_info.rentals = joinRentalTimes(result.info);
+            listing_info.rentals_joined = createRentalProp(listing_info.rentals);
             req.session.listing_info = listing_info;
             callback();
         }
@@ -923,6 +924,37 @@ function joinRentalTimes(rental_times){
     }
 
     return temp_times;
+}
+
+//function to create rental properties inside listing info
+function createRentalProp(orig_rentals){
+    var all_rentals = orig_rentals.slice(0);
+
+	//iterate once across all results
+	for (var x = 0; x < all_rentals.length; x++){
+		var temp_dates = [];
+		var temp_durations = [];
+
+		//iterate again to look for multiple dates and durations
+		for (var y = 0; y < all_rentals.length; y++){
+			if (!all_rentals[y].checked && all_rentals[x]["rental_id"] == all_rentals[y]["rental_id"]){
+				temp_dates.push(all_rentals[y].date);
+				temp_durations.push(all_rentals[y].duration);
+				all_rentals[y].checked = true;
+			}
+		}
+
+		//combine dates into a property
+		all_rentals[x].date = temp_dates;
+		all_rentals[x].duration = temp_durations;
+	}
+
+	//remove empty date entries
+	all_rentals = all_rentals.filter(function(value, index, array){
+		return value.date.length;
+	});
+
+	return all_rentals;
 }
 
 //helper function to check database for availability
