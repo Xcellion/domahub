@@ -64,7 +64,11 @@ function updatePreview(tempRow, rental_info){
 	});
 }
 function updateStatus(tempRow, rental_info){
+	var expired = rental_info.date[0] + rental_info.duration[0] <= new Date().getTime();
 	var status_text = (rental_info.status == 0) ? "Inactive" : "Active";
+	if (expired){
+		status_text = "Expired";
+	}
 	tempRow.find(".td-status").text(status_text);
 }
 function updateAddress(tempRow, rental_info){
@@ -97,8 +101,10 @@ function createRowDrop(rental_info, rownum){
 	tempRow_drop = $("#clone-row-drop").clone();
 	updateDates(tempRow_drop, rental_info);
 	updateViewListing(tempRow_drop, rental_info);
+	updateRentalDelete(tempRow_drop, rental_info);
 	updateSaveCancelButtons(tempRow_drop, rental_info);
 	updateDeleteMessagesX(tempRow_drop);
+	updatePreviewImage(tempRow_drop, rental_info);
 
 	tempRow_drop.removeClass('is-hidden clone-row').attr("id", "row-drop" + rownum);
     return tempRow_drop;
@@ -135,52 +141,11 @@ function updateDeleteMessagesX(tempRow_drop){
 	});
 }
 function updateRentalDelete(tempRow_drop, rental_info){
-	tempRow_drop.find(".").on("click", function(e) {
-		areYouSure($(this), rental_info)
+	tempRow_drop.find(".delete-rental").on("click", function(e) {
+		areYouSure($(this), rental_info);
 	});
 }
-
-//various buttons (add time, view listing, view rental, delete rental)
-function createButtons(rental_info){
-	var temp_div_buttons = $("<div class='is-flex-wrap margin-bottom-10'></div>");
-	var temp_button1 = $("<a target='_blank' href='/listing/" + rental_info.domain_name + "' class='button margin-right-5 no-shadow'>View Listing</a>");
-	var temp_button2 = $("<a class='button no-shadow'>Delete Rental</a>");
-
-	//are you sure?
-	temp_button2.on("click", function(e) {
-		areYouSure($(this), rental_info)
-	});
-
-	temp_div_buttons.append(temp_button1, temp_button2);
-
-	return temp_div_buttons;
-}
-
-//function to create start and end dates
-function createDatesDrop(rental_info){
-    var temp_col = $("<div class='column is-9'></div>");
-
-	var temp_control_labels = $("<div class='control'></div>")
-    var temp_p_start = $("<p class='is-inline-block margin-bottom-5 is-bold'>Rental Dates</p>");
-	var temp_ol = $("<ol class='padding-left-20'></ol>");
-
-	temp_col.append(temp_control_labels.append(temp_p_start, temp_ol));
-
-    for (var x = 0; x < rental_info.date.length; x++){
-        var disp_start = moment(new Date(rental_info.date[x])).format('MMMM D, YYYY h:mmA');
-        var disp_duration = moment.duration(rental_info.duration[x]).humanize();
-        var disp_end = moment(parseFloat(rental_info.date[x]) + parseFloat(rental_info.duration[x])).format('MMMM D, YYYY h:mmA');
-
-        var p_date = $("<li>" + disp_start + " - " + disp_end + " <span class='is-accent'>(" + disp_duration + ")</span></li>");
-
-		temp_ol.append(p_date);
-    }
-
-    return temp_col;
-}
-
-//function to create the image drop column
-function createImgDrop(rental_info){
+function updatePreviewImage(tempRow_drop, rental_info){
 	if (rental_info.address == ""){
 		var background_image = "https://placeholdit.imgix.net/~text?txtsize=40&txt=NO%20PREVIEW&w=200&h=200";
 	}
@@ -191,21 +156,13 @@ function createImgDrop(rental_info){
 		var background_image =  "/screenshot?rental_address=" + rental_info.address + "&width=200&height=200";
 	}
 
-    var temp_col = $("<div class='column is-3'></div>");
-    var temp_div = $("<div class='card is-pulled-right no-shadow listing-img'></div>");
-    var temp_div_image = $("<div class='card-image'></div>")
-    var temp_figure = $("<figure class='image listing-img'></figure>");
-    var temp_img = $("<img class='is-listing' alt='Image not found' src=" + background_image + " />");
-    var temp_footer = $("<footer class='card-footer has-text-centered'></div>");
-    var temp_preview_button = $("<a target='_blank' href='/listing/" + rental_info.domain_name + "/" + rental_info.rental_id + "' class='card-footer-item no-border'>Click to Preview</a>");
-    temp_col.append(temp_div.append(temp_div_image.append(temp_figure.append(temp_img)), temp_footer.append(temp_preview_button)));
+	tempRow_drop.data('background_image', background_image);
+	tempRow_drop.find(".preview-image").error(function() {
+		$(this).attr("src", "");
+	});
 
-    //if theres an error in getting the image, remove the link
-    temp_img.error(function() {
-        $(this).attr("src", "");
-    });
-
-    return temp_col;
+	//preview link
+	tempRow_drop.find(".preview-link").attr('href', "/listing/" + rental_info.domain_name + "/" + rental_info.rental_id);
 }
 
 // ------------------------------------------------------------------------------------------------------------------------------ DELETE RENTAL
@@ -272,6 +229,7 @@ function editRow(row){
 
     dropRow(row, editing);
     editAddress(row, editing);
+	editImage(row.next('.row-drop'), editing);
 
     //cancel any changes if we collapse the row
     if (!editing){
@@ -292,6 +250,13 @@ function editAddress(row, editing){
         address_td.removeClass("is-hidden");
         address_drop_td.addClass("is-hidden");
     }
+}
+
+//funciton to update the preview image
+function editImage(tempRow_drop, editing){
+	if (editing && !tempRow_drop.find('.preview-image').attr("src")){
+		tempRow_drop.find('.preview-image').attr("src", tempRow_drop.data("background_image"));
+	}
 }
 
 // ------------------------------------------------------------------------------------------------------------------------------ SELECT ROW
@@ -367,9 +332,11 @@ function submitRentalChanges(row, row_drop, success_button, rental_info){
     var cancel_button = success_button.closest(".control").next(".control").find(".cancel-changes-button");
     var domain_name = rental_info.domain_name;
 
-    //clear any existing messages
-    var rental_msg = row_drop.find(".rental-msg");
-    errorMessage(rental_msg);
+	//clear any existing messages
+    var rental_msg_error = row_drop.find(".listing-msg-error");
+    var rental_msg_success = row_drop.find(".listing-msg-success");
+    errorMessage(rental_msg_error);
+    successMessage(rental_msg_success);
 
     success_button.addClass("is-loading");
 
@@ -385,6 +352,7 @@ function submitRentalChanges(row, row_drop, success_button, rental_info){
     }).done(function(data){
         success_button.removeClass("is-loading");
         if (data.state == "success"){
+			successMessage(rental_msg_success, true);
             rentals = data.rentals;
             success_button.addClass("is-disabled");
             cancel_button.addClass('is-hidden');
@@ -392,17 +360,31 @@ function submitRentalChanges(row, row_drop, success_button, rental_info){
         }
         else {
             cancel_button.click();
-            errorMessage(rental_msg, data.message);
+            errorMessage(rental_msg_error, data.message);
         }
     });
 }
 
-//helper function to display error messages per listing
+//helper function to display success messages per rental
+function successMessage(msg_elem, message){
+	$(".notification").addClass('is-hidden');
+    msg_elem.removeClass('is-hidden');
+	msg_elem.find("p").empty();
+    if (message){
+        msg_elem.append("<p class='is-white'>Successfully updated this rental!</p>");
+    }
+    else {
+        msg_elem.addClass('is-hidden');
+    }
+}
+
+//helper function to display error messages per rental
 function errorMessage(msg_elem, message){
+	$(".notification").addClass('is-hidden');
     msg_elem.removeClass('is-hidden');
     msg_elem.find("p").empty();
     if (message){
-        msg_elem.append("<p>" + message + "</p>");
+        msg_elem.append("<p class='is-white'>" + message + "</p>");
     }
     else {
         msg_elem.addClass('is-hidden');
@@ -431,8 +413,12 @@ function refreshSubmitbindings(success_button, cancel_button, rentals, rental_id
             });
 
             both_rows.find(".drop-form .changeable-input").unbind("input").on("input", function(e){
-                changedListingValue($(this), rentals[x]);
+                changedValue($(this), rentals[x]);
             });
+
+			updatePreviewImage(row_drop, rentals[x]);
+			row_drop.find('.preview-image').removeAttr("src");
+			editImage(row_drop, true);
 
             break;
         }

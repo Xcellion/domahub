@@ -638,7 +638,7 @@ function submitListingChanges(row, row_drop, success_button, listing_info){
 
 //helper function to display error messages per listing
 function errorMessage(msg_elem, message){
-    $(".notification").addClass('is-hidden')
+    $(".notification").addClass('is-hidden');
     msg_elem.removeClass('is-hidden');
     msg_elem.find("p").empty();
     if (message){
@@ -657,8 +657,9 @@ function errorMessage(msg_elem, message){
 
 //helper function to display success messages per listing
 function successMessage(msg_elem, message){
+	$(".notification").addClass('is-hidden');
     msg_elem.removeClass('is-hidden');
-    $(".notification p").empty();
+    msg_elem.find("p").empty();
     if (message){
         msg_elem.append("<p class='is-white'>Successfully updated this listing!</p>");
     }

@@ -133,7 +133,7 @@
 									<td class="td-visible td-address td-address-drop is-hidden is-hidden-mobile">
 										<span class="is-fullwidth address-span">
 											<form class="drop-form">
-												<input placeholder="Nothing is being displayed!" class="address_input input changeable-input">
+												<input data-name="address" placeholder="Nothing is being displayed!" class="address_input input changeable-input">
 											</form>
 										</span>
 									</td>
@@ -163,10 +163,10 @@
 																	<a class="cancel-changes-button button is-hidden is-danger">Cancel Changes</a>
 																</div>
 															</div>
-															<div class="rental-msg-error is-hidden is-danger notification">
+															<div class="rental-msg listing-msg-error is-hidden is-danger notification">
 																<button class="delete"></button>
 															</div>
-															<div class="rental-msg-success is-hidden is-primary notification">
+															<div class="rental-msg listing-msg-success is-hidden is-primary notification">
 																<button class="delete"></button>
 															</div>
 														</form>
@@ -176,7 +176,7 @@
 													<div class="card is-pulled-right no-shadow listing-img">
 														<div class="card-image">
 															<figure class="image listing-img">
-																<img class="is-listing preview-image" alt="Image not found" src=""></figure>
+																<img class="is-listing preview-image" src=""></figure>
 															</div>
 															<footer class="card-footer has-text-centered">
 																<a target="_blank" href="" class="preview-link card-footer-item no-border">Click to Preview</a>
@@ -236,8 +236,8 @@
 		var user = <% if(typeof user != "undefined"){ %><%-JSON.stringify(user)%><% }else{ %>window.location="/"<% } %>;
 		var rentals = <% if(typeof rentals != "undefined"){ %><%-JSON.stringify(rentals)%><% }else{ %>""<% } %>;
 	</script>
-	<script src="/js/routes/profile/profile_myrentals_logic.js" type="text/javascript"></script>
-	<%# <script src="/js/routes/profile/profile_myrentals_logic2.js" type="text/javascript"></script>%>
+	<%# <script src="/js/routes/profile/profile_myrentals_logic.js" type="text/javascript"></script>%>
+	<script src="/js/routes/profile/profile_myrentals_logic2.js" type="text/javascript"></script>
 	<script src="/js/routes/profile/profile_pagination_logic.js" type="text/javascript"></script>
 </body>
 </html>
