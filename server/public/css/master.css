@@ -2420,8 +2420,6 @@ input:-webkit-autofill {
   .table tbody tr:last-child td,
   .table tbody tr:last-child th {
     border-bottom-width: 0; }
-  .table tbody tr:hover {
-    cursor: pointer; }
   .table tbody tr.is-active {
     background-color: #efefef; }
   .table tbody tr.no-hover-effect:hover {
