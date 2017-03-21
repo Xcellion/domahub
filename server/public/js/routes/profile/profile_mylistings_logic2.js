@@ -228,7 +228,7 @@ function updateRegistrarURL(tempRow, whois){
 		var reg_url = whois["Registrar URL"] || whois["Registrar URL (registration services)"];
 		var regex_url = /^((http|https):\/\/)/;
 		if (!regex_url.test(reg_url)) { reg_url = "http://" + reg_url; }
-		tempRow.find(".registrar_url").replaceWith("<a class='registrar_url is-accent' href='" + reg_url + "'>log in to your domain provider</a> (" + reg_name + ") ");
+		tempRow.find(".registrar_url").replaceWith("<a class='registrar_url is-accent' target='_blank' href='" + reg_url + "'>log in to your domain provider</a> (" + reg_name + ") ");
 	}
 }
 function updateExistingDNS(tempRow, a_records){

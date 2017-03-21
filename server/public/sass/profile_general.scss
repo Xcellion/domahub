@@ -115,6 +115,9 @@
 
 .td-arrow {
   width: 10px;
+  &:hover {
+    cursor: pointer;
+  }
 }
 
 .td-date {
