@@ -43,8 +43,13 @@ function googleSafe(){
 
 //testing dns records look up
 function dnsRecords(){
-    dns.resolve("fgajlfhjjhjkahdsksdjdsakjfhdsflhsafjdhsflkjsahfd.com", "A", function(err, addresses){
-        console.log(err);
-        console.log(addresses);
+    // dns.resolve("rudotcom.com", "A", function(err, addresses){
+    //     console.log(err);
+    //     console.log(addresses);
+    // });
+
+    dns.lookup("entraclub.com", function (err, address, family) {
+        domain_ip = address;
+        console.log(domain_ip);
     });
 }
