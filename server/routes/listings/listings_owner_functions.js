@@ -732,9 +732,9 @@ module.exports = {
 	verifyListing: function(req, res, next){
 		console.log("F: Attempting to verify this listing...");
 
-		domain_name = req.params.domain_name;
-		dns.lookup(domain_name, function (err, address, family) {
-			domain_ip = address;
+		var domain_name = req.params.domain_name;
+		dns.resolve(domain_name, "A", function (err, address, family) {
+			var domain_ip = address;
 			dns.lookup("domahub.com", function (err, address, family) {
 				if (domain_ip == address){
 					req.new_listing_info = {

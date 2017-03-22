@@ -313,9 +313,9 @@ module.exports = {
     //checks to make sure listing is still verified
 	checkStillVerified : function(req, res, next){
         console.log("F: Checking to see if domain is still pointed to DomaHub...");
-		domain_name = req.params.domain_name;
-		dns.lookup(domain_name, function (err, address, family) {
-			domain_ip = address;
+		var domain_name = req.params.domain_name;
+		dns.resolve(domain_name, "A", function (err, address, family) {
+			var domain_ip = address;
 			dns.lookup("domahub.com", function (err, address, family) {
 				if (domain_ip != address){
                     console.log("F: Listing is not pointed to DomaHub anymore! Reverting verification...");

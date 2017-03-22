@@ -21,9 +21,9 @@ module.exports = function(app, db, auth, error){
 }
 
 //testing dns records look up
-function dnsRecords(){
-    dns.lookup(req.params.domain_name, function (err, address, family) {
-        console.log(address);
+function dnsRecords(req, res, next){
+    dns.resolve(req.params.domain_name, "A", function (err, address, family) {
+        res.send(address);
     });
 }
 
@@ -38,6 +38,6 @@ function createSignupCodes(req, res, next){
         }
     }
     Account.createSignupCodes(codes, function(result){
-        console.log(result);
+        res.send(result);
     });
 }
