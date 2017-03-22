@@ -7,49 +7,37 @@ var bodyParser = require('body-parser');
 var urlencodedParser = bodyParser.urlencoded({ extended: true });
 var dns = require("dns");
 
+var randomstring = require("randomstring");
+
 module.exports = function(app, db, auth, error){
     Auth = auth;
     Account = new account_model(db);
     Listing = new listing_model(db);
 
-    //google safe browsing test
-    app.get("/googlesafe", googleSafe);
-    app.get("/dnsrecords", dnsRecords)
-}
-
-//testing google safe browsing
-function googleSafe(){
-    request({
-        url: "https://safebrowsing.googleapis.com/v4/threatMatches:find?key=AIzaSyDjjsGtrO_4QwFDBA1cq9rCweeO4v3YLfs",
-        method: "POST",
-        body: {
-            "client": {
-                "clientId": "domahub",
-                "clientVersion": "1.0"
-            },
-            "threatInfo": {
-                "threatTypes": ["MALWARE", "SOCIAL_ENGINEERING", "UNWANTED_SOFTWARE", "POTENTIALLY_HARMFUL_APPLICATION"],
-                "threatEntryTypes": ["URL"],
-                "threatEntries": [
-                    {"url": "www.hjaoopoa.top/admin.php?f=1.gif"}
-                ]
-            }
-        },
-        json: true
-    }, function (err, response, body) {
-        console.log(response.body);
-    });
+    app.get("/dnsrecords/:domain_name", dnsRecords);
+    app.get("/createcodes/:number", [
+        createSignupCodes
+    ]);
 }
 
 //testing dns records look up
 function dnsRecords(){
-    // dns.resolve("rudotcom.com", "A", function(err, addresses){
-    //     console.log(err);
-    //     console.log(addresses);
-    // });
+    dns.lookup(req.params.domain_name, function (err, address, family) {
+        console.log(address);
+    });
+}
 
-    dns.lookup("entraclub.com", function (err, address, family) {
-        domain_ip = address;
-        console.log(domain_ip);
+//function to create X sign up codes
+function createSignupCodes(req, res, next){
+    console.log("F: Creating " + req.params.number + " signup codes...");
+    var codes = [];
+
+    if (validator.isInt(req.params.number)){
+        for (var x = 0; x < req.params.number; x++){
+            codes.push([randomstring.generate(10), 1]);
+        }
+    }
+    Account.createSignupCodes(codes, function(result){
+        console.log(result);
     });
 }
