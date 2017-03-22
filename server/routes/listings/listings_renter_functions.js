@@ -894,7 +894,6 @@ function getListingRentalTimes(req, res, listing_info, callback){
             }
 
             listing_info.rentals = joinRentalTimes(result.info);
-            listing_info.rentals_joined = createRentalProp(listing_info.rentals);
             req.session.listing_info = listing_info;
             callback();
         }

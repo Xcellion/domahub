@@ -243,6 +243,7 @@ function createTrafficChart(){
 
 	//traffic dataset
 	var traffic_dataset = {
+		label: "Listing Views",
 		xAxisID : "traffic-x",
 		yAxisID : "traffic-y",
 		borderColor: "#3CBC8D",
@@ -261,32 +262,47 @@ function createTrafficChart(){
 		monthly_labels.unshift(temp_month);
 	}
 
-	//loop through all rentals
-	for (var y = 0; y < listing_info.rentals_joined.length; y++){
-		var temp_data = [];
-		var length_of_dates = listing_info.rentals_joined[y].date.length;
-		var end_date = listing_info.rentals_joined[y].date[length_of_dates - 1] + listing_info.rentals_joined[y].duration[length_of_dates - 1];
+	var last_rental_id;
 
-		if (moment(new Date(end_date)).isAfter(moment().endOf("month").subtract(5, "month").startOf("month"))){
-			var temp_dataset = {
-				xAxisID : "rentals-x",
-				yAxisID : "rentals-y",
-				borderColor: "rgba(0,0,0,0)",
-				pointHoverBackgroundColor: "rgba(0,0,0,0)",
-				pointRadius: 0,
-				backgroundColor: "rgba(255, 87, 34, 0.3)",
-				data: [
-					{
-						x: listing_info.rentals_joined[y].date[0],
-						y: 1
-					},
-					{
-						x: end_date,
-						y: 1
-					}
-				]
+	//loop through all rentals
+	for (var y = 0; y < listing_info.rentals.length; y++){
+
+		//add to existing dataset
+		if (listing_info.rentals[y].rental_id == last_rental_id){
+			var start_date = listing_info.rentals[y].date;
+			var end_date = start_date + listing_info.rentals[y].duration;
+			all_datasets[all_datasets.length - 1].data[1].x = end_date;
+		}
+		//create new dataset
+		else {
+			var temp_data = [];
+			var start_date = listing_info.rentals[y].date;
+			var end_date = start_date + listing_info.rentals[y].duration;
+
+			//if the end date is after 6 months ago
+			if (moment(new Date(end_date)).isAfter(moment().endOf("month").subtract(5, "month").startOf("month"))){
+				var temp_dataset = {
+					label: "Rental",
+					xAxisID : "rentals-x",
+					yAxisID : "traffic-y",
+					borderColor: "rgba(0,0,0,0)",
+					pointHoverBackgroundColor: "rgba(0,0,0,0)",
+					pointRadius: 0,
+					backgroundColor: "rgba(255, 87, 34, 0.3)",
+					data: [
+						{
+							x: start_date,
+							y: listing_info.rentals[y].views
+						},
+						{
+							x: end_date,
+							y: listing_info.rentals[y].views
+						}
+					]
+				}
+				all_datasets.push(temp_dataset);
+				last_rental_id = listing_info.rentals[y].rental_id;
 			}
-			all_datasets.push(temp_dataset);
 		}
 	}
 
@@ -299,41 +315,47 @@ function createTrafficChart(){
 		},
 		options: {
 			legend: {
-				display: false
+				display:false,
+				labels: {
+					filter : function(legendItem, chart){
+						console.log(legendItem, chart);
+						console.log("s");
+					}
+				}
 			},
 			responsive: true,
 			// showAllTooltips: true,
 			//tooltip to display all values at a specific X-axis
 			tooltips: {
 				mode: 'x-axis',
-				custom: function(tooltip) {
-	                // tooltip will be false if tooltip is not visible or should be hidden
-	                if (!tooltip) {
-	                    return;
-	                }
-					if (tooltip.title && monthly_labels.indexOf(tooltip.title[0]) == -1){
-						tooltip.opacity = 0;
-					}
-					else if (tooltip.title) {
-						tooltip.titleSpacing = 0;
-						tooltip.title = "";
-						var views_plural = (tooltip.body[0].lines[0].replace(": ", "") == 1) ? "view" : "views"
-						tooltip.body[0].lines[0] = tooltip.body[0].lines[0].replace(": ", "");
-						tooltip.body[0].after[0] = views_plural;
-					}
-				},
-				// titleSpacing: 0,
-				// callbacks: {
-				// 	label: function(tooltipItems, data) {
-				// 		if (monthly_labels.indexOf(tooltipItems.yLabel) == -1){
-				// 			var views_plural = (tooltipItems.yLabel == 1) ? " view" : " views"
-				// 			return tooltipItems.yLabel + views_plural;
-				// 		}
-				// 	},
-				// 	title: function(){
-				// 		return "";
+				// custom: function(tooltip) {
+	            //     // tooltip will be false if tooltip is not visible or should be hidden
+	            //     if (!tooltip) {
+	            //         return;
+	            //     }
+				// 	if (tooltip.title && monthly_labels.indexOf(tooltip.title[0]) == -1){
+				// 		tooltip.opacity = 0;
 				// 	}
-				// }
+				// 	else if (tooltip.title) {
+				// 		tooltip.titleSpacing = 0;
+				// 		tooltip.title = "";
+				// 		var views_plural = (tooltip.body[0].lines[0].replace(": ", "") == 1) ? "view" : "views"
+				// 		tooltip.body[0].lines[0] = tooltip.body[0].lines[0].replace(": ", "");
+				// 		tooltip.body[0].after[0] = views_plural;
+				// 	}
+				// },
+				titleSpacing: 0,
+				callbacks: {
+					label: function(tooltipItems, data) {
+						if (monthly_labels.indexOf(tooltipItems.yLabel) == -1){
+							var views_plural = (tooltipItems.yLabel == 1) ? " view" : " views"
+							return tooltipItems.yLabel + views_plural;
+						}
+					},
+					title: function(){
+						return "";
+					}
+				}
 			},
 			scales: {
 				xAxes: [{
@@ -345,17 +367,9 @@ function createTrafficChart(){
 					type: "category"
 				}],
 				yAxes: [{
-					id: "rentals-y",
-					type: "linear",
-					display: false,
-					ticks: {
-						max: 1,
-						min: 0
-					}
-				},{
 					id: "traffic-y",
 					display: true,
-					type: "linear",
+					type: 'linear',
 					ticks: {
 						beginAtZero: true   // minimum value will be 0.
 					}
