@@ -233,7 +233,20 @@ function updateRegistrarURL(tempRow, whois){
 }
 function updateExistingDNS(tempRow, a_records){
 	if (a_records){
-		tempRow.find(".existing_a_record").text(a_records);
+		var temp_a_records = a_records.slice(0);
+		if (temp_a_records.indexOf("208.68.37.82") != -1){
+			temp_a_records.splice(temp_a_records.indexOf("208.68.37.82"), 1);
+			tempRow.find("#existing_a_record_clone").removeClass('is-hidden');
+		}
+		for (var x = 0; x < temp_a_records.length; x++){
+			var temp_dns_row = tempRow.find("#existing_a_record_clone").clone().removeAttr('id').removeClass('is-hidden');
+			temp_dns_row.find(".existing_data").text(a_records[x]).addClass('is-danger');
+			temp_dns_row.find(".required_data").text("You must delete this!").addClass('is-danger');
+			tempRow.find("#dns_table_body").append(temp_dns_row);
+		}
+	}
+	else {
+		tempRow.find("#existing_a_record_clone").removeClass('is-hidden').find(".existing_data").text("Not found!").addClass('is-danger');
 	}
 }
 function updateVerificationButton(tempRow, listing_info, cb_when_verified){
