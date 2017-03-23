@@ -317,7 +317,8 @@ module.exports = {
 		dns.resolve(domain_name, "A", function (err, address, family) {
 			var domain_ip = address;
 			dns.lookup("domahub.com", function (err, address, family) {
-				if (domain_ip != address){
+                console.log(domain_ip, address)
+				if (domain_ip != address && domain_ip.length != 1){
                     console.log("F: Listing is not pointed to DomaHub anymore! Reverting verification...");
                     Listing.updateListing(domain_name, {
                         verified: null,
