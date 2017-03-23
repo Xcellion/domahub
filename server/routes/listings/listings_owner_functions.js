@@ -554,7 +554,7 @@ module.exports = {
 			listing_obj.whois = whoisObj;
 
 			//look up any existing DNS A Records
-			dns.lookup(listing_obj.domain_name, "A", function(err, addresses){
+			dns.resolve(listing_obj.domain_name, "A", function(err, addresses){
 				listing_obj.a_records = addresses || false;
 				res.send({
 					state: "success",
