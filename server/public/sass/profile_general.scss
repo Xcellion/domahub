@@ -173,3 +173,10 @@
     background-color: $primary-dark;
   }
 }
+
+.preview-image {
+    background: url("/images/loading.svg");
+    background-repeat: no-repeat;
+    background-position: center center;
+    min-height:200px;
+}

@@ -157,22 +157,103 @@ $(document).ready(function() {
 
 //function to create the traffic chart
 function createTrafficChart(){
-	//past six months
-	var dataset = [0,0,0,0,0,0];
-	var months_away = [moment().subtract(5, "month").valueOf(),
-					   moment().subtract(4, "month").valueOf(),
-					   moment().subtract(3, "month").valueOf(),
-					   moment().subtract(2, "month").valueOf(),
-					   moment().subtract(1, "month").valueOf(),
-					   moment().valueOf()]
+
+	Chart.plugins.register({
+	  beforeRender: function (chart) {
+	    if (chart.config.options.showAllTooltips) {
+	        // create an array of tooltips
+	        // we can't use the chart tooltip because there is only one tooltip per chart
+	        chart.pluginTooltips = [];
+	        chart.config.data.datasets.forEach(function (dataset, i) {
+	            chart.getDatasetMeta(i).data.forEach(function (sector, j) {
+	                chart.pluginTooltips.push(new Chart.Tooltip({
+	                    _chart: chart.chart,
+	                    _chartInstance: chart,
+	                    _data: chart.data,
+	                    _options: chart.options.tooltips,
+	                    _active: [sector]
+	                }, chart));
+	            });
+	        });
+
+	        // turn off normal tooltips
+	        chart.options.tooltips.enabled = false;
+	    }
+	},
+	  afterDraw: function (chart, easing) {
+	    if (chart.config.options.showAllTooltips) {
+	        // we don't want the permanent tooltips to animate, so don't do anything till the animation runs atleast once
+	        if (!chart.allTooltipsOnce) {
+	            if (easing !== 1)
+	                return;
+	            chart.allTooltipsOnce = true;
+	        }
+
+	        // turn on tooltips
+	        chart.options.tooltips.enabled = true;
+	        Chart.helpers.each(chart.pluginTooltips, function (tooltip) {
+	            tooltip.initialize();
+	            tooltip.update();
+	            // we don't actually need this since we are not animating tooltips
+	            tooltip.pivot();
+	            tooltip.transition(easing).draw();
+	        });
+	        chart.options.tooltips.enabled = false;
+	    }
+	  }
+	});
+
+	//past six months only
+	var traffic_data = [
+		{
+			x: moment().endOf("month").subtract(5, "month").valueOf(),
+			y: 0
+		},
+		{
+			x: moment().endOf("month").subtract(4, "month").valueOf(),
+			y: 0
+		},
+		{
+			x: moment().endOf("month").subtract(3, "month").valueOf(),
+			y: 0
+		},
+		{
+			x: moment().endOf("month").subtract(2, "month").valueOf(),
+			y: 0
+		},
+		{
+			x: moment().endOf("month").subtract(1, "month").valueOf(),
+			y: 0
+		},
+		{
+			x: moment().endOf("month").valueOf(),
+			y: 0
+		},
+	];
+
+	//split traffic into six months
 	for (var x = 0; x < listing_info.traffic.length; x++){
-		for (var y = 0; y < 6; y++){
-			if (listing_info.traffic[x].timestamp < months_away[y]){
-				dataset[y]++;
+		for (var y = 0; y < traffic_data.length; y++){
+			if (listing_info.traffic[x].timestamp < traffic_data[y].x){
+				traffic_data[y].y++;
 				break;
 			}
 		}
 	}
+
+	//traffic dataset
+	var traffic_dataset = {
+		label: "Listing Views",
+		xAxisID : "traffic-x",
+		yAxisID : "traffic-y",
+		borderColor: "#3CBC8D",
+		backgroundColor: "#3CBC8D",
+		fill: false,
+		data: traffic_data
+	}
+
+	//create the super dataset containing traffic data and rentals data
+	var all_datasets = [traffic_dataset];
 
 	//create the labels array
 	var monthly_labels = [];
@@ -181,36 +262,114 @@ function createTrafficChart(){
 		monthly_labels.unshift(temp_month);
 	}
 
+	var last_rental_id;
+
+	//loop through all rentals
+	for (var y = 0; y < listing_info.rentals.length; y++){
+
+		//add to existing dataset
+		if (listing_info.rentals[y].rental_id == last_rental_id){
+			var start_date = listing_info.rentals[y].date;
+			var end_date = start_date + listing_info.rentals[y].duration;
+			all_datasets[all_datasets.length - 1].data[1].x = end_date;
+		}
+		//create new dataset
+		else {
+			var temp_data = [];
+			var start_date = listing_info.rentals[y].date;
+			var end_date = start_date + listing_info.rentals[y].duration;
+
+			//if the end date is after 6 months ago
+			if (moment(new Date(end_date)).isAfter(moment().endOf("month").subtract(5, "month").startOf("month"))){
+				var temp_dataset = {
+					label: "Rental",
+					xAxisID : "rentals-x",
+					yAxisID : "traffic-y",
+					borderColor: "rgba(0,0,0,0)",
+					pointHoverBackgroundColor: "rgba(0,0,0,0)",
+					pointRadius: 0,
+					backgroundColor: "rgba(255, 87, 34, 0.3)",
+					data: [
+						{
+							x: start_date,
+							y: listing_info.rentals[y].views
+						},
+						{
+							x: end_date,
+							y: listing_info.rentals[y].views
+						}
+					]
+				}
+				all_datasets.push(temp_dataset);
+				last_rental_id = listing_info.rentals[y].rental_id;
+			}
+		}
+	}
+
 	//create the chart
 	var myChart = new Chart($("#traffic-chart")[0], {
 		type: 'line',
 		data: {
 			labels: monthly_labels,
-			datasets: [{
-				borderColor: "#3CBC8D",
-				backgroundColor: "#3CBC8D",
-				fill: false,
-				data: dataset
-			}]
+			datasets: all_datasets
 		},
 		options: {
 			legend: {
-				display: false
+				display:false,
+				labels: {
+					filter : function(legendItem, chart){
+						console.log(legendItem, chart);
+						console.log("s");
+					}
+				}
 			},
 			responsive: true,
+			// showAllTooltips: true,
 			//tooltip to display all values at a specific X-axis
 			tooltips: {
 				mode: 'x-axis',
+				// custom: function(tooltip) {
+	            //     // tooltip will be false if tooltip is not visible or should be hidden
+	            //     if (!tooltip) {
+	            //         return;
+	            //     }
+				// 	if (tooltip.title && monthly_labels.indexOf(tooltip.title[0]) == -1){
+				// 		tooltip.opacity = 0;
+				// 	}
+				// 	else if (tooltip.title) {
+				// 		tooltip.titleSpacing = 0;
+				// 		tooltip.title = "";
+				// 		var views_plural = (tooltip.body[0].lines[0].replace(": ", "") == 1) ? "view" : "views"
+				// 		tooltip.body[0].lines[0] = tooltip.body[0].lines[0].replace(": ", "");
+				// 		tooltip.body[0].after[0] = views_plural;
+				// 	}
+				// },
+				titleSpacing: 0,
 				callbacks: {
 					label: function(tooltipItems, data) {
-						var views_plural = (tooltipItems.yLabel == 1) ? " view" : " views"
-						return tooltipItems.yLabel + views_plural;
+						if (monthly_labels.indexOf(tooltipItems.yLabel) == -1){
+							var views_plural = (tooltipItems.yLabel == 1) ? " view" : " views"
+							return tooltipItems.yLabel + views_plural;
+						}
+					},
+					title: function(){
+						return "";
 					}
 				}
 			},
 			scales: {
+				xAxes: [{
+					id: "rentals-x",
+					display: false,
+					type: "time"
+				}, {
+					id: "traffic-x",
+					type: "category"
+				}],
 				yAxes: [{
+					id: "traffic-y",
 					display: true,
+					type: 'linear',
 					ticks: {
 						beginAtZero: true   // minimum value will be 0.
 					}
