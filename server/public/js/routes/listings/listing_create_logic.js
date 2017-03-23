@@ -286,7 +286,7 @@ function getTableListingInfo(){
 		//if domain name is not empty and not disabled
 		if (temp_row.find(".domain-name-input").val() && !temp_row.find(".domain-name-input").hasClass('is-disabled')){
 			var row_obj = {
-				domain_name : temp_row.find(".domain-name-input").val(),
+				domain_name : temp_row.find(".domain-name-input").val().replace(/\s/g, ''),
 				price_type : temp_row.find(".price-type-input").val(),
 				price_rate : temp_row.find(".price-rate-input").val(),
 				premium : temp_row.find(".cat-checkbox").prop("checked")
