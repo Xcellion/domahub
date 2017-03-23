@@ -258,7 +258,7 @@ function createTrafficChart(){
 	//create the labels array
 	var monthly_labels = [];
 	for (var y = 0; y < 6; y++){
-		var temp_month = moment().subtract(y, "month").format("MMM");
+		var temp_month = moment().subtract(y, "month").format("MMMM");
 		monthly_labels.unshift(temp_month);
 	}
 
@@ -281,14 +281,19 @@ function createTrafficChart(){
 
 			//if the end date is after 6 months ago
 			if (moment(new Date(end_date)).isAfter(moment().endOf("month").subtract(5, "month").startOf("month"))){
+				var random_rental_color = randomColor({
+				   format: 'rgba',
+				   hue: "orange",
+				   luminosity: "light",
+				   alpha: 0.5
+				});
 				var temp_dataset = {
-					label: "Rental",
+					label: "Rental #" + listing_info.rentals[y].rental_id,
 					xAxisID : "rentals-x",
 					yAxisID : "traffic-y",
-					borderColor: "rgba(0,0,0,0)",
-					pointHoverBackgroundColor: "rgba(0,0,0,0)",
-					pointRadius: 0,
-					backgroundColor: "rgba(255, 87, 34, 0.3)",
+					pointBackgroundColor: random_rental_color,
+					pointHoverBackgroundColor: random_rental_color,
+					backgroundColor: random_rental_color,
 					data: [
 						{
 							x: start_date,
@@ -315,45 +320,36 @@ function createTrafficChart(){
 		},
 		options: {
 			legend: {
-				display:false,
-				labels: {
-					filter : function(legendItem, chart){
-						console.log(legendItem, chart);
-						console.log("s");
-					}
-				}
+				display:false
 			},
 			responsive: true,
 			// showAllTooltips: true,
 			//tooltip to display all values at a specific X-axis
+			hover: {
+				mode: "index"
+			},
 			tooltips: {
-				mode: 'x-axis',
-				// custom: function(tooltip) {
-	            //     // tooltip will be false if tooltip is not visible or should be hidden
-	            //     if (!tooltip) {
-	            //         return;
-	            //     }
-				// 	if (tooltip.title && monthly_labels.indexOf(tooltip.title[0]) == -1){
-				// 		tooltip.opacity = 0;
-				// 	}
-				// 	else if (tooltip.title) {
-				// 		tooltip.titleSpacing = 0;
-				// 		tooltip.title = "";
-				// 		var views_plural = (tooltip.body[0].lines[0].replace(": ", "") == 1) ? "view" : "views"
-				// 		tooltip.body[0].lines[0] = tooltip.body[0].lines[0].replace(": ", "");
-				// 		tooltip.body[0].after[0] = views_plural;
-				// 	}
-				// },
 				titleSpacing: 0,
 				callbacks: {
 					label: function(tooltipItems, data) {
-						if (monthly_labels.indexOf(tooltipItems.yLabel) == -1){
-							var views_plural = (tooltipItems.yLabel == 1) ? " view" : " views"
-							return tooltipItems.yLabel + views_plural;
+						if (monthly_labels.indexOf(tooltipItems.xLabel) != -1){
+							return tooltipItems.xLabel
+						}
+						else {
+							return moment(tooltipItems.xLabel).format("MMM DD");
 						}
 					},
-					title: function(){
-						return "";
+					title: function(tooltipItems, data){
+						if (monthly_labels.indexOf(tooltipItems[0].xLabel) != -1){
+							return "Listing Traffic";
+						}
+						else {
+							return (tooltipItems[0].index == 0) ? "Rental Start" : "Rental End";
+						}
+					},
+					footer: function(tooltipItems, data){
+						var views_plural = (tooltipItems[0].yLabel == 1) ? " view" : " views"
+						return tooltipItems[0].yLabel + views_plural;
 					}
 				}
 			},
