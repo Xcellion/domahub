@@ -267,7 +267,7 @@ function updateVerificationButton(tempRow, listing_info, cb_when_verified){
 			}
 			else {
 				verify_button.addClass('is-danger');
-				verify_button.text("Failed to verify! Please check the above table and try again.");
+				verify_button.text("Failed to verify! Check info and click to try again.");
 			}
 		});
 	});
