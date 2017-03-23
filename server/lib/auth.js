@@ -163,6 +163,7 @@ module.exports = {
 	checkLoggedIn : function(req, res, next) {
         console.log("F: Checking if authenticated...");
 		//if user is authenticated in the session, carry on
+        console.log(req.session, req.isAuthenticated());
 		if (req.isAuthenticated()){
 			res.header('Cache-Control', 'private, no-cache, no-store, must-revalidate');
 			res.header('Expires', '-1');
