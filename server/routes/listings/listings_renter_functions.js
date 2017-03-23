@@ -313,9 +313,9 @@ module.exports = {
     //checks to make sure listing is still verified
 	checkStillVerified : function(req, res, next){
         console.log("F: Checking to see if domain is still pointed to DomaHub...");
-		domain_name = req.params.domain_name;
-		dns.lookup(domain_name, function (err, address, family) {
-			domain_ip = address;
+		var domain_name = req.params.domain_name;
+		dns.resolve(domain_name, "A", function (err, address, family) {
+			var domain_ip = address;
 			dns.lookup("domahub.com", function (err, address, family) {
 				if (domain_ip != address){
                     console.log("F: Listing is not pointed to DomaHub anymore! Reverting verification...");
@@ -923,6 +923,37 @@ function joinRentalTimes(rental_times){
     }
 
     return temp_times;
+}
+
+//function to create rental properties inside listing info
+function createRentalProp(orig_rentals){
+    var all_rentals = orig_rentals.slice(0);
+
+	//iterate once across all results
+	for (var x = 0; x < all_rentals.length; x++){
+		var temp_dates = [];
+		var temp_durations = [];
+
+		//iterate again to look for multiple dates and durations
+		for (var y = 0; y < all_rentals.length; y++){
+			if (!all_rentals[y].checked && all_rentals[x]["rental_id"] == all_rentals[y]["rental_id"]){
+				temp_dates.push(all_rentals[y].date);
+				temp_durations.push(all_rentals[y].duration);
+				all_rentals[y].checked = true;
+			}
+		}
+
+		//combine dates into a property
+		all_rentals[x].date = temp_dates;
+		all_rentals[x].duration = temp_durations;
+	}
+
+	//remove empty date entries
+	all_rentals = all_rentals.filter(function(value, index, array){
+		return value.date.length;
+	});
+
+	return all_rentals;
 }
 
 //helper function to check database for availability

@@ -39,31 +39,46 @@
   <div class="container">
     <div class="columns flex-column-mobile margin-right-0">
       <div id="domain-modules-column" class="column is-8 order-2-mobile">
+
+        <%# DESCRIPTION MODULE %>
         <% if (listing_info.description) { %>
-        <div class="content listing-module margin-bottom-0">
-          <blockquote>
-            <i><%- listing_info.description %></i>
-          </blockquote>
-        </div>
+            <div class="content listing-module margin-bottom-0">
+              <blockquote>
+                <i><%- listing_info.description %></i>
+              </blockquote>
+            </div>
         <% } %>
-          <% if (listing_info.rentals.length > 0){ %>
 
-              <% var popular_rental = listing_info.rentals[0]; %>
-              <% for (var x = 0; x < listing_info.rentals.length; x++){ %>
-                  <% var max_views = 0;
-                  if (listing_info.rentals[x].views > max_views){
-                      popular_rental = listing_info.rentals[x];
-                  } %>
-              <% } %>
-              <% var background_image = (popular_rental.address == "") ? "https://placeholdit.imgix.net/~text?txtsize=20&txt=NO%20PREVIEW&w=800&h=400" : "/screenshot?rental_address=" + popular_rental.address; %>
-              <% background_image = (popular_rental.address.match(/\.(jpeg|jpg|gif|png)$/) != null) ? popular_rental.address : background_image; %>
+        <%# TRAFFIC MODULE %>
+        <% if (listing_info.traffic){ %>
+            <div class="content listing-module">
+              <h2 class="margin-bottom-15">Listing Views</h2>
+              <canvas id="traffic-chart"></canvas>
+            </div>
+        <% } %>
 
-              <%- include("popular_rental_module.ejs", {
-                  listing_info : listing_info,
-                  popular_rental: popular_rental,
-                  background_image: background_image
-              }); %>
+        <%# RENTALS MODULE %>
+        <% if (listing_info.rentals.length > 0){ %>
 
+            <% var popular_rental = listing_info.rentals[0]; %>
+            <% for (var x = 0; x < listing_info.rentals.length; x++){ %>
+                <% var max_views = 0;
+                if (listing_info.rentals[x].views > max_views){
+                    popular_rental = listing_info.rentals[x];
+                } %>
+            <% } %>
+
+            <% var background_image = (popular_rental.address == "") ? "https://placeholdit.imgix.net/~text?txtsize=20&txt=NO%20PREVIEW&w=800&h=400" : "/screenshot?rental_address=" + popular_rental.address; %>
+            <% background_image = (popular_rental.address.match(/\.(jpeg|jpg|gif|png)$/) != null) ? popular_rental.address : background_image; %>
+
+            <%# POPULAR RENTAL MODULE %>
+            <%- include("popular_rental_module.ejs", {
+                listing_info : listing_info,
+                popular_rental: popular_rental,
+                background_image: background_image
+            }); %>
+
+            <%# PREVIOUS RENTALS MODULE %>
             <% if (listing_info.rentals.length > 1) { %>
                 <%- include("previous_rentals_module.ejs", {
                     listing_info : listing_info,
@@ -71,11 +86,12 @@
                 }); %>
             <% } %>
 
-          <% } %>
+        <% } %>
 
-          <%- include("similar_domains_module.ejs", {
-              listing_info : listing_info
-          }); %>
+        <%# SIMILAR DOMAINS MODULE %>
+        <%- include("similar_domains_module.ejs", {
+          listing_info : listing_info
+        }); %>
 
       </div>
 
@@ -205,12 +221,7 @@
                     <p class="is-flex-wrap" id="date_created"></p>
                 </div>
             <% } %>
-            <% if (listing_info.traffic){ %>
-                <div class="content listing-info">
-                  <h3 class="is-bold margin-bottom-15">Listing Views</h3>
-                  <canvas id="traffic-chart"></canvas>
-                </div>
-            <% } %>
+
             <div class="content">
               <% if (listing_info.owner_id){ %>
                   <h3 class="is-bold margin-bottom-15">Listed By</h3>

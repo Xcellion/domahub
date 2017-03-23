@@ -4,6 +4,7 @@ account_model = function(database){
 	account_query = function(query, error_description, callback, params){
 		database.query(query, function(result, err){
 			if (err){
+				console.log(err);
 				callback({
 					state : "error",
 					info : error_description,
@@ -197,6 +198,19 @@ account_model.prototype.useSignupCode = function(signup_code, code_obj, callback
 			SET ? \
 			WHERE code = ?"
 	account_query(query, "Failed to use signup code: " + signup_code + "!", callback, [code_obj, signup_code]);
+}
+
+//creates new sign up codes
+account_model.prototype.createSignupCodes = function(codes, callback){
+	console.log("DB: Creating signup codes...");
+	query = "INSERT IGNORE INTO signup_codes (\
+				code, \
+				referer_id \
+			)\
+			VALUES ? \
+			ON DUPLICATE KEY UPDATE \
+				code = MD5(NOW())"
+	account_query(query, "Failed to create signup codes!", callback, [codes]);
 }
 
 //----------------------------------------------------------------------UPDATE----------------------------------------------------------

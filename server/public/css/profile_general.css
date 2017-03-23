@@ -131,3 +131,9 @@
   background-color: #8ad6ba; }
   .selected-row:hover {
     background-color: #309670; }
+
+.preview-image {
+  background: url("/images/loading.svg");
+  background-repeat: no-repeat;
+  background-position: center center;
+  min-height: 200px; }
