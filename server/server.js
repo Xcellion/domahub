@@ -119,9 +119,7 @@ app.get('*', function(req, res){
 	res.redirect('/nothinghere');
 });
 
-console.log('fjkdasljfsajklfjasldfjsafjklsajflasjkldfsjklfjlkasjfklsajfklasdjlfkdjaskldfjksl');
-
-// //HTTP website on port 8080
-// serverHTTP(app).listen(8080, function(){
-// 	console.log("HTTP website listening on port 8080");
-// });
+//HTTP website on port 8080
+serverHTTP(app).listen(8080, function(){
+	console.log("HTTP website listening on port 8080");
+});
