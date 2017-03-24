@@ -49,9 +49,6 @@ function getCurrentRental(req, res, domain_name){
 		searchAndDirect(req.session.rented_info, req, res);
 	}
 	else {
-		var fullUrl = req.protocol + '://' + req.get('host') + req.originalUrl;
-		console.log(req.session);
-
 		console.log("F: Attempting to check current rental status for " + domain_name + "!");
 		Listing.getCurrentRental(domain_name, function(result){
 			if (result.state != "success" || result.info.length == 0){
