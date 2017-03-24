@@ -50,45 +50,15 @@
 
         <%# ALEXA MODULE %>
         <% if (listing_info.alexa){ %>
-            <div class="content listing-module">
-              <h2 class="margin-bottom-15">Traffic Details</h2>
-              <nav class="level">
-                <div class="level-left">
-                  <p class="level-item">Alexa Ranking</p>
-                </div>
-                <div class="level-right">
-                  <p class="level-item is-bold"><%= (listing_info.alexa.globalRank == "-" || !listing_info.alexa.globalRank) ? "N/A" : listing_info.alexa.globalRank %></p>
-                </div>
-              </nav>
-              <nav class="level">
-                <div class="level-left">
-                  <p class="level-item">Daily Time on Site</p>
-                </div>
-                <div class="level-right">
-                    <p class="level-item is-bold"><%= (listing_info.alexa.engagement.dailyTimeOnSite == "-" || !listing_info.alexa.engagement.dailyTimeOnSite) ? "N/A" : listing_info.alexa.engagement.dailyTimeOnSite %></p>
-                </div>
-              </nav>
-              <nav class="level">
-                <div class="level-left">
-                  <p class="level-item">Daily Pageviews per Visitor</p>
-                </div>
-                <div class="level-right">
-                    <p class="level-item is-bold"><%= (listing_info.alexa.engagement.dailyPageViewPerVisitor == "-" || !listing_info.alexa.engagement.dailyPageViewPerVisitor) ? "N/A" : listing_info.alexa.engagement.dailyPageViewPerVisitor %></p>
-                </div>
-              </nav>
-              <nav class="level">
-                <div class="level-left">
-                  <p class="level-item">Bounce Rate</p>
-                </div>
-                <div class="level-right">
-                    <p class="level-item is-bold"><%= (listing_info.alexa.engagement.bounceRate == "-" || !listing_info.alexa.engagement.bounceRate) ? "N/A" : listing_info.alexa.engagement.bounceRate %></p>
-                </div>
-              </nav>
-              <small class="margin-top-10">
-                  For more information, visit <a title="Link to respective Alexa website" target="_blank" class='is-accent' href="http://www.alexa.com/siteinfo/<%= listing_info.domain_name %>">Alexa.com</a>
-              </small>
-            </div>
+            <%- include("alexa_module.ejs", {
+              listing_info : listing_info
+            }); %>
         <% } %>
+
+        <%# DEMOGRAPHIC MODULE %>
+        <%- include("demographic_module.ejs", {
+          listing_info : listing_info
+        }); %>
 
         <%# RENTALS MODULE %>
         <% if (listing_info.rentals.length > 0){ %>
