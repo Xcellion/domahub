@@ -87,6 +87,9 @@
   .td-arrow:hover {
     cursor: pointer; }
 
+.td-domain:hover {
+  cursor: pointer; }
+
 .td-date {
   width: 160px; }
 
