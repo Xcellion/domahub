@@ -220,7 +220,7 @@ listing_model.prototype.getThreeRandomListingsByOwner = function(domain_name_exc
 			AND listings.deleted IS NULL \
 			AND listings.categories NOT LIKE '%adult%' \
 			ORDER BY RAND() \
-			LIMIT 3"
+			LIMIT 5"
 	listing_query(query, "Failed to get 3 other random listings by the same owner!", callback, [domain_name_exclude, owner_id]);
 }
 

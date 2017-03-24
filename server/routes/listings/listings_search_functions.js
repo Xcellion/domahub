@@ -1,5 +1,6 @@
 var Categories = require("../../lib/categories.js");
 var price_rate_list = ["hour_price", "day_price", "week_price", "month_price", "none"];
+var node_env = process.env.NODE_ENV || 'dev'; 	//dev or prod bool
 
 var validator = require("validator");
 
@@ -206,12 +207,17 @@ module.exports = {
 
 	//new view for a specific rental
 	newRentalHistory : function(rental_id, req){
-		var user_ip = req.connection.remoteAddress ||
-		req.headers['x-forwarded-for'] ||
+		var user_ip = req.headers['x-forwarded-for'] ||
+		req.connection.remoteAddress ||
 		req.socket.remoteAddress;
 
+		//nginx https proxy removes IP
+		if (req.headers["x-real-ip"]){
+			user_ip = req.headers["x-real-ip"];
+		}
+
 		//add to search history if its not localhost
-		if (user_ip != "::1" && user_ip != "::ffff:127.0.0.1" && user_ip != "127.0.0.1"){
+		if (node_env != "dev"){
 			var history_info = {
 				rental_id: rental_id,													//what rental they went to
 				account_id: (typeof req.user == "undefined") ? null : req.user.id,		//who searched if who exists
