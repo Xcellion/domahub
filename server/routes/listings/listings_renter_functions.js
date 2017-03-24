@@ -348,6 +348,7 @@ module.exports = {
     		req.socket.remoteAddress;
 
             //add to search history if its not localhost
+            console.log(user_ip, "fjldasfklasjfdaklsdfklasjdfklajslkfjkasdlfjdklsajdfkljasklfjklsadf");
             if (user_ip != "::1" && user_ip != "::ffff:127.0.0.1" && user_ip != "127.0.0.1"){
                 var account_id = (typeof req.user == "undefined") ? null : req.user.id;
                 var now = new Date().getTime();
