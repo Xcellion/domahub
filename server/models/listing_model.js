@@ -206,7 +206,7 @@ listing_model.prototype.getThreeRandomListings = function(domain_name_exclude, c
 
 //gets 3 random listings by the same owner
 listing_model.prototype.getThreeRandomListingsByOwner = function(domain_name_exclude, owner_id, callback){
-	console.log("DB: Attempting to get 3 random listings by the same owner...");
+	console.log("DB: Attempting to get 5 random listings by the same owner...");
 	query = "SELECT \
 				listings.domain_name, \
 				listings.background_image, \
@@ -221,7 +221,7 @@ listing_model.prototype.getThreeRandomListingsByOwner = function(domain_name_exc
 			AND listings.categories NOT LIKE '%adult%' \
 			ORDER BY RAND() \
 			LIMIT 5"
-	listing_query(query, "Failed to get 3 other random listings by the same owner!", callback, [domain_name_exclude, owner_id]);
+	listing_query(query, "Failed to get 5 other random listings by the same owner!", callback, [domain_name_exclude, owner_id]);
 }
 
 //gets listings related to specific categories

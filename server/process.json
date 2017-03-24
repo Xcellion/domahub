@@ -3,10 +3,19 @@
     name        : "DomaHub",
     script      : "./server.js",
     env: {
-      "NODE_ENV": "development",
+      "NODE_ENV": "production",
     },
-    env_production : {
-       "NODE_ENV": "production"
+	watch: ["../server"],
+	ignore_watch : ["../node_modules", "../uploads"],
+	watch_options: {
+		followSymlinks: false
+	}
+  },
+  {
+    name        : "DomaHub API",
+    script      : "./api_server.js",
+    env: {
+      "NODE_ENV": "production",
     },
 	watch: ["../server"],
 	ignore_watch : ["../node_modules", "../uploads"],

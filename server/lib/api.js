@@ -26,18 +26,19 @@ function checkHost(req, res, next){
 		|| domain_name == "www.domahub.com"
 		|| domain_name == "domahub.com"
 		|| domain_name == "localhost"
-		|| domain_name == "localhost:8080"){
-			next();
+		|| domain_name == "localhost:8080"
+		|| domain_name == "localhost:9090"){
+			error.handler(req, res, "Requested DomaHub!", "api");
 		}
 		else if (!validator.isFQDN(domain_name)){
-			error.handler(req, res, "Invalid rental!");
+			error.handler(req, res, "Invalid rental!", "api");
 		}
 		else {
 			getCurrentRental(req, res, domain_name);
 		}
 	}
 	else {
-		res.redirect('/');
+		error.handler(req, res, "Requested DomaHub!", "api");
 	}
 }
 
