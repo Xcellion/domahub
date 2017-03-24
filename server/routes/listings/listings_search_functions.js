@@ -215,6 +215,7 @@ module.exports = {
 		if (req.headers["x-real-ip"]){
 			user_ip = req.headers["x-real-ip"];
 		}
+		console.log(req.headers);
 
 		//add to search history if its not localhost
 		if (node_env != "dev"){
