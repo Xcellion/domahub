@@ -50,13 +50,13 @@
 
         <%# ALEXA MODULE %>
         <% if (listing_info.alexa){ %>
-            <%- include("alexa_module.ejs", {
+            <%- include("modules/alexa_module.ejs", {
               listing_info : listing_info
             }); %>
         <% } %>
 
         <%# DEMOGRAPHIC MODULE %>
-        <%- include("demographic_module.ejs", {
+        <%- include("modules/demographic_module.ejs", {
           listing_info : listing_info
         }); %>
 
@@ -75,7 +75,7 @@
             <% background_image = (popular_rental.address.match(/\.(jpeg|jpg|gif|png)$/) != null) ? popular_rental.address : background_image; %>
 
             <%# POPULAR RENTAL MODULE %>
-            <%- include("popular_rental_module.ejs", {
+            <%- include("modules/popular_rental_module.ejs", {
                 listing_info : listing_info,
                 popular_rental: popular_rental,
                 background_image: background_image
@@ -83,7 +83,7 @@
 
             <%# PREVIOUS RENTALS MODULE %>
             <% if (listing_info.rentals.length > 1) { %>
-                <%- include("previous_rentals_module.ejs", {
+                <%- include("modules/previous_rentals_module.ejs", {
                     listing_info : listing_info,
                     popular_rental: popular_rental
                 }); %>
@@ -92,7 +92,7 @@
         <% } %>
 
         <%# SIMILAR DOMAINS MODULE %>
-        <%- include("similar_domains_module.ejs", {
+        <%- include("modules/similar_domains_module.ejs", {
           listing_info : listing_info
         }); %>
 
@@ -104,7 +104,7 @@
             <div class="content">
               <% if (listing_info.status == 1) { %>
 
-                  <%- include("checkout_card_content.ejs", {
+                  <%- include("modules/checkout_module.ejs", {
                       user : user,
                       listing_info : listing_info
                   }); %>
@@ -232,7 +232,7 @@
             </div>
 
             <%# OTHER BY SAME OWNER DOMAINS MODULE %>
-            <%- include("other_domains_module.ejs", {
+            <%- include("modules/other_domains_module.ejs", {
               listing_info : listing_info
             }); %>
 
