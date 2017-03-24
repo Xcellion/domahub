@@ -1,3 +1,5 @@
+var node_env = process.env.NODE_ENV || 'dev'; 	//dev or prod bool
+
 module.exports = {
 	handler: handler
 }
@@ -5,6 +7,14 @@ module.exports = {
 //handle errors, either send them back json, or redirect the page
 function handler(req, res, message, type) {
 	switch (type){
+		case "api":
+			if (node_env == "dev"){
+				res.redirect("http://localhost:8080" + req.originalUrl);
+			}
+			else {
+				res.redirect("https://domahub.com" + req.originalUrl);
+			}
+			break;
 		//send direct message or redirect page
 		case "json":
 			console.log("ERROR: " + message);
