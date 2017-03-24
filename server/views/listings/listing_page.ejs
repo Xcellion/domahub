@@ -132,23 +132,23 @@
         <div id="description-card" class="card margin-bottom-25 is-hidden-mobile">
           <div class="card-content">
 
+          <%# CATEGORIES MODULE %>
+          <% if (listing_info.categories) { %>
+              <div class="content listing-info">
+                  <h3 class="is-bold margin-bottom-15">Categories</h3>
+                  <div class="is-flex-wrap">
+                  <% var categories_array = listing_info.categories.split(" ")
+                  for (var i = 0; i < categories_array.length; i++) { %>
+                      <span class="tag is-accent"><%= categories_array[i].charAt(0).toUpperCase() + categories_array[i].substr(1); %></span>
+                  <% } %>
+                  </div>
+              </div>
+          <% } %>
+
             <%# LISTING OWNER MODULE %>
             <%- include("modules/listing_owner_module.ejs", {
               listing_info : listing_info
             }); %>
-
-            <%# CATEGORIES MODULE %>
-            <% if (listing_info.categories) { %>
-                <div class="content listing-info">
-                    <h3 class="is-bold margin-bottom-15">Categories</h3>
-                    <div class="is-flex-wrap">
-                        <% var categories_array = listing_info.categories.split(" ")
-                        for (var i = 0; i < categories_array.length; i++) { %>
-                            <span class="tag is-accent"><%= categories_array[i].charAt(0).toUpperCase() + categories_array[i].substr(1); %></span>
-                        <% } %>
-                    </div>
-                </div>
-            <% } %>
 
             <%# OWNERS NOTES MODULE %>
             <% if (listing_info.description) { %>
