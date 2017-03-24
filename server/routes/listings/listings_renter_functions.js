@@ -1005,8 +1005,6 @@ function checkOverlap(dateX, durationX, dateY, durationY){
 
 //helper function to run whois since domain isn't listed but is a real domain
 function renderWhoIs(req, res, domain_name){
-    var fullUrl = req.protocol + '://' + req.get('host') + req.originalUrl;
-    console.log(fullUrl);
     whois.lookup(domain_name, function(err, data){
         //look up domain owner info
         var whoisObj = {};
