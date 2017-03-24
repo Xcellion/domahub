@@ -352,8 +352,8 @@ module.exports = {
                 user_ip = req.headers["x-real-ip"] || req.headers["x-forwarded-for"];
             }
 
-            //add to search history if its not localhost
-            if (user_ip != "::1" && user_ip != "::ffff:127.0.0.1" && user_ip != "127.0.0.1"){
+            //add to search history if its not dev
+            if (node_env != "dev"){
                 var account_id = (typeof req.user == "undefined") ? null : req.user.id;
                 var now = new Date().getTime();
                 var history_info = {
