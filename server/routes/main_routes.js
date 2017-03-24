@@ -1,4 +1,6 @@
 var	account_model = require('../models/account_model.js');
+var	listing_model = require('../models/listing_model.js');
+var	data_model = require('../models/data_model.js');
 
 var	validator = require('validator');
 var	request = require('request');
@@ -21,6 +23,8 @@ var mailer = nodemailer.createTransport(sgTransport(mailOptions));
 module.exports = function(app, db, auth, error){
 	Auth = auth;
 	Account = new account_model(db);
+	Listing = new listing_model(db);
+	Data = new data_model(db);
 
     //array of all views from the main page
     main_page_routes = [
