@@ -204,6 +204,26 @@ listing_model.prototype.getThreeRandomListings = function(domain_name_exclude, c
 	listing_query(query, "Failed to get related 3 random listings!", callback, domain_name_exclude);
 }
 
+//gets 3 random listings by the same owner
+listing_model.prototype.getThreeRandomListingsByOwner = function(domain_name_exclude, owner_id, callback){
+	console.log("DB: Attempting to get 3 random listings by the same owner...");
+	query = "SELECT \
+				listings.domain_name, \
+				listings.background_image, \
+				listings.price_type, \
+				listings.price_rate \
+			FROM listings \
+			WHERE listings.domain_name != ? \
+			AND listings.owner_id = ? \
+			AND listings.status = 1 \
+			AND listings.verified = 1 \
+			AND listings.deleted IS NULL \
+			AND listings.categories NOT LIKE '%adult%' \
+			ORDER BY RAND() \
+			LIMIT 3"
+	listing_query(query, "Failed to get 3 other random listings by the same owner!", callback, [domain_name_exclude, owner_id]);
+}
+
 //gets listings related to specific categories
 listing_model.prototype.getRelatedListings = function(categories, domain_name_exclude, callback){
 	console.log("DB: Attempting to get related listings with categories: " + categories + "...");
