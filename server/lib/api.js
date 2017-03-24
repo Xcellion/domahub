@@ -57,6 +57,8 @@ function getCurrentRental(req, res, domain_name){
 				res.redirect("https://domahub.com/listing/" + domain_name);
 			}
 			else {
+				//add it to stats
+				search_functions.newRentalHistory(rental_info.rental_id, req);
 				searchAndDirect(result.info[0], req, res);
 			}
 		});
@@ -67,9 +69,6 @@ function getCurrentRental(req, res, domain_name){
 //function to add to search and decide where to proxy
 function searchAndDirect(rental_info, req, res){
 	console.log("F: Currently rented!");
-	
-	//add it to stats
-	search_functions.newRentalHistory(rental_info.rental_id, req);
 
 	//proxy the request
 	if (rental_info.address){
