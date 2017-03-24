@@ -32,7 +32,7 @@
 /*--------------------------------------------------------PROXY EDIT--------------------------------------------------------------*/
 
 .domahub-wrapper h1,.domahub-wrapper h2,.domahub-wrapper h3,.domahub-wrapper a{
-    font-family: Helvetica,sans-serif;
+    font-family: "roboto", Helvetica,sans-serif;
 }
 .domahub-wrapper {
     align-items:flex-end;
@@ -68,7 +68,7 @@
 
 .domahub-info-wrapper{
     border-bottom:1px solid #D3D3D3;
-    font-family: Helvetica,sans-serif;
+    font-family: "roboto", Helvetica,sans-serif;
 }
 .domahub-status-info {
     color:#ff5722;
@@ -95,6 +95,7 @@
     transition:all 0.25s ease;
     cursor:pointer;
     font-size:15px;
+    font-weight:bold;
 }
 .domahub-action-button:hover {
     background-color:#3cbc8d;
