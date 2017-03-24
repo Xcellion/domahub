@@ -195,7 +195,7 @@ function createTableRow(data){
 
 //function to show or disable submit
 function handleSubmitDisabled(){
-	if ($(".domain-name-input").filter(function(){ return $(this).val() == ""}).length == 1 && $(".is-danger").length == 1 && $("#agree-to-terms:checked").length > 0){
+	if ($(".domain-name-input").filter(function(){ return $(this).val() == ""}).length == 1 && $(".is-danger").length == 2 && $("#agree-to-terms:checked").length > 0){
 		$("#domains-submit").removeClass('is-disabled');
 	}
 	else {
@@ -355,7 +355,7 @@ function refreshRows(bad_listings, good_listings){
 //function to refresh notifications if there are no relative rows
 function refreshNotification(){
 	//hide error notification
-	if ($(".is-danger").length == 1){
+	if ($(".is-danger").length == 2){
 		$("#domain-error-message").addClass("is-hidden");
 		$("td small.is-danger").remove();
 		$("td .is-danger").removeClass("is-danger");

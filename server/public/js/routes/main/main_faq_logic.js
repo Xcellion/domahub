@@ -3,7 +3,7 @@ $(document).ready(function() {
     //toggle X
     $(".faq-header").click(function() {
         $(this).toggleClass("is-active");
-        $(this).siblings(".qa-wrapper").toggleClass("is-hidden");
+        $(this).siblings(".content").toggleClass("is-hidden");
     });
 
     //change the active as you scroll down
@@ -17,7 +17,7 @@ $(document).ready(function() {
         $(this).addClass("is-active");
         var faq_id = $(this).attr("id").split("-")[0];
         $("#" + faq_id).find(".faq-header").removeClass("is-active");
-        $("#" + faq_id).find(".qa-wrapper").removeClass("is-hidden");
+        $("#" + faq_id).find(".content").removeClass("is-hidden");
         history.replaceState({}, "", "#" + faq_id);
     });
 
