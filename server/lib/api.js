@@ -50,7 +50,7 @@ function getCurrentRental(req, res, domain_name){
 	}
 	else {
 		var fullUrl = req.protocol + '://' + req.get('host') + req.originalUrl;
-		console.log(fullUrl);
+		console.log(req.session);
 
 		console.log("F: Attempting to check current rental status for " + domain_name + "!");
 		Listing.getCurrentRental(domain_name, function(result){
