@@ -343,12 +343,13 @@ module.exports = {
 
         Listing.checkListing(domain_name, function(result){
             var listing_result = result;
-            var user_ip = req.headers['X-Real-IP'] || req.connection.remoteAddress ||
+            var user_ip = req.connection.remoteAddress ||
     		req.headers['x-forwarded-for'] ||
     		req.socket.remoteAddress;
 
             //add to search history if its not localhost
             console.log(user_ip, "fjldasfklasjfdaklsdfklasjdfklajslkfjkasdlfjdklsajdfkljasklfjklsadf");
+            console.log(req.headers, "fjldasfklasjfdaklsdfklasjdfklajslkfjkasdlfjdklsajdfkljasklfjklsadf");
             if (user_ip != "::1" && user_ip != "::ffff:127.0.0.1" && user_ip != "127.0.0.1"){
                 var account_id = (typeof req.user == "undefined") ? null : req.user.id;
                 var now = new Date().getTime();
