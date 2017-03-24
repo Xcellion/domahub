@@ -4,7 +4,6 @@ var	data_model = require('../../models/data_model.js');
 var search_functions = require("../listings/listings_search_functions.js");
 var renter_functions = require("../listings/listings_renter_functions.js");
 var owner_functions = require("../listings/listings_owner_functions.js");
-var stats_functions = require("../listings/listings_stats_functions.js");
 var profile_functions = require("../profiles/profile_functions.js");
 var general_functions = require("../general_functions.js");
 

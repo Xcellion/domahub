@@ -61,35 +61,9 @@
         }); %>
 
         <%# RENTALS MODULE %>
-        <% if (listing_info.rentals.length > 0){ %>
-
-            <% var popular_rental = listing_info.rentals[0]; %>
-            <% for (var x = 0; x < listing_info.rentals.length; x++){ %>
-                <% var max_views = 0;
-                if (listing_info.rentals[x].views > max_views){
-                    popular_rental = listing_info.rentals[x];
-                } %>
-            <% } %>
-
-            <% var background_image = (popular_rental.address == "") ? "https://placeholdit.imgix.net/~text?txtsize=20&txt=NO%20PREVIEW&w=800&h=400" : "/screenshot?rental_address=" + popular_rental.address; %>
-            <% background_image = (popular_rental.address.match(/\.(jpeg|jpg|gif|png)$/) != null) ? popular_rental.address : background_image; %>
-
-            <%# POPULAR RENTAL MODULE %>
-            <%- include("modules/popular_rental_module.ejs", {
-                listing_info : listing_info,
-                popular_rental: popular_rental,
-                background_image: background_image
-            }); %>
-
-            <%# PREVIOUS RENTALS MODULE %>
-            <% if (listing_info.rentals.length > 1) { %>
-                <%- include("modules/previous_rentals_module.ejs", {
-                    listing_info : listing_info,
-                    popular_rental: popular_rental
-                }); %>
-            <% } %>
-
-        <% } %>
+        <%- include("modules/rentals_module.ejs", {
+          listing_info : listing_info
+        }); %>
 
         <%# SIMILAR DOMAINS MODULE %>
         <%- include("modules/similar_domains_module.ejs", {
@@ -104,25 +78,15 @@
             <div class="content">
               <% if (listing_info.status == 1) { %>
 
+                  <%# CHECKOUT MODULE (RENT NOW) %>
                   <%- include("modules/checkout_module.ejs", {
                       user : user,
                       listing_info : listing_info
                   }); %>
 
-              <% } else if (listing_info.available) { %>
-                    <p>
-                    While this domain is unavailable for rent at DomaHub,
-                    it is available for purchase at any of the sites listed below.
-                    </p>
-                    <p>
-                    Purchase it today for your own use or list it with us to
-                    make some money!
-                    </p>
               <% } else { %>
                 <p>
-                    This domain is currently unavailable. You may request
-                    the listing by clicking the button below which will
-                    notify both DomaHub and the domain owner.
+                    This domain is currently unavailable. Please try again at a later time!
                 </p>
               <% } %>
             </div>
@@ -141,6 +105,8 @@
                   <i class="fa fa-angle-up"></i>
                 </span>
               </a>
+
+              <%# SOCIAL SHARE MODULE %>
                 <!-- <a tabindex="1" class="card-footer-item has-icon">
                   <span class="icon is-small">
                     <i class="fa fa-bookmark"></i>
@@ -159,26 +125,17 @@
                   </span>
                   <span>Share</span>
                 </a> -->
-            <% } else if (listing_info.available) { %>
-              <a id="google_link" tabindex="1" class="card-footer-item" href="https://domains.google.com/registrar?s=<%= listing_info.domain_name %>">Google</a>
-              <a id="namecheap_link" tabindex="1" class="card-footer-item" href="https://www.namecheap.com/domains/registration/results.aspx?domain=<%= listing_info.domain_name %>&aff=108189">Namecheap</a>
-              <a id="godaddy_link" tabindex="1" class="card-footer-item" href="https://www.godaddy.com/domains/searchresults.aspx?domainToCheck=<%= listing_info.domain_name %>">GoDaddy</a>
-            <% } else { %>
-              <a id="request_link" class="button card-footer-item is-fullwidth is-primary" tabindex="1">Request Listing</a>
+
             <% } %>
           </footer>
         </div>
         <div id="description-card" class="card margin-bottom-25 is-hidden-mobile">
           <div class="card-content">
 
-            <%# DESCRIPTION MODULE %>
-            <% if (listing_info.description) { %>
-              <div class="content listing-info">
-                <blockquote>
-                  <i><%- listing_info.description %></i>
-                </blockquote>
-              </div>
-            <% } %>
+            <%# LISTING OWNER MODULE %>
+            <%- include("modules/listing_owner_module.ejs", {
+              listing_info : listing_info
+            }); %>
 
             <%# CATEGORIES MODULE %>
             <% if (listing_info.categories) { %>
@@ -193,43 +150,12 @@
                 </div>
             <% } %>
 
-            <%# DATE CREATED MODULE %>
-            <% if (listing_info.date_created) { %>
-                <div class="content listing-info">
-                    <h3 class="is-bold margin-bottom-15">Date Listed</h3>
-                    <p class="is-flex-wrap" id="date_created"></p>
-                </div>
+            <%# OWNERS NOTES MODULE %>
+            <% if (listing_info.description) { %>
+                <%- include("modules/owners_notes_module.ejs", {
+                  listing_info : listing_info
+                }); %>
             <% } %>
-
-            <%# LISTING OWNER MODULE %>
-            <div class="content listing-info">
-              <% if (listing_info.owner_id){ %>
-                  <h3 class="is-bold margin-bottom-15">Listed By</h3>
-              <% } else { %>
-                  <h3 class="is-bold margin-bottom-15">Owned By</h3>
-              <% } %>
-              <article class="media">
-                <figure class="media-left">
-                  <p class="image is-circle is-64x64">
-                    <% if (listing_info.profile_pic){ %>
-                      <img src="<%= listing_info.profile_pic %>">
-                    <% } else { %>
-                      <%- "<img src='https://placeholdit.imgix.net/~text?txtsize=25&bg=9e9e9e&txtclr=ffffff&txt=" + listing_info.username + "&w=128&h=128'/>" %>
-                    <% } %>
-                  </p>
-                </figure>
-                <div class="media-content">
-                  <div class="content">
-                    <h3><%= listing_info.username %></h3>
-                    <% if (listing_info.user_created) { %>
-                      <p>
-                        User since <span id='user-since'></span>
-                      </p>
-                    <% } %>
-                  </div>
-                </div>
-              </article>
-            </div>
 
             <%# OTHER BY SAME OWNER DOMAINS MODULE %>
             <%- include("modules/other_domains_module.ejs", {
@@ -246,6 +172,8 @@
               </a>
           </footer>
         </div>
+
+
       </div>
     </div>
   </div>

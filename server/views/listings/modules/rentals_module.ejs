@@ -1,0 +1,29 @@
+<% if (listing_info.rentals.length > 0){ %>
+
+    <% var popular_rental = listing_info.rentals[0]; %>
+    <% for (var x = 0; x < listing_info.rentals.length; x++){ %>
+        <% var max_views = 0;
+        if (listing_info.rentals[x].views > max_views){
+            popular_rental = listing_info.rentals[x];
+        } %>
+    <% } %>
+
+    <% var background_image = (popular_rental.address == "") ? "https://placeholdit.imgix.net/~text?txtsize=20&txt=NO%20PREVIEW&w=800&h=400" : "/screenshot?rental_address=" + popular_rental.address; %>
+    <% background_image = (popular_rental.address.match(/\.(jpeg|jpg|gif|png)$/) != null) ? popular_rental.address : background_image; %>
+
+    <%# POPULAR RENTAL MODULE %>
+    <%- include("rentals_popular_module.ejs", {
+        listing_info : listing_info,
+        popular_rental: popular_rental,
+        background_image: background_image
+    }); %>
+
+    <%# PREVIOUS RENTALS MODULE %>
+    <% if (listing_info.rentals.length > 1) { %>
+        <%- include("rentals_previous_module.ejs", {
+            listing_info : listing_info,
+            popular_rental: popular_rental
+        }); %>
+    <% } %>
+
+<% } %>

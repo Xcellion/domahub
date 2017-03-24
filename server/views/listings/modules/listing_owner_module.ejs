@@ -1,0 +1,24 @@
+<div class="content listing-info">
+  <% if (listing_info.owner_id){ %>
+      <h3 class="is-bold margin-bottom-15">Listed By</h3>
+  <% } else { %>
+      <h3 class="is-bold margin-bottom-15">Owned By</h3>
+  <% } %>
+  <article class="media">
+    <!--<figure class="media-left">
+      <p class="image is-circle is-64x64">
+        <% if (listing_info.profile_pic){ %>
+          <img src="<%= listing_info.profile_pic %>">
+        <% } else { %>
+          <%- "<img src='https://placeholdit.imgix.net/~text?txtsize=25&bg=9e9e9e&txtclr=ffffff&txt=" + listing_info.username + "&w=128&h=128'/>" %>
+        <% } %>
+      </p>
+    </figure>-->
+    <div class="media-content">
+      <div class="content">
+        <h3><%= listing_info.username %></h3>
+        <p class="is-flex-wrap is-hidden" id="date_created"></p>
+      </div>
+    </div>
+  </article>
+</div>

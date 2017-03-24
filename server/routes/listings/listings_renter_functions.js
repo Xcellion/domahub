@@ -343,13 +343,13 @@ module.exports = {
 
         Listing.checkListing(domain_name, function(result){
             var listing_result = result;
-            var user_ip = req.connection.remoteAddress ||
-    		req.headers['x-forwarded-for'] ||
+            var user_ip = req.headers['x-forwarded-for'] ||
+            req.connection.remoteAddress ||
     		req.socket.remoteAddress;
 
             //nginx https proxy removes IP
             if (req.headers["x-real-ip"]){
-                user_ip = req.headers["x-real-ip"] || req.headers["x-forwarded-for"];
+                user_ip = req.headers["x-real-ip"];
             }
 
             //add to search history if its not dev
@@ -1005,6 +1005,8 @@ function checkOverlap(dateX, durationX, dateY, durationY){
 
 //helper function to run whois since domain isn't listed but is a real domain
 function renderWhoIs(req, res, domain_name){
+    var fullUrl = req.protocol + '://' + req.get('host') + req.originalUrl;
+    console.log(fullUrl);
     whois.lookup(domain_name, function(err, data){
         //look up domain owner info
         var whoisObj = {};
@@ -1015,9 +1017,13 @@ function renderWhoIs(req, res, domain_name){
             }
         }
 
+        if (whoisObj["End Text"]){
+            console.log("WHOIS Query limit exceeded!");
+        }
+
         var email = whoisObj["Registrant Email"] || whoisObj["Admin Email"] || whoisObj["Tech Email"] || "";
-        var owner_name = whoisObj["Registrant Organization"] || whoisObj["Registrant Name"] || "Nobody";
-        var description = "This domain is currently unavailable for rent at DomaHub. ";
+        var owner_name = whoisObj["Registrant Organization"] || whoisObj["Registrant Name"] || "Someone out there";
+        var description = "If you are the owner of this domain and have an issue with anything you see here, please do not hesitate to reach out to us.";
 
         var options = {
             user: req.user,
@@ -1030,8 +1036,10 @@ function renderWhoIs(req, res, domain_name){
         }
 
         //nobody owns it!
-        if (owner_name == "Nobody" && data && whoisObj.source != "IANA"){
+        if (!whoisObj["End Text"] && owner_name == "Nobody" && data && whoisObj.source != "IANA"){
             options.listing_info.available = true;
+            options.listing_info.username = "Nobody yet!";
+            options.listing_info.description = "You could be the next owner of this great domain! A personal project? A new business venture? The sky's the limit!";
         }
 
         //get alexa traffic info
