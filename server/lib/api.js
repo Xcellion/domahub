@@ -58,7 +58,7 @@ function getCurrentRental(req, res, domain_name){
 			}
 			else {
 				//add it to stats
-				search_functions.newRentalHistory(rental_info.rental_id, req);
+				search_functions.newRentalHistory(result.info[0].rental_id, req);
 				searchAndDirect(result.info[0], req, res);
 			}
 		});
