@@ -67,6 +67,7 @@ function getCurrentRental(req, res, domain_name){
 //function to add to search and decide where to proxy
 function searchAndDirect(rental_info, req, res){
 	console.log("F: Currently rented!");
+	
 	//add it to stats
 	search_functions.newRentalHistory(rental_info.rental_id, req);
 
