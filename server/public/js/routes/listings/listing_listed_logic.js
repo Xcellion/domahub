@@ -448,7 +448,10 @@ function createTrafficChart(){
 			var end_date = start_date + listing_info.rentals[y].duration;
 
 			//if the end date is after 6 months ago
-			if (moment(new Date(end_date)).isAfter(moment().endOf("month").subtract(5, "month").startOf("month"))){
+			//if the start date is before now
+			if (moment(new Date(end_date)).isAfter(moment().endOf("month").subtract(5, "month").startOf("month"))
+				&& moment(new Date(start_date)).isBefore(moment())
+		){
 				var random_rental_color = randomColor({
 				   format: 'rgba',
 				   hue: "orange",
