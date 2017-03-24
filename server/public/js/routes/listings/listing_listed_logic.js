@@ -570,8 +570,15 @@ function findOtherDomains(){
 				cloned_similar_listing.removeAttr("id").removeClass('is-hidden');
 
 				//edit it based on new listing info
+				if (data.listings[x].domain_name.length + 4 + data.listings[x].price_rate.toString().length + data.listings[x].price_type.length > 30){
+					var sliced_domain = data.listings[x].domain_name.slice(0,15) + "...";
+				}
+				else {
+					var sliced_domain = data.listings[x].domain_name;
+				}
+
 				cloned_similar_listing.find(".otherowner-domain-price").text("$" + data.listings[x].price_rate + " / " + data.listings[x].price_type);
-				cloned_similar_listing.find(".otherowner-domain-name").text(data.listings[x].domain_name).attr("href", "/listing/" + data.listings[x].domain_name);
+				cloned_similar_listing.find(".otherowner-domain-name").text(sliced_domain).attr("href", "/listing/" + data.listings[x].domain_name);
 				$("#otherowner-domain-table").append(cloned_similar_listing);
 			}
 		}
