@@ -343,7 +343,7 @@ module.exports = {
 
         Listing.checkListing(domain_name, function(result){
             var listing_result = result;
-            var user_ip = req.connection.remoteAddress ||
+            var user_ip = req.headers['X-Real-IP'] || req.connection.remoteAddress ||
     		req.headers['x-forwarded-for'] ||
     		req.socket.remoteAddress;
 
