@@ -9,8 +9,6 @@ var jsonParser = bodyParser.json();
 var urlencodedParser = bodyParser.urlencoded({ extended: true })
 
 module.exports = function(app, db){
-	Listing = new listing_model(db);
-
 	app.post('/stripe/webhook', [
 		jsonParser,
 		stripeWebhookEventCatcher

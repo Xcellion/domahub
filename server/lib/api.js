@@ -1,4 +1,7 @@
 var	listing_model = require('../models/listing_model.js');
+var	account_model = require('../models/account_model.js');
+var	data_model = require('../models/data_model.js');
+
 var search_functions = require("../routes/listings/listings_search_functions.js");
 
 var validator = require("validator");
@@ -12,6 +15,8 @@ var node_env = process.env.NODE_ENV || 'dev'; 	//dev or prod bool
 module.exports = function(app, db, e){
 	error = e;
 	Listing = new listing_model(db);
+	Account = new account_model(db);
+	Data = new data_model(db);
 
 	app.use("*", checkHost);
 }
