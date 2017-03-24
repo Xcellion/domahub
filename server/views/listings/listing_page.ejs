@@ -40,15 +40,6 @@
     <div class="columns flex-column-mobile margin-right-0">
       <div id="domain-modules-column" class="column is-8 order-2-mobile">
 
-        <%# DESCRIPTION MODULE %>
-        <% if (listing_info.description) { %>
-            <div class="content listing-module margin-bottom-0">
-              <blockquote>
-                <i><%- listing_info.description %></i>
-              </blockquote>
-            </div>
-        <% } %>
-
         <%# TRAFFIC MODULE %>
         <% if (listing_info.traffic){ %>
             <div class="content listing-module">
@@ -56,6 +47,18 @@
               <canvas id="traffic-chart"></canvas>
             </div>
         <% } %>
+
+        <%# ALEXA MODULE %>
+        <% if (listing_info.alexa){ %>
+            <%- include("modules/alexa_module.ejs", {
+              listing_info : listing_info
+            }); %>
+        <% } %>
+
+        <%# DEMOGRAPHIC MODULE %>
+        <%- include("modules/demographic_module.ejs", {
+          listing_info : listing_info
+        }); %>
 
         <%# RENTALS MODULE %>
         <% if (listing_info.rentals.length > 0){ %>
@@ -72,7 +75,7 @@
             <% background_image = (popular_rental.address.match(/\.(jpeg|jpg|gif|png)$/) != null) ? popular_rental.address : background_image; %>
 
             <%# POPULAR RENTAL MODULE %>
-            <%- include("popular_rental_module.ejs", {
+            <%- include("modules/popular_rental_module.ejs", {
                 listing_info : listing_info,
                 popular_rental: popular_rental,
                 background_image: background_image
@@ -80,7 +83,7 @@
 
             <%# PREVIOUS RENTALS MODULE %>
             <% if (listing_info.rentals.length > 1) { %>
-                <%- include("previous_rentals_module.ejs", {
+                <%- include("modules/previous_rentals_module.ejs", {
                     listing_info : listing_info,
                     popular_rental: popular_rental
                 }); %>
@@ -89,7 +92,7 @@
         <% } %>
 
         <%# SIMILAR DOMAINS MODULE %>
-        <%- include("similar_domains_module.ejs", {
+        <%- include("modules/similar_domains_module.ejs", {
           listing_info : listing_info
         }); %>
 
@@ -101,7 +104,7 @@
             <div class="content">
               <% if (listing_info.status == 1) { %>
 
-                  <%- include("checkout_card_content.ejs", {
+                  <%- include("modules/checkout_module.ejs", {
                       user : user,
                       listing_info : listing_info
                   }); %>
@@ -167,54 +170,30 @@
         </div>
         <div id="description-card" class="card margin-bottom-25 is-hidden-mobile">
           <div class="card-content">
-            <div class="content listing-info">
-              <nav class="level">
-                <div class="level-left">
-                  <p class="level-item">Alexa Ranking</p>
-                </div>
-                <div class="level-right">
-                  <p class="level-item is-bold"><%= (listing_info.alexa.globalRank == "-" || !listing_info.alexa.globalRank) ? "N/A" : listing_info.alexa.globalRank %></p>
-                </div>
-              </nav>
-              <nav class="level">
-                <div class="level-left">
-                  <p class="level-item">Daily Time on Site</p>
-                </div>
-                <div class="level-right">
-                    <p class="level-item is-bold"><%= (listing_info.alexa.engagement.dailyTimeOnSite == "-" || !listing_info.alexa.engagement.dailyTimeOnSite) ? "N/A" : listing_info.alexa.engagement.dailyTimeOnSite %></p>
-                </div>
-              </nav>
-              <nav class="level">
-                <div class="level-left">
-                  <p class="level-item">Daily Pageviews per Visitor</p>
-                </div>
-                <div class="level-right">
-                    <p class="level-item is-bold"><%= (listing_info.alexa.engagement.dailyPageViewPerVisitor == "-" || !listing_info.alexa.engagement.dailyPageViewPerVisitor) ? "N/A" : listing_info.alexa.engagement.dailyPageViewPerVisitor %></p>
-                </div>
-              </nav>
-              <nav class="level">
-                <div class="level-left">
-                  <p class="level-item">Bounce Rate</p>
-                </div>
-                <div class="level-right">
-                    <p class="level-item is-bold"><%= (listing_info.alexa.engagement.bounceRate == "-" || !listing_info.alexa.engagement.bounceRate) ? "N/A" : listing_info.alexa.engagement.bounceRate %></p>
-                </div>
-              </nav>
-              <small class="margin-top-10">
-                  For more information, visit <a title="Link to respective Alexa website" target="_blank" class='is-accent' href="http://www.alexa.com/siteinfo/<%= listing_info.domain_name %>">Alexa.com</a>
-              </small>
-            </div>
-            <% if (listing_info.categories) { %>
-            <div class="content listing-info">
-              <h3 class="is-bold margin-bottom-15">Categories</h3>
-              <div class="is-flex-wrap">
-                <% var categories_array = listing_info.categories.split(" ")
-                for (var i = 0; i < categories_array.length; i++) { %>
-                     <span class="tag is-accent"><%= categories_array[i].charAt(0).toUpperCase() + categories_array[i].substr(1); %></span>
-              <% } %>
-            </div>
-            </div>
+
+            <%# DESCRIPTION MODULE %>
+            <% if (listing_info.description) { %>
+              <div class="content listing-info">
+                <blockquote>
+                  <i><%- listing_info.description %></i>
+                </blockquote>
+              </div>
             <% } %>
+
+            <%# CATEGORIES MODULE %>
+            <% if (listing_info.categories) { %>
+                <div class="content listing-info">
+                    <h3 class="is-bold margin-bottom-15">Categories</h3>
+                    <div class="is-flex-wrap">
+                        <% var categories_array = listing_info.categories.split(" ")
+                        for (var i = 0; i < categories_array.length; i++) { %>
+                            <span class="tag is-accent"><%= categories_array[i].charAt(0).toUpperCase() + categories_array[i].substr(1); %></span>
+                        <% } %>
+                    </div>
+                </div>
+            <% } %>
+
+            <%# DATE CREATED MODULE %>
             <% if (listing_info.date_created) { %>
                 <div class="content listing-info">
                     <h3 class="is-bold margin-bottom-15">Date Listed</h3>
@@ -222,7 +201,8 @@
                 </div>
             <% } %>
 
-            <div class="content">
+            <%# LISTING OWNER MODULE %>
+            <div class="content listing-info">
               <% if (listing_info.owner_id){ %>
                   <h3 class="is-bold margin-bottom-15">Listed By</h3>
               <% } else { %>
@@ -250,6 +230,12 @@
                 </div>
               </article>
             </div>
+
+            <%# OTHER BY SAME OWNER DOMAINS MODULE %>
+            <%- include("modules/other_domains_module.ejs", {
+              listing_info : listing_info
+            }); %>
+
           </div>
           <footer class="card-footer">
               <a id="less-info-button" tabindex="1" class="card-footer-item has-icon is-hidden">

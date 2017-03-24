@@ -347,8 +347,13 @@ module.exports = {
     		req.headers['x-forwarded-for'] ||
     		req.socket.remoteAddress;
 
-            //add to search history if its not localhost
-            if (user_ip != "::1" && user_ip != "::ffff:127.0.0.1" && user_ip != "127.0.0.1"){
+            //nginx https proxy removes IP
+            if (req.headers["x-real-ip"]){
+                user_ip = req.headers["x-real-ip"] || req.headers["x-forwarded-for"];
+            }
+
+            //add to search history if its not dev
+            if (node_env != "dev"){
                 var account_id = (typeof req.user == "undefined") ? null : req.user.id;
                 var now = new Date().getTime();
                 var history_info = {

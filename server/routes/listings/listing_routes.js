@@ -31,6 +31,12 @@ module.exports = function(app, db, auth, error, stripe){
 		search_functions.getRelatedListings
 	]);
 
+	//get random listings belonging to specific owner
+	app.post("/listing/otherowner", [
+		urlencodedParser,
+		search_functions.getOtherListings
+	]);
+
 	// //search for a listing with specific filters
 	// app.post("/listing/search", [
 	// 	urlencodedParser,
