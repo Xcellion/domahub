@@ -207,15 +207,15 @@ module.exports = {
 
 	//new view for a specific rental
 	newRentalHistory : function(rental_id, req){
-		var user_ip = req.headers['x-forwarded-for'] ||
-		req.connection.remoteAddress ||
+		var user_ip = req.connection.remoteAddress ||
+		req.headers['x-forwarded-for'] ||
 		req.socket.remoteAddress;
 
 		//nginx https proxy removes IP
 		if (req.headers["x-real-ip"]){
 			user_ip = req.headers["x-real-ip"];
 		}
-		console.log(req.headers);
+		console.log(user_ip, req.headers);
 
 		//add to search history if its not localhost
 		if (node_env != "dev"){
