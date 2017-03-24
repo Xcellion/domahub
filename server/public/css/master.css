@@ -838,8 +838,7 @@ pre {
     -moz-box-shadow: 0 0 0 0 black;
     box-shadow: 0 0 0 0 black; }
   .button.is-icon {
-    border: none;
-    border-radius: 0; }
+    border: none; }
   .button.is-white {
     background-color: white;
     border-color: transparent;
@@ -1938,6 +1937,11 @@ input:-webkit-autofill {
       border-radius: 0;
       margin-right: -1px;
       width: auto; }
+      .control.has-addons .button.is-icon,
+      .control.has-addons .input.is-icon,
+      .control.has-addons .is-icon.textarea,
+      .control.has-addons .select.is-icon {
+        margin-right: 0; }
       .control.has-addons .button:hover,
       .control.has-addons .input:hover,
       .control.has-addons .textarea:hover,
