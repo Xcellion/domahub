@@ -5,6 +5,7 @@
   "main": "server/server.js",
   "dependencies": {
     "alexa-traffic-rank": "1.0.1",
+    "awis": "^1.0.6",
     "bcrypt-nodejs": "0.0.3",
     "body-parser": "1.15.2",
     "compression": "1.6.2",
