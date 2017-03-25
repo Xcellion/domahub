@@ -121,27 +121,27 @@
   .order-2-mobile {
     order: 2; } }
 
-#previous-listings-cards {
+#previous-rentals-cards {
   display: flex;
   justify-content: space-around; }
-  #previous-listings-cards .card {
+  #previous-rentals-cards .card {
     margin: 0; }
-    #previous-listings-cards .card + .card {
+    #previous-rentals-cards .card + .card {
       margin-left: 15px; }
 
-#previous-listings-table {
+#previous-rentals-table {
   display: flex;
   flex-wrap: wrap; }
-  #previous-listings-table .previous-listing {
+  #previous-rentals-table .previous-rental {
     border-radius: 3px;
     border: 1px solid rgba(0, 0, 0, 0.12);
     margin-bottom: 10px;
     padding: 20px; }
-    #previous-listings-table .previous-listing:not(:last-child) {
+    #previous-rentals-table .previous-rental:not(:last-child) {
       margin-right: 5px; }
-    #previous-listings-table .previous-listing:hover {
+    #previous-rentals-table .previous-rental:hover {
       border-color: rgba(0, 0, 0, 0.66); }
-  #previous-listings-table .previous-stats {
+  #previous-rentals-table .previous-stats {
     display: flex;
     flex-direction: column;
     justify-content: center;
