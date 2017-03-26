@@ -28,7 +28,7 @@ $(document).ready(function() {
 
 	//formatting for date created metadata text
 	if (listing_info.date_created){
-		$("#date_created").removeClass('is-hidden').text("Listed on " + moment(new Date(listing_info.date_created)).format("MMMM DD, YYYY"));
+		$("#date_created").removeClass('is-hidden').text("On " + moment(new Date(listing_info.date_created)).format("MMMM DD, YYYY"));
 	}
 
 	//show more information on domain
