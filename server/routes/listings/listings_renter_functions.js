@@ -389,7 +389,7 @@ module.exports = {
         Listing.getVerifiedListing(req.params.domain_name, function(result){
             if (result.state=="error"){error.handler(req, res, "Invalid listing!");}
             else if (result.state == "success" && result.info.length == 0){
-                error.handler(req, res, "Invalid listing!");
+                renderWhoIs(req, res, req.params.domain_name);
             }
             else {
                 getListingRentalTimes(req, res, result.info[0], function(){

@@ -38,9 +38,10 @@ function alexa(req, res, next){
 // SitesLinkingIn - get a list of sites linking in to a specified site
 
         client({
-            'Action': 'UrlInfo',
+            'Action': 'TrafficHistory',
             'Url': req.params.domain_name,
-            'ResponseGroup': 'Related,TrafficData,ContentData'
+            'ResponseGroup': 'History'
+            // 'ResponseGroup': 'RelatedLinks,Categories,Rank,RankByCountry,UsageStats,AdultContent,Speed,Language,OwnedDomains,LinksInCount,SiteData'
         }, function (err, data) {
             if(err) { console.log(err); return; }
             res.send(data);
