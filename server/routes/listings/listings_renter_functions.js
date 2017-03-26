@@ -315,23 +315,28 @@ module.exports = {
         console.log("F: Checking to see if domain is still pointed to DomaHub...");
 		var domain_name = req.params.domain_name;
 		dns.resolve(domain_name, "A", function (err, address, family) {
-			var domain_ip = address;
-			dns.lookup("domahub.com", function (err, address, family) {
-				if (domain_ip != address && domain_ip.length != 1){
-                    console.log("F: Listing is not pointed to DomaHub anymore! Reverting verification...");
-                    Listing.updateListing(domain_name, {
-                        verified: null,
-                        status: 0
-                    }, function(result){
-                        req.session.listing_info.verified = null;
-                        req.session.listing_info.status = 0;
-                        renderWhoIs(req, res, domain_name);
-                    });
-				}
-                else {
-                    next();
-                }
-			});
+            if (!err){
+                var domain_ip = address;
+                dns.lookup("domahub.com", function (err, address, family) {
+                    if (domain_ip != address && domain_ip.length != 1){
+                        console.log("F: Listing is not pointed to DomaHub anymore! Reverting verification...");
+                        Listing.updateListing(domain_name, {
+                            verified: null,
+                            status: 0
+                        }, function(result){
+                            req.session.listing_info.verified = null;
+                            req.session.listing_info.status = 0;
+                            renderWhoIs(req, res, domain_name);
+                        });
+                    }
+                    else {
+                        next();
+                    }
+                });
+            }
+            else {
+                next();
+            }
 		});
 	},
 
