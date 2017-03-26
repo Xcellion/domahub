@@ -152,7 +152,7 @@
   }
 }
 
-#previous-listings-cards {
+#previous-rentals-cards {
   display: flex;
   justify-content: space-around;
   .card {
@@ -163,10 +163,10 @@
   }
 }
 
-#previous-listings-table {
+#previous-rentals-table {
   display: flex;
   flex-wrap: wrap;
-  .previous-listing {
+  .previous-rental {
     border-radius: $radius;
     border: 1px solid $border;
     margin-bottom: 10px;
