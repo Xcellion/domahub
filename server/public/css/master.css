@@ -3449,10 +3449,8 @@ input:-webkit-autofill {
   display: flex;
   justify-content: center;
   margin: 0 !important; }
-  .card-header-icon:hover, .card-header-icon:active, .card-header-icon:focus {
-    color: rgba(0, 0, 0, 0.88); }
-  .card-header-icon.is-active {
-    color: #3cbc8d; }
+  .card-header-icon:hover {
+    cursor: pointer; }
 
 .card-image {
   display: block;

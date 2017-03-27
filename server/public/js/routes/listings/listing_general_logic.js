@@ -34,7 +34,7 @@ $(document).ready(function() {
 	//show more information on domain
 	$("#more-info-button, #less-info-button").click(function() {
 		$("#more-info-button, #less-info-button").toggleClass("is-hidden");
-		$("#description-card").toggleClass("is-hidden");
+		$("#description-card").toggleClass("is-hidden-mobile");
 	});
 
 	//related domains module

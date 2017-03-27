@@ -1,5 +1,6 @@
 @import 'vars';
 @import 'mixins';
+@import 'balloon';
 
 .listing-section {
   background-position: center center;
@@ -12,6 +13,35 @@
   }
   @include mobile {
     height: 300px;
+  }
+}
+
+.alexa-stat {
+  display: flex;
+  flex-direction: column;
+  .header {
+    align-items: center;
+    background-color: $primary;
+    border-bottom: none;
+    border-radius: $radius $radius 0 0;
+    display: flex;
+    justify-content: space-between;
+    padding: 5px 8px;
+    p {
+      color: $white;
+      margin-bottom: 0 !important;
+    }
+    &:hover {
+      cursor: pointer;
+    }
+  }
+  p {
+    &:last-child {
+      border-radius: 0 0 $radius $radius;
+      border-top: none;
+      border: 1px solid $border;
+      padding: 5px 8px;
+    }
   }
 }
 
@@ -88,8 +118,11 @@
 }
 
 .listing-info {
-  padding-bottom: 25px;
-  border-bottom: 1px solid $border;
+  padding-top: 15px;
+  margin-bottom: 15px;
+  &:not(:first-child) {
+    border-top: 1px solid $border;
+  }
 }
 
 .listing-module {
@@ -186,11 +219,9 @@
   }
 }
 
-#checkout-card {
-  margin-left: auto;
-}
-
-#description-card {
+#checkout-card,
+#description-card,
+#popular-rental-card {
   margin-left: auto;
 }
 
