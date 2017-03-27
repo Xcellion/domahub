@@ -348,28 +348,33 @@ module.exports = {
 
         Listing.checkListing(domain_name, function(result){
             var listing_result = result;
-            var user_ip = req.headers['x-forwarded-for'] ||
-            req.connection.remoteAddress ||
-    		req.socket.remoteAddress;
 
-            //nginx https proxy removes IP
-            if (req.headers["x-real-ip"]){
-                user_ip = req.headers["x-real-ip"];
-            }
+            //add to search only if we went directly to listing
+            if (!req.session.from_api){
+                var user_ip = req.headers['x-forwarded-for'] ||
+                req.connection.remoteAddress ||
+                req.socket.remoteAddress;
 
-            //add to search history if its not dev
-            if (node_env != "dev"){
-                var account_id = (typeof req.user == "undefined") ? null : req.user.id;
-                var now = new Date().getTime();
-                var history_info = {
-                    account_id: account_id,			//who searched if who exists
-                    domain_name: domain_name.toLowerCase(),		//what they searched for
-                    timestamp: now,		//when they searched for it
-                    user_ip : user_ip
+                //nginx https proxy removes IP
+                if (req.headers["x-real-ip"]){
+                    user_ip = req.headers["x-real-ip"];
                 }
-                console.log("F: Adding to search history...");
 
-                Data.newListingHistory(history_info, function(result){if (result.state == "error") {console.log(result)}});	//async
+                //add to search history if its not dev
+                if (node_env != "dev"){
+                    var account_id = (typeof req.user == "undefined") ? null : req.user.id;
+                    var now = new Date().getTime();
+                    var history_info = {
+                        account_id: account_id,			//who searched if who exists
+                        domain_name: domain_name.toLowerCase(),		//what they searched for
+                        timestamp: now,		//when they searched for it
+                        user_ip : user_ip
+                    }
+                    console.log("F: Adding to search history...");
+
+                    Data.newListingHistory(history_info, function(result){if (result.state == "error") {console.log(result)}});	//async
+                }
+                delete req.session.from_api;
             }
 
             //doesnt exist, render the whois EJS
@@ -389,7 +394,7 @@ module.exports = {
         Listing.getVerifiedListing(req.params.domain_name, function(result){
             if (result.state=="error"){error.handler(req, res, "Invalid listing!");}
             else if (result.state == "success" && result.info.length == 0){
-                error.handler(req, res, "Invalid listing!");
+                renderWhoIs(req, res, req.params.domain_name);
             }
             else {
                 getListingRentalTimes(req, res, result.info[0], function(){
