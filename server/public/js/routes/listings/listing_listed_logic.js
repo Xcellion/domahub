@@ -362,6 +362,7 @@ function createTrafficChart(){
 			},
 		];
 
+
 		//split traffic into six months
 		for (var x = 0; x < listing_info.traffic.length; x++){
 			for (var y = 0; y < traffic_data.length; y++){
@@ -371,6 +372,16 @@ function createTrafficChart(){
 				}
 			}
 		}
+
+		var date_created = moment(listing_info.date_created);
+		var last_deleted = 0;
+		for (var y = 0; y < traffic_data.length; y++){
+			if (listing_info.date_created > traffic_data[y].x){
+				delete traffic_data[y].y;
+				last_deleted = y;
+			}
+		}
+		traffic_data[last_deleted].y = 0;
 
 		//traffic dataset
 		var traffic_dataset = {
@@ -457,7 +468,6 @@ function createTrafficChart(){
 				},
 				responsive: true,
 				// showAllTooltips: true,
-				//tooltip to display all values at a specific X-axis
 				hover: {
 					mode: "index"
 				},
@@ -465,7 +475,10 @@ function createTrafficChart(){
 					titleSpacing: 0,
 					callbacks: {
 						label: function(tooltipItems, data) {
-							if (monthly_labels.indexOf(tooltipItems.xLabel) != -1){
+							if (tooltipItems.datasetIndex == 0 && tooltipItems.yLabel == 0){
+								return "Listing created";
+							}
+							else if (monthly_labels.indexOf(tooltipItems.xLabel) != -1){
 								return tooltipItems.xLabel
 							}
 							else {
@@ -473,7 +486,10 @@ function createTrafficChart(){
 							}
 						},
 						title: function(tooltipItems, data){
-							if (monthly_labels.indexOf(tooltipItems[0].xLabel) != -1){
+							if (tooltipItems[0].datasetIndex == 0 && tooltipItems[0].yLabel == 0){
+								return false;
+							}
+							else if (monthly_labels.indexOf(tooltipItems[0].xLabel) != -1){
 								return "Listing Traffic";
 							}
 							else {
@@ -481,8 +497,13 @@ function createTrafficChart(){
 							}
 						},
 						footer: function(tooltipItems, data){
-							var views_plural = (tooltipItems[0].yLabel == 1) ? " view" : " views"
-							return tooltipItems[0].yLabel + views_plural;
+							if (tooltipItems[0].datasetIndex == 0 && tooltipItems[0].yLabel == 0){
+								return false;
+							}
+							else {
+								var views_plural = (tooltipItems[0].yLabel == 1) ? " view" : " views"
+								return tooltipItems[0].yLabel + views_plural;
+							}
 						}
 					}
 				},
