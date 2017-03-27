@@ -12,18 +12,18 @@
     <% background_image = (popular_rental.address.match(/\.(jpeg|jpg|gif|png)$/) != null) ? popular_rental.address : background_image; %>
 
     <%# POPULAR RENTAL MODULE %>
-    <%- include("rentals_popular_module.ejs", {
+    <%- include("rentals_popular_card.ejs", {
         listing_info : listing_info,
         popular_rental: popular_rental,
         background_image: background_image
     }); %>
 
     <%# PREVIOUS RENTALS MODULE %>
-    <% if (listing_info.rentals.length > 1) { %>
+    <!-- <% if (listing_info.rentals.length > 1) { %>
         <%- include("rentals_previous_module.ejs", {
             listing_info : listing_info,
             popular_rental: popular_rental
         }); %>
-    <% } %>
+    <% } %> -->
 
 <% } %>

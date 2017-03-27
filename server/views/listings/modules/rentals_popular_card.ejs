@@ -1,0 +1,30 @@
+<div id="popular-rental-card" class="card is-hidden-mobile">
+  <header class="card-header is-white">
+    <h3 class="card-header-title is-bold">Trending Rental</h3>
+    <div class="card-header-icon">
+      <span class="icon" data-balloon-length="medium" data-balloon="This is the rental with the most views ever." data-balloon-pos="up">
+        <i class="fa fa-question-circle"></i>
+      </span>
+    </div>
+  </header>
+  <div class="card-image">
+    <figure class="image">
+      <img id="popular-rental-img">
+    </figure>
+  </div>
+  <div class="card-content">
+    <nav class="level">
+      <div class="level-left">
+        <p id="popular-rental-duration" class="is-bold"></p>
+      </div>
+      <div class="level-right">
+        <p id="popular-rental-views"></p>
+      </div>
+    </nav>
+  </div>
+  <footer class="card-footer">
+    <a class="card-footer-item button no-shadow is-primary is-fullwidth is-stylish"
+    target="_blank" id="popular-rental-preview" href="/listing/<%= listing_info.domain_name + '/' + popular_rental.rental_id %>">
+    View</a>
+  </footer>
+</div>
