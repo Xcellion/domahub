@@ -375,13 +375,19 @@ function createTrafficChart(){
 
 		var date_created = moment(listing_info.date_created);
 		var last_deleted = 0;
+		var start_month_views = 0;
 		for (var y = 0; y < traffic_data.length; y++){
+			console.log(listing_info.date_created, traffic_data[y].x, listing_info.date_created > traffic_data[y].x);
 			if (listing_info.date_created > traffic_data[y].x){
 				delete traffic_data[y].y;
 				last_deleted = y;
 			}
 		}
-		traffic_data[last_deleted].y = 0;
+
+		//only if the start month doesnt have 0 views
+		if (traffic_data[last_deleted + 1].y != 0){
+			traffic_data[last_deleted].y = 0;
+		}
 
 		//traffic dataset
 		var traffic_dataset = {
