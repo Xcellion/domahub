@@ -60,6 +60,34 @@ function getCurrentRental(req, res, domain_name){
 			if (result.state != "success" || result.info.length == 0){
 				console.log("F: Not rented! Redirecting to listing page");
 				delete req.session.rented_info;
+
+				//add to search
+				var user_ip = req.headers['x-forwarded-for'] ||
+				req.connection.remoteAddress ||
+				req.socket.remoteAddress;
+
+				//nginx https proxy removes IP
+				if (req.headers["x-real-ip"]){
+					user_ip = req.headers["x-real-ip"];
+				}
+
+				//add to search history if its not dev
+				if (node_env != "dev"){
+					req.session.from_api = true;
+					
+					var account_id = (typeof req.user == "undefined") ? null : req.user.id;
+					var now = new Date().getTime();
+					var history_info = {
+						account_id: account_id,			//who searched if who exists
+						domain_name: domain_name.toLowerCase(),		//what they searched for
+						timestamp: now,		//when they searched for it
+						user_ip : user_ip
+					}
+					console.log("F: Adding to search history...");
+
+					Data.newListingHistory(history_info, function(result){if (result.state == "error") {console.log(result)}});	//async
+				}
+
 				res.redirect("https://domahub.com/listing/" + domain_name);
 			}
 			else {
