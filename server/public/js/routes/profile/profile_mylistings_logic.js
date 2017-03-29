@@ -28,7 +28,7 @@ function deletionHandler(rows, selected_rows){
 
 //function to create a listing row
 function createRow(listing_info, rownum){
-	$("#row" + rownum).remove();
+	// $("#row" + rownum).remove();
 
 	//choose a row to clone
 	if (listing_info.verified){
@@ -103,7 +103,7 @@ function updatePriceType(tempRow, listing_info){
 
 //function to create dropdown row
 function createRowDrop(listing_info, rownum){
-	$("#row-drop" + rownum).remove();
+	// $("#row-drop" + rownum).remove();
 
 	//choose a row to clone
 	if (listing_info.verified){
@@ -125,10 +125,8 @@ function createRowDrop(listing_info, rownum){
 			if (user.stripe_info && user.stripe_info.charges_enabled){
 				listing_info.status = 1;
 			}
-
 			//recreate the rows
-			var new_row = tempRow_drop.prev(".row-disp");
-			new_row.replaceWith(createRow(listing_info, rownum));
+			tempRow_drop.prev(".row-disp").replaceWith(createRow(listing_info, rownum));
 			tempRow_drop.replaceWith(createRowDrop(listing_info, rownum));
 			refreshSubmitbindings();
 		});
@@ -236,7 +234,7 @@ function updateExistingDNS(tempRow, a_records){
 		var temp_a_records = a_records.slice(0);
 		if (temp_a_records.indexOf("208.68.37.82") != -1){
 			temp_a_records.splice(temp_a_records.indexOf("208.68.37.82"), 1);
-			tempRow.find("#existing_a_record_clone").removeClass('is-hidden');
+			tempRow.find("#existing_a_record_clone").removeClass('is-hidden').find(".existing_data").text("208.68.37.82").removeClass("is-danger").addClass('is-success');
 		}
 		for (var x = 0; x < temp_a_records.length; x++){
 			var temp_dns_row = tempRow.find("#existing_a_record_clone").clone().removeAttr('id').removeClass('is-hidden');

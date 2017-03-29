@@ -377,7 +377,6 @@ function createTrafficChart(){
 		var last_deleted = 0;
 		var start_month_views = 0;
 		for (var y = 0; y < traffic_data.length; y++){
-			console.log(listing_info.date_created, traffic_data[y].x, listing_info.date_created > traffic_data[y].x);
 			if (listing_info.date_created > traffic_data[y].x){
 				delete traffic_data[y].y;
 				last_deleted = y;
