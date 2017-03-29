@@ -284,7 +284,7 @@ module.exports = {
 
 			//to check for file type
 			fileFilter: function (req, file, cb) {
-				console.log(req.user.username + " is uploading an image file for parsing...");
+				console.log("F: " + req.user.username + " is uploading an image file for parsing...");
 
 				var allowedMimeTypes = [
 					"image/jpeg",
@@ -303,7 +303,6 @@ module.exports = {
 		}).single("background_image");
 
 		upload_img(req, res, function(err){
-			console.log("Image file is being uploaded...");
 			if (err){
 				if (err.code == "LIMIT_FILE_SIZE"){
 					error.handler(req, res, 'File is bigger than 1 MB!', "json");
@@ -330,7 +329,7 @@ module.exports = {
 				image: fs.createReadStream(req.file.path)
 			}
 
-			console.log(req.user.username + " is uploading an image to Imgur...");
+			console.log("F: " + req.user.username + " is uploading an image to Imgur...");
 			request.post({
 				url: "https://imgur-apiv3.p.mashape.com/3/image",
 				headers: {
