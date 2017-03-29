@@ -232,31 +232,37 @@ module.exports = {
 
                 //check if its a legit date
                 if (isNaN(temp_start) || isNaN(temp_end) || start_num <= time_now || end_num <= time_now){
+                    console.log("Not a legit date!");
                     invalid_times.push(times[x]);
                 }
 
                 //not divisible by hour blocks
                 else if (moment(end_num).diff(moment(start_num)) % 3600000 != 0){
+                    console.log("Not divisible by hour blocks!");
                     invalid_times.push(times[x]);
                 }
 
                 //start time in the past
                 else if (moment(start_num).isBefore(moment())){
+                    console.log("Start time in the past!");
                     invalid_times.push(times[x]);
                 }
 
                 //end date further than 1 year
                 else if (moment(end_num).isAfter(moment().add(1, "year"))){
+                    console.log("End time further than 1 year from now!");
                     invalid_times.push(times[x]);
                 }
 
                 //invalid time slot end
                 else if (!moment(end_num).isSame(moment(end_num).subtract(1, "millisecond").endOf(req.session.listing_info.price_type).add(1, "millisecond"))){
+                    console.log("Invalid end time!");
                     invalid_times.push(times[x]);
                 }
 
                 //invalid time slot start
-                else if (moment(start_num).diff(moment()) > 3600000 && !moment(start_num).isSame(moment(start_num).startOf(req.session.listing_info.price_type))){
+                else if (moment().diff(moment().startOf(req.session.listing_info.price_type)) < 3600000 && !moment(start_num).isSame(moment(start_num).startOf(req.session.listing_info.price_type))){
+                    console.log("Invalid start time!");
                     invalid_times.push(times[x]);
                 }
 
