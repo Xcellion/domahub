@@ -88,7 +88,8 @@ function getCurrentRental(req, res, domain_name){
 					Data.newListingHistory(history_info, function(result){if (result.state == "error") {console.log(result)}});	//async
 				}
 
-				res.redirect("https://domahub.com/listing/" + domain_name);
+				//render a middleman page to send quantcast data first
+				res.render("quant_redirect.ejs");
 			}
 			else {
 				//add it to stats
