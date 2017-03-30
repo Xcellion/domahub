@@ -89,7 +89,9 @@ function getCurrentRental(req, res, domain_name){
 				}
 
 				//render a middleman page to send quantcast data first
-				res.render("quant_redirect.ejs");
+				res.render("quant_redirect.ejs", {
+					redirect_link : "https://domahub.com/listing/" + domain_name
+				});
 			}
 			else {
 				//add it to stats
