@@ -74,7 +74,7 @@ function getCurrentRental(req, res, domain_name){
 				//add to search history if its not dev
 				if (node_env != "dev"){
 					req.session.from_api = true;
-					
+
 					var account_id = (typeof req.user == "undefined") ? null : req.user.id;
 					var now = new Date().getTime();
 					var history_info = {
@@ -112,7 +112,8 @@ function searchAndDirect(rental_info, req, res){
 	}
 	else {
 		console.log("F: No address associated with rental! Displaying default empty page...");
-		res.render("./views/proxy/proxy-image.ejs", {
+		var image_path = (node_env == "dev") ? path.resolve(process.cwd(), 'server', 'views', 'proxy', 'proxy-image.ejs') : path.resolve(process.cwd(), 'views', 'proxy', 'proxy-image.ejs');
+		res.render(image_path, {
 			image: "",
 			edit: false,
 			preview: false,
@@ -130,7 +131,9 @@ function requestProxy(req, res, rental_info){
 		//an image was requested
 		if (response.headers['content-type'].indexOf("image") != -1){
 			console.log("F: Requested rental address was an image!");
-			res.render("./views/proxy/proxy-image.ejs", {
+			var image_path = (node_env == "dev") ? path.resolve(process.cwd(), 'server', 'views', 'proxy', 'proxy-image.ejs') : path.resolve(process.cwd(), 'views', 'proxy', 'proxy-image.ejs');
+
+			res.render(image_path, {
 				image: rental_info.address,
 				edit: false,
 				preview: false,
