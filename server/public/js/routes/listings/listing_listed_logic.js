@@ -103,8 +103,8 @@ $(document).ready(function() {
 
 	//---------------------------------------------------------------------------------------------------MODULES
 
-	editRentalModule();
 	findOtherDomains();
+	editRentalModule();
 	createTrafficChart();
 
 });
@@ -573,15 +573,17 @@ function findOtherDomains(){
 
 //function to create popular rentals module
 function editRentalModule(){
-	var popular_rental;
-	for (var x = 0; x < listing_info.rentals.length; x++){
-		var max_views = 0;
-		if (listing_info.rentals[x].views > max_views){
-			popular_rental = listing_info.rentals[x];
+	if (listing_info.rentals.length > 0){
+		var popular_rental = listing_info.rentals[0];
+		for (var x = 0; x < listing_info.rentals.length; x++){
+			if (listing_info.rentals[x].views > popular_rental.views){
+				popular_rental = listing_info.rentals[x];
+			}
 		}
 	}
 	if (popular_rental){
 		$("#popular-rental-duration").text(aggregateDateDuration(popular_rental.rental_id));
+		$("#popular-rental-preview").attr("href", "/listing/" + listing_info.domain_name + "/" + popular_rental.rental_id);
 		$("#popular-rental-views").text(popular_rental.views + " Views");
 
 		//async image load
