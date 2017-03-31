@@ -62,7 +62,7 @@ else {
 }
 
 // API for all domains listed on domahub
-require('./lib/api.js')(app, db, error);
+require('./lib/api_functions.js')(app, db, error);
 
 //catch future requests if rented (for dev environment and for rental preview)
 app.use("/", function(req, res, next){
