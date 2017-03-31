@@ -18,9 +18,15 @@ module.exports = function(app, db, auth, error){
 
     app.get("/dnsrecords/:domain_name", dnsRecords);
     app.get("/alexa/:domain_name", alexa);
+    app.get("/quantcast", quantcast);
     app.get("/createcodes/:number", [
         createSignupCodes
     ]);
+}
+
+//testing quantcast redirect
+function quantcast(req, res, next){
+    res.render("quant_redirect.ejs");
 }
 
 //testing alexa get
