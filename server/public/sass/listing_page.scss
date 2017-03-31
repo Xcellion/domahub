@@ -66,17 +66,6 @@
   padding: 0 12px;
 }
 
-#unlisted-display {
-  background-color: $white;
-  border-radius: $radius $radius 0 0;
-  padding: 10px;
-  margin-left: auto;
-  max-width: 325px;
-  @include mobile {
-    margin-right: auto;
-  }
-}
-
 #trending-rental-image {
   background-image: url("");
   background-position: top center;

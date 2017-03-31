@@ -345,7 +345,7 @@ button[data-balloon] {
   justify-content: flex-start;
   margin: 10px 0; }
   .step-box span {
-    margin-right: 5px; }
+    margin-right: 10px; }
 
 .has-stripe {
   position: relative; }
