@@ -7,6 +7,10 @@
 <% } else { %>
     <%- include("domahub_metatags.ejs"); %>
 <% } %>
+<script type="text/javascript">
+    var user = <% if(typeof user != "undefined"){ %><%-JSON.stringify(user)%><% }else{ %>""<% } %>;
+    var message = <% if(typeof message != "undefined"){ %><%-JSON.stringify(message)%><% }else{ %>""<% } %>;
+</script>
 <link rel="stylesheet" type="text/css" href="/css/min/master.min.css" />
 <link rel="icon" type="image/png" href="/images/dh-assets/circle-logo/dh-circle-logo-primary.png" />
 <link href="https://fonts.googleapis.com/css?family=Roboto:400,700" rel="stylesheet" />
@@ -44,3 +48,11 @@ qacct:"p-09CUz3n_dWjFg"
     ga('create', 'UA-92778659-1', 'auto');
     ga('send', 'pageview');
 </script>
+<!-- Peek in tag -->
+<script>
+    peekin = {api_key: "b31723302043cf7df20f"};
+    if (user){
+        peekin.identity = user.username;
+    }
+</script>
+<script src="//cdn.peekin.io/peekin.js" async></script>
