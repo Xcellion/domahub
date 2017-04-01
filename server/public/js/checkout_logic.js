@@ -27,7 +27,7 @@ $(document).ready(function() {
 			}
 			//all good!
 			else {
-				submitStripe(response.id);
+				submitNewRental(response.id);
 			}
 		});
 	    return false;
@@ -66,8 +66,13 @@ $(document).ready(function() {
 		e.preventDefault();
 		var bool = checkSubmit();
 		if (bool == true && unlock){
-			unlock = false;
-			$("#stripe-form").submit();
+			if (listing_info.price_rate != 0){
+				unlock = false;
+				$("#stripe-form").submit();
+			}
+			else {
+				submitNewRental(false);
+			}
 		}
 		else {
 			$(this).removeClass('is-loading');

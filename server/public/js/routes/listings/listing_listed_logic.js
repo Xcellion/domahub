@@ -1,6 +1,5 @@
 var unlock = true;
 
-
 $(document).ready(function() {
 	setUpCalendar(listing_info);
 
@@ -149,19 +148,19 @@ function checkSubmit(){
 		bool = "Invalid dates!";
 		errorHandler(bool);
 	}
-	else if (!$("#cc-num").val()){
+	else if (!$("#cc-num").val() && listing_info.price_rate != 0){
 		bool = "Invalid cc number!";
 		$("#stripe-error-message").addClass('is-danger').html("Please provide a credit card to charge.");
 	}
-	else if (!$("#cc-exp").val()){
+	else if (!$("#cc-exp").val() && listing_info.price_rate != 0){
 		bool = "Invalid cc exp!";
 		$("#stripe-error-message").addClass('is-danger').html("Please provide your credit card expiration date.");
 	}
-	else if (!$("#cc-cvc").val()){
+	else if (!$("#cc-cvc").val() && listing_info.price_rate != 0){
 		bool = "Invalid cvc!";
 		$("#stripe-error-message").addClass('is-danger').html("Please provide your credit card CVC number.");
 	}
-	else if (!$("#cc-zip").val()){
+	else if (!$("#cc-zip").val() && listing_info.price_rate != 0){
 		bool = "Invalid zip Code!";
 		$("#stripe-error-message").addClass('is-danger').html("Please provide a ZIP code.");
 	}
@@ -181,7 +180,7 @@ function checkSubmit(){
 }
 
 //function to submit new rental info
-function submitStripe(stripeToken){
+function submitNewRental(stripeToken){
 	if (checkSubmit() == true && unlock){
 		var newEvents = $('#calendar').fullCalendar('clientEvents', returnMineNotBG);
 		unlock = false;
@@ -279,7 +278,7 @@ function successHandler(data){
 	}
 	else {
 		var url = "https://www.domahub.com/listing/" + listing_info.domain_name + "/" + data.rental_id;
-		$("#rental-preview-button").href(url);
+		$("#rental-preview-button").attr("href", url);
 	}
 }
 
