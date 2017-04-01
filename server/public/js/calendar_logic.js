@@ -252,6 +252,14 @@ function setUpCalendar(listing_info){
 	});
 }
 
+//helper function to get month from a string
+function getMonthFromString(mon){
+    var d = Date.parse(mon + "1, 2012");
+    if(!isNaN(d))
+        return new Date(d).getMonth() + 1;
+    return -1;
+}
+
 //helper function to highlight individual agendaweek cells
 function highlightCellHover(viewname){
 	$('td.fc-widget-content').not(".fc-axis").mouseenter(function(e){
@@ -835,15 +843,22 @@ function createEvent(start, end){
 
 	//checked for all cases, create the new event!
 	if (!eventEncompassed && overlappingEvents.length == 0 && fullyOverlappingEvents.length == 0){
+        if (listing_info.price_rate != 0){
+            var event_title = moneyFormat.to(eventPrice({
+                start: start,
+                end: end
+            }).price);
+        }
+        else {
+            var event_title = "Free";
+        }
+
 		var eventData = {
 			start: start,
 			end: end,
 			newevent: true,
 			color: "#3CBC8D",
-			title: moneyFormat.to(eventPrice({
-				start: start,
-				end: end
-			}).price),
+			title: event_title,
 		};
 
 		//make sure it doesnt overlap any existing events (not mine)
@@ -930,7 +945,7 @@ function updatePrices(){
         var s_or_not = (totalUnits > 1) ? "s" : "";
 
         //price or price per day
-        if (totalPrice == 0){
+        if (totalPrice == 0 && listing_info.price_rate != 0){
             $("#calendar-card-content").find(".card-button-next").addClass('is-disabled');
             $("#price").text("$" + listing_info.price_rate + " Per " + listing_info.price_type.capitalizeFirstLetter());
         }
@@ -946,7 +961,9 @@ function updatePrices(){
                 duration: 100,
                 easing: 'swing',
                 step: function (now) {
-                    $(this).text("Total: $" + Number(Math.round(now+'e2')+'e-2').toFixed(2));
+                    if (listing_info.price_rate != 0){
+                        $(this).text("Total: $" + Number(Math.round(now+'e2')+'e-2').toFixed(2));
+                    }
                 }
             });
         }

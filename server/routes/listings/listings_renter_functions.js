@@ -304,14 +304,19 @@ module.exports = {
     checkRentalPrice : function(req, res, next){
         console.log("F: Checking rental price...");
 
-        var price = calculatePrice(req.body.events, req.session.listing_info);
+        if (req.session.listing_info.price_rate != 0){
+            var price = calculatePrice(req.body.events, req.session.listing_info);
 
-        //check for price
-        if (!price){
-            error.handler(req, res, "Invalid price!", "json");
+            //check for price
+            if (!price){
+                error.handler(req, res, "Invalid price!", "json");
+            }
+            else {
+                req.session.new_rental_info.price = price;
+                next();
+            }
         }
         else {
-            req.session.new_rental_info.price = price;
             next();
         }
     },
@@ -502,25 +507,30 @@ module.exports = {
     getOwnerStripe : function(req, res, next){
         console.log("F: Getting all Stripe info for a listing...");
 
-        //get the stripe id of the listing owner
-        Account.getStripeAndType(req.params.domain_name, function(result){
-            if (result.state == "error"){error.handler(req, res, result.info);}
-            else {
-                if (!result.info[0].stripe_account){
-                    error.handler(req, res, "Invalid stripe user account!", "json");
-                }
+        if (req.session.listing_info.price_rate != 0){
+            //get the stripe id of the listing owner
+            Account.getStripeAndType(req.params.domain_name, function(result){
+                if (result.state == "error"){error.handler(req, res, result.info);}
                 else {
-                    req.session.new_rental_info.owner_stripe_id = result.info[0].stripe_account;	//stripe id
+                    if (!result.info[0].stripe_account){
+                        error.handler(req, res, "Invalid stripe user account!", "json");
+                    }
+                    else {
+                        req.session.new_rental_info.owner_stripe_id = result.info[0].stripe_account;	//stripe id
 
-                    // //premium or basic listing expiration date
-                    // if (result.info[0].exp_date != 0 && result.info[0].exp_date > (new Date).getTime()){
-                    //     req.session.new_rental_info.premium = true;
-                    // }
+                        // //premium or basic listing expiration date
+                        // if (result.info[0].exp_date != 0 && result.info[0].exp_date > (new Date).getTime()){
+                        //     req.session.new_rental_info.premium = true;
+                        // }
 
-                    next();
+                        next();
+                    }
                 }
-            }
-        });
+            });
+        }
+        else {
+            next();
+        }
     },
 
     //delete session rental info if it exists
