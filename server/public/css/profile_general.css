@@ -51,19 +51,12 @@
   outline: -webkit-focus-ring-color auto 3px; }
 
 @media screen and (min-width: 769px) {
-  .table {
+  .table.is-profile {
     min-width: 730px; } }
 
 @media screen and (max-width: 768px) {
-  .table {
+  .table.is-profile {
     width: 100%; } }
-
-.table.is-bordered tr {
-  border-left: 1px solid rgba(0, 0, 0, 0.12);
-  border-right: 1px solid rgba(0, 0, 0, 0.12); }
-
-.table.is-bordered th {
-  border-bottom: 1px solid rgba(0, 0, 0, 0.12) !important; }
 
 .row-disp {
   height: 48px; }
@@ -98,12 +91,14 @@
 
 .td-price-rate {
   white-space: nowrap;
-  border-left: 1px solid rgba(0, 0, 0, 0.12);
   width: 75px;
   text-align: right !important; }
 
 .td-price-type {
   width: 75px; }
+
+.td-rental-date {
+  width: 150px; }
 
 @media screen and (min-width: 769px) {
   .td-address {

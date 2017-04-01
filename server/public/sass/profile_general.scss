@@ -74,21 +74,14 @@
 
 // table stuff
 .table {
-  @include tablet {
-    min-width: 730px;
+  &.is-profile {
+    @include tablet {
+      min-width: 730px;
+    }
+    @include mobile {
+      width: 100%;
+    }
   }
-  @include mobile {
-    width: 100%;
-  }
-}
-
-.table.is-bordered tr {
-    border-left: 1px solid $border;
-    border-right: 1px solid $border;
-}
-
-.table.is-bordered th {
-    border-bottom: 1px solid $border !important;
 }
 
 .row-disp {
@@ -136,13 +129,16 @@
 
 .td-price-rate {
   white-space: nowrap;
-  border-left: 1px solid $border;
   width: 75px;
   text-align: right !important;
 }
 
 .td-price-type {
   width: 75px;
+}
+
+.td-rental-date {
+  width: 150px;
 }
 
 .td-address {
