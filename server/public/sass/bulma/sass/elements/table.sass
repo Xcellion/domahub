@@ -9,73 +9,40 @@
     td,
     th
       border-bottom: none
-  td
-    padding: 8px 6px
   td,
   th
     text-align: left
     vertical-align: middle
-    border-bottom: 1px solid $border
-    &.is-danger
-      color: $danger
-      font-weight: 400
-    &.is-success
-      color: $success
-      font-weight: 400
-      text-transform: uppercase
+    padding: 10px
     &.row-drop-td
       padding: 0
       border: none
     & > .div-drop
       background-color: $white
-      border-bottom: 1px solid $border
+      border-top: 1px solid $border
       padding: 10px 18px 10px 35px
       cursor: auto
-
     // Modifiers
-    &.is-icon
-      padding: 5px
-      text-align: center
-      white-space: nowrap
-      width: 1%
-      .fa
-        +fa(21px, 24px)
-      &.is-link
-        padding: 0
-        & > a
-          padding: 5px
-    &.is-link
-      padding: 0
-      & > a
-        display: block
-        padding: 8px 10px
-        &:hover
-          background-color: $link
-          color: $link-invert
     &.is-narrow
       white-space: nowrap
       width: 1%
   th
-    border-width: 0 0 1px
+    font-weight: 700
+    &:hover
+      cursor: pointer
+  tr
     border: 1px solid $border
-    color: $text
-    font-weight: bold
-    padding: 12px 6px
+    border-width: 0 1px
   thead
-    border-bottom: 2px solid $border
+    border: 1px solid $border
+    border-width: 1px 1px 2px
     &.has-shadow
       border: none
       +box-shadow(0,2px,3px,$border,0)
-    th
-      border: none
-      &:hover
-        cursor: pointer
   tbody
     tr
-      &:last-child
-        td,
-        th
-          border-bottom-width: 0
+      &:hover
+        background-color: $border
       &.is-active
         background-color: #efefef
       &.no-hover-effect
@@ -96,34 +63,21 @@
               background: $primary
               position: absolute
               content: ""
-              height: 48px
+              height: 53px
               width: 4px
-              left: 19px
+              left: 20px
               +mobile
                 left: 0
-          // fix for dropdown on mobile
-          &.is-expanded
-            &:hover
-              &::after
-                +mobile
-                  height: 60px
-
         &.unverified-row
           &::after
             background: $danger
             position: absolute
             content: ""
-            height: 48px
+            height: 53px
             width: 4px
-            left: 19px
+            left: 20px
             +mobile
               left: 0
-
-  tfoot
-    td,
-    th
-      border-width: 2px 0 0
-      color: $text-light
   // Modifiers
   &.is-bordered
     td,
@@ -137,18 +91,7 @@
   &.is-narrow
     td,
     th
-      padding: 5px 10px
-      // Modifiers
-      &.is-icon
-        padding: 2px
-        &.is-link
-          padding: 0
-          & > a
-            padding: 2px
-      &.is-link
-        padding: 0
-        & > a
-          padding: 5px 10px
+      padding: 6px
   &.is-striped
     tbody
       tr

@@ -63,6 +63,9 @@
     +box-shadow(0,0,0,$black,0)
   &.is-icon
     border: none
+    &:hover,
+    &:focus
+      background-color: $border
 
   // Colors
   @each $name, $pair in $colors
