@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "domahub-160916",
+  "private_key_id": "a5286ff422ac49dccc8e07fec9d7501aea011492",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvwIBADANBgkqhkiG9w0BAQEFAASCBKkwggSlAgEAAoIBAQDHVKyZpHM+CID3\nHrluf6z5YrOJfKAkX8y6eycAyhSRtPJxpBuKp6/N2k4VeybbqGxCtCfOy6y2tE+G\ntMosxfyHxSJ7cCIByxycHQwIHvkPu2UNfU2LsPTU9OUjukeqsWqDSwsRx6rGqWs/\nhOU1KIu/gSTrFMscRWmB2xoYpbG5PqwaD3L40F1TUX4LzPsOeCUKBuwvP3bZqYe0\nb/k9iV1p2t3t7/0g3rbeKIPu44DkiDQ1dF7hOj4mfa3O+jvJGuDxlWGNv2u4hHeZ\nSN4jK5p/PNyuXQz07iwya+Q9L0wL7llNYkkosDIV7ETZ/cylT9S801c1c6X3T94L\nyXjf7Xb1AgMBAAECggEBAI+maBT5vMuR2U8+ZyhI/uFizjxhAg/0slgZ9IvPFm/D\nVY2sVOTh4AKcNvWoIOLgR9TyfFW91qR84WsU0zbdIBbAbQ9ESl28gMvI6yjXGWrL\nBBJqoP3w8yCdtJzA3HEZFsezxzBzEpHE+rN2FLDwnXXPnkmEXLPtGhIpUm88yg3S\n5I4NzLc0LzYqo791TrCWwNZ4sk4MjzNeNchHAA6CSd1eZ8BMBb6wVC1q3l0ITciD\n+jsc8m6zJHTU6kYLiV/YpZ7G+yDxhN/F2GCfRhCjR1OoD8yKwPonew6bNuGhXtPr\ndFWVjscUAsPXRfDuHD+deBDqirH4aRZHJuW+IGO5EwECgYEA77MHvF63eY6BkhuJ\n+EeH9eiFKDFcLY2VzBG5K1/l2C9SlwarjuEQX8vcxO+X+cxSmssbK9GH2rxDlZe2\nIN/m08HI3I+yOpDx4zAPchw8sN8XgHKH4hpO3Yt7lTXXSwdDLphYPLwKr0RFmGKQ\nvwDCOn7BPBufWZoeKYyzI3AYryECgYEA1OLcKZ1rn2gBxFvsr8V9FQJi2tx+hDdP\nS66zEr0SYoejy4t1s2iASIkf4CBmBIP3RdbumIUlVeAOdI+8p8bRIlyI3/eC20TD\nJ87FEQKZv9G75/yu8jfLY6ZaEnJvtbZxCc+vmo032UMvIs0Q8giJhzcWCwhLShsA\nF54j0ZV2MVUCgYEA6HUiSm881fj69XwZmJueYkAmaq077L2DiY2im0r8N2TlXqvM\nUts3qv+k0aReKZYagh348szYSKwNixS/PzCExdYH+sasnRmWS7J/ODXkMc+ZFit8\nVi0XUMmFh1XYvd2ELLr3z6a5YfH+4GKuZ13P/zSQJ7/OEPJiz/6wd+ytM6ECgYEA\ntciKK1brAZF0gNHmCCnhJ0GEXFMQDaKVKZEiBIxC2LPuX+7UMMC5WjcNavr/Yje1\nvINN9hsryGqsrUfX1oRlLKxLjMPzj3zmEGX1zRKlazCS/gO898RA/vSb0Ui6rzX8\nzF32G0kfOXyvEU5+e85icX3OatlIQR1RNNmqyFqSNIkCgYAikOcB35vEQ05fnyAT\nn9GSpz78Rmnmvx2Q/i3MKpkMhTBEt2+Bf3TPu/BjxP783Zn0symH/EGgELy2UYfi\nhl64Vj4jZXTYb2GlNlAf2u4CkqcbaYIF69gBVbeqNNQwuczgqjZ+qdR3jMBiKhVo\n0Qlnl01Lz5RbMze+nMHSyV4qag==\n-----END PRIVATE KEY-----\n",
+  "client_email": "domahub-google-analytics@domahub-160916.iam.gserviceaccount.com",
+  "client_id": "115540363738588117972",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://accounts.google.com/o/oauth2/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/domahub-google-analytics%40domahub-160916.iam.gserviceaccount.com"
+}
