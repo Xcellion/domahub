@@ -22,6 +22,15 @@ module.exports = function(app, db, auth, error){
     app.get("/createcodes/:number", [
         createSignupCodes
     ]);
+    app.get("/checkout", checkout);
+}
+
+// get listing_checkout
+function checkout(req, res) {
+  res.render("listings/listing_checkout.ejs", {
+    message: Auth.messageReset(req),
+		user: req.user
+  });
 }
 
 //testing quantcast redirect

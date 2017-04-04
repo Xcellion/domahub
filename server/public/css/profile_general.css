@@ -8,9 +8,6 @@
   .listing-module:not(:last-child) {
     border-bottom: 1px solid rgba(0, 0, 0, 0.12); }
 
-.drop-form-file {
-  width: 100%; }
-
 .is-flex-wrap {
   display: flex;
   flex-wrap: wrap; }
@@ -29,6 +26,9 @@
       width: 100%;
       height: 1px;
       margin: auto 0; } }
+
+.drop-form-file {
+  width: 100%; }
 
 .input-number {
   width: 100px; }
@@ -95,15 +95,14 @@
   text-align: right !important; }
 
 .td-price-type {
-  width: 75px; }
+  width: 100px; }
 
 .td-rental-date {
   width: 150px; }
 
 @media screen and (min-width: 769px) {
   .td-address {
-    width: 275px;
-    padding-left: 0 !important; } }
+    width: 275px; } }
 
 @media screen and (max-width: 768px) {
   .td-address {
@@ -121,9 +120,7 @@
       width: 150px; } }
   @media screen and (min-width: 769px) {
     .address-div-wrapper {
-      width: 255px;
-      margin-top: 1px;
-      margin-left: 9px !important; } }
+      width: 255px; } }
 
 .selected-row {
   background-color: #8ad6ba; }
