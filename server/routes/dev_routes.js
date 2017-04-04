@@ -72,13 +72,16 @@ function dnsRecords(req, res, next){
 function createSignupCodes(req, res, next){
     console.log("F: Creating " + req.params.number + " signup codes...");
     var codes = [];
+    var return_lazy = [];
 
     if (validator.isInt(req.params.number)){
         for (var x = 0; x < req.params.number; x++){
-            codes.push([randomstring.generate(10), 1]);
+            var random_string = randomstring.generate(10);
+            codes.push([random_string, 1]);
+            return_lazy.push("https://domahub.com/signup/" + random_string);
         }
     }
     Account.createSignupCodes(codes, function(result){
-        res.send(result);
+        res.send(return_lazy.join("</br></br>"));
     });
 }
