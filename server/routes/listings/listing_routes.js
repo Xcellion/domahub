@@ -170,7 +170,7 @@ module.exports = function(app, db, auth, error, stripe){
 		res.render("listings/listing_w3bbi.ejs", {
 			user: req.user,
 			message: Auth.messageReset(req)
-		})
+		});
 	});
 
 	//render a rental screenshot
@@ -186,6 +186,11 @@ module.exports = function(app, db, auth, error, stripe){
 		renter_functions.checkStillVerified,
 		renter_functions.deleteRentalInfo,
 		renter_functions.renderListing
+	]);
+
+	//render rental checkout page
+	app.get('/listing/:domain_name/checkout', [
+		renter_functions.renderCheckout
 	]);
 
 	//get listing info / times
@@ -225,6 +230,16 @@ module.exports = function(app, db, auth, error, stripe){
 	app.get('/rentalpreview', [
 		renter_functions.checkForPreview,
 		renter_functions.renderRental
+	]);
+
+	//render checkout page
+	app.post('/listing/:domain_name/checkout', [
+		urlencodedParser,
+		checkDomainValid,
+		checkDomainListed,
+		renter_functions.getVerifiedListing,
+		renter_functions.checkRentalTimes,
+		renter_functions.redirectCheckout
 	]);
 
 	//create a new rental
