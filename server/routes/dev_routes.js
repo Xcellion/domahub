@@ -26,7 +26,10 @@ module.exports = function(app, db, auth, error){
 
 //testing quantcast redirect
 function quantcast(req, res, next){
-    res.render("quant_redirect.ejs");
+    res.render("quant_redirect.ejs", {
+        redirect_link: "https://fuck.com",
+        redirect_name: "fuck.com"
+    });
 }
 
 //testing alexa get
