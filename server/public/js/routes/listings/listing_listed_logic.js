@@ -201,12 +201,13 @@ function submitStripe(stripeToken){
 		//create a new rental
 		$.ajax({
 			type: "POST",
-			url: "/listing/" + listing_info.domain_name + "/rent",
+			url: "/listing/" + listing_info.domain_name + "/checkout",
 			data: {
-				events: minEvents,
-				new_user_email: $("#new_user_email").val(),
-				address: $("#address_form_input").val(),
-				stripeToken: stripeToken
+				events: minEvents
+				// new_user_email: $("#new_user_email").val(),
+				// address: $("#address_form_input").val(),
+				// stripeToken: stripeToken,
+				// rental_type: 0
 			}
 		}).done(function(data){
 			$('#checkout-button').removeClass('is-loading');
@@ -215,7 +216,7 @@ function submitStripe(stripeToken){
 				for (var x = 0; x < data.unavailable.length; x++){
 					showCardContent("calendar");
 					$('#calendar').fullCalendar('removeEvents', data.unavailable[x]._id);
-					$("#calendar-error-message").addClass('is-danger').html("Invalid slots have been removed from your selection! Your credit card has not been charged yet.");
+					$("#calendar-error-message").removeClass('is-hidden').addClass('is-danger').html("Invalid slots have been removed from your selection! Your credit card has not been charged yet.");
 				}
 			}
 			else if (data.state == "success"){
@@ -241,7 +242,7 @@ function errorHandler(message){
 	}
 	else if (message == "Invalid dates!"){
 		showCardContent("calendar");
-		$("#calendar-error-message").addClass('is-danger').html("Invalid dates selected! Your credit card has not been charged yet.");
+		$("#calendar-error-message").removeClass('is-hidden').addClass('is-danger').html("Invalid dates selected! Your credit card has not been charged yet.");
 	}
 	else if (message == "Invalid email!"){
 		showCardContent("checkout");

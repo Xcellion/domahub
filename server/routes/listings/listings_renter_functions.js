@@ -82,6 +82,10 @@ module.exports = {
         else if (!req.user && req.body.new_user_email && !validator.isEmail(req.body.new_user_email)){
             error.handler(req, res, "Invalid email!", "json");
         }
+        //check for rental type
+        else if (req.body.rental_type != 0 || req.body.rental_type != 1){
+            error.handler(req, res, "Invalid rental type!", "json");
+        }
         else {
 
             //check against google safe browsing
@@ -553,10 +557,36 @@ module.exports = {
         });
     },
 
+    renderCheckout : function(req, res, next){
+        console.log("F: Rendering listing checkout page...");
+
+        res.render("listings/listing_checkout.ejs", {
+            user: req.user,
+            message: Auth.messageReset(req),
+            listing_info: req.session.listing_info,
+            new_rental_info : req.session.new_rental_info
+        });
+    },
+
     //redirect to rental preview route
     redirectToPreview : function(req, res, next){
         console.log("F: Redirecting to rental preview...");
         res.redirect('/rentalpreview');
+    },
+
+    //redirect to rental page after updating its owner
+    redirectRental: function(req, res, next){
+        console.log("F: Redirecting to rental page...");
+
+        delete req.session.rental_object.db_object;
+        delete req.rental_info;
+        res.redirect("/listing/" + req.params.domain_name + "/" + req.params.rental_id);
+    },
+
+    //redirect to checkout page after checking times
+    redirectCheckout: function(req, res, next){
+        console.log("F: Redirecting to checkout page...");
+        res.redirect("/listing/" + req.params.domain_name + "/checkout");
     },
 
     //check to make sure we should display edit overlay
@@ -832,15 +862,6 @@ module.exports = {
         });
     },
 
-    //redirect to rental page after updating its owner
-    redirectRental: function(req, res, next){
-        console.log("F: Redirecting to rental page...");
-
-        delete req.session.rental_object.db_object;
-        delete req.rental_info;
-        res.redirect("/listing/" + req.params.domain_name + "/" + req.params.rental_id);
-    },
-
     sendRentalSuccess : function(req, res, next){
         var rental_id = (req.session.new_rental_info) ? req.session.new_rental_info.rental_id : req.params.rental_id;
         var owner_hash_id = (req.session.new_rental_info) ? req.session.new_rental_info.rental_db_info.owner_hash_id : false;
@@ -849,8 +870,7 @@ module.exports = {
         res.send({
             state: "success",
             rental_id: rental_id,
-            owner_hash_id: owner_hash_id || false,
-            rentals: (req.user) ? req.user.rentals : false
+            owner_hash_id: owner_hash_id || false
         });
     }
 
@@ -944,37 +964,6 @@ function joinRentalTimes(rental_times){
     }
 
     return temp_times;
-}
-
-//function to create rental properties inside listing info
-function createRentalProp(orig_rentals){
-    var all_rentals = orig_rentals.slice(0);
-
-	//iterate once across all results
-	for (var x = 0; x < all_rentals.length; x++){
-		var temp_dates = [];
-		var temp_durations = [];
-
-		//iterate again to look for multiple dates and durations
-		for (var y = 0; y < all_rentals.length; y++){
-			if (!all_rentals[y].checked && all_rentals[x]["rental_id"] == all_rentals[y]["rental_id"]){
-				temp_dates.push(all_rentals[y].date);
-				temp_durations.push(all_rentals[y].duration);
-				all_rentals[y].checked = true;
-			}
-		}
-
-		//combine dates into a property
-		all_rentals[x].date = temp_dates;
-		all_rentals[x].duration = temp_durations;
-	}
-
-	//remove empty date entries
-	all_rentals = all_rentals.filter(function(value, index, array){
-		return value.date.length;
-	});
-
-	return all_rentals;
 }
 
 //helper function to check database for availability
@@ -1084,11 +1073,6 @@ function addProtocol(address){
     }
 }
 
-//helper function to divide number
-function divided(num, den){
-    return Math[num > 0 ? 'floor' : 'ceil'](num / den);
-}
-
 //helper function to get price of events
 function calculatePrice(times, listing_info){
     if (times && listing_info){
@@ -1131,15 +1115,6 @@ function updateUserRentalsObject(user_rentals, db_rentals, rental_id){
                 }
             }
             break;
-        }
-    }
-}
-
-//helper function to get the req.user listings object for a specific domain
-function getUserRentalObj(rentals, domain_name){
-    for (var x = 0; x < rentals.length; x++){
-        if (rentals[x].domain_name.toLowerCase() == domain_name.toLowerCase()){
-            return rentals[x];
         }
     }
 }
