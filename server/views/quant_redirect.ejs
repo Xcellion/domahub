@@ -2,51 +2,84 @@
 <html>
 <head>
     <title>Redirecting... - DomaHub</title>
-<body>
-
     <%# Quantcast tag %>
     <script type="text/javascript">
     var _qevents = _qevents || [];
 
     (function() {
-    var elem = document.createElement('script');
-    elem.src = (document.location.protocol == "https:" ? "https://secure" : "http://edge") + ".quantserve.com/quant.js";
-    elem.async = true;
-    elem.type = "text/javascript";
-    var scpt = document.getElementsByTagName('script')[0];
-    scpt.parentNode.insertBefore(elem, scpt);
+        var elem = document.createElement('script');
+        elem.src = (document.location.protocol == "https:" ? "https://secure" : "http://edge") + ".quantserve.com/quant.js";
+        elem.async = true;
+        elem.type = "text/javascript";
+        var scpt = document.getElementsByTagName('script')[0];
+        scpt.parentNode.insertBefore(elem, scpt);
     })();
 
     _qevents.push({
-    qacct:"p-09CUz3n_dWjFg"
+        qacct:"p-09CUz3n_dWjFg"
     });
     </script>
 
     <noscript>
-    <div style="display:none;">
-    <img src="//pixel.quantserve.com/pixel/p-09CUz3n_dWjFg.gif" border="0" height="1" width="1" alt="Quantcast"/>
-    </div>
+        <div style="display:none;">
+            <img src="//pixel.quantserve.com/pixel/p-09CUz3n_dWjFg.gif" border="0" height="1" width="1" alt="Quantcast"/>
+        </div>
     </noscript>
 
     <%# Google analytics tag %>
     <script>
-        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
         (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
         m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-        })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-        ga('create', 'UA-92778659-1', 'auto');
-        ga('send', 'pageview');
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+    ga('create', 'UA-92778659-1', 'auto');
+    ga('send', 'pageview');
     </script>
+
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,700" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="https://domahub.com/css/min/master.min.css" />
+    <link rel="stylesheet" type="text/css" href="/css/min/login_signup.min.css" />
+
+    <body>
+
+    <div class="content has-text-centered clear-nav">
+        <h2 class="margin-bottom-5 has-text-centered">
+            <a class='is-inline-block flat-logo is-primary' tabindex="1" title="Home" href="/">
+                <div class='is-inline-block flat-logo is-primary'></div>
+            </a>
+        </h2>
+    </div>
+
+    <div id="login-form" class="account-form">
+        <form id="target" action="/login" method="post">
+            <p id="message" class="has-text-centered margin-bottom-25">Please wait, now redirecting you.</p>
+
+            <div id="redirect">
+                <a id="redirect-button" class="login-button button is-primary is-stylish is-fullwidth" href="/">
+                    Continue to <%= redirect_name || "domahub.com" %>
+                </a>
+            </div>
+
+        </form>
+    </div>
 
     <%# Redirect to listings page %>
     <script>
         console.log("Redirecting to appropriate listing page!");
-        window.location = "<%= redirect_link || "https://domahub.com" %>";
-    </script>
+        var seconds = 3;
+        var interval;
+    	//add a period every second
+        interval = window.setInterval(function(){
+    		seconds--;
+    		var message = document.getElementById("message");
+            message.innerHTML = message.innerHTML += ".";
+    		//redirect after 3 seconds
+    		if (seconds == 0){
+                clearInterval(interval);
+    			window.location.href = "<%= redirect_link || "https://domahub.com"; %>";
+    		}
+    	}, 1000);
 
-    <!--
-        Hello! This page is redirecting you to the domain's DomaHub listings page.
-        On that page you can rent this domain name and begin using it immediately!
-    -->
+    </script>
 </body>
 </html>
