@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>DomaHub - Checkout</title>
+  <link rel="stylesheet" type="text/css" href="/css/min/listing_page.min.css" />
+  <%- include("../templates/head_links"); %>
+</head>
+
+<body>
+
+  <%- include("../templates/navbar", {user: user}); %>
+
+  <section class="section is-medium min-height">
+    <div class="container">
+      <div class="columns">
+        <div class="column is-7">
+          <% if (!user){ %>
+          <div class="content">
+            <h3>
+              Have a DomaHub account?
+            </h3>
+          </div>
+          <form>
+            <p class="control">
+              <a tabindex="1" class="button is-primary is-stylish is-small no-shadow">Log into your account</a>
+            </p>
+          </form>
+          <% } %>
+
+          <hr width="60%" style="margin-left:auto;margin-right:auto;"/>
+
+          <div class="content">
+            <h2>1. Customize your website</h2>
+            <article class="message">
+              <div class="message-body">
+                There are many different ways to create content for your website.
+                Please select one of the options below to move forward!
+              </div>
+            </article>
+          </div>
+          <div id="choices-block">
+            <div class="content box no-shadow hover-effect choice-block build-choice">
+              <div class="step-box">
+                <span class="icon is-primary">
+                  <i class="fa fa-pencil-square"></i>
+                </span>
+                <h3 class="is-bold">Build a website</h3>
+              </div>
+              <p>
+                Use a website building service to create a beautiful website in minutes.
+                You don't even have to know how to code!
+              </p>
+            </div>
+            <div class="content box no-shadow hover-effect choice-block link-choice">
+              <div class="step-box">
+                <span class="icon is-info">
+                  <i class="fa fa-external-link-square"></i>
+                </span>
+                <h3 class="is-bold">Link web content</h3>
+              </div>
+              <p>
+                Link an existing website or web content (e.g. a gif, image, slideshow, etc.).
+                We will display that content through your new domain rental.
+              </p>
+            </div>
+            <div class="content box no-shadow hover-effect choice-block forward-choice">
+              <div class="step-box">
+                <span class="icon is-accent">
+                  <i class="fa fa-share-square"></i>
+                </span>
+                <h3 class="is-bold">Forward elsewhere</h3>
+              </div>
+              <p>
+                Forward your domain rental to a different domain name.
+              </p>
+            </div>
+          </div>
+
+          <div id="checkout-card-content" class="success-hide checkout-card-content">
+            <div class="content">
+              <p id="stripe-error-message">
+                  Please enter your payment information.
+              </p>
+            </div>
+            <form id="stripe-form" autocomplete="on">
+              <label class="label">Credit or Debit Card Number</label>
+              <p class="control has-icon">
+                <input tabindex="1" id="cc-num" data-stripe="number" class="input stripe-input" type="tel" placeholder="•••• •••• •••• ••••" autocomplete="cc-number"/>
+                <i id="cc-icon" class="fa fa-credit-card"></i>
+              </p>
+              <div class="control is-grouped">
+                <p class="control is-expanded">
+                  <label class="label">Expiration Date</label>
+                  <input tabindex="1" id="cc-exp" maxlength="7" data-stripe="exp" class="input stripe-input" type="tel" placeholder="•• / ••" autocomplete="cc-exp"/>
+                </p>
+                <p class="control">
+                  <label class="label">Security Code</label>
+                  <input tabindex="1" id="cc-cvc" data-stripe="cvc" class="input stripe-input" type="tel" placeholder="•••" autocomplete="off"/>
+                </p>
+              </div>
+              <p class="control">
+                <label class="label">Zip Code</label>
+                <input tabindex="1" id="cc-zip" maxlength="6" data-stripe="address_zip" class="input stripe-input" type="tel" autocomplete="postal-code" placeholder="•••••"/>
+              </p>
+            </form>
+            <p class="calendar-control margin-top-10">
+                <a tabindex="1" class="card-button-prev button no-shadow is-stylish is-small">Back</a>
+                <a id="checkout-button" tabindex="1" class="button is-primary no-shadow is-stylish is-small">Confirm & Pay</a>
+            </p>
+          </div>
+        </div>
+        <div class="column is-5">
+          <div class="box">
+              <div class="content-box">
+                <div class="content">
+                  <h1 class="is-primary">domahub.com</h1>
+                </div>
+              </div>
+              <div class="content-box">
+                <div class="columns">
+                  <div class="column is-6">
+                    <div class="content">
+                      <p id="preview-start-dates">
+                        Rental Start
+                      </p>
+                      <p>
+                        Apr 25, 2017
+                      </p>
+                    </div>
+                  </div>
+                  <div class="column is-6">
+                    <div class="content">
+                      <p id="preview-end-dates">
+                        Rental End
+                      </p>
+                      <p>
+                        Apr 27, 2017
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div class="control">
+                  <a tabindex="1" id="edit-dates-button" class="button is-primary is-stylish">Edit Dates</a>
+                </div>
+              </div>
+              <div class="content-box">
+
+              </div>
+            <div class="rental-summary-section">
+              <div class="columns">
+                <div class="column">
+                  <div class="content">
+                    <h3 class="is-bold">
+                      Rate
+                    </h3>
+                  </div>
+                </div>
+                <div class="column is-three-quarters">
+                  <div id="preview-rates" class="content has-text-right"></div>
+                </div>
+              </div>
+            </div>
+            <div class="rental-summary-section">
+              <div class="columns">
+                <div class="column is-half">
+                  <div class="content">
+                    <h2 class="is-bold">
+                      Total
+                    </h2>
+                  </div>
+                </div>
+                <div class="column is-half">
+                  <div class="content has-text-right">
+                    <h2 id="price-total"></h2>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <%- include("../templates/footer"); %>
+  <%- include("../templates/js_scripts"); %>
+</body>
+</html>
