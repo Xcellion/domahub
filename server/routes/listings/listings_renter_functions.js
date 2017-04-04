@@ -329,7 +329,10 @@ module.exports = {
             if (!err){
                 var domain_ip = address;
                 dns.lookup("domahub.com", function (err, address, family) {
-                    if (domain_ip != address && domain_ip.length != 1){
+                    if ((domain_ip == address || domain_ip[0] == address) && domain_ip.length == 1){
+                        next();
+                    }
+                    else {
                         console.log("F: Listing is not pointed to DomaHub anymore! Reverting verification...");
                         Listing.updateListing(domain_name, {
                             verified: null,
@@ -339,9 +342,6 @@ module.exports = {
                             req.session.listing_info.status = 0;
                             renderWhoIs(req, res, domain_name);
                         });
-                    }
-                    else {
-                        next();
                     }
                 });
             }
