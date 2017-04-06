@@ -558,14 +558,21 @@ module.exports = {
     },
 
     renderCheckout : function(req, res, next){
-        console.log("F: Rendering listing checkout page...");
+        if (req.session.new_rental_info){
+            console.log("F: Rendering listing checkout page...");
 
-        res.render("listings/listing_checkout.ejs", {
-            user: req.user,
-            message: Auth.messageReset(req),
-            listing_info: req.session.listing_info,
-            new_rental_info : req.session.new_rental_info
-        });
+            res.render("listings/listing_checkout.ejs", {
+                user: req.user,
+                message: Auth.messageReset(req),
+                listing_info: req.session.listing_info,
+                new_rental_info : req.session.new_rental_info
+            });
+        }
+        else {
+            console.log("F: Not checking out! Redirecting to listings page...");
+
+            res.redirect("/listing/" + req.params.domain_name);
+        }
     },
 
     //redirect to rental preview route
@@ -581,12 +588,6 @@ module.exports = {
         delete req.session.rental_object.db_object;
         delete req.rental_info;
         res.redirect("/listing/" + req.params.domain_name + "/" + req.params.rental_id);
-    },
-
-    //redirect to checkout page after checking times
-    redirectCheckout: function(req, res, next){
-        console.log("F: Redirecting to checkout page...");
-        res.redirect("/listing/" + req.params.domain_name + "/checkout");
     },
 
     //check to make sure we should display edit overlay
@@ -862,9 +863,17 @@ module.exports = {
         });
     },
 
+    //time check was successful! redirect to checkout
+    sendTimeSuccess : function(req, res, next){
+        res.send({
+            state: "success"
+        });
+    },
+
+    //rental was successful! (send new rental info)
     sendRentalSuccess : function(req, res, next){
         var rental_id = (req.session.new_rental_info) ? req.session.new_rental_info.rental_id : req.params.rental_id;
-        var owner_hash_id = (req.session.new_rental_info) ? req.session.new_rental_info.rental_db_info.owner_hash_id : false;
+        var owner_hash_id = (req.session.new_rental_info.rental_db_info) ? req.session.new_rental_info.rental_db_info.owner_hash_id : false;
         delete req.session.new_rental_info;
 
         res.send({

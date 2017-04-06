@@ -239,7 +239,7 @@ module.exports = function(app, db, auth, error, stripe){
 		checkDomainListed,
 		renter_functions.getVerifiedListing,
 		renter_functions.checkRentalTimes,
-		renter_functions.redirectCheckout
+		renter_functions.sendTimeSuccess
 	]);
 
 	//create a new rental
