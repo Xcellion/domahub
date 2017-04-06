@@ -113,7 +113,7 @@ function submitTimes(checkout_button){
 				}
 			}
 			else if (data.state == "success"){
-				window.location.href = "/listing/" + listing_info.domain_name + "/checkout";
+				window.location.assign(window.location.origin + "/listing/" + listing_info.domain_name + "/checkout");
 			}
 			else if (data.state == "error"){
 				$("#calendar-error-message").removeClass('is-hidden').addClass('is-danger').html("Something went wrong with the rental! Please try again.");
@@ -272,7 +272,6 @@ function createTrafficChart(){
 					display:false
 				},
 				responsive: true,
-				// showAllTooltips: true,
 				hover: {
 					mode: "index"
 				},
@@ -332,6 +331,8 @@ function createTrafficChart(){
 				}
 			 }
 		});
+
+		$("#traffic-loading").addClass('is-hidden');
 
 	}
 }
@@ -397,30 +398,95 @@ function editRentalModule(){
 		popular_screenshot.src = background_image;
 	}
 
-	editPreviousRentalModule(popular_rental);
+	editExampleRentalModule(popular_rental);
 }
 
 //function to create previous rentals module
-function editPreviousRentalModule(popular_rental){
+function editExampleRentalModule(popular_rental){
 	if (listing_info.rentals.length){
 		var total_to_show = Math.min(5, listing_info.rentals.length);
 		var already_shown = [];
 		var x = 0;
 		var now = moment();
 		while (already_shown.length < total_to_show){
-			var end_moment = moment(listing_info.rentals[x].date + listing_info.rentals[x].duration);
 
-			//rental is in the past, rental is not the trending rental, rental is not already showing
-			if (end_moment.isBefore(now) && listing_info.rentals[x].rental_id != popular_rental.rental_id && already_shown.indexOf(listing_info.rentals[x].rental_id) == -1){
-				var previous_clone = $("#previous-rentals-clone").clone().removeAttr('id').removeClass('is-hidden');
+			// rental is not already showing
+			if (already_shown.indexOf(listing_info.rentals[x].rental_id) == -1){
+				var end_moment = moment(listing_info.rentals[x].date + listing_info.rentals[x].duration);
+				var start_moment = moment(listing_info.rentals[x].date);
+				var ticker_clone = $("#ticker-clone").clone().removeAttr('id').removeClass('is-hidden');
 
-				//update clone specific data
-				previous_clone.attr("href", "/listing/" + listing_info.domain_name + "/" + listing_info.rentals[x].rental_id);
-				previous_clone.find(".previous-rental-duration").text(aggregateDateDuration(listing_info.rentals[x].rental_id));
-				var plural_or_single = (listing_info.rentals[x].views == 1) ? " view" : " views";
-				previous_clone.find(".previous-rental-views").text(listing_info.rentals[x].views + plural_or_single);
+				//user name or anonymous
+				var ticker_user = (user) ? user.username : "An anonymous user";
+				ticker_clone.find(".ticker-user").text(ticker_user + " ");
 
-				$("#previous-rentals-table").append(previous_clone);
+				//views / reach
+				var ticker_time = "<span class='is-bold'>" + moment.duration(listing_info.rentals[x].duration, "milliseconds").humanize() + "</span>";
+				var ticker_reach = "";
+
+				if (listing_info.rentals[x].views > 0){
+					var ticker_views_plural = (listing_info.rentals[x].views == 1) ? " person in " : " people in ";
+					var ticker_views_format = wNumb({
+						thousand: ','
+					}).to(listing_info.rentals[x].views);
+					var ticker_reach = "--reaching <span class='is-primary'>" + ticker_views_format + "</span>" + ticker_views_plural;
+				}
+				else {
+					ticker_time = " for " + ticker_time;
+				}
+
+				//word tense
+				var ticker_pre_tense = "";
+				var ticker_verb_tense = "";
+
+				//rental is in the past
+				if (end_moment.isBefore(now)){
+					ticker_verb_tense = "ed";
+
+					//where have they sent traffic??
+					var rental_preview = "/listing/" + listing_info.domain_name + "/" + listing_info.rentals[x].rental_id;
+				}
+				//rental ends in the future but started in the past
+				else if (now.isAfter(start_moment)){
+					ticker_pre_tense = "has been "
+					ticker_verb_tense = "ing";
+					var ticker_time = " for the past <span class='is-bold'>" + moment.duration(now.diff(start_moment)).humanize() + "</span>";
+					ticker_views_plural = ticker_views_plural.replace("in ", "");
+					ticker_reach = "--reaching <span class='is-primary'>" + ticker_views_format + "</span>" + ticker_views_plural;
+
+					//where have they been sending traffic??
+					var rental_preview = "http://" + listing_info.domain_name;
+				}
+
+				//update time / reach
+				ticker_clone.find(".ticker-time").html(ticker_time);
+				ticker_clone.find(".ticker-reach").html(ticker_reach);
+
+				//redirect content to display on that domain
+				if (listing_info.rentals[x].type == 0){
+					if (listing_info.rentals[x].address.match(/\.(jpeg|jpg|png|bmp)$/) != null){
+						var ticker_type = ticker_pre_tense + "display" + ticker_verb_tense + " <a href=" + rental_preview + " class='is-accent is-underlined'>an image</a> on this domain";
+					}
+					else if (listing_info.rentals[x].address.match(/\.(gif)$/) != null){
+						var ticker_type = ticker_pre_tense + "display" + ticker_verb_tense + " <a href=" + rental_preview + " class='is-accent is-underlined'>a GIF</a> on this domain";
+					}
+					else if (listing_info.rentals[x].address){
+						var ticker_address = getHost(listing_info.rentals[x].address);
+						var ticker_type = ticker_pre_tense + "redirect" + ticker_verb_tense + " this domain to <a href=" + rental_preview + " class='is-accent is-underlined'>" + ticker_address + "</a>";
+					}
+					else {
+						var ticker_type = ticker_pre_tense + "display" + ticker_verb_tense + " nothing on this domain";
+					}
+				}
+				//forward the domain
+				else {
+					var rental_preview = getHost(listing_info.rentals[x].address);
+					var ticker_type = ticker_pre_tense + "forward" + ticker_verb_tense + " this domain to <a href=" + rental_preview + " class='is-accent is-underlined'>" + ticker_address + "</a>";
+				}
+				ticker_clone.find(".ticker-type").html(ticker_type);
+
+				//add the cloned ticker event
+				$("#ticker-wrapper").prepend(ticker_clone);
 				already_shown.push(listing_info.rentals[x].rental_id);
 			}
 			x++;
@@ -431,9 +497,9 @@ function editPreviousRentalModule(popular_rental){
 			}
 		}
 
-		//if nothing is showing, then hide the module
-		if (already_shown.length == 0){
-			$("#previous-rentals-module").addClass('is-hidden');
+		//if something is showing, then un-hide the module
+		if (already_shown.length > 0){
+			$("#example-rentals-module").removeClass('is-hidden');
 		}
 	}
 }
@@ -455,3 +521,10 @@ function aggregateDateDuration(rental_id){
 String.prototype.capitalizeFirstLetter = function() {
     return this.charAt(0).toUpperCase() + this.slice(1);
 }
+
+//get the hostname of a URL
+function getHost(href) {
+    var l = document.createElement("a");
+    l.href = href;
+    return l.hostname.replace("www.", "");
+};

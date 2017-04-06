@@ -243,7 +243,7 @@ button[data-balloon] {
 .listing-module {
   padding: 25px 0; }
 
-#calendar-loading {
+#calendar-loading, #traffic-loading {
   background: url(/images/loading.svg) center center no-repeat;
   min-width: 250px;
   min-height: 308px;

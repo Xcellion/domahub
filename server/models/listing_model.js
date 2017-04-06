@@ -95,6 +95,7 @@ listing_model.prototype.getListingRentalsInfo = function(listing_id, callback){
 				rentals.address, \
 				rentals.rental_id, \
 				rentals.listing_id, \
+				rentals.type, \
 				rental_times.date, \
 				rental_times.duration, \
 				accounts.username, \
