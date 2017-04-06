@@ -460,7 +460,7 @@ pre {
 
 .block:not(:last-child), .box:not(:last-child), .content:not(:last-child), .notification:not(:last-child), .progress:not(:last-child), .title:not(:last-child),
 .subtitle:not(:last-child), .highlight:not(:last-child), .level:not(:last-child), .message:not(:last-child), .tabs:not(:last-child) {
-  margin-bottom: 10px; }
+  margin-bottom: 20px; }
 
 .container {
   position: relative;
@@ -1555,6 +1555,9 @@ button {
 
 input:-webkit-autofill {
   -webkit-box-shadow: 0 0 0px 1000px white inset; }
+
+.form {
+  margin: 10px 0; }
 
 .input, .textarea {
   -moz-appearance: none;
@@ -4104,7 +4107,7 @@ input:-webkit-autofill {
 .message {
   background-color: #efefef;
   border-radius: 3px;
-  margin: 10px 0; }
+  margin: 20px 0; }
   .message.is-white {
     background-color: white; }
     .message.is-white .message-header {
