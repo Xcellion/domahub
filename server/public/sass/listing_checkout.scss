@@ -52,6 +52,7 @@
   &.is-disabled {
     h2 {
       color: $black-disabled;
+      pointer-events: auto !important;
     }
   }
 }
