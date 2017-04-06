@@ -15,12 +15,13 @@
         <div class="container">
             <div class="columns">
                 <div class="column is-7">
-                    <header id="step-header-log" class="step-header header margin-bottom-10">
+                    <!--LOG IN STEP-->
+                    <header id="step-header-log" class="step-header header">
                         <h2>1. Log In</h2>
                     </header>
-                    <div id="step-content-log" class="step-content columns">
+                    <div id="step-content-log" class="step-content columns margin-top-10">
                         <div class="column is-6">
-                            <form class="margin-bottom-25">
+                            <form>
                                 <h3>
                                     Already have an account?
                                 </h3>
@@ -38,7 +39,9 @@
                             </div>
                         </div>
                     </div>
-                    <header id="step-header-site" class="step-header header is-disabled">
+
+                    <!--BUILD SITE STEP-->
+                    <header id="step-header-site" class="step-header header is-disabled margin-top-15">
                         <h2>2. Customize Your Website</h2>
                     </header>
                     <div id="step-content-site" class="step-content is-hidden">
@@ -140,7 +143,9 @@
                             </div>
                         </div>
                     </div>
-                    <header id="step-header-payment" class="step-header header is-disabled margin-top-25">
+
+                    <!--PAYMENT STEP-->
+                    <header id="step-header-payment" class="step-header header is-disabled margin-top-15">
                         <h2>3. Payment</h2>
                     </header>
                     <div id="step-content-payment" class='step-content is-hidden'>
@@ -148,7 +153,7 @@
                             <div class="message-body">
                                 <p id="stripe-error-message">
                                     Please enter your payment information. By clicking the Confirm & Pay button,
-                                    you agree to pay the entire amount shown.
+                                    you are agreeing to pay the entire amount shown and to our <a href="/terms" class='is-accent'>terms and conditions</a>.
                                 </p>
                             </div>
                         </article>

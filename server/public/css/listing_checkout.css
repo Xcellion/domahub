@@ -36,7 +36,8 @@
   border-bottom: 3px solid rgba(0, 0, 0, 0.12);
   cursor: pointer; }
   .header.is-disabled h2 {
-    color: rgba(0, 0, 0, 0.38); }
+    color: rgba(0, 0, 0, 0.38);
+    pointer-events: auto !important; }
 
 .img-wrapper {
   background-color: rgba(0, 0, 0, 0.7);
