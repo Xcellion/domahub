@@ -22,10 +22,18 @@
     <div class="columns flex-column-mobile margin-right-0">
       <div id="domain-modules-column" class="column is-8 order-2-mobile">
 
+        <%# EXAMPLES MODULE %>
+        <% if (listing_info.rentals.length > 0){ %>
+            <%- include("modules/rentals_examples_module.ejs", {
+              listing_info : listing_info
+            }); %>
+        <% } %>
+
         <%# TRAFFIC MODULE %>
         <% if (listing_info.traffic){ %>
             <div class="content listing-module">
               <h2 class="margin-bottom-15">Listing Traffic</h2>
+              <div id="traffic-loading">Now loading listing traffic...</div>
               <canvas id="traffic-chart"></canvas>
             </div>
         <% } %>
@@ -159,10 +167,12 @@
               </a>
           </footer>
         </div>
+
         <%# RENTALS MODULE %>
         <%- include("modules/rentals_module.ejs", {
           listing_info : listing_info
         }); %>
+
       </div>
     </div>
   </div>
