@@ -1,21 +1,22 @@
-<div class='checkout-card-content'>
+<div id="start-card-content" class='checkout-card-content is-hidden-desktop'>
     <div class="content">
         <p>
             Click the button below to see available rental dates.
         </p>
     </div>
-    <a id="start-card-button" tabindex="1" class="card-button-next button no-shadow is-primary is-fullwidth is-stylish">Rent Now</a>
+    <a id="start-card-button" tabindex="1" class="button no-shadow is-primary is-fullwidth is-stylish">Rent Now</a>
 </div>
 
-<div id="calendar-card-content" class="is-hidden checkout-card-content">
+<div id="calendar-card-content" class="is-hidden-mobile checkout-card-content">
     <p id="calendar-error-message" class='is-hidden'></p>
+    <div id="calendar-loading">Now loading dates...</div>
     <div id="calendar" class=""></div>
     <div class="calendar-control">
         <a tabindex="1" class="button is-danger is-disabled no-shadow is-stylish is-small" id="remove_events">Clear</a>
         <a tabindex="1" class="button no-shadow is-disabled is-stylish is-small" id="today-button">Today</a>
         <a tabindex="1" class="button no-shadow is-disabled is-stylish is-small" id="next-available-button">Next Available</a>
     </div>
-    <a id="checkout-button" tabindex="1" class="card-button-next is-disabled button no-shadow is-fullwidth is-primary is-stylish is-small">Checkout</a>
+    <a id="checkout-button" tabindex="1" class="is-disabled button no-shadow is-fullwidth is-primary is-stylish is-small">Checkout</a>
 </div>
 
 <!--

@@ -243,6 +243,14 @@ button[data-balloon] {
 .listing-module {
   padding: 25px 0; }
 
+#calendar-loading {
+  background: url(/images/loading.svg) center center no-repeat;
+  min-width: 250px;
+  min-height: 308px;
+  text-align: center;
+  padding-top: 50px;
+  background-color: rgba(0, 0, 0, 0.05); }
+
 .calendar-control {
   display: flex;
   justify-content: space-between;
