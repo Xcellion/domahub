@@ -205,10 +205,19 @@ module.exports = {
         next();
     },
 
-    //create a rental object for checking
+    //create a rental object for checking (for edit)
     createRentalObject : function(req, res, next){
         req.session.rental_object = {
             db_object: {}
+        };
+
+        next();
+    },
+
+    //create a rental object for checking (for new)
+    createNewRentalObject : function(req, res, next){
+        req.session.new_rental_info = {
+            domain_name : req.params.domain_name
         };
 
         next();
@@ -287,14 +296,8 @@ module.exports = {
                         }
                         //all checks are good!
                         else {
-                            if (!req.session.new_rental_info){
-                                req.session.new_rental_info = {
-                                    new_rental_times : available_times
-                                }
-                            }
-                            else {
-                                req.session.new_rental_info.new_rental_times = available_times;
-                            }
+                            req.session.new_rental_info.new_rental_times = available_times;
+                            req.session.new_rental_info.unformatted_times = times;
                             next();
                         }
                     });
@@ -558,7 +561,7 @@ module.exports = {
     },
 
     renderCheckout : function(req, res, next){
-        if (req.session.new_rental_info){
+        if (req.session.new_rental_info && req.session.new_rental_info.domain_name == req.params.domain_name){
             console.log("F: Rendering listing checkout page...");
 
             res.render("listings/listing_checkout.ejs", {

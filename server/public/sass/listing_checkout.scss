@@ -57,6 +57,12 @@
   }
 }
 
+.img-wrapper {
+  background-color: rgba(0,0,0,0.7);
+  height: 100%;
+  width: 100%;
+}
+
 .card {
   &.is-checkout {
     width: 375px;
