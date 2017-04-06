@@ -4524,7 +4524,7 @@ input:-webkit-autofill {
     #profile-button {
       display: none; } }
 
-#login-modal {
+.login-modal {
   width: auto; }
 
 #login-dropdown {

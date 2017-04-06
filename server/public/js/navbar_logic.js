@@ -23,7 +23,7 @@ $(document).ready(function() {
 	});
 
 	// adds is-active to login button
-	$('#login-modal').click(function() {
+	$('.login-modal').click(function() {
 	  $('#modal-login').addClass('is-active');
 	});
 
@@ -80,7 +80,7 @@ $(document).ready(function() {
 		$(".nav-menu").removeClass("is-black");
 		$("#nav-logo, .circle-logo").addClass("is-primary").removeClass("is-white");
 		$(".nav-toggle").removeClass("is-white").addClass("is-black");
-		$("#profile-button, #login-modal").addClass("is-primary").removeClass("is-white");
+		$("#profile-button, .login-modal").addClass("is-primary").removeClass("is-white");
 	}
 
 	//change navbar based on scroll
@@ -107,7 +107,7 @@ function navbarChange(windowelem, pages_white_nav, current_page){
 			$("#nav-logo, .circle-logo").addClass("is-primary").removeClass("is-white");
 		}
 		else {
-			$("#profile-button, #login-modal").removeClass("is-primary").addClass("is-white");
+			$("#profile-button, .login-modal").removeClass("is-primary").addClass("is-white");
 			$("#nav-logo, .circle-logo").removeClass("is-primary").addClass("is-white");
 			$(".nav-link").addClass("is-white");
 			$(".nav-menu").addClass("is-black");
@@ -121,6 +121,6 @@ function navbarChange(windowelem, pages_white_nav, current_page){
 		$(".nav-menu").removeClass("is-black");
 		$(".nav-toggle").removeClass("is-white").addClass("is-black");
 		$("#nav-logo, .circle-logo").addClass("is-primary").removeClass("is-white");
-		$("#profile-button, #login-modal").addClass("is-primary").removeClass("is-white");
+		$("#profile-button, .login-modal").addClass("is-primary").removeClass("is-white");
 	}
 }

@@ -238,6 +238,7 @@ module.exports = function(app, db, auth, error, stripe){
 		checkDomainValid,
 		checkDomainListed,
 		renter_functions.getVerifiedListing,
+		renter_functions.createNewRentalObject,
 		renter_functions.checkRentalTimes,
 		renter_functions.sendTimeSuccess
 	]);
