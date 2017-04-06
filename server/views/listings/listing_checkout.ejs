@@ -15,21 +15,36 @@
     <div class="container">
       <div class="columns">
         <div class="column is-7">
+          <header id="header-step1" class="header margin-bottom-10">
+            <h2>1. Log In</h2>
+          </header>
           <% if (!user){ %>
-          <form class="box no-shadow margin-bottom-25">
-            <h3>
-              Have a DomaHub account?
-            </h3>
-            <p class="control">
-              <a tabindex="1" class="login-modal button is-primary is-stylish is-small no-shadow">Log in to your account</a>
-            </p>
-          </form>
+          <div class="columns">
+            <div class="column is-6">
+              <form class="margin-bottom-25">
+                <h3>
+                  Already have an account?
+                </h3>
+                <p class="control">
+                  <a tabindex="1" class="login-modal button is-primary is-stylish">Log In</a>
+                </p>
+              </form>
+            </div>
+            <div class="column is-6">
+              <div class="control">
+                <h3>
+                  Or you may continue as a guest.
+                </h3>
+                <a class="button is-stylish">Continue as guest</a>
+              </div>
+            </div>
+          </div>
           <% } %>
 
-          <header id="header-step1" class="header">
-            <h2>1. Customize your website</h2>
+          <header id="header-step1" class="header is-disabled">
+            <h2>2. Customize Your Website</h2>
           </header>
-          <div id="checkout-step1">
+          <div id="checkout-step1" class="is-hidden">
             <article class="message">
               <div class="message-body">
                 <p id="checkout-msg1">
@@ -129,7 +144,7 @@
             </div>
           </div>
           <header id="header-step2" class="header is-disabled margin-top-25">
-            <h2>2. Payment</h2>
+            <h2>3. Payment</h2>
           </header>
           <div id="checkout-step2" class='is-hidden'>
             <article class="message">
