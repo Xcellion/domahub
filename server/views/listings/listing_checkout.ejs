@@ -3,7 +3,7 @@
 
 <head>
   <title>DomaHub - Checkout</title>
-  <link rel="stylesheet" type="text/css" href="/css/min/listing_page.min.css" />
+  <link rel="stylesheet" type="text/css" href="/css/min/listing_checkout.min.css" />
   <%- include("../templates/head_links"); %>
 </head>
 
@@ -16,167 +16,212 @@
       <div class="columns">
         <div class="column is-7">
           <% if (!user){ %>
-          <div class="content">
+          <form class="box no-shadow margin-bottom-25">
             <h3>
               Have a DomaHub account?
             </h3>
-          </div>
-          <form>
             <p class="control">
               <a tabindex="1" class="button is-primary is-stylish is-small no-shadow">Log into your account</a>
             </p>
           </form>
           <% } %>
 
-          <hr width="60%" style="margin-left:auto;margin-right:auto;"/>
-
-          <div class="content">
+          <header id="header-step1" class="header">
             <h2>1. Customize your website</h2>
+          </header>
+          <div id="checkout-step1">
             <article class="message">
               <div class="message-body">
-                There are many different ways to create content for your website.
-                Please select one of the options below to move forward!
+                <p id="checkout-msg1">
+                  There are many different ways to create content for your website.
+                  Please select one of the options below to move forward!
+                </p>
               </div>
             </article>
-          </div>
-          <div id="choices-block">
-            <div class="content box no-shadow hover-effect choice-block build-choice">
-              <div class="step-box">
-                <span class="icon is-primary">
-                  <i class="fa fa-pencil-square"></i>
-                </span>
-                <h3 class="is-bold">Build a website</h3>
-              </div>
-              <p>
-                Use a website building service to create a beautiful website in minutes.
-                You don't even have to know how to code!
-              </p>
-            </div>
-            <div class="content box no-shadow hover-effect choice-block link-choice">
-              <div class="step-box">
-                <span class="icon is-info">
-                  <i class="fa fa-external-link-square"></i>
-                </span>
-                <h3 class="is-bold">Link web content</h3>
-              </div>
-              <p>
-                Link an existing website or web content (e.g. a gif, image, slideshow, etc.).
-                We will display that content through your new domain rental.
-              </p>
-            </div>
-            <div class="content box no-shadow hover-effect choice-block forward-choice">
-              <div class="step-box">
-                <span class="icon is-accent">
-                  <i class="fa fa-share-square"></i>
-                </span>
-                <h3 class="is-bold">Forward elsewhere</h3>
-              </div>
-              <p>
-                Forward your domain rental to a different domain name.
-              </p>
-            </div>
-          </div>
-
-          <div id="checkout-card-content" class="success-hide checkout-card-content">
-            <div class="content">
-              <p id="stripe-error-message">
-                  Please enter your payment information.
-              </p>
-            </div>
-            <form id="stripe-form" autocomplete="on">
-              <label class="label">Credit or Debit Card Number</label>
-              <p class="control has-icon">
-                <input tabindex="1" id="cc-num" data-stripe="number" class="input stripe-input" type="tel" placeholder="•••• •••• •••• ••••" autocomplete="cc-number"/>
-                <i id="cc-icon" class="fa fa-credit-card"></i>
-              </p>
-              <div class="control is-grouped">
-                <p class="control is-expanded">
-                  <label class="label">Expiration Date</label>
-                  <input tabindex="1" id="cc-exp" maxlength="7" data-stripe="exp" class="input stripe-input" type="tel" placeholder="•• / ••" autocomplete="cc-exp"/>
+            <div id="choices-block">
+              <div class="content box no-shadow hover-effect choice-block build-choice">
+                <div class="step-box">
+                  <span class="icon is-primary">
+                    <i class="fa fa-pencil-square"></i>
+                  </span>
+                  <h3 class="is-bold">Build a website</h3>
+                </div>
+                <p>
+                  Use a website building service to create a beautiful website in minutes.
+                  You don't even have to know how to code!
                 </p>
+              </div>
+              <div class="content box no-shadow hover-effect choice-block link-choice">
+                <div class="step-box">
+                  <span class="icon is-info">
+                    <i class="fa fa-external-link-square"></i>
+                  </span>
+                  <h3 class="is-bold">Link web content</h3>
+                </div>
+                <p>
+                  Link an existing website or web content (e.g. a gif, image, slideshow, etc.).
+                  We will display that content through your new domain rental.
+                </p>
+              </div>
+              <div class="content box no-shadow hover-effect choice-block forward-choice">
+                <div class="step-box">
+                  <span class="icon is-accent">
+                    <i class="fa fa-share-square"></i>
+                  </span>
+                  <h3 class="is-bold">Forward elsewhere</h3>
+                </div>
+                <p>
+                  Forward your domain rental to a different domain name.
+                </p>
+              </div>
+              <!-- <div class="control">
+                <button class="button is-primary is-stylish is-disabled next-button">Next</button>
+              </div> -->
+            </div>
+            <div id="choices-selected is-hidden">
+              <div class="columns is-hidden build-choice-column choice-column">
+                <div class="column">
+                  <a target="_blank" href="https://gsuite.google.com/products/sites/" title="Google Sites" class="provider-img" style="border-color: #efefef; background-color: #efefef;">
+                    <img src="/images/companies/google-logo.png" alt="Google" height="50px" width="180px"/>
+                  </a>
+                  <a target="_blank" href="https://www.weebly.com/themes" title="Weebly" class="provider-img" style="border-color: rgb(41, 144, 234); background-color: rgb(41, 144, 234);">
+                    <img src="/images/companies/weebly-logo.png" alt="Weebly" height="35px" width="180px"/>
+                  </a>
+                  <a target="_blank" href="https://www.shopify.com/online" title="Shopify" class="provider-img" style="border-color: rgb(122, 181, 92); background-color: rgb(122, 181, 92);">
+                    <img src="/images/companies/shopify-logo.png" alt="Shopify" height="35px" width="180px"/>
+                  </a>
+                  <a target="_blank" href="https://www.squarespace.com/templates" title="Squarespace" class="provider-img" style="border-color: rgb(35, 31, 32); background-color: rgb(35, 31, 32);">
+                    <img src="/images/companies/squarespace-logo.png" alt="Squarespace" height="40px" width="180px"/>
+                  </a>
+                  <a target="_blank" href="http://www.wix.com/website/templates" title="Wix" class="provider-img" style="border-color: rgb(170, 77, 200); background-color: rgb(170, 77, 200);">
+                    <img src="/images/companies/wix-logo.png" alt="Wix" height="35px" width="180px"/>
+                  </a>
+                </div>
+              </div>
+              <div class="columns is-hidden link-choice-column choice-column">
+                <div class="column">
+                  <form>
+                    <div class="control is-grouped">
+                      <p class="control is-expanded">
+                        <input tabindex="1" class="input is-medium" type="url" placeholder="Enter URL here"/>
+                      </p>
+                      <p class="control">
+                        <button class="button is-primary is-stylish">Submit</button>
+                      </p>
+                    </div>
+                  </form>
+                </div>
+              </div>
+              <div class="columns is-hidden forward-choice-column choice-column">
+                <div class="column">
+                  <form>
+                    <div class="control is-grouped">
+                      <p class="control is-expanded">
+                        <input tabindex="1" class="input is-medium" type="url" placeholder="Enter URL here"/>
+                      </p>
+                      <p class="control">
+                        <button class="button is-primary is-stylish">Forward</button>
+                      </p>
+                    </div>
+                  </form>
+                </div>
+              </div>
+              <div class="control">
+                <button class="button is-hidden is-stylish back-button">Back</button>
+              </div>
+            </div>
+          </div>
+          <header id="header-step2" class="header is-disabled margin-top-25">
+            <h2>2. Payment</h2>
+          </header>
+          <div id="checkout-step2">
+            <article class="message">
+              <div class="message-body">
+                <p id="stripe-error-message">
+                  Please enter your payment information. By clicking the Confirm & Pay button,
+                  you agree to pay the entire amount shown.
+                </p>
+              </div>
+            </article>
+            <div id="checkout-card-content" class="success-hide checkout-card-content">
+              <form id="stripe-form" autocomplete="on">
+                <label class="label is-medium">Card Number</label>
+                <p class="control has-icon">
+                  <input tabindex="1" id="cc-num" data-stripe="number" class="input stripe-input is-medium" type="tel" placeholder="•••• •••• •••• ••••" autocomplete="cc-number"/>
+                  <i id="cc-icon" class="fa fa-credit-card"></i>
+                </p>
+                <div class="control is-grouped">
+                  <p class="control is-expanded">
+                    <label class="label is-medium">Expiration Date</label>
+                    <input tabindex="1" id="cc-exp" maxlength="7" data-stripe="exp" class="input stripe-input is-medium" type="tel" placeholder="•• / ••" autocomplete="cc-exp"/>
+                  </p>
+                  <p class="control">
+                    <label class="label is-medium">Security Code</label>
+                    <input tabindex="1" id="cc-cvc" data-stripe="cvc" class="input stripe-input is-medium" type="tel" placeholder="•••" autocomplete="off"/>
+                  </p>
+                </div>
                 <p class="control">
-                  <label class="label">Security Code</label>
-                  <input tabindex="1" id="cc-cvc" data-stripe="cvc" class="input stripe-input" type="tel" placeholder="•••" autocomplete="off"/>
+                  <label class="label is-medium">Zip Code</label>
+                  <input tabindex="1" id="cc-zip" maxlength="6" data-stripe="address_zip" class="input stripe-input is-medium" type="tel" autocomplete="postal-code" placeholder="•••••"/>
                 </p>
+              </form>
+              <div class="control margin-top-10">
+                <a id="checkout-button" tabindex="1" class="button is-primary no-shadow is-stylish">Confirm & Pay</a>
               </div>
-              <p class="control">
-                <label class="label">Zip Code</label>
-                <input tabindex="1" id="cc-zip" maxlength="6" data-stripe="address_zip" class="input stripe-input" type="tel" autocomplete="postal-code" placeholder="•••••"/>
-              </p>
-            </form>
-            <p class="calendar-control margin-top-10">
-                <a tabindex="1" class="card-button-prev button no-shadow is-stylish is-small">Back</a>
-                <a id="checkout-button" tabindex="1" class="button is-primary no-shadow is-stylish is-small">Confirm & Pay</a>
-            </p>
+            </div>
           </div>
         </div>
         <div class="column is-5">
-          <div class="box">
-              <div class="content-box">
-                <div class="content">
-                  <h1 class="is-primary">domahub.com</h1>
-                </div>
-              </div>
-              <div class="content-box">
-                <div class="columns">
-                  <div class="column is-6">
-                    <div class="content">
-                      <p id="preview-start-dates">
-                        Rental Start
-                      </p>
-                      <p>
-                        Apr 25, 2017
-                      </p>
-                    </div>
-                  </div>
-                  <div class="column is-6">
-                    <div class="content">
-                      <p id="preview-end-dates">
-                        Rental End
-                      </p>
-                      <p>
-                        Apr 27, 2017
-                      </p>
-                    </div>
-                  </div>
-                </div>
-                <div class="control">
-                  <a tabindex="1" id="edit-dates-button" class="button is-primary is-stylish">Edit Dates</a>
-                </div>
-              </div>
-              <div class="content-box">
+          <div class="card is-checkout">
+            <!-- <header class="card-header is-white">
+              <h1 class="is-primary card-header-title">domahub.com</h1>
+            </header> -->
+            <figure class="card-image" style="background-image: url('https://i.imgur.com/yqycCDV.png');">
 
+            </figure>
+            <div class="card-content">
+              <div class="content">
+                <h1 class="is-primary">domahub.com</h1>
               </div>
-            <div class="rental-summary-section">
-              <div class="columns">
-                <div class="column">
-                  <div class="content">
-                    <h3 class="is-bold">
-                      Rate
-                    </h3>
-                  </div>
+              <div class="columns has-border-bottom">
+                <div class="column is-5">
+                  <p id="preview-start-dates">
+                    Rental Start
+                  </p>
+                  <p>
+                    Apr 25, 2017
+                  </p>
                 </div>
-                <div class="column is-three-quarters">
-                  <div id="preview-rates" class="content has-text-right"></div>
+                <div class="column is-2">
+                  <span class="icon is-medium is-blacklight is-hidden-mobile">
+                    <i class="fa fa-long-arrow-right"></i>
+                  </span>
                 </div>
+                <div class="column is-5">
+                  <p id="preview-end-dates">
+                    Rental End
+                  </p>
+                  <p>
+                    Apr 27, 2017
+                  </p>
+                </div>
+              </div>
+              <div class="control-flex">
+                <p id="preview-rates">
+                  $5 x 5 days
+                </p>
+                <p id="price-total" class="is-bold">
+                  $25
+                </p>
+              </div>
+              <div class="control-flex">
+                <h3>Total</h3>
+                <h3 class="is-bold">$25</h3>
               </div>
             </div>
-            <div class="rental-summary-section">
-              <div class="columns">
-                <div class="column is-half">
-                  <div class="content">
-                    <h2 class="is-bold">
-                      Total
-                    </h2>
-                  </div>
-                </div>
-                <div class="column is-half">
-                  <div class="content has-text-right">
-                    <h2 id="price-total"></h2>
-                  </div>
-                </div>
-              </div>
-            </div>
+            <footer class="card-footer">
+              <a tabindex="1" id="edit-dates-button" class="button is-stylish no-shadow card-footer-item">Edit Dates</a>
+            </footer>
           </div>
         </div>
       </div>
@@ -185,5 +230,6 @@
 
   <%- include("../templates/footer"); %>
   <%- include("../templates/js_scripts"); %>
+  <script src="/js/routes/listings/listing_checkout_logic.js" type="text/javascript"></script>
 </body>
 </html>

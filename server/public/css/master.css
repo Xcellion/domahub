@@ -3289,80 +3289,42 @@ input:-webkit-autofill {
     box-shadow: 0px 1px 1px 0 rgba(0, 0, 0, 0.38); }
   .card-header.is-white {
     background-color: white; }
-    .card-header.is-white .card-header-title {
-      color: black; }
   .card-header.is-black {
     background-color: black; }
-    .card-header.is-black .card-header-title {
-      color: white; }
   .card-header.is-grey {
     background-color: #d0d0d0; }
-    .card-header.is-grey .card-header-title {
-      color: #444; }
   .card-header.is-blacklight {
     background-color: rgba(0, 0, 0, 0.66); }
-    .card-header.is-blacklight .card-header-title {
-      color: rgba(255, 255, 255, 0.7); }
   .card-header.is-whitelight {
     background-color: rgba(255, 255, 255, 0.7); }
-    .card-header.is-whitelight .card-header-title {
-      color: rgba(0, 0, 0, 0.66); }
   .card-header.is-light {
     background-color: #d0d0d0; }
-    .card-header.is-light .card-header-title {
-      color: #444; }
   .card-header.is-lighter {
     background-color: #efefef; }
-    .card-header.is-lighter .card-header-title {
-      color: #efefef; }
   .card-header.is-dark {
     background-color: #444; }
-    .card-header.is-dark .card-header-title {
-      color: #d0d0d0; }
   .card-header.is-purple {
     background-color: #9c27b0; }
-    .card-header.is-purple .card-header-title {
-      color: white; }
   .card-header.is-primary {
     background-color: #3cbc8d; }
-    .card-header.is-primary .card-header-title {
-      color: white; }
   .card-header.is-primarydark {
     background-color: #309670; }
-    .card-header.is-primarydark .card-header-title {
-      color: #309670; }
   .card-header.is-primarylight {
     background-color: #62c9a3; }
-    .card-header.is-primarylight .card-header-title {
-      color: #62c9a3; }
   .card-header.is-primarylighter {
     background-color: #8ad6ba; }
-    .card-header.is-primarylighter .card-header-title {
-      color: #8ad6ba; }
   .card-header.is-info {
     background-color: #2196f3; }
-    .card-header.is-info .card-header-title {
-      color: white; }
   .card-header.is-bluedarker {
     background-color: #23415f; }
-    .card-header.is-bluedarker .card-header-title {
-      color: #23415f; }
   .card-header.is-accent {
     background-color: #ff5722; }
-    .card-header.is-accent .card-header-title {
-      color: white; }
   .card-header.is-success {
     background-color: #81c784; }
-    .card-header.is-success .card-header-title {
-      color: white; }
   .card-header.is-warning {
     background-color: #ffeb3b; }
-    .card-header.is-warning .card-header-title {
-      color: rgba(0, 0, 0, 0.5); }
   .card-header.is-danger {
     background-color: #EF5350; }
-    .card-header.is-danger .card-header-title {
-      color: white; }
 
 .card-header-title {
   align-items: center;

@@ -52,15 +52,6 @@
   margin-bottom: 50px;
 }
 
-#domain-modules-column,
-#domain-info-column {
-  @include width-1215px-max {
-    flex-basis: 0;
-    flex-grow: 1;
-    flex-shrink: 1;
-  }
-}
-
 #domain-display {
   color: $primary;
   padding: 0 12px;
@@ -206,45 +197,4 @@
   background-position: center center;
   min-width: 250px;
   min-height: 250px;
-}
-
-.box {
-  &.hover-effect {
-    cursor: pointer;
-    &:hover,
-    &:focus {
-      border-color: $black-secondary !important;
-    }
-  }
-}
-
-.step-box {
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  margin: 10px 0;
-  span,
-  a {
-    margin-right: 10px;
-  }
-  &.has-border {
-    border: 1px solid $border;
-    border-radius: $radius;
-  }
-}
-
-.build-provider {
-  align-items: center;
-  border-radius: $radius 0 0 $radius;
-  display: flex;
-  height: 66px;
-  justify-content: center;
-  width: 175px;
-}
-
-.content-box {
-  padding: 20px 0;
-  &:not(:last-child) {
-    border-bottom: 1px solid $border;
-  }
 }

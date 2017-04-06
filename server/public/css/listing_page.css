@@ -211,13 +211,6 @@ button[data-balloon] {
     #top-wrapper {
       padding: 0 20px 40px; } }
 
-@media screen and (max-width: 1215px) {
-  #domain-modules-column,
-  #domain-info-column {
-    flex-basis: 0;
-    flex-grow: 1;
-    flex-shrink: 1; } }
-
 #domain-display {
   color: #3cbc8d;
   padding: 0 12px; }
@@ -332,33 +325,3 @@ button[data-balloon] {
   background-position: center center;
   min-width: 250px;
   min-height: 250px; }
-
-.box.hover-effect {
-  cursor: pointer; }
-  .box.hover-effect:hover, .box.hover-effect:focus {
-    border-color: rgba(0, 0, 0, 0.66) !important; }
-
-.step-box {
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  margin: 10px 0; }
-  .step-box span,
-  .step-box a {
-    margin-right: 10px; }
-  .step-box.has-border {
-    border: 1px solid rgba(0, 0, 0, 0.12);
-    border-radius: 3px; }
-
-.build-provider {
-  align-items: center;
-  border-radius: 3px 0 0 3px;
-  display: flex;
-  height: 66px;
-  justify-content: center;
-  width: 175px; }
-
-.content-box {
-  padding: 20px 0; }
-  .content-box:not(:last-child) {
-    border-bottom: 1px solid rgba(0, 0, 0, 0.12); }
