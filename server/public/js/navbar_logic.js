@@ -70,8 +70,9 @@ $(document).ready(function() {
 		}
 	});
 
-	var pages_white_nav = ["listings", "faq", "contact", "profile", "mission", "about", "press", "careers", "terms", "privacy", "nothinghere"];
-	var current_page = (window.location.pathname == "/") ? "/" : window.location.pathname.split("/")[1];
+	//list of pages that need a green doma logo // white background. otherwise transparent and white logo
+	var pages_white_nav = ["checkout", "listings", "faq", "contact", "profile", "mission", "about", "press", "careers", "terms", "privacy", "nothinghere"];
+	var current_page = (window.location.pathname == "/") ? "/" : window.location.pathname.split("/").pop();
 
 	//remove white link if not a page that needs it
 	if (pages_white_nav.indexOf(current_page) != -1){

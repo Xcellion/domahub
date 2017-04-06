@@ -25,6 +25,11 @@ function setUpCalendar(listing_info){
         displayEventEnd: true,
         disableDragging: true,
 
+        //hide the calendar loading background once calendar is fully loaded
+        eventAfterAllRender: function() {
+            $("#calendar-loading").addClass("is-hidden");
+        },
+
         //header buttons
         header: {left:'prev', center:'next', right:'title, today'},
 
@@ -930,14 +935,12 @@ function updatePrices(){
         var s_or_not = (totalUnits > 1) ? "s" : "";
 
         //price or price per day
-        if (totalPrice == 0){
-            $("#calendar-card-content").find(".card-button-next").addClass('is-disabled');
+        if (totalPrice == 0 && listing_info.price_rate != 0){
+            $("#checkout-button").addClass('is-disabled');
             $("#price").text("$" + listing_info.price_rate + " Per " + listing_info.price_type.capitalizeFirstLetter());
         }
         else {
-            $("#calendar-card-content").find(".card-button-next").removeClass('is-disabled');
-            //show calendar card if already set in cookies
-            showCardContent("calendar");
+            $("#checkout-button").removeClass('is-disabled');
 
             //animation for counting numbers
             $("#price").prop('Counter', $("#price").prop('Counter')).stop().animate({
@@ -946,7 +949,9 @@ function updatePrices(){
                 duration: 100,
                 easing: 'swing',
                 step: function (now) {
-                    $(this).text("Total: $" + Number(Math.round(now+'e2')+'e-2').toFixed(2));
+                    if (listing_info.price_rate != 0){
+                        $(this).text("Total: $" + Number(Math.round(now+'e2')+'e-2').toFixed(2));
+                    }
                 }
             });
         }

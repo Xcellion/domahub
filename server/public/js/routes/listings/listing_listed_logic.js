@@ -1,38 +1,5 @@
-var unlock = true;
-
-
 $(document).ready(function() {
 	setUpCalendar(listing_info);
-
-	//user since text in About Owner
-	$("#user-since").text(moment(new Date(listing_info.user_created)).format("MMMM, YYYY"));
-
-	//change the URL, save as cookie and allow next
-	$("#address_form_input").on("change keyup paste", function(e){
-		storeCookies("address");
-		if ($("#address-error-message").hasClass('is-danger')){
-			$("#address-error-message").removeClass('is-danger').text("The content of the URL you link below will be displayed when anyone goes to your rental domain name. You may change this URL at any time.")
-		}
-
-		//press enter to go next
-		if (e.keyCode == 13){
-			if (user){
-				showCardContent("checkout");
-			}
-			else {
-				showCardContent("nouser");
-			}
-		}
-	});
-
-	//press enter to go next for no user email
-	$("#new_user_email").on("change keyup paste", function(e){
-		if (e.keyCode == 13){
-			showCardContent("checkout");
-		}
-	});
-
-	//---------------------------------------------------------------------------------------------------cookies
 
 	//check if there are cookies for this domain name
 	if (read_cookie("domain_name") == listing_info.domain_name){
@@ -59,132 +26,63 @@ $(document).ready(function() {
 			}
 		}
 		updatePrices();	//show prices
-
-		//check if theres a cookie for the rental address
-		if (read_cookie("address")){
-			$("#address_form_input").val(read_cookie("address"));
-			$("#checkout-next-button").removeClass('is-disabled');
-		}
 	}
 	else {
 		delete_cookies();
 	}
 
-	//---------------------------------------------------------------------------------------------------modals
-
-	//changes the cards for calendar, address, and checkout
-	$('.card-button-next').click(function() {
-		showNextCard();
-	});
-
-	$('.card-button-prev').click(function() {
-		showPrevCard();
-	});
-
-	//---------------------------------------------------------------------------------------------------CALENDAR
-
-	//prevent enter to submit on new emailToRegister
-	$("#new_user_email").submit(function(e){
-		e.preventDefault();
-	});
-
-	//copy ownership url
-	$("#rental-link-button").click(function(){
-		$(this).prev("input").select();
-		document.execCommand("copy");
-		$(this).prev("input").blur();
-		$(this).find("i").removeClass("fa-clipboard").addClass('fa-check-square-o');
-	});
-
-	//---------------------------------------------------------------------------------------------------CALENDAR
-
 	//create existing rentals
 	createExisting(listing_info.rentals);
 
-	//---------------------------------------------------------------------------------------------------MODULES
+	//user since date in About Owner
+	$("#user-since").text(moment(new Date(listing_info.user_created)).format("MMMM, YYYY"));
 
+	//submit times (redirect to checkout)
+	$("#checkout-button").on("click", function(){
+		submitTimes($(this));
+	});
+
+	//check rental times (for mobile only)
+	$("#start-card-button").on('click', function(){
+		$("#start-card-content").addClass('is-hidden');
+		$("#calendar-card-content").removeClass('is-hidden-mobile');
+	});
+
+	//---------------------------------------------------------------------------------------------------MODULES
 	findOtherDomains();
 	editRentalModule();
 	createTrafficChart();
-
 });
 
-//functions to show different cards
-function showCardContent(type){
-	$(".checkout-card-content").addClass('is-hidden');
-	$("#" + type + "-card-content").removeClass('is-hidden');
-	if (type == "calendar"){
-		$('#calendar').fullCalendar('render');
-	}
-}
-
-function showNextCard(){
-	var current_card = $(".checkout-card-content:not(.is-hidden)");
-	current_card.addClass('is-hidden')
-	var next_card = current_card.next(".checkout-card-content");
-	next_card.removeClass('is-hidden');
-
-	if (next_card.attr('id') == "calendar-card-content"){
-		$('#calendar').fullCalendar('render');
-	}
-}
-
-function showPrevCard(){
-	var current_card = $(".checkout-card-content:not(.is-hidden)");
-	current_card.addClass('is-hidden')
-	var prev_card = current_card.prev(".checkout-card-content");
-	prev_card.removeClass('is-hidden');
-
-	if (prev_card.attr('id') == "calendar-card-content"){
-		$('#calendar').fullCalendar('render');
-	}
-}
-
 //helper function to check if everything is legit
-function checkSubmit(){
+function checkTimes(){
 	var newEvents = $('#calendar').fullCalendar('clientEvents', returnMineNotBG);
-	var bool = true;
 
 	if (!newEvents || newEvents.length == 0){
-		bool = "Invalid dates!";
-		errorHandler(bool);
-	}
-	else if (!$("#cc-num").val()){
-		bool = "Invalid cc number!";
-		$("#stripe-error-message").addClass('is-danger').html("Please provide a credit card to charge.");
-	}
-	else if (!$("#cc-exp").val()){
-		bool = "Invalid cc exp!";
-		$("#stripe-error-message").addClass('is-danger').html("Please provide your credit card expiration date.");
-	}
-	else if (!$("#cc-cvc").val()){
-		bool = "Invalid cvc!";
-		$("#stripe-error-message").addClass('is-danger').html("Please provide your credit card CVC number.");
-	}
-	else if (!$("#cc-zip").val()){
-		bool = "Invalid zip Code!";
-		$("#stripe-error-message").addClass('is-danger').html("Please provide a ZIP code.");
+		$("#calendar-error-message").removeClass('is-hidden').addClass('is-danger').html("Invalid dates selected!");
 	}
 	else if (newEvents.length > 0){
 		for (var x = 0; x < newEvents.length; x++){
 			if (!newEvents[x].old){
 				var start = new Date(newEvents[x].start._d);
 				if (isNaN(start)){
-					bool = "Invalid dates!";
-					errorHandler(bool);
+					$("#calendar-error-message").removeClass('is-hidden').addClass('is-danger').html("Invalid dates selected!");
 					break;
 				}
 			}
 		}
 	}
-	return bool;
+	return newEvents;
 }
 
 //function to submit new rental info
-function submitStripe(stripeToken){
-	if (checkSubmit() == true && unlock){
-		var newEvents = $('#calendar').fullCalendar('clientEvents', returnMineNotBG);
-		unlock = false;
+function submitTimes(checkout_button){
+	//remove event handler
+	checkout_button.off();
+	checkout_button.addClass('is-loading');
+	var newEvents = checkTimes();
+
+	if (newEvents.length > 0){
 		minEvents = [];
 
 		//format the events to be sent
@@ -204,136 +102,37 @@ function submitStripe(stripeToken){
 			url: "/listing/" + listing_info.domain_name + "/checkout",
 			data: {
 				events: minEvents
-				// new_user_email: $("#new_user_email").val(),
-				// address: $("#address_form_input").val(),
-				// stripeToken: stripeToken,
-				// rental_type: 0
 			}
 		}).done(function(data){
-			$('#checkout-button').removeClass('is-loading');
+			checkout_button.removeClass('is-loading');
 			unlock = true;
 			if (data.unavailable){
 				for (var x = 0; x < data.unavailable.length; x++){
-					showCardContent("calendar");
 					$('#calendar').fullCalendar('removeEvents', data.unavailable[x]._id);
-					$("#calendar-error-message").removeClass('is-hidden').addClass('is-danger').html("Invalid slots have been removed from your selection! Your credit card has not been charged yet.");
+					$("#calendar-error-message").removeClass('is-hidden').addClass('is-danger').html("Invalid slots have been removed from your selection!");
 				}
 			}
 			else if (data.state == "success"){
-				delete_cookies();
-				successHandler(data);
+				window.location.href = "/listing/" + listing_info.domain_name + "/checkout";
 			}
 			else if (data.state == "error"){
-				errorHandler(data.message);
+				$("#calendar-error-message").removeClass('is-hidden').addClass('is-danger').html("Something went wrong with the rental! Please try again.");
 			}
 		});
 	}
-}
-
-//error handler from server
-function errorHandler(message){
-	if (message == "Invalid address!"){
-		showCardContent("address");
-		$("#address-error-message").addClass('is-danger').html("Invalid URL entered! Your credit card has not been charged yet.");
-	}
-	else if (message == "Malicious address!"){
-		showCardContent("address");
-		$("#address-error-message").addClass('is-danger').html("Your URL has been deemed malicious! Please enter a different URL. Your credit card has not been charged yet.");
-	}
-	else if (message == "Invalid dates!"){
-		showCardContent("calendar");
-		$("#calendar-error-message").removeClass('is-hidden').addClass('is-danger').html("Invalid dates selected! Your credit card has not been charged yet.");
-	}
-	else if (message == "Invalid email!"){
-		showCardContent("checkout");
-		$("#new-user-email-error").addClass('is-danger').html("Invalid email address! Your credit card has not been charged yet.");
-	}
-	else if (message == "Invalid price!"){
-		showCardContent("checkout");
-		$("#stripe-error-message").addClass('is-danger').html("Payment error! Your credit card has not been charged yet.");
-	}
-	else if (message == "Invalid stripe user account!"){
-		showCardContent("checkout");
-		$("#summary-error-message").addClass('is-danger').html("Listing error! Please try again later! Your credit card has not been charged yet.");
-	}
 	else {
-		showCardContent("checkout");
-		$("#summary-error-message").addClass('is-danger').html("Rental error! Please try again later! Your credit card has not been charged yet.");
-	}
-
-}
-
-//success handler
-function successHandler(data){
-	$(".success-hide").addClass('is-hidden');
-	$("#success-column").removeClass('is-hidden');
-	$("#success-message").text("Your credit card was successfully charged!");
-	//if theres a link for ownership claiming
-	if (data.owner_hash_id){
-		var url = "https://www.domahub.com/listing/" + listing_info.domain_name + "/" + data.rental_id + "/" + data.owner_hash_id;
-		$("#rental-link-input").val(url);
-		//$("#rental-link-href").prop('href', url);
-
-		$("#rental-link-input").focus(function(){
-			$(this).select();
+		checkout_button.on('click', function(){
+			submitTimes(checkout_button);
 		});
 	}
-	else {
-		var url = "https://www.domahub.com/listing/" + listing_info.domain_name + "/" + data.rental_id;
-		$("#rental-preview-button").href(url);
-	}
 }
+
 
 //---------------------------------------------------------------------------------------------------LISTING MODULES
 
 //function to create the traffic chart
 function createTrafficChart(){
 	if (listing_info.traffic){
-
-		Chart.plugins.register({
-		  beforeRender: function (chart) {
-		    if (chart.config.options.showAllTooltips) {
-		        // create an array of tooltips
-		        // we can't use the chart tooltip because there is only one tooltip per chart
-		        chart.pluginTooltips = [];
-		        chart.config.data.datasets.forEach(function (dataset, i) {
-		            chart.getDatasetMeta(i).data.forEach(function (sector, j) {
-		                chart.pluginTooltips.push(new Chart.Tooltip({
-		                    _chart: chart.chart,
-		                    _chartInstance: chart,
-		                    _data: chart.data,
-		                    _options: chart.options.tooltips,
-		                    _active: [sector]
-		                }, chart));
-		            });
-		        });
-
-		        // turn off normal tooltips
-		        chart.options.tooltips.enabled = false;
-		    }
-		},
-		  afterDraw: function (chart, easing) {
-		    if (chart.config.options.showAllTooltips) {
-		        // we don't want the permanent tooltips to animate, so don't do anything till the animation runs atleast once
-		        if (!chart.allTooltipsOnce) {
-		            if (easing !== 1)
-		                return;
-		            chart.allTooltipsOnce = true;
-		        }
-
-		        // turn on tooltips
-		        chart.options.tooltips.enabled = true;
-		        Chart.helpers.each(chart.pluginTooltips, function (tooltip) {
-		            tooltip.initialize();
-		            tooltip.update();
-		            // we don't actually need this since we are not animating tooltips
-		            tooltip.pivot();
-		            tooltip.transition(easing).draw();
-		        });
-		        chart.options.tooltips.enabled = false;
-		    }
-		  }
-		});
 
 		//past six months only
 		var traffic_data = [
