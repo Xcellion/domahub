@@ -50,7 +50,6 @@
   border-bottom: 3px solid $border;
   cursor: pointer;
   &.is-disabled {
-    @include unselectable;
     h2 {
       color: $black-disabled;
     }

@@ -35,14 +35,8 @@
   padding-bottom: 20px;
   border-bottom: 3px solid rgba(0, 0, 0, 0.12);
   cursor: pointer; }
-  .header.is-disabled {
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none; }
-    .header.is-disabled h2 {
-      color: rgba(0, 0, 0, 0.38); }
+  .header.is-disabled h2 {
+    color: rgba(0, 0, 0, 0.38); }
 
 .img-wrapper {
   background-color: rgba(0, 0, 0, 0.7);
