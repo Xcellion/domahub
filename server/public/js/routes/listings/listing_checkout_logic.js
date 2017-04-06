@@ -1,5 +1,26 @@
 $(document).ready(function () {
 
+    //--------------------------------------------------------------------------------------------------------- HEADER STEPS
+
+    //hide the login step if logged in
+    if (user){
+        $("#step-header-log").addClass('is-disabled');
+        $("#step-content-log").addClass('is-hidden');
+
+        $("#step-header-site").removeClass('is-disabled');
+        $("#step-content-site").removeClass('is-hidden');
+    }
+
+    //click to go to different step
+    $(".step-header").on("click", function(){
+        $(".step-header").addClass('is-disabled');
+        $(this).removeClass('is-disabled');
+
+        $(".step-content").addClass('is-disabled');
+        $(this).next(".step-content").removeClass('is-disabled');
+    });
+
+
     //--------------------------------------------------------------------------------------------------------- LISTING DETAILS CARD
 
     //get the start date and end date of the new rental
