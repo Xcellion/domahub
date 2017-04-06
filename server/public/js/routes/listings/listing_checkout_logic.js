@@ -16,8 +16,8 @@ $(document).ready(function () {
         $(".step-header").addClass('is-disabled');
         $(this).removeClass('is-disabled');
 
-        $(".step-content").addClass('is-disabled');
-        $(this).next(".step-content").removeClass('is-disabled');
+        $(".step-content").addClass('is-hidden');
+        $(this).next(".step-content").removeClass('is-hidden');
     });
 
 
