@@ -73,6 +73,7 @@ module.exports = {
         console.log("F: Checking posted rental info...");
 
         var address = addProtocol(req.body.address);
+        var rental_type = parseFloat(req.body.rental_type);
 
         //check for address
         if (req.body.address && !validator.isIP(address) && !validator.isURL(address, {protocols: ["http", "https"], require_protocol: true})){
@@ -83,7 +84,7 @@ module.exports = {
             error.handler(req, res, "Invalid email!", "json");
         }
         //check for rental type
-        else if (req.body.rental_type != 0 || req.body.rental_type != 1){
+        else if (rental_type != 0 && rental_type != 1){
             error.handler(req, res, "Invalid rental type!", "json");
         }
         else {
