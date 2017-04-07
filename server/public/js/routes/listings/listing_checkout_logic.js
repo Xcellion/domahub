@@ -290,8 +290,13 @@ function submitNewRental(stripeToken){
         }
     }).done(function(data){
         $("#checkout-button").removeClass('is-loading');
-        if (data.state == "success"){
+        console.log(data);
+        if (data.unavailable){
+            errorHandler("Invalid times");
+        }
+        else if (data.state == "success"){
             console.log('yay');
+            successHandler();
         }
         else if (data.state == "error"){
             errorHandler(data.message);
@@ -299,8 +304,16 @@ function submitNewRental(stripeToken){
     });
 }
 
+//handler for various error messages
 function errorHandler(message){
     switch (message){
+		case "Invalid times!":
+            showMessage("stripe-error-message", "The selected times are not available anymore! Please edit your selected rental dates.");
+			break;
+		case "Nothing displayed at that address!":
+            showStep("site");
+            showMessage("address-error-message", "There's nothing to display on that site! Please choose a different website link.");
+			break;
 		case "Invalid rental type!":
             showMessage("stripe-error-message", "Something went wrong with the rental! Please refresh this page and try again.");
 			break;
@@ -308,6 +321,10 @@ function errorHandler(message){
             showStep("site");
             showMessage("address-error-message");
 			break;
+        case "Malicious address!":
+            showStep("site");
+            showMessage("address-error-message", "This website link has been deemed malicious or dangerous! Please enter a different link");
+            break;
 		case "Invalid email!":
             showStep("log");
 			break;
@@ -320,6 +337,11 @@ function errorHandler(message){
     $('#checkout-button').removeClass('is-loading').on("click", function(){
         submitStripe($(this));
     });
+}
+
+//handler for successful rental
+function successHandler(){
+    delete_cookies();
 }
 
 //to format a number for $$$$

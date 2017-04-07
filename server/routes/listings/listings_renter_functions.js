@@ -76,7 +76,7 @@ module.exports = {
         var rental_type = parseFloat(req.body.rental_type);
 
         //check for address
-        if (req.body.address && !validator.isIP(address) && !validator.isURL(address, {protocols: ["http", "https"], require_protocol: true})){
+        if (req.body.address && !validator.isURL(address, {protocols: ["http", "https"], require_protocol: true})){
             error.handler(req, res, "Invalid address!", "json");
         }
         //check for email if it was posted
@@ -88,6 +88,7 @@ module.exports = {
             error.handler(req, res, "Invalid rental type!", "json");
         }
         else {
+            console.log("F: Checking against Google Safe Browsing...");
 
             //check against google safe browsing
             request({
@@ -138,7 +139,7 @@ module.exports = {
                                 create_new_listing_info();
                             }
                             else {
-                                error.handler(req, res, "Invalid address!", "json");
+                                error.handler(req, res, "Nothing displayed at that address!", "json");
                             }
                         });
                     }

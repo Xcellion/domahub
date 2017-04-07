@@ -1,6 +1,9 @@
 $(document).ready(function() {
 	setUpCalendar(listing_info);
 
+	//create existing rentals
+	createExisting(listing_info.rentals);
+
 	//check if there are cookies for this domain name
 	if (read_cookie("domain_name") == listing_info.domain_name){
 		if (read_cookie("local_events")){
@@ -30,9 +33,6 @@ $(document).ready(function() {
 	else {
 		delete_cookies();
 	}
-
-	//create existing rentals
-	createExisting(listing_info.rentals);
 
 	//user since date in About Owner
 	$("#user-since").text(moment(new Date(listing_info.user_created)).format("MMMM, YYYY"));
@@ -111,12 +111,18 @@ function submitTimes(checkout_button){
 					$('#calendar').fullCalendar('removeEvents', data.unavailable[x]._id);
 					$("#calendar-error-message").removeClass('is-hidden').addClass('is-danger').html("Invalid slots have been removed from your selection!");
 				}
+				checkout_button.on('click', function(){
+					submitTimes(checkout_button);
+				});
 			}
 			else if (data.state == "success"){
 				window.location.assign(window.location.origin + "/listing/" + listing_info.domain_name + "/checkout");
 			}
 			else if (data.state == "error"){
 				$("#calendar-error-message").removeClass('is-hidden').addClass('is-danger').html("Something went wrong with the rental! Please try again.");
+				checkout_button.on('click', function(){
+					submitTimes(checkout_button);
+				});
 			}
 		});
 	}
