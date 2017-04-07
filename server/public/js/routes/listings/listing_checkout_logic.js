@@ -296,6 +296,7 @@ function submitNewRental(stripeToken){
         }
         else if (data.state == "success"){
             console.log('yay');
+            successHandler();
         }
         else if (data.state == "error"){
             errorHandler(data.message);
@@ -303,6 +304,7 @@ function submitNewRental(stripeToken){
     });
 }
 
+//handler for various error messages
 function errorHandler(message){
     switch (message){
 		case "Invalid times!":
@@ -319,6 +321,10 @@ function errorHandler(message){
             showStep("site");
             showMessage("address-error-message");
 			break;
+        case "Malicious address!":
+            showStep("site");
+            showMessage("address-error-message", "This website link has been deemed malicious or dangerous! Please enter a different link");
+            break;
 		case "Invalid email!":
             showStep("log");
 			break;
@@ -331,6 +337,11 @@ function errorHandler(message){
     $('#checkout-button').removeClass('is-loading').on("click", function(){
         submitStripe($(this));
     });
+}
+
+//handler for successful rental
+function successHandler(){
+    delete_cookies();
 }
 
 //to format a number for $$$$
