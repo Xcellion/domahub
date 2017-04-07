@@ -1,7 +1,11 @@
 .box.hover-effect {
   cursor: pointer; }
-  .box.hover-effect:hover, .box.hover-effect:focus {
-    border-color: rgba(0, 0, 0, 0.66) !important; }
+  .box.hover-effect:hover.is-primary, .box.hover-effect:focus.is-primary {
+    border-color: #3cbc8d !important; }
+  .box.hover-effect:hover.is-info, .box.hover-effect:focus.is-info {
+    border-color: #2196f3 !important; }
+  .box.hover-effect:hover.is-accent, .box.hover-effect:focus.is-accent {
+    border-color: #ff5722 !important; }
 
 .step-box {
   display: flex;
@@ -18,26 +22,28 @@
 .is-flex-wrap {
   display: flex;
   flex-wrap: wrap;
-  align-items: left;
-  justify-content: left; }
+  align-items: center;
+  justify-content: center; }
 
 .provider-img {
-  border-radius: 3px 0 0 3px;
   display: flex;
   align-items: center;
   margin-right: 10px;
   height: 60px;
-  width: 180px;
-  min-width: 180px; }
+  width: 180;
+  min-width: 180px;
+  border: 1px solid rgba(0, 0, 0, 0.12); }
   .provider-img img {
+    max-height: 48px;
     vertical-align: middle;
     margin: auto; }
 
 .provider-card {
-  border: 1px solid rgba(0, 0, 0, 0.12);
   margin-bottom: 10px;
   width: 180px; }
   .provider-card .content {
+    border: 1px solid rgba(0, 0, 0, 0.12);
+    border-top: none;
     padding: 10px; }
   .provider-card:not(:last-child) {
     margin-right: 10px; }
@@ -53,7 +59,7 @@
 
 .step-content {
   border-bottom: 3px solid rgba(0, 0, 0, 0.12);
-  padding-bottom: 40px;
+  padding-bottom: 20px;
   margin-left: 0 !important;
   margin-right: 0 !important; }
 

@@ -33,10 +33,14 @@
                             </div>
                             <div class="column is-6">
                                 <div class="control">
-                                    <h3>
+                                    <h3 id="guest-message">
                                         Or you may continue as a guest.
                                     </h3>
-                                    <a id="guest-button" class="button is-stylish">Continue as guest</a>
+                                    <a id="guest-button" class="button is-stylish">Continue</a>
+                                    <div class="control has-addons is-hidden">
+                                        <input tabindex="1" class="input is-medium" placeholder="Email" type="email"/>
+                                        <a class="button is-stylish is-primary">Submit</a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -67,7 +71,7 @@
                         </article>
 
                         <div id="choices-block">
-                            <div class="content box no-shadow hover-effect choice-block link-choice">
+                            <div class="content box no-shadow is-primary hover-effect choice-block link-choice">
                                 <div class="step-box">
                                     <span class="icon is-medium is-primary">
                                         <i class="fa fa-external-link-square"></i>
@@ -79,7 +83,7 @@
                                     We will display that content on <span class='is-bold'><%= listing_info.domain_name %></span>.
                                 </p>
                             </div>
-                            <div class="content box no-shadow hover-effect choice-block forward-choice">
+                            <div class="content box no-shadow is-info hover-effect choice-block forward-choice">
                                 <div class="step-box">
                                     <span class="icon is-medium is-info">
                                         <i class="fa fa-share-square"></i>
@@ -90,7 +94,7 @@
                                     Forward <span class='is-bold'><%= listing_info.domain_name %></span> to an entirely different domain or website.
                                 </p>
                             </div>
-                            <div class="content box no-shadow hover-effect choice-block build-choice">
+                            <div class="content box no-shadow is-accent hover-effect choice-block build-choice">
                                 <div class="step-box">
                                     <span class="icon is-medium is-accent">
                                         <i class="fa fa-pencil-square"></i>
@@ -120,45 +124,45 @@
                                     <div class='is-flex-wrap'>
                                         <div class="provider-card">
                                           <a target="_blank" href="https://imgur.com" title="Imgur" class="provider-img" style="border-color: #2b2b2b; background-color: #2b2b2b;">
-                                              <img src="/images/companies/imgur-logo.png" alt="Imgur" height="50px"/>
+                                              <img src="/images/companies/imgur-logo.png" alt="Imgur" height="40px"/>
                                           </a>
                                           <div class="content">
                                             <ul class="has-disc">
                                               <li>
-                                                Completely free!
+                                                Gifs
                                               </li>
                                               <li>
-                                                Funny memes
+                                                Memes
                                               </li>
                                             </ul>
                                           </div>
                                         </div>
                                         <div class="provider-card">
                                           <a target="_blank" href="https://images.google.com" title="Google Images" class="provider-img" style="border-color: #efefef; background-color: #FFF;">
-                                              <img src="/images/companies/google-images-logo.png" alt="Google Images" height="50px"/>
+                                              <img src="/images/companies/google-images-logo.png" alt="Google Images" height="45px"/>
                                           </a>
                                           <div class="content">
                                             <ul class="has-disc">
                                               <li>
-                                                Completely free!
+                                                Images
                                               </li>
                                               <li>
-                                                Any picture or GIF
+                                                Literally anything
                                               </li>
                                             </ul>
                                           </div>
                                         </div>
                                         <div class="provider-card">
                                           <a target="_blank" href="https://reddit.com" title="Reddit" class="provider-img" style="border-color: #efefef; background-color: #efefef;">
-                                              <img src="/images/companies/reddit-logo.png" alt="Reddit" height="50px"/>
+                                              <img src="/images/companies/reddit-logo.png" alt="Reddit" height="40px"/>
                                           </a>
                                           <div class="content">
                                             <ul class="has-disc">
                                               <li>
-                                                Completely free!
+                                                Threads
                                               </li>
                                               <li>
-                                                Dank memes
+                                                Comments
                                               </li>
                                             </ul>
                                           </div>
@@ -187,10 +191,10 @@
                                           <div class="content">
                                             <ul class="has-disc">
                                               <li>
-                                                Completely free!
+                                                Someone's profile
                                               </li>
                                               <li>
-                                                Professional
+                                                Company page
                                               </li>
                                             </ul>
                                           </div>
@@ -202,10 +206,10 @@
                                           <div class="content">
                                             <ul class="has-disc">
                                               <li>
-                                                Completely free!
+                                                Someone's profile
                                               </li>
                                               <li>
-                                                Personal
+                                                Facebook page
                                               </li>
                                             </ul>
                                           </div>
@@ -217,10 +221,10 @@
                                           <div class="content">
                                             <ul class="has-disc">
                                               <li>
-                                                Completely free!
+                                                Account Page
                                               </li>
                                               <li>
-                                                Personal
+                                                A photo
                                               </li>
                                             </ul>
                                           </div>
