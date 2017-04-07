@@ -66,7 +66,7 @@
                                 <p id="address-build-message" class="is-hidden regular-message">
                                     Create an entirely new website for <span class='is-bold'><%= listing_info.domain_name %></span>. It doesn&#39;t matter if its a personal portfolio, your new eCommerce store, or just a fun website.
                                 </p>
-                                <p id="address-error-message" class="error-message is-hidden"></p>
+                                <p id="address-error-message" class="error-message is-danger is-hidden">This is an invalid website link! Please try something else.</p>
                             </div>
                         </article>
 
@@ -342,7 +342,7 @@
                                     Please enter your payment information. By clicking the Confirm & Pay button,
                                     you are agreeing to pay the entire amount shown and to our <a href="/terms" class='is-accent'>terms and conditions</a>.
                                 </p>
-                                <p id="stripe-error-message" class="error-message is-hidden"></p>
+                                <p id="stripe-error-message" class="error-message is-danger is-hidden"></p>
                             </div>
                         </article>
                         <div id="checkout-card-content" class="success-hide checkout-card-content">
