@@ -1,6 +1,9 @@
 $(document).ready(function() {
 	setUpCalendar(listing_info);
 
+	//create existing rentals
+	createExisting(listing_info.rentals);
+
 	//check if there are cookies for this domain name
 	if (read_cookie("domain_name") == listing_info.domain_name){
 		if (read_cookie("local_events")){
@@ -30,9 +33,6 @@ $(document).ready(function() {
 	else {
 		delete_cookies();
 	}
-
-	//create existing rentals
-	createExisting(listing_info.rentals);
 
 	//user since date in About Owner
 	$("#user-since").text(moment(new Date(listing_info.user_created)).format("MMMM, YYYY"));
