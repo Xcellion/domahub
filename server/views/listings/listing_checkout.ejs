@@ -54,47 +54,48 @@
                                     Please select one of the options below to move forward!
                                 </p>
                                 <p id="address-link-message" class="is-hidden regular-message">
-                                    Enter the URL of the web content you wish to display on your rental.
+                                    Link an existing website or web content (e.g. a gif, image, meme, etc.). We will display it on <span class='is-bold'><%= listing_info.domain_name %></span> for the duration of your rental. Enter the link below to get started!
                                 </p>
                                 <p id="address-forward-message" class="is-hidden regular-message">
-                                    Enter the URL of the website you want to forward your rental to.
+                                    Anyone navigating to <span class='is-bold'><%= listing_info.domain_name %></span> will be automatically redirected to this link for the duration of your rental. Enter the link of the website you want to get started!
                                 </p>
                                 <p id="address-build-message" class="is-hidden regular-message">
-                                    We are NOT sponsored by any of these providers below. Clicking the image will send you to the respective website.
+                                    Create an entirely new website for <span class='is-bold'><%= listing_info.domain_name %></span>. It doesn&#39;t matter if its a personal portfolio, your new eCommerce store, or just a fun website.
                                 </p>
                                 <p id="address-error-message" class="error-message is-hidden"></p>
                             </div>
                         </article>
+
                         <div id="choices-block">
                             <div class="content box no-shadow hover-effect choice-block link-choice">
                                 <div class="step-box">
-                                    <span class="icon is-primary">
+                                    <span class="icon is-medium is-primary">
                                         <i class="fa fa-external-link-square"></i>
                                     </span>
-                                    <h3 class="is-bold">Link web content</h3>
+                                    <h2 class="">Link web content</h2>
                                 </div>
                                 <p>
-                                    Link an existing website or web content (e.g. a gif, image, slideshow, etc.).
-                                    We will display that content through your new domain rental.
+                                    Link an existing website or web content (e.g. a gif, image, meme, etc.).
+                                    We will display that content on <span class='is-bold'><%= listing_info.domain_name %></span>.
                                 </p>
                             </div>
                             <div class="content box no-shadow hover-effect choice-block forward-choice">
                                 <div class="step-box">
-                                    <span class="icon is-info">
+                                    <span class="icon is-medium is-info">
                                         <i class="fa fa-share-square"></i>
                                     </span>
-                                    <h3 class="is-bold">Forward elsewhere</h3>
+                                    <h2 class="">Forward elsewhere</h2>
                                 </div>
                                 <p>
-                                    Forward your domain rental to a different domain name.
+                                    Forward <span class='is-bold'><%= listing_info.domain_name %></span> to an entirely different domain or website.
                                 </p>
                             </div>
                             <div class="content box no-shadow hover-effect choice-block build-choice">
                                 <div class="step-box">
-                                    <span class="icon is-accent">
+                                    <span class="icon is-medium is-accent">
                                         <i class="fa fa-pencil-square"></i>
                                     </span>
-                                    <h3 class="is-bold">Build a website</h3>
+                                    <h2 class="">Build a website</h2>
                                 </div>
                                 <p>
                                     Use a website building service to create a beautiful website in minutes.
@@ -102,114 +103,226 @@
                                 </p>
                             </div>
                         </div>
-                        <div id="choices-selected is-hidden">
-                            <div class="is-flex-wrap is-hidden build-choice-column choice-column">
-                                <div class="provider-card">
-                                  <a target="_blank" href="https://gsuite.google.com/products/sites/" title="Google Sites" class="provider-img" style="border-color: #efefef; background-color: #efefef;">
-                                      <img src="/images/companies/google-logo.png" alt="Google" height="50px"/>
-                                  </a>
-                                  <div class="content">
-                                    <ul class="has-disc">
-                                      <li>
-                                        Free option
-                                      </li>
-                                      <li>
-                                        Collaborative
-                                      </li>
-                                    </ul>
-                                  </div>
-                                </div>
-                                <div class="provider-card">
-                                  <a target="_blank" href="https://www.weebly.com/themes" title="Weebly" class="provider-img" style="border-color: rgb(41, 144, 234); background-color: rgb(41, 144, 234);">
-                                      <img src="/images/companies/weebly-logo.png" alt="Weebly" height="35px"/>
-                                  </a>
-                                  <div class="content">
-                                    <ul class="has-disc">
-                                      <li>
-                                        Free option
-                                      </li>
-                                      <li>
-                                        eCommerce
-                                      </li>
-                                    </ul>
-                                  </div>
-                                </div>
-                                <div class="provider-card">
-                                  <a target="_blank" href="https://www.shopify.com/online" title="Shopify" class="provider-img" style="border-color: rgb(122, 181, 92); background-color: rgb(122, 181, 92);">
-                                      <img src="/images/companies/shopify-logo.png" alt="Shopify" height="35px"/>
-                                  </a>
-                                  <div class="content">
-                                    <ul class="has-disc">
-                                      <li>
-                                        Paid
-                                      </li>
-                                      <li>
-                                        eCommerce
-                                      </li>
-                                    </ul>
-                                  </div>
-                                </div>
-                                <div class="provider-card">
-                                  <a target="_blank" href="https://www.squarespace.com/templates" title="Squarespace" class="provider-img" style="border-color: rgb(35, 31, 32); background-color: rgb(35, 31, 32);">
-                                      <img src="/images/companies/squarespace-logo.png" alt="Squarespace" height="40px"/>
-                                  </a>
-                                  <div class="content">
-                                    <ul class="has-disc">
-                                      <li>
-                                        Free option
-                                      </li>
-                                      <li>
-                                        eCommerce
-                                      </li>
-                                    </ul>
-                                  </div>
-                                </div>
-                                <div class="provider-card">
-                                  <a target="_blank" href="http://www.wix.com/website/templates" title="Wix" class="provider-img" style="border-color: rgb(170, 77, 200); background-color: rgb(170, 77, 200);">
-                                      <img src="/images/companies/wix-logo.png" alt="Wix" height="35px"/>
-                                  </a>
-                                  <div class="content">
-                                    <ul class="has-disc">
-                                      <li>
-                                        Free option
-                                      </li>
-                                      <li>
-                                        eCommerce
-                                      </li>
-                                    </ul>
-                                  </div>
-                                </div>
-                            </div>
+
+                        <div id="choices-selected" style="display:none;">
                             <div class="columns is-hidden link-choice-column choice-column">
                                 <div class="column">
-                                    <form class="margin-bottom-20">
-                                        <div class="control is-grouped">
-                                            <p class="control is-expanded">
-                                                <input tabindex="1" class="address-input input is-medium" type="url" placeholder="Enter URL here"/>
-                                            </p>
-                                            <p class="control">
-                                                <button class="button is-primary is-stylish">Submit</button>
-                                            </p>
+                                    <div class="control is-grouped">
+                                        <p class="control is-expanded has-icon">
+                                            <input tabindex="1" id="address-link-input" class="address-input input is-large" type="url" placeholder="A funny picture, a viral meme, or a cat GIF..."/>
+                                            <i class="fa fa-link"></i>
+                                        </p>
+                                        <p class="control">
+                                            <button class="address-next-button button is-large is-primary is-stylish">Submit</button>
+                                        </p>
+                                    </div>
+                                    <p class='margin-bottom-10 margin-top-30'>Here are some example websites for inspiration!</p>
+                                    <div class='is-flex-wrap'>
+                                        <div class="provider-card">
+                                          <a target="_blank" href="https://imgur.com" title="Imgur" class="provider-img" style="border-color: #2b2b2b; background-color: #2b2b2b;">
+                                              <img src="/images/companies/imgur-logo.png" alt="Imgur" height="50px"/>
+                                          </a>
+                                          <div class="content">
+                                            <ul class="has-disc">
+                                              <li>
+                                                Completely free!
+                                              </li>
+                                              <li>
+                                                Funny memes
+                                              </li>
+                                            </ul>
+                                          </div>
                                         </div>
-                                    </form>
+                                        <div class="provider-card">
+                                          <a target="_blank" href="https://images.google.com" title="Google Images" class="provider-img" style="border-color: #efefef; background-color: #FFF;">
+                                              <img src="/images/companies/google-images-logo.png" alt="Google Images" height="50px"/>
+                                          </a>
+                                          <div class="content">
+                                            <ul class="has-disc">
+                                              <li>
+                                                Completely free!
+                                              </li>
+                                              <li>
+                                                Any picture or GIF
+                                              </li>
+                                            </ul>
+                                          </div>
+                                        </div>
+                                        <div class="provider-card">
+                                          <a target="_blank" href="https://reddit.com" title="Reddit" class="provider-img" style="border-color: #efefef; background-color: #efefef;">
+                                              <img src="/images/companies/reddit-logo.png" alt="Reddit" height="50px"/>
+                                          </a>
+                                          <div class="content">
+                                            <ul class="has-disc">
+                                              <li>
+                                                Completely free!
+                                              </li>
+                                              <li>
+                                                Dank memes
+                                              </li>
+                                            </ul>
+                                          </div>
+                                        </div>
+                                    </div>
+                                    <small>NOTE: We are not sponsored by any of the sites listed above. Clicking the image will send you to the respective website.</small>
                                 </div>
                             </div>
                             <div class="columns is-hidden forward-choice-column choice-column">
                                 <div class="column">
-                                    <form>
-                                        <div class="control is-grouped">
-                                            <p class="control is-expanded">
-                                                <input tabindex="1" class="address-input input is-medium" type="url" placeholder="Enter URL here"/>
-                                            </p>
-                                            <p class="control">
-                                                <button class="button is-primary is-stylish">Forward</button>
-                                            </p>
+                                    <div class="control is-grouped">
+                                        <p class="control is-expanded has-icon">
+                                            <input tabindex="1" id="address-forward-input" class="address-input input is-large" type="url" placeholder="Your company website, your friend's Instagram, or a product page..."/>
+                                            <i class="fa fa-link"></i>
+                                        </p>
+                                        <p class="control">
+                                            <button class="address-next-button button is-large is-primary is-stylish">Forward</button>
+                                        </p>
+                                    </div>
+                                    <p class='margin-bottom-10 margin-top-30'>Here are some example websites for inspiration!</p>
+                                    <div class='is-flex-wrap'>
+                                        <div class="provider-card">
+                                          <a target="_blank" href="https://linkedin.com" title="LinkedIn" class="provider-img" style="border-color: #efefef; background-color: #efefef;">
+                                              <img src="/images/companies/linkedin-logo.png" alt="LinkedIn"/>
+                                          </a>
+                                          <div class="content">
+                                            <ul class="has-disc">
+                                              <li>
+                                                Completely free!
+                                              </li>
+                                              <li>
+                                                Professional
+                                              </li>
+                                            </ul>
+                                          </div>
                                         </div>
-                                    </form>
+                                        <div class="provider-card">
+                                          <a target="_blank" href="https://facebook.com" title="Facebook" class="provider-img" style="border-color: #4867aa; background-color: #4867aa;">
+                                              <img src="/images/companies/facebook-logo.png" alt="Facebook" height="50px"/>
+                                          </a>
+                                          <div class="content">
+                                            <ul class="has-disc">
+                                              <li>
+                                                Completely free!
+                                              </li>
+                                              <li>
+                                                Personal
+                                              </li>
+                                            </ul>
+                                          </div>
+                                        </div>
+                                        <div class="provider-card">
+                                          <a target="_blank" href="https://instagram.com" title="Instagram" class="provider-img" style="border-color: #efefef; background-color: #FFF;">
+                                              <img src="/images/companies/Instagram-logo.png" alt="Instagram" height="50px"/>
+                                          </a>
+                                          <div class="content">
+                                            <ul class="has-disc">
+                                              <li>
+                                                Completely free!
+                                              </li>
+                                              <li>
+                                                Personal
+                                              </li>
+                                            </ul>
+                                          </div>
+                                        </div>
+                                    </div>
+                                    <small>NOTE: We are not sponsored by any of the sites listed above. Clicking the image will send you to the respective website.</small>
+                                </div>
+                            </div>
+                            <div class="columns is-hidden build-choice-column choice-column">
+                                <div class="column">
+                                    <div class="control is-grouped">
+                                        <p class="control is-expanded has-icon">
+                                            <input tabindex="1" id="address-build-input" class="address-input input is-large" type="url" placeholder="Your personal portfolio, an eCommerce store, or a new website..."/>
+                                            <i class="fa fa-link"></i>
+                                        </p>
+                                        <p class="control">
+                                            <button class="address-next-button button is-large is-primary is-stylish">Submit</button>
+                                        </p>
+                                    </div>
+                                    <p class='margin-bottom-10 margin-top-30'>Here are some premium website creation services!</p>
+                                    <div class='is-flex-wrap'>
+                                        <div class="provider-card">
+                                          <a target="_blank" href="https://gsuite.google.com/products/sites/" title="Google Sites" class="provider-img" style="border-color: #efefef; background-color: #efefef;">
+                                              <img src="/images/companies/google-logo.png" alt="Google" height="50px"/>
+                                          </a>
+                                          <div class="content">
+                                            <ul class="has-disc">
+                                              <li>
+                                                Free option
+                                              </li>
+                                              <li>
+                                                Collaborative
+                                              </li>
+                                            </ul>
+                                          </div>
+                                        </div>
+                                        <div class="provider-card">
+                                          <a target="_blank" href="https://www.weebly.com/themes" title="Weebly" class="provider-img" style="border-color: rgb(41, 144, 234); background-color: rgb(41, 144, 234);">
+                                              <img src="/images/companies/weebly-logo.png" alt="Weebly" height="35px"/>
+                                          </a>
+                                          <div class="content">
+                                            <ul class="has-disc">
+                                              <li>
+                                                Free option
+                                              </li>
+                                              <li>
+                                                eCommerce
+                                              </li>
+                                            </ul>
+                                          </div>
+                                        </div>
+                                        <div class="provider-card">
+                                          <a target="_blank" href="https://www.squarespace.com/templates" title="Squarespace" class="provider-img" style="border-color: rgb(35, 31, 32); background-color: rgb(35, 31, 32);">
+                                              <img src="/images/companies/squarespace-logo.png" alt="Squarespace" height="40px"/>
+                                          </a>
+                                          <div class="content">
+                                            <ul class="has-disc">
+                                              <li>
+                                                Free option
+                                              </li>
+                                              <li>
+                                                eCommerce
+                                              </li>
+                                            </ul>
+                                          </div>
+                                        </div>
+                                        <div class="provider-card">
+                                          <a target="_blank" href="http://www.wix.com/website/templates" title="Wix" class="provider-img" style="border-color: rgb(170, 77, 200); background-color: rgb(170, 77, 200);">
+                                              <img src="/images/companies/wix-logo.png" alt="Wix" height="35px"/>
+                                          </a>
+                                          <div class="content">
+                                            <ul class="has-disc">
+                                              <li>
+                                                Free option
+                                              </li>
+                                              <li>
+                                                eCommerce
+                                              </li>
+                                            </ul>
+                                          </div>
+                                        </div>
+                                        <div class="provider-card">
+                                          <a target="_blank" href="https://www.shopify.com/online" title="Shopify" class="provider-img" style="border-color: rgb(122, 181, 92); background-color: rgb(122, 181, 92);">
+                                              <img src="/images/companies/shopify-logo.png" alt="Shopify" height="35px"/>
+                                          </a>
+                                          <div class="content">
+                                            <ul class="has-disc">
+                                              <li>
+                                                Paid only
+                                              </li>
+                                              <li>
+                                                eCommerce
+                                              </li>
+                                            </ul>
+                                          </div>
+                                        </div>
+                                    </div>
+                                    <small>NOTE: We are not sponsored by any of the sites listed above. Clicking the image will send you to the respective website.</small>
                                 </div>
                             </div>
                             <div class="control">
-                                <button class="button is-hidden is-danger is-stylish back-button">Cancel</button>
+                                <button class="button is-danger is-stylish back-button">Cancel</button>
                             </div>
                         </div>
                     </div>
@@ -250,7 +363,8 @@
                                     <input tabindex="1" id="cc-zip" maxlength="6" data-stripe="address_zip" class="input stripe-input is-medium" type="tel" autocomplete="postal-code" placeholder="•••••"/>
                                 </p>
                             </form>
-                            <div class="control margin-top-10">
+                            <div class="control margin-top-30">
+                                <a id="back-to-address-button" tabindex="1" class="button is-danger no-shadow is-stylish">Go Back</a>
                                 <a id="checkout-button" tabindex="1" class="button is-primary no-shadow is-stylish">Confirm & Pay</a>
                             </div>
                         </div>
@@ -263,6 +377,11 @@
                             <div class="content">
                                 <h1 class="is-primary"><%= listing_info.domain_name %></h1>
                             </div>
+                            <p id="rental-will-msg" class="content is-hidden">
+                            </p>
+                            <p id="rental-will-duration-msg" class="content is-hidden">
+                                for the duration of the rental below:
+                            </p>
                             <div class="columns has-border-bottom">
                                 <div class="column is-5">
                                     <p id="preview-start-dates">
@@ -289,13 +408,8 @@
                                 <p class="total-price is-bold"></p>
                             </div>
                             <div class="control-flex">
-                                <h3>Total</h3>
+                                <h3>Total Price</h3>
                                 <h3 class="total-price is-bold"></h3>
-                            </div>
-                            <div class="content is-hidden">
-                                <p id="customize-msg">
-
-                                </p>
                             </div>
                         </div>
                         <footer class="card-footer">
