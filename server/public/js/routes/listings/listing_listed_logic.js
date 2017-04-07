@@ -111,12 +111,18 @@ function submitTimes(checkout_button){
 					$('#calendar').fullCalendar('removeEvents', data.unavailable[x]._id);
 					$("#calendar-error-message").removeClass('is-hidden').addClass('is-danger').html("Invalid slots have been removed from your selection!");
 				}
+				checkout_button.on('click', function(){
+					submitTimes(checkout_button);
+				});
 			}
 			else if (data.state == "success"){
 				window.location.assign(window.location.origin + "/listing/" + listing_info.domain_name + "/checkout");
 			}
 			else if (data.state == "error"){
 				$("#calendar-error-message").removeClass('is-hidden').addClass('is-danger').html("Something went wrong with the rental! Please try again.");
+				checkout_button.on('click', function(){
+					submitTimes(checkout_button);
+				});
 			}
 		});
 	}
