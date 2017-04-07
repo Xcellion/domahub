@@ -18,8 +18,8 @@
 .is-flex-wrap {
   display: flex;
   flex-wrap: wrap;
-  align-items: center;
-  justify-content: center; }
+  align-items: left;
+  justify-content: left; }
 
 .provider-img {
   border-radius: 3px 0 0 3px;
@@ -30,9 +30,7 @@
   width: 180px;
   min-width: 180px; }
   .provider-img img {
-    max-height: 48px;
     vertical-align: middle;
-    width: 130px;
     margin: auto; }
 
 .provider-card {
@@ -55,7 +53,7 @@
 
 .step-content {
   border-bottom: 3px solid rgba(0, 0, 0, 0.12);
-  padding-bottom: 20px;
+  padding-bottom: 40px;
   margin-left: 0 !important;
   margin-right: 0 !important; }
 

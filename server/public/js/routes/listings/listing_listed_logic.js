@@ -417,7 +417,7 @@ function editExampleRentalModule(popular_rental){
 				var ticker_clone = $("#ticker-clone").clone().removeAttr('id').removeClass('is-hidden');
 
 				//user name or anonymous
-				var ticker_user = (user) ? user.username : "An anonymous user";
+				var ticker_user = (listing_info.rentals[x].username) ? listing_info.rentals[x].username : "An anonymous user";
 				ticker_clone.find(".ticker-user").text(ticker_user + " ");
 
 				//views / reach
