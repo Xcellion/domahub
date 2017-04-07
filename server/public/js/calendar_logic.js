@@ -669,7 +669,6 @@ function removeEventTimeSlot(calEvent, mouseDownSlot, mouseUpSlot){
 function checkIfNotOverlapped(event){
     var existing = $('#calendar').fullCalendar('clientEvents', returnNotMineNotBG);
     var overlap = 0;
-
     for (var x = 0; x < existing.length; x++){
         if (moment(event.start).isBefore(existing[x].end) && moment(event.end).isAfter(existing[x].start)){
             overlap++;

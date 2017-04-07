@@ -290,7 +290,11 @@ function submitNewRental(stripeToken){
         }
     }).done(function(data){
         $("#checkout-button").removeClass('is-loading');
-        if (data.state == "success"){
+        console.log(data);
+        if (data.unavailable){
+            errorHandler("Invalid times");
+        }
+        else if (data.state == "success"){
             console.log('yay');
         }
         else if (data.state == "error"){
@@ -301,6 +305,13 @@ function submitNewRental(stripeToken){
 
 function errorHandler(message){
     switch (message){
+		case "Invalid times!":
+            showMessage("stripe-error-message", "The selected times are not available anymore! Please edit your selected rental dates.");
+			break;
+		case "Nothing displayed at that address!":
+            showStep("site");
+            showMessage("address-error-message", "There's nothing to display on that site! Please choose a different website link.");
+			break;
 		case "Invalid rental type!":
             showMessage("stripe-error-message", "Something went wrong with the rental! Please refresh this page and try again.");
 			break;
