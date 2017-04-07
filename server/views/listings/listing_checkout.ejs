@@ -103,9 +103,86 @@
                             </div>
                         </div>
                         <div id="choices-selected is-hidden">
+                            <div class="is-flex-wrap is-hidden build-choice-column choice-column">
+                                <div class="provider-card">
+                                  <a target="_blank" href="https://gsuite.google.com/products/sites/" title="Google Sites" class="provider-img" style="border-color: #efefef; background-color: #efefef;">
+                                      <img src="/images/companies/google-logo.png" alt="Google" height="50px"/>
+                                  </a>
+                                  <div class="content">
+                                    <ul class="has-disc">
+                                      <li>
+                                        Free option
+                                      </li>
+                                      <li>
+                                        Collaborative
+                                      </li>
+                                    </ul>
+                                  </div>
+                                </div>
+                                <div class="provider-card">
+                                  <a target="_blank" href="https://www.weebly.com/themes" title="Weebly" class="provider-img" style="border-color: rgb(41, 144, 234); background-color: rgb(41, 144, 234);">
+                                      <img src="/images/companies/weebly-logo.png" alt="Weebly" height="35px"/>
+                                  </a>
+                                  <div class="content">
+                                    <ul class="has-disc">
+                                      <li>
+                                        Free option
+                                      </li>
+                                      <li>
+                                        eCommerce
+                                      </li>
+                                    </ul>
+                                  </div>
+                                </div>
+                                <div class="provider-card">
+                                  <a target="_blank" href="https://www.shopify.com/online" title="Shopify" class="provider-img" style="border-color: rgb(122, 181, 92); background-color: rgb(122, 181, 92);">
+                                      <img src="/images/companies/shopify-logo.png" alt="Shopify" height="35px"/>
+                                  </a>
+                                  <div class="content">
+                                    <ul class="has-disc">
+                                      <li>
+                                        Paid
+                                      </li>
+                                      <li>
+                                        eCommerce
+                                      </li>
+                                    </ul>
+                                  </div>
+                                </div>
+                                <div class="provider-card">
+                                  <a target="_blank" href="https://www.squarespace.com/templates" title="Squarespace" class="provider-img" style="border-color: rgb(35, 31, 32); background-color: rgb(35, 31, 32);">
+                                      <img src="/images/companies/squarespace-logo.png" alt="Squarespace" height="40px"/>
+                                  </a>
+                                  <div class="content">
+                                    <ul class="has-disc">
+                                      <li>
+                                        Free option
+                                      </li>
+                                      <li>
+                                        eCommerce
+                                      </li>
+                                    </ul>
+                                  </div>
+                                </div>
+                                <div class="provider-card">
+                                  <a target="_blank" href="http://www.wix.com/website/templates" title="Wix" class="provider-img" style="border-color: rgb(170, 77, 200); background-color: rgb(170, 77, 200);">
+                                      <img src="/images/companies/wix-logo.png" alt="Wix" height="35px"/>
+                                  </a>
+                                  <div class="content">
+                                    <ul class="has-disc">
+                                      <li>
+                                        Free option
+                                      </li>
+                                      <li>
+                                        eCommerce
+                                      </li>
+                                    </ul>
+                                  </div>
+                                </div>
+                            </div>
                             <div class="columns is-hidden link-choice-column choice-column">
                                 <div class="column">
-                                    <form>
+                                    <form class="margin-bottom-20">
                                         <div class="control is-grouped">
                                             <p class="control is-expanded">
                                                 <input tabindex="1" class="address-input input is-medium" type="url" placeholder="Enter URL here"/>
@@ -131,27 +208,8 @@
                                     </form>
                                 </div>
                             </div>
-                            <div class="columns is-hidden build-choice-column choice-column">
-                                <div class="column">
-                                    <a target="_blank" href="https://gsuite.google.com/products/sites/" title="Google Sites" class="provider-img" style="border-color: #efefef; background-color: #efefef;">
-                                        <img src="/images/companies/google-logo.png" alt="Google" height="50px" width="180px"/>
-                                    </a>
-                                    <a target="_blank" href="https://www.weebly.com/themes" title="Weebly" class="provider-img" style="border-color: rgb(41, 144, 234); background-color: rgb(41, 144, 234);">
-                                        <img src="/images/companies/weebly-logo.png" alt="Weebly" height="35px" width="180px"/>
-                                    </a>
-                                    <a target="_blank" href="https://www.shopify.com/online" title="Shopify" class="provider-img" style="border-color: rgb(122, 181, 92); background-color: rgb(122, 181, 92);">
-                                        <img src="/images/companies/shopify-logo.png" alt="Shopify" height="35px" width="180px"/>
-                                    </a>
-                                    <a target="_blank" href="https://www.squarespace.com/templates" title="Squarespace" class="provider-img" style="border-color: rgb(35, 31, 32); background-color: rgb(35, 31, 32);">
-                                        <img src="/images/companies/squarespace-logo.png" alt="Squarespace" height="40px" width="180px"/>
-                                    </a>
-                                    <a target="_blank" href="http://www.wix.com/website/templates" title="Wix" class="provider-img" style="border-color: rgb(170, 77, 200); background-color: rgb(170, 77, 200);">
-                                        <img src="/images/companies/wix-logo.png" alt="Wix" height="35px" width="180px"/>
-                                    </a>
-                                </div>
-                            </div>
                             <div class="control">
-                                <button class="button is-hidden is-stylish back-button">Back</button>
+                                <button class="button is-hidden is-danger is-stylish back-button">Cancel</button>
                             </div>
                         </div>
                     </div>
@@ -233,6 +291,11 @@
                             <div class="control-flex">
                                 <h3>Total</h3>
                                 <h3 class="total-price is-bold"></h3>
+                            </div>
+                            <div class="content is-hidden">
+                                <p id="customize-msg">
+
+                                </p>
                             </div>
                         </div>
                         <footer class="card-footer">

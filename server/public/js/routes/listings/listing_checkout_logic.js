@@ -80,19 +80,31 @@ $(document).ready(function () {
         //build a website
         if ($(this).hasClass("build-choice")) {
             $(".build-choice-column").toggleClass("is-hidden");
+<<<<<<< HEAD
             showMessage("address-build-message");
+=======
+            $("#checkout-msg1").text("We are NOT sponsored by any of these providers below. Clicking the image will send you to the respective website.");
+>>>>>>> cb2a4d2011ad55175e101d3b506e2ad96a61020b
         }
 
         //link a website
         else if ($(this).hasClass("link-choice")) {
             $(".link-choice-column").toggleClass("is-hidden");
+<<<<<<< HEAD
             showMessage("address-link-message");
+=======
+            $("#checkout-msg1").text("You may link anything on the web to your rental (e.g. an image, a gif, a website). Enter the URL below and we will display it on www." + listing_info.domain_name);
+>>>>>>> cb2a4d2011ad55175e101d3b506e2ad96a61020b
         }
 
         //forward to a website
         else {
             $(".forward-choice-column").toggleClass("is-hidden");
+<<<<<<< HEAD
             showMessage("address-forward-message");
+=======
+            $("#checkout-msg1").text("We can forward your domain rental to another existing website. Just enter the URL below!");
+>>>>>>> cb2a4d2011ad55175e101d3b506e2ad96a61020b
         }
     });
 
