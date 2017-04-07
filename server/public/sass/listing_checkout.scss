@@ -6,7 +6,15 @@
     cursor: pointer;
     &:hover,
     &:focus {
-      border-color: $black-secondary !important;
+      &.is-primary {
+        border-color: $primary !important;
+      }
+      &.is-info {
+        border-color: $info !important;
+      }
+      &.is-accent {
+        border-color: $accent !important;
+      }
     }
   }
 }
@@ -29,29 +37,31 @@
 .is-flex-wrap {
   display: flex;
   flex-wrap: wrap;
-  align-items: left;
-  justify-content: left;
+  align-items: center;
+  justify-content: center;
 }
 
 .provider-img {
-  border-radius: $radius 0 0 $radius;
   display: flex;
   align-items: center;
   margin-right: 10px;
   height: 60px;
-  width: 180px;
+  width: 180;
   min-width: 180px;
+  border: 1px solid $border;
   img {
+    max-height: 48px;
     vertical-align: middle;
     margin: auto;
   }
 }
 
 .provider-card {
-  border: 1px solid $border;
   margin-bottom: 10px;
   width: 180px;
   .content {
+    border: 1px solid $border;
+    border-top: none;
     padding: 10px;
   }
   &:not(:last-child) {
@@ -73,7 +83,7 @@
 
 .step-content {
   border-bottom: 3px solid $border;
-  padding-bottom: 40px;
+  padding-bottom: 20px;
   margin-left: 0 !important;
   margin-right: 0 !important;
 }
