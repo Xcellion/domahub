@@ -1938,8 +1938,7 @@ input:-webkit-autofill {
     .control.has-addons .textarea,
     .control.has-addons .select {
       border-radius: 0;
-      margin-right: -1px;
-      width: auto; }
+      margin-right: -1px; }
       .control.has-addons .button.is-icon,
       .control.has-addons .input.is-icon,
       .control.has-addons .is-icon.textarea,
