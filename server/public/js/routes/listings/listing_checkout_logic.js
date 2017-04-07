@@ -2,37 +2,27 @@ $(document).ready(function () {
 
     //--------------------------------------------------------------------------------------------------------- HEADER STEPS
 
-    //function to go to build a site step
-    var not_user_step = function(){
-        $("#step-header-log").addClass('is-disabled');
-        $("#step-content-log").addClass('is-hidden');
-
-        $("#step-header-site").removeClass('is-disabled');
-        $("#step-content-site").removeClass('is-hidden');
-    }
-
     //hide the login step if logged in
     if (user){
-        not_user_step();
+        showStep("log");
+        showMessage("address-regular-message");
     }
 
     //continue as guest
     $("#guest-button").on("click", function(){
-        not_user_step();
+        showStep("site");
+        showMessage("address-regular-message");
     });
 
     //click to go to different step
     $(".step-header").on("click", function(){
+        var step_id = $(this).attr('id').split("-");
+        step_id = step_id[step_id.length - 1];
         if ($(this).attr('id') == "step-header-log" && user){
             //dont allow change to step 1 if logged in
         }
         else {
-            $(".step-header").addClass('is-disabled');
-            $(this).removeClass('is-disabled');
-
-            $(".step-content").addClass('is-hidden');
-            $(this).next(".step-content").removeClass('is-hidden');
-
+            showStep(step_id);
             showMessage($(this).next(".step-content").find(".regular-message:first-child").attr('id'));
         }
     });
@@ -108,7 +98,7 @@ $(document).ready(function () {
             $("#choices-block").stop().fadeIn(250);
             $(".choice-column").addClass('is-hidden');
             showMessage("address-regular-message");
-            $(".address-input").val("");
+            $(".address-input").val("").removeClass('input-selected');
             $("#rental-will-msg").addClass('is-hidden');
             $("#rental-will-duration-msg").addClass('is-hidden');
         });
@@ -128,19 +118,28 @@ $(document).ready(function () {
             $("#rental-will-duration-msg").removeClass('is-hidden');
         }
         else {
+            $(".address-input").removeClass('input-selected');
             $("#rental-will-msg").addClass('is-hidden');
             $("#rental-will-duration-msg").addClass('is-hidden');
+        }
+    }).on("keypress", function(e){
+        //enter to go next
+        if (e.keyCode == 13){
+            $(this).parent(".control").next(".control").find(".address-next-button").click();
         }
     });
 
     //submit the new address
     $(".address-next-button").on('click', function(){
-        $("#step-header-site").addClass('is-disabled');
-        $("#step-content-site").addClass('is-hidden');
-
-        $("#step-header-payment").removeClass('is-disabled');
-        $("#step-content-payment").removeClass('is-hidden');
-        showMessage("stripe-regular-message");
+        var address_input = $(this).parent(".control").parent(".control").find(".address-input");
+        if (checkAddress(address_input.val())){
+            showStep("payment");
+            showMessage("stripe-regular-message");
+            address_input.addClass('input-selected');
+        }
+        else {
+            showMessage("address-error-message");
+        }
     });
 
     //--------------------------------------------------------------------------------------------------------- PAYMENT
@@ -163,9 +162,10 @@ $(document).ready(function () {
     $("#stripe-form").submit(function(e){
         Stripe.card.createToken($(this), function(status, response){
             if (response.error){
-                $('#checkout-button').removeClass('is-loading');
-                $("#stripe-error-message").removeClass('is-hidden').text(response.error.message).addClass('is-danger');
-                $("#stripe-regular-message").addClass('is-hidden');
+                $('#checkout-button').removeClass('is-loading').on("click", function(){
+                    submitStripe($(this));
+                });
+                showMessage("stripe-error-message", response.error.message);
             }
             //all good!
             else {
@@ -205,26 +205,36 @@ $(document).ready(function () {
 
     //go back to address
     $("#back-to-address-button").on('click', function(){
-        $("#step-header-payment").addClass('is-disabled');
-        $("#step-content-payment").addClass('is-hidden');
-
-        $("#step-header-site").removeClass('is-disabled');
-        $("#step-content-site").removeClass('is-hidden');
+        showStep("site");
         showMessage(which_address);
     });
 
 });
 
 //function to show a specific message, hide all others
-function showMessage(message_id){
+function showMessage(message_id, text){
     $(".regular-message").addClass('is-hidden');
-    $("#" + message_id).removeClass('is-hidden');
     $(".error-message").addClass('is-hidden');
+    $("#" + message_id).removeClass('is-hidden');
+
+    //optional text
+    if (text){
+        $("#" + message_id).text(text);
+    }
+}
+
+//function to show step
+function showStep(step_id){
+    $(".step-header").addClass('is-disabled');
+    $(".step-content").addClass('is-hidden');
+
+    $("#step-header-" + step_id).removeClass('is-disabled');
+    $("#step-content-" + step_id).removeClass('is-hidden');
 }
 
 //check the address of the site
-function checkAddress(){
-    return true;
+function checkAddress(address){
+    return address.includes(".");
 }
 
 //check the CC info
@@ -250,11 +260,11 @@ function checkCC(){
 
 //client side check and then submit for a new stripe token
 function submitStripe(checkout_button){
+    showMessage("stripe-regular-message");
     checkout_button.off().addClass('is-loading');
 
     //successfully passed address and CC test
-    if (checkAddress() && checkCC()){
-
+    if (checkAddress($(".input-selected").val()) && checkCC()){
         //submit to get the stripe token
         $("#stripe-form").submit();
     }
@@ -268,32 +278,47 @@ function submitStripe(checkout_button){
 
 //submit for a new rental
 function submitNewRental(stripeToken){
-    //create a new rental
     $.ajax({
         type: "POST",
-        url: "/listing/" + listing_info.domain_name + "/checkout",
+        url: "/listing/" + listing_info.domain_name + "/rent",
         data: {
-            events: minEvents,
+            events: new_rental_info.unformatted_times,
             new_user_email: $("#new_user_email").val(),
-            address: $("#address_form_input").val(),
+            address: $(".input-selected").val(),
             stripeToken: stripeToken,
-            rental_type: 0
+            rental_type: ($(".input-selected").attr("id") == "address-forward-input") ? 1 : 0
         }
     }).done(function(data){
-        checkout_button.removeClass('is-loading');
-        unlock = true;
-        if (data.unavailable){
-            for (var x = 0; x < data.unavailable.length; x++){
-                $('#calendar').fullCalendar('removeEvents', data.unavailable[x]._id);
-                $("#calendar-error-message").removeClass('is-hidden').addClass('is-danger').html("Invalid slots have been removed from your selection!");
-            }
-        }
-        else if (data.state == "success"){
-            window.location.assign(window.location.origin + "/listing/" + listing_info.domain_name + "/checkout");
+        $("#checkout-button").removeClass('is-loading');
+        if (data.state == "success"){
+            console.log('yay');
         }
         else if (data.state == "error"){
-            $("#calendar-error-message").removeClass('is-hidden').addClass('is-danger').html("Something went wrong with the rental! Please try again.");
+            errorHandler(data.message);
         }
+    });
+}
+
+function errorHandler(message){
+    switch (message){
+		case "Invalid rental type!":
+            showMessage("stripe-error-message", "Something went wrong with the rental! Please refresh this page and try again.");
+			break;
+		case "Invalid address!":
+            showStep("site");
+            showMessage("address-error-message");
+			break;
+		case "Invalid email!":
+            showStep("log");
+			break;
+		default:
+            showMessage("stripe-error-message", "Something went wrong with the rental! Please try again.");
+            break;
+    }
+
+    //reattach handler
+    $('#checkout-button').removeClass('is-loading').on("click", function(){
+        submitStripe($(this));
     });
 }
 
