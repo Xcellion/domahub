@@ -10,30 +10,47 @@ $(document).ready(function () {
 
     //continue as guest
     $("#guest-button").on("click", function(){
-        $(this).next().removeClass('is-hidden');
+        $(this).next(".control").removeClass('is-hidden');
         $(this).addClass("is-hidden");
+        $("#new-user-email").focus();
+        $("#email-balloon").removeClass('is-hidden');
         showMessage("guest-regular-message", "Enter your email below.");
     });
 
     //submit guest email
     $("#guest-submit").on("click", function() {
-        if ($(this).val()){
+        if (checkEmail($("#new-user-email").val())){
             showStep("site");
             showMessage("address-regular-message");
         }
         else {
-            console.log("No email address");
+            showMessage("log-error-message");
+        }
+    });
+
+    //enter in an email for guests
+    $("#new-user-email").on("change keyup paste", function(){
+        if ($(this).val()){
+            $("#guest-submit").removeClass('is-disabled');
+        }
+        else {
+            $("#guest-submit").addClass('is-disabled');
+        }
+    }).on("keypress", function(e){
+        //enter to go next
+        if (e.keyCode == 13 && checkEmail($(this).val())){
+            $("#guest-submit").click();
         }
     });
 
     //click to go to different step
     $(".step-header").on("click", function(){
-        var step_id = $(this).attr('id').split("-");
-        step_id = step_id[step_id.length - 1];
         if ($(this).attr('id') == "step-header-log" && user){
             //dont allow change to step 1 if logged in
         }
-        else {
+        else if ($(this).data('can-go') == true){
+            var step_id = $(this).attr('id').split("-");
+            step_id = step_id[step_id.length - 1];
             showStep(step_id);
             showMessage($(this).next(".step-content").find(".regular-message:first-child").attr('id'));
         }
@@ -82,21 +99,21 @@ $(document).ready(function () {
 
             //build a website
             if (which_choice.hasClass("build-choice")) {
-                $(".build-choice-column").removeClass("is-hidden");
+                $(".build-choice-column").removeClass("is-hidden").find('input').focus();
                 showMessage("address-build-message");
                 which_address = "address-build-message";
             }
 
             //link a website
             else if (which_choice.hasClass("link-choice")) {
-                $(".link-choice-column").removeClass("is-hidden");
+                $(".link-choice-column").removeClass("is-hidden").find('input').focus();
                 showMessage("address-link-message");
                 which_address = "address-link-message";
             }
 
             //forward to a website
             else {
-                $(".forward-choice-column").removeClass("is-hidden");
+                $(".forward-choice-column").removeClass("is-hidden").find('input').focus();
                 showMessage("address-forward-message");
                 which_address = "address-forward-message";
             }
@@ -128,9 +145,11 @@ $(document).ready(function () {
             }
             $("#rental-will-msg").html(rental_type_text).removeClass('is-hidden');
             $("#rental-will-duration-msg").removeClass('is-hidden');
+            $(".address-next-button").removeClass('is-disabled');
         }
         else {
             $(".address-input").removeClass('input-selected');
+            $(".address-next-button").addClass('is-disabled');
             $("#rental-will-msg").addClass('is-hidden');
             $("#rental-will-duration-msg").addClass('is-hidden');
         }
@@ -227,6 +246,7 @@ $(document).ready(function () {
 function showMessage(message_id, text){
     $(".regular-message").addClass('is-hidden');
     $(".error-message").addClass('is-hidden');
+    $("#log-error-message").addClass('is-hidden');
     $("#" + message_id).removeClass('is-hidden');
 
     //optional text
@@ -240,13 +260,27 @@ function showStep(step_id){
     $(".step-header").addClass('is-disabled');
     $(".step-content").addClass('is-hidden');
 
+    if (step_id == "site"){
+        var coming_step_id = "log";
+    }
+
     $("#step-header-" + step_id).removeClass('is-disabled');
+    $("#step-header-" + step_id).data("can-go", true);
+    $("#step-header-" + coming_step_id).data("can-go", true);
     $("#step-content-" + step_id).removeClass('is-hidden');
+
+    //focus any visible input fields
+    $("#step-content-" + step_id).find("input:visible").first().focus();
 }
 
 //check the address of the site
 function checkAddress(address){
     return address.includes(".");
+}
+
+//check the email
+function checkEmail(email){
+    return email.includes("@");
 }
 
 //check the CC info
@@ -295,7 +329,7 @@ function submitNewRental(stripeToken){
         url: "/listing/" + listing_info.domain_name + "/rent",
         data: {
             events: new_rental_info.unformatted_times,
-            new_user_email: $("#guest-submit").val(),
+            new_user_email: $("#new-user-email").val(),
             address: $(".input-selected").val(),
             stripeToken: stripeToken,
             rental_type: ($(".input-selected").attr("id") == "address-forward-input") ? 1 : 0
@@ -338,11 +372,11 @@ function errorHandler(message){
 			break;
 		case "Invalid address!":
             showStep("site");
-            showMessage("address-error-message", "This is an invalid website link! Please try something else.");
+            showMessage("address-error-message", "This is an invalid website link! Please choose a different website link.");
 			break;
         case "Malicious address!":
             showStep("site");
-            showMessage("address-error-message", "This website link has been deemed malicious or dangerous! Please enter a different link.");
+            showMessage("address-error-message", "This website link has been deemed malicious or dangerous! Please choose a different website link.");
             break;
 		case "Invalid email!":
             showStep("log");
