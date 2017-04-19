@@ -10,8 +10,6 @@ $(document).ready(function () {
 
     //continue as guest
     $("#guest-button").on("click", function(){
-        // showStep("site");
-        // showMessage("address-regular-message");
         $(this).next().removeClass('is-hidden');
         $(this).addClass("is-hidden");
         showMessage("guest-regular-message", "Enter your email below.");
@@ -19,8 +17,13 @@ $(document).ready(function () {
 
     //submit guest email
     $("#guest-submit").on("click", function() {
-        showStep("site");
-        showMessage("address-regular-message");
+        if ($(this).val()){
+            showStep("site");
+            showMessage("address-regular-message");
+        }
+        else {
+            console.log("No email address");
+        }
     });
 
     //click to go to different step
@@ -292,7 +295,7 @@ function submitNewRental(stripeToken){
         url: "/listing/" + listing_info.domain_name + "/rent",
         data: {
             events: new_rental_info.unformatted_times,
-            new_user_email: $("#new_user_email").val(),
+            new_user_email: $("#guest-submit").val(),
             address: $(".input-selected").val(),
             stripeToken: stripeToken,
             rental_type: ($(".input-selected").attr("id") == "address-forward-input") ? 1 : 0
@@ -335,14 +338,15 @@ function errorHandler(message){
 			break;
 		case "Invalid address!":
             showStep("site");
-            showMessage("address-error-message");
+            showMessage("address-error-message", "This is an invalid website link! Please try something else.");
 			break;
         case "Malicious address!":
             showStep("site");
-            showMessage("address-error-message", "This website link has been deemed malicious or dangerous! Please enter a different link");
+            showMessage("address-error-message", "This website link has been deemed malicious or dangerous! Please enter a different link.");
             break;
 		case "Invalid email!":
             showStep("log");
+            showMessage("log-error-message");
 			break;
 		default:
             showMessage("stripe-error-message", "Something went wrong with the rental! Please try again.");
