@@ -20,13 +20,13 @@
                         <h2>1. Log In</h2>
                     </header>
                     <% if (!user) { %>
-                      <article class="message is-hidden">
-                        <div class="message-body">
-                          <p id="login-error-message" class="error-message is-danger">
-                            There was something wrong with your email input.
-                          </p>
-                        </div>
-                      </article>
+                        <article id="log-error-message" class="message is-hidden">
+                            <div class="message-body">
+                                <p class="is-danger">
+                                    This is an invalid email address! Please enter a valid email address.
+                                </p>
+                            </div>
+                        </article>
                         <div id="step-content-log" class="step-content columns margin-top-10">
                             <div class="column is-6">
                                 <form>
@@ -41,17 +41,17 @@
                             <div class="column is-6">
                                 <div class="control">
                                     <div class="margin-bottom-10">
-                                      <h3 id="guest-regular-message" class="regular-message is-inline-block">
+                                      <h3 id="guest-regular-message" class="is-inline-block">
                                         You may also continue as a guest.
                                       </h3>
-                                      <span class="icon is-inline-block is-dark" data-balloon="We need your email in order to send information and credentials." data-balloon-length="large" data-balloon-pos="up">
+                                      <span id="email-balloon" class="is-hidden icon is-inline-block is-dark" data-balloon="We will send you a confirmation email to edit or publish this rental." data-balloon-length="large" data-balloon-pos="up">
                                         <i class="fa fa-question-circle"></i>
                                       </span>
                                     </div>
                                     <a id="guest-button" class="button is-stylish">Continue</a>
                                     <div class="control has-addons margin-top-10 is-hidden">
-                                        <input tabindex="1" class="input is-medium" placeholder="Email" type="email"/>
-                                        <button id="guest-submit" class="button is-stylish is-primary no-shadow">Submit</button>
+                                        <input id="new-user-email" tabindex="1" class="input is-medium" placeholder="Email" type="email"/>
+                                        <button id="guest-submit" class="is-disabled button is-stylish is-primary no-shadow">Submit</button>
                                     </div>
                                 </div>
                             </div>
@@ -78,7 +78,7 @@
                                 <p id="address-build-message" class="is-hidden regular-message">
                                     Create an entirely new website for <span class='is-bold'><%= listing_info.domain_name %></span>. It doesn&#39;t matter if its a personal portfolio, your new eCommerce store, or just a fun website.
                                 </p>
-                                <p id="address-error-message" class="error-message is-danger is-hidden">This is an invalid website link! Please try something else.</p>
+                                <p id="address-error-message" class="error-message is-danger is-hidden">This is an invalid website link! Please choose a different website link.</p>
                             </div>
                         </article>
 
@@ -129,24 +129,20 @@
                                             <i class="fa fa-link"></i>
                                         </p>
                                         <p class="control">
-                                            <button class="address-next-button button is-large is-primary is-stylish">Submit</button>
+                                            <button class="address-next-button is-disabled button is-large is-primary is-stylish">Submit</button>
                                         </p>
                                     </div>
                                     <p class='margin-bottom-10 margin-top-30'>Here are some example websites for inspiration!</p>
                                     <div class='is-flex-wrap'>
                                         <div class="provider-card">
+                                          <span class="icon is-inline-block is-dark" data-balloon="Link GIFs, memes, and funny images" data-balloon-length="large" data-balloon-pos="up">
+                                            <i class="fa fa-question-circle"></i>
+                                          </span>
                                           <a target="_blank" href="https://imgur.com" title="Imgur" class="provider-img" style="border-color: #2b2b2b; background-color: #2b2b2b;">
                                               <img src="/images/companies/imgur-logo.png" alt="Imgur" height="40px"/>
                                           </a>
                                           <div class="content">
-                                            <ul class="has-disc">
-                                              <li>
-                                                GIFs
-                                              </li>
-                                              <li>
-                                                Memes
-                                              </li>
-                                            </ul>
+                                            Use Imgur to show cat GIFs, memes, or funny images.
                                           </div>
                                         </div>
                                         <div class="provider-card">
@@ -154,14 +150,7 @@
                                               <img src="/images/companies/google-images-logo.png" alt="Google Images" height="45px"/>
                                           </a>
                                           <div class="content">
-                                            <ul class="has-disc">
-                                              <li>
-                                                Images
-                                              </li>
-                                              <li>
-                                                Literally anything
-                                              </li>
-                                            </ul>
+                                            Display literally any image you want.
                                           </div>
                                         </div>
                                         <div class="provider-card">
@@ -169,14 +158,7 @@
                                               <img src="/images/companies/reddit-logo.png" alt="Reddit" height="40px"/>
                                           </a>
                                           <div class="content">
-                                            <ul class="has-disc">
-                                              <li>
-                                                Subreddits
-                                              </li>
-                                              <li>
-                                                Comments / Posts
-                                              </li>
-                                            </ul>
+                                            Link to viral posts, popular subreddits, or funny comments.
                                           </div>
                                         </div>
                                     </div>
@@ -191,7 +173,7 @@
                                             <i class="fa fa-link"></i>
                                         </p>
                                         <p class="control">
-                                            <button class="address-next-button button is-large is-primary is-stylish">Forward</button>
+                                            <button class="address-next-button is-disabled button is-large is-primary is-stylish">Forward</button>
                                         </p>
                                     </div>
                                     <p class='margin-bottom-10 margin-top-30'>Here are some example websites for inspiration!</p>
@@ -253,7 +235,7 @@
                                             <i class="fa fa-link"></i>
                                         </p>
                                         <p class="control">
-                                            <button class="address-next-button button is-large is-primary is-stylish">Submit</button>
+                                            <button class="address-next-button is-disabled button is-large is-primary is-stylish">Submit</button>
                                         </p>
                                     </div>
                                     <p class='margin-bottom-10 margin-top-30'>Here are some premium website creation services!</p>
