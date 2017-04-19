@@ -33,13 +33,13 @@
                             </div>
                             <div class="column is-6">
                                 <div class="control">
-                                    <h3 id="guest-message">
-                                        Or you may continue as a guest.
+                                    <h3 id="guest-regular-message" class="regular-message">
+                                      You may also continue as a guest.
                                     </h3>
                                     <a id="guest-button" class="button is-stylish">Continue</a>
-                                    <div class="control has-addons is-hidden">
+                                    <div class="control has-addons margin-top-10 is-hidden">
                                         <input tabindex="1" class="input is-medium" placeholder="Email" type="email"/>
-                                        <a class="button is-stylish is-primary">Submit</a>
+                                        <button id="guest-submit" class="button is-stylish is-primary">Submit</button>
                                     </div>
                                 </div>
                             </div>
@@ -372,6 +372,19 @@
                                 <a id="checkout-button" tabindex="1" class="button is-primary no-shadow is-stylish">Confirm & Pay</a>
                             </div>
                         </div>
+                        <div id="checkout-success-content" class="success-hide is-hidden">
+                          <% if (!user) { %>
+                          <div class="content">
+
+                          </div>
+                          <% } %>
+                          <div class="content">
+                            <p>
+                              You may edit your rental settings at <a class="is-accent" href="/profile/myrentals" tabindex="1">
+                              your rentals page</a>.
+                            </p>
+                          </div>
+                        </div>
                     </div>
                 </div>
                 <div class="column is-5">
@@ -416,7 +429,7 @@
                                 <h3 class="total-price is-bold"></h3>
                             </div>
                         </div>
-                        <footer class="card-footer">
+                        <footer id="edit-dates-button" class="card-footer">
                             <a tabindex="1" href="/listing/<%= listing_info.domain_name%>" class="button is-stylish no-shadow card-footer-item">Edit Dates</a>
                         </footer>
                     </div>
