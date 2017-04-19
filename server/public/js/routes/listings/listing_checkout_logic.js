@@ -10,6 +10,15 @@ $(document).ready(function () {
 
     //continue as guest
     $("#guest-button").on("click", function(){
+        // showStep("site");
+        // showMessage("address-regular-message");
+        $(this).next().removeClass('is-hidden');
+        $(this).addClass("is-hidden");
+        showMessage("guest-regular-message", "Enter your email below.");
+    });
+
+    //submit guest email
+    $("#guest-submit").on("click", function() {
         showStep("site");
         showMessage("address-regular-message");
     });
@@ -109,7 +118,7 @@ $(document).ready(function () {
         if ($(this).val() != ""){
             var value_clipped = ($(this).val().length > 35) ? $(this).val().substr(0, 35) + "..." : $(this).val();
             if ($(this).attr("id") == "address-forward-input"){
-                var rental_type_text = "will forward to <a href=" + $(this).val() + " class='is-accent'>this link </br>(" + value_clipped + ")</a>";
+                var rental_type_text = "will forward to this link <a href=" + $(this).val() + " class='is-accent'> </br>(" + value_clipped + ")</a>";
             }
             else {
                 var rental_type_text = "will display the content on <a href=" + $(this).val() + " class='is-accent'>this link </br>(" + value_clipped + ")</a>";
@@ -296,12 +305,19 @@ function submitNewRental(stripeToken){
         }
         else if (data.state == "success"){
             console.log('yay');
+            rentalSuccess();
             successHandler();
         }
         else if (data.state == "error"){
             errorHandler(data.message);
         }
     });
+}
+
+function rentalSuccess(data) {
+  $(".success-hide, #edit-dates-button").toggleClass('is-hidden');
+  $("#stripe-regular-message").parents(".message").addClass('is-hidden');
+  $("#step-content-payment").prepend("<div class='notification is-primary'>Success! Your domain rental is now live!</div>")
 }
 
 //handler for various error messages
