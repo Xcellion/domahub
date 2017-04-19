@@ -197,6 +197,10 @@ button[data-balloon] {
   flex-wrap: wrap;
   align-items: center;
   justify-content: center; }
+  @media screen and (max-width: 768px) {
+    .is-flex-wrap {
+      flex-direction: column;
+      flex-grow: 1; } }
 
 .provider-img {
   display: flex;
@@ -212,14 +216,17 @@ button[data-balloon] {
     margin: auto; }
 
 .provider-card {
-  margin-bottom: 10px;
-  width: 180px; }
+  width: 180px;
+  margin-bottom: 10px; }
   .provider-card .content {
     border: 1px solid rgba(0, 0, 0, 0.12);
     border-top: none;
     padding: 10px; }
   .provider-card:not(:last-child) {
     margin-right: 10px; }
+    @media screen and (max-width: 768px) {
+      .provider-card:not(:last-child) {
+        margin-right: 0; } }
 
 .header {
   padding-bottom: 10px;

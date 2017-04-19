@@ -40,6 +40,10 @@
   flex-wrap: wrap;
   align-items: center;
   justify-content: center;
+  @include mobile {
+    flex-direction: column;
+    flex-grow: 1;
+  }
 }
 
 .provider-img {
@@ -58,8 +62,8 @@
 }
 
 .provider-card {
-  margin-bottom: 10px;
   width: 180px;
+  margin-bottom: 10px;
   .content {
     border: 1px solid $border;
     border-top: none;
@@ -67,6 +71,9 @@
   }
   &:not(:last-child) {
     margin-right: 10px;
+    @include mobile {
+      margin-right: 0;
+    }
   }
 }
 
