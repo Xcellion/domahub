@@ -20,6 +20,13 @@
                         <h2>1. Log In</h2>
                     </header>
                     <% if (!user) { %>
+                      <article class="message is-hidden">
+                        <div class="message-body">
+                          <p id="login-error-message" class="error-message is-danger">
+                            There was something wrong with your email input.
+                          </p>
+                        </div>
+                      </article>
                         <div id="step-content-log" class="step-content columns margin-top-10">
                             <div class="column is-6">
                                 <form>
@@ -33,13 +40,18 @@
                             </div>
                             <div class="column is-6">
                                 <div class="control">
-                                    <h3 id="guest-regular-message" class="regular-message">
-                                      You may also continue as a guest.
-                                    </h3>
+                                    <div class="margin-bottom-10">
+                                      <h3 id="guest-regular-message" class="regular-message is-inline-block">
+                                        You may also continue as a guest.
+                                      </h3>
+                                      <span class="icon is-inline-block is-dark" data-balloon="We need your email in order to send information and credentials." data-balloon-length="large" data-balloon-pos="up">
+                                        <i class="fa fa-question-circle"></i>
+                                      </span>
+                                    </div>
                                     <a id="guest-button" class="button is-stylish">Continue</a>
                                     <div class="control has-addons margin-top-10 is-hidden">
                                         <input tabindex="1" class="input is-medium" placeholder="Email" type="email"/>
-                                        <button id="guest-submit" class="button is-stylish is-primary">Submit</button>
+                                        <button id="guest-submit" class="button is-stylish is-primary no-shadow">Submit</button>
                                     </div>
                                 </div>
                             </div>
