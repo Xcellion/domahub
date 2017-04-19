@@ -44,7 +44,7 @@
                                       <h3 id="guest-regular-message" class="is-inline-block">
                                         You may also continue as a guest.
                                       </h3>
-                                      <span id="email-balloon" class="is-hidden icon is-inline-block is-dark" data-balloon="We will send you a confirmation email to edit or publish this rental." data-balloon-length="large" data-balloon-pos="up">
+                                      <span id="email-balloon" class="is-hidden is-small icon is-inline-block is-dark" data-balloon="We will send you a confirmation email to edit or publish this rental." data-balloon-length="large" data-balloon-pos="up">
                                         <i class="fa fa-question-circle"></i>
                                       </span>
                                     </div>
@@ -70,7 +70,7 @@
                                     See below for some options on what you can do with <span class='is-bold'><%= listing_info.domain_name %></span>!
                                 </p>
                                 <p id="address-link-message" class="is-hidden regular-message">
-                                    Link an existing website or web content (e.g. a gif, image, meme, etc.). We will display it on <span class='is-bold'><%= listing_info.domain_name %></span> for the duration of your rental. Enter the link below to get started!
+                                    Display an existing website or web content (e.g. a gif, image, meme, etc.). This will be displayed <span class='is-bold'><%= listing_info.domain_name %></span> for the duration of your rental. Enter the link below to get started!
                                 </p>
                                 <p id="address-forward-message" class="is-hidden regular-message">
                                     Anyone navigating to <span class='is-bold'><%= listing_info.domain_name %></span> will be automatically redirected to this link for the duration of your rental. Enter the link of the website you want to get started!
@@ -88,11 +88,14 @@
                                     <span class="icon is-medium is-primary">
                                         <i class="fa fa-external-link-square"></i>
                                     </span>
-                                    <h2 class="">Link web content</h2>
+                                    <h2>Display web content</h2>
+                                    <span class="margin-left-5 is-small icon is-inline-block is-dark" data-balloon='When someone visits <%= listing_info.domain_name %>, they will see "<%= listing_info.domain_name %>" in the address bar, but will see the content from the website you provide us.' data-balloon-length="large" data-balloon-pos="up">
+                                      <i class="fa fa-question-circle"></i>
+                                    </span>
                                 </div>
                                 <p>
-                                    Link an existing website or web content (e.g. a gif, image, meme, etc.).
-                                    We will display that content on <span class='is-bold'><%= listing_info.domain_name %></span>.
+                                    Display an existing website or content (e.g. a gif, image, meme, etc.).
+                                    We will show that content on <span class='is-bold'><%= listing_info.domain_name %></span>.
                                 </p>
                             </div>
                             <div class="content box no-shadow is-info hover-effect choice-block forward-choice">
@@ -100,7 +103,9 @@
                                     <span class="icon is-medium is-info">
                                         <i class="fa fa-share-square"></i>
                                     </span>
-                                    <h2 class="">Forward elsewhere</h2>
+                                    <h2>Forward elsewhere</h2>
+                                    <span class="margin-left-5 is-small icon is-inline-block is-dark" data-balloon='When someone visits <%= listing_info.domain_name %>, they will immediately be redirected to the website you provide us. The address bar will change to the forwarded website URL.' data-balloon-length="large" data-balloon-pos="up">                                      <i class="fa fa-question-circle"></i>
+                                    </span>
                                 </div>
                                 <p>
                                     Forward <span class='is-bold'><%= listing_info.domain_name %></span> to an entirely different domain or website.
@@ -111,7 +116,10 @@
                                     <span class="icon is-medium is-accent">
                                         <i class="fa fa-pencil-square"></i>
                                     </span>
-                                    <h2 class="">Build a website</h2>
+                                    <h2>Build a website</h2>
+                                    <span class="margin-left-5 is-small icon is-inline-block is-dark" data-balloon='When someone visits <%= listing_info.domain_name %>, they will see "<%= listing_info.domain_name %>" in the address bar, but will see your website on the page.' data-balloon-length="large" data-balloon-pos="up">
+                                      <i class="fa fa-question-circle"></i>
+                                    </span>
                                 </div>
                                 <p>
                                     Use a website building service to create a new website for <span class='is-bold'><%= listing_info.domain_name %></span> in minutes.
@@ -132,17 +140,16 @@
                                             <button class="address-next-button is-disabled button is-large is-primary is-stylish">Submit</button>
                                         </p>
                                     </div>
-                                    <p class='margin-bottom-10 margin-top-30'>Here are some example websites for inspiration!</p>
+                                    <p class='margin-bottom-10 margin-top-30'>These websites provide great content for your domain rental.</p>
                                     <div class='is-flex-wrap'>
                                         <div class="provider-card">
-                                          <span class="icon is-inline-block is-dark" data-balloon="Link GIFs, memes, and funny images" data-balloon-length="large" data-balloon-pos="up">
-                                            <i class="fa fa-question-circle"></i>
-                                          </span>
                                           <a target="_blank" href="https://imgur.com" title="Imgur" class="provider-img" style="border-color: #2b2b2b; background-color: #2b2b2b;">
                                               <img src="/images/companies/imgur-logo.png" alt="Imgur" height="40px"/>
                                           </a>
                                           <div class="content">
-                                            Use Imgur to show cat GIFs, memes, or funny images.
+                                            <p>
+                                              Display GIFs, memes, and other images.
+                                            </p>
                                           </div>
                                         </div>
                                         <div class="provider-card">
@@ -150,7 +157,9 @@
                                               <img src="/images/companies/google-images-logo.png" alt="Google Images" height="45px"/>
                                           </a>
                                           <div class="content">
-                                            Display literally any image you want.
+                                            <p>
+                                              Display images, wallpapers, comics, etc.
+                                            </p>
                                           </div>
                                         </div>
                                         <div class="provider-card">
@@ -158,7 +167,9 @@
                                               <img src="/images/companies/reddit-logo.png" alt="Reddit" height="40px"/>
                                           </a>
                                           <div class="content">
-                                            Link to viral posts, popular subreddits, or funny comments.
+                                            <p>
+                                              Display subreddits, threads, or comments.
+                                            </p>
                                           </div>
                                         </div>
                                     </div>
@@ -183,14 +194,9 @@
                                               <img src="/images/companies/linkedin-logo.png" alt="LinkedIn"/>
                                           </a>
                                           <div class="content">
-                                            <ul class="has-disc">
-                                              <li>
-                                                Someone&#39;s profile
-                                              </li>
-                                              <li>
-                                                Company page
-                                              </li>
-                                            </ul>
+                                            <p>
+                                             Forward to your company page or job posting.
+                                            </p>
                                           </div>
                                         </div>
                                         <div class="provider-card">
@@ -198,14 +204,9 @@
                                               <img src="/images/companies/facebook-logo.png" alt="Facebook" height="50px"/>
                                           </a>
                                           <div class="content">
-                                            <ul class="has-disc">
-                                              <li>
-                                                Someone&#39;s profile
-                                              </li>
-                                              <li>
-                                                Facebook page
-                                              </li>
-                                            </ul>
+                                              <p>
+                                               Forward to a personal or business page.
+                                              </p>
                                           </div>
                                         </div>
                                         <div class="provider-card">
@@ -213,14 +214,9 @@
                                               <img src="/images/companies/Instagram-logo.png" alt="Instagram" height="50px"/>
                                           </a>
                                           <div class="content">
-                                            <ul class="has-disc">
-                                              <li>
-                                                Account Page
-                                              </li>
-                                              <li>
-                                                A photo
-                                              </li>
-                                            </ul>
+                                              <p>
+                                               Forward to a specific promotional photo.
+                                              </p>
                                           </div>
                                         </div>
                                     </div>
