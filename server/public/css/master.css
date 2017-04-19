@@ -3051,6 +3051,9 @@ input:-webkit-autofill {
     color: #3cbc8d; }
   .icon.is-disabled {
     color: rgba(0, 0, 0, 0.38); }
+  .icon.is-tooltip {
+    color: rgba(0, 0, 0, 0.66);
+    cursor: pointer; }
 
 .hamburger, .nav-toggle {
   cursor: pointer;
@@ -4978,16 +4981,18 @@ input:-webkit-autofill {
     .footer-list {
       flex-wrap: wrap; } }
 
-.footer-item {
-  margin-left: 20px; }
-  @media screen and (max-width: 456px) {
-    .footer-item {
-      margin-top: 10px; } }
-  .footer-item a {
-    padding: 5px 0;
-    color: white; }
-    .footer-item a:hover, .footer-item a:focus {
-      color: #3cbc8d; }
+.footer-item:not(:last-child) {
+  margin-right: 20px; }
+
+@media screen and (max-width: 456px) {
+  .footer-item {
+    margin-top: 10px; } }
+
+.footer-item a {
+  padding: 5px 0;
+  color: white; }
+  .footer-item a:hover, .footer-item a:focus {
+    color: #3cbc8d; }
 
 .footer-bar {
   display: flex;
@@ -4996,22 +5001,8 @@ input:-webkit-autofill {
   margin-top: 40px; }
   @media screen and (max-width: 768px) {
     .footer-bar {
-      padding: 30px 20px;
-      flex-direction: column;
-      justify-content: flex-start; } }
-
-.footer-bar-content {
-  display: flex;
-  align-items: center;
-  justify-content: space-between; }
-
-.footer-bar-item {
-  font-size: 12px;
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box; }
-  .footer-bar-item:not(:first-child) {
-    margin-left: 25px; }
+      padding: 0 20px;
+      flex-direction: column; } }
 
 @media screen and (min-width: 769px) {
   .footer-bar-right {
@@ -5022,22 +5013,24 @@ input:-webkit-autofill {
   .footer-bar-right .footer-bar-item:hover, .footer-bar-right .footer-bar-item:focus {
     color: #3cbc8d; }
 
-.social-icon:not(:first-child) {
-  margin-left: 20px; }
+.footer-bar-item {
+  font-size: 12px;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box; }
+  .footer-bar-item:not(:last-child) {
+    margin-right: 20px; }
 
 .social-icon > .icon {
   color: white;
-  font-size: 12px; }
+  font-size: 12px;
+  vertical-align: baseline; }
   .social-icon > .icon:hover {
     color: #3cbc8d; }
 
-@media screen and (max-width: 456px) {
-  .social-icon {
-    display: none; } }
-
 /********************** CUSTOM CLASS STYLING ******************/
 .min-height {
-  min-height: calc(100vh - 200px); }
+  min-height: calc(100vh - 158px); }
 
 .clear-nav {
   padding-top: 60px; }
