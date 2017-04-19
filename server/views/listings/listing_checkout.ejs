@@ -44,7 +44,7 @@
                                       <h3 id="guest-regular-message" class="regular-message is-inline-block">
                                         You may also continue as a guest.
                                       </h3>
-                                      <span class="icon is-inline-block is-dark" data-balloon="We need your email in order to send information and credentials." data-balloon-length="large" data-balloon-pos="up">
+                                      <span class="icon is-inline-block is-dark is-tooltip" data-balloon="We need your email in order to send information and credentials." data-balloon-length="large" data-balloon-pos="up">
                                         <i class="fa fa-question-circle"></i>
                                       </span>
                                     </div>
@@ -70,7 +70,7 @@
                                     See below for some options on what you can do with <span class='is-bold'><%= listing_info.domain_name %></span>!
                                 </p>
                                 <p id="address-link-message" class="is-hidden regular-message">
-                                    Link an existing website or web content (e.g. a gif, image, meme, etc.). We will display it on <span class='is-bold'><%= listing_info.domain_name %></span> for the duration of your rental. Enter the link below to get started!
+                                    Link an existing website or web content (e.g. a gif, image, meme, etc.). This will be displayed <span class='is-bold'><%= listing_info.domain_name %></span> for the duration of your rental. Enter the link below to get started!
                                 </p>
                                 <p id="address-forward-message" class="is-hidden regular-message">
                                     Anyone navigating to <span class='is-bold'><%= listing_info.domain_name %></span> will be automatically redirected to this link for the duration of your rental. Enter the link of the website you want to get started!
@@ -132,21 +132,16 @@
                                             <button class="address-next-button button is-large is-primary is-stylish">Submit</button>
                                         </p>
                                     </div>
-                                    <p class='margin-bottom-10 margin-top-30'>Here are some example websites for inspiration!</p>
+                                    <p class='margin-bottom-10 margin-top-30'>These websites provide great content for your domain rental.</p>
                                     <div class='is-flex-wrap'>
                                         <div class="provider-card">
                                           <a target="_blank" href="https://imgur.com" title="Imgur" class="provider-img" style="border-color: #2b2b2b; background-color: #2b2b2b;">
                                               <img src="/images/companies/imgur-logo.png" alt="Imgur" height="40px"/>
                                           </a>
                                           <div class="content">
-                                            <ul class="has-disc">
-                                              <li>
-                                                GIFs
-                                              </li>
-                                              <li>
-                                                Memes
-                                              </li>
-                                            </ul>
+                                            <p>
+                                              Display GIFs, memes, and other images.
+                                            </p>
                                           </div>
                                         </div>
                                         <div class="provider-card">
@@ -154,14 +149,9 @@
                                               <img src="/images/companies/google-images-logo.png" alt="Google Images" height="45px"/>
                                           </a>
                                           <div class="content">
-                                            <ul class="has-disc">
-                                              <li>
-                                                Images
-                                              </li>
-                                              <li>
-                                                Literally anything
-                                              </li>
-                                            </ul>
+                                            <p>
+                                              Background images, comics, etc.
+                                            </p>
                                           </div>
                                         </div>
                                         <div class="provider-card">
@@ -169,14 +159,9 @@
                                               <img src="/images/companies/reddit-logo.png" alt="Reddit" height="40px"/>
                                           </a>
                                           <div class="content">
-                                            <ul class="has-disc">
-                                              <li>
-                                                Threads
-                                              </li>
-                                              <li>
-                                                Comments
-                                              </li>
-                                            </ul>
+                                            <p>
+                                              Subreddits, threads, comments, etc.
+                                            </p>
                                           </div>
                                         </div>
                                     </div>
