@@ -1,9 +1,6 @@
 $(document).ready(function() {
 	setUpCalendar(listing_info);
 
-	//create existing rentals
-	//createExisting(listing_info.rentals);
-
 	//check if there are cookies for this domain name
 	if (read_cookie("domain_name") == listing_info.domain_name){
 		if (read_cookie("local_events")){
@@ -189,7 +186,7 @@ function createTrafficChart(){
 		//create the labels array
 		var monthly_labels = [];
 		for (var y = 0; y < 6; y++){
-			var temp_month = moment().subtract(y, "month").format("MMMM");
+			var temp_month = moment().subtract(y, "month").format("MMM");
 			monthly_labels.unshift(temp_month);
 		}
 
@@ -264,7 +261,7 @@ function createTrafficChart(){
 					callbacks: {
 						label: function(tooltipItems, data) {
 							if (tooltipItems.datasetIndex == 0 && tooltipItems.yLabel == 0){
-								return "Listing created";
+								return "Created";
 							}
 							else if (monthly_labels.indexOf(tooltipItems.xLabel) != -1){
 								return tooltipItems.xLabel
@@ -278,7 +275,7 @@ function createTrafficChart(){
 								return false;
 							}
 							else if (monthly_labels.indexOf(tooltipItems[0].xLabel) != -1){
-								return "Listing Traffic";
+								return false;
 							}
 							else {
 								return (tooltipItems[0].index == 0) ? "Rental Start" : "Rental End";
@@ -315,9 +312,6 @@ function createTrafficChart(){
 				}
 			 }
 		});
-
-		$("#traffic-loading").addClass('is-hidden');
-
 	}
 }
 
@@ -333,7 +327,7 @@ function findOtherDomains(){
 	}).done(function(data){
 		if (data.state == "success"){
 			$("#otherowner-domains").removeClass('is-hidden');
-			$("#otherowner-domains-title").text("Other Domains By " + listing_info.username);
+			$("#otherowner-domains-title").text("Other Websites By " + listing_info.username);
 			for (var x = 0; x < data.listings.length; x++){
 				var cloned_similar_listing = $("#otherowner-domain-clone").clone();
 				cloned_similar_listing.removeAttr("id").removeClass('is-hidden');
@@ -405,7 +399,7 @@ function editExampleRentalModule(popular_rental){
 				ticker_clone.find(".ticker-user").text(ticker_user + " ");
 
 				//views / reach
-				var ticker_time = "<span class='is-bold'>" + moment.duration(listing_info.rentals[x].duration, "milliseconds").humanize() + "</span>";
+				var ticker_time = "<span>" + moment.duration(listing_info.rentals[x].duration, "milliseconds").humanize() + "</span>";
 				var ticker_reach = "";
 
 				if (listing_info.rentals[x].views > 0){
