@@ -4,7 +4,7 @@
       <div class="content has-text-centered">
         <a tabindex="1" href="http://<%= listing_info.domain_name %>">
         <h1 id="domain-display" class="title is-1 is-bold is-primary is-inline-block">
-        <%= listing_info.domain_name %></h1></a>
+        <%= listing_info.domain_name %><span id="typed-slash"></span></h1></a>
         <h2 class="subtitle is-4 is-white margin-top-15">
         <% if (listing_info.status == 1) { %>
           Currently available for use
