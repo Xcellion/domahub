@@ -1,6 +1,13 @@
 $(document).ready(function() {
 	setUpCalendar(listing_info);
 
+	Typed.new('#typed-slash', {
+		strings: ["/sarah", "/connor", "/adrian"],
+		typeSpeed: 100,
+		loop: true,
+		shuffle: true
+	});
+
 	//check if there are cookies for this domain name
 	if (read_cookie("domain_name") == listing_info.domain_name){
 		if (read_cookie("local_events")){
@@ -75,7 +82,6 @@ function submitTimes(checkout_button){
 	var newEvents = checkTimes();
 
 	if (newEvents){
-		console.log(newEvents);
 		//redirect to checkout page
 		$.ajax({
 			type: "POST",
@@ -113,7 +119,7 @@ function submitTimes(checkout_button){
 
 //function to create the traffic chart
 function createTrafficChart(){
-	if (listing_info.traffic){
+	if (listing_info.traffic && $("#traffic-chart").length){
 
 		//past six months only
 		var traffic_data = [
