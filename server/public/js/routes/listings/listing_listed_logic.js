@@ -1,6 +1,13 @@
 $(document).ready(function() {
 	setUpCalendar(listing_info);
 
+	Typed.new('#typed-slash', {
+		strings: ["/sarah", "/connor", "/adrian"],
+		typeSpeed: 100,
+		loop: true,
+		shuffle: true
+	});
+
 	//check if there are cookies for this domain name
 	if (read_cookie("domain_name") == listing_info.domain_name){
 		if (read_cookie("local_events")){
