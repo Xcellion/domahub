@@ -13,7 +13,6 @@
   display: flex
   align-items: center
   text-decoration: none
-  justify-content: center
   +mobile-456px
     flex-wrap: wrap
 
@@ -23,42 +22,42 @@
   +mobile-456px
     margin-top: 10px
   a
-    padding: 5px 0
     color: $white-primary
+    padding: 5px 0
+    position: relative
+    &::before
+      @include transition(all 0.25s ease)
+      background: $white
+      bottom: 0
+      content: ""
+      height: 3px
+      position: absolute
+      width: 0
+      left: 0
     &:hover,
     &:focus
-      color: $primary
+      &::before
+        width: 100%
+        right: 0
 
 .footer-bar
   display: flex
-  justify-content: space-between
-  align-items: center
+  flex-direction: column
   margin-top: 40px
   +mobile
     padding: 0 20px
     flex-direction: column
 
-.footer-bar-right
-  +tablet
-    text-align: right
-  .footer-bar-item
-    color: $white
-    &:hover,
-    &:focus
-      color: $primary
-
 .footer-bar-item
-  font-size: $size-8
   margin: 0
   padding: 0
   box-sizing: border-box
   &:not(:last-child)
-    margin-right: 20px
+    margin-right: 10px
 
 .social-icon
   & > .icon
     color: $white
-    font-size: $size-8
     vertical-align: baseline
     &:hover
       color: $primary
