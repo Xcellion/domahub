@@ -16,6 +16,11 @@ $(document).ready(function() {
         Intercom("show");
     });
 
+    //random contact characters
+    var random_char = random_characters[Math.floor(Math.random()*random_characters.length)];
+    $("#contact_name").attr("placeholder", random_char.name);
+    $("#contact_email").attr("placeholder", random_char.email);
+    $("#contact_message").attr("placeholder", random_char.message);
 });
 
 //function to submit contact form

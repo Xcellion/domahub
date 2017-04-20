@@ -2,7 +2,7 @@ $(document).ready(function() {
 	setUpCalendar(listing_info);
 
 	//create existing rentals
-	createExisting(listing_info.rentals);
+	//createExisting(listing_info.rentals);
 
 	//check if there are cookies for this domain name
 	if (read_cookie("domain_name") == listing_info.domain_name){
@@ -56,23 +56,18 @@ $(document).ready(function() {
 
 //helper function to check if everything is legit
 function checkTimes(){
-	var newEvents = $('#calendar').fullCalendar('clientEvents', returnMineNotBG);
+	var startDate = $("#calendar").data('daterangepicker').startDate;
+	var endDate = $("#calendar").data('daterangepicker').endDate.clone().add(1, "millisecond");
 
-	if (!newEvents || newEvents.length == 0){
+	if (!startDate.isValid() || !endDate.isValid()){
 		$("#calendar-error-message").removeClass('is-hidden').addClass('is-danger').html("Invalid dates selected!");
 	}
-	else if (newEvents.length > 0){
-		for (var x = 0; x < newEvents.length; x++){
-			if (!newEvents[x].old){
-				var start = new Date(newEvents[x].start._d);
-				if (isNaN(start)){
-					$("#calendar-error-message").removeClass('is-hidden').addClass('is-danger').html("Invalid dates selected!");
-					break;
-				}
-			}
-		}
+	else {
+		return [{
+			start : startDate._d.getTime(),
+			end : endDate._d.getTime()
+		}];
 	}
-	return newEvents;
 }
 
 //function to submit new rental info
@@ -82,26 +77,14 @@ function submitTimes(checkout_button){
 	checkout_button.addClass('is-loading');
 	var newEvents = checkTimes();
 
-	if (newEvents.length > 0){
-		minEvents = [];
-
-		//format the events to be sent
-		for (var x = 0; x < newEvents.length; x++){
-			var start = new Date(newEvents[x].start._d);
-			var offset = start.getTimezoneOffset();
-			minEvents.push({
-				start: newEvents[x].start._d.getTime(),
-				end: newEvents[x].end._d.getTime(),
-				_id: newEvents[x]._id
-			});
-		}
-
-		//create a new rental
+	if (newEvents){
+		console.log(newEvents);
+		//redirect to checkout page
 		$.ajax({
 			type: "POST",
 			url: "/listing/" + listing_info.domain_name + "/checkout",
 			data: {
-				events: minEvents
+				events: newEvents
 			}
 		}).done(function(data){
 			checkout_button.removeClass('is-loading');
@@ -124,11 +107,6 @@ function submitTimes(checkout_button){
 					submitTimes(checkout_button);
 				});
 			}
-		});
-	}
-	else {
-		checkout_button.on('click', function(){
-			submitTimes(checkout_button);
 		});
 	}
 }
