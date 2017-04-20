@@ -7,7 +7,7 @@
         <%= listing_info.domain_name %></h1></a>
         <h2 class="subtitle is-4 is-white margin-top-15">
         <% if (listing_info.status == 1) { %>
-          Currently Available
+          Currently available for use
           <% } else { %>
           Currently Unavailable
           <% } %>
@@ -29,21 +29,10 @@
             }); %>
         <% } %>
 
-        <%# TRAFFIC MODULE %>
-        <% if (listing_info.traffic){ %>
-            <div class="content listing-module">
-              <h2 class="margin-bottom-15">Listing Traffic</h2>
-              <div id="traffic-loading">Now loading listing traffic...</div>
-              <canvas id="traffic-chart"></canvas>
-            </div>
-        <% } %>
-
-        <%# ALEXA MODULE %>
-        <% if (listing_info.alexa){ %>
-            <%- include("modules/alexa_module.ejs", {
-              listing_info : listing_info
-            }); %>
-        <% } %>
+        <%# RENTALS MODULE %>
+        <%- include("modules/rentals_module.ejs", {
+          listing_info : listing_info
+        }); %>
 
         <!-- <%# DEMOGRAPHIC MODULE %>
         <%- include("modules/demographic_module.ejs", {
@@ -137,7 +126,6 @@
           <%# CATEGORIES MODULE %>
           <% if (listing_info.categories) { %>
               <div class="content listing-info">
-                  <h3 class="is-bold margin-bottom-15">Categories</h3>
                   <div class="is-flex-wrap">
                   <% var categories_array = listing_info.categories.split(" ")
                   for (var i = 0; i < categories_array.length; i++) { %>
@@ -157,6 +145,20 @@
               listing_info : listing_info
             }); %>
 
+            <%# TRAFFIC MODULE %>
+            <% if (listing_info.traffic){ %>
+                <%- include("modules/traffic_module.ejs", {
+                  listing_info : listing_info
+                }); %>
+            <% } %>
+            
+            <%# ALEXA MODULE %>
+            <% if (listing_info.alexa){ %>
+                <%- include("modules/alexa_module.ejs", {
+                  listing_info : listing_info
+                }); %>
+            <% } %>
+
           </div>
           <footer class="card-footer">
               <a id="less-info-button" tabindex="1" class="card-footer-item has-icon is-hidden">
@@ -167,11 +169,6 @@
               </a>
           </footer>
         </div>
-
-        <%# RENTALS MODULE %>
-        <%- include("modules/rentals_module.ejs", {
-          listing_info : listing_info
-        }); %>
 
       </div>
     </div>
