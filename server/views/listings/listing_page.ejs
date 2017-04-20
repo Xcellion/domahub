@@ -1,4 +1,4 @@
-<section id="background_image" class="section listing-section" style="background-image:url('<%= listing_info.background_image %>')">
+<section id="background_image" class="min-height section listing-section" style="background-image:url('<%= listing_info.background_image %>')">
   <div class="img-wrapper">
     <div id="listing-hero" class="container">
       <div class="content has-text-centered">
@@ -17,7 +17,7 @@
   </div>
 </section>
 
-<section id="top-wrapper" class="min-height">
+<section id="top-wrapper" class="">
   <div class="container">
     <div class="columns flex-column-mobile margin-right-0">
       <div id="domain-modules-column" class="column is-8 order-2-mobile">
@@ -37,12 +37,15 @@
         <!-- <%# DEMOGRAPHIC MODULE %>
         <%- include("modules/demographic_module.ejs", {
           listing_info : listing_info
-        }); %> -->
+        }); %>
+        -->
 
+        <!--
         <%# SIMILAR DOMAINS MODULE %>
         <%- include("modules/similar_domains_module.ejs", {
           listing_info : listing_info
         }); %>
+        -->
 
       </div>
       <div id="domain-info-column" class="column is-4 order-1-mobile">
@@ -113,8 +116,17 @@
             <% } %>
           </footer>
         </div>
+
+        <!--
         <div id="description-card" class="card is-hidden-mobile">
           <div class="card-content">
+
+          <%# OWNERS NOTES MODULE %>
+          <% if (listing_info.description) { %>
+              <%- include("modules/owners_notes_module.ejs", {
+                listing_info : listing_info
+              }); %>
+          <% } %>
 
           <%# OWNERS NOTES MODULE %>
           <% if (listing_info.description) { %>
@@ -151,7 +163,7 @@
                   listing_info : listing_info
                 }); %>
             <% } %>
-            
+
             <%# ALEXA MODULE %>
             <% if (listing_info.alexa){ %>
                 <%- include("modules/alexa_module.ejs", {
@@ -169,6 +181,8 @@
               </a>
           </footer>
         </div>
+
+    -->
 
       </div>
     </div>
