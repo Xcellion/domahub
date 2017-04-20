@@ -75,7 +75,6 @@ function submitTimes(checkout_button){
 	var newEvents = checkTimes();
 
 	if (newEvents){
-		console.log(newEvents);
 		//redirect to checkout page
 		$.ajax({
 			type: "POST",
@@ -113,7 +112,7 @@ function submitTimes(checkout_button){
 
 //function to create the traffic chart
 function createTrafficChart(){
-	if (listing_info.traffic){
+	if (listing_info.traffic && $("#traffic-chart").length){
 
 		//past six months only
 		var traffic_data = [
