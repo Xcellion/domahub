@@ -3,6 +3,7 @@ var	account_model = require('../models/account_model.js');
 var	data_model = require('../models/data_model.js');
 
 var search_functions = require("../routes/listings/listings_search_functions.js");
+var renter_functions = require("../routes/listings/listings_renter_functions.js");
 
 var validator = require("validator");
 var	request = require('request');
@@ -18,7 +19,14 @@ module.exports = function(app, db, e){
 	Account = new account_model(db);
 	Data = new data_model(db);
 
-	app.use("*", checkHost);
+	app.use("*", [
+		checkHost,
+		renter_functions.checkDomainListedAndAddToSearch,
+		renter_functions.getVerifiedListing,
+		renter_functions.checkStillVerified,
+		renter_functions.deleteRentalInfo,
+		renter_functions.renderListing
+	]);
 }
 
 //function to check if the requested host is not for domahub
@@ -35,11 +43,11 @@ function checkHost(req, res, next){
 		|| domain_name == "localhost:9090"){
 			error.handler(req, res, "Requested DomaHub!", "api");
 		}
-		else if (!validator.isFQDN(domain_name)){
-			error.handler(req, res, "Invalid rental!", "api");
+		else if (!validator.isAscii(domain_name) || !validator.isFQDN(domain_name)){
+			error.handler(req, res, "Invalid domain name!");
 		}
 		else {
-			getCurrentRental(req, res, domain_name);
+			getCurrentRental(req, res, domain_name, next);
 		}
 	}
 	else {
@@ -48,7 +56,7 @@ function checkHost(req, res, next){
 }
 
 //send the current rental details and information for a listing
-function getCurrentRental(req, res, domain_name){
+function getCurrentRental(req, res, domain_name, next{
 	//requesting something besides main page, pipe the request
 	if (req.session.rented_info){
 		console.log("F: Proxying rental request for an existing session for " + domain_name + "!");
@@ -60,41 +68,10 @@ function getCurrentRental(req, res, domain_name){
 			if (result.state != "success" || result.info.length == 0){
 				console.log("F: Not rented! Redirecting to listing page");
 				delete req.session.rented_info;
-
-				//add to search
-				var user_ip = req.headers['x-forwarded-for'] ||
-				req.connection.remoteAddress ||
-				req.socket.remoteAddress;
-
-				//nginx https proxy removes IP
-				if (req.headers["x-real-ip"]){
-					user_ip = req.headers["x-real-ip"];
-				}
-
-				//add to search history if its not dev
-				if (node_env != "dev"){
-					req.session.from_api = true;
-
-					var account_id = (typeof req.user == "undefined") ? null : req.user.id;
-					var now = new Date().getTime();
-					var history_info = {
-						account_id: account_id,			//who searched if who exists
-						domain_name: domain_name.toLowerCase(),		//what they searched for
-						timestamp: now,		//when they searched for it
-						user_ip : user_ip
-					}
-					console.log("F: Adding to search history...");
-
-					Data.newListingHistory(history_info, function(result){if (result.state == "error") {console.log(result)}});	//async
-				}
-
-				//render a middleman page to send quantcast data first
-				res.render("quant_redirect.ejs", {
-					redirect_link : "https://domahub.com/listing/" + domain_name
-				});
+				next();
 			}
 			else {
-				//add it to stats
+				//add it to rental stats
 				search_functions.newRentalHistory(result.info[0].rental_id, req);
 				searchAndDirect(result.info[0], req, res);
 			}
