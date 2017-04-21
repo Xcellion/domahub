@@ -171,49 +171,42 @@ button[data-balloon] {
 [data-balloon-length="fit"]:after {
   width: 100%; }
 
-.listing-section {
-  background-position: center center;
-  background-repeat: no-repeat;
-  background-size: cover;
-  padding: 0 !important;
-  width: 100%; }
-  @media screen and (min-width: 769px) {
-    .listing-section {
-      height: 400px; } }
-  @media screen and (max-width: 768px) {
-    .listing-section {
-      height: 300px; } }
+#domain-desc {
+  max-width: 500px; }
 
-.container {
-  padding-left: 0 !important;
-  padding-right: 0 !important; }
+#domain-display h1 {
+  font-size: 48px; }
+  @media screen and (max-width: 768px) {
+    #domain-display h1 {
+      font-size: 40px; } }
+  @media screen and (max-width: 456px) {
+    #domain-display h1 {
+      font-size: 28px; } }
 
 #domain-display .control {
-  width: 300px; }
+  width: 250px; }
   #domain-display .control input {
     width: 100%; }
 
-#domain-desc {
-  min-width: 150px; }
-
 .input-tooltip {
-  position: absolute;
-  left: 2px;
-  right: 0;
+  background-color: #ff5722;
   bottom: -25px;
   box-sizing: border-box;
-  background-color: #ff5722;
-  font-size: 16px;
-  width: 138px;
   color: white;
-  padding: 2px 5px; }
+  cursor: pointer;
+  font-size: 16px;
+  left: 2px;
+  padding: 2px 5px;
+  position: absolute;
+  right: 0;
+  width: 136px; }
   @media screen and (max-width: 456px) {
     .input-tooltip {
       font-size: 14px; } }
   .input-tooltip .triangle {
     position: absolute;
     top: -5px;
-    left: 50%;
+    left: 62px;
     width: 0;
     height: 0;
     border-left: 5px solid transparent;
@@ -225,7 +218,6 @@ button[data-balloon] {
   color: #ff5722;
   font-size: 48px;
   margin-right: auto;
-  padding-left: 2px;
   position: relative;
   vertical-align: baseline !important;
   width: auto; }
@@ -257,60 +249,18 @@ button[data-balloon] {
     outline: none;
     cursor: auto;
     border-color: rgba(0, 0, 0, 0.88); }
-
-.input-tooltip {
-  cursor: pointer; }
-
-.alexa-stat {
-  display: flex;
-  flex-direction: column; }
-  .alexa-stat .header {
-    align-items: center;
-    border: 1px solid rgba(0, 0, 0, 0.12);
-    border-bottom: none;
-    border-radius: 3px 3px 0 0;
-    display: flex;
-    justify-content: space-between;
-    padding: 5px 8px; }
-    .alexa-stat .header p {
-      font-weight: 700;
-      margin-bottom: 0 !important; }
-    .alexa-stat .header:hover {
-      cursor: pointer; }
-  .alexa-stat p:last-child {
-    border-radius: 0 0 3px 3px;
-    border-top: none;
-    border: 1px solid rgba(0, 0, 0, 0.12);
-    padding: 5px 8px; }
-
-#trending-rental-image {
-  background-image: url("");
-  background-position: top center;
-  background-size: cover;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
-  height: 250px;
-  width: 100%; }
-
-.listing-info {
-  padding-top: 15px;
-  margin-bottom: 15px; }
-  .listing-info:not(:first-child) {
-    border-top: 1px solid rgba(0, 0, 0, 0.12); }
-
-.calendar-control {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-  margin: 10px 0; }
-  .calendar-control .button {
-    margin-right: 5px;
-    flex-grow: 1; }
-    .calendar-control .button:last-child {
-      margin-right: 0; }
-    @media screen and (max-width: 360px) {
-      .calendar-control .button:nth-child(2) {
-        margin-right: 0; } }
+    #typed-slash:active::-webkit-input-placeholder, #typed-slash:focus::-webkit-input-placeholder {
+      /* Chrome/Opera/Safari */
+      color: transparent; }
+    #typed-slash:active::-moz-placeholder, #typed-slash:focus::-moz-placeholder {
+      /* Firefox 19+ */
+      color: transparent; }
+    #typed-slash:active:-ms-input-placeholder, #typed-slash:focus:-ms-input-placeholder {
+      /* IE 10+ */
+      color: transparent; }
+    #typed-slash:active:-moz-placeholder, #typed-slash:focus:-moz-placeholder {
+      /* Firefox 18- */
+      color: transparent; }
 
 .is-flex-wrap {
   display: flex;
@@ -321,73 +271,22 @@ button[data-balloon] {
     margin-bottom: 10px;
     margin-right: 10px; }
 
-@media screen and (max-width: 768px) {
-  .flex-column-mobile {
-    display: flex;
-    flex-direction: column; } }
-
-@media screen and (max-width: 768px) {
-  .order-1-mobile {
-    order: 1; } }
-
-@media screen and (max-width: 768px) {
-  .order-2-mobile {
-    order: 2; } }
-
 #ticker-wrapper {
-  height: 125px;
-  overflow-y: auto; }
+  -webkit-box-shadow: 0 8px 15px 0 rgba(0, 0, 0, 0.12);
+  -moz-box-shadow: 0 8px 15px 0 rgba(0, 0, 0, 0.12);
+  box-shadow: 0 8px 15px 0 rgba(0, 0, 0, 0.12);
+  display: block;
+  max-height: 203px;
+  overflow-y: scroll;
+  padding: 8px 5px;
+  width: 100%; }
 
 .ticker-row {
-  background-color: #f9f9f9;
-  padding: 5px;
+  background-color: white;
+  box-sizing: border-box;
+  display: block;
   margin: 0;
-  border: 1px solid #e5e5e5; }
-
-#previous-rentals-cards {
-  display: flex;
-  justify-content: space-around; }
-  #previous-rentals-cards .card {
-    margin: 0; }
-    #previous-rentals-cards .card + .card {
-      margin-left: 15px; }
-
-#previous-rentals-table {
-  display: flex;
-  flex-wrap: wrap; }
-  #previous-rentals-table .previous-rental {
-    border-radius: 3px;
-    border: 1px solid rgba(0, 0, 0, 0.12);
-    margin-bottom: 10px;
-    padding: 20px; }
-    #previous-rentals-table .previous-rental:not(:last-child) {
-      margin-right: 5px; }
-    #previous-rentals-table .previous-rental:hover {
-      border-color: rgba(0, 0, 0, 0.66); }
-  #previous-rentals-table .previous-stats {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: flex-start; }
-
-#checkout-card,
-#description-card,
-#popular-rental-card {
-  margin-left: auto; }
-
-#popular-rental-img {
-  background: url("/images/loading.svg");
-  background-repeat: no-repeat;
-  background-position: center center;
-  min-width: 250px;
-  min-height: 250px; }
-
-.other-rental {
-  display: inline-block;
-  height: 150px;
-  width: 150px;
-  background-color: #f9f9f9;
-  margin-right: 10px;
-  margin-top: 10px;
-  border: 1px solid #e5e5e5;
-  word-break: break-all; }
+  padding: 8px;
+  width: 100%; }
+  .ticker-row:not(:last-child) {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.12); }

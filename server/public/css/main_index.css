@@ -284,6 +284,12 @@ button[data-balloon] {
         .tabs-box ul li a:hover, .tabs-box ul li a:focus {
           outline: none; }
 
+.dom-trait {
+  max-width: 300px; }
+  @media screen and (max-width: 768px) {
+    .dom-trait {
+      margin: auto; } }
+
 .slider-box {
   -webkit-box-shadow: 0 8px 20px 0 #d0d0d0;
   -moz-box-shadow: 0 8px 20px 0 #d0d0d0;
@@ -334,11 +340,16 @@ button[data-balloon] {
 .slider-icon:hover {
   cursor: pointer; }
 
-.flex-list li {
-  display: flex;
-  align-items: center; }
-  .flex-list li span {
-    padding-right: 30px; }
+.flex-list {
+  max-width: 420px; }
+  @media screen and (max-width: 768px) {
+    .flex-list {
+      margin: auto; } }
+  .flex-list li {
+    display: flex;
+    align-items: center; }
+    .flex-list li span {
+      padding-right: 30px; }
 
 .step-box {
   display: flex;
