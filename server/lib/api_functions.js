@@ -109,9 +109,15 @@ function searchAndDirect(rental_info, req, res){
 
 	//proxy the request
 	if (rental_info.address){
-		console.log("F: Proxying request to " + rental_info.address + "...");
-		req.session.rented_info = rental_info;
-		requestProxy(req, res, rental_info);
+		if (rental_info.type == 0){
+			console.log("F: Displaying content from " + rental_info.address + "...");
+			req.session.rented_info = rental_info;
+			requestProxy(req, res, rental_info);
+		}
+		else {
+			console.log("F: Forwarding website to " + rental_info.address + "...");
+			res.redirect(rental_info.address);
+		}
 	}
 	else {
 		console.log("F: No address associated with rental! Displaying default empty page...");

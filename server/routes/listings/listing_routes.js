@@ -275,25 +275,25 @@ module.exports = function(app, db, auth, error, stripe){
 		renter_functions.updateRentalObject
 	]);
 
-	//adding time to an existing rental
-	app.post('/listing/:domain_name/:rental_id/time', [
-		urlencodedParser,
-		auth.checkLoggedIn,
-		checkDomainValid,
-		checkDomainListed,
-		renter_functions.getRental,
-		renter_functions.checkRentalDomain,
-		renter_functions.checkRentalOwner,
-		renter_functions.createRentalObject,
-		renter_functions.getVerifiedListing,
-		renter_functions.checkRentalTimes,
-		renter_functions.checkRentalPrice,
-		renter_functions.getOwnerStripe,
-		stripe.chargeMoney,
-		renter_functions.editRentalTimes,
-		profile_functions.getAccountRentals,
-		renter_functions.sendRentalSuccess
-	]);
+	// //adding time to an existing rental
+	// app.post('/listing/:domain_name/:rental_id/time', [
+	// 	urlencodedParser,
+	// 	auth.checkLoggedIn,
+	// 	checkDomainValid,
+	// 	checkDomainListed,
+	// 	renter_functions.getRental,
+	// 	renter_functions.checkRentalDomain,
+	// 	renter_functions.checkRentalOwner,
+	// 	renter_functions.createRentalObject,
+	// 	renter_functions.getVerifiedListing,
+	// 	renter_functions.checkRentalTimes,
+	// 	renter_functions.checkRentalPrice,
+	// 	renter_functions.getOwnerStripe,
+	// 	stripe.chargeMoney,
+	// 	renter_functions.editRentalTimes,
+	// 	profile_functions.getAccountRentals,
+	// 	renter_functions.sendRentalSuccess
+	// ]);
 
 	//delete a rental
 	app.post('/listing/:domain_name/:rental_id/delete', [

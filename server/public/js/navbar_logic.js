@@ -74,20 +74,22 @@ $(document).ready(function() {
 	var pages_white_nav = ["checkout", "listings", "faq", "contact", "profile", "mission", "about", "press", "careers", "terms", "privacy", "nothinghere"];
 	var current_page = (window.location.pathname == "/") ? "/" : window.location.pathname.split("/").pop();
 
-	//remove white link if not a page that needs it
-	if (pages_white_nav.indexOf(current_page) != -1){
-		$(".nav-link").removeClass("is-white");
-		$(".nav-menu").removeClass("is-black");
-		$("#nav-logo, .circle-logo").addClass("is-primary").removeClass("is-white");
-		$(".nav-toggle").removeClass("is-white").addClass("is-black");
-		$("#profile-button, .login-modal").addClass("is-primary").removeClass("is-white");
-	}
+	if ($("#navbar").length){
+		//remove white link if not a page that needs it
+		if (pages_white_nav.indexOf(current_page) != -1){
+			$(".nav-link").removeClass("is-white");
+			$(".nav-menu").removeClass("is-black");
+			$("#nav-logo, .circle-logo").addClass("is-primary").removeClass("is-white");
+			$(".nav-toggle").removeClass("is-white").addClass("is-black");
+			$("#profile-button, .login-modal").addClass("is-primary").removeClass("is-white");
+		}
 
-	//change navbar based on scroll
-	navbarChange($(window), pages_white_nav, current_page);
-	$(window).scroll(function(e){
-		navbarChange($(this), pages_white_nav, current_page);
-	});
+		//change navbar based on scroll
+		navbarChange($(window), pages_white_nav, current_page);
+		$(window).scroll(function(e){
+			navbarChange($(this), pages_white_nav, current_page);
+		});
+	}
 
 	//delete notifications button
 	$(".delete").on("click", function(e){
