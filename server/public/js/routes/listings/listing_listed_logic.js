@@ -1,44 +1,23 @@
 $(document).ready(function() {
 	setUpCalendar(listing_info);
 
+	//typed JS
 	$(function(){
-      $("#typed-slash").typed({
-      strings: ["sarah", "jennifer", "samuel"],
-      typeSpeed: 50,
+		$("#typed-slash").typed({
+			strings: ["sarah", "jennifer", "samuel"],
+			typeSpeed: 50,
 			loop: true,
 			shuffle: true
-      });
-  });
+		});
+	});
 
-	//check if there are cookies for this domain name
-	if (read_cookie("domain_name") == listing_info.domain_name){
-		if (read_cookie("local_events")){
-			var cookie_events = read_cookie("local_events");
-			var changed = false;
-			for (var x = cookie_events.length - 1; x >= 0; x--){
-				var partial_days = handlePartialDays(moment(cookie_events[x].start), moment(cookie_events[x].end));
-				cookie_events[x].start = partial_days.start;
-				cookie_events[x].end = partial_days.end;
-				//if its a new event, make sure it doesnt overlap
-				if (checkIfNotOverlapped(cookie_events[x])){
-					$('#calendar').fullCalendar('renderEvent', cookie_events[x], true);
-				}
-				else {
-					changed = true;
-					cookie_events.splice(x, 1);
-				}
-			}
-
-			//if we removed any events, change the cookies
-			if (changed){
-				storeCookies("local_events");
-			}
-		}
-		updatePrices();	//show prices
-	}
-	else {
-		delete_cookies();
-	}
+	$("#typed-slash").on("focus", function(){
+		$(".input-tooltip").addClass('is-hidden');
+		$("#typed-slash").data('typed').pauseTyping();
+	}).on("focusout", function(){
+		$(".input-tooltip").removeClass('is-hidden');
+		$("#typed-slash").data('typed').continueTyping();
+	});
 
 	//user since date in About Owner
 	$("#user-since").text(moment(new Date(listing_info.user_created)).format("MMMM, YYYY"));

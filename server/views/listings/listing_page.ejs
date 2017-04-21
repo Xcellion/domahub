@@ -2,13 +2,13 @@
   <!--style="background-image:url('<%= listing_info.background_image %>')"  -->
     <div class="container">
       <div class="content">
-        <h1>
-          <% if (listing_info.status == 1) { %>
-            Rent this website now.
-            <% } else { %>
-            Unavailable for rent.
-            <% } %>
-        </h1>
+        <p class='margin-bottom-0'>
+          <% if (listing_info.description) { %>
+              <%= listing_info.description %>
+          <% } else { %>
+              Rent this website today!
+          <% } %>
+        </p>
         <div id="domain-display">
           <span class="title is-1 is-bold is-primary is-inline-block margin-bottom-0"><%= listing_info.domain_name %>/</span>
           <div class="control is-inline-block">
@@ -16,6 +16,7 @@
             <label class="input-tooltip" for="typed-slash"><span class="triangle"></span>Click here to edit.</label>
           </div>
         </div>
+
         <!-- <article id="domain-desc" class="message">
           <div class="message-body">
             <% if (listing_info.description) { %>
@@ -177,6 +178,8 @@
 
             <%# TRAFFIC MODULE %>
             <% if (listing_info.traffic){ %>
+                <script src="/js/lib/chart.min.js" type="text/javascript"></script>
+                <script src="/js/lib/randomColor.js" type="text/javascript"></script>
                 <%- include("modules/traffic_module.ejs", {
                   listing_info : listing_info
                 }); %>
