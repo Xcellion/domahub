@@ -24,7 +24,7 @@ module.exports = function(app, db, e){
 		function(req, res, next){
 			console.log("Whaa");
 			next();
-		}
+		},
 		renter_functions.checkDomainListedAndAddToSearch,
 		renter_functions.getVerifiedListing,
 		renter_functions.checkStillVerified,
