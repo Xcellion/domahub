@@ -19,24 +19,12 @@ module.exports = function(app, db, e){
 	Account = new account_model(db);
 	Data = new data_model(db);
 
-	app.use("*", [
-		checkHost,
-		function(req, res, next){
-			console.log("Whaa");
-			next();
-		},
-		renter_functions.checkDomainListedAndAddToSearch,
-		renter_functions.getVerifiedListing,
-		renter_functions.checkStillVerified,
-		renter_functions.deleteRentalInfo,
-		renter_functions.renderListing
-	]);
+	app.use("*", checkHost);
 }
 
 //function to check if the requested host is not for domahub
 function checkHost(req, res, next){
 	if (req.headers.host){
-		console.log("F: Checking where this request wants to go.");
 		var domain_name = req.headers.host.replace(/^(https?:\/\/)?(www\.)?/,'');
 
 		if (domain_name == "www.w3bbi.com"
@@ -46,26 +34,22 @@ function checkHost(req, res, next){
 		|| domain_name == "localhost"
 		|| domain_name == "localhost:8080"
 		|| domain_name == "localhost:9090"){
-			console.log("F: Requested DomaHub!");
 			error.handler(req, res, "Requested DomaHub!", "api");
 		}
 		else if (!validator.isAscii(domain_name) || !validator.isFQDN(domain_name)){
-			console.log("F: Invalid domain name!");
 			error.handler(req, res, "Invalid domain name!");
 		}
 		else {
-			console.log("F: Requested a rental domain!");
 			getCurrentRental(req, res, domain_name, next);
 		}
 	}
 	else {
-		console.log("F: Requested DomaHub!");
 		error.handler(req, res, "Requested DomaHub!", "api");
 	}
 }
 
 //send the current rental details and information for a listing
-function getCurrentRental(req, res, domain_name, next){
+function getCurrentRental(req, res, domain_name, next{
 	//requesting something besides main page, pipe the request
 	if (req.session.rented_info){
 		console.log("F: Proxying rental request for an existing session for " + domain_name + "!");
@@ -77,7 +61,39 @@ function getCurrentRental(req, res, domain_name, next){
 			if (result.state != "success" || result.info.length == 0){
 				console.log("F: Not rented! Redirecting to listing page");
 				delete req.session.rented_info;
-				next();
+
+				//add to search
+				var user_ip = req.headers['x-forwarded-for'] ||
+				req.connection.remoteAddress ||
+				req.socket.remoteAddress;
+
+				//nginx https proxy removes IP
+				if (req.headers["x-real-ip"]){
+					user_ip = req.headers["x-real-ip"];
+				}
+
+				//add to search history if its not dev
+				if (node_env != "dev"){
+					req.session.from_api = true;
+
+					var account_id = (typeof req.user == "undefined") ? null : req.user.id;
+					var now = new Date().getTime();
+					var history_info = {
+						account_id: account_id,			//who searched if who exists
+						domain_name: domain_name.toLowerCase(),		//what they searched for
+						timestamp: now,		//when they searched for it
+						user_ip : user_ip
+					}
+					console.log("F: Adding to search history...");
+
+					Data.newListingHistory(history_info, function(result){if (result.state == "error") {console.log(result)}});	//async
+				}
+
+				//render a middleman page to send quantcast data first
+				res.render("quant_redirect.ejs", {
+					redirect_link : "https://domahub.com/listing/" + domain_name,
+					redirect_name : domain_name
+				});
 			}
 			else {
 				//add it to rental stats
