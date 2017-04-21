@@ -1,6 +1,6 @@
 $(document).ready(function() {
 	//if remember me is set in the cookie
-	var remember_cookie = read_cookie("remember");
+	var remember_cookie = readCookie("remember");
 	if (remember_cookie){
 		$("#remember-checkbox").prop("checked", true);
 		$("#email").val(remember_cookie);
@@ -8,14 +8,14 @@ $(document).ready(function() {
 
 	//remember me check box
 	$("#remember-checkbox").click(function(){
-		remember($(this).is(":checked"));
+		rememberAccount($(this).is(":checked"));
 	});
 
 	//to catch empty emails or empty passwords
 	$('#navbar_form').submit(function(event){
 
 		//re-set cookie for remember
-		remember($("#remember-checkbox").is(":checked"));
+		rememberAccount($("#remember-checkbox").is(":checked"));
 
 		//if no email is entered
 		if (!$("#email").val()) {
@@ -36,18 +36,37 @@ $(document).ready(function() {
 
 });
 
-//helper function to remember cookie
-function remember(bool){
-	if (bool && validateEmail($("#email").val())){
-		bake_cookie("remember", $("#email").val())
-	}
-	else {
-		delete_cookie("remember");
-	}
-}
-
 //helper function to validate email address
 function validateEmail(email) {
   var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   return re.test(email);
+}
+
+//helper function to remember cookie
+function rememberAccount(bool){
+	if (bool && validateEmail($("#email").val())){
+		bakeCookie("remember", $("#email").val())
+	}
+	else {
+		deleteCookie("remember");
+	}
+}
+
+//helper function to make cookie
+function bakeCookie(name, value) {
+	var cookie = [name, '=', JSON.stringify(value), '; path=/;'].join('');
+	document.cookie = cookie;
+}
+
+//helper function to read a cookie
+function readCookie(name) {
+	var result = document.cookie.match(new RegExp(name + '=([^;]+)'));
+	result && (result = JSON.parse(result[1]));
+	return result;
+}
+
+//helper function to delete a cookie
+function deleteCookie(name) {
+	//document.cookie = [name, '=; expires=Thu, 01-Jan-1970 00:00:01 GMT; path=/; domain=.', window.location.host.toString()].join('');
+	document.cookie = [name, '=; expires=Thu, 01-Jan-1970 00:00:01 GMT', '; path=/;'].join('');
 }

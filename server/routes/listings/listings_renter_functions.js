@@ -412,19 +412,29 @@ module.exports = {
             }
             else {
                 getListingRentalTimes(req, res, result.info[0], function(){
-
-                    //get listing traffic
-                    Data.getListingTraffic(req.params.domain_name, function(result){
-                        req.session.listing_info.traffic = result.info;
-
-                        //get alexa traffic info
-                        alexaData.AlexaWebData(req.params.domain_name, function(error, result) {
-                            req.session.listing_info.alexa = result;
-                            next();
-                        });
-                    });
+                    next();
                 });
             }
+        });
+    },
+
+    //get listing traffic
+    getListingAlexa : function(req, res, next){
+        Data.getListingTraffic(req.params.domain_name, function(result){
+            req.session.listing_info.traffic = result.info;
+            res.send({
+                listing_info: req.session.listing_info
+            });
+        });
+    },
+
+    //get alexa traffic info
+    getListingAlexa : function(req, res, next){
+        alexaData.AlexaWebData(req.params.domain_name, function(error, result) {
+            req.session.listing_info.alexa = result;
+            res.send({
+                listing_info: req.session.listing_info
+            });
         });
     },
 
