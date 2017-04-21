@@ -12,17 +12,15 @@ $(document).ready(function() {
 	});
 
 	$("#typed-slash").on("focus", function(){
-		$(".input-tooltip").addClass('is-hidden');
+		$("#input-tooltip").addClass('is-hidden');
 	}).on("focusout", function(){
-		$(".input-tooltip").removeClass('is-hidden');
+		$("#input-tooltip").removeClass('is-hidden');
 	});
 
 	$("#path-input").on("submit", function(e) {
 		e.preventDefault();
 		checkInput();
 	});
-
-	removeNotification();
 
 	//user since date in About Owner
 	$("#user-since").text(moment(new Date(listing_info.user_created)).format("MMMM, YYYY"));
@@ -50,8 +48,8 @@ function checkInput() {
 	var letterNumber = /^[0-9a-zA-Z]+$/;
 
 	function notificationText(text) {
-		$("#error-notification").addClass("is-active");
-		$("#notification-text").text(text);
+		$("#input-tooltip").removeClass('is-hidden').addClass("is-active");
+		$("#input-tooltip").text(text);
 	}
 
 	if (!input || !input.match(letterNumber)) {

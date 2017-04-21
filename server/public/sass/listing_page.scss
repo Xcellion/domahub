@@ -24,8 +24,9 @@
   }
 }
 
-.input-tooltip {
-  background-color: $accent;
+#input-tooltip {
+  background-color: $black-primary;
+  border-radius: 0 $radius-large $radius-large $radius-large;
   bottom: -25px;
   box-sizing: border-box;
   color: $white;
@@ -39,15 +40,28 @@
   @include mobile-456px {
     font-size: $size-7
   }
-  .triangle {
-    position: absolute;
-    top: -5px;
-    left: 62px;
-    width: 0;
+  &.is-active {
+    background-color: $danger;
+    bottom: -45px;
+    width: auto;
+    &::before {
+      border-bottom-color: $danger;
+      border-left-color: $danger;
+    }
+  }
+  &::before,
+  &::after {
+    content: '';
     height: 0;
-    border-left: 5px solid transparent;
-    border-right: 5px solid transparent;
-    border-bottom: 5px solid $accent;
+    position: absolute;
+    width: 0;
+    border: 5px solid transparent;
+  }
+  &::before {
+    border-bottom-color: $black-primary;
+    border-left-color: $black-primary;
+    top: -10px;
+    left: 0;
   }
 }
 

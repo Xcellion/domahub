@@ -16,12 +16,13 @@
               Request Listing
           <% } %>
         </span>
-        <div id="domain-display" class="content margin-bottom-40">
+        <div id="domain-display" class="content margin-bottom-50">
           <h1 class="is-primary is-inline-block margin-bottom-0"><%= listing_info.domain_name %>/</h1>
           <form id="path-input" class="is-inline-block">
             <div class="control margin-bottom-0">
               <input id="typed-slash" tabindex="1" type="text" autocomplete="off"></input>
-              <label class="input-tooltip" for="typed-slash"><span class="triangle"></span>Click here to edit.</label>
+              <label id="input-tooltip" for="typed-slash">Click here to edit.</label>
+              <!-- <span class="triangle"></span> -->
             </div>
           </form>
         </div>
@@ -32,7 +33,7 @@
             }); %>
           <% } %>
           <div class="control">
-            <button form="path-input" class="button is-stylish is-primary v-align-middle" type="submit">Check Availability</button>
+            <button id="submit-path-input" form="path-input" class="button is-stylish is-primary v-align-middle" type="submit">Check Availability</button>
           </div>
         </div>
     </div>
