@@ -203,9 +203,13 @@ button[data-balloon] {
   bottom: -25px;
   box-sizing: border-box;
   background-color: #ff5722;
+  font-size: 16px;
   width: 138px;
   color: white;
   padding: 2px 5px; }
+  @media screen and (max-width: 456px) {
+    .input-tooltip {
+      font-size: 14px; } }
   .input-tooltip .triangle {
     position: absolute;
     top: -5px;
