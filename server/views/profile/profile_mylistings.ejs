@@ -5,6 +5,7 @@
 <head>
 	<title>My Listings - DomaHub</title>
 	<link rel="stylesheet" href="/css/min/profile_general.min.css" type="text/css" />
+	<link rel="stylesheet" href="/css/lib/jquery.tagit.css" type="text/css" />
 	<%- include("../templates/head_links"); %>
 </head>
 
@@ -162,11 +163,14 @@
 												<div class="columns listing-module">
 													<div class="column is-3">
 														<p class="is-bold">Rental Pricing</p>
+														<span class="icon is-small" data-balloon-length="medium" data-balloon="Minimum pricing is $1 / Day." data-balloon-pos="up">
+															<i class="fa fa-question-circle"></i>
+														</span>
 													</div>
 													<div class="column is-9">
 														<div class="control is-grouped">
 															<p class="control">
-																<input data-name="price_rate" type="number" min="1" step="1" class="padding-top-0 price-rate-input input changeable-input">
+																<input data-name="price_rate" placeholder="minimum 1" type="number" min="1" step="1" class="padding-top-0 price-rate-input input changeable-input">
 															</p>
 															<span class="select price-type-span">
 																<div class="drop-form">
@@ -182,19 +186,10 @@
 												</div>
 												<div class="columns listing-module">
 													<div class="column is-3">
-														<p class="is-bold">Min. Purchase Price</p>
-													</div>
-													<div class="column is-9">
-														<div class="control is-grouped">
-															<p class="control">
-																<input data-name="buy_price" placeholder="Empty for no buy-outs" type="number" min="1" step="1" class="padding-top-0 buy-price-input input changeable-input">
-															</p>
-														</div>
-													</div>
-												</div>
-												<div class="columns listing-module">
-													<div class="column is-3">
 														<p class="is-bold">Listing Description</p>
+														<span class="icon is-small" data-balloon-length="large" data-balloon="Descriptions help renters understand what your domain name can be useful for." data-balloon-pos="up">
+															<i class="fa fa-question-circle"></i>
+														</span>
 													</div>
 													<div class="column is-9">
 														<div class="control">
@@ -206,7 +201,25 @@
 												</div>
 												<div class="columns listing-module">
 													<div class="column is-3">
+														<p class="is-bold">Example Paths</p>
+														<span class="icon is-small" data-balloon-length="large" data-balloon="Example paths that renters may want to rent on your domain. Must consist of either letters or numbers." data-balloon-pos="up">
+															<i class="fa fa-question-circle"></i>
+														</span>
+													</div>
+													<div class="column is-9">
+														<div class="control">
+															<div class="control">
+																<input data-name="paths" tabindex="1" class="is-hidden paths-input input changeable-input"></input>
+															</div>
+														</div>
+													</div>
+												</div>
+												<div class="columns listing-module">
+													<div class="column is-3">
 														<p class="is-bold">Categories</p>
+														<span class="icon is-small" data-balloon-length="large" data-balloon="Categories help users find similar domains to rent." data-balloon-pos="up">
+															<i class="fa fa-question-circle"></i>
+														</span>
 													</div><div class="column is-9">
 														<div class="control">
 															<div class="is-flex-wrap category-control">
@@ -353,8 +366,9 @@
 
 	<%- include("../templates/footer"); %>
 	<%- include("../templates/js_scripts"); %>
+	<script src="/js/jquery/jquery-ui.js" type="text/javascript"></script>
 	<script src="/js/lib/moment.min.js" type="text/javascript"></script>
-	<script src="https://checkout.stripe.com/checkout.js"></script>
+	<script src="/js/lib/tag-it.min.js" type="text/javascript"></script>
 	<script type="text/javascript">
 		//redirect to homepage if user is not defined
 		var user = <% if(typeof user != "undefined"){ %><%-JSON.stringify(user)%><% }else{ %>window.location="/"<% } %>;
