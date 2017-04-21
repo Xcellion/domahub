@@ -188,9 +188,6 @@ button[data-balloon] {
   padding-left: 0 !important;
   padding-right: 0 !important; }
 
-#domain-display .title {
-  white-space: nowrap; }
-
 #domain-display .control {
   width: 300px; }
   #domain-display .control input {
@@ -220,12 +217,14 @@ button[data-balloon] {
     border-bottom: 5px solid #ff5722; }
 
 #typed-slash {
-  position: relative;
   border: none;
   color: #ff5722;
   font-size: 48px;
+  margin-right: auto;
   padding-left: 2px;
-  vertical-align: baseline !important; }
+  position: relative;
+  vertical-align: baseline !important;
+  width: auto; }
   #typed-slash::-webkit-input-placeholder {
     /* Chrome/Opera/Safari */
     color: #ff5722; }
@@ -244,6 +243,9 @@ button[data-balloon] {
   @media screen and (max-width: 768px) {
     #typed-slash {
       font-size: 40px; } }
+  @media screen and (max-width: 456px) {
+    #typed-slash {
+      font-size: 28px; } }
   #typed-slash:hover {
     cursor: pointer;
     border-color: rgba(0, 0, 0, 0.66); }
