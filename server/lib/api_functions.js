@@ -59,6 +59,7 @@ function checkHost(req, res, next){
 		}
 	}
 	else {
+		console.log("F: Requested DomaHub!");
 		error.handler(req, res, "Requested DomaHub!", "api");
 	}
 }
