@@ -9,7 +9,7 @@
 <body>
     <%- include("proxy-index.ejs"); %>
     <% if (image != "") { %>
-        <img id="proxy-image" style="max-height: 100%;top:50%;left:50%;transform:translate(-50%,-50%);margin-right:50%;position:absolute;" src="<%= image %>"/>
+        <img id="proxy-image" style="max-width:100%;max-height:100%;top:50%;left:50%;transform:translate(-50%,-50%);margin-right:50%;position:absolute;" src="<%= image %>"/>
         <script>
         document.getElementById('proxy-image').ondragstart = function() { return false; };
         </script>
