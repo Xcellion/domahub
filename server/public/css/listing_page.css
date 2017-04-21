@@ -257,18 +257,9 @@ button[data-balloon] {
     outline: none;
     cursor: auto;
     border-color: rgba(0, 0, 0, 0.88); }
-    #typed-slash:active::-webkit-input-placeholder, #typed-slash:focus::-webkit-input-placeholder {
-      /* Chrome/Opera/Safari */
-      color: transparent; }
-    #typed-slash:active::-moz-placeholder, #typed-slash:focus::-moz-placeholder {
-      /* Firefox 19+ */
-      color: transparent; }
-    #typed-slash:active:-ms-input-placeholder, #typed-slash:focus:-ms-input-placeholder {
-      /* IE 10+ */
-      color: transparent; }
-    #typed-slash:active:-moz-placeholder, #typed-slash:focus:-moz-placeholder {
-      /* Firefox 18- */
-      color: transparent; }
+
+.input-tooltip {
+  cursor: pointer; }
 
 .alexa-stat {
   display: flex;
@@ -305,9 +296,6 @@ button[data-balloon] {
   margin-bottom: 15px; }
   .listing-info:not(:first-child) {
     border-top: 1px solid rgba(0, 0, 0, 0.12); }
-
-.listing-module {
-  padding: 25px 0; }
 
 .calendar-control {
   display: flex;
@@ -348,7 +336,7 @@ button[data-balloon] {
 
 #ticker-wrapper {
   height: 125px;
-  overflow-y: scroll; }
+  overflow-y: auto; }
 
 .ticker-row {
   background-color: #f9f9f9;
@@ -386,9 +374,6 @@ button[data-balloon] {
 #description-card,
 #popular-rental-card {
   margin-left: auto; }
-
-#checkout-card {
-  margin-top: -58px; }
 
 #popular-rental-img {
   background: url("/images/loading.svg");

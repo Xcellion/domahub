@@ -103,23 +103,11 @@
     outline: none;
     cursor: auto;
     border-color: $black-primary;
-    &::-webkit-input-placeholder {
-      /* Chrome/Opera/Safari */
-      color: transparent;
-    }
-    &::-moz-placeholder {
-      /* Firefox 19+ */
-      color: transparent;
-    }
-    &:-ms-input-placeholder {
-      /* IE 10+ */
-      color: transparent;
-    }
-    &:-moz-placeholder {
-      /* Firefox 18- */
-      color: transparent;
-    }
   }
+}
+
+.input-tooltip{
+    cursor:pointer;
 }
 
 .alexa-stat {
@@ -166,10 +154,6 @@
   &:not(:first-child) {
     border-top: 1px solid $border;
   }
-}
-
-.listing-module {
-  padding: 25px 0;
 }
 
 .calendar-control {
@@ -224,7 +208,7 @@
 
 #ticker-wrapper {
   height: 125px;
-  overflow-y: scroll;
+  overflow-y: auto;
 }
 
 .ticker-row {
@@ -272,10 +256,6 @@
 #description-card,
 #popular-rental-card {
   margin-left: auto;
-}
-
-#checkout-card {
-  margin-top: -58px;
 }
 
 #popular-rental-img {
