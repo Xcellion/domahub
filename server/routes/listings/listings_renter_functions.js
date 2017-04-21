@@ -113,10 +113,13 @@ module.exports = {
                     error.handler(req, res, "Malicious address!", "json");
                 }
                 else {
-                    var create_new_listing_info = function(){
+
+                    //function to create the new rental info db object
+                    var create_new_rental_info = function(){
                         req.session.new_rental_info = {
                             rental_db_info : {
                                 listing_id: req.session.listing_info.id,
+                                path: req.session.new_rental_info.path,
                                 address: (req.body.address == "" || !req.body.address) ? "" : address    //empty address or not
                             },
                             new_user_email : req.body.new_user_email
@@ -136,7 +139,7 @@ module.exports = {
                         //check if its a valid HTTP address and that theres a response
                         request(address, function (err, response, body) {
                             if (!err && response.statusCode == 200) {
-                                create_new_listing_info();
+                                create_new_rental_info();
                             }
                             else {
                                 error.handler(req, res, "Nothing displayed at that address!", "json");
@@ -144,7 +147,7 @@ module.exports = {
                         });
                     }
                     else {
-                        create_new_listing_info();
+                        create_new_rental_info();
                     }
                 }
             });
@@ -225,86 +228,82 @@ module.exports = {
         next();
     },
 
+    //check the path if valid
+    checkPath : function(req, res, next){
+        console.log("F: Checking posted path...");
+
+        if (!validator.isAlphanumeric(req.body.path)){
+            error.handler(req, res, "Invalid path!", "json");
+        }
+        else {
+            next();
+        }
+    },
+
     //check times
     checkRentalTimes : function(req, res, next){
         console.log("F: Checking posted rental times...");
 
-        var times = req.body.events;
+        var starttime = parseFloat(req.body.starttime);
+        var endtime = parseFloat(req.body.endtime);
+        var path = req.body.path || req.session.new_rental_info.path;
 
         //no times posted
-        if (!times || times.length <= 0){
+        if (!starttime || !endtime){
             error.handler(req, res, "Invalid dates!", "json");
         }
         else {
             //check if its even a valid JS date
-            var invalid_times = [];
-            var time_now = (new Date()).getTime();
-            for (var x = 0; x < times.length; x++){
-                var start_num = parseFloat(times[x].start);
-                var end_num = parseFloat(times[x].end);
-                var temp_start = new Date(start_num);
-                var temp_end = new Date(end_num);
+            var start_moment = moment(starttime);
+            var end_moment = moment(endtime);
 
-                //check if its a legit date
-                if (isNaN(temp_start) || isNaN(temp_end) || start_num <= time_now || end_num <= time_now){
-                    console.log("Not a legit date!");
-                    invalid_times.push(times[x]);
-                }
-
-                //not divisible by hour blocks
-                else if (moment(end_num).diff(moment(start_num)) % 3600000 != 0){
-                    console.log("Not divisible by hour blocks!");
-                    invalid_times.push(times[x]);
-                }
-
-                //start time in the past
-                else if (moment(start_num).isBefore(moment())){
-                    console.log("Start time in the past!");
-                    invalid_times.push(times[x]);
-                }
-
-                //end date further than 1 year
-                else if (moment(end_num).isAfter(moment().add(1, "year"))){
-                    console.log("End time further than 1 year from now!");
-                    invalid_times.push(times[x]);
-                }
-
-                //invalid time slot end
-                else if (!moment(end_num).isSame(moment(end_num).subtract(1, "millisecond").endOf(req.session.listing_info.price_type).add(1, "millisecond"))){
-                    console.log("Invalid end time!");
-                    invalid_times.push(times[x]);
-                }
-
-                //invalid time slot start
-                else if (moment().diff(moment().startOf(req.session.listing_info.price_type)) < 3600000 && !moment(start_num).isSame(moment(start_num).startOf(req.session.listing_info.price_type))){
-                    console.log("Invalid start time!");
-                    invalid_times.push(times[x]);
-                }
-
+            //check if its a legit date
+            if (!start_moment.isValid() || !end_moment.isValid()){
+                error.handler(req, res, "Invalid dates!", "json");
             }
 
-            //send back any that were unavailable
-            if (invalid_times.length > 0){
-                res.send({unavailable : invalid_times})
+            //not divisible by hour blocks
+            else if (end_moment.diff(start_moment) % 3600000 != 0){
+                error.handler(req, res, "Not divisible by hour blocks!", "json");
+            }
+
+            //start time in the past
+            else if (start_moment.isBefore(moment())){
+                error.handler(req, res, "Start time in the past!", "json");
+            }
+
+            //end date further than 1 year
+            else if (end_moment.isAfter(moment().add(1, "year"))){
+                error.handler(req, res, "End time further than 1 year from now!", "json");
+            }
+
+            //invalid time slot end
+            else if (!end_moment.isSame(end_moment.subtract(1, "millisecond").endOf(req.session.listing_info.price_type).add(1, "millisecond"))){
+                error.handler(req, res, "Invalid end time!", "json");
+            }
+
+            //invalid time slot start
+            else if (moment().diff(moment().startOf(req.session.listing_info.price_type)) < 3600000 && !start_moment.isSame(start_moment.startOf(req.session.listing_info.price_type))){
+                error.handler(req, res, "Invalid start time!", "json");
             }
 
             else {
-                //helper function, check against the DB for any unavailable times
-                getListingRentalTimes(req, res, req.session.listing_info, function(){
-                    crossCheckRentalTime(req.session.listing_info.rentals, times, function(unavailable_times, available_times){
-                        //send back any that were unavailable
-                        if (unavailable_times.length > 0){
-                            res.send({unavailable : unavailable_times})
+                //check against the DB
+                Listing.crossCheckRentalTime(req.params.domain_name, path, starttime, endtime, function(result){
+                    if (result.state=="error"){error.handler(req, res, result.info);}
+                    else {
+                        if (result.info.length > 0){
+                            error.handler(req, res, "Invalid dates!", "json");
                         }
-                        //all checks are good!
+                        //all good!
                         else {
-                            req.session.new_rental_info.new_rental_times = available_times;
-                            req.session.new_rental_info.unformatted_times = times;
+                            req.session.new_rental_info.starttime = starttime;
+                            req.session.new_rental_info.endtime = endtime;
+                            req.session.new_rental_info.path = path;
                             next();
                         }
-                    });
+                    }
                 });
-
             }
         }
     },
@@ -313,7 +312,7 @@ module.exports = {
     checkRentalPrice : function(req, res, next){
         console.log("F: Checking rental price...");
 
-        var price = calculatePrice(req.body.events, req.session.listing_info);
+        var price = calculatePrice(req.body.starttime, req.body.endtime, req.session.listing_info);
 
         //check for price
         if (!price){
@@ -754,30 +753,32 @@ module.exports = {
         newListingRental(req, res, req.session.new_rental_info.rental_db_info, function(rental_id){
 
             //format it with the new rental_id from above
-            formatNewRentalTimes(rental_id, req.session.new_rental_info.new_rental_times);
+            var starttime = req.session.new_rental_info.starttime;
+            var endtime = req.session.new_rental_info.endtime;
+            var new_rental_times = [rental_id, starttime, moment(endtime).diff(moment(starttime))];
 
             //helper function, create new rental times for the above new rental
-            newRentalTimes(req, res, rental_id, req.session.new_rental_info.new_rental_times, function(){
+            newRentalTimes(req, res, rental_id, [new_rental_times], function(){
                 req.session.new_rental_info.rental_id = rental_id;
                 next();
             });
         });
     },
 
-    //add times to rental
-    editRentalTimes : function(req, res, next){
-        console.log("F: Adding times to an existing rental...");
-        var rental_id = req.params.rental_id;
-
-        //format times if it exists
-        formatNewRentalTimes(rental_id, req.session.new_rental_info.new_rental_times);
-
-        newRentalTimes(req, res, rental_id, req.session.new_rental_info.new_rental_times, function(){
-            delete req.session.new_rental_info;
-            delete req.user.rentals;
-            next();
-        });
-    },
+    // //add times to rental
+    // editRentalTimes : function(req, res, next){
+    //     console.log("F: Adding times to an existing rental...");
+    //     var rental_id = req.params.rental_id;
+    //
+    //     //format times if it exists
+    //     formatNewRentalTimes(rental_id, req.session.new_rental_info.new_rental_times);
+    //
+    //     newRentalTimes(req, res, rental_id, req.session.new_rental_info.new_rental_times, function(){
+    //         delete req.session.new_rental_info;
+    //         delete req.user.rentals;
+    //         next();
+    //     });
+    // },
 
     //email the link to the posted email
     emailToRegister : function(req, res, next){
@@ -793,7 +794,7 @@ module.exports = {
                 subject: "Your DomaHub Rental Link",
                 text: 'Here is a link to your recent rental of a DomaHub Domain.\n\n' +
                 'You may use the following link to create a account that will be associated with this rental.\n\n' +
-                'https://domahub.com/listing' + req.params.domain_name + req.session.new_rental_info.rental_id + "/" + owner_hash_id + '\n\n'
+                'https://domahub.com/listing' + req.params.domain_name + "/" + req.session.new_rental_info.rental_id + "/" + owner_hash_id + '\n\n'
             };
 
             //send email of edit link
@@ -914,17 +915,6 @@ function updateRental(req, res, raw_info, callback){
 
 //----------------------------------------------------------------RENTAL TIME HELPERS----------------------------------------------------------------
 
-//helper function to format new rental times
-function formatNewRentalTimes(rental_id, times){
-    if (times){
-        //add the rental id to the formatted
-        for (var x in times){
-            times[x].unshift(rental_id);
-            times[x].push("");
-        }
-    }
-}
-
 //helper function to create new rental times
 function newRentalTimes(req, res, rental_id, times, callback){
     Listing.newRentalTimes(rental_id, times, function(result){
@@ -980,47 +970,7 @@ function joinRentalTimes(rental_times){
     return temp_times;
 }
 
-//helper function to check database for availability
-function crossCheckRentalTime(existing_times, new_times, callback){
-    var unavailable = [];		//array of all unavailable events
-    var available = [];
-
-    //loop through all posted rental times
-    for (var y = 0; y < new_times.length; y++){
-        var user_start = parseFloat(new_times[y].start);
-        var user_duration = parseFloat(new_times[y].end) - user_start;
-
-        var totally_new = true;
-
-        //cross reference with all existing times
-        for (var x = 0; x < existing_times.length; x++){
-            //check for any overlaps that prevent it from being created
-            if (checkOverlap(user_start, user_duration, parseFloat(existing_times[x].date), parseFloat(existing_times[x].duration))){
-                totally_new = false;
-                unavailable.push(new_times[y]);
-            }
-        }
-
-        var tempValue = [];
-
-        //totally available! format the time for DB entry
-        if (totally_new){
-            tempValue.push(
-                user_start,
-                user_duration
-            );
-            available.push(tempValue);
-        }
-    }
-
-    //send back unavailable and formatted events
-    callback(unavailable, available);
-}
-
-//helper function to check if dates overlap
-function checkOverlap(dateX, durationX, dateY, durationY){
-    return ((dateX < dateY + durationY) && (dateY < dateX + durationX));
-}
+//---------------------------------------------------------------------------------------------------------------------------------
 
 //helper function to run whois since domain isn't listed but is a real domain
 function renderWhoIs(req, res, domain_name){
@@ -1069,8 +1019,6 @@ function renderWhoIs(req, res, domain_name){
     });
 }
 
-//---------------------------------------------------------------------------------------------------------------------------------
-
 //helper function to add http or https
 function addProtocol(address){
     if (address){
@@ -1088,24 +1036,20 @@ function addProtocol(address){
 }
 
 //helper function to get price of events
-function calculatePrice(times, listing_info){
-    if (times && listing_info){
-        var totalPrice = 0;
+function calculatePrice(starttime, endtime, listing_info){
+    if (starttime && endtime && listing_info){
+        var temp_start = moment(parseFloat(starttime));
+        var temp_end = moment(parseFloat(endtime));
 
-        for (var x = 0; x < times.length; x++){
-            //get total number of price type units
-            var tempPrice = moment.duration(moment(parseFloat(times[x].end)).diff(moment(parseFloat(times[x].start))));
-            if (listing_info.price_type == "month"){
-                tempPrice = tempPrice.asDays() / 30;
-            }
-            else {
-                tempPrice = tempPrice.as(listing_info.price_type);
-                tempPrice = Number(Math.round(tempPrice+'e2')+'e-2');
-            }
-
-            totalPrice += tempPrice;
+		//calculate the price
+        var totalPrice = moment.duration(temp_end.diff(temp_start));
+        if (listing_info.price_type == "month"){
+            totalPrice = totalPrice.asDays() / 30;
         }
-
+        else {
+            totalPrice = totalPrice.as(listing_info.price_type);
+            totalPrice = Number(Math.round(totalPrice+'e2')+'e-2');
+        }
         return totalPrice * listing_info.price_rate;
     }
     else {return false;}
