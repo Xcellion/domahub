@@ -41,9 +41,13 @@
   bottom: -25px;
   box-sizing: border-box;
   background-color: $accent;
+  font-size: $size-6;
   width: 138px;
   color: $white;
   padding: 2px 5px;
+  @include mobile-456px {
+    font-size: $size-7
+  }
   .triangle {
     position: absolute;
     top: -5px;
