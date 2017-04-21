@@ -439,7 +439,19 @@ module.exports = {
 		var price_type = req.body.price_type;
 		var buy_price = req.body.buy_price;
 
-		var categories = (req.body.categories) ? req.body.categories.replace(/\s\s+/g, ' ').toLowerCase().split(" ").sort() : [];
+		//example paths
+		var paths = (req.body.paths) ? req.body.paths.replace(/\s/g, "").toLowerCase().split(",").sort() : [];
+		var paths_clean = [];
+		//loop through the paths posted
+		for (var x = 0; x < paths.length; x++){
+			//if its alphanumeric
+			if (validator.isAlphanumeric(paths[x])){
+				paths_clean.push(paths[x]);
+			}
+		}
+		paths_clean = paths_clean.join(",");
+
+		var categories = (req.body.categories) ? req.body.categories.replace(/\s/g, " ").toLowerCase().split(" ").sort() : [];
 		var categories_clean = [];
 		//loop through the categories posted
 		for (var x = 0; x < categories.length; x++){
@@ -449,11 +461,14 @@ module.exports = {
 			}
 		}
 		categories_clean = categories_clean.join(" ");
-		console.log(description, description.length,req.params.domain_name.length * 2 );
 
 		//no description
 		if (req.body.description && description.length == 0){
 			error.handler(req, res, "Invalid listing description!", "json");
+		}
+		//no paths
+		if (req.body.paths && paths.length == 0){
+			error.handler(req, res, "Invalid example pathes!", "json");
 		}
 		//invalid categories
 		else if (req.body.categories && categories_clean.length == 0){
@@ -481,6 +496,7 @@ module.exports = {
 			req.new_listing_info.price_rate = price_rate;
 			req.new_listing_info.buy_price = (buy_price == "" || buy_price == 0) ? "" : buy_price;
 			req.new_listing_info.categories = (categories_clean == "") ? null : categories_clean;
+			req.new_listing_info.paths = (paths_clean == "") ? null : paths_clean;
 
 			//delete anything that wasnt posted (except if its "", in which case it was intentional deletion)
 			for (var x in req.new_listing_info){
