@@ -35,10 +35,10 @@ module.exports = function(app, db, auth, error){
 		"/careers",
 		"/contact",
 		"/privacy",
-    // "/sellers",
+        // "/sellers",
 		// "/renters",
 		"/terms",
-    "/nothinghere"
+        "/nothinghere"
     ]
 
 	//default page

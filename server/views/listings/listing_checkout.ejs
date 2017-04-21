@@ -70,13 +70,13 @@
                                     See below for some options on what you can do with <span class='is-bold'><%= listing_info.domain_name %></span>!
                                 </p>
                                 <p id="address-link-message" class="is-hidden regular-message">
-                                    Display an existing website or web content (e.g. a gif, image, meme, etc.). This will be displayed <span class='is-bold'><%= listing_info.domain_name %></span> for the duration of your rental. Enter the link below to get started!
+                                    Display an existing website or web content (e.g. a gif, image, meme, etc.). This will be displayed <span class='is-bold'><%= listing_info.domain_name %><%= (new_rental_info.path) ? "/" + new_rental_info.path : "" %></span> for the duration of your rental. Enter the link below to get started!
                                 </p>
                                 <p id="address-forward-message" class="is-hidden regular-message">
-                                    Anyone navigating to <span class='is-bold'><%= listing_info.domain_name %></span> will be automatically redirected to this link for the duration of your rental. Enter the link of the website you want to get started!
+                                    Anyone navigating to <span class='is-bold'><%= listing_info.domain_name %><%= "/" + new_rental_info.path %></span> will be automatically redirected to this link for the duration of your rental. Enter the link of the website you want to get started!
                                 </p>
                                 <p id="address-build-message" class="is-hidden regular-message">
-                                    Create an entirely new website for <span class='is-bold'><%= listing_info.domain_name %></span>. It doesn&#39;t matter if its a personal portfolio, your new eCommerce store, or just a fun website.
+                                    Create an entirely new website for <span class='is-bold'><%= listing_info.domain_name %><%= (new_rental_info.path) ? "/" + new_rental_info.path : "" %></span>. It doesn&#39;t matter if its a personal portfolio, your new eCommerce store, or just a fun website.
                                 </p>
                                 <p id="address-error-message" class="error-message is-danger is-hidden">This is an invalid website link! Please choose a different website link.</p>
                             </div>
@@ -89,13 +89,13 @@
                                         <i class="fa fa-external-link-square"></i>
                                     </span>
                                     <h2>Display web content</h2>
-                                    <span class="margin-left-5 is-small icon is-inline-block is-dark" data-balloon='When someone visits <%= listing_info.domain_name %>, they will see "<%= listing_info.domain_name %>" in the address bar, but will see the content from the website you provide us.' data-balloon-length="large" data-balloon-pos="up">
+                                    <span class="margin-left-5 is-small icon is-inline-block is-dark" data-balloon='A user visiting <%= listing_info.domain_name%><%= (new_rental_info.path) ? "/" + new_rental_info.path : "" %> will see that URL in the address bar, but will see the content from the website you provide us.' data-balloon-length="large" data-balloon-pos="up">
                                       <i class="fa fa-question-circle"></i>
                                     </span>
                                 </div>
                                 <p>
                                     Display an existing website or content (e.g. a gif, image, meme, etc.).
-                                    We will show that content on <span class='is-bold'><%= listing_info.domain_name %></span>.
+                                    We will show that content on <span class='is-bold'><%= listing_info.domain_name %><%= (new_rental_info.path) ? "/" + new_rental_info.path : "" %></span>.
                                 </p>
                             </div>
                             <div class="content box no-shadow is-info hover-effect choice-block forward-choice">
@@ -104,11 +104,13 @@
                                         <i class="fa fa-share-square"></i>
                                     </span>
                                     <h2>Forward elsewhere</h2>
-                                    <span class="margin-left-5 is-small icon is-inline-block is-dark" data-balloon='When someone visits <%= listing_info.domain_name %>, they will immediately be redirected to the website you provide us. The address bar will change to the forwarded website URL.' data-balloon-length="large" data-balloon-pos="up">                                      <i class="fa fa-question-circle"></i>
+                                    <span class="margin-left-5 is-small icon is-inline-block is-dark" data-balloon='A user visiting <%= listing_info.domain_name%><%= (new_rental_info.path) ? "/" + new_rental_info.path : "" %> will be redirected to the website you provide us. The address bar will change to the forwarded website URL.' data-balloon-length="large" data-balloon-pos="up">
+                                    <i class="fa fa-question-circle">
+                                    </i>
                                     </span>
                                 </div>
                                 <p>
-                                    Forward <span class='is-bold'><%= listing_info.domain_name %></span> to an entirely different domain or website.
+                                    Forward <span class='is-bold'><%= listing_info.domain_name %><%= (new_rental_info.path) ? "/" + new_rental_info.path : "" %></span> to an entirely different domain or website.
                                 </p>
                             </div>
                             <div class="content box no-shadow is-accent hover-effect choice-block build-choice">
@@ -117,12 +119,12 @@
                                         <i class="fa fa-pencil-square"></i>
                                     </span>
                                     <h2>Build a website</h2>
-                                    <span class="margin-left-5 is-small icon is-inline-block is-dark" data-balloon='When someone visits <%= listing_info.domain_name %>, they will see "<%= listing_info.domain_name %>" in the address bar, but will see your website on the page.' data-balloon-length="large" data-balloon-pos="up">
+                                    <span class="margin-left-5 is-small icon is-inline-block is-dark" data-balloon='A user visiting <%= listing_info.domain_name%><%= (new_rental_info.path) ? "/" + new_rental_info.path : "" %> will see that URL in the address bar, but will see your website on the page.' data-balloon-length="large" data-balloon-pos="up">
                                       <i class="fa fa-question-circle"></i>
                                     </span>
                                 </div>
                                 <p>
-                                    Use a website building service to create a new website for <span class='is-bold'><%= listing_info.domain_name %></span> in minutes.
+                                    Use a website building service to create a new website for <span class='is-bold'><%= listing_info.domain_name %><%= (new_rental_info.path) ? "/" + new_rental_info.path : "" %></span> in minutes.
                                     You don&#39;t even have to know how to code!
                                 </p>
                             </div>
@@ -333,6 +335,7 @@
                                     you are agreeing to pay the entire amount shown as well as our <a href="/terms" class='is-accent'>Terms and Conditions</a>.
                                 </p>
                                 <p id="stripe-error-message" class="error-message is-danger is-hidden"></p>
+                                <p id="stripe-success-message" class="regular-message is-hidden"></p>
                             </div>
                         </article>
                         <div id="checkout-card-content" class="success-hide checkout-card-content">
@@ -365,15 +368,24 @@
                         <div id="checkout-success-content" class="success-hide is-hidden">
                           <% if (!user) { %>
                           <div class="content">
-
-                          </div>
-                          <% } %>
-                          <div class="content">
                             <p>
-                              You may edit your rental settings at <a class="is-accent" href="/profile/myrentals" tabindex="1">
-                              your rentals page</a>.
+                                Below is a link you can use to edit your rental. We have also emailed this link to the email address you provided.
                             </p>
+                            <div class="control has-addons">
+                                <input id="rental-link-input" class='input is-expanded' placeholder="Save me for later!"/>
+                                <a id="rental-link-button" class="button is-primary no-shadow">
+                                    <i class="fa fa-clipboard"></i>
+                                </a>
+                            </div>
                           </div>
+                          <% } else { %>
+                              <div class="content">
+                                <p>
+                                  You may edit your rental settings at <a class="is-accent" href="/profile/myrentals" tabindex="1">
+                                  your rentals page</a>.
+                                </p>
+                              </div>
+                          <% } %>
                         </div>
                     </div>
                 </div>
@@ -382,7 +394,7 @@
                         <figure class="card-image img-wrapper" style="background-image:url('<%= listing_info.background_image %>')"></figure>
                         <div class="card-content">
                             <div class="content">
-                                <h1 class="is-primary"><%= listing_info.domain_name %></h1>
+                                <h1 class="is-primary"><%= listing_info.domain_name %><%= "/" + new_rental_info.path %></h1>
                             </div>
                             <p id="rental-will-msg" class="content is-hidden">
                             </p>
