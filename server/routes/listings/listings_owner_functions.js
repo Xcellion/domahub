@@ -5,7 +5,6 @@ var default_descriptions = require("../../lib/default_descriptions.js");
 var request = require("request");
 var dns = require("dns");
 var validator = require("validator");
-var sanitize = require("sanitize-html");
 
 var whois = require("whois");
 var parser = require('parse-whois');
@@ -433,14 +432,14 @@ module.exports = {
 		console.log("F: Checking posted listing details...");
 
 		var status = parseFloat(req.body.status);
-        var description = sanitize(req.body.description);
+        var description = req.body.description;
 
 		//prices
 		var price_rate = req.body.price_rate;
 		var price_type = req.body.price_type;
 		var buy_price = req.body.buy_price;
 
-		var categories = (req.body.categories) ? sanitize(req.body.categories.replace(/\s\s+/g, ' ').toLowerCase()).split(" ").sort() : [];
+		var categories = (req.body.categories) ? req.body.categories.replace(/\s\s+/g, ' ').toLowerCase().split(" ").sort() : [];
 		var categories_clean = [];
 		//loop through the categories posted
 		for (var x = 0; x < categories.length; x++){
@@ -450,7 +449,9 @@ module.exports = {
 			}
 		}
 		categories_clean = categories_clean.join(" ");
+		console.log(description, description.length,req.params.domain_name.length * 2 );
 
+		//no description
 		if (req.body.description && description.length == 0){
 			error.handler(req, res, "Invalid listing description!", "json");
 		}
