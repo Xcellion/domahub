@@ -126,6 +126,13 @@
   }
 }
 
+.dom-trait {
+  max-width: 300px;
+  @include mobile {
+    margin: auto;
+  }
+}
+
 .slider-box {
   @include box-shadow(0,8px,20px,$grey-light,0);
   background-color: #fff;
@@ -189,6 +196,10 @@
 }
 
 .flex-list {
+  max-width: 420px;
+  @include mobile {
+    margin: auto;
+  }
   li {
     display: flex;
     align-items: center;

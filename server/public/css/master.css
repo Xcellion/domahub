@@ -420,6 +420,9 @@ a {
     outline: none; }
   a:active, a:hover, a:focus {
     text-decoration: none !important; }
+  @media screen and (max-width: 456px) {
+    a {
+      font-size: 14px; } }
 
 code {
   background-color: white;
@@ -2169,6 +2172,29 @@ input:-webkit-autofill {
     -webkit-box-shadow: 0 0 0 0 white, 0 0 0 0 white, 0 0 0 0 white;
     -moz-box-shadow: 0 0 0 0 white, 0 0 0 0 white, 0 0 0 0 white;
     box-shadow: 0 0 0 0 white, 0 0 0 0 white, 0 0 0 0 white; }
+  .notification.is-popup {
+    -moz-transition: top 0.25s ease, width 0s ease;
+    -o-transition: top 0.25s ease, width 0s ease;
+    -webkit-transition: top 0.25s ease, width 0s ease;
+    transition: top 0.25s ease, width 0s ease;
+    -moz-transform: translate(-50%, 0);
+    -o-transform: translate(-50%, 0);
+    -ms-transform: translate(-50%, 0);
+    -webkit-transform: translate(-50%, 0);
+      -webkit-transform-transform: translate(-50%, 0);
+    left: 50%;
+    box-sizing: border-box;
+    position: fixed;
+    top: -100%;
+    width: 300px;
+    z-index: 100; }
+    .notification.is-popup.is-active {
+      top: 20px; }
+      @media screen and (max-width: 768px) {
+        .notification.is-popup.is-active {
+          border-radius: 0;
+          top: 0;
+          width: 100%; } }
   .notification .delete, .notification .modal-close {
     border-radius: 0 3px;
     float: right;
@@ -2470,7 +2496,7 @@ input:-webkit-autofill {
         font-size: 40px; } }
     @media screen and (max-width: 456px) {
       .title.is-1 {
-        font-size: 28px; } }
+        font-size: 32px; } }
     .title.is-1 code {
       font-size: 36px; }
   .title.is-2 {
@@ -2480,7 +2506,7 @@ input:-webkit-autofill {
         font-size: 28px; } }
     @media screen and (max-width: 456px) {
       .title.is-2 {
-        font-size: 16px; } }
+        font-size: 20px; } }
     .title.is-2 code {
       font-size: 28px; }
   .title.is-3 {
@@ -2490,7 +2516,7 @@ input:-webkit-autofill {
         font-size: 20px; } }
     @media screen and (max-width: 456px) {
       .title.is-3 {
-        font-size: 8px; } }
+        font-size: 12px; } }
     .title.is-3 code {
       font-size: 22px; }
   .title.is-4 {
@@ -2500,7 +2526,7 @@ input:-webkit-autofill {
         font-size: 14px; } }
     @media screen and (max-width: 456px) {
       .title.is-4 {
-        font-size: 2px; } }
+        font-size: 6px; } }
     .title.is-4 code {
       font-size: 18px; }
   .title.is-5 {
@@ -2510,7 +2536,7 @@ input:-webkit-autofill {
         font-size: 10px; } }
     @media screen and (max-width: 456px) {
       .title.is-5 {
-        font-size: -2px; } }
+        font-size: 2px; } }
     .title.is-5 code {
       font-size: 16px; }
   .title.is-6 {
@@ -2520,7 +2546,7 @@ input:-webkit-autofill {
         font-size: 8px; } }
     @media screen and (max-width: 456px) {
       .title.is-6 {
-        font-size: -4px; } }
+        font-size: 0px; } }
     .title.is-6 code {
       font-size: 16px; }
 
@@ -3206,11 +3232,15 @@ input:-webkit-autofill {
     background-color: #efefef; }
     .tag:hover .delete, .tag:hover .modal-close, .tag:active .delete, .tag:active .modal-close {
       background-color: rgba(0, 0, 0, 0.66); }
-  .tag.is-uppercase {
-    text-transform: uppercase; }
   .tag .delete, .tag .modal-close {
     margin-left: 4px;
     margin-right: -6px; }
+  .tag.is-uppercase {
+    text-transform: uppercase; }
+  .tag.is-bordered {
+    border: 1px solid rgba(0, 0, 0, 0.66); }
+    .tag.is-bordered:hover, .tag.is-bordered:active {
+      background-color: transparent; }
   .tag.is-white {
     background-color: white;
     color: black; }
@@ -4966,7 +4996,7 @@ input:-webkit-autofill {
       padding: 85px 20px; } }
   @media screen and (min-width: 769px) {
     .section.is-medium-top {
-      padding: 130px 20px 0; } }
+      padding: 160px 20px 0; } }
   @media screen and (max-width: 768px) {
     .section.is-medium-top {
       padding: 85px 20px 0px; } }
@@ -4984,13 +5014,11 @@ input:-webkit-autofill {
   background-color: #23415f;
   overflow: hidden;
   padding: 40px 0; }
+  .footer.is-white {
+    background-color: white; }
   @media screen and (max-width: 768px) {
     .footer {
       padding: 40px 20px; } }
-
-.footer-form {
-  margin: 25px auto;
-  max-width: 500px; }
 
 .footer-list {
   display: flex;

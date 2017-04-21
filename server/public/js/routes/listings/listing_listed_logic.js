@@ -4,20 +4,25 @@ $(document).ready(function() {
 	//typed JS
 	$(function(){
 		$("#typed-slash").typed({
-			strings: ["sarah", "jennifer", "samuel"],
-			typeSpeed: 50,
-			loop: true,
-			shuffle: true
+			strings: ["rtz", "artour", "arteezy", "babyrage"],
+			typeSpeed: 40,
+			shuffle: true,
+			loop: true
 		});
 	});
 
 	$("#typed-slash").on("focus", function(){
 		$(".input-tooltip").addClass('is-hidden');
-		$("#typed-slash").data('typed').pauseTyping();
 	}).on("focusout", function(){
 		$(".input-tooltip").removeClass('is-hidden');
-		$("#typed-slash").data('typed').continueTyping();
 	});
+
+	$("#path-input").on("submit", function(e) {
+		e.preventDefault();
+		checkInput();
+	});
+
+	removeNotification();
 
 	//user since date in About Owner
 	$("#user-since").text(moment(new Date(listing_info.user_created)).format("MMMM, YYYY"));
@@ -38,6 +43,21 @@ $(document).ready(function() {
 	editRentalModule();
 	createTrafficChart();
 });
+
+//check domain path input
+function checkInput() {
+	var input = $("#typed-slash").val();
+	var letterNumber = /^[0-9a-zA-Z]+$/;
+
+	function notificationText(text) {
+		$("#error-notification").addClass("is-active");
+		$("#notification-text").text(text);
+	}
+
+	if (!input || !input.match(letterNumber)) {
+		notificationText("You may only input English letters and/or numbers.");
+	}
+}
 
 //helper function to check if everything is legit
 function checkTimes(){

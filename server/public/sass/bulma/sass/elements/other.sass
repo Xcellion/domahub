@@ -228,14 +228,20 @@
     background-color: $grey-lighter
     .delete
       background-color: $black-secondary
-  &.is-uppercase
-    text-transform: uppercase
   .delete
     margin-left: 4px
     margin-right: -6px
   &:not(.is-large)
     .delete
       @extend .delete.is-small
+  // Modifiers
+  &.is-uppercase
+    text-transform: uppercase
+  &.is-bordered
+    border: 1px solid $black-secondary
+    &:hover,
+    &:active
+      background-color: transparent
   // Colors
   @each $name, $pair in $colors
     $color: nth($pair, 1)
