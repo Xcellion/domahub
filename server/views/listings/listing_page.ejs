@@ -1,24 +1,52 @@
-<section id="background_image" class="min-height section listing-section" style="background-image:url('<%= listing_info.background_image %>')">
-  <div class="img-wrapper">
-    <div id="listing-hero" class="container">
-      <div class="content has-text-centered">
-        <a tabindex="1" href="http://<%= listing_info.domain_name %>">
-        <h1 id="domain-display" class="title is-1 is-bold is-primary is-inline-block">
-        <%= listing_info.domain_name %><span id="typed-slash"></span></h1></a>
-        <h2 class="subtitle is-4 is-white margin-top-15">
-        <% if (listing_info.status == 1) { %>
-          Currently available for use
-          <% } else { %>
-          Currently Unavailable
-          <% } %>
-        </h2>
+<section class="section is-medium">
+  <!--style="background-image:url('<%= listing_info.background_image %>')"  -->
+    <div class="container">
+      <div class="content">
+        <h1>
+          <% if (listing_info.status == 1) { %>
+            Rent this website now.
+            <% } else { %>
+            Unavailable for rent.
+            <% } %>
+        </h1>
+        <div id="domain-display">
+          <h1 class="title is-1 is-bold is-primary is-inline-block margin-bottom-0"><%= listing_info.domain_name %>/</h1>
+          <div class="control is-inline-block">
+            <input id="typed-slash"></input>
+            <label class="input-tooltip" for="typed-slash"><span class="triangle"></span>Click here to edit.</label>
+          </div>
+        </div>
+        <!-- <article id="domain-desc" class="message">
+          <div class="message-body">
+            <% if (listing_info.description) { %>
+                <%- include("modules/owners_notes_module.ejs", {
+                  listing_info : listing_info
+                }); %>
+            <% } %>
+          </div>
+        </article> -->
       </div>
     </div>
-  </div>
 </section>
 
-<section id="top-wrapper" class="">
+<section class="section is-medium">
   <div class="container">
+    <!-- <div class="content">
+      <h2 class="step-number">1</h2>
+      <h3>Create an extension.</h3>
+      <div class="calendar-control">
+        <p>
+          <%= listing_info.domain_name %>/
+        </p>
+        <input class="input" />
+      </div>
+    </div>
+    <div class="content">
+      <h2 class="step-number">2</h2>
+    </div>
+    <div class="content">
+      <h2 class="step-number">3</h2>
+    </div> -->
     <div class="columns flex-column-mobile margin-right-0">
       <div id="domain-modules-column" class="column is-8 order-2-mobile">
 
@@ -120,13 +148,6 @@
         <!--
         <div id="description-card" class="card is-hidden-mobile">
           <div class="card-content">
-
-          <%# OWNERS NOTES MODULE %>
-          <% if (listing_info.description) { %>
-              <%- include("modules/owners_notes_module.ejs", {
-                listing_info : listing_info
-              }); %>
-          <% } %>
 
           <%# OWNERS NOTES MODULE %>
           <% if (listing_info.description) { %>

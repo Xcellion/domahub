@@ -54,7 +54,7 @@ h3
 
 h1
   font-size: $size-3
-  font-weight: 700
+  font-weight: 400
 h2
   font-size: $size-4
   font-weight: 400
@@ -99,10 +99,14 @@ a
   +transition(all 0.25s ease)
   cursor: pointer
   color: $text
-  text-decoration: none
+  text-decoration: none !important
   word-break: break-word
   &:active
     outline: none
+  &:active,
+  &:hover,
+  &:focus
+    text-decoration: none !important
 
 code
   background-color: $code-background
