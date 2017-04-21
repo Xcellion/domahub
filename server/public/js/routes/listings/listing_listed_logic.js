@@ -4,7 +4,7 @@ $(document).ready(function() {
 	//typed JS
 	$(function(){
 		$("#typed-slash").typed({
-			strings: ["sarah", "jennifer", "samuel"],
+			strings: ["sarah", "jennifer", "samuel", "alex"],
 			typeSpeed: 50,
 			loop: true,
 			shuffle: true
@@ -13,10 +13,8 @@ $(document).ready(function() {
 
 	$("#typed-slash").on("focus", function(){
 		$(".input-tooltip").addClass('is-hidden');
-		$("#typed-slash").data('typed').pauseTyping();
 	}).on("focusout", function(){
 		$(".input-tooltip").removeClass('is-hidden');
-		$("#typed-slash").data('typed').continueTyping();
 	});
 
 	//user since date in About Owner
