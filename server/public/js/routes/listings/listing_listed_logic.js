@@ -67,10 +67,10 @@ function checkTimes(){
 		$("#calendar-error-message").removeClass('is-hidden').addClass('is-danger').html("Invalid dates selected!");
 	}
 	else {
-		return [{
-			start : startDate._d.getTime(),
-			end : endDate._d.getTime()
-		}];
+		return {
+			starttime : startDate._d.getTime(),
+			endtime : endDate._d.getTime()
+		};
 	}
 }
 
@@ -79,33 +79,26 @@ function submitTimes(checkout_button){
 	//remove event handler
 	checkout_button.off();
 	checkout_button.addClass('is-loading');
-	var newEvents = checkTimes();
+	var newEvent = checkTimes();
 
-	if (newEvents){
+	if (newEvent.starttime && newEvent.endtime){
 		//redirect to checkout page
 		$.ajax({
 			type: "POST",
 			url: "/listing/" + listing_info.domain_name + "/checkout",
 			data: {
-				events: newEvents
+				starttime: newEvent.starttime,
+				endtime: newEvent.endtime,
+				path: "test"
 			}
 		}).done(function(data){
 			checkout_button.removeClass('is-loading');
-			unlock = true;
-			if (data.unavailable){
-				for (var x = 0; x < data.unavailable.length; x++){
-					$('#calendar').fullCalendar('removeEvents', data.unavailable[x]._id);
-					$("#calendar-error-message").removeClass('is-hidden').addClass('is-danger').html("Invalid slots have been removed from your selection!");
-				}
-				checkout_button.on('click', function(){
-					submitTimes(checkout_button);
-				});
-			}
-			else if (data.state == "success"){
+			if (data.state == "success"){
 				window.location.assign(window.location.origin + "/listing/" + listing_info.domain_name + "/checkout");
 			}
 			else if (data.state == "error"){
-				$("#calendar-error-message").removeClass('is-hidden').addClass('is-danger').html("Something went wrong with the rental! Please try again.");
+				$("#calendar-regular-message").addClass('is-hidden');
+				errorHandler(data.message);
 				checkout_button.on('click', function(){
 					submitTimes(checkout_button);
 				});
@@ -114,12 +107,30 @@ function submitTimes(checkout_button){
 	}
 }
 
+//handler for various error messages
+function errorHandler(message){
+	console.log(message);
+	switch (message){
+		case "Invalid dates!":
+            $("#calendar-error-message").removeClass('is-hidden').text("The selected times are not available! Please edit your selected rental dates.");
+			break;
+		case "Not divisible by hour blocks!":
+		case "Start time in the past!":
+		case "Invalid end time!":
+		case "Invalid start time!":
+            $("#calendar-error-message").removeClass('is-hidden').text("You have selected an invalid time! Please refresh the page and try again");
+			break;
+		default:
+            $("#calendar-error-message").removeClass('is-hidden').text("Something went wrong with the rental! Please try again.");
+            break;
+    }
+}
 
 //---------------------------------------------------------------------------------------------------LISTING MODULES
 
 //function to create the traffic chart
 function createTrafficChart(){
-	if (listing_info.traffic && $("#traffic-chart").length){
+	if (listing_info.traffic && $("#traffic-chart").length > 0){
 
 		//past six months only
 		var traffic_data = [
@@ -323,35 +334,37 @@ function createTrafficChart(){
 
 //other domains by same owner
 function findOtherDomains(){
-	$.ajax({
-		url: "/listing/otherowner",
-		method: "POST",
-		data: {
-			owner_id: listing_info.owner_id,
-			domain_name_exclude: listing_info.domain_name
-		}
-	}).done(function(data){
-		if (data.state == "success"){
-			$("#otherowner-domains").removeClass('is-hidden');
-			$("#otherowner-domains-title").text("Other Websites By " + listing_info.username);
-			for (var x = 0; x < data.listings.length; x++){
-				var cloned_similar_listing = $("#otherowner-domain-clone").clone();
-				cloned_similar_listing.removeAttr("id").removeClass('is-hidden');
-
-				//edit it based on new listing info
-				if (data.listings[x].domain_name.length + 4 + data.listings[x].price_rate.toString().length + data.listings[x].price_type.length > 30){
-					var sliced_domain = data.listings[x].domain_name.slice(0,15) + "...";
-				}
-				else {
-					var sliced_domain = data.listings[x].domain_name;
-				}
-
-				cloned_similar_listing.find(".otherowner-domain-price").text("$" + data.listings[x].price_rate + " / " + data.listings[x].price_type);
-				cloned_similar_listing.find(".otherowner-domain-name").text(sliced_domain).attr("href", "/listing/" + data.listings[x].domain_name);
-				$("#otherowner-domain-table").append(cloned_similar_listing);
+	if ($("#otherowner-domains").length > 0){
+		$.ajax({
+			url: "/listing/otherowner",
+			method: "POST",
+			data: {
+				owner_id: listing_info.owner_id,
+				domain_name_exclude: listing_info.domain_name
 			}
-		}
-	})
+		}).done(function(data){
+			if (data.state == "success"){
+				$("#otherowner-domains").removeClass('is-hidden');
+				$("#otherowner-domains-title").text("Other Websites By " + listing_info.username);
+				for (var x = 0; x < data.listings.length; x++){
+					var cloned_similar_listing = $("#otherowner-domain-clone").clone();
+					cloned_similar_listing.removeAttr("id").removeClass('is-hidden');
+
+					//edit it based on new listing info
+					if (data.listings[x].domain_name.length + 4 + data.listings[x].price_rate.toString().length + data.listings[x].price_type.length > 30){
+						var sliced_domain = data.listings[x].domain_name.slice(0,15) + "...";
+					}
+					else {
+						var sliced_domain = data.listings[x].domain_name;
+					}
+
+					cloned_similar_listing.find(".otherowner-domain-price").text("$" + data.listings[x].price_rate + " / " + data.listings[x].price_type);
+					cloned_similar_listing.find(".otherowner-domain-name").text(sliced_domain).attr("href", "/listing/" + data.listings[x].domain_name);
+					$("#otherowner-domain-table").append(cloned_similar_listing);
+				}
+			}
+		});
+	}
 }
 
 //---------------------------------------------------------------------------------------------------RENTAL EXAMPLES MODULE
@@ -366,7 +379,7 @@ function editRentalModule(){
 			}
 		}
 	}
-	if (popular_rental){
+	if (popular_rental && $("#popular-rental-card").length > 0){
 		$("#popular-rental-duration").text(aggregateDateDuration(popular_rental.rental_id));
 		$("#popular-rental-preview").attr("href", "/listing/" + listing_info.domain_name + "/" + popular_rental.rental_id);
 		$("#popular-rental-views").text(popular_rental.views + " Views");

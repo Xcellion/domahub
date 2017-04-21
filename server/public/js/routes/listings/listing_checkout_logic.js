@@ -58,33 +58,22 @@ $(document).ready(function () {
 
     //--------------------------------------------------------------------------------------------------------- LISTING DETAILS CARD
 
-    var total_duration = 0;
-    var start_date = new_rental_info.new_rental_times[0][0];
-    var end_date = new_rental_info.new_rental_times[0][0] + new_rental_info.new_rental_times[0][1];
+    var starttime = moment(new_rental_info.starttime);
+    var endtime = moment(new_rental_info.endtime);
+    var total_duration = endtime.diff(starttime);
 
-    //loop through all new times, find start / end date, find total duration
-    for (var x = 0; x < new_rental_info.new_rental_times.length; x++){
-        total_duration += new_rental_info.new_rental_times[x][1];
+    $("#rental-start").text(starttime.format("MMMM DD, YYYY"));
+    $("#rental-end").text(endtime.format("MMMM DD, YYYY"));
 
-        if (new_rental_info.new_rental_times[x][0] < start_date){
-            start_date = new_rental_info.new_rental_times[x][0];
-        }
-
-        if (new_rental_info.new_rental_times[x][0] + new_rental_info.new_rental_times[x][1] > end_date){
-            end_date = new_rental_info.new_rental_times[x][0] + new_rental_info.new_rental_times[x][1];
-        }
-    }
-
-    $("#rental-start").text(moment(start_date).format("MMMM DD, YYYY"));
-    $("#rental-end").text(moment(end_date).format("MMMM DD, YYYY"));
-
-    total_duration = moment.duration(total_duration).as(listing_info.price_type)
+    //total duration of the rental (rounded)
+    total_duration = moment.duration(total_duration).as(listing_info.price_type);
+    total_duration = Math.round(total_duration * 100) / 100
     var duration_plural = (total_duration == 1) ? "" : "s";
     $("#total-duration").text(total_duration + ' ' + listing_info.price_type + duration_plural);
     $("#listing-price-rate").text(moneyFormat.to(listing_info.price_rate));
 
     //total price of the rental
-    var total_price = calculatePrice(new_rental_info.new_rental_times, listing_info);
+    var total_price = calculatePrice(starttime, endtime, listing_info);
     $("#total-duration").text(total_duration + ' ' + listing_info.price_type + duration_plural);
     $(".total-price").text(moneyFormat.to(total_price));
 
@@ -251,7 +240,7 @@ function showMessage(message_id, text){
 
     //optional text
     if (text){
-        $("#" + message_id).text(text);
+        $("#" + message_id).html(text);
     }
 }
 
@@ -328,7 +317,8 @@ function submitNewRental(stripeToken){
         type: "POST",
         url: "/listing/" + listing_info.domain_name + "/rent",
         data: {
-            events: new_rental_info.unformatted_times,
+            starttime: new_rental_info.starttime,
+            endtime: new_rental_info.endtime,
             new_user_email: $("#new-user-email").val(),
             address: $(".input-selected").val(),
             stripeToken: stripeToken,
@@ -336,29 +326,20 @@ function submitNewRental(stripeToken){
         }
     }).done(function(data){
         $("#checkout-button").removeClass('is-loading');
-        console.log(data);
         if (data.unavailable){
             errorHandler("Invalid times");
         }
         else if (data.state == "success"){
-            console.log('yay');
-            rentalSuccess();
-            successHandler();
+            successHandler(data.rental_id, data.owner_hash_id);
         }
         else if (data.state == "error"){
             errorHandler(data.message);
         }
     });
 }
-
-function rentalSuccess(data) {
-  $(".success-hide, #edit-dates-button").toggleClass('is-hidden');
-  $("#stripe-regular-message").parents(".message").addClass('is-hidden');
-  $("#step-content-payment").prepend("<div class='notification is-primary'>Success! Your domain rental is now live!</div>")
-}
-
 //handler for various error messages
 function errorHandler(message){
+    console.log(message);
     switch (message){
 		case "Invalid times!":
             showMessage("stripe-error-message", "The selected times are not available anymore! Please edit your selected rental dates.");
@@ -383,7 +364,7 @@ function errorHandler(message){
             showMessage("log-error-message");
 			break;
 		default:
-            showMessage("stripe-error-message", "Something went wrong with the rental! Please try again.");
+            showMessage("stripe-error-message", "Something went wrong with the rental! Please refresh the page and try again.");
             break;
     }
 
@@ -394,37 +375,53 @@ function errorHandler(message){
 }
 
 //handler for successful rental
-function successHandler(){
+function successHandler(rental_id, owner_hash_id){
     delete_cookies();
+
+    //show success message
+    var domain_and_path = (new_rental_info.path) ? listing_info.domain_name + "/" + new_rental_info.path : listing_info.domain_name;
+    var starttime_format = moment(new_rental_info.starttime).format("MMMM DD, YYYY");
+    var endtime_format = moment(new_rental_info.endtime).format("MMMM DD, YYYY");
+    showMessage("stripe-success-message", "Hurray! Your rental was successfully created for <strong>" + domain_and_path + "</strong> scheduled to start on <strong>" + starttime_format + "</strong> and end on <strong>" + endtime_format + "</strong>.");
+
+    //hide certain stuff
+    $("#checkout-card-content").remove();
+    $("#checkout-success-content").removeClass('is-hidden');
+    $("#edit-dates-button").addClass('is-hidden');
+
+    //copy ownership url
+    if (!user){
+        $("#rental-link-input").val("https://domahub.com/listing/" + listing_info.domain_name + "/rental_id/" + "/" + owner_hash_id);
+        $("#rental-link-button").on("click", function(){
+            $("#rental-link-input").select();
+            document.execCommand("copy");
+            $("#rental-link-input").blur();
+            $(this).find("i").removeClass("fa-clipboard").addClass('fa-check-square-o');
+        });
+    }
 }
 
 //to format a number for $$$$
 var moneyFormat = wNumb({
 	thousand: ',',
 	prefix: '$',
-	decimals: 0
+	decimals: 2
 });
 
 //helper function to get price of events
-function calculatePrice(times, listing_info){
-    if (times && listing_info){
-        var totalPrice = 0;
-
-        for (var x = 0; x < times.length; x++){
-            //get total number of price type units
-            var tempPrice = moment.duration(parseFloat(times[x][1]));
-            if (listing_info.price_type == "month"){
-                tempPrice = tempPrice.asDays() / 30;
-            }
-            else {
-                tempPrice = tempPrice.as(listing_info.price_type);
-                tempPrice = Number(Math.round(tempPrice+'e2')+'e-2');
-            }
-
-            totalPrice += tempPrice;
+function calculatePrice(starttime, endtime, listing_info){
+    if (starttime && endtime && listing_info){
+        //get total number of price type units
+        var totalPrice = moment.duration(endtime.diff(starttime));
+        if (listing_info.price_type == "month"){
+            totalPrice = totalPrice.asDays() / 30;
+        }
+        else {
+            totalPrice = totalPrice.as(listing_info.price_type);
+            totalPrice = Number(Math.round(totalPrice+'e2')+'e-2');
         }
 
         return totalPrice * listing_info.price_rate;
     }
-    else {return false;}
+    else {return "ERROR";}
 }

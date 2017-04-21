@@ -4,6 +4,7 @@ listing_model = function(database){
 	listing_query = function(query, error_description, callback, params){
 		database.query(query, function(result, err){
 			if (err){
+				console.log(err);
 				if (err.code == "ER_DUP_ENTRY"){
 					callback({
 						state : "error",
@@ -51,6 +52,26 @@ listing_model.prototype.checkListingOwner = function(account_id, domain_name, ca
 	console.log("DB: Checking to see if account #" + account_id + " owns domain " + domain_name + "...");
 	query = 'SELECT 1 AS "exist" FROM listings WHERE owner_id = ? AND domain_name = ? AND listings.deleted IS NULL'
 	listing_query(query, "Account does not own the domain" + domain_name + "!", callback, [account_id, domain_name]);
+}
+
+//check if an account owns a listing
+listing_model.prototype.crossCheckRentalTime = function(domain_name, path, starttime, endtime, callback){
+	console.log("DB: Checking times for " + domain_name + "/" + path + "...");
+	query = 'SELECT 1 AS "exist" \
+			FROM rentals \
+			INNER JOIN rental_times \
+				ON rentals.rental_id = rental_times.rental_id \
+			INNER JOIN listings \
+				ON listings.id = rentals.listing_id \
+			WHERE \
+				listings.domain_name = ? AND \
+				rentals.path = ? AND \
+				rentals.status = 1 AND \
+				listings.deleted IS NULL AND ((\
+				? BETWEEN rental_times.date AND rental_times.date + rental_times.duration) OR ( \
+				? BETWEEN rental_times.date AND rental_times.date + rental_times.duration) OR ( \
+				? <= rental_times.date AND ? >= rental_times.date + rental_times.duration))'
+	listing_query(query, "Failed to check times for " + domain_name + "/" + path + "!", callback, [domain_name, path, starttime, endtime, starttime, endtime]);
 }
 
 //----------------------------------------------------------------------GETS----------------------------------------------------------
@@ -345,11 +366,10 @@ listing_model.prototype.newListingRental = function(listing_id, rental_info, cal
 //BULK INSERT NEEDS TRIPLE NESTED ARRAYS
 listing_model.prototype.newRentalTimes = function(rental_id, rental_times, callback){
 	console.log("DB: Attempting to create new rental times for rental #" + rental_id + "...");
-	query = "INSERT INTO rental_times (rental_id, date, duration, id) VALUES ? ON DUPLICATE KEY UPDATE \
+	query = "INSERT INTO rental_times (rental_id, date, duration) VALUES ? ON DUPLICATE KEY UPDATE \
 		rental_id = VALUES(rental_id), \
 		date = VALUES(date), \
-		duration = VALUES(duration), \
-		id = VALUES(id)"
+		duration = VALUES(duration)"
 	listing_query(query, "Failed to add new rental times for rental #" + rental_id + "!", callback, [rental_times]);
 }
 
