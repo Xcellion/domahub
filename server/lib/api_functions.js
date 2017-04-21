@@ -36,6 +36,7 @@ module.exports = function(app, db, e){
 //function to check if the requested host is not for domahub
 function checkHost(req, res, next){
 	if (req.headers.host){
+		console.log("F: Checking where this request wants to go.");
 		var domain_name = req.headers.host.replace(/^(https?:\/\/)?(www\.)?/,'');
 
 		if (domain_name == "www.w3bbi.com"
@@ -45,12 +46,15 @@ function checkHost(req, res, next){
 		|| domain_name == "localhost"
 		|| domain_name == "localhost:8080"
 		|| domain_name == "localhost:9090"){
+			console.log("F: Requested DomaHub!");
 			error.handler(req, res, "Requested DomaHub!", "api");
 		}
 		else if (!validator.isAscii(domain_name) || !validator.isFQDN(domain_name)){
+			console.log("F: Invalid domain name!");
 			error.handler(req, res, "Invalid domain name!");
 		}
 		else {
+			console.log("F: Requested a rental domain!");
 			getCurrentRental(req, res, domain_name, next);
 		}
 	}
