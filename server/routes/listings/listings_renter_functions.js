@@ -411,20 +411,17 @@ module.exports = {
                 renderWhoIs(req, res, req.params.domain_name);
             }
             else {
+
+                //get listing rental times
                 getListingRentalTimes(req, res, result.info[0], function(){
-                    next();
+
+                    //get the traffic of the listing
+                    Data.getListingTraffic(req.params.domain_name, function(result){
+                        req.session.listing_info.traffic = result.info;
+                        next();
+                    });
                 });
             }
-        });
-    },
-
-    //get listing traffic
-    getListingAlexa : function(req, res, next){
-        Data.getListingTraffic(req.params.domain_name, function(result){
-            req.session.listing_info.traffic = result.info;
-            res.send({
-                listing_info: req.session.listing_info
-            });
         });
     },
 

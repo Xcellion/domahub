@@ -440,7 +440,7 @@ module.exports = {
 		var buy_price = req.body.buy_price;
 
 		//example paths
-		var paths = (req.body.paths) ? req.body.paths.replace(/\s/g, "").toLowerCase().split(",").sort() : [];
+		var paths = (req.body.paths) ? req.body.paths.replace(/\s/g, "").toLowerCase().split(",") : [];
 		var paths_clean = [];
 		//loop through the paths posted
 		for (var x = 0; x < paths.length; x++){
