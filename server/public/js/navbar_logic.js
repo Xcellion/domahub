@@ -52,7 +52,7 @@ $(document).ready(function() {
 		  $(this).toggleClass("is-active");
 		  $(".nav-menu").toggleClass("is-active");
 		});
-		
+
 		//profile dropdown logic
 		$(document).on("click", function(event) {
 			//clicked off profile dropdown
@@ -77,7 +77,7 @@ $(document).ready(function() {
 		var pages_white_nav = ["checkout", "listings", "faq", "contact", "profile", "mission", "about", "press", "careers", "terms", "privacy", "nothinghere"];
 		var current_page = (window.location.pathname == "/") ? "/" : window.location.pathname.split("/")[1];
 
-		if (window.location.pathname.split("/").pop == "checkout"){
+		if (window.location.pathname.split("/").pop() == "checkout"){
 			current_page = "checkout";
 		}
 

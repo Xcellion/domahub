@@ -1,0 +1,12 @@
+<div id="desc-avail-module" class="content">
+    <div id="domain-desc" class="content">
+        <% if (listing_info.description) { %>
+            <p><%- listing_info.description %></p>
+        <% } else { %>
+            <p>Rent this website today!</p>
+        <% } %>
+    </div>
+    <div class="control">
+        <button id="submit-path-input" form="path-input" class="button is-disabled is-stylish is-primary v-align-middle" type="submit">Check Availability</button>
+    </div>
+</div>
