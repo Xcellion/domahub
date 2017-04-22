@@ -13,11 +13,16 @@ $(document).ready(function() {
 	//focus to hide the click me message
 	$("#typed-slash").on("focus", function(){
 		$("#input-tooltip").addClass('is-hidden');
+
+		//select all on existing path
 		$("#typed-slash").select();
-		$("#submit-path-input").removeClass('is-disabled');
+
+		//remove the disabled on check availability button
+		$("#check-avail").removeClass('is-disabled');
 	}).on("focusout", function(){
-		$("#input-tooltip").removeClass("is-hidden is-active");
-		$("#input-tooltip").text("Click here to edit.");
+		if ($("#typed-slash").val() == ""){
+			$("#input-tooltip").removeClass('is-hidden');
+		}
 	});
 
 	//function for input text validation and tooltip change
@@ -25,22 +30,23 @@ $(document).ready(function() {
 		var inp = String.fromCharCode(event.keyCode);
 		//regex for alphanumeric
 		var validChar = /^[0-9a-zA-Z]+$/;
+
 		//logic to check alphanumeric input value
 		if (!inp.match(validChar)) {
-			$("#input-tooltip").removeClass("is-hidden").addClass("is-active").text("Input must be alphanumeric.");
 			e.preventDefault();
+			$("#input-tooltip-error").removeClass("is-hidden");
 		} else {
-			$("#input-tooltip").addClass("is-hidden");
+			$("#input-tooltip-error").addClass("is-hidden");
 		}
 	}).on('keydown', function(e){
 		var validChar = /^[0-9a-zA-Z]+$/;
-		if ($(this).val().match(validChar)){
-			$("#input-tooltip").addClass("is-hidden");
+		if ($("#typed-slash").val().match(validChar)){
+			$("#input-tooltip-error").addClass("is-hidden");
 		}
 	});
 
 	//show calendar
-	$("#path-input").on("click", function(e) {
+	$("#check-avail").on("click", function(e) {
 		e.preventDefault();
 		$("#desc-avail-module").addClass('is-hidden');
 		$("#calendar-module").removeClass('is-hidden');
@@ -70,6 +76,22 @@ $(document).ready(function() {
 	editTrafficModule();
 	moreInfoModule();
 });
+
+//show error
+function showAlphaError(){
+	var validChar = /^[0-9a-zA-Z]+$/;
+	if ($("#typed-slash").val().match(validChar)){
+
+	}
+	$("#input-tooltip-error").removeClass("is-hidden");
+	$("#input-tooltip").addClass("is-hidden");
+}
+
+//hide error
+function hideAlphaError(){
+	$("#input-tooltip-error").addClass("is-hidden");
+	$("#input-tooltip").addClass("is-hidden");
+}
 
 //helper function to check if everything is legit
 function checkTimes(){
