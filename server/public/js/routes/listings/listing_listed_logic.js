@@ -4,15 +4,18 @@ $(document).ready(function() {
 	//typed JS
 	$(function(){
 		$("#typed-slash").typed({
-			strings: ["rtz", "artour", "arteezy", "babyrage"],
+			strings: listing_info.paths.split(","),
 			typeSpeed: 40,
 			shuffle: true,
 			loop: true
 		});
 	});
 
+	//focus to hide the click me message
 	$("#typed-slash").on("focus", function(){
 		$(".input-tooltip").addClass('is-hidden');
+		$("#typed-slash").select();
+		$("#check-avail").removeClass('is-disabled');
 	}).on("focusout", function(){
 		$(".input-tooltip").removeClass('is-hidden');
 	});
@@ -21,8 +24,6 @@ $(document).ready(function() {
 		e.preventDefault();
 		checkInput();
 	});
-
-	removeNotification();
 
 	//user since date in About Owner
 	$("#user-since").text(moment(new Date(listing_info.user_created)).format("MMMM, YYYY"));
@@ -161,7 +162,6 @@ function createTrafficChart(){
 			},
 		];
 
-
 		//split traffic into six months
 		for (var x = 0; x < listing_info.traffic.length; x++){
 			for (var y = 0; y < traffic_data.length; y++){
@@ -171,6 +171,11 @@ function createTrafficChart(){
 				}
 			}
 		}
+
+		//how many people in the past month ticker
+		$("#views-total").text(wNumb({
+			thousand: ','
+		}).to(traffic_data[0].y));
 
 		var date_created = moment(listing_info.date_created);
 		var last_deleted = 0;
@@ -271,6 +276,7 @@ function createTrafficChart(){
 					display:false
 				},
 				responsive: true,
+				maintainAspectRatio: false,
 				hover: {
 					mode: "index"
 				},
@@ -402,7 +408,7 @@ function editRentalModule(){
 //function to create previous rentals module
 function editExampleRentalModule(popular_rental){
 	if (listing_info.rentals.length){
-		var total_to_show = Math.min(5, listing_info.rentals.length);
+		var total_to_show = listing_info.rentals.length;
 		var already_shown = [];
 		var x = 0;
 		var now = moment();
@@ -460,26 +466,44 @@ function editExampleRentalModule(popular_rental){
 				ticker_clone.find(".ticker-time").html(ticker_time);
 				ticker_clone.find(".ticker-reach").html(ticker_reach);
 
+				var ticker_icon_color = ticker_clone.find(".ticker-icon-color");
+				var ticker_icon = ticker_clone.find(".ticker-icon");
+
 				//redirect content to display on that domain
 				if (listing_info.rentals[x].type == 0){
 					if (listing_info.rentals[x].address.match(/\.(jpeg|jpg|png|bmp)$/) != null){
-						var ticker_type = ticker_pre_tense + "display" + ticker_verb_tense + " <a href=" + rental_preview + " class='is-accent is-underlined'>an image</a> on this domain";
+						var ticker_type = ticker_pre_tense + "display" + ticker_verb_tense + " <a href=" + rental_preview + " class='is-accent is-underlined'>an image</a> on this website";
+						ticker_icon_color.addClass('is-info');
+						ticker_icon.addClass('fa-camera-retro');
 					}
 					else if (listing_info.rentals[x].address.match(/\.(gif)$/) != null){
-						var ticker_type = ticker_pre_tense + "display" + ticker_verb_tense + " <a href=" + rental_preview + " class='is-accent is-underlined'>a GIF</a> on this domain";
+						var ticker_type = ticker_pre_tense + "display" + ticker_verb_tense + " <a href=" + rental_preview + " class='is-accent is-underlined'>a GIF</a> on this website";
+						ticker_icon_color.addClass('is-accent');
+						ticker_icon.addClass('fa-smile-o');
+					}
+					else if (listing_info.rentals[x].address.match(/\.(pdf)$/) != null){
+						var ticker_type = ticker_pre_tense + "display" + ticker_verb_tense + " <a href=" + rental_preview + " class='is-accent is-underlined'>a PDF</a> on this website";
+						ticker_icon_color.addClass('is-accent');
+						ticker_icon.addClass('fa-pdf-o');
 					}
 					else if (listing_info.rentals[x].address){
 						var ticker_address = getHost(listing_info.rentals[x].address);
-						var ticker_type = ticker_pre_tense + "redirect" + ticker_verb_tense + " this domain to <a href=" + rental_preview + " class='is-accent is-underlined'>" + ticker_address + "</a>";
+						var ticker_type = ticker_pre_tense + "display" + ticker_verb_tense + " content from <a href=" + rental_preview + " class='is-accent is-underlined'>" + ticker_address + "</a>";
+						ticker_icon_color.addClass('is-dark');
+						ticker_icon.addClass('fa-external-link');
 					}
 					else {
-						var ticker_type = ticker_pre_tense + "display" + ticker_verb_tense + " nothing on this domain";
+						var ticker_type = ticker_pre_tense + "display" + ticker_verb_tense + " nothing on this website";
+						ticker_icon_color.addClass('is-black');
+						ticker_icon.addClass('fa-times-circle-o');
 					}
 				}
 				//forward the domain
 				else {
-					var rental_preview = getHost(listing_info.rentals[x].address);
-					var ticker_type = ticker_pre_tense + "forward" + ticker_verb_tense + " this domain to <a href=" + rental_preview + " class='is-accent is-underlined'>" + ticker_address + "</a>";
+					var ticker_address = getHost(listing_info.rentals[x].address);
+					var ticker_type = ticker_pre_tense + "forward" + ticker_verb_tense + " this website to <a href=" + listing_info.rentals[x].address + " class='is-accent is-underlined'>" + ticker_address + "</a>";
+					ticker_icon_color.addClass('is-primary');
+					ticker_icon.addClass('fa-share-square');
 				}
 				ticker_clone.find(".ticker-type").html(ticker_type);
 

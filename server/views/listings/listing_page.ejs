@@ -32,7 +32,7 @@
             }); %>
           <% } %>
           <div class="control">
-            <button form="path-input" class="button is-stylish is-primary v-align-middle" type="submit">Check Availability</button>
+            <button id="check-avail" form="path-input" class="button is-disabled is-stylish is-primary v-align-middle" type="submit">Check Availability</button>
           </div>
         </div>
     </div>
@@ -43,6 +43,13 @@
     <%# EXAMPLES MODULE %>
     <% if (listing_info.rentals.length > 0){ %>
         <%- include("modules/rentals_examples_module.ejs", {
+          listing_info : listing_info
+        }); %>
+    <% } %>
+
+    <%# TRAFFIC MODULE %>
+    <% if (listing_info.traffic){ %>
+        <%- include("modules/traffic_module.ejs", {
           listing_info : listing_info
         }); %>
     <% } %>
