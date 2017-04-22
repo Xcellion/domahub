@@ -1,19 +1,18 @@
 $(document).ready(function() {
-	setUpCalendar(listing_info);
-
 	//typed JS
 	$(function(){
 		$("#typed-slash").typed({
 			strings: listing_info.paths.split(","),
 			typeSpeed: 40,
 			shuffle: true,
-			loop: true
+			loop: true,
+			attr: "placeholder"
 		});
 	});
 
 	//focus to hide the click me message
 	$("#typed-slash").on("focus", function(){
-		$(".input-tooltip").addClass('is-hidden');
+		$("#input-tooltip").addClass('is-hidden');
 		$("#typed-slash").select();
 		$("#submit-path-input").removeClass('is-disabled');
 	}).on("focusout", function(){
@@ -22,42 +21,45 @@ $(document).ready(function() {
 	});
 
 	//function for input text validation and tooltip change
-	$("#typed-slash").on("keyup change paste cut click", function() {
-		var input = $(this).val();
+	$("#typed-slash").on("keypress", function(e) {
+		var inp = String.fromCharCode(event.keyCode);
 		//regex for alphanumeric
 		var validChar = /^[0-9a-zA-Z]+$/;
 		//logic to check alphanumeric input value
-		if (!input.match(validChar) && input.length > 0) {
+		if (!inp.match(validChar)) {
 			$("#input-tooltip").removeClass("is-hidden").addClass("is-active").text("Input must be alphanumeric.");
+			e.preventDefault();
 		} else {
+			$("#input-tooltip").addClass("is-hidden");
+		}
+	}).on('keydown', function(e){
+		var validChar = /^[0-9a-zA-Z]+$/;
+		if ($(this).val().match(validChar)){
 			$("#input-tooltip").addClass("is-hidden");
 		}
 	});
 
 	//show calendar
-	$("#path-input").on("submit", function(e) {
+	$("#path-input").on("click", function(e) {
 		e.preventDefault();
+		$("#desc-avail-module").addClass('is-hidden');
 		$("#calendar-module").removeClass('is-hidden');
 	});
-
-	//user since date in About Owner
-	$("#user-since").text(moment(new Date(listing_info.user_created)).format("MMMM, YYYY"));
 
 	//submit times (redirect to checkout)
 	$("#checkout-button").on("click", function(){
 		submitTimes($(this));
 	});
 
-	//check rental times (for mobile only)
-	$("#start-card-button").on('click', function(){
-		$("#start-card-content").addClass('is-hidden');
-		$("#calendar-card-content").removeClass('is-hidden-mobile');
-	});
+	$("#calendar").on("click", function(){
+        getExistingEvents($(this));
+    });
 
 	//---------------------------------------------------------------------------------------------------MODULES
-	findOtherDomains();
-	editRentalModule();
-	createTrafficChart();
+
+	editTickerModule();
+	editTrafficModule();
+	moreInfoModule();
 });
 
 //helper function to check if everything is legit
@@ -91,7 +93,7 @@ function submitTimes(checkout_button){
 			data: {
 				starttime: newEvent.starttime,
 				endtime: newEvent.endtime,
-				path: "test"
+				path: $("#typed-slash").val()
 			}
 		}).done(function(data){
 			checkout_button.removeClass('is-loading');
@@ -128,10 +130,10 @@ function errorHandler(message){
     }
 }
 
-//---------------------------------------------------------------------------------------------------LISTING MODULES
+//---------------------------------------------------------------------------------------------------TRAFFIC MODULE
 
 //function to create the traffic chart
-function createTrafficChart(){
+function editTrafficModule(){
 	if (listing_info.traffic && $("#traffic-chart").length > 0){
 
 		//past six months only
@@ -339,6 +341,16 @@ function createTrafficChart(){
 	}
 }
 
+//---------------------------------------------------------------------------------------------------MORE INFORMATION MODULE
+
+//function for the more information module
+function moreInfoModule(){
+	findOtherDomains();
+
+	//user since date in about owner
+	$("#user-since").text(moment(new Date(listing_info.user_created)).format("MMMM, YYYY"));
+}
+
 //other domains by same owner
 function findOtherDomains(){
 	if ($("#otherowner-domains").length > 0){
@@ -374,39 +386,10 @@ function findOtherDomains(){
 	}
 }
 
-//---------------------------------------------------------------------------------------------------RENTAL EXAMPLES MODULE
+//---------------------------------------------------------------------------------------------------RENTAL TICKER MODULE
 
 //function to create popular rentals module
-function editRentalModule(){
-	if (listing_info.rentals.length > 0){
-		var popular_rental = listing_info.rentals[0];
-		for (var x = 0; x < listing_info.rentals.length; x++){
-			if (listing_info.rentals[x].views > popular_rental.views){
-				popular_rental = listing_info.rentals[x];
-			}
-		}
-	}
-	if (popular_rental && $("#popular-rental-card").length > 0){
-		$("#popular-rental-duration").text(aggregateDateDuration(popular_rental.rental_id));
-		$("#popular-rental-preview").attr("href", "/listing/" + listing_info.domain_name + "/" + popular_rental.rental_id);
-		$("#popular-rental-views").text(popular_rental.views + " Views");
-
-		//async image load
-		var popular_screenshot = new Image();
-		popular_screenshot.onload = function(){
-			$("#popular-rental-img").attr("src", this.src);
-		}
-
-		var background_image = (popular_rental.address == "") ? "https://placeholdit.imgix.net/~text?txtsize=20&txt=NO%20PREVIEW&w=800&h=400" : "/screenshot?rental_address=" + popular_rental.address;
-		background_image = (popular_rental.address.match(/\.(jpeg|jpg|gif|png)$/) != null) ? popular_rental.address : background_image;
-		popular_screenshot.src = background_image;
-	}
-
-	editExampleRentalModule(popular_rental);
-}
-
-//function to create previous rentals module
-function editExampleRentalModule(popular_rental){
+function editTickerModule(){
 	if (listing_info.rentals.length){
 		var total_to_show = listing_info.rentals.length;
 		var already_shown = [];
@@ -521,8 +504,35 @@ function editExampleRentalModule(popular_rental){
 
 		//if something is showing, then un-hide the module
 		if (already_shown.length > 0){
-			$("#example-rentals-module").removeClass('is-hidden');
+			$("#ticker-module").removeClass('is-hidden');
 		}
+	}
+}
+
+//function to create popular rental
+function editPopularRental(){
+	if (listing_info.rentals.length > 0){
+		var popular_rental = listing_info.rentals[0];
+		for (var x = 0; x < listing_info.rentals.length; x++){
+			if (listing_info.rentals[x].views > popular_rental.views){
+				popular_rental = listing_info.rentals[x];
+			}
+		}
+	}
+	if (popular_rental && $("#popular-rental-card").length > 0){
+		$("#popular-rental-duration").text(aggregateDateDuration(popular_rental.rental_id));
+		$("#popular-rental-preview").attr("href", "/listing/" + listing_info.domain_name + "/" + popular_rental.rental_id);
+		$("#popular-rental-views").text(popular_rental.views + " Views");
+
+		//async image load
+		var popular_screenshot = new Image();
+		popular_screenshot.onload = function(){
+			$("#popular-rental-img").attr("src", this.src);
+		}
+
+		var background_image = (popular_rental.address == "") ? "https://placeholdit.imgix.net/~text?txtsize=20&txt=NO%20PREVIEW&w=800&h=400" : "/screenshot?rental_address=" + popular_rental.address;
+		background_image = (popular_rental.address.match(/\.(jpeg|jpg|gif|png)$/) != null) ? popular_rental.address : background_image;
+		popular_screenshot.src = background_image;
 	}
 }
 

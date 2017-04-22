@@ -1,21 +1,42 @@
 //----------------------------------------------------------------------------------------------------------------CALENDAR SET UP
 
-//function to setup the calendar
-function setUpCalendar(listing_info){
-    var start_date = moment().endOf("hour").add(1, "millisecond");
+function getExistingEvents(calendar_elem){
+    calendar_elem.off();
 
     listing_info.rental_moments = [];
     for (var x = 0; x < listing_info.rentals.length; x++){
         var startDate = moment(listing_info.rentals[x].date);
         var endDate = moment(listing_info.rentals[x].date + listing_info.rentals[x].duration);
-        //only if it's after now
-        if (startDate.isAfter(moment())){
+
+        //only if its the same path and after today
+        if (endDate.isSameOrAfter(moment()) && listing_info.rentals[x].path == $("#typed-slash").val()){
             listing_info.rental_moments.push({
                 start : startDate,
-                end : endDate
+                end : endDate,
+                rental: listing_info.rentals[x]
             });
         }
     }
+
+    //re-add the event handler
+    $("#calendar").on("click", function(){
+        getExistingEvents($(this));
+    });
+
+    setUpCalendar(listing_info);
+}
+
+//function to setup the calendar
+function setUpCalendar(listing_info){
+
+    //remove any existing date range pickers
+    if ($("#calendar").data('daterangepicker')){
+        console.log("Removing old date picker");
+        $("#calendar").data('daterangepicker').remove();
+    }
+
+    //create a new range picker based on new path rental availability
+    var start_date = moment().endOf("hour").add(1, "millisecond");
 
     $('#calendar').daterangepicker({
         opens: "center",
@@ -34,15 +55,17 @@ function setUpCalendar(listing_info){
         maxDate: moment().endOf("hour").add(1, "millisecond").add(1, "year"),
 
         isInvalidDate: function(curDate){
-            var bool = checkIfNotOverlapped(curDate);
-            return bool;
-        },
-        isCustomDate: function(curDate){
-
+            if (curDate.isAfter(moment())){
+                var bool = checkIfNotOverlapped(curDate);
+                return bool;
+            }
+            else {
+                return true;
+            }
         }
     });
 
-    //update when pressing apply
+    //update when applying new dates
     $('#calendar').on('apply.daterangepicker', function(ev, picker) {
         updatePrices();
         if (picker.startDate.isValid() && picker.endDate.isValid()){
@@ -61,20 +84,22 @@ function setUpCalendar(listing_info){
     });
 
     //to figure out what events are already existing in given view
-    $('#calendar').on('show.daterangepicker', function(a, b,c,d) {
-
+    $('#calendar').on('show.daterangepicker', function(ev, picker) {
         //remove any error messages
         $("#calendar-regular-message").removeClass('is-hidden');
         $("#calendar-error-message").addClass('is-hidden');
     });
-}
 
+    $("#calendar").data('daterangepicker').show();
+}
 
 //helper function to make sure theres nothing overlapping this event
 function checkIfNotOverlapped(event){
     var overlap = 0;
     for (var x = 0; x < listing_info.rental_moments.length; x++){
-        if (event.isBetween(listing_info.rental_moments[x].start, listing_info.rental_moments[x].end, listing_info.price_type, "[)")){
+        var rental_start = listing_info.rental_moments[x].start;
+        var rental_end = listing_info.rental_moments[x].end;
+        if (event.isBetween(rental_start, rental_end, listing_info.price_type, "()")){
             overlap++;
         }
     }
@@ -87,27 +112,16 @@ function updatePrices(){
         var startDate = $("#calendar").data('daterangepicker').startDate;
     	var endDate = $("#calendar").data('daterangepicker').endDate.clone().add(1, "millisecond");
 
-        if (!startDate.isValid() || !endDate.isValid()){
-			$("#redirect-next-button, #remove_events").removeClass('is-disabled');
-		}
-		else {
-			$("#redirect-next-button, #remove_events").addClass('is-disabled');
-		}
-
 		//calculate the price
-        var tempDuration = moment.duration(endDate.diff(startDate));
+        var totalPrice = moment.duration(endDate.diff(startDate));
         if (listing_info.price_type == "month"){
-            tempDuration = tempDuration.asDays() / 30;
+            totalPrice = totalPrice.asDays() / 30;
         }
         else {
-            tempDuration = tempDuration.as(listing_info.price_type);
-            tempDuration = Number(Math.round(tempDuration+'e2')+'e-2');
+            totalPrice = totalPrice.as(listing_info.price_type);
+            totalPrice = Number(Math.round(totalPrice+'e2')+'e-2');
         }
-
-        totalPrice = tempDuration * listing_info.price_rate;
-        totalUnits = tempDuration;
-
-        var s_or_not = (totalUnits > 1) ? "s" : "";
+        totalPrice = totalPrice * listing_info.price_rate;
 
         //price or price per day
         if (totalPrice == 0 && listing_info.price_rate != 0){
