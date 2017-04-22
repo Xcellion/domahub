@@ -24,9 +24,10 @@
   }
 }
 
-.input-tooltip {
-  background-color: $accent;
-  bottom: -25px;
+#input-tooltip {
+  background-color: $grey-dark;
+  border-radius: 0 $radius-large $radius-large $radius-large;
+  bottom: -30px;
   box-sizing: border-box;
   color: $white;
   cursor: pointer;
@@ -39,15 +40,27 @@
   @include mobile-456px {
     font-size: $size-7
   }
-  .triangle {
-    position: absolute;
-    top: -5px;
-    left: 62px;
-    width: 0;
+  &.is-active {
+    background-color: $danger;
+    width: 218px;
+    &::before {
+      border-bottom-color: $danger;
+      border-left-color: $danger;
+    }
+  }
+  &::before,
+  &::after {
+    content: '';
     height: 0;
-    border-left: 5px solid transparent;
-    border-right: 5px solid transparent;
-    border-bottom: 5px solid $accent;
+    position: absolute;
+    width: 0;
+    border: 5px solid transparent;
+  }
+  &::before {
+    border-bottom-color: $grey-dark;
+    border-left-color: $grey-dark;
+    top: -10px;
+    left: 0;
   }
 }
 
@@ -171,6 +184,10 @@
   &:not(:last-child) {
     border-bottom: 1px solid $border;
   }
+}
+
+#calendar-module {
+  width: 300px;
 }
 
 // #previous-rentals-cards {
