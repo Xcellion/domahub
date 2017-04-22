@@ -1,0 +1,23 @@
+<div id="info-module" class="module">
+
+    <%# SIMILAR DOMAINS MODULE %>
+    <%- include("info/similar_domains_module.ejs", {
+      listing_info : listing_info
+    }); %>
+
+    <%# CATEGORIES MODULE %>
+    <%- include("info/categories_module.ejs", {
+      listing_info : listing_info
+    }); %>
+
+    <%# LISTING OWNER MODULE %>
+    <%- include("info/listing_owner_module.ejs", {
+      listing_info : listing_info
+    }); %>
+
+    <%# OTHER BY SAME OWNER DOMAINS MODULE %>
+    <%- include("info/same_owner_listings_module.ejs", {
+      listing_info : listing_info
+    }); %>
+
+</div>

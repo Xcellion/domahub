@@ -55,7 +55,14 @@ $(document).ready(function() {
         getExistingEvents($(this));
     });
 
-	//---------------------------------------------------------------------------------------------------MODULES
+	//---------------------------------------------------------------------------------------------------MODULES AND TABS
+
+	//switch tabs
+	$(".tab").on("click", function(){
+		var which_tab = $(this).attr("id").replace("-tab", "");
+		$(".module").addClass('is-hidden');
+		$("#" + which_tab + "-module").removeClass('is-hidden').closest("li").addClass('is-active');
+	})
 
 	editTickerModule();
 	editTrafficModule();
@@ -134,7 +141,7 @@ function errorHandler(message){
 
 //function to create the traffic chart
 function editTrafficModule(){
-	if (listing_info.traffic && $("#traffic-chart").length > 0){
+	if (listing_info.traffic){
 
 		//past six months only
 		var traffic_data = [
@@ -338,6 +345,9 @@ function editTrafficModule(){
 				}
 			 }
 		});
+
+		//hide until click to show
+		$("#traffic-module").addClass('is-hidden');
 	}
 }
 
@@ -349,6 +359,9 @@ function moreInfoModule(){
 
 	//user since date in about owner
 	$("#user-since").text(moment(new Date(listing_info.user_created)).format("MMMM, YYYY"));
+
+	//hide until click to show
+	$("#info-module").addClass('is-hidden');
 }
 
 //other domains by same owner
@@ -500,11 +513,6 @@ function editTickerModule(){
 			if (x == listing_info.rentals.length){
 				break;
 			}
-		}
-
-		//if something is showing, then un-hide the module
-		if (already_shown.length > 0){
-			$("#ticker-module").removeClass('is-hidden');
 		}
 	}
 }

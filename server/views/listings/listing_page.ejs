@@ -40,6 +40,21 @@
 <section class="section is-medium">
   <div class="container">
 
+      <%# TABS %>
+      <div class="tabs is-boxed margin-bottom-0">
+        <ul>
+          <li class="is-active">
+            <a id="ticker-tab" class='tab'>History</a>
+          </li>
+          <li>
+            <a id="traffic-tab" class='tab'>Graph</a>
+          </li>
+          <li>
+            <a id="info-tab" class='tab'>Information</a>
+          </li>
+        </ul>
+      </div>
+
     <%# EXAMPLES MODULE %>
     <% if (listing_info.rentals.length > 0){ %>
         <%- include("modules/ticker_module.ejs", {
@@ -50,6 +65,13 @@
     <%# TRAFFIC MODULE %>
     <% if (listing_info.traffic){ %>
         <%- include("modules/traffic_module.ejs", {
+          listing_info : listing_info
+        }); %>
+    <% } %>
+
+    <%# INFO MODULE %>
+    <% if (listing_info.traffic){ %>
+        <%- include("modules/info_module.ejs", {
           listing_info : listing_info
         }); %>
     <% } %>
