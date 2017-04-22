@@ -19,8 +19,8 @@
           <form id="path-input" class="is-inline-block">
             <div class="control margin-bottom-0">
               <input id="typed-slash" tabindex="1" type="text" autocomplete="off"></input>
-              <label id="input-tooltip" for="typed-slash">Click here to edit.</label>
-              <!-- <span class="triangle"></span> -->
+              <label id="input-tooltip" class="input-tooltip" for="typed-slash">Click here to edit.</label>
+              <label id="input-tooltip-error" class="input-tooltip is-active is-hidden" for="typed-slash">Input must be alphanumeric!</label>
             </div>
           </form>
         </div>
@@ -41,16 +41,25 @@
   <div class="container">
 
       <%# TABS %>
-      <div class="tabs is-boxed margin-bottom-0">
+      <div class="tabs is-toggle is-boxed margin-bottom-0">
         <ul>
           <li class="is-active">
-            <a id="ticker-tab" class='tab'>History</a>
+            <a id="ticker-tab" class='tab'>
+                <span class="icon is-small"><i class="fa fa-history"></i></span>
+                <span>History</span>
+            </a>
           </li>
           <li>
-            <a id="traffic-tab" class='tab'>Graph</a>
+            <a id="traffic-tab" class='tab'>
+                <span class="icon is-small"><i class="fa fa-line-chart"></i></span>
+                <span>Traffic</span>
+            </a>
           </li>
           <li>
-            <a id="info-tab" class='tab'>Information</a>
+            <a id="info-tab" class='tab'>
+                <span class="icon is-small"><i class="fa fa-info-circle"></i></span>
+                <span>Information</span>
+            </a>
           </li>
         </ul>
       </div>

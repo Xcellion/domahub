@@ -188,7 +188,7 @@ button[data-balloon] {
   #domain-display .control input {
     width: 100%; }
 
-#input-tooltip {
+.input-tooltip {
   background-color: #444;
   border-radius: 0 5px 5px 5px;
   bottom: -30px;
@@ -202,21 +202,21 @@ button[data-balloon] {
   right: 0;
   width: 136px; }
   @media screen and (max-width: 456px) {
-    #input-tooltip {
+    .input-tooltip {
       font-size: 14px; } }
-  #input-tooltip.is-active {
+  .input-tooltip.is-active {
     background-color: #EF5350;
     width: 218px; }
-    #input-tooltip.is-active::before {
+    .input-tooltip.is-active::before {
       border-bottom-color: #EF5350;
       border-left-color: #EF5350; }
-  #input-tooltip::before, #input-tooltip::after {
+  .input-tooltip::before, .input-tooltip::after {
     content: '';
     height: 0;
     position: absolute;
     width: 0;
     border: 5px solid transparent; }
-  #input-tooltip::before {
+  .input-tooltip::before {
     border-bottom-color: #444;
     border-left-color: #444;
     top: -10px;
