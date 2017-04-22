@@ -189,9 +189,9 @@ button[data-balloon] {
     width: 100%; }
 
 #input-tooltip {
-  background-color: rgba(0, 0, 0, 0.88);
+  background-color: #444;
   border-radius: 0 5px 5px 5px;
-  bottom: -25px;
+  bottom: -30px;
   box-sizing: border-box;
   color: white;
   cursor: pointer;
@@ -206,8 +206,7 @@ button[data-balloon] {
       font-size: 14px; } }
   #input-tooltip.is-active {
     background-color: #EF5350;
-    bottom: -45px;
-    width: auto; }
+    width: 218px; }
     #input-tooltip.is-active::before {
       border-bottom-color: #EF5350;
       border-left-color: #EF5350; }
@@ -218,8 +217,8 @@ button[data-balloon] {
     width: 0;
     border: 5px solid transparent; }
   #input-tooltip::before {
-    border-bottom-color: rgba(0, 0, 0, 0.88);
-    border-left-color: rgba(0, 0, 0, 0.88);
+    border-bottom-color: #444;
+    border-left-color: #444;
     top: -10px;
     left: 0; }
 
@@ -300,3 +299,6 @@ button[data-balloon] {
   width: 100%; }
   .ticker-row:not(:last-child) {
     border-bottom: 1px solid rgba(0, 0, 0, 0.12); }
+
+#calendar-card-content {
+  width: 300px; }
