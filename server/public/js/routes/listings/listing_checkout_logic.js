@@ -4,7 +4,7 @@ $(document).ready(function () {
 
     //hide the login step if logged in
     if (user){
-        showStep("log");
+        showStep("site");
         showMessage("address-regular-message");
     }
 

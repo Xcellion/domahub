@@ -246,7 +246,7 @@ module.exports = {
 
         var starttime = parseFloat(req.body.starttime);
         var endtime = parseFloat(req.body.endtime);
-        var path = req.body.path || req.session.new_rental_info.path;
+        var path = (req.session.new_rental_info.path) ? req.session.new_rental_info.path : req.body.path;
 
         //no times posted
         if (!starttime || !endtime){
