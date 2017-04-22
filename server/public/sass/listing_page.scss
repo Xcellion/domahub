@@ -25,9 +25,9 @@
 }
 
 #input-tooltip {
-  background-color: $black-primary;
+  background-color: $grey-dark;
   border-radius: 0 $radius-large $radius-large $radius-large;
-  bottom: -25px;
+  bottom: -30px;
   box-sizing: border-box;
   color: $white;
   cursor: pointer;
@@ -42,8 +42,7 @@
   }
   &.is-active {
     background-color: $danger;
-    bottom: -45px;
-    width: auto;
+    width: 218px;
     &::before {
       border-bottom-color: $danger;
       border-left-color: $danger;
@@ -58,8 +57,8 @@
     border: 5px solid transparent;
   }
   &::before {
-    border-bottom-color: $black-primary;
-    border-left-color: $black-primary;
+    border-bottom-color: $grey-dark;
+    border-left-color: $grey-dark;
     top: -10px;
     left: 0;
   }
@@ -185,6 +184,10 @@
   &:not(:last-child) {
     border-bottom: 1px solid $border;
   }
+}
+
+#calendar-card-content {
+  width: 300px;
 }
 
 // #previous-rentals-cards {
