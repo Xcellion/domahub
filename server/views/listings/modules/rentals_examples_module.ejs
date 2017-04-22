@@ -1,14 +1,31 @@
-<div id="example-rentals-module" class="is-hidden content">
+<div id="example-rentals-module" class="is-hidden">
   <%# <h3 class="margin-bottom-10">
       How are people using this website?
       <span class="icon" data-balloon-length="large" data-balloon="Users who have used this website URL to display their personal content." data-balloon-pos="up">
         <i class="fa fa-question-circle"></i>
       </span>
   </h3>%>
+  <div class="tabs is-boxed">
+    <ul>
+      <li class="is-active">
+        <a>History</a>
+      </li>
+      <li>
+        <a>Graph</a>
+      </li>
+      <li>
+        <a>Information</a>
+      </li>
+    </ul>
+  </div>
   <li id='ticker-clone' class='ticker-row is-hidden'>
-      <p>
-          <span class='ticker-icon-color'><i style="margin-bottom:4px;vertical-align:middle;" class="margin-right-10 fa ticker-icon"></i></span><span class='is-bold ticker-user'></span><span class='ticker-type'></span><span class='ticker-reach'></span><span class='ticker-time'></span>.
-      </p>
+      <div class='ticker-icon-color'><i class="margin-right-10 fa ticker-icon"></i></div>
+      <div class="ticker-text">
+        <p class='is-bold ticker-user is-inline'></p>
+        <p class='ticker-type is-inline'></p>
+        <p class='ticker-reach is-inline'></p>
+        <p class='ticker-time is-inline'></p>.
+      </div>
   </li>
   <ul id="ticker-wrapper"></ul>
 </div>

@@ -168,22 +168,33 @@
 #ticker-wrapper {
   @include box-shadow(0,8px,15px,$border,0);
   display: block;
-  max-height: 203px;
+  max-height: 205px;
   overflow-y: scroll;
   padding: 8px 5px;
   width: 100%;
 }
 
 .ticker-row {
+  align-items: center;
   background-color: $white;
   box-sizing: border-box;
-  display: block;
+  display: flex;
   margin: 0;
-  padding: 8px;
+  padding: 12px 8px;
   width: 100%;
   &:not(:last-child) {
     border-bottom: 1px solid $border;
   }
+}
+
+.ticker-icon-color {
+  border-right: 2px solid $border;
+  margin-right: 10px;
+}
+
+.ticker-icon {
+  margin-top: 4px;
+  vertical-align: baseline !important;
 }
 
 #calendar-module {
