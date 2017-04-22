@@ -60,6 +60,8 @@ $(document).ready(function() {
 	//switch tabs
 	$(".tab").on("click", function(){
 		var which_tab = $(this).attr("id").replace("-tab", "");
+		$(".tab").closest("li").removeClass('is-active');
+		$(this).closest("li").addClass('is-active');
 		$(".module").addClass('is-hidden');
 		$("#" + which_tab + "-module").removeClass('is-hidden').closest("li").addClass('is-active');
 	})
@@ -409,11 +411,11 @@ function editTickerModule(){
 		var x = 0;
 		var now = moment();
 		while (already_shown.length < total_to_show){
+			var start_moment = moment(listing_info.rentals[x].date);
 
-			// rental is not already showing
-			if (already_shown.indexOf(listing_info.rentals[x].rental_id) == -1){
+			// rental is not already showing / is not in the future
+			if (already_shown.indexOf(listing_info.rentals[x].rental_id) == -1 && now.isAfter(start_moment)){
 				var end_moment = moment(listing_info.rentals[x].date + listing_info.rentals[x].duration);
-				var start_moment = moment(listing_info.rentals[x].date);
 				var ticker_clone = $("#ticker-clone").clone().removeAttr('id').removeClass('is-hidden');
 
 				//user name or anonymous
@@ -447,7 +449,7 @@ function editTickerModule(){
 					var rental_preview = "/listing/" + listing_info.domain_name + "/" + listing_info.rentals[x].rental_id;
 				}
 				//rental ends in the future but started in the past
-				else if (now.isAfter(start_moment)){
+				else {
 					ticker_pre_tense = "has been "
 					ticker_verb_tense = "ing";
 					var ticker_time = " for the past <span class='is-bold'>" + moment.duration(now.diff(start_moment)).humanize() + "</span>";
