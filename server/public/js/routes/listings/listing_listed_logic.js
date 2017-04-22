@@ -15,14 +15,29 @@ $(document).ready(function() {
 	$("#typed-slash").on("focus", function(){
 		$(".input-tooltip").addClass('is-hidden');
 		$("#typed-slash").select();
-		$("#check-avail").removeClass('is-disabled');
+		$("#submit-path-input").removeClass('is-disabled');
 	}).on("focusout", function(){
-		$(".input-tooltip").removeClass('is-hidden');
+		$("#input-tooltip").removeClass("is-hidden is-active");
+		$("#input-tooltip").text("Click here to edit.");
 	});
 
+	//function for input text validation and tooltip change
+	$("#typed-slash").on("keyup change paste cut click", function() {
+		var input = $(this).val();
+		//regex for alphanumeric
+		var validChar = /^[0-9a-zA-Z]+$/;
+		//logic to check alphanumeric input value
+		if (!input.match(validChar) && input.length > 0) {
+			$("#input-tooltip").removeClass("is-hidden").addClass("is-active").text("Input must be alphanumeric.");
+		} else {
+			$("#input-tooltip").addClass("is-hidden");
+		}
+	});
+
+	//show calendar
 	$("#path-input").on("submit", function(e) {
 		e.preventDefault();
-		checkInput();
+		$("#calendar-module").removeClass('is-hidden');
 	});
 
 	//user since date in About Owner
@@ -44,21 +59,6 @@ $(document).ready(function() {
 	editRentalModule();
 	createTrafficChart();
 });
-
-//check domain path input
-function checkInput() {
-	var input = $("#typed-slash").val();
-	var letterNumber = /^[0-9a-zA-Z]+$/;
-
-	function notificationText(text) {
-		$("#error-notification").addClass("is-active");
-		$("#notification-text").text(text);
-	}
-
-	if (!input || !input.match(letterNumber)) {
-		notificationText("You may only input English letters and/or numbers.");
-	}
-}
 
 //helper function to check if everything is legit
 function checkTimes(){
