@@ -166,8 +166,12 @@
 }
 
 .module {
-    @include box-shadow(0,8px,15px,$border,0);
-    padding: 15px;
+  @include box-shadow(0,8px,15px,$border,0);
+  padding:15px;
+}
+
+#ticker-module {
+  padding:0;
 }
 
 #ticker-wrapper {
@@ -184,15 +188,9 @@
   display: flex;
   margin: 0;
   width: 100%;
-  padding:7.5px 0px;
+  padding:7.5px 10px;
   &:not(:last-child) {
     border-bottom: 1px solid $border;
-  }
-  &:first-child {
-    padding-top: 0;
-  }
-  &:last-child {
-    padding-bottom: 0;
   }
 }
 
