@@ -280,14 +280,16 @@ button[data-balloon] {
     margin-bottom: 10px;
     margin-right: 10px; }
 
-#ticker-wrapper {
+.module {
   -webkit-box-shadow: 0 8px 15px 0 rgba(0, 0, 0, 0.12);
   -moz-box-shadow: 0 8px 15px 0 rgba(0, 0, 0, 0.12);
   box-shadow: 0 8px 15px 0 rgba(0, 0, 0, 0.12);
+  padding: 15px; }
+
+#ticker-wrapper {
   display: block;
-  max-height: 205px;
+  max-height: 250px;
   overflow-y: scroll;
-  padding: 8px 5px;
   width: 100%; }
 
 .ticker-row {
@@ -296,10 +298,14 @@ button[data-balloon] {
   box-sizing: border-box;
   display: flex;
   margin: 0;
-  padding: 12px 8px;
-  width: 100%; }
+  width: 100%;
+  padding: 7.5px 0px; }
   .ticker-row:not(:last-child) {
     border-bottom: 1px solid rgba(0, 0, 0, 0.12); }
+  .ticker-row:first-child {
+    padding-top: 0; }
+  .ticker-row:last-child {
+    padding-bottom: 0; }
 
 .ticker-icon-color {
   border-right: 2px solid rgba(0, 0, 0, 0.12);

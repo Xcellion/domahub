@@ -106,16 +106,6 @@
       background-position: center center;
       background-size: cover;
     }
-    .card-footer {
-      .button {
-        border: 1px solid $black-disabled;
-        &:hover,
-        &:focus {
-          border: 1px solid $black-secondary;
-          background-color: transparent;
-        }
-      }
-    }
   }
 }
 

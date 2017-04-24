@@ -73,7 +73,7 @@
                                     Display an existing website or web content (e.g. a gif, image, meme, etc.). This will be displayed <span class='is-bold'><%= listing_info.domain_name %><%= (new_rental_info.path) ? "/" + new_rental_info.path : "" %></span> for the duration of your rental. Enter the link below to get started!
                                 </p>
                                 <p id="address-forward-message" class="is-hidden regular-message">
-                                    Anyone navigating to <span class='is-bold'><%= listing_info.domain_name %><%= "/" + new_rental_info.path %></span> will be automatically redirected to this link for the duration of your rental. Enter the link of the website you want to get started!
+                                    Anyone navigating to <span class='is-bold'><%= listing_info.domain_name %><%= (new_rental_info.path) ? "/" + new_rental_info.path : "" %></span> will be automatically redirected to this link for the duration of your rental. Enter the link of the website you want to get started!
                                 </p>
                                 <p id="address-build-message" class="is-hidden regular-message">
                                     Create an entirely new website for <span class='is-bold'><%= listing_info.domain_name %><%= (new_rental_info.path) ? "/" + new_rental_info.path : "" %></span>. It doesn&#39;t matter if its a personal portfolio, your new eCommerce store, or just a fun website.
@@ -372,8 +372,8 @@
                                 Below is a link you can use to edit your rental. We have also emailed this link to the email address you provided.
                             </p>
                             <div class="control has-addons">
-                                <input id="rental-link-input" class='input is-expanded' placeholder="Save me for later!"/>
-                                <a id="rental-link-button" class="button is-primary no-shadow">
+                                <input id="rental-link-input" class='is-large input is-expanded' placeholder="Save me for later!"/>
+                                <a id="rental-link-button" class="button is-large is-primary no-shadow">
                                     <i class="fa fa-clipboard"></i>
                                 </a>
                             </div>
@@ -386,12 +386,16 @@
                                 </p>
                               </div>
                           <% } %>
+                          <a id="rental-preview-button" class="button is-stylish is-primary no-shadow">
+                            <span class="icon is-small"><i class="fa fa-search"></i></span>
+                            <span>Preview Rental</span>
+                          </a>
                         </div>
                     </div>
                 </div>
                 <div class="column is-5">
                     <div class="card is-checkout">
-                        <figure class="card-image img-wrapper" style="background-image:url('<%= listing_info.background_image %>')"></figure>
+                        <figure class="card-image img-wrapper" style="background-image:url('<%= listing_info.background_image || "https://source.unsplash.com/category/nature/375x150" %>')"></figure>
                         <div class="card-content">
                             <div class="content">
                                 <h1 class="is-primary is-breakword"><%= listing_info.domain_name %><%= (new_rental_info.path) ? "/" + new_rental_info.path : "" %></h1>
