@@ -52,6 +52,9 @@ $(document).ready(function() {
 		e.preventDefault();
 		$("#desc-avail-module").addClass('is-hidden');
 		$("#calendar-module").removeClass('is-hidden');
+
+		//show calendar
+		getExistingEvents($(this));
 	});
 
 	//submit times (redirect to checkout)
@@ -59,9 +62,12 @@ $(document).ready(function() {
 		submitTimes($(this));
 	});
 
+	//initiate calendar based on current path value, prevent typing
 	$("#calendar").on("click", function(){
         getExistingEvents($(this));
-    });
+    }).on("keydown", function(e){
+		e.preventDefault();
+	});
 
 	//---------------------------------------------------------------------------------------------------MODULES AND TABS
 
@@ -155,19 +161,21 @@ function submitTimes(checkout_button){
 
 //handler for various error messages
 function errorHandler(message){
-	console.log(message);
 	switch (message){
 		case "Invalid dates!":
+		case "Invalid dates! No times posted!":
+		case "Invalid dates! Not valid dates!":
             $("#calendar-error-message").removeClass('is-hidden').text("The selected times are not available! Please edit your selected rental dates.");
 			break;
+		case "Dates are unavailable!":
 		case "Not divisible by hour blocks!":
 		case "Start time in the past!":
 		case "Invalid end time!":
 		case "Invalid start time!":
-            $("#calendar-error-message").removeClass('is-hidden').text("You have selected an invalid time! Please refresh the page and try again");
+            $("#calendar-error-message").removeClass('is-hidden').text("You have selected an invalid time! Please refresh the page and try again.");
 			break;
 		default:
-            $("#calendar-error-message").removeClass('is-hidden').text("Something went wrong with the rental! Please try again.");
+            $("#calendar-error-message").removeClass('is-hidden').text("Something went wrong! Please refresh the page and try again.");
             break;
     }
 }
@@ -223,7 +231,7 @@ function editTickerModule(){
 				else {
 					ticker_pre_tense = "has been "
 					ticker_verb_tense = "ing";
-					var ticker_time = " for the past <span class='is-bold'>" + moment.duration(now.diff(start_moment)).humanize() + "</span>";
+					var ticker_time = " for the past <span>" + moment.duration(now.diff(start_moment)).humanize() + "</span>";
 					ticker_views_plural = ticker_views_plural.replace("in ", "");
 					ticker_reach = "--reaching <span class='is-primary'>" + ticker_views_format + "</span>" + ticker_views_plural;
 
@@ -240,27 +248,37 @@ function editTickerModule(){
 
 				//redirect content to display on that domain
 				if (listing_info.rentals[x].type == 0){
+
+					//showing an image
 					if (listing_info.rentals[x].address.match(/\.(jpeg|jpg|png|bmp)$/) != null){
 						var ticker_type = ticker_pre_tense + "display" + ticker_verb_tense + " <a href=" + rental_preview + " class='is-accent is-underlined'>an image</a> on this website";
-						ticker_icon_color.addClass('is-info');
+						ticker_icon_color.addClass('is-purple');
 						ticker_icon.addClass('fa-camera-retro');
 					}
+
+					//showing a GIF
 					else if (listing_info.rentals[x].address.match(/\.(gif)$/) != null){
 						var ticker_type = ticker_pre_tense + "display" + ticker_verb_tense + " <a href=" + rental_preview + " class='is-accent is-underlined'>a GIF</a> on this website";
-						ticker_icon_color.addClass('is-accent');
+						ticker_icon_color.addClass('is-info');
 						ticker_icon.addClass('fa-smile-o');
 					}
+
+					//showing a PDF
 					else if (listing_info.rentals[x].address.match(/\.(pdf)$/) != null){
 						var ticker_type = ticker_pre_tense + "display" + ticker_verb_tense + " <a href=" + rental_preview + " class='is-accent is-underlined'>a PDF</a> on this website";
-						ticker_icon_color.addClass('is-accent');
+						ticker_icon_color.addClass('is-danger');
 						ticker_icon.addClass('fa-pdf-o');
 					}
+
+					//showing a website
 					else if (listing_info.rentals[x].address){
 						var ticker_address = getHost(listing_info.rentals[x].address);
 						var ticker_type = ticker_pre_tense + "display" + ticker_verb_tense + " content from <a href=" + rental_preview + " class='is-accent is-underlined'>" + ticker_address + "</a>";
-						ticker_icon_color.addClass('is-dark');
+						ticker_icon_color.addClass('is-primary');
 						ticker_icon.addClass('fa-external-link');
 					}
+
+					//showing nothing
 					else {
 						var ticker_type = ticker_pre_tense + "display" + ticker_verb_tense + " nothing on this website";
 						ticker_icon_color.addClass('is-black');
@@ -271,7 +289,7 @@ function editTickerModule(){
 				else {
 					var ticker_address = getHost(listing_info.rentals[x].address);
 					var ticker_type = ticker_pre_tense + "forward" + ticker_verb_tense + " this website to <a href=" + listing_info.rentals[x].address + " class='is-accent is-underlined'>" + ticker_address + "</a>";
-					ticker_icon_color.addClass('is-primary');
+					ticker_icon_color.addClass('is-accent');
 					ticker_icon.addClass('fa-share-square');
 				}
 				ticker_clone.find(".ticker-type").html(ticker_type);
@@ -443,10 +461,10 @@ function createTrafficChart(){
 					&& moment(new Date(start_date)).isBefore(moment())
 			){
 					var random_rental_color = randomColor({
-					   format: 'rgba',
-					   hue: "orange",
+					   format: 'rgb',
+					   hue: "green",
 					   luminosity: "dark"
-					});
+				   }).replace(")", ",0.5)").replace("rgb", "rgba");
 					var temp_dataset = {
 						label: "Rental #" + listing_info.rentals[y].rental_id,
 						xAxisID : "rentals-x",

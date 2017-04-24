@@ -250,7 +250,7 @@ module.exports = {
 
         //no times posted
         if (!starttime || !endtime){
-            error.handler(req, res, "Invalid dates!", "json");
+            error.handler(req, res, "Invalid dates! No times posted!", "json");
         }
         else {
             //check if its even a valid JS date
@@ -259,7 +259,7 @@ module.exports = {
 
             //check if its a legit date
             if (!start_moment.isValid() || !end_moment.isValid()){
-                error.handler(req, res, "Invalid dates!", "json");
+                error.handler(req, res, "Invalid dates! Not valid dates!", "json");
             }
 
             //not divisible by hour blocks
@@ -290,10 +290,10 @@ module.exports = {
             else {
                 //check against the DB
                 Listing.crossCheckRentalTime(req.params.domain_name, path, starttime, endtime, function(result){
-                    if (result.state=="error"){error.handler(req, res, result.info);}
+                    if (result.state=="error"){error.handler(req, res, result.info, "json");}
                     else {
                         if (result.info.length > 0){
-                            error.handler(req, res, "Invalid dates!", "json");
+                            error.handler(req, res, "Dates are unavailable!", "json");
                         }
                         //all good!
                         else {
@@ -414,11 +414,17 @@ module.exports = {
 
                 //get listing rental times
                 getListingRentalTimes(req, res, result.info[0], function(){
+                    console.log("F: Getting all rental information for domain: " + req.params.domain_name + "...");
 
                     //get the traffic of the listing
                     Data.getListingTraffic(req.params.domain_name, function(result){
+                        console.log("F: Getting all Alexa information for domain: " + req.params.domain_name + "...");
+
                         req.session.listing_info.traffic = result.info;
-                        next();
+                        alexaData.AlexaWebData(req.params.domain_name, function(error, result) {
+                            req.session.listing_info.alexa = result;
+                            next();
+                        });
                     });
                 });
             }
@@ -427,12 +433,7 @@ module.exports = {
 
     //get alexa traffic info
     getListingAlexa : function(req, res, next){
-        alexaData.AlexaWebData(req.params.domain_name, function(error, result) {
-            req.session.listing_info.alexa = result;
-            res.send({
-                listing_info: req.session.listing_info
-            });
-        });
+
     },
 
     //gets the rental/listing info
