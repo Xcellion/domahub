@@ -23,19 +23,18 @@ function getExistingEvents(calendar_elem){
         getExistingEvents($(this));
     });
 
-    setUpCalendar(listing_info);
-    $("#calendar").focus().data('daterangepicker').show();
+    //only show new calendar if path changed
+    if (myPath != $("#typed-slash").val()){
+        myPath = $("#typed-slash").val();
+        setUpCalendar(listing_info);
+    }
+    else {
+        $("#calendar").focus().data('daterangepicker').show();
+    }
 }
 
 //function to setup the calendar
 function setUpCalendar(listing_info){
-
-    //remove any existing date range pickers
-    if ($("#calendar").data('daterangepicker')){
-        console.log("Removing old date picker");
-        $("#calendar").data('daterangepicker').remove();
-    }
-
     //create a new range picker based on new path rental availability
     var start_date = moment().endOf("hour").add(1, "millisecond");
     var end_date = moment().endOf(listing_info.price_type).add(1, "millisecond");
@@ -67,12 +66,13 @@ function setUpCalendar(listing_info){
 
     //update when applying new dates
     $('#calendar').on('apply.daterangepicker', function(ev, picker) {
-        updatePrices();
         if (picker.startDate.isValid() && picker.endDate.isValid()){
+            updatePrices();
             $(this).val(picker.startDate.format('MMM D, YYYY') + ' - ' + picker.endDate.format('MMM D, YYYY'));
             $("#checkout-button").removeClass('is-disabled');
         }
         else {
+            $(this).val("");
             $("#checkout-button").addClass('is-disabled');
         }
     });
@@ -82,15 +82,6 @@ function setUpCalendar(listing_info){
         //remove any error messages
         $("#calendar-regular-message").removeClass('is-hidden');
         $("#calendar-error-message").addClass('is-hidden');
-    });
-
-    //clear any selected dates if cancelled
-    //for when the calendar is hidden (click outside)
-    $('#calendar').on('cancel.daterangepicker', function(ev, picker) {
-        delete $("#calendar").data('daterangepicker').startDate;
-        delete $("#calendar").data('daterangepicker').endDate;
-        $(this).val("");
-        $("#checkout-button").addClass('is-disabled');
     });
 
     $("#calendar").data('daterangepicker').show();
