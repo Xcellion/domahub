@@ -62,8 +62,8 @@ $(document).ready(function () {
     var endtime = moment(new_rental_info.endtime);
     var total_duration = endtime.diff(starttime);
 
-    $("#rental-start").text(starttime.format("MMMM DD, YYYY"));
-    $("#rental-end").text(endtime.format("MMMM DD, YYYY"));
+    $("#rental-start").text(starttime.format("MMMM D, YYYY"));
+    $("#rental-end").text(endtime.format("MMMM D, YYYY"));
 
     //total duration of the rental (rounded)
     total_duration = moment.duration(total_duration).as(listing_info.price_type);
@@ -376,22 +376,26 @@ function errorHandler(message){
 
 //handler for successful rental
 function successHandler(rental_id, owner_hash_id){
-    delete_cookies();
-
     //show success message
     var domain_and_path = (new_rental_info.path) ? listing_info.domain_name + "/" + new_rental_info.path : listing_info.domain_name;
-    var starttime_format = moment(new_rental_info.starttime).format("MMMM DD, YYYY");
-    var endtime_format = moment(new_rental_info.endtime).format("MMMM DD, YYYY");
-    showMessage("stripe-success-message", "Hurray! Your rental was successfully created for <strong>" + domain_and_path + "</strong> scheduled to start on <strong>" + starttime_format + "</strong> and end on <strong>" + endtime_format + "</strong>.");
+    var starttime_format = moment(new_rental_info.starttime).format("MMMM D, YYYY");
+    var endtime_format = moment(new_rental_info.endtime).format("MMMM D, YYYY");
+    showMessage("stripe-success-message", "Hurray! Your rental was successfully created for <strong>" + domain_and_path + "</strong>. It is scheduled to start on <strong>" + starttime_format + "</strong> and end on <strong>" + endtime_format + "</strong>.");
 
     //hide certain stuff
     $("#checkout-card-content").remove();
     $("#checkout-success-content").removeClass('is-hidden');
-    $("#edit-dates-button").addClass('is-hidden');
+    $("#edit-dates-button").find("a").text('Rent again').addClass('is-primary');
+
+    //remove click handler for going back to login/customize
+    $(".step-header").off();
+
+    //edit preview button
+    $("#rental-preview-button").attr("href", "https://domahub.com/listing/" + listing_info.domain_name + "/" + rental_id);
 
     //copy ownership url
     if (!user){
-        $("#rental-link-input").val("https://domahub.com/listing/" + listing_info.domain_name + "/rental_id/" + "/" + owner_hash_id);
+        $("#rental-link-input").val("https://domahub.com/listing/" + listing_info.domain_name + "/" + rental_id + "/" + owner_hash_id);
         $("#rental-link-button").on("click", function(){
             $("#rental-link-input").select();
             document.execCommand("copy");
