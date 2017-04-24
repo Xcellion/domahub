@@ -166,9 +166,9 @@
 }
 
 #ticker-wrapper {
-  @include box-shadow(0,8px,15px,$border,0);
+  @include box-shadow(0,8px,20px,$grey-light,0);
   display: block;
-  max-height: 205px;
+  max-height: 195px;
   overflow-y: scroll;
   padding: 8px 5px;
   width: 100%;
@@ -200,61 +200,3 @@
 #calendar-module {
   width: 300px;
 }
-
-// #previous-rentals-cards {
-//   display: flex;
-//   justify-content: space-around;
-//   .card {
-//     margin: 0;
-//     & + .card {
-//       margin-left: 15px;
-//     }
-//   }
-// }
-//
-// #previous-rentals-table {
-//   display: flex;
-//   flex-wrap: wrap;
-//   .previous-rental {
-//     border-radius: $radius;
-//     border: 1px solid $border;
-//     margin-bottom: 10px;
-//     padding: 20px;
-//     &:not(:last-child) {
-//       margin-right: 5px;
-//     }
-//     &:hover {
-//       border-color: $black-secondary;
-//     }
-//   }
-//   .previous-stats {
-//     display: flex;
-//     flex-direction: column;
-//     justify-content: center;
-//     align-items: flex-start;
-//   }
-// }
-//
-// #description-card,
-// #popular-rental-card {
-//   margin-left: auto;
-// }
-//
-// #popular-rental-img {
-//   background: url("/images/loading.svg");
-//   background-repeat: no-repeat;
-//   background-position: center center;
-//   min-width: 250px;
-//   min-height: 250px;
-// }
-//
-// .other-rental{
-//     display: inline-block;
-//     height: 150px;
-//     width: 150px;
-//     background-color: #f9f9f9;
-//     margin-right: 10px;
-//     margin-top: 10px;
-//     border: 1px solid #e5e5e5;
-//     word-break: break-all;
-// }

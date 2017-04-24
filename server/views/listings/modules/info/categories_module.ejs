@@ -1,11 +1,17 @@
 <% if (listing_info.categories) { %>
     <div class="content">
-        <h3 class="is-bold margin-bottom-15">Categories</h3>
-        <div class="is-flex-wrap">
-        <% var categories_array = listing_info.categories.split(" ")
-        for (var i = 0; i < categories_array.length; i++) { %>
-            <span class="tag is-accent"><%= categories_array[i].charAt(0).toUpperCase() + categories_array[i].substr(1); %></span>
-        <% } %>
+      <div class="columns">
+        <div class="column is-3">
+          <h3>Categories</h3>
         </div>
+        <div class="column">
+          <div class="is-flex-wrap">
+            <% var categories_array = listing_info.categories.split(" ")
+            for (var i = 0; i < categories_array.length; i++) { %>
+              <span class="tag is-bordered"><%= categories_array[i].charAt(0).toUpperCase() + categories_array[i].substr(1); %></span>
+              <% } %>
+            </div>
+        </div>
+      </div>
     </div>
 <% } %>
