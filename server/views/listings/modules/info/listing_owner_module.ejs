@@ -1,14 +1,16 @@
 <div class="content">
   <div class="columns">
-    <div class="column is-3">
-      <% if (listing_info.owner_id){ %>
-          <h3>Created By</h3>
-      <% } else { %>
-          <h3>Owned By</h3>
-      <% } %>
+    <div class="column is-2">
+      <p class="is-underlined">
+        <% if (listing_info.owner_id){ %>
+          Created By
+        <% } else { %>
+          Owned By
+        <% } %>
+      </p>
     </div>
     <div class="column">
-      <h3 class="is-bold"><%= listing_info.username %></h3>
+      <p class="is-bold"><%= listing_info.username %></p>
       <p class="is-hidden" id="date_created"></p>
     </div>
   </div>
