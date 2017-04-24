@@ -1,7 +1,7 @@
 //----------------------------------------------------------------------------------------------------------------CALENDAR SET UP
 
 function getExistingEvents(calendar_elem){
-    calendar_elem.off();
+    calendar_elem.off("click");
 
     listing_info.rental_moments = [];
     for (var x = 0; x < listing_info.rentals.length; x++){
@@ -24,6 +24,7 @@ function getExistingEvents(calendar_elem){
     });
 
     setUpCalendar(listing_info);
+    $("#calendar").focus().data('daterangepicker').show();
 }
 
 //function to setup the calendar
@@ -37,6 +38,7 @@ function setUpCalendar(listing_info){
 
     //create a new range picker based on new path rental availability
     var start_date = moment().endOf("hour").add(1, "millisecond");
+    var end_date = moment().endOf(listing_info.price_type).add(1, "millisecond");
 
     $('#calendar').daterangepicker({
         opens: "center",
@@ -49,9 +51,7 @@ function setUpCalendar(listing_info){
         // timePicker: true,
         // timePickerIncrement: 60,
 
-        startDate: start_date,
-        endDate: moment().endOf("hour").add(1, "millisecond").add(1, "hour"),
-        minDate: start_date,
+        minDate: moment().endOf("hour").add(1, "millisecond").add(1, "hour"),
         maxDate: moment().endOf("hour").add(1, "millisecond").add(1, "year"),
 
         isInvalidDate: function(curDate){
@@ -77,17 +77,20 @@ function setUpCalendar(listing_info){
         }
     });
 
-    //clear any selected dates if cancelled
-    $('#calendar').on('cancel.daterangepicker', function(ev, picker) {
-        $(this).val('');
-        $("#checkout-button").addClass('is-disabled');
-    });
-
     //to figure out what events are already existing in given view
     $('#calendar').on('show.daterangepicker', function(ev, picker) {
         //remove any error messages
         $("#calendar-regular-message").removeClass('is-hidden');
         $("#calendar-error-message").addClass('is-hidden');
+    });
+
+    //clear any selected dates if cancelled
+    //for when the calendar is hidden (click outside)
+    $('#calendar').on('cancel.daterangepicker', function(ev, picker) {
+        delete $("#calendar").data('daterangepicker').startDate;
+        delete $("#calendar").data('daterangepicker').endDate;
+        $(this).val("");
+        $("#checkout-button").addClass('is-disabled');
     });
 
     $("#calendar").data('daterangepicker').show();
