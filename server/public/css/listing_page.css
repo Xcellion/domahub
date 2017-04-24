@@ -286,6 +286,9 @@ button[data-balloon] {
   box-shadow: 0 8px 15px 0 rgba(0, 0, 0, 0.12);
   padding: 15px; }
 
+#ticker-module {
+  padding: 0; }
+
 #ticker-wrapper {
   display: block;
   max-height: 250px;
@@ -299,13 +302,9 @@ button[data-balloon] {
   display: flex;
   margin: 0;
   width: 100%;
-  padding: 7.5px 0px; }
+  padding: 7.5px 10px; }
   .ticker-row:not(:last-child) {
     border-bottom: 1px solid rgba(0, 0, 0, 0.12); }
-  .ticker-row:first-child {
-    padding-top: 0; }
-  .ticker-row:last-child {
-    padding-bottom: 0; }
 
 .ticker-icon-color {
   border-right: 2px solid rgba(0, 0, 0, 0.12);
