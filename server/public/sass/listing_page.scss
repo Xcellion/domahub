@@ -166,14 +166,18 @@
 }
 
 .module {
-    @include box-shadow(0,8px,15px,$border,0);
-    padding: 15px;
+  @include box-shadow(0,8px,15px,$border,0);
+  padding:15px;
+}
+
+#ticker-module {
+  padding:0;
 }
 
 #ticker-wrapper {
   @include box-shadow(0,8px,20px,$grey-light,0);
   display: block;
-  max-height: 195px;
+  max-height: 250px;
   overflow-y: scroll;
   width: 100%;
 }
@@ -185,21 +189,16 @@
   display: flex;
   margin: 0;
   width: 100%;
-  padding:7.5px 0px;
+  padding: 10px;
   &:not(:last-child) {
     border-bottom: 1px solid $border;
-  }
-  &:first-child {
-    padding-top: 0;
-  }
-  &:last-child {
-    padding-bottom: 0;
   }
 }
 
 .ticker-icon-color {
   border-right: 2px solid $border;
   margin-right: 10px;
+  min-width: 28px;
 }
 
 .ticker-icon {
