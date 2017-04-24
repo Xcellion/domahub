@@ -1,15 +1,15 @@
 <div class="content">
-  <% if (listing_info.owner_id){ %>
-      <h3 class="is-bold margin-bottom-15">Created By</h3>
-  <% } else { %>
-      <h3 class="is-bold margin-bottom-15">Owned By</h3>
-  <% } %>
-  <article class="media">
-    <div class="media-content">
-      <div class="content">
-        <h3><%= listing_info.username %></h3>
-        <p class="is-flex-wrap is-hidden" id="date_created"></p>
-      </div>
+  <div class="columns">
+    <div class="column is-3">
+      <% if (listing_info.owner_id){ %>
+          <h3>Created By</h3>
+      <% } else { %>
+          <h3>Owned By</h3>
+      <% } %>
     </div>
-  </article>
+    <div class="column">
+      <h3 class="is-bold"><%= listing_info.username %></h3>
+      <p class="is-hidden" id="date_created"></p>
+    </div>
+  </div>
 </div>

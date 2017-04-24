@@ -281,11 +281,11 @@ button[data-balloon] {
     margin-right: 10px; }
 
 #ticker-wrapper {
-  -webkit-box-shadow: 0 8px 15px 0 rgba(0, 0, 0, 0.12);
-  -moz-box-shadow: 0 8px 15px 0 rgba(0, 0, 0, 0.12);
-  box-shadow: 0 8px 15px 0 rgba(0, 0, 0, 0.12);
+  -webkit-box-shadow: 0 8px 20px 0 #d0d0d0;
+  -moz-box-shadow: 0 8px 20px 0 #d0d0d0;
+  box-shadow: 0 8px 20px 0 #d0d0d0;
   display: block;
-  max-height: 205px;
+  max-height: 195px;
   overflow-y: scroll;
   padding: 8px 5px;
   width: 100%; }
