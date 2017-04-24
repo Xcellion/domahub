@@ -4753,6 +4753,10 @@ input:-webkit-autofill {
     border-radius: 3px 0 0 3px; }
   .tabs.is-toggle li:last-child a {
     border-radius: 0 3px 3px 0; }
+  .tabs.is-toggle li.is-attached:first-child a {
+    border-radius: 3px 0 0 0; }
+  .tabs.is-toggle li.is-attached:last-child a {
+    border-radius: 0 3px 0 0; }
   .tabs.is-toggle li.is-active a {
     -webkit-box-shadow: 0 0 0 0 black;
     -moz-box-shadow: 0 0 0 0 black;

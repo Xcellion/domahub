@@ -93,6 +93,11 @@
         border-radius: $radius 0 0 $radius
       &:last-child a
         border-radius: 0 $radius $radius 0
+      &.is-attached
+        &:first-child a
+          border-radius: $radius 0 0 0
+        &:last-child a
+          border-radius: 0 $radius 0 0
       &.is-active
         a
           +box-shadow(0,0,0,$black,0)
