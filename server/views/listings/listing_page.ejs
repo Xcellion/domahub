@@ -43,20 +43,20 @@
       <%# TABS %>
       <div class="tabs is-toggle has-shadow margin-bottom-0">
         <ul>
-          <li class="is-active is-attached">
-            <a id="ticker-tab" class='tab'>
+          <li id="ticker-tab" class="tab is-active is-attached">
+            <a>
                 <span class="icon is-small"><i class="fa fa-history"></i></span>
                 <span>History</span>
             </a>
           </li>
-          <li>
-            <a id="traffic-tab" class='tab'>
+          <li id="traffic-tab" class='tab'>
+            <a>
                 <span class="icon is-small"><i class="fa fa-line-chart"></i></span>
                 <span>Traffic</span>
             </a>
           </li>
-          <li class="is-attached">
-            <a id="info-tab" class='tab'>
+          <li id="info-tab" class="tab is-attached">
+            <a>
                 <span class="icon is-small"><i class="fa fa-info-circle"></i></span>
                 <span>Information</span>
             </a>
@@ -65,25 +65,19 @@
       </div>
 
     <%# EXAMPLES MODULE %>
-    <% if (listing_info.rentals.length > 0){ %>
-        <%- include("modules/ticker_module.ejs", {
-          listing_info : listing_info
-        }); %>
-    <% } %>
+    <%- include("modules/ticker_module.ejs", {
+      listing_info : listing_info
+    }); %>
 
     <%# TRAFFIC MODULE %>
-    <% if (listing_info.traffic){ %>
-        <%- include("modules/traffic_module.ejs", {
-          listing_info : listing_info
-        }); %>
-    <% } %>
+    <%- include("modules/traffic_module.ejs", {
+      listing_info : listing_info
+    }); %>
 
     <%# INFO MODULE %>
-    <% if (listing_info.traffic){ %>
-        <%- include("modules/info_module.ejs", {
-          listing_info : listing_info
-        }); %>
-    <% } %>
+    <%- include("modules/info_module.ejs", {
+      listing_info : listing_info
+    }); %>
 
   </div>
 </section>

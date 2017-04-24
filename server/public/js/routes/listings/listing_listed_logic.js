@@ -1,3 +1,5 @@
+var myChart;
+
 $(document).ready(function() {
 	//typed JS
 	$(function(){
@@ -66,10 +68,19 @@ $(document).ready(function() {
 	//switch tabs
 	$(".tab").on("click", function(){
 		var which_tab = $(this).attr("id").replace("-tab", "");
-		$(".tab").closest("li").removeClass('is-active');
-		$(this).closest("li").addClass('is-active');
+
+		//show the tab
+		$(".tab").removeClass('is-active');
+		$(this).addClass('is-active');
+
+		//show the module
 		$(".module").addClass('is-hidden');
-		$("#" + which_tab + "-module").removeClass('is-hidden').closest("li").addClass('is-active');
+		$("#" + which_tab + "-module").removeClass('is-hidden');
+
+		//initialize chart
+		if (which_tab == "traffic"){
+			createTrafficChart();
+		}
 	})
 
 	editTickerModule();
@@ -161,273 +172,11 @@ function errorHandler(message){
     }
 }
 
-//---------------------------------------------------------------------------------------------------TRAFFIC MODULE
-
-//function to create the traffic chart
-function editTrafficModule(){
-	if (listing_info.traffic){
-
-		//past six months only
-		var traffic_data = [
-			{
-				x: moment().endOf("month").subtract(5, "month").valueOf(),
-				y: 0
-			},
-			{
-				x: moment().endOf("month").subtract(4, "month").valueOf(),
-				y: 0
-			},
-			{
-				x: moment().endOf("month").subtract(3, "month").valueOf(),
-				y: 0
-			},
-			{
-				x: moment().endOf("month").subtract(2, "month").valueOf(),
-				y: 0
-			},
-			{
-				x: moment().endOf("month").subtract(1, "month").valueOf(),
-				y: 0
-			},
-			{
-				x: moment().endOf("month").valueOf(),
-				y: 0
-			},
-		];
-
-		//split traffic into six months
-		for (var x = 0; x < listing_info.traffic.length; x++){
-			for (var y = 0; y < traffic_data.length; y++){
-				if (listing_info.traffic[x].timestamp < traffic_data[y].x){
-					traffic_data[y].y++;
-					break;
-				}
-			}
-		}
-
-		//how many people in the past month ticker
-		$("#views-total").text(wNumb({
-			thousand: ','
-		}).to(traffic_data[0].y));
-
-		var date_created = moment(listing_info.date_created);
-		var last_deleted = 0;
-		var start_month_views = 0;
-		for (var y = 0; y < traffic_data.length; y++){
-			if (listing_info.date_created > traffic_data[y].x){
-				delete traffic_data[y].y;
-				last_deleted = y;
-			}
-		}
-
-		//only if the start month doesnt have 0 views
-		if (traffic_data[last_deleted + 1].y != 0){
-			traffic_data[last_deleted].y = 0;
-		}
-
-		//traffic dataset
-		var traffic_dataset = {
-			label: "Listing Views",
-			xAxisID : "traffic-x",
-			yAxisID : "traffic-y",
-			borderColor: "#3CBC8D",
-			backgroundColor: "#3CBC8D",
-			fill: false,
-			data: traffic_data
-		}
-
-		//create the super dataset containing traffic data and rentals data
-		var all_datasets = [traffic_dataset];
-
-		//create the labels array
-		var monthly_labels = [];
-		for (var y = 0; y < 6; y++){
-			var temp_month = moment().subtract(y, "month").format("MMM");
-			monthly_labels.unshift(temp_month);
-		}
-
-		var last_rental_id;
-
-		//loop through all rentals
-		for (var y = 0; y < listing_info.rentals.length; y++){
-
-			//add to existing dataset
-			if (listing_info.rentals[y].rental_id == last_rental_id){
-				var start_date = listing_info.rentals[y].date;
-				var end_date = start_date + listing_info.rentals[y].duration;
-				all_datasets[all_datasets.length - 1].data[1].x = end_date;
-			}
-			//create new dataset
-			else {
-				var temp_data = [];
-				var start_date = listing_info.rentals[y].date;
-				var end_date = start_date + listing_info.rentals[y].duration;
-
-				//if the end date is after 6 months ago
-				//if the start date is before now
-				if (moment(new Date(end_date)).isAfter(moment().endOf("month").subtract(5, "month").startOf("month"))
-					&& moment(new Date(start_date)).isBefore(moment())
-			){
-					var random_rental_color = randomColor({
-					   format: 'rgba',
-					   hue: "orange",
-					   luminosity: "dark"
-					});
-					var temp_dataset = {
-						label: "Rental #" + listing_info.rentals[y].rental_id,
-						xAxisID : "rentals-x",
-						yAxisID : "traffic-y",
-						pointBackgroundColor: random_rental_color,
-						pointHoverBackgroundColor: random_rental_color,
-						backgroundColor: random_rental_color,
-						data: [
-							{
-								x: start_date,
-								y: listing_info.rentals[y].views
-							},
-							{
-								x: end_date,
-								y: listing_info.rentals[y].views
-							}
-						]
-					}
-					all_datasets.push(temp_dataset);
-					last_rental_id = listing_info.rentals[y].rental_id;
-				}
-			}
-		}
-
-		//create the chart
-		var myChart = new Chart($("#traffic-chart")[0], {
-			type: 'line',
-			data: {
-				labels: monthly_labels,
-				datasets: all_datasets
-			},
-			options: {
-				legend: {
-					display:false
-				},
-				responsive: true,
-				maintainAspectRatio: false,
-				hover: {
-					mode: "index"
-				},
-				tooltips: {
-					titleSpacing: 0,
-					callbacks: {
-						label: function(tooltipItems, data) {
-							if (tooltipItems.datasetIndex == 0 && tooltipItems.yLabel == 0){
-								return "Created";
-							}
-							else if (monthly_labels.indexOf(tooltipItems.xLabel) != -1){
-								return tooltipItems.xLabel
-							}
-							else {
-								return moment(tooltipItems.xLabel).format("MMM DD");
-							}
-						},
-						title: function(tooltipItems, data){
-							if (tooltipItems[0].datasetIndex == 0 && tooltipItems[0].yLabel == 0){
-								return false;
-							}
-							else if (monthly_labels.indexOf(tooltipItems[0].xLabel) != -1){
-								return false;
-							}
-							else {
-								return (tooltipItems[0].index == 0) ? "Rental Start" : "Rental End";
-							}
-						},
-						footer: function(tooltipItems, data){
-							if (tooltipItems[0].datasetIndex == 0 && tooltipItems[0].yLabel == 0){
-								return false;
-							}
-							else {
-								var views_plural = (tooltipItems[0].yLabel == 1) ? " view" : " views"
-								return tooltipItems[0].yLabel + views_plural;
-							}
-						}
-					}
-				},
-				scales: {
-					xAxes: [{
-						id: "rentals-x",
-						display: false,
-						type: "time"
-					}, {
-						id: "traffic-x",
-						type: "category"
-					}],
-					yAxes: [{
-						id: "traffic-y",
-						display: true,
-						type: 'linear',
-						ticks: {
-							beginAtZero: true   // minimum value will be 0.
-						}
-					}]
-				}
-			 }
-		});
-
-		//hide until click to show
-		$("#traffic-module").addClass('is-hidden');
-	}
-}
-
-//---------------------------------------------------------------------------------------------------MORE INFORMATION MODULE
-
-//function for the more information module
-function moreInfoModule(){
-	findOtherDomains();
-
-	//user since date in about owner
-	$("#user-since").text(moment(new Date(listing_info.user_created)).format("MMMM, YYYY"));
-
-	//hide until click to show
-	$("#info-module").addClass('is-hidden');
-}
-
-//other domains by same owner
-function findOtherDomains(){
-	if ($("#otherowner-domains").length > 0){
-		$.ajax({
-			url: "/listing/otherowner",
-			method: "POST",
-			data: {
-				owner_id: listing_info.owner_id,
-				domain_name_exclude: listing_info.domain_name
-			}
-		}).done(function(data){
-			if (data.state == "success"){
-				$("#otherowner-domains").removeClass('is-hidden');
-				$("#otherowner-domains-title").text("Other Websites By " + listing_info.username);
-				for (var x = 0; x < data.listings.length; x++){
-					var cloned_similar_listing = $("#otherowner-domain-clone").clone();
-					cloned_similar_listing.removeAttr("id").removeClass('is-hidden');
-
-					//edit it based on new listing info
-					if (data.listings[x].domain_name.length + 4 + data.listings[x].price_rate.toString().length + data.listings[x].price_type.length > 30){
-						var sliced_domain = data.listings[x].domain_name.slice(0,15) + "...";
-					}
-					else {
-						var sliced_domain = data.listings[x].domain_name;
-					}
-
-					cloned_similar_listing.find(".otherowner-domain-price").text("$" + data.listings[x].price_rate + " / " + data.listings[x].price_type);
-					cloned_similar_listing.find(".otherowner-domain-name").text(sliced_domain).attr("href", "/listing/" + data.listings[x].domain_name);
-					$("#otherowner-domain-table").append(cloned_similar_listing);
-				}
-			}
-		});
-	}
-}
-
 //---------------------------------------------------------------------------------------------------RENTAL TICKER MODULE
 
 //function to create popular rentals module
 function editTickerModule(){
-	if (listing_info.rentals.length){
+	if (listing_info.rentals.length > 0){
 		var total_to_show = listing_info.rentals.length;
 		var already_shown = [];
 		var x = 0;
@@ -539,6 +288,9 @@ function editTickerModule(){
 			}
 		}
 	}
+	else {
+		$("#ticker-empty").removeClass('is-hidden');
+	}
 }
 
 //function to create popular rental
@@ -579,6 +331,265 @@ function aggregateDateDuration(rental_id){
 		}
 	}
 	return Math.ceil(moment.duration(totalDuration).as(listing_info.price_type)) + " " + listing_info.price_type.capitalizeFirstLetter() + " Rental";
+}
+
+//---------------------------------------------------------------------------------------------------TRAFFIC MODULE
+
+//function to create the traffic chart module
+function editTrafficModule(){
+	// //how many people in the past month
+	// $("#views-total").text(wNumb({
+	// 	thousand: ','
+	// }).to(traffic_data[0].y));
+}
+
+//function to initiate chart only if uninitiated
+function createTrafficChart(){
+	if (!myChart && listing_info.traffic){
+		//past six months only
+		var traffic_data = [
+			{
+				x: moment().endOf("month").subtract(5, "month").valueOf(),
+				y: 0
+			},
+			{
+				x: moment().endOf("month").subtract(4, "month").valueOf(),
+				y: 0
+			},
+			{
+				x: moment().endOf("month").subtract(3, "month").valueOf(),
+				y: 0
+			},
+			{
+				x: moment().endOf("month").subtract(2, "month").valueOf(),
+				y: 0
+			},
+			{
+				x: moment().endOf("month").subtract(1, "month").valueOf(),
+				y: 0
+			},
+			{
+				x: moment().endOf("month").valueOf(),
+				y: 0
+			},
+		];
+
+		//split traffic into six months
+		for (var x = 0; x < listing_info.traffic.length; x++){
+			for (var y = 0; y < traffic_data.length; y++){
+				if (listing_info.traffic[x].timestamp < traffic_data[y].x){
+					traffic_data[y].y++;
+					break;
+				}
+			}
+		}
+
+		var date_created = moment(listing_info.date_created);
+		var last_deleted = 0;
+		var start_month_views = 0;
+		for (var y = 0; y < traffic_data.length; y++){
+			if (listing_info.date_created > traffic_data[y].x){
+				delete traffic_data[y].y;
+				last_deleted = y;
+			}
+		}
+
+		//only if the start month doesnt have 0 views
+		if (traffic_data[last_deleted + 1].y != 0){
+			traffic_data[last_deleted].y = 0;
+		}
+
+		//traffic dataset
+		var traffic_dataset = {
+			label: "Website Views",
+			xAxisID : "traffic-x",
+			yAxisID : "traffic-y",
+			borderColor: "#3CBC8D",
+			backgroundColor: "#3CBC8D",
+			fill: false,
+			data: traffic_data
+		}
+
+		//create the super dataset containing traffic data and rentals data
+		var all_datasets = [traffic_dataset];
+
+		//create the labels array
+		var monthly_labels = [];
+		for (var y = 0; y < 6; y++){
+			var temp_month = moment().subtract(y, "month").format("MMM");
+			monthly_labels.unshift(temp_month);
+		}
+
+		var last_rental_id;
+
+		//loop through all rentals
+		for (var y = 0; y < listing_info.rentals.length; y++){
+
+			//add to existing dataset
+			if (listing_info.rentals[y].rental_id == last_rental_id){
+				var start_date = listing_info.rentals[y].date;
+				var end_date = start_date + listing_info.rentals[y].duration;
+				all_datasets[all_datasets.length - 1].data[1].x = end_date;
+			}
+			//create new dataset
+			else {
+				var temp_data = [];
+				var start_date = listing_info.rentals[y].date;
+				var end_date = start_date + listing_info.rentals[y].duration;
+
+				//if the end date is after 6 months ago
+				//if the start date is before now
+				if (moment(new Date(end_date)).isAfter(moment().endOf("month").subtract(5, "month").startOf("month"))
+					&& moment(new Date(start_date)).isBefore(moment())
+			){
+					var random_rental_color = randomColor({
+					   format: 'rgba',
+					   hue: "orange",
+					   luminosity: "dark"
+					});
+					var temp_dataset = {
+						label: "Rental #" + listing_info.rentals[y].rental_id,
+						xAxisID : "rentals-x",
+						yAxisID : "traffic-y",
+						pointBackgroundColor: random_rental_color,
+						pointHoverBackgroundColor: random_rental_color,
+						backgroundColor: random_rental_color,
+						data: [
+							{
+								x: start_date,
+								y: listing_info.rentals[y].views
+							},
+							{
+								x: end_date,
+								y: listing_info.rentals[y].views
+							}
+						]
+					}
+					all_datasets.push(temp_dataset);
+					last_rental_id = listing_info.rentals[y].rental_id;
+				}
+			}
+		}
+
+		//create the chart
+		myChart = new Chart($("#traffic-chart"), {
+			type: 'line',
+			data: {
+				labels: monthly_labels,
+				datasets: all_datasets
+			},
+			options: {
+				animation : false,
+				legend: {
+					display:false
+				},
+				responsive: true,
+				maintainAspectRatio: true,
+				hover: {
+					mode: "index"
+				},
+				tooltips: {
+					titleSpacing: 0,
+					callbacks: {
+						label: function(tooltipItems, data) {
+							if (tooltipItems.datasetIndex == 0 && tooltipItems.yLabel == 0){
+								return "Created";
+							}
+							else if (monthly_labels.indexOf(tooltipItems.xLabel) != -1){
+								return tooltipItems.xLabel
+							}
+							else {
+								return moment(tooltipItems.xLabel).format("MMM DD");
+							}
+						},
+						title: function(tooltipItems, data){
+							if (tooltipItems[0].datasetIndex == 0 && tooltipItems[0].yLabel == 0){
+								return false;
+							}
+							else if (monthly_labels.indexOf(tooltipItems[0].xLabel) != -1){
+								return false;
+							}
+							else {
+								return (tooltipItems[0].index == 0) ? "Rental Start" : "Rental End";
+							}
+						},
+						footer: function(tooltipItems, data){
+							if (tooltipItems[0].datasetIndex == 0 && tooltipItems[0].yLabel == 0){
+								return false;
+							}
+							else {
+								var views_plural = (tooltipItems[0].yLabel == 1) ? " view" : " views"
+								return tooltipItems[0].yLabel + views_plural;
+							}
+						}
+					}
+				},
+				scales: {
+					xAxes: [{
+						id: "rentals-x",
+						display: false,
+						type: "time"
+					}, {
+						id: "traffic-x",
+						type: "category"
+					}],
+					yAxes: [{
+						id: "traffic-y",
+						display: true,
+						type: 'linear',
+						ticks: {
+							beginAtZero: true   // minimum value will be 0.
+						}
+					}]
+				}
+			 }
+		});
+	}
+}
+
+//---------------------------------------------------------------------------------------------------MORE INFORMATION MODULE
+
+//function for the more information module
+function moreInfoModule(){
+	findOtherDomains();
+
+	//user since date in about owner
+	$("#user-since").text(moment(new Date(listing_info.user_created)).format("MMMM, YYYY"));
+}
+
+//other domains by same owner
+function findOtherDomains(){
+	if ($("#otherowner-domains").length > 0){
+		$.ajax({
+			url: "/listing/otherowner",
+			method: "POST",
+			data: {
+				owner_id: listing_info.owner_id,
+				domain_name_exclude: listing_info.domain_name
+			}
+		}).done(function(data){
+			if (data.state == "success"){
+				$("#otherowner-domains").removeClass('is-hidden');
+				$("#otherowner-domains-title").text("Other Websites By " + listing_info.username);
+				for (var x = 0; x < data.listings.length; x++){
+					var cloned_similar_listing = $("#otherowner-domain-clone").clone();
+					cloned_similar_listing.removeAttr("id").removeClass('is-hidden');
+
+					//edit it based on new listing info
+					if (data.listings[x].domain_name.length + 4 + data.listings[x].price_rate.toString().length + data.listings[x].price_type.length > 30){
+						var sliced_domain = data.listings[x].domain_name.slice(0,15) + "...";
+					}
+					else {
+						var sliced_domain = data.listings[x].domain_name;
+					}
+
+					cloned_similar_listing.find(".otherowner-domain-price").text("$" + data.listings[x].price_rate + " / " + data.listings[x].price_type);
+					cloned_similar_listing.find(".otherowner-domain-name").text(sliced_domain).attr("href", "/listing/" + data.listings[x].domain_name);
+					$("#otherowner-domain-table").append(cloned_similar_listing);
+				}
+			}
+		});
+	}
 }
 
 //to cap the first letter
