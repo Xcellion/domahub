@@ -21,9 +21,6 @@ $(document).ready(function() {
 
 		//remove the disabled on check availability button
 		$("#check-avail").removeClass('is-disabled');
-
-		//show calendar
-		$("#calendar").data('daterangepicker').show();
 	}).on("focusout", function(){
 		if ($("#typed-slash").val() == ""){
 			$("#input-tooltip").removeClass('is-hidden');
@@ -55,6 +52,9 @@ $(document).ready(function() {
 		e.preventDefault();
 		$("#desc-avail-module").addClass('is-hidden');
 		$("#calendar-module").removeClass('is-hidden');
+
+		//show calendar
+		getExistingEvents($(this));
 	});
 
 	//submit times (redirect to checkout)
@@ -62,9 +62,12 @@ $(document).ready(function() {
 		submitTimes($(this));
 	});
 
+	//initiate calendar based on current path value, prevent typing
 	$("#calendar").on("click", function(){
         getExistingEvents($(this));
-    });
+    }).on("keydown", function(e){
+		e.preventDefault();
+	});
 
 	//---------------------------------------------------------------------------------------------------MODULES AND TABS
 

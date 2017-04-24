@@ -414,11 +414,17 @@ module.exports = {
 
                 //get listing rental times
                 getListingRentalTimes(req, res, result.info[0], function(){
+                    console.log("F: Getting all rental information for domain: " + req.params.domain_name + "...");
 
                     //get the traffic of the listing
                     Data.getListingTraffic(req.params.domain_name, function(result){
+                        console.log("F: Getting all Alexa information for domain: " + req.params.domain_name + "...");
+
                         req.session.listing_info.traffic = result.info;
-                        next();
+                        alexaData.AlexaWebData(req.params.domain_name, function(error, result) {
+                            req.session.listing_info.alexa = result;
+                            next();
+                        });
                     });
                 });
             }
@@ -427,12 +433,7 @@ module.exports = {
 
     //get alexa traffic info
     getListingAlexa : function(req, res, next){
-        alexaData.AlexaWebData(req.params.domain_name, function(error, result) {
-            req.session.listing_info.alexa = result;
-            res.send({
-                listing_info: req.session.listing_info
-            });
-        });
+
     },
 
     //gets the rental/listing info
