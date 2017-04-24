@@ -68,9 +68,8 @@ listing_model.prototype.crossCheckRentalTime = function(domain_name, path, start
 				rentals.path = ? AND \
 				rentals.status = 1 AND \
 				listings.deleted IS NULL AND ((\
-				? BETWEEN rental_times.date AND rental_times.date + rental_times.duration) OR ( \
-				? BETWEEN rental_times.date AND rental_times.date + rental_times.duration) OR ( \
-				? <= rental_times.date AND ? >= rental_times.date + rental_times.duration))'
+				? < rental_times.date + rental_times.duration) AND ( \
+				? > rental_times.date))'
 	listing_query(query, "Failed to check times for " + domain_name + "/" + path + "!", callback, [domain_name, path, starttime, endtime, starttime, endtime]);
 }
 
