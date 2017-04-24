@@ -290,8 +290,11 @@ button[data-balloon] {
   padding: 0; }
 
 #ticker-wrapper {
+  -webkit-box-shadow: 0 8px 20px 0 #d0d0d0;
+  -moz-box-shadow: 0 8px 20px 0 #d0d0d0;
+  box-shadow: 0 8px 20px 0 #d0d0d0;
   display: block;
-  max-height: 250px;
+  max-height: 195px;
   overflow-y: scroll;
   width: 100%; }
 
