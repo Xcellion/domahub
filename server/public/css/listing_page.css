@@ -171,7 +171,7 @@ button[data-balloon] {
 [data-balloon-length="fit"]:after {
   width: 100%; }
 
-#domain-desc {
+.description-text {
   max-width: 500px; }
 
 #domain-display h1 {
