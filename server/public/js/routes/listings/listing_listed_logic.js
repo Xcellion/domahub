@@ -54,25 +54,37 @@ $(document).ready(function() {
 
 	//typed JS
 	$(function(){
-		$("#typed-slash").typed({
-			strings: listing_info.paths.split(","),
+		var typed_options = {
 			typeSpeed: 40,
-			shuffle: true,
-			loop: true,
 			attr: "placeholder"
-		});
+		};
+		if (listing_info.paths == ""){
+			typed_options.strings = [
+				"thing",
+				"something",
+				"ANYTHING"
+			]
+		}
+		else {
+			typed_options.strings = listing_info.paths.split(",");
+			typed_options.loop = true;
+			typed_options.shuffle = true;
+		}
+		$("#typed-slash").typed(typed_options);
 	});
 
 	//---------------------------------------------------------------------------------------------------CALENDAR AND TIMES
 
-	//show calendar
+	//show calendar or unavailble description
 	$("#check-avail").on("click", function(e) {
 		e.preventDefault();
 		$("#desc-avail-module").addClass('is-hidden');
-		$("#calendar-module").removeClass('is-hidden');
+		$(".post-description-module").removeClass('is-hidden');
 
-		//show calendar
-		getExistingEvents($(this));
+		if (listing_info.status == 1){
+			//show calendar
+			getExistingEvents($(this));
+		}
 	});
 
 	//submit times (redirect to checkout)

@@ -3,7 +3,7 @@
     <div class="container">
 
         <span id="price" class="tag is-bold is-medium is-bordered">
-          <% if (listing_info.status == 1 && listing_info.price_rate > 0) { %>
+          <% if (listing_info.price_rate > 0) { %>
               $<%= listing_info.price_rate %> Per <%= listing_info.price_type.charAt(0).toUpperCase() + listing_info.price_type.substr(1) %>
           <% } else if (listing_info.status == 1 && listing_info.price_rate == 0){ %>
               Free!
@@ -30,10 +30,14 @@
             listing_info : listing_info
         }); %>
 
-        <%# CALENDAR MODULE %>
-        <%- include("modules/calendar_module.ejs", {
-            listing_info : listing_info
-        }); %>
+        <% if (listing_info.status == 1) { %>
+            <%# CALENDAR MODULE %>
+            <%- include("modules/calendar_module.ejs"); %>
+        <% } else { %>
+            <%# LISTED, BUT TURNED OFF (UNAVAILABLE MODULE) %>
+            <%- include("modules/unavailable_module.ejs"); %>
+        <% } %>
+
     </div>
 </section>
 
