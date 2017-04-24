@@ -47,11 +47,11 @@ function findRelatedDomains(){
 	if ($("#similar-domains").length > 0){
 		if (listing_info.categories){
 			var categories_to_post = listing_info.categories;
-			$("#similar-domains-title").text('Similar Listings');
+			$("#similar-domains-title").text('Similar Websites');
 		}
 		else {
 			var categories_to_post = "";
-			$("#similar-domains-title").text('Other Listings');
+			$("#similar-domains-title").text('Other Websites');
 		}
 
 		$.ajax({

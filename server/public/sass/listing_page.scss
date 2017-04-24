@@ -125,34 +125,37 @@
   }
 }
 
-// .alexa-stat {
-//   display: flex;
-//   flex-direction: column;
-//   .header {
-//     align-items: center;
-//     border: 1px solid $border;
-//     border-bottom: none;
-//     border-radius: $radius $radius 0 0;
-//     display: flex;
-//     justify-content: space-between;
-//     padding: 5px 8px;
-//     p {
-//       font-weight: 700;
-//       margin-bottom: 0 !important;
-//     }
-//     &:hover {
-//       cursor: pointer;
-//     }
-//   }
-//   p {
-//     &:last-child {
-//       border-radius: 0 0 $radius $radius;
-//       border-top: none;
-//       border: 1px solid $border;
-//       padding: 5px 8px;
-//     }
-//   }
-// }
+.alexa-stat {
+  display: flex;
+  flex-direction: column;
+  &:not(:last-child) {
+    margin-bottom: 10px;
+  }
+  .header {
+    align-items: center;
+    border: 1px solid $border;
+    border-bottom: none;
+    border-radius: $radius $radius 0 0;
+    display: flex;
+    justify-content: space-between;
+    padding: 5px 8px;
+    p {
+      font-weight: 700;
+      margin-bottom: 0 !important;
+    }
+    &:hover {
+      cursor: pointer;
+    }
+  }
+  p {
+    &:last-child {
+      border-radius: 0 0 $radius $radius;
+      border-top: none;
+      border: 1px solid $border;
+      padding: 5px 8px;
+    }
+  }
+}
 
 .is-flex-wrap {
   display: flex;
@@ -166,8 +169,8 @@
 }
 
 .module {
-  @include box-shadow(0,8px,15px,$border,0);
-  padding:15px;
+  @include box-shadow(0,8px,20px,$border,0);
+  padding: 15px;
 }
 
 #ticker-module {
@@ -175,7 +178,6 @@
 }
 
 #ticker-wrapper {
-  @include box-shadow(0,8px,20px,$grey-light,0);
   display: block;
   max-height: 250px;
   overflow-y: scroll;
