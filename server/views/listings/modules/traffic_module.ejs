@@ -1,5 +1,15 @@
 <script src="/js/lib/chart.min.js" type="text/javascript"></script>
 <script src="/js/lib/randomColor.js" type="text/javascript"></script>
-<div id="traffic-module" class="is-hidden no-border-radius module">
-    <canvas id="traffic-chart"></canvas>
+<div id="traffic-module" class="is-hidden module">
+  <div class="columns">
+    <div class="column is-8">
+      <canvas id="traffic-chart"></canvas>
+    </div>
+
+    <%# ALEXA MODULE %>
+    <%- include("traffic/alexa_module.ejs", {
+      listing_info : listing_info
+    }); %>
+    
+  </div>
 </div>

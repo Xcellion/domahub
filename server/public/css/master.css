@@ -3952,7 +3952,7 @@ input:-webkit-autofill {
 
 @media screen and (max-width: 768px) {
   .level-left + .level-right {
-    margin-top: 20px; } }
+    margin-top: 10px; } }
 
 @media screen and (min-width: 769px) {
   .level-left {
@@ -3968,6 +3968,9 @@ input:-webkit-autofill {
 .level {
   align-items: center;
   justify-content: space-between; }
+  .level.has-border {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+    padding: 5px 0; }
   .level.filter-panel {
     justify-content: flex-start; }
     .level.filter-panel .filter-local {
