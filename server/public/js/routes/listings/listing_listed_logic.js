@@ -1,31 +1,26 @@
 var myChart;
+var myPath;
 
 $(document).ready(function() {
-	//typed JS
-	$(function(){
-		$("#typed-slash").typed({
-			strings: listing_info.paths.split(","),
-			typeSpeed: 40,
-			shuffle: true,
-			loop: true,
-			attr: "placeholder"
-		});
-	});
+
+	//---------------------------------------------------------------------------------------------------TYPED PATH
 
 	//focus to hide the click me message
 	$("#typed-slash").on("focus", function(){
+		//remove the disabled on check availability button
+		$("#check-avail").removeClass('is-disabled');
 		$("#input-tooltip").addClass('is-hidden');
 
 		//select all on existing path
 		$("#typed-slash").select();
-
-		//remove the disabled on check availability button
-		$("#check-avail").removeClass('is-disabled');
 	}).on("focusout", function(){
 		if ($("#typed-slash").val() == ""){
 			$("#input-tooltip").removeClass('is-hidden');
 		}
 	});
+
+	//tooltip appears too fast, hide until the above handler is in place.
+	$("#input-tooltip").fadeIn('slow');
 
 	//function for input text validation and tooltip change
 	$("#typed-slash").on("keypress", function(e) {
@@ -40,12 +35,35 @@ $(document).ready(function() {
 		} else {
 			$("#input-tooltip-error").addClass("is-hidden");
 		}
-	}).on('keydown', function(e){
+	}).on('keyup', function(e){
 		var validChar = /^[0-9a-zA-Z]+$/;
 		if ($("#typed-slash").val().match(validChar)){
 			$("#input-tooltip-error").addClass("is-hidden");
 		}
+
+		//changed path, so change calendar
+		if (myPath != $(this).val()){
+			//remove any existing date range pickers
+			if ($("#calendar").data('daterangepicker')){
+				$("#calendar").data('daterangepicker').remove();
+			}
+			$("#calendar").val("");
+			$("#checkout-button").addClass('is-disabled');
+		}
 	});
+
+	//typed JS
+	$(function(){
+		$("#typed-slash").typed({
+			strings: listing_info.paths.split(","),
+			typeSpeed: 40,
+			shuffle: true,
+			loop: true,
+			attr: "placeholder"
+		});
+	});
+
+	//---------------------------------------------------------------------------------------------------CALENDAR AND TIMES
 
 	//show calendar
 	$("#check-avail").on("click", function(e) {
