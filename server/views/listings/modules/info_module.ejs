@@ -1,22 +1,27 @@
 <div id="info-module" class="is-hidden module">
 
-    <%# SIMILAR DOMAINS MODULE %>
-    <%- include("info/similar_domains_module.ejs", {
-      listing_info : listing_info
-    }); %>
-
-    <%# CATEGORIES MODULE %>
-    <%- include("info/categories_module.ejs", {
-      listing_info : listing_info
-    }); %>
+    <div class="columns">
+      <div class="column is-4">
+        <%# OTHER BY SAME OWNER DOMAINS MODULE %>
+        <%- include("info/same_owner_listings_module.ejs", {
+          listing_info : listing_info
+        }); %>
+      </div>
+      <div class="column is-4">
+        <%# CATEGORIES MODULE %>
+        <%- include("info/categories_module.ejs", {
+          listing_info : listing_info
+        }); %>
+      </div>
+    </div>
 
     <%# LISTING OWNER MODULE %>
-    <%- include("info/listing_owner_module.ejs", {
+    <%# include("info/listing_owner_module.ejs", {
       listing_info : listing_info
     }); %>
 
-    <%# OTHER BY SAME OWNER DOMAINS MODULE %>
-    <%- include("info/same_owner_listings_module.ejs", {
+    <%# SIMILAR DOMAINS MODULE %>
+    <%# include("info/similar_domains_module.ejs", {
       listing_info : listing_info
     }); %>
 

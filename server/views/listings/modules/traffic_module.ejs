@@ -5,69 +5,11 @@
     <div class="column is-8">
       <canvas id="traffic-chart"></canvas>
     </div>
-    <div class="column is-4">
-      <div class="content listing-module">
-        <h2 class="margin-bottom-10">Traffic Details</h2>
-        <p>
-            For more information, please visit <a title="Link to Alexa website" target="_blank" class='is-accent' href="http://www.alexa.com/siteinfo/<%= listing_info.domain_name %>">Alexa.com</a>
-        </p>
-        <div class="columns">
-          <div class="column is-3">
-            <div class="alexa-stat">
-              <div class="header" data-balloon-length="medium" data-balloon="Rank is calculated using a combination of average daily visitors to this site and pageviews on this site over the past 3 months."
-               data-balloon-pos="up">
-                <p>Global Rank</p>
-                 <span class="icon is-small">
-                   <i class="fa fa-question-circle"></i>
-                 </span>
-              </div>
-              <p><%= (listing_info.alexa.globalRank == "-" || !listing_info.alexa.globalRank) ? "Not enough data." : listing_info.alexa.globalRank %></p>
-            </div>
-          </div>
-          <div class="column is-3">
-            <div class="alexa-stat">
-              <div class="header"
-               data-balloon-length="medium" data-balloon="Estimated daily time on site (mm:ss) per visitor to the site." data-balloon-pos="up">
-                <p>Time on Site</p>
-                <span class="icon is-small">
-                  <i class="fa fa-question-circle"></i>
-                </span>
-              </div>
-              <p>
-                <%= (listing_info.alexa.engagement.dailyTimeOnSite == "-" || !listing_info.alexa.engagement.dailyTimeOnSite) ? "Not enough data." : listing_info.alexa.engagement.dailyTimeOnSite %>
-              </p>
-            </div>
-          </div>
-          <div class="column is-3">
-            <div class="alexa-stat">
-              <div class="header"
-               data-balloon-length="medium" data-balloon="Estimated daily unique pageviews per visitor on the site." data-balloon-pos="up">
-                <p>Page Views</p>
-                <span class="icon is-small">
-                  <i class="fa fa-question-circle"></i>
-                </span>
-              </div>
-              <p>
-                <%= (listing_info.alexa.engagement.dailyPageViewPerVisitor == "-" || !listing_info.alexa.engagement.dailyPageViewPerVisitor) ? "Not enough data." : listing_info.alexa.engagement.dailyPageViewPerVisitor %>
-              </p>
-            </div>
-          </div>
-          <div class="column is-3">
-            <div class="alexa-stat">
-              <div class="header" data-balloon-length="medium" data-balloon="Percentage of visits to the site that consist of a single pageview."
-              data-balloon-pos="up">
-                <p>Bounce Rate</p>
-                <span class="icon is-small">
-                  <i class="fa fa-question-circle"></i>
-                </span>
-              </div>
-              <p>
-                <%= (listing_info.alexa.engagement.bounceRate == "-" || !listing_info.alexa.engagement.bounceRate) ? "Not enough data." : listing_info.alexa.engagement.bounceRate %>
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+
+    <%# ALEXA MODULE %>
+    <%- include("traffic/alexa_module.ejs", {
+      listing_info : listing_info
+    }); %>
+    
   </div>
 </div>

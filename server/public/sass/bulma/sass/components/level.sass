@@ -20,7 +20,7 @@
   // Responsiveness
   +mobile
     & + .level-right
-      margin-top: 20px
+      margin-top: 10px
   +tablet
     align-items: center
     display: flex
@@ -36,6 +36,10 @@
   @extend .block
   align-items: center
   justify-content: space-between
+  &.has-border
+    border-bottom: 1px solid $border
+    padding: 5px 0
+  // for listing hub
   &.filter-panel
     justify-content: flex-start
     // each filter tab
