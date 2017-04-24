@@ -570,7 +570,7 @@ function findOtherDomains(){
 		}).done(function(data){
 			if (data.state == "success"){
 				$("#otherowner-domains").removeClass('is-hidden');
-				$("#otherowner-domains-title").text("Other Websites By " + listing_info.username);
+				$("#otherowner-domains-title").text("More from " + listing_info.username);
 				for (var x = 0; x < data.listings.length; x++){
 					var cloned_similar_listing = $("#otherowner-domain-clone").clone();
 					cloned_similar_listing.removeAttr("id").removeClass('is-hidden');

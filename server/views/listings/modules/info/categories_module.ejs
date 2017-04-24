@@ -1,8 +1,8 @@
 <% if (listing_info.categories) { %>
     <div class="content">
       <div class="columns">
-        <div class="column is-3">
-          <h3>Categories</h3>
+        <div class="column is-2">
+          <p class="is-underlined">Categories</p>
         </div>
         <div class="column">
           <div class="is-flex-wrap">
@@ -10,7 +10,7 @@
             for (var i = 0; i < categories_array.length; i++) { %>
               <span class="tag is-bordered"><%= categories_array[i].charAt(0).toUpperCase() + categories_array[i].substr(1); %></span>
               <% } %>
-            </div>
+            </div> 
         </div>
       </div>
     </div>
