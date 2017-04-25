@@ -126,10 +126,69 @@
   }
 }
 
+.button-wrapper {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 25px;
+  &.is-left-aligned {
+    justify-content: flex-start;
+  }
+  .button {
+    &:not(:last-child) {
+      margin-right: 10px;
+    }
+  }
+  @include mobile-456px {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    .button {
+      &:not(:last-child) {
+        margin-right: 0;
+        margin-bottom: 10px;
+      }
+    }
+  }
+}
+
 .dom-trait {
   max-width: 300px;
+  @include desktop {
+    height: 188px;
+  }
+  @include tablet-only {
+    height: 236px;
+  }
   @include mobile {
     margin: auto;
+  }
+}
+
+.hiw {
+  @include desktop {
+    height: 212px;
+  }
+  @include tablet-only {
+    height: 272px;
+  }
+}
+
+.dom-ben {
+  @include desktop {
+    height: 188px;
+  }
+  @include tablet-only {
+    height: 224px;
+  }
+}
+
+.options {
+  @include desktop {
+    height: 212px;
+  }
+  @include tablet-only {
+    height: 248px;
   }
 }
 
@@ -209,7 +268,7 @@
   }
 }
 
-.step-box {
+.flex-align-center {
   display: flex;
   align-items: center;
   justify-content: flex-start;

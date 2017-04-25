@@ -5,7 +5,7 @@
 
       </div>
       <div class="content has-text-centered">
-        <a tabindex="1" href="http://<%= listing_info.domain_name %>">
+        <a tabindex="0" href="http://<%= listing_info.domain_name %>">
         <h1 id="domain-display" class="title is-1 is-bold is-primary is-inline-block">
         <%= listing_info.domain_name %></h1></a>
         <h2 class="subtitle is-4 is-white margin-top-15">
@@ -69,7 +69,7 @@
                   </div>
                 </div>
                 <div class="level-right">
-                  <a  target="_blank" id="popular-rental-preview" href="/listing/<%= listing_info.domain_name + '/' + popular_rental.rental_id %>" class="button is-primary level-item">
+                  <a  target="_blank" rel="noopener" id="popular-rental-preview" href="/listing/<%= listing_info.domain_name + '/' + popular_rental.rental_id %>" class="button is-primary level-item">
                     <span>View</span>
                     <span class="icon is-small">
                       <i class="fa fa-external-link-square"></i>
@@ -91,7 +91,7 @@
                       <h3 class="previous-listing-title">
                         <span class='previous-rental-duration'></span> · <span class='previous-rental-views'></span> Views
                       </h3>
-                      <a target="_blank" class="button is-primary is-inverted">
+                      <a target="_blank" rel="noopener" class="button is-primary is-inverted">
                           <span>View</span>
                           <span class="icon is-small">
                             <i class="fa fa-external-link-square"></i>
@@ -117,7 +117,7 @@
                               <h3 class="previous-listing-title">
                                 <span data-rental_id="<%= temp_rental.rental_id %>" class='previous-rental-duration'></span> · <%= temp_rental.views %> Views
                               </h3>
-                              <a target="_blank" href="/listing/<%= listing_info.domain_name + '/' + temp_rental.rental_id%>" class="button is-primary is-inverted">
+                              <a target="_blank" rel="noopener" href="/listing/<%= listing_info.domain_name + '/' + temp_rental.rental_id%>" class="button is-primary is-inverted">
                                   <span>View</span>
                                   <span class="icon is-small">
                                     <i class="fa fa-external-link-square"></i>
@@ -162,7 +162,7 @@
                                 Click the button below to see available rental dates.
                             </p>
                         </div>
-                        <a id="start-card-button" tabindex="1" class="card-button-next button no-shadow is-medium is-fullwidth is-primary">Rent Now</a>
+                        <a id="start-card-button" tabindex="0" class="card-button-next button no-shadow is-medium is-fullwidth is-primary">Rent Now</a>
                     </div>
 
                     <div id="calendar-card-content" class="is-hidden checkout-card-content">
@@ -171,11 +171,11 @@
                         </div>
                         <div id="calendar" class=""></div>
                         <div class="calendar-control margin-top-10">
-                            <a tabindex="1" class="button is-danger is-disabled no-shadow" id="remove_events">Clear</a>
-                            <a tabindex="1" class="button no-shadow is-disabled" id="today-button">Today</a>
-                            <a tabindex="1" class="button no-shadow" id="next-available-button">Next Available</a>
+                            <a tabindex="0" class="button is-danger is-disabled no-shadow" id="remove_events">Clear</a>
+                            <a tabindex="0" class="button no-shadow is-disabled" id="today-button">Today</a>
+                            <a tabindex="0" class="button no-shadow" id="next-available-button">Next Available</a>
                         </div>
-                        <a tabindex="1" class="card-button-next button no-shadow is-fullwidth is-primary margin-top-10">Next</a>
+                        <a tabindex="0" class="card-button-next button no-shadow is-fullwidth is-primary margin-top-10">Next</a>
                     </div>
 
                     <div id="address-card-content" class="is-hidden checkout-card-content">
@@ -189,11 +189,11 @@
                             <p id="address-error-message"></p>
                         </div>
                         <p class="control is-expanded">
-                            <input tabindex="1" autofocus required class="input is-expanded" id="address_form_input" type="url" placeholder="Enter a link to your content">
+                            <input tabindex="0" autofocus required class="input is-expanded" id="address_form_input" type="url" placeholder="Enter a link to your content">
                         </p>
                         <p class="calendar-control margin-top-10">
-                            <a tabindex="1" class="card-button-prev button no-shadow">Back</a>
-                            <a tabindex="1" class="card-button-next button is-primary no-shadow">Checkout</a>
+                            <a tabindex="0" class="card-button-prev button no-shadow">Back</a>
+                            <a tabindex="0" class="card-button-next button is-primary no-shadow">Checkout</a>
                         </p>
                     </div>
 
@@ -211,12 +211,12 @@
                             <form>
                                 <label id="new-user-email-error" class="label">Email Address</label>
                                 <p class="control is-expanded has-addons">
-                                    <input tabindex="1" id="new_user_email" class="input is-expanded is-medium" placeholder="This is optional" type="email" />
+                                    <input tabindex="0" id="new_user_email" class="input is-expanded is-medium" placeholder="This is optional" type="email" />
                                 </p>
                             </form>
                             <p class="calendar-control margin-top-10">
-                                <a tabindex="1" class="card-button-prev button no-shadow">Back</a>
-                                <a tabindex="1" class="card-button-next button is-primary no-shadow">Checkout</a>
+                                <a tabindex="0" class="card-button-prev button no-shadow">Back</a>
+                                <a tabindex="0" class="card-button-next button is-primary no-shadow">Checkout</a>
                             </p>
                         </div>
                     <% } %>
@@ -230,33 +230,33 @@
                         <form id="stripe-form" autocomplete="on">
                             <label class="label">Credit or Debit Card Number</label>
                             <p class="control has-icon">
-                                <input tabindex="1" id="cc-num" data-stripe="number" class="input stripe-input is-medium" type="tel" placeholder="•••• •••• •••• ••••" autocomplete="cc-number"/>
+                                <input tabindex="0" id="cc-num" data-stripe="number" class="input stripe-input is-medium" type="tel" placeholder="•••• •••• •••• ••••" autocomplete="cc-number"/>
                                 <i id="cc-icon" class="fa fa-credit-card"></i>
                             </p>
                             <div class="control is-grouped">
                                 <p class="control is-expanded">
                                     <label class="label">Expiration Date</label>
-                                    <input tabindex="1" id="cc-exp" maxlength="7" data-stripe="exp" class="input stripe-input is-medium" type="tel" placeholder="•• / ••" autocomplete="cc-exp"/>
+                                    <input tabindex="0" id="cc-exp" maxlength="7" data-stripe="exp" class="input stripe-input is-medium" type="tel" placeholder="•• / ••" autocomplete="cc-exp"/>
                                 </p>
                                 <p class="control">
                                     <label class="label">Security Code</label>
-                                    <input tabindex="1" id="cc-cvc" data-stripe="cvc" class="input stripe-input is-medium" type="tel" placeholder="•••" autocomplete="off"/>
+                                    <input tabindex="0" id="cc-cvc" data-stripe="cvc" class="input stripe-input is-medium" type="tel" placeholder="•••" autocomplete="off"/>
                                 </p>
                             </div>
                             <p class="control">
                                 <label class="label">Zip Code</label>
-                                <input tabindex="1" id="cc-zip" maxlength="6" data-stripe="address_zip" class="input stripe-input is-medium" type="tel" autocomplete="postal-code" placeholder="•••••"/>
+                                <input tabindex="0" id="cc-zip" maxlength="6" data-stripe="address_zip" class="input stripe-input is-medium" type="tel" autocomplete="postal-code" placeholder="•••••"/>
                             </p>
                         </form>
                         <form class="checkbox-form margin-top-10">
                             <input class="is-small" value="agree-to-terms" id="agree-to-terms" type="checkbox" />
-                            <label class="is-small" tabindex="1" for="agree-to-terms">
-                                I agree to the <a target="_blank" href="/terms" class="is-accent">DomaHub Terms & Conditions</a>.
+                            <label class="is-small" tabindex="0" for="agree-to-terms">
+                                I agree to the <a target="_blank" rel="noopener" href="/terms" class="is-accent">DomaHub Terms & Conditions</a>.
                             </label>
                         </form>
                         <p class="calendar-control margin-top-10">
-                            <a tabindex="1" class="card-button-prev button no-shadow">Back</a>
-                            <a id="checkout-button" tabindex="1" class="button is-primary no-shadow">Confirm & Pay</a>
+                            <a tabindex="0" class="card-button-prev button no-shadow">Back</a>
+                            <a id="checkout-button" tabindex="0" class="button is-primary no-shadow">Confirm & Pay</a>
                         </p>
                     </div>
 
@@ -308,7 +308,7 @@
                                 button below to go to your My Rentals page.
                                 </p>
                                 <p class="control margin-top-20">
-                                    <a href="/profile/myrentals" class="button is-accent is-medium" tabindex="1">
+                                    <a href="/profile/myrentals" class="button is-accent is-medium" tabindex="0">
                                         <span class="icon is-small">
                                             <i class="fa fa-th-list"></i>
                                         </span>
@@ -339,42 +339,42 @@
           </div>
           <footer class="card-footer">
             <% if (listing_info.status == 1) { %>
-              <a id="more-info-button" tabindex="1" class="card-footer-item no-border has-icon">
+              <a id="more-info-button" tabindex="0" class="card-footer-item no-border has-icon">
                 <span>Show Listing Details</span>
                 <span class="icon is-small">
                   <i class="fa fa-angle-down"></i>
                 </span>
               </a>
-              <a id="less-info-button" tabindex="1" class="card-footer-item has-icon is-hidden">
+              <a id="less-info-button" tabindex="0" class="card-footer-item has-icon is-hidden">
                 <span>Hide Listing Details</span>
                 <span class="icon is-small">
                   <i class="fa fa-angle-up"></i>
                 </span>
               </a>
-                <!-- <a tabindex="1" class="card-footer-item has-icon">
+                <!-- <a tabindex="0" class="card-footer-item has-icon">
                   <span class="icon is-small">
                     <i class="fa fa-bookmark"></i>
                   </span>
                   <span>Save</span>
                 </a>
-                <a tabindex="1" class="card-footer-item has-icon">
+                <a tabindex="0" class="card-footer-item has-icon">
                   <span class="icon is-small">
                     <i class="fa fa-flag"></i>
                   </span>
                   <span>Report</span>
                 </a>
-                <a tabindex="1" class="card-footer-item has-icon">
+                <a tabindex="0" class="card-footer-item has-icon">
                   <span class="icon is-small">
                     <i class="fa fa-share-alt"></i>
                   </span>
                   <span>Share</span>
                 </a> -->
             <% } else if (listing_info.available) { %>
-              <a id="google_link" tabindex="1" class="card-footer-item" href="https://domains.google.com/registrar?s=<%= listing_info.domain_name %>">Google</a>
-              <a id="namecheap_link" tabindex="1" class="card-footer-item" href="https://www.namecheap.com/domains/registration/results.aspx?domain=<%= listing_info.domain_name %>&aff=108189">Namecheap</a>
-              <a id="godaddy_link" tabindex="1" class="card-footer-item" href="https://www.godaddy.com/domains/searchresults.aspx?domainToCheck=<%= listing_info.domain_name %>">GoDaddy</a>
+              <a id="google_link" tabindex="0" class="card-footer-item" href="https://domains.google.com/registrar?s=<%= listing_info.domain_name %>">Google</a>
+              <a id="namecheap_link" tabindex="0" class="card-footer-item" href="https://www.namecheap.com/domains/registration/results.aspx?domain=<%= listing_info.domain_name %>&aff=108189">Namecheap</a>
+              <a id="godaddy_link" tabindex="0" class="card-footer-item" href="https://www.godaddy.com/domains/searchresults.aspx?domainToCheck=<%= listing_info.domain_name %>">GoDaddy</a>
             <% } else { %>
-              <a id="request_link" class="button card-footer-item is-fullwidth is-primary" tabindex="1">Request Listing</a>
+              <a id="request_link" class="button card-footer-item is-fullwidth is-primary" tabindex="0">Request Listing</a>
             <% } %>
           </footer>
         </div>
@@ -422,7 +422,7 @@
                 </div>
               </nav>
               <small class="margin-top-10">
-                  For more information, visit <a title="Link to respective Alexa website" target="_blank" class='is-accent' href="http://www.alexa.com/siteinfo/<%= listing_info.domain_name %>">Alexa.com</a>
+                  For more information, visit <a title="Link to respective Alexa website" target="_blank" rel="noopener" class='is-accent' href="http://www.alexa.com/siteinfo/<%= listing_info.domain_name %>">Alexa.com</a>
               </small>
             </div>
             <% if (listing_info.categories) { %>
@@ -472,7 +472,7 @@
             </div>
           </div>
           <footer class="card-footer">
-              <a id="less-info-button" tabindex="1" class="card-footer-item has-icon is-hidden">
+              <a id="less-info-button" tabindex="0" class="card-footer-item has-icon is-hidden">
                   <span>Hide Listing Details</span>
                   <span class="icon is-small">
                       <i class="fa fa-angle-up"></i>

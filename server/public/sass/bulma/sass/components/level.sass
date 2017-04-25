@@ -37,8 +37,9 @@
   align-items: center
   justify-content: space-between
   &.has-border
-    border-bottom: 1px solid $border
     padding: 5px 0
+    &:not(:last-child)
+      border-bottom: 1px solid $border
   // for listing hub
   &.filter-panel
     justify-content: flex-start

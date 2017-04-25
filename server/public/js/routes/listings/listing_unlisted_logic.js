@@ -1,223 +1,19 @@
+var myChart;
+var myPath;
+
 $(document).ready(function() {
 
-	//---------------------------------------------------------------------------------------------------UNAVAILABLE MAGIC BUTTON
-
-	if (listing_info.status == 0 || listing_info.unlisted){
-		var bored_meter = 0;
-		var magic_text = [
-			"Try again?",
-			"Try again?",
-			"Not giving up?",
-			"Why not?",
-			"You are really persistent.",
-			"You really want this site?",
-			"I understand.",
-			"You're bored.",
-			"You're really bored.",
-			"Truly.",
-			"Truly..",
-			"Truly...",
-			"Bored.",
-			"So here you are.",
-			"Interacting with a button.",
-			"I was doing just fine...",
-			"Before you came along...",
-			"And now...",
-			"I'm just getting poked...",
-			"And poked...",
-			"And poked....",
-			"And poked.....",
-			"You won't stop, will you?",
-			"This is fun for you?",
-			"What if I just disappear?",
-			"",
-			"Shoot.",
-			"Well that didn't work.",
-			"What do you even want?",
-			"Why are you doing this?",
-			listing_info.domain_name + "?",
-			"Interesting website...",
-			"Sounds pretty useful.",
-			"You gonna use it?",
-			"Well it's not available.",
-			"I can tell you that much.",
-			"Bothering me won't help.",
-			"Despite what it says above.",
-			"I don't know what to say.",
-			"What do you want?",
-			"I'm a magic button.",
-			"Not a know-it-all button.",
-			"...",
-			"....",
-			".....",
-			"......",
-			".......",
-			"........",
-			".........",
-			"Okay.",
-			"You got me.",
-			"I didn't tell you but...",
-			"Fact is...",
-			"Every time you press me...",
-			"I make $1.",
-			"+$1",
-			"+$1",
-			"+$1",
-			"+$1",
-			"+$1",
-			"+$1",
-			"+$1",
-			"+$1",
-			"+$1",
-			"+$1",
-			"Still here?",
-			"WHY???",
-			"I told you it's $1 / click!",
-			"You're giving me money.",
-			"You're okay with that?",
-			"You must be rich.",
-			"Or just extremely bored.",
-			"+$1",
-			"+$1",
-			"+$1",
-			"+$1",
-			"+$1",
-			"Okay...",
-			"Fine.",
-			"Since you're so determined.",
-			"I'll do some magic for you.",
-			"You paid for it anyway.",
-			"Haha.",
-			"...",
-			"....",
-			".....",
-			".....",
-			"Okay, I'm joking.",
-			"I don't get paid.",
-			"I can't do magic.",
-			"I'm just a button.",
-			"A normal.",
-			"Regular.",
-			"Good ol' fashioned.",
-			"Button.",
-			"Anyways.",
-			"I'm done with you.",
-			"I'm going to stop now.",
-			"Goodbye.",
-		]
-		var magic_index = 0;
-
-		//button doesnt do anything, but dont worry, loading the page already stored the info we needed
-		$("#unavail-button").on("click", function(){
-			magicButton($(this), magic_text, magic_index, bored_meter);
-		});
-	}
-
-	//related domains module
-	// findRelatedDomains();
-
-	//---------------------------------------------------------------------------------------------------TABS AND MODULES
-
-	//switch tabs
-	$(".tab").on("click", function(){
-		var which_tab = $(this).attr("id").replace("-tab", "");
-
-		//show the tab
-		$(".tab").removeClass('is-active');
-		$(this).addClass('is-active');
-
-		//show the module
-		$(".module").addClass('is-hidden');
-		$("#" + which_tab + "-module").removeClass('is-hidden');
-
-		//initialize chart
-		if (which_tab == "traffic"){
-			if (!myChart){
-				createTrafficChart();
-			}
-		}
-	});
+	//---------------------------------------------------------------------------------------------------MODULES AND TABS
 
 	editTickerModule();
 	editTrafficModule();
 	moreInfoModule();
-
 });
-
-//fun function for magic button
-function magicButton(button, magic_text, magic_index, bored_meter){
-	button.off().addClass('is-loading');
-
-	window.setTimeout(function(){
-		button.removeClass('is-loading').text(magic_text[magic_index]).on("click", function(){
-			magicButton(button, magic_text, magic_index);
-		});
-		if (magic_index >= magic_text.length - 1){
-			magic_index = magic_text.length - 1;
-			//user has reached the end
-			bored_meter++;
-		}
-		magic_index++;
-	}, 200);
-}
-
-//related domains
-function findRelatedDomains(){
-	if ($("#similar-domains").length > 0){
-		if (listing_info.categories){
-			var categories_to_post = listing_info.categories;
-			$("#similar-domains-title").text('Similar Websites');
-		}
-		else {
-			var categories_to_post = "";
-			$("#similar-domains-title").text('Other Websites');
-		}
-
-		$.ajax({
-			url: "/listing/related",
-			method: "POST",
-			data: {
-				categories: categories_to_post,
-				domain_name_exclude: listing_info.domain_name
-			}
-		}).done(function(data){
-			if (data.state == "success"){
-				$("#similar-domains").removeClass('is-hidden');
-				for (var x = 0; x < data.listings.length; x++){
-					var cloned_similar_listing = $("#similar-domain-clone").clone();
-					cloned_similar_listing.removeAttr("id").removeClass('is-hidden');
-
-					//edit it based on new listing info
-					cloned_similar_listing.find(".similar-domain-price").text("$" + data.listings[x].price_rate + " / " + data.listings[x].price_type);
-					// var random_sig = Math.floor(Math.random()*1000);
-					// var background_image = data.listings[x].background_image || "https://source.unsplash.com/category/nature/250x200?sig=" + random_sig;
-					// cloned_similar_listing.find(".similar-domain-img").attr("src", background_image);
-					cloned_similar_listing.find(".similar-domain-name").text(data.listings[x].domain_name).attr("href", "/listing/" + data.listings[x].domain_name);
-					$("#similar-domain-table").append(cloned_similar_listing);
-				}
-			}
-		});
-	}
-}
 
 //---------------------------------------------------------------------------------------------------RENTAL TICKER MODULE
 
 //function to create popular rentals module
 function editTickerModule(){
-
-	//how many people have seen this website in the past month
-	if (listing_info.traffic){
-
-		var one_month_ago = moment().subtract(1, "month")._d;
-		var views_last_month = listing_info.traffic.filter(function(elem) {return elem.timestamp > one_month_ago}).length;
-
-		//how many people in the past month
-		$("#views-total").text(wNumb({
-			thousand: ','
-		}).to(views_last_month));
-	}
-
-	//create a ticker of rentals if there are any
 	if (listing_info.rentals && listing_info.rentals.length > 0){
 		var total_to_show = listing_info.rentals.length;
 		var already_shown = [];
@@ -345,34 +141,86 @@ function editTickerModule(){
 	}
 }
 
+//function to create popular rental
+function editPopularRental(){
+	if (listing_info.rentals.length > 0){
+		var popular_rental = listing_info.rentals[0];
+		for (var x = 0; x < listing_info.rentals.length; x++){
+			if (listing_info.rentals[x].views > popular_rental.views){
+				popular_rental = listing_info.rentals[x];
+			}
+		}
+	}
+	if (popular_rental && $("#popular-rental-card").length > 0){
+		$("#popular-rental-duration").text(aggregateDateDuration(popular_rental.rental_id));
+		$("#popular-rental-preview").attr("href", "/listing/" + listing_info.domain_name + "/" + popular_rental.rental_id);
+		$("#popular-rental-views").text(popular_rental.views + " Views");
+
+		//async image load
+		var popular_screenshot = new Image();
+		popular_screenshot.onload = function(){
+			$("#popular-rental-img").attr("src", this.src);
+		}
+
+		var background_image = (popular_rental.address == "") ? "https://placeholdit.imgix.net/~text?txtsize=20&txt=NO%20PREVIEW&w=800&h=400" : "/screenshot?rental_address=" + popular_rental.address;
+		background_image = (popular_rental.address.match(/\.(jpeg|jpg|gif|png)$/) != null) ? popular_rental.address : background_image;
+		popular_screenshot.src = background_image;
+	}
+}
+
+//function to find start time, end time, and total duration of a rental
+function aggregateDateDuration(rental_id){
+	var startDate = 0;
+	var totalDuration = 0;
+	for (var x = 0; x < listing_info.rentals.length; x++){
+		if (listing_info.rentals[x].rental_id == rental_id){
+			startDate = (startDate == 0 || listing_info.rentals[x].date < startDate) ? listing_info.rentals[x].date : startDate;
+			totalDuration += listing_info.rentals[x].duration;
+		}
+	}
+	return Math.ceil(moment.duration(totalDuration).as(listing_info.price_type)) + " " + listing_info.price_type.capitalizeFirstLetter() + " Rental";
+}
+
 //---------------------------------------------------------------------------------------------------TRAFFIC MODULE
 
 //function to create the traffic chart module
 function editTrafficModule(){
-
+	// //how many people in the past month
+	// $("#views-total").text(wNumb({
+	// 	thousand: ','
+	// }).to(traffic_data[0].y));
 }
 
 //function to initiate chart only if uninitiated
 function createTrafficChart(){
-	//create the monthly x-axis labels array
-	var monthly_labels = [];
-	var months_to_go_back = 6;
-	for (var y = 0; y < months_to_go_back; y++){
-		var temp_month = moment().subtract(y, "month").format("MMM");
-		monthly_labels.unshift(temp_month);
-	}
-
-	//create a chart with the traffic data
-	if (listing_info.traffic){
-
-		//create the base object for counting monthly traffic
-		var traffic_data = [];
-		for (var x = 0; x < months_to_go_back; x++){
-			traffic_data.unshift({
-				x: moment().endOf("month").subtract(x, "month").valueOf(),
+	if (!myChart && listing_info.traffic){
+		//past six months only
+		var traffic_data = [
+			{
+				x: moment().endOf("month").subtract(5, "month").valueOf(),
 				y: 0
-			});
-		}
+			},
+			{
+				x: moment().endOf("month").subtract(4, "month").valueOf(),
+				y: 0
+			},
+			{
+				x: moment().endOf("month").subtract(3, "month").valueOf(),
+				y: 0
+			},
+			{
+				x: moment().endOf("month").subtract(2, "month").valueOf(),
+				y: 0
+			},
+			{
+				x: moment().endOf("month").subtract(1, "month").valueOf(),
+				y: 0
+			},
+			{
+				x: moment().endOf("month").valueOf(),
+				y: 0
+			},
+		];
 
 		//split traffic into six months
 		for (var x = 0; x < listing_info.traffic.length; x++){
@@ -413,55 +261,60 @@ function createTrafficChart(){
 		//create the super dataset containing traffic data and rentals data
 		var all_datasets = [traffic_dataset];
 
+		//create the labels array
+		var monthly_labels = [];
+		for (var y = 0; y < 6; y++){
+			var temp_month = moment().subtract(y, "month").format("MMM");
+			monthly_labels.unshift(temp_month);
+		}
+
 		var last_rental_id;
 
 		//loop through all rentals
-		if (listing_info.rentals){
-			for (var y = 0; y < listing_info.rentals.length; y++){
+		for (var y = 0; y < listing_info.rentals.length; y++){
 
-				//add to existing dataset
-				if (listing_info.rentals[y].rental_id == last_rental_id){
-					var start_date = listing_info.rentals[y].date;
-					var end_date = start_date + listing_info.rentals[y].duration;
-					all_datasets[all_datasets.length - 1].data[1].x = end_date;
-				}
-				//create new dataset
-				else {
-					var temp_data = [];
-					var start_date = listing_info.rentals[y].date;
-					var end_date = start_date + listing_info.rentals[y].duration;
+			//add to existing dataset
+			if (listing_info.rentals[y].rental_id == last_rental_id){
+				var start_date = listing_info.rentals[y].date;
+				var end_date = start_date + listing_info.rentals[y].duration;
+				all_datasets[all_datasets.length - 1].data[1].x = end_date;
+			}
+			//create new dataset
+			else {
+				var temp_data = [];
+				var start_date = listing_info.rentals[y].date;
+				var end_date = start_date + listing_info.rentals[y].duration;
 
-					//if the end date is after 6 months ago
-					//if the start date is before now
-					if (moment(new Date(end_date)).isAfter(moment().endOf("month").subtract(5, "month").startOf("month"))
-						&& moment(new Date(start_date)).isBefore(moment())
-				){
-						var random_rental_color = randomColor({
-						   format: 'rgb',
-						   hue: "green",
-						   luminosity: "dark"
-					   }).replace(")", ",0.5)").replace("rgb", "rgba");
-						var temp_dataset = {
-							label: "Rental #" + listing_info.rentals[y].rental_id,
-							xAxisID : "rentals-x",
-							yAxisID : "traffic-y",
-							pointBackgroundColor: random_rental_color,
-							pointHoverBackgroundColor: random_rental_color,
-							backgroundColor: random_rental_color,
-							data: [
-								{
-									x: start_date,
-									y: listing_info.rentals[y].views
-								},
-								{
-									x: end_date,
-									y: listing_info.rentals[y].views
-								}
-							]
-						}
-						all_datasets.push(temp_dataset);
-						last_rental_id = listing_info.rentals[y].rental_id;
+				//if the end date is after 6 months ago
+				//if the start date is before now
+				if (moment(new Date(end_date)).isAfter(moment().endOf("month").subtract(5, "month").startOf("month"))
+					&& moment(new Date(start_date)).isBefore(moment())
+			){
+					var random_rental_color = randomColor({
+					   format: 'rgb',
+					   hue: "green",
+					   luminosity: "dark"
+				   }).replace(")", ",0.5)").replace("rgb", "rgba");
+					var temp_dataset = {
+						label: "Rental #" + listing_info.rentals[y].rental_id,
+						xAxisID : "rentals-x",
+						yAxisID : "traffic-y",
+						pointBackgroundColor: random_rental_color,
+						pointHoverBackgroundColor: random_rental_color,
+						backgroundColor: random_rental_color,
+						data: [
+							{
+								x: start_date,
+								y: listing_info.rentals[y].views
+							},
+							{
+								x: end_date,
+								y: listing_info.rentals[y].views
+							}
+						]
 					}
+					all_datasets.push(temp_dataset);
+					last_rental_id = listing_info.rentals[y].rental_id;
 				}
 			}
 		}
@@ -540,77 +393,21 @@ function createTrafficChart(){
 			 }
 		});
 	}
-
-	//create an empty chart
-	else {
-		//traffic dataset
-		var traffic_dataset = {
-			label: "Website Views",
-			xAxisID : "traffic-x",
-			yAxisID : "traffic-y",
-			borderColor: "#3CBC8D",
-			backgroundColor: "#3CBC8D",
-			fill: false,
-			data: traffic_data
-		}
-
-		//create the chart
-		myChart = new Chart($("#traffic-chart"), {
-			type: 'line',
-			data: {
-				labels: monthly_labels,
-				datasets: []
-			},
-			options: {
-				animation : false,
-				legend: {
-					display:false
-				},
-				responsive: true,
-				onResize: function(controller, object){
-					$("#traffic-overlay").css({
-						"height" : object.height,
-						"width" : object.width
-					})
-				},
-				maintainAspectRatio: true,
-				scales: {
-					xAxes: [{
-						type: "category"
-					}],
-					yAxes: [{
-						display: true,
-						type: 'linear',
-						ticks: {
-							beginAtZero: true   // minimum value will be 0.
-						}
-					}]
-				}
-			 }
-		});
-
-		//unhide the overlay
-		$("#traffic-overlay").css({
-			"height" : $("#traffic-chart").height(),
-			"width" : $("#traffic-chart").width()
-		}).removeClass('is-hidden');
-	}
 }
 
 //---------------------------------------------------------------------------------------------------MORE INFORMATION MODULE
 
 //function for the more information module
 function moreInfoModule(){
+	findOtherDomains();
 
-	//find other domains by the same domahub user
-	if (!listing_info.unlisted){
-		findOtherDomains();
-	}
+	//user since date in about owner
+	$("#user-since").text(moment(new Date(listing_info.user_created)).format("MMMM, YYYY"));
 }
 
 //other domains by same owner
 function findOtherDomains(){
-	if ($("#otherowner-domains").length > 0 && !listing_info.unlisted){
+	if ($("#otherowner-domains").length > 0){
 		$.ajax({
 			url: "/listing/otherowner",
 			method: "POST",

@@ -25,6 +25,47 @@ $(document).ready(function() {
 
 });
 
+
+//function to create popular rental
+function editPopularRental(){
+	if (listing_info.rentals.length > 0){
+		var popular_rental = listing_info.rentals[0];
+		for (var x = 0; x < listing_info.rentals.length; x++){
+			if (listing_info.rentals[x].views > popular_rental.views){
+				popular_rental = listing_info.rentals[x];
+			}
+		}
+	}
+	if (popular_rental && $("#popular-rental-card").length > 0){
+		$("#popular-rental-duration").text(aggregateDateDuration(popular_rental.rental_id));
+		$("#popular-rental-preview").attr("href", "/listing/" + listing_info.domain_name + "/" + popular_rental.rental_id);
+		$("#popular-rental-views").text(popular_rental.views + " Views");
+
+		//async image load
+		var popular_screenshot = new Image();
+		popular_screenshot.onload = function(){
+			$("#popular-rental-img").attr("src", this.src);
+		}
+
+		var background_image = (popular_rental.address == "") ? "https://placeholdit.imgix.net/~text?txtsize=20&txt=NO%20PREVIEW&w=800&h=400" : "/screenshot?rental_address=" + popular_rental.address;
+		background_image = (popular_rental.address.match(/\.(jpeg|jpg|gif|png)$/) != null) ? popular_rental.address : background_image;
+		popular_screenshot.src = background_image;
+	}
+}
+
+//function to find start time, end time, and total duration of a rental
+function aggregateDateDuration(rental_id){
+	var startDate = 0;
+	var totalDuration = 0;
+	for (var x = 0; x < listing_info.rentals.length; x++){
+		if (listing_info.rentals[x].rental_id == rental_id){
+			startDate = (startDate == 0 || listing_info.rentals[x].date < startDate) ? listing_info.rentals[x].date : startDate;
+			totalDuration += listing_info.rentals[x].duration;
+		}
+	}
+	return Math.ceil(moment.duration(totalDuration).as(listing_info.price_type)) + " " + listing_info.price_type.capitalizeFirstLetter() + " Rental";
+}
+
 //functions to show different cards
 function showCardContent(type){
 	$(".checkout-card-content").addClass('is-hidden');

@@ -26,7 +26,7 @@ module.exports = data_model;
 
 //gets all search traffic for a particular domain name
 data_model.prototype.getListingTraffic = function(domain_name, callback){
-	console.log("DB: Attempting to get traffic for domain " + domain_name + "...");
+	console.log("DB: Attempting to get traffic for domain: " + domain_name + "...");
 	query = "SELECT \
 				stats_search_history.timestamp \
 			FROM stats_search_history \

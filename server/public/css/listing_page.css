@@ -171,7 +171,7 @@ button[data-balloon] {
 [data-balloon-length="fit"]:after {
   width: 100%; }
 
-#domain-desc {
+.description-text {
   max-width: 500px; }
 
 #domain-display h1 {
@@ -271,20 +271,26 @@ button[data-balloon] {
       /* Firefox 18- */
       color: transparent; }
 
+.header {
+  display: flex;
+  align-items: center;
+  cursor: pointer; }
+  .header p:not(:last-child) {
+    margin-bottom: 0 !important; }
+
 .is-flex-wrap {
   display: flex;
   flex-wrap: wrap;
   flex-direction: row;
   align-items: center; }
-  .is-flex-wrap .tag {
+  .is-flex-wrap .tag, .is-flex-wrap .button {
     margin-bottom: 10px;
     margin-right: 10px; }
 
 .module {
-  -webkit-box-shadow: 0 8px 20px 0 rgba(0, 0, 0, 0.12);
-  -moz-box-shadow: 0 8px 20px 0 rgba(0, 0, 0, 0.12);
-  box-shadow: 0 8px 20px 0 rgba(0, 0, 0, 0.12);
-  padding: 15px; }
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  border-top: none;
+  padding: 25px; }
 
 #ticker-module {
   padding: 0; }
@@ -309,7 +315,7 @@ button[data-balloon] {
 .ticker-icon-color {
   border-right: 2px solid rgba(0, 0, 0, 0.12);
   margin-right: 10px;
-  min-width: 28px; }
+  min-width: 30px; }
 
 .ticker-icon {
   margin-top: 4px;
@@ -317,3 +323,17 @@ button[data-balloon] {
 
 #calendar-module {
   width: 300px; }
+
+#traffic-overlay {
+  position: absolute;
+  background-color: rgba(255, 255, 255, 0.5);
+  display: block;
+  top: 10px;
+  z-index: 99; }
+
+#traffic-overlay-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  margin-right: -50%; }

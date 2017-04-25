@@ -2,7 +2,7 @@
 @import 'mixins';
 @import 'balloon';
 
-#domain-desc {
+.description-text {
   max-width: 500px;
 }
 
@@ -125,20 +125,32 @@
   }
 }
 
+.header {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  p {
+    &:not(:last-child) {
+      margin-bottom: 0 !important;
+    }
+  }
+}
+
 .is-flex-wrap {
   display: flex;
   flex-wrap: wrap;
   flex-direction: row;
   align-items: center;
-  .tag {
+  .tag, .button {
     margin-bottom: 10px;
     margin-right: 10px;
   }
 }
 
 .module {
-  @include box-shadow(0,8px,20px,$border,0);
-  padding: 15px;
+  border: 1px solid $border;
+  border-top: none;
+  padding: 25px;
 }
 
 #ticker-module {
@@ -168,7 +180,7 @@
 .ticker-icon-color {
   border-right: 2px solid $border;
   margin-right: 10px;
-  min-width: 28px;
+  min-width: 30px;
 }
 
 .ticker-icon {
@@ -178,4 +190,20 @@
 
 #calendar-module {
   width: 300px;
+}
+
+#traffic-overlay {
+    position:absolute;
+    background-color:rgba(255,255,255,0.5);
+    display:block;
+    top:10px;
+    z-index:99;
+}
+
+#traffic-overlay-text {
+    position:absolute;
+    top:50%;
+    left:50%;
+    transform:translate(-50%,-50%);
+    margin-right:-50%;
 }

@@ -284,11 +284,59 @@ button[data-balloon] {
         .tabs-box ul li a:hover, .tabs-box ul li a:focus {
           outline: none; }
 
+.button-wrapper {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 25px; }
+  .button-wrapper.is-left-aligned {
+    justify-content: flex-start; }
+  .button-wrapper .button:not(:last-child) {
+    margin-right: 10px; }
+  @media screen and (max-width: 456px) {
+    .button-wrapper {
+      flex-direction: column;
+      justify-content: center;
+      align-items: center; }
+      .button-wrapper .button:not(:last-child) {
+        margin-right: 0;
+        margin-bottom: 10px; } }
+
 .dom-trait {
   max-width: 300px; }
+  @media screen and (min-width: 980px) {
+    .dom-trait {
+      height: 188px; } }
+  @media screen and (min-width: 769px) and (max-width: 979px) {
+    .dom-trait {
+      height: 236px; } }
   @media screen and (max-width: 768px) {
     .dom-trait {
       margin: auto; } }
+
+@media screen and (min-width: 980px) {
+  .hiw {
+    height: 212px; } }
+
+@media screen and (min-width: 769px) and (max-width: 979px) {
+  .hiw {
+    height: 272px; } }
+
+@media screen and (min-width: 980px) {
+  .dom-ben {
+    height: 188px; } }
+
+@media screen and (min-width: 769px) and (max-width: 979px) {
+  .dom-ben {
+    height: 224px; } }
+
+@media screen and (min-width: 980px) {
+  .options {
+    height: 212px; } }
+
+@media screen and (min-width: 769px) and (max-width: 979px) {
+  .options {
+    height: 248px; } }
 
 .slider-box {
   -webkit-box-shadow: 0 8px 20px 0 #d0d0d0;
@@ -351,12 +399,12 @@ button[data-balloon] {
     .flex-list li span {
       padding-right: 30px; }
 
-.step-box {
+.flex-align-center {
   display: flex;
   align-items: center;
   justify-content: flex-start;
   margin: 10px 0; }
-  .step-box span {
+  .flex-align-center span {
     margin-right: 10px; }
 
 .has-stripe {

@@ -18,20 +18,27 @@
 		<script src="/js/lib/daterangepicker.js" type="text/javascript"></script>
 		<script src="/js/lib/wNumb.js" type="text/javascript"></script>
 		<script src="/js/lib/typed.js" type="text/javascript"></script>
-		<%- include("listing_page.ejs") %>
+
+		<%# IS THE LISTED LISTED OR UNLISTED WITH DOMAHUB %>
+		<% if (listing_info.unlisted) { %>
+			<%- include("unlisted_page.ejs") %>
+		<% } else { %>
+			<%- include("listed_page.ejs") %>
+		<% } %>
 		<footer class="footer is-white">
 			<div class="container">
 				<p>
-					Powered by <a tabindex="1" class="is-primary is-bold" href="/" target="_blank">DomaHub</a>
+					Powered by <a tabindex="0" class="is-primary is-bold" href="/" target="_blank" rel="noopener">DomaHub</a>
 				</p>
 			</div>
 		</footer>
+		
 		<script type="text/javascript">
 			var listing_info = <% if(typeof listing_info != "undefined"){ %><%-JSON.stringify(listing_info)%><% }else{ %>""<% } %>;
 		</script>
 		<script src="/js/calendar_logic.js" type="text/javascript"></script>
-		<script src="/js/routes/listings/listing_listed_logic.js" type="text/javascript"></script>
 		<script src="/js/routes/listings/listing_general_logic.js" type="text/javascript"></script>
+		<script src="/js/routes/listings/listing_listed_logic.js" type="text/javascript"></script>
 	</body>
 
 </html>
