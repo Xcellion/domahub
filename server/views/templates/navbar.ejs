@@ -2,36 +2,36 @@
   <div class="container">
     <div class="nav-left">
       <div class="nav-item">
-        <a id="nav-logo" class="flat-logo is-white is-hidden-mobile" tabindex="1" title="Home" href="/">
+        <a id="nav-logo" class="flat-logo is-white is-hidden-mobile" tabindex="0" title="Home" href="/">
         </a>
-        <a class="circle-logo is-white is-hidden-tablet" tabindex="1" title="Home" href="/"></a>
+        <a class="circle-logo is-white is-hidden-tablet" tabindex="0" title="Home" href="/"></a>
       </div>
     </div>
     <div class="nav-center">
       <%# <form id="searchbar-form" class="nav-item searchbar" novalidate>
         <p class="control has-icon">
-          <input id="domain-name" tabindex="1" class="input" type="text" placeholder="Search domains" name="domain-name" autocomplete="off">
+          <input id="domain-name" tabindex="0" class="input" type="text" placeholder="Search domains" name="domain-name" autocomplete="off">
           <i class="fa fa-search"></i>
         </p>
       </form>%>
     </div>
-    <span class="nav-toggle is-white" tabindex="1">
+    <span class="nav-toggle is-white" tabindex="0">
       <span></span>
       <span></span>
       <span></span>
     </span>
     <div class="nav-right nav-menu is-black">
 <%# <div class="nav-item">
-<a class="nav-link is-white" tabindex="1" title="Browse Listings" href="/listings">Browse Listings</a>
+<a class="nav-link is-white" tabindex="0" title="Browse Listings" href="/listings">Browse Listings</a>
 </div>%>
 
 <%# navbar checks for a user variable, if it doesnt exist, then display the login button %>
 <% if (!user) { %>
     <%# <div class="nav-item">
-      <a id="signup" tabindex="1" class="nav-link is-white" title="Sign Up" href="/signup">Sign Up</a>
+      <a id="signup" tabindex="0" class="nav-link is-white" title="Sign Up" href="/signup">Sign Up</a>
     </div> %>
     <div class="nav-item">
-      <a tabindex="1" class="login-modal button is-white is-stylish is-small modal-button" title="Log In" data-object="#modal-login">Log In</a>
+      <a tabindex="0" class="login-modal button is-white is-stylish is-small modal-button" title="Log In" data-object="#modal-login">Log In</a>
     </div>
     <div id="modal-login" class="modal">
       <div class="modal-background"></div>
@@ -39,7 +39,7 @@
         <div class="modal-content login-box">
           <div id="login-dropdown" class="padding-25">
             <h2 class="margin-bottom-10 has-text-centered">
-              <a class='is-inline-block flat-logo is-primary' tabindex="1" title="Home" href="/"></a>
+              <a class='is-inline-block flat-logo is-primary' tabindex="0" title="Home" href="/"></a>
             </h2>
 
             <% if (typeof message != "undefined") {%>
@@ -89,39 +89,39 @@
 <!-- or else display the user profile as logged in -->
 <% } else { %>
     <div class="nav-item">
-      <a class="nav-link is-white" tabindex="1" title="Create Listing" href="/listings/create">Create Listings</a>
+      <a class="nav-link is-white" tabindex="0" title="Create Listing" href="/listings/create">Create Listings</a>
     </div>
     <div class="nav-item">
-      <a id="profile-button" tabindex="1" class="button is-white is-stylish is-small" title="Profile">
+      <a id="profile-button" tabindex="0" class="button is-white is-stylish is-small" title="Profile">
         <span><%= (user.username.length > 6) ? user.username.slice(0,6) + "..." : user.username %></span>
         <span class="icon">
           <i class="fa fa-angle-down"></i>
         </span>
       </a>
-      <a tabindex="1" class="nav-link is-white is-hidden-tablet" href="/profile/mylistings" title="My Listings">
+      <a tabindex="0" class="nav-link is-white is-hidden-tablet" href="/profile/mylistings" title="My Listings">
         My Listings
       </a>
       <div id="profile-dropdown" class="is-hidden is-hidden-mobile">
         <ul class="profile-dropdown-menu">
-          <li><a tabindex="1" href="/profile/mylistings">
+          <li><a tabindex="0" href="/profile/mylistings">
             <span class="icon is-small">
               <i class="fa fa-tasks"></i>
             </span>
             <span>My Listings</span>
           </a></li>
-          <li><a tabindex="1" href="/profile/myrentals">
+          <li><a tabindex="0" href="/profile/myrentals">
             <span class="icon is-small">
               <i class="fa fa-window-maximize"></i>
             </span>
             <span>My Rentals</span>
           </a></li>
-          <li><a tabindex="1" href="/profile/settings">
+          <li><a tabindex="0" href="/profile/settings">
             <span class="icon is-small">
               <i class="fa fa-cog"></i>
             </span>
             <span>Account Settings</span>
           </a></li>
-          <li><a tabindex="1" href="/logout">
+          <li><a tabindex="0" href="/logout">
             <span class="icon is-small">
               <i class="fa fa-sign-out"></i>
             </span>
@@ -131,17 +131,17 @@
       </div>
     </div>
     <div class="nav-item is-hidden-tablet">
-      <a tabindex="1" class="nav-link is-white is-hidden-tablet" href="/profile/myrentals" title="My Rentals">
+      <a tabindex="0" class="nav-link is-white is-hidden-tablet" href="/profile/myrentals" title="My Rentals">
         My Rentals
       </a>
     </div>
     <div class="nav-item is-hidden-tablet">
-      <a tabindex="1" class="nav-link is-white is-hidden-tablet" href="/profile/settings" title="Account Settings">
+      <a tabindex="0" class="nav-link is-white is-hidden-tablet" href="/profile/settings" title="Account Settings">
         Account Settings
       </a>
     </div>
     <div class="nav-item is-hidden-tablet">
-      <a tabindex="1" class="nav-link is-white is-hidden-tablet" href="/logout" title="Log Out">
+      <a tabindex="0" class="nav-link is-white is-hidden-tablet" href="/logout" title="Log Out">
         Log Out
       </a>
     </div>

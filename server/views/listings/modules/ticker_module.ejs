@@ -8,8 +8,18 @@
         <p class='ticker-time is-inline'></p>.
       </div>
   </li>
-  <div id="ticker-empty" class='is-hidden'>
-      There is no recent activity!
-  </div>
-  <ul id="ticker-wrapper" class='padding-top-0 padding-bottom-0'></ul>
+  <ul id="ticker-wrapper" class='padding-top-0 padding-bottom-0'>
+      <li  class='ticker-row'>
+          <span class='ticker-icon-color is-dark'><i class="margin-right-10 fa fa-users ticker-icon"></i></span>
+          <div class="ticker-text">
+              <span id="views-total">0</span> people have viewed this website in the past month.
+          </div>
+      </li>
+      <li id="ticker-empty" class='ticker-row is-hidden'>
+          <span class='ticker-icon-color is-danger'><i class="margin-right-10 fa fa-exclamation-triangle ticker-icon"></i></span>
+          <div class="ticker-text">
+              There is no other recent activity!
+          </div>
+      </li>
+  </ul>
 </div>

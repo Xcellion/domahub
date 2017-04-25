@@ -1,24 +1,21 @@
 <section class="section is-medium-top">
-  <!--style="background-image:url('<%= listing_info.background_image %>')"  -->
     <div class="container">
 
         <span id="price" class="tag is-bold is-medium is-bordered">
-          <% if (listing_info.status == 1 && listing_info.price_rate > 0) { %>
+          <% if (listing_info.price_rate > 0) { %>
               $<%= listing_info.price_rate %> Per <%= listing_info.price_type.charAt(0).toUpperCase() + listing_info.price_type.substr(1) %>
           <% } else if (listing_info.status == 1 && listing_info.price_rate == 0){ %>
               Free!
-          <% } else if (listing_info.available){ %>
-              Available for Purchase
           <% } else { %>
-              Request Listing
+              Unavailable
           <% } %>
         </span>
 
-        <div id="domain-display" class="content margin-bottom-35">
+        <div id="domain-display" class="content">
           <h1 class="is-primary is-inline-block margin-bottom-0"><%= listing_info.domain_name %>/</h1>
           <form id="path-input" class="is-inline-block">
             <div class="control margin-bottom-0">
-              <input id="typed-slash" tabindex="1" type="text" autocomplete="off"></input>
+              <input id="typed-slash" tabindex="0" type="text" autocomplete="off"></input>
               <label id="input-tooltip" style="display:none;" class="input-tooltip" for="typed-slash">Click here to edit.</label>
               <label id="input-tooltip-error" class="input-tooltip is-active is-hidden" for="typed-slash">Input must be alphanumeric!</label>
             </div>
@@ -30,10 +27,14 @@
             listing_info : listing_info
         }); %>
 
-        <%# CALENDAR MODULE %>
-        <%- include("modules/calendar_module.ejs", {
-            listing_info : listing_info
-        }); %>
+        <% if (listing_info.status == 1) { %>
+            <%# CALENDAR MODULE %>
+            <%- include("modules/calendar_module.ejs"); %>
+        <% } else { %>
+            <%# UNAVAILABLE MODULE %>
+            <%- include("modules/unavailable_module.ejs"); %>
+        <% } %>
+
     </div>
 </section>
 
@@ -41,7 +42,7 @@
   <div class="container">
 
       <%# TABS %>
-      <div class="tabs is-toggle has-shadow margin-bottom-0">
+      <div class="tabs is-boxed has-shadow margin-bottom-0">
         <ul>
           <li id="ticker-tab" class="tab is-active is-attached">
             <a>
