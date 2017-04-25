@@ -5053,10 +5053,10 @@ input:-webkit-autofill {
     height: 3px;
     position: absolute;
     width: 0;
-    left: 0; }
+    left: 50%; }
   .footer-item a:hover::before, .footer-item a:focus::before {
     width: 100%;
-    right: 0; }
+    left: 0; }
 
 .footer-bar {
   display: flex;
