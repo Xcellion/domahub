@@ -1,5 +1,4 @@
 <section class="section is-medium-top">
-  <!--style="background-image:url('<%= listing_info.background_image %>')"  -->
     <div class="container">
 
         <span id="price" class="tag is-bold is-medium is-bordered">
@@ -7,10 +6,8 @@
               $<%= listing_info.price_rate %> Per <%= listing_info.price_type.charAt(0).toUpperCase() + listing_info.price_type.substr(1) %>
           <% } else if (listing_info.status == 1 && listing_info.price_rate == 0){ %>
               Free!
-          <% } else if (listing_info.available){ %>
-              Available for Purchase
           <% } else { %>
-              Request Listing
+              Unavailable
           <% } %>
         </span>
 
@@ -34,7 +31,7 @@
             <%# CALENDAR MODULE %>
             <%- include("modules/calendar_module.ejs"); %>
         <% } else { %>
-            <%# LISTED, BUT TURNED OFF (UNAVAILABLE MODULE) %>
+            <%# UNAVAILABLE MODULE %>
             <%- include("modules/unavailable_module.ejs"); %>
         <% } %>
 
