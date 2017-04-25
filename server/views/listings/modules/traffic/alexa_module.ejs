@@ -11,7 +11,7 @@
          <i class="fa fa-question-circle"></i>
        </span>
     </div>
-    <p><%= (listing_info.alexa.globalRank == "-" || !listing_info.alexa.globalRank) ? "Not enough data." : listing_info.alexa.globalRank %></p>
+    <p id="alexa-globalrank">Loading...</p>
   </div>
   <div class="alexa-stat">
     <div class="header"
@@ -21,9 +21,7 @@
         <i class="fa fa-question-circle"></i>
       </span>
     </div>
-    <p>
-      <%= (listing_info.alexa.engagement.dailyTimeOnSite == "-" || !listing_info.alexa.engagement.dailyTimeOnSite) ? "Not enough data." : listing_info.alexa.engagement.dailyTimeOnSite %>
-    </p>
+    <p id="alexa-timeonsite">Loading...</p>
   </div>
   <div class="alexa-stat">
     <div class="header"
@@ -33,9 +31,7 @@
         <i class="fa fa-question-circle"></i>
       </span>
     </div>
-    <p>
-      <%= (listing_info.alexa.engagement.dailyPageViewPerVisitor == "-" || !listing_info.alexa.engagement.dailyPageViewPerVisitor) ? "Not enough data." : listing_info.alexa.engagement.dailyPageViewPerVisitor %>
-    </p>
+    <p id="alexa-pageviews">Loading...</p>
   </div>
   <div class="alexa-stat">
     <div class="header" data-balloon-length="medium" data-balloon="Percentage of visits to the site that consist of a single pageview."
@@ -45,8 +41,6 @@
         <i class="fa fa-question-circle"></i>
       </span>
     </div>
-    <p>
-      <%= (listing_info.alexa.engagement.bounceRate == "-" || !listing_info.alexa.engagement.bounceRate) ? "Not enough data." : listing_info.alexa.engagement.bounceRate %>
-    </p>
+    <p id="alexa-bouncerate">Loading...</p>
   </div>
 </div>
