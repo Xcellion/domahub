@@ -644,7 +644,9 @@ module.exports = {
                 encoding: null
             }, function (err, response, body) {
                 //not an image requested
-                if (response.headers['content-type'].indexOf("image") == -1){
+                if (response.headers['content-type'].indexOf("image") == -1 && response.headers['content-type'].indexOf("pdf") == -1){
+                    console.log("F: Requested rental address was a website!");
+
                     var index_path = (node_env == "dev") ? path.resolve(process.cwd(), 'server', 'views', 'proxy', 'proxy-index.ejs') : path.resolve(process.cwd(), 'views', 'proxy', 'proxy-index.ejs');
                     var preview_path = (node_env == "dev") ? path.resolve(process.cwd(), 'server', 'views', 'proxy', 'proxy-preview.ejs') : path.resolve(process.cwd(), 'views', 'proxy', 'proxy-preview.ejs');
 
@@ -674,8 +676,11 @@ module.exports = {
                     }
                 }
                 else {
+                    console.log("F: Requested rental address was an image/PDF!");
+
                     res.render("proxy/proxy-image.ejs", {
                         image: req.session.rental_info.address,
+                        content: response.headers['content-type'],
                         edit: req.session.proxy_edit,
                         preview: true,
                         doma_rental_info : req.session.rental_info

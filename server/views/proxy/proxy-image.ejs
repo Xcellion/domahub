@@ -6,27 +6,48 @@
         var doma_rental_info = <%-JSON.stringify(doma_rental_info)%>;
     </script>
 </head>
-<body>
+<body style="margin:0;padding:0;border:0;overflow:hidden;">
+
+    <%# THE DOMAHUB BUTTON %>
     <%- include("proxy-index.ejs"); %>
+
     <% if (image != "") { %>
-        <img id="proxy-image" style="max-height: 100%;top:50%;left:50%;transform:translate(-50%,-50%);margin-right:50%;position:absolute;" src="<%= image %>"/>
-        <script>
-        document.getElementById('proxy-image').ondragstart = function() { return false; };
-        </script>
+
+        <% if (content.indexOf("pdf") == -1) { %>
+
+            <!-- CONTENT IS AN IMAGE -->
+            <img id="proxy-image" style="max-height: 100%;top:50%;left:50%;transform:translate(-50%,-50%);margin-right:50%;position:absolute;" src="<%= image %>"/>
+            <script>
+            document.getElementById('proxy-image').ondragstart = function() { return false; };
+            </script>
+
+        <% } else { %>
+
+            <!-- CONTENT IS A PDF -->
+            <iframe style="width:100vw;height:100vh;margin:0;border:0;padding:0;" src="<%= image %>"></iframe>
+
+        <% } %>
+
     <% } else { %>
+
+        <!-- THERE IS NO CONTENT -->
         <div style="font-size:20px;text-align:center;top:50%;left:50%;transform:translate(-50%,-50%);position:absolute;font-family:helvetica,sans-serif;">
             <h1 >There&#146;s nothing here! Move along now :)</h1>
             <% if (preview == "false") { %>
                 <h3>Press the menu button to edit this rental.</h3>
             <% } %>
         </div>
+
     <% } %>
+
+    <%# EDIT BUTTON IF LOGGED IN%>
     <% if (edit) { %>
         <%- include("proxy-edit.ejs"); %>
     <% } else { %>
         <%- include("proxy-noedit.ejs"); %>
     <% } %>
 
+    <%# PREVIEW BANNER IF ITS A RENTAL PREVIEW %>
     <% if (preview) { %>
         <%- include("proxy-preview.ejs"); %>
     <% } %>

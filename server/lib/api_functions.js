@@ -114,13 +114,14 @@ function requestProxy(req, res, rental_info){
 		url: addProtocol(rental_info.address),
 		encoding: null
 	}, function (err, response, body) {
-		//an image was requested
-		if (response.headers['content-type'].indexOf("image") != -1){
-			console.log("F: Requested rental address was an image!");
+		//an image/PDF was requested
+		if (response.headers['content-type'].indexOf("image") != -1 || response.headers['content-type'].indexOf("pdf") != -1){
+			console.log("F: Requested rental address was an image/PDF!");
 			var image_path = (node_env == "dev") ? path.resolve(process.cwd(), 'server', 'views', 'proxy', 'proxy-image.ejs') : path.resolve(process.cwd(), 'views', 'proxy', 'proxy-image.ejs');
 
 			res.render(image_path, {
 				image: rental_info.address,
+				content: response.headers['content-type'],
 				edit: false,
 				preview: false,
 				doma_rental_info : rental_info
