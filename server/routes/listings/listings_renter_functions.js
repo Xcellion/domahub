@@ -1006,7 +1006,8 @@ function renderWhoIs(req, res, domain_name){
                 domain_name: domain_name,
                 email: email,
                 username: owner_name,
-                description: description
+                description: description,
+                unlisted: true
             }
         }
 
@@ -1017,12 +1018,16 @@ function renderWhoIs(req, res, domain_name){
             options.listing_info.description = "You could be the next owner of this great domain! A personal project? A new business venture? The sky's the limit!";
         }
 
-        //get alexa traffic info
-        alexaData.AlexaWebData(domain_name, function(error, result) {
-            if (!error){
+        console.log("F: Getting all rental information for domain: " + req.params.domain_name + "...");
+
+        //get the traffic of the listing
+        Data.getListingTraffic(domain_name, function(result){
+            console.log("F: Getting all Alexa information for domain: " + req.params.domain_name + "...");
+            options.listing_info.traffic = result.info;
+            alexaData.AlexaWebData(domain_name, function(error, result) {
                 options.listing_info.alexa = result;
-            }
-            res.render("listings/listing_unlisted.ejs", options);
+                res.render("listings/listing.ejs", options);
+            });
         });
     });
 }

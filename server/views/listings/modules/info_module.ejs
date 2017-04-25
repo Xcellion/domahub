@@ -1,24 +1,46 @@
 <div id="info-module" class="is-hidden module">
 
     <div class="columns">
-      <div class="column is-4">
-        <%# OTHER BY SAME OWNER DOMAINS MODULE %>
-        <%- include("info/same_owner_listings_module.ejs", {
-          listing_info : listing_info
-        }); %>
-      </div>
-      <div class="column is-4">
-        <%# CATEGORIES MODULE %>
-        <%- include("info/categories_module.ejs", {
-          listing_info : listing_info
-        }); %>
-      </div>
-    </div>
 
-    <%# LISTING OWNER MODULE %>
-    <%# include("info/listing_owner_module.ejs", {
-      listing_info : listing_info
-    }); %>
+        <%# IS THE LISTED LISTED OR UNLISTED WITH DOMAHUB %>
+        <% if (listing_info.unlisted) { %>
+
+            <div class="column is-4">
+                <%# UNLISTED LISTING IS OWNED BY SOMEONE %>
+                <% if (!listing_info.available) { %>
+                	<%- include("info/unbuyable_module.ejs", {
+                	  listing_info : listing_info
+                	}); %>
+                    <%- include("info/buyable_module.ejs", {
+                	  listing_info : listing_info
+                	}); %>
+                <% } %>
+            </div>
+
+            <div class="column is-4">
+                <%# LISTING OWNER MODULE %>
+                <%- include("info/listing_owner_module.ejs", {
+                  listing_info : listing_info
+                }); %>
+            </div>
+
+        <% } else { %>
+
+            <div class="column is-4">
+              <%# OTHER BY SAME OWNER DOMAINS MODULE %>
+              <%- include("info/same_owner_listings_module.ejs", {
+                listing_info : listing_info
+              }); %>
+            </div>
+            <div class="column is-4">
+              <%# CATEGORIES MODULE %>
+              <%- include("info/categories_module.ejs", {
+                listing_info : listing_info
+              }); %>
+            </div>
+
+        <% } %>
+    </div>
 
     <%# SIMILAR DOMAINS MODULE %>
     <%# include("info/similar_domains_module.ejs", {

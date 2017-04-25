@@ -2,14 +2,19 @@
 <script src="/js/lib/randomColor.js" type="text/javascript"></script>
 <div id="traffic-module" class="is-hidden module">
   <div class="columns">
-    <div class="column is-8">
+    <div class="column is-8" style="position:relative;">
       <canvas id="traffic-chart"></canvas>
+      <div id="traffic-overlay" class="is-hidden">
+          <p id="traffic-overlay-text" class='is-bold'>
+              There is not enough data!
+          </p>
+      </div>
     </div>
 
     <%# ALEXA MODULE %>
     <%- include("traffic/alexa_module.ejs", {
       listing_info : listing_info
     }); %>
-    
+
   </div>
 </div>
