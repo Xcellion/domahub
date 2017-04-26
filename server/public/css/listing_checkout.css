@@ -244,6 +244,7 @@ button[data-balloon] {
   margin-right: 0 !important; }
 
 .card.is-checkout {
+  margin-left: auto;
   width: 375px; }
   .card.is-checkout .card-image {
     width: 100%;
@@ -251,11 +252,6 @@ button[data-balloon] {
     background-repeat: no-repeat;
     background-position: center center;
     background-size: cover; }
-  .card.is-checkout .card-footer .button {
-    border: 1px solid rgba(0, 0, 0, 0.38); }
-    .card.is-checkout .card-footer .button:hover, .card.is-checkout .card-footer .button:focus {
-      border: 1px solid rgba(0, 0, 0, 0.66);
-      background-color: transparent; }
 
 .control-flex {
   display: flex;

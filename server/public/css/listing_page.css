@@ -171,6 +171,9 @@ button[data-balloon] {
 [data-balloon-length="fit"]:after {
   width: 100%; }
 
+html {
+  overflow-y: scroll; }
+
 .description-text {
   max-width: 500px; }
 
