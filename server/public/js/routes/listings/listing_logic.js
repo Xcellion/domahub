@@ -84,7 +84,6 @@ function getTickerData(loadmore){
 
 	//unlisted so no rentals exist
 	if (listing_info.unlisted){
-		listing_info.rentals = [];
 		$("#ticker-loading").addClass('is-hidden');
 		$("#ticker-empty").removeClass('is-hidden').appendTo("#ticker-wrapper");
 	}
@@ -118,16 +117,22 @@ function getTickerData(loadmore){
 				if (listing_info.rentals){
 					listing_info.rentals = listing_info.rentals.concat(data.loaded_rentals);
 				}
-				else {
+				else if (data.loaded_rentals) {
 					listing_info.rentals = data.loaded_rentals;
 				}
-				editTickerModule(data.loaded_rentals, max_count);
-				if (listing_info.rentals && listing_info.traffic){
-					pastViewsTickerRow();
+				else {
+					listing_info.rentals = [];
 				}
+
+				editTickerModule(data.loaded_rentals, max_count);
 			}
 			else {
+				listing_info.rentals = [];
 				$("#ticker-empty").removeClass('is-hidden');
+			}
+
+			if (listing_info.rentals && listing_info.traffic){
+				pastViewsTickerRow();
 			}
 		});
 	}
@@ -404,7 +409,7 @@ function createTrafficChart(){
 		x: moment().endOf("month").subtract(traffic.length, "month").valueOf(),
 		y: 0
 	});
-	
+
 	//traffic dataset
 	var traffic_dataset = {
 		label: "Website Views",
