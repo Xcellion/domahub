@@ -1,46 +1,59 @@
 <div class="content margin-top-10">
-  <h3>Traffic Details</h3>
-  <p>
-      For more information, please visit <a title="Link to Alexa website" target="_blank" class='is-accent' href="http://www.alexa.com/siteinfo/<%= listing_info.domain_name %>">Alexa.com</a>
-  </p>
-  <div class="alexa-stat">
+  <div class="level has-border">
     <div class="header" data-balloon-length="medium" data-balloon="Rank is calculated using a combination of average daily visitors to this site and pageviews on this site over the past 3 months."
      data-balloon-pos="up">
-      <p>Global Rank</p>
-       <span class="icon is-small">
-         <i class="fa fa-question-circle"></i>
-       </span>
+      <p>
+        Global Rank
+      </p>
+      <span class="icon is-small is-tooltip">
+        <i class="fa fa-question-circle"></i>
+      </span>
     </div>
     <p id="alexa-globalrank">Loading...</p>
   </div>
-  <div class="alexa-stat">
+  <div class="level has-border">
     <div class="header"
      data-balloon-length="medium" data-balloon="Estimated daily time on site (mm:ss) per visitor to the site." data-balloon-pos="up">
-      <p>Time on Site</p>
-      <span class="icon is-small">
+      <p>
+        Time on Site
+      </p>
+      <span class="icon is-small is-tooltip">
         <i class="fa fa-question-circle"></i>
       </span>
     </div>
     <p id="alexa-timeonsite">Loading...</p>
   </div>
-  <div class="alexa-stat">
-    <div class="header"
-     data-balloon-length="medium" data-balloon="Estimated daily unique pageviews per visitor on the site." data-balloon-pos="up">
-      <p>Page Views</p>
-      <span class="icon is-small">
-        <i class="fa fa-question-circle"></i>
-      </span>
+  <div class="level has-border">
+    <div class="level-left">
+      <div class="header"
+       data-balloon-length="medium" data-balloon="Estimated daily unique pageviews per visitor on the site." data-balloon-pos="up">
+        <p>
+          Page Views
+        </p>
+        <span class="icon is-small is-tooltip">
+          <i class="fa fa-question-circle"></i>
+        </span>
+      </div>
     </div>
-    <p id="alexa-pageviews">Loading...</p>
-  </div>
-  <div class="alexa-stat">
-    <div class="header" data-balloon-length="medium" data-balloon="Percentage of visits to the site that consist of a single pageview."
-    data-balloon-pos="up">
-      <p>Bounce Rate</p>
-      <span class="icon is-small">
-        <i class="fa fa-question-circle"></i>
-      </span>
+    <div class="level-right">
+      <p id="alexa-pageviews">Loading...</p>
     </div>
-    <p id="alexa-bouncerate">Loading...</p>
   </div>
+  <div class="level has-border">
+    <div class="level-left">
+      <div class="header" data-balloon-length="medium" data-balloon="Percentage of visits to the site that consist of a single pageview."
+      data-balloon-pos="up">
+        <p>
+          Bounce Rate
+        </p>
+        <span class="icon is-small is-tooltip">
+          <i class="fa fa-question-circle"></i>
+        </span>
+      </div>
+    </div>
+    <div class="level-right">
+      <p id="alexa-bouncerate">Loading...</p>
+    </div>
+  </div>
+  <small>For more information, please visit <a title="Link to Alexa website" target="_blank" rel="noopener" class='is-accent' href="http://www.alexa.com/siteinfo/<%= listing_info.domain_name %>">Alexa.com</a></small>
 </div>

@@ -125,34 +125,13 @@
   }
 }
 
-.alexa-stat {
+.header {
   display: flex;
-  flex-direction: column;
-  &:not(:last-child) {
-    margin-bottom: 10px;
-  }
-  .header {
-    align-items: center;
-    border: 1px solid $border;
-    border-bottom: none;
-    border-radius: $radius $radius 0 0;
-    display: flex;
-    justify-content: space-between;
-    padding: 5px 8px;
-    p {
-      font-weight: 700;
-      margin-bottom: 0 !important;
-    }
-    &:hover {
-      cursor: pointer;
-    }
-  }
+  align-items: center;
+  cursor: pointer;
   p {
-    &:last-child {
-      border-radius: 0 0 $radius $radius;
-      border-top: none;
-      border: 1px solid $border;
-      padding: 5px 8px;
+    &:not(:last-child) {
+      margin-bottom: 0 !important;
     }
   }
 }
@@ -162,15 +141,16 @@
   flex-wrap: wrap;
   flex-direction: row;
   align-items: center;
-  .tag {
+  .tag, .button {
     margin-bottom: 10px;
     margin-right: 10px;
   }
 }
 
 .module {
-  @include box-shadow(0,8px,20px,$border,0);
-  padding: 15px;
+  border: 1px solid $border;
+  border-top: none;
+  padding: 25px;
 }
 
 #ticker-module {
@@ -200,7 +180,7 @@
 .ticker-icon-color {
   border-right: 2px solid $border;
   margin-right: 10px;
-  min-width: 28px;
+  min-width: 30px;
 }
 
 .ticker-icon {

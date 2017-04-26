@@ -45,7 +45,7 @@
 						</span>
 						Successfully created <span id="success-total"></span>! Please click the button below to view your newly created listings!
 						<p class="control margin-top-15">
-							<a tabindex="1" href="/profile/mylistings" class="button is-stylish is-small is-inverted is-primary" title="My Listings">
+							<a tabindex="0" href="/profile/mylistings" class="button is-stylish is-small is-inverted is-primary" title="My Listings">
 								<span>My Listings</span>
 							</a>
 						</p>
@@ -55,10 +55,10 @@
 			<div id="domain-input-form" class="columns">
 				<div class="column is-6">
 					<p class="control">
-						<textarea tabindex="1" autofocus id="domain-names" class="textarea" placeholder="e.g. butterflies.com, tigers.net, oysters.org" spellcheck="false"></textarea>
+						<textarea tabindex="0" autofocus id="domain-names" class="textarea" placeholder="e.g. butterflies.com, tigers.net, oysters.org" spellcheck="false"></textarea>
 					</p>
 					<p class="control">
-						<a tabindex="1" id="domain-names-submit" class="button is-primary is-stylish" title="Submit Domains">Submit</a>
+						<a tabindex="0" id="domain-names-submit" class="button is-primary is-stylish" title="Submit Domains">Submit</a>
 					</p>
 				</div>
 			</div>
@@ -137,8 +137,8 @@
 					<div class="control is-inline-block">
 						<form class="checkbox-form">
 							<input class="is-small" value="agree-to-terms" id="agree-to-terms" type="checkbox" />
-							<label class="is-small" tabindex="1" for="agree-to-terms">
-								I agree to the <a target="_blank" href="/terms" class="is-accent">DomaHub Terms & Conditions</a>.
+							<label class="is-small" tabindex="0" for="agree-to-terms">
+								I agree to the <a target="_blank" rel="noopener" href="/terms" class="is-accent">DomaHub Terms & Conditions</a>.
 							</label>
 						</form>
 					</div>
@@ -151,33 +151,33 @@
 					<form id="stripe-form" autocomplete="on">
 						<label class="label">Credit or Debit Card Number</label>
 						<p class="control has-icon">
-							<input tabindex="1" id="cc-num" data-stripe="number" class="input stripe-input is-medium" type="tel" placeholder="•••• •••• •••• ••••" autocomplete="cc-number"/>
+							<input tabindex="0" id="cc-num" data-stripe="number" class="input stripe-input is-medium" type="tel" placeholder="•••• •••• •••• ••••" autocomplete="cc-number"/>
 							<i id="cc-icon" class="fa fa-credit-card"></i>
 						</p>
 						<div class="control is-grouped">
 							<p class="control is-expanded">
 								<label class="label">Expiration Date</label>
-								<input tabindex="1" id="cc-exp" maxlength="7" data-stripe="exp" class="input stripe-input is-medium" type="tel" placeholder="•• / ••" autocomplete="cc-exp"/>
+								<input tabindex="0" id="cc-exp" maxlength="7" data-stripe="exp" class="input stripe-input is-medium" type="tel" placeholder="•• / ••" autocomplete="cc-exp"/>
 							</p>
 							<p class="control">
 								<label class="label">Security Code</label>
-								<input tabindex="1" id="cc-cvc" data-stripe="cvc" class="input stripe-input is-medium" type="tel" placeholder="•••" autocomplete="off"/>
+								<input tabindex="0" id="cc-cvc" data-stripe="cvc" class="input stripe-input is-medium" type="tel" placeholder="•••" autocomplete="off"/>
 							</p>
 						</div>
 						<p class="control">
 							<label class="label">Zip Code</label>
-							<input tabindex="1" id="cc-zip" maxlength="6" data-stripe="address_zip" class="input stripe-input is-medium" type="tel" autocomplete="postal-code" placeholder="•••••"/>
+							<input tabindex="0" id="cc-zip" maxlength="6" data-stripe="address_zip" class="input stripe-input is-medium" type="tel" autocomplete="postal-code" placeholder="•••••"/>
 						</p>
 					</form>
 					<form class="checkbox-form margin-top-10">
 						<input class="cat-checkbox" value="agree-to-terms" id="agree-to-terms" type="checkbox" />
-						<label class="label" tabindex="1" for="agree-to-terms">
+						<label class="label" tabindex="0" for="agree-to-terms">
 							I agree to the <a class="is-accent">Terms & Conditions</a>. I also agree to pay the total amount
 							shown.
 						</label>
 					</form>
 					<p class="control margin-top-20">
-						<a id="checkout-button" class="button is-primary is-medium" tabindex="1">
+						<a id="checkout-button" class="button is-primary is-medium" tabindex="0">
 							<span class="icon">
 								<i class="fa fa-check-circle-o"></i>
 							</span>

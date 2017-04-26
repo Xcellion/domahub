@@ -1,10 +1,17 @@
 $(document).ready(function() {
 
-    $(".beta-submit").click(function(e){
+    $(".beta-submit").on("click", function(e){
         e.preventDefault();
         $(this).closest(".beta-form").submit();
     });
 
+    //hide error
+    $(".betaemail").on("keypress", function(e){
+        $(".beta-normal-message").removeClass('is-hidden');
+        $(".beta-error-message").addClass('is-hidden');
+    });
+
+    //submit the beta email
     $('.beta-form').submit(function(e){
         e.preventDefault();
 
@@ -23,7 +30,13 @@ $(document).ready(function() {
                 beta_submit.removeClass("is-loading");
                 if (data.state == "success"){
                     beta_form.addClass("is-hidden");
-                    beta_form.next().removeClass("is-hidden");
+                    beta_form.next(".beta-form-success").removeClass("is-hidden");
+                    $(".beta-success-message").removeClass("is-hidden");
+                    $(".beta-normal-message").addClass('is-hidden');
+                }
+                else {
+                    $(".beta-error-message").removeClass('is-hidden');
+                    $(".beta-normal-message").addClass('is-hidden');
                 }
             });
         }
