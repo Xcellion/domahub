@@ -58,11 +58,11 @@ function getCurrentRental(req, res, domain_name, path){
 	}
 	else {
 		console.log("F: Attempting to check current rental status for " + domain_name + "!");
-		Listing.getCurrentRental(domain_name, function(result){
-			if (result.state != "success" || result.info.length == 0 || result.info[0].path != path){
+		Listing.getCurrentRental(domain_name, path, function(result){
+			if (result.state != "success" || result.info.length == 0){
 				console.log("F: Not rented! Redirecting to listing page");
 				delete req.session.rented_info;
-				next();
+				res.redirect("https://domahub.com/listing/" + domain_name);
 			}
 			else {
 				//add it to rental stats
