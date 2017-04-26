@@ -271,7 +271,7 @@ function getTimes(calendar_elem){
 //function to setup the calendar
 function setUpCalendar(listing_info){
     //create a new range picker based on new path rental availability
-    var start_date = moment().endOf("hour").add(1, "millisecond");
+    var start_date = moment();
     var end_date = moment().endOf(listing_info.price_type).add(1, "millisecond");
 
     $('#calendar').daterangepicker({

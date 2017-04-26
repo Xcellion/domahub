@@ -167,6 +167,8 @@ function createTickerRow(rental, now){
 	var end_moment = moment(rental.date + rental.duration);
 	var ticker_clone = $("#ticker-clone").clone().removeAttr('id').removeClass('is-hidden');
 
+	var path = (rental.path == "" || !rental.path) ? "this website" : listing_info.domain_name + "/" + rental.path;
+
 	//user name or anonymous
 	var ticker_user = (rental.username) ? rental.username : "An anonymous user";
 	ticker_clone.find(".ticker-user").text(ticker_user + " ");
@@ -222,21 +224,21 @@ function createTickerRow(rental, now){
 
 		//showing an image
 		if (rental.address.match(/\.(jpeg|jpg|png|bmp)$/) != null){
-			var ticker_type = ticker_pre_tense + "display" + ticker_verb_tense + " <a href=" + rental_preview + " class='is-accent is-underlined'>an image</a> on this website";
+			var ticker_type = ticker_pre_tense + "display" + ticker_verb_tense + " <a href=" + rental_preview + " class='is-accent is-underlined'>an image</a> on " + path;
 			ticker_icon_color.addClass('is-info');
 			ticker_icon.addClass('fa-camera-retro');
 		}
 
 		//showing a GIF
 		else if (rental.address.match(/\.(gif)$/) != null){
-			var ticker_type = ticker_pre_tense + "display" + ticker_verb_tense + " <a href=" + rental_preview + " class='is-accent is-underlined'>a GIF</a> on this website";
+			var ticker_type = ticker_pre_tense + "display" + ticker_verb_tense + " <a href=" + rental_preview + " class='is-accent is-underlined'>a GIF</a> on " + path;
 			ticker_icon_color.addClass('is-dark');
 			ticker_icon.addClass('fa-smile-o');
 		}
 
 		//showing a PDF
 		else if (rental.address.match(/\.(pdf)$/) != null){
-			var ticker_type = ticker_pre_tense + "display" + ticker_verb_tense + " <a href=" + rental_preview + " class='is-accent is-underlined'>a PDF</a> on this website";
+			var ticker_type = ticker_pre_tense + "display" + ticker_verb_tense + " <a href=" + rental_preview + " class='is-accent is-underlined'>a PDF</a> on " + path;
 			ticker_icon_color.addClass('is-danger');
 			ticker_icon.addClass('fa-pdf-o');
 		}
@@ -244,14 +246,14 @@ function createTickerRow(rental, now){
 		//showing a website
 		else if (rental.address){
 			var ticker_address = getHost(rental.address);
-			var ticker_type = ticker_pre_tense + "display" + ticker_verb_tense + " content from <a href=" + rental_preview + " class='is-accent is-underlined'>" + ticker_address + "</a>";
+			var ticker_type = ticker_pre_tense + "display" + ticker_verb_tense + " content from <a href=" + rental_preview + " class='is-accent is-underlined'>" + ticker_address + "</a> on " + path;
 			ticker_icon_color.addClass('is-primary');
 			ticker_icon.addClass('fa-external-link');
 		}
 
 		//showing nothing
 		else {
-			var ticker_type = ticker_pre_tense + "display" + ticker_verb_tense + " nothing on this website";
+			var ticker_type = ticker_pre_tense + "display" + ticker_verb_tense + " nothing on " + path;
 			ticker_icon_color.addClass('is-black');
 			ticker_icon.addClass('fa-times-circle-o');
 		}
@@ -259,7 +261,7 @@ function createTickerRow(rental, now){
 	//forward the domain
 	else {
 		var ticker_address = getHost(rental.address);
-		var ticker_type = ticker_pre_tense + "forward" + ticker_verb_tense + " this website to <a href=" + rental.address + " class='is-accent is-underlined'>" + ticker_address + "</a>";
+		var ticker_type = ticker_pre_tense + "forward" + ticker_verb_tense + " " + path + " to <a href=" + rental.address + " class='is-accent is-underlined'>" + ticker_address + "</a>";
 		ticker_icon_color.addClass('is-accent');
 		ticker_icon.addClass('fa-share-square');
 	}
@@ -445,112 +447,114 @@ function createTrafficChart(){
 
 				//if the end date is after 6 months ago
 				//if the start date is before now
-				if (moment(new Date(end_date)).isAfter(moment().endOf("month").subtract(5, "month").startOf("month"))
-				&& moment(new Date(start_date)).isBefore(moment())
-			){
-				var random_rental_color = randomColor({
-					format: 'rgb',
-					hue: "green",
-					luminosity: "dark"
-				}).replace(")", ",0.5)").replace("rgb", "rgba");
-				var temp_dataset = {
-					label: "Rental #" + listing_info.rentals[y].rental_id,
-					xAxisID : "rentals-x",
-					yAxisID : "traffic-y",
-					pointBackgroundColor: random_rental_color,
-					pointHoverBackgroundColor: random_rental_color,
-					backgroundColor: random_rental_color,
-					data: [
-						{
-							x: start_date,
-							y: listing_info.rentals[y].views
-						},
-						{
-							x: end_date,
-							y: listing_info.rentals[y].views
-						}
-					]
+				if (moment(new Date(end_date)).isAfter(moment().endOf("month").subtract(5, "month").startOf("month")) && moment(new Date(start_date)).isBefore(moment())){
+					var random_rental_color = randomColor({
+						format: 'rgb',
+						hue: "green",
+						luminosity: "dark"
+					}).replace(")", ",0.5)").replace("rgb", "rgba");
+					var temp_dataset = {
+						label: "Rental #" + listing_info.rentals[y].rental_id,
+						xAxisID : "rentals-x",
+						yAxisID : "traffic-y",
+						pointBackgroundColor: random_rental_color,
+						pointHoverBackgroundColor: random_rental_color,
+						backgroundColor: random_rental_color,
+						data: [
+							{
+								x: start_date,
+								y: listing_info.rentals[y].views
+							},
+							{
+								x: end_date,
+								y: listing_info.rentals[y].views
+							}
+						]
+					}
+					all_datasets.push(temp_dataset);
+					last_rental_id = listing_info.rentals[y].rental_id;
 				}
-				all_datasets.push(temp_dataset);
-				last_rental_id = listing_info.rentals[y].rental_id;
 			}
 		}
+
+		//create the chart
+		myChart = new Chart($("#traffic-chart"), {
+			type: 'line',
+			data: {
+				labels: monthly_labels,
+				datasets: all_datasets
+			},
+			options: {
+				legend: {
+					display:false
+				},
+				responsive: true,
+				maintainAspectRatio: true,
+				hover: {
+					mode: "index"
+				},
+				tooltips: {
+					titleSpacing: 0,
+					callbacks: {
+						label: function(tooltipItems, data) {
+							if (monthly_labels.indexOf(tooltipItems.xLabel) != -1){
+								return tooltipItems.xLabel
+							}
+							else {
+								return moment(tooltipItems.xLabel).format("MMM DD");
+							}
+						},
+						title: function(tooltipItems, data){
+							if (tooltipItems[0].datasetIndex == 0 && tooltipItems[0].yLabel == 0){
+								return false;
+							}
+							else if (monthly_labels.indexOf(tooltipItems[0].xLabel) != -1){
+								return false;
+							}
+							else {
+								return (tooltipItems[0].index == 0) ? "Rental Start" : "Rental End";
+							}
+						},
+						footer: function(tooltipItems, data){
+							if (tooltipItems[0].datasetIndex == 0 && tooltipItems[0].yLabel == 0){
+								return false;
+							}
+							else {
+								var views_plural = (tooltipItems[0].yLabel == 1) ? " view" : " views";
+								var views_formatted = wNumb({
+									thousand: ','
+								}).to(tooltipItems[0].yLabel);
+								return views_formatted + views_plural;
+							}
+						}
+					}
+				},
+				scales: {
+					xAxes: [{
+						id: "rentals-x",
+						display: false,
+						type: "time",
+						time: {
+							format: 'MM/DD/YYYY HH:mm:SS'
+						},
+					}, {
+						id: "traffic-x",
+						type: "category"
+					}],
+					yAxes: [{
+						id: "traffic-y",
+						display: true,
+						type: 'linear',
+						ticks: {
+							beginAtZero: true   // minimum value will be 0.
+						}
+					}]
+				}
+			}
+		});
 	}
 }
 
-//create the chart
-myChart = new Chart($("#traffic-chart"), {
-	type: 'line',
-	data: {
-		labels: monthly_labels,
-		datasets: all_datasets
-	},
-	options: {
-		legend: {
-			display:false
-		},
-		responsive: true,
-		maintainAspectRatio: true,
-		hover: {
-			mode: "index"
-		},
-		tooltips: {
-			titleSpacing: 0,
-			callbacks: {
-				label: function(tooltipItems, data) {
-					if (monthly_labels.indexOf(tooltipItems.xLabel) != -1){
-						return tooltipItems.xLabel
-					}
-					else {
-						return moment(tooltipItems.xLabel).format("MMM DD");
-					}
-				},
-				title: function(tooltipItems, data){
-					if (tooltipItems[0].datasetIndex == 0 && tooltipItems[0].yLabel == 0){
-						return false;
-					}
-					else if (monthly_labels.indexOf(tooltipItems[0].xLabel) != -1){
-						return false;
-					}
-					else {
-						return (tooltipItems[0].index == 0) ? "Rental Start" : "Rental End";
-					}
-				},
-				footer: function(tooltipItems, data){
-					if (tooltipItems[0].datasetIndex == 0 && tooltipItems[0].yLabel == 0){
-						return false;
-					}
-					else {
-						var views_plural = (tooltipItems[0].yLabel == 1) ? " view" : " views"
-						return tooltipItems[0].yLabel + views_plural;
-					}
-				}
-			}
-		},
-		scales: {
-			xAxes: [{
-				id: "rentals-x",
-				display: false,
-				type: "time",
-				time: {
-					format: 'MM/DD/YYYY HH:mm:SS'
-				},
-			}, {
-				id: "traffic-x",
-				type: "category"
-			}],
-			yAxes: [{
-				id: "traffic-y",
-				display: true,
-				type: 'linear',
-				ticks: {
-					beginAtZero: true   // minimum value will be 0.
-				}
-			}]
-		}
-	}
-});
-}
 
 //---------------------------------------------------------------------------------------------------ALEXA MODULE
 
