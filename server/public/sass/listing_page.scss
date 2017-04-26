@@ -113,8 +113,7 @@ html {
     cursor: pointer;
     border-color: $black-secondary;
   }
-  &:active,
-  &:focus {
+  &.is-active {
     outline: none;
     cursor: auto;
     border-color: $black-primary;

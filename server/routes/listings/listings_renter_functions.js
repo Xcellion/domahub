@@ -77,9 +77,6 @@ module.exports = {
         else if (rental_type != 0 && rental_type != 1){
             error.handler(req, res, "Invalid rental type!", "json");
         }
-        else if (req.body.path != "" && !validator.isAlphanumeric(req.body.path)){
-            error.handler(req, res, "Invalid path!", "json");
-        }
         else {
             console.log("F: Checking against Google Safe Browsing...");
 
