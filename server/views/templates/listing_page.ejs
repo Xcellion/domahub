@@ -57,7 +57,7 @@
           <div class="card is-fullwidth no-shadow">
             <div class="card-image">
               <figure class="image">
-                <img id="popular-rental-img" src="<%= background_image %>" alt="Image">
+                <img id="popular-rental-img" src="<%= background_image %>" alt="Trending domain rental screenshot">
               </figure>
             </div>
             <div class="card-content">
@@ -452,7 +452,7 @@
                 <figure class="media-left">
                   <p class="image is-circle is-64x64">
                     <% if (listing_info.profile_pic){ %>
-                      <img src="<%= listing_info.profile_pic %>">
+                      <img src="<%= listing_info.profile_pic %>" alt="Profile picture">
                     <% } else { %>
                       <%- "<img src='https://placeholdit.imgix.net/~text?txtsize=25&bg=9e9e9e&txtclr=ffffff&txt=" + listing_info.username + "&w=128&h=128'/>" %>
                     <% } %>
