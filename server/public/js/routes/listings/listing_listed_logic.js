@@ -9,6 +9,7 @@ $(document).ready(function() {
 		//remove the disabled on check availability button
 		$("#check-avail").removeClass('is-disabled');
 		$("#input-tooltip").addClass('is-hidden');
+		$(this).addClass('is-active');
 
 		//select all on existing path
 		$("#typed-slash").select();
@@ -16,10 +17,19 @@ $(document).ready(function() {
 		if ($("#typed-slash").val() == ""){
 			$("#input-tooltip").removeClass('is-hidden');
 		}
+		$(this).removeClass('is-active');
 
 		//re-add the calendar event handler if path changed
 		if (myPath != undefined && myPath != $("#typed-slash").val()){
-			$("#calendar").on("click", function(){
+			//remove any existing date range pickers
+			if ($("#calendar").data('daterangepicker')){
+				$("#calendar").data('daterangepicker').remove();
+			}
+
+			$("#calendar").val("");
+			$("#checkout-button").addClass('is-disabled');
+
+			$("#calendar").off("click").on("click", function(){
 				getTimes($(this));
 			});
 		}
@@ -35,24 +45,40 @@ $(document).ready(function() {
 		var validChar = /^[0-9a-zA-Z]+$/;
 
 		//logic to check alphanumeric input value
-		if (!inp.match(validChar)) {
+		if (!inp.match(validChar) && e.keyCode != 13) {
 			e.preventDefault();
 			$("#input-tooltip-error").removeClass("is-hidden");
-		} else {
+		}
+		else if (e.keyCode == 13){
+			e.preventDefault();
+			$("#input-tooltip-error").addClass("is-hidden");
+		}
+		else {
 			$("#input-tooltip-error").addClass("is-hidden");
 		}
 	}).on('keyup', function(e){
 		var validChar = /^[0-9a-zA-Z]+$/;
 
-		//changed path, so change calendar
-		if (myPath != $(this).val()){
-			//remove any existing date range pickers
-			if ($("#calendar").data('daterangepicker')){
-				$("#calendar").data('daterangepicker').remove();
+		//enter to see calendar
+		if (e.keyCode == 13 && ($(this).val().match(validChar) || $(this).val() == "")){
+			e.preventDefault();
+			//unfocus the typed JS
+			$(this).blur();
+
+			//first time getting calendar
+			if ($("#check-avail").is(":visible")){
+				$("#check-avail").click();
 			}
 
-			$("#calendar").val("");
-			$("#checkout-button").addClass('is-disabled');
+			//get new calendar if mypath is different
+			else if (myPath != $(this).val()) {
+				getTimes($(this));
+			}
+
+			//show if mypath is the same
+			else {
+				$("#calendar").data('daterangepicker').show();
+			}
 		}
 	});
 
@@ -150,7 +176,7 @@ function submitTimes(checkout_button){
 				});
 
 				//re-add calendar event handler to fetch new events
-				$("#calendar").on("click", function(){
+				$("#calendar").off('click').on("click", function(){
 					getTimes($(this));
 				});
 			}
@@ -189,6 +215,11 @@ function errorHandler(message){
 
 //function to get times from the server
 function getTimes(calendar_elem){
+	//renting top level, hide tooltip
+	if ($("#typed-slash").val() == ""){
+		$("#input-tooltip").addClass('is-hidden');
+		$("#typed-slash").addClass('is-active');
+	}
 
 	//now loading messages
 	$("#calendar").addClass('is-disabled');
@@ -286,6 +317,12 @@ function setUpCalendar(listing_info){
         //remove any error messages
         $("#calendar-regular-message").removeClass('is-hidden');
         $("#calendar-error-message").addClass('is-hidden');
+
+		//renting top level, hide tooltip
+		if ($("#typed-slash").val() == ""){
+			$("#input-tooltip").addClass('is-hidden');
+			$("#typed-slash").addClass('is-active');
+		}
     });
 
     $("#calendar").data('daterangepicker').show();

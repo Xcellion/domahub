@@ -267,20 +267,20 @@ html {
   #typed-slash:hover {
     cursor: pointer;
     border-color: rgba(0, 0, 0, 0.66); }
-  #typed-slash:active, #typed-slash:focus {
+  #typed-slash.is-active {
     outline: none;
     cursor: auto;
     border-color: rgba(0, 0, 0, 0.88); }
-    #typed-slash:active::-webkit-input-placeholder, #typed-slash:focus::-webkit-input-placeholder {
+    #typed-slash.is-active::-webkit-input-placeholder {
       /* Chrome/Opera/Safari */
       color: transparent; }
-    #typed-slash:active::-moz-placeholder, #typed-slash:focus::-moz-placeholder {
+    #typed-slash.is-active::-moz-placeholder {
       /* Firefox 19+ */
       color: transparent; }
-    #typed-slash:active:-ms-input-placeholder, #typed-slash:focus:-ms-input-placeholder {
+    #typed-slash.is-active:-ms-input-placeholder {
       /* IE 10+ */
       color: transparent; }
-    #typed-slash:active:-moz-placeholder, #typed-slash:focus:-moz-placeholder {
+    #typed-slash.is-active:-moz-placeholder {
       /* Firefox 18- */
       color: transparent; }
 
