@@ -206,7 +206,8 @@ function createTickerRow(rental, now){
 		ticker_reach = "--reaching <span class='is-primary'>" + ticker_views_format + "</span>" + ticker_views_plural;
 
 		//where have they been sending traffic??
-		var rental_preview = "http://" + listing_info.domain_name;
+		var rental_path = (rental.path) ? "/" + rental.path : "";
+		var rental_preview = "http://" + listing_info.domain_name + rental_path;
 	}
 
 	//update time / reach
