@@ -326,106 +326,138 @@ module.exports = {
 
     //checks to make sure listing is still verified
 	checkStillVerified : function(req, res, next){
-        console.log("F: Checking to see if domain is still pointed to DomaHub...");
-		var domain_name = req.params.domain_name;
-		dns.resolve(domain_name, "A", function (err, address, family) {
-            if (!err){
-                var domain_ip = address;
-                dns.lookup("domahub.com", function (err, address, family) {
-                    if (domain_ip != address && domain_ip.length != 1){
-                        console.log("F: Listing is not pointed to DomaHub anymore! Reverting verification...");
-                        Listing.updateListing(domain_name, {
-                            verified: null,
-                            status: 0
-                        }, function(result){
-                            req.session.listing_info.verified = null;
-                            req.session.listing_info.status = 0;
-                            renderWhoIs(req, res, domain_name);
-                        });
-                    }
-                    else {
-                        next();
-                    }
-                });
-            }
-            else {
-                next();
-            }
-		});
+        //ignore if unlisted
+        if (req.session.listing_info.unlisted){
+            next();
+        }
+        else {
+            console.log("F: Checking to see if domain is still pointed to DomaHub...");
+
+            dns.resolve(req.params.domain_name, "A", function (err, address, family) {
+                if (!err){
+                    var domain_ip = address;
+                    dns.lookup("domahub.com", function (err, address, family) {
+                        if (domain_ip != address && domain_ip.length != 1){
+                            console.log("F: Listing is not pointed to DomaHub anymore! Reverting verification...");
+                            Listing.updateListing(req.params.domain_name, {
+                                verified: null,
+                                status: 0
+                            }, function(result){
+                                getWhoIs(req, res, next);
+                            });
+                        }
+                        else {
+                            next();
+                        }
+                    });
+                }
+                else {
+                    error.handler(req, res, "DNS error!");
+                }
+            });
+        }
 	},
 
-    //check if listing is a valid domain name and add it to the search history
-    checkDomainListedAndAddToSearch : function(req, res, next){
-        console.log("F: Checking if domain is listed on DomaHub...");
+    addToSearch : function(req, res, next){
+        //add to search only if we went directly to listing
+        if (!req.session.from_api && node_env != "dev"){
+            var user_ip = req.headers['x-forwarded-for'] ||
+            req.connection.remoteAddress ||
+            req.socket.remoteAddress;
 
-        var domain_name = req.params.domain_name;
-
-        Listing.checkListing(domain_name, function(result){
-            var listing_result = result;
-
-            //add to search only if we went directly to listing
-            if (!req.session.from_api){
-                var user_ip = req.headers['x-forwarded-for'] ||
-                req.connection.remoteAddress ||
-                req.socket.remoteAddress;
-
-                //nginx https proxy removes IP
-                if (req.headers["x-real-ip"]){
-                    user_ip = req.headers["x-real-ip"];
-                }
-
-                //add to search history if its not dev
-                if (node_env != "dev"){
-                    var account_id = (typeof req.user == "undefined") ? null : req.user.id;
-                    var now = new Date().getTime();
-                    var history_info = {
-                        account_id: account_id,			//who searched if who exists
-                        domain_name: domain_name.toLowerCase(),		//what they searched for
-                        timestamp: now,		//when they searched for it
-                        user_ip : user_ip
-                    }
-                    console.log("F: Adding to search history...");
-
-                    Data.newListingHistory(history_info, function(result){if (result.state == "error") {console.log(result)}});	//async
-                }
-                delete req.session.from_api;
+            //nginx https proxy removes IP
+            if (req.headers["x-real-ip"]){
+                user_ip = req.headers["x-real-ip"];
             }
 
-            //doesnt exist, render the whois EJS
-            if (!listing_result.info.length || listing_result.state == "error"){
-                renderWhoIs(req, res, domain_name);
+            var account_id = (typeof req.user == "undefined") ? null : req.user.id;
+            var now = new Date().getTime();
+            var history_info = {
+                account_id: account_id,			//who searched if who exists
+                domain_name: domain_name.toLowerCase(),		//what they searched for
+                timestamp: now,		//when they searched for it
+                user_ip : user_ip
+            }
+            console.log("F: Adding to search history...");
+            Data.newListingHistory(history_info, function(result){if (result.state == "error") {console.log(result)}});	//async
+            delete req.session.from_api;
+        }
+        next();
+    },
+
+    //gets the listing info if it is listed
+    getListingInfo : function(req, res, next) {
+        console.log("F: Checking if " + req.params.domain_name + " is listed on DomaHub...");
+
+        Listing.getVerifiedListing(req.params.domain_name, function(result){
+            if (result.state=="error"){error.handler(req, res, "Invalid listing!");}
+            else if (result.state=="success" && result.info.length <= 0){
+                console.log("F: " + req.params.domain_name + " is NOT listed on DomaHub.");
+
+                getWhoIs(req, res, next);
             }
             else {
-                next();     //exists! handle the rest of the route
+                console.log("F: " + req.params.domain_name + " is listed on DomaHub!");
+
+                req.session.listing_info = result.info[0];
+                next();
             }
         });
     },
 
-    //gets the listing info and all rental info/times belonging to it for a verified and active listing
-    getVerifiedListing : function(req, res, next) {
-        console.log("F: Getting all listing info for the verified listing: " + req.params.domain_name + "...");
+    //check to make sure that anything posted was for the correct domain
+    checkSession : function(req, res, next){
+        console.log("F: Checking to make sure that the correct domain was requested...");
 
-        Listing.getVerifiedListing(req.params.domain_name, function(result){
-            if (result.state=="error"){error.handler(req, res, "Invalid listing!");}
-            else if (result.state == "success" && result.info.length == 0){
-                renderWhoIs(req, res, req.params.domain_name);
-            }
-            else {
+        if (!req.session.listing_info || req.session.listing_info.domain_name != req.params.domain_name){
+            error.handler(req, res, "Invalid listing!", "json");
+        }
+        else {
+            next();
+        }
+    },
 
-                //get listing rental times
-                getListingRentalTimes(req, res, result.info[0], function(){
-                    console.log("F: Getting all rental information for domain: " + req.params.domain_name + "...");
+    //gets X ticker rows per call
+    getListingTicker : function(req, res, next){
+        console.log("F: Getting ticker data for " + req.params.domain_name + "...");
 
-                    //get the traffic of the listing
-                    Data.getListingTraffic(req.params.domain_name, function(result){
-                        console.log("F: Getting all Alexa information for domain: " + req.params.domain_name + "...");
+        //check to see that the posted old rental date is valid
+        if (!moment(parseFloat(req.body.oldest_rental_date)).isValid()){
+            error.handler(req, res, "Invalid last date for rental!", "json");
+        }
+        else if (!validator.isInt(req.body.max_count)){
+            error.handler(req, res, "Invalid max count!", "json");
+        }
+        else {
+            var max_count = parseFloat(req.body.max_count);
 
-                        req.session.listing_info.traffic = result.info;
-                        alexaData.AlexaWebData(req.params.domain_name, function(error, result) {
-                            req.session.listing_info.alexa = result;
-                            next();
-                        });
+            Listing.getListingRentals(req.params.domain_name, req.body.oldest_rental_date, max_count, function(result){
+                if (result.state=="error"){error.handler(req, res, "Something went wrong getting rentals!", "json");}
+                else if (result.info.length <= 0){
+                    res.send({
+                        loaded_rentals : []
                     });
+                }
+                else {
+                    res.send({
+                        state: "success",
+                        loaded_rentals : result.info
+                    });
+                }
+            });
+        }
+    },
+
+    //get the traffic of the listing
+    getListingTraffic : function(req, res, next){
+        console.log("F: Getting all traffic information for domain: " + req.params.domain_name + "...");
+
+        Data.getListingTraffic(req.params.domain_name, function(result){
+            if (result.state=="error"){error.handler(req, res, "Invalid traffic!", 'json');}
+            else {
+                res.json({
+                    state : "success",
+                    traffic : result.info
                 });
             }
         });
@@ -433,7 +465,15 @@ module.exports = {
 
     //get alexa traffic info
     getListingAlexa : function(req, res, next){
-
+        alexaData.AlexaWebData(req.params.domain_name, function(error, result) {
+            if (error){error.handler(req, res, "Invalid Alexa!", 'json');}
+            else {
+                res.json({
+                    state : "success",
+                    alexa : result
+                });
+            }
+        });
     },
 
     //gets the rental/listing info
@@ -943,16 +983,12 @@ function getListingRentalTimes(req, res, listing_info, callback){
     Listing.getListingRentalsInfo(listing_info.id, function(result){
         if (result.state=="error"){error.handler(req, res, result.info);}
         else {
-            //remove some sensitive info
-            delete listing_info.stripe_subscription_id;
-
             //stripe not connected, make sure the listing doesnt accept new rentals
             if (listing_info.stripe_connected == 0){
                 listing_info.status = 0;
             }
 
             listing_info.rentals = joinRentalTimes(result.info);
-            req.session.listing_info = listing_info;
             callback();
         }
     });
@@ -986,8 +1022,8 @@ function joinRentalTimes(rental_times){
 //---------------------------------------------------------------------------------------------------------------------------------
 
 //helper function to run whois since domain isn't listed but is a real domain
-function renderWhoIs(req, res, domain_name){
-    whois.lookup(domain_name, function(err, data){
+function getWhoIs(req, res, next){
+    whois.lookup(req.params.domain_name, function(err, data){
         //look up domain owner info
         var whoisObj = {};
         if (data){
@@ -1003,37 +1039,22 @@ function renderWhoIs(req, res, domain_name){
 
         var email = whoisObj["Registrant Email"] || whoisObj["Admin Email"] || whoisObj["Tech Email"] || "";
         var owner_name = whoisObj["Registrant Organization"] || whoisObj["Registrant Name"] || "Someone out there";
-        var description = "If you are the owner of this domain and have an issue with anything you see here, please do not hesitate to reach out to us.";
 
-        var options = {
-            user: req.user,
-            listing_info: {
-                domain_name: domain_name,
-                email: email,
-                username: owner_name,
-                description: description,
-                unlisted: true
-            }
+        var listing_info = {
+            domain_name: req.params.domain_name,
+            email: email,
+            username: owner_name,
+            unlisted: true
         }
 
         //nobody owns it!
         if (!whoisObj["End Text"] && owner_name == "Nobody" && data && whoisObj.source != "IANA"){
-            options.listing_info.available = true;
-            options.listing_info.username = "Nobody yet!";
-            options.listing_info.description = "You could be the next owner of this great domain! A personal project? A new business venture? The sky's the limit!";
+            listing_info.available = true;
+            listing_info.username = "Nobody yet!";
         }
 
-        console.log("F: Getting all rental information for domain: " + req.params.domain_name + "...");
-
-        //get the traffic of the listing
-        Data.getListingTraffic(domain_name, function(result){
-            console.log("F: Getting all Alexa information for domain: " + req.params.domain_name + "...");
-            options.listing_info.traffic = result.info;
-            alexaData.AlexaWebData(domain_name, function(error, result) {
-                options.listing_info.alexa = result;
-                res.render("listings/listing.ejs", options);
-            });
-        });
+        req.session.listing_info = listing_info;
+        next();
     });
 }
 

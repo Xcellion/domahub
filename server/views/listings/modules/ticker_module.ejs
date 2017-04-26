@@ -1,5 +1,5 @@
 <div id="ticker-module" class="module">
-  <li id='ticker-clone' class='ticker-row is-hidden'>
+  <li id='ticker-clone' class='ticker-row ticker-rental is-hidden'>
       <span class='ticker-icon-color'><i class="margin-right-10 fa ticker-icon"></i></span>
       <div class="ticker-text">
         <p class='is-bold ticker-user is-inline'></p>
@@ -8,17 +8,27 @@
         <p class='ticker-time is-inline'></p>.
       </div>
   </li>
+  <li id="ticker-loadmore" class='ticker-row is-hidden'>
+      <a class="is-accent ticker-text">
+          Click here to load more
+      </a>
+  </li>
   <ul id="ticker-wrapper" class='padding-top-0 padding-bottom-0'>
-      <li  class='ticker-row'>
+      <li id="ticker-views" class='ticker-row is-hidden'>
           <span class='ticker-icon-color is-dark'><i class="margin-right-10 fa fa-users ticker-icon"></i></span>
           <div class="ticker-text">
-              <span id="views-total">0</span> people have viewed this website in the past month.
+              <span id="views-total">0</span> people have viewed this page or its subpages in the past <span id="views-time">day</span>.
           </div>
       </li>
       <li id="ticker-empty" class='ticker-row is-hidden'>
           <span class='ticker-icon-color is-danger'><i class="margin-right-10 fa fa-exclamation-triangle ticker-icon"></i></span>
           <div class="ticker-text">
               There is no other recent activity!
+          </div>
+      </li>
+      <li id="ticker-loading" class='ticker-row'>
+          <div class="ticker-text">
+              Now loading recent history...
           </div>
       </li>
   </ul>
