@@ -98,6 +98,7 @@
 
 .card {
   &.is-checkout {
+    margin-left: auto;
     width: 375px;
     .card-image {
       width: 100%;

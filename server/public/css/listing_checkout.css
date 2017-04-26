@@ -244,6 +244,7 @@ button[data-balloon] {
   margin-right: 0 !important; }
 
 .card.is-checkout {
+  margin-left: auto;
   width: 375px; }
   .card.is-checkout .card-image {
     width: 100%;
