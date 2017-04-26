@@ -32,5 +32,4 @@ function redirectDelay(path){
 			window.location.href = path;
 		}
 	}, 1000);
-
 }

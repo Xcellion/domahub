@@ -28,14 +28,15 @@
         <% } else { %>
 
             <div class="column is-4">
-              <%# OTHER BY SAME OWNER DOMAINS MODULE %>
-              <%- include("info/same_owner_listings_module.ejs", {
+              <%# CATEGORIES MODULE %>
+              <%- include("info/categories_module.ejs", {
                 listing_info : listing_info
               }); %>
             </div>
+
             <div class="column is-4">
-              <%# CATEGORIES MODULE %>
-              <%- include("info/categories_module.ejs", {
+              <%# OTHER BY SAME OWNER DOMAINS MODULE %>
+              <%- include("info/same_owner_listings_module.ejs", {
                 listing_info : listing_info
               }); %>
             </div>
