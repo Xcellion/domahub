@@ -26,6 +26,7 @@ module.exports = function(app, db, e){
 function checkHost(req, res, next){
 	if (req.headers.host){
 		var domain_name = req.headers.host.replace(/^(https?:\/\/)?(www\.)?/,'');
+		var path = req.path.substr(1, req.path.length);
 
 		if (domain_name == "www.w3bbi.com"
 		|| domain_name == "w3bbi.com"
@@ -40,7 +41,7 @@ function checkHost(req, res, next){
 			error.handler(req, res, "Invalid domain name!");
 		}
 		else {
-			getCurrentRental(req, res, domain_name);
+			getCurrentRental(req, res, domain_name, path);
 		}
 	}
 	else {
@@ -49,7 +50,7 @@ function checkHost(req, res, next){
 }
 
 //send the current rental details and information for a listing
-function getCurrentRental(req, res, domain_name){
+function getCurrentRental(req, res, domain_name, path){
 	//requesting something besides main page, pipe the request
 	if (req.session.rented_info){
 		console.log("F: Proxying rental request for an existing session for " + domain_name + "!");
@@ -58,42 +59,10 @@ function getCurrentRental(req, res, domain_name){
 	else {
 		console.log("F: Attempting to check current rental status for " + domain_name + "!");
 		Listing.getCurrentRental(domain_name, function(result){
-			if (result.state != "success" || result.info.length == 0){
+			if (result.state != "success" || result.info.length == 0 || result.info[0].path != path){
 				console.log("F: Not rented! Redirecting to listing page");
 				delete req.session.rented_info;
-
-				//add to search
-				var user_ip = req.headers['x-forwarded-for'] ||
-				req.connection.remoteAddress ||
-				req.socket.remoteAddress;
-
-				//nginx https proxy removes IP
-				if (req.headers["x-real-ip"]){
-					user_ip = req.headers["x-real-ip"];
-				}
-
-				//add to search history if its not dev
-				if (node_env != "dev"){
-					req.session.from_api = true;
-
-					var account_id = (typeof req.user == "undefined") ? null : req.user.id;
-					var now = new Date().getTime();
-					var history_info = {
-						account_id: account_id,			//who searched if who exists
-						domain_name: domain_name.toLowerCase(),		//what they searched for
-						timestamp: now,		//when they searched for it
-						user_ip : user_ip
-					}
-					console.log("F: Adding to search history...");
-
-					Data.newListingHistory(history_info, function(result){if (result.state == "error") {console.log(result)}});	//async
-				}
-
-				//render a middleman page to send quantcast data first
-				res.render("quant_redirect.ejs", {
-					redirect_link : "https://domahub.com/listing/" + domain_name,
-					redirect_name : domain_name
-				});
+				next();
 			}
 			else {
 				//add it to rental stats
@@ -139,13 +108,14 @@ function requestProxy(req, res, rental_info){
 		url: addProtocol(rental_info.address),
 		encoding: null
 	}, function (err, response, body) {
-		//an image was requested
-		if (response.headers['content-type'].indexOf("image") != -1){
-			console.log("F: Requested rental address was an image!");
+		//an image/PDF was requested
+		if (response.headers['content-type'].indexOf("image") != -1 || response.headers['content-type'].indexOf("pdf") != -1){
+			console.log("F: Requested rental address was an image/PDF!");
 			var image_path = (node_env == "dev") ? path.resolve(process.cwd(), 'server', 'views', 'proxy', 'proxy-image.ejs') : path.resolve(process.cwd(), 'views', 'proxy', 'proxy-image.ejs');
 
 			res.render(image_path, {
 				image: rental_info.address,
+				content: response.headers['content-type'],
 				edit: false,
 				preview: false,
 				doma_rental_info : rental_info
