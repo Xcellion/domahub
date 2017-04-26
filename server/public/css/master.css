@@ -3964,10 +3964,8 @@ input:-webkit-autofill {
 .level {
   align-items: center;
   justify-content: space-between; }
-  .level.has-border {
-    padding: 5px 0; }
-    .level.has-border:not(:last-child) {
-      border-bottom: 1px solid rgba(0, 0, 0, 0.12); }
+  .level.has-border:not(:last-child) {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.12); }
   .level.filter-panel {
     justify-content: flex-start; }
     .level.filter-panel .filter-local {
@@ -5017,7 +5015,8 @@ input:-webkit-autofill {
 .footer-list {
   display: flex;
   align-items: center;
-  text-decoration: none; }
+  text-decoration: none;
+  list-style: none; }
   @media screen and (max-width: 456px) {
     .footer-list {
       flex-wrap: wrap; } }
