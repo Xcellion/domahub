@@ -20,13 +20,13 @@
 					<div class="tabs is-fullwidth is-toggle">
 						<ul>
 							<li>
-								<a tabindex="1" href="/profile/mylistingss">
+								<a tabindex="0" href="/profile/mylistingss">
 									<span class="icon is-small"><i class="fa fa-tasks"></i></span>
 									<span>My Listings</span>
 								</a>
 							</li>
 							<li class="is-active">
-								<a tabindex="1">
+								<a tabindex="0">
 									<span class="icon is-small"><i class="fa fa-window-maximize"></i></span>
 									<span>My Rentals</span>
 								</a>
@@ -41,7 +41,7 @@
 						<div class="level-left">
 							<div class="level-item">
 								<div class="control has-addons">
-									<span class="select" tabindex="1">
+									<span class="select" tabindex="0">
 										<select id="filter-select">
 											<option value="active_filter">Active</option>
 											<option value="upcoming_filter">Upcoming</option>
@@ -49,7 +49,7 @@
 											<option value="reset_filter">View All</option>
 										</select>
 									</span>
-									<a id="multi-delete" class="multi-button is-disabled button no-shadow" tabindex="1" title="Delete Rental(s)">
+									<a id="multi-delete" class="multi-button is-disabled button no-shadow" tabindex="0" title="Delete Rental(s)">
 										<span class="icon is-small">
 											<i class="fa fa-trash-o"></i>
 										</span>
@@ -60,7 +60,7 @@
 							<div class="level-item">
 								<div class="control is-expanded has-icon">
 									<i class="fa fa-search"></i>
-									<input id="search-domain" tabindex="1" class="input is-expanded" type="text" placeholder="Search my rentals" />
+									<input id="search-domain" tabindex="0" class="input is-expanded" type="text" placeholder="Search my rentals" />
 								</div>
 							</div>
 						</div>
@@ -123,7 +123,7 @@
 											</span>
 											<span>Edit</span>
 										</a>
-										<!-- <a class="button preview-button is-pulled-right margin-right-5 no-shadow" target="_blank" title="Preview this rental" style="target-new: tab;" href="">
+										<!-- <a class="button preview-button is-pulled-right margin-right-5 no-shadow" target="_blank" rel="noopener" title="Preview this rental" style="target-new: tab;" href="">
 											<span class="icon is-small">
 												<i class="fa fa-external-link" aria-hidden="true"></i>
 											</span>
@@ -139,7 +139,7 @@
 									<td class="td-visible td-status is-hidden-mobile"></td>
 									<td class="td-visible td-address is-hidden-mobile">
 										<div class="address-div-wrapper">
-											<a target="_blank" class="address-link is-accent" href=""></a>
+											<a target="_blank" rel="noopener" class="address-link is-accent" href=""></a>
 										</div>
 									</td>
 									<td class="td-visible td-address td-address-drop is-hidden is-hidden-mobile">
@@ -163,7 +163,7 @@
 													</div>
 													<div class="control">
 														<div class="is-flex-wrap margin-bottom-10">
-															<a target="_blank" class="view-rental button margin-right-5 no-shadow">View Listing</a>
+															<a target="_blank" rel="noopener" class="view-rental button margin-right-5 no-shadow">View Listing</a>
 															<a class="delete-rental button no-shadow">Delete Rental</a>
 														</div>
 														<form class="drop-form">
@@ -191,7 +191,7 @@
 																<img class="is-listing preview-image" src=""></figure>
 															</div>
 															<footer class="card-footer has-text-centered">
-																<a target="_blank" href="" class="preview-link card-footer-item no-border">Click to Preview</a>
+																<a target="_blank" rel="noopener" href="" class="preview-link card-footer-item no-border">Click to Preview</a>
 															</footer>
 														</div>
 													</div>

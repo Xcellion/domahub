@@ -1039,13 +1039,11 @@ function getWhoIs(req, res, next){
 
         var email = whoisObj["Registrant Email"] || whoisObj["Admin Email"] || whoisObj["Tech Email"] || "";
         var owner_name = whoisObj["Registrant Organization"] || whoisObj["Registrant Name"] || "Someone out there";
-        var description = "If you are the owner of this domain and have an issue with anything you see here, please do not hesitate to reach out to us.";
 
         var listing_info = {
             domain_name: req.params.domain_name,
             email: email,
             username: owner_name,
-            description: description,
             unlisted: true
         }
 
@@ -1053,7 +1051,6 @@ function getWhoIs(req, res, next){
         if (!whoisObj["End Text"] && owner_name == "Nobody" && data && whoisObj.source != "IANA"){
             listing_info.available = true;
             listing_info.username = "Nobody yet!";
-            listing_info.description = "You could be the next owner of this great domain! A personal project? A new business venture? The sky's the limit!";
         }
 
         req.session.listing_info = listing_info;
