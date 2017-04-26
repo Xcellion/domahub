@@ -26,7 +26,7 @@ module.exports = function(app, db, e){
 function checkHost(req, res, next){
 	if (req.headers.host){
 		var domain_name = req.headers.host.replace(/^(https?:\/\/)?(www\.)?/,'');
-		var path = req.path.substr(1, req.path.length);
+		var path = req.originalUrl.substr(1, req.originalUrl.length);
 
 		if (domain_name == "www.w3bbi.com"
 		|| domain_name == "w3bbi.com"
@@ -51,7 +51,6 @@ function checkHost(req, res, next){
 
 //send the current rental details and information for a listing
 function getCurrentRental(req, res, domain_name, path){
-	console.log("jkfdafkljasfjasklf", req.originalUrl, "+", req.path, "+", req.headers);
 	//requesting something besides main page, pipe the request
 	if (req.session.rented_info){
 		console.log("F: Proxying rental request for an existing session for " + domain_name + "!");
