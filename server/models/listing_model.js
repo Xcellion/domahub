@@ -126,7 +126,7 @@ listing_model.prototype.getRentalInfo = function(rental_id, callback){
 }
 
 //gets all rental information for the current rental
-listing_model.prototype.getCurrentRental = function(domain_name, callback){
+listing_model.prototype.getCurrentRental = function(domain_name, path, callback){
 	console.log("DB: Attempting to get current rental info for for domain " + domain_name + "...");
 	query = "SELECT \
 				rentals.*,\
@@ -141,11 +141,12 @@ listing_model.prototype.getCurrentRental = function(domain_name, callback){
 			ON rentals.rental_id = rental_times.rental_id \
 			WHERE listings.domain_name = ? \
 			AND (UNIX_TIMESTAMP(NOW()) * 1000) BETWEEN rental_times.date AND rental_times.date + rental_times.duration \
+			AND rentals.path = ? \
 			AND listings.status = 1 \
 			AND listings.verified = 1 \
 			AND listings.deleted IS NULL \
 			AND rentals.status = 1";
-	listing_query(query, "Failed to get current rental info for domain " + domain_name + "!", callback, domain_name);
+	listing_query(query, "Failed to get current rental info for domain " + domain_name + "!", callback, [domain_name, path]);
 }
 
 //gets all rental times for a specific rental
