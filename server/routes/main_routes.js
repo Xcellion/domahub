@@ -28,23 +28,23 @@ module.exports = function(app, db, auth, error){
 
     //array of all views from the main page
     main_page_routes = [
-		"/about",
-		"/mission",
-		"/press",
+		// "/about",
+		// "/mission",
+		// "/press",
 		"/faq",
 		"/careers",
 		"/contact",
 		"/privacy",
-        // "/sellers",
+    // "/sellers",
 		// "/renters",
 		"/terms",
-        "/nothinghere"
+    "/nothinghere"
     ]
 
 	//default page
 	app.get("/", renderMainPage);
 
-    //routes any of the above routes to the appropriate view
+  //routes any of the above routes to the appropriate view
 	app.get(main_page_routes, mainPageLinksRender);
 
 	//to check email and sign up for beta

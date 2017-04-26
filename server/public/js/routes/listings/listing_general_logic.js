@@ -342,14 +342,14 @@ function createTickerRow(rental, now){
 		//showing an image
 		if (rental.address.match(/\.(jpeg|jpg|png|bmp)$/) != null){
 			var ticker_type = ticker_pre_tense + "display" + ticker_verb_tense + " <a href=" + rental_preview + " class='is-accent is-underlined'>an image</a> on this website";
-			ticker_icon_color.addClass('is-purple');
+			ticker_icon_color.addClass('is-info');
 			ticker_icon.addClass('fa-camera-retro');
 		}
 
 		//showing a GIF
 		else if (rental.address.match(/\.(gif)$/) != null){
 			var ticker_type = ticker_pre_tense + "display" + ticker_verb_tense + " <a href=" + rental_preview + " class='is-accent is-underlined'>a GIF</a> on this website";
-			ticker_icon_color.addClass('is-info');
+			ticker_icon_color.addClass('is-dark');
 			ticker_icon.addClass('fa-smile-o');
 		}
 

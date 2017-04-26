@@ -183,10 +183,20 @@ button[data-balloon] {
     #domain-display h1 {
       font-size: 28px; } }
 
-#domain-display .control {
-  width: 250px; }
-  #domain-display .control input {
-    width: 100%; }
+@media screen and (min-width: 980px) {
+  #domain-display .control {
+    width: 100%; } }
+
+@media screen and (min-width: 769px) and (max-width: 979px) {
+  #domain-display .control {
+    width: 250px; } }
+
+@media screen and (max-width: 768px) {
+  #domain-display .control {
+    width: 250px; } }
+
+#domain-display .control input {
+  width: 100%; }
 
 .input-tooltip {
   background-color: #444;
