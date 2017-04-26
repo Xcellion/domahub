@@ -212,7 +212,6 @@ module.exports = function(app, db, auth, error, stripe){
 
 	//render rental checkout page
 	app.get('/listing/:domain_name/checkout', [
-		renter_functions.deleteRentalInfo,
 		renter_functions.renderCheckout
 	]);
 
