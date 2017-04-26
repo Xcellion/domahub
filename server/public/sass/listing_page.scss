@@ -2,6 +2,10 @@
 @import 'mixins';
 @import 'balloon';
 
+html {
+  overflow-y: scroll;
+}
+
 .description-text {
   max-width: 500px;
 }

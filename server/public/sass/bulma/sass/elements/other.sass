@@ -43,14 +43,13 @@
     width: 40px
 
 .icon
-  +fa(21px, 24px)
+  align-items: center
+  display: inline-flex
+  justify-content: center
+  height: 1.5rem
+  width: 1.5rem
   .fa
-    // +transition(color 0.25s ease, background-color 0.25s ease)
-    color: inherit
-    font-size: inherit
-    line-height: inherit
-    &.no-transition
-      +transition(none)
+    font-size: 21px
   // Colors
   @each $name, $pair in $colors
     $color: nth($pair, 1)
@@ -79,11 +78,20 @@
           height: 60px
   // Sizes
   &.is-small
-    +fa(14px, 18px)
+    height: 1rem
+    width: 1rem
+    .fa
+      font-size: 14px
   &.is-medium
-    +fa(28px, 32px)
+    height: 2rem
+    width: 2rem
+    .fa
+      font-size: 28px
   &.is-large
-    +fa(42px, 48px)
+    height: 3rem
+    width: 3rem
+    .fa
+      font-size: 42px
   // Modifiers
   &.is-active
     color: $primary

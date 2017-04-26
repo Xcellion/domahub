@@ -1,122 +1,8 @@
+var myChart;
+
 $(document).ready(function() {
 
-	//---------------------------------------------------------------------------------------------------UNAVAILABLE MAGIC BUTTON
-
-	if (listing_info.status == 0 || listing_info.unlisted){
-		var bored_meter = 0;
-		var magic_text = [
-			"Try again?",
-			"Try again?",
-			"Not giving up?",
-			"Why not?",
-			"You are really persistent.",
-			"You really want this site?",
-			"I understand.",
-			"You're bored.",
-			"You're really bored.",
-			"Truly.",
-			"Truly..",
-			"Truly...",
-			"Bored.",
-			"So here you are.",
-			"Interacting with a button.",
-			"I was doing just fine...",
-			"Before you came along...",
-			"And now...",
-			"I'm just getting poked...",
-			"And poked...",
-			"And poked....",
-			"And poked.....",
-			"You won't stop, will you?",
-			"This is fun for you?",
-			"What if I just disappear?",
-			"",
-			"Shoot.",
-			"Well that didn't work.",
-			"What do you even want?",
-			"Why are you doing this?",
-			listing_info.domain_name + "?",
-			"Interesting website...",
-			"Sounds pretty useful.",
-			"You gonna use it?",
-			"Well it's not available.",
-			"I can tell you that much.",
-			"Bothering me won't help.",
-			"Despite what it says above.",
-			"I don't know what to say.",
-			"What do you want?",
-			"I'm a magic button.",
-			"Not a know-it-all button.",
-			"...",
-			"....",
-			".....",
-			"......",
-			".......",
-			"........",
-			".........",
-			"Okay.",
-			"You got me.",
-			"I didn't tell you but...",
-			"Fact is...",
-			"Every time you press me...",
-			"I make $1.",
-			"+$1",
-			"+$1",
-			"+$1",
-			"+$1",
-			"+$1",
-			"+$1",
-			"+$1",
-			"+$1",
-			"+$1",
-			"+$1",
-			"Still here?",
-			"WHY???",
-			"I told you it's $1 / click!",
-			"You're giving me money.",
-			"You're okay with that?",
-			"You must be rich.",
-			"Or just extremely bored.",
-			"+$1",
-			"+$1",
-			"+$1",
-			"+$1",
-			"+$1",
-			"Okay...",
-			"Fine.",
-			"Since you're so determined.",
-			"I'll do some magic for you.",
-			"You paid for it anyway.",
-			"Haha.",
-			"...",
-			"....",
-			".....",
-			".....",
-			"Okay, I'm joking.",
-			"I don't get paid.",
-			"I can't do magic.",
-			"I'm just a button.",
-			"A normal.",
-			"Regular.",
-			"Good ol' fashioned.",
-			"Button.",
-			"Anyways.",
-			"I'm done with you.",
-			"I'm going to stop now.",
-			"Goodbye.",
-		]
-		var magic_index = 0;
-
-		//button doesnt do anything, but dont worry, loading the page already stored the info we needed
-		$("#unavail-button").on("click", function(){
-			magicButton($(this), magic_text, magic_index, bored_meter);
-		});
-	}
-
-	//related domains module
-	// findRelatedDomains();
-
-	//---------------------------------------------------------------------------------------------------TABS AND MODULES
+	//---------------------------------------------------------------------------------------------------TABS
 
 	//switch tabs
 	$(".tab").on("click", function(){
@@ -131,6 +17,8 @@ $(document).ready(function() {
 		$("#" + which_tab + "-module").removeClass('is-hidden');
 	});
 
+	//---------------------------------------------------------------------------------------------------MODULES
+
 	//initialize chart only if its not loaded yet
 	$("#traffic-tab").bind("click.traffic", function(){
 		createTrafficChart();
@@ -144,66 +32,50 @@ $(document).ready(function() {
 		$(this).unbind("click.info");
 	})
 
+	//initialize modules
 	getTrafficData();
 	getTickerData();
 
 });
 
-//fun function for magic button
-function magicButton(button, magic_text, magic_index, bored_meter){
-	button.off().addClass('is-loading');
-
-	window.setTimeout(function(){
-		button.removeClass('is-loading').text(magic_text[magic_index]).on("click", function(){
-			magicButton(button, magic_text, magic_index);
-		});
-		if (magic_index >= magic_text.length - 1){
-			magic_index = magic_text.length - 1;
-			//user has reached the end
-			bored_meter++;
-		}
-		magic_index++;
-	}, 200);
-}
-
-//related domains
-function findRelatedDomains(){
-	if ($("#similar-domains").length > 0){
-		if (listing_info.categories){
-			var categories_to_post = listing_info.categories;
-			$("#similar-domains-title").text('Similar Websites');
-		}
-		else {
-			var categories_to_post = "";
-			$("#similar-domains-title").text('Other Websites');
-		}
-
-		$.ajax({
-			url: "/listing/related",
-			method: "POST",
-			data: {
-				categories: categories_to_post,
-				domain_name_exclude: listing_info.domain_name
-			}
-		}).done(function(data){
-			if (data.state == "success"){
-				$("#similar-domains").removeClass('is-hidden');
-				for (var x = 0; x < data.listings.length; x++){
-					var cloned_similar_listing = $("#similar-domain-clone").clone();
-					cloned_similar_listing.removeAttr("id").removeClass('is-hidden');
-
-					//edit it based on new listing info
-					cloned_similar_listing.find(".similar-domain-price").text("$" + data.listings[x].price_rate + " / " + data.listings[x].price_type);
-					// var random_sig = Math.floor(Math.random()*1000);
-					// var background_image = data.listings[x].background_image || "https://source.unsplash.com/category/nature/250x200?sig=" + random_sig;
-					// cloned_similar_listing.find(".similar-domain-img").attr("src", background_image);
-					cloned_similar_listing.find(".similar-domain-name").text(data.listings[x].domain_name).attr("href", "/listing/" + data.listings[x].domain_name);
-					$("#similar-domain-table").append(cloned_similar_listing);
-				}
-			}
-		});
-	}
-}
+// //related domains
+// function findRelatedDomains(){
+// 	if ($("#similar-domains").length > 0){
+// 		if (listing_info.categories){
+// 			var categories_to_post = listing_info.categories;
+// 			$("#similar-domains-title").text('Similar Websites');
+// 		}
+// 		else {
+// 			var categories_to_post = "";
+// 			$("#similar-domains-title").text('Other Websites');
+// 		}
+//
+// 		$.ajax({
+// 			url: "/listing/related",
+// 			method: "POST",
+// 			data: {
+// 				categories: categories_to_post,
+// 				domain_name_exclude: listing_info.domain_name
+// 			}
+// 		}).done(function(data){
+// 			if (data.state == "success"){
+// 				$("#similar-domains").removeClass('is-hidden');
+// 				for (var x = 0; x < data.listings.length; x++){
+// 					var cloned_similar_listing = $("#similar-domain-clone").clone();
+// 					cloned_similar_listing.removeAttr("id").removeClass('is-hidden');
+//
+// 					//edit it based on new listing info
+// 					cloned_similar_listing.find(".similar-domain-price").text("$" + data.listings[x].price_rate + " / " + data.listings[x].price_type);
+// 					// var random_sig = Math.floor(Math.random()*1000);
+// 					// var background_image = data.listings[x].background_image || "https://source.unsplash.com/category/nature/250x200?sig=" + random_sig;
+// 					// cloned_similar_listing.find(".similar-domain-img").attr("src", background_image);
+// 					cloned_similar_listing.find(".similar-domain-name").text(data.listings[x].domain_name).attr("href", "/listing/" + data.listings[x].domain_name);
+// 					$("#similar-domain-table").append(cloned_similar_listing);
+// 				}
+// 			}
+// 		});
+// 	}
+// }
 
 //---------------------------------------------------------------------------------------------------RENTAL TICKER MODULE
 
@@ -225,6 +97,7 @@ function getTickerData(loadmore){
 
 		//how many to load at a time;
 		var max_count = 5;
+		loadingDots($("#ticker-loading"));
 
 		$.ajax({
 			url: "/listing/" + listing_info.domain_name + "/ticker",
@@ -238,6 +111,8 @@ function getTickerData(loadmore){
 		}).done(function(data){
 			//remove the loading message
 			$("#ticker-loading").addClass('is-hidden');
+			clearLoadingDots($("#ticker-loading"));
+
 			if (data.state == "success"){
 				//add to the session listing_info
 				if (listing_info.rentals){
@@ -420,6 +295,7 @@ function getTrafficData(){
 	}).done(function(data){
 		//remove the loading message
 		$("#traffic-loading").addClass('is-hidden');
+
 		if (data.traffic){
 			listing_info.traffic = data.traffic;
 			createCharts(data.traffic);
@@ -436,6 +312,7 @@ function createCharts(traffic){
 			myChart.destroy();
 		}
 
+		//X people viewed this in the past X
 		if (listing_info.rentals && listing_info.traffic){
 			pastViewsTickerRow();
 		}
@@ -509,7 +386,7 @@ function createTrafficChart(){
 
 	//create the monthly x-axis labels array
 	var monthly_labels = [];
-	var months_to_go_back = traffic.length || 6;
+	var months_to_go_back = traffic.length + 1 || 6;
 	for (var y = 0; y < months_to_go_back; y++){
 		var temp_month = moment().subtract(y, "month").format("MMM");
 		monthly_labels.unshift(temp_month);
@@ -523,7 +400,11 @@ function createTrafficChart(){
 			y: traffic[x].views
 		});
 	}
-
+	traffic_data.unshift({
+		x: moment().endOf("month").subtract(traffic.length, "month").valueOf(),
+		y: 0
+	});
+	
 	//traffic dataset
 	var traffic_dataset = {
 		label: "Website Views",
@@ -696,11 +577,6 @@ function createAlexa(alexa){
 
 //---------------------------------------------------------------------------------------------------MORE INFORMATION MODULE
 
-//function for the more information module
-function moreInfoModule(){
-
-}
-
 //other domains by same owner
 function findOtherDomains(){
 	if ($("#otherowner-domains").length > 0 && !listing_info.unlisted){
@@ -747,3 +623,27 @@ function getHost(href) {
 	l.href = href;
 	return l.hostname.replace("www.", "");
 };
+
+//keep appending dots to loading message
+function loadingDots(elem){
+	var max_dots = 5;
+	var cur_dots = 0;
+	var original_text = elem.text();
+
+	elem.data("interval", window.setInterval(function(){
+		elem.data("original_text", original_text);
+		cur_dots++;
+		elem.text(elem.text() + ".");
+
+		if (cur_dots >= max_dots){
+			cur_dots = 0;
+			elem.text(original_text);
+		}
+	}, 100));
+}
+
+//function to stop the loading message interval
+function clearLoadingDots(elem){
+	clearInterval(elem.data("interval"));
+	elem.text(elem.data("original_text"));
+}
