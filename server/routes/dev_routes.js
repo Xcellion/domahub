@@ -1,14 +1,11 @@
 var	account_model = require('../models/account_model.js');
 var	listing_model = require('../models/listing_model.js');
-
 var	validator = require('validator');
 var	request = require('request');
 var bodyParser = require('body-parser');
 var urlencodedParser = bodyParser.urlencoded({ extended: true });
 var dns = require("dns");
-
 var randomstring = require("randomstring");
-
 var awis = require('awis');
 
 module.exports = function(app, db, auth, error){
@@ -23,6 +20,7 @@ module.exports = function(app, db, auth, error){
         createSignupCodes
     ]);
     app.get("/checkout", checkout);
+    app.get("/pathtest", pathtest);
 }
 
 // get listing_checkout
@@ -47,10 +45,10 @@ function alexa(req, res, next){
             secret: "MNAY4e02cTdJsmcqvapakMTiUP6sbs0ZlWo+FqUf"
         });
 
-// UrlInfo - get information about pages and sites on the web - their traffic, content, and related sites
-// TrafficHistory - get a history of traffic rank
-// CategoryBrowse, CategoryListings - get lists of sites within a specific category ordered by traffic rank, or create a browseable directory of websites
-// SitesLinkingIn - get a list of sites linking in to a specified site
+        // UrlInfo - get information about pages and sites on the web - their traffic, content, and related sites
+        // TrafficHistory - get a history of traffic rank
+        // CategoryBrowse, CategoryListings - get lists of sites within a specific category ordered by traffic rank, or create a browseable directory of websites
+        // SitesLinkingIn - get a list of sites linking in to a specified site
 
         client({
             'Action': 'TrafficHistory',
@@ -87,4 +85,9 @@ function createSignupCodes(req, res, next){
     Account.createSignupCodes(codes, function(result){
         res.send(result);
     });
+}
+
+//function to test path
+function pathtest(req, res, next){
+    console.log(req.path.substr(1, req.path.length));
 }

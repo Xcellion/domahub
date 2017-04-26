@@ -127,10 +127,10 @@ $(document).ready(function () {
         if ($(this).val() != ""){
             var value_clipped = ($(this).val().length > 35) ? $(this).val().substr(0, 35) + "..." : $(this).val();
             if ($(this).attr("id") == "address-forward-input"){
-                var rental_type_text = "will forward to this link <a href=" + $(this).val() + " class='is-accent'> </br>(" + value_clipped + ")</a>";
+                var rental_type_text = "Will forward to <a target='_blank' href=" + $(this).val() + " class='is-accent'>this link </br>(" + value_clipped + ")</a>";
             }
             else {
-                var rental_type_text = "will display the content on <a href=" + $(this).val() + " class='is-accent'>this link </br>(" + value_clipped + ")</a>";
+                var rental_type_text = "Will display the content on <a target='_blank' href=" + $(this).val() + " class='is-accent'>this link </br>(" + value_clipped + ")</a>";
             }
             $("#rental-will-msg").html(rental_type_text).removeClass('is-hidden');
             $("#rental-will-duration-msg").removeClass('is-hidden');
@@ -395,7 +395,9 @@ function successHandler(rental_id, owner_hash_id){
 
     //copy ownership url
     if (!user){
-        $("#rental-link-input").val("https://domahub.com/listing/" + listing_info.domain_name + "/" + rental_id + "/" + owner_hash_id);
+        $("#rental-link-input").val("https://domahub.com/listing/" + listing_info.domain_name + "/" + rental_id + "/" + owner_hash_id).on("click", function(){
+            $(this).select();
+        });
         $("#rental-link-button").on("click", function(){
             $("#rental-link-input").select();
             document.execCommand("copy");
