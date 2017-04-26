@@ -27,48 +27,38 @@ var url = require("url");
 var node_env = process.env.NODE_ENV || 'dev'; 	//dev or prod bool
 
 module.exports = {
-    //check domain name for rental
-    checkRentalDomain : function(req, res, next){
-        console.log("F: Checking if rental belongs to the correct domain...");
-        var domain_name = req.params.domain_name;
 
-        if (req.session.rental_info.domain_name != domain_name){
-            error.handler(req, res, "Invalid domain name for rental!");
+    //delete session rental info if it exists
+    deleteRentalInfo : function(req, res, next){
+        console.log("F: Deleting any previous existing rental info...");
+
+        if (req.session.rental_info){
+            delete req.session.rental_info;
         }
-        else {
-            next();
+        if (req.session.new_rental_info){
+            delete req.session.new_rental_info;
         }
+        if (req.session.rented_info){
+            delete req.session.rented_info;
+        }
+        if (req.session.proxy_edit){
+            delete req.session.proxy_edit;
+        }
+        next();
     },
 
-    //check if rental belongs to account
-    checkRentalOwner : function(req, res, next){
-        console.log("F: Checking rental owner...");
+    //<editor-fold>-------------------------------CREATE A NEW RENTAL-------------------------------
 
-        //incorrect owner!
-        if (req.session.rental_info.account_id != req.user.id){
-            error.handler(req, res, "Invalid rental owner!");
-        }
-        else {
-            next();
-        }
+    //create a rental object for checking (for new)
+    createNewRentalObject : function(req, res, next){
+        req.session.new_rental_info = {
+            domain_name : req.params.domain_name
+        };
+
+        next();
     },
 
-    //check if domain belongs to account
-    checkDomainOwner : function(req, res, next){
-        console.log("F: Checking domain owner...");
-
-        Listing.checkListingOwner(req.user.id, req.params.domain_name, function(result){
-            //incorrect owner!
-            if (result.state == "error" || result.info.length == 0){
-                error.handler(req, res, "Invalid domain owner!");
-            }
-            else {
-                next();
-            }
-        });
-    },
-
-    //check the rental info posted
+    //check the rental info posted (for creating a new rental)
     checkRentalInfo : function(req, res, next){
         console.log("F: Checking posted rental info...");
 
@@ -86,6 +76,9 @@ module.exports = {
         //check for rental type
         else if (rental_type != 0 && rental_type != 1){
             error.handler(req, res, "Invalid rental type!", "json");
+        }
+        else if (req.body.path != "" && !validator.isAlphanumeric(req.body.path)){
+            error.handler(req, res, "Invalid path!", "json");
         }
         else {
             console.log("F: Checking against Google Safe Browsing...");
@@ -151,92 +144,6 @@ module.exports = {
                     }
                 }
             });
-        }
-    },
-
-    //check posted rental address
-    checkPostedRentalAddress : function(req, res, next){
-        if (typeof req.body.address != "undefined"){
-            console.log("F: Checking posted rental address...");
-            var address = addProtocol(req.body.address);
-            if (req.body.address != "" && !validator.isIP(address) && !validator.isURL(address, {protocols: ["http", "https"], require_protocol: true})){
-                error.handler(req, res, "Invalid address!", "json");
-            }
-            //set to nothing
-            else if (req.body.address == ""){
-                req.session.rental_object.db_object.address = (req.body.address == "") ? "" : address;
-                next();
-            }
-            else {
-                var parsed_url = parseDomain(address);
-
-                if (parsed_url == null){
-                    error.handler(req, res, "Invalid address!", "json");
-                }
-                else {
-                    //make sure theres something there listening
-                    whois.lookup(parsed_url.domain + "." + parsed_url.tld, function(err, data){
-                        if (err || !data){error.handler(req, res, "Invalid address!", "json");}
-                        else {
-                            var whoisObj = {};
-                            if (data){
-                                var array = parser.parseWhoIsData(data);
-                                for (var x = 0; x < array.length; x++){
-                                    whoisObj[array[x].attribute] = array[x].value;
-                                }
-                            }
-
-                            if (whoisObj["Domain Name"]){
-                                req.session.rental_object.db_object.address = (req.body.address == "") ? "" : address;
-                                next();
-                            }
-                            else {
-                                error.handler(req, res, "There's nothing to display on that page!", "json");
-                            }
-                        }
-                    });
-                }
-            }
-        }
-        else {
-            next();
-        }
-    },
-
-    //function to deactivate a rental
-    deactivateRental : function(req, res, next){
-        console.log("F: Deactivating rental...");
-        req.session.rental_object.db_object.status = 0;
-        next();
-    },
-
-    //create a rental object for checking (for edit)
-    createRentalObject : function(req, res, next){
-        req.session.rental_object = {
-            db_object: {}
-        };
-
-        next();
-    },
-
-    //create a rental object for checking (for new)
-    createNewRentalObject : function(req, res, next){
-        req.session.new_rental_info = {
-            domain_name : req.params.domain_name
-        };
-
-        next();
-    },
-
-    //check the path if valid
-    checkPath : function(req, res, next){
-        console.log("F: Checking posted path...");
-
-        if (!validator.isAlphanumeric(req.body.path)){
-            error.handler(req, res, "Invalid path!", "json");
-        }
-        else {
-            next();
         }
     },
 
@@ -324,157 +231,139 @@ module.exports = {
         }
     },
 
-    //checks to make sure listing is still verified
-	checkStillVerified : function(req, res, next){
-        //ignore if unlisted
-        if (req.session.listing_info.unlisted){
-            next();
-        }
-        else {
-            console.log("F: Checking to see if domain is still pointed to DomaHub...");
+    //get the stripe id of the listing owner
+    getOwnerStripe : function(req, res, next){
+        console.log("F: Getting all Stripe info for a listing...");
 
-            dns.resolve(req.params.domain_name, "A", function (err, address, family) {
-                if (!err){
-                    var domain_ip = address;
-                    dns.lookup("domahub.com", function (err, address, family) {
-                        if (domain_ip != address && domain_ip.length != 1){
-                            console.log("F: Listing is not pointed to DomaHub anymore! Reverting verification...");
-                            Listing.updateListing(req.params.domain_name, {
-                                verified: null,
-                                status: 0
-                            }, function(result){
-                                getWhoIs(req, res, next);
-                            });
-                        }
-                        else {
-                            next();
-                        }
-                    });
+        //get the stripe id of the listing owner
+        Account.getStripeAndType(req.params.domain_name, function(result){
+            if (result.state == "error"){error.handler(req, res, result.info);}
+            else {
+                if (!result.info[0].stripe_account){
+                    error.handler(req, res, "Invalid stripe user account!", "json");
                 }
                 else {
-                    error.handler(req, res, "DNS error!");
+                    req.session.new_rental_info.owner_stripe_id = result.info[0].stripe_account;	//stripe id
+                    next();
                 }
-            });
-        }
-	},
-
-    addToSearch : function(req, res, next){
-        //add to search only if we went directly to listing
-        if (!req.session.from_api && node_env != "dev"){
-            var user_ip = req.headers['x-forwarded-for'] ||
-            req.connection.remoteAddress ||
-            req.socket.remoteAddress;
-
-            //nginx https proxy removes IP
-            if (req.headers["x-real-ip"]){
-                user_ip = req.headers["x-real-ip"];
             }
-
-            var account_id = (typeof req.user == "undefined") ? null : req.user.id;
-            var now = new Date().getTime();
-            var history_info = {
-                account_id: account_id,			//who searched if who exists
-                domain_name: domain_name.toLowerCase(),		//what they searched for
-                timestamp: now,		//when they searched for it
-                user_ip : user_ip
-            }
-            console.log("F: Adding to search history...");
-            Data.newListingHistory(history_info, function(result){if (result.state == "error") {console.log(result)}});	//async
-            delete req.session.from_api;
-        }
-        next();
+        });
     },
 
-    //gets the listing info if it is listed
-    getListingInfo : function(req, res, next) {
-        console.log("F: Checking if " + req.params.domain_name + " is listed on DomaHub...");
+    //renders the checkout page for creating a new rental
+    renderCheckout : function(req, res, next){
+        if (req.session.new_rental_info && req.session.new_rental_info.domain_name == req.params.domain_name){
+            console.log("F: Rendering listing checkout page...");
 
-        Listing.getVerifiedListing(req.params.domain_name, function(result){
-            if (result.state=="error"){error.handler(req, res, "Invalid listing!");}
-            else if (result.state=="success" && result.info.length <= 0){
-                console.log("F: " + req.params.domain_name + " is NOT listed on DomaHub.");
+            res.render("listings/listing_checkout.ejs", {
+                user: req.user,
+                message: Auth.messageReset(req),
+                listing_info: req.session.listing_info,
+                new_rental_info : req.session.new_rental_info
+            });
+        }
+        else {
+            console.log("F: Not checking out! Redirecting to listings page...");
 
-                getWhoIs(req, res, next);
+            res.redirect("/listing/" + req.params.domain_name);
+        }
+    },
+
+    //create a new rental
+    createRental : function(req, res, next){
+        console.log("F: Creating a new rental...");
+
+        //helper function, create a new rental
+        newListingRental(req, res, req.session.new_rental_info.rental_db_info, function(rental_id){
+
+            //format it with the new rental_id from above
+            var starttime = req.session.new_rental_info.starttime;
+            var endtime = req.session.new_rental_info.endtime;
+            var new_rental_times = [rental_id, starttime, moment(endtime).diff(moment(starttime))];
+
+            //helper function, create new rental times for the above new rental
+            newRentalTimes(req, res, rental_id, [new_rental_times], function(){
+                req.session.new_rental_info.rental_id = rental_id;
+                next();
+            });
+        });
+    },
+
+    //email the link to the posted email
+    emailToRegister : function(req, res, next){
+        var owner_hash_id = req.session.new_rental_info.rental_db_info.owner_hash_id;
+        var new_user_email = req.session.new_rental_info.new_user_email || req.body.new_user_email;
+
+        if (!req.user && owner_hash_id && new_user_email){
+            console.log("F: Emailing registration link to new rental owner...");
+
+            var email = {
+                to: req.session.new_rental_info.new_user_email,
+                from: 'noreply@domahub.com',
+                subject: "Your DomaHub Rental Link",
+                text: 'Here is a link to your recent rental of a DomaHub Domain.\n\n' +
+                'You may use the following link to create a account that will be associated with this rental.\n\n' +
+                'https://domahub.com/listing' + req.params.domain_name + "/" + req.session.new_rental_info.rental_id + "/" + owner_hash_id + '\n\n'
+            };
+
+            //send email of edit link
+            mailer.sendMail(email, function(err) {
+                if (err) {
+                    console.log(err)
+                }
+                next();
+            });
+        }
+        else {
+            next();
+        }
+    },
+
+    //activate the rental once its good
+    toggleActivateRental : function(req, res, next){
+        console.log("F: Toggling rental activation...");
+
+        var rental_id = (req.session.new_rental_info) ? req.session.new_rental_info.rental_id : req.params.rental_id;
+        var domain_name = req.params.domain_name;
+        var owner_hash_id = (req.session.new_rental_info) ? req.session.new_rental_info.rental_db_info.owner_hash_id : false;
+
+        Listing.toggleActivateRental(rental_id, function(result){
+            if (result.state != "success"){
+                delete req.session.new_rental_info;
+                error.handler(req, res, result.info);
             }
             else {
-                console.log("F: " + req.params.domain_name + " is listed on DomaHub!");
+                if (req.user){
+                    delete req.user.rentals;
+                }
 
-                req.session.listing_info = result.info[0];
+                //update the session listing info rentals if we're creating a new rental
+                if (req.session.listing_info.rentals && req.session.new_rental_info){
+                    req.session.listing_info.rentals.push(req.session.new_rental_info);
+                    req.session.listing_info.rentals = joinRentalTimes(req.session.listing_info.rentals);
+                }
+
                 next();
             }
         });
     },
 
-    //check to make sure that anything posted was for the correct domain
-    checkSession : function(req, res, next){
-        console.log("F: Checking to make sure that the correct domain was requested...");
+    //rental was successful! (send new rental info)
+    sendRentalSuccess : function(req, res, next){
+        var rental_id = (req.session.new_rental_info) ? req.session.new_rental_info.rental_id : req.params.rental_id;
+        var owner_hash_id = (req.session.new_rental_info.rental_db_info) ? req.session.new_rental_info.rental_db_info.owner_hash_id : false;
+        delete req.session.new_rental_info;
 
-        if (!req.session.listing_info || req.session.listing_info.domain_name != req.params.domain_name){
-            error.handler(req, res, "Invalid listing!", "json");
-        }
-        else {
-            next();
-        }
-    },
-
-    //gets X ticker rows per call
-    getListingTicker : function(req, res, next){
-        console.log("F: Getting ticker data for " + req.params.domain_name + "...");
-
-        //check to see that the posted old rental date is valid
-        if (!moment(parseFloat(req.body.oldest_rental_date)).isValid()){
-            error.handler(req, res, "Invalid last date for rental!", "json");
-        }
-        else if (!validator.isInt(req.body.max_count)){
-            error.handler(req, res, "Invalid max count!", "json");
-        }
-        else {
-            var max_count = parseFloat(req.body.max_count);
-
-            Listing.getListingRentals(req.params.domain_name, req.body.oldest_rental_date, max_count, function(result){
-                if (result.state=="error"){error.handler(req, res, "Something went wrong getting rentals!", "json");}
-                else if (result.info.length <= 0){
-                    res.send({
-                        loaded_rentals : []
-                    });
-                }
-                else {
-                    res.send({
-                        state: "success",
-                        loaded_rentals : result.info
-                    });
-                }
-            });
-        }
-    },
-
-    //get the traffic of the listing
-    getListingTraffic : function(req, res, next){
-        console.log("F: Getting all traffic information for domain: " + req.params.domain_name + "...");
-
-        Data.getListingTraffic(req.params.domain_name, function(result){
-            if (result.state=="error"){error.handler(req, res, "Invalid traffic!", 'json');}
-            else {
-                res.json({
-                    state : "success",
-                    traffic : result.info
-                });
-            }
+        res.send({
+            state: "success",
+            rental_id: rental_id,
+            owner_hash_id: owner_hash_id || false
         });
     },
 
-    //get alexa traffic info
-    getListingAlexa : function(req, res, next){
-        alexaData.AlexaWebData(req.params.domain_name, function(error, result) {
-            if (error){error.handler(req, res, "Invalid Alexa!", 'json');}
-            else {
-                res.json({
-                    state : "success",
-                    alexa : result
-                });
-            }
-        });
-    },
+    //</editor-fold>
+
+    //<editor-fold>-------------------------------EDIT RENTAL-------------------------------
 
     //gets the rental/listing info
     getRental : function(req, res, next){
@@ -546,91 +435,122 @@ module.exports = {
         });
     },
 
-    getListingRentalTimes : function(req, res, next){
-        console.log("F: Sending all listing times...");
+    //create a rental object for checking (for edit)
+    createRentalObject : function(req, res, next){
+        req.session.rental_object = {
+            db_object: {}
+        };
 
-        res.send({
-            listing_info: req.session.listing_info
-        });
+        next();
     },
 
-    //get the stripe id of the listing owner and if listing is premium/basic
-    getOwnerStripe : function(req, res, next){
-        console.log("F: Getting all Stripe info for a listing...");
+    //check domain name for rental
+    checkRentalDomain : function(req, res, next){
+        console.log("F: Checking if rental belongs to the correct domain...");
+        var domain_name = req.params.domain_name;
 
-        //get the stripe id of the listing owner
-        Account.getStripeAndType(req.params.domain_name, function(result){
-            if (result.state == "error"){error.handler(req, res, result.info);}
+        if (req.session.rental_info.domain_name != domain_name){
+            error.handler(req, res, "Invalid domain name for rental!");
+        }
+        else {
+            next();
+        }
+    },
+
+    //check if rental belongs to account
+    checkRentalOwner : function(req, res, next){
+        console.log("F: Checking rental owner...");
+
+        //incorrect owner!
+        if (req.session.rental_info.account_id != req.user.id){
+            error.handler(req, res, "Invalid rental owner!");
+        }
+        else {
+            next();
+        }
+    },
+
+    //check if domain belongs to account (for refunding a rental)
+    checkDomainOwner : function(req, res, next){
+        console.log("F: Checking domain owner...");
+
+        Listing.checkListingOwner(req.user.id, req.params.domain_name, function(result){
+            //incorrect owner!
+            if (result.state == "error" || result.info.length == 0){
+                error.handler(req, res, "Invalid domain owner!");
+            }
             else {
-                if (!result.info[0].stripe_account){
-                    error.handler(req, res, "Invalid stripe user account!", "json");
-                }
-                else {
-                    req.session.new_rental_info.owner_stripe_id = result.info[0].stripe_account;	//stripe id
-
-                    // //premium or basic listing expiration date
-                    // if (result.info[0].exp_date != 0 && result.info[0].exp_date > (new Date).getTime()){
-                    //     req.session.new_rental_info.premium = true;
-                    // }
-
-                    next();
-                }
+                next();
             }
         });
     },
 
-    //delete session rental info if it exists
-    deleteRentalInfo : function(req, res, next){
-        console.log("F: Deleting any previous existing rental info...");
+    //check posted rental address (for editing rental address)
+    checkPostedRentalAddress : function(req, res, next){
+        if (typeof req.body.address != "undefined"){
+            console.log("F: Checking posted rental address...");
+            var address = addProtocol(req.body.address);
+            if (req.body.address != "" && !validator.isIP(address) && !validator.isURL(address, {protocols: ["http", "https"], require_protocol: true})){
+                error.handler(req, res, "Invalid address!", "json");
+            }
+            //set to nothing
+            else if (req.body.address == ""){
+                req.session.rental_object.db_object.address = (req.body.address == "") ? "" : address;
+                next();
+            }
+            else {
+                var parsed_url = parseDomain(address);
 
-        if (req.session.rental_info){
-            delete req.session.rental_info;
+                if (parsed_url == null){
+                    error.handler(req, res, "Invalid address!", "json");
+                }
+                else {
+                    //make sure theres something there listening
+                    whois.lookup(parsed_url.domain + "." + parsed_url.tld, function(err, data){
+                        if (err || !data){error.handler(req, res, "Invalid address!", "json");}
+                        else {
+                            var whoisObj = {};
+                            if (data){
+                                var array = parser.parseWhoIsData(data);
+                                for (var x = 0; x < array.length; x++){
+                                    whoisObj[array[x].attribute] = array[x].value;
+                                }
+                            }
+
+                            if (whoisObj["Domain Name"]){
+                                req.session.rental_object.db_object.address = (req.body.address == "") ? "" : address;
+                                next();
+                            }
+                            else {
+                                error.handler(req, res, "There's nothing to display on that page!", "json");
+                            }
+                        }
+                    });
+                }
+            }
         }
-        if (req.session.new_rental_info){
-            delete req.session.new_rental_info;
+        else {
+            next();
         }
-        if (req.session.rented_info){
-            delete req.session.rented_info;
-        }
-        if (req.session.proxy_edit){
-            delete req.session.proxy_edit;
-        }
+    },
+
+    //function to deactivate a rental
+    deactivateRental : function(req, res, next){
+        console.log("F: Deactivating rental...");
+        req.session.rental_object.db_object.status = 0;
         next();
     },
 
-    //render a listing that is listed on domahub
-    renderListing : function(req, res, next){
-        console.log("F: Rendering listing...");
-
-        res.render("listings/listing.ejs", {
-            user: req.user,
-            message: Auth.messageReset(req),
-            listing_info: req.session.listing_info
-        });
-    },
-
-    renderCheckout : function(req, res, next){
-        if (req.session.new_rental_info && req.session.new_rental_info.domain_name == req.params.domain_name){
-            console.log("F: Rendering listing checkout page...");
-
-            res.render("listings/listing_checkout.ejs", {
-                user: req.user,
-                message: Auth.messageReset(req),
-                listing_info: req.session.listing_info,
-                new_rental_info : req.session.new_rental_info
-            });
+    //updates the owner of a rental that has no owner (hash rental)
+    updateRentalOwner : function(req, res, next){
+        console.log("F: Updating the rental owner...");
+        req.session.rental_object = {
+            db_object : {
+                account_id: req.user.id,
+                owner_hash_id: null
+            }
         }
-        else {
-            console.log("F: Not checking out! Redirecting to listings page...");
-
-            res.redirect("/listing/" + req.params.domain_name);
-        }
-    },
-
-    //redirect to rental preview route
-    redirectToPreview : function(req, res, next){
-        console.log("F: Redirecting to rental preview...");
-        res.redirect('/rentalpreview');
+        next();
     },
 
     //redirect to rental page after updating its owner
@@ -670,6 +590,12 @@ module.exports = {
                 next();
             }
         }
+    },
+
+    //redirect to rental preview route
+    redirectToPreview : function(req, res, next){
+        console.log("F: Redirecting to rental preview...");
+        res.redirect('/rentalpreview');
     },
 
     //render a rental edit page
@@ -743,6 +669,205 @@ module.exports = {
 
     },
 
+    //edit the rental (update the database)
+    editRental : function(req, res, next){
+        console.log("F: Updating rental...");
+
+        updateRental(req, res, req.session.rental_object.db_object, function(){
+            next();
+        });
+    },
+
+    //update the rental session object
+    updateRentalObject : function(req, res, next){
+        updateUserRentalsObject(req.user.rentals, req.session.rental_object.db_object, req.params.rental_id);
+        delete req.session.rental_object.db_object;
+        res.send({
+            state: "success",
+            rentals: req.user.rentals
+        });
+    },
+
+    //</editor-fold>
+
+    //<editor-fold>-------------------------------DISPLAY LISTING-------------------------------
+
+    //checks to make sure listing is still verified
+	checkStillVerified : function(req, res, next){
+        //ignore if unlisted
+        if (req.session.listing_info.unlisted){
+            next();
+        }
+        else {
+            console.log("F: Checking to see if domain is still pointed to DomaHub...");
+
+            dns.resolve(req.params.domain_name, "A", function (err, address, family) {
+                if (!err){
+                    var domain_ip = address;
+                    dns.lookup("domahub.com", function (err, address, family) {
+                        if (domain_ip != address && domain_ip.length != 1){
+                            console.log("F: Listing is not pointed to DomaHub anymore! Reverting verification...");
+                            Listing.updateListing(req.params.domain_name, {
+                                verified: null,
+                                status: 0
+                            }, function(result){
+                                getWhoIs(req, res, next);
+                            });
+                        }
+                        else {
+                            next();
+                        }
+                    });
+                }
+                else {
+                    error.handler(req, res, "DNS error!");
+                }
+            });
+        }
+	},
+
+    //add to search database
+    addToSearch : function(req, res, next){
+        //add to search only if we went directly to listing
+        if (!req.session.from_api && node_env != "dev"){
+            var user_ip = req.headers['x-forwarded-for'] ||
+            req.connection.remoteAddress ||
+            req.socket.remoteAddress;
+
+            //nginx https proxy removes IP
+            if (req.headers["x-real-ip"]){
+                user_ip = req.headers["x-real-ip"];
+            }
+
+            var account_id = (typeof req.user == "undefined") ? null : req.user.id;
+            var now = new Date().getTime();
+            var history_info = {
+                account_id: account_id,			//who searched if who exists
+                domain_name: domain_name.toLowerCase(),		//what they searched for
+                timestamp: now,		//when they searched for it
+                user_ip : user_ip
+            }
+            console.log("F: Adding to search history...");
+            Data.newListingHistory(history_info, function(result){if (result.state == "error") {console.log(result)}});	//async
+            delete req.session.from_api;
+        }
+        next();
+    },
+
+    //gets the listing info if it is listed
+    getListingInfo : function(req, res, next) {
+        console.log("F: Checking if " + req.params.domain_name + " is listed on DomaHub...");
+
+        Listing.getVerifiedListing(req.params.domain_name, function(result){
+            if (result.state=="error"){error.handler(req, res, "Invalid listing!");}
+            else if (result.state=="success" && result.info.length <= 0){
+                console.log("F: " + req.params.domain_name + " is NOT listed on DomaHub.");
+
+                getWhoIs(req, res, next);
+            }
+            else {
+                console.log("F: " + req.params.domain_name + " is listed on DomaHub!");
+
+                req.session.listing_info = result.info[0];
+                next();
+            }
+        });
+    },
+
+    //gets the next year's events for calendar
+    getListingTimes : function(req, res, next){
+        console.log("F: Getting all time slot information for domain: " + req.params.domain_name + "...");
+
+        //invalid path!
+        if (req.body.path != "" && !validator.isAlphanumeric(req.body.path)){
+            error.handler(req, res, "Invalid path!", "json");
+        }
+        else {
+            var one_year_later = moment().add(1, "year").add(1, "millisecond")._d.getTime();
+            Listing.getListingTimes(req.params.domain_name, req.body.path, one_year_later, function(result){
+                if (result.state=="error"){error.handler(req, res, "Something went wrong with getting times!");}
+                else {
+                    res.json({
+                        state : "success",
+                        times : result.info
+                    });
+                }
+            });
+        }
+    },
+
+    //gets X ticker rows per call
+    getListingTicker : function(req, res, next){
+        console.log("F: Getting ticker data for " + req.params.domain_name + "...");
+
+        //check to see that the posted old rental date is valid
+        if (!moment(parseFloat(req.body.oldest_rental_date)).isValid()){
+            error.handler(req, res, "Invalid last date for rental!", "json");
+        }
+        else if (!validator.isInt(req.body.max_count)){
+            error.handler(req, res, "Invalid max count!", "json");
+        }
+        else {
+            var max_count = parseFloat(req.body.max_count);
+
+            Listing.getListingRentals(req.params.domain_name, req.body.oldest_rental_date, max_count, function(result){
+                if (result.state=="error"){error.handler(req, res, "Something went wrong getting rentals!", "json");}
+                else if (result.info.length <= 0){
+                    res.send({
+                        loaded_rentals : []
+                    });
+                }
+                else {
+                    res.send({
+                        state: "success",
+                        loaded_rentals : result.info
+                    });
+                }
+            });
+        }
+    },
+
+    //get the traffic of the listing
+    getListingTraffic : function(req, res, next){
+        console.log("F: Getting all traffic information for domain: " + req.params.domain_name + "...");
+
+        Data.getListingTraffic(req.params.domain_name, function(result){
+            if (result.state=="error"){error.handler(req, res, "Invalid traffic!", 'json');}
+            else {
+                res.json({
+                    state : "success",
+                    traffic : result.info
+                });
+            }
+        });
+    },
+
+    //get alexa traffic info
+    getListingAlexa : function(req, res, next){
+        console.log("F: Getting all Alexa information for domain: " + req.params.domain_name + "...");
+
+        alexaData.AlexaWebData(req.params.domain_name, function(error, result) {
+            if (error){error.handler(req, res, "Invalid Alexa!", 'json');}
+            else {
+                res.json({
+                    state : "success",
+                    alexa : result
+                });
+            }
+        });
+    },
+
+    //render a listing that is listed on domahub
+    renderListing : function(req, res, next){
+        console.log("F: Rendering listing...");
+
+        res.render("listings/listing.ejs", {
+            user: req.user,
+            message: Auth.messageReset(req),
+            listing_info: req.session.listing_info
+        });
+    },
+
     //render screenshot of a rental, only if coming from a listing page
     renderRentalScreenshot : function(req, res, next){
         var screenshot_address = addProtocol(req.query.rental_address);
@@ -798,149 +923,14 @@ module.exports = {
 
     },
 
-    //create a new rental
-    createRental : function(req, res, next){
-        console.log("F: Creating a new rental...");
-
-        //helper function, create a new rental
-        newListingRental(req, res, req.session.new_rental_info.rental_db_info, function(rental_id){
-
-            //format it with the new rental_id from above
-            var starttime = req.session.new_rental_info.starttime;
-            var endtime = req.session.new_rental_info.endtime;
-            var new_rental_times = [rental_id, starttime, moment(endtime).diff(moment(starttime))];
-
-            //helper function, create new rental times for the above new rental
-            newRentalTimes(req, res, rental_id, [new_rental_times], function(){
-                req.session.new_rental_info.rental_id = rental_id;
-                next();
-            });
-        });
-    },
-
-    // //add times to rental
-    // editRentalTimes : function(req, res, next){
-    //     console.log("F: Adding times to an existing rental...");
-    //     var rental_id = req.params.rental_id;
-    //
-    //     //format times if it exists
-    //     formatNewRentalTimes(rental_id, req.session.new_rental_info.new_rental_times);
-    //
-    //     newRentalTimes(req, res, rental_id, req.session.new_rental_info.new_rental_times, function(){
-    //         delete req.session.new_rental_info;
-    //         delete req.user.rentals;
-    //         next();
-    //     });
-    // },
-
-    //email the link to the posted email
-    emailToRegister : function(req, res, next){
-        var owner_hash_id = req.session.new_rental_info.rental_db_info.owner_hash_id;
-        var new_user_email = req.session.new_rental_info.new_user_email || req.body.new_user_email;
-
-        if (!req.user && owner_hash_id && new_user_email){
-            console.log("F: Emailing registration link to new rental owner...");
-
-            var email = {
-                to: req.session.new_rental_info.new_user_email,
-                from: 'noreply@domahub.com',
-                subject: "Your DomaHub Rental Link",
-                text: 'Here is a link to your recent rental of a DomaHub Domain.\n\n' +
-                'You may use the following link to create a account that will be associated with this rental.\n\n' +
-                'https://domahub.com/listing' + req.params.domain_name + "/" + req.session.new_rental_info.rental_id + "/" + owner_hash_id + '\n\n'
-            };
-
-            //send email of edit link
-            mailer.sendMail(email, function(err) {
-                if (err) {
-                    console.log(err)
-                }
-                next();
-            });
-        }
-        else {
-            next();
-        }
-    },
-
-    //activate the rental once its good
-    toggleActivateRental : function(req, res, next){
-        console.log("F: Toggling rental activation...");
-
-        var rental_id = (req.session.new_rental_info) ? req.session.new_rental_info.rental_id : req.params.rental_id;
-        var domain_name = req.params.domain_name;
-        var owner_hash_id = (req.session.new_rental_info) ? req.session.new_rental_info.rental_db_info.owner_hash_id : false;
-
-        Listing.toggleActivateRental(rental_id, function(result){
-            if (result.state != "success"){
-                delete req.session.new_rental_info;
-                error.handler(req, res, result.info);
-            }
-            else {
-                if (req.user){
-                    delete req.user.rentals;
-                }
-
-                //update the session listing info rentals if we're creating a new rental
-                if (req.session.listing_info.rentals && req.session.new_rental_info){
-                    req.session.listing_info.rentals.push(req.session.new_rental_info);
-                    req.session.listing_info.rentals = joinRentalTimes(req.session.listing_info.rentals);
-                }
-
-                next();
-            }
-        });
-    },
-
-    //updates the owner of a rental that has no owner (hash rental)
-    updateRentalOwner : function(req, res, next){
-        console.log("F: Updating the rental owner...");
-        req.session.rental_object = {
-            db_object : {
-                account_id: req.user.id,
-                owner_hash_id: null
-            }
-        }
-        next();
-    },
-
-    updateRentalObject : function(req, res, next){
-        updateUserRentalsObject(req.user.rentals, req.session.rental_object.db_object, req.params.rental_id);
-        delete req.session.rental_object.db_object;
-        res.send({
-            state: "success",
-            rentals: req.user.rentals
-        });
-    },
-
-    //edit the rental
-    editRental : function(req, res, next){
-        console.log("F: Updating rental...");
-
-        updateRental(req, res, req.session.rental_object.db_object, function(){
-            next();
-        });
-    },
-
     //time check was successful! redirect to checkout
-    sendTimeSuccess : function(req, res, next){
+    redirectToCheckout : function(req, res, next){
         res.send({
             state: "success"
         });
     },
 
-    //rental was successful! (send new rental info)
-    sendRentalSuccess : function(req, res, next){
-        var rental_id = (req.session.new_rental_info) ? req.session.new_rental_info.rental_id : req.params.rental_id;
-        var owner_hash_id = (req.session.new_rental_info.rental_db_info) ? req.session.new_rental_info.rental_db_info.owner_hash_id : false;
-        delete req.session.new_rental_info;
-
-        res.send({
-            state: "success",
-            rental_id: rental_id,
-            owner_hash_id: owner_hash_id || false
-        });
-    }
+    //</editor-fold>
 
 }
 
@@ -973,22 +963,6 @@ function newRentalTimes(req, res, rental_id, times, callback){
     Listing.newRentalTimes(rental_id, times, function(result){
         if (result.state != "success"){error.handler(req, res, result.info, "json");}
         else {
-            callback();
-        }
-    });
-}
-
-//helper function to get existing rental times
-function getListingRentalTimes(req, res, listing_info, callback){
-    Listing.getListingRentalsInfo(listing_info.id, function(result){
-        if (result.state=="error"){error.handler(req, res, result.info);}
-        else {
-            //stripe not connected, make sure the listing doesnt accept new rentals
-            if (listing_info.stripe_connected == 0){
-                listing_info.status = 0;
-            }
-
-            listing_info.rentals = joinRentalTimes(result.info);
             callback();
         }
     });
