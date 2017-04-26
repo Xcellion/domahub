@@ -312,6 +312,7 @@ function createCharts(traffic){
 			myChart.destroy();
 		}
 
+		//X people viewed this in the past X
 		if (listing_info.rentals && listing_info.traffic){
 			pastViewsTickerRow();
 		}
@@ -385,7 +386,7 @@ function createTrafficChart(){
 
 	//create the monthly x-axis labels array
 	var monthly_labels = [];
-	var months_to_go_back = traffic.length || 6;
+	var months_to_go_back = traffic.length + 1 || 6;
 	for (var y = 0; y < months_to_go_back; y++){
 		var temp_month = moment().subtract(y, "month").format("MMM");
 		monthly_labels.unshift(temp_month);
@@ -399,7 +400,11 @@ function createTrafficChart(){
 			y: traffic[x].views
 		});
 	}
-
+	traffic_data.unshift({
+		x: moment().endOf("month").subtract(traffic.length, "month").valueOf(),
+		y: 0
+	});
+	
 	//traffic dataset
 	var traffic_dataset = {
 		label: "Website Views",

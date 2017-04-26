@@ -50,6 +50,7 @@ $(document).ready(function() {
 			if ($("#calendar").data('daterangepicker')){
 				$("#calendar").data('daterangepicker').remove();
 			}
+
 			$("#calendar").val("");
 			$("#checkout-button").addClass('is-disabled');
 		}
@@ -161,6 +162,10 @@ function submitTimes(checkout_button){
 function errorHandler(message){
 	switch (message){
 		case "Dates are unavailable!":
+			//remove any existing date range pickers
+			if ($("#calendar").data('daterangepicker')){
+				$("#calendar").data('daterangepicker').remove();
+			}
 			$("#calendar-error-message").removeClass('is-hidden').text("Bummer! Someone just took that slot. Please select a different time.");
 			break;
 		case "Invalid dates!":
@@ -217,7 +222,7 @@ function getTimes(calendar_elem){
 			}
 
 			//only show new calendar if path changed
-			if (myPath != $("#typed-slash").val()){
+			if (myPath != $("#typed-slash").val() || !$("#calendar").data('daterangepicker')){
 				myPath = $("#typed-slash").val();
 				setUpCalendar(listing_info);
 			}
