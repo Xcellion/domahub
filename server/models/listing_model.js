@@ -107,14 +107,12 @@ listing_model.prototype.getAllListings = function(callback){
 	listing_query(query, "Failed to get all listing info!", callback);
 }
 
-//gets all rentals times and their owners for a specific listing
-listing_model.prototype.getListingRentalsInfo = function(listing_id, callback){
-	console.log("DB: Attempting to get all existing active rentals for listing #" + listing_id + "...");
+//gets X number of rentals at a time
+listing_model.prototype.getListingRentals = function(domain_name, oldest_rental_date, count, callback){
+	console.log("DB: Attempting to get " + count + " rentals for domain: " + domain_name + " after " + oldest_rental_date + "...");
 	query = "SELECT \
-				rentals.account_id, \
 				rentals.address, \
 				rentals.rental_id, \
-				rentals.listing_id, \
 				rentals.type, \
 				rentals.path, \
 				rental_times.date, \
@@ -124,14 +122,17 @@ listing_model.prototype.getListingRentalsInfo = function(listing_id, callback){
 			FROM rentals \
 			INNER JOIN rental_times ON rentals.rental_id = rental_times.rental_id \
 			LEFT JOIN accounts ON rentals.account_id = accounts.id \
+			LEFT JOIN listings ON rentals.listing_id = listings.id \
 			LEFT OUTER JOIN ( \
 				SELECT rental_id, COUNT(rental_id) AS views FROM stats_rental_history GROUP BY rental_id \
 			) AS rental_s \
 			ON rental_s.rental_id = rentals.rental_id \
-			WHERE rentals.listing_id = ? \
+			WHERE listings.domain_name = ? \
 			AND rentals.status = 1 \
-			ORDER BY rental_times.date ASC"
-	listing_query(query, "Failed to get all existing active rentals for listing #" + listing_id + "!", callback, listing_id);
+			AND rental_times.date < ? \
+			ORDER BY rental_times.date DESC \
+			LIMIT ?"
+	listing_query(query, "Failed to get all existing active rentals for domain: " + domain_name + "!", callback, [domain_name, oldest_rental_date, count]);
 }
 
 //gets all rental info for a specific rental

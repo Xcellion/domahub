@@ -9,7 +9,7 @@
         <i class="fa fa-question-circle"></i>
       </span>
     </div>
-    <p><%= (listing_info.alexa.globalRank == "-" || !listing_info.alexa.globalRank) ? "Not enough data." : listing_info.alexa.globalRank %></p>
+    <p id="alexa-globalrank">Loading...</p>
   </div>
   <div class="level has-border">
     <div class="header"
@@ -21,9 +21,7 @@
         <i class="fa fa-question-circle"></i>
       </span>
     </div>
-    <p>
-      <%= (listing_info.alexa.engagement.dailyTimeOnSite == "-" || !listing_info.alexa.engagement.dailyTimeOnSite) ? "Not enough data." : listing_info.alexa.engagement.dailyTimeOnSite %>
-    </p>
+    <p id="alexa-timeonsite">Loading...</p>
   </div>
   <div class="level has-border">
     <div class="level-left">
@@ -38,9 +36,7 @@
       </div>
     </div>
     <div class="level-right">
-      <p>
-        <%= (listing_info.alexa.engagement.dailyPageViewPerVisitor == "-" || !listing_info.alexa.engagement.dailyPageViewPerVisitor) ? "Not enough data." : listing_info.alexa.engagement.dailyPageViewPerVisitor %>
-      </p>
+      <p id="alexa-pageviews">Loading...</p>
     </div>
   </div>
   <div class="level has-border">
@@ -56,9 +52,7 @@
       </div>
     </div>
     <div class="level-right">
-      <p>
-        <%= (listing_info.alexa.engagement.bounceRate == "-" || !listing_info.alexa.engagement.bounceRate) ? "Not enough data." : listing_info.alexa.engagement.bounceRate %>
-      </p>
+      <p id="alexa-bouncerate">Loading...</p>
     </div>
   </div>
   <small>For more information, please visit <a title="Link to Alexa website" target="_blank" rel="noopener" class='is-accent' href="http://www.alexa.com/siteinfo/<%= listing_info.domain_name %>">Alexa.com</a></small>

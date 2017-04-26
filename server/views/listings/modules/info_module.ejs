@@ -6,25 +6,24 @@
         <% if (listing_info.unlisted) { %>
 
             <div class="column is-4">
-                <%# UNLISTED LISTING IS OWNED BY SOMEONE %>
+            <%# UNLISTED LISTING IS OWNED BY SOMEONE %>
                 <% if (!listing_info.available) { %>
                 	<%- include("info/unbuyable_module.ejs", {
                 	  listing_info : listing_info
                 	}); %>
-            </div>
-            <div class="column is-4">
+                <% } else { %>
                     <%- include("info/buyable_module.ejs", {
                 	  listing_info : listing_info
                 	}); %>
                 <% } %>
             </div>
+
+            <%# LISTING OWNER MODULE %>
             <div class="column is-4">
-                <%# LISTING OWNER MODULE %>
                 <%- include("info/listing_owner_module.ejs", {
                   listing_info : listing_info
                 }); %>
             </div>
-
 
         <% } else { %>
 

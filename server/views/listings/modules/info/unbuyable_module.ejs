@@ -1,22 +1,24 @@
 <div class="content">
     <p class="is-bold is-capitalized">Do you own this domain?</p>
-    <p>
-        Sign up below to list your domain with us!
+    <p class='beta-normal-message'>
+        Apply below to list your domain with us!
+    </p>
+    <p class='beta-success-message is-primary is-hidden'>
+        Success! Please check your email for further instructions.
+    </p>
+    <p class="beta-error-message is-danger is-hidden">
+        Hey! That was not a valid email address!
     </p>
     <form class="beta-form">
         <div class="control is-grouped">
             <p class="control is-expanded has-icon">
-              <input tabindex="0" class="input is-expanded" type="email" name="betaemail" placeholder="Enter your email"/>
+              <input tabindex="0" class="betaemail input is-expanded" type="email" name="betaemail" placeholder="Enter your email"/>
               <i class="fa fa-envelope"></i>
             </p>
             <p class="control">
-                <a tabindex="0" class="beta-submit button no-shadow is-small is-primary is-stylish">Sign Up</a>
+                <a tabindex="0" class="beta-submit button no-shadow is-small is-primary is-stylish">Apply</a>
             </p>
         </div>
     </form>
-    <div class="beta-form-success is-hidden">
-        <div class="notification has-text-centered is-white">
-            <h3 class="is-primary is-bold">Success! Please check your email.</h3>
-        </div>
-    </div>
 </div>
+<script src="/js/beta_signup_logic.js" type="text/javascript"></script>
