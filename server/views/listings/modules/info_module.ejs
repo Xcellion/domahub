@@ -1,0 +1,46 @@
+<div id="info-module" class="is-hidden module">
+
+    <div class="columns">
+
+        <%# IS THE LISTED LISTED OR UNLISTED WITH DOMAHUB %>
+        <% if (listing_info.unlisted) { %>
+
+            <div class="column is-4">
+            <%# UNLISTED LISTING IS OWNED BY SOMEONE %>
+                <% if (!listing_info.available) { %>
+                	<%- include("info/unbuyable_module.ejs", {
+                	  listing_info : listing_info
+                	}); %>
+                <% } else { %>
+                    <%- include("info/buyable_module.ejs", {
+                	  listing_info : listing_info
+                	}); %>
+                <% } %>
+            </div>
+
+        <% } else { %>
+
+              <%# CATEGORIES MODULE %>
+              <%- include("info/categories_module.ejs", {
+                listing_info : listing_info
+              }); %>
+
+              <%# LISTING OWNER MODULE %>
+              <%- include("info/listing_owner_module.ejs", {
+                listing_info : listing_info
+              }); %>
+
+              <%# OTHER BY SAME OWNER DOMAINS MODULE %>
+              <%- include("info/same_owner_listings_module.ejs", {
+                listing_info : listing_info
+              }); %>
+
+        <% } %>
+    </div>
+
+    <%# SIMILAR DOMAINS MODULE %>
+    <%# include("info/similar_domains_module.ejs", {
+      listing_info : listing_info
+    }); %>
+
+</div>

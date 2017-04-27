@@ -1,5 +1,6 @@
 @import 'vars';
 @import 'mixins';
+@import 'balloon';
 
 // listing image
 .listing-img {
@@ -16,11 +17,6 @@
   &:not(:last-child) {
     border-bottom: 1px solid $border;
   }
-}
-
-// file upload button form full width
-.drop-form-file {
-  width: 100%;
 }
 
 // category buttons
@@ -47,6 +43,10 @@
   }
 }
 // file upload button
+.drop-form-file {
+  width: 100%;
+}
+
 .input-number {
   width: 100px;
 }
@@ -134,7 +134,7 @@
 }
 
 .td-price-type {
-  width: 75px;
+  width: 100px;
 }
 
 .td-rental-date {
@@ -144,7 +144,6 @@
 .td-address {
   @include tablet {
     width: 275px;
-    padding-left:0 !important
   }
   @include mobile {
     width: 150px;
@@ -164,8 +163,6 @@
   }
   @include tablet {
     width: 255px;
-    margin-top: 1px;
-    margin-left: 9px !important;
   }
 }
 

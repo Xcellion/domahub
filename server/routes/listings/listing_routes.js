@@ -17,7 +17,7 @@ module.exports = function(app, db, auth, error, stripe){
 	Listing = new listing_model(db);
 	Data = new data_model(db);
 
-	//-------------------------------------------------------------------------------------------------------------------- SEARCH LISTINGS
+	//<editor-fold>-------------------------------SEARCH LISTINGS-------------------------------
 
 	//get a random listing with specific category
 	app.get("/listing/random/:category", [
@@ -43,7 +43,9 @@ module.exports = function(app, db, auth, error, stripe){
 	// 	search_functions.getListingBySearchParams
 	// ]);
 
-	//-------------------------------------------------------------------------------------------------------------------- OWNER RELATED
+	//</editor-fold>
+
+	//<editor-fold>-------------------------------OWNER RELATED-------------------------------
 
 	//render listing create
 	app.get('/listings/create', [
@@ -163,15 +165,17 @@ module.exports = function(app, db, auth, error, stripe){
 	// 	owner_functions.updateListing
 	// ]);
 
-	//-------------------------------------------------------------------------------------------------------------------- RENTAL RELATED
+	//</editor-fold>
+
+	//<editor-fold>-------------------------------RENTAL RELATED-------------------------------
 
 	//domahub easter egg page
-	app.get(['/listing/domahub.com', '/listing/w3bbi.com'], function(req, res){
-		res.render("listings/listing_w3bbi.ejs", {
-			user: req.user,
-			message: Auth.messageReset(req)
-		})
-	});
+	// app.get(['/listing/domahub.com', '/listing/w3bbi.com'], function(req, res){
+	// 	res.render("listings/listing_w3bbi.ejs", {
+	// 		user: req.user,
+	// 		message: Auth.messageReset(req)
+	// 	});
+	// });
 
 	//render a rental screenshot
 	app.get('/screenshot', [
@@ -181,20 +185,42 @@ module.exports = function(app, db, auth, error, stripe){
 	//render specific listing page
 	app.get('/listing/:domain_name', [
 		checkDomainValid,
-		renter_functions.checkDomainListedAndAddToSearch,
-		renter_functions.getVerifiedListing,
+		renter_functions.addToSearch,
+		renter_functions.getListingInfo,
 		renter_functions.checkStillVerified,
-		renter_functions.deleteRentalInfo,
 		renter_functions.renderListing
+	]);
+
+	//get a domain's ticker information
+	app.post("/listing/:domain_name/ticker", [
+		urlencodedParser,
+		checkDomainValid,
+		renter_functions.getListingTicker
+	]);
+
+	//get a domain's traffic
+	app.post("/listing/:domain_name/traffic", [
+		checkDomainValid,
+		renter_functions.getListingTraffic
+	]);
+
+	//get a domain's alexa information
+	app.post("/listing/:domain_name/alexa", [
+		checkDomainValid,
+		renter_functions.getListingAlexa
+	]);
+
+	//render rental checkout page
+	app.get('/listing/:domain_name/checkout', [
+		renter_functions.renderCheckout
 	]);
 
 	//get listing info / times
 	app.post('/listing/:domain_name/times', [
+		urlencodedParser,
 		checkDomainValid,
 		checkDomainListed,
-		renter_functions.getVerifiedListing,
-		renter_functions.deleteRentalInfo,
-		renter_functions.getListingRentalTimes
+		renter_functions.getListingTimes
 	]);
 
 	//associate a user with a hash rental
@@ -217,7 +243,7 @@ module.exports = function(app, db, auth, error, stripe){
 		renter_functions.getRental,
 		renter_functions.checkRentalDomain,
 		renter_functions.getRentalRentalTimes,
-		renter_functions.getVerifiedListing,
+		renter_functions.getListingInfo,
 		renter_functions.redirectToPreview
 	]);
 
@@ -227,12 +253,23 @@ module.exports = function(app, db, auth, error, stripe){
 		renter_functions.renderRental
 	]);
 
+	//render checkout page
+	app.post('/listing/:domain_name/checkout', [
+		urlencodedParser,
+		checkDomainValid,
+		checkDomainListed,
+		renter_functions.getListingInfo,
+		renter_functions.createNewRentalObject,
+		renter_functions.checkRentalTimes,
+		renter_functions.redirectToCheckout
+	]);
+
 	//create a new rental
 	app.post('/listing/:domain_name/rent', [
 		urlencodedParser,
 		checkDomainValid,
 		checkDomainListed,
-		renter_functions.getVerifiedListing,
+		renter_functions.getListingInfo,
 		renter_functions.checkRentalInfo,
 		renter_functions.checkRentalTimes,
 		renter_functions.checkRentalPrice,
@@ -257,26 +294,6 @@ module.exports = function(app, db, auth, error, stripe){
 		renter_functions.checkPostedRentalAddress,
 		renter_functions.editRental,
 		renter_functions.updateRentalObject
-	]);
-
-	//adding time to an existing rental
-	app.post('/listing/:domain_name/:rental_id/time', [
-		urlencodedParser,
-		auth.checkLoggedIn,
-		checkDomainValid,
-		checkDomainListed,
-		renter_functions.getRental,
-		renter_functions.checkRentalDomain,
-		renter_functions.checkRentalOwner,
-		renter_functions.createRentalObject,
-		renter_functions.getVerifiedListing,
-		renter_functions.checkRentalTimes,
-		renter_functions.checkRentalPrice,
-		renter_functions.getOwnerStripe,
-		stripe.chargeMoney,
-		renter_functions.editRentalTimes,
-		profile_functions.getAccountRentals,
-		renter_functions.sendRentalSuccess
 	]);
 
 	//delete a rental
@@ -309,6 +326,8 @@ module.exports = function(app, db, auth, error, stripe){
 		renter_functions.editRental,
 		general_functions.sendSuccess
 	]);
+
+	//</editor-fold>
 
 }
 

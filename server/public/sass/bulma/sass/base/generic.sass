@@ -47,25 +47,27 @@ h3
   & + p
     margin-top: 10px
 
-h1,
-h2,
-h3
-  color: $black
-
 h1
   font-size: $size-3
-  font-weight: 700
+  font-weight: 400
+  +mobile-456px
+    font-size: $size-4
 h2
   font-size: $size-4
-  font-weight: 400
+  font-weight: 300
+  +mobile-456px
+    font-size: $size-5
 h3
   font-size: $size-5
-  font-weight: 400
+  font-weight: 300
+  +mobile-456px
+    font-size: $size-6
 p
-  color: $black-primary
   font-size: $size-6
   font-weight: 400
   line-height: 1.5
+  +mobile-456px
+    font-size: $size-7
 
 code,
 pre
@@ -99,10 +101,17 @@ a
   +transition(all 0.25s ease)
   cursor: pointer
   color: $text
-  text-decoration: none
+  font-weight: 400
+  text-decoration: none !important
   word-break: break-word
   &:active
     outline: none
+  &:active,
+  &:hover,
+  &:focus
+    text-decoration: none !important
+  +mobile-456px
+    font-size: $size-7
 
 code
   background-color: $code-background
