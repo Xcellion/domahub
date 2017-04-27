@@ -69,12 +69,21 @@
                                     There are many different ways to create content for your new domain name.
                                     See below for some options on what you can do with <span class='is-bold'><%= listing_info.domain_name %></span>!
                                 </p>
+<<<<<<< HEAD
                                 <p id="address-link-message" class="is-hidden regular-message">
                                     Display an existing website or web content (e.g. a gif, image, meme, etc.). This will be displayed <span class='is-bold'><%= listing_info.domain_name %><%= (new_rental_info.path) ? "/" + new_rental_info.path : "" %></span> for the duration of your rental. Enter the link below to get started!
                                 </p>
                                 <p id="address-forward-message" class="is-hidden regular-message">
                                     Anyone navigating to <span class='is-bold'><%= listing_info.domain_name %><%= (new_rental_info.path) ? "/" + new_rental_info.path : "" %></span> will be automatically redirected to this link for the duration of your rental. Enter the link of the website you want to get started!
                                 </p>
+=======
+                                <p id="address-forward-message" class="is-hidden regular-message">
+                                Anyone navigating to <span class='is-bold'><%= listing_info.domain_name %><%= (new_rental_info.path) ? "/" + new_rental_info.path : "" %></span> will be automatically redirected to this link for the duration of your rental. Enter the link of the website you want to get started!
+                                </p>
+                                <p id="address-link-message" class="is-hidden regular-message">
+                                    Display an existing website or web content (e.g. a gif, image, meme, etc.). This will be displayed <span class='is-bold'><%= listing_info.domain_name %><%= (new_rental_info.path) ? "/" + new_rental_info.path : "" %></span> for the duration of your rental. Enter the link below to get started!
+                                </p>
+>>>>>>> development
                                 <p id="address-build-message" class="is-hidden regular-message">
                                     Create an entirely new website for <span class='is-bold'><%= listing_info.domain_name %><%= (new_rental_info.path) ? "/" + new_rental_info.path : "" %></span>. It doesn&#39;t matter if its a personal portfolio, your new eCommerce store, or just a fun website.
                                 </p>
@@ -83,6 +92,7 @@
                         </article>
 
                         <div id="choices-block">
+<<<<<<< HEAD
                             <div class="content box no-shadow is-primary hover-effect choice-block link-choice">
                                 <div class="step-box">
                                     <span class="icon is-medium is-primary">
@@ -111,6 +121,36 @@
                                 </div>
                                 <p>
                                     Forward <span class='is-bold'><%= listing_info.domain_name %><%= (new_rental_info.path) ? "/" + new_rental_info.path : "" %></span> to an entirely different domain or website.
+=======
+                            <div class="content box no-shadow is-primary hover-effect choice-block forward-choice">
+                                <div class="step-box">
+                                    <span class="icon is-medium is-primary">
+                                        <i class="fa fa-share-square"></i>
+                                    </span>
+                                    <h2>Forward elsewhere</h2>
+                                    <span class="margin-left-5 is-small icon is-inline-block is-tooltip" data-balloon='A user visiting <%= listing_info.domain_name%><%= (new_rental_info.path) ? "/" + new_rental_info.path : "" %> will be redirected to the website you provide us. The address bar will change to the forwarded website URL.' data-balloon-length="large" data-balloon-pos="up">
+                                    <i class="fa fa-question-circle">
+                                    </i>
+                                    </span>
+                                </div>
+                                <p>
+                                    Forward <span class='is-bold'><%= listing_info.domain_name %><%= (new_rental_info.path) ? "/" + new_rental_info.path : "" %></span> to an entirely different domain or website.
+                                </p>
+                            </div>
+                            <div class="content box no-shadow is-info hover-effect choice-block link-choice">
+                                <div class="step-box">
+                                    <span class="icon is-medium is-info">
+                                        <i class="fa fa-external-link-square"></i>
+                                    </span>
+                                    <h2>Display web content</h2>
+                                    <span class="margin-left-5 is-small icon is-inline-block is-tooltip" data-balloon='A user visiting <%= listing_info.domain_name%><%= (new_rental_info.path) ? "/" + new_rental_info.path : "" %> will see that URL in the address bar, but will see the content from the website you provide us.' data-balloon-length="large" data-balloon-pos="up">
+                                      <i class="fa fa-question-circle"></i>
+                                    </span>
+                                </div>
+                                <p>
+                                    Display an existing website or content (e.g. a gif, image, meme, etc.).
+                                    We will show that content on <span class='is-bold'><%= listing_info.domain_name %><%= (new_rental_info.path) ? "/" + new_rental_info.path : "" %></span>.
+>>>>>>> development
                                 </p>
                             </div>
                             <div class="content box no-shadow is-accent hover-effect choice-block build-choice">
@@ -325,20 +365,43 @@
 
                     <!--PAYMENT STEP-->
                     <header id="step-header-payment" class="step-header header is-disabled margin-top-15">
+<<<<<<< HEAD
                         <h2>3. Payment</h2>
+=======
+                        <% if (listing_info.price_rate != 0) { %>
+                            <h2>3. Payment</h2>
+                        <% } else { %>
+                            <h2>3. Confirmation</h2>
+                        <% } %>
+>>>>>>> development
                     </header>
                     <div id="step-content-payment" class='step-content is-hidden'>
                         <article class="message">
                             <div class="message-body">
+<<<<<<< HEAD
                                 <p id="stripe-regular-message" class="regular-message">
                                     Please enter your payment information. By clicking the Confirm & Pay button,
                                     you are agreeing to pay the entire amount shown as well as our <a href="/terms" class='is-accent'>Terms and Conditions</a>.
                                 </p>
+=======
+                                <% if (listing_info.price_rate != 0) { %>
+                                    <p id="stripe-regular-message" class="regular-message">
+                                        Please enter your payment information. By clicking the Confirm & Pay button,
+                                        you are agreeing to pay the entire amount shown as well as our <a href="/terms" class='is-accent'>Terms and Conditions</a>.
+                                    </p>
+                                <% } else { %>
+                                    <p id="stripe-regular-message" class="regular-message">
+                                        Please clicking the Confirm button,
+                                        you are agreeing to our <a href="/terms" class='is-accent'>Terms and Conditions</a>.
+                                    </p>
+                                <% } %>
+>>>>>>> development
                                 <p id="stripe-error-message" class="error-message is-danger is-hidden"></p>
                                 <p id="stripe-success-message" class="regular-message is-hidden"></p>
                             </div>
                         </article>
                         <div id="checkout-card-content" class="success-hide checkout-card-content">
+<<<<<<< HEAD
                             <form id="stripe-form" autocomplete="on">
                                 <label class="label is-medium">Card Number</label>
                                 <p class="control has-icon">
@@ -364,6 +427,42 @@
                                 <a id="back-to-address-button" tabindex="0" class="button is-danger no-shadow is-stylish">Go Back</a>
                                 <a id="checkout-button" tabindex="0" class="button is-primary no-shadow is-stylish">Confirm & Pay</a>
                             </div>
+=======
+
+                            <% if (listing_info.price_rate != 0) { %>
+                                <form id="stripe-form" autocomplete="on">
+                                    <label class="label is-medium">Card Number</label>
+                                    <p class="control has-icon">
+                                        <input tabindex="0" id="cc-num" data-stripe="number" class="input stripe-input is-medium" type="tel" placeholder="•••• •••• •••• ••••" autocomplete="cc-number"/>
+                                        <i id="cc-icon" class="fa fa-credit-card"></i>
+                                    </p>
+                                    <div class="control is-grouped">
+                                        <p class="control is-expanded">
+                                            <label class="label is-medium">Expiration Date</label>
+                                            <input tabindex="0" id="cc-exp" maxlength="7" data-stripe="exp" class="input stripe-input is-medium" type="tel" placeholder="•• / ••" autocomplete="cc-exp"/>
+                                        </p>
+                                        <p class="control">
+                                            <label class="label is-medium">Security Code</label>
+                                            <input tabindex="0" id="cc-cvc" data-stripe="cvc" class="input stripe-input is-medium" type="tel" placeholder="•••" autocomplete="off"/>
+                                        </p>
+                                    </div>
+                                    <p class="control">
+                                        <label class="label is-medium">Zip Code</label>
+                                        <input tabindex="0" id="cc-zip" maxlength="6" data-stripe="address_zip" class="input stripe-input is-medium" type="tel" autocomplete="postal-code" placeholder="•••••"/>
+                                    </p>
+                                </form>
+                            <% } %>
+
+                            <div class="control margin-top-30">
+                                <a id="back-to-address-button" tabindex="0" class="button is-danger no-shadow is-stylish">Go Back</a>
+                                <% if (listing_info.price_rate != 0) { %>
+                                    <a id="checkout-button" tabindex="0" class="button is-primary no-shadow is-stylish">Confirm & Pay</a>
+                                <% } else { %>
+                                    <a id="checkout-button" tabindex="0" class="button is-primary no-shadow is-stylish">Confirm</a>
+                                <% } %>
+                            </div>
+
+>>>>>>> development
                         </div>
                         <div id="checkout-success-content" class="success-hide is-hidden">
                           <% if (!user) { %>
@@ -436,7 +535,11 @@
                             </div>
                         </div>
                         <footer id="edit-dates-button" class="card-footer">
+<<<<<<< HEAD
                             <a tabindex="0" href="/listing/<%= listing_info.domain_name%>" class="button is-stylish no-shadowis-fullwidth">Edit Dates or Path</a>
+=======
+                            <a tabindex="0" href="/listing/<%= listing_info.domain_name%>" class="button is-stylish no-shadow is-fullwidth">Edit Dates or Path</a>
+>>>>>>> development
                         </footer>
                     </div>
                 </div>

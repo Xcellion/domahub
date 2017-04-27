@@ -2,20 +2,21 @@
 <html>
 
 <head>
-  <title>DomaHub - Domain Name Rentals</title>
+  <title>Domain Name Rentals - DomaHub</title>
   <link rel="stylesheet" type="text/css" href="/css/min/main_index.min.css" />
-  <meta name="description" content="DomaHub provides domain name rentals at low, affordable prices and flexible time slots. Rent one today!" />
+  <meta name="description" content="Rent memorable domain names for marketing or personal use for the exact duration you need.
+   Domahub is an online marketplace for domain name rentals that allows users to rent already registered domains for days, weeks, or months." />
   <%- include("../templates/head_links"); %>
 </head>
 
 <body>
 
   <%- include("../templates/navbar", {user: user}); %>
-  <section id="index-img" class="section is-index-img">
+  <section id="landing" class="section is-index-img">
     <span></span>
     <div class="container">
       <div class="content has-text-centered margin-bottom-25">
-        <h1 class="title is-1 is-white">
+        <h1 class="title is-1 is-white is-bold">
           Exceptional domains for rent.
         </h1>
         <h2 class="subtitle is-4 is-white">
@@ -25,6 +26,7 @@
       <form class="beta-form has-text-centered">
         <div class="control is-grouped-center margin-bottom-0">
           <p class="control margin-right-5 has-icon">
+<<<<<<< HEAD
             <input tabindex="1" class="input is-medium" type="text" name="betaemail" placeholder="Your Email"/>
             <i class="fa fa-envelope"></i>
           </p>
@@ -33,6 +35,17 @@
           </p>
         </div>
         <p class="signup-text">Please submit your email to apply for our service.</p>
+=======
+            <input tabindex="0" class="input is-medium" type="text" name="betaemail" placeholder="Your Email"/>
+            <i class="fa fa-envelope"></i>
+          </p>
+          <p class="control">
+            <button tabindex="0" class="beta-submit button is-primary is-stylish">Apply</button>
+          </p>
+        </div>
+        <p class="signup-text beta-normal-message">Please submit your email to apply for our service.</p>
+        <p class="signup-text has-text-center beta-error-message is-danger is-hidden">Hey! That was not a valid email address!</p>
+>>>>>>> development
       </form>
       <div class="beta-form-success is-hidden">
         <div class="notification has-text-centered is-white">
@@ -40,24 +53,24 @@
         </div>
       </div>
     </div>
+  </section>
+
+  <section id="decision-section" class="section is-medium-top">
     <div class="learn-more-arrow">
-      <a tabindex="1" href="#decision-section" id="learn-more-button" title="Learn More">
+      <a tabindex="0" href="#decision-section" id="learn-more-button" title="Learn More">
         <span class="icon is-medium is-white">
           <i class="fa fa-angle-down"></i>
         </span>
       </a>
     </div>
-  </section>
-
-  <section id="decision-section" class="section is-medium-top">
     <div class="container">
       <div class="tabs-box">
         <ul>
           <li id="have-domains-tab" class="is-active">
-            <a tabindex="1" href="#owners" title="Domain Owners">I have domains</a>
+            <a tabindex="0" href="#owners" title="Domain Owners">I have domains</a>
           </li>
           <li id="want-domains-tab">
-            <a tabindex="1" href="#renters" title="Domain Renters">I want domains</a>
+            <a tabindex="0" href="#renters" title="Domain Renters">I want domains</a>
           </li>
         </ul>
       </div>
@@ -67,9 +80,10 @@
   <section id="have-domains-section" class="section is-medium d-owner">
     <div class="container">
       <div class="content">
-        <h1 class="title is-2 has-text-centered margin-bottom-50">Exceptional domain names.</h1>
+        <h1 class="title is-2 has-text-centered">What makes a domain exceptional?</h1>
       </div>
       <div class="columns">
+<<<<<<< HEAD
         <div class="column is-5">
           <div class="content margin-bottom-20">
             <h2 class="has-text-centered-mobile">What makes a domain name exceptional?</h2>
@@ -90,8 +104,30 @@
                   A marketable tag line, slogan, motto, or quote.
                 </p>
               </div>
+=======
+        <div class="column is-3">
+          <div class="content box dom-trait">
+            <div class="flex-align-center">
+              <span class="icon is-medium is-primary"><i class="fa fa-snowflake-o"></i></span>
+              <h2 >Unique</h2>
             </div>
+            <p>
+              Words or phrases related to themes like holidays, places, ideas, etc.
+            </p>
           </div>
+        </div>
+        <div class="column is-3">
+          <div class="content box dom-trait">
+            <div class="flex-align-center">
+              <span class="icon is-medium is-primary"><i class="fa fa-star"></i></span>
+              <h2 >Memorable</h2>
+>>>>>>> development
+            </div>
+            <p>
+              A catchy and easy-to-remember saying, slogan, motto, tag-line, quote, etc.
+            </p>
+          </div>
+<<<<<<< HEAD
           <div class="columns">
             <div class="column">
               <div class="content dom-trait">
@@ -108,10 +144,37 @@
                   Multiple meanings and use cases.
                 </p>
               </div>
+=======
+        </div>
+        <div class="column is-3">
+          <div class="content box dom-trait">
+            <div class="flex-align-center">
+              <span class="icon is-medium is-primary"><i class="fa fa-search"></i></span>
+              <h2 >Searchable</h2>
+>>>>>>> development
             </div>
+            <p>
+              Natural traffic generated from common keywords and search terms.
+            </p>
           </div>
         </div>
+<<<<<<< HEAD
         <div class="column is-5 is-offset-1">
+=======
+        <div class="column is-3">
+          <div class="content box dom-trait">
+            <div class="flex-align-center">
+              <span class="icon is-medium is-primary"><i class="fa fa-recycle"></i></span>
+              <h2 >Versatile</h2>
+            </div>
+            <p>
+              Various use cases based on multiple meanings, definitions, or interpretations.
+            </p>
+          </div>
+        </div>
+      </div>
+        <!-- <div class="column is-5 is-offset-1">
+>>>>>>> development
           <div class="content">
             <div class="content margin-bottom-20">
               <h2 class="has-text-centered-mobile">What are the benefits of renting?</h2>
@@ -137,8 +200,7 @@
               </li>
             </ul>
           </div>
-        </div>
-      </div>
+        </div> -->
     </div>
   </section>
 
@@ -158,13 +220,13 @@
       </div>
       <div class="columns">
         <div class="column is-4">
-          <div class="content box has-stripe">
+          <div class="content box has-stripe hiw">
             <p class="is-blacklight">Step One</p>
-            <div class="step-box">
+            <div class="flex-align-center">
               <span class="icon is-medium is-bluedarker">
                 <i class="fa fa-list-alt"></i>
               </span>
-              <h3 class="is-bold">You List Your Domain</h3>
+              <h2 >You List Your Domain</h2>
             </div>
             <p>
               Create custom listings using our upload tool and verify that you own them
@@ -173,13 +235,13 @@
           </div>
         </div>
         <div class="column is-4">
-          <div class="content box has-stripe">
+          <div class="content box has-stripe hiw">
             <p class="is-blacklight">Step Two</p>
-            <div class="step-box">
+            <div class="flex-align-center">
               <span class="icon is-medium is-bluedarker">
                 <i class="fa fa-calendar-check-o"></i>
               </span>
-              <h3 class="is-bold">Someone Rents It</h3>
+              <h2 >Someone Rents It</h2>
             </div>
             <p>
               We pay you directly into a bank account you've linked
@@ -188,13 +250,13 @@
           </div>
         </div>
         <div class="column is-4">
-          <div class="content box has-stripe">
+          <div class="content box has-stripe hiw">
             <p class="is-blacklight">Step Three</p>
-            <div class="step-box">
+            <div class="flex-align-center">
               <span class="icon is-medium is-bluedarker">
                 <i class="fa fa-share-square-o"></i>
               </span>
-              <h3 class="is-bold">We Redirect Web Content</h3>
+              <h2 >We Redirect Web Content</h2>
             </div>
             <p>
               The renter provides a link to some web content they wish to display and it is
@@ -219,7 +281,11 @@
                 <i class="fa fa-server"></i>
               </span>
               <div class="content slider-text margin-bottom-0">
+<<<<<<< HEAD
                 <h3>Never transfer domains</h3>
+=======
+                <h2>Never transfer domains</h2>
+>>>>>>> development
                 <p>
                   You keep your nameservers.
                 </p>
@@ -244,7 +310,11 @@
                 <i class="fa fa-gears"></i>
               </span>
               <div class="content slider-text margin-bottom-0">
+<<<<<<< HEAD
                 <h3>Control pricing and scheduling</h3>
+=======
+                <h2>Control pricing and scheduling</h2>
+>>>>>>> development
                 <p>
                   You have full control over both.
                 </p>
@@ -271,7 +341,11 @@
                 <i class="fa fa-credit-card"></i>
               </span>
               <div class="content slider-text margin-bottom-0">
+<<<<<<< HEAD
                 <h3>Quick and easy payments</h3>
+=======
+                <h2>Quick and easy payments</h2>
+>>>>>>> development
                 <p>
                   Get paid immediately and securely.
                 </p>
@@ -296,7 +370,11 @@
                 <i class="fa fa-book"></i>
               </span>
               <div class="content slider-text margin-bottom-0">
+<<<<<<< HEAD
                 <h3>Secure rental contracts</h3>
+=======
+                <h2>Secure rental contracts</h2>
+>>>>>>> development
                 <p>
                   All rentals are bounded by our terms.
                 </p>
@@ -323,16 +401,20 @@
   <section id="want-domains-section" class="section is-medium d-renter is-hidden">
     <div class="container">
       <div class="content">
+<<<<<<< HEAD
         <h1 class="title is-2 has-text-centered margin-bottom-50">Our Benefits</h1>
+=======
+        <h1 class="title is-2 has-text-centered">Our Benefits</h1>
+>>>>>>> development
       </div>
       <div class="columns">
         <div class="column is-4">
-          <div class="content box">
-            <div class="step-box">
+          <div class="content box dom-ben">
+            <div class="flex-align-center">
               <span class="icon is-medium is-primary">
                 <i class="fa fa-pie-chart"></i>
               </span>
-              <h2>Affordable Prices</h2>
+              <h2 >Affordable Prices</h2>
             </div>
             <p>
               Exceptional domains can be expensive to buy, we know.
@@ -342,12 +424,12 @@
           </div>
         </div>
         <div class="column is-4">
-          <div class="content box">
-            <div class="step-box">
+          <div class="content box dom-ben">
+            <div class="flex-align-center">
               <span class="icon is-medium is-primary">
                 <i class="fa fa-calendar-check-o"></i>
               </span>
-              <h2>Flexible Scheduling</h2>
+              <h2 >Flexible Scheduling</h2>
             </div>
             <p>
               Domains are available by the day, week or month. We work hard to make sure our domains
@@ -356,12 +438,12 @@
           </div>
         </div>
         <div class="column is-4">
-          <div class="content box">
-            <div class="step-box">
+          <div class="content box dom-ben">
+            <div class="flex-align-center">
               <span class="icon is-medium is-primary">
                 <i class="fa fa-folder-o"></i>
               </span>
-              <h2>Exceptional Inventory</h2>
+              <h2 >Exceptional Inventory</h2>
             </div>
             <p>
               If a domain you want is not listed on DomaHub, we will do our best to get that domain for you!
@@ -391,15 +473,19 @@
         <div class="column">
           <div class="columns">
             <div class="column is-5 is-offset-1">
-              <div class="content box has-stripe">
+              <div class="content box has-stripe options">
                 <p class="is-blacklight">
                   Option One
                 </p>
-                <div class="step-box">
+                <div class="flex-align-center">
                   <span class="icon is-medium is-bluedarker">
                     <i class="fa fa-television"></i>
                   </span>
+<<<<<<< HEAD
                   <h3 class="is-bold">Display custom content.</h3>
+=======
+                  <h2 >Display custom content.</h2>
+>>>>>>> development
                 </div>
                 <p>
                   Link web content (e.g. an image, GIF, or website) to your new rental.
@@ -409,15 +495,19 @@
               </div>
             </div>
             <div class="column is-5">
-              <div class="content box has-stripe">
+              <div class="content box has-stripe options">
                 <p class="is-blacklight">
                   Option Two
                 </p>
-                <div class="step-box">
+                <div class="flex-align-center">
                   <span class="icon is-medium is-bluedarker">
                     <i class="fa fa-share"></i>
                   </span>
+<<<<<<< HEAD
                   <h3 class="is-bold">Forward to another website.</h3>
+=======
+                  <h2 >Forward to another website.</h2>
+>>>>>>> development
                 </div>
                 <p>
                   Visitors to the rented domain will be forwarded to a website of your choosing.
@@ -433,8 +523,8 @@
 
   <section class="section is-medium d-renter is-hidden">
     <div class="container">
-      <div class="content">
-        <h1 class="title is-2 has-text-centered margin-bottom-50">How it works.</h1>
+      <div class="content margin-bottom-30">
+        <h1 class="title is-2 has-text-centered">How it works.</h1>
       </div>
       <div class="columns">
         <div class="column is-4 is-offset-2">
@@ -447,7 +537,7 @@
         </div>
         <div class="column is-5">
           <figure class="image has-shadow is-real-ratio">
-            <img src="/images/main/listing-capture.jpg" />
+            <img src="/images/main/listing-capture.jpg" alt="Domain name rental listing page"/>
           </figure>
         </div>
       </div>
@@ -462,7 +552,7 @@
         </div>
         <div class="column is-5">
           <figure class="image has-shadow is-real-ratio">
-            <img src="/images/main/date_selection.gif" />
+            <img src="/images/main/date_selection.gif" alt="Domain name rental date selection" />
           </figure>
         </div>
       </div>
@@ -478,16 +568,16 @@
         </div>
         <div class="column is-5">
           <figure class="image-stack">
-            <img src="/images/main/stack-img-3.jpg" alt="" />
-            <img src="/images/main/stack-img-2.jpg" alt="" />
-            <img src="/images/main/stack-img-1.jpg" alt="" />
+            <img src="/images/main/stack-img-3.jpg" alt="Example website" />
+            <img src="/images/main/stack-img-2.jpg" alt="Example website" />
+            <img src="/images/main/stack-img-1.jpg" alt="Example website" />
           </figure>
         </div>
       </div>
     </div>
   </section>
 
-  <section class="section is-medium is-lighter">
+  <section class="section is-medium has-pyramid is-primary">
     <div class="container">
       <div class="columns">
         <div class="column">
@@ -495,15 +585,19 @@
             <h1 class="title is-2">Have any questions?</h1>
             <h3>
               Feel free to send us a message or explore the FAQ!
-            </h2>
+            </h3>
             <div class="button-wrapper">
+<<<<<<< HEAD
               <a tabindex="1" class="button is-primary is-stylish" href="/contact" target="_blank">
+=======
+              <a tabindex="0" class="button is-primary is-inverted is-stylish" href="/contact" target="_blank" rel="noopener">
+>>>>>>> development
                 <span class="icon">
                   <i class="fa fa-envelope-o"></i>
                 </span>
                 <span>Contact Us</span>
               </a>
-              <a tabindex="1" class="button is-accent is-stylish" href="/faq" target="_blank">
+              <a tabindex="0" class="button is-accent is-stylish" href="/faq" target="_blank" rel="noopener">
                 <span class="icon">
                   <i class="fa fa-question-circle"></i>
                 </span>
@@ -519,5 +613,6 @@
     <%- include("../templates/footer"); %>
     <%- include("../templates/js_scripts"); %>
     <script src="/js/routes/main/main_index_logic.js" type="text/javascript"></script>
+    <script src="/js/beta_signup_logic.js" type="text/javascript"></script>
   </body>
 </html>

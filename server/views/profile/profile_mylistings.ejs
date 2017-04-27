@@ -5,6 +5,7 @@
 <head>
 	<title>My Listings - DomaHub</title>
 	<link rel="stylesheet" href="/css/min/profile_general.min.css" type="text/css" />
+	<link rel="stylesheet" href="/css/lib/jquery.tagit.css" type="text/css" />
 	<%- include("../templates/head_links"); %>
 </head>
 
@@ -18,13 +19,13 @@
 					<div class="tabs is-fullwidth is-toggle">
 						<ul>
 							<li class="is-active">
-								<a tabindex="1">
+								<a tabindex="0">
 									<span class="icon is-small"><i class="fa fa-tasks"></i></span>
 									<span>My Listings</span>
 								</a>
 							</li>
 							<li>
-								<a tabindex="1" href="/profile/myrentals">
+								<a tabindex="0" href="/profile/myrentals">
 									<span class="icon is-small"><i class="fa fa-window-maximize"></i></span>
 									<span>My Rentals</span>
 								</a>
@@ -39,7 +40,7 @@
 						<div class="level-left">
 							<div class="level-item">
 								<div class="control has-addons">
-									<span class="select" tabindex="1">
+									<span class="select" tabindex="0">
 										<select id="filter-select">
 											<option value="reset_filter">View All</option>
 											<option value="rented_filter">Rented Now</option>
@@ -48,13 +49,13 @@
 											<option value="unverified_filter">Unverified</option>
 										</select>
 									</span>
-									<a id="multi-delete" class="multi-button is-disabled button no-shadow" tabindex="1" title="Delete Listing(s)">
+									<a id="multi-delete" class="multi-button is-disabled button no-shadow" tabindex="0" title="Delete Listing(s)">
 										<span class="icon is-small">
 											<i class="fa fa-trash"></i>
 										</span>
 										<span>Delete</span>
 									</a>
-									<a id="multi-verify" class="multi-button is-disabled button no-shadow" tabindex="1" title="Verify Listing(s)">
+									<a id="multi-verify" class="multi-button is-disabled button no-shadow" tabindex="0" title="Verify Listing(s)">
 										<span class="icon is-small">
 											<i class="fa fa-check-circle-o"></i>
 										</span>
@@ -65,7 +66,7 @@
 							<div class="level-item">
 								<div class="control is-expanded has-icon">
 									<i class="fa fa-search"></i>
-									<input id="search-domain" tabindex="1" class="input is-expanded" type="text" placeholder="Search my listings" />
+									<input id="search-domain" tabindex="0" class="input is-expanded" type="text" placeholder="Search my listings" />
 								</div>
 							</div>
 						</div>
@@ -74,8 +75,8 @@
 			</div>
 			<div class="columns">
 				<div class="column is-12">
-					<table class="table is-profile has-shadow">
-						<thead class="has-shadow">
+					<table class="table is-profile">
+						<thead class="">
 							<tr>
 								<th id="select-all" class="td-arrow">
 									<span class="icon is-small"><i class="no-transition fa fa-square-o"></i></span>
@@ -133,7 +134,7 @@
 										</span>
 										<span>Edit</span>
 									</a>
-									<a class="view-button button is-pulled-right margin-right-5 no-shadow" target="_blank" title="Open listing in new tab" style="target-new: tab;" href="">
+									<a class="view-button button is-pulled-right margin-right-5 no-shadow" target="_blank" rel="noopener" title="Open listing in new tab" style="target-new: tab;" href="">
 										<span class="icon is-small">
 											<i class="fa fa-external-link" aria-hidden="true"></i>
 										</span>
@@ -161,12 +162,15 @@
 											<form class="drop-form column is-9">
 												<div class="columns listing-module">
 													<div class="column is-3">
-														<p class="is-bold">Rental Pricing</p>
+														<p class="is-inline">Rental Pricing</p>
+														<span class="icon is-small is-tooltip v-align-middle" data-balloon-length="medium" data-balloon="Minimum pricing is $1 / Day." data-balloon-pos="up">
+															<i class="fa fa-question-circle"></i>
+														</span>
 													</div>
 													<div class="column is-9">
 														<div class="control is-grouped">
 															<p class="control">
-																<input data-name="price_rate" type="number" min="1" step="1" class="padding-top-0 price-rate-input input changeable-input">
+																<input data-name="price_rate" placeholder="minimum 1" type="number" min="1" step="1" class="padding-top-0 price-rate-input input changeable-input">
 															</p>
 															<span class="select price-type-span">
 																<div class="drop-form">
@@ -182,35 +186,44 @@
 												</div>
 												<div class="columns listing-module">
 													<div class="column is-3">
-														<p class="is-bold">Min. Purchase Price</p>
-													</div>
-													<div class="column is-9">
-														<div class="control is-grouped">
-															<p class="control">
-																<input data-name="buy_price" placeholder="Empty for no buy-outs" type="number" min="1" step="1" class="padding-top-0 buy-price-input input changeable-input">
-															</p>
-														</div>
-													</div>
-												</div>
-												<div class="columns listing-module">
-													<div class="column is-3">
-														<p class="is-bold">Listing Description</p>
+														<p class="is-inline">Listing Description</p>
+														<span class="icon is-small is-tooltip v-align-middle" data-balloon-length="large" data-balloon="Descriptions help renters understand what your domain name can be useful for." data-balloon-pos="up">
+															<i class="fa fa-question-circle"></i>
+														</span>
 													</div>
 													<div class="column is-9">
 														<div class="control">
 															<div class="control">
-																<textarea data-name="description" tabindex="1" class="description-input textarea changeable-input" placeholder="Rent this website for any time period you please!"></textarea>
+																<textarea data-name="description" tabindex="0" class="description-input textarea changeable-input" placeholder="Rent this website for any time period you please!"></textarea>
 															</div>
 														</div>
 													</div>
 												</div>
 												<div class="columns listing-module">
 													<div class="column is-3">
-														<p class="is-bold">Categories</p>
+														<p class="is-inline">Example Paths</p>
+														<span class="icon is-small is-tooltip v-align-middle" data-balloon-length="large" data-balloon="Example paths that renters may want to rent on your domain. Must consist of either letters or numbers." data-balloon-pos="up">
+															<i class="fa fa-question-circle"></i>
+														</span>
+													</div>
+													<div class="column is-9">
+														<div class="control">
+															<div class="control">
+																<input data-name="paths" tabindex="0" class="is-hidden paths-input input changeable-input"></input>
+															</div>
+														</div>
+													</div>
+												</div>
+												<div class="columns listing-module">
+													<div class="column is-3">
+														<p class="is-inline">Categories</p>
+														<span class="icon is-small is-tooltip v-align-middle" data-balloon-length="large" data-balloon="Categories help users find similar domains to rent." data-balloon-pos="up">
+															<i class="fa fa-question-circle"></i>
+														</span>
 													</div><div class="column is-9">
 														<div class="control">
 															<div class="is-flex-wrap category-control">
-																<input data-name="categories" onchange=""tabindex="1" class="is-hidden categories-input input changeable-input" value="" business="" ecard="" marketing="" niche="" personal="" promotion="">
+																<input data-name="categories" onchange=""tabindex="0" class="is-hidden categories-input input changeable-input" value="" business="" ecard="" marketing="" niche="" personal="" promotion="">
 
 																<%# make all the categories %>
 																<% for (var x = 0; x < categories.length; x++){ %>
@@ -219,8 +232,8 @@
 															</div>
 														</div>
 														<div class="control">
-															<a tabindex="1" title="Save Changes" class="save-changes-button margin-right-10 button is-disabled is-small is-stylish is-primary no-shadow">Save Changes</a>
-															<a tabindex="1" title="Cancel Changes" class="cancel-changes-button button is-hidden is-danger is-small is-stylish no-shadow">Cancel Changes</a>
+															<a tabindex="0" title="Save Changes" class="save-changes-button margin-right-10 button is-disabled is-small is-stylish is-primary no-shadow">Save Changes</a>
+															<a tabindex="0" title="Cancel Changes" class="cancel-changes-button button is-hidden is-danger is-small is-stylish no-shadow">Cancel Changes</a>
 														</div>
 														<div class="listing-msg-error is-hidden is-danger notification">
 															<button class="delete"></button>
@@ -235,12 +248,12 @@
 												<div class="card listing-img no-shadow">
 													<div class="card-image">
 														<figure class="image listing-img">
-															<button tabindex="1" class="delete-img delete"></button>
+															<button tabindex="0" class="delete-img delete"></button>
 															<img class="background_image is-listing" alt="Image not found" src="">
 														</figure>
 													</div>
 													<footer class="card-footer">
-														<form tabindex="1" class="drop-form-file" action="/listings/create/multiple" method="post" enctype="multipart/form-data">
+														<form tabindex="0" class="drop-form-file" action="/listings/create/multiple" method="post" enctype="multipart/form-data">
 															<input data-name="background_image" type="file" name="background_image" accept="image/png, image/gif, image/jpeg" class="picture-file changeable-input input-file">
 															<label for="" class="picture-label card-footer-item">
 																<i class="fa fa-upload" aria-hidden="true"></i>
@@ -288,7 +301,7 @@
 													<h3 class="is-bold">You must verify that you own this domain.</h3>
 													<p>The table below details the DNS entries that are needed to verify this domain.</p>
 													<p>Please <a class="registrar_url">log in to your domain provider</a> to create these entries.</p>
-													<p>If you require any assistance, please refer to our <a target="_blank" style'target-new:="" tab;'="" class="is-accent margin-bottom-25" href="https://intercom.help/domahub/how-to-verify-your-domain-on-domahub"> step-by-step guide</a> on domain verification.</p>
+													<p>If you require any assistance, please refer to our <a target="_blank" rel="noopener" style'target-new:="" tab;'="" class="is-accent margin-bottom-25" href="https://intercom.help/domahub/how-to-verify-your-domain-on-domahub"> step-by-step guide</a> on domain verification.</p>
 													<table class="table is-bordered margin-top-15">
 														<th>Host</th>
 														<th>Record</th>
@@ -353,8 +366,9 @@
 
 	<%- include("../templates/footer"); %>
 	<%- include("../templates/js_scripts"); %>
+	<script src="/js/jquery/jquery-ui.js" type="text/javascript"></script>
 	<script src="/js/lib/moment.min.js" type="text/javascript"></script>
-	<script src="https://checkout.stripe.com/checkout.js"></script>
+	<script src="/js/lib/tag-it.min.js" type="text/javascript"></script>
 	<script type="text/javascript">
 		//redirect to homepage if user is not defined
 		var user = <% if(typeof user != "undefined"){ %><%-JSON.stringify(user)%><% }else{ %>window.location="/"<% } %>;

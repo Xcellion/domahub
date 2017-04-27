@@ -105,6 +105,9 @@ function createRowDrop(rental_info, rownum){
 	updateSaveCancelButtons(tempRow_drop, rental_info);
 	updateDeleteMessagesX(tempRow_drop);
 	updatePreviewImage(tempRow_drop, rental_info);
+	updateBuildChoice(tempRow_drop);
+	updateLinkChoice(tempRow_drop);
+	updateForwardChoice(tempRow_drop);
 
 	tempRow_drop.removeClass('is-hidden clone-row').attr("id", "row-drop" + rownum);
     return tempRow_drop;
@@ -165,7 +168,25 @@ function updatePreviewImage(tempRow_drop, rental_info){
 	//preview link
 	tempRow_drop.find(".preview-link").attr('href', "/listing/" + rental_info.domain_name + "/" + rental_info.rental_id);
 }
-
+function updateBuildChoice(tempRow_drop) {
+	tempRow_drop.find(".build-choice").on("click", function() {
+		$(this).parents("#choices-block").addClass("is-hidden");
+		tempRow_drop.find(".build-choice-column").toggleClass("is-hidden");
+		tempRow_drop.find(".choices-message").text("These are some quick and easy ways to create a website! (We are not sponsored by any of these providers.)");
+	});
+}
+function updateLinkChoice(tempRow_drop) {
+	tempRow_drop.find(".link-choice").on("click", function() {
+		$(this).parents("#choices-block").addClass("is-hidden");
+		$(".link-choice-column").toggleClass("is-hidden");
+	});
+}
+function updateForwardChoice(tempRow_drop) {
+	tempRow_drop.find(".forward-choice").on("click", function() {
+		$(this).parents("#choices-block").addClass("is-hidden");
+		$(".forward-choice-column").toggleClass("is-hidden");
+	});
+}
 // ------------------------------------------------------------------------------------------------------------------------------ DELETE RENTAL
 
 //function to make sure of deletion
@@ -253,7 +274,7 @@ function editAddress(row, editing){
     }
 }
 
-//funciton to update the preview image
+//function to update the preview image
 function editImage(tempRow_drop, editing){
 	if (editing && !tempRow_drop.find('.preview-image').attr("src")){
 		tempRow_drop.find('.preview-image').attr("src", tempRow_drop.data("background_image"));

@@ -1,5 +1,10 @@
 .table
   background-color: #fff
+  border-collapse: separate
+  border-radius: $radius
+  border-spacing: 0px
+  border: 1px solid $border
+  box-shadow: none
   color: $text
   margin-bottom: 20px
   width: 100%
@@ -13,14 +18,13 @@
   th
     text-align: left
     vertical-align: middle
-    padding: 10px
     &.row-drop-td
       padding: 0
       border: none
     & > .div-drop
       background-color: $white
       border-top: 1px solid $border
-      padding: 10px 18px 10px 35px
+      padding: 25px 20px 25px 40px
       cursor: auto
     // Modifiers
     &.is-narrow
@@ -28,21 +32,25 @@
       width: 1%
   th
     font-weight: 700
+    padding: 10px 8px
     &:hover
       cursor: pointer
   tr
     border: 1px solid $border
     border-width: 0 1px
+  td
+    padding: 8px
   thead
-    border: 1px solid $border
-    border-width: 1px 1px 2px
+    th
+      border: 1px solid $border
+      border-width: 0 0 1px
     &.has-shadow
       border: none
       +box-shadow(0,2px,3px,$border,0)
   tbody
     tr
       &:hover
-        background-color: $border
+        background-color: $grey-lighter
       &.is-active
         background-color: #efefef
       &.no-hover-effect
@@ -63,7 +71,7 @@
               background: $primary
               position: absolute
               content: ""
-              height: 53px
+              height: 48px
               width: 4px
               left: 20px
               +mobile
@@ -73,7 +81,7 @@
             background: $danger
             position: absolute
             content: ""
-            height: 53px
+            height: 48px
             width: 4px
             left: 20px
             +mobile

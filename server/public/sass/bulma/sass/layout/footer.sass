@@ -2,72 +2,61 @@
   background-color: $blue-darker
   overflow: hidden
   padding: 40px 0
+  &.is-white
+    background-color: $white
   +mobile
     padding: 40px 20px
-
-.footer-form
-  margin: 25px auto
-  max-width: 500px
 
 .footer-list
   display: flex
   align-items: center
   text-decoration: none
-  justify-content: center
+  list-style: none
   +mobile-456px
     flex-wrap: wrap
 
 .footer-item
-  margin-left: 20px
+  &:not(:last-child)
+    margin-right: 20px
   +mobile-456px
     margin-top: 10px
   a
-    padding: 5px 0
     color: $white-primary
+    padding: 5px 0
+    position: relative
+    &::before
+      @include transition(all 0.25s ease)
+      background: $white
+      bottom: 0
+      content: ""
+      height: 3px
+      position: absolute
+      width: 0
+      left: 50%
     &:hover,
     &:focus
-      color: $primary
+      &::before
+        width: 100%
+        left: 0
 
 .footer-bar
   display: flex
-  justify-content: space-between
-  align-items: center
+  flex-direction: column
   margin-top: 40px
   +mobile
-    padding: 30px 20px
     flex-direction: column
-    justify-content: flex-start
-
-.footer-bar-content
-  display: flex
-  align-items: center
-  justify-content: space-between
 
 .footer-bar-item
-  font-size: $size-8
   margin: 0
   padding: 0
   box-sizing: border-box
-  &:not(:first-child)
-    margin-left: 25px
-
-.footer-bar-right
-  +tablet
-    text-align: right
-  .footer-bar-item
-    color: $white-primary
-    &:hover,
-    &:focus
-      color: $primary
-
+  &:not(:last-child)
+    margin-right: 10px
 
 .social-icon
-  &:not(:first-child)
-    margin-left: 20px
   & > .icon
+    +transition(all 0.25s ease)
     color: $white
-    font-size: $size-8
+    vertical-align: baseline
     &:hover
       color: $primary
-  +mobile-456px
-    display: none
