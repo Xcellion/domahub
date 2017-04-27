@@ -610,7 +610,7 @@ module.exports = {
         console.log("F: Rendering rental...");
 
         //render the appropriate address
-        if (req.session.rental_info.address){
+        if (req.session.rental_info.address && req.session.rental_info.type == 0){
             req.session.rented_info = req.session.rental_info;
             var address_request = request({
                 url: addProtocol(req.session.rented_info.address),

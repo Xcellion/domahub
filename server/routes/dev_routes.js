@@ -83,7 +83,9 @@ function proxyimage(req, res, next){
         edit: true,
         preview: true,
         doma_rental_info : {
-            address: "fuck",
+            address: "fuck.com",
+            type: 0,
+            path: "lol",
             domain_name: "imsorryimdumb.com"
         }
     });
