@@ -1,37 +1,32 @@
-<div class="domahub-wrapper" style="display:none;">
-    <div class="domahub-menu">
-        <div class="domahub-heading-wrapper">
-            <h3 class="domahub-heading">Edit Your Rental</h3>
-        </div>
-        <div class="domahub-info-wrapper">
-            <p class="domahub-status-info">Currently Active</p>
-        </div>
-
-        <input placeholder="Edit Address" class="domahub-action-input input"></input>
-        <a id="domahub-listing-button" class="domahub-action-button">View Listing</a>
-        <a href="https://www.domahub.com/contact" class="domahub-action-button">Something wrong?</a>
+<div class="dh-wrapper">
+    <div class="dh-menu">
+        <p class="dh-heading dh-spacing">Your Rental</p>
+        <p class="dh-status-info dh-spacing">Currently Active</p>
+        <input placeholder="Edit Address" class="dh-action-input"></input>
+        <a id="dh-listing-button" class="dh-action-button">View Listing</a>
+        <a href="https://www.domahub.com/contact" class="dh-action-button" target="_blank" rel="noopener">Something wrong?</a>
     </div>
 </div>
 
-<script>
-    console.log("DomaHub editing menu loaded!");
+<!-- <script>
+    console.log("dh editing menu loaded!");
     $(document).ready(function(){
-        $(".domahub-action-input").on("keypress", function(e){
+        $(".dh-action-input").on("keypress", function(e){
             if (e.keyCode == 13){
                 change_address($(this));
             }
         }).val(doma_rental_info.address).on("focus", function(e){
             $(this).select();
         });
-        
+
         //auto show menu if editing
-        $("#domahub-button").click();
+        $("#dh-button").click();
 
         //rental times
         for (var x = 0 ; x < doma_rental_info.times.length; x++){
             var temp_start = moment(doma_rental_info.times[x].date).format("MMM D YYYY");
             var temp_end = moment(doma_rental_info.times[x].date).add(doma_rental_info.times[x].duration, "millisecond").format("MMM D YYYY");;
-            $(".domahub-info-wrapper").append("<p class='domahub-rental-dates'>" + temp_start + " - " + temp_end + "</p>");
+            $(".dh-info-wrapper").append("<p class='dh-rental-dates'>" + temp_start + " - " + temp_end + "</p>");
         }
     });
 
@@ -42,7 +37,7 @@
             url: "/listing/" + doma_rental_info.domain_name + "/" + doma_rental_info.rental_id + "/edit",
             method: "POST",
             data: {
-                address: $('.domahub-action-input').val()
+                address: $('.dh-action-input').val()
             }
         }).done(function(data){
             elem.on("keypress", function(){
@@ -52,11 +47,11 @@
             });
             console.log(data);
             if (data.state == "error"){
-                $('.domahub-action-input').val("");
+                $('.dh-action-input').val("");
             }
             else {
                 location.replace("http://" + window.location.host + "/listing/" + doma_rental_info.domain_name + "/" + doma_rental_info.rental_id);
             }
         });
     }
-</script>
+</script> -->
