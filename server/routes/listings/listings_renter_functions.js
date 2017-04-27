@@ -110,6 +110,7 @@ module.exports = {
                             rental_db_info : {
                                 listing_id: req.session.listing_info.id,
                                 path: req.session.new_rental_info.path,
+                                type: rental_type,
                                 address: (req.body.address == "" || !req.body.address) ? "" : address    //empty address or not
                             },
                             new_user_email : req.body.new_user_email
@@ -172,7 +173,7 @@ module.exports = {
             }
 
             //start time in the past
-            else if (start_moment.isBefore(moment())){
+            else if (start_moment.isBefore(moment().startOf("hour"))){
                 error.handler(req, res, "Start time in the past!", "json");
             }
 
@@ -214,37 +215,46 @@ module.exports = {
 
     //calculate and check for the price
     checkRentalPrice : function(req, res, next){
-        console.log("F: Checking rental price...");
+        if (req.session.listing_info.price_rate != 0){
+            console.log("F: Checking rental price...");
+            var price = calculatePrice(req.body.starttime, req.body.endtime, req.session.listing_info);
 
-        var price = calculatePrice(req.body.starttime, req.body.endtime, req.session.listing_info);
-
-        //check for price
-        if (!price){
-            error.handler(req, res, "Invalid price!", "json");
+            //check for price
+            if (!price){
+                error.handler(req, res, "Invalid price!", "json");
+            }
+            else {
+                req.session.new_rental_info.price = price;
+                next();
+            }
         }
         else {
-            req.session.new_rental_info.price = price;
             next();
         }
     },
 
     //get the stripe id of the listing owner
     getOwnerStripe : function(req, res, next){
-        console.log("F: Getting all Stripe info for a listing...");
+        if (req.session.listing_info.price_rate != 0){
+            console.log("F: Getting all Stripe info for a listing...");
 
-        //get the stripe id of the listing owner
-        Account.getStripeAndType(req.params.domain_name, function(result){
-            if (result.state == "error"){error.handler(req, res, result.info);}
-            else {
-                if (!result.info[0].stripe_account){
-                    error.handler(req, res, "Invalid stripe user account!", "json");
-                }
+            //get the stripe id of the listing owner
+            Account.getStripeAndType(req.params.domain_name, function(result){
+                if (result.state == "error"){error.handler(req, res, result.info);}
                 else {
-                    req.session.new_rental_info.owner_stripe_id = result.info[0].stripe_account;	//stripe id
-                    next();
+                    if (!result.info[0].stripe_account){
+                        error.handler(req, res, "Invalid stripe user account!", "json");
+                    }
+                    else {
+                        req.session.new_rental_info.owner_stripe_id = result.info[0].stripe_account;	//stripe id
+                        next();
+                    }
                 }
-            }
-        });
+            });
+        }
+        else {
+            next();
+        }
     },
 
     //renders the checkout page for creating a new rental

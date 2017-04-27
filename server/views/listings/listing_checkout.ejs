@@ -325,45 +325,65 @@
 
                     <!--PAYMENT STEP-->
                     <header id="step-header-payment" class="step-header header is-disabled margin-top-15">
-                        <h2>3. Payment</h2>
+                        <% if (listing_info.price_rate != 0) { %>
+                            <h2>3. Payment</h2>
+                        <% } else { %>
+                            <h2>3. Confirmation</h2>
+                        <% } %>
                     </header>
                     <div id="step-content-payment" class='step-content is-hidden'>
                         <article class="message">
                             <div class="message-body">
-                                <p id="stripe-regular-message" class="regular-message">
-                                    Please enter your payment information. By clicking the Confirm & Pay button,
-                                    you are agreeing to pay the entire amount shown as well as our <a href="/terms" class='is-accent'>Terms and Conditions</a>.
-                                </p>
+                                <% if (listing_info.price_rate != 0) { %>
+                                    <p id="stripe-regular-message" class="regular-message">
+                                        Please enter your payment information. By clicking the Confirm & Pay button,
+                                        you are agreeing to pay the entire amount shown as well as our <a href="/terms" class='is-accent'>Terms and Conditions</a>.
+                                    </p>
+                                <% } else { %>
+                                    <p id="stripe-regular-message" class="regular-message">
+                                        Please clicking the Confirm button,
+                                        you are agreeing to our <a href="/terms" class='is-accent'>Terms and Conditions</a>.
+                                    </p>
+                                <% } %>
                                 <p id="stripe-error-message" class="error-message is-danger is-hidden"></p>
                                 <p id="stripe-success-message" class="regular-message is-hidden"></p>
                             </div>
                         </article>
                         <div id="checkout-card-content" class="success-hide checkout-card-content">
-                            <form id="stripe-form" autocomplete="on">
-                                <label class="label is-medium">Card Number</label>
-                                <p class="control has-icon">
-                                    <input tabindex="0" id="cc-num" data-stripe="number" class="input stripe-input is-medium" type="tel" placeholder="•••• •••• •••• ••••" autocomplete="cc-number"/>
-                                    <i id="cc-icon" class="fa fa-credit-card"></i>
-                                </p>
-                                <div class="control is-grouped">
-                                    <p class="control is-expanded">
-                                        <label class="label is-medium">Expiration Date</label>
-                                        <input tabindex="0" id="cc-exp" maxlength="7" data-stripe="exp" class="input stripe-input is-medium" type="tel" placeholder="•• / ••" autocomplete="cc-exp"/>
+
+                            <% if (listing_info.price_rate != 0) { %>
+                                <form id="stripe-form" autocomplete="on">
+                                    <label class="label is-medium">Card Number</label>
+                                    <p class="control has-icon">
+                                        <input tabindex="0" id="cc-num" data-stripe="number" class="input stripe-input is-medium" type="tel" placeholder="•••• •••• •••• ••••" autocomplete="cc-number"/>
+                                        <i id="cc-icon" class="fa fa-credit-card"></i>
                                     </p>
+                                    <div class="control is-grouped">
+                                        <p class="control is-expanded">
+                                            <label class="label is-medium">Expiration Date</label>
+                                            <input tabindex="0" id="cc-exp" maxlength="7" data-stripe="exp" class="input stripe-input is-medium" type="tel" placeholder="•• / ••" autocomplete="cc-exp"/>
+                                        </p>
+                                        <p class="control">
+                                            <label class="label is-medium">Security Code</label>
+                                            <input tabindex="0" id="cc-cvc" data-stripe="cvc" class="input stripe-input is-medium" type="tel" placeholder="•••" autocomplete="off"/>
+                                        </p>
+                                    </div>
                                     <p class="control">
-                                        <label class="label is-medium">Security Code</label>
-                                        <input tabindex="0" id="cc-cvc" data-stripe="cvc" class="input stripe-input is-medium" type="tel" placeholder="•••" autocomplete="off"/>
+                                        <label class="label is-medium">Zip Code</label>
+                                        <input tabindex="0" id="cc-zip" maxlength="6" data-stripe="address_zip" class="input stripe-input is-medium" type="tel" autocomplete="postal-code" placeholder="•••••"/>
                                     </p>
-                                </div>
-                                <p class="control">
-                                    <label class="label is-medium">Zip Code</label>
-                                    <input tabindex="0" id="cc-zip" maxlength="6" data-stripe="address_zip" class="input stripe-input is-medium" type="tel" autocomplete="postal-code" placeholder="•••••"/>
-                                </p>
-                            </form>
+                                </form>
+                            <% } %>
+
                             <div class="control margin-top-30">
                                 <a id="back-to-address-button" tabindex="0" class="button is-danger no-shadow is-stylish">Go Back</a>
-                                <a id="checkout-button" tabindex="0" class="button is-primary no-shadow is-stylish">Confirm & Pay</a>
+                                <% if (listing_info.price_rate != 0) { %>
+                                    <a id="checkout-button" tabindex="0" class="button is-primary no-shadow is-stylish">Confirm & Pay</a>
+                                <% } else { %>
+                                    <a id="checkout-button" tabindex="0" class="button is-primary no-shadow is-stylish">Confirm</a>
+                                <% } %>
                             </div>
+
                         </div>
                         <div id="checkout-success-content" class="success-hide is-hidden">
                           <% if (!user) { %>

@@ -4,10 +4,8 @@
         <span id="price" class="tag is-bold is-medium is-bordered">
           <% if (listing_info.price_rate > 0) { %>
               $<%= listing_info.price_rate %> Per <%= listing_info.price_type.charAt(0).toUpperCase() + listing_info.price_type.substr(1) %>
-          <% } else if (listing_info.status == 1 && listing_info.price_rate == 0){ %>
-              Free!
           <% } else { %>
-              Unavailable
+              Free!
           <% } %>
         </span>
 

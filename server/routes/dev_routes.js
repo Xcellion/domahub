@@ -13,27 +13,11 @@ module.exports = function(app, db, auth, error){
     Account = new account_model(db);
     Listing = new listing_model(db);
 
-    app.get("/dnsrecords/:domain_name", dnsRecords);
     app.get("/alexa/:domain_name", alexa);
-    app.get("/quantcast", quantcast);
     app.get("/createcodes/:number", [
         createSignupCodes
     ]);
-    app.get("/checkout", checkout);
-    app.get("/pathtest", pathtest);
-}
-
-// get listing_checkout
-function checkout(req, res) {
-  res.render("listings/listing_checkout.ejs", {
-    message: Auth.messageReset(req),
-		user: req.user
-  });
-}
-
-//testing quantcast redirect
-function quantcast(req, res, next){
-    res.render("quant_redirect.ejs");
+    app.get("/proxyimage", proxyimage);
 }
 
 //testing alexa get
@@ -65,13 +49,6 @@ function alexa(req, res, next){
     }
 }
 
-//testing dns records look up
-function dnsRecords(req, res, next){
-    dns.resolve(req.params.domain_name, "A", function (err, address, family) {
-        res.send(address);
-    });
-}
-
 //function to create X sign up codes
 function createSignupCodes(req, res, next){
     console.log("F: Creating " + req.params.number + " signup codes...");
@@ -87,7 +64,13 @@ function createSignupCodes(req, res, next){
     });
 }
 
-//function to test path
-function pathtest(req, res, next){
-    console.log(req.path.substr(1, req.path.length));
+//function to test proxy image
+function proxyimage(req, res, next){
+    res.render("proxy/proxy-image.ejs", {
+        image: "http://i.imgur.com/R3RfrnJ.jpg",
+        content: "image",
+        edit: true,
+        preview: true,
+        doma_rental_info : {}
+    });
 }
