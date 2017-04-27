@@ -78,18 +78,19 @@ function createSignupCodes(req, res, next){
 //function to test proxy image
 function proxyimage(req, res, next){
     res.render("proxy/proxy-image.ejs", {
-        image: "http://i.imgur.com/R3RfrnJ.jpg",
+        image: "https://vignette1.wikia.nocookie.net/buffy/images/f/f9/Sarah_thompson_-_Eve.jpg/revision/latest?cb=20120303110621",
         content: "image",
         edit: true,
         preview: true,
         doma_rental_info : {
-            address: "http://i.imgur.com/R3RfrnJ.jpg",
-            type: 0,
-            rental_id : 113059,
+            address: "https://vignette1.wikia.nocookie.net/buffy/images/f/f9/Sarah_thompson_-_Eve.jpg/revision/latest?cb=20120303110621",
+            type: 1,
+            rental_id : 359,
             path: "lol",
-            domain_name: "imsorryimdumb.com",
-            date: 1493314525063,
-            duration: 86400000
+            domain_name: "youreacutie.com",
+            date: 1493352000000,
+            duration: 86400000,
+            owner_hash_id: "jfka0"
         }
     });
 }

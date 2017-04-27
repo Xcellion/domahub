@@ -11,7 +11,7 @@
     font-family:"roboto",Helvetica,sans-serif;
     font-size:14px;
     cursor:default;
-    position:absolute;
+    position:fixed;
     bottom:209px;
     left:20px;
     max-width:250px;
@@ -71,6 +71,11 @@
     text-align: center;
     transition:all 0.25s;
 }
+.dh-is-disabled {
+    cursor: not-allowed;
+    pointer-events: none;
+    opacity: .5;
+}
 #dh-confirm-button {
     background-color:#81c784;
 }
@@ -96,46 +101,69 @@
         <option value="0">Display Content</option>
     </select>
     <div id="dh-confirm-wrapper">
-        <a id="dh-confirm-button" class='dh-button'>Confirm</a>
-        <a id="dh-cancel-button" class='dh-button'>Cancel</a>
+        <a id="dh-confirm-button" class='dh-button dh-is-disabled'>Confirm</a>
+        <a id="dh-cancel-button" class='dh-button dh-is-disabled'>Cancel</a>
     </div>
 </div>
 <script>
     console.log("DomaHub editing menu loaded!");
 
     $(document).ready(function(){
-        $("#dh-select-wrapper").val(doma_rental_info.type);
+        $("#dh-select-wrapper").val(doma_rental_info.type).on("change input", function(){
+            allowOrDontAllow();
+        });
         $("#dh-rental-start").text(moment(doma_rental_info.date).format("MMM DD, YYYY h:mmA"));
         $("#dh-rental-end").text(moment(doma_rental_info.date + doma_rental_info.duration).format("MMM DD, YYYY h:mmA"));
+
+        $("#dh-input-address").on('input change keypress', function(){
+            allowOrDontAllow();
+        });
 
         $("#dh-confirm-button").on("click", function(){
             editRental($(this));
         });
     });
 
+    //allow or dont allow submission
+    function allowOrDontAllow(){
+        if ($("#dh-select-wrapper").val() != doma_rental_info.type || $("#dh-input-address").val() != doma_rental_info.address){
+            $(".dh-button").removeClass('dh-is-disabled');
+            $("#dh-confirm-button").off().on("click", function(){
+                editRental($(this));
+            });
+        }
+        else {
+            $(".dh-button").addClass('dh-is-disabled');
+            $("#dh-confirm-button").off();
+        }
+    }
+
     //function to submit address/type change
     function editRental(elem){
         elem.off();
-        var data = {}
+        var data_to_send = {}
         if ($("#dh-select-wrapper").val() != doma_rental_info.type){
-            data.type = $("#dh-select-wrapper").val();
+            data_to_send.type = $("#dh-select-wrapper").val();
         }
         if ($("#dh-input-address").val() != doma_rental_info.address){
-            data.address = $("#dh-input-address'").val();
+            data_to_send.address = $("#dh-input-address").val();
+        }
+        if (doma_rental_info.owner_hash_id){
+            data_to_send.owner_hash_id = doma_rental_info.owner_hash_id;
         }
         $.ajax({
             url: "/listing/" + doma_rental_info.domain_name + "/" + doma_rental_info.rental_id + "/edit",
             method: "POST",
-            data: data
+            data: data_to_send
         }).done(function(data){
-            console.log(data);
-            // if (data.state == "error"){
-            //     $('#dh-input-address').val(doma_rental_info.address);
-            //     $('#dh-select-wrapper').val(doma_rental_info.type);
-            // }
-            // else {
-            //     location.replace("http://" + window.location.host + "/listing/" + doma_rental_info.domain_name + "/" + doma_rental_info.rental_id);
-            // }
+            if (data.state == "error"){
+                $("#dh-edit-header").text("Something went wrong! Try refreshing the page.");
+                $('#dh-input-address').val(doma_rental_info.address);
+                $('#dh-select-wrapper').val(doma_rental_info.type);
+            }
+            else {
+                location.replace("http://" + window.location.host + "/listing/" + doma_rental_info.domain_name + "/" + doma_rental_info.rental_id);
+            }
         });
     }
 </script>

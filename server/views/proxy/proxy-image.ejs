@@ -17,7 +17,7 @@
         left:50%;
         transform:translate(-50%,-50%);
         margin-right:50%;
-        position:absolute;"
+        position:absolute;
     }
     #proxy-pdf {
         width:100vw;
@@ -56,7 +56,7 @@
 
         <!-- CONTENT IS A PDF -->
         <% } else { %>
-            <iframe src="<%= image %>"></iframe>
+            <iframe id="proxy-pdf" src="<%= image %>"></iframe>
         <% } %>
 
     <% } else { %>

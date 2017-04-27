@@ -59,7 +59,7 @@ module.exports = {
     },
 
     //check the rental info posted (for creating a new rental)
-    checkRentalInfo : function(req, res, next){
+    checkRentalInfoNew : function(req, res, next){
         console.log("F: Checking posted rental info...");
 
         var address = addProtocol(req.body.address);
@@ -78,70 +78,47 @@ module.exports = {
             error.handler(req, res, "Invalid rental type!", "json");
         }
         else {
-            console.log("F: Checking against Google Safe Browsing...");
 
-            //check against google safe browsing
-            request({
-                url: "https://safebrowsing.googleapis.com/v4/threatMatches:find?key=" + safe_browse_key,
-                method: "POST",
-                body: {
-                    "client": {
-                        "clientId": "domahub",
-                        "clientVersion": "1.0"
+            //function to create the new rental info db object
+            var create_new_rental_info = function(){
+                req.session.new_rental_info = {
+                    rental_db_info : {
+                        listing_id: req.session.listing_info.id,
+                        path: req.session.new_rental_info.path,
+                        type: rental_type,
+                        address: (req.body.address == "" || !req.body.address) ? "" : address    //empty address or not
                     },
-                    "threatInfo": {
-                        "threatTypes": ["MALWARE", "SOCIAL_ENGINEERING", "UNWANTED_SOFTWARE", "POTENTIALLY_HARMFUL_APPLICATION"],
-                        "threatEntryTypes": ["URL"],
-                        "threatEntries": [
-                            {"url": address}
-                        ]
-                    }
-                },
-                json: true
-            }, function (err, response, body) {
-                if (err || response.body.matches){
-                    error.handler(req, res, "Malicious address!", "json");
+                    new_user_email : req.body.new_user_email
+                };
+
+                //if user is logged in, otherwise create a token for creation
+                if (req.user){
+                    req.session.new_rental_info.rental_db_info.account_id = req.user.id;
                 }
                 else {
+                    req.session.new_rental_info.rental_db_info.owner_hash_id = Math.random().toString(36).substr(5,5);
+                }
+                next();
+            }
 
-                    //function to create the new rental info db object
-                    var create_new_rental_info = function(){
-                        req.session.new_rental_info = {
-                            rental_db_info : {
-                                listing_id: req.session.listing_info.id,
-                                path: req.session.new_rental_info.path,
-                                type: rental_type,
-                                address: (req.body.address == "" || !req.body.address) ? "" : address    //empty address or not
-                            },
-                            new_user_email : req.body.new_user_email
-                        };
-
-                        //if user is logged in, otherwise create a token for creation
-                        if (req.user){
-                            req.session.new_rental_info.rental_db_info.account_id = req.user.id;
+            if (req.body.address){
+                //check against google safe browsing
+                googleSafeCheck(req, res, address, function () {
+                    console.log("F: Checking if its a valid HTTP address and that theres a response...");
+                    //check if its a valid HTTP address and that theres a response
+                    request(address, function (err, response, body) {
+                        if (!err && response.statusCode == 200) {
+                            create_new_rental_info();
                         }
                         else {
-                            req.session.new_rental_info.rental_db_info.owner_hash_id = Math.random().toString(36).substr(5,5);
+                            error.handler(req, res, "Nothing displayed at that address!", "json");
                         }
-                        next();
-                    }
-
-                    if (req.body.address){
-                        //check if its a valid HTTP address and that theres a response
-                        request(address, function (err, response, body) {
-                            if (!err && response.statusCode == 200) {
-                                create_new_rental_info();
-                            }
-                            else {
-                                error.handler(req, res, "Nothing displayed at that address!", "json");
-                            }
-                        });
-                    }
-                    else {
-                        create_new_rental_info();
-                    }
-                }
-            });
+                    });
+                });
+            }
+            else {
+                create_new_rental_info();
+            }
         }
     },
 
@@ -468,8 +445,12 @@ module.exports = {
     checkRentalOwner : function(req, res, next){
         console.log("F: Checking rental owner...");
 
+        //correct hash
+        if (req.body.owner_hash_id && req.body.owner_hash_id == req.session.rental_info.owner_hash_id){
+            next();
+        }
         //incorrect owner!
-        if (req.session.rental_info.account_id != req.user.id){
+        else if (!req.user || req.session.rental_info.account_id != req.user.id){
             error.handler(req, res, "Invalid rental owner!");
         }
         else {
@@ -492,52 +473,58 @@ module.exports = {
         });
     },
 
-    //check posted rental address (for editing rental address)
-    checkPostedRentalAddress : function(req, res, next){
-        if (typeof req.body.address != "undefined"){
-            console.log("F: Checking posted rental address...");
-            var address = addProtocol(req.body.address);
-            if (req.body.address != "" && !validator.isIP(address) && !validator.isURL(address, {protocols: ["http", "https"], require_protocol: true})){
-                error.handler(req, res, "Invalid address!", "json");
-            }
-            //set to nothing
-            else if (req.body.address == ""){
-                req.session.rental_object.db_object.address = (req.body.address == "") ? "" : address;
-                next();
-            }
-            else {
-                var parsed_url = parseDomain(address);
+    //check posted rental address or type (for editing rental address)
+    checkRentalInfoEdit : function(req, res, next){
+        console.log("F: Checking posted rental information...");
 
-                if (parsed_url == null){
-                    error.handler(req, res, "Invalid address!", "json");
-                }
-                else {
-                    //make sure theres something there listening
-                    whois.lookup(parsed_url.domain + "." + parsed_url.tld, function(err, data){
-                        if (err || !data){error.handler(req, res, "Invalid address!", "json");}
-                        else {
-                            var whoisObj = {};
-                            if (data){
-                                var array = parser.parseWhoIsData(data);
-                                for (var x = 0; x < array.length; x++){
-                                    whoisObj[array[x].attribute] = array[x].value;
-                                }
-                            }
+        var address = addProtocol(req.body.address);
+        var rental_type = parseFloat(req.body.type);
 
-                            if (whoisObj["Domain Name"]){
-                                req.session.rental_object.db_object.address = (req.body.address == "") ? "" : address;
-                                next();
-                            }
-                            else {
-                                error.handler(req, res, "There's nothing to display on that page!", "json");
-                            }
-                        }
-                    });
-                }
-            }
+        //check for address
+        if (req.body.address && !validator.isURL(address, {protocols: ["http", "https"], require_protocol: true})){
+            error.handler(req, res, "Invalid address!", "json");
+        }
+        //check for rental type
+        else if (rental_type != 0 && rental_type != 1){
+            error.handler(req, res, "Invalid rental type!", "json");
         }
         else {
-            next();
+
+            //function to edit the rental info db object
+            var edit_rental_info_db = function(){
+                //if type exists
+                if (req.body.type){
+                    req.session.rental_object.db_object.type = req.body.type;
+                }
+
+                //if address exists
+                if (req.body.address != undefined){
+                    req.session.rental_object.db_object.address = address;
+                }
+                else if (req.body.address == ""){
+                    req.session.rental_object.db_object.address = "";
+                }
+
+                next();
+            }
+
+            if (req.body.address){
+                //check against google safe browsing
+                googleSafeCheck(req, res, address, function () {
+                    //check if its a valid HTTP address and that theres a response
+                    request(address, function (err, response, body) {
+                        if (!err && response.statusCode == 200) {
+                            edit_rental_info_db();
+                        }
+                        else {
+                            error.handler(req, res, "Nothing displayed at that address!", "json");
+                        }
+                    });
+                });
+            }
+            else {
+                edit_rental_info_db();
+            }
         }
     },
 
@@ -680,18 +667,24 @@ module.exports = {
     editRental : function(req, res, next){
         console.log("F: Updating rental...");
 
-        updateRental(req, res, req.session.rental_object.db_object, function(){
-            next();
+        Listing.updateRental(req.params.rental_id, req.session.rental_object.db_object, function(result){
+            if (result.state != "success"){error.handler(req, res, result.info, "json");}
+            else {
+                next();
+            }
         });
     },
 
     //update the rental session object
     updateRentalObject : function(req, res, next){
-        updateUserRentalsObject(req.user.rentals, req.session.rental_object.db_object, req.params.rental_id);
+        if (req.user){
+            updateUserRentalsObject(req.user.rentals, req.session.rental_object.db_object, req.params.rental_id);
+        }
         delete req.session.rental_object.db_object;
+        delete req.session.rental_info;
         res.send({
             state: "success",
-            rentals: req.user.rentals
+            rentals: (req.user) ? req.user.rentals : false
         });
     },
 
@@ -954,15 +947,37 @@ function newListingRental(req, res, raw_info, callback){
     });
 }
 
-//helper function to update rental info
-function updateRental(req, res, raw_info, callback){
-    Listing.updateRental(req.params.rental_id, raw_info, function(result){
-        if (result.state != "success"){error.handler(req, res, result.info, "json");}
+//helper function to check against google safe browsing
+function googleSafeCheck(req, res, address, callback){
+    console.log("F: Checking against Google Safe Browsing...");
+
+    request({
+        url: "https://safebrowsing.googleapis.com/v4/threatMatches:find?key=" + safe_browse_key,
+        method: "POST",
+        body: {
+            "client": {
+                "clientId": "domahub",
+                "clientVersion": "1.0"
+            },
+            "threatInfo": {
+                "threatTypes": ["MALWARE", "SOCIAL_ENGINEERING", "UNWANTED_SOFTWARE", "POTENTIALLY_HARMFUL_APPLICATION"],
+                "threatEntryTypes": ["URL"],
+                "threatEntries": [
+                    {"url": address}
+                ]
+            }
+        },
+        json: true
+    }, function (err, response, body) {
+        if (err || response.body.matches){
+            error.handler(req, res, "Malicious address!", "json");
+        }
         else {
             callback();
         }
     });
 }
+
 
 //----------------------------------------------------------------RENTAL TIME HELPERS----------------------------------------------------------------
 

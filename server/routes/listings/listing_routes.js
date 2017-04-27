@@ -210,17 +210,45 @@ module.exports = function(app, db, auth, error, stripe){
 		renter_functions.getListingAlexa
 	]);
 
-	//render rental checkout page
-	app.get('/listing/:domain_name/checkout', [
-		renter_functions.renderCheckout
-	]);
-
 	//get listing info / times
 	app.post('/listing/:domain_name/times', [
 		urlencodedParser,
 		checkDomainValid,
 		checkDomainListed,
 		renter_functions.getListingTimes
+	]);
+
+	//render rental checkout page
+	app.get('/listing/:domain_name/checkout', [
+		renter_functions.renderCheckout
+	]);
+
+	//redirect to the checkout page after validating times / path
+	app.post('/listing/:domain_name/checkout', [
+		urlencodedParser,
+		checkDomainValid,
+		checkDomainListed,
+		renter_functions.getListingInfo,
+		renter_functions.createNewRentalObject,
+		renter_functions.checkRentalTimes,
+		renter_functions.redirectToCheckout
+	]);
+
+	//create a new rental
+	app.post('/listing/:domain_name/rent', [
+		urlencodedParser,
+		checkDomainValid,
+		checkDomainListed,
+		renter_functions.getListingInfo,
+		renter_functions.checkRentalInfoNew,
+		renter_functions.checkRentalTimes,
+		renter_functions.checkRentalPrice,
+		renter_functions.createRental,
+		renter_functions.getOwnerStripe,
+		stripe.chargeMoney,
+		renter_functions.emailToRegister,
+		renter_functions.toggleActivateRental,
+		renter_functions.sendRentalSuccess
 	]);
 
 	//associate a user with a hash rental
@@ -253,45 +281,16 @@ module.exports = function(app, db, auth, error, stripe){
 		renter_functions.renderRental
 	]);
 
-	//render checkout page
-	app.post('/listing/:domain_name/checkout', [
-		urlencodedParser,
-		checkDomainValid,
-		checkDomainListed,
-		renter_functions.getListingInfo,
-		renter_functions.createNewRentalObject,
-		renter_functions.checkRentalTimes,
-		renter_functions.redirectToCheckout
-	]);
-
-	//create a new rental
-	app.post('/listing/:domain_name/rent', [
-		urlencodedParser,
-		checkDomainValid,
-		checkDomainListed,
-		renter_functions.getListingInfo,
-		renter_functions.checkRentalInfo,
-		renter_functions.checkRentalTimes,
-		renter_functions.checkRentalPrice,
-		renter_functions.createRental,
-		renter_functions.getOwnerStripe,
-		stripe.chargeMoney,
-		renter_functions.emailToRegister,
-		renter_functions.toggleActivateRental,
-		renter_functions.sendRentalSuccess
-	]);
-
 	//changing rental information
 	app.post('/listing/:domain_name/:rental_id/edit', [
 		urlencodedParser,
-		auth.checkLoggedIn,
 		checkDomainValid,
 		checkDomainListed,
 		renter_functions.getRental,
 		renter_functions.checkRentalDomain,
 		renter_functions.checkRentalOwner,
 		renter_functions.createRentalObject,
-		renter_functions.checkPostedRentalAddress,
+		renter_functions.checkRentalInfoEdit,
 		renter_functions.editRental,
 		renter_functions.updateRentalObject
 	]);
