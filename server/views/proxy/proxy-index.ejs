@@ -3,20 +3,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 <script>
     console.log("DomaHub logic loaded!");
-    $(document).ready(function(){
-        //fade in after 5 seconds
-        setTimeout(function(){ $("#dh-overlay").fadeIn(); }, 1000);
-        //set listing link
-        $("#dh-button").attr("href", "https://www.domahub.com/listing/" + doma_rental_info.domain_name);
-        $("#dh-delete").on("click", function(){
-            $("#dh-overlay").hide();
-        });
-    });
+    var doma_rental_info = <%-JSON.stringify(doma_rental_info)%>;
 </script>
 <!-- Quantcast Tag -->
 <script type="text/javascript">
 var _qevents = _qevents || [];
-
 (function() {
 var elem = document.createElement('script');
 elem.src = (document.location.protocol == "https:" ? "https://secure" : "http://edge") + ".quantserve.com/quant.js";
@@ -25,12 +16,10 @@ elem.type = "text/javascript";
 var scpt = document.getElementsByTagName('script')[0];
 scpt.parentNode.insertBefore(elem, scpt);
 })();
-
 _qevents.push({
 qacct:"p-09CUz3n_dWjFg"
 });
 </script>
-
 <noscript>
 <div style="display:none;">
 <img src="//pixel.quantserve.com/pixel/p-09CUz3n_dWjFg.gif" border="0" height="1" width="1" alt="Quantcast"/>

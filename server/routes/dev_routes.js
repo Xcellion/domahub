@@ -80,13 +80,16 @@ function proxyimage(req, res, next){
     res.render("proxy/proxy-image.ejs", {
         image: "http://i.imgur.com/R3RfrnJ.jpg",
         content: "image",
-        edit: false,
+        edit: true,
         preview: true,
         doma_rental_info : {
-            address: "fuck.com",
+            address: "http://i.imgur.com/R3RfrnJ.jpg",
             type: 0,
+            rental_id : 113059,
             path: "lol",
-            domain_name: "imsorryimdumb.com"
+            domain_name: "imsorryimdumb.com",
+            date: 1493314525063,
+            duration: 86400000
         }
     });
 }
