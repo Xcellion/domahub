@@ -6,6 +6,7 @@
     $color-invert: nth($pair, 2)
     &.is-#{$name}
       background-color: $color
+      color: $color-invert
       &.gradient-left-right
         $gradient-top-left: darken(saturate(adjust-hue($color, -10deg), 10%), 10%)
         $gradient-bottom-right: lighten(saturate(adjust-hue($color, 10deg), 5%), 5%)
@@ -27,18 +28,18 @@
     padding: 20px
   &.is-medium
     +tablet
-      padding: 130px 20px
+      padding: 130px 0
     +mobile
-      padding: 60px 20px
+      padding: 85px 20px
     &-top
       +tablet
-        padding: 130px 20px 0
+        padding: 160px 0 0
       +mobile
-        padding: 80px 20px 0px
+        padding: 85px 20px 0px
   &.is-large
     +desktop
-      padding: 200px 20px
+      padding: 200px 0
     +tablet-only
-      padding: 150px 20px
+      padding: 150px 0
     +mobile
-      padding: 60px 20px
+      padding: 100px 20px

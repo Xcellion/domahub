@@ -1,0 +1,65 @@
+<section class="section is-medium-top">
+    <div class="container">
+
+        <span id="price" class="tag is-bold is-medium is-bordered">
+          <% if (listing_info.available){ %>
+              Available for Purchase
+          <% } else { %>
+              Unavailable
+          <% } %>
+        </span>
+
+        <div id="domain-display" class="content">
+          <h1 class="is-primary is-inline-block margin-bottom-0"><%= listing_info.domain_name %></h1>
+        </div>
+
+        <%# UNAVAILABLE MODULE %>
+        <%- include("modules/unavailable_module.ejs"); %>
+
+    </div>
+</section>
+
+<section class="section is-medium">
+  <div class="container">
+
+      <%# TABS %>
+      <div class="tabs is-boxed has-shadow margin-bottom-0">
+        <ul>
+          <li id="ticker-tab" class="tab is-active is-attached">
+            <a>
+                <span class="is-hidden-mobile icon is-small"><i class="fa fa-history"></i></span>
+                <span>History</span>
+            </a>
+          </li>
+          <li id="traffic-tab" class='tab'>
+            <a>
+                <span class="is-hidden-mobile icon is-small"><i class="fa fa-line-chart"></i></span>
+                <span>Traffic</span>
+            </a>
+          </li>
+          <li id="info-tab" class="tab is-attached">
+            <a>
+                <span class="is-hidden-mobile icon is-small"><i class="fa fa-info-circle"></i></span>
+                <span>Information</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+
+    <%# EXAMPLES MODULE %>
+    <%- include("modules/ticker_module.ejs", {
+      listing_info : listing_info
+    }); %>
+
+    <%# TRAFFIC MODULE %>
+    <%- include("modules/traffic_module.ejs", {
+      listing_info : listing_info
+    }); %>
+
+    <%# INFO MODULE %>
+    <%- include("modules/info_module.ejs", {
+      listing_info : listing_info
+    }); %>
+
+  </div>
+</section>

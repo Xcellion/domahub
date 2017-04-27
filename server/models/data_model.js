@@ -24,15 +24,17 @@ module.exports = data_model;
 
 //----------------------------------------------------------------------SETS----------------------------------------------------------
 
-//gets all search traffic for a particular domain name
+//gets all listing traffic grouped by month
 data_model.prototype.getListingTraffic = function(domain_name, callback){
-	console.log("DB: Attempting to get traffic for domain " + domain_name + "...");
+	console.log("DB: Attempting to get traffic for domain: " + domain_name + "...");
 	query = "SELECT \
-				stats_search_history.timestamp \
+    		2592000000 * (stats_search_history.timestamp div 2592000000) as 'from', \
+    		2592000000 * (stats_search_history.timestamp div 2592000000) + 2629746000 as 'to', \
+    		COUNT(*) as views \
 			FROM stats_search_history \
-			WHERE stats_search_history.domain_name = ? \
-			ORDER BY stats_search_history.timestamp ASC "
-	data_query(query, "Failed to get traffic for domain " + domain_name + "!", callback, domain_name);
+		WHERE domain_name = ? \
+		GROUP BY stats_search_history.timestamp div 2592000000"
+	data_query(query, "Failed to get traffic for domain: " + domain_name + "!", callback, domain_name);
 }
 
 //----------------------------------------------------------------------SETS----------------------------------------------------------

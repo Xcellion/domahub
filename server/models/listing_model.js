@@ -4,6 +4,7 @@ listing_model = function(database){
 	listing_query = function(query, error_description, callback, params){
 		database.query(query, function(result, err){
 			if (err){
+				console.log(err);
 				if (err.code == "ER_DUP_ENTRY"){
 					callback({
 						state : "error",
@@ -37,7 +38,7 @@ module.exports = listing_model;
 //INSERT BULK - 'INSERT INTO ?? (??) VALUES ?'
 //DELETE - 'DELETE FROM ?? WHERE ?? = ?'
 
-//--------------------------------------------------------------------CHECKS------------------------------------------------------------
+//<editor-fold>-------------------------------CHECKS-------------------------------
 
 //check if a listing exists
 listing_model.prototype.checkListing = function(domain_name, callback){
@@ -53,7 +54,28 @@ listing_model.prototype.checkListingOwner = function(account_id, domain_name, ca
 	listing_query(query, "Account does not own the domain" + domain_name + "!", callback, [account_id, domain_name]);
 }
 
-//----------------------------------------------------------------------GETS----------------------------------------------------------
+//check if an account owns a listing
+listing_model.prototype.crossCheckRentalTime = function(domain_name, path, starttime, endtime, callback){
+	console.log("DB: Checking times for " + domain_name + "/" + path + "...");
+	query = 'SELECT 1 AS "exist" \
+			FROM rentals \
+			INNER JOIN rental_times \
+				ON rentals.rental_id = rental_times.rental_id \
+			INNER JOIN listings \
+				ON listings.id = rentals.listing_id \
+			WHERE \
+				listings.domain_name = ? AND \
+				rentals.path = ? AND \
+				rentals.status = 1 AND \
+				listings.deleted IS NULL AND ((\
+				? < rental_times.date + rental_times.duration) AND ( \
+				? > rental_times.date))'
+	listing_query(query, "Failed to check times for " + domain_name + "/" + path + "!", callback, [domain_name, path, starttime, endtime, starttime, endtime]);
+}
+
+//</editor-fold>
+
+//<editor-fold>-------------------------------GETS-------------------------------
 
 //gets all info for an active listing including owner name and email
 listing_model.prototype.getVerifiedListing = function(domain_name, callback){
@@ -87,14 +109,14 @@ listing_model.prototype.getAllListings = function(callback){
 	listing_query(query, "Failed to get all listing info!", callback);
 }
 
-//gets all rentals times and their owners for a specific listing
-listing_model.prototype.getListingRentalsInfo = function(listing_id, callback){
-	console.log("DB: Attempting to get all existing active rentals for listing #" + listing_id + "...");
+//gets X number of rentals at a time
+listing_model.prototype.getListingRentals = function(domain_name, oldest_rental_date, count, callback){
+	console.log("DB: Attempting to get " + count + " rentals for domain: " + domain_name + " after " + oldest_rental_date + "...");
 	query = "SELECT \
-				rentals.account_id, \
 				rentals.address, \
 				rentals.rental_id, \
-				rentals.listing_id, \
+				rentals.type, \
+				rentals.path, \
 				rental_times.date, \
 				rental_times.duration, \
 				accounts.username, \
@@ -102,14 +124,36 @@ listing_model.prototype.getListingRentalsInfo = function(listing_id, callback){
 			FROM rentals \
 			INNER JOIN rental_times ON rentals.rental_id = rental_times.rental_id \
 			LEFT JOIN accounts ON rentals.account_id = accounts.id \
+			LEFT JOIN listings ON rentals.listing_id = listings.id \
 			LEFT OUTER JOIN ( \
 				SELECT rental_id, COUNT(rental_id) AS views FROM stats_rental_history GROUP BY rental_id \
 			) AS rental_s \
 			ON rental_s.rental_id = rentals.rental_id \
-			WHERE rentals.listing_id = ? \
+			WHERE listings.domain_name = ? \
 			AND rentals.status = 1 \
-			ORDER BY rental_times.date ASC"
-	listing_query(query, "Failed to get all existing active rentals for listing #" + listing_id + "!", callback, listing_id);
+			AND rental_times.date < ? \
+			ORDER BY rental_times.date DESC \
+			LIMIT ?"
+	listing_query(query, "Failed to get all existing active rentals for domain: " + domain_name + "!", callback, [domain_name, oldest_rental_date, count]);
+}
+
+//gets all rental times for a specific listing and path
+listing_model.prototype.getListingTimes = function(domain_name, path, max_date, callback){
+	console.log("DB: Attempting to get times for domain: " + domain_name + "...");
+	query = "SELECT \
+				rental_times.date, \
+				rental_times.duration \
+			FROM rental_times \
+			INNER JOIN rentals ON rentals.rental_id = rental_times.rental_id \
+			INNER JOIN listings ON rentals.listing_id = listings.id \
+			WHERE listings.domain_name = ? \
+			AND listings.status = 1 \
+			AND rentals.path = ? \
+			AND rentals.status = 1 \
+			AND rental_times.date <= ? \
+			AND rental_times.date + rental_times.duration >= (UNIX_TIMESTAMP(NOW()) * 1000) \
+			ORDER BY rental_times.date ASC "
+	listing_query(query, "Failed to get times for domain: " + domain_name + "!", callback, [domain_name, path, max_date]);
 }
 
 //gets all rental info for a specific rental
@@ -126,7 +170,7 @@ listing_model.prototype.getRentalInfo = function(rental_id, callback){
 }
 
 //gets all rental information for the current rental
-listing_model.prototype.getCurrentRental = function(domain_name, callback){
+listing_model.prototype.getCurrentRental = function(domain_name, path, callback){
 	console.log("DB: Attempting to get current rental info for for domain " + domain_name + "...");
 	query = "SELECT \
 				rentals.*,\
@@ -141,11 +185,12 @@ listing_model.prototype.getCurrentRental = function(domain_name, callback){
 			ON rentals.rental_id = rental_times.rental_id \
 			WHERE listings.domain_name = ? \
 			AND (UNIX_TIMESTAMP(NOW()) * 1000) BETWEEN rental_times.date AND rental_times.date + rental_times.duration \
+			AND rentals.path = ? \
 			AND listings.status = 1 \
 			AND listings.verified = 1 \
 			AND listings.deleted IS NULL \
 			AND rentals.status = 1";
-	listing_query(query, "Failed to get current rental info for domain " + domain_name + "!", callback, domain_name);
+	listing_query(query, "Failed to get current rental info for domain " + domain_name + "!", callback, [domain_name, path]);
 }
 
 //gets all rental times for a specific rental
@@ -159,19 +204,6 @@ listing_model.prototype.getRentalRentalTimes = function(rental_id, callback){
 			WHERE rental_id = ?\
 			ORDER BY date ASC"
 	listing_query(query, "Failed to get rental times for rental #" + rental_id + "!", callback, rental_id);
-}
-
-//gets all rental times for a specific listing to cross check against a new rental (see checkRentalTime)
-listing_model.prototype.getListingRentalTimes = function(listing_id, callback){
-	console.log("DB: Attempting to get rental times for listing #" + listing_id + "...");
-	query = "SELECT \
-				rental_times.* \
-			FROM rental_times \
-			INNER JOIN rentals ON rentals.rental_id = rental_times.rental_id \
-			WHERE rentals.listing_id = ? \
-			AND rentals.status = 1 \
-			ORDER BY rental_times.date ASC "
-	listing_query(query, "Failed to get rental times for listing #" + listing_id + "!", callback, listing_id);
 }
 
 //gets all rental times for a specific listing to cross check against a new rental (see checkRentalTime)
@@ -295,7 +327,10 @@ listing_model.prototype.getRandomListings = function(callback){
 			LIMIT 10";
 	listing_query(query, "Failed to get 10 random listings!", callback);
 }
-//----------------------------------------------------------------------SETS----------------------------------------------------------
+
+//</editor-fold>
+
+//<editor-fold>-------------------------------SETS-------------------------------
 
 //creates a new listing
 listing_model.prototype.newListing = function(listing_info, callback){
@@ -344,15 +379,16 @@ listing_model.prototype.newListingRental = function(listing_id, rental_info, cal
 //BULK INSERT NEEDS TRIPLE NESTED ARRAYS
 listing_model.prototype.newRentalTimes = function(rental_id, rental_times, callback){
 	console.log("DB: Attempting to create new rental times for rental #" + rental_id + "...");
-	query = "INSERT INTO rental_times (rental_id, date, duration, id) VALUES ? ON DUPLICATE KEY UPDATE \
+	query = "INSERT INTO rental_times (rental_id, date, duration) VALUES ? ON DUPLICATE KEY UPDATE \
 		rental_id = VALUES(rental_id), \
 		date = VALUES(date), \
-		duration = VALUES(duration), \
-		id = VALUES(id)"
+		duration = VALUES(duration)"
 	listing_query(query, "Failed to add new rental times for rental #" + rental_id + "!", callback, [rental_times]);
 }
 
-//----------------------------------------------------------------------UPDATE----------------------------------------------------------
+//</editor-fold>
+
+//<editor-fold>-------------------------------UPDATE-------------------------------
 
 //updates listing info
 listing_model.prototype.updateListing = function(domain_name, listing_info, callback){
@@ -457,7 +493,9 @@ listing_model.prototype.toggleActivateRental = function(rental_id, callback){
 	listing_query(query, "Failed to toggle activation on rental #" + rental_id + "!", callback, rental_id);
 }
 
-//----------------------------------------------------------------------DELETE----------------------------------------------------------
+//</editor-fold>
+
+//<editor-fold>-------------------------------DELETE-------------------------------
 
 //deletes a specific rental
 listing_model.prototype.deleteRental = function(rental_id, callback){
@@ -504,7 +542,9 @@ listing_model.prototype.deleteListings = function(listings_to_delete, callback){
 	listing_query(query, "Failed to deactivate " + listings_to_delete.length + " listings!", callback, [listings_to_delete]);
 }
 
-//----------------------------------------------------------------------HELPER----------------------------------------------------------
+//</editor-fold>
+
+//<editor-fold>-------------------------------HELPER-------------------------------
 
 //helper function to change a date to UTC
 function toUTC(date, offset){

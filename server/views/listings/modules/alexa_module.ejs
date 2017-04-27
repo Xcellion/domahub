@@ -26,7 +26,7 @@
           </span>
         </div>
         <p>
-          <%= (listing_info.alexa.engagement.dailyTimeOnSite == "-" || !listing_info.alexa.engagement.dailyTimeOnSite) ? "Not enough data." : listing_info.alexa.engagement.dailyTimeOnSite %>
+          <%= (!listing_info.alexa.engagement || listing_info.alexa.engagement.dailyTimeOnSite == "-" || !listing_info.alexa.engagement.dailyTimeOnSite) ? "Not enough data." : listing_info.alexa.engagement.dailyTimeOnSite %>
         </p>
       </div>
     </div>
@@ -40,7 +40,7 @@
           </span>
         </div>
         <p>
-          <%= (listing_info.alexa.engagement.dailyPageViewPerVisitor == "-" || !listing_info.alexa.engagement.dailyPageViewPerVisitor) ? "Not enough data." : listing_info.alexa.engagement.dailyPageViewPerVisitor %>
+          <%= (!listing_info.alexa.engagement || listing_info.alexa.engagement.dailyPageViewPerVisitor == "-" || !listing_info.alexa.engagement.dailyPageViewPerVisitor) ? "Not enough data." : listing_info.alexa.engagement.dailyPageViewPerVisitor %>
         </p>
       </div>
     </div>
@@ -54,41 +54,9 @@
           </span>
         </div>
         <p>
-          <%= (listing_info.alexa.engagement.bounceRate == "-" || !listing_info.alexa.engagement.bounceRate) ? "Not enough data." : listing_info.alexa.engagement.bounceRate %>
+          <%= (!listing_info.alexa.engagement || listing_info.alexa.engagement.bounceRate == "-" || !listing_info.alexa.engagement.bounceRate) ? "Not enough data." : listing_info.alexa.engagement.bounceRate %>
         </p>
       </div>
     </div>
   </div>
-  <!-- <nav class="level">
-    <div class="level-left">
-      <p class="level-item">Alexa Global Ranking</p>
-    </div>
-    <div class="level-right">
-      <p class="level-item is-bold"><%= (listing_info.alexa.globalRank == "-" || !listing_info.alexa.globalRank) ? "Not enough data." : listing_info.alexa.globalRank %></p>
-    </div>
-  </nav>
-  <nav class="level">
-    <div class="level-left">
-      <p class="level-item">Daily Time on Site</p>
-    </div>
-    <div class="level-right">
-        <p class="level-item is-bold"><%= (listing_info.alexa.engagement.dailyTimeOnSite == "-" || !listing_info.alexa.engagement.dailyTimeOnSite) ? "Not enough data." : listing_info.alexa.engagement.dailyTimeOnSite %></p>
-    </div>
-  </nav>
-  <nav class="level">
-    <div class="level-left">
-      <p class="level-item">Daily Pageviews per Visitor</p>
-    </div>
-    <div class="level-right">
-        <p class="level-item is-bold"><%= (listing_info.alexa.engagement.dailyPageViewPerVisitor == "-" || !listing_info.alexa.engagement.dailyPageViewPerVisitor) ? "Not enough data." : listing_info.alexa.engagement.dailyPageViewPerVisitor %></p>
-    </div>
-  </nav>
-  <nav class="level">
-    <div class="level-left">
-      <p class="level-item">Bounce Rate</p>
-    </div>
-    <div class="level-right">
-        <p class="level-item is-bold"><%= (listing_info.alexa.engagement.bounceRate == "-" || !listing_info.alexa.engagement.bounceRate) ? "Not enough data." : listing_info.alexa.engagement.bounceRate %></p>
-    </div>
-  </nav> -->
 </div>
