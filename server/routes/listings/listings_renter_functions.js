@@ -750,10 +750,11 @@ module.exports = {
             var now = new Date().getTime();
             var history_info = {
                 account_id: account_id,			//who searched if who exists
-                domain_name: domain_name.toLowerCase(),		//what they searched for
+                domain_name: req.params.domain_name.toLowerCase(),		//what they searched for
                 timestamp: now,		//when they searched for it
                 user_ip : user_ip
             }
+
             console.log("F: Adding to search history...");
             Data.newListingHistory(history_info, function(result){if (result.state == "error") {console.log(result)}});	//async
             delete req.session.from_api;
