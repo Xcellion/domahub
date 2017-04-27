@@ -3,10 +3,8 @@
   padding: 40px 20px
   @each $name, $pair in $colors
     $color: nth($pair, 1)
-    $color-invert: nth($pair, 2)
     &.is-#{$name}
       background-color: $color
-      color: $color-invert
       &.gradient-left-right
         $gradient-top-left: darken(saturate(adjust-hue($color, -10deg), 10%), 10%)
         $gradient-bottom-right: lighten(saturate(adjust-hue($color, 10deg), 5%), 5%)
