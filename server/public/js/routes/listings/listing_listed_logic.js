@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-var unlock = true;
-=======
 var myPath;
->>>>>>> development
 
 $(document).ready(function() {
 
@@ -138,69 +134,18 @@ $(document).ready(function() {
 function checkTimes(){
 	var startDate = $("#calendar").data('daterangepicker').startDate;
 	var endDate = $("#calendar").data('daterangepicker').endDate.clone().add(1, "millisecond");
-	console.log(startDate.format("MMM,DD,HH:mm"), endDate.format("MMM,DD,HH:mm"));
+
 	if (!startDate.isValid() || !endDate.isValid()){
 		$("#calendar-error-message").removeClass('is-hidden').addClass('is-danger').html("Invalid dates selected!");
 	}
-<<<<<<< HEAD
-	else if (!$("#cc-num").val() && listing_info.price_rate != 0){
-		bool = "Invalid cc number!";
-		$("#stripe-error-message").addClass('is-danger').html("Please provide a credit card to charge.");
-	}
-	else if (!$("#cc-exp").val() && listing_info.price_rate != 0){
-		bool = "Invalid cc exp!";
-		$("#stripe-error-message").addClass('is-danger').html("Please provide your credit card expiration date.");
-	}
-	else if (!$("#cc-cvc").val() && listing_info.price_rate != 0){
-		bool = "Invalid cvc!";
-		$("#stripe-error-message").addClass('is-danger').html("Please provide your credit card CVC number.");
-	}
-	else if (!$("#cc-zip").val() && listing_info.price_rate != 0){
-		bool = "Invalid zip Code!";
-		$("#stripe-error-message").addClass('is-danger').html("Please provide a ZIP code.");
-	}
-	else if (newEvents.length > 0){
-		for (var x = 0; x < newEvents.length; x++){
-			if (!newEvents[x].old){
-				var start = new Date(newEvents[x].start._d);
-				if (isNaN(start)){
-					bool = "Invalid dates!";
-					errorHandler(bool);
-					break;
-				}
-			}
-		}
-=======
 	else {
 		return {
 			starttime : startDate._d.getTime(),
 			endtime : endDate._d.getTime()
 		};
->>>>>>> development
 	}
 }
 
-//function to submit new rental info
-<<<<<<< HEAD
-function submitNewRental(stripeToken){
-	if (checkSubmit() == true && unlock){
-		var newEvents = $('#calendar').fullCalendar('clientEvents', returnMineNotBG);
-		unlock = false;
-		minEvents = [];
-
-		//format the events to be sent
-		for (var x = 0; x < newEvents.length; x++){
-			var start = new Date(newEvents[x].start._d);
-			var offset = start.getTimezoneOffset();
-			minEvents.push({
-				start: newEvents[x].start._d.getTime(),
-				end: newEvents[x].end._d.getTime(),
-				_id: newEvents[x]._id
-			});
-		}
-
-		//create a new rental
-=======
 function submitTimes(checkout_button){
 	//remove event handler
 	checkout_button.off();
@@ -209,7 +154,6 @@ function submitTimes(checkout_button){
 
 	if (newEvent.starttime && newEvent.endtime){
 		//redirect to checkout page
->>>>>>> development
 		$.ajax({
 			type: "POST",
 			url: "/listing/" + listing_info.domain_name + "/checkout",
@@ -241,153 +185,11 @@ function submitTimes(checkout_button){
 
 //handler for various error messages
 function errorHandler(message){
-<<<<<<< HEAD
-	if (message == "Invalid address!"){
-		showCardContent("address");
-		$("#address-error-message").addClass('is-danger').html("Invalid URL entered! Your credit card has not been charged yet.");
-	}
-	else if (message == "Malicious address!"){
-		showCardContent("address");
-		$("#address-error-message").addClass('is-danger').html("Your URL has been deemed malicious! Please enter a different URL. Your credit card has not been charged yet.");
-	}
-	else if (message == "Invalid dates!"){
-		showCardContent("calendar");
-		$("#calendar-error-message").addClass('is-danger').html("Invalid dates selected! Your credit card has not been charged yet.");
-	}
-	else if (message == "Invalid email!"){
-		showCardContent("checkout");
-		$("#new-user-email-error").addClass('is-danger').html("Invalid email address! Your credit card has not been charged yet.");
-	}
-	else if (message == "Invalid price!"){
-		showCardContent("checkout");
-		$("#stripe-error-message").addClass('is-danger').html("Payment error! Your credit card has not been charged yet.");
-	}
-	else if (message == "Invalid stripe user account!"){
-		showCardContent("checkout");
-		$("#summary-error-message").addClass('is-danger').html("Listing error! Please try again later! Your credit card has not been charged yet.");
-	}
-	else {
-		showCardContent("checkout");
-		$("#summary-error-message").addClass('is-danger').html("Rental error! Please try again later! Your credit card has not been charged yet.");
-	}
-
-}
-
-//success handler
-function successHandler(data){
-	$(".success-hide").addClass('is-hidden');
-	$("#success-column").removeClass('is-hidden');
-	$("#success-message").text("Your credit card was successfully charged!");
-	//if theres a link for ownership claiming
-	if (data.owner_hash_id){
-		var url = "https://www.domahub.com/listing/" + listing_info.domain_name + "/" + data.rental_id + "/" + data.owner_hash_id;
-		$("#rental-link-input").val(url);
-		//$("#rental-link-href").prop('href', url);
-
-		$("#rental-link-input").focus(function(){
-			$(this).select();
-		});
-	}
-	else {
-		var url = "https://www.domahub.com/listing/" + listing_info.domain_name + "/" + data.rental_id;
-		$("#rental-preview-button").attr("href", url);
-	}
-}
-
-//---------------------------------------------------------------------------------------------------LISTING MODULES
-
-//function to create the traffic chart
-function createTrafficChart(){
-	if (listing_info.traffic){
-
-		Chart.plugins.register({
-		  beforeRender: function (chart) {
-		    if (chart.config.options.showAllTooltips) {
-		        // create an array of tooltips
-		        // we can't use the chart tooltip because there is only one tooltip per chart
-		        chart.pluginTooltips = [];
-		        chart.config.data.datasets.forEach(function (dataset, i) {
-		            chart.getDatasetMeta(i).data.forEach(function (sector, j) {
-		                chart.pluginTooltips.push(new Chart.Tooltip({
-		                    _chart: chart.chart,
-		                    _chartInstance: chart,
-		                    _data: chart.data,
-		                    _options: chart.options.tooltips,
-		                    _active: [sector]
-		                }, chart));
-		            });
-		        });
-
-		        // turn off normal tooltips
-		        chart.options.tooltips.enabled = false;
-		    }
-		},
-		  afterDraw: function (chart, easing) {
-		    if (chart.config.options.showAllTooltips) {
-		        // we don't want the permanent tooltips to animate, so don't do anything till the animation runs atleast once
-		        if (!chart.allTooltipsOnce) {
-		            if (easing !== 1)
-		                return;
-		            chart.allTooltipsOnce = true;
-		        }
-
-		        // turn on tooltips
-		        chart.options.tooltips.enabled = true;
-		        Chart.helpers.each(chart.pluginTooltips, function (tooltip) {
-		            tooltip.initialize();
-		            tooltip.update();
-		            // we don't actually need this since we are not animating tooltips
-		            tooltip.pivot();
-		            tooltip.transition(easing).draw();
-		        });
-		        chart.options.tooltips.enabled = false;
-		    }
-		  }
-		});
-
-		//past six months only
-		var traffic_data = [
-			{
-				x: moment().endOf("month").subtract(5, "month").valueOf(),
-				y: 0
-			},
-			{
-				x: moment().endOf("month").subtract(4, "month").valueOf(),
-				y: 0
-			},
-			{
-				x: moment().endOf("month").subtract(3, "month").valueOf(),
-				y: 0
-			},
-			{
-				x: moment().endOf("month").subtract(2, "month").valueOf(),
-				y: 0
-			},
-			{
-				x: moment().endOf("month").subtract(1, "month").valueOf(),
-				y: 0
-			},
-			{
-				x: moment().endOf("month").valueOf(),
-				y: 0
-			},
-		];
-
-
-		//split traffic into six months
-		for (var x = 0; x < listing_info.traffic.length; x++){
-			for (var y = 0; y < traffic_data.length; y++){
-				if (listing_info.traffic[x].timestamp < traffic_data[y].x){
-					traffic_data[y].y++;
-					break;
-				}
-=======
 	switch (message){
 		case "Dates are unavailable!":
 			//remove any existing date range pickers
 			if ($("#calendar").data('daterangepicker')){
 				$("#calendar").data('daterangepicker').remove();
->>>>>>> development
 			}
 			$("#calendar-error-message").removeClass('is-hidden').text("Bummer! Someone just took that slot. Please select a different time.");
 			break;
