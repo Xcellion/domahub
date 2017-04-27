@@ -134,7 +134,7 @@ $(document).ready(function() {
 function checkTimes(){
 	var startDate = $("#calendar").data('daterangepicker').startDate;
 	var endDate = $("#calendar").data('daterangepicker').endDate.clone().add(1, "millisecond");
-
+	console.log(startDate.format("MMM,DD,HH:mm"), endDate.format("MMM,DD,HH:mm"));
 	if (!startDate.isValid() || !endDate.isValid()){
 		$("#calendar-error-message").removeClass('is-hidden').addClass('is-danger').html("Invalid dates selected!");
 	}
@@ -271,7 +271,7 @@ function getTimes(calendar_elem){
 //function to setup the calendar
 function setUpCalendar(listing_info){
     //create a new range picker based on new path rental availability
-    var start_date = moment().endOf("hour").add(1, "millisecond");
+    var start_date = moment();
     var end_date = moment().endOf(listing_info.price_type).add(1, "millisecond");
 
     $('#calendar').daterangepicker({
@@ -301,6 +301,11 @@ function setUpCalendar(listing_info){
 
     //update when applying new dates
     $('#calendar').on('apply.daterangepicker', function(ev, picker) {
+		//picked today to start
+		if (picker.startDate.startOf("day").isSame(moment().startOf("day"))){
+			picker.startDate = moment().startOf("hour");
+		}
+
         if (picker.startDate.isValid() && picker.endDate.isValid()){
             updatePrices();
             $(this).val(picker.startDate.format('MMM D, YYYY') + ' - ' + picker.endDate.format('MMM D, YYYY'));

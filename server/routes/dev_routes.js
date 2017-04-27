@@ -1,14 +1,11 @@
 var	account_model = require('../models/account_model.js');
 var	listing_model = require('../models/listing_model.js');
-
 var	validator = require('validator');
 var	request = require('request');
 var bodyParser = require('body-parser');
 var urlencodedParser = bodyParser.urlencoded({ extended: true });
 var dns = require("dns");
-
 var randomstring = require("randomstring");
-
 var awis = require('awis');
 
 module.exports = function(app, db, auth, error){
@@ -16,26 +13,11 @@ module.exports = function(app, db, auth, error){
     Account = new account_model(db);
     Listing = new listing_model(db);
 
-    app.get("/dnsrecords/:domain_name", dnsRecords);
     app.get("/alexa/:domain_name", alexa);
-    app.get("/quantcast", quantcast);
     app.get("/createcodes/:number", [
         createSignupCodes
     ]);
-    app.get("/checkout", checkout);
-}
-
-// get listing_checkout
-function checkout(req, res) {
-  res.render("listings/listing_checkout.ejs", {
-    message: Auth.messageReset(req),
-		user: req.user
-  });
-}
-
-//testing quantcast redirect
-function quantcast(req, res, next){
-    res.render("quant_redirect.ejs");
+    app.get("/proxyimage", proxyimage);
 }
 
 //testing alexa get
@@ -47,10 +29,10 @@ function alexa(req, res, next){
             secret: "MNAY4e02cTdJsmcqvapakMTiUP6sbs0ZlWo+FqUf"
         });
 
-// UrlInfo - get information about pages and sites on the web - their traffic, content, and related sites
-// TrafficHistory - get a history of traffic rank
-// CategoryBrowse, CategoryListings - get lists of sites within a specific category ordered by traffic rank, or create a browseable directory of websites
-// SitesLinkingIn - get a list of sites linking in to a specified site
+        // UrlInfo - get information about pages and sites on the web - their traffic, content, and related sites
+        // TrafficHistory - get a history of traffic rank
+        // CategoryBrowse, CategoryListings - get lists of sites within a specific category ordered by traffic rank, or create a browseable directory of websites
+        // SitesLinkingIn - get a list of sites linking in to a specified site
 
         client({
             'Action': 'TrafficHistory',
@@ -67,13 +49,6 @@ function alexa(req, res, next){
     }
 }
 
-//testing dns records look up
-function dnsRecords(req, res, next){
-    dns.resolve(req.params.domain_name, "A", function (err, address, family) {
-        res.send(address);
-    });
-}
-
 //function to create X sign up codes
 function createSignupCodes(req, res, next){
     console.log("F: Creating " + req.params.number + " signup codes...");
@@ -86,5 +61,16 @@ function createSignupCodes(req, res, next){
     }
     Account.createSignupCodes(codes, function(result){
         res.send(result);
+    });
+}
+
+//function to test proxy image
+function proxyimage(req, res, next){
+    res.render("proxy/proxy-image.ejs", {
+        image: "http://i.imgur.com/R3RfrnJ.jpg",
+        content: "image",
+        edit: true,
+        preview: true,
+        doma_rental_info : {}
     });
 }
