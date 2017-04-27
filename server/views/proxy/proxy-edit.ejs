@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <div class="dh-wrapper">
     <div class="dh-menu">
         <p class="dh-heading dh-spacing">Your Rental</p>
@@ -28,30 +29,144 @@
             var temp_end = moment(doma_rental_info.times[x].date).add(doma_rental_info.times[x].duration, "millisecond").format("MMM D YYYY");;
             $(".dh-info-wrapper").append("<p class='dh-rental-dates'>" + temp_start + " - " + temp_end + "</p>");
         }
+<script src="https://domahub.com/js/lib/moment.min.js" type="text/javascript"></script>
+<style>
+#dh-edit-wrapper {
+    padding:15px;
+    box-sizing:border-box;
+    border-radius:5px;
+    border:1px solid rgba(0,0,0,0.1);
+    box-shadow:0 10px 30px rgba(0,0,0,0.18);
+    color:#fff;
+    background-color:rgba(60,189,141,1);
+    font-family:"roboto",Helvetica,sans-serif;
+    font-size:14px;
+    cursor:default;
+    position:absolute;
+    bottom:209px;
+    left:20px;
+    max-width:250px;
+    z-index:9999999999999;
+}
+#dh-edit-header {
+    margin:0;
+    font-family:"roboto",Helvetica,sans-serif;
+    font-size:16px;
+    font-weight:bold;
+}
+#dh-rental-dates-wrapper {
+    margin: 5px 0;
+}
+.dh-rental-date {
+    float:right;
+}
+#dh-listing-link {
+    color:#FFF;
+}
+#dh-select-wrapper {
+    display:block;
+    margin:5px 0px;
+    height: 32px;
+    padding:0px 5px;
+    border: 0px;
+    border-radius: 3px;
+    width: 100%;
+}
+#dh-input-address {
+    align-items: center;
+    background-color: #fff;
+    color: #000;
+    display: inline-flex;
+    font-size: 14px;
+    height: 32px;
+    justify-content: flex-start;
+    line-height: 24px;
+    padding: 0 8px;
+    position: relative;
+    border: 0px;
+    border-radius: 3px;
+    max-width: 100%;
+    width: calc(100% - 16px);
+}
+#dh-confirm-wrapper {
+    margin-top:5px;
+    text-align:justify;
+}
+.dh-button {
+    cursor: pointer;
+    display: inline-block;
+    width: 40%;
+    padding: 8px;
+    color: #FFF;
+    border-radius: 3px;
+    text-align: center;
+    transition:all 0.25s;
+}
+#dh-confirm-button {
+    background-color:#81c784;
+}
+#dh-confirm-button:hover {
+    background-color:#4cab50;
+}
+#dh-cancel-button {
+    background-color:#EF5350;
+}
+#dh-cancel-button:hover {
+    background-color:#da1814;
+}
+</style>
+<div id="dh-edit-wrapper">
+    <p id="dh-edit-header">Edit Your Rental</p>
+    <div id="dh-rental-dates-wrapper">
+        <div>Start  <span id="dh-rental-start" class="dh-rental-date"></span></div>
+        <div>End <span id="dh-rental-end" class="dh-rental-date"></span></div>
+    </div>
+    <input id="dh-input-address" placeholder="Edit Address" value="<%= doma_rental_info.address %>"></input>
+    <select id="dh-select-wrapper">
+        <option value="1">Forward / Redirect</option>
+        <option value="0">Display Content</option>
+    </select>
+    <div id="dh-confirm-wrapper">
+        <a id="dh-confirm-button" class='dh-button'>Confirm</a>
+        <a id="dh-cancel-button" class='dh-button'>Cancel</a>
+    </div>
+</div>
+<script>
+    console.log("DomaHub editing menu loaded!");
+
+    $(document).ready(function(){
+        $("#dh-select-wrapper").val(doma_rental_info.type);
+        $("#dh-rental-start").text(moment(doma_rental_info.date).format("MMM DD, YYYY h:mmA"));
+        $("#dh-rental-end").text(moment(doma_rental_info.date + doma_rental_info.duration).format("MMM DD, YYYY h:mmA"));
+
+        $("#dh-confirm-button").on("click", function(){
+            editRental($(this));
+        });
     });
 
-    //function to submit address change
-    function change_address(elem){
+    //function to submit address/type change
+    function editRental(elem){
         elem.off();
+        var data = {}
+        if ($("#dh-select-wrapper").val() != doma_rental_info.type){
+            data.type = $("#dh-select-wrapper").val();
+        }
+        if ($("#dh-input-address").val() != doma_rental_info.address){
+            data.address = $("#dh-input-address'").val();
+        }
         $.ajax({
             url: "/listing/" + doma_rental_info.domain_name + "/" + doma_rental_info.rental_id + "/edit",
             method: "POST",
-            data: {
-                address: $('.dh-action-input').val()
-            }
+            data: data
         }).done(function(data){
-            elem.on("keypress", function(){
-                if (e.keyCode == 13){
-                    change_address(elem);
-                }
-            });
             console.log(data);
-            if (data.state == "error"){
-                $('.dh-action-input').val("");
-            }
-            else {
-                location.replace("http://" + window.location.host + "/listing/" + doma_rental_info.domain_name + "/" + doma_rental_info.rental_id);
-            }
+            // if (data.state == "error"){
+            //     $('#dh-input-address').val(doma_rental_info.address);
+            //     $('#dh-select-wrapper').val(doma_rental_info.type);
+            // }
+            // else {
+            //     location.replace("http://" + window.location.host + "/listing/" + doma_rental_info.domain_name + "/" + doma_rental_info.rental_id);
+            // }
         });
     }
 </script> -->
