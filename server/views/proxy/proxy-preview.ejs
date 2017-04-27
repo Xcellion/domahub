@@ -16,14 +16,74 @@
     max-width:250px;
     z-index:9999999999999;
 }
-#dh-preview a {
+#dh-preview > span > a {
     color:#FFF;
+}
+#dh-input-wrapper{
+    display: flex;
+    justify-content: flex-start;
+    position: relative;
+    margin:10px 0px;
+}
+#dh-input {
+    align-items: center;
+    background-color: #fff;
+    color: #000;
+    display: inline-flex;
+    font-size: 14px;
+    height: 32px;
+    justify-content: flex-start;
+    line-height: 24px;
+    padding: 0 8px;
+    position: relative;
+    border: 0px;
+    border-radius: 3px 0px 0px 3px;
+    max-width: 100%;
+    width: calc(100% - 16px);
+}
+#dh-input-copy{
+    letter-spacing: 1px;
+    font-weight: 700;
+    font-size: 14px;
+    height: 42px;
+    padding-left: 21px;
+    padding-right: 21px;
+    background-color: #3cbc8d;
+    color: #fff;
+    align-items: center;
+    border: 1px solid rgba(0,0,0,.38);
+    border-radius: 0 3px 3px 0;
+    display: inline-flex;
+    height: 32px;
+    line-height: 24px;
+    padding-left: 8px;
+    padding-right: 8px;
+    position: relative;
+    transition: all .25s ease;
+    justify-content: center;
+    text-align: center;
+    margin-right: -1px;
 }
 </style>
 <div id="dh-preview">
-    This is just a preview of what the rental will look like.
-    </br></br>If there is something wrong, please <a href="https://domahub.com/contact">let us know</a>.
+    <span>
+        This is just a preview of what the rental will look like. The URL below is a permanent link to this preview.</span>
+    <div id="dh-input-wrapper">
+        <input id="dh-input" value="https://domahub.com/listing/<%= doma_rental_info.domain_name + '/' + doma_rental_info.rental_id %>" placeholder="Rental preview link"></input>
+        <button id="dh-input-copy">Copy</button>
+    </div>
+    <span>If there is something wrong, please <a href="https://domahub.com/contact">let us know</a>.</span>
 </div>
 <script>
     console.log("DomaHub preview message loaded!");
+    $(document).ready(function(){
+        $("#dh-input").on("click", function(){
+            $(this).select();
+        });
+        $("#dh-input-copy").on("click", function(){
+            $("#dh-input").select();
+            document.execCommand("copy");
+            $("#dh-input").blur();
+        });
+    });
 </script>

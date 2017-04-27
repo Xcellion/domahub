@@ -289,7 +289,9 @@ function pastViewsTickerRow(){
 
 		//add back past X months
 		for (var x = 0; x < Math.floor(ticker_latest_date._milliseconds / 2592000000); x++){
-			last_month_views += listing_info.traffic[x].views;
+			if (listing_info.traffic[x]){
+				last_month_views += listing_info.traffic[x].views;
+			}
 		}
 		var ticker_latest_date_human = ticker_latest_date.humanize();
 	}

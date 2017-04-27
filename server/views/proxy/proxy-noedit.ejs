@@ -62,9 +62,16 @@
     }
 </style>
 <div id="dh-overlay" style="display:none;">
-    <a id="dh-button"target="_blank" rel="noopener">What is this website?</a>
+    <a id="dh-button" target="_blank" href="https://www.domahub.com/listing/<%= doma_rental_info.domain_name %>" rel="noopener">What is this website?</a>
     <span id="dh-delete"></span>
 </div>
 <script>
     console.log("DomaHub info message loaded!");
+    $(document).ready(function(){
+        //fade in after 5 seconds
+        setTimeout(function(){ $("#dh-overlay").fadeIn(); }, 1000);
+        $("#dh-delete").on("click", function(){
+            $("#dh-overlay").hide();
+        });
+    });
 </script>
