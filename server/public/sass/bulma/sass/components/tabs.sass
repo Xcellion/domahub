@@ -1,39 +1,41 @@
 .tabs
   @extend .block
   @extend .unselectable
+  +overflow-touch
   align-items: stretch
   display: flex
   font-size: $size-normal
   justify-content: space-between
-  line-height: 24px
   overflow: hidden
   overflow-x: auto
   white-space: nowrap
   a
     align-items: center
+    border-bottom: 1px solid $border
     color: $text
     display: flex
     justify-content: center
-    padding: 5px 5px 8px
+    margin-bottom: -1px
+    padding: 5px 8px 8px
     vertical-align: top
     &:hover,
-    &:focus
-      +box-shadow(0,-3px,0,$black-disabled,0,inset)
+    &:active
+      border-bottom-color: $black-secondary
   li
     display: block
     &.is-active
       a
-        +box-shadow(0,-3px,0,$primary,0,inset)
         color: $primary
+        border-bottom-color: $primary
         &:hover,
         &:focus
-          +box-shadow(0,-2px,0,$primary-lighter,0,inset)
           color: $primary-lighter
   ul
-    +box-shadow(0,-2px,0,$border,0,inset)
     align-items: center
+    border-bottom: 1px solid $border
     display: flex
     flex-grow: 1
+    flex-shrink: 0
     justify-content: flex-start
     &.is-left
       padding-right: 10px
@@ -63,17 +65,14 @@
       border: 1px solid transparent
       border-radius: $radius $radius 0 0
       &:hover
-        +box-shadow(0,0,0,$black,0)
         background-color: $grey-lighter
         border-bottom-color: $border
     li
       &.is-active
         a
-          +box-shadow(0,0,0,$black,0)
-          background-color: $primary
+          background-color: $white
           border-color: $border
           border-bottom-color: transparent !important
-          color: $white
   &.is-fullwidth
     li
       flex-grow: 1
@@ -96,6 +95,11 @@
         border-radius: $radius 0 0 $radius
       &:last-child a
         border-radius: 0 $radius $radius 0
+      &.is-attached
+        &:first-child a
+          border-radius: $radius 0 0 0
+        &:last-child a
+          border-radius: 0 $radius 0 0
       &.is-active
         a
           +box-shadow(0,0,0,$black,0)

@@ -110,6 +110,7 @@ function createRowDrop(listing_info, rownum){
 		var tempRow_drop = $("#verified-clone-row-drop").clone();
 		updatePriceInputs(tempRow_drop, listing_info);
 		updateDescription(tempRow_drop, listing_info);
+		updatePaths(tempRow_drop, listing_info);
 		updateCategories(tempRow_drop, listing_info);
 		updateSaveCancelButtons(tempRow_drop, listing_info);
 		updateBackgroundImage(tempRow_drop, listing_info, rownum);
@@ -140,14 +141,29 @@ function createRowDrop(listing_info, rownum){
 function updatePriceInputs(tempRow_drop, listing_info){
 	tempRow_drop.find(".price-rate-input").val(listing_info.price_rate);
 	tempRow_drop.find(".price-type-input").val(listing_info.price_type);
-
-	//only if not 0
-	if (listing_info.buy_price != 0 || listing_info.buy_price == null || listing_info.buy_price == undefined){
-		tempRow_drop.find(".buy-price-input").val(listing_info.buy_price);
-	}
 }
 function updateDescription(tempRow_drop, listing_info){
 	tempRow_drop.find(".description-input").val(listing_info.description);
+}
+function updatePaths(tempRow_drop, listing_info){
+	//if created tags before
+	if (tempRow_drop.find(".paths-input").data('tags') == true){
+		tempRow_drop.find(".paths-input").tagit("destroy");
+	}
+	else {
+		tempRow_drop.find(".paths-input").data("tags", true);
+	}
+
+	tempRow_drop.find(".paths-input").val(listing_info.paths);
+	tempRow_drop.find(".paths-input").tagit({
+		animate: false,
+		afterTagAdded : function(event, ui){
+			changedValue(tempRow_drop.find(".paths-input"), listing_info);
+		},
+		afterTagRemoved : function(event, ui){
+			changedValue(tempRow_drop.find(".paths-input"), listing_info);
+		}
+	});
 }
 function updateCategories(tempRow_drop, listing_info){
 	//color existing categories
@@ -371,8 +387,9 @@ function refreshSubmitbindings(bool_for_status_td){
                         e.preventDefault();
                     });
 
-                    //refresh category click handlers
+                    //refresh category click handlers and paths
 					updateCategories(row_drop, info);
+					updatePaths(row_drop, info);
 
 					//all other inputs handler
                     both_rows.find(".drop-form .changeable-input").unbind("input").on("input", function(e){
@@ -567,8 +584,9 @@ function cancelListingChanges(row, row_drop, cancel_button, listing_info){
     row_drop.find(".description-input").val(listing_info.description);
     row_drop.find(".categories-input").val(listing_info.categories);
 
-	//revert categories
+	//revert categories and paths
 	updateCategories(row_drop, listing_info);
+	updatePaths(row_drop, listing_info);
 
     //image
     var img_elem = row_drop.find("img.is-listing");

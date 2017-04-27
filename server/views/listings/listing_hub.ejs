@@ -29,7 +29,7 @@
 							</div>
 							<div class="column is-8-desktop">
 								<p class="control has-icon has-addons">
-									<input id="domain_name-input" class="input is-medium is-expanded" tabindex="1" type="text" placeholder="Search domains" />
+									<input id="domain_name-input" class="input is-medium is-expanded" tabindex="0" type="text" placeholder="Search domains" />
 									<i class="fa fa-search"></i>
 									<a id="submit-button" class="button no-shadow is-primary is-medium">Submit</a>
 									<a id="filter-open-button" class="button no-shadow is-medium is-hidden">Filters</a>
@@ -92,7 +92,7 @@
 						</h1>
 					</div>
 					<div class="domain-tile-wrapper">
-						<div tabindex="1" class="domain-tile">
+						<div tabindex="0" class="domain-tile">
 							<div class="img-wrapper">
 								<div class="flex-column-center">
 									<h1 class="domain-title is-white">1qlee.com</h1>
@@ -103,7 +103,7 @@
 								</div>
 							</div>
 						</div>
-						<div tabindex="1" class="domain-tile">
+						<div tabindex="0" class="domain-tile">
 							<div class="img-wrapper">
 								<div class="flex-column-center">
 									<h1 class="domain-title is-white">imsorryimdumb.com</h1>
@@ -114,7 +114,7 @@
 								</div>
 							</div>
 						</div>
-						<div tabindex="1" class="domain-tile">
+						<div tabindex="0" class="domain-tile">
 							<div class="img-wrapper">
 								<div class="flex-column-center">
 									<h1 class="domain-title is-white">happybirthday.com</h1>
@@ -125,7 +125,7 @@
 								</div>
 							</div>
 						</div>
-						<div tabindex="1" class="domain-tile">
+						<div tabindex="0" class="domain-tile">
 							<div class="img-wrapper">
 								<div class="flex-column-center">
 									<h1 class="domain-title is-white">monkeyfuckers.com</h1>
@@ -146,16 +146,16 @@
 				<div class="columns">
 					<div class="column">
 						<p class="control has-icon has-addons margin-bottom-0">
-							<input id="domain-name-input" class="input is-medium" tabindex="1" type="text" placeholder="Press enter to search domains" />
+							<input id="domain-name-input" class="input is-medium" tabindex="0" type="text" placeholder="Press enter to search domains" />
 							<i class="fa fa-search"></i>
-							<a tabindex="1" class="button is-primary is-medium no-shadow is-hidden-mobile">Search</a>
-							<a tabindex="1" id="filter-open-button" class="button is-medium no-shadow is-hidden-mobile">
+							<a tabindex="0" class="button is-primary is-medium no-shadow is-hidden-mobile">Search</a>
+							<a tabindex="0" id="filter-open-button" class="button is-medium no-shadow is-hidden-mobile">
 								<span>Apply Filters</span>
 								<span class="icon">
 									<i class="fa fa-angle-down"></i>
 								</span>
 							</a>
-							<a tabindex="1" id="filter-open-button-mobile" class="button is-primary no-shadow is-medium is-hidden-tablet">
+							<a tabindex="0" id="filter-open-button-mobile" class="button is-primary no-shadow is-medium is-hidden-tablet">
 								<span class="icon">
 									<i class="fa fa-bars"></i>
 								</span>
@@ -169,7 +169,7 @@
 										<div class="control-label is-medium">
 											<label class="label">Date Range</label>
 										</div>
-										<input id="start_date-input" class="flatpickr input is-expanded" tabindex="1" type="text" placeholder="Rental Start Date">
+										<input id="start_date-input" class="flatpickr input is-expanded" tabindex="0" type="text" placeholder="Rental Start Date">
 									</div>
 								</div>
 							</div>
@@ -211,7 +211,7 @@
 									<% for (var x = 0; x < categories_front.length; x++) {%>
 										<div class="checkbox-wrapper">
 											<input class="cat-checkbox" value="<%= categories_back[x] %>" id="cb<%= x %>" type="checkbox" />
-											<label class="label" tabindex="1" for="cb<%= x %>"><%= categories_front[x] %></label>
+											<label class="label" tabindex="0" for="cb<%= x %>"><%= categories_front[x] %></label>
 										</div>
 									<% } %>
 								</form>
@@ -227,7 +227,7 @@
 							<div class="level-right">
 								<div class="level-item">
 									<span class="select is-medium">
-										<select tabindex="1">
+										<select tabindex="0">
 											<option>Sort By</option>
 											<option>Name: A - Z</option>
 											<option>Name: Z - A</option>
@@ -246,15 +246,15 @@
 								<div class="level-item">
 									<span class="tag filter-tag">
 										Month
-										<button tabindex="1" class="delete is-small"></button>
+										<button tabindex="0" class="delete is-small"></button>
 									</span>
 									<span class="tag filter-tag">
 										$5 - 25
-										<button tabindex="1" class="delete is-small"></button>
+										<button tabindex="0" class="delete is-small"></button>
 									</span>
 									<span class="tag filter-tag">
 										Business
-										<button tabindex="1" class="delete is-small"></button>
+										<button tabindex="0" class="delete is-small"></button>
 									</span>
 								</div>
 							</div>
@@ -265,7 +265,7 @@
 
 				<div class="columns">
 					<div class="column">
-						<div class="box is-domain-listing" tabindex="1">
+						<div class="box is-domain-listing" tabindex="0">
 							<div class="columns">
 								<div class="column is-6">
 									<div class="content">
@@ -282,7 +282,7 @@
 								</div>
 							</div>
 						</div>
-						<div class="box is-domain-listing" tabindex="1">
+						<div class="box is-domain-listing" tabindex="0">
 							<div class="columns">
 								<div class="column is-6">
 									<div class="content">

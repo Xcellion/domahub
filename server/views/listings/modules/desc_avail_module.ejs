@@ -1,0 +1,14 @@
+<div id="desc-avail-module" class="content margin-top-35">
+    <div class="content description-text">
+        <% if (listing_info.description) { %>
+            <p><%- listing_info.description %></p>
+        <% } else { %>
+            <p>Rent this website today!</p>
+        <% } %>
+    </div>
+    <div class="control">
+        <button id="check-avail" class="button is-disabled is-stylish is-primary v-align-middle" type="button">
+            Check Availability
+        </button>
+    </div>
+</div>

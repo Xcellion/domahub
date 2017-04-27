@@ -53,7 +53,11 @@
           <header class="card-header is-white">
             <h2 id="price" class="card-header-title is-bold has-text-centered">
               <% if (listing_info.status == 1) { %>
-                  $<%= listing_info.price_rate %> Per <%= listing_info.price_type.charAt(0).toUpperCase() + listing_info.price_type.substr(1) %>
+                  <% if (listing_info.price_rate == 0){ %>
+                      Free to use
+                  <% } else { %>
+                      $<%= listing_info.price_rate %> Per <%= listing_info.price_type.charAt(0).toUpperCase() + listing_info.price_type.substr(1) %>
+                  <% } %>
               <% } else if (listing_info.available){ %>
                   Available for Purchase
               <% } else { %>
