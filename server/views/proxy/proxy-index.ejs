@@ -1,16 +1,19 @@
+<<<<<<< HEAD
 <link href="/css/proxy.css" rel="stylesheet">
+=======
+>>>>>>> 1a6a70b6cdbb64283b429ea8357a834c14a1ddb5
 <link href="https://fonts.googleapis.com/css?family=Roboto:400,700" rel="stylesheet" />
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 <script>
-    console.log("DomaHub menu loaded!");
+    console.log("DomaHub logic loaded!");
     $(document).ready(function(){
         //fade in after 5 seconds
-        setTimeout(function(){ $("#domahub-overlay").fadeIn(); }, 1000);
+        setTimeout(function(){ $("#dh-overlay").fadeIn(); }, 1000);
         //set listing link
-        $("#domahub-button").attr("href", "https://www.domahub.com/listing/" + doma_rental_info.domain_name);
-        $("#domahub-delete").on("click", function(){
-            $("#domahub-overlay").hide();
+        $("#dh-button").attr("href", "https://www.domahub.com/listing/" + doma_rental_info.domain_name);
+        $("#dh-delete").on("click", function(){
+            $("#dh-overlay").hide();
         });
     });
 </script>

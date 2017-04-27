@@ -184,6 +184,9 @@ button[data-balloon] {
 .is-flex-wrap {
   display: flex;
   flex-wrap: wrap; }
+  .is-flex-wrap .button {
+    margin-right: 5px;
+    margin-bottom: 5px; }
 
 .category-selector {
   margin-right: 10px;
@@ -223,13 +226,14 @@ button[data-balloon] {
   outline: 1px dotted #000;
   outline: -webkit-focus-ring-color auto 3px; }
 
-@media screen and (min-width: 769px) {
-  .table.is-profile {
-    min-width: 730px; } }
-
-@media screen and (max-width: 768px) {
-  .table.is-profile {
-    width: 100%; } }
+.table {
+  border-bottom-width: 0px !important; }
+  @media screen and (min-width: 769px) {
+    .table.is-profile {
+      min-width: 730px; } }
+  @media screen and (max-width: 768px) {
+    .table.is-profile {
+      width: 100%; } }
 
 .row-disp {
   height: 48px; }
