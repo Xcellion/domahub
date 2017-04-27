@@ -71,6 +71,8 @@ function proxyimage(req, res, next){
         content: "image",
         edit: true,
         preview: true,
-        doma_rental_info : {}
+        doma_rental_info : {
+            address: "fuck"
+        }
     });
 }
