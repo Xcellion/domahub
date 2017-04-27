@@ -75,7 +75,12 @@ $(document).ready(function () {
     //total price of the rental
     var total_price = calculatePrice(starttime, endtime, listing_info);
     $("#total-duration").text(total_duration + ' ' + listing_info.price_type + duration_plural);
-    $(".total-price").text(moneyFormat.to(total_price));
+    if (total_price != 0){
+        $(".total-price").text(moneyFormat.to(total_price));
+    }
+    else {
+        $(".total-price").text("Free!");
+    }
 
     //--------------------------------------------------------------------------------------------------------- CHOICE BLOCKS
 
@@ -299,9 +304,13 @@ function submitStripe(checkout_button){
     checkout_button.off().addClass('is-loading');
 
     //successfully passed address and CC test
-    if (checkAddress($(".input-selected").val()) && checkCC()){
+    if (listing_info.price_rate != 0 && checkCC() && checkAddress($(".input-selected").val())){
         //submit to get the stripe token
         $("#stripe-form").submit();
+    }
+    //free! so just submit
+    else if (listing_info.price_rate ==0 && checkAddress($(".input-selected").val())){
+        submitNewRental();
     }
     else {
         checkout_button.removeClass('is-loading');

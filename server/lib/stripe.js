@@ -288,51 +288,56 @@ module.exports = {
 
 	//function to pay for a rental via stripe
 	chargeMoney : function(req, res, next){
-		if (req.body.stripeToken){
-			var owner_stripe_id = req.session.new_rental_info.owner_stripe_id;
-			var total_price = Math.round(req.session.new_rental_info.price * 100);		//USD in cents
+		if (req.session.listing_info.price_rate != 0){
+			if (req.body.stripeToken){
+				var owner_stripe_id = req.session.new_rental_info.owner_stripe_id;
+				var total_price = Math.round(req.session.new_rental_info.price * 100);		//USD in cents
 
-			//doma fee if the listing is basic (aka premium hasn't expired)
-			var doma_fees = Math.round(total_price * 0.18);
-			var stripe_fees = Math.round(total_price * 0.029) + 30;
+				//doma fee if the listing is basic (aka premium hasn't expired)
+				var doma_fees = Math.round(total_price * 0.18);
+				var stripe_fees = Math.round(total_price * 0.029) + 30;
 
-			var stripeOptions = {
-				amount: total_price,
-				currency: "usd",
-				source: req.body.stripeToken,
-				description: "Rental for " + req.params.domain_name,
-				destination: owner_stripe_id,
-				application_fee: stripe_fees + doma_fees,
-				metadata: {
-					"domain_name" : req.params.domain_name,
-					"renter_name" : (req.user) ? req.user.username : "Guest",
-					"rental_id" : req.session.new_rental_info.rental_id
+				var stripeOptions = {
+					amount: total_price,
+					currency: "usd",
+					source: req.body.stripeToken,
+					description: "Rental for " + req.params.domain_name,
+					destination: owner_stripe_id,
+					application_fee: stripe_fees + doma_fees,
+					metadata: {
+						"domain_name" : req.params.domain_name,
+						"renter_name" : (req.user) ? req.user.username : "Guest",
+						"rental_id" : req.session.new_rental_info.rental_id
+					}
 				}
+
+				//something went wrong with the price
+				if (isNaN(total_price) || isNaN(total_price) || isNaN(total_price)){
+					error.handler(req, res, "Invalid price!", 'json');
+				}
+				else {
+					//charge the end user, transfer to the owner, take doma fees if its a basic listing
+					stripe.charges.create(stripeOptions, function(err, charge) {
+						if (err) {
+							console.log(err.message);
+							error.handler(req, res, "Invalid price!", "json");
+						}
+						else {
+							console.log("Payment processed! " + owner_stripe_id + " has been paid $" + ((total_price - stripe_fees - doma_fees)/100).toFixed(2) + " with $" + (doma_fees/100).toFixed(2) + " in Doma fees and $" + (stripe_fees/100).toFixed(2) + " in Stripe fees.")
+							next();
+						}
+					});
+				}
+
 			}
 
-			//something went wrong with the price
-			if (isNaN(total_price) || isNaN(total_price) || isNaN(total_price)){
-				error.handler(req, res, "Invalid price!", 'json');
-			}
+			//if stripetoken doesnt exist
 			else {
-				//charge the end user, transfer to the owner, take doma fees if its a basic listing
-				stripe.charges.create(stripeOptions, function(err, charge) {
-					if (err) {
-						console.log(err.message);
-						error.handler(req, res, "Invalid price!", "json");
-					}
-					else {
-						console.log("Payment processed! " + owner_stripe_id + " has been paid $" + ((total_price - stripe_fees - doma_fees)/100).toFixed(2) + " with $" + (doma_fees/100).toFixed(2) + " in Doma fees and $" + (stripe_fees/100).toFixed(2) + " in Stripe fees.")
-						next();
-					}
-				});
+				stripeErrorHandler(req, res, {message: "Invalid Stripe token! Please log out and try again."});
 			}
-
 		}
-
-		//if stripetoken doesnt exist
 		else {
-			stripeErrorHandler(req, res, {message: "Invalid Stripe token! Please log out and try again."});
+			next();
 		}
 	},
 
