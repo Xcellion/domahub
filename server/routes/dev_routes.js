@@ -17,7 +17,7 @@ module.exports = function(app, db, auth, error){
     app.get("/createcodes/:number", [
         createSignupCodes
     ]);
-<<<<<<< HEAD
+    app.get("/proxyimage", proxyimage);
 }
 
 //testing quantcast redirect
@@ -26,9 +26,6 @@ function quantcast(req, res, next){
         redirect_link: "https://fuck.com",
         redirect_name: "fuck.com"
     });
-=======
-    app.get("/proxyimage", proxyimage);
->>>>>>> development
 }
 
 //testing alexa get
