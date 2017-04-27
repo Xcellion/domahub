@@ -12,11 +12,11 @@
 <body>
 
   <%- include("../templates/navbar", {user: user}); %>
-  <section id="index-img" class="section is-index-img">
+  <section id="landing" class="section is-index-img">
     <span></span>
     <div class="container">
       <div class="content has-text-centered margin-bottom-25">
-        <h1 class="title is-1 is-white">
+        <h1 class="title is-1 is-white is-bold">
           Exceptional domains for rent.
         </h1>
         <h2 class="subtitle is-4 is-white">
@@ -42,6 +42,9 @@
         </div>
       </div>
     </div>
+  </section>
+
+  <section id="decision-section" class="section is-medium-top">
     <div class="learn-more-arrow">
       <a tabindex="0" href="#decision-section" id="learn-more-button" title="Learn More">
         <span class="icon is-medium is-white">
@@ -49,9 +52,6 @@
         </span>
       </a>
     </div>
-  </section>
-
-  <section id="decision-section" class="section is-medium-top">
     <div class="container">
       <div class="tabs-box">
         <ul>
@@ -69,7 +69,7 @@
   <section id="have-domains-section" class="section is-medium d-owner">
     <div class="container">
       <div class="content">
-        <h1 class="title is-2 has-text-centered">Domains that work on DomaHub.</h1>
+        <h1 class="title is-2 has-text-centered">What makes a domain exceptional?</h1>
       </div>
       <div class="columns">
         <div class="column is-3">
@@ -492,7 +492,7 @@
     </div>
   </section>
 
-  <section class="section is-medium is-lighter">
+  <section class="section is-medium has-pyramid is-primary">
     <div class="container">
       <div class="columns">
         <div class="column">
@@ -502,7 +502,7 @@
               Feel free to send us a message or explore the FAQ!
             </h3>
             <div class="button-wrapper">
-              <a tabindex="0" class="button is-primary is-stylish" href="/contact" target="_blank" rel="noopener">
+              <a tabindex="0" class="button is-primary is-inverted is-stylish" href="/contact" target="_blank" rel="noopener">
                 <span class="icon">
                   <i class="fa fa-envelope-o"></i>
                 </span>

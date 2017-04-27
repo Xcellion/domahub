@@ -171,40 +171,40 @@ button[data-balloon] {
 [data-balloon-length="fit"]:after {
   width: 100%; }
 
-#index-img {
-  background-position: center center;
-  background-size: cover;
-  background-repeat: no-repeat;
+#landing {
+  background: #23415f;
   width: 100%;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  position: relative; }
+  position: relative;
+  overflow: hidden; }
   @media screen and (min-width: 769px) {
-    #index-img {
-      background-image: linear-gradient(#3cbc8d, #23415f);
+    #landing {
       min-height: 504px;
       height: calc(100vh - 130px);
       padding: 0 !important; } }
   @media screen and (max-width: 768px) {
-    #index-img {
-      background-image: linear-gradient(#3cbc8d, #23415f);
+    #landing {
       height: 550px;
       padding: 40px 20px 0; } }
-  #index-img .subtitle {
+  #landing .subtitle {
     max-width: 600px;
     margin-left: auto;
     margin-right: auto; }
-  #index-img .signup-text {
+  #landing .signup-text {
     color: white;
     font-size: 14px;
     margin: 0 auto;
     max-width: 315px;
     text-align: right; }
-  #index-img .notification {
+  #landing .notification {
     max-width: 305px;
     margin-left: auto;
     margin-right: auto; }
+
+#decision-section {
+  position: relative; }
 
 .learn-more-arrow {
   -webkit-box-shadow: 1px 1px 10px 0 rgba(0, 0, 0, 0.38);
@@ -216,9 +216,10 @@ button[data-balloon] {
   transition: background-color 0.25s ease;
   background-color: #3cbc8d;
   border-radius: 100%;
-  bottom: -16px;
-  left: 50%;
-  position: absolute; }
+  top: -16px;
+  left: 49%;
+  position: absolute;
+  z-index: 4; }
   .learn-more-arrow:hover {
     background-color: #309670; }
   .learn-more-arrow a:active, .learn-more-arrow a:focus {
@@ -417,6 +418,42 @@ button[data-balloon] {
     background: #3cbc8d;
     left: 0;
     top: 0; }
+
+.section.has-pyramid {
+  position: relative;
+  overflow: hidden; }
+  .section.has-pyramid .container {
+    z-index: 3; }
+  .section.has-pyramid::before {
+    -moz-transform: rotate(60deg);
+    -o-transform: rotate(60deg);
+    -ms-transform: rotate(60deg);
+    -webkit-transform: rotate(60deg);
+      -webkit-transform-transform: rotate(60deg);
+    content: "";
+    background: #62c9a3;
+    width: 500px;
+    position: absolute;
+    top: 200px;
+    height: 500px;
+    left: 0;
+    z-index: 1; }
+  .section.has-pyramid::after {
+    -moz-transform: rotate(105deg);
+    -o-transform: rotate(105deg);
+    -ms-transform: rotate(105deg);
+    -webkit-transform: rotate(105deg);
+      -webkit-transform-transform: rotate(105deg);
+    content: "";
+    opacity: 0.4;
+    width: 0;
+    position: absolute;
+    top: 175px;
+    height: 0;
+    border: 300px solid transparent;
+    border-bottom-color: #309670;
+    left: 253px;
+    z-index: 2; }
 
 .image-stack {
   max-width: 440px;
