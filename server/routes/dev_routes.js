@@ -80,7 +80,7 @@ function proxyimage(req, res, next){
     res.render("proxy/proxy-image.ejs", {
         image: "http://i.imgur.com/R3RfrnJ.jpg",
         content: "image",
-        edit: false,
+        edit: true,
         preview: true,
         doma_rental_info : {
             address: "fuck",

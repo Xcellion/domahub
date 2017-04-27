@@ -14,18 +14,17 @@
 
 /*<editor-fold>----------------------------PROXY NO EDIT----------------------------*/
 
-#domahub-overlay {
+#dh-overlay {
     position:fixed;
     z-index:9999999999999;
     top:30px;
     right:20px;
 }
 
-#domahub-button {
+#dh-button {
     padding: 10px 25px 10px 15px;
     box-sizing: border-box;
     border-radius: 5px;
-    border:1px solid rgba(0,0,0,0.1);
     box-shadow: 0 10px 30px rgba(0,0,0,0.18);
     color:#fff;
     background-color: rgba(60,189,141,0.85);
@@ -36,11 +35,11 @@
     transition:all 0.25s;
     position: relative;
 }
-#domahub-button:hover{
+#dh-button:hover{
     text-decoration:underline !important;
 }
 
-#domahub-delete {
+#dh-delete {
     position: relative;
     border-radius: 100%;
     cursor: pointer;
@@ -54,13 +53,13 @@
     margin-top: -27px;
 }
 
-#domahub-delete:hover::before,
-#domahub-delete:hover::after {
+#dh-delete:hover::before,
+#dh-delete:hover::after {
     background: white;
 }
 
-#domahub-delete::before,
-#domahub-delete::after {
+#dh-delete::before,
+#dh-delete::after {
     background: rgba(0,0,0,0.5);
     content: "";
     display: block;
@@ -73,10 +72,10 @@
     width: 50%;
     transition: background 0.25s ease;
 }
-#domahub-delete::before {
+#dh-delete::before {
     transform: rotate(45deg);
 }
-#domahub-delete::after {
+#dh-delete::after {
     transform: rotate(-45deg);
 }
 
@@ -84,62 +83,52 @@
 
 /*<editor-fold>----------------------------PROXY EDIT----------------------------*/
 
-.domahub-wrapper h1,.domahub-wrapper h2,.domahub-wrapper h3,.domahub-wrapper a{
+.dh-wrapper {
+  font-family: Helvetica, sans-serif;
 }
-.domahub-wrapper {
-    align-items:flex-end;
+.dh-wrapper {
     bottom:80px;
-    display:flex;
-    flex-direction:column;
     position:fixed;
     right:20px;
     z-index:9999999999999;
-    text-align:right;
-    line-height:1;
 }
-.domahub-menu {
+.dh-menu {
     background-color:#fff;
-    border-radius:5px;
-    box-shadow:3px 3px 4px 0 rgba(0,0,0,.14),0 -2px 5px -3px rgba(0,0,0,.2),0 3px 5px 0 rgba(0,0,0,.12);
+    box-shadow: 0 10px 30px 0 rgba(0,0,0,0.18);
     display:flex;
     flex-direction:column;
     width:200px;
 }
-
-.domahub-heading-wrapper {
+.dh-spacing {
+    margin:0;
+    padding:10px;
+}
+.dh-heading {
     background-color:#3cbc8d;
     color:#fff;
     padding:10px;
     border-radius:5px 5px 0 0;
-}
-.domahub-heading {
     margin:0;
     font-size:18px;
     text-align: center;
 }
-
-.domahub-info-wrapper{
+.dh-status-info {
     border-bottom:1px solid #D3D3D3;
-    font-family: "roboto", Helvetica,sans-serif;
-}
-.domahub-status-info {
     color:#ff5722;
-    padding:0;
-    margin:10px;
     margin-bottom:5px;
     font-size:15px;
 }
-.domahub-rental-dates {
+.dh-rental-dates {
     padding:0;
     margin:5px 10px 5px 10px;
     font-size:15px;
     color:black;
 }
-.domahub-rental-dates:last-child {
+.dh-rental-dates:last-child {
     margin-bottom:10px;
 }
 
-.domahub-action-button {
+.dh-action-button {
     border-bottom:1px solid rgba(0,0,0,0.12);
     color:#3cbc8d;
     padding:10px 8px;
@@ -147,26 +136,25 @@
     transition:all 0.25s ease;
     cursor:pointer;
     font-size:15px;
-    font-weight:bold;
 }
-.domahub-action-button:hover {
+.dh-action-button:hover {
     background-color:#3cbc8d;
     color:#fff !important;
     border-color:#3cbc8d;
     text-decoration:none;
 }
-.domahub-action-button:visited {
+.dh-action-button:visited {
     color:#3cbc8d;
 }
-.domahub-action-button:last-child {
+.dh-action-button:last-child {
     border-radius:0 0 5px 5px;
 }
 
-.domahub-action-input{
-    margin:5px;
+.dh-action-input{
     line-height:1;
     height:25px;
-    padding:0;
+    margin: 10px;
+    padding: 0;
     font-size:15px;
 }
 
