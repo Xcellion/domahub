@@ -30,19 +30,13 @@ module.exports = {
 
     //delete session rental info if it exists
     deleteRentalInfo : function(req, res, next){
-        console.log("F: Deleting any previous existing rental info...");
-
-        if (req.session.rental_info){
-            delete req.session.rental_info;
-        }
-        if (req.session.new_rental_info){
-            delete req.session.new_rental_info;
-        }
-        if (req.session.rented_info){
-            delete req.session.rented_info;
-        }
-        if (req.session.proxy_edit){
+        if (req.session.rental_info && req.params.owner_hash_id != req.session.rental_info.owner_hash_id){
+            console.log("F: Deleting any previous editable rental info...");
             delete req.session.proxy_edit;
+        }
+        if (req.session.rental_info && req.session.rental_info.domain_name != req.params.domain_name){
+            console.log("F: Deleting any previous existing rental info...");
+            delete req.session.rental_info;
         }
         next();
     },
@@ -354,14 +348,13 @@ module.exports = {
         console.log("F: Getting all rental info...");
 
         var rental_id = req.params.rental_id;
-        var owner_hash_id = req.params.owner_hash_id;
 
         //if its a number
         if ((parseFloat(rental_id) != rental_id >>> 0) && rental_id != "new"){
             error.handler(req, res, "Invalid rental!");
         }
         //get it otherwise
-        else if (!req.session.rental_info || (req.session.rental_info.rental_id != rental_id)){
+        else {
             Listing.getRentalInfo(rental_id, function(result){
                 if (result.state != "success"){error.handler(req, res, result.info);}
                 //no rental exists
@@ -370,37 +363,9 @@ module.exports = {
                 }
                 else {
                     req.session.rental_info = result.info[0];
-                    //if hash exists in URL and its the same as DB, we're good
-                    if (typeof owner_hash_id != "undefined"){
-                        if (req.session.rental_info.owner_hash_id == owner_hash_id){
-                            req.session.message = "Please create an account to edit this rental!";
-                            next();
-                        }
-                        else {
-                            res.redirect('/listing/' + req.params.domain_name + "/" + req.params.rental_id);
-                        }
-                    }
-                    else {
-                        next();
-                    }
-                }
-            });
-        }
-        //if already got the info from previous session
-        else {
-            //if hash exists in URL and its the same as DB, we're good
-            if (typeof owner_hash_id != "undefined"){
-                if (req.session.rental_info.owner_hash_id == owner_hash_id){
-                    req.session.message = "Please create an account to edit this rental!";
                     next();
                 }
-                else {
-                    res.redirect('/listing/' + req.params.domain_name + "/" + req.params.rental_id);
-                }
-            }
-            else {
-                next();
-            }
+            });
         }
     },
 
@@ -444,14 +409,26 @@ module.exports = {
     //check if rental belongs to account
     checkRentalOwner : function(req, res, next){
         console.log("F: Checking rental owner...");
-
+        var owner_hash_id = req.params.owner_hash_id;
         //correct hash
-        if (req.body.owner_hash_id && req.body.owner_hash_id == req.session.rental_info.owner_hash_id){
+        if (req.session.proxy_edit){
+            next();
+        }
+        else if (req.params.owner_hash_id && req.params.owner_hash_id == req.session.rental_info.owner_hash_id){
+            req.session.proxy_edit = true;
             next();
         }
         //incorrect owner!
-        else if (!req.user || req.session.rental_info.account_id != req.user.id){
-            error.handler(req, res, "Invalid rental owner!");
+        else if (req.user && req.session.rental_info.account_id != req.user.id){
+            delete req.session.rental_info.owner_hash_id;
+            req.session.proxy_edit = false;
+            next();
+        }
+        //if hash exists in URL and its not the same, redirect to the normal rental
+        else if (owner_hash_id && req.session.rental_info.owner_hash_id != owner_hash_id){
+            delete req.session.rental_info.owner_hash_id;
+            req.session.proxy_edit = false;
+            next();
         }
         else {
             next();
@@ -485,7 +462,7 @@ module.exports = {
             error.handler(req, res, "Invalid address!", "json");
         }
         //check for rental type
-        else if (rental_type != 0 && rental_type != 1){
+        else if (req.body.type && rental_type != 0 && rental_type != 1){
             error.handler(req, res, "Invalid rental type!", "json");
         }
         else {
@@ -510,7 +487,7 @@ module.exports = {
 
             if (req.body.address){
                 //check against google safe browsing
-                googleSafeCheck(req, res, address, function () {
+                googleSafeCheck(req, res, address, function(){
                     //check if its a valid HTTP address and that theres a response
                     request(address, function (err, response, body) {
                         if (!err && response.statusCode == 200) {
@@ -537,18 +514,25 @@ module.exports = {
 
     //updates the owner of a rental that has no owner (hash rental)
     updateRentalOwner : function(req, res, next){
-        console.log("F: Updating the rental owner...");
-        req.session.rental_object = {
-            db_object : {
-                account_id: req.user.id,
-                owner_hash_id: null
+        if (req.user && req.params.owner_hash_id && req.params.owner_hash_id == req.session.rental_info.owner_hash_id){
+            console.log("F: Updating the rental owner...");
+            req.session.proxy_edit = true;
+            delete req.session.rental_info.owner_hash_id;
+            req.session.rental_object = {
+                db_object : {
+                    account_id: req.user.id,
+                    owner_hash_id: null
+                }
             }
+            next();
         }
-        next();
+        else {
+            next();
+        }
     },
 
     //redirect to rental page after updating its owner
-    redirectRental: function(req, res, next){
+    redirectToRental: function(req, res, next){
         console.log("F: Redirecting to rental page...");
 
         delete req.session.rental_object.db_object;
@@ -563,16 +547,8 @@ module.exports = {
             res.redirect("/");
         }
         else {
-            //check if we should display the preview edit menu
-            if (req.user && req.user.id == req.session.rental_info.account_id){
-                req.session.proxy_edit = true;
-            }
-            else {
-                req.session.proxy_edit = false;
-            }
-
             //coming from /rentalpreview (endless loop)
-            if (req.header("Referer") && req.header("Referer").indexOf("rentalpreview") != -1){
+            if (!req.session.rental_editted && req.header("Referer") && req.header("Referer").indexOf("rentalpreview") != -1){
                 console.log("F: Something went wrong and triggered an endless loop!");
                 res.render("proxy/proxy-error.ejs", {
                     image: "",
@@ -595,6 +571,12 @@ module.exports = {
     //render a rental edit page
     renderRental : function(req, res, next){
         console.log("F: Rendering rental...");
+
+        //now rendering rental, delete any sensitive stuff
+        if (!req.session.proxy_edit){
+            delete req.session.rental_info.owner_hash_id;
+        }
+        delete req.session.rental_editted;
 
         //render the appropriate address
         if (req.session.rental_info.address && req.session.rental_info.type == 0){
@@ -665,23 +647,37 @@ module.exports = {
 
     //edit the rental (update the database)
     editRental : function(req, res, next){
-        console.log("F: Updating rental...");
 
-        Listing.updateRental(req.params.rental_id, req.session.rental_object.db_object, function(result){
-            if (result.state != "success"){error.handler(req, res, result.info, "json");}
-            else {
-                next();
-            }
-        });
+        //if not blank (aka has address/type/account_id)
+        if (req.session.rental_object.db_object.address || req.session.rental_object.db_object.type || req.session.rental_object.db_object.account_id){
+            console.log("F: Updating rental...");
+
+            Listing.updateRental(req.params.rental_id, req.session.rental_object.db_object, function(result){
+                if (result.state != "success"){error.handler(req, res, result.info, "json");}
+                else {
+                    next();
+                }
+            });
+        }
+        else {
+            next();
+        }
     },
 
     //update the rental session object
     updateRentalObject : function(req, res, next){
         if (req.user){
+            //update the user rentals object with anything thats changed
             updateUserRentalsObject(req.user.rentals, req.session.rental_object.db_object, req.params.rental_id);
         }
-        delete req.session.rental_object.db_object;
-        delete req.session.rental_info;
+        else {
+            //update the session rental info with anything that's changed
+            for (x in req.session.rental_object.db_object){
+                req.session.rental_info[x] = req.session.rental_object.db_object[x];
+            }
+        }
+        req.session.rental_editted = true;
+        delete req.session.rental_object;
         res.send({
             state: "success",
             rentals: (req.user) ? req.user.rentals : false
