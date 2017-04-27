@@ -17,18 +17,18 @@
 #domahub-overlay {
     position:fixed;
     z-index:9999999999999;
-    top:40px;
+    top:30px;
     right:20px;
 }
 
 #domahub-button {
-    padding: 25px 25px 15px 25px;
+    padding: 10px 25px 10px 15px;
     box-sizing: border-box;
     border-radius: 5px;
     border:1px solid rgba(0,0,0,0.1);
     box-shadow: 0 10px 30px rgba(0,0,0,0.18);
     color:#fff;
-    background-color: rgba(60,189,141,0.7);
+    background-color: rgba(60,189,141,0.85);
     font-family: "roboto",Helvetica,sans-serif;
     font-size:14px;
     text-decoration:none !important;
@@ -51,7 +51,7 @@
     width: 20px;
     float: right;
     margin-left: -24px;
-    margin-top: -42px;
+    margin-top: -27px;
 }
 
 #domahub-delete:hover::before,
