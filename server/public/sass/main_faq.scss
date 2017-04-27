@@ -5,16 +5,23 @@
   padding-top: 70px;
 }
 
-.faq-question {
-  font-weight: bold;
-}
-
 .faq-header {
-  cursor: pointer;
   color: $primary;
-  font-weight: bold;
+  cursor: pointer;
+  font-weight: 400;
   margin-bottom: 20px;
+  position: relative;
+  padding-left: 15px;
+  &::before {
+    content: "";
+    position: absolute;;
+    height: 100%;
+    width: 5px;
+    background: $primary;
+    left: 0;
+    bottom: 0;
+  }
   &:hover {
-    color: $primary-dark;
+    color: $primary-lighter;
   }
 }

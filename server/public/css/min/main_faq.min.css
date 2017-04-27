@@ -1,1 +1,1 @@
-.faq-header,.faq-question{font-weight:700}.faq-section{padding-top:70px}.faq-header{cursor:pointer;color:#3cbc8d;margin-bottom:20px}.faq-header:hover{color:#309670}
+.faq-section{padding-top:70px}.faq-header{color:#3cbc8d;cursor:pointer;font-weight:400;margin-bottom:20px;position:relative;padding-left:15px}.faq-header::before{content:"";position:absolute;height:100%;width:5px;background:#3cbc8d;left:0;bottom:0}.faq-header:hover{color:#8ad6ba}

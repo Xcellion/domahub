@@ -2,26 +2,23 @@
 @import 'mixins';
 @import 'balloon';
 
-#index-img {
+#landing {
   @include tablet {
-    background-image: linear-gradient($primary, $blue-darker);
     min-height: 504px;
     height: calc(100vh - 130px);
     padding: 0 !important;
   }
   @include mobile {
-    background-image: linear-gradient($primary, $blue-darker);
     height: 550px;
     padding: 40px 20px 0;
   }
-  background-position: center center;
-  background-size: cover;
-  background-repeat: no-repeat;
+  background: $blue-darker;
   width: 100%;
   display: flex;
   justify-content: space-between;
   align-items: center;
   position: relative;
+  overflow: hidden;
   .subtitle {
     max-width: 600px;
     margin-left: auto;
@@ -41,14 +38,19 @@
   }
 }
 
+#decision-section {
+  position: relative;
+}
+
 .learn-more-arrow {
   @include box-shadow(1px,1px,10px,$black-disabled,0);
   @include transition(background-color 0.25s ease);
   background-color: $primary;
   border-radius: 100%;
-  bottom: -16px;
-  left: 50%;
+  top: -16px;
+  left: 49%;
   position: absolute;
+  z-index: 4;
   &:hover {
     background-color: $primary-dark;
   }
@@ -290,21 +292,40 @@
     top: 0;
   }
 }
-// .card-flex-wrap {
-//   display: flex;
-//   flex-wrap: wrap;
-//   flex-direction: row;
-//   align-items: center;
-//   justify-content: center;
-//   .card {
-//     width: 200px;
-//     height: 250px;
-//     margin: 10px !important;
-//     .card-image {
-//       padding: 20px;
-//     }
-//   }
-// }
+
+.section {
+  &.has-pyramid {
+    position: relative;
+    overflow: hidden;
+    .container {
+      z-index: 3;
+    }
+    &::before {
+      @include rotate(60);
+      content:"";
+      background: $primary-light;
+      width: 500px;
+      position: absolute;
+      top: 200px;
+      height: 500px;
+      left: 0;
+      z-index: 1;
+    }
+    &::after {
+      @include rotate(105);
+      content:"";
+      opacity: 0.4;
+      width: 0;
+      position: absolute;
+      top: 175px;
+      height: 0;
+      border: 300px solid transparent;
+      border-bottom-color: $primary-dark;
+      left: 253px;
+      z-index: 2;
+    }
+  }
+}
 
 .image-stack {
   max-width: 440px;
