@@ -1,17 +1,17 @@
 <link href="https://domahub.com/css/proxy.css" rel="stylesheet">
-<a id="domahub-button">D</a>
 <link href="https://fonts.googleapis.com/css?family=Roboto:400,700" rel="stylesheet" />
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 <script>
     console.log("DomaHub menu loaded!");
     $(document).ready(function(){
-        $("#domahub-button").on("click", function(e){
-            $(".domahub-wrapper").slideToggle(300);
-        });
-
+        //fade in after 5 seconds
+        setTimeout(function(){ $("#domahub-overlay").fadeIn(); }, 1000);
         //set listing link
-        $("#domahub-listing-button").attr("href", "https://www.domahub.com/listing/" + doma_rental_info.domain_name);
+        $("#domahub-button").attr("href", "https://www.domahub.com/listing/" + doma_rental_info.domain_name);
+        $("#domahub-delete").on("click", function(){
+            $("#domahub-overlay").hide();
+        });
     });
 </script>
 <!-- Quantcast Tag -->
