@@ -2,11 +2,7 @@
 <html>
 <head>
     <link rel="icon" type="image/png" href="/images/favicon.ico" />
-    <script>
-        var doma_rental_info = <%-JSON.stringify(doma_rental_info)%>;
-    </script>
 </head>
-
 <style>
     body {
         margin:0;
@@ -43,45 +39,45 @@
         font-family:"roboto",Helvetica,sans-serif;
     }
 </style>
-
 <body>
 
-    <%# WHAT IS THIS WEBSITE NOTIFICATION %>
+    <%# LOAD DOMALOGIC / JQUERY / FONTS / QUANTCAST %>
     <%- include("proxy-index.ejs"); %>
 
+    <%#-- CONTENT IS AN IMAGE OR PDF %>
     <% if (image != "" && doma_rental_info.type == 0) { %>
-        <% if (content.indexOf("pdf") == -1) { %>
 
-            <!-- CONTENT IS AN IMAGE -->
+        <!-- CONTENT IS AN IMAGE -->
+        <% if (content.indexOf("pdf") == -1) { %>
             <img id="proxy-image" src="<%= image %>"/>
             <script>
                 document.getElementById('proxy-image').ondragstart = function() { return false; };
             </script>
 
+        <!-- CONTENT IS A PDF -->
         <% } else { %>
-
-            <!-- CONTENT IS A PDF -->
             <iframe src="<%= image %>"></iframe>
-
         <% } %>
 
     <% } else { %>
 
         <div id="dh-nothing-text">
+
+            <!-- FORWARDING WEBSITE -->
             <% if (doma_rental_info.type == 1) { %>
-                <!-- FORWARDING WEBSITE -->
                 The website <%= doma_rental_info.domain_name %><%= (doma_rental_info.path) ? "/" + doma_rental_info.path : "" %> will forward to
                 <a href="<%= doma_rental_info.address %>">this link (<%= (doma_rental_info.address.length > 20) ? doma_rental_info.address.substr(0, 20) + "..." : doma_rental_info.address %>)</a>
                 at the specified rental time.
+
+            <!-- THERE IS NO CONTENT -->
             <% } else { %>
-                <!-- THERE IS NO CONTENT -->
                 There&#146;s nothing here! Move along now :)
             <% } %>
-        </div>
 
+        </div>
     <% } %>
 
-    <%# EDIT BUTTON IF LOGGED IN%>
+    <%# EDIT BUTTON IF LOGGED IN %>
     <% if (edit) { %>
         <%- include("proxy-edit.ejs"); %>
     <% } else { %>
