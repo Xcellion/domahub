@@ -1,7 +1,70 @@
-<div id="domahub-overlay" style="display:none;">
-    <a id="domahub-button"target="_blank" rel="noopener">What is this website?</a>
-    <span id="domahub-delete"></span>
+<style>
+    #dh-overlay {
+        position:fixed;
+        z-index:9999999999999;
+        top:30px;
+        right:20px;
+    }
+    #dh-button {
+        padding: 10px 25px 10px 15px;
+        box-sizing: border-box;
+        border-radius: 5px;
+        border:1px solid rgba(0,0,0,0.1);
+        box-shadow: 0 10px 30px rgba(0,0,0,0.18);
+        color:#fff;
+        background-color: rgba(60,189,141,0.85);
+        font-family:"roboto",Helvetica,sans-serif;
+        font-size:14px;
+        text-decoration:none !important;
+        cursor:pointer;
+        transition:all 0.25s;
+        position: relative;
+    }
+    #dh-button:hover{
+        text-decoration:underline !important;
+    }
+    #dh-delete {
+        position: relative;
+        border-radius: 100%;
+        cursor: pointer;
+        vertical-align: top;
+        display: inline-block;
+        border: none;
+        height: 20px;
+        width: 20px;
+        float: right;
+        margin-left: -24px;
+        margin-top: -27px;
+    }
+    #dh-delete:hover::before,
+    #dh-delete:hover::after {
+        background: white;
+    }
+    #dh-delete::before,
+    #dh-delete::after {
+        background: rgba(0,0,0,0.5);
+        content: "";
+        display: block;
+        height: 2px;
+        left: 50%;
+        margin-left: -25%;
+        margin-top: -1px;
+        position: absolute;
+        top: 50%;
+        width: 50%;
+        transition: background 0.25s ease;
+    }
+    #dh-delete::before {
+        transform: rotate(45deg);
+    }
+    #dh-delete::after {
+        transform: rotate(-45deg);
+    }
+</style>
+<div id="dh-overlay" style="display:none;">
+    <a id="dh-button"target="_blank" rel="noopener">What is this website?</a>
+    <span id="dh-delete"></span>
 </div>
 <script>
-    console.log("DomaHub no edit menu loaded!");
+    console.log("DomaHub info message loaded!");
 </script>

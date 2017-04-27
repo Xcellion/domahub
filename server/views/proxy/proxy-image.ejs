@@ -6,34 +6,76 @@
         var doma_rental_info = <%-JSON.stringify(doma_rental_info)%>;
     </script>
 </head>
-<body style="margin:0;padding:0;border:0;overflow:hidden;">
 
-    <%# THE DOMAHUB BUTTON %>
+<style>
+    body {
+        margin:0;
+        padding:0;
+        border:0;
+        overflow:hidden;
+    }
+    #proxy-image {
+        max-height:100%;
+        max-width:100%;
+        top:50%;
+        left:50%;
+        transform:translate(-50%,-50%);
+        margin-right:50%;
+        position:absolute;"
+    }
+    #proxy-pdf {
+        width:100vw;
+        height:100vh;
+        margin:0;
+        border:0;
+        padding:0;
+    }
+    #dh-nothing-text {
+        line-height:200%;
+        max-width:500px;
+        font-size:20px;
+        text-align:center;
+        top:50%;
+        left:50%;
+        transform:translate(-50%,-50%);
+        margin-right:-50%;
+        position:absolute;
+        font-family:"roboto",Helvetica,sans-serif;
+    }
+</style>
+
+<body>
+
+    <%# WHAT IS THIS WEBSITE NOTIFICATION %>
     <%- include("proxy-index.ejs"); %>
 
-    <% if (image != "") { %>
+    <% if (image != "" && doma_rental_info.type == 0) { %>
         <% if (content.indexOf("pdf") == -1) { %>
 
             <!-- CONTENT IS AN IMAGE -->
             <img id="proxy-image" src="<%= image %>"/>
             <script>
-            document.getElementById('proxy-image').ondragstart = function() { return false; };
+                document.getElementById('proxy-image').ondragstart = function() { return false; };
             </script>
 
         <% } else { %>
 
             <!-- CONTENT IS A PDF -->
-            <iframe style="width:100vw;height:100vh;margin:0;border:0;padding:0;" src="<%= image %>"></iframe>
+            <iframe src="<%= image %>"></iframe>
 
         <% } %>
 
     <% } else { %>
 
-        <!-- THERE IS NO CONTENT -->
-        <div style="font-size:20px;text-align:center;top:50%;left:50%;transform:translate(-50%,-50%);position:absolute;font-family:helvetica,sans-serif;">
-            <h1 >There&#146;s nothing here! Move along now :)</h1>
-            <% if (preview == "false") { %>
-                <h3>Press the menu button to edit this rental.</h3>
+        <div id="dh-nothing-text">
+            <% if (doma_rental_info.type == 1) { %>
+                <!-- FORWARDING WEBSITE -->
+                The website <%= doma_rental_info.domain_name %><%= (doma_rental_info.path) ? "/" + doma_rental_info.path : "" %> will forward to
+                <a href="<%= doma_rental_info.address %>">this link (<%= (doma_rental_info.address.length > 20) ? doma_rental_info.address.substr(0, 20) + "..." : doma_rental_info.address %>)</a>
+                at the specified rental time.
+            <% } else { %>
+                <!-- THERE IS NO CONTENT -->
+                There&#146;s nothing here! Move along now :)
             <% } %>
         </div>
 

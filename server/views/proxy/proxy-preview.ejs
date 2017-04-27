@@ -1,29 +1,29 @@
-<div class="domahub-preview-ribbon top-left sticky red shadow">Preview</div>
-
 <style>
-.domahub-preview-ribbon {
-font-family:helvetica,sans-serif;
-width: 200px;
-background: #3cbc8d;
-position: absolute;
-top: 25px;
-left: -50px;
-text-align: center;
-line-height: 50px;
-letter-spacing: 1px;
-color: #f0f0f0;
-transform: rotate(-45deg);
--webkit-transform: rotate(-45deg);
-top: 25px;
-left: -50px;
-transform: rotate(-45deg);
--webkit-transform: rotate(-45deg);
-position: fixed;
-box-shadow: 0 0 3px rgba(0,0,0,.3);
-z-index:9999999;
+#dh-preview {
+    padding:15px;
+    box-sizing:border-box;
+    border-radius:5px;
+    border:1px solid rgba(0,0,0,0.1);
+    box-shadow:0 10px 30px rgba(0,0,0,0.18);
+    color:#fff;
+    background-color:rgba(60,189,141,1);
+    font-family:"roboto",Helvetica,sans-serif;
+    font-size:14px;
+    cursor:default;
+    position:absolute;
+    bottom:20px;
+    left:20px;
+    max-width:250px;
+    z-index:9999999999999;
+}
+#dh-preview a {
+    color:#FFF;
 }
 </style>
-<script src="https://domahub.com/js/lib/moment.min.js" type="text/javascript"></script>
+<div id="dh-preview">
+    This is just a preview of what the rental will look like.
+    </br></br>If there is something wrong, please <a href="https://domahub.com/contact">let us know</a>.
+</div>
 <script>
-    console.log("DomaHub preview ribbon loaded!");
+    console.log("DomaHub preview message loaded!");
 </script>
