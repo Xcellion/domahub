@@ -85,12 +85,13 @@ module.exports = {
                     new_user_email : req.body.new_user_email
                 };
 
-                //if user is logged in, otherwise create a token for creation
+                //if user is logged in, otherwise create a token for creation (and keep track of the email)
                 if (req.user){
                     req.session.new_rental_info.rental_db_info.account_id = req.user.id;
                 }
                 else {
                     req.session.new_rental_info.rental_db_info.owner_hash_id = Math.random().toString(36).substr(5,5);
+                    req.session.new_rental_info.rental_db_info.owner_email = req.body.new_user_email;
                 }
                 next();
             }
@@ -575,6 +576,7 @@ module.exports = {
         //now rendering rental, delete any sensitive stuff
         if (!req.session.proxy_edit){
             delete req.session.rental_info.owner_hash_id;
+            delete req.session.rental_info.owner_email;
         }
         delete req.session.rental_editted;
 
