@@ -50,51 +50,39 @@
 							<p class="card-header-title">
 								Basic Information &nbsp<span id="basic-message" class="setting-message"></span>
 							</p>
-							<a class='edit-section-button card-header-icon button is-small no-shadow is-accent'>
-								Edit
-							</a>
+							<button class='edit-section-button card-header-icon button is-small no-shadow'>
+								<span class="icon is-small is-icon"><i class="fa fa-cog"></i></span>
+								<span>Edit</span>
+							</button>
 						</header>
 						<div class="card-content">
-							<form id="account-settings" class="account-form">
-								<div class="control is-horizontal">
-									<div class="control-label is-medium is-medium">
-										<label class="label">Email Address</label>
+							<form id="account-settings" class="form account-form">
+								<div class="control">
+									<div class="label-icon">
+										<label class="label" for"email-input">Email Address</label>
+										<span data-balloon="Private" data-balloon-pos="up" class="icon is-tooltip is-small">
+											<i class="fa fa-lock"></i>
+										</span>
 									</div>
-									<p class="control">
 										<input id="email-input" class="is-disabled input account-input" type="text" value="<%= user.email %>" />
-									</p>
+										<small class="tip">We don't share your email with anyone.</small>
 								</div>
-								<div class="control is-horizontal">
-									<div class="control-label is-medium">
-										<label class="label">Username</label>
-									</div>
-									<p class="control">
+								<div class="control">
+										<label class="label" for="username-input">Username</label>
 										<input id="username-input" class="is-disabled input account-input" type="text" value="<%= user.username %>" spellcheck="false"/>
-									</p>
+										<small class="tip">Other users will be able to see your username.</small>
 								</div>
-								<div class="control is-horizontal">
-									<div class="control-label is-medium">
-										<label class="label">Current Password</label>
-									</div>
-									<p class="control">
+								<div class="control">
+										<label class="label" for="old-pw-input">Current Password</label>
 										<input id="old-pw-input" class="is-disabled input account-input" name="password" type="password" autocomplete="new-password" value="">
-									</p>
 								</div>
-								<div class="control is-horizontal hidden-edit is-hidden">
-									<div class="control-label is-medium">
-										<label id="pw-label" class="label">New Password</label>
-									</div>
-									<p class="control">
+								<div class="control hidden-edit is-hidden">
+										<label id="pw-label" class="label" for="new-pw-input">New Password</label>
 										<input id="new-pw-input" class="is-disabled input account-input" type="password"/>
-									</p>
 								</div>
-								<div class="control is-horizontal hidden-edit is-hidden">
-									<div class="control-label is-medium">
-										<label class="label">Confirm Password</label>
-									</div>
-									<p class="control">
+								<div class="control hidden-edit is-hidden">
+										<label class="label" for="verify-pw-input">Confirm Password</label>
 										<input id="verify-pw-input" class="is-disabled input account-input" type="password">
-									</p>
 								</div>
 								<div class="control hidden-edit is-hidden">
 									<button id="change-account-submit" class="button is-disabled is-primary no-shadow is-stylish is-small">Save Changes</button>
@@ -111,48 +99,32 @@
 							</p>
 						</header>
 						<div class="card-content">
-							<form>
-								<div class="control is-horizontal">
-									<div class="control-label is-medium">
-										<label class="label">Email Address</label>
-									</div>
-									<p class="control">
-										<span class="tag is-primary">Verified</span>
-									</p>
-								</div>
-								<div class="control is-horizontal">
-									<div class="control-label is-medium">
-										<label class="label">Bank Account</label>
-									</div>
-									<div class="control is-grouped">
-										<% if (user.stripe_info && user.stripe_info.transfers_enabled) { %>
-											<p class="control is-success">
-												<span class="tag is-primary">Connected</span>
-											</p>
-										<% } else { %>
-											<p class="control is-danger">
-												<span class="tag is-danger">Not Connected</span>
-											</p>
-										<% } %>
-									</div>
-								</div>
-								<div class="control is-horizontal">
-									<div class="control-label is-medium">
-										<label class="label">Account Standing</label>
-									</div>
-									<div class="control is-grouped">
-										<% if (user.type >= 2) { %>
-											<p class="control is-success">
-												<span class="tag is-primary">Good</span>
-											</p>
-										<% } else { %>
-											<p class="control is-danger">
-												<span class="tag is-danger">Not Good</span>
-											</p>
-										<% } %>
-									</div>
-								</div>
-							</form>
+							<div class="content">
+								<p>
+									Email Address
+								</p>
+								<span class="tag is-success">Verified</span>
+							</div>
+							<div class="content">
+								<p>
+									Bank Account
+								</p>
+								<% if (user.stripe_info && user.stripe_info.transfers_enabled) { %>
+										<span class="tag is-success">Connected</span>
+								<% } else { %>
+										<span class="tag is-danger">Not Connected</span>
+								<% } %>
+							</div>
+							<div class="content">
+								<p>
+									Account Standing
+								</p>
+									<% if (user.type >= 2) { %>
+											<span class="tag is-success">Good</span>
+									<% } else { %>
+											<span class="tag is-danger">Not Good</span>
+									<% } %>
+							</div>
 						</div>
 					</div>
 					<div id="payout-address" class="card is-fullwidth is-hidden">
@@ -165,9 +137,9 @@
 							</a>
 						</header>
 						<div class="card-content">
-							<form id="payout-address-form" class="payout-form stripe-form">
-								<label class="label">Country</label>
+							<form id="payout-address-form" class="form payout-form stripe-form">
 									<div class="control">
+										<label class="label" for="country-input">Country</label>
 										<span class="select is-disabled is-fullwidth">
 											<select required name="country" id="country-input" class="stripe-input">
 												<option value="AT">Austria</option>
@@ -196,24 +168,24 @@
 											</select>
 										</span>
 									</div>
-								<label class="label">Address Line 1</label>
 									<div class="control">
+										<label class="label" for="addressline1-input">Address Line 1</label>
 										<input required id="addressline1-input" class="input is-disabled stripe-input" type="text" name="addressline1" autocomplete=""/>
 									</div>
-								<label class="label">Address Line 2</label>
 									<div class="control">
+										<label class="label" for="addressline2-input">Address Line 2</label>
 										<input id="addressline2-input" class="input is-disabled stripe-input" type="text" name="addressline2" autocomplete=""/>
 									</div>
-								<label class="label">City</label>
 									<div class="control">
+										<label class="label" for="city-input">City</label>
 										<input required id="city-input" class="input is-disabled stripe-input" type="text" name="city" autocomplete=""/>
 									</div>
-								<label class="label">State / Province</label>
 									<div class="control">
+										<label class="label" for="state-input">State / Province</label>
 										<input required id="state-input" class="input is-disabled stripe-input" type="text" name="state" autocomplete=""/>
 									</div>
-								<label class="label">Zip Code / Postal Code</label>
 									<div class="control">
+										<label class="label" for="zip-input">Zip Code / Postal Code</label>
 										<input required id="zip-input" class="input is-disabled stripe-input" type="text" name="zip" autocomplete=""/>
 									</div>
 								<div class="control hidden-edit is-hidden">
@@ -234,17 +206,34 @@
 							</a>
 						</header>
 						<div class="card-content">
-							<form id="payout-personal-form" class="payout-form stripe-form">
-								<label class="label">First Name</label>
+							<form id="payout-personal-form" class="form payout-form stripe-form">
 									<div class="control">
+										<div class="label-icon">
+											<label class="label has-icon" for="first_name-input">First Name</label>
+											<span data-balloon="Private" data-balloon-pos="up" class="icon is-tooltip is-small">
+												<i class="fa fa-lock"></i>
+											</span>
+										</div>
 										<input required id="first_name-input" class="input is-disabled stripe-input" type="text" name="first_name" />
+										<small class="tip">Other users cannot see your name.</small>
 									</div>
-								<label class="label">Last Name</label>
-									<div class="control">
+									<div class="control" for="last_name-input">
+										<div class="label-icon">
+											<label class="label">Last Name</label>
+											<span data-balloon="Private" data-balloon-pos="up" class="icon is-tooltip is-small">
+												<i class="fa fa-lock"></i>
+											</span>
+										</div>
 										<input required id="last_name-input" class="input is-disabled stripe-input" type="text" name="last_name" />
+										<small class="tip">Other users cannot see your name.</small>
 									</div>
-								<label class="label">Birth Date</label>
 									<div class="control">
+										<div class="label-icon">
+											<label class="label">Birth Date</label>
+											<span data-balloon="Private" data-balloon-pos="up" class="icon is-tooltip is-small">
+												<i class="fa fa-lock"></i>
+											</span>
+										</div>
 										<div class="select is-disabled">
 											<select required id="birthday_year-input" name="birthday_year" class="stripe-input">
 												<option selected value="" disabled>Year</option>
@@ -386,6 +375,7 @@
 												<option value="31">31</option>
 											</select>
 										</div>
+										<small class="tip">We use this info for our records ONLY.</small>
 									</div>
 								<div class="control hidden-edit is-hidden">
 									<button tabindex="0" id="payout-personal-submit" class="submit-payout button is-stylish is-small is-primary no-shadow is-disabled">Save Changes</button>
@@ -405,9 +395,9 @@
 							</a>
 						</header>
 						<div class="card-content">
-							<form id="payout-bank-form" class="payout-form stripe-form">
-								<label class="label">Account Type</label>
+							<form id="payout-bank-form" class="form payout-form stripe-form">
 									<div class="control">
+										<label class="label" for="account_type-input">Account Type</label>
 										<span class="select is-disabled is-fullwidth">
 											<select required id="account_type-input" name="account_type" class="stripe-input">
 												<option selected value="individual">Individual</option>
@@ -415,8 +405,8 @@
 											</select>
 										</span>
 									</div>
-								<label class="label">Currency</label>
 									<div class="control">
+										<label class="label" for="currency-input">Currency</label>
 										<span class="select is-disabled is-fullwidth">
 											<select required id="currency-input" name="currency" class="stripe-input">
 												<option selected value="" disabled>Currency</option>
@@ -559,13 +549,25 @@
 											</select>
 										</span>
 									</div>
-								<label class="label">Routing Number</label>
 									<div class="control">
+										<div class="label-icon">
+											<label class="label" for="account_routing-input">Routing Number</label>
+											<span data-balloon="Private" data-balloon-pos="up" class="icon is-tooltip is-small">
+												<i class="fa fa-lock"></i>
+											</span>
+										</div>
 										<input required id="account_routing-input" class="input is-disabled stripe-input" type="number" pattern="[0-9]*" inputmode="numeric" name="account_routing" />
+										<small class="tip">This information is stored with our third party payment provider, Stripe.</small>
 									</div>
-								<label id="account_number-label" class="label">Account Number <span id="account_number-last4">(Last 4 Digits)</span></label>
 									<div class="control">
+										<div class="label-icon">
+											<label id="account_number-label" class="label" for="account_number-input">Account Number <span id="account_number-last4">(Last 4 Digits)</span></label>
+											<span data-balloon="Private" data-balloon-pos="up" class="icon is-tooltip is-small">
+												<i class="fa fa-lock"></i>
+											</span>
+										</div>
 										<input required id="account_number-input" class="input is-disabled stripe-input" type="number" pattern="[0-9]*" inputmode="numeric" name="account_number" />
+										<small class="tip">This information is stored with our third party payment provider, Stripe.</small>
 									</div>
 								<div class="control hidden-edit is-hidden">
 									<button tabindex="0" id="payout-bank-submit" class="submit-payout button is-stylish is-small is-primary no-shadow is-disabled">Save Changes</button>
