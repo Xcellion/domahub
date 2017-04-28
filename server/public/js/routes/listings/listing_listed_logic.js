@@ -103,6 +103,12 @@ $(document).ready(function() {
 		$("#typed-slash").typed(typed_options);
 	});
 
+	if (window.location.search.substr(1,window.location.search.length) != ""){
+		$("#typed-slash").val(window.location.search.substr(1,window.location.search.length));
+		//remove the disabled on check availability button
+		$("#check-avail").removeClass('is-disabled');
+	}
+
 	//---------------------------------------------------------------------------------------------------CALENDAR AND TIMES
 
 	//show calendar or unavailable description
