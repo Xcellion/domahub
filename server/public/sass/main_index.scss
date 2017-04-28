@@ -110,7 +110,7 @@
         }
       }
       a {
-        font-weight: 700;
+        font-weight: 500;
         text-transform: uppercase;
         padding: 15px;
         @include mobile {
@@ -222,7 +222,7 @@
   display: flex;
   align-items: center;
   h3 {
-    font-weight: 700;
+    font-weight: 500;
   }
   .slider-icon {
     border: 2px solid $primary;

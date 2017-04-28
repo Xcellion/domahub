@@ -54,9 +54,9 @@
     #filter-dropdown-wrapper {
       position: absolute;
       left: -400px;
-      -webkit-box-shadow: 2px 0 5px 0 black;
-      -moz-box-shadow: 2px 0 5px 0 black;
-      box-shadow: 2px 0 5px 0 black;
+      -webkit-box-shadow: 2px 0 5px 0 #000;
+      -moz-box-shadow: 2px 0 5px 0 #000;
+      box-shadow: 2px 0 5px 0 #000;
       z-index: 5; } }
 
 #filter-dropdown {
