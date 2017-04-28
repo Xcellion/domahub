@@ -65,8 +65,8 @@
 
             <!-- FORWARDING WEBSITE -->
             <% if (doma_rental_info.type == 1) { %>
-                The website <%= doma_rental_info.domain_name %><%= (doma_rental_info.path) ? "/" + doma_rental_info.path "" %> will forward to
-                <a href="<%= doma_rental_info.address %>">this link (<%= (doma_rental_info.address.length > 20) ? doma_rental_info.address.substr(0, 20) + "..." doma_rental_info.address %>)</a>
+                The website <%= doma_rental_info.domain_name %><%= (doma_rental_info.path) ? "/" + doma_rental_info.path : "" %> will forward to
+                <a href="<%= doma_rental_info.address %>">this link (<%= (doma_rental_info.address.length > 20) ? doma_rental_info.address.substr(0, 20) + "..." : doma_rental_info.address %>)</a>
                 at the specified rental time.
 
             <!-- THERE IS NO CONTENT -->
