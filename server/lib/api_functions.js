@@ -106,8 +106,8 @@ function searchAndDirect(rental_info, req, res){
 function requestProxy(req, res, rental_info){
 	//now rendering rental, delete any sensitive stuff
 	if (!req.session.proxy_edit){
-		delete req.session.rental_info.owner_hash_id;
-		delete req.session.rental_info.owner_email;
+		delete rental_info.owner_hash_id;
+		delete rental_info.owner_email;
 	}
 	request({
 		url: addProtocol(rental_info.address),
