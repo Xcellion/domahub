@@ -1,67 +1,67 @@
 <style>
     #dh-overlay {
-        position:fixed;
-        z-index:9999999999999;
-        top:30px;
-        right:20px;
+        position:fixed !important;
+        z-index:9999999999999 !important;
+        top:30px !important;
+        right:20px !important;
     }
     #dh-button {
-        padding: 10px 25px 10px 15px;
-        box-sizing: border-box;
-        border-radius: 5px;
-        border:1px solid rgba(0,0,0,0.1);
-        box-shadow: 0 10px 30px rgba(0,0,0,0.18);
-        color:#fff;
-        background-color: rgba(60,189,141,0.85);
-        font-family:"roboto",Helvetica,sans-serif;
-        font-size:14px;
-        text-decoration:none !important;
-        cursor:pointer;
-        transition:all 0.25s;
-        position: relative;
+        padding:10px 25px 10px 15px !important;
+        box-sizing:border-box !important;
+        border-radius:5px !important;
+        border:1px solid rgba(0,0,0,0.1) !important;
+        box-shadow:0 10px 30px rgba(0,0,0,0.18) !important;
+        color:#fff !important;
+        background-color:rgba(60,189,141,0.85) !important;
+        font-family:"roboto",Helvetica,sans-serif !important;
+        font-size:14px !important;
+        text-decoration:none !important !important;
+        cursor:pointer !important;
+        transition:all 0.25s !important;
+        position:relative !important;
     }
     #dh-button:hover{
-        text-decoration:underline !important;
+        text-decoration:underline !important !important;
     }
     #dh-delete {
-        position: relative;
-        border-radius: 100%;
-        cursor: pointer;
-        vertical-align: top;
-        display: inline-block;
-        border: none;
-        height: 20px;
-        width: 20px;
-        float: right;
-        margin-left: -24px;
-        margin-top: -27px;
+        position:relative !important;
+        border-radius:100% !important;
+        cursor:pointer !important;
+        vertical-align:top !important;
+        display:inline-block !important;
+        border:none !important;
+        height:20px !important;
+        width:20px !important;
+        float:right !important;
+        margin-left:-24px !important;
+        margin-top:-27px !important;
     }
     #dh-delete:hover::before,
     #dh-delete:hover::after {
-        background: white;
+        background:white !important;
     }
     #dh-delete::before,
     #dh-delete::after {
-        background: rgba(0,0,0,0.5);
-        content: "";
-        display: block;
-        height: 2px;
-        left: 50%;
-        margin-left: -25%;
-        margin-top: -1px;
-        position: absolute;
-        top: 50%;
-        width: 50%;
-        transition: background 0.25s ease;
+        background:rgba(0,0,0,0.5) !important;
+        content:"" !important;
+        display:block !important;
+        height:2px !important;
+        left:50% !important;
+        margin-left:-25% !important;
+        margin-top:-1px !important;
+        position:absolute !important;
+        top:50% !important;
+        width:50% !important;
+        transition:background 0.25s ease !important;
     }
     #dh-delete::before {
-        transform: rotate(45deg);
+        transform:rotate(45deg) !important;
     }
     #dh-delete::after {
-        transform: rotate(-45deg);
+        transform:rotate(-45deg) !important;
     }
 </style>
-<div id="dh-overlay" style="display:none;">
+<div id="dh-overlay" style="display:none !important;">
     <a id="dh-button" target="_blank" href="https://www.domahub.com/listing/<%= doma_rental_info.domain_name %>" rel="noopener">What is this website?</a>
     <span id="dh-delete"></span>
 </div>
@@ -69,7 +69,7 @@
     console.log("DomaHub info message loaded!");
     $(document).ready(function(){
         //fade in after 5 seconds
-        setTimeout(function(){ $("#dh-overlay").fadeIn(); }, 1000);
+        setTimeout(function(){ $("#dh-overlay").fadeIn() !important; }, 1000);
         $("#dh-delete").on("click", function(){
             $("#dh-overlay").hide();
         });

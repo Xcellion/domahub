@@ -1,108 +1,107 @@
 <script src="https://domahub.com/js/lib/moment.min.js" type="text/javascript"></script>
 <style>
     #dh-no-owner-wrapper {
-        margin:0;
+        margin:0 !important;
     }
     #dh-edit-wrapper {
-        padding:15px;
-        box-sizing:border-box;
-        border-radius:5px;
-        border:1px solid rgba(0,0,0,0.1);
-        box-shadow:0 10px 30px rgba(0,0,0,0.18);
-        color:#fff;
-        background-color:rgba(60,189,141,1);
-        font-family:"roboto",Helvetica,sans-serif;
-        font-size:14px;
-        cursor:default;
-        position:fixed;
-        bottom:209px;
-        left:20px;
-        max-width:250px;
-        z-index:9999999999999;
+        padding:15px !important;
+        box-sizing:border-box !important;
+        border-radius:5px !important;
+        border:1px solid rgba(0,0,0,0.1) !important;
+        box-shadow:0 10px 30px rgba(0,0,0,0.18) !important;
+        color:#fff !important;
+        background-color:rgba(60,189,141,1) !important;
+        font-family:"roboto",Helvetica,sans-serif !important;
+        font-size:14px !important;
+        cursor:default !important;
+        position:fixed !important;
+        bottom:209px !important;
+        left:20px !important;
+        max-width:250px !important;
+        z-index:9999999999999 !important;
     }
     #dh-edit-wrapper a {
-        color:#FFF;
+        color:#FFF !important;
     }
     .dh-edit-header {
-        margin:0;
-        font-family:"roboto",Helvetica,sans-serif;
-        font-size:16px;
-        font-weight:bold;
+        margin:0 !important;
+        font-family:"roboto",Helvetica,sans-serif !important;
+        font-size:16px !important;
+        font-weight:bold !important;
     }
     #dh-warning{
-        margin:5px 0;
+        margin:5px 0 !important;
     }
     #dh-rental-dates-wrapper {
-        margin:5px 0;
+        margin:5px 0 !important;
     }
     .dh-rental-date {
-        float:right;
+        float:right !important;
     }
     #dh-listing-link {
-        color:#FFF;
+        color:#FFF !important;
     }
     #dh-select-wrapper {
-        display:block;
-        margin:5px 0px;
-        height:32px;
-        padding:0px 5px;
-        border:0px;
-        border-radius:3px;
-        width:100%;
+        display:block !important;
+        margin:5px 0px !important;
+        height:32px !important;
+        padding:0px 5px !important;
+        border:0px !important;
+        border-radius:3px !important;
+        width:100% !important;
     }
     #dh-owner-hash-link {
-        margin-bottom:10px;
+        margin-bottom:10px !important;
     }
     .dh-input {
-        align-items:center;
-        background-color:#fff;
-        color:#000;
-        display:inline-flex;
-        font-size:14px;
-        height:32px;
-        justify-content:flex-start;
-        line-height:24px;
-        padding:0 8px;
-        position:relative;
-        border:0px;
-        border-radius:3px;
-        max-width:100%;
-        width:calc(100% - 16px);
+        align-items:center !important;
+        background-color:#fff !important;
+        color:#000 !important;
+        display:inline-flex !important;
+        font-size:14px !important;
+        height:32px !important;
+        justify-content:flex-start !important;
+        line-height:24px !important;
+        padding:0 8px !important;
+        position:relative !important;
+        border:0px !important;
+        border-radius:3px !important;
+        max-width:100% !important;
+        width:calc(100% - 16px) !important;
     }
     #dh-confirm-wrapper {
-        margin-top:5px;
-        text-align:justify;
+        margin-top:5px !important;
+        text-align:justify !important;
     }
     .dh-button {
-        cursor:pointer;
-        display:inline-block;
-        width:40%;
-        padding:8px;
-        color:#FFF;
-        border-radius:3px;
-        text-align:center;
-        transition:all 0.25s;
+        cursor:pointer !important;
+        display:inline-block !important;
+        width:40% !important;
+        padding:8px !important;
+        color:#FFF !important;
+        border-radius:3px !important;
+        text-align:center !important;
+        transition:all 0.25s !important;
     }
     .dh-is-disabled {
-        cursor:not-allowed;
-        pointer-events:none;
-        opacity:.5;
+        cursor:not-allowed !important;
+        pointer-events:none !important;
+        opacity:.5 !important;
     }
     #dh-confirm-button {
-        background-color:#81c784;
+        background-color:#81c784 !important;
     }
     #dh-confirm-button:hover {
-        background-color:#4cab50;
+        background-color:#4cab50 !important;
     }
     #dh-cancel-button {
-        background-color:#EF5350;
+        background-color:#EF5350 !important;
     }
     #dh-cancel-button:hover {
-        background-color:#da1814;
+        background-color:#da1814 !important;
     }
 </style>
 <div id="dh-edit-wrapper">
-
     <div id="dh-no-owner-wrapper" style="display:none;">
         <p class="dh-edit-header">Editing Your Rental</p>
         <p id="dh-warning">
@@ -115,8 +114,6 @@
         </p>
         <input id="dh-owner-hash-link" class="dh-input" placeholder="This link is your password!"></input>
     </div>
-
-
     <p id="dh-edit-header" class="dh-edit-header">Rental Details</p>
     <div id="dh-rental-dates-wrapper">
         <div>Start  <span id="dh-rental-start" class="dh-rental-date"></span></div>
@@ -132,10 +129,8 @@
         <a id="dh-cancel-button" class='dh-button dh-is-disabled'>Cancel</a>
     </div>
 </div>
-
 <script>
     console.log("DomaHub editing menu loaded!");
-
     $(document).ready(function(){
         if (doma_rental_info.owner_hash_id){
             $("#dh-no-owner-wrapper").show();
@@ -159,7 +154,6 @@
             editRental($(this));
         });
     });
-
     //allow or dont allow submission
     function allowOrDontAllow(){
         if ($("#dh-select-wrapper").val() != doma_rental_info.type || $("#dh-input-address").val() != doma_rental_info.address){
@@ -173,7 +167,6 @@
             $("#dh-confirm-button").off();
         }
     }
-
     //function to submit address/type change
     function editRental(elem){
         elem.off();

@@ -5,38 +5,38 @@
 </head>
 <style>
     body {
-        margin:0;
-        padding:0;
-        border:0;
-        overflow:hidden;
+        margin:0 !important;
+        padding:0 !important;
+        border:0 !important;
+        overflow:hidden !important;
     }
     #proxy-image {
-        max-height:100%;
-        max-width:100%;
-        top:50%;
-        left:50%;
-        transform:translate(-50%,-50%);
-        margin-right:50%;
-        position:absolute;
+        max-height:100% !important;
+        max-width:100% !important;
+        top:50% !important;
+        left:50% !important;
+        transform:translate(-50%,-50%) !important;
+        margin-right:50% !important;
+        position:absolute !important;
     }
     #proxy-pdf {
-        width:100vw;
-        height:100vh;
-        margin:0;
-        border:0;
-        padding:0;
+        width:100vw !important;
+        height:100vh !important;
+        margin:0 !important;
+        border:0 !important;
+        padding:0 !important;
     }
     #dh-nothing-text {
-        line-height:200%;
-        max-width:500px;
-        font-size:20px;
-        text-align:center;
-        top:50%;
-        left:50%;
-        transform:translate(-50%,-50%);
-        margin-right:-50%;
-        position:absolute;
-        font-family:"roboto",Helvetica,sans-serif;
+        line-height:200% !important;
+        max-width:500px !important;
+        font-size:20px !important;
+        text-align:center !important;
+        top:50% !important;
+        left:50% !important;
+        transform:translate(-50%,-50%) !important;
+        margin-right:-50% !important;
+        position:absolute !important;
+        font-family:"roboto",Helvetica,sans-serif !important;
     }
 </style>
 <body>
@@ -65,8 +65,8 @@
 
             <!-- FORWARDING WEBSITE -->
             <% if (doma_rental_info.type == 1) { %>
-                The website <%= doma_rental_info.domain_name %><%= (doma_rental_info.path) ? "/" + doma_rental_info.path : "" %> will forward to
-                <a href="<%= doma_rental_info.address %>">this link (<%= (doma_rental_info.address.length > 20) ? doma_rental_info.address.substr(0, 20) + "..." : doma_rental_info.address %>)</a>
+                The website <%= doma_rental_info.domain_name %><%= (doma_rental_info.path) ? "/" + doma_rental_info.path "" %> will forward to
+                <a href="<%= doma_rental_info.address %>">this link (<%= (doma_rental_info.address.length > 20) ? doma_rental_info.address.substr(0, 20) + "..." doma_rental_info.address %>)</a>
                 at the specified rental time.
 
             <!-- THERE IS NO CONTENT -->
