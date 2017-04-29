@@ -209,7 +209,7 @@ function createTickerRow(rental, now){
 	else {
 		ticker_pre_tense = "has been "
 		ticker_verb_tense = "ing";
-		var ticker_time = " for the past <span>" + moment.duration(now.diff(start_moment)).humanize() + "</span>";
+		var ticker_time = " since <span>" + moment.duration(start_moment.diff(now)).humanize(true) + "</span>";
 		if (rental.views > 0){
 			var ticker_views_plural = ticker_views_plural.replace("in ", "");
 			ticker_reach = "--reaching <span class='is-primary'>" + ticker_views_format + "</span>" + ticker_views_plural;
