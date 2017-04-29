@@ -279,7 +279,7 @@ html {
   #typed-slash.is-active {
     outline: none;
     cursor: auto;
-    border-color: rgba(0, 0, 0, 0.8); }
+    border-color: rgba(0, 0, 0, 0.88); }
     #typed-slash.is-active::-webkit-input-placeholder {
       /* Chrome/Opera/Safari */
       color: transparent; }
