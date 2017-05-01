@@ -587,10 +587,12 @@ function getAlexaData(){
 //function to edit alexa information
 function createAlexa(alexa){
 	if (alexa){
+		listing_info.alexa = alexa;
+
 		var globalrank = (alexa.globalRank == "-") ? "Not enough data!" : alexa.globalRank;
 		$("#alexa-globalrank").text(globalrank);
 
-		var bouncerate = (alexa.engagement && alexa.engagement.bounceRate == "-") ? "Not enough data!" : alexa.engagement.bouncerate;
+		var bouncerate = (alexa.engagement && alexa.engagement.bounceRate == "-") ? "Not enough data!" : alexa.engagement.bounceRate;
 		$("#alexa-bouncerate").text(bouncerate);
 
 		var timeonsite = (alexa.engagement && alexa.engagement.dailyTimeOnSite == "-") ? "Not enough data!" : alexa.engagement.dailyTimeOnSite;
