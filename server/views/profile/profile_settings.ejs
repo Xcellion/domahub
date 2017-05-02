@@ -132,14 +132,20 @@
 							<p class="card-header-title">
 								Payout Address &nbsp<span id="payout-address-message" class="setting-message"></span>
 							</p>
-							<a class='edit-section-button card-header-icon button is-small no-shadow is-accent'>
-								Edit
-							</a>
+							<button class='edit-section-button card-header-icon button is-small no-shadow'>
+								<span class="icon is-small is-icon"><i class="fa fa-cog"></i></span>
+								<span>Edit</span>
+							</button>
 						</header>
 						<div class="card-content">
 							<form id="payout-address-form" class="form payout-form stripe-form">
 									<div class="control">
-										<label class="label" for="country-input">Country</label>
+										<div class="label-icon">
+											<label class="label" for"country-input">Country</label>
+											<span data-balloon="Private" data-balloon-pos="up" class="icon is-tooltip is-small">
+												<i class="fa fa-lock"></i>
+											</span>
+										</div>
 										<span class="select is-disabled is-fullwidth">
 											<select required name="country" id="country-input" class="stripe-input">
 												<option value="AT">Austria</option>
@@ -167,25 +173,51 @@
 												<option value="US" selected>United States</option>
 											</select>
 										</span>
+										<small class="tip">Payout information is stored with our third party payment provider, Stripe.</small>
 									</div>
 									<div class="control">
-										<label class="label" for="addressline1-input">Address Line 1</label>
+										<div class="label-icon">
+											<label class="label" for"addressline1-input">Address Line 1</label>
+											<span data-balloon="Private" data-balloon-pos="up" class="icon is-tooltip is-small">
+												<i class="fa fa-lock"></i>
+											</span>
+										</div>
 										<input required id="addressline1-input" class="input is-disabled stripe-input" type="text" name="addressline1" autocomplete=""/>
 									</div>
 									<div class="control">
-										<label class="label" for="addressline2-input">Address Line 2</label>
+										<div class="label-icon">
+											<label class="label" for"addressline2-input">Address Line 2</label>
+											<span data-balloon="Private" data-balloon-pos="up" class="icon is-tooltip is-small">
+												<i class="fa fa-lock"></i>
+											</span>
+										</div>
 										<input id="addressline2-input" class="input is-disabled stripe-input" type="text" name="addressline2" autocomplete=""/>
 									</div>
 									<div class="control">
-										<label class="label" for="city-input">City</label>
+										<div class="label-icon">
+											<label class="label" for"city-input">City</label>
+											<span data-balloon="Private" data-balloon-pos="up" class="icon is-tooltip is-small">
+												<i class="fa fa-lock"></i>
+											</span>
+										</div>
 										<input required id="city-input" class="input is-disabled stripe-input" type="text" name="city" autocomplete=""/>
 									</div>
 									<div class="control">
-										<label class="label" for="state-input">State / Province</label>
+										<div class="label-icon">
+											<label class="label" for"state-input">State / Province</label>
+											<span data-balloon="Private" data-balloon-pos="up" class="icon is-tooltip is-small">
+												<i class="fa fa-lock"></i>
+											</span>
+										</div>
 										<input required id="state-input" class="input is-disabled stripe-input" type="text" name="state" autocomplete=""/>
 									</div>
 									<div class="control">
-										<label class="label" for="zip-input">Zip Code / Postal Code</label>
+										<div class="label-icon">
+											<label class="label" for"zip-input">Zip / Postal Code</label>
+											<span data-balloon="Private" data-balloon-pos="up" class="icon is-tooltip is-small">
+												<i class="fa fa-lock"></i>
+											</span>
+										</div>
 										<input required id="zip-input" class="input is-disabled stripe-input" type="text" name="zip" autocomplete=""/>
 									</div>
 								<div class="control hidden-edit is-hidden">
@@ -201,9 +233,10 @@
 							<p class="card-header-title">
 								Personal Information &nbsp<span id="payout-personal-message" class="setting-message"></span>
 							</p>
-							<a class='edit-section-button card-header-icon button is-small no-shadow is-accent'>
-								Edit
-							</a>
+							<button class='edit-section-button card-header-icon button is-small no-shadow'>
+								<span class="icon is-small is-icon"><i class="fa fa-cog"></i></span>
+								<span>Edit</span>
+							</button>
 						</header>
 						<div class="card-content">
 							<form id="payout-personal-form" class="form payout-form stripe-form">
@@ -390,9 +423,10 @@
 							<p class="card-header-title">
 								Bank Information &nbsp<span id="payout-bank-message" class="setting-message"></span>
 							</p>
-							<a class='edit-section-button card-header-icon button is-small no-shadow is-accent'>
-								Edit
-							</a>
+							<button class='edit-section-button card-header-icon button is-small no-shadow'>
+								<span class="icon is-small is-icon"><i class="fa fa-cog"></i></span>
+								<span>Edit</span>
+							</button>
 						</header>
 						<div class="card-content">
 							<form id="payout-bank-form" class="form payout-form stripe-form">

@@ -154,6 +154,10 @@
   }
 }
 
+#Smallchat {
+  display: none !important;
+}
+
 .dom-trait {
   max-width: 300px;
   @include desktop {
@@ -181,7 +185,7 @@
     height: 188px;
   }
   @include tablet-only {
-    height: 224px;
+    height: 244px;
   }
 }
 

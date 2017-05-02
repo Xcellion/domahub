@@ -1469,8 +1469,8 @@ pre {
     font-weight: 500;
     font-size: 14px;
     height: 42px;
-    padding-left: 21px;
-    padding-right: 21px; }
+    padding-left: 16px;
+    padding-right: 16px; }
     .button.is-stylish.is-small {
       font-size: 12px;
       height: 32px;
@@ -4065,7 +4065,7 @@ input:-webkit-autofill {
 
 .menu-label {
   color: rgba(0, 0, 0, 0.88);
-  font-weight: bold;
+  font-weight: 500;
   font-size: 14px;
   letter-spacing: 1px;
   margin-bottom: 5px;
@@ -4582,7 +4582,7 @@ input:-webkit-autofill {
     .profile-dropdown-menu li:last-child {
       padding-bottom: 14px; }
       .profile-dropdown-menu li:last-child a {
-        font-weight: bold; }
+        font-weight: 500; }
   .profile-dropdown-menu a {
     width: 100%;
     display: inline-block;
