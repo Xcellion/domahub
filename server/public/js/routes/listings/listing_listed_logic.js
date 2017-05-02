@@ -110,11 +110,6 @@ $(document).ready(function() {
 		$("#check-avail").removeClass('is-disabled');
 	}
 
-	//where did this come from
-	if (parseFloat(getParameterByName("camefrom"))){
-
-	}
-
 	//---------------------------------------------------------------------------------------------------CALENDAR AND TIMES
 
 	//show calendar or unavailable description
