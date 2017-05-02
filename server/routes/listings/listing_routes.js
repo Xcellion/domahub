@@ -185,12 +185,12 @@ module.exports = function(app, db, auth, error, stripe){
 	//render specific listing page
 	app.get('/listing/:domain_name', [
 		checkDomainValid,
-		renter_functions.addToSearch,
+		renter_functions.addToSearchHistory,
 		renter_functions.getListingInfo,
 		renter_functions.checkStillVerified,
 		renter_functions.renderListing
 	]);
-	
+
 	//get a domain's ticker information
 	app.post("/listing/:domain_name/ticker", [
 		urlencodedParser,
@@ -215,6 +215,7 @@ module.exports = function(app, db, auth, error, stripe){
 		urlencodedParser,
 		checkDomainValid,
 		checkDomainListed,
+		renter_functions.addToAvailCheckHistory,
 		renter_functions.getListingTimes
 	]);
 
@@ -231,6 +232,7 @@ module.exports = function(app, db, auth, error, stripe){
 		renter_functions.getListingInfo,
 		renter_functions.createNewRentalObject,
 		renter_functions.checkRentalTimes,
+		renter_functions.addToCheckoutHistory,
 		renter_functions.redirectToCheckout
 	]);
 

@@ -724,7 +724,7 @@ module.exports = {
 	},
 
     //add to search database
-    addToSearch : function(req, res, next){
+    addToSearchHistory : function(req, res, next){
         //add to search only if we went directly to listing
         if (!req.session.from_api && node_env != "dev"){
             var user_ip = req.headers['x-forwarded-for'] ||
@@ -753,6 +753,62 @@ module.exports = {
             console.log("F: Adding to search history...");
             Data.newListingHistory(history_info, function(result){if (result.state == "error") {console.log(result)}});	//async
             delete req.session.from_api;
+        }
+        next();
+    },
+
+    //clicked on check availability button
+    addToAvailCheckHistory : function(req, res, next){
+        //add to search only if not dev
+        if (node_env != "dev"){
+            var user_ip = req.headers['x-forwarded-for'] ||
+            req.connection.remoteAddress ||
+            req.socket.remoteAddress;
+
+            //nginx https proxy removes IP
+            if (req.headers["x-real-ip"]){
+                user_ip = req.headers["x-real-ip"];
+            }
+
+            var history_info = {
+                account_id: (typeof req.user == "undefined") ? null : req.user.id,      //who searched if who exists
+                domain_name: req.params.domain_name.toLowerCase(),		                 //what they searched for
+                timestamp: new Date().getTime(),	                                    //when they searched for it
+                user_ip : user_ip,
+                path: req.body.path                                                     //what path did they want
+            }
+
+            console.log("F: Adding to search history...");
+            Data.newCheckAvailHistory(history_info, function(result){if (result.state == "error") {console.log(result)}});	//async
+        }
+        next();
+    },
+
+    //rendered checkout page, track it!!!
+    addToCheckoutHistory : function(req, res, next){
+        //add to search only if not dev
+        if (node_env != "dev"){
+            var user_ip = req.headers['x-forwarded-for'] ||
+            req.connection.remoteAddress ||
+            req.socket.remoteAddress;
+
+            //nginx https proxy removes IP
+            if (req.headers["x-real-ip"]){
+                user_ip = req.headers["x-real-ip"];
+            }
+
+            var history_info = {
+                account_id: (typeof req.user == "undefined") ? null : req.user.id,      //who searched if who exists
+                domain_name: req.params.domain_name.toLowerCase(),		                //what they searched for
+                timestamp: new Date().getTime(),	                                    //when they searched for it
+                user_ip : user_ip,
+                path: req.session.new_rental_info.path,                                 //what path did they want
+                starttime: req.session.new_rental_info.starttime,                       //what start time
+                endtime: req.session.new_rental_info.endtime,                         //what end time
+            }
+
+            console.log("F: Adding to search history...");
+            Data.newCheckoutHistory(history_info, function(result){if (result.state == "error") {console.log(result)}});	//async
         }
         next();
     },
