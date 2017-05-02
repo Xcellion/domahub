@@ -47,7 +47,7 @@ data_model.prototype.newListingHistory = function(history_info, callback){
 	data_query(query, "Failed to add search history for " + history_info.domain_name + "!", callback, history_info);
 }
 
-//creates a new entry for a rental data row
+//creates a new entry for a rental history data row
 data_model.prototype.newRentalHistory = function(history_info, callback){
 	console.log("DB: Adding new rental history item for rental #" + history_info.rental_id + "...");
 	query = "INSERT INTO stats_rental_history \
@@ -55,12 +55,20 @@ data_model.prototype.newRentalHistory = function(history_info, callback){
 	data_query(query, "Failed to add rental view history for rental #" + history_info.rental_id + "!", callback, history_info);
 }
 
-//creates a new entry for a checked availability data row
+//creates a new entry for a checked availability history data row
 data_model.prototype.newCheckAvailHistory = function(history_info, callback){
 	console.log("DB: Adding new availability check history item for domain: " + history_info.domain_name + "...");
 	query = "INSERT INTO stats_availcheck_history \
 			SET ? "
 	data_query(query, "Failed to add availability check history item for domain:" + history_info.domain_name + "!", callback, history_info);
+}
+
+//creates a new entry for a checkout history data row
+data_model.prototype.newCheckoutHistory = function(history_info, callback){
+	console.log("DB: Adding new checkout history item for domain: " + history_info.domain_name + "...");
+	query = "INSERT INTO stats_checkout_history \
+			SET ? "
+	data_query(query, "Failed to add checkout check history item for domain:" + history_info.domain_name + "!", callback, history_info);
 }
 
 // //creates new rental times for unavailable listings
