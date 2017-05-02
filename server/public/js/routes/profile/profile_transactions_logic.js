@@ -47,6 +47,7 @@ function createEarningsRow(stripe_charge){
         //refund button
         temp_row.find(".earnings-row-refund-button").on("click", function(){
             $(this).off();
+            $(this).addClass("is-loading");
             $.ajax({
                 url: "/listing/" + stripe_charge.domain_name + "/" + stripe_charge.rental_id + "/refund",
                 method: "POST",
@@ -56,9 +57,11 @@ function createEarningsRow(stripe_charge){
             }).done(function(data){
                 if (data.state == "success"){
                     refundedRow(temp_row);
+                    $(this).removeClass("is-loading");
                 }
                 else {
                     flashError($("#transaction-message"), data.message);
+                    $(this).removeClass("is-loading");
                 }
             });
         });

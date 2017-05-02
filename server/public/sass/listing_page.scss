@@ -139,11 +139,9 @@ html {
 .header {
   display: flex;
   align-items: center;
-  cursor: pointer;
-  p {
-    &:not(:last-child) {
-      margin-bottom: 0 !important;
-    }
+  margin-bottom: 0 !important;
+  span {
+    margin-left: 3px;
   }
 }
 
