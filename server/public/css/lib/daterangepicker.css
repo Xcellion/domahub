@@ -1,6 +1,9 @@
 td.today {
     background-color: #90caf9 !important;
 }
+td.free-times {
+    /*background-color: blue !important;*/
+}
 .daterangepicker {
   position: absolute;
   color: inherit;

@@ -288,7 +288,7 @@ module.exports = {
 
 	//function to pay for a rental via stripe
 	chargeMoney : function(req, res, next){
-		if (req.session.listing_info.price_rate != 0){
+		if (req.session.new_rental_info.price != 0){
 			if (req.body.stripeToken){
 				var owner_stripe_id = req.session.new_rental_info.owner_stripe_id;
 				var total_price = Math.round(req.session.new_rental_info.price * 100);		//USD in cents

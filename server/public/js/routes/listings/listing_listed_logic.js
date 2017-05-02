@@ -112,6 +112,26 @@ $(document).ready(function() {
 
 	//---------------------------------------------------------------------------------------------------CALENDAR AND TIMES
 
+	//if and any free times
+	if (listing_info.freetimes && listing_info.freetimes.length > 0){
+		var now = moment();
+		var freetime_now;
+		//loop and find out when is free
+		for (var x = 0; x < listing_info.freetimes.length; x++){
+			if (now.isBetween(moment(listing_info.freetimes[x].date), moment(listing_info.freetimes[x].date + listing_info.freetimes[x].duration))){
+				freetime_now = listing_info.freetimes[x];
+				break;
+			}
+		}
+
+		//free now
+		if (freetime_now){
+			var until_date = moment(freetime_now.date + freetime_now.duration).format("MMM, DD");
+			$("#free-until").removeClass('is-hidden').text("Free until " + until_date);
+			$("#price").addClass('is-linethrough');
+		}
+	}
+
 	//show calendar or unavailable description
 	$("#check-avail").on("click", function(e) {
 		e.preventDefault();
@@ -302,7 +322,16 @@ function setUpCalendar(listing_info){
             else {
                 return true;
             }
-        }
+        },
+
+		//free times on calendar
+		isCustomDate: function(curDate){
+			if (curDate.isAfter(moment())){
+				if (checkIfFree(curDate)){
+					return "free-times";
+				}
+			}
+		}
     });
 
     //update when applying new dates
@@ -354,6 +383,21 @@ function checkIfNotOverlapped(event){
     return overlap != 0;
 }
 
+//helper function to check if overlaps a free period
+function checkIfFree(event){
+	var overlap = 0;
+	for (var x = 0; x < listing_info.freetimes.length; x++){
+		var freetime_start = moment(listing_info.freetimes[x].date);
+		var freetime_end = moment(listing_info.freetimes[x].date + listing_info.freetimes[x].duration);
+
+		//include start, exclude end
+		if (event.isBetween(freetime_start, freetime_end, "day", "[)")){
+			overlap++;
+		}
+	}
+	return overlap != 0;
+}
+
 //helper function to get correct price of events
 function updatePrices(){
 	if (listing_info.status){
@@ -362,36 +406,104 @@ function updatePrices(){
 
 		//calculate the price
         var totalPrice = moment.duration(endDate.diff(startDate));
-        if (listing_info.price_type == "month"){
-            totalPrice = totalPrice.asDays() / 30;
-        }
-        else {
-            totalPrice = totalPrice.as(listing_info.price_type);
-            totalPrice = Number(Math.round(totalPrice+'e2')+'e-2');
-        }
-        totalPrice = totalPrice * listing_info.price_rate;
+
+		//any overlapped time with free times
+		var overlappedTime = anyFreeDayOverlap(startDate, endDate);
+
+		if (overlappedTime > 0){
+			var origPrice = calculatePrice(totalPrice);
+			var actual_price = totalPrice.subtract(overlappedTime, "milliseconds");
+			var totalPrice = calculatePrice(actual_price);
+		}
+		else {
+			var totalPrice = calculatePrice(totalPrice);
+		}
 
         //price or price per day
-        if (totalPrice == 0 && listing_info.price_rate != 0){
+        if (totalPrice == 0 && listing_info.price_rate != 0 && overlappedTime == 0){
+			$("#total-price").addClass("is-hidden");
             $("#checkout-button").addClass('is-disabled');
-            $("#price").text("$" + listing_info.price_rate + " Per " + listing_info.price_type.capitalizeFirstLetter());
+            $("#actual-price").text("$" + listing_info.price_rate + " Per " + listing_info.price_type.capitalizeFirstLetter());
         }
         else {
+			$("#total-price").removeClass("is-hidden");
             $("#checkout-button").removeClass('is-disabled');
 
-            //animation for counting numbers
-            $("#price").prop('Counter', $("#price").prop('Counter')).stop().animate({
-                Counter: totalPrice
-            }, {
-                duration: 100,
-                easing: 'swing',
-                step: function (now) {
-                    if (listing_info.price_rate != 0){
-                        $(this).text("Total: $" + Number(Math.round(now+'e2')+'e-2').toFixed(2));
-                    }
-                }
-            });
+			if (origPrice){
+				$("#orig-price").removeClass('is-hidden');
+				countPrice($("#orig-price"), origPrice);
+			}
+			else {
+				$("#orig-price").addClass('is-hidden');
+			}
+
+			countPrice($("#actual-price"), totalPrice);
         }
+	}
+}
+
+//function to count number for price
+function countPrice(elem, price){
+	elem.prop('Counter', $("#price").prop('Counter')).stop().animate({
+		Counter: price
+	}, {
+		duration: 100,
+		easing: 'swing',
+		step: function (now) {
+			if (now == 0){
+				$(this).text("Free");
+			}
+			else {
+				$(this).text(" $" + Number(Math.round(now+'e2')+'e-2').toFixed(2));
+			}
+		}
+	});
+}
+
+//figure out price from milliseconds
+function calculatePrice(totalduration){
+	if (listing_info.price_type == "month"){
+		totalduration = totalduration.asDays() / 30;
+	}
+	else {
+		totalduration = totalduration.as(listing_info.price_type);
+		totalduration = Number(Math.round(totalduration+'e2')+'e-2');
+	}
+	return totalduration * listing_info.price_rate;
+}
+
+//figure out if the start and end dates overlap any free periods
+function anyFreeDayOverlap(starttime, endtime){
+	if (listing_info.freetimes && listing_info.freetimes.length > 0){
+		var overlap_time = 0;
+		for (var x = 0; x < listing_info.freetimes.length; x++){
+			var freetime_start = moment(listing_info.freetimes[x].date);
+			var freetime_end = moment(listing_info.freetimes[x].date + listing_info.freetimes[x].duration);
+
+			//there is overlap
+			if (starttime.isBefore(freetime_end) && endtime.isAfter(freetime_start)){
+				//completely covered by free time
+				if (starttime.isSameOrAfter(freetime_start) && endtime.isSameOrBefore(freetime_end)){
+					overlap_time += endtime.diff(starttime);
+				}
+				//completely covers free time
+				else if (freetime_start.isSameOrAfter(starttime) && freetime_end.isSameOrBefore(endtime)){
+					overlap_time += freetime_end.diff(freetime_start);
+				}
+				//overlap partially in the end of wanted time
+				else if (starttime.isSameOrBefore(freetime_start) && endtime.isSameOrBefore(freetime_end)){
+					overlap_time += endtime.diff(freetime_start);
+				}
+				//overlap partially at the beginning of wanted time
+				else {
+					overlap_time += freetime_end.diff(starttime);
+				}
+			}
+		}
+		return overlap_time;
+	}
+	else {
+		return 0;
 	}
 }
 
