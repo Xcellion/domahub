@@ -188,6 +188,7 @@ module.exports = function(app, db, auth, error, stripe){
 		renter_functions.addToSearchHistory,
 		renter_functions.getListingInfo,
 		renter_functions.checkStillVerified,
+		renter_functions.getListingFreeTimes,
 		renter_functions.renderListing
 	]);
 
@@ -230,8 +231,10 @@ module.exports = function(app, db, auth, error, stripe){
 		checkDomainValid,
 		checkDomainListed,
 		renter_functions.getListingInfo,
+		renter_functions.getListingFreeTimes,
 		renter_functions.createNewRentalObject,
 		renter_functions.checkRentalTimes,
+		renter_functions.checkRentalPrice,
 		renter_functions.addToCheckoutHistory,
 		renter_functions.redirectToCheckout
 	]);
@@ -242,6 +245,7 @@ module.exports = function(app, db, auth, error, stripe){
 		checkDomainValid,
 		checkDomainListed,
 		renter_functions.getListingInfo,
+		renter_functions.getListingFreeTimes,
 		renter_functions.checkRentalInfoNew,
 		renter_functions.checkRentalTimes,
 		renter_functions.checkRentalPrice,
