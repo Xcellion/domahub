@@ -312,9 +312,6 @@ button[data-balloon] {
         margin-right: 0;
         margin-bottom: 10px; } }
 
-#Smallchat {
-  display: none !important; }
-
 .dom-trait {
   max-width: 300px; }
   @media screen and (min-width: 980px) {
