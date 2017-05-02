@@ -281,11 +281,11 @@ function createTickerRow(rental, now){
 
 //callback function to create past views ticker row
 function pastViewsTickerRow(){
-	if (listing_info.rentals.length > 0 && listing_info.traffic){
+	if (listing_info.rentals.length > 0 && listing_info.traffic && listing_info.traffic.length > 0){
 		var last_month_views = listing_info.rentals.reduce(function(a,b){
 			return {views: a.views + b.views};
 		}).views + listing_info.traffic[0].views;
-		var ticker_latest_date = moment.duration(moment().diff(moment(listing_info.rentals[listing_info.rentals.length - 1].date)), "milliseconds")
+		var ticker_latest_date = moment.duration(moment(listing_info.rentals[listing_info.rentals.length - 1].date).diff(moment()), "milliseconds")
 
 		//add back past X months
 		for (var x = 0; x < Math.floor(ticker_latest_date._milliseconds / 2592000000); x++){
@@ -293,7 +293,7 @@ function pastViewsTickerRow(){
 				last_month_views += listing_info.traffic[x].views;
 			}
 		}
-		var ticker_latest_date_human = ticker_latest_date.humanize();
+		var ticker_latest_date_human = ticker_latest_date.humanize(true);
 	}
 	else {
 		var last_month_views = listing_info.traffic[0].views;

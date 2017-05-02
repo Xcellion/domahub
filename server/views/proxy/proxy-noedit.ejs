@@ -2,17 +2,20 @@
     #dh-overlay {
         position:fixed !important;
         z-index:9999999999999 !important;
-        top:30px !important;
-        right:20px !important;
+        top:15px !important;
+        left:50% !important;
+        transform:translateX(-50%) !important;
+        margin-right:-50% !important;
+        padding:15px;
     }
     #dh-button {
-        padding:10px 25px 10px 15px !important;
+        padding:15px 30px 15px 20px !important;
         box-sizing:border-box !important;
         border-radius:5px !important;
         border:1px solid rgba(0,0,0,0.1) !important;
         box-shadow:0 10px 30px rgba(0,0,0,0.18) !important;
         color:#fff !important;
-        background-color:rgba(60,189,141,0.85) !important;
+        background-color:rgb(60,189,141) !important;
         font-family:"roboto",Helvetica,sans-serif !important;
         font-size:14px !important;
         text-decoration:none !important !important;
@@ -69,7 +72,7 @@
     console.log("DomaHub info message loaded!");
     $(document).ready(function(){
         //fade in after 5 seconds
-        setTimeout(function(){ $("#dh-overlay").fadeIn("slow"); }, 1000);
+        setTimeout(function(){ $("#dh-overlay").slideDown("fast"); }, 500);
         $("#dh-delete").on("click", function(){
             $("#dh-overlay").hide();
         });
