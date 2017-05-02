@@ -169,6 +169,9 @@ textarea {
   color: inherit;
   text-decoration: underline; }
 
+.is-linethrough {
+  text-decoration: line-through; }
+
 .is-uppercase {
   text-transform: uppercase; }
 
