@@ -103,10 +103,16 @@ $(document).ready(function() {
 		$("#typed-slash").typed(typed_options);
 	});
 
-	if (window.location.search.substr(1,window.location.search.length) != ""){
-		$("#typed-slash").val(window.location.search.substr(1,window.location.search.length));
+	//pre-fill the path input
+	if (getParameterByName("wanted")){
+		$("#typed-slash").val(getParameterByName("wanted"));
 		//remove the disabled on check availability button
 		$("#check-avail").removeClass('is-disabled');
+	}
+
+	//where did this come from
+	if (parseFloat(getParameterByName("camefrom"))){
+		console.log(getParameterByName("camefrom"));
 	}
 
 	//---------------------------------------------------------------------------------------------------CALENDAR AND TIMES
@@ -392,6 +398,17 @@ function updatePrices(){
             });
         }
 	}
+}
+
+//get query string from URL
+function getParameterByName(name, url) {
+    if (!url) url = window.location.href;
+    name = name.replace(/[\[\]]/g, "\\$&");
+    var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+        results = regex.exec(url);
+    if (!results) return null;
+    if (!results[2]) return '';
+    return decodeURIComponent(results[2].replace(/\+/g, " "));
 }
 
 //</editor-fold>

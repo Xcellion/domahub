@@ -62,7 +62,7 @@ function getCurrentRental(req, res, domain_name, path){
 			if (result.state != "success" || result.info.length == 0){
 				console.log("F: Not rented! Redirecting to listing page");
 				delete req.session.rented_info;
-				res.redirect("https://domahub.com/listing/" + domain_name + "?" + path);
+				res.redirect("https://domahub.com/listing/" + domain_name + "?wanted=" + path);
 			}
 			else {
 				//add it to rental stats
