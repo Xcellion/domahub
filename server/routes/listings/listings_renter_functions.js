@@ -75,15 +75,14 @@ module.exports = {
 
             //function to create the new rental info db object
             var create_new_rental_info = function(){
-                req.session.new_rental_info = {
-                    rental_db_info : {
-                        listing_id: req.session.listing_info.id,
-                        path: req.session.new_rental_info.path,
-                        type: rental_type,
-                        address: (req.body.address == "" || !req.body.address) ? "" : address    //empty address or not
-                    },
-                    new_user_email : req.body.new_user_email
+                req.session.new_rental_info.rental_db_info = {
+                    date_created: new Date().getTime(),
+                    listing_id: req.session.listing_info.id,
+                    path: req.session.new_rental_info.path,
+                    type: rental_type,
+                    address: (req.body.address == "" || !req.body.address) ? "" : address    //empty address or not
                 };
+                req.session.new_rental_info.new_user_email = req.body.new_user_email;
 
                 //if user is logged in, otherwise create a token for creation (and keep track of the email)
                 if (req.user){
@@ -123,7 +122,7 @@ module.exports = {
 
         var starttime = parseFloat(req.body.starttime);
         var endtime = parseFloat(req.body.endtime);
-        var path = (req.session.new_rental_info.path) ? req.session.new_rental_info.path : req.body.path;
+        var path = (req.session.new_rental_info.rental_db_info) ? req.session.new_rental_info.path : req.body.path;
 
         //no times posted
         if (!starttime || !endtime){
@@ -744,6 +743,11 @@ module.exports = {
                 domain_name: req.params.domain_name.toLowerCase(),		//what they searched for
                 timestamp: now,		//when they searched for it
                 user_ip : user_ip
+            }
+
+            //what rental did it come from?
+            if (req.query.camefrom && parseFloat(req.query.camefrom)){
+                history_info.rental_id = req.query.camefrom;
             }
 
             console.log("F: Adding to search history...");
