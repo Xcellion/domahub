@@ -112,7 +112,7 @@ $(document).ready(function() {
 
 	//where did this come from
 	if (parseFloat(getParameterByName("camefrom"))){
-		console.log(getParameterByName("camefrom"));
+
 	}
 
 	//---------------------------------------------------------------------------------------------------CALENDAR AND TIMES
