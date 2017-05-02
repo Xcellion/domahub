@@ -744,7 +744,11 @@ module.exports = {
                 timestamp: now,		//when they searched for it
                 user_ip : user_ip
             }
-            console.log(req.query.camefrom);
+
+            //what rental did it come from?
+            if (req.query.camefrom && parseFloat(req.query.camefrom)){
+                history_info.rental_id = req.query.camefrom;
+            }
 
             console.log("F: Adding to search history...");
             Data.newListingHistory(history_info, function(result){if (result.state == "error") {console.log(result)}});	//async
