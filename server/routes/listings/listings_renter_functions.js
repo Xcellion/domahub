@@ -744,6 +744,7 @@ module.exports = {
                 timestamp: now,		//when they searched for it
                 user_ip : user_ip
             }
+            console.log(req.query.camefrom);
 
             console.log("F: Adding to search history...");
             Data.newListingHistory(history_info, function(result){if (result.state == "error") {console.log(result)}});	//async
