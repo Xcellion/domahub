@@ -757,6 +757,33 @@ module.exports = {
         next();
     },
 
+    //clicked on check availability button
+    addtoAvailCheck : function(req, res, next){
+        //add to search only if not dev
+        if (node_env != "dev"){
+            var user_ip = req.headers['x-forwarded-for'] ||
+            req.connection.remoteAddress ||
+            req.socket.remoteAddress;
+
+            //nginx https proxy removes IP
+            if (req.headers["x-real-ip"]){
+                user_ip = req.headers["x-real-ip"];
+            }
+
+            var history_info = {
+                account_id: (typeof req.user == "undefined") ? null : req.user.id,      //who searched if who exists
+                domain_name: req.params.domain_name.toLowerCase(),		                 //what they searched for
+                timestamp: new Date().getTime(),	                                    //when they searched for it
+                user_ip : user_ip,
+                path: req.body.path                                                     //what path did they want
+            }
+
+            console.log("F: Adding to search history...");
+            Data.newCheckAvailHistory(history_info, function(result){if (result.state == "error") {console.log(result)}});	//async
+        }
+        next();
+    },
+
     //gets the listing info if it is listed
     getListingInfo : function(req, res, next) {
         console.log("F: Checking if " + req.params.domain_name + " is listed on DomaHub...");

@@ -190,7 +190,7 @@ module.exports = function(app, db, auth, error, stripe){
 		renter_functions.checkStillVerified,
 		renter_functions.renderListing
 	]);
-	
+
 	//get a domain's ticker information
 	app.post("/listing/:domain_name/ticker", [
 		urlencodedParser,
@@ -215,6 +215,7 @@ module.exports = function(app, db, auth, error, stripe){
 		urlencodedParser,
 		checkDomainValid,
 		checkDomainListed,
+		renter_functions.addtoAvailCheck,
 		renter_functions.getListingTimes
 	]);
 
