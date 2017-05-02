@@ -67,19 +67,36 @@ $(document).ready(function () {
 
     //total duration of the rental (rounded)
     total_duration = moment.duration(total_duration).as(listing_info.price_type);
-    total_duration = Math.round(total_duration * 100) / 100
+    total_duration = Math.round(total_duration * 100) / 100;
     var duration_plural = (total_duration == 1) ? "" : "s";
     $("#total-duration").text(total_duration + ' ' + listing_info.price_type + duration_plural);
     $("#listing-price-rate").text(moneyFormat.to(listing_info.price_rate));
 
     //total price of the rental
-    var total_price = calculatePrice(starttime, endtime, listing_info);
+    var overlappedTime = anyFreeDayOverlap(starttime, endtime);
+    var total_price = calculatePrice(starttime, endtime, overlappedTime, listing_info);
     $("#total-duration").text(total_duration + ' ' + listing_info.price_type + duration_plural);
+
+    //discounted times
+    if (overlappedTime){
+        var orig_price = calculatePrice(starttime, endtime, 0, listing_info);
+        var discount_price = calculateDiscountPrice(moment.duration(overlappedTime));
+        $("#sub-total-price").text(moneyFormat.to(orig_price));
+
+        $(".discount-hidden").removeClass('is-hidden');
+        discount_duration = moment.duration(overlappedTime).as(listing_info.price_type);
+        discount_duration = Math.round(discount_duration * 100) / 100;
+        var duration_plural = (discount_duration == 1) ? "" : "s";
+        $("#discount-duration").text(discount_duration + " " + listing_info.price_type + duration_plural);
+        $("#discount-price").text("-$" + discount_price);
+    }
+
+    //free or not
     if (total_price != 0){
-        $(".total-price").text(moneyFormat.to(total_price));
+        $("#total-price").text(moneyFormat.to(total_price));
     }
     else {
-        $(".total-price").text("Free!");
+        $("#total-price").text("Free");
     }
 
     //--------------------------------------------------------------------------------------------------------- CHOICE BLOCKS
@@ -304,12 +321,12 @@ function submitStripe(checkout_button){
     checkout_button.off().addClass('is-loading');
 
     //successfully passed address and CC test
-    if (listing_info.price_rate != 0 && checkCC() && checkAddress($(".input-selected").val())){
+    if (new_rental_info.price != 0 && checkCC() && checkAddress($(".input-selected").val())){
         //submit to get the stripe token
         $("#stripe-form").submit();
     }
     //free! so just submit
-    else if (listing_info.price_rate ==0 && checkAddress($(".input-selected").val())){
+    else if (new_rental_info.price == 0 && checkAddress($(".input-selected").val())){
         submitNewRental();
     }
     else {
@@ -424,10 +441,11 @@ var moneyFormat = wNumb({
 });
 
 //helper function to get price of events
-function calculatePrice(starttime, endtime, listing_info){
+function calculatePrice(starttime, endtime, overlappedTime, listing_info){
     if (starttime && endtime && listing_info){
         //get total number of price type units
         var totalPrice = moment.duration(endtime.diff(starttime));
+        totalPrice.subtract(overlappedTime);
         if (listing_info.price_type == "month"){
             totalPrice = totalPrice.asDays() / 30;
         }
@@ -439,4 +457,51 @@ function calculatePrice(starttime, endtime, listing_info){
         return totalPrice * listing_info.price_rate;
     }
     else {return "ERROR";}
+}
+
+//figure out price from milliseconds
+function calculateDiscountPrice(totalduration){
+	if (listing_info.price_type == "month"){
+		totalduration = totalduration.asDays() / 30;
+	}
+	else {
+		totalduration = totalduration.as(listing_info.price_type);
+		totalduration = Number(Math.round(totalduration+'e2')+'e-2');
+	}
+    return Number(Math.round((totalduration * listing_info.price_rate)+'e2')+'e-2').toFixed(2)
+}
+
+//figure out if the start and end dates overlap any free periods
+function anyFreeDayOverlap(starttime, endtime){
+	if (listing_info.freetimes && listing_info.freetimes.length > 0){
+		var overlap_time = 0;
+		for (var x = 0; x < listing_info.freetimes.length; x++){
+			var freetime_start = moment(listing_info.freetimes[x].date);
+			var freetime_end = moment(listing_info.freetimes[x].date + listing_info.freetimes[x].duration);
+
+			//there is overlap
+			if (starttime.isBefore(freetime_end) && endtime.isAfter(freetime_start)){
+				//completely covered by free time
+				if (starttime.isSameOrAfter(freetime_start) && endtime.isSameOrBefore(freetime_end)){
+					overlap_time += endtime.diff(starttime);
+				}
+				//completely covers free time
+				else if (freetime_start.isSameOrAfter(starttime) && freetime_end.isSameOrBefore(endtime)){
+					overlap_time += freetime_end.diff(freetime_start);
+				}
+				//overlap partially in the end of wanted time
+				else if (starttime.isSameOrBefore(freetime_start) && endtime.isSameOrBefore(freetime_end)){
+					overlap_time += endtime.diff(freetime_start);
+				}
+				//overlap partially at the beginning of wanted time
+				else {
+					overlap_time += freetime_end.diff(starttime);
+				}
+			}
+		}
+		return overlap_time;
+	}
+	else {
+		return 0;
+	}
 }

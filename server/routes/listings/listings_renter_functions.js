@@ -188,10 +188,11 @@ module.exports = {
     checkRentalPrice : function(req, res, next){
         if (req.session.listing_info.price_rate != 0){
             console.log("F: Checking rental price...");
-            var price = calculatePrice(req.body.starttime, req.body.endtime, req.session.listing_info);
+            var overlapped_time = anyFreeDayOverlap(req.body.starttime, req.body.endtime, req.session.listing_info.freetimes);
+            var price = calculatePrice(req.body.starttime, req.body.endtime, overlapped_time, req.session.listing_info);
 
             //check for price
-            if (!price){
+            if (price == "Not a valid price" || isNaN(price)){
                 error.handler(req, res, "Invalid price!", "json");
             }
             else {
@@ -206,7 +207,7 @@ module.exports = {
 
     //get the stripe id of the listing owner
     getOwnerStripe : function(req, res, next){
-        if (req.session.listing_info.price_rate != 0){
+        if (req.session.new_rental_info.price != 0){
             console.log("F: Getting all Stripe info for a listing...");
 
             //get the stripe id of the listing owner
@@ -855,6 +856,16 @@ module.exports = {
         }
     },
 
+    //gets any free time periods for free rentals
+    getListingFreeTimes : function(req, res, next){
+        Listing.getListingFreeTimes(req.params.domain_name, function(result){
+            if (result.state =="success"){
+                req.session.listing_info.freetimes = result.info;
+            }
+            next();
+        });
+    },
+
     //gets X ticker rows per call
     getListingTicker : function(req, res, next){
         console.log("F: Getting ticker data for " + req.params.domain_name + "...");
@@ -1130,13 +1141,14 @@ function addProtocol(address){
 }
 
 //helper function to get price of events
-function calculatePrice(starttime, endtime, listing_info){
+function calculatePrice(starttime, endtime, overlapped_time, listing_info){
     if (starttime && endtime && listing_info){
         var temp_start = moment(parseFloat(starttime));
         var temp_end = moment(parseFloat(endtime));
 
 		//calculate the price
         var totalPrice = moment.duration(temp_end.diff(temp_start));
+        totalPrice.subtract(overlapped_time);
         if (listing_info.price_type == "month"){
             totalPrice = totalPrice.asDays() / 30;
         }
@@ -1146,7 +1158,46 @@ function calculatePrice(starttime, endtime, listing_info){
         }
         return totalPrice * listing_info.price_rate;
     }
-    else {return false;}
+    else {return "Not a valid price";}
+}
+
+
+//figure out if the start and end dates overlap any free periods
+function anyFreeDayOverlap(starttime, endtime, freetimes){
+	if (freetimes && freetimes.length > 0){
+        var starttime = moment(parseFloat(starttime));
+        var endtime = moment(parseFloat(endtime));
+
+		var overlap_time = 0;
+		for (var x = 0; x < freetimes.length; x++){
+			var freetime_start = moment(freetimes[x].date);
+			var freetime_end = moment(freetimes[x].date + freetimes[x].duration);
+
+			//there is overlap
+			if (starttime.isBefore(freetime_end) && endtime.isAfter(freetime_start)){
+				//completely covered by free time
+				if (starttime.isSameOrAfter(freetime_start) && endtime.isSameOrBefore(freetime_end)){
+					overlap_time += endtime.diff(starttime);
+				}
+				//completely covers free time
+				else if (freetime_start.isSameOrAfter(starttime) && freetime_end.isSameOrBefore(endtime)){
+					overlap_time += freetime_end.diff(freetime_start);
+				}
+				//overlap partially in the end of wanted time
+				else if (starttime.isSameOrBefore(freetime_start) && endtime.isSameOrBefore(freetime_end)){
+					overlap_time += endtime.diff(freetime_start);
+				}
+				//overlap partially at the beginning of wanted time
+				else {
+					overlap_time += freetime_end.diff(starttime);
+				}
+			}
+		}
+		return overlap_time;
+	}
+	else {
+		return 0;
+	}
 }
 
 //----------------------------------------------------------------helper functions for user obj----------------------------------------------------------------

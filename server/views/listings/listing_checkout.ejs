@@ -325,7 +325,7 @@
 
                     <!--PAYMENT STEP-->
                     <header id="step-header-payment" class="step-header header is-disabled margin-top-15">
-                        <% if (listing_info.price_rate != 0) { %>
+                        <% if (new_rental_info.price != 0) { %>
                             <h2>3. Payment</h2>
                         <% } else { %>
                             <h2>3. Confirmation</h2>
@@ -334,7 +334,7 @@
                     <div id="step-content-payment" class='step-content is-hidden'>
                         <article class="message">
                             <div class="message-body">
-                                <% if (listing_info.price_rate != 0) { %>
+                                <% if (new_rental_info.price != 0) { %>
                                     <p id="stripe-regular-message" class="regular-message">
                                         Please enter your payment information. By clicking the Confirm & Pay button,
                                         you are agreeing to pay the entire amount shown as well as our <a href="/terms" class='is-accent'>Terms and Conditions</a>.
@@ -350,7 +350,7 @@
                             </div>
                         </article>
                         <div id="checkout-card-content" class="success-hide checkout-card-content">
-                            <% if (listing_info.price_rate != 0) { %>
+                            <% if (new_rental_info.price != 0) { %>
                                 <form id="stripe-form" autocomplete="on">
                                     <label class="label is-medium">Card Number</label>
                                     <p class="control has-icon">
@@ -376,7 +376,7 @@
 
                             <div class="control margin-top-30">
                                 <a id="back-to-address-button" tabindex="0" class="button is-danger no-shadow is-stylish">Go Back</a>
-                                <% if (listing_info.price_rate != 0) { %>
+                                <% if (new_rental_info.price != 0) { %>
                                     <a id="checkout-button" tabindex="0" class="button is-primary no-shadow is-stylish">Confirm & Pay</a>
                                 <% } else { %>
                                     <a id="checkout-button" tabindex="0" class="button is-primary no-shadow is-stylish">Confirm</a>
@@ -454,11 +454,17 @@
                                 <p id="preview-rates">
                                     <span id="listing-price-rate"></span> x <span id="total-duration"></span>
                                 </p>
-                                <p class="total-price is-bold"></p>
+                                <p id="sub-total-price" class="is-bold"></p>
+                            </div>
+                            <div class="control-flex discount-hidden">
+                                <p>
+                                    <span>Discount </span> x <span id="discount-duration"></span>
+                                </p>
+                                <p id="discount-price" class="is-bold"></p>
                             </div>
                             <div class="control-flex">
                                 <h3>Total Price</h3>
-                                <h3 class="total-price is-bold"></h3>
+                                <h3 id="total-price" class="is-bold"></h3>
                             </div>
                         </div>
                         <footer id="edit-dates-button" class="card-footer">

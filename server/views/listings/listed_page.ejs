@@ -1,13 +1,18 @@
 <section class="section is-medium-top">
     <div class="container">
 
-        <span id="price" class="tag is-bold is-medium is-bordered">
-          <% if (listing_info.price_rate > 0) { %>
-              $<%= listing_info.price_rate %> Per <%= listing_info.price_type.charAt(0).toUpperCase() + listing_info.price_type.substr(1) %>
-          <% } else { %>
-              Free!
-          <% } %>
+        <span class="tag is-bold is-medium is-bordered">
+          <span id="total-price" class='margin-right-5 is-hidden'>Total: </span>
+          <span id="orig-price" class='margin-right-5 is-linethrough is-hidden'></span>
+          <span id="actual-price">
+              <% if (listing_info.price_rate > 0) { %>
+                  $<%= listing_info.price_rate %> Per <%= listing_info.price_type.charAt(0).toUpperCase() + listing_info.price_type.substr(1) %>
+              <% } else { %>
+                  Free!
+              <% } %>
+          </span>
         </span>
+        <span id="free-until" class='is-hidden tag is-bold is-medium is-bordered'></span>
 
         <div id="domain-display" class="content">
           <h1 class="is-primary is-inline-block margin-bottom-0"><%= listing_info.domain_name %>/</h1>
