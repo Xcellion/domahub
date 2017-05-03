@@ -260,7 +260,8 @@ function getTimes(calendar_elem){
 		url: "/listing/" + listing_info.domain_name + "/times",
 		method: "POST",
 		data: {
-			path: $("#typed-slash").val()
+			path: $("#typed-slash").val(),
+			rental_id: getParameterByName("camefrom")
 		}
 	}).done(function(data){
 		$("#calendar").removeClass('is-disabled');

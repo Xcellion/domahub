@@ -776,7 +776,8 @@ module.exports = {
                 domain_name: req.params.domain_name.toLowerCase(),		                 //what they searched for
                 timestamp: new Date().getTime(),	                                    //when they searched for it
                 user_ip : user_ip,
-                path: req.body.path                                                     //what path did they want
+                path: req.body.path,                                                     //what path did they want
+                rental_id: req.body.rental_id || null                                                     //what path did they want
             }
 
             console.log("F: Adding to search history...");

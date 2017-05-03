@@ -1,0 +1,178 @@
+<script>
+    var traffic = <%-JSON.stringify(traffic)%>;
+</script>
+<style>
+    .inline {
+        display:inline-block;
+        margin-right:10px;
+        padding-right:10px;
+        border-right:1px solid black;
+        vertical-align:top;
+    }
+    table {
+        text-align:left;
+        border-collapse: collapse;
+    }
+    tr:hover {
+        background-color:#F1F1F1;
+    }
+    td {
+        padding:5px;
+        border:1px solid lightgray;
+    }
+    td.checkavail{
+        height:29px;
+    }
+    th {
+        border:1px solid black;
+        padding:5px;
+    }
+</style>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script src="/js/lib/moment.min.js" type="text/javascript"></script>
+<script>
+    $(document).ready(function(){
+        $(".funnel-tbody-row").each(function(){
+            var cur_row = $(this);
+            var first_view = cur_row.data("first-view");
+            var last_view = cur_row.data("last-view");
+            var check_avail_count = 0;
+            for (var x = 0; x < traffic.avail_check_history.length; x++){
+                if (traffic.avail_check_history.data[x].timestamp >= first_view && traffic.avail_check_history.data[x].timestamp <= last_view){
+                    check_avail_count++;
+                }
+            }
+            var temp_td = $("<td>" + check_avail_count + "</td>");
+            cur_row.append(temp_td);
+
+        });
+    });
+</script>
+<h1><%= traffic.domain_name %></h1>
+<div class='inline'>
+    <h3>User Funnel</h3>
+    <table>
+        <thead>
+            <th>
+                Path
+            </th>
+            <th>
+                Rental ID
+            </th>
+            <th>
+                Date created
+            </th>
+            <th>
+                Start date
+            </th>
+            <th>
+                End date
+            </th>
+            <th>
+                Duration
+            </th>
+            <th>
+                Rental views
+            </th>
+            <th>
+                Resulting Listing Views
+            </th>
+            <th>
+                Conversion %
+            </th>
+        </thead>
+        <tbody id="funnel-tbody">
+            <% for (var x = 0; x < traffic.rental_views.length ; x++){ %>
+                <tr class="funnel-tbody-row" data-last-view="<%= traffic.rental_views[x].max_ts %>" data-first-view="<%= traffic.rental_views[x].min_ts %>">
+                    <td>
+                        <%= traffic.rental_views[x].path %>
+                    </td>
+                    <td>
+                        <%= traffic.rental_views[x].rental_id %>
+                    </td>
+                    <td>
+                        <%= new Date(traffic.rental_views[x].date_created).toLocaleDateString() %>
+                    </td>
+                    <td>
+                        <%= new Date(traffic.rental_views[x].date).toLocaleDateString() %>
+                    </td>
+                    <td>
+                        <%= new Date(traffic.rental_views[x].date + traffic.rental_views[x].duration).toLocaleDateString() %>
+                    </td>
+                    <td>
+                        <%= Math.round(traffic.rental_views[x].duration / 86400000 * 100) / 100 %> days
+                    </td>
+                    <td>
+                        <%= traffic.rental_views[x].views %>
+                    </td>
+                    <% for (var y = 0; y < traffic.listing_rental_views.length ; y++){ %>
+                        <% if (traffic.listing_rental_views[y].rental_id == traffic.rental_views[x].rental_id) { %>
+                            <td>
+                                <%= traffic.listing_rental_views[y].views %>
+                            </td>
+                            <td>
+                                <%= Math.round(traffic.rental_views[x].views / traffic.listing_rental_views[y].views * 100) / 100 %>%
+                            </td>
+                        <% } %>
+                    <% } %>
+                </tr>
+            <% } %>
+        </tbody>
+    </table>
+</div>
+<div class='inline'>
+    <h3>Check Availability - Total: <%= traffic.avail_check_history.length %></h3>
+    <table>
+        <thead>
+            <th>
+                Timestamp
+            </th>
+            <th>
+                Path
+            </th>
+        </thead>
+        <tbody>
+            <% for (var x = 0; x < traffic.avail_check_history.length ; x++){ %>
+                <tr>
+                    <td>
+                        <%= traffic.avail_check_history.data[x].timestamp %>
+                    </td>
+                    <td class='checkavail'>
+                        <%= traffic.avail_check_history.data[x].path %>
+                    </td>
+                </tr>
+            <% } %>
+        </tbody>
+    </table>
+</div>
+<div class='inline'>
+    <h3>Checkout - Total: <%= traffic.checkout_history.length %></h3>
+    <table>
+        <thead>
+            <th>
+                Path
+            </th>
+            <th>
+                Start Date
+            </th>
+            <th>
+                End Date
+            </th>
+        </thead>
+        <tbody>
+            <% for (var x = 0; x < traffic.checkout_history.length ; x++){ %>
+                <tr>
+                    <td class='checkavail'>
+                        <%= traffic.checkout_history.data[x].path %>
+                    </td>
+                    <td>
+                        <%= new Date(traffic.checkout_history.data[x].starttime).toLocaleDateString() %>
+                    </td>
+                    <td>
+                        <%= new Date(traffic.checkout_history.data[x].endtime).toLocaleDateString() %>
+                    </td>
+                </tr>
+            <% } %>
+        </tbody>
+    </table>
+</div>
