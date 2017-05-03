@@ -115,6 +115,20 @@ data_model.prototype.getCheckoutHistory = function(domain_name, callback){
 	listing_query(query, "Failed to get checkout history for " + domain_name + "!", callback, domain_name);
 }
 
+//gets all availability check history for a specific listing
+data_model.prototype.getCheckoutActions = function(domain_name, callback){
+	console.log("DB: Attempting to get checkout actions for domain: " + domain_name + "...");
+	query = 'SELECT \
+				stats_checkout_actions.rental_id, \
+				stats_checkout_actions.timestamp, \
+				stats_checkout_actions.user_ip, \
+				stats_checkout_actions.elem_id \
+			FROM stats_checkout_actions \
+			WHERE stats_checkout_actions.domain_name = ? \
+			ORDER BY timestamp DESC '
+	listing_query(query, "Failed to get checkout actions for " + domain_name + "!", callback, domain_name);
+}
+
 
 //----------------------------------------------------------------------SETS----------------------------------------------------------
 

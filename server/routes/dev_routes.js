@@ -177,8 +177,15 @@ function analysis(req, res, next){
                         length: result.info.length,
                         data: result.info
                     }
-                    res.render("dev/analysis.ejs", {
-                        traffic: traffic
+
+                    Data.getCheckoutActions(domain_name, function(result){
+                        traffic.checkout_actions = {
+                            length: result.info.length,
+                            data: result.info
+                        }
+                        res.render("dev/analysis.ejs", {
+                            traffic: traffic
+                        });
                     });
                 });
             });
