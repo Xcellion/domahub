@@ -12,6 +12,7 @@ var jsonParser = bodyParser.json()
 var urlencodedParser = bodyParser.urlencoded({ extended: true })
 
 var validator = require("validator");
+var node_env = process.env.NODE_ENV || 'dev'; 	//dev or prod bool
 
 module.exports = function(app, db, auth, error, stripe){
 	Listing = new listing_model(db);
@@ -225,6 +226,13 @@ module.exports = function(app, db, auth, error, stripe){
 		renter_functions.renderCheckout
 	]);
 
+	//track checkout behavior
+	app.post("/listing/:domain_name/checkouttrack", [
+		ifNotDev,
+		urlencodedParser,
+		renter_functions.addToCheckoutAction
+	]);
+
 	//redirect to the checkout page after validating times / path
 	app.post('/listing/:domain_name/checkout', [
 		urlencodedParser,
@@ -326,6 +334,16 @@ module.exports = function(app, db, auth, error, stripe){
 
 	//</editor-fold>
 
+}
+
+//function to check dev or not
+function ifNotDev(req, res, next){
+	if (node_env != "dev"){
+		next();
+	}
+	else {
+		res.sendStatus(200);
+	}
 }
 
 //function to check validity of domain name
