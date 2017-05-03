@@ -749,6 +749,7 @@ module.exports = {
             //what rental did it come from?
             if (req.query.camefrom && parseFloat(req.query.camefrom)){
                 history_info.rental_id = req.query.camefrom;
+                req.session.camefrom = req.query.camefrom;
             }
 
             console.log("F: Adding to search history...");
@@ -777,7 +778,7 @@ module.exports = {
                 timestamp: new Date().getTime(),	                                    //when they searched for it
                 user_ip : user_ip,
                 path: req.body.path,                                                     //what path did they want
-                rental_id: req.body.rental_id || null                                                     //what path did they want
+                rental_id: req.session.camefrom || null                                   //what rental they came from
             }
 
             console.log("F: Adding to search history...");
@@ -806,7 +807,8 @@ module.exports = {
                 user_ip : user_ip,
                 path: req.session.new_rental_info.path,                                 //what path did they want
                 starttime: req.session.new_rental_info.starttime,                       //what start time
-                endtime: req.session.new_rental_info.endtime,                         //what end time
+                endtime: req.session.new_rental_info.endtime,                           //what end time
+                rental_id: req.session.camefrom || null                                 //what rental they came from
             }
 
             console.log("F: Adding to search history...");
