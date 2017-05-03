@@ -182,3 +182,34 @@
         </tbody>
     </table>
 </div>
+<div class='inline'>
+    <h3>Checkout Actions - Total: <%= traffic.checkout_actions.length %></h3>
+    <table>
+        <thead>
+            <th>
+                Timestamp
+            </th>
+            <th>
+                Element Clicked
+            </th>
+            <th>
+                IP
+            </th>
+        </thead>
+        <tbody>
+            <% for (var x = 0; x < traffic.checkout_actions.length ; x++){ %>
+                <tr>
+                    <td>
+                        <%= new Date(traffic.checkout_actions.data[x].timestamp).toLocaleDateString() %>
+                    </td>
+                    <td>
+                        <%= traffic.checkout_actions.data[x].elem_id %>
+                    </td>
+                    <td class='checkavail'>
+                        <%= traffic.checkout_actions.data[x].user_ip %>
+                    </td>
+                </tr>
+            <% } %>
+        </tbody>
+    </table>
+</div>
