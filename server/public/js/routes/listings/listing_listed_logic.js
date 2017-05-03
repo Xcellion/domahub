@@ -37,15 +37,17 @@ $(document).ready(function() {
 
 	//tooltip appears too fast, hide until the above handler is in place.
 	$("#input-tooltip").fadeIn('slow');
+	console.log('WTF')
 
 	//function for input text validation and tooltip change
-	$("#typed-slash").on("keypress", function(e) {
-		var inp = String.fromCharCode(event.keyCode);
+	$("#typed-slash").on("keypress onkeypress", function(e) {
+		var code = e.charCode || e.keyCode;
+		var inp = String.fromCharCode(code);
 		//regex for alphanumeric
 		var validChar = /^[0-9a-zA-Z]+$/;
 
 		//logic to check alphanumeric input value
-		if (!inp.match(validChar) && e.keyCode != 13) {
+		if (!inp.match(validChar) && code != 13 && code != 8) {
 			e.preventDefault();
 			$("#input-tooltip-error").removeClass("is-hidden");
 		}
@@ -57,10 +59,12 @@ $(document).ready(function() {
 			$("#input-tooltip-error").addClass("is-hidden");
 		}
 	}).on('keyup', function(e){
+		var code = e.charCode || e.keyCode;
+
 		var validChar = /^[0-9a-zA-Z]+$/;
 
 		//enter to see calendar
-		if (e.keyCode == 13 && ($(this).val().match(validChar) || $(this).val() == "")){
+		if (code == 13 && ($(this).val().match(validChar) || $(this).val() == "")){
 			e.preventDefault();
 			//unfocus the typed JS
 			$(this).blur();
