@@ -222,6 +222,7 @@ module.exports = {
 				rental_id: rental_id,													//what rental they went to
 				account_id: (typeof req.user == "undefined") ? null : req.user.id,		//who searched if who exists
 				timestamp: new Date().getTime(),										//when they searched for it
+				referer: req.header("Referer") || req.headers.referer,										//when they searched for it
 				user_ip : user_ip														//their ip address
 			}
 			console.log("F: Adding to rental view stats...");

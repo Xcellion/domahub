@@ -92,10 +92,10 @@ data_model.prototype.getListingRentalTraffic = function(domain_name, callback){
 data_model.prototype.getAvailCheckHistory = function(domain_name, callback){
 	console.log("DB: Attempting to get avail check history for domain: " + domain_name + "...");
 	query = 'SELECT \
-				stats_availcheck_history.timestamp, \
-				stats_availcheck_history.path \
+				stats_availcheck_history.* \
 			FROM stats_availcheck_history \
-			WHERE stats_availcheck_history.domain_name = ?'
+			WHERE stats_availcheck_history.domain_name = ? \
+			ORDER BY timestamp DESC '
 	listing_query(query, "Failed to get avail check history for " + domain_name + "!", callback, domain_name);
 }
 
@@ -103,12 +103,14 @@ data_model.prototype.getAvailCheckHistory = function(domain_name, callback){
 data_model.prototype.getCheckoutHistory = function(domain_name, callback){
 	console.log("DB: Attempting to get checkout history for domain: " + domain_name + "...");
 	query = 'SELECT \
+				stats_checkout_history.rental_id, \
 				stats_checkout_history.timestamp, \
 				stats_checkout_history.path, \
 				stats_checkout_history.starttime, \
 				stats_checkout_history.endtime \
 			FROM stats_checkout_history \
-			WHERE stats_checkout_history.domain_name = ?'
+			WHERE stats_checkout_history.domain_name = ? \
+			ORDER BY timestamp DESC '
 	listing_query(query, "Failed to get checkout history for " + domain_name + "!", callback, domain_name);
 }
 

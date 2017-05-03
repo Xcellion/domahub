@@ -34,11 +34,11 @@
     $(document).ready(function(){
         $(".funnel-tbody-row").each(function(){
             var cur_row = $(this);
-            var first_view = cur_row.data("first-view");
-            var last_view = cur_row.data("last-view");
+            var rental_id = cur_row.data("rental-id");
+
             var check_avail_count = 0;
             for (var x = 0; x < traffic.avail_check_history.length; x++){
-                if (traffic.avail_check_history.data[x].timestamp >= first_view && traffic.avail_check_history.data[x].timestamp <= last_view){
+                if (traffic.avail_check_history.data[x].rental_id == rental_id){
                     check_avail_count++;
                 }
             }
@@ -48,7 +48,7 @@
         });
     });
 </script>
-<h1><%= traffic.domain_name %></h1>
+<h1><%= traffic.domain_name %> - Newest Data First</h1>
 <div class='inline'>
     <h3>User Funnel</h3>
     <table>
@@ -83,7 +83,7 @@
         </thead>
         <tbody id="funnel-tbody">
             <% for (var x = 0; x < traffic.rental_views.length ; x++){ %>
-                <tr class="funnel-tbody-row" data-last-view="<%= traffic.rental_views[x].max_ts %>" data-first-view="<%= traffic.rental_views[x].min_ts %>">
+                <tr class="funnel-tbody-row" data-rental-id="<%= traffic.rental_views[x].rental_id %>">
                     <td>
                         <%= traffic.rental_views[x].path %>
                     </td>
@@ -130,15 +130,21 @@
             <th>
                 Path
             </th>
+            <th>
+                IP
+            </th>
         </thead>
         <tbody>
             <% for (var x = 0; x < traffic.avail_check_history.length ; x++){ %>
                 <tr>
                     <td>
-                        <%= traffic.avail_check_history.data[x].timestamp %>
+                        <%= new Date(traffic.avail_check_history.data[x].timestamp).toLocaleDateString() %>
                     </td>
                     <td class='checkavail'>
                         <%= traffic.avail_check_history.data[x].path %>
+                    </td>
+                    <td class='checkavail'>
+                        <%= traffic.avail_check_history.data[x].user_ip %>
                     </td>
                 </tr>
             <% } %>
