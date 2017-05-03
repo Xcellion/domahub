@@ -173,11 +173,6 @@ function createTickerRow(rental, now){
 	var end_moment = moment(rental.date + rental.duration);
 	var ticker_clone = $("#ticker-clone").clone().removeAttr('id').removeClass('is-hidden');
 
-	//where have they been sending traffic??
-	var rental_path = (rental.path) ? "/" + rental.path : "";
-	var rental_preview = "http://" + listing_info.domain_name + rental_path;
-	var path = (rental.path == "" || !rental.path) ? "this website" : listing_info.domain_name + "<a href='" + rental_preview + "' class='is-accent'>" + "/" + rental.path + '</a>';
-
 	//user name or anonymous
 	var ticker_user = (rental.username) ? rental.username : "An anonymous user";
 	ticker_clone.find(".ticker-user").text(ticker_user + " ");
@@ -201,17 +196,24 @@ function createTickerRow(rental, now){
 	var ticker_pre_tense = "";
 	var ticker_verb_tense = "ed";
 
+	//where have they been sending traffic??
+	var rental_path = (rental.path) ? "/" + rental.path : "";
+	var rental_preview = "http://" + listing_info.domain_name + rental_path;
+
+
 	//rental is in the past
 	if (end_moment.isBefore(now)){
 		ticker_verb_tense = "ed";
 
 		//where have they sent traffic??
 		var rental_preview = "/listing/" + listing_info.domain_name + "/" + rental.rental_id;
+		var path = (rental.path == "" || !rental.path) ? "this website" : listing_info.domain_name + "<a class='is-accent'>" + "/" + rental.path + '</a>';
 	}
 	//rental ends in the future but started in the past
 	else {
 		ticker_pre_tense = "is "
 		ticker_verb_tense = "ing";
+		var path = (rental.path == "" || !rental.path) ? "<a href='" + rental_preview + "' class='is-accent'>this website</a>" : listing_info.domain_name + "<a href='" + rental_preview + "' class='is-accent'>" + "/" + rental.path + '</a>';
 
 		if (rental.views > 0){
 			var ticker_time = " in <span>" + moment.duration(start_moment.diff(now)).humanize() + "</span>";
@@ -235,21 +237,21 @@ function createTickerRow(rental, now){
 
 		//showing an image
 		if (rental.address.match(/\.(jpeg|jpg|png|bmp)$/) != null){
-			var ticker_type = ticker_pre_tense + " us" + ticker_verb_tense + " " + path + " to display <a target='_blank' href=" + rental_preview + " class='is-info is-underlined'>an image</a>";
+			var ticker_type = ticker_pre_tense + " us" + ticker_verb_tense + " " + path + " to display <a target='_blank' href=" + rental.address + " class='is-info is-underlined'>an image</a>";
 			ticker_icon_color.addClass('is-info');
 			ticker_icon.addClass('fa-camera-retro');
 		}
 
 		//showing a GIF
 		else if (rental.address.match(/\.(gif)$/) != null){
-			var ticker_type = ticker_pre_tense + " us" + ticker_verb_tense + " " + path + " to display <a target='_blank' href=" + rental_preview + " class='is-info is-underlined'>a GIF</a>";
+			var ticker_type = ticker_pre_tense + " us" + ticker_verb_tense + " " + path + " to display <a target='_blank' href=" + rental.address + " class='is-info is-underlined'>a GIF</a>";
 			ticker_icon_color.addClass('is-dark');
 			ticker_icon.addClass('fa-smile-o');
 		}
 
 		//showing a PDF
 		else if (rental.address.match(/\.(pdf)$/) != null){
-			var ticker_type = ticker_pre_tense + " us" + ticker_verb_tense + " " + path + " to display <a target='_blank' href=" + rental_preview + " class='is-info is-underlined'>a PDF</a>";
+			var ticker_type = ticker_pre_tense + " us" + ticker_verb_tense + " " + path + " to display <a target='_blank' href=" + rental.address + " class='is-info is-underlined'>a PDF</a>";
 			ticker_icon_color.addClass('is-danger');
 			ticker_icon.addClass('fa-file-pdf-o');
 		}
@@ -257,7 +259,7 @@ function createTickerRow(rental, now){
 		//showing a website
 		else if (rental.address){
 			var ticker_address = getHost(rental.address);
-			var ticker_type = ticker_pre_tense + " us" + ticker_verb_tense + " " + path + " to display content from <a target='_blank' href=" + rental_preview + " class='is-info is-underlined'>" + ticker_address + "</a>";
+			var ticker_type = ticker_pre_tense + " us" + ticker_verb_tense + " " + path + " to display content from <a target='_blank' href=" + rental.address + " class='is-info is-underlined'>" + ticker_address + "</a>";
 			ticker_icon_color.addClass('is-primary');
 			ticker_icon.addClass('fa-external-link');
 		}
@@ -272,7 +274,7 @@ function createTickerRow(rental, now){
 	//forward the domain
 	else {
 		var ticker_address = getHost(rental.address);
-		var ticker_type = ticker_pre_tense + "forward" + ticker_verb_tense + " " + path + " to <a target='_blank' href='http://" + listing_info.domain_name + "/" + rental.path + "' class='is-info is-underlined'>" + ticker_address + "</a>";
+		var ticker_type = ticker_pre_tense + "forward" + ticker_verb_tense + " " + path + " to <a target='_blank' href='" + rental.address + "' class='is-info is-underlined'>" + ticker_address + "</a>";
 		ticker_icon_color.addClass('is-accent');
 		ticker_icon.addClass('fa-share-square');
 	}
