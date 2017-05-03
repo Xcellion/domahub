@@ -4,6 +4,7 @@ data_model = function(database){
 	data_query = function(query, error_description, callback, params){
 		database.query(query, function(result, err){
 			if (err){
+				console.log(err);
 				callback({
 					state : "error",
 					info : error_description,
@@ -147,6 +148,14 @@ data_model.prototype.newCheckoutHistory = function(history_info, callback){
 	query = "INSERT INTO stats_checkout_history \
 			SET ? "
 	data_query(query, "Failed to add checkout check history item for domain:" + history_info.domain_name + "!", callback, history_info);
+}
+
+//creates a new entry for a checkout action data row
+data_model.prototype.newCheckoutAction = function(history_info, callback){
+	console.log("DB: Adding new checkout action item for domain: " + history_info.domain_name + "...");
+	query = "INSERT INTO stats_checkout_actions \
+			SET ? "
+	data_query(query, "Failed to add checkout check action item for domain:" + history_info.domain_name + "!", callback, history_info);
 }
 
 // //creates new rental times for unavailable listings
