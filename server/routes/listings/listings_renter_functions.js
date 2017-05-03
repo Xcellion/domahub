@@ -743,7 +743,8 @@ module.exports = {
                 account_id: account_id,			//who searched if who exists
                 domain_name: req.params.domain_name.toLowerCase(),		//what they searched for
                 timestamp: now,		//when they searched for it
-                user_ip : user_ip
+                user_ip : user_ip,
+                referer : req.header("Referer") || req.headers.referer
             }
 
             //what rental did it come from?
