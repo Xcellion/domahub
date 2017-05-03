@@ -29,12 +29,13 @@ module.exports = data_model;
 data_model.prototype.getListingTraffic = function(domain_name, callback){
 	console.log("DB: Attempting to get traffic for domain: " + domain_name + "...");
 	query = "SELECT \
-    		2592000000 * (stats_search_history.timestamp div 2592000000) as 'from', \
-    		2592000000 * (stats_search_history.timestamp div 2592000000) + 2629746000 as 'to', \
+    		2592000000 * (stats_search_history.timestamp div 2592000000) as 'from_time', \
+    		2592000000 * (stats_search_history.timestamp div 2592000000) + 2629746000 as 'to_time', \
     		COUNT(*) as views \
 			FROM stats_search_history \
 		WHERE domain_name = ? \
-		GROUP BY stats_search_history.timestamp div 2592000000"
+		GROUP BY stats_search_history.timestamp div 2592000000 \
+		ORDER BY from_time DESC "
 	data_query(query, "Failed to get traffic for domain: " + domain_name + "!", callback, domain_name);
 }
 
