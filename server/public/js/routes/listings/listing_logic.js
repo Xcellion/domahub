@@ -173,7 +173,10 @@ function createTickerRow(rental, now){
 	var end_moment = moment(rental.date + rental.duration);
 	var ticker_clone = $("#ticker-clone").clone().removeAttr('id').removeClass('is-hidden');
 
-	var path = (rental.path == "" || !rental.path) ? "this website" : listing_info.domain_name + "/" + rental.path;
+	//where have they been sending traffic??
+	var rental_path = (rental.path) ? "/" + rental.path : "";
+	var rental_preview = "http://" + listing_info.domain_name + rental_path;
+	var path = (rental.path == "" || !rental.path) ? "this website" : listing_info.domain_name + "<a href='" + rental_preview + "' class='is-accent'>" + "/" + rental.path + '</a>';
 
 	//user name or anonymous
 	var ticker_user = (rental.username) ? rental.username : "An anonymous user";
@@ -196,7 +199,7 @@ function createTickerRow(rental, now){
 
 	//word tense
 	var ticker_pre_tense = "";
-	var ticker_verb_tense = "";
+	var ticker_verb_tense = "ed";
 
 	//rental is in the past
 	if (end_moment.isBefore(now)){
@@ -207,17 +210,17 @@ function createTickerRow(rental, now){
 	}
 	//rental ends in the future but started in the past
 	else {
-		ticker_pre_tense = "has been "
+		ticker_pre_tense = "is "
 		ticker_verb_tense = "ing";
-		var ticker_time = " since <span>" + moment.duration(start_moment.diff(now)).humanize(true) + "</span>";
+
 		if (rental.views > 0){
+			var ticker_time = " in <span>" + moment.duration(start_moment.diff(now)).humanize() + "</span>";
 			var ticker_views_plural = ticker_views_plural.replace("in ", "");
 			ticker_reach = "--reaching <span class='is-primary'>" + ticker_views_format + "</span>" + ticker_views_plural;
 		}
-
-		//where have they been sending traffic??
-		var rental_path = (rental.path) ? "/" + rental.path : "";
-		var rental_preview = "http://" + listing_info.domain_name + rental_path;
+		else {
+			var ticker_time = " for <span>" + moment.duration(start_moment.diff(now)).humanize() + "</span>";
+		}
 	}
 
 	//update time / reach
@@ -232,21 +235,21 @@ function createTickerRow(rental, now){
 
 		//showing an image
 		if (rental.address.match(/\.(jpeg|jpg|png|bmp)$/) != null){
-			var ticker_type = ticker_pre_tense + "display" + ticker_verb_tense + " <a target='_blank' href=" + rental_preview + " class='is-accent is-underlined'>an image</a> on " + path;
+			var ticker_type = ticker_pre_tense + " us" + ticker_verb_tense + " " + path + " to display <a target='_blank' href=" + rental_preview + " class='is-info is-underlined'>an image</a>";
 			ticker_icon_color.addClass('is-info');
 			ticker_icon.addClass('fa-camera-retro');
 		}
 
 		//showing a GIF
 		else if (rental.address.match(/\.(gif)$/) != null){
-			var ticker_type = ticker_pre_tense + "display" + ticker_verb_tense + " <a target='_blank' href=" + rental_preview + " class='is-accent is-underlined'>a GIF</a> on " + path;
+			var ticker_type = ticker_pre_tense + " us" + ticker_verb_tense + " " + path + " to display <a target='_blank' href=" + rental_preview + " class='is-info is-underlined'>a GIF</a>";
 			ticker_icon_color.addClass('is-dark');
 			ticker_icon.addClass('fa-smile-o');
 		}
 
 		//showing a PDF
 		else if (rental.address.match(/\.(pdf)$/) != null){
-			var ticker_type = ticker_pre_tense + "display" + ticker_verb_tense + " <a target='_blank' href=" + rental_preview + " class='is-accent is-underlined'>a PDF</a> on " + path;
+			var ticker_type = ticker_pre_tense + " us" + ticker_verb_tense + " " + path + " to display <a target='_blank' href=" + rental_preview + " class='is-info is-underlined'>a PDF</a>";
 			ticker_icon_color.addClass('is-danger');
 			ticker_icon.addClass('fa-file-pdf-o');
 		}
@@ -254,14 +257,14 @@ function createTickerRow(rental, now){
 		//showing a website
 		else if (rental.address){
 			var ticker_address = getHost(rental.address);
-			var ticker_type = ticker_pre_tense + "display" + ticker_verb_tense + " content from <a target='_blank' href=" + rental_preview + " class='is-accent is-underlined'>" + ticker_address + "</a> on " + path;
+			var ticker_type = ticker_pre_tense + " us" + ticker_verb_tense + " " + path + " to display content from <a target='_blank' href=" + rental_preview + " class='is-info is-underlined'>" + ticker_address + "</a>";
 			ticker_icon_color.addClass('is-primary');
 			ticker_icon.addClass('fa-external-link');
 		}
 
 		//showing nothing
 		else {
-			var ticker_type = ticker_pre_tense + "display" + ticker_verb_tense + " nothing on " + path;
+			var ticker_type = ticker_pre_tense + " us" + ticker_verb_tense + " " + path + " to display nothing";
 			ticker_icon_color.addClass('is-black');
 			ticker_icon.addClass('fa-times-circle-o');
 		}
@@ -269,7 +272,7 @@ function createTickerRow(rental, now){
 	//forward the domain
 	else {
 		var ticker_address = getHost(rental.address);
-		var ticker_type = ticker_pre_tense + "forward" + ticker_verb_tense + " " + path + " to <a target='_blank' href='http://" + listing_info.domain_name + "/" + rental.path + "' class='is-accent is-underlined'>" + ticker_address + "</a>";
+		var ticker_type = ticker_pre_tense + "forward" + ticker_verb_tense + " " + path + " to <a target='_blank' href='http://" + listing_info.domain_name + "/" + rental.path + "' class='is-info is-underlined'>" + ticker_address + "</a>";
 		ticker_icon_color.addClass('is-accent');
 		ticker_icon.addClass('fa-share-square');
 	}
@@ -293,7 +296,7 @@ function pastViewsTickerRow(){
 				last_month_views += listing_info.traffic[x].views;
 			}
 		}
-		var ticker_latest_date_human = ticker_latest_date.humanize(true);
+		var ticker_latest_date_human = ticker_latest_date.humanize().replace("a ", "").replace("an ", "");
 	}
 	else {
 		var last_month_views = listing_info.traffic[0].views;
