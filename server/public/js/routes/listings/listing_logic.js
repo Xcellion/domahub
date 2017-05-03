@@ -427,6 +427,8 @@ function createTrafficChart(){
 			y: traffic[x].views
 		});
 	}
+
+	//add one extra month
 	traffic_data.unshift({
 		x: moment().endOf("month").subtract(traffic.length, "month").valueOf(),
 		y: 0
