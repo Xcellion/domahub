@@ -8,7 +8,7 @@ module.exports = function(app, auth){
 
 	//cant access these routes if they are logged in
 	app.get([
-		// '/signup',
+		'/signup',
 		'/forgot'
 	], [
 		auth.isNotLoggedIn,
@@ -22,7 +22,7 @@ module.exports = function(app, auth){
 		auth.checkCode,
 		auth.signup,
 		auth.signupCode
-	])
+	]);
 
 	//to render reset/verify page
 	app.get("/reset/:token", [
