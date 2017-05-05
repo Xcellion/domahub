@@ -6,8 +6,6 @@
 		<title>Browse Listings - DomaHub</title>
 		<link rel="stylesheet" href="/css/min/listing_404.min.css" type="text/css" />
 		<link rel="stylesheet" href="/css/min/listing_hub.min.css" type="text/css" />
-		<link rel="stylesheet" href="/css/lib/flatpickr.min.css" type="text/css" />
-		<link rel="stylesheet" href="/css/lib/nouislider.min.css" type="text/css" />
   	<%- include("../templates/head_links"); %>
 	</head>
 
@@ -15,291 +13,50 @@
 
 		<%- include("../templates/navbar", {user: user}); %>
 
-		<section class="section is-medium-top">
-			<!-- <div class="container is-fluid">
-				<div class="columns">
-					<div id="table-wrapper" class="is-hidden">
-						<div class="columns is-gapless">
-							<div class="column is-1 is-hidden-1160px-min">
-								<div class="hamburger is-filter-menu is-black">
-									<span></span>
-									<span></span>
-									<span></span>
-								</div>
-							</div>
-							<div class="column is-8-desktop">
-								<p class="control has-icon has-addons">
-									<input id="domain_name-input" class="input is-medium is-expanded" tabindex="0" type="text" placeholder="Search domains" />
-									<i class="fa fa-search"></i>
-									<a id="submit-button" class="button no-shadow is-primary is-medium">Submit</a>
-									<a id="filter-open-button" class="button no-shadow is-medium is-hidden">Filters</a>
-								</p>
-							</div>
-						</div>
-						<table id="listings-table" class="table margin-top-15">
-							<thead>
-								<tr>
-									<th>
-										Domain Name
-										<span class="icon is-small is-active sort-desc is-hidden"><i class="fa fa-sort-desc"></i></span>
-										<span class="icon is-small is-active sort-asc is-hidden"><i class="fa fa-sort-asc"></i></span>
-										<span class="icon is-small sort-none is-disabled"><i class="fa fa-sort"></i></span>
-									</th>
-									<th id="availability-th">
-										Availability
-									</th>
-									<th>
-										Categories
-										<span class="icon is-small is-active sort-desc is-hidden"><i class="fa fa-sort-desc"></i></span>
-										<span class="icon is-small is-active sort-asc is-hidden"><i class="fa fa-sort-asc"></i></span>
-										<span class="icon is-small sort-none is-disabled"><i class="fa fa-sort"></i></span>
-									</th>
-									<th class="td-price">
-										Hourly
-										<span class="icon is-small is-active sort-desc is-hidden"><i class="fa fa-sort-desc"></i></span>
-										<span class="icon is-small is-active sort-asc is-hidden"><i class="fa fa-sort-asc"></i></span>
-										<span class="icon is-small sort-none is-disabled"><i class="fa fa-sort"></i></span>
-									</th>
-									<th class="td-price">
-										Daily
-										<span class="icon is-small is-active sort-desc is-hidden"><i class="fa fa-sort-desc"></i></span>
-										<span class="icon is-small is-active sort-asc is-hidden"><i class="fa fa-sort-asc"></i></span>
-										<span class="icon is-small sort-none is-disabled"><i class="fa fa-sort"></i></span>
-									</th>
-									<th class="td-price">
-										Weekly
-										<span class="icon is-small is-active sort-desc is-hidden"><i class="fa fa-sort-desc"></i></span>
-										<span class="icon is-small is-active sort-asc is-hidden"><i class="fa fa-sort-asc"></i></span>
-										<span class="icon is-small sort-none is-disabled"><i class="fa fa-sort"></i></span>
-									</th>
-									<th class="td-price">
-										Monthly
-										<span class="icon is-small is-active sort-desc is-hidden"><i class="fa fa-sort-desc"></i></span>
-										<span class="icon is-small is-active sort-asc is-hidden"><i class="fa fa-sort-asc"></i></span>
-										<span class="icon is-small sort-none is-disabled"><i class="fa fa-sort"></i></span>
-									</th>
-								</tr>
-							</thead>
-							<tbody>
-							</tbody>
-						</table>
-					</div>
-				</div> -->
+		<section class="section is-medium min-height">
 				<div class="container">
-					<div class="content">
-						<h1 class="is-title">
-							Featured Domains
-						</h1>
-					</div>
-					<div class="domain-tile-wrapper">
-						<div tabindex="0" class="domain-tile">
-							<div class="img-wrapper">
-								<div class="flex-column-center">
-									<h1 class="domain-title is-white">1qlee.com</h1>
-									<span class="tag is-primary is-medium is-bold">$25 / mo</span>
-									<p class="category-tag is-white">
-										Personal
-									</p>
-								</div>
-							</div>
-						</div>
-						<div tabindex="0" class="domain-tile">
-							<div class="img-wrapper">
-								<div class="flex-column-center">
-									<h1 class="domain-title is-white">imsorryimdumb.com</h1>
-									<span class="tag is-primary is-medium is-bold">$10 / wk</span>
-									<p class="category-tag is-white">
-										Card
-									</p>
-								</div>
-							</div>
-						</div>
-						<div tabindex="0" class="domain-tile">
-							<div class="img-wrapper">
-								<div class="flex-column-center">
-									<h1 class="domain-title is-white">happybirthday.com</h1>
-									<span class="tag is-primary is-medium is-bold">$10 / hr</span>
-									<p class="category-tag is-white">
-										Event
-									</p>
-								</div>
-							</div>
-						</div>
-						<div tabindex="0" class="domain-tile">
-							<div class="img-wrapper">
-								<div class="flex-column-center">
-									<h1 class="domain-title is-white">monkeyfuckers.com</h1>
-									<span class="tag is-primary is-medium is-bold">$10 / hr</span>
-									<p class="category-tag is-white">
-										Event
-									</p>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</section>
-
-		<section class="section min-height is-light">
-			<div class="container">
-				<div class="columns">
-					<div class="column">
-						<p class="control has-icon has-addons margin-bottom-0">
-							<input id="domain-name-input" class="input is-medium" tabindex="0" type="text" placeholder="Press enter to search domains" />
+						<div class="control has-icon has-addons">
+							<input id="domain-name-input" class="input is-medium" tabindex="0" type="text" placeholder="Search domains" />
 							<i class="fa fa-search"></i>
-							<a tabindex="0" class="button is-primary is-medium no-shadow is-hidden-mobile">Search</a>
-							<a tabindex="0" id="filter-open-button" class="button is-medium no-shadow is-hidden-mobile">
-								<span>Apply Filters</span>
-								<span class="icon">
-									<i class="fa fa-angle-down"></i>
-								</span>
-							</a>
-							<a tabindex="0" id="filter-open-button-mobile" class="button is-primary no-shadow is-medium is-hidden-tablet">
-								<span class="icon">
-									<i class="fa fa-bars"></i>
-								</span>
-							</a>
-						</p>
-
-						<div id="filter-dropdown" class="is-hidden">
-							<div class="control is-horizontal has-border-bottom">
-								<div class="control is-grouped">
-									<div class="control is-horizontal">
-										<div class="control-label is-medium">
-											<label class="label">Date Range</label>
-										</div>
-										<input id="start_date-input" class="flatpickr input is-expanded" tabindex="0" type="text" placeholder="Rental Start Date">
-									</div>
-								</div>
-							</div>
-							<div class="control is-horizontal has-border-bottom">
-								<div class="control-label">
-									<label class="label">Price / Rate</label>
-								</div>
-								<div id="slider-control" class="control is-grouped">
-									<div class="control">
-										<span class="select">
-											<select id="category-input">
-												<option selected disabled>Select Rate</option>
-												<option value="none">None</option>
-												<option value="hour_price">Hourly</option>
-												<option value="day_price">Daily</option>
-												<option value="week_price">Weekly</option>
-												<option value="month_price">Monthly</option>
-												<%# <option>Yearly</option>%>
-											</select>
-										</span>
-									</div>
-									<div class="control has-slider">
-										<div id="slider" class="margin-bottom-50"></div>
-									</div>
-								</div>
-							</div>
-							<div class="control is-horizontal has-border-bottom">
-								<div class="control-label is-large">
-									<label class="label">Domain Length</label>
-								</div>
-								<div class="control has-slider">
-									<div id="sliderSmall" class="margin-bottom-35"></div>
-								</div>
-							</div>
-							<div class="control">
-								<label class="label">Categories</label>
-								<form class="control checkbox-form is-flex-wrap">
-									<%# using for loop to generate all categories %>
-									<% for (var x = 0; x < categories_front.length; x++) {%>
-										<div class="checkbox-wrapper">
-											<input class="cat-checkbox" value="<%= categories_back[x] %>" id="cb<%= x %>" type="checkbox" />
-											<label class="label" tabindex="0" for="cb<%= x %>"><%= categories_front[x] %></label>
-										</div>
-									<% } %>
-								</form>
-							</div>
+							<a tabindex="0" class="button is-primary is-stylish no-shadow">Submit</a>
 						</div>
-
-						<nav class="level margin-top-10">
-							<div class="level-left">
-								<p class="level-item is-bold">
-									2 Domains
+						<div class="content">
+							<h2 id="total-domains">
+								1,000 Domains
+							</h2>
+						</div>
+						<div id="domain-table">
+							<a class="domain-listing">
+								<p class="domain-name">whatsup.com</p>
+								<p class="domain-price">
+									$10 / mo
 								</p>
-							</div>
-							<div class="level-right">
-								<div class="level-item">
-									<span class="select is-medium">
-										<select tabindex="0">
-											<option>Sort By</option>
-											<option>Name: A - Z</option>
-											<option>Name: Z - A</option>
-											<option>Price: Ascending</option>
-											<option>Price: Descending</option>
-											<option>Rate: Hour to Month</option>
-											<option>Rate: Month to Hour</option>
-										</select>
-									</span>
-								</div>
-							</div>
-						</nav>
-
-						<nav class="level">
-							<div class="level-right">
-								<div class="level-item">
-									<span class="tag filter-tag">
-										Month
-										<button tabindex="0" class="delete is-small"></button>
-									</span>
-									<span class="tag filter-tag">
-										$5 - 25
-										<button tabindex="0" class="delete is-small"></button>
-									</span>
-									<span class="tag filter-tag">
-										Business
-										<button tabindex="0" class="delete is-small"></button>
-									</span>
-								</div>
-							</div>
-						</nav>
-
-					</div>
-				</div>
-
-				<div class="columns">
-					<div class="column">
-						<div class="box is-domain-listing" tabindex="0">
-							<div class="columns">
-								<div class="column is-6">
-									<div class="content">
-										<h3 class="is-bold is-primary domain-name">whatsup.com</h3>
-									</div>
-								</div>
-								<div class="column is-3">
-									<div class="content">
-										<h3 class="is-bold">$10 / mo</h3>
-									</div>
-								</div>
-								<div class="column is-3">
-									<span class="tag is-accent">Business</span>
-								</div>
-							</div>
+							</a>
+							<a class="domain-listing">
+								<p class="domain-name">coffee.com</p>
+								<p class="domain-price">
+									$10 / mo
+								</p>
+							</a>
+							<a class="domain-listing">
+								<p class="domain-name">suckadick.com</p>
+								<p class="domain-price">
+									$99.99 / mo
+								</p>
+							</a>
+							<a class="domain-listing">
+								<p class="domain-name">boothbabesinbabylonwhatsupmyhomiesthisiswhereidomybiz.com</p>
+								<p class="domain-price">
+									$9993339 / mo
+								</p>
+							</a>
 						</div>
-						<div class="box is-domain-listing" tabindex="0">
-							<div class="columns">
-								<div class="column is-6">
-									<div class="content">
-										<h3 class="is-bold is-primary domain-name">coffee.com</h3>
-									</div>
-								</div>
-								<div class="column is-3">
-									<div class="content">
-										<h3 class="is-bold">$25 / mo</h3>
-									</div>
-								</div>
-								<div class="column is-3">
-									<span class="tag is-accent">Business</span>
-								</div>
-							</div>
+						<div class="control is-grouped-center margin-top-20">
+							<button id="load-button" class="button no-shadow">
+								<span class="icon is-small"><i class="fa fa-refresh"></i></span>
+								<span>Load More</span>
+							</button>
 						</div>
-					</div>
 				</div>
 			</div>
 		</section>
@@ -307,9 +64,7 @@
 		<%- include("../templates/footer"); %>
 		<%- include("../templates/js_scripts"); %>
 		<script src="/js/lib/moment.min.js" type="text/javascript"></script>
-		<script src="/js/lib/nouislider.min.js" type="text/javascript"></script>
 		<script src="/js/lib/wNumb.js" type="text/javascript"></script>
-		<script src="/js/lib/flatpickr.min.js" type="text/javascript"></script>
 		<script type="text/javascript">
 			var categories_front = <% if(typeof categories_front != "undefined"){ %><%-JSON.stringify(categories_front)%><% }else{ %>""<% } %>;
 			var categories_back = <% if(typeof categories_back != "undefined"){ %><%-JSON.stringify(categories_back)%><% }else{ %>""<% } %>;
