@@ -191,6 +191,7 @@ listing_model.prototype.getCurrentRental = function(domain_name, path, callback)
 	query = "SELECT \
 				rentals.*,\
 				listings.domain_name,\
+				listings.description_hook,\
 				listings.id,\
 				rental_times.date,\
 				rental_times.duration \

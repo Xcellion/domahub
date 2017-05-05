@@ -14,6 +14,7 @@ $(document).ready(function () {
         $(this).addClass("is-hidden");
         $("#new-user-email").focus();
         $("#email-balloon").removeClass('is-hidden');
+        $("#email-skip").removeClass('is-hidden');
         showMessage("guest-regular-message", "Enter your email below.");
     });
 
@@ -26,6 +27,11 @@ $(document).ready(function () {
         else {
             showMessage("log-error-message");
         }
+    });
+
+    $("#email-skip").on('click', function(){
+        showStep("site");
+        showMessage("address-regular-message");
     });
 
     //enter in an email for guests
@@ -251,7 +257,28 @@ $(document).ready(function () {
         showMessage(which_address);
     });
 
+    //--------------------------------------------------------------------------------------------------------- BEHAVIOR TRACKER
+
+    $(".checkout-track").on("click", function(){
+        console.log("CLICKED")
+        trackCheckoutBehavior($(this).attr("id"));
+    });
+
 });
+
+//used to see what people are doing on this checkout page
+function trackCheckoutBehavior(id){
+    $.ajax({
+        url: "/listing/" + listing_info.domain_name + "/checkouttrack",
+        method: "POST",
+        async: true,
+        data: {
+            elem_id : id
+        }
+    }).done(function(data){
+        console.log(data);
+    });
+}
 
 //function to show a specific message, hide all others
 function showMessage(message_id, text){
@@ -339,17 +366,23 @@ function submitStripe(checkout_button){
 
 //submit for a new rental
 function submitNewRental(stripeToken){
+    var data_for_submit = {
+        starttime: new_rental_info.starttime,
+        endtime: new_rental_info.endtime,
+        address: $(".input-selected").val(),
+        stripeToken: stripeToken,
+        rental_type: ($(".input-selected").attr("id") == "address-forward-input") ? 1 : 0
+    }
+
+    //optional email
+    if ($("#new-user-email").val()){
+        data_for_submit.new_user_email = $("#new-user-email").val();
+    }
+
     $.ajax({
         type: "POST",
         url: "/listing/" + listing_info.domain_name + "/rent",
-        data: {
-            starttime: new_rental_info.starttime,
-            endtime: new_rental_info.endtime,
-            new_user_email: $("#new-user-email").val(),
-            address: $(".input-selected").val(),
-            stripeToken: stripeToken,
-            rental_type: ($(".input-selected").attr("id") == "address-forward-input") ? 1 : 0
-        }
+        data: data_for_submit
     }).done(function(data){
         $("#checkout-button").removeClass('is-loading');
         if (data.unavailable){
@@ -424,7 +457,7 @@ function successHandler(rental_id, owner_hash_id){
         $("#rental-link-input").val("https://domahub.com/listing/" + listing_info.domain_name + "/" + rental_id + "/" + owner_hash_id).on("click", function(){
             $(this).select();
         });
-        $("#rental-link-button").on("click", function(){
+        $("#rental-link-copy").on("click", function(){
             $("#rental-link-input").select();
             document.execCommand("copy");
             $("#rental-link-input").blur();

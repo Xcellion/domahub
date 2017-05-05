@@ -728,27 +728,20 @@ module.exports = {
     addToSearchHistory : function(req, res, next){
         //add to search only if we went directly to listing
         if (!req.session.from_api && node_env != "dev"){
-            var user_ip = req.headers['x-forwarded-for'] ||
-            req.connection.remoteAddress ||
-            req.socket.remoteAddress;
-
-            //nginx https proxy removes IP
-            if (req.headers["x-real-ip"]){
-                user_ip = req.headers["x-real-ip"];
-            }
-
             var account_id = (typeof req.user == "undefined") ? null : req.user.id;
             var now = new Date().getTime();
             var history_info = {
                 account_id: account_id,			//who searched if who exists
                 domain_name: req.params.domain_name.toLowerCase(),		//what they searched for
                 timestamp: now,		//when they searched for it
-                user_ip : user_ip
+                user_ip : getIP(req),
+                referer : req.header("Referer") || req.headers.referer
             }
 
             //what rental did it come from?
             if (req.query.camefrom && parseFloat(req.query.camefrom)){
                 history_info.rental_id = req.query.camefrom;
+                req.session.camefrom = req.query.camefrom;
             }
 
             console.log("F: Adding to search history...");
@@ -762,21 +755,13 @@ module.exports = {
     addToAvailCheckHistory : function(req, res, next){
         //add to search only if not dev
         if (node_env != "dev"){
-            var user_ip = req.headers['x-forwarded-for'] ||
-            req.connection.remoteAddress ||
-            req.socket.remoteAddress;
-
-            //nginx https proxy removes IP
-            if (req.headers["x-real-ip"]){
-                user_ip = req.headers["x-real-ip"];
-            }
-
             var history_info = {
                 account_id: (typeof req.user == "undefined") ? null : req.user.id,      //who searched if who exists
                 domain_name: req.params.domain_name.toLowerCase(),		                 //what they searched for
                 timestamp: new Date().getTime(),	                                    //when they searched for it
-                user_ip : user_ip,
-                path: req.body.path                                                     //what path did they want
+                user_ip : getIP(req),
+                path: req.body.path,                                                     //what path did they want
+                rental_id: req.session.camefrom || null                                   //what rental they came from
             }
 
             console.log("F: Adding to search history...");
@@ -789,29 +774,90 @@ module.exports = {
     addToCheckoutHistory : function(req, res, next){
         //add to search only if not dev
         if (node_env != "dev"){
-            var user_ip = req.headers['x-forwarded-for'] ||
-            req.connection.remoteAddress ||
-            req.socket.remoteAddress;
-
-            //nginx https proxy removes IP
-            if (req.headers["x-real-ip"]){
-                user_ip = req.headers["x-real-ip"];
-            }
-
             var history_info = {
                 account_id: (typeof req.user == "undefined") ? null : req.user.id,      //who searched if who exists
                 domain_name: req.params.domain_name.toLowerCase(),		                //what they searched for
                 timestamp: new Date().getTime(),	                                    //when they searched for it
-                user_ip : user_ip,
+                user_ip : getIP(req),
                 path: req.session.new_rental_info.path,                                 //what path did they want
                 starttime: req.session.new_rental_info.starttime,                       //what start time
-                endtime: req.session.new_rental_info.endtime,                         //what end time
+                endtime: req.session.new_rental_info.endtime,                           //what end time
+                price: req.session.new_rental_info.price,                               //what price
+                rental_id: req.session.camefrom || null                                 //what rental they came from
             }
 
             console.log("F: Adding to search history...");
             Data.newCheckoutHistory(history_info, function(result){if (result.state == "error") {console.log(result)}});	//async
         }
         next();
+    },
+
+    //function to checkout track
+    addToCheckoutAction(req, res, next){
+        var valid_ids = [
+            'login-navbar',
+            'step-header-log',
+            'login-checkout',
+            'guest-button',
+            'new-user-email',
+            'guest-submit',
+            'email-skip',
+            'step-header-site',
+            'forward-choice',
+            'link-choice',
+            'build-choice',
+            'address-forward-input',
+            'forward-submit',
+            'linkedin-example',
+            'facebook-example',
+            'instagram-example',
+            'address-link-input',
+            'link-submit',
+            'imgur-example',
+            'googleimages-example',
+            'reddit-example',
+            'address-build-input',
+            'build-submit',
+            'googlesites-example',
+            'weebly-example',
+            'squarespace-example',
+            'wix-example',
+            'shopify-example',
+            'site-cancel',
+            'step-header-payment',
+            'back-to-address-button',
+            'checkout-button',
+            'rental-link-input',
+            'rental-link-copy',
+            'rental-preview-button',
+            'edit-dates-path'
+        ]
+
+        //check to make sure the ids are legit
+        if (valid_ids.indexOf(req.body.elem_id) == -1){
+            console.log('Invalid tracker ID!')
+            res.sendStatus(200);
+        }
+        //check to make sure domain is legit
+        else if (req.params.domain_name != req.session.listing_info.domain_name){
+            console.log('Invalid domain name!')
+            res.sendStatus(200);
+        }
+        //okay add to DB
+        else {
+            var history_data = {
+                domain_name : req.params.domain_name,
+                timestamp: new Date().getTime(),
+                rental_id: req.session.camefrom || null,                                //what rental they came from
+                account_id: (typeof req.user == "undefined") ? null : req.user.id,      //who searched if who exists
+                user_ip: getIP(req),
+                elem_id: req.body.elem_id
+            }
+
+            Data.newCheckoutAction(history_data, function(result){
+                res.sendStatus(200);
+            });
+        }
     },
 
     //gets the listing info if it is listed
@@ -1005,6 +1051,17 @@ module.exports = {
 }
 
 //----------------------------------------------------------------helper functions----------------------------------------------------------------
+
+//helper function to get a user's ip
+function getIP(req){
+    //nginx https proxy removes IP
+    if (req.headers["x-real-ip"]){
+        return req.headers["x-real-ip"];
+    }
+    else {
+        return req.headers['x-forwarded-for'] || req.connection.remoteAddress || req.socket.remoteAddress;
+    }
+}
 
 //helper function to create a new rental
 function newListingRental(req, res, raw_info, callback){

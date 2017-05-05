@@ -1,5 +1,6 @@
 var	account_model = require('../models/account_model.js');
 var	listing_model = require('../models/listing_model.js');
+var	data_model = require('../models/data_model.js');
 var	validator = require('validator');
 var	request = require('request');
 var bodyParser = require('body-parser');
@@ -15,6 +16,7 @@ module.exports = function(app, db, auth, error){
     Auth = auth;
     Account = new account_model(db);
     Listing = new listing_model(db);
+    Data = new data_model(db);
 
     app.get("/alexa/:domain_name", alexa);
     app.get("/createcodes/:number", [
@@ -22,6 +24,7 @@ module.exports = function(app, db, auth, error){
     ]);
     app.get("/proxyimage", proxyimage);
     app.get("/proxysite", proxysite);
+    app.get("/analysis/:domain_name", analysis);
 }
 
 //testing quantcast redirect
@@ -146,5 +149,46 @@ function proxysite(req, res, next){
             res.end(Buffer.concat(buffer_array));
         }
 
+    });
+}
+
+//function to analyze traffic funnel
+function analysis(req, res, next){
+    var domain_name = req.params.domain_name;
+
+    var traffic = {
+        domain_name : domain_name
+    };
+
+    Data.getRentalTraffic(domain_name, function(result){
+        traffic.rental_views = result.info;
+
+        Data.getListingRentalTraffic(domain_name, function(result){
+            traffic.listing_rental_views = result.info;
+
+            Data.getAvailCheckHistory(domain_name, function(result){
+                traffic.avail_check_history = {
+                    length: result.info.length,
+                    data: result.info
+                }
+
+                Data.getCheckoutHistory(domain_name, function(result){
+                    traffic.checkout_history = {
+                        length: result.info.length,
+                        data: result.info
+                    }
+
+                    Data.getCheckoutActions(domain_name, function(result){
+                        traffic.checkout_actions = {
+                            length: result.info.length,
+                            data: result.info
+                        }
+                        res.render("dev/analysis.ejs", {
+                            traffic: traffic
+                        });
+                    });
+                });
+            });
+        });
     });
 }

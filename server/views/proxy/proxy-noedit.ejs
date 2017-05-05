@@ -18,26 +18,27 @@
         background-color:rgb(60,189,141) !important;
         font-family:"roboto",Helvetica,sans-serif !important;
         font-size:14px !important;
-        text-decoration:none !important !important;
+        text-decoration:underline !important;
         cursor:pointer !important;
         transition:all 0.25s !important;
         position:relative !important;
+        display: block !important;
+        max-width: 200px !important;
     }
     #dh-button:hover{
-        text-decoration:underline !important !important;
+        text-decoration:underline !important;
     }
     #dh-delete {
-        position:relative !important;
+        position:absolute !important;
         border-radius:100% !important;
         cursor:pointer !important;
         vertical-align:top !important;
-        display:inline-block !important;
+        display:block !important;
         border:none !important;
         height:20px !important;
         width:20px !important;
-        float:right !important;
-        margin-left:-24px !important;
-        margin-top:-27px !important;
+        top:20px !important;
+        right:20px !important;
     }
     #dh-delete:hover::before,
     #dh-delete:hover::after {
@@ -65,12 +66,16 @@
     }
 </style>
 <div id="dh-overlay" style="display:none !important;">
-    <a id="dh-button" target="_blank" rel="noopener">What is this website?</a>
+    <a id="dh-button" target="_blank" rel="noopener"></a>
     <span id="dh-delete"></span>
 </div>
 <script>
     console.log("DomaHub info message loaded!");
     $(document).ready(function(){
+
+        var description_hook = doma_rental_info.description_hook || "What is this website?";
+        $("#dh-button").text(description_hook);
+
         //fade in after 5 seconds
         setTimeout(function(){ $("#dh-overlay").slideDown("fast"); }, 500);
         $("#dh-delete").on("click", function(){

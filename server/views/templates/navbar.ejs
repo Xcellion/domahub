@@ -24,11 +24,11 @@
 
 <%# navbar checks for a user variable, if it doesnt exist, then display the login button %>
 <% if (!user) { %>
-    <%# <div class="nav-item">
-      <a id="signup" tabindex="0" class="nav-link is-white" title="Sign Up" href="/signup">Sign Up</a>
-    </div> %>
     <div class="nav-item">
-      <a tabindex="0" class="login-modal button is-white is-stylish is-small modal-button" title="Log In" data-object="#modal-login">Log In</a>
+      <a id="signup" tabindex="0" class="nav-link is-white" title="Sign Up" href="/signup">Sign Up</a>
+    </div>
+    <div class="nav-item">
+      <a tabindex="0" id="login-navbar" class="checkout-track login-modal button is-white is-stylish is-small modal-button" title="Log In" data-object="#modal-login">Log In</a>
     </div>
     <div id="modal-login" class="modal">
       <div class="modal-background"></div>
