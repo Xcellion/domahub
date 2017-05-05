@@ -101,11 +101,11 @@ module.exports = {
                     console.log("F: Checking if its a valid HTTP address and that theres a response...");
                     //check if its a valid HTTP address and that theres a response
                     request(address, function (err, response, body) {
-                        if (!err && response.statusCode == 200) {
+                        if (!err) {
                             create_new_rental_info();
                         }
                         else {
-                            error.handler(req, res, "Nothing displayed at that address!", "json");
+                            error.handler(req, res, "There's something wrong with this address!", "json");
                         }
                     });
                 });
