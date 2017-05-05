@@ -744,20 +744,6 @@ pre {
     border-radius: 0 5px 5px 0; }
   .box.no-border-radius {
     border-radius: 0; }
-  .box.is-domain-listing {
-    -moz-transition: all 0.25s ease;
-    -o-transition: all 0.25s ease;
-    -webkit-transition: all 0.25s ease;
-    transition: all 0.25s ease;
-    padding: 15px 20px 10px;
-    border: 1px solid rgba(0, 0, 0, 0.12); }
-    .box.is-domain-listing:not(:last-child) {
-      margin-bottom: 15px; }
-    .box.is-domain-listing:hover, .box.is-domain-listing:active, .box.is-domain-listing:focus {
-      cursor: pointer;
-      -webkit-box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.38);
-      -moz-box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.38);
-      box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.38); }
 
 .button {
   -webkit-box-shadow: 0 3px 5px 0 rgba(0, 0, 0, 0.12);

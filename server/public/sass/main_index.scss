@@ -45,10 +45,11 @@
 .learn-more-arrow {
   @include box-shadow(1px,1px,10px,$black-disabled,0);
   @include transition(background-color 0.25s ease);
+  @include transform(translate(-50%,0));
   background-color: $primary;
   border-radius: 100%;
   top: -16px;
-  left: 49%;
+  left: 50%;
   position: absolute;
   z-index: 4;
   &:hover {

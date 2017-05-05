@@ -223,10 +223,15 @@ button[data-balloon] {
   -o-transition: background-color 0.25s ease;
   -webkit-transition: background-color 0.25s ease;
   transition: background-color 0.25s ease;
+  -moz-transform: translate(-50%, 0);
+  -o-transform: translate(-50%, 0);
+  -ms-transform: translate(-50%, 0);
+  -webkit-transform: translate(-50%, 0);
+    -webkit-transform-transform: translate(-50%, 0);
   background-color: #3cbc8d;
   border-radius: 100%;
   top: -16px;
-  left: 49%;
+  left: 50%;
   position: absolute;
   z-index: 4; }
   .learn-more-arrow:hover {
