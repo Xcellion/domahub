@@ -327,12 +327,8 @@ listing_model.prototype.getListingByFilter = function(filter_name, filter_price,
 listing_model.prototype.getRandomListings = function(callback){
 	console.log("DB: Attempting to get 10 random listings...");
 	query = "SELECT \
-				listings.domain_name, \
-				listings.hour_price, \
-				listings.day_price, \
-				listings.week_price, \
-				listings.month_price, \
-				listings.categories \
+				listings.*, \
+				accounts.username \
 			FROM listings \
 			INNER JOIN accounts \
 				ON accounts.id = listings.owner_id \
