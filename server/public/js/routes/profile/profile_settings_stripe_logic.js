@@ -194,6 +194,7 @@ function submitBank(stripe_token){
             $(".hide-stripe").removeClass('is-hidden');
             flashSuccess($("#payout-bank-message"));
             user = data.user;
+            cancelFormSubmit($("#payout-bank-form"));
         }
         else {
             flashError($("#payout-bank-message"), data.message);

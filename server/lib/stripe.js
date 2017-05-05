@@ -272,6 +272,7 @@ module.exports = {
 			}
 		}, function(err, result){
 			if (result){
+				updateUserStripeInfo(req.user, result);
 				res.json({
                     state: "success",
                     user: req.user
