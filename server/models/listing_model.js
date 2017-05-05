@@ -327,8 +327,10 @@ listing_model.prototype.getListingByFilter = function(filter_name, filter_price,
 listing_model.prototype.getRandomListings = function(last_date, callback){
 	console.log("DB: Attempting to get 10 random listings...");
 	query = "SELECT \
-				listings.*, \
-				accounts.username \
+				listings.id, \
+				listings.domain_name, \
+				listings.price_rate, \
+				listings.price_type \
 			FROM listings \
 			INNER JOIN accounts \
 				ON accounts.id = listings.owner_id \
@@ -336,8 +338,8 @@ listing_model.prototype.getRandomListings = function(last_date, callback){
 			AND listings.verified = 1 \
 			AND listings.deleted IS NULL \
 			AND accounts.stripe_account IS NOT NULL \
-			AND listings.date_created >= ? \
-			ORDER BY rand() \
+			AND listings.id > ? \
+			ORDER BY listings.id ASC \
 			LIMIT 10";
 	listing_query(query, "Failed to get 10 random listings!", callback, last_date);
 }
