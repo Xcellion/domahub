@@ -215,6 +215,20 @@ button[data-balloon] {
 #decision-section {
   position: relative; }
 
+#learn-more-wrapper {
+  color: #FFF;
+  top: -50px;
+  left: 50%;
+  position: absolute;
+  z-index: 4;
+  transform: translateX(-50%);
+  margin-right: -50%;
+  cursor: pointer; }
+
+#learn-more-text {
+  margin: auto;
+  margin-bottom: 15px; }
+
 .learn-more-arrow {
   -webkit-box-shadow: 1px 1px 10px 0 rgba(0, 0, 0, 0.38);
   -moz-box-shadow: 1px 1px 10px 0 rgba(0, 0, 0, 0.38);
@@ -230,10 +244,12 @@ button[data-balloon] {
     -webkit-transform-transform: translate(-50%, 0);
   background-color: #3cbc8d;
   border-radius: 100%;
-  top: -16px;
   left: 50%;
+  top: 34px;
   position: absolute;
-  z-index: 4; }
+  z-index: 4;
+  width: 34px;
+  margin: auto; }
   .learn-more-arrow:hover {
     background-color: #309670; }
   .learn-more-arrow a:active, .learn-more-arrow a:focus {

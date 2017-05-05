@@ -25,8 +25,6 @@ module.exports = function(app, db, auth, error){
     app.get("/proxyimage", proxyimage);
     app.get("/proxysite", proxysite);
     app.get("/analysis/:domain_name", analysis);
-
-    app.get('/fuck', listinghub)
 }
 
 //testing quantcast redirect
@@ -192,14 +190,5 @@ function analysis(req, res, next){
                 });
             });
         });
-    });
-}
-
-//listinghub
-function listinghub(req, res ,next){
-    res.render("listings/listing_hub.ejs", {
-        user: {
-            username: "fuck"
-        }
     });
 }
