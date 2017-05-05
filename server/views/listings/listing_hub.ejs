@@ -4,7 +4,6 @@
 
 	<head>
 		<title>Browse Listings - DomaHub</title>
-		<link rel="stylesheet" href="/css/min/listing_404.min.css" type="text/css" />
 		<link rel="stylesheet" href="/css/min/listing_hub.min.css" type="text/css" />
   	<%- include("../templates/head_links"); %>
 	</head>
@@ -16,39 +15,16 @@
 		<section class="section is-medium min-height">
 				<div class="container">
 						<div class="control has-icon has-addons">
-							<input id="domain-name-input" class="input is-medium" tabindex="0" type="text" placeholder="Search domains" />
+							<input id="domain-name-input" autofocus class="input is-medium" tabindex="0" type="text" placeholder="Search for domains" />
 							<i class="fa fa-search"></i>
-							<a tabindex="0" class="button is-primary is-stylish no-shadow">Submit</a>
-						</div>
-						<div class="content">
-							<h2 id="total-domains">
-								1,000 Domains
-							</h2>
 						</div>
 						<div id="domain-table">
-							<a class="domain-listing">
-								<p class="domain-name">whatsup.com</p>
-								<p class="domain-price">
-									$10 / mo
-								</p>
+							<a id="clone-listing-row" class="is-hidden domain-listing">
+								<p class="domain-name"></p>
+								<p class="is-bold domain-price"><span class='domain-price-rate'></span> / <span class='domain-price-type'></span></p>
 							</a>
-							<a class="domain-listing">
-								<p class="domain-name">coffee.com</p>
-								<p class="domain-price">
-									$10 / mo
-								</p>
-							</a>
-							<a class="domain-listing">
-								<p class="domain-name">suckadick.com</p>
-								<p class="domain-price">
-									$99.99 / mo
-								</p>
-							</a>
-							<a class="domain-listing">
-								<p class="domain-name">boothbabesinbabylonwhatsupmyhomiesthisiswhereidomybiz.com</p>
-								<p class="domain-price">
-									$9993339 / mo
-								</p>
+							<a id="none-listing-row" class="is-hidden domain-listing">
+								<p class="is-bold domain-name">There are no matching domains with that name!</p>
 							</a>
 						</div>
 						<div class="control is-grouped-center margin-top-20">
@@ -68,10 +44,7 @@
 		<script type="text/javascript">
 			var categories_front = <% if(typeof categories_front != "undefined"){ %><%-JSON.stringify(categories_front)%><% }else{ %>""<% } %>;
 			var categories_back = <% if(typeof categories_back != "undefined"){ %><%-JSON.stringify(categories_back)%><% }else{ %>""<% } %>;
-			var random_listings = <% if(typeof random_listings != "undefined"){ %><%-JSON.stringify(random_listings)%><% }else{ %>""<% } %>;
-			var min_max_prices = <% if(typeof min_max_prices != "undefined"){ %><%-JSON.stringify(min_max_prices)%><% }else{ %>""<% } %>;
 		</script>
 		<script src="/js/routes/listings/listing_hub_logic.js" type="text/javascript"></script>
-
 		</body>
 </html>
