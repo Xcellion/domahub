@@ -23,6 +23,12 @@ module.exports = function(app, db, auth, error, stripe){
 		search_functions.renderListingHub
 	]);
 
+	//get more listings for the listings hub
+	app.post("/listings", [
+		urlencodedParser,
+		search_functions.getMoreListings
+	]);
+
 	//<editor-fold>-------------------------------SEARCH LISTINGS-------------------------------
 
 	//get a random listing with specific category
