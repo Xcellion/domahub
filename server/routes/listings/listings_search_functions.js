@@ -9,14 +9,11 @@ module.exports = {
 	//render the listing hub with 10 random active listings
 	renderListingHub : function(req, res, next){
 		Listing.getRandomListings(function(result){
-			getMinMaxPrices(function(min_max_prices){
-				res.render("listings/listing_hub.ejs", {
-					user: req.user,
-					categories_front: Categories.front(),
-					categories_back: Categories.back(),
-					random_listings: result.info,
-					min_max_prices: min_max_prices
-				});
+			res.render("listings/listing_hub.ejs", {
+				user: req.user,
+				categories_front: Categories.front(),
+				categories_back: Categories.back(),
+				random_listings: result.info
 			});
 		});
 	},
@@ -340,46 +337,4 @@ function checkAllListingCategories(listings, posted_categories){
 	}
 
 	return temp_listings;
-}
-
-//function to get the minimum and maximum prices for all domains or default values if error
-function getMinMaxPrices(callback){
-	Data.getMinMaxPrices(function(result){
-		callback({
-			hour_price : {
-				min: Math.min(result.info[0].min_hour_price, 1),
-				max: Math.max(result.info[0].max_hour_price, 100)
-			},
-			day_price : {
-				min: Math.min(result.info[0].min_day_price, 100),
-				max: Math.max(result.info[0].max_day_price, 500)
-			},
-			week_price : {
-				min: Math.min(result.info[0].min_week_price, 100),
-				max: Math.max(result.info[0].max_week_price, 1000)
-			},
-			month_price : {
-				min: Math.min(result.info[0].min_month_price, 100),
-				max: Math.max(result.info[0].max_month_price, 5000)
-			}
-
-			//change to this once there are some more listings
-			// hour_price : {
-			// 	min: result.info[0].min_hour_price || 1,
-			// 	max: result.info[0].max_hour_price || 100
-			// },
-			// day_price : {
-			// 	min: result.info[0].min_day_price || 100,
-			// 	max: result.info[0].max_day_price || 500
-			// },
-			// week_price : {
-			// 	min: result.info[0].min_week_price || 100,
-			// 	max: result.info[0].max_week_price || 1000
-			// },
-			// month_price : {
-			// 	min: result.info[0].min_month_price || 100,
-			// 	max: result.info[0].max_month_price || 5000
-			// }
-		})
-	});
 }

@@ -18,6 +18,11 @@ module.exports = function(app, db, auth, error, stripe){
 	Listing = new listing_model(db);
 	Data = new data_model(db);
 
+	//render listing hub
+	app.get("/listings", [
+		search_functions.renderListingHub
+	]);
+
 	//<editor-fold>-------------------------------SEARCH LISTINGS-------------------------------
 
 	//get a random listing with specific category
