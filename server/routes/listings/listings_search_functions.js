@@ -8,14 +8,26 @@ module.exports = {
 
 	//render the listing hub with 10 random active listings
 	renderListingHub : function(req, res, next){
-		Listing.getRandomListings(function(result){
-			res.render("listings/listing_hub.ejs", {
-				user: req.user,
-				categories_front: Categories.front(),
-				categories_back: Categories.back(),
-				random_listings: result.info
-			});
+		res.render("listings/listing_hub.ejs", {
+			user: req.user,
+			categories_front: Categories.front(),
+			categories_back: Categories.back()
 		});
+	},
+
+	//get more listings
+	getMoreListings : function(req, res, next){
+		if (!validator.isInt(req.body.last_date)){
+			error.handler(req, res, "Not a valid last date!", "json");
+		}
+		else {
+			Listing.getRandomListings(req.body.last_date, function(result){
+				res.send({
+					state: result.state,
+					listings: result.info
+				});
+			});
+		}
 	},
 
 	//returns a random listing by category

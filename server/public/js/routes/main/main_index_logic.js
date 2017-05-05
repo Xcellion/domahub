@@ -20,7 +20,7 @@ $(document).ready(function() {
     });
 
     //two button scroll
-    $("#learn-more-button").on("click", function(e){
+    $("#learn-more-wrapper").on("click", function(e){
         e.preventDefault();
         $('html, body').stop().animate({
             scrollTop: $("#decision-section").offset().top - $("#navbar").height()
@@ -38,23 +38,12 @@ $(document).ready(function() {
         $(this).addClass("is-active");
         $(".d-owner").removeClass("is-hidden");
         $(".d-renter").addClass("is-hidden");
-    })
+    });
     $("#want-domains-tab").on("click", function(e){
         e.preventDefault();
         $("#have-domains-tab").removeClass("is-active");
         $(this).addClass("is-active");
         $(".d-renter").removeClass("is-hidden");
         $(".d-owner").addClass("is-hidden");
-    })
-
-    //fade in learn more
-    $('#learn-more-text').stop().animate({
-        opacity: 1
-    }, 3000);
-
-    //click to chat with us
-    $('#chat-with-us-button').on("click", function(){
-        Intercom("show");
     });
-
 });

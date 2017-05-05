@@ -42,15 +42,29 @@
   position: relative;
 }
 
+#learn-more-wrapper {
+    color:#FFF;
+    top: -50px;
+    left: 50%;
+    position: absolute;
+    z-index: 4;
+    transform: translateX(-50%);
+    margin-right: -50%;
+    cursor:pointer;
+}
+
+#learn-more-text {
+    margin:auto;
+    margin-bottom:15px;
+}
+
 .learn-more-arrow {
   @include box-shadow(1px,1px,10px,$black-disabled,0);
   @include transition(background-color 0.25s ease);
   background-color: $primary;
   border-radius: 100%;
-  top: -16px;
-  left: 49%;
-  position: absolute;
-  z-index: 4;
+  width:34px;
+  margin:auto;
   &:hover {
     background-color: $primary-dark;
   }
