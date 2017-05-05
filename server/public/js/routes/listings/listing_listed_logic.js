@@ -37,7 +37,6 @@ $(document).ready(function() {
 
 	//tooltip appears too fast, hide until the above handler is in place.
 	$("#input-tooltip").fadeIn('slow');
-	console.log('WTF')
 
 	//function for input text validation and tooltip change
 	$("#typed-slash").on("keypress onkeypress", function(e) {
