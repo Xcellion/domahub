@@ -166,7 +166,7 @@ module.exports = {
 
 	//function to create a new managed account with stripe
 	createManagedAccount : function(req, res, next){
-		if (req.user.stripe_account){
+		if (req.user.stripe_account && req.user.stripe_info.country == req.body.country){
 			console.log('F: Updating existing Stripe managed account address...');
 			stripe.accounts.update(req.user.stripe_account, {
 				"legal_entity": {
@@ -607,23 +607,26 @@ module.exports = {
 
 //function to update req.user with stripe info
 function updateUserStripeInfo(user, stripe_results){
-	user.stripe_info = {
-		country : stripe_results.legal_entity.address.country || "",
-		addressline1 : stripe_results.legal_entity.address.line1 || "",
-		addressline2 : stripe_results.legal_entity.address.line2 || "",
-		city : stripe_results.legal_entity.address.city || "",
-		state : stripe_results.legal_entity.address.state || "",
-		zip : stripe_results.legal_entity.address.postal_code || "",
-		birthday_year : stripe_results.legal_entity.dob.year || "",
-		birthday_month : stripe_results.legal_entity.dob.month || "",
-		birthday_day : stripe_results.legal_entity.dob.day || "",
-		first_name : stripe_results.legal_entity.first_name || "",
-		last_name : stripe_results.legal_entity.last_name || "",
-		account_type : stripe_results.legal_entity.type || "",
-		transfers_enabled : stripe_results.transfers_enabled,
-		charges_enabled : stripe_results.charges_enabled
+	if (stripe_results.legal_entity && stripe_results.legal_entity.address && stripe_results.legal_entity.dob){
+		user.stripe_info = {
+			country : stripe_results.legal_entity.address.country || "",
+			addressline1 : stripe_results.legal_entity.address.line1 || "",
+			addressline2 : stripe_results.legal_entity.address.line2 || "",
+			city : stripe_results.legal_entity.address.city || "",
+			state : stripe_results.legal_entity.address.state || "",
+			zip : stripe_results.legal_entity.address.postal_code || "",
+			birthday_year : stripe_results.legal_entity.dob.year || "",
+			birthday_month : stripe_results.legal_entity.dob.month || "",
+			birthday_day : stripe_results.legal_entity.dob.day || "",
+			first_name : stripe_results.legal_entity.first_name || "",
+			last_name : stripe_results.legal_entity.last_name || "",
+			account_type : stripe_results.legal_entity.type || "",
+			transfers_enabled : stripe_results.transfers_enabled,
+			charges_enabled : stripe_results.charges_enabled
+		}
 	}
 	if (stripe_results.external_accounts.total_count > 0){
+		user.stripe_info.bank_country = stripe_results.external_accounts.data[0].country || "",
 		user.stripe_info.object = stripe_results.external_accounts.data[0].object || "";
 		user.stripe_info.currency = stripe_results.external_accounts.data[0].currency.toUpperCase() || "";
 		user.stripe_info.bank_name = stripe_results.external_accounts.data[0].bank_name || "";
