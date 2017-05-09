@@ -54,6 +54,25 @@ listing_model.prototype.checkListingOwner = function(account_id, domain_name, ca
 	listing_query(query, "Account does not own the domain" + domain_name + "!", callback, [account_id, domain_name]);
 }
 
+
+//check if listing is currently rented
+listing_model.prototype.checkCurrentlyRented = function(domain_name, callback){
+	console.log("DB: Checking if domain " + domain_name + " is currently rented...");
+	query = "SELECT 1 AS 'exist' \
+				FROM rentals \
+			LEFT JOIN listings \
+				ON rentals.listing_id = listings.id \
+			LEFT OUTER JOIN rental_times \
+				ON rentals.rental_id = rental_times.rental_id \
+			WHERE listings.domain_name = ? \
+				AND (UNIX_TIMESTAMP(NOW()) * 1000) BETWEEN rental_times.date AND rental_times.date + rental_times.duration \
+				AND listings.status = 1 \
+				AND listings.verified = 1 \
+				AND listings.deleted IS NULL \
+				AND rentals.status = 1";
+	listing_query(query, "Failed to check if domain " + domain_name + " is currently rented!", callback, domain_name);
+}
+
 //check if an account owns a listing
 listing_model.prototype.crossCheckRentalTime = function(domain_name, path, starttime, endtime, callback){
 	console.log("DB: Checking times for " + domain_name + "/" + path + "...");
@@ -324,7 +343,7 @@ listing_model.prototype.getListingByFilter = function(filter_name, filter_price,
 }
 
 //gets a handful of random listings for the search page
-listing_model.prototype.getRandomListings = function(last_date, callback){
+listing_model.prototype.getRandomListings = function(search_term, seed, total, callback){
 	console.log("DB: Attempting to get 10 random listings...");
 	query = "SELECT \
 				listings.id, \
@@ -338,10 +357,10 @@ listing_model.prototype.getRandomListings = function(last_date, callback){
 			AND listings.verified = 1 \
 			AND listings.deleted IS NULL \
 			AND accounts.stripe_account IS NOT NULL \
-			AND listings.id > ? \
-			ORDER BY listings.id ASC \
-			LIMIT 10";
-	listing_query(query, "Failed to get 10 random listings!", callback, last_date);
+			AND listings.domain_name LIKE ? \
+			ORDER BY RAND(?) \
+			LIMIT ?,10";
+	listing_query(query, "Failed to get 10 random listings!", callback, [search_term, seed, total]);
 }
 
 //</editor-fold>

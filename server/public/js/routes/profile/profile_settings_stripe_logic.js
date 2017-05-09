@@ -6,6 +6,11 @@ $(document).ready(function() {
         Stripe.setPublishableKey('pk_live_506Yzo8MYppeCnLZkW9GEm13');
     }
 
+    //change the bank forms based on country
+    $("#currency-input").on("change", function(e){
+        changeBankCountry($(this).val());
+    });
+
     //to highlight submit when data changes for stripe form
     $(".stripe-form").find(".stripe-input").bind("input click", function(e){
         var stripe_form = $(this).closest(".stripe-form");
@@ -114,14 +119,24 @@ $(document).ready(function() {
         if (checkRequiredFields($(this), "bank")){
             e.preventDefault();
 
-            //create stripe token
-            Stripe.bankAccount.createToken({
-                country: $('#country-input').val(),
+            var stripe_info = {
+                country: $('#bank_country-input').val(),
                 currency: $('#currency-input').val(),
-                routing_number: $('#account_routing-input').val(),
                 account_number: $('#account_number-input').val()
-            }, function(status, response){
+            }
+
+            if ($("#account_routing-wrapper").is(":visible")) {
+                stripe_info.routing_number = $('#account_routing-input').val().toString() + $('#account_routing2-input').val().toString();
+            }
+
+            if ($("#account_routing3-wrapper").is(":visible")) {
+                stripe_info.account_holder_name = $('#account_routing3-input').val().toString();
+            }
+
+            //create stripe token
+            Stripe.bankAccount.createToken(stripe_info, function(status, response){
                 if (status != 200){
+                    console.log(response);
                     flashError($("#payout-bank-message"), response.error.message);
                 }
                 else {
@@ -178,6 +193,7 @@ function prefillStripeInfo(){
             $("#" + x + "-input").val(user.stripe_info[x]);
         }
     }
+    changeBankCountry($("#currency-input").val());
 }
 
 //function to submit stripe token for bank info
@@ -200,6 +216,66 @@ function submitBank(stripe_token){
             flashError($("#payout-bank-message"), data.message);
         }
     });
+}
+
+//change bank forms based on country
+function changeBankCountry(currency){
+    if (currency != user.stripe_info.currency){
+        $(".excess-routing-input").val("");
+    }
+
+    switch (currency){
+        case "AUD":
+            $("#account_routing-text").text("BSB");
+            $("#account_number-text").text("Account Number ");
+            $("#account_routing-wrapper").removeClass("is-hidden");
+            $("#account_routing2-wrapper").addClass("is-hidden");
+            $("#account_routing3-wrapper").addClass("is-hidden");
+            break;
+        case "USD":
+            $("#account_routing-text").text("Routing Number");
+            $("#account_number-text").text("Account Number ");
+            $("#account_routing-wrapper").removeClass("is-hidden");
+            $("#account_routing2-wrapper").addClass("is-hidden");
+            $("#account_routing3-wrapper").addClass("is-hidden");
+            break;
+        case "CAD":
+            $("#account_routing-text").text("Transit Number");
+            $("#account_routing2-text").text("Institution Number");
+            $("#account_number-text").text("Account Number ");
+            $("#account_routing-wrapper").removeClass("is-hidden");
+            $("#account_routing2-wrapper").removeClass("is-hidden");
+            $("#account_routing3-wrapper").addClass("is-hidden");
+            break;
+        case "JPY":
+            $("#account_routing-text").text("Bank Code");
+            $("#account_routing2-text").text("Branch Code");
+            $("#account_number-text").text("Account Number ");
+            $("#account_routing-wrapper").removeClass("is-hidden");
+            $("#account_routing2-wrapper").removeClass("is-hidden");
+            $("#account_routing3-wrapper").removeClass("is-hidden");
+            break;
+        case "SGD":
+            $("#account_routing-text").text("Bank Code");
+            $("#account_routing2-text").text("Branch Code");
+            $("#account_number-text").text("Account Number ");
+            $("#account_routing-wrapper").removeClass("is-hidden");
+            $("#account_routing2-wrapper").removeClass("is-hidden");
+            $("#account_routing3-wrapper").addClass("is-hidden");
+            break;
+        case "HKD":
+            $("#account_routing-text").text("Clearing Code");
+            $("#account_routing2-text").text("Branch Code");
+            $("#account_number-text").text("Account Number ");
+            $("#account_routing-wrapper").removeClass("is-hidden");
+            $("#account_routing2-wrapper").removeClass("is-hidden");
+            $("#account_routing3-wrapper").addClass("is-hidden");
+            break;
+        default:
+            $("#account_number-text").text("IBAN ");
+            $(".excess-routing-wrapper").addClass("is-hidden");
+            break;
+    }
 }
 
 //reset error success flashes
@@ -231,26 +307,3 @@ function cancelFormEdit(form){
     form.find(".cancel-payout ").addClass("is-hidden");
     form.find(".submit-payout ").addClass("is-disabled");
 }
-
-// //function to deauthorize stripe
-// function deauthorizeStripe(e){
-//     e.preventDefault();
-//     var that = $(this);
-//
-//     that.addClass('is-loading');
-//     that.off("click");  //remove click handler
-//
-//     $.ajax({
-//         type: "POST",
-//         url: "/deauthorizestripe"
-//     }).done(function(data){
-//         if (data.state == "success"){
-//             that.text("Revoked!");
-//         }
-//         else {
-//             that.on("click", deauthorizeStripe);
-//         }
-//     }).always(function(){
-//         that.removeClass('is-loading');
-//     });
-// }

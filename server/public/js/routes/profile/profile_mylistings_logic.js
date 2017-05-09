@@ -144,6 +144,7 @@ function updatePriceInputs(tempRow_drop, listing_info){
 }
 function updateDescription(tempRow_drop, listing_info){
 	tempRow_drop.find(".description-input").val(listing_info.description);
+	tempRow_drop.find(".description-hook-input").val(listing_info.description_hook);
 }
 function updatePaths(tempRow_drop, listing_info){
 	//if created tags before
@@ -204,7 +205,7 @@ function updateSaveCancelButtons(tempRow_drop, listing_info){
 function updateBackgroundImage(tempRow_drop, listing_info, rownum){
 	var background_image = (listing_info.background_image == null || listing_info.background_image == undefined || listing_info.background_image == "") ? "https://placeholdit.imgix.net/~text?txtsize=40&txt=RANDOM%20PHOTO&w=200&h=200" : listing_info.background_image;
 	tempRow_drop.find(".background_image").attr('src', background_image).error(function() {
-        $(this).attr("src", "");
+        $(this).attr("src", "https://placeholdit.imgix.net/~text?txtsize=40&txt=LOADING...%20&w=200&h=200");
     });
 
 	tempRow_drop.find(".picture-file").attr('id', "pic" + rownum);

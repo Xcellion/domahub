@@ -412,12 +412,12 @@ module.exports = {
 			}
 			else {
 				//check to see if its currently rented
-				Listing.getCurrentRental(domain_name, function(result){
-					if (result.state != "success" || result.info.length == 0){
-						next();
+				Listing.checkCurrentlyRented(domain_name, function(result){
+					if (result.state != "success" || result.info.length > 0){
+						error.handler(req, res, "This listing is currently being rented!", "json");
 					}
 					else {
-						error.handler(req, res, "This listing is currently being rented!", "json");
+						next();
 					}
 				});
 			}
@@ -433,6 +433,7 @@ module.exports = {
 
 		var status = parseFloat(req.body.status);
         var description = req.body.description;
+        var description_hook = req.body.description_hook;
 
 		//prices
 		var price_rate = req.body.price_rate;
@@ -466,6 +467,10 @@ module.exports = {
 		if (req.body.description && description.length == 0){
 			error.handler(req, res, "Invalid listing description!", "json");
 		}
+		//no description
+		if (req.body.description_hook && description_hook.length == 0){
+			error.handler(req, res, "Invalid short listing description!", "json");
+		}
 		//no paths
 		if (req.body.paths && paths.length == 0){
 			error.handler(req, res, "Invalid example pathes!", "json");
@@ -492,6 +497,7 @@ module.exports = {
 			}
 			req.new_listing_info.status = status;
 			req.new_listing_info.description = description;
+			req.new_listing_info.description_hook = description_hook;
 			req.new_listing_info.price_type = price_type;
 			req.new_listing_info.price_rate = price_rate;
 			req.new_listing_info.buy_price = (buy_price == "" || buy_price == 0) ? "" : buy_price;

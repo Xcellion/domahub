@@ -47,8 +47,7 @@ module.exports = function(app, auth){
 	//post routes for authentication
 	app.post([
 		"/signup",
-		"/login",
-		"/forgot"
+		"/login"
 	], [
 		urlencodedParser,
 		auth.isNotLoggedIn,
@@ -57,6 +56,13 @@ module.exports = function(app, auth){
 			auth[path_name](req, res, next);
 		}
 	]);
+
+	app.post("/forgot", [
+		urlencodedParser,
+		auth.isNotLoggedIn,
+		checkAccountExists,
+		auth.forgotPost
+	])
 
 	//signup with code
 	app.post("/signup/:code", [
@@ -85,4 +91,21 @@ module.exports = function(app, auth){
 		auth.checkToken,
 		auth.verifyPost
 	]);
+}
+
+
+//function to check if account exists on domahub
+function checkAccountExists(req, res, next){
+	console.log("F: Checking if account exists...");
+
+	var email = req.body["email"];
+
+	Account.checkAccountEmail(email, function(result){
+		if (!result.info.length || result.state == "error"){
+			error.handler(req, res, "No account exists with that email!", "json");
+		}
+		else {
+			next();
+		}
+	});
 }

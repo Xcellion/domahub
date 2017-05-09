@@ -13,36 +13,38 @@
 		<%- include("../templates/navbar", {user: user}); %>
 
 		<section class="section is-medium min-height">
-				<div class="container">
-						<div class="control has-icon has-addons">
-							<input id="domain-name-input" autofocus class="input is-medium" tabindex="0" type="text" placeholder="Search for domains" />
-							<i class="fa fa-search"></i>
-						</div>
-						<div class="control">
-							<span class="select">
-								<select>
-									<option value="AZ">Name: A to Z</option>
-									<option value="ZA">Name: Z to A</option>
-									<option value="HL">Price: Low to High</option>
-									<option value="LH">Price: High to Low</option>
-								</select>
-							</span>
-						</div>
-						<div id="domain-table">
-							<a id="clone-listing-row" class="is-hidden domain-listing">
-								<p class="domain-name"></p>
-								<p class="is-bold domain-price"><span class='domain-price-rate'></span> / <span class='domain-price-type'></span></p>
-							</a>
-							<a id="none-listing-row" class="is-hidden domain-listing">
-								<p class="is-bold domain-name">There are no matching domains with that name!</p>
-							</a>
-						</div>
-						<div class="control is-grouped-center margin-top-20">
-							<button id="load-button" class="button no-shadow">
-								<span class="icon is-small"><i class="fa fa-refresh"></i></span>
-								<span>Load More</span>
-							</button>
-						</div>
+			<div class="container">
+				<form id="domain-name-search" class='margin-bottom-15'>
+					<div class="control has-icon has-addons">
+						<input id="domain-name-input" name="domain_name" autofocus class="input is-medium" tabindex="0" type="text" placeholder="Search for domains" />
+						<i class="fa fa-search"></i>
+						<button class="button is-primary is-stylish" type="submit">Submit</button>
+					</div>
+				</form>
+				<div class="control">
+					<span class="select">
+						<select>
+							<option value="AZ">Name: A to Z</option>
+							<option value="ZA">Name: Z to A</option>
+							<option value="HL">Price: Low to High</option>
+							<option value="LH">Price: High to Low</option>
+						</select>
+					</span>
+				</div>
+				<div id="domain-table">
+					<a id="clone-listing-row" class="is-hidden domain-listing">
+						<p class="domain-name"></p>
+						<p class="is-bold domain-price"><span class='domain-price-rate'></span> / <span class='domain-price-type'></span></p>
+					</a>
+					<a id="none-listing-row" class="is-hidden domain-listing">
+						<p class="is-bold domain-name">There are no matching domains with that name!</p>
+					</a>
+				</div>
+				<div class="control is-grouped-center margin-top-20">
+					<button id="load-button" class="button no-shadow">
+						<span class="icon is-small"><i class="fa fa-refresh"></i></span>
+						<span>Load More</span>
+					</button>
 				</div>
 			</div>
 		</section>
