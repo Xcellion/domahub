@@ -12,10 +12,10 @@ var total_earnings = 0;
 
 //function to create all earnings rows
 function createEarningsRows(){
-    if (user.stripe_charges.length > 0){
+    if (user.stripe_transfers.length > 0){
         $("#no-earnings-row").addClass('is-hidden');
-        for (var x = 0; x < user.stripe_charges.length; x++){
-            $(".earnings-table").append(createEarningsRow(user.stripe_charges[x]));
+        for (var x = 0; x < user.stripe_transfers.length; x++){
+            $(".earnings-table").append(createEarningsRow(user.stripe_transfers[x]));
         }
         $("#total-earnings").text(number_format.to(total_earnings / 100));
     }
@@ -46,22 +46,21 @@ function createEarningsRow(stripe_charge){
 
         //refund button
         temp_row.find(".earnings-row-refund-button").on("click", function(){
-            $(this).off();
-            $(this).addClass("is-loading");
+            var refund_button = $(this);
+            refund_button.off().addClass("is-loading");
             $.ajax({
                 url: "/listing/" + stripe_charge.domain_name + "/" + stripe_charge.rental_id + "/refund",
                 method: "POST",
                 data: {
-                    stripe_id : stripe_charge.id
+                    stripe_id : stripe_charge.charge_id
                 }
             }).done(function(data){
+                refund_button.removeClass("is-loading");
                 if (data.state == "success"){
                     refundedRow(temp_row);
-                    $(this).removeClass("is-loading");
                 }
                 else {
                     flashError($("#transaction-message"), data.message);
-                    $(this).removeClass("is-loading");
                 }
             });
         });
