@@ -343,7 +343,7 @@ listing_model.prototype.getListingByFilter = function(filter_name, filter_price,
 }
 
 //gets a handful of random listings for the search page
-listing_model.prototype.getRandomListings = function(last_date, callback){
+listing_model.prototype.getRandomListings = function(search_term, seed, total, callback){
 	console.log("DB: Attempting to get 10 random listings...");
 	query = "SELECT \
 				listings.id, \
@@ -357,10 +357,10 @@ listing_model.prototype.getRandomListings = function(last_date, callback){
 			AND listings.verified = 1 \
 			AND listings.deleted IS NULL \
 			AND accounts.stripe_account IS NOT NULL \
-			AND listings.id > ? \
-			ORDER BY listings.id ASC \
-			LIMIT 10";
-	listing_query(query, "Failed to get 10 random listings!", callback, last_date);
+			AND listings.domain_name LIKE ? \
+			ORDER BY RAND(?) \
+			LIMIT ?,10";
+	listing_query(query, "Failed to get 10 random listings!", callback, [search_term, seed, total]);
 }
 
 //</editor-fold>
