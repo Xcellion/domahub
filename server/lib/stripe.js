@@ -49,17 +49,18 @@ module.exports = {
 	},
 
 	//function to get all charges made to account
-	getTransactions : function(req, res, next){
+	getTransfers : function(req, res, next){
 		if (req.user.stripe_account){
 			console.log('F: Retrieving all Stripe transactions...');
-			stripe.charges.list({
-				destination: req.user.stripe_account
-			}, function(err, charges) {
+			stripe.transfers.list({
+				destination: req.user.stripe_account,
+				expand: ["data.source_transaction"]
+			}, function(err, transfers) {
 				if (err) { console.log(err.message); }
 				if (node_env == "dev"){
-					req.user.dev_charges = charges;
+					req.user.dev_transfers = transfers;
 				}
-				updateUserStripeCharges(req.user, charges.data);
+				updateUserStripeTransfers(req.user, transfers.data);
 				next();
 			});
 		}
@@ -353,18 +354,13 @@ module.exports = {
 					next();
 				}
 				else {
-					res.send({
-						state: "error",
-						message: err.message
-					});
+					console.log(err.message);
+					stripeErrorHandler(req, res, {message: "Invalid Stripe charge!"});
 				}
 			});
 		}
 		else {
-			res.send({
-				state: "error",
-				message: "Invalid charge!"
-			});
+			stripeErrorHandler(req, res, {message: "Invalid Stripe charge!"});
 		}
 	},
 
@@ -637,25 +633,24 @@ function updateUserStripeInfo(user, stripe_results){
 }
 
 //function to update req.user with stripe charges
-function updateUserStripeCharges(user, stripe_charges){
-	var temp_charges = [];
-	for (var x = 0; x < stripe_charges.length; x++){
-		var temp_charge = {
-			amount: stripe_charges[x].amount,
-			amount_refunded: stripe_charges[x].amount_refunded,
-			created: stripe_charges[x].created,
-			currency: stripe_charges[x].currency,
-			description: stripe_charges[x].description,
-			id: stripe_charges[x].id
+function updateUserStripeTransfers(user, stripe_transfers){
+	var temp_transfers = [];
+	for (var x = 0; x < stripe_transfers.length; x++){
+		var temp_transfer = {
+			amount: stripe_transfers[x].amount,
+			created: stripe_transfers[x].created,
+			currency: stripe_transfers[x].currency,
+			charge_id: stripe_transfers[x].source_transaction.id
 		}
-		if (stripe_charges[x].metadata){
-			temp_charge.rental_id = stripe_charges[x].metadata.rental_id;
-			temp_charge.renter_name = stripe_charges[x].metadata.renter_name;
-			temp_charge.domain_name = stripe_charges[x].metadata.domain_name;
+		if (stripe_transfers[x].source_transaction && stripe_transfers[x].source_transaction.id){
+			temp_transfer.amount_refunded = stripe_transfers[x].source_transaction.amount_refunded,
+			temp_transfer.rental_id = stripe_transfers[x].source_transaction.metadata.rental_id;
+			temp_transfer.renter_name = stripe_transfers[x].source_transaction.metadata.renter_name;
+			temp_transfer.domain_name = stripe_transfers[x].source_transaction.metadata.domain_name;
 		}
-		temp_charges.push(temp_charge);
+		temp_transfers.push(temp_transfer);
 	}
-	user.stripe_charges = temp_charges;
+	user.stripe_transfers = temp_transfers;
 }
 
 // //helper function to create a new stripe customer

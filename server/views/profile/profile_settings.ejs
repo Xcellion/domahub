@@ -32,7 +32,7 @@
 							<li><a id="payout-personal-link" href="#payout-personal" class="hide-stripe is-hidden setting-link">Personal Information</a></li>
 							<li><a id="payout-bank-link" href="#payout-bank" class="hide-stripe is-hidden setting-link">Bank Information</a></li>
 						</ul>
-						<% if (user.stripe_charges) { %>
+						<% if (user.stripe_transfers) { %>
 							<p class="menu-label">
 								Transactions
 							</p>
@@ -545,7 +545,7 @@
 						</div>
 					</div>
 
-					<% if (user.stripe_charges) { %>
+					<% if (user.stripe_transfers) { %>
 						<%- include("profile_transactions", {user: user}); %>
 					<% } %>
 				</div>
@@ -565,7 +565,7 @@
 	<script src="https://js.stripe.com/v2/" type="text/javascript" ></script>
 	<script src="/js/routes/profile/profile_settings_logic.js" type="text/javascript"></script>
 	<script src="/js/routes/profile/profile_settings_stripe_logic.js" type="text/javascript"></script>
-	<% if (user.stripe_charges) { %>
+	<% if (user.stripe_transfers) { %>
 		<script src="/js/routes/profile/profile_transactions_logic.js" type="text/javascript"></script>
 	<% } %>
 </body>
