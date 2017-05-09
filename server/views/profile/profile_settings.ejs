@@ -32,7 +32,7 @@
 							<li><a id="payout-personal-link" href="#payout-personal" class="hide-stripe is-hidden setting-link">Personal Information</a></li>
 							<li><a id="payout-bank-link" href="#payout-bank" class="hide-stripe is-hidden setting-link">Bank Information</a></li>
 						</ul>
-						<% if (user.stripe_charges) { %>
+						<% if (user.stripe_transfers) { %>
 							<p class="menu-label">
 								Transactions
 							</p>
@@ -159,7 +159,6 @@
 												<option value="HK">Hong Kong</option>
 												<option value="IE">Ireland</option>
 												<option value="IT">Italy</option>
-												<option value="JP">Japan</option>
 												<option value="LU">Luxembourg</option>
 												<option value="NL">Netherlands</option>
 												<option value="NO">Norway</option>
@@ -440,167 +439,102 @@
 										</span>
 									</div>
 									<div class="control">
-										<label class="label" for="currency-input">Currency</label>
-										<span class="select is-disabled is-fullwidth">
-											<select required id="currency-input" name="currency" class="stripe-input">
-												<option selected value="" disabled>Currency</option>
-												<option value='AED'>AED: United Arab Emirates Dirham</option>
-												<option value='AFN'>AFN: Afghan Afghani</option>
-												<option value='ALL'>ALL: Albanian Lek</option>
-												<option value='AMD'>AMD: Armenian Dram</option>
-												<option value='ANG'>ANG: Netherlands Antillean Gulden</option>
-												<option value='AOA'>AOA: Angolan Kwanza</option>
-												<option value='ARS'>ARS: Argentine Peso</option>
-												<option value='AUD'>AUD: Australian Dollar</option>
-												<option value='AWG'>AWG: Aruban Florin</option>
-												<option value='AZN'>AZN: Azerbaijani Manat</option>
-												<option value='BAM'>BAM: Bosnia & Herzegovina Convertible Mark</option>
-												<option value='BBD'>BBD: Barbadian Dollar</option>
-												<option value='BDT'>BDT: Bangladeshi Taka</option>
-												<option value='BGN'>BGN: Bulgarian Lev</option>
-												<option value='BIF'>BIF: Burundian Franc</option>
-												<option value='BMD'>BMD: Bermudian Dollar</option>
-												<option value='BND'>BND: Brunei Dollar</option>
-												<option value='BOB'>BOB: Bolivian Boliviano</option>
-												<option value='BRL'>BRL: Brazilian Real</option>
-												<option value='BSD'>BSD: Bahamian Dollar</option>
-												<option value='BWP'>BWP: Botswana Pula</option>
-												<option value='BZD'>BZD: Belize Dollar</option>
-												<option value='CAD'>CAD: Canadian Dollar</option>
-												<option value='CDF'>CDF: Congolese Franc</option>
-												<option value='CHF'>CHF: Swiss Franc</option>
-												<option value='CLP'>CLP: Chilean Peso</option>
-												<option value='CNY'>CNY: Chinese Renminbi Yuan</option>
-												<option value='COP'>COP: Colombian Peso</option>
-												<option value='CRC'>CRC: Costa Rican Colón</option>
-												<option value='CVE'>CVE: Cape Verdean Escudo</option>
-												<option value='CZK'>CZK: Czech Koruna</option>
-												<option value='DJF'>DJF: Djiboutian Franc</option>
-												<option value='DKK'>DKK: Danish Krone</option>
-												<option value='DOP'>DOP: Dominican Peso</option>
-												<option value='DZD'>DZD: Algerian Dinar</option>
-												<option value='EGP'>EGP: Egyptian Pound</option>
-												<option value='ETB'>ETB: Ethiopian Birr</option>
-												<option value='EUR'>EUR: Euro</option>
-												<option value='FJD'>FJD: Fijian Dollar</option>
-												<option value='FKP'>FKP: Falkland Islands Pound</option>
-												<option value='GBP'>GBP: British Pound</option>
-												<option value='GEL'>GEL: Georgian Lari</option>
-												<option value='GIP'>GIP: Gibraltar Pound</option>
-												<option value='GMD'>GMD: Gambian Dalasi</option>
-												<option value='GNF'>GNF: Guinean Franc</option>
-												<option value='GTQ'>GTQ: Guatemalan Quetzal</option>
-												<option value='GYD'>GYD: Guyanese Dollar</option>
-												<option value='HKD'>HKD: Hong Kong Dollar</option>
-												<option value='HNL'>HNL: Honduran Lempira</option>
-												<option value='HRK'>HRK: Croatian Kuna</option>
-												<option value='HTG'>HTG: Haitian Gourde</option>
-												<option value='HUF'>HUF: Hungarian Forint</option>
-												<option value='IDR'>IDR: Indonesian Rupiah</option>
-												<option value='ILS'>ILS: Israeli New Sheqel</option>
-												<option value='INR'>INR: Indian Rupee</option>
-												<option value='ISK'>ISK: Icelandic Króna</option>
-												<option value='JMD'>JMD: Jamaican Dollar</option>
-												<option value='JPY'>JPY: Japanese Yen</option>
-												<option value='KES'>KES: Kenyan Shilling</option>
-												<option value='KGS'>KGS: Kyrgyzstani Som</option>
-												<option value='KHR'>KHR: Cambodian Riel</option>
-												<option value='KMF'>KMF: Comorian Franc</option>
-												<option value='KRW'>KRW: South Korean Won</option>
-												<option value='KYD'>KYD: Cayman Islands Dollar</option>
-												<option value='KZT'>KZT: Kazakhstani Tenge</option>
-												<option value='LAK'>LAK: Lao Kip</option>
-												<option value='LBP'>LBP: Lebanese Pound</option>
-												<option value='LKR'>LKR: Sri Lankan Rupee</option>
-												<option value='LRD'>LRD: Liberian Dollar</option>
-												<option value='LSL'>LSL: Lesotho Loti</option>
-												<option value='MAD'>MAD: Moroccan Dirham</option>
-												<option value='MDL'>MDL: Moldovan Leu</option>
-												<option value='MGA'>MGA: Malagasy Ariary</option>
-												<option value='MKD'>MKD: Macedonian Denar</option>
-												<option value='MMK'>MMK: Myanmar Kyat</option>
-												<option value='MNT'>MNT: Mongolian Tögrög</option>
-												<option value='MOP'>MOP: Macanese Pataca</option>
-												<option value='MRO'>MRO: Mauritanian Ouguiya</option>
-												<option value='MUR'>MUR: Mauritian Rupee</option>
-												<option value='MVR'>MVR: Maldivian Rufiyaa</option>
-												<option value='MWK'>MWK: Malawian Kwacha</option>
-												<option value='MXN'>MXN: Mexican Peso</option>
-												<option value='MYR'>MYR: Malaysian Ringgit</option>
-												<option value='MZN'>MZN: Mozambican Metical</option>
-												<option value='NAD'>NAD: Namibian Dollar</option>
-												<option value='NGN'>NGN: Nigerian Naira</option>
-												<option value='NIO'>NIO: Nicaraguan Córdoba</option>
-												<option value='NOK'>NOK: Norwegian Krone</option>
-												<option value='NPR'>NPR: Nepalese Rupee</option>
-												<option value='NZD'>NZD: New Zealand Dollar</option>
-												<option value='PAB'>PAB: Panamanian Balboa</option>
-												<option value='PEN'>PEN: Peruvian Nuevo Sol</option>
-												<option value='PGK'>PGK: Papua New Guinean Kina</option>
-												<option value='PHP'>PHP: Philippine Peso</option>
-												<option value='PKR'>PKR: Pakistani Rupee</option>
-												<option value='PLN'>PLN: Polish Złoty</option>
-												<option value='PYG'>PYG: Paraguayan Guaraní</option>
-												<option value='QAR'>QAR: Qatari Riyal</option>
-												<option value='RON'>RON: Romanian Leu</option>
-												<option value='RSD'>RSD: Serbian Dinar</option>
-												<option value='RUB'>RUB: Russian Ruble</option>
-												<option value='RWF'>RWF: Rwandan Franc</option>
-												<option value='SAR'>SAR: Saudi Riyal</option>
-												<option value='SBD'>SBD: Solomon Islands Dollar</option>
-												<option value='SCR'>SCR: Seychellois Rupee</option>
-												<option value='SEK'>SEK: Swedish Krona</option>
-												<option value='SGD'>SGD: Singapore Dollar</option>
-												<option value='SHP'>SHP: Saint Helenian Pound</option>
-												<option value='SLL'>SLL: Sierra Leonean Leone</option>
-												<option value='SOS'>SOS: Somali Shilling</option>
-												<option value='SRD'>SRD: Surinamese Dollar</option>
-												<option value='STD'>STD: São Tomé and Príncipe Dobra</option>
-												<option value='SVC'>SVC: Salvadoran Colón</option>
-												<option value='SZL'>SZL: Swazi Lilangeni</option>
-												<option value='THB'>THB: Thai Baht</option>
-												<option value='TJS'>TJS: Tajikistani Somoni</option>
-												<option value='TOP'>TOP: Tongan Paʻanga</option>
-												<option value='TRY'>TRY: Turkish Lira</option>
-												<option value='TTD'>TTD: Trinidad and Tobago Dollar</option>
-												<option value='TWD'>TWD: New Taiwan Dollar</option>
-												<option value='TZS'>TZS: Tanzanian Shilling</option>
-												<option value='UAH'>UAH: Ukrainian Hryvnia</option>
-												<option value='UGX'>UGX: Ugandan Shilling</option>
-												<option value='USD'>USD: United States Dollar</option>
-												<option value='UYU'>UYU: Uruguayan Peso</option>
-												<option value='UZS'>UZS: Uzbekistani Som</option>
-												<option value='VND'>VND: Vietnamese Đồng</option>
-												<option value='VUV'>VUV: Vanuatu Vatu</option>
-												<option value='WST'>WST: Samoan Tala</option>
-												<option value='XAF'>XAF: Central African Cfa Franc</option>
-												<option value='XCD'>XCD: East Caribbean Dollar</option>
-												<option value='XOF'>XOF: West African Cfa Franc</option>
-												<option value='XPF'>XPF: Cfp Franc</option>
-												<option value='YER'>YER: Yemeni Rial</option>
-												<option value='ZAR'>ZAR: South African Rand</option>
-												<option value='ZMW'>ZMW: Zambian Kwacha</option>
-											</select>
-										</span>
-									</div>
-									<div class="control">
 										<div class="label-icon">
-											<label class="label" for="account_routing-input">Routing Number</label>
+											<label class="label" for"country-input">Country</label>
 											<span data-balloon="Private" data-balloon-pos="up" class="icon is-tooltip is-small">
 												<i class="fa fa-lock"></i>
 											</span>
 										</div>
-										<input required id="account_routing-input" class="input is-disabled stripe-input" type="number" pattern="[0-9]*" inputmode="numeric" name="account_routing" />
+										<span class="select is-disabled is-fullwidth">
+											<select required name="bank_country" id="bank_country-input" class="stripe-input">
+												<option value="AT">Austria</option>
+												<option value="AU">Australia</option>
+												<option value="BE">Belgium</option>
+												<option value="CA">Canada</option>
+												<option value="DK">Denmark</option>
+												<option value="FI">Finland</option>
+												<option value="FR">France</option>
+												<option value="DE">Germany</option>
+												<option value="HK">Hong Kong</option>
+												<option value="IE">Ireland</option>
+												<option value="IT">Italy</option>
+												<option value="LU">Luxembourg</option>
+												<option value="NL">Netherlands</option>
+												<option value="NO">Norway</option>
+												<option value="NZ">New Zealand</option>
+												<option value="PT">Portugal</option>
+												<option value="SG">Singapore</option>
+												<option value="ES">Spain</option>
+												<option value="SE">Sweden</option>
+												<option value="CH">Switzerland</option>
+												<option value="GB">United Kingdom</option>
+												<option value="US" selected>United States</option>
+											</select>
+										</span>
+										<small class="tip">Payout information is stored with our third party payment provider, Stripe.</small>
+									</div>
+									<div class="control">
+										<div class="label-icon">
+											<label class="label" for="currency-input">Currency</label>
+											<span data-balloon="Don't see your currency? Please contact us for assistance." data-balloon-pos="up" class="icon is-tooltip is-small">
+												<i class="fa fa-question-circle"></i>
+											</span>
+										</div>
+										<span class="select is-disabled is-fullwidth">
+											<select required id="currency-input" name="currency" class="stripe-input">
+												<option selected value="" disabled>Currency</option>
+												<option value='AUD'>AUD: Australian Dollar</option>
+												<option value='CAD'>CAD: Canadian Dollar</option>
+												<option value='CHF'>CHF: Swiss Franc</option>
+												<option value='EUR'>EUR: Euro</option>
+												<option value='GBP'>GBP: British Pound</option>
+												<option value='HKD'>HKD: Hong Kong Dollar</option>
+												<option value='JPY'>JPY: Japanese Yen</option>
+												<option value='NOK'>NOK: Norwegian Krone</option>
+												<option value='SGD'>SGD: Singapore Dollar</option>
+												<option value='SEK'>SEK: Swedish Krona</option>
+												<option value='USD'>USD: United States Dollar</option>
+											</select>
+										</span>
+									</div>
+									<div id="account_routing-wrapper" class="excess-routing-wrapper is-hidden control">
+										<div class="label-icon">
+											<label id="account_routing-text" class="label" for="account_routing-input">Routing Number</label>
+											<span data-balloon="Private" data-balloon-pos="up" class="icon is-tooltip is-small">
+												<i class="fa fa-lock"></i>
+											</span>
+										</div>
+										<input id="account_routing-input" class="excess-routing-input input is-disabled stripe-input" type="text" name="account_routing" />
+										<small class="tip">This information is stored with our third party payment provider, Stripe.</small>
+									</div>
+									<div id="account_routing2-wrapper" class="excess-routing-wrapper is-hidden control">
+										<div class="label-icon">
+											<label id="account_routing2-text" class="label" for="account_routing-input"></label>
+											<span data-balloon="Private" data-balloon-pos="up" class="icon is-tooltip is-small">
+												<i class="fa fa-lock"></i>
+											</span>
+										</div>
+										<input id="account_routing2-input" class="excess-routing-input input is-disabled stripe-input" type="text" name="account_routing2" />
+										<small class="tip">This information is stored with our third party payment provider, Stripe.</small>
+									</div>
+									<div id="account_routing3-wrapper" class="excess-routing-wrapper is-hidden control">
+										<div class="label-icon">
+											<label id="account_routing3-text" class="label" for="account_routing-input">Account Owner Name</label>
+											<span data-balloon="Private" data-balloon-pos="up" class="icon is-tooltip is-small">
+												<i class="fa fa-lock"></i>
+											</span>
+										</div>
+										<input id="account_routing3-input" class="excess-routing-input input is-disabled stripe-input" type="text" name="account_owner_name" />
 										<small class="tip">This information is stored with our third party payment provider, Stripe.</small>
 									</div>
 									<div class="control">
 										<div class="label-icon">
-											<label id="account_number-label" class="label" for="account_number-input">Account Number <span id="account_number-last4">(Last 4 Digits)</span></label>
+											<label id="account_number-label" class="label" for="account_number-input"><span id="account_number-text">Account Number </span><span id="account_number-last4">(Last 4 Digits)</span></label>
 											<span data-balloon="Private" data-balloon-pos="up" class="icon is-tooltip is-small">
 												<i class="fa fa-lock"></i>
 											</span>
 										</div>
-										<input required id="account_number-input" class="input is-disabled stripe-input" type="number" pattern="[0-9]*" inputmode="numeric" name="account_number" />
+										<input required id="account_number-input" class="excess-routing-input input is-disabled stripe-input" type="text" name="account_number" />
 										<small class="tip">This information is stored with our third party payment provider, Stripe.</small>
 									</div>
 								<div class="control hidden-edit is-hidden">
@@ -611,7 +545,7 @@
 						</div>
 					</div>
 
-					<% if (user.stripe_charges) { %>
+					<% if (user.stripe_transfers) { %>
 						<%- include("profile_transactions", {user: user}); %>
 					<% } %>
 				</div>
@@ -631,7 +565,7 @@
 	<script src="https://js.stripe.com/v2/" type="text/javascript" ></script>
 	<script src="/js/routes/profile/profile_settings_logic.js" type="text/javascript"></script>
 	<script src="/js/routes/profile/profile_settings_stripe_logic.js" type="text/javascript"></script>
-	<% if (user.stripe_charges) { %>
+	<% if (user.stripe_transfers) { %>
 		<script src="/js/routes/profile/profile_transactions_logic.js" type="text/javascript"></script>
 	<% } %>
 </body>

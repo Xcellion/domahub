@@ -36,6 +36,9 @@ var stripe = require('./lib/stripe.js');
 app.set('view engine', 'ejs');
 app.set('views', __dirname + '/views');
 
+app.use(cookieParser());
+app.use(autoReap);		//to delete any temporary uploaded files left
+
 //which session store to use depending on DEV or PROD
 if (node_env == "dev"){
 	console.log("Development environment! Using memory for sessions store.");
@@ -43,10 +46,10 @@ if (node_env == "dev"){
 	//express session in memory
 	app.use(session({
 		secret: 'domahub_market',
-		// cookie: {
-		// 	maxAge: 1800000 //30 minutes
-		// },
-		saveUninitialized: false,
+		cookie: {
+			secure: false
+		},
+		saveUninitialized: true,
 		resave: true
 	}));
 }
@@ -68,7 +71,7 @@ else {
 		},
 		proxy: true,
 		secret: 'domahub_market',
-		saveUninitialized: false,
+		saveUninitialized: true,
 		resave: true
 	}));
 
@@ -79,9 +82,6 @@ else {
 
 //for routing of static files
 app.use(express.static(__dirname + '/public'));
-
-app.use(cookieParser());
-app.use(autoReap);		//to delete any temporary uploaded files left
 
 //initialize passport for auth
 app.use(passport.initialize());

@@ -403,9 +403,9 @@ function errorHandler(message){
 		case "Invalid times!":
             showMessage("stripe-error-message", "The selected times are not available anymore! Please edit your selected rental dates.");
 			break;
-		case "Nothing displayed at that address!":
+		case "There's something wrong with this address!":
             showStep("site");
-            showMessage("address-error-message", "There's nothing to display on that site! Please choose a different website link.");
+            showMessage("address-error-message", "There's something wrong with this address! Please choose a different website link.");
 			break;
 		case "Invalid rental type!":
             showMessage("stripe-error-message", "Something went wrong with the rental! Please refresh this page and try again.");

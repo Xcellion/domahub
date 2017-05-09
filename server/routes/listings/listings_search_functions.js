@@ -17,14 +17,17 @@ module.exports = {
 
 	//get more listings
 	getMoreListings : function(req, res, next){
-		if (!validator.isInt(req.body.last_date)){
-			error.handler(req, res, "Not a valid last date!", "json");
+		console.log(req.body);
+		if (req.body.listing_count == undefined || !validator.isInt(req.body.listing_count)){
+			error.handler(req, res, "Not a valid count!", "json");
 		}
 		else {
-			Listing.getRandomListings(req.body.last_date, function(result){
+			var search_term = "%" + req.body.search_term + "%";
+			Listing.getRandomListings(search_term, req.session.id, parseFloat(req.body.listing_count), function(result){
 				res.send({
 					state: result.state,
-					listings: result.info
+					listings: result.info,
+					search_term: req.body.search_term
 				});
 			});
 		}

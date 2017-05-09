@@ -3,21 +3,20 @@ var moneyFormat = wNumb({
 	prefix: '$'
 });
 var listings = [];
+var search_term = "";
 
 $(document).ready(function() {
 
 	//get the first 10 listings
     getListings();
 
-	$("#domain-name-input").on("keyup", function(e){
-		searchListings($("#domain-name-input").val());
-		if (e.keyCode == 13){
-			e.preventDefault();
-		}
+	$("#load-button").on("click", function(){
+		getListings($(this), "click");
 	});
 
-	$("#load-button").on("click", function(){
-		getListings($(this));
+	$("#domain-name-search").on("submit", function(e){
+		e.preventDefault();
+		getListings($(this), "submit");
 	});
 
 });
@@ -25,28 +24,50 @@ $(document).ready(function() {
 //------------------------------------------------------------------------------------------- GET LISTINGS
 
 //get 10 more listings
-function getListings(load_more_elem){
+function getListings(load_more_elem, type){
 	if (load_more_elem){
 		load_more_elem.off();
+	}
+
+	//concatenate array or new array of listings
+	if (search_term != $("#domain-name-input").val()){
+		listings = [];
 	}
 
 	$.ajax({
 		url: "/listings",
 		method: "POST",
 		data: {
-			last_date : (listings.length > 0) ? listings[listings.length - 1].id : 0
+			listing_count : (listings.length > 0) ? listings.length : 0,
+			search_term : $("#domain-name-input").val(),
 		}
 	}).done(function(data){
 
 		if (load_more_elem){
 			//add back event handler
-			load_more_elem.on("click", function(){
-				getListings(load_more_elem)
+			load_more_elem.on(type, function(e){
+				e.preventDefault();
+				getListings(load_more_elem, type);
 			});
 		}
 
+		//concatenate array or new array of listings
+		if (search_term != data.search_term){
+			$("#domain-table").find(".domain-listing").not('#clone-listing-row').not("#none-listing-row").remove();
+		}
+
 		if (data.state == "success" && data.listings.length > 0){
-			listings = listings.concat(data.listings);
+
+			//concatenate array or new array of listings
+			if (search_term != data.search_term){
+				search_term = data.search_term
+				listings = data.listings;
+			}
+			else {
+				listings = listings.concat(data.listings);
+			}
+
+			$("#none-listing-row").addClass('is-hidden');
 			for (var x = 0; x < data.listings.length; x++){
 				createListingRow(data.listings[x]);
 			}
@@ -54,9 +75,15 @@ function getListings(load_more_elem){
 			if (data.listings.length != 10){
 				$("#load-button").off().addClass('is-hidden');
 			}
+			else {
+				$("#load-button").off().removeClass('is-hidden').on("click", function(){
+					getListings($("#load-button"), "click");
+				});
+			}
 		}
-		else if (data.listings.length == 0 || data.state == "error") {
+		else if ((data.listings && data.listings.length == 0) || data.state == "error") {
 			$("#load-button").off().addClass('is-hidden');
+			$("#none-listing-row").removeClass('is-hidden');
 		}
 	});
 }
@@ -88,7 +115,7 @@ function searchListings(val){
 		}
 	});
 
-	if ($('.domain-listing').is(":visible")){
+	if ($('.domain-listing').not("#none-listing-row").is(":visible")){
 		$("#none-listing-row").addClass('is-hidden');
 	}
 	else {
