@@ -19,6 +19,11 @@ $(document).ready(function() {
 		getListings($(this), "submit");
 	});
 
+	$("#order-value").on("change", function(e){
+		e.preventDefault();
+		refreshListings();
+	});
+
 });
 
 //------------------------------------------------------------------------------------------- GET LISTINGS
@@ -39,21 +44,15 @@ function getListings(load_more_elem, type){
 		method: "POST",
 		data: {
 			listing_count : (listings.length > 0) ? listings.length : 0,
-			search_term : $("#domain-name-input").val(),
+			search_term : $("#domain-name-input").val()
 		}
 	}).done(function(data){
-
 		if (load_more_elem){
 			//add back event handler
 			load_more_elem.on(type, function(e){
 				e.preventDefault();
 				getListings(load_more_elem, type);
 			});
-		}
-
-		//concatenate array or new array of listings
-		if (search_term != data.search_term){
-			$("#domain-table").find(".domain-listing").not('#clone-listing-row').not("#none-listing-row").remove();
 		}
 
 		if (data.state == "success" && data.listings.length > 0){
@@ -67,10 +66,9 @@ function getListings(load_more_elem, type){
 				listings = listings.concat(data.listings);
 			}
 
-			$("#none-listing-row").addClass('is-hidden');
-			for (var x = 0; x < data.listings.length; x++){
-				createListingRow(data.listings[x]);
-			}
+			refreshListings();
+
+			$("#total-domains-num").text("Total Domains: " + listings.length);
 
 			if (data.listings.length != 10){
 				$("#load-button").off().addClass('is-hidden');
@@ -94,38 +92,72 @@ function createListingRow(listing){
 
 	temp_clone.attr("href", "/listing/" + listing.domain_name).data("domain_name", listing.domain_name);
 	temp_clone.find(".domain-name").text(listing.domain_name);
-	temp_clone.find(".domain-price-rate").text(moneyFormat.to(listing.price_rate));
-	temp_clone.find(".domain-price-type").text(listing.price_type);
+	if (listing.price_rate != 0){
+		temp_clone.find(".domain-price-rate").text(moneyFormat.to(listing.price_rate) + " / ");
+		temp_clone.find(".domain-price-type").text(listing.price_type);
+	}
+	else {
+		temp_clone.find(".domain-price-rate").text("Free!");
+	}
 	$("#domain-table").append(temp_clone);
 }
 
 //------------------------------------------------------------------------------------------- SEARCH
 
-//function to search for domains
-function searchListings(val){
-	$(".domain-listing").not("#clone-listing-row").not("#none-listing-row").each(function(){
-		if ($(this).data("domain_name").indexOf(val) == -1){
-			$(this).addClass('is-hidden');
+function sortListings(){
+	var price_multipliers = {
+		hour : 720,
+		week : 4,
+		day : 30,
+		month : 1
+	}
+
+	listings.sort(function(a,b){
+		if ($("#order-value").val() == "za"){
+			if (b.domain_name > a.domain_name){
+				return 1
+			}
+			if (b.domain_name < a.domain_name){
+				return -1
+			}
+			return 0;
 		}
-		else if (!val){
-			$(this).removeClass('is-hidden');
+		else if ($("#order-value").val() == "hl"){
+			if (b.price_rate * price_multipliers[b.price_type] > a.price_rate * price_multipliers[a.price_type]){
+				return 1
+			}
+			if (b.price_rate * price_multipliers[b.price_type] < a.price_rate * price_multipliers[a.price_type]){
+				return -1
+			}
+			return 0;
+		}
+		else if ($("#order-value").val() == "lh"){
+			if (b.price_rate * price_multipliers[b.price_type] > a.price_rate * price_multipliers[a.price_type]){
+				return -1
+			}
+			if (b.price_rate * price_multipliers[b.price_type] < a.price_rate * price_multipliers[a.price_type]){
+				return 1
+			}
+			return 0;
 		}
 		else {
-			$(this).removeClass('is-hidden');
+			if (b.domain_name > a.domain_name){
+				return -1
+			}
+			if (b.domain_name < a.domain_name){
+				return 1
+			}
+			return 0;
 		}
 	});
+}
 
-	if ($('.domain-listing').not("#none-listing-row").is(":visible")){
-		$("#none-listing-row").addClass('is-hidden');
-	}
-	else {
-		$("#none-listing-row").removeClass('is-hidden');
-	}
-
-	if (val){
-		$("#load-button").addClass('is-hidden');
-	}
-	else {
-		$("#load-button").removeClass('is-hidden');
+//function to search for domains
+function refreshListings(){
+	$("#domain-table").find(".domain-listing").not('#clone-listing-row').not("#none-listing-row").remove();
+	sortListings();
+	$("#none-listing-row").addClass('is-hidden');
+	for (var x = 0; x < listings.length; x++){
+		createListingRow(listings[x]);
 	}
 }
