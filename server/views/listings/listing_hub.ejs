@@ -21,20 +21,22 @@
 						<button class="button is-primary is-stylish" type="submit">Submit</button>
 					</div>
 				</form>
-				<div class="control">
-					<span class="select">
-						<select>
-							<option value="AZ">Name: A to Z</option>
-							<option value="ZA">Name: Z to A</option>
-							<option value="HL">Price: Low to High</option>
-							<option value="LH">Price: High to Low</option>
+				<div class="control margin-bottom-25">
+					<span id="total-domains-num" class='v-align-middle margin-right-15'>Total Domains: 0</span>
+					<span class='v-align-middle margin-right-15'>Sort: </span>
+					<span class="select v-align-middle">
+						<select id="order-value">
+							<option value="az">Name: A to Z</option>
+							<option value="za">Name: Z to A</option>
+							<option value="lh">Price: Low to High</option>
+							<option value="hl">Price: High to Low</option>
 						</select>
 					</span>
 				</div>
 				<div id="domain-table">
 					<a id="clone-listing-row" class="is-hidden domain-listing">
 						<p class="domain-name"></p>
-						<p class="is-bold domain-price"><span class='domain-price-rate'></span> / <span class='domain-price-type'></span></p>
+						<p class="is-bold domain-price"><span class='domain-price-rate'></span><span class='domain-price-type'></span></p>
 					</a>
 					<a id="none-listing-row" class="is-hidden domain-listing">
 						<p class="is-bold domain-name">There are no matching domains with that name!</p>

@@ -17,13 +17,12 @@ module.exports = {
 
 	//get more listings
 	getMoreListings : function(req, res, next){
-		console.log(req.body);
 		if (req.body.listing_count == undefined || !validator.isInt(req.body.listing_count)){
 			error.handler(req, res, "Not a valid count!", "json");
 		}
 		else {
 			var search_term = "%" + req.body.search_term + "%";
-			Listing.getRandomListings(search_term, req.session.id, parseFloat(req.body.listing_count), function(result){
+			Listing.getRandomListings(search_term, parseFloat(req.body.listing_count), function(result){
 				res.send({
 					state: result.state,
 					listings: result.info,
