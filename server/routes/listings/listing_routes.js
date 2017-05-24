@@ -12,10 +12,22 @@ var jsonParser = bodyParser.json()
 var urlencodedParser = bodyParser.urlencoded({ extended: true })
 
 var validator = require("validator");
+var node_env = process.env.NODE_ENV || 'dev'; 	//dev or prod bool
 
 module.exports = function(app, db, auth, error, stripe){
 	Listing = new listing_model(db);
 	Data = new data_model(db);
+
+	//render listing hub
+	app.get("/listings", [
+		search_functions.renderListingHub
+	]);
+
+	//get more listings for the listings hub
+	app.post("/listings", [
+		urlencodedParser,
+		search_functions.getMoreListings
+	]);
 
 	//<editor-fold>-------------------------------SEARCH LISTINGS-------------------------------
 
@@ -185,9 +197,10 @@ module.exports = function(app, db, auth, error, stripe){
 	//render specific listing page
 	app.get('/listing/:domain_name', [
 		checkDomainValid,
-		renter_functions.addToSearch,
+		renter_functions.addToSearchHistory,
 		renter_functions.getListingInfo,
 		renter_functions.checkStillVerified,
+		renter_functions.getListingFreeTimes,
 		renter_functions.renderListing
 	]);
 
@@ -210,57 +223,38 @@ module.exports = function(app, db, auth, error, stripe){
 		renter_functions.getListingAlexa
 	]);
 
-	//render rental checkout page
-	app.get('/listing/:domain_name/checkout', [
-		renter_functions.renderCheckout
-	]);
-
 	//get listing info / times
 	app.post('/listing/:domain_name/times', [
 		urlencodedParser,
 		checkDomainValid,
 		checkDomainListed,
+		renter_functions.addToAvailCheckHistory,
 		renter_functions.getListingTimes
 	]);
 
-	//associate a user with a hash rental
-	app.get('/listing/:domain_name/:rental_id/:owner_hash_id', [
-		checkDomainValid,
-		checkDomainListed,
-		renter_functions.getRental,
-		auth.checkLoggedIn,
-		renter_functions.createRentalObject,
-		renter_functions.updateRentalOwner,
-		renter_functions.editRental,
-		renter_functions.redirectRental
+	//render rental checkout page
+	app.get('/listing/:domain_name/checkout', [
+		renter_functions.renderCheckout
 	]);
 
-	//render rental page
-	app.get('/listing/:domain_name/:rental_id', [
-		checkDomainValid,
-		checkDomainListed,
-		renter_functions.deleteRentalInfo,
-		renter_functions.getRental,
-		renter_functions.checkRentalDomain,
-		renter_functions.getRentalRentalTimes,
-		renter_functions.getListingInfo,
-		renter_functions.redirectToPreview
+	//track checkout behavior
+	app.post("/listing/:domain_name/checkouttrack", [
+		ifNotDev,
+		urlencodedParser,
+		renter_functions.addToCheckoutAction
 	]);
 
-	//render rental page
-	app.get('/rentalpreview', [
-		renter_functions.checkForPreview,
-		renter_functions.renderRental
-	]);
-
-	//render checkout page
+	//redirect to the checkout page after validating times / path
 	app.post('/listing/:domain_name/checkout', [
 		urlencodedParser,
 		checkDomainValid,
 		checkDomainListed,
 		renter_functions.getListingInfo,
+		renter_functions.getListingFreeTimes,
 		renter_functions.createNewRentalObject,
 		renter_functions.checkRentalTimes,
+		renter_functions.checkRentalPrice,
+		renter_functions.addToCheckoutHistory,
 		renter_functions.redirectToCheckout
 	]);
 
@@ -270,7 +264,8 @@ module.exports = function(app, db, auth, error, stripe){
 		checkDomainValid,
 		checkDomainListed,
 		renter_functions.getListingInfo,
-		renter_functions.checkRentalInfo,
+		renter_functions.getListingFreeTimes,
+		renter_functions.checkRentalInfoNew,
 		renter_functions.checkRentalTimes,
 		renter_functions.checkRentalPrice,
 		renter_functions.createRental,
@@ -281,17 +276,38 @@ module.exports = function(app, db, auth, error, stripe){
 		renter_functions.sendRentalSuccess
 	]);
 
+	//associate a user with a hash rental
+	app.get(['/listing/:domain_name/:rental_id/:owner_hash_id',
+	'/listing/:domain_name/:rental_id'], [
+		checkDomainValid,
+		checkDomainListed,
+		renter_functions.deleteRentalInfo,
+		renter_functions.getRental,
+		renter_functions.checkRentalOwner,
+		renter_functions.checkRentalDomain,
+		renter_functions.getRentalRentalTimes,
+		renter_functions.createRentalObject,
+		renter_functions.updateRentalOwner,
+		renter_functions.editRental,
+		renter_functions.redirectToPreview
+	]);
+
+	//render rental page
+	app.get('/rentalpreview', [
+		renter_functions.checkForPreview,
+		renter_functions.renderRental
+	]);
+
 	//changing rental information
 	app.post('/listing/:domain_name/:rental_id/edit', [
 		urlencodedParser,
-		auth.checkLoggedIn,
 		checkDomainValid,
 		checkDomainListed,
 		renter_functions.getRental,
 		renter_functions.checkRentalDomain,
 		renter_functions.checkRentalOwner,
 		renter_functions.createRentalObject,
-		renter_functions.checkPostedRentalAddress,
+		renter_functions.checkRentalInfoEdit,
 		renter_functions.editRental,
 		renter_functions.updateRentalObject
 	]);
@@ -329,6 +345,16 @@ module.exports = function(app, db, auth, error, stripe){
 
 	//</editor-fold>
 
+}
+
+//function to check dev or not
+function ifNotDev(req, res, next){
+	if (node_env != "dev"){
+		next();
+	}
+	else {
+		res.sendStatus(200);
+	}
 }
 
 //function to check validity of domain name

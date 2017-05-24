@@ -20,18 +20,17 @@
       <span></span>
       <span></span>
     </span>
-    <div class="nav-right nav-menu is-black">
-<%# <div class="nav-item">
-<a class="nav-link is-white" tabindex="0" title="Browse Listings" href="/listings">Browse Listings</a>
-</div>%>
-
+    <div class="nav-right nav-menu is-blue">
+        <div class="nav-item">
+          <a tabindex="0" class="nav-link is-white" title="Browse Domains" href="/listings">Browse Domains</a>
+        </div>
 <%# navbar checks for a user variable, if it doesnt exist, then display the login button %>
 <% if (!user) { %>
-    <%# <div class="nav-item">
-      <a id="signup" tabindex="0" class="nav-link is-white" title="Sign Up" href="/signup">Sign Up</a>
-    </div> %>
     <div class="nav-item">
-      <a tabindex="0" class="login-modal button is-white is-stylish is-small modal-button" title="Log In" data-object="#modal-login">Log In</a>
+      <a id="signup" tabindex="0" class="nav-link is-white" title="Sign Up" href="/signup">Sign Up</a>
+    </div>
+    <div class="nav-item">
+      <a tabindex="0" id="login-navbar" class="checkout-track login-modal button is-white is-stylish is-small modal-button" title="Log In" data-object="#modal-login">Log In</a>
     </div>
     <div id="modal-login" class="modal">
       <div class="modal-background"></div>

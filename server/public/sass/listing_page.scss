@@ -48,13 +48,13 @@ html {
   padding: 2px 5px;
   position: absolute;
   right: 0;
-  width: 136px;
+  width: 142px;
   @include mobile-456px {
     font-size: $size-7
   }
   &.is-active {
     background-color: $danger;
-    width: 218px;
+    width: 225px;
     &::before {
       border-bottom-color: $danger;
       border-left-color: $danger;
@@ -139,11 +139,9 @@ html {
 .header {
   display: flex;
   align-items: center;
-  cursor: pointer;
-  p {
-    &:not(:last-child) {
-      margin-bottom: 0 !important;
-    }
+  margin-bottom: 0 !important;
+  span {
+    margin-left: 3px;
   }
 }
 

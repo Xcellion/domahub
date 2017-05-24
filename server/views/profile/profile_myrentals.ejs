@@ -4,9 +4,7 @@
 
 <head>
 	<title>My Rentals - DomaHub</title>
-	<link rel="stylesheet" href="/css/lib/fullcalendar.min.css" type="text/css" />
 	<link rel="stylesheet" href="/css/min/profile_general.min.css" type="text/css" />
-	<link rel="stylesheet" href="/css/min/calendar_modal.min.css" type="text/css" />
 	<%- include("../templates/head_links"); %>
 </head>
 
@@ -123,19 +121,7 @@
 											</span>
 											<span>Edit</span>
 										</a>
-										<!-- <a class="button preview-button is-pulled-right margin-right-5 no-shadow" target="_blank" rel="noopener" title="Preview this rental" style="target-new: tab;" href="">
-											<span class="icon is-small">
-												<i class="fa fa-external-link" aria-hidden="true"></i>
-											</span>
-											<span>Preview</span>
-										</a> -->
 									</td>
-									<!-- <td class="td-visible is-hidden-mobile">
-
-									</td>
-									<td class="td-visible is-hidden-mobile">
-
-									</td> -->
 									<td class="td-visible td-status is-hidden-mobile"></td>
 									<td class="td-visible td-address is-hidden-mobile">
 										<div class="address-div-wrapper">
@@ -154,47 +140,46 @@
 									<td class="row-drop-td" colspan="5">
 										<div class="div-drop td-visible" style="display: none;"> <!-- need in style for drop row-->
 											<div class="columns">
-												<div class="column is-9">
-													<div class="control">
-														<p class="rental-dates is-inline-block margin-bottom-5 is-bold">Rental Dates</p>
-														<ol class="padding-left-20">
-															<li id="rental-dates-clone" class='is-hidden'></li>
-														</ol>
-													</div>
-													<div class="control">
-														<div class="is-flex-wrap margin-bottom-10">
-															<a target="_blank" rel="noopener" class="view-rental button margin-right-5 no-shadow">View Listing</a>
+												<div class="column">
+													<div class="control has-addons is-flex-wrap">
+															<a target="_blank" rel="noopener" class="view-rental button no-shadow">View Listing</a>
 															<a class="delete-rental button no-shadow">Delete Rental</a>
-														</div>
-														<form class="drop-form">
-															<div class="control is-grouped">
-																<div class="control">
-																	<a class="save-changes-button button is-disabled is-primary">Save Changes</a>
-																</div>
-																<div class="control">
-																	<a class="cancel-changes-button button is-hidden is-danger">Cancel Changes</a>
-																</div>
-															</div>
-															<div class="rental-msg listing-msg-error is-hidden is-danger notification">
-																<button class="delete"></button>
-															</div>
-															<div class="rental-msg listing-msg-success is-hidden is-primary notification">
-																<button class="delete"></button>
-															</div>
-														</form>
+															<a target="_blank" rel="noopener" href="" class="preview-link button no-shadow">Click to Preview</a>
 													</div>
+													<div class="content">
+														<h3>Rental Dates</h3>
+														<ul class="rental-dates margin-top-10 has-disc">
+															<li id="rental-dates-clone" class='is-hidden'></li>
+														</ul>
+													</div>
+													<form class="drop-form">
+														<div class="control is-grouped">
+															<div class="control">
+																<a class="save-changes-button button is-disabled is-primary is-stylish is-small">Save Changes</a>
+															</div>
+															<div class="control">
+																<a class="cancel-changes-button button is-hidden is-danger is-stylish is-small">Cancel Changes</a>
+															</div>
+														</div>
+														<div class="rental-msg listing-msg-error is-hidden is-danger notification">
+															<button class="delete"></button>
+														</div>
+														<div class="rental-msg listing-msg-success is-hidden is-primary notification">
+															<button class="delete"></button>
+														</div>
+													</form>
 												</div>
-												<div class="column is-3">
+												<!-- <div class="column is-3">
 													<div class="card is-pulled-right no-shadow listing-img">
 														<div class="card-image">
 															<figure class="image listing-img">
 																<img class="is-listing preview-image" src="" alt="Listing preview image"></figure>
 															</div>
 															<footer class="card-footer has-text-centered">
-																<a target="_blank" rel="noopener" href="" class="preview-link card-footer-item no-border">Click to Preview</a>
+																<a target="_blank" rel="noopener" href="" class="preview-link button no-shadow is-fullwidth">Click to Preview</a>
 															</footer>
 														</div>
-													</div>
+													</div> -->
 												</div>
 											</div>
 										</td>

@@ -15,14 +15,18 @@
       <li id="ticker-views" class='ticker-row is-hidden'>
           <span class='ticker-icon-color is-dark'><i class="margin-right-10 fa fa-users ticker-icon"></i></span>
           <div class="ticker-text">
-              <span id="views-total">0</span> people have viewed this page or its subpages in the past <span id="views-time">day</span>.
+            <p>
+              <span id="views-total" class="is-inline">0</span>
+              people have viewed this page or its subpages in the past 
+              <span id="views-time">day</span>.
+            </p>
           </div>
       </li>
       <li id="ticker-empty" class='ticker-row is-hidden'>
           <span class='ticker-icon-color is-danger'><i class="margin-right-10 fa fa-exclamation-triangle ticker-icon"></i></span>
-          <div class="ticker-text">
-              There is no other recent activity!
-          </div>
+          <p class="ticker-text">
+            There is no other recent activity!
+          </p>
       </li>
       <li id="ticker-loading" class='ticker-row'>Now loading recent history</li>
   </ul>

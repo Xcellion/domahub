@@ -8,6 +8,7 @@ module.exports = {
 function handler(req, res, message, type) {
 	switch (type){
 		case "api":
+			console.log("ERROR: " + message);
 			if (node_env == "dev"){
 				res.redirect("http://localhost:8080" + req.originalUrl);
 			}

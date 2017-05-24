@@ -1,5 +1,6 @@
 var	account_model = require('../models/account_model.js');
 var	listing_model = require('../models/listing_model.js');
+var	data_model = require('../models/data_model.js');
 var	validator = require('validator');
 var	request = require('request');
 var bodyParser = require('body-parser');
@@ -7,17 +8,31 @@ var urlencodedParser = bodyParser.urlencoded({ extended: true });
 var dns = require("dns");
 var randomstring = require("randomstring");
 var awis = require('awis');
+var node_env = "dev";
+var path = require('path');
+var fs = require('fs');
 
 module.exports = function(app, db, auth, error){
     Auth = auth;
     Account = new account_model(db);
     Listing = new listing_model(db);
+    Data = new data_model(db);
 
     app.get("/alexa/:domain_name", alexa);
     app.get("/createcodes/:number", [
         createSignupCodes
     ]);
     app.get("/proxyimage", proxyimage);
+    app.get("/proxysite", proxysite);
+    app.get("/analysis/:domain_name", analysis);
+}
+
+//testing quantcast redirect
+function quantcast(req, res, next){
+    res.render("quant_redirect.ejs", {
+        redirect_link: "https://fuck.com",
+        redirect_name: "fuck.com"
+    });
 }
 
 //testing alexa get
@@ -53,26 +68,127 @@ function alexa(req, res, next){
 function createSignupCodes(req, res, next){
     console.log("F: Creating " + req.params.number + " signup codes...");
     var codes = [];
+    var return_lazy = [];
 
     if (validator.isInt(req.params.number)){
         for (var x = 0; x < req.params.number; x++){
-            codes.push([randomstring.generate(10), 1]);
+            var random_string = randomstring.generate(10);
+            codes.push([random_string, 1]);
+            return_lazy.push("https://domahub.com/signup/" + random_string);
         }
     }
     Account.createSignupCodes(codes, function(result){
-        res.send(result);
+        res.send(return_lazy.join("</br></br>"));
     });
 }
 
 //function to test proxy image
 function proxyimage(req, res, next){
     res.render("proxy/proxy-image.ejs", {
-        image: "http://i.imgur.com/R3RfrnJ.jpg",
+        image: "https://clips.twitch.tv/GoodAgileSparrowUWot",
         content: "image",
-        edit: true,
-        preview: true,
+        edit: false,
+        preview: false,
         doma_rental_info : {
-            address: "fuck"
+            address: "https://clips.twitch.tv/GoodAgileSparrowUWot",
+            type: 0,
+            rental_id : 359,
+            path: "lol",
+            domain_name: "youretoxic.com",
+            date: 1493352000000,
+            duration: 86400000,
+            owner_hash_id: "jfka0"
         }
+    });
+}
+
+//function to test proxy websites
+function proxysite(req, res, next){
+    var doma_rental_info = {
+        address: "http://1minlee.com",
+        type: 0,
+        rental_id : 359,
+        path: "lol",
+        domain_name: "youretoxic.com",
+        date: 1493352000000,
+        duration: 86400000,
+        owner_hash_id: "jfka0"
+    }
+
+    var address_request = request({
+        url: doma_rental_info.address,
+        encoding: null
+    }, function (err, response, body) {
+
+        var index_path = (node_env == "dev") ? path.resolve(process.cwd(), 'server', 'views', 'proxy', 'proxy-index.ejs') : path.resolve(process.cwd(), 'views', 'proxy', 'proxy-index.ejs');
+        var preview_path = (node_env == "dev") ? path.resolve(process.cwd(), 'server', 'views', 'proxy', 'proxy-preview.ejs') : path.resolve(process.cwd(), 'views', 'proxy', 'proxy-preview.ejs');
+
+        var proxy_index = fs.readFileSync(index_path);
+        var proxy_preview = fs.readFileSync(preview_path);
+
+        var rental_info_buffer = new Buffer("<script>var doma_rental_info = " + JSON.stringify(doma_rental_info) + "</script>");
+        var buffer_array = [body, proxy_index, proxy_preview, rental_info_buffer];
+
+        //if authenticated to edit the rental preview
+        if (req.session.proxy_edit){
+            var edit_path = (node_env == "dev") ? path.resolve(process.cwd(), 'server', 'views', 'proxy', 'proxy-edit.ejs') : path.resolve(process.cwd(), 'views', 'proxy', 'proxy-edit.ejs');
+            var proxy_preview = fs.readFileSync(edit_path);
+            buffer_array.push(proxy_preview);
+        }
+        else {
+            var noedit_path = (node_env == "dev") ? path.resolve(process.cwd(), 'server', 'views', 'proxy', 'proxy-noedit.ejs') : path.resolve(process.cwd(), 'views', 'proxy', 'proxy-noedit.ejs');
+            var proxy_nopreview = fs.readFileSync(noedit_path);
+            buffer_array.push(proxy_nopreview);
+        }
+
+        if (!proxy_index || (req.session.proxy_edit && !proxy_preview) || (!req.session.proxy_edit && !proxy_nopreview)) {
+            error.handler(req, res, "Invalid rental!");
+        }
+        else {
+            res.set("content-type", response.headers["content-type"]);
+            res.end(Buffer.concat(buffer_array));
+        }
+
+    });
+}
+
+//function to analyze traffic funnel
+function analysis(req, res, next){
+    var domain_name = req.params.domain_name;
+
+    var traffic = {
+        domain_name : domain_name
+    };
+
+    Data.getRentalTraffic(domain_name, function(result){
+        traffic.rental_views = result.info;
+
+        Data.getListingRentalTraffic(domain_name, function(result){
+            traffic.listing_rental_views = result.info;
+
+            Data.getAvailCheckHistory(domain_name, function(result){
+                traffic.avail_check_history = {
+                    length: result.info.length,
+                    data: result.info
+                }
+
+                Data.getCheckoutHistory(domain_name, function(result){
+                    traffic.checkout_history = {
+                        length: result.info.length,
+                        data: result.info
+                    }
+
+                    Data.getCheckoutActions(domain_name, function(result){
+                        traffic.checkout_actions = {
+                            length: result.info.length,
+                            data: result.info
+                        }
+                        res.render("dev/analysis.ejs", {
+                            traffic: traffic
+                        });
+                    });
+                });
+            });
+        });
     });
 }

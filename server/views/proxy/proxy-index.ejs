@@ -1,23 +1,13 @@
-<link href="https://domahub.com/css/proxy.css" rel="stylesheet">
-<a id="domahub-button">D</a>
 <link href="https://fonts.googleapis.com/css?family=Roboto:400,700" rel="stylesheet" />
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 <script>
-    console.log("DomaHub menu loaded!");
-    $(document).ready(function(){
-        $("#domahub-button").on("click", function(e){
-            $(".domahub-wrapper").slideToggle(300);
-        });
-
-        //set listing link
-        $("#domahub-listing-button").attr("href", "https://www.domahub.com/listing/" + doma_rental_info.domain_name);
-    });
+    console.log("DomaHub logic loaded!");
+    var doma_rental_info = <%-JSON.stringify(doma_rental_info)%>;
 </script>
 <!-- Quantcast Tag -->
 <script type="text/javascript">
 var _qevents = _qevents || [];
-
 (function() {
 var elem = document.createElement('script');
 elem.src = (document.location.protocol == "https:" ? "https://secure" : "http://edge") + ".quantserve.com/quant.js";
@@ -26,12 +16,10 @@ elem.type = "text/javascript";
 var scpt = document.getElementsByTagName('script')[0];
 scpt.parentNode.insertBefore(elem, scpt);
 })();
-
 _qevents.push({
 qacct:"p-09CUz3n_dWjFg"
 });
 </script>
-
 <noscript>
 <div style="display:none;">
 <img src="//pixel.quantserve.com/pixel/p-09CUz3n_dWjFg.gif" border="0" height="1" width="1" alt="Quantcast"/>
