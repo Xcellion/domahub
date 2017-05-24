@@ -248,7 +248,7 @@ function createTickerRow(rental, now){
 		else if (rental.address.match(/\.(pdf)$/) != null){
 			var ticker_type = ticker_pre_tense + "display" + ticker_verb_tense + " <a href=" + rental_preview + " class='is-accent is-underlined'>a PDF</a> on " + path;
 			ticker_icon_color.addClass('is-danger');
-			ticker_icon.addClass('fa-pdf-o');
+			ticker_icon.addClass('fa-file-pdf-o');
 		}
 
 		//showing a website
