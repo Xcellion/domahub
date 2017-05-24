@@ -12,18 +12,10 @@ button[data-balloon] {
   -moz-opacity: 0;
   opacity: 0;
   pointer-events: none;
-  -webkit-transition: all 0.18s ease-out 0.18s;
-  transition: all 0.18s ease-out 0.18s;
   bottom: 100%;
   left: 50%;
   position: absolute;
-  z-index: 10;
-  -webkit-transform: translate(-50%, 10px);
-  -ms-transform: translate(-50%, 10px);
-  transform: translate(-50%, 10px);
-  -webkit-transform-origin: top;
-  -ms-transform-origin: top;
-  transform-origin: top; }
+  z-index: 10; }
 
 [data-balloon]:after {
   background: #fff;
@@ -34,15 +26,29 @@ button[data-balloon] {
   font-size: 12px;
   padding: .5em 1em;
   white-space: nowrap;
-  margin-bottom: 11px; }
+  margin-bottom: 11px;
+  -webkit-transform: translate(-50%, 10px);
+  -ms-transform: translate(-50%, 10px);
+  transform: translate(-50%, 10px);
+  -webkit-transform-origin: top;
+  -ms-transform-origin: top;
+  transform-origin: top;
+  z-index: 9; }
 
 [data-balloon]:before {
-  background: url("data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%2236px%22%20height%3D%2212px%22%3E%3Cpath%20fill%3D%22rgba%2817,%2017,%2017,%200.9%29%22%20transform%3D%22rotate%280%29%22%20d%3D%22M2.658,0.000%20C-13.615,0.000%2050.938,0.000%2034.662,0.000%20C28.662,0.000%2023.035,12.002%2018.660,12.002%20C14.285,12.002%208.594,0.000%202.658,0.000%20Z%22/%3E%3C/svg%3E") no-repeat;
-  background-size: 100% auto;
-  height: 6px;
-  width: 18px;
+  background: #fff;
+  border-bottom: 1px solid #444;
+  border-left: 1px solid #444;
+  -moz-transform: rotate(-45deg) translate(-40%, -1px);
+  -o-transform: rotate(-45deg) translate(-40%, -1px);
+  -ms-transform: rotate(-45deg) translate(-40%, -1px);
+  -webkit-transform: rotate(-45deg) translate(-40%, -1px);
+  transform: rotate(-45deg) translate(-40%, -1px);
+  height: 7px;
+  margin-bottom: 9px;
+  width: 7px;
   content: "";
-  margin-bottom: 5px; }
+  z-index: 10; }
 
 [data-balloon]:hover:before,
 [data-balloon][data-balloon-visible]:before,
@@ -53,7 +59,10 @@ button[data-balloon] {
   -khtml-opacity: 1;
   -moz-opacity: 1;
   opacity: 1;
-  pointer-events: auto;
+  pointer-events: auto; }
+
+[data-balloon]:hover:after,
+[data-balloon][data-balloon-visible]:after {
   -webkit-transform: translate(-50%, 0);
   -ms-transform: translate(-50%, 0);
   transform: translate(-50%, 0); }
@@ -206,6 +215,20 @@ button[data-balloon] {
 #decision-section {
   position: relative; }
 
+#learn-more-wrapper {
+  color: #FFF;
+  top: -50px;
+  left: 50%;
+  position: absolute;
+  z-index: 4;
+  transform: translateX(-50%);
+  margin-right: -50%;
+  cursor: pointer; }
+
+#learn-more-text {
+  margin: auto;
+  margin-bottom: 15px; }
+
 .learn-more-arrow {
   -webkit-box-shadow: 1px 1px 10px 0 rgba(0, 0, 0, 0.38);
   -moz-box-shadow: 1px 1px 10px 0 rgba(0, 0, 0, 0.38);
@@ -214,12 +237,19 @@ button[data-balloon] {
   -o-transition: background-color 0.25s ease;
   -webkit-transition: background-color 0.25s ease;
   transition: background-color 0.25s ease;
+  -moz-transform: translate(-50%, 0);
+  -o-transform: translate(-50%, 0);
+  -ms-transform: translate(-50%, 0);
+  -webkit-transform: translate(-50%, 0);
+    -webkit-transform-transform: translate(-50%, 0);
   background-color: #3cbc8d;
   border-radius: 100%;
-  top: -16px;
-  left: 49%;
+  left: 50%;
+  top: 34px;
   position: absolute;
-  z-index: 4; }
+  z-index: 4;
+  width: 34px;
+  margin: auto; }
   .learn-more-arrow:hover {
     background-color: #309670; }
   .learn-more-arrow a:active, .learn-more-arrow a:focus {
@@ -273,7 +303,7 @@ button[data-balloon] {
             border-bottom: 1px solid rgba(0, 0, 0, 0.12);
             padding-bottom: 20px; } }
       .tabs-box ul li a {
-        font-weight: 700;
+        font-weight: 500;
         text-transform: uppercase;
         padding: 15px; }
         @media screen and (max-width: 768px) {
@@ -329,7 +359,7 @@ button[data-balloon] {
 
 @media screen and (min-width: 769px) and (max-width: 979px) {
   .dom-ben {
-    height: 224px; } }
+    height: 244px; } }
 
 @media screen and (min-width: 980px) {
   .options {
@@ -365,7 +395,7 @@ button[data-balloon] {
   display: flex;
   align-items: center; }
   .slider-content h3 {
-    font-weight: 700; }
+    font-weight: 500; }
   .slider-content .slider-icon {
     border: 2px solid #3cbc8d;
     border-radius: 100%;

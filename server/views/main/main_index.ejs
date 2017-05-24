@@ -13,7 +13,6 @@
 
   <%- include("../templates/navbar", {user: user}); %>
   <section id="landing" class="section is-index-img">
-    <span></span>
     <div class="container">
       <div class="content has-text-centered margin-bottom-25">
         <h1 class="title is-1 is-white is-bold">
@@ -23,35 +22,23 @@
           Rent memorable domain names for marketing or personal use for the exact duration you need.
         </h2>
       </div>
-      <form class="beta-form has-text-centered">
-        <div class="control is-grouped-center margin-bottom-0">
-          <p class="control margin-right-5 has-icon">
-            <input tabindex="0" class="input is-medium" type="text" name="betaemail" placeholder="Your Email"/>
-            <i class="fa fa-envelope"></i>
-          </p>
-          <p class="control">
-            <button tabindex="0" class="beta-submit button is-primary is-stylish">Apply</button>
-          </p>
-        </div>
-        <p class="signup-text beta-normal-message">Please submit your email to apply for our service.</p>
-        <p class="signup-text has-text-center beta-error-message is-danger is-hidden">Hey! That was not a valid email address!</p>
-      </form>
-      <div class="beta-form-success is-hidden">
-        <div class="notification has-text-centered is-white">
-          <p>You have been put on the waiting list!</p>
-        </div>
+      <div class="control is-grouped-center">
+        <a tabindex="0" href="/listings" class="button is-stylish is-primary">Browse Domains</a>
       </div>
     </div>
   </section>
 
   <section id="decision-section" class="section is-medium-top">
-    <div class="learn-more-arrow">
-      <a tabindex="0" href="#decision-section" id="learn-more-button" title="Learn More">
-        <span class="icon is-medium is-white">
-          <i class="fa fa-angle-down"></i>
-        </span>
-      </a>
-    </div>
+      <div id="learn-more-wrapper" class='has-text-centered'>
+        <p id="learn-more-text">Learn more...</p>
+          <div class="learn-more-arrow">
+              <a tabindex="0" href="#decision-section" id="learn-more-button" title="Learn More">
+                  <span class="icon is-medium is-white">
+                      <i class="fa fa-angle-down"></i>
+                  </span>
+              </a>
+          </div>
+      </div>
     <div class="container">
       <div class="tabs-box">
         <ul>
@@ -66,7 +53,7 @@
     </div>
   </section>
 
-  <section id="have-domains-section" class="section is-medium d-owner">
+  <section id="have-domains-section" class="section is-medium has-border-bottom d-owner">
     <div class="container">
       <div class="content">
         <h1 class="title is-2 has-text-centered">What makes a domain exceptional?</h1>
@@ -147,7 +134,7 @@
     </div>
   </section>
 
-  <section class="section is-medium d-owner">
+  <section class="section is-medium has-border-bottom d-owner">
     <div class="container">
       <div class="columns">
         <div class="column is-6 is-offset-3">
@@ -325,7 +312,7 @@
     </div>
   </section>
 
-  <section id="want-domains-section" class="section is-medium d-renter is-hidden">
+  <section id="want-domains-section" class="section is-medium has-border-bottom d-renter is-hidden">
     <div class="container">
       <div class="content">
         <h1 class="title is-2 has-text-centered">Our Benefits</h1>
@@ -377,7 +364,7 @@
     </div>
   </section>
 
-  <section class="section is-medium d-renter is-hidden">
+  <section class="section is-medium has-border-bottom d-renter is-hidden">
     <div class="container">
       <div class="columns">
         <div class="column is-6 is-offset-3">
@@ -452,7 +439,7 @@
         </div>
         <div class="column is-5">
           <figure class="image has-shadow is-real-ratio">
-            <img src="/images/main/listing-capture.jpg" alt="Domain name rental listing page"/>
+            <img src="/images/main/listing-capture.png" alt="Domain name rental listing page"/>
           </figure>
         </div>
       </div>
@@ -467,7 +454,7 @@
         </div>
         <div class="column is-5">
           <figure class="image has-shadow is-real-ratio">
-            <img src="/images/main/date_selection.gif" alt="Domain name rental date selection" />
+            <img src="/images/main/date-selection.gif" alt="Domain name rental date selection" />
           </figure>
         </div>
       </div>
@@ -497,8 +484,8 @@
       <div class="columns">
         <div class="column">
           <div class="content has-text-centered">
-            <h1 class="title is-2">Have any questions?</h1>
-            <h3>
+            <h1 class="title is-2 is-white">Have any questions?</h1>
+            <h3 class="is-white">
               Feel free to send us a message or explore the FAQ!
             </h3>
             <div class="button-wrapper">
@@ -510,7 +497,7 @@
               </a>
               <a tabindex="0" class="button is-accent is-stylish" href="/faq" target="_blank" rel="noopener">
                 <span class="icon">
-                  <i class="fa fa-question-circle"></i>
+                  <i class="fa fa-question-circle-o"></i>
                 </span>
                 <span>Explore FAQ</span>
               </a>

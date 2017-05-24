@@ -1,3 +1,27 @@
+<<<<<<< HEAD:server/views/listings/modules/checkout_module.ejs
+<div class='checkout-card-content'>
+    <div class="content">
+        <p>
+            Click the button below to see available rental dates.
+        </p>
+    </div>
+    <a id="start-card-button" tabindex="1" class="card-button-next button no-shadow is-primary is-fullwidth is-stylish">Rent Now</a>
+</div>
+
+<div id="calendar-card-content" class="is-hidden checkout-card-content">
+    <div class="content">
+        <p id="calendar-error-message"></p>
+    </div>
+    <div id="calendar" class=""></div>
+    <div class="calendar-control">
+        <a tabindex="1" class="button is-danger is-disabled no-shadow is-stylish is-small" id="remove_events">Clear</a>
+        <a tabindex="1" class="button no-shadow is-disabled is-stylish is-small" id="today-button">Today</a>
+        <a tabindex="1" class="button no-shadow is-disabled is-stylish is-small" id="next-available-button">Next Available</a>
+    </div>
+    <a tabindex="1" class="card-button-next is-disabled button no-shadow is-fullwidth is-primary is-stylish is-small">Next</a>
+</div>
+
+=======
 <%# <div class="calendar-control">
     <a tabindex="1" class="button is-danger is-disabled no-shadow is-stylish is-small" id="remove_events">Clear</a>
     <a tabindex="1" class="button no-shadow is-disabled is-stylish is-small" id="today-button">Today</a>
@@ -5,6 +29,7 @@
 </div>%>
 
 <!--
+>>>>>>> development:unused/ejs/modules/old_checkout_module.ejs
 <% if (!user){ %>
     <div id="nouser-card-content" class="is-hidden checkout-card-content">
         <p class='is-danger is-bold'>
@@ -81,14 +106,22 @@
                 <input tabindex="1" id="cc-zip" maxlength="6" data-stripe="address_zip" class="input stripe-input" type="tel" autocomplete="postal-code" placeholder="•••••"/>
             </p>
         </form>
+<<<<<<< HEAD:server/views/listings/modules/checkout_module.ejs
+        <!-- <form class="checkbox-form margin-top-10">
+=======
         <%#
         <form class="checkbox-form margin-top-10">
+>>>>>>> development:unused/ejs/modules/old_checkout_module.ejs
             <input class="is-small" value="agree-to-terms" id="agree-to-terms" type="checkbox" />
             <label class="is-small" tabindex="1" for="agree-to-terms">
                 I agree to the <a target="_blank" href="/terms" class="is-accent">DomaHub Terms & Conditions</a>.
             </label>
+<<<<<<< HEAD:server/views/listings/modules/checkout_module.ejs
+        </form> -->
+=======
         </form>
         %>
+>>>>>>> development:unused/ejs/modules/old_checkout_module.ejs
         <p class="calendar-control margin-top-10">
             <a tabindex="1" class="card-button-prev button no-shadow is-stylish is-small">Back</a>
             <a id="checkout-button" tabindex="1" class="button is-primary no-shadow is-stylish is-small">Confirm & Pay</a>

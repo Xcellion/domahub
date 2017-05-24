@@ -26,7 +26,7 @@ module.exports = function(app, db, e){
 function checkHost(req, res, next){
 	if (req.headers.host){
 		var domain_name = req.headers.host.replace(/^(https?:\/\/)?(www\.)?/,'');
-		var path = req.path.substr(1, req.path.length);
+		var path = req.originalUrl.substr(1, req.originalUrl.length);
 
 		if (domain_name == "www.w3bbi.com"
 		|| domain_name == "w3bbi.com"
@@ -52,17 +52,17 @@ function checkHost(req, res, next){
 //send the current rental details and information for a listing
 function getCurrentRental(req, res, domain_name, path){
 	//requesting something besides main page, pipe the request
-	if (req.session.rented_info){
+	if (req.session.rented_info && req.session.rented_info.path == path){
 		console.log("F: Proxying rental request for an existing session for " + domain_name + "!");
 		searchAndDirect(req.session.rented_info, req, res);
 	}
 	else {
 		console.log("F: Attempting to check current rental status for " + domain_name + "!");
-		Listing.getCurrentRental(domain_name, function(result){
-			if (result.state != "success" || result.info.length == 0 || result.info[0].path != path){
+		Listing.getCurrentRental(domain_name, path, function(result){
+			if (result.state != "success" || result.info.length == 0){
 				console.log("F: Not rented! Redirecting to listing page");
 				delete req.session.rented_info;
-				next();
+				res.redirect("https://domahub.com/listing/" + domain_name + "?wanted=" + path);
 			}
 			else {
 				//add it to rental stats
@@ -104,6 +104,11 @@ function searchAndDirect(rental_info, req, res){
 
 //function to proxy request
 function requestProxy(req, res, rental_info){
+	//now rendering rental, delete any sensitive stuff
+	if (!req.session.proxy_edit){
+		delete rental_info.owner_hash_id;
+		delete rental_info.owner_email;
+	}
 	request({
 		url: addProtocol(rental_info.address),
 		encoding: null

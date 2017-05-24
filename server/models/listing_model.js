@@ -54,6 +54,25 @@ listing_model.prototype.checkListingOwner = function(account_id, domain_name, ca
 	listing_query(query, "Account does not own the domain" + domain_name + "!", callback, [account_id, domain_name]);
 }
 
+
+//check if listing is currently rented
+listing_model.prototype.checkCurrentlyRented = function(domain_name, callback){
+	console.log("DB: Checking if domain " + domain_name + " is currently rented...");
+	query = "SELECT 1 AS 'exist' \
+				FROM rentals \
+			LEFT JOIN listings \
+				ON rentals.listing_id = listings.id \
+			LEFT OUTER JOIN rental_times \
+				ON rentals.rental_id = rental_times.rental_id \
+			WHERE listings.domain_name = ? \
+				AND (UNIX_TIMESTAMP(NOW()) * 1000) BETWEEN rental_times.date AND rental_times.date + rental_times.duration \
+				AND listings.status = 1 \
+				AND listings.verified = 1 \
+				AND listings.deleted IS NULL \
+				AND rentals.status = 1";
+	listing_query(query, "Failed to check if domain " + domain_name + " is currently rented!", callback, domain_name);
+}
+
 //check if an account owns a listing
 listing_model.prototype.crossCheckRentalTime = function(domain_name, path, starttime, endtime, callback){
 	console.log("DB: Checking times for " + domain_name + "/" + path + "...");
@@ -156,6 +175,22 @@ listing_model.prototype.getListingTimes = function(domain_name, path, max_date, 
 	listing_query(query, "Failed to get times for domain: " + domain_name + "!", callback, [domain_name, path, max_date]);
 }
 
+
+//gets all free rental times for a specific listing
+listing_model.prototype.getListingFreeTimes = function(domain_name, callback){
+	console.log("DB: Attempting to get free times for domain: " + domain_name + "...");
+	query = "SELECT \
+				listing_free_times.date, \
+				listing_free_times.duration \
+			FROM listing_free_times \
+			INNER JOIN listings ON listing_free_times.listing_id = listings.id \
+			WHERE listings.domain_name = ? \
+			AND listings.status = 1 \
+			AND listing_free_times.date + listing_free_times.duration >= UNIX_TIMESTAMP() * 1000 \
+			ORDER BY listing_free_times.date ASC "
+	listing_query(query, "Failed to get free times for domain: " + domain_name + "!", callback, domain_name);
+}
+
 //gets all rental info for a specific rental
 listing_model.prototype.getRentalInfo = function(rental_id, callback){
 	console.log("DB: Attempting to get all rental info for rental #" + rental_id + "...");
@@ -170,11 +205,12 @@ listing_model.prototype.getRentalInfo = function(rental_id, callback){
 }
 
 //gets all rental information for the current rental
-listing_model.prototype.getCurrentRental = function(domain_name, callback){
+listing_model.prototype.getCurrentRental = function(domain_name, path, callback){
 	console.log("DB: Attempting to get current rental info for for domain " + domain_name + "...");
 	query = "SELECT \
 				rentals.*,\
 				listings.domain_name,\
+				listings.description_hook,\
 				listings.id,\
 				rental_times.date,\
 				rental_times.duration \
@@ -185,11 +221,12 @@ listing_model.prototype.getCurrentRental = function(domain_name, callback){
 			ON rentals.rental_id = rental_times.rental_id \
 			WHERE listings.domain_name = ? \
 			AND (UNIX_TIMESTAMP(NOW()) * 1000) BETWEEN rental_times.date AND rental_times.date + rental_times.duration \
+			AND rentals.path = ? \
 			AND listings.status = 1 \
 			AND listings.verified = 1 \
 			AND listings.deleted IS NULL \
 			AND rentals.status = 1";
-	listing_query(query, "Failed to get current rental info for domain " + domain_name + "!", callback, domain_name);
+	listing_query(query, "Failed to get current rental info for domain " + domain_name + "!", callback, [domain_name, path]);
 }
 
 //gets all rental times for a specific rental
@@ -306,15 +343,13 @@ listing_model.prototype.getListingByFilter = function(filter_name, filter_price,
 }
 
 //gets a handful of random listings for the search page
-listing_model.prototype.getRandomListings = function(callback){
+listing_model.prototype.getRandomListings = function(search_term, total, callback){
 	console.log("DB: Attempting to get 10 random listings...");
 	query = "SELECT \
+				listings.id, \
 				listings.domain_name, \
-				listings.hour_price, \
-				listings.day_price, \
-				listings.week_price, \
-				listings.month_price, \
-				listings.categories \
+				listings.price_rate, \
+				listings.price_type \
 			FROM listings \
 			INNER JOIN accounts \
 				ON accounts.id = listings.owner_id \
@@ -322,9 +357,10 @@ listing_model.prototype.getRandomListings = function(callback){
 			AND listings.verified = 1 \
 			AND listings.deleted IS NULL \
 			AND accounts.stripe_account IS NOT NULL \
-			ORDER BY rand() \
-			LIMIT 10";
-	listing_query(query, "Failed to get 10 random listings!", callback);
+			AND listings.domain_name LIKE ? \
+			ORDER BY listings.domain_name ASC \
+			LIMIT ?, 10";
+	listing_query(query, "Failed to get 10 random listings!", callback, [search_term, total]);
 }
 
 //</editor-fold>

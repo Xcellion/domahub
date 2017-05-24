@@ -163,8 +163,8 @@
 												<div class="columns listing-module">
 													<div class="column is-3">
 														<p class="is-inline">Rental Pricing</p>
-														<span class="icon is-small is-tooltip v-align-middle" data-balloon-length="medium" data-balloon="Minimum pricing is $1 / Day." data-balloon-pos="up">
-															<i class="fa fa-question-circle"></i>
+														<span class="icon is-small is-tooltip v-align-middle" data-balloon-length="medium" data-balloon="Minimum price is $1. Leave blank or 0 for free rentals." data-balloon-pos="up">
+															<i class="fa fa-question-circle-o"></i>
 														</span>
 													</div>
 													<div class="column is-9">
@@ -186,9 +186,24 @@
 												</div>
 												<div class="columns listing-module">
 													<div class="column is-3">
+														<p class="is-inline">Buy-out Price</p>
+														<span class="icon is-small is-tooltip v-align-middle" data-balloon-length="medium" data-balloon="Minimum price is $1. Leave blank or 0 for no buy out option." data-balloon-pos="up">
+															<i class="fa fa-question-circle-o"></i>
+														</span>
+													</div>
+													<div class="column is-9">
+														<div class="control is-grouped">
+															<p class="control">
+																<input data-name="buy_price" type="number" min="1" step="1" class="padding-top-0 buy-price-input input changeable-input">
+															</p>
+														</div>
+													</div>
+												</div>
+												<div class="columns listing-module">
+													<div class="column is-3">
 														<p class="is-inline">Listing Description</p>
 														<span class="icon is-small is-tooltip v-align-middle" data-balloon-length="large" data-balloon="Descriptions help renters understand what your domain name can be useful for." data-balloon-pos="up">
-															<i class="fa fa-question-circle"></i>
+															<i class="fa fa-question-circle-o"></i>
 														</span>
 													</div>
 													<div class="column is-9">
@@ -201,15 +216,30 @@
 												</div>
 												<div class="columns listing-module">
 													<div class="column is-3">
-														<p class="is-inline">Example Paths</p>
-														<span class="icon is-small is-tooltip v-align-middle" data-balloon-length="large" data-balloon="Example paths that renters may want to rent on your domain. Must consist of either letters or numbers." data-balloon-pos="up">
-															<i class="fa fa-question-circle"></i>
+														<p class="is-inline">Short Description</p>
+														<span class="icon is-small is-tooltip v-align-middle" data-balloon-length="large" data-balloon="A short catch phrase helps users understand at a glance what they can utilize your domain for. 100 character limit." data-balloon-pos="up">
+															<i class="fa fa-question-circle-o"></i>
 														</span>
 													</div>
 													<div class="column is-9">
 														<div class="control">
 															<div class="control">
-																<input data-name="paths" tabindex="0" class="is-hidden paths-input input changeable-input"></input>
+																<input data-name="description_hook" tabindex="0" class="description-hook-input input changeable-input" placeholder="What is this website?"></input>
+															</div>
+														</div>
+													</div>
+												</div>
+												<div class="columns listing-module">
+													<div class="column is-3">
+														<p class="is-inline">Example Paths</p>
+														<span class="icon is-small is-tooltip v-align-middle" data-balloon-length="large" data-balloon="Example paths that renters may want to rent on your domain. Must consist of either letters or numbers." data-balloon-pos="up">
+															<i class="fa fa-question-circle-o"></i>
+														</span>
+													</div>
+													<div class="column is-9">
+														<div class="control">
+															<div class="control">
+																<input data-name="paths" placeholder="test test test test" tabindex="0" class="is-hidden paths-input input changeable-input"></input>
 															</div>
 														</div>
 													</div>
@@ -218,7 +248,7 @@
 													<div class="column is-3">
 														<p class="is-inline">Categories</p>
 														<span class="icon is-small is-tooltip v-align-middle" data-balloon-length="large" data-balloon="Categories help users find similar domains to rent." data-balloon-pos="up">
-															<i class="fa fa-question-circle"></i>
+															<i class="fa fa-question-circle-o"></i>
 														</span>
 													</div><div class="column is-9">
 														<div class="control">
@@ -255,7 +285,7 @@
 													<footer class="card-footer">
 														<form tabindex="0" class="drop-form-file" action="/listings/create/multiple" method="post" enctype="multipart/form-data">
 															<input data-name="background_image" type="file" name="background_image" accept="image/png, image/gif, image/jpeg" class="picture-file changeable-input input-file">
-															<label for="" class="picture-label card-footer-item">
+															<label for="" class="picture-label button no-shadow is-fullwidth">
 																<i class="fa fa-upload" aria-hidden="true"></i>
 																<p class="file-label">Background Image</p>
 															</label>
