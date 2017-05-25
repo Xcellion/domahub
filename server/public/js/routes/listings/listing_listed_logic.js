@@ -1,91 +1,212 @@
 var myPath;
+//to format a number for $$$$
+var moneyFormat = wNumb({
+	thousand: ',',
+	prefix: '$',
+	decimals: 0
+});
 
 $(document).ready(function() {
 
-	//---------------------------------------------------------------------------------------------------TYPED PATH
+	//<editor-fold>-----------------------------------------------------------------------------------BUY NOW
 
-	//focus to hide the click me message
-	$("#typed-slash").on("focus", function(){
-		//remove the disabled on check availability button
-		$("#check-avail").removeClass('is-disabled');
-		$("#input-tooltip").addClass('is-hidden');
-		$(this).addClass('is-active');
+	//buy now price tag
+	if (listing_info.buy_price > 0){
+		$("#buy-price").text("For sale - " + moneyFormat.to(listing_info.buy_price));
+		$("#buy-price-tag").removeClass('is-hidden');
+	}
 
-		//select all on existing path
-		$("#typed-slash").select();
-	}).on("focusout", function(){
-		if ($("#typed-slash").val() == ""){
-			$("#input-tooltip").removeClass('is-hidden');
-		}
-		$(this).removeClass('is-active');
-
-		//re-add the calendar event handler if path changed
-		if (myPath != undefined && myPath != $("#typed-slash").val()){
-			//remove any existing date range pickers
-			if ($("#calendar").data('daterangepicker')){
-				$("#calendar").data('daterangepicker').remove();
-			}
-
-			$("#calendar").val("");
-			$("#checkout-button").addClass('is-disabled');
-
-			$("#calendar").off("click").on("click", function(){
-				getTimes($(this));
-			});
-		}
+	//click buy now button or unavailable description
+	$("#buy-now-button").on("click", function(e){
+		showBuyStuff($(this));
 	});
 
-	//tooltip appears too fast, hide until the above handler is in place.
-	$("#input-tooltip").fadeIn('slow');
+	//</editor-fold>
 
-	//function for input text validation and tooltip change
-	$("#typed-slash").on("keypress onkeypress", function(e) {
-		var code = e.charCode || e.keyCode;
-		var inp = String.fromCharCode(code);
-		//regex for alphanumeric
-		var validChar = /^[0-9a-zA-Z]+$/;
 
-		//logic to check alphanumeric input value
-		if (!inp.match(validChar) && code != 13 && code != 8) {
-			e.preventDefault();
-			$("#input-tooltip-error").removeClass("is-hidden");
-		}
-		else if (e.keyCode == 13){
-			e.preventDefault();
-			$("#input-tooltip-error").addClass("is-hidden");
-		}
-		else {
-			$("#input-tooltip-error").addClass("is-hidden");
-		}
-	}).on('keyup', function(e){
-		var code = e.charCode || e.keyCode;
 
-		var validChar = /^[0-9a-zA-Z]+$/;
+	if (listing_info.price_rate > 0){
 
-		//enter to see calendar
-		if (code == 13 && ($(this).val().match(validChar) || $(this).val() == "")){
-			e.preventDefault();
-			//unfocus the typed JS
-			$(this).blur();
+		//click rent now or unavailable description
+		$("#rent-now-button").on("click", function(e) {
+			showRentalStuff($(this));
+		});
 
-			//first time getting calendar
-			if ($("#check-avail").is(":visible")){
-				$("#check-avail").click();
+	//<editor-fold>-----------------------------------------------------------------------------------TYPED PATH
+
+		//focus to hide the click me message
+		$("#typed-slash").on("focus", function(){
+			$("#input-tooltip").addClass('is-hidden');
+			$(this).addClass('is-active');
+
+			//select all on existing path
+			$("#typed-slash").select();
+		}).on("focusout", function(){
+			if ($("#typed-slash").val() == ""){
+				$("#input-tooltip").removeClass('is-hidden');
 			}
+			$(this).removeClass('is-active');
 
-			//get new calendar if mypath is different
-			else if (myPath != $(this).val()) {
-				getTimes($(this));
+			//re-add the calendar event handler if path changed
+			if (myPath != undefined && myPath != $("#typed-slash").val()){
+				//remove any existing date range pickers
+				if ($("#calendar").data('daterangepicker')){
+					$("#calendar").data('daterangepicker').remove();
+				}
+
+				$("#calendar").val("");
+				$("#checkout-button").addClass('is-disabled');
+
+				$("#calendar").off("click").on("click", function(){
+					getTimes($(this));
+				});
 			}
+		});
 
-			//show if mypath is the same
+		//function for input text validation and tooltip change
+		$("#typed-slash").on("keypress onkeypress", function(e) {
+			var code = e.charCode || e.keyCode;
+			var inp = String.fromCharCode(code);
+			//regex for alphanumeric
+			var validChar = /^[0-9a-zA-Z]+$/;
+
+			//logic to check alphanumeric input value
+			if (!inp.match(validChar) && code != 13 && code != 8) {
+				e.preventDefault();
+				$("#input-tooltip-error").removeClass("is-hidden");
+			}
+			else if (e.keyCode == 13){
+				e.preventDefault();
+				$("#input-tooltip-error").addClass("is-hidden");
+			}
 			else {
-				$("#calendar").data('daterangepicker').show();
+				$("#input-tooltip-error").addClass("is-hidden");
+			}
+		}).on('keyup', function(e){
+			var code = e.charCode || e.keyCode;
+
+			var validChar = /^[0-9a-zA-Z]+$/;
+
+			//enter to see calendar
+			if (code == 13 && ($(this).val().match(validChar) || $(this).val() == "")){
+				e.preventDefault();
+				//unfocus the typed JS
+				$(this).blur();
+
+				//get new calendar if mypath is different
+				if (myPath != $(this).val()) {
+					getTimes($(this));
+				}
+
+				//show if mypath is the same
+				else {
+					$("#calendar").data('daterangepicker').show();
+				}
+			}
+		});
+
+		//pre-fill the path input
+		if (getParameterByName("wanted")){
+			$("#typed-slash").val(getParameterByName("wanted"));
+		}
+
+	//</editor-fold>
+
+	//<editor-fold>-----------------------------------------------------------------------------------CALENDAR AND TIMES
+
+		//if and any free times
+		if (listing_info.freetimes && listing_info.freetimes.length > 0){
+			var now = moment();
+			var freetime_now;
+			//loop and find out when is free
+			for (var x = 0; x < listing_info.freetimes.length; x++){
+				if (now.isBetween(moment(listing_info.freetimes[x].date), moment(listing_info.freetimes[x].date + listing_info.freetimes[x].duration))){
+					freetime_now = listing_info.freetimes[x];
+					break;
+				}
+			}
+
+			//free now
+			if (freetime_now){
+				var until_date = moment(freetime_now.date + freetime_now.duration).format("MMM, DD");
+				$("#free-until").removeClass('is-hidden').text("Free until " + until_date);
+				$("#price").addClass('is-linethrough');
 			}
 		}
+
+		//submit times (redirect to checkout)
+		$("#checkout-button").on("click", function(){
+			submitTimes($(this));
+		});
+
+		//prevent typing on calendar
+		$("#calendar").on("keydown", function(e){
+			e.preventDefault();
+		});
+	}
+
+	//</editor-fold>
+
+});
+
+//function to show buy now module
+function showBuyStuff(buy_now_button){
+
+	//fade out buy button, remove handler
+	buy_now_button.off().addClass('is-disabled');
+
+	//re-attach rent now handler
+	$("#rent-now-button").removeClass('is-disabled').off().on("click", function(){
+		showRentalStuff($(this));
 	});
 
-	//typed JS
+	//show buy related stuff
+	$(".post-buy-module").removeClass('is-hidden');
+	$(".post-rent-module").addClass('is-hidden');
+
+	//get a random char phrase
+	var random_char = random_characters[Math.floor(Math.random()*random_characters.length)];
+	$("#contact_name").attr("placeholder", random_char.name);
+	$("#contact_email").attr("placeholder", random_char.email);
+	$("#contact_phone").attr("placeholder", random_char.phone);
+	$("#contact_message").attr("placeholder", random_char.message + " Anyways, I'm interested in buying " + listing_info.domain_name + ". Let's chat.");
+
+	//add a / to end of domain
+	$("#domain-title").text(listing_info.domain_name);
+
+	//hide the slash input
+	$("#path-input").addClass("is-hidden");
+}
+
+//function to show rental module
+function showRentalStuff(rent_now_button){
+
+	//fade out rent button, remove handler
+	rent_now_button.off().addClass('is-disabled');
+
+	//re-attach rent now handler
+	$("#buy-now-button").removeClass('is-disabled').off().on("click", function(){
+		showBuyStuff($(this));
+	});
+
+	//show rental related stuff
+	$(".post-rent-module").removeClass('is-hidden');
+	$(".post-buy-module").addClass('is-hidden');
+	$("#path-input").removeClass("is-hidden");
+
+	//get calendar times
+	if (listing_info.status == 1){
+		getTimes();
+	}
+
+	//add a / to end of domain
+	$("#domain-title").text(listing_info.domain_name + "/");
+
+	//tooltip appears too fast, fade it in
+	$("#input-tooltip").fadeIn('slow');
+	$("#typed-slash").attr("placeholder", "");
+	
+	//initiate typed JS
 	$(function(){
 		var typed_options = {
 			typeSpeed: 40,
@@ -105,58 +226,8 @@ $(document).ready(function() {
 		}
 		$("#typed-slash").typed(typed_options);
 	});
+}
 
-	//pre-fill the path input
-	if (getParameterByName("wanted")){
-		$("#typed-slash").val(getParameterByName("wanted"));
-		//remove the disabled on check availability button
-		$("#check-avail").removeClass('is-disabled');
-	}
-
-	//---------------------------------------------------------------------------------------------------CALENDAR AND TIMES
-
-	//if and any free times
-	if (listing_info.freetimes && listing_info.freetimes.length > 0){
-		var now = moment();
-		var freetime_now;
-		//loop and find out when is free
-		for (var x = 0; x < listing_info.freetimes.length; x++){
-			if (now.isBetween(moment(listing_info.freetimes[x].date), moment(listing_info.freetimes[x].date + listing_info.freetimes[x].duration))){
-				freetime_now = listing_info.freetimes[x];
-				break;
-			}
-		}
-
-		//free now
-		if (freetime_now){
-			var until_date = moment(freetime_now.date + freetime_now.duration).format("MMM, DD");
-			$("#free-until").removeClass('is-hidden').text("Free until " + until_date);
-			$("#price").addClass('is-linethrough');
-		}
-	}
-
-	//show calendar or unavailable description
-	$("#check-avail").on("click", function(e) {
-		e.preventDefault();
-		$("#desc-avail-module").addClass('is-hidden');
-		$(".post-description-module").removeClass('is-hidden');
-
-		if (listing_info.status == 1){
-			//show calendar
-			getTimes($(this));
-		}
-	});
-
-	//submit times (redirect to checkout)
-	$("#checkout-button").on("click", function(){
-		submitTimes($(this));
-	});
-
-	//prevent typing on calendar
-	$("#calendar").on("keydown", function(e){
-		e.preventDefault();
-	});
-});
 
 //<editor-fold>-------------------------------SUBMIT TIMES-------------------------------
 
@@ -244,12 +315,6 @@ function errorHandler(message){
 
 //function to get times from the server
 function getTimes(calendar_elem){
-	//renting top level, hide tooltip
-	if ($("#typed-slash").val() == ""){
-		$("#input-tooltip").addClass('is-hidden');
-		$("#typed-slash").addClass('is-active');
-	}
-
 	//now loading messages
 	$("#calendar").addClass('is-disabled');
 	$("#calendar-loading-message").removeClass('is-hidden');
@@ -257,7 +322,9 @@ function getTimes(calendar_elem){
 	$("#calendar-regular-message").addClass('is-hidden');
 
 	//loading dates message
-	calendar_elem.off("click");
+	if (calendar_elem){
+		calendar_elem.off("click");
+	}
 
 	$.ajax({
 		url: "/listing/" + listing_info.domain_name + "/times",
@@ -360,12 +427,6 @@ function setUpCalendar(listing_info){
         //remove any error messages
         $("#calendar-regular-message").removeClass('is-hidden');
         $("#calendar-error-message").addClass('is-hidden');
-
-		//renting top level, hide tooltip
-		if ($("#typed-slash").val() == ""){
-			$("#input-tooltip").addClass('is-hidden');
-			$("#typed-slash").addClass('is-active');
-		}
     });
 
     $("#calendar").data('daterangepicker').show();

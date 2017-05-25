@@ -12,10 +12,6 @@ $(document).ready(function() {
         $("#error_message").addClass("is-hidden");
     });
 
-    $("#contact-us-button").on('click', function(){
-        Intercom("show");
-    });
-
     //random contact characters
     var random_char = random_characters[Math.floor(Math.random()*random_characters.length)];
     $("#contact_name").attr("placeholder", random_char.name);
