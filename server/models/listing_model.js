@@ -278,6 +278,7 @@ listing_model.prototype.getThreeRandomListingsByOwner = function(domain_name_exc
 	query = "SELECT \
 				listings.domain_name, \
 				listings.background_image, \
+				listings.buy_price, \
 				listings.price_type, \
 				listings.price_rate \
 			FROM listings \

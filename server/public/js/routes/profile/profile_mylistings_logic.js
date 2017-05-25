@@ -1,5 +1,12 @@
 var row_display = listings.slice(0);
 
+//to format a number for $$$$
+var moneyFormat = wNumb({
+	thousand: ',',
+	prefix: '$',
+	decimals: 0
+});
+
 $(document).ready(function(){
 	//multiple delete listings
 	$("#multi-delete").on("click", function(e){
@@ -35,8 +42,7 @@ function createRow(listing_info, rownum){
 		var tempRow = $("#verified-clone-row").clone();
 		updateView(tempRow, listing_info);
 		updateStatus(tempRow, listing_info);
-		updatePriceRate(tempRow, listing_info);
-		updatePriceType(tempRow, listing_info);
+		updateBuyPrice(tempRow, listing_info);
 	}
 	else {
 		var tempRow = $("#unverified-clone-row").clone();
@@ -87,16 +93,10 @@ function updateStatus(tempRow, listing_info){
 	else {
 		tempRow.find(".td-status").text("Active").removeClass('is-danger');
 	}
-
-	tempRow.find(".td-status-drop").find('.status_input').val(listing_info.status).on('click', function(e) {
-		e.stopPropagation();
-	});
 }
-function updatePriceRate(tempRow, listing_info){
-	tempRow.find(".td-price-rate").text("$" + listing_info.price_rate);
-}
-function updatePriceType(tempRow, listing_info){
-	tempRow.find(".td-price-type").text(toUpperCase(listing_info.price_type));
+function updateBuyPrice(tempRow, listing_info){
+	var buy_price = (listing_info.buy_price == 0) ? "No min." : moneyFormat.to(parseFloat(listing_info.buy_price));
+	tempRow.find(".td-price-rate").text(buy_price);
 }
 
 // ------------------------------------------------------------------------------------------------------------------------------ CREATE DROP
@@ -108,6 +108,7 @@ function createRowDrop(listing_info, rownum){
 	//choose a row to clone
 	if (listing_info.verified){
 		var tempRow_drop = $("#verified-clone-row-drop").clone();
+		updateStatusDrop(tempRow_drop, listing_info);
 		updatePriceInputs(tempRow_drop, listing_info);
 		updateDescription(tempRow_drop, listing_info);
 		updatePaths(tempRow_drop, listing_info);
@@ -137,10 +138,15 @@ function createRowDrop(listing_info, rownum){
     return tempRow_drop;
 }
 
+//update the listing status
+function updateStatusDrop(tempRow_drop, listing_info){
+	tempRow_drop.find(".status-input").val(listing_info.status);
+}
 //update the clone row drop with row drop specifics
 function updatePriceInputs(tempRow_drop, listing_info){
 	tempRow_drop.find(".price-rate-input").val(listing_info.price_rate);
 	tempRow_drop.find(".price-type-input").val(listing_info.price_type);
+	tempRow_drop.find(".buy-price-input").val(listing_info.buy_price);
 }
 function updateDescription(tempRow_drop, listing_info){
 	tempRow_drop.find(".description-input").val(listing_info.description);
@@ -297,7 +303,6 @@ function editRow(row){
         if ($(this).data('editing') == true && $(this).attr("id") != row.attr("id")){
             $(this).data("editing", false);
             dropRow($(this), false);
-            editStatus($(this), false);
 			editVerifyButton($(this), false);
             $(this).next(".row-drop").find(".cancel-changes-button").click();
         }
@@ -308,7 +313,6 @@ function editRow(row){
     row.data("editing", editing);
 
     dropRow(row, editing);
-    editStatus(row, editing);
 	editVerifyButton(row, editing);
 
 	//get the current who is and A record if unverified row
@@ -338,20 +342,6 @@ function getDNSRecordAndWhois(domain_name, row){
 		updateRegistrarURL(row.next(".row-drop"), data.listing.whois);
 		updateExistingDNS(row.next(".row-drop"), data.listing.a_records);
 	});
-}
-
-//function to change status column to editable
-function editStatus(row, editing){
-    var status_drop_td = row.find(".td-status-drop");
-    var status_td = row.find(".td-status");
-    if (editing){
-        status_td.addClass("is-hidden");
-        status_drop_td.removeClass("is-hidden");
-    }
-    else {
-        status_td.removeClass("is-hidden");
-        status_drop_td.addClass("is-hidden");
-    }
 }
 
 //function to hide verification button in row
@@ -391,6 +381,8 @@ function refreshSubmitbindings(bool_for_status_td){
                     //refresh category click handlers and paths
 					updateCategories(row_drop, info);
 					updatePaths(row_drop, info);
+					updateBuyPrice(row, info);
+					updateStatus(row, info);
 
 					//all other inputs handler
                     both_rows.find(".drop-form .changeable-input").unbind("input").on("input", function(e){
@@ -563,8 +555,8 @@ function cancelListingChanges(row, row_drop, cancel_button, listing_info){
     listing_msg.addClass('is-hidden');
 
     //revert back to the old status
-    row.find(".status_input").val(listing_info.status);
-	var current_status = row.find(".td-status").not(".td-status-drop");
+	row_drop.find(".status-input").val(listing_info.status);
+	var current_status = row.find(".td-status");
 	if (listing_info.status == 0){
 		current_status.text("Inactive");
 		current_status.addClass('is-danger');
@@ -573,13 +565,6 @@ function cancelListingChanges(row, row_drop, cancel_button, listing_info){
 		current_status.text("Active");
 		current_status.removeClass('is-danger');
 	}
-
-    //revert prices
-    row.find(".price-rate-input").val(listing_info.price_rate);
-    row.find(".td-price-rate").text("$" + listing_info.price_rate);
-
-    row.find(".price-type-input").val(listing_info.price_type);
-    row.find(".td-price-type").text(toUpperCase(listing_info.price_type));
 
     //revert all other inputs
     row_drop.find(".description-input").val(listing_info.description);

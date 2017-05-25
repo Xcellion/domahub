@@ -86,7 +86,7 @@ $(document).ready(function() {
 			$(".nav-link").removeClass("is-white");
 			$(".nav-menu").removeClass("is-blue");
 			$("#nav-logo, .circle-logo").addClass("is-primary").removeClass("is-white");
-			$(".nav-toggle").removeClass("is-white").addClass("is-blue");
+			$(".nav-toggle").removeClass("is-white").addClass("is-black");
 			$("#profile-button, .login-modal").addClass("is-primary").removeClass("is-white");
 		}
 

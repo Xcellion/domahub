@@ -473,7 +473,7 @@ function goodTableRows(good_listings){
 		var table_row = $($(".table-row").not("#clone-row")[good_listings[x].index]);
 		var explanation = $("<small class='is-primary is-pulled-right'>Successfully added!</small>")
 		table_row.find(".domain-name-input").addClass('is-primary').closest('td').append(explanation);
-		table_row.find(".domain-name-input, .price-type-input, .price-rate-input").addClass('is-disabled');
+		table_row.find(".domain-name-input, .buy-price-input").addClass('is-disabled');
 		table_row.find(".premium-input").addClass('is-disabled');
 	}
 }
