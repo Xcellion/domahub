@@ -1,5 +1,6 @@
 @import 'vars';
 @import 'mixins';
+@import 'balloon';
 
 #preview-img {
   background-image: url("https://source.unsplash.com/category/nature");
@@ -37,15 +38,14 @@
 }
 
 // Table columns
-.td-price {
-  width: 110px;
-}
-
-.td-rate {
-  min-width: 105px;
-  width: 105px;
+.td-buy-price {
+  width: 190px;
 }
 
 .td-premium {
   width: 130px;
+}
+
+.what-is-premium {
+  text-align:right !important;
 }

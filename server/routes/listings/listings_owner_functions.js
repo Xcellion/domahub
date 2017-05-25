@@ -110,13 +110,9 @@ module.exports = {
 			if (domains_sofar.indexOf(posted_domains[x].domain_name) != -1){
 				bad_reasons.push("Duplicate domain name!");
 			}
-			//check price type
-			if (["month", "week", "day"].indexOf(posted_domains[x].price_type) == -1){
-				bad_reasons.push("Invalid type!");
-			}
 			//check price rate
-			if (!validator.isInt(posted_domains[x].price_rate, {min: 1})){
-				bad_reasons.push("Invalid rate!");
+			if (!validator.isInt(posted_domains[x].buy_price, {min: 0}) && posted_domains[x].buy_price != ""){
+				bad_reasons.push("Invalid price!");
 			}
 
 			//some were messed up
@@ -140,8 +136,7 @@ module.exports = {
 					req.user.id,
 					date_now,
 					posted_domains[x].domain_name.toLowerCase(),
-					posted_domains[x].price_type,
-					posted_domains[x].price_rate,
+					posted_domains[x].buy_price,
 					default_descriptions.random()		//random default description
 				]);
 
@@ -174,6 +169,8 @@ module.exports = {
 			}
 			else {
 				res.send({
+					state: "error",
+					message: "No Stripe Token",
 					premium_count : req.session.new_listings.premium_obj.count
 				});
 			}
@@ -734,19 +731,27 @@ module.exports = {
 		//update the domahub DB appropriately
 		if (req.session.new_listings.premium_obj.db_success_obj.length > 0){
 			Listing.updateListingsPremium(req.session.new_listings.premium_obj.db_success_obj, function(result){
+				res.send({
+					bad_listings: req.session.new_listings.bad_listings,
+					good_listings: req.session.new_listings.good_listings
+				});
+				delete req.session.new_listings;
 			});
 		}
-
-		if (req.session.new_listings.premium_obj.db_failed_obj.length > 0){
-			Listing.updateListingsBasic(req.session.new_listings.premium_obj.db_failed_obj, function(result){
+		else {
+			res.send({
+				bad_listings: req.session.new_listings.bad_listings,
+				good_listings: req.session.new_listings.good_listings
 			});
+			delete req.session.new_listings;
 		}
 
-		res.send({
-			bad_listings: req.session.new_listings.bad_listings,
-			good_listings: req.session.new_listings.good_listings
-		});
-		delete req.session.new_listings;
+		//no need to revert to basic
+		// if (req.session.new_listings.premium_obj.db_failed_obj.length > 0){
+		// 	Listing.updateListingsBasic(req.session.new_listings.premium_obj.db_failed_obj, function(result){
+		// 	});
+		// }
+
 	},
 
 	//function to verify ownership of a listing

@@ -1,5 +1,46 @@
 $(document).ready(function() {
 
+	//--------------------------------------------------------------------------------STRIPE FORM
+
+	//key for stripe
+	if (window.location.hostname == "localhost"){
+		Stripe.setPublishableKey('pk_test_kcmOEkkC3QtULG5JiRMWVODJ');
+	}
+	else {
+		Stripe.setPublishableKey('pk_live_506Yzo8MYppeCnLZkW9GEm13');
+	}
+
+    //format all stripe inputs
+    $('#cc-num').payment('formatCardNumber');
+    $('#cc-exp').payment('formatCardExpiry');
+    $('#cc-cvc').payment('formatCardCVC');
+    $('#cc-zip').payment('restrictNumeric');
+
+	//request a token from stripe
+	$("#stripe-form").on("submit", function(e){
+		Stripe.card.createToken($(this), function(status, response){
+			if (response.error){
+				$(".stripe-input").removeClass('is-disabled');
+				$("#review-table-button, #goback-button").off().on("click", function(e){
+					e.preventDefault();
+					showTable();
+					refreshNotification();
+				});
+				$("#checkout-button").removeClass('is-loading').on("click", function(){
+					submitStripe($(this));
+				});
+				handleErrors(response.error.message);
+			}
+			//all good!
+			else {
+				submitStripeToken(response.id);
+			}
+		});
+		return false;
+	});
+
+	//--------------------------------------------------------------------------------LISTING CREATE STUFF
+
 	//submit to create the table
 	$("#domain-names-submit").on("click", function(e){
 		e.preventDefault();
@@ -18,9 +59,10 @@ $(document).ready(function() {
 	$(".add-domain-button").on("click keypress", function(e){
 		if (e.which == 1 || e.which == 13 || e.which == 32){
 			e.preventDefault();
+			clearSuccessRows();
 			createTableRow("");
 			handleSubmitDisabled();
-			//calculateSummaryRows();
+			calculateSummaryRows();
 		}
 	});
 
@@ -42,8 +84,9 @@ $(document).ready(function() {
 	});
 
 	//go back to edit table
-	$("#review-table-button").on("click", function(e){
+	$("#review-table-button, #goback-button").on("click", function(e){
 		e.preventDefault();
+		refreshNotification();
 		showTable();
 	});
 
@@ -51,7 +94,6 @@ $(document).ready(function() {
 	$("#agree-to-terms").on("click", function(e){
 		handleSubmitDisabled();
 	});
-
 
 });
 
@@ -77,7 +119,6 @@ function submitDomainNames(submit_elem){
 				domain_names: domain_names
 			}
 		}).done(function(data){
-			//console.log(data);
 			createTable(data.bad_listings, data.good_listings);
 			submit_elem.removeClass('is-loading');
 			submit_elem.on("click", function(e){
@@ -107,14 +148,14 @@ function createTable(bad_listings, good_listings){
 	}
 
 	showHelpText("table");
-	//calculateSummaryRows();
+	calculateSummaryRows();
 	window.scrollTo(0, 0);		//scroll to top so we can see the help text
 }
 
 //--------------------------------------------------------------------------------TABLE
 
 //function to show the table
-function showTable(old_submit){
+function showTable(){
 	showHelpText("table");
 	$("#domains-submit").removeClass('is-hidden is-disabled');
 	$("#payment-column").addClass('is-hidden');
@@ -133,9 +174,8 @@ function createTableRow(data){
 	})
 
 	//click handler for price type select
-	temp_table_row.find("select").on("change", function(){
-		//calculateSummaryRows();
-		//checkPremiumRow($(this).closest(".table-row"));
+	temp_table_row.find(".premium-input").on("click", function(){
+		calculateSummaryRows();
 	});
 
 	//click handler for row delete
@@ -147,10 +187,8 @@ function createTableRow(data){
 		handleSubmitDisabled();
 		handleTopAddDomainButton();
 		refreshNotification();
-		//calculateSummaryRows();
+		calculateSummaryRows();
 	});
-
-	handleTopAddDomainButton();
 
 	//reasons for why it was a bad listing
 	handleBadReasons(data.reasons, temp_table_row);
@@ -158,44 +196,57 @@ function createTableRow(data){
 	$("#clone-row").addClass("is-hidden");
 	temp_table_row.appendTo("#domain-input-table");
 	temp_table_row.find(".domain-name-input").focus();
+
+	//add addbutton on top if there are too many
+	handleTopAddDomainButton();
+
+	//calculate new basic v premium counts
+	calculateSummaryRows();
+	refreshNotification();
 }
 
-// //function to calculate/refresh the summary rows
-// function calculateSummaryRows(){
-// 	var total_rows = $(".domain-name-input").not(".is-disabled").length - 1;
-// 	var premium_domains = $("td .cat-checkbox:checked").not("#clone-row .cat-checkbox").length;
-// 	var basic_domains = total_rows - premium_domains;
-//
-// 	$("#basic-count-total").text(basic_domains);
-// 	$("#premium-count-total").text(premium_domains);
-//
-// 	//plural or not
-// 	var basic_plural = (basic_domains > 1) ? "s" : "";
-// 	$("#basic-count-plural").text(basic_plural);
-// 	var premium_plural = (premium_domains > 1) ? "s" : "";
-// 	$("#premium-count-plural").text(premium_plural);
-//
-// 	if (premium_domains){
-// 		$("#premium-summary-row").removeClass('is-hidden');
-// 	}
-// 	else {
-// 		$("#premium-summary-row").addClass('is-hidden');
-// 	}
-//
-// 	if (basic_domains){
-// 		$("#basic-summary-row").removeClass('is-hidden');
-// 	}
-// 	else {
-// 		$("#basic-summary-row").addClass('is-hidden');
-// 	}
-//
-// 	var total_price = (premium_domains > 0) ? "$" + (premium_domains * 5) : "FREE";
-// 	$("#summary-total-price").text(total_price);
-// }
+//function to calculate/refresh the summary rows
+function calculateSummaryRows(){
+	var total_rows = $(".domain-name-input").not("#clone-row .domain-name-input").length;
+	var premium_domains = $(".premium-input:checked").not("#clone-row .premium-input").not('.is-disabled').length;
+	var basic_domains = total_rows - premium_domains;
+
+	$("#basic-count-total").text(basic_domains);
+	$("#premium-count-total").text(premium_domains);
+
+	//plural or not
+	var basic_plural = (basic_domains > 1) ? "s" : "";
+	$("#basic-count-plural").text(basic_plural);
+	var premium_plural = (premium_domains > 1) ? "s" : "";
+	$("#premium-count-plural").text(premium_plural);
+
+	if (premium_domains){
+		$("#premium-summary-row").removeClass('is-hidden');
+	}
+	else {
+		$("#premium-summary-row").addClass('is-hidden');
+	}
+
+	if (basic_domains){
+		$("#basic-summary-row").removeClass('is-hidden');
+	}
+	else {
+		$("#basic-summary-row").addClass('is-hidden');
+	}
+
+	var total_price = (premium_domains > 0) ? "$" + (premium_domains) + " / year": "FREE";
+	$("#summary-total-price").text(total_price);
+}
 
 //function to show or disable submit
 function handleSubmitDisabled(){
-	if ($(".domain-name-input").filter(function(){ return $(this).val() == ""}).length == 1 && $(".is-danger").length == 2 && $("#agree-to-terms:checked").length > 0){
+
+	//show the table related help text
+	showHelpText("table");
+
+	//see if we should remove disable on submit button
+	if ($(".domain-name-input").filter(function(){ return $(this).val() != "" && !$(this).hasClass("is-disabled")}).length > 0
+	&& $(".notification.is-danger").length == 2 && $("#agree-to-terms:checked").length > 0){
 		$("#domains-submit").removeClass('is-disabled');
 	}
 	else {
@@ -220,6 +271,11 @@ function deleteAllRows(){
 	}
 }
 
+//function to clear all successful rows
+function clearSuccessRows(){
+	$(".domain-name-input.is-disabled").closest(".table-row").not("#clone-row").remove();
+}
+
 //if there are more than 10 rows, add the add-domain button to the top as well
 function handleTopAddDomainButton(){
 	if ($(".table-row").length > 7){
@@ -229,34 +285,6 @@ function handleTopAddDomainButton(){
 		$("#top-header-row").addClass('is-hidden');
 	}
 }
-//
-// //function to set values of price type/price rate according to premium checkbox
-// function checkPremiumRow(row_elem){
-// 	var price_input = row_elem.find(".price-rate-input");
-// 	var price_select = row_elem.find("select");
-// 	var price_checkbox = row_elem.find(".cat-checkbox");
-// 	refreshNotification();
-//
-// 	if (price_checkbox.prop('checked')){
-// 		price_select.find(".day-type").removeProp('disabled');
-// 		price_select.find(".hour-type").removeProp('disabled');
-// 		price_input.removeClass('is-disabled');
-// 	}
-// 	else {
-// 		if (price_select.val() == "week"){
-// 			price_input.attr("value", 10);
-// 			price_input.val(10);
-// 		}
-// 		else {
-// 			price_select.val("month");
-// 			price_input.attr("value", 25);
-// 			price_input.val(25);
-// 		}
-// 		price_select.find(".day-type").prop('disabled', true);
-// 		price_select.find(".hour-type").prop('disabled', true);
-// 		price_input.addClass('is-disabled');
-// 	}
-// }
 
 //--------------------------------------------------------------------------------TABLE SUBMIT
 
@@ -269,10 +297,14 @@ function submitDomains(submit_elem){
 		var domains = getTableListingInfo(".domain-name-input");
 
 		if (domains.length > 0){
-			submit_elem.off();		//remove handler
-			submit_elem.addClass('is-loading');
-
-			submitDomainsAjax(domains, submit_elem);
+			//check for any premium
+			if ($(".premium-input:checked").length > 0){
+				showCCForm(submit_elem);
+			}
+			else {
+				submit_elem.off().addClass('is-loading');
+				submitDomainsAjax(domains, submit_elem);
+			}
 		}
 	}
 
@@ -287,9 +319,8 @@ function getTableListingInfo(){
 		if (temp_row.find(".domain-name-input").val() && !temp_row.find(".domain-name-input").hasClass('is-disabled')){
 			var row_obj = {
 				domain_name : temp_row.find(".domain-name-input").val().replace(/\s/g, ''),
-				price_type : temp_row.find(".price-type-input").val(),
-				price_rate : temp_row.find(".price-rate-input").val(),
-				premium : temp_row.find(".cat-checkbox").prop("checked")
+				buy_price : temp_row.find(".buy-price-input").val(),
+				premium : temp_row.find(".premium-input").prop("checked")
 			};
 			temp_array.push(row_obj);
 		}
@@ -308,16 +339,34 @@ function submitDomainsAjax(domains, submit_elem, stripeToken){
 			stripeToken : stripeToken
 		}
 	}).done(function(data){
+		refreshNotification();
 		//handle any good or bad listings
 		refreshRows(data.bad_listings, data.good_listings);
 
 		if (data.state == "error"){
-			$("#stripe-error-message").addClass('is-danger').html("Your credit card was declined.");
+			//some unhandled error
+			if (!data.bad_listings && !data.good_listings){
+				showTable();
+			}
+
+			handleErrors(data.message);
 		}
 
-		submit_elem.removeClass('is-loading');
-		submit_elem.on("click", function(e){
-			e.preventDefault();
+		if (data.bad_listings && data.bad_listings.length == 0){
+			showHelpText("success");
+		}
+
+		//clear the CVC
+		$('#cc-cvc').val("");
+		$(".stripe-input").removeClass('is-disabled');
+
+		//click handler for getting stripe token
+		$("#checkout-button").removeClass('is-loading').off().on("click", function(){
+			submitStripe($(this));
+		});
+
+		//click handler for resubmitting newly added domains
+		$("#domains-submit").removeClass('is-loading').off().on("click", function(e){
 			submitDomains(submit_elem);
 		});
 	});
@@ -355,8 +404,8 @@ function refreshRows(bad_listings, good_listings){
 //function to refresh notifications if there are no relative rows
 function refreshNotification(){
 	//hide error notification
-	if ($(".is-danger").length == 2){
-		$("#domain-error-message").addClass("is-hidden");
+	if ($("small.is-danger").length == 0){
+		$(".notification.is-danger").addClass("is-hidden");
 		$("td small.is-danger").remove();
 		$("td .is-danger").removeClass("is-danger");
 	}
@@ -401,11 +450,8 @@ function handleBadReasons(reasons, row){
 		//append latest one
 		for (var x = 0; x < reasons.length; x++){
 			var explanation = $("<small class='is-danger has-text-right is-pulled-right'>" + reasons[x] + "</small>")
-			if (reasons[x] == "Invalid type!"){
-				var reason_input = ".price-type-input";
-			}
-			else if (reasons[x] == "Invalid rate!"){
-				var reason_input = ".price-rate-input";
+			if (reasons[x] == "Invalid price!"){
+				var reason_input = ".buy-price-input";
 			}
 			else {
 				var reason_input = ".domain-name-input";
@@ -428,10 +474,7 @@ function goodTableRows(good_listings){
 		var explanation = $("<small class='is-primary is-pulled-right'>Successfully added!</small>")
 		table_row.find(".domain-name-input").addClass('is-primary').closest('td').append(explanation);
 		table_row.find(".domain-name-input, .price-type-input, .price-rate-input").addClass('is-disabled');
-
-		//revert checkbox to text
-		var premium_text = (table_row.find(".cat-checkbox").prop("checked")) ? "Premium" : "Basic";
-		table_row.find(".td-premium").addClass("has-text-centered padding-top-15").empty().html("<strong>" + premium_text + "</strong>");
+		table_row.find(".premium-input").addClass('is-disabled');
 	}
 }
 
@@ -445,48 +488,89 @@ function deleteGoodTableRows(){
 }
 
 // //--------------------------------------------------------------------------------PAYMENT SUBMIT
-//
-// //function to show the CC payment form
-// function showCCForm(old_submit){
-// 	old_submit.addClass('is-hidden').removeClass('is-disabled');
-// 	$("#payment-column").removeClass('is-hidden');
-// 	$("#table-column").addClass('is-hidden');
-// 	$("#summary-column").addClass('is-offset-2');
-// 	$("#review-table-button").removeClass('is-hidden');
-//
-// 	showHelpText("payment");
-// 	window.scrollTo(0, 0);		//scroll to top so we can see the help text
-// }
-//
-// //helper function to check if everything is legit on payment form
-// function checkSubmit(){
-// 	var bool = true;
-//
-// 	if (!$("#cc-num").val()){
-// 		bool = "Invalid cc number!";
-// 		$("#stripe-error-message").addClass('is-danger').html("Please provide a credit card to charge.");
-// 	}
-// 	else if (!$("#cc-exp").val()){
-// 		bool = "Invalid cc exp!";
-// 		$("#stripe-error-message").addClass('is-danger').html("Please provide your credit card expiration date.");
-// 	}
-// 	else if (!$("#cc-cvc").val()){
-// 		bool = "Invalid cvc!";
-// 		$("#stripe-error-message").addClass('is-danger').html("Please provide your credit card CVC number.");
-// 	}
-// 	else if (!$("#cc-zip").val()){
-// 		bool = "Invalid zip Code!";
-// 		$("#stripe-error-message").addClass('is-danger').html("Please provide a ZIP code.");
-// 	}
-// 	else if (!$("#agree-to-terms").prop('checked')){
-// 		bool = "Invalid terms!";
-// 		$("#stripe-error-message").addClass('is-danger').html("You must agree to the terms and conditions.");
-// 	}
-//
-// 	return bool;
-// }
-//
-// function submitStripe(stripeToken){
-// 	var domains = getTableListingInfo(".domain-name-input");
-// 	submitDomainsAjax(domains, $("#checkout-button"), stripeToken);
-// }
+
+//function to show the CC payment form
+function showCCForm(old_submit){
+	clearDangerSuccess();
+	$("#payment-column").removeClass('is-hidden');
+	$("#table-column").addClass('is-hidden');
+	$("#summary-column").addClass('is-offset-2');
+	$("#review-table-button").removeClass('is-hidden');
+
+	showHelpText("payment");
+	window.scrollTo(0, 0);		//scroll to top so we can see the help text
+
+	//click handler for getting stripe token
+	$("#checkout-button").off().on("click", function(){
+		submitStripe($(this));
+	});
+}
+
+//helper function to check if everything is legit on payment form
+function checkCCSubmit(){
+	if (!$("#cc-num").val()){
+		handleErrors("Invalid cc");
+		return false;
+	}
+	else if (!$("#cc-exp").val()){
+		handleErrors("Invalid cc exp");
+		return false;
+	}
+	else if (!$("#cc-cvc").val()){
+		handleErrors("Invalid cvc");
+		return false;
+	}
+	else if (!$("#cc-zip").val()){
+		handleErrors("Invalid zip");
+		return false;
+	}
+	else {
+		return true;
+	}
+}
+
+//helper function for handling CC errors
+function handleErrors(error_description){
+	$("#payment-error-message").removeClass('is-hidden');
+
+	switch (error_description){
+		case "No Stripe Token":
+		case "Invalid cc":
+			var error_desc = "Please provide a valid credit card to charge.";
+			break;
+		case "Invalid cc exp":
+			var error_desc = "Please provide your credit card expiration date.";
+			break;
+		case "Invalid cvc":
+			var error_desc = "Please provide your credit card CVC number.";
+			break;
+		case "Invalid zip":
+			var error_desc = "Please provide a ZIP code.";
+			break;
+		case "":
+			var error_desc = "Something went wrong with the payment! Your credit card has not been charged.";
+			break;
+		default:
+			var error_desc = error_description;
+			break;
+	}
+
+	$("#payment-error-desc").text(error_desc)
+}
+
+//get stripe token
+function submitStripe(checkout_button){
+	//check locally first
+	if (checkCCSubmit()){
+		$("#review-table-button, #goback-button").off();
+		$(".stripe-input").addClass('is-disabled');
+		checkout_button.addClass('is-loading').off();
+		$("#stripe-form").submit();
+	}
+}
+
+//got the stripetoken, submit to domahub
+function submitStripeToken(stripeToken){
+	var domains = getTableListingInfo(".domain-name-input");
+	submitDomainsAjax(domains, $("#checkout-button"), stripeToken);
+}

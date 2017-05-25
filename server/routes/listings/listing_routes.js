@@ -86,8 +86,8 @@ module.exports = function(app, db, auth, error, stripe){
 		owner_functions.checkPostedPremium,
 		profile_functions.getAccountListings,		//to find out which listings were not created in multi-create
 		owner_functions.createListings,
-		//stripe.createStripeCustomer,
-		//stripe.createStripeSubscriptions,
+		stripe.createStripeCustomer,
+		stripe.createStripeSubscriptions,
 		owner_functions.updateListingPremium
 	]);
 
