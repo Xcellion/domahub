@@ -283,8 +283,7 @@ button[data-balloon] {
 
 .td-price-rate {
   white-space: nowrap;
-  width: 75px;
-  text-align: right !important; }
+  width: 75px; }
 
 .td-price-type {
   width: 100px; }
