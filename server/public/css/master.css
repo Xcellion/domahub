@@ -4435,9 +4435,9 @@ input:-webkit-autofill {
 
 @media screen and (max-width: 768px) {
   .nav-menu {
-    -webkit-box-shadow: 0 3px 5px 0 rgba(0, 0, 0, 0.14), 0 3px 6px -2px rgba(0, 0, 0, 0.2), 0 3px 7px 0 rgba(0, 0, 0, 0.12);
-    -moz-box-shadow: 0 3px 5px 0 rgba(0, 0, 0, 0.14), 0 3px 6px -2px rgba(0, 0, 0, 0.2), 0 3px 7px 0 rgba(0, 0, 0, 0.12);
-    box-shadow: 0 3px 5px 0 rgba(0, 0, 0, 0.14), 0 3px 6px -2px rgba(0, 0, 0, 0.2), 0 3px 7px 0 rgba(0, 0, 0, 0.12);
+    -webkit-box-shadow: 0 3px 8px 1px rgba(0, 0, 0, 0.12);
+    -moz-box-shadow: 0 3px 8px 1px rgba(0, 0, 0, 0.12);
+    box-shadow: 0 3px 8px 1px rgba(0, 0, 0, 0.12);
     background-color: white;
     display: none;
     position: absolute;
@@ -4486,10 +4486,10 @@ input:-webkit-autofill {
     justify-content: flex-end; } }
 
 .nav {
-  -moz-transition: all 0.1s;
-  -o-transition: all 0.1s;
-  -webkit-transition: all 0.1s;
-  transition: all 0.1s;
+  -moz-transition: all 0.2s;
+  -o-transition: all 0.2s;
+  -webkit-transition: all 0.2s;
+  transition: all 0.2s;
   align-items: stretch;
   background-color: transparent;
   display: flex;
@@ -4509,19 +4509,17 @@ input:-webkit-autofill {
     @media screen and (min-width: 980px) {
       .nav > .container > .nav-left > .nav-item:first-child:not(.is-tab) {
         padding-left: 0; } }
-    .nav > .container > .nav-right > .nav-item:nth-child(2):not(.is-tab) {
-      padding-right: 0; }
-      @media screen and (max-width: 768px) {
-        .nav > .container > .nav-right > .nav-item:nth-child(2):not(.is-tab) {
-          padding-right: 10px; } }
+    @media screen and (max-width: 768px) {
+      .nav > .container > .nav-right > .nav-item:nth-child(2):not(.is-tab) {
+        padding-right: 10px; } }
   .container > .nav > .nav-left > .nav-item:first-child:not(.is-tab) {
     padding-left: 0; }
   .container > .nav > .nav-right > .nav-item:last-child:not(.is-tab) {
     padding-right: 0; }
   .nav.has-shadow {
-    -webkit-box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
-    -moz-box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
-    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12); }
+    -webkit-box-shadow: 0 3px 5px 0 rgba(0, 0, 0, 0.12);
+    -moz-box-shadow: 0 3px 5px 0 rgba(0, 0, 0, 0.12);
+    box-shadow: 0 3px 5px 0 rgba(0, 0, 0, 0.12); }
   @media screen and (max-width: 979px) {
     .nav > .container > .nav-left > .nav-item.is-brand:first-child,
     .container > .nav > .nav-left > .nav-item.is-brand:first-child {

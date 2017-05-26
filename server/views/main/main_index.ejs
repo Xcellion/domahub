@@ -4,476 +4,170 @@
 <head>
   <title>Domain Name Rentals - DomaHub</title>
   <link rel="stylesheet" type="text/css" href="/css/min/main_index.min.css" />
-  <meta name="description" content="Rent memorable domain names for marketing or personal use for the exact duration you need.
-   Domahub is an online marketplace for domain name rentals that allows users to rent already registered domains for days, weeks, or months." />
+  <meta name="description" content="Beautiful and robust domain name landing pages." />
   <%- include("../templates/head_links"); %>
 </head>
 
 <body>
 
   <%- include("../templates/navbar", {user: user}); %>
-  <section id="landing" class="section is-index-img">
+  <section id="landing" class="section is-large">
     <div class="container">
       <div class="content has-text-centered margin-bottom-25">
-        <h1 class="title is-1 is-white is-bold">
-          Exceptional domains for rent.
+        <h1 class="title is-2 is-bold">
+          Beautiful landing pages for your domains.
         </h1>
-        <h2 class="subtitle is-4 is-white">
-          Rent memorable domain names for marketing or personal use for the exact duration you need.
-        </h2>
+        <p class="subtitle is-5">
+          Create robust landing pages for your domains in seconds.
+          You don't even have to know how to code!
+        </p>
       </div>
-      <div class="control is-grouped-center">
-        <a tabindex="0" href="/listings" class="button is-stylish is-primary">Browse Domains</a>
+      <div class="control is-grouped is-grouped-center">
+        <p class="control">
+          <input class="input is-medium" type="text" placeholder="yourdomain.com"/>
+        </p>
+        <p class="control">
+          <a tabindex="0" href="/listings" class="button is-stylish is-primary">Try it Now</a>
+        </p>
       </div>
+    </div>
+    <div id="learn-more-wrapper" class='has-text-centered'>
+      <p id="learn-more-text">Learn more...</p>
+        <div class="learn-more-arrow">
+            <a tabindex="0" href="#features-section" id="learn-more-button" title="Learn More">
+                <span class="icon is-medium is-white">
+                    <i class="fa fa-angle-down"></i>
+                </span>
+            </a>
+        </div>
     </div>
   </section>
 
-  <section id="decision-section" class="section is-medium-top">
-      <div id="learn-more-wrapper" class='has-text-centered'>
-        <p id="learn-more-text">Learn more...</p>
-          <div class="learn-more-arrow">
-              <a tabindex="0" href="#decision-section" id="learn-more-button" title="Learn More">
-                  <span class="icon is-medium is-white">
-                      <i class="fa fa-angle-down"></i>
-                  </span>
-              </a>
-          </div>
-      </div>
+  <section id="features-section" class="section is-medium has-border-bottom">
     <div class="container">
-      <div class="tabs-box">
-        <ul>
-          <li id="have-domains-tab" class="is-active">
-            <a tabindex="0" href="#owners" title="Domain Owners">I have domains</a>
-          </li>
-          <li id="want-domains-tab">
-            <a tabindex="0" href="#renters" title="Domain Renters">I want domains</a>
-          </li>
-        </ul>
-      </div>
-    </div>
-  </section>
-
-  <section id="have-domains-section" class="section is-medium has-border-bottom d-owner">
-    <div class="container">
-      <div class="content">
-        <h1 class="title is-2 has-text-centered">What makes a domain exceptional?</h1>
-      </div>
       <div class="columns">
-        <div class="column is-3">
-          <div class="content box dom-trait">
-            <div class="flex-align-center">
-              <span class="icon is-medium is-primary"><i class="fa fa-snowflake-o"></i></span>
-              <h2 >Unique</h2>
-            </div>
-            <p>
-              Words or phrases related to themes like holidays, places, ideas, etc.
-            </p>
-          </div>
-        </div>
-        <div class="column is-3">
-          <div class="content box dom-trait">
-            <div class="flex-align-center">
-              <span class="icon is-medium is-primary"><i class="fa fa-star"></i></span>
-              <h2 >Memorable</h2>
-            </div>
-            <p>
-              A catchy and easy-to-remember saying, slogan, motto, tag-line, quote, etc.
-            </p>
-          </div>
-        </div>
-        <div class="column is-3">
-          <div class="content box dom-trait">
-            <div class="flex-align-center">
-              <span class="icon is-medium is-primary"><i class="fa fa-search"></i></span>
-              <h2 >Searchable</h2>
-            </div>
-            <p>
-              Natural traffic generated from common keywords and search terms.
-            </p>
-          </div>
-        </div>
-        <div class="column is-3">
-          <div class="content box dom-trait">
-            <div class="flex-align-center">
-              <span class="icon is-medium is-primary"><i class="fa fa-recycle"></i></span>
-              <h2 >Versatile</h2>
-            </div>
-            <p>
-              Various use cases based on multiple meanings, definitions, or interpretations.
-            </p>
-          </div>
-        </div>
-      </div>
-        <!-- <div class="column is-5 is-offset-1">
+        <div class="column is-5">
           <div class="content">
-            <div class="content margin-bottom-20">
-              <h2 class="has-text-centered-mobile">What are the benefits of renting?</h2>
-            </div>
-            <ul class="flex-list box">
-              <li>
-                <span class="icon is-primary">
-                  <i class="fa fa-check"></i>
-                </span>
-                <p>Earn money from unused domains.</p>
-              </li>
-              <li>
-                <span class="icon is-primary">
-                  <i class="fa fa-check"></i>
-                </span>
-                <p>Organically grow traffic from your renters.</p>
-              </li>
-              <li>
-                <span class="icon is-primary">
-                  <i class="fa fa-check"></i>
-                </span>
-                <p>Increase the likelihood of a sale.</p>
-              </li>
+            <h1>Goodbye, boring landing pages.</h1>
+            <p>
+              Our landing pages are focused on one thing only: <strong>helping you sell your domain</strong>.
+              Utilize our custom features and plugins to boost your domain's online presence.
+            </p>
+            <ul class="has-disc">
+              <li>Individual domain traffic data</li>
+              <li>Visitor demographics and statistics</li>
+              <li>Custom images, colors, and other modules</li>
+              <li>Domain owner portfolio showcase</li>
+              <li>Links to other listings/marketplaces</li>
             </ul>
           </div>
-        </div> -->
-    </div>
-  </section>
-
-  <section class="section is-medium has-border-bottom d-owner">
-    <div class="container">
-      <div class="columns">
-        <div class="column is-6 is-offset-3">
-          <div class="content">
-            <h1 class="title is-2 has-text-centered">How it works.</h1>
-            <%# <p>
-              Our platform introduces your domain to potential renters. We create the listing page,
-              set rental terms, manage payments and transactions, and handle the process of
-              redirecting renter's content to the domain. This process is detailed below.
-            </p>%>
-          </div>
         </div>
-      </div>
-      <div class="columns">
-        <div class="column is-4">
-          <div class="content box has-stripe hiw">
-            <p class="is-blacklight">Step One</p>
-            <div class="flex-align-center">
-              <span class="icon is-medium is-bluedarker">
-                <i class="fa fa-list-alt"></i>
-              </span>
-              <h2 >You List Your Domain</h2>
-            </div>
-            <p>
-              Create custom listings using our upload tool and verify that you own them
-              by pointing a DNS A Record to DomaHub.
-            </p>
-          </div>
-        </div>
-        <div class="column is-4">
-          <div class="content box has-stripe hiw">
-            <p class="is-blacklight">Step Two</p>
-            <div class="flex-align-center">
-              <span class="icon is-medium is-bluedarker">
-                <i class="fa fa-calendar-check-o"></i>
-              </span>
-              <h2 >Someone Rents It</h2>
-            </div>
-            <p>
-              We pay you directly into a bank account you've linked
-              with us. Rentals are not complete until we confirm payment.
-            </p>
-          </div>
-        </div>
-        <div class="column is-4">
-          <div class="content box has-stripe hiw">
-            <p class="is-blacklight">Step Three</p>
-            <div class="flex-align-center">
-              <span class="icon is-medium is-bluedarker">
-                <i class="fa fa-share-square-o"></i>
-              </span>
-              <h2 >We Redirect Web Content</h2>
-            </div>
-            <p>
-              The renter provides a link to some web content they wish to display and it is
-              displayed on your domain for the duration of the rental.
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="section is-medium d-owner">
-    <div class="container">
-      <div class="content margin-bottom-25">
-          <h1 class="title is-2 has-text-centered">Why list with DomaHub?</h1>
-      </div>
-      <div class="columns">
-        <div class="column is-6">
-          <div class="slider-box">
-            <div class="slider-content">
-              <span class="slider-icon icon is-primary is-medium">
-                <i class="fa fa-server"></i>
-              </span>
-              <div class="content slider-text margin-bottom-0">
-                <h2>Never transfer domains</h2>
-                <p>
-                  You keep your nameservers.
-                </p>
-                <a class="slider-learn is-accent">Click to learn more.</a>
-              </div>
-              <div class="slider-hidden-content margin-right-25 slider-text">
-                <p>
-                  You maintain legal ownership of your domain. The renter does not use
-                  their own nameservers.
-                </p>
-              </div>
-            </div>
-            <div class="slider-arrow">
-              <span class="icon is-primary">
-                <i class="fa fa-angle-right"></i>
-              </span>
-            </div>
-          </div>
-          <div class="slider-box">
-            <div class="slider-content">
-              <span class="slider-icon icon is-primary is-medium">
-                <i class="fa fa-gears"></i>
-              </span>
-              <div class="content slider-text margin-bottom-0">
-                <h2>Control pricing and scheduling</h2>
-                <p>
-                  You have full control over both.
-                </p>
-                <a class="slider-learn is-accent">Click to learn more.</a>
-              </div>
-              <div class="slider-hidden-content margin-right-25 slider-text">
-                <p>
-                  You decide pricing for all of your domains.
-                  You also decide the time it is available for: daily, weekly, or monthly.
-                </p>
-              </div>
-            </div>
-            <div class="slider-arrow">
-              <span class="icon is-primary">
-                <i class="fa fa-angle-right"></i>
-              </span>
-            </div>
-          </div>
-        </div>
-        <div class="column is-6">
-          <div class="slider-box">
-            <div class="slider-content">
-              <span class="slider-icon icon is-primary is-medium">
-                <i class="fa fa-credit-card"></i>
-              </span>
-              <div class="content slider-text margin-bottom-0">
-                <h2>Quick and easy payments</h2>
-                <p>
-                  Get paid immediately and securely.
-                </p>
-                <a class="slider-learn is-accent">Click to learn more.</a>
-              </div>
-              <div class="slider-hidden-content margin-right-25 slider-text">
-                <p>
-                  Secured payment directly into your bank
-                  account within a few business days.
-                </p>
-              </div>
-            </div>
-            <div class="slider-arrow">
-              <span class="icon is-primary">
-                <i class="fa fa-angle-right"></i>
-              </span>
-            </div>
-          </div>
-          <div class="slider-box">
-            <div class="slider-content">
-              <span class="slider-icon icon is-primary is-medium">
-                <i class="fa fa-book"></i>
-              </span>
-              <div class="content slider-text margin-bottom-0">
-                <h2>Secure rental contracts</h2>
-                <p>
-                  All rentals are bounded by our terms.
-                </p>
-                <a class="slider-learn is-accent">Click to learn more.</a>
-              </div>
-              <div class="slider-hidden-content margin-right-25 slider-text">
-                <p>
-                  Every rental is subject to our <a href="/terms" class="is-accent">Terms</a>.
-                  We reserve the right to remove any inappropriate rental on DomaHub.
-                </p>
-              </div>
-            </div>
-            <div class="slider-arrow">
-              <span class="icon is-primary">
-                <i class="fa fa-angle-right"></i>
-              </span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section id="want-domains-section" class="section is-medium has-border-bottom d-renter is-hidden">
-    <div class="container">
-      <div class="content">
-        <h1 class="title is-2 has-text-centered">Our Benefits</h1>
-      </div>
-      <div class="columns">
-        <div class="column is-4">
-          <div class="content box dom-ben">
-            <div class="flex-align-center">
-              <span class="icon is-medium is-primary">
-                <i class="fa fa-pie-chart"></i>
-              </span>
-              <h2 >Affordable Prices</h2>
-            </div>
-            <p>
-              Exceptional domains can be expensive to buy, we know.
-              Rentals are a cost-effective way to utilize the
-              domains that you want!
-            </p>
-          </div>
-        </div>
-        <div class="column is-4">
-          <div class="content box dom-ben">
-            <div class="flex-align-center">
-              <span class="icon is-medium is-primary">
-                <i class="fa fa-calendar-check-o"></i>
-              </span>
-              <h2 >Flexible Scheduling</h2>
-            </div>
-            <p>
-              Domains are available by the day, week or month. We work hard to make sure our domains
-              fit your schedule perfectly.
-            </p>
-          </div>
-        </div>
-        <div class="column is-4">
-          <div class="content box dom-ben">
-            <div class="flex-align-center">
-              <span class="icon is-medium is-primary">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <h2 >Exceptional Inventory</h2>
-            </div>
-            <p>
-              If a domain you want is not listed on DomaHub, we will do our best to get that domain for you!
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="section is-medium has-border-bottom d-renter is-hidden">
-    <div class="container">
-      <div class="columns">
-        <div class="column is-6 is-offset-3">
-          <div class="content">
-            <h1 class="title is-2 has-text-centered">Using your domain rental.</h1>
-            <%# <p>
-              Every domain listing on DomaHub has verified demographics data and traffic statistics.
-              We provide you with all the information you need to make an informed decision. Find a
-              unique domain name that not only delivers the right message, but also has the exact
-              audience you're looking to target.
-            </p>%>
-          </div>
-        </div>
-      </div>
-      <div class="columns">
-        <div class="column">
-          <div class="columns">
-            <div class="column is-5 is-offset-1">
-              <div class="content box has-stripe options">
-                <p class="is-blacklight">
-                  Option One
-                </p>
-                <div class="flex-align-center">
-                  <span class="icon is-medium is-bluedarker">
-                    <i class="fa fa-television"></i>
-                  </span>
-                  <h2 >Display custom content.</h2>
-                </div>
-                <p>
-                  Link web content (e.g. an image, GIF, or website) to your new rental.
-                  Visitors to the rented domain will see your content for the duration of
-                  your rental.
-                </p>
-              </div>
-            </div>
-            <div class="column is-5">
-              <div class="content box has-stripe options">
-                <p class="is-blacklight">
-                  Option Two
-                </p>
-                <div class="flex-align-center">
-                  <span class="icon is-medium is-bluedarker">
-                    <i class="fa fa-share"></i>
-                  </span>
-                  <h2 >Forward to another website.</h2>
-                </div>
-                <p>
-                  Visitors to the rented domain will be forwarded to a website of your choosing.
-                  You keep your existing brand and gain extra traffic from your new domain rental.
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="section is-medium d-renter is-hidden">
-    <div class="container">
-      <div class="content margin-bottom-30">
-        <h1 class="title is-2 has-text-centered">How it works.</h1>
-      </div>
-      <div class="columns">
-        <div class="column is-4 is-offset-2">
-          <div class="content">
-            <h2>1. Browse Domains</h2>
-            <p>
-              Find a memorable domain name that fits your needs.
-            </p>
-          </div>
-        </div>
-        <div class="column is-5">
-          <figure class="image has-shadow is-real-ratio">
-            <img src="/images/main/listing-capture.png" alt="Domain name rental listing page"/>
+        <div class="column is-7">
+          <figure class="image has-shadow">
+            <img src="/images/main/dummy-image.jpg" alt="Preview of our landing page"/>
           </figure>
         </div>
       </div>
+    </div>
+  </section>
+
+  <section class="section is-medium has-border-bottom">
+    <div class="container">
       <div class="columns">
-        <div class="column is-4 is-offset-2">
-          <div class="content">
-            <h2>2. Select Dates</h2>
-            <p>
-              Confirm your rental dates directly on the listing's page.
-            </p>
-          </div>
+        <div class="column is-7">
+          <figure class="image">
+            <img src="" />
+          </figure>
         </div>
         <div class="column is-5">
-          <figure class="image has-shadow is-real-ratio">
-            <img src="/images/main/date-selection.gif" alt="Domain name rental date selection" />
-          </figure>
+          <div class="content">
+            <h1>Why do I need a good landing page?</h1>
+            <div class="flex-align-center">
+              <span class="icon is-primary">
+                <i class="fa fa-window-maximize"></i>
+              </span>
+              <p>
+                Landing pages are proven to improve the likelihood of sales.
+              </p>
+            </div>
+            <div class="flex-align-center">
+              <span class="icon is-primary">
+                <i class="fa fa-line-chart"></i>
+              </span>
+              <p>
+                Relevant statistics and info increase the value of your domain to buyers.
+              </p>
+            </div>
+            <div class="flex-align-center">
+              <span class="icon is-primary fix">
+                <i class="fa fa-envelope-open-o"></i>
+              </span>
+              <p>
+                Buyers can send you offers effortlessly as long as it's above your minimum price!
+              </p>
+            </div>
+            <div class="flex-align-center">
+              <span class="icon is-primary">
+                <i class="fa fa-folder-open-o"></i>
+              </span>
+              <p>
+                Showcasing your entire portfolio allows buyers to shop all of your domains with ease.
+              </p>
+            </div>
+          </div>
         </div>
       </div>
+    </div>
+  </section>
+
+  <section class="section is-medium">
+    <div class="container">
+      <div class="content has-text-centered">
+        <h1>Pricing</h1>
+      </div>
       <div class="columns">
-        <div class="column is-4 is-offset-2">
-          <div class="content">
-            <h2>3. Redirect Content</h2>
-            <p>
-              Provide a link to whatever web content you wish to redirect to your new domain
-              rental.
-            </p>
+        <div class="column is-5 is-offset-1">
+          <div class="card is-fullwidth">
+            <div class="card-header">
+              <h2 class="card-header-title has-text-centered">Free Tier</h2>
+            </div>
+            <div class="card-content">
+              <div class="content">
+                <p>
+                  This is the free tier model.
+                </p>
+                <ul>
+                  <li>Free tier stuff</li>
+                  <li>Free tier stuff</li>
+                  <li>Free tier stuff</li>
+                  <li>Free tier stuff</li>
+                </ul>
+              </div>
+              </div>
+            <footer class="card-footer">
+              <a class="button is-primary no-shadow">Get Started</a>
+            </footer>
           </div>
         </div>
         <div class="column is-5">
-          <figure class="image-stack">
-            <img src="/images/main/stack-img-3.jpg" alt="Example website" />
-            <img src="/images/main/stack-img-2.jpg" alt="Example website" />
-            <img src="/images/main/stack-img-1.jpg" alt="Example website" />
-          </figure>
+          <div class="card is-fullwidth">
+            <div class="card-header">
+              <h2 class="card-header-title has-text-centered">Paid Tier</h2>
+            </div>
+            <div class="card-content">
+              <div class="content">
+                <p>
+                  This is the paid tier model.
+                </p>
+                <ul>
+                  <li>Free paid stuff</li>
+                  <li>Free paid stuff</li>
+                  <li>Free paid stuff</li>
+                  <li>Free paid stuff</li>
+                </ul>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

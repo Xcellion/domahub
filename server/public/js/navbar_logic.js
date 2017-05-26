@@ -74,26 +74,26 @@ $(document).ready(function() {
 		});
 
 		//list of pages that need a green doma logo // white background. otherwise transparent and white logo
-		var pages_white_nav = ["checkout", "listings", "faq", "contact", "profile", "mission", "about", "press", "careers", "terms", "privacy", "nothinghere"];
-		var current_page = (window.location.pathname == "/") ? "/" : window.location.pathname.split("/")[1];
-
-		if (window.location.pathname.split("/").pop() == "checkout"){
-			current_page = "checkout";
-		}
+		// var pages_white_nav = ["checkout", "listings", "faq", "contact", "profile", "mission", "about", "press", "careers", "terms", "privacy", "nothinghere"];
+		// var current_page = (window.location.pathname == "/") ? "/" : window.location.pathname.split("/")[1];
+		//
+		// if (window.location.pathname.split("/").pop() == "checkout"){
+		// 	current_page = "checkout";
+		// }
 
 		//remove white link if not a page that needs it
-		if (pages_white_nav.indexOf(current_page) != -1){
-			$(".nav-link").removeClass("is-white");
-			$(".nav-menu").removeClass("is-blue");
-			$("#nav-logo, .circle-logo").addClass("is-primary").removeClass("is-white");
-			$(".nav-toggle").removeClass("is-white").addClass("is-blue");
-			$("#profile-button, .login-modal").addClass("is-primary").removeClass("is-white");
-		}
+		// if (pages_white_nav.indexOf(current_page) != -1){
+		// 	$(".nav-link").removeClass("is-white");
+		// 	$(".nav-menu").removeClass("is-blue");
+		// 	$("#nav-logo, .circle-logo").addClass("is-primary").removeClass("is-white");
+		// 	$(".nav-toggle").removeClass("is-white").addClass("is-blue");
+		// 	$("#profile-button, .login-modal").addClass("is-primary").removeClass("is-white");
+		// }
 
 		//change navbar based on scroll
-		navbarChange($(window), pages_white_nav, current_page);
+		navbarChange($(window));
 		$(window).scroll(function(e){
-			navbarChange($(this), pages_white_nav, current_page);
+			navbarChange($(this));
 		});
 	}
 
@@ -106,29 +106,29 @@ $(document).ready(function() {
 });
 
 //function to change navbar on scroll
-function navbarChange(windowelem, pages_white_nav, current_page){
+function navbarChange(windowelem){
 	//before the top
 	if (windowelem.scrollTop() <= 0) {
-		$(".nav").removeClass("has-shadow is-white");
-		if (pages_white_nav.indexOf(current_page) != -1){
-			$(".nav-link").removeClass("is-white");
-			$("#nav-logo, .circle-logo").addClass("is-primary").removeClass("is-white");
-		}
-		else {
-			$("#profile-button, .login-modal").removeClass("is-primary").addClass("is-white");
-			$("#nav-logo, .circle-logo").removeClass("is-primary").addClass("is-white");
-			$(".nav-link").addClass("is-white");
-			$(".nav-menu").addClass("is-blue");
-			$(".nav-toggle").removeClass("is-black").addClass("is-white");
-		}
+		$(".nav").removeClass("has-shadow");
+		// if (pages_white_nav.indexOf(current_page) != -1){
+		// 	$(".nav-link").removeClass("is-white");
+		// 	$("#nav-logo, .circle-logo").addClass("is-primary").removeClass("is-white");
+		// }
+		// else {
+		// 	$("#profile-button, .login-modal").removeClass("is-primary").addClass("is-white");
+		// 	$("#nav-logo, .circle-logo").removeClass("is-primary").addClass("is-white");
+		// 	$(".nav-link").addClass("is-white");
+		// 	$(".nav-menu").addClass("is-blue");
+		// 	$(".nav-toggle").removeClass("is-black").addClass("is-white");
+		// }
 	}
 	//past the top
 	else if (windowelem.scrollTop() > 0 && !$(".nav").hasClass("has-shadow")){
-		$(".nav").addClass("has-shadow is-white");
-		$(".nav-link").removeClass("is-white");
-		$(".nav-menu").removeClass("is-blue");
-		$(".nav-toggle").removeClass("is-white").addClass("is-black");
-		$("#nav-logo, .circle-logo").addClass("is-primary").removeClass("is-white");
-		$("#profile-button, .login-modal").addClass("is-primary").removeClass("is-white");
+		$(".nav").addClass("has-shadow");
+		// $(".nav-link").removeClass("is-white");
+		// $(".nav-menu").removeClass("is-blue");
+		// $(".nav-toggle").removeClass("is-white").addClass("is-black");
+		// $("#nav-logo, .circle-logo").addClass("is-primary").removeClass("is-white");
+		// $("#profile-button, .login-modal").addClass("is-primary").removeClass("is-white");
 	}
 }
