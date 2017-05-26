@@ -6,20 +6,28 @@
 }
 
 .faq-header {
+  @include transition(all 0.25s ease);
   color: $primary;
   cursor: pointer;
   font-weight: 400;
   margin-bottom: 20px;
   position: relative;
-  padding-left: 15px;
   &::before {
+    @include transition(all 0.25s ease);
     content: "";
     position: absolute;;
     height: 100%;
-    width: 5px;
+    width: 0;
     background: $primary;
     left: 0;
     bottom: 0;
+  }
+  &.is-active {
+    position: relative;
+    padding-left: 15px;
+    &::before {
+      width: 5px;
+    }
   }
   &:hover {
     color: $primary-lighter;

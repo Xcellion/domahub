@@ -11,7 +11,7 @@
 <body>
 
   <%- include("../templates/navbar", {user: user}); %>
-  <section id="landing" class="section is-large">
+  <section id="landing" class="section">
     <div class="container">
       <div class="content has-text-centered margin-bottom-25">
         <h1 class="title is-2 is-bold">
@@ -64,7 +64,7 @@
         </div>
         <div class="column is-7">
           <figure class="image has-shadow">
-            <img src="/images/main/dummy-image.jpg" alt="Preview of our landing page"/>
+            <img alt="Preview of our landing page"/>
           </figure>
         </div>
       </div>
@@ -76,7 +76,7 @@
       <div class="columns">
         <div class="column is-7">
           <figure class="image">
-            <img src="" />
+            <img  />
           </figure>
         </div>
         <div class="column is-5">
@@ -123,51 +123,74 @@
   <section class="section is-medium">
     <div class="container">
       <div class="content has-text-centered">
-        <h1>Pricing</h1>
+        <h1 class="title is-bold">Pricing</h1>
       </div>
       <div class="columns">
-        <div class="column is-5 is-offset-1">
-          <div class="card is-fullwidth">
+        <div class="column is-4-desktop is-5-tablet is-offset-2-desktop is-offset-1-tablet">
+          <div class="card price-card is-fullwidth">
             <div class="card-header">
-              <h2 class="card-header-title has-text-centered">Free Tier</h2>
+              <h2 class="card-header-title has-text-centered">Basic</h2>
             </div>
             <div class="card-content">
               <div class="content">
-                <p>
-                  This is the free tier model.
-                </p>
-                <ul>
-                  <li>Free tier stuff</li>
-                  <li>Free tier stuff</li>
-                  <li>Free tier stuff</li>
-                  <li>Free tier stuff</li>
+                <h2 class="is-primary is-bold has-text-centered">
+                  Free
+                </h2>
+              </div>
+              <div class="content">
+                <h3 class="has-text-centered">
+                  For the hobby domainer
+                </h3>
+              </div>
+              <div class="content">
+                <ul class="has-disc">
+                  <li>15% commission on sales</li>
+                  <li>Selection of background images</li>
+                  <li>Up to 20 related portfolio domains</li>
+                  <li>Embedded DomaHub logo</li>
                 </ul>
               </div>
-              </div>
+            </div>
             <footer class="card-footer">
-              <a class="button is-primary no-shadow">Get Started</a>
+              <a class="button is-primary is-fullwidth is-stylish no-shadow">Choose Plan</a>
             </footer>
           </div>
+          <p class="has-text-centered">
+            <a class="is-accent">See an example</a>
+          </p>
         </div>
-        <div class="column is-5">
-          <div class="card is-fullwidth">
+        <div class="column is-4-desktop is-5-tablet">
+          <div class="card price-card is-fullwidth">
             <div class="card-header">
-              <h2 class="card-header-title has-text-centered">Paid Tier</h2>
+              <h2 class="card-header-title has-text-centered">Premium</h2>
             </div>
             <div class="card-content">
               <div class="content">
-                <p>
-                  This is the paid tier model.
-                </p>
-                <ul>
-                  <li>Free paid stuff</li>
-                  <li>Free paid stuff</li>
-                  <li>Free paid stuff</li>
-                  <li>Free paid stuff</li>
+                <h2 class="is-primary is-bold has-text-centered">
+                  $1 / year / domain
+                </h2>
+              </div>
+              <div class="content">
+                <h3 class="has-text-centered">
+                  For professional domainers
+                </h3>
+              </div>
+              <div class="content">
+                <ul class="has-disc">
+                  <li>No commission on sales</li>
+                  <li>Custom background images and colors</li>
+                  <li>Unlimited portfolio size</li>
+                  <li>No DomaHub branding</li>
                 </ul>
               </div>
             </div>
+            <footer class="card-footer">
+              <a class="button is-primary is-fullwidth is-stylish no-shadow">Choose Plan</a>
+            </footer>
           </div>
+          <p class="has-text-centered">
+            <a class="is-accent">See an example</a>
+          </p>
         </div>
       </div>
     </div>

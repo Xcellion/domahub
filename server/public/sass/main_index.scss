@@ -4,13 +4,17 @@
 
 #landing {
   border-bottom: 1px solid $border;
-  position: relative;
   width: 100%;
+  position: relative;
+  @include tablet {
+    padding-top: 300px;
+    height: 850px;
+  }
+  @include mobile {
+    padding-top: 175px;
+    height: 500px;
+  }
   .container {
-    align-items: center;
-    display: flex;
-    justify-content: space-between;
-    flex-direction: column;
   }
   .subtitle {
     font-weight: 300;
@@ -26,18 +30,18 @@
 }
 
 #learn-more-wrapper {
-    left: 50%;
-    position: absolute;
-    z-index: 4;
-    transform: translateX(-50%);
-    margin-right: -50%;
-    cursor:pointer;
-    bottom: 10px;
+  left: 50%;
+  position: absolute;
+  z-index: 4;
+  transform: translateX(-50%);
+  margin-right: -50%;
+  cursor:pointer;
+  bottom: 10px;
 }
 
 #learn-more-text {
-    margin:auto;
-    margin-bottom:15px;
+  margin:auto;
+  margin-bottom:15px;
 }
 
 .learn-more-arrow {
@@ -100,6 +104,13 @@
       margin-left: 2px;
     }
   }
+}
+
+.price-card {
+  height: 454px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .has-stripe {
