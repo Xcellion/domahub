@@ -70,7 +70,7 @@ a.nav-item
 .nav-menu
   // Responsiveness
   +mobile
-    +box-shadows(0 3px 5px 0 rgba(0,0,0,.14),0 3px 6px -2px rgba(0,0,0,.2),0 3px 7px 0 rgba(0,0,0,.12))
+    +box-shadow(0,3px,8px,$border,1px)
     background-color: $white
     display: none
     position: absolute
@@ -120,7 +120,7 @@ a.nav-item
 
 // Main container
 .nav
-  +transition(all 0.1s)
+  +transition(all 0.2s)
   align-items: stretch
   background-color: transparent
   display: flex
@@ -143,7 +143,6 @@ a.nav-item
           padding-left: 0
     & > .nav-right
       & > .nav-item:nth-child(2):not(.is-tab)
-        padding-right: 0
         +mobile
           padding-right: 10px
   .container > &
@@ -155,7 +154,7 @@ a.nav-item
         padding-right: 0
   // Modifiers
   &.has-shadow
-    +box-shadows(0 2px 2px 0 rgba(0,0,0,.14),0 3px 1px -2px rgba(0,0,0,.2),0 1px 5px 0 rgba(0,0,0,.12))
+    +box-shadow(0,3px,5px,$border,0)
   // Responsiveness
   +touch
     & > .container,

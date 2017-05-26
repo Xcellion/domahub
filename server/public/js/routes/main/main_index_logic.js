@@ -23,27 +23,27 @@ $(document).ready(function() {
     $("#learn-more-wrapper").on("click", function(e){
         e.preventDefault();
         $('html, body').stop().animate({
-            scrollTop: $("#decision-section").offset().top - $("#navbar").height()
+            scrollTop: $("#features-section").offset().top - $("#navbar").height()
         }, 500);
     });
-    $("#want-domains-button").on("click", function(e){
-        e.preventDefault();
-        $('html, body').stop().animate({
-            scrollTop: $("#want-domains-section").offset().top - $("#navbar").height()
-        }, 500);
-    });
-    $("#have-domains-tab").on("click", function(e){
-        e.preventDefault();
-        $("#want-domains-tab").removeClass("is-active");
-        $(this).addClass("is-active");
-        $(".d-owner").removeClass("is-hidden");
-        $(".d-renter").addClass("is-hidden");
-    });
-    $("#want-domains-tab").on("click", function(e){
-        e.preventDefault();
-        $("#have-domains-tab").removeClass("is-active");
-        $(this).addClass("is-active");
-        $(".d-renter").removeClass("is-hidden");
-        $(".d-owner").addClass("is-hidden");
-    });
+    // $("#want-domains-button").on("click", function(e){
+    //     e.preventDefault();
+    //     $('html, body').stop().animate({
+    //         scrollTop: $("#want-domains-section").offset().top - $("#navbar").height()
+    //     }, 500);
+    // });
+    // $("#have-domains-tab").on("click", function(e){
+    //     e.preventDefault();
+    //     $("#want-domains-tab").removeClass("is-active");
+    //     $(this).addClass("is-active");
+    //     $(".d-owner").removeClass("is-hidden");
+    //     $(".d-renter").addClass("is-hidden");
+    // });
+    // $("#want-domains-tab").on("click", function(e){
+    //     e.preventDefault();
+    //     $("#have-domains-tab").removeClass("is-active");
+    //     $(this).addClass("is-active");
+    //     $(".d-renter").removeClass("is-hidden");
+    //     $(".d-owner").addClass("is-hidden");
+    // });
 });
