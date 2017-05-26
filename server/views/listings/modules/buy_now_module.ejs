@@ -1,0 +1,50 @@
+<div id="buy-now-module" class="post-buy-module content is-hidden margin-top-20">
+    <div class="content description-text">
+        <form id="contact-form">
+          <label class="error_message label">Name</label>
+          <p class="control has-icon">
+            <input id="contact_name" required class="input" name="contact_name" type="text">
+            <i class="fa fa-user-circle-o"></i>
+          </p>
+          <label class="error_message label">Email Address</label>
+          <p class="control has-icon">
+            <input id="contact_email" required class="input" name="contact_email" type="email">
+            <i class="fa fa-envelope"></i>
+          </p>
+          <label class="error_message label">Phone</label>
+          <p class="control has-icon">
+            <input id="contact_phone" class="input" name="contact_phone" type="text">
+            <i class="fa fa-phone"></i>
+          </p>
+          <label class="error_message label">Offer in USD</label>
+          <p class="control has-icon">
+            <input id="contact_offer" required class="input" name="contact_offer" type="number" placeholder="<%= (listing_info.buy_price == 0) ? "" : listing_info.buy_price %>" min="<%= (listing_info.buy_price == 0) ? "" : listing_info.buy_price %>">
+            <i class="fa fa-money"></i>
+          </p>
+          <label class="error_message label">Message</label>
+          <p class="control">
+            <textarea id="contact_message" required class="textarea" name="contact_message" placeholder="Hey! I'm interested in buying <%= listing_info.domain_name %>. Let's chat."></textarea>
+          </p>
+          <nav class="level">
+            <div class="level-left">
+              <div class="level-item">
+                  <div class='control is-grouped'>
+                      <div class='control'>
+                          <button id="submit-button" type="submit" class="button is-accent is-stylish">
+                              Send Offer
+                          </button>
+                      </div>
+                  </div>
+              </div>
+            </div>
+            <div class="level-right">
+              <div class="level-item">
+                <p id="error_message" class="is-hidden is-danger">
+                  Please fill in all the fields!
+                </p>
+              </div>
+            </div>
+          </nav>
+        </form>
+    </div>
+</div>

@@ -44,8 +44,8 @@
 										<select id="filter-select">
 											<option value="reset_filter">View All</option>
 											<option value="rented_filter">Rented Now</option>
-											<%# <option value="premium_filter">Premium</option> %>
-											<%# <option value="basic_filter">Basic</option>%>
+											<option value="premium_filter">Premium</option>
+											<option value="basic_filter">Basic</option>
 											<option value="unverified_filter">Unverified</option>
 										</select>
 									</span>
@@ -88,20 +88,8 @@
 									<span class="icon is-small sort-none is-disabled"><i class="fa fa-sort"></i></span>
 								</th>
 								<th class="td-buttons is-hidden-mobile"></th>
-								<%# <th class="is-hidden-mobile td-type">
-									Type
-									<span class="icon is-small is-active sort-desc is-hidden"><i class="fa fa-sort-desc"></i></span>
-									<span class="icon is-small is-active sort-asc is-hidden"><i class="fa fa-sort-asc"></i></span>
-									<span class="icon is-small sort-none is-disabled"><i class="fa fa-sort"></i></span>
-								</th>%>
 								<th class="is-hidden-mobile td-status">
 									Status
-									<span class="icon is-small is-active sort-desc is-hidden"><i class="fa fa-sort-desc"></i></span>
-									<span class="icon is-small is-active sort-asc is-hidden"><i class="fa fa-sort-asc"></i></span>
-									<span class="icon is-small sort-none is-disabled"><i class="fa fa-sort"></i></span>
-								</th>
-								<th class="has-text-right is-hidden-mobile td-price-rate">
-									$
 									<span class="icon is-small is-active sort-desc is-hidden"><i class="fa fa-sort-desc"></i></span>
 									<span class="icon is-small is-active sort-asc is-hidden"><i class="fa fa-sort-asc"></i></span>
 									<span class="icon is-small sort-none is-disabled"><i class="fa fa-sort"></i></span>
@@ -142,28 +130,38 @@
 									</a>
 								</td>
 								<td class="td-status is-hidden-mobile"></td>
-								<td class="td-status-drop is-hidden">
-									<span class="select status-span">
-										<form class="drop-form">
-											<select data-name="status" class="status_input changeable-input">
-												<option value="1">Active</option>
-												<option value="0">Inactive</option>
-											</select>
-										</form>
-									</span>
-								</td>
 								<td class="has-text-right td-price-rate is-bold is-hidden-mobile"></td>
-								<td class="td-price-type is-hidden-mobile"></td>
+								<%# <td class="td-price-type is-hidden-mobile"></td>%>
 							</tr>
 							<tr class="clone-row row-drop is-hidden" id="verified-clone-row-drop">
-								<td class="row-drop-td" colspan="7">
+								<td class="row-drop-td" colspan="5">
 									<div class="div-drop" style="display:none;"> <!-- need in style for drop row-->
 										<div class="columns">
 											<form class="drop-form column is-9">
 												<div class="columns listing-module">
 													<div class="column is-3">
+														<p class="is-inline">Status</p>
+														<span class="icon is-small is-tooltip v-align-middle" data-balloon-length="medium" data-balloon="Whether this listing is displayed publically or not." data-balloon-pos="up">
+															<i class="fa fa-question-circle-o"></i>
+														</span>
+													</div>
+													<div class="column is-9">
+														<div class="control is-grouped">
+															<span class="select status-span">
+																<div class="drop-form">
+																	<select data-name="status" class="status-input changeable-input">
+																		<option value="1">Active</option>
+																		<option value="0">Inactive</option>
+																	</select>
+																</div>
+															</span>
+														</div>
+													</div>
+												</div>
+												<div class="columns listing-module">
+													<div class="column is-3">
 														<p class="is-inline">Rental Pricing</p>
-														<span class="icon is-small is-tooltip v-align-middle" data-balloon-length="medium" data-balloon="Minimum price is $1. Leave blank or 0 for free rentals." data-balloon-pos="up">
+														<span class="icon is-small is-tooltip v-align-middle" data-balloon-length="medium" data-balloon="Minimum price is $1. Leave blank or 0 for no rentals." data-balloon-pos="up">
 															<i class="fa fa-question-circle-o"></i>
 														</span>
 													</div>
@@ -186,8 +184,8 @@
 												</div>
 												<div class="columns listing-module">
 													<div class="column is-3">
-														<p class="is-inline">Buy-out Price</p>
-														<span class="icon is-small is-tooltip v-align-middle" data-balloon-length="medium" data-balloon="Minimum price is $1. Leave blank or 0 for no buy out option." data-balloon-pos="up">
+														<p class="is-inline">Min. Purchase Price</p>
+														<span class="icon is-small is-tooltip v-align-middle" data-balloon-length="medium" data-balloon="Minimum price is $1. Leave blank or 0 for no minimum purchase price." data-balloon-pos="up">
 															<i class="fa fa-question-circle-o"></i>
 														</span>
 													</div>
@@ -320,10 +318,9 @@
 									</p>
 								</td>
 								<td></td>
-								<td></td>
 							</tr>
 							<tr class="clone-row row-drop is-hidden" id="unverified-clone-row-drop">
-								<td class="row-drop-td" colspan="7">
+								<td class="row-drop-td" colspan="5">
 									<div class="div-drop" style="display:none;">  <!-- need in style for drop row-->
 										<div class="padding-top-10 padding-bottom-10">
 											<div class="columns">
@@ -399,6 +396,9 @@
 	<script src="/js/jquery/jquery-ui.js" type="text/javascript"></script>
 	<script src="/js/lib/moment.min.js" type="text/javascript"></script>
 	<script src="/js/lib/tag-it.min.js" type="text/javascript"></script>
+	<script src="/js/lib/wNumb.js" type="text/javascript"></script>
+	<script src="https://js.stripe.com/v2/" type="text/javascript" ></script>
+	<script src="/js/jquery/jquery.payment.min.js" type="text/javascript"></script>
 	<script type="text/javascript">
 		//redirect to homepage if user is not defined
 		var user = <% if(typeof user != "undefined"){ %><%-JSON.stringify(user)%><% }else{ %>window.location="/"<% } %>;
