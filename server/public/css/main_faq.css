@@ -2,19 +2,31 @@
   padding-top: 70px; }
 
 .faq-header {
+  -moz-transition: all 0.25s ease;
+  -o-transition: all 0.25s ease;
+  -webkit-transition: all 0.25s ease;
+  transition: all 0.25s ease;
   color: #3cbc8d;
   cursor: pointer;
   font-weight: 400;
   margin-bottom: 20px;
-  position: relative;
-  padding-left: 15px; }
+  position: relative; }
   .faq-header::before {
+    -moz-transition: all 0.25s ease;
+    -o-transition: all 0.25s ease;
+    -webkit-transition: all 0.25s ease;
+    transition: all 0.25s ease;
     content: "";
     position: absolute;
     height: 100%;
-    width: 5px;
+    width: 0;
     background: #3cbc8d;
     left: 0;
     bottom: 0; }
+  .faq-header.is-active {
+    position: relative;
+    padding-left: 15px; }
+    .faq-header.is-active::before {
+      width: 5px; }
   .faq-header:hover {
     color: #8ad6ba; }

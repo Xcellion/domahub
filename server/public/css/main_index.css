@@ -182,13 +182,16 @@ button[data-balloon] {
 
 #landing {
   border-bottom: 1px solid rgba(0, 0, 0, 0.12);
-  position: relative;
-  width: 100%; }
-  #landing .container {
-    align-items: center;
-    display: flex;
-    justify-content: space-between;
-    flex-direction: column; }
+  width: 100%;
+  position: relative; }
+  @media screen and (min-width: 769px) {
+    #landing {
+      padding-top: 300px;
+      height: 850px; } }
+  @media screen and (max-width: 768px) {
+    #landing {
+      padding-top: 175px;
+      height: 500px; } }
   #landing .subtitle {
     font-weight: 300;
     max-width: 500px;
@@ -265,6 +268,12 @@ button[data-balloon] {
     margin-right: 15px; }
     .flex-align-center .icon.fix {
       margin-left: 2px; }
+
+.price-card {
+  height: 454px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; }
 
 .has-stripe {
   position: relative; }

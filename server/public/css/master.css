@@ -1506,6 +1506,10 @@ button {
   .content li.has-icon.is-large {
     line-height: 48px; }
 
+@media screen and (max-width: 456px) {
+  .content li {
+    font-size: 14px; } }
+
 .content li + li {
   margin-top: 10px; }
 
