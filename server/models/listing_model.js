@@ -278,6 +278,7 @@ listing_model.prototype.getThreeRandomListingsByOwner = function(domain_name_exc
 	query = "SELECT \
 				listings.domain_name, \
 				listings.background_image, \
+				listings.status, \
 				listings.buy_price, \
 				listings.price_type, \
 				listings.price_rate \
@@ -421,7 +422,7 @@ listing_model.prototype.newRentalTimes = function(rental_id, rental_times, callb
 
 //</editor-fold>
 
-//<editor-fold>-------------------------------UPDATE-------------------------------
+//<editor-fold>-------------------------------UPDATES-------------------------------
 
 //updates listing info
 listing_model.prototype.updateListing = function(domain_name, listing_info, callback){

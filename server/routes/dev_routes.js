@@ -11,6 +11,8 @@ var awis = require('awis');
 var node_env = "dev";
 var path = require('path');
 var fs = require('fs');
+var PNF = require('google-libphonenumber').PhoneNumberFormat;
+var phoneUtil = require('google-libphonenumber').PhoneNumberUtil.getInstance();
 
 module.exports = function(app, db, auth, error){
     Auth = auth;
@@ -18,7 +20,7 @@ module.exports = function(app, db, auth, error){
     Listing = new listing_model(db);
     Data = new data_model(db);
 
-    app.get("/alexa/:domain_name", alexa);
+    app.get("/emailviews/:email_template", emailViews);
     app.get("/createcodes/:number", [
         createSignupCodes
     ]);
@@ -28,11 +30,27 @@ module.exports = function(app, db, auth, error){
 }
 
 //testing quantcast redirect
-function quantcast(req, res, next){
-    res.render("quant_redirect.ejs", {
-        redirect_link: "https://fuck.com",
-        redirect_name: "fuck.com"
+function emailViews(req, res, next){
+    var wNumb = require("wnumb");
+    var moneyFormat = wNumb({
+    	thousand: ',',
+    	prefix: '$',
+    	decimals: 0
     });
+
+    var phoneNumber = phoneUtil.parse("+17183097773");
+
+    var data = {
+        domain_name: "fuck.com",
+        verification_code: randomstring.generate(10),
+        name: "TEST",
+        email: "test@email.com",
+        offer: moneyFormat.to(parseFloat("1231324")),
+        phone: phoneUtil.format(phoneNumber, PNF.INTERNATIONAL),
+        message: "djkljakljfljasklfjkldasjfklasdjkldfjaskldfjkasdlfjklsajdfklasjdklfjaslkfjklasjdflkjskdlf"
+    }
+
+    res.render("email/" + req.params.email_template + ".ejs", data);
 }
 
 //testing alexa get

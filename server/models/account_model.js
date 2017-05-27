@@ -29,7 +29,7 @@ module.exports = account_model;
 //INSERT BULK - 'INSERT INTO ?? (??) VALUES ?'
 //DELETE - 'DELETE FROM ?? WHERE ?? = ?'
 
-//--------------------------------------------------------------------CHECKS------------------------------------------------------------
+//<editor-fold>-------------------------------CHECK-------------------------------
 
 //check if an account email exists
 account_model.prototype.checkAccountEmail = function(email, callback){
@@ -52,7 +52,9 @@ account_model.prototype.checkSignupCode = function(code, callback){
 	account_query(query, "Code does not exist!", callback, code);
 }
 
-//----------------------------------------------------------------------GETS----------------------------------------------------------
+//</editor-fold>
+
+//<editor-fold>-------------------------------GETS-------------------------------
 
 //gets all account info
 account_model.prototype.getAccount = function(email, username, callback){
@@ -181,7 +183,9 @@ account_model.prototype.getStripeAndType = function(domain_name, callback){
 	account_query(query, "Failed to get the Stripe ID of the owner of: " + domain_name + "!", callback, domain_name);
 }
 
-//----------------------------------------------------------------------SETS----------------------------------------------------------
+//</editor-fold>
+
+//<editor-fold>-------------------------------SETS-------------------------------
 
 //creates a new account
 account_model.prototype.newAccount = function(account_info, callback){
@@ -213,7 +217,9 @@ account_model.prototype.createSignupCodes = function(codes, callback){
 	account_query(query, "Failed to create signup codes!", callback, [codes]);
 }
 
-//----------------------------------------------------------------------UPDATE----------------------------------------------------------
+//</editor-fold>
+
+//<editor-fold>-------------------------------UPDATES-------------------------------
 
 //updates a new account
 account_model.prototype.updateAccount = function(account_info, email, callback){
