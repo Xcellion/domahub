@@ -5,7 +5,7 @@
     <%- include("templates/head_links.ejs"); %>
     <link rel="stylesheet" type="text/css" href="/css/min/login_signup.min.css" />
     <script>
-    var redirect = <% if(typeof redirect != "undefined"){ %><%-JSON.stringify(redirect)%><% }else{ %>""<% } %>;
+        var redirect = <% if(typeof redirect != "undefined"){ %><%-JSON.stringify(redirect)%><% }else{ %>"/"<% } %>;
     </script>
 </head>
 
@@ -22,11 +22,11 @@
   <div id="login-form" class="account-form">
     <form id="target" action="/login" method="post">
         <p id="message" class="has-text-centered margin-bottom-25">
-            Please wait...now redirecting you.
+            <%= message %>
         </p>
 
         <div id="redirect">
-            <a id="redirect-button" class="login-button button is-primary is-stylish is-fullwidth" href="/"></a>
+            <a id="redirect-button" class="login-button button is-primary is-stylish is-fullwidth" href="<%= redirect %>"><%= button %></a>
         </div>
 
     </form>
