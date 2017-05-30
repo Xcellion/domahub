@@ -189,7 +189,7 @@ html {
 .module {
   border: 1px solid $border;
   border-top: none;
-  padding: 25px;
+  padding: 15px;
   background:#FFF;
 }
 
@@ -227,10 +227,6 @@ html {
 .ticker-icon {
   margin-top: 4px;
   vertical-align: baseline !important;
-}
-
-#calendar-module {
-  width: 300px;
 }
 
 #traffic-overlay {

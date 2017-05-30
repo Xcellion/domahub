@@ -4,7 +4,6 @@ data_model = function(database){
 	data_query = function(query, error_description, callback, params){
 		database.query(query, function(result, err){
 			if (err){
-				console.log(err);
 				callback({
 					state : "error",
 					info : error_description,
@@ -23,7 +22,24 @@ data_model = function(database){
 
 module.exports = data_model;
 
-//----------------------------------------------------------------------GETS----------------------------------------------------------
+//<editor-fold>-------------------------------CHECKS-------------------------------
+
+//check if a specific verification code for a domain exists
+data_model.prototype.checkContactVerificationCode = function(domain_name, verification_code, callback){
+	console.log("DB: Attempting to get a contact verification code for domain: " + domain_name + "...");
+	query = "SELECT 1 AS 'exist' \
+			FROM stats_contact_history \
+			INNER JOIN listings \
+			ON listings.id = stats_contact_history.listing_id \
+			WHERE listings.domain_name = ? \
+			AND stats_contact_history.verification_code = ? \
+			AND stats_contact_history.verified IS NULL"
+	data_query(query, "Failed to get traffic for domain: " + domain_name + "!", callback, [domain_name, verification_code]);
+}
+
+//</editor-fold>
+
+//<editor-fold>-------------------------------GETS-------------------------------
 
 //gets all listing traffic grouped by month
 data_model.prototype.getListingTraffic = function(domain_name, callback){
@@ -130,8 +146,9 @@ data_model.prototype.getCheckoutActions = function(domain_name, callback){
 	listing_query(query, "Failed to get checkout actions for " + domain_name + "!", callback, domain_name);
 }
 
+//</editor-fold>
 
-//----------------------------------------------------------------------SETS----------------------------------------------------------
+//<editor-fold>-------------------------------SETS-------------------------------
 
 //creates a new entry for a listing data row
 data_model.prototype.newListingHistory = function(history_info, callback){
@@ -139,6 +156,14 @@ data_model.prototype.newListingHistory = function(history_info, callback){
 	query = "INSERT INTO stats_search_history \
 			SET ? "
 	data_query(query, "Failed to add search history for " + history_info.domain_name + "!", callback, history_info);
+}
+
+//creates a new entry for a listing contact data row
+data_model.prototype.newListingContactHistory = function(domain_name, history_info, callback){
+	console.log("DB: Adding new purchase contact history item for " + domain_name + "...");
+	query = "INSERT INTO stats_contact_history \
+			SET ? "
+	data_query(query, "Failed to add purchase contact history for " + domain_name + "!", callback, history_info);
 }
 
 //creates a new entry for a rental history data row
@@ -197,3 +222,21 @@ data_model.prototype.newCheckoutAction = function(history_info, callback){
 // 			WHERE listings.status >= 1";
 // 	data_query(query, "Failed to get maxmimum and minimum prices for all domains!", callback);
 // }
+
+//</editor-fold>
+
+//<editor-fold>-------------------------------UPDATES-------------------------------
+
+//updates a new account
+data_model.prototype.verifyContactHistory = function(verification_code, domain_name, callback){
+	console.log("DB: Verifying contact history on domain " + domain_name + " with code: " + verification_code + "...");
+	query = "UPDATE stats_contact_history \
+			INNER JOIN listings \
+			ON listings.id = stats_contact_history.listing_id \
+			SET stats_contact_history.verified = true \
+			WHERE stats_contact_history.verification_code = ? \
+			AND listings.domain_name = ?"
+	account_query(query, "Failed to verify contact history!", callback, [verification_code, domain_name]);
+}
+
+//</editor-fold>

@@ -23,9 +23,10 @@ $(document).ready(function() {
     $("#learn-more-wrapper").on("click", function(e){
         e.preventDefault();
         $('html, body').stop().animate({
-            scrollTop: $("#features-section").offset().top - $("#navbar").height()
+            scrollTop: $("#features").offset().top - $("#navbar").height()
         }, 500);
     });
+
     // $("#want-domains-button").on("click", function(e){
     //     e.preventDefault();
     //     $('html, body').stop().animate({
