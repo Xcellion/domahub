@@ -1068,6 +1068,8 @@ module.exports = {
 
     //function to check buy-now contact details
     checkContactInfo : function(req, res, next){
+        console.log("Checking posted contact details for offer...");
+
         var phoneNumber = phoneUtil.parse(req.body.contact_phone);
 
         if (!req.body.contact_name){
@@ -1092,6 +1094,8 @@ module.exports = {
 
     //record the contact message (with verification code)
     createContactRecord : function(req, res, next){
+        console.log("Creating a new contact offer record...");
+
         var contact_details = {
             listing_id : req.session.listing_info.id,
             timestamp : new Date().getTime(),
@@ -1109,53 +1113,57 @@ module.exports = {
 
     //send the verification email
     sendContactVerificationEmail : function(req, res, next){
-        var email_contents_path = (node_env == "dev") ? path.resolve(process.cwd(), 'server', 'views', 'email', 'buy_contact_verify.ejs') : path.resolve(process.cwd(), 'views', 'email', 'buy_contact_verify.ejs');
+        console.log("Sending email to offerer to verify email...");
 
-        var phoneNumber = phoneUtil.parse(req.body.contact_phone);
-        var contact_details = {
+        var email_contents_path = (node_env == "dev") ? path.resolve(process.cwd(), 'server', 'views', 'email', 'offer_verify_email.ejs') : path.resolve(process.cwd(), 'views', 'email', 'offer_verify_email.ejs');
+
+        var EJSVariables = {
             domain_name: req.session.listing_info.domain_name,
             verification_code: req.session.contact_verification_code,
             name: req.body.contact_name,
             email: req.body.contact_email,
             offer: moneyFormat.to(parseFloat(req.body.contact_offer)),
-            phone: phoneUtil.format(phoneNumber, PNF.INTERNATIONAL),
+            phone: phoneUtil.format(phoneUtil.parse(req.body.contact_phone), PNF.INTERNATIONAL),
             message: req.body.contact_message
         }
 
-        //read the file and add appropriate variables
-        ejs.renderFile(email_contents_path, contact_details, null, function(err, html_str){
-            delete req.session.contact_verification_code;
+        //if premium
+        if (req.session.listing_info.premium == true){
+            EJSVariables.premium = true;
+        }
 
-            if (err){
-                error.handler(req, res, "Something went wrong! Please refresh the page and try again.", "json");
+        delete req.session.contact_verification_code;
+
+        //email options
+        var emailDetails = {
+            to: req.body.contact_email,
+            from: '"DomaHub" <general@domahub.com>',
+            subject: "Hi, " + req.body.contact_name + '! Please verify your offer for ' + req.session.listing_info.domain_name,
+        };
+
+        //use helper function to email someone
+        emailSomeone(req, res, email_contents_path, EJSVariables, emailDetails, "Something went wrong! Please refresh the page and try again.");
+    },
+
+    //check the posted verification code
+    checkContactVerificationCodeVerified : function(req, res, next){
+        console.log("Checking if verification code for offer is verified...");
+
+        Data.checkContactVerificationCodeVerified(req.params.domain_name, req.params.verification_code, function(result){
+            if (result.state == "success" && result.info.length > 0){
+                next();
             }
             else {
-                //email options
-                var email = {
-                    to: req.body.contact_email,
-                    from: '"DomaHub" <general@domahub.com>',
-                    subject: "Hi, " + req.body.contact_name + '! Please verify your offer for ' + req.session.listing_info.domain_name,
-                    html: html_str
-                };
-
-                //send email
-                mailer.sendMail(email, function(err) {
-                    if (err) {
-                        error.handler(req, res, "Something went wrong! Please refresh the page and try again.", "json");
-                    }
-                    else {
-                        res.send({
-                            state: "success"
-                        });
-                    }
-                });
+                res.redirect("/listing/" + req.params.domain_name);
             }
         });
     },
 
     //check the posted verification code
-    checkContactVerificationCode : function(req, res, next){
-        Data.checkContactVerificationCode(req.params.domain_name, req.params.verification_code, function(result){
+    checkContactVerificationCodeUnverified : function(req, res, next){
+        console.log("Checking if verification code for offer is not verified...");
+
+        Data.checkContactVerificationCodeUnverified(req.params.domain_name, req.params.verification_code, function(result){
             if (result.state == "success" && result.info.length > 0){
                 next();
             }
@@ -1167,7 +1175,11 @@ module.exports = {
 
     //okay! verify the contact history entry
     verifyContactHistory : function(req, res, next){
+        console.log("Verifying offer email...");
+
         Data.verifyContactHistory(req.params.verification_code, req.params.domain_name, function(result){
+
+            //render the redirect page to notify offerer that offer was successfully sent
             res.render("redirect", {
                 redirect: "/listing/" + req.params.domain_name,
                 message: "Success! Now redirecting you back to " + req.params.domain_name,
@@ -1175,8 +1187,64 @@ module.exports = {
             });
 
             //asynchronously alert the owner!
+            //get the listing owner contact information to email
+            getListingOwnerContactInfo(req.params.domain_name, function(owner_result){
+                getListingOffererContactInfo(req.params.domain_name, req.params.verification_code, function(offerer_result){
+                    var email_contents_path = (node_env == "dev") ? path.resolve(process.cwd(), 'server', 'views', 'email', 'offer_notify_owner.ejs') : path.resolve(process.cwd(), 'views', 'email', 'offer_notify_owner.ejs');
+                    var offer_formatted = moneyFormat.to(parseFloat(offerer_result.offer))
+                    var EJSVariables = {
+                        domain_name: req.params.domain_name,
+                        owner_name: owner_result.username,
+                        offerer_name: offerer_result.name,
+                        offerer_email: offerer_result.email,
+                        offerer_phone: phoneUtil.format(phoneUtil.parse(offerer_result.phone), PNF.INTERNATIONAL),
+                        verification_code: req.params.verification_code,
+                        offer: offer_formatted,
+                        message: offerer_result.message
+                    }
+                    var emailDetails = {
+                        to: owner_result.email,
+                        from: '"DomaHub" <general@domahub.com>',
+                        subject: 'You have a new ' + offer_formatted + ' offer for ' + req.params.domain_name + "!"
+                    };
+
+                    //email the owner
+                    emailSomeone(req, res, email_contents_path, EJSVariables, emailDetails, false);
+                });
+            });
+
         });
     },
+
+    //asynchronously alert the offerer
+    notifyOfferer : function(req, res, next){
+        console.log("Sending email to offerer to notify of accept/reject status...");
+        getListingOffererContactInfo(req.params.domain_name, req.params.verification_code, function(offerer_result){
+            var email_contents_path = (node_env == "dev") ? path.resolve(process.cwd(), 'server', 'views', 'email', 'offer_notify_offerer.ejs') : path.resolve(process.cwd(), 'views', 'email', 'offer_notify_offerer.ejs');
+
+            var accepted = req.path.indexOf("/accept") != -1;
+            var accepted_text = (accepted) ? "accepted" : "rejected";
+            var offer_formatted = moneyFormat.to(parseFloat(offerer_result.offer));
+            var EJSVariables = {
+                accepted: accepted,
+                domain_name: req.params.domain_name,
+                offerer_name: offerer_result.name,
+                offerer_email: offerer_result.email,
+                offerer_phone: phoneUtil.format(phoneUtil.parse(offerer_result.phone), PNF.INTERNATIONAL),
+                offer: offer_formatted,
+                message: offerer_result.message
+            }
+
+            var emailDetails = {
+                to: offerer_result.email,
+                from: '"DomaHub" <general@domahub.com>',
+                subject: 'Your ' + offer_formatted + ' offer for ' + req.params.domain_name + " was " + accepted_text + "!"
+            };
+
+            //email the offerer
+            emailSomeone(req, res, email_contents_path, EJSVariables, emailDetails, false);
+        });
+    }
 
     //</editor-fold>
 
@@ -1221,7 +1289,52 @@ function joinRentalTimes(rental_times){
 
 //</editor-fold>
 
-//<editor-fold>-------------------------------HELPER FUNCTIONS-------------------------------
+//<editor-fold>-------------------------------BUY CONTACT HELPERS-------------------------------
+
+//helper function to get the email address of the listing owner to contact
+function getListingOwnerContactInfo(domain_name, cb){
+    Listing.getListingOwnerContactInfo(domain_name, function(result){
+        if (result.state == "success" && result.info.length > 0){
+            cb(result.info[0]);
+        }
+    });
+}
+
+//helper function to get the email address of the listing offerer to contact
+function getListingOffererContactInfo(domain_name, verification_code, cb){
+    Data.getListingOffererContactInfo(domain_name, verification_code, function(result){
+        if (result.state == "success" && result.info.length > 0){
+            cb(result.info[0]);
+        }
+    });
+}
+
+//helper function to email someone
+function emailSomeone(req, res, pathEJSTemplate, EJSVariables, emailDetails, errorMsg){
+    //read the file and add appropriate variables
+    ejs.renderFile(pathEJSTemplate, EJSVariables, null, function(err, html_str){
+        if (err && errorMsg){
+            error.handler(req, res, errorMsg, "json");
+        }
+        else {
+            emailDetails.html = html_str;
+
+            //send email
+            mailer.sendMail(emailDetails, function(err) {
+                if (errorMsg){
+                    if (err) {
+                        error.handler(req, res, errorMsg, "json");
+                    }
+                    else {
+                        res.send({
+                            state: "success"
+                        });
+                    }
+                }
+            });
+        }
+    });
+}
 
 //recursive helper function to make sure verification code for contact is unique
 function newListingContactHistory(req, res, next, contact_details){
@@ -1240,6 +1353,10 @@ function newListingContactHistory(req, res, next, contact_details){
         }
     });
 }
+
+//</editor-fold>
+
+//<editor-fold>-------------------------------HELPER FUNCTIONS-------------------------------
 
 //helper function to get a user's ip
 function getIP(req){

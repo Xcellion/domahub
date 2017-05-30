@@ -25,15 +25,27 @@ module.exports = data_model;
 //<editor-fold>-------------------------------CHECKS-------------------------------
 
 //check if a specific verification code for a domain exists
-data_model.prototype.checkContactVerificationCode = function(domain_name, verification_code, callback){
-	console.log("DB: Attempting to get a contact verification code for domain: " + domain_name + "...");
+data_model.prototype.checkContactVerificationCodeVerified = function(domain_name, verification_code, callback){
+	console.log("DB: Checking if code for domain: " + domain_name + " is verified...");
+	query = "SELECT 1 AS 'exist' \
+			FROM stats_contact_history \
+			INNER JOIN listings \
+			ON listings.id = stats_contact_history.listing_id \
+			WHERE listings.domain_name = ? \
+			AND stats_contact_history.verification_code = ? "
+	data_query(query, "Failed to get traffic for domain: " + domain_name + "!", callback, [domain_name, verification_code]);
+}
+
+//check if a specific verification code for a domain exists
+data_model.prototype.checkContactVerificationCodeUnverified = function(domain_name, verification_code, callback){
+	console.log("DB: Checking if code for domain: " + domain_name + " is not verified...");
 	query = "SELECT 1 AS 'exist' \
 			FROM stats_contact_history \
 			INNER JOIN listings \
 			ON listings.id = stats_contact_history.listing_id \
 			WHERE listings.domain_name = ? \
 			AND stats_contact_history.verification_code = ? \
-			AND stats_contact_history.verified IS NULL"
+			AND stats_contact_history.verified IS NULL "
 	data_query(query, "Failed to get traffic for domain: " + domain_name + "!", callback, [domain_name, verification_code]);
 }
 
@@ -146,6 +158,26 @@ data_model.prototype.getCheckoutActions = function(domain_name, callback){
 	listing_query(query, "Failed to get checkout actions for " + domain_name + "!", callback, domain_name);
 }
 
+//gets offer details for a specific domain
+data_model.prototype.getListingOffererContactInfo = function(domain_name, verification_code, callback){
+	console.log("DB: Attempting to get offer contact info for domain: " + domain_name + " with code: " + verification_code + "...");
+	query = 'SELECT \
+				stats_contact_history.name, \
+				stats_contact_history.email, \
+				stats_contact_history.phone, \
+				stats_contact_history.offer, \
+				stats_contact_history.message, \
+				stats_contact_history.verification_code, \
+				stats_contact_history.accepted \
+			FROM stats_contact_history \
+			INNER JOIN listings \
+			ON listings.id = stats_contact_history.listing_id \
+			WHERE listings.domain_name = ? \
+			AND stats_contact_history.verification_code = ? \
+			AND stats_contact_history.verified = 1 '
+	listing_query(query, "Failed to get offer contact info for " + domain_name + "!", callback, [domain_name, verification_code]);
+}
+
 //</editor-fold>
 
 //<editor-fold>-------------------------------SETS-------------------------------
@@ -227,7 +259,7 @@ data_model.prototype.newCheckoutAction = function(history_info, callback){
 
 //<editor-fold>-------------------------------UPDATES-------------------------------
 
-//updates a new account
+//verifies the email on the offer contact history db
 data_model.prototype.verifyContactHistory = function(verification_code, domain_name, callback){
 	console.log("DB: Verifying contact history on domain " + domain_name + " with code: " + verification_code + "...");
 	query = "UPDATE stats_contact_history \
@@ -237,6 +269,19 @@ data_model.prototype.verifyContactHistory = function(verification_code, domain_n
 			WHERE stats_contact_history.verification_code = ? \
 			AND listings.domain_name = ?"
 	account_query(query, "Failed to verify contact history!", callback, [verification_code, domain_name]);
+}
+
+//accept or reject an offer
+data_model.prototype.acceptRejectOffer = function(accepted, domain_name, verification_code, callback){
+	var accept_text = (accepted) ? "Accepting " : "Rejecting ";
+	console.log("DB: " + accept_text + " offer on domain with code: " + verification_code + " on domain: " + domain_name + "...");
+	query = "UPDATE stats_contact_history \
+			INNER JOIN listings \
+			ON listings.id = stats_contact_history.listing_id \
+			SET stats_contact_history.accepted = ? \
+			WHERE stats_contact_history.verification_code = ? \
+			AND listings.domain_name = ?"
+	account_query(query, "Failed to accept/reject offer!", callback, [accepted, verification_code, domain_name]);
 }
 
 //</editor-fold>
