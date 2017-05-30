@@ -62,49 +62,4 @@
       </div>
   </section>
 </body>
-<body>
-  <div>
-      <div id="text-wrapper">
-          <a tabindex="0" title="Home" href="http://www.<%= domain_name %>">
-              <% if (premium == true) { %>
-                  <img id="nav-logo" src="<%= logo %>" />
-              <% } else { %>
-                  <img id="nav-logo" src="https://domahub.com/images/dh-assets/flat-logo/dh-flat-logo-sprite.png" />
-              <% } %>
-          </a>
-          <p>
-             Hello <%= name %>!
-          </p>
-          <p>
-             This email is to verify your offer for <%= domain_name %>. Please see below for details on your offer:
-          </p>
-          <div>
-            <ul>
-                <li>Name - <%= name %></li>
-                <li>Email - <%= email %></li>
-                <li>Phone - <%= phone %></li>
-                <li>Offer - <%= offer %></li>
-            </ul>
-            <p>Message - <%= message %></p>
-          </div>
-          <p>
-              Please click on the button below to verify your offer.
-          </p>
-          <a id="verify_button" class='button is-primary is-stylish' href="https://domahub.com/listing/<%= domain_name %>/contact/<%= verification_code %>">Verify my offer</a>
-          <p>
-              <small>If you did not submit an offer for <%= domain_name %>. Please ignore this email.</small>
-          </p>
-          <p>
-              Thank you!
-          </p>
-          <p style="text-align:right;">
-              <% if (premium == true) { %>
-                  -- <%= domain_name %>
-              <% } else { %>
-                  -- DomaHub
-              <% } %>
-          </p>
-      </div>
-  </div>
-</body>
 </html>
