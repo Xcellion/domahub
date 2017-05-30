@@ -4,6 +4,64 @@
     <script async src="https://use.fontawesome.com/b36602cf54.js"></script>
     <link rel="stylesheet" type="text/css" href="https://domahub.com/css/min/master.min.css" />
 </head>
+
+<body style="font-family: Verdana;">
+  <section class="section is-light">
+      <div class="container">
+        <div class="box">
+            <div class="content">
+              <% if (premium == true) { %>
+                <a tabindex="0" title="View Website" href="http://www.<%= domain_name %>">
+                    <figure class="image is-128x128 left-aligned" style="height: auto;">
+                      <img src="<%= logo %>" />
+                    </figure>
+                </a>
+              <% } else { %>
+                <a tabindex="0" title="DomaHub" href="https://domahub.com">
+                    <div class="flat-logo"></div>
+                </a>
+              <% } %>
+            </div>
+            <div class="content">
+                <h3>
+                   Hello <%= owner_name %>!
+                </h3>
+                <p>
+                   You have a new offer for <strong class="is-700"><%= domain_name %></strong>! Please see below for details on the offer:
+                </p>
+                <ul class="has-disc">
+                    <li>Name: <%= offerer_name %></li>
+                    <li>Email: <%= offerer_email %></li>
+                    <li>Phone: <%= offerer_phone %></li>
+                    <li>Offer: <%= offer %></li>
+                    <li>
+                      Message: <p style="word-break: break-all;">
+                        <%= message %>
+                      </p>
+                    </li>
+                </ul>
+                <h3>Verify your offer</h3>
+                <p>
+                  Please click the button below to verify this offer.
+                </p>
+                <div class="control">
+                  <a id="verify_button" class='button is-primary is-medium no-shadow' href="https://domahub.com/listing/<%= domain_name %>/contact/<%= verification_code %>">Verify my offer</a>
+                </div>
+                <p>
+                  <small>If you did not submit an offer for <%= domain_name %>. Please ignore this email.</small>
+                </p>
+                <p class="has-text-centered">
+                  <% if (premium == true) { %>
+                      From <%= domain_name %>
+                  <% } else { %>
+                      Sent by DomaHub
+                  <% } %>
+                </p>
+            </div>
+        </div>
+      </div>
+  </section>
+</body>
 <body>
   <div>
       <div id="text-wrapper">
