@@ -5,15 +5,15 @@ $(document).ready(function() {
 	//---------------------------------------------------------------------------------------------------TABS
 
 	//switch tabs
-	$(".tab").on("click", function(){
+	$(".tab").not(".top-tab").on("click", function(){
 		var which_tab = $(this).attr("id").replace("-tab", "");
 
 		//show the tab
-		$(".tab").removeClass('is-active');
+		$(".tab").not(".top-tab").removeClass('is-active');
 		$(this).addClass('is-active');
 
 		//show the module
-		$(".module").addClass('is-hidden');
+		$(".module").not(".top-module ").addClass('is-hidden');
 		$("#" + which_tab + "-module").removeClass('is-hidden');
 	});
 
@@ -646,6 +646,9 @@ function findOtherDomains(){
 					//else available for rent
 					else if (data.listings[x].price_rate > 0){
 						cloned_similar_listing.find(".otherowner-domain-price").text("For rent - $" + data.listings[x].price_rate + " / " + data.listings[x].price_type);
+					}
+					else if (data.listings[x].status > 0){
+						cloned_similar_listing.find(".otherowner-domain-price").text("Now available!");
 					}
 
 					cloned_similar_listing.find(".otherowner-domain-name").text(sliced_domain).attr("href", "/listing/" + data.listings[x].domain_name);

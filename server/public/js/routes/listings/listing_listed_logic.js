@@ -16,9 +16,48 @@ $(document).ready(function() {
 		$("#buy-price-tag").removeClass('is-hidden');
 	}
 
+	showBuyStuff($("#buy-now-button"));
+	$("#contact_phone").intlTelInput({
+		utilsScript: "/js/jquery/utils.js"
+	});
+
 	//click buy now button or unavailable description
 	$("#buy-now-button").on("click", function(e){
 		showBuyStuff($(this));
+	});
+
+	$("#buy-now-form").on("submit", function(e){
+		e.preventDefault();
+
+		if (checkPhone()){
+			$("#buy-now-submit").addClass('is-loading');
+			$(".notification").addClass('is-hidden');
+			$.ajax({
+				url: "/listing/" + listing_info.domain_name + "/contact",
+				method: "POST",
+				data: {
+					contact_email: $("#contact_email").val(),
+					contact_name: $("#contact_name").val(),
+					contact_phone: $("#contact_phone").intlTelInput("getNumber"),
+					contact_offer: $("#contact_offer").val(),
+					contact_message: $("#contact_message").val()
+				}
+			}).done(function(data){
+				$("#buy-now-submit").removeClass('is-loading');
+
+				if (data.state == "success"){
+					$(".contact-input").addClass('is-disabled');
+					$("#contact-success").removeClass('is-hidden');
+					$("#buy-now-submit").addClass('is-hidden');
+					$("#buy-now-form").off();
+				}
+				else {
+					$("#contact-error").removeClass('is-hidden');
+					$("#contact-error-message").text(data.message);
+				}
+			});
+		}
+
 	});
 
 	//</editor-fold>
@@ -153,22 +192,22 @@ $(document).ready(function() {
 function showBuyStuff(buy_now_button){
 
 	//fade out buy button, remove handler
-	buy_now_button.off().addClass('is-disabled');
+	buy_now_button.off().addClass('is-disabled is-active');
 
 	//re-attach rent now handler
-	$("#rent-now-button").removeClass('is-disabled').off().on("click", function(){
+	$("#rent-now-button").removeClass('is-disabled  is-active').off().on("click", function(){
 		showRentalStuff($(this));
 	});
 
 	//show buy related stuff
 	$(".post-buy-module").removeClass('is-hidden');
 	$(".post-rent-module").addClass('is-hidden');
+	$("#contact_name").focus();
 
 	//get a random char phrase
 	var random_char = random_characters[Math.floor(Math.random()*random_characters.length)];
 	$("#contact_name").attr("placeholder", random_char.name);
 	$("#contact_email").attr("placeholder", random_char.email);
-	$("#contact_phone").attr("placeholder", random_char.phone);
 	$("#contact_message").attr("placeholder", random_char.message + " Anyways, I'm interested in buying " + listing_info.domain_name + ". Let's chat.");
 
 	//add a / to end of domain
@@ -178,14 +217,25 @@ function showBuyStuff(buy_now_button){
 	$("#path-input").addClass("is-hidden");
 }
 
+//function to check phone number
+function checkPhone(){
+	if ($("#contact_phone").intlTelInput("isValidNumber")){
+		return true;
+	}
+	else {
+		$("#contact-error-message").text("That is not a valid phone number!");
+		$("#contact-error").removeClass('is-hidden');
+	}
+}
+
 //function to show rental module
 function showRentalStuff(rent_now_button){
 
 	//fade out rent button, remove handler
-	rent_now_button.off().addClass('is-disabled');
+	rent_now_button.off().addClass('is-disabled is-active');
 
 	//re-attach rent now handler
-	$("#buy-now-button").removeClass('is-disabled').off().on("click", function(){
+	$("#buy-now-button").removeClass('is-disabled  is-active').off().on("click", function(){
 		showBuyStuff($(this));
 	});
 
@@ -194,38 +244,42 @@ function showRentalStuff(rent_now_button){
 	$(".post-buy-module").addClass('is-hidden');
 	$("#path-input").removeClass("is-hidden");
 
-	//get calendar times
-	if (listing_info.status == 1){
-		getTimes();
+	//only if rental price is not 0
+	if (listing_info.price_rate > 0){
+		//get calendar times
+		if (listing_info.status == 1){
+			getTimes();
+		}
+
+		//add a / to end of domain
+		$("#domain-title").text(listing_info.domain_name + "/");
+
+		//tooltip appears too fast, fade it in
+		$("#input-tooltip").fadeIn('slow');
+		$("#typed-slash").attr("placeholder", "");
+
+		//initiate typed JS
+		$(function(){
+			var typed_options = {
+				typeSpeed: 40,
+				attr: "placeholder"
+			};
+			if (listing_info.paths == "" || !listing_info.paths){
+				typed_options.strings = [
+					"thing",
+					"something",
+					"ANYTHING"
+				]
+			}
+			else {
+				typed_options.strings = listing_info.paths.split(",");
+				typed_options.loop = true;
+				typed_options.shuffle = true;
+			}
+			$("#typed-slash").typed(typed_options);
+		});
 	}
 
-	//add a / to end of domain
-	$("#domain-title").text(listing_info.domain_name + "/");
-
-	//tooltip appears too fast, fade it in
-	$("#input-tooltip").fadeIn('slow');
-	$("#typed-slash").attr("placeholder", "");
-	
-	//initiate typed JS
-	$(function(){
-		var typed_options = {
-			typeSpeed: 40,
-			attr: "placeholder"
-		};
-		if (listing_info.paths == "" || !listing_info.paths){
-			typed_options.strings = [
-				"thing",
-				"something",
-				"ANYTHING"
-			]
-		}
-		else {
-			typed_options.strings = listing_info.paths.split(",");
-			typed_options.loop = true;
-			typed_options.shuffle = true;
-		}
-		$("#typed-slash").typed(typed_options);
-	});
 }
 
 
@@ -286,6 +340,8 @@ function submitTimes(checkout_button){
 
 //handler for various error messages
 function errorHandler(message){
+	$("#calendar-regular-message").addClass('is-hidden');
+
 	switch (message){
 		case "Dates are unavailable!":
 			//remove any existing date range pickers
@@ -320,6 +376,7 @@ function getTimes(calendar_elem){
 	$("#calendar-loading-message").removeClass('is-hidden');
 	loadingDots($("#calendar-loading-message"));
 	$("#calendar-regular-message").addClass('is-hidden');
+	$("#calendar-error-message").addClass('is-hidden');
 
 	//loading dates message
 	if (calendar_elem){
@@ -372,6 +429,7 @@ function setUpCalendar(listing_info){
 
     $('#calendar').daterangepicker({
         opens: "center",
+		alwaysShowCalendars: true,
         autoApply: true,
         autoUpdateInput: false,
         locale: {
@@ -427,6 +485,7 @@ function setUpCalendar(listing_info){
         //remove any error messages
         $("#calendar-regular-message").removeClass('is-hidden');
         $("#calendar-error-message").addClass('is-hidden');
+		$("#calendar-module").css("margin-bottom", $(".daterangepicker").height());
     });
 
     $("#calendar").data('daterangepicker').show();

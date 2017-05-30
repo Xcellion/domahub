@@ -205,29 +205,41 @@ module.exports = function(app, db, auth, error, stripe){
 	]);
 
 	//get a domain's ticker information
-	app.post("/listing/:domain_name/ticker", [
+	app.get("/listing/:domain_name/contact/:verification_code", [
 		urlencodedParser,
 		checkDomainValid,
+		renter_functions.checkContactVerificationCode,
+		renter_functions.verifyContactHistory
+	]);
+
+	//get a domain's ticker information
+	app.post("/listing/:domain_name/contact", [
+		urlencodedParser,
+		checkDomainValid,
+		renter_functions.checkContactInfo,
+		renter_functions.createContactRecord,
+		renter_functions.sendContactVerificationEmail
+	]);
+
+	//get a domain's ticker information
+	app.post("/listing/:domain_name/ticker", [
+		urlencodedParser,
 		renter_functions.getListingTicker
 	]);
 
 	//get a domain's traffic
 	app.post("/listing/:domain_name/traffic", [
-		checkDomainValid,
 		renter_functions.getListingTraffic
 	]);
 
 	//get a domain's alexa information
 	app.post("/listing/:domain_name/alexa", [
-		checkDomainValid,
 		renter_functions.getListingAlexa
 	]);
 
 	//get listing info / times
 	app.post('/listing/:domain_name/times', [
 		urlencodedParser,
-		checkDomainValid,
-		checkDomainListed,
 		renter_functions.addToAvailCheckHistory,
 		renter_functions.getListingTimes
 	]);
