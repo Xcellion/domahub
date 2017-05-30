@@ -6,16 +6,9 @@
   border-bottom: 1px solid $border;
   width: 100%;
   position: relative;
-  @include tablet {
-    padding-top: 300px;
-    height: 850px;
-  }
-  @include mobile {
-    padding-top: 175px;
-    height: 500px;
-  }
-  .container {
-  }
+  height: 100vh;
+  display: flex;
+  align-items: center;
   .subtitle {
     font-weight: 300;
     max-width: 500px;
@@ -36,7 +29,7 @@
   transform: translateX(-50%);
   margin-right: -50%;
   cursor:pointer;
-  bottom: 10px;
+  bottom: 40px;
 }
 
 #learn-more-text {
@@ -96,8 +89,10 @@
 .flex-align-center {
   display: flex;
   align-items: center;
-  justify-content: flex-start;
   margin: 10px 0;
+  p,h2 {
+    flex-grow: 1;
+  }
   .icon {
     margin-right: 15px;
     &.fix {

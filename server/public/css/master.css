@@ -3408,9 +3408,9 @@ input:-webkit-autofill {
     margin-right: 5px; }
 
 .card {
-  -webkit-box-shadow: 0 3px 10px 0 #d0d0d0;
-  -moz-box-shadow: 0 3px 10px 0 #d0d0d0;
-  box-shadow: 0 3px 10px 0 #d0d0d0;
+  -webkit-box-shadow: 0 3px 10px 1px rgba(0, 0, 0, 0.12);
+  -moz-box-shadow: 0 3px 10px 1px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 3px 10px 1px rgba(0, 0, 0, 0.12);
   background-color: white;
   border-radius: 3px;
   max-width: 100%;
@@ -3445,9 +3445,9 @@ input:-webkit-autofill {
     -webkit-transition: all 0.25s ease;
     transition: all 0.25s ease; }
     .card.has-shadow-effect:hover, .card.has-shadow-effect:active, .card.has-shadow-effect:focus {
-      -webkit-box-shadow: 0 5px 15px 0 rgba(0, 0, 0, 0.38);
-      -moz-box-shadow: 0 5px 15px 0 rgba(0, 0, 0, 0.38);
-      box-shadow: 0 5px 15px 0 rgba(0, 0, 0, 0.38); }
+      -webkit-box-shadow: 0 5px 30px 3px rgba(0, 0, 0, 0.12);
+      -moz-box-shadow: 0 5px 30px 3px rgba(0, 0, 0, 0.12);
+      box-shadow: 0 5px 30px 3px rgba(0, 0, 0, 0.12); }
   .card.min-height {
     min-height: 350px; }
 
