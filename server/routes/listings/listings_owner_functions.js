@@ -15,7 +15,7 @@ var fs = require('fs');
 
 module.exports = {
 
-	//------------------------------------------------------------------------------------------------------RENDERS
+	//<editor-fold>-------------------------------RENDERS-------------------------------
 
 	//function to display the create listing choice page
 	renderCreateListing : function(req, res, next){
@@ -33,7 +33,9 @@ module.exports = {
 		});
 	},
 
-	//------------------------------------------------------------------------------------------------------CHECKS
+	//</editor-fold>
+
+	//<editor-fold>-------------------------------CHECKS------------------------------
 
 	//function to check all posted domain names
 	checkPostedDomains : function(req, res, next){
@@ -375,7 +377,7 @@ module.exports = {
 	},
 
 	//function to check that the user owns the listing
-	checkListingOwner : function(req, res, next){
+	checkListingOwnerPost : function(req, res, next){
 		console.log("F: Checking if current user is listing owner...");
 
 		if (!req.listing_info){
@@ -388,6 +390,20 @@ module.exports = {
 		else {
 			next();
 		}
+	},
+
+	//function to check that the user owns the listing
+	checkListingOwnerGet : function(req, res, next){
+		console.log("F: Checking if current user is listing owner...");
+
+		Listing.checkListingOwner(req.user.id, req.params.domain_name, function(result){
+			if (result.state == "error" || result.info.length <= 0){
+				res.redirect("/listing/" + req.params.domain_name);
+			}
+			else {
+				next();
+			}
+		});
 	},
 
 	//function to check the posted status change of a listing
@@ -554,7 +570,9 @@ module.exports = {
 		}
 	},
 
-	//------------------------------------------------------------------------------------------------------GETS
+	//</editor-fold>
+
+	//<editor-fold>-------------------------------GETS------------------------------
 
 	//gets unverified A Record and domain who is info
 	getDNSRecordAndWhois : function(req, res, next){
@@ -583,7 +601,9 @@ module.exports = {
 
 	},
 
-	//------------------------------------------------------------------------------------------------------CREATES/UPDATES
+	//</editor-fold>
+
+	//<editor-fold>-------------------------------CREATES/UPDATES------------------------------
 
 	//function to create the batch listings once done
 	createListings : function(req, res, next){
@@ -781,9 +801,51 @@ module.exports = {
 				}
 			});
 		});
-	}
+	},
+
+	//</editor-fold>
+
+	//function to render the accept or reject an offer page
+	renderAcceptOrRejectOffer: function(req, res, next){
+		console.log("Rendering accept or reject offer page...");
+
+		var accepted = req.path.indexOf("/accept") != -1;
+
+		Listing.getVerifiedListing(req.params.domain_name, function(listing_result){
+			Data.getListingOffererContactInfo(req.params.domain_name, req.params.verification_code, function(offer_result){
+				if (offer_result.state == "success" && !offer_result.info[0].accepted){
+					res.render("listings/accept_or_reject.ejs", {
+						accepted : accepted,
+						offer_info : offer_result.info[0],
+						listing_info : listing_result.info[0]
+					});
+				}
+				else {
+					res.redirect('/listing/' + req.params.domain_name);
+				}
+			});
+		});
+
+	},
+
+	//function to accept or reject an offer
+	acceptOrRejectOffer: function(req, res, next){
+		console.log("Accepting or rejecting an offer...");
+		var accepted = req.path.indexOf("/accept") != -1;
+
+		//update the DB on accepted or rejected
+		Data.acceptRejectOffer(accepted, req.params.domain_name, req.params.verification_code, function(offer_result){
+			res.json({
+				state: offer_result.state,
+				accepted: accepted
+			});
+
+			next();
+		});
+	},
+
 }
-//----------------------------------------------------------------helper functions----------------------------------------------------------------
+//<editor-fold>-------------------------------HELPERS------------------------------
 
 //checks each row of the CSV file
 function checkCSVRow(record, domains_sofar){
@@ -1046,3 +1108,5 @@ function sortListings(new_listings, formatted_listings, inserted_domains, premiu
 	new_listings.premium_obj.inserted_ids = premium_inserted_ids;
 	new_listings.premium_obj.indexes = premium_indexes;
 }
+
+//</editor-fold>
