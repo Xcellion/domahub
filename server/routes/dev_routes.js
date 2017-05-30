@@ -13,6 +13,8 @@ var path = require('path');
 var fs = require('fs');
 var PNF = require('google-libphonenumber').PhoneNumberFormat;
 var phoneUtil = require('google-libphonenumber').PhoneNumberUtil.getInstance();
+var stripe_key = (node_env == "dev") ? "sk_test_PHd0TEZT5ytlF0qCNvmgAThp" : "sk_live_Nqq1WW2x9JmScHxNbnFlORoh";
+var stripe = require("stripe")(stripe_key);
 
 module.exports = function(app, db, auth, error){
     Auth = auth;
@@ -27,6 +29,18 @@ module.exports = function(app, db, auth, error){
     app.get("/proxyimage", proxyimage);
     app.get("/proxysite", proxysite);
     app.get("/analysis/:domain_name", analysis);
+    app.get("/striperoo", function(req, res, next){
+        //check it against stripe
+        stripe.subscriptions.retrieve("sub_Aislajkzfjof1X", function(err, subscription) {
+            if (err){
+                console.log(subscription);
+            }
+            else {
+                console.log(subscription);
+            }
+            res.sendStatus(200);
+        });
+    });
 }
 
 //testing quantcast redirect
@@ -42,11 +56,18 @@ function emailViews(req, res, next){
 
     var data = {
         domain_name: "fuck.com",
-        verification_code: randomstring.generate(10),
-        name: "TEST",
+        premium: true,
+        logo: "http://i.imgur.com/qiJLjgz.png",
+        name : "offerer",
+        owner_name : "OWNERFUCK",
+        offerer_name: "BUYERTWAT",
+        offerer_email: "test@email.com",
         email: "test@email.com",
-        offer: moneyFormat.to(parseFloat("1231324")),
+        accepted: true,
+        offerer_phone: phoneUtil.format(phoneNumber, PNF.INTERNATIONAL),
         phone: phoneUtil.format(phoneNumber, PNF.INTERNATIONAL),
+        offer: moneyFormat.to(parseFloat("1231324")),
+        verification_code: randomstring.generate(10),
         message: "djkljakljfljasklfjkldasjfklasdjkldfjaskldfjkasdlfjklsajdfklasjdklfjaslkfjklasjdflkjskdlf"
     }
 

@@ -23,7 +23,7 @@ module.exports = {
 		Listing = new listing_model(db);
 	},
 
-	//------------------------------------------------------------------------------------------ STRIPE MANAGED
+	//<editor-fold>-------------------------------STRIPE MANAGED-------------------------------
 
 	//gets the stripe managed account info
 	getAccountInfo : function(req, res, next){
@@ -286,7 +286,9 @@ module.exports = {
 		});
 	},
 
-	//------------------------------------------------------------------------------------------ STRIPE PAYMENTS
+	//</editor-fold>
+
+	//<editor-fold>-------------------------------STRIPE PAYMENTS-------------------------------
 
 	//function to pay for a rental via stripe
 	chargeMoney : function(req, res, next){
@@ -364,7 +366,9 @@ module.exports = {
 		}
 	},
 
-	//------------------------------------------------------------------------------------------ STRIPE STANDALONE
+	//</editor-fold>
+
+	//<editor-fold>-------------------------------STRIPE STANDALONE-------------------------------
 
 	// //authorize stripe
 	// authorizeStripe : function(req, res){
@@ -477,7 +481,27 @@ module.exports = {
 	// 	}
 	// },
 
-	//------------------------------------------------------------------------------------------ STRIPE SUBSCRIPTIONS
+	//</editor-fold>
+
+	//<editor-fold>-------------------------------STRIPE SUBSCRIPTIONS-------------------------------
+
+	//check if stripe subscription is still valid
+	checkStripeSubscription : function(req, res, next){
+		//if subscription id exists in our database
+		if (req.session.listing_info.stripe_subscription_id){
+
+			//check it against stripe
+			stripe.subscriptions.retrieve(req.session.listing_info.stripe_subscription_id, function(err, subscription) {
+				if (!err && subscription && subscription.status == "active"){
+					req.session.listing_info.premium = true;
+				}
+				next();
+			});
+		}
+		else {
+			next();
+		}
+	},
 
 	//check that the stripe customer is legit and has a good payment card
 	createStripeCustomer : function(req, res, next){
@@ -598,6 +622,8 @@ module.exports = {
 			error.handler(req, res, "This isn't a Premium listing!", "json")
 		}
 	}
+
+	//</editor-fold>
 
 }
 
