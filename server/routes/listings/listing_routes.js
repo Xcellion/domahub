@@ -111,7 +111,8 @@ module.exports = function(app, db, auth, error, stripe){
 		checkDomainValid,
 		checkDomainListed,
 		stripe.getAccountInfo,
-		owner_functions.checkListingOwner,
+		profile_functions.getAccountListings,
+	owner_functions.checkListingOwnerPost,
 		owner_functions.verifyListing,
 		owner_functions.updateListing
 	]);
@@ -121,7 +122,8 @@ module.exports = function(app, db, auth, error, stripe){
 		auth.checkLoggedIn,
 		checkDomainValid,
 		checkDomainListed,
-		owner_functions.checkListingOwner,
+		profile_functions.getAccountListings,
+		owner_functions.checkListingOwnerPost,
 		owner_functions.getDNSRecordAndWhois
 	]);
 
@@ -130,7 +132,7 @@ module.exports = function(app, db, auth, error, stripe){
 	// 	auth.checkLoggedIn,
 	// 	checkDomainValid,
 	// 	checkDomainListed,
-	// 	owner_functions.checkListingOwner,
+	// 	owner_functions.checkListingOwnerPost,
 	// 	owner_functions.deleteListing
 	// ]);
 
@@ -140,7 +142,7 @@ module.exports = function(app, db, auth, error, stripe){
 		checkDomainValid,
 		checkDomainListed,
 		profile_functions.getAccountListings,
-		owner_functions.checkListingOwner,
+		owner_functions.checkListingOwnerPost,
 		owner_functions.checkListingVerified,
 		owner_functions.checkImageUploadSize,
 		owner_functions.checkListingImage,
@@ -158,7 +160,7 @@ module.exports = function(app, db, auth, error, stripe){
 	// 	checkDomainValid,
 	// 	checkDomainListed,
 	// 	profile_functions.getAccountListings,
-	// 	owner_functions.checkListingOwner,
+	// 	owner_functions.checkListingOwnerPost,
 	// 	owner_functions.checkListingVerified,
 	// 	stripe.createStripeCustomer,
 	// 	stripe.createSingleStripeSubscription,
@@ -171,7 +173,7 @@ module.exports = function(app, db, auth, error, stripe){
 	// 	checkDomainValid,
 	// 	checkDomainListed,
 	// 	profile_functions.getAccountListings,
-	// 	owner_functions.checkListingOwner,
+	// 	owner_functions.checkListingOwnerPost,
 	// 	owner_functions.checkListingVerified,
 	// 	stripe.cancelStripeSubscription,
 	// 	owner_functions.updateListing
@@ -204,19 +206,46 @@ module.exports = function(app, db, auth, error, stripe){
 		renter_functions.renderListing
 	]);
 
-	//get a domain's ticker information
+	//verify a offer history item email
 	app.get("/listing/:domain_name/contact/:verification_code", [
 		urlencodedParser,
 		checkDomainValid,
-		renter_functions.checkContactVerificationCode,
+		renter_functions.checkContactVerificationCodeUnverified,
 		renter_functions.verifyContactHistory
 	]);
 
-	//get a domain's ticker information
+	//accept or reject an offer
+	app.get(["/listing/:domain_name/contact/:verification_code/accept",
+	"/listing/:domain_name/contact/:verification_code/reject"], [
+		auth.checkLoggedIn,
+		urlencodedParser,
+		checkDomainValid,
+		checkDomainListed,
+		owner_functions.checkListingOwnerGet,
+		renter_functions.checkContactVerificationCodeVerified,
+		owner_functions.renderAcceptOrRejectOffer
+	]);
+
+	//accept or reject an offer
+	app.post(["/listing/:domain_name/contact/:verification_code/accept",
+	"/listing/:domain_name/contact/:verification_code/reject"], [
+		auth.checkLoggedIn,
+		urlencodedParser,
+		checkDomainValid,
+		checkDomainListed,
+		profile_functions.getAccountListings,
+		owner_functions.checkListingOwnerPost,
+		renter_functions.checkContactVerificationCodeVerified,
+		owner_functions.acceptOrRejectOffer,
+		renter_functions.notifyOfferer
+	]);
+
+	//create a new offer history item
 	app.post("/listing/:domain_name/contact", [
 		urlencodedParser,
 		checkDomainValid,
 		renter_functions.checkContactInfo,
+		stripe.checkStripeSubscription,
 		renter_functions.createContactRecord,
 		renter_functions.sendContactVerificationEmail
 	]);

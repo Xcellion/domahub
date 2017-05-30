@@ -54,7 +54,6 @@ listing_model.prototype.checkListingOwner = function(account_id, domain_name, ca
 	listing_query(query, "Account does not own the domain" + domain_name + "!", callback, [account_id, domain_name]);
 }
 
-
 //check if listing is currently rented
 listing_model.prototype.checkCurrentlyRented = function(domain_name, callback){
 	console.log("DB: Checking if domain " + domain_name + " is currently rented...");
@@ -111,6 +110,20 @@ listing_model.prototype.getVerifiedListing = function(domain_name, callback){
 			AND listings.verified = 1 \
 			AND listings.deleted IS NULL";
 	listing_query(query, "Failed to get active listing info for " + domain_name + "!", callback, domain_name);
+}
+
+//gets contact info for an active/verified listing
+listing_model.prototype.getListingOwnerContactInfo = function(domain_name, callback){
+	console.log("DB: Attempting to get contact info for " + domain_name + "...");
+	query = "SELECT \
+				accounts.username,\
+				accounts.email\
+			FROM listings \
+			JOIN accounts ON listings.owner_id = accounts.id \
+			WHERE listings.domain_name = ? \
+			AND listings.verified = 1 \
+			AND listings.deleted IS NULL";
+	listing_query(query, "Failed to get contact info for " + domain_name + "!", callback, domain_name);
 }
 
 //gets all 'active' listing information including owner name and email
