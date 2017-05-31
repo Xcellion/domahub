@@ -276,16 +276,33 @@
 												<div class="card listing-img no-shadow">
 													<div class="card-image">
 														<figure class="image listing-img">
-															<button tabindex="0" class="delete-img delete"></button>
+															<button tabindex="0" class="background-delete-img delete"></button>
 															<img class="background_image is-listing" alt="Image not found" src="">
 														</figure>
 													</div>
 													<footer class="card-footer">
-														<form tabindex="0" class="drop-form-file" action="/listings/create/multiple" method="post" enctype="multipart/form-data">
-															<input data-name="background_image" type="file" name="background_image" accept="image/png, image/gif, image/jpeg" class="picture-file changeable-input input-file">
-															<label for="" class="picture-label button no-shadow is-fullwidth">
+														<form tabindex="0" class="drop-form-file" method="post" enctype="multipart/form-data">
+															<input data-name="background_image" type="file" name="background_image" accept="image/png, image/gif, image/jpeg" class="background-file changeable-input input-file">
+															<label for="" class="background-label button no-shadow is-fullwidth">
 																<i class="fa fa-upload" aria-hidden="true"></i>
-																<p class="file-label">Background Image</p>
+																<p class="file-label background-image-label">Background Image</p>
+															</label>
+														</form>
+													</footer>
+												</div>
+												<div class="card listing-img no-shadow">
+													<div class="card-image">
+														<figure class="image listing-logo">
+															<button tabindex="0" class="logo-delete-img delete"></button>
+															<img class="listing-logo-img is-listing" alt="Image not found" src="">
+														</figure>
+													</div>
+													<footer class="card-footer">
+														<form tabindex="0" class="drop-form-file" method="post" enctype="multipart/form-data">
+															<input data-name="logo" type="file" name="logo" accept="image/png, image/gif, image/jpeg" class="logo-file changeable-input input-file">
+															<label for="" class="logo-label button no-shadow is-fullwidth">
+																<i class="fa fa-upload" aria-hidden="true"></i>
+																<p class="file-label logo-image-label">Logo</p>
 															</label>
 														</form>
 													</footer>
