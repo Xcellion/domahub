@@ -1068,7 +1068,7 @@ module.exports = {
 
     //function to check buy-now contact details
     checkContactInfo : function(req, res, next){
-        console.log("Checking posted contact details for offer...");
+        console.log("F: Checking posted contact details for offer...");
 
         var phoneNumber = phoneUtil.parse(req.body.contact_phone);
 
@@ -1094,7 +1094,7 @@ module.exports = {
 
     //record the contact message (with verification code)
     createContactRecord : function(req, res, next){
-        console.log("Creating a new contact offer record...");
+        console.log("F: Creating a new contact offer record...");
 
         var contact_details = {
             listing_id : req.session.listing_info.id,
@@ -1113,23 +1113,19 @@ module.exports = {
 
     //send the verification email
     sendContactVerificationEmail : function(req, res, next){
-        console.log("Sending email to offerer to verify email...");
+        console.log("F: Sending email to offerer to verify email...");
 
         var email_contents_path = (node_env == "dev") ? path.resolve(process.cwd(), 'server', 'views', 'email', 'offer_verify_email.ejs') : path.resolve(process.cwd(), 'views', 'email', 'offer_verify_email.ejs');
 
         var EJSVariables = {
+            premium: req.session.listing_info.premium || false,
             domain_name: req.session.listing_info.domain_name,
             verification_code: req.session.contact_verification_code,
-            name: req.body.contact_name,
-            email: req.body.contact_email,
+            offerer_name: req.body.contact_name,
+            offerer_email: req.body.contact_email,
+            offerer_phone: phoneUtil.format(phoneUtil.parse(req.body.contact_phone), PNF.INTERNATIONAL),
             offer: moneyFormat.to(parseFloat(req.body.contact_offer)),
-            phone: phoneUtil.format(phoneUtil.parse(req.body.contact_phone), PNF.INTERNATIONAL),
             message: req.body.contact_message
-        }
-
-        //if premium
-        if (req.session.listing_info.premium == true){
-            EJSVariables.premium = true;
         }
 
         delete req.session.contact_verification_code;
@@ -1147,7 +1143,7 @@ module.exports = {
 
     //check the posted verification code
     checkContactVerificationCodeVerified : function(req, res, next){
-        console.log("Checking if verification code for offer is verified...");
+        console.log("F: Checking if verification code for offer is verified...");
 
         Data.checkContactVerificationCodeVerified(req.params.domain_name, req.params.verification_code, function(result){
             if (result.state == "success" && result.info.length > 0){
@@ -1161,7 +1157,7 @@ module.exports = {
 
     //check the posted verification code
     checkContactVerificationCodeUnverified : function(req, res, next){
-        console.log("Checking if verification code for offer is not verified...");
+        console.log("F: Checking if verification code for offer is not verified...");
 
         Data.checkContactVerificationCodeUnverified(req.params.domain_name, req.params.verification_code, function(result){
             if (result.state == "success" && result.info.length > 0){
@@ -1175,7 +1171,7 @@ module.exports = {
 
     //okay! verify the contact history entry
     verifyContactHistory : function(req, res, next){
-        console.log("Verifying offer email...");
+        console.log("F: Verifying offer email...");
 
         Data.verifyContactHistory(req.params.verification_code, req.params.domain_name, function(result){
 
@@ -1218,7 +1214,7 @@ module.exports = {
 
     //asynchronously alert the offerer
     notifyOfferer : function(req, res, next){
-        console.log("Sending email to offerer to notify of accept/reject status...");
+        console.log("F: Sending email to offerer to notify of accept/reject status...");
         getListingOffererContactInfo(req.params.domain_name, req.params.verification_code, function(offerer_result){
             var email_contents_path = (node_env == "dev") ? path.resolve(process.cwd(), 'server', 'views', 'email', 'offer_notify_offerer.ejs') : path.resolve(process.cwd(), 'views', 'email', 'offer_notify_offerer.ejs');
 
@@ -1314,6 +1310,7 @@ function emailSomeone(req, res, pathEJSTemplate, EJSVariables, emailDetails, err
     //read the file and add appropriate variables
     ejs.renderFile(pathEJSTemplate, EJSVariables, null, function(err, html_str){
         if (err && errorMsg){
+            console.log(err);
             error.handler(req, res, errorMsg, "json");
         }
         else {
@@ -1323,6 +1320,7 @@ function emailSomeone(req, res, pathEJSTemplate, EJSVariables, emailDetails, err
             mailer.sendMail(emailDetails, function(err) {
                 if (errorMsg){
                     if (err) {
+                        console.log(err);
                         error.handler(req, res, errorMsg, "json");
                     }
                     else {

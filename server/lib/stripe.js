@@ -495,10 +495,14 @@ module.exports = {
 				if (!err && subscription && subscription.status == "active"){
 					req.session.listing_info.premium = true;
 				}
+				else {
+					req.session.listing_info.premium = false;
+				}
 				next();
 			});
 		}
 		else {
+			req.session.listing_info.premium = false;
 			next();
 		}
 	},

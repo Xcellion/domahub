@@ -115,6 +115,7 @@ function createRowDrop(listing_info, rownum){
 		updateCategories(tempRow_drop, listing_info);
 		updateSaveCancelButtons(tempRow_drop, listing_info);
 		updateBackgroundImage(tempRow_drop, listing_info, rownum);
+		updateLogo(tempRow_drop, listing_info, rownum);
 		updateDeleteMessagesX(tempRow_drop);
 	}
 	else {
@@ -214,22 +215,33 @@ function updateBackgroundImage(tempRow_drop, listing_info, rownum){
         $(this).attr("src", "https://placeholdit.imgix.net/~text?txtsize=40&txt=LOADING...%20&w=200&h=200");
     });
 
-	tempRow_drop.find(".picture-file").attr('id', "pic" + rownum);
-	tempRow_drop.find(".picture-label").attr('for', "pic" + rownum);
+	tempRow_drop.find(".background-file").attr('id', "background" + rownum);
+	tempRow_drop.find(".background-label").attr('for', "background" + rownum);
 
-	tempRow_drop.find(".delete-img").on("click", function(e){
-		deleteBackgroundImg($(this), listing_info);
+	tempRow_drop.find(".background-delete-img").on("click", function(e){
+		deleteBackgroundImg($(this), listing_info, "https://placeholdit.imgix.net/~text?txtsize=40&txt=RANDOM%20PHOTO&w=200&h=200");
 	});
+
+	//upload image button handler
+	tempRow_drop.find(".background-file").on("change", function(e){
+		console.log("Sdjklsajd");
+		e.preventDefault();
+		var file_name = ($(this).val()) ? $(this).val().replace(/^.*[\\\/]/, '') : "Background Image";
+		file_name = (file_name.length > 14) ? "..." + file_name.substr(file_name.length - 14) : file_name;
+		$(this).next(".background-label").find(".file-label").text(file_name);
+		changedValue($(this), info);
+	});
+
 }
-function deleteBackgroundImg(temp_x, listing_info){
+function deleteBackgroundImg(temp_x, listing_info, default_img){
 	var temp_img = temp_x.next('img');
 	var temp_input = temp_x.closest(".card-image").next('.card-footer').find(".input-file");
 	var temp_form = temp_x.closest(".card-image").next('.card-footer').find(".drop-form-file");
 
-	if (temp_img.attr("src") != "https://placeholdit.imgix.net/~text?txtsize=40&txt=RANDOM%20PHOTO&w=200&h=200"){
+	if (temp_img.attr("src") != default_img){
 		var old_src = temp_img.attr("src");
 		temp_img.data("old_src", old_src);
-		temp_img.attr("src", "https://placeholdit.imgix.net/~text?txtsize=40&txt=RANDOM%20PHOTO&w=200&h=200");
+		temp_img.attr("src", default_img);
 		temp_input.data("deleted", true);
 		temp_input.val("");
 		temp_form.find(".file-label").text("Background Image");
@@ -240,6 +252,28 @@ function updateDeleteMessagesX(tempRow_drop){
 	tempRow_drop.find(".notification").find(".delete").on("click", function(){
 		$(this).closest(".notification").addClass('is-hidden');
 	});
+}
+function updateLogo(tempRow_drop, listing_info, rownum){
+	var logo = (listing_info.logo == null || listing_info.logo == undefined || listing_info.logo == "") ? "/images/dh-assets/flat-logo/dh-flat-logo-primary.png" : listing_info.logo;
+	tempRow_drop.find(".listing-logo-img").attr('src', logo).error(function() {
+        $(this).attr("src", "https://placeholdit.imgix.net/~text?txtsize=20&txt=LOADING...%20&w=200&h=50");
+    });
+
+	tempRow_drop.find(".logo-file").attr('id', "logo" + rownum);
+	tempRow_drop.find(".logo-label").attr('for', "logo" + rownum);
+
+	tempRow_drop.find(".logo-delete-img").on("click", function(e){
+		deleteBackgroundImg($(this), listing_info, "https://placeholdit.imgix.net/~text?txtsize=20&txt=LOADING...%20&w=200&h=50");
+	});
+
+	// //upload image button handler
+	// tempRow_drop.find(".logo-file.changeable-input").off().on("change", function(e){
+	// 	e.preventDefault();
+	// 	var file_name = ($(this).val()) ? $(this).val().replace(/^.*[\\\/]/, '') : "Logo";
+	// 	file_name = (file_name.length > 14) ? "..." + file_name.substr(file_name.length - 14) : file_name;
+	// 	$(this).next(".logo-image-label").find(".file-label").text(file_name);
+	// 	changedValue($(this), info);
+	// });
 }
 
 //functions to update row drop unverified
@@ -395,15 +429,17 @@ function refreshSubmitbindings(bool_for_status_td){
                         e.preventDefault();
                         var file_name = ($(this).val()) ? $(this).val().replace(/^.*[\\\/]/, '') : "Background Image";
                         file_name = (file_name.length > 14) ? "..." + file_name.substr(file_name.length - 14) : file_name;
-                        $(this).next(".card-footer-item").find(".file-label").text(file_name);
+                        $(this).next(".background-label").find(".file-label").text(file_name);
                         changedValue($(this), info);
                     });
 
-					//click X to delete image
-					row_drop.find(".delete-img").off().on("click", function(e){
-						e.preventDefault();
-						deleteBackgroundImg($(this), info);
-					})
+					//click X to delete images
+					tempRow_drop.find(".background-delete-img").off().on("click", function(e){
+						deleteBackgroundImg($(this), listing_info, "https://placeholdit.imgix.net/~text?txtsize=40&txt=RANDOM%20PHOTO&w=200&h=200");
+					});
+					tempRow_drop.find(".logo-delete-img").off().on("click", function(e){
+						deleteBackgroundImg($(this), listing_info, "https://placeholdit.imgix.net/~text?txtsize=20&txt=LOADING...%20&w=200&h=50");
+					});
 
                     row_drop.find(".categories-input").val(info.categories);
 
@@ -574,12 +610,19 @@ function cancelListingChanges(row, row_drop, cancel_button, listing_info){
 	updateCategories(row_drop, listing_info);
 	updatePaths(row_drop, listing_info);
 
-    //image
-    var img_elem = row_drop.find("img.is-listing");
+    //background image
+    var background_img_elem = row_drop.find("background_image");
 	var background_image = (listing_info.background_image == null || listing_info.background_image == undefined || listing_info.background_image == "") ? "https://placeholdit.imgix.net/~text?txtsize=40&txt=RANDOM%20PHOTO&w=200&h=200" : listing_info.background_image;
-    img_elem.attr("src", background_image);
-    row_drop.find(".file-label").text("Background Image");
-    row_drop.find(".input-file").val("");
+	background_img_elem.attr("src", background_image);
+	row_drop.find(".background-image-label").text("Background Image");
+
+	//logo
+	var logo_img_elem = row_drop.find("listing-logo-img");
+	var logo = (listing_info.logo == null || listing_info.logo == undefined || listing_info.logo == "") ? "/images/dh-assets/flat-logo/dh-flat-logo-primary.png" : listing_info.logo;
+	logo_img_elem.attr("src", logo);
+    row_drop.find(".logo-image-label").text("Logo");
+
+	row_drop.find(".input-file").val("");
 
     var listing_msg_error = row_drop.find(".listing-msg-error");
     var listing_msg_success = row_drop.find(".listing-msg-success");
