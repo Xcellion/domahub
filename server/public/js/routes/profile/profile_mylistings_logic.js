@@ -215,23 +215,12 @@ function updateBackgroundImage(tempRow_drop, listing_info, rownum){
         $(this).attr("src", "https://placeholdit.imgix.net/~text?txtsize=40&txt=LOADING...%20&w=200&h=200");
     });
 
-	tempRow_drop.find(".background-file").attr('id', "background" + rownum);
+	tempRow_drop.find(".background-file").attr('id', "background" + rownum).data("default_text", "Background Image");
 	tempRow_drop.find(".background-label").attr('for', "background" + rownum);
 
 	tempRow_drop.find(".background-delete-img").on("click", function(e){
 		deleteBackgroundImg($(this), listing_info, "https://placeholdit.imgix.net/~text?txtsize=40&txt=RANDOM%20PHOTO&w=200&h=200");
 	});
-
-	//upload image button handler
-	tempRow_drop.find(".background-file").on("change", function(e){
-		console.log("Sdjklsajd");
-		e.preventDefault();
-		var file_name = ($(this).val()) ? $(this).val().replace(/^.*[\\\/]/, '') : "Background Image";
-		file_name = (file_name.length > 14) ? "..." + file_name.substr(file_name.length - 14) : file_name;
-		$(this).next(".background-label").find(".file-label").text(file_name);
-		changedValue($(this), info);
-	});
-
 }
 function deleteBackgroundImg(temp_x, listing_info, default_img){
 	var temp_img = temp_x.next('img');
@@ -256,24 +245,15 @@ function updateDeleteMessagesX(tempRow_drop){
 function updateLogo(tempRow_drop, listing_info, rownum){
 	var logo = (listing_info.logo == null || listing_info.logo == undefined || listing_info.logo == "") ? "/images/dh-assets/flat-logo/dh-flat-logo-primary.png" : listing_info.logo;
 	tempRow_drop.find(".listing-logo-img").attr('src', logo).error(function() {
-        $(this).attr("src", "https://placeholdit.imgix.net/~text?txtsize=20&txt=LOADING...%20&w=200&h=50");
+        $(this).attr("src", "/images/dh-assets/flat-logo/dh-flat-logo-primary.png");
     });
 
-	tempRow_drop.find(".logo-file").attr('id', "logo" + rownum);
+	tempRow_drop.find(".logo-file").attr('id', "logo" + rownum).data("default_text", "Logo");
 	tempRow_drop.find(".logo-label").attr('for', "logo" + rownum);
 
 	tempRow_drop.find(".logo-delete-img").on("click", function(e){
-		deleteBackgroundImg($(this), listing_info, "https://placeholdit.imgix.net/~text?txtsize=20&txt=LOADING...%20&w=200&h=50");
+		deleteBackgroundImg($(this), listing_info, "/images/dh-assets/flat-logo/dh-flat-logo-primary.png");
 	});
-
-	// //upload image button handler
-	// tempRow_drop.find(".logo-file.changeable-input").off().on("change", function(e){
-	// 	e.preventDefault();
-	// 	var file_name = ($(this).val()) ? $(this).val().replace(/^.*[\\\/]/, '') : "Logo";
-	// 	file_name = (file_name.length > 14) ? "..." + file_name.substr(file_name.length - 14) : file_name;
-	// 	$(this).next(".logo-image-label").find(".file-label").text(file_name);
-	// 	changedValue($(this), info);
-	// });
 }
 
 //functions to update row drop unverified
@@ -424,14 +404,14 @@ function refreshSubmitbindings(bool_for_status_td){
                         changedValue($(this), info);
                     });
 
-					//upload image button handler
-                    both_rows.find(".drop-form-file .changeable-input").off().on("change", function(e){
-                        e.preventDefault();
-                        var file_name = ($(this).val()) ? $(this).val().replace(/^.*[\\\/]/, '') : "Background Image";
-                        file_name = (file_name.length > 14) ? "..." + file_name.substr(file_name.length - 14) : file_name;
-                        $(this).next(".background-label").find(".file-label").text(file_name);
-                        changedValue($(this), info);
-                    });
+					// //upload image button handler
+                    // both_rows.find(".drop-form-file .changeable-input").off().on("change", function(e){
+                    //     e.preventDefault();
+                    //     var file_name = ($(this).val()) ? $(this).val().replace(/^.*[\\\/]/, '') : "Background Image";
+                    //     file_name = (file_name.length > 14) ? "..." + file_name.substr(file_name.length - 14) : file_name;
+                    //     $(this).next(".background-label").find(".file-label").text(file_name);
+                    //     changedValue($(this), info);
+                    // });
 
 					//click X to delete images
 					tempRow_drop.find(".background-delete-img").off().on("click", function(e){
@@ -646,10 +626,16 @@ function submitListingChanges(row, row_drop, success_button, listing_info){
     //only add changed inputs
     row.add(row_drop).find(".changeable-input").each(function(e){
         var input_name = $(this).data("name");
-        var input_val = (input_name == "background_image") ? $(this)[0].files[0] : $(this).val();
+        var input_val = (input_name == "background_image" || input_name == "logo") ? $(this)[0].files[0] : $(this).val();
 
-        //if image is being deleted
+        //if background image is being deleted
         if (input_name == "background_image" && $(this).data("deleted")){
+            var input_val = "";
+			$(this).data('deleted', false);
+        }
+
+        //if logo is being deleted
+        if (input_name == "logo" && $(this).data("deleted")){
             var input_val = "";
 			$(this).data('deleted', false);
         }

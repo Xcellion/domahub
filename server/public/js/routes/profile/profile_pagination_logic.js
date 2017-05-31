@@ -487,12 +487,14 @@ function changedValueHandlers(both_rows, info){
 
     //upload image button handler
     both_rows.find(".drop-form-file .changeable-input").off().on("change", function(e){
-        e.preventDefault();
-        var file_name = ($(this).val()) ? $(this).val().replace(/^.*[\\\/]/, '') : "Change Picture";
-        file_name = (file_name.length > 14) ? "..." + file_name.substr(file_name.length - 14) : file_name;
-        $(this).next(".card-footer-item").find(".file-label").text(file_name);
-        changedValue($(this), info);
-    });
+		e.preventDefault();
+		var file_name = ($(this).val()) ? $(this).val().replace(/^.*[\\\/]/, '') : $(this).data("default_text");
+        if ($(this).val()){
+            file_name = (file_name.length > 14) ? "..." + file_name.substr(file_name.length - 14) : file_name;
+        }
+		$(this).next("label").find(".file-label").text(file_name);
+		changedValue($(this), info);
+	});
 }
 
 //helper function to bind to inputs to listen for any changes from existing listing info

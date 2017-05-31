@@ -11,6 +11,7 @@ var parser = require('parse-whois');
 
 var multer = require("multer");
 var parse = require("csv-parse");
+var Q = require('q');
 var fs = require('fs');
 
 module.exports = {
@@ -298,7 +299,7 @@ module.exports = {
 					cb(null, true);
 				}
 			}
-		}).single("background_image");
+		}).fields([{ name: 'background_image', maxCount: 1 }, { name: 'logo', maxCount: 1 }]);
 
 		upload_img(req, res, function(err){
 			if (err){
@@ -321,41 +322,65 @@ module.exports = {
 
 	//function to check the user image and upload to imgur
 	checkListingImage : function(req, res, next){
-		if (req.file){
-			var formData = {
-				title: req.file.filename,
-				image: fs.createReadStream(req.file.path)
+		if (req.files){
+
+			//custom image upload promise function
+			var q_function = function(formData){
+				return Q.Promise(function(resolve, reject, notify){
+					console.log("F: " + req.user.username + " is uploading image(s) to Imgur...");
+					request.post({
+						url: "https://imgur-apiv3.p.mashape.com/3/image",
+						headers: {
+							'X-Mashape-Key' : "72Ivh0ASpImsh02oTqa4gJe0fD3Dp1iZagojsn1Yt1hWAaIzX3",
+							'Authorization' : 'Client-ID 730e9e6f4471d64'
+						},
+						formData: formData
+					}, function (err, response, body) {
+						if (!err){
+							resolve({
+								imgur_link: JSON.parse(body).data.link.replace("http", "https"),
+								image_type: formData.image_type
+							});
+						}
+						else {
+							reject(err);
+						}
+					});
+				})
 			}
 
-			console.log("F: " + req.user.username + " is uploading an image to Imgur...");
-			request.post({
-				url: "https://imgur-apiv3.p.mashape.com/3/image",
-				headers: {
-					'X-Mashape-Key' : "72Ivh0ASpImsh02oTqa4gJe0fD3Dp1iZagojsn1Yt1hWAaIzX3",
-					'Authorization' : 'Client-ID 730e9e6f4471d64'
-				},
-				formData: formData
-			}, function (err, response, body) {
-				if (!err){
-					req.new_listing_info = {
-						background_image : JSON.parse(body).data.link.replace("http", "https")
-					};
-					next();
+			//create the array of promises
+			var promises = [];
+			for (var x in req.files){
+				var promise = q_function({
+					title : req.files[x][0].filename,
+					image : fs.createReadStream(req.files[x][0].path),
+					image_type : req.files[x][0].fieldname
+				});
+				promises.push(promise);
+			}
+			//wait for all promises to finish
+			Q.allSettled(promises)
+			 .then(function(results) {
+			 	req.new_listing_info = {};
+				//figure out which promises failed / passed
+				for (var y = 0; y < results.length; y++){
+					if (results[y].state == "fulfilled"){
+						req.new_listing_info[results[y].value.image_type] = results[y].value.imgur_link;
+					}
 				}
-				else {
-					console.log(err);
-					error.handler(req, res, 'Something went wrong with the upload!', "json");
-				}
+				next();
 			});
 		}
-		//removing existing image intentionally
-		else if (req.body.background_image == ""){
-			req.new_listing_info = {
-				background_image : null
-			};
-			next();
-		}
+		//removing existing image(s) intentionally
 		else {
+			req.new_listing_info = {};
+			if (req.body.background_image == ""){
+				req.new_listing_info.background_image = null;
+			}
+			if (req.body.logo == ""){
+				req.new_listing_info.logo = null;
+			}
 			next();
 		}
 	},
@@ -519,7 +544,7 @@ module.exports = {
 
 			//delete anything that wasnt posted (except if its "", in which case it was intentional deletion)
 			for (var x in req.new_listing_info){
-				if (!req.body[x] && req.body[x] != "" && x != "background_image"){
+				if (!req.body[x] && req.body[x] != "" && x != "background_image" && x != "logo"){
 					delete req.new_listing_info[x];
 				}
 			}
