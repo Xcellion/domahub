@@ -127,9 +127,6 @@ module.exports = {
 
 					else {
 						user = result.info[0];
-                        var intercom_hmac = crypto.createHmac('sha256', 'y8Qjb0WvQh6wCPKvPUSPGkkTmQEoVEBPP8ffJfq0');
-                        intercom_hmac.update(user.id.toString());
-                        user.intercomHash = intercom_hmac.digest('hex');
 						return done(null, user);
 					}
 				});

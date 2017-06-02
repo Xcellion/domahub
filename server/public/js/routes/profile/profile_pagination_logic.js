@@ -469,14 +469,10 @@ function createDomain(row_info){
 
 //function to handle all changed value handlers (for submit/cancel)
 function changedValueHandlers(both_rows, info){
-    //prevent enter to submit
-    both_rows.find(".drop-form").on("submit", function(e){
-        e.preventDefault();
-    });
-
     //to remove disabled on save changes button
     both_rows.find(".drop-form .changeable-input").on("input", function(e){
         e.preventDefault();
+        $(".notification").addClass('is-hidden');
         changedValue($(this), info);
     });
 
@@ -505,9 +501,9 @@ function changedValue(input_elem, info){
     var cancel_button = (closest_row.hasClass("row-drop")) ? closest_row.find(".cancel-changes-button") : closest_row.next(".row-drop").find(".cancel-changes-button");
 
     //only change if the value changed from existing or if image exists
-    if ((name_of_attr != "image" && input_elem.val() != info[name_of_attr])
-    || (name_of_attr == "image" && input_elem.val())
-    || (name_of_attr == "image" && input_elem.data("deleted"))){
+    if ((name_of_attr != "background_image" && name_of_attr != "logo" && input_elem.val() != info[name_of_attr])
+    || ((name_of_attr == "background_image" || name_of_attr == "logo") && input_elem.val())
+    || ((name_of_attr == "background_image" || name_of_attr == "logo") && input_elem.data("deleted"))){
         input_elem.data('changed', true);
 
         if (save_button.hasClass("is-disabled")){
