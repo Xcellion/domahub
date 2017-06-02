@@ -186,7 +186,8 @@ button[data-balloon] {
   position: relative;
   height: 100vh;
   display: flex;
-  align-items: center; }
+  align-items: center;
+  overflow: hidden; }
   #landing .subtitle {
     font-weight: 300;
     max-width: 500px;
@@ -196,6 +197,46 @@ button[data-balloon] {
     max-width: 305px;
     margin-left: auto;
     margin-right: auto; }
+
+#trials {
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  position: absolute;
+  background: white; }
+  #trials div {
+    -webkit-box-shadow: 0 5px 15px 2px rgba(0, 0, 0, 0.12);
+    -moz-box-shadow: 0 5px 15px 2px rgba(0, 0, 0, 0.12);
+    box-shadow: 0 5px 15px 2px rgba(0, 0, 0, 0.12);
+    -moz-transform: skew(0deg, -10deg);
+    -o-transform: skew(0deg, -10deg);
+    -ms-transform: skew(0deg, -10deg);
+    -webkit-transform: skew(0deg, -10deg);
+      -webkit-transform-transform: skew(0deg, -10deg);
+    position: absolute; }
+    #trials div:nth-child(1) {
+      width: 350px;
+      left: 500px;
+      background: #EF5350;
+      height: 350px;
+      top: 250px; }
+    #trials div:nth-child(2) {
+      -moz-transform: skew(0deg, 10deg);
+      -o-transform: skew(0deg, 10deg);
+      -ms-transform: skew(0deg, 10deg);
+      -webkit-transform: skew(0deg, 10deg);
+        -webkit-transform-transform: skew(0deg, 10deg);
+      width: 500px;
+      left: 700px;
+      background: #3cbc8d;
+      top: 300px;
+      height: 360px; }
+    #trials div:nth-child(3) {
+      width: 275px;
+      left: 1100px;
+      background: #2196f3;
+      top: 250px;
+      height: 350px; }
 
 #learn-more-wrapper {
   left: 50%;
@@ -270,17 +311,6 @@ button[data-balloon] {
   display: flex;
   flex-direction: column;
   justify-content: space-between; }
-
-.has-stripe {
-  position: relative; }
-  .has-stripe::before {
-    content: "";
-    position: absolute;
-    height: 100%;
-    width: 5px;
-    background: #3cbc8d;
-    left: 0;
-    top: 0; }
 
 .section.has-pyramid {
   position: relative;
