@@ -1,12 +1,5 @@
 var row_display = listings.slice(0);
 
-//to format a number for $$$$
-var moneyFormat = wNumb({
-	thousand: ',',
-	prefix: '$',
-	decimals: 0
-});
-
 $(document).ready(function(){
 	//multiple delete listings
 	$("#multi-delete").on("click", function(e){
@@ -17,21 +10,17 @@ $(document).ready(function(){
 	$("#multi-verify").on("click", function(e){
 		multiVerify($(this));
 	});
+
+	//key for stripe
+	if (window.location.hostname == "localhost"){
+		Stripe.setPublishableKey('pk_test_kcmOEkkC3QtULG5JiRMWVODJ');
+	}
+	else {
+		Stripe.setPublishableKey('pk_live_506Yzo8MYppeCnLZkW9GEm13');
+	}
 });
 
-//function to handle post-deletion of multi listings
-function deletionHandler(rows, selected_rows){
-	listings = rows;
-	row_display = listings.slice(0);
-	for (var x = 0; x < selected_rows.length; x++){
-		$(selected_rows[x]).next(".row-drop").remove();
-		$(selected_rows[x]).remove();
-	}
-	deselectAllRows();
-	emptyRows();
-}
-
-// ------------------------------------------------------------------------------------------------------------------------------ CREATE ROW
+//<editor-fold>-------------------------------CREATE ROW-------------------------------
 
 //function to create a listing row
 function createRow(listing_info, rownum){
@@ -99,7 +88,9 @@ function updateBuyPrice(tempRow, listing_info){
 	tempRow.find(".td-price-rate").text(buy_price);
 }
 
-// ------------------------------------------------------------------------------------------------------------------------------ CREATE DROP
+//</editor-fold>
+
+//<editor-fold>-------------------------------CREATE ROW DROP-------------------------------
 
 //function to create dropdown row
 function createRowDrop(listing_info, rownum){
@@ -108,6 +99,7 @@ function createRowDrop(listing_info, rownum){
 	//choose a row to clone
 	if (listing_info.verified){
 		var tempRow_drop = $("#verified-clone-row-drop").clone();
+		updateColorScheme(tempRow_drop, listing_info);
 		updateStatusDrop(tempRow_drop, listing_info);
 		updatePriceInputs(tempRow_drop, listing_info);
 		updateDescription(tempRow_drop, listing_info);
@@ -117,6 +109,8 @@ function createRowDrop(listing_info, rownum){
 		updateBackgroundImage(tempRow_drop, listing_info, rownum);
 		updateLogo(tempRow_drop, listing_info, rownum);
 		updateDeleteMessagesX(tempRow_drop);
+		updateTabs(tempRow_drop, listing_info);
+		updatePremium(tempRow_drop, listing_info, true);
 	}
 	else {
 		var tempRow_drop = $("#unverified-clone-row-drop").clone();
@@ -139,11 +133,19 @@ function createRowDrop(listing_info, rownum){
     return tempRow_drop;
 }
 
-//update the listing status
+//update the clone row drop with row drop specifics
 function updateStatusDrop(tempRow_drop, listing_info){
 	tempRow_drop.find(".status-input").val(listing_info.status);
 }
-//update the clone row drop with row drop specifics
+function updateColorScheme(tempRow_drop, listing_info){
+	var minicolor_options = {
+		letterCase: "uppercase",
+		swatches: ["#3cbc8d", "#FF5722", "#2196F3"]
+	}
+	tempRow_drop.find(".primary-color-input").val(listing_info.primary_color).minicolors("destroy").minicolors(minicolor_options);
+	tempRow_drop.find(".secondary-color-input").val(listing_info.secondary_color).minicolors("destroy").minicolors(minicolor_options);
+	tempRow_drop.find(".tertiary-color-input").val(listing_info.tertiary_color).minicolors("destroy").minicolors(minicolor_options);
+}
 function updatePriceInputs(tempRow_drop, listing_info){
 	tempRow_drop.find(".price-rate-input").val(listing_info.price_rate);
 	tempRow_drop.find(".price-type-input").val(listing_info.price_type);
@@ -211,27 +213,19 @@ function updateSaveCancelButtons(tempRow_drop, listing_info){
 }
 function updateBackgroundImage(tempRow_drop, listing_info, rownum){
 	var background_image = (listing_info.background_image == null || listing_info.background_image == undefined || listing_info.background_image == "") ? "https://placeholdit.imgix.net/~text?txtsize=40&txt=RANDOM%20PHOTO&w=200&h=200" : listing_info.background_image;
-	tempRow_drop.find(".background_image").attr('src', background_image).error(function() {
+	tempRow_drop.find(".background_image").attr('src', background_image).off().on("error", function() {
         $(this).attr("src", "https://placeholdit.imgix.net/~text?txtsize=40&txt=LOADING...%20&w=200&h=200");
     });
 
-	tempRow_drop.find(".background-file").attr('id', "background" + rownum);
-	tempRow_drop.find(".background-label").attr('for', "background" + rownum);
+	//unique id for label
+	if (rownum >= 0){
+		tempRow_drop.find(".background-file").attr('id', "background" + rownum).data("default_text", "Background Image");
+		tempRow_drop.find(".background-label").attr('for', "background" + rownum);
+	}
 
-	tempRow_drop.find(".background-delete-img").on("click", function(e){
+	tempRow_drop.find(".background-delete-img").off().on("click", function(e){
 		deleteBackgroundImg($(this), listing_info, "https://placeholdit.imgix.net/~text?txtsize=40&txt=RANDOM%20PHOTO&w=200&h=200");
 	});
-
-	//upload image button handler
-	tempRow_drop.find(".background-file").on("change", function(e){
-		console.log("Sdjklsajd");
-		e.preventDefault();
-		var file_name = ($(this).val()) ? $(this).val().replace(/^.*[\\\/]/, '') : "Background Image";
-		file_name = (file_name.length > 14) ? "..." + file_name.substr(file_name.length - 14) : file_name;
-		$(this).next(".background-label").find(".file-label").text(file_name);
-		changedValue($(this), info);
-	});
-
 }
 function deleteBackgroundImg(temp_x, listing_info, default_img){
 	var temp_img = temp_x.next('img');
@@ -249,32 +243,269 @@ function deleteBackgroundImg(temp_x, listing_info, default_img){
 	changedValue(temp_input, listing_info);
 }
 function updateDeleteMessagesX(tempRow_drop){
-	tempRow_drop.find(".notification").find(".delete").on("click", function(){
+	tempRow_drop.find(".notification").find(".delete").off().on("click", function(){
 		$(this).closest(".notification").addClass('is-hidden');
 	});
 }
 function updateLogo(tempRow_drop, listing_info, rownum){
 	var logo = (listing_info.logo == null || listing_info.logo == undefined || listing_info.logo == "") ? "/images/dh-assets/flat-logo/dh-flat-logo-primary.png" : listing_info.logo;
-	tempRow_drop.find(".listing-logo-img").attr('src', logo).error(function() {
-        $(this).attr("src", "https://placeholdit.imgix.net/~text?txtsize=20&txt=LOADING...%20&w=200&h=50");
+	tempRow_drop.find(".listing-logo-img").attr('src', logo).off().on("error", function() {
+        $(this).attr("src", "/images/dh-assets/flat-logo/dh-flat-logo-primary.png");
     });
 
-	tempRow_drop.find(".logo-file").attr('id', "logo" + rownum);
-	tempRow_drop.find(".logo-label").attr('for', "logo" + rownum);
+	//unique id for label for
+	if (rownum >= 0){
+		tempRow_drop.find(".logo-file").attr('id', "logo" + rownum).data("default_text", "Logo");
+		tempRow_drop.find(".logo-label").attr('for', "logo" + rownum);
+	}
 
-	tempRow_drop.find(".logo-delete-img").on("click", function(e){
-		deleteBackgroundImg($(this), listing_info, "https://placeholdit.imgix.net/~text?txtsize=20&txt=LOADING...%20&w=200&h=50");
+	tempRow_drop.find(".logo-delete-img").off().on("click", function(e){
+		deleteBackgroundImg($(this), listing_info, "https://placeholdit.imgix.net/~text?txtsize=20&txt=NO%20LOGO&w=200&h=50");
 	});
-
-	// //upload image button handler
-	// tempRow_drop.find(".logo-file.changeable-input").off().on("change", function(e){
-	// 	e.preventDefault();
-	// 	var file_name = ($(this).val()) ? $(this).val().replace(/^.*[\\\/]/, '') : "Logo";
-	// 	file_name = (file_name.length > 14) ? "..." + file_name.substr(file_name.length - 14) : file_name;
-	// 	$(this).next(".logo-image-label").find(".file-label").text(file_name);
-	// 	changedValue($(this), info);
-	// });
 }
+function updateTabs(tempRow_drop, listing_info){
+	tempRow_drop.find(".tab").off().on("click", function(e){
+		var clicked_tab = $(this);
+
+		//cancel any changes being made
+		cancelListingChanges(tempRow_drop.prev(".row-disp"), tempRow_drop, tempRow_drop.find(".cancel-changes-button"), listing_info);
+
+		//hide other tab selectors
+		tempRow_drop.find(".tab").removeClass('is-active');
+		clicked_tab.addClass('is-active');
+
+		//hide any notifications
+		$(".notification").addClass('is-hidden');
+
+		//hide other tabs
+		tempRow_drop.find(".drop-tab").addClass('is-hidden');
+		tempRow_drop.find("." + clicked_tab.data("tab-id") + "-tab").removeClass('is-hidden');
+
+		//clicked on the upgrade tab
+		if (clicked_tab.data('tab-id') == "upgrade"){
+			tempRow_drop.find(".save-changes-button").addClass('is-hidden');
+		}
+		else {
+			tempRow_drop.find(".save-changes-button").removeClass('is-hidden');
+		}
+
+		//get stripe subscription info if we dont already have it
+		if (!clicked_tab.data("got_stripe_sub") && clicked_tab.data('tab-id') == "upgrade" && listing_info.stripe_subscription_id && (listing_info.exp_date == undefined || !listing_info.expiring == undefined || user.stripe_info.premium_cc_last4  == undefined || user.stripe_info.premium_cc_brand  == undefined)){
+			$.ajax({
+				url: "/listing/" + listing_info.domain_name + "/stripeinfo",
+				method: "GET"
+			}).done(function(data){
+				listings = data.listings;
+				user = data.user;
+				clicked_tab.data("got_stripe_sub", true);
+				updatePremium(tempRow_drop, getUserListingObj(listings, listing_info.domain_name));
+			});
+		}
+	});
+}
+function updatePremium(tempRow_drop, listing_info, firstload){
+	//first time loading
+	if (firstload){
+		//format stripe cc icons
+		tempRow_drop.find(".stripe-input").off().on("change keyup paste", function(){
+			tempRow_drop.find(".listing-msg-error").addClass('is-hidden');
+
+			var card_type = $.payment.cardType(tempRow_drop.find(".cc-num").val());
+			if (card_type == "dinersclub") { card_type = "diners-club"}
+			if (["maestro", "unionpay", "forbrugsforeningen", "dankort"].indexOf(card_type) != -1){ card_type = null}
+
+			//show appropriate card icon
+			if ($(".fa-cc-" + card_type) && card_type){
+				tempRow_drop.find(".cc-icon").removeClass().addClass("cc-icon fa fa-cc-" + card_type);
+			}
+			//or show default
+			else {
+				tempRow_drop.find(".cc-icon").removeClass().addClass("cc-icon fa fa-credit-card");
+			}
+		});
+
+		//format all stripe inputs
+		tempRow_drop.find('.cc-num').val("").payment('formatCardNumber');
+		tempRow_drop.find('.cc-exp').val("").payment('formatCardExpiry');
+		tempRow_drop.find('.cc-cvc').val("").payment('formatCardCVC');
+		tempRow_drop.find('.cc-zip').val("").payment('restrictNumeric');
+
+		//click checkout button to submit and get stripe token
+		tempRow_drop.find(".checkout-button").off().on("click", function(e){
+			e.preventDefault();
+			if (checkCC(tempRow_drop)){
+				$(this).addClass('is-loading');
+				tempRow_drop.find(".stripe-form").submit();
+			}
+		});
+
+		//get stripe token
+		tempRow_drop.find(".stripe-form").off().on("submit", function(e){
+			e.preventDefault();
+			Stripe.card.createToken($(this), function(status, response){
+				if (response.error){
+					errorMessage(tempRow_drop.find(".listing-msg-error"), "Something went wrong with the payment! Please refresh the page and try again.");
+				}
+				else {
+					//all good, submit stripe token and listing id to dh server
+					submitPremium(listing_info, tempRow_drop, response.id, $(tempRow_drop).find(".checkout-button"), firstload);
+				}
+			});
+		});
+	}
+
+	//is not premium
+	if (!listing_info.stripe_subscription_id){
+		//tab title
+		tempRow_drop.find(".upgrade-tab-text").text("Upgrade to Premium");
+
+		//add disabled to premium inputs if not premium
+		tempRow_drop.find(".premium-input").addClass('is-disabled');
+
+		//hide/show elements needed for upgrade
+		tempRow_drop.find(".basic-elem").removeClass('is-hidden');
+		tempRow_drop.find(".premium-elem").addClass('is-hidden');
+
+		//show cc form
+		tempRow_drop.find(".stripe-form").removeClass('is-hidden');
+		tempRow_drop.find(".checkout-button").text("Confirm & Pay").attr("title", "Confirm and Pay");
+	}
+	//is premium
+	else {
+
+		//hide cc form, show change card button
+		tempRow_drop.find(".stripe-form").addClass('is-hidden');
+		tempRow_drop.find(".change-card-button").removeClass('is-hidden');
+		tempRow_drop.find(".checkout-button").text("Confirm Payment Method").attr("title", "Confirm Payment Method");
+
+		//tab title
+		tempRow_drop.find(".upgrade-tab-text").text("Premium Status");
+
+		//remove disabled to premium inputs
+		tempRow_drop.find(".premium-input").removeClass('is-disabled');
+
+		//show/hide elements needed for upgrade
+		tempRow_drop.find(".basic-elem").addClass('is-hidden');
+		tempRow_drop.find(".premium-elem").removeClass('is-hidden');
+
+		//show the CC form if they want to change card
+		tempRow_drop.find(".change-card-button").off().on("click", function(){
+			$(this).addClass('is-hidden');
+			tempRow_drop.find(".stripe-form").removeClass('is-hidden');
+			tempRow_drop.find('.cc-num').focus();
+		});
+
+		//last 4 digits
+		var premium_cc_last4 = (user.stripe_info.premium_cc_last4) ? user.stripe_info.premium_cc_last4 : "****";
+		var premium_cc_brand = (user.stripe_info.premium_cc_brand) ? user.stripe_info.premium_cc_brand : "Credit"
+		tempRow_drop.find(".existing-cc").text(premium_cc_brand + " card ending in " + premium_cc_last4);
+
+		//expiring
+		if (listing_info.expiring == true){
+			if (listing_info.exp_date){
+				tempRow_drop.find(".renew-status").text("Active, but expiring on " + moment(listing_info.exp_date * 1000).format("MMM DD, YYYY") + ".");
+			}
+			tempRow_drop.find(".cancel-premium-button").addClass("is-hidden");
+
+			//click to renew subscription
+			tempRow_drop.find(".renew-premium-button").removeClass("is-hidden").off().on("click", function(){
+				$(this).addClass('is-loading');
+				submitPremium(listing_info, tempRow_drop, "", $(this));
+			});
+		}
+
+		//not expiring, show cancel button
+		else if (listing_info.expiring == false){
+			if (listing_info.exp_date){
+				tempRow_drop.find(".renew-status").text("Active and renewing on " + moment(listing_info.exp_date * 1000).format("MMM DD, YYYY") + ".");
+			}
+			tempRow_drop.find(".renew-premium-button").addClass("is-hidden").removeClass('is-loading');
+
+			//cancel subscription
+			tempRow_drop.find(".cancel-premium-button").removeClass("is-hidden").off().on("click", function(){
+				var cancel_button = $(this);
+				cancel_button.addClass('is-loading');
+				$.ajax({
+					url: "/listing/" + listing_info.domain_name + "/downgrade",
+					method: "POST"
+				}).done(function(data){
+					cancel_button.removeClass('is-loading');
+					if (data.state == "success"){
+						premiumSuccessHandler(listing_info, data.listings, tempRow_drop);
+					}
+					else {
+						var error_msg = data.message || "Something went wrong with the cancellation! Please refresh the page and try again.";
+						errorMessage(tempRow_drop.find(".listing-msg-error"), error_msg);
+					}
+				});
+			});
+		}
+	}
+}
+
+//</editor-fold>
+
+//<editor-fold>-------------------------------UPGRADE TO PREMIUM-------------------------------
+
+//check the CC info
+function checkCC(tempRow_drop){
+	var listing_error_elem = tempRow_drop.find(".listing-msg-error");
+    listing_error_elem.addClass('is-hidden');
+    if (!tempRow_drop.find(".cc-num").val()){
+    	listing_error_elem.removeClass('is-hidden').addClass('is-danger').html("Please provide a credit card to charge.");
+    }
+    else if (!tempRow_drop.find(".cc-exp").val()){
+    	listing_error_elem.removeClass('is-hidden').addClass('is-danger').html("Please provide your credit card expiration date.");
+    }
+    else if (!tempRow_drop.find(".cc-cvc").val()){
+    	listing_error_elem.removeClass('is-hidden').addClass('is-danger').html("Please provide your credit card CVC number.");
+    }
+    else if (!tempRow_drop.find(".cc-zip").val()){
+    	listing_error_elem.removeClass('is-hidden').addClass('is-danger').html("Please provide a ZIP code.");
+    }
+    else {
+        return true;
+    }
+}
+
+function submitPremium(listing_info, tempRow_drop, stripeToken, button_elem, firstload){
+	$.ajax({
+		url: "/listing/" + listing_info.domain_name + "/upgrade",
+		method: "POST",
+		data: {
+			stripeToken: stripeToken
+		}
+	}).done(function(data){
+		console.log(data);
+
+		//update cc last 4 and brand
+		if (data.user){
+			user = data.user;
+		}
+
+		button_elem.removeClass('is-loading');
+
+		if (data.state == "success"){
+			premiumSuccessHandler(listing_info, data.listings, tempRow_drop, firstload);
+		}
+		else {
+			var error_msg = data.message || "Something went wrong with the cancellation! Please refresh the page and try again.";
+			errorMessage(tempRow_drop.find(".listing-msg-error"), error_msg);
+		}
+	});
+}
+
+//function to set premium-related info / tab
+function premiumSuccessHandler(old_listing_info, new_listings, tempRow_drop, firstload){
+	listings = new_listings;
+
+	//show all premium stuff
+	updatePremium(tempRow_drop, getUserListingObj(listings, old_listing_info.domain_name), firstload);
+}
+
+//</editor-fold>
+
+//<editor-fold>-------------------------------UPDATE ROW UNVERIFIED-------------------------------
 
 //functions to update row drop unverified
 function updateRegistrarURL(tempRow, whois){
@@ -328,7 +559,9 @@ function updateVerificationButton(tempRow, listing_info, cb_when_verified){
 	});
 }
 
-// ------------------------------------------------------------------------------------------------------------------------------ EDIT ROW
+//</editor-fold>
+
+//<editor-fold>-------------------------------EDIT ROW-------------------------------
 
 //function to initiate edit mode
 function editRow(row){
@@ -336,6 +569,7 @@ function editRow(row){
     $(".row-disp").each(function(e){
         if ($(this).data('editing') == true && $(this).attr("id") != row.attr("id")){
             $(this).data("editing", false);
+            $(this).removeClass("is-active");
             dropRow($(this), false);
 			editVerifyButton($(this), false);
             $(this).next(".row-drop").find(".cancel-changes-button").click();
@@ -345,6 +579,14 @@ function editRow(row){
     //are we editing or saving?
     var editing = (row.data("editing") == false) ? true : false;
     row.data("editing", editing);
+
+	//highlight to show which one we're editing
+	if (editing){
+		row.addClass('is-active');
+	}
+	else {
+		row.removeClass('is-active');
+	}
 
     dropRow(row, editing);
 	editVerifyButton(row, editing);
@@ -407,49 +649,19 @@ function refreshSubmitbindings(bool_for_status_td){
                         submitListingChanges(row, row_drop, $(this), info);
                     });
 
-                    //prevent enter to submit
-                    both_rows.find(".drop-form").on("submit", function(e){
-                        e.preventDefault();
-                    });
-
                     //refresh category click handlers and paths
 					updateCategories(row_drop, info);
+					row_drop.find(".categories-input").val(info.categories);
+
 					updatePaths(row_drop, info);
 					updateBuyPrice(row, info);
 					updateStatus(row, info);
 
-					//all other inputs handler
-                    both_rows.find(".drop-form .changeable-input").unbind("input").on("input", function(e){
-                        e.preventDefault();
-                        changedValue($(this), info);
-                    });
+					changedValueHandlers(both_rows, info);
 
-					//upload image button handler
-                    both_rows.find(".drop-form-file .changeable-input").off().on("change", function(e){
-                        e.preventDefault();
-                        var file_name = ($(this).val()) ? $(this).val().replace(/^.*[\\\/]/, '') : "Background Image";
-                        file_name = (file_name.length > 14) ? "..." + file_name.substr(file_name.length - 14) : file_name;
-                        $(this).next(".background-label").find(".file-label").text(file_name);
-                        changedValue($(this), info);
-                    });
-
-					//click X to delete images
-					tempRow_drop.find(".background-delete-img").off().on("click", function(e){
-						deleteBackgroundImg($(this), listing_info, "https://placeholdit.imgix.net/~text?txtsize=40&txt=RANDOM%20PHOTO&w=200&h=200");
-					});
-					tempRow_drop.find(".logo-delete-img").off().on("click", function(e){
-						deleteBackgroundImg($(this), listing_info, "https://placeholdit.imgix.net/~text?txtsize=20&txt=LOADING...%20&w=200&h=50");
-					});
-
-                    row_drop.find(".categories-input").val(info.categories);
-
-                    //update the status td text
-                    if (info.status == 0){
-                        row.find(".td-status").text("Inactive").addClass('is-danger');
-                    }
-					else {
-						row.find(".td-status").text("Active").removeClass('is-danger');
-					}
+					//revert all inputs
+					updateBackgroundImage(row_drop, info);
+					updateLogo(row_drop, info);
                 }(listings[y], $($(".row-disp")[x])));
                 break;
             }
@@ -457,7 +669,9 @@ function refreshSubmitbindings(bool_for_status_td){
     }
 }
 
-// ------------------------------------------------------------------------------------------------------------------------------ SELECT ROW
+//</editor-fold>
+
+//<editor-fold>-------------------------------SELECT ROW-------------------------------
 
 //function to select a row
 function selectRow(row){
@@ -579,7 +793,21 @@ function verificationHandler(data){
 	refreshSubmitbindings();
 }
 
-// ------------------------------------------------------------------------------------------------------------------------------ SUBMIT LISTING UPDATES
+//function to handle post-deletion of multi listings
+function deletionHandler(rows, selected_rows){
+	listings = rows;
+	row_display = listings.slice(0);
+	for (var x = 0; x < selected_rows.length; x++){
+		$(selected_rows[x]).next(".row-drop").remove();
+		$(selected_rows[x]).remove();
+	}
+	deselectAllRows();
+	emptyRows();
+}
+
+//</editor-fold>
+
+//<editor-fold>-------------------------------SUBMIT LISTING UPDATES-------------------------------
 
 //function to cancel the listing submit
 function cancelListingChanges(row, row_drop, cancel_button, listing_info){
@@ -590,44 +818,19 @@ function cancelListingChanges(row, row_drop, cancel_button, listing_info){
     var listing_msg = row_drop.find(".listing-msg");
     listing_msg.addClass('is-hidden');
 
-    //revert back to the old status
-	row_drop.find(".status-input").val(listing_info.status);
-	var current_status = row.find(".td-status");
-	if (listing_info.status == 0){
-		current_status.text("Inactive");
-		current_status.addClass('is-danger');
-	}
-	else {
-		current_status.text("Active");
-		current_status.removeClass('is-danger');
-	}
-
-    //revert all other inputs
-    row_drop.find(".description-input").val(listing_info.description);
-    row_drop.find(".categories-input").val(listing_info.categories);
-
-	//revert categories and paths
-	updateCategories(row_drop, listing_info);
+	//revert all inputs
 	updatePaths(row_drop, listing_info);
+	updateCategories(row_drop, listing_info);
+	updateColorScheme(row_drop, listing_info);
+	updateStatusDrop(row_drop, listing_info);
+	updatePriceInputs(row_drop, listing_info);
+	updateDescription(row_drop, listing_info);
+	updateBackgroundImage(row_drop, listing_info);
+	updateLogo(row_drop, listing_info);
+	updateDeleteMessagesX(row_drop);
 
-    //background image
-    var background_img_elem = row_drop.find("background_image");
-	var background_image = (listing_info.background_image == null || listing_info.background_image == undefined || listing_info.background_image == "") ? "https://placeholdit.imgix.net/~text?txtsize=40&txt=RANDOM%20PHOTO&w=200&h=200" : listing_info.background_image;
-	background_img_elem.attr("src", background_image);
-	row_drop.find(".background-image-label").text("Background Image");
-
-	//logo
-	var logo_img_elem = row_drop.find("listing-logo-img");
-	var logo = (listing_info.logo == null || listing_info.logo == undefined || listing_info.logo == "") ? "/images/dh-assets/flat-logo/dh-flat-logo-primary.png" : listing_info.logo;
-	logo_img_elem.attr("src", logo);
-    row_drop.find(".logo-image-label").text("Logo");
-
-	row_drop.find(".input-file").val("");
-
-    var listing_msg_error = row_drop.find(".listing-msg-error");
-    var listing_msg_success = row_drop.find(".listing-msg-success");
-    errorMessage(listing_msg_error);
-    successMessage(listing_msg_success);
+    errorMessage(row_drop.find(".listing-msg-error"));
+    successMessage(row_drop.find(".listing-msg-success"));
 }
 
 //function to submit any changes to a listing
@@ -646,10 +849,16 @@ function submitListingChanges(row, row_drop, success_button, listing_info){
     //only add changed inputs
     row.add(row_drop).find(".changeable-input").each(function(e){
         var input_name = $(this).data("name");
-        var input_val = (input_name == "background_image") ? $(this)[0].files[0] : $(this).val();
+        var input_val = (input_name == "background_image" || input_name == "logo") ? $(this)[0].files[0] : $(this).val();
 
-        //if image is being deleted
+        //if background image is being deleted
         if (input_name == "background_image" && $(this).data("deleted")){
+            var input_val = "";
+			$(this).data('deleted', false);
+        }
+
+        //if logo is being deleted
+        if (input_name == "logo" && $(this).data("deleted")){
             var input_val = "";
 			$(this).data('deleted', false);
         }
@@ -694,12 +903,14 @@ function submitListingChanges(row, row_drop, success_button, listing_info){
     });
 }
 
-//helper function to display error messages per listing
+//helper function to display/hide error messages per listing
 function errorMessage(msg_elem, message){
-    $(".notification").addClass('is-hidden')
-    msg_elem.removeClass('is-hidden');
-    msg_elem.find("p").empty();
-    if (message){
+	$(".notification").addClass('is-hidden');
+
+    if (message && message != "nothing-changed"){
+		msg_elem.removeClass('is-hidden');
+		msg_elem.find("p").empty();
+
         //connect stripe first!
         if (message == "stripe-connect-error"){
             msg_elem.append("<p class='is-white'>You must <a class='is-underlined' href='/profile/settings#payout-address'>enter your payment information</a> before your listing can go live!</p>");
@@ -725,6 +936,10 @@ function successMessage(msg_elem, message){
     }
 }
 
+//</editor-fold>
+
+//<editor-fold>-------------------------------HELPER FUNCTIONS--------------------------------
+
 function toUpperCase(string){
     return string.charAt(0).toUpperCase() + string.substr(1);
 }
@@ -737,3 +952,12 @@ function getUserListingObj(listings, domain_name){
 		}
 	}
 }
+
+//to format a number for $$$$
+var moneyFormat = wNumb({
+	thousand: ',',
+	prefix: '$',
+	decimals: 0
+});
+
+//</editor-fold>
