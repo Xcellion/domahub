@@ -2,6 +2,12 @@
 @import 'mixins';
 @import 'balloon';
 
+.background_image {
+    min-height: 200px;
+    max-height: 200px;
+    object-fit: cover;
+}
+
 // listing image
 .listing-img {
    .delete {
