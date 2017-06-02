@@ -7,9 +7,9 @@ var owner_functions = require("../listings/listings_owner_functions.js");
 var profile_functions = require("../profiles/profile_functions.js");
 var general_functions = require("../general_functions.js");
 
-var bodyParser = require('body-parser')
-var jsonParser = bodyParser.json()
-var urlencodedParser = bodyParser.urlencoded({ extended: true })
+var bodyParser = require('body-parser');
+var jsonParser = bodyParser.json();
+var urlencodedParser = bodyParser.urlencoded({ extended: true });
 
 var validator = require("validator");
 var node_env = process.env.NODE_ENV || 'dev'; 	//dev or prod bool
@@ -112,7 +112,7 @@ module.exports = function(app, db, auth, error, stripe){
 		checkDomainListed,
 		stripe.getAccountInfo,
 		profile_functions.getAccountListings,
-	owner_functions.checkListingOwnerPost,
+		owner_functions.checkListingOwnerPost,
 		owner_functions.verifyListing,
 		owner_functions.updateListing
 	]);
@@ -144,40 +144,52 @@ module.exports = function(app, db, auth, error, stripe){
 		profile_functions.getAccountListings,
 		owner_functions.checkListingOwnerPost,
 		owner_functions.checkListingVerified,
+		stripe.checkStripeSubscription,
 		owner_functions.checkImageUploadSize,
 		owner_functions.checkListingImage,
 		owner_functions.checkListingStatus,
 		//owner_functions.checkListingPrice,
+		owner_functions.checkListingPremiumDetails,
 		owner_functions.checkListingDetails,
 		owner_functions.checkListingExisting,
 		owner_functions.updateListing
 	]);
 
+	//get a listing's stripe info
+	app.get('/listing/:domain_name/stripeinfo', [
+		auth.checkLoggedIn,
+		checkDomainValid,
+		checkDomainListed,
+		profile_functions.getAccountListings,
+		owner_functions.checkListingOwnerPost,
+		owner_functions.checkListingVerified,
+		stripe.getStripeSubscription
+	]);
+
 	//update listing to premium
-	// app.post('/listing/:domain_name/upgrade', [
-	// 	urlencodedParser,
-	// 	auth.checkLoggedIn,
-	// 	checkDomainValid,
-	// 	checkDomainListed,
-	// 	profile_functions.getAccountListings,
-	// 	owner_functions.checkListingOwnerPost,
-	// 	owner_functions.checkListingVerified,
-	// 	stripe.createStripeCustomer,
-	// 	stripe.createSingleStripeSubscription,
-	// 	owner_functions.updateListing
-	// ]);
+	app.post('/listing/:domain_name/upgrade', [
+		urlencodedParser,
+		auth.checkLoggedIn,
+		checkDomainValid,
+		checkDomainListed,
+		profile_functions.getAccountListings,
+		owner_functions.checkListingOwnerPost,
+		owner_functions.checkListingVerified,
+		stripe.createStripeCustomer,
+		stripe.createStripeSubscription,
+		owner_functions.updateListing
+	]);
 
 	//degrade listing to basic
-	// app.post('/listing/:domain_name/downgrade', [
-	// 	auth.checkLoggedIn,
-	// 	checkDomainValid,
-	// 	checkDomainListed,
-	// 	profile_functions.getAccountListings,
-	// 	owner_functions.checkListingOwnerPost,
-	// 	owner_functions.checkListingVerified,
-	// 	stripe.cancelStripeSubscription,
-	// 	owner_functions.updateListing
-	// ]);
+	app.post('/listing/:domain_name/downgrade', [
+		auth.checkLoggedIn,
+		checkDomainValid,
+		checkDomainListed,
+		profile_functions.getAccountListings,
+		owner_functions.checkListingOwnerPost,
+		owner_functions.checkListingVerified,
+		stripe.cancelStripeSubscription
+	]);
 
 	//</editor-fold>
 

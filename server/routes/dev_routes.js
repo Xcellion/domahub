@@ -4,7 +4,7 @@ var	data_model = require('../models/data_model.js');
 var	validator = require('validator');
 var	request = require('request');
 var bodyParser = require('body-parser');
-var urlencodedParser = bodyParser.urlencoded({ extended: true });
+var urlencodedParser = bodyParser.urlencoded({ extended: false });
 var dns = require("dns");
 var randomstring = require("randomstring");
 var awis = require('awis');
@@ -41,6 +41,13 @@ module.exports = function(app, db, auth, error){
             res.sendStatus(200);
         });
     });
+
+	app.post("/fuck",[
+		urlencodedParser,
+		function(req, res, next){
+			console.log(req.body);
+		}]
+	);
 }
 
 //testing quantcast redirect
