@@ -11,13 +11,19 @@
 <body>
 
   <%- include("../templates/navbar", {user: user}); %>
-  <section id="landing" class="section">
+  <section id="landing" class="">
+    <div id="trials">
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
     <div class="container">
       <div class="content has-text-centered margin-bottom-25">
-        <h1 class="title is-2">
+        <h1 class="title is-2 is-white">
           Beautiful landing pages for your domains.
         </h1>
-        <p class="subtitle is-5">
+        <p class="subtitle is-5 is-white">
           Create robust landing pages for your domains in seconds.
           You don't even have to know how to code!
         </p>
@@ -27,7 +33,7 @@
           <input class="input is-medium" type="text" placeholder="MyDomain.com"/>
         </p>
         <p class="control">
-          <a tabindex="0" class="button is-stylish is-primary">Try it Now</a>
+          <a tabindex="0" class="button is-stylish is-primary is-inverted">Try it Now</a>
         </p>
       </div>
     </div>
@@ -81,7 +87,7 @@
               <h2>Custom Features</h2>
             </div>
             <p>
-              We provide several custom features and designs that help you domain stand out among the rest.
+              We provide several custom features and designs that help your domain stand out among the rest.
             </p>
           </div>
         </div>
