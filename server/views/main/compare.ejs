@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>DomaHub</title>
+    <%- include("../templates/head_links"); %>
+</head>
+
+<body>
+
+    <%# NOT A LEGIT DOMAIN %>
+    <% if (!domain_name) { %>
+
+        <p>
+            This is not a valid domain name!
+        </p>
+
+    <% } else { %>
+
+        <img src="/screenshot?domain_name=<%= domain_name %>"/>
+
+    <% } %>
+
+    <%- include("../templates/js_scripts"); %>
+
+</body>
+
+</html>
