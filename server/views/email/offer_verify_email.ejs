@@ -15,7 +15,7 @@
       <div class="container">
         <div class="box">
             <div class="content">
-              <% if (premium == true) { %>
+              <% if (premium == true && logo) { %>
                 <a tabindex="0" title="View Website" href="http://www.<%= domain_name %>">
                     <figure class="image is-128x128 left-aligned" style="height: auto;">
                       <img src="<%= logo %>" />
@@ -40,9 +40,7 @@
                     <li>Phone: <%= offerer_phone %></li>
                     <li>Offer: <%= offer %></li>
                     <li>
-                      Message: <p style="word-break: break-all;">
-                        <%= message %>
-                      </p>
+                      Message: <p style="white-space: pre-wrap; word-break: break-all;"><%= message %></p>
                     </li>
                 </ul>
                 <h3>Verify your offer</h3>

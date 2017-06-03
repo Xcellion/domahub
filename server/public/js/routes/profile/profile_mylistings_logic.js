@@ -99,17 +99,24 @@ function createRowDrop(listing_info, rownum){
 	//choose a row to clone
 	if (listing_info.verified){
 		var tempRow_drop = $("#verified-clone-row-drop").clone();
-		updateColorScheme(tempRow_drop, listing_info);
+		updateTabs(tempRow_drop, listing_info);
+
 		updateStatusDrop(tempRow_drop, listing_info);
-		updatePriceInputs(tempRow_drop, listing_info);
 		updateDescription(tempRow_drop, listing_info);
-		updatePaths(tempRow_drop, listing_info);
 		updateCategories(tempRow_drop, listing_info);
-		updateSaveCancelButtons(tempRow_drop, listing_info);
+		updatePaths(tempRow_drop, listing_info);
+
+		updatePriceInputs(tempRow_drop, listing_info);
+
+		updateColorScheme(tempRow_drop, listing_info);
+		updateFontStyling(tempRow_drop, listing_info);
+		updateModules(tempRow_drop, listing_info);
 		updateBackgroundImage(tempRow_drop, listing_info, rownum);
 		updateLogo(tempRow_drop, listing_info, rownum);
 		updateDeleteMessagesX(tempRow_drop);
-		updateTabs(tempRow_drop, listing_info);
+
+		updateSaveCancelButtons(tempRow_drop, listing_info);
+
 		updatePremium(tempRow_drop, listing_info, true);
 	}
 	else {
@@ -134,46 +141,53 @@ function createRowDrop(listing_info, rownum){
 }
 
 //update the clone row drop with row drop specifics
+function updateTabs(tempRow_drop, listing_info){
+	tempRow_drop.find(".tab").off().on("click", function(e){
+		var clicked_tab = $(this);
+
+		//cancel any changes being made
+		cancelListingChanges(tempRow_drop.prev(".row-disp"), tempRow_drop, tempRow_drop.find(".cancel-changes-button"), listing_info);
+
+		//hide other tab selectors
+		tempRow_drop.find(".tab").removeClass('is-active');
+		clicked_tab.addClass('is-active');
+
+		//hide any notifications
+		$(".notification").addClass('is-hidden');
+
+		//hide other tabs
+		tempRow_drop.find(".drop-tab").addClass('is-hidden');
+		tempRow_drop.find("." + clicked_tab.data("tab-id") + "-tab").removeClass('is-hidden');
+
+		//clicked on the upgrade tab
+		if (clicked_tab.data('tab-id') == "upgrade"){
+			tempRow_drop.find(".save-changes-button").addClass('is-hidden');
+		}
+		else {
+			tempRow_drop.find(".save-changes-button").removeClass('is-hidden');
+		}
+
+		//get stripe subscription info if we dont already have it
+		if (!clicked_tab.data("got_stripe_sub") && clicked_tab.data('tab-id') == "upgrade" && listing_info.stripe_subscription_id && (listing_info.exp_date == undefined || !listing_info.expiring == undefined || user.stripe_info.premium_cc_last4  == undefined || user.stripe_info.premium_cc_brand  == undefined)){
+			$.ajax({
+				url: "/listing/" + listing_info.domain_name + "/stripeinfo",
+				method: "GET"
+			}).done(function(data){
+				listings = data.listings;
+				user = data.user;
+				clicked_tab.data("got_stripe_sub", true);
+				updatePremium(tempRow_drop, getUserListingObj(listings, listing_info.domain_name));
+			});
+		}
+	});
+}
+
 function updateStatusDrop(tempRow_drop, listing_info){
 	tempRow_drop.find(".status-input").val(listing_info.status);
-}
-function updateColorScheme(tempRow_drop, listing_info){
-	var minicolor_options = {
-		letterCase: "uppercase",
-		swatches: ["#3cbc8d", "#FF5722", "#2196F3"]
-	}
-	tempRow_drop.find(".primary-color-input").val(listing_info.primary_color).minicolors("destroy").minicolors(minicolor_options);
-	tempRow_drop.find(".secondary-color-input").val(listing_info.secondary_color).minicolors("destroy").minicolors(minicolor_options);
-	tempRow_drop.find(".tertiary-color-input").val(listing_info.tertiary_color).minicolors("destroy").minicolors(minicolor_options);
-}
-function updatePriceInputs(tempRow_drop, listing_info){
-	tempRow_drop.find(".price-rate-input").val(listing_info.price_rate);
-	tempRow_drop.find(".price-type-input").val(listing_info.price_type);
-	tempRow_drop.find(".buy-price-input").val(listing_info.buy_price);
 }
 function updateDescription(tempRow_drop, listing_info){
 	tempRow_drop.find(".description-input").val(listing_info.description);
 	tempRow_drop.find(".description-hook-input").val(listing_info.description_hook);
-}
-function updatePaths(tempRow_drop, listing_info){
-	//if created tags before
-	if (tempRow_drop.find(".paths-input").data('tags') == true){
-		tempRow_drop.find(".paths-input").tagit("destroy");
-	}
-	else {
-		tempRow_drop.find(".paths-input").data("tags", true);
-	}
-
-	tempRow_drop.find(".paths-input").val(listing_info.paths);
-	tempRow_drop.find(".paths-input").tagit({
-		animate: false,
-		afterTagAdded : function(event, ui){
-			changedValue(tempRow_drop.find(".paths-input"), listing_info);
-		},
-		afterTagRemoved : function(event, ui){
-			changedValue(tempRow_drop.find(".paths-input"), listing_info);
-		}
-	});
 }
 function updateCategories(tempRow_drop, listing_info){
 	//color existing categories
@@ -200,16 +214,68 @@ function updateHiddenCategoryInput(tempRow_drop, input){
 	joined_categories = (joined_categories == "") ? null : joined_categories;
 	input.val(joined_categories);
 }
-function updateSaveCancelButtons(tempRow_drop, listing_info){
-	//to submit form changes
-	tempRow_drop.find(".save-changes-button").click(function(e){
-		submitListingChanges(tempRow_drop.prev(".row-disp"), tempRow_drop, $(this), listing_info);
-	});
+function updatePaths(tempRow_drop, listing_info){
+	//if created tags before
+	if (tempRow_drop.find(".paths-input").data('tags') == true){
+		tempRow_drop.find(".paths-input").tagit("destroy");
+	}
+	else {
+		tempRow_drop.find(".paths-input").data("tags", true);
+	}
 
-	//to cancel form changes
-	tempRow_drop.find(".cancel-changes-button").click(function(e){
-		cancelListingChanges(tempRow_drop.prev(".row-disp"), tempRow_drop, $(this), listing_info);
+	tempRow_drop.find(".paths-input").val(listing_info.paths).tagit({
+		animate: false,
+		afterTagAdded : function(event, ui){
+			changedValue(tempRow_drop.find(".paths-input"), listing_info);
+		},
+		afterTagRemoved : function(event, ui){
+			changedValue(tempRow_drop.find(".paths-input"), listing_info);
+		}
 	});
+}
+
+function updatePriceInputs(tempRow_drop, listing_info){
+	tempRow_drop.find(".price-rate-input").val(listing_info.price_rate);
+	tempRow_drop.find(".price-type-input").val(listing_info.price_type);
+	tempRow_drop.find(".buy-price-input").val(listing_info.buy_price);
+}
+
+function updateColorScheme(tempRow_drop, listing_info){
+	var minicolor_options = {
+		letterCase: "uppercase",
+		swatches: ["#3cbc8d", "#FF5722", "#2196F3"]
+	}
+	tempRow_drop.find(".primary-color-input").val(listing_info.primary_color).minicolors("destroy").minicolors(minicolor_options);
+	tempRow_drop.find(".secondary-color-input").val(listing_info.secondary_color).minicolors("destroy").minicolors(minicolor_options);
+	tempRow_drop.find(".tertiary-color-input").val(listing_info.tertiary_color).minicolors("destroy").minicolors(minicolor_options);
+}
+function updateFontStyling(tempRow_drop, listing_info){
+	var minicolor_options = {
+		letterCase: "uppercase",
+		swatches: ["#000", "#222", "#D3D3D3", "#FFF"]
+	}
+	tempRow_drop.find(".font-color-input").val(listing_info.font_color).minicolors("destroy").minicolors(minicolor_options);
+
+	//if created tags before
+	if (tempRow_drop.find(".font-name-input").data('tags') == true){
+		tempRow_drop.find(".font-name-input").tagit("destroy");
+	}
+	else {
+		tempRow_drop.find(".font-name-input").data("tags", true);
+	}
+	tempRow_drop.find(".font-name-input").val(listing_info.font_name).tagit({
+		animate: false,
+		afterTagAdded : function(event, ui){
+			changedValue(tempRow_drop.find(".font-name-input"), listing_info);
+		},
+		afterTagRemoved : function(event, ui){
+			changedValue(tempRow_drop.find(".font-name-input"), listing_info);
+		}
+	});
+}
+function updateModules(tempRow_drop, listing_info){
+	tempRow_drop.find(".history-module-input").val(listing_info.history_module);
+	tempRow_drop.find(".traffic-module-input").val(listing_info.traffic_module);
 }
 function updateBackgroundImage(tempRow_drop, listing_info, rownum){
 	var background_image = (listing_info.background_image == null || listing_info.background_image == undefined || listing_info.background_image == "") ? "https://placeholdit.imgix.net/~text?txtsize=40&txt=RANDOM%20PHOTO&w=200&h=200" : listing_info.background_image;
@@ -263,46 +329,19 @@ function updateLogo(tempRow_drop, listing_info, rownum){
 		deleteBackgroundImg($(this), listing_info, "https://placeholdit.imgix.net/~text?txtsize=20&txt=NO%20LOGO&w=200&h=50");
 	});
 }
-function updateTabs(tempRow_drop, listing_info){
-	tempRow_drop.find(".tab").off().on("click", function(e){
-		var clicked_tab = $(this);
 
-		//cancel any changes being made
-		cancelListingChanges(tempRow_drop.prev(".row-disp"), tempRow_drop, tempRow_drop.find(".cancel-changes-button"), listing_info);
+function updateSaveCancelButtons(tempRow_drop, listing_info){
+	//to submit form changes
+	tempRow_drop.find(".save-changes-button").click(function(e){
+		submitListingChanges(tempRow_drop.prev(".row-disp"), tempRow_drop, $(this), listing_info);
+	});
 
-		//hide other tab selectors
-		tempRow_drop.find(".tab").removeClass('is-active');
-		clicked_tab.addClass('is-active');
-
-		//hide any notifications
-		$(".notification").addClass('is-hidden');
-
-		//hide other tabs
-		tempRow_drop.find(".drop-tab").addClass('is-hidden');
-		tempRow_drop.find("." + clicked_tab.data("tab-id") + "-tab").removeClass('is-hidden');
-
-		//clicked on the upgrade tab
-		if (clicked_tab.data('tab-id') == "upgrade"){
-			tempRow_drop.find(".save-changes-button").addClass('is-hidden');
-		}
-		else {
-			tempRow_drop.find(".save-changes-button").removeClass('is-hidden');
-		}
-
-		//get stripe subscription info if we dont already have it
-		if (!clicked_tab.data("got_stripe_sub") && clicked_tab.data('tab-id') == "upgrade" && listing_info.stripe_subscription_id && (listing_info.exp_date == undefined || !listing_info.expiring == undefined || user.stripe_info.premium_cc_last4  == undefined || user.stripe_info.premium_cc_brand  == undefined)){
-			$.ajax({
-				url: "/listing/" + listing_info.domain_name + "/stripeinfo",
-				method: "GET"
-			}).done(function(data){
-				listings = data.listings;
-				user = data.user;
-				clicked_tab.data("got_stripe_sub", true);
-				updatePremium(tempRow_drop, getUserListingObj(listings, listing_info.domain_name));
-			});
-		}
+	//to cancel form changes
+	tempRow_drop.find(".cancel-changes-button").click(function(e){
+		cancelListingChanges(tempRow_drop.prev(".row-disp"), tempRow_drop, $(this), listing_info);
 	});
 }
+
 function updatePremium(tempRow_drop, listing_info, firstload){
 	//first time loading
 	if (firstload){
