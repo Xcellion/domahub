@@ -1000,61 +1000,6 @@ module.exports = {
         });
     },
 
-    //render screenshot of a rental, only if coming from a listing page
-    renderRentalScreenshot : function(req, res, next){
-        var screenshot_address = addProtocol(req.query.rental_address);
-        var originating_hostname = (req.header("Referer")) ? url.parse(req.header("Referer")).hostname : "";
-
-        //if we're originating from domahub or localhost
-        if (originating_hostname.indexOf("domahub") != -1 || node_env == "dev"){
-            if (screenshot_address && validator.isURL(screenshot_address)){
-                console.log('F: Capturing screenshot of rental ...');
-                var screenshot_options = {
-                    quality: 1,
-                    renderDelay: 50,
-                    screenSize: {},
-                    streamType: "jpeg",
-                    shotSize: {
-                        width: "window",
-                        height: "window"
-                    },
-                    userAgent: 'Mozilla/5.0 (iPhone; U; CPU iPhone OS 3_2 like Mac OS X; en-us) AppleWebKit/531.21.20 (KHTML, like Gecko) Mobile/7B298g'
-                }
-
-                if (node_env != "dev"){
-                    screenshot_options.phantomPath = "/var/www/w3bbi/phantomjs/bin/phantomjs"
-                }
-
-                //queries for screensize
-                if (req.query.width && validator.isInt(req.query.width)){
-                    screenshot_options.screenSize.width = parseInt(req.query.width);
-                }
-                if (req.query.height && validator.isInt(req.query.height)){
-                    screenshot_options.screenSize.height = parseInt(req.query.height);
-                }
-
-                webshot(screenshot_address, screenshot_options, function(err, renderStream) {
-                    if (err) {
-                        console.log('F: Screenshot of ' + screenshot_address + ' not found!');
-                        res.sendStatus(404);
-                    }
-                    else {
-                        renderStream.pipe(res);
-                    }
-                });
-            }
-            else {
-                console.log('F: Screenshot of ' + screenshot_address + ' not found!');
-                res.sendStatus(404);
-            }
-        }
-        //redirect to domahub home page
-        else {
-            res.redirect("/");
-        }
-
-    },
-
     //time check was successful! redirect to checkout
     redirectToCheckout : function(req, res, next){
         res.send({

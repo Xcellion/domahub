@@ -29,12 +29,12 @@
         </p>
       </div>
       <div class="control is-grouped is-grouped-center">
-        <p class="control">
-          <input class="input is-medium" type="text" placeholder="MyDomain.com"/>
-        </p>
-        <p class="control">
-          <a tabindex="0" class="button is-stylish is-primary is-inverted">Try it Now</a>
-        </p>
+          <form id="tryit-form" action="/compare?domain_name=">
+              <p class="control is-grouped">
+                  <input autofocus name="domain_name" class="input is-medium" type="text" placeholder="MyDomain.com"/>
+                  <button id="tryit-button" type="submit" tabindex="0" class="margin-left-10 button is-stylish is-primary is-inverted">Try it Now</button>
+              </p>
+          </form>
       </div>
     </div>
     <div id="learn-more-wrapper" class='has-text-centered'>
