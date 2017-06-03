@@ -470,7 +470,7 @@ function createDomain(row_info){
 //function to handle all changed value handlers (for submit/cancel)
 function changedValueHandlers(both_rows, info){
     //to remove disabled on save changes button
-    both_rows.find(".drop-form .changeable-input").on("input", function(e){
+    both_rows.find(".drop-form .changeable-input").on("input change", function(e){
         e.preventDefault();
         $(".notification").addClass('is-hidden');
         changedValue($(this), info);

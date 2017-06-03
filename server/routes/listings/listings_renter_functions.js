@@ -1125,7 +1125,8 @@ module.exports = {
             offerer_email: req.body.contact_email,
             offerer_phone: phoneUtil.format(phoneUtil.parse(req.body.contact_phone), PNF.INTERNATIONAL),
             offer: moneyFormat.to(parseFloat(req.body.contact_offer)),
-            message: req.body.contact_message
+            message: req.body.contact_message,
+            logo: req.session.listing_info.logo
         }
 
         delete req.session.contact_verification_code;
