@@ -4,7 +4,7 @@
 
 <head>
 	<title>My Listings - DomaHub</title>
-	<link rel="stylesheet" href="/css/min/profile_general.min.css" type="text/css" />
+	<link rel="stylesheet" href="/css/min/profile_dashboard.min.css" type="text/css" />
 	<link rel="stylesheet" href="/css/lib/jquery.tagit.css" type="text/css" />
 	<link rel="stylesheet" href="/css/lib/jquery.minicolors.css" type="text/css" />
 	<%- include("../templates/head_links"); %>
@@ -13,609 +13,700 @@
 <body>
 	<%- include("../templates/navbar", {user: user}); %>
 
+	<!-- <table class="table is-profile">
+	  <thead class="">
+	    <tr>
+	      <th id="select-all" class="td-arrow">
+	        <span class="icon is-small"><i class="no-transition fa fa-square-o"></i></span>
+	      </th>
+	      <th class="td-domain">
+	        Domain Name
+	        <span class="icon is-small is-active sort-desc is-hidden"><i class="fa fa-sort-desc"></i></span>
+	        <span class="icon is-small is-active sort-asc is-hidden"><i class="fa fa-sort-asc"></i></span>
+	        <span class="icon is-small sort-none is-disabled"><i class="fa fa-sort"></i></span>
+	      </th>
+	      <th class="td-buttons is-hidden-mobile"></th>
+	      <th class="is-hidden-mobile td-status">
+	        Status
+	        <span class="icon is-small is-active sort-desc is-hidden"><i class="fa fa-sort-desc"></i></span>
+	        <span class="icon is-small is-active sort-asc is-hidden"><i class="fa fa-sort-asc"></i></span>
+	        <span class="icon is-small sort-none is-disabled"><i class="fa fa-sort"></i></span>
+	      </th>
+	      <th class="is-hidden-mobile td-price-type">
+	        Price
+	        <span class="icon is-small is-active sort-desc is-hidden"><i class="fa fa-sort-desc"></i></span>
+	        <span class="icon is-small is-active sort-asc is-hidden"><i class="fa fa-sort-asc"></i></span>
+	        <span class="icon is-small sort-none is-disabled"><i class="fa fa-sort"></i></span>
+	      </th>
+	    </tr>
+	  </thead>
+	  <tbody id="table_body">
+	    <tr>
+	      <td colspan="999" class="is-loading has-text-centered padding-50">
+	        Loading listings...
+	      </td>
+	    </tr>
+	    <tr class="clone-row row-disp verified-row is-hidden" id="verified-clone-row">
+	      <td class="td-arrow">
+	        <span class="v-align-bottom icon is-small">
+	          <i class="no-transition fa fa-square-o" aria-hidden="true"></i>
+	        </span>
+	      </td>
+	      <td class="td-visible td-domain"></td>
+	      <td class="td-buttons is-hidden-mobile">
+	        <a class="edit-button is-pulled-right button no-shadow ">
+	          <span class="icon is-small">
+	            <i class="fa fa-cog" aria-hidden="true"></i>
+	          </span>
+	          <span>Edit</span>
+	        </a>
+	        <a class="view-button button is-pulled-right margin-right-5 no-shadow" target="_blank" rel="noopener" title="Open listing in new tab" style="target-new: tab;" href="">
+	          <span class="icon is-small">
+	            <i class="fa fa-external-link" aria-hidden="true"></i>
+	          </span>
+	          <span>View</span>
+	        </a>
+	      </td>
+	      <td class="td-status is-hidden-mobile"></td>
+	      <td class="has-text-right td-price-rate is-bold is-hidden-mobile"></td>
+	      <%# <td class="td-price-type is-hidden-mobile"></td>%>
+	    </tr>
+	    <tr class="clone-row row-drop is-hidden" id="verified-clone-row-drop">
+	      <td class="row-drop-td" colspan="5">
+	        <div class="div-drop" style="display:none;">
+	          <div class="columns">
+	            <div class="drop-form column is-9">
+	              <div class="tabs is-boxed has-shadow margin-bottom-0">
+	                <ul>
+	                  <li data-tab-id="info" class='tab is-active'>
+	                    <a>
+	                      <span class="is-hidden-mobile icon is-small"><i class="fa fa-info"></i></span>
+	                      <span>Information</span>
+	                    </a>
+	                  </li>
+	                  <li data-tab-id="pricing" class="tab is-attached">
+	                    <a>
+	                      <span class="is-hidden-mobile icon is-small"><i class="fa fa-money"></i></span>
+	                      <span>Pricing</span>
+	                    </a>
+	                  </li>
+	                  <li data-tab-id="design" class="tab is-attached">
+	                    <a>
+	                      <span class="is-hidden-mobile icon is-small"><i class="fa fa-picture-o"></i></span>
+	                      <span>Design</span>
+	                    </a>
+	                  </li>
+	                  <li data-tab-id="upgrade" class="tab is-attached">
+	                    <a>
+	                      <span class="is-hidden-mobile icon is-small"><i class="fa fa-heart-o"></i></span>
+	                      <span class="upgrade-tab-text">Upgrade to Premium</span>
+	                    </a>
+	                  </li>
+	                </ul>
+	              </div>
+
+	              <div class="info-tab drop-tab">
+	                <div class="columns listing-module">
+	                  <div class="column is-3">
+	                    <p class="is-inline v-align-middle">Status</p>
+	                    <span class="icon is-small is-tooltip v-align-middle" data-balloon-length="medium" data-balloon="Whether this listing is displayed publically or not." data-balloon-pos="up">
+	                      <i class="fa fa-question-circle-o"></i>
+	                    </span>
+	                  </div>
+	                  <div class="column is-9">
+	                    <div class="control is-grouped">
+	                      <span class="select status-span">
+	                        <div class="drop-form">
+	                          <select data-name="status" class="status-input changeable-input">
+	                            <option value="1">Active</option>
+	                            <option value="0">Inactive</option>
+	                          </select>
+	                        </div>
+	                      </span>
+	                    </div>
+	                  </div>
+	                </div>
+	                <div class="columns listing-module">
+	                  <div class="column is-3">
+	                    <p class="is-inline v-align-middle">Listing Description</p>
+	                    <span class="icon is-small is-tooltip v-align-middle" data-balloon-length="large" data-balloon="Descriptions help renters understand what your domain name can be useful for." data-balloon-pos="up">
+	                      <i class="fa fa-question-circle-o"></i>
+	                    </span>
+	                  </div>
+	                  <div class="column is-9">
+	                    <div class="control">
+	                      <div class="control">
+	                        <textarea data-name="description" tabindex="0" class="description-input textarea changeable-input" placeholder="Rent this website for any time period you please!"></textarea>
+	                      </div>
+	                    </div>
+	                  </div>
+	                </div>
+	                <div class="columns listing-module">
+	                  <div class="column is-3">
+	                    <p class="is-inline v-align-middle">Short Description</p>
+	                    <span class="icon is-small is-tooltip v-align-middle" data-balloon-length="large" data-balloon="A short catch phrase helps users understand at a glance what they can utilize your domain for. 100 character limit." data-balloon-pos="up">
+	                      <i class="fa fa-question-circle-o"></i>
+	                    </span>
+	                  </div>
+	                  <div class="column is-9">
+	                    <div class="control">
+	                      <div class="control">
+	                        <input data-name="description_hook" tabindex="0" class="description-hook-input input changeable-input" placeholder="What is this website?"></input>
+	                      </div>
+	                    </div>
+	                  </div>
+	                </div>
+	                <div class="columns listing-module">
+	                  <div class="column is-3">
+	                    <p class="is-inline v-align-middle">Categories</p>
+	                    <span class="icon is-small is-tooltip v-align-middle" data-balloon-length="large" data-balloon="Categories help users find similar domains to rent." data-balloon-pos="up">
+	                      <i class="fa fa-question-circle-o"></i>
+	                    </span>
+	                  </div>
+	                  <div class="column is-9">
+	                    <div class="control">
+	                      <div class="category-control">
+	                        <input data-name="categories" onchange=""tabindex="0" class="is-hidden categories-input input changeable-input" value="" business="" ecard="" marketing="" niche="" personal="" promotion="">
+
+	                        <%# make all the categories %>
+	                        <% for (var x = 0; x < categories.length; x++){ %>
+	                          <a data-category="<%= categories[x].back %>" class="<%= categories[x].back %>-category tag category-selector has-shadow"><%= categories[x].front %></a>
+	                        <% } %>
+	                      </div>
+	                    </div>
+	                  </div>
+	                </div>
+	                <div class="columns listing-module">
+	                  <div class="column is-3">
+	                    <p class="is-inline v-align-middle">Example Paths</p>
+	                    <span class="icon is-small is-tooltip v-align-middle" data-balloon-length="large" data-balloon="Example paths that renters may want to rent on your domain. Must consist of either letters or numbers." data-balloon-pos="up">
+	                      <i class="fa fa-question-circle-o"></i>
+	                    </span>
+	                  </div>
+	                  <div class="column is-9">
+	                    <div class="control">
+	                      <div class="control">
+	                        <input data-name="paths" placeholder="test test test test" tabindex="0" class="is-hidden paths-input input changeable-input"></input>
+	                      </div>
+	                    </div>
+	                  </div>
+	                </div>
+	              </div>
+	              <div class="pricing-tab drop-tab is-hidden">
+
+	                <div class="columns listing-module">
+	                  <div class="column is-3">
+	                    <p class="is-inline v-align-middle">Min. Purchase Price</p>
+	                    <span class="icon is-small is-tooltip v-align-middle" data-balloon-length="medium" data-balloon="Minimum price is $1. Leave blank or 0 for no minimum purchase price." data-balloon-pos="up">
+	                      <i class="fa fa-question-circle-o"></i>
+	                    </span>
+	                  </div>
+	                  <div class="column is-9">
+	                    <div class="control is-grouped">
+	                      <p class="control">
+	                        <input data-name="buy_price" type="number" min="1" step="1" class="padding-top-0 buy-price-input input changeable-input">
+	                      </p>
+	                    </div>
+	                  </div>
+	                </div>
+	                <div class="columns listing-module">
+	                  <div class="column is-3">
+	                    <p class="is-inline v-align-middle">Rental Pricing</p>
+	                    <span class="icon is-small is-tooltip v-align-middle" data-balloon-length="medium" data-balloon="Minimum price is $1. Leave blank or 0 for no rentals." data-balloon-pos="up">
+	                      <i class="fa fa-question-circle-o"></i>
+	                    </span>
+	                  </div>
+	                  <div class="column is-9">
+	                    <div class="control is-grouped">
+	                      <p class="control">
+	                        <input data-name="price_rate" placeholder="minimum 1" type="number" min="1" step="1" class="padding-top-0 price-rate-input input changeable-input">
+	                      </p>
+	                      <span class="select price-type-span">
+	                        <div class="drop-form">
+	                          <select data-name="price_type" class="price-type-input changeable-input">
+	                            <option value="month">Month</option>
+	                            <option value="week">Week</option>
+	                            <option value="day">Day</option>
+	                          </select>
+	                        </div>
+	                      </span>
+	                    </div>
+	                  </div>
+	                </div>
+	              </div>
+	              <div class="design-tab drop-tab is-hidden">
+	                <div class='basic-elem columns listing-module premium-overlay'>
+	                  You must first upgrade to a premium listing to edit these settings!
+	                </div>
+	                <div class="columns listing-module">
+	                  <div class="column is-3">
+	                    <p class="is-inline v-align-middle">Color Scheme</p>
+	                    <span class="icon is-small is-tooltip v-align-middle" data-balloon-length="medium" data-balloon="The three main colors of your landing page." data-balloon-pos="up">
+	                      <i class="fa fa-question-circle-o"></i>
+	                    </span>
+	                  </div>
+	                  <div class="column is-9">
+	                    <div class="control is-grouped">
+	                      <p class="control">
+	                        <input data-name="primary_color" placeholder="#3CBC8D" type="text" class="premium-input padding-top-0 primary-color-input input changeable-input">
+	                      </p>
+	                      <p class="control">
+	                        <input data-name="secondary_color" placeholder="#FF5722" type="text" class="premium-input padding-top-0 secondary-color-input input changeable-input">
+	                      </p>
+	                      <p class="control">
+	                        <input data-name="tertiary_color" placeholder="#2196F3" type="text" class="premium-input padding-top-0 tertiary-color-input input changeable-input">
+	                      </p>
+	                    </div>
+	                  </div>
+	                </div>
+	                <div class="listing-module card no-shadow">
+	                  <div class="card-image">
+	                    <figure class="image listing-img">
+	                      <button tabindex="0" class="background-delete-img delete"></button>
+	                      <img class="background_image is-listing" alt="Image not found" src="">
+	                    </figure>
+	                  </div>
+	                  <footer class="card-footer">
+	                    <form tabindex="0" class="drop-form-file" method="post" enctype="multipart/form-data">
+	                      <input data-name="background_image" type="file" name="background_image" accept="image/png, image/gif, image/jpeg" class="premium-input background-file changeable-input input-file">
+	                      <label for="" class="premium-input background-label button no-shadow is-fullwidth">
+	                        <i class="fa fa-upload" aria-hidden="true"></i>
+	                        <p class="file-label background-image-label">Background Image</p>
+	                      </label>
+	                    </form>
+	                  </footer>
+	                </div>
+	                <div class="card listing-img no-shadow">
+	                  <div class="card-image">
+	                    <figure class="image listing-logo">
+	                      <button tabindex="0" class="logo-delete-img delete"></button>
+	                      <img class="listing-logo-img is-listing" alt="Image not found" src="">
+	                    </figure>
+	                  </div>
+	                  <footer class="card-footer">
+	                    <form tabindex="0" class="drop-form-file" method="post" enctype="multipart/form-data">
+	                      <input data-name="logo" type="file" name="logo" accept="image/png, image/gif, image/jpeg" class="premium-input logo-file changeable-input input-file">
+	                      <label for="" class="premium-input logo-label button no-shadow is-fullwidth">
+	                        <i class="fa fa-upload" aria-hidden="true"></i>
+	                        <p class="file-label logo-image-label">Logo</p>
+	                      </label>
+	                    </form>
+	                  </footer>
+	                </div>
+	              </div>
+	              <div class="upgrade-tab drop-tab is-hidden">
+	                <div class="columns listing-module">
+	                  <div class="column is-3">
+	                    <p class="is-inline v-align-middle">Premium Status</p>
+	                    <span class="icon basic-elem is-small is-tooltip v-align-middle" data-balloon-length="medium" data-balloon="Upgrade your listing to a premium listing for $1 / year and unlock customization features." data-balloon-pos="up">
+	                      <i class="fa fa-question-circle-o"></i>
+	                    </span>
+	                  </div>
+	                  <div class="premium-elem column is-9">
+	                    <p class='margin-bottom-10 no-shadow renew-status premium-elem is-hidden'>
+	                      <span class="renew-status">Now loading premium status...</span>
+	                    </p>
+	                    <a tabindex="0" title="Cancel Premium" class="cancel-premium-button margin-top-10 is-hidden button is-danger is-small is-stylish no-shadow">Cancel Premium</a>
+	                    <a tabindex="0" title="Renew Premium" class="renew-premium-button margin-top-10 is-hidden button is-success is-small is-stylish no-shadow">Renew Premium</a>
+	                  </div>
+	                  <div class="basic-elem column is-9">
+	                    <p class='no-shadow renew-status'>
+	                      Upgrade to a premium listing for $1 / year and unlock customization features!
+	                    </p>
+	                  </div>
+	                </div>
+
+	                <div class="columns premium-elem">
+	                  <div class="column is-3">
+	                    <p class="is-inline v-align-middle">Current Payment Method</p>
+	                  </div>
+	                  <div class="column is-9">
+	                    <div class="control is-grouped">
+	                      <p class="existing-cc">Credit card ending in ****</p>
+	                    </div>
+	                    <a tabindex="0" title="Change Payment Method" class="change-card-button button is-primary is-small is-stylish no-shadow">Change Payment Method</a>
+	                  </div>
+	                </div>
+	                <form class="stripe-form" autocomplete="on">
+	                  <div class="columns">
+	                    <div class="column is-3">
+	                      <p class="is-inline v-align-middle">Card Number</p>
+	                    </div>
+	                    <div class="column is-9">
+	                      <div class="control is-grouped">
+	                        <p class="control has-icon">
+	                          <input tabindex="0" data-stripe="number" class="cc-num input stripe-input" type="tel" placeholder="•••• •••• •••• ••••" autocomplete="cc-number"/>
+	                          <i class="cc-icon fa fa-credit-card"></i>
+	                        </p>
+	                      </div>
+	                    </div>
+	                  </div>
+	                  <div class="columns">
+	                    <div class="column is-3">
+	                      <p class="is-inline v-align-middle">Expiration Date</p>
+	                    </div>
+	                    <div class="column is-9">
+	                      <div class="control is-grouped">
+	                        <p class="control">
+	                          <input tabindex="0" maxlength="7" data-stripe="exp" class="cc-exp input stripe-input" type="tel" placeholder="•• / ••" autocomplete="cc-exp"/>
+	                        </p>
+	                      </div>
+	                    </div>
+	                  </div>
+	                  <div class="columns">
+	                    <div class="column is-3">
+	                      <p class="is-inline v-align-middle">Security Code</p>
+	                    </div>
+	                    <div class="column is-9">
+	                      <div class="control is-grouped">
+	                        <p class="control">
+	                          <input tabindex="0" data-stripe="cvc" class="cc-cvc input stripe-input" type="tel" placeholder="•••" autocomplete="off"/>
+	                        </p>
+	                      </div>
+	                    </div>
+	                  </div>
+	                  <div class="columns">
+	                    <div class="column is-3">
+	                      <p class="is-inline v-align-middle">Zip Code</p>
+	                    </div>
+	                    <div class="column is-9">
+	                      <div class="control is-grouped">
+	                        <p class="control">
+	                          <input tabindex="0" maxlength="6" data-stripe="address_zip" class="cc-zip input stripe-input" type="tel" autocomplete="postal-code" placeholder="•••••"/>
+	                        </p>
+	                      </div>
+	                      <a tabindex="0" title="Confirm and Pay" class="checkout-button margin-top-10 button is-primary is-small is-stylish no-shadow">Confirm & Pay</a>
+	                    </div>
+	                  </div>
+	                </form>
+	              </div>
+
+	            </div>
+	            <div class="column is-3">
+	              <div class="control">
+	                <a tabindex="0" title="Save Changes" class="save-changes-button margin-bottom-10 button is-disabled is-small is-stylish is-primary no-shadow">Save Changes</a>
+	                <a tabindex="0" title="Cancel Changes" class="cancel-changes-button button is-hidden is-danger is-small is-stylish no-shadow">Cancel Changes</a>
+	              </div>
+	              <div class="listing-msg-error is-hidden is-danger notification">
+	                <button class="delete"></button>
+	              </div>
+	              <div class="listing-msg-success is-hidden is-primary notification">
+	                <button class="delete"></button>
+	              </div>
+
+	            </div>
+	          </div>
+	        </div>
+	      </td>
+	    </tr>
+
+	    <tr class="clone-row row-disp unverified-row is-hidden" id="unverified-clone-row">
+	      <td class="td-arrow">
+	        <span class="v-align-bottom icon is-small">
+	          <i class="no-transition fa fa-square-o" aria-hidden="true">
+	          </i>
+	        </span>
+	      </td>
+	      <td class="td-visible td-domain"></td>
+	      <td class="td-buttons is-hidden-mobile">
+	        <a class="is-pulled-right button no-shadow  verify-button is-danger">
+	          <span class="icon is-small">
+	            <i class="fa fa-check-circle-o" aria-hidden="true"></i>
+	          </span>
+	          <span>Verify Now</span>
+	        </a>
+	      </td>
+	      <td class="td-verify is-hidden-mobile">
+	        <p class="is-danger">
+	          <span>Unverified</span>
+	        </p>
+	      </td>
+	      <td></td>
+	    </tr>
+	    <tr class="clone-row row-drop is-hidden" id="unverified-clone-row-drop">
+	      <td class="row-drop-td" colspan="5">
+	        <div class="div-drop" style="display:none;">
+	          <div class="padding-top-10 padding-bottom-10">
+	            <div class="columns">
+	              <div class="column">
+	                <h3 class="is-bold">You must verify that you own this domain.</h3>
+	                <p>The table below details the DNS entries that are needed to verify this domain.</p>
+	                <p>Please <a class="registrar_url">log in to your domain provider</a> to create these entries.</p>
+	                <p>If you require any assistance, please refer to our <a target="_blank" rel="noopener" style'target-new:="" tab;'="" class="is-accent margin-bottom-25" href="https://intercom.help/domahub/how-to-verify-your-domain-on-domahub"> step-by-step guide</a> on domain verification.</p>
+	                <table class="table is-bordered margin-top-15">
+	                  <th>Host</th>
+	                  <th>Record</th>
+	                  <th>Required Data</th>
+	                  <th>Current Data</th>
+	                  <tbody id="dns_table_body">
+	                    <tr id="existing_a_record_clone" class='is-hidden'>
+	                      <td>@</td>
+	                      <td>A</td>
+	                      <td class='required_data'>208.68.37.82</td>
+	                      <td class="existing_data">208.68.37.82</td>
+	                    </tr>
+	                  </tbody>
+	                </table>
+	                <a class="verify-button button is-primary" title="Verify this domain">
+	                  <span class="icon is-small"><i class="fa fa-check-square-o"></i></span>
+	                  <span>Verify this domain.</span>
+	                </a>
+	              </div>
+	            </div>
+	          </div>
+	        </div>
+	      </td>
+	    </tr>
+	  </tbody>
+	</table>-->
+
+<!----------------------------- NEW VIEW ---------------------------->
 	<section class="section is-medium min-height">
 		<div class="container">
 			<div class="columns">
-				<div class="column is-6">
-					<div class="tabs is-fullwidth is-toggle">
+				<div class="column is-3">
+					<div class="content">
+						<h2>My Domains</h2>
+					</div>
+					<!-- FITER MENU -->
+					<div id="filters" class="is-hidden">
+						<div class="control">
+	            <span class="select is-fullwidth" tabindex="0">
+	              <select id="filter-select">
+	                <option value="reset_filter">View All</option>
+	                <option value="rented_filter">Rented Now</option>
+	                <option value="premium_filter">Premium</option>
+	                <option value="basic_filter">Basic</option>
+	                <option value="unverified_filter">Unverified</option>
+	              </select>
+	            </span>
+	          </div>
+						<div class="button-wrapper control">
+							<span class="select" tabindex="0">
+								<select id="sort-select">
+									<option value="">A to Z</option>
+									<option value="">Z to A</option>
+								</select>
+							</span>
+							<a id="multi-delete" class="multi-button is-disabled button no-shadow" tabindex="0" title="Delete Listing(s)">
+	              <span class="icon is-small">
+	                <i class="fa fa-trash"></i>
+	              </span>
+	              <span>Delete</span>
+	            </a>
+							<a id="multi-verify" class="multi-button is-disabled button no-shadow" tabindex="0" title="Verify Listing(s)">
+	              <span class="icon is-small">
+	                <i class="fa fa-check-circle-o"></i>
+	              </span>
+	              <span>Verify</span>
+	            </a>
+						</div>
+						<div class="control is-expanded has-icon">
+	            <i class="fa fa-search"></i>
+	            <input id="search-domain" tabindex="0" class="input is-expanded" type="text" placeholder="Search domains" />
+	          </div>
+					</div>
+
+					<!-- DOMAINS TABLE  -->
+					<div id="domain-table" class="">
+						<div class="flex-item is-active">
+							<p>
+								www.verifiedname.com
+							</p>
+						</div>
+						<div class="flex-item">
+							<p>
+								www.verifiedname2.com
+							</p>
+						</div>
+						<div class="flex-item">
+							<p>
+								www.verifiedname2.com
+							</p>
+						</div>
+						<div class="flex-item">
+							<p>
+								www.verifiedname2.com
+							</p>
+						</div>
+						<div class="flex-item">
+							<p>
+								www.verifiedname2.com
+							</p>
+						</div>
+						<div class="flex-item">
+							<p>
+								www.verifiedname2.com
+							</p>
+						</div>
+						<div class="flex-item">
+							<p>
+								www.verifiedname2.com
+							</p>
+						</div>
+						<div class="flex-item">
+							<p>
+								www.verifiedname2.com
+							</p>
+						</div>
+						<div class="flex-item">
+							<p>
+								www.verifiedname2.com
+							</p>
+						</div>
+						<div class="flex-item">
+							<p>
+								www.verifiedname2.com
+							</p>
+						</div>
+						<div class="flex-item is-unverified">
+							<p>
+								www.unverifiedmotherfuckingname.com
+							</p>
+							<span class="icon is-danger is-small"><i class="fa fa-exclamation-circle"></i></span>
+						</div>
+						<div class="flex-item is-unverified">
+							<p>
+								www.unverifiedname2.com
+							</p>
+							<span class="icon is-danger is-small"><i class="fa fa-exclamation-circle"></i></span>
+						</div>
+					</div>
+				</div>
+				<div class="column is-9">
+					<div class="tabs no-border">
 						<ul>
-							<li class="is-active">
-								<a tabindex="0">
-									<span class="icon is-small"><i class="fa fa-tasks"></i></span>
-									<span>My Listings</span>
-								</a>
+							<li data-tab-id="info" class="is-active">
+								<a tabindex="0">Information</a>
 							</li>
-							<li>
-								<a tabindex="0" href="/profile/myrentals">
-									<span class="icon is-small"><i class="fa fa-window-maximize"></i></span>
-									<span>My Rentals</span>
-								</a>
+							<li data-tab-id="pricing">
+								<a tabindex="0">Pricing</a>
+							</li>
+							<li data-tab-id="design">
+								<a tabindex="0">Design</a>
 							</li>
 						</ul>
 					</div>
-				</div>
-			</div>
-			<div id="filters" class="is-hidden columns">
-				<div class="column">
-					<nav class="level">
-						<div class="level-left">
-							<div class="level-item">
-								<div class="control has-addons">
-									<span class="select" tabindex="0">
-										<select id="filter-select">
-											<option value="reset_filter">View All</option>
-											<option value="rented_filter">Rented Now</option>
-											<option value="premium_filter">Premium</option>
-											<option value="basic_filter">Basic</option>
-											<option value="unverified_filter">Unverified</option>
-										</select>
-									</span>
-									<a id="multi-delete" class="multi-button is-disabled button no-shadow" tabindex="0" title="Delete Listing(s)">
-										<span class="icon is-small">
-											<i class="fa fa-trash"></i>
-										</span>
-										<span>Delete</span>
+					<div class="box">
+						<div class="info-tab drop-tab">
+							<div class="control is-spaced">
+								<div class="control-left">
+									<a tabindex="0" class="button is-primary is-icon-only no-shadow">
+										<span class="icon"><i class="fa fa-toggle-on"></i></span>
+										<span>Active</span>
 									</a>
-									<a id="multi-verify" class="multi-button is-disabled button no-shadow" tabindex="0" title="Verify Listing(s)">
-										<span class="icon is-small">
-											<i class="fa fa-check-circle-o"></i>
-										</span>
-										<span>Verify</span>
+									<a tabindex="0" class="button is-danger is-icon-only no-shadow">
+										<span class="icon"><i class="fa fa-toggle-off"></i></span>
+										<span>Inactive</span>
 									</a>
 								</div>
-							</div>
-							<div class="level-item">
-								<div class="control is-expanded has-icon">
-									<i class="fa fa-search"></i>
-									<input id="search-domain" tabindex="0" class="input is-expanded" type="text" placeholder="Search my listings" />
+								<div class="control-right">
+									<a class="button no-shadow is-info is-small">
+										<span class="icon is-small">
+											<i class="fa fa-diamond"></i>
+										</span>
+										<span>Upgrade</span>
+									</a>
 								</div>
-							</div>
-						</div>
-					</nav>
-				</div>
-			</div>
-			<div class="columns">
-				<div class="column is-12">
-					<table class="table is-profile">
-						<thead class="">
-							<tr>
-								<th id="select-all" class="td-arrow">
-									<span class="icon is-small"><i class="no-transition fa fa-square-o"></i></span>
-								</th>
-								<th class="td-domain">
-									Domain Name
-									<span class="icon is-small is-active sort-desc is-hidden"><i class="fa fa-sort-desc"></i></span>
-									<span class="icon is-small is-active sort-asc is-hidden"><i class="fa fa-sort-asc"></i></span>
-									<span class="icon is-small sort-none is-disabled"><i class="fa fa-sort"></i></span>
-								</th>
-								<th class="td-buttons is-hidden-mobile"></th>
-								<th class="is-hidden-mobile td-status">
-									Status
-									<span class="icon is-small is-active sort-desc is-hidden"><i class="fa fa-sort-desc"></i></span>
-									<span class="icon is-small is-active sort-asc is-hidden"><i class="fa fa-sort-asc"></i></span>
-									<span class="icon is-small sort-none is-disabled"><i class="fa fa-sort"></i></span>
-								</th>
-								<th class="is-hidden-mobile td-price-type">
-									Price
-									<span class="icon is-small is-active sort-desc is-hidden"><i class="fa fa-sort-desc"></i></span>
-									<span class="icon is-small is-active sort-asc is-hidden"><i class="fa fa-sort-asc"></i></span>
-									<span class="icon is-small sort-none is-disabled"><i class="fa fa-sort"></i></span>
-								</th>
-							</tr>
-						</thead>
-						<tbody id="table_body">
-							<tr>
-								<td colspan="999" class="is-loading has-text-centered padding-50">
-									Loading listings...
-								</td>
-							</tr>
-							<tr class="clone-row row-disp verified-row is-hidden" id="verified-clone-row">
-								<td class="td-arrow">
-									<span class="v-align-bottom icon is-small">
-										<i class="no-transition fa fa-square-o" aria-hidden="true"></i>
-									</span>
-								</td>
-								<td class="td-visible td-domain"></td>
-								<td class="td-buttons is-hidden-mobile">
-									<a class="edit-button is-pulled-right button no-shadow ">
-										<span class="icon is-small">
-											<i class="fa fa-cog" aria-hidden="true"></i>
-										</span>
-										<span>Edit</span>
-									</a>
-									<a class="view-button button is-pulled-right margin-right-5 no-shadow" target="_blank" rel="noopener" title="Open listing in new tab" style="target-new: tab;" href="">
-										<span class="icon is-small">
-											<i class="fa fa-external-link" aria-hidden="true"></i>
-										</span>
-										<span>View</span>
-									</a>
-								</td>
-								<td class="td-status is-hidden-mobile"></td>
-								<td class="has-text-right td-price-rate is-bold is-hidden-mobile"></td>
-								<%# <td class="td-price-type is-hidden-mobile"></td>%>
-							</tr>
-							<tr class="clone-row row-drop is-hidden" id="verified-clone-row-drop">
-								<td class="row-drop-td" colspan="5">
-									<div class="div-drop" style="display:none;"> <!-- need in style for drop row-->
-										<div class="columns">
-											<div class="drop-form column is-9">
-												<div class="tabs is-boxed has-shadow margin-bottom-0">
-													<ul>
-														<li data-tab-id="info" class='tab is-active'>
-															<a>
-																<span class="is-hidden-mobile icon is-small"><i class="fa fa-info"></i></span>
-																<span>Information</span>
-															</a>
-														</li>
-														<li data-tab-id="pricing" class="tab is-attached">
-															<a>
-																<span class="is-hidden-mobile icon is-small"><i class="fa fa-money"></i></span>
-																<span>Pricing</span>
-															</a>
-														</li>
-														<li data-tab-id="design" class="tab is-attached">
-															<a>
-																<span class="is-hidden-mobile icon is-small"><i class="fa fa-picture-o"></i></span>
-																<span>Design</span>
-															</a>
-														</li>
-														<li data-tab-id="upgrade" class="tab is-attached">
-															<a>
-																<span class="is-hidden-mobile icon is-small"><i class="fa fa-heart-o"></i></span>
-																<span class="upgrade-tab-text">Upgrade to Premium</span>
-															</a>
-														</li>
-													</ul>
-												</div>
-
-												<div class="info-tab drop-tab">
-													<div class="columns listing-module">
-														<div class="column is-3">
-															<p class="is-inline v-align-middle">Status</p>
-															<span class="icon is-small is-tooltip v-align-middle" data-balloon-length="medium" data-balloon="Whether this listing is displayed publically or not." data-balloon-pos="up">
-																<i class="fa fa-question-circle-o"></i>
-															</span>
-														</div>
-														<div class="column is-9">
-															<div class="control is-grouped">
-																<span class="select status-span">
-																	<div class="drop-form">
-																		<select data-name="status" class="status-input changeable-input">
-																			<option value="1">Active</option>
-																			<option value="0">Inactive</option>
-																		</select>
-																	</div>
-																</span>
-															</div>
-														</div>
-													</div>
-													<div class="columns listing-module">
-														<div class="column is-3">
-															<p class="is-inline v-align-middle">Listing Description</p>
-															<span class="icon is-small is-tooltip v-align-middle" data-balloon-length="large" data-balloon="Descriptions help renters understand what your domain name can be useful for." data-balloon-pos="up">
-																<i class="fa fa-question-circle-o"></i>
-															</span>
-														</div>
-														<div class="column is-9">
-															<div class="control">
-																<div class="control">
-																	<textarea data-name="description" tabindex="0" class="description-input textarea changeable-input" placeholder="Rent this website for any time period you please!"></textarea>
-																</div>
-															</div>
-														</div>
-													</div>
-													<div class="columns listing-module">
-														<div class="column is-3">
-															<p class="is-inline v-align-middle">Short Description</p>
-															<span class="icon is-small is-tooltip v-align-middle" data-balloon-length="large" data-balloon="A short catch phrase helps users understand at a glance what they can utilize your domain for. 100 character limit." data-balloon-pos="up">
-																<i class="fa fa-question-circle-o"></i>
-															</span>
-														</div>
-														<div class="column is-9">
-															<div class="control">
-																<div class="control">
-																	<input data-name="description_hook" tabindex="0" class="description-hook-input input changeable-input" placeholder="What is this website?"></input>
-																</div>
-															</div>
-														</div>
-													</div>
-													<div class="columns listing-module">
-														<div class="column is-3">
-															<p class="is-inline v-align-middle">Categories</p>
-															<span class="icon is-small is-tooltip v-align-middle" data-balloon-length="large" data-balloon="Categories help users find similar domains to rent." data-balloon-pos="up">
-																<i class="fa fa-question-circle-o"></i>
-															</span>
-														</div>
-														<div class="column is-9">
-															<div class="control">
-																<div class="is-flex-wrap category-control">
-																	<input data-name="categories" onchange=""tabindex="0" class="is-hidden categories-input input changeable-input" value="" business="" ecard="" marketing="" niche="" personal="" promotion="">
-
-																	<%# make all the categories %>
-																	<% for (var x = 0; x < categories.length; x++){ %>
-																		<a data-category="<%= categories[x].back %>" class="<%= categories[x].back %>-category tag category-selector has-shadow"><%= categories[x].front %></a>
-																	<% } %>
-																</div>
-															</div>
-														</div>
-													</div>
-													<div class="columns listing-module">
-														<div class="column is-3">
-															<p class="is-inline v-align-middle">Example Paths</p>
-															<span class="icon is-small is-tooltip v-align-middle" data-balloon-length="large" data-balloon="Example paths that renters may want to rent on your domain. Must consist of either letters or numbers." data-balloon-pos="up">
-																<i class="fa fa-question-circle-o"></i>
-															</span>
-														</div>
-														<div class="column is-9">
-															<div class="control">
-																<div class="control">
-																	<input data-name="paths" tabindex="0" class="is-hidden paths-input input changeable-input"></input>
-																</div>
-															</div>
-														</div>
-													</div>
-												</div>
-												<div class="pricing-tab drop-tab is-hidden">
-
-													<div class="columns listing-module">
-														<div class="column is-3">
-															<p class="is-inline v-align-middle">Min. Purchase Price</p>
-															<span class="icon is-small is-tooltip v-align-middle" data-balloon-length="medium" data-balloon="Minimum price is $1. Leave blank or 0 for no minimum purchase price." data-balloon-pos="up">
-																<i class="fa fa-question-circle-o"></i>
-															</span>
-														</div>
-														<div class="column is-9">
-															<div class="control is-grouped">
-																<p class="control">
-																	<input data-name="buy_price" type="number" min="1" step="1" class="padding-top-0 buy-price-input input changeable-input">
-																</p>
-															</div>
-														</div>
-													</div>
-													<div class="columns listing-module">
-														<div class="column is-3">
-															<p class="is-inline v-align-middle">Rental Pricing</p>
-															<span class="icon is-small is-tooltip v-align-middle" data-balloon-length="medium" data-balloon="Minimum price is $1. Leave blank or 0 for no rentals." data-balloon-pos="up">
-																<i class="fa fa-question-circle-o"></i>
-															</span>
-														</div>
-														<div class="column is-9">
-															<div class="control is-grouped">
-																<p class="control">
-																	<input data-name="price_rate" placeholder="minimum 1" type="number" min="1" step="1" class="padding-top-0 price-rate-input input changeable-input">
-																</p>
-																<span class="select price-type-span">
-																	<div class="drop-form">
-																		<select data-name="price_type" class="price-type-input changeable-input">
-																			<option value="month">Month</option>
-																			<option value="week">Week</option>
-																			<option value="day">Day</option>
-																		</select>
-																	</div>
-																</span>
-															</div>
-														</div>
-													</div>
-												</div>
-												<div class="design-tab drop-tab is-hidden">
-													<div class='basic-elem columns listing-module premium-overlay'>
-														You must first upgrade to a premium listing to edit these settings!
-													</div>
-													<div class="columns listing-module">
-														<div class="column is-3">
-															<p class="is-inline v-align-middle">Color Scheme</p>
-															<span class="icon is-small is-tooltip v-align-middle" data-balloon-length="medium" data-balloon="The three main colors of your landing page." data-balloon-pos="up">
-																<i class="fa fa-question-circle-o"></i>
-															</span>
-														</div>
-														<div class="column is-9">
-															<div class="control is-grouped">
-																<p class="control">
-																	<input data-name="primary_color" placeholder="#3CBC8D" type="text" class="premium-input padding-top-0 primary-color-input input changeable-input">
-																</p>
-																<p class="control">
-																	<input data-name="secondary_color" placeholder="#FF5722" type="text" class="premium-input padding-top-0 secondary-color-input input changeable-input">
-																</p>
-																<p class="control">
-																	<input data-name="tertiary_color" placeholder="#2196F3" type="text" class="premium-input padding-top-0 tertiary-color-input input changeable-input">
-																</p>
-															</div>
-														</div>
-													</div>
-													<div class="columns listing-module">
-														<div class="column is-3">
-															<p class="is-inline v-align-middle">Font Styling</p>
-															<span class="icon is-small is-tooltip v-align-middle" data-balloon-length="large" data-balloon="Supported fonts include standard web fonts or any Google web font. Any font after the first are backup/fallback fonts." data-balloon-pos="up">
-																<i class="fa fa-question-circle-o"></i>
-															</span>
-														</div>
-														<div class="column is-9">
-															<div class="control">
-																<div class="control">
-																	<input data-name="font_name" placeholder="Rubik" type="text" class="premium-input padding-top-0 font-name-input input changeable-input">
-																</div>
-																<div class="control">
-																	<input data-name="font_color" placeholder="#000000" type="text" class="premium-input padding-top-0 font-color-input input changeable-input">
-																</div>
-															</div>
-														</div>
-													</div>
-													<div class="columns listing-module">
-														<div class="column is-3">
-															<p class="is-inline v-align-middle">Display Recent History?</p>
-															<span class="icon is-small is-tooltip v-align-middle" data-balloon-length="large" data-balloon="Displays a table of recent rentals of this domain." data-balloon-pos="up">
-																<i class="fa fa-question-circle-o"></i>
-															</span>
-														</div>
-														<div class="column is-9">
-															<div class="control">
-																<div class="control">
-																	<input data-name="history_module" type="checkbox" class="history-module-input premium-input padding-top-0 checkbox changeable-input">
-																</div>
-															</div>
-														</div>
-													</div>
-													<div class="columns listing-module">
-														<div class="column is-3">
-															<p class="is-inline v-align-middle">Display Traffic Statistics?</p>
-															<span class="icon is-small is-tooltip v-align-middle" data-balloon-length="large" data-balloon="Displays a chart of traffic for this domain." data-balloon-pos="up">
-																<i class="fa fa-question-circle-o"></i>
-															</span>
-														</div>
-														<div class="column is-9">
-															<div class="control">
-																<div class="control">
-																	<input data-name="traffic_module" type="checkbox" class="traffic-module-input premium-input padding-top-0 checkbox changeable-input">
-																</div>
-															</div>
-														</div>
-													</div>
-													<div class="columns listing-module">
-														<div class="column is-3">
-															<p class="is-inline v-align-middle">Display Relevant Information?</p>
-															<span class="icon is-small is-tooltip v-align-middle" data-balloon-length="large" data-balloon="Displays relevant information about this domain such as categories, username, and other domains by the same owner." data-balloon-pos="up">
-																<i class="fa fa-question-circle-o"></i>
-															</span>
-														</div>
-														<div class="column is-9">
-															<div class="control">
-																<div class="control">
-																	<input data-name="info_module" type="checkbox" class="info-module-input premium-input padding-top-0 checkbox changeable-input">
-																</div>
-															</div>
-														</div>
-													</div>
-													<div class="listing-module card no-shadow">
-														<div class="card-image">
-															<figure class="image listing-img">
-																<button tabindex="0" class="background-delete-img delete"></button>
-																<img class="background_image is-listing" alt="Image not found" src="">
-															</figure>
-														</div>
-														<footer class="card-footer">
-															<form tabindex="0" class="drop-form-file" method="post" enctype="multipart/form-data">
-																<input data-name="background_image" type="file" name="background_image" accept="image/png, image/gif, image/jpeg" class="premium-input background-file changeable-input input-file">
-																<label for="" class="premium-input background-label button no-shadow is-fullwidth">
-																	<i class="fa fa-upload" aria-hidden="true"></i>
-																	<p class="file-label background-image-label">Background Image</p>
-																</label>
-															</form>
-														</footer>
-													</div>
-													<div class="card listing-img no-shadow">
-														<div class="card-image">
-															<figure class="image listing-logo">
-																<button tabindex="0" class="logo-delete-img delete"></button>
-																<img class="listing-logo-img is-listing" alt="Image not found" src="">
-															</figure>
-														</div>
-														<footer class="card-footer">
-															<form tabindex="0" class="drop-form-file" method="post" enctype="multipart/form-data">
-																<input data-name="logo" type="file" name="logo" accept="image/png, image/gif, image/jpeg" class="premium-input logo-file changeable-input input-file">
-																<label for="" class="premium-input logo-label button no-shadow is-fullwidth">
-																	<i class="fa fa-upload" aria-hidden="true"></i>
-																	<p class="file-label logo-image-label">Logo</p>
-																</label>
-															</form>
-														</footer>
-													</div>
-												</div>
-												<div class="upgrade-tab drop-tab is-hidden">
-													<div class="columns listing-module">
-														<div class="column is-3">
-															<p class="is-inline v-align-middle">Premium Status</p>
-															<span class="icon basic-elem is-small is-tooltip v-align-middle" data-balloon-length="medium" data-balloon="Upgrade your listing to a premium listing for $1 / year and unlock customization features." data-balloon-pos="up">
-																<i class="fa fa-question-circle-o"></i>
-															</span>
-														</div>
-														<div class="premium-elem column is-9">
-															<p class='margin-bottom-10 no-shadow renew-status premium-elem is-hidden'>
-																<span class="renew-status">Now loading premium status...</span>
-															</p>
-															<a tabindex="0" title="Cancel Premium" class="cancel-premium-button margin-top-10 is-hidden button is-danger is-small is-stylish no-shadow">Cancel Premium</a>
-															<a tabindex="0" title="Renew Premium" class="renew-premium-button margin-top-10 is-hidden button is-success is-small is-stylish no-shadow">Renew Premium</a>
-														</div>
-														<div class="basic-elem column is-9">
-															<p class='no-shadow renew-status'>
-																Upgrade to a premium listing for $1 / year and unlock customization features!
-															</p>
-														</div>
-													</div>
-
-													<div class="columns premium-elem">
-														<div class="column is-3">
-															<p class="is-inline v-align-middle">Current Payment Method</p>
-														</div>
-														<div class="column is-9">
-															<div class="control is-grouped">
-																<p class="existing-cc">Credit card ending in ****</p>
-															</div>
-															<a tabindex="0" title="Change Payment Method" class="change-card-button button is-primary is-small is-stylish no-shadow">Change Payment Method</a>
-														</div>
-													</div>
-													<form class="stripe-form" autocomplete="on">
-														<div class="columns">
-															<div class="column is-3">
-																<p class="is-inline v-align-middle">Card Number</p>
-															</div>
-															<div class="column is-9">
-																<div class="control is-grouped">
-																	<p class="control has-icon">
-																		<input tabindex="0" data-stripe="number" class="cc-num input stripe-input" type="tel" placeholder="•••• •••• •••• ••••" autocomplete="cc-number"/>
-																		<i class="cc-icon fa fa-credit-card"></i>
-																	</p>
-																</div>
-															</div>
-														</div>
-														<div class="columns">
-															<div class="column is-3">
-																<p class="is-inline v-align-middle">Expiration Date</p>
-															</div>
-															<div class="column is-9">
-																<div class="control is-grouped">
-																	<p class="control">
-																		<input tabindex="0" maxlength="7" data-stripe="exp" class="cc-exp input stripe-input" type="tel" placeholder="•• / ••" autocomplete="cc-exp"/>
-																	</p>
-																</div>
-															</div>
-														</div>
-														<div class="columns">
-															<div class="column is-3">
-																<p class="is-inline v-align-middle">Security Code</p>
-															</div>
-															<div class="column is-9">
-																<div class="control is-grouped">
-																	<p class="control">
-																		<input tabindex="0" data-stripe="cvc" class="cc-cvc input stripe-input" type="tel" placeholder="•••" autocomplete="off"/>
-																	</p>
-																</div>
-															</div>
-														</div>
-														<div class="columns">
-															<div class="column is-3">
-																<p class="is-inline v-align-middle">Zip Code</p>
-															</div>
-															<div class="column is-9">
-																<div class="control is-grouped">
-																	<p class="control">
-																		<input tabindex="0" maxlength="6" data-stripe="address_zip" class="cc-zip input stripe-input" type="tel" autocomplete="postal-code" placeholder="•••••"/>
-																	</p>
-																</div>
-																<a tabindex="0" title="Confirm and Pay" class="checkout-button margin-top-10 button is-primary is-small is-stylish no-shadow">Confirm & Pay</a>
-															</div>
-														</div>
-													</form>
-												</div>
-
-											</div>
-											<div class="column is-3">
-												<div class="control">
-													<a tabindex="0" title="Save Changes" class="save-changes-button margin-bottom-10 button is-disabled is-small is-stylish is-primary no-shadow">Save Changes</a>
-													<a tabindex="0" title="Cancel Changes" class="cancel-changes-button button is-hidden is-danger is-small is-stylish no-shadow">Cancel Changes</a>
-												</div>
-												<div class="listing-msg-error is-hidden is-danger notification">
-													<button class="delete"></button>
-												</div>
-												<div class="listing-msg-success is-hidden is-primary notification">
-													<button class="delete"></button>
-												</div>
-
-											</div>
-										</div>
-									</div>
-								</td>
-							</tr>
-
-							<tr class="clone-row row-disp unverified-row is-hidden" id="unverified-clone-row">
-								<td class="td-arrow">
-									<span class="v-align-bottom icon is-small">
-										<i class="no-transition fa fa-square-o" aria-hidden="true">
-										</i>
-									</span>
-								</td>
-								<td class="td-visible td-domain"></td>
-								<td class="td-buttons is-hidden-mobile">
-									<a class="is-pulled-right button no-shadow  verify-button is-danger">
-										<span class="icon is-small">
-											<i class="fa fa-check-circle-o" aria-hidden="true"></i>
-										</span>
-										<span>Verify Now</span>
-									</a>
-								</td>
-								<td class="td-verify is-hidden-mobile">
-									<p class="is-danger">
-										<span>Unverified</span>
-									</p>
-								</td>
-								<td></td>
-							</tr>
-							<tr class="clone-row row-drop is-hidden" id="unverified-clone-row-drop">
-								<td class="row-drop-td" colspan="5">
-									<div class="div-drop" style="display:none;">  <!-- need in style for drop row-->
-										<div class="padding-top-10 padding-bottom-10">
-											<div class="columns">
-												<div class="column">
-													<h3 class="is-bold">You must verify that you own this domain.</h3>
-													<p>The table below details the DNS entries that are needed to verify this domain.</p>
-													<p>Please <a class="registrar_url">log in to your domain provider</a> to create these entries.</p>
-													<p>If you require any assistance, please refer to our <a target="_blank" rel="noopener" style'target-new:="" tab;'="" class="is-accent margin-bottom-25" href="https://intercom.help/domahub/how-to-verify-your-domain-on-domahub"> step-by-step guide</a> on domain verification.</p>
-													<table class="table is-bordered margin-top-15">
-														<th>Host</th>
-														<th>Record</th>
-														<th>Required Data</th>
-														<th>Current Data</th>
-														<tbody id="dns_table_body">
-															<tr id="existing_a_record_clone" class='is-hidden'>
-																<td>@</td>
-																<td>A</td>
-																<td class='required_data'>208.68.37.82</td>
-																<td class="existing_data">208.68.37.82</td>
-															</tr>
-														</tbody>
-													</table>
-													<a class="verify-button button is-primary" title="Verify this domain">
-														<span class="icon is-small"><i class="fa fa-check-square-o"></i></span>
-														<span>Verify this domain.</span>
-													</a>
-												</div>
-											</div>
-										</div>
-									</div>
-								</td>
-							</tr>
-						</tbody>
-					</table>
-
-					<nav id="page-control" class="is-hidden pagination margin-bottom-10">
-						<a id="prev-page" class="button no-shadow">Previous page</a>
-						<a id="next-page" class="button no-shadow">Next page</a>
-						<ul id="page-list"></ul>
-					</nav>
-
-					<nav class="pagination-control">
-						<div id='domains-per-page-control' class="is-hidden control is-horizontal">
-							<div class="control-label">
-								<label class="label">Show per page:</label>
 							</div>
 							<div class="control">
-								<div class="select">
-									<select id="domains-per-page">
-										<option selected value="25">25</option>
-										<option value="50">50</option>
-										<option value="100">100</option>
-									</select>
+								<label class="label" for="long-desc">Listing Description</label>
+								<textarea id="description" class="description-input textarea changeable-input"
+								tabindex="0" data-name="description" placeholder="Write anything you want!"></textarea>
+							</div>
+							<div class="control">
+								<label class="label" for="short-desc">Short Description</label>
+								<input id="short-desc" data-name="description_hook" tabindex="0" class="description-hook-input input changeable-input"
+								 placeholder="What is this website?"></input>
+							</div>
+							<div class="control">
+								<label class="label" for="categories">Categories</label>
+								<div id="categories" class="category-control">
+									<input data-name="categories" onchange=""tabindex="0" class="is-hidden categories-input input changeable-input" value="" business="" ecard="" marketing="" niche="" personal="" promotion="">
+
+									<%# make all the categories %>
+									<% for (var x = 0; x < categories.length; x++){ %>
+										<a data-category="<%= categories[x].back %>" class="<%= categories[x].back %>-category tag category-selector is-bordered"><%= categories[x].front %></a>
+									<% } %>
 								</div>
 							</div>
+							<div class="control">
+								<label class="label" for="paths">Example Paths</label>
+								<input id="paths" data-name="paths" placeholder="test test test test" tabindex="0" class="is-hidden paths-input input changeable-input"></input>
+							</div>
 						</div>
-						<div id="go-to-page-control" class="control is-hidden">
-							<p class="control has-addons has-addons-right">
-								<input id="go-to-page-input" class="input" type="number" min="1" value="1" />
-								<a id="go-to-page-button" class="button is-primary no-shadow">
-									Go to page
-								</a>
-							</p>
+						<div class="pricing-tab drop-tab is-hidden">
+							<div class="control">
+								<label class="label" for="min-price">Min. Purchase Price</label>
+								<input id="min-price" data-name="buy_price" type="number" min="1" step="1" class="buy-price-input input changeable-input">
+							</div>
+							<div class="control">
+								<label class="label" for="price-rate">Min. Purchase Price</label>
+								<input id="price-rate" data-name="price_rate" placeholder="minimum 1" type="number" min="1" step="1" class="padding-top-0 price-rate-input input changeable-input">
+								<span class="select price-type-span">
+									<div class="drop-form">
+										<select data-name="price_type" class="price-type-input changeable-input">
+											<option value="month">Month</option>
+											<option value="week">Week</option>
+											<option value="day">Day</option>
+										</select>
+									</div>
+								</span>
+							</div>
 						</div>
-					</nav>
+						<div class="design-tab drop-tab is-hidden">
+							<div class="basic-elem premium-overlay">
+								<div class="control">
+									<label class="label" for="color-scheme">Color Scheme</label>
+									<div class="control">
+										<input data-name="primary_color" placeholder="#3cbc8d" type="text" class="premium-input padding-top-0 primary-color-input input changeable-input">
+										<input data-name="secondary_color" placeholder="#FF5722" type="text" class="premium-input padding-top-0 secondary-color-input input changeable-input">
+										<input data-name="tertiary_color" placeholder="#2196F3" type="text" class="premium-input padding-top-0 tertiary-color-input input changeable-input">
+									</div>
+								</div>
+								<div class="card no-shadow">
+                  <div class="card-image">
+                    <figure class="image listing-img">
+                      <button tabindex="0" class="background-delete-img delete"></button>
+                      <img class="background_image is-listing" alt="Image not found" src="">
+                    </figure>
+                  </div>
+                  <footer class="card-footer">
+                    <form tabindex="0" class="drop-form-file" method="post" enctype="multipart/form-data">
+                      <input data-name="background_image" type="file" name="background_image" accept="image/png, image/gif, image/jpeg" class="premium-input background-file changeable-input input-file">
+                      <label for="" class="premium-input background-label button no-shadow is-fullwidth">
+                        <i class="fa fa-upload" aria-hidden="true"></i>
+                        <p class="file-label background-image-label">Background Image</p>
+                      </label>
+                    </form>
+                  </footer>
+                </div>
+                <div class="card listing-img no-shadow">
+                  <div class="card-image">
+                    <figure class="image listing-logo">
+                      <button tabindex="0" class="logo-delete-img delete"></button>
+                      <img class="listing-logo-img is-listing" alt="Image not found" src="">
+                    </figure>
+                  </div>
+                  <footer class="card-footer">
+                    <form tabindex="0" class="drop-form-file" method="post" enctype="multipart/form-data">
+                      <input data-name="logo" type="file" name="logo" accept="image/png, image/gif, image/jpeg" class="premium-input logo-file changeable-input input-file">
+                      <label for="" class="premium-input logo-label button no-shadow is-fullwidth">
+                        <i class="fa fa-upload" aria-hidden="true"></i>
+                        <p class="file-label logo-image-label">Logo</p>
+                      </label>
+                    </form>
+                  </footer>
+                </div>
+							</div>
+						</div>
+						<footer class="box-footer">
+							<div class="control">
+								<button class="button cancel-changes-button is-stylish is-small no-shadow">Cancel</button>
+								<button class="button save-changes-button is-primary is-stylish is-small no-shadow">Save</button>
+							</div>
+						</footer>
+					</div>
 				</div>
 			</div>
 		</div>
