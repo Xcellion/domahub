@@ -35,8 +35,8 @@
     background-color: $black-secondary
   // Sizes
   &.is-small
-    height: 16px
-    width: 16px
+    height: 14px
+    width: 14px
   &.is-medium
     height: 32px
     width: 32px
@@ -83,7 +83,7 @@
     height: 1rem
     width: 1rem
     .fa
-      font-size: 14px
+      font-size: 12px
   &.is-medium
     height: 2rem
     width: 2rem
@@ -233,11 +233,6 @@
   padding-right: 10px
   vertical-align: top
   white-space: nowrap
-  &:hover,
-  &:active
-    background-color: $grey-lighter
-    .delete
-      background-color: $black-secondary
   .delete
     margin-left: 4px
     margin-right: -6px
@@ -249,9 +244,6 @@
     text-transform: uppercase
   &.is-bordered
     border: 1px solid $black-secondary
-    &:hover,
-    &:active
-      background-color: transparent
   // Colors
   @each $name, $pair in $colors
     $color: nth($pair, 1)
