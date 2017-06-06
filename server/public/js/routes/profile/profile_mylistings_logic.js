@@ -278,8 +278,8 @@ function updateTabs(tempRow_drop, listing_info){
 		$(".notification").addClass('is-hidden');
 
 		//hide other tabs
-		tempRow_drop.find(".drop-tab").addClass('is-hidden');
-		tempRow_drop.find("." + clicked_tab.data("tab-id") + "-tab").removeClass('is-hidden');
+		tempRow_drop.find(".drop-tab").fadeOut(100).addClass('is-hidden');
+		tempRow_drop.find("." + clicked_tab.data("tab-id") + "-tab").fadeIn(100).removeClass('is-hidden');
 
 		//clicked on the upgrade tab
 		if (clicked_tab.data('tab-id') == "upgrade"){
