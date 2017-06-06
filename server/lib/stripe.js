@@ -291,7 +291,7 @@ module.exports = {
 	//<editor-fold>-------------------------------STRIPE PAYMENTS (FOR RENTAL)-------------------------------
 
 	//function to pay for a rental via stripe
-	chargeMoney : function(req, res, next){
+	chargeMoneyRent : function(req, res, next){
 
 		if (req.session.new_rental_info.price != 0){
 			if (req.body.stripeToken){
@@ -345,6 +345,55 @@ module.exports = {
 		}
 		else {
 			next();
+		}
+	},
+
+	//function to pay for a listing via stripe
+	chargeMoneyBuy : function(req, res, next){
+		if (!req.body.stripeToken){
+			console.log("wt");
+
+			stripeErrorHandler(req, res, {message: "Something went wrong with your payment! Please refresh the page and try again."});
+		}
+		else {
+
+			var total_price = Math.round(req.session.listing_info.buy_price * 100);		//USD in cents
+
+			//something went wrong with the price
+			if (isNaN(total_price)){
+				error.handler(req, res, "Something went wrong with the payment! Please refresh the page and try again.", 'json');
+			}
+			else {
+				console.log("SF: Charging money via Stripe...");
+
+				var stripeOptions = {
+					amount: total_price,
+					currency: "usd",
+					source: req.body.stripeToken,
+					description: "Purchasing " + req.params.domain_name,
+					metadata: {
+						"domain_name" : req.params.domain_name,
+						"owner_email" : req.session.listing_info.owner_id,
+						"listing_id" : req.session.listing_info.id,
+						"buyer_name" : req.session.new_buying_info.offerer_name,
+						"buyer_email" : req.session.new_buying_info.offerer_email,
+						"buyer_phone" : req.session.new_buying_info.offerer_phone,
+					}
+				}
+
+				//charge the end user, transfer to the owner, take doma fees if its a basic listing
+				stripe.charges.create(stripeOptions, function(err, charge) {
+					if (err) {
+						console.log(err.message);
+						error.handler(req, res, "Invalid price!", "json");
+					}
+					else {
+						console.log("Payment processed! Received $" + (total_price/100).toFixed(2));
+						next();
+					}
+				});
+			}
+
 		}
 	},
 

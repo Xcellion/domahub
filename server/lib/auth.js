@@ -596,31 +596,31 @@ module.exports = {
 		password = req.body.new_password;
 
 		//not a valid email
-		if (!validator.isEmail(new_email)){
+		if (req.body.new_email && !validator.isEmail(new_email)){
 			error.handler(req, res, "Invalid email!", "json");
 		}
 		//username too long
-		else if (username.length > 70){
+		else if (req.body.username && username.length > 70){
 			error.handler(req, res, "Username is too long!", "json");
 		}
 		//username too short
-		else if (username.length < 3){
+		else if (req.body.username && username.length < 3){
 			error.handler(req, res, "Username is too short!", "json");
 		}
 		//username is invalid
-		else if (/\s/.test(username)){
+		else if (req.body.username && /\s/.test(username)){
 			error.handler(req, res, "Invalid name!", "json");
 		}
 		//password is too long
-		else if (password && 70 < password.length){
+		else if (req.body.new_password && password && 70 < password.length){
 			error.handler(req, res, "The new password is too long!", "json");
 		}
 		//password is too short
-		else if (password && password.length < 6){
+		else if (req.body.new_password && password && password.length < 6){
 			error.handler(req, res, "The new password is too short!", "json");
 		}
 		//check the pw
-		else {
+		else if (req.body.new_password || req.body.username || req.body.new_email){
 			req.body.email = req.body.email || req.user.email;
 			passport.authenticate('local-login', function(err, user, info){
 				if (!user && info){
@@ -631,6 +631,13 @@ module.exports = {
 				}
 			})(req, res, next);
 		}
+        //paypal
+        else if (validator.isEmail(req.body.paypal_email)){
+            next();
+        }
+        else {
+            error.handler(req, res, "Something went wrong! Please refresh the page and try again!", "json");
+        }
 	},
 
 	//function to update account settings
@@ -647,8 +654,11 @@ module.exports = {
 		if (req.body.new_password){
 			new_account_info.password = bcrypt.hashSync(req.body.new_password, null, null);
 		}
+		if (req.body.paypal_email){
+			new_account_info.paypal_email = req.body.paypal_email;
+		}
 		//update only if theres something to update
-		if (req.body.new_email || req.body.username || req.body.new_password){
+		if (req.body.paypal_email || req.body.new_email || req.body.username || req.body.new_password){
 			Account.updateAccount(new_account_info, req.user.email, function(result){
 				if (result.state=="error"){
 					if (result.errcode == "ER_DUP_ENTRY"){
@@ -659,8 +669,9 @@ module.exports = {
 					}
 				}
 				else {
-					req.user.email = req.body.email;
-					req.user.username = req.body.username;
+                    for (var x in new_account_info){
+                        req.user[x] = new_account_info[x];
+                    }
 					res.json({
 						state: "success",
 						user: req.user

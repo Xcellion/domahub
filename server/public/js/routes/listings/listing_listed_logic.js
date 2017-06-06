@@ -13,7 +13,9 @@ $(document).ready(function() {
 	//buy now price tag
 	if (listing_info.buy_price > 0){
 		$("#buy-price").text("For sale - " + moneyFormat.to(listing_info.buy_price));
+		$("#min-price").text(" (Minimum " + moneyFormat.to(listing_info.buy_price) + ")");
 		$("#buy-price-tag").removeClass('is-hidden');
+		$("#buy-button").removeClass('is-hidden');
 	}
 
 	showBuyStuff($("#buy-now-button"));
@@ -27,13 +29,17 @@ $(document).ready(function() {
 	});
 
 	$("#buy-now-form").on("submit", function(e){
+		var type_of_submit = $("button[type=submit][clicked=true]").attr("name");
 		e.preventDefault();
 
-		if (checkPhone()){
-			$("#buy-now-submit").addClass('is-loading');
+		// if (checkPhone()){
+		if (true){
+			$("button[type=submit][clicked=true]").addClass('is-loading');
 			$(".notification").addClass('is-hidden');
+
+			//send an offer / or buy it now request
 			$.ajax({
-				url: "/listing/" + listing_info.domain_name + "/contact",
+				url: "/listing/" + listing_info.domain_name + "/contact/" + type_of_submit,
 				method: "POST",
 				data: {
 					contact_email: $("#contact_email").val(),
@@ -46,23 +52,33 @@ $(document).ready(function() {
 				$("#buy-now-submit").removeClass('is-loading');
 
 				if (data.state == "success"){
-					$(".contact-input").addClass('is-disabled');
-					$("#contact-success").removeClass('is-hidden');
-					$("#buy-now-submit").addClass('is-hidden');
-					$("#buy-now-form").off();
+					if (type_of_submit == "offer"){
+						$(".contact-input").addClass('is-disabled');
+						$("#contact-success").removeClass('is-hidden');
+						$("#buy-now-submit").addClass('is-hidden');
+						$("#buy-now-form").off();
+					}
+					else {
+						window.location.assign(window.location.origin + "/listing/" + listing_info.domain_name + "/checkout/buy");
+					}
 				}
 				else {
 					$("#contact-error").removeClass('is-hidden');
 					$("#contact-error-message").text(data.message);
 				}
 			});
+
 		}
 
 	});
 
+	//set the clicked attribute so we know which type of submit
+	$("form button[type=submit]").on("click", function(e){
+		$("form button[type=submit][clicked=true]").attr("clicked", false);
+		$(this).attr('clicked', true);
+	});
+
 	//</editor-fold>
-
-
 
 	if (listing_info.price_rate > 0){
 
@@ -311,7 +327,7 @@ function submitTimes(checkout_button){
 		//redirect to checkout page
 		$.ajax({
 			type: "POST",
-			url: "/listing/" + listing_info.domain_name + "/checkout",
+			url: "/listing/" + listing_info.domain_name + "/checkoutrent",
 			data: {
 				starttime: newEvent.starttime,
 				endtime: newEvent.endtime,
@@ -320,7 +336,7 @@ function submitTimes(checkout_button){
 		}).done(function(data){
 			checkout_button.removeClass('is-loading');
 			if (data.state == "success"){
-				window.location.assign(window.location.origin + "/listing/" + listing_info.domain_name + "/checkout");
+				window.location.assign(window.location.origin + "/listing/" + listing_info.domain_name + "/checkout/rent");
 			}
 			else if (data.state == "error"){
 				$("#calendar-regular-message").addClass('is-hidden');

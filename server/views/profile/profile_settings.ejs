@@ -32,6 +32,12 @@
 							<li><a id="payout-personal-link" href="#payout-personal" class="hide-stripe is-hidden setting-link">Personal Information</a></li>
 							<li><a id="payout-bank-link" href="#payout-bank" class="hide-stripe is-hidden setting-link">Bank Information</a></li>
 						</ul>
+						<p class="menu-label">
+							Integrations
+						</p>
+						<ul class="menu-list">
+							<li><a id="paypal-link" href="#paypal" class="setting-link">PayPal Settings</a></li>
+						</ul>
 						<% if (user.stripe_transfers) { %>
 							<p class="menu-label">
 								Transactions
@@ -45,7 +51,7 @@
 				</div>
 
 				<div class="column is-9">
-					<div id="basic" class="card is-fullwidth is-hidden">
+					<div id="basic" class="is-hidden card is-fullwidth">
 						<header class="card-header">
 							<p class="card-header-title">
 								Basic Information &nbsp<span id="basic-message" class="setting-message"></span>
@@ -56,7 +62,7 @@
 							</button>
 						</header>
 						<div class="card-content">
-							<form id="account-settings" class="form account-form">
+							<form id="account-form" class="form account-form">
 								<div class="control">
 									<div class="label-icon">
 										<label class="label" for"email-input">Email Address</label>
@@ -68,21 +74,21 @@
 										<small class="tip">We don't share your email with anyone.</small>
 								</div>
 								<div class="control">
-										<label class="label" for="username-input">Username</label>
-										<input id="username-input" class="is-disabled input account-input" type="text" value="<%= user.username %>" spellcheck="false"/>
-										<small class="tip">Other users will be able to see your username.</small>
+									<label class="label" for="username-input">Username</label>
+									<input id="username-input" class="is-disabled input account-input" type="text" value="<%= user.username %>" spellcheck="false"/>
+									<small class="tip">Other users will be able to see your username.</small>
 								</div>
 								<div class="control">
-										<label class="label" for="old-pw-input">Current Password</label>
-										<input id="old-pw-input" class="is-disabled input account-input" name="password" type="password" autocomplete="new-password" value="">
+									<label class="label" for="old-pw-input">Current Password</label>
+									<input id="old-pw-input" class="new-account-input is-disabled input account-input" name="password" type="password" autocomplete="new-password" value="">
 								</div>
 								<div class="control hidden-edit is-hidden">
-										<label id="pw-label" class="label" for="new-pw-input">New Password</label>
-										<input id="new-pw-input" class="is-disabled input account-input" type="password"/>
+									<label id="pw-label" class="label" for="new-pw-input">New Password</label>
+									<input id="new-pw-input" class="new-account-input is-disabled input account-input" type="password"/>
 								</div>
 								<div class="control hidden-edit is-hidden">
-										<label class="label" for="verify-pw-input">Confirm Password</label>
-										<input id="verify-pw-input" class="is-disabled input account-input" type="password">
+									<label class="label" for="verify-pw-input">Confirm Password</label>
+									<input id="verify-pw-input" class="new-account-input is-disabled input account-input" type="password">
 								</div>
 								<div class="control hidden-edit is-hidden">
 									<button id="change-account-submit" class="button is-disabled is-primary no-shadow is-stylish is-small">Save Changes</button>
@@ -92,7 +98,7 @@
 						</div>
 
 					</div>
-					<div id="verifications" class="card is-fullwidth is-hidden" >
+					<div id="verifications" class="is-hidden card is-fullwidth" >
 						<header class="card-header">
 							<p class="card-header-title">
 								Account Verifications
@@ -127,7 +133,7 @@
 							</div>
 						</div>
 					</div>
-					<div id="payout-address" class="card is-fullwidth is-hidden">
+					<div id="payout-address" class="is-hidden card is-fullwidth">
 						<header class="card-header">
 							<p class="card-header-title">
 								Payout Address &nbsp<span id="payout-address-message" class="setting-message"></span>
@@ -227,7 +233,7 @@
 							</form>
 						</div>
 					</div>
-					<div id="payout-personal" class="is-hidden card is-fullwidth is-hidden">
+					<div id="payout-personal" class="is-hidden card is-fullwidth">
 						<header class="card-header">
 							<p class="card-header-title">
 								Personal Information &nbsp<span id="payout-personal-message" class="setting-message"></span>
@@ -417,7 +423,7 @@
 							</form>
 						</div>
 					</div>
-					<div id="payout-bank" class="is-hidden card is-fullwidth is-hidden">
+					<div id="payout-bank" class="is-hidden card is-fullwidth">
 						<header class="card-header">
 							<p class="card-header-title">
 								Bank Information &nbsp<span id="payout-bank-message" class="setting-message"></span>
@@ -545,6 +551,35 @@
 						</div>
 					</div>
 
+					<div id="paypal" class="is-hidden card is-fullwidth">
+						<header class="card-header">
+							<p class="card-header-title">
+								PayPal Settings &nbsp<span id="paypal-message" class="setting-message"></span>
+							</p>
+							<button class='edit-section-button card-header-icon button is-small no-shadow'>
+								<span class="icon is-small is-icon"><i class="fa fa-cog"></i></span>
+								<span>Edit</span>
+							</button>
+						</header>
+						<div class="card-content">
+							<form id="paypal-form" class="account-form form">
+								<div id="paypal-wrapper" class="control">
+									<div class="label-icon">
+										<label id="paypal-text" class="label" for="paypal_email">PayPal Account Email Address</label>
+										<span data-balloon="Private" data-balloon-pos="up" class="icon is-tooltip is-small">
+											<i class="fa fa-lock"></i>
+										</span>
+									</div>
+									<input id="paypal_email-input" class="input is-disabled account-input" type="text" value="<%= user.paypal_email %>" name="paypal_email" />
+									<small class="tip">Please enter the email address of your PayPal account.</small>
+								</div>
+								<div class="control hidden-edit is-hidden">
+									<button tabindex="0" id="paypal-submit" class="button is-stylish is-small is-primary no-shadow is-disabled">Save Changes</button>
+									<button tabindex="0" id="paypal-cancel" class="button is-stylish is-small is-danger no-shadow is-hidden">Cancel Changes</button>
+								</div>
+							</form>
+						</div>
+					</div>
 					<% if (user.stripe_transfers) { %>
 						<%- include("profile_transactions", {user: user}); %>
 					<% } %>

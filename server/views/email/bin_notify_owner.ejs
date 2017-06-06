@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script async src="https://use.fontawesome.com/b36602cf54.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://domahub.com/css/min/master.min.css" />
+</head>
+
+<body style="font-family: Verdana;">
+  <section class="section is-light">
+      <div class="container">
+        <div class="box">
+            <div class="content">
+                <a tabindex="0" title="DomaHub" href="https://domahub.com">
+                    <div class="flat-logo"></div>
+                </a>
+            </div>
+            <div class="content">
+                <h3>
+                   Hello <%= owner_name %>!
+                </h3>
+                <p>
+                   Congratulations! Somebody has just purchased <strong class="is-700"><%= domain_name %></strong> for <%= buy_price %>! Please see below for details on the purchase:
+                </p>
+                <ul class="has-disc">
+                    <li>Name: <%= offerer_name %></li>
+                    <li>Email: <%= offerer_email %></li>
+                    <li>Phone: <%= offerer_phone %></li>
+                    <li>
+                      Message: <p style="word-break: break-all;">
+                        <%= message %>
+                      </p>
+                    </li>
+                </ul>
+
+                <p>
+                    You have <strong>one week</strong> from today to transfer the domain ownership to <%= offerer_name %>. Please email the buyer (<%= offerer_email %>) to start the ownership transfer process.
+                </p>
+                <p>
+                    NOTE: Failure to do so will result in a refund for the buyer and your account will be flagged for review. You cannot withdraw the money for this domain until the buyer has verified that you have transferred the domain. If you need any assistance in transferring, please do not hesitate to <a class='is-accent' href="https://domahub.com/contact">contact us</a>.
+                </p>
+
+                <p>
+                    Thank you!
+                </p>
+                <p class="has-text-centered">
+                    Sent by DomaHub
+                </p>
+            </div>
+        </div>
+      </div>
+  </section>
+</body>
+</html>
