@@ -250,7 +250,7 @@ module.exports = {
         if (req.session.new_rental_info && req.session.new_rental_info.domain_name == req.params.domain_name){
             console.log("F: Rendering listing checkout page...");
 
-            res.render("listings/listing_checkout.ejs", {
+            res.render("listings/listing_checkout_rent.ejs", {
                 user: req.user,
                 message: Auth.messageReset(req),
                 listing_info: req.session.listing_info,
@@ -787,7 +787,7 @@ module.exports = {
     },
 
     //rendered checkout page, track it!!!
-    addToCheckoutHistory : function(req, res, next){
+    addToRentalCheckoutHistory : function(req, res, next){
         //add to search only if not dev
         if (node_env != "dev"){
             var history_info = {
@@ -1038,7 +1038,7 @@ module.exports = {
     },
 
     //record the contact message (with verification code)
-    createContactRecord : function(req, res, next){
+    createOfferContactRecord : function(req, res, next){
         console.log("F: Creating a new contact offer record...");
 
         var contact_details = {
@@ -1047,13 +1047,14 @@ module.exports = {
             verification_code : randomstring.generate(10),
             name : req.body.contact_name,
             email : req.body.contact_email,
-            phone : req.body.contact_phone,
+            phone : phoneUtil.format(phoneUtil.parse(req.body.contact_phone), PNF.INTERNATIONAL),
             offer : req.body.contact_offer,
-            message : req.body.contact_message
+            message : req.body.contact_message,
+            bin : false
         }
 
         //recursive function to make sure verification code is unique
-        newListingContactHistory(req, res, next, contact_details)
+        newListingContactHistory(req, res, next, contact_details);
     },
 
     //send the verification email
@@ -1079,9 +1080,14 @@ module.exports = {
         //email options
         var emailDetails = {
             to: req.body.contact_email,
-            from: '"DomaHub" <general@domahub.com>',
+            from: '"DomaHub Domains" <general@domahub.com>',
             subject: "Hi, " + req.body.contact_name + '! Please verify your offer for ' + req.session.listing_info.domain_name,
         };
+
+        //set premium options
+        if (req.session.listing_info.premium){
+            emailDetails.from = '"' + req.session.listing_info.domain_name + '" <' + req.session.listing_info.owner_email + '>';
+        }
 
         //use helper function to email someone
         emailSomeone(req, res, email_contents_path, EJSVariables, emailDetails, "Something went wrong! Please refresh the page and try again.");
@@ -1146,7 +1152,7 @@ module.exports = {
                     }
                     var emailDetails = {
                         to: owner_result.email,
-                        from: '"DomaHub" <general@domahub.com>',
+                        from: '"DomaHub Domains" <general@domahub.com>',
                         subject: 'You have a new ' + offer_formatted + ' offer for ' + req.params.domain_name + "!"
                     };
 
@@ -1162,7 +1168,7 @@ module.exports = {
     notifyOfferer : function(req, res, next){
         console.log("F: Sending email to offerer to notify of accept/reject status...");
         getListingOffererContactInfo(req.params.domain_name, req.params.verification_code, function(offerer_result){
-            var email_contents_path = (node_env == "dev") ? path.resolve(process.cwd(), 'server', 'views', 'email', 'offer_notify_offerer.ejs') : path.resolve(process.cwd(), 'views', 'email', 'offer_notify_offerer.ejs');
+            var email_contents_path = (node_env == "dev") ? path.resolve(process.cwd(), 'server', 'views', 'email', 'offer_notify_buyer.ejs') : path.resolve(process.cwd(), 'views', 'email', 'offer_notify_buyer.ejs');
 
             var accepted = req.path.indexOf("/accept") != -1;
             var accepted_text = (accepted) ? "accepted" : "rejected";

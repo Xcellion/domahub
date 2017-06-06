@@ -369,25 +369,25 @@ module.exports = {
 			//wait for all promises to finish
 			Q.allSettled(promises)
 			 .then(function(results) {
-			 	req.new_listing_info = {};
+			 	req.session.new_listing_info = {};
 				//figure out which promises failed / passed
 				for (var y = 0; y < results.length; y++){
 					if (results[y].state == "fulfilled"){
-						req.new_listing_info[results[y].value.image_type] = results[y].value.imgur_link;
+						req.session.new_listing_info[results[y].value.image_type] = results[y].value.imgur_link;
 					}
 				}
 				next();
 			});
 		}
 		else {
-			req.new_listing_info = {};
+			req.session.new_listing_info = {};
 
 			//removing existing image(s) intentionally
 			if (req.body.background_image == ""){
-				req.new_listing_info.background_image = null;
+				req.session.new_listing_info.background_image = null;
 			}
 			if (req.body.logo == ""){
-				req.new_listing_info.logo = null;
+				req.session.new_listing_info.logo = null;
 			}
 			next();
 		}
@@ -439,12 +439,23 @@ module.exports = {
 		});
 	},
 
+	//function to check if listing has been purchased
+	checkListingPurchased : function(req, res, next){
+		Listing.checkListingPurchased(req.params.domain_name, function(result){
+			if (result.state != "success" || result.info.length > 0){
+				error.handler(req, res, "This listing has already been purchased. Please transfer the ownership!", "json");
+			}
+			else {
+				next();
+			}
+		});
+	},
+
 	//function to check the posted status change of a listing
 	checkListingStatus : function(req, res, next){
 		console.log("F: Checking posted listing status...");
 
 		var status = parseFloat(req.body.status);
-		var domain_name = req.params.domain_name;
 
 		//if status exists and is not 1 or 0
 		if (req.body.status && status != 1 && status != 0){
@@ -458,7 +469,7 @@ module.exports = {
 			}
 			else {
 				//check to see if its currently rented
-				Listing.checkCurrentlyRented(domain_name, function(result){
+				Listing.checkCurrentlyRented(req.params.domain_name, function(result){
 					if (result.state != "success" || result.info.length > 0){
 						error.handler(req, res, "This listing is currently being rented!", "json");
 					}
@@ -573,43 +584,24 @@ module.exports = {
 		else {
 			var listing_info = getUserListingObj(req.user.listings, req.params.domain_name);
 
-			if (!req.new_listing_info) {
-				req.new_listing_info = {};
+			if (!req.session.new_listing_info) {
+				req.session.new_listing_info = {};
 			}
-			req.new_listing_info.status = status;
-			req.new_listing_info.description = description;
-			req.new_listing_info.description_hook = description_hook;
-			req.new_listing_info.price_type = price_type;
-			req.new_listing_info.price_rate = price_rate;
-			req.new_listing_info.buy_price = (buy_price == "" || buy_price == 0) ? "" : buy_price;
-			req.new_listing_info.categories = (categories_clean == "") ? null : categories_clean;
-			req.new_listing_info.paths = (paths_clean == "") ? null : paths_clean;
+			req.session.new_listing_info.status = status;
+			req.session.new_listing_info.description = description;
+			req.session.new_listing_info.description_hook = description_hook;
+			req.session.new_listing_info.price_type = price_type;
+			req.session.new_listing_info.price_rate = price_rate;
+			req.session.new_listing_info.buy_price = (buy_price == "" || buy_price == 0) ? "" : buy_price;
+			req.session.new_listing_info.categories = (categories_clean == "") ? null : categories_clean;
+			req.session.new_listing_info.paths = (paths_clean == "") ? null : paths_clean;
 
 			//delete anything that wasnt posted (except if its "", in which case it was intentional deletion)
-			for (var x in req.new_listing_info){
+			for (var x in req.session.new_listing_info){
 				if (!req.body[x] && req.body[x] != "" && x != "background_image" && x != "logo"){
-					delete req.new_listing_info[x];
+					delete req.session.new_listing_info[x];
 				}
 			}
-			next();
-		}
-	},
-
-	//function to make sure that if they're changing the pricing, that they can change it
-	checkListingPrice : function(req, res, next){
-		if (req.body.price_rate){
-			console.log("F: Checking if listing price can be edited...");
-			var listing_info = getUserListingObj(req.user.listings, req.params.domain_name);
-
-			//if pricing is not default
-			if ((req.body.price_rate != "10" && req.body.price_type == "week") || (req.body.price_rate != "25" && req.body.price_type == "month")){
-				error.handler(req, res, "You cannot change the pricing for this listing!", "json");
-			}
-			else {
-				next();
-			}
-		}
-		else {
 			next();
 		}
 	},
@@ -622,14 +614,14 @@ module.exports = {
 			req.listing_info = getUserListingObj(req.user.listings, req.params.domain_name);
 		}
 
-		for (var x in req.new_listing_info){
-			if (req.new_listing_info[x] == req.listing_info[x]){
-				delete req.new_listing_info[x];
+		for (var x in req.session.new_listing_info){
+			if (req.session.new_listing_info[x] == req.listing_info[x]){
+				delete req.session.new_listing_info[x];
 			}
 		}
 
 		//if nothing is being changed
-		if (Object.keys(req.new_listing_info).length === 0 && req.new_listing_info.constructor === Object){
+		if (Object.keys(req.session.new_listing_info).length === 0 && req.session.new_listing_info.constructor === Object){
 			error.handler(req, res, "nothing-changed", "json");
 		}
 		//only go next if the object has anything
@@ -782,19 +774,19 @@ module.exports = {
 
 	//function to update a listing
 	updateListing: function(req, res, next){
-		if (req.new_listing_info){
+		if (req.session.new_listing_info){
 			console.log("F: Updating domain details...")
 			var domain_name = req.params.domain_name;
-			Listing.updateListing(domain_name, req.new_listing_info, function(result){
+			Listing.updateListing(domain_name, req.session.new_listing_info, function(result){
 				if (result.state=="error"){error.handler(req, res, result.info, "json")}
 				else {
-					var background_image = req.new_listing_info.background_image || false;
-					var logo = req.new_listing_info.logo || false;
+					var background_image = req.session.new_listing_info.background_image || false;
+					var logo = req.session.new_listing_info.logo || false;
 					updateUserListingsObject(req, res, domain_name);
 					res.json({
 						state: "success",
-						user: req.user,
-						listings: req.user.listings,
+						user: (req.user) ? req.user : false,
+						listings: (req.user) ? req.user.listings : false,
 						new_background_image : background_image,
 						new_logo : logo
 					});
@@ -804,7 +796,7 @@ module.exports = {
 		else {
 			res.json({
 				state: "success",
-				listings: req.user.listings
+				listings: (req.user) ? req.user.listings : false
 			});
 		}
 	},
@@ -863,14 +855,14 @@ module.exports = {
 			var domain_ip = address;
 			dns.lookup("domahub.com", function (err, address, family) {
 				if ((domain_ip == address || domain_ip[0] == address) && domain_ip.length == 1){
-					req.new_listing_info = {
+					req.session.new_listing_info = {
 						domain_name: domain_name,
 						verified: 1
 					}
 
 					//if bank account is accepting charges, then set it to live
 					if (req.user.stripe_info && req.user.stripe_info.charges_enabled){
-						req.new_listing_info.status = 1;
+						req.session.new_listing_info.status = 1;
 					}
 					next();
 				}
@@ -1034,21 +1026,25 @@ function parseCSVFile(sourceFilePath, errorHandler, done){
 
 //helper function to update req.user.listings after updating a listing
 function updateUserListingsObject(req, res, domain_name){
-	for (var x = 0; x < req.user.listings.length; x++){
-		if (req.user.listings[x].domain_name.toLowerCase() == domain_name.toLowerCase()){
-			req.user.listings[x] = Object.assign({}, req.user.listings[x], req.new_listing_info);
-			delete req.new_listing_info;
-			break;
+	if (req.user){
+		for (var x = 0; x < req.user.listings.length; x++){
+			if (req.user.listings[x].domain_name.toLowerCase() == domain_name.toLowerCase()){
+				req.user.listings[x] = Object.assign({}, req.user.listings[x], req.session.new_listing_info);
+				delete req.session.new_listing_info;
+				break;
+			}
 		}
 	}
 }
 
 //helper function to update req.user.listings after deleting a listing
 function deleteUserListingsObject(req, res, domain_name){
-	for (var x = 0; x < req.user.listings.length; x++){
-		if (req.user.listings[x].domain_name.toLowerCase() == domain_name.toLowerCase()){
-			req.user.listings.splice(x, 1);
-			break;
+	if (req.user){
+		for (var x = 0; x < req.user.listings.length; x++){
+			if (req.user.listings[x].domain_name.toLowerCase() == domain_name.toLowerCase()){
+				req.user.listings.splice(x, 1);
+				break;
+			}
 		}
 	}
 }

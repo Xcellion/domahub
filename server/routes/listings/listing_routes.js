@@ -3,6 +3,7 @@ var	data_model = require('../../models/data_model.js');
 
 var search_functions = require("../listings/listings_search_functions.js");
 var renter_functions = require("../listings/listings_renter_functions.js");
+var buyer_functions = require("../listings/listings_buyer_functions.js");
 var owner_functions = require("../listings/listings_owner_functions.js");
 var profile_functions = require("../profiles/profile_functions.js");
 var general_functions = require("../general_functions.js");
@@ -144,11 +145,11 @@ module.exports = function(app, db, auth, error, stripe){
 		profile_functions.getAccountListings,
 		owner_functions.checkListingOwnerPost,
 		owner_functions.checkListingVerified,
+		owner_functions.checkListingPurchased,
 		stripe.checkStripeSubscription,
 		owner_functions.checkImageUploadSize,
 		owner_functions.checkListingImage,
 		owner_functions.checkListingStatus,
-		//owner_functions.checkListingPrice,
 		owner_functions.checkListingPremiumDetails,
 		owner_functions.checkListingDetails,
 		owner_functions.checkListingExisting,
@@ -193,25 +194,7 @@ module.exports = function(app, db, auth, error, stripe){
 
 	//</editor-fold>
 
-	//<editor-fold>-------------------------------RENTAL RELATED-------------------------------
-
-	//domahub easter egg page
-	// app.get(['/listing/domahub.com', '/listing/w3bbi.com'], function(req, res){
-	// 	res.render("listings/listing_w3bbi.ejs", {
-	// 		user: req.user,
-	// 		message: Auth.messageReset(req)
-	// 	});
-	// });
-
-	//render specific listing page
-	app.get('/listing/:domain_name', [
-		checkDomainValid,
-		renter_functions.addToSearchHistory,
-		renter_functions.getListingInfo,
-		renter_functions.checkStillVerified,
-		renter_functions.getListingFreeTimes,
-		renter_functions.renderListing
-	]);
+	//<editor-fold>-------------------------------BUYING RELATED-------------------------------
 
 	//verify a offer history item email
 	app.get("/listing/:domain_name/contact/:verification_code", [
@@ -248,13 +231,81 @@ module.exports = function(app, db, auth, error, stripe){
 	]);
 
 	//create a new offer history item
-	app.post("/listing/:domain_name/contact", [
+	app.post("/listing/:domain_name/contact/offer", [
 		urlencodedParser,
 		checkDomainValid,
 		renter_functions.checkContactInfo,
 		stripe.checkStripeSubscription,
-		renter_functions.createContactRecord,
+		renter_functions.createOfferContactRecord,
 		renter_functions.sendContactVerificationEmail
+	]);
+
+	//render verify transfer ownership page
+	app.get("/listing/:domain_name/bin/:verification_code", [
+		checkDomainValid,
+		checkDomainListed,
+		buyer_functions.checkListingPurchaseVerificationCode,
+		buyer_functions.renderVerificationPage
+	]);
+
+	//verify transfer ownership
+	app.post("/listing/:domain_name/bin/:verification_code", [
+		checkDomainValid,
+		checkDomainListed,
+		buyer_functions.checkListingPurchaseVerificationCode,
+		buyer_functions.verifyTransferOwnership
+	]);
+
+	//new buy it now
+	app.post("/listing/:domain_name/contact/buy", [
+		urlencodedParser,
+		checkDomainValid,
+		renter_functions.checkContactInfo,
+		stripe.checkStripeSubscription,
+		buyer_functions.redirectToCheckout
+	]);
+
+	//render BIN checkout page
+	app.get('/listing/:domain_name/checkout/buy', [
+		buyer_functions.renderCheckout
+	]);
+
+	//buy a listing
+	app.post('/listing/:domain_name/buy', [
+		urlencodedParser,
+		checkDomainValid,
+		checkDomainListed,
+		renter_functions.getListingInfo,
+		stripe.checkStripeSubscription,
+		stripe.chargeMoneyBuy,
+		buyer_functions.createBuyContactRecord,
+		buyer_functions.alertOwnerBIN,
+		buyer_functions.alertBuyerNextSteps,
+		buyer_functions.deleteBINInfo,
+		buyer_functions.disableListing,
+		owner_functions.updateListing
+	]);
+
+	//</editor-fold>
+
+	//<editor-fold>-------------------------------RENTAL RELATED-------------------------------
+
+	//domahub easter egg page
+	// app.get(['/listing/domahub.com', '/listing/w3bbi.com'], function(req, res){
+	// 	res.render("listings/listing_w3bbi.ejs", {
+	// 		user: req.user,
+	// 		message: Auth.messageReset(req)
+	// 	});
+	// });
+
+	//render specific listing page
+	app.get('/listing/:domain_name', [
+		checkDomainValid,
+		renter_functions.addToSearchHistory,
+		renter_functions.getListingInfo,
+		renter_functions.checkStillVerified,
+		renter_functions.getListingFreeTimes,
+		renter_functions.renderListing
 	]);
 
 	//get a domain's ticker information
@@ -281,7 +332,7 @@ module.exports = function(app, db, auth, error, stripe){
 	]);
 
 	//render rental checkout page
-	app.get('/listing/:domain_name/checkout', [
+	app.get('/listing/:domain_name/checkout/rent', [
 		renter_functions.renderCheckout
 	]);
 
@@ -293,7 +344,7 @@ module.exports = function(app, db, auth, error, stripe){
 	]);
 
 	//redirect to the checkout page after validating times / path
-	app.post('/listing/:domain_name/checkout', [
+	app.post('/listing/:domain_name/checkoutrent', [
 		urlencodedParser,
 		checkDomainValid,
 		checkDomainListed,
@@ -302,7 +353,7 @@ module.exports = function(app, db, auth, error, stripe){
 		renter_functions.createNewRentalObject,
 		renter_functions.checkRentalTimes,
 		renter_functions.checkRentalPrice,
-		renter_functions.addToCheckoutHistory,
+		renter_functions.addToRentalCheckoutHistory,
 		renter_functions.redirectToCheckout
 	]);
 
@@ -318,7 +369,7 @@ module.exports = function(app, db, auth, error, stripe){
 		renter_functions.checkRentalPrice,
 		renter_functions.createRental,
 		renter_functions.getOwnerStripe,
-		stripe.chargeMoney,
+		stripe.chargeMoneyRent,
 		renter_functions.emailToRegister,
 		renter_functions.toggleActivateRental,
 		renter_functions.sendRentalSuccess

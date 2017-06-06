@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= domain_name %> - Domain Ownership Transfer Verification</title>
+    <%- include("../templates/head_links.ejs"); %>
+    <script type="text/javascript">
+        var domain_name = <% if(typeof domain_name != "undefined"){ %><%-JSON.stringify(domain_name)%><% }else{ %>""<% } %>;
+        var verification_code = <% if(typeof verification_code != "undefined"){ %><%-JSON.stringify(verification_code)%><% }else{ %>""<% } %>;
+    </script>
+  </head>
+
+  <body>
+
+      <p>
+          Please verify that you have ownership of <%= domain_name %>
+      </p>
+      <p>
+          <a id="main_button" class='button is-primary'>I own <%= domain_name %>.</a>
+      </p>
+
+      <div id="error-message" class="is-hidden notification is-danger">
+          <button class="delete"></button>
+          <span class="icon is-small">
+              <i class="fa fa-exclamation-circle" aria-hidden="true"></i>
+          </span>
+          Something went wrong with the verifcation! Please refresh the page and try again.
+      </div>
+
+      <div id="success-message" class="is-hidden notification is-success">
+          <button class="delete"></button>
+          <span class="icon is-small">
+              <i class="fa fa-check" aria-hidden="true"></i>
+          </span>
+          <span id="success-message-text"></span>
+      </div>
+
+      <%- include("../templates/js_scripts"); %>
+      <script src="/js/routes/listings/transfer_verify_logic.js" type="text/javascript"></script>
+
+  </body>
+
+</html>

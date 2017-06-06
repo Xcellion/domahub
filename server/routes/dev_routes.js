@@ -29,26 +29,13 @@ module.exports = function(app, db, auth, error){
     app.get("/proxyimage", proxyimage);
     app.get("/proxysite", proxysite);
     app.get("/analysis/:domain_name", analysis);
-    app.get("/striperoo", function(req, res, next){
-        //check it against stripe
-        stripe.subscriptions.retrieve("sub_Aislajkzfjof1X", function(err, subscription) {
-            if (err){
-                console.log(subscription);
-            }
-            else {
-                console.log(subscription);
-            }
-            res.sendStatus(200);
-        });
-    });
-
-	app.post("/fuck",[
-		urlencodedParser,
-		function(req, res, next){
-			console.log(req.body);
-		}]
-	);
+    app.get("/paypal", paypal);
 }
+
+function paypal(req, res, next){
+    res.render("paypaltest.ejs");
+}
+
 
 //testing quantcast redirect
 function emailViews(req, res, next){

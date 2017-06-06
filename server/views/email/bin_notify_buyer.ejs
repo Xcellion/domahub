@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script async src="https://use.fontawesome.com/b36602cf54.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://domahub.com/css/min/master.min.css" />
+</head>
+
+<body style="font-family: Verdana;">
+  <section class="section is-light">
+      <div class="container">
+        <div class="box">
+            <div class="content">
+                <a tabindex="0" title="DomaHub" href="https://domahub.com">
+                    <div class="flat-logo"></div>
+                </a>
+            </div>
+            <div class="content">
+                <h3>
+                   Hello <%= offerer_name %>!
+                </h3>
+                <p>
+                   Congratulations on your purchase of <strong class="is-700"><%= domain_name %></strong> for <%= buy_price %>! Please see below for details on the purchase:
+                </p>
+                <ul class="has-disc">
+                    <li>Name: <%= offerer_name %></li>
+                    <li>Email: <%= offerer_email %></li>
+                    <li>Phone: <%= offerer_phone %></li>
+                    <li>
+                      Message: <p style="word-break: break-all;">
+                        <%= message %>
+                      </p>
+                    </li>
+                </ul>
+
+                <p>
+                    The owner of <strong class="is-700"><%= domain_name %></strong> (<%= owner_email %>) will be reaching out shortly with instructions on how to take over ownership of the domain.
+                </p>
+
+                <p>
+                    Once the domain has been transferred to your name, please click on the link below to verify that the purchase has been completed.
+                </p>
+
+                <a href="https://domahub.com/listing/<%= domain_name %>/bin/<%= verification_code %>">
+                    https://domahub.com/listing/<%= domain_name %>/bin/<%= verification_code %>
+                </a>
+
+                <p>
+                    NOTE: Please give the owner a few days to get in contact with you. If after a few days the owner still has not contacted you, please do not hesitate to <a class='is-accent' href="https://domahub.com/contact">contact us</a> for assistance.
+                </p>
+
+                <p>
+                    Thank you!
+                </p>
+                <p class="has-text-centered">
+                    Sent by DomaHub
+                </p>
+            </div>
+        </div>
+      </div>
+  </section>
+</body>
+</html>

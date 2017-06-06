@@ -86,12 +86,29 @@ account_model.prototype.getAccountByToken = function(token, callback){
 account_model.prototype.getAccountListings = function(account_id, callback){
 	console.log("DB: Attempting to get all listings belonging to account " + account_id + "...");
 	query = "SELECT \
-				listings.*, \
+				listings.id,\
+				listings.date_created,\
+				listings.domain_name,\
+				listings.owner_id,\
+				listings.status,\
+				listings.verified,\
+				listings.stripe_subscription_id,\
+				listings.price_type,\
+				listings.price_rate,\
+				listings.buy_price,\
+				listings.description,\
+				listings.description_hook,\
+				listings.categories,\
+				listings.paths,\
+				listings.background_image,\
+				listings.logo,\
 				IF(listings.primary_color IS NULL, '#3CBC8D', listings.primary_color) as primary_color, \
 				IF(listings.secondary_color IS NULL, '#FF5722', listings.secondary_color) as secondary_color, \
 				IF(listings.tertiary_color IS NULL, '#2196F3', listings.tertiary_color) as tertiary_color, \
 				IF(listings.font_name IS NULL, 'Rubik,Helvetica,sans-serif', listings.font_color) as font_name, \
 				IF(listings.font_color IS NULL, '#000000', listings.font_color) as font_color, \
+				listings.font_name,\
+				listings.font_color,\
 				rented_table.rented \
 			FROM listings \
 			LEFT JOIN \

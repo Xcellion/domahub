@@ -82,6 +82,7 @@ $(document).ready(function () {
     var overlappedTime = anyFreeDayOverlap(starttime, endtime);
     var total_price = calculatePrice(starttime, endtime, overlappedTime, listing_info);
     $("#total-duration").text(total_duration + ' ' + listing_info.price_type + duration_plural);
+    $("#sub-total-price").text(moneyFormat.to(total_price));
 
     //discounted times
     if (overlappedTime){
@@ -260,7 +261,6 @@ $(document).ready(function () {
     //--------------------------------------------------------------------------------------------------------- BEHAVIOR TRACKER
 
     $(".checkout-track").on("click", function(){
-        console.log("CLICKED")
         trackCheckoutBehavior($(this).attr("id"));
     });
 
@@ -276,7 +276,7 @@ function trackCheckoutBehavior(id){
             elem_id : id
         }
     }).done(function(data){
-        console.log(data);
+        // console.log(data);
     });
 }
 
