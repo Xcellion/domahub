@@ -100,6 +100,11 @@ listing_model.prototype.getVerifiedListing = function(domain_name, callback){
 	console.log("DB: Attempting to get active listing information for " + domain_name + "...");
 	query = "SELECT \
 				listings.*,\
+				IF(listings.primary_color IS NULL, '#3CBC8D', listings.primary_color) as primary_color, \
+				IF(listings.secondary_color IS NULL, '#FF5722', listings.secondary_color) as secondary_color, \
+				IF(listings.tertiary_color IS NULL, '#2196F3', listings.tertiary_color) as tertiary_color, \
+				IF(listings.font_name IS NULL, 'Rubik,Helvetica,sans-serif', listings.font_color) as font_name, \
+				IF(listings.font_color IS NULL, '#000000', listings.font_color) as font_color, \
 				accounts.username,\
 				!ISNULL(accounts.stripe_account) AS stripe_connected,\
 				accounts.date_created AS user_created,\
