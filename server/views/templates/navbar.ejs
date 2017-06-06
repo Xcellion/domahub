@@ -20,10 +20,9 @@
       <span></span>
       <span></span>
     </span>
-
+    <div class="nav-right nav-menu is-white">
 <%# navbar checks for a user variable, if it doesnt exist, then display the login button %>
 <% if (!user) { %>
-    <div class="nav-right nav-menu is-white">
         <div class="nav-item">
           <a tabindex="0" class="nav-link" title="Features" href="/#features">Features</a>
         </div>
@@ -36,7 +35,6 @@
         <div class="nav-item">
           <a tabindex="0" id="login-navbar" class="checkout-track login-modal button is-stylish is-small is-primary modal-button" title="Log In" data-object="#modal-login">Log In</a>
         </div>
-    </div>
     <div id="modal-login" class="modal">
       <div class="modal-background"></div>
       <div class="modal-container">
