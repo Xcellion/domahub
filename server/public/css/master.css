@@ -4706,8 +4706,7 @@ input:-webkit-autofill {
   .tabs li {
     display: block; }
     .tabs li.is-active a {
-      color: #3cbc8d;
-      border-bottom-color: #3cbc8d; }
+      font-weight: 500; }
       .tabs li.is-active a:hover, .tabs li.is-active a:active {
         outline: none; }
   .tabs ul {
