@@ -29,7 +29,7 @@ module.exports = account_model;
 //INSERT BULK - 'INSERT INTO ?? (??) VALUES ?'
 //DELETE - 'DELETE FROM ?? WHERE ?? = ?'
 
-//--------------------------------------------------------------------CHECKS------------------------------------------------------------
+//<editor-fold>-------------------------------CHECK-------------------------------
 
 //check if an account email exists
 account_model.prototype.checkAccountEmail = function(email, callback){
@@ -52,7 +52,9 @@ account_model.prototype.checkSignupCode = function(code, callback){
 	account_query(query, "Code does not exist!", callback, code);
 }
 
-//----------------------------------------------------------------------GETS----------------------------------------------------------
+//</editor-fold>
+
+//<editor-fold>-------------------------------GETS-------------------------------
 
 //gets all account info
 account_model.prototype.getAccount = function(email, username, callback){
@@ -85,6 +87,11 @@ account_model.prototype.getAccountListings = function(account_id, callback){
 	console.log("DB: Attempting to get all listings belonging to account " + account_id + "...");
 	query = "SELECT \
 				listings.*, \
+				IF(listings.primary_color IS NULL, '#3CBC8D', listings.primary_color) as primary_color, \
+				IF(listings.secondary_color IS NULL, '#FF5722', listings.secondary_color) as secondary_color, \
+				IF(listings.tertiary_color IS NULL, '#2196F3', listings.tertiary_color) as tertiary_color, \
+				IF(listings.font_name IS NULL, 'Rubik,Helvetica,sans-serif', listings.font_color) as font_name, \
+				IF(listings.font_color IS NULL, '#000000', listings.font_color) as font_color, \
 				rented_table.rented \
 			FROM listings \
 			LEFT JOIN \
@@ -181,7 +188,9 @@ account_model.prototype.getStripeAndType = function(domain_name, callback){
 	account_query(query, "Failed to get the Stripe ID of the owner of: " + domain_name + "!", callback, domain_name);
 }
 
-//----------------------------------------------------------------------SETS----------------------------------------------------------
+//</editor-fold>
+
+//<editor-fold>-------------------------------SETS-------------------------------
 
 //creates a new account
 account_model.prototype.newAccount = function(account_info, callback){
@@ -213,7 +222,9 @@ account_model.prototype.createSignupCodes = function(codes, callback){
 	account_query(query, "Failed to create signup codes!", callback, [codes]);
 }
 
-//----------------------------------------------------------------------UPDATE----------------------------------------------------------
+//</editor-fold>
+
+//<editor-fold>-------------------------------UPDATES-------------------------------
 
 //updates a new account
 account_model.prototype.updateAccount = function(account_info, email, callback){

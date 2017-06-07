@@ -1,19 +1,9 @@
 <div id="desc-avail-module" class="content margin-top-35">
-    <div class="content description-text">
+    <div class="description-text">
         <% if (listing_info.description) { %>
             <p><%- listing_info.description %></p>
         <% } else { %>
             <p>The greatest possible domain name you can ask for. Buy it now and start your next venture today!</p>
-        <% } %>
-    </div>
-    <div class="control">
-        <a id="buy-now-button" class="button is-stylish is-accent margin-right-5 v-align-middle">
-            Buy now
-        </a>
-        <% if (listing_info.price_rate > 0) { %>
-            <a id="rent-now-button" class="button is-stylish is-primary v-align-middle">
-                Rent now
-            </a>
         <% } %>
     </div>
 </div>

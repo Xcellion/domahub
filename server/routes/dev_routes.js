@@ -4,13 +4,17 @@ var	data_model = require('../models/data_model.js');
 var	validator = require('validator');
 var	request = require('request');
 var bodyParser = require('body-parser');
-var urlencodedParser = bodyParser.urlencoded({ extended: true });
+var urlencodedParser = bodyParser.urlencoded({ extended: false });
 var dns = require("dns");
 var randomstring = require("randomstring");
 var awis = require('awis');
 var node_env = "dev";
 var path = require('path');
 var fs = require('fs');
+var PNF = require('google-libphonenumber').PhoneNumberFormat;
+var phoneUtil = require('google-libphonenumber').PhoneNumberUtil.getInstance();
+var stripe_key = (node_env == "dev") ? "sk_test_PHd0TEZT5ytlF0qCNvmgAThp" : "sk_live_Nqq1WW2x9JmScHxNbnFlORoh";
+var stripe = require("stripe")(stripe_key);
 
 module.exports = function(app, db, auth, error){
     Auth = auth;
@@ -18,21 +22,63 @@ module.exports = function(app, db, auth, error){
     Listing = new listing_model(db);
     Data = new data_model(db);
 
-    app.get("/alexa/:domain_name", alexa);
+    app.get("/emailviews/:email_template", emailViews);
     app.get("/createcodes/:number", [
         createSignupCodes
     ]);
     app.get("/proxyimage", proxyimage);
     app.get("/proxysite", proxysite);
     app.get("/analysis/:domain_name", analysis);
+    app.get("/striperoo", function(req, res, next){
+        //check it against stripe
+        stripe.subscriptions.retrieve("sub_Aislajkzfjof1X", function(err, subscription) {
+            if (err){
+                console.log(subscription);
+            }
+            else {
+                console.log(subscription);
+            }
+            res.sendStatus(200);
+        });
+    });
+
+	app.post("/fuck",[
+		urlencodedParser,
+		function(req, res, next){
+			console.log(req.body);
+		}]
+	);
 }
 
 //testing quantcast redirect
-function quantcast(req, res, next){
-    res.render("quant_redirect.ejs", {
-        redirect_link: "https://fuck.com",
-        redirect_name: "fuck.com"
+function emailViews(req, res, next){
+    var wNumb = require("wnumb");
+    var moneyFormat = wNumb({
+    	thousand: ',',
+    	prefix: '$',
+    	decimals: 0
     });
+
+    var phoneNumber = phoneUtil.parse("+17183097773");
+
+    var data = {
+        domain_name: "fuck.com",
+        premium: true,
+        logo: "http://i.imgur.com/qiJLjgz.png",
+        name : "offerer",
+        owner_name : "OWNERFUCK",
+        offerer_name: "BUYERTWAT",
+        offerer_email: "test@email.com",
+        email: "test@email.com",
+        accepted: true,
+        offerer_phone: phoneUtil.format(phoneNumber, PNF.INTERNATIONAL),
+        phone: phoneUtil.format(phoneNumber, PNF.INTERNATIONAL),
+        offer: moneyFormat.to(parseFloat("1231324")),
+        verification_code: randomstring.generate(10),
+        message: "djkljakljfljasklfjkldasjfklasdjkldfjaskldfjkasdlfjklsajdfklasjdklfjaslkfjklasjdflkjskdlf"
+    }
+
+    res.render("email/" + req.params.email_template + ".ejs", data);
 }
 
 //testing alexa get

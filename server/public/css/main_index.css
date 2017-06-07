@@ -182,13 +182,12 @@ button[data-balloon] {
 
 #landing {
   border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+  width: 100%;
   position: relative;
-  width: 100%; }
-  #landing .container {
-    align-items: center;
-    display: flex;
-    justify-content: space-between;
-    flex-direction: column; }
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  overflow: hidden; }
   #landing .subtitle {
     font-weight: 300;
     max-width: 500px;
@@ -199,6 +198,92 @@ button[data-balloon] {
     margin-left: auto;
     margin-right: auto; }
 
+#panes {
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  position: absolute;
+  top: 0;
+  background: white; }
+  #panes div {
+    -webkit-box-shadow: 0 5px 15px 2px rgba(0, 0, 0, 0.12);
+    -moz-box-shadow: 0 5px 15px 2px rgba(0, 0, 0, 0.12);
+    box-shadow: 0 5px 15px 2px rgba(0, 0, 0, 0.12);
+    -moz-transform: skew(0deg, -10deg);
+    -o-transform: skew(0deg, -10deg);
+    -ms-transform: skew(0deg, -10deg);
+    -webkit-transform: skew(0deg, -10deg);
+      -webkit-transform-transform: skew(0deg, -10deg);
+    -moz-transition: all 0.2s ease;
+    -o-transition: all 0.2s ease;
+    -webkit-transition: all 0.2s ease;
+    transition: all 0.2s ease;
+    position: absolute; }
+    #panes div:nth-child(1) {
+      width: 350px;
+      left: 25%;
+      background: #EF5350;
+      height: 350px;
+      top: 22%; }
+      @media only screen and (max-width: 1500px) {
+        #panes div:nth-child(1) {
+          left: 20%; } }
+      @media only screen and (max-width: 1300px) {
+        #panes div:nth-child(1) {
+          left: 15%; } }
+      @media only screen and (max-width: 1050px) {
+        #panes div:nth-child(1) {
+          left: 10%; } }
+      @media screen and (min-width: 769px) and (max-width: 979px) {
+        #panes div:nth-child(1) {
+          left: 20px; } }
+      @media screen and (max-width: 768px) {
+        #panes div:nth-child(1) {
+          left: 0;
+          width: 200px; } }
+    #panes div:nth-child(2) {
+      -moz-transform: skew(0deg, 6deg);
+      -o-transform: skew(0deg, 6deg);
+      -ms-transform: skew(0deg, 6deg);
+      -webkit-transform: skew(0deg, 6deg);
+        -webkit-transform-transform: skew(0deg, 6deg);
+      width: 500px;
+      left: 35%;
+      background: #3cbc8d;
+      top: 30%;
+      height: 360px; }
+      @media only screen and (max-width: 1500px) {
+        #panes div:nth-child(2) {
+          left: 30%; } }
+      @media only screen and (max-width: 1300px) {
+        #panes div:nth-child(2) {
+          left: 27%; } }
+      @media screen and (min-width: 769px) and (max-width: 979px) {
+        #panes div:nth-child(2) {
+          left: 20%; } }
+      @media screen and (max-width: 768px) {
+        #panes div:nth-child(2) {
+          left: 150px;
+          height: 300px;
+          width: 400px; } }
+    #panes div:nth-child(3) {
+      width: 275px;
+      left: 56%;
+      background: #2196f3;
+      top: 20%;
+      height: 350px; }
+      @media only screen and (max-width: 1300px) {
+        #panes div:nth-child(3) {
+          left: 58%; } }
+      @media only screen and (max-width: 1050px) {
+        #panes div:nth-child(3) {
+          left: 60%; } }
+      @media screen and (max-width: 768px) {
+        #panes div:nth-child(3) {
+          left: 75%;
+          width: 150px;
+          height: 250px; } }
+
 #learn-more-wrapper {
   left: 50%;
   position: absolute;
@@ -206,7 +291,7 @@ button[data-balloon] {
   transform: translateX(-50%);
   margin-right: -50%;
   cursor: pointer;
-  bottom: 10px; }
+  bottom: 40px; }
 
 #learn-more-text {
   margin: auto;
@@ -259,23 +344,19 @@ button[data-balloon] {
 .flex-align-center {
   display: flex;
   align-items: center;
-  justify-content: flex-start;
   margin: 10px 0; }
+  .flex-align-center p, .flex-align-center h2 {
+    flex-grow: 1; }
   .flex-align-center .icon {
     margin-right: 15px; }
     .flex-align-center .icon.fix {
       margin-left: 2px; }
 
-.has-stripe {
-  position: relative; }
-  .has-stripe::before {
-    content: "";
-    position: absolute;
-    height: 100%;
-    width: 5px;
-    background: #3cbc8d;
-    left: 0;
-    top: 0; }
+.price-card {
+  height: 454px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; }
 
 .section.has-pyramid {
   position: relative;

@@ -1,3 +1,5 @@
+//<editor-fold>-------------------------------NODE REQUIREMENTS-------------------------------
+
 var validator = require("validator");
 var whois = require("whois");
 var dns = require("dns");
@@ -25,6 +27,20 @@ var webshot = require("webshot");
 var url = require("url");
 
 var node_env = process.env.NODE_ENV || 'dev'; 	//dev or prod bool
+
+//contact for buy now requirements
+var PNF = require('google-libphonenumber').PhoneNumberFormat;
+var phoneUtil = require('google-libphonenumber').PhoneNumberUtil.getInstance();
+var randomstring = require("randomstring");
+var ejs = require('ejs');
+var wNumb = require("wnumb");
+var moneyFormat = wNumb({
+    thousand: ',',
+    prefix: '$',
+    decimals: 0
+});
+
+//</editor-fold>
 
 module.exports = {
 
@@ -885,7 +901,7 @@ module.exports = {
         console.log("F: Getting all time slot information for domain: " + req.params.domain_name + "...");
 
         //invalid path!
-        if (req.body.path != "" && !validator.isAlphanumeric(req.body.path)){
+        if (req.body.path == undefined || (req.body.path != "" && !validator.isAlphanumeric(req.body.path))){
             error.handler(req, res, "Invalid path!", "json");
         }
         else {
@@ -984,61 +1000,6 @@ module.exports = {
         });
     },
 
-    //render screenshot of a rental, only if coming from a listing page
-    renderRentalScreenshot : function(req, res, next){
-        var screenshot_address = addProtocol(req.query.rental_address);
-        var originating_hostname = (req.header("Referer")) ? url.parse(req.header("Referer")).hostname : "";
-
-        //if we're originating from domahub or localhost
-        if (originating_hostname.indexOf("domahub") != -1 || node_env == "dev"){
-            if (screenshot_address && validator.isURL(screenshot_address)){
-                console.log('F: Capturing screenshot of rental ...');
-                var screenshot_options = {
-                    quality: 1,
-                    renderDelay: 50,
-                    screenSize: {},
-                    streamType: "jpeg",
-                    shotSize: {
-                        width: "window",
-                        height: "window"
-                    },
-                    userAgent: 'Mozilla/5.0 (iPhone; U; CPU iPhone OS 3_2 like Mac OS X; en-us) AppleWebKit/531.21.20 (KHTML, like Gecko) Mobile/7B298g'
-                }
-
-                if (node_env != "dev"){
-                    screenshot_options.phantomPath = "/var/www/w3bbi/phantomjs/bin/phantomjs"
-                }
-
-                //queries for screensize
-                if (req.query.width && validator.isInt(req.query.width)){
-                    screenshot_options.screenSize.width = parseInt(req.query.width);
-                }
-                if (req.query.height && validator.isInt(req.query.height)){
-                    screenshot_options.screenSize.height = parseInt(req.query.height);
-                }
-
-                webshot(screenshot_address, screenshot_options, function(err, renderStream) {
-                    if (err) {
-                        console.log('F: Screenshot of ' + screenshot_address + ' not found!');
-                        res.sendStatus(404);
-                    }
-                    else {
-                        renderStream.pipe(res);
-                    }
-                });
-            }
-            else {
-                console.log('F: Screenshot of ' + screenshot_address + ' not found!');
-                res.sendStatus(404);
-            }
-        }
-        //redirect to domahub home page
-        else {
-            res.redirect("/");
-        }
-
-    },
-
     //time check was successful! redirect to checkout
     redirectToCheckout : function(req, res, next){
         res.send({
@@ -1048,9 +1009,298 @@ module.exports = {
 
     //</editor-fold>
 
+    //<editor-fold>-------------------------------CONTACT FOR PURCHASE-------------------------------
+
+    //function to check buy-now contact details
+    checkContactInfo : function(req, res, next){
+        console.log("F: Checking posted contact details for offer...");
+
+        var phoneNumber = phoneUtil.parse(req.body.contact_phone);
+
+        if (!req.body.contact_name){
+            error.handler(req, res, "Please enter your name!", "json");
+        }
+        else if (!validator.isEmail(req.body.contact_email)){
+            error.handler(req, res, "Please enter a valid email address!", "json");
+        }
+        else if (!phoneUtil.isValidNumber(phoneNumber, PNF.INTERNATIONAL)){
+            error.handler(req, res, "Please enter a valid phone number!", "json");
+        }
+        else if (!validator.isInt(req.body.contact_offer, { min: req.session.listing_info.buy_price })){
+            error.handler(req, res, "This is an invalid offer price! Please enter an amount greater than " + req.session.listing_info.buy_price, "json");
+        }
+        else if (!req.body.contact_message){
+            error.handler(req, res, "A message to the owner greatly increases your chance of successfully purchasing this domain name! Please enter a short message for the owner.", "json");
+        }
+        else {
+            next();
+        }
+    },
+
+    //record the contact message (with verification code)
+    createContactRecord : function(req, res, next){
+        console.log("F: Creating a new contact offer record...");
+
+        var contact_details = {
+            listing_id : req.session.listing_info.id,
+            timestamp : new Date().getTime(),
+            verification_code : randomstring.generate(10),
+            name : req.body.contact_name,
+            email : req.body.contact_email,
+            phone : req.body.contact_phone,
+            offer : req.body.contact_offer,
+            message : req.body.contact_message
+        }
+
+        //recursive function to make sure verification code is unique
+        newListingContactHistory(req, res, next, contact_details)
+    },
+
+    //send the verification email
+    sendContactVerificationEmail : function(req, res, next){
+        console.log("F: Sending email to offerer to verify email...");
+
+        var email_contents_path = (node_env == "dev") ? path.resolve(process.cwd(), 'server', 'views', 'email', 'offer_verify_email.ejs') : path.resolve(process.cwd(), 'views', 'email', 'offer_verify_email.ejs');
+
+        var EJSVariables = {
+            premium: req.session.listing_info.premium || false,
+            domain_name: req.session.listing_info.domain_name,
+            verification_code: req.session.contact_verification_code,
+            offerer_name: req.body.contact_name,
+            offerer_email: req.body.contact_email,
+            offerer_phone: phoneUtil.format(phoneUtil.parse(req.body.contact_phone), PNF.INTERNATIONAL),
+            offer: moneyFormat.to(parseFloat(req.body.contact_offer)),
+            message: req.body.contact_message,
+            logo: req.session.listing_info.logo
+        }
+
+        delete req.session.contact_verification_code;
+
+        //email options
+        var emailDetails = {
+            to: req.body.contact_email,
+            from: '"DomaHub" <general@domahub.com>',
+            subject: "Hi, " + req.body.contact_name + '! Please verify your offer for ' + req.session.listing_info.domain_name,
+        };
+
+        //use helper function to email someone
+        emailSomeone(req, res, email_contents_path, EJSVariables, emailDetails, "Something went wrong! Please refresh the page and try again.");
+    },
+
+    //check the posted verification code
+    checkContactVerificationCodeVerified : function(req, res, next){
+        console.log("F: Checking if verification code for offer is verified...");
+
+        Data.checkContactVerificationCodeVerified(req.params.domain_name, req.params.verification_code, function(result){
+            if (result.state == "success" && result.info.length > 0){
+                next();
+            }
+            else {
+                res.redirect("/listing/" + req.params.domain_name);
+            }
+        });
+    },
+
+    //check the posted verification code
+    checkContactVerificationCodeUnverified : function(req, res, next){
+        console.log("F: Checking if verification code for offer is not verified...");
+
+        Data.checkContactVerificationCodeUnverified(req.params.domain_name, req.params.verification_code, function(result){
+            if (result.state == "success" && result.info.length > 0){
+                next();
+            }
+            else {
+                res.redirect("/listing/" + req.params.domain_name);
+            }
+        });
+    },
+
+    //okay! verify the contact history entry
+    verifyContactHistory : function(req, res, next){
+        console.log("F: Verifying offer email...");
+
+        Data.verifyContactHistory(req.params.verification_code, req.params.domain_name, function(result){
+
+            //render the redirect page to notify offerer that offer was successfully sent
+            res.render("redirect", {
+                redirect: "/listing/" + req.params.domain_name,
+                message: "Success! Now redirecting you back to " + req.params.domain_name,
+                button: req.params.domain_name
+            });
+
+            //asynchronously alert the owner!
+            //get the listing owner contact information to email
+            getListingOwnerContactInfo(req.params.domain_name, function(owner_result){
+                getListingOffererContactInfo(req.params.domain_name, req.params.verification_code, function(offerer_result){
+                    var email_contents_path = (node_env == "dev") ? path.resolve(process.cwd(), 'server', 'views', 'email', 'offer_notify_owner.ejs') : path.resolve(process.cwd(), 'views', 'email', 'offer_notify_owner.ejs');
+                    var offer_formatted = moneyFormat.to(parseFloat(offerer_result.offer))
+                    var EJSVariables = {
+                        domain_name: req.params.domain_name,
+                        owner_name: owner_result.username,
+                        offerer_name: offerer_result.name,
+                        offerer_email: offerer_result.email,
+                        offerer_phone: phoneUtil.format(phoneUtil.parse(offerer_result.phone), PNF.INTERNATIONAL),
+                        verification_code: req.params.verification_code,
+                        offer: offer_formatted,
+                        message: offerer_result.message
+                    }
+                    var emailDetails = {
+                        to: owner_result.email,
+                        from: '"DomaHub" <general@domahub.com>',
+                        subject: 'You have a new ' + offer_formatted + ' offer for ' + req.params.domain_name + "!"
+                    };
+
+                    //email the owner
+                    emailSomeone(req, res, email_contents_path, EJSVariables, emailDetails, false);
+                });
+            });
+
+        });
+    },
+
+    //asynchronously alert the offerer
+    notifyOfferer : function(req, res, next){
+        console.log("F: Sending email to offerer to notify of accept/reject status...");
+        getListingOffererContactInfo(req.params.domain_name, req.params.verification_code, function(offerer_result){
+            var email_contents_path = (node_env == "dev") ? path.resolve(process.cwd(), 'server', 'views', 'email', 'offer_notify_offerer.ejs') : path.resolve(process.cwd(), 'views', 'email', 'offer_notify_offerer.ejs');
+
+            var accepted = req.path.indexOf("/accept") != -1;
+            var accepted_text = (accepted) ? "accepted" : "rejected";
+            var offer_formatted = moneyFormat.to(parseFloat(offerer_result.offer));
+            var EJSVariables = {
+                accepted: accepted,
+                domain_name: req.params.domain_name,
+                offerer_name: offerer_result.name,
+                offerer_email: offerer_result.email,
+                offerer_phone: phoneUtil.format(phoneUtil.parse(offerer_result.phone), PNF.INTERNATIONAL),
+                offer: offer_formatted,
+                message: offerer_result.message
+            }
+
+            var emailDetails = {
+                to: offerer_result.email,
+                from: '"DomaHub" <general@domahub.com>',
+                subject: 'Your ' + offer_formatted + ' offer for ' + req.params.domain_name + " was " + accepted_text + "!"
+            };
+
+            //email the offerer
+            emailSomeone(req, res, email_contents_path, EJSVariables, emailDetails, false);
+        });
+    }
+
+    //</editor-fold>
+
 }
 
-//----------------------------------------------------------------helper functions----------------------------------------------------------------
+//<editor-fold>-------------------------------RENTAL TIME HELPERS-------------------------------
+
+//helper function to create new rental times
+function newRentalTimes(req, res, rental_id, times, callback){
+    Listing.newRentalTimes(rental_id, times, function(result){
+        if (result.state != "success"){error.handler(req, res, result.info, "json");}
+        else {
+            callback();
+        }
+    });
+}
+
+//helper function to join all rental times
+function joinRentalTimes(rental_times){
+    var temp_times = rental_times.slice(0);
+
+    //loop once
+    for (var x = temp_times.length - 1; x >= 0; x--){
+        var orig_start = temp_times[x].date;
+        var orig_end = orig_start + temp_times[x].duration;
+
+        //loop twice to check with all others
+        for (var y = temp_times.length - 1; y >= 0; y--){
+            var compare_start = temp_times[y].date;
+            var compare_end = compare_start + temp_times[y].duration;
+            //touches bottom
+            if (temp_times[y].rental_id == temp_times[x].rental_id && x != y && orig_start == compare_end){
+                temp_times[y].duration = temp_times[y].duration + temp_times[x].duration;
+                temp_times.splice(x, 1);
+                break;
+            }
+        }
+    }
+
+    return temp_times;
+}
+
+//</editor-fold>
+
+//<editor-fold>-------------------------------BUY CONTACT HELPERS-------------------------------
+
+//helper function to get the email address of the listing owner to contact
+function getListingOwnerContactInfo(domain_name, cb){
+    Listing.getListingOwnerContactInfo(domain_name, function(result){
+        if (result.state == "success" && result.info.length > 0){
+            cb(result.info[0]);
+        }
+    });
+}
+
+//helper function to get the email address of the listing offerer to contact
+function getListingOffererContactInfo(domain_name, verification_code, cb){
+    Data.getListingOffererContactInfo(domain_name, verification_code, function(result){
+        if (result.state == "success" && result.info.length > 0){
+            cb(result.info[0]);
+        }
+    });
+}
+
+//helper function to email someone
+function emailSomeone(req, res, pathEJSTemplate, EJSVariables, emailDetails, errorMsg){
+    //read the file and add appropriate variables
+    ejs.renderFile(pathEJSTemplate, EJSVariables, null, function(err, html_str){
+        if (err && errorMsg){
+            console.log(err);
+            error.handler(req, res, errorMsg, "json");
+        }
+        else {
+            emailDetails.html = html_str;
+
+            //send email
+            mailer.sendMail(emailDetails, function(err) {
+                if (errorMsg){
+                    if (err) {
+                        console.log(err);
+                        error.handler(req, res, errorMsg, "json");
+                    }
+                    else {
+                        res.send({
+                            state: "success"
+                        });
+                    }
+                }
+            });
+        }
+    });
+}
+
+//recursive helper function to make sure verification code for contact is unique
+function newListingContactHistory(req, res, next, contact_details){
+    Data.newListingContactHistory(req.session.listing_info.domain_name, contact_details, function(result){
+        //recursion check here
+        if (result.state == "error" && result.errcode == "ER_DUP_ENTRY"){
+            contact_details.verification_code = randomstring.generate(10);
+            newListingContactHistory(req, res, next, contact_details)
+        }
+        else if (result.state == "success"){
+            req.session.contact_verification_code = contact_details.verification_code;
+            next();
+        }
+        else {
+            error.handler(req, res, "Something went wrong! Please refresh the page and try again.", "json");
+        }
+    });
+}
+
+//</editor-fold>
+
+//<editor-fold>-------------------------------HELPER FUNCTIONS-------------------------------
 
 //helper function to get a user's ip
 function getIP(req){
@@ -1103,46 +1353,6 @@ function googleSafeCheck(req, res, address, callback){
         }
     });
 }
-
-
-//----------------------------------------------------------------RENTAL TIME HELPERS----------------------------------------------------------------
-
-//helper function to create new rental times
-function newRentalTimes(req, res, rental_id, times, callback){
-    Listing.newRentalTimes(rental_id, times, function(result){
-        if (result.state != "success"){error.handler(req, res, result.info, "json");}
-        else {
-            callback();
-        }
-    });
-}
-
-//helper function to join all rental times
-function joinRentalTimes(rental_times){
-    var temp_times = rental_times.slice(0);
-
-    //loop once
-    for (var x = temp_times.length - 1; x >= 0; x--){
-        var orig_start = temp_times[x].date;
-        var orig_end = orig_start + temp_times[x].duration;
-
-        //loop twice to check with all others
-        for (var y = temp_times.length - 1; y >= 0; y--){
-            var compare_start = temp_times[y].date;
-            var compare_end = compare_start + temp_times[y].duration;
-            //touches bottom
-            if (temp_times[y].rental_id == temp_times[x].rental_id && x != y && orig_start == compare_end){
-                temp_times[y].duration = temp_times[y].duration + temp_times[x].duration;
-                temp_times.splice(x, 1);
-                break;
-            }
-        }
-    }
-
-    return temp_times;
-}
-
-//---------------------------------------------------------------------------------------------------------------------------------
 
 //helper function to run whois since domain isn't listed but is a real domain
 function getWhoIs(req, res, next){
@@ -1218,7 +1428,6 @@ function calculatePrice(starttime, endtime, overlapped_time, listing_info){
     else {return "Not a valid price";}
 }
 
-
 //figure out if the start and end dates overlap any free periods
 function anyFreeDayOverlap(starttime, endtime, freetimes){
 	if (freetimes && freetimes.length > 0){
@@ -1257,8 +1466,6 @@ function anyFreeDayOverlap(starttime, endtime, freetimes){
 	}
 }
 
-//----------------------------------------------------------------helper functions for user obj----------------------------------------------------------------
-
 //helper function to update req.user.rentals after changing to active
 function updateUserRentalsObject(user_rentals, db_rentals, rental_id){
     for (var x = user_rentals.length - 1; x >= 0; x--){
@@ -1278,3 +1485,5 @@ function updateUserRentalsObject(user_rentals, db_rentals, rental_id){
         }
     }
 }
+
+//</editor-fold>

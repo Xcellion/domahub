@@ -7,6 +7,7 @@
 
 input:-webkit-autofill
     -webkit-box-shadow: 0 0 0px 1000px white inset
+    box-shadow: 0 0 0px 1000px white inset
 
 .form
   margin: 10px 0
@@ -137,6 +138,8 @@ input:-webkit-autofill
       vertical-align: baseline
   &:not(:last-child)
     margin-bottom: 5px
+  &.is-small
+    font-size: $size-small
   &.is-medium
     font-size: $size-medium
   &.is-large
@@ -169,13 +172,10 @@ input:-webkit-autofill
   position: relative
   text-align: left
   &:not(:last-child)
-    margin-bottom: 15px
+    margin-bottom: 20px
   // Modifiers
   &.has-text-centered
     text-align: center
-  &.has-slider
-    padding: 5px 20px 0
-    width: 100%
   &.has-addons
     display: flex
     justify-content: flex-start
@@ -210,6 +210,10 @@ input:-webkit-autofill
       .input,
       .select
         flex-grow: 1
+  &.is-spaced
+    display: flex
+    justify-content: space-between
+    align-items: center
   &.has-icon
     & > .fa
       +fa(14px, 24px)
