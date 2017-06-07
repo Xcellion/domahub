@@ -4,14 +4,12 @@
 
 #landing {
   border-bottom: 1px solid $border;
-  position: relative;
   width: 100%;
-  .container {
-    align-items: center;
-    display: flex;
-    justify-content: space-between;
-    flex-direction: column;
-  }
+  position: relative;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
   .subtitle {
     font-weight: 300;
     max-width: 500px;
@@ -25,19 +23,97 @@
   }
 }
 
-#learn-more-wrapper {
-    left: 50%;
+#panes {
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  position: absolute;
+  top: 0;
+  background: $white;
+  div {
+    @include box-shadow(0,5px,15px,$border,2px);
+    @include skew(0,-10);
+    @include transition(all 0.2s ease);
     position: absolute;
-    z-index: 4;
-    transform: translateX(-50%);
-    margin-right: -50%;
-    cursor:pointer;
-    bottom: 10px;
+    &:nth-child(1) {
+      width: 350px;
+      left: 25%;
+      background: $red;
+      height: 350px;
+      top: 22%;
+      @media only screen and (max-width: 1500px) {
+        left: 20%;
+      }
+      @media only screen and (max-width: 1300px) {
+        left: 15%;
+      }
+      @media only screen and (max-width: 1050px) {
+        left: 10%;
+      }
+      @include tablet-only {
+        left: 20px;
+      }
+      @include mobile {
+        left: 0;
+        width: 200px;
+      }
+    }
+    &:nth-child(2) {
+      @include skew(0,6);
+      width: 500px;
+      left: 35%;
+      background: $primary;
+      top: 30%;
+      height: 360px;
+      @media only screen and (max-width: 1500px) {
+        left: 30%;
+      }
+      @media only screen and (max-width: 1300px) {
+        left: 27%;
+      }
+      @include tablet-only {
+        left: 20%;
+      }
+      @include mobile {
+        left: 150px;
+        height: 300px;
+        width: 400px;
+      }
+    }
+    &:nth-child(3) {
+      width: 275px;
+      left: 56%;
+      background: $blue;
+      top: 20%;
+      height: 350px;
+      @media only screen and (max-width: 1300px) {
+        left: 58%;
+      }
+      @media only screen and (max-width: 1050px) {
+        left: 60%;
+      }
+      @include mobile {
+        left: 75%;
+        width: 150px;
+        height: 250px;
+      }
+    }
+  }
+}
+
+#learn-more-wrapper {
+  left: 50%;
+  position: absolute;
+  z-index: 4;
+  transform: translateX(-50%);
+  margin-right: -50%;
+  cursor:pointer;
+  bottom: 40px;
 }
 
 #learn-more-text {
-    margin:auto;
-    margin-bottom:15px;
+  margin:auto;
+  margin-bottom:15px;
 }
 
 .learn-more-arrow {
@@ -92,8 +168,10 @@
 .flex-align-center {
   display: flex;
   align-items: center;
-  justify-content: flex-start;
   margin: 10px 0;
+  p,h2 {
+    flex-grow: 1;
+  }
   .icon {
     margin-right: 15px;
     &.fix {
@@ -102,17 +180,11 @@
   }
 }
 
-.has-stripe {
-  position: relative;
-  &::before {
-    content:"";
-    position: absolute;
-    height: 100%;
-    width: 5px;
-    background: $primary;
-    left: 0;
-    top: 0;
-  }
+.price-card {
+  height: 454px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .section {

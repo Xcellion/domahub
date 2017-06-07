@@ -54,7 +54,6 @@ listing_model.prototype.checkListingOwner = function(account_id, domain_name, ca
 	listing_query(query, "Account does not own the domain" + domain_name + "!", callback, [account_id, domain_name]);
 }
 
-
 //check if listing is currently rented
 listing_model.prototype.checkCurrentlyRented = function(domain_name, callback){
 	console.log("DB: Checking if domain " + domain_name + " is currently rented...");
@@ -101,6 +100,11 @@ listing_model.prototype.getVerifiedListing = function(domain_name, callback){
 	console.log("DB: Attempting to get active listing information for " + domain_name + "...");
 	query = "SELECT \
 				listings.*,\
+				IF(listings.primary_color IS NULL, '#3CBC8D', listings.primary_color) as primary_color, \
+				IF(listings.secondary_color IS NULL, '#FF5722', listings.secondary_color) as secondary_color, \
+				IF(listings.tertiary_color IS NULL, '#2196F3', listings.tertiary_color) as tertiary_color, \
+				IF(listings.font_name IS NULL, 'Rubik,Helvetica,sans-serif', listings.font_color) as font_name, \
+				IF(listings.font_color IS NULL, '#000000', listings.font_color) as font_color, \
 				accounts.username,\
 				!ISNULL(accounts.stripe_account) AS stripe_connected,\
 				accounts.date_created AS user_created,\
@@ -111,6 +115,20 @@ listing_model.prototype.getVerifiedListing = function(domain_name, callback){
 			AND listings.verified = 1 \
 			AND listings.deleted IS NULL";
 	listing_query(query, "Failed to get active listing info for " + domain_name + "!", callback, domain_name);
+}
+
+//gets contact info for an active/verified listing
+listing_model.prototype.getListingOwnerContactInfo = function(domain_name, callback){
+	console.log("DB: Attempting to get contact info for " + domain_name + "...");
+	query = "SELECT \
+				accounts.username,\
+				accounts.email\
+			FROM listings \
+			JOIN accounts ON listings.owner_id = accounts.id \
+			WHERE listings.domain_name = ? \
+			AND listings.verified = 1 \
+			AND listings.deleted IS NULL";
+	listing_query(query, "Failed to get contact info for " + domain_name + "!", callback, domain_name);
 }
 
 //gets all 'active' listing information including owner name and email
@@ -278,6 +296,7 @@ listing_model.prototype.getThreeRandomListingsByOwner = function(domain_name_exc
 	query = "SELECT \
 				listings.domain_name, \
 				listings.background_image, \
+				listings.status, \
 				listings.buy_price, \
 				listings.price_type, \
 				listings.price_rate \
@@ -421,7 +440,7 @@ listing_model.prototype.newRentalTimes = function(rental_id, rental_times, callb
 
 //</editor-fold>
 
-//<editor-fold>-------------------------------UPDATE-------------------------------
+//<editor-fold>-------------------------------UPDATES-------------------------------
 
 //updates listing info
 listing_model.prototype.updateListing = function(domain_name, listing_info, callback){

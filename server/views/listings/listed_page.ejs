@@ -1,102 +1,82 @@
-<!--<img id="background_image" class="is-bnw" src="<%= listing_info.background_image %>"></img>-->
+<!-- <img id="background_image" src="<%= listing_info.background_image %>"></img> -->
 
-<section class="section is-medium">
+<section id="background-image">
     <div class="container">
+        <div class="columns master right">
+          <div class="column is-6">
 
-        <% if (listing_info.buy_price > 0) { %>
-            <span id="buy-price-tag" class="tag is-bold is-hidden is-medium is-bordered">
-                <span id="buy-price"></span>
-            </span>
-        <% } %>
-        <% if (listing_info.price_rate > 0) { %>
-            <span class="tag is-bold is-medium is-bordered">
-              <span id="total-price" class='margin-right-5 is-hidden'>Total: </span>
-              <span id="orig-price" class='margin-right-5 is-linethrough is-hidden'></span>
-              <span id="actual-price">
-                  For rent - $<%= listing_info.price_rate %> / <%= listing_info.price_type %>
-              </span>
-            </span>
-        <% } %>
-        <span id="free-until" class='is-hidden tag is-bold is-medium is-bordered'></span>
-
-        <div id="domain-display" class="content">
-            <% if (listing_info.price_rate > 0) { %>
-                <h1 id="domain-title" class="is-primary is-inline-block margin-bottom-0"><%= listing_info.domain_name %></h1>
-                <form id="path-input" class="is-hidden is-inline-block">
-                  <div class="control margin-bottom-0">
-                    <input id="typed-slash" class='padding-0' tabindex="0" type="text" autocomplete="off"></input>
-                    <label id="input-tooltip" style="display:none;" class="input-tooltip" for="typed-slash">Click here to edit.</label>
-                    <label id="input-tooltip-error" class="input-tooltip is-active is-hidden" for="typed-slash">Input must be alphanumeric!</label>
-                  </div>
-                </form>
-            <% } else { %>
-                <h1 class="is-primary is-inline-block margin-bottom-0"><%= listing_info.domain_name %></h1>
+            <% if (listing_info.buy_price > 0) { %>
+                <span id="buy-price-tag" class="tag is-primary margin-bottom-5 is-hidden is-medium">
+                    <span id="buy-price"></span>
+                </span>
             <% } %>
+            <% if (listing_info.price_rate > 0) { %>
+                <span class="tag is-primary is-medium">
+                  <span id="total-price" class='margin-right-5 is-hidden'>Total: </span>
+                  <span id="orig-price" class='margin-right-5 is-linethrough is-hidden'></span>
+                  <span id="actual-price">
+                      For rent - $<%= listing_info.price_rate %> / <%= listing_info.price_type %>
+                  </span>
+                </span>
+            <% } %>
+            <span id="free-until" class='is-hidden tag is-primary is-medium'></span>
+
+            <div id="domain-display" class="content margin-top-15">
+                <% if (listing_info.price_rate > 0) { %>
+                    <h1 id="domain-title" class="is-primary is-inline-block margin-bottom-0"><%= listing_info.domain_name %></h1>
+                    <form id="path-input" class="is-hidden is-inline-block">
+                      <div class="control margin-bottom-0">
+                        <input id="typed-slash" class='padding-0' tabindex="0" type="text" autocomplete="off"></input>
+                        <label id="input-tooltip" style="display:none;" class="input-tooltip" for="typed-slash">Click here to edit.</label>
+                        <label id="input-tooltip-error" class="input-tooltip is-active is-hidden" for="typed-slash">Input must be alphanumeric!</label>
+                      </div>
+                    </form>
+                <% } else { %>
+                    <h1 class="is-primary is-inline-block margin-bottom-0"><%= listing_info.domain_name %></h1>
+                <% } %>
+            </div>
+
+            <%# DESCRIPTION AND CHECK AVAILABILITY MODULE %>
+            <%- include("modules/desc_avail_module.ejs", {
+                listing_info : listing_info
+            }); %>
+          </div>
+          <div class="column is-6">
+            <div class="tabs has-shadow is-medium">
+                <ul>
+                  <li id="buy-now-button" class="top-tab is-active">
+                    <a>
+                        <span>Purchase</span>
+                    </a>
+                  </li>
+                  <li id="rent-now-button" class="top-tab">
+                    <a>
+                        <span>Rent</span>
+                    </a>
+                  </li>
+                </ul>
+            </div>
+            <div class='box has-tabs'>
+
+                <% if (listing_info.status == 1) { %>
+                    <%# BUY NOW MODULE %>
+                    <%- include("modules/buy_now_module.ejs"); %>
+
+                    <% if (listing_info.price_rate > 0) { %>
+                        <%# CALENDAR MODULE %>
+                        <%- include("modules/calendar_module.ejs"); %>
+                    <% } else { %>
+                        <%# UNAVAILABLE FOR RENT MODULE %>
+                        <%- include("modules/unavail_rent_module.ejs"); %>
+                    <% } %>
+
+                <% } else { %>
+                    <%# UNAVAILABLE MODULE %>
+                    <%- include("modules/unavailable_module.ejs"); %>
+                <% } %>
+
+            </div>
+          </div>
         </div>
-
-        <%# DESCRIPTION AND CHECK AVAILABILITY MODULE %>
-        <%- include("modules/desc_avail_module.ejs", {
-            listing_info : listing_info
-        }); %>
-
-        <% if (listing_info.status == 1) { %>
-            <%# BUY NOW MODULE %>
-            <%- include("modules/buy_now_module.ejs"); %>
-
-            <% if (listing_info.price_rate > 0) { %>
-                <%# CALENDAR MODULE %>
-                <%- include("modules/calendar_module.ejs"); %>
-            <% } %>
-
-        <% } else { %>
-            <%# UNAVAILABLE MODULE %>
-            <%- include("modules/unavailable_module.ejs"); %>
-        <% } %>
-
     </div>
-</section>
-
-<section class="section is-medium">
-  <div class="container">
-
-      <%# TABS %>
-      <div class="tabs is-boxed has-shadow margin-bottom-0">
-        <ul>
-          <li id="ticker-tab" class="tab is-active is-attached">
-            <a>
-                <span class="is-hidden-mobile icon is-small"><i class="fa fa-history"></i></span>
-                <span>History</span>
-            </a>
-          </li>
-          <li id="traffic-tab" class='tab'>
-            <a>
-                <span class="is-hidden-mobile icon is-small"><i class="fa fa-line-chart"></i></span>
-                <span>Traffic</span>
-            </a>
-          </li>
-          <li id="info-tab" class="tab is-attached">
-            <a>
-                <span class="is-hidden-mobile icon is-small"><i class="fa fa-info-circle"></i></span>
-                <span>Information</span>
-            </a>
-          </li>
-        </ul>
-      </div>
-
-    <%# EXAMPLES MODULE %>
-    <%- include("modules/ticker_module.ejs", {
-      listing_info : listing_info
-    }); %>
-
-    <%# TRAFFIC MODULE %>
-    <%- include("modules/traffic_module.ejs", {
-      listing_info : listing_info
-    }); %>
-
-    <%# INFO MODULE %>
-    <%- include("modules/info_module.ejs", {
-      listing_info : listing_info
-    }); %>
-
-  </div>
 </section>

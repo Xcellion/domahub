@@ -1,6 +1,6 @@
 .box
   @extend .block
-  +box-shadow(0,8px,20px,$grey-light,0)
+  +box-shadow(0,3px,15px,$border,0)
   background-color: $white
   border-radius: $radius-large
   display: block
@@ -8,7 +8,14 @@
   &.no-shadow
     +box-shadow(0,0,0,$black,0)
     border: 1px solid $border
-  &.radius-right-only
-    border-radius: 0 $radius-large $radius-large 0
+  &.has-tabs
+    border-radius: 0 0 $radius-large $radius-large
   &.no-border-radius
     border-radius: 0
+
+.box-footer
+  border-top: 1px solid $border
+  display: flex
+  padding-top: 20px
+  &.has-items-right
+    justify-content: flex-end

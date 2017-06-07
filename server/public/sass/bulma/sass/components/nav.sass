@@ -70,7 +70,7 @@ a.nav-item
 .nav-menu
   // Responsiveness
   +mobile
-    +box-shadow(0,3px,8px,$border,1px)
+    +box-shadow(0,3px,15px,$border,1px)
     background-color: $white
     display: none
     position: absolute
@@ -120,7 +120,7 @@ a.nav-item
 
 // Main container
 .nav
-  +transition(all 0.2s)
+  +transition(box-shadow 0.25s)
   align-items: stretch
   background-color: transparent
   display: flex
@@ -165,7 +165,6 @@ a.nav-item
 
 // profile button styling
 #profile-button
-  +transition(none)
   width: 110px
   &.is-active
     border-radius: 3px 3px 0px 0px
@@ -182,10 +181,10 @@ a.nav-item
 
 // profile dropdown menu
 #profile-dropdown
-  +box-shadows(0 5px 3px 0 rgba(0,0,0,.14),0 4px 3px -2px rgba(0,0,0,.2),0 3px 5px 0 rgba(0,0,0,.12))
+  +box-shadow(0,3px,15px,$border,1px)
   background-color: $white
   position: absolute
-  right: 0
+  right: 10px
   text-align: left
   top: 46px
   width: 200px

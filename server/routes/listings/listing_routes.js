@@ -7,9 +7,9 @@ var owner_functions = require("../listings/listings_owner_functions.js");
 var profile_functions = require("../profiles/profile_functions.js");
 var general_functions = require("../general_functions.js");
 
-var bodyParser = require('body-parser')
-var jsonParser = bodyParser.json()
-var urlencodedParser = bodyParser.urlencoded({ extended: true })
+var bodyParser = require('body-parser');
+var jsonParser = bodyParser.json();
+var urlencodedParser = bodyParser.urlencoded({ extended: true });
 
 var validator = require("validator");
 var node_env = process.env.NODE_ENV || 'dev'; 	//dev or prod bool
@@ -111,7 +111,8 @@ module.exports = function(app, db, auth, error, stripe){
 		checkDomainValid,
 		checkDomainListed,
 		stripe.getAccountInfo,
-		owner_functions.checkListingOwner,
+		profile_functions.getAccountListings,
+		owner_functions.checkListingOwnerPost,
 		owner_functions.verifyListing,
 		owner_functions.updateListing
 	]);
@@ -121,7 +122,8 @@ module.exports = function(app, db, auth, error, stripe){
 		auth.checkLoggedIn,
 		checkDomainValid,
 		checkDomainListed,
-		owner_functions.checkListingOwner,
+		profile_functions.getAccountListings,
+		owner_functions.checkListingOwnerPost,
 		owner_functions.getDNSRecordAndWhois
 	]);
 
@@ -130,7 +132,7 @@ module.exports = function(app, db, auth, error, stripe){
 	// 	auth.checkLoggedIn,
 	// 	checkDomainValid,
 	// 	checkDomainListed,
-	// 	owner_functions.checkListingOwner,
+	// 	owner_functions.checkListingOwnerPost,
 	// 	owner_functions.deleteListing
 	// ]);
 
@@ -140,42 +142,54 @@ module.exports = function(app, db, auth, error, stripe){
 		checkDomainValid,
 		checkDomainListed,
 		profile_functions.getAccountListings,
-		owner_functions.checkListingOwner,
+		owner_functions.checkListingOwnerPost,
 		owner_functions.checkListingVerified,
+		stripe.checkStripeSubscription,
 		owner_functions.checkImageUploadSize,
 		owner_functions.checkListingImage,
 		owner_functions.checkListingStatus,
 		//owner_functions.checkListingPrice,
+		owner_functions.checkListingPremiumDetails,
 		owner_functions.checkListingDetails,
 		owner_functions.checkListingExisting,
 		owner_functions.updateListing
 	]);
 
+	//get a listing's stripe info
+	app.get('/listing/:domain_name/stripeinfo', [
+		auth.checkLoggedIn,
+		checkDomainValid,
+		checkDomainListed,
+		profile_functions.getAccountListings,
+		owner_functions.checkListingOwnerPost,
+		owner_functions.checkListingVerified,
+		stripe.getStripeSubscription
+	]);
+
 	//update listing to premium
-	// app.post('/listing/:domain_name/upgrade', [
-	// 	urlencodedParser,
-	// 	auth.checkLoggedIn,
-	// 	checkDomainValid,
-	// 	checkDomainListed,
-	// 	profile_functions.getAccountListings,
-	// 	owner_functions.checkListingOwner,
-	// 	owner_functions.checkListingVerified,
-	// 	stripe.createStripeCustomer,
-	// 	stripe.createSingleStripeSubscription,
-	// 	owner_functions.updateListing
-	// ]);
+	app.post('/listing/:domain_name/upgrade', [
+		urlencodedParser,
+		auth.checkLoggedIn,
+		checkDomainValid,
+		checkDomainListed,
+		profile_functions.getAccountListings,
+		owner_functions.checkListingOwnerPost,
+		owner_functions.checkListingVerified,
+		stripe.createStripeCustomer,
+		stripe.createStripeSubscription,
+		owner_functions.updateListing
+	]);
 
 	//degrade listing to basic
-	// app.post('/listing/:domain_name/downgrade', [
-	// 	auth.checkLoggedIn,
-	// 	checkDomainValid,
-	// 	checkDomainListed,
-	// 	profile_functions.getAccountListings,
-	// 	owner_functions.checkListingOwner,
-	// 	owner_functions.checkListingVerified,
-	// 	stripe.cancelStripeSubscription,
-	// 	owner_functions.updateListing
-	// ]);
+	app.post('/listing/:domain_name/downgrade', [
+		auth.checkLoggedIn,
+		checkDomainValid,
+		checkDomainListed,
+		profile_functions.getAccountListings,
+		owner_functions.checkListingOwnerPost,
+		owner_functions.checkListingVerified,
+		stripe.cancelStripeSubscription
+	]);
 
 	//</editor-fold>
 
@@ -189,11 +203,6 @@ module.exports = function(app, db, auth, error, stripe){
 	// 	});
 	// });
 
-	//render a rental screenshot
-	app.get('/screenshot', [
-		renter_functions.renderRentalScreenshot
-	]);
-
 	//render specific listing page
 	app.get('/listing/:domain_name', [
 		checkDomainValid,
@@ -204,30 +213,69 @@ module.exports = function(app, db, auth, error, stripe){
 		renter_functions.renderListing
 	]);
 
+	//verify a offer history item email
+	app.get("/listing/:domain_name/contact/:verification_code", [
+		urlencodedParser,
+		checkDomainValid,
+		renter_functions.checkContactVerificationCodeUnverified,
+		renter_functions.verifyContactHistory
+	]);
+
+	//accept or reject an offer
+	app.get(["/listing/:domain_name/contact/:verification_code/accept",
+	"/listing/:domain_name/contact/:verification_code/reject"], [
+		auth.checkLoggedIn,
+		urlencodedParser,
+		checkDomainValid,
+		checkDomainListed,
+		owner_functions.checkListingOwnerGet,
+		renter_functions.checkContactVerificationCodeVerified,
+		owner_functions.renderAcceptOrRejectOffer
+	]);
+
+	//accept or reject an offer
+	app.post(["/listing/:domain_name/contact/:verification_code/accept",
+	"/listing/:domain_name/contact/:verification_code/reject"], [
+		auth.checkLoggedIn,
+		urlencodedParser,
+		checkDomainValid,
+		checkDomainListed,
+		profile_functions.getAccountListings,
+		owner_functions.checkListingOwnerPost,
+		renter_functions.checkContactVerificationCodeVerified,
+		owner_functions.acceptOrRejectOffer,
+		renter_functions.notifyOfferer
+	]);
+
+	//create a new offer history item
+	app.post("/listing/:domain_name/contact", [
+		urlencodedParser,
+		checkDomainValid,
+		renter_functions.checkContactInfo,
+		stripe.checkStripeSubscription,
+		renter_functions.createContactRecord,
+		renter_functions.sendContactVerificationEmail
+	]);
+
 	//get a domain's ticker information
 	app.post("/listing/:domain_name/ticker", [
 		urlencodedParser,
-		checkDomainValid,
 		renter_functions.getListingTicker
 	]);
 
 	//get a domain's traffic
 	app.post("/listing/:domain_name/traffic", [
-		checkDomainValid,
 		renter_functions.getListingTraffic
 	]);
 
 	//get a domain's alexa information
 	app.post("/listing/:domain_name/alexa", [
-		checkDomainValid,
 		renter_functions.getListingAlexa
 	]);
 
 	//get listing info / times
 	app.post('/listing/:domain_name/times', [
 		urlencodedParser,
-		checkDomainValid,
-		checkDomainListed,
 		renter_functions.addToAvailCheckHistory,
 		renter_functions.getListingTimes
 	]);

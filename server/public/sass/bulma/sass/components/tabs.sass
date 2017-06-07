@@ -21,15 +21,15 @@
     &:hover,
     &:active
       border-bottom-color: $black-secondary
+      outline: none
   li
     display: block
     &.is-active
       a
-        color: $primary
-        border-bottom-color: $primary
+        font-weight: 500
         &:hover,
-        &:focus
-          color: $primary-lighter
+        &:active
+          outline: none
   ul
     align-items: center
     border-bottom: 1px solid $border
@@ -60,6 +60,35 @@
     ul
       justify-content: flex-end
   // Styles
+  &.has-shadow
+    +box-shadow(0,3px,15px,$border,0)
+    background-color: $white
+    margin-bottom: 0
+    border-radius: $radius-large $radius-large 0 0
+    ul
+      border-bottom: none
+    li
+      width: 100%
+      a
+        &:hover,
+        &:focus
+          background-color: #eeeeee
+  &.no-border
+    ul
+      border-bottom: none
+    li
+      margin: 0 10px
+      a
+        +transition(all .2s ease)
+        border-bottom: none
+        margin-bottom: 0
+        &:hover,
+        &:active
+          +box-shadow(0,-2px,0,$black-disabled,0,inset)
+          outline: 0
+      &.is-active
+        a
+          +box-shadow(0,-2px,0,$primary,0,inset)
   &.is-boxed
     a
       border: 1px solid transparent

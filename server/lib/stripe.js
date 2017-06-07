@@ -23,12 +23,12 @@ module.exports = {
 		Listing = new listing_model(db);
 	},
 
-	//------------------------------------------------------------------------------------------ STRIPE MANAGED
+	//<editor-fold>-------------------------------STRIPE MANAGED-------------------------------
 
 	//gets the stripe managed account info
 	getAccountInfo : function(req, res, next){
 		if (req.user.stripe_account){
-			console.log('F: Retrieving existing Stripe managed account information...');
+			console.log('SF: Retrieving existing Stripe managed account information...');
 			stripe.accounts.retrieve(req.user.stripe_account, function(err, account) {
 				if (!err){
 					updateUserStripeInfo(req.user, account);
@@ -51,7 +51,7 @@ module.exports = {
 	//function to get all charges made to account
 	getTransfers : function(req, res, next){
 		if (req.user.stripe_account){
-			console.log('F: Retrieving all Stripe transactions...');
+			console.log('SF: Retrieving all Stripe transactions...');
 			stripe.transfers.list({
 				destination: req.user.stripe_account,
 				expand: ["data.source_transaction"]
@@ -80,34 +80,34 @@ module.exports = {
 
 	//function to check posted info for address
 	checkPayoutAddress : function(req, res, next){
-		console.log('F: Checking posted Stripe managed account address information...');
+		console.log('SF: Checking posted Stripe managed account address information...');
 		var country_codes = [
-			"AU",		//Australia
-			"US",		//United States
-			"CA",		//Canada
-			"AT",		//Austria
-			"DK",		//Denmark
-			"BE",		//Belgium
-			"FI",		//Finland
-			"DE",		//Germany
-			"FR",		//France
-			"HK",		//Hong Kong
-			"IE",		//Ireland
-			"IT",		//Italy
-			"JP",		//Japan
-			"LU",		//Luxembourg
-			"NO",		//Norway
-			"NL",		//Netherlands
-			"SG",		//Singapore
-			"NZ",		//New Zealand
-			"ES",		//Spain
-			"PT",		//Portugal
-			"SE",		//Sweden
-			"CH",		//Switzerland
-			"GB",		//United Kingdom
-			"BR",		//Brazil
-			"MX"		//Mexico
-		];
+				"AU",		//Australia
+				"US",		//United States
+				"CA",		//Canada
+				"AT",		//Austria
+				"DK",		//Denmark
+				"BE",		//Belgium
+				"FI",		//Finland
+				"DE",		//Germany
+				"FR",		//France
+				"HK",		//Hong Kong
+				"IE",		//Ireland
+				"IT",		//Italy
+				"JP",		//Japan
+				"LU",		//Luxembourg
+				"NO",		//Norway
+				"NL",		//Netherlands
+				"SG",		//Singapore
+				"NZ",		//New Zealand
+				"ES",		//Spain
+				"PT",		//Portugal
+				"SE",		//Sweden
+				"CH",		//Switzerland
+				"GB",		//United Kingdom
+				"BR",		//Brazil
+				"MX"		//Mexico
+			];
 
 		if (country_codes.indexOf(req.body.country) == -1){
 			error.handler(req, res, "Invalid country!", "json");
@@ -131,7 +131,7 @@ module.exports = {
 
 	//function to check posted info for personal
 	checkPayoutPersonal : function(req, res, next){
-		console.log('F: Checking posted Stripe managed account personal information...');
+		console.log('SF: Checking posted Stripe managed account personal information...');
 
 		if (!req.body.first_name){
 			error.handler(req, res, "Invalid first name!", "json");
@@ -155,7 +155,7 @@ module.exports = {
 
 	//function to check posted info for bank info
 	checkPayoutBank : function(req, res, next){
-		console.log('F: Checking posted Stripe managed account bank information...');
+		console.log('SF: Checking posted Stripe managed account bank information...');
 
 		if (!req.body.stripe_token){
 			error.handler(req, res, "Invalid bank information!", "json");
@@ -168,7 +168,7 @@ module.exports = {
 	//function to create a new managed account with stripe
 	createManagedAccount : function(req, res, next){
 		if (req.user.stripe_account && req.user.stripe_info.country == req.body.country){
-			console.log('F: Updating existing Stripe managed account address...');
+			console.log('SF: Updating existing Stripe managed account address...');
 			stripe.accounts.update(req.user.stripe_account, {
 				"legal_entity": {
 					"address": {
@@ -198,7 +198,7 @@ module.exports = {
 			});
 		}
 		else {
-			console.log('F: Creating a new Stripe managed account...');
+			console.log('SF: Creating a new Stripe managed account...');
 			stripe.accounts.create({
 				country: req.body.country,
 				email: req.user.email,
@@ -232,7 +232,7 @@ module.exports = {
 
 	//function to update managed account personal info
 	updateStripePersonal : function(req, res, next){
-		console.log('F: Updating existing Stripe managed account personal information...');
+		console.log('SF: Updating existing Stripe managed account personal information...');
 		stripe.accounts.update(req.user.stripe_account, {
 			legal_entity: {
 				"first_name": req.body.first_name,
@@ -260,7 +260,7 @@ module.exports = {
 
 	//function to update managed account bank info
 	updateStripeBank : function(req, res, next){
-		console.log('F: Updating existing Stripe managed account bank information...');
+		console.log('SF: Updating existing Stripe managed account bank information...');
 
 		stripe.accounts.update(req.user.stripe_account, {
 			external_account: req.body.stripe_token,
@@ -286,10 +286,13 @@ module.exports = {
 		});
 	},
 
-	//------------------------------------------------------------------------------------------ STRIPE PAYMENTS
+	//</editor-fold>
+
+	//<editor-fold>-------------------------------STRIPE PAYMENTS (FOR RENTAL)-------------------------------
 
 	//function to pay for a rental via stripe
 	chargeMoney : function(req, res, next){
+
 		if (req.session.new_rental_info.price != 0){
 			if (req.body.stripeToken){
 				var owner_stripe_id = req.session.new_rental_info.owner_stripe_id;
@@ -318,6 +321,8 @@ module.exports = {
 					error.handler(req, res, "Invalid price!", 'json');
 				}
 				else {
+					console.log("SF: Charging money via Stripe...");
+
 					//charge the end user, transfer to the owner, take doma fees if its a basic listing
 					stripe.charges.create(stripeOptions, function(err, charge) {
 						if (err) {
@@ -345,8 +350,8 @@ module.exports = {
 
 	//function to refund a rental
 	refundRental : function(req, res, next){
-		console.log("F: Refunding with Stripe...");
 		if (req.body.stripe_id){
+			console.log("SF: Refunding with Stripe...");
 			stripe.refunds.create({
 				charge: req.body.stripe_id
 			}, function(err, refund) {
@@ -364,7 +369,9 @@ module.exports = {
 		}
 	},
 
-	//------------------------------------------------------------------------------------------ STRIPE STANDALONE
+	//</editor-fold>
+
+	//<editor-fold>-------------------------------STRIPE STANDALONE (DEPRECATED)-------------------------------
 
 	// //authorize stripe
 	// authorizeStripe : function(req, res){
@@ -477,32 +484,111 @@ module.exports = {
 	// 	}
 	// },
 
-	//------------------------------------------------------------------------------------------ STRIPE SUBSCRIPTIONS
+	//</editor-fold>
+
+	//<editor-fold>-------------------------------STRIPE SUBSCRIPTIONS-------------------------------
+
+	//check if stripe subscription is still valid
+	checkStripeSubscription : function(req, res, next){
+		console.log("SF: Checking if Stripe subscription for listing is still active...");
+
+		var listing_info = (req.session.listing_info) ? req.session.listing_info : getUserListingObj(req.user.listings, req.params.domain_name);
+
+		//if subscription id exists in our database
+		if (listing_info && listing_info.stripe_subscription_id){
+
+			//check it against stripe
+			stripe.subscriptions.retrieve(req.session.listing_info.stripe_subscription_id, function(err, subscription) {
+				if (!err && subscription && subscription.status == "active"){
+					listing_info.premium = true;
+				}
+				else {
+					listing_info.premium = false;
+				}
+				next();
+			});
+		}
+		else {
+			listing_info.premium = false;
+			next();
+		}
+	},
+
+	//get stripe subscription info
+	getStripeSubscription : function(req, res, next){
+		console.log("SF: Getting Stripe subscription information for listing...");
+
+		var listing_info = getUserListingObj(req.user.listings, req.params.domain_name);
+
+		//if subscription id exists in our database
+		if (listing_info && listing_info.stripe_subscription_id){
+
+			//check it against stripe
+			stripe.subscriptions.retrieve(listing_info.stripe_subscription_id,{
+				expand: ["customer"]
+			}, function(err, subscription) {
+				if (err || !subscription){
+					delete listing_info.stripe_subscription_id;
+
+					//to do update our DH database to remove stripe_subscription_id
+					res.send({
+						user: req.user,
+						listings : req.user.listings
+					});
+				}
+				else {
+					updateUserStripeInfo(req.user, subscription.customer);
+					listing_info.exp_date = (subscription) ? subscription.current_period_end : false;
+					listing_info.expiring = (subscription) ? subscription.cancel_at_period_end : false;
+
+					res.send({
+						user: req.user,
+						listings : req.user.listings
+					});
+				}
+			});
+		}
+		else {
+			res.send({
+				user: req.user,
+				listings : req.user.listings
+			});
+		}
+	},
 
 	//check that the stripe customer is legit and has a good payment card
 	createStripeCustomer : function(req, res, next){
-		if (req.user.stripe_customer_id){
+		if (!req.body.stripeToken && !req.user.stripe_customer_id){
+			error.handler(req, res, "Something went wrong with the payment! Please refresh the page and try again!", "json");
+		}
+		else if (req.user.stripe_customer_id){
 			console.log("SF: Trying to update an existing Stripe customer...");
 
 			//cross reference with stripe
 			stripe.customers.retrieve(req.user.stripe_customer_id, function(err, customer) {
+
+				//our db is outdated, customer doesnt exist
 				if (err){
 					newStripeCustomer(req, res, next);
 				}
 				else {
-					req.user.customer_subscriptions = customer.subscriptions;
-
 					//update the customer default credit card
-					stripe.customers.update(req.user.stripe_customer_id, {
-						source: req.body.stripeToken
-					}, function(err, customer) {
-						if (err){
-							revertPremiumListings(req, res, err);
-						}
-						else {
-							next();
-						}
-					});
+					if (req.body.stripeToken){
+						stripe.customers.update(req.user.stripe_customer_id, {
+							source: req.body.stripeToken
+						}, function(err, customer) {
+							if (err){
+								updateUserStripeInfo(req.user, customer);
+								stripeErrorHandler(req, res, err);
+							}
+							else {
+								next();
+							}
+						});
+					}
+					else {
+						next();
+					}
 				}
 			});
 		}
@@ -515,65 +601,97 @@ module.exports = {
 	},
 
 	//function to create a monthly subscription for a listing
-	createSingleStripeSubscription : function(req, res, next){
+	createStripeSubscription : function(req, res, next){
+
 		var domain_name = req.params.domain_name || req.body.domain_name;
 		var listing_info = getUserListingObj(req.user.listings, domain_name);
 
 		//if subscription id exists in our database
 		if (listing_info && listing_info.stripe_subscription_id){
+			console.log("SF: Renewing existing Stripe subscription...");
 
 			//check it against stripe
 			stripe.subscriptions.retrieve(listing_info.stripe_subscription_id, function(err, subscription) {
-				if (err){stripeErrorHandler(req, res, err)}
+
+				//our db is outdated, subscription doesnt exist
+				if (err){
+					newStripeSubscription(req, res, next, listing_info);
+				}
 				else {
 					//subscription was cancelled, re-subscribe
 					if (subscription.cancel_at_period_end){
-						stripe.subscriptions.update(listing_info.stripe_subscription_id, function(err, subscription) {
+						stripe.subscriptions.update(listing_info.stripe_subscription_id, {
+							plan: "premium"
+						}, function(err, subscription) {
 							if (err){stripeErrorHandler(req, res, err)}
 							else {
-								req.new_listing_info = {
-									stripe_subscription_id : subscription.id,
-									exp_date : subscription.current_period_end * 1000,
-									expiring: false
-								}
+								listing_info.exp_date = (subscription) ? subscription.current_period_end : false;
+								listing_info.expiring = (subscription) ? subscription.cancel_at_period_end : false;
 								next();
 							}
 						});
 					}
-
 					//subscription is still active, all gucci
 					else {
-						error.handler(req, res, "This listing is already a Premium listing!", "json");
+						res.json({
+							state: "success",
+							listings: req.user.listings
+						});
 					}
 				}
 			});
 		}
 		else {
-			stripe.subscriptions.create({
-				customer: req.user.stripe_customer_id,
-				plan: "premium",
-				metadata: {
-					"insert_id" : listing_info.id
-				}
-			}, function(err, subscription) {
-				if (err){stripeErrorHandler(req, res, err)}
-				else {
-					req.new_listing_info = {
-						stripe_subscription_id : subscription.id,
-						exp_date : subscription.current_period_end * 1000,
-						expiring: false
-					}
-					next();
-				}
-			});
+			newStripeSubscription(req, res, next, listing_info);
 		}
 	},
 
 	//function to create multiple monthly subscriptions
 	createStripeSubscriptions : function(req, res, next){
-		console.log("SF: Trying to create or update a Stripe subscription...");
+		console.log("SF: Trying to create multiple Stripe subscriptions...");
 
-		newStripeSubscription(req, res, next);
+		//create the array of promises
+		var promises = [];
+		for (var x = 0; x < req.session.new_listings.premium_obj.inserted_ids.length; x++){
+			var promise = stripe.subscriptions.create({
+				customer: req.user.stripe_customer_id,
+				plan: "premium",
+				metadata: {
+					insert_id : req.session.new_listings.premium_obj.inserted_ids[x],
+					index : req.session.new_listings.premium_obj.indexes[x]
+				}
+			});
+			promises.push(promise);
+		}
+
+		//wait for all promises to finish
+		Q.allSettled(promises)
+		 .then(function(results) {
+			var premium_db_query_success = [];
+			var premium_db_query_failed = [];
+
+			//figure out which promises passed
+			for (var y = 0; y < results.length; y++){
+				if (results[y].state == "fulfilled"){
+					var subscription = results[y].value;
+
+					//create the formatted db query to update premium ID
+					premium_db_query_success.push([
+						subscription.metadata.insert_id,
+						subscription.id
+					]);
+
+					//add to good listings
+					req.session.new_listings.good_listings.push({
+						index: subscription.metadata.index
+					});
+				}
+			}
+
+			req.session.new_listings.premium_obj.db_success_obj = premium_db_query_success;
+			next();
+
+		});
 	},
 
 	//check that stripe subscription exists
@@ -582,15 +700,17 @@ module.exports = {
 
 		//if subscription id exists in our database
 		if (listing_info && listing_info.stripe_subscription_id){
+			console.log("SF: Cancelling an existing Stripe subscription...");
+
 			stripe.subscriptions.del(listing_info.stripe_subscription_id, { at_period_end: true }, function(err, confirmation) {
 				if (err){stripeErrorHandler(req, res, err)}
 				else {
-
-					//set expiring flag
-					req.new_listing_info = {
-						expiring: true
-					}
-					next();
+					listing_info.exp_date = (confirmation) ? confirmation.current_period_end : false;
+					listing_info.expiring = (confirmation) ? confirmation.cancel_at_period_end : false;
+					res.json({
+						state: "success",
+						listings: req.user.listings
+					});
 				}
 			});
 		}
@@ -599,29 +719,42 @@ module.exports = {
 		}
 	}
 
+	//</editor-fold>
+
 }
 
 //function to update req.user with stripe info
 function updateUserStripeInfo(user, stripe_results){
-	if (stripe_results.legal_entity && stripe_results.legal_entity.address && stripe_results.legal_entity.dob){
-		user.stripe_info = {
-			country : stripe_results.legal_entity.address.country || "",
-			addressline1 : stripe_results.legal_entity.address.line1 || "",
-			addressline2 : stripe_results.legal_entity.address.line2 || "",
-			city : stripe_results.legal_entity.address.city || "",
-			state : stripe_results.legal_entity.address.state || "",
-			zip : stripe_results.legal_entity.address.postal_code || "",
-			birthday_year : stripe_results.legal_entity.dob.year || "",
-			birthday_month : stripe_results.legal_entity.dob.month || "",
-			birthday_day : stripe_results.legal_entity.dob.day || "",
-			first_name : stripe_results.legal_entity.first_name || "",
-			last_name : stripe_results.legal_entity.last_name || "",
-			account_type : stripe_results.legal_entity.type || "",
-			transfers_enabled : stripe_results.transfers_enabled,
-			charges_enabled : stripe_results.charges_enabled
-		}
+	if (!user.stripe_info){
+		user.stripe_info = {}
 	}
-	if (stripe_results.external_accounts.total_count > 0){
+
+	//customer last4 cc # for premium payments
+	if (stripe_results.sources && stripe_results.sources.total_count > 0){
+		user.stripe_info.premium_cc_brand = stripe_results.sources.data[0].brand;
+		user.stripe_info.premium_cc_last4 = stripe_results.sources.data[0].last4;
+	}
+
+	//managed stripe account details for getting paid
+	if (stripe_results.legal_entity && stripe_results.legal_entity.address && stripe_results.legal_entity.dob){
+		user.stripe_info.country = stripe_results.legal_entity.address.country || "";
+		user.stripe_info.addressline1 = stripe_results.legal_entity.address.line1 || "";
+		user.stripe_info.addressline2 = stripe_results.legal_entity.address.line2 || "";
+		user.stripe_info.city = stripe_results.legal_entity.address.city || "";
+		user.stripe_info.state = stripe_results.legal_entity.address.state || "";
+		user.stripe_info.zip = stripe_results.legal_entity.address.postal_code || "";
+		user.stripe_info.birthday_year = stripe_results.legal_entity.dob.year || "";
+		user.stripe_info.birthday_month = stripe_results.legal_entity.dob.month || "";
+		user.stripe_info.birthday_day = stripe_results.legal_entity.dob.day || "";
+		user.stripe_info.first_name = stripe_results.legal_entity.first_name || "";
+		user.stripe_info.last_name = stripe_results.legal_entity.last_name || "";
+		user.stripe_info.account_type = stripe_results.legal_entity.type || "";
+		user.stripe_info.transfers_enabled = stripe_results.transfers_enabled;
+		user.stripe_info.charges_enabled = stripe_results.charges_enabled;
+	}
+
+	//bank account details
+	if (stripe_results.external_accounts && stripe_results.external_accounts.total_count > 0){
 		user.stripe_info.bank_country = stripe_results.external_accounts.data[0].country || "",
 		user.stripe_info.object = stripe_results.external_accounts.data[0].object || "";
 		user.stripe_info.currency = stripe_results.external_accounts.data[0].currency.toUpperCase() || "";
@@ -664,21 +797,16 @@ function newStripeCustomer(req, res, next){
 		}
 	}, function(err, customer) {
 		if (err){
-			revertPremiumListings(req, res, err);
+			stripeErrorHandler(req, res, err);
 		}
 		else {
-
 			//update the customer id in the DB
-			var new_stripe_cus = {
+			Account.updateAccount({
 				stripe_customer_id: customer.id
-			}
-			Account.updateAccount(new_stripe_cus, req.user.email, function(result){
+			}, req.user.email, function(result){
 				if (result.state=="error"){error.handler(req, res, result.info, "json")}
 				else {
-					console.log(customer);
 					req.user.stripe_customer_id = customer.id;
-					req.user.customer_subscriptions = customer.subscriptions;
-
 					next();
 				}
 			});
@@ -686,112 +814,70 @@ function newStripeCustomer(req, res, next){
 	});
 }
 
-//helper function to create a new stripe subscription
-function newStripeSubscription(req, res, next){
+//helper function to create a new stripe customer
+function newStripeSubscription(req, res, next, listing_info){
+	console.log("SF: Creating a new Stripe subscription...");
 
-	//create the array of promises
-	var promises = [];
-	for (var x = 0; x < req.session.new_listings.premium_obj.inserted_ids.length; x++){
-		var promise = stripe.subscriptions.create({
-			customer: req.user.stripe_customer_id,
-			plan: "premium",
-			metadata: {
-				insert_id : req.session.new_listings.premium_obj.inserted_ids[x],
-				index : req.session.new_listings.premium_obj.indexes[x]
+	stripe.subscriptions.create({
+		customer: req.user.stripe_customer_id,
+		plan: "premium",
+		metadata: {
+			"insert_id" : listing_info.id
+		},
+		expand: ["customer"]
+	}, function(err, subscription) {
+		if (err){stripeErrorHandler(req, res, err)}
+		else {
+			updateUserStripeInfo(req.user, subscription.customer);
+			listing_info.exp_date = (subscription) ? subscription.current_period_end : false;
+			listing_info.expiring = (subscription) ? subscription.cancel_at_period_end : false;
+			req.new_listing_info = {
+				stripe_subscription_id : subscription.id
 			}
-		});
-		promises.push(promise);
-	}
-
-	//wait for all promises to finish
-	Q.allSettled(promises)
-	 .then(function(results) {
-		var premium_db_query_success = [];
-		var premium_db_query_failed = [];
-
-		//figure out which promises failed / passed
-		for (var y = 0; y < results.length; y++){
-			if (results[y].state == "fulfilled"){
-				var subscription = results[y].value;
-				//create the formatted db query to update premium ID
-				premium_db_query_success.push([
-					subscription.metadata.insert_id,
-					subscription.id
-				]);
-
-				//add to good listings
-				req.session.new_listings.good_listings.push({
-					index: subscription.metadata.index
-				});
-			}
-			// else {
-			// 	//revert pricing for failed premium listings
-			// 	premium_db_query_failed.push([
-			// 		req.session.new_listings.premium_obj.inserted_ids[y],			//insert id
-			// 		"month",														//price type
-			// 		25,																//price rate
-			// 		"",																//subscription id
-			// 		0,																//exp date
-			// 		false															//expiring
-			// 	]);
-			//
-			// 	//add to bad listings
-			// 	req.session.new_listings.bad_listings.push({
-			// 		index: req.session.new_listings.premium_obj.indexes[y],
-			// 		reasons: [
-			// 			"Premium upgrade failed! Your card was not charged for this domain."
-			// 		]
-			// 	});
-			// }
+			next();
 		}
-
-		req.session.new_listings.premium_obj.db_success_obj = premium_db_query_success;
-		// req.session.new_listings.premium_obj.db_failed_obj = premium_db_query_failed;
-		next();
-
 	});
-
 }
 
-//helper function to handle unsuccessful stripe card, revert premium
-function revertPremiumListings(req, res, err){
-	if (req.path == "/listings/create"){
-		var premium_db_query_failed = [];
-
-		for (var x = 0; x < req.session.new_listings.premium_obj.inserted_ids.length; x++){
-			premium_db_query_failed.push([
-				req.session.new_listings.premium_obj.inserted_ids[x],			//insert id
-				"month",														//price type
-				25,																//price rate
-				"",																//subscription id
-				0,																//exp date
-				false															//expiring
-			]);
-
-			//add to bad listings
-			req.session.new_listings.bad_listings.push({
-				index: req.session.new_listings.premium_obj.indexes[x],
-				reasons: [
-					"Premium purchase error! This domain was created as a basic domain instead."
-				]
-			});
-		}
-
-		//revert pricing for failed premium listings
-		if (premium_db_query_failed.length > 0){
-			Listing.updateListingsBasic(premium_db_query_failed, function(result){
-			});
-			res.send({
-				bad_listings: req.session.new_listings.bad_listings,
-				good_listings: req.session.new_listings.good_listings
-			});
-			delete req.session.new_listings;
-		}
-	}
-	else {
-		stripeErrorHandler(req, res, err);
-	}
-}
+// //helper function to handle unsuccessful stripe card, revert premium
+// function revertPremiumListings(req, res, err){
+// 	if (req.path == "/listings/create"){
+// 		var premium_db_query_failed = [];
+//
+// 		for (var x = 0; x < req.session.new_listings.premium_obj.inserted_ids.length; x++){
+// 			premium_db_query_failed.push([
+// 				req.session.new_listings.premium_obj.inserted_ids[x],			//insert id
+// 				"month",														//price type
+// 				25,																//price rate
+// 				"",																//subscription id
+// 				0,																//exp date
+// 				false															//expiring
+// 			]);
+//
+// 			//add to bad listings
+// 			req.session.new_listings.bad_listings.push({
+// 				index: req.session.new_listings.premium_obj.indexes[x],
+// 				reasons: [
+// 					"Premium purchase error! This domain was created as a basic domain instead."
+// 				]
+// 			});
+// 		}
+//
+// 		//revert pricing for failed premium listings
+// 		if (premium_db_query_failed.length > 0){
+// 			Listing.updateListingsBasic(premium_db_query_failed, function(result){
+// 			});
+// 			res.send({
+// 				bad_listings: req.session.new_listings.bad_listings,
+// 				good_listings: req.session.new_listings.good_listings
+// 			});
+// 			delete req.session.new_listings;
+// 		}
+// 	}
+// 	else {
+// 		stripeErrorHandler(req, res, err);
+// 	}
+// }
 
 //helper function for handling stripe errors
 function stripeErrorHandler(req, res, err){

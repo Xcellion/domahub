@@ -10,7 +10,6 @@ var	request = require('request');
 var url = require('url');
 var fs = require('fs');
 var path = require('path');
-var concat = require('concat-stream');
 var node_env = process.env.NODE_ENV || 'dev'; 	//dev or prod bool
 
 module.exports = function(app, db, e){
