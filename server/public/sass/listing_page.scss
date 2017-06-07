@@ -24,11 +24,25 @@
 
 .footer {
   height: 200px;
-  padding: 10px;
 }
 
 .logo {
-  display: flex;
+  display: inline-flex;
+  padding: 5px 8px;
+  border: 1px solid $primary;
+  &:hover,
+  &:focus {
+    border-color: $white;
+    .flat-logo {
+      background-position: 0 -32px;
+    }
+  }
+  .flat-logo {
+    @include transition (background-position 0.25s ease);
+    &:focus {
+      outline: none;
+    }
+  }
 }
 
 #background_image{

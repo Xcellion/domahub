@@ -197,11 +197,23 @@ button[data-balloon] {
   padding: 60px 20px; }
 
 .footer {
-  height: 200px;
-  padding: 10px; }
+  height: 200px; }
 
 .logo {
-  display: flex; }
+  display: inline-flex;
+  padding: 5px 8px;
+  border: 1px solid #3cbc8d; }
+  .logo:hover, .logo:focus {
+    border-color: white; }
+    .logo:hover .flat-logo, .logo:focus .flat-logo {
+      background-position: 0 -32px; }
+  .logo .flat-logo {
+    -moz-transition: background-position 0.25s ease;
+    -o-transition: background-position 0.25s ease;
+    -webkit-transition: background-position 0.25s ease;
+    transition: background-position 0.25s ease; }
+    .logo .flat-logo:focus {
+      outline: none; }
 
 #background_image {
   position: fixed;
