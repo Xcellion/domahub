@@ -1,35 +1,9 @@
 $(document).ready(function() {
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
   // colorize("ff8751", ".button", "background-color");
   // colorize("ff8751", ".tag", "background-color");
   // colorize("238fea", "p", "color");
   // colorize("fff", "h1,h2,h3", "color");
   // colorize("ff8751", "a", "color");
-=======
-=======
->>>>>>> 5860876ea8780ae7c438ca51c5890531ca0fd1f7
-=======
->>>>>>> 5860876ea8780ae7c438ca51c5890531ca0fd1f7
-=======
->>>>>>> 5860876ea8780ae7c438ca51c5890531ca0fd1f7
-  colorize("fff", ".button", "background-color");
-  colorize("000", ".tag", "background-color");
-  colorize("0ff", "p", "color");
-  colorize("fff", "h1,h2,h3", "color");
-  colorize("#ff0", "a", "color");
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
->>>>>>> 5860876ea8780ae7c438ca51c5890531ca0fd1f7
-=======
->>>>>>> 5860876ea8780ae7c438ca51c5890531ca0fd1f7
-=======
->>>>>>> 5860876ea8780ae7c438ca51c5890531ca0fd1f7
-=======
->>>>>>> 5860876ea8780ae7c438ca51c5890531ca0fd1f7
 });
 
 var primaryColor = "f00";
