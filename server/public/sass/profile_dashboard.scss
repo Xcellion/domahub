@@ -1,0 +1,223 @@
+@import 'vars';
+@import 'mixins';
+@import 'balloon';
+
+// New dashboard
+#domain-table {
+  margin: 10px 0;
+  border-radius: $radius;
+  max-height: 420px;
+  overflow-y: auto;
+}
+
+.button-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  .button,
+  .select {
+    flex-grow: 1;
+    margin-bottom: 5px;
+  }
+  select {
+    width: 100%;
+  }
+}
+
+.flex-item {
+  align-items: center;
+  border-bottom: 1px solid $border;
+  border-left: 1px solid $border;
+  display: flex;
+  justify-content: space-between;
+  padding: 8px;
+  p {
+    word-break: break-all;
+    margin-right: 10px;
+  }
+  &:hover {
+    background-color: $grey-lighter;
+    border-color: $grey-lighter;
+    cursor: pointer;
+    color: $primary;
+  }
+  &.is-active {
+    background-color: $primary;
+    border-color: $primary;
+    color: $white;
+  }
+}
+
+.background_image {
+    min-height: 200px;
+    max-height: 200px;
+    object-fit: cover;
+}
+
+// listing image
+.listing-img {
+   .delete {
+     border-radius: 0 $radius;
+     position: absolute;
+     right:0;
+   }
+}
+
+// listing modules
+.listing-module {
+  padding: 10px 0;
+  &:not(:last-child) {
+    border-bottom: 1px solid $border;
+  }
+}
+
+// category buttons
+.category-control {
+  display: flex;
+  flex-wrap: wrap;
+  .button {
+    margin-right: 5px;
+    margin-bottom: 5px;
+  }
+}
+
+.category-selector {
+  margin-right: 10px;
+  margin-bottom: 10px;
+}
+
+// file upload button
+.drop-form-file {
+  width: 100%;
+}
+
+.input-number {
+  width: 100px;
+}
+
+.input-file {
+  width: 0.1px;
+  height: 0.1px;
+  opacity: 0;
+  overflow: hidden;
+  position: absolute;
+  z-index: -1;
+}
+
+.input-file + label {
+	cursor: pointer;
+  & > .fa {
+    margin-right: 5px;
+  }
+}
+
+.input-file:focus + label {
+	outline: 1px dotted #000;
+	outline: -webkit-focus-ring-color auto 3px;
+}
+
+// table stuff
+.table {
+  &.is-profile {
+    @include tablet {
+      min-width: 730px;
+    }
+    @include mobile {
+      width: 100%;
+    }
+  }
+}
+
+.row-disp {
+  height: 48px;
+}
+
+.td-status {
+  width: 122px;
+  padding-left: 10px !important;
+}
+
+.td-verify {
+  padding-left: 10px !important;
+}
+
+.td-status-drop {
+  padding-left: 1px !important;
+  width: 122px;
+}
+
+.td-type {
+  width: 80px;
+}
+
+.td-arrow {
+  width: 10px;
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.td-domain {
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.td-date {
+  width: 160px;
+}
+
+.td-buttons {
+  width: 175px;
+}
+
+.td-price-rate {
+  white-space: nowrap;
+  width: 75px;
+}
+
+.td-price-type {
+  width: 100px;
+}
+
+.td-rental-date {
+  width: 150px;
+}
+
+.td-address {
+  @include tablet {
+    width: 275px;
+  }
+  @include mobile {
+    width: 150px;
+  }
+}
+
+.box-checked {
+  margin-left: 2px;
+}
+
+.address-div-wrapper {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  @include mobile {
+    width: 150px;
+  }
+  @include tablet {
+    width: 255px;
+  }
+}
+
+.selected-row {
+  background-color: $primary-lighter;
+  &:hover {
+    background-color: $primary-dark;
+  }
+}
+
+.preview-image {
+    background: url("/images/loading.svg");
+    background-repeat: no-repeat;
+    background-position: center center;
+    min-height:200px;
+}

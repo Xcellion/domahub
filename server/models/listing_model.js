@@ -60,7 +60,9 @@ listing_model.prototype.checkListingPurchased = function(domain_name, callback){
 	query = 'SELECT 1 AS "exist" FROM listings \
 			INNER JOIN stats_contact_history ON \
 			stats_contact_history.listing_id = listings.id \
-			WHERE stats_contact_history.verification_code IS NOT NULL AND listings.domain_name = ?'
+			WHERE stats_contact_history.verification_code IS NOT NULL \
+			AND stats_contact_history.bin = 1 \
+			AND listings.domain_name = ?'
 	listing_query(query, "Failed to check if domain has been bought already!" + domain_name + "!", callback, [domain_name]);
 }
 
@@ -135,13 +137,14 @@ listing_model.prototype.getVerifiedListing = function(domain_name, callback){
 				listings.paths,\
 				listings.background_image,\
 				listings.logo,\
+				listings.history_module,\
+				listings.traffic_module,\
+				listings.info_module,\
 				IF(listings.primary_color IS NULL, '#3CBC8D', listings.primary_color) as primary_color, \
 				IF(listings.secondary_color IS NULL, '#FF5722', listings.secondary_color) as secondary_color, \
 				IF(listings.tertiary_color IS NULL, '#2196F3', listings.tertiary_color) as tertiary_color, \
 				IF(listings.font_name IS NULL, 'Rubik,Helvetica,sans-serif', listings.font_color) as font_name, \
 				IF(listings.font_color IS NULL, '#000000', listings.font_color) as font_color, \
-				listings.font_name,\
-				listings.font_color,\
 				accounts.username, \
 				accounts.email AS owner_email, \
 				!ISNULL(accounts.stripe_account) AS stripe_connected, \

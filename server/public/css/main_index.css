@@ -323,6 +323,17 @@ button[data-balloon] {
   .learn-more-arrow a:active, .learn-more-arrow a:focus {
     outline: none; }
 
+.content.is-mobile {
+  max-width: 400px;
+  margin-left: auto;
+  margin-right: auto; }
+
+@media screen and (max-width: 768px) {
+  .content ul.has-disc {
+    max-width: 300px;
+    margin-left: auto;
+    margin-right: auto; } }
+
 .button-wrapper {
   display: flex;
   justify-content: center;
@@ -353,7 +364,7 @@ button[data-balloon] {
       margin-left: 2px; }
 
 .price-card {
-  height: 454px;
+  height: 400px;
   display: flex;
   flex-direction: column;
   justify-content: space-between; }
