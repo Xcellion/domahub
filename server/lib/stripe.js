@@ -27,7 +27,7 @@ module.exports = {
 
 	//gets the stripe managed account info
 	getAccountInfo : function(req, res, next){
-		if (req.user.stripe_account){
+		if (req.user.stripe_account && !req.user.stripe_info){
 			console.log('SF: Retrieving existing Stripe managed account information...');
 			stripe.accounts.retrieve(req.user.stripe_account, function(err, account) {
 				if (!err){
@@ -35,7 +35,24 @@ module.exports = {
 					if (node_env == "dev"){
 						req.user.dev_stripe_info = account;
 					}
-					next();
+
+					if (req.user.stripe_customer_id){
+						console.log('SF: Retrieving existing Stripe customer information...');
+
+						stripe.customers.retrieve(req.user.stripe_customer_id, function(err, customer) {
+							if (!err){
+								updateUserStripeInfo(req.user, customer);
+								next();
+							}
+							else {
+								console.log(err.message);
+								next();
+							}
+						});
+					}
+					else {
+						next();
+					}
 				}
 				else {
 					console.log(err.message);
@@ -547,7 +564,7 @@ module.exports = {
 		if (listing_info && listing_info.stripe_subscription_id){
 
 			//check it against stripe
-			stripe.subscriptions.retrieve(req.session.listing_info.stripe_subscription_id, function(err, subscription) {
+			stripe.subscriptions.retrieve(listing_info.stripe_subscription_id, function(err, subscription) {
 				if (!err && subscription && subscription.status == "active"){
 					listing_info.premium = true;
 				}
@@ -573,25 +590,19 @@ module.exports = {
 		if (listing_info && listing_info.stripe_subscription_id){
 
 			//check it against stripe
-			stripe.subscriptions.retrieve(listing_info.stripe_subscription_id,{
-				expand: ["customer"]
-			}, function(err, subscription) {
+			stripe.subscriptions.retrieve(listing_info.stripe_subscription_id, function(err, subscription) {
 				if (err || !subscription){
 					delete listing_info.stripe_subscription_id;
 
 					//to do update our DH database to remove stripe_subscription_id
 					res.send({
-						user: req.user,
 						listings : req.user.listings
 					});
 				}
 				else {
-					updateUserStripeInfo(req.user, subscription.customer);
 					listing_info.exp_date = (subscription) ? subscription.current_period_end : false;
 					listing_info.expiring = (subscription) ? subscription.cancel_at_period_end : false;
-
 					res.send({
-						user: req.user,
 						listings : req.user.listings
 					});
 				}
@@ -599,7 +610,6 @@ module.exports = {
 		}
 		else {
 			res.send({
-				user: req.user,
 				listings : req.user.listings
 			});
 		}
@@ -611,11 +621,9 @@ module.exports = {
 			error.handler(req, res, "Something went wrong with the payment! Please refresh the page and try again!", "json");
 		}
 		else if (req.user.stripe_customer_id){
-			console.log("SF: Trying to update an existing Stripe customer...");
 
 			//cross reference with stripe
 			stripe.customers.retrieve(req.user.stripe_customer_id, function(err, customer) {
-
 				//our db is outdated, customer doesnt exist
 				if (err){
 					newStripeCustomer(req, res, next);
@@ -623,6 +631,8 @@ module.exports = {
 				else {
 					//update the customer default credit card
 					if (req.body.stripeToken){
+						console.log("SF: Trying to update an existing Stripe customer default credit card...");
+
 						stripe.customers.update(req.user.stripe_customer_id, {
 							source: req.body.stripeToken
 						}, function(err, customer) {
@@ -644,7 +654,6 @@ module.exports = {
 
 		//no customer exists, create a new stripe customer
 		else {
-			console.log("SF: Trying to create a new Stripe customer...");
 			newStripeCustomer(req, res, next);
 		}
 	},
@@ -657,7 +666,6 @@ module.exports = {
 
 		//if subscription id exists in our database
 		if (listing_info && listing_info.stripe_subscription_id){
-			console.log("SF: Renewing existing Stripe subscription...");
 
 			//check it against stripe
 			stripe.subscriptions.retrieve(listing_info.stripe_subscription_id, function(err, subscription) {
@@ -669,6 +677,8 @@ module.exports = {
 				else {
 					//subscription was cancelled, re-subscribe
 					if (subscription.cancel_at_period_end){
+						console.log("SF: Renewing existing Stripe subscription...");
+
 						stripe.subscriptions.update(listing_info.stripe_subscription_id, {
 							plan: "premium"
 						}, function(err, subscription) {
@@ -779,13 +789,13 @@ function updateUserStripeInfo(user, stripe_results){
 	}
 
 	//customer last4 cc # for premium payments
-	if (stripe_results.sources && stripe_results.sources.total_count > 0){
+	if (stripe_results && stripe_results.sources && stripe_results.sources.total_count > 0){
 		user.stripe_info.premium_cc_brand = stripe_results.sources.data[0].brand;
 		user.stripe_info.premium_cc_last4 = stripe_results.sources.data[0].last4;
 	}
 
 	//managed stripe account details for getting paid
-	if (stripe_results.legal_entity && stripe_results.legal_entity.address && stripe_results.legal_entity.dob){
+	if (stripe_results && stripe_results.legal_entity && stripe_results.legal_entity.address && stripe_results.legal_entity.dob){
 		user.stripe_info.country = stripe_results.legal_entity.address.country || "";
 		user.stripe_info.addressline1 = stripe_results.legal_entity.address.line1 || "";
 		user.stripe_info.addressline2 = stripe_results.legal_entity.address.line2 || "";
@@ -803,7 +813,7 @@ function updateUserStripeInfo(user, stripe_results){
 	}
 
 	//bank account details
-	if (stripe_results.external_accounts && stripe_results.external_accounts.total_count > 0){
+	if (stripe_results && stripe_results.external_accounts && stripe_results.external_accounts.total_count > 0){
 		user.stripe_info.bank_country = stripe_results.external_accounts.data[0].country || "",
 		user.stripe_info.object = stripe_results.external_accounts.data[0].object || "";
 		user.stripe_info.currency = stripe_results.external_accounts.data[0].currency.toUpperCase() || "";
@@ -837,6 +847,8 @@ function updateUserStripeTransfers(user, stripe_transfers){
 
 //helper function to create a new stripe customer
 function newStripeCustomer(req, res, next){
+	console.log("SF: Trying to create a new Stripe customer...");
+
 	stripe.customers.create({
 		source: req.body.stripeToken,
 		email: req.user.email,
@@ -880,7 +892,7 @@ function newStripeSubscription(req, res, next, listing_info){
 			updateUserStripeInfo(req.user, subscription.customer);
 			listing_info.exp_date = (subscription) ? subscription.current_period_end : false;
 			listing_info.expiring = (subscription) ? subscription.cancel_at_period_end : false;
-			req.new_listing_info = {
+			req.session.new_listing_info = {
 				stripe_subscription_id : subscription.id
 			}
 			next();

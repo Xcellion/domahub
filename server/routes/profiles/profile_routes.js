@@ -18,8 +18,7 @@ module.exports = function(app, db, auth, error, stripe){
 	//mylistings pages
 	app.get([
 		"/profile",
-		"/profile/mylistings",
-		"/profile/mylistings/:page"
+		"/profile/mylistings"
 	], [
 		profile_functions.checkPageNum,
 		auth.checkLoggedIn,

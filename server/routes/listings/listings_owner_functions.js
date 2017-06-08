@@ -490,24 +490,80 @@ module.exports = {
 		if (getUserListingObj(req.user.listings, req.params.domain_name).premium){
 			console.log("F: Checking posted premium listing details...");
 
+			var font_name = (req.body.font_name) ? req.body.font_name.replace(/\s/g, "").toLowerCase().split(",") : [];
+			var font_name_clean = [];
+
+			//loop through the font names posted
+			for (var x = 0; x < font_name.length; x++){
+				//if its alphanumeric
+				if (validator.isAscii(font_name[x])){
+					font_name_clean.push(font_name[x]);
+				}
+			}
+			font_name_clean = font_name_clean.join(",");
+
+			var history_module = parseFloat(req.body.history_module);
+			var traffic_module = parseFloat(req.body.traffic_module);
+			var info_module = parseFloat(req.body.info_module);
+
 			//invalid primary color
 			if (req.body.primary_color && !validator.isHexColor(req.body.primary_color)){
 				error.handler(req, res, "Invalid primary color!", "json");
 			}
 			//invalid secondary color
-			if (req.body.secondary_color && !validator.isHexColor(req.body.secondary_color)){
+			else if (req.body.secondary_color && !validator.isHexColor(req.body.secondary_color)){
 				error.handler(req, res, "Invalid secondary color!", "json");
 			}
 			//invalid tertiary color
-			if (req.body.tertiary_color && !validator.isHexColor(req.body.tertiary_color)){
+			else if (req.body.tertiary_color && !validator.isHexColor(req.body.tertiary_color)){
 				error.handler(req, res, "Invalid tertiary color!", "json");
+			}
+			//invalid font names
+			else if (req.body.font_name && font_name_clean.length == 0){
+				error.handler(req, res, "Invalid font names!", "json");
+			}
+			//invalid font color
+			else if (req.body.font_color && !validator.isHexColor(req.body.font_color)){
+				error.handler(req, res, "Invalid font color!", "json");
+			}
+			//invalid history module
+			else if (req.body.history_module && (history_module != 0 && history_module != 1)){
+				error.handler(req, res, "Invalid history module selection!", "json");
+			}
+			//invalid traffic module
+			else if (req.body.traffic_module && (traffic_module != 0 && traffic_module != 1)){
+				error.handler(req, res, "Invalid traffic module selection!", "json");
+			}
+			//invalid info module
+			else if (req.body.info_module && (info_module != 0 && info_module != 1)){
+				error.handler(req, res, "Invalid info module selection!", "json");
+			}
+			//all good!
+			else {
+
+				//set the new listing info
+				if (!req.session.new_listing_info) {
+					req.session.new_listing_info = {};
+				}
+				req.session.new_listing_info.primary_color = req.body.primary_color;
+				req.session.new_listing_info.secondary_color = req.body.secondary_color;
+				req.session.new_listing_info.tertiary_color = req.body.tertiary_color;
+				req.session.new_listing_info.font_name = req.body.font_name;
+				req.session.new_listing_info.font_color = req.body.font_color;
+				req.session.new_listing_info.history_module = history_module;
+				req.session.new_listing_info.traffic_module = traffic_module;
+				req.session.new_listing_info.info_module = info_module;
+
+				next();
 			}
 		}
 		else {
 			//not premium but tried to do premium updates
 			if (req.body.primary_color ||
 				req.body.secondary_color ||
-				req.body.tertiary_color
+				req.body.tertiary_color ||
+				req.body.font_name ||
+				req.body.font_color
 			){
 				error.handler(req, res, "This listing is not a premium listing!", "json");
 			}
@@ -854,7 +910,7 @@ module.exports = {
 		dns.resolve(domain_name, "A", function (err, address, family) {
 			var domain_ip = address;
 			dns.lookup("domahub.com", function (err, address, family) {
-				if ((domain_ip == address || domain_ip[0] == address) && domain_ip.length == 1){
+				if (domain_ip && address && (domain_ip == address || domain_ip[0] == address) && domain_ip.length == 1){
 					req.session.new_listing_info = {
 						domain_name: domain_name,
 						verified: 1
