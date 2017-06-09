@@ -924,6 +924,8 @@ function successMessage(message){
 //function to initiate edit mode for unverified
 function editRowUnverified(listing_info){
 	//get who is an A record data if we haven't yet
+
+	console.log(listing_info.a_records, listing_info.whois)
 	if (listing_info.a_records == undefined || listing_info.whois == undefined){
 		getDNSRecordAndWhois(listing_info.domain_name);
 	}
@@ -960,12 +962,20 @@ function getDNSRecordAndWhois(domain_name){
 		method: "POST"
 	}).done(function(data){
 		var unverified_domain = getUserListingObj(listings, domain_name);
-		unverified_domain.a_records = data.listing.a_records;
-		unverified_domain.whois = data.listing.whois;
 
-		//update the unverified domain table
-		updateRegistrarURL(data.listing.whois);
-		updateExistingDNS(data.listing.a_records);
+		(function(unverified_domain){
+			unverified_domain.a_records = data.listing.a_records;
+			unverified_domain.whois = data.listing.whois;
+
+			//update the change row handler
+			$("#row-listing_id" + current_listing.id).off().on("click", function(e){
+				changeRow($(this), unverified_domain, true);
+			});
+
+			//update the unverified domain table
+			updateRegistrarURL(unverified_domain.whois);
+			updateExistingDNS(unverified_domain.a_records);
+		})(unverified_domain);
 	});
 }
 

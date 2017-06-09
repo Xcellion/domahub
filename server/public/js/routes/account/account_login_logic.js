@@ -7,13 +7,16 @@ $(document).ready(function() {
 	}
 
 	//remember me check box
-	$("#remember-checkbox").click(function(){
+	$("#remember-checkbox").on("click", function(){
 		rememberAccount($(this).is(":checked"));
 	});
 
-	//to catch empty emails or empty passwords
-	$('#navbar_form').submit(function(event){
+	$("#login-form").on('submit', function(){
+		$("#login-button").addClass('is-loading');
+	});
 
+	//to catch empty emails or empty passwords
+	$('#navbar_form').on("submit", function(event){
 		//re-set cookie for remember
 		rememberAccount($("#remember-checkbox").is(":checked"));
 
