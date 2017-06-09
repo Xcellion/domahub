@@ -197,14 +197,16 @@ button[data-balloon] {
     word-break: break-all;
     margin-right: 10px; }
   .flex-item:hover {
-    background-color: #efefef;
-    border-color: #efefef;
-    cursor: pointer;
-    color: #3cbc8d; }
+    cursor: pointer; }
   .flex-item.is-active {
-    background-color: #3cbc8d;
-    border-color: #3cbc8d;
-    color: white; }
+    background-color: #efefef;
+    border-color: #efefef; }
+  .flex-item .checkbox-form label::before {
+    top: 0 !important;
+    left: 0 !important; }
+  .flex-item .checkbox-form label {
+    width: 24px;
+    height: 24px; }
 
 .background_image {
   min-height: 200px;
@@ -254,85 +256,3 @@ button[data-balloon] {
 .input-file:focus + label {
   outline: 1px dotted #000;
   outline: -webkit-focus-ring-color auto 3px; }
-
-@media screen and (min-width: 769px) {
-  .table.is-profile {
-    min-width: 730px; } }
-
-@media screen and (max-width: 768px) {
-  .table.is-profile {
-    width: 100%; } }
-
-.row-disp {
-  height: 48px; }
-
-.td-status {
-  width: 122px;
-  padding-left: 10px !important; }
-
-.td-verify {
-  padding-left: 10px !important; }
-
-.td-status-drop {
-  padding-left: 1px !important;
-  width: 122px; }
-
-.td-type {
-  width: 80px; }
-
-.td-arrow {
-  width: 10px; }
-  .td-arrow:hover {
-    cursor: pointer; }
-
-.td-domain:hover {
-  cursor: pointer; }
-
-.td-date {
-  width: 160px; }
-
-.td-buttons {
-  width: 175px; }
-
-.td-price-rate {
-  white-space: nowrap;
-  width: 75px; }
-
-.td-price-type {
-  width: 100px; }
-
-.td-rental-date {
-  width: 150px; }
-
-@media screen and (min-width: 769px) {
-  .td-address {
-    width: 275px; } }
-
-@media screen and (max-width: 768px) {
-  .td-address {
-    width: 150px; } }
-
-.box-checked {
-  margin-left: 2px; }
-
-.address-div-wrapper {
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  overflow: hidden; }
-  @media screen and (max-width: 768px) {
-    .address-div-wrapper {
-      width: 150px; } }
-  @media screen and (min-width: 769px) {
-    .address-div-wrapper {
-      width: 255px; } }
-
-.selected-row {
-  background-color: #8ad6ba; }
-  .selected-row:hover {
-    background-color: #309670; }
-
-.preview-image {
-  background: url("/images/loading.svg");
-  background-repeat: no-repeat;
-  background-position: center center;
-  min-height: 200px; }

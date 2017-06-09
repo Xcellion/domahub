@@ -4,6 +4,7 @@
 
 <head>
 	<title>My Listings - DomaHub</title>
+	<link rel="stylesheet" href="/css/min/profile_dashboard.min.css" />
 	<link rel="stylesheet" href="/css/lib/jquery.tagit.css" type="text/css" />
 	<link rel="stylesheet" href="/css/lib/jquery.minicolors.css" type="text/css" />
 	<%- include("../templates/head_links"); %>
@@ -50,31 +51,39 @@
 							<input id="domain-search" tabindex="0" class="input is-expanded" type="text" placeholder="Search domains" />
 						</div>
 						<div class="button-wrapper control">
-							<a id="select-all" data-selected="false" class="no-shadow" tabindex="0" title="Select All">
-								<span class="icon is-medium"><i class="fa fa-square-o"></i></span>
-							</a>
-							<a id="multi-delete" class="multi-button is-disabled button no-shadow" tabindex="0" title="Delete Listing(s)">
+							<!-- <form class="checkbox-form">
+								<input id="select-all" data-selected="false" type="checkbox" class="no-shadow" tabindex="0" title="Select All" />
+								<label for="select-all" tabindex="0"></label>
+							</form> -->
+							<button id="select-all" data-selected="false" tabindex="0" class="button no-shadow" title="Select All">
+								<span class="icon is-small">
+									<i class="fa fa-check-square-o"></i>
+								</span>
+								<span>Select All</span>
+							</button>
+							<button id="multi-delete" class="button is-disabled no-shadow" tabindex="0" title="Delete Listing(s)">
 								<span class="icon is-small">
 									<i class="fa fa-trash"></i>
 								</span>
 								<span>Delete</span>
-							</a>
-							<a id="multi-verify" class="multi-button is-disabled button no-shadow" tabindex="0" title="Verify Listing(s)">
+							</button>
+							<button id="multi-verify" class="button is-disabled no-shadow" tabindex="0" title="Verify Listing(s)">
 								<span class="icon is-small">
 									<i class="fa fa-check-circle-o"></i>
 								</span>
 								<span>Verify</span>
-							</a>
+							</button>
 						</div>
 					</div>
 
 					<!-- DOMAINS TABLE  -->
 					<div id="table_body" class="margin-top-15">
 						<div id="verified-clone-row" class="padding-5 clone-row table-row is-hidden flex-item">
-							<p class="select-button is-inline">
-				                <span class="icon is-medium"><i class="no-transition fa fa-square-o"></i></span>
-				            </p>
-							<p class='is-inline td-domain'></p>
+							<form class="checkbox-form">
+								<input class="select-button" data-selected="false" type="checkbox" class="no-shadow" tabindex="0" title="Select All" />
+								<label for="select-button" tabindex="0"></label>
+							</form>
+							<p class='td-domain'></p>
 						</div>
 						<div id="unverified-clone-row" class="padding-5 clone-row table-row is-hidden flex-item">
 							<p class="select-button is-inline v-align-middle">
