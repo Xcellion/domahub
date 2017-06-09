@@ -630,7 +630,7 @@ module.exports = {
 				}
 				else {
 					//update the customer default credit card
-					if (req.body.stripeToken){
+					if (req.body.stripeToken && typeof req.body.stripeToken == "string"){
 						console.log("SF: Trying to update an existing Stripe customer default credit card...");
 
 						stripe.customers.update(req.user.stripe_customer_id, {

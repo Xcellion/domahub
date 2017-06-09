@@ -168,7 +168,16 @@
 				</div>
 
 				<div id="payment-column" class="is-hidden column is-7">
-					<form id="stripe-form" autocomplete="on">
+					<div id="existing-cc-form" class="is-hidden control">
+						<label class="label" for="color-scheme">
+							<span class="v-align-middle">Default Payment Method</span>
+						</label>
+						<div class="control">
+							<p id="existing-cc" class="">Credit card ending in ****</p>
+							<a id="change-card-button" tabindex="0" title="Change Payment Method" class="button is-primary is-small is-stylish no-shadow">Change Payment Method</a>
+						</div>
+					</div>
+					<form id="stripe-form" class="is-hidden" autocomplete="on">
 						<label class="label">Credit or Debit Card Number</label>
 						<p class="control has-icon">
 							<input tabindex="0" id="cc-num" data-stripe="number" class="input stripe-input is-medium" type="tel" placeholder="•••• •••• •••• ••••" autocomplete="cc-number"/>
