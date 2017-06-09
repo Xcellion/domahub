@@ -153,6 +153,11 @@ function editTickerModule(loaded_rentals, max_count){
 			createTickerRow(loaded_rentals[x], now);
 		}
 
+		//change colors if premium
+		if (listing_info.premium){
+	        setupCustomColors();
+		}
+
 		//show load more only if max count returned
 		if (loaded_rentals.length == max_count){
 			$("#ticker-loadmore").removeClass('is-hidden').appendTo("#ticker-wrapper").on("click", function(){
@@ -441,8 +446,8 @@ function createTrafficChart(){
 		label: "Website Views",
 		xAxisID : "traffic-x",
 		yAxisID : "traffic-y",
-		borderColor: "#3CBC8D",
-		backgroundColor: "#3CBC8D",
+		borderColor: (listing_info.premium && listing_info.primary_color) ? listing_info.primary_color : "#3CBC8D",
+		backgroundColor: (listing_info.premium && listing_info.primary_color) ? listing_info.primary_color : "#3CBC8D",
 		fill: false,
 		data: traffic_data
 	}

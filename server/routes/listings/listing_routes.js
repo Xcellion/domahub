@@ -305,6 +305,7 @@ module.exports = function(app, db, auth, error, stripe){
 		renter_functions.addToSearchHistory,
 		renter_functions.getListingInfo,
 		renter_functions.checkStillVerified,
+		stripe.checkStripeSubscription,
 		renter_functions.getListingFreeTimes,
 		renter_functions.renderListing
 	]);

@@ -565,6 +565,11 @@ module.exports = {
 
 			//check it against stripe
 			stripe.subscriptions.retrieve(listing_info.stripe_subscription_id, function(err, subscription) {
+
+				if (req.session.listing_info){
+					delete req.session.listing_info.stripe_subscription_id;
+				}
+
 				if (!err && subscription && subscription.status == "active"){
 					listing_info.premium = true;
 				}

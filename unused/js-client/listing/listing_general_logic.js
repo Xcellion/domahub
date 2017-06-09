@@ -529,8 +529,8 @@ function createTrafficChart(){
 		label: "Website Views",
 		xAxisID : "traffic-x",
 		yAxisID : "traffic-y",
-		borderColor: "#3CBC8D",
-		backgroundColor: "#3CBC8D",
+		borderColor: (listing_info.premium && listing_info.primary_color) ? listing_info.primary_color : "#3CBC8D",
+		backgroundColor: (listing_info.premium && listing_info.primary_color) ? listing_info.primary_color : "#3CBC8D",
 		fill: false,
 		data: traffic_data
 	}
