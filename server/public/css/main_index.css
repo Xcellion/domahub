@@ -180,6 +180,14 @@ button[data-balloon] {
   overflow: hidden; }
   #landing .container {
     top: -100px; }
+    @media screen and (max-height: 720px) {
+      #landing .container {
+        top: -50px; } }
+    @media screen and (max-height: 500px) {
+      #landing .container {
+        top: 0; }
+        #landing .container .image {
+          display: none !important; } }
     @media screen and (max-width: 768px) {
       #landing .container {
         top: -50px; } }

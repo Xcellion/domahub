@@ -12,6 +12,15 @@
   overflow: hidden;
   .container {
     top: -100px;
+    @media screen and (max-height: 720px) {
+      top: -50px;
+    }
+    @media screen and (max-height: 500px) {
+      top: 0;
+      .image {
+        display: none !important;
+      }
+    }
     @include mobile {
       top: -50px;
     }
