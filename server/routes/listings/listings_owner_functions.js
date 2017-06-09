@@ -167,13 +167,20 @@ module.exports = {
 	checkPostedPremium : function(req, res, next){
 		console.log("F: Checking for any Premium listings...");
 		if (req.session.new_listings.premium_obj.count > 0){
-			if (req.body.stripeToken){
+
+			//posting new card, go next
+			if (req.body.stripeToken && typeof req.body.stripeToken == "string"){
+				next();
+			}
+
+			//card already on file, go next
+			else if (req.user.stripe_info && req.user.stripe_info.premium_cc_last4){
 				next();
 			}
 			else {
 				res.send({
 					state: "error",
-					message: "No Stripe Token",
+					message: "There were no valid payment methods! Please add a valid payment method.",
 					premium_count : req.session.new_listings.premium_obj.count
 				});
 			}
@@ -764,7 +771,8 @@ module.exports = {
 							Listing.updateListingsVerified(inserted_ids, function(result){
 								delete req.user.listings;
 
-								if (req.body.stripeToken){
+								//done here for basic or move on to payment for premium
+								if (req.session.new_listings.premium_obj.count > 0){
 									next();
 								}
 								else {
