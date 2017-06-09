@@ -41,6 +41,18 @@ $(document).ready(function(){
 		createRows();
 	});
 
+	$("#domain-search").on("input keyup", function(){
+		$(".table-row:not(.clone-row)").addClass('is-hidden');
+
+		var search_term = $(this).val();
+
+		$(".table-row:not(.clone-row)").filter(function(){
+			if ($(this).data('domain_name').indexOf(search_term) != -1){
+				return true;
+			}
+		}).removeClass('is-hidden');
+	});
+
 	//</editor-fold>
 
 	//<editor-fold>-------------------------------DOMAIN LIST-------------------------------
@@ -55,6 +67,11 @@ $(document).ready(function(){
 	//multiple verify listings
 	$("#multi-verify").on("click", function(e){
 		multiVerify($(this));
+	});
+
+	//select all domains
+	$("#select-all").on("click", function(e){
+		selectAllRows($(this), $(this).data('selected'));
 	});
 
 	//</editor-fold>
@@ -243,6 +260,7 @@ function createRow(listing_info, rownum){
 	tempRow.data("editing", false);
 	tempRow.data("selected", false);
 	tempRow.data("id", listing_info.id);
+	tempRow.data("domain_name", listing_info.domain_name);
 
 	//already got the dns and a records for unverified domain
 	if (listing_info.a_records != undefined && listing_info.whois != undefined){
@@ -919,6 +937,7 @@ function editRowUnverified(listing_info){
 	$(".verified-elem").addClass('is-hidden');
 	$(".unverified-elem").removeClass('is-hidden');
 
+	//function to run after successful verification
 	updateVerificationButton(listing_info, function(){
 		listing_info.verified = 1;
 
@@ -928,7 +947,9 @@ function editRowUnverified(listing_info){
 		}
 
 		//recreate the rows
+		createRows();
 		editRowVerified(listing_info);
+		successMessage("Successfully verified this domain! You may now edit the listing details.");
 	});
 }
 
@@ -995,7 +1016,6 @@ function updateVerificationButton(listing_info, cb_when_verified){
 		e.preventDefault();
 
 		verify_button.addClass('is-loading');
-		console.log(listing_info.domain_name);
 		$.ajax({
 			url: "/listing/" + listing_info.domain_name + "/verify",
 			method: "POST"
@@ -1038,9 +1058,36 @@ function selectRow(row){
     multiSelectButtons();
 }
 
+//function to select all rows
+function selectAllRows(select_all_button, select_or_deselect){
+
+	//select all
+	if (!select_or_deselect){
+		select_all_button.data('selected', true);
+		select_all_button.find(".icon").addClass('is-primary');
+		select_all_button.find("i").removeClass("fa-square-o").addClass('fa-check-square-o box-checked');
+
+		$(".table-row:not(.clone-row)").addClass('is-active').data('selected', true);
+		$(".table-row .select-button .icon").addClass('is-primary');
+		$(".table-row .select-button i").removeClass("fa-square-o").addClass('fa-check-square-o box-checked');
+	}
+	//deselect all
+	else {
+		select_all_button.data('selected', false);
+		select_all_button.find(".icon").removeClass('is-primary');
+		select_all_button.find("i").addClass("fa-square-o").removeClass('fa-check-square-o box-checked');
+
+		$(".table-row:not(.clone-row)").removeClass('is-active').data('selected', false);
+		$(".table-row .select-button .icon").removeClass('is-primary');
+		$(".table-row .select-button i").addClass("fa-square-o").removeClass('fa-check-square-o box-checked');
+	}
+
+	multiSelectButtons();
+}
+
 //helper function to handle multi-select action buttons
 function multiSelectButtons(){
-    var selected_rows = $(".row-disp").filter(function(){ return $(this).data("selected") == true });
+    var selected_rows = $(".table-row:not(.clone-row)").filter(function(){ return $(this).data("selected") == true });
     var verified_selected_rows = selected_rows.filter(function(){ return $(this).data("verified") == false});
 
     if (selected_rows.length > 0){
@@ -1058,38 +1105,12 @@ function multiSelectButtons(){
     }
 }
 
-//function to select all rows
-function selectAllRows(){
-	$(".row-disp").addClass('is-active').data('selected', true);
-	$(".row-disp>.td-arrow .icon, #select-all>span").addClass('is-primary');
-	$(".row-disp>.td-arrow i, #select-all>span>i").removeClass("fa-square-o").addClass('fa-check-square-o box-checked');
-
-	var unverified_icon = $(".row-disp>.td-arrow i.fa-exclamation-triangle");
-	var unverified_span = $(".row-disp>.td-arrow .icon.is-danger");
-	unverified_icon.removeClass('fa-exclamation-triangle').addClass('unverified-icon');
-	unverified_span.removeClass('is-danger').addClass('unverified-span');
-
-	multiSelectButtons();
-}
-
-//function to deselect all rows
-function deselectAllRows(){
-	$(".row-disp").removeClass('is-active').data('selected', false);
-	$(".row-disp>.td-arrow .icon, #select-all>span").removeClass('is-primary');
-	$(".row-disp>.td-arrow i, #select-all>span>i").addClass("fa-square-o").removeClass('fa-check-square-o box-checked');
-
-	$(".unverified-icon").addClass("fa-exclamation-triangle").removeClass('fa-square-o');
-	$(".unverified-span").addClass("is-danger");
-
-	multiSelectButtons();
-}
-
 //function to multi-verify listings
 function multiVerify(verify_button){
     verify_button.off();
 
 	var ids = [];
-	var selected_rows = $(".row-disp").filter(function(){
+	var selected_rows = $(".table-row").filter(function(){
 		if ($(this).data('selected') == true){
 			ids.push($(this).data('id'));
 			return true;
@@ -1103,11 +1124,15 @@ function multiVerify(verify_button){
 			ids: ids
 		}
 	}).done(function(data){
+		console.log(data);
+
 		verify_button.on("click", function(){
 			multiVerify(verify_button);
 		});
 
-		deselectAllRows();
+		//deselect all rows
+		selectAllRows($("#select-all"), true);
+
 		//unverified listings error
 		if (data.unverified_listings){
 			//add danger to failed rows
@@ -1132,37 +1157,50 @@ function multiVerify(verify_button){
 //function to handle post-verification of multi listings
 function verificationHandler(data){
 	listings = data.listings;
+	createRows();
+}
 
-	//verified listings change
-	if (data.verified_listings){
-		for (var x = 0; x < data.verified_listings.length; x++){
-			for (var y = 0; y < listings.length; y++){
-				if (data.verified_listings[x] == listings[y].id){
-					$(".row-disp").each(function(){
-						if ($(this).data('id') == data.verified_listings[x]){
-							//recreate the rows
-							var row_drop = $(this).next(".row-drop");
-							$(this).replaceWith(createRow(listings[y], $(this).attr('id').replace("row", "")));
-							row_drop.replaceWith(createRowDrop(listings[y], $(this).attr('id').replace("row", "")));
-							return false;
-						}
-					});
-				}
-			}
+//function to delete multiple rows
+function multiDelete(delete_button){
+    delete_button.off();
+
+	var deletion_ids = [];
+	var selected_rows = $(".table-row").filter(function(){
+		if ($(this).data('selected') == true){
+			deletion_ids.push($(this).data('id'));
+			return true;
 		}
-	}
-	refreshSubmitbindings();
+	});
+
+	$.ajax({
+		url: "/profile/mylistings/delete",
+		method: "POST",
+		data: {
+			ids: deletion_ids
+		}
+	}).done(function(data){
+		delete_button.on("click", function(){
+			multiDelete(delete_button);
+		});
+
+		//deselect all rows
+		selectAllRows($("#select-all"), true);
+
+		if (data.state == "success"){
+            deletionHandler(data.rows, selected_rows);
+		}
+        else {
+            console.log(data);
+        }
+	});
 }
 
 //function to handle post-deletion of multi listings
 function deletionHandler(rows, selected_rows){
 	listings = rows;
 	for (var x = 0; x < selected_rows.length; x++){
-		$(selected_rows[x]).next(".row-drop").remove();
 		$(selected_rows[x]).remove();
 	}
-	deselectAllRows();
-	emptyRows();
 }
 
 //</editor-fold>
