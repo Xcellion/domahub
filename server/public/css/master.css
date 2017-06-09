@@ -5057,11 +5057,8 @@ input:-webkit-autofill {
       padding: 100px 20px; } }
 
 .footer {
-  background-color: #23415f;
   overflow: hidden;
   padding: 40px 0; }
-  .footer.is-white {
-    background-color: white; }
   .footer.is-dark {
     background-color: #222; }
   @media screen and (max-width: 768px) {

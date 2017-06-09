@@ -10,17 +10,39 @@
   display: flex;
   align-items: center;
   overflow: hidden;
+  .container {
+    top: -100px;
+    @include mobile {
+      top: -50px;
+    }
+  }
   .subtitle {
     font-weight: 300;
     max-width: 500px;
     margin-left: auto;
     margin-right: auto;
   }
-  .notification {
-    max-width: 305px;
-    margin-left: auto;
-    margin-right: auto;
+  .image {
+    height: 200px;
+    width: 300px;
+    @include mobile {
+      height: 125px;
+      width: 185px;
+    }
+    img {
+      height: 200px;
+      width: 300px;
+      @include mobile {
+        height: 125px;
+        width: 185px;
+      }
+    }
   }
+}
+
+#tryit-form {
+  margin-left: auto;
+  margin-right: auto;
 }
 
 #panes {
@@ -145,15 +167,6 @@
     margin-left: auto;
     margin-right: auto;
   }
-  ul {
-    &.has-disc {
-      @include mobile {
-        max-width: 300px;
-        margin-left: auto;
-        margin-right: auto;
-      }
-    }
-  }
 }
 
 .button-wrapper {
@@ -202,6 +215,15 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  ul {
+    &.has-disc {
+      @include mobile {
+        max-width: 300px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+    }
+  }
 }
 
 .section {
