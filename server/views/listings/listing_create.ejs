@@ -105,12 +105,17 @@
 							<tr>
 								<th class='padding-left-15'>Domain Name</th>
 								<th>
-									Min. Purchase Price
-									<span class="is-small icon is-inline-block is-tooltip" data-balloon="The minimum you're willing to sell this domain for. Set to blank or 0 for no minimum purchase price." data-balloon-length="large" data-balloon-pos="up">
+									<span class='v-align-middle'>Min. Purchase Price</span>
+									<span class="v-align-middle is-small icon is-inline-block is-tooltip" data-balloon="The minimum you're willing to sell this domain for. Set to blank or 0 for no minimum purchase price." data-balloon-length="large" data-balloon-pos="up">
 									  <i class="fa fa-question-circle-o"></i>
 									</span>
 								</th>
-								<th>Premium</th>
+								<th>
+									<form id="premium-check-all-form" class="checkbox-form">
+										<input id="premium-check-all-input" class="is-small" type="checkbox" tabindex="0" />
+										<label id="premium-check-all-label" class="is-small is-bold" tabindex="0" for="premium-check-all-input">Premium</label>
+									</form>
+								</th>
 							</tr>
 						</thead>
 						<tbody id="domain-input-table" data-rows="0">
@@ -129,9 +134,9 @@
 									<input class="buy-price-input input" type="number" tabindex="-1" min="0" />
 								</td>
 								<td class="td-premium v-align-top">
-									<form id="premium-form" class="checkbox-form">
-										<input id="premium-input" class="is-small" type="checkbox" tabindex="0" />
-										<label id="premium-label" class="is-small" tabindex="0" for="premium-input"></label>
+									<form class="checkbox-form">
+										<input class="is-small premium-input" type="checkbox" tabindex="0" />
+										<label class="is-small premium-label" tabindex="0" for="premium-input">Premium</label>
 									</form>
 								</td>
 							</tr>

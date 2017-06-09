@@ -85,6 +85,11 @@ $(document).ready(function() {
 		}
 	});
 
+	//premium all rows
+	$("#premium-check-all-input").on("change", function(e){
+		$(".premium-input").prop("checked", $(this).prop("checked"));
+	});
+
 	//submit to create listings
 	$("#domains-submit").on("click", function(e){
 		e.preventDefault();
@@ -187,9 +192,11 @@ function createTableRow(data){
 	});
 
 	//click handler for price type select
-	temp_table_row.find("#premium-input").on("click", function(){
+	temp_table_row.find(".premium-input").on("click", function(){
 		calculateSummaryRows();
 	});
+
+	temp_table_row.find()
 
 	//click handler for row delete
 	temp_table_row.find(".delete-icon").on("click", function(){
@@ -210,6 +217,10 @@ function createTableRow(data){
 	temp_table_row.appendTo("#domain-input-table");
 	temp_table_row.find(".domain-name-input").focus();
 
+	//set ID for premium label
+	temp_table_row.find(".premium-input").attr("id", "premium-input" + temp_table_row.index());
+	temp_table_row.find(".premium-label").attr("for", "premium-input" + temp_table_row.index());
+
 	//add addbutton on top if there are too many
 	handleTopAddDomainButton();
 
@@ -221,7 +232,7 @@ function createTableRow(data){
 //function to calculate/refresh the summary rows
 function calculateSummaryRows(){
 	var total_rows = $(".domain-name-input").not("#clone-row .domain-name-input").length;
-	var premium_domains = $("#premium-input:checked").not("#clone-row #premium-input").not('.is-disabled').length;
+	var premium_domains = $(".premium-input:checked").not("#clone-row .premium-input").not('.is-disabled').length;
 	var basic_domains = total_rows - premium_domains;
 
 	$("#basic-count-total").text(basic_domains);
@@ -291,7 +302,7 @@ function submitDomains(submit_elem){
 
 		if (domains.length > 0){
 			//check for any premium
-			if ($("#premium-input:checked").length > 0){
+			if ($(".premium-input:checked").length > 0){
 				showCCForm(submit_elem);
 			}
 			else {
@@ -313,7 +324,7 @@ function getTableListingInfo(){
 			var row_obj = {
 				domain_name : temp_row.find(".domain-name-input").val().replace(/\s/g, ''),
 				buy_price : temp_row.find(".buy-price-input").val(),
-				premium : temp_row.find("#premium-input").prop("checked")
+				premium : temp_row.find(".premium-input").prop("checked")
 			};
 			temp_array.push(row_obj);
 		}
@@ -505,7 +516,7 @@ function goodTableRows(good_listings){
 		var explanation = $("<small class='is-primary is-pulled-right'>Successfully added!</small>")
 		table_row.find(".domain-name-input").addClass('is-primary').closest('td').append(explanation);
 		table_row.find(".domain-name-input, .buy-price-input").addClass('is-disabled');
-		table_row.find("#premium-input").addClass('is-disabled');
+		table_row.find(".premium-input").addClass('is-disabled');
 	}
 }
 
