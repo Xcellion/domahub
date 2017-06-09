@@ -63,6 +63,7 @@ module.exports = function(app, db, auth, error, stripe){
 	//render listing create
 	app.get('/listings/create', [
 		auth.checkLoggedIn,
+		stripe.getAccountInfo,
 		owner_functions.renderCreateListing
 	]);
 

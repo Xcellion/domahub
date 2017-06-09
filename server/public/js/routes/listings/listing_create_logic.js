@@ -1,6 +1,12 @@
 $(document).ready(function() {
 
-	//--------------------------------------------------------------------------------STRIPE FORM
+	//delete notifications button
+	$(".delete").on("click", function(e){
+		e.preventDefault();
+		handleSubmitDisabled();
+	});
+
+	//<editor-fold>-------------------------------STRIPE-------------------------------
 
 	//key for stripe
 	if (window.location.hostname == "localhost"){
@@ -39,7 +45,9 @@ $(document).ready(function() {
 		return false;
 	});
 
-	//--------------------------------------------------------------------------------LISTING CREATE STUFF
+	//</editor-fold>
+
+	//<editor-fold>-------------------------------LISTING CREATE-------------------------------
 
 	//submit to create the table
 	$("#domain-names-submit").on("click", function(e){
@@ -86,14 +94,16 @@ $(document).ready(function() {
 	//go back to edit table
 	$("#review-table-button, #goback-button").on("click", function(e){
 		e.preventDefault();
-		refreshNotification();
 		showTable();
+		refreshNotification();
 	});
 
 	//agree to terms show submit button
 	$("#agree-to-terms").on("click", function(e){
 		handleSubmitDisabled();
 	});
+
+	//</editor-fold>
 
 });
 
@@ -103,7 +113,7 @@ function showHelpText(help_text_id){
 	$("#" + help_text_id + "-helptext").removeClass('is-hidden');
 }
 
-//--------------------------------------------------------------------------------TEXTAREA
+//<editor-fold>-------------------------------TEXTAREA CREATE-------------------------------
 
 //function to submit textarea domains
 function submitDomainNames(submit_elem){
@@ -152,11 +162,14 @@ function createTable(bad_listings, good_listings){
 	window.scrollTo(0, 0);		//scroll to top so we can see the help text
 }
 
-//--------------------------------------------------------------------------------TABLE
+//</editor-fold>
+
+//<editor-fold>-------------------------------TABLE CREATE-------------------------------
 
 //function to show the table
 function showTable(){
 	showHelpText("table");
+	showExistingCC();
 	$("#domains-submit").removeClass('is-hidden is-disabled');
 	$("#payment-column").addClass('is-hidden');
 	$("#table-column").removeClass('is-hidden');
@@ -171,7 +184,7 @@ function createTableRow(data){
 	temp_table_row.removeAttr('id');
 	temp_table_row.find(".domain-name-input").val(data.domain_name).on("keyup change", function(){
 		handleSubmitDisabled();
-	})
+	});
 
 	//click handler for price type select
 	temp_table_row.find("#premium-input").on("click", function(){
@@ -246,34 +259,12 @@ function handleSubmitDisabled(){
 
 	//see if we should remove disable on submit button
 	if ($(".domain-name-input").filter(function(){ return $(this).val() != "" && !$(this).hasClass("is-disabled")}).length > 0
-	&& $(".notification.is-danger").length == 2 && $("#agree-to-terms:checked").length > 0){
+	&& $(".notification.is-danger:not(.is-hidden)").length == 0 && $("#agree-to-terms:checked").length > 0){
 		$("#domains-submit").removeClass('is-disabled');
 	}
 	else {
 		$("#domains-submit").addClass('is-disabled');
 	}
-}
-
-//function to delete empty table rows
-function deleteEmptyTableRows(){
-	var empty_domain_inputs = $(".domain-name-input").filter(function() { return $(this).val() == ""; });
-	empty_domain_inputs.closest("tr").not("#clone-row").remove();
-	if ($(".table-row").length == 1){
-		createTableRow("");
-	}
-}
-
-//function to delete all rows
-function deleteAllRows(){
-	$(".table-row").not("#clone-row").remove();
-	if ($(".table-row").length == 1){
-		createTableRow("");
-	}
-}
-
-//function to clear all successful rows
-function clearSuccessRows(){
-	$(".domain-name-input.is-disabled").closest(".table-row").not("#clone-row").remove();
 }
 
 //if there are more than 10 rows, add the add-domain button to the top as well
@@ -286,7 +277,9 @@ function handleTopAddDomainButton(){
 	}
 }
 
-//--------------------------------------------------------------------------------TABLE SUBMIT
+//</editor-fold>
+
+//<editor-fold>-------------------------------TABLE SUBMIT-------------------------------
 
 //function to submit textarea domains
 function submitDomains(submit_elem){
@@ -331,15 +324,22 @@ function getTableListingInfo(){
 //function to send ajax to server for domain creation
 function submitDomainsAjax(domains, submit_elem, stripeToken){
 	deleteGoodTableRows();
+
+	//existing CC or new one
+	var data = {
+		domains: domains
+	};
+	if (stripeToken){
+		data.stripeToken = stripeToken;
+	}
+
 	$.ajax({
 		url: "/listings/create",
 		method: "POST",
-		data: {
-			domains: domains,
-			stripeToken : stripeToken
-		}
+		data: data
 	}).done(function(data){
 		refreshNotification();
+
 		//handle any good or bad listings
 		refreshRows(data.bad_listings, data.good_listings);
 
@@ -356,6 +356,9 @@ function submitDomainsAjax(domains, submit_elem, stripeToken){
 			showHelpText("success");
 		}
 
+		//uncheck terms
+		$("#agree-to-terms").prop("checked", false);
+
 		//clear the CVC
 		$('#cc-cvc').val("");
 		$(".stripe-input").removeClass('is-disabled');
@@ -369,10 +372,36 @@ function submitDomainsAjax(domains, submit_elem, stripeToken){
 		$("#domains-submit").removeClass('is-loading').off().on("click", function(e){
 			submitDomains(submit_elem);
 		});
+
+		handleSubmitDisabled();
 	});
 }
 
-//--------------------------------------------------------------------------------TABLE UPDATE
+//</editor-fold>
+
+//<editor-fold>-------------------------------TABLE UPDATE-------------------------------
+
+//function to delete empty table rows
+function deleteEmptyTableRows(){
+	var empty_domain_inputs = $(".domain-name-input").filter(function() { return $(this).val() == ""; });
+	empty_domain_inputs.closest("tr").not("#clone-row").remove();
+	if ($(".table-row").length == 1){
+		createTableRow("");
+	}
+}
+
+//function to delete all rows
+function deleteAllRows(){
+	$(".table-row").not("#clone-row").remove();
+	if ($(".table-row").length == 1){
+		createTableRow("");
+	}
+}
+
+//function to clear all successful rows
+function clearSuccessRows(){
+	$(".domain-name-input.is-disabled").closest(".table-row").not("#clone-row").remove();
+}
 
 //function to refresh rows on ajax return
 function refreshRows(bad_listings, good_listings){
@@ -459,9 +488,11 @@ function handleBadReasons(reasons, row){
 
 			//handler to clear reasons and append the reason
 			row.find(reason_input).addClass('is-danger').on("input change", function(){
-				$(this).removeClass('is-danger');
-				$(this).closest("td").find("small").remove();
-				refreshNotification();
+				if ($(this).val().indexOf(".") != -1){
+					$(this).removeClass('is-danger');
+					$(this).closest("td").find("small").remove();
+					refreshNotification();
+				}
 			}).closest('td').append(explanation);
 		}
 	}
@@ -487,7 +518,9 @@ function deleteGoodTableRows(){
 	}
 }
 
-// //--------------------------------------------------------------------------------PAYMENT SUBMIT
+//</editor-fold>
+
+//<editor-fold>-------------------------------PAYMENT SUBMIT-------------------------------
 
 //function to show the CC payment form
 function showCCForm(old_submit){
@@ -504,6 +537,33 @@ function showCCForm(old_submit){
 	$("#checkout-button").off().on("click", function(){
 		submitStripe($(this));
 	});
+
+	showExistingCC();
+}
+
+//show existing cc or not
+function showExistingCC(){
+	//if user doesnt have an existing card
+	if (user.stripe_info && user.stripe_info.premium_cc_last4 && user.stripe_info.premium_cc_brand){
+		$("#existing-cc-form").removeClass('is-hidden');
+		$("#stripe-form").addClass('is-hidden');
+		$("#change-card-button").removeClass('is-hidden');
+
+		//last 4 digits
+		var premium_cc_last4 = (user.stripe_info.premium_cc_last4) ? user.stripe_info.premium_cc_last4 : "****";
+		var premium_cc_brand = (user.stripe_info.premium_cc_brand) ? user.stripe_info.premium_cc_brand : "Credit"
+		$("#existing-cc").text(premium_cc_brand + " card ending in " + premium_cc_last4);
+
+		//change card handler
+		$("#change-card-button").off().on("click", function(){
+			$("#stripe-form").removeClass('is-hidden');
+			$("#change-card-button").addClass('is-hidden');
+		});
+	}
+	else {
+		$("#existing-cc-form").addClass('is-hidden');
+		$("#stripe-form").removeClass('is-hidden');
+	}
 }
 
 //helper function to check if everything is legit on payment form
@@ -561,11 +621,17 @@ function handleErrors(error_description){
 //get stripe token
 function submitStripe(checkout_button){
 	//check locally first
-	if (checkCCSubmit()){
+	if (!user.stripe_info && !user.stripe_info.premium_cc_last4 && checkCCSubmit()){
 		$("#review-table-button, #goback-button").off();
 		$(".stripe-input").addClass('is-disabled');
 		checkout_button.addClass('is-loading').off();
 		$("#stripe-form").submit();
+	}
+
+	//card already on file, just submit without new stripe token
+	else {
+		checkout_button.addClass('is-loading').off();
+		submitStripeToken(false);
 	}
 }
 
@@ -574,3 +640,5 @@ function submitStripeToken(stripeToken){
 	var domains = getTableListingInfo(".domain-name-input");
 	submitDomainsAjax(domains, $("#checkout-button"), stripeToken);
 }
+
+//</editor-fold>
