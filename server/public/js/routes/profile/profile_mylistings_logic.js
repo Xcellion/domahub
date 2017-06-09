@@ -94,8 +94,8 @@ $(document).ready(function(){
 		$(this).addClass('is-active');
 
 		//show specific tab
-		$(".drop-tab").addClass('is-hidden');
-		$("#" + $(this).attr("id") + "-drop").removeClass('is-hidden');
+		$(".drop-tab").fadeOut(300).addClass('is-hidden');
+		$("#" + $(this).attr("id") + "-drop").fadeIn(300).removeClass('is-hidden');
 
 		//clicked on the upgrade tab
 		if ($(this).attr("id") == "upgrade-tab"){
@@ -362,15 +362,15 @@ function editRowVerified(listing_info){
 	}
 	function updateCategories(listing_info){
 		var listing_categories = (listing_info.categories) ? listing_info.categories.split(" ") : [];
-		$(".category-selector").removeClass('is-dark');
+		$(".category-selector").removeClass('is-primary');
 		for (var x = 0; x < listing_info.categories.split(" ").length; x++){
 			//color existing categories
-			var temp_category = $("." + listing_categories[x] + "-category").addClass('is-dark');
+			var temp_category = $("." + listing_categories[x] + "-category").addClass('is-primary');
 		}
 		updateHiddenCategoryInput();
 	}
 	function updateHiddenCategoryInput(){
-		var joined_categories = $(".category-selector.is-dark").map(function() {
+		var joined_categories = $(".category-selector.is-primary").map(function() {
 			return $(this).data("category");
 		}).toArray().sort().join(" ");
 		joined_categories = (joined_categories == "") ? null : joined_categories;
@@ -582,7 +582,7 @@ function editRowVerified(listing_info){
 
 		//click to add this category
 		$(".category-selector").off().on("click", function(e){
-			$(this).toggleClass('is-dark');
+			$(this).toggleClass('is-primary');
 			updateHiddenCategoryInput();
 			changedValue($("#categories-input"), listing_info);
 		});
@@ -890,7 +890,7 @@ function submitListingChanges(){
 //helper function to display/hide error messages per listing
 function errorMessage(message){
     if (message && message != "nothing-changed"){
-		$("#listing-msg-error").removeClass('is-hidden');
+		$("#listing-msg-error").removeClass('is-hidden').addClass("is-active");
 		$("#listing-msg-error").find("p").empty();
 
         //connect stripe first!
@@ -902,18 +902,18 @@ function errorMessage(message){
         }
     }
     else {
-        $("#listing-msg-error").addClass('is-hidden');
+        $("#listing-msg-error").addClass('is-hidden').removeClass("is-active");
     }
 }
 
 //helper function to display success messages per listing
 function successMessage(message){
     if (message){
-		$("#listing-msg-success").removeClass('is-hidden');
+		$("#listing-msg-success").removeClass('is-hidden').addClass("is-active");
         $("#listing-msg-success-text").text(message);
     }
     else {
-        $("#listing-msg-success").addClass('is-hidden');
+        $("#listing-msg-success").addClass('is-hidden').removeClass("is-active");
     }
 }
 
