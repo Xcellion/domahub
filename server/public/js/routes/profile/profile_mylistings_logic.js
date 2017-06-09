@@ -1037,24 +1037,13 @@ function updateVerificationButton(listing_info, cb_when_verified){
 
 //function to select a row
 function selectRow(row){
-    var selected = (row.data("selected") == false) ? true : false;
+    var selected = (row.prop("checked") == false) ? true : false;
     var verified = row.data("verified");
     row.data("selected", selected);
 
     var icon_i = row.find(".select-button i");
-    var icon_span = row.find(".select-button .icon");
 
-    row.toggleClass('is-active');
-    icon_span.toggleClass('is-primary');
-
-    if (selected){
-		icon_span.removeClass('is-danger');
-        icon_i.removeClass("fa-exclamation-triangle").removeClass('fa-square-o').addClass("fa-check-square-o box-checked");
-    }
-    else {
-        icon_i.addClass('fa-square-o');
-        icon_i.removeClass("fa-check-square-o box-checked");
-    }
+    row.toggleClass('is-selected');
 
     multiSelectButtons();
 }
@@ -1068,10 +1057,8 @@ function selectAllRows(select_all_button, select_or_deselect){
 		select_all_button.find(".icon").addClass('is-primary');
 		select_all_button.find("i").removeClass("fa-square-o").addClass('fa-check-square-o box-checked');
 
-		$(".table-row:not(.clone-row)").addClass('is-active');
+		$(".table-row:not(.clone-row)").addClass('is-selected');
 		$(".table-row .select-button").prop("checked", true);
-		$(".table-row .select-button .icon").addClass('is-primary');
-		$(".table-row .select-button i").removeClass("fa-square-o").addClass('fa-check-square-o box-checked');
 	}
 	//deselect all
 	else {
@@ -1079,10 +1066,8 @@ function selectAllRows(select_all_button, select_or_deselect){
 		select_all_button.find(".icon").removeClass('is-primary');
 		select_all_button.find("i").addClass("fa-square-o").removeClass('fa-check-square-o box-checked');
 
-		$(".table-row:not(.clone-row)").removeClass('is-active');
+		$(".table-row:not(.clone-row)").removeClass('is-selected');
 		$(".table-row .select-button").prop("checked", false);
-		$(".table-row .select-button .icon").removeClass('is-primary');
-		$(".table-row .select-button i").addClass("fa-square-o").removeClass('fa-check-square-o box-checked');
 	}
 
 	multiSelectButtons();
