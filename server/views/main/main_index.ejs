@@ -11,30 +11,35 @@
 <body>
 
   <%- include("../templates/navbar", {user: user}); %>
-  <section id="landing" class="">
-    <div id="panes">
+  <section id="landing" class="section">
+    <!-- <div id="panes">
       <div></div>
       <div></div>
       <div></div>
-    </div>
+    </div> -->
     <div class="container">
+      <figure class="image">
+        <img src="/images/main/standing-desk.svg"/>
+      </figure>
       <div class="content has-text-centered margin-bottom-25">
-        <h1 class="title is-2 is-white">
+        <h1 class="title is-2">
           Beautiful landing pages for your domains.
         </h1>
-        <p class="subtitle is-5 is-white">
+        <p class="subtitle is-5">
           Create robust landing pages for your domains in seconds.
           You don't even have to know how to code!
         </p>
       </div>
-      <div class="control is-grouped is-grouped-center">
-          <form id="tryit-form" action="/compare?domain_name=">
-              <p class="control is-grouped">
-                  <input autofocus name="domain_name" class="input is-medium" type="text" placeholder="MyDomain.com"/>
-                  <button id="tryit-button" type="submit" tabindex="0" class="margin-left-10 button is-stylish is-primary is-inverted">Try it Now</button>
+      <form id="tryit-form" action="/compare?domain_name=">
+          <div class="control is-grouped is-grouped-center">
+              <p class="control">
+                <input autofocus name="domain_name" class="input is-medium" type="text" placeholder="MyDomain.com"/>
               </p>
-          </form>
-      </div>
+              <p class="control">
+                <button id="tryit-button" type="submit" tabindex="0" class="button is-stylish is-primary">Try it Now</button>
+              </p>
+          </div>
+      </form>
     </div>
     <div id="learn-more-wrapper" class='has-text-centered'>
       <p id="learn-more-text">Learn more...</p>
@@ -79,11 +84,11 @@
         <div class="column is-4">
           <div class="content is-mobile has-text-centered">
             <span class="icon is-primary is-circle is-medium">
-              <i class="fa fa-gears"></i>
+              <i class="fa fa-folder-open-o"></i>
             </span>
-            <h2>Custom Features</h2>
+            <h2>Bulk Management</h2>
             <p>
-              We provide several custom features and designs that help your domain stand out among the rest.
+              Upload multiple domains at once and apply themes across all of them with just one click!
             </p>
           </div>
         </div>
@@ -156,7 +161,7 @@
             </div>
             <div class="flex-align-center">
               <span class="icon is-primary">
-                <i class="fa fa-folder-open-o"></i>
+                <i class="fa fa-vcard-o"></i>
               </span>
               <p>
                 Showcasing your entire portfolio allows buyers to shop all of your domains with ease.

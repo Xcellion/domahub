@@ -190,6 +190,7 @@ h3 + p {
   margin-top: 10px; }
 
 h1 {
+  color: rgba(0, 0, 0, 0.88);
   font-size: 28px;
   font-weight: 400; }
   @media screen and (max-width: 456px) {
@@ -197,20 +198,21 @@ h1 {
       font-size: 22px; } }
 
 h2 {
-  font-size: 22px;
-  font-weight: 300; }
+  color: rgba(0, 0, 0, 0.88);
+  font-size: 22px; }
   @media screen and (max-width: 456px) {
     h2 {
       font-size: 18px; } }
 
 h3 {
-  font-size: 18px;
-  font-weight: 300; }
+  color: rgba(0, 0, 0, 0.88);
+  font-size: 18px; }
   @media screen and (max-width: 456px) {
     h3 {
       font-size: 16px; } }
 
 p {
+  color: #212121;
   font-size: 16px;
   font-weight: 400;
   line-height: 1.5; }
@@ -409,7 +411,7 @@ a {
   -webkit-transition: all 0.25s ease;
   transition: all 0.25s ease;
   cursor: pointer;
-  color: rgba(0, 0, 0, 0.88);
+  color: #212121;
   font-weight: 400;
   text-decoration: none !important;
   word-break: break-word; }
@@ -463,12 +465,12 @@ strong {
 
 pre {
   background-color: white;
-  color: rgba(0, 0, 0, 0.88);
+  color: #212121;
   white-space: pre;
   word-wrap: normal; }
   pre code {
     background-color: white;
-    color: rgba(0, 0, 0, 0.88);
+    color: #212121;
     display: block;
     overflow-x: auto;
     padding: 16px 20px; }
@@ -763,7 +765,7 @@ pre {
   background-color: white;
   border: 1px solid rgba(0, 0, 0, 0.38);
   border-radius: 3px;
-  color: #000;
+  color: rgba(0, 0, 0, 0.88);
   display: inline-flex;
   font-size: 16px;
   height: 32px;
@@ -1620,7 +1622,7 @@ input:-webkit-autofill {
   background-color: white;
   border: 1px solid rgba(0, 0, 0, 0.38);
   border-radius: 3px;
-  color: #000;
+  color: rgba(0, 0, 0, 0.88);
   display: inline-flex;
   font-size: 16px;
   height: 32px;
@@ -1759,7 +1761,7 @@ input:-webkit-autofill {
     background-color: white;
     border: 1px solid rgba(0, 0, 0, 0.38);
     border-radius: 3px;
-    color: #000;
+    color: rgba(0, 0, 0, 0.88);
     display: inline-flex;
     font-size: 16px;
     height: 32px;
@@ -1892,7 +1894,7 @@ input:-webkit-autofill {
       padding-right: 52px; }
 
 .label {
-  color: rgba(0, 0, 0, 0.88);
+  color: #212121;
   display: block; }
   .label.is-white {
     color: white; }
@@ -2326,9 +2328,9 @@ input:-webkit-autofill {
   .progress::-webkit-progress-bar {
     background-color: rgba(0, 0, 0, 0.12); }
   .progress::-webkit-progress-value {
-    background-color: rgba(0, 0, 0, 0.88); }
+    background-color: #212121; }
   .progress::-moz-progress-bar {
-    background-color: rgba(0, 0, 0, 0.88); }
+    background-color: #212121; }
   .progress.is-white::-webkit-progress-value {
     background-color: white; }
   .progress.is-white::-moz-progress-bar {
@@ -2419,7 +2421,7 @@ input:-webkit-autofill {
   border-spacing: 0px;
   border: 1px solid rgba(0, 0, 0, 0.12);
   box-shadow: none;
-  color: rgba(0, 0, 0, 0.88);
+  color: #212121;
   margin-bottom: 20px;
   width: 100%; }
   .table.has-shadow {
@@ -2611,7 +2613,7 @@ input:-webkit-autofill {
     padding: 2px 3px;
     vertical-align: top; }
   .subtitle strong {
-    color: #000; }
+    color: rgba(0, 0, 0, 0.88); }
   .subtitle.is-1 {
     font-size: 48px; }
     @media screen and (max-width: 768px) {
@@ -3235,7 +3237,7 @@ input:-webkit-autofill {
   -ms-border-radius: 50%;
   border-radius: 50%;
   border: 2px solid rgba(0, 0, 0, 0.66);
-  color: rgba(0, 0, 0, 0.88);
+  color: #212121;
   display: block;
   height: 32px;
   line-height: 30px;
@@ -3247,7 +3249,7 @@ input:-webkit-autofill {
   align-items: center;
   background-color: white;
   border-radius: 290486px;
-  color: rgba(0, 0, 0, 0.88);
+  color: #212121;
   display: inline-flex;
   font-size: 12px;
   height: 24px;
@@ -3994,7 +3996,7 @@ input:-webkit-autofill {
   .level.filter-panel {
     justify-content: flex-start; }
     .level.filter-panel .filter-local {
-      color: rgba(0, 0, 0, 0.88);
+      color: #212121;
       font-size: 14px;
       padding: 2px; }
       .level.filter-panel .filter-local:hover, .level.filter-panel .filter-local:focus {
@@ -4100,7 +4102,7 @@ input:-webkit-autofill {
 
 .menu-list a {
   border-radius: 2px;
-  color: rgba(0, 0, 0, 0.88);
+  color: #212121;
   display: block;
   padding: 5px 10px; }
   .menu-list a:hover {
@@ -4115,7 +4117,7 @@ input:-webkit-autofill {
   padding-left: 10px; }
 
 .menu-label {
-  color: rgba(0, 0, 0, 0.88);
+  color: #212121;
   font-weight: 500;
   font-size: 14px;
   letter-spacing: 1px;
@@ -4405,7 +4407,7 @@ input:-webkit-autofill {
   border-bottom: 1px solid rgba(0, 0, 0, 0.12); }
 
 .modal-card-title {
-  color: #000;
+  color: rgba(0, 0, 0, 0.88);
   flex-grow: 1;
   font-size: 22px;
   line-height: 1; }
@@ -4460,7 +4462,7 @@ input:-webkit-autofill {
     background-position: 0 -32px; }
 
 .nav-link {
-  color: rgba(0, 0, 0, 0.88);
+  color: #212121;
   padding: 5px; }
   .nav-link:hover, .nav-link:active, .nav-link:focus, .nav-link.is-active {
     opacity: 0.5; }
@@ -4694,7 +4696,7 @@ input:-webkit-autofill {
   .tabs a {
     align-items: center;
     border-bottom: 1px solid rgba(0, 0, 0, 0.12);
-    color: rgba(0, 0, 0, 0.88);
+    color: #212121;
     display: flex;
     justify-content: center;
     margin-bottom: -1px;
@@ -5055,11 +5057,8 @@ input:-webkit-autofill {
       padding: 100px 20px; } }
 
 .footer {
-  background-color: #23415f;
   overflow: hidden;
   padding: 40px 0; }
-  .footer.is-white {
-    background-color: white; }
   .footer.is-dark {
     background-color: #222; }
   @media screen and (max-width: 768px) {
@@ -5580,7 +5579,7 @@ input:-webkit-autofill {
   -o-transition: all 0.25s ease;
   -webkit-transition: all 0.25s ease;
   transition: all 0.25s ease;
-  color: rgba(0, 0, 0, 0.88);
+  color: #212121;
   cursor: pointer;
   display: inline-block;
   position: relative;
