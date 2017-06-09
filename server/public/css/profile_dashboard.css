@@ -197,16 +197,29 @@ button[data-balloon] {
     word-break: break-all;
     margin-right: 10px; }
   .flex-item:hover {
+    background-color: #efefef;
     cursor: pointer; }
   .flex-item.is-active {
-    background-color: #efefef;
-    border-color: #efefef; }
-  .flex-item .checkbox-form label::before {
+    background-color: #d0d0d0;
+    border-color: #d0d0d0; }
+    .flex-item.is-active p {
+      color: #309670; }
+
+.checkbox-form {
+  width: 24px;
+  height: 24px; }
+  .checkbox-form label::before {
     top: 0 !important;
     left: 0 !important; }
-  .flex-item .checkbox-form label {
-    width: 24px;
-    height: 24px; }
+  .checkbox-form label {
+    padding: 0 !important;
+    width: 100%;
+    height: 100%; }
+
+.tip {
+  display: block;
+  margin: 5px 0;
+  color: rgba(0, 0, 0, 0.66); }
 
 .background_image {
   min-height: 200px;

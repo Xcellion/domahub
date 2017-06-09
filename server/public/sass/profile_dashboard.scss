@@ -35,22 +35,34 @@
     margin-right: 10px;
   }
   &:hover {
+    background-color: $grey-lighter;
     cursor: pointer;
   }
   &.is-active {
-    background-color: $grey-lighter;
-    border-color: $grey-lighter;
+    background-color: $grey-light;
+    border-color: $grey-light;
+    p {color: $primary-dark;}
   }
-  .checkbox-form {
-    label::before {
-      top: 0 !important;
-      left: 0 !important;
-    }
-    label {
-      width: 24px;
-      height: 24px;
-    }
+}
+
+.checkbox-form {
+  width: 24px;
+  height: 24px;
+  label::before {
+    top: 0 !important;
+    left: 0 !important;
   }
+  label {
+    padding: 0 !important;
+    width: 100%;
+    height: 100%;
+  }
+}
+
+.tip {
+  display: block;
+  margin: 5px 0;
+  color: $text-light;
 }
 
 .background_image {
