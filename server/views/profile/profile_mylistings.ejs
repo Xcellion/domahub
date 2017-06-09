@@ -13,8 +13,16 @@
 <body>
 	<%- include("../templates/navbar", {user: user}); %>
 
+
 	<section class="section is-medium min-height">
 		<div class="container">
+			<div id="listing-msg-error" class="is-hidden is-danger notification is-popup">
+				<button class="delete"></button>
+			</div>
+			<div id="listing-msg-success" class="is-hidden is-primary notification is-popup">
+				<button class="delete"></button>
+				<p id="listing-msg-success-text" class='is-white'></p>
+			</div>
 			<div class="columns">
 				<div class="column is-3">
 					<div class="content">
@@ -51,10 +59,6 @@
 							<input id="domain-search" tabindex="0" class="input is-expanded" type="text" placeholder="Search domains" />
 						</div>
 						<div class="button-wrapper control">
-							<!-- <form class="checkbox-form">
-								<input id="select-all" data-selected="false" type="checkbox" class="no-shadow" tabindex="0" title="Select All" />
-								<label for="select-all" tabindex="0"></label>
-							</form> -->
 							<button id="select-all" data-selected="false" tabindex="0" class="button no-shadow" title="Select All">
 								<span class="icon is-small">
 									<i class="fa fa-check-square-o"></i>
@@ -86,11 +90,16 @@
 							<p class='td-domain'></p>
 						</div>
 						<div id="unverified-clone-row" class="padding-5 clone-row table-row is-hidden flex-item">
-							<p class="select-button is-inline v-align-middle">
-				                <span class="icon is-medium"><i class="no-transition fa fa-square-o"></i></span>
-				            </p>
-							<p class='is-inline is-danger td-domain v-align-middle'></p>
-							<span class="icon is-danger is-small v-align-middle"><i class="fa fa-exclamation-circle"></i></span>
+							<form class="checkbox-form">
+								<input class="select-button" data-selected="false" type="checkbox" class="no-shadow" tabindex="0" title="Select All" />
+								<label for="select-button" tabindex="0"></label>
+							</form>
+							<div>
+								<p class="is-danger td-domain is-inline"></p>
+								<span class="icon is-danger is-small is-inline">
+									<i class="fa fa-exclamation-circle"></i>
+								</span>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -146,37 +155,24 @@
 						</div>
 						<div class="verified-elem">
 							<div id="info-tab-drop" class="drop-tab">
-								<div class="control is-spaced">
-									<div class="control-left">
+								<div class="control has-items-center">
 										<a id="status-color" tabindex="0" class="button is-primary is-icon-only no-shadow">
 											<span class="icon v-align-middle"><i id="status-icon" class="fa fa-toggle-on"></i></span>
-											<span id="status-text" class="v-align-middle">Active</span>
-											<span class="icon margin-left-5 is-small is-tooltip v-align-middle" data-balloon-length="medium" data-balloon="Whether this listing is displayed publically or not." data-balloon-pos="up">
-												<i class="fa fa-question-circle-o"></i>
-											</span>
+											<span id="status-text">Active</span>
 										</a>
 										<input id="status-input" data-name="status" tabindex="0" type="hidden" class="input changeable-input" />
-									</div>
+										<small class="tip">Publicly hide or show your landing page.</small>
 								</div>
 								<div class="control">
-									<label class="label" for="long-desc">
-										<span class="v-align-middle">Listing Description</span>
-										<span class="icon is-small is-tooltip v-align-middle" data-balloon-length="medium" data-balloon="Descriptions help renters understand what your domain name can be useful for." data-balloon-pos="up">
-											<i class="fa fa-question-circle-o"></i>
-										</span>
-									</label>
+									<label class="label" for="description">Listing Description</label>
 									<textarea id="description" class="description-input textarea changeable-input"
 									tabindex="0" data-name="description" placeholder="Write anything you want!"></textarea>
 								</div>
 								<div class="control">
-									<label class="label" for="short-desc">
-										<span class="v-align-middle">Short Description</span>
-										<span class="icon is-small is-tooltip v-align-middle" data-balloon-length="medium" data-balloon="A short catch phrase helps users understand at a glance what they can utilize your domain for. 100 character limit." data-balloon-pos="up">
-											<i class="fa fa-question-circle-o"></i>
-										</span>
-									</label>
+									<label class="label" for="short-desc">Short Description</label>
 									<input id="short-desc" data-name="description_hook" tabindex="0" class="input changeable-input"
 									placeholder="What is this website?"></input>
+									<small class="tip">100 character limit.</small>
 								</div>
 								<div class="control">
 									<label class="label" for="categories">
@@ -206,34 +202,24 @@
 							</div>
 							<div id="pricing-tab-drop" class="drop-tab is-hidden">
 								<div class="control">
-									<label class="label" for="min-price">
-										<span class="v-align-middle">Min. Purchase Price</span>
-										<span class="icon is-small is-tooltip v-align-middle" data-balloon-length="medium" data-balloon="Minimum price is $1. Leave blank or 0 for no minimum purchase price." data-balloon-pos="up">
-											<i class="fa fa-question-circle-o"></i>
-										</span>
-									</label>
+									<label class="label" for="buy-price-input">Min. Purchase Price</label>
 									<input id="buy-price-input" data-name="buy_price" type="number" min="1" step="1" class="input changeable-input">
+									<small class="tip">The minimum offer you will consider.</small>
 								</div>
-								<div class="control">
-									<label class="label" for="price-rate">
-										<span class="v-align-middle">Rental Price</span>
-										<span class="icon is-small is-tooltip v-align-middle" data-balloon-length="medium" data-balloon="Minimum price is $1. Leave blank or 0 for no rentals." data-balloon-pos="up">
-											<i class="fa fa-question-circle-o"></i>
-										</span>
-									</label>
-									<div class="control is-grouped">
-										<input id="price-rate-input" data-name="price_rate" placeholder="minimum 1" type="number" min="1" step="1" class="padding-top-0 input changeable-input">
-										<span class="select price-type-span">
-											<div class="drop-form">
-												<select id="price-type-input" data-name="price_type" class="changeable-input">
-													<option value="month">Month</option>
-													<option value="week">Week</option>
-													<option value="day">Day</option>
-												</select>
-											</div>
-										</span>
-									</div>
+								<label class="label" for="price-rate-input">Rental Price</label>
+								<div class="control has-addons margin-bottom-0">
+									<input id="price-rate-input" data-name="price_rate" placeholder="minimum 1" type="number" min="1" step="1" class="padding-top-0 input changeable-input">
+									<span class="select price-type-span">
+										<div class="drop-form">
+											<select id="price-type-input" data-name="price_type" class="changeable-input">
+												<option value="month">Month</option>
+												<option value="week">Week</option>
+												<option value="day">Day</option>
+											</select>
+										</div>
+									</span>
 								</div>
+								<small class="tip">Minimum price is $1. Leave blank or 0 for no rentals.</small>
 							</div>
 							<div id="design-tab-drop" class="drop-tab is-hidden">
 									<div class="basic-elem control is-spaced">
@@ -282,26 +268,28 @@
 											<input id="font-name-input" data-name="font_name" placeholder="" type="text" class="premium-input padding-top-0 input changeable-input">
 										</div>
 									</div>
-									<div class="control">
-										<label class="label" for="color-scheme">
-											<span class="v-align-middle">History Module</span>
-											<span class="icon is-small is-tooltip v-align-middle" data-balloon-length="medium" data-balloon="Displays a ticker of recent activity on this domain." data-balloon-pos="up">
-												<i class="fa fa-question-circle-o"></i>
-											</span>
-										</label>
-										<div class="control">
-											<input id="history-module-input" data-name="history_module" type="checkbox" class="module-checkbox premium-input padding-top-0 changeable-input">
+									<div class="control is-spaced">
+										<div class="control-left">
+											<label class="label" for="history-module-input">History Module</label>
+											<small class="tip">A display that shows recent activity on your domain name. (Relevant for rentals)</small>
+										</div>
+										<div class="control-right">
+											<form class="checkbox-form">
+												<input id="history-module-input" data-name="history_module" type="checkbox" class="module-checkbox premium-input changeable-input" tabindex="0" />
+												<label for="history-module-input" tabindex="0"></label>
+											</form>
 										</div>
 									</div>
-									<div class="control">
-										<label class="label" for="color-scheme">
-											<span class="v-align-middle">Traffic Module</span>
-											<span class="icon is-small is-tooltip v-align-middle" data-balloon-length="medium" data-balloon="Displays detailed information about the traffic of this domain including Alexa data." data-balloon-pos="up">
-												<i class="fa fa-question-circle-o"></i>
-											</span>
-										</label>
-										<div class="control">
-											<input id="traffic-module-input" data-name="traffic_module" type="checkbox" class="module-checkbox premium-input padding-top-0 changeable-input">
+									<div class="control is-spaced">
+										<div class="control-left">
+											<label class="label" for="traffic-module-input">Traffic Module</label>
+											<small class="tip">A display with detailed information about domain traffic including Alexa data.</small>
+										</div>
+										<div class="control-right">
+											<form class="checkbox-form">
+												<input id="traffic-module-input" data-name="traffic_module" type="checkbox" class="module-checkbox premium-input changeable-input" tabindex="0" />
+												<label for="traffic-module-input" tabindex="0"></label>
+											</form>
 										</div>
 									</div>
 									<div class="control">
@@ -462,13 +450,6 @@
 								<button id="save-changes-button" class="button is-primary is-disabled is-stylish is-small no-shadow">Save</button>
 								<button id="cancel-changes-button" class="button is-danger is-hidden is-stylish is-small no-shadow">Cancel</button>
 								<button id="checkout-button" class="button is-primary is-disabled is-hidden is-stylish is-small no-shadow">Checkout</button>
-							</div>
-							<div id="listing-msg-error" class="margin-top-15 is-hidden is-danger notification">
-								<button class="delete"></button>
-							</div>
-							<div id="listing-msg-success" class="margin-top-15 is-hidden is-primary notification">
-								<button class="delete"></button>
-								<p id="listing-msg-success-text" class='is-white'></p>
 							</div>
 						</footer>
 					</div>
