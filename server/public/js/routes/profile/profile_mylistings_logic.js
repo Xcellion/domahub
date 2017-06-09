@@ -232,7 +232,7 @@ function createRows(){
 		else {
 			editRowUnverified(listings[0]);
 		}
-		$("#table_body").find(".table-row:not(.clone-row)").eq(0).addClass('is-active').css('background-color', "red");
+		$("#table_body").find(".table-row:not(.clone-row)").eq(0).addClass('is-active');
 	}
 }
 
@@ -291,7 +291,7 @@ function changeRow(row, listing_info, bool){
 
 		//highlight selected row on table
 		$(".table-row").removeClass('is-active').removeAttr("style");
-		row.addClass('is-active').css("background-color", "red");
+		row.addClass('is-active');
 
 		//clear any existing messages
 	    errorMessage(false);
@@ -1046,6 +1046,7 @@ function selectRow(row){
 
     row.toggleClass('is-active');
     icon_span.toggleClass('is-primary');
+
     if (selected){
 		icon_span.removeClass('is-danger');
         icon_i.removeClass("fa-exclamation-triangle").removeClass('fa-square-o').addClass("fa-check-square-o box-checked");
@@ -1067,7 +1068,8 @@ function selectAllRows(select_all_button, select_or_deselect){
 		select_all_button.find(".icon").addClass('is-primary');
 		select_all_button.find("i").removeClass("fa-square-o").addClass('fa-check-square-o box-checked');
 
-		$(".table-row:not(.clone-row)").addClass('is-active').data('selected', true);
+		$(".table-row:not(.clone-row)").addClass('is-active');
+		$(".table-row .select-button").prop("checked", true);
 		$(".table-row .select-button .icon").addClass('is-primary');
 		$(".table-row .select-button i").removeClass("fa-square-o").addClass('fa-check-square-o box-checked');
 	}
@@ -1077,7 +1079,8 @@ function selectAllRows(select_all_button, select_or_deselect){
 		select_all_button.find(".icon").removeClass('is-primary');
 		select_all_button.find("i").addClass("fa-square-o").removeClass('fa-check-square-o box-checked');
 
-		$(".table-row:not(.clone-row)").removeClass('is-active').data('selected', false);
+		$(".table-row:not(.clone-row)").removeClass('is-active');
+		$(".table-row .select-button").prop("checked", false);
 		$(".table-row .select-button .icon").removeClass('is-primary');
 		$(".table-row .select-button i").addClass("fa-square-o").removeClass('fa-check-square-o box-checked');
 	}
