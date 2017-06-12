@@ -170,8 +170,43 @@ button[data-balloon] {
 [data-balloon-length="fit"]:after {
   width: 100%; }
 
-#domain-table {
-  margin: 10px 0;
+@media screen and (max-width: 768px) {
+  #filter-menu {
+    -moz-transition: left 0.2s ease;
+    -o-transition: left 0.2s ease;
+    -webkit-transition: left 0.2s ease;
+    transition: left 0.2s ease;
+    -webkit-box-shadow: 0 3px 15px 0 rgba(0, 0, 0, 0.12);
+    -moz-box-shadow: 0 3px 15px 0 rgba(0, 0, 0, 0.12);
+    box-shadow: 0 3px 15px 0 rgba(0, 0, 0, 0.12);
+    background-color: white;
+    height: 100%;
+    left: -100%;
+    position: absolute;
+    z-index: 10; } }
+
+#filter-menu.is-active {
+  left: -20px;
+  top: 9px; }
+
+#filter-menu .delete {
+  position: absolute;
+  right: 10px; }
+
+.filter-menu-toggle {
+  cursor: pointer; }
+  .filter-menu-toggle.hamburger {
+    height: 30px;
+    width: 30px; }
+
+.black-background {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: 9;
+  background-color: rgba(0, 0, 0, 0.66); }
+
+#table-body {
   border-radius: 3px;
   max-height: 420px;
   overflow-y: auto; }
@@ -188,22 +223,23 @@ button[data-balloon] {
 
 .flex-item {
   align-items: center;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
-  border-left: 1px solid rgba(0, 0, 0, 0.12);
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  border-width: 1px 1px 0;
   display: flex;
   justify-content: space-between;
   padding: 8px; }
+  .flex-item:last-child {
+    border-bottom-width: 1px; }
   .flex-item p {
     word-break: break-all;
-    margin-right: 10px; }
+    margin-left: 10px; }
   .flex-item:hover {
     background-color: #efefef;
     cursor: pointer; }
   .flex-item.is-active {
-    background-color: #d0d0d0;
-    border-color: #d0d0d0; }
+    background-color: #444; }
     .flex-item.is-active p {
-      color: #309670; }
+      color: white; }
 
 .checkbox-form {
   width: 24px;
@@ -226,10 +262,14 @@ button[data-balloon] {
   max-height: 200px;
   object-fit: cover; }
 
-.listing-img .delete {
-  border-radius: 0 3px;
-  position: absolute;
-  right: 0; }
+.on-img {
+  top: 0;
+  right: 0;
+  position: absolute !important; }
+
+.listing-img {
+  width: 96px;
+  height: auto; }
 
 .listing-module {
   padding: 10px 0; }
