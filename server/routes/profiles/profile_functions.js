@@ -12,6 +12,9 @@ module.exports = {
 	//gets all listings for a user
 	getAccountListings : function(req, res, next){
 
+		//moving to profile view, remove any existing listing session info
+		delete req.session.listing_info;
+
 		//if we dont already have the list of listings
 		if (!req.user.listings){
 			Account.getAccountListings(req.user.id, function(result){
