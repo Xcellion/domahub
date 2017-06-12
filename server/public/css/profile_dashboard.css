@@ -181,7 +181,7 @@ button[data-balloon] {
     box-shadow: 0 3px 15px 0 rgba(0, 0, 0, 0.12);
     background-color: white;
     height: 100%;
-    left: -100%;
+    left: -150%;
     position: absolute;
     z-index: 10; } }
 
@@ -256,11 +256,6 @@ button[data-balloon] {
   display: block;
   margin: 5px 0;
   color: rgba(0, 0, 0, 0.66); }
-
-.background_image {
-  min-height: 200px;
-  max-height: 200px;
-  object-fit: cover; }
 
 .on-img {
   top: 0;

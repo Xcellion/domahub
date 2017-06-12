@@ -23,20 +23,9 @@
     color: $white-primary
     padding: 5px 0
     position: relative
-    &::before
-      @include transition(all 0.25s ease)
-      background: $white
-      bottom: 0
-      content: ""
-      height: 3px
-      position: absolute
-      width: 0
-      left: 50%
     &:hover,
     &:focus
-      &::before
-        width: 100%
-        left: 0
+      @include box-shadow(0,3px,0,$white-primary,0)
 
 .footer-bar
   display: flex

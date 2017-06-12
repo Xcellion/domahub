@@ -4729,8 +4729,6 @@ input:-webkit-autofill {
       outline: none; }
   .tabs li {
     display: block; }
-    .tabs li.is-active a {
-      font-weight: 500; }
   .tabs ul {
     align-items: center;
     border-bottom: 1px solid rgba(0, 0, 0, 0.12);
@@ -5105,21 +5103,10 @@ input:-webkit-autofill {
   color: white;
   padding: 5px 0;
   position: relative; }
-  .footer-item a::before {
-    -moz-transition: all 0.25s ease;
-    -o-transition: all 0.25s ease;
-    -webkit-transition: all 0.25s ease;
-    transition: all 0.25s ease;
-    background: white;
-    bottom: 0;
-    content: "";
-    height: 3px;
-    position: absolute;
-    width: 0;
-    left: 50%; }
-  .footer-item a:hover::before, .footer-item a:focus::before {
-    width: 100%;
-    left: 0; }
+  .footer-item a:hover, .footer-item a:focus {
+    -webkit-box-shadow: 0 3px 0 0 white;
+    -moz-box-shadow: 0 3px 0 0 white;
+    box-shadow: 0 3px 0 0 white; }
 
 .footer-bar {
   display: flex;
