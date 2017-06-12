@@ -76,7 +76,7 @@ $(document).ready(function(){
 
 	//select all domains
 	$("#select-all").on("click", function(e){
-		selectAllRows($(this), $("this").prop('checked', true));
+		selectAllRows($(this), $(this).data('selected'));
 	});
 
 	//</editor-fold>
@@ -119,11 +119,6 @@ $(document).ready(function(){
 
 		cancelListingChanges();
 
-	});
-
-	//delete background image X button
-	$("#background-delete-img").on("click", function(e){
-		deleteBackgroundImg($(this), "https://placeholdit.imgix.net/~text?txtsize=40&txt=RANDOM%20PHOTO&w=96&h=96");
 	});
 
 	//to submit form changes
@@ -415,9 +410,30 @@ function editRowVerified(listing_info){
 
 	//update the pricing tab
 	function updatePriceInputs(listing_info){
+		checkBox(listing_info.rentable, $("#rentable-input"));
+		checkBox(listing_info.buyable, $("#buyable-input"));
+
+		updatePriceDisabled(listing_info.buyable, listing_info.rentable);
+		$("#buy-price-input").val(listing_info.buy_price);
 		$("#price-rate-input").val(listing_info.price_rate);
 		$("#price-type-input").val(listing_info.price_type);
-		$("#buy-price-input").val(listing_info.buy_price);
+	}
+	function updatePriceDisabled(buyable, rentable){
+		if (buyable == 1){
+			$("#buy-price-input").removeClass('is-disabled');
+		}
+		else {
+			$("#buy-price-input").addClass('is-disabled');
+		}
+
+		if (rentable == 1){
+			$("#price-rate-input").removeClass('is-disabled');
+			$("#price-type-input").removeClass('is-disabled');
+		}
+		else {
+			$("#price-rate-input").addClass('is-disabled');
+			$("#price-type-input").addClass('is-disabled');
+		}
 	}
 
 	//</editor-fold>
@@ -461,10 +477,6 @@ function editRowVerified(listing_info){
 			}
 		});
 	}
-	function updateModules(listing_info){
-		$("#history-module-input").val(listing_info.history_module);
-		$("#traffic-module-input").val(listing_info.traffic_module);
-	}
 	function updateBackgroundImage(listing_info){
 		var background_image = (listing_info.background_image == null || listing_info.background_image == undefined || listing_info.background_image == "") ? "https://placeholdit.imgix.net/~text?txtsize=40&txt=RANDOM%20PHOTO&w=96&h=96" : listing_info.background_image;
 		$("#background-image").attr('src', background_image).off().on("error", function() {
@@ -478,11 +490,14 @@ function editRowVerified(listing_info){
 	    });
 	}
 	function updateModules(listing_info){
-		checkModuleBox(listing_info.history_module, $("#history-module-input"))
-		checkModuleBox(listing_info.traffic_module, $("#traffic-module-input"))
-		checkModuleBox(listing_info.info_module, $("#info-module-input"))
+		checkBox(listing_info.history_module, $("#history-module-input"));
+		checkBox(listing_info.traffic_module, $("#traffic-module-input"));
+		checkBox(listing_info.info_module, $("#info-module-input"));
+
+		//alexa link
+		$("#alexa_link").attr("href", "https://www.alexa.com/siteinfo/" + listing_info.domain_name);
 	}
-	function checkModuleBox(module_value, elem){
+	function checkBox(module_value, elem){
 		if (module_value){
 			elem.val(module_value).prop("checked", true);
 		}
@@ -590,6 +605,10 @@ function editRowVerified(listing_info){
 		}
 	}
 
+	//</editor-fold>
+
+	//<editor-fold>-------------------------------BINDINGS-------------------------------
+
 	//update change bindings (category, changeable-input, status)
 	function updateBindings(listing_info){
 
@@ -613,10 +632,17 @@ function editRowVerified(listing_info){
 		});
 
 		//module checkbox handlers
-		$(".module-checkbox").off().on("click", function(){
+		$(".checkbox-input").off().on("change", function(){
 			var new_checkbox_val = ($(this).val() == "1") ? 0 : 1;
 			$(this).val(new_checkbox_val);
 			changedValue($(this), listing_info);
+		});
+
+		$("#buyable-input").on("change", function(){
+			updatePriceDisabled($(this).val(), $("#rentable-input").val());
+		});
+		$("#rentable-input").on("change", function(){
+			updatePriceDisabled($("#buyable-input").val(), $(this).val());
 		});
 
 		//delete images
@@ -1093,6 +1119,7 @@ function selectAllRows(select_all_button, select_or_deselect){
 		$(".table-row .select-button").prop("checked", false);
 	}
 
+	select_all_button.data('selected', !select_or_deselect);
 	multiSelectButtons();
 }
 

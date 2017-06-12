@@ -93,8 +93,10 @@ account_model.prototype.getAccountListings = function(account_id, callback){
 				listings.status,\
 				listings.verified,\
 				listings.stripe_subscription_id,\
+				listings.rentable,\
 				listings.price_type,\
 				listings.price_rate,\
+				listings.buyable,\
 				listings.buy_price,\
 				listings.description,\
 				listings.description_hook,\

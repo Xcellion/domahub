@@ -2,6 +2,10 @@
 @import 'mixins';
 @import 'balloon';
 
+.box-checked {
+    margin-left:2px;
+}
+
 #filter-menu {
   @include mobile {
     @include transition(left 0.2s ease);
