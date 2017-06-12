@@ -2,6 +2,11 @@ var current_listing = (listings) ? listings[0] : {};
 
 $(document).ready(function(){
 
+	$(".filter-menu-toggle").on("click", function() {
+		$("#filter-menu").toggleClass("is-active");
+		$(".black-background").toggleClass('is-hidden');
+	});
+
 	//<editor-fold>-------------------------------FILTERS-------------------------------
 
 	$("#sort-select").on("change", function(){
@@ -71,7 +76,7 @@ $(document).ready(function(){
 
 	//select all domains
 	$("#select-all").on("click", function(e){
-		selectAllRows($(this), $(this).data('selected'));
+		selectAllRows($(this), $("this").prop('checked', true));
 	});
 
 	//</editor-fold>
@@ -118,7 +123,7 @@ $(document).ready(function(){
 
 	//delete background image X button
 	$("#background-delete-img").on("click", function(e){
-		deleteBackgroundImg($(this), "https://placeholdit.imgix.net/~text?txtsize=40&txt=RANDOM%20PHOTO&w=200&h=200");
+		deleteBackgroundImg($(this), "https://placeholdit.imgix.net/~text?txtsize=40&txt=RANDOM%20PHOTO&w=96&h=96");
 	});
 
 	//to submit form changes
@@ -216,10 +221,10 @@ $(document).ready(function(){
 function createRows(){
 
 	//empty the tabl
-	$("#table_body").find(".table-row:not(.clone-row)").remove();
+	$("#table-body").find(".table-row:not(.clone-row)").remove();
 
 	for (var x = 0; x < listings.length; x++){
-		$("#table_body").append(createRow(listings[x], x));
+		$("#table-body").append(createRow(listings[x], x));
 	}
 
 	//show the first child
@@ -232,8 +237,11 @@ function createRows(){
 		else {
 			editRowUnverified(listings[0]);
 		}
-		$("#table_body").find(".table-row:not(.clone-row)").eq(0).addClass('is-active');
+		$("#table-body").find(".table-row:not(.clone-row)").eq(0).addClass('is-active');
 	}
+
+	//change domain name header
+	$("#current-domain-name").text(current_listing.domain_name);
 }
 
 //function to create a listing row
@@ -298,6 +306,9 @@ function changeRow(row, listing_info, bool){
 	    successMessage(false);
 
 		current_listing = listing_info;
+
+		//change domain name header
+		$("#current-domain-name").text(listing_info.domain_name);
 
 		//update inputs
 		if (listing_info.verified){
@@ -455,9 +466,9 @@ function editRowVerified(listing_info){
 		$("#traffic-module-input").val(listing_info.traffic_module);
 	}
 	function updateBackgroundImage(listing_info){
-		var background_image = (listing_info.background_image == null || listing_info.background_image == undefined || listing_info.background_image == "") ? "https://placeholdit.imgix.net/~text?txtsize=40&txt=RANDOM%20PHOTO&w=200&h=200" : listing_info.background_image;
+		var background_image = (listing_info.background_image == null || listing_info.background_image == undefined || listing_info.background_image == "") ? "https://placeholdit.imgix.net/~text?txtsize=40&txt=RANDOM%20PHOTO&w=96&h=96" : listing_info.background_image;
 		$("#background-image").attr('src', background_image).off().on("error", function() {
-	        $(this).attr("src", "https://placeholdit.imgix.net/~text?txtsize=40&txt=LOADING...%20&w=200&h=200");
+	        $(this).attr("src", "https://placeholdit.imgix.net/~text?txtsize=40&txt=LOADING...%20&w=96&h=96");
 	    });
 	}
 	function updateLogo(listing_info){
@@ -494,7 +505,8 @@ function editRowVerified(listing_info){
 
 		//if user has a CC already on file, change the text
 		if (user.stripe_info.premium_cc_last4){
-			$("#change-card-button").removeClass('is-hidden').text("Change Payment Method");
+			$("#change-card-button").removeClass('is-hidden');
+			$("#change-card-button span:nth-child(2)").text("Change Card");
 
 			//last 4 digits
 			var premium_cc_last4 = (user.stripe_info.premium_cc_last4) ? user.stripe_info.premium_cc_last4 : "****";
@@ -502,7 +514,8 @@ function editRowVerified(listing_info){
 			$("#existing-cc").text(premium_cc_brand + " card ending in " + premium_cc_last4);
 		}
 		else {
-			$("#change-card-button").removeClass('is-hidden').text("Add Payment Method");
+			$("#change-card-button").removeClass('is-hidden');
+			$("#change-card-button span:nth-child(2)").text("Add Card");
 		}
 
 		//is not premium
@@ -1000,18 +1013,18 @@ function updateExistingDNS(a_records){
 		}
 
 		//clear table first
-		$("#dns_table_body").find(".clone-dns-row:not(#existing_a_record_clone)").remove();
+		$("#dns_table-body").find(".clone-dns-row:not(#existing_a_record_clone)").remove();
 
 		for (var x = 0; x < temp_a_records.length; x++){
 			var temp_dns_row = $("#existing_a_record_clone").clone().removeAttr('id').removeClass('is-hidden');
 			temp_dns_row.find(".existing_data").text(a_records[x]).addClass('is-danger');
 			temp_dns_row.find(".required_data").text("You must delete this!").addClass('is-danger');
-			$("#dns_table_body").append(temp_dns_row);
+			$("#dns_table-body").append(temp_dns_row);
 		}
 	}
 	else {
 		//clear table first
-		$("#dns_table_body").find(".clone-dns-row:not(#existing_a_record_clone)").remove();
+		$("#dns_table-body").find(".clone-dns-row:not(#existing_a_record_clone)").remove();
 
 		$("#existing_a_record_clone").removeClass('is-hidden').find(".existing_data").text("Not found!").addClass('is-danger');
 	}
@@ -1085,7 +1098,7 @@ function selectAllRows(select_all_button, select_or_deselect){
 
 //helper function to handle multi-select action buttons
 function multiSelectButtons(){
-    var selected_rows = $(".table-row:not(.clone-row)").filter(function(){ return $(this).data("selected") == true });
+    var selected_rows = $(".table-row:not(.clone-row)").filter(function(){ return $(this).hasClass("is-selected") == true });
     var verified_selected_rows = selected_rows.filter(function(){ return $(this).data("verified") == false});
 
     if (selected_rows.length > 0){
@@ -1109,7 +1122,7 @@ function multiVerify(verify_button){
 
 	var ids = [];
 	var selected_rows = $(".table-row").filter(function(){
-		if ($(this).data('selected') == true){
+		if ($(this).hasClass('is-selected')){
 			ids.push($(this).data('id'));
 			return true;
 		}
@@ -1164,7 +1177,7 @@ function multiDelete(delete_button){
 
 	var deletion_ids = [];
 	var selected_rows = $(".table-row").filter(function(){
-		if ($(this).data('selected') == true){
+		if ($(this).hasClass('is-selected')){
 			deletion_ids.push($(this).data('id'));
 			return true;
 		}

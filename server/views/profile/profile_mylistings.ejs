@@ -24,9 +24,12 @@
 				<p id="listing-msg-success-text" class='is-white'></p>
 			</div>
 			<div class="columns">
-				<div class="column is-3">
+				<div id="filter-menu" class="column is-3">
 					<div class="content">
-						<h2>My Domains</h2>
+						<h2>
+							My Domains
+							<span class="delete filter-menu-toggle is-hidden-tablet"></span>
+						</h2>
 					</div>
 
 					<!-- FITER MENU -->
@@ -81,7 +84,7 @@
 					</div>
 
 					<!-- DOMAINS TABLE  -->
-					<div id="table_body" class="margin-top-15">
+					<div id="table-body" class="margin-top-15">
 						<div id="verified-clone-row" class="padding-5 clone-row table-row is-hidden flex-item">
 							<form class="checkbox-form">
 								<input class="select-button" data-selected="false" type="checkbox" class="no-shadow" tabindex="0" title="Select All" />
@@ -106,7 +109,16 @@
 
 				<!-- LISTING DETAILS  -->
 				<div class="column is-9">
+					<div class="black-background is-hidden">
 
+					</div>
+					<!-- CURRENT DOMAIN NAME -->
+					<div class="content">
+						<button tabindex="0" class="button is-primary is-icon-only filter-menu-toggle no-shadow is-small is-hidden-tablet" title="Filters">
+							<span class="icon"><i class="fa fa-bars"></i></span>
+						</button>
+						<h2 id="current-domain-name" class="is-inline"></h2>
+					</div>
 					<!-- LISTING DETAIL TABS  -->
 					<div class="tabs no-border">
 						<ul>
@@ -140,7 +152,7 @@
 								<th>Record</th>
 								<th>Required Data</th>
 								<th>Current Data</th>
-								<tbody id="dns_table_body">
+								<tbody id="dns_table-body">
 									<tr id="existing_a_record_clone" class='clone-dns-row is-hidden'>
 										<td>@</td>
 										<td>A</td>
@@ -175,7 +187,16 @@
 									<small class="tip">100 character limit.</small>
 								</div>
 								<div class="control">
-									<label class="label" for="categories">
+									<label class="label" for="paths">
+										<span class="v-align-middle">Example Paths</span>
+										<span class="icon is-small is-tooltip v-align-middle" data-balloon-length="medium" data-balloon="Example paths or subdirectories that users may want to rent on your domain. Must consist of either letters or numbers." data-balloon-pos="up">
+											<i class="fa fa-question-circle-o"></i>
+										</span>
+									</label>
+									<input id="paths-input" data-name="paths" tabindex="0" class="is-hidden input changeable-input"></input>
+								</div>
+								<div class="control">
+									<label class="label margin-bottom-10" for="categories">
 										<span class="v-align-middle">Categories</span>
 										<span class="icon is-small is-tooltip v-align-middle" data-balloon-length="medium" data-balloon="Categories help users find similar domains. Incorrect categories can lead to a poor user experience and hurt your domain brand by being associated with non-similar domains." data-balloon-pos="up">
 											<i class="fa fa-question-circle-o"></i>
@@ -189,15 +210,6 @@
 										<a data-category="<%= categories[x].back %>" class="<%= categories[x].back %>-category tag margin-bottom-5 category-selector is-bordered"><%= categories[x].front %></a>
 										<% } %>
 									</div>
-								</div>
-								<div class="control">
-									<label class="label" for="paths">
-										<span class="v-align-middle">Example Paths</span>
-										<span class="icon is-small is-tooltip v-align-middle" data-balloon-length="medium" data-balloon="Example paths or subdirectories that users may want to rent on your domain. Must consist of either letters or numbers." data-balloon-pos="up">
-											<i class="fa fa-question-circle-o"></i>
-										</span>
-									</label>
-									<input id="paths-input" data-name="paths" tabindex="0" class="is-hidden input changeable-input"></input>
 								</div>
 							</div>
 							<div id="pricing-tab-drop" class="drop-tab is-hidden">
@@ -271,7 +283,7 @@
 									<div class="control is-spaced">
 										<div class="control-left">
 											<label class="label" for="history-module-input">History Module</label>
-											<small class="tip">A display that shows recent activity on your domain name. (Relevant for rentals)</small>
+											<small class="tip">Displays recent activity on your domain name; relevant for rentals.</small>
 										</div>
 										<div class="control-right">
 											<form class="checkbox-form">
@@ -283,7 +295,7 @@
 									<div class="control is-spaced">
 										<div class="control-left">
 											<label class="label" for="traffic-module-input">Traffic Module</label>
-											<small class="tip">A display with detailed information about domain traffic including Alexa data.</small>
+											<small class="tip">Displays detailed information about domain traffic including Alexa data.</small>
 										</div>
 										<div class="control-right">
 											<form class="checkbox-form">
@@ -292,71 +304,68 @@
 											</form>
 										</div>
 									</div>
-									<div class="control">
-										<label class="label" for="color-scheme">
-											<span class="v-align-middle">Info Module</span>
-											<span class="icon is-small is-tooltip v-align-middle" data-balloon-length="medium" data-balloon="Displays more detailed information about the domain and other related information." data-balloon-pos="up">
-												<i class="fa fa-question-circle-o"></i>
-											</span>
-										</label>
-										<div class="control">
-											<input id="info-module-input" data-name="info_module" type="checkbox" class="module-checkbox premium-input padding-top-0 changeable-input">
+									<div class="control is-spaced">
+										<div class="control-left">
+											<label class="label" for="info-module-input">Info Module</label>
+											<small class="tip">Displays more detailed information about the domain and other related information.</small>
+										</div>
+										<div class="control-right">
+											<form class="checkbox-form">
+												<input id="info-module-input" data-name="info_module" type="checkbox" class="module-checkbox premium-input changeable-input" tabindex="0" />
+												<label for="info-module-input" tabindex="0"></label>
+											</form>
 										</div>
 									</div>
-									<div class="control">
-										<div class="label">
-											<span class="v-align-middle">Background Image</span>
-											<span class="icon is-small is-tooltip v-align-middle" data-balloon-length="medium" data-balloon="The main background image of the landing page." data-balloon-pos="up">
-												<i class="fa fa-question-circle-o"></i>
-											</span>
+									<div class="control is-spaced">
+										<div class="control-left">
+											<div class="label">Background Image</div>
+											<small class="tip">The background image will display full-screen on your landing page.</small>
 										</div>
-										<div class="card-image">
-											<figure class="image">
-												<button id="background" tabindex="0" class="delete delete-image"></button>
-												<img data-default-img="https://placeholdit.imgix.net/~text?txtsize=40&txt=LOADING...%20&w=200&h=200" id="background-image" alt="Image not found" src="">
+										<div class="control-right">
+											<figure class="image listing-img">
+												<button id="background-delete-img" tabindex="0" class="delete on-img"></button>
+												<img data-default-img="https://placeholdit.imgix.net/~text?txtsize=40&txt=NONE%20&w=96" id="background-image" alt="Image not found" src="">
 											</figure>
-										</div>
-										<footer class="card-footer">
 											<form tabindex="0" class="drop-form-file" method="post" enctype="multipart/form-data">
 												<input id="background-image-input" data-name="background_image" type="file" name="background_image" accept="image/png, image/gif, image/jpeg" class="premium-input changeable-input input-file">
-												<label for="background-image-input" class="premium-input button no-shadow is-fullwidth">
+												<label for="background-image-input" class="premium-input button is-small is-fullwidth no-shadow">
 													<i class="fa fa-upload" aria-hidden="true"></i>
-													<p data-default-name="Background Image" id="background-image-label" class="file-label">Background Image</p>
+													<p data-default-name="Background Image" id="background-image-label" class="file-label">Upload</p>
 												</label>
 											</form>
-										</footer>
-									</div>
-									<div class="card listing-img no-shadow">
-										<div class="card-image">
-											<figure class="image">
-												<button id="logo" tabindex="0" class="delete delete-image"></button>
-												<img data-default-img="https://placeholdit.imgix.net/~text?txtsize=20&txt=NO%20LOGO&w=200&h=50" id="logo-image" alt="Image not found" src="">
-											</figure>
 										</div>
-										<footer class="card-footer">
+										</form>
+									</div>
+									<div class="control is-spaced">
+										<div class="control-left">
+											<div class="label">Logo</div>
+											<small class="tip">The logo will be displayed on the top left of your landing page.</small>
+										</div>
+										<div class="control-right">
+											<figure class="image listing-img">
+												<button id="logo" tabindex="0" class="delete on-img"></button>
+												<img data-default-img="https://placeholdit.imgix.net/~text?txtsize=20&txt=NO%20LOGO&w=96" id="logo-image" alt="Image not found" src="">
+											</figure>
 											<form tabindex="0" class="drop-form-file" method="post" enctype="multipart/form-data">
 												<input id="logo-image-input" data-name="logo" type="file" name="logo" accept="image/png, image/gif, image/jpeg" class="premium-input changeable-input input-file">
-												<label for="logo-image-input" class="premium-input button no-shadow is-fullwidth">
+												<label for="logo-image-input" class="premium-input button is-small no-shadow is-fullwidth">
 													<i class="fa fa-upload" aria-hidden="true"></i>
-													<p data-default-name="Logo" id="logo-image-label" class="file-label">Logo</p>
+													<p data-default-name="Logo" id="logo-image-label" class="file-label">Upload</p>
 												</label>
 											</form>
-										</footer>
+										</div>
 									</div>
 								</div>
 							<div id="upgrade-tab-drop" class="drop-tab is-hidden">
 
-									<div class="control">
-										<label class="label" for="color-scheme">
-											<span class="v-align-middle">Premium Status</span>
-											<span class="icon is-small is-tooltip v-align-middle" data-balloon-length="medium" data-balloon="Upgrade your listing to a premium listing for $1 / year and unlock customization features." data-balloon-pos="up">
-												<i class="fa fa-question-circle-o"></i>
-											</span>
-										</label>
-										<div class="control">
-											<p id="renew-status">
-												Now loading Premium details...
+									<div class="control is-spaced">
+										<div class="control-left">
+											<p>
+												Premium Status
 											</p>
+											<small id="renew-status" class="tip">Now loading Premium details...</small>
+										</div>
+										<div class="control-right">
 											<a id="upgrade-button" class="margin-top-5 is-stylish is-small basic-elem button no-shadow is-info">
 												<span class="icon is-small">
 													<i class="fa fa-diamond"></i>
@@ -368,25 +377,32 @@
 													<span class="icon is-small">
 														<i class="fa fa-times-circle"></i>
 													</span>
-													<span>Cancel Premium</span>
+													<span>Cancel Plan</span>
 												</a>
 												<a id="renew-premium-button" class="margin-top-5 is-hidden is-small is-stylish button no-shadow is-primary">
 													<span class="icon is-small">
 														<i class="fa fa-repeat"></i>
 													</span>
-													<span>Renew Premium</span>
+													<span>Renew Plan</span>
 												</a>
 											</div>
 										</div>
 									</div>
 
-									<div class="control">
-										<label class="label" for="color-scheme">
-											<span class="v-align-middle">Default Payment Method</span>
-										</label>
-										<div class="control">
-											<p id="existing-cc" class="">Credit card ending in ****</p>
-											<a id="change-card-button" tabindex="0" title="Change Payment Method" class="button is-primary is-small is-stylish no-shadow">Change Payment Method</a>
+									<div class="control is-spaced">
+										<div class="control-left">
+											<p>
+												Default Payment Method
+											</p>
+											<small id="existing-cc" class="tip">Credit card ending in ****</small>
+										</div>
+										<div class="control-right">
+											<a id="change-card-button" tabindex="0" title="Change Payment Method" class="button is-primary is-small is-stylish no-shadow">
+												<span class="icon is-small">
+													<i class="fa fa-credit-card"></i>
+												</span>
+												<span>Change Payment Method</span>
+											</a>
 										</div>
 									</div>
 
