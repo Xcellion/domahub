@@ -64,7 +64,7 @@
 						<div class="button-wrapper control">
 							<button id="select-all" data-selected="false" tabindex="0" class="button no-shadow" title="Select All">
 								<span class="icon is-small">
-									<i class="fa fa-check-square-o"></i>
+									<i class="fa fa-square-o"></i>
 								</span>
 								<span>Select All</span>
 							</button>
@@ -213,25 +213,52 @@
 								</div>
 							</div>
 							<div id="pricing-tab-drop" class="drop-tab is-hidden">
+								<div class="control is-spaced">
+									<div class="control-left">
+										<label class="label" for="info-module-input">Allow Offers / Buy It Now</label>
+										<small class="tip">Displays a form allowing verified users to make offers on this domain or buy it immediately.</small>
+									</div>
+									<div class="control-right">
+										<form class="checkbox-form">
+											<input id="buyable-input" data-name="buyable" type="checkbox" class="checkbox-input changeable-input" tabindex="0" />
+											<label for="buyable-input" tabindex="0"></label>
+										</form>
+									</div>
+								</div>
 								<div class="control">
 									<label class="label" for="buy-price-input">Min. Purchase Price</label>
 									<input id="buy-price-input" data-name="buy_price" type="number" min="1" step="1" class="input changeable-input">
-									<small class="tip">The minimum offer you will consider.</small>
+									<small class="tip">The minimum offer / price you will consider.</small>
+								</div>
+								<div class="control is-spaced">
+									<div class="control-left">
+										<label class="label" for="info-module-input">Allow Rentals</label>
+										<small class="tip">Displays a calendar allowing verified users to rent usage of this domain for short amounts of time.</small>
+										<small class="tip"><a href="/faq" class="is-accent">Why should I rent my domain out?</a></small>
+									</div>
+									<div class="control-right">
+										<form class="checkbox-form">
+											<input id="rentable-input" data-name="rentable" type="checkbox" class="checkbox-input changeable-input" tabindex="0" />
+											<label for="rentable-input" tabindex="0"></label>
+										</form>
+									</div>
 								</div>
 								<label class="label" for="price-rate-input">Rental Price</label>
-								<div class="control has-addons margin-bottom-0">
-									<input id="price-rate-input" data-name="price_rate" placeholder="minimum 1" type="number" min="1" step="1" class="padding-top-0 input changeable-input">
-									<span class="select price-type-span">
-										<div class="drop-form">
-											<select id="price-type-input" data-name="price_type" class="changeable-input">
-												<option value="month">Month</option>
-												<option value="week">Week</option>
-												<option value="day">Day</option>
-											</select>
-										</div>
-									</span>
+								<div class="control">
+									<div class="control has-addons margin-bottom-0">
+										<input id="price-rate-input" data-name="price_rate" placeholder="minimum 1" type="number" min="1" step="1" class="padding-top-0 input changeable-input">
+										<span class="select price-type-span">
+											<div class="drop-form">
+												<select id="price-type-input" data-name="price_type" class="changeable-input">
+													<option value="month">Month</option>
+													<option value="week">Week</option>
+													<option value="day">Day</option>
+												</select>
+											</div>
+										</span>
+									</div>
+									<small class="tip">Price per unit of time for the domain rental.</small>
 								</div>
-								<small class="tip">Minimum price is $1. Leave blank or 0 for no rentals.</small>
 							</div>
 							<div id="design-tab-drop" class="drop-tab is-hidden">
 									<div class="basic-elem control is-spaced">
@@ -282,25 +309,25 @@
 									</div>
 									<div class="control is-spaced">
 										<div class="control-left">
-											<label class="label" for="history-module-input">History Module</label>
-											<small class="tip">Displays recent activity on your domain name; relevant for rentals.</small>
+											<label class="label" for="traffic-module-input">Traffic Module</label>
+											<small class="tip">Displays detailed information about domain traffic including <a class="is-accent" target="_blank" id="alexa_link">Alexa</a> data.</small>
 										</div>
 										<div class="control-right">
 											<form class="checkbox-form">
-												<input id="history-module-input" data-name="history_module" type="checkbox" class="module-checkbox premium-input changeable-input" tabindex="0" />
-												<label for="history-module-input" tabindex="0"></label>
+												<input id="traffic-module-input" data-name="traffic_module" type="checkbox" class="checkbox-input premium-input changeable-input" tabindex="0" />
+												<label for="traffic-module-input" tabindex="0"></label>
 											</form>
 										</div>
 									</div>
 									<div class="control is-spaced">
 										<div class="control-left">
-											<label class="label" for="traffic-module-input">Traffic Module</label>
-											<small class="tip">Displays detailed information about domain traffic including Alexa data.</small>
+											<label class="label" for="history-module-input">History Module</label>
+											<small class="tip">Displays recent activity on your domain name; relevant for rentals.</small>
 										</div>
 										<div class="control-right">
 											<form class="checkbox-form">
-												<input id="traffic-module-input" data-name="traffic_module" type="checkbox" class="module-checkbox premium-input changeable-input" tabindex="0" />
-												<label for="traffic-module-input" tabindex="0"></label>
+												<input id="history-module-input" data-name="history_module" type="checkbox" class="checkbox-input premium-input changeable-input" tabindex="0" />
+												<label for="history-module-input" tabindex="0"></label>
 											</form>
 										</div>
 									</div>
@@ -311,7 +338,7 @@
 										</div>
 										<div class="control-right">
 											<form class="checkbox-form">
-												<input id="info-module-input" data-name="info_module" type="checkbox" class="module-checkbox premium-input changeable-input" tabindex="0" />
+												<input id="info-module-input" data-name="info_module" type="checkbox" class="checkbox-input premium-input changeable-input" tabindex="0" />
 												<label for="info-module-input" tabindex="0"></label>
 											</form>
 										</div>
@@ -319,11 +346,11 @@
 									<div class="control is-spaced">
 										<div class="control-left">
 											<div class="label">Background Image</div>
-											<small class="tip">The background image will display full-screen on your landing page.</small>
+											<small class="tip">This image will display as the full-screen background on your landing page.</small>
 										</div>
 										<div class="control-right">
 											<figure class="image listing-img">
-												<button id="background-delete-img" tabindex="0" class="delete on-img"></button>
+												<button id="background" tabindex="0" class="delete delete-image on-img"></button>
 												<img data-default-img="https://placeholdit.imgix.net/~text?txtsize=40&txt=NONE%20&w=96" id="background-image" alt="Image not found" src="">
 											</figure>
 											<form tabindex="0" class="drop-form-file" method="post" enctype="multipart/form-data">
@@ -339,11 +366,11 @@
 									<div class="control is-spaced">
 										<div class="control-left">
 											<div class="label">Logo</div>
-											<small class="tip">The logo will be displayed on the top left of your landing page.</small>
+											<small class="tip">The logo will be utilized for email communications and branding.</small>
 										</div>
 										<div class="control-right">
 											<figure class="image listing-img">
-												<button id="logo" tabindex="0" class="delete on-img"></button>
+												<button id="logo" tabindex="0" class="delete delete-image on-img"></button>
 												<img data-default-img="https://placeholdit.imgix.net/~text?txtsize=20&txt=NO%20LOGO&w=96" id="logo-image" alt="Image not found" src="">
 											</figure>
 											<form tabindex="0" class="drop-form-file" method="post" enctype="multipart/form-data">

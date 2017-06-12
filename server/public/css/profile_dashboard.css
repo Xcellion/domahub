@@ -170,6 +170,9 @@ button[data-balloon] {
 [data-balloon-length="fit"]:after {
   width: 100%; }
 
+.box-checked {
+  margin-left: 2px; }
+
 @media screen and (max-width: 768px) {
   #filter-menu {
     -moz-transition: left 0.2s ease;
