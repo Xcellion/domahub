@@ -7,6 +7,7 @@ var moneyFormat = wNumb({
 });
 
 $(document).ready(function() {
+	$("#date_created").text(moment(listing_info.date_created).format("MMMM DD, YYYY"));
 
 	//<editor-fold>-----------------------------------------------------------------------------------BUY NOW
 
@@ -87,7 +88,7 @@ $(document).ready(function() {
 			showRentalStuff($(this));
 		});
 
-	//<editor-fold>-----------------------------------------------------------------------------------TYPED PATH
+		//<editor-fold>-----------------------------------------------------------------------------------TYPED PATH
 
 		//focus to hide the click me message
 		$("#typed-slash").on("focus", function(){
@@ -204,44 +205,43 @@ $(document).ready(function() {
 
 });
 
+//<editor-fold>-------------------------------BUY NOW-------------------------------
+
 //function to show buy now module
 function showBuyStuff(buy_now_button){
 
-	//fade out buy button, remove handler
-	buy_now_button.off().addClass('is-disabled is-active');
-
-	//re-attach rent now handler
-	$("#rent-now-button").removeClass('is-disabled  is-active').off().on("click", function(){
-		showRentalStuff($(this));
-	});
-
-	//show buy related stuff
-	$(".post-buy-module").removeClass('is-hidden');
-	$(".post-rent-module").addClass('is-hidden');
-	$("#contact_name").focus();
-
-	//get a random char phrase
-	var random_char = random_characters[Math.floor(Math.random()*random_characters.length)];
-	$("#contact_name").attr("placeholder", random_char.name);
-	$("#contact_email").attr("placeholder", random_char.email);
-	$("#contact_message").attr("placeholder", random_char.message + " Anyways, I'm interested in buying " + listing_info.domain_name + ". Let's chat.");
-
-	//add a / to end of domain
-	$("#domain-title").text(listing_info.domain_name);
-
 	//hide the slash input
 	$("#path-input").addClass("is-hidden");
-}
 
-//function to check phone number
-function checkPhone(){
-	if ($("#contact_phone").intlTelInput("isValidNumber")){
-		return true;
+	if (listing_info.status == 1){
+		$("#unavailable-module").addClass('is-hidden');
+
+		//fade out buy button, remove handler
+		buy_now_button.off().addClass('is-disabled is-active');
+
+		//re-attach rent now handler
+		$("#rent-now-button").removeClass('is-disabled  is-active').off().on("click", function(){
+			showRentalStuff($(this));
+		});
+
+		//show buy related stuff
+		$(".post-buy-module").removeClass('is-hidden');
+		$(".post-rent-module").addClass('is-hidden');
+		$("#contact_name").focus();
+
+		//get a random char phrase
+		var random_char = random_characters[Math.floor(Math.random()*random_characters.length)];
+		$("#contact_name").attr("placeholder", random_char.name);
+		$("#contact_email").attr("placeholder", random_char.email);
+		$("#contact_message").attr("placeholder", random_char.message + " Anyways, I'm interested in buying " + listing_info.domain_name + ". Let's chat.");
+
+		//add a / to end of domain
+		$("#domain-title").text(listing_info.domain_name);
 	}
 	else {
-		$("#contact-error-message").text("That is not a valid phone number!");
-		$("#contact-error").removeClass('is-hidden');
+		$("#unavailable-module").removeClass('is-hidden');
 	}
+
 }
 
 //function to show rental module
@@ -258,10 +258,12 @@ function showRentalStuff(rent_now_button){
 	//show rental related stuff
 	$(".post-rent-module").removeClass('is-hidden');
 	$(".post-buy-module").addClass('is-hidden');
-	$("#path-input").removeClass("is-hidden");
 
 	//only if rental price is not 0
 	if (listing_info.price_rate > 0){
+		$("#unavailable-module").addClass('is-hidden');
+		$("#path-input").removeClass("is-hidden");
+
 		//get calendar times
 		if (listing_info.status == 1){
 			getTimes();
@@ -295,9 +297,24 @@ function showRentalStuff(rent_now_button){
 			$("#typed-slash").typed(typed_options);
 		});
 	}
+	else {
+		$("#unavailable-module").removeClass('is-hidden');
+	}
 
 }
 
+//function to check phone number
+function checkPhone(){
+	if ($("#contact_phone").intlTelInput("isValidNumber")){
+		return true;
+	}
+	else {
+		$("#contact-error-message").text("That is not a valid phone number!");
+		$("#contact-error").removeClass('is-hidden');
+	}
+}
+
+//</editor-fold>
 
 //<editor-fold>-------------------------------SUBMIT TIMES-------------------------------
 
