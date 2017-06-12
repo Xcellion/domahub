@@ -424,7 +424,7 @@ listing_model.prototype.newListing = function(listing_info, callback){
 //BULK INSERT NEEDS TRIPLE NESTED ARRAYS
 listing_model.prototype.newListings = function(listing_info_array, callback){
 	console.log("DB: Attempting to create " + listing_info_array.length + " new listings...");
-	query = "INSERT IGNORE INTO listings ( \
+	query = "INSERT INTO listings ( \
 				owner_id, \
 				date_created, \
 				domain_name, \
@@ -433,13 +433,13 @@ listing_model.prototype.newListings = function(listing_info_array, callback){
 			)\
 			 VALUES ? \
 			 ON DUPLICATE KEY UPDATE \
-			 deleted = CASE WHEN owner_id = VALUES(owner_id) \
+			 deleted = CASE WHEN (owner_id = VALUES(owner_id) AND deleted IS NOT NULL) \
 				 THEN NULL ELSE deleted END \
-			 ,buy_price = CASE WHEN owner_id = VALUES(owner_id) \
+			 ,buy_price = CASE WHEN (owner_id = VALUES(owner_id) AND deleted IS NOT NULL) \
 				 THEN VALUES(buy_price) ELSE buy_price END \
-			 ,description = CASE WHEN owner_id = VALUES(owner_id) \
+			 ,description = CASE WHEN (owner_id = VALUES(owner_id) AND deleted IS NOT NULL) \
 				 THEN VALUES(description) ELSE description END \
-			 ,date_created = CASE WHEN owner_id = VALUES(owner_id) \
+			 ,date_created = CASE WHEN (owner_id = VALUES(owner_id) AND deleted IS NOT NULL) \
 				 THEN VALUES(date_created) ELSE date_created END "
 	listing_query(query, "Failed to create " + listing_info_array.length + " new listings! Please refresh the page and try again.", callback, [listing_info_array]);
 }

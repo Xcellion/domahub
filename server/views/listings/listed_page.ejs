@@ -1,6 +1,6 @@
 <!-- <img id="background_image" src="<%= listing_info.background_image %>"></img> -->
 
-<section id="background-image">
+<section id="background-image" class="min-height">
     <div class="container">
         <div class="columns master right">
           <div class="column is-6">
@@ -78,5 +78,48 @@
             </div>
           </div>
         </div>
+    </div>
+
+    <div class="container margin-top-100">
+
+        <%# TABS %>
+        <div class="tabs is-boxed has-shadow margin-bottom-0">
+          <ul>
+            <li id="ticker-tab" class="tab is-active is-attached">
+              <a>
+                  <span class="is-hidden-mobile icon is-small"><i class="fa fa-history"></i></span>
+                  <span>History</span>
+              </a>
+            </li>
+            <li id="traffic-tab" class='tab'>
+              <a>
+                  <span class="is-hidden-mobile icon is-small"><i class="fa fa-line-chart"></i></span>
+                  <span>Traffic</span>
+              </a>
+            </li>
+            <li id="info-tab" class="tab is-attached">
+              <a>
+                  <span class="is-hidden-mobile icon is-small"><i class="fa fa-info-circle"></i></span>
+                  <span>Information</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+
+      <%# EXAMPLES MODULE %>
+      <%- include("modules/ticker_module.ejs", {
+        listing_info : listing_info
+      }); %>
+
+      <%# TRAFFIC MODULE %>
+      <%- include("modules/traffic_module.ejs", {
+        listing_info : listing_info
+      }); %>
+
+      <%# INFO MODULE %>
+      <%- include("modules/info_module.ejs", {
+        listing_info : listing_info
+      }); %>
+
     </div>
 </section>

@@ -1015,15 +1015,13 @@ module.exports = {
     checkContactInfo : function(req, res, next){
         console.log("F: Checking posted contact details for offer...");
 
-        var phoneNumber = phoneUtil.parse(req.body.contact_phone);
-
         if (!req.body.contact_name){
             error.handler(req, res, "Please enter your name!", "json");
         }
         else if (!validator.isEmail(req.body.contact_email)){
             error.handler(req, res, "Please enter a valid email address!", "json");
         }
-        else if (!phoneUtil.isValidNumber(phoneNumber, PNF.INTERNATIONAL)){
+        else if (!req.body.contact_phone || !phoneUtil.isValidNumber(phoneUtil.parse(req.body.contact_phone), PNF.INTERNATIONAL)){
             error.handler(req, res, "Please enter a valid phone number!", "json");
         }
         else if (!validator.isInt(req.body.contact_offer, { min: req.session.listing_info.buy_price })){

@@ -16,10 +16,11 @@
 }
 
 #background-image {
-  background: url("https://source.unsplash.com/random/1000x800") no-repeat center/cover;
-  min-height: calc(100vh - 200px);
+  background-color: "#FFF";
   width: 100%;
+  min-height:100vh;
   padding: 60px 20px;
+  background-attachment: fixed;
 }
 
 .footer {
@@ -43,6 +44,12 @@
       outline: none;
     }
   }
+}
+
+#custom_logo {
+    max-width:100px;
+    max-height:50px;
+    object-fit:cover;
 }
 
 #background_image{
@@ -153,25 +160,6 @@
   vertical-align: baseline !important;
   width: auto;
   background:transparent;
-  &::-webkit-input-placeholder {
-    /* Chrome/Opera/Safari */
-    color: $accent;
-  }
-  &::-moz-placeholder {
-    /* Firefox 19+ */
-    color: $accent;
-    opacity: 1;
-  }
-  &:-ms-input-placeholder {
-    /* IE 10+ */
-    color: $accent;
-    font-size: 48px;
-  }
-  &:-moz-placeholder {
-    /* Firefox 18- */
-    color: $accent;
-    opacity: 1;
-  }
   @include mobile {
     font-size: 40px;
   }
@@ -224,13 +212,14 @@
     margin-right: 10px;
   }
 }
-//
-// .module {
-//   border: 1px solid $border;
-//   border-top: none;
-//   padding: 15px;
-//   background:#FFF;
-// }
+
+.module {
+  border: 1px solid $border;
+  border-top: none;
+  padding: 15px;
+  background:#FFF;
+  border-radius: 0px 0px 3px 3px;
+}
 
 #ticker-module {
   padding:0;
