@@ -2,7 +2,7 @@ var myChart;
 
 $(document).ready(function() {
 
-	//---------------------------------------------------------------------------------------------------TABS
+	//<editor-fold>-----------------------------------------------------------------------------------TABS
 
 	//switch tabs
 	$(".tab").not(".top-tab").on("click", function(){
@@ -13,28 +13,21 @@ $(document).ready(function() {
 		$(this).addClass('is-active');
 
 		//show the module
-		$(".module").not(".top-module ").addClass('is-hidden');
+		$(".module").not(".top-module").addClass('is-hidden');
 		$("#" + which_tab + "-module").removeClass('is-hidden');
 	});
 
-	//---------------------------------------------------------------------------------------------------MODULES
+	//</editor-fold>
 
-	//initialize chart only if its not loaded yet
-	$("#traffic-tab").bind("click.traffic", function(){
-		createTrafficChart();
-		getAlexaData();
-		$(this).unbind("click.traffic");
-	})
-
-	//initialize info only if its not loaded yet
-	$("#info-tab").bind("click.info", function(){
-		findOtherDomains();
-		$(this).unbind("click.info");
-	})
+	//<editor-fold>-----------------------------------------------------------------------------------MODULES
 
 	//initialize modules
 	getTrafficData();
 	getTickerData();
+	getAlexaData();
+	findOtherDomains();
+
+	//</editor-fold>
 
 });
 
@@ -77,7 +70,7 @@ $(document).ready(function() {
 // 	}
 // }
 
-//---------------------------------------------------------------------------------------------------RENTAL TICKER MODULE
+//<editor-fold>-----------------------------------------------------------------------------------RENTAL TICKER MODULE
 
 //ajax call to get ticker information
 function getTickerData(loadmore){
@@ -319,7 +312,9 @@ function pastViewsTickerRow(){
 	$("#ticker-views").removeClass('is-hidden');
 }
 
-//---------------------------------------------------------------------------------------------------TRAFFIC MODULE
+//</editor-fold>
+
+//<editor-fold>-----------------------------------------------------------------------------------TRAFFIC MODULE
 
 //function to get traffic data
 function getTrafficData(){
@@ -341,10 +336,7 @@ function getTrafficData(){
 function createCharts(traffic){
 	//create a chart with the traffic data
 	if (traffic && traffic.length > 0){
-		//destroy any old charts we've had
-		if (myChart){
-			myChart.destroy();
-		}
+		createTrafficChart();
 
 		//X people viewed this in the past X
 		if (listing_info.rentals && listing_info.traffic){
@@ -583,8 +575,9 @@ function createTrafficChart(){
 	});
 }
 
+//</editor-fold>
 
-//---------------------------------------------------------------------------------------------------ALEXA MODULE
+//<editor-fold>-----------------------------------------------------------------------------------ALEXA MODULE
 
 //function to get alexa data
 function getAlexaData(){
@@ -615,7 +608,9 @@ function createAlexa(alexa){
 	}
 }
 
-//---------------------------------------------------------------------------------------------------MORE INFORMATION MODULE
+//</editor-fold>
+
+//<editor-fold>-----------------------------------------------------------------------------------INFO MODULE
 
 //other domains by same owner
 function findOtherDomains(){
@@ -664,6 +659,10 @@ function findOtherDomains(){
 	}
 }
 
+//</editor-fold>
+
+//<editor-fold>-----------------------------------------------------------------------------------HELPERS
+
 //to cap the first letter
 String.prototype.capitalizeFirstLetter = function() {
 	return this.charAt(0).toUpperCase() + this.slice(1);
@@ -699,3 +698,5 @@ function clearLoadingDots(elem){
 	clearInterval(elem.data("interval"));
 	elem.text(elem.data("original_text"));
 }
+
+//</editor-fold>

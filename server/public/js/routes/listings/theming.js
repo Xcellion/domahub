@@ -26,9 +26,16 @@ $(document).ready(function() {
             $(".footer").addClass('is-hidden');
         }
     }
+    else {
+        setupDefaultColors();
+    }
+
+    //add active to the first appearing tab (maybe some tabs are disabled)
+    $(".tab").eq(0).addClass('is-active');
+    $(".module").eq(0).removeClass('is-hidden');
 });
 
-var primaryColor = "f00";
+var primaryColor = "#3CBC8D";
 var secondaryColor = "0f0";
 var tertiaryColor = "00f";
 var whiteText = "#fff";
@@ -81,6 +88,7 @@ function colorize(color, element, style) {
     }
 }
 
+//function to setup any custom premium colors
 function setupCustomColors(){
     colorize(listing_info.primary_color, ".is-primary", "color");
     colorize(listing_info.primary_color, ".button", "background-color");
@@ -90,4 +98,9 @@ function setupCustomColors(){
     colorize(listing_info.tertiary_color, ".is-info", "color");
     colorize(listing_info.secondary_color, ".is-accent", "color");
     colorize(listing_info.secondary_color, ".is-accent.button", "background-color");
+}
+
+//set up default DH colors
+function setupDefaultColors(){
+    colorize(primaryColor, ".tag", "background-color");
 }

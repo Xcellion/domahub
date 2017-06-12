@@ -67,7 +67,7 @@
                         <%- include("modules/calendar_module.ejs"); %>
                     <% } else { %>
                         <%# UNAVAILABLE FOR RENT MODULE %>
-                        <%- include("modules/unavail_rent_module.ejs"); %>
+                        <%- include("modules/unavailable_module.ejs"); %>
                     <% } %>
 
                 <% } else { %>
@@ -85,41 +85,57 @@
         <%# TABS %>
         <div class="tabs is-boxed has-shadow margin-bottom-0">
           <ul>
-            <li id="ticker-tab" class="tab is-active is-attached">
-              <a>
-                  <span class="is-hidden-mobile icon is-small"><i class="fa fa-history"></i></span>
-                  <span>History</span>
-              </a>
-            </li>
-            <li id="traffic-tab" class='tab'>
-              <a>
-                  <span class="is-hidden-mobile icon is-small"><i class="fa fa-line-chart"></i></span>
-                  <span>Traffic</span>
-              </a>
-            </li>
-            <li id="info-tab" class="tab is-attached">
-              <a>
-                  <span class="is-hidden-mobile icon is-small"><i class="fa fa-info-circle"></i></span>
-                  <span>Information</span>
-              </a>
-            </li>
+
+              <% if ((listing_info.premium && listing_info.traffic_module) || !listing_info.premium){ %>
+                  <li id="traffic-tab" class='tab'>
+                      <a>
+                        <span class="is-hidden-mobile icon is-small"><i class="fa fa-line-chart"></i></span>
+                        <span>Traffic</span>
+                      </a>
+                  </li>
+              <% } %>
+
+              <% if ((listing_info.premium && listing_info.history_module) || !listing_info.premium){ %>
+                  <li id="ticker-tab" class="tab is-attached">
+                    <a>
+                        <span class="is-hidden-mobile icon is-small"><i class="fa fa-history"></i></span>
+                        <span>History</span>
+                    </a>
+                  </li>
+              <% } %>
+
+              <% if ((listing_info.premium && listing_info.info_module) || !listing_info.premium){ %>
+                  <li id="info-tab" class="tab is-attached">
+                      <a>
+                          <span class="is-hidden-mobile icon is-small"><i class="fa fa-info-circle"></i></span>
+                          <span>Information</span>
+                      </a>
+                  </li>
+              <% } %>
+
           </ul>
         </div>
 
-      <%# EXAMPLES MODULE %>
-      <%- include("modules/ticker_module.ejs", {
-        listing_info : listing_info
-      }); %>
+        <%# TRAFFIC MODULE %>
+        <% if ((listing_info.premium && listing_info.traffic_module) || !listing_info.premium){ %>
+            <%- include("modules/traffic_module.ejs", {
+                listing_info : listing_info
+            }); %>
+        <% } %>
 
-      <%# TRAFFIC MODULE %>
-      <%- include("modules/traffic_module.ejs", {
-        listing_info : listing_info
-      }); %>
+        <%# EXAMPLES MODULE %>
+        <% if ((listing_info.premium && listing_info.history_module) || !listing_info.premium){ %>
+            <%- include("modules/ticker_module.ejs", {
+                listing_info : listing_info
+            }); %>
+        <% } %>
 
-      <%# INFO MODULE %>
-      <%- include("modules/info_module.ejs", {
-        listing_info : listing_info
-      }); %>
+        <%# INFO MODULE %>
+        <% if ((listing_info.premium && listing_info.info_module) || !listing_info.premium){ %>
+            <%- include("modules/info_module.ejs", {
+                listing_info : listing_info
+            }); %>
+        <% } %>
 
     </div>
 </section>

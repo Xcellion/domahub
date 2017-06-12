@@ -1,8 +1,8 @@
 <%# IS THE LISTED LISTED OR UNLISTED WITH DOMAHUB %>
 <% if (listing_info.unlisted) { %>
-    <div class="post-rent-module post-buy-module content">
+    <div id="unavailable-module" class="top-module content">
 <% } else { %>
-    <div class="post-rent-module post-buy-module content is-hidden">
+    <div id="unavailable-module" class="top-module content is-hidden">
 <% } %>
     <div class="content description-text">
         <p>
@@ -11,7 +11,7 @@
     </div>
     <div class="control">
         <a id="unavail-button" class="button is-stylish is-accent v-align-middle">
-            Magic button
+            Magic button!
         </a>
     </div>
 </div>

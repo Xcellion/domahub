@@ -113,7 +113,7 @@ module.exports = {
 
 		//make sure owner and domain exclude are legit
 		if (validator.isFQDN(domain_name_exclude) && validator.isInt(owner_id)){
-			Listing.getThreeRandomListingsByOwner(domain_name_exclude, owner_id, function(result){
+			Listing.getTenRandomListingsByOwner(domain_name_exclude, owner_id, function(result){
 				if (!result.info.length || result.state == "error"){
 					res.send({
 						state: "error"
