@@ -87,14 +87,14 @@
 					<div id="table-body" class="margin-top-15">
 						<div id="verified-clone-row" class="padding-5 clone-row table-row is-hidden flex-item">
 							<form class="checkbox-form">
-								<input class="select-button" data-selected="false" type="checkbox" class="no-shadow" tabindex="0" title="Select All" />
+								<input class="select-button" data-selected="false" type="checkbox" tabindex="0" title="Select All" />
 								<label for="select-button" tabindex="0"></label>
 							</form>
 							<p class='td-domain'></p>
 						</div>
 						<div id="unverified-clone-row" class="padding-5 clone-row table-row is-hidden flex-item">
 							<form class="checkbox-form">
-								<input class="select-button" data-selected="false" type="checkbox" class="no-shadow" tabindex="0" title="Select All" />
+								<input class="select-button" data-selected="false" type="checkbox" tabindex="0" title="Select All" />
 								<label for="select-button" tabindex="0"></label>
 							</form>
 							<div>
@@ -104,6 +104,9 @@
 								</span>
 							</div>
 						</div>
+					</div>
+					<div class="control margin-top-20">
+						<a class="button is-stylish is-small is-primary is-fullwidth" tabindex="0" href="/listings/create">Add New Domain</a>
 					</div>
 				</div>
 
@@ -118,6 +121,10 @@
 							<span class="icon"><i class="fa fa-bars"></i></span>
 						</button>
 						<h2 id="current-domain-name" class="is-inline"></h2>
+						<a tabindex="0" class="button is-small no-shadow margin-top-0" title="View Domain">
+							<span class="icon is-small"><i class="fa fa-external-link"></i></span>
+							<span>View</span>
+						</a>
 					</div>
 					<!-- LISTING DETAIL TABS  -->
 					<div class="tabs no-border">
@@ -168,12 +175,11 @@
 						<div class="verified-elem">
 							<div id="info-tab-drop" class="drop-tab">
 								<div class="control has-items-center">
-										<a id="status-color" tabindex="0" class="button is-primary is-icon-only no-shadow">
-											<span class="icon v-align-middle"><i id="status-icon" class="fa fa-toggle-on"></i></span>
+										<a id="status-color" tabindex="0" class="button is-primary is-icon-only no-shadow" title="Publicly hide or show landing page.">
+											<span class="icon"><i id="status-icon" class="fa fa-toggle-on"></i></span>
 											<span id="status-text">Active</span>
 										</a>
 										<input id="status-input" data-name="status" tabindex="0" type="hidden" class="input changeable-input" />
-										<small class="tip">Publicly hide or show your landing page.</small>
 								</div>
 								<div class="control">
 									<label class="label" for="description">Listing Description</label>
@@ -207,7 +213,7 @@
 
 									<%# make all the categories %>
 									<% for (var x = 0; x < categories.length; x++){ %>
-										<a data-category="<%= categories[x].back %>" class="<%= categories[x].back %>-category tag margin-bottom-5 category-selector is-bordered"><%= categories[x].front %></a>
+										<a data-category="<%= categories[x].back %>" class="<%= categories[x].back %>-category tag margin-bottom-5 category-selector"><%= categories[x].front %></a>
 										<% } %>
 									</div>
 								</div>
@@ -485,13 +491,13 @@
 								</div>
 						</div>
 						<footer class="margin-top-25">
-							<a id="verify-button" class="unverified-elem button is-primary" title="Verify this domain">
-								<span class="icon is-small"><i class="fa fa-check-square-o"></i></span>
-								<span>Verify this domain.</span>
+							<a id="verify-button" class="unverified-elem button is-primary is-stylish is-small" title="Verify this domain">
+								<span class="icon is-small"><i class="fa fa-check-circle-o"></i></span>
+								<span>Verify Now</span>
 							</a>
 							<div class="verified-elem">
-								<button id="save-changes-button" class="button is-primary is-disabled is-stylish is-small no-shadow">Save</button>
-								<button id="cancel-changes-button" class="button is-danger is-hidden is-stylish is-small no-shadow">Cancel</button>
+								<button id="save-changes-button" class="button is-disabled is-stylish is-small no-shadow">Save</button>
+								<button id="cancel-changes-button" class="button is-danger is-inverted is-hidden is-stylish is-small no-shadow">Cancel</button>
 								<button id="checkout-button" class="button is-primary is-disabled is-hidden is-stylish is-small no-shadow">Checkout</button>
 							</div>
 						</footer>
