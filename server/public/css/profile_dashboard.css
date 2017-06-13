@@ -212,7 +212,8 @@ button[data-balloon] {
 #table-body {
   border-radius: 3px;
   max-height: 420px;
-  overflow-y: auto; }
+  overflow-y: auto;
+  border: 1px solid rgba(0, 0, 0, 0.12); }
 
 .button-wrapper {
   display: flex;
@@ -227,12 +228,14 @@ button[data-balloon] {
 .flex-item {
   align-items: center;
   border: 1px solid rgba(0, 0, 0, 0.12);
-  border-width: 1px 1px 0;
+  border-width: 1px 0 0;
   display: flex;
   justify-content: space-between;
   padding: 8px; }
   .flex-item:last-child {
-    border-bottom-width: 1px; }
+    border-bottom-width: 0px; }
+  .flex-item:first-child {
+    border-top-width: 0px; }
   .flex-item p {
     word-break: break-all;
     margin-left: 10px; }

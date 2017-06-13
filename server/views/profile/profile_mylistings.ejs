@@ -27,7 +27,7 @@
 				<div id="filter-menu" class="column is-3">
 					<div class="content">
 						<h2>
-							My Domains
+							My Listings
 							<span class="delete filter-menu-toggle is-hidden-tablet"></span>
 						</h2>
 					</div>
@@ -106,7 +106,7 @@
 						</div>
 					</div>
 					<div class="control margin-top-20">
-						<a class="button is-stylish is-small is-primary is-fullwidth" tabindex="0" href="/listings/create">Add New Domain</a>
+						<a class="button is-stylish is-small is-primary is-fullwidth" tabindex="0" href="/listings/create">Add New Listing</a>
 					</div>
 				</div>
 
@@ -120,14 +120,15 @@
 						<button tabindex="0" class="button is-primary is-icon-only filter-menu-toggle no-shadow is-small is-hidden-tablet" title="Filters">
 							<span class="icon"><i class="fa fa-bars"></i></span>
 						</button>
-						<h2 id="current-domain-name" class="is-inline"></h2>
-						<a tabindex="0" class="button is-small no-shadow margin-top-0" title="View Domain">
-							<span class="icon is-small"><i class="fa fa-external-link"></i></span>
+						<h2 id="current-domain-name" class="yes-listings-elem is-inline is-hidden"></h2>
+						<a id="current-domain-view" target="_blank" tabindex="0" class="yes-listings-elem is-hidden button is-small no-shadow margin-top-0" title="View Domain">
+							<span class="icon is-small"><i style="margin-top: 2px" class="fa fa-external-link"></i></span>
 							<span>View</span>
 						</a>
 					</div>
+
 					<!-- LISTING DETAIL TABS  -->
-					<div class="tabs no-border">
+					<div class="yes-listings-elem is-hidden tabs no-border">
 						<ul>
 							<li id="verify-tab" class="unverified-elem is-hidden tab">
 								<a tabindex="0">Verification</a>
@@ -149,7 +150,16 @@
 
 					<!-- LISTING DETAILS  -->
 					<div class="box">
-						<div id="verify-drop-tab" class="unverified-elem drop-tab is-hidden">
+						<div id="loading-tab">
+							Now loading listings...
+						</div>
+						<div id="no-domains-tab" class="no-listings-elem is-hidden">
+							<p>
+								You have no listings. Let's go make some!
+							</p>
+							<a class="is-primary button is-stylish" href="/listings/create">Create Listings</a>
+						</div>
+						<div id="unverified-drop-tab" class="unverified-elem drop-tab is-hidden">
 							<h3 class="is-bold">You must verify that you own this domain.</h3>
 							<p>The table below details the DNS entries that are needed to verify this domain.</p>
 							<p id="registrar_url">Please <a>log in to your domain provider</a> to create these entries.</p>
@@ -172,7 +182,7 @@
 								</tbody>
 							</table>
 						</div>
-						<div class="verified-elem">
+						<div id="verified-drop-tab" class="is-hidden verified-elem">
 							<div id="info-tab-drop" class="drop-tab">
 								<div class="control has-items-center">
 										<a id="status-color" tabindex="0" class="button is-primary is-icon-only no-shadow" title="Publicly hide or show landing page.">
@@ -490,7 +500,7 @@
 									</form>
 								</div>
 						</div>
-						<footer class="margin-top-25">
+						<footer class="yes-listings-elem is-hidden margin-top-25">
 							<a id="verify-button" class="unverified-elem button is-primary is-stylish is-small" title="Verify this domain">
 								<span class="icon is-small"><i class="fa fa-check-circle-o"></i></span>
 								<span>Verify Now</span>
