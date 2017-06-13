@@ -41,21 +41,33 @@
                 listing_info : listing_info
             }); %>
           </div>
+
           <div class="column is-6">
-            <div class="tabs has-shadow is-medium">
-                <ul>
-                  <li id="buy-now-button" class="top-tab is-active">
-                    <a>
-                        <span>Purchase</span>
-                    </a>
-                  </li>
-                  <li id="rent-now-button" class="top-tab">
-                    <a>
-                        <span>Rent</span>
-                    </a>
-                  </li>
-                </ul>
-            </div>
+              
+              <% if (listing_info.buyable && listing_info.rentable){ %>
+                <div class="tabs has-shadow is-medium">
+                    <ul>
+
+                        <% if (listing_info.buyable){ %>
+                            <li id="buy-now-button" class="top-tab is-active">
+                              <a>
+                                  <span>Purchase</span>
+                              </a>
+                            </li>
+                        <% } %>
+
+                        <% if (listing_info.rentable){ %>
+                            <li id="rent-now-button" class="top-tab">
+                              <a>
+                                  <span>Rent</span>
+                              </a>
+                            </li>
+                        <% } %>
+
+                    </ul>
+                </div>
+            <% } %>
+
             <div class='box has-tabs'>
 
                 <% if (listing_info.status == 1) { %>
