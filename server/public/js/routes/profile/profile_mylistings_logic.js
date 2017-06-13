@@ -215,9 +215,10 @@ $(document).ready(function(){
 //function to create all rows
 function createRows(){
 
-	//empty the tabl
+	//empty the table
 	$("#table-body").find(".table-row:not(.clone-row)").remove();
 
+	//create rows for each listing
 	for (var x = 0; x < listings.length; x++){
 		$("#table-body").append(createRow(listings[x], x));
 	}
@@ -226,6 +227,11 @@ function createRows(){
 	if (listings.length > 0){
 		current_listing = listings[0];
 
+		//show and hide elements that we need if there are listings
+		$(".yes-listings-elem").removeClass('is-hidden');
+		$(".no-listings-elem").addClass('is-hidden');
+		$("#loading-tab").addClass('is-hidden');
+
 		if (listings[0].verified){
 			editRowVerified(listings[0]);
 		}
@@ -233,10 +239,17 @@ function createRows(){
 			editRowUnverified(listings[0]);
 		}
 		$("#table-body").find(".table-row:not(.clone-row)").eq(0).addClass('is-active');
-	}
 
-	//change domain name header
-	$("#current-domain-name").text(current_listing.domain_name);
+		//change domain name header and view button
+		$("#current-domain-name").text(listings[0].domain_name);
+		$("#current-domain-view").attr("href", "/listing/" + listings[0].domain_name);
+	}
+	else {
+		//show and hide elements that we need if there are listings
+		$(".yes-listings-elem").addClass('is-hidden');
+		$(".no-listings-elem").removeClass('is-hidden');
+		$("#loading-tab").addClass('is-hidden');
+	}
 }
 
 //function to create a listing row
@@ -302,8 +315,9 @@ function changeRow(row, listing_info, bool){
 
 		current_listing = listing_info;
 
-		//change domain name header
+		//change domain name header and view button
 		$("#current-domain-name").text(listing_info.domain_name);
+		$("#current-domain-view").attr("href", "/listing/" + listing_info.domain_name);
 
 		//update inputs
 		if (listing_info.verified){
