@@ -85,14 +85,14 @@
 
 					<!-- DOMAINS TABLE  -->
 					<div id="table-body" class="margin-top-15">
-						<div id="verified-clone-row" class="padding-5 clone-row table-row is-hidden flex-item">
+						<div id="verified-clone-row" class="padding-5 clone-row table-row is-hidden">
 							<form class="checkbox-form">
 								<input class="select-button" data-selected="false" type="checkbox" tabindex="0" title="Select All" />
 								<label for="select-button" tabindex="0"></label>
 							</form>
 							<p class='td-domain'></p>
 						</div>
-						<div id="unverified-clone-row" class="padding-5 clone-row table-row is-hidden flex-item">
+						<div id="unverified-clone-row" class="padding-5 clone-row table-row is-hidden">
 							<form class="checkbox-form">
 								<input class="select-button" data-selected="false" type="checkbox" tabindex="0" title="Select All" />
 								<label for="select-button" tabindex="0"></label>
@@ -121,7 +121,7 @@
 							<span class="icon"><i class="fa fa-bars"></i></span>
 						</button>
 						<h2 id="current-domain-name" class="yes-listings-elem is-inline is-hidden"></h2>
-						<a id="current-domain-view" target="_blank" tabindex="0" class="yes-listings-elem is-hidden button is-small no-shadow margin-top-0" title="View Domain">
+						<a id="current-domain-view" target="_blank" tabindex="0" class="verified-elem yes-listings-elem is-hidden button is-small no-shadow margin-top-0" title="View Domain">
 							<span class="icon is-small"><i style="margin-top: 2px" class="fa fa-external-link"></i></span>
 							<span>View</span>
 						</a>
@@ -131,7 +131,7 @@
 					<div class="yes-listings-elem is-hidden tabs no-border">
 						<ul>
 							<li id="verify-tab" class="unverified-elem is-hidden tab">
-								<a tabindex="0">Verification</a>
+								<a tabindex="0">Verification Status</a>
 							</li>
 							<li id="info-tab" class="verified-elem tab is-active">
 								<a tabindex="0">Information</a>

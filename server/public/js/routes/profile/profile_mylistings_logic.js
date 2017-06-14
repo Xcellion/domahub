@@ -238,7 +238,7 @@ function createRows(){
 		else {
 			editRowUnverified(listings[0]);
 		}
-		$("#table-body").find(".table-row:not(.clone-row)").eq(0).addClass('is-active');
+		$("#table-body").find(".table-row:not(.clone-row)").eq(0).addClass('is-active first-row');
 
 		//change domain name header and view button
 		$("#current-domain-name").text(listings[0].domain_name);
@@ -1016,19 +1016,22 @@ function getDNSRecordAndWhois(domain_name){
 	}).done(function(data){
 		var unverified_domain = getUserListingObj(listings, domain_name);
 
-		(function(unverified_domain){
-			unverified_domain.a_records = data.listing.a_records;
-			unverified_domain.whois = data.listing.whois;
+		if (unverified_domain){
+			(function(unverified_domain){
 
-			//update the change row handler
-			$("#row-listing_id" + current_listing.id).off().on("click", function(e){
-				changeRow($(this), unverified_domain, true);
-			});
+				unverified_domain.a_records = data.listing.a_records;
+				unverified_domain.whois = data.listing.whois;
 
-			//update the unverified domain table
-			updateRegistrarURL(unverified_domain.whois);
-			updateExistingDNS(unverified_domain.a_records);
-		})(unverified_domain);
+				//update the change row handler
+				$("#row-listing_id" + current_listing.id).off().on("click", function(e){
+					changeRow($(this), unverified_domain, true);
+				});
+
+				//update the unverified domain table
+				updateRegistrarURL(unverified_domain.whois);
+				updateExistingDNS(unverified_domain.a_records);
+			})(unverified_domain);
+		}
 	});
 }
 
