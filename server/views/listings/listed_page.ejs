@@ -5,12 +5,12 @@
         <div class="columns master right">
           <div class="column is-6">
 
-            <% if (listing_info.buy_price > 0) { %>
+            <% if (listing_info.buy_price > 0 && listing_info.buyable) { %>
                 <span id="buy-price-tag" class="tag is-primary margin-bottom-5 is-hidden is-medium">
                     <span id="buy-price"></span>
                 </span>
             <% } %>
-            <% if (listing_info.price_rate > 0) { %>
+            <% if (listing_info.price_rate > 0 && listing_info.rentable) { %>
                 <span class="tag is-primary is-medium">
                   <span id="total-price" class='margin-right-5 is-hidden'>Total: </span>
                   <span id="orig-price" class='margin-right-5 is-linethrough is-hidden'></span>
@@ -43,7 +43,7 @@
           </div>
 
           <div class="column is-6">
-              
+
               <% if (listing_info.buyable && listing_info.rentable){ %>
                 <div class="tabs has-shadow is-medium">
                     <ul>
@@ -107,21 +107,21 @@
                   </li>
               <% } %>
 
-              <% if ((listing_info.premium && listing_info.history_module) || !listing_info.premium){ %>
-                  <li id="ticker-tab" class="tab is-attached">
-                    <a>
-                        <span class="is-hidden-mobile icon is-small"><i class="fa fa-history"></i></span>
-                        <span>History</span>
-                    </a>
-                  </li>
-              <% } %>
-
               <% if ((listing_info.premium && listing_info.info_module) || !listing_info.premium){ %>
                   <li id="info-tab" class="tab is-attached">
                       <a>
                           <span class="is-hidden-mobile icon is-small"><i class="fa fa-info-circle"></i></span>
                           <span>Information</span>
                       </a>
+                  </li>
+              <% } %>
+
+              <% if ((listing_info.premium && listing_info.history_module) || !listing_info.premium){ %>
+                  <li id="ticker-tab" class="tab is-attached">
+                    <a>
+                        <span class="is-hidden-mobile icon is-small"><i class="fa fa-history"></i></span>
+                        <span>History</span>
+                    </a>
                   </li>
               <% } %>
 
@@ -135,16 +135,16 @@
             }); %>
         <% } %>
 
-        <%# EXAMPLES MODULE %>
-        <% if ((listing_info.premium && listing_info.history_module) || !listing_info.premium){ %>
-            <%- include("modules/ticker_module.ejs", {
+        <%# INFO MODULE %>
+        <% if ((listing_info.premium && listing_info.info_module) || !listing_info.premium){ %>
+            <%- include("modules/info_module.ejs", {
                 listing_info : listing_info
             }); %>
         <% } %>
 
-        <%# INFO MODULE %>
-        <% if ((listing_info.premium && listing_info.info_module) || !listing_info.premium){ %>
-            <%- include("modules/info_module.ejs", {
+        <%# EXAMPLES MODULE %>
+        <% if ((listing_info.premium && listing_info.history_module) || !listing_info.premium){ %>
+            <%- include("modules/ticker_module.ejs", {
                 listing_info : listing_info
             }); %>
         <% } %>

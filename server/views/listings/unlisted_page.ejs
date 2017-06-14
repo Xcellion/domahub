@@ -1,37 +1,35 @@
-<section class="section is-medium">
+<section id="background-image" class="min-height">
     <div class="container">
+        <div class="columns master right">
+            <div class="column is-6">
 
-        <span id="price" class="tag is-bold is-medium is-bordered">
-          <% if (listing_info.available){ %>
-              Available for Purchase
-          <% } else { %>
-              Unavailable
-          <% } %>
-        </span>
+                <span class="tag is-primary margin-bottom-5 is-medium">
+                  <% if (listing_info.available){ %>
+                      Available for Purchase
+                  <% } else { %>
+                      Unavailable
+                  <% } %>
+                </span>
 
-        <div id="domain-display" class="content margin-top-15">
-          <h1 class="is-primary is-inline-block margin-bottom-0"><%= listing_info.domain_name %></h1>
+                <div id="domain-display" class="content margin-top-15">
+                  <h1 class="is-primary is-inline-block margin-bottom-0"><%= listing_info.domain_name %></h1>
+                </div>
+
+            </div>
+            <div class="column is-6">
+                <div class='box has-tabs'>
+                    <%# UNAVAILABLE MODULE %>
+                    <%- include("modules/unavailable_module.ejs"); %>
+                </div>
+            </div>
         </div>
 
-        <%# UNAVAILABLE MODULE %>
-        <%- include("modules/unavailable_module.ejs"); %>
-
-    </div>
-</section>
-
-<section class="section is-medium">
-  <div class="container">
+    <div class="container margin-top-100">
 
       <%# TABS %>
       <div class="tabs is-boxed has-shadow margin-bottom-0">
         <ul>
-          <li id="ticker-tab" class="tab is-active is-attached">
-            <a>
-                <span class="is-hidden-mobile icon is-small"><i class="fa fa-history"></i></span>
-                <span>History</span>
-            </a>
-          </li>
-          <li id="traffic-tab" class='tab'>
+          <li id="traffic-tab" class='tab is-active'>
             <a>
                 <span class="is-hidden-mobile icon is-small"><i class="fa fa-line-chart"></i></span>
                 <span>Traffic</span>
@@ -43,23 +41,29 @@
                 <span>Information</span>
             </a>
           </li>
+          <li id="ticker-tab" class="tab is-attached">
+            <a>
+                <span class="is-hidden-mobile icon is-small"><i class="fa fa-history"></i></span>
+                <span>History</span>
+            </a>
+          </li>
         </ul>
       </div>
 
-    <%# EXAMPLES MODULE %>
-    <%- include("modules/ticker_module.ejs", {
-      listing_info : listing_info
-    }); %>
+        <%# TRAFFIC MODULE %>
+        <%- include("modules/traffic_module.ejs", {
+          listing_info : listing_info
+        }); %>
 
-    <%# TRAFFIC MODULE %>
-    <%- include("modules/traffic_module.ejs", {
-      listing_info : listing_info
-    }); %>
+        <%# INFO MODULE %>
+        <%- include("modules/info_module.ejs", {
+          listing_info : listing_info
+        }); %>
 
-    <%# INFO MODULE %>
-    <%- include("modules/info_module.ejs", {
-      listing_info : listing_info
-    }); %>
+        <%# TICKER MODULE %>
+        <%- include("modules/ticker_module.ejs", {
+            listing_info : listing_info
+        }); %>
 
   </div>
 </section>

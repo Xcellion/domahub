@@ -1384,6 +1384,11 @@ function getWhoIs(req, res, next){
             unlisted: true
         }
 
+        //dev whois object
+        if (node_env == "dev"){
+            listing_info.dev_whois = whoisObj;
+        }
+
         //nobody owns it!
         if (!whoisObj["End Text"] && owner_name == "Nobody" && data && whoisObj.source != "IANA"){
             listing_info.available = true;
