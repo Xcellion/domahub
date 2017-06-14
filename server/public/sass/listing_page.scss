@@ -81,8 +81,13 @@
     }
 }
 
-.description-text {
-  max-width: 500px;
+.description-wrapper {
+    max-width: 500px;
+}
+
+#description-text {
+    white-space: pre-wrap;
+    word-break: break-all;
 }
 
 #domain-display {
@@ -242,9 +247,7 @@
   margin: 0;
   width: 100%;
   padding: 10px;
-  &:not(:last-child) {
-    border-bottom: 1px solid $border;
-  }
+  border-bottom: 1px solid $border;
 }
 
 .ticker-icon-color {

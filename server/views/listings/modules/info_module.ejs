@@ -5,7 +5,7 @@
         <%# IS THE LISTED LISTED OR UNLISTED WITH DOMAHUB %>
         <% if (listing_info.unlisted) { %>
 
-            <div class="column is-4">
+            <div class="column is-half">
             <%# UNLISTED LISTING IS OWNED BY SOMEONE %>
                 <% if (!listing_info.available) { %>
                 	<%- include("info/unbuyable_module.ejs", {

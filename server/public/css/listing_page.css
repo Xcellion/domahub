@@ -237,8 +237,12 @@ button[data-balloon] {
     filter: blur(5px) grayscale(100%);
     transform: scale(1.03); }
 
-.description-text {
+.description-wrapper {
   max-width: 500px; }
+
+#description-text {
+  white-space: pre-wrap;
+  word-break: break-all; }
 
 #domain-display h1 {
   font-size: 48px; }
@@ -374,9 +378,8 @@ button[data-balloon] {
   display: flex;
   margin: 0;
   width: 100%;
-  padding: 10px; }
-  .ticker-row:not(:last-child) {
-    border-bottom: 1px solid rgba(0, 0, 0, 0.12); }
+  padding: 10px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.12); }
 
 .ticker-icon-color {
   border-right: 2px solid rgba(0, 0, 0, 0.12);
