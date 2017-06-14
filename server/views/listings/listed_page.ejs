@@ -5,24 +5,30 @@
         <div class="columns master right">
           <div class="column is-6">
 
-            <% if (listing_info.buy_price > 0 && listing_info.buyable) { %>
+            <% if (listing_info.buy_price > 0) { %>
                 <span id="buy-price-tag" class="tag is-primary margin-bottom-5 is-hidden is-medium">
                     <span id="buy-price"></span>
                 </span>
             <% } %>
-            <% if (listing_info.price_rate > 0 && listing_info.rentable) { %>
+            <% if (listing_info.rentable) { %>
                 <span class="tag is-primary is-medium">
                   <span id="total-price" class='margin-right-5 is-hidden'>Total: </span>
                   <span id="orig-price" class='margin-right-5 is-linethrough is-hidden'></span>
                   <span id="actual-price">
+
+                  <% if (listing_info.price_rate > 0){ %>
                       For rent - $<%= listing_info.price_rate %> / <%= listing_info.price_type %>
+                  <% } else { %>
+                      For rent - Free
+                  <% } %>
+                  
                   </span>
                 </span>
             <% } %>
             <span id="free-until" class='is-hidden tag is-primary is-medium'></span>
 
             <div id="domain-display" class="content margin-top-15">
-                <% if (listing_info.price_rate > 0) { %>
+                <% if (listing_info.rentable) { %>
                     <h1 id="domain-title" class="is-primary is-inline-block margin-bottom-0"><%= listing_info.domain_name %></h1>
                     <form id="path-input" class="is-hidden is-inline-block">
                       <div class="control margin-bottom-0">
@@ -44,25 +50,21 @@
 
           <div class="column is-6">
 
-              <% if (listing_info.buyable && listing_info.rentable){ %>
+              <% if (listing_info.rentable){ %>
                 <div class="tabs has-shadow is-medium">
                     <ul>
 
-                        <% if (listing_info.buyable){ %>
-                            <li id="buy-now-button" class="top-tab is-active">
-                              <a>
-                                  <span>Purchase</span>
-                              </a>
-                            </li>
-                        <% } %>
+                        <li id="buy-now-button" class="top-tab is-active">
+                          <a>
+                              <span>Purchase</span>
+                          </a>
+                        </li>
 
-                        <% if (listing_info.rentable){ %>
-                            <li id="rent-now-button" class="top-tab">
-                              <a>
-                                  <span>Rent</span>
-                              </a>
-                            </li>
-                        <% } %>
+                        <li id="rent-now-button" class="top-tab">
+                          <a>
+                              <span>Rent</span>
+                          </a>
+                        </li>
 
                     </ul>
                 </div>
@@ -74,12 +76,9 @@
                     <%# BUY NOW MODULE %>
                     <%- include("modules/buy_now_module.ejs"); %>
 
-                    <% if (listing_info.price_rate > 0) { %>
+                    <% if (listing_info.rentable) { %>
                         <%# CALENDAR MODULE %>
                         <%- include("modules/calendar_module.ejs"); %>
-                    <% } else { %>
-                        <%# UNAVAILABLE FOR RENT MODULE %>
-                        <%- include("modules/unavailable_module.ejs"); %>
                     <% } %>
 
                 <% } else { %>
@@ -95,7 +94,7 @@
     <div class="container margin-top-100">
 
         <%# TABS %>
-        <div class="tabs is-boxed has-shadow margin-bottom-0">
+        <div class="tabs is-boxed margin-bottom-0">
           <ul>
 
               <% if ((listing_info.premium && listing_info.traffic_module) || !listing_info.premium){ %>

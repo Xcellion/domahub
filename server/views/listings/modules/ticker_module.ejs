@@ -22,11 +22,23 @@
             </p>
           </div>
       </li>
-      <li id="ticker-empty" class='ticker-row is-hidden'>
-          <span class='ticker-icon-color is-danger'><i class="margin-right-10 fa fa-exclamation-triangle ticker-icon"></i></span>
-          <p class="ticker-text">
-            There is no other recent activity!
-          </p>
+      <li id="ticker-updated" class='ticker-row is-hidden'>
+          <span class='ticker-icon-color is-purple'><i class="margin-right-10 fa fa-star-o ticker-icon"></i></span>
+          <div class="ticker-text">
+            <p id="ticker-updated-date"></p>
+          </div>
+      </li>
+      <li id="ticker-created" class='ticker-row is-hidden'>
+          <span class='ticker-icon-color is-danger'><i class="margin-right-10 fa fa-heart-o ticker-icon"></i></span>
+          <div class="ticker-text">
+            <p id="ticker-created-date"></p>
+          </div>
+      </li>
+      <li id="ticker-registered" class='ticker-row is-hidden'>
+          <span class='ticker-icon-color is-dark'><i class="margin-right-10 fa fa-globe ticker-icon"></i></span>
+          <div class="ticker-text">
+            <p id="ticker-registered-date"></p>
+          </div>
       </li>
       <li id="ticker-loading" class='ticker-row'>Now loading recent history</li>
   </ul>
