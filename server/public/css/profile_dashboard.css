@@ -225,27 +225,30 @@ button[data-balloon] {
   .button-wrapper select {
     width: 100%; }
 
-.flex-item {
+.table-row {
   align-items: center;
   border: 1px solid rgba(0, 0, 0, 0.12);
   border-width: 1px 0 0;
   display: flex;
   justify-content: space-between;
-  padding: 5px; }
-  .flex-item:last-child {
+  padding: 5px;
+  white-space: nowrap;
+  overflow-x: hidden; }
+  .table-row:last-child {
     border-bottom-width: 0px; }
-  .flex-item:first-child {
-    border-top-width: 0px; }
-  .flex-item p {
+  .table-row p {
     word-break: break-all;
-    margin-left: 10px; }
-  .flex-item:hover {
+    margin-left: 30px; }
+  .table-row:hover {
     background-color: #efefef;
     cursor: pointer; }
-  .flex-item.is-active {
+  .table-row.is-active {
     background-color: #444; }
-    .flex-item.is-active p {
+    .table-row.is-active p {
       color: white; }
+
+.first-row {
+  border-top-width: 0px; }
 
 .checkbox-form {
   width: 24px;

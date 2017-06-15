@@ -84,7 +84,7 @@ function getTickerData(loadmore){
 			pastViewsTickerRow();
 		}
 		$("#ticker-loading").addClass('is-hidden');
-		$("#ticker-empty").removeClass('is-hidden').appendTo("#ticker-wrapper");
+		editTickerDates();
 	}
 	else {
 		//remove click handler for load more
@@ -94,7 +94,7 @@ function getTickerData(loadmore){
 		}
 
 		//how many to load at a time;
-		var max_count = 5;
+		var max_count = 10;
 		loadingDots($("#ticker-loading"));
 
 		$.ajax({
@@ -127,13 +127,35 @@ function getTickerData(loadmore){
 			}
 			else {
 				listing_info.rentals = [];
-				$("#ticker-empty").removeClass('is-hidden');
+				editTickerDates();
 			}
 
 			if (listing_info.rentals && listing_info.traffic){
 				pastViewsTickerRow();
 			}
 		});
+	}
+}
+
+//edit listing created date / updated date etc.
+function editTickerDates(){
+	if (listing_info.date_updated){
+		$("#ticker-updated").removeClass('is-hidden').appendTo("#ticker-wrapper");
+		$("#ticker-updated-date").text("This domain was last updated on " + moment(listing_info.date_updated).format("MMMM DD, YYYY") + ".");
+	}
+
+	if (listing_info.date_created){
+		$("#ticker-created").removeClass('is-hidden').appendTo("#ticker-wrapper");
+		$("#ticker-created-date").removeClass('is-hidden').text("This website was created on " + moment(listing_info.date_created).format("MMMM DD, YYYY") + ".");
+	}
+	else {
+		$("#ticker-created").removeClass('is-hidden').appendTo("#ticker-wrapper");
+		$("#ticker-created-date").removeClass('is-hidden').text("This website was created on " + moment(1467345600000).format("MMMM DD, YYYY") + ".");
+	}
+
+	if (listing_info.date_registered){
+		$("#ticker-registered").removeClass('is-hidden').appendTo("#ticker-wrapper");
+		$("#ticker-registered-date").text("This domain was first registered on " + moment(listing_info.date_registered).format("MMMM DD, YYYY") + ".");
 	}
 }
 
@@ -161,7 +183,7 @@ function editTickerModule(loaded_rentals, max_count){
 
 	//nothing more to load if less than max_count returned
 	if (!loaded_rentals || loaded_rentals.length < max_count){
-		$("#ticker-empty").removeClass('is-hidden').appendTo("#ticker-wrapper");
+		editTickerDates();
 	}
 }
 
@@ -644,8 +666,12 @@ function findOtherDomains(){
 						cloned_similar_listing.find(".otherowner-domain-price").text("For sale - " + buy_price);
 					}
 					//else available for rent
-					else if (data.listings[x].price_rate > 0){
+					else if (data.listings[x].rentable && data.listings[x].price_rate > 0){
 						cloned_similar_listing.find(".otherowner-domain-price").text("For rent - $" + data.listings[x].price_rate + " / " + data.listings[x].price_type);
+					}
+					//else available for rent
+					else if (data.listings[x].rentable && data.listings[x].price_rate <= 0){
+						cloned_similar_listing.find(".otherowner-domain-price").text("For rent - Free");
 					}
 					else if (data.listings[x].status > 0){
 						cloned_similar_listing.find(".otherowner-domain-price").text("Now available!");

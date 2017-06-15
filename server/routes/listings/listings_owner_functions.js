@@ -117,6 +117,10 @@ module.exports = {
 			if (!validator.isInt(posted_domains[x].buy_price, {min: 0}) && posted_domains[x].buy_price != ""){
 				bad_reasons.push("Invalid price!");
 			}
+			//domain is too long
+			if (posted_domains[x].domain_name.length > 100){
+				bad_reasons.push("Domain name is too long!");
+			}
 
 			//some were messed up
 			if (bad_reasons.length > 0){
