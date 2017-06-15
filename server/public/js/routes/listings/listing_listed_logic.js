@@ -81,7 +81,7 @@ $(document).ready(function() {
 
 	//</editor-fold>
 
-	if (listing_info.price_rate > 0){
+	if (listing_info.rentable){
 
 		//click rent now or unavailable description
 		$("#rent-now-button").on("click", function(e) {
@@ -259,8 +259,8 @@ function showRentalStuff(rent_now_button){
 	$(".post-rent-module").removeClass('is-hidden');
 	$(".post-buy-module").addClass('is-hidden');
 
-	//only if rental price is not 0
-	if (listing_info.price_rate > 0){
+	//only if rentable
+	if (listing_info.rentable){
 		$("#unavailable-module").addClass('is-hidden');
 		$("#path-input").removeClass("is-hidden");
 
@@ -661,17 +661,6 @@ function anyFreeDayOverlap(starttime, endtime){
 	else {
 		return 0;
 	}
-}
-
-//get query string from URL
-function getParameterByName(name, url) {
-    if (!url) url = window.location.href;
-    name = name.replace(/[\[\]]/g, "\\$&");
-    var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
-        results = regex.exec(url);
-    if (!results) return null;
-    if (!results[2]) return '';
-    return decodeURIComponent(results[2].replace(/\+/g, " "));
 }
 
 //</editor-fold>

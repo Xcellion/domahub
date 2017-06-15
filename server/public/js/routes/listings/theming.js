@@ -1,5 +1,7 @@
 $(document).ready(function() {
     if (listing_info.premium){
+        console.log("Premium");
+        
         setupCustomColors();
 
         colorize(listing_info.secondary_color, "#typed-slash", "color");

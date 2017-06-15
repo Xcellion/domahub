@@ -34,7 +34,7 @@ var random_characters = [
     {name:"The Terminator",email:"hastalavista@terminator.com",message:"I'll be back.",phone:'(717) 788-2923'},
     {name:"Dorothy Gale",email:"yellowbrick@wizardofoz.com",message:"There's no place like home.",phone:'(128) 460-6698'},
     {name:"Wicked Witch of the West",email:"yellowbrick@wizardofoz.com",message:"I'll get you, my pretty, and your little dog too!",phone:'(703) 349-1903'},
-    {name:"Jack Dawson",email:"jack@titanic.com",message:"I'm the King of the World ",phone:'(300) 599-9732'},
+    {name:"Jack Dawson",email:"jack@titanic.com",message:"I'm the King of the World!",phone:'(300) 599-9732'},
     {name:"Pete Mitchell",email:"pete@topgun.com",message:"I feel the need—the need for speed!",phone:'(358) 734-5423'},
     {name:"Dorothy Gale",email:"yellowbrick@wizardofoz.com",message:"Toto, I've a feeling we're not in Kansas anymore.",phone:'(374) 373-9014'}
 ]

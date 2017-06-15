@@ -725,7 +725,7 @@ module.exports = {
                                 verified: null,
                                 status: 0
                             }, function(result){
-                                getWhoIs(req, res, next);
+                                getWhoIs(req, res, next, true);
                             });
                         }
                         else {
@@ -885,13 +885,13 @@ module.exports = {
             else if (result.state=="success" && result.info.length <= 0){
                 console.log("F: " + req.params.domain_name + " is NOT listed on DomaHub.");
 
-                getWhoIs(req, res, next);
+                getWhoIs(req, res, next, true);
             }
             else {
                 console.log("F: " + req.params.domain_name + " is listed on DomaHub!");
 
                 req.session.listing_info = result.info[0];
-                next();
+                getWhoIs(req, res, next, false);
             }
         });
     },
@@ -996,7 +996,8 @@ module.exports = {
         res.render("listings/listing.ejs", {
             user: req.user,
             message: Auth.messageReset(req),
-            listing_info: req.session.listing_info
+            listing_info: req.session.listing_info,
+            compare : (req.query.compare == "true") ? true : false
         });
     },
 
@@ -1359,7 +1360,7 @@ function googleSafeCheck(req, res, address, callback){
 }
 
 //helper function to run whois since domain isn't listed but is a real domain
-function getWhoIs(req, res, next){
+function getWhoIs(req, res, next, unlisted){
     whois.lookup(req.params.domain_name, function(err, data){
         //look up domain owner info
         var whoisObj = {};
@@ -1374,23 +1375,38 @@ function getWhoIs(req, res, next){
             console.log("WHOIS Query limit exceeded!");
         }
 
-        var email = whoisObj["Registrant Email"] || whoisObj["Admin Email"] || whoisObj["Tech Email"] || "";
-        var owner_name = whoisObj["Registrant Organization"] || whoisObj["Registrant Name"] || "Someone out there";
+        //who is for unlisted only
+        if (unlisted){
+            var email = whoisObj["Registrant Email"] || whoisObj["Admin Email"] || whoisObj["Tech Email"] || "";
+            var owner_name = whoisObj["Registrant Organization"] || whoisObj["Registrant Name"] || "Someone out there";
 
-        var listing_info = {
-            domain_name: req.params.domain_name,
-            email: email,
-            username: owner_name,
-            unlisted: true
-        }
+            var listing_info = {
+                domain_name: req.params.domain_name,
+                email: email,
+                username: owner_name,
+                unlisted: true,
+                date_registered: whoisObj["Creation Date"],
+                date_updated: whoisObj["Updated Date"]
+            }
 
-        //nobody owns it!
-        if (!whoisObj["End Text"] && owner_name == "Nobody" && data && whoisObj.source != "IANA"){
+            //nobody owns it!
             listing_info.available = true;
-            listing_info.username = "Nobody yet!";
+            if (!whoisObj["End Text"] && owner_name == "Nobody" && data && whoisObj.source != "IANA"){
+                listing_info.username = "Nobody yet!";
+            }
+
+            req.session.listing_info = listing_info;
+        }
+        else {
+            req.session.listing_info.date_registered = whoisObj["Creation Date"];
+            req.session.listing_info.date_updated = whoisObj["Updated Date"];
         }
 
-        req.session.listing_info = listing_info;
+        //dev whois object
+        if (node_env == "dev"){
+            req.session.listing_info.dev_whois = whoisObj;
+        }
+
         next();
     });
 }

@@ -238,7 +238,7 @@ function createRows(){
 		else {
 			editRowUnverified(listings[0]);
 		}
-		$("#table-body").find(".table-row:not(.clone-row)").eq(0).addClass('is-active');
+		$("#table-body").find(".table-row:not(.clone-row)").eq(0).addClass('is-active first-row');
 
 		//change domain name header and view button
 		$("#current-domain-name").text(listings[0].domain_name);
@@ -427,19 +427,12 @@ function editRowVerified(listing_info){
 		checkBox(listing_info.rentable, $("#rentable-input"));
 		checkBox(listing_info.buyable, $("#buyable-input"));
 
-		updatePriceDisabled(listing_info.buyable, listing_info.rentable);
+		updatePriceDisabled(listing_info.rentable);
 		$("#buy-price-input").val(listing_info.buy_price);
 		$("#price-rate-input").val(listing_info.price_rate);
 		$("#price-type-input").val(listing_info.price_type);
 	}
-	function updatePriceDisabled(buyable, rentable){
-		if (buyable == 1){
-			$("#buy-price-input").removeClass('is-disabled');
-		}
-		else {
-			$("#buy-price-input").addClass('is-disabled');
-		}
-
+	function updatePriceDisabled(rentable){
 		if (rentable == 1){
 			$("#price-rate-input").removeClass('is-disabled');
 			$("#price-type-input").removeClass('is-disabled');
@@ -652,11 +645,8 @@ function editRowVerified(listing_info){
 			changedValue($(this), listing_info);
 		});
 
-		$("#buyable-input").on("change", function(){
-			updatePriceDisabled($(this).val(), $("#rentable-input").val());
-		});
 		$("#rentable-input").on("change", function(){
-			updatePriceDisabled($("#buyable-input").val(), $(this).val());
+			updatePriceDisabled($(this).val());
 		});
 
 		//delete images
@@ -1016,19 +1006,22 @@ function getDNSRecordAndWhois(domain_name){
 	}).done(function(data){
 		var unverified_domain = getUserListingObj(listings, domain_name);
 
-		(function(unverified_domain){
-			unverified_domain.a_records = data.listing.a_records;
-			unverified_domain.whois = data.listing.whois;
+		if (unverified_domain){
+			(function(unverified_domain){
 
-			//update the change row handler
-			$("#row-listing_id" + current_listing.id).off().on("click", function(e){
-				changeRow($(this), unverified_domain, true);
-			});
+				unverified_domain.a_records = data.listing.a_records;
+				unverified_domain.whois = data.listing.whois;
 
-			//update the unverified domain table
-			updateRegistrarURL(unverified_domain.whois);
-			updateExistingDNS(unverified_domain.a_records);
-		})(unverified_domain);
+				//update the change row handler
+				$("#row-listing_id" + current_listing.id).off().on("click", function(e){
+					changeRow($(this), unverified_domain, true);
+				});
+
+				//update the unverified domain table
+				updateRegistrarURL(unverified_domain.whois);
+				updateExistingDNS(unverified_domain.a_records);
+			})(unverified_domain);
+		}
 	});
 }
 
