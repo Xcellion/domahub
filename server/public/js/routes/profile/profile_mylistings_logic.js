@@ -662,7 +662,7 @@ function editRowVerified(listing_info){
 				temp_img.attr("src", temp_img.data("default-img"));
 				temp_input.data("deleted", true);
 				temp_input.val("");
-				temp_label.text(temp_label.data("default-name"));
+				// temp_label.text(temp_label.data("default-name"));
 			}
 			changedValue(temp_input, listing_info);
 		});
