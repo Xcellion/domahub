@@ -14,6 +14,26 @@
 
 	<section class="section is-medium min-height">
 		<div class="container">
+			<div id="domain-error-message" class="is-hidden notification is-danger is-popup">
+				<button class="delete"></button>
+				Some domain names were invalid! See below for more details.
+			</div>
+			<div id="domain-success-message" class="is-hidden notification is-primary is-popup">
+				<button class="delete"></button>
+				Successfully created <span id="success-total"></span>! Please click the button below to view your newly created listings!
+				<p class="control margin-top-15">
+					<a tabindex="0" href="/profile/mylistings" class="button is-stylish is-small is-inverted is-primary" title="My Listings">
+						<span>My Listings</span>
+					</a>
+				</p>
+			</div>
+			<div id="payment-error-message" class="is-hidden notification is-danger is-popup">
+				<button class="delete"></button>
+				<span class="icon is-small">
+					<i class="fa fa-exclamation-circle" aria-hidden="true"></i>
+				</span>
+				<span id="payment-error-desc">Something went wrong with the payment! Your credit card has not been charged.</span>
+			</div>
 			<div class="columns">
 				<div class="column is-6">
 					<div class="content">
@@ -43,32 +63,6 @@
 							</p>
 						</div>
 					</div>
-					<div id="domain-error-message" class="is-hidden notification is-danger">
-						<button class="delete"></button>
-						<span class="icon is-small">
-							<i class="fa fa-exclamation-circle" aria-hidden="true"></i>
-						</span>
-						Some domain names were invalid! See below for more details.
-					</div>
-					<div id="domain-success-message" class="is-hidden notification is-primary">
-						<button class="delete"></button>
-						<span class="icon is-small">
-							<i class="fa fa-check-circle" aria-hidden="true"></i>
-						</span>
-						Successfully created <span id="success-total"></span>! Please click the button below to view your newly created listings!
-						<p class="control margin-top-15">
-							<a tabindex="0" href="/profile/mylistings" class="button is-stylish is-small is-inverted is-primary" title="My Listings">
-								<span>My Listings</span>
-							</a>
-						</p>
-					</div>
-					<div id="payment-error-message" class="is-hidden notification is-danger">
-						<button class="delete"></button>
-						<span class="icon is-small">
-							<i class="fa fa-exclamation-circle" aria-hidden="true"></i>
-						</span>
-						<span id="payment-error-desc">Something went wrong with the payment! Your credit card has not been charged.</span>
-					</div>
 				</div>
 			</div>
 			<div id="domain-input-form" class="columns">
@@ -87,11 +81,11 @@
 						<thead id="top-header-row" class='is-hidden'>
 							<tr>
 								<th colspan='1'>
-									<a tabindex="0" class="is-inline-block add-domain-button button no-shadow is-primary is-small is-stylish">
-										<span class="icon is-small"><i class="fa fa-plus-circle"></i></span>
+									<a tabindex="0" class="is-inline-block add-domain-button button no-shadow is-small is-stylish">
+										<span class="icon is-small"><i class="fa fa-plus"></i></span>
 										<span>Add row</span>
 									</a>
-									<a tabindex="0" class="delete-domains-button button no-shadow is-danger is-small is-stylish">
+									<a tabindex="0" class="delete-domains-button button no-shadow is-danger is-small is-stylish is-inverted">
 										<span class='icon is-small'>
 											<i class='fa fa-trash-o'></i>
 										</span>
@@ -107,7 +101,7 @@
 								<th>
 									<span class='v-align-middle'>Min. Purchase Price</span>
 									<span class="v-align-middle is-small icon is-inline-block is-tooltip" data-balloon="The minimum you're willing to sell this domain for. Set to blank or 0 for no minimum purchase price." data-balloon-length="large" data-balloon-pos="up">
-									  <i class="fa fa-question-circle-o"></i>
+									  <i class="fa fa-question-circle"></i>
 									</span>
 								</th>
 								<th>
@@ -144,29 +138,21 @@
 						<tfoot>
 							<tr>
 								<th colspan='1'>
-									<a tabindex="0" class="is-inline-block add-domain-button button no-shadow is-primary is-small is-stylish">
-										<span class="icon is-small"><i class="fa fa-plus-circle"></i></span>
+									<a tabindex="0" class="is-inline-block add-domain-button button no-shadow is-small is-stylish">
+										<span class="icon is-small"><i class="fa fa-plus"></i></span>
 										<span>Add row</span>
 									</a>
-									<a tabindex="0" class="delete-domains-button button no-shadow is-danger is-small is-stylish">
+									<a tabindex="0" class="delete-domains-button button no-shadow is-danger is-small is-stylish is-inverted">
 										<span class='icon is-small'>
 											<i class='fa fa-trash-o'></i>
 										</span>
 										<span>Remove all</span>
 									</a>
 								</th>
-								<th colspan='2' class='what-is-premium'><a tabindex="-1" class="is-accent" target='_blank' href="/sellers#basicvpremium">What is a Premium listing?</a></th>
+								<!-- <th colspan='2' class='what-is-premium'><a tabindex="-1" class="is-accent" target='_blank' href="/sellers#basicvpremium">What is a Premium listing?</a></th> -->
 							</tr>
 						</tfoot>
 					</table>
-					<div class="control is-inline-block">
-						<form class="checkbox-form">
-							<input class="is-small" value="agree-to-terms" id="agree-to-terms" type="checkbox" />
-							<label class="is-small" tabindex="0" for="agree-to-terms">
-								I agree to the <a target="_blank" rel="noopener" href="/terms" class="is-accent">DomaHub Terms & Conditions</a>.
-							</label>
-						</form>
-					</div>
 					<div class="control">
 						<a id='domains-submit'class="is-disabled button is-primary is-stylish">Confirm</a>
 					</div>
@@ -174,13 +160,9 @@
 
 				<div id="payment-column" class="is-hidden column is-7">
 					<div id="existing-cc-form" class="is-hidden control">
-						<label class="label" for="color-scheme">
-							<span class="v-align-middle">Default Payment Method</span>
-						</label>
-						<div class="control">
-							<p id="existing-cc" class="">Credit card ending in ****</p>
-							<a id="change-card-button" tabindex="0" title="Change Payment Method" class="button is-primary is-small is-stylish no-shadow">Change Payment Method</a>
-						</div>
+						<h3>Your Default Payment Method:</h3>
+						<p id="existing-cc" class="is-bold">Credit card ending in ****</p>
+						<a id="change-card-button" tabindex="0" title="Change Payment Method" class="is-accent">Change Payment Method</a>
 					</div>
 					<form id="stripe-form" class="is-hidden" autocomplete="on">
 						<label class="label">Credit or Debit Card Number</label>
@@ -204,23 +186,23 @@
 						</p>
 					</form>
 					<p class="control margin-top-20">
-						<a id="goback-button" class="button is-danger is-medium" tabindex="0">Go Back</a>
-						<a id="checkout-button" class="button is-primary is-medium" tabindex="0">
+						<button id="checkout-button" class="button is-primary is-stylish" tabindex="0">
 							<span class="icon">
 								<i class="fa fa-check-circle-o"></i>
 							</span>
 							<span>Confirm & Pay</span>
-						</a>
+						</button>
+						<a id="goback-button" class="button is-danger is-stylish" tabindex="0">Go Back</a>
 					</p>
 				</div>
 				<div id="summary-column" class="column is-3 order-1-mobile">
 					<div class="card is-fullwidth">
 						<div class="card-header">
-							<h3 class="card-header-title is-bold">Listing Summary</h3>
+							<h3 class="card-header-title is-bold">Review</h3>
 						</div>
 						<div class="card-content">
 							<div id="review-table-button" class="is-hidden content">
-								<a class='button is-primary is-fullwidth'>Edit Listing Details</a>
+								<a class='button is-primary is-stylish is-small is-fullwidth'>Edit Details</a>
 							</div>
 							<div class="content">
 								<nav id="premium-summary-row" class="level is-hidden is-mobile">

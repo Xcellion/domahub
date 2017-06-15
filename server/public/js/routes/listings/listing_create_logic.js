@@ -103,10 +103,6 @@ $(document).ready(function() {
 		refreshNotification();
 	});
 
-	//agree to terms show submit button
-	$("#agree-to-terms").on("click", function(e){
-		handleSubmitDisabled();
-	});
 
 	//</editor-fold>
 
@@ -150,7 +146,7 @@ function createTable(bad_listings, good_listings){
 	$("#table-columns").removeClass('is-hidden');
 
 	if (bad_listings.length > 0){
-		$("#domain-error-message").removeClass("is-hidden");
+		$("#domain-error-message").removeClass("is-hidden").addClass("is-active");
 		for (var x = 0; x < bad_listings.length; x++){
 			createTableRow(bad_listings[x]);
 		}
@@ -270,7 +266,7 @@ function handleSubmitDisabled(){
 
 	//see if we should remove disable on submit button
 	if ($(".domain-name-input").filter(function(){ return $(this).val() != "" && !$(this).hasClass("is-disabled")}).length > 0
-	&& $(".notification.is-danger:not(.is-hidden)").length == 0 && $("#agree-to-terms:checked").length > 0){
+	&& $(".notification.is-danger:not(.is-hidden)").length == 0){
 		$("#domains-submit").removeClass('is-disabled');
 	}
 	else {
@@ -367,9 +363,6 @@ function submitDomainsAjax(domains, submit_elem, stripeToken){
 			showHelpText("success");
 		}
 
-		//uncheck terms
-		$("#agree-to-terms").prop("checked", false);
-
 		//clear the CVC
 		$('#cc-cvc').val("");
 		$(".stripe-input").removeClass('is-disabled');
@@ -433,34 +426,33 @@ function refreshRows(bad_listings, good_listings){
 		//how many were created successfully
 		var success_amount = (good_listings.length == 1) ? "1 domain" : good_listings.length + " domains"
 		$("#success-total").text(success_amount);
-		$("#domain-success-message").removeClass("is-hidden");
+		$("#domain-success-message").removeClass("is-hidden").addClass("is-active");
 	}
 
 	//disable submit and unclick terms
 	$("#domains-submit").addClass('is-disabled');
-	$("#agree-to-terms").click();
 }
 
 //function to refresh notifications if there are no relative rows
 function refreshNotification(){
 	//hide error notification
 	if ($("small.is-danger").length == 0){
-		$(".notification.is-danger").addClass("is-hidden");
+		$(".notification.is-danger").addClass("is-hidden").removeClass("is-active");
 		$("td small.is-danger").remove();
 		$("td .is-danger").removeClass("is-danger");
 	}
 
 	//hide success notification
 	if ($("tr .td-price .is-disabled").not("#clone-row").length == 0){
-		$("#domain-success-message").addClass("is-hidden");
+		$("#domain-success-message").addClass("is-hidden").removeClass("is-active");
 	}
 }
 
 //function to remove all success/error messages
 function clearDangerSuccess(){
 	//notifications
-	$("#domain-error-message").addClass("is-hidden");
-	$("#domain-success-message").addClass("is-hidden");
+	$("#domain-error-message").addClass("is-hidden").removeClass("is-active");
+	$("#domain-success-message").addClass("is-hidden").removeClass("is-active");
 
 	//remove small error reasons
 	$("td small").remove();
@@ -472,7 +464,7 @@ function clearDangerSuccess(){
 
 //label the incorrect table rows
 function badTableRows(bad_listings){
-	$("#domain-error-message").removeClass("is-hidden");
+	$("#domain-error-message").removeClass("is-hidden").addClass("is-active");
 	for (var x = 0; x < bad_listings.length; x++){
 		var table_row = $($(".table-row").not("#clone-row")[bad_listings[x].index]);
 		handleBadReasons(bad_listings[x].reasons, table_row);
