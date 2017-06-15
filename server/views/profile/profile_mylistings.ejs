@@ -85,14 +85,14 @@
 
 					<!-- DOMAINS TABLE  -->
 					<div id="table-body" class="margin-top-15">
-						<div id="verified-clone-row" class="padding-5 clone-row table-row is-hidden flex-item">
+						<div id="verified-clone-row" class="clone-row table-row is-hidden flex-item">
 							<form class="checkbox-form">
 								<input class="select-button" data-selected="false" type="checkbox" tabindex="0" title="Select All" />
 								<label for="select-button" tabindex="0"></label>
 							</form>
 							<p class='td-domain'></p>
 						</div>
-						<div id="unverified-clone-row" class="padding-5 clone-row table-row is-hidden flex-item">
+						<div id="unverified-clone-row" class="clone-row table-row is-hidden flex-item">
 							<form class="checkbox-form">
 								<input class="select-button" data-selected="false" type="checkbox" tabindex="0" title="Select All" />
 								<label for="select-button" tabindex="0"></label>
@@ -231,7 +231,7 @@
 							<div id="pricing-tab-drop" class="drop-tab is-hidden">
 								<div class="control is-spaced">
 									<div class="control-left">
-										<label class="label" for="info-module-input">Allow Offers / Buy It Now</label>
+										<label class="label" for="buyable-input">Allow Offers / Buy It Now</label>
 										<small class="tip">Displays a form allowing verified users to make offers on this domain or buy it immediately.</small>
 									</div>
 									<div class="control-right">
@@ -248,9 +248,8 @@
 								</div>
 								<div class="control is-spaced">
 									<div class="control-left">
-										<label class="label" for="info-module-input">Allow Rentals</label>
+										<label class="label" for="rentable-input">Allow Rentals</label>
 										<small class="tip">Displays a calendar allowing verified users to rent usage of this domain for short amounts of time.</small>
-										<small class="tip"><a href="/faq" class="is-accent">Why should I rent my domain out?</a></small>
 									</div>
 									<div class="control-right">
 										<form class="checkbox-form">
@@ -367,7 +366,7 @@
 										<div class="control-right">
 											<figure class="image listing-img">
 												<button id="background" tabindex="0" class="delete delete-image on-img"></button>
-												<img data-default-img="https://placeholdit.imgix.net/~text?txtsize=40&txt=NONE%20&w=96" id="background-image" alt="Image not found" src="">
+												<img data-default-img="https://placeholdit.imgix.net/~text?txtsize=40&txt=NONE%20&w=96&h=64" id="background-image" alt="Image not found" src="">
 											</figure>
 											<form tabindex="0" class="drop-form-file" method="post" enctype="multipart/form-data">
 												<input id="background-image-input" data-name="background_image" type="file" name="background_image" accept="image/png, image/gif, image/jpeg" class="premium-input changeable-input input-file">
@@ -387,7 +386,7 @@
 										<div class="control-right">
 											<figure class="image listing-img">
 												<button id="logo" tabindex="0" class="delete delete-image on-img"></button>
-												<img data-default-img="https://placeholdit.imgix.net/~text?txtsize=20&txt=NO%20LOGO&w=96" id="logo-image" alt="Image not found" src="">
+												<img data-default-img="https://placeholdit.imgix.net/~text?txtsize=20&txt=NO%20LOGO&w=96&h=64" id="logo-image" alt="Image not found" src="">
 											</figure>
 											<form tabindex="0" class="drop-form-file" method="post" enctype="multipart/form-data">
 												<input id="logo-image-input" data-name="logo" type="file" name="logo" accept="image/png, image/gif, image/jpeg" class="premium-input changeable-input input-file">
