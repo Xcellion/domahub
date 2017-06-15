@@ -352,7 +352,7 @@ button[data-balloon] {
 .module {
   border: 1px solid rgba(0, 0, 0, 0.12);
   border-top: none;
-  padding: 15px;
+  padding: 25px;
   background: #FFF;
   border-radius: 0px 0px 3px 3px;
   height: 400px; }

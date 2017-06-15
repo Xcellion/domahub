@@ -492,9 +492,9 @@ function editRowVerified(listing_info){
 		});
 	}
 	function updateBackgroundImage(listing_info){
-		var background_image = (listing_info.background_image == null || listing_info.background_image == undefined || listing_info.background_image == "") ? "https://placeholdit.imgix.net/~text?txtsize=40&txt=RANDOM%20PHOTO&w=96&h=60" : listing_info.background_image;
+		var background_image = (listing_info.background_image == null || listing_info.background_image == undefined || listing_info.background_image == "") ? "https://placeholdit.imgix.net/~text?txtsize=40&txt=RANDOM%20PHOTO&w=96&h=64" : listing_info.background_image;
 		$("#background-image").attr('src', background_image).off().on("error", function() {
-	        $(this).attr("src", "https://placeholdit.imgix.net/~text?txtsize=40&txt=LOADING...%20&w=96&h=60");
+	        $(this).attr("src", "https://placeholdit.imgix.net/~text?txtsize=40&txt=LOADING...%20&w=96&h=64");
 	    });
 	}
 	function updateLogo(listing_info){
