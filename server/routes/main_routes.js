@@ -128,9 +128,12 @@ function contactUs(req, res, next){
 
 //render the compare current vs domahub page
 function comparePage(req, res, next){
-    res.render("main/compare.ejs", {
-        domain_name: (!validator.isFQDN(req.query.domain_name)) ? false : req.query.domain_name
-    });
+    if (validator.isFQDN(req.query.domain_name)){
+        res.redirect("/listing/" + req.query.domain_name + "?editor=true");
+    }
+    else {
+        res.redirect("/");
+    }
 }
 
 //render screenshot of a rental, only if coming from a listing page

@@ -996,7 +996,8 @@ module.exports = {
         res.render("listings/listing.ejs", {
             user: req.user,
             message: Auth.messageReset(req),
-            listing_info: req.session.listing_info
+            listing_info: req.session.listing_info,
+            compare : (req.query.compare == "true") ? true : false
         });
     },
 
