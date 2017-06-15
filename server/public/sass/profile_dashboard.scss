@@ -11,8 +11,9 @@
     @include transition(left 0.2s ease);
     @include box-shadow(0,3px,15px,$border,0);
     background-color: $white;
-    height: 100%;
-    left: -150%;
+    height: calc(100% + 2px);
+    width: 300px;
+    left: -300%;
     position: absolute;
     z-index: 10;
   }
@@ -42,9 +43,14 @@
   background-color: $black-secondary;
 }
 
+#current-domain-name {
+  word-break: break-all;
+}
+
 #table-body {
   border-radius: $radius;
   max-height: 420px;
+  white-space: nowrap;
   overflow-y: auto;
   border: 1px solid rgba(0,0,0,.12);
 }
