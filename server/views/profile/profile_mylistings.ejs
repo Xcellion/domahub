@@ -14,7 +14,7 @@
 	<%- include("../templates/navbar", {user: user}); %>
 
 
-	<section class="section is-medium min-height">
+	<section class="section is-medium min-height is-clipped">
 		<div class="container">
 			<div id="listing-msg-error" class="is-hidden is-danger notification is-popup">
 				<button class="delete"></button>
@@ -229,21 +229,10 @@
 								</div>
 							</div>
 							<div id="pricing-tab-drop" class="drop-tab is-hidden">
-								<div class="control">
-									<label class="label" for="buy-price-input">Minimum Purchase Price</label>
-									<input id="buy-price-input" data-name="buy_price" type="number" min="1" step="1" class="input changeable-input">
-									<small class="tip">The minimum offer / price you will consider.</small>
-								</div>
 								<div class="control is-spaced">
 									<div class="control-left">
-<<<<<<< HEAD
 										<label class="label" for="buyable-input">Allow Offers / Buy It Now</label>
 										<small class="tip">Displays a form allowing verified users to make offers on this domain or buy it immediately.</small>
-=======
-										<label class="label" for="info-module-input">Allow Buy It Now</label>
-										<small class="tip">Allows verified users to purchase this domain immediately.</small>
-										<small class="tip"><a href="/faq" class="is-accent">What are the advantages of buying immediately?</a></small>
->>>>>>> 8334e6f3a1d8a27bf4090dbf15694751d032e91c
 									</div>
 									<div class="control-right">
 										<form class="checkbox-form">
@@ -263,6 +252,11 @@
 											<label for="rentable-input" tabindex="0"></label>
 										</form>
 									</div>
+								</div>
+								<div class="control">
+									<label class="label" for="buy-price-input">Minimum Purchase Price</label>
+									<input id="buy-price-input" data-name="buy_price" type="number" min="1" step="1" class="input changeable-input">
+									<small class="tip">The minimum offer / price you will consider.</small>
 								</div>
 								<label class="label" for="price-rate-input">Rental Price</label>
 								<div class="control">
