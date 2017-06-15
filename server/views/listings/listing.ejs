@@ -19,6 +19,7 @@
 		<script type="text/javascript">
 			<% delete listing_info.owner_email %>
 			var listing_info = <% if(typeof listing_info != "undefined"){ %><%-JSON.stringify(listing_info)%><% }else{ %>""<% } %>;
+			var compare = <% if(typeof compare != "undefined"){ %><%-JSON.stringify(compare)%><% }else{ %>""<% } %>;
 		</script>
 		<script src="/js/routes/listings/listing_logic.js" type="text/javascript"></script>
 
@@ -26,13 +27,7 @@
 		<% if (listing_info.unlisted) { %>
 			<%- include("unlisted_page.ejs") %>
 		<% } else { %>
-			<script src="/js/routes/main/random_characters.js" type="text/javascript"></script>
-			<script src="/js/lib/typed.js" type="text/javascript"></script>
-			<script src="/js/lib/daterangepicker.js" type="text/javascript"></script>
 			<%- include("listed_page.ejs") %>
-
-			<script src="/js/routes/listings/listing_listed_logic.js" type="text/javascript"></script>
-			<script src="/js/routes/listings/theming.js" type="text/javascript"></script>
 		<% } %>
 
 		<footer class="footer is-dark">
@@ -46,6 +41,11 @@
 				<img id="custom_logo" />
 			</div>
 		</footer>
+
+		<%# TOOL TO COMPARE %>
+		<% if (compare) { %>
+			<%- include("modules/compare_module.ejs") %>
+		<% } %>
 
 	</body>
 
