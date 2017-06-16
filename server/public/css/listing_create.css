@@ -202,6 +202,9 @@ button[data-balloon] {
     display: flex;
     flex-direction: column; } }
 
+.td-domain {
+  width: 100%; }
+
 .td-buy-price {
   width: 190px; }
 
