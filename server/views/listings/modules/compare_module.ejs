@@ -4,11 +4,14 @@
 
 <div class="column is-3">
     <div class="box">
+        <%# INFO %>
         <div class="control">
             <label class="label" for="description">Listing Description</label>
             <textarea id="description" class="description-input textarea changeable-input"
             tabindex="0" data-name="description" placeholder="Write anything you want!"></textarea>
         </div>
+
+        <%# PRICING %>
         <div class="control">
             <label class="label" for="buy-price-input">Minimum Purchase Price</label>
             <input id="buy-price-input" data-name="buy_price" type="number" min="1" step="1" class="input changeable-input">
@@ -40,8 +43,8 @@
                 </form>
             </div>
         </div>
-        <label class="label" for="price-rate-input">Rental Price</label>
         <div class="control">
+            <label class="label" for="price-rate-input">Rental Price</label>
             <div class="control has-addons margin-bottom-0">
                 <input id="price-rate-input" data-name="price_rate" placeholder="minimum 1" type="number" min="1" step="1" class="padding-top-0 input changeable-input">
                 <span class="select price-type-span">
@@ -55,6 +58,12 @@
                 </span>
             </div>
             <small class="tip">Price per unit of time for the domain rental.</small>
+        </div>
+
+        <%# DESIGN %>
+        <div class="control">
+            <label class="label" for="buy-price-input">Background Image</label>
+            <input id="background-image-input" data-name="background_image" type="number" min="1" step="1" class="input changeable-input">
         </div>
         <div class="control">
             <label class="label" for="color-scheme">
@@ -82,9 +91,6 @@
             </label>
             <div class="control">
                 <input id="font-color-input" data-name="font_color" placeholder="#000000" type="text" class="premium-input padding-top-0 input changeable-input">
-            </div>
-            <div class="control">
-                <input id="font-name-input" data-name="font_name" placeholder="" type="text" class="premium-input padding-top-0 input changeable-input">
             </div>
         </div>
         <div class="control is-spaced">
