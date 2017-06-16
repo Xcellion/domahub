@@ -92,7 +92,7 @@
 								</div>
 								<div class="control hidden-edit is-hidden">
 									<button id="change-account-submit" class="button is-disabled is-primary no-shadow is-stylish is-small">Save Changes</button>
-									<button id="change-account-cancel" class="button is-hidden is-danger no-shadow is-stylish is-small">Cancel Changes</button>
+									<button id="change-account-cancel" class="button is-hidden is-danger no-shadow is-stylish is-small is-inverted">Cancel</button>
 								</div>
 							</form>
 						</div>
@@ -109,14 +109,14 @@
 								<p>
 									Email Address
 								</p>
-								<span class="tag is-success">Verified</span>
+								<span class="tag is-primary">Verified</span>
 							</div>
 							<div class="content">
 								<p>
 									Bank Account
 								</p>
 								<% if (user.stripe_info && user.stripe_info.transfers_enabled) { %>
-										<span class="tag is-success">Connected</span>
+										<span class="tag is-primary">Connected</span>
 								<% } else { %>
 										<span class="tag is-danger">Not Connected</span>
 								<% } %>
@@ -126,7 +126,7 @@
 									Account Standing
 								</p>
 									<% if (user.type >= 2) { %>
-											<span class="tag is-success">Good</span>
+											<span class="tag is-primary">Good</span>
 									<% } else { %>
 											<span class="tag is-danger">Not Good</span>
 									<% } %>
@@ -227,7 +227,7 @@
 									</div>
 								<div class="control hidden-edit is-hidden">
 									<button tabindex="0" id="payout-address-submit" class="submit-payout button is-stylish is-small is-primary no-shadow is-disabled">Save Changes</button>
-									<button tabindex="0" id="payout-address-cancel" class="cancel-payout button is-stylish is-small is-danger no-shadow is-hidden">Cancel Changes</button>
+									<button tabindex="0" id="payout-address-cancel" class="cancel-payout button is-stylish is-small is-danger no-shadow is-hidden is-inverted">Cancel</button>
 									<button tabindex="0" id="payout-address-next" class="payout-next-button is-hidden button is-stylish is-small is-primary is-pulled-right no-shadow is-hidden">Personal Information</button>
 								</div>
 							</form>
@@ -417,7 +417,7 @@
 									</div>
 								<div class="control hidden-edit is-hidden">
 									<button tabindex="0" id="payout-personal-submit" class="submit-payout button is-stylish is-small is-primary no-shadow is-disabled">Save Changes</button>
-									<button tabindex="0" id="payout-personal-cancel" class="cancel-payout button is-stylish is-small is-danger no-shadow is-hidden">Cancel Changes</button>
+									<button tabindex="0" id="payout-personal-cancel" class="cancel-payout button is-stylish is-small is-danger no-shadow is-hidden is-inverted">Cancel</button>
 									<button tabindex="0" id="payout-personal-next" class="payout-next-button is-hidden button is-stylish is-small is-primary is-pulled-right no-shadow is-hidden">Bank Information</button>
 								</div>
 							</form>
@@ -545,7 +545,7 @@
 									</div>
 								<div class="control hidden-edit is-hidden">
 									<button tabindex="0" id="payout-bank-submit" class="submit-payout button is-stylish is-small is-primary no-shadow is-disabled">Save Changes</button>
-									<button tabindex="0" id="payout-bank-cancel" class="cancel-payout button is-stylish is-small is-danger no-shadow is-hidden">Cancel Changes</button>
+									<button tabindex="0" id="payout-bank-cancel" class="cancel-payout button is-stylish is-small is-danger no-shadow is-hidden is-inverted">Cancel</button>
 								</div>
 							</form>
 						</div>
@@ -575,7 +575,7 @@
 								</div>
 								<div class="control hidden-edit is-hidden">
 									<button tabindex="0" id="paypal-submit" class="button is-stylish is-small is-primary no-shadow is-disabled">Save Changes</button>
-									<button tabindex="0" id="paypal-cancel" class="button is-stylish is-small is-danger no-shadow is-hidden">Cancel Changes</button>
+									<button tabindex="0" id="paypal-cancel" class="button is-stylish is-small is-danger no-shadow is-hidden is-inverted">Cancel</button>
 								</div>
 							</form>
 						</div>
