@@ -219,8 +219,7 @@
 }
 
 .module {
-  border: 1px solid $border;
-  border-top: none;
+  @include box-shadow(0,3px,15px,$border,0);
   padding: 25px;
   background:#FFF;
   border-radius: 0px 0px 3px 3px;

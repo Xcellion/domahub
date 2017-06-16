@@ -64,10 +64,11 @@
       border-bottom: none
     li
       width: 100%
-      a
-        &:hover,
-        &:focus
-          background-color: #eeeeee
+      &:not(.is-active)
+        a
+          &:hover,
+          &:focus
+            background-color: $grey-lighter
   &.no-border
     ul
       border-bottom: none
