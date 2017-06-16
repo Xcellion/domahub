@@ -354,8 +354,9 @@ button[data-balloon] {
     margin-right: 10px; }
 
 .module {
-  border: 1px solid rgba(0, 0, 0, 0.12);
-  border-top: none;
+  -webkit-box-shadow: 0 3px 15px 0 rgba(0, 0, 0, 0.12);
+  -moz-box-shadow: 0 3px 15px 0 rgba(0, 0, 0, 0.12);
+  box-shadow: 0 3px 15px 0 rgba(0, 0, 0, 0.12);
   padding: 25px;
   background: #FFF;
   border-radius: 0px 0px 3px 3px;
