@@ -22,17 +22,24 @@
 			var compare = <% if(typeof compare != "undefined"){ %><%-JSON.stringify(compare)%><% }else{ %>""<% } %>;
 		</script>
 
+		<%# TOOL TO COMPARE %>
+		<% if (compare && listing_info.unlisted) { %>
+			<div class="foobar">
+			<%- include("modules/compare_module.ejs") %>
+		<% } %>
+
 		<%# IS THE LISTED LISTED OR UNLISTED WITH DOMAHUB %>
 		<% if (listing_info.unlisted && !compare) { %>
 			<%- include("unlisted_page.ejs") %>
+			</div>
 		<% } else { %>
 			<%- include("listed_page.ejs") %>
+			</div>
 		<% } %>
 
-		<%# TOOL TO COMPARE %>
-		<% if (compare && listing_info.unlisted) { %>
-			<%- include("modules/compare_module.ejs") %>
-		<% } else { %>
+		<%# SHOW OR HIDE FOOTER %>
+		<% if (!(compare && listing_info.unlisted)) { %>
+		</div>
 			<footer class="footer is-dark">
 				<div class="container">
 					<p id="powered-by" class="is-primary">
