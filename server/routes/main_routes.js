@@ -129,7 +129,7 @@ function contactUs(req, res, next){
 //render the compare current vs domahub page
 function comparePage(req, res, next){
     if (validator.isFQDN(req.query.domain_name)){
-        res.redirect("/listing/" + req.query.domain_name + "?editor=true");
+        res.redirect("/listing/" + req.query.domain_name + "?compare=true");
     }
     else {
         res.redirect("/");

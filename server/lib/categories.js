@@ -61,6 +61,13 @@ module.exports = {
 		return all_categories;
 	},
 
+	//return all possible categories as a string
+	allFrontAsString : function(){
+		return all_categories.map(function(a) {
+			return a["front"];
+		}).join(" ");
+	},
+
 	//categories that are formatted for the back-end
 	back : function(){
 		var back_array = [];

@@ -22,10 +22,16 @@ $(document).ready(function() {
 	//<editor-fold>-----------------------------------------------------------------------------------MODULES
 
 	//initialize modules
-	getTrafficData();
-	getTickerData();
-	getAlexaData();
-	findOtherDomains();
+	if ((listing_info.premium && listing_info.traffic_module) || !listing_info.premium){
+		getTrafficData();
+		getAlexaData();
+	}
+	if ((listing_info.premium && listing_info.history_module) || !listing_info.premium){
+		getTickerData();
+	}
+	if ((listing_info.premium && listing_info.info_module) || !listing_info.premium){
+		findOtherDomains();
+	}
 
 	//</editor-fold>
 
@@ -74,9 +80,8 @@ $(document).ready(function() {
 
 //ajax call to get ticker information
 function getTickerData(loadmore){
-
 	//unlisted so no rentals exist
-	if (listing_info.unlisted){
+	if (listing_info.unlisted && !compare){
 
 		//create the X views in past X time
 		listing_info.rentals = [];
@@ -84,6 +89,13 @@ function getTickerData(loadmore){
 			pastViewsTickerRow();
 		}
 		$("#ticker-loading").addClass('is-hidden');
+		editTickerDates();
+	}
+	else if (compare && listing_info.unlisted) {
+		$("#ticker-loading").addClass('is-hidden');
+		createTestRentals();
+		editTickerModule(listing_info.rentals, 10);
+		pastViewsTickerRow();
 		editTickerDates();
 	}
 	else {
@@ -220,7 +232,6 @@ function createTickerRow(rental, now){
 	var rental_path = (rental.path) ? "/" + rental.path : "";
 	var rental_preview = "http://" + listing_info.domain_name + rental_path;
 
-
 	//rental is in the past
 	if (end_moment.isBefore(now)){
 		ticker_verb_tense = "ed";
@@ -310,7 +321,7 @@ function pastViewsTickerRow(){
 		var last_month_views = listing_info.rentals.reduce(function(a,b){
 			return {views: a.views + b.views};
 		}).views + listing_info.traffic[0].views;
-		var ticker_latest_date = moment.duration(moment(listing_info.rentals[listing_info.rentals.length - 1].date).diff(moment()), "milliseconds")
+		var ticker_latest_date = moment.duration(moment(listing_info.rentals[listing_info.rentals.length - 1].date).diff(moment()), "milliseconds");
 
 		//add back past X months
 		for (var x = 0; x < Math.floor(ticker_latest_date._milliseconds / 2592000000); x++){
@@ -320,7 +331,7 @@ function pastViewsTickerRow(){
 		}
 		var ticker_latest_date_human = ticker_latest_date.humanize().replace("a ", "").replace("an ", "");
 	}
-	else {
+	else if (listing_info.traffic){
 		var last_month_views = listing_info.traffic[0].views;
 		ticker_latest_date_human = "month";
 	}
@@ -340,18 +351,23 @@ function pastViewsTickerRow(){
 
 //function to get traffic data
 function getTrafficData(){
-	$.ajax({
-		url: "/listing/" + listing_info.domain_name + "/traffic",
-		method: "POST"
-	}).done(function(data){
-		//remove the loading message
-		$("#traffic-loading").addClass('is-hidden');
+	if (compare && listing_info.unlisted){
+		createTestChart();
+	}
+	else {
+		$.ajax({
+			url: "/listing/" + listing_info.domain_name + "/traffic",
+			method: "POST"
+		}).done(function(data){
+			//hide the loading overlay
+			$("#traffic-overlay-load").addClass('is-hidden');
 
-		if (data.traffic){
-			listing_info.traffic = data.traffic;
-			createCharts(data.traffic);
-		}
-	});
+			if (data.traffic){
+				listing_info.traffic = data.traffic;
+				createCharts(data.traffic);
+			}
+		});
+	}
 }
 
 //create empty or full chart
@@ -366,18 +382,15 @@ function createCharts(traffic){
 		}
 	}
 	else {
-		//hide the loading overlay
-		$("#traffic-overlay-load").addClass('is-hidden');
-
 		createEmptyChart();
-
-		//not enough data overlay
-		$("#traffic-overlay-text").removeClass('is-hidden');
 	}
 }
 
 //function to create an empty chart
 function createEmptyChart(){
+	//hide the loading overlay
+	$("#traffic-overlay-load").addClass('is-hidden');
+
 	//create the monthly x-axis labels array
 	var monthly_labels = [];
 	var months_to_go_back = 6;
@@ -426,6 +439,9 @@ function createEmptyChart(){
 		"height" : $("#traffic-chart").height(),
 		"width" : $("#traffic-chart").width()
 	}).removeClass('is-hidden');
+
+	//not enough data overlay
+	$("#traffic-overlay-text").removeClass('is-hidden');
 }
 
 //function to initiate chart only if uninitiated
@@ -521,6 +537,11 @@ function createTrafficChart(){
 	}
 
 	//create the chart
+	createValidChart(monthly_labels, all_datasets);
+}
+
+//function to create a valid traffic chart
+function createValidChart(monthly_labels, all_datasets){
 	myChart = new Chart($("#traffic-chart"), {
 		type: 'line',
 		data: {
@@ -636,7 +657,10 @@ function createAlexa(alexa){
 
 //other domains by same owner
 function findOtherDomains(){
-	if ($("#otherowner-domains").length > 0 && !listing_info.unlisted){
+	if (compare && listing_info.unlisted){
+		createTestOtherDomains();
+	}
+	else if ($("#otherowner-domains").length > 0 && !listing_info.unlisted){
 		$.ajax({
 			url: "/listing/otherowner",
 			method: "POST",
@@ -646,42 +670,52 @@ function findOtherDomains(){
 			}
 		}).done(function(data){
 			if (data.state == "success"){
-				$("#otherowner-domains").removeClass('is-hidden');
-				$("#otherowner-domains-title").text("More From This Owner");
-				for (var x = 0; x < data.listings.length; x++){
-					var cloned_similar_listing = $("#otherowner-domain-clone").clone();
-					cloned_similar_listing.removeAttr("id").removeClass('is-hidden');
-
-					//edit it based on new listing info
-					if (data.listings[x].domain_name.length + 4 + data.listings[x].price_rate.toString().length + data.listings[x].price_type.length > 25){
-						var sliced_domain = data.listings[x].domain_name.slice(0,10) + "...";
-					}
-					else {
-						var sliced_domain = data.listings[x].domain_name;
-					}
-
-					//available to buy
-					if (data.listings[x].buy_price > 0){
-						var buy_price = (data.listings[x].buy_price == 0) ? "" : moneyFormat.to(parseFloat(data.listings[x].buy_price));
-						cloned_similar_listing.find(".otherowner-domain-price").text("For sale - " + buy_price);
-					}
-					//else available for rent
-					else if (data.listings[x].rentable && data.listings[x].price_rate > 0){
-						cloned_similar_listing.find(".otherowner-domain-price").text("For rent - $" + data.listings[x].price_rate + " / " + data.listings[x].price_type);
-					}
-					//else available for rent
-					else if (data.listings[x].rentable && data.listings[x].price_rate <= 0){
-						cloned_similar_listing.find(".otherowner-domain-price").text("For rent - Free");
-					}
-					else if (data.listings[x].status > 0){
-						cloned_similar_listing.find(".otherowner-domain-price").text("Now available!");
-					}
-
-					cloned_similar_listing.find(".otherowner-domain-name").text(sliced_domain).attr("href", "/listing/" + data.listings[x].domain_name);
-					$("#otherowner-domain-table").append(cloned_similar_listing);
-				}
+				createOtherDomains(data.listings);
 			}
 		});
+	}
+}
+
+//function to create the other domain
+function createOtherDomains(other_listings){
+	$("#otherowner-domains").removeClass('is-hidden');
+	$("#otherowner-domains-title").text("More From This Owner");
+	for (var x = 0; x < other_listings.length; x++){
+		var cloned_similar_listing = $("#otherowner-domain-clone").clone();
+		cloned_similar_listing.removeAttr("id").removeClass('is-hidden');
+
+		//edit it based on new listing info
+		if (other_listings[x].domain_name.length > 23){
+			var sliced_domain = other_listings[x].domain_name.slice(0,20) + "...";
+		}
+		else {
+			var sliced_domain = other_listings[x].domain_name;
+		}
+
+		//available to buy
+		if (other_listings[x].buy_price > 0){
+			var buy_price = (other_listings[x].buy_price == 0) ? "" : moneyFormat.to(parseFloat(other_listings[x].buy_price));
+			cloned_similar_listing.find(".otherowner-domain-price").text("For sale - " + buy_price);
+		}
+		//else available for rent
+		else if (other_listings[x].rentable && other_listings[x].price_rate > 0){
+			cloned_similar_listing.find(".otherowner-domain-price").text("For rent - $" + other_listings[x].price_rate + " / " + other_listings[x].price_type);
+		}
+		//else available for rent
+		else if (other_listings[x].rentable && other_listings[x].price_rate <= 0){
+			cloned_similar_listing.find(".otherowner-domain-price").text("For rent - Free");
+		}
+		else if (other_listings[x].status > 0){
+			cloned_similar_listing.find(".otherowner-domain-price").text("Now available!");
+		}
+
+		if (other_listings[x].compare && listing_info.unlisted){
+			cloned_similar_listing.find(".otherowner-domain-name").text(sliced_domain).attr("href", "/listing/" + other_listings[x].domain_name + "?compare=true");
+		}
+		else {
+			cloned_similar_listing.find(".otherowner-domain-name").text(sliced_domain).attr("href", "/listing/" + other_listings[x].domain_name);
+		}
+		$("#otherowner-domain-table").append(cloned_similar_listing);
 	}
 }
 
@@ -723,6 +757,17 @@ function loadingDots(elem){
 function clearLoadingDots(elem){
 	clearInterval(elem.data("interval"));
 	elem.text(elem.data("original_text"));
+}
+
+//function to get query string
+function getParameterByName(name, url) {
+	if (!url) url = window.location.href;
+	name = name.replace(/[\[\]]/g, "\\$&");
+	var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+	results = regex.exec(url);
+	if (!results) return null;
+	if (!results[2]) return '';
+	return decodeURIComponent(results[2].replace(/\+/g, " "));
 }
 
 //</editor-fold>

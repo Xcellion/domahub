@@ -3,7 +3,7 @@
     <div class="columns">
 
         <%# IS THE LISTED LISTED OR UNLISTED WITH DOMAHUB %>
-        <% if (listing_info.unlisted) { %>
+        <% if (listing_info.unlisted && !compare) { %>
 
             <div class="column is-half">
             <%# UNLISTED LISTING IS OWNED BY SOMEONE %>

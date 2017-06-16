@@ -3,6 +3,8 @@
 var validator = require("validator");
 var whois = require("whois");
 var dns = require("dns");
+var default_descriptions = require("../../lib/default_descriptions.js");
+var Categories = require("../../lib/categories.js");
 
 var nodemailer = require('nodemailer');
 var sgTransport = require('nodemailer-sendgrid-transport');
@@ -1389,25 +1391,46 @@ function getWhoIs(req, res, next, unlisted){
                 date_updated: whoisObj["Updated Date"]
             }
 
+            //comparing, so make fake listing info
+            if (req.query.compare == "true"){
+                console.log("F: Rendering the comparison tool!");
+
+                listing_info.username = "The Domain Master";
+                listing_info.owner_id = "compare";
+                listing_info.categories = Categories.allFrontAsString();
+                listing_info.date_created = new Date().getTime();
+                listing_info.description = default_descriptions.random();
+                listing_info.status = 1;
+                listing_info.price_rate = Math.round(Math.random() * 250);
+                listing_info.price_type = "day";
+                listing_info.buy_price = Math.round(Math.random() * 10000);
+                listing_info.buyable = 1;
+                listing_info.rentable = 1;
+                listing_info.history_module = 1;
+                listing_info.traffic_module = 1;
+                listing_info.info_module = 1;
+            }
             //nobody owns it!
-            listing_info.available = true;
-            if (!whoisObj["End Text"] && owner_name == "Nobody" && data && whoisObj.source != "IANA"){
+            else if (!whoisObj["End Text"] && owner_name == "Nobody" && data && whoisObj.source != "IANA"){
+                listing_info.available = true;
                 listing_info.username = "Nobody yet!";
             }
 
             req.session.listing_info = listing_info;
+
+            res.render("listings/listing.ejs", {
+                user: req.user,
+                message: Auth.messageReset(req),
+                listing_info: req.session.listing_info,
+                compare : (req.query.compare == "true") ? true : false
+            });
         }
         else {
             req.session.listing_info.date_registered = whoisObj["Creation Date"];
             req.session.listing_info.date_updated = whoisObj["Updated Date"];
-        }
 
-        //dev whois object
-        if (node_env == "dev"){
-            req.session.listing_info.dev_whois = whoisObj;
+            next();
         }
-
-        next();
     });
 }
 
