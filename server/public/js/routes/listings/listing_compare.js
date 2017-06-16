@@ -86,6 +86,45 @@ function updateRentable(){
 	});
 }
 
+//inputs to update color scheme
+function updateColorScheme(listing_info){
+	var minicolor_options = {
+		letterCase: "uppercase",
+		swatches: ["#3cbc8d", "#FF5722", "#2196F3"]
+	}
+	$("#primary-color-input").val("#3CBC8D").minicolors("destroy").minicolors(minicolor_options).on("change", function(){
+		listing_info.primary_color = $(this).val();
+		colorize($(this).val(), ".daterangepicker td.active, .daterangepicker td.active:hover", "background-color");
+		colorize($(this).val(), ".is-primary", "color");
+		colorize($(this).val(), ".is-primary.button", "background-color");
+		colorize($(this).val(), ".tag", "background-color");
+
+		if (myChart){
+			myChart.data.datasets[0].borderColor = $(this).val();
+			myChart.data.datasets[0].backgroundColor = $(this).val();
+			myChart.update();
+		}
+	});
+	$("#secondary-color-input").val("#FF5722").minicolors("destroy").minicolors(minicolor_options).on("change", function(){
+		listing_info.secondary_color = $(this).val();
+		colorize($(this).val(), ".is-accent", "color");
+	    colorize($(this).val(), ".is-accent.button", "background-color");
+	});
+	$("#tertiary-color-input").val("#2196F3").minicolors("destroy").minicolors(minicolor_options).on("change", function(){
+		listing_info.tertiary_color = $(this).val();
+		colorize($(this).val(), ".is-info", "color");
+	});
+
+	var minicolor_options = {
+		letterCase: "uppercase",
+		swatches: ["#000", "#222", "#D3D3D3", "#FFF"]
+	}
+	$("#font-color-input").val("#000").minicolors("destroy").minicolors(minicolor_options).on("change", function(){
+		listing_info.font_color = $(this).val();
+		colorize($(this).val(), ".regular-font", "color");
+	});
+}
+
 //function to check the module boxes according to value
 function checkBox(module_value, elem){
 	if (module_value){
@@ -96,29 +135,17 @@ function checkBox(module_value, elem){
 	}
 }
 
-//inputs to update color scheme
-function updateColorScheme(listing_info){
-	var minicolor_options = {
-		letterCase: "uppercase",
-		swatches: ["#3cbc8d", "#FF5722", "#2196F3"]
-	}
-	$("#primary-color-input").val("#3CBC8D").minicolors("destroy").minicolors(minicolor_options);
-	$("#secondary-color-input").val("#FF5722").minicolors("destroy").minicolors(minicolor_options);
-	$("#tertiary-color-input").val("#2196F3").minicolors("destroy").minicolors(minicolor_options);
-
-	var minicolor_options = {
-		letterCase: "uppercase",
-		swatches: ["#000", "#222", "#D3D3D3", "#FFF"]
-	}
-	$("#font-color-input").val("#000").minicolors("destroy").minicolors(minicolor_options);
-}
-
 //</editor-fold>
 
 //<editor-fold>-----------------------------------------------------------------------------------MODULES
 
 //function to create a test chart
 function createTestChart(){
+
+	if (myChart){
+		myChart.destroy();
+	}
+
 	listing_info.traffic = [{
 		views : Math.floor(Math.random() * 10000)
 	}];
@@ -141,8 +168,8 @@ function createTestChart(){
 		label: "Website Views",
 		xAxisID : "traffic-x",
 		yAxisID : "traffic-y",
-		borderColor: (listing_info.premium && listing_info.primary_color) ? listing_info.primary_color : "#3CBC8D",
-		backgroundColor: (listing_info.premium && listing_info.primary_color) ? listing_info.primary_color : "#3CBC8D",
+		borderColor: (listing_info.primary_color) ? listing_info.primary_color : "#3CBC8D",
+		backgroundColor: (listing_info.primary_color) ? listing_info.primary_color : "#3CBC8D",
 		fill: false,
 		data: traffic_data
 	}
@@ -282,3 +309,47 @@ function createTestRentals(){
 }
 
 //</editor-fold>
+
+//<editor-fold>-----------------------------------------------------------------------------------REMOVE HANDLERS
+
+//function to do submit buy handler
+function testSubmitBuyHandler(){
+	setTimeout(function(){
+		$("button[type=submit][clicked=true]").removeClass('is-loading');
+		$("#contact-success-compare").removeClass('is-hidden');
+	}, 500);
+}
+
+//function to handle submit calendar handler
+function testCalendarHandler(){
+	setTimeout(function(){
+		$("#calendar").removeClass('is-disabled');
+		$("#calendar-loading-message").addClass('is-hidden');
+		clearLoadingDots($("#calendar-loading-message"));
+		$("#calendar-regular-message").removeClass('is-hidden');
+
+		listing_info.rental_moments = [];
+		var random_rentals_count = 24;
+		for (var x = 0; x < random_rentals_count; x++){
+			var start_of_month = moment().add(x, "months").startOf("month")._d.getTime();
+			var end_of_month = moment().add(x, "months").endOf("month")._d.getTime();
+
+			var random_start = randomIntFromInterval(start_of_month, end_of_month);
+			var random_duration = 86400000 * randomIntFromInterval(5, 7);
+
+			var temp_rental = {
+				start : moment(random_start),
+				end : moment(random_start + random_duration)
+			}
+			listing_info.rental_moments.push(temp_rental);
+		}
+
+		setUpCalendar(listing_info);
+	}, 500);
+}
+
+//</editor-fold>
+
+function randomIntFromInterval(min,max){
+    return Math.floor(Math.random()*(max-min+1)+min);
+}

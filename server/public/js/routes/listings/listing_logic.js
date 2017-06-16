@@ -737,7 +737,7 @@ function getHost(href) {
 
 //keep appending dots to loading message
 function loadingDots(elem){
-	var max_dots = 5;
+	var max_dots = 4;
 	var cur_dots = 0;
 	var original_text = elem.text();
 
