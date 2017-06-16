@@ -235,6 +235,7 @@ module.exports = function(app, db, auth, error, stripe){
 	app.post("/listing/:domain_name/contact/offer", [
 		urlencodedParser,
 		checkDomainValid,
+		checkDomainListed,
 		renter_functions.checkContactInfo,
 		stripe.checkStripeSubscription,
 		renter_functions.createOfferContactRecord,

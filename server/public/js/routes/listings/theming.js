@@ -1,7 +1,7 @@
 $(document).ready(function() {
     if (listing_info.premium){
         console.log("Premium");
-        
+
         setupCustomColors();
 
         colorize(listing_info.secondary_color, "#typed-slash", "color");
@@ -93,6 +93,7 @@ function colorize(color, element, style) {
 //function to setup any custom premium colors
 function setupCustomColors(){
     colorize(listing_info.primary_color, ".is-primary", "color");
+    colorize(listing_info.primary_color, ".daterangepicker td.active, .daterangepicker td.active:hover", "background-color");
     colorize(listing_info.primary_color, ".button", "background-color");
     colorize(listing_info.primary_color, ".tag", "background-color");
     colorize(listing_info.font_color, ".regular-font", "color");

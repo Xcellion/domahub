@@ -36,44 +36,48 @@ $(document).ready(function() {
 			var type_of_submit = $("button[type=submit][clicked=true]").attr("name");
 			e.preventDefault();
 
-			// if (checkPhone()){
-			if (true){
+			if (checkPhone()){
 				$("button[type=submit][clicked=true]").addClass('is-loading');
 				$(".notification").addClass('is-hidden');
+				$(".contact-input").addClass('is-disabled');
 
-				//send an offer / or buy it now request
-				$.ajax({
-					url: "/listing/" + listing_info.domain_name + "/contact/" + type_of_submit,
-					method: "POST",
-					data: {
-						contact_email: $("#contact_email").val(),
-						contact_name: $("#contact_name").val(),
-						contact_phone: $("#contact_phone").intlTelInput("getNumber"),
-						contact_offer: $("#contact_offer").val(),
-						contact_message: $("#contact_message").val()
-					}
-				}).done(function(data){
-					$("#buy-now-submit").removeClass('is-loading');
+				//comparison only, no need for AJAX
+				if (compare){
+					testSubmitBuyHandler();
+				}
+				else {
+					//send an offer / or buy it now request
+					$.ajax({
+						url: "/listing/" + listing_info.domain_name + "/contact/" + type_of_submit,
+						method: "POST",
+						data: {
+							contact_email: $("#contact_email").val(),
+							contact_name: $("#contact_name").val(),
+							contact_phone: $("#contact_phone").intlTelInput("getNumber"),
+							contact_offer: $("#contact_offer").val(),
+							contact_message: $("#contact_message").val()
+						}
+					}).done(function(data){
+						$("button[type=submit][clicked=true]").removeClass('is-loading');
 
-					if (data.state == "success"){
-						if (type_of_submit == "offer"){
-							$(".contact-input").addClass('is-disabled');
-							$("#contact-success").removeClass('is-hidden');
-							$("#buy-now-submit").addClass('is-hidden');
-							$("#buy-now-form").off();
+						if (data.state == "success"){
+							if (type_of_submit == "offer"){
+								$("#contact-success").removeClass('is-hidden');
+								$("#buy-now-submit").addClass('is-hidden');
+								$("#buy-now-form").off();
+							}
+							else {
+								window.location.assign(window.location.origin + "/listing/" + listing_info.domain_name + "/checkout/buy");
+							}
 						}
 						else {
-							window.location.assign(window.location.origin + "/listing/" + listing_info.domain_name + "/checkout/buy");
+							$(".contact-input").removeClass('is-disabled');
+							$("#contact-error").removeClass('is-hidden');
+							$("#contact-error-message").text(data.message);
 						}
-					}
-					else {
-						$("#contact-error").removeClass('is-hidden');
-						$("#contact-error-message").text(data.message);
-					}
-				});
-
+					});
+				}
 			}
-
 		});
 
 		//set the clicked attribute so we know which type of submit
@@ -420,42 +424,47 @@ function getTimes(calendar_elem){
 		calendar_elem.off("click");
 	}
 
-	$.ajax({
-		url: "/listing/" + listing_info.domain_name + "/times",
-		method: "POST",
-		data: {
-			path: $("#typed-slash").val()
-		}
-	}).done(function(data){
-		$("#calendar").removeClass('is-disabled');
-		$("#calendar-loading-message").addClass('is-hidden');
-		clearLoadingDots($("#calendar-loading-message"));
-		$("#calendar-regular-message").removeClass('is-hidden');
-
-		//got the future events, go ahead and create the calendar
-		if (data.state == "success" && data.times){
-			listing_info.rental_moments = [];
-			for (var x = 0; x < data.times.length; x++){
-				listing_info.rental_moments.push({
-					start : moment(data.times[x].date),
-					end : moment(data.times[x].date + data.times[x].duration),
-				});
+	//comparison only, no need for AJAX
+	if (compare){
+		testCalendarHandler();
+	}
+	else {
+		$.ajax({
+			url: "/listing/" + listing_info.domain_name + "/times",
+			method: "POST",
+			data: {
+				path: $("#typed-slash").val()
 			}
+		}).done(function(data){
+			$("#calendar").removeClass('is-disabled');
+			$("#calendar-loading-message").addClass('is-hidden');
+			clearLoadingDots($("#calendar-loading-message"));
+			$("#calendar-regular-message").removeClass('is-hidden');
 
-			//only show new calendar if path changed
-			if (myPath != $("#typed-slash").val() || !$("#calendar").data('daterangepicker')){
-				myPath = $("#typed-slash").val();
-				setUpCalendar(listing_info);
+			//got the future events, go ahead and create the calendar
+			if (data.state == "success" && data.times){
+				listing_info.rental_moments = [];
+				for (var x = 0; x < data.times.length; x++){
+					listing_info.rental_moments.push({
+						start : moment(data.times[x].date),
+						end : moment(data.times[x].date + data.times[x].duration),
+					});
+				}
+
+				//only show new calendar if path changed
+				if (myPath != $("#typed-slash").val() || !$("#calendar").data('daterangepicker')){
+					myPath = $("#typed-slash").val();
+					setUpCalendar(listing_info);
+				}
+				else {
+					$("#calendar").focus().data('daterangepicker').show();
+				}
 			}
 			else {
-				$("#calendar").focus().data('daterangepicker').show();
+				errorHandler("");
 			}
-		}
-		else {
-			errorHandler("");
-		}
-
-	});
+		});
+	}
 }
 
 //function to setup the calendar
@@ -531,28 +540,32 @@ function setUpCalendar(listing_info){
 //helper function to make sure theres nothing overlapping this event
 function checkIfNotOverlapped(event){
     var overlap = 0;
-    for (var x = 0; x < listing_info.rental_moments.length; x++){
-        var rental_start = listing_info.rental_moments[x].start;
-        var rental_end = listing_info.rental_moments[x].end;
+	if (listing_info.rental_moments){
+		for (var x = 0; x < listing_info.rental_moments.length; x++){
+			var rental_start = listing_info.rental_moments[x].start;
+			var rental_end = listing_info.rental_moments[x].end;
 
-        //include start, exclude end
-        if (event.isBetween(rental_start, rental_end, listing_info.price_type, "[)")){
-            overlap++;
-        }
-    }
+			//include start, exclude end
+			if (event.isBetween(rental_start, rental_end, listing_info.price_type, "[)")){
+				overlap++;
+			}
+		}
+	}
     return overlap != 0;
 }
 
 //helper function to check if overlaps a free period
 function checkIfFree(event){
 	var overlap = 0;
-	for (var x = 0; x < listing_info.freetimes.length; x++){
-		var freetime_start = moment(listing_info.freetimes[x].date);
-		var freetime_end = moment(listing_info.freetimes[x].date + listing_info.freetimes[x].duration);
+	if (listing_info.freetimes){
+		for (var x = 0; x < listing_info.freetimes.length; x++){
+			var freetime_start = moment(listing_info.freetimes[x].date);
+			var freetime_end = moment(listing_info.freetimes[x].date + listing_info.freetimes[x].duration);
 
-		//include start, exclude end
-		if (event.isBetween(freetime_start, freetime_end, "day", "[)")){
-			overlap++;
+			//include start, exclude end
+			if (event.isBetween(freetime_start, freetime_end, "day", "[)")){
+				overlap++;
+			}
 		}
 	}
 	return overlap != 0;
