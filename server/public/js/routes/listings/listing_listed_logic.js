@@ -162,7 +162,7 @@ $(document).ready(function() {
 					}
 
 					//show if mypath is the same
-					else {
+					else if ($("#calendar").is(":visible")){
 						$("#calendar").data('daterangepicker').show();
 					}
 				}
@@ -220,6 +220,11 @@ function showBuyStuff(buy_now_button){
 
 	//hide the slash input
 	$("#path-input").addClass("is-hidden");
+
+	//hide calendar if switching back to buy tab
+	if (listing_info.rentable && $("#calendar").data('daterangepicker')){
+		$("#calendar").data('daterangepicker').hide();
+	}
 
 	if (listing_info.status == 1){
 		$("#unavailable-module").addClass('is-hidden');
@@ -456,7 +461,7 @@ function getTimes(calendar_elem){
 					myPath = $("#typed-slash").val();
 					setUpCalendar(listing_info);
 				}
-				else {
+				else if ($("#calendar").is(":visible")){
 					$("#calendar").focus().data('daterangepicker').show();
 				}
 			}
@@ -534,7 +539,10 @@ function setUpCalendar(listing_info){
 		$("#calendar-module").css("margin-bottom", $(".daterangepicker").height());
     });
 
-    $("#calendar").data('daterangepicker').show();
+	//only show if the calendar input is visible
+	if ($("#calendar").is(":visible")){
+		$("#calendar").data('daterangepicker').show();
+	}
 }
 
 //helper function to make sure theres nothing overlapping this event
