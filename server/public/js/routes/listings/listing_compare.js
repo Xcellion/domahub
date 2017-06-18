@@ -10,6 +10,7 @@ $(document).ready(function() {
 		checkBox(listing_info.traffic_module, $("#traffic-module-input"));
 		checkBox(listing_info.info_module, $("#info-module-input"));
 
+		updateBackground(listing_info);
 		updateColorScheme(listing_info);
 	}
 });
@@ -86,13 +87,29 @@ function updateRentable(){
 	});
 }
 
+//input to update background
+function updateBackground(listing_info){
+	$("#background-image-input").val(listing_info.background_image).on("input", function(){
+		$("#background-image").css("background", "url(" + $(this).val() + ") center/cover no-repeat");
+	});
+
+	var minicolor_options = {
+		letterCase: "uppercase",
+		swatches: ["#FFFFFF", "#E5E5E5", "#B2B2B2", "#7F7F7F", "#666666", "#222222", "#000000"]
+	}
+
+	$("#background-color-input").val(listing_info.background_color).minicolors(minicolor_options).on("input", function(){
+		$("#background-image").css("background-color", $(this).val());
+	});
+}
+
 //inputs to update color scheme
 function updateColorScheme(listing_info){
 	var minicolor_options = {
 		letterCase: "uppercase",
 		swatches: ["#3cbc8d", "#FF5722", "#2196F3"]
 	}
-	$("#primary-color-input").val("#3CBC8D").minicolors("destroy").minicolors(minicolor_options).on("change", function(){
+	$("#primary-color-input").val("#3CBC8D").minicolors(minicolor_options).on("change", function(){
 		listing_info.primary_color = $(this).val();
 		colorize($(this).val(), ".daterangepicker td.active, .daterangepicker td.active:hover", "background-color");
 		colorize($(this).val(), ".is-primary", "color");
@@ -105,7 +122,7 @@ function updateColorScheme(listing_info){
 			myChart.update();
 		}
 	});
-	$("#secondary-color-input").val("#FF5722").minicolors("destroy").minicolors(minicolor_options).on("change", function(){
+	$("#secondary-color-input").val("#FF5722").minicolors(minicolor_options).on("change", function(){
 		listing_info.secondary_color = $(this).val();
 		colorize($(this).val(), ".is-accent", "color");
 	    colorize($(this).val(), ".is-accent.button", "background-color");

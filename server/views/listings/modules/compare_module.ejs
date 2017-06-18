@@ -63,8 +63,12 @@
 
               <%# DESIGN %>
               <div class="control">
-                  <label class="label" for="buy-price-input">Background Image</label>
-                  <input id="background-image-input" data-name="background_image" type="number" min="1" step="1" class="input changeable-input">
+                  <label class="label" for="buy-price-input">Background Image URL</label>
+                  <input id="background-image-input" data-name="background_image" type="text" class="input changeable-input">
+              </div>
+              <div class="control">
+                  <label class="label" for="buy-price-input">Background Color</label>
+                  <input id="background-color-input" type="text" class="input">
               </div>
               <div class="control">
                   <label class="label" for="color-scheme">
@@ -73,12 +77,8 @@
                           <i class="fa fa-question-circle-o"></i>
                       </span>
                   </label>
-                  <div class="control">
-                      <input id="primary-color-input" data-name="primary_color" placeholder="#3CBC8D" type="text" class="premium-input padding-top-0 input changeable-input">
-                  </div>
-                  <div class="control">
-                      <input id="secondary-color-input" data-name="secondary_color" placeholder="#FF5722" type="text" class="premium-input padding-top-0 input changeable-input">
-                  </div>
+                  <input id="primary-color-input" data-name="primary_color" placeholder="#3CBC8D" type="text" class="premium-input padding-top-0 input changeable-input">
+                  <input id="secondary-color-input" data-name="secondary_color" placeholder="#FF5722" type="text" class="premium-input padding-top-0 input changeable-input">
                   <div class="control">
                       <input id="tertiary-color-input" data-name="tertiary_color" placeholder="#2196F3" type="text" class="premium-input padding-top-0 input changeable-input">
                   </div>
