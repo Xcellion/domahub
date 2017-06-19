@@ -1,5 +1,5 @@
 td.today {
-    background-color: #90caf9 !important;
+    background-color: #808080 !important;
 }
 td.free-times {
     /*background-color: blue !important;*/
@@ -104,7 +104,7 @@ td.free-times {
     white-space: nowrap;
     cursor: pointer; }
     .daterangepicker td.available:hover, .daterangepicker th.available:hover {
-      background-color: #3cbc8d;
+      background-color: #222222;
       border-radius: 0 4px 4px 0;
       color: #FFF; }
     .daterangepicker td.week, .daterangepicker th.week {
@@ -115,7 +115,7 @@ td.free-times {
     border-color: transparent;
     color: #999; }
   .daterangepicker td.in-range {
-    background-color: #d8f1e8;
+    background-color: #E5E5E5;
     border-color: transparent;
     color: #000;
     border-radius: 0; }
@@ -126,7 +126,7 @@ td.free-times {
   .daterangepicker td.start-date.end-date {
     border-radius: 4px; }
   .daterangepicker td.active, .daterangepicker td.active:hover {
-    background-color: #3cbc8d;
+    background-color: #222222;
     border-color: transparent;
     color: #fff; }
   .daterangepicker th.month {
@@ -161,7 +161,7 @@ td.free-times {
     padding: 0 6px 0 28px;
     width: 100%; }
     .daterangepicker .input-mini.active {
-      border: 1px solid #3cbc8d;
+      border: 1px solid #222222;
       border-radius: 4px; }
   .daterangepicker .daterangepicker_input {
     position: relative; }
@@ -200,17 +200,17 @@ td.free-times {
     background-color: #f5f5f5;
     border: 1px solid #f5f5f5;
     border-radius: 4px;
-    color: #3cbc8d;
+    color: #222222;
     padding: 3px 12px;
     margin-bottom: 8px;
     cursor: pointer; }
     .ranges li:hover {
-      background-color: #3cbc8d;
-      border: 1px solid #3cbc8d;
+      background-color: #222222;
+      border: 1px solid #222222;
       color: #fff; }
     .ranges li.active {
-      background-color: #3cbc8d;
-      border: 1px solid #3cbc8d;
+      background-color: #222222;
+      border: 1px solid #222222;
       color: #fff; }
 
 /*  Larger Screen Styling */
