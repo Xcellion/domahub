@@ -4765,8 +4765,8 @@ input:-webkit-autofill {
       border-bottom: none; }
     .tabs.has-shadow li {
       width: 100%; }
-      .tabs.has-shadow li a:hover, .tabs.has-shadow li a:focus {
-        background-color: #eeeeee; }
+      .tabs.has-shadow li:not(.is-active) a:hover, .tabs.has-shadow li:not(.is-active) a:focus {
+        background-color: #efefef; }
   .tabs.no-border ul {
     border-bottom: none; }
   .tabs.no-border li {
