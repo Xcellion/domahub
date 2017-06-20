@@ -6,13 +6,15 @@ $(document).ready(function() {
 
         colorize(listing_info.secondary_color, "#typed-slash", "color");
 
-        $("#background-image").css("background", "url(" + listing_info.background_image + ") center/cover no-repeat").on("error", function(){
-            console.log("Error loading background image!");
-            $(this).css({
-                background: "",
-                "background-color": "#FFF"
+        if (listing_info.background_image){
+            $("#background-image").css("background", "url(" + listing_info.background_image + ") center/cover no-repeat").on("error", function(){
+                console.log("Error loading background image!");
+                $(this).css({
+                    background: "",
+                    "background-color": "#FFF"
+                });
             });
-        });
+        }
 
         if (listing_info.logo){
             //hide dh logo

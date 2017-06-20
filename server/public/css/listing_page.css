@@ -181,11 +181,26 @@ button[data-balloon] {
   align-items: center; }
 
 #background-image {
-  background-color: "#FFF";
-  width: 100%;
+  background-color: #fff;
   min-height: 100vh;
   padding: 60px 20px;
   background-attachment: fixed; }
+
+.foobar {
+  width: 100%;
+  height: 100%;
+  display: flex; }
+
+.foo {
+  width: 70%;
+  position: absolute;
+  left: 30%; }
+
+.bar {
+  position: fixed;
+  width: 30%;
+  height: 100vh;
+  overflow-y: scroll; }
 
 .footer {
   height: 200px; }
@@ -354,8 +369,9 @@ button[data-balloon] {
     margin-right: 10px; }
 
 .module {
-  border: 1px solid rgba(0, 0, 0, 0.12);
-  border-top: none;
+  -webkit-box-shadow: 0 3px 15px 0 rgba(0, 0, 0, 0.12);
+  -moz-box-shadow: 0 3px 15px 0 rgba(0, 0, 0, 0.12);
+  box-shadow: 0 3px 15px 0 rgba(0, 0, 0, 0.12);
   padding: 25px;
   background: #FFF;
   border-radius: 0px 0px 3px 3px;

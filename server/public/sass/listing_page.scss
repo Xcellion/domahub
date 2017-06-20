@@ -16,11 +16,29 @@
 }
 
 #background-image {
-  background-color: "#FFF";
-  width: 100%;
+  background-color: #fff;
   min-height:100vh;
   padding: 60px 20px;
   background-attachment: fixed;
+}
+
+.foobar {
+  width: 100%;
+  height: 100%;
+  display: flex;
+}
+
+.foo {
+  width: 70%;
+  position: absolute;
+  left: 30%;
+}
+
+.bar {
+  position: fixed;
+  width: 30%;
+  height: 100vh;
+  overflow-y: scroll;
 }
 
 .footer {
@@ -219,8 +237,7 @@
 }
 
 .module {
-  border: 1px solid $border;
-  border-top: none;
+  @include box-shadow(0,3px,15px,$border,0);
   padding: 25px;
   background:#FFF;
   border-radius: 0px 0px 3px 3px;
