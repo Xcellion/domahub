@@ -196,12 +196,12 @@
 									<textarea id="description" class="description-input textarea changeable-input"
 									tabindex="0" data-name="description" placeholder="Write anything you want!"></textarea>
 								</div>
-								<div class="control">
+								<%# <div class="control">
 									<label class="label" for="short-desc">Short Description</label>
 									<input id="short-desc" data-name="description_hook" tabindex="0" class="input changeable-input"
 									placeholder="What is this website?"></input>
 									<small class="tip">100 character limit.</small>
-								</div>
+								</div>%>
 								<div class="control">
 									<label class="label" for="paths">
 										<span class="v-align-middle">Example Paths</span>
@@ -229,9 +229,14 @@
 								</div>
 							</div>
 							<div id="pricing-tab-drop" class="drop-tab is-hidden">
+								<div class="control">
+									<label class="label" for="buy-price-input">Minimum Purchase Price</label>
+									<input id="buy-price-input" data-name="buy_price" type="number" min="1" step="1" class="input changeable-input">
+									<small class="tip">The minimum offer / price you will consider.</small>
+								</div>
 								<div class="control is-spaced">
 									<div class="control-left">
-										<label class="label" for="buyable-input">Allow Offers / Buy It Now</label>
+										<label class="label" for="buyable-input">Allow Buy It Now</label>
 										<small class="tip">Displays a form allowing verified users to make offers on this domain or buy it immediately.</small>
 									</div>
 									<div class="control-right">
@@ -252,11 +257,6 @@
 											<label for="rentable-input" tabindex="0"></label>
 										</form>
 									</div>
-								</div>
-								<div class="control">
-									<label class="label" for="buy-price-input">Minimum Purchase Price</label>
-									<input id="buy-price-input" data-name="buy_price" type="number" min="1" step="1" class="input changeable-input">
-									<small class="tip">The minimum offer / price you will consider.</small>
 								</div>
 								<label class="label" for="price-rate-input">Rental Price</label>
 								<div class="control">
