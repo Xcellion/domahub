@@ -4,7 +4,7 @@ $(document).ready(function() {
 
         setupCustomColors();
 
-        colorize(listing_info.secondary_color, "#typed-slash", "color");
+        stylize(listing_info.secondary_color, "#typed-slash", "color");
 
         if (listing_info.background_image){
             $("#background-image").css("background", "url(" + listing_info.background_image + ") center/cover no-repeat").on("error", function(){
@@ -45,39 +45,24 @@ var tertiaryColor = "00f";
 var whiteText = "#fff";
 var blackText = "#222";
 
-function calculateLuminance(hex) {
-    // parse hexcode and convert into decimal values
-    var arrBuff = new ArrayBuffer(4);
-    var vw = new DataView(arrBuff);
-    vw.setUint32(0,parseInt(hex, 16),false);
-    var arrByte = new Uint8Array(arrBuff);
-
-    // variables for storing decimal values and others
-    var red = arrByte[1];
-    var green = arrByte[2];
-    var blue = arrByte[3]
-    var luminance = 0;
-    var arrByteNew = [];
-
-    // calculate the luminance value of each r g b
-    arrByte.forEach(function(col) {
-        col = col / 255.0;
-
-        if (col <= 0.03928) {
-            col = col / 12.92;
-        }
-        else {
-            col = ((col + 0.055) / 1.055) ^ 2.4
-        }
-
-        arrByteNew.push(col);
-    })
+//return white or black text based on luminance
+function calculateLuminance(rgb) {
+	var hexValue = rgb.replace(/[^0-9A-Fa-f]/, '');
+	var r,g,b;
+	if (hexValue.length === 3) {
+		hexValue = hexValue[0] + hexValue[0] + hexValue[1] + hexValue[1] + hexValue[2] + hexValue[2];
+	}
+	if (hexValue.length !== 6) {
+		return 0;
+	}
+    r = parseInt(hexValue.substring(0,2), 16) / 255;
+	g = parseInt(hexValue.substring(2,4), 16) / 255;
+	b = parseInt(hexValue.substring(4,6), 16) / 255;
 
     // calculate the overall luminance of the color
-    luminance = 0.2126 * arrByteNew[1] + 0.7152 * arrByteNew[2] + 0.0722 * arrByteNew[3];
+    var luminance = 0.2126 * r + 0.7152 * g + 0.0722 * b;
 
-    // return white or black text based on luminance
-    if (luminance > 0.179) {
+    if (luminance > 0.5) {
         return "#000";
     }
     else {
@@ -85,7 +70,7 @@ function calculateLuminance(hex) {
     }
 }
 
-function colorize(color, element, style) {
+function stylize(color, element, style) {
     $(element).css(style, color);
     if (style == "background-color") {
         $(element).css("color", calculateLuminance(color));
@@ -94,18 +79,20 @@ function colorize(color, element, style) {
 
 //function to setup any custom premium colors
 function setupCustomColors(){
-    colorize(listing_info.primary_color, ".is-primary", "color");
-    colorize(listing_info.primary_color, ".daterangepicker td.active, .daterangepicker td.active:hover", "background-color");
-    colorize(listing_info.primary_color, ".button", "background-color");
-    colorize(listing_info.primary_color, ".tag", "background-color");
-    colorize(listing_info.font_color, ".regular-font", "color");
-    colorize(listing_info.primary_color, "h1,h2,h3", "color");
-    colorize(listing_info.tertiary_color, ".is-info", "color");
-    colorize(listing_info.secondary_color, ".is-accent", "color");
-    colorize(listing_info.secondary_color, ".is-accent.button", "background-color");
+    stylize(listing_info.primary_color, ".is-primary", "color");
+    stylize(listing_info.primary_color, ".daterangepicker td.active, .daterangepicker td.active:hover", "background-color");
+    stylize(listing_info.primary_color, ".button", "background-color");
+    stylize(listing_info.primary_color, ".tag", "background-color");
+    stylize(listing_info.font_color, ".regular-font", "color");
+    stylize(listing_info.primary_color, "h1,h2,h3", "color");
+    stylize(listing_info.tertiary_color, ".is-info", "color");
+    stylize(listing_info.secondary_color, ".is-accent", "color");
+    stylize(listing_info.secondary_color, ".is-accent.button", "background-color");
+    stylize(listing_info.background_color, "#background-image", "background-color");
+    stylize(listing_info.font_name, "#domain-title", "font-family");
 }
 
 //set up default DH colors
 function setupDefaultColors(){
-    colorize(primaryColor, ".tag", "background-color");
+    stylize(primaryColor, ".tag", "background-color");
 }
