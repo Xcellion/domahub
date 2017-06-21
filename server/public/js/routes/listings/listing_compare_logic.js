@@ -1,5 +1,16 @@
 $(document).ready(function() {
 	if (compare){
+
+		//change compare tabs
+		$(".compare-tab").on("click", function(){
+			$(".compare-tab").removeClass('is-active');
+			$(this).addClass('is-active');
+
+			var box_id = $(this).attr('id').split("-")[0];
+			$(".compare-box").addClass('is-hidden');
+			$("#" + box_id + "-box").removeClass('is-hidden');
+		});
+
 		updateDescription();
 		updatePricing();
 		updateBIN();
@@ -32,8 +43,10 @@ function toggleMenu() {
 
 	hideMenuButton.on("click", function() {
 		menu.toggleClass("is-active");
-		showMenuWrapper.toggleClass("is-hidden");
 		preview.toggleClass("is-active");
+		showMenuWrapper.toggleClass("is-hidden", function(){
+			console.log("finished showing new");
+		});
 	});
 
 	showMenuWrapper.on("click",function() {
@@ -115,7 +128,7 @@ function updateRentable(){
 
 //input to update background
 function updateBackground(){
-	$("#background-image-input").val(listing_info.background_image).on("input", function(){
+	$("#compare-preview-input").val(listing_info.background_image).on("input", function(){
 		$("#compare-preview").css("background", "url(" + $(this).val() + ") center/cover no-repeat");
 	});
 
@@ -138,8 +151,8 @@ function updateColorScheme(){
 	$("#primary-color-input").val("#3CBC8D").minicolors(minicolor_options).on("change", function(){
 		listing_info.primary_color = $(this).val();
 		stylize($(this).val(), ".daterangepicker td.active, .daterangepicker td.active:hover", "background-color");
-		stylize($(this).val(), "#background-image .is-primary", "color");
-		stylize($(this).val(), "#background-image .is-primary.button", "background-color");
+		stylize($(this).val(), "#compare-preview .is-primary", "color");
+		stylize($(this).val(), "#compare-preview .is-primary.button", "background-color");
 		stylize($(this).val(), ".tag", "background-color");
 
 		if (myChart){
@@ -150,12 +163,12 @@ function updateColorScheme(){
 	});
 	$("#secondary-color-input").val("#FF5722").minicolors(minicolor_options).on("change", function(){
 		listing_info.secondary_color = $(this).val();
-		stylize($(this).val(), "#background-image .is-accent", "color");
-	    stylize($(this).val(), "#background-image .is-accent.button", "background-color");
+		stylize($(this).val(), "#compare-preview .is-accent", "color");
+	    stylize($(this).val(), "#compare-preview .is-accent.button", "background-color");
 	});
 	$("#tertiary-color-input").val("#2196F3").minicolors("destroy").minicolors(minicolor_options).on("change", function(){
 		listing_info.tertiary_color = $(this).val();
-		stylize($(this).val(), "#background-image .is-info", "color");
+		stylize($(this).val(), "#compare-preview .is-info", "color");
 	});
 }
 
