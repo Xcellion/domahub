@@ -12,10 +12,24 @@ $(document).ready(function() {
 
 		updateBackground(listing_info);
 		updateColorScheme(listing_info);
+
+		toggleMenu();
 	}
 });
 
 //<editor-fold>-----------------------------------------------------------------------------------EDITOR
+
+//function to hide and show menu
+function toggleMenu() {
+	var button = $("#hide-menu-button");
+	var menu = $("#compare-menu");
+	var preview = $("#compare-preview");
+
+	button.on("click", function() {
+		menu.toggleClass("is-collapsed");
+		preview.toggleClass("is-active");
+	});
+}
 
 //function to update the description
 function updateDescription(){
@@ -90,7 +104,7 @@ function updateRentable(){
 //input to update background
 function updateBackground(listing_info){
 	$("#background-image-input").val(listing_info.background_image).on("input", function(){
-		$("#background-image").css("background", "url(" + $(this).val() + ") center/cover no-repeat");
+		$("#compare-preview").css("background", "url(" + $(this).val() + ") center/cover no-repeat");
 	});
 
 	var minicolor_options = {
@@ -99,7 +113,7 @@ function updateBackground(listing_info){
 	}
 
 	$("#background-color-input").val(listing_info.background_color).minicolors(minicolor_options).on("input", function(){
-		$("#background-image").css("background-color", $(this).val());
+		$("#compare-preview").css("background-color", $(this).val());
 	});
 }
 

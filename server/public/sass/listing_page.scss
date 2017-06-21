@@ -15,30 +15,37 @@
   }
 }
 
-#background-image {
-  background-color: #fff;
-  min-height:100vh;
-  padding: 60px 20px;
-  background-attachment: fixed;
-}
-
-.foobar {
+#compare-model {
   width: 100%;
   height: 100%;
   display: flex;
 }
 
-.foo {
-  width: 70%;
-  position: absolute;
+#compare-preview {
+  background-attachment: fixed;
+  background-color: #fff;
   left: 30%;
+  min-height: 100vh;
+  padding: 60px 20px;
+  position: absolute;
+  width: 70%;
+  &.is-active {
+    position: relative;
+    left: 0;
+    width: 100%;
+  }
 }
 
-.bar {
-  position: fixed;
-  width: 30%;
+#compare-menu {
+  @include transition(left 0.5s ease);
   height: 100vh;
   overflow-y: scroll;
+  position: fixed;
+  width: 30%;
+  left: 0;
+  &.is-collapsed {
+    left: 100%;
+  }
 }
 
 .footer {
@@ -111,6 +118,7 @@
 #domain-display {
   h1 {
     font-size: $size-1;
+    word-break: break-all;
     @include mobile {
       font-size: 40px;
     }
