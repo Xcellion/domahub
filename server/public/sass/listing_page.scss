@@ -36,6 +36,10 @@
   }
 }
 
+.tab.is-active {
+    background-color: black;
+}
+
 #compare-menu {
   @include transition(all 0.25s);
   @include translate(-100%,0);

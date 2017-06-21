@@ -114,26 +114,39 @@
               </div>
           </div>
           <div class="control is-spaced">
+              <div class="control">
+                  <label class="label" for="color-scheme">
+                      <span class="v-align-middle">Font Styling</span>
+                      <span class="icon is-small is-tooltip v-align-middle" data-balloon-length="medium" data-balloon="The color of the main font on your landing page. Font names can include any standard web font or Google web font. Any fonts after the first are used as backup or fallback fonts." data-balloon-pos="up">
+                          <i class="fa fa-question-circle-o"></i>
+                      </span>
+                  </label>
+                  <div class="control">
+                      <input id="font-color-input" data-name="font_color" placeholder="#000000" type="text" class="premium-input padding-top-0 input changeable-input">
+                  </div>
+                  <div class="control">
+                      <span class="select is-fullwidth" tabindex="0">
+                          <select data-name="font_name" id="font-name-input" class="premium-input changeable-input">
+                              <option selected default value="Rubik">Rubik</option>
+                              <option value="Times New Roman">Times New Roman</option>
+                              <option value="Helvetica">Helvetica</option>
+                              <option value="Courier">Courier</option>
+                              <option value="Verdana">Verdana</option>
+                              <option value="Tahoma">Tahoma</option>
+                          </select>
+                      </span>
+                  </div>
+              </div>
+          </div>
+          <div class="control is-spaced">
               <div class="control-left">
                   <label class="label" for="traffic-module-input">Traffic Module</label>
                   <small class="tip">Displays detailed information about domain traffic including <a class="is-accent" target="_blank" href="http://www.alexa.com/siteinfo/<%= listing_info.domain_name %>">Alexa</a> data.</small>
               </div>
               <div class="control-right">
                   <form class="checkbox-form">
-                      <input id="traffic-module-input" data-name="history_module" type="checkbox" class="checkbox-input premium-input changeable-input" tabindex="0" />
+                      <input id="traffic-module-input" type="checkbox" class="module-input checkbox-input premium-input changeable-input" tabindex="0" />
                       <label for="traffic-module-input" tabindex="0"></label>
-                  </form>
-              </div>
-          </div>
-          <div class="control is-spaced">
-              <div class="control-left">
-                  <label class="label" for="history-module-input">History Module</label>
-                  <small class="tip">Displays recent activity on your domain name; relevant for rentals.</small>
-              </div>
-              <div class="control-right">
-                  <form class="checkbox-form">
-                      <input id="history-module-input" data-name="history_module" type="checkbox" class="checkbox-input premium-input changeable-input" tabindex="0" />
-                      <label for="history-module-input" tabindex="0"></label>
                   </form>
               </div>
           </div>
@@ -144,8 +157,20 @@
               </div>
               <div class="control-right">
                   <form class="checkbox-form">
-                      <input id="info-module-input" data-name="info_module" type="checkbox" class="checkbox-input premium-input changeable-input" tabindex="0" />
+                      <input id="info-module-input" type="checkbox" class="module-input checkbox-input premium-input changeable-input" tabindex="0" />
                       <label for="info-module-input" tabindex="0"></label>
+                  </form>
+              </div>
+          </div>
+          <div class="control is-spaced">
+              <div class="control-left">
+                  <label class="label" for="history-module-input">History Module</label>
+                  <small class="tip">Displays recent activity on your domain name; relevant for rentals.</small>
+              </div>
+              <div class="control-right">
+                  <form class="checkbox-form">
+                      <input id="ticker-module-input" type="checkbox" class="module-input checkbox-input premium-input changeable-input" tabindex="0" />
+                      <label for="ticker-module-input" tabindex="0"></label>
                   </form>
               </div>
           </div>
