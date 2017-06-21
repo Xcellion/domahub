@@ -241,7 +241,7 @@ function createRows(){
 		$("#table-body").find(".table-row:not(.clone-row)").eq(0).addClass('is-active first-row');
 
 		//change domain name header and view button
-		$("#current-domain-name").text(listings[0].domain_name);
+		$(".current-domain-name").text(listings[0].domain_name);
 		$("#current-domain-view").attr("href", "/listing/" + listings[0].domain_name);
 	}
 	else {
@@ -316,7 +316,7 @@ function changeRow(row, listing_info, bool){
 		current_listing = listing_info;
 
 		//change domain name header and view button
-		$("#current-domain-name").text(listing_info.domain_name);
+		$(".current-domain-name").text(listing_info.domain_name);
 		$("#current-domain-view").attr("href", "/listing/" + listing_info.domain_name);
 
 		//update inputs
@@ -463,32 +463,20 @@ function editRowVerified(listing_info){
 			swatches: ["#000", "#222", "#D3D3D3", "#FFF"]
 		}
 		$("#font-color-input").val(listing_info.font_color).minicolors("destroy").minicolors(minicolor_options);
-
-		//if created tags before
-		if ($("#font-name-input").data('tags') == true){
-			$("#font-name-input").tagit("destroy");
-		}
-		else {
-			$("#font-name-input").data("tags", true);
-		}
-
-		//create new tags
-		$("#font-name-input").val(listing_info.font_name).tagit({
-			animate : false,
-			allowSpaces : true,
-			afterTagAdded : function(event, ui){
-				changedValue($("#font-name-input"), listing_info);
-			},
-			afterTagRemoved : function(event, ui){
-				changedValue($("#font-name-input"), listing_info);
-			}
-		});
+		$("#font-name-input").val(listing_info.font_name);
+		$("#preview-domain-font").removeAttr("style").css("font-family", listing_info.font_name);
 	}
 	function updateBackgroundImage(listing_info){
 		var background_image = (listing_info.background_image == null || listing_info.background_image == undefined || listing_info.background_image == "") ? "https://placeholdit.imgix.net/~text?txtsize=20&txt=NO%20IMG&w=96&h=64" : listing_info.background_image;
 		$("#background-image").attr('src', background_image).off().on("error", function() {
 	        $(this).attr("src", "https://placeholdit.imgix.net/~text?txtsize=20&txt=LOADING...%20&w=96&h=64");
 	    });
+
+		var minicolor_options = {
+			letterCase: "uppercase",
+			swatches: ["#FFFFFF", "#E5E5E5", "#B2B2B2", "#7F7F7F", "#666666", "#222222", "#000000"]
+		}
+		$("#background-color-input").val(listing_info.background_color).minicolors("destroy").minicolors(minicolor_options);
 	}
 	function updateLogo(listing_info){
 		var logo = (listing_info.logo == null || listing_info.logo == undefined || listing_info.logo == "") ? "/images/dh-assets/flat-logo/dh-flat-logo-primary.png" : listing_info.logo;
@@ -551,7 +539,6 @@ function editRowVerified(listing_info){
 
 			//add disabled to premium inputs if not premium
 			$(".premium-input").addClass('is-disabled');
-			$("#font-name-input").data("ui-tagit").tagList.addClass("is-disabled");
 
 			//hide/show elements needed for upgrade
 			$(".basic-elem").removeClass('is-hidden');
@@ -574,7 +561,6 @@ function editRowVerified(listing_info){
 
 			//remove disabled to premium inputs
 			$(".premium-input").removeClass('is-disabled');
-			$("#font-name-input").data("ui-tagit").tagList.removeClass("is-disabled");
 
 			//show/hide elements needed for upgrade
 			$(".basic-elem").addClass('is-hidden');
@@ -647,6 +633,11 @@ function editRowVerified(listing_info){
 
 		$("#rentable-input").on("change", function(){
 			updatePriceDisabled($(this).val());
+		});
+
+		//change domain name font
+		$("#font-name-input").on("input", function(){
+			$("#preview-domain-font").removeAttr("style").css("font-family", $(this).val());
 		});
 
 		//delete images
