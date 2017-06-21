@@ -464,7 +464,6 @@ function editRowVerified(listing_info){
 		}
 		$("#font-color-input").val(listing_info.font_color).minicolors("destroy").minicolors(minicolor_options);
 		$("#font-name-input").val(listing_info.font_name);
-		console.log($("#font-name-input").val());
 		$("#preview-domain-font").removeAttr("style").css("font-family", listing_info.font_name);
 	}
 	function updateBackgroundImage(listing_info){
@@ -632,12 +631,12 @@ function editRowVerified(listing_info){
 			changedValue($(this), listing_info);
 		});
 
-		$("#rentable-input").off().on("change", function(){
+		$("#rentable-input").on("change", function(){
 			updatePriceDisabled($(this).val());
 		});
 
 		//change domain name font
-		$("#font-name-input").off().on("input", function(){
+		$("#font-name-input").on("input", function(){
 			$("#preview-domain-font").removeAttr("style").css("font-family", $(this).val());
 		});
 
