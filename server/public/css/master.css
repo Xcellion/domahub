@@ -747,6 +747,8 @@ pre {
     border-radius: 0 0 5px 5px; }
   .box.no-border-radius {
     border-radius: 0; }
+  .box.no-border {
+    border: none !important; }
 
 .box-footer {
   border-top: 1px solid rgba(0, 0, 0, 0.12);

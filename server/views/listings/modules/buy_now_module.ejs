@@ -4,26 +4,26 @@
 <div id="buy-now-module" class="top-module post-buy-module">
     <div class="description-text">
         <form id="buy-now-form" method="post" action="/listing/<%= listing_info.domain_name %>/contact" >
-          <label class="error_message label">Name</label>
+          <label class="error_message label" for="contact_name">Name</label>
           <p class="control has-icon">
             <input id="contact_name" required class="contact-input input" name="contact_name" type="text">
             <i class="fa fa-user-circle-o"></i>
           </p>
-          <label class="error_message label">Email Address</label>
+          <label class="error_message label" for="contact_email">Email Address</label>
           <p class="control has-icon">
             <input id="contact_email" required class="contact-input input" name="contact_email" type="email">
             <i class="fa fa-envelope"></i>
           </p>
-          <label class="error_message label">Phone</label>
+          <label class="error_message label" for="contact_phone">Phone</label>
           <p class="control has-icon">
             <input id="contact_phone" required class="padding-left-50 contact-input input" name="contact_phone" type="tel">
           </p>
-          <label class="error_message label">Offer in USD<span id="min-price"></span></label>
+          <label class="error_message label" for="contact_offer">Offer in USD<span id="min-price"></span></label>
           <p class="control has-icon">
             <input id="contact_offer" required class="contact-input input" name="contact_offer" type="number" placeholder="<%= (listing_info.buy_price == 0) ? "" : listing_info.buy_price %>" min="<%= (listing_info.buy_price == 0) ? "" : listing_info.buy_price %>">
             <i class="fa fa-money"></i>
           </p>
-          <label class="error_message label">Message</label>
+          <label class="error_message label" for="contact_message">Message</label>
           <p class="control">
             <textarea id="contact_message" required class="contact-input textarea" name="contact_message" placeholder="Hey! I'm interested in buying <%= listing_info.domain_name %>. Let's chat."></textarea>
           </p>

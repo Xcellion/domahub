@@ -2,148 +2,153 @@
 <script src="/js/jquery/jquery.minicolors.min.js" type="text/javascript"></script>
 <script src="/js/routes/listings/listing_compare.js" type="text/javascript"></script>
 
-<div id="compare-menu" class="bar">
-    <div class="box">
+<div id="compare-menu">
+    <div class="box no-shadow no-border">
+          <div class="control has-addons has-addons-right">
+            <button id="hide-menu-button" class="button no-shadow" tabindex="0" title="Hide Menu">
+              <span class="icon"><i class="fa fa-long-arrow-left"></i></span>
+              <span>Hide Menu</span>
+            </button>
+          </div>
+          <%# INFO %>
+          <div class="control">
+              <label class="label" for="description">Listing Description</label>
+              <textarea id="description" class="description-input textarea changeable-input"
+              tabindex="0" data-name="description" placeholder="Write anything you want!"></textarea>
+          </div>
 
-              <%# INFO %>
-              <div class="control">
-                  <label class="label" for="description">Listing Description</label>
-                  <textarea id="description" class="description-input textarea changeable-input"
-                  tabindex="0" data-name="description" placeholder="Write anything you want!"></textarea>
+          <%# PRICING %>
+          <div class="control">
+              <label class="label" for="buy-price-input">Minimum Purchase Price</label>
+              <input id="buy-price-input" data-name="buy_price" type="number" min="1" step="1" class="input changeable-input">
+              <small class="tip">The minimum offer / price you will consider.</small>
+          </div>
+          <div class="control is-spaced">
+              <div class="control-left">
+                  <label class="label" for="info-module-input">Allow Buy It Now</label>
+                  <small class="tip">Allows verified users to purchase this domain immediately.</small>
+                  <small class="tip"><a href="/faq" class="is-accent">What are the advantages of buying immediately?</a></small>
               </div>
+              <div class="control-right">
+                  <form class="checkbox-form">
+                      <input id="buyable-input" data-name="buyable" type="checkbox" class="checkbox-input changeable-input" tabindex="0" />
+                      <label for="buyable-input" tabindex="0"></label>
+                  </form>
+              </div>
+          </div>
+          <div class="control is-spaced">
+              <div class="control-left">
+                  <label class="label" for="info-module-input">Allow Rentals</label>
+                  <small class="tip">Displays a calendar allowing verified users to rent usage of this domain for short amounts of time.</small>
+                  <small class="tip"><a href="/faq" class="is-accent">Why should I rent my domain out?</a></small>
+              </div>
+              <div class="control-right">
+                  <form class="checkbox-form">
+                      <input id="rentable-input" data-name="rentable" type="checkbox" class="checkbox-input changeable-input" tabindex="0" />
+                      <label for="rentable-input" tabindex="0"></label>
+                  </form>
+              </div>
+          </div>
+          <div class="control">
+              <label class="label" for="price-rate-input">Rental Price</label>
+              <div class="control has-addons margin-bottom-0">
+                  <input id="price-rate-input" data-name="price_rate" placeholder="minimum 1" type="number" min="1" step="1" class="padding-top-0 input changeable-input">
+                  <span class="select price-type-span">
+                      <div class="drop-form">
+                          <select id="price-type-input" data-name="price_type" class="changeable-input">
+                              <option value="month">Month</option>
+                              <option value="week">Week</option>
+                              <option value="day">Day</option>
+                          </select>
+                      </div>
+                  </span>
+              </div>
+              <small class="tip">Price per unit of time for the domain rental.</small>
+          </div>
 
-              <%# PRICING %>
+          <%# DESIGN %>
+          <div class="control">
+              <label class="label" for="background-image-input">Background Image URL</label>
+              <input id="background-image-input" data-name="background_image" type="text" class="input changeable-input">
+          </div>
+          <div class="control">
+              <label class="label" for="background-color-input">Background Color</label>
+              <input id="background-color-input" type="text" class="input">
+          </div>
+          <div class="control">
+              <label class="label" for="color-scheme">
+                  <span class="v-align-middle">Color Scheme</span>
+                  <span class="icon is-small is-tooltip v-align-middle" data-balloon-length="medium" data-balloon="The three main colors of your landing page." data-balloon-pos="up">
+                      <i class="fa fa-question-circle"></i>
+                  </span>
+              </label>
+              <input id="primary-color-input" data-name="primary_color" placeholder="#3CBC8D" type="text" class="premium-input padding-top-0 input changeable-input">
+              <input id="secondary-color-input" data-name="secondary_color" placeholder="#FF5722" type="text" class="premium-input padding-top-0 input changeable-input">
               <div class="control">
-                  <label class="label" for="buy-price-input">Minimum Purchase Price</label>
-                  <input id="buy-price-input" data-name="buy_price" type="number" min="1" step="1" class="input changeable-input">
-                  <small class="tip">The minimum offer / price you will consider.</small>
+                  <input id="tertiary-color-input" data-name="tertiary_color" placeholder="#2196F3" type="text" class="premium-input padding-top-0 input changeable-input">
               </div>
-              <div class="control is-spaced">
-                  <div class="control-left">
-                      <label class="label" for="info-module-input">Allow Buy It Now</label>
-                      <small class="tip">Allows verified users to purchase this domain immediately.</small>
-                      <small class="tip"><a href="/faq" class="is-accent">What are the advantages of buying immediately?</a></small>
-                  </div>
-                  <div class="control-right">
-                      <form class="checkbox-form">
-                          <input id="buyable-input" data-name="buyable" type="checkbox" class="checkbox-input changeable-input" tabindex="0" />
-                          <label for="buyable-input" tabindex="0"></label>
-                      </form>
-                  </div>
-              </div>
-              <div class="control is-spaced">
-                  <div class="control-left">
-                      <label class="label" for="info-module-input">Allow Rentals</label>
-                      <small class="tip">Displays a calendar allowing verified users to rent usage of this domain for short amounts of time.</small>
-                      <small class="tip"><a href="/faq" class="is-accent">Why should I rent my domain out?</a></small>
-                  </div>
-                  <div class="control-right">
-                      <form class="checkbox-form">
-                          <input id="rentable-input" data-name="rentable" type="checkbox" class="checkbox-input changeable-input" tabindex="0" />
-                          <label for="rentable-input" tabindex="0"></label>
-                      </form>
-                  </div>
-              </div>
+          </div>
+          <div class="control">
+              <label class="label" for="font-color-input">
+                  <span class="v-align-middle">Font Styling</span>
+                  <span class="icon is-small is-tooltip v-align-middle" data-balloon-length="medium" data-balloon="The color of the main font on your landing page. Font names can include any standard web font or Google web font. Any fonts after the first are used as backup or fallback fonts." data-balloon-pos="up">
+                      <i class="fa fa-question-circle"></i>
+                  </span>
+              </label>
               <div class="control">
-                  <label class="label" for="price-rate-input">Rental Price</label>
-                  <div class="control has-addons margin-bottom-0">
-                      <input id="price-rate-input" data-name="price_rate" placeholder="minimum 1" type="number" min="1" step="1" class="padding-top-0 input changeable-input">
-                      <span class="select price-type-span">
-                          <div class="drop-form">
-                              <select id="price-type-input" data-name="price_type" class="changeable-input">
-                                  <option value="month">Month</option>
-                                  <option value="week">Week</option>
-                                  <option value="day">Day</option>
-                              </select>
-                          </div>
-                      </span>
-                  </div>
-                  <small class="tip">Price per unit of time for the domain rental.</small>
+                  <input id="font-color-input" data-name="font_color" placeholder="#000000" type="text" class="premium-input padding-top-0 input changeable-input">
               </div>
+          </div>
+          <div class="control is-spaced">
+              <div class="control-left">
+                  <label class="label" for="traffic-module-input">Traffic Module</label>
+                  <small class="tip">Displays detailed information about domain traffic including <a class="is-accent" target="_blank" href="http://www.alexa.com/siteinfo/<%= listing_info.domain_name %>">Alexa</a> data.</small>
+              </div>
+              <div class="control-right">
+                  <form class="checkbox-form">
+                      <input id="traffic-module-input" data-name="traffic_module" type="checkbox" class="checkbox-input premium-input changeable-input" tabindex="0" />
+                      <label for="traffic-module-input" tabindex="0"></label>
+                  </form>
+              </div>
+          </div>
+          <div class="control is-spaced">
+              <div class="control-left">
+                  <label class="label" for="history-module-input">History Module</label>
+                  <small class="tip">Displays recent activity on your domain name; relevant for rentals.</small>
+              </div>
+              <div class="control-right">
+                  <form class="checkbox-form">
+                      <input id="history-module-input" data-name="history_module" type="checkbox" class="checkbox-input premium-input changeable-input" tabindex="0" />
+                      <label for="history-module-input" tabindex="0"></label>
+                  </form>
+              </div>
+          </div>
+          <div class="control is-spaced">
+              <div class="control-left">
+                  <label class="label" for="info-module-input">Info Module</label>
+                  <small class="tip">Displays more detailed information about the domain and other related information.</small>
+              </div>
+              <div class="control-right">
+                  <form class="checkbox-form">
+                      <input id="info-module-input" data-name="info_module" type="checkbox" class="checkbox-input premium-input changeable-input" tabindex="0" />
+                      <label for="info-module-input" tabindex="0"></label>
+                  </form>
+              </div>
+          </div>
 
-              <%# DESIGN %>
-              <div class="control">
-                  <label class="label" for="buy-price-input">Background Image URL</label>
-                  <input id="background-image-input" data-name="background_image" type="text" class="input changeable-input">
-              </div>
-              <div class="control">
-                  <label class="label" for="buy-price-input">Background Color</label>
-                  <input id="background-color-input" type="text" class="input">
-              </div>
-              <div class="control">
-                  <label class="label" for="color-scheme">
-                      <span class="v-align-middle">Color Scheme</span>
-                      <span class="icon is-small is-tooltip v-align-middle" data-balloon-length="medium" data-balloon="The three main colors of your landing page." data-balloon-pos="up">
-                          <i class="fa fa-question-circle-o"></i>
-                      </span>
-                  </label>
-                  <input id="primary-color-input" data-name="primary_color" placeholder="#3CBC8D" type="text" class="premium-input padding-top-0 input changeable-input">
-                  <input id="secondary-color-input" data-name="secondary_color" placeholder="#FF5722" type="text" class="premium-input padding-top-0 input changeable-input">
-                  <div class="control">
-                      <input id="tertiary-color-input" data-name="tertiary_color" placeholder="#2196F3" type="text" class="premium-input padding-top-0 input changeable-input">
-                  </div>
-              </div>
-              <div class="control">
-                  <label class="label" for="color-scheme">
-                      <span class="v-align-middle">Font Styling</span>
-                      <span class="icon is-small is-tooltip v-align-middle" data-balloon-length="medium" data-balloon="The color of the main font on your landing page. Font names can include any standard web font or Google web font. Any fonts after the first are used as backup or fallback fonts." data-balloon-pos="up">
-                          <i class="fa fa-question-circle-o"></i>
-                      </span>
-                  </label>
-                  <div class="control">
-                      <input id="font-color-input" data-name="font_color" placeholder="#000000" type="text" class="premium-input padding-top-0 input changeable-input">
-                  </div>
-              </div>
-              <div class="control is-spaced">
-                  <div class="control-left">
-                      <label class="label" for="traffic-module-input">Traffic Module</label>
-                      <small class="tip">Displays detailed information about domain traffic including <a class="is-accent" target="_blank" href="http://www.alexa.com/siteinfo/<%= listing_info.domain_name %>">Alexa</a> data.</small>
-                  </div>
-                  <div class="control-right">
-                      <form class="checkbox-form">
-                          <input id="traffic-module-input" data-name="traffic_module" type="checkbox" class="checkbox-input premium-input changeable-input" tabindex="0" />
-                          <label for="traffic-module-input" tabindex="0"></label>
-                      </form>
-                  </div>
-              </div>
-              <div class="control is-spaced">
-                  <div class="control-left">
-                      <label class="label" for="history-module-input">History Module</label>
-                      <small class="tip">Displays recent activity on your domain name; relevant for rentals.</small>
-                  </div>
-                  <div class="control-right">
-                      <form class="checkbox-form">
-                          <input id="history-module-input" data-name="history_module" type="checkbox" class="checkbox-input premium-input changeable-input" tabindex="0" />
-                          <label for="history-module-input" tabindex="0"></label>
-                      </form>
-                  </div>
-              </div>
-              <div class="control is-spaced">
-                  <div class="control-left">
-                      <label class="label" for="info-module-input">Info Module</label>
-                      <small class="tip">Displays more detailed information about the domain and other related information.</small>
-                  </div>
-                  <div class="control-right">
-                      <form class="checkbox-form">
-                          <input id="info-module-input" data-name="info_module" type="checkbox" class="checkbox-input premium-input changeable-input" tabindex="0" />
-                          <label for="info-module-input" tabindex="0"></label>
-                      </form>
-                  </div>
-              </div>
-
-              <div class="control is-spaced">
-                  <div class="control-left">
-                      <p id="powered-by" class="is-primary">
-                          Powered by
-                      </p>
-                      <a id="dh_logo" class="logo" href="/" target="_blank" rel="noopener">
-                          <p tabindex="0" class="flat-logo is-primary"></p>
-                      </a>
-                      <img id="custom_logo" />
-                  </div>
-                  <div class="control-right">
-                      <a href="/signup" class="is-accent button is-stylish">Sign Up Now</a>
-                  </div>
-              </div>
+          <div class="control">
+              <a href="/signup" class="is-accent button is-stylish">Sign Up Now</a>
+          </div>
     </div>
+    <footer class="footer is-dark">
+      <div class="container">
+        <p id="powered-by" class="is-primary">
+            Powered by
+        </p>
+        <a id="dh_logo" class="logo" href="/" target="_blank" rel="noopener">
+            <p tabindex="0" class="flat-logo is-primary"></p>
+        </a>
+        <img id="custom_logo" />
+      </div>
+    </footer>
 </div>
