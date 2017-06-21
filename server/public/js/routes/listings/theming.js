@@ -56,14 +56,14 @@ function calculateLuminance(rgb) {
 		return 0;
 	}
     r = parseInt(hexValue.substring(0,2), 16) / 255;
-	g = parseInt(hexValue.substring(2,4), 16) / 255;
-	b = parseInt(hexValue.substring(4,6), 16) / 255;
+  	g = parseInt(hexValue.substring(2,4), 16) / 255;
+  	b = parseInt(hexValue.substring(4,6), 16) / 255;
 
     // calculate the overall luminance of the color
     var luminance = 0.2126 * r + 0.7152 * g + 0.0722 * b;
 
-    if (luminance > 0.5) {
-        return "#000";
+    if (luminance > 0.8) {
+        return "#222";
     }
     else {
         return "#fff";
