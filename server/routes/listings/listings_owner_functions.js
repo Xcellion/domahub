@@ -501,18 +501,6 @@ module.exports = {
 		if (getUserListingObj(req.user.listings, req.params.domain_name).premium){
 			console.log("F: Checking posted premium listing details...");
 
-			var font_name = (req.body.font_name) ? req.body.font_name.replace(/\s/g, "").toLowerCase().split(",") : [];
-			var font_name_clean = [];
-
-			//loop through the font names posted
-			for (var x = 0; x < font_name.length; x++){
-				//if its alphanumeric
-				if (validator.isAscii(font_name[x])){
-					font_name_clean.push(font_name[x]);
-				}
-			}
-			font_name_clean = font_name_clean.join(",");
-
 			var history_module = parseFloat(req.body.history_module);
 			var traffic_module = parseFloat(req.body.traffic_module);
 			var info_module = parseFloat(req.body.info_module);
@@ -529,13 +517,13 @@ module.exports = {
 			else if (req.body.tertiary_color && !validator.isHexColor(req.body.tertiary_color)){
 				error.handler(req, res, "Invalid tertiary color!", "json");
 			}
-			//invalid font names
-			else if (req.body.font_name && font_name_clean.length == 0){
-				error.handler(req, res, "Invalid font names!", "json");
-			}
 			//invalid font color
 			else if (req.body.font_color && !validator.isHexColor(req.body.font_color)){
 				error.handler(req, res, "Invalid font color!", "json");
+			}
+			//invalid background color
+			else if (req.body.background_color && !validator.isHexColor(req.body.background_color)){
+				error.handler(req, res, "Invalid background color!", "json");
 			}
 			//invalid history module
 			else if (req.body.history_module && (history_module != 0 && history_module != 1)){
@@ -561,6 +549,7 @@ module.exports = {
 				req.session.new_listing_info.tertiary_color = req.body.tertiary_color;
 				req.session.new_listing_info.font_name = req.body.font_name;
 				req.session.new_listing_info.font_color = req.body.font_color;
+				req.session.new_listing_info.background_color = req.body.background_color;
 				req.session.new_listing_info.history_module = history_module;
 				req.session.new_listing_info.traffic_module = traffic_module;
 				req.session.new_listing_info.info_module = info_module;

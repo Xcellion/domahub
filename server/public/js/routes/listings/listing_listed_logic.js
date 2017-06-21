@@ -63,7 +63,6 @@ $(document).ready(function() {
 						if (data.state == "success"){
 							if (type_of_submit == "offer"){
 								$("#contact-success").removeClass('is-hidden');
-								$("#buy-now-submit").addClass('is-hidden');
 								$("#buy-now-form").off();
 							}
 							else {
