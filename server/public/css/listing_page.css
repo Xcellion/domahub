@@ -201,9 +201,6 @@ button[data-balloon] {
     width: 70%;
     left: 30%; }
 
-.tab.is-active {
-  background-color: black; }
-
 #compare-menu {
   -moz-transition: all 0.25s;
   -o-transition: all 0.25s;
@@ -214,9 +211,11 @@ button[data-balloon] {
   -ms-transform: translate(-100%, 0);
   -webkit-transform: translate(-100%, 0);
     -webkit-transform-transform: translate(-100%, 0);
+  -webkit-box-shadow: 0 3px 15px 0 rgba(0, 0, 0, 0.12);
+  -moz-box-shadow: 0 3px 15px 0 rgba(0, 0, 0, 0.12);
+  box-shadow: 0 3px 15px 0 rgba(0, 0, 0, 0.12);
   position: fixed;
   z-index: 200;
-  overflow-y: scroll;
   height: 100vh;
   width: 30%;
   top: 0;
@@ -228,6 +227,23 @@ button[data-balloon] {
     -ms-transform: translate(0, 0);
     -webkit-transform: translate(0, 0);
       -webkit-transform-transform: translate(0, 0); }
+
+#compare-buttons {
+  padding: 20px;
+  top: 0;
+  position: absolute;
+  width: 100%;
+  border-bottom: 1px solid #d0d0d0; }
+
+#compare-content {
+  overflow-y: auto;
+  margin-top: 72px;
+  height: calc(100vh - 200px); }
+
+#compare-footer {
+  bottom: 0;
+  position: absolute;
+  width: 100%; }
 
 .footer {
   height: 200px; }
@@ -423,7 +439,7 @@ button[data-balloon] {
   width: 100%; }
 
 #show-menu-wrapper {
-  position: absolute;
+  position: fixed;
   top: 20px;
   left: 20px; }
 

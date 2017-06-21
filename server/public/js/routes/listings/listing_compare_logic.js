@@ -1,5 +1,16 @@
 $(document).ready(function() {
 	if (compare){
+
+		//change compare tabs
+		$(".compare-tab").on("click", function(){
+			$(".compare-tab").removeClass('is-active');
+			$(this).addClass('is-active');
+
+			var box_id = $(this).attr('id').split("-")[0];
+			$(".compare-box").addClass('is-hidden');
+			$("#" + box_id + "-box").removeClass('is-hidden');
+		});
+
 		updateDescription();
 		updatePricing();
 		updateBIN();
@@ -32,8 +43,10 @@ function toggleMenu() {
 
 	hideMenuButton.on("click", function() {
 		menu.toggleClass("is-active");
-		showMenuWrapper.toggleClass("is-hidden");
 		preview.toggleClass("is-active");
+		showMenuWrapper.toggleClass("is-hidden", function(){
+			console.log("finished showing new");
+		});
 	});
 
 	showMenuWrapper.on("click",function() {
