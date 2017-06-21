@@ -13,7 +13,7 @@ $(document).ready(function() {
 		updateBackground(listing_info);
 		updateColorScheme(listing_info);
 		updateFontStyle(listing_info);
-		
+
 		toggleMenu();
 	}
 });
@@ -22,12 +22,20 @@ $(document).ready(function() {
 
 //function to hide and show menu
 function toggleMenu() {
-	var button = $("#hide-menu-button");
+	var hideMenuButton = $("#hide-menu-button");
+	var showMenuWrapper = $("#show-menu-wrapper");
 	var menu = $("#compare-menu");
 	var preview = $("#compare-preview");
 
-	button.on("click", function() {
-		menu.toggleClass("is-collapsed");
+	hideMenuButton.on("click", function() {
+		menu.toggleClass("is-active");
+		showMenuWrapper.toggleClass("is-hidden");
+		preview.toggleClass("is-active");
+	});
+
+	showMenuWrapper.on("click",function() {
+		$(this).toggleClass("is-hidden");
+		menu.toggleClass("is-active");
 		preview.toggleClass("is-active");
 	});
 }

@@ -5,7 +5,17 @@
 <script src="/js/routes/listings/listing_listed_logic.js" type="text/javascript"></script>
 <script src="/js/routes/listings/theming.js" type="text/javascript"></script>
 
-<div id="compare-preview" class="min-height">
+<div id="compare-preview" class="is-active">
+
+    <div id="show-menu-wrapper" class="control is-hidden">
+      <button class="button">
+        <span class="icon">
+          <i class="fa fa-bars"></i>
+        </span>
+        <span>Show Menu</span>
+      </button>
+    </div>
+
     <div class="container">
         <div class="columns master right">
           <div class="column is-6">
@@ -95,7 +105,7 @@
         </div>
 
         <%# TABS %>
-        <div class="margin-top-75 tabs has-shadow margin-bottom-0">
+        <div class="margin-top-75 tabs is-medium has-shadow margin-bottom-0">
           <ul>
 
               <% if ((listing_info.premium && listing_info.traffic_module) || !listing_info.premium){ %>
