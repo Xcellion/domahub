@@ -12,6 +12,7 @@ $(document).ready(function() {
 
 		updateBackground(listing_info);
 		updateColorScheme(listing_info);
+		updateFontStyle(listing_info);
 	}
 });
 
@@ -111,10 +112,10 @@ function updateColorScheme(listing_info){
 	}
 	$("#primary-color-input").val("#3CBC8D").minicolors(minicolor_options).on("change", function(){
 		listing_info.primary_color = $(this).val();
-		colorize($(this).val(), ".daterangepicker td.active, .daterangepicker td.active:hover", "background-color");
-		colorize($(this).val(), ".is-primary", "color");
-		colorize($(this).val(), ".is-primary.button", "background-color");
-		colorize($(this).val(), ".tag", "background-color");
+		stylize($(this).val(), ".daterangepicker td.active, .daterangepicker td.active:hover", "background-color");
+		stylize($(this).val(), "#background-image .is-primary", "color");
+		stylize($(this).val(), "#background-image .is-primary.button", "background-color");
+		stylize($(this).val(), ".tag", "background-color");
 
 		if (myChart){
 			myChart.data.datasets[0].borderColor = $(this).val();
@@ -124,21 +125,28 @@ function updateColorScheme(listing_info){
 	});
 	$("#secondary-color-input").val("#FF5722").minicolors(minicolor_options).on("change", function(){
 		listing_info.secondary_color = $(this).val();
-		colorize($(this).val(), ".is-accent", "color");
-	    colorize($(this).val(), ".is-accent.button", "background-color");
+		stylize($(this).val(), "#background-image .is-accent", "color");
+	    stylize($(this).val(), "#background-image .is-accent.button", "background-color");
 	});
 	$("#tertiary-color-input").val("#2196F3").minicolors("destroy").minicolors(minicolor_options).on("change", function(){
 		listing_info.tertiary_color = $(this).val();
-		colorize($(this).val(), ".is-info", "color");
+		stylize($(this).val(), "#background-image .is-info", "color");
 	});
+}
 
+//function to update font
+function updateFontStyle(){
 	var minicolor_options = {
 		letterCase: "uppercase",
 		swatches: ["#000", "#222", "#D3D3D3", "#FFF"]
 	}
 	$("#font-color-input").val("#000").minicolors("destroy").minicolors(minicolor_options).on("change", function(){
 		listing_info.font_color = $(this).val();
-		colorize($(this).val(), ".regular-font", "color");
+		stylize($(this).val(), ".regular-font", "color");
+	});
+
+	$("#font-name-input").on("change", function(){
+		stylize($(this).val(), "#domain-title", "font-family");
 	});
 }
 
