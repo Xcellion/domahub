@@ -2,9 +2,12 @@ $(document).ready(function() {
 	if (compare){
 		updateDescription();
 		updatePricing();
-
 		updateBIN();
 		updateRentable();
+		updateBackground();
+		updateColorScheme();
+		updateModules();
+		updateFontStyle();
 
 		checkBox(listing_info.history_module, $("#history-module-input"));
 		checkBox(listing_info.traffic_module, $("#traffic-module-input"));
@@ -111,7 +114,7 @@ function updateRentable(){
 }
 
 //input to update background
-function updateBackground(listing_info){
+function updateBackground(){
 	$("#background-image-input").val(listing_info.background_image).on("input", function(){
 		$("#compare-preview").css("background", "url(" + $(this).val() + ") center/cover no-repeat");
 	});
@@ -127,7 +130,7 @@ function updateBackground(listing_info){
 }
 
 //inputs to update color scheme
-function updateColorScheme(listing_info){
+function updateColorScheme(){
 	var minicolor_options = {
 		letterCase: "uppercase",
 		swatches: ["#3cbc8d", "#FF5722", "#2196F3"]
@@ -170,6 +173,53 @@ function updateFontStyle(){
 	$("#font-name-input").on("change", function(){
 		stylize($(this).val(), "#domain-title", "font-family");
 	});
+}
+
+//function to update modules
+function updateModules(){
+	checkBox(listing_info.traffic_module, $("#traffic-module-input"));
+	checkBox(listing_info.info_module, $("#info-module-input"));
+	checkBox(listing_info.history_module, $("#ticker-module-input"));
+
+	$(".module-input").on("change", function(){
+		var which_module = $(this).attr("id").split("-")[0];
+		var selected_position = $("#" + which_module + "-tab").data('position');
+		var current_position = $(".module-tab.is-active").data('position');
+
+		//selected position is current position
+		if (selected_position == current_position || current_position == undefined){
+			$(".module").addClass('is-active');
+			$(".module-tab").removeClass('is-active');
+			hideShowModules(which_module, $(this).prop("checked"), false);
+
+			//show next one if nothing is showing
+			var next_visible = $(".module-tab:not(.is-hidden)").first();
+			if (next_visible.attr("id")){
+				var next_visible_id = next_visible.attr("id").split("-")[0];
+				$("#" + next_visible_id + "-module").removeClass('is-hidden');
+				next_visible.addClass('is-active');
+			}
+		}
+		else {
+			hideShowModules(which_module, $(this).prop("checked"), true);
+		}
+	});
+}
+
+//function to handle showing modules
+function hideShowModules(which_module, checked, tabOnly){
+	if (checked){
+		if (!tabOnly){
+			$("#" + which_module + "-module").removeClass('is-hidden');
+		}
+		$("#" + which_module + "-tab").removeClass('is-hidden');
+	}
+	else {
+		if (!tabOnly){
+			$("#" + which_module + "-module").addClass('is-hidden');
+		}
+		$("#" + which_module + "-tab").addClass('is-hidden');
+	}
 }
 
 //function to check the module boxes according to value

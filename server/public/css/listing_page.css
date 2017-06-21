@@ -201,6 +201,9 @@ button[data-balloon] {
     width: 70%;
     left: 30%; }
 
+.tab.is-active {
+  background-color: black; }
+
 #compare-menu {
   -moz-transition: all 0.25s;
   -o-transition: all 0.25s;
