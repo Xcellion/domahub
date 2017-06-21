@@ -80,11 +80,9 @@ input:-webkit-autofill
     padding-right: 36px
     border-color: $black-disabled
     &:hover,
-    &:active
-      border-color: $black-secondary
+    &:active,
     &:focus
       border-color: $black-secondary
-      border-radius: $radius $radius 0 0
     &::-ms-expand
       display: none
   &::-ms-expand
@@ -126,16 +124,6 @@ input:-webkit-autofill
 .label
   color: $text
   display: block
-  @each $name, $pair in $colors
-    $color: nth($pair, 1)
-    $color-invert: nth($pair, 2)
-    &.is-#{$name}
-      color: $color
-  &.has-icon
-    display: inline-flex
-    & + i
-      display: inline-flex
-      vertical-align: baseline
   &:not(:last-child)
     margin-bottom: 5px
   &.is-small
@@ -145,29 +133,7 @@ input:-webkit-autofill
   &.is-large
     font-size: $size-large
 
-// Containers
-.control-label
-  +mobile
-    margin-bottom: 5px
-  +tablet
-    align-self: center
-    box-sizing: border-box
-    flex-grow: 0
-    margin-right: 10px
-    text-align: left
-  &.is-aligned-top
-    align-self: flex-start
-  &.is-aligned-bottom
-    align-self: flex-end
-  &.is-small
-    width: 100px
-  &.is-medium
-    width: 120px
-  &.is-large
-    width: 140px
-  &.is-padded
-    width: 100px
-
+// control containers
 .control
   position: relative
   text-align: left
@@ -214,6 +180,8 @@ input:-webkit-autofill
     display: flex
     justify-content: space-between
     align-items: center
+    .control-left
+      margin-right: 10px
   &.has-items-center
     display: flex
     align-items: center
@@ -229,18 +197,22 @@ input:-webkit-autofill
         color: $danger
       &.is-success
         color: $success
-    .input
+    .input,
+    .select
       &:focus + .fa
         color: $black-secondary
       &.is-small + .fa
         font-size: 10.5px
         top: 0
       &.is-medium + .fa
-        font-size: 21px
-        top: 8px
+        font-size: 20px
+        top: 9px
       &.is-large + .fa
         font-size: 21px
         top: 12px
+    .select
+      & + .fa
+        color: $black-secondary
     &:not(.has-icon-right)
       & > .fa
         left: 4px
@@ -256,6 +228,24 @@ input:-webkit-autofill
             left: 8px
         &.is-large
           padding-left: 48px
+          & + .fa
+            left: 12px
+      .select
+        select
+          padding-left: 32px
+        &.is-small
+          select
+            padding-left: 24px
+          & + .fa
+            left: 0
+        &.is-medium
+          select
+            padding-left: 40px
+          & + .fa
+            left: 8px
+        &.is-large
+          select
+            padding-left: 48px
           & + .fa
             left: 12px
     &.has-icon-right
@@ -275,6 +265,24 @@ input:-webkit-autofill
           padding-right: 48px
           & + .fa
             right: 12px
+      .select
+        select
+          padding-right: 32px
+        &.is-small
+          select
+            padding-right: 24px
+          & + .fa
+            left: 0
+        &.is-medium
+          select
+            padding-right: 40px
+          & + .fa
+            left: 8px
+        &.is-large
+          select
+            padding-right: 48px
+          & + .fa
+            left: 12px
   &.is-grouped
     display: flex
     justify-content: flex-start
