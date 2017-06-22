@@ -232,11 +232,20 @@ button[data-balloon] {
     -webkit-transform: translate(0, 0);
       -webkit-transform-transform: translate(0, 0); }
 
+#compare-buttons {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  padding: 20px;
+  border-bottom: 1px solid #efefef; }
+
 #compare-content {
   overflow-y: auto;
-  height: calc(100vh - 200px); }
+  margin-top: 83px;
+  height: calc(100vh - 283px); }
 
 #compare-footer {
+  z-index: 4;
   bottom: 0;
   position: absolute;
   width: 100%; }
