@@ -220,19 +220,14 @@
 }
 
 .price-card {
-  height: 400px;
+  @include box-shadow(0,3px,15px,$border,0);
+  align-items: center;
+  border-radius: $radius;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  ul {
-    &.has-disc {
-      @include mobile {
-        max-width: 300px;
-        margin-left: auto;
-        margin-right: auto;
-      }
-    }
-  }
+  height: 275px;
+  justify-content: center;
+  width: 100%;
 }
 
 .section {
