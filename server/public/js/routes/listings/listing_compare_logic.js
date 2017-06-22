@@ -202,7 +202,7 @@ function updateModules(){
 		//selected position is current position
 		if (selected_position == current_position || current_position == undefined){
 			$(".module").addClass('is-active');
-			$(".module-tab").removeClass('is-active');
+			$(".module-tab").removeClass('is-active is-disabled');
 			hideShowModules(which_module, $(this).prop("checked"), false);
 
 			//show next one if nothing is showing
@@ -210,7 +210,7 @@ function updateModules(){
 			if (next_visible.attr("id")){
 				var next_visible_id = next_visible.attr("id").split("-")[0];
 				$("#" + next_visible_id + "-module").removeClass('is-hidden');
-				next_visible.addClass('is-active');
+				next_visible.addClass('is-active is-disabled');
 			}
 		}
 		else {
