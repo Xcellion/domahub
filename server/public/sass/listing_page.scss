@@ -25,14 +25,14 @@
   @include transition(all 0.25s);
   background-attachment: fixed;
   background-color: #fff;
+  min-height: 100vh;
   left: 0;
   padding: 80px 20px;
   width: 100%;
   min-height: 100vh;
   &.is-active {
-    position: absolute;
-    width: 70%;
-    left: 30%;
+    @include translate(500px,0);
+    width: calc(100% - 500px);
   }
 }
 
@@ -43,7 +43,7 @@
   position: fixed;
   z-index: 200;
   height: 100vh;
-  width: 30%;
+  width: 500px;
   top: 0;
   left: 0;
   &.is-active {
@@ -52,17 +52,8 @@
   }
 }
 
-#compare-buttons {
-  padding: 20px;
-  top: 0;
-  position: absolute;
-  width: 100%;
-  border-bottom: 1px solid $grey-light;
-}
-
 #compare-content {
     overflow-y: auto;
-    margin-top:72px;
     height: calc(100vh - 200px);
 }
 

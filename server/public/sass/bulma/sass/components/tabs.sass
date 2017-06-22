@@ -25,6 +25,9 @@
       outline: none
   li
     display: block
+    &.is-active
+      a
+        border-bottom-color: $black-primary
   ul
     align-items: center
     border-bottom: 1px solid $border
@@ -55,6 +58,11 @@
     ul
       justify-content: flex-end
   // Styles
+  &.is-primary
+    li
+      &.is-active
+        a
+          border-bottom-color: $primary
   &.has-shadow
     +box-shadow(0,3px,15px,$border,0)
     background-color: $white
@@ -64,6 +72,9 @@
       border-bottom: none
     li
       width: 100%
+      &.is-active
+        a
+          border-bottom: 1px solid $black-primary
       &:not(.is-active)
         a
           &:hover,

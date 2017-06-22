@@ -4,26 +4,26 @@
 
 <div id="compare-menu" class="min-height is-active">
     <!-- LISTING DETAIL TABS  -->
-    <div id="compare-buttons">
-        <div class="tabs no-border">
-            <ul>
-                <li id="info-tab" class="margin-left-0 compare-tab is-active">
-                    <a tabindex="0">Information</a>
-                </li>
-                <li id="design-tab" class="compare-tab">
-                    <a tabindex="0">Design</a>
-                </li>
-            </ul>
-            <div class="control has-addons-right">
-                <button id="hide-menu-button" class="button no-shadow" tabindex="0" title="Hide Menu">
-                    <span class="icon"><i class="fa fa-long-arrow-left"></i></span>
-                    <span>Hide Menu</span>
-                </button>
-            </div>
-        </div>
-    </div>
 
     <div id="compare-content" class="box no-shadow no-border">
+        <div class="control is-spaced">
+          <div class="tabs is-primary margin-bottom-0 control-left is-medium">
+              <ul>
+                  <li id="info-tab" class="margin-left-0 compare-tab is-active">
+                      <a tabindex="0">Information</a>
+                  </li>
+                  <li id="design-tab" class="compare-tab">
+                      <a tabindex="0">Design</a>
+                  </li>
+              </ul>
+          </div>
+          <div class="control-right">
+              <button id="hide-menu-button" class="button no-shadow" tabindex="0" title="Hide Menu">
+                  <span class="icon"><i class="fa fa-long-arrow-left"></i></span>
+                  <span>Hide Menu</span>
+              </button>
+          </div>
+        </div>
         <div id="info-box" class="compare-box">
             <%# INFO %>
             <div class="control">
@@ -47,7 +47,7 @@
                 <div class="control-right">
                     <form class="checkbox-form">
                         <input id="buyable-input" data-name="buyable" type="checkbox" class="checkbox-input changeable-input" tabindex="0" />
-                        <label for="buyable-input" tabindex="0"></label>
+                        <label for="buyable-input"></label>
                     </form>
                 </div>
             </div>
@@ -60,7 +60,7 @@
                 <div class="control-right">
                     <form class="checkbox-form">
                         <input id="rentable-input" data-name="rentable" type="checkbox" class="checkbox-input changeable-input" tabindex="0" />
-                        <label for="rentable-input" tabindex="0"></label>
+                        <label for="rentable-input"></label>
                     </form>
                 </div>
             </div>
@@ -70,7 +70,7 @@
                     <input id="price-rate-input" data-name="price_rate" placeholder="minimum 1" type="number" min="1" step="1" class="padding-top-0 input changeable-input">
                     <span class="select price-type-span">
                         <div class="drop-form">
-                            <select id="price-type-input" data-name="price_type" class="changeable-input">
+                            <select tabindex="0" id="price-type-input" data-name="price_type" class="changeable-input">
                                 <option value="month">Month</option>
                                 <option value="week">Week</option>
                                 <option value="day">Day</option>
@@ -116,9 +116,9 @@
                     <p class="control">
                         <input id="font-color-input" data-name="font_color" placeholder="#000000" type="text" class="premium-input padding-top-0 input changeable-input">
                     </p>
-                    <p class="control">
-                        <span class="select is-fullwidth" tabindex="0">
-                            <select data-name="font_name" id="font-name-input" class="premium-input changeable-input">
+                    <p class="control has-icon">
+                        <span class="select is-fullwidth">
+                            <select data-name="font_name" tabindex="0" id="font-name-input" class="premium-input changeable-input">
                                 <option selected default value="Rubik">Rubik</option>
                                 <option value="Times New Roman">Times New Roman</option>
                                 <option value="Helvetica">Helvetica</option>
@@ -127,32 +127,8 @@
                                 <option value="Tahoma">Tahoma</option>
                             </select>
                         </span>
+                        <i class="fa fa-font"></i>
                     </p>
-                </div>
-            </div>
-            <div class="control is-spaced">
-                <div class="control">
-                    <label class="label" for="color-scheme">
-                        <span class="v-align-middle">Font Styling</span>
-                        <span class="icon is-small is-tooltip v-align-middle" data-balloon-length="medium" data-balloon="The color of the main font on your landing page. Font names can include any standard web font or Google web font. Any fonts after the first are used as backup or fallback fonts." data-balloon-pos="up">
-                            <i class="fa fa-question-circle-o"></i>
-                        </span>
-                    </label>
-                    <div class="control">
-                        <input id="font-color-input" data-name="font_color" placeholder="#000000" type="text" class="premium-input padding-top-0 input changeable-input">
-                    </div>
-                    <div class="control">
-                        <span class="select is-fullwidth" tabindex="0">
-                            <select data-name="font_name" id="font-name-input" class="premium-input changeable-input">
-                                <option selected default value="Rubik">Rubik</option>
-                                <option value="Times New Roman">Times New Roman</option>
-                                <option value="Helvetica">Helvetica</option>
-                                <option value="Courier">Courier</option>
-                                <option value="Verdana">Verdana</option>
-                                <option value="Tahoma">Tahoma</option>
-                            </select>
-                        </span>
-                    </div>
                 </div>
             </div>
             <div class="control is-spaced">
@@ -163,7 +139,7 @@
                 <div class="control-right">
                     <form class="checkbox-form">
                         <input id="traffic-module-input" type="checkbox" class="module-input checkbox-input premium-input changeable-input" tabindex="0" />
-                        <label for="traffic-module-input" tabindex="0"></label>
+                        <label for="traffic-module-input"></label>
                     </form>
                 </div>
             </div>
@@ -175,7 +151,7 @@
                 <div class="control-right">
                     <form class="checkbox-form">
                         <input id="info-module-input" type="checkbox" class="module-input checkbox-input premium-input changeable-input" tabindex="0" />
-                        <label for="info-module-input" tabindex="0"></label>
+                        <label for="info-module-input"></label>
                     </form>
                 </div>
             </div>
@@ -187,7 +163,7 @@
                 <div class="control-right">
                     <form class="checkbox-form">
                         <input id="ticker-module-input" type="checkbox" class="module-input checkbox-input premium-input changeable-input" tabindex="0" />
-                        <label for="ticker-module-input" tabindex="0"></label>
+                        <label for="ticker-module-input"></label>
                     </form>
                 </div>
             </div>
@@ -195,15 +171,19 @@
     </div>
     <footer id="compare-footer" class="footer is-dark">
         <div class="container">
-            <p id="powered-by" class="is-primary">
-                Powered by
-            </p>
-            <a id="dh_logo" class="logo" href="/" target="_blank" rel="noopener">
-                <p tabindex="0" class="flat-logo is-primary"></p>
-            </a>
-            <img id="custom_logo" />
-            <div class="control-right">
+            <div class="control is-spaced">
+              <div class="control-left">
+                <p id="powered-by" class="is-primary">
+                    Powered by
+                </p>
+                <a tabindex="0" id="dh_logo" class="logo" href="/" target="_blank" rel="noopener">
+                    <p class="flat-logo is-primary"></p>
+                </a>
+                <img id="custom_logo" />
+              </div>
+              <div class="control-right">
                 <a href="/signup" class="is-accent button is-stylish">Sign Up Now</a>
+              </div>
             </div>
         </div>
     </footer>
