@@ -1,14 +1,15 @@
 $(document).ready(function() {
-    if (listing_info.premium){
-        console.log("Premium");
 
+    //remove class to prevent screen flash DH green
+    $("#compare-preview").removeClass('is-hidden');
+
+    if (listing_info.premium){
         setupCustomColors();
 
         stylize(listing_info.secondary_color, "#typed-slash", "color");
 
         if (listing_info.background_image){
-            $("#background-image").css("background", "url(" + listing_info.background_image + ") center/cover no-repeat").on("error", function(){
-                console.log("Error loading background image!");
+            $("#compare-preview").css("background", "url(" + listing_info.background_image + ") center/cover no-repeat").on("error", function(){
                 $(this).css({
                     background: "",
                     "background-color": "#FFF"
@@ -88,8 +89,9 @@ function setupCustomColors(){
     stylize(listing_info.tertiary_color, ".is-info", "color");
     stylize(listing_info.secondary_color, ".is-accent", "color");
     stylize(listing_info.secondary_color, ".is-accent.button", "background-color");
-    stylize(listing_info.background_color, "#background-image", "background-color");
+    stylize(listing_info.background_color, "#compare-preview", "background-color");
     stylize(listing_info.font_name, "#domain-title", "font-family");
+    stylize(listing_info.font_name, "#typed-slash", "font-family");
 }
 
 //set up default DH colors

@@ -83,7 +83,7 @@ $(document).ready(function(){
 
 	//<editor-fold>-------------------------------REGULAR TABS-------------------------------
 
-	//click to move to upgrade tab
+	//click to move to upgrade tab from design tab
 	$("#other-tab-upgrade-button").on('click', function(e){
 		$("#upgrade-tab").click();
 	});
@@ -102,9 +102,8 @@ $(document).ready(function(){
 		$(".drop-tab").fadeOut(300).addClass('is-hidden');
 		$("#" + $(this).attr("id") + "-drop").fadeIn(300).removeClass('is-hidden');
 
-		//clicked on the upgrade tab
-		if ($(this).attr("id") == "upgrade-tab"){
-			//hide save/cancel changes buttons, show checkout button
+		//hide save/cancel changes buttons on premium and offers tab
+		if ($(this).attr("id") == "upgrade-tab" || $(this).attr("id") == "offers-tab"){
 			$("#save-changes-button").addClass('is-hidden');
 			$("#cancel-changes-button").addClass('is-hidden');
 		}
@@ -335,6 +334,13 @@ function changeRow(row, listing_info, bool){
 
 //function to intiate edit mode
 function editRowVerified(listing_info){
+	//get offers if we haven't yet
+	if (listing_info.offers == undefined){
+		getDomainOffers(listing_info.domain_name);
+	}
+	else {
+		updateOffers(listing_info);
+	}
 
 	//show the verification tab, hide others
 	$(".verified-elem").removeClass('is-hidden');
@@ -358,6 +364,64 @@ function editRowVerified(listing_info){
 
 	updateBindings(listing_info);
 }
+
+//function to get offers on a domain
+function getDomainOffers(domain_name){
+	$.ajax({
+		url: "/listing/" + domain_name + "/getoffers",
+		method: "POST"
+	}).done(function(data){
+		var listing_to_get_offers = getUserListingObj(listings, domain_name);
+
+		//update local listings variable
+		if (listing_to_get_offers){
+			(function(listing_to_get_offers){
+				listing_to_get_offers.offers = data.listing.offers;
+				//update the change row handler
+				$("#row-listing_id" + current_listing.id).off().on("click", function(e){
+					changeRow($(this), listing_to_get_offers, true);
+				});
+
+				updateOffers(listing_to_get_offers);
+			})(listing_to_get_offers);
+		}
+	});
+}
+
+	//<editor-fold>-------------------------------OFFER TAB EDITS-------------------------------
+
+	//function to update the offers tab
+	function updateOffers(listing_info){
+		if (listing_info.offers){
+			//hide loading msg
+			$("#loading-offers").addClass('is-hidden');
+			$("#offers-wrapper").empty();
+
+			if (listing_info.offers.length){
+				$("#no-offers").addClass('is-hidden');
+				//clone offers
+				for (var x = 0; x < listing_info.offers.length; x++){
+					var cloned_offer_row = $("#offer-clone").clone();
+					cloned_offer_row.removeAttr("id").removeClass('is-hidden');
+					cloned_offer_row.find("#offer-timestamp").text(moment(listing_info.offers[x].timestamp).format("MMMM DD, YYYY - HH:mmA"));
+					cloned_offer_row.find("#offer-name").text(listing_info.offers[x].name);
+					cloned_offer_row.find("#offer-email").text(listing_info.offers[x].email).attr("href", "mailto:" + listing_info.offers[x].email);
+					cloned_offer_row.find("#offer-phone").text(listing_info.offers[x].phone);
+					cloned_offer_row.find("#offer-offer").text(listing_info.offers[x].offer);
+					cloned_offer_row.find("#offer-message").text(listing_info.offers[x].message);
+					$("#offers-wrapper").append(cloned_offer_row);
+				}
+			}
+			else {
+				$("#no-offers").removeClass('is-hidden');
+			}
+		}
+		else {
+			getDomainOffers(listing_info.domain_name);
+		}
+	}
+
+	//</editor-fold>
 
 	//<editor-fold>-------------------------------INFORMATION TAB EDITS-------------------------------
 
@@ -420,26 +484,24 @@ function editRowVerified(listing_info){
 
 	//</editor-fold>
 
-	//<editor-fold>-------------------------------PRICE TAB EDITS-------------------------------
+	//<editor-fold>-------------------------------PRICE EDITS-------------------------------
 
 	//update the pricing tab
 	function updatePriceInputs(listing_info){
 		checkBox(listing_info.rentable, $("#rentable-input"));
 		checkBox(listing_info.buyable, $("#buyable-input"));
 
-		updatePriceDisabled(listing_info.rentable);
+		updateRentalInputsDisabled(listing_info.rentable);
 		$("#buy-price-input").val(listing_info.buy_price);
 		$("#price-rate-input").val(listing_info.price_rate);
 		$("#price-type-input").val(listing_info.price_type);
 	}
-	function updatePriceDisabled(rentable){
+	function updateRentalInputsDisabled(rentable){
 		if (rentable == 1){
-			$("#price-rate-input").removeClass('is-disabled');
-			$("#price-type-input").removeClass('is-disabled');
+			$(".rentable-input").removeClass('is-disabled');
 		}
 		else {
-			$("#price-rate-input").addClass('is-disabled');
-			$("#price-type-input").addClass('is-disabled');
+			$(".rentable-input").addClass('is-disabled');
 		}
 	}
 
@@ -632,7 +694,7 @@ function editRowVerified(listing_info){
 		});
 
 		$("#rentable-input").on("change", function(){
-			updatePriceDisabled($(this).val());
+			updateRentalInputsDisabled($(this).val());
 		});
 
 		//change domain name font
@@ -958,8 +1020,6 @@ function successMessage(message){
 //function to initiate edit mode for unverified
 function editRowUnverified(listing_info){
 	//get who is an A record data if we haven't yet
-
-	console.log(listing_info.a_records, listing_info.whois)
 	if (listing_info.a_records == undefined || listing_info.whois == undefined){
 		getDNSRecordAndWhois(listing_info.domain_name);
 	}

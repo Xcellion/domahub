@@ -729,6 +729,28 @@ module.exports = {
 
 	},
 
+	//gets all offers for a specific domain
+	getListingOffers : function(req, res, next){
+		console.log("F: Finding the all verified offers for " + req.params.domain_name + "...");
+		listing_obj = getUserListingObj(req.user.listings, req.params.domain_name);
+		Data.getListingOffers(req.params.domain_name, function(result){
+			if (result.state == "success"){
+				listing_obj.offers = result.info;
+				res.send({
+					state: "success",
+					listing: listing_obj
+				});
+			}
+			else {
+				res.send({
+					state: "success",
+					listing: listing_obj
+				});
+			}
+		});
+
+	},
+
 	//</editor-fold>
 
 	//<editor-fold>-------------------------------CREATES/UPDATES------------------------------

@@ -133,14 +133,17 @@
 							<li id="verify-tab" class="unverified-elem is-hidden tab">
 								<a tabindex="0">Verification Status</a>
 							</li>
-							<li id="info-tab" class="verified-elem tab is-active">
+							<li id="info-tab" class="is-active verified-elem tab">
 								<a tabindex="0">Information</a>
 							</li>
-							<li id="pricing-tab" class="verified-elem tab">
-								<a tabindex="0">Pricing</a>
+							<li id="rental-tab" class="verified-elem tab">
+								<a tabindex="0">Rental</a>
 							</li>
 							<li id="design-tab" class="verified-elem tab">
 								<a tabindex="0">Design</a>
+							</li>
+							<li id="offers-tab" class="verified-elem tab">
+								<a tabindex="0">Offers</a>
 							</li>
 							<li id="upgrade-tab" class="verified-elem tab">
 								<a id="upgrade-tab-text" tabindex="0">Upgrade</a>
@@ -192,6 +195,23 @@
 									<input id="status-input" data-name="status" tabindex="0" type="hidden" class="input changeable-input" />
 								</div>
 								<div class="control">
+									<label class="label">Minimum Purchase Price</label>
+									<input id="buy-price-input" data-name="buy_price" type="number" min="1" step="1" class="input changeable-input">
+									<small class="tip">The minimum offer / price you will consider.</small>
+								</div>
+								<div class="control is-spaced">
+									<div class="control-left">
+										<label class="label">Allow Buy It Now</label>
+										<small class="tip">Displays a form allowing verified users to make offers on this domain or buy it immediately.</small>
+									</div>
+									<div class="control-right">
+										<form class="checkbox-form">
+											<input id="buyable-input" data-name="buyable" type="checkbox" class="checkbox-input changeable-input" tabindex="0" />
+											<label for="buyable-input" tabindex="0"></label>
+										</form>
+									</div>
+								</div>
+								<div class="control">
 									<label class="label">Listing Description</label>
 									<textarea id="description" class="description-input textarea changeable-input"
 									tabindex="0" data-name="description" placeholder="Write anything you want!"></textarea>
@@ -202,15 +222,6 @@
 									placeholder="What is this website?"></input>
 									<small class="tip">100 character limit.</small>
 								</div>%>
-								<div class="control">
-									<label class="label">
-										<span class="v-align-middle">Example Paths</span>
-										<span class="icon is-small is-tooltip v-align-middle" data-balloon-length="medium" data-balloon="Example paths or subdirectories that users may want to rent on your domain. Must consist of either letters or numbers." data-balloon-pos="up">
-											<i class="fa fa-question-circle"></i>
-										</span>
-									</label>
-									<input id="paths-input" data-name="paths" tabindex="0" class="is-hidden input changeable-input"></input>
-								</div>
 								<div class="control">
 									<label class="label margin-bottom-10">
 										<span class="v-align-middle">Categories</span>
@@ -228,24 +239,7 @@
 									</div>
 								</div>
 							</div>
-							<div id="pricing-tab-drop" class="drop-tab is-hidden">
-								<div class="control">
-									<label class="label">Minimum Purchase Price</label>
-									<input id="buy-price-input" data-name="buy_price" type="number" min="1" step="1" class="input changeable-input">
-									<small class="tip">The minimum offer / price you will consider.</small>
-								</div>
-								<div class="control is-spaced">
-									<div class="control-left">
-										<label class="label">Allow Buy It Now</label>
-										<small class="tip">Displays a form allowing verified users to make offers on this domain or buy it immediately.</small>
-									</div>
-									<div class="control-right">
-										<form class="checkbox-form">
-											<input id="buyable-input" data-name="buyable" type="checkbox" class="checkbox-input changeable-input" tabindex="0" />
-											<label for="buyable-input" tabindex="0"></label>
-										</form>
-									</div>
-								</div>
+							<div id="rental-tab-drop" class="drop-tab is-hidden">
 								<div class="control is-spaced">
 									<div class="control-left">
 										<label class="label">Allow Rentals</label>
@@ -261,10 +255,10 @@
 								<label class="label">Rental Price</label>
 								<div class="control">
 									<div class="control has-addons margin-bottom-0">
-										<input id="price-rate-input" data-name="price_rate" placeholder="minimum 1" type="number" min="1" step="1" class="padding-top-0 input changeable-input">
+										<input id="price-rate-input" data-name="price_rate" placeholder="minimum 1" type="number" min="1" step="1" class="padding-top-0 input changeable-input rentable-input">
 										<span class="select price-type-span">
 											<div class="drop-form">
-												<select id="price-type-input" data-name="price_type" class="changeable-input">
+												<select id="price-type-input" data-name="price_type" class="changeable-input rentable-input">
 													<option value="month">Month</option>
 													<option value="week">Week</option>
 													<option value="day">Day</option>
@@ -273,6 +267,15 @@
 										</span>
 									</div>
 									<small class="tip">Price per unit of time for the domain rental.</small>
+								</div>
+								<div class="control">
+									<label class="label">
+										<span class="v-align-middle">Example Paths</span>
+										<span class="icon is-small is-tooltip v-align-middle" data-balloon-length="medium" data-balloon="Example paths or subdirectories that users may want to rent on your domain. Must consist of either letters or numbers." data-balloon-pos="up">
+											<i class="fa fa-question-circle"></i>
+										</span>
+									</label>
+									<input id="paths-input" data-name="paths" tabindex="0" class="is-hidden input changeable-input rentable-input"></input>
 								</div>
 							</div>
 							<div id="design-tab-drop" class="drop-tab is-hidden">
@@ -420,6 +423,40 @@
 										</div>
 									</div>
 								</div>
+							<div id="offers-tab-drop" class="drop-tab is-hidden">
+								<div id="loading-offers">
+									Now loading offers...
+								</div>
+								<div id="no-offers" class="is-hidden">
+									You have no offers on this domain yet. Click here for some tips on how to generate leads!
+								</div>
+								<div id="offers-wrapper">
+
+								</div>
+								<div id="offer-clone" class="is-hidden">
+									<div id="offer-timestamp">
+
+									</div>
+									<div id="offer-name">
+
+									</div>
+									<a id="offer-email">
+
+									</a>
+									<div id="offer-phone">
+
+									</div>
+									<div id="offer-name">
+
+									</div>
+									<div id="offer-offer">
+
+									</div>
+									<div id="offer-message">
+
+									</div>
+								</div>
+							</div>
 							<div id="upgrade-tab-drop" class="drop-tab is-hidden">
 
 									<div class="control is-spaced">

@@ -38,9 +38,8 @@
 		<% } %>
 
 		<%# SHOW OR HIDE FOOTER %>
-		<% if (!(compare && listing_info.unlisted)) { %>
-		</div>
-			<footer class="footer is-dark">
+		<% if (!compare && !listing_info.premium) { %>
+			<footer class="footer is-dark is-hidden">
 				<div class="container">
 					<p id="powered-by" class="is-primary">
 						Powered by
