@@ -231,6 +231,8 @@ button[data-balloon] {
     -ms-transform: translate(0, 0);
     -webkit-transform: translate(0, 0);
       -webkit-transform-transform: translate(0, 0); }
+  #compare-menu .footer {
+    height: 200px; }
 
 #compare-buttons {
   position: absolute;
@@ -249,9 +251,6 @@ button[data-balloon] {
   bottom: 0;
   position: absolute;
   width: 100%; }
-
-.footer {
-  height: 200px; }
 
 .logo {
   display: inline-flex;
@@ -284,32 +283,6 @@ button[data-balloon] {
   max-width: 100px;
   max-height: 50px;
   object-fit: cover; }
-
-#background_image {
-  position: fixed;
-  object-fit: cover;
-  min-height: 100vh; }
-  #background_image.is-bnw {
-    -webkit-filter: grayscale(100%);
-    /* Safari 6.0 - 9.0 */
-    -moz-filter: grayscale(100%);
-    -o-filter: grayscale(100%);
-    -ms-filter: grayscale(100%);
-    filter: grayscale(100%); }
-  #background_image.is-blur {
-    -webkit-filter: blur(5px);
-    -moz-filter: blur(5px);
-    -o-filter: blur(5px);
-    -ms-filter: blur(5px);
-    filter: blur(5px);
-    transform: scale(1.03); }
-  #background_image.is-blur.is-bnw {
-    -webkit-filter: blur(5px) grayscale(100%);
-    -moz-filter: blur(5px) grayscale(100%);
-    -o-filter: blur(5px) grayscale(100%);
-    -ms-filter: blur(5px) grayscale(100%);
-    filter: blur(5px) grayscale(100%);
-    transform: scale(1.03); }
 
 .description-wrapper {
   max-width: 500px; }

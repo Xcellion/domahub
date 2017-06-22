@@ -106,7 +106,7 @@
 						</div>
 					</div>
 					<div class="control margin-top-20">
-						<a class="button is-stylish is-small is-primary is-fullwidth" tabindex="0" href="/listings/create">Add New Listing</a>
+						<a class="button is-stylish is-small is-primary is-fullwidth" tabindex="0" href="/listings/create">Add New Domain</a>
 					</div>
 				</div>
 
@@ -116,15 +116,24 @@
 
 					</div>
 					<!-- CURRENT DOMAIN NAME -->
-					<div class="content">
-						<button tabindex="0" class="button is-primary is-icon-only filter-menu-toggle no-shadow is-small is-hidden-tablet" title="Filters">
-							<span class="icon"><i class="fa fa-bars"></i></span>
-						</button>
-						<h2 class="current-domain-name yes-listings-elem is-inline is-hidden"></h2>
-						<a id="current-domain-view" target="_blank" tabindex="0" class="verified-elem yes-listings-elem is-hidden button is-small no-shadow margin-top-0" title="View Domain">
-							<span class="icon is-small"><i style="margin-top: 2px" class="fa fa-external-link"></i></span>
-							<span>View</span>
-						</a>
+					<div class="control is-spaced">
+						<div class="control-left">
+							<button tabindex="0" class="button is-primary is-icon-only filter-menu-toggle no-shadow is-small is-hidden-tablet" title="Filters">
+								<span class="icon"><i class="fa fa-bars"></i></span>
+							</button>
+							<h2 class="current-domain-name yes-listings-elem is-inline is-hidden"></h2>
+						</div>
+						<div class="control-right">
+							<a id="current-domain-view" target="_blank" tabindex="0" class="verified-elem yes-listings-elem is-hidden button is-black is-icon-only is-small no-shadow margin-top-0" title="View Domain">
+								<span class="icon is-small"><i style="margin-top: 2px" class="fa fa-external-link"></i></span>
+								<span>View</span>
+							</a>
+							<a id="status-color" tabindex="0" class="button is-primary is-small is-icon-only no-shadow" title="Publicly hide or show landing page.">
+								<span class="icon is-small"><i id="status-icon" class="fa fa-toggle-on"></i></span>
+								<span id="status-text">Active</span>
+							</a>
+							<input id="status-input" data-name="status" tabindex="0" type="hidden" class="input changeable-input" />
+						</div>
 					</div>
 
 					<!-- LISTING DETAIL TABS  -->
@@ -187,18 +196,6 @@
 						</div>
 						<div id="verified-drop-tab" class="is-hidden verified-elem">
 							<div id="info-tab-drop" class="drop-tab">
-								<div class="control has-items-center">
-									<a id="status-color" tabindex="0" class="button is-primary is-icon-only no-shadow" title="Publicly hide or show landing page.">
-										<span class="icon"><i id="status-icon" class="fa fa-toggle-on"></i></span>
-										<span id="status-text">Active</span>
-									</a>
-									<input id="status-input" data-name="status" tabindex="0" type="hidden" class="input changeable-input" />
-								</div>
-								<div class="control">
-									<label class="label">Minimum Purchase Price</label>
-									<input id="buy-price-input" data-name="buy_price" type="number" min="1" step="1" class="input changeable-input">
-									<small class="tip">The minimum offer / price you will consider.</small>
-								</div>
 								<div class="control is-spaced">
 									<div class="control-left">
 										<label class="label">Allow Buy It Now</label>
@@ -210,6 +207,11 @@
 											<label for="buyable-input" tabindex="0"></label>
 										</form>
 									</div>
+								</div>
+								<div class="control">
+									<label class="label">Minimum Purchase Price</label>
+									<input id="buy-price-input" data-name="buy_price" type="number" min="1" step="1" class="input changeable-input">
+									<small class="tip">The minimum offer / price you will consider.</small>
 								</div>
 								<div class="control">
 									<label class="label">Listing Description</label>
