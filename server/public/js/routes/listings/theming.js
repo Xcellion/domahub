@@ -72,9 +72,11 @@ function calculateLuminance(rgb) {
 }
 
 function stylize(color, element, style) {
-    $(element).css(style, color);
-    if (style == "background-color") {
-        $(element).css("color", calculateLuminance(color));
+    if (color){
+        $(element).css(style, color);
+        if (style == "background-color") {
+            $(element).css("color", calculateLuminance(color));
+        }
     }
 }
 
