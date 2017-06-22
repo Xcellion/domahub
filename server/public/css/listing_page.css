@@ -192,14 +192,18 @@ button[data-balloon] {
   transition: all 0.25s;
   background-attachment: fixed;
   background-color: #fff;
+  min-height: 100vh;
   left: 0;
   padding: 80px 20px;
   width: 100%;
   min-height: 100vh; }
   #compare-preview.is-active {
-    position: absolute;
-    width: 70%;
-    left: 30%; }
+    -moz-transform: translate(500px, 0);
+    -o-transform: translate(500px, 0);
+    -ms-transform: translate(500px, 0);
+    -webkit-transform: translate(500px, 0);
+      -webkit-transform-transform: translate(500px, 0);
+    width: calc(100% - 500px); }
 
 #compare-menu {
   -moz-transition: all 0.25s;
@@ -217,7 +221,7 @@ button[data-balloon] {
   position: fixed;
   z-index: 200;
   height: 100vh;
-  width: 30%;
+  width: 500px;
   top: 0;
   left: 0; }
   #compare-menu.is-active {
@@ -228,16 +232,8 @@ button[data-balloon] {
     -webkit-transform: translate(0, 0);
       -webkit-transform-transform: translate(0, 0); }
 
-#compare-buttons {
-  padding: 20px;
-  top: 0;
-  position: absolute;
-  width: 100%;
-  border-bottom: 1px solid #d0d0d0; }
-
 #compare-content {
   overflow-y: auto;
-  margin-top: 72px;
   height: calc(100vh - 200px); }
 
 #compare-footer {
