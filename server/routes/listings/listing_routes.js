@@ -119,7 +119,7 @@ module.exports = function(app, db, auth, error, stripe){
 		owner_functions.updateListing
 	]);
 
-	//verify that someone changed their DNS to point to domahub
+	//get the whois and DNS records for an unverified domain
 	app.post('/listing/:domain_name/unverifiedInfo', [
 		auth.checkLoggedIn,
 		checkDomainValid,
@@ -127,6 +127,16 @@ module.exports = function(app, db, auth, error, stripe){
 		profile_functions.getAccountListings,
 		owner_functions.checkListingOwnerPost,
 		owner_functions.getDNSRecordAndWhois
+	]);
+
+	//get offers for a verified domain
+	app.post('/listing/:domain_name/getoffers', [
+		auth.checkLoggedIn,
+		checkDomainValid,
+		checkDomainListed,
+		profile_functions.getAccountListings,
+		owner_functions.checkListingOwnerPost,
+		owner_functions.getListingOffers
 	]);
 
 	// //to delete a listing

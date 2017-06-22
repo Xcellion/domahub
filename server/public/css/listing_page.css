@@ -192,12 +192,12 @@ button[data-balloon] {
   transition: all 0.25s;
   background-attachment: fixed;
   background-color: #fff;
-  min-height: 100vh;
-  position: absolute;
   left: 0;
-  padding: 60px 20px;
-  width: 100%; }
+  padding: 80px 20px;
+  width: 100%;
+  min-height: 100vh; }
   #compare-preview.is-active {
+    position: absolute;
     width: 70%;
     left: 30%; }
 
@@ -310,8 +310,7 @@ button[data-balloon] {
   max-width: 500px; }
 
 #description-text {
-  white-space: pre-wrap;
-  word-break: break-all; }
+  white-space: pre-wrap; }
 
 #domain-display h1 {
   font-size: 48px;

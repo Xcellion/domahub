@@ -25,12 +25,12 @@
   @include transition(all 0.25s);
   background-attachment: fixed;
   background-color: #fff;
-  min-height: 100vh;
-  position: absolute;
   left: 0;
-  padding: 60px 20px;
+  padding: 80px 20px;
   width: 100%;
+  min-height: 100vh;
   &.is-active {
+    position: absolute;
     width: 70%;
     left: 30%;
   }
@@ -150,7 +150,6 @@
 
 #description-text {
     white-space: pre-wrap;
-    word-break: break-all;
 }
 
 #domain-display {

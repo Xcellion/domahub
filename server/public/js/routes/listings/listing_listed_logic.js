@@ -541,6 +541,7 @@ function setUpCalendar(listing_info){
 	//only show if the calendar input is visible
 	if ($("#calendar").is(":visible")){
 		$("#calendar").data('daterangepicker').show();
+		console.log("W")
 	}
 }
 

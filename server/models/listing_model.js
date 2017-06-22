@@ -221,7 +221,6 @@ listing_model.prototype.getListingTimes = function(domain_name, path, max_date, 
 	listing_query(query, "Failed to get times for domain: " + domain_name + "!", callback, [domain_name, path, max_date]);
 }
 
-
 //gets all free rental times for a specific listing
 listing_model.prototype.getListingFreeTimes = function(domain_name, callback){
 	console.log("DB: Attempting to get free times for domain: " + domain_name + "...");

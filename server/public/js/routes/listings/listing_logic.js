@@ -1,6 +1,13 @@
 var myChart;
 
 $(document).ready(function() {
+	//remove active if not comparing
+	if (compare){
+		$("#compare-preview").addClass('is-active');
+	}
+	
+	//remove class to prevent screen flash DH green
+	$(".footer").removeClass('is-hidden');
 
 	//<editor-fold>-----------------------------------------------------------------------------------TABS
 
