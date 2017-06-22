@@ -13,12 +13,16 @@ $(document).ready(function() {
 
 		//<editor-fold>-----------------------------------------------------------------------------------BUY NOW
 
-		//buy now price tag
-		if (listing_info.buy_price > 0){
-			$("#buy-price").text("For sale - " + moneyFormat.to(listing_info.buy_price));
-			$("#min-price").text(" (Minimum " + moneyFormat.to(listing_info.buy_price) + ")");
-			$("#buy-price-tag").removeClass('is-hidden');
-			$("#buy-button").removeClass('is-hidden');
+		//if it's available
+		if (listing_info.status == 1){
+
+			//show minimum price if it's defined
+			if (listing_info.buy_price > 0){
+				$("#buy-price").text("For sale - " + moneyFormat.to(listing_info.buy_price));
+				$("#min-price").text(" (Minimum " + moneyFormat.to(listing_info.buy_price) + ")");
+				$("#buy-price-tag").removeClass('is-hidden');
+				$("#buy-button").removeClass('is-hidden');
+			}
 
 			showBuyStuff($("#buy-now-button"));
 		}
@@ -246,7 +250,6 @@ function showBuyStuff(buy_now_button){
 		$("#contact_name").attr("placeholder", random_char.name);
 		$("#contact_email").attr("placeholder", random_char.email);
 		$("#contact_message").attr("placeholder", random_char.message + " Anyways, I'm interested in buying " + listing_info.domain_name + ". Let's chat.");
-
 		//add a / to end of domain
 		$("#domain-title").text(listing_info.domain_name);
 	}
