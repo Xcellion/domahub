@@ -1,6 +1,6 @@
 .card-header
   align-items: stretch
-  background-color: $white
+  background-color: inherit
   border-bottom: 1px solid $border
   display: flex
   justify-content: space-between
@@ -9,11 +9,6 @@
   border-radius: $radius $radius 0 0
   &.has-shadow
     +box-shadow(0px,1px,1px,$black-disabled,0)
-  @each $name, $pair in $colors
-    $color: nth($pair, 1)
-    $color-invert: nth($pair, 2)
-    &.is-#{$name}
-      background-color: $color
 
 .card-header-title
   align-items: center
