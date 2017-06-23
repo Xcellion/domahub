@@ -118,16 +118,21 @@
 					<!-- CURRENT DOMAIN NAME -->
 					<div class="control is-spaced">
 						<div class="control-left">
-							<button tabindex="0" class="button is-primary is-icon-only filter-menu-toggle no-shadow is-small is-hidden-tablet" title="Filters">
+							<button tabindex="0" class="button is-primary filter-menu-toggle is-icon-only no-shadow is-small is-hidden-tablet" title="Filters">
 								<span class="icon"><i class="fa fa-bars"></i></span>
 							</button>
 							<h2 class="current-domain-name yes-listings-elem is-inline is-hidden"></h2>
 						</div>
 						<div class="control-right">
-							<a id="current-domain-view" target="_blank" tabindex="0" class="verified-elem yes-listings-elem is-hidden button is-black is-icon-only is-small no-shadow margin-top-0" title="View Domain">
+							<a id="current-domain-view" target="_blank" tabindex="0" class="verified-elem yes-listings-elem is-hidden button is-small no-shadow margin-top-0" title="View Domain">
 								<span class="icon is-small"><i style="margin-top: 2px" class="fa fa-external-link"></i></span>
 								<span>View</span>
 							</a>
+							<a id="status-color" tabindex="0" class="button is-primary is-small no-shadow" title="Publicly hide or show landing page.">
+								<span class="icon is-small"><i id="status-icon" class="fa fa-toggle-on"></i></span>
+								<span id="status-text">Active</span>
+							</a>
+							<input id="status-input" data-name="status" tabindex="0" type="hidden" class="input changeable-input" />
 						</div>
 					</div>
 
@@ -356,6 +361,9 @@
 												<i class="fa fa-question-circle"></i>
 											</span>
 										</label>
+										<div class="content">
+											<h1 id="preview-domain-font" class="is-bold current-domain-name">DOMAIN NAME WOOT</h1>
+										</div>
 										<div class="control is-grouped">
 											<div class="control">
 												<input id="font-color-input" data-name="font_color" placeholder="#000000" type="text" class="premium-input padding-top-0 input changeable-input">
@@ -375,6 +383,17 @@
 											</div>
 										</div>
 									</div>
+									<div class="control">
+										<label class="label">
+											<span class="v-align-middle">Background Color</span>
+											<span class="icon is-small is-tooltip v-align-middle" data-balloon-length="medium" data-balloon="This color is only used if there is no background image." data-balloon-pos="up">
+												<i class="fa fa-question-circle"></i>
+											</span>
+										</label>
+										<div class="control">
+											<input id="background-color-input" data-name="background_color" placeholder="#FFFFFF" type="text" class="premium-input padding-top-0 input changeable-input">
+										</div>
+									</div>
 									<div class="control is-spaced">
 										<div class="control-left">
 											<div class="label">Background Image</div>
@@ -392,17 +411,6 @@
 													<p data-default-name="Background Image" id="background-image-label" class="file-label">Upload</p>
 												</label>
 											</form>
-										</div>
-									</div>
-									<div class="control">
-										<label class="label">
-											<span class="v-align-middle">Background Color</span>
-											<span class="icon is-small is-tooltip v-align-middle" data-balloon-length="medium" data-balloon="This color is only used if there is no background image." data-balloon-pos="up">
-												<i class="fa fa-question-circle"></i>
-											</span>
-										</label>
-										<div class="control">
-											<input id="background-color-input" data-name="background_color" placeholder="#FFFFFF" type="text" class="premium-input padding-top-0 input changeable-input">
 										</div>
 									</div>
 									<div class="control is-spaced">
@@ -465,8 +473,10 @@
 								<div id="loading-offers">
 									Now loading offers...
 								</div>
-								<div id="no-offers" class="is-hidden">
-									You have no offers on this domain yet. Click here for some tips on how to generate leads!
+								<div class="content">
+									<p id="no-offers" class="is-hidden">
+										You have no offers on this domain yet. Click here for some tips on how to generate leads!
+									</p>
 								</div>
 								<div id="offers-wrapper">
 
@@ -512,13 +522,13 @@
 												<span>Upgrade</span>
 											</a>
 											<div class="premium-elem control">
-												<a id="cancel-premium-button" class="margin-top-5 is-hidden is-small is-stylish button no-shadow is-danger">
+												<a id="cancel-premium-button" class="margin-top-5 is-hidden is-outlined is-small is-stylish button no-shadow is-danger">
 													<span class="icon is-small">
 														<i class="fa fa-times-circle"></i>
 													</span>
 													<span>Cancel Plan</span>
 												</a>
-												<a id="renew-premium-button" class="margin-top-5 is-hidden is-small is-stylish button no-shadow is-primary">
+												<a id="renew-premium-button" class="margin-top-5 is-hidden is-outlined is-small is-stylish button no-shadow is-primary">
 													<span class="icon is-small">
 														<i class="fa fa-repeat"></i>
 													</span>
@@ -536,7 +546,7 @@
 											<small id="existing-cc" class="tip">Credit card ending in ****</small>
 										</div>
 										<div class="control-right">
-											<a id="change-card-button" tabindex="0" title="Change Payment Method" class="button is-primary is-small is-stylish no-shadow">
+											<a id="change-card-button" tabindex="0" title="Change Payment Method" class="button is-primary is-outlined is-small is-stylish no-shadow">
 												<span class="icon is-small">
 													<i class="fa fa-credit-card"></i>
 												</span>

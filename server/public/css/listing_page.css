@@ -207,6 +207,17 @@ button[data-balloon] {
     -webkit-transform: translate(500px, 0);
       -webkit-transform-transform: translate(500px, 0);
     width: calc(100% - 500px); }
+    @media screen and (max-width: 1305px) {
+      #compare-preview.is-active {
+        -moz-transform: translate(300px, 0);
+        -o-transform: translate(300px, 0);
+        -ms-transform: translate(300px, 0);
+        -webkit-transform: translate(300px, 0);
+          -webkit-transform-transform: translate(300px, 0);
+        width: calc(100% - 300px); } }
+    @media screen and (min-width: 769px) and (max-width: 979px) {
+      #compare-preview.is-active .master.right {
+        flex-direction: column; } }
 
 #compare-menu {
   -moz-transition: all 0.25s;
@@ -234,19 +245,25 @@ button[data-balloon] {
     -ms-transform: translate(0, 0);
     -webkit-transform: translate(0, 0);
       -webkit-transform-transform: translate(0, 0); }
+  @media screen and (max-width: 1305px) {
+    #compare-menu {
+      width: 300px; } }
   #compare-menu .footer {
     height: 200px; }
 
 #compare-buttons {
-  position: absolute;
-  top: 0;
   width: 100%;
   padding: 20px;
-  border-bottom: 1px solid #efefef; }
+  border-bottom: 1px solid rgba(0, 0, 0, 0.12); }
+  @media screen and (max-width: 1305px) {
+    #compare-buttons .control.is-spaced {
+      flex-direction: column-reverse;
+      align-items: flex-start; }
+      #compare-buttons .control.is-spaced .control-right {
+        margin-bottom: 10px; } }
 
 #compare-content {
   overflow-y: auto;
-  margin-top: 83px;
   height: calc(100vh - 283px); }
 
 #compare-footer {
