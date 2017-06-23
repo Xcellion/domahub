@@ -76,7 +76,7 @@
       &:hover,
       &:focus,
       &.is-active
-        background-color: darken($color, 12%)
+        background-color: darken($color, 10%)
         border-color: transparent
         color: $color-invert
       &:active
@@ -90,27 +90,18 @@
         &:hover,
         &:active,
         &:focus
-          background-color: darken($color-invert, 12%)
+          background-color: darken($color-invert, 10%)
       &.is-loading
         &:after
-          border-color: transparent transparent $color-invert $color-invert !important
+          border-color: transparent transparent $color $color !important
       &.is-outlined
-        background-color: transparent
+        background-color: $color-invert
         border-color: $color
         color: $color
         &:hover,
         &:active,
-        &:focus,
-        &.is-active
-          background-color: $color
-          border-color: $color
-          color: $color-invert
-        &.is-active
-          +transition(all 0.25s ease)
-          &:hover,
-          &:active,
-          &:focus
-            background-color: darken($color, 12%)
+        &:focus
+          background-color: darken($color-invert, 2%)
 
   // Sizes
   &.is-small
