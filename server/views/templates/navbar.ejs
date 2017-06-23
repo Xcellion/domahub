@@ -50,7 +50,7 @@
               <form id="navbar_form" action="/login" method="post">
                 <p class="control has-icon">
                   <input id="email" autofocus class="input is-medium" name="email" type="email" placeholder="Email" spellcheck="false">
-                  <i class="fa fa-envelope"></i>
+                  <i class="fa fa-envelope-o"></i>
                 </p>
                 <p class="control has-icon">
                   <input id="password" class="input is-medium" name="password" type="password" placeholder="Password">
@@ -61,14 +61,12 @@
                     Log In
                   </button>
                 </p>
-                <div class="control is-grouped">
-                  <p class="control is-expanded">
-                    <label class="checkbox">
-                      <input id="remember-checkbox" type="checkbox">
-                      Remember me
-                    </label>
-                  </p>
-                  <p class="control">
+                <div class="control is-spaced">
+                  <div class="checkbox-form">
+    								<input id="remember-checkbox" type="checkbox" tabindex="0" title="Remember Me" />
+    								<label for="remember-checkbox" tabindex="0">Remember Me</label>
+    							</div>
+                  <p class="control-right">
                       <a class="forgot is-accent" href="/forgot">Forgot password?</a>
                   </p>
                 </div>

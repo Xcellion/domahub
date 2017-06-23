@@ -2,6 +2,7 @@
 @import 'vars';
 @import 'mixins';
 
+// Compare Model Stuff
 .master {
   &.right {
     flex-direction: row;
@@ -27,8 +28,9 @@
   background-color: #fff;
   min-height: 100vh;
   left: 0;
-  padding: 60px 20px;
+  padding: 80px 20px;
   width: 100%;
+  min-height: 100vh;
   &.is-active {
     @include translate(500px,0);
     width: calc(100% - 500px);
@@ -49,21 +51,30 @@
     height: 100vh;
     @include translate(0,0);
   }
+  .footer {
+    height: 200px;
+  }
+}
+
+#compare-buttons {
+    position:absolute;
+    top:0;
+    width:100%;
+    padding:20px;
+    border-bottom:1px solid $grey-lighter;
 }
 
 #compare-content {
     overflow-y: auto;
-    height: calc(100vh - 200px);
+    margin-top:83px;
+    height: calc(100vh - 283px);
 }
 
 #compare-footer {
+    z-index:4;
     bottom:0;
     position:absolute;
     width:100%;
-}
-
-.footer {
-  height: 200px;
 }
 
 .logo {
@@ -105,34 +116,34 @@
     object-fit:cover;
 }
 
-#background_image{
-    position:fixed;
-    object-fit:cover;
-    min-height:100vh;
-    &.is-bnw {
-        -webkit-filter: grayscale(100%); /* Safari 6.0 - 9.0 */
-        -moz-filter: grayscale(100%);
-        -o-filter: grayscale(100%);
-        -ms-filter: grayscale(100%);
-        filter: grayscale(100%);
-    }
-    &.is-blur {
-        -webkit-filter: blur(5px);
-        -moz-filter: blur(5px);
-        -o-filter: blur(5px);
-        -ms-filter: blur(5px);
-        filter: blur(5px);
-        transform: scale(1.03);
-    }
-    &.is-blur.is-bnw {
-        -webkit-filter: blur(5px) grayscale(100%);
-        -moz-filter: blur(5px) grayscale(100%);
-        -o-filter: blur(5px) grayscale(100%);
-        -ms-filter: blur(5px) grayscale(100%);
-        filter: blur(5px) grayscale(100%);
-        transform: scale(1.03);
-    }
-}
+// #background_image{
+//     position:fixed;
+//     object-fit:cover;
+//     min-height:100vh;
+//     &.is-bnw {
+//         -webkit-filter: grayscale(100%); /* Safari 6.0 - 9.0 */
+//         -moz-filter: grayscale(100%);
+//         -o-filter: grayscale(100%);
+//         -ms-filter: grayscale(100%);
+//         filter: grayscale(100%);
+//     }
+//     &.is-blur {
+//         -webkit-filter: blur(5px);
+//         -moz-filter: blur(5px);
+//         -o-filter: blur(5px);
+//         -ms-filter: blur(5px);
+//         filter: blur(5px);
+//         transform: scale(1.03);
+//     }
+//     &.is-blur.is-bnw {
+//         -webkit-filter: blur(5px) grayscale(100%);
+//         -moz-filter: blur(5px) grayscale(100%);
+//         -o-filter: blur(5px) grayscale(100%);
+//         -ms-filter: blur(5px) grayscale(100%);
+//         filter: blur(5px) grayscale(100%);
+//         transform: scale(1.03);
+//     }
+// }
 
 .description-wrapper {
     max-width: 500px;
@@ -140,7 +151,6 @@
 
 #description-text {
     white-space: pre-wrap;
-    word-break: break-all;
 }
 
 #domain-display {
