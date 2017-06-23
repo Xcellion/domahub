@@ -196,6 +196,13 @@
 						</div>
 						<div id="verified-drop-tab" class="is-hidden verified-elem">
 							<div id="info-tab-drop" class="drop-tab">
+								<div class="control">
+									<a id="status-color" tabindex="0" class="button is-primary is-medium is-icon-only no-shadow" title="Publicly hide or show landing page.">
+										<span class="icon is-small"><i id="status-icon" class="fa fa-toggle-on"></i></span>
+										<span id="status-text">Active</span>
+									</a>
+									<input id="status-input" data-name="status" tabindex="0" type="hidden" class="input changeable-input" />
+								</div>
 								<div class="control is-spaced">
 									<div class="control-left">
 										<label class="label">Allow Buy It Now</label>
@@ -296,6 +303,40 @@
 											</a>
 										</div>
 									</div>
+									<div id="example-wrapper" class="preview-elem padding-25 control has-border-bottom">
+										<div class="control">
+											<span id="example-buy-price-tag" class="tag is-primary margin-right-5 margin-bottom-10 is-medium"></span>
+											<span id="example-rent-price-tag" class="tag is-primary margin-right-5 margin-bottom-10 is-medium"></span>
+											<h1 id="example-domain-name" class="preview-elem is-bold current-domain-name"></h1>
+										</div>
+										<div class="control">
+											<p id="example-font" class="preview-elem is-black">This is a preview of your chosen design. Use the settings below to customize your landing page!</a>
+										</div>
+										<div class="control box" style="display:inline-block">
+											<a id="example-button-primary" class="v-align-middle preview-elem is-primary is-small button is-stylish">Send Offer</a>
+											<a id="example-button-accent" class="v-align-middle preview-elem is-accent is-small button is-stylish">Buy Now</a>
+											<a id="example-link-info" class="v-align-middle preview-elem is-info margin-left-10">Do I need this?</a>
+										</div>
+									</div>
+									<div class="control">
+						                <label class="label" for="random-button">Theme</label>
+						                <div class="control is-grouped">
+						                    <div class="control has-icon">
+						                        <span class="select is-fullwidth">
+						                            <select tabindex="0" id="theme-input" class="changeable-input">
+						                                <option selected default value="DomaHub">DomaHub</option>
+						                                <option value="Custom">Custom</option>
+						                                <option value="Aqua">Aqua</option>
+						                                <option value="Bumblebee">Bumblebee</option>
+						                            </select>
+						                        </span>
+						                        <i class="fa fa-picture-o"></i>
+						                    </div>
+						                    <div class="control">
+						                        <a id="random-button" class="button is-small is-stylish">Random Theme</a>
+						                    </div>
+						                </div>
+						            </div>
 									<div class="control">
 										<label class="label">
 											<span class="v-align-middle">Color Scheme</span>
@@ -360,7 +401,7 @@
 										</div>
 										<div class="control-right">
 											<figure class="image listing-img">
-												<button id="background" tabindex="0" class="delete delete-image on-img"></button>
+												<button id="background" tabindex="0" class="premium-input delete delete-image on-img"></button>
 												<img data-default-img="https://placeholdit.imgix.net/~text?txtsize=20&txt=NO%20IMG&w=96&h=64" id="background-image" alt="Image not found" src="">
 											</figure>
 											<form tabindex="0" class="drop-form-file" method="post" enctype="multipart/form-data">
@@ -379,7 +420,7 @@
 										</div>
 										<div class="control-right">
 											<figure class="image listing-img">
-												<button id="logo" tabindex="0" class="delete delete-image on-img"></button>
+												<button id="logo" tabindex="0" class="premium-input delete delete-image on-img"></button>
 												<img data-default-img="https://placeholdit.imgix.net/~text?txtsize=20&txt=NO%20LOGO&w=96&h=64" id="logo-image" alt="Image not found" src="">
 											</figure>
 											<form tabindex="0" class="drop-form-file" method="post" enctype="multipart/form-data">
@@ -399,7 +440,7 @@
 										<div class="control-right">
 											<form class="checkbox-form">
 												<input id="traffic-module-input" data-name="traffic_module" type="checkbox" class="checkbox-input premium-input changeable-input" tabindex="0" />
-												<label for="traffic-module-input" tabindex="0"></label>
+												<label for="traffic-module-input" class="premium-input" tabindex="0"></label>
 											</form>
 										</div>
 									</div>
@@ -411,7 +452,7 @@
 										<div class="control-right">
 											<form class="checkbox-form">
 												<input id="history-module-input" data-name="history_module" type="checkbox" class="checkbox-input premium-input changeable-input" tabindex="0" />
-												<label for="history-module-input" tabindex="0"></label>
+												<label for="history-module-input" class="premium-input" tabindex="0"></label>
 											</form>
 										</div>
 									</div>
@@ -423,7 +464,7 @@
 										<div class="control-right">
 											<form class="checkbox-form">
 												<input id="info-module-input" data-name="info_module" type="checkbox" class="checkbox-input premium-input changeable-input" tabindex="0" />
-												<label for="info-module-input" tabindex="0"></label>
+												<label for="info-module-input" class="premium-input" tabindex="0"></label>
 											</form>
 										</div>
 									</div>
