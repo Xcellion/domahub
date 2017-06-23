@@ -201,8 +201,6 @@ module.exports = {
 		var unverified_listings = [];
 		var verified_listings = [];
 
-		console.log(req.body);
-
 		//custom promise creation, get ip address of domain
 		var q_function = function(listing_obj){
 			return Q.Promise(function(resolve, reject, notify){

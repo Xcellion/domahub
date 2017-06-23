@@ -139,6 +139,7 @@ listing_model.prototype.getVerifiedListing = function(domain_name, callback){
 				listings.paths,\
 				listings.background_image,\
 				listings.background_color,\
+				IF(listings.background_color IS NULL, '#FFFFFF', listings.background_color) as background_color, \
 				listings.logo,\
 				listings.history_module,\
 				listings.traffic_module,\

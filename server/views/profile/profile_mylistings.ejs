@@ -121,10 +121,12 @@
 							<span class="icon"><i class="fa fa-bars"></i></span>
 						</button>
 						<h2 class="current-domain-name yes-listings-elem is-inline is-hidden"></h2>
-						<a id="current-domain-view" target="_blank" tabindex="0" class="verified-elem yes-listings-elem is-hidden button is-small no-shadow margin-top-0" title="View Domain">
-							<span class="icon is-small"><i style="margin-top: 2px" class="fa fa-external-link"></i></span>
-							<span>View</span>
-						</a>
+						<div class="is-pulled-right">
+							<a id="current-domain-view" target="_blank" tabindex="0" class="verified-elem yes-listings-elem is-hidden button is-small no-shadow margin-top-0" title="View Domain">
+								<span class="icon is-small"><i style="margin-top: 2px" class="fa fa-external-link"></i></span>
+								<span>View</span>
+							</a>
+						</div>
 					</div>
 
 					<!-- LISTING DETAIL TABS  -->
@@ -294,6 +296,40 @@
 											</a>
 										</div>
 									</div>
+									<div id="example-wrapper" class="preview-elem padding-25 control has-border-bottom">
+										<div class="control">
+											<span id="example-buy-price-tag" class="tag is-primary margin-right-5 margin-bottom-10 is-medium"></span>
+											<span id="example-rent-price-tag" class="tag is-primary margin-right-5 margin-bottom-10 is-medium"></span>
+											<h1 id="example-domain-name" class="preview-elem is-bold current-domain-name"></h1>
+										</div>
+										<div class="control">
+											<p id="example-font" class="preview-elem is-black">This is a preview of your chosen design. Use the settings below to customize your landing page!</a>
+										</div>
+										<div class="control box" style="display:inline-block">
+											<a id="example-button-primary" class="v-align-middle preview-elem is-primary is-small button is-stylish">Send Offer</a>
+											<a id="example-button-accent" class="v-align-middle preview-elem is-accent is-small button is-stylish">Buy Now</a>
+											<a id="example-link-info" class="v-align-middle preview-elem is-info margin-left-10">Do I need this?</a>
+										</div>
+									</div>
+									<div class="control">
+						                <label class="label" for="random-button">Theme</label>
+						                <div class="control is-grouped">
+						                    <div class="control has-icon">
+						                        <span class="select is-fullwidth">
+						                            <select tabindex="0" id="theme-input" class="changeable-input">
+						                                <option selected default value="DomaHub">DomaHub</option>
+						                                <option value="Custom">Custom</option>
+						                                <option value="Aqua">Aqua</option>
+						                                <option value="Bumblebee">Bumblebee</option>
+						                            </select>
+						                        </span>
+						                        <i class="fa fa-picture-o"></i>
+						                    </div>
+						                    <div class="control">
+						                        <a id="random-button" class="button is-small is-stylish">Random Theme</a>
+						                    </div>
+						                </div>
+						            </div>
 									<div class="control">
 										<label class="label">
 											<span class="v-align-middle">Color Scheme</span>
@@ -318,23 +354,23 @@
 												<i class="fa fa-question-circle"></i>
 											</span>
 										</label>
-										<div class="control">
-											<input id="font-color-input" data-name="font_color" placeholder="#000000" type="text" class="premium-input padding-top-0 input changeable-input">
-										</div>
-										<label class="label">
-											<h1 id="preview-domain-font" class="is-bold current-domain-name">DOMAIN NAME WOOT</h1>
-										</label>
-										<div class="control">
-											<span class="select is-fullwidth" tabindex="0">
-												<select data-name="font_name" id="font-name-input" class="premium-input changeable-input">
-													<option selected default value="Rubik">Rubik</option>
-													<option value="Times New Roman">Times New Roman</option>
-													<option value="Helvetica">Helvetica</option>
-													<option value="Courier">Courier</option>
-													<option value="Verdana">Verdana</option>
-													<option value="Tahoma">Tahoma</option>
-												</select>
-											</span>
+										<div class="control is-grouped">
+											<div class="control">
+												<input id="font-color-input" data-name="font_color" placeholder="#000000" type="text" class="premium-input padding-top-0 input changeable-input">
+											</div>
+											<div class="control has-icon">
+												<span class="select is-fullwidth" tabindex="0">
+													<select data-name="font_name" id="font-name-input" class="premium-input changeable-input">
+														<option selected default value="Rubik">Rubik</option>
+														<option value="Times New Roman">Times New Roman</option>
+														<option value="Helvetica">Helvetica</option>
+														<option value="Courier">Courier</option>
+														<option value="Verdana">Verdana</option>
+														<option value="Tahoma">Tahoma</option>
+													</select>
+												</span>
+												<i class="fa fa-font"></i>
+											</div>
 										</div>
 									</div>
 									<div class="control is-spaced">
@@ -344,7 +380,7 @@
 										</div>
 										<div class="control-right">
 											<figure class="image listing-img">
-												<button id="background" tabindex="0" class="delete delete-image on-img"></button>
+												<button id="background" tabindex="0" class="premium-input delete delete-image on-img"></button>
 												<img data-default-img="https://placeholdit.imgix.net/~text?txtsize=20&txt=NO%20IMG&w=96&h=64" id="background-image" alt="Image not found" src="">
 											</figure>
 											<form tabindex="0" class="drop-form-file" method="post" enctype="multipart/form-data">
@@ -374,7 +410,7 @@
 										</div>
 										<div class="control-right">
 											<figure class="image listing-img">
-												<button id="logo" tabindex="0" class="delete delete-image on-img"></button>
+												<button id="logo" tabindex="0" class="premium-input delete delete-image on-img"></button>
 												<img data-default-img="https://placeholdit.imgix.net/~text?txtsize=20&txt=NO%20LOGO&w=96&h=64" id="logo-image" alt="Image not found" src="">
 											</figure>
 											<form tabindex="0" class="drop-form-file" method="post" enctype="multipart/form-data">
@@ -394,7 +430,7 @@
 										<div class="control-right">
 											<form class="checkbox-form">
 												<input id="traffic-module-input" data-name="traffic_module" type="checkbox" class="checkbox-input premium-input changeable-input" tabindex="0" />
-												<label for="traffic-module-input" tabindex="0"></label>
+												<label for="traffic-module-input" class="premium-input" tabindex="0"></label>
 											</form>
 										</div>
 									</div>
@@ -406,7 +442,7 @@
 										<div class="control-right">
 											<form class="checkbox-form">
 												<input id="history-module-input" data-name="history_module" type="checkbox" class="checkbox-input premium-input changeable-input" tabindex="0" />
-												<label for="history-module-input" tabindex="0"></label>
+												<label for="history-module-input" class="premium-input" tabindex="0"></label>
 											</form>
 										</div>
 									</div>
@@ -418,7 +454,7 @@
 										<div class="control-right">
 											<form class="checkbox-form">
 												<input id="info-module-input" data-name="info_module" type="checkbox" class="checkbox-input premium-input changeable-input" tabindex="0" />
-												<label for="info-module-input" tabindex="0"></label>
+												<label for="info-module-input" class="premium-input" tabindex="0"></label>
 											</form>
 										</div>
 									</div>
