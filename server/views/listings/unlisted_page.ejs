@@ -5,9 +5,9 @@
 
                 <span class="tag is-primary margin-bottom-5 is-medium">
                   <% if (listing_info.available){ %>
-                      Available for Purchase
+                      Available for purchase
                   <% } else { %>
-                      Unavailable
+                      Currently unavailable
                   <% } %>
                 </span>
 
@@ -24,39 +24,18 @@
             </div>
         </div>
 
-    <div class="container margin-top-100">
-
-      <%# TABS %>
-      <div class="tabs is-boxed margin-bottom-0">
-        <ul>
-          <li id="traffic-tab" class='tab is-active'>
-            <a>
-                <span class="is-hidden-mobile icon is-small"><i class="fa fa-line-chart"></i></span>
-                <span>Traffic</span>
-            </a>
-          </li>
-          <li id="info-tab" class="tab is-attached">
-            <a>
-                <span class="is-hidden-mobile icon is-small"><i class="fa fa-info-circle"></i></span>
-                <span>Information</span>
-            </a>
-          </li>
-          <li id="ticker-tab" class="tab is-attached">
-            <a>
-                <span class="is-hidden-mobile icon is-small"><i class="fa fa-history"></i></span>
-                <span>History</span>
-            </a>
-          </li>
-        </ul>
-      </div>
-
-        <%# TRAFFIC MODULE %>
-        <%- include("modules/traffic_module.ejs", {
-          listing_info : listing_info
+        <%# TABS FOR THE BELOW MODULES %>
+        <%- include("modules/tabs_module.ejs", {
+            listing_info : listing_info
         }); %>
 
         <%# INFO MODULE %>
         <%- include("modules/info_module.ejs", {
+          listing_info : listing_info
+        }); %>
+
+        <%# TRAFFIC MODULE %>
+        <%- include("modules/traffic_module.ejs", {
           listing_info : listing_info
         }); %>
 
@@ -65,5 +44,4 @@
             listing_info : listing_info
         }); %>
 
-  </div>
 </section>

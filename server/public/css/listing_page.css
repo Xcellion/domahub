@@ -180,6 +180,9 @@ button[data-balloon] {
   flex-direction: column;
   align-items: center; }
 
+.module {
+  height: 410px; }
+
 #compare-model {
   width: 100%;
   height: 100%;
