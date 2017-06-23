@@ -375,15 +375,16 @@ button[data-balloon] {
       margin-left: 2px; }
 
 .price-card {
-  height: 400px;
+  -webkit-box-shadow: 0 3px 15px 0 rgba(0, 0, 0, 0.12);
+  -moz-box-shadow: 0 3px 15px 0 rgba(0, 0, 0, 0.12);
+  box-shadow: 0 3px 15px 0 rgba(0, 0, 0, 0.12);
+  align-items: center;
+  border-radius: 3px;
   display: flex;
   flex-direction: column;
-  justify-content: space-between; }
-  @media screen and (max-width: 768px) {
-    .price-card ul.has-disc {
-      max-width: 300px;
-      margin-left: auto;
-      margin-right: auto; } }
+  height: 275px;
+  justify-content: center;
+  width: 100%; }
 
 .section.has-pyramid {
   position: relative;

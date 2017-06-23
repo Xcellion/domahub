@@ -1,11 +1,10 @@
-<!-- <img id="background_image" src="<%= listing_info.background_image %>"></img> -->
 <script src="/js/routes/main/random_characters.js" type="text/javascript"></script>
 <script src="/js/lib/typed.js" type="text/javascript"></script>
 <script src="/js/lib/daterangepicker.js" type="text/javascript"></script>
 <script src="/js/routes/listings/listing_listed_logic.js" type="text/javascript"></script>
 <script src="/js/routes/listings/theming.js" type="text/javascript"></script>
 
-<div id="compare-preview" class="is-active">
+<div id="compare-preview" class="is-hidden">
 
     <div id="show-menu-wrapper" class="control is-hidden">
       <button class="button">
@@ -21,7 +20,7 @@
           <div class="column is-6">
 
             <% if (listing_info.buy_price > 0) { %>
-                <span id="buy-price-tag" class="tag is-primary margin-bottom-5 is-hidden is-medium">
+                <span id="buy-price-tag" class="tag is-primary margin-right-5 margin-bottom-5 is-hidden is-medium">
                     <span id="buy-price"></span>
                 </span>
             <% } %>

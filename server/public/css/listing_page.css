@@ -194,8 +194,9 @@ button[data-balloon] {
   background-color: #fff;
   min-height: 100vh;
   left: 0;
-  padding: 60px 20px;
-  width: 100%; }
+  padding: 80px 20px;
+  width: 100%;
+  min-height: 100vh; }
   #compare-preview.is-active {
     -moz-transform: translate(500px, 0);
     -o-transform: translate(500px, 0);
@@ -230,18 +231,26 @@ button[data-balloon] {
     -ms-transform: translate(0, 0);
     -webkit-transform: translate(0, 0);
       -webkit-transform-transform: translate(0, 0); }
+  #compare-menu .footer {
+    height: 200px; }
+
+#compare-buttons {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  padding: 20px;
+  border-bottom: 1px solid #efefef; }
 
 #compare-content {
   overflow-y: auto;
-  height: calc(100vh - 200px); }
+  margin-top: 83px;
+  height: calc(100vh - 283px); }
 
 #compare-footer {
+  z-index: 4;
   bottom: 0;
   position: absolute;
   width: 100%; }
-
-.footer {
-  height: 200px; }
 
 .logo {
   display: inline-flex;
@@ -275,38 +284,11 @@ button[data-balloon] {
   max-height: 50px;
   object-fit: cover; }
 
-#background_image {
-  position: fixed;
-  object-fit: cover;
-  min-height: 100vh; }
-  #background_image.is-bnw {
-    -webkit-filter: grayscale(100%);
-    /* Safari 6.0 - 9.0 */
-    -moz-filter: grayscale(100%);
-    -o-filter: grayscale(100%);
-    -ms-filter: grayscale(100%);
-    filter: grayscale(100%); }
-  #background_image.is-blur {
-    -webkit-filter: blur(5px);
-    -moz-filter: blur(5px);
-    -o-filter: blur(5px);
-    -ms-filter: blur(5px);
-    filter: blur(5px);
-    transform: scale(1.03); }
-  #background_image.is-blur.is-bnw {
-    -webkit-filter: blur(5px) grayscale(100%);
-    -moz-filter: blur(5px) grayscale(100%);
-    -o-filter: blur(5px) grayscale(100%);
-    -ms-filter: blur(5px) grayscale(100%);
-    filter: blur(5px) grayscale(100%);
-    transform: scale(1.03); }
-
 .description-wrapper {
   max-width: 500px; }
 
 #description-text {
-  white-space: pre-wrap;
-  word-break: break-all; }
+  white-space: pre-wrap; }
 
 #domain-display h1 {
   font-size: 48px;
