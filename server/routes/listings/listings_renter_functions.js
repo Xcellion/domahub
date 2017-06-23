@@ -1406,6 +1406,13 @@ function getWhoIs(req, res, next, unlisted){
                 listing_info.buy_price = Math.round(Math.random() * 10000);
                 listing_info.buyable = 1;
                 listing_info.rentable = 1;
+                listing_info.primary_color = "#3CBC8D";
+                listing_info.secondary_color = "#FF5722";
+                listing_info.tertiary_color = "#2196F3";
+                listing_info.font_color = "#000000";
+                listing_info.font_name = "Rubik";
+                listing_info.background_color = "#FFFFFF";
+                listing_info.background_image = "";
                 listing_info.history_module = 1;
                 listing_info.traffic_module = 1;
                 listing_info.info_module = 1;

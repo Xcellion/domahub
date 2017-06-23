@@ -346,6 +346,9 @@ function editRowVerified(listing_info){
 	$(".verified-elem").removeClass('is-hidden');
 	$(".unverified-elem").addClass('is-hidden');
 
+	//revert preview stuff
+	$(".preview-elem").removeAttr('style');
+
 	updateStatus(listing_info);
 	updateDescription(listing_info);
 	updateCategories(listing_info);
@@ -475,6 +478,7 @@ function getDomainOffers(domain_name){
 			animate: false,
 			afterTagAdded : function(event, ui){
 				changedValue($("#paths-input"), listing_info);
+				$(".tagit.textarea").addClass('rentable-input');
 			},
 			afterTagRemoved : function(event, ui){
 				changedValue($("#paths-input"), listing_info);
@@ -495,6 +499,20 @@ function getDomainOffers(domain_name){
 		$("#buy-price-input").val(listing_info.buy_price);
 		$("#price-rate-input").val(listing_info.price_rate);
 		$("#price-type-input").val(listing_info.price_type);
+
+		//update preview on design page
+		if (listing_info.buy_price > 0){
+			$("#example-buy-price-tag").removeClass('is-hidden').text("For sale - " + moneyFormat.to(parseFloat(listing_info.buy_price)));
+		}
+		else {
+			$("#example-buy-price-tag").addClass('is-hidden');
+		}
+		if (listing_info.rentable){
+			$("#example-rent-price-tag").removeClass('is-hidden').text("For rent - " + moneyFormat.to(parseFloat(listing_info.price_rate)) + " / " + listing_info.price_type);
+		}
+		else {
+			$("#example-rent-price-tag").addClass('is-hidden');
+		}
 	}
 	function updateRentalInputsDisabled(rentable){
 		if (rentable == 1){
@@ -518,6 +536,18 @@ function getDomainOffers(domain_name){
 		$("#primary-color-input").val(listing_info.primary_color).minicolors("destroy").minicolors(minicolor_options);
 		$("#secondary-color-input").val(listing_info.secondary_color).minicolors("destroy").minicolors(minicolor_options);
 		$("#tertiary-color-input").val(listing_info.tertiary_color).minicolors("destroy").minicolors(minicolor_options);
+
+		//update the preview
+		$("#example-domain-name").css("color", listing_info.primary_color);
+		$("#example-button-primary, #example-rent-price-tag, #example-buy-price-tag").css({
+			"background-color" : listing_info.primary_color,
+			"color" : calculateLuminance(listing_info.primary_color)
+		});
+		$("#example-button-accent").css({
+			"background-color" : listing_info.secondary_color,
+			"color" : calculateLuminance(listing_info.secondary_color)
+		});
+		$("#example-link-info").css("color", listing_info.tertiary_color);
 	}
 	function updateFontStyling(listing_info){
 		var minicolor_options = {
@@ -526,7 +556,10 @@ function getDomainOffers(domain_name){
 		}
 		$("#font-color-input").val(listing_info.font_color).minicolors("destroy").minicolors(minicolor_options);
 		$("#font-name-input").val(listing_info.font_name);
-		$("#preview-domain-font").removeAttr("style").css("font-family", listing_info.font_name);
+
+		//update the preview
+		$("#example-domain-name").css("font-family", listing_info.font_name);
+		$("#example-font").css("color", listing_info.font_color);
 	}
 	function updateBackgroundImage(listing_info){
 		var background_image = (listing_info.background_image == null || listing_info.background_image == undefined || listing_info.background_image == "") ? "https://placeholdit.imgix.net/~text?txtsize=20&txt=NO%20IMG&w=96&h=64" : listing_info.background_image;
@@ -539,6 +572,9 @@ function getDomainOffers(domain_name){
 			swatches: ["#FFFFFF", "#E5E5E5", "#B2B2B2", "#7F7F7F", "#666666", "#222222", "#000000"]
 		}
 		$("#background-color-input").val(listing_info.background_color).minicolors("destroy").minicolors(minicolor_options);
+
+		//update the preview
+		$("#example-wrapper").css("background-color", listing_info.background_color);
 	}
 	function updateLogo(listing_info){
 		var logo = (listing_info.logo == null || listing_info.logo == undefined || listing_info.logo == "") ? "/images/dh-assets/flat-logo/dh-flat-logo-primary.png" : listing_info.logo;
@@ -699,7 +735,39 @@ function getDomainOffers(domain_name){
 
 		//change domain name font
 		$("#font-name-input").on("input", function(){
-			$("#preview-domain-font").removeAttr("style").css("font-family", $(this).val());
+			$("#example-domain-name").css("font-family", $(this).val());
+		});
+
+		//change primary font color
+		$("#primary-color-input").on("input", function(){
+			$("#example-button-primary, #example-rent-price-tag, #example-buy-price-tag").css({
+				"background-color" : $(this).val(),
+				"color" : calculateLuminance($(this).val())
+			});
+			$("#example-domain-name").css("color", $(this).val());
+		});
+
+		//change secondary font color
+		$("#secondary-color-input").on("input", function(){
+			$("#example-button-accent").css({
+				"background-color" : $(this).val(),
+				"color" : calculateLuminance($(this).val())
+			});
+		});
+
+		//change tertiary font color
+		$("#tertiary-color-input").on("input", function(){
+			$("#example-link-info").css("color", $(this).val());
+		});
+
+		//change regular font color
+		$("#font-color-input").on("input", function(){
+			$("#example-font").css("color", $(this).val());
+		});
+
+		//change background color
+		$("#background-color-input").on("input", function(){
+			$("#example-wrapper").css("background-color", $(this).val());
 		});
 
 		//delete images
@@ -1302,6 +1370,31 @@ function deletionHandler(rows, selected_rows){
 //</editor-fold>
 
 //<editor-fold>-------------------------------HELPER FUNCTIONS--------------------------------
+
+//return white or black text based on luminance
+function calculateLuminance(rgb) {
+	var hexValue = rgb.replace(/[^0-9A-Fa-f]/, '');
+	var r,g,b;
+	if (hexValue.length === 3) {
+		hexValue = hexValue[0] + hexValue[0] + hexValue[1] + hexValue[1] + hexValue[2] + hexValue[2];
+	}
+	if (hexValue.length !== 6) {
+		return 0;
+	}
+    r = parseInt(hexValue.substring(0,2), 16) / 255;
+  	g = parseInt(hexValue.substring(2,4), 16) / 255;
+  	b = parseInt(hexValue.substring(4,6), 16) / 255;
+
+    // calculate the overall luminance of the color
+    var luminance = 0.2126 * r + 0.7152 * g + 0.0722 * b;
+
+    if (luminance > 0.8) {
+        return "#222";
+    }
+    else {
+        return "#fff";
+    }
+}
 
 //function to sort
 function sortBy(property_name, asc, a, b){
