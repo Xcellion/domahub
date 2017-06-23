@@ -34,6 +34,17 @@
   &.is-active {
     @include translate(500px,0);
     width: calc(100% - 500px);
+    @media screen and (max-width: 1305px) {
+      @include translate(300px,0);
+      width: calc(100% - 300px);
+    }
+    @include tablet-only {
+      .master {
+        &.right {
+          flex-direction: column;
+        }
+      }
+    }
   }
 }
 
@@ -51,22 +62,33 @@
     height: 100vh;
     @include translate(0,0);
   }
+  @media screen and (max-width: 1305px) {
+    width: 300px;
+  }
   .footer {
     height: 200px;
   }
 }
 
 #compare-buttons {
-    position:absolute;
-    top:0;
     width:100%;
-    padding:20px;
-    border-bottom:1px solid $grey-lighter;
+    padding: 20px;
+    border-bottom:1px solid $border;
+    .control {
+      &.is-spaced {
+        @media screen and (max-width: 1305px) {
+          flex-direction: column-reverse;
+          align-items: flex-start;
+          .control-right {
+            margin-bottom: 10px;
+          }
+        }
+      }
+    }
 }
 
 #compare-content {
     overflow-y: auto;
-    margin-top:83px;
     height: calc(100vh - 283px);
 }
 
