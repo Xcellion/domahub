@@ -83,7 +83,11 @@
                 </div>
             <% } %>
 
-            <div class='box has-tabs'>
+            <% if (listing_info.rentable){ %>
+                <div class='box has-tabs'>
+            <% } else { %>
+                <div class='box'>
+            <% } %>
 
                 <% if (listing_info.status == 1) { %>
                     <%# BUY NOW MODULE %>
@@ -103,50 +107,21 @@
           </div>
         </div>
 
-        <%# TABS %>
-        <div class="margin-top-75 tabs has-shadow is-medium">
-          <ul>
-
-              <% if ((listing_info.premium && listing_info.traffic_module) || !listing_info.premium){ %>
-                  <li id="traffic-tab" data-position="0" class='tab module-tab is-active'>
-                      <a>
-                        <span class="is-hidden-mobile icon is-small"><i class="fa fa-line-chart"></i></span>
-                        <span>Traffic</span>
-                      </a>
-                  </li>
-              <% } %>
-
-              <% if ((listing_info.premium && listing_info.info_module) || !listing_info.premium){ %>
-                  <li id="info-tab" data-position="1" class="tab module-tab">
-                      <a>
-                          <span class="is-hidden-mobile icon is-small"><i class="fa fa-info-circle"></i></span>
-                          <span>Information</span>
-                      </a>
-                  </li>
-              <% } %>
-
-              <% if ((listing_info.premium && listing_info.history_module) || !listing_info.premium){ %>
-                  <li id="ticker-tab" data-position="2" class="tab module-tab">
-                    <a>
-                        <span class="is-hidden-mobile icon is-small"><i class="fa fa-history"></i></span>
-                        <span>History</span>
-                    </a>
-                  </li>
-              <% } %>
-
-          </ul>
-        </div>
-
-        <%# TRAFFIC MODULE %>
-        <% if ((listing_info.premium && listing_info.traffic_module) || !listing_info.premium){ %>
-            <%- include("modules/traffic_module.ejs", {
-                listing_info : listing_info
-            }); %>
-        <% } %>
+        <%# TABS FOR THE BELOW MODULES %>
+        <%- include("modules/tabs_module.ejs", {
+            listing_info : listing_info
+        }); %>
 
         <%# INFO MODULE %>
         <% if ((listing_info.premium && listing_info.info_module) || !listing_info.premium){ %>
             <%- include("modules/info_module.ejs", {
+                listing_info : listing_info
+            }); %>
+        <% } %>
+
+        <%# TRAFFIC MODULE %>
+        <% if ((listing_info.premium && listing_info.traffic_module) || !listing_info.premium){ %>
+            <%- include("modules/traffic_module.ejs", {
                 listing_info : listing_info
             }); %>
         <% } %>
