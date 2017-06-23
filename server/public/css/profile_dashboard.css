@@ -210,7 +210,7 @@ button[data-balloon] {
   z-index: 9;
   background-color: rgba(0, 0, 0, 0.66); }
 
-#current-domain-name {
+.current-domain-name {
   word-break: break-all; }
 
 #table-body {
