@@ -1,3 +1,5 @@
+var current_theme = "DomaHub";
+
 $(document).ready(function() {
 	if (compare){
 
@@ -11,28 +13,29 @@ $(document).ready(function() {
 			$("#" + box_id + "-box").removeClass('is-hidden');
 		});
 
+		//INFO TAB
 		updateDescription();
 		updatePricing();
 		updateBIN();
 		updateRentable();
-		updateBackground();
-		updateColorScheme();
+
+		//DESIGN TAB
+		updateThemes();
+		loadBackgroundHandlers();
+		loadColorSchemeHandlers();
+		loadFontStyleHandlers();
 		updateModules();
-		updateFontStyle();
+		switchTheme($("#theme-input").val());
 
-		checkBox(listing_info.history_module, $("#history-module-input"));
-		checkBox(listing_info.traffic_module, $("#traffic-module-input"));
-		checkBox(listing_info.info_module, $("#info-module-input"));
-
-		updateBackground(listing_info);
-		updateColorScheme(listing_info);
-		updateFontStyle(listing_info);
+		//change to custom theme if anything is changed
+		$(".theme-changeable-input").on("change", function(){
+			current_theme = "Custom";
+			$("#theme-input").val(current_theme);
+		});
 
 		toggleMenu();
 	}
 });
-
-//<editor-fold>-----------------------------------------------------------------------------------EDITOR
 
 //function to hide and show menu
 function toggleMenu() {
@@ -55,6 +58,57 @@ function toggleMenu() {
 		preview.toggleClass("is-active");
 	});
 }
+
+//<editor-fold>-----------------------------------------------------------------------------------THEMES
+
+//update theme selector
+function updateThemes(){
+	//swtich theme selector
+	$("#theme-input").off().on("input", function(){
+		switchTheme($(this).val());
+	});
+
+	//get a unique random theme
+	$("#random-theme-button").off().on("click", function(){
+		var new_theme = getRandomTheme();
+		while (current_theme == new_theme){
+			new_theme = getRandomTheme();
+		}
+		current_theme = new_theme;
+		switchTheme(new_theme);
+	});
+
+	//get a random theme
+	function getRandomTheme(){
+		var themes_array = $("#theme-input option").map(function(){ if ($(this).val() != "Custom") { return $(this).val() } } ).get();
+		var random_index = Math.floor(Math.random() * themes_array.length);
+		return themes_array[random_index];
+	}
+}
+
+//function to switch theme
+function switchTheme(theme_name){
+	var theme_to_load = findTheme(theme_name);
+
+	for (var x in theme_to_load){
+		listing_info[x] = theme_to_load[x];
+	}
+
+	updateBackgroundImage(listing_info.background_image);
+	updateFontName(listing_info.font_name);
+	$("#background-color-input").minicolors("value", listing_info.background_color);
+	$("#primary-color-input").minicolors("value", listing_info.primary_color);
+	$("#secondary-color-input").minicolors("value", listing_info.secondary_color);
+	$("#tertiary-color-input").minicolors("value", listing_info.tertiary_color);
+	$("#font-color-input").minicolors("value", listing_info.font_color);
+
+	current_theme = theme_name;
+	$("#theme-input").val(theme_name);
+}
+
+//</editor-fold>
+
+//<editor-fold>-----------------------------------------------------------------------------------INFO TAB
 
 //function to update the description
 function updateDescription(){
@@ -126,66 +180,119 @@ function updateRentable(){
 	});
 }
 
-//input to update background
-function updateBackground(){
-	$("#compare-preview-input").val(listing_info.background_image).on("input", function(){
-		$("#compare-preview").css("background", "url(" + $(this).val() + ") center/cover no-repeat");
+//</editor-fold>
+
+//<editor-fold>-----------------------------------------------------------------------------------DESIGN TAB
+
+//function to load background handlers
+function loadBackgroundHandlers(){
+	//load background image handler
+	$("#background-image-input").off().on("input", function(){
+		updateBackgroundImage($(this).val(), false);
 	});
 
-	var minicolor_options = {
+	//load background color handler
+	$("#background-color-input").minicolors({
 		letterCase: "uppercase",
 		swatches: ["#FFFFFF", "#E5E5E5", "#B2B2B2", "#7F7F7F", "#666666", "#222222", "#000000"]
-	}
-
-	$("#background-color-input").val(listing_info.background_color).minicolors(minicolor_options).on("input", function(){
-		$("#compare-preview").css("background-color", $(this).val());
+	}).off().on("input", function(){
+		updateBackgroundColor($(this).val());
 	});
 }
 
-//inputs to update color scheme
-function updateColorScheme(){
+//input to update background and the page
+function updateBackgroundImage(background_image){
+	listing_info.background_image = background_image;
+	$("#background-image-input").val(background_image);
+	if (background_image == ""){
+		$("#compare-preview").css("background", "");
+	}
+	else {
+		$("#compare-preview").css("background", "url(" + background_image + ") center/cover no-repeat");
+	}
+}
+
+//input to update background color and the page
+function updateBackgroundColor(background_color){
+	listing_info.background_color = background_color;
+	$("#background-color-input").val(background_color);
+	$("#compare-preview").css("background-color", background_color);
+}
+
+//load color scheme handlers
+function loadColorSchemeHandlers(){
 	var minicolor_options = {
 		letterCase: "uppercase",
 		swatches: ["#3cbc8d", "#FF5722", "#2196F3"]
 	}
-	$("#primary-color-input").val("#3CBC8D").minicolors(minicolor_options).on("change", function(){
-		listing_info.primary_color = $(this).val();
-		stylize($(this).val(), ".daterangepicker td.active, .daterangepicker td.active:hover", "background-color");
-		stylize($(this).val(), "#compare-preview .is-primary", "color");
-		stylize($(this).val(), "#compare-preview .is-primary.button", "background-color");
-		stylize($(this).val(), ".tag", "background-color");
-
-		if (myChart){
-			myChart.data.datasets[0].borderColor = $(this).val();
-			myChart.data.datasets[0].backgroundColor = $(this).val();
-			myChart.update();
-		}
+	$("#primary-color-input").minicolors(minicolor_options).off().on("change", function(){
+		updateColorScheme($(this).val(), false, false);
 	});
-	$("#secondary-color-input").val("#FF5722").minicolors(minicolor_options).on("change", function(){
-		listing_info.secondary_color = $(this).val();
-		stylize($(this).val(), "#compare-preview .is-accent", "color");
-	    stylize($(this).val(), "#compare-preview .is-accent.button", "background-color");
+	$("#secondary-color-input").minicolors(minicolor_options).off().on("change", function(){
+		updateColorScheme(false, $(this).val(), false);
 	});
-	$("#tertiary-color-input").val("#2196F3").minicolors("destroy").minicolors(minicolor_options).on("change", function(){
-		listing_info.tertiary_color = $(this).val();
-		stylize($(this).val(), "#compare-preview .is-info", "color");
+	$("#tertiary-color-input").minicolors(minicolor_options).off().on("change", function(){
+		updateColorScheme(false, false, $(this).val());
 	});
 }
 
-//function to update font
-function updateFontStyle(){
-	var minicolor_options = {
+//inputs to update color scheme
+function updateColorScheme(primary_color, secondary_color, tertiary_color){
+	if (primary_color != false){
+		listing_info.primary_color = primary_color;
+		$("#primary-color-input").val(primary_color);
+		stylize(primary_color, ".daterangepicker td.active, .daterangepicker td.active:hover", "background-color");
+		stylize(primary_color, "#compare-preview .is-primary", "color");
+		stylize(primary_color, "#compare-preview .is-primary.button", "background-color");
+		stylize(primary_color, ".tag", "background-color");
+
+		if (myChart){
+			myChart.data.datasets[0].borderColor = primary_color;
+			myChart.data.datasets[0].backgroundColor = primary_color;
+			myChart.update();
+		}
+	}
+	if (secondary_color != false){
+		listing_info.secondary_color = secondary_color;
+		$("#secondary-color-input").val(secondary_color);
+		stylize(secondary_color, "#compare-preview .is-accent", "color");
+		stylize(secondary_color, "#compare-preview .is-accent.button", "background-color");
+	}
+	if (tertiary_color != false){
+		listing_info.tertiary_color = tertiary_color;
+		$("#tertiary-color-input").val(tertiary_color);
+		stylize(tertiary_color, "#compare-preview .is-info", "color");
+	}
+}
+
+//load the font styling handlers
+function loadFontStyleHandlers(){
+	//font color
+	$("#font-color-input").minicolors({
 		letterCase: "uppercase",
 		swatches: ["#000", "#222", "#D3D3D3", "#FFF"]
-	}
-	$("#font-color-input").val("#000").minicolors("destroy").minicolors(minicolor_options).on("change", function(){
-		listing_info.font_color = $(this).val();
-		stylize($(this).val(), ".regular-font", "color");
+	}).on("change", function(){
+		updateFontColor($(this).val());
 	});
 
-	$("#font-name-input").on("change", function(){
-		stylize($(this).val(), "#domain-title", "font-family");
+	//font name
+	$("#font-name-input").off().on("change", function(){
+		updateFontName($(this).val());
 	});
+}
+
+//function to update font color
+function updateFontColor(font_color){
+	listing_info.font_color = font_color;
+	$("#font-color-input").val(font_color);
+	stylize(font_color, ".regular-font", "color");
+}
+
+//function to update font name
+function updateFontName(font_name){
+	listing_info.font_name = font_name;
+	$("#font-name-input").val(font_name)
+	stylize(font_name, "#domain-title", "font-family");
 }
 
 //function to update modules
@@ -420,7 +527,7 @@ function createTestRentals(){
 
 //</editor-fold>
 
-//<editor-fold>-----------------------------------------------------------------------------------REMOVE HANDLERS
+//<editor-fold>-----------------------------------------------------------------------------------UPDATE HANDLERS
 
 //function to do submit buy handler
 function testSubmitBuyHandler(){

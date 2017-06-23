@@ -1,6 +1,7 @@
 <link rel="stylesheet" href="/css/lib/jquery.minicolors.css" type="text/css" />
 <script src="/js/jquery/jquery.minicolors.min.js" type="text/javascript"></script>
 <script src="/js/routes/listings/listing_compare_logic.js" type="text/javascript"></script>
+<script src="/js/themes.js" type="text/javascript"></script>
 
 <div id="compare-menu" class="min-height is-active">
 
@@ -33,13 +34,13 @@
             <%# INFO %>
             <div class="control">
                 <label class="label" for="description">Listing Description</label>
-                <textarea id="description" class="description-input textarea changeable-input" tabindex="0" placeholder="Write anything you want!"></textarea>
+                <textarea id="description" class="description-input textarea " tabindex="0" placeholder="Write anything you want!"></textarea>
             </div>
 
             <%# PRICING %>
             <div class="control">
                 <label class="label" for="buy-price-input">Minimum Purchase Price</label>
-                <input id="buy-price-input" type="number" min="1" step="1" class="input changeable-input">
+                <input id="buy-price-input" type="number" min="1" step="1" class="input ">
                 <small class="tip">The minimum offer / price you will consider.</small>
             </div>
             <div class="control is-spaced">
@@ -50,7 +51,7 @@
                 </div>
                 <div class="control-right">
                     <form class="checkbox-form">
-                        <input id="buyable-input" type="checkbox" class="checkbox-input changeable-input" tabindex="0" />
+                        <input id="buyable-input" type="checkbox" class="checkbox-input " tabindex="0" />
                         <label for="buyable-input"></label>
                     </form>
                 </div>
@@ -63,7 +64,7 @@
                 </div>
                 <div class="control-right">
                     <form class="checkbox-form">
-                        <input id="rentable-input" type="checkbox" class="checkbox-input changeable-input" tabindex="0" />
+                        <input id="rentable-input" type="checkbox" class="checkbox-input " tabindex="0" />
                         <label for="rentable-input"></label>
                     </form>
                 </div>
@@ -71,10 +72,10 @@
             <div class="control">
                 <label class="label" for="price-rate-input">Rental Price</label>
                 <div class="control has-addons margin-bottom-0">
-                    <input id="price-rate-input" placeholder="minimum 1" type="number" min="1" step="1" class="padding-top-0 input changeable-input">
+                    <input id="price-rate-input" placeholder="minimum 1" type="number" min="1" step="1" class="padding-top-0 input ">
                     <span class="select price-type-span">
                         <div class="drop-form">
-                            <select tabindex="0" id="price-type-input" class="changeable-input">
+                            <select tabindex="0" id="price-type-input" class="">
                                 <option value="month">Month</option>
                                 <option value="week">Week</option>
                                 <option value="day">Day</option>
@@ -93,7 +94,7 @@
                 <div class="control is-grouped">
                     <div class="control has-icon">
                         <span class="select is-fullwidth">
-                            <select tabindex="0" id="theme-input" class="changeable-input">
+                            <select tabindex="0" id="theme-input" class="">
                                 <option selected default value="DomaHub">DomaHub</option>
                                 <option value="Custom">Custom</option>
                                 <option value="Aqua">Aqua</option>
@@ -103,17 +104,9 @@
                         <i class="fa fa-picture-o"></i>
                     </div>
                     <div class="control">
-                        <a id="random-button" class="button is-small is-stylish">Random Theme</a>
+                        <a id="random-theme-button" class="button is-small is-stylish">Random Theme</a>
                     </div>
                 </div>
-            </div>
-            <div class="control">
-                <label class="label" for="background-image-input">Background Image URL</label>
-                <input id="background-image-input" type="text" class="input changeable-input">
-            </div>
-            <div class="control">
-                <label class="label" for="background-color-input">Background Color</label>
-                <input id="background-color-input" type="text" class="input">
             </div>
             <div class="control">
                 <label class="label" for="color-scheme">
@@ -122,11 +115,9 @@
                         <i class="fa fa-question-circle"></i>
                     </span>
                 </label>
-                <input id="primary-color-input" placeholder="#3CBC8D" type="text" class="padding-top-0 input changeable-input">
-                <input id="secondary-color-input" placeholder="#FF5722" type="text" class="padding-top-0 input changeable-input">
-                <div class="control">
-                    <input id="tertiary-color-input" placeholder="#2196F3" type="text" class="padding-top-0 input changeable-input">
-                </div>
+                <input id="primary-color-input" placeholder="#3CBC8D" type="text" class="padding-top-0 input theme-changeable-input">
+                <input id="secondary-color-input" placeholder="#FF5722" type="text" class="padding-top-0 input theme-changeable-input">
+                <input id="tertiary-color-input" placeholder="#2196F3" type="text" class="padding-top-0 input theme-changeable-input">
             </div>
             <div class="control">
                 <label class="label">
@@ -137,11 +128,11 @@
                 </label>
                 <div class="control is-grouped">
                     <p class="control">
-                        <input id="font-color-input" placeholder="#000000" type="text" class="padding-top-0 input changeable-input">
+                        <input id="font-color-input" placeholder="#000000" type="text" class="padding-top-0 input theme-changeable-input">
                     </p>
                     <p class="control has-icon">
                         <span class="select is-fullwidth">
-                            <select tabindex="0" id="font-name-input" class="changeable-input">
+                            <select tabindex="0" id="font-name-input" class="theme-changeable-input">
                                 <option selected default value="Rubik">Rubik</option>
                                 <option value="Times New Roman">Times New Roman</option>
                                 <option value="Helvetica">Helvetica</option>
@@ -154,6 +145,14 @@
                     </p>
                 </div>
             </div>
+            <div class="control">
+                <label class="label" for="background-image-input">Background Image URL</label>
+                <input id="background-image-input" type="text" class="input theme-changeable-input">
+            </div>
+            <div class="control">
+                <label class="label" for="background-color-input">Background Color</label>
+                <input id="background-color-input" type="text" class="input theme-changeable-input">
+            </div>
             <div class="control is-spaced">
                 <div class="control-left">
                     <label class="label" for="traffic-module-input">Traffic Module</label>
@@ -161,7 +160,7 @@
                 </div>
                 <div class="control-right">
                     <form class="checkbox-form">
-                        <input id="traffic-module-input" type="checkbox" class="module-input checkbox-input changeable-input" tabindex="0" />
+                        <input id="traffic-module-input" type="checkbox" class="module-input checkbox-input" tabindex="0" />
                         <label for="traffic-module-input"></label>
                     </form>
                 </div>
@@ -173,7 +172,7 @@
                 </div>
                 <div class="control-right">
                     <form class="checkbox-form">
-                        <input id="info-module-input" type="checkbox" class="module-input checkbox-input changeable-input" tabindex="0" />
+                        <input id="info-module-input" type="checkbox" class="module-input checkbox-input " tabindex="0" />
                         <label for="info-module-input"></label>
                     </form>
                 </div>
@@ -185,7 +184,7 @@
                 </div>
                 <div class="control-right">
                     <form class="checkbox-form">
-                        <input id="ticker-module-input" type="checkbox" class="module-input checkbox-input changeable-input" tabindex="0" />
+                        <input id="ticker-module-input" type="checkbox" class="module-input checkbox-input " tabindex="0" />
                         <label for="ticker-module-input"></label>
                     </form>
                 </div>
