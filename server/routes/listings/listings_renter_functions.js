@@ -736,7 +736,8 @@ module.exports = {
                     });
                 }
                 else {
-                    error.handler(req, res, "DNS error!");
+                    req.session.listing_info.status = 0;
+                    next();
                 }
             });
         }
