@@ -23,18 +23,18 @@ textarea
   +font-size(16px)
 
 .is-bold
-  font-weight: 500
+  font-weight: 500 !important
 .is-normal
-  font-weight: 400
+  font-weight: 400 !important
 .is-underlined
   color: inherit
-  text-decoration: underline
+  text-decoration: underline !important
 .is-linethrough
-  text-decoration: line-through
+  text-decoration: line-through !important
 .is-uppercase
-  text-transform: uppercase
+  text-transform: uppercase !important
 .is-capitalized
-  text-transform: capitalize
+  text-transform: capitalize !important
 
 h1,
 h2,
@@ -105,7 +105,7 @@ a
   cursor: pointer
   color: $text
   font-weight: 400
-  text-decoration: none !important
+  text-decoration: none
   word-break: break-word
   &:active
     outline: none
@@ -113,6 +113,10 @@ a
   &:hover,
   &:focus
     text-decoration: none !important
+  &.is-generic
+    text-decoration: underline !important
+    &:active
+      outline: none
   +mobile-456px
     font-size: $size-7
 

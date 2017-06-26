@@ -409,8 +409,8 @@ function getDomainOffers(domain_name){
 					cloned_offer_row.find("#offer-timestamp").text(moment(listing_info.offers[x].timestamp).format("MMMM DD, YYYY - HH:mmA"));
 					cloned_offer_row.find("#offer-name").text(listing_info.offers[x].name);
 					cloned_offer_row.find("#offer-email").text(listing_info.offers[x].email).attr("href", "mailto:" + listing_info.offers[x].email);
-					cloned_offer_row.find("#offer-phone").text(listing_info.offers[x].phone);
-					cloned_offer_row.find("#offer-offer").text(listing_info.offers[x].offer);
+					cloned_offer_row.find("#offer-phone").text("(" + listing_info.offers[x].phone + ")");
+					cloned_offer_row.find("#offer-offer").text("$" + listing_info.offers[x].offer);
 					cloned_offer_row.find("#offer-message").text(listing_info.offers[x].message);
 					$("#offers-wrapper").append(cloned_offer_row);
 				}
