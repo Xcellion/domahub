@@ -1,15 +1,15 @@
 var mysql = require('mysql');
 var pool = mysql.createPool({
-    host: 'p3plcpnl0172.prod.phx3.secureserver.net',
-    //host: 'localhost',
-    user: 'administrator',
-    password: 'Password01',
-    database: 'domahub',
-    multipleStatements: true,
-    dateStrings: true,
-    timezone: '+0:00',
-    charset: "utf8_unicode_ci"
-  });
+  host: 'p3plcpnl0172.prod.phx3.secureserver.net',
+  //host: 'localhost',
+  user: 'administrator',
+  password: 'Password01',
+  database: 'domahub',
+  multipleStatements: true,
+  dateStrings: true,
+  timezone: '+0:00',
+  charset: "utf8_unicode_ci"
+});
 
 module.exports = {
   connect: database_connect,
