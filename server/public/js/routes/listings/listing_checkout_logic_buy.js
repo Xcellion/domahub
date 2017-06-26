@@ -139,16 +139,16 @@ function showMessage(message_id, text){
 function checkCC(){
     $("#stripe-regular-message").addClass('is-hidden');
     if (!$("#cc-num").val()){
-    	$("#stripe-error-message").removeClass('is-hidden').addClass('is-danger').html("Please provide a credit card to charge.");
+      $("#stripe-error-message").removeClass('is-hidden').addClass('is-danger').html("Please provide a credit card to charge.");
     }
     else if (!$("#cc-exp").val()){
-    	$("#stripe-error-message").removeClass('is-hidden').addClass('is-danger').html("Please provide your credit card expiration date.");
+      $("#stripe-error-message").removeClass('is-hidden').addClass('is-danger').html("Please provide your credit card expiration date.");
     }
     else if (!$("#cc-cvc").val()){
-    	$("#stripe-error-message").removeClass('is-hidden').addClass('is-danger').html("Please provide your credit card CVC number.");
+      $("#stripe-error-message").removeClass('is-hidden').addClass('is-danger').html("Please provide your credit card CVC number.");
     }
     else if (!$("#cc-zip").val()){
-    	$("#stripe-error-message").removeClass('is-hidden').addClass('is-danger').html("Please provide a ZIP code.");
+      $("#stripe-error-message").removeClass('is-hidden').addClass('is-danger').html("Please provide a ZIP code.");
     }
     else {
         $("#stripe-regular-message").removeClass('is-hidden');
@@ -196,11 +196,11 @@ function submitNewPurchase(stripeToken){
 //handler for various error messages
 function errorHandler(message){
     switch (message){
-		case "Invalid email!":
+    case "Invalid email!":
             showStep("log");
             showMessage("log-error-message");
-			break;
-		default:
+      break;
+    default:
             showMessage("stripe-error-message", "Something went wrong with the payment! Please refresh the page and try again.");
             break;
     }
@@ -222,7 +222,7 @@ function successHandler(rental_id, owner_hash_id){
 
 //to format a number for $$$$
 var moneyFormat = wNumb({
-	thousand: ',',
-	prefix: '$',
-	decimals: 2
+  thousand: ',',
+  prefix: '$',
+  decimals: 2
 });

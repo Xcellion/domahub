@@ -1,6 +1,6 @@
 //<editor-fold>-------------------------------NODE REQUIREMENTS-------------------------------
 
-var node_env = process.env.NODE_ENV || 'dev'; 	//dev or prod bool
+var node_env = process.env.NODE_ENV || 'dev';   //dev or prod bool
 
 var PNF = require('google-libphonenumber').PhoneNumberFormat;
 var phoneUtil = require('google-libphonenumber').PhoneNumberUtil.getInstance();

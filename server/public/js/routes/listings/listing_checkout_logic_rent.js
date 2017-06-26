@@ -325,16 +325,16 @@ function checkEmail(email){
 function checkCC(){
     $("#stripe-regular-message").addClass('is-hidden');
     if (!$("#cc-num").val()){
-    	$("#stripe-error-message").removeClass('is-hidden').addClass('is-danger').html("Please provide a credit card to charge.");
+      $("#stripe-error-message").removeClass('is-hidden').addClass('is-danger').html("Please provide a credit card to charge.");
     }
     else if (!$("#cc-exp").val()){
-    	$("#stripe-error-message").removeClass('is-hidden').addClass('is-danger').html("Please provide your credit card expiration date.");
+      $("#stripe-error-message").removeClass('is-hidden').addClass('is-danger').html("Please provide your credit card expiration date.");
     }
     else if (!$("#cc-cvc").val()){
-    	$("#stripe-error-message").removeClass('is-hidden').addClass('is-danger').html("Please provide your credit card CVC number.");
+      $("#stripe-error-message").removeClass('is-hidden').addClass('is-danger').html("Please provide your credit card CVC number.");
     }
     else if (!$("#cc-zip").val()){
-    	$("#stripe-error-message").removeClass('is-hidden').addClass('is-danger').html("Please provide a ZIP code.");
+      $("#stripe-error-message").removeClass('is-hidden').addClass('is-danger').html("Please provide a ZIP code.");
     }
     else {
         $("#stripe-regular-message").removeClass('is-hidden');
@@ -400,29 +400,29 @@ function submitNewRental(stripeToken){
 function errorHandler(message){
     console.log(message);
     switch (message){
-		case "Invalid times!":
+    case "Invalid times!":
             showMessage("stripe-error-message", "The selected times are not available anymore! Please edit your selected rental dates.");
-			break;
-		case "There's something wrong with this address!":
+      break;
+    case "There's something wrong with this address!":
             showStep("site");
             showMessage("address-error-message", "There's something wrong with this address! Please choose a different website link.");
-			break;
-		case "Invalid rental type!":
+      break;
+    case "Invalid rental type!":
             showMessage("stripe-error-message", "Something went wrong with the rental! Please refresh this page and try again.");
-			break;
-		case "Invalid address!":
+      break;
+    case "Invalid address!":
             showStep("site");
             showMessage("address-error-message", "This is an invalid website link! Please choose a different website link.");
-			break;
+      break;
         case "Malicious address!":
             showStep("site");
             showMessage("address-error-message", "This website link has been deemed malicious or dangerous! Please choose a different website link.");
             break;
-		case "Invalid email!":
+    case "Invalid email!":
             showStep("log");
             showMessage("log-error-message");
-			break;
-		default:
+      break;
+    default:
             showMessage("stripe-error-message", "Something went wrong with the rental! Please refresh the page and try again.");
             break;
     }
@@ -468,9 +468,9 @@ function successHandler(rental_id, owner_hash_id){
 
 //to format a number for $$$$
 var moneyFormat = wNumb({
-	thousand: ',',
-	prefix: '$',
-	decimals: 2
+  thousand: ',',
+  prefix: '$',
+  decimals: 2
 });
 
 //helper function to get price of events
@@ -494,47 +494,47 @@ function calculatePrice(starttime, endtime, overlappedTime, listing_info){
 
 //figure out price from milliseconds
 function calculateDiscountPrice(totalduration){
-	if (listing_info.price_type == "month"){
-		totalduration = totalduration.asDays() / 30;
-	}
-	else {
-		totalduration = totalduration.as(listing_info.price_type);
-		totalduration = Number(Math.round(totalduration+'e2')+'e-2');
-	}
+  if (listing_info.price_type == "month"){
+    totalduration = totalduration.asDays() / 30;
+  }
+  else {
+    totalduration = totalduration.as(listing_info.price_type);
+    totalduration = Number(Math.round(totalduration+'e2')+'e-2');
+  }
     return Number(Math.round((totalduration * listing_info.price_rate)+'e2')+'e-2').toFixed(2)
 }
 
 //figure out if the start and end dates overlap any free periods
 function anyFreeDayOverlap(starttime, endtime){
-	if (listing_info.freetimes && listing_info.freetimes.length > 0){
-		var overlap_time = 0;
-		for (var x = 0; x < listing_info.freetimes.length; x++){
-			var freetime_start = moment(listing_info.freetimes[x].date);
-			var freetime_end = moment(listing_info.freetimes[x].date + listing_info.freetimes[x].duration);
+  if (listing_info.freetimes && listing_info.freetimes.length > 0){
+    var overlap_time = 0;
+    for (var x = 0; x < listing_info.freetimes.length; x++){
+      var freetime_start = moment(listing_info.freetimes[x].date);
+      var freetime_end = moment(listing_info.freetimes[x].date + listing_info.freetimes[x].duration);
 
-			//there is overlap
-			if (starttime.isBefore(freetime_end) && endtime.isAfter(freetime_start)){
-				//completely covered by free time
-				if (starttime.isSameOrAfter(freetime_start) && endtime.isSameOrBefore(freetime_end)){
-					overlap_time += endtime.diff(starttime);
-				}
-				//completely covers free time
-				else if (freetime_start.isSameOrAfter(starttime) && freetime_end.isSameOrBefore(endtime)){
-					overlap_time += freetime_end.diff(freetime_start);
-				}
-				//overlap partially in the end of wanted time
-				else if (starttime.isSameOrBefore(freetime_start) && endtime.isSameOrBefore(freetime_end)){
-					overlap_time += endtime.diff(freetime_start);
-				}
-				//overlap partially at the beginning of wanted time
-				else {
-					overlap_time += freetime_end.diff(starttime);
-				}
-			}
-		}
-		return overlap_time;
-	}
-	else {
-		return 0;
-	}
+      //there is overlap
+      if (starttime.isBefore(freetime_end) && endtime.isAfter(freetime_start)){
+        //completely covered by free time
+        if (starttime.isSameOrAfter(freetime_start) && endtime.isSameOrBefore(freetime_end)){
+          overlap_time += endtime.diff(starttime);
+        }
+        //completely covers free time
+        else if (freetime_start.isSameOrAfter(starttime) && freetime_end.isSameOrBefore(endtime)){
+          overlap_time += freetime_end.diff(freetime_start);
+        }
+        //overlap partially in the end of wanted time
+        else if (starttime.isSameOrBefore(freetime_start) && endtime.isSameOrBefore(freetime_end)){
+          overlap_time += endtime.diff(freetime_start);
+        }
+        //overlap partially at the beginning of wanted time
+        else {
+          overlap_time += freetime_end.diff(starttime);
+        }
+      }
+    }
+    return overlap_time;
+  }
+  else {
+    return 0;
+  }
 }
