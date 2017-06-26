@@ -112,14 +112,18 @@ function switchTheme(theme_name){
 
 //function to update the description
 function updateDescription(){
-	$("#description").val(listing_info.description).on("input", function(){
+	var listing_description = getParameterByName("description") || listing_info.description;
+	$("#description").val(listing_description).on("input", function(){
 		$("#description-text").text($(this).val());
+		listing_info.description = $(this).val();
+		updateQueryStringParam("description", $(this).val());
 	});
 }
 
 //function to update pricing
 function updatePricing(){
-	$("#buy-price-input").val(listing_info.buy_price).on("input", function(){
+	var buy_price = getParameterByName("buy_price") || listing_info.buy_price;
+	$("#buy-price-input").val(buy_price).on("input", function(){
 		if ($(this).val() > 0){
 			$("#buy-price-tag").removeClass('is-hidden');
 			$("#buy-price").text("For sale - " + moneyFormat.to(parseFloat($(this).val())));
@@ -132,13 +136,18 @@ function updatePricing(){
 			$("#contact_offer").attr("placeholder", "");
 		}
 		listing_info.buy_price = $(this).val();
+		updateQueryStringParam("buy_price", $(this).val());
 	});
-	$("#price-rate-input").val(listing_info.price_rate).on("input", function(){
+	var price_rate = getParameterByName("price_rate") || listing_info.price_rate;
+	$("#price-rate-input").val(price_rate).on("input", function(){
 		listing_info.price_rate = $(this).val();
+		updateQueryStringParam("price_rate", $(this).val());
 		$("#actual-price").text("For rent - " + moneyFormat.to(parseFloat($(this).val())) + " / " + $("#price-type-input").val());
 	});
-	$("#price-type-input").val(listing_info.price_type).on("input", function(){
+	var price_type = getParameterByName("price_type") || listing_info.price_type;
+	$("#price-type-input").val(price_type).on("input", function(){
 		listing_info.price_type = $(this).val();
+		updateQueryStringParam("price_type", $(this).val());
 		$("#actual-price").text("For rent - " + moneyFormat.to(parseFloat($("#price-rate-input").val())) + " / " + $("#price-type-input").val());
 	});
 }
@@ -570,3 +579,45 @@ function testCalendarHandler(){
 function randomIntFromInterval(min,max){
     return Math.floor(Math.random()*(max-min+1)+min);
 }
+
+function getParameterByName(name, url) {
+    if (!url) url = window.location.href;
+    name = name.replace(/[\[\]]/g, "\\$&");
+    var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+        results = regex.exec(url);
+    if (!results) return null;
+    if (!results[2]) return '';
+    return decodeURIComponent(results[2].replace(/\+/g, " "));
+}
+
+function updateQueryStringParam(key, value) {
+
+    var baseUrl = [location.protocol, '//', location.host, location.pathname].join(''),
+        urlQueryString = document.location.search,
+        newParam = key + '=' + value,
+        params = '?' + newParam;
+
+    // If the "search" string exists, then build params from it
+    if (urlQueryString) {
+
+        updateRegex = new RegExp('([\?&])' + key + '[^&]*');
+        removeRegex = new RegExp('([\?&])' + key + '=[^&;]+[&;]?');
+
+        if( typeof value == 'undefined' || value == null || value == '' ) { // Remove param if value is empty
+
+            params = urlQueryString.replace(removeRegex, "$1");
+            params = params.replace( /[&;]$/, "" );
+
+        } else if (urlQueryString.match(updateRegex) !== null) { // If param exists already, update it
+
+            params = urlQueryString.replace(updateRegex, "$1" + newParam);
+
+        } else { // Otherwise, add it to end of query string
+
+            params = urlQueryString + '&' + newParam;
+
+        }
+
+    }
+    window.history.replaceState({}, "", baseUrl + params);
+};
