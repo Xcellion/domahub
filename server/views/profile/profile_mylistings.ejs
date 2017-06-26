@@ -35,8 +35,8 @@
 					<!-- FITER MENU -->
 					<div id="filters">
 						<div class="control">
-							<span class="select is-fullwidth" tabindex="0">
-								<select id="filter-select">
+							<span class="select is-fullwidth">
+								<select id="filter-select" tabindex="0">
 									<option selected value="reset_filter">View All</option>
 									<option value="premium_filter">Premium</option>
 									<option value="basic_filter">Basic</option>
@@ -46,8 +46,8 @@
 							</span>
 						</div>
 						<div class="control">
-							<span class="select is-fullwidth" tabindex="0">
-								<select id="sort-select">
+							<span class="select is-fullwidth">
+								<select id="sort-select" tabindex="0">
 									<option disabled selected>Sort By</option>
 									<option value="date">Date Created</option>
 									<option value="az">Name (A - Z)</option>
@@ -88,14 +88,14 @@
 						<div id="verified-clone-row" class="clone-row table-row is-hidden">
 							<form class="checkbox-form">
 								<input class="select-button" data-selected="false" type="checkbox" tabindex="0" title="Select All" />
-								<label for="select-button" tabindex="0"></label>
+								<label for="select-button"></label>
 							</form>
 							<p class='td-domain'></p>
 						</div>
 						<div id="unverified-clone-row" class="clone-row table-row is-hidden">
 							<form class="checkbox-form">
 								<input class="select-button" data-selected="false" type="checkbox" tabindex="0" title="Select All" />
-								<label for="select-button" tabindex="0"></label>
+								<label for="select-button"></label>
 							</form>
 							<div>
 								<p class="is-danger td-domain is-inline"></p>
@@ -128,11 +128,6 @@
 								<span class="icon is-small"><i style="margin-top: 2px" class="fa fa-external-link"></i></span>
 								<span>View</span>
 							</a>
-							<a id="status-color" tabindex="0" class="button is-primary is-small no-shadow" title="Publicly hide or show landing page.">
-								<span class="icon is-small"><i id="status-icon" class="fa fa-toggle-on"></i></span>
-								<span id="status-text">Active</span>
-							</a>
-							<input id="status-input" data-name="status" tabindex="0" type="hidden" class="input changeable-input" />
 						</div>
 					</div>
 
@@ -197,21 +192,21 @@
 						<div id="verified-drop-tab" class="is-hidden verified-elem">
 							<div id="info-tab-drop" class="drop-tab">
 								<div class="control">
-									<a id="status-color" tabindex="0" class="button is-primary is-medium is-icon-only no-shadow" title="Publicly hide or show landing page.">
-										<span class="icon is-small"><i id="status-icon" class="fa fa-toggle-on"></i></span>
+									<a id="status-color" tabindex="0" class="button is-primary is-icon-only no-shadow" title="Publicly hide or show landing page.">
+										<span class="icon"><i id="status-icon" class="fa fa-toggle-on"></i></span>
 										<span id="status-text">Active</span>
 									</a>
 									<input id="status-input" data-name="status" tabindex="0" type="hidden" class="input changeable-input" />
 								</div>
 								<div class="control is-spaced">
 									<div class="control-left">
-										<label class="label">Allow Buy It Now</label>
+										<label class="label" for="buyable-input">Allow Buy It Now</label>
 										<small class="tip">Displays a form allowing verified users to make offers on this domain or buy it immediately.</small>
 									</div>
 									<div class="control-right">
 										<form class="checkbox-form">
 											<input id="buyable-input" data-name="buyable" type="checkbox" class="checkbox-input changeable-input" tabindex="0" />
-											<label for="buyable-input" tabindex="0"></label>
+											<label for="buyable-input"></label>
 										</form>
 									</div>
 								</div>
@@ -251,13 +246,13 @@
 							<div id="rental-tab-drop" class="drop-tab is-hidden">
 								<div class="control is-spaced">
 									<div class="control-left">
-										<label class="label">Allow Rentals</label>
+										<label class="label" for="rentable-input">Allow Rentals</label>
 										<small class="tip">Displays a calendar allowing verified users to rent usage of this domain for short amounts of time.</small>
 									</div>
 									<div class="control-right">
 										<form class="checkbox-form">
 											<input id="rentable-input" data-name="rentable" type="checkbox" class="checkbox-input changeable-input" tabindex="0" />
-											<label for="rentable-input" tabindex="0"></label>
+											<label for="rentable-input"></label>
 										</form>
 									</div>
 								</div>
@@ -369,8 +364,8 @@
 												<input id="font-color-input" data-name="font_color" placeholder="#000000" type="text" class="premium-input padding-top-0 input changeable-input">
 											</div>
 											<div class="control has-icon">
-												<span class="select is-fullwidth" tabindex="0">
-													<select data-name="font_name" id="font-name-input" class="premium-input changeable-input">
+												<span class="select is-fullwidth">
+													<select tabindex="0" data-name="font_name" id="font-name-input" class="premium-input changeable-input">
 														<option selected default value="Rubik">Rubik</option>
 														<option value="Times New Roman">Times New Roman</option>
 														<option value="Helvetica">Helvetica</option>
@@ -404,8 +399,8 @@
 												<button id="background" tabindex="0" class="premium-input delete delete-image on-img"></button>
 												<img data-default-img="https://placeholdit.imgix.net/~text?txtsize=20&txt=NO%20IMG&w=96&h=64" id="background-image" alt="Image not found" src="">
 											</figure>
-											<form tabindex="0" class="drop-form-file" method="post" enctype="multipart/form-data">
-												<input id="background-image-input" data-name="background_image" type="file" name="background_image" accept="image/png, image/gif, image/jpeg" class="premium-input changeable-input input-file">
+											<form class="drop-form-file" method="post" enctype="multipart/form-data">
+												<input tabindex="0" id="background-image-input" data-name="background_image" type="file" name="background_image" accept="image/png, image/gif, image/jpeg" class="premium-input changeable-input input-file">
 												<label for="background-image-input" class="premium-input button is-small is-fullwidth no-shadow">
 													<i class="fa fa-upload" aria-hidden="true"></i>
 													<p data-default-name="Background Image" id="background-image-label" class="file-label">Upload</p>
@@ -423,8 +418,8 @@
 												<button id="logo" tabindex="0" class="premium-input delete delete-image on-img"></button>
 												<img data-default-img="https://placeholdit.imgix.net/~text?txtsize=20&txt=NO%20LOGO&w=96&h=64" id="logo-image" alt="Image not found" src="">
 											</figure>
-											<form tabindex="0" class="drop-form-file" method="post" enctype="multipart/form-data">
-												<input id="logo-image-input" data-name="logo" type="file" name="logo" accept="image/png, image/gif, image/jpeg" class="premium-input changeable-input input-file">
+											<form class="drop-form-file" method="post" enctype="multipart/form-data">
+												<input tabindex="0" id="logo-image-input" data-name="logo" type="file" name="logo" accept="image/png, image/gif, image/jpeg" class="premium-input changeable-input input-file">
 												<label for="logo-image-input" class="premium-input button is-small no-shadow is-fullwidth">
 													<i class="fa fa-upload" aria-hidden="true"></i>
 													<p data-default-name="Logo" id="logo-image-label" class="file-label">Upload</p>
@@ -435,43 +430,45 @@
 									<div class="control is-spaced">
 										<div class="control-left">
 											<label class="label">Traffic Module</label>
-											<small class="tip">Displays detailed information about domain traffic including <a class="is-accent" target="_blank" id="alexa_link">Alexa</a> data.</small>
+											<small class="tip">Displays detailed traffic data from <a class="is-accent" target="_blank" id="alexa_link">Alexa</a>.</small>
 										</div>
 										<div class="control-right">
 											<form class="checkbox-form">
 												<input id="traffic-module-input" data-name="traffic_module" type="checkbox" class="checkbox-input premium-input changeable-input" tabindex="0" />
-												<label for="traffic-module-input" class="premium-input" tabindex="0"></label>
+												<label for="traffic-module-input" class="premium-input"></label>
 											</form>
 										</div>
 									</div>
 									<div class="control is-spaced">
 										<div class="control-left">
 											<label class="label">History Module</label>
-											<small class="tip">Displays recent activity on your domain name; relevant for rentals.</small>
+											<small class="tip">Displays recent activity on your domain name - only if you have rentals enabled.</small>
 										</div>
 										<div class="control-right">
 											<form class="checkbox-form">
 												<input id="history-module-input" data-name="history_module" type="checkbox" class="checkbox-input premium-input changeable-input" tabindex="0" />
-												<label for="history-module-input" class="premium-input" tabindex="0"></label>
+												<label for="history-module-input" class="premium-input"></label>
 											</form>
 										</div>
 									</div>
 									<div class="control is-spaced">
 										<div class="control-left">
 											<label class="label">Info Module</label>
-											<small class="tip">Displays more detailed information about the domain and other related information.</small>
+											<small class="tip">Displays other domains the owner has for sale as well as other relevant information.</small>
 										</div>
 										<div class="control-right">
 											<form class="checkbox-form">
 												<input id="info-module-input" data-name="info_module" type="checkbox" class="checkbox-input premium-input changeable-input" tabindex="0" />
-												<label for="info-module-input" class="premium-input" tabindex="0"></label>
+												<label for="info-module-input" class="premium-input"></label>
 											</form>
 										</div>
 									</div>
 								</div>
 							<div id="offers-tab-drop" class="drop-tab is-hidden">
-								<div id="loading-offers">
-									Now loading offers...
+								<div id="loading-offers" class="content">
+									<p>
+										Now loading offers...
+									</p>
 								</div>
 								<div class="content">
 									<p id="no-offers" class="is-hidden">
@@ -481,27 +478,45 @@
 								<div id="offers-wrapper">
 
 								</div>
-								<div id="offer-clone" class="is-hidden">
-									<div id="offer-timestamp">
-
+								<div id="offer-clone" class="media is-hidden">
+									<div class="media-left">
+										<!-- <figure class="image is-48x48 is-circle">
+											<img src="https://placeholdit.co//i/48x48?&text=WL&bg=3cbc8d" />
+										</figure> -->
+										<form class="checkbox-form">
+											<input class="select-offer" data-selected="false" type="checkbox" tabindex="0" title="Select Offer" />
+											<label for="select-offer"></label>
+										</form>
 									</div>
-									<div id="offer-name">
+									<div class="media-content">
+										<div class="media-heading">
+											<h3 id="offer-name" class="is-bold is-inline">
+											</h3>
+											<small id="offer-timestamp"></small>
+										</div>
+										<div class="">
+											<div class="foobar">
+												<div class="foo">
+													<span class="icon is-small is-primary"><i class="fa fa-envelope-o"></i></span>
+													<a id="offer-email">
 
+													</a>
+												</div>
+												<div class="foo">
+													<span class="icon is-small is-primary"><i class="fa fa-phone"></i></span>
+													<p id="offer-phone"></p>
+												</div>
+											</div>
+											<p id="offer-message" class="is-hidden">
+
+											</p>
+										</div>
 									</div>
-									<a id="offer-email">
+									<div class="media-right">
+										<p id="offer-offer">
 
-									</a>
-									<div id="offer-phone">
-
-									</div>
-									<div id="offer-name">
-
-									</div>
-									<div id="offer-offer">
-
-									</div>
-									<div id="offer-message">
-
+										</p>
+										<button class="button is-primary is-small no-shadow is-outlined" tabindex="0">View Message</button>
 									</div>
 								</div>
 							</div>
