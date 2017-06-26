@@ -338,8 +338,6 @@ function createTickerRow(rental, now){
 //callback function to create past views ticker row
 function pastViewsTickerRow(){
 	if ((listing_info.rentals && listing_info.rentals.length > 0) || (listing_info.traffic && listing_info.traffic.length > 0)){
-		console.log("PAS");
-
 		if (listing_info.rentals.length > 0){
 			var last_month_views = listing_info.rentals.reduce(function(a,b){
 				return {views: a.views + b.views};
