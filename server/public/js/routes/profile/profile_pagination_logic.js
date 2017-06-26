@@ -483,14 +483,14 @@ function changedValueHandlers(both_rows, info){
 
     //upload image button handler
     both_rows.find(".drop-form-file .changeable-input").off().on("change", function(e){
-		e.preventDefault();
-		var file_name = ($(this).val()) ? $(this).val().replace(/^.*[\\\/]/, '') : $(this).data("default_text");
+    e.preventDefault();
+    var file_name = ($(this).val()) ? $(this).val().replace(/^.*[\\\/]/, '') : $(this).data("default_text");
         if ($(this).val()){
             file_name = (file_name.length > 14) ? "..." + file_name.substr(file_name.length - 14) : file_name;
         }
-		$(this).next("label").find(".file-label").text(file_name);
-		changedValue($(this), info);
-	});
+    $(this).next("label").find(".file-label").text(file_name);
+    changedValue($(this), info);
+  });
 }
 
 //helper function to bind to inputs to listen for any changes from existing listing info
@@ -562,32 +562,32 @@ function multiSelectButtons(){
 function multiDelete(delete_button){
     delete_button.off();
 
-	var deletion_ids = [];
-	var selected_rows = $(".row-disp").filter(function(){
-		if ($(this).data('selected') == true){
-			deletion_ids.push($(this).data('id'));
-			return true;
-		}
-	});
+  var deletion_ids = [];
+  var selected_rows = $(".row-disp").filter(function(){
+    if ($(this).data('selected') == true){
+      deletion_ids.push($(this).data('id'));
+      return true;
+    }
+  });
 
     var listing_or_rental_url = window.location.pathname.indexOf("listings") != -1 ? "mylistings" : "myrentals";
-	$.ajax({
-		url: "/profile/" + listing_or_rental_url + "/delete",
-		method: "POST",
-		data: {
-			ids: deletion_ids
-		}
-	}).done(function(data){
-		delete_button.on("click", function(){
-			multiDelete(delete_button);
-		});
+  $.ajax({
+    url: "/profile/" + listing_or_rental_url + "/delete",
+    method: "POST",
+    data: {
+      ids: deletion_ids
+    }
+  }).done(function(data){
+    delete_button.on("click", function(){
+      multiDelete(delete_button);
+    });
 
         deselectAllRows();
-		if (data.state == "success"){
+    if (data.state == "success"){
             deletionHandler(data.rows, selected_rows);
-		}
+    }
         else {
             console.log(data);
         }
-	});
+  });
 }

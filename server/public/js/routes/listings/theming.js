@@ -44,17 +44,17 @@ var blackText = "#222";
 
 //return white or black text based on luminance
 function calculateLuminance(rgb) {
-	var hexValue = rgb.replace(/[^0-9A-Fa-f]/, '');
-	var r,g,b;
-	if (hexValue.length === 3) {
-		hexValue = hexValue[0] + hexValue[0] + hexValue[1] + hexValue[1] + hexValue[2] + hexValue[2];
-	}
-	if (hexValue.length !== 6) {
-		return 0;
-	}
+  var hexValue = rgb.replace(/[^0-9A-Fa-f]/, '');
+  var r,g,b;
+  if (hexValue.length === 3) {
+    hexValue = hexValue[0] + hexValue[0] + hexValue[1] + hexValue[1] + hexValue[2] + hexValue[2];
+  }
+  if (hexValue.length !== 6) {
+    return 0;
+  }
     r = parseInt(hexValue.substring(0,2), 16) / 255;
-  	g = parseInt(hexValue.substring(2,4), 16) / 255;
-  	b = parseInt(hexValue.substring(4,6), 16) / 255;
+    g = parseInt(hexValue.substring(2,4), 16) / 255;
+    b = parseInt(hexValue.substring(4,6), 16) / 255;
 
     // calculate the overall luminance of the color
     var luminance = 0.2126 * r + 0.7152 * g + 0.0722 * b;

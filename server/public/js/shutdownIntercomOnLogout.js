@@ -1,3 +1,3 @@
 $(document).ready(function(){
-	Intercom('shutdown');
+  Intercom('shutdown');
 });
