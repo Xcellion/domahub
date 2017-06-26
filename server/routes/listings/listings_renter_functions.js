@@ -28,7 +28,7 @@ var safe_browse_key = "AIzaSyDjjsGtrO_4QwFDBA1cq9rCweeO4v3YLfs";
 var webshot = require("webshot");
 var url = require("url");
 
-var node_env = process.env.NODE_ENV || 'dev'; 	//dev or prod bool
+var node_env = process.env.NODE_ENV || 'dev';   //dev or prod bool
 
 //contact for buy now requirements
 var PNF = require('google-libphonenumber').PhoneNumberFormat;
@@ -236,7 +236,7 @@ module.exports = {
                         error.handler(req, res, "Invalid stripe user account!", "json");
                     }
                     else {
-                        req.session.new_rental_info.owner_stripe_id = result.info[0].stripe_account;	//stripe id
+                        req.session.new_rental_info.owner_stripe_id = result.info[0].stripe_account;  //stripe id
                         next();
                     }
                 }
@@ -709,7 +709,7 @@ module.exports = {
     //<editor-fold>-------------------------------DISPLAY LISTING-------------------------------
 
     //checks to make sure listing is still verified
-	checkStillVerified : function(req, res, next){
+  checkStillVerified : function(req, res, next){
         //ignore if unlisted
         if (req.session.listing_info.unlisted){
             next();
@@ -741,7 +741,7 @@ module.exports = {
                 }
             });
         }
-	},
+  },
 
     //add to search database
     addToSearchHistory : function(req, res, next){
@@ -750,9 +750,9 @@ module.exports = {
             var account_id = (typeof req.user == "undefined") ? null : req.user.id;
             var now = new Date().getTime();
             var history_info = {
-                account_id: account_id,			//who searched if who exists
-                domain_name: req.params.domain_name.toLowerCase(),		//what they searched for
-                timestamp: now,		//when they searched for it
+                account_id: account_id,      //who searched if who exists
+                domain_name: req.params.domain_name.toLowerCase(),    //what they searched for
+                timestamp: now,    //when they searched for it
                 user_ip : getIP(req),
                 referer : req.header("Referer") || req.headers.referer
             }
@@ -764,7 +764,7 @@ module.exports = {
             }
 
             console.log("F: Adding to search history...");
-            Data.newListingHistory(history_info, function(result){if (result.state == "error") {console.log(result)}});	//async
+            Data.newListingHistory(history_info, function(result){if (result.state == "error") {console.log(result)}});  //async
             delete req.session.from_api;
         }
         next();
@@ -776,15 +776,15 @@ module.exports = {
         if (node_env != "dev"){
             var history_info = {
                 account_id: (typeof req.user == "undefined") ? null : req.user.id,      //who searched if who exists
-                domain_name: req.params.domain_name.toLowerCase(),		                 //what they searched for
-                timestamp: new Date().getTime(),	                                    //when they searched for it
+                domain_name: req.params.domain_name.toLowerCase(),                     //what they searched for
+                timestamp: new Date().getTime(),                                      //when they searched for it
                 user_ip : getIP(req),
                 path: req.body.path,                                                     //what path did they want
                 rental_id: req.session.camefrom || null                                   //what rental they came from
             }
 
             console.log("F: Adding to search history...");
-            Data.newCheckAvailHistory(history_info, function(result){if (result.state == "error") {console.log(result)}});	//async
+            Data.newCheckAvailHistory(history_info, function(result){if (result.state == "error") {console.log(result)}});  //async
         }
         next();
     },
@@ -795,8 +795,8 @@ module.exports = {
         if (node_env != "dev"){
             var history_info = {
                 account_id: (typeof req.user == "undefined") ? null : req.user.id,      //who searched if who exists
-                domain_name: req.params.domain_name.toLowerCase(),		                //what they searched for
-                timestamp: new Date().getTime(),	                                    //when they searched for it
+                domain_name: req.params.domain_name.toLowerCase(),                    //what they searched for
+                timestamp: new Date().getTime(),                                      //when they searched for it
                 user_ip : getIP(req),
                 path: req.session.new_rental_info.path,                                 //what path did they want
                 starttime: req.session.new_rental_info.starttime,                       //what start time
@@ -806,7 +806,7 @@ module.exports = {
             }
 
             console.log("F: Adding to search history...");
-            Data.newCheckoutHistory(history_info, function(result){if (result.state == "error") {console.log(result)}});	//async
+            Data.newCheckoutHistory(history_info, function(result){if (result.state == "error") {console.log(result)}});  //async
         }
         next();
     },
@@ -1464,7 +1464,7 @@ function calculatePrice(starttime, endtime, overlapped_time, listing_info){
         var temp_start = moment(parseFloat(starttime));
         var temp_end = moment(parseFloat(endtime));
 
-		//calculate the price
+    //calculate the price
         var totalPrice = moment.duration(temp_end.diff(temp_start));
         totalPrice.subtract(overlapped_time);
         if (listing_info.price_type == "month"){
@@ -1481,40 +1481,40 @@ function calculatePrice(starttime, endtime, overlapped_time, listing_info){
 
 //figure out if the start and end dates overlap any free periods
 function anyFreeDayOverlap(starttime, endtime, freetimes){
-	if (freetimes && freetimes.length > 0){
+  if (freetimes && freetimes.length > 0){
         var starttime = moment(parseFloat(starttime));
         var endtime = moment(parseFloat(endtime));
 
-		var overlap_time = 0;
-		for (var x = 0; x < freetimes.length; x++){
-			var freetime_start = moment(freetimes[x].date);
-			var freetime_end = moment(freetimes[x].date + freetimes[x].duration);
+    var overlap_time = 0;
+    for (var x = 0; x < freetimes.length; x++){
+      var freetime_start = moment(freetimes[x].date);
+      var freetime_end = moment(freetimes[x].date + freetimes[x].duration);
 
-			//there is overlap
-			if (starttime.isBefore(freetime_end) && endtime.isAfter(freetime_start)){
-				//completely covered by free time
-				if (starttime.isSameOrAfter(freetime_start) && endtime.isSameOrBefore(freetime_end)){
-					overlap_time += endtime.diff(starttime);
-				}
-				//completely covers free time
-				else if (freetime_start.isSameOrAfter(starttime) && freetime_end.isSameOrBefore(endtime)){
-					overlap_time += freetime_end.diff(freetime_start);
-				}
-				//overlap partially in the end of wanted time
-				else if (starttime.isSameOrBefore(freetime_start) && endtime.isSameOrBefore(freetime_end)){
-					overlap_time += endtime.diff(freetime_start);
-				}
-				//overlap partially at the beginning of wanted time
-				else {
-					overlap_time += freetime_end.diff(starttime);
-				}
-			}
-		}
-		return overlap_time;
-	}
-	else {
-		return 0;
-	}
+      //there is overlap
+      if (starttime.isBefore(freetime_end) && endtime.isAfter(freetime_start)){
+        //completely covered by free time
+        if (starttime.isSameOrAfter(freetime_start) && endtime.isSameOrBefore(freetime_end)){
+          overlap_time += endtime.diff(starttime);
+        }
+        //completely covers free time
+        else if (freetime_start.isSameOrAfter(starttime) && freetime_end.isSameOrBefore(endtime)){
+          overlap_time += freetime_end.diff(freetime_start);
+        }
+        //overlap partially in the end of wanted time
+        else if (starttime.isSameOrBefore(freetime_start) && endtime.isSameOrBefore(freetime_end)){
+          overlap_time += endtime.diff(freetime_start);
+        }
+        //overlap partially at the beginning of wanted time
+        else {
+          overlap_time += freetime_end.diff(starttime);
+        }
+      }
+    }
+    return overlap_time;
+  }
+  else {
+    return 0;
+  }
 }
 
 //helper function to update req.user.rentals after changing to active
