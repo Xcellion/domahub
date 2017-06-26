@@ -612,7 +612,7 @@ function getDomainOffers(domain_name){
     $('#cc-zip').val("");
 
     //if user has a CC already on file, change the text
-    if (user.stripe_info.premium_cc_last4){
+    if (user.stripe_info && user.stripe_info.premium_cc_last4){
       $("#change-card-button").removeClass('is-hidden');
       $("#change-card-button span:nth-child(2)").text("Change Card");
 
