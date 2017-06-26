@@ -202,7 +202,7 @@ function editTickerModule(loaded_rentals, max_count){
 
     //change colors if premium
     if (listing_info.premium){
-          setupCustomColors();
+      setupCustomColors();
     }
 
     //show load more only if max count returned
@@ -337,39 +337,39 @@ function createTickerRow(rental, now){
 
 //callback function to create past views ticker row
 function pastViewsTickerRow(){
-	if ((listing_info.rentals && listing_info.rentals.length > 0) || (listing_info.traffic && listing_info.traffic.length > 0)){
-		if (listing_info.rentals.length > 0){
-			var last_month_views = listing_info.rentals.reduce(function(a,b){
-				return {views: a.views + b.views};
-			}).views;
-			var ticker_latest_date = moment.duration(moment(listing_info.rentals[listing_info.rentals.length - 1].date).diff(moment()), "milliseconds");
+  if ((listing_info.rentals && listing_info.rentals.length > 0) || (listing_info.traffic && listing_info.traffic.length > 0)){
+    if (listing_info.rentals.length > 0){
+      var last_month_views = listing_info.rentals.reduce(function(a,b){
+        return {views: a.views + b.views};
+      }).views;
+      var ticker_latest_date = moment.duration(moment(listing_info.rentals[listing_info.rentals.length - 1].date).diff(moment()), "milliseconds");
 
-			if (listing_info.traffic && listing_info.traffic.length > 0){
-				last_month_views + listing_info.traffic[0].views;
+      if (listing_info.traffic && listing_info.traffic.length > 0){
+        last_month_views + listing_info.traffic[0].views;
 
-				//add back past X months
-				for (var x = 0; x < Math.floor(ticker_latest_date._milliseconds / 2592000000); x++){
-					if (listing_info.traffic[x]){
-						last_month_views += listing_info.traffic[x].views;
-					}
-				}
-			}
+        //add back past X months
+        for (var x = 0; x < Math.floor(ticker_latest_date._milliseconds / 2592000000); x++){
+          if (listing_info.traffic[x]){
+            last_month_views += listing_info.traffic[x].views;
+          }
+        }
+      }
 
-			var ticker_latest_date_human = ticker_latest_date.humanize().replace("a ", "").replace("an ", "");
-		}
-		else if (listing_info.traffic){
-			var last_month_views = listing_info.traffic[0].views;
-			ticker_latest_date_human = "month";
-		}
+      var ticker_latest_date_human = ticker_latest_date.humanize().replace("a ", "").replace("an ", "");
+    }
+    else if (listing_info.traffic){
+      var last_month_views = listing_info.traffic[0].views;
+      ticker_latest_date_human = "month";
+    }
 
-		//how many people in the past month
-		$("#views-total").text(wNumb({
-			thousand: ','
-		}).to(last_month_views));
+    //how many people in the past month
+    $("#views-total").text(wNumb({
+      thousand: ','
+    }).to(last_month_views));
 
-		$("#views-time").text(ticker_latest_date_human);
-		$("#ticker-views").removeClass('is-hidden');
-	}
+    $("#views-time").text(ticker_latest_date_human);
+    $("#ticker-views").removeClass('is-hidden');
+  }
 
 }
 
