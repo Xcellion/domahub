@@ -1,9 +1,45 @@
 @import 'vars';
 @import 'mixins';
 @import 'balloon';
+@import 'bulma/sass/components/media.sass';
+
+.media {
+  @include transition(border 0.25s ease);
+  border-radius: $radius-small;
+  border: 1px solid transparent;
+  padding: 10px;
+  &:hover,
+  &:focus {
+    border-color: $border;
+    cursor: pointer;
+  }
+}
 
 .box-checked {
     margin-left:2px;
+}
+
+.foobar {
+  display: flex;
+  margin-top: 5px;
+  @include mobile {
+    flex-direction: column;
+  }
+}
+
+.foo {
+  display: flex;
+  align-items: center;
+  &:first-child {
+    margin-right: 10px;
+    @include mobile {
+      margin-right: 0;
+      margin-bottom: 5px;
+    }
+  }
+  .icon {
+    margin-right: 5px;
+  }
 }
 
 #filter-menu {
