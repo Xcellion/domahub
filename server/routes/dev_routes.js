@@ -1,8 +1,8 @@
-var	account_model = require('../models/account_model.js');
-var	listing_model = require('../models/listing_model.js');
-var	data_model = require('../models/data_model.js');
-var	validator = require('validator');
-var	request = require('request');
+var  account_model = require('../models/account_model.js');
+var  listing_model = require('../models/listing_model.js');
+var  data_model = require('../models/data_model.js');
+var  validator = require('validator');
+var  request = require('request');
 var bodyParser = require('body-parser');
 var urlencodedParser = bodyParser.urlencoded({ extended: false });
 var dns = require("dns");
@@ -41,9 +41,9 @@ function paypal(req, res, next){
 function emailViews(req, res, next){
     var wNumb = require("wnumb");
     var moneyFormat = wNumb({
-    	thousand: ',',
-    	prefix: '$',
-    	decimals: 0
+      thousand: ',',
+      prefix: '$',
+      decimals: 0
     });
 
     var phoneNumber = phoneUtil.parse("+17183097773");
