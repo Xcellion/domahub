@@ -99,32 +99,32 @@ module.exports = {
   checkPayoutAddress : function(req, res, next){
     console.log('SF: Checking posted Stripe managed account address information...');
     var country_codes = [
-        "AU",    //Australia
-        "US",    //United States
-        "CA",    //Canada
-        "AT",    //Austria
-        "DK",    //Denmark
-        "BE",    //Belgium
-        "FI",    //Finland
-        "DE",    //Germany
-        "FR",    //France
-        "HK",    //Hong Kong
-        "IE",    //Ireland
-        "IT",    //Italy
-        "JP",    //Japan
-        "LU",    //Luxembourg
-        "NO",    //Norway
-        "NL",    //Netherlands
-        "SG",    //Singapore
-        "NZ",    //New Zealand
-        "ES",    //Spain
-        "PT",    //Portugal
-        "SE",    //Sweden
-        "CH",    //Switzerland
-        "GB",    //United Kingdom
-        "BR",    //Brazil
-        "MX"    //Mexico
-      ];
+      "AU",    //Australia
+      "US",    //United States
+      "CA",    //Canada
+      "AT",    //Austria
+      "DK",    //Denmark
+      "BE",    //Belgium
+      "FI",    //Finland
+      "DE",    //Germany
+      "FR",    //France
+      "HK",    //Hong Kong
+      "IE",    //Ireland
+      "IT",    //Italy
+      "JP",    //Japan
+      "LU",    //Luxembourg
+      "NO",    //Norway
+      "NL",    //Netherlands
+      "SG",    //Singapore
+      "NZ",    //New Zealand
+      "ES",    //Spain
+      "PT",    //Portugal
+      "SE",    //Sweden
+      "CH",    //Switzerland
+      "GB",    //United Kingdom
+      "BR",    //Brazil
+      "MX"    //Mexico
+    ];
 
     if (country_codes.indexOf(req.body.country) == -1){
       error.handler(req, res, "Invalid country!", "json");
@@ -204,9 +204,9 @@ module.exports = {
         if (result){
           updateUserStripeInfo(req.user, result);
           res.json({
-                      state: "success",
-                      user: req.user
-                  });
+            state: "success",
+            user: req.user
+          });
         }
         else {
           console.log(err.message);
@@ -264,9 +264,9 @@ module.exports = {
       if (result){
         updateUserStripeInfo(req.user, result);
         res.json({
-                    state: "success",
-                    user: req.user
-                });
+          state: "success",
+          user: req.user
+        });
       }
       else {
         console.log(err.message);
@@ -292,9 +292,9 @@ module.exports = {
       if (result){
         updateUserStripeInfo(req.user, result);
         res.json({
-                    state: "success",
-                    user: req.user
-                });
+          state: "success",
+          user: req.user
+        });
       }
       else {
         console.log(err.message);
@@ -730,7 +730,7 @@ module.exports = {
 
     //wait for all promises to finish
     Q.allSettled(promises)
-     .then(function(results) {
+    .then(function(results) {
       var premium_db_query_success = [];
       var premium_db_query_failed = [];
 
@@ -741,8 +741,8 @@ module.exports = {
 
           //create the formatted db query to update premium ID
           premium_db_query_success.push([
-            subscription.metadata.insert_id,
-            subscription.id
+                                        subscription.metadata.insert_id,
+                                        subscription.id
           ]);
 
           //add to good listings
@@ -950,11 +950,11 @@ function stripeErrorHandler(req, res, err){
   console.log(err.message);
   switch (err.message){
     case ("Your card was declined!"):
-    case ("Your card's expiration year is invalid."):
-    error.handler(req, res, err.message, "json");
+      case ("Your card's expiration year is invalid."):
+      error.handler(req, res, err.message, "json");
     break;
     default:
-    error.handler(req, res, "Something went wrong with the payment!", "json");
+      error.handler(req, res, "Something went wrong with the payment!", "json");
     break;
   }
 }

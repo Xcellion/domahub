@@ -11,9 +11,9 @@ var moment = require('moment');
 var nodemailer = require('nodemailer');
 var sgTransport = require('nodemailer-sendgrid-transport');
 var mailOptions = {
-    auth: {
-        api_key: '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'
-    }
+  auth: {
+    api_key: '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'
+  }
 }
 var mailer = nodemailer.createTransport(sgTransport(mailOptions));
 
@@ -55,110 +55,110 @@ module.exports = {
 
     //post to create a new account
     passport.use('local-signup', new LocalStrategy({
-        usernameField: 'email',
-        passReqToCallback : true // allows us to pass back the entire request to the callback
-      },
-      function(req, email, password, done) {
-        //check if account exists
-        Account.checkAccountEmail(email, function(result){
-                    //email exists
-          if (result.state=="error" || result.info.length){
-            return done(false, {message: 'User with that email exists!'});
-          }
+      usernameField: 'email',
+      passReqToCallback : true // allows us to pass back the entire request to the callback
+    },
+    function(req, email, password, done) {
+      //check if account exists
+      Account.checkAccountEmail(email, function(result){
+        //email exists
+        if (result.state=="error" || result.info.length){
+          return done(false, {message: 'User with that email exists!'});
+        }
 
-          else {
-                        //check if username exists
-                Account.checkAccountUsername(username, function(result){
-                            //username exists
-                  if (result.state=="error" || result.info.length){
-                    return done(false, {message: 'User with that username exists!'});
-                  }
+        else {
+          //check if username exists
+          Account.checkAccountUsername(username, function(result){
+            //username exists
+            if (result.state=="error" || result.info.length){
+              return done(false, {message: 'User with that username exists!'});
+            }
 
-                            else {
-                                var now = new Date();
-                    var now_utc = new Date(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(),  now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds());
+            else {
+              var now = new Date();
+              var now_utc = new Date(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(),  now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds());
 
-                    var account_info = {
-                      email: email,
-                      username: username,
-                      password: bcrypt.hashSync(password, null, null),
-                      date_created: now_utc,
-                      date_accessed: now_utc
+              var account_info = {
+                email: email,
+                username: username,
+                password: bcrypt.hashSync(password, null, null),
+                date_created: now_utc,
+                date_accessed: now_utc
+              }
+
+              //create the new account
+              Account.newAccount(account_info, function(result){
+                if (result.state=="error"){ done(false, { message: result.info}); }
+                else {
+                  account_info.id = result.info.insertId;
+                  account_info.type = 0;
+                  return done(account_info);
+                }
+              });
+            }
+
+          });
+
+        }
+      });
+    })
+                );
+
+                //post to check login
+                passport.use('local-login', new LocalStrategy({
+                  usernameField: 'email',
+                  passReqToCallback : true // allows us to pass back the entire request to the callback
+                },
+                function(req, email, password, done) {
+                  Account.getAccount(email, undefined, function(result){
+                    if (result.state=="error"){
+                      done(result.info, null);
                     }
 
-                    //create the new account
-                    Account.newAccount(account_info, function(result){
-                      if (result.state=="error"){ done(false, { message: result.info}); }
-                      else {
-                        account_info.id = result.info.insertId;
-                        account_info.type = 0;
-                        return done(account_info);
-                      }
-                    });
-                            }
+                    //account doesnt exists
+                    else if (!result.info.length){
+                      return done(null, false, {message: 'Invalid user!'});
+                    }
 
-                        });
+                    //if the user is found but the password is wrong
+                    else if (!bcrypt.compareSync(password, result.info[0].password)){
+                      return done(null, false, {message: 'Invalid password!'});
+                    }
 
-          }
-        });
-      })
-    );
-
-    //post to check login
-    passport.use('local-login', new LocalStrategy({
-        usernameField: 'email',
-        passReqToCallback : true // allows us to pass back the entire request to the callback
-      },
-      function(req, email, password, done) {
-        Account.getAccount(email, undefined, function(result){
-          if (result.state=="error"){
-            done(result.info, null);
-          }
-
-          //account doesnt exists
-          else if (!result.info.length){
-            return done(null, false, {message: 'Invalid user!'});
-          }
-
-           //if the user is found but the password is wrong
-          else if (!bcrypt.compareSync(password, result.info[0].password)){
-            return done(null, false, {message: 'Invalid password!'});
-          }
-
-          else {
-            user = result.info[0];
-            return done(null, user);
-          }
-        });
-      })
-    );
+                    else {
+                      user = result.info[0];
+                      return done(null, user);
+                    }
+                  });
+                })
+                            );
 
   },
 
-    //check if signup beta code is legit
-    checkCode : function(req, res, next){
-        if (!req.params.code){
-            res.redirect('/');
+  //check if signup beta code is legit
+  checkCode : function(req, res, next){
+    if (!req.params.code){
+      res.redirect('/');
+    }
+    else {
+      Account.checkSignupCode(req.params.code, function(result){
+        if (result.state == "error" || result.info.length == 0){
+          res.redirect('/');
         }
         else {
-            Account.checkSignupCode(req.params.code, function(result){
-                if (result.state == "error" || result.info.length == 0){
-                    res.redirect('/');
-                }
-                else {
-                    next();
-                }
-            });
+          next();
         }
-    },
+      });
+    }
+  },
 
-    signupCode : function(req, res, next){
-        console.log("Logged in, do something");
-    },
+  signupCode : function(req, res, next){
+    console.log("Logged in, do something");
+  },
 
   //make sure user is logged in before doing anything
   checkLoggedIn : function(req, res, next) {
-        console.log("F: Checking if authenticated...");
+    console.log("F: Checking if authenticated...");
     //if user is authenticated in the session, carry on
     if (req.isAuthenticated()){
       res.header('Cache-Control', 'private, no-cache, no-store, must-revalidate');
@@ -213,12 +213,12 @@ module.exports = {
       delete req.session.mylistings;
       delete req.session.myrentals;
       req.logout();
-            redirectTo = "/login";
-            res.redirect(redirectTo);
+      redirectTo = "/login";
+      res.redirect(redirectTo);
     }
-        else {
-            res.redirect('/');
-        }
+    else {
+      res.redirect('/');
+    }
   },
 
   //sign up for a new account
@@ -267,8 +267,8 @@ module.exports = {
       error.handler(req, res, "Account is already verified!", "json");
     }
     else if (req.user.requested || (req.user.token_exp && (new Date().getTime() < new Date(req.user.token_exp)))){
-            resendVerify(req.user, function(state){
-                if (state == "success"){
+      resendVerify(req.user, function(state){
+        if (state == "success"){
           req.logout();
           res.send({
             state: "success"
@@ -279,7 +279,7 @@ module.exports = {
             state: "error"
           });
         }
-            });
+      });
     }
     else {
       error.handler(req, res, "Something went wrong with account verification!", "json");
@@ -334,56 +334,56 @@ module.exports = {
           response: recaptcha
         }
       },
-        function (err, response, body) {
-          body = JSON.parse(body);
+      function (err, response, body) {
+        body = JSON.parse(body);
 
-          //all good with google!
-          if (!err && response.statusCode == 200 && body.success) {
-                        var redirectUrl = (req.params.code) ? "/signup/" + req.params.code : "/signup";
+        //all good with google!
+        if (!err && response.statusCode == 200 && body.success) {
+          var redirectUrl = (req.params.code) ? "/signup/" + req.params.code : "/signup";
 
-            passport.authenticate('local-signup', {
-              failureRedirect : redirectUrl, // redirect back to the signup page if there is an error
-            }, function(user, info){
-              if (!user && info){
-                error.handler(req, res, info.message);
-              }
-              else {
-                                //if code, update
-                                if (req.params.code){
-                                    Account.useSignupCode(req.params.code, {
-                                        account_id : user.id,
-                                        code : null,
-                                        date_accessed : new Date()
-                                    }, function(){
-                                        console.log("Successfully used code!");
-                                    });
-                                }
-
-                generateVerify(req, res, email, username, function(state){
-                  req.session.message = "Success! Please check your email for further instructions!";
-                  res.redirect("/login");
+          passport.authenticate('local-signup', {
+            failureRedirect : redirectUrl, // redirect back to the signup page if there is an error
+          }, function(user, info){
+            if (!user && info){
+              error.handler(req, res, info.message);
+            }
+            else {
+              //if code, update
+              if (req.params.code){
+                Account.useSignupCode(req.params.code, {
+                  account_id : user.id,
+                  code : null,
+                  date_accessed : new Date()
+                }, function(){
+                  console.log("Successfully used code!");
                 });
               }
-            })(req, res, next);
-          }
-          else {
-            error.handler(req, res, "Invalid captcha!");
-          }
+
+              generateVerify(req, res, email, username, function(state){
+                req.session.message = "Success! Please check your email for further instructions!";
+                res.redirect("/login");
+              });
+            }
+          })(req, res, next);
         }
-      )
+        else {
+          error.handler(req, res, "Invalid captcha!");
+        }
+      }
+                  )
     }
   },
 
   //function to login
   loginPost: function(req, res, next){
-        var referer = req.header("Referer").split("/");
-        //redirect to profile unless coming from a listing
+    var referer = req.header("Referer").split("/");
+    //redirect to profile unless coming from a listing
     if (referer.indexOf('rentalpreview') != -1 || referer.indexOf("listing") != -1 || referer.indexOf("listings") != -1 || referer.indexOf("profile") != -1){
-            redirectTo = req.header("Referer");
-        }
-        else {
-            redirectTo = "/profile";
-        }
+      redirectTo = req.header("Referer");
+    }
+    else {
+      redirectTo = "/profile";
+    }
 
     passport.authenticate('local-login', function(err, user, info){
       if (!user && info){
@@ -415,7 +415,7 @@ module.exports = {
   //function to change password
   forgotPost: function(req, res, next){
     email = req.body.email;
-        console.log('F: Sending account password forgot email...');
+    console.log('F: Sending account password forgot email...');
 
     if (!validator.isEmail(email)){
       error.handler(req, res, "Invalid email!", "json");
@@ -443,10 +443,10 @@ module.exports = {
               from: 'noreply@domahub.com',
               subject: 'Forgot your password for domahub?',
               text: 'You are receiving this because you (or someone else) requested the reset of the password for your account.\n\n' +
-                      'Please click on the following link, or paste this into your browser to complete the process:\n\n' +
-                      'http://' + req.headers.host + '/reset/' + token + '\n\n' +
-                      'If you did not request this, please ignore this email and your password will remain unchanged.\n' +
-                  'The link above will expire in 1 hour.'
+                'Please click on the following link, or paste this into your browser to complete the process:\n\n' +
+                'http://' + req.headers.host + '/reset/' + token + '\n\n' +
+              'If you did not request this, please ignore this email and your password will remain unchanged.\n' +
+                'The link above will expire in 1 hour.'
             };
 
             //send email
@@ -470,19 +470,19 @@ module.exports = {
   resetPost: function(req, res, next){
     var token = req.params.token;
     var password = req.body.password;
-        console.log('F: Resetting account password...');
+    console.log('F: Resetting account password...');
 
     if (!password){
       error.handler(req, res, "Invalid password!", "json");
     }
-        //password is too long
-        else if (password.length > 70){
-            error.handler(req, res, "Password is too long!", "json");
-        }
-        //password is too short
-        else if (password.length < 3){
-            error.handler(req, res, "Password is too short!", "json");
-        }
+    //password is too long
+    else if (password.length > 70){
+      error.handler(req, res, "Password is too long!", "json");
+    }
+    //password is too short
+    else if (password.length < 3){
+      error.handler(req, res, "Password is too short!", "json");
+    }
     else {
       Account.getAccountByToken(token, function(result){
         if (result.state=="error"){error.handler(req, res, result.info);}
@@ -534,7 +534,7 @@ module.exports = {
   //function to verify account
   verifyPost: function(req, res, next){
     var token = req.params.token;
-        console.log('F: Verifying account...');
+    console.log('F: Verifying account...');
 
     Account.getAccountByToken(token, function(result){
       if (result.state=="error"){error.handler(req, res, result.info);}
@@ -589,7 +589,7 @@ module.exports = {
 
   //function to check account settings posted
   checkAccountSettings: function(req, res, next){
-        console.log('F: Checking posted account settings...');
+    console.log('F: Checking posted account settings...');
 
     new_email = req.body.new_email;
     username = req.body.username;
@@ -631,18 +631,18 @@ module.exports = {
         }
       })(req, res, next);
     }
-        //paypal
-        else if (validator.isEmail(req.body.paypal_email)){
-            next();
-        }
-        else {
-            error.handler(req, res, "Something went wrong! Please refresh the page and try again!", "json");
-        }
+    //paypal
+    else if (validator.isEmail(req.body.paypal_email)){
+      next();
+    }
+    else {
+      error.handler(req, res, "Something went wrong! Please refresh the page and try again!", "json");
+    }
   },
 
   //function to update account settings
   updateAccountSettings : function(req, res, next){
-        console.log('F: Updating account settings...');
+    console.log('F: Updating account settings...');
 
     new_account_info = {};
     if (req.body.new_email){
@@ -669,9 +669,9 @@ module.exports = {
           }
         }
         else {
-                    for (var x in new_account_info){
-                        req.user[x] = new_account_info[x];
-                    }
+          for (var x in new_account_info){
+            req.user[x] = new_account_info[x];
+          }
           res.json({
             state: "success",
             user: req.user
@@ -685,29 +685,29 @@ module.exports = {
 
   },
 
-    //function to update for managed stripe
-    updateAccountStripe : function(req, res, next){
-        console.log('F: Updating account Stripe settings...');
+  //function to update for managed stripe
+  updateAccountStripe : function(req, res, next){
+    console.log('F: Updating account Stripe settings...');
 
-        Account.updateAccount({
-            stripe_account : req.session.stripe_results.id,
-            stripe_secret : req.session.stripe_results.keys.secret,
-            stripe_public : req.session.stripe_results.keys.publishable,
-            type: 2
-        }, req.user.email, function(result){
-            if (result.state=="error"){
-                error.handler(req, res, result.info, "json");
-            }
-            else {
-                req.user.stripe_account = req.session.stripe_results.id;
-                delete req.session.stripe_results;
-                res.json({
-                    state: "success",
-                    user: req.user
-                });
-            }
+    Account.updateAccount({
+      stripe_account : req.session.stripe_results.id,
+      stripe_secret : req.session.stripe_results.keys.secret,
+      stripe_public : req.session.stripe_results.keys.publishable,
+      type: 2
+    }, req.user.email, function(result){
+      if (result.state=="error"){
+        error.handler(req, res, result.info, "json");
+      }
+      else {
+        req.user.stripe_account = req.session.stripe_results.id;
+        delete req.session.stripe_results;
+        res.json({
+          state: "success",
+          user: req.user
         });
-    }
+      }
+    });
+  }
 
 }
 
@@ -722,31 +722,31 @@ function messageReset(req){
 
 //function to resend same verification email link
 function resendVerify(user, cb){
-    console.log("F: Resending the same verification link...");
-    var email_message = {
-        to: user.email,
-        from: 'noreply@domahub.com',
-        subject: 'Verify your account at domahub!',
-        text: 'Hello, ' + user.username + '.\n\n' +
-              'Please click on the following link, or paste this into your browser to verify your email.\n\n' +
-              'http://domahub.com/verify/' + user.token + '\n\n' +
-              'The link above will expire in 1 hour.'
-    };
+  console.log("F: Resending the same verification link...");
+  var email_message = {
+    to: user.email,
+    from: 'noreply@domahub.com',
+    subject: 'Verify your account at domahub!',
+    text: 'Hello, ' + user.username + '.\n\n' +
+      'Please click on the following link, or paste this into your browser to verify your email.\n\n' +
+      'http://domahub.com/verify/' + user.token + '\n\n' +
+    'The link above will expire in 1 hour.'
+  };
 
-    //send email
-    mailer.sendMail(email_message, function(err) {
-        if (err) {
-            cb(err);
-        }
-        else {
-            cb("success");
-        }
-    });
+  //send email
+  mailer.sendMail(email_message, function(err) {
+    if (err) {
+      cb(err);
+    }
+    else {
+      cb("success");
+    }
+  });
 }
 
 //helper function to verify account
 function generateVerify(req, res, email, username, cb){
-    console.log("F: Creating a new verification link...");
+  console.log("F: Creating a new verification link...");
   //generate token to email to user
   crypto.randomBytes(20, function(err, buf) {
     var verify_token = buf.toString('hex');
@@ -767,9 +767,9 @@ function generateVerify(req, res, email, username, cb){
           from: 'noreply@domahub.com',
           subject: 'Verify your account at domahub!',
           text: 'Hello, ' + username + '.\n\n' +
-              'Please click on the following link, or paste this into your browser to verify your email.\n\n' +
-              'http://' + req.headers.host + '/verify/' + verify_token + '\n\n' +
-              'The link above will expire in 1 hour.'
+            'Please click on the following link, or paste this into your browser to verify your email.\n\n' +
+            'http://' + req.headers.host + '/verify/' + verify_token + '\n\n' +
+          'The link above will expire in 1 hour.'
         };
 
         //send email
