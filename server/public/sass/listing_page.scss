@@ -17,7 +17,7 @@
 }
 
 .module {
-    height: 410px;
+    min-height: 410px;
 }
 
 #compare-model {
@@ -317,6 +317,7 @@
 #ticker-module {
   padding:0;
   background:#FFF;
+  height:410px;
 }
 
 #ticker-wrapper {
