@@ -736,6 +736,7 @@ module.exports = {
           });
         }
         else {
+          console.log(err);
           req.session.listing_info.status = 0;
           next();
         }

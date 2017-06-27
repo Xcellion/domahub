@@ -19,7 +19,7 @@
 		<script type="text/javascript">
 			<% delete listing_info.owner_email %>
 			var listing_info = <% if(typeof listing_info != "undefined"){ %><%-JSON.stringify(listing_info)%><% }else{ %>""<% } %>;
-			var compare = false;
+			var compare = <% if(typeof compare != "undefined"){ %><%-JSON.stringify(compare)%><% }else{ %>""<% } %>;
 		</script>
 
 		<%# TOOL TO COMPARE %>
