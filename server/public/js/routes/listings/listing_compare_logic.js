@@ -13,6 +13,9 @@ $(document).ready(function() {
       $("#" + box_id + "-box").removeClass('is-hidden');
     });
 
+    var current_theme = getParameterByName("theme") || $("#theme-input").val();
+    switchTheme(current_theme);
+
     //INFO TAB
     updateDescription();
     updatePricing();
@@ -25,7 +28,6 @@ $(document).ready(function() {
     loadColorSchemeHandlers();
     loadFontStyleHandlers();
     updateModules();
-    switchTheme($("#theme-input").val());
 
     //change to custom theme if anything is changed
     $(".theme-changeable-input").on("change", function(){
@@ -90,20 +92,25 @@ function updateThemes(){
 function switchTheme(theme_name){
   var theme_to_load = findTheme(theme_name);
 
+  //if there wasnt a theme, load domahub theme
+  if (!theme_to_load){
+    var theme_to_load = findTheme("DomaHub");
+  }
+
   for (var x in theme_to_load){
     listing_info[x] = theme_to_load[x];
   }
 
   updateBackgroundImage(listing_info.background_image);
+  updateBackgroundColor(listing_info.background_color);
   updateFontName(listing_info.font_name);
-  $("#background-color-input").minicolors("value", listing_info.background_color);
-  $("#primary-color-input").minicolors("value", listing_info.primary_color);
-  $("#secondary-color-input").minicolors("value", listing_info.secondary_color);
-  $("#tertiary-color-input").minicolors("value", listing_info.tertiary_color);
-  $("#font-color-input").minicolors("value", listing_info.font_color);
+  updateColorScheme(listing_info.primary_color, listing_info.secondary_color, listing_info.tertiary_color);
+  updateFontColor(listing_info.font_color);
+  updateFontName(listing_info.font_name);
 
-  current_theme = theme_name;
-  $("#theme-input").val(theme_name);
+  current_theme = theme_to_load.theme_name;
+  $("#theme-input").val(theme_to_load.theme_name);
+  updateQueryStringParam("theme", theme_to_load.theme_name);
 }
 
 //</editor-fold>
