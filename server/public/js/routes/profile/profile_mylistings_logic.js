@@ -7,6 +7,9 @@ $(document).ready(function(){
     $(".black-background").toggleClass('is-hidden');
   });
 
+  //populate all themes
+  populateThemeDropdown();
+
   //<editor-fold>-------------------------------FILTERS-------------------------------
 
   $("#sort-select").on("change", function(){
@@ -91,8 +94,8 @@ $(document).ready(function(){
   //change tabs
   $(".tab").on("click", function(e){
     //clear any existing messages
-      errorMessage(false);
-      successMessage(false);
+    errorMessage(false);
+    successMessage(false);
 
     //hide other tab selectors
     $(".tab").removeClass('is-active');
@@ -101,6 +104,12 @@ $(document).ready(function(){
     //show specific tab
     $(".drop-tab").fadeOut(300).addClass('is-hidden');
     $("#" + $(this).attr("id") + "-drop").fadeIn(300).removeClass('is-hidden');
+
+    //hide cc-form if its not the upgrade tab
+    if ($(this).attr("id") != "upgrade-tab"){
+      $("#checkout-button").addClass('is-hidden');
+      $("#stripe-form").addClass('is-hidden');
+    }
 
     //hide save/cancel changes buttons on premium and offers tab
     if ($(this).attr("id") == "upgrade-tab" || $(this).attr("id") == "offers-tab"){
@@ -113,7 +122,6 @@ $(document).ready(function(){
       //show save/cancel changes buttons, hide checkout button
       $("#save-changes-button").removeClass('is-hidden');
       $("#cancel-changes-button").removeClass('is-hidden');
-      $("#checkout-button").addClass('is-hidden');
     }
 
     cancelListingChanges();
@@ -263,8 +271,8 @@ function createRow(listing_info, rownum){
   }
 
   //update row specifics and add handlers
-    updateDomainName(tempRow, listing_info);
-    updateIcon(tempRow, listing_info);
+  updateDomainName(tempRow, listing_info);
+  updateIcon(tempRow, listing_info);
 
   //change domains
   tempRow.on("click", function(e){
@@ -282,7 +290,7 @@ function createRow(listing_info, rownum){
     tempRow.data("record_got", true);
   }
 
-    return tempRow;
+  return tempRow;
 }
 
 //update the clone row with row specifics
@@ -309,8 +317,8 @@ function changeRow(row, listing_info, bool){
     row.addClass('is-active');
 
     //clear any existing messages
-      errorMessage(false);
-      successMessage(false);
+    errorMessage(false);
+    successMessage(false);
 
     current_listing = listing_info;
 
@@ -359,8 +367,8 @@ function editRowVerified(listing_info){
   updateColorScheme(listing_info);
   updateFontStyling(listing_info);
   updateModules(listing_info);
-  updateBackgroundImage(listing_info);
-   updateModules(listing_info);
+  updateBackground(listing_info);
+  updateModules(listing_info);
   updateLogo(listing_info);
 
   updatePremium(listing_info, true);
@@ -391,447 +399,468 @@ function getDomainOffers(domain_name){
   });
 }
 
-  //<editor-fold>-------------------------------OFFER TAB EDITS-------------------------------
+//<editor-fold>-------------------------------OFFER TAB EDITS-------------------------------
 
-  //function to update the offers tab
-  function updateOffers(listing_info){
-    if (listing_info.offers){
-      //hide loading msg
-      $("#loading-offers").addClass('is-hidden');
-      $("#offers-wrapper").empty();
+//function to update the offers tab
+function updateOffers(listing_info){
+  if (listing_info.offers){
+    //hide loading msg
+    $("#loading-offers").addClass('is-hidden');
+    $("#offers-wrapper").empty();
 
-      if (listing_info.offers.length){
-        $("#no-offers").addClass('is-hidden');
-        //clone offers
-        for (var x = 0; x < listing_info.offers.length; x++){
-          var cloned_offer_row = $("#offer-clone").clone();
-          cloned_offer_row.removeAttr("id").removeClass('is-hidden');
-          cloned_offer_row.find("#offer-timestamp").text(moment(listing_info.offers[x].timestamp).format("MMMM DD, YYYY - HH:mmA"));
-          cloned_offer_row.find("#offer-name").text(listing_info.offers[x].name);
-          cloned_offer_row.find("#offer-email").text(listing_info.offers[x].email).attr("href", "mailto:" + listing_info.offers[x].email);
-          cloned_offer_row.find("#offer-phone").text(listing_info.offers[x].phone);
-          cloned_offer_row.find("#offer-offer").text(listing_info.offers[x].offer);
-          cloned_offer_row.find("#offer-message").text(listing_info.offers[x].message);
-          $("#offers-wrapper").append(cloned_offer_row);
-        }
+    if (listing_info.offers.length){
+      $("#no-offers").addClass('is-hidden');
+      //clone offers
+      for (var x = 0; x < listing_info.offers.length; x++){
+        var cloned_offer_row = $("#offer-clone").clone();
+        cloned_offer_row.removeAttr("id").removeClass('is-hidden');
+        cloned_offer_row.find("#offer-timestamp").text(moment(listing_info.offers[x].timestamp).format("MMMM DD, YYYY - HH:mmA"));
+        cloned_offer_row.find("#offer-name").text(listing_info.offers[x].name);
+        cloned_offer_row.find("#offer-email").text(listing_info.offers[x].email).attr("href", "mailto:" + listing_info.offers[x].email);
+        cloned_offer_row.find("#offer-phone").text(listing_info.offers[x].phone);
+        cloned_offer_row.find("#offer-offer").text(listing_info.offers[x].offer);
+        cloned_offer_row.find("#offer-message").text(listing_info.offers[x].message);
+        $("#offers-wrapper").append(cloned_offer_row);
+      }
+    }
+    else {
+      $("#no-offers").removeClass('is-hidden');
+    }
+  }
+  else {
+    getDomainOffers(listing_info.domain_name);
+  }
+}
+
+//</editor-fold>
+
+//<editor-fold>-------------------------------INFORMATION TAB EDITS-------------------------------
+
+//update the information tab
+function updateStatus(listing_info){
+  $("#status-input").val(listing_info.status);
+
+  if (listing_info.status == 1){
+    $("#status-text").text("Active");
+    $("#status-color").addClass("is-primary").removeClass('is-danger');
+    $("#status-icon").addClass("fa-toggle-on").removeClass('fa-toggle-off');
+  }
+  else {
+    $("#status-text").text("Inactive");
+    $("#status-color").addClass('is-danger').removeClass("is-primary");
+    $("#status-icon").addClass('fa-toggle-off').removeClass("fa-toggle-on");
+  }
+}
+function updateDescription(listing_info){
+  $("#description").val(listing_info.description);
+  $("#short-desc").val(listing_info.description_hook);
+}
+function updateCategories(listing_info){
+  var listing_categories = (listing_info.categories) ? listing_info.categories.split(" ") : [];
+  $(".category-selector").removeClass('is-primary');
+  for (var x = 0; x < listing_info.categories.split(" ").length; x++){
+    //color existing categories
+    var temp_category = $("." + listing_categories[x] + "-category").addClass('is-primary');
+  }
+  updateHiddenCategoryInput();
+}
+function updateHiddenCategoryInput(){
+  var joined_categories = $(".category-selector.is-primary").map(function() {
+    return $(this).data("category");
+  }).toArray().sort().join(" ");
+  joined_categories = (joined_categories == "") ? null : joined_categories;
+  $("#categories-input").val(joined_categories);
+}
+function updatePaths(listing_info){
+  var listing_paths = (listing_info.paths) ? listing_info.paths.split(",") : [];
+
+  //if created tags before
+  if ($("#paths-input").data('tags') == true){
+    $("#paths-input").tagit("destroy");
+  }
+  else {
+    $("#paths-input").data("tags", true);
+  }
+
+  $("#paths-input").val(listing_info.paths).tagit({
+    animate: false,
+    afterTagAdded : function(event, ui){
+      changedValue($("#paths-input"), listing_info);
+    },
+    afterTagRemoved : function(event, ui){
+      changedValue($("#paths-input"), listing_info);
+    }
+  });
+
+  //add custom class so we can gray it out if not rentable
+  $(".tagit.textarea").addClass('rentable-input');
+}
+
+//</editor-fold>
+
+//<editor-fold>-------------------------------PRICE EDITS-------------------------------
+
+//update the pricing tab
+function updatePriceInputs(listing_info){
+  checkBox(listing_info.rentable, $("#rentable-input"));
+  checkBox(listing_info.buyable, $("#buyable-input"));
+
+  updateRentalInputsDisabled(listing_info.rentable);
+  $("#buy-price-input").val(listing_info.buy_price);
+  $("#price-rate-input").val(listing_info.price_rate);
+  $("#price-type-input").val(listing_info.price_type);
+
+  //update preview on design page
+  if (listing_info.buy_price > 0){
+    $("#example-buy-price-tag").removeClass('is-hidden').text("For sale - " + moneyFormat.to(parseFloat(listing_info.buy_price)));
+  }
+  else {
+    $("#example-buy-price-tag").addClass('is-hidden');
+  }
+  if (listing_info.rentable){
+    $("#example-rent-price-tag").removeClass('is-hidden').text("For rent - " + moneyFormat.to(parseFloat(listing_info.price_rate)) + " / " + listing_info.price_type);
+  }
+  else {
+    $("#example-rent-price-tag").addClass('is-hidden');
+  }
+}
+function updateRentalInputsDisabled(rentable){
+  if (rentable == 1){
+    $(".rentable-input").removeClass('is-disabled');
+  }
+  else {
+    $(".rentable-input").addClass('is-disabled');
+  }
+}
+
+//</editor-fold>
+
+//<editor-fold>-------------------------------DESIGN TAB EDITS-------------------------------
+
+//function to switch theme
+function switchTheme(theme_name){
+  var theme_to_load = findTheme(theme_name);
+
+  //if there wasnt a theme, load domahub theme
+  if (!theme_to_load){
+    var theme_to_load = findTheme("DomaHub");
+  }
+
+  updateBackground(theme_to_load);
+  updateColorScheme(theme_to_load);
+  updateFontStyling(theme_to_load);
+  $("#theme-input").val(theme_to_load.theme_name);
+  changedValue($(".changeable-input"), theme_to_load);
+}
+
+//update the design tab
+function updateColorScheme(listing_info){
+  var minicolor_options = {
+    letterCase: "uppercase",
+    swatches: ["#3cbc8d", "#FF5722", "#2196F3"]
+  }
+  $("#primary-color-input").val(listing_info.primary_color).minicolors("destroy").minicolors(minicolor_options);
+  $("#secondary-color-input").val(listing_info.secondary_color).minicolors("destroy").minicolors(minicolor_options);
+  $("#tertiary-color-input").val(listing_info.tertiary_color).minicolors("destroy").minicolors(minicolor_options);
+
+  //update the preview
+  $("#example-domain-name").css("color", listing_info.primary_color);
+  $("#example-button-primary, #example-rent-price-tag, #example-buy-price-tag").css({
+    "background-color" : listing_info.primary_color,
+    "color" : calculateLuminance(listing_info.primary_color)
+  });
+  $("#example-button-accent").css({
+    "background-color" : listing_info.secondary_color,
+    "color" : calculateLuminance(listing_info.secondary_color)
+  });
+  $("#example-link-info").css("color", listing_info.tertiary_color);
+}
+function updateFontStyling(listing_info){
+  var minicolor_options = {
+    letterCase: "uppercase",
+    swatches: ["#000", "#222", "#D3D3D3", "#FFF"]
+  }
+  $("#font-color-input").val(listing_info.font_color).minicolors("destroy").minicolors(minicolor_options);
+  $("#font-name-input").val(listing_info.font_name);
+
+  //update the preview
+  $("#example-domain-name").css("font-family", listing_info.font_name);
+  $("#example-font").css("color", listing_info.font_color);
+}
+function updateBackground(listing_info){
+  var background_image = (listing_info.background_image == null || listing_info.background_image == undefined || listing_info.background_image == "") ? "https://placeholdit.imgix.net/~text?txtsize=20&txt=NO%20IMG&w=96&h=64" : listing_info.background_image;
+  $("#background-image").attr('src', background_image).off().on("error", function() {
+    $(this).attr("src", "https://placeholdit.imgix.net/~text?txtsize=20&txt=LOADING...%20&w=96&h=64");
+  });
+
+  var minicolor_options = {
+    letterCase: "uppercase",
+    swatches: ["#FFFFFF", "#E5E5E5", "#B2B2B2", "#7F7F7F", "#666666", "#222222", "#000000"]
+  }
+  $("#background-color-input").val(listing_info.background_color).minicolors("destroy").minicolors(minicolor_options);
+
+  //update the preview
+  $("#example-wrapper").css("background-color", listing_info.background_color);
+}
+function updateLogo(listing_info){
+  var logo = (listing_info.logo == null || listing_info.logo == undefined || listing_info.logo == "") ? "/images/dh-assets/flat-logo/dh-flat-logo-primary.png" : listing_info.logo;
+  $("#logo-image").attr('src', logo).off().on("error", function() {
+    $(this).attr("src", "/images/dh-assets/flat-logo/dh-flat-logo-primary.png");
+  });
+}
+function updateModules(listing_info){
+  checkBox(listing_info.history_module, $("#history-module-input"));
+  checkBox(listing_info.traffic_module, $("#traffic-module-input"));
+  checkBox(listing_info.info_module, $("#info-module-input"));
+
+  //alexa link
+  $("#alexa_link").attr("href", "https://www.alexa.com/siteinfo/" + listing_info.domain_name);
+}
+function checkBox(module_value, elem){
+  if (module_value){
+    elem.val(module_value).prop("checked", true);
+  }
+  else {
+    elem.val(module_value).prop("checked", false);
+  }
+}
+
+//</editor-fold>
+
+//<editor-fold>-------------------------------UPGRADE TAB EDITS-------------------------------
+
+function updatePremium(listing_info){
+
+  //remove all CC info
+  $('#cc-num').val("");
+  $('#cc-exp').val("");
+  $('#cc-cvc').val("");
+  $('#cc-zip').val("");
+
+  //if user has a CC already on file, change the text
+  if (user.stripe_info && user.stripe_info.premium_cc_last4){
+    $("#change-card-button").removeClass('is-hidden');
+    $("#change-card-button span:nth-child(2)").text("Change Card");
+
+    //last 4 digits
+    var premium_cc_last4 = (user.stripe_info.premium_cc_last4) ? user.stripe_info.premium_cc_last4 : "****";
+    var premium_cc_brand = (user.stripe_info.premium_cc_brand) ? user.stripe_info.premium_cc_brand : "Credit"
+    $("#existing-cc").text(premium_cc_brand + " card ending in " + premium_cc_last4);
+  }
+  else {
+    $("#change-card-button").removeClass('is-hidden');
+    $("#change-card-button span:nth-child(2)").text("Add Card");
+  }
+
+  //is not premium
+  if (!listing_info.stripe_subscription_id){
+    $("#renew-status").text("Please click the button below to upgrade this listing to a premium listing for $1 / year!");
+
+    $("#checkout-button").text("Confirm & Pay").attr("title", "Confirm and Pay");
+
+    //tab title
+    $("#upgrade-tab-text").text("Upgrade to Premium");
+
+    //add disabled to premium inputs if not premium
+    $(".premium-input").addClass('is-disabled');
+
+    //hide/show elements needed for upgrade
+    $(".basic-elem").removeClass('is-hidden');
+    $(".premium-elem").addClass('is-hidden');
+  }
+  //is premium
+  else {
+    //hide upgrade button
+    $("#upgrade-button").addClass('is-hidden');
+
+    //hide cc form, show change card button
+    $("#stripe-form").addClass('is-hidden');
+    $("#change-card-button").removeClass('is-hidden');
+
+    //hide checkout button
+    $("#checkout-button").addClass("is-hidden");
+
+    //tab title
+    $("#upgrade-tab-text").text("Premium Status");
+
+    //remove disabled to premium inputs
+    $(".premium-input").removeClass('is-disabled');
+
+    //show/hide elements needed for upgrade
+    $(".basic-elem").addClass('is-hidden');
+    $(".premium-elem").removeClass('is-hidden');
+
+    //expiring
+    if (listing_info.expiring == true){
+      if (listing_info.exp_date){
+        $("#renew-status").text("Premium is active, but set to expire on " + moment(listing_info.exp_date * 1000).format("MMM DD, YYYY") + ". You will not be charged further for this listing.");
+      }
+
+      //hide the checkout button until you click to change payment method
+      $("#checkout-button").text("Confirm Payment Method").attr("title", "Confirm Payment Method").addClass('is-hidden');
+
+      //not renewing, so hide the cancel button
+      $("#cancel-premium-button").addClass("is-hidden");
+
+      //show button click to renew subscription
+      $("#renew-premium-button").removeClass("is-hidden");
+    }
+
+    //not expiring, show cancel button
+    else if (listing_info.expiring == false){
+
+      if (listing_info.exp_date){
+        $("#renew-status").text("Premium is active and set to renew on " + moment(listing_info.exp_date * 1000).format("MMM DD, YYYY") + ". You will be charged $1 at renewal.");
+      }
+
+      //renewing, so hide the renew button
+      $("#renew-premium-button").addClass("is-hidden").removeClass('is-loading');
+
+      //show button to cancel subscription
+      $("#cancel-premium-button").removeClass("is-hidden");
+    }
+  }
+}
+
+//</editor-fold>
+
+//<editor-fold>-------------------------------BINDINGS-------------------------------
+
+//update change bindings (category, changeable-input, status)
+function updateBindings(listing_info){
+
+  //click to add this category
+  $(".category-selector").off().on("click", function(e){
+    $(this).toggleClass('is-primary');
+    updateHiddenCategoryInput();
+    changedValue($("#categories-input"), listing_info);
+  });
+
+  //bind new handlers for any changeable inputs
+  $(".changeable-input").off().on("change input", function(e){
+    changedValue($(this), listing_info);
+  });
+
+  //update status binding
+  $("#status-color").off().on("click", function(e){
+    var new_status = ($("#status-input").val() == "1") ? 0 : 1;
+    updateStatus({ status : new_status });
+    changedValue($("#status-input"), listing_info);
+  });
+
+  //module checkbox handlers
+  $(".checkbox-input").off().on("change", function(){
+    var new_checkbox_val = ($(this).val() == "1") ? 0 : 1;
+    $(this).val(new_checkbox_val);
+    changedValue($(this), listing_info);
+  });
+
+  //load theme buttons
+  loadThemeHandler();
+
+  $("#rentable-input").on("change", function(){
+    updateRentalInputsDisabled($(this).val());
+  });
+
+  //change domain name font
+  $("#font-name-input").on("input", function(){
+    $("#example-domain-name").css("font-family", $(this).val());
+  });
+
+  //change primary font color
+  $("#primary-color-input").on("input", function(){
+    $("#example-button-primary, #example-rent-price-tag, #example-buy-price-tag").css({
+      "background-color" : $(this).val(),
+      "color" : calculateLuminance($(this).val())
+    });
+    $("#example-domain-name").css("color", $(this).val());
+  });
+
+  //change secondary font color
+  $("#secondary-color-input").on("input", function(){
+    $("#example-button-accent").css({
+      "background-color" : $(this).val(),
+      "color" : calculateLuminance($(this).val())
+    });
+  });
+
+  //change tertiary font color
+  $("#tertiary-color-input").on("input", function(){
+    $("#example-link-info").css("color", $(this).val());
+  });
+
+  //change regular font color
+  $("#font-color-input").on("input", function(){
+    $("#example-font").css("color", $(this).val());
+  });
+
+  //change background color
+  $("#background-color-input").on("input", function(){
+    $("#example-wrapper").css("background-color", $(this).val());
+  });
+
+  //delete images
+  $(".delete-image").off().on("click", function(){
+    var image_id = $(this).attr('id');
+    var temp_img = $("#" + image_id + "-image");
+    var temp_input = $("#" + image_id + "-image-input");
+    var temp_label = $("#" + image_id + "-image-label");
+
+    if (temp_img.attr("src") != temp_img.data("default-img")){
+      var old_src = temp_img.attr("src");
+      temp_img.data("old_src", old_src);
+      temp_img.attr("src", temp_img.data("default-img"));
+      temp_input.data("deleted", true);
+      temp_input.val("");
+      // temp_label.text(temp_label.data("default-name"));
+    }
+    changedValue(temp_input, listing_info);
+  });
+
+  //premium bindings
+  if (listing_info.stripe_subscription_id){
+
+    //button to renew subscription
+    $("#renew-premium-button").off().on("click", function(){
+      //no stripe token because we're just renewing with existing CC on file
+      submitPremium(listing_info, false, $(this));
+    });
+
+    //button to cancel subscription
+    $("#cancel-premium-button").off().on("click", function(){
+      submitCancelPremium(listing_info, $(this));
+    });
+
+    //get stripe info for this listing if we haven't yet
+    if (listing_info.exp_date == undefined || listing_info.expiring == undefined){
+      $.ajax({
+        url: "/listing/" + listing_info.domain_name + "/stripeinfo",
+        method: "GET"
+      }).done(function(data){
+        updatePremiumPostAjax(data.listings);
+      });
+    }
+  }
+
+  //basic listing, remove premium handlers and add upgrade handler
+  else {
+    $("#cancel-premium-button").off();
+    $("#renew-premium-button").off();
+
+    //upgrade a basic listing
+    $("#upgrade-button").off().on("click", function(){
+      if (user.stripe_info && user.stripe_info.premium_cc_last4){
+        //just upgrade to premium with existing card
+        submitPremium(listing_info, false, $(this));
       }
       else {
-        $("#no-offers").removeClass('is-hidden');
-      }
-    }
-    else {
-      getDomainOffers(listing_info.domain_name);
-    }
-  }
-
-  //</editor-fold>
-
-  //<editor-fold>-------------------------------INFORMATION TAB EDITS-------------------------------
-
-  //update the information tab
-  function updateStatus(listing_info){
-    $("#status-input").val(listing_info.status);
-
-    if (listing_info.status == 1){
-      $("#status-text").text("Active");
-      $("#status-color").addClass("is-primary").removeClass('is-danger');
-      $("#status-icon").addClass("fa-toggle-on").removeClass('fa-toggle-off');
-    }
-    else {
-      $("#status-text").text("Inactive");
-      $("#status-color").addClass('is-danger').removeClass("is-primary");
-      $("#status-icon").addClass('fa-toggle-off').removeClass("fa-toggle-on");
-    }
-  }
-  function updateDescription(listing_info){
-    $("#description").val(listing_info.description);
-    $("#short-desc").val(listing_info.description_hook);
-  }
-  function updateCategories(listing_info){
-    var listing_categories = (listing_info.categories) ? listing_info.categories.split(" ") : [];
-    $(".category-selector").removeClass('is-primary');
-    for (var x = 0; x < listing_info.categories.split(" ").length; x++){
-      //color existing categories
-      var temp_category = $("." + listing_categories[x] + "-category").addClass('is-primary');
-    }
-    updateHiddenCategoryInput();
-  }
-  function updateHiddenCategoryInput(){
-    var joined_categories = $(".category-selector.is-primary").map(function() {
-      return $(this).data("category");
-    }).toArray().sort().join(" ");
-    joined_categories = (joined_categories == "") ? null : joined_categories;
-    $("#categories-input").val(joined_categories);
-  }
-  function updatePaths(listing_info){
-    var listing_paths = (listing_info.paths) ? listing_info.paths.split(",") : [];
-
-    //if created tags before
-    if ($("#paths-input").data('tags') == true){
-      $("#paths-input").tagit("destroy");
-    }
-    else {
-      $("#paths-input").data("tags", true);
-    }
-
-    $("#paths-input").val(listing_info.paths).tagit({
-      animate: false,
-      afterTagAdded : function(event, ui){
-        changedValue($("#paths-input"), listing_info);
-        $(".tagit.textarea").addClass('rentable-input');
-      },
-      afterTagRemoved : function(event, ui){
-        changedValue($("#paths-input"), listing_info);
+        $("#change-card-button").click();
       }
     });
   }
+}
 
-  //</editor-fold>
-
-  //<editor-fold>-------------------------------PRICE EDITS-------------------------------
-
-  //update the pricing tab
-  function updatePriceInputs(listing_info){
-    checkBox(listing_info.rentable, $("#rentable-input"));
-    checkBox(listing_info.buyable, $("#buyable-input"));
-
-    updateRentalInputsDisabled(listing_info.rentable);
-    $("#buy-price-input").val(listing_info.buy_price);
-    $("#price-rate-input").val(listing_info.price_rate);
-    $("#price-type-input").val(listing_info.price_type);
-
-    //update preview on design page
-    if (listing_info.buy_price > 0){
-      $("#example-buy-price-tag").removeClass('is-hidden').text("For sale - " + moneyFormat.to(parseFloat(listing_info.buy_price)));
-    }
-    else {
-      $("#example-buy-price-tag").addClass('is-hidden');
-    }
-    if (listing_info.rentable){
-      $("#example-rent-price-tag").removeClass('is-hidden').text("For rent - " + moneyFormat.to(parseFloat(listing_info.price_rate)) + " / " + listing_info.price_type);
-    }
-    else {
-      $("#example-rent-price-tag").addClass('is-hidden');
-    }
-  }
-  function updateRentalInputsDisabled(rentable){
-    if (rentable == 1){
-      $(".rentable-input").removeClass('is-disabled');
-    }
-    else {
-      $(".rentable-input").addClass('is-disabled');
-    }
-  }
-
-  //</editor-fold>
-
-  //<editor-fold>-------------------------------DESIGN TAB EDITS-------------------------------
-
-  //update the design tab
-  function updateColorScheme(listing_info){
-    var minicolor_options = {
-      letterCase: "uppercase",
-      swatches: ["#3cbc8d", "#FF5722", "#2196F3"]
-    }
-    $("#primary-color-input").val(listing_info.primary_color).minicolors("destroy").minicolors(minicolor_options);
-    $("#secondary-color-input").val(listing_info.secondary_color).minicolors("destroy").minicolors(minicolor_options);
-    $("#tertiary-color-input").val(listing_info.tertiary_color).minicolors("destroy").minicolors(minicolor_options);
-
-    //update the preview
-    $("#example-domain-name").css("color", listing_info.primary_color);
-    $("#example-button-primary, #example-rent-price-tag, #example-buy-price-tag").css({
-      "background-color" : listing_info.primary_color,
-      "color" : calculateLuminance(listing_info.primary_color)
-    });
-    $("#example-button-accent").css({
-      "background-color" : listing_info.secondary_color,
-      "color" : calculateLuminance(listing_info.secondary_color)
-    });
-    $("#example-link-info").css("color", listing_info.tertiary_color);
-  }
-  function updateFontStyling(listing_info){
-    var minicolor_options = {
-      letterCase: "uppercase",
-      swatches: ["#000", "#222", "#D3D3D3", "#FFF"]
-    }
-    $("#font-color-input").val(listing_info.font_color).minicolors("destroy").minicolors(minicolor_options);
-    $("#font-name-input").val(listing_info.font_name);
-
-    //update the preview
-    $("#example-domain-name").css("font-family", listing_info.font_name);
-    $("#example-font").css("color", listing_info.font_color);
-  }
-  function updateBackgroundImage(listing_info){
-    var background_image = (listing_info.background_image == null || listing_info.background_image == undefined || listing_info.background_image == "") ? "https://placeholdit.imgix.net/~text?txtsize=20&txt=NO%20IMG&w=96&h=64" : listing_info.background_image;
-    $("#background-image").attr('src', background_image).off().on("error", function() {
-          $(this).attr("src", "https://placeholdit.imgix.net/~text?txtsize=20&txt=LOADING...%20&w=96&h=64");
-      });
-
-    var minicolor_options = {
-      letterCase: "uppercase",
-      swatches: ["#FFFFFF", "#E5E5E5", "#B2B2B2", "#7F7F7F", "#666666", "#222222", "#000000"]
-    }
-    $("#background-color-input").val(listing_info.background_color).minicolors("destroy").minicolors(minicolor_options);
-
-    //update the preview
-    $("#example-wrapper").css("background-color", listing_info.background_color);
-  }
-  function updateLogo(listing_info){
-    var logo = (listing_info.logo == null || listing_info.logo == undefined || listing_info.logo == "") ? "/images/dh-assets/flat-logo/dh-flat-logo-primary.png" : listing_info.logo;
-    $("#logo-image").attr('src', logo).off().on("error", function() {
-          $(this).attr("src", "/images/dh-assets/flat-logo/dh-flat-logo-primary.png");
-      });
-  }
-  function updateModules(listing_info){
-    checkBox(listing_info.history_module, $("#history-module-input"));
-    checkBox(listing_info.traffic_module, $("#traffic-module-input"));
-    checkBox(listing_info.info_module, $("#info-module-input"));
-
-    //alexa link
-    $("#alexa_link").attr("href", "https://www.alexa.com/siteinfo/" + listing_info.domain_name);
-  }
-  function checkBox(module_value, elem){
-    if (module_value){
-      elem.val(module_value).prop("checked", true);
-    }
-    else {
-      elem.val(module_value).prop("checked", false);
-    }
-  }
-
-  //</editor-fold>
-
-  //<editor-fold>-------------------------------UPGRADE TAB EDITS-------------------------------
-
-  function updatePremium(listing_info){
-
-    //remove all CC info
-    $('#cc-num').val("");
-    $('#cc-exp').val("");
-    $('#cc-cvc').val("");
-    $('#cc-zip').val("");
-
-    //if user has a CC already on file, change the text
-    if (user.stripe_info && user.stripe_info.premium_cc_last4){
-      $("#change-card-button").removeClass('is-hidden');
-      $("#change-card-button span:nth-child(2)").text("Change Card");
-
-      //last 4 digits
-      var premium_cc_last4 = (user.stripe_info.premium_cc_last4) ? user.stripe_info.premium_cc_last4 : "****";
-      var premium_cc_brand = (user.stripe_info.premium_cc_brand) ? user.stripe_info.premium_cc_brand : "Credit"
-      $("#existing-cc").text(premium_cc_brand + " card ending in " + premium_cc_last4);
-    }
-    else {
-      $("#change-card-button").removeClass('is-hidden');
-      $("#change-card-button span:nth-child(2)").text("Add Card");
-    }
-
-    //is not premium
-    if (!listing_info.stripe_subscription_id){
-      $("#renew-status").text("Please click the button below to upgrade this listing to a premium listing for $1 / year!");
-
-      $("#checkout-button").text("Confirm & Pay").attr("title", "Confirm and Pay");
-
-      //tab title
-      $("#upgrade-tab-text").text("Upgrade to Premium");
-
-      //add disabled to premium inputs if not premium
-      $(".premium-input").addClass('is-disabled');
-
-      //hide/show elements needed for upgrade
-      $(".basic-elem").removeClass('is-hidden');
-      $(".premium-elem").addClass('is-hidden');
-    }
-    //is premium
-    else {
-      //hide upgrade button
-      $("#upgrade-button").addClass('is-hidden');
-
-      //hide cc form, show change card button
-      $("#stripe-form").addClass('is-hidden');
-      $("#change-card-button").removeClass('is-hidden');
-
-      //hide checkout button
-      $("#checkout-button").addClass("is-hidden");
-
-      //tab title
-      $("#upgrade-tab-text").text("Premium Status");
-
-      //remove disabled to premium inputs
-      $(".premium-input").removeClass('is-disabled');
-
-      //show/hide elements needed for upgrade
-      $(".basic-elem").addClass('is-hidden');
-      $(".premium-elem").removeClass('is-hidden');
-
-      //expiring
-      if (listing_info.expiring == true){
-        if (listing_info.exp_date){
-          $("#renew-status").text("Premium is active, but set to expire on " + moment(listing_info.exp_date * 1000).format("MMM DD, YYYY") + ". You will not be charged further for this listing.");
-        }
-
-        //hide the checkout button until you click to change payment method
-        $("#checkout-button").text("Confirm Payment Method").attr("title", "Confirm Payment Method").addClass('is-hidden');
-
-        //not renewing, so hide the cancel button
-        $("#cancel-premium-button").addClass("is-hidden");
-
-        //show button click to renew subscription
-        $("#renew-premium-button").removeClass("is-hidden");
-      }
-
-      //not expiring, show cancel button
-      else if (listing_info.expiring == false){
-
-        if (listing_info.exp_date){
-          $("#renew-status").text("Premium is active and set to renew on " + moment(listing_info.exp_date * 1000).format("MMM DD, YYYY") + ". You will be charged $1 at renewal.");
-        }
-
-        //renewing, so hide the renew button
-        $("#renew-premium-button").addClass("is-hidden").removeClass('is-loading');
-
-        //show button to cancel subscription
-        $("#cancel-premium-button").removeClass("is-hidden");
-      }
-    }
-  }
-
-  //</editor-fold>
-
-  //<editor-fold>-------------------------------BINDINGS-------------------------------
-
-  //update change bindings (category, changeable-input, status)
-  function updateBindings(listing_info){
-
-    //click to add this category
-    $(".category-selector").off().on("click", function(e){
-      $(this).toggleClass('is-primary');
-      updateHiddenCategoryInput();
-      changedValue($("#categories-input"), listing_info);
-    });
-
-    //bind new handlers for any changeable inputs
-    $(".changeable-input").off().on("change input", function(e){
-      changedValue($(this), listing_info);
-    });
-
-    //update status binding
-    $("#status-color").off().on("click", function(e){
-      var new_status = ($("#status-input").val() == "1") ? 0 : 1;
-      updateStatus({ status : new_status });
-      changedValue($("#status-input"), listing_info);
-    });
-
-    //module checkbox handlers
-    $(".checkbox-input").off().on("change", function(){
-      var new_checkbox_val = ($(this).val() == "1") ? 0 : 1;
-      $(this).val(new_checkbox_val);
-      changedValue($(this), listing_info);
-    });
-
-    $("#rentable-input").on("change", function(){
-      updateRentalInputsDisabled($(this).val());
-    });
-
-    //change domain name font
-    $("#font-name-input").on("input", function(){
-      $("#example-domain-name").css("font-family", $(this).val());
-    });
-
-    //change primary font color
-    $("#primary-color-input").on("input", function(){
-      $("#example-button-primary, #example-rent-price-tag, #example-buy-price-tag").css({
-        "background-color" : $(this).val(),
-        "color" : calculateLuminance($(this).val())
-      });
-      $("#example-domain-name").css("color", $(this).val());
-    });
-
-    //change secondary font color
-    $("#secondary-color-input").on("input", function(){
-      $("#example-button-accent").css({
-        "background-color" : $(this).val(),
-        "color" : calculateLuminance($(this).val())
-      });
-    });
-
-    //change tertiary font color
-    $("#tertiary-color-input").on("input", function(){
-      $("#example-link-info").css("color", $(this).val());
-    });
-
-    //change regular font color
-    $("#font-color-input").on("input", function(){
-      $("#example-font").css("color", $(this).val());
-    });
-
-    //change background color
-    $("#background-color-input").on("input", function(){
-      $("#example-wrapper").css("background-color", $(this).val());
-    });
-
-    //delete images
-    $(".delete-image").off().on("click", function(){
-      var image_id = $(this).attr('id');
-      var temp_img = $("#" + image_id + "-image");
-      var temp_input = $("#" + image_id + "-image-input");
-      var temp_label = $("#" + image_id + "-image-label");
-
-      if (temp_img.attr("src") != temp_img.data("default-img")){
-        var old_src = temp_img.attr("src");
-        temp_img.data("old_src", old_src);
-        temp_img.attr("src", temp_img.data("default-img"));
-        temp_input.data("deleted", true);
-        temp_input.val("");
-        // temp_label.text(temp_label.data("default-name"));
-      }
-      changedValue(temp_input, listing_info);
-    });
-
-    //premium bindings
-    if (listing_info.stripe_subscription_id){
-
-      //button to renew subscription
-      $("#renew-premium-button").off().on("click", function(){
-        //no stripe token because we're just renewing with existing CC on file
-        submitPremium(listing_info, false, $(this));
-      });
-
-      //button to cancel subscription
-      $("#cancel-premium-button").off().on("click", function(){
-        submitCancelPremium(listing_info, $(this));
-      });
-
-      //get stripe info for this listing if we haven't yet
-      if (listing_info.exp_date == undefined || listing_info.expiring == undefined){
-        $.ajax({
-          url: "/listing/" + listing_info.domain_name + "/stripeinfo",
-          method: "GET"
-        }).done(function(data){
-          updatePremiumPostAjax(data.listings);
-        });
-      }
-    }
-
-    //basic listing, remove premium handlers and add upgrade handler
-    else {
-      $("#cancel-premium-button").off();
-      $("#renew-premium-button").off();
-
-      //upgrade a basic listing
-      $("#upgrade-button").off().on("click", function(){
-        if (user.stripe_info.premium_cc_last4){
-          //just upgrade to premium with existing card
-          submitPremium(listing_info, false, $(this));
-        }
-        else {
-          $("#change-card-button").click();
-        }
-      });
-    }
-  }
-
-  //</editor-fold>
+//</editor-fold>
 
 //</editor-fold>
 
@@ -839,21 +868,21 @@ function getDomainOffers(domain_name){
 
 //check the CC info
 function checkCC(){
-    if (!$("#cc-num").val()){
-      errorMessage("Please provide a credit card to charge.");
-    }
-    else if (!$("#cc-exp").val()){
-      errorMessage("Please provide your credit card expiration date.");
-    }
-    else if (!$("#cc-cvc").val()){
-      errorMessage("Please provide your credit card CVC number.");
-    }
-    else if (!$("#cc-zip").val()){
-      errorMessage("Please provide a ZIP code.");
-    }
-    else {
-        return true;
-    }
+  if (!$("#cc-num").val()){
+    errorMessage("Please provide a credit card to charge.");
+  }
+  else if (!$("#cc-exp").val()){
+    errorMessage("Please provide your credit card expiration date.");
+  }
+  else if (!$("#cc-cvc").val()){
+    errorMessage("Please provide your credit card CVC number.");
+  }
+  else if (!$("#cc-zip").val()){
+    errorMessage("Please provide a ZIP code.");
+  }
+  else {
+    return true;
+  }
 }
 
 //function to submit a new premium or to renew the premium again
@@ -935,35 +964,35 @@ function updatePremiumPostAjax(new_listings){
 
 //helper function to bind to inputs to listen for any changes from existing listing info
 function changedValue(input_elem, listing_info){
-    var name_of_attr = input_elem.data("name");
+  var name_of_attr = input_elem.data("name");
 
   //clear any existing messages
   errorMessage(false);
   successMessage(false);
 
-    var save_button = $("#save-changes-button");
-    var cancel_button = $("#cancel-changes-button");
+  var save_button = $("#save-changes-button");
+  var cancel_button = $("#cancel-changes-button");
 
-    //only change if the value changed from existing or if image exists
-    if ((name_of_attr != "background_image" && name_of_attr != "logo" && input_elem.val() != listing_info[name_of_attr])
-    || ((name_of_attr == "background_image" || name_of_attr == "logo") && input_elem.val())
-    || ((name_of_attr == "background_image" || name_of_attr == "logo") && input_elem.data("deleted"))){
-        input_elem.data('changed', true);
+  //only change if the value changed from existing or if image exists
+  if ((name_of_attr != "background_image" && name_of_attr != "logo" && input_elem.val() != listing_info[name_of_attr])
+  || ((name_of_attr == "background_image" || name_of_attr == "logo") && input_elem.val())
+  || ((name_of_attr == "background_image" || name_of_attr == "logo") && input_elem.data("deleted"))){
+    input_elem.data('changed', true);
     save_button.removeClass("is-disabled");
     cancel_button.removeClass("is-hidden");
-    }
-    //hide the cancel, disable the save
-    else {
-        input_elem.data('changed', false);
-        save_button.addClass("is-disabled");
-        cancel_button.addClass("is-hidden");
-    }
+  }
+  //hide the cancel, disable the save
+  else {
+    input_elem.data('changed', false);
+    save_button.addClass("is-disabled");
+    cancel_button.addClass("is-hidden");
+  }
 }
 
 //function to visually reset submit/cancel buttons
 function refreshSubmitButtons(){
   $("#cancel-changes-button").addClass("is-hidden");
-    $("#save-changes-button").removeClass("is-loading").addClass('is-disabled');
+  $("#save-changes-button").removeClass("is-loading").addClass('is-disabled');
 }
 
 //function to cancel the listing submit
@@ -973,68 +1002,68 @@ function cancelListingChanges(){
   //revert all inputs
   editRowVerified(current_listing);
 
-    errorMessage(false);
-    successMessage(false);
+  errorMessage(false);
+  successMessage(false);
 }
 
 //function to submit any changes to a listing
 function submitListingChanges(){
 
-    //clear any existing messages
-    errorMessage(false);
-    successMessage(false);
+  //clear any existing messages
+  errorMessage(false);
+  successMessage(false);
 
-    //only add changed inputs
+  //only add changed inputs
   var formData = new FormData();
-    $(".changeable-input").each(function(e){
-        var input_name = $(this).data("name");
-        var input_val = (input_name == "background_image" || input_name == "logo") ? $(this)[0].files[0] : $(this).val();
+  $(".changeable-input").each(function(e){
+    var input_name = $(this).data("name");
+    var input_val = (input_name == "background_image" || input_name == "logo") ? $(this)[0].files[0] : $(this).val();
 
-        //if background image is being deleted
-        if (input_name == "background_image" && $(this).data("deleted")){
-            var input_val = "";
+    //if background image is being deleted
+    if (input_name == "background_image" && $(this).data("deleted")){
+      var input_val = "";
       $(this).data('deleted', false);
-        }
+    }
 
-        //if logo is being deleted
-        if (input_name == "logo" && $(this).data("deleted")){
-            var input_val = "";
+    //if logo is being deleted
+    if (input_name == "logo" && $(this).data("deleted")){
+      var input_val = "";
       $(this).data('deleted', false);
-        }
+    }
 
-        //if null or undefined
-        current_listing[input_name] = (current_listing[input_name] == null || current_listing[input_name] == undefined) ? "" : current_listing[input_name];
-        if (input_val != current_listing[input_name]){
-            formData.append(input_name, input_val);
-        }
-    });
+    //if null or undefined
+    current_listing[input_name] = (current_listing[input_name] == null || current_listing[input_name] == undefined) ? "" : current_listing[input_name];
+    if (input_val != current_listing[input_name]){
+      formData.append(input_name, input_val);
+    }
+  });
 
-    $("#save-changes-button").addClass("is-loading");
+  $("#save-changes-button").addClass("is-loading");
 
-    $.ajax({
-        url: "/listing/" + current_listing.domain_name + "/update",
-        type: "POST",
-        data: formData,
-        // Options to tell jQuery not to process data or worry about the content-type
-        cache: false,
-        contentType: false,
-        processData: false
-    }, 'json').done(function(data){
-        $("#save-changes-button").removeClass("is-loading");
+  $.ajax({
+    url: "/listing/" + current_listing.domain_name + "/update",
+    type: "POST",
+    data: formData,
+    // Options to tell jQuery not to process data or worry about the content-type
+    cache: false,
+    contentType: false,
+    processData: false
+  }, 'json').done(function(data){
+    $("#save-changes-button").removeClass("is-loading");
 
-        if (data.state == "success"){
-            successMessage("Successfully updated this listing!");
+    if (data.state == "success"){
+      successMessage("Successfully updated this listing!");
       updateCurrentListing(data.listings);
 
       //update images if necessary
       if (data.new_background_image){
-        updateBackgroundImage({ background_image : data.new_background_image});
+        updateBackground({ background_image : data.new_background_image});
       }
       if (data.new_logo){
-        updateBackgroundImage({ logo : data.new_logo});
+        updateBackground({ logo : data.new_logo});
       }
 
-            refreshSubmitButtons();
+      refreshSubmitButtons();
 
       (function(listing_info){
         //update the change row handler
@@ -1044,41 +1073,43 @@ function submitListingChanges(){
 
         updateBindings(listing_info);
       })(current_listing);
-        }
-        else {
-            errorMessage(data.message);
-        }
-    });
+    }
+    else {
+      errorMessage(data.message);
+    }
+  });
 }
 
 //helper function to display/hide error messages per listing
 function errorMessage(message){
-    if (message && message != "nothing-changed"){
+  if (message && message != "nothing-changed"){
+    successMessage(false);
     $("#listing-msg-error").removeClass('is-hidden').addClass("is-active");
     $("#listing-msg-error").find("p").empty();
 
-        //connect stripe first!
-        if (message == "stripe-connect-error"){
-            $("#listing-msg-error").append("<p class='is-white'>You must <a class='is-underlined' href='/profile/settings#payout-address'>enter your payment information</a> before your listing can go live!</p>");
-        }
-        else {
-            $("#listing-msg-error").append("<p class='is-white'>" + message + "</p>");
-        }
+    //connect stripe first!
+    if (message == "stripe-connect-error"){
+      $("#listing-msg-error").append("<p class='is-white'>You must <a class='is-underlined' href='/profile/settings#payout-address'>enter your payment information</a> before your listing can go live!</p>");
     }
     else {
-        $("#listing-msg-error").addClass('is-hidden').removeClass("is-active");
+      $("#listing-msg-error").append("<p class='is-white'>" + message + "</p>");
     }
+  }
+  else {
+    $("#listing-msg-error").addClass('is-hidden').removeClass("is-active");
+  }
 }
 
 //helper function to display success messages per listing
 function successMessage(message){
-    if (message){
+  if (message){
+    errorMessage(false);
     $("#listing-msg-success").removeClass('is-hidden').addClass("is-active");
-        $("#listing-msg-success-text").text(message);
-    }
-    else {
-        $("#listing-msg-success").addClass('is-hidden').removeClass("is-active");
-    }
+    $("#listing-msg-success-text").text(message);
+  }
+  else {
+    $("#listing-msg-success").addClass('is-hidden').removeClass("is-active");
+  }
 }
 
 //</editor-fold>
@@ -1212,15 +1243,15 @@ function updateVerificationButton(listing_info, cb_when_verified){
 
 //function to select a row
 function selectRow(row){
-    var selected = (row.prop("checked") == false) ? true : false;
-    var verified = row.data("verified");
-    row.data("selected", selected);
+  var selected = (row.prop("checked") == false) ? true : false;
+  var verified = row.data("verified");
+  row.data("selected", selected);
 
-    var icon_i = row.find(".select-button i");
+  var icon_i = row.find(".select-button i");
 
-    row.toggleClass('is-selected');
+  row.toggleClass('is-selected');
 
-    multiSelectButtons();
+  multiSelectButtons();
 }
 
 //function to select all rows
@@ -1251,27 +1282,27 @@ function selectAllRows(select_all_button, select_or_deselect){
 
 //helper function to handle multi-select action buttons
 function multiSelectButtons(){
-    var selected_rows = $(".table-row:not(.clone-row)").filter(function(){ return $(this).hasClass("is-selected") == true });
-    var verified_selected_rows = selected_rows.filter(function(){ return $(this).data("verified") == false});
+  var selected_rows = $(".table-row:not(.clone-row)").filter(function(){ return $(this).hasClass("is-selected") == true });
+  var verified_selected_rows = selected_rows.filter(function(){ return $(this).data("verified") == false});
 
-    if (selected_rows.length > 0){
-        $("#multi-delete").removeClass("is-disabled");
-    }
-    else {
-        $("#multi-delete").addClass("is-disabled");
-    }
+  if (selected_rows.length > 0){
+    $("#multi-delete").removeClass("is-disabled");
+  }
+  else {
+    $("#multi-delete").addClass("is-disabled");
+  }
 
-    if (verified_selected_rows.length > 0){
-        $("#multi-verify").removeClass("is-disabled");
-    }
-    else {
-        $("#multi-verify").addClass("is-disabled");
-    }
+  if (verified_selected_rows.length > 0){
+    $("#multi-verify").removeClass("is-disabled");
+  }
+  else {
+    $("#multi-verify").addClass("is-disabled");
+  }
 }
 
 //function to multi-verify listings
 function multiVerify(verify_button){
-    verify_button.off();
+  verify_button.off();
 
   var ids = [];
   var selected_rows = $(".table-row").filter(function(){
@@ -1313,7 +1344,7 @@ function multiVerify(verify_button){
 
     //success rows
     if (data.state == "success"){
-            verificationHandler(data);
+      verificationHandler(data);
     }
   });
 }
@@ -1326,7 +1357,7 @@ function verificationHandler(data){
 
 //function to delete multiple rows
 function multiDelete(delete_button){
-    delete_button.off();
+  delete_button.off();
 
   var deletion_ids = [];
   var selected_rows = $(".table-row").filter(function(){
@@ -1351,11 +1382,11 @@ function multiDelete(delete_button){
     selectAllRows($("#select-all"), true);
 
     if (data.state == "success"){
-            deletionHandler(data.rows, selected_rows);
+      deletionHandler(data.rows, selected_rows);
     }
-        else {
-            console.log(data);
-        }
+    else {
+      console.log(data);
+    }
   });
 }
 
@@ -1381,19 +1412,19 @@ function calculateLuminance(rgb) {
   if (hexValue.length !== 6) {
     return 0;
   }
-    r = parseInt(hexValue.substring(0,2), 16) / 255;
-    g = parseInt(hexValue.substring(2,4), 16) / 255;
-    b = parseInt(hexValue.substring(4,6), 16) / 255;
+  r = parseInt(hexValue.substring(0,2), 16) / 255;
+  g = parseInt(hexValue.substring(2,4), 16) / 255;
+  b = parseInt(hexValue.substring(4,6), 16) / 255;
 
-    // calculate the overall luminance of the color
-    var luminance = 0.2126 * r + 0.7152 * g + 0.0722 * b;
+  // calculate the overall luminance of the color
+  var luminance = 0.2126 * r + 0.7152 * g + 0.0722 * b;
 
-    if (luminance > 0.8) {
-        return "#222";
-    }
-    else {
-        return "#fff";
-    }
+  if (luminance > 0.8) {
+    return "#222";
+  }
+  else {
+    return "#fff";
+  }
 }
 
 //function to sort
@@ -1419,7 +1450,7 @@ function sortBy(property_name, asc, a, b){
 }
 
 function toUpperCase(string){
-    return string.charAt(0).toUpperCase() + string.substr(1);
+  return string.charAt(0).toUpperCase() + string.substr(1);
 }
 
 //update the current_listing object based on
