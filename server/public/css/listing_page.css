@@ -181,7 +181,7 @@ button[data-balloon] {
   align-items: center; }
 
 .module {
-  height: 410px; }
+  min-height: 410px; }
 
 #compare-model {
   width: 100%;
@@ -427,7 +427,8 @@ button[data-balloon] {
 
 #ticker-module {
   padding: 0;
-  background: #FFF; }
+  background: #FFF;
+  height: 410px; }
 
 #ticker-wrapper {
   display: block;
