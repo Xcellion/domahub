@@ -474,21 +474,21 @@ module.exports = {
     }
     else if (req.body.status){
 
-      //must connect
-      if (status == 1 && !req.user.stripe_account){
-        error.handler(req, res, "stripe-connect-error", "json");
-      }
-      else {
-        //check to see if its currently rented
-        Listing.checkCurrentlyRented(req.params.domain_name, function(result){
-          if (result.state != "success" || result.info.length > 0){
-            error.handler(req, res, "This listing is currently being rented!", "json");
-          }
-          else {
-            next();
-          }
-        });
-      }
+      // //no stripe information, prevent them from making it active
+      // if (status == 1 && !req.user.stripe_account){
+      //   error.handler(req, res, "stripe-connect-error", "json");
+      // }
+      // else {
+
+      //check to see if its currently rented
+      Listing.checkCurrentlyRented(req.params.domain_name, function(result){
+        if (result.state != "success" || result.info.length > 0){
+          error.handler(req, res, "This listing is currently being rented!", "json");
+        }
+        else {
+          next();
+        }
+      });
     }
     else {
       next();

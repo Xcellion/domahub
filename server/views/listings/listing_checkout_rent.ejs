@@ -362,19 +362,28 @@
                                         <i id="cc-icon" class="fa fa-credit-card"></i>
                                     </p>
                                     <div class="control is-grouped">
-                                        <p class="control is-expanded">
-                                            <label class="label is-medium">Expiration Date</label>
+                                        <div class="control is-expanded">
+                                          <label class="label is-medium">Expiration Date</label>
+                                          <div class="control has-icon">
                                             <input tabindex="0" id="cc-exp" maxlength="7" data-stripe="exp" class="checkout-track input stripe-input is-medium" type="tel" placeholder="•• / ••" autocomplete="cc-exp"/>
-                                        </p>
-                                        <p class="control">
-                                            <label class="label is-medium">Security Code</label>
+                                            <i class="fa fa-calendar-o"></i>
+                                          </div>
+                                        </div>
+                                        <div class="control">
+                                          <label class="label is-medium">Security Code</label>
+                                          <div class="control has-icon">
                                             <input tabindex="0" id="cc-cvc" data-stripe="cvc" class="checkout-track input stripe-input is-medium" type="tel" placeholder="•••" autocomplete="off"/>
-                                        </p>
+                                            <i class="fa fa-lock"></i>
+                                          </div>
+                                        </div>
                                     </div>
-                                    <p class="control">
-                                        <label class="label is-medium">Zip Code</label>
+                                    <div class="control">
+                                      <label class="label is-medium">Zip Code</label>
+                                      <div class="control has-icon">
                                         <input tabindex="0" id="cc-zip" maxlength="6" data-stripe="address_zip" class="checkout-track input stripe-input is-medium" type="tel" autocomplete="postal-code" placeholder="•••••"/>
-                                    </p>
+                                        <i class="fa fa-map-marker"></i>
+                                      </div>
+                                    </div>
                                 </form>
                             <% } %>
 

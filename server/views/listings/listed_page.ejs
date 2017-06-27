@@ -25,17 +25,12 @@
                 </span>
             <% } %>
             <% if (listing_info.rentable) { %>
-                <span id="rent-price-tag" class="tag is-primary is-medium">
-                  <span id="total-price" class='margin-right-5 is-hidden'>Total: </span>
-                  <span id="orig-price" class='margin-right-5 is-linethrough is-hidden'></span>
-                  <span id="actual-price">
-
+                <span class="tag is-primary is-medium">
                   <% if (listing_info.price_rate > 0){ %>
                       For rent - $<%= listing_info.price_rate %> / <%= listing_info.price_type %>
                   <% } else { %>
                       For rent - Free
                   <% } %>
-
                   </span>
                 </span>
             <% } %>
