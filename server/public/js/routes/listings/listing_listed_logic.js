@@ -176,9 +176,9 @@ $(document).ready(function() {
         $("#typed-slash").val(getParameterByName("wanted"));
       }
 
-    //</editor-fold>
+      //</editor-fold>
 
-    //<editor-fold>-----------------------------------------------------------------------------------CALENDAR AND TIMES
+      //<editor-fold>-----------------------------------------------------------------------------------CALENDAR AND TIMES
 
       //if and any free times
       if (listing_info.freetimes && listing_info.freetimes.length > 0){
@@ -392,12 +392,12 @@ function errorHandler(message){
 
   switch (message){
     case "Dates are unavailable!":
-      //remove any existing date range pickers
-      if ($("#calendar").data('daterangepicker')){
-        $("#calendar").data('daterangepicker').remove();
-      }
-      $("#calendar-error-message").removeClass('is-hidden').text("Bummer! Someone just took that slot. Please select a different time.");
-      break;
+    //remove any existing date range pickers
+    if ($("#calendar").data('daterangepicker')){
+      $("#calendar").data('daterangepicker').remove();
+    }
+    $("#calendar-error-message").removeClass('is-hidden').text("Bummer! Someone just took that slot. Please select a different time.");
+    break;
     case "Invalid dates!":
     case "Invalid dates! No times posted!":
     case "Invalid dates! Not valid dates!":
@@ -405,12 +405,12 @@ function errorHandler(message){
     case "Start time in the past!":
     case "Invalid end time!":
     case "Invalid start time!":
-            $("#calendar-error-message").removeClass('is-hidden').text("You have selected an invalid time! Please refresh the page and try again.");
-      break;
+    $("#calendar-error-message").removeClass('is-hidden').text("You have selected an invalid time! Please refresh the page and try again.");
+    break;
     default:
-            $("#calendar-error-message").removeClass('is-hidden').text("Oh no, something went wrong! Please refresh the page and try again.");
-            break;
-    }
+    $("#calendar-error-message").removeClass('is-hidden').text("Oh no, something went wrong! Please refresh the page and try again.");
+    break;
+  }
 }
 
 //</editor-fold>
@@ -476,34 +476,34 @@ function getTimes(calendar_elem){
 
 //function to setup the calendar
 function setUpCalendar(listing_info){
-    //create a new range picker based on new path rental availability
-    var start_date = moment();
-    var end_date = moment().endOf(listing_info.price_type).add(1, "millisecond");
+  //create a new range picker based on new path rental availability
+  var start_date = moment();
+  var end_date = moment().endOf(listing_info.price_type).add(1, "millisecond");
 
-    $('#calendar').daterangepicker({
-        opens: "center",
+  $('#calendar').daterangepicker({
+    opens: "center",
     alwaysShowCalendars: true,
-        autoApply: true,
-        autoUpdateInput: false,
-        locale: {
-            // format: 'MM/DD/YYYY h:mmA'
-            format: 'MM/DD/YYYY'
-        },
-        // timePicker: true,
-        // timePickerIncrement: 60,
+    autoApply: true,
+    autoUpdateInput: false,
+    locale: {
+      // format: 'MM/DD/YYYY h:mmA'
+      format: 'MM/DD/YYYY'
+    },
+    // timePicker: true,
+    // timePickerIncrement: 60,
 
-        minDate: moment().endOf("hour").add(1, "millisecond").add(1, "hour"),
-        maxDate: moment().endOf("hour").add(1, "millisecond").add(1, "year"),
+    minDate: moment().endOf("hour").add(1, "millisecond").add(1, "hour"),
+    maxDate: moment().endOf("hour").add(1, "millisecond").add(1, "year"),
 
-        isInvalidDate: function(curDate){
-            if (curDate.isAfter(moment())){
-                var bool = checkIfNotOverlapped(curDate);
-                return bool;
-            }
-            else {
-                return true;
-            }
-        },
+    isInvalidDate: function(curDate){
+      if (curDate.isAfter(moment())){
+        var bool = checkIfNotOverlapped(curDate);
+        return bool;
+      }
+      else {
+        return true;
+      }
+    },
 
     //free times on calendar
     isCustomDate: function(curDate){
@@ -513,44 +513,43 @@ function setUpCalendar(listing_info){
         }
       }
     }
-    });
+  });
 
-    //update when applying new dates
-    $('#calendar').on('apply.daterangepicker', function(ev, picker) {
+  //update when applying new dates
+  $('#calendar').on('apply.daterangepicker', function(ev, picker) {
     //picked today to start
     if (picker.startDate.startOf("day").isSame(moment().startOf("day"))){
       picker.startDate = moment().startOf("hour");
     }
 
-        if (picker.startDate.isValid() && picker.endDate.isValid()){
-            updatePrices();
-            $(this).val(picker.startDate.format('MMM D, YYYY') + ' - ' + picker.endDate.format('MMM D, YYYY'));
-            $("#checkout-button").removeClass('is-disabled');
-        }
-        else {
-            $(this).val("");
-            $("#checkout-button").addClass('is-disabled');
-        }
-    });
+    if (picker.startDate.isValid() && picker.endDate.isValid()){
+      updatePrices();
+      $(this).val(picker.startDate.format('MMM D, YYYY') + ' - ' + picker.endDate.format('MMM D, YYYY'));
+      $("#checkout-button").removeClass('is-disabled');
+    }
+    else {
+      $(this).val("");
+      $("#checkout-button").addClass('is-disabled');
+    }
+  });
 
-    //to figure out what events are already existing in given view
-    $('#calendar').on('show.daterangepicker', function(ev, picker) {
-        //remove any error messages
-        $("#calendar-regular-message").removeClass('is-hidden');
-        $("#calendar-error-message").addClass('is-hidden');
+  //to figure out what events are already existing in given view
+  $('#calendar').on('show.daterangepicker', function(ev, picker) {
+    //remove any error messages
+    $("#calendar-regular-message").removeClass('is-hidden');
+    $("#calendar-error-message").addClass('is-hidden');
     $("#calendar-module").css("margin-bottom", $(".daterangepicker").height());
-    });
+  });
 
   //only show if the calendar input is visible
   if ($("#calendar").is(":visible")){
     $("#calendar").data('daterangepicker').show();
-    console.log("W")
   }
 }
 
 //helper function to make sure theres nothing overlapping this event
 function checkIfNotOverlapped(event){
-    var overlap = 0;
+  var overlap = 0;
   if (listing_info.rental_moments){
     for (var x = 0; x < listing_info.rental_moments.length; x++){
       var rental_start = listing_info.rental_moments[x].start;
@@ -562,7 +561,7 @@ function checkIfNotOverlapped(event){
       }
     }
   }
-    return overlap != 0;
+  return overlap != 0;
 }
 
 //helper function to check if overlaps a free period
@@ -585,11 +584,11 @@ function checkIfFree(event){
 //helper function to get correct price of events
 function updatePrices(){
   if (listing_info.status){
-        var startDate = $("#calendar").data('daterangepicker').startDate;
-      var endDate = $("#calendar").data('daterangepicker').endDate.clone().add(1, "millisecond");
+    var startDate = $("#calendar").data('daterangepicker').startDate;
+    var endDate = $("#calendar").data('daterangepicker').endDate.clone().add(1, "millisecond");
 
     //calculate the price
-        var totalPrice = moment.duration(endDate.diff(startDate));
+    var totalPrice = moment.duration(endDate.diff(startDate));
 
     //any overlapped time with free times
     var overlappedTime = anyFreeDayOverlap(startDate, endDate);
@@ -603,16 +602,16 @@ function updatePrices(){
       var totalPrice = calculatePrice(totalPrice);
     }
 
-        //price or price per day
-        if (totalPrice == 0 && listing_info.price_rate != 0 && overlappedTime == 0){
+    //price or price per day
+    if (totalPrice == 0 && listing_info.price_rate != 0 && overlappedTime == 0){
       $("#total-price").addClass("is-hidden");
-            $("#checkout-button").addClass('is-disabled');
-            $("#actual-price").text("$" + listing_info.price_rate + " Per " + listing_info.price_type.capitalizeFirstLetter());
-        }
-        else {
+      $("#checkout-button").addClass('is-disabled');
+      $("#actual-price").text("$" + listing_info.price_rate + " Per " + listing_info.price_type.capitalizeFirstLetter());
+    }
+    else {
       $("#total-price").removeClass("is-hidden");
-            $("#checkout-button").removeClass('is-disabled');
-
+      $("#checkout-button").removeClass('is-disabled');
+      
       if (origPrice){
         $("#orig-price").removeClass('is-hidden');
         countPrice($("#orig-price"), origPrice);
@@ -622,7 +621,7 @@ function updatePrices(){
       }
 
       countPrice($("#actual-price"), totalPrice);
-        }
+    }
   }
 }
 

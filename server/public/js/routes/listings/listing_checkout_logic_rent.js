@@ -148,18 +148,20 @@ $(document).ready(function () {
             $(".address-input").val("").removeClass('input-selected');
             $("#rental-will-msg").addClass('is-hidden');
             $("#rental-will-duration-msg").addClass('is-hidden');
+            $(".address-next-button").addClass('is-disabled');
         });
     });
 
     //change the card to display what will happen
-    $(".address-input").on("change keyup paste", function(){
+    $(".address-input").on("change keyup paste input", function(){
         if ($(this).val() != ""){
             var value_clipped = ($(this).val().length > 35) ? $(this).val().substr(0, 35) + "..." : $(this).val();
+            var link_absolute = ($(this).val().indexOf("http") == -1) ? "http://" + $(this).val() : $(this).val();
             if ($(this).attr("id") == "address-forward-input"){
-                var rental_type_text = "Will forward to <a target='_blank' href=" + $(this).val() + " class='is-accent'>this link </br>(" + value_clipped + ")</a>";
+                var rental_type_text = "Will forward to <a target='_blank' href=" + link_absolute + " class='is-accent'>this link </br>(" + value_clipped + ")</a>";
             }
             else {
-                var rental_type_text = "Will display the content on <a target='_blank' href=" + $(this).val() + " class='is-accent'>this link </br>(" + value_clipped + ")</a>";
+                var rental_type_text = "Will display the content on <a target='_blank' href=" + link_absolute + " class='is-accent'>this link </br>(" + value_clipped + ")</a>";
             }
             $("#rental-will-msg").html(rental_type_text).removeClass('is-hidden');
             $("#rental-will-duration-msg").removeClass('is-hidden');
