@@ -219,26 +219,24 @@ module.exports = {
       }
     }
     else {
+      req.session.new_rental_info.price = 0;
       next();
     }
   },
 
-  //get the stripe id of the listing owner
+  //get the stripe id of the listing owner if it exists
   getOwnerStripe : function(req, res, next){
     if (req.session.new_rental_info.price != 0){
       console.log("F: Getting all Stripe info for a listing...");
 
       //get the stripe id of the listing owner
       Account.getStripeAndType(req.params.domain_name, function(result){
-        if (result.state == "error"){error.handler(req, res, result.info);}
+        if (result.state == "error"){error.handler(req, res, result.info, "json")}
         else {
-          if (!result.info[0].stripe_account){
-            error.handler(req, res, "Invalid stripe user account!", "json");
-          }
-          else {
+          if (result.info[0].stripe_account){
             req.session.new_rental_info.owner_stripe_id = result.info[0].stripe_account;  //stripe id
-            next();
           }
+          next();
         }
       });
     }
@@ -718,15 +716,15 @@ module.exports = {
       console.log("F: Checking to see if domain is still pointed to DomaHub...");
 
       dns.resolve(req.params.domain_name, "A", function (err, address, family) {
-        console.log(err);
         //something went wrong in looking up DNS, just mark it inactive
         if (err){
+          console.log("F: DNS error! Setting listing to inactive...");
           req.session.listing_info.status = 0;
           next();
         }
         else {
           var domain_ip = address;
-          dns.lookup("domahub.com", function (err, address, family) {
+          dns.resolve("domahub.com", "A", function (err, address, family) {
 
             //not pointed to DH anymore
             if (domain_ip != address && domain_ip.length != 1){
@@ -741,6 +739,7 @@ module.exports = {
 
             //something went wrong in looking up DNS, just mark it inactive
             else if (err){
+              console.log("F: DNS error! Setting listing to inactive...");
               req.session.listing_info.status = 0;
               next();
             }

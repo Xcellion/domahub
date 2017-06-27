@@ -474,21 +474,21 @@ module.exports = {
     }
     else if (req.body.status){
 
-      //must connect
-      if (status == 1 && !req.user.stripe_account){
-        error.handler(req, res, "stripe-connect-error", "json");
-      }
-      else {
-        //check to see if its currently rented
-        Listing.checkCurrentlyRented(req.params.domain_name, function(result){
-          if (result.state != "success" || result.info.length > 0){
-            error.handler(req, res, "This listing is currently being rented!", "json");
-          }
-          else {
-            next();
-          }
-        });
-      }
+      // //no stripe information, prevent them from making it active
+      // if (status == 1 && !req.user.stripe_account){
+      //   error.handler(req, res, "stripe-connect-error", "json");
+      // }
+      // else {
+
+      //check to see if its currently rented
+      Listing.checkCurrentlyRented(req.params.domain_name, function(result){
+        if (result.state != "success" || result.info.length > 0){
+          error.handler(req, res, "This listing is currently being rented!", "json");
+        }
+        else {
+          next();
+        }
+      });
     }
     else {
       next();
@@ -948,13 +948,10 @@ module.exports = {
         if (domain_ip && address && (domain_ip == address || domain_ip[0] == address) && domain_ip.length == 1){
           req.session.new_listing_info = {
             domain_name: domain_name,
-            verified: 1
+            verified: 1,
+            status: 1
           }
-
-          //if bank account is accepting charges, then set it to live
-          if (req.user.stripe_info && req.user.stripe_info.charges_enabled){
-            req.session.new_listing_info.status = 1;
-          }
+          
           next();
         }
         else {

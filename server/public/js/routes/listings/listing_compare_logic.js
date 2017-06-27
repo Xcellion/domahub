@@ -1,5 +1,3 @@
-var current_theme = "DomaHub";
-
 $(document).ready(function() {
   if (compare){
 
@@ -13,6 +11,9 @@ $(document).ready(function() {
       $("#" + box_id + "-box").removeClass('is-hidden');
     });
 
+    //populate all themes
+    populateThemeDropdown();
+
     var current_theme = getParameterByName("theme") || $("#theme-input").val();
     switchTheme(current_theme);
 
@@ -23,7 +24,7 @@ $(document).ready(function() {
     updateRentable();
 
     //DESIGN TAB
-    updateThemes();
+    loadThemeHandler();
     loadBackgroundHandlers();
     loadColorSchemeHandlers();
     loadFontStyleHandlers();
@@ -31,8 +32,7 @@ $(document).ready(function() {
 
     //change to custom theme if anything is changed
     $(".theme-changeable-input").on("change", function(){
-      current_theme = "Custom";
-      $("#theme-input").val(current_theme);
+      $("#theme-input").val("Custom");
     });
 
     toggleMenu();
@@ -63,31 +63,6 @@ function toggleMenu() {
 
 //<editor-fold>-----------------------------------------------------------------------------------THEMES
 
-//update theme selector
-function updateThemes(){
-  //swtich theme selector
-  $("#theme-input").off().on("input", function(){
-    switchTheme($(this).val());
-  });
-
-  //get a unique random theme
-  $("#random-theme-button").off().on("click", function(){
-    var new_theme = getRandomTheme();
-    while (current_theme == new_theme){
-      new_theme = getRandomTheme();
-    }
-    current_theme = new_theme;
-    switchTheme(new_theme);
-  });
-
-  //get a random theme
-  function getRandomTheme(){
-    var themes_array = $("#theme-input option").map(function(){ if ($(this).val() != "Custom") { return $(this).val() } } ).get();
-    var random_index = Math.floor(Math.random() * themes_array.length);
-    return themes_array[random_index];
-  }
-}
-
 //function to switch theme
 function switchTheme(theme_name){
   var theme_to_load = findTheme(theme_name);
@@ -108,7 +83,6 @@ function switchTheme(theme_name){
   updateFontColor(listing_info.font_color);
   updateFontName(listing_info.font_name);
 
-  current_theme = theme_to_load.theme_name;
   $("#theme-input").val(theme_to_load.theme_name);
   updateQueryStringParam("theme", theme_to_load.theme_name);
 }
