@@ -30,12 +30,23 @@ module.exports = function(app, db, auth, error){
     app.get("/proxysite", proxysite);
     app.get("/analysis/:domain_name", analysis);
     app.get("/paypal", paypal);
+    app.get("/dnswtf", DNSwtf);
 }
 
 function paypal(req, res, next){
     res.render("paypaltest.ejs");
 }
 
+//testing DNS errors for 1q computer
+function DNSwtf(req, res, next){
+  dns.resolve("google.com", "A", function (err, address, family) {
+    res.json({
+      err: err,
+      address: address,
+      family: family
+    });
+  });
+}
 
 //testing quantcast redirect
 function emailViews(req, res, next){

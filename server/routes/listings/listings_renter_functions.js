@@ -718,9 +718,17 @@ module.exports = {
       console.log("F: Checking to see if domain is still pointed to DomaHub...");
 
       dns.resolve(req.params.domain_name, "A", function (err, address, family) {
-        if (!err){
+        console.log(err);
+        //something went wrong in looking up DNS, just mark it inactive
+        if (err){
+          req.session.listing_info.status = 0;
+          next();
+        }
+        else {
           var domain_ip = address;
           dns.lookup("domahub.com", function (err, address, family) {
+
+            //not pointed to DH anymore
             if (domain_ip != address && domain_ip.length != 1){
               console.log("F: Listing is not pointed to DomaHub anymore! Reverting verification...");
               Listing.updateListing(req.params.domain_name, {
@@ -730,14 +738,16 @@ module.exports = {
                 getWhoIs(req, res, next, true);
               });
             }
+
+            //something went wrong in looking up DNS, just mark it inactive
+            else if (err){
+              req.session.listing_info.status = 0;
+              next();
+            }
             else {
               next();
             }
           });
-        }
-        else {
-          req.session.listing_info.status = 0;
-          next();
         }
       });
     }
