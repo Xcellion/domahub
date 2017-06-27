@@ -1,7 +1,7 @@
 var myChart;
 
 $(document).ready(function() {
-  //remove active from main section if not comparing
+  //add active to main section if comparing
   if (compare){
     $("#compare-preview").addClass('is-active');
   }

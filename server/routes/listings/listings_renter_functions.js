@@ -757,6 +757,11 @@ module.exports = {
         referer : req.header("Referer") || req.headers.referer
       }
 
+      //if it was a compare query
+      if (req.query && req.query.compare == "true"){
+        history_info.compare = true;
+      }
+
       //what rental did it come from?
       if (req.query.camefrom && parseFloat(req.query.camefrom)){
         history_info.rental_id = req.query.camefrom;
