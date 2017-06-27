@@ -948,13 +948,10 @@ module.exports = {
         if (domain_ip && address && (domain_ip == address || domain_ip[0] == address) && domain_ip.length == 1){
           req.session.new_listing_info = {
             domain_name: domain_name,
-            verified: 1
+            verified: 1,
+            status: 1
           }
-
-          //if bank account is accepting charges, then set it to live
-          if (req.user.stripe_info && req.user.stripe_info.charges_enabled){
-            req.session.new_listing_info.status = 1;
-          }
+          
           next();
         }
         else {
