@@ -312,7 +312,6 @@ module.exports = {
 
     if (req.session.new_rental_info.price != 0){
       if (req.body.stripeToken){
-        var owner_stripe_id = req.session.new_rental_info.owner_stripe_id;
         var total_price = Math.round(req.session.new_rental_info.price * 100);    //USD in cents
 
         //doma fee if the listing is basic (aka premium hasn't expired)
@@ -324,13 +323,17 @@ module.exports = {
           currency: "usd",
           source: req.body.stripeToken,
           description: "Rental for " + req.params.domain_name,
-          destination: owner_stripe_id,
-          application_fee: stripe_fees + doma_fees,
           metadata: {
             "domain_name" : req.params.domain_name,
             "renter_name" : (req.user) ? req.user.username : "Guest",
             "rental_id" : req.session.new_rental_info.rental_id
           }
+        }
+
+        //destination if the listing owner has stripe/payments set up
+        if (req.session.new_rental_info.owner_stripe_id){
+          stripeOptions.destination = req.session.new_rental_info.owner_stripe_id;
+          stripeOptions.application_fee = stripe_fees + doma_fees;
         }
 
         //something went wrong with the price
@@ -347,7 +350,7 @@ module.exports = {
               error.handler(req, res, "Invalid price!", "json");
             }
             else {
-              console.log("Payment processed! " + owner_stripe_id + " has been paid $" + ((total_price - stripe_fees - doma_fees)/100).toFixed(2) + " with $" + (doma_fees/100).toFixed(2) + " in Doma fees and $" + (stripe_fees/100).toFixed(2) + " in Stripe fees.")
+              console.log("Payment processed! Customer paid $" + ((total_price - stripe_fees - doma_fees)/100).toFixed(2) + " with $" + (doma_fees/100).toFixed(2) + " in Doma fees and $" + (stripe_fees/100).toFixed(2) + " in Stripe fees.")
               next();
             }
           });
