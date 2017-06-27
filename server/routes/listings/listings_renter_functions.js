@@ -718,7 +718,6 @@ module.exports = {
       console.log("F: Checking to see if domain is still pointed to DomaHub...");
 
       dns.resolve(req.params.domain_name, "A", function (err, address, family) {
-        console.log(err);
         //something went wrong in looking up DNS, just mark it inactive
         if (err){
           req.session.listing_info.status = 0;
