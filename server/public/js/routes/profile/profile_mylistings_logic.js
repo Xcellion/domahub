@@ -298,7 +298,7 @@ function createRow(listing_info, rownum){
   tempRow.data("selected", false);
   tempRow.data("id", listing_info.id);
   tempRow.data("domain_name", listing_info.domain_name);
-  if (listing_info.premium){
+  if (listing_info.stripe_subscription_id){
     tempRow.data("premium", true);
     tempRow.data("basic", false);
   }
