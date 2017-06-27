@@ -12,6 +12,7 @@ $(document).ready(function(){
 
   //<editor-fold>-------------------------------FILTERS-------------------------------
 
+  //sorting
   $("#sort-select").on("change", function(){
     var sort_by = $(this).val();
 
@@ -49,6 +50,7 @@ $(document).ready(function(){
     createRows();
   });
 
+  //domain search
   $("#domain-search").on("input keyup", function(){
     $(".table-row:not(.clone-row)").addClass('is-hidden');
 
@@ -56,6 +58,18 @@ $(document).ready(function(){
 
     $(".table-row:not(.clone-row)").filter(function(){
       if ($(this).data('domain_name').indexOf(search_term) != -1){
+        return true;
+      }
+    }).removeClass('is-hidden');
+  });
+
+  //filters
+  $("#filter-select").on("change", function(){
+    $(".table-row:not(.clone-row)").addClass('is-hidden');
+
+    var filter_val = $(this).val();
+    $(".table-row:not(.clone-row)").filter(function(){
+      if ($(this).data(filter_val)){
         return true;
       }
     }).removeClass('is-hidden');
@@ -284,6 +298,16 @@ function createRow(listing_info, rownum){
   tempRow.data("selected", false);
   tempRow.data("id", listing_info.id);
   tempRow.data("domain_name", listing_info.domain_name);
+  if (listing_info.premium){
+    tempRow.data("premium", true);
+    tempRow.data("basic", false);
+  }
+  else {
+    tempRow.data("premium", false);
+    tempRow.data("basic", true);
+  }
+  tempRow.data("verified", listing_info.verified);
+  tempRow.data("rented", listing_info.rented);
 
   //already got the dns and a records for unverified domain
   if (listing_info.a_records != undefined && listing_info.whois != undefined){
