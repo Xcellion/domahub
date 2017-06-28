@@ -112,7 +112,7 @@ $(document).ready(function(){
     successMessage(false);
 
     //hide other tab selectors
-    $(".tab").removeClass('is-active');
+    $(".tab.verified-elem").removeClass('is-active');
     $(this).addClass('is-active');
 
     //show specific tab
@@ -127,19 +127,19 @@ $(document).ready(function(){
 
     //hide save/cancel changes buttons on premium and offers tab
     if ($(this).attr("id") == "upgrade-tab" || $(this).attr("id") == "offers-tab"){
+      $("#tab-buttons-wrapper").addClass('is-hidden');
       $("#save-changes-button").addClass('is-hidden');
       $("#cancel-changes-button").addClass('is-hidden');
     }
 
     //clicked on a not upgrade tab
     else {
-      //show save/cancel changes buttons, hide checkout button
+      $("#tab-buttons-wrapper").removeClass('is-hidden');
       $("#save-changes-button").removeClass('is-hidden');
       $("#cancel-changes-button").removeClass('is-hidden');
     }
 
     cancelListingChanges();
-
   });
 
   //to submit form changes
@@ -211,6 +211,7 @@ $(document).ready(function(){
     $(this).addClass('is-hidden');
     $("#checkout-button").removeClass('is-hidden');
     $("#stripe-form").removeClass('is-hidden');
+    $("#tab-buttons-wrapper").removeClass('is-hidden');
     $('#cc-num').focus();
   });
 
@@ -253,9 +254,15 @@ function createRows(){
     $(".no-listings-elem").addClass('is-hidden');
     $("#loading-tab").addClass('is-hidden');
 
-    if (listings[0].verified){
+    //update inputs for purchased domain
+    if (listings[0].accepted){
+      editRowPurchased(listings[0]);
+    }
+    //update inputs for verified
+    else if (listings[0].verified){
       editRowVerified(listings[0]);
     }
+    //update inputs for unverified
     else {
       editRowUnverified(listings[0]);
     }
@@ -350,10 +357,15 @@ function changeRow(row, listing_info, bool){
     $(".current-domain-name").text(listing_info.domain_name);
     $("#current-domain-view").attr("href", "/listing/" + listing_info.domain_name);
 
-    //update inputs
-    if (listing_info.verified){
+    //update inputs for purchased domain
+    if (listing_info.accepted){
+      editRowPurchased(listing_info);
+    }
+    //update inputs for verified
+    else if (listing_info.verified){
       editRowVerified(listing_info);
     }
+    //update inputs for unverified
     else {
       editRowUnverified(listing_info);
     }
@@ -364,8 +376,9 @@ function changeRow(row, listing_info, bool){
 
 //<editor-fold>-------------------------------UPDATE ROW VERIFIED-------------------------------
 
-//function to intiate edit mode
+//function to update a row if it's verified but not yet purchased
 function editRowVerified(listing_info){
+
   //get offers if we haven't yet
   if (listing_info.offers == undefined){
     getDomainOffers(listing_info.domain_name);
@@ -374,9 +387,17 @@ function editRowVerified(listing_info){
     updateOffers(listing_info);
   }
 
-  //show the verification tab, hide others
+  //hide purchased tab, show other tabs
+  $(".purchased-elem").addClass('is-hidden');
+  $(".unpurchased-elem").removeClass("is-hidden");
+
+  //show the verified tabs, hide unverified
   $(".verified-elem").removeClass('is-hidden');
   $(".unverified-elem").addClass('is-hidden');
+
+  //show active tab drop
+  $(".drop-tab").addClass('is-hidden');
+  $("#" + $(".verified-elem.tab.is-active").attr('id') + "-drop").removeClass('is-hidden');
 
   //revert preview stuff
   $(".preview-elem").removeAttr('style');
@@ -400,25 +421,39 @@ function editRowVerified(listing_info){
   updateBindings(listing_info);
 }
 
+//function to update a row if it's been purchased
+function editRowPurchased(listing_info){
+  //show purchased tab, hide other tabs
+  $(".purchased-elem").removeClass('is-hidden');
+  $(".unpurchased-elem").addClass("is-hidden");
+
+  //show offers tab only
+  $("#drop-tab").addClass('is-active');
+  $(".drop-tab, #tab-buttons-wrapper").addClass('is-hidden');
+  $("#verified-drop-tab, #offers-tab-drop").removeClass('is-hidden');
+  updateOffers(listing_info);
+}
+
 //function to get offers on a domain
 function getDomainOffers(domain_name){
+  console.log("GETTING OFFERS");
+
   $.ajax({
     url: "/listing/" + domain_name + "/getoffers",
     method: "POST"
   }).done(function(data){
-    var listing_to_get_offers = getUserListingObj(listings, domain_name);
+    updateCurrentListing(data.listings);
 
     //update local listings variable
-    if (listing_to_get_offers){
-      (function(listing_to_get_offers){
-        listing_to_get_offers.offers = data.listing.offers;
+    if (current_listing){
+      (function(current_listing){
         //update the change row handler
         $("#row-listing_id" + current_listing.id).off().on("click", function(e){
-          changeRow($(this), listing_to_get_offers, true);
+          changeRow($(this), current_listing, true);
         });
 
-        updateOffers(listing_to_get_offers);
-      })(listing_to_get_offers);
+        updateOffers(current_listing);
+      })(current_listing);
     }
   });
 }
@@ -427,32 +462,51 @@ function getDomainOffers(domain_name){
 
 //function to update the offers tab
 function updateOffers(listing_info){
-  if (listing_info.offers){
+  if (listing_info.offers == undefined){
+    getDomainOffers(listing_info.domain_name);
+  }
+  else {
     //hide loading msg
     $("#loading-offers").addClass('is-hidden');
     $("#offers-wrapper").empty();
 
     if (listing_info.offers.length){
       $("#no-offers").addClass('is-hidden');
+
       //clone offers
       for (var x = 0; x < listing_info.offers.length; x++){
         var cloned_offer_row = $("#offer-clone").clone();
         cloned_offer_row.removeAttr("id").removeClass('is-hidden');
-        cloned_offer_row.find("#offer-timestamp").text(moment(listing_info.offers[x].timestamp).format("MMMM DD, YYYY - HH:mmA"));
-        cloned_offer_row.find("#offer-name").text(listing_info.offers[x].name);
-        cloned_offer_row.find("#offer-email").text(listing_info.offers[x].email).attr("href", "mailto:" + listing_info.offers[x].email);
-        cloned_offer_row.find("#offer-phone").text(listing_info.offers[x].phone);
-        cloned_offer_row.find("#offer-offer").text(listing_info.offers[x].offer);
-        cloned_offer_row.find("#offer-message").text(listing_info.offers[x].message);
+        cloned_offer_row.find(".offer-timestamp").text(moment(listing_info.offers[x].timestamp).format("MMMM DD, YYYY - h:mmA"));
+        cloned_offer_row.find(".offer-name").text(listing_info.offers[x].name);
+        cloned_offer_row.find(".offer-email").text(listing_info.offers[x].email).attr("href", "mailto:" + listing_info.offers[x].email);
+        cloned_offer_row.find(".offer-phone").text(listing_info.offers[x].phone);
+        cloned_offer_row.find(".offer-offer").text(moneyFormat.to(parseFloat(listing_info.offers[x].offer)));
+        cloned_offer_row.find(".offer-message").text(listing_info.offers[x].message);
+        if (listing_info.offers[x].accepted == 1){
+          cloned_offer_row.find(".offer-accepted").text('Accepted - ');
+        }
+        else {
+          cloned_offer_row.addClass('unaccepted-offer');
+          cloned_offer_row.find(".offer-accept").removeClass('is-hidden').attr("href", "/listing/" + listing_info.domain_name + "/contact/" + listing_info.offers[x].id + "/accept");
+          cloned_offer_row.find(".offer-reject").removeClass('is-hidden').attr("href", "/listing/" + listing_info.domain_name + "/contact/" + listing_info.offers[x].id + "/reject");
+        }
         $("#offers-wrapper").append(cloned_offer_row);
+      }
+
+      //accepted an offer! hide other offers
+      if (listing_info.accepted == 1){
+        $('.unaccepted-offer').addClass('is-hidden');
+        $("#accepted-offer").removeClass('is-hidden');
+      }
+      else {
+        $("#accepted-offer").addClass('is-hidden');
       }
     }
     else {
       $("#no-offers").removeClass('is-hidden');
+      $("#accepted-offer").addClass('is-hidden');
     }
-  }
-  else {
-    getDomainOffers(listing_info.domain_name);
   }
 }
 
@@ -857,6 +911,7 @@ function updateBindings(listing_info){
 
     //get stripe info for this listing if we haven't yet
     if (listing_info.exp_date == undefined || listing_info.expiring == undefined){
+      console.log("GETTING STRIPE INFO");
       $.ajax({
         url: "/listing/" + listing_info.domain_name + "/stripeinfo",
         method: "GET"
@@ -1150,6 +1205,10 @@ function editRowUnverified(listing_info){
     updateRegistrarURL(listing_info.whois);
     updateExistingDNS(listing_info.a_records);
   }
+
+  //hide purchased tab, show other tabs
+  $(".purchased-elem").addClass('is-hidden');
+  $(".unpurchased-elem").removeClass("is-hidden");
 
   //show the verification tab, hide others
   $("#verify-tab").addClass('is-active');
@@ -1479,7 +1538,18 @@ function toUpperCase(string){
 
 //update the current_listing object based on
 function updateCurrentListing(new_listings){
-  listings = new_listings;
+
+  //loop and update any new variables
+  for (var y = 0; y < new_listings.length; y++){
+    for (var z = 0; z < listings.length; z++){
+      if (new_listings[y].id == listings[z].id){
+        for (var w in new_listings[y]){
+          listings[z][w] = new_listings[y][w];
+        }
+        break;
+      }
+    }
+  }
 
   //update current listing info
   for (var x = 0; x < listings.length; x++){

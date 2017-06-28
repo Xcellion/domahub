@@ -601,13 +601,16 @@ module.exports = {
       stripe.subscriptions.retrieve(listing_info.stripe_subscription_id, function(err, subscription) {
         if (err || !subscription){
           delete listing_info.stripe_subscription_id;
+          console.log("SF: Not a real Stripe subscription! Updating our database appropriately...");
 
-          //to do update our DH database to remove stripe_subscription_id
-          res.send({
-            listings : req.user.listings
-          });
+          //update our DH database to remove stripe_subscription_id
+          req.session.new_listing_info = {
+            stripe_subscription_id : null
+          }
+          next();
         }
         else {
+          console.log("SF: Legit Stripe subscription!");
           listing_info.exp_date = (subscription) ? subscription.current_period_end : false;
           listing_info.expiring = (subscription) ? subscription.cancel_at_period_end : false;
           res.send({

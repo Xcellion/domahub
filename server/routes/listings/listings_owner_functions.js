@@ -732,19 +732,19 @@ module.exports = {
   //gets all offers for a specific domain
   getListingOffers : function(req, res, next){
     console.log("F: Finding the all verified offers for " + req.params.domain_name + "...");
-    listing_obj = getUserListingObj(req.user.listings, req.params.domain_name);
+    var listing_obj = getUserListingObj(req.user.listings, req.params.domain_name);
     Data.getListingOffers(req.params.domain_name, function(result){
       if (result.state == "success"){
         listing_obj.offers = result.info;
         res.send({
           state: "success",
-          listing: listing_obj
+          listings: req.user.listings
         });
       }
       else {
         res.send({
           state: "success",
-          listing: listing_obj
+          listings: req.user.listings
         });
       }
     });
@@ -951,7 +951,7 @@ module.exports = {
             verified: 1,
             status: 1
           }
-          
+
           next();
         }
         else {
@@ -964,45 +964,6 @@ module.exports = {
   },
 
   //</editor-fold>
-
-  //function to render the accept or reject an offer page
-  renderAcceptOrRejectOffer: function(req, res, next){
-    console.log("Rendering accept or reject offer page...");
-
-    var accepted = req.path.indexOf("/accept") != -1;
-
-    Listing.getVerifiedListing(req.params.domain_name, function(listing_result){
-      Data.getListingOffererContactInfo(req.params.domain_name, req.params.verification_code, function(offer_result){
-        if (offer_result.state == "success" && !offer_result.info[0].accepted){
-          res.render("listings/accept_or_reject.ejs", {
-            accepted : accepted,
-            offer_info : offer_result.info[0],
-            listing_info : listing_result.info[0]
-          });
-        }
-        else {
-          res.redirect('/listing/' + req.params.domain_name);
-        }
-      });
-    });
-
-  },
-
-  //function to accept or reject an offer
-  acceptOrRejectOffer: function(req, res, next){
-    console.log("Accepting or rejecting an offer...");
-    var accepted = req.path.indexOf("/accept") != -1;
-
-    //update the DB on accepted or rejected
-    Data.acceptRejectOffer(accepted, req.params.domain_name, req.params.verification_code, function(offer_result){
-      res.json({
-        state: offer_result.state,
-        accepted: accepted
-      });
-
-      next();
-    });
-  },
 
 }
 //<editor-fold>-------------------------------HELPERS------------------------------
