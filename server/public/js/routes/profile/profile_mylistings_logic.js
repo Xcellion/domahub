@@ -313,7 +313,7 @@ function createRow(listing_info, rownum){
     tempRow.data("premium", false);
     tempRow.data("basic", true);
   }
-  tempRow.data("verified", listing_info.verified);
+  tempRow.data("unverified", (listing_info.verified) ? false : true);
   tempRow.data("rented", listing_info.rented);
 
   //already got the dns and a records for unverified domain
