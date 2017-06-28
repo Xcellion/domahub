@@ -254,10 +254,11 @@ button[data-balloon] {
   .learn-more-arrow a:active, .learn-more-arrow a:focus {
     outline: none; }
 
-.content.is-mobile {
-  max-width: 400px;
-  margin-left: auto;
-  margin-right: auto; }
+@media screen and (max-width: 768px) {
+  .content.is-mobile {
+    max-width: 400px;
+    margin-left: auto;
+    margin-right: auto; } }
 
 .button-wrapper {
   display: flex;
@@ -288,11 +289,16 @@ button[data-balloon] {
     .flex-align-center .icon.fix {
       margin-left: 2px; }
 
+.feature {
+  display: flex;
+  align-items: flex-start;
+  margin-top: 40px !important; }
+  .feature .icon {
+    margin-right: 15px; }
+
 .price-card {
-  -webkit-box-shadow: 0 3px 15px 0 rgba(0, 0, 0, 0.12);
-  -moz-box-shadow: 0 3px 15px 0 rgba(0, 0, 0, 0.12);
-  box-shadow: 0 3px 15px 0 rgba(0, 0, 0, 0.12);
   align-items: center;
+  border: 1px solid rgba(0, 0, 0, 0.12);
   border-radius: 3px;
   display: flex;
   flex-direction: column;
