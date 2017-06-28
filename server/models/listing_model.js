@@ -152,9 +152,18 @@ listing_model.prototype.getVerifiedListing = function(domain_name, callback){
         accounts.username, \
         accounts.email AS owner_email, \
         !ISNULL(accounts.stripe_account) AS stripe_connected, \
-        accounts.date_created AS user_created \
+        accounts.date_created AS user_created, \
+        offers_table.accepted \
       FROM listings \
       JOIN accounts ON listings.owner_id = accounts.id \
+      LEFT JOIN \
+        (SELECT DISTINCT\
+          stats_contact_history.listing_id as listing_id, \
+          stats_contact_history.accepted IS NOT NULL AS accepted \
+        FROM stats_contact_history \
+        WHERE stats_contact_history.accepted = 1 \
+      ) as offers_table \
+      ON offers_table.listing_id = listings.id \
       WHERE listings.domain_name = ? \
       AND listings.verified = 1 \
       AND listings.deleted IS NULL";

@@ -17,7 +17,7 @@ function acceptOrRejectOffer(negate, button_elem){
   var accept_url = (negate == accepted) ? "/reject" : "/accept";
 
   $.ajax({
-    url: "/listing/" + listing_info.domain_name + "/contact/" + offer_info.verification_code + accept_url,
+    url: "/listing/" + listing_info.domain_name + "/contact/" + offer_info.id + accept_url,
     method: "POST"
   }).done(function(data){
     button_elem.removeClass('is-loading');
