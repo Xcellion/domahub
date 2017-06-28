@@ -218,9 +218,7 @@ button[data-balloon] {
       .media .media .media + .media {
         margin-top: 5px; }
   .media + .media {
-    border-top: 1px solid rgba(0, 0, 0, 0.12);
-    margin-top: 10px;
-    padding-top: 10px; }
+    margin-top: 20px; }
   .media.is-large + .media {
     margin-top: 20px;
     padding-top: 20px; }
@@ -237,7 +235,7 @@ button[data-balloon] {
   border: 1px solid transparent;
   padding: 10px; }
   .media:hover, .media:focus {
-    border-color: rgba(0, 0, 0, 0.12);
+    border-color: rgba(0, 0, 0, 0.38);
     cursor: pointer; }
 
 .box-checked {

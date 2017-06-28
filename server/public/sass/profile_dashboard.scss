@@ -10,7 +10,7 @@
   padding: 10px;
   &:hover,
   &:focus {
-    border-color: $border;
+    border-color: $black-disabled;
     cursor: pointer;
   }
 }
