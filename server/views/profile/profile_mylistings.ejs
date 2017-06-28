@@ -175,19 +175,23 @@
 							<p id="registrar_url">Please <a>log in to your domain provider</a> to create these entries.</p>
 							<p>If you require any assistance, please refer to our <a target="_blank" rel="noopener" style'target-new:="" tab;'="" class="is-accent margin-bottom-25" href="https://intercom.help/domahub/how-to-verify-your-domain-on-domahub"> step-by-step guide</a> on domain verification.</p>
 							<table class="table is-bordered margin-top-15">
-								<th>Host</th>
-								<th>Record</th>
-								<th>Required Data</th>
-								<th>Current Data</th>
+                <tr>
+                  <th>Host</th>
+                  <th>Record</th>
+                  <th>Required Data</th>
+                  <th>Current Data</th>
+                  <th>Next Steps</th>
+                </tr>
 								<tbody id="dns_table-body">
+                  <tr id="loading-records-row" class="">
+                    <td colspan=5>Now loading existing DNS records...</td>
+                  </tr>
 									<tr id="existing_a_record_clone" class='clone-dns-row is-hidden'>
 										<td>@</td>
 										<td>A</td>
 										<td class='required_data'>208.68.37.82</td>
 										<td class="existing_data">208.68.37.82</td>
-									</tr>
-									<tr class="clone-dns-row">
-										<td colspan=4>Now loading existing DNS records...</td>
+										<td class="next_step"><span class='is-danger'>Create this record</span></td>
 									</tr>
 								</tbody>
 							</table>
@@ -522,8 +526,8 @@
 									<div class="media-right has-text-right">
 										<p class="is-bold"><span class="offer-accepted"></span><span class="offer-offer"></span></p>
 										<button class="offer-view button is-primary is-small no-shadow is-outlined" tabindex="0">View Message</button>
-										<a class="offer-accept button is-success is-small is-hidden no-shadow" tabindex="0">Accept Offer</a>
-										<a class="offer-reject button is-danger is-small is-hidden no-shadow" tabindex="0">Reject Offer</a>
+										<a target="_blank" class="offer-accept button is-success is-small is-hidden no-shadow" tabindex="0">Accept Offer</a>
+										<a target="_blank" class="offer-reject button is-danger is-small is-hidden no-shadow" tabindex="0">Reject Offer</a>
 									</div>
 								</div>
 							</div>
@@ -631,6 +635,10 @@
 							<a id="verify-button" class="unverified-elem button is-primary is-stylish is-small" title="Verify this domain">
 								<span class="icon is-small"><i class="fa fa-check-circle-o"></i></span>
 								<span>Verify Now</span>
+							</a>
+							<a id="refresh-dns-button" class="unverified-elem button is-outlined is-accent is-stylish is-small" title="Refresh DNS">
+								<span class="icon is-small"><i class="fa fa-refresh"></i></span>
+								<span>Refresh Table</span>
 							</a>
 							<div class="verified-elem">
 								<button id="save-changes-button" class="button is-disabled is-stylish is-small no-shadow">Save</button>
