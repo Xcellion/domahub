@@ -452,14 +452,12 @@ module.exports = {
 
   //function to check if listing has been purchased
   checkListingPurchased : function(req, res, next){
-    Listing.checkListingPurchased(req.params.domain_name, function(result){
-      if (result.state != "success" || result.info.length > 0){
-        error.handler(req, res, "This listing has already been purchased. Please transfer the ownership!", "json");
-      }
-      else {
-        next();
-      }
-    });
+    if (getUserListingObj(req.user.listings, req.params.domain_name).accepted){
+      error.handler(req, res, "This listing has already been purchased! Please complete the ownership transfer to the new owner.", "json");
+    }
+    else {
+      next();
+    }
   },
 
   //function to check the posted status change of a listing
@@ -473,13 +471,6 @@ module.exports = {
       error.handler(req, res, "Invalid listing status!", "json");
     }
     else if (req.body.status){
-
-      // //no stripe information, prevent them from making it active
-      // if (status == 1 && !req.user.stripe_account){
-      //   error.handler(req, res, "stripe-connect-error", "json");
-      // }
-      // else {
-
       //check to see if its currently rented
       Listing.checkCurrentlyRented(req.params.domain_name, function(result){
         if (result.state != "success" || result.info.length > 0){
