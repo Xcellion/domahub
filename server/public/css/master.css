@@ -859,7 +859,7 @@ pre {
       .button.is-white.is-inverted:hover, .button.is-white.is-inverted:active, .button.is-white.is-inverted:focus {
         background-color: black; }
     .button.is-white.is-loading:after {
-      border-color: transparent transparent white white !important; }
+      border-color: transparent transparent #d0d0d0 #d0d0d0 !important; }
     .button.is-white.is-outlined {
       background-color: #000;
       border-color: white;
@@ -885,7 +885,7 @@ pre {
       .button.is-black.is-inverted:hover, .button.is-black.is-inverted:active, .button.is-black.is-inverted:focus {
         background-color: #e6e6e6; }
     .button.is-black.is-loading:after {
-      border-color: transparent transparent #000 #000 !important; }
+      border-color: transparent transparent #d0d0d0 #d0d0d0 !important; }
     .button.is-black.is-outlined {
       background-color: white;
       border-color: #000;
@@ -937,7 +937,7 @@ pre {
       .button.is-blacklight.is-inverted:hover, .button.is-blacklight.is-inverted:active, .button.is-blacklight.is-inverted:focus {
         background-color: rgba(230, 230, 230, 0.7); }
     .button.is-blacklight.is-loading:after {
-      border-color: transparent transparent rgba(0, 0, 0, 0.66) rgba(0, 0, 0, 0.66) !important; }
+      border-color: transparent transparent #d0d0d0 #d0d0d0 !important; }
     .button.is-blacklight.is-outlined {
       background-color: rgba(255, 255, 255, 0.7);
       border-color: rgba(0, 0, 0, 0.66);
@@ -963,7 +963,7 @@ pre {
       .button.is-whitelight.is-inverted:hover, .button.is-whitelight.is-inverted:active, .button.is-whitelight.is-inverted:focus {
         background-color: rgba(0, 0, 0, 0.66); }
     .button.is-whitelight.is-loading:after {
-      border-color: transparent transparent rgba(255, 255, 255, 0.7) rgba(255, 255, 255, 0.7) !important; }
+      border-color: transparent transparent #d0d0d0 #d0d0d0 !important; }
     .button.is-whitelight.is-outlined {
       background-color: rgba(0, 0, 0, 0.66);
       border-color: rgba(255, 255, 255, 0.7);
@@ -1015,7 +1015,7 @@ pre {
       .button.is-lighter.is-inverted:hover, .button.is-lighter.is-inverted:active, .button.is-lighter.is-inverted:focus {
         background-color: #d6d6d6; }
     .button.is-lighter.is-loading:after {
-      border-color: transparent transparent #efefef #efefef !important; }
+      border-color: transparent transparent #d0d0d0 #d0d0d0 !important; }
     .button.is-lighter.is-outlined {
       background-color: #efefef;
       border-color: #efefef;
@@ -1041,7 +1041,7 @@ pre {
       .button.is-dark.is-inverted:hover, .button.is-dark.is-inverted:active, .button.is-dark.is-inverted:focus {
         background-color: #b7b7b7; }
     .button.is-dark.is-loading:after {
-      border-color: transparent transparent #444 #444 !important; }
+      border-color: transparent transparent #d0d0d0 #d0d0d0 !important; }
     .button.is-dark.is-outlined {
       background-color: #d0d0d0;
       border-color: #444;
@@ -1067,7 +1067,7 @@ pre {
       .button.is-purple.is-inverted:hover, .button.is-purple.is-inverted:active, .button.is-purple.is-inverted:focus {
         background-color: #e6e6e6; }
     .button.is-purple.is-loading:after {
-      border-color: transparent transparent #9c27b0 #9c27b0 !important; }
+      border-color: transparent transparent #d0d0d0 #d0d0d0 !important; }
     .button.is-purple.is-outlined {
       background-color: white;
       border-color: #9c27b0;
@@ -1093,7 +1093,7 @@ pre {
       .button.is-primary.is-inverted:hover, .button.is-primary.is-inverted:active, .button.is-primary.is-inverted:focus {
         background-color: #e6e6e6; }
     .button.is-primary.is-loading:after {
-      border-color: transparent transparent #3cbc8d #3cbc8d !important; }
+      border-color: transparent transparent #d0d0d0 #d0d0d0 !important; }
     .button.is-primary.is-outlined {
       background-color: white;
       border-color: #3cbc8d;
@@ -1119,7 +1119,7 @@ pre {
       .button.is-primarydark.is-inverted:hover, .button.is-primarydark.is-inverted:active, .button.is-primarydark.is-inverted:focus {
         background-color: #246f53; }
     .button.is-primarydark.is-loading:after {
-      border-color: transparent transparent #309670 #309670 !important; }
+      border-color: transparent transparent #d0d0d0 #d0d0d0 !important; }
     .button.is-primarydark.is-outlined {
       background-color: #309670;
       border-color: #309670;
@@ -1145,7 +1145,7 @@ pre {
       .button.is-primarylight.is-inverted:hover, .button.is-primarylight.is-inverted:active, .button.is-primarylight.is-inverted:focus {
         background-color: #3fb98c; }
     .button.is-primarylight.is-loading:after {
-      border-color: transparent transparent #62c9a3 #62c9a3 !important; }
+      border-color: transparent transparent #d0d0d0 #d0d0d0 !important; }
     .button.is-primarylight.is-outlined {
       background-color: #62c9a3;
       border-color: #62c9a3;
@@ -1171,7 +1171,7 @@ pre {
       .button.is-primarylighter.is-inverted:hover, .button.is-primarylighter.is-inverted:active, .button.is-primarylighter.is-inverted:focus {
         background-color: #64c9a4; }
     .button.is-primarylighter.is-loading:after {
-      border-color: transparent transparent #8ad6ba #8ad6ba !important; }
+      border-color: transparent transparent #d0d0d0 #d0d0d0 !important; }
     .button.is-primarylighter.is-outlined {
       background-color: #8ad6ba;
       border-color: #8ad6ba;
@@ -1197,7 +1197,7 @@ pre {
       .button.is-info.is-inverted:hover, .button.is-info.is-inverted:active, .button.is-info.is-inverted:focus {
         background-color: #e6e6e6; }
     .button.is-info.is-loading:after {
-      border-color: transparent transparent #2196f3 #2196f3 !important; }
+      border-color: transparent transparent #d0d0d0 #d0d0d0 !important; }
     .button.is-info.is-outlined {
       background-color: white;
       border-color: #2196f3;
@@ -1223,7 +1223,7 @@ pre {
       .button.is-bluedarker.is-inverted:hover, .button.is-bluedarker.is-inverted:active, .button.is-bluedarker.is-inverted:focus {
         background-color: #15283a; }
     .button.is-bluedarker.is-loading:after {
-      border-color: transparent transparent #23415f #23415f !important; }
+      border-color: transparent transparent #d0d0d0 #d0d0d0 !important; }
     .button.is-bluedarker.is-outlined {
       background-color: #23415f;
       border-color: #23415f;
@@ -1249,7 +1249,7 @@ pre {
       .button.is-accent.is-inverted:hover, .button.is-accent.is-inverted:active, .button.is-accent.is-inverted:focus {
         background-color: #e6e6e6; }
     .button.is-accent.is-loading:after {
-      border-color: transparent transparent #ff5722 #ff5722 !important; }
+      border-color: transparent transparent #d0d0d0 #d0d0d0 !important; }
     .button.is-accent.is-outlined {
       background-color: white;
       border-color: #ff5722;
@@ -1275,7 +1275,7 @@ pre {
       .button.is-success.is-inverted:hover, .button.is-success.is-inverted:active, .button.is-success.is-inverted:focus {
         background-color: #e6e6e6; }
     .button.is-success.is-loading:after {
-      border-color: transparent transparent #81c784 #81c784 !important; }
+      border-color: transparent transparent #d0d0d0 #d0d0d0 !important; }
     .button.is-success.is-outlined {
       background-color: white;
       border-color: #81c784;
@@ -1301,7 +1301,7 @@ pre {
       .button.is-warning.is-inverted:hover, .button.is-warning.is-inverted:active, .button.is-warning.is-inverted:focus {
         background-color: rgba(0, 0, 0, 0.5); }
     .button.is-warning.is-loading:after {
-      border-color: transparent transparent #ffeb3b #ffeb3b !important; }
+      border-color: transparent transparent #d0d0d0 #d0d0d0 !important; }
     .button.is-warning.is-outlined {
       background-color: rgba(0, 0, 0, 0.5);
       border-color: #ffeb3b;
@@ -1327,7 +1327,7 @@ pre {
       .button.is-danger.is-inverted:hover, .button.is-danger.is-inverted:active, .button.is-danger.is-inverted:focus {
         background-color: #e6e6e6; }
     .button.is-danger.is-loading:after {
-      border-color: transparent transparent #EF5350 #EF5350 !important; }
+      border-color: transparent transparent #d0d0d0 #d0d0d0 !important; }
     .button.is-danger.is-outlined {
       background-color: white;
       border-color: #EF5350;
