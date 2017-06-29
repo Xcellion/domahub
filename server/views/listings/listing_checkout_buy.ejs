@@ -46,7 +46,7 @@
                                     Pay with any major credit or debit card. Our payments are handled by a third party payments processor, <a target="_blank" href="https://stripe.com/about" class="is-accent">Stripe</a>.
                                 </p>
                             </div>
-                            <div id="paypal-choice" class="checkout-track content box no-shadow is-info hover-effect choice-block">
+                            <%# <div id="paypal-choice" class="checkout-track content box no-shadow is-info hover-effect choice-block">
                                 <div class="step-box">
                                     <span class="icon is-medium is-info">
                                         <i class="fa fa-paypal"></i>
@@ -56,7 +56,7 @@
                                 <p>
                                     Login to your PayPal account and pay instantly using your PayPal balance or any of your saved payment methods.
                                 </p>
-                            </div>
+                            </div>%>
                         </div>
 
                         <div id="choices-selected" style="display:none;">
@@ -142,17 +142,7 @@
         </div>
     </section>
 
-    <footer class="footer is-dark">
-        <div class="container">
-            <p class="is-primary">
-                Powered by
-            </p>
-            <a class="logo" href="/" target="_blank" rel="noopener">
-                <p tabindex="0" class="flat-logo is-primary"></p>
-            </a>
-        </div>
-    </footer>
-
+    <%- include("../templates/footer"); %>
     <%- include("../templates/js_scripts"); %>
     <script src="/js/lib/moment.min.js" type="text/javascript"></script>
     <script src="/js/lib/wNumb.js" type="text/javascript"></script>

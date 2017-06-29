@@ -37,7 +37,7 @@ var compare = <% if(typeof compare != "undefined"){ %><%-JSON.stringify(compare)
       <%# INFO %>
       <div class="control">
         <label class="label" for="description">Listing Description</label>
-        <textarea id="description" class="description-input textarea " tabindex="0" placeholder="Write anything you want!"></textarea>
+        <textarea id="description" class="description-input textarea " tabindex="0" placeholder="A great description will help users understand the full potential of this domain."></textarea>
       </div>
 
       <%# PRICING %>
@@ -50,7 +50,7 @@ var compare = <% if(typeof compare != "undefined"){ %><%-JSON.stringify(compare)
         <div class="control-left">
           <label class="label" for="buyable-input">Allow Buy It Now</label>
           <small class="tip">Allows verified users to purchase this domain immediately.</small>
-          <small class="tip"><a href="/faq" class="is-accent">What are the advantages of buying immediately?</a></small>
+          <small class="tip"><a href="/faq#selling" class="is-accent">What are the advantages of buying immediately?</a></small>
         </div>
         <div class="control-right">
           <form class="checkbox-form">
@@ -63,7 +63,7 @@ var compare = <% if(typeof compare != "undefined"){ %><%-JSON.stringify(compare)
         <div class="control-left">
           <label class="label" for="rentable-input">Allow Rentals</label>
           <small class="tip">Displays a calendar allowing verified users to rent usage of this domain for short amounts of time.</small>
-          <small class="tip"><a href="/faq" class="is-accent">Why should I rent my domain out?</a></small>
+          <small class="tip"><a href="/faq#renting" class="is-accent">Why should I rent my domain out?</a></small>
         </div>
         <div class="control-right">
           <form class="checkbox-form">
@@ -75,7 +75,7 @@ var compare = <% if(typeof compare != "undefined"){ %><%-JSON.stringify(compare)
       <div class="control">
         <label class="label" for="price-rate-input">Rental Price</label>
         <div class="control has-addons margin-bottom-0">
-          <input id="price-rate-input" placeholder="minimum 1" type="number" min="1" step="1" class="padding-top-0 input ">
+          <input id="price-rate-input" placeholder="" type="number" min="1" step="1" class="padding-top-0 input ">
           <span class="select price-type-span">
             <div class="drop-form">
               <select tabindex="0" id="price-type-input" class="">
