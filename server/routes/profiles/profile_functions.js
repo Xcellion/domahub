@@ -21,49 +21,22 @@ module.exports = {
         if (result.state=="error"){error.handler(req, res, result.info);}
         else {
           req.user.listings = result.info;
-          next();
-          // //THIS TAKES TOO LONG WITH MANY DOMAINS
-          // var whois_promises = [];
-          //
-          // //custom promise creation, get whois data about an unverified domain
-          // var q_function = function(listing_obj){
-          //   return Q.Promise(function(resolve, reject, notify){
-          //     whois.lookup(listing_obj.domain_name, function(err, data){
-          //       if (err) {reject(err)}
-          //       else {
-          //         var whoisObj = {};
-          //         var array = parser.parseWhoIsData(data);
-          //         for (var x = 0; x < array.length; x++){
-          //           whoisObj[array[x].attribute] = array[x].value;
-          //         }
-          //         listing_obj.whois = whoisObj;
-          //
-          //         //look up any existing DNS A Records
-          //         dns.lookup(listing_obj.domain_name, "A", function(err, addresses){
-          //           if (addresses){
-          //             listing_obj.a_records = addresses;
-          //           }
-          //           resolve();
-          //         });
-          //       }
-          //     });
-          //   })
-          // }
-          //
-          // //figure out domain registrar of unverified domains
-          // for (var x = 0; x < req.user.listings.length; x++){
-          //   if (!req.user.listings[x].verified){
-          //     //add to promises
-          //     var promise = q_function(req.user.listings[x]);
-          //     whois_promises.push(promise);
-          //   }
-          // }
-          //
-          // //wait for all promises
-          // Q.allSettled(whois_promises)
-          // .then(function(results) {
-          //   next();
-          // });
+
+          //redirect if not going to mylistings aka logging in for first time
+          if (req.path.indexOf("mylistings") == -1){
+
+            //no listings, redirect to listings create
+            if (req.user.listings.length == 0){
+              res.redirect("/listings/create");
+            }
+            //has listings, redirect to mylistings
+            else {
+              res.redirect("/profile/mylistings");
+            }
+          }
+          else {
+            next();
+          }
         }
       });
     }
@@ -143,18 +116,6 @@ module.exports = {
     }
     else {
       next();
-    }
-  },
-
-  //check page number
-  checkPageNum: function(req, res, next){
-    page = req.params.page;
-    if (!page || ((parseFloat(page) >>> 0) && (Number.isInteger(parseFloat(page))) && (parseFloat(page) > 0))){
-      next();
-    }
-    else {
-      var new_path = req.path.includes("listing") ? "/profile/mylistings" : "/profile/myrentals"
-      res.redirect(new_path);
     }
   },
 

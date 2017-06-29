@@ -12,15 +12,11 @@ var qs = require('qs');
 module.exports = function(app, db, auth, error, stripe){
   Account = new account_model(db);
 
-  //redirect profile to dashboard
-  app.get("/profile", function(req, res){ res.redirect("/profile/mylistings") });
-
   //mylistings pages
   app.get([
     "/profile",
     "/profile/mylistings"
   ], [
-    profile_functions.checkPageNum,
     auth.checkLoggedIn,
     profile_functions.getAccountListings,
     stripe.getAccountInfo,
@@ -51,7 +47,6 @@ module.exports = function(app, db, auth, error, stripe){
     "/profile/myrentals",
     "/profile/myrentals/:page"
   ], [
-    profile_functions.checkPageNum,
     auth.checkLoggedIn,
     profile_functions.getAccountRentals,
     profile_functions.renderMyRentals
