@@ -5,6 +5,10 @@
   padding-top: 70px;
 }
 
+.faq-question {
+  font-weight: 500;
+}
+
 .faq-header {
   @include transition(all 0.25s ease);
   color: $primary;

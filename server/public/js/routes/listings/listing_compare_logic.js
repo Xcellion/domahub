@@ -42,19 +42,17 @@ $(document).ready(function() {
 //function to hide and show menu
 function toggleMenu() {
   var hideMenuButton = $("#hide-menu-button");
-  var showMenuWrapper = $("#show-menu-wrapper");
+  var showMenuButton = $("#show-menu-button");
   var menu = $("#compare-menu");
   var preview = $("#compare-preview");
 
   hideMenuButton.on("click", function() {
     menu.toggleClass("is-active");
     preview.toggleClass("is-active");
-    showMenuWrapper.toggleClass("is-hidden", function(){
-      console.log("finished showing new");
-    });
+    showMenuButton.fadeIn(250).toggleClass("is-hidden");
   });
 
-  showMenuWrapper.on("click",function() {
+  showMenuButton.on("click",function() {
     $(this).toggleClass("is-hidden");
     menu.toggleClass("is-active");
     preview.toggleClass("is-active");
@@ -535,7 +533,7 @@ function createTestRentals(){
 function testSubmitBuyHandler(){
   setTimeout(function(){
     $("button[type=submit][clicked=true]").removeClass('is-loading');
-    $("#contact-success-compare").removeClass('is-hidden');
+    $("#contact-success-compare").removeClass('is-hidden').addClass('is-active');
   }, 500);
 }
 

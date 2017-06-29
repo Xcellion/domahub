@@ -186,7 +186,7 @@ function editTickerDates(){
   }
 
   if (listing_info.date_registered){
-    $("#ticker-registered").removeClass('is-hidden').appendTo("#ticker-wrapper");
+    $("#ticker-registered").removeClass('is-hidden');
     $("#ticker-registered-date").text("This domain was first registered on " + moment(listing_info.date_registered).format("MMMM DD, YYYY") + ".");
   }
 }

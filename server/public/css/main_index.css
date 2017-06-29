@@ -298,13 +298,16 @@ button[data-balloon] {
 
 .price-card {
   align-items: center;
-  border: 1px solid rgba(0, 0, 0, 0.12);
+  background-color: #efefef;
   border-radius: 3px;
   display: flex;
   flex-direction: column;
-  height: 275px;
+  height: 300px;
   justify-content: center;
   width: 100%; }
+  @media screen and (max-width: 456px) {
+    .price-card {
+      height: 250px; } }
 
 .section.has-pyramid {
   position: relative;
