@@ -97,7 +97,7 @@ function updateDescription(){
   $("#description").val(listing_description).on("input", function(){
     $("#description-text").text($(this).val());
     listing_info.description = $(this).val();
-    updateQueryStringParam("description", $(this).val());
+    // updateQueryStringParam("description", $(this).val());
   });
 }
 
@@ -117,19 +117,31 @@ function updatePricing(){
       $("#contact_offer").attr("placeholder", "");
     }
     listing_info.buy_price = $(this).val();
-    updateQueryStringParam("buy_price", $(this).val());
+    // updateQueryStringParam("buy_price", $(this).val());
   });
   var price_rate = getParameterByName("price_rate") || listing_info.price_rate;
   $("#price-rate-input").val(price_rate).on("input", function(){
     listing_info.price_rate = $(this).val();
-    updateQueryStringParam("price_rate", $(this).val());
-    $("#actual-price").text("For rent - " + moneyFormat.to(parseFloat($(this).val())) + " / " + $("#price-type-input").val());
+    // updateQueryStringParam("price_rate", $(this).val());
+    var current_price = parseFloat($(this).val()) || 0;
+    if (current_price == 0){
+      $("#rent-price-tag").text("For rent - Free");
+    }
+    else {
+      $("#rent-price-tag").text("For rent - " + moneyFormat.to(current_price) + " / " + $("#price-type-input").val());
+    }
   });
   var price_type = getParameterByName("price_type") || listing_info.price_type;
   $("#price-type-input").val(price_type).on("input", function(){
     listing_info.price_type = $(this).val();
-    updateQueryStringParam("price_type", $(this).val());
-    $("#actual-price").text("For rent - " + moneyFormat.to(parseFloat($("#price-rate-input").val())) + " / " + $("#price-type-input").val());
+    // updateQueryStringParam("price_type", $(this).val());
+    var current_price = parseFloat($("#price-rate-input").val()) || 0;
+    if (current_price == 0){
+      $("#rent-price-tag").text("For rent - Free");
+    }
+    else {
+      $("#rent-price-tag").text("For rent - " + moneyFormat.to(current_price) + " / " + $("#price-type-input").val());
+    }
   });
 }
 
