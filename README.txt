@@ -1,5 +1,3 @@
-DomaHub is a marketplace for the renting of domain names
-
-DomaHub will offer a platform on which owners of domain names and potential renters of them can connect. Our prime strategy is to pioneer the domain name rental market and to develop DomaHub as the leading marketplace for our users and partners. Like eBay or Craigslist for generic and normally unobtainable domain names.
+DomaHub offers beautiful landing pages for your domains. Sell more with a custom DomaHub landing page today!
 
 Created in 2016 by two brothers.

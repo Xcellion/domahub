@@ -25,7 +25,7 @@
                 </span>
             <% } %>
             <% if (listing_info.rentable) { %>
-                <span class="tag is-primary is-medium">
+                <span id="rent-price-tag" class="tag is-primary is-medium">
                   <% if (listing_info.price_rate > 0){ %>
                       For rent - $<%= listing_info.price_rate %> / <%= listing_info.price_type %>
                   <% } else { %>
