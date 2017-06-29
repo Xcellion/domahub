@@ -11,26 +11,12 @@ $(document).ready(function() {
       }
     }
 
-    //redirect search to the appropriate /listing page
-    $("#searchbar-form").submit(function(e){
-      e.preventDefault();
-      var domain_name = $('#domain-name').val();
-
-      //default to .com if theres nothing provided
-      if (domain_name.indexOf(".") == -1){
-        domain_name += ".com";
-        $('#domain-name').val(domain_name);
-      }
-
-      window.location = window.location.origin + "/listing/" + domain_name;
-    });
-
-    // adds is-active to login button
+    //adds is-active to login button
     $('.login-modal').click(function() {
       $('#modal-login').addClass('is-active');
     });
 
-    // various ways to close login dropdown menu
+    //various ways to close login dropdown menu
     $('.modal-close, .modal-background').click(function() {
       $('#modal-login').removeClass('is-active');
       $("#message").attr("style", "");
@@ -73,23 +59,6 @@ $(document).ready(function() {
       }
     });
 
-    //list of pages that need a green doma logo // white background. otherwise transparent and white logo
-    // var pages_white_nav = ["checkout", "listings", "faq", "contact", "profile", "mission", "about", "press", "careers", "terms", "privacy", "nothinghere"];
-    // var current_page = (window.location.pathname == "/") ? "/" : window.location.pathname.split("/")[1];
-    //
-    // if (window.location.pathname.split("/").pop() == "checkout"){
-    //   current_page = "checkout";
-    // }
-
-    //remove white link if not a page that needs it
-    // if (pages_white_nav.indexOf(current_page) != -1){
-    //   $(".nav-link").removeClass("is-white");
-    //   $(".nav-menu").removeClass("is-blue");
-    //   $("#nav-logo, .circle-logo").addClass("is-primary").removeClass("is-white");
-    //   $(".nav-toggle").removeClass("is-white").addClass("is-blue");
-    //   $("#profile-button, .login-modal").addClass("is-primary").removeClass("is-white");
-    // }
-
     //change navbar based on scroll
     navbarChange($(window));
     $(window).scroll(function(e){
@@ -110,25 +79,9 @@ function navbarChange(windowelem){
   //before the top
   if (windowelem.scrollTop() <= 0) {
     $(".nav").removeClass("has-shadow");
-    // if (pages_white_nav.indexOf(current_page) != -1){
-    //   $(".nav-link").removeClass("is-white");
-    //   $("#nav-logo, .circle-logo").addClass("is-primary").removeClass("is-white");
-    // }
-    // else {
-    //   $("#profile-button, .login-modal").removeClass("is-primary").addClass("is-white");
-    //   $("#nav-logo, .circle-logo").removeClass("is-primary").addClass("is-white");
-    //   $(".nav-link").addClass("is-white");
-    //   $(".nav-menu").addClass("is-blue");
-    //   $(".nav-toggle").removeClass("is-black").addClass("is-white");
-    // }
   }
   //past the top
   else if (windowelem.scrollTop() > 0 && !$(".nav").hasClass("has-shadow")){
     $(".nav").addClass("has-shadow");
-    // $(".nav-link").removeClass("is-white");
-    // $(".nav-menu").removeClass("is-blue");
-    // $(".nav-toggle").removeClass("is-white").addClass("is-black");
-    // $("#nav-logo, .circle-logo").addClass("is-primary").removeClass("is-white");
-    // $("#profile-button, .login-modal").addClass("is-primary").removeClass("is-white");
   }
 }
