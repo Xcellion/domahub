@@ -87,14 +87,14 @@
 					<div id="table-body" class="margin-top-15">
 						<div id="verified-clone-row" class="clone-row table-row is-hidden">
 							<form class="checkbox-form">
-								<input class="select-button" data-selected="false" type="checkbox" tabindex="0" title="Select All" />
+								<input class="select-button" data-selected="false" type="checkbox" tabindex="0" title="Select" />
 								<label for="select-button"></label>
 							</form>
 							<p class='td-domain'></p>
 						</div>
 						<div id="unverified-clone-row" class="clone-row table-row is-hidden">
 							<form class="checkbox-form">
-								<input class="select-button" data-selected="false" type="checkbox" tabindex="0" title="Select All" />
+								<input class="select-button" data-selected="false" type="checkbox" tabindex="0" title="Select" />
 								<label for="select-button"></label>
 							</form>
 							<div>
@@ -106,7 +106,7 @@
 						</div>
 					</div>
 					<div class="control margin-top-20">
-						<a class="button is-stylish is-small is-primary is-fullwidth" tabindex="0" href="/listings/create">Add Listings</a>
+						<a class="button is-stylish is-small is-fullwidth" tabindex="0" href="/listings/create">Add Listings</a>
 					</div>
 				</div>
 
@@ -208,7 +208,7 @@
 								<div class="control is-spaced">
 									<div class="control-left">
 										<label class="label" for="buyable-input">Allow Buy It Now</label>
-										<small class="tip">Why should I allow users to buy it immediately?</small>
+										<small class="tip">Allows your domain to be sold immediately at a set price.</small>
 									</div>
 									<div class="control-right">
 										<form class="checkbox-form">
@@ -218,12 +218,17 @@
 									</div>
 								</div>
 								<div class="control">
-									<label class="label">Minimum Purchase Price</label>
+									<label class="label" for="buy-now-input">Buy It Now Price</label>
+									<input id="buy-now-input" data-name="buy_price" type="number" min="1" step="1" class="input changeable-input">
+									<small class="tip">The price you are willing to immediately sell the domain for.</small>
+								</div>
+								<div class="control">
+									<label class="label" for="buy-price-input">Minimum Purchase Price</label>
 									<input id="buy-price-input" data-name="buy_price" type="number" min="1" step="1" class="input changeable-input">
 									<small class="tip">The minimum offer / price you will consider.</small>
 								</div>
 								<div class="control">
-									<label class="label">Listing Description</label>
+									<label class="label" for="description">Listing Description</label>
 									<textarea id="description" class="description-input textarea changeable-input"
 									tabindex="0" data-name="description" placeholder="Write anything you want!"></textarea>
 								</div>
@@ -297,7 +302,7 @@
 											</p>
 										</div>
 										<div class="control-right">
-											<a id="other-tab-upgrade-button" class="button is-stylish no-shadow is-info is-small">
+											<a id="other-tab-upgrade-button" class="button is-stylish no-shadow is-small">
 												<span class="icon is-small">
 													<i class="fa fa-diamond"></i>
 												</span>
@@ -407,7 +412,7 @@
 											</form>
 										</div>
 									</div>
-									<div class="control is-spaced">
+									<%#<div class="control is-spaced">
 										<div class="control-left">
 											<div class="label">Logo</div>
 											<small class="tip">The logo will be utilized for email communications and branding.</small>
@@ -425,7 +430,7 @@
 												</label>
 											</form>
 										</div>
-									</div>
+									</div>%>
 									<div class="control is-spaced">
 										<div class="control-left">
 											<label class="label">Traffic Module</label>
@@ -473,9 +478,6 @@
 									<p>
 										You have no offers on this domain yet.
 									</p>
-                  <p>
-                    <a href="/faq" class="is-accent">Click here for some tips on how to generate leads!</a>
-                  </p>
 								</div>
                 <div id="accepted-offer" class="is-hidden">
                   <div class="content">
@@ -525,8 +527,8 @@
 									</div>
 									<div class="media-right has-text-right">
 										<p class="is-bold"><span class="offer-accepted"></span><span class="offer-offer"></span></p>
-										<button class="offer-view button is-primary is-small no-shadow is-outlined" tabindex="0">View Message</button>
-										<a target="_blank" class="offer-accept button is-success is-small is-hidden no-shadow" tabindex="0">Accept Offer</a>
+										<button class="offer-view button is-primary is-small no-shadow is-outlined" tabindex="0">Respond</button>
+										<a target="_blank" class="offer-accept button is-primary is-small is-hidden no-shadow" tabindex="0">Accept Offer</a>
 										<a target="_blank" class="offer-reject button is-danger is-small is-hidden no-shadow" tabindex="0">Reject Offer</a>
 									</div>
 								</div>
@@ -540,7 +542,7 @@
 											<small id="renew-status" class="tip">Now loading Premium details...</small>
 										</div>
 										<div class="control-right">
-											<a id="upgrade-button" class="margin-top-5 is-stylish is-small basic-elem button no-shadow is-info">
+											<a id="upgrade-button" class="margin-top-5 is-stylish is-small basic-elem button no-shadow">
 												<span class="icon is-small">
 													<i class="fa fa-diamond"></i>
 												</span>
@@ -632,11 +634,11 @@
 								</div>
 						</div>
 						<footer id="tab-buttons-wrapper" class="yes-listings-elem is-hidden margin-top-25">
-							<a id="verify-button" class="unverified-elem button is-primary is-stylish is-small" title="Verify this domain">
+							<a id="verify-button" class="unverified-elem button is-primary is-stylish is-small no-shadow" title="Verify this domain">
 								<span class="icon is-small"><i class="fa fa-check-circle-o"></i></span>
 								<span>Verify Now</span>
 							</a>
-							<a id="refresh-dns-button" class="unverified-elem button is-outlined is-accent is-stylish is-small" title="Refresh DNS">
+							<a id="refresh-dns-button" class="unverified-elem button is-outlined is-accent is-stylish is-small no-shadow" title="Refresh DNS">
 								<span class="icon is-small"><i class="fa fa-refresh"></i></span>
 								<span>Refresh Table</span>
 							</a>

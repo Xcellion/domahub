@@ -1384,7 +1384,6 @@ function selectAllRows(select_all_button, select_or_deselect){
   //select all
   if (!select_or_deselect){
     select_all_button.data('selected', true);
-    select_all_button.find(".icon").addClass('is-primary');
     select_all_button.find("i").removeClass("fa-square-o").addClass('fa-check-square-o box-checked');
 
     $(".table-row:not(.clone-row)").addClass('is-selected');
@@ -1393,7 +1392,6 @@ function selectAllRows(select_all_button, select_or_deselect){
   //deselect all
   else {
     select_all_button.data('selected', false);
-    select_all_button.find(".icon").removeClass('is-primary');
     select_all_button.find("i").addClass("fa-square-o").removeClass('fa-check-square-o box-checked');
 
     $(".table-row:not(.clone-row)").removeClass('is-selected');

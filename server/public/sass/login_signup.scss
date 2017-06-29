@@ -8,7 +8,7 @@
   &.has-icon {
     .input {
       &:focus + .fa-check {
-        color: $success !important;
+        color: $primary !important;
       }
     }
   }
