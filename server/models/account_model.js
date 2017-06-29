@@ -113,7 +113,8 @@ account_model.prototype.getAccountListings = function(account_id, callback){
         IF(listings.tertiary_color IS NULL, '#2196F3', listings.tertiary_color) as tertiary_color, \
         IF(listings.font_name IS NULL, 'Rubik', listings.font_name) as font_name, \
         IF(listings.font_color IS NULL, '#000000', listings.font_color) as font_color, \
-        rented_table.rented \
+        rented_table.rented, \
+        offers_table.accepted \
       FROM listings \
       LEFT JOIN \
         (SELECT DISTINCT\
@@ -127,6 +128,14 @@ account_model.prototype.getAccountListings = function(account_id, callback){
         WHERE (UNIX_TIMESTAMP(NOW())*1000) BETWEEN rental_times.date AND rental_times.date + rental_times.duration \
       ) as rented_table \
       ON rented_table.listing_id = listings.id \
+      LEFT JOIN \
+        (SELECT DISTINCT\
+          stats_contact_history.listing_id as listing_id, \
+          stats_contact_history.accepted IS NOT NULL AS accepted \
+        FROM stats_contact_history \
+        WHERE stats_contact_history.accepted = 1 \
+      ) as offers_table \
+      ON offers_table.listing_id = listings.id \
       WHERE owner_id = ? \
       AND listings.deleted IS NULL \
       ORDER BY listings.id ASC";
