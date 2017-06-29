@@ -19,13 +19,7 @@
             </div>
 
         <% } else { %>
-
-            <%# OTHER BY SAME OWNER DOMAINS MODULE %>
-            <%- include("info/same_owner_listings_module.ejs", {
-              listing_info : listing_info
-            }); %>
-
-            <div class="column is-offset-1">
+            <div class="column">
 
                 <%# LISTING OWNER MODULE %>
                 <%- include("info/listing_owner_module.ejs", {
@@ -38,6 +32,11 @@
                 }); %>
 
             </div>
+
+            <%# OTHER BY SAME OWNER DOMAINS MODULE %>
+            <%- include("info/same_owner_listings_module.ejs", {
+              listing_info : listing_info
+            }); %>
 
         <% } %>
     </div>
