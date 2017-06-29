@@ -292,7 +292,7 @@ button[data-balloon] {
 .feature {
   display: flex;
   align-items: flex-start;
-  padding-top: 40px; }
+  padding-top: 30px; }
   .feature .icon {
     margin-right: 15px; }
 

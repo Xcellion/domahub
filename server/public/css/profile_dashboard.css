@@ -335,7 +335,8 @@ button[data-balloon] {
     background-color: #efefef;
     cursor: pointer; }
   .table-row.is-active {
-    background-color: #444; }
+    background-color: #3cbc8d;
+    border-color: #3cbc8d; }
     .table-row.is-active p {
       color: white; }
 
