@@ -2935,11 +2935,12 @@ input:-webkit-autofill {
   -moz-border-radius: 50%;
   -ms-border-radius: 50%;
   border-radius: 50%;
-  border: 2px solid rgba(0, 0, 0, 0.66);
-  color: #212121;
+  background-color: #3cbc8d;
+  color: white;
+  font-weight: 500;
   display: block;
   height: 32px;
-  line-height: 30px;
+  line-height: 32px;
   margin-bottom: 10px;
   text-align: center;
   width: 32px; }
@@ -3060,10 +3061,6 @@ input:-webkit-autofill {
     .tag.is-large .delete, .tag.is-large .modal-close {
       margin-left: 4px;
       margin-right: -8px; }
-  .tag.is-create {
-    font-size: 16px;
-    justify-content: flex-end;
-    height: 24px; }
 
 .unselectable, .is-unselectable, .button, .delete, .modal-close, .tabs {
   -webkit-touch-callout: none;
