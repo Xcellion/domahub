@@ -452,14 +452,12 @@ module.exports = {
 
   //function to check if listing has been purchased
   checkListingPurchased : function(req, res, next){
-    Listing.checkListingPurchased(req.params.domain_name, function(result){
-      if (result.state != "success" || result.info.length > 0){
-        error.handler(req, res, "This listing has already been purchased. Please transfer the ownership!", "json");
-      }
-      else {
-        next();
-      }
-    });
+    if (getUserListingObj(req.user.listings, req.params.domain_name).accepted){
+      error.handler(req, res, "This listing has already been purchased! Please complete the ownership transfer to the new owner.", "json");
+    }
+    else {
+      next();
+    }
   },
 
   //function to check the posted status change of a listing
@@ -473,13 +471,6 @@ module.exports = {
       error.handler(req, res, "Invalid listing status!", "json");
     }
     else if (req.body.status){
-
-      // //no stripe information, prevent them from making it active
-      // if (status == 1 && !req.user.stripe_account){
-      //   error.handler(req, res, "stripe-connect-error", "json");
-      // }
-      // else {
-
       //check to see if its currently rented
       Listing.checkCurrentlyRented(req.params.domain_name, function(result){
         if (result.state != "success" || result.info.length > 0){
@@ -732,19 +723,19 @@ module.exports = {
   //gets all offers for a specific domain
   getListingOffers : function(req, res, next){
     console.log("F: Finding the all verified offers for " + req.params.domain_name + "...");
-    listing_obj = getUserListingObj(req.user.listings, req.params.domain_name);
+    var listing_obj = getUserListingObj(req.user.listings, req.params.domain_name);
     Data.getListingOffers(req.params.domain_name, function(result){
       if (result.state == "success"){
         listing_obj.offers = result.info;
         res.send({
           state: "success",
-          listing: listing_obj
+          listings: req.user.listings
         });
       }
       else {
         res.send({
           state: "success",
-          listing: listing_obj
+          listings: req.user.listings
         });
       }
     });
@@ -951,7 +942,7 @@ module.exports = {
             verified: 1,
             status: 1
           }
-          
+
           next();
         }
         else {
@@ -964,45 +955,6 @@ module.exports = {
   },
 
   //</editor-fold>
-
-  //function to render the accept or reject an offer page
-  renderAcceptOrRejectOffer: function(req, res, next){
-    console.log("Rendering accept or reject offer page...");
-
-    var accepted = req.path.indexOf("/accept") != -1;
-
-    Listing.getVerifiedListing(req.params.domain_name, function(listing_result){
-      Data.getListingOffererContactInfo(req.params.domain_name, req.params.verification_code, function(offer_result){
-        if (offer_result.state == "success" && !offer_result.info[0].accepted){
-          res.render("listings/accept_or_reject.ejs", {
-            accepted : accepted,
-            offer_info : offer_result.info[0],
-            listing_info : listing_result.info[0]
-          });
-        }
-        else {
-          res.redirect('/listing/' + req.params.domain_name);
-        }
-      });
-    });
-
-  },
-
-  //function to accept or reject an offer
-  acceptOrRejectOffer: function(req, res, next){
-    console.log("Accepting or rejecting an offer...");
-    var accepted = req.path.indexOf("/accept") != -1;
-
-    //update the DB on accepted or rejected
-    Data.acceptRejectOffer(accepted, req.params.domain_name, req.params.verification_code, function(offer_result){
-      res.json({
-        state: offer_result.state,
-        accepted: accepted
-      });
-
-      next();
-    });
-  },
 
 }
 //<editor-fold>-------------------------------HELPERS------------------------------

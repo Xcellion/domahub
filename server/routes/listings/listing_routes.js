@@ -175,7 +175,8 @@ module.exports = function(app, db, auth, error, stripe){
     profile_functions.getAccountListings,
     owner_functions.checkListingOwnerPost,
     owner_functions.checkListingVerified,
-    stripe.getStripeSubscription
+    stripe.getStripeSubscription,
+    owner_functions.updateListing
   ]);
 
   //update listing to premium
@@ -211,33 +212,33 @@ module.exports = function(app, db, auth, error, stripe){
   app.get("/listing/:domain_name/contact/:verification_code", [
     urlencodedParser,
     checkDomainValid,
-    renter_functions.checkContactVerificationCodeUnverified,
+    buyer_functions.checkContactVerificationCode,
     renter_functions.verifyContactHistory
   ]);
 
-  //accept or reject an offer
-  app.get(["/listing/:domain_name/contact/:verification_code/accept",
-  "/listing/:domain_name/contact/:verification_code/reject"], [
+  //render the accept or reject an offer page
+  app.get(["/listing/:domain_name/contact/:offer_id/accept",
+  "/listing/:domain_name/contact/:offer_id/reject"], [
     auth.checkLoggedIn,
     urlencodedParser,
     checkDomainValid,
     checkDomainListed,
     owner_functions.checkListingOwnerGet,
-    renter_functions.checkContactVerificationCodeVerified,
-    owner_functions.renderAcceptOrRejectOffer
+    buyer_functions.checkContactVerified,
+    buyer_functions.renderAcceptOrRejectOffer
   ]);
 
   //accept or reject an offer
-  app.post(["/listing/:domain_name/contact/:verification_code/accept",
-  "/listing/:domain_name/contact/:verification_code/reject"], [
+  app.post(["/listing/:domain_name/contact/:offer_id/accept",
+  "/listing/:domain_name/contact/:offer_id/reject"], [
     auth.checkLoggedIn,
     urlencodedParser,
     checkDomainValid,
     checkDomainListed,
     profile_functions.getAccountListings,
     owner_functions.checkListingOwnerPost,
-    renter_functions.checkContactVerificationCodeVerified,
-    owner_functions.acceptOrRejectOffer,
+    buyer_functions.checkContactVerified,
+    buyer_functions.acceptOrRejectOffer,
     renter_functions.notifyOfferer
   ]);
 

@@ -134,22 +134,25 @@
 					<!-- LISTING DETAIL TABS  -->
 					<div class="yes-listings-elem is-hidden tabs no-border">
 						<ul>
-							<li id="verify-tab" class="unverified-elem is-hidden tab">
+							<li id="verify-tab" class="unverified-elem is-active is-hidden unpurchased-elem tab">
 								<a tabindex="0">Verification Status</a>
 							</li>
-							<li id="info-tab" class="is-active verified-elem tab">
+							<li id="info-tab" class="is-active verified-elem unpurchased-elem tab">
 								<a tabindex="0">Information</a>
 							</li>
-							<li id="rental-tab" class="verified-elem tab">
+							<li id="rental-tab" class="verified-elem unpurchased-elem tab">
 								<a tabindex="0">Rental</a>
 							</li>
-							<li id="design-tab" class="verified-elem tab">
+							<li id="design-tab" class="verified-elem unpurchased-elem tab">
 								<a tabindex="0">Design</a>
 							</li>
-							<li id="offers-tab" class="verified-elem tab">
+							<li id="offers-tab" class="verified-elem unpurchased-elem tab">
 								<a tabindex="0">Offers</a>
 							</li>
-							<li id="upgrade-tab" class="verified-elem tab">
+							<li id="purchased-tab" class="purchased-elem tab is-active is-hidden">
+								<a tabindex="0">Next Steps</a>
+							</li>
+							<li id="upgrade-tab" class="verified-elem unpurchased-elem tab">
 								<a id="upgrade-tab-text" tabindex="0">Upgrade</a>
 							</li>
 						</ul>
@@ -166,25 +169,29 @@
 							</p>
 							<a class="is-primary button is-stylish" href="/listings/create">Create Listings</a>
 						</div>
-						<div id="unverified-drop-tab" class="unverified-elem drop-tab is-hidden">
+						<div id="unverified-drop-tab" class="drop-tab unverified-elem is-hidden">
 							<h3 class="is-bold">You must verify that you own this domain.</h3>
 							<p>The table below details the DNS entries that are needed to verify this domain.</p>
 							<p id="registrar_url">Please <a>log in to your domain provider</a> to create these entries.</p>
 							<p>If you require any assistance, please refer to our <a target="_blank" rel="noopener" style'target-new:="" tab;'="" class="is-accent margin-bottom-25" href="https://intercom.help/domahub/how-to-verify-your-domain-on-domahub"> step-by-step guide</a> on domain verification.</p>
 							<table class="table is-bordered margin-top-15">
-								<th>Host</th>
-								<th>Record</th>
-								<th>Required Data</th>
-								<th>Current Data</th>
+                <tr>
+                  <th>Host</th>
+                  <th>Record</th>
+                  <th>Required Data</th>
+                  <th>Current Data</th>
+                  <th>Next Steps</th>
+                </tr>
 								<tbody id="dns_table-body">
+                  <tr id="loading-records-row" class="">
+                    <td colspan=5>Now loading existing DNS records...</td>
+                  </tr>
 									<tr id="existing_a_record_clone" class='clone-dns-row is-hidden'>
 										<td>@</td>
 										<td>A</td>
 										<td class='required_data'>208.68.37.82</td>
 										<td class="existing_data">208.68.37.82</td>
-									</tr>
-									<tr class="clone-dns-row">
-										<td colspan=4>Now loading existing DNS records...</td>
+										<td class="next_step"><span class='is-danger'>Create this record</span></td>
 									</tr>
 								</tbody>
 							</table>
@@ -462,58 +469,69 @@
 										Now loading offers...
 									</p>
 								</div>
-								<div class="content">
-									<p id="no-offers" class="is-hidden">
-										You have no offers on this domain yet. Click here for some tips on how to generate leads!
+								<div id="no-offers" class="content is-hidden">
+									<p>
+										You have no offers on this domain yet.
 									</p>
+                  <p>
+                    <a href="/faq" class="is-accent">Click here for some tips on how to generate leads!</a>
+                  </p>
 								</div>
+                <div id="accepted-offer" class="is-hidden">
+                  <div class="content">
+                    <h3 class='is-bold'>
+                      Congratulations on selling your domain!
+                    </h3>
+                    <p>
+                      The money has been deposited to your DomaHub account. You must now transfer the ownership of this domain to the new owner.
+                      Once the new owner has verified that the ownership has been transferred over, the money will become available for withdrawal.
+                    </p>
+                    <p>
+                      <a class="is-accent" href="/contact">
+                        Having issues? Contact us for assistance.
+                      </a>
+                    </p>
+                  </div>
+                </div>
 								<div id="offers-wrapper">
 
 								</div>
 								<div id="offer-clone" class="media is-hidden">
-									<div class="media-left">
-										<!-- <figure class="image is-48x48 is-circle">
-											<img src="https://placeholdit.co//i/48x48?&text=WL&bg=3cbc8d" />
-										</figure> -->
+									<%# <div class="media-left">
 										<form class="checkbox-form">
 											<input class="select-offer" data-selected="false" type="checkbox" tabindex="0" title="Select Offer" />
 											<label for="select-offer"></label>
 										</form>
-									</div>
+									</div>%>
 									<div class="media-content">
 										<div class="media-heading">
-											<h3 id="offer-name" class="is-bold is-inline">
+											<h3 class="offer-name is-bold is-inline">
 											</h3>
-											<small id="offer-timestamp"></small>
+											<small class="offer-timestamp"></small>
 										</div>
 										<div class="">
 											<div class="foobar">
 												<div class="foo">
 													<span class="icon is-small is-primary"><i class="fa fa-envelope-o"></i></span>
-													<a id="offer-email">
-
-													</a>
+													<a class="offer-email"></a>
 												</div>
 												<div class="foo">
 													<span class="icon is-small is-primary"><i class="fa fa-phone"></i></span>
-													<p id="offer-phone"></p>
+													<p class="offer-phone"></p>
 												</div>
 											</div>
-											<p id="offer-message" class="is-hidden">
-
-											</p>
+											<p class="offer-message is-hidden"></p>
 										</div>
 									</div>
-									<div class="media-right">
-										<p id="offer-offer">
-
-										</p>
-										<button class="button is-primary is-small no-shadow is-outlined" tabindex="0">View Message</button>
+									<div class="media-right has-text-right">
+										<p class="is-bold"><span class="offer-accepted"></span><span class="offer-offer"></span></p>
+										<button class="offer-view button is-primary is-small no-shadow is-outlined" tabindex="0">View Message</button>
+										<a target="_blank" class="offer-accept button is-success is-small is-hidden no-shadow" tabindex="0">Accept Offer</a>
+										<a target="_blank" class="offer-reject button is-danger is-small is-hidden no-shadow" tabindex="0">Reject Offer</a>
 									</div>
 								</div>
 							</div>
 							<div id="upgrade-tab-drop" class="drop-tab is-hidden">
-
 									<div class="control is-spaced">
 										<div class="control-left">
 											<p>
@@ -545,7 +563,7 @@
 										</div>
 									</div>
 
-									<div class="control is-spaced">
+									<div class="control margin-bottom-0 is-spaced">
 										<div class="control-left">
 											<p>
 												Default Payment Method
@@ -562,7 +580,7 @@
 										</div>
 									</div>
 
-									<form id="stripe-form" class="is-hidden" autocomplete="on">
+									<form id="stripe-form" class="is-hidden margin-top-20" autocomplete="on">
 										<div class="control">
 											<label class="label">
 												<span class="v-align-middle">Card Number</span>
@@ -613,10 +631,14 @@
 									</form>
 								</div>
 						</div>
-						<footer class="yes-listings-elem is-hidden margin-top-25">
+						<footer id="tab-buttons-wrapper" class="yes-listings-elem is-hidden margin-top-25">
 							<a id="verify-button" class="unverified-elem button is-primary is-stylish is-small" title="Verify this domain">
 								<span class="icon is-small"><i class="fa fa-check-circle-o"></i></span>
 								<span>Verify Now</span>
+							</a>
+							<a id="refresh-dns-button" class="unverified-elem button is-outlined is-accent is-stylish is-small" title="Refresh DNS">
+								<span class="icon is-small"><i class="fa fa-refresh"></i></span>
+								<span>Refresh Table</span>
 							</a>
 							<div class="verified-elem">
 								<button id="save-changes-button" class="button is-disabled is-stylish is-small no-shadow">Save</button>

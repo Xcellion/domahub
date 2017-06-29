@@ -1120,34 +1120,6 @@ module.exports = {
     emailSomeone(req, res, email_contents_path, EJSVariables, emailDetails, "Something went wrong! Please refresh the page and try again.");
   },
 
-  //check the posted verification code
-  checkContactVerificationCodeVerified : function(req, res, next){
-    console.log("F: Checking if verification code for offer is verified...");
-
-    Data.checkContactVerificationCodeVerified(req.params.domain_name, req.params.verification_code, function(result){
-      if (result.state == "success" && result.info.length > 0){
-        next();
-      }
-      else {
-        res.redirect("/listing/" + req.params.domain_name);
-      }
-    });
-  },
-
-  //check the posted verification code
-  checkContactVerificationCodeUnverified : function(req, res, next){
-    console.log("F: Checking if verification code for offer is not verified...");
-
-    Data.checkContactVerificationCodeUnverified(req.params.domain_name, req.params.verification_code, function(result){
-      if (result.state == "success" && result.info.length > 0){
-        next();
-      }
-      else {
-        res.redirect("/listing/" + req.params.domain_name);
-      }
-    });
-  },
-
   //okay! verify the contact history entry
   verifyContactHistory : function(req, res, next){
     console.log("F: Verifying offer email...");
@@ -1194,7 +1166,8 @@ module.exports = {
   //asynchronously alert the offerer
   notifyOfferer : function(req, res, next){
     console.log("F: Sending email to offerer to notify of accept/reject status...");
-    getListingOffererContactInfo(req.params.domain_name, req.params.verification_code, function(offerer_result){
+    
+    getListingOffererContactInfo(req.params.domain_name, req.params.offer_id, function(offerer_result){
       var email_contents_path = (node_env == "dev") ? path.resolve(process.cwd(), 'server', 'views', 'email', 'offer_notify_buyer.ejs') : path.resolve(process.cwd(), 'views', 'email', 'offer_notify_buyer.ejs');
 
       var accepted = req.path.indexOf("/accept") != -1;
