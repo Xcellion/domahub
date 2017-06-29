@@ -1,6 +1,9 @@
 .faq-section {
   padding-top: 70px; }
 
+.faq-question {
+  font-weight: 500; }
+
 .faq-header {
   -moz-transition: all 0.25s ease;
   -o-transition: all 0.25s ease;

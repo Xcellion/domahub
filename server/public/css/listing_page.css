@@ -438,6 +438,7 @@ button[data-balloon] {
 
 #show-menu-wrapper {
   position: fixed;
+  z-index: 99;
   top: 20px;
   left: 20px; }
 

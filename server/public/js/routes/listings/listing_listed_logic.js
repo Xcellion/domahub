@@ -42,7 +42,7 @@ $(document).ready(function() {
 
       if (checkPhone()){
         $("button[type=submit][clicked=true]").addClass('is-loading');
-        $(".notification").addClass('is-hidden');
+        $(".notification").addClass('is-hidden').removeClass('is-active');
         $(".contact-input").addClass('is-disabled');
 
         //comparison only, no need for AJAX
@@ -66,7 +66,7 @@ $(document).ready(function() {
 
             if (data.state == "success"){
               if (type_of_submit == "offer"){
-                $("#contact-success").removeClass('is-hidden');
+                $("#contact-success").removeClass('is-hidden').addClass('is-active');
                 $("#buy-now-form").off();
               }
               else {
@@ -75,7 +75,7 @@ $(document).ready(function() {
             }
             else {
               $(".contact-input").removeClass('is-disabled');
-              $("#contact-error").removeClass('is-hidden');
+              $("#contact-error").removeClass('is-hidden').addClass('is-active');
               $("#contact-error-message").text(data.message);
             }
           });
@@ -325,7 +325,7 @@ function checkPhone(){
   }
   else {
     $("#contact-error-message").text("That is not a valid phone number!");
-    $("#contact-error").removeClass('is-hidden');
+    $("#contact-error").removeClass('is-hidden').addClass('is-active');
   }
 }
 
@@ -611,7 +611,7 @@ function updatePrices(){
     else {
       $("#total-price").removeClass("is-hidden");
       $("#checkout-button").removeClass('is-disabled');
-      
+
       if (origPrice){
         $("#orig-price").removeClass('is-hidden');
         countPrice($("#orig-price"), origPrice);

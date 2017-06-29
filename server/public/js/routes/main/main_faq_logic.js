@@ -22,7 +22,7 @@ $(document).ready(function() {
     });
 
     //if you came direct to url with a hash
-    if (["#about", "#pricing", "#creating", "#selling", "#payments", "#communicating", "#contracts"].indexOf(window.location.hash) != -1){
+    if (["#about", "#pricing", "#creating", "#selling", "#payments", "#renting"].indexOf(window.location.hash) != -1){
         $(window.location.hash + "-menu").click();
     }
 });

@@ -1,6 +1,6 @@
 /*************************** REGISTER ***************************/
 .control.has-icon .input:focus + .fa-check {
-  color: #81c784 !important; }
+  color: #3cbc8d !important; }
 
 .control.has-icon > .fa-warning {
   font-size: 21px !important;
