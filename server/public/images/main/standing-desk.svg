@@ -85,8 +85,8 @@
 	</g>
 	<polyline class="st3" points="135,70 139,108 121,76 103,108 108,70 	"/>
 	<g>
-		<polyline class="st3" points="151,42 153,40 149,36 151,34 		"/>
-		<polyline class="st3" points="158,42 160,40 156,36 158,34 		"/>
+		<polyline class="st3 coffee" points="151,42 153,40 149,36 151,34 		"/>
+		<polyline class="st3 coffee" points="158,42 160,40 156,36 158,34 		"/>
 	</g>
 	<polygon class="st3" points="158,61 151,61 149,48 160,48 	"/>
 	<polygon class="st3" points="37,108 28,108 23,89 42,89 	"/>

@@ -211,6 +211,20 @@ button[data-balloon] {
           height: 125px;
           width: 185px; } }
 
+.coffee {
+  -webkit-animation: steam 3s infinite;
+  -moz-animation: steam 3s infinite;
+  -o-animation: steam 3s infinite;
+  animation: steam 3s infinite; }
+
+@keyframes steam {
+  0% {
+    transform: translateY(0); }
+  50% {
+    transform: translateY(-5px); }
+  100% {
+    transform: translateY(0); } }
+
 #tryit-form {
   margin-left: auto;
   margin-right: auto; }
