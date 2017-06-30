@@ -481,7 +481,7 @@ function checkDomainValid(req, res, next){
     error.handler(req, res, "Invalid domain name!");
   }
   else if (req.params.domain_name != req.params.domain_name.toLowerCase()){
-    res.redirect("/listing/" + req.params.domain_name.toLowerCase());
+    res.redirect(req.originalUrl.toLowerCase());
   }
   else {
     next();
