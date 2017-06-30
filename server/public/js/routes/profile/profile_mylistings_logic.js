@@ -4,7 +4,6 @@ $(document).ready(function(){
 
   $(".filter-menu-toggle").on("click", function() {
     $("#filter-menu").toggleClass("is-active");
-    $(".black-background").toggleClass('is-hidden');
   });
 
   //populate all themes

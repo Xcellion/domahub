@@ -15,11 +15,7 @@
   }
 }
 
-.box-checked {
-    margin-left:2px;
-}
-
-.foobar {
+.media-items {
   display: flex;
   margin-top: 5px;
   @include mobile {
@@ -27,7 +23,7 @@
   }
 }
 
-.foo {
+.media-item {
   display: flex;
   align-items: center;
   &:first-child {
@@ -42,12 +38,16 @@
   }
 }
 
+.box-checked {
+    margin-left:2px;
+}
+
 #filter-menu {
+  @include transition(left 0.25s ease);
   @include mobile {
-    @include transition(left 0.2s ease);
     @include box-shadow(0,3px,15px,$border,0);
     background-color: $white;
-    height: calc(100% + 2px);
+    height: 1000px;
     width: 300px;
     left: -300%;
     position: absolute;
@@ -69,14 +69,6 @@
     height: 30px;
     width: 30px;
   }
-}
-
-.black-background {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  z-index: 9;
-  background-color: $black-secondary;
 }
 
 .current-domain-name {
