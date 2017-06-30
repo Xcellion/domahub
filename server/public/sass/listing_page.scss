@@ -27,7 +27,7 @@
 }
 
 #compare-preview {
-  @include transition(all 0.25s);
+  @include transition(width 0.25s ease);
   background-attachment: fixed;
   background-color: #fff;
   min-height: 100vh;
@@ -38,7 +38,11 @@
   &.is-active {
     @include translate(500px,0);
     width: calc(100% - 500px);
-    @media screen and (max-width: 1305px) {
+    @include mobile {
+      @include translate(0,0);
+      width: 100%;
+    }
+    @media screen and (min-width: 768px) and (max-width: 1305px) {
       @include translate(300px,0);
       width: calc(100% - 300px);
     }
@@ -66,6 +70,9 @@
     height: 100vh;
     @include translate(0,0);
   }
+  @include mobile {
+
+  }
   @media screen and (max-width: 1305px) {
     width: 300px;
   }
@@ -75,20 +82,21 @@
 }
 
 #compare-buttons {
-    width:100%;
-    padding: 20px;
-    border-bottom:1px solid $border;
-    .control {
-      &.is-spaced {
-        @media screen and (max-width: 1305px) {
-          flex-direction: column-reverse;
-          align-items: flex-start;
-          .control-right {
-            margin-bottom: 10px;
-          }
+  border-bottom:1px solid $border;
+  padding: 20px;
+  width:100%;
+  background-color: $white;
+  .control {
+    &.is-spaced {
+      @media screen and (max-width: 1305px) {
+        flex-direction: column-reverse;
+        align-items: flex-start;
+        .control-right {
+          margin-bottom: 10px;
         }
       }
     }
+  }
 }
 
 #compare-content {
