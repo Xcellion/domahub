@@ -9,19 +9,16 @@
     <p><%= listing_info.username %></p>
 </div>
 
+<% if (listing_info.date_registered) { %>
 <div class='content'>
   <p class="is-bold">
     Date Registered
   </p>
-  <p>
-    <% if (listing_info.date_registered) { %>
-    This domain was first registered on
-    <%= (listing_info.date_registered) %>
-    <% } else { %>
+  <p id="date_registered">
     No registration date found.
-    <% } %>
   </p>
 </div>
+<% } %>
 
 <% if (listing_info.owner_id){ %>
     <div class="content">
