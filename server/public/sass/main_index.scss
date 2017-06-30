@@ -26,7 +26,6 @@
     }
   }
   .subtitle {
-    font-weight: 300;
     max-width: 500px;
     margin-left: auto;
     margin-right: auto;
@@ -59,12 +58,12 @@
 
 @keyframes sway-one {
   from {transform: skew(0deg,0deg);}
-  to   {transform: skew(1deg,-6deg);}
+  to   {transform: skew(1deg,-10deg);}
 }
 
 @keyframes sway-two {
   from {transform: skew(0,0);}
-  to   {transform: skew(-1deg,6deg);}
+  to   {transform: skew(-1deg,10deg);}
 }
 
 .coffee {
@@ -88,7 +87,7 @@
   z-index: 4;
   transform: translateX(-50%);
   margin-right: -50%;
-  cursor:pointer;
+  cursor: pointer;
   bottom: 40px;
 }
 

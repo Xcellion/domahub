@@ -189,10 +189,10 @@ button[data-balloon] {
   display: flex; }
 
 #compare-preview {
-  -moz-transition: all 0.25s;
-  -o-transition: all 0.25s;
-  -webkit-transition: all 0.25s;
-  transition: all 0.25s;
+  -moz-transition: width 0.25s ease;
+  -o-transition: width 0.25s ease;
+  -webkit-transition: width 0.25s ease;
+  transition: width 0.25s ease;
   background-attachment: fixed;
   background-color: #fff;
   min-height: 100vh;
@@ -207,7 +207,15 @@ button[data-balloon] {
     -webkit-transform: translate(500px, 0);
       -webkit-transform-transform: translate(500px, 0);
     width: calc(100% - 500px); }
-    @media screen and (max-width: 1305px) {
+    @media screen and (max-width: 768px) {
+      #compare-preview.is-active {
+        -moz-transform: translate(0, 0);
+        -o-transform: translate(0, 0);
+        -ms-transform: translate(0, 0);
+        -webkit-transform: translate(0, 0);
+          -webkit-transform-transform: translate(0, 0);
+        width: 100%; } }
+    @media screen and (min-width: 768px) and (max-width: 1305px) {
       #compare-preview.is-active {
         -moz-transform: translate(300px, 0);
         -o-transform: translate(300px, 0);
@@ -252,9 +260,10 @@ button[data-balloon] {
     height: 200px; }
 
 #compare-buttons {
-  width: 100%;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
   padding: 20px;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.12); }
+  width: 100%;
+  background-color: white; }
   @media screen and (max-width: 1305px) {
     #compare-buttons .control.is-spaced {
       flex-direction: column-reverse;

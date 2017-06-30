@@ -192,7 +192,6 @@ button[data-balloon] {
       #landing .container {
         top: -50px; } }
   #landing .subtitle {
-    font-weight: 300;
     max-width: 500px;
     margin-left: auto;
     margin-right: auto; }
@@ -227,13 +226,13 @@ button[data-balloon] {
   from {
     transform: skew(0deg, 0deg); }
   to {
-    transform: skew(1deg, -6deg); } }
+    transform: skew(1deg, -10deg); } }
 
 @keyframes sway-two {
   from {
     transform: skew(0, 0); }
   to {
-    transform: skew(-1deg, 6deg); } }
+    transform: skew(-1deg, 10deg); } }
 
 .coffee {
   -webkit-animation: steam 3s infinite;
