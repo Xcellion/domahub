@@ -13,6 +13,11 @@ $(document).ready(function() {
   //remove class to prevent screen flash DH green
   $(".footer").removeClass('is-hidden');
 
+  //date registered format
+  if (listing_info.date_registered){
+    $("#date_registered").text(moment(listing_info.date_registered).format("MMMM DD, YYYY"));
+  }
+
   //<editor-fold>-----------------------------------------------------------------------------------TABS
 
   //switch tabs
@@ -56,45 +61,6 @@ $(document).ready(function() {
   //</editor-fold>
 
 });
-
-// //related domains
-// function findRelatedDomains(){
-//   if ($("#similar-domains").length > 0){
-//     if (listing_info.categories){
-//       var categories_to_post = listing_info.categories;
-//       $("#similar-domains-title").text('Similar Websites');
-//     }
-//     else {
-//       var categories_to_post = "";
-//       $("#similar-domains-title").text('Other Websites');
-//     }
-//
-//     $.ajax({
-//       url: "/listing/related",
-//       method: "POST",
-//       data: {
-//         categories: categories_to_post,
-//         domain_name_exclude: listing_info.domain_name
-//       }
-//     }).done(function(data){
-//       if (data.state == "success"){
-//         $("#similar-domains").removeClass('is-hidden');
-//         for (var x = 0; x < data.listings.length; x++){
-//           var cloned_similar_listing = $("#similar-domain-clone").clone();
-//           cloned_similar_listing.removeAttr("id").removeClass('is-hidden');
-//
-//           //edit it based on new listing info
-//           cloned_similar_listing.find(".similar-domain-price").text("$" + data.listings[x].price_rate + " / " + data.listings[x].price_type);
-//           // var random_sig = Math.floor(Math.random()*1000);
-//           // var background_image = data.listings[x].background_image || "https://source.unsplash.com/category/nature/250x200?sig=" + random_sig;
-//           // cloned_similar_listing.find(".similar-domain-img").attr("src", background_image);
-//           cloned_similar_listing.find(".similar-domain-name").text(data.listings[x].domain_name).attr("href", "/listing/" + data.listings[x].domain_name);
-//           $("#similar-domain-table").append(cloned_similar_listing);
-//         }
-//       }
-//     });
-//   }
-// }
 
 //<editor-fold>-----------------------------------------------------------------------------------RENTAL TICKER MODULE
 
