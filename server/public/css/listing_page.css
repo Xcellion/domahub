@@ -253,7 +253,10 @@ button[data-balloon] {
     -ms-transform: translate(0, 0);
     -webkit-transform: translate(0, 0);
       -webkit-transform-transform: translate(0, 0); }
-  @media screen and (max-width: 1305px) {
+  @media screen and (max-width: 456px) {
+    #compare-menu {
+      width: 100%; } }
+  @media screen and (min-width: 456px) and (max-width: 1305px) {
     #compare-menu {
       width: 300px; } }
   #compare-menu .footer {
@@ -273,7 +276,7 @@ button[data-balloon] {
 
 #compare-content {
   overflow-y: auto;
-  height: calc(100vh - 283px); }
+  height: calc(100vh - 316px); }
 
 #compare-footer {
   z-index: 4;
