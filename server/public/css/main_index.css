@@ -211,6 +211,30 @@ button[data-balloon] {
           height: 125px;
           width: 185px; } }
 
+.sway-one {
+  -webkit-animation: sway-one 2s ease-in-out infinite alternate;
+  -moz-animation: sway-one 2s ease-in-out infinite alternate;
+  -o-animation: sway-one 2s ease-in-out infinite alternate;
+  animation: sway-one 2s ease-in-out infinite alternate; }
+
+.sway-two {
+  -webkit-animation: sway-two 2s 1s ease-in-out infinite alternate;
+  -moz-animation: sway-two 2s 1s ease-in-out infinite alternate;
+  -o-animation: sway-two 2s 1s ease-in-out infinite alternate;
+  animation: sway-two 2s 1s ease-in-out infinite alternate; }
+
+@keyframes sway-one {
+  from {
+    transform: skew(0deg, 0deg); }
+  to {
+    transform: skew(1deg, -6deg); } }
+
+@keyframes sway-two {
+  from {
+    transform: skew(0, 0); }
+  to {
+    transform: skew(-1deg, 6deg); } }
+
 .coffee {
   -webkit-animation: steam 3s infinite;
   -moz-animation: steam 3s infinite;

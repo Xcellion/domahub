@@ -166,7 +166,8 @@ var compare = <% if(typeof compare != "undefined"){ %><%-JSON.stringify(compare)
       <div class="control is-spaced">
         <div class="control-left">
           <label class="label" for="traffic-module-input">Traffic Module</label>
-          <small class="tip">Displays detailed information about domain traffic including <a class="is-accent" target="_blank" href="http://www.alexa.com/siteinfo/<%= listing_info.domain_name %>">Alexa</a> data.</small>
+          <small class="tip">Displays detailed information about domain traffic including
+            <a class="is-accent"   href="http://www.alexa.com/siteinfo/<%= listing_info.domain_name %>">Alexa</a> data.</small>
         </div>
         <div class="control-right">
           <form class="checkbox-form">
@@ -203,7 +204,7 @@ var compare = <% if(typeof compare != "undefined"){ %><%-JSON.stringify(compare)
       </div>
       <div class="control">
         <p class="is-white">
-          Powered by <a tabindex="0" id="dh_logo" class="is-primary" href="/" target="_blank" rel="noopener">
+          Powered by <a tabindex="0" id="dh_logo" class="is-primary" href="/"  >
             DomaHub
           </a>
         </p>
