@@ -70,10 +70,10 @@
     height: 100vh;
     @include translate(0,0);
   }
-  @include mobile {
-
+  @include mobile-456px {
+    width: 100%;
   }
-  @media screen and (max-width: 1305px) {
+  @media screen and (min-width: 456px) and (max-width: 1305px) {
     width: 300px;
   }
   .footer {
@@ -101,7 +101,7 @@
 
 #compare-content {
     overflow-y: auto;
-    height: calc(100vh - 283px);
+    height: calc(100vh - 316px);
 }
 
 #compare-footer {
