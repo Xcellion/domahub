@@ -48,24 +48,6 @@
   }
 }
 
-.sway-one {
-  @include keyframes(sway-one 2s ease-in-out infinite alternate);
-}
-
-.sway-two {
-  @include keyframes(sway-two 2s 1s ease-in-out infinite alternate);
-}
-
-@keyframes sway-one {
-  from {transform: skew(0deg,0deg);}
-  to   {transform: skew(1deg,-10deg);}
-}
-
-@keyframes sway-two {
-  from {transform: skew(0,0);}
-  to   {transform: skew(-1deg,10deg);}
-}
-
 .coffee {
   @include keyframes(steam 3s infinite);
 }
