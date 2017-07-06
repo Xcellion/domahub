@@ -24,12 +24,13 @@ function approveDomains(opts, certs, cb) {
   // This is where you check your database and associated
   // email addresses with domains and agreements and such
 
+  opts.domains = ["w3bbi.com"];
 
   // The domains being approved for the first time are listed in opts.domains
   // Certs being renewed are listed in certs.altnames
   if (certs) {
+    console.log(certs);
     opts.domains = certs.altnames;
-    opts.domains = ["w3bbi.com"];
   }
   else {
     opts.email = 'wonmin@w3bbi.com';
@@ -40,6 +41,7 @@ function approveDomains(opts, certs, cb) {
   // opts.challengeType = 'http-01';
   // opts.challenge = require('le-challenge-fs').create({});
 
+  console.log(opts, certs);
   cb(null, { options: opts, certs: certs });
 }
 
