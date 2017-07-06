@@ -30,13 +30,11 @@ function approveDomains(opts, certs, cb) {
 }
 
 // handles acme-challenge and redirects to https
-require('http').createServer(lex.middleware(function ensureSecure(req, res, next){
-  if(req.secure){
-    // OK, continue
-    return next();
-  };
-  res.redirect('https://' + req.hostname + req.url); // express 4.x
-})).listen(8080, function () {
+require('http').createServer(lex.middleware(require('redirect-https')({
+  port: 4343,
+  trustProxy: true,
+  body: "FUCK u"
+}))).listen(8080, function () {
   console.log("Listening for ACME http-01 challenges on", this.address());
 });
 
