@@ -44,6 +44,11 @@ function approveDomains(opts, certs, cb) {
   cb(null, { options: opts, certs: certs });
 }
 
+// handles acme-challenge and redirects to https
+require('http').createServer(lex.middleware(require('redirect-https')())).listen(8080, function () {
+  console.log("Listening for ACME http-01 challenges on", this.address());
+});
+
 var app = require('express')();
 app.use('/', function (req, res) {
   res.end('Hello, World!');
