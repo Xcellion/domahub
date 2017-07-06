@@ -29,24 +29,18 @@ function approveDomains(opts, certs, cb) {
   cb(null, { options: opts, certs: certs });
 }
 
-var app = require('express')();
-app.all('*', ensureSecure); // at top of routing calls
-app.use('/', function (req, res) {
-  res.end('Hello, World!');
+// handles acme-challenge and redirects to https
+require('http').createServer(lex.middleware(require('redirect-https')({
+  port: 4343,
+  trustProxy: true,
+  body: "FUCK u "
+}))).listen(8080, function () {
+  console.log("Listening for ACME http-01 challenges on", this.address());
 });
 
-function ensureSecure(req, res, next){
-  if (req.secure){
-    return next();
-  }
-  else {
-    res.redirect('https://' + req.hostname + req.url);
-  }
-}
-
-// handles acme-challenge and redirects to https
-require('http').createServer(lex.middleware(app)).listen(8080, function () {
-  console.log("Listening for ACME http-01 challenges on", this.address());
+var app = require('express')();
+app.use('/', function (req, res) {
+  res.end('Hello, World!');
 });
 
 // handles your app
