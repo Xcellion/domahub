@@ -178,6 +178,9 @@ button[data-balloon] {
   display: flex;
   align-items: center;
   overflow: hidden; }
+  @media screen and (max-width: 768px) {
+    #landing {
+      height: calc(100vh - 60px); } }
   #landing .container {
     top: -100px; }
     @media screen and (max-height: 720px) {
