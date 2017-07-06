@@ -188,9 +188,6 @@ button[data-balloon] {
         top: 0; }
         #landing .container .image {
           display: none !important; } }
-    @media screen and (max-width: 768px) {
-      #landing .container {
-        top: -50px; } }
   #landing .subtitle {
     max-width: 500px;
     margin-left: auto;
@@ -310,17 +307,20 @@ button[data-balloon] {
     margin-right: 15px; }
 
 .price-card {
-  align-items: center;
-  background-color: #efefef;
-  border-radius: 3px;
-  display: flex;
-  flex-direction: column;
-  height: 300px;
-  justify-content: center;
-  width: 100%; }
-  @media screen and (max-width: 456px) {
-    .price-card {
-      height: 250px; } }
+  -moz-transition: all 0.25s ease;
+  -o-transition: all 0.25s ease;
+  -webkit-transition: all 0.25s ease;
+  transition: all 0.25s ease;
+  border-radius: 3px; }
+  .price-card .card-title {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+    padding: 15px 20px; }
+  .price-card:hover {
+    -moz-transform: translate(0, -5px);
+    -o-transform: translate(0, -5px);
+    -ms-transform: translate(0, -5px);
+    -webkit-transform: translate(0, -5px);
+      -webkit-transform-transform: translate(0, -5px); }
 
 .section.has-pyramid {
   position: relative;

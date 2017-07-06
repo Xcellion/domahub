@@ -9,10 +9,13 @@
 
 	<div class="content has-text-centered clear-nav">
 		<h2 class="margin-bottom-5 has-text-centered">
-            <a id="nav-logo" class='is-inline-block flat-logo is-primary' tabindex="0" title="Home" href="/">
-                <div class='is-inline-block flat-logo is-primary'></div>
-            </a>
-        </h2>
+        <a id="nav-logo" class='is-inline-block flat-logo is-primary' tabindex="0" title="Home" href="/">
+            <div class='is-inline-block flat-logo is-primary'></div>
+        </a>
+    </h2>
+		<p>
+			Sign Up Form
+		</p>
 		<% if (typeof message != "undefined") {%>
 			<p id="message" class="has-text-centered margin-top-0 margin-bottom-15"><%= message %></p>
 		<% } %>
@@ -45,15 +48,15 @@
 					<i class="fa fa-warning is-hidden is-danger"></i>
 				</div>
 			<div class="g-recaptcha" data-sitekey="6LdwpykTAAAAAEaTl3u4-xDCSqH7-Aj-YDImCQXI"></div>
-			<div class="control">
+			<div class="control has-text-centered">
 				<button id="signup-login-button" class="login-button button is-primary is-stylish is-fullwidth margin-bottom-10">
 					Create Account
 				</button>
 				<small>By signing up, you agree to our
-					<a tabindex="0"   href="/terms" class="is-accent">Terms of Service</a> and
-					<a tabindex="0"   href="/privacy" class="is-accent">Privacy Policy</a>.</small>
+					<a tabindex="0"  href="/terms" class="is-accent">Terms of Service</a> and
+					<a tabindex="0"  href="/privacy" class="is-accent">Privacy Policy</a>.</small>
 			</div>
-			<div class="control">
+			<div class="control has-text-centered">
 				<small>
 					Already have an account?
 				</small>

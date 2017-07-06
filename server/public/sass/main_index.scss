@@ -21,9 +21,6 @@
         display: none !important;
       }
     }
-    @include mobile {
-      top: -50px;
-    }
   }
   .subtitle {
     max-width: 500px;
@@ -162,17 +159,14 @@
 }
 
 .price-card {
-  // @include box-shadow(0,3px,15px,$border,1px);
-  align-items: center;
-  background-color: $grey-lighter;
+  @include transition(all 0.25s ease);
   border-radius: $radius;
-  display: flex;
-  flex-direction: column;
-  height: 300px;
-  justify-content: center;
-  width: 100%;
-  @include mobile-456px {
-    height: 250px;
+  .card-title {
+    border-bottom: 1px solid $border;
+    padding: 15px 20px;
+  }
+  &:hover {
+    @include translate(0,-5px);
   }
 }
 
