@@ -33,7 +33,7 @@ function approveDomains(opts, certs, cb) {
     opts.domains = ["w3bbi.com"];
   }
   else {
-    opts.email = 'john.doe@example.com';
+    opts.email = 'wonmin@w3bbi.com';
     opts.agreeTos = true;
   }
 
@@ -45,7 +45,7 @@ function approveDomains(opts, certs, cb) {
 }
 
 // handles acme-challenge and redirects to https
-require('http').createServer(lex.middleware(require('redirect-https')())).listen(200, function () {
+require('http').createServer(lex.middleware(require('redirect-https')())).listen(8080, function () {
   console.log("Listening for ACME http-01 challenges on", this.address());
 });
 
@@ -55,6 +55,6 @@ app.use('/', function (req, res) {
 });
 
 // handles your app
-require('https').createServer(lex.middleware(app)).listen(443, function () {
+require('https').createServer(lex.middleware(app)).listen(4343, function () {
   console.log("Listening for ACME tls-sni-01 challenges and serve app on", this.address());
 });
