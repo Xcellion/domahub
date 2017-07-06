@@ -30,7 +30,7 @@ function approveDomains(opts, certs, cb) {
   // Certs being renewed are listed in certs.altnames
   if (certs) {
     opts.domains = certs.altnames;
-    opts.domains = ["example.com"];
+    opts.domains = ["w3bbi.com"];
   }
   else {
     opts.email = 'john.doe@example.com';
