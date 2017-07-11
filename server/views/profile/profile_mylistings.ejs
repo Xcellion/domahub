@@ -97,11 +97,11 @@
 								<input class="select-button" data-selected="false" type="checkbox" tabindex="0" title="Select" />
 								<label for="select-button"></label>
 							</form>
-							<div>
-								<p class="is-danger td-domain is-inline"></p>
+							<div class="table-row-text">
 								<span class="icon is-danger is-small is-inline">
 									<i class="fa fa-exclamation-circle"></i>
 								</span>
+								<p class="is-danger td-domain is-inline"></p>
 							</div>
 						</div>
 					</div>
@@ -115,10 +115,10 @@
 					<!-- CURRENT DOMAIN NAME -->
 					<div class="control is-spaced">
 						<div class="control-left">
-							<button tabindex="0" class="button is-primary filter-menu-toggle is-icon-only no-shadow is-small is-hidden-tablet" title="Filters">
+							<button tabindex="0" class="button filter-menu-toggle is-inline-block is-dark is-icon-only no-shadow is-small is-hidden-tablet" title="Filters">
 								<span class="icon"><i class="fa fa-bars"></i></span>
 							</button>
-							<h2 class="current-domain-name yes-listings-elem is-inline is-hidden"></h2>
+							<h2 class="current-domain-name yes-listings-elem is-inline-block is-hidden"></h2>
 						</div>
 						<div class="control-right">
 							<a id="current-domain-view"  tabindex="0" class="verified-elem yes-listings-elem is-hidden button is-small no-shadow margin-top-0" title="View Domain">
@@ -171,14 +171,16 @@
 							<p>The table below details the DNS entries that are needed to verify this domain.</p>
 							<p id="registrar_url">Please <a>log in to your domain provider</a> to create these entries.</p>
 							<p>If you require any assistance, please refer to our <a   style'target-new:="" tab;'="" class="is-accent margin-bottom-25" href="https://intercom.help/domahub/how-to-verify-your-domain-on-domahub"> step-by-step guide</a> on domain verification.</p>
-							<table class="table is-bordered margin-top-15">
-                <tr>
-                  <th>Host</th>
-                  <th>Record</th>
-                  <th>Required Data</th>
-                  <th>Current Data</th>
-                  <th>Next Steps</th>
-                </tr>
+							<table class="table margin-top-15">
+                <thead>
+									<tr>
+	                  <th>Host</th>
+	                  <th>Record</th>
+	                  <th>Required Data</th>
+	                  <th>Current Data</th>
+	                  <th>Next Steps</th>
+	                </tr>
+								</thead>
 								<tbody id="dns_table-body">
                   <tr id="loading-records-row" class="">
                     <td colspan=5>Now loading existing DNS records...</td>
@@ -632,7 +634,7 @@
 								<span class="icon is-small"><i class="fa fa-check-circle-o"></i></span>
 								<span>Verify Now</span>
 							</a>
-							<a id="refresh-dns-button" class="unverified-elem button is-outlined is-accent is-stylish is-small no-shadow" title="Refresh DNS">
+							<a id="refresh-dns-button" class="unverified-elem button is-outlined is-stylish is-small no-shadow" title="Refresh DNS">
 								<span class="icon is-small"><i class="fa fa-refresh"></i></span>
 								<span>Refresh Table</span>
 							</a>

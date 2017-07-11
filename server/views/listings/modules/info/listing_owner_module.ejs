@@ -1,14 +1,3 @@
-<div class="content">
-    <p class="is-bold">
-      <% if (listing_info.owner_id){ %>
-        Created By
-      <% } else { %>
-        Owned By
-      <% } %>
-    </p>
-    <p><%= listing_info.username %></p>
-</div>
-
 <% if (listing_info.date_registered) { %>
 <div class='content'>
   <p class="is-bold">
@@ -22,7 +11,19 @@
 
 <% if (listing_info.owner_id){ %>
     <div class="content">
-        <p class="is-bold">Date Created</p>
+        <p class="is-bold">Listing Created</p>
         <p id="date_created"></p>
     </div>
 <% } %>
+
+
+<div class="content">
+    <p class="is-bold">
+      <% if (listing_info.owner_id){ %>
+        Created By
+      <% } else { %>
+        Owned By
+      <% } %>
+    </p>
+    <p><%= listing_info.username %></p>
+</div>
