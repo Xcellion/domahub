@@ -189,10 +189,10 @@ button[data-balloon] {
   display: flex; }
 
 #compare-preview {
-  -moz-transition: width 0.25s ease;
-  -o-transition: width 0.25s ease;
-  -webkit-transition: width 0.25s ease;
-  transition: width 0.25s ease;
+  -moz-transition: all 0.2s ease;
+  -o-transition: all 0.2s ease;
+  -webkit-transition: all 0.2s ease;
+  transition: all 0.2s ease;
   background-attachment: fixed;
   background-color: #fff;
   min-height: 100vh;
@@ -228,10 +228,10 @@ button[data-balloon] {
         flex-direction: column; } }
 
 #compare-menu {
-  -moz-transition: all 0.25s;
-  -o-transition: all 0.25s;
-  -webkit-transition: all 0.25s;
-  transition: all 0.25s;
+  -moz-transition: all 0.2s;
+  -o-transition: all 0.2s;
+  -webkit-transition: all 0.2s;
+  transition: all 0.2s;
   -moz-transform: translate(-100%, 0);
   -o-transform: translate(-100%, 0);
   -ms-transform: translate(-100%, 0);
@@ -276,7 +276,7 @@ button[data-balloon] {
 
 #compare-content {
   overflow-y: auto;
-  height: calc(100vh - 316px); }
+  height: calc(100vh - 312px); }
 
 #compare-footer {
   z-index: 4;
@@ -293,10 +293,10 @@ button[data-balloon] {
     .logo:hover .flat-logo, .logo:focus .flat-logo {
       background-position: 0 -32px; }
   .logo .flat-logo {
-    -moz-transition: background-position 0.25s ease;
-    -o-transition: background-position 0.25s ease;
-    -webkit-transition: background-position 0.25s ease;
-    transition: background-position 0.25s ease; }
+    -moz-transition: background-position 0.2s ease;
+    -o-transition: background-position 0.2s ease;
+    -webkit-transition: background-position 0.2s ease;
+    transition: background-position 0.2s ease; }
     .logo .flat-logo:focus {
       outline: none; }
 

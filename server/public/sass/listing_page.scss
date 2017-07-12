@@ -17,7 +17,7 @@
 }
 
 .module {
-    min-height: 410px;
+  min-height: 410px;
 }
 
 #compare-model {
@@ -27,7 +27,7 @@
 }
 
 #compare-preview {
-  @include transition(width 0.25s ease);
+  @include transition(all 0.2s ease);
   background-attachment: fixed;
   background-color: #fff;
   min-height: 100vh;
@@ -57,7 +57,7 @@
 }
 
 #compare-menu {
-  @include transition(all 0.25s);
+  @include transition(all 0.2s);
   @include translate(-100%,0);
   @include box-shadow(0,3px,15px,$border,0);
   position: fixed;
@@ -101,7 +101,7 @@
 
 #compare-content {
     overflow-y: auto;
-    height: calc(100vh - 316px);
+    height: calc(100vh - 312px);
 }
 
 #compare-footer {
@@ -123,7 +123,7 @@
     }
   }
   .flat-logo {
-    @include transition (background-position 0.25s ease);
+    @include transition (background-position 0.2s ease);
     &:focus {
       outline: none;
     }
