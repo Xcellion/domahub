@@ -81,11 +81,11 @@
 						<thead id="top-header-row" class='is-hidden'>
 							<tr>
 								<th colspan='3'>
-									<a tabindex="0" class="is-inline-block add-domain-button button no-shadow is-small is-stylish">
+									<a tabindex="0" class="is-inline-block add-domain-button button no-shadow is-small is-outlined">
 										<span class="icon is-small"><i class="fa fa-plus"></i></span>
 										<span>Add row</span>
 									</a>
-									<a tabindex="0" class="delete-domains-button button no-shadow is-danger is-small is-stylish">
+									<a tabindex="0" class="delete-domains-button button no-shadow is-danger is-small is-outlined">
 										<span class='icon is-small'>
 											<i class='fa fa-trash-o'></i>
 										</span>
@@ -99,8 +99,8 @@
 							<tr>
 								<th class='padding-left-15'>Domain Name</th>
 								<th>
-									<span class='v-align-middle'>Min. Purchase Price</span>
-									<span class="v-align-middle is-small icon is-inline-block is-tooltip" data-balloon="The minimum you're willing to sell this domain for. Set to blank or 0 for no minimum purchase price." data-balloon-length="large" data-balloon-pos="up">
+									<span>Min. Purchase Price</span>
+									<span class="icon is-tooltip is-small" data-balloon="The minimum you're willing to sell this domain for. Set to blank or 0 for no minimum purchase price." data-balloon-length="large" data-balloon-pos="up">
 									  <i class="fa fa-question-circle"></i>
 									</span>
 								</th>
@@ -114,7 +114,7 @@
 						</thead>
 						<tbody id="domain-input-table" data-rows="0">
 							<tr id="clone-row" class="table-row no-hover-effect">
-								<td class="v-align-top">
+								<td class="td-domain aligned">
 									<div class='control has-addons is-marginless'>
 										<a class="button no-shadow is-icon">
 											<span class='icon delete-icon'>
@@ -124,10 +124,10 @@
 										<input class="domain-name-input input is-expanded" type="text" value=""/>
 									</div>
 								</td>
-								<td class="td-buy-price v-align-top">
+								<td class="td-buy-price aligned">
 									<input class="buy-price-input input" type="number" tabindex="-1" min="0" />
 								</td>
-								<td class="td-premium v-align-top">
+								<td class="td-premium aligned">
 									<form class="checkbox-form">
 										<input class="is-small premium-input" type="checkbox" tabindex="0" />
 										<label class="is-small premium-label" tabindex="0" for="premium-input">Premium</label>
@@ -138,18 +138,17 @@
 						<tfoot>
 							<tr>
 								<th colspan='3'>
-									<a tabindex="0" class="is-inline-block add-domain-button button no-shadow is-small is-stylish">
+									<a tabindex="0" class="is-inline-block add-domain-button button no-shadow is-small is-outlined">
 										<span class="icon is-small"><i class="fa fa-plus"></i></span>
 										<span>Add row</span>
 									</a>
-									<a tabindex="0" class="delete-domains-button button no-shadow is-danger is-small is-stylish">
+									<a tabindex="0" class="delete-domains-button button no-shadow is-danger is-small is-outlined">
 										<span class='icon is-small'>
 											<i class='fa fa-trash-o'></i>
 										</span>
 										<span>Remove all</span>
 									</a>
 								</th>
-								<!-- <th colspan='2' class='what-is-premium'><a tabindex="-1" class="is-accent"  href="/sellers#basicvpremium">What is a Premium listing?</a></th> -->
 							</tr>
 						</tfoot>
 					</table>
