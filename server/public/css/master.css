@@ -2318,11 +2318,11 @@ input:-webkit-autofill {
   cursor: pointer;
   display: inline-block;
   font-size: 16px;
-  height: 20px;
+  height: 24px;
   outline: none;
   position: relative;
   vertical-align: top;
-  width: 20px; }
+  width: 24px; }
   .delete:before, .modal-close:before, .delete:after, .modal-close:after {
     background-color: white;
     content: "";

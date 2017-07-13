@@ -53,15 +53,16 @@
 
 // Table columns
 .td-domain {
-  width: 100%;
+  width: 300px;
 }
 
-.td-buy-price {
-  width: 190px;
+.tip {
+  margin-top: 5px;
+  float: right;
 }
 
-.td-premium {
-  width: 130px;
+.aligned {
+  vertical-align: top !important;
 }
 
 .what-is-premium {
