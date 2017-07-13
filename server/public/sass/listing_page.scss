@@ -60,12 +60,13 @@
   @include transition(all 0.2s);
   @include translate(-100%,0);
   @include box-shadow(0,3px,15px,$border,0);
-  position: fixed;
-  z-index: 200;
+  background-color: $white;
   height: 100vh;
-  width: 500px;
-  top: 0;
   left: 0;
+  position: fixed;
+  top: 0;
+  width: 500px;
+  z-index: 200;
   &.is-active {
     height: 100vh;
     @include translate(0,0);
@@ -75,9 +76,6 @@
   }
   @media screen and (min-width: 456px) and (max-width: 1305px) {
     width: 300px;
-  }
-  .footer {
-    height: 200px;
   }
 }
 
@@ -100,15 +98,19 @@
 }
 
 #compare-content {
-    overflow-y: auto;
-    height: calc(100vh - 312px);
-}
-
-#compare-footer {
-    z-index:4;
-    bottom:0;
-    position:absolute;
-    width:100%;
+  overflow-y: auto;
+  height: calc(100vh - 74px);
+  .footer {
+    border-top: 1px solid $border;
+    margin-top: 20px;
+    padding: 20px 0 !important;
+  }
+  @include mobile-456px {
+    height: calc(100vh - 114px);
+  }
+  @media screen and (min-width: 456px) and (max-width: 1305px) {
+    height: calc(100vh - 116px);
+  }
 }
 
 .logo {
