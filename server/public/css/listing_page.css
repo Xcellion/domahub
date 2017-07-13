@@ -240,12 +240,13 @@ button[data-balloon] {
   -webkit-box-shadow: 0 3px 15px 0 rgba(0, 0, 0, 0.12);
   -moz-box-shadow: 0 3px 15px 0 rgba(0, 0, 0, 0.12);
   box-shadow: 0 3px 15px 0 rgba(0, 0, 0, 0.12);
-  position: fixed;
-  z-index: 200;
+  background-color: white;
   height: 100vh;
-  width: 500px;
+  left: 0;
+  position: fixed;
   top: 0;
-  left: 0; }
+  width: 500px;
+  z-index: 200; }
   #compare-menu.is-active {
     height: 100vh;
     -moz-transform: translate(0, 0);
@@ -259,8 +260,6 @@ button[data-balloon] {
   @media screen and (min-width: 456px) and (max-width: 1305px) {
     #compare-menu {
       width: 300px; } }
-  #compare-menu .footer {
-    height: 200px; }
 
 #compare-buttons {
   border-bottom: 1px solid rgba(0, 0, 0, 0.12);
@@ -276,13 +275,17 @@ button[data-balloon] {
 
 #compare-content {
   overflow-y: auto;
-  height: calc(100vh - 312px); }
-
-#compare-footer {
-  z-index: 4;
-  bottom: 0;
-  position: absolute;
-  width: 100%; }
+  height: calc(100vh - 74px); }
+  #compare-content .footer {
+    border-top: 1px solid rgba(0, 0, 0, 0.12);
+    margin-top: 20px;
+    padding: 20px 0 !important; }
+  @media screen and (max-width: 456px) {
+    #compare-content {
+      height: calc(100vh - 114px); } }
+  @media screen and (min-width: 456px) and (max-width: 1305px) {
+    #compare-content {
+      height: calc(100vh - 116px); } }
 
 .logo {
   display: inline-flex;
