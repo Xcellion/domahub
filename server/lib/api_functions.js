@@ -49,6 +49,8 @@ function checkHost(req, res, next){
 
 //send the current rental details and information for a listing
 function checkListed(req, res, next){
+  var domain_name = req.headers.host.replace(/^(https?:\/\/)?(www\.)?/,'');
+  
   console.log("F: Attempting to check premium status for " + domain_name + "!");
   Listing.checkListingStripe(domain_name, function(result){
     //premium! check stripe now to see if it's an active subscription
