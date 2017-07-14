@@ -1,5 +1,5 @@
-var  listing_model = require('../../models/listing_model.js');
-var  data_model = require('../../models/data_model.js');
+var listing_model = require('../../models/listing_model.js');
+var data_model = require('../../models/data_model.js');
 
 var search_functions = require("../listings/listings_search_functions.js");
 var renter_functions = require("../listings/listings_renter_functions.js");
