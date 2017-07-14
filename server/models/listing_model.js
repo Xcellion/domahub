@@ -54,6 +54,13 @@ listing_model.prototype.checkListingOwner = function(account_id, domain_name, ca
   listing_query(query, "Account does not own the domain" + domain_name + "!", callback, [account_id, domain_name]);
 }
 
+//check if a listing has a stripe subscription
+listing_model.prototype.checkListingStripe = function(domain_name, callback){
+  console.log("DB: Checking to see if " + domain_name + " has a Stripe subscription ID...");
+  query = 'SELECT stripe_subscription_id FROM listings WHERE stripe_subscription_id IS NOT NULL AND domain_name = ? AND listings.deleted IS NULL'
+  listing_query(query, "There is no Stripe subscription for " + domain_name + "!", callback, [domain_name]);
+}
+
 //check if a listing has been purchased already
 listing_model.prototype.checkListingPurchased = function(domain_name, callback){
   console.log("DB: Checking to see if domain " + domain_name + " has been purchased...");

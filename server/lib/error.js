@@ -9,12 +9,7 @@ function handler(req, res, message, type) {
   switch (type){
     case "api":
       console.log("ERROR: " + message);
-      if (node_env == "dev"){
-        res.redirect("http://localhost:8080" + req.originalUrl);
-      }
-      else {
-        res.redirect("https://domahub.com" + req.originalUrl);
-      }
+      res.sendStatus(404);
       break;
     //send direct message or redirect page
     case "json":

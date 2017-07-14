@@ -1,7 +1,7 @@
 {
   apps : [{
-    name        : "DomaHub Test LetsEncrypt",
-    script      : "./letsencrypt_server.js",
+    name        : "DomaHub Server (Test)",
+    script      : "./server.js",
     env: {
       "NODE_ENV": "dev",
     },
@@ -10,5 +10,18 @@
 	watch_options: {
 		followSymlinks: false
 	}
-  }]
+  },
+  {
+    name        : "DomaHub Server (LE API Test)",
+    script      : "./api_server.js",
+    env: {
+      "NODE_ENV": "dev",
+    },
+	watch: ["../server"],
+	ignore_watch : ["../node_modules", "../uploads"],
+	watch_options: {
+		followSymlinks: false
+	}
+  }
+  ]
 }
