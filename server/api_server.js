@@ -62,7 +62,7 @@ else {
 }
 
 //API for Lets Encrypt SSL certs for premium domains listed on domahub
-require('./lib/api_functions.js')(app, db, error);
+require('./lib/le_api_functions.js')(app, db, error);
 
 //404 not found
 app.get('*', function(req, res){

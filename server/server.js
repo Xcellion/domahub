@@ -87,6 +87,9 @@ app.use(express.static(__dirname + '/public'));
 app.use(passport.initialize());
 app.use(passport.session());
 
+//route to determine host
+require('./lib/api_functions.js')(app, db, error);
+
 //main routes
 require('./routes/routes.js')(app, db, auth, error, stripe);
 
