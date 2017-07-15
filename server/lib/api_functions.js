@@ -110,12 +110,11 @@ function getCurrentRental(req, res, domain_name, path, next){
 
 //not rented! send to domahub/listings or its own URL if it's premium
 function checkForBasicRedirect(req, res, next){
-  console.log(req.session.id);
 
   //premium! go ahead and display listings on this URL
   if (req.session.listing_info && req.session.listing_info.premium){
     console.log("AF: Premium domain! Display listing on custom URL...");
-    res.session.pipe_to_dh = req.headers.host.replace(/^(https?:\/\/)?(www\.)?/,'');
+    req.session.pipe_to_dh = req.headers.host.replace(/^(https?:\/\/)?(www\.)?/,'');
     next();
   }
 
