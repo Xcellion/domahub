@@ -1,16 +1,9 @@
 var listing_model = require('../models/listing_model.js');
-var account_model = require('../models/account_model.js');
-var data_model = require('../models/data_model.js');
-
-var search_functions = require("../routes/listings/listings_search_functions.js");
-var renter_functions = require("../routes/listings/listings_renter_functions.js");
-
 var validator = require("validator");
 var node_env = process.env.NODE_ENV || 'dev';   //dev or prod bool
 var stripe = require('../lib/stripe.js');
 
-module.exports = function(app, db, e){
-  error = e;
+module.exports = function(app, db){
   Listing = new listing_model(db);
 
   app.use("*", [
@@ -33,25 +26,25 @@ function checkHost(req, res, next){
     || domain_name == "localhost"
     || domain_name == "localhost:8080"
     || domain_name == "localhost:9090"){
-      error.handler(req, res, "Requested DomaHub!", "api");
+      res.sendStatus(404);
     }
     else if (!validator.isAscii(domain_name) || !validator.isFQDN(domain_name)){
-      error.handler(req, res, "Invalid domain name!", "apiP");
+      res.sendStatus(404);
     }
     else {
       next();
     }
   }
   else {
-    error.handler(req, res, "Requested DomaHub!", "api");
+    res.sendStatus(404);
   }
 }
 
 //send the current rental details and information for a listing
 function checkListed(req, res, next){
   var domain_name = req.headers.host.replace(/^(https?:\/\/)?(www\.)?/,'');
-  
-  console.log("F: Attempting to check premium status for " + domain_name + "!");
+
+  console.log("LEF: Attempting to check premium status for " + domain_name + "!");
   Listing.checkListingStripe(domain_name, function(result){
     //premium! check stripe now to see if it's an active subscription
     if (result.state == "success" && result.info.length > 0){
@@ -65,7 +58,8 @@ function checkListed(req, res, next){
   });
 }
 
-//stripe subscription is active! send ok to NGINX
+//stripe subscription is active! send ok to NGINX for new SSL certificate
 function sendOkayToNginx(req, res, next){
+  console.log("LEF: " + domain_name + " is a Premium domain! Getting new SSL certificate...");
   res.sendStatus(200);
 }
