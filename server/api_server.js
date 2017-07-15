@@ -7,14 +7,10 @@ serverHTTP = function(application){
   return http.createServer(application);
 };
 
-var bodyParser   = require('body-parser'),
+var bodyParser = require('body-parser'),
 cookieParser = require('cookie-parser'),
 session = require('express-session'),
-db = require('./lib/database.js'),
-error = require('./lib/error.js'),
-request = require('request'),
-parseDomain = require('parse-domain'),
-url = require('url');
+db = require('./lib/database.js');
 
 db.connect();  //connect to the database
 
@@ -37,7 +33,7 @@ if (node_env == "dev"){
 
   //express session in memory
   app.use(session({
-    secret: 'domahub_market_api',
+    secret: 'domahub_lets_encrypt_api_dev',
     cookie: {
       secure: false
     },
@@ -65,7 +61,7 @@ else {
     cookie: {
       maxAge: 1800000, //30 minutes
     },
-    secret: 'domahub_market_api',
+    secret: 'domahub_lets_encrypt_api_prod',
     saveUninitialized: false,
     resave: true,
     rolling: true
@@ -73,12 +69,12 @@ else {
 }
 
 //API for Lets Encrypt SSL certs for premium domains listed on domahub
-require('./lib/le_api_functions.js')(app, db, error);
+require('./lib/le_api_functions.js')(app, db);
 
 //404 not found
 app.get('*', function(req, res){
   referer = req.header("Referer") || "someone";
-  console.log("404! Unable to find " + req.originalUrl + ". Coming from " + referer);
+  console.log("LEF: 404! Unable to find " + req.originalUrl + ". Coming from " + referer);
   res.sendStatus(404);
 });
 
