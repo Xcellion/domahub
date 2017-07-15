@@ -22,9 +22,14 @@ db.connect();  //connect to the database
 ** SERVER INITIALIZATION
 **************************************************/
 
+//enable CORS (cross origin request sharing)
+var cors = require('cors');
+app.use(cors());
+
 //set the view engine
 app.set('view engine', 'ejs');
 app.set('views', __dirname + '/views');
+app.use(cookieParser());
 
 //which session store to use depending on DEV or PROD
 if (node_env == "dev"){
@@ -33,13 +38,18 @@ if (node_env == "dev"){
   //express session in memory
   app.use(session({
     secret: 'domahub_market_api',
-    saveUninitialized: false,
-    resave: true
+    cookie: {
+      secure: false
+    },
+    saveUninitialized: true,
+    resave: true,
+    rolling: true
   }));
 }
 else {
   console.log("Production environment! Using redis for sessions store for LE API server.");
   var redisStore = require('connect-redis')(session);
+  app.use(cors({origin: 'https://domahub.com'}));
 
   //compression for production traffic
   var compression = require("compression");
@@ -57,7 +67,8 @@ else {
     },
     secret: 'domahub_market_api',
     saveUninitialized: false,
-    resave: true
+    resave: true,
+    rolling: true
   }));
 }
 

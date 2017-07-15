@@ -59,6 +59,15 @@ module.exports = {
     next();
   },
 
+  //delete pipe to DH session variable so we can redirect to DH.com now
+  deletePipeToDH : function(req, res, next){
+    if (typeof req.session.pipe_to_dh != "undefined"){
+      console.log("F: Deleting the pipe to DH session variable...");
+      delete req.session.pipe_to_dh;
+    }
+    next();
+  },
+
   //<editor-fold>-------------------------------CREATE A NEW RENTAL-------------------------------
 
   //create a rental object for checking (for new)
@@ -245,22 +254,33 @@ module.exports = {
     }
   },
 
+  //time check was successful! redirect to checkout
+  redirectToCheckout : function(req, res, next){
+    console.log("F: Redirecting the user to the checkout page for final confirmation of rental...")
+    res.send({
+      state: "success"
+    });
+  },
+
   //renders the checkout page for creating a new rental
   renderCheckout : function(req, res, next){
-    if (req.session.new_rental_info && req.session.new_rental_info.domain_name == req.params.domain_name){
+    var domain_name = (typeof req.session.pipe_to_dh != "undefined") ? req.session.pipe_to_dh : req.params.domain_name;
+
+    if (req.session.new_rental_info && req.session.new_rental_info.domain_name == domain_name){
       console.log("F: Rendering listing checkout page...");
 
       res.render("listings/listing_checkout_rent.ejs", {
         user: req.user,
         message: Auth.messageReset(req),
         listing_info: req.session.listing_info,
-        new_rental_info : req.session.new_rental_info
+        new_rental_info : req.session.new_rental_info,
+        node_env : node_env || "dev"
       });
     }
     else {
       console.log("F: Not checking out! Redirecting to listings page...");
 
-      res.redirect("/listing/" + req.params.domain_name);
+      res.redirect("/listing/" + domain_name);
     }
   },
 
@@ -492,7 +512,7 @@ module.exports = {
         }
 
         //if address exists
-        if (req.body.address != undefined){
+        if (req.body.address != "undefined"){
           req.session.rental_object.db_object.address = address;
         }
         else if (req.body.address == ""){
@@ -708,6 +728,8 @@ module.exports = {
 
   //checks to make sure listing is still verified
   checkStillVerified : function(req, res, next){
+    var domain_name = (typeof req.session.pipe_to_dh != "undefined") ? req.session.pipe_to_dh : req.params.domain_name;
+
     //ignore if unlisted
     if (req.session.listing_info.unlisted){
       next();
@@ -715,7 +737,7 @@ module.exports = {
     else {
       console.log("F: Checking to see if domain is still pointed to DomaHub...");
 
-      dns.resolve(req.params.domain_name, "A", function (err, address, family) {
+      dns.resolve(domain_name, "A", function (err, address, family) {
         //something went wrong in looking up DNS, just mark it inactive
         if (err){
           console.log("F: DNS error! Setting listing to inactive...");
@@ -729,11 +751,11 @@ module.exports = {
             //not pointed to DH anymore
             if (domain_ip != address && domain_ip.length != 1){
               console.log("F: Listing is not pointed to DomaHub anymore! Reverting verification...");
-              Listing.updateListing(req.params.domain_name, {
+              Listing.updateListing(domain_name, {
                 verified: null,
                 status: 0
               }, function(result){
-                getWhoIs(req, res, next, true);
+                getWhoIs(req, res, next, domain_name, true);
               });
             }
 
@@ -754,13 +776,14 @@ module.exports = {
 
   //add to search database
   addToSearchHistory : function(req, res, next){
-    //add to search only if we went directly to listing
-    if (!req.session.from_api && node_env != "dev"){
+    //add to search only if not development
+    if (node_env != "dev"){
+      var domain_name = (typeof req.session.pipe_to_dh != "undefined") ? req.session.pipe_to_dh : req.params.domain_name;
       var account_id = (typeof req.user == "undefined") ? null : req.user.id;
       var now = new Date().getTime();
       var history_info = {
         account_id: account_id,      //who searched if who exists
-        domain_name: req.params.domain_name.toLowerCase(),    //what they searched for
+        domain_name: domain_name.toLowerCase(),    //what they searched for
         timestamp: now,    //when they searched for it
         user_ip : getIP(req),
         referer : req.header("Referer") || req.headers.referer
@@ -896,13 +919,14 @@ module.exports = {
   //function to check if session listing_info exists and get listing info if it doesnt match with current domain_name
   checkSessionListingInfoPost : function(req, res, next){
     console.log("F: Checking if session listing info domain is same as posted domain...");
+    var domain_name = (typeof req.session.pipe_to_dh != "undefined") ? req.session.pipe_to_dh : req.params.domain_name;
 
-    if (req.session.listing_info && req.session.listing_info.domain_name == req.params.domain_name){
+    if (req.session.listing_info && req.session.listing_info.domain_name == domain_name){
       next();
     }
     else {
       console.log("F: Not the correct domain! Getting new session listing info...");
-      getVerifiedListing(req, res, function(result){
+      getVerifiedListing(req, res, domain_name, function(result){
         error.handler(req, res, "Something went wrong with this domain! Please refresh the page and try again.", "json");
       }, function(result){
         req.session.listing_info = result.info[0];
@@ -913,13 +937,14 @@ module.exports = {
 
   //gets the listing info if it is listed
   getListingInfo : function(req, res, next) {
-    console.log("F: Checking if " + req.params.domain_name + " is listed on DomaHub...");
+    var domain_name = (typeof req.session.pipe_to_dh != "undefined") ? req.session.pipe_to_dh : req.params.domain_name;
+    console.log("F: Checking if " + domain_name + " is listed on DomaHub...");
 
-    getVerifiedListing(req, res, function(result){
-      getWhoIs(req, res, next, true);
+    getVerifiedListing(req, res, domain_name, function(result){
+      getWhoIs(req, res, next, domain_name, true);
     }, function(result){
       req.session.listing_info = result.info[0];
-      getWhoIs(req, res, next, false);
+      getWhoIs(req, res, next, domain_name, false);
     });
   },
 
@@ -947,7 +972,9 @@ module.exports = {
 
   //gets any free time periods for free rentals
   getListingFreeTimes : function(req, res, next){
-    Listing.getListingFreeTimes(req.params.domain_name, function(result){
+    var domain_name = (typeof req.session.pipe_to_dh != "undefined") ? req.session.pipe_to_dh : req.params.domain_name;
+
+    Listing.getListingFreeTimes(domain_name, function(result){
       if (result.state =="success"){
         req.session.listing_info.freetimes = result.info;
       }
@@ -1023,16 +1050,8 @@ module.exports = {
 
     res.render("listings/listing.ejs", {
       user: req.user,
-      message: Auth.messageReset(req),
       listing_info: req.session.listing_info,
       compare : (req.query.compare == "true") ? true : false
-    });
-  },
-
-  //time check was successful! redirect to checkout
-  redirectToCheckout : function(req, res, next){
-    res.send({
-      state: "success"
     });
   },
 
@@ -1166,7 +1185,7 @@ module.exports = {
   //asynchronously alert the offerer
   notifyOfferer : function(req, res, next){
     console.log("F: Sending email to offerer to notify of accept/reject status...");
-    
+
     getListingOffererContactInfo(req.params.domain_name, req.params.offer_id, function(offerer_result){
       var email_contents_path = (node_env == "dev") ? path.resolve(process.cwd(), 'server', 'views', 'email', 'offer_notify_buyer.ejs') : path.resolve(process.cwd(), 'views', 'email', 'offer_notify_buyer.ejs');
 
@@ -1309,15 +1328,15 @@ function newListingContactHistory(req, res, next, contact_details){
 //<editor-fold>-------------------------------HELPER FUNCTIONS-------------------------------
 
 //function to get a verified listing's details
-function getVerifiedListing(req, res, callback_success, callback_error){
-  Listing.getVerifiedListing(req.params.domain_name, function(result){
+function getVerifiedListing(req, res, domain_name, callback_success, callback_error){
+  Listing.getVerifiedListing(domain_name, function(result){
     if (result.state=="error"){error.handler(req, res, "Invalid listing!");}
     else if (result.state=="success" && result.info.length <= 0){
-      console.log("F: " + req.params.domain_name + " is NOT listed on DomaHub.");
+      console.log("F: " + domain_name + " is NOT listed on DomaHub.");
       callback_success(result);
     }
     else {
-      console.log("F: " + req.params.domain_name + " is listed on DomaHub!");
+      console.log("F: " +domain_name + " is listed on DomaHub!");
       callback_error(result);
     }
   });
@@ -1376,8 +1395,8 @@ function googleSafeCheck(req, res, address, callback){
 }
 
 //helper function to run whois since domain isn't listed but is a real domain
-function getWhoIs(req, res, next, unlisted){
-  whois.lookup(req.params.domain_name, function(err, data){
+function getWhoIs(req, res, next, domain_name, unlisted){
+  whois.lookup(domain_name, function(err, data){
     //look up domain owner info
     var whoisObj = {};
     if (data){
@@ -1397,7 +1416,7 @@ function getWhoIs(req, res, next, unlisted){
       var owner_name = whoisObj["Registrant Organization"] || whoisObj["Registrant Name"] || "Someone out there";
 
       var listing_info = {
-        domain_name: req.params.domain_name,
+        domain_name: domain_name,
         email: email,
         username: owner_name,
         unlisted: true,
@@ -1441,7 +1460,6 @@ function getWhoIs(req, res, next, unlisted){
 
       res.render("listings/listing.ejs", {
         user: req.user,
-        message: Auth.messageReset(req),
         listing_info: req.session.listing_info,
         compare : (req.query.compare == "true") ? true : false
       });
