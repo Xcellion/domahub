@@ -3,6 +3,7 @@ var validator = require("validator");
 var node_env = process.env.NODE_ENV || 'dev';   //dev or prod bool
 var stripe = require('../lib/stripe.js');
 
+//Lets Encrypt server for custom SSL on demand for all domains listed at DomaHub
 module.exports = function(app, db){
   Listing = new listing_model(db);
 
@@ -14,11 +15,12 @@ module.exports = function(app, db){
   ]);
 }
 
-//function to check if the requested host is not for domahub
+//function to check for hostname
 function checkHost(req, res, next){
   if (req.headers.host){
     var domain_name = req.headers.host.replace(/^(https?:\/\/)?(www\.)?/,'');
 
+    //requested domahub, dont need SSL
     if (domain_name == "www.w3bbi.com"
     || domain_name == "w3bbi.com"
     || domain_name == "www.domahub.com"
@@ -28,6 +30,7 @@ function checkHost(req, res, next){
     || domain_name == "localhost:9090"){
       res.sendStatus(404);
     }
+    //not a legit domain name, dont need SSL
     else if (!validator.isAscii(domain_name) || !validator.isFQDN(domain_name)){
       res.sendStatus(404);
     }
@@ -35,6 +38,7 @@ function checkHost(req, res, next){
       next();
     }
   }
+  //not a legit domain name, dont need SSL
   else {
     res.sendStatus(404);
   }
