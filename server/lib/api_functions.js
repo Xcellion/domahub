@@ -33,6 +33,7 @@ module.exports = function(app, db, e){
 //function to check if the requested host is not for domahub
 function checkHost(req, res, next){
   var domain_name = req.headers.host.replace(/^(https?:\/\/)?(www\.)?/,'');
+  console.log(req.session.id);
 
   //if the cookie set by DH is the same as the requested host, proxy the request to the main server
   if (req.session.pipe_to_dh == domain_name && req.originalUrl != "/"){
@@ -109,6 +110,7 @@ function getCurrentRental(req, res, domain_name, path, next){
 
 //not rented! send to domahub/listings or its own URL if it's premium
 function checkForBasicRedirect(req, res, next){
+  console.log(req.session.id);
 
   //premium! go ahead and display listings on this URL
   if (req.session.listing_info && req.session.listing_info.premium){
