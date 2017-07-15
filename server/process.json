@@ -5,7 +5,7 @@
     env: {
       "NODE_ENV": "dev",
     },
-	watch: ["../server"],
+	watch: true,
 	ignore_watch : ["../node_modules", "../uploads"],
 	watch_options: {
 		followSymlinks: false
@@ -17,11 +17,10 @@
     env: {
       "NODE_ENV": "dev",
     },
-	watch: ["../server"],
+	watch: true,
 	ignore_watch : ["../node_modules", "../uploads"],
 	watch_options: {
 		followSymlinks: false
 	}
-  }
-  ]
+  }]
 }
