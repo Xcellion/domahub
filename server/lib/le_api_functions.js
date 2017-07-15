@@ -53,6 +53,7 @@ function checkListed(req, res, next){
     }
     //not premium! send 404 to NGINX to not bother with SSL
     else {
+      console.log("LEF: " + domain_name + " is not a Premium domain!...");
       res.sendStatus(404);
     }
   });
@@ -60,6 +61,12 @@ function checkListed(req, res, next){
 
 //stripe subscription is active! send ok to NGINX for new SSL certificate
 function sendOkayToNginx(req, res, next){
-  console.log("LEF: " + domain_name + " is a Premium domain! Getting new SSL certificate...");
-  res.sendStatus(200);
+  if (req.session.listing_info.premium){
+    console.log("LEF: " + domain_name + " is a Premium domain! Getting new SSL certificate...");
+    res.sendStatus(200);
+  }
+  else {
+    console.log("LEF: " + domain_name + " is not a Premium domain!...");
+    res.sendStatus(404);
+  }
 }
