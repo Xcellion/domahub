@@ -561,7 +561,7 @@ module.exports = {
   checkStripeSubscription : function(req, res, next){
     var domain_name = (req.session.api_domain) ? req.session.api_domain : req.params.domain_name;
     var listing_info = (req.session.listing_info) ? req.session.listing_info : getUserListingObj(req.user.listings, domain_name);
-
+    console.log(listing_info);
     //if subscription id exists in our database
     if (listing_info && listing_info.stripe_subscription_id){
       console.log("SF: Checking if Stripe subscription for listing is still active...");
