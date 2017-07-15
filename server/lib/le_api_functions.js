@@ -46,6 +46,7 @@ function checkListed(req, res, next){
 
   console.log("LEF: Attempting to check premium status for " + domain_name + "!");
   Listing.checkListingStripe(domain_name, function(result){
+    console.log(result);
     //premium! check stripe now to see if it's an active subscription
     if (result.state == "success" && result.info.length > 0){
       req.session.listing_info = result.info[0];
