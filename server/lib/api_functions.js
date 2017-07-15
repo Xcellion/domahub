@@ -36,21 +36,18 @@ function checkHost(req, res, next){
 
   //if the cookie set by DH is the same as the requested host, proxy the request to the main server
   if (req.session.pipe_to_dh == domain_name && req.originalUrl != "/"){
-    if (node_env == "dev"){
-      next("route");
-    }
-    else {
-      req.pipe(request({
-        url: "https://domahub.com" + req.originalUrl
-      })).pipe(res);
-    }
+    next("route");
   }
   else if (req.headers.host){
 
-    //requested domahub! skip this route and go to next route
+    //requested w3bbi!, redirect to domahub
     if (domain_name == "www.w3bbi.com"
-    || domain_name == "w3bbi.com"
-    || domain_name == "www.domahub.com"
+    || domain_name == "w3bbi.com"){
+      res.redirect("https://domahub.com" + req.originalUrl);
+    }
+    
+    //requested domahub! skip this route and go to next route
+    else if (domain_name == "www.domahub.com"
     || domain_name == "domahub.com"
     || domain_name == "localhost"
     || domain_name == "localhost:8080"
@@ -60,7 +57,7 @@ function checkHost(req, res, next){
 
     //invalid domain host, redirect to domahub main page
     else if (!validator.isAscii(domain_name) || !validator.isFQDN(domain_name)){
-      res.redirect("https://domahub.com");
+      res.redirect("https://domahub.com" + req.originalUrl);
     }
 
     //requested a different host, check if rented
@@ -73,7 +70,7 @@ function checkHost(req, res, next){
 
   //no host header, just redirect to domahub
   else {
-    res.redirect("https://domahub.com");
+    res.redirect("https://domahub.com" + req.originalUrl);
   }
 }
 
