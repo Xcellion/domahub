@@ -4,9 +4,10 @@ var data_model = require('../models/data_model.js');
 
 var search_functions = require("../routes/listings/listings_search_functions.js");
 var renter_functions = require("../routes/listings/listings_renter_functions.js");
+var stripe = require("../lib/stripe.js");
 
 var validator = require("validator");
-var  request = require('request');
+var request = require('request');
 var url = require('url');
 var fs = require('fs');
 var path = require('path');
@@ -18,15 +19,35 @@ module.exports = function(app, db, e){
   Account = new account_model(db);
   Data = new data_model(db);
 
-  app.use("*", checkHost);
+  app.all("*", [
+    checkHost,
+    renter_functions.getListingInfo,
+    stripe.checkStripeSubscription,
+    checkForBasicRedirect,
+    renter_functions.addToSearchHistory,
+    renter_functions.checkStillVerified,
+    renter_functions.renderListing
+  ]);
 }
 
 //function to check if the requested host is not for domahub
 function checkHost(req, res, next){
-  if (req.headers.host){
-    var domain_name = req.headers.host.replace(/^(https?:\/\/)?(www\.)?/,'');
-    var path = req.originalUrl.substr(1, req.originalUrl.length);
+  var domain_name = req.headers.host.replace(/^(https?:\/\/)?(www\.)?/,'');
 
+  //if the cookie set by DH is the same as the requested host, proxy the request to the main server
+  if (req.session.pipe_to_dh == domain_name && req.originalUrl != "/"){
+    if (node_env == "dev"){
+      next("route");
+    }
+    else {
+      req.pipe(request({
+        url: "https://domahub.com" + req.originalUrl
+      })).pipe(res);
+    }
+  }
+  else if (req.headers.host){
+
+    //requested domahub! skip this route and go to next route
     if (domain_name == "www.w3bbi.com"
     || domain_name == "w3bbi.com"
     || domain_name == "www.domahub.com"
@@ -34,37 +55,50 @@ function checkHost(req, res, next){
     || domain_name == "localhost"
     || domain_name == "localhost:8080"
     || domain_name == "localhost:9090"){
-      error.handler(req, res, "Requested DomaHub!", "api");
+      next("route");
     }
+
+    //invalid domain host, redirect to domahub main page
     else if (!validator.isAscii(domain_name) || !validator.isFQDN(domain_name)){
-      error.handler(req, res, "Invalid domain name!");
+      res.redirect("https://domahub.com");
     }
+
+    //requested a different host, check if rented
     else {
-      getCurrentRental(req, res, domain_name, path);
+      var path = req.originalUrl.substr(1, req.originalUrl.length);
+      delete req.session.pipe_to_dh;
+      getCurrentRental(req, res, domain_name, path, next);
     }
   }
+
+  //no host header, just redirect to domahub
   else {
-    error.handler(req, res, "Requested DomaHub!", "api");
+    res.redirect("https://domahub.com");
   }
 }
 
 //send the current rental details and information for a listing
-function getCurrentRental(req, res, domain_name, path){
+function getCurrentRental(req, res, domain_name, path, next){
   //requesting something besides main page, pipe the request
   if (req.session.rented_info && req.session.rented_info.path == path){
-    console.log("F: Proxying rental request for an existing session for " + domain_name + "!");
+    console.log("AF: Proxying rental request for an existing session for " + domain_name + "!");
     searchAndDirect(req.session.rented_info, req, res);
   }
   else {
-    console.log("F: Attempting to check current rental status for " + domain_name + "!");
+    console.log("AF: Attempting to check current rental status for " + domain_name + "!");
     Listing.getCurrentRental(domain_name, path, function(result){
+
+      //not rented! check if it's premium to see if we should use domahub URL or custom URL
       if (result.state != "success" || result.info.length == 0){
-        console.log("F: Not rented! Redirecting to listing page");
+        console.log("AF: Not rented! Redirecting to listing page...");
         delete req.session.rented_info;
-        res.redirect("https://domahub.com/listing/" + domain_name + "?wanted=" + path);
+
+        //used to replace req.params domain name variable since there is none coming from API
+        req.session.pipe_to_dh = domain_name;
+        next();
       }
+      //rented! add it to rental stats
       else {
-        //add it to rental stats
         search_functions.newRentalHistory(result.info[0].rental_id, req);
         searchAndDirect(result.info[0], req, res);
       }
@@ -73,24 +107,42 @@ function getCurrentRental(req, res, domain_name, path){
 
 }
 
-//function to add to search and decide where to proxy
+//not rented! send to domahub/listings or its own URL if it's premium
+function checkForBasicRedirect(req, res, next){
+
+  //premium! go ahead and display listings on this URL
+  if (req.session.listing_info && req.session.listing_info.premium){
+    console.log("AF: Premium domain! Display listing on custom URL...");
+    res.session.pipe_to_dh = req.headers.host.replace(/^(https?:\/\/)?(www\.)?/,'');
+    next();
+  }
+
+  //basic domain! redirect to /listings
+  else {
+    console.log("AF: Basic domain! Redirecting to DomaHub...");
+    var path = req.originalUrl.substr(1, req.originalUrl.length);
+    res.redirect("https://domahub.com/listing/" + req.session.listing_info.domain_name + "?wanted=" + path);
+  }
+}
+
+//rented! add to search and decide where to proxy
 function searchAndDirect(rental_info, req, res){
-  console.log("F: Currently rented!");
+  console.log("AF: Currently rented!");
 
   //proxy the request
   if (rental_info.address){
     if (rental_info.type == 0){
-      console.log("F: Displaying content from " + rental_info.address + "...");
+      console.log("AF: Displaying content from " + rental_info.address + "...");
       req.session.rented_info = rental_info;
       requestProxy(req, res, rental_info);
     }
     else {
-      console.log("F: Forwarding website to " + rental_info.address + "...");
+      console.log("AF: Forwarding website to " + rental_info.address + "...");
       res.redirect(rental_info.address);
     }
   }
   else {
-    console.log("F: No address associated with rental! Displaying default empty page...");
+    console.log("AF: No address associated with rental! Displaying default empty page...");
     var image_path = (node_env == "dev") ? path.resolve(process.cwd(), 'server', 'views', 'proxy', 'proxy-image.ejs') : path.resolve(process.cwd(), 'views', 'proxy', 'proxy-image.ejs');
     res.render(image_path, {
       image: "",
@@ -114,7 +166,7 @@ function requestProxy(req, res, rental_info){
   }, function (err, response, body) {
     //an image/PDF was requested
     if (response.headers['content-type'].indexOf("image") != -1 || response.headers['content-type'].indexOf("pdf") != -1){
-      console.log("F: Requested rental address was an image/PDF!");
+      console.log("AF: Requested rental address was an image/PDF!");
       var image_path = (node_env == "dev") ? path.resolve(process.cwd(), 'server', 'views', 'proxy', 'proxy-image.ejs') : path.resolve(process.cwd(), 'views', 'proxy', 'proxy-image.ejs');
 
       res.render(image_path, {
@@ -126,7 +178,7 @@ function requestProxy(req, res, rental_info){
       });
     }
     else {
-      console.log("F: Requested rental address was a website!");
+      console.log("AF: Requested rental address was a website!");
 
       //pathes for the domahub overlay
       var index_path = (node_env == "dev") ? path.resolve(process.cwd(), 'server', 'views', 'proxy', 'proxy-index.ejs') : path.resolve(process.cwd(), 'views', 'proxy', 'proxy-index.ejs');

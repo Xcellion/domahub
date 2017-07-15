@@ -320,7 +320,7 @@ module.exports = function(app, db, auth, error, stripe){
     renter_functions.getListingInfo,
     renter_functions.checkStillVerified,
     stripe.checkStripeSubscription,
-    renter_functions.getListingFreeTimes,
+    // renter_functions.getListingFreeTimes,
     renter_functions.renderListing
   ]);
 
@@ -364,6 +364,7 @@ module.exports = function(app, db, auth, error, stripe){
     urlencodedParser,
     checkDomainValid,
     checkDomainListed,
+    // renter_functions.deletePipeToDH,
     renter_functions.checkSessionListingInfoPost,
     renter_functions.getListingFreeTimes,
     renter_functions.createNewRentalObject,

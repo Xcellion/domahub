@@ -196,7 +196,7 @@ $(document).ready(function () {
     //--------------------------------------------------------------------------------------------------------- PAYMENT
 
     //key for stripe
-    if (window.location.hostname == "localhost"){
+    if (node_env == "dev"){
         Stripe.setPublishableKey('pk_test_kcmOEkkC3QtULG5JiRMWVODJ');
     }
     else {

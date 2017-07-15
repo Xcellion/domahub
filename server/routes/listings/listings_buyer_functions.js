@@ -55,7 +55,8 @@ module.exports = {
         user: req.user,
         message: Auth.messageReset(req),
         listing_info: req.session.listing_info,
-        new_buying_info: req.session.new_buying_info
+        new_buying_info: req.session.new_buying_info,
+        node_env : node_env || "dev"
       });
     }
     else {
