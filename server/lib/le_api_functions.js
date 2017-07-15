@@ -65,6 +65,8 @@ function checkListed(req, res, next){
 
 //stripe subscription is active! send ok to NGINX for new SSL certificate
 function sendOkayToNginx(req, res, next){
+  var domain_name = req.headers.host.replace(/^(https?:\/\/)?(www\.)?/,'');
+  
   if (req.session.listing_info.premium){
     console.log("LEF: " + domain_name + " is a Premium domain! Getting new SSL certificate...");
     res.sendStatus(200);
