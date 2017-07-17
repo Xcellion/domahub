@@ -34,8 +34,14 @@ module.exports = function(app, db, e){
 function checkHost(req, res, next){
   var domain_name = req.headers.host.replace(/^(https?:\/\/)?(www\.)?/,'');
 
+  //skip rental check for some reason (if requested a path besides / and was redirected)
+  if (req.session.skip_rental_check){
+    delete req.session.skip_rental_check;
+    req.session.pipe_to_dh = req.headers.host.replace(/^(https?:\/\/)?(www\.)?/,'');
+    next();
+  }
   //if the cookie set by DH is the same as the requested host, proxy the request to the main server
-  if (req.session.pipe_to_dh == domain_name && req.originalUrl != "/"){
+  else if (req.session.pipe_to_dh == domain_name && req.originalUrl.indexOf("listing") != -1){
     next("route");
   }
   else if (req.headers.host){
@@ -110,8 +116,16 @@ function checkForBasicRedirect(req, res, next){
   //premium! go ahead and display listings on this URL
   if (req.session.listing_info && req.session.listing_info.premium){
     console.log("AF: Premium domain! Display listing on custom URL...");
-    req.session.pipe_to_dh = req.headers.host.replace(/^(https?:\/\/)?(www\.)?/,'');
-    next();
+
+    //redirect to base path if it's requesting something weird
+    if (req.originalUrl != "/"){
+      req.session.skip_rental_check = true;
+      res.redirect("/");
+    }
+    else {
+      req.session.pipe_to_dh = req.headers.host.replace(/^(https?:\/\/)?(www\.)?/,'');
+      next();
+    }
   }
 
   //basic domain! redirect to /listings
