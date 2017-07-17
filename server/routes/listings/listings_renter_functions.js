@@ -1108,7 +1108,6 @@ module.exports = {
     console.log("F: Sending email to offerer to verify email...");
 
     var email_contents_path = path.resolve(process.cwd(), 'server', 'views', 'email', 'offer_verify_email.ejs');
-    console.log("WHJKKJFJADLF", email_contents_path, process.cwd());
 
     var EJSVariables = {
       premium: req.session.listing_info.premium || false,

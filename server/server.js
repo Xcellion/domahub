@@ -7,8 +7,6 @@ serverHTTP = function(application){
   return http.createServer(application);
 };
 
-console.log(process.cwd());
-
 var bodyParser   = require('body-parser'),
 cookieParser = require('cookie-parser'),
 session = require('express-session'),
@@ -139,6 +137,6 @@ app.get('*', function(req, res){
 });
 
 //HTTP website on port 8080
-serverHTTP(app).listen(8080, function(){
+serverHTTP(app).listen(80, function(){
   console.log("HTTP website listening on port 8080");
 });

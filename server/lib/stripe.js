@@ -582,7 +582,10 @@ module.exports = {
       });
     }
     else {
-      listing_info.premium = false;
+      //only set it to basic if we havent already checked and premium is set
+      if (typeof listing_info.premium == "undefined"){
+        listing_info.premium = false;
+      }
       next();
     }
   },
