@@ -102,7 +102,7 @@ module.exports = {
     console.log("F: Alerting the owner of a new BIN purchase!");
 
     //get the listing owner contact information to email
-    var email_contents_path = (node_env == "dev") ? path.resolve(process.cwd(), 'server', 'views', 'email', 'bin_notify_owner.ejs') : path.resolve(process.cwd(), 'views', 'email', 'bin_notify_owner.ejs');
+    var email_contents_path = path.resolve(process.cwd(), 'server', 'views', 'email', 'bin_notify_owner.ejs');
     var price_formatted = moneyFormat.to(parseFloat(req.session.listing_info.buy_price));
     var EJSVariables = {
       domain_name: req.session.listing_info.domain_name,
@@ -131,7 +131,7 @@ module.exports = {
     console.log("F: Alerting the buyer of next steps!");
 
     //get the listing owner contact information to email
-    var email_contents_path = (node_env == "dev") ? path.resolve(process.cwd(), 'server', 'views', 'email', 'bin_notify_buyer.ejs') : path.resolve(process.cwd(), 'views', 'email', 'bin_notify_buyer.ejs');
+    var email_contents_path = path.resolve(process.cwd(), 'server', 'views', 'email', 'bin_notify_buyer.ejs');
 
     var price_formatted = moneyFormat.to(parseFloat(req.session.listing_info.buy_price));
     var EJSVariables = {
@@ -279,7 +279,7 @@ module.exports = {
   notifyOfferer : function(req, res, next){
     console.log("F: Sending email to offerer to notify of accept/reject status...");
     getListingOffererContactInfo(req.params.domain_name, req.params.verification_code, function(offerer_result){
-      var email_contents_path = (node_env == "dev") ? path.resolve(process.cwd(), 'server', 'views', 'email', 'offer_notify_buyer.ejs') : path.resolve(process.cwd(), 'views', 'email', 'offer_notify_buyer.ejs');
+      var email_contents_path = path.resolve(process.cwd(), 'server', 'views', 'email', 'offer_notify_buyer.ejs');
 
       var accepted = req.path.indexOf("/accept") != -1;
       var accepted_text = (accepted) ? "accepted" : "rejected";
