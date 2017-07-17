@@ -20,9 +20,9 @@ module.exports = function(app, db, auth, error, stripe){
   Data = new data_model(db);
 
   //render listing hub
-  app.get("/listings", [
-    search_functions.renderListingHub
-  ]);
+  // app.get("/listings", [
+  //   search_functions.renderListingHub
+  // ]);
 
   //get more listings for the listings hub
   app.post("/listings", [
