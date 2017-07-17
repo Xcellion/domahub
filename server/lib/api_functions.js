@@ -140,7 +140,7 @@ function searchAndDirect(rental_info, req, res){
   }
   else {
     console.log("AF: No address associated with rental! Displaying default empty page...");
-    var image_path = (node_env == "dev") ? path.resolve(process.cwd(), 'server', 'views', 'proxy', 'proxy-image.ejs') : path.resolve(process.cwd(), 'views', 'proxy', 'proxy-image.ejs');
+    var image_path = path.resolve(process.cwd(), 'server', 'views', 'proxy', 'proxy-image.ejs');
     res.render(image_path, {
       image: "",
       edit: false,
@@ -164,7 +164,7 @@ function requestProxy(req, res, rental_info){
     //an image/PDF was requested
     if (response.headers['content-type'].indexOf("image") != -1 || response.headers['content-type'].indexOf("pdf") != -1){
       console.log("AF: Requested rental address was an image/PDF!");
-      var image_path = (node_env == "dev") ? path.resolve(process.cwd(), 'server', 'views', 'proxy', 'proxy-image.ejs') : path.resolve(process.cwd(), 'views', 'proxy', 'proxy-image.ejs');
+      var image_path = path.resolve(process.cwd(), 'server', 'views', 'proxy', 'proxy-image.ejs');
 
       res.render(image_path, {
         image: rental_info.address,
@@ -178,8 +178,8 @@ function requestProxy(req, res, rental_info){
       console.log("AF: Requested rental address was a website!");
 
       //pathes for the domahub overlay
-      var index_path = (node_env == "dev") ? path.resolve(process.cwd(), 'server', 'views', 'proxy', 'proxy-index.ejs') : path.resolve(process.cwd(), 'views', 'proxy', 'proxy-index.ejs');
-      var noedit_path = (node_env == "dev") ? path.resolve(process.cwd(), 'server', 'views', 'proxy', 'proxy-noedit.ejs') : path.resolve(process.cwd(), 'views', 'proxy', 'proxy-noedit.ejs');
+      var index_path = path.resolve(process.cwd(), 'server', 'views', 'proxy', 'proxy-index.ejs');
+      var noedit_path = path.resolve(process.cwd(), 'server', 'views', 'proxy', 'proxy-noedit.ejs');
       var rental_info_buffer = new Buffer("<script>var doma_rental_info = " + JSON.stringify(rental_info) + "</script>");
 
       var proxy_index = fs.readFileSync(index_path);

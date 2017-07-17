@@ -627,8 +627,8 @@ module.exports = {
         if (response.headers['content-type'].indexOf("image") == -1 && response.headers['content-type'].indexOf("pdf") == -1){
           console.log("F: Requested rental address was a website!");
 
-          var index_path = (node_env == "dev") ? path.resolve(process.cwd(), 'server', 'views', 'proxy', 'proxy-index.ejs') : path.resolve(process.cwd(), 'views', 'proxy', 'proxy-index.ejs');
-          var preview_path = (node_env == "dev") ? path.resolve(process.cwd(), 'server', 'views', 'proxy', 'proxy-preview.ejs') : path.resolve(process.cwd(), 'views', 'proxy', 'proxy-preview.ejs');
+          var index_path = path.resolve(process.cwd(), 'server', 'views', 'proxy', 'proxy-index.ejs');
+          var preview_path = path.resolve(process.cwd(), 'server', 'views', 'proxy', 'proxy-preview.ejs');
 
           var proxy_index = fs.readFileSync(index_path);
           var proxy_preview = fs.readFileSync(preview_path);
@@ -637,12 +637,12 @@ module.exports = {
 
           //if authenticated to edit the rental preview
           if (req.session.proxy_edit){
-            var edit_path = (node_env == "dev") ? path.resolve(process.cwd(), 'server', 'views', 'proxy', 'proxy-edit.ejs') : path.resolve(process.cwd(), 'views', 'proxy', 'proxy-edit.ejs');
+            var edit_path = path.resolve(process.cwd(), 'server', 'views', 'proxy', 'proxy-edit.ejs');
             var proxy_preview = fs.readFileSync(edit_path);
             buffer_array.push(proxy_preview);
           }
           else {
-            var noedit_path = (node_env == "dev") ? path.resolve(process.cwd(), 'server', 'views', 'proxy', 'proxy-noedit.ejs') : path.resolve(process.cwd(), 'views', 'proxy', 'proxy-noedit.ejs');
+            var noedit_path = path.resolve(process.cwd(), 'server', 'views', 'proxy', 'proxy-noedit.ejs');
             var proxy_nopreview = fs.readFileSync(noedit_path);
             buffer_array.push(proxy_nopreview);
           }
@@ -1107,7 +1107,7 @@ module.exports = {
   sendContactVerificationEmail : function(req, res, next){
     console.log("F: Sending email to offerer to verify email...");
 
-    var email_contents_path = (node_env == "dev") ? path.resolve(process.cwd(), 'server', 'views', 'email', 'offer_verify_email.ejs') : path.resolve(process.cwd(), 'views', 'email', 'offer_verify_email.ejs');
+    var email_contents_path = path.resolve(process.cwd(), 'server', 'views', 'email', 'offer_verify_email.ejs');
 
     var EJSVariables = {
       premium: req.session.listing_info.premium || false,
@@ -1156,7 +1156,7 @@ module.exports = {
       //get the listing owner contact information to email
       getListingOwnerContactInfo(req.params.domain_name, function(owner_result){
         getListingOffererContactInfo(req.params.domain_name, req.params.verification_code, function(offerer_result){
-          var email_contents_path = (node_env == "dev") ? path.resolve(process.cwd(), 'server', 'views', 'email', 'offer_notify_owner.ejs') : path.resolve(process.cwd(), 'views', 'email', 'offer_notify_owner.ejs');
+          var email_contents_path = path.resolve(process.cwd(), 'server', 'views', 'email', 'offer_notify_owner.ejs');
           var offer_formatted = moneyFormat.to(parseFloat(offerer_result.offer))
           var EJSVariables = {
             domain_name: req.params.domain_name,
@@ -1187,7 +1187,7 @@ module.exports = {
     console.log("F: Sending email to offerer to notify of accept/reject status...");
 
     getListingOffererContactInfo(req.params.domain_name, req.params.offer_id, function(offerer_result){
-      var email_contents_path = (node_env == "dev") ? path.resolve(process.cwd(), 'server', 'views', 'email', 'offer_notify_buyer.ejs') : path.resolve(process.cwd(), 'views', 'email', 'offer_notify_buyer.ejs');
+      var email_contents_path = path.resolve(process.cwd(), 'server', 'views', 'email', 'offer_notify_buyer.ejs');
 
       var accepted = req.path.indexOf("/accept") != -1;
       var accepted_text = (accepted) ? "accepted" : "rejected";

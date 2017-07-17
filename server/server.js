@@ -7,8 +7,6 @@ serverHTTP = function(application){
   return http.createServer(application);
 };
 
-console.log(process.cwd());
-
 var bodyParser   = require('body-parser'),
 cookieParser = require('cookie-parser'),
 session = require('express-session'),
