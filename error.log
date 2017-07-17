@@ -706,3 +706,317 @@ Details:
 2017/07/14 21:48:50 [notice] 22006#22006: *623 [lua] init_by_lua:20: allow_domain(): Failed to request: bad uri: 127.0.0.1:9090, context: ssl_certificate_by_lua*, client: 74.108.133.133, server: 0.0.0.0:443
 2017/07/14 21:48:50 [notice] 22006#22006: *623 [lua] ssl_certificate.lua:249: auto-ssl: domain not allowed - using fallback - eraisawesome.com, context: ssl_certificate_by_lua*, client: 74.108.133.133, server: 0.0.0.0:443
 2017/07/14 21:48:50 [info] 22006#22006: *622 client closed connection while waiting for request, client: 74.108.133.133, server: 0.0.0.0:443
+2017/07/14 21:54:09 [debug] 22911#22911: *628 [lua] http.lua:610: send_request(): 
+GET / HTTP/1.1
+User-Agent: lua-resty-http/0.10 (Lua) ngx_lua/10008
+Host: eraisawesome.com
+DomaApi: true
+
+
+2017/07/14 21:54:10 [notice] 22911#22911: *628 [lua] init_by_lua:25: allow_domain(): Premium listing! Getting SSL certificate..., context: ssl_certificate_by_lua*, client: 74.108.133.133, server: 0.0.0.0:443
+2017/07/14 21:54:13 [warn] 22911#22911: *638 an upstream response is buffered to a temporary file /usr/local/openresty/nginx/proxy_temp/3/00/0000000003 while reading upstream, client: 74.108.133.133, server: , request: "GET /js/lib/chart.min.js HTTP/1.1", upstream: "http://127.0.0.1:8080/js/lib/chart.min.js", host: "eraisawesome.com", referrer: "https://eraisawesome.com/"
+2017/07/14 21:54:44 [info] 22911#22911: *636 client 74.108.133.133 closed keepalive connection
+2017/07/14 21:54:44 [info] 22911#22911: *634 client 74.108.133.133 closed keepalive connection
+2017/07/14 21:54:44 [info] 22911#22911: *626 client 74.108.133.133 closed keepalive connection
+2017/07/14 21:54:44 [info] 22911#22911: *627 client 74.108.133.133 closed keepalive connection
+2017/07/14 21:54:44 [info] 22911#22911: *633 client 74.108.133.133 closed keepalive connection
+2017/07/14 21:54:44 [info] 22911#22911: *638 client 74.108.133.133 closed keepalive connection
+2017/07/14 21:54:44 [info] 22911#22911: *632 client 74.108.133.133 closed keepalive connection
+2017/07/14 21:55:35 [debug] 22911#22911: *664 [lua] http.lua:610: send_request(): 
+GET / HTTP/1.1
+User-Agent: lua-resty-http/0.10 (Lua) ngx_lua/10008
+Host: w3bbi.com
+DomaApi: true
+
+
+2017/07/14 21:55:35 [notice] 22911#22911: *664 [lua] init_by_lua:30: allow_domain(): Not Premium! No need for SSL..., context: ssl_certificate_by_lua*, client: 74.108.133.133, server: 0.0.0.0:443
+2017/07/14 21:55:35 [notice] 22911#22911: *664 [lua] ssl_certificate.lua:249: auto-ssl: domain not allowed - using fallback - w3bbi.com, context: ssl_certificate_by_lua*, client: 74.108.133.133, server: 0.0.0.0:443
+2017/07/14 21:55:47 [info] 22911#22911: *668 client 74.108.133.133 closed keepalive connection
+2017/07/14 21:55:47 [info] 22911#22911: *676 client closed connection while waiting for request, client: 74.108.133.133, server: 0.0.0.0:443
+2017/07/14 21:55:47 [info] 22911#22911: *675 client closed connection while waiting for request, client: 74.108.133.133, server: 0.0.0.0:443
+2017/07/14 21:55:47 [info] 22911#22911: *663 client 74.108.133.133 closed keepalive connection
+2017/07/14 21:55:47 [info] 22911#22911: *673 client 74.108.133.133 closed keepalive connection
+2017/07/14 21:55:47 [info] 22911#22911: *672 client 74.108.133.133 closed keepalive connection
+2017/07/14 21:55:47 [info] 22911#22911: *662 client 74.108.133.133 closed keepalive connection
+2017/07/14 21:56:24 [info] 22911#22911: *683 client 74.108.133.133 closed keepalive connection
+2017/07/14 21:56:27 [debug] 22911#22911: *685 [lua] http.lua:610: send_request(): 
+GET / HTTP/1.1
+User-Agent: lua-resty-http/0.10 (Lua) ngx_lua/10008
+Host: w3bbi.com
+DomaApi: true
+
+
+2017/07/14 21:56:27 [notice] 22911#22911: *685 [lua] init_by_lua:30: allow_domain(): Not Premium! No need for SSL..., context: ssl_certificate_by_lua*, client: 74.108.133.133, server: 0.0.0.0:443
+2017/07/14 21:56:27 [notice] 22911#22911: *685 [lua] ssl_certificate.lua:249: auto-ssl: domain not allowed - using fallback - w3bbi.com, context: ssl_certificate_by_lua*, client: 74.108.133.133, server: 0.0.0.0:443
+2017/07/14 21:56:27 [info] 22911#22911: *684 client 74.108.133.133 closed keepalive connection
+2017/07/14 22:00:53 [debug] 22911#22911: *688 [lua] http.lua:610: send_request(): 
+GET / HTTP/1.1
+User-Agent: lua-resty-http/0.10 (Lua) ngx_lua/10008
+Host: eraisawesome.com
+DomaApi: true
+
+
+2017/07/14 22:00:53 [notice] 22911#22911: *688 [lua] init_by_lua:30: allow_domain(): Not Premium! No need for SSL..., context: ssl_certificate_by_lua*, client: 74.108.133.133, server: 0.0.0.0:443
+2017/07/14 22:00:53 [notice] 22911#22911: *688 [lua] ssl_certificate.lua:249: auto-ssl: domain not allowed - using fallback - eraisawesome.com, context: ssl_certificate_by_lua*, client: 74.108.133.133, server: 0.0.0.0:443
+2017/07/14 22:00:53 [info] 22911#22911: *687 client closed connection while waiting for request, client: 74.108.133.133, server: 0.0.0.0:443
+2017/07/14 22:03:30 [debug] 22911#22911: *692 [lua] http.lua:610: send_request(): 
+GET / HTTP/1.1
+User-Agent: lua-resty-http/0.10 (Lua) ngx_lua/10008
+Host: w3bbi.com
+DomaApi: true
+
+
+2017/07/14 22:03:30 [notice] 22911#22911: *692 [lua] init_by_lua:30: allow_domain(): Not Premium! No need for SSL..., context: ssl_certificate_by_lua*, client: 74.108.133.133, server: 0.0.0.0:443
+2017/07/14 22:03:30 [notice] 22911#22911: *692 [lua] ssl_certificate.lua:249: auto-ssl: domain not allowed - using fallback - w3bbi.com, context: ssl_certificate_by_lua*, client: 74.108.133.133, server: 0.0.0.0:443
+2017/07/14 22:03:33 [info] 22911#22911: *690 client 74.108.133.133 closed keepalive connection
+2017/07/14 22:03:33 [info] 22911#22911: *691 client 74.108.133.133 closed keepalive connection
+2017/07/14 22:12:53 [debug] 25795#25795: *698 [lua] http.lua:610: send_request(): 
+GET / HTTP/1.1
+User-Agent: lua-resty-http/0.10 (Lua) ngx_lua/10008
+Host: eraisawesome.com
+DomaApi: true
+
+
+2017/07/14 22:12:54 [notice] 25795#25795: *698 [lua] init_by_lua:30: allow_domain(): Not Premium! No need for SSL..., context: ssl_certificate_by_lua*, client: 74.108.133.133, server: 0.0.0.0:443
+2017/07/14 22:12:54 [error] 25795#25795: *698 [lua] ssl_certificate.lua:274: ssl_certificate(): auto-ssl: failed to run do_ssl: init_by_lua:31: attempt to perform arithmetic on a string value, context: ssl_certificate_by_lua*, client: 74.108.133.133, server: 0.0.0.0:443
+2017/07/14 22:12:54 [info] 25795#25795: *697 client closed connection while waiting for request, client: 74.108.133.133, server: 0.0.0.0:443
+2017/07/14 22:18:08 [debug] 26666#26666: *703 [lua] http.lua:610: send_request(): 
+GET / HTTP/1.1
+User-Agent: lua-resty-http/0.10 (Lua) ngx_lua/10008
+Host: eraisawesome.com
+DomaApi: true
+
+
+2017/07/14 22:18:09 [notice] 26666#26666: *703 [lua] init_by_lua:30: allow_domain(): Not Premium! No need for SSL..., context: ssl_certificate_by_lua*, client: 74.108.133.133, server: 0.0.0.0:443
+2017/07/14 22:18:09 [error] 26666#26666: *703 [lua] ssl_certificate.lua:274: ssl_certificate(): auto-ssl: failed to run do_ssl: init_by_lua:31: attempt to perform arithmetic on a string value, context: ssl_certificate_by_lua*, client: 74.108.133.133, server: 0.0.0.0:443
+2017/07/14 22:18:09 [info] 26666#26666: *702 client closed connection while waiting for request, client: 74.108.133.133, server: 0.0.0.0:443
+2017/07/14 22:18:59 [debug] 26869#26869: *708 [lua] http.lua:610: send_request(): 
+GET / HTTP/1.1
+User-Agent: lua-resty-http/0.10 (Lua) ngx_lua/10008
+Host: eraisawesome.com
+DomaApi: true
+
+
+2017/07/14 22:18:59 [notice] 26869#26869: *708 [lua] init_by_lua:30: allow_domain(): Not Premium! No need for SSL..., context: ssl_certificate_by_lua*, client: 74.108.133.133, server: 0.0.0.0:443
+2017/07/14 22:18:59 [error] 26869#26869: *708 [lua] ssl_certificate.lua:274: ssl_certificate(): auto-ssl: failed to run do_ssl: init_by_lua:31: attempt to concatenate global 'domain_name' (a nil value), context: ssl_certificate_by_lua*, client: 74.108.133.133, server: 0.0.0.0:443
+2017/07/14 22:18:59 [info] 26869#26869: *707 client closed connection while waiting for request, client: 74.108.133.133, server: 0.0.0.0:443
+2017/07/14 22:19:26 [debug] 26999#26999: *713 [lua] http.lua:610: send_request(): 
+GET / HTTP/1.1
+User-Agent: lua-resty-http/0.10 (Lua) ngx_lua/10008
+Host: eraisawesome.com
+DomaApi: true
+
+
+2017/07/14 22:19:26 [notice] 26999#26999: *713 [lua] init_by_lua:30: allow_domain(): Not Premium! No need for SSL..., context: ssl_certificate_by_lua*, client: 74.108.133.133, server: 0.0.0.0:443
+2017/07/14 22:19:26 [error] 26999#26999: *713 [lua] ssl_certificate.lua:274: ssl_certificate(): auto-ssl: failed to run do_ssl: init_by_lua:31: API disabled in the context of ssl_certificate_by_lua*, context: ssl_certificate_by_lua*, client: 74.108.133.133, server: 0.0.0.0:443
+2017/07/14 22:19:26 [info] 26999#26999: *712 client closed connection while waiting for request, client: 74.108.133.133, server: 0.0.0.0:443
+2017/07/14 22:20:01 [debug] 27131#27131: *718 [lua] http.lua:610: send_request(): 
+GET / HTTP/1.1
+User-Agent: lua-resty-http/0.10 (Lua) ngx_lua/10008
+Host: eraisawesome.com
+DomaApi: true
+
+
+2017/07/14 22:20:01 [notice] 27131#27131: *718 [lua] init_by_lua:30: allow_domain(): Not Premium! No need for SSL..., context: ssl_certificate_by_lua*, client: 74.108.133.133, server: 0.0.0.0:443
+2017/07/14 22:20:01 [error] 27131#27131: *718 [lua] ssl_certificate.lua:274: ssl_certificate(): auto-ssl: failed to run do_ssl: /usr/local/share/lua/5.1/resty/auto-ssl/ssl_certificate.lua:248: API disabled in the context of ssl_certificate_by_lua*, context: ssl_certificate_by_lua*, client: 74.108.133.133, server: 0.0.0.0:443
+2017/07/14 22:20:01 [info] 27131#27131: *717 client closed connection while waiting for request, client: 74.108.133.133, server: 0.0.0.0:443
+2017/07/14 22:30:47 [debug] 28709#28709: *723 [lua] http.lua:610: send_request(): 
+GET / HTTP/1.1
+User-Agent: lua-resty-http/0.10 (Lua) ngx_lua/10008
+Host: eraisawesome.com
+DomaApi: true
+
+
+2017/07/14 22:30:47 [notice] 28709#28709: *723 [lua] init_by_lua:30: allow_domain(): Not Premium! No need for SSL..., context: ssl_certificate_by_lua*, client: 74.108.133.133, server: 0.0.0.0:443
+2017/07/14 22:30:47 [error] 28709#28709: *723 [lua] ssl_certificate.lua:274: ssl_certificate(): auto-ssl: failed to run do_ssl: init_by_lua:31: API disabled in the context of ssl_certificate_by_lua*, context: ssl_certificate_by_lua*, client: 74.108.133.133, server: 0.0.0.0:443
+2017/07/14 22:30:47 [info] 28709#28709: *722 client closed connection while waiting for request, client: 74.108.133.133, server: 0.0.0.0:443
+2017/07/14 22:31:55 [debug] 28986#28986: *728 [lua] http.lua:610: send_request(): 
+GET / HTTP/1.1
+User-Agent: lua-resty-http/0.10 (Lua) ngx_lua/10008
+Host: eraisawesome.com
+DomaApi: true
+
+
+2017/07/14 22:31:55 [notice] 28986#28986: *728 [lua] init_by_lua:30: allow_domain(): Not Premium! No need for SSL..., context: ssl_certificate_by_lua*, client: 74.108.133.133, server: 0.0.0.0:443
+2017/07/14 22:31:55 [error] 28986#28986: *728 [lua] ssl_certificate.lua:274: ssl_certificate(): auto-ssl: failed to run do_ssl: /usr/local/share/lua/5.1/resty/auto-ssl/ssl_certificate.lua:248: API disabled in the context of ssl_certificate_by_lua*, context: ssl_certificate_by_lua*, client: 74.108.133.133, server: 0.0.0.0:443
+2017/07/14 22:31:55 [info] 28986#28986: *727 client closed connection while waiting for request, client: 74.108.133.133, server: 0.0.0.0:443
+2017/07/14 22:37:19 [debug] 29770#29770: *733 [lua] http.lua:610: send_request(): 
+GET / HTTP/1.1
+User-Agent: lua-resty-http/0.10 (Lua) ngx_lua/10008
+Host: eraisawesome.com
+DomaApi: true
+
+
+2017/07/14 22:37:19 [notice] 29770#29770: *733 [lua] init_by_lua:30: allow_domain(): Not Premium! No need for SSL..., context: ssl_certificate_by_lua*, client: 74.108.133.133, server: 0.0.0.0:443
+2017/07/14 22:37:19 [error] 29770#29770: *733 [lua] ssl_certificate.lua:274: ssl_certificate(): auto-ssl: failed to run do_ssl: /usr/local/share/lua/5.1/resty/auto-ssl/ssl_certificate.lua:248: API disabled in the context of ssl_certificate_by_lua*, context: ssl_certificate_by_lua*, client: 74.108.133.133, server: 0.0.0.0:443
+2017/07/14 22:37:19 [info] 29770#29770: *732 client closed connection while waiting for request, client: 74.108.133.133, server: 0.0.0.0:443
+2017/07/14 22:37:54 [debug] 29915#29915: *738 [lua] http.lua:610: send_request(): 
+GET / HTTP/1.1
+User-Agent: lua-resty-http/0.10 (Lua) ngx_lua/10008
+Host: eraisawesome.com
+DomaApi: true
+
+
+2017/07/14 22:37:54 [notice] 29915#29915: *738 [lua] init_by_lua:30: allow_domain(): Not Premium! No need for SSL..., context: ssl_certificate_by_lua*, client: 74.108.133.133, server: 0.0.0.0:443
+2017/07/14 22:37:54 [notice] 29915#29915: *738 [lua] ssl_certificate.lua:249: auto-ssl: domain not allowed - using fallback - eraisawesome.com, context: ssl_certificate_by_lua*, client: 74.108.133.133, server: 0.0.0.0:443
+2017/07/14 22:37:54 [info] 29915#29915: *737 client closed connection while waiting for request, client: 74.108.133.133, server: 0.0.0.0:443
+2017/07/14 22:38:58 [debug] 30189#30189: *743 [lua] http.lua:610: send_request(): 
+GET / HTTP/1.1
+User-Agent: lua-resty-http/0.10 (Lua) ngx_lua/10008
+Host: eraisawesome.com
+DomaApi: true
+
+
+2017/07/14 22:38:58 [notice] 30189#30189: *743 [lua] init_by_lua:30: allow_domain(): Not Premium! No need for SSL..., context: ssl_certificate_by_lua*, client: 74.108.133.133, server: 0.0.0.0:443
+2017/07/14 22:38:58 [notice] 30189#30189: *743 [lua] ssl_certificate.lua:249: auto-ssl: domain not allowed - using fallback - eraisawesome.com, context: ssl_certificate_by_lua*, client: 74.108.133.133, server: 0.0.0.0:443
+2017/07/14 22:38:58 [info] 30189#30189: *742 client closed connection while waiting for request, client: 74.108.133.133, server: 0.0.0.0:443
+2017/07/14 22:42:03 [debug] 30189#30189: *747 [lua] http.lua:610: send_request(): 
+GET / HTTP/1.1
+User-Agent: lua-resty-http/0.10 (Lua) ngx_lua/10008
+Host: w3bbi.com
+DomaApi: true
+
+
+2017/07/14 22:42:03 [notice] 30189#30189: *747 [lua] init_by_lua:30: allow_domain(): Not Premium! No need for SSL..., context: ssl_certificate_by_lua*, client: 35.192.41.240, server: 0.0.0.0:443
+2017/07/14 22:42:03 [notice] 30189#30189: *747 [lua] ssl_certificate.lua:249: auto-ssl: domain not allowed - using fallback - w3bbi.com, context: ssl_certificate_by_lua*, client: 35.192.41.240, server: 0.0.0.0:443
+2017/07/14 22:42:03 [info] 30189#30189: *746 client 35.192.41.240 closed keepalive connection
+2017/07/14 22:42:03 [info] 30189#30189: *745 client 35.192.41.240 closed keepalive connection
+2017/07/14 23:01:18 [error] 1049#1049: *754 lua entry thread aborted: runtime error: ssl_certificate_by_lua:2: attempt to index global 'auto_ssl_instance' (a nil value)
+stack traceback:
+coroutine 0:
+	ssl_certificate_by_lua: in function <ssl_certificate_by_lua:1>, context: ssl_certificate_by_lua*, client: 74.108.133.133, server: 0.0.0.0:443
+2017/07/14 23:01:18 [crit] 1049#1049: *753 SSL_do_handshake() failed (SSL: error:1408A179:SSL routines:ssl3_get_client_hello:cert cb error) while SSL handshaking, client: 74.108.133.133, server: 0.0.0.0:443
+2017/07/14 23:01:50 [info] 1049#1049: *756 client 188.174.135.217 closed keepalive connection
+2017/07/14 23:01:51 [info] 1049#1049: *757 client 188.174.135.217 closed keepalive connection
+2017/07/14 23:01:56 [info] 1049#1049: *758 client 188.174.135.217 closed keepalive connection
+2017/07/14 23:01:58 [info] 1049#1049: *759 client 188.174.135.217 closed keepalive connection
+2017/07/14 23:04:09 [error] 1049#1049: *762 lua entry thread aborted: runtime error: ssl_certificate_by_lua:2: attempt to index global 'auto_ssl_instance' (a nil value)
+stack traceback:
+coroutine 0:
+	ssl_certificate_by_lua: in function <ssl_certificate_by_lua:1>, context: ssl_certificate_by_lua*, client: 35.192.48.78, server: 0.0.0.0:443
+2017/07/14 23:04:09 [crit] 1049#1049: *761 SSL_do_handshake() failed (SSL: error:1408A179:SSL routines:ssl3_get_client_hello:cert cb error) while SSL handshaking, client: 35.192.48.78, server: 0.0.0.0:443
+2017/07/14 23:04:09 [info] 1049#1049: *760 client 35.192.48.78 closed keepalive connection
+2017/07/14 23:05:28 [debug] 1871#1871: *766 [lua] http.lua:610: send_request(): 
+GET / HTTP/1.1
+User-Agent: lua-resty-http/0.10 (Lua) ngx_lua/10008
+Host: eraisawesome.com
+DomaApi: true
+
+
+2017/07/14 23:05:28 [notice] 1871#1871: *766 [lua] init_by_lua:33: allow_domain(): Not Premium! No need for SSL..., context: ssl_certificate_by_lua*, client: 74.108.133.133, server: 0.0.0.0:443
+2017/07/14 23:05:28 [notice] 1871#1871: *766 [lua] ssl_certificate.lua:249: auto-ssl: domain not allowed - using fallback - eraisawesome.com, context: ssl_certificate_by_lua*, client: 74.108.133.133, server: 0.0.0.0:443
+2017/07/14 23:05:28 [info] 1871#1871: *765 client closed connection while waiting for request, client: 74.108.133.133, server: 0.0.0.0:443
+2017/07/14 23:07:19 [debug] 1871#1871: *769 [lua] http.lua:610: send_request(): 
+GET / HTTP/1.1
+User-Agent: lua-resty-http/0.10 (Lua) ngx_lua/10008
+Host: eraisawesome.com
+DomaApi: true
+
+
+2017/07/14 23:07:19 [notice] 1871#1871: *769 [lua] init_by_lua:33: allow_domain(): Not Premium! No need for SSL..., context: ssl_certificate_by_lua*, client: 74.108.133.133, server: 0.0.0.0:443
+2017/07/14 23:07:19 [notice] 1871#1871: *769 [lua] ssl_certificate.lua:249: auto-ssl: domain not allowed - using fallback - eraisawesome.com, context: ssl_certificate_by_lua*, client: 74.108.133.133, server: 0.0.0.0:443
+2017/07/14 23:07:19 [info] 1871#1871: *768 client closed connection while waiting for request, client: 74.108.133.133, server: 0.0.0.0:443
+2017/07/14 23:07:42 [debug] 1871#1871: *772 [lua] http.lua:610: send_request(): 
+GET / HTTP/1.1
+User-Agent: lua-resty-http/0.10 (Lua) ngx_lua/10008
+Host: eraisawesome.com
+DomaApi: true
+
+
+2017/07/14 23:07:42 [notice] 1871#1871: *772 [lua] init_by_lua:33: allow_domain(): Not Premium! No need for SSL..., context: ssl_certificate_by_lua*, client: 74.108.133.133, server: 0.0.0.0:443
+2017/07/14 23:07:42 [notice] 1871#1871: *772 [lua] ssl_certificate.lua:249: auto-ssl: domain not allowed - using fallback - eraisawesome.com, context: ssl_certificate_by_lua*, client: 74.108.133.133, server: 0.0.0.0:443
+2017/07/14 23:07:42 [info] 1871#1871: *771 client closed connection while waiting for request, client: 74.108.133.133, server: 0.0.0.0:443
+2017/07/14 23:10:39 [debug] 1871#1871: *775 [lua] http.lua:610: send_request(): 
+GET / HTTP/1.1
+User-Agent: lua-resty-http/0.10 (Lua) ngx_lua/10008
+Host: eraisawesome.com
+DomaApi: true
+
+
+2017/07/14 23:10:40 [notice] 1871#1871: *775 [lua] init_by_lua:33: allow_domain(): Not Premium! No need for SSL..., context: ssl_certificate_by_lua*, client: 104.198.182.248, server: 0.0.0.0:443
+2017/07/14 23:10:40 [notice] 1871#1871: *775 [lua] ssl_certificate.lua:249: auto-ssl: domain not allowed - using fallback - eraisawesome.com, context: ssl_certificate_by_lua*, client: 104.198.182.248, server: 0.0.0.0:443
+2017/07/14 23:10:41 [info] 1871#1871: *774 SSL_do_handshake() failed (SSL: error:14094416:SSL routines:ssl3_read_bytes:sslv3 alert certificate unknown:SSL alert number 46) while SSL handshaking, client: 104.198.182.248, server: 0.0.0.0:443
+2017/07/14 23:10:43 [info] 1871#1871: *773 client 104.198.182.248 closed keepalive connection
+2017/07/14 23:11:08 [error] 2830#2830: *780 lua entry thread aborted: runtime error: ssl_certificate_by_lua:2: API disabled in the context of ssl_certificate_by_lua*
+stack traceback:
+coroutine 0:
+	[C]: in function 'redirect'
+	ssl_certificate_by_lua:2: in function <ssl_certificate_by_lua:1>, context: ssl_certificate_by_lua*, client: 74.108.133.133, server: 0.0.0.0:443
+2017/07/14 23:11:08 [crit] 2830#2830: *779 SSL_do_handshake() failed (SSL: error:1408A179:SSL routines:ssl3_get_client_hello:cert cb error) while SSL handshaking, client: 74.108.133.133, server: 0.0.0.0:443
+2017/07/14 23:18:42 [info] 3977#3977: *783 client closed connection while waiting for request, client: 74.108.133.133, server: 0.0.0.0:443
+2017/07/14 23:19:08 [info] 3977#3977: *784 client closed connection while waiting for request, client: 74.108.133.133, server: 0.0.0.0:443
+2017/07/14 23:20:13 [info] 4323#4323: *787 client closed connection while waiting for request, client: 74.108.133.133, server: 0.0.0.0:443
+2017/07/14 23:22:33 [debug] 4795#4795: *793 [lua] http.lua:610: send_request(): 
+GET / HTTP/1.1
+User-Agent: lua-resty-http/0.10 (Lua) ngx_lua/10008
+Host: eraisawesome.com
+DomaApi: true
+
+
+2017/07/14 23:22:34 [notice] 4795#4795: *793 [lua] init_by_lua:30: allow_domain(): Not Premium! No need for SSL..., context: ssl_certificate_by_lua*, client: 74.108.133.133, server: 0.0.0.0:443
+2017/07/14 23:22:34 [notice] 4795#4795: *793 [lua] ssl_certificate.lua:249: auto-ssl: domain not allowed - using fallback - eraisawesome.com, context: ssl_certificate_by_lua*, client: 74.108.133.133, server: 0.0.0.0:443
+2017/07/14 23:22:34 [info] 4795#4795: *792 client closed connection while waiting for request, client: 74.108.133.133, server: 0.0.0.0:443
+2017/07/14 23:23:50 [debug] 4997#4997: *798 [lua] http.lua:610: send_request(): 
+GET / HTTP/1.1
+User-Agent: lua-resty-http/0.10 (Lua) ngx_lua/10008
+Host: eraisawesome.com
+DomaApi: true
+
+
+2017/07/14 23:23:50 [notice] 4997#4997: *798 [lua] init_by_lua:30: allow_domain(): Not Premium! No need for SSL..., context: ssl_certificate_by_lua*, client: 74.108.133.133, server: 0.0.0.0:443
+2017/07/14 23:23:50 [notice] 4997#4997: *798 [lua] ssl_certificate.lua:249: auto-ssl: domain not allowed - using fallback - eraisawesome.com, context: ssl_certificate_by_lua*, client: 74.108.133.133, server: 0.0.0.0:443
+2017/07/14 23:23:50 [info] 4997#4997: *797 client closed connection while waiting for request, client: 74.108.133.133, server: 0.0.0.0:443
+2017/07/14 23:26:53 [info] 5534#5534: *802 client closed connection while waiting for request, client: 74.108.133.133, server: 0.0.0.0:443
+2017/07/14 23:26:56 [error] 5534#5534: *803 lua entry thread aborted: runtime error: rewrite_by_lua(nginx.conf:99):2: bad argument #1 to 'log' (number expected, got nil)
+stack traceback:
+coroutine 0:
+	[C]: in function 'log'
+	rewrite_by_lua(nginx.conf:99):2: in function <rewrite_by_lua(nginx.conf:99):1>, client: 74.108.133.133, server: , request: "GET / HTTP/1.1", host: "eraisawesome.com"
+2017/07/14 23:29:12 [info] 5980#5980: *806 client closed connection while waiting for request, client: 74.108.133.133, server: 0.0.0.0:443
+2017/07/14 23:29:14 [error] 5980#5980: *807 lua entry thread aborted: runtime error: rewrite_by_lua(nginx.conf:99):2: bad argument #1 to 'log' (number expected, got string)
+stack traceback:
+coroutine 0:
+	[C]: in function 'log'
+	rewrite_by_lua(nginx.conf:99):2: in function <rewrite_by_lua(nginx.conf:99):1>, client: 74.108.133.133, server: , request: "GET / HTTP/1.1", host: "eraisawesome.com"
+2017/07/14 23:30:10 [info] 6183#6183: *810 client closed connection while waiting for request, client: 74.108.133.133, server: 0.0.0.0:443
+2017/07/14 23:30:12 [error] 6183#6183: *811 lua entry thread aborted: runtime error: rewrite_by_lua(nginx.conf:99):2: bad argument #1 to 'log' (expected table to have __tostring metamethod)
+stack traceback:
+coroutine 0:
+	[C]: in function 'log'
+	rewrite_by_lua(nginx.conf:99):2: in function <rewrite_by_lua(nginx.conf:99):1>, client: 74.108.133.133, server: , request: "GET / HTTP/1.1", host: "eraisawesome.com"
+2017/07/14 23:31:23 [info] 6387#6387: *814 client closed connection while waiting for request, client: 74.108.133.133, server: 0.0.0.0:443
+2017/07/14 23:31:25 [error] 6387#6387: *815 lua entry thread aborted: runtime error: rewrite_by_lua(nginx.conf:99):3: attempt to call ngx.redirect after sending out the headers
+stack traceback:
+coroutine 0:
+	[C]: in function 'redirect'
+	rewrite_by_lua(nginx.conf:99):3: in function <rewrite_by_lua(nginx.conf:99):1>, client: 74.108.133.133, server: , request: "GET / HTTP/1.1", host: "eraisawesome.com"
+2017/07/14 23:31:25 [info] 6387#6387: *816 client closed connection while waiting for request, client: 74.108.133.133, server: 0.0.0.0:443
+2017/07/14 23:31:25 [error] 6387#6387: *817 lua entry thread aborted: runtime error: rewrite_by_lua(nginx.conf:99):3: attempt to call ngx.redirect after sending out the headers
+stack traceback:
+coroutine 0:
+	[C]: in function 'redirect'
+	rewrite_by_lua(nginx.conf:99):3: in function <rewrite_by_lua(nginx.conf:99):1>, client: 74.108.133.133, server: , request: "GET / HTTP/1.1", host: "eraisawesome.com"
+2017/07/14 23:31:30 [info] 6387#6387: *818 client closed connection while waiting for request, client: 74.108.133.133, server: 0.0.0.0:443
+2017/07/14 23:31:30 [error] 6387#6387: *819 lua entry thread aborted: runtime error: rewrite_by_lua(nginx.conf:99):3: attempt to call ngx.redirect after sending out the headers
+stack traceback:
+coroutine 0:
+	[C]: in function 'redirect'
+	rewrite_by_lua(nginx.conf:99):3: in function <rewrite_by_lua(nginx.conf:99):1>, client: 74.108.133.133, server: , request: "GET / HTTP/1.1", host: "eraisawesome.com"
+2017/07/14 23:32:00 [info] 6387#6387: *820 client closed connection while waiting for request, client: 74.108.133.133, server: 0.0.0.0:443
+2017/07/14 23:32:00 [error] 6387#6387: *821 lua entry thread aborted: runtime error: rewrite_by_lua(nginx.conf:99):3: attempt to call ngx.redirect after sending out the headers
+stack traceback:
+coroutine 0:
+	[C]: in function 'redirect'
+	rewrite_by_lua(nginx.conf:99):3: in function <rewrite_by_lua(nginx.conf:99):1>, client: 74.108.133.133, server: , request: "GET / HTTP/1.1", host: "eraisawesome.com"
+2017/07/14 23:33:18 [info] 6735#6735: *824 client closed connection while waiting for request, client: 74.108.133.133, server: 0.0.0.0:443
+2017/07/14 23:33:20 [error] 6735#6735: *825 lua entry thread aborted: runtime error: attempt to call ngx.redirect after sending out the headers
+stack traceback:
+coroutine 0:
+	[C]: ?, client: 74.108.133.133, server: , request: "GET / HTTP/1.1", host: "eraisawesome.com"
+2017/07/14 23:33:20 [info] 6735#6735: *826 client closed connection while waiting for request, client: 74.108.133.133, server: 0.0.0.0:443
+2017/07/14 23:33:20 [error] 6735#6735: *827 lua entry thread aborted: runtime error: attempt to call ngx.redirect after sending out the headers
+stack traceback:
+coroutine 0:
+	[C]: ?, client: 74.108.133.133, server: , request: "GET / HTTP/1.1", host: "eraisawesome.com"
+2017/07/14 23:35:57 [info] 7244#7244: *830 client closed connection while waiting for request, client: 74.108.133.133, server: 0.0.0.0:443
+2017/07/14 23:35:59 [error] 7244#7244: *831 failed to load inlined Lua code: access_by_lua(nginx.conf:103):2: unexpected symbol near '.', client: 74.108.133.133, server: , request: "GET / HTTP/1.1", host: "eraisawesome.com"
