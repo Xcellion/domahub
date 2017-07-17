@@ -40,12 +40,12 @@ function checkHost(req, res, next){
   }
   else if (req.headers.host){
 
-    //requested w3bbi!, redirect to domahub
+    //requested w3bbi, redirect to domahub
     if (domain_name == "www.w3bbi.com"
     || domain_name == "w3bbi.com"){
       res.redirect("https://domahub.com" + req.originalUrl);
     }
-    
+
     //requested domahub! skip this route and go to next route
     else if (domain_name == "www.domahub.com"
     || domain_name == "domahub.com"
