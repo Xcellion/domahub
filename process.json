@@ -1,7 +1,7 @@
 {
   apps : [{
     name        : "DomaHub Server (Test)",
-    script      : "./server.js",
+    script      : "./server/server.js",
     env: {
       "NODE_ENV": "dev",
     },
@@ -13,7 +13,7 @@
   },
   {
     name        : "DomaHub Server (LE API Test)",
-    script      : "./api_server.js",
+    script      : "./server/api_server.js",
     env: {
       "NODE_ENV": "dev",
     },
