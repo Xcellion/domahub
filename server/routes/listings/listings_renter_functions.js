@@ -938,14 +938,30 @@ module.exports = {
   //gets the listing info if it is listed
   getListingInfo : function(req, res, next) {
     var domain_name = (typeof req.session.pipe_to_dh != "undefined") ? req.session.pipe_to_dh : req.params.domain_name;
-    console.log("F: Checking if " + domain_name + " is listed on DomaHub...");
 
-    getVerifiedListing(req, res, domain_name, function(result){
-      getWhoIs(req, res, next, domain_name, true);
-    }, function(result){
-      req.session.listing_info = result.info[0];
+    //skip listed check if we've already determined it's unlisted and got redirected to domahub from custom URL
+    if (req.session.skip_listed_check == true){
+      delete req.session.skip_listed_check;
       getWhoIs(req, res, next, domain_name, false);
-    });
+    }
+    else {
+      console.log("F: Checking if " + domain_name + " is listed on DomaHub...");
+
+      getVerifiedListing(req, res, domain_name, function(result){
+        //if unlisted and hostname isn't domahub, redirect to domahub
+        var hostname = req.headers.host.replace(/^(https?:\/\/)?(www\.)?/,'');
+        if (hostname != "domahub.com" || hostname != "localhost"){
+          req.session.skip_listed_check = true;
+          res.redirect("https://domahub.com/listing/" + hostname);
+        }
+        else {
+          getWhoIs(req, res, next, domain_name, true);
+        }
+      }, function(result){
+        req.session.listing_info = result.info[0];
+        getWhoIs(req, res, next, domain_name, false);
+      });
+    }
   },
 
   //gets the next year's events for calendar

@@ -35,7 +35,7 @@ function checkHost(req, res, next){
   var domain_name = req.headers.host.replace(/^(https?:\/\/)?(www\.)?/,'');
 
   //skip rental check for some reason (if requested a path besides / and was redirected)
-  if (req.session.skip_rental_check){
+  if (req.session.skip_rental_check == true){
     delete req.session.skip_rental_check;
     req.session.pipe_to_dh = req.headers.host.replace(/^(https?:\/\/)?(www\.)?/,'');
     next();
