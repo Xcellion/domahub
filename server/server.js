@@ -32,10 +32,6 @@ var stripe = require('./lib/stripe.js');
 ** SERVER INITIALIZATION
 **************************************************/
 
-//enable CORS (cross origin request sharing)
-var cors = require('cors');
-app.use(cors());
-
 //set the view engine
 app.set('view engine', 'ejs');
 app.set('views', __dirname + '/views');
