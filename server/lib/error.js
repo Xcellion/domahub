@@ -34,7 +34,6 @@ function handler(req, res, message, type) {
           req.session.message = "Invalid rental!";
         case "Invalid rental!":
           var fullUrl = req.protocol + '://' + req.get('host') + req.originalUrl;
-          console.log(fullUrl);
         case "No rental information!":
         case "Invalid rental / listing!":
         case "Invalid rental owner!":
