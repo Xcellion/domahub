@@ -571,7 +571,6 @@ module.exports = {
         if (req.session.listing_info){
           delete req.session.listing_info.stripe_subscription_id;
         }
-        console.log(err, subscription);
 
         if (!err && subscription && subscription.status == "active"){
           listing_info.premium = true;
