@@ -3,7 +3,7 @@ $(document).ready(function() {
   //delete notifications button
   $(".delete").on("click", function(e){
     e.preventDefault();
-    handleSubmitDisabled();
+    //handleSubmitDisabled();
   });
 
   //<editor-fold>-------------------------------STRIPE-------------------------------
@@ -16,11 +16,11 @@ $(document).ready(function() {
     Stripe.setPublishableKey('pk_live_506Yzo8MYppeCnLZkW9GEm13');
   }
 
-    //format all stripe inputs
-    $('#cc-num').payment('formatCardNumber');
-    $('#cc-exp').payment('formatCardExpiry');
-    $('#cc-cvc').payment('formatCardCVC');
-    $('#cc-zip').payment('restrictNumeric');
+  //format all stripe inputs
+  $('#cc-num').payment('formatCardNumber');
+  $('#cc-exp').payment('formatCardExpiry');
+  $('#cc-cvc').payment('formatCardCVC');
+  $('#cc-zip').payment('restrictNumeric');
 
   //request a token from stripe
   $("#stripe-form").on("submit", function(e){
@@ -132,7 +132,7 @@ function submitDomainNames(submit_elem){
     }).done(function(data){
       createTable(data.bad_listings, data.good_listings);
       submit_elem.removeClass('is-loading');
-      submit_elem.on("click", function(e){
+      submit_elem.off().on("click", function(e){
         e.preventDefault();
         submitDomainNames(submit_elem);
       });
@@ -161,6 +161,7 @@ function createTable(bad_listings, good_listings){
   showHelpText("table");
   calculateSummaryRows();
   window.scrollTo(0, 0);    //scroll to top so we can see the help text
+  handleSubmitDisabled();
 }
 
 //</editor-fold>
@@ -260,7 +261,6 @@ function calculateSummaryRows(){
 
 //function to show or disable submit
 function handleSubmitDisabled(){
-
   //show the table related help text
   showHelpText("table");
 
@@ -599,23 +599,23 @@ function handleErrors(error_description){
   switch (error_description){
     case "No Stripe Token":
     case "Invalid cc":
-      var error_desc = "Please provide a valid credit card to charge.";
-      break;
+    var error_desc = "Please provide a valid credit card to charge.";
+    break;
     case "Invalid cc exp":
-      var error_desc = "Please provide your credit card expiration date.";
-      break;
+    var error_desc = "Please provide your credit card expiration date.";
+    break;
     case "Invalid cvc":
-      var error_desc = "Please provide your credit card CVC number.";
-      break;
+    var error_desc = "Please provide your credit card CVC number.";
+    break;
     case "Invalid zip":
-      var error_desc = "Please provide a ZIP code.";
-      break;
+    var error_desc = "Please provide a ZIP code.";
+    break;
     case "":
-      var error_desc = "Something went wrong with the payment! Your credit card has not been charged.";
-      break;
+    var error_desc = "Something went wrong with the payment! Your credit card has not been charged.";
+    break;
     default:
-      var error_desc = error_description;
-      break;
+    var error_desc = error_description;
+    break;
   }
 
   $("#payment-error-desc").text(error_desc)
