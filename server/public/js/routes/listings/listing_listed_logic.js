@@ -70,7 +70,7 @@ $(document).ready(function() {
                 $("#buy-now-form").off();
               }
               else {
-                window.location.assign(window.location.origin + "/listing/" + listing_info.domain_name + "/checkout/buy");
+                window.location.assign("/listing/" + listing_info.domain_name + "/checkout/buy");
               }
             }
             else {
@@ -364,11 +364,12 @@ function submitTimes(checkout_button){
         starttime: newEvent.starttime,
         endtime: newEvent.endtime,
         path: $("#typed-slash").val()
-      }
+      },
+      xhrFields: { withCredentials: true }
     }).done(function(data){
       checkout_button.removeClass('is-loading');
       if (data.state == "success"){
-        window.location.assign(window.location.origin + "/listing/" + listing_info.domain_name + "/checkout/rent");
+        window.location.assign("/listing/" + listing_info.domain_name + "/checkout/rent");
       }
       else if (data.state == "error"){
         $("#calendar-regular-message").addClass('is-hidden');

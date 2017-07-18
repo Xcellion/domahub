@@ -152,8 +152,8 @@ function proxysite(req, res, next){
         encoding: null
     }, function (err, response, body) {
 
-        var index_path = (node_env == "dev") ? path.resolve(process.cwd(), 'server', 'views', 'proxy', 'proxy-index.ejs') : path.resolve(process.cwd(), 'views', 'proxy', 'proxy-index.ejs');
-        var preview_path = (node_env == "dev") ? path.resolve(process.cwd(), 'server', 'views', 'proxy', 'proxy-preview.ejs') : path.resolve(process.cwd(), 'views', 'proxy', 'proxy-preview.ejs');
+        var index_path = path.resolve(process.cwd(), 'server', 'views', 'proxy', 'proxy-index.ejs');
+        var preview_path = path.resolve(process.cwd(), 'server', 'views', 'proxy', 'proxy-preview.ejs');
 
         var proxy_index = fs.readFileSync(index_path);
         var proxy_preview = fs.readFileSync(preview_path);
@@ -163,12 +163,12 @@ function proxysite(req, res, next){
 
         //if authenticated to edit the rental preview
         if (req.session.proxy_edit){
-            var edit_path = (node_env == "dev") ? path.resolve(process.cwd(), 'server', 'views', 'proxy', 'proxy-edit.ejs') : path.resolve(process.cwd(), 'views', 'proxy', 'proxy-edit.ejs');
+            var edit_path = path.resolve(process.cwd(), 'server', 'views', 'proxy', 'proxy-edit.ejs');
             var proxy_preview = fs.readFileSync(edit_path);
             buffer_array.push(proxy_preview);
         }
         else {
-            var noedit_path = (node_env == "dev") ? path.resolve(process.cwd(), 'server', 'views', 'proxy', 'proxy-noedit.ejs') : path.resolve(process.cwd(), 'views', 'proxy', 'proxy-noedit.ejs');
+            var noedit_path = path.resolve(process.cwd(), 'server', 'views', 'proxy', 'proxy-noedit.ejs');
             var proxy_nopreview = fs.readFileSync(noedit_path);
             buffer_array.push(proxy_nopreview);
         }
