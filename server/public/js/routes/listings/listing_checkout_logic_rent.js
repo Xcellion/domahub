@@ -1,12 +1,9 @@
 $(document).ready(function () {
 
     //--------------------------------------------------------------------------------------------------------- HEADER STEPS
-
-    //hide the login step if logged in
-    if (user){
-        showStep("site");
-        showMessage("address-regular-message");
-    }
+    
+    showStep("site");
+    showMessage("address-regular-message");
 
     //continue as guest
     $("#guest-button").on("click", function(){
@@ -196,7 +193,7 @@ $(document).ready(function () {
     //--------------------------------------------------------------------------------------------------------- PAYMENT
 
     //key for stripe
-    if (window.location.hostname == "localhost"){
+    if (node_env == "dev"){
         Stripe.setPublishableKey('pk_test_kcmOEkkC3QtULG5JiRMWVODJ');
     }
     else {
@@ -452,7 +449,11 @@ function successHandler(rental_id, owner_hash_id){
     $(".step-header").off();
 
     //edit preview button
-    $("#rental-preview-button").attr("href", "https://domahub.com/listing/" + listing_info.domain_name + "/" + rental_id);
+    if (listing_info.premium){
+      $("#rental-preview-button").attr("href", "/listing/" + listing_info.domain_name + "/" + rental_id);
+    } else {
+      $("#rental-preview-button").attr("href", "https://domahub.com/listing/" + listing_info.domain_name + "/" + rental_id);
+    }
 
     //copy ownership url
     if (!user){

@@ -1,9 +1,9 @@
 {
   apps : [{
-    name        : "DomaHub",
-    script      : "./server.js",
+    name        : "DomaHub Server (Test)",
+    script      : "./server/server.js",
     env: {
-      "NODE_ENV": "production",
+      "NODE_ENV": "dev",
     },
 	watch: ["../server"],
 	ignore_watch : ["../node_modules", "../uploads"],
@@ -12,10 +12,10 @@
 	}
   },
   {
-    name        : "DomaHub API",
-    script      : "./api_server.js",
+    name        : "DomaHub Server (LE API Test)",
+    script      : "./server/api_server.js",
     env: {
-      "NODE_ENV": "production",
+      "NODE_ENV": "dev",
     },
 	watch: ["../server"],
 	ignore_watch : ["../node_modules", "../uploads"],

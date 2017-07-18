@@ -1,5 +1,5 @@
-var  listing_model = require('../../models/listing_model.js');
-var  data_model = require('../../models/data_model.js');
+var listing_model = require('../../models/listing_model.js');
+var data_model = require('../../models/data_model.js');
 
 var search_functions = require("../listings/listings_search_functions.js");
 var renter_functions = require("../listings/listings_renter_functions.js");
@@ -20,9 +20,9 @@ module.exports = function(app, db, auth, error, stripe){
   Data = new data_model(db);
 
   //render listing hub
-  app.get("/listings", [
-    search_functions.renderListingHub
-  ]);
+  // app.get("/listings", [
+  //   search_functions.renderListingHub
+  // ]);
 
   //get more listings for the listings hub
   app.post("/listings", [
@@ -320,7 +320,7 @@ module.exports = function(app, db, auth, error, stripe){
     renter_functions.getListingInfo,
     renter_functions.checkStillVerified,
     stripe.checkStripeSubscription,
-    renter_functions.getListingFreeTimes,
+    // renter_functions.getListingFreeTimes,
     renter_functions.renderListing
   ]);
 
@@ -364,6 +364,7 @@ module.exports = function(app, db, auth, error, stripe){
     urlencodedParser,
     checkDomainValid,
     checkDomainListed,
+    // renter_functions.deletePipeToDH,
     renter_functions.checkSessionListingInfoPost,
     renter_functions.getListingFreeTimes,
     renter_functions.createNewRentalObject,

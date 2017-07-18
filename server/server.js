@@ -1,25 +1,25 @@
 var node_env = process.env.NODE_ENV || 'dev';   //dev or prod bool
 
 var express = require('express'),
-  app = express(),
-  http = require('http'),
-  serverHTTP = function(application){
-    return http.createServer(application);
-  };
+app = express(),
+http = require('http'),
+serverHTTP = function(application){
+  return http.createServer(application);
+};
 
 var bodyParser   = require('body-parser'),
-  cookieParser = require('cookie-parser'),
-  session = require('express-session'),
-  passport = require('passport'),
-  db = require('./lib/database.js'),
-  error = require('./lib/error.js'),
-  request = require('request'),
-  autoReap  = require('multer-autoreap');
-  autoReap.options = {
-      reapOnError: true
-  },
-  parseDomain = require('parse-domain'),
-  url = require('url');
+cookieParser = require('cookie-parser'),
+session = require('express-session'),
+passport = require('passport'),
+db = require('./lib/database.js'),
+error = require('./lib/error.js'),
+request = require('request'),
+autoReap  = require('multer-autoreap');
+autoReap.options = {
+  reapOnError: true
+},
+parseDomain = require('parse-domain'),
+url = require('url');
 
 db.connect();  //connect to the database
 
@@ -31,6 +31,10 @@ var stripe = require('./lib/stripe.js');
 /**************************************************
 ** SERVER INITIALIZATION
 **************************************************/
+
+//enable CORS (cross origin request sharing)
+var cors = require('cors');
+app.use(cors());
 
 //set the view engine
 app.set('view engine', 'ejs');
@@ -50,7 +54,8 @@ if (node_env == "dev"){
       secure: false
     },
     saveUninitialized: true,
-    resave: true
+    resave: true,
+    rolling: true
   }));
 }
 else {
@@ -72,7 +77,8 @@ else {
     proxy: true,
     secret: 'domahub_market',
     saveUninitialized: true,
-    resave: true
+    resave: true,
+    rolling: true
   }));
 
   //compression for production traffic
@@ -82,10 +88,23 @@ else {
 
 //for routing of static files
 app.use(express.static(__dirname + '/public'));
+app.use(function(req, res, next) {
+  res.header('Access-Control-Allow-Credentials', true);
+  res.header('Access-Control-Allow-Origin', req.headers.origin);
+  res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+  res.header('Access-Control-Allow-Headers', 'X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept');
+  next();
+});
+
+//all other domains listed on domahub
+require('./lib/api_functions.js')(app, db, error);
 
 //initialize passport for auth
 app.use(passport.initialize());
 app.use(passport.session());
+
+//route to determine host
+require('./lib/api_functions.js')(app, db, error);
 
 //main routes
 require('./routes/routes.js')(app, db, auth, error, stripe);
@@ -98,6 +117,7 @@ app.use("/", function(req, res, next){
   if (req.header("Referer") && req.header("Referer").indexOf("rentalpreview") != -1 && req.session.rented_info){
     var domain_url = parseDomain(req.session.rented_info.address);
     var protocol = url.parse(req.session.rented_info.address).protocol;
+
     console.log("F: Proxying future request for " + req.originalUrl + " along to " + protocol + "//www." + domain_url.domain + "." + domain_url.tld);
     req.pipe(request({
       url: protocol + "//www." + domain_url.domain + "." + domain_url.tld + req.originalUrl
