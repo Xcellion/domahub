@@ -271,8 +271,8 @@ function createRows(){
     $(".current-domain-name").text(listings[0].domain_name);
     $("#current-domain-view").attr("href", "/listing/" + listings[0].domain_name);
   }
+  //there are no listings to show!
   else {
-    //show and hide elements that we need if there are listings
     $(".yes-listings-elem").addClass('is-hidden');
     $(".no-listings-elem").removeClass('is-hidden');
     $("#loading-tab").addClass('is-hidden');
@@ -1516,6 +1516,13 @@ function deletionHandler(rows, selected_rows){
   listings = rows;
   for (var x = 0; x < selected_rows.length; x++){
     $(selected_rows[x]).remove();
+  }
+
+  //there are no more listings!
+  if (rows.length == 0){
+    $(".yes-listings-elem").addClass('is-hidden');
+    $(".no-listings-elem").removeClass('is-hidden');
+    $("#loading-tab").addClass('is-hidden');
   }
 }
 
