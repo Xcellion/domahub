@@ -481,7 +481,7 @@ function handleBadReasons(reasons, row){
 
     //append latest one
     for (var x = 0; x < reasons.length; x++){
-      var explanation = $("<small class='is-danger has-text-right is-pulled-right'>" + reasons[x] + "</small>")
+      var explanation = $("<small class='is-danger tip'>" + reasons[x] + "</small>")
       if (reasons[x] == "Invalid price!"){
         var reason_input = ".buy-price-input";
       }

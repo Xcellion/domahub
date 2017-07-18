@@ -18,9 +18,11 @@
 
 .level-left
   // Responsiveness
-  +mobile
-    & + .level-right
+  & + .level-right
+    margin-left: 10px
+    +mobile
       margin-top: 10px
+      margin-left: 0
   +tablet
     align-items: center
     display: flex
@@ -40,29 +42,6 @@
   &.has-border
     &:not(:last-child)
       border-bottom: 1px solid $border
-  // for listing hub
-  &.filter-panel
-    justify-content: flex-start
-    // each filter tab
-    .filter-local
-      color: $text
-      font-size: $size-small
-      padding: 2px
-      &:hover,
-      &:focus
-        opacity: 0.5
-        outline: none
-      &.is-active
-        +box-shadow(0,-2px,0,$primary,0,inset)
-        color: $primary
-        &:hover,
-        &:focus
-          +box-shadow(0,-1px,0,$primary,0,inset)
-    // level item containers for filters
-    & > .level-item
-      +tablet
-        &:not(:first-child)
-          margin-left: 25px
     // responsiveness
     +tablet
       & > .level-item
