@@ -1,0 +1,58 @@
+server {
+	listen 80;
+	
+	location / {
+	    return 301 https://$host$request_uri;
+	}
+
+	location /.well-known/acme-challenge {
+	    content_by_lua_block {
+		auto_ssl:challenge_server()
+	    }
+	}
+}
+
+server {
+	listen 443 ssl;
+
+	# LUA RESTY SSL
+
+	ssl_certificate_by_lua_block {
+	    auto_ssl:ssl_certificate()
+	}
+
+	# FALL BACK CERTS
+	
+	ssl_certificate /etc/letsencrypt/live/w3bbi.com/fullchain.pem;
+	ssl_certificate_key /etc/letsencrypt/live/w3bbi.com/privkey.pem;
+
+	# REVERSE PROXY TO NODE SERVER
+
+	location / {
+	    root /var/www/w3bbi;
+	    proxy_pass http://localhost:8080;
+	    proxy_set_header X-Real-IP $remote_addr;
+	    proxy_set_header X-NginX-Proxy true;
+	    proxy_ssl_session_reuse off;
+	    proxy_set_header Host $http_host;
+	    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+	    proxy_set_header X-Forwarded-proto https;
+	    proxy_cache_bypass $http_upgrade;
+	    proxy_redirect off;
+	}
+}
+
+# HOOK SERVER
+
+server {
+	listen 127.0.0.1:8999;
+
+	client_body_buffer_size 128k;
+	client_max_body_size 128k;
+	
+	location / {
+	    content_by_lua_block {
+		auto_ssl:hook_server()
+	    }
+	}
+}
