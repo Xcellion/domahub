@@ -41,7 +41,6 @@ if (node_env == "dev"){
 else {
   console.log("Production environment! Using redis for sessions store for LE API server.");
   var redisStore = require('connect-redis')(session);
-  app.use(cors({origin: 'https://domahub.com'}));
 
   //compression for production traffic
   var compression = require("compression");
