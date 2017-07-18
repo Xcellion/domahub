@@ -3,7 +3,7 @@ $(document).ready(function() {
   //delete notifications button
   $(".delete").on("click", function(e){
     e.preventDefault();
-    //handleSubmitDisabled();
+    handleSubmitDisabled();
   });
 
   //<editor-fold>-------------------------------STRIPE-------------------------------
