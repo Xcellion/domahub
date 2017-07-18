@@ -6,7 +6,7 @@ var compare = <% if(typeof compare != "undefined"){ %><%-JSON.stringify(compare)
 <script src="/js/jquery/jquery.minicolors.min.js" type="text/javascript"></script>
 <script src="/js/routes/listings/listing_compare_logic.js" type="text/javascript"></script>
 <script src="/js/themes.js" type="text/javascript"></script>
-<div id="compare-menu" class="min-height is-active">
+<div id="compare-menu" class="is-active">
 
   <!-- EDIT LISTING DETAIL TABS BUTTONS  -->
   <div id="compare-buttons" class="">
@@ -31,7 +31,7 @@ var compare = <% if(typeof compare != "undefined"){ %><%-JSON.stringify(compare)
   </div>
 
   <!-- EDIT LISTING DETAILS  -->
-  <div id="compare-content" class="box no-shadow no-border">
+  <div id="compare-content" class="box no-shadow no-border no-border-radius">
     <div id="info-box" class="compare-box">
 
       <%# INFO %>
@@ -189,26 +189,20 @@ var compare = <% if(typeof compare != "undefined"){ %><%-JSON.stringify(compare)
         </div>
       </div>
     </div>
-  </div>
-  <footer id="compare-footer" class="footer is-dark">
-    <div class="container">
-      <div class="control is-spaced">
-        <div class="control-left">
-          <p class="tip is-white">
-            This page is just an example of what your landing page could look like.
-          </p>
-        </div>
-        <div class="control-right">
-          <a href="/signup" class="button is-accent is-small is-stylish">Sign Up Now</a>
-        </div>
+    <footer id="compare-footer" class="footer is-white">
+      <div class="content">
+        <p>
+          This page is just an example of what your landing page could look like.
+        </p>
+        <a href="/signup" class="button is-accent is-small is-stylish">Sign Up Now</a>
       </div>
       <div class="control">
-        <p class="is-white">
+        <p>
           Powered by <a tabindex="0" id="dh_logo" class="is-primary" href="/"  >
             DomaHub
           </a>
         </p>
       </div>
-    </div>
-  </footer>
+    </footer>
+  </div>
 </div>

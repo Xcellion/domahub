@@ -311,18 +311,14 @@ button[data-balloon] {
 
 .table-row {
   align-items: center;
-  border: 1px solid rgba(0, 0, 0, 0.12);
   border-width: 1px 0 0;
+  border: 1px solid rgba(0, 0, 0, 0.12);
   display: flex;
   justify-content: space-between;
   padding: 5px;
-  white-space: nowrap;
-  overflow-x: hidden; }
+  white-space: nowrap; }
   .table-row:last-child {
     border-bottom-width: 0px; }
-  .table-row p {
-    word-break: break-all;
-    margin-left: 30px; }
   .table-row:hover {
     background-color: #efefef;
     cursor: pointer; }
@@ -331,6 +327,15 @@ button[data-balloon] {
     border-color: #3cbc8d; }
     .table-row.is-active p {
       color: white; }
+
+.table-row-text {
+  margin-left: 30px;
+  overflow-x: hidden;
+  text-align: right;
+  width: calc(100% - 30px); }
+  .table-row-text p {
+    text-align: right;
+    word-break: break-all; }
 
 .first-row {
   border-top-width: 0px; }

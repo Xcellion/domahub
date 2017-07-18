@@ -43,23 +43,23 @@ module.exports = function(app, db, auth, error, stripe){
   ]);
 
   //myrentals pages
-  app.get([
-    "/profile/myrentals",
-    "/profile/myrentals/:page"
-  ], [
-    auth.checkLoggedIn,
-    profile_functions.getAccountRentals,
-    profile_functions.renderMyRentals
-  ]);
+  // app.get([
+  //   "/profile/myrentals",
+  //   "/profile/myrentals/:page"
+  // ], [
+  //   auth.checkLoggedIn,
+  //   profile_functions.getAccountRentals,
+  //   profile_functions.renderMyRentals
+  // ]);
 
   //myrentals multi delete
-  app.post("/profile/myrentals/delete", [
-    urlencodedParser,
-    auth.checkLoggedIn,
-    profile_functions.getAccountRentals,
-    profile_functions.checkPostedDeletionRows,
-    profile_functions.deleteRentals
-  ]);
+  // app.post("/profile/myrentals/delete", [
+  //   urlencodedParser,
+  //   auth.checkLoggedIn,
+  //   profile_functions.getAccountRentals,
+  //   profile_functions.checkPostedDeletionRows,
+  //   profile_functions.deleteRentals
+  // ]);
 
   // //check if user is legit, get all listings, get all rentals
   // app.get("/profile/dashboard", [
