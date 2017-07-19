@@ -84,7 +84,7 @@ module.exports = function(app, db, auth, error, stripe){
   app.post("/listings/create", [
     urlencodedParser,
     auth.checkLoggedIn,
-    owner_functions.checkPostedListingInfo,
+    owner_functions.checkPostedListingInfoForCreate,
     owner_functions.checkPostedPremium,
     profile_functions.getAccountListings,    //to find out which listings were not created in multi-create
     owner_functions.createListings,

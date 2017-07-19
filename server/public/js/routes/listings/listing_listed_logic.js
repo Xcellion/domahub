@@ -17,11 +17,15 @@ $(document).ready(function() {
     if (listing_info.status == 1){
 
       //show minimum price if it's defined
+      if (listing_info.min_price > 0){
+        $("#min-price-tag").text("For sale - " + moneyFormat.to(listing_info.min_price));
+        $("#min-price").text(" (Minimum " + moneyFormat.to(listing_info.min_price) + ")");
+        $("#min-price-tag").removeClass('is-hidden');
+      }
+
+      //can buy now
       if (listing_info.buy_price > 0){
-        $("#buy-price").text("For sale - " + moneyFormat.to(listing_info.buy_price));
-        $("#min-price").text(" (Minimum " + moneyFormat.to(listing_info.buy_price) + ")");
-        $("#buy-price-tag").removeClass('is-hidden');
-        $("#buy-button").removeClass('is-hidden');
+        $("#buy-button").text("Buy now - " + moneyFormat.to(listing_info.buy_price));
       }
 
       showBuyStuff($("#buy-now-button"));

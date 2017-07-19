@@ -85,7 +85,7 @@ module.exports = {
   },
 
   //function to check all posted listing info
-  checkPostedListingInfo : function(req, res, next){
+  checkPostedListingInfoForCreate : function(req, res, next){
     console.log("F: Checking all posted listing info...");
 
     var posted_domains = req.body.domains;
@@ -578,10 +578,10 @@ module.exports = {
     var price_rate = req.body.price_rate;
     var price_type = req.body.price_type;
     var buy_price = req.body.buy_price;
+    var min_price = req.body.min_price;
 
-    //buyable or rentable
+    //rentable?
     var rentable = parseFloat(req.body.rentable);
-    var buyable = parseFloat(req.body.buyable);
 
     //example paths
     var paths = (req.body.paths) ? req.body.paths.replace(/\s/g, "").toLowerCase().split(",") : [];
@@ -630,13 +630,13 @@ module.exports = {
       error.handler(req, res, "Rental price must be a whole number!", "json");
     }
     else if (req.body.buy_price && !validator.isInt(buy_price) && buy_price != 0){
-      error.handler(req, res, "Purchase price must be a whole number!", "json");
+      error.handler(req, res, "The buy it now price must be a whole number!", "json");
     }
-    else if (buyable && buyable != 1 && buyable != 0){
-      error.handler(req, res, "Rental price must be a whole number!", "json");
+    else if (req.body.min_price && !validator.isInt(min_price) && min_price != 0){
+      error.handler(req, res, "The minimum price must be a whole number!", "json");
     }
     else if (rentable && rentable != 1 && rentable != 0){
-      error.handler(req, res, "Rental price must be a whole number!", "json");
+      error.handler(req, res, "Invalid option! Please refresh the page and try again!", "json");
     }
     else {
       var listing_info = getUserListingObj(req.user.listings, req.params.domain_name);
@@ -650,10 +650,10 @@ module.exports = {
       req.session.new_listing_info.price_type = price_type;
       req.session.new_listing_info.price_rate = price_rate;
       req.session.new_listing_info.buy_price = (buy_price == "" || buy_price == 0) ? "" : buy_price;
+      req.session.new_listing_info.min_price = (min_price == "" || min_price == 0) ? "" : min_price;
       req.session.new_listing_info.categories = (categories_clean == "") ? null : categories_clean;
       req.session.new_listing_info.paths = (paths_clean == "") ? null : paths_clean;
       req.session.new_listing_info.rentable = rentable;
-      req.session.new_listing_info.buyable = buyable;
 
       //delete anything that wasnt posted (except if its "", in which case it was intentional deletion)
       for (var x in req.session.new_listing_info){

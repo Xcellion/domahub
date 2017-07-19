@@ -118,19 +118,23 @@ function updateDescription(){
 function updatePricing(){
   var buy_price = getParameterByName("buy_price") || listing_info.buy_price;
   $("#buy-price-input").val(buy_price).on("input", function(){
+    listing_info.buy_price = $(this).val();
+    $("#buy-button").text("Buy now - " + moneyFormat.to(parseFloat(listing_info.buy_price)));
+  });
+  var min_price = getParameterByName("min_price") || listing_info.min_price;
+  $("#min-price-input").val(min_price).on("input", function(){
     if ($(this).val() > 0){
-      $("#buy-price-tag").removeClass('is-hidden');
-      $("#buy-price").text("For sale - " + moneyFormat.to(parseFloat($(this).val())));
+      $("#min-price-tag").removeClass('is-hidden');
+      $("#min-price-tag").text("For sale - " + moneyFormat.to(parseFloat($(this).val())));
       $("#min-price").removeClass('is-hidden').text(" (Minimum " + moneyFormat.to(parseFloat($(this).val())) + ")");
       $("#contact_offer").attr("placeholder", $(this).val());
     }
     else {
-      $("#buy-price-tag").addClass('is-hidden');
+      $("#min-price-tag").addClass('is-hidden');
       $("#min-price").addClass('is-hidden');
       $("#contact_offer").attr("placeholder", "");
     }
-    listing_info.buy_price = $(this).val();
-    // updateQueryStringParam("buy_price", $(this).val());
+    listing_info.min_price = $(this).val();
   });
   var price_rate = getParameterByName("price_rate") || listing_info.price_rate;
   $("#price-rate-input").val(price_rate).on("input", function(){
