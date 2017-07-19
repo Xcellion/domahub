@@ -317,7 +317,6 @@ module.exports = function(app, db, auth, error, stripe){
   app.get('/listing/:domain_name', [
     checkDomainValid,
     renter_functions.addToSearchHistory,
-    renter_functions.checkIfComparing,
     renter_functions.getListingInfo,
     renter_functions.checkStillVerified,
     stripe.checkStripeSubscription,

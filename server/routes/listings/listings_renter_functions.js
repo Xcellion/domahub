@@ -935,17 +935,6 @@ module.exports = {
     }
   },
 
-  //check if we're using the compare tool
-  checkIfComparing : function(req, res, next){
-    if (req.query.compare == "true"){
-      var domain_name = (typeof req.session.pipe_to_dh != "undefined") ? req.session.pipe_to_dh : req.params.domain_name;
-      getWhoIs(req, res, next, domain_name, true);
-    }
-    else {
-      next();
-    }
-  },
-
   //gets the listing info if it is listed
   getListingInfo : function(req, res, next) {
     var domain_name = (typeof req.session.pipe_to_dh != "undefined") ? req.session.pipe_to_dh : req.params.domain_name;
@@ -1489,13 +1478,15 @@ function getWhoIs(req, res, next, domain_name, unlisted){
 
       res.render("listings/listing.ejs", {
         user: req.user,
-        listing_info: req.session.listing_info,
+        listing_info: listing_info,
         compare : (req.query.compare == "true") ? true : false
       });
     }
+
+    //domain is listed on DomaHub, we just need to get the registrar creation and last updated date
     else {
-      req.session.listing_info.date_registered = whoisObj["Creation Date"];
       req.session.listing_info.date_updated = whoisObj["Updated Date"];
+      req.session.listing_info.date_registered = whoisObj["Creation Date"];
 
       next();
     }
