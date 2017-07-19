@@ -690,10 +690,15 @@ function createOtherDomains(other_listings){
       var sliced_domain = other_listings[x].domain_name;
     }
 
-    //available to buy
+    //available to buy now
     if (other_listings[x].buy_price > 0){
-      var buy_price = (other_listings[x].buy_price == 0) ? "" : moneyFormat.to(parseFloat(other_listings[x].buy_price));
-      cloned_similar_listing.find(".otherowner-domain-price").text("For sale - " + buy_price);
+      var buy_price = moneyFormat.to(parseFloat(other_listings[x].buy_price));
+      cloned_similar_listing.find(".otherowner-domain-price").text("Buy now - " + buy_price);
+    }
+    //available to buy at a specific minimum price
+    else if (other_listings[x].min_price > 0){
+      var min_price = moneyFormat.to(parseFloat(other_listings[x].min_price));
+      cloned_similar_listing.find(".otherowner-domain-price").text("For sale - " + min_price);
     }
     //else available for rent
     else if (other_listings[x].rentable && other_listings[x].price_rate > 0){
@@ -703,6 +708,7 @@ function createOtherDomains(other_listings){
     else if (other_listings[x].rentable && other_listings[x].price_rate <= 0){
       cloned_similar_listing.find(".otherowner-domain-price").text("For rent - Free");
     }
+    //just available (no minimum price, no BIN)
     else if (other_listings[x].status > 0){
       cloned_similar_listing.find(".otherowner-domain-price").text("Now available!");
     }

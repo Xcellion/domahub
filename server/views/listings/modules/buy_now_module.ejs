@@ -20,7 +20,7 @@
           </p>
           <label class="error_message label" for="contact_offer">Offer in USD<span id="min-price"></span></label>
           <p class="control has-icon">
-            <input id="contact_offer" required class="contact-input input" name="contact_offer" type="number" placeholder="<%= (listing_info.buy_price == 0) ? "" : listing_info.buy_price %>" min="<%= (listing_info.buy_price == 0) ? "" : listing_info.buy_price %>">
+            <input id="contact_offer" required class="contact-input input" name="contact_offer" type="number" placeholder="<%= (listing_info.min_price == 0) ? "" : listing_info.min_price %>" min="<%= (listing_info.min_price == 0) ? "" : listing_info.min_price %>">
             <i class="fa fa-money"></i>
           </p>
           <label class="error_message label" for="contact_message">Message</label>
@@ -33,8 +33,8 @@
                   Send Offer
               </button>
 
-              <% if (listing_info.buyable) { %>
-                  <button id="buy-button" name="buy" type="submit" class='margin-bottom-15 is-hidden is-accent button is-stylish contact-input'>Buy now</button>
+              <% if (listing_info.buy_price > 0) { %>
+                  <button id="buy-button" name="buy" type="submit" class='margin-bottom-15 is-accent button is-stylish contact-input'>Buy now</button>
               <% } %>
 
               <div>

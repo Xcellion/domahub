@@ -138,8 +138,8 @@ listing_model.prototype.getVerifiedListing = function(domain_name, callback){
         listings.rentable,\
         listings.price_type,\
         listings.price_rate,\
-        listings.buyable,\
         listings.buy_price,\
+        listings.min_price,\
         listings.description,\
         listings.description_hook,\
         listings.categories,\

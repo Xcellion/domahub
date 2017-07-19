@@ -52,28 +52,22 @@ var compare = <% if(typeof compare != "undefined"){ %><%-JSON.stringify(compare)
 
       <%# PRICING %>
       <div class="control">
-        <label class="label" for="buy-price-input">Minimum Purchase Price</label>
-        <input id="buy-price-input" type="number" min="1" step="1" class="input ">
+        <label class="label" for="min-price-input">Minimum Purchase Price</label>
+        <input id="min-price-input" type="number" min="1" step="1" class="input">
         <small class="tip">The minimum offer / price you will consider.</small>
       </div>
-      <div class="control is-spaced">
-        <div class="control-left">
-          <label class="label" for="buyable-input">Allow Buy It Now</label>
-          <small class="tip">Allows verified users to purchase this domain immediately.</small>
-          <small class="tip"><a href="/faq#selling" class="is-accent">What are the advantages of buying immediately?</a></small>
-        </div>
-        <div class="control-right">
-          <form class="checkbox-form">
-            <input id="buyable-input" type="checkbox" class="checkbox-input " tabindex="0" />
-            <label for="buyable-input"></label>
-          </form>
-        </div>
+      <div class="control">
+        <label class="label" for="buy-price-input">Buy It Now Price</label>
+        <input id="buy-price-input" type="number" min="1" step="1" class="input">
+        <small class="tip">The price you are willing to immediately sell the domain for.</small>
+        <small class="tip"><a target="_blank" href="/faq#selling" class="is-accent">What are the advantages of buying immediately?</a></small>
       </div>
+
       <div class="control is-spaced">
         <div class="control-left">
           <label class="label" for="rentable-input">Allow Rentals</label>
-          <small class="tip">Displays a calendar allowing verified users to rent usage of this domain for short amounts of time.</small>
-          <small class="tip"><a href="/faq#renting" class="is-accent">Why should I rent my domain out?</a></small>
+          <small class="tip">Allows verified users to rent usage of this domain for short amounts of time.</small>
+          <small class="tip"><a target="_blank" href="/faq#renting" class="is-accent">Why should I rent my domain out?</a></small>
         </div>
         <div class="control-right">
           <form class="checkbox-form">
