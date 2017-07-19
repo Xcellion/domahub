@@ -92,7 +92,7 @@ function mainPageLinksRender(req, res, next){
 
 //function to handle contact us form submission
 function contactUs(req, res, next){
-  console.log("F: Checking posted email for beta signup...");
+  console.log("F: Checking posted message for contact us form...");
 
   var contact_name = req.body.contact_name;
   var contact_email = req.body.contact_email;
