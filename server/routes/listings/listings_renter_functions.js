@@ -1452,8 +1452,8 @@ function getWhoIs(req, res, next, domain_name, unlisted){
         listing_info.status = 1;
         listing_info.price_rate = Math.round(Math.random() * 250);
         listing_info.price_type = "day";
-        listing_info.buy_price = Math.round(Math.random() * 10000);
-        listing_info.buyable = 1;
+        listing_info.min_price = Math.ceil(Math.round(Math.random() * 10000)/1000)*1000;
+        listing_info.buy_price = listing_info.min_price * 2;
         listing_info.rentable = 1;
         listing_info.primary_color = "#3CBC8D";
         listing_info.secondary_color = "#FF5722";
