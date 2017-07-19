@@ -940,7 +940,7 @@ module.exports = {
     var domain_name = (typeof req.session.pipe_to_dh != "undefined") ? req.session.pipe_to_dh : req.params.domain_name;
 
     //skip listed check if we've already determined it's unlisted and got redirected to domahub from custom URL
-    if (req.session.skip_listed_check == true){
+    if (req.session.skip_listed_check == domain_name){
       delete req.session.skip_listed_check;
       getWhoIs(req, res, next, domain_name, false);
     }
@@ -953,7 +953,7 @@ module.exports = {
         console.log(hostname);
         if (hostname != "domahub.com" && hostname != "localhost:8080"){
           console.log("WTF");
-          req.session.skip_listed_check = true;
+          req.session.skip_listed_check = domain_name;
           res.redirect("https://domahub.com/listing/" + hostname);
         }
         else {
