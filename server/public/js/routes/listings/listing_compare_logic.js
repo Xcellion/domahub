@@ -46,12 +46,14 @@ function enableToggleMenu() {
   var menu = $("#compare-menu");
   var preview = $("#compare-preview");
 
+  //click to hide the compare tool
   hideMenuButton.on("click", function() {
     menu.toggleClass("is-active");
     preview.toggleClass("is-active");
-    showMenuButton.fadeIn(250).toggleClass("is-hidden");
+    showMenuButton.fadeIn(100).toggleClass("is-hidden");
   });
 
+  //click to show the compare tool
   showMenuButton.on("click",function() {
     $(this).toggleClass("is-hidden");
     menu.toggleClass("is-active");
@@ -72,6 +74,14 @@ function switchTheme(theme_name){
 
   for (var x in theme_to_load){
     listing_info[x] = theme_to_load[x];
+  }
+
+  //hide footer if it's not a basic theme
+  if (theme_to_load.theme_name != "DomaHub"){
+    $(".footer").addClass('is-hidden');
+  }
+  else {
+    $(".footer").removeClass('is-hidden');
   }
 
   updateBackgroundImage(listing_info.background_image);
