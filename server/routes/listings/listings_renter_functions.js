@@ -961,7 +961,9 @@ module.exports = {
       getVerifiedListing(req, res, domain_name, function(result){
         //if unlisted and hostname isn't domahub, redirect to domahub
         var hostname = req.headers.host.replace(/^(https?:\/\/)?(www\.)?/,'');
-        if (hostname != "domahub.com" && hostname != "localhost"){
+        console.log(hostname);
+        if (hostname != "domahub.com" && hostname != "localhost:8080"){
+          console.log("WTF");
           req.session.skip_listed_check = true;
           res.redirect("https://domahub.com/listing/" + hostname);
         }
@@ -1359,7 +1361,7 @@ function getVerifiedListing(req, res, domain_name, callback_success, callback_er
   Listing.getVerifiedListing(domain_name, function(result){
     if (result.state=="error"){error.handler(req, res, "Invalid listing!");}
     else if (result.state=="success" && result.info.length <= 0){
-      console.log("F: " + domain_name + " is NOT listed on DomaHub.");
+      console.log("F: " + domain_name + " is NOT listed on DomaHub...");
       callback_success(result);
     }
     else {
