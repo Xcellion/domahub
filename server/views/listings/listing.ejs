@@ -18,7 +18,7 @@
 		<script type="text/javascript">
 			<% delete listing_info.owner_email %>
 			var listing_info = <% if(typeof listing_info != "undefined"){ %><%-JSON.stringify(listing_info)%><% }else{ %>""<% } %>;
-			var compare = false;
+      var compare = <% if(typeof compare != "undefined"){ %><%-JSON.stringify(compare)%><% }else{ %>""<% } %>;
 		</script>
 
 		<div id="contact-success" class="is-hidden notification is-popup is-primary">
@@ -44,8 +44,7 @@
 		</div>
 
 		<%# TOOL TO COMPARE %>
-		<% if (compare && listing_info.unlisted) { %>
-			<div id="compare-model">
+		<% if (compare) { %>
 			<%- include("modules/compare_module.ejs") %>
 		<% } %>
 
