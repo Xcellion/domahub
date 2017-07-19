@@ -39,8 +39,8 @@ function submitContact(){
                 $("#error_message").text(data.message).removeClass("is-hidden");
             }
             else {
-                $("input, textarea").not("#submit-button").val("");
-                $("#submit-button").val("Thank you!").addClass('is-disabled');
+                $("input, textarea").not("#submit-button").val("").addClass('is-disabled');
+                $("#submit-button").text("Thank you!").addClass('is-disabled');
             }
             $("#message-success").removeClass("is-hidden").addClass("is-active");
         });
