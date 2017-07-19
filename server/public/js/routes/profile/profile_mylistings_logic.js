@@ -833,7 +833,7 @@ function updateBindings(listing_info){
   $("#status-color").off().on("click", function(e){
     var new_status = ($("#status-input").val() == "1") ? 0 : 1;
     updateStatus({ status : new_status });
-    changedValue($("#status-input"), listing_info);
+    submitStatusChange();
   });
 
   //module checkbox handlers
@@ -1097,6 +1097,45 @@ function cancelListingChanges(){
 
   errorMessage(false);
   successMessage(false);
+}
+
+//function to submit status change
+function submitStatusChange(){
+  //clear any existing messages
+  errorMessage(false);
+  successMessage(false);
+
+  var formData = new FormData();
+  formData.append("status", $("#status-input").val());
+
+  $.ajax({
+    url: "/listing/" + current_listing.domain_name + "/update",
+    type: "POST",
+    data: formData,
+    // Options to tell jQuery not to process data or worry about the content-type
+    cache: false,
+    contentType: false,
+    processData: false
+  }, 'json').done(function(data){
+    if (data.state == "success"){
+      var active_inactive_text = ($("#status-input").val() == "0") ? "inactive" : "active";
+      successMessage("Listing has been set to " + active_inactive_text + "!");
+      updateCurrentListing(data.listings);
+      refreshSubmitButtons();
+
+      (function(listing_info){
+        //update the change row handler
+        $("#row-listing_id" + current_listing.id).off().on("click", function(e){
+          changeRow($(this), listing_info, true);
+        });
+
+        updateBindings(listing_info);
+      })(current_listing);
+    }
+    else {
+      errorMessage(data.message);
+    }
+  });
 }
 
 //function to submit any changes to a listing
