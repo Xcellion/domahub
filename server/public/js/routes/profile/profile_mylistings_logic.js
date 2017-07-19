@@ -236,6 +236,7 @@ $(document).ready(function(){
 //function to create all rows
 function createRows(){
 
+  console.log("creating rows");
   //empty the table
   $("#table-body").find(".table-row:not(.clone-row)").remove();
 
@@ -304,7 +305,7 @@ function createRow(listing_info, rownum){
   tempRow.data("selected", false);
   tempRow.data("id", listing_info.id);
   tempRow.data("domain_name", listing_info.domain_name);
-  if (listing_info.stripe_subscription_id){
+  if (listing_info.stripe_subscription_id || listing_info.premium == true){
     tempRow.data("premium", true);
     tempRow.data("basic", false);
   }
@@ -1002,6 +1003,7 @@ function submitPremium(listing_info, stripeToken, button_elem){
       else {
         successMessage("Successfully upgraded to Premium!");
       }
+
       updatePremiumPostAjax(data.listings);
     }
     else {
@@ -1043,6 +1045,9 @@ function updatePremiumPostAjax(new_listings){
 
     updateBindings(listing_info);
     updatePremium(listing_info);
+
+    //recreate rows so filters will work
+    createRows();
   })(current_listing);
 }
 
