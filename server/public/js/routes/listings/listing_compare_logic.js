@@ -433,8 +433,8 @@ function createTestOtherDomains(){
     "goingon.holiday",
     "illtakeyour.photo",
     "cleanoutyour.plumbing",
-    "myboyfriendis.sexy",
-    "mygirlfriendis.sexy",
+    "myboyfriendis.cool",
+    "mygirlfriendis.smart",
     "whereareallthe.singles",
     "ilove.nyc",
     "abc.xyz",
@@ -458,8 +458,11 @@ function createTestOtherDomains(){
     }
 
     var domain_price_type_random = Math.random();
-    if (domain_price_type_random > 0.6){
-      test_listing.buy_price = Math.round(Math.random() * 10000);
+    if (domain_price_type_random > 0.8){
+      test_listing.min_price = Math.ceil(Math.round(Math.random() * 10000)/1000)*1000;
+    }
+    else if (domain_price_type_random > 0.6){
+      test_listing.buy_price = Math.ceil(Math.round(Math.random() * 10000)/1000)*2000;
     }
     else if (domain_price_type_random > 0.4){
       test_listing.rentable = 1;
