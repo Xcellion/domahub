@@ -950,9 +950,7 @@ module.exports = {
       getVerifiedListing(req, res, domain_name, function(result){
         //if unlisted and hostname isn't domahub, redirect to domahub
         var hostname = req.headers.host.replace(/^(https?:\/\/)?(www\.)?/,'');
-        console.log(hostname);
         if (hostname != "domahub.com" && hostname != "localhost:8080"){
-          console.log("WTF");
           req.session.skip_listed_check = domain_name;
           res.redirect("https://domahub.com/listing/" + hostname);
         }

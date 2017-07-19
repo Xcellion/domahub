@@ -51,14 +51,12 @@
 		<%# IS THE LISTED LISTED OR UNLISTED WITH DOMAHUB %>
 		<% if (listing_info.unlisted && !compare) { %>
 			<%- include("unlisted_page.ejs") %>
-			</div>
 		<% } else { %>
 			<%- include("listed_page.ejs") %>
-			</div>
 		<% } %>
 
 		<%# SHOW OR HIDE FOOTER %>
-		<% if (!compare && !listing_info.premium) { %>
+		<% if (!listing_info.premium) { %>
 			<footer class="footer is-dark is-hidden">
 				<div class="container">
 					<p id="powered-by" class="is-primary">
