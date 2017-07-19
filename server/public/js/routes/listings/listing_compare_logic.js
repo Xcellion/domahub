@@ -35,12 +35,12 @@ $(document).ready(function() {
       $("#theme-input").val("Custom");
     });
 
-    toggleMenu();
+    enableToggleMenu();
   }
 });
 
 //function to hide and show menu
-function toggleMenu() {
+function enableToggleMenu() {
   var hideMenuButton = $("#hide-menu-button");
   var showMenuButton = $("#show-menu-button");
   var menu = $("#compare-menu");
