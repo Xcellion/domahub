@@ -935,6 +935,17 @@ module.exports = {
     }
   },
 
+  //check if we're using the compare tool
+  checkIfComparing : function(req, res, next){
+    if (req.query.compare == "true"){
+      var domain_name = (typeof req.session.pipe_to_dh != "undefined") ? req.session.pipe_to_dh : req.params.domain_name;
+      getWhoIs(req, res, next, domain_name, true);
+    }
+    else {
+      next();
+    }
+  },
+
   //gets the listing info if it is listed
   getListingInfo : function(req, res, next) {
     var domain_name = (typeof req.session.pipe_to_dh != "undefined") ? req.session.pipe_to_dh : req.params.domain_name;
@@ -950,7 +961,7 @@ module.exports = {
       getVerifiedListing(req, res, domain_name, function(result){
         //if unlisted and hostname isn't domahub, redirect to domahub
         var hostname = req.headers.host.replace(/^(https?:\/\/)?(www\.)?/,'');
-        if (hostname != "domahub.com" || hostname != "localhost"){
+        if (hostname != "domahub.com" && hostname != "localhost"){
           req.session.skip_listed_check = true;
           res.redirect("https://domahub.com/listing/" + hostname);
         }
