@@ -80,7 +80,7 @@ function stylize(color, element, style) {
 
 //function to setup any custom premium colors
 function setupCustomColors(){
-  stylize(listing_info.primary_color, ".is-primary", "color");
+  stylize(listing_info.primary_color, ".is-primary:not(.notification)", "color");
   stylize(listing_info.primary_color, ".daterangepicker td.active, .daterangepicker td.active:hover", "background-color");
   stylize(listing_info.primary_color, ".button", "background-color");
   stylize(listing_info.primary_color, ".tag", "background-color");

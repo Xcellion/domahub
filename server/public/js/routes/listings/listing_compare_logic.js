@@ -68,8 +68,13 @@ function switchTheme(theme_name){
   var theme_to_load = findTheme(theme_name);
 
   //if there wasnt a theme, load domahub theme
-  if (!theme_to_load){
+  if (!theme_to_load && theme_name != "Custom"){
     var theme_to_load = findTheme("DomaHub");
+  }
+  else if (theme_name == "Custom"){
+    var theme_to_load = {
+      theme_name : "Custom"
+    }
   }
 
   for (var x in theme_to_load){
@@ -78,10 +83,10 @@ function switchTheme(theme_name){
 
   //hide footer if it's not a basic theme
   if (theme_to_load.theme_name != "DomaHub"){
-    $(".footer").addClass('is-hidden');
+    $(".footer.is-dark").addClass('is-hidden');
   }
   else {
-    $(".footer").removeClass('is-hidden');
+    $(".footer.is-dark").removeClass('is-hidden');
   }
 
   updateBackgroundImage(listing_info.background_image);
