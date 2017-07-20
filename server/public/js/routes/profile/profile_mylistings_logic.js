@@ -787,6 +787,9 @@ function updatePremium(listing_info){
       if (listing_info.exp_date){
         $("#renew-status").text("Premium is active, but set to expire on " + moment(listing_info.exp_date * 1000).format("MMM DD, YYYY") + ". You will not be charged further for this listing.");
       }
+      else {
+        $("#renew-status").text("Premium is currently active.");
+      }
 
       //hide the checkout button until you click to change payment method
       $("#checkout-button").text("Confirm Payment Method").attr("title", "Confirm Payment Method").addClass('is-hidden');
@@ -803,6 +806,9 @@ function updatePremium(listing_info){
 
       if (listing_info.exp_date){
         $("#renew-status").text("Premium is active and set to renew on " + moment(listing_info.exp_date * 1000).format("MMM DD, YYYY") + ". You will be charged $1 at renewal.");
+      }
+      else {
+        $("#renew-status").text("Premium is currently active.");
       }
 
       //renewing, so hide the renew button
