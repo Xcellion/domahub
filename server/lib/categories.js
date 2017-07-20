@@ -5,16 +5,52 @@ var all_categories = [
     front: "Adult"
   },
   {
+    back: "art",
+    front: "Art"
+  },
+  {
+    back: "automotive",
+    front: "Automotive"
+  },
+  {
     back: "business",
     front: "Business"
+  },
+  {
+    back: "dating",
+    front: "Dating"
   },
   {
     back: "ecard",
     front: "E-Card"
   },
   {
+    back: "education",
+    front: "Education"
+  },
+  {
     back: "event",
     front: "Event"
+  },
+  {
+    back: "family",
+    front: "Family"
+  },
+  {
+    back: "financial",
+    front: "Financial"
+  },
+  {
+    back: "food",
+    front: "Food"
+  },
+  {
+    back: "gaming",
+    front: "Gaming"
+  },
+  {
+    back: "health",
+    front: "Health"
   },
   {
     back: "hightraffic",
@@ -25,8 +61,24 @@ var all_categories = [
     front: "Holiday"
   },
   {
+    back: "home",
+    front: "Home"
+  },
+  {
     back: "industry",
     front: "Industry"
+  },
+  {
+    back: "information",
+    front: "Information"
+  },
+  {
+    back: "insurance",
+    front: "Insurance"
+  },
+  {
+    back: "legal",
+    front: "Legal"
   },
   {
     back: "niche",
@@ -37,6 +89,10 @@ var all_categories = [
     front: "Marketing"
   },
   {
+    back: "music",
+    front: "Music"
+  },
+  {
     back: "other",
     front: "Other"
   },
@@ -45,12 +101,44 @@ var all_categories = [
     front: "Personal"
   },
   {
+    back: "politics",
+    front: "Politics"
+  },
+  {
     back: "promotion",
     front: "Promotion"
   },
   {
+    back: "realestate",
+    front: "Real Estate"
+  },
+  {
+    back: "religion",
+    front: "Religion"
+  },
+  {
+    back: "science",
+    front: "Science"
+  },
+  {
+    back: "shopping",
+    front: "Shopping"
+  },
+  {
+    back: "sports",
+    front: "Sports"
+  },
+  {
     back: "startup",
     front: "Start-Up"
+  },
+  {
+    back: "technology",
+    front: "Technology"
+  },
+  {
+    back: "travel",
+    front: "Travel"
   }
 ]
 

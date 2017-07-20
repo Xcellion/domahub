@@ -357,6 +357,10 @@ function changeRow(row, listing_info, bool){
     $(".current-domain-name").text(listing_info.domain_name);
     $("#current-domain-view").attr("href", "/listing/" + listing_info.domain_name);
 
+    //hide CC form
+    $("#checkout-button").addClass('is-hidden');
+    $("#stripe-form").addClass('is-hidden');
+
     //update inputs for purchased domain
     if (listing_info.accepted){
       editRowPurchased(listing_info);
