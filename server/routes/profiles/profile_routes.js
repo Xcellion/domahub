@@ -12,35 +12,7 @@ var qs = require('qs');
 module.exports = function(app, db, auth, error, stripe){
   Account = new account_model(db);
 
-  //mylistings pages
-  app.get([
-    "/profile",
-    "/profile/mylistings"
-  ], [
-    auth.checkLoggedIn,
-    profile_functions.getAccountListings,
-    stripe.getAccountInfo,
-    profile_functions.renderMyListings
-  ]);
-
-  //mylistings multi delete
-  app.post("/profile/mylistings/delete", [
-    urlencodedParser,
-    auth.checkLoggedIn,
-    profile_functions.getAccountListings,
-    profile_functions.checkPostedDeletionRows,
-    profile_functions.deleteListings
-  ]);
-
-  //mylistings multi verify
-  app.post("/profile/mylistings/verify", [
-    urlencodedParser,
-    auth.checkLoggedIn,
-    profile_functions.getAccountListings,
-    stripe.getAccountInfo,
-    profile_functions.checkPostedVerificationRows,
-    profile_functions.verifyListings
-  ]);
+  //<editor-fold>------------------------------------------------------------------------------------------RENTALS
 
   //myrentals pages
   // app.get([
@@ -79,32 +51,82 @@ module.exports = function(app, db, auth, error, stripe){
   //   profile_functions.renderInbox
   // ])
 
+  //</editor-fold>
+
+  //<editor-fold>------------------------------------------------------------------------------------------PROFILE
+
+  //mylistings pages
+  app.get([
+    "/profile",
+    "/profile/mylistings"
+  ], [
+    auth.checkLoggedIn,
+    profile_functions.getAccountListings,
+    stripe.getAccountInfo,
+    stripe.getStripeSubscription,
+    profile_functions.updateAccountSettingsGet,
+    profile_functions.renderMyListings
+  ]);
+
+  //mylistings multi delete
+  app.post("/profile/mylistings/delete", [
+    urlencodedParser,
+    auth.checkLoggedIn,
+    profile_functions.getAccountListings,
+    profile_functions.checkPostedDeletionRows,
+    profile_functions.deleteListings
+  ]);
+
+  //mylistings multi verify
+  app.post("/profile/mylistings/verify", [
+    urlencodedParser,
+    auth.checkLoggedIn,
+    profile_functions.getAccountListings,
+    stripe.getAccountInfo,
+    profile_functions.checkPostedVerificationRows,
+    profile_functions.verifyListings
+  ]);
+
+  //update listing to premium
+  app.post("/profile/upgrade", [
+    urlencodedParser,
+    auth.checkLoggedIn,
+    stripe.createStripeCustomer,
+    stripe.createStripeSubscription,
+    profile_functions.updateAccountSettingsPost
+  ]);
+
+  //cancel renewal of premium
+  app.post("/profile/downgrade", [
+    urlencodedParser,
+    auth.checkLoggedIn,
+    stripe.cancelStripeSubscription
+  ]);
+
   //settings
   app.get("/profile/settings", [
     auth.checkLoggedIn,
     stripe.getAccountInfo,
     stripe.getTransfers,
+    stripe.getStripeCustomer,
+    stripe.getStripeSubscription,
+    profile_functions.updateAccountSettingsGet,
     profile_functions.renderSettings
   ]);
-
-  //temporary to test /redirect page
-  app.get("/redirect", function(req, res){
-    res.render("redirect.ejs", {
-      redirect: "/"
-    });
-  });
 
   //redirect anything not caught above to /profile
   app.get("/profile*", profile_functions.redirectProfile);
 
-  //------------------------------------------------------------------------------------------ STRIPE MANAGED
+  //</editor-fold>
+
+  //<editor-fold>------------------------------------------------------------------------------------------ STRIPE MANAGED
 
   //post to change account settings
   app.post("/profile/settings", [
     urlencodedParser,
     auth.checkLoggedIn,
     auth.checkAccountSettings,
-    auth.updateAccountSettings
+    profile_functions.updateAccountSettingsPost
   ]);
 
   //post to create new stripe managed account or update address of old
@@ -113,7 +135,7 @@ module.exports = function(app, db, auth, error, stripe){
     auth.checkLoggedIn,
     stripe.checkPayoutAddress,
     stripe.createManagedAccount,
-    auth.updateAccountStripe
+    profile_functions.updateAccountStripe
   ]);
 
   //post to update personal info of old stripe managed account
@@ -123,7 +145,7 @@ module.exports = function(app, db, auth, error, stripe){
     stripe.checkManagedAccount,
     stripe.checkPayoutPersonal,
     stripe.updateStripePersonal,
-    auth.updateAccountStripe
+    profile_functions.updateAccountStripe
   ]);
 
   //post to update personal info of existing stripe managed account
@@ -144,23 +166,5 @@ module.exports = function(app, db, auth, error, stripe){
     stripe.updateStripeBank
   ]);
 
-  //------------------------------------------------------------------------------------------ STRIPE STANDALONE (deprecated)
-
-  //connect stripe
-  // app.get("/connectstripe", [
-  //   auth.checkLoggedIn,
-  //   stripe.connectStripe
-  // ]);
-
-  //authorize stripe
-  // app.get("/authorizestripe", [
-  //   auth.checkLoggedIn,
-  //   stripe.authorizeStripe
-  // ]);
-
-  //deauthorize stripe
-  // app.post("/deauthorizestripe", [
-  //   auth.checkLoggedIn,
-  //   stripe.deauthorizeStripe
-  // ]);
+  //</editor-fold>
 }

@@ -9,6 +9,9 @@ var parser = require('parse-whois');
 var dns = require("dns");
 
 module.exports = {
+
+  //<editor-fold>----------------------------------------------------------------------GET ACCOUNT INFO
+
   //gets all listings for a user
   getAccountListings : function(req, res, next){
 
@@ -119,7 +122,9 @@ module.exports = {
     }
   },
 
-  //----------------------------------------------------------------------RENTAL----------------------------------------------------------
+  //</editor-fold>
+
+  //<editor-fold>----------------------------------------------------------------------MULTI
 
   checkPostedDeletionRows : function(req, res, next){
     console.log("F: Checking posted IDs for deletion...");
@@ -240,23 +245,23 @@ module.exports = {
     }
   },
 
-  //multi-delete rentals
-  deleteRentals : function(req, res, next){
-    console.log("F: Deleting rentals...");
-    Listing.deleteRentals(req.session.deletion_object, function(result){
-      if (result.state == "success"){
-        updateUserRentalsObject(req.user.rentals, req.session.deletion_object);
-        delete req.session.deletion_object;
-        res.send({
-          state: "success",
-          rows: req.user.rentals
-        });
-      }
-      else {
-        res.send({state: "error"});
-      }
-    });
-  },
+  // //multi-delete rentals
+  // deleteRentals : function(req, res, next){
+  //   console.log("F: Deleting rentals...");
+  //   Listing.deleteRentals(req.session.deletion_object, function(result){
+  //     if (result.state == "success"){
+  //       updateUserRentalsObject(req.user.rentals, req.session.deletion_object);
+  //       delete req.session.deletion_object;
+  //       res.send({
+  //         state: "success",
+  //         rows: req.user.rentals
+  //       });
+  //     }
+  //     else {
+  //       res.send({state: "error"});
+  //     }
+  //   });
+  // },
 
   //multi-delete listings
   deleteListings : function(req, res, next){
@@ -298,7 +303,126 @@ module.exports = {
     });
   },
 
-  //----------------------------------------------------------------------RENDERS----------------------------------------------------------
+  //</editor-fold>
+
+  //<editor-fold>----------------------------------------------------------------------UPDATE ACCOUNT
+
+  //function to update account settings on a get
+  updateAccountSettingsGet : function(req, res, next){
+
+    //any changes from other routes (stripe upgrade)
+    if (req.session.new_account_info){
+      console.log('F: Updating account settings...');
+
+      var new_account_info = {};
+      for (var x in req.session.new_account_info){
+        new_account_info[x] = req.session.new_account_info[x];
+      }
+
+      //remove old invalid stripe subscription ID
+      //this function can be called from anonymous user (aka listing_info exists) or the account owner (aka listing_info doesnt exist)
+      var owner_email = (req.session.listing_info) ? req.session.listing_info.owner_email : req.user.email;
+      Account.updateAccount(new_account_info, owner_email, function(result){
+        if (result.state == "success" && !req.session.listing_info){
+          for (var x in new_account_info){
+            req.user[x] = new_account_info[x];
+          }
+        }
+        next();
+      });
+
+    }
+    else {
+      next();
+    }
+
+  },
+
+  //function to update account settings on a post
+  updateAccountSettingsPost : function(req, res, next){
+    console.log('F: Updating account settings...');
+
+    var new_account_info = {};
+
+    //any posted changes
+    if (req.body.new_email){
+      new_account_info.email = req.body.new_email;
+    }
+    if (req.body.username){
+      new_account_info.username = req.body.username;
+    }
+    if (req.body.new_password){
+      new_account_info.password = bcrypt.hashSync(req.body.new_password, null, null);
+    }
+    if (req.body.paypal_email){
+      new_account_info.paypal_email = req.body.paypal_email;
+    }
+
+    //any changes from other routes (stripe upgrade)
+    if (req.session.new_account_info){
+      for (var x in req.session.new_account_info){
+        new_account_info[x] = req.session.new_account_info[x];
+      }
+    }
+
+    //update only if theres something to update
+    if (!isEmptyObject(new_account_info)){
+      Account.updateAccount(new_account_info, req.user.email, function(result){
+        if (result.state=="error"){
+          if (result.errcode == "ER_DUP_ENTRY"){
+            error.handler(req, res, "A user with that email/username already exists!", "json");
+          }
+          else {
+            error.handler(req, res, result.info, "json");
+          }
+        }
+        else {
+          for (var x in new_account_info){
+            req.user[x] = new_account_info[x];
+          }
+          res.json({
+            state: "success",
+            user: req.user
+          });
+        }
+      });
+    }
+    else {
+      res.json({
+        state: "success",
+        user: req.user
+      });
+    }
+
+  },
+
+  //function to update for managed stripe
+  updateAccountStripe : function(req, res, next){
+    console.log('F: Updating account Stripe settings...');
+
+    Account.updateAccount({
+      stripe_account : req.session.stripe_results.id,
+      stripe_secret : req.session.stripe_results.keys.secret,
+      stripe_public : req.session.stripe_results.keys.publishable,
+      type: 2
+    }, req.user.email, function(result){
+      if (result.state=="error"){
+        error.handler(req, res, result.info, "json");
+      }
+      else {
+        req.user.stripe_account = req.session.stripe_results.id;
+        delete req.session.stripe_results;
+        res.json({
+          state: "success",
+          user: req.user
+        });
+      }
+    });
+  },
+
+  //</editor-fold>
+
+  //<editor-fold>----------------------------------------------------------------------RENDERS
 
   renderDashboard : function(req, res){
     res.render("profile/profile_dashboard", {
@@ -360,6 +484,8 @@ module.exports = {
       res.redirect("/profile/settings");
     }
   }
+
+  //</editor-fold>
 
 }
 
@@ -452,4 +578,9 @@ function updateUserListingsObjectVerify(user_listings, to_verify_formatted){
       }
     }
   }
+}
+
+//helper to check for empty object
+function isEmptyObject(obj) {
+  return !Object.keys(obj).length;
 }

@@ -6,47 +6,6 @@ $(document).ready(function() {
     handleSubmitDisabled();
   });
 
-  //<editor-fold>-------------------------------STRIPE-------------------------------
-
-  //key for stripe
-  if (window.location.hostname == "localhost"){
-    Stripe.setPublishableKey('pk_test_kcmOEkkC3QtULG5JiRMWVODJ');
-  }
-  else {
-    Stripe.setPublishableKey('pk_live_506Yzo8MYppeCnLZkW9GEm13');
-  }
-
-  //format all stripe inputs
-  $('#cc-num').payment('formatCardNumber');
-  $('#cc-exp').payment('formatCardExpiry');
-  $('#cc-cvc').payment('formatCardCVC');
-  $('#cc-zip').payment('restrictNumeric');
-
-  //request a token from stripe
-  $("#stripe-form").on("submit", function(e){
-    Stripe.card.createToken($(this), function(status, response){
-      if (response.error){
-        $(".stripe-input").removeClass('is-disabled');
-        $("#review-table-button, #goback-button").off().on("click", function(e){
-          e.preventDefault();
-          showTable();
-          refreshNotification();
-        });
-        $("#checkout-button").removeClass('is-loading').on("click", function(){
-          submitStripe($(this));
-        });
-        handleErrors(response.error.message);
-      }
-      //all good!
-      else {
-        submitStripeToken(response.id);
-      }
-    });
-    return false;
-  });
-
-  //</editor-fold>
-
   //<editor-fold>-------------------------------LISTING CREATE-------------------------------
 
   //submit to create the table
@@ -70,7 +29,6 @@ $(document).ready(function() {
       clearSuccessRows();
       createTableRow("");
       handleSubmitDisabled();
-      calculateSummaryRows();
     }
   });
 
@@ -85,11 +43,6 @@ $(document).ready(function() {
     }
   });
 
-  //premium all rows
-  $("#premium-check-all-input").on("change", function(e){
-    $(".premium-input").prop("checked", $(this).prop("checked"));
-  });
-
   //submit to create listings
   $("#domains-submit").on("click", function(e){
     e.preventDefault();
@@ -102,7 +55,6 @@ $(document).ready(function() {
     showTable();
     refreshNotification();
   });
-
 
   //</editor-fold>
 
@@ -159,7 +111,6 @@ function createTable(bad_listings, good_listings){
   }
 
   showHelpText("table");
-  calculateSummaryRows();
   window.scrollTo(0, 0);    //scroll to top so we can see the help text
   handleSubmitDisabled();
 }
@@ -171,11 +122,8 @@ function createTable(bad_listings, good_listings){
 //function to show the table
 function showTable(){
   showHelpText("table");
-  showExistingCC();
   $("#domains-submit").removeClass('is-hidden is-disabled');
-  $("#payment-column").addClass('is-hidden');
   $("#table-column").removeClass('is-hidden');
-  $("#summary-column").removeClass('is-offset-2');
   $("#review-table-button").addClass('is-hidden');
 }
 
@@ -186,11 +134,6 @@ function createTableRow(data){
   temp_table_row.removeAttr('id');
   temp_table_row.find(".domain-name-input").val(data.domain_name).on("keyup change", function(){
     handleSubmitDisabled();
-  });
-
-  //click handler for price type select
-  temp_table_row.find(".premium-input").on("click", function(){
-    calculateSummaryRows();
   });
 
   temp_table_row.find()
@@ -204,7 +147,6 @@ function createTableRow(data){
     handleSubmitDisabled();
     handleTopAddDomainButton();
     refreshNotification();
-    calculateSummaryRows();
   });
 
   //reasons for why it was a bad listing
@@ -214,49 +156,9 @@ function createTableRow(data){
   temp_table_row.appendTo("#domain-input-table");
   temp_table_row.find(".domain-name-input").focus();
 
-  //set ID for premium label
-  temp_table_row.find(".premium-input").attr("id", "premium-input" + temp_table_row.index());
-  temp_table_row.find(".premium-label").attr("for", "premium-input" + temp_table_row.index());
-
   //add addbutton on top if there are too many
   handleTopAddDomainButton();
-
-  //calculate new basic v premium counts
-  calculateSummaryRows();
   refreshNotification();
-}
-
-//function to calculate/refresh the summary rows
-function calculateSummaryRows(){
-  var total_rows = $(".domain-name-input").not("#clone-row .domain-name-input").length;
-  var premium_domains = $(".premium-input:checked").not("#clone-row .premium-input").not('.is-disabled').length;
-  var basic_domains = total_rows - premium_domains;
-
-  $("#basic-count-total").text(basic_domains);
-  $("#premium-count-total").text(premium_domains);
-
-  //plural or not
-  var basic_plural = (basic_domains > 1) ? "s" : "";
-  $("#basic-count-plural").text(basic_plural);
-  var premium_plural = (premium_domains > 1) ? "s" : "";
-  $("#premium-count-plural").text(premium_plural);
-
-  if (premium_domains){
-    $("#premium-summary-row").removeClass('is-hidden');
-  }
-  else {
-    $("#premium-summary-row").addClass('is-hidden');
-  }
-
-  if (basic_domains){
-    $("#basic-summary-row").removeClass('is-hidden');
-  }
-  else {
-    $("#basic-summary-row").addClass('is-hidden');
-  }
-
-  var total_price = (premium_domains > 0) ? "$" + (premium_domains) + " / year": "FREE";
-  $("#summary-total-price").text(total_price);
 }
 
 //function to show or disable submit
@@ -297,14 +199,8 @@ function submitDomains(submit_elem){
     var domains = getTableListingInfo(".domain-name-input");
 
     if (domains.length > 0){
-      //check for any premium
-      if ($(".premium-input:checked").length > 0){
-        showCCForm(submit_elem);
-      }
-      else {
-        submit_elem.off().addClass('is-loading');
-        submitDomainsAjax(domains, submit_elem);
-      }
+      submit_elem.off().addClass('is-loading');
+      submitDomainsAjax(domains, submit_elem);
     }
   }
 
@@ -319,8 +215,7 @@ function getTableListingInfo(){
     if (temp_row.find(".domain-name-input").val() && !temp_row.find(".domain-name-input").hasClass('is-disabled')){
       var row_obj = {
         domain_name : temp_row.find(".domain-name-input").val().replace(/\s/g, ''),
-        buy_price : temp_row.find(".buy-price-input").val(),
-        premium : temp_row.find(".premium-input").prop("checked")
+        min_price : temp_row.find(".min-price-input").val()
       };
       temp_array.push(row_obj);
     }
@@ -329,21 +224,15 @@ function getTableListingInfo(){
 }
 
 //function to send ajax to server for domain creation
-function submitDomainsAjax(domains, submit_elem, stripeToken){
+function submitDomainsAjax(domains, submit_elem){
   deleteGoodTableRows();
-
-  //existing CC or new one
-  var data = {
-    domains: domains
-  };
-  if (stripeToken){
-    data.stripeToken = stripeToken;
-  }
 
   $.ajax({
     url: "/listings/create",
     method: "POST",
-    data: data
+    data: {
+      domains: domains
+    }
   }).done(function(data){
     refreshNotification();
 
@@ -362,15 +251,6 @@ function submitDomainsAjax(domains, submit_elem, stripeToken){
     if (data.bad_listings && data.bad_listings.length == 0){
       showHelpText("success");
     }
-
-    //clear the CVC
-    $('#cc-cvc').val("");
-    $(".stripe-input").removeClass('is-disabled');
-
-    //click handler for getting stripe token
-    $("#checkout-button").removeClass('is-loading').off().on("click", function(){
-      submitStripe($(this));
-    });
 
     //click handler for resubmitting newly added domains
     $("#domains-submit").removeClass('is-loading').off().on("click", function(e){
@@ -508,7 +388,6 @@ function goodTableRows(good_listings){
     var explanation = $("<small class='is-primary is-pulled-right'>Successfully added!</small>")
     table_row.find(".domain-name-input").addClass('is-primary').closest('td').append(explanation);
     table_row.find(".domain-name-input, .buy-price-input").addClass('is-disabled');
-    table_row.find(".premium-input").addClass('is-disabled');
   }
 }
 
@@ -519,129 +398,6 @@ function deleteGoodTableRows(){
   if ($(".table-row").length == 1){
     createTableRow("");
   }
-}
-
-//</editor-fold>
-
-//<editor-fold>-------------------------------PAYMENT SUBMIT-------------------------------
-
-//function to show the CC payment form
-function showCCForm(old_submit){
-  clearDangerSuccess();
-  $("#payment-column").removeClass('is-hidden');
-  $("#table-column").addClass('is-hidden');
-  $("#summary-column").addClass('is-offset-2');
-  $("#review-table-button").removeClass('is-hidden');
-
-  showHelpText("payment");
-  window.scrollTo(0, 0);    //scroll to top so we can see the help text
-
-  //click handler for getting stripe token
-  $("#checkout-button").off().on("click", function(){
-    submitStripe($(this));
-  });
-
-  showExistingCC();
-}
-
-//show existing cc or not
-function showExistingCC(){
-  //if user doesnt have an existing card
-  if (user.stripe_info && user.stripe_info.premium_cc_last4 && user.stripe_info.premium_cc_brand){
-    $("#existing-cc-form").removeClass('is-hidden');
-    $("#stripe-form").addClass('is-hidden');
-    $("#change-card-button").removeClass('is-hidden');
-
-    //last 4 digits
-    var premium_cc_last4 = (user.stripe_info.premium_cc_last4) ? user.stripe_info.premium_cc_last4 : "****";
-    var premium_cc_brand = (user.stripe_info.premium_cc_brand) ? user.stripe_info.premium_cc_brand : "Credit"
-    $("#existing-cc").text(premium_cc_brand + " card ending in " + premium_cc_last4);
-
-    //change card handler
-    $("#change-card-button").off().on("click", function(){
-      $("#stripe-form").removeClass('is-hidden');
-      $("#change-card-button").addClass('is-hidden');
-    });
-  }
-  else {
-    $("#existing-cc-form").addClass('is-hidden');
-    $("#stripe-form").removeClass('is-hidden');
-  }
-}
-
-//helper function to check if everything is legit on payment form
-function checkCCSubmit(){
-  if (!$("#cc-num").val()){
-    handleErrors("Invalid cc");
-    return false;
-  }
-  else if (!$("#cc-exp").val()){
-    handleErrors("Invalid cc exp");
-    return false;
-  }
-  else if (!$("#cc-cvc").val()){
-    handleErrors("Invalid cvc");
-    return false;
-  }
-  else if (!$("#cc-zip").val()){
-    handleErrors("Invalid zip");
-    return false;
-  }
-  else {
-    return true;
-  }
-}
-
-//helper function for handling CC errors
-function handleErrors(error_description){
-  $("#payment-error-message").removeClass('is-hidden');
-
-  switch (error_description){
-    case "No Stripe Token":
-    case "Invalid cc":
-    var error_desc = "Please provide a valid credit card to charge.";
-    break;
-    case "Invalid cc exp":
-    var error_desc = "Please provide your credit card expiration date.";
-    break;
-    case "Invalid cvc":
-    var error_desc = "Please provide your credit card CVC number.";
-    break;
-    case "Invalid zip":
-    var error_desc = "Please provide a ZIP code.";
-    break;
-    case "":
-    var error_desc = "Something went wrong with the payment! Your credit card has not been charged.";
-    break;
-    default:
-    var error_desc = error_description;
-    break;
-  }
-
-  $("#payment-error-desc").text(error_desc)
-}
-
-//get stripe token
-function submitStripe(checkout_button){
-  //check locally first
-  if (!user.stripe_info && !user.stripe_info.premium_cc_last4 && checkCCSubmit()){
-    $("#review-table-button, #goback-button").off();
-    $(".stripe-input").addClass('is-disabled');
-    checkout_button.addClass('is-loading').off();
-    $("#stripe-form").submit();
-  }
-
-  //card already on file, just submit without new stripe token
-  else {
-    checkout_button.addClass('is-loading').off();
-    submitStripeToken(false);
-  }
-}
-
-//got the stripetoken, submit to domahub
-function submitStripeToken(stripeToken){
-  var domains = getTableListingInfo(".domain-name-input");
-  submitDomainsAjax(domains, $("#checkout-button"), stripeToken);
 }
 
 //</editor-fold>
