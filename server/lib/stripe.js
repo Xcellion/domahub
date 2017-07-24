@@ -601,7 +601,7 @@ module.exports = {
 
       //check it against stripe
       stripe.subscriptions.retrieve(listing_info.stripe_subscription_id, function(err, subscription) {
-        if (err || !subscription){
+        if (err && !subscription && err.message.indexOf("a similar object exists in live mode") == -1){
           delete listing_info.stripe_subscription_id;
           console.log("SF: Not a real Stripe subscription! Updating our database appropriately...");
 
@@ -611,10 +611,22 @@ module.exports = {
           }
           next();
         }
-        else {
+
+        //using live mode subscription key in test mode
+        else if (subscription) {
           console.log("SF: Legit Stripe subscription!");
           listing_info.exp_date = (subscription) ? subscription.current_period_end : false;
           listing_info.expiring = (subscription) ? subscription.cancel_at_period_end : false;
+          res.send({
+            listings : req.user.listings
+          });
+        }
+
+        //using live mode subscription key in test mode
+        else {
+          console.log("SF: Using live Stripe key in test mode!");
+          listing_info.exp_date = false;
+          listing_info.expiring = false;
           res.send({
             listings : req.user.listings
           });

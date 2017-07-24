@@ -81,6 +81,7 @@ function switchTheme(theme_name){
     listing_info[x] = theme_to_load[x];
   }
 
+
   //hide footer if it's not a basic theme
   if (theme_to_load.theme_name != "DomaHub"){
     $(".footer.is-dark").addClass('is-hidden');
