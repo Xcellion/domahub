@@ -126,7 +126,7 @@
                 <span id="status-text">Active</span>
               </a>
               <input id="status-input" data-name="status" tabindex="0" type="hidden" class="input changeable-input" />
-							<a id="current-domain-view" target="_blank" tabindex="0" class="verified-elem yes-listings-elem is-hidden button is-small no-shadow margin-top-0" title="View Domain">
+							<a id="current-domain-view" target="_blank" rel="noopener" tabindex="0" class="verified-elem yes-listings-elem is-hidden button is-small no-shadow margin-top-0" title="View Domain">
 								<span class="icon is-small"><i style="margin-top: 2px" class="fa fa-external-link"></i></span>
 								<span>View</span>
 							</a>
@@ -211,7 +211,7 @@
                   <label class="label" for="buy-price-input">Buy It Now Price</label>
                   <input id="buy-price-input" data-name="buy_price" type="number" min="1" step="1" class="input changeable-input">
                   <small class="tip">The price you are willing to immediately sell the domain for. Put blank or 0 for no Buy It Now option.</small>
-                  <small class="tip"><a target="_blank" href="/faq#selling" class="is-accent">What are the advantages of buying immediately?</a></small>
+                  <small class="tip"><a target="_blank" rel="noopener" href="/faq#selling" class="is-accent">What are the advantages of buying immediately?</a></small>
                 </div>
 								<div class="control">
 									<label class="label" for="description">Listing Description</label>
@@ -224,7 +224,7 @@
 									placeholder="What is this website?"></input>
 									<small class="tip">100 character limit.</small>
 								</div>%>
-								<div class="control">
+								<!-- <div class="control">
 									<label class="label margin-bottom-10">
 										<span class="v-align-middle">Categories</span>
 										<span class="icon is-small is-tooltip v-align-middle" data-balloon-length="medium" data-balloon="Categories help users find similar domains. Incorrect categories can lead to a poor user experience and hurt your domain brand by being associated with non-similar domains." data-balloon-pos="up">
@@ -239,14 +239,14 @@
 										<a data-category="<%= categories[x].back %>" class="<%= categories[x].back %>-category tag margin-bottom-5 category-selector"><%= categories[x].front %></a>
 										<% } %>
 									</div>
-								</div>
+								</div> -->
 							</div>
 							<div id="rental-tab-drop" class="drop-tab is-hidden">
 								<div class="control is-spaced">
 									<div class="control-left">
 										<label class="label" for="rentable-input">Allow Rentals</label>
 										<small class="tip">Allows verified users to rent usage of this domain for short amounts of time.</small>
-                    <small class="tip"><a target="_blank" href="/faq#renting" class="is-accent">Why should I rent my domain out?</a></small>
+                    <small class="tip"><a target="_blank" rel="noopener" href="/faq#renting" class="is-accent">Why should I rent my domain out?</a></small>
 									</div>
 									<div class="control-right">
 										<form class="checkbox-form">
