@@ -357,6 +357,10 @@ function changeRow(row, listing_info, bool){
     $(".current-domain-name").text(listing_info.domain_name);
     $("#current-domain-view").attr("href", "/listing/" + listing_info.domain_name);
 
+    //hide CC form
+    $("#checkout-button").addClass('is-hidden');
+    $("#stripe-form").addClass('is-hidden');
+
     //update inputs for purchased domain
     if (listing_info.accepted){
       editRowPurchased(listing_info);
@@ -783,6 +787,9 @@ function updatePremium(listing_info){
       if (listing_info.exp_date){
         $("#renew-status").text("Premium is active, but set to expire on " + moment(listing_info.exp_date * 1000).format("MMM DD, YYYY") + ". You will not be charged further for this listing.");
       }
+      else {
+        $("#renew-status").text("Premium is currently active.");
+      }
 
       //hide the checkout button until you click to change payment method
       $("#checkout-button").text("Confirm Payment Method").attr("title", "Confirm Payment Method").addClass('is-hidden');
@@ -799,6 +806,9 @@ function updatePremium(listing_info){
 
       if (listing_info.exp_date){
         $("#renew-status").text("Premium is active and set to renew on " + moment(listing_info.exp_date * 1000).format("MMM DD, YYYY") + ". You will be charged $1 at renewal.");
+      }
+      else {
+        $("#renew-status").text("Premium is currently active.");
       }
 
       //renewing, so hide the renew button
@@ -938,14 +948,21 @@ function updateBindings(listing_info){
 
     //upgrade a basic listing
     $("#upgrade-button").off().on("click", function(){
-      if (user.stripe_info && user.stripe_info.premium_cc_last4){
-        //just upgrade to premium with existing card
-        submitPremium(listing_info, false, $(this));
+      //make sure they are sure
+      if ($(this).data("youSure") == true){
+        if (user.stripe_info && user.stripe_info.premium_cc_last4){
+          //just upgrade to premium with existing card
+          submitPremium(listing_info, false, $(this));
+        }
+        else {
+          $("#change-card-button").click();
+        }
       }
       else {
-        $("#change-card-button").click();
+        $(this).data("youSure", true);
+        $(this).find(".button-text").text("Are you sure?");
       }
-    });
+    }).find(".button-text").text("Upgrade").data("youSure", false);
   }
 }
 
