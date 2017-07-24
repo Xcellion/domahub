@@ -14,6 +14,14 @@
 
   <section class="section min-height is-medium">
     <div class="container">
+      <div id="settings-msg-error" class="is-hidden is-danger notification is-popup">
+        <button class="delete"></button>
+        <p id="settings-msg-error-text" class='is-white'></p>
+      </div>
+      <div id="settings-msg-success" class="is-hidden is-primary notification is-popup">
+        <button class="delete"></button>
+        <p id="settings-msg-success-text" class='is-white'></p>
+      </div>
       <div class="columns">
 				<div class="column is-3">
 					<aside class="menu">
@@ -22,7 +30,19 @@
 						</p>
 						<ul class="menu-list">
 							<li><a id="basic-link" href='#basic' class="setting-link is-active">Basic Information</a></li>
-							<li><a id="verifications-link" href='#verification' class="setting-link">Verifications</a></li>
+              <li><a id="premium-link" href='#premium' class="setting-link">
+              <span id="upgrade-to-premium-text" class="v-align-middle">
+                <% if (user.stripe_subscription_id) { %>
+                  Upgrade to Premium
+                <% } else { %>
+                  Premium Status
+                <% } %>
+              </span>
+              <span class="v-align-middle icon is-small">
+                <i class="fa fa-diamond"></i>
+              </span>
+              </a></li>
+              <li><a id="verifications-link" href='#verification' class="setting-link">Verifications</a></li>
 						</ul>
 						<p class="menu-label">
 							Payment Settings
@@ -54,7 +74,7 @@
 					<div id="basic" class="is-hidden card is-fullwidth">
 						<header class="card-header">
 							<p class="card-header-title">
-								Basic Information &nbsp<span id="basic-message" class="setting-message"></span>
+								Basic Information
 							</p>
 							<button class='edit-section-button card-header-icon button is-small no-shadow'>
 								<span class="icon is-small is-icon"><i class="fa fa-cog"></i></span>
@@ -62,7 +82,7 @@
 							</button>
 						</header>
 						<div class="card-content">
-							<form id="account-form" class="form account-form">
+							<form id="account-form" class="margin-0 form account-form">
 								<div class="control">
 									<div class="label-icon">
 										<label class="label" for"email-input">Email Address</label>
@@ -98,7 +118,118 @@
 						</div>
 
 					</div>
-					<div id="verifications" class="is-hidden card is-fullwidth" >
+          <div id="premium" class="is-hidden card is-fullwidth">
+            <header class="card-header">
+							<p id="upgrade-tab-header" class="card-header-title">
+                  Premium Status
+							</p>
+						</header>
+
+            <div class="card-content">
+
+              <div class="control is-spaced">
+                <div class="control-left">
+                  <p>
+                    Premium Status
+                  </p>
+                  <small id="renew-status" class="tip"></small>
+                </div>
+                <div class="control-right">
+                  <a id="upgrade-button" class="margin-top-5 is-stylish is-small basic-elem button no-shadow">
+                    <span class="icon is-small">
+                      <i class="fa fa-diamond"></i>
+                    </span>
+                    <span class="button-text">Upgrade</span>
+                  </a>
+                  <div class="premium-elem control">
+                    <a id="cancel-premium-button" class="margin-top-5 is-hidden is-outlined is-small is-stylish button no-shadow is-danger">
+                      <span class="icon is-small">
+                        <i class="fa fa-times-circle"></i>
+                      </span>
+                      <span>Cancel Plan</span>
+                    </a>
+                    <a id="renew-premium-button" class="margin-top-5 is-hidden is-outlined is-small is-stylish button no-shadow is-primary">
+                      <span class="icon is-small">
+                        <i class="fa fa-repeat"></i>
+                      </span>
+                      <span>Renew Plan</span>
+                    </a>
+                  </div>
+                </div>
+              </div>
+
+              <div class="control margin-bottom-0 is-spaced">
+                <div class="control-left">
+                  <p>
+                    Default Payment Method
+                  </p>
+                  <small id="existing-cc" class="tip">Click the button on the right to add a default credit card!</small>
+                </div>
+                <div class="control-right">
+                  <a id="change-card-button" tabindex="0" title="Change Payment Method" class="button is-primary is-outlined is-small is-stylish no-shadow">
+                    <span class="icon is-small">
+                      <i class="fa fa-credit-card"></i>
+                    </span>
+                    <span>Add New Payment Method</span>
+                  </a>
+                </div>
+              </div>
+
+              <form id="stripe-form" class="is-hidden margin-top-20" autocomplete="on">
+                <div class="control">
+                  <label class="label">
+                    <span class="v-align-middle">Card Number</span>
+                  </label>
+                  <div class="control is-grouped">
+                    <p class="control has-icon">
+                      <input id="cc-num" tabindex="0" data-stripe="number" class="input stripe-input" type="tel" placeholder="•••• •••• •••• ••••" autocomplete="cc-number"/>
+                      <i id="cc-icon" class="fa fa-credit-card"></i>
+                    </p>
+                  </div>
+                </div>
+
+                <div class="control">
+                  <label class="label">
+                    <span class="v-align-middle">Expiration Date</span>
+                  </label>
+                  <div class="control is-grouped">
+                    <p class="control has-icon">
+                      <input id="cc-exp" tabindex="0" maxlength="7" data-stripe="exp" class="input stripe-input" type="tel" placeholder="•• / ••" autocomplete="cc-exp"/>
+                      <i class="fa fa-calendar-o"></i>
+                    </p>
+                  </div>
+                </div>
+
+                <div class="control">
+                  <label class="label">
+                    <span class="v-align-middle">Security Code</span>
+                  </label>
+                  <div class="control is-grouped">
+                    <p class="control has-icon">
+                      <input id="cc-cvc" tabindex="0" data-stripe="cvc" class="input stripe-input" type="tel" placeholder="•••" autocomplete="off"/>
+                      <i class="fa fa-lock"></i>
+                    </p>
+                  </div>
+                </div>
+
+                <div class="control">
+                  <label class="label">
+                    <span class="v-align-middle">Zip Code</span>
+                  </label>
+                  <div class="control is-grouped">
+                    <p class="control has-icon">
+                      <input id="cc-zip" tabindex="0" maxlength="6" data-stripe="address_zip" class="input stripe-input" type="tel" autocomplete="postal-code" placeholder="•••••"/>
+                      <i class="fa fa-map-marker"></i>
+                    </p>
+                  </div>
+                </div>
+              </form>
+              <footer id="checkout-button-wrapper" class="is-hidden margin-top-25">
+                <button id="checkout-button" class="button is-primary is-disabled is-stylish is-small no-shadow">Checkout</button>
+              </footer>
+						</div>
+          </div>
+          <div id="verifications" class="is-hidden card is-fullwidth" >
 						<header class="card-header">
 							<p class="card-header-title">
 								Account Verifications
@@ -136,7 +267,7 @@
 					<div id="payout-address" class="is-hidden card is-fullwidth">
 						<header class="card-header">
 							<p class="card-header-title">
-								Payout Address &nbsp<span id="payout-address-message" class="setting-message"></span>
+								Payout Address
 							</p>
 							<button class='edit-section-button card-header-icon button is-small no-shadow'>
 								<span class="icon is-small is-icon"><i class="fa fa-cog"></i></span>
@@ -236,7 +367,7 @@
 					<div id="payout-personal" class="is-hidden card is-fullwidth">
 						<header class="card-header">
 							<p class="card-header-title">
-								Personal Information &nbsp<span id="payout-personal-message" class="setting-message"></span>
+								Personal Information
 							</p>
 							<button class='edit-section-button card-header-icon button is-small no-shadow'>
 								<span class="icon is-small is-icon"><i class="fa fa-cog"></i></span>
@@ -426,7 +557,7 @@
 					<div id="payout-bank" class="is-hidden card is-fullwidth">
 						<header class="card-header">
 							<p class="card-header-title">
-								Bank Information &nbsp<span id="payout-bank-message" class="setting-message"></span>
+								Bank Information
 							</p>
 							<button class='edit-section-button card-header-icon button is-small no-shadow'>
 								<span class="icon is-small is-icon"><i class="fa fa-cog"></i></span>
@@ -554,7 +685,7 @@
 					<div id="paypal" class="is-hidden card is-fullwidth">
 						<header class="card-header">
 							<p class="card-header-title">
-								PayPal Settings &nbsp<span id="paypal-message" class="setting-message"></span>
+								PayPal Settings
 							</p>
 							<button class='edit-section-button card-header-icon button is-small no-shadow'>
 								<span class="icon is-small is-icon"><i class="fa fa-cog"></i></span>
@@ -598,6 +729,7 @@
 		var user = <% if(typeof user != "undefined"){ %><%-JSON.stringify(user)%><% }else{ %>window.location="/"<% } %>;
 	</script>
 	<script src="https://js.stripe.com/v2/" type="text/javascript" ></script>
+  <script src="/js/jquery/jquery.payment.min.js" type="text/javascript"></script>
 	<script src="/js/routes/profile/profile_settings_logic.js" type="text/javascript"></script>
 	<script src="/js/routes/profile/profile_settings_stripe_logic.js" type="text/javascript"></script>
 	<% if (user.stripe_transfers) { %>

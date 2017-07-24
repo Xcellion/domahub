@@ -440,121 +440,6 @@ module.exports = {
 
   //</editor-fold>
 
-  //<editor-fold>-------------------------------STRIPE STANDALONE (DEPRECATED)-------------------------------
-
-  // //authorize stripe
-  // authorizeStripe : function(req, res){
-  //   var client_id = (node_env == "dev") ? "ca_997O55c2IqFxXDmgI9B0WhmpPgoh28s3" : "ca_997OlLjHwTzo6hMT8VGbot4OF6l3v1V0";
-  //
-  //   // Redirect to Stripe /oauth/authorize endpoint
-  //   res.redirect("https://connect.stripe.com/oauth/authorize" + "?" + qs.stringify({
-  //     response_type: "code",
-  //     scope: "read_write",
-  //     state: "domahubrules",
-  //     client_id: client_id,
-  //     stripe_user: {
-  //       email: req.user.email,
-  //       physical_product: false,
-  //       product_description: "DomaHub domain rentals."
-  //     }
-  //   }));
-  // },
-  //
-  // //deauthorize stripe
-  // deauthorizeStripe : function(req, res){
-  //   if (req.user.stripe_account){
-  //     request.post({
-  //       url: 'https://connect.stripe.com/oauth/deauthorize',
-  //       form: {
-  //         client_id: "ca_997O55c2IqFxXDmgI9B0WhmpPgoh28s3",
-  //         stripe_account: req.user.stripe_account,
-  //         client_secret: stripe_key
-  //       }
-  //     },
-  //       function (err, response, body) {
-  //         body = JSON.parse(body);
-  //
-  //         //all good with stripe!
-  //         if (!body.error && response.statusCode == 200 && body.stripe_account == req.user.stripe_account) {
-  //           var account_info = {
-  //             stripe_account: null,
-  //             type: 1
-  //           }
-  //           Account.updateAccount(account_info, req.user.email, function(result){
-  //             if (result.state=="error"){error.handler(req, res, result.info);}
-  //             else {
-  //               req.user.stripe_account = null;
-  //               req.user.type = 1;
-  //               res.send({
-  //                 state: "success"
-  //               })
-  //             }
-  //           });
-  //         }
-  //         else {
-  //           error.handler(req, res, "Invalid stripe token!", "json");
-  //         }
-  //       }
-  //     );
-  //   }
-  //
-  //   //isnt authorized
-  //   else {
-  //     error.handler(req, res, "Invalid stripe token!", "json");
-  //   }
-  // },
-  //
-  // //connect to stripe and get the stripe account info to store on our db
-  // connectStripe : function(req, res){
-  //   scope = req.query.scope;
-  //   code = req.query.code;
-  //
-  //   //connection errored
-  //   if (req.query.error || !scope || !code || req.query.state != "domahubrules") {
-  //     error.handler(req, res, "Invalid stripe token!");
-  //   }
-  //   else {
-  //     var client_id = (node_env == "dev") ? "ca_997O55c2IqFxXDmgI9B0WhmpPgoh28s3" : "ca_997OlLjHwTzo6hMT8VGbot4OF6l3v1V0";
-  //
-  //     request.post({
-  //       url: 'https://connect.stripe.com/oauth/token',
-  //       form: {
-  //         grant_type: "authorization_code",
-  //         client_id: client_id,
-  //         code: code,
-  //         client_secret: stripe_key
-  //       }
-  //     },
-  //       function (err, response, body) {
-  //         body = JSON.parse(body);
-  //
-  //         //all good with stripe!
-  //         if (!body.error && response.statusCode == 200 && body.access_token) {
-  //           var account_info = {
-  //             stripe_account: body.stripe_account,
-  //             type: 2
-  //           }
-  //           Account.updateAccount(account_info, req.user.email, function(result){
-  //             if (result.state=="error"){error.handler(req, res, result.info);}
-  //             else {
-  //               req.user.stripe_account = body.stripe_account;
-  //               req.user.type = 2;
-  //               res.render("redirect.ejs", {
-  //                 redirect: "/profile"
-  //               });
-  //             }
-  //           });
-  //         }
-  //         else {
-  //           error.handler(req, res, "Invalid stripe token!");
-  //         }
-  //       }
-  //     );
-  //   }
-  // },
-
-  //</editor-fold>
-
   //<editor-fold>-------------------------------STRIPE SUBSCRIPTIONS-------------------------------
 
   //check if stripe subscription is still valid
@@ -564,18 +449,23 @@ module.exports = {
 
     //if subscription id exists in our database
     if (listing_info && listing_info.stripe_subscription_id){
-      console.log("SF: Checking if Stripe subscription for listing is still active...");
+      console.log("SF: Checking if Stripe subscription for account is still active...");
 
       //check it against stripe
       stripe.subscriptions.retrieve(listing_info.stripe_subscription_id, function(err, subscription) {
         if (req.session.listing_info){
           delete req.session.listing_info.stripe_subscription_id;
         }
-
         if (!err && subscription && subscription.status == "active"){
+          console.log("SF: Premium is still active!");
           listing_info.premium = true;
         }
         else {
+          //delete it from our database if it's wrong
+          console.log("SF: Premium is NOT active!");
+          req.session.new_account_info = {
+            stripe_subscription_id : null
+          }
           listing_info.premium = false;
         }
         next();
@@ -590,23 +480,87 @@ module.exports = {
     }
   },
 
-  //get stripe subscription info
-  getStripeSubscription : function(req, res, next){
-    console.log("SF: Getting Stripe subscription information for listing...");
-
-    var listing_info = getUserListingObj(req.user.listings, req.params.domain_name);
+  //check if stripe subscription is still valid (for the owner)
+  checkStripeSubscriptionUser : function(req, res, next){
+    var domain_name = (req.session.api_domain) ? req.session.api_domain : req.params.domain_name;
+    var listing_info = (req.session.listing_info) ? req.session.listing_info : getUserListingObj(req.user.listings, domain_name);
 
     //if subscription id exists in our database
-    if (listing_info && listing_info.stripe_subscription_id){
+    if (req.user.stripe_subscription_id){
+      console.log("SF: Checking if Stripe subscription for account is still active...");
 
       //check it against stripe
-      stripe.subscriptions.retrieve(listing_info.stripe_subscription_id, function(err, subscription) {
+      stripe.subscriptions.retrieve(req.user.stripe_subscription_id, function(err, subscription) {
+        if (err || !subscription){
+          console.log("SF: Premium is NOT active!");
+          //delete it from our database if it's wrong
+          req.session.new_account_info = {
+            stripe_subscription_id : null
+          }
+        }
+        next();
+      });
+    }
+    else {
+      error.handler(req, res, "You can only edit a listing design after upgrading to a Premium account!", "json");
+    }
+  },
+
+  //get stripe customer info
+  getStripeCustomer : function(req, res, next){
+    //if subscription id exists in our database
+    if (req.user.stripe_customer_id){
+      console.log("SF: Getting Stripe customer information for an account...");
+
+      //check it against stripe
+      stripe.customers.retrieve(req.user.stripe_customer_id, function(err, customer) {
+        if (err && !customer && err.message.indexOf("a similar object exists in live mode") == -1){
+          console.log("SF: Not a real Stripe customer! Updating our database appropriately...");
+
+          //update our DH database to remove stripe_customer_id
+          req.session.new_account_info = {
+            stripe_customer_id : null
+          }
+          next();
+        }
+
+        //using live mode subscription key in test mode
+        else if (customer) {
+          console.log("SF: Legit Stripe customer!");
+
+          //customer last4 cc # for premium payments
+          if (customer.sources && customer.sources.total_count > 0){
+            req.user.premium_cc_brand = customer.sources.data[0].brand;
+            req.user.premium_cc_last4 = customer.sources.data[0].last4;
+          }
+          next();
+        }
+
+        //using live mode subscription key in test mode
+        else {
+          next();
+        }
+      });
+    }
+    else {
+      next();
+    }
+  },
+
+  //get stripe subscription info
+  getStripeSubscription : function(req, res, next){
+
+    //if subscription id exists in our database
+    if (req.user.stripe_subscription_id){
+      console.log("SF: Getting Stripe subscription information for an account...");
+
+      //check it against stripe
+      stripe.subscriptions.retrieve(req.user.stripe_subscription_id, function(err, subscription) {
         if (err && !subscription && err.message.indexOf("a similar object exists in live mode") == -1){
-          delete listing_info.stripe_subscription_id;
           console.log("SF: Not a real Stripe subscription! Updating our database appropriately...");
 
           //update our DH database to remove stripe_subscription_id
-          req.session.new_listing_info = {
+          req.session.new_account_info = {
             stripe_subscription_id : null
           }
           next();
@@ -615,28 +569,22 @@ module.exports = {
         //using live mode subscription key in test mode
         else if (subscription) {
           console.log("SF: Legit Stripe subscription!");
-          listing_info.exp_date = (subscription) ? subscription.current_period_end : false;
-          listing_info.expiring = (subscription) ? subscription.cancel_at_period_end : false;
-          res.send({
-            listings : req.user.listings
-          });
+          req.user.premium_exp_date = subscription.current_period_end;
+          req.user.premium_expiring = subscription.cancel_at_period_end;
+          next();
         }
 
         //using live mode subscription key in test mode
         else {
           console.log("SF: Using live Stripe key in test mode!");
-          listing_info.exp_date = false;
-          listing_info.expiring = false;
-          res.send({
-            listings : req.user.listings
-          });
+          listing_info.premium_exp_date = false;
+          listing_info.premium_expiring = false;
+          next();
         }
       });
     }
     else {
-      res.send({
-        listings : req.user.listings
-      });
+      next();
     }
   },
 
@@ -646,7 +594,6 @@ module.exports = {
       error.handler(req, res, "Something went wrong with the payment! Please refresh the page and try again!", "json");
     }
     else if (req.user.stripe_customer_id){
-
       //cross reference with stripe
       stripe.customers.retrieve(req.user.stripe_customer_id, function(err, customer) {
         //our db is outdated, customer doesnt exist
@@ -685,32 +632,31 @@ module.exports = {
 
   //function to create a monthly subscription for a listing
   createStripeSubscription : function(req, res, next){
-
-    var domain_name = req.params.domain_name || req.body.domain_name;
-    var listing_info = getUserListingObj(req.user.listings, domain_name);
-
+    if (!req.body.stripeToken && !req.user.stripe_customer_id){
+      error.handler(req, res, "Something went wrong with the payment! Please refresh the page and try again!", "json");
+    }
     //if subscription id exists in our database
-    if (listing_info && listing_info.stripe_subscription_id){
+    else if (req.user.stripe_subscription_id){
 
       //check it against stripe
-      stripe.subscriptions.retrieve(listing_info.stripe_subscription_id, function(err, subscription) {
+      stripe.subscriptions.retrieve(req.user.stripe_subscription_id, function(err, subscription) {
 
         //our db is outdated, subscription doesnt exist
         if (err){
-          newStripeSubscription(req, res, next, listing_info);
+          newStripeSubscription(req, res, next);
         }
         else {
           //subscription was cancelled, re-subscribe
           if (subscription.cancel_at_period_end){
             console.log("SF: Renewing existing Stripe subscription...");
 
-            stripe.subscriptions.update(listing_info.stripe_subscription_id, {
-              plan: "premium"
+            stripe.subscriptions.update(req.user.stripe_subscription_id, {
+              plan: "premium_account"
             }, function(err, subscription) {
               if (err){stripeErrorHandler(req, res, err)}
               else {
-                listing_info.exp_date = (subscription) ? subscription.current_period_end : false;
-                listing_info.expiring = (subscription) ? subscription.cancel_at_period_end : false;
+                req.user.premium_exp_date = subscription.current_period_end;
+                req.user.premium_expiring = subscription.cancel_at_period_end;
                 next();
               }
             });
@@ -719,87 +665,85 @@ module.exports = {
           else {
             res.json({
               state: "success",
-              listings: req.user.listings
+              user: req.user
             });
           }
         }
       });
     }
     else {
-      newStripeSubscription(req, res, next, listing_info);
+      newStripeSubscription(req, res, next);
     }
   },
 
-  //function to create multiple monthly subscriptions
-  createStripeSubscriptions : function(req, res, next){
-    console.log("SF: Trying to create multiple Stripe subscriptions...");
-
-    //create the array of promises
-    var promises = [];
-    for (var x = 0; x < req.session.new_listings.premium_obj.inserted_ids.length; x++){
-      var promise = stripe.subscriptions.create({
-        customer: req.user.stripe_customer_id,
-        plan: "premium",
-        metadata: {
-          insert_id : req.session.new_listings.premium_obj.inserted_ids[x],
-          index : req.session.new_listings.premium_obj.indexes[x]
-        }
-      });
-      promises.push(promise);
-    }
-
-    //wait for all promises to finish
-    Q.allSettled(promises)
-    .then(function(results) {
-      var premium_db_query_success = [];
-      var premium_db_query_failed = [];
-
-      //figure out which promises passed
-      for (var y = 0; y < results.length; y++){
-        if (results[y].state == "fulfilled"){
-          var subscription = results[y].value;
-
-          //create the formatted db query to update premium ID
-          premium_db_query_success.push([
-                                        subscription.metadata.insert_id,
-                                        subscription.id
-          ]);
-
-          //add to good listings
-          req.session.new_listings.good_listings.push({
-            index: subscription.metadata.index
-          });
-        }
-      }
-
-      req.session.new_listings.premium_obj.db_success_obj = premium_db_query_success;
-      next();
-
-    });
-  },
+  // //function to create multiple monthly subscriptions
+  // createStripeSubscriptions : function(req, res, next){
+  //   console.log("SF: Trying to create multiple Stripe subscriptions...");
+  //
+  //   //create the array of promises
+  //   var promises = [];
+  //   for (var x = 0; x < req.session.new_listings.premium_obj.inserted_ids.length; x++){
+  //     var promise = stripe.subscriptions.create({
+  //       customer: req.user.stripe_customer_id,
+  //       plan: "premium",
+  //       metadata: {
+  //         insert_id : req.session.new_listings.premium_obj.inserted_ids[x],
+  //         index : req.session.new_listings.premium_obj.indexes[x]
+  //       }
+  //     });
+  //     promises.push(promise);
+  //   }
+  //
+  //   //wait for all promises to finish
+  //   Q.allSettled(promises)
+  //   .then(function(results) {
+  //     var premium_db_query_success = [];
+  //     var premium_db_query_failed = [];
+  //
+  //     //figure out which promises passed
+  //     for (var y = 0; y < results.length; y++){
+  //       if (results[y].state == "fulfilled"){
+  //         var subscription = results[y].value;
+  //
+  //         //create the formatted db query to update premium ID
+  //         premium_db_query_success.push([
+  //                                       subscription.metadata.insert_id,
+  //                                       subscription.id
+  //         ]);
+  //
+  //         //add to good listings
+  //         req.session.new_listings.good_listings.push({
+  //           index: subscription.metadata.index
+  //         });
+  //       }
+  //     }
+  //
+  //     req.session.new_listings.premium_obj.db_success_obj = premium_db_query_success;
+  //     next();
+  //
+  //   });
+  // },
 
   //check that stripe subscription exists
   cancelStripeSubscription : function(req, res, next){
-    var listing_info = getUserListingObj(req.user.listings, req.params.domain_name);
-
     //if subscription id exists in our database
-    if (listing_info && listing_info.stripe_subscription_id){
+    if (req.user.stripe_subscription_id){
       console.log("SF: Cancelling an existing Stripe subscription...");
 
-      stripe.subscriptions.del(listing_info.stripe_subscription_id, { at_period_end: true }, function(err, confirmation) {
+      stripe.subscriptions.del(req.user.stripe_subscription_id, { at_period_end: true }, function(err, confirmation) {
         if (err){stripeErrorHandler(req, res, err)}
         else {
-          listing_info.exp_date = (confirmation) ? confirmation.current_period_end : false;
-          listing_info.expiring = (confirmation) ? confirmation.cancel_at_period_end : false;
+          req.user.premium_exp_date = confirmation.current_period_end;
+          req.user.premium_expiring = confirmation.cancel_at_period_end;
           res.json({
             state: "success",
-            listings: req.user.listings
+            user: req.user
           });
         }
       });
     }
     else {
-      error.handler(req, res, "This isn't a Premium listing!", "json")
+      error.handler(req, res, "You don't have a Premium account to cancel!", "json")
     }
   }
 
@@ -811,12 +755,6 @@ module.exports = {
 function updateUserStripeInfo(user, stripe_results){
   if (!user.stripe_info){
     user.stripe_info = {}
-  }
-
-  //customer last4 cc # for premium payments
-  if (stripe_results && stripe_results.sources && stripe_results.sources.total_count > 0){
-    user.stripe_info.premium_cc_brand = stripe_results.sources.data[0].brand;
-    user.stripe_info.premium_cc_last4 = stripe_results.sources.data[0].last4;
   }
 
   //managed stripe account details for getting paid
@@ -879,6 +817,7 @@ function newStripeCustomer(req, res, next){
     email: req.user.email,
     metadata: {
       "account_id" : req.user.id,
+      "username" : req.user.username,
       "stripe_account" : req.user.stripe_account
     }
   }, function(err, customer) {
@@ -901,23 +840,24 @@ function newStripeCustomer(req, res, next){
 }
 
 //helper function to create a new stripe customer
-function newStripeSubscription(req, res, next, listing_info){
+function newStripeSubscription(req, res, next){
   console.log("SF: Creating a new Stripe subscription...");
 
   stripe.subscriptions.create({
     customer: req.user.stripe_customer_id,
-    plan: "premium",
+    plan: "premium_account",
     metadata: {
-      "insert_id" : listing_info.id
-    },
-    expand: ["customer"]
+      "account_id" : req.user.id,
+      "username" : req.user.username
+    }
   }, function(err, subscription) {
     if (err){stripeErrorHandler(req, res, err)}
     else {
-      updateUserStripeInfo(req.user, subscription.customer);
-      listing_info.exp_date = (subscription) ? subscription.current_period_end : false;
-      listing_info.expiring = (subscription) ? subscription.cancel_at_period_end : false;
-      req.session.new_listing_info = {
+      req.user.premium_exp_date = subscription.current_period_end;
+      req.user.premium_expiring = subscription.cancel_at_period_end;
+
+      //update our database with new stripe customer ID
+      req.session.new_account_info = {
         stripe_subscription_id : subscription.id
       }
       next();

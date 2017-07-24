@@ -30,6 +30,13 @@ module.exports = function(app, db, auth, error){
     app.get("/proxysite", proxysite);
     app.get("/analysis/:domain_name", analysis);
     app.get("/paypal", paypal);
+    
+    //temporary to test /redirect page
+    app.get("/redirect", function(req, res){
+      res.render("redirect.ejs", {
+        redirect: "/"
+      });
+    });
 }
 
 function paypal(req, res, next){

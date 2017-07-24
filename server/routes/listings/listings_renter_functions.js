@@ -950,7 +950,7 @@ module.exports = {
       getVerifiedListing(req, res, domain_name, function(result){
         //if unlisted and hostname isn't domahub, redirect to domahub
         var hostname = req.headers.host.replace(/^(https?:\/\/)?(www\.)?/,'');
-        if (hostname != "domahub.com" && hostname != "localhost:8080"){
+        if (hostname != "domahub.com" && hostname != "localhost:8080" && hostname != "localhost"){
           req.session.skip_listed_check = domain_name;
           res.redirect("https://domahub.com/listing/" + hostname);
         }
@@ -1344,16 +1344,16 @@ function newListingContactHistory(req, res, next, contact_details){
 //<editor-fold>-------------------------------HELPER FUNCTIONS-------------------------------
 
 //function to get a verified listing's details
-function getVerifiedListing(req, res, domain_name, callback_success, callback_error){
+function getVerifiedListing(req, res, domain_name, callback_error, callback_success){
   Listing.getVerifiedListing(domain_name, function(result){
     if (result.state=="error"){error.handler(req, res, "Invalid listing!");}
     else if (result.state=="success" && result.info.length <= 0){
       console.log("F: " + domain_name + " is NOT listed on DomaHub...");
-      callback_success(result);
+      callback_error(result);
     }
     else {
       console.log("F: " +domain_name + " is listed on DomaHub!");
-      callback_error(result);
+      callback_success(result);
     }
   });
 }

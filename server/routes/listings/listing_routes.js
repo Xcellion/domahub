@@ -85,12 +85,8 @@ module.exports = function(app, db, auth, error, stripe){
     urlencodedParser,
     auth.checkLoggedIn,
     owner_functions.checkPostedListingInfoForCreate,
-    owner_functions.checkPostedPremium,
     profile_functions.getAccountListings,    //to find out which listings were not created in multi-create
-    owner_functions.createListings,
-    stripe.createStripeCustomer,
-    stripe.createStripeSubscriptions,
-    owner_functions.updateListingPremium
+    owner_functions.createListings
   ]);
 
   //redirect all /create to proper /create
@@ -139,15 +135,6 @@ module.exports = function(app, db, auth, error, stripe){
     owner_functions.getListingOffers
   ]);
 
-  // //to delete a listing
-  // app.post('/listing/:domain_name/delete', [
-  //   auth.checkLoggedIn,
-  //   checkDomainValid,
-  //   checkDomainListed,
-  //   owner_functions.checkListingOwnerPost,
-  //   owner_functions.deleteListing
-  // ]);
-
   //update listing information
   app.post('/listing/:domain_name/update', [
     auth.checkLoggedIn,
@@ -157,7 +144,8 @@ module.exports = function(app, db, auth, error, stripe){
     owner_functions.checkListingOwnerPost,
     owner_functions.checkListingVerified,
     owner_functions.checkListingPurchased,
-    stripe.checkStripeSubscription,
+    stripe.checkStripeSubscriptionUser,
+    profile_functions.updateAccountSettingsGet,
     owner_functions.checkImageUploadSize,
     owner_functions.checkListingImage,
     owner_functions.checkListingStatus,
@@ -167,42 +155,42 @@ module.exports = function(app, db, auth, error, stripe){
     owner_functions.updateListing
   ]);
 
-  //get a listing's stripe info
-  app.get('/listing/:domain_name/stripeinfo', [
-    auth.checkLoggedIn,
-    checkDomainValid,
-    checkDomainListed,
-    profile_functions.getAccountListings,
-    owner_functions.checkListingOwnerPost,
-    owner_functions.checkListingVerified,
-    stripe.getStripeSubscription,
-    owner_functions.updateListing
-  ]);
+  // //get a listing's stripe info
+  // app.get('/listing/:domain_name/stripeinfo', [
+  //   auth.checkLoggedIn,
+  //   checkDomainValid,
+  //   checkDomainListed,
+  //   profile_functions.getAccountListings,
+  //   owner_functions.checkListingOwnerPost,
+  //   owner_functions.checkListingVerified,
+  //   stripe.getStripeSubscription,
+  //   owner_functions.updateListing
+  // ]);
 
-  //update listing to premium
-  app.post('/listing/:domain_name/upgrade', [
-    urlencodedParser,
-    auth.checkLoggedIn,
-    checkDomainValid,
-    checkDomainListed,
-    profile_functions.getAccountListings,
-    owner_functions.checkListingOwnerPost,
-    owner_functions.checkListingVerified,
-    stripe.createStripeCustomer,
-    stripe.createStripeSubscription,
-    owner_functions.updateListing
-  ]);
+  // //update listing to premium
+  // app.post('/listing/:domain_name/upgrade', [
+  //   urlencodedParser,
+  //   auth.checkLoggedIn,
+  //   checkDomainValid,
+  //   checkDomainListed,
+  //   profile_functions.getAccountListings,
+  //   owner_functions.checkListingOwnerPost,
+  //   owner_functions.checkListingVerified,
+  //   stripe.createStripeCustomer,
+  //   stripe.createStripeSubscription,
+  //   owner_functions.updateListing
+  // ]);
 
-  //degrade listing to basic
-  app.post('/listing/:domain_name/downgrade', [
-    auth.checkLoggedIn,
-    checkDomainValid,
-    checkDomainListed,
-    profile_functions.getAccountListings,
-    owner_functions.checkListingOwnerPost,
-    owner_functions.checkListingVerified,
-    stripe.cancelStripeSubscription
-  ]);
+  // //degrade listing to basic
+  // app.post('/listing/:domain_name/downgrade', [
+  //   auth.checkLoggedIn,
+  //   checkDomainValid,
+  //   checkDomainListed,
+  //   profile_functions.getAccountListings,
+  //   owner_functions.checkListingOwnerPost,
+  //   owner_functions.checkListingVerified,
+  //   stripe.cancelStripeSubscription
+  // ]);
 
   //</editor-fold>
 
@@ -250,6 +238,7 @@ module.exports = function(app, db, auth, error, stripe){
     renter_functions.checkSessionListingInfoPost,
     renter_functions.checkContactInfo,
     stripe.checkStripeSubscription,
+    profile_functions.updateAccountSettingsGet,
     renter_functions.createOfferContactRecord,
     renter_functions.sendContactVerificationEmail
   ]);
@@ -277,6 +266,7 @@ module.exports = function(app, db, auth, error, stripe){
     renter_functions.checkSessionListingInfoPost,
     renter_functions.checkContactInfo,
     stripe.checkStripeSubscription,
+    profile_functions.updateAccountSettingsGet,
     buyer_functions.redirectToCheckout
   ]);
 
@@ -292,6 +282,7 @@ module.exports = function(app, db, auth, error, stripe){
     checkDomainListed,
     renter_functions.checkSessionListingInfoPost,
     stripe.checkStripeSubscription,
+    profile_functions.updateAccountSettingsGet,
     stripe.chargeMoneyBuy,
     buyer_functions.createBuyContactRecord,
     buyer_functions.alertOwnerBIN,
@@ -320,6 +311,7 @@ module.exports = function(app, db, auth, error, stripe){
     renter_functions.getListingInfo,
     renter_functions.checkStillVerified,
     stripe.checkStripeSubscription,
+    profile_functions.updateAccountSettingsGet,
     // renter_functions.getListingFreeTimes,
     renter_functions.renderListing
   ]);

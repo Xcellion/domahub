@@ -33,13 +33,13 @@ module.exports = function(app, db, auth, error){
   main_page_routes = [
     // "/about",
     // "/mission",
+    // "/sellers",
+    // "/renters",
     // "/press",
+    "/privacy",
     "/faq",
     "/careers",
     "/contact",
-    "/privacy",
-    // "/sellers",
-    // "/renters",
     "/terms",
     "/nothinghere"
   ]
