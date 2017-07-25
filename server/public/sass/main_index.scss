@@ -156,9 +156,17 @@
   display: flex;
   align-items: flex-start;
   padding-top: 30px;
-  .icon {
+  .icon,
+  .step-number {
     margin-right: 15px;
   }
+}
+
+.is-step {
+  background-color: $primary;
+  color: $white;
+  padding: 15px;
+  font-weight: 500;
 }
 
 .price-card {
