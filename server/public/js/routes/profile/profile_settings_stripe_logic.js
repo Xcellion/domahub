@@ -308,6 +308,9 @@ function setUpUpgradeTab(){
     var premium_cc_last4 = (user.premium_cc_last4) ? user.premium_cc_last4 : "****";
     var premium_cc_brand = (user.premium_cc_brand) ? user.premium_cc_brand : "Credit"
     $("#existing-cc").text(premium_cc_brand + " card ending in " + premium_cc_last4);
+
+    //change checkout button text
+    $("#checkout-button").text("Change Default Card");
   }
 
 }
@@ -335,13 +338,16 @@ function checkCC(){
 function submitPremium(stripeToken, button_elem){
   //new premium listing or renewing
   var data = {};
+  var url = "/profile/upgrade";
   if (stripeToken){
-    data.stripeToken = stripeToken
+    data.stripeToken = stripeToken;
+    url = "/profile/newcard";
+    var changing_card = true;
   }
 
   button_elem.addClass('is-loading');
   $.ajax({
-    url: "/profile/upgrade",
+    url: url,
     method: "POST",
     data: data
   }).done(function(data){
@@ -349,20 +355,23 @@ function submitPremium(stripeToken, button_elem){
     var new_premium = (user.stripe_customer_id) ? false : true;
     var was_expiring = user.premium_expiring;
 
+    //update client side variable
     if (data.user){
       user = data.user;
     }
 
     button_elem.removeClass('is-loading');
     if (data.state == "success"){
-      if (!new_premium && was_expiring == true){
-        successMessage("Successfully renewed Premium! Welcome back!");
-      }
-      else if (!new_premium && was_expiring == false){
+      if (changing_card){
         successMessage("Successfully changed the default payment method!");
       }
       else {
-        successMessage("Successfully upgraded to Premium!");
+        if (!new_premium && was_expiring == true){
+          successMessage("Successfully renewed Premium! Welcome back!");
+        }
+        else {
+          successMessage("Successfully upgraded to Premium!");
+        }
       }
     }
     else {
