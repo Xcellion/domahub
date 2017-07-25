@@ -25,7 +25,15 @@ $(document).ready(function() {
 
       //can buy now
       if (listing_info.buy_price > 0){
-        $("#buy-button").text("Buy now - " + moneyFormat.to(listing_info.buy_price));
+        $("#buy-button").text("Buy now - " + moneyFormat.to(listing_info.buy_price)).on('click', function(){
+          //dont need the min offer input if you're just buying now
+          $("#contact_offer").removeAttr("required");
+        });
+
+        //need the min offer input if you're just offering
+        $("#buy-now-submit").on('click', function(){
+          $("#contact_offer").attr("required", true);
+        });
       }
 
       showBuyStuff($("#buy-now-button"));

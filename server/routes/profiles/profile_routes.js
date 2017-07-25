@@ -87,11 +87,18 @@ module.exports = function(app, db, auth, error, stripe){
     profile_functions.verifyListings
   ]);
 
+  //add a new card to user
+  app.post("/profile/newcard", [
+    urlencodedParser,
+    auth.checkLoggedIn,
+    stripe.createStripeCustomer,
+    profile_functions.updateAccountSettingsPost
+  ]);
+
   //update listing to premium
   app.post("/profile/upgrade", [
     urlencodedParser,
     auth.checkLoggedIn,
-    stripe.createStripeCustomer,
     stripe.createStripeSubscription,
     profile_functions.updateAccountSettingsPost
   ]);
