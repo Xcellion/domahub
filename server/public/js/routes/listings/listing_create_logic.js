@@ -385,7 +385,7 @@ function handleBadReasons(reasons, row){
 function goodTableRows(good_listings){
   for (var x = 0; x < good_listings.length; x++){
     var table_row = $($(".table-row").not("#clone-row")[good_listings[x].index]);
-    var explanation = $("<small class='is-primary is-pulled-right'>Successfully added!</small>")
+    var explanation = $("<small class='is-primary tip'>Successfully added!</small>")
     table_row.find(".domain-name-input").addClass('is-primary').closest('td').append(explanation);
     table_row.find(".domain-name-input, .buy-price-input").addClass('is-disabled');
   }

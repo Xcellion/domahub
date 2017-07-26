@@ -34,6 +34,10 @@
 
 					<!-- FITER MENU -->
 					<div id="filters">
+						<div class="control is-expanded has-icon">
+							<i class="fa fa-search"></i>
+							<input id="domain-search" tabindex="0" class="input is-expanded" type="text" placeholder="Search domains" />
+						</div>
 						<div class="control">
 							<span class="select is-fullwidth">
 								<select id="filter-select" tabindex="0">
@@ -55,10 +59,6 @@
 								</select>
 							</span>
 						</div>
-						<div class="control is-expanded has-icon">
-							<i class="fa fa-search"></i>
-							<input id="domain-search" tabindex="0" class="input is-expanded" type="text" placeholder="Search domains" />
-						</div>
 						<div class="button-wrapper control">
 							<button id="select-all" data-selected="false" tabindex="0" class="button no-shadow" title="Select All">
 								<span class="icon is-small">
@@ -66,13 +66,13 @@
 								</span>
 								<span>Select All</span>
 							</button>
-							<button id="multi-delete" class="button is-disabled no-shadow" tabindex="0" title="Delete Listing(s)">
+							<button id="multi-delete" class="button is-disabled is-danger  no-shadow" tabindex="0" title="Delete Listing(s)">
 								<span class="icon is-small">
 									<i class="fa fa-trash"></i>
 								</span>
 								<span>Delete</span>
 							</button>
-							<button id="multi-verify" class="button is-disabled no-shadow" tabindex="0" title="Verify Listing(s)">
+							<button id="multi-verify" class="button is-disabled is-primary  no-shadow" tabindex="0" title="Verify Listing(s)">
 								<span class="icon is-small">
 									<i class="fa fa-check-circle-o"></i>
 								</span>
@@ -99,7 +99,7 @@
 								<span class="icon is-danger is-small is-inline">
 									<i class="fa fa-exclamation-circle"></i>
 								</span>
-								<p class="is-danger td-domain is-inline"></p>
+								<p class="td-domain is-danger is-inline"></p>
 							</div>
 						</div>
 					</div>
@@ -119,12 +119,12 @@
 							<h2 class="current-domain-name yes-listings-elem is-inline-block is-hidden"></h2>
 						</div>
 						<div class="control-right">
-              <a id="status-color" tabindex="0" class="verified-elem unpurchased-elem button is-primary is-small is-icon-only no-shadow" title="Publicly hide or show landing page.">
+              <a id="status-color" tabindex="0" class="verified-elem unpurchased-elem button is-primary is-small is-outlined" title="Publicly hide or show landing page.">
                 <span class="icon"><i id="status-icon" class="fa fa-toggle-on"></i></span>
                 <span id="status-text">Active</span>
               </a>
               <input id="status-input" data-name="status" tabindex="0" type="hidden" class="input changeable-input" />
-							<a id="current-domain-view" target="_blank" tabindex="0" class="verified-elem yes-listings-elem is-hidden button is-small no-shadow margin-top-0" title="View Domain">
+							<a id="current-domain-view" target="_blank" tabindex="0" class="verified-elem yes-listings-elem is-hidden button is-small margin-top-0" title="View Domain">
 								<span class="icon is-small"><i style="margin-top: 2px" class="fa fa-external-link"></i></span>
 								<span>View</span>
 							</a>
@@ -170,7 +170,7 @@
 							<h3 class="is-bold">You must verify that you own this domain.</h3>
 							<p>The table below details the DNS entries that are needed to verify this domain.</p>
 							<p id="registrar_url">Please <a>log in to your domain provider</a> to create these entries.</p>
-							<p>If you require any assistance, please refer to our <a   style'target-new:="" tab;'="" class="is-accent margin-bottom-25" href="https://intercom.help/domahub/how-to-verify-your-domain-on-domahub"> step-by-step guide</a> on domain verification.</p>
+							<p>If you require any assistance, please refer to our <a   style'target-new:="" tab;'="" class="is-accent margin-bottom-25" href="https://medium.com/@domahub/how-to-verify-domains-on-domahub-7d526c4ce6d"> step-by-step guide</a> on domain verification.</p>
 							<table class="table margin-top-15">
                 <thead>
 									<tr>
