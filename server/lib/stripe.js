@@ -502,7 +502,7 @@ module.exports = {
       });
     }
     else {
-      error.handler(req, res, "You can only edit a listing design after upgrading to a Premium account!", "json");
+      next();
     }
   },
 
