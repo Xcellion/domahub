@@ -184,6 +184,9 @@ function updateRentable(){
   checkBox(listing_info.rentable, $("#rentable-input"));
 
   $("#rentable-input").on("change", function(){
+    //switch to buy tab if on rent tab
+    showBuyStuff($("#buy-now-button"));
+    
     //allow rent
     if ($(this).prop("checked")){
       listing_info.rentable = 1;

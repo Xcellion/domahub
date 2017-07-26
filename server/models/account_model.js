@@ -92,7 +92,6 @@ account_model.prototype.getAccountListings = function(account_id, callback){
         listings.owner_id,\
         listings.status,\
         listings.verified,\
-        listings.stripe_subscription_id,\
         listings.rentable,\
         listings.price_type,\
         listings.price_rate,\
@@ -114,8 +113,10 @@ account_model.prototype.getAccountListings = function(account_id, callback){
         IF(listings.font_name IS NULL, 'Rubik', listings.font_name) as font_name, \
         IF(listings.font_color IS NULL, '#000000', listings.font_color) as font_color, \
         rented_table.rented, \
-        offers_table.accepted \
+        offers_table.accepted, \
+        accounts.stripe_subscription_id \
       FROM listings \
+      JOIN accounts ON listings.owner_id = accounts.id \
       LEFT JOIN \
         (SELECT DISTINCT\
           listings.id AS listing_id, \

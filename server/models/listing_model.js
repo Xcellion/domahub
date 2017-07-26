@@ -54,12 +54,12 @@ listing_model.prototype.checkListingOwner = function(account_id, domain_name, ca
   listing_query(query, "Account does not own the domain" + domain_name + "!", callback, [account_id, domain_name]);
 }
 
-//check if a listing has a stripe subscription
-listing_model.prototype.checkListingStripe = function(domain_name, callback){
-  console.log("DB: Checking to see if " + domain_name + " has a Stripe subscription ID...");
-  query = 'SELECT stripe_subscription_id FROM listings WHERE stripe_subscription_id IS NOT NULL AND domain_name = ? AND listings.deleted IS NULL'
-  listing_query(query, "There is no Stripe subscription for " + domain_name + "!", callback, [domain_name]);
-}
+// //check if a listing has a stripe subscription
+// listing_model.prototype.checkListingStripe = function(domain_name, callback){
+//   console.log("DB: Checking to see if " + domain_name + " has a Stripe subscription ID...");
+//   query = 'SELECT stripe_subscription_id FROM listings WHERE stripe_subscription_id IS NOT NULL AND domain_name = ? AND listings.deleted IS NULL'
+//   listing_query(query, "There is no Stripe subscription for " + domain_name + "!", callback, [domain_name]);
+// }
 
 //check if a listing has been purchased already
 listing_model.prototype.checkListingPurchased = function(domain_name, callback){
@@ -134,7 +134,6 @@ listing_model.prototype.getVerifiedListing = function(domain_name, callback){
         listings.owner_id,\
         listings.status,\
         listings.verified,\
-        listings.stripe_subscription_id,\
         listings.rentable,\
         listings.price_type,\
         listings.price_rate,\
@@ -158,6 +157,7 @@ listing_model.prototype.getVerifiedListing = function(domain_name, callback){
         IF(listings.font_color IS NULL, '#000000', listings.font_color) as font_color, \
         accounts.username, \
         accounts.email AS owner_email, \
+        accounts.stripe_subscription_id, \
         !ISNULL(accounts.stripe_account) AS stripe_connected, \
         accounts.date_created AS user_created, \
         offers_table.accepted \
@@ -447,7 +447,7 @@ listing_model.prototype.newListings = function(listing_info_array, callback){
         owner_id, \
         date_created, \
         domain_name, \
-        buy_price, \
+        min_price, \
         description \
       )\
        VALUES ? \
@@ -495,21 +495,21 @@ listing_model.prototype.updateListing = function(domain_name, listing_info, call
   listing_query(query, "Failed to update domain " + domain_name + "!", callback, [listing_info, domain_name]);
 }
 
-//updates bulk listings to premium
-//BULK INSERT NEEDS TRIPLE NESTED ARRAYS
-listing_model.prototype.updateListingsPremium = function(listing_info_array, callback){
-  console.log("DB: Attempting to upgrade " + listing_info_array.length + " listings to Premium...");
-  query = "INSERT INTO listings ( \
-        id, \
-        stripe_subscription_id \
-      )\
-       VALUES ? \
-       ON DUPLICATE KEY UPDATE \
-         id = VALUES(id), \
-         stripe_subscription_id = VALUES(stripe_subscription_id)"
-  listing_query(query, "Failed to upgrade " + listing_info_array.length + " listings to Premium!", callback, [listing_info_array]);
-}
-
+// //updates bulk listings to premium
+// //BULK INSERT NEEDS TRIPLE NESTED ARRAYS
+// listing_model.prototype.updateListingsPremium = function(listing_info_array, callback){
+//   console.log("DB: Attempting to upgrade " + listing_info_array.length + " listings to Premium...");
+//   query = "INSERT INTO listings ( \
+//         id, \
+//         stripe_subscription_id \
+//       )\
+//        VALUES ? \
+//        ON DUPLICATE KEY UPDATE \
+//          id = VALUES(id), \
+//          stripe_subscription_id = VALUES(stripe_subscription_id)"
+//   listing_query(query, "Failed to upgrade " + listing_info_array.length + " listings to Premium!", callback, [listing_info_array]);
+// }
+//
 // //reverts bulk listings to basic
 // //BULK INSERT NEEDS TRIPLE NESTED ARRAYS
 // listing_model.prototype.updateListingsBasic = function(listing_info_array, callback){
