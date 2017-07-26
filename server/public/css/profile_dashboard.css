@@ -296,12 +296,20 @@ button[data-balloon] {
   border-radius: 3px;
   max-height: 420px;
   white-space: nowrap;
-  overflow-y: auto;
-  border: 1px solid rgba(0, 0, 0, 0.12); }
+  overflow-y: auto; }
 
 .button-wrapper {
   display: flex;
   flex-wrap: wrap; }
+  .button-wrapper .button:nth-child(2) {
+    margin-right: 5px;
+    margin-left: 5px; }
+    @media screen and (min-width: 897px) and (max-width: 1205px) {
+      .button-wrapper .button:nth-child(2) {
+        margin-right: 0; } }
+    @media screen and (max-width: 897px) and (min-width: 768px) {
+      .button-wrapper .button:nth-child(2) {
+        margin-left: 0; } }
   .button-wrapper .button,
   .button-wrapper .select {
     flex-grow: 1;
@@ -310,39 +318,40 @@ button[data-balloon] {
     width: 100%; }
 
 .table-row {
+  -moz-transition: border 0.25s ease;
+  -o-transition: border 0.25s ease;
+  -webkit-transition: border 0.25s ease;
+  transition: border 0.25s ease;
   align-items: center;
-  border-width: 1px 0 0;
   border: 1px solid rgba(0, 0, 0, 0.12);
   display: flex;
   justify-content: space-between;
   padding: 5px;
+  overflow-x: hidden;
   white-space: nowrap; }
-  .table-row:last-child {
-    border-bottom-width: 0px; }
-  .table-row:hover {
+  .table-row:not(.is-active):hover {
     background-color: #efefef;
     cursor: pointer; }
   .table-row.is-active {
-    background-color: #3cbc8d;
-    border-color: #3cbc8d; }
+    border-right-width: 5px;
+    border-right-color: rgba(0, 0, 0, 0.66); }
     .table-row.is-active p {
-      color: white; }
+      font-weight: 500; }
 
 .table-row-text {
-  margin-left: 30px;
-  overflow-x: hidden;
   text-align: right;
   width: calc(100% - 30px); }
   .table-row-text p {
     text-align: right;
     word-break: break-all; }
 
-.first-row {
-  border-top-width: 0px; }
+.td-domain {
+  overflow-x: hidden; }
 
 .checkbox-form {
-  width: 24px;
-  height: 24px; }
+  height: 24px;
+  margin-right: 10px;
+  width: 24px; }
   .checkbox-form label::before {
     top: 0 !important;
     left: 0 !important; }
@@ -364,11 +373,6 @@ button[data-balloon] {
 .listing-img {
   width: 96px;
   height: auto; }
-
-.listing-module {
-  padding: 10px 0; }
-  .listing-module:not(:last-child) {
-    border-bottom: 1px solid rgba(0, 0, 0, 0.12); }
 
 .category-control {
   display: flex;
