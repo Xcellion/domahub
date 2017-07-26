@@ -6,7 +6,9 @@ $(document).ready(function() {
   $(".module").eq(0).removeClass('is-hidden');
 
   //remove footer (use JS so it's after theming);
-  $(".footer.is-dark").removeClass('is-hidden');
+  if (!compare){
+    $(".footer.is-dark").removeClass('is-hidden');
+  }
 
   //date registered format
   if (listing_info.date_registered){
@@ -714,7 +716,7 @@ function createOtherDomains(other_listings){
     }
 
     if (other_listings[x].compare && listing_info.unlisted){
-      cloned_similar_listing.find(".otherowner-domain-name").text(sliced_domain).attr("href", "/listing/" + other_listings[x].domain_name + "?compare=true");
+      cloned_similar_listing.find(".otherowner-domain-name").text(sliced_domain).attr("href", "/listing/" + other_listings[x].domain_name + "?compare=true&theme=Random");
     }
     else {
       cloned_similar_listing.find(".otherowner-domain-name").text(sliced_domain).attr("href", "/listing/" + other_listings[x].domain_name);
