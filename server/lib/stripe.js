@@ -514,7 +514,7 @@ module.exports = {
 
       //check it against stripe
       stripe.customers.retrieve(req.user.stripe_customer_id, function(err, customer) {
-        if (err && !customer && err.message.indexOf("a similar object exists in live mode") == -1){
+        if (customer.deleted || (err && !customer && err.message.indexOf("a similar object exists in live mode") == -1)){
           console.log("SF: Not a real Stripe customer! Updating our database appropriately...");
 
           //update our DH database to remove stripe_customer_id
@@ -609,10 +609,14 @@ module.exports = {
               source: req.body.stripeToken
             }, function(err, customer) {
               if (err){
-                updateUserStripeInfo(req.user, customer);
                 stripeErrorHandler(req, res, err);
               }
               else {
+                //customer last4 cc # for premium payments
+                if (customer.sources && customer.sources.total_count > 0){
+                  req.user.premium_cc_brand = customer.sources.data[0].brand;
+                  req.user.premium_cc_last4 = customer.sources.data[0].last4;
+                }
                 next();
               }
             });
@@ -825,16 +829,17 @@ function newStripeCustomer(req, res, next){
       stripeErrorHandler(req, res, err);
     }
     else {
+      //customer last4 cc # for premium payments
+      if (customer.sources && customer.sources.total_count > 0){
+        req.user.premium_cc_brand = customer.sources.data[0].brand;
+        req.user.premium_cc_last4 = customer.sources.data[0].last4;
+      }
+      
       //update the customer id in the DB
-      Account.updateAccount({
+      req.session.new_account_info = {
         stripe_customer_id: customer.id
-      }, req.user.email, function(result){
-        if (result.state=="error"){error.handler(req, res, result.info, "json")}
-        else {
-          req.user.stripe_customer_id = customer.id;
-          next();
-        }
-      });
+      }
+      next();
     }
   });
 }
