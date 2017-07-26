@@ -181,7 +181,7 @@ function createRows(){
     else {
       editRowUnverified(listings[0]);
     }
-    $("#table-body").find(".table-row:not(.clone-row)").eq(0).addClass('is-active first-row');
+    $("#table-body").find(".table-row:not(.clone-row)").eq(0).addClass('is-active');
 
     //change domain name header and view button
     $(".current-domain-name").text(listings[0].domain_name);
@@ -1028,7 +1028,7 @@ function updateExistingDNS(a_records){
     }
     else {
       $("#existing_a_record_clone").removeClass('is-hidden').find(".existing_data").text("-");
-      $("#existing_a_record_clone").find(".next_step").html("<span class='is-danger'>Create this record</span>");
+      $("#existing_a_record_clone").find(".next_step").html("<span class='is-primary'>Create this record.</span>");
     }
 
     //clear table first of non-clones
@@ -1039,7 +1039,7 @@ function updateExistingDNS(a_records){
       var temp_dns_row = $("#existing_a_record_clone").clone().removeAttr('id').removeClass('is-hidden');
       temp_dns_row.find(".existing_data").text(a_records[x]);
       temp_dns_row.find(".required_data").text("-");
-      temp_dns_row.find(".next_step").html("<span class='is-danger'>Delete this record</span>");
+      temp_dns_row.find(".next_step").html("<span class='is-danger'>Delete this record.</span>");
       $("#dns_table-body").append(temp_dns_row);
     }
   }
