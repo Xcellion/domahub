@@ -5,6 +5,9 @@ $(document).ready(function() {
   $(".tab").eq(0).addClass('is-active');
   $(".module").eq(0).removeClass('is-hidden');
 
+  //remove footer (use JS so it's after theming);
+  $(".footer.is-dark").removeClass('is-hidden');
+
   //date registered format
   if (listing_info.date_registered){
     $("#date_registered").text(moment(listing_info.date_registered).format("MMMM DD, YYYY"));
