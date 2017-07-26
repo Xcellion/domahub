@@ -57,6 +57,7 @@
 						</p>
 						<ul class="menu-list">
 							<li><a id="paypal-link" href="#paypal" class="setting-link">PayPal Settings</a></li>
+							<li><a id="registrar-link" href="#registrar" class="setting-link">Registrar Settings</a></li>
 						</ul>
 						<% if (user.stripe_transfers) { %>
 							<p class="menu-label">
@@ -709,6 +710,22 @@
 									<button tabindex="0" id="paypal-cancel" class="button is-stylish is-small is-danger no-shadow is-hidden is-inverted">Cancel</button>
 								</div>
 							</form>
+						</div>
+					</div>
+					<div id="registrar" class="is-hidden card is-fullwidth">
+						<header class="card-header">
+							<p class="card-header-title">
+								Registrar Settings
+							</p>
+							<button class='edit-section-button card-header-icon button is-small no-shadow'>
+								<span class="icon is-small is-icon"><i class="fa fa-cog"></i></span>
+								<span>Edit</span>
+							</button>
+						</header>
+						<div class="card-content">
+							<div class="control">
+                <button tabindex="0" id="godaddy-connect-button" class="button is-stylish is-small no-shadow">Connect GoDaddy Account</button>
+							</div>
 						</div>
 					</div>
 					<% if (user.stripe_transfers) { %>
