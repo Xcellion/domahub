@@ -41,6 +41,7 @@
             <% if (typeof message != "undefined") {%>
               <p id="message" class="has-text-centered margin-top-0 margin-bottom-15"><%= message %></p>
             <% } %>
+
               <form id="navbar_form" action="/login" method="post">
                 <p class="control has-icon">
                   <input id="email" autofocus class="input is-medium" name="email" type="email" placeholder="Email" spellcheck="false">
@@ -109,6 +110,14 @@
             </span>
             <span>Account Settings</span>
           </a></li>
+          <% if (!user.stripe_subscription_id) { %>
+            <li id="nav-premium-link"><a tabindex="0" href="/profile/settings#premium">
+              <span class="icon is-primary is-small">
+                <i class="fa fa-diamond"></i>
+              </span>
+              <span>Upgrade Account</span>
+            </a></li>
+          <% } %>
           <li><a tabindex="0" href="/logout">
             <span class="icon is-small">
               <i class="fa fa-sign-out"></i>
@@ -123,6 +132,13 @@
         Account Settings
       </a>
     </div>
+    <% if (!user.stripe_subscription_id) { %>
+      <div class="nav-item is-hidden-tablet">
+        <a tabindex="0" class="nav-link is-hidden-tablet" href="/profile/settings#premium" title="Upgrade to Premium">
+          Upgrade Account
+        </a>
+      </div>
+    <% } %>
     <div class="nav-item is-hidden-tablet">
       <a tabindex="0" class="nav-link is-hidden-tablet" href="/logout" title="Log Out">
         Log Out

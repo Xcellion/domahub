@@ -13,11 +13,11 @@
 <body>
 	<%- include("../templates/navbar", {user: user}); %>
 
-
 	<section class="section is-medium min-height is-clipped">
 		<div class="container">
 			<div id="listing-msg-error" class="is-hidden is-danger notification is-popup">
 				<button class="delete"></button>
+        <p id="listing-msg-error-text" class='is-white'></p>
 			</div>
 			<div id="listing-msg-success" class="is-hidden is-primary notification is-popup">
 				<button class="delete"></button>
@@ -34,12 +34,14 @@
 
 					<!-- FITER MENU -->
 					<div id="filters">
+						<div class="control is-expanded has-icon">
+							<i class="fa fa-search"></i>
+							<input id="domain-search" tabindex="0" class="input is-expanded" type="text" placeholder="Search domains" />
+						</div>
 						<div class="control">
 							<span class="select is-fullwidth">
 								<select id="filter-select" tabindex="0">
 									<option selected value="id">View All</option>
-									<option value="premium">Premium</option>
-									<option value="basic">Basic</option>
 									<option value="unverified">Unverified</option>
 									<option value="rented">Rented Now</option>
 								</select>
@@ -57,10 +59,6 @@
 								</select>
 							</span>
 						</div>
-						<div class="control is-expanded has-icon">
-							<i class="fa fa-search"></i>
-							<input id="domain-search" tabindex="0" class="input is-expanded" type="text" placeholder="Search domains" />
-						</div>
 						<div class="button-wrapper control">
 							<button id="select-all" data-selected="false" tabindex="0" class="button no-shadow" title="Select All">
 								<span class="icon is-small">
@@ -68,13 +66,13 @@
 								</span>
 								<span>Select All</span>
 							</button>
-							<button id="multi-delete" class="button is-disabled no-shadow" tabindex="0" title="Delete Listing(s)">
+							<button id="multi-delete" class="button is-disabled is-danger  no-shadow" tabindex="0" title="Delete Listing(s)">
 								<span class="icon is-small">
 									<i class="fa fa-trash"></i>
 								</span>
 								<span>Delete</span>
 							</button>
-							<button id="multi-verify" class="button is-disabled no-shadow" tabindex="0" title="Verify Listing(s)">
+							<button id="multi-verify" class="button is-disabled is-primary  no-shadow" tabindex="0" title="Verify Listing(s)">
 								<span class="icon is-small">
 									<i class="fa fa-check-circle-o"></i>
 								</span>
@@ -101,7 +99,7 @@
 								<span class="icon is-danger is-small is-inline">
 									<i class="fa fa-exclamation-circle"></i>
 								</span>
-								<p class="is-danger td-domain is-inline"></p>
+								<p class="td-domain is-danger is-inline"></p>
 							</div>
 						</div>
 					</div>
@@ -121,7 +119,7 @@
 							<h2 class="current-domain-name yes-listings-elem is-inline-block is-hidden"></h2>
 						</div>
 						<div class="control-right">
-              <a id="status-color" tabindex="0" class="verified-elem unpurchased-elem button is-primary is-small is-icon-only no-shadow" title="Publicly hide or show landing page.">
+              <a id="status-color" tabindex="0" class="verified-elem unpurchased-elem button is-primary is-small is-outlined" title="Publicly hide or show landing page.">
                 <span class="icon"><i id="status-icon" class="fa fa-toggle-on"></i></span>
                 <span id="status-text">Active</span>
               </a>
@@ -154,9 +152,6 @@
 							<li id="purchased-tab" class="purchased-elem tab is-active is-hidden">
 								<a tabindex="0">Next Steps</a>
 							</li>
-							<li id="upgrade-tab" class="verified-elem unpurchased-elem tab">
-								<a id="upgrade-tab-text" tabindex="0">Upgrade</a>
-							</li>
 						</ul>
 					</div>
 
@@ -175,7 +170,7 @@
 							<h3 class="is-bold">You must verify that you own this domain.</h3>
 							<p>The table below details the DNS entries that are needed to verify this domain.</p>
 							<p id="registrar_url">Please <a>log in to your domain provider</a> to create these entries.</p>
-							<p>If you require any assistance, please refer to our <a   style'target-new:="" tab;'="" class="is-accent margin-bottom-25" href="https://intercom.help/domahub/how-to-verify-your-domain-on-domahub"> step-by-step guide</a> on domain verification.</p>
+							<p>If you require any assistance, please refer to our <a   style'target-new:="" tab;'="" class="is-accent margin-bottom-25" href="https://medium.com/@domahub/how-to-verify-domains-on-domahub-7d526c4ce6d"> step-by-step guide</a> on domain verification.</p>
 							<table class="table margin-top-15">
                 <thead>
 									<tr>
@@ -282,14 +277,14 @@
 								</div>
 							</div>
 							<div id="design-tab-drop" class="drop-tab is-hidden">
-									<div class="basic-elem control is-spaced">
+									<div id="premium-only-notification" class="control is-spaced">
 										<div class="control-left">
 											<p>
-												Please upgrade to a Premium listing for custom designs!
+												Please upgrade to a Premium account for custom designs!
 											</p>
 										</div>
 										<div class="control-right">
-											<a id="other-tab-upgrade-button" class="button is-stylish no-shadow is-small">
+											<a href="/profile/settings#premium" class="button is-stylish no-shadow is-small">
 												<span class="icon is-small">
 													<i class="fa fa-diamond"></i>
 												</span>
@@ -517,105 +512,6 @@
 									</div>
 								</div>
 							</div>
-							<div id="upgrade-tab-drop" class="drop-tab is-hidden">
-									<div class="control is-spaced">
-										<div class="control-left">
-											<p>
-												Premium Status
-											</p>
-											<small id="renew-status" class="tip">Now loading Premium details...</small>
-										</div>
-										<div class="control-right">
-											<a id="upgrade-button" class="margin-top-5 is-stylish is-small basic-elem button no-shadow">
-												<span class="icon is-small">
-													<i class="fa fa-diamond"></i>
-												</span>
-												<span class="button-text">Upgrade</span>
-											</a>
-											<div class="premium-elem control">
-												<a id="cancel-premium-button" class="margin-top-5 is-hidden is-outlined is-small is-stylish button no-shadow is-danger">
-													<span class="icon is-small">
-														<i class="fa fa-times-circle"></i>
-													</span>
-													<span>Cancel Plan</span>
-												</a>
-												<a id="renew-premium-button" class="margin-top-5 is-hidden is-outlined is-small is-stylish button no-shadow is-primary">
-													<span class="icon is-small">
-														<i class="fa fa-repeat"></i>
-													</span>
-													<span>Renew Plan</span>
-												</a>
-											</div>
-										</div>
-									</div>
-
-									<div class="control margin-bottom-0 is-spaced">
-										<div class="control-left">
-											<p>
-												Default Payment Method
-											</p>
-											<small id="existing-cc" class="tip">Click the button on the right to add a default credit card!</small>
-										</div>
-										<div class="control-right">
-											<a id="change-card-button" tabindex="0" title="Change Payment Method" class="button is-primary is-outlined is-small is-stylish no-shadow">
-												<span class="icon is-small">
-													<i class="fa fa-credit-card"></i>
-												</span>
-												<span>Change Payment Method</span>
-											</a>
-										</div>
-									</div>
-
-									<form id="stripe-form" class="is-hidden margin-top-20" autocomplete="on">
-										<div class="control">
-											<label class="label">
-												<span class="v-align-middle">Card Number</span>
-											</label>
-											<div class="control is-grouped">
-												<p class="control has-icon">
-													<input id="cc-num" tabindex="0" data-stripe="number" class="input stripe-input" type="tel" placeholder="•••• •••• •••• ••••" autocomplete="cc-number"/>
-													<i id="cc-icon" class="fa fa-credit-card"></i>
-												</p>
-											</div>
-										</div>
-
-										<div class="control">
-											<label class="label">
-												<span class="v-align-middle">Expiration Date</span>
-											</label>
-											<div class="control is-grouped">
-												<p class="control has-icon">
-													<input id="cc-exp" tabindex="0" maxlength="7" data-stripe="exp" class="input stripe-input" type="tel" placeholder="•• / ••" autocomplete="cc-exp"/>
-													<i class="fa fa-calendar-o"></i>
-												</p>
-											</div>
-										</div>
-
-										<div class="control">
-											<label class="label">
-												<span class="v-align-middle">Security Code</span>
-											</label>
-											<div class="control is-grouped">
-												<p class="control has-icon">
-													<input id="cc-cvc" tabindex="0" data-stripe="cvc" class="input stripe-input" type="tel" placeholder="•••" autocomplete="off"/>
-													<i class="fa fa-lock"></i>
-												</p>
-											</div>
-										</div>
-
-										<div class="control">
-											<label class="label">
-												<span class="v-align-middle">Zip Code</span>
-											</label>
-											<div class="control is-grouped">
-												<p class="control has-icon">
-													<input id="cc-zip" tabindex="0" maxlength="6" data-stripe="address_zip" class="input stripe-input" type="tel" autocomplete="postal-code" placeholder="•••••"/>
-													<i class="fa fa-map-marker"></i>
-												</p>
-											</div>
-										</div>
-									</form>
-								</div>
 						</div>
 						<footer id="tab-buttons-wrapper" class="yes-listings-elem is-hidden margin-top-25">
 							<a id="verify-button" class="unverified-elem button is-primary is-stylish is-small no-shadow" title="Verify this domain">
@@ -629,7 +525,6 @@
 							<div class="verified-elem">
 								<button id="save-changes-button" class="button is-disabled is-stylish is-small no-shadow">Save</button>
 								<button id="cancel-changes-button" class="button is-danger is-inverted is-hidden is-stylish is-small no-shadow">Cancel</button>
-								<button id="checkout-button" class="button is-primary is-disabled is-hidden is-stylish is-small no-shadow">Checkout</button>
 							</div>
 						</footer>
 					</div>
@@ -644,8 +539,6 @@
 	<script src="/js/lib/moment.min.js" type="text/javascript"></script>
 	<script src="/js/lib/tag-it.min.js" type="text/javascript"></script>
 	<script src="/js/lib/wNumb.js" type="text/javascript"></script>
-	<script src="https://js.stripe.com/v2/" type="text/javascript" ></script>
-	<script src="/js/jquery/jquery.payment.min.js" type="text/javascript"></script>
 	<script src="/js/jquery/jquery.minicolors.min.js" type="text/javascript"></script>
   <script src="/js/themes.js" type="text/javascript"></script>
 	<script type="text/javascript">

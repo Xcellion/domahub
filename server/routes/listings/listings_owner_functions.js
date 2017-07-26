@@ -114,7 +114,7 @@ module.exports = {
         bad_reasons.push("Duplicate domain name!");
       }
       //check price rate
-      if (!validator.isInt(posted_domains[x].buy_price, {min: 0}) && posted_domains[x].buy_price != ""){
+      if (!validator.isInt(posted_domains[x].min_price, {min: 0}) && posted_domains[x].min_price != ""){
         bad_reasons.push("Invalid price!");
       }
       //domain is too long
@@ -131,11 +131,11 @@ module.exports = {
       }
       //all good! format the db array
       else {
-        //update the premium object if its premium
-        if (posted_domains[x].premium == "true"){
-          premium_obj.count++;
-          premium_obj.domain_names.push([posted_domains[x].domain_name]);
-        }
+        // //update the premium object if its premium
+        // if (posted_domains[x].premium == "true"){
+        //   premium_obj.count++;
+        //   premium_obj.domain_names.push([posted_domains[x].domain_name]);
+        // }
         domains_sofar.push(posted_domains[x].domain_name);
 
         //format the object for DB insert
@@ -143,7 +143,7 @@ module.exports = {
           req.user.id,
           date_now,
           posted_domains[x].domain_name.toLowerCase(),
-          posted_domains[x].buy_price,
+          posted_domains[x].min_price,
           default_descriptions.random()    //random default description
         ]);
 
@@ -489,7 +489,7 @@ module.exports = {
   //function to check and reformat new listings details excluding image
   checkListingPremiumDetails : function(req, res, next){
     //premium design checks
-    if (getUserListingObj(req.user.listings, req.params.domain_name).premium){
+    if (req.user.stripe_subscription_id){
       console.log("F: Checking posted premium listing details...");
 
       var history_module = parseFloat(req.body.history_module);
@@ -554,9 +554,13 @@ module.exports = {
         req.body.secondary_color ||
         req.body.tertiary_color ||
         req.body.font_name ||
-        req.body.font_color
+        req.body.font_color ||
+        req.body.background_color ||
+        req.body.history_module ||
+        req.body.traffic_module ||
+        req.body.info_module
       ){
-        error.handler(req, res, "This listing is not a premium listing!", "json");
+        error.handler(req, res, "You can only edit a listing design after upgrading to a Premium account!", "json");
       }
       else {
         next();
