@@ -514,7 +514,7 @@ module.exports = {
 
       //check it against stripe
       stripe.customers.retrieve(req.user.stripe_customer_id, function(err, customer) {
-        if (customer.deleted || (err && !customer && err.message.indexOf("a similar object exists in live mode") == -1)){
+        if ((customer && customer.deleted) || (err && !customer && err.message.indexOf("a similar object exists in live mode") == -1)){
           console.log("SF: Not a real Stripe customer! Updating our database appropriately...");
 
           //update our DH database to remove stripe_customer_id
@@ -834,7 +834,7 @@ function newStripeCustomer(req, res, next){
         req.user.premium_cc_brand = customer.sources.data[0].brand;
         req.user.premium_cc_last4 = customer.sources.data[0].last4;
       }
-      
+
       //update the customer id in the DB
       req.session.new_account_info = {
         stripe_customer_id: customer.id
