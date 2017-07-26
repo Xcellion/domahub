@@ -560,6 +560,7 @@ module.exports = {
         req.body.traffic_module ||
         req.body.info_module
       ){
+        console.log(req.body);
         error.handler(req, res, "You can only edit a listing design after upgrading to a Premium account!", "json");
       }
       else {
