@@ -459,7 +459,11 @@
             </div>
           </div>
           <footer class="card-footer">
+            <% if (user) { %>
+            <a href="/profile/settings#premium" tabindex="0" class="card-footer-item button is-stylish is-primary">Choose Premium</a>
+            <% } else { %>
             <a href="/signup" tabindex="0" class="card-footer-item button is-stylish is-primary">Choose Premium</a>
+            <% } %>
           </footer>
         </div>
         <p class="has-text-centered">
