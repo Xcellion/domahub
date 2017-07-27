@@ -1,5 +1,3 @@
-var can_submit = true;
-
 $(document).ready(function() {
 
   $('#target').submit(function(event){
@@ -13,8 +11,6 @@ $(document).ready(function() {
       return false;
     }
     else {
-      can_submit = false;
-
       $.ajax({
         type: "POST",
         url: "/forgot",
@@ -31,9 +27,8 @@ $(document).ready(function() {
           $("#accept").show();
         }
         else {
-          console.log(data);
-          can_submit = true;
-          $("#message").html(data.message);
+          $("#login-button").removeClass('is-loading');
+          $("#message").text(data.message);
         }
       });
     }
