@@ -1,68 +1,108 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <script async src="https://use.fontawesome.com/b36602cf54.js"></script>
-    <style type="text/css">
-    body {
-      font-family: Arial;
-    }
-    </style>
-</head>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <title></title>
+        <style type="text/css" >
+          #bodyTable {
+            font-family: Verdana, sans-serif;
+          }
+          #emailHeader {
+            background-color: #3cbc8d;
+          }
+          .list-item {
+             border:0;margin:0;padding:5px 20px;
+          }
+          .message {
+            work-break:break-all;
+            border: 1px solid #ddd;
+          }
+          #emailFooter {
+            background-color: #ddd;
+          }
+        </style>
+    </head>
+    <body>
+        <table border="0" cellpadding="0" cellspacing="0" height="100%" width="100%" id="bodyTable">
+            <tr>
+                <td align="center" valign="top">
+                    <table border="0" cellpadding="20" cellspacing="0" width="600" id="emailContainer">
+                        <tr>
+                            <td align="center" valign="top">
+                                <table border="0" cellpadding="20" cellspacing="0" width="100%" id="emailHeader">
+                                    <tr>
+                                        <td align="center" valign="top">
+                                          <a href="https://www.domahub.com" style="border:0;margin:0;padding:0" rel="noreferrer" target="_blank">
+                                            <img alt height="72" width="72" style="border:0;margin:0;padding:0" src="/images/dh-assets/circle-logo/dh-circle-logo-white-500x500.png" />
+                                          </a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                      <td align="center" style="border:0;margin:0;padding-bottom:25px;color:#fff;font-size:24px;font-weight:700;">
+                                        Please verify your offer for <%= domain_name %>
+                                      </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="center" valign="top">
+                                <table border="0" cellpadding="20" cellspacing="0" width="100%" id="emailBody">
+                                    <tr>
+                                      <td align="center" valign="top">
+                                        Hello <%= offerer_name %>!
+                                      </td>
+                                    </tr>
+                                    <tr>
+                                      <td align="left" valign="top">
+                                        This email is to verify your offer for <a style="text-decoration: none;"><%= domain_name %></a>! Please see below for details on your offer:
+                                      </td>
+                                    </tr>
+                                    <tr>
+                                      <td align="left" class="list-item">
+                                        Name: <%= offerer_name %>
+                                      </td>
+                                    </tr>
+                                    <tr>
+                                      <td align="left" class="list-item">
+                                        Email: <%= offerer_email %>
 
-<body style="font-family: Arial;">
-  <section class="section is-light">
-      <div class="container">
-        <div class="box">
-            <div class="content">
-              <% if (premium == true && logo) { %>
-                <a tabindex="0" title="View Website" href="http://www.<%= domain_name %>">
-                    <figure class="image is-128x128 left-aligned" style="height: auto;">
-                      <img src="<%= logo %>" />
-                    </figure>
-                </a>
-              <% } else { %>
-                <a tabindex="0" title="DomaHub" href="https://domahub.com">
-                    <div class="flat-logo"></div>
-                </a>
-              <% } %>
-            </div>
-            <div class="content">
-                <h3>
-                   Hello <%= offerer_name %>!
-                </h3>
-                <p>
-                    This email is to verify your offer for <strong class="is-700"><%= domain_name %></strong>! Please see below for details on your offer:
-                </p>
-                <ul class="has-disc">
-                    <li>Name: <%= offerer_name %></li>
-                    <li>Email: <%= offerer_email %></li>
-                    <li>Phone: <%= offerer_phone %></li>
-                    <li>Offer: <%= offer %></li>
-                    <li>
-                      Message: <p style="white-space: pre-wrap; word-break: break-all;"><%= message %></p>
-                    </li>
-                </ul>
-                <h3>Verify your offer</h3>
-                <p>
-                  Please click the button below to verify this offer.
-                </p>
-                <div class="control">
-                  <a id="verify_button" class='button is-primary is-medium no-shadow' href="https://domahub.com/listing/<%= domain_name %>/contact/<%= verification_code %>">Verify my offer</a>
-                </div>
-                <p>
-                  <small>If you did not submit an offer for <%= domain_name %>. Please ignore this email.</small>
-                </p>
-                <p class="has-text-centered">
-                  <% if (premium == true) { %>
-                      From <%= domain_name %>
-                  <% } else { %>
-                      Sent by DomaHub
-                  <% } %>
-                </p>
-            </div>
-        </div>
-      </div>
-  </section>
-</body>
+                                      </td>
+                                    </tr>
+                                    <tr>
+                                      <td align="left" class="list-item">
+                                        Phone: <%= offerer_phone %>
+
+                                      </td>
+                                    </tr>
+                                    <tr>
+                                      <td align="left" class="list-item">
+                                        Offer: <%= offer %>
+
+                                      </td>
+                                    </tr>
+                                    <tr>
+                                      <td align="left" class="list-item message">
+                                        Message: <%= message %>
+                                      </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="center" valign="top">
+                                <table border="0" cellpadding="20" cellspacing="0" width="100%" id="emailFooter">
+                                    <tr>
+                                        <td align="center" valign="top">
+                                            This is where my footer content goes.
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+    </body>
 </html>
