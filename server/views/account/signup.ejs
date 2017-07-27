@@ -13,11 +13,12 @@
             <div class='is-inline-block flat-logo is-primary'></div>
         </a>
     </h2>
-		<p>
-			Sign Up Form
-		</p>
 		<% if (typeof message != "undefined") {%>
-			<p id="message" class="has-text-centered margin-top-0 margin-bottom-15"><%= message %></p>
+			<p id="message" class="is-danger has-text-centered margin-top-0 margin-bottom-15"><%= message %></p>
+		<% } else { %>
+			<p>
+				Sign Up Below!
+			</p>
 		<% } %>
 	</div>
 
