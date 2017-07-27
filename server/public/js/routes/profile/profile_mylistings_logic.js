@@ -1137,7 +1137,7 @@ function multiSelectButtons(){
 
 //function to multi-verify listings
 function multiVerify(verify_button){
-  verify_button.off();
+  verify_button.off().addClass('is-loading');
 
   var ids = [];
   var selected_rows = $(".table-row").filter(function(){
@@ -1157,13 +1157,15 @@ function multiVerify(verify_button){
 
     verify_button.on("click", function(){
       multiVerify(verify_button);
-    });
+    }).removeClass('is-loading');
 
     //deselect all rows
     selectAllRows($("#select-all"), true);
 
     //unverified listings error
     if (data.unverified_listings){
+      errorMessage("Failed to verify listings! Did you make the necessary DNS changes?");
+
       //add danger to failed rows
       for (var x = 0; x < data.unverified_listings.length; x++){
         $(".row-disp").each(function(){
@@ -1179,6 +1181,7 @@ function multiVerify(verify_button){
     //success rows
     if (data.state == "success"){
       verificationHandler(data);
+      successMessage("Successfully verified listings!");
     }
   });
 }
