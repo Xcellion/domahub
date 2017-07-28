@@ -20,13 +20,19 @@
             word-wrap:break-word;padding-left:20px;
           }
           #emailFooter {
-            background-color: #ddd;padding:20px 50px;
+            background-color:#eee;padding:20px 30px;
+          }
+          .button {
+            color:#fff !important;background-color:#3cbc8d;padding:10px 20px;box-sizing:border-box;border-radius:5px;
           }
           a {
-            cursor:pointer;text-decoration:none;color:#3cbc8d;
+            cursor:pointer;text-decoration:none;color:#3cbc8d!important;
           }
           a:hover {
             opacity:0.8;
+          }
+          span > a {
+            color: #fff !important;
           }
         </style>
     </head>
@@ -40,14 +46,22 @@
                                 <table border="0" cellpadding="20" cellspacing="0" width="100%" id="emailHeader">
                                     <tr>
                                         <td align="center" valign="top">
-                                          <a href="https://www.domahub.com" style="border:0;margin:0;padding:0" rel="noreferrer" target="_blank">
-                                            <img alt height="72" width="72" style="border:0;margin:0;padding:0" src="https://domahub.com/images/dh-assets/circle-logo/dh-circle-logo-white-500x500.png" />
-                                          </a>
+                                          <% if (premium == true && logo) { %>
+                                            <a href="http://www.<%= domain_name %>">
+                                               <img src="<%= logo %>" />
+                                            </a>
+                                          <% } else if (premium == true && !logo) { %>
+                                            <img height="72" width="72" src="https://domahub.com/images/lib/sign.png" />
+                                          <% } else { %>
+                                            <a href="https://www.domahub.com" style="border:0;margin:0;padding:0" rel="noreferrer" target="_blank" title="DomaHub">
+                                              <img alt height="72" width="72" style="border:0;margin:0;padding:0" src="https://domahub.com/images/dh-assets/circle-logo/dh-circle-logo-white-500x500.png" />
+                                            </a>
+                                          <% } %>
                                         </td>
                                     </tr>
                                     <tr>
-                                      <td align="center" style="border:0;margin:0;padding-bottom:25px;color:#fff;font-size:24px;font-weight:700;">
-                                        Please verify your offer for <span style="text-decoration:none;color:#fff;"><%= domain_name %></span>
+                                      <td align="center" style="border:0;margin:0;padding-bottom:25px;color:#fff;font-size:24px;font-weight:700;line-height:2;">
+                                        Please verify your offer for <span style="text-decoration:none;"><%= domain_name %></span>
                                       </td>
                                     </tr>
                                 </table>
@@ -63,7 +77,7 @@
                                     </tr>
                                     <tr>
                                       <td align="left" valign="top" colspan="5" style="padding-bottom:20px;">
-                                        This email is to verify your offer for <span style="text-decoration:none;color:#000;"><%= domain_name %></span>! Please see below for details on your offer:
+                                        This email is to verify your offer for <%= domain_name %>! Please see below for details on your offer:
                                       </td>
                                     </tr>
                                     <tr>
@@ -106,24 +120,30 @@
                                         <%= message %>
                                       </td>
                                     </tr>
+                                    <tr>
+                                      <td colspan="5" align="center" style="padding-top:30px;">
+                                        <a class="button" href="https://domahub.com/listing/<%= domain_name %>/contact/<%= verification_code %>">Click Here to Verify Offer</a>
+                                      </td>
+                                    </tr>
                                 </table>
                             </td>
                         </tr>
                         <tr>
                             <td align="center" valign="top">
-                                <table border="0" cellpadding="15" cellspacing="0" width="100%" id="emailFooter">
+                                <table border="0" cellpadding="10" cellspacing="0" width="100%" id="emailFooter">
                                     <tr>
                                         <td align="center" valign="top">
                                             You are receving this email because you made an offer to purchase
-                                            <span style="text-decoration:none;"><%= domain_name %></span>, a domain listed on
-                                            <a href="https://www.domahub.com">DomaHub.com</a>.
+                                            <%= domain_name %>. If you did not do this, please disregard this email.
                                         </td>
                                     </tr>
-                                    <tr>
-                                      <td align="center" valign="top">
-                                        Have questions? <a href="mailto:support@domahub.com">Send us an email</a>!
-                                      </td>
-                                    </tr>
+                                    <% if (!premium) { %>
+                                      <tr>
+                                        <td align="center" valign="top">
+                                          Powered by <a href="https://www.domahub.com">DomaHub.com</a>. Have questions? <a href="mailto:support@domahub.com">Send us an email</a>!
+                                        </td>
+                                      </tr>
+                                    <% } %>
                                 </table>
                             </td>
                         </tr>
