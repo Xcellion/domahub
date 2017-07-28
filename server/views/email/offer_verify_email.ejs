@@ -28,6 +28,9 @@
           a:hover {
             opacity:0.8;
           }
+          span > a {
+            color: #fff !important;
+          }
         </style>
     </head>
     <body>
@@ -40,14 +43,14 @@
                                 <table border="0" cellpadding="20" cellspacing="0" width="100%" id="emailHeader">
                                     <tr>
                                         <td align="center" valign="top">
-                                          <a href="https://www.domahub.com" style="border:0;margin:0;padding:0" rel="noreferrer" target="_blank">
+                                          <a href="https://www.domahub.com" style="border:0;margin:0;padding:0" rel="noreferrer" target="_blank" title="DomaHub">
                                             <img alt height="72" width="72" style="border:0;margin:0;padding:0" src="https://domahub.com/images/dh-assets/circle-logo/dh-circle-logo-white-500x500.png" />
                                           </a>
                                         </td>
                                     </tr>
                                     <tr>
                                       <td align="center" style="border:0;margin:0;padding-bottom:25px;color:#fff;font-size:24px;font-weight:700;line-height:2;">
-                                        Please verify your offer for <span style="text-decoration:none;background-color:#fff;padding:5px;"><%= domain_name %></span>
+                                        Please verify your offer for <span style="text-decoration:none;"><%= domain_name %></span>
                                       </td>
                                     </tr>
                                 </table>
