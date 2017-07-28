@@ -20,7 +20,7 @@
             word-wrap:break-word;padding-left:20px;
           }
           #emailFooter {
-            background-color:#eee;padding:20px 40px;
+            background-color:#eee;padding:20px 30px;
           }
           .button {
             color:#fff !important;background-color:#3cbc8d;padding:10px 20px;box-sizing:border-box;border-radius:5px;
@@ -128,7 +128,7 @@
                         </tr>
                         <tr>
                             <td align="center" valign="top">
-                                <table border="0" cellpadding="0" cellspacing="0" width="100%" id="emailFooter">
+                                <table border="0" cellpadding="10" cellspacing="0" width="100%" id="emailFooter">
                                     <tr>
                                         <td align="center" valign="top">
                                             You are receving this email because you made an offer to purchase
@@ -137,13 +137,8 @@
                                     </tr>
                                     <% if (!premium) { %>
                                       <tr>
-                                        <td>
-                                          Powered by <a href="https://www.domahub.com">DomaHub.com</a>.
-                                        </td>
-                                      </tr>
-                                      <tr>
-                                        <td>
-                                           Have questions? <a href="mailto:support@domahub.com">Send us an email</a>!
+                                        <td align="center" valign="top">
+                                          Powered by <a href="https://www.domahub.com">DomaHub.com</a>. Have questions? <a href="mailto:support@domahub.com">Send us an email</a>!
                                         </td>
                                       </tr>
                                     <% } %>
