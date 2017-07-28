@@ -50,6 +50,8 @@
                                             <a href="http://www.<%= domain_name %>">
                                                <img src="<%= logo %>" />
                                             </a>
+                                          <% else if (premium == true && !logo) { %>
+                                            <img src="https://domahub.com/images/lib/sign.png" />
                                           <% } else { %>
                                             <a href="https://www.domahub.com" style="border:0;margin:0;padding:0" rel="noreferrer" target="_blank" title="DomaHub">
                                               <img alt height="72" width="72" style="border:0;margin:0;padding:0" src="https://domahub.com/images/dh-assets/circle-logo/dh-circle-logo-white-500x500.png" />
