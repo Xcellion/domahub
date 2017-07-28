@@ -754,6 +754,12 @@ module.exports = {
                 verified: null,
                 status: 0
               }, function(result){
+
+                //revert req.user.listings if req.user exists and is the owner of this domain
+                if (req.user && req.user.listings && req.user.id == req.session.listing_info.owner_id){
+                  delete getUserListingObj(req.user.listings, domain_name).verified;
+                }
+                
                 getWhoIs(req, res, next, domain_name, true);
               });
             }
@@ -1581,6 +1587,15 @@ function updateUserRentalsObject(user_rentals, db_rentals, rental_id){
         }
       }
       break;
+    }
+  }
+}
+
+//helper function to get the req.user listings object for a specific domain
+function getUserListingObj(listings, domain_name){
+  for (var x = 0; x < listings.length; x++){
+    if (listings[x].domain_name.toLowerCase() == domain_name.toLowerCase()){
+      return listings[x];
     }
   }
 }
