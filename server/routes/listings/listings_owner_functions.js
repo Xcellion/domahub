@@ -470,8 +470,8 @@ module.exports = {
     if (req.body.status && status != 1 && status != 0){
       error.handler(req, res, "Invalid listing status!", "json");
     }
-    else if (req.body.status){
-      //check to see if its currently rented
+    //check to see if its currently rented
+    else if (req.body.status == 0){
       Listing.checkCurrentlyRented(req.params.domain_name, function(result){
         if (result.state != "success" || result.info.length > 0){
           error.handler(req, res, "This listing is currently being rented!", "json");
@@ -479,6 +479,37 @@ module.exports = {
         else {
           next();
         }
+      });
+    }
+    //check to see if its still pointed to domahub
+    else if (req.body.status == 1){
+      console.log("F: Checking to see if domain is still pointed to DomaHub...");
+
+      dns.resolve(req.params.domain_name, "A", function (err_one, address, family) {
+        //the domain's A Record
+        var domain_ip = address;
+        dns.resolve("domahub.com", "A", function (err_two, address, family) {
+
+          //not pointed to DH anymore!
+          if (domain_ip != address || domain_ip.length != 1){
+            console.log("F: Listing is not pointed to DomaHub anymore! Reverting verification...");
+            Listing.updateListing(req.params.domain_name, {
+              verified: null,
+              status: 0
+            }, function(result){
+              delete getUserListingObj(req.user.listings, req.params.domain_name).verified;
+              error.handler(req, res, "verification-error", "json");
+            });
+          }
+          //something went wrong in looking up DNS, just mark it inactive
+          else if (err_one || err_two){
+            console.log("F: DNS error! Setting listing to inactive...");
+            next();
+          }
+          else {
+            next();
+          }
+        });
       });
     }
     else {
