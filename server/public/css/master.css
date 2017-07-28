@@ -445,6 +445,9 @@ input[type="radio"] {
 small {
   font-size: 14px;
   line-height: normal; }
+  @media screen and (max-width: 456px) {
+    small {
+      font-size: 12px; } }
   small + small {
     margin-top: 5px; }
 
@@ -775,6 +778,9 @@ pre {
   justify-content: center;
   text-align: center;
   white-space: nowrap; }
+  @media screen and (max-width: 456px) {
+    .button {
+      font-size: 14px; } }
   .button:hover {
     border-color: rgba(0, 0, 0, 0.66); }
   .button:focus, .button.is-active {
@@ -1436,6 +1442,9 @@ input:-webkit-autofill {
   border-radius: 3px;
   max-width: 100%;
   width: 100%; }
+  @media screen and (max-width: 456px) {
+    .input, .textarea {
+      font-size: 14px; } }
   .input:hover, .textarea:hover {
     border-color: rgba(0, 0, 0, 0.66); }
   .input:focus, .textarea:focus, .input.is-active, .is-active.textarea {
@@ -1573,6 +1582,9 @@ input:-webkit-autofill {
     display: block;
     padding-right: 36px;
     border-color: rgba(0, 0, 0, 0.38); }
+    @media screen and (max-width: 456px) {
+      .select select {
+        font-size: 14px; } }
     .select select:hover {
       border-color: rgba(0, 0, 0, 0.66); }
     .select select:focus, .select select.is-active {
@@ -1689,6 +1701,9 @@ input:-webkit-autofill {
 .label {
   color: #212121;
   display: block; }
+  @media screen and (max-width: 456px) {
+    .label {
+      font-size: 14px; } }
   .label:not(:last-child) {
     margin-bottom: 5px; }
   .label.is-small {
