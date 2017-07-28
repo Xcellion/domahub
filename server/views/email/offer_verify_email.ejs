@@ -20,7 +20,10 @@
             word-wrap:break-word;padding-left:20px;
           }
           #emailFooter {
-            background-color: #eee;padding:20px 30px;
+            background-color:#eee;padding:20px 30px;
+          }
+          .button {
+            color:#fff !important;background-color:#3cbc8d;padding:10px 20px;box-sizing:border-box;border-radius:5px;
           }
           a {
             cursor:pointer;text-decoration:none;color:#3cbc8d!important;
@@ -43,9 +46,15 @@
                                 <table border="0" cellpadding="20" cellspacing="0" width="100%" id="emailHeader">
                                     <tr>
                                         <td align="center" valign="top">
-                                          <a href="https://www.domahub.com" style="border:0;margin:0;padding:0" rel="noreferrer" target="_blank" title="DomaHub">
-                                            <img alt height="72" width="72" style="border:0;margin:0;padding:0" src="https://domahub.com/images/dh-assets/circle-logo/dh-circle-logo-white-500x500.png" />
-                                          </a>
+                                          <% if (premium == true && logo) { %>
+                                            <a href="http://www.<%= domain_name %>">
+                                               <img src="<%= logo %>" />
+                                            </a>
+                                          <% } else { %>
+                                            <a href="https://www.domahub.com" style="border:0;margin:0;padding:0" rel="noreferrer" target="_blank" title="DomaHub">
+                                              <img alt height="72" width="72" style="border:0;margin:0;padding:0" src="https://domahub.com/images/dh-assets/circle-logo/dh-circle-logo-white-500x500.png" />
+                                            </a>
+                                          <% } %>
                                         </td>
                                     </tr>
                                     <tr>
@@ -109,6 +118,11 @@
                                         <%= message %>
                                       </td>
                                     </tr>
+                                    <tr>
+                                      <td colspan="5" align="center" style="padding-top:20px;">
+                                        <a class="button" href="https://domahub.com/listing/<%= domain_name %>/contact/<%= verification_code %>">Verify Offer</a>
+                                      </td>
+                                    </tr>
                                 </table>
                             </td>
                         </tr>
@@ -118,14 +132,13 @@
                                     <tr>
                                         <td align="center" valign="top">
                                             You are receving this email because you made an offer to purchase
-                                            <%= domain_name %>, a domain listed on
-                                            <a href="https://www.domahub.com">DomaHub.com</a>.
+                                            <%= domain_name %>.
+                                            <% if (!premium) { %>
+                                              This domain is listed on
+                                              <a href="https://www.domahub.com">DomaHub.com</a>.
+                                              Have questions? <a href="mailto:support@domahub.com">Send us an email</a>!
+                                            <% } %>
                                         </td>
-                                    </tr>
-                                    <tr>
-                                      <td align="center" valign="top">
-                                        Have questions? <a href="mailto:support@domahub.com">Send us an email</a>!
-                                      </td>
                                     </tr>
                                 </table>
                             </td>
