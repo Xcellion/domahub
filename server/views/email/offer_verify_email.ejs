@@ -10,15 +10,23 @@
           #emailHeader {
             background-color: #3cbc8d;
           }
+          #emailBody {
+            padding: 20px;
+          }
           .list-item {
-             border:0;margin:0;padding:5px 20px;
+            border:0;margin:0;padding:10px 0;border-bottom:1px solid #ddd;
           }
           .message {
-            work-break:break-all;
-            border: 1px solid #ddd;
+            word-wrap:break-word;padding-left:20px;
           }
           #emailFooter {
-            background-color: #ddd;
+            background-color: #ddd;padding:20px 50px;
+          }
+          a {
+            cursor:pointer;text-decoration:none;color:#3cbc8d;
+          }
+          a:hover {
+            opacity:0.8;
           }
         </style>
     </head>
@@ -33,13 +41,13 @@
                                     <tr>
                                         <td align="center" valign="top">
                                           <a href="https://www.domahub.com" style="border:0;margin:0;padding:0" rel="noreferrer" target="_blank">
-                                            <img alt height="72" width="72" style="border:0;margin:0;padding:0" src="/images/dh-assets/circle-logo/dh-circle-logo-white-500x500.png" />
+                                            <img alt height="72" width="72" style="border:0;margin:0;padding:0" src="https://domahub.com/images/dh-assets/circle-logo/dh-circle-logo-white-500x500.png" />
                                           </a>
                                         </td>
                                     </tr>
                                     <tr>
                                       <td align="center" style="border:0;margin:0;padding-bottom:25px;color:#fff;font-size:24px;font-weight:700;">
-                                        Please verify your offer for <%= domain_name %>
+                                        Please verify your offer for <span style="text-decoration:none;color:#fff;"><%= domain_name %></span>
                                       </td>
                                     </tr>
                                 </table>
@@ -47,43 +55,55 @@
                         </tr>
                         <tr>
                             <td align="center" valign="top">
-                                <table border="0" cellpadding="20" cellspacing="0" width="100%" id="emailBody">
+                                <table border="0" cellpadding="0" cellspacing="0" id="emailBody">
                                     <tr>
-                                      <td align="center" valign="top">
+                                      <td align="center" valign="top" colspan="5" style="font-size:18px;padding-bottom:20px;">
                                         Hello <%= offerer_name %>!
                                       </td>
                                     </tr>
                                     <tr>
-                                      <td align="left" valign="top">
-                                        This email is to verify your offer for <a style="text-decoration: none;"><%= domain_name %></a>! Please see below for details on your offer:
+                                      <td align="left" valign="top" colspan="5" style="padding-bottom:20px;">
+                                        This email is to verify your offer for <span style="text-decoration:none;color:#000;"><%= domain_name %></span>! Please see below for details on your offer:
+                                      </td>
+                                    </tr>
+                                    <tr>
+                                      <td align="left" class="list-item" colspan="1">
+                                        Name
+                                      </td>
+                                      <td aling="right" class="list-item" style="padding-left:20px;">
+                                        <%= offerer_name %>
                                       </td>
                                     </tr>
                                     <tr>
                                       <td align="left" class="list-item">
-                                        Name: <%= offerer_name %>
+                                        Email
+                                      </td>
+                                      <td align="left" class="list-item" style="padding-left:20px;">
+                                        <%= offerer_email %>
                                       </td>
                                     </tr>
                                     <tr>
                                       <td align="left" class="list-item">
-                                        Email: <%= offerer_email %>
-
+                                        Phone
+                                      </td>
+                                      <td align="left" class="list-item" style="padding-left:20px;">
+                                        <%= offerer_phone %>
                                       </td>
                                     </tr>
                                     <tr>
                                       <td align="left" class="list-item">
-                                        Phone: <%= offerer_phone %>
-
+                                        Offer
+                                      </td>
+                                      <td align="left" class="list-item" style="padding-left:20px;">
+                                        <%= offer %>
                                       </td>
                                     </tr>
                                     <tr>
                                       <td align="left" class="list-item">
-                                        Offer: <%= offer %>
-
+                                        Message
                                       </td>
-                                    </tr>
-                                    <tr>
                                       <td align="left" class="list-item message">
-                                        Message: <%= message %>
+                                        <%= message %>
                                       </td>
                                     </tr>
                                 </table>
@@ -91,11 +111,18 @@
                         </tr>
                         <tr>
                             <td align="center" valign="top">
-                                <table border="0" cellpadding="20" cellspacing="0" width="100%" id="emailFooter">
+                                <table border="0" cellpadding="15" cellspacing="0" width="100%" id="emailFooter">
                                     <tr>
                                         <td align="center" valign="top">
-                                            This is where my footer content goes.
+                                            You are receving this email because you made an offer to purchase
+                                            <span style="text-decoration:none;"><%= domain_name %></span>, a domain listed on
+                                            <a href="https://www.domahub.com">DomaHub.com</a>.
                                         </td>
+                                    </tr>
+                                    <tr>
+                                      <td align="center" valign="top">
+                                        Have questions? <a href="mailto:support@domahub.com">Send us an email</a>!
+                                      </td>
                                     </tr>
                                 </table>
                             </td>
