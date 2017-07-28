@@ -201,7 +201,7 @@ module.exports = function(app, db, auth, error, stripe){
     urlencodedParser,
     checkDomainValid,
     buyer_functions.checkContactVerificationCode,
-    renter_functions.verifyContactHistory
+    buyer_functions.verifyContactHistory
   ]);
 
   //render the accept or reject an offer page
@@ -227,7 +227,7 @@ module.exports = function(app, db, auth, error, stripe){
     owner_functions.checkListingOwnerPost,
     buyer_functions.checkContactVerified,
     buyer_functions.acceptOrRejectOffer,
-    renter_functions.notifyOfferer
+    buyer_functions.notifyOfferer
   ]);
 
   //create a new offer history item
@@ -236,11 +236,11 @@ module.exports = function(app, db, auth, error, stripe){
     checkDomainValid,
     checkDomainListed,
     renter_functions.checkSessionListingInfoPost,
-    renter_functions.checkContactInfo,
+    buyer_functions.checkContactInfo,
     stripe.checkStripeSubscription,
     profile_functions.updateAccountSettingsGet,
-    renter_functions.createOfferContactRecord,
-    renter_functions.sendContactVerificationEmail
+    buyer_functions.createOfferContactRecord,
+    buyer_functions.sendContactVerificationEmail
   ]);
 
   //render verify transfer ownership page
@@ -264,7 +264,7 @@ module.exports = function(app, db, auth, error, stripe){
     urlencodedParser,
     checkDomainValid,
     renter_functions.checkSessionListingInfoPost,
-    renter_functions.checkContactInfo,
+    buyer_functions.checkContactInfo,
     stripe.checkStripeSubscription,
     profile_functions.updateAccountSettingsGet,
     buyer_functions.redirectToCheckout
