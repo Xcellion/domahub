@@ -4,14 +4,15 @@
 @import 'bulma/sass/components/media.sass';
 
 .media {
-  @include transition(border 0.25s ease);
+  @include transition(background-color 0.25s ease);
   border-radius: $radius-small;
-  border: 1px solid transparent;
-  padding: 10px;
+  padding: 15px 10px;
+  &:not(:last-child) {
+    border-bottom: 1px solid $border;
+  }
   &:hover,
   &:focus {
-    border-color: $black-disabled;
-    cursor: pointer;
+    background-color: $grey-lighter;
   }
 }
 
@@ -75,6 +76,35 @@
   word-break: break-all;
 }
 
+#design-tab-drop {
+  position: relative;
+}
+
+.blackscreen {
+  position: absolute;
+  height: calc(100% + 100px);
+  width: calc(100% + 40px);
+  top: -22px;
+  left: -19px;
+  background-color: $black-secondary;
+  z-index: 5;
+}
+
+#premium-only-notification {
+  @include translate(-50%,50%);
+  background-color: $white;
+  border-radius: $radius-large;
+  left: 50%;
+  padding: 15px;
+  position: absolute;
+  top: 10%;
+  @include mobile {
+    width: 225px;
+  }
+}
+
+// table stuff
+
 #table-body {
   border-radius: $radius;
   max-height: 420px;
@@ -85,16 +115,11 @@
 .button-wrapper {
   display: flex;
   flex-wrap: wrap;
+  justify-content: space-between;
   .button {
     &:nth-child(2) {
       margin-right: 5px;
       margin-left: 5px;
-      @media screen and (min-width: 897px) and (max-width: 1205px) {
-        margin-right: 0;
-      }
-      @media screen and (max-width: 897px) and (min-width: 768px) {
-        margin-left: 0;
-      }
     }
   }
   .button,
@@ -116,11 +141,9 @@
   padding: 5px;
   overflow-x: hidden;
   white-space: nowrap;
-  &:not(.is-active) {
-    &:hover {
-      background-color: $grey-lighter;
-      cursor: pointer;
-    }
+  &:hover {
+    background-color: $grey-lighter;
+    cursor: pointer;
   }
   &.is-active {
     border-right-width: 5px;
