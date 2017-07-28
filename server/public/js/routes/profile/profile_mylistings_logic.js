@@ -151,7 +151,7 @@ $(document).ready(function(){
 //<editor-fold>-------------------------------CREATE ROW VERIFIED DOMAIN-------------------------------
 
 //function to create all rows
-function createRows(){
+function createRows(cur_listing_index){
   //empty the table
   $("#table-body").find(".table-row:not(.clone-row)").remove();
 
@@ -162,7 +162,12 @@ function createRows(){
 
   //show the first child
   if (listings.length > 0){
-    current_listing = listings[0];
+
+    //a specific listing to show or show first one
+    var listing_to_show = (cur_listing_index) ? listings[cur_listing_index] : listings[0];
+    var index_for_table = (cur_listing_index) ? cur_listing_index : 0;
+
+    current_listing = listing_to_show;
 
     //show and hide elements that we need if there are listings
     $(".yes-listings-elem").removeClass('is-hidden');
@@ -170,22 +175,24 @@ function createRows(){
     $("#loading-tab").addClass('is-hidden');
 
     //update inputs for purchased domain
-    if (listings[0].accepted){
-      editRowPurchased(listings[0]);
+    if (listing_to_show.accepted){
+      editRowPurchased(listing_to_show);
     }
     //update inputs for verified
-    else if (listings[0].verified){
-      editRowVerified(listings[0]);
+    else if (listing_to_show.verified){
+      editRowVerified(listing_to_show);
     }
     //update inputs for unverified
     else {
-      editRowUnverified(listings[0]);
+      editRowUnverified(listing_to_show);
     }
-    $("#table-body").find(".table-row:not(.clone-row)").eq(0).addClass('is-active');
+
+    //add active to the left-side table
+    $("#table-body").find(".table-row:not(.clone-row)").eq(index_for_table).addClass('is-active');
 
     //change domain name header and view button
-    $(".current-domain-name").text(listings[0].domain_name);
-    $("#current-domain-view").attr("href", "/listing/" + listings[0].domain_name);
+    $(".current-domain-name").text(listing_to_show.domain_name);
+    $("#current-domain-view").attr("href", "/listing/" + listing_to_show.domain_name);
   }
   //there are no listings to show!
   else {
@@ -653,7 +660,7 @@ function getDomainOffers(domain_name){
     $("#status-color").off().on("click", function(e){
       var new_status = ($("#status-input").val() == "1") ? 0 : 1;
       updateStatus({ status : new_status });
-      submitStatusChange();
+      submitStatusChange(listing_info);
     });
 
     //module checkbox handlers
@@ -778,7 +785,7 @@ function cancelListingChanges(){
 }
 
 //function to submit status change
-function submitStatusChange(){
+function submitStatusChange(listing_info){
   //clear any existing messages
   errorMessage(false);
   successMessage(false);
@@ -787,7 +794,7 @@ function submitStatusChange(){
   formData.append("status", $("#status-input").val());
 
   $.ajax({
-    url: "/listing/" + current_listing.domain_name + "/update",
+    url: "/listing/" + listing_info.domain_name + "/update",
     type: "POST",
     data: formData,
     // Options to tell jQuery not to process data or worry about the content-type
@@ -801,17 +808,35 @@ function submitStatusChange(){
       updateCurrentListing(data.listings);
       refreshSubmitButtons();
 
-      (function(listing_info){
+      (function(new_listing_info){
         //update the change row handler
-        $("#row-listing_id" + current_listing.id).off().on("click", function(e){
-          changeRow($(this), listing_info, true);
+        $("#row-listing_id" + new_listing_info.id).off().on("click", function(e){
+          changeRow($(this), new_listing_info, true);
         });
 
-        updateBindings(listing_info);
-      })(current_listing);
+        updateBindings(new_listing_info);
+      })(listing_info);
     }
     else {
-      errorMessage(data.message);
+      //listing is no longer pointed to domahub, revert to verify tab
+      if (data.message == "verification-error"){
+        delete listing_info.verified;
+
+        (function(new_listing_info){
+          errorMessage("This domain is no longer pointed to DomaHub! Please verify your DNS settings.");
+
+          //find the index of the faulty listing
+          var index_to_change = getListingIndex(new_listing_info.domain_name);
+
+          //recreate the rows
+          createRows(index_to_change);
+          editRowUnverified(new_listing_info);
+          updateBindings(new_listing_info);
+        })(listing_info);
+      }
+      else {
+        errorMessage(data.message);
+      }
     }
   });
 }
@@ -1137,7 +1162,7 @@ function multiSelectButtons(){
 
 //function to multi-verify listings
 function multiVerify(verify_button){
-  verify_button.off();
+  verify_button.off().addClass('is-loading');
 
   var ids = [];
   var selected_rows = $(".table-row").filter(function(){
@@ -1157,13 +1182,15 @@ function multiVerify(verify_button){
 
     verify_button.on("click", function(){
       multiVerify(verify_button);
-    });
+    }).removeClass('is-loading');
 
     //deselect all rows
     selectAllRows($("#select-all"), true);
 
     //unverified listings error
     if (data.unverified_listings){
+      errorMessage("Failed to verify listings! Did you make the necessary DNS changes?");
+
       //add danger to failed rows
       for (var x = 0; x < data.unverified_listings.length; x++){
         $(".row-disp").each(function(){
@@ -1179,6 +1206,7 @@ function multiVerify(verify_button){
     //success rows
     if (data.state == "success"){
       verificationHandler(data);
+      successMessage("Successfully verified listings!");
     }
   });
 }
@@ -1323,6 +1351,15 @@ function getUserListingObj(listings, domain_name){
   for (var x = 0; x < listings.length; x++){
     if (listings[x].domain_name.toLowerCase() == domain_name.toLowerCase()){
       return listings[x];
+    }
+  }
+}
+
+//helper function to find index of a specific listing in listings array
+function getListingIndex(domain_name){
+  for (var x = 0; x < listings.length; x++){
+    if (listings[x].domain_name == domain_name){
+      return x;
     }
   }
 }

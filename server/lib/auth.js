@@ -67,7 +67,7 @@ module.exports = {
 
         else {
           //check if username exists
-          Account.checkAccountUsername(username, function(result){
+          Account.checkAccountUsername(req.body.username, function(result){
             //username exists
             if (result.state=="error" || result.info.length){
               return done(false, {message: 'User with that username exists!'});
@@ -79,7 +79,7 @@ module.exports = {
 
               var account_info = {
                 email: email,
-                username: username,
+                username: req.body.username,
                 password: bcrypt.hashSync(password, null, null),
                 date_created: now_utc,
                 date_accessed: now_utc
@@ -284,38 +284,43 @@ module.exports = {
 
   //function to sign up for a new account
   signupPost: function(req, res, next){
-    email = req.body.email;
-    username = req.body.username;
-    password = req.body.password;
-    recaptcha = req.body["g-recaptcha-response"]
+    var email = req.body.email;
+    var username = req.body.username;
+    var password = req.body.password;
+    var recaptcha = req.body["g-recaptcha-response"];
+    var verify_pw = req.body["verify-pw"];
 
     //not a valid email
     if (!email || !validator.isEmail(email)){
-      error.handler(req, res, "Invalid email!");
+      error.handler(req, res, "Please enter an email address!");
     }
     //invalid username
     else if (!username || /\s/.test(username)){
-      error.handler(req, res, "Invalid username!");
+      error.handler(req, res, "Please enter a username!");
     }
     //username is too long
     else if (username.length > 70){
-      error.handler(req, res, "Username is too long!");
+      error.handler(req, res, "Your username is too long!");
     }
     //username is too short
     else if (username.length < 3){
-      error.handler(req, res, "Username is too short!");
+      error.handler(req, res, "Your username is too short!");
     }
     //invalid password
     else if (!password){
-      error.handler(req, res, "Invalid password!");
+      error.handler(req, res, "Please enter a password!");
     }
     //password is too long
     else if (password.length > 70){
-      error.handler(req, res, "Password is too long!");
+      error.handler(req, res, "Your password is too long!");
     }
     //password is too short
     else if (password.length < 3){
-      error.handler(req, res, "Password is too short!");
+      error.handler(req, res, "Your password is too short!");
+    }
+    //passwords aren't the same
+    else if (password != verify_pw){
+      error.handler(req, res, "Please prove you're not a robot!");
     }
     //recaptcha is empty
     else if (!recaptcha){
