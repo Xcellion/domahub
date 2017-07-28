@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-        <title></title>
+        <title>Verify your offer on DomaHub!</title>
         <style type="text/css" >
           #bodyTable {
             font-family: Verdana, sans-serif;
@@ -13,17 +13,8 @@
           #emailBody {
             padding: 20px;
           }
-          .list-item {
-            border:0;margin:0;padding:10px 0;border-bottom:1px solid #ddd;
-          }
-          .message {
-            word-wrap:break-word;padding-left:20px;
-          }
           #emailFooter {
             background-color:#eee;padding:20px 30px;
-          }
-          .button {
-            color:#fff !important;background-color:#3cbc8d;padding:10px 20px;box-sizing:border-box;border-radius:5px;
           }
           a {
             cursor:pointer;text-decoration:none;color:#3cbc8d!important;
@@ -33,6 +24,15 @@
           }
           span > a {
             color: #fff !important;
+          }
+          .list-item {
+            border:0;margin:0;padding:10px 0;border-bottom:1px solid #ddd;
+          }
+          .message {
+            word-wrap:break-word;padding-left:20px;
+          }
+          .button {
+            color:#fff !important;background-color:#3cbc8d;padding:10px 20px;box-sizing:border-box;border-radius:5px;
           }
         </style>
     </head>
@@ -48,7 +48,7 @@
                                         <td align="center" valign="top">
                                           <% if (premium == true && logo) { %>
                                             <a href="http://www.<%= domain_name %>">
-                                               <img src="<%= logo %>" />
+                                               <img height="72" width="72" src="<%= logo %>" />
                                             </a>
                                           <% } else if (premium == true && !logo) { %>
                                             <img height="72" width="72" src="https://domahub.com/images/lib/sign.png" />

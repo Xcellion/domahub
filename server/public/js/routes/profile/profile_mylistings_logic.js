@@ -414,7 +414,7 @@ function getDomainOffers(domain_name){
             cloned_offer_row.find(".offer-accept").removeClass('is-hidden').attr("href", "/listing/" + listing_info.domain_name + "/contact/" + listing_info.offers[x].id + "/accept");
             cloned_offer_row.find(".offer-reject").removeClass('is-hidden').attr("href", "/listing/" + listing_info.domain_name + "/contact/" + listing_info.offers[x].id + "/reject");
           }
-          $("#offers-wrapper").append(cloned_offer_row);
+          $("#offers-wrapper").prepend(cloned_offer_row);
         }
 
         //accepted an offer! hide other offers
@@ -559,10 +559,12 @@ function getDomainOffers(domain_name){
     //if premium, remove the notification / disabled inputs
     if (user.stripe_subscription_id){
       $("#premium-only-notification").addClass("is-hidden");
+      $(".blackscreen").addClass("is-hidden");
       $(".premium-input").removeClass("is-disabled");
     }
     else {
       $("#premium-only-notification").removeClass("is-hidden");
+      $(".blackscreen").removeClass("is-hidden");
       $(".premium-input").addClass("is-disabled");
     }
   }
