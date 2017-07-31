@@ -1,5 +1,7 @@
 $(document).ready(function() {
-  redirectDelay(redirect);
+  if (auto_redirect){
+    redirectDelay(redirect);
+  }
 });
 
 //redirect after a short delay
