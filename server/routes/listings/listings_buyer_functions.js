@@ -202,8 +202,10 @@ module.exports = {
   notifyOfferer : function(req, res, next){
     console.log("F: Sending email to offerer to notify of accept/reject status...");
 
+
     getListingOffererContactInfoByID(req.params.domain_name, req.params.offer_id, function(offerer_result){
       var email_contents_path = path.resolve(process.cwd(), 'server', 'views', 'email', 'offer_notify_buyer.ejs');
+      var listing_info = getUserListingObj(req.user.listings, req.params.domain_name);
 
       var accepted = req.path.indexOf("/accept") != -1;
       var accepted_text = (accepted) ? "accepted" : "rejected";
@@ -216,7 +218,8 @@ module.exports = {
         offerer_phone: phoneUtil.format(phoneUtil.parse(offerer_result.phone), PNF.INTERNATIONAL),
         offer: offer_formatted,
         message: offerer_result.message,
-        premium: (offerer_result.stripe_subscription_id) ? true : false
+        premium: (req.user.stripe_subscription_id) ? true : false,
+        listing_info: (listing_info) ? listing_info : false
       }
 
       var emailDetails = {
@@ -524,6 +527,15 @@ function emailSomeone(req, res, pathEJSTemplate, EJSVariables, emailDetails, err
       });
     }
   });
+}
+
+//helper function to get the req.user listings object for a specific domain
+function getUserListingObj(listings, domain_name){
+  for (var x = 0; x < listings.length; x++){
+    if (listings[x].domain_name.toLowerCase() == domain_name.toLowerCase()){
+      return listings[x];
+    }
+  }
 }
 
 //get the luminance based on listing info primary color (for email)
