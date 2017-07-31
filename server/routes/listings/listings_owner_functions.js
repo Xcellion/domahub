@@ -278,7 +278,7 @@ module.exports = {
 
   //function to check the size of the image uploaded
   checkImageUploadSize : function(req, res, next){
-    var premium = getUserListingObj(req.user.listings, req.params.domain_name).premium;
+    var premium = req.user.stripe_subscription_id;
     var upload_path = (node_env == "dev") ? "./uploads/images" : '/var/www/w3bbi/uploads/images';
     var storage = multer.diskStorage({
       destination: function (req, file, cb) {
@@ -325,7 +325,7 @@ module.exports = {
           error.handler(req, res, 'Wrong file type!', "json");
         }
         else if (err.message == "NOT_PREMIUM"){
-          error.handler(req, res, "This listing is not a premium listing!", "json");
+          error.handler(req, res, "You must have a Premium account to change the background image!", "json");
         }
         else {
           console.log(err);
