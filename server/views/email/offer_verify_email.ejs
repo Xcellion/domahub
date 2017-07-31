@@ -46,11 +46,11 @@
                                 <table border="0" cellpadding="20" cellspacing="0" width="100%" id="emailHeader">
                                     <tr>
                                         <td align="center" valign="top">
-                                          <% if (premium == true && logo) { %>
+                                          <% if (premium == true && listing_info.logo) { %>
                                             <a href="http://www.<%= domain_name %>">
-                                               <img height="72" width="72" src="<%= logo %>" />
+                                               <img height="72" width="72" src="<%= listing_info.logo %>" />
                                             </a>
-                                          <% } else if (premium == true && !logo) { %>
+                                          <% } else if (premium == true && !listing_info.logo) { %>
                                             <img height="72" width="72" src="https://domahub.com/images/lib/sign.png" />
                                           <% } else { %>
                                             <a href="https://www.domahub.com" style="border:0;margin:0;padding:0" rel="noreferrer" target="_blank" title="DomaHub">
