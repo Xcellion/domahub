@@ -82,6 +82,9 @@ module.exports = {
 
     var email_contents_path = path.resolve(process.cwd(), 'server', 'views', 'email', 'offer_verify_email.ejs');
 
+    //figure out luminance based on primary color
+    getListingInfoLuminance(listing_info);
+
     var EJSVariables = {
       premium: req.session.listing_info.premium || false,
       domain_name: req.session.listing_info.domain_name,
@@ -117,15 +120,6 @@ module.exports = {
     console.log("F: Verifying offer email...");
 
     Data.verifyContactHistory(req.params.verification_code, req.params.domain_name, function(result){
-
-      //render the redirect page to notify offerer that offer was successfully sent
-      res.render("redirect", {
-        redirect: "/listing/" + req.params.domain_name,
-        message: "Your offer has been verified! \n Please wait for the owner to accept or reject your offer.",
-        button: "Back to " + req.params.domain_name,
-        auto_redirect: false
-      });
-
       //asynchronously alert the owner!
       //get the listing owner contact information to email
       getListingOwnerContactInfo(req.params.domain_name, function(owner_result){
@@ -154,6 +148,14 @@ module.exports = {
         });
       });
 
+      //render the redirect page to notify offerer that offer was successfully sent
+      res.render("redirect", {
+        redirect: "/listing/" + req.params.domain_name,
+        message: "Your offer has been verified! \n Please wait for the owner to accept or reject your offer.",
+        button: "Back to " + req.params.domain_name,
+        auto_redirect: false,
+        listing_info: req.session.listing_info
+      });
     });
   },
 
@@ -523,3 +525,35 @@ function emailSomeone(req, res, pathEJSTemplate, EJSVariables, emailDetails, err
     }
   });
 }
+
+//get the luminance based on listing info primary color (for email)
+function getListingInfoLuminance(listing_info){
+  listing_info.font_luminance = calculateLuminance(listing_info.primary_color);
+}
+
+//return white or black text based on luminance
+function calculateLuminance(rgb) {
+  var hexValue = rgb.replace(/[^0-9A-Fa-f]/, '');
+  var r,g,b;
+  if (hexValue.length === 3) {
+    hexValue = hexValue[0] + hexValue[0] + hexValue[1] + hexValue[1] + hexValue[2] + hexValue[2];
+  }
+  if (hexValue.length !== 6) {
+    return 0;
+  }
+  r = parseInt(hexValue.substring(0,2), 16) / 255;
+  g = parseInt(hexValue.substring(2,4), 16) / 255;
+  b = parseInt(hexValue.substring(4,6), 16) / 255;
+
+  // calculate the overall luminance of the color
+  var luminance = 0.2126 * r + 0.7152 * g + 0.0722 * b;
+
+  if (luminance > 0.8) {
+    return "#222";
+  }
+  else {
+    return "#fff";
+  }
+}
+
+//</editor-fold>
