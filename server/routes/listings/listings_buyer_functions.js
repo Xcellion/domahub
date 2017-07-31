@@ -82,6 +82,9 @@ module.exports = {
 
     var email_contents_path = path.resolve(process.cwd(), 'server', 'views', 'email', 'offer_verify_email.ejs');
 
+    //figure out luminance based on primary color
+    getListingInfoLuminance(listing_info);
+
     var EJSVariables = {
       premium: req.session.listing_info.premium || false,
       domain_name: req.session.listing_info.domain_name,
@@ -522,3 +525,35 @@ function emailSomeone(req, res, pathEJSTemplate, EJSVariables, emailDetails, err
     }
   });
 }
+
+//get the luminance based on listing info primary color (for email)
+function getListingInfoLuminance(listing_info){
+  listing_info.font_luminance = calculateLuminance(listing_info.primary_color);
+}
+
+//return white or black text based on luminance
+function calculateLuminance(rgb) {
+  var hexValue = rgb.replace(/[^0-9A-Fa-f]/, '');
+  var r,g,b;
+  if (hexValue.length === 3) {
+    hexValue = hexValue[0] + hexValue[0] + hexValue[1] + hexValue[1] + hexValue[2] + hexValue[2];
+  }
+  if (hexValue.length !== 6) {
+    return 0;
+  }
+  r = parseInt(hexValue.substring(0,2), 16) / 255;
+  g = parseInt(hexValue.substring(2,4), 16) / 255;
+  b = parseInt(hexValue.substring(4,6), 16) / 255;
+
+  // calculate the overall luminance of the color
+  var luminance = 0.2126 * r + 0.7152 * g + 0.0722 * b;
+
+  if (luminance > 0.8) {
+    return "#222";
+  }
+  else {
+    return "#fff";
+  }
+}
+
+//</editor-fold>
