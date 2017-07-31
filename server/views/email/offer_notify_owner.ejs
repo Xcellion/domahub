@@ -29,7 +29,7 @@
             border:0;margin:0;padding:10px 0;border-bottom:1px solid #ddd;
           }
           .message {
-            word-wrap:break-word;padding-left:20px;
+            word-wrap:break-word;padding-left:20px;white-space:pre-wrap;
           }
           .button {
             color:#fff !important;background-color:#3cbc8d;padding:10px 20px;box-sizing:border-box;border-radius:5px;
@@ -109,12 +109,10 @@
                                     </td>
                                   </tr>
                                   <tr>
-                                    <td align="left" class="list-item">
+                                    <td align="left" valign="top" class="list-item">
                                       Message
                                     </td>
-                                    <td align="left" class="list-item message">
-                                      <%= message %>
-                                    </td>
+                                    <td align="left" class="list-item message"><%= message %></td>
                                   </tr>
                                   <tr>
                                     <td colspan="5" style="padding-top:20px;">
