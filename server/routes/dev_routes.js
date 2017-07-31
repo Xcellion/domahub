@@ -87,7 +87,7 @@ function emailViews(req, res, next){
     offerer_name: "BUYERTWAT",
     offerer_email: "test@email.com",
     email: "test@email.com",
-    accepted: true,
+    accepted: false,
     offerer_phone: phoneUtil.format(phoneNumber, PNF.INTERNATIONAL),
     phone: phoneUtil.format(phoneNumber, PNF.INTERNATIONAL),
     offer: moneyFormat.to(parseFloat("1231324")),
