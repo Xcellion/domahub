@@ -91,7 +91,7 @@ module.exports = {
       offerer_phone: phoneUtil.format(phoneUtil.parse(req.body.contact_phone), PNF.INTERNATIONAL),
       offer: moneyFormat.to(parseFloat(req.body.contact_offer)),
       message: req.body.contact_message,
-      logo: req.session.listing_info.logo
+      listing_info: req.session.listing_info
     }
 
     delete req.session.contact_verification_code;
@@ -121,8 +121,9 @@ module.exports = {
       //render the redirect page to notify offerer that offer was successfully sent
       res.render("redirect", {
         redirect: "/listing/" + req.params.domain_name,
-        message: "Success! Now redirecting you back to " + req.params.domain_name,
-        button: req.params.domain_name
+        message: "Your offer has been verified! \n Please wait for the owner to accept or reject your offer.",
+        button: "Back to " + req.params.domain_name,
+        auto_redirect: false
       });
 
       //asynchronously alert the owner!
@@ -212,7 +213,8 @@ module.exports = {
         offerer_email: offerer_result.email,
         offerer_phone: phoneUtil.format(phoneUtil.parse(offerer_result.phone), PNF.INTERNATIONAL),
         offer: offer_formatted,
-        message: offerer_result.message
+        message: offerer_result.message,
+        premium: (offerer_result.stripe_subscription_id) ? true : false
       }
 
       var emailDetails = {
@@ -486,10 +488,15 @@ function newListingContactHistory(req, res, next, contact_details){
 
 //helper function to email someone
 function emailSomeone(req, res, pathEJSTemplate, EJSVariables, emailDetails, errorMsg){
+  console.log("F: Sending email!");
+
   //read the file and add appropriate variables
   ejs.renderFile(pathEJSTemplate, EJSVariables, null, function(err, html_str){
-    if (err && errorMsg){
+    if (err){
       console.log(err);
+    }
+
+    if (err && errorMsg){
       error.handler(req, res, errorMsg, "json");
     }
     else {
@@ -497,6 +504,10 @@ function emailSomeone(req, res, pathEJSTemplate, EJSVariables, emailDetails, err
 
       //send email
       mailer.sendMail(emailDetails, function(err) {
+        if (err){
+          console.log(err);
+        }
+
         if (errorMsg){
           if (err) {
             console.log(err);
