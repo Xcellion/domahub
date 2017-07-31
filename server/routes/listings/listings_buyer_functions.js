@@ -83,7 +83,7 @@ module.exports = {
     var email_contents_path = path.resolve(process.cwd(), 'server', 'views', 'email', 'offer_verify_email.ejs');
 
     //figure out luminance based on primary color
-    getListingInfoLuminance(listing_info);
+    getListingInfoLuminance(req.session.listing_info);
 
     var EJSVariables = {
       premium: req.session.listing_info.premium || false,
