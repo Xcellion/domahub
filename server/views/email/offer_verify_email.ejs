@@ -7,9 +7,6 @@
           #bodyTable {
             font-family: Verdana, sans-serif;
           }
-          #emailHeader {
-            background-color: #3cbc8d;
-          }
           #emailBody {
             padding: 20px;
           }
@@ -17,13 +14,10 @@
             background-color:#eee;padding:20px 30px;
           }
           a {
-            cursor:pointer;text-decoration:none;color:#3cbc8d!important;
+            cursor:pointer;text-decoration:none;
           }
           a:hover {
             opacity:0.8;
-          }
-          span > a {
-            color: #fff !important;
           }
           .list-item {
             border:0;margin:0;padding:10px 0;border-bottom:1px solid #ddd;
@@ -32,7 +26,7 @@
             word-wrap:break-word;padding-left:20px;white-space:pre-wrap;
           }
           .button {
-            color:#fff !important;background-color:#3cbc8d;padding:10px 20px;box-sizing:border-box;border-radius:5px;
+            padding:10px 20px;box-sizing:border-box;border-radius:5px;
           }
         </style>
     </head>
@@ -43,17 +37,17 @@
                     <table border="0" cellpadding="20" cellspacing="0" width="600" id="emailContainer">
                         <tr>
                             <td align="center" valign="top">
-                                <table border="0" cellpadding="20" cellspacing="0" width="100%" id="emailHeader">
+                                <table border="0" cellpadding="20" cellspacing="0" width="100%" id="emailHeader" style="background-color:<%= listing_info.primary_color %>">
                                     <tr>
                                         <td align="center" valign="top">
                                           <% if (premium == true && listing_info.logo) { %>
-                                            <a href="http://www.<%= domain_name %>">
+                                            <a href="http://www.<%= domain_name %>" style="color: <%= listing_info.primary_color %>">
                                                <img height="72" width="72" src="<%= listing_info.logo %>" />
                                             </a>
                                           <% } else if (premium == true && !listing_info.logo) { %>
                                             <img height="72" width="72" src="https://domahub.com/images/lib/sign.png" />
                                           <% } else { %>
-                                            <a href="https://www.domahub.com" style="border:0;margin:0;padding:0" rel="noreferrer" target="_blank" title="DomaHub">
+                                            <a href="https://www.domahub.com" style="border:0;margin:0;padding:0" rel="noreferrer" target="_blank" title="DomaHub" style="color: <%= listing_info.primary_color %>">
                                               <img alt height="72" width="72" style="border:0;margin:0;padding:0" src="https://domahub.com/images/dh-assets/circle-logo/dh-circle-logo-white-500x500.png" />
                                             </a>
                                           <% } %>
@@ -61,7 +55,7 @@
                                     </tr>
                                     <tr>
                                       <td align="center" style="border:0;margin:0;padding-bottom:25px;color:#fff;font-size:24px;font-weight:700;line-height:2;">
-                                        Please verify your offer for <span style="text-decoration:none;"><%= domain_name %></span>
+                                        Please verify your offer for <span style="text-decoration:none;"><%= domain_name %></span>.
                                       </td>
                                     </tr>
                                 </table>
@@ -77,7 +71,7 @@
                                     </tr>
                                     <tr>
                                       <td align="left" valign="top" colspan="5" style="padding-bottom:20px;">
-                                        This email is to verify your offer for <%= domain_name %>! Please see below for details on your offer:
+                                        This email is to verify your offer for <span style="text-decoration:none;"><%= domain_name %></span>! Please see below for details on your offer:
                                       </td>
                                     </tr>
                                     <tr>
@@ -120,7 +114,8 @@
                                     </tr>
                                     <tr>
                                       <td colspan="5" align="center" style="padding-top:30px;">
-                                        <a class="button" href="https://domahub.com/listing/<%= domain_name %>/contact/<%= verification_code %>">Click Here to Verify Offer</a>
+                                        <a class="button" href="https://domahub.com/listing/<%= domain_name %>/contact/<%= verification_code %>" style="background-color: <%= listing_info.primary_color %>; color: <%= listing_info.font_color %>;">
+                                          Click Here to Verify Offer</a>
                                       </td>
                                     </tr>
                                 </table>
@@ -132,7 +127,7 @@
                                     <tr>
                                         <td align="center" valign="top">
                                             You are receving this email because you made an offer to purchase
-                                            <%= domain_name %>. If you did not do this, please disregard this email.
+                                            <span style="text-decoration:none;"><%= domain_name %></span>. If you did not do this, please disregard this email.
                                         </td>
                                     </tr>
                                     <% if (!premium) { %>
