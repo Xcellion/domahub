@@ -168,13 +168,10 @@ data_model.prototype.getListingOffererContactInfoByID = function(domain_name, of
         stats_contact_history.phone, \
         stats_contact_history.offer, \
         stats_contact_history.message, \
-        stats_contact_history.accepted, \
-        accounts.stripe_subscription_id \
+        stats_contact_history.accepted \
       FROM stats_contact_history \
       INNER JOIN listings \
       ON listings.id = stats_contact_history.listing_id \
-      INNER JOIN accounts \
-      ON listings.owner_id = accounts.id \
       WHERE listings.domain_name = ? \
       AND stats_contact_history.id = ? \
       AND stats_contact_history.verified = 1 '
