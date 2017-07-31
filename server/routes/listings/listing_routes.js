@@ -196,11 +196,26 @@ module.exports = function(app, db, auth, error, stripe){
 
   //<editor-fold>-------------------------------BUYING RELATED-------------------------------
 
+  //create a new offer history item
+  app.post("/listing/:domain_name/contact/offer", [
+    urlencodedParser,
+    checkDomainValid,
+    checkDomainListed,
+    renter_functions.checkSessionListingInfoPost,
+    buyer_functions.checkContactInfo,
+    stripe.checkStripeSubscription,
+    profile_functions.updateAccountSettingsGet,
+    buyer_functions.createOfferContactRecord,
+    buyer_functions.sendContactVerificationEmail
+  ]);
+
   //verify a offer history item email
   app.get("/listing/:domain_name/contact/:verification_code", [
     urlencodedParser,
     checkDomainValid,
     buyer_functions.checkContactVerificationCode,
+    renter_functions.getListingInfo,
+    stripe.checkStripeSubscription,
     buyer_functions.verifyContactHistory
   ]);
 
@@ -230,19 +245,6 @@ module.exports = function(app, db, auth, error, stripe){
     buyer_functions.notifyOfferer
   ]);
 
-  //create a new offer history item
-  app.post("/listing/:domain_name/contact/offer", [
-    urlencodedParser,
-    checkDomainValid,
-    checkDomainListed,
-    renter_functions.checkSessionListingInfoPost,
-    buyer_functions.checkContactInfo,
-    stripe.checkStripeSubscription,
-    profile_functions.updateAccountSettingsGet,
-    buyer_functions.createOfferContactRecord,
-    buyer_functions.sendContactVerificationEmail
-  ]);
-
   //render verify transfer ownership page
   app.get("/listing/:domain_name/bin/:verification_code", [
     checkDomainValid,
@@ -257,22 +259,6 @@ module.exports = function(app, db, auth, error, stripe){
     checkDomainListed,
     buyer_functions.checkListingPurchaseVerificationCode,
     buyer_functions.verifyTransferOwnership
-  ]);
-
-  //new buy it now
-  app.post("/listing/:domain_name/contact/buy", [
-    urlencodedParser,
-    checkDomainValid,
-    renter_functions.checkSessionListingInfoPost,
-    buyer_functions.checkContactInfo,
-    stripe.checkStripeSubscription,
-    profile_functions.updateAccountSettingsGet,
-    buyer_functions.redirectToCheckout
-  ]);
-
-  //render BIN checkout page
-  app.get('/listing/:domain_name/checkout/buy', [
-    buyer_functions.renderCheckout
   ]);
 
   //buy a listing
@@ -290,6 +276,22 @@ module.exports = function(app, db, auth, error, stripe){
     buyer_functions.deleteBINInfo,
     buyer_functions.disableListing,
     owner_functions.updateListing
+  ]);
+
+  //new buy it now
+  app.post("/listing/:domain_name/contact/buy", [
+    urlencodedParser,
+    checkDomainValid,
+    renter_functions.checkSessionListingInfoPost,
+    buyer_functions.checkContactInfo,
+    stripe.checkStripeSubscription,
+    profile_functions.updateAccountSettingsGet,
+    buyer_functions.redirectToCheckout
+  ]);
+
+  //render BIN checkout page
+  app.get('/listing/:domain_name/checkout/buy', [
+    buyer_functions.renderCheckout
   ]);
 
   //</editor-fold>
