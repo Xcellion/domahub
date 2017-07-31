@@ -1,74 +1,5 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
-<<<<<<< HEAD
-  <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <title>Verify your offer on DomaHub!</title>
-    <style type="text/css" >
-      #bodyTable {
-        font-family: Verdana, sans-serif;
-      }
-      #emailHeader {
-        background-color: #3cbc8d;
-      }
-      #emailBody {
-        padding: 20px;
-      }
-      #emailFooter {
-        background-color:#eee;padding:20px 30px;
-      }
-      a {
-        cursor:pointer;text-decoration:none;color:#3cbc8d!important;
-      }
-      a:hover {
-        opacity:0.8;
-      }
-      span > a {
-        color: #fff !important;
-      }
-      .list-item {
-        border:0;margin:0;padding:10px 0;border-bottom:1px solid #ddd;
-      }
-      .message {
-        word-wrap:break-word;padding-left:20px;white-space:pre-wrap;
-      }
-      .button {
-        color:#fff !important;background-color:#3cbc8d;padding:10px 20px;box-sizing:border-box;border-radius:5px;
-      }
-    </style>
-  </head>
-  <body>
-    <table border="0" cellpadding="0" cellspacing="0" height="100%" width="100%" id="bodyTable">
-      <tr>
-        <td align="center" valign="top">
-          <table border="0" cellpadding="20" cellspacing="0" width="600" id="emailContainer">
-            <tr>
-              <td align="center" valign="top">
-                <table border="0" cellpadding="20" cellspacing="0" width="100%" id="emailHeader">
-                  <tr>
-                    <td align="center" valign="top">
-                      <% if (premium == true && listing_info.logo) { %>
-                        <a href="http://www.<%= domain_name %>">
-                           <img height="72" width="72" src="<%= listing_info.logo %>" />
-                        </a>
-                      <% } else if (premium == true && !listing_info.logo) { %>
-                        <img height="72" width="72" src="https://domahub.com/images/lib/sign.png" />
-                      <% } else { %>
-                        <a href="https://www.domahub.com" style="border:0;margin:0;padding:0" rel="noreferrer" target="_blank" title="DomaHub">
-                          <img alt height="72" width="72" style="border:0;margin:0;padding:0" src="https://domahub.com/images/dh-assets/circle-logo/dh-circle-logo-white-500x500.png" />
-                        </a>
-                      <% } %>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td align="center" style="border:0;margin:0;padding-bottom:25px;color:#fff;font-size:24px;font-weight:700;line-height:2;">
-                      Please verify your offer for <span style="text-decoration:none;"><%= domain_name %></span>
-                    </td>
-                  </tr>
-                </table>
-              </td>
-            </tr>
-=======
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <title>Verify your offer on DomaHub!</title>
@@ -101,21 +32,10 @@
     </head>
     <body>
         <table border="0" cellpadding="0" cellspacing="0" height="100%" width="100%" id="bodyTable">
->>>>>>> 3534e006c88af32ee2c30dd71ab8a7ef729b0468
             <tr>
                 <td align="center" valign="top">
-                    <table border="0" cellpadding="0" cellspacing="0" id="emailBody">
+                    <table border="0" cellpadding="20" cellspacing="0" width="600" id="emailContainer">
                         <tr>
-<<<<<<< HEAD
-                          <td align="center" valign="top" colspan="5" style="font-size:18px;padding-bottom:20px;">
-                            Hello <%= offerer_name %>!
-                          </td>
-                        </tr>
-                        <tr>
-                          <td align="left" valign="top" colspan="5" style="padding-bottom:20px;">
-                            This email is to verify your offer for <%= domain_name %>! Please see below for details on your offer:
-                          </td>
-=======
                             <td align="center" valign="top">
                                 <table border="0" cellpadding="20" cellspacing="0" width="100%" id="emailHeader" style="background-color:<%= listing_info.primary_color %>">
                                     <tr>
@@ -200,63 +120,9 @@
                                     </tr>
                                 </table>
                             </td>
->>>>>>> 3534e006c88af32ee2c30dd71ab8a7ef729b0468
                         </tr>
-                        <tr>
-                          <td align="left" class="list-item" colspan="1">
-                            Name
-                          </td>
-                          <td aling="right" class="list-item" style="padding-left:20px;">
-                            <%= offerer_name %>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td align="left" class="list-item">
-                            Email
-                          </td>
-                          <td align="left" class="list-item" style="padding-left:20px;">
-                            <%= offerer_email %>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td align="left" class="list-item">
-                            Phone
-                          </td>
-                          <td align="left" class="list-item" style="padding-left:20px;">
-                            <%= offerer_phone %>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td align="left" class="list-item">
-                            Offer
-                          </td>
-                          <td align="left" class="list-item" style="padding-left:20px;">
-                            <%= offer %>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td align="left" class="list-item">
-                            Message
-                          </td>
-                          <td align="left" class="list-item message"><%= message %></td>
-                        </tr>
-                        <tr>
-                          <td colspan="5" align="center" style="padding-top:30px;">
-                            <a class="button" href="https://domahub.com/listing/<%= domain_name %>/contact/<%= verification_code %>">Click Here to Verify Offer</a>
-                          </td>
-                        </tr>
-                    </table>
-                </td>
-            </tr>
-            <tr>
-                <td align="center" valign="top">
-                    <table border="0" cellpadding="10" cellspacing="0" width="100%" id="emailFooter">
                         <tr>
                             <td align="center" valign="top">
-<<<<<<< HEAD
-                                You are receving this email because you made an offer to purchase
-                                <%= domain_name %>. If you did not do this, please disregard this email.
-=======
                                 <table border="0" cellpadding="10" cellspacing="0" width="100%" id="emailFooter">
                                     <tr>
                                         <td align="center" valign="top">
@@ -272,22 +138,11 @@
                                       </tr>
                                     <% } %>
                                 </table>
->>>>>>> 3534e006c88af32ee2c30dd71ab8a7ef729b0468
                             </td>
                         </tr>
-                        <% if (!premium) { %>
-                          <tr>
-                            <td align="center" valign="top">
-                              Powered by <a href="https://www.domahub.com">DomaHub.com</a>. Have questions? <a href="mailto:support@domahub.com">Send us an email</a>!
-                            </td>
-                          </tr>
-                        <% } %>
                     </table>
                 </td>
             </tr>
-          </table>
-        </td>
-      </tr>
-    </table>
-  </body>
+        </table>
+    </body>
 </html>
