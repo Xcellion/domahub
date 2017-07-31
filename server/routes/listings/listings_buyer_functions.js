@@ -117,15 +117,6 @@ module.exports = {
     console.log("F: Verifying offer email...");
 
     Data.verifyContactHistory(req.params.verification_code, req.params.domain_name, function(result){
-
-      //render the redirect page to notify offerer that offer was successfully sent
-      res.render("redirect", {
-        redirect: "/listing/" + req.params.domain_name,
-        message: "Your offer has been verified! \n Please wait for the owner to accept or reject your offer.",
-        button: "Back to " + req.params.domain_name,
-        auto_redirect: false
-      });
-
       //asynchronously alert the owner!
       //get the listing owner contact information to email
       getListingOwnerContactInfo(req.params.domain_name, function(owner_result){
@@ -154,6 +145,14 @@ module.exports = {
         });
       });
 
+      //render the redirect page to notify offerer that offer was successfully sent
+      res.render("redirect", {
+        redirect: "/listing/" + req.params.domain_name,
+        message: "Your offer has been verified! \n Please wait for the owner to accept or reject your offer.",
+        button: "Back to " + req.params.domain_name,
+        auto_redirect: false,
+        listing_info: req.session.listing_info
+      });
     });
   },
 
