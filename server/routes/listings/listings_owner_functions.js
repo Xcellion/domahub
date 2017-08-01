@@ -760,21 +760,41 @@ module.exports = {
     console.log("F: Finding the all verified offers for " + req.params.domain_name + "...");
     var listing_obj = getUserListingObj(req.user.listings, req.params.domain_name);
     Data.getListingOffers(req.params.domain_name, function(result){
+
+      //set server side offers
       if (result.state == "success"){
         listing_obj.offers = result.info;
-        res.send({
-          state: "success",
-          listings: req.user.listings
-        });
       }
       else {
-        res.send({
-          state: "success",
-          listings: req.user.listings
-        });
+        listing_obj.offers = false;
       }
-    });
 
+      res.send({
+        state: "success",
+        listings: req.user.listings
+      });
+    });
+  },
+
+  //gets all statistics for a specific domain
+  getListingStats : function(req, res, next){
+    console.log("F: Finding the all verified statistics for " + req.params.domain_name + "...");
+    var listing_obj = getUserListingObj(req.user.listings, req.params.domain_name);
+    Data.getListingStats(req.params.domain_name, function(result){
+
+      //set server side stats
+      if (result.state == "success"){
+        listing_obj.stats = result.info;
+      }
+      else {
+        listing_obj.stats = false;
+      }
+      
+      res.send({
+        state: "success",
+        listings: req.user.listings
+      });
+    });
   },
 
   //</editor-fold>

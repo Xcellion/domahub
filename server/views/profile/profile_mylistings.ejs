@@ -146,9 +146,12 @@
 							<li id="design-tab" class="verified-elem unpurchased-elem tab">
 								<a tabindex="0">Design</a>
 							</li>
-							<li id="offers-tab" class="verified-elem unpurchased-elem tab">
+							<li id="offers-tab" class="verified-elem no-buttons-tab unpurchased-elem tab">
 								<a tabindex="0">Offers</a>
 							</li>
+              <%# <li id="stats-tab" class="verified-elem no-buttons-tab unpurchased-elem tab">
+                <a tabindex="0">Stats</a>
+              </li>%>
 							<li id="purchased-tab" class="purchased-elem tab is-active is-hidden">
 								<a tabindex="0">Next Steps</a>
 							</li>
@@ -280,14 +283,19 @@
 									<div class="blackscreen">
 										<div id="premium-only-notification" class="content has-text-centered">
 											<p>
-												Please upgrade to a Premium account for custom designs!
+												Please upgrade to a Premium account to customize the look and feel of your landing page!
 											</p>
-											<a href="/profile/settings#premium" class="button is-stylish no-shadow is-primary is-small">
-												<span class="icon is-small">
-													<i class="fa fa-diamond"></i>
-												</span>
-												<span>Upgrade</span>
+											<a href="/#pricing" class="is-accent">
+												What is a Premium account?
 											</a>
+                      <div class="margin-top-15 control has-text-centered">
+                        <a href="/profile/settings#premium" class="button is-stylish no-shadow is-primary is-small">
+                          <span class="icon is-small">
+                            <i class="fa fa-diamond"></i>
+                          </span>
+                          <span>Upgrade</span>
+                        </a>
+                      </div>
 										</div>
 									</div>
 									<div id="example-wrapper" class="preview-elem padding-25 control has-border-bottom">
@@ -449,9 +457,9 @@
 									</div>
 								</div>
 							<div id="offers-tab-drop" class="drop-tab is-hidden">
-								<div id="loading-offers" class="content">
+								<div id="loading-offers" class="margin-top-20 content">
 									<p>
-										Now loading offers...
+										Now loading domain offers...
 									</p>
 								</div>
 								<div id="no-offers" class="content is-hidden">
@@ -523,7 +531,22 @@
 									</div>
 								</div>
 							</div>
-						</div>
+              <div id="stats-tab-drop" class="drop-tab is-hidden">
+                <div id="loading-stats" class="margin-top-20 content">
+									<p>
+										Now loading listings statistics...
+									</p>
+								</div>
+								<div id="no-stats" class="content is-hidden">
+									<p>
+										There is no activity on this domain yet. Need some tips? Check out our <a href="/faq" class="is-accent">FAQ</a>.
+									</p>
+								</div>
+								<div id="stats-wrapper">
+								</div>
+                <canvas id="referer-chart"></canvas>
+              </div>
+            </div>
 						<footer id="tab-buttons-wrapper" class="yes-listings-elem is-hidden margin-top-25">
 							<a id="verify-button" class="unverified-elem button is-primary is-stylish is-small no-shadow" title="Verify this domain">
 								<span class="icon is-small"><i class="fa fa-check-circle-o"></i></span>
@@ -552,6 +575,8 @@
 	<script src="/js/lib/wNumb.js" type="text/javascript"></script>
 	<script src="/js/jquery/jquery.minicolors.min.js" type="text/javascript"></script>
   <script src="/js/themes.js" type="text/javascript"></script>
+  <script src="/js/lib/chart.min.js" type="text/javascript"></script>
+  <script src="/js/lib/randomColor.js" type="text/javascript"></script>
 	<script type="text/javascript">
 		//redirect to homepage if user is not defined
 		var user = <% if(typeof user != "undefined"){ %><%-JSON.stringify(user)%><% }else{ %>window.location="/"<% } %>;
