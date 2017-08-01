@@ -1697,7 +1697,7 @@ input:-webkit-autofill {
   display: block; }
   @media screen and (max-width: 456px) {
     .label {
-      font-size: 14px; } }
+      font-size: 14px !important; } }
   .label:not(:last-child) {
     margin-bottom: 5px; }
   .label.is-small {
@@ -3578,11 +3578,13 @@ input:-webkit-autofill {
     align-items: center;
     display: flex; } }
 
-@media screen and (min-width: 769px) {
-  .level-right {
-    align-items: center;
-    display: flex;
-    justify-content: flex-end; } }
+.level-right {
+  text-align: right; }
+  @media screen and (min-width: 769px) {
+    .level-right {
+      align-items: center;
+      display: flex;
+      justify-content: flex-end; } }
 
 .level {
   align-items: center;
