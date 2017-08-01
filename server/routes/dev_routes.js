@@ -76,7 +76,7 @@ function emailViews(req, res, next){
 
   var data = {
     domain_name: "fuck.com",
-    premium: true,
+    premium: false,
     listing_info: {
       logo: "http://i.imgur.com/qiJLjgz.png",
       primary_color: "#ac38be"
