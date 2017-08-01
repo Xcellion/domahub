@@ -457,6 +457,44 @@
 									</div>
 								</div>
 							<div id="offers-tab-drop" class="drop-tab is-hidden">
+								<div id="offer-modal" class="modal">
+									<div class="modal-background"></div>
+						      <div class="modal-container">
+										<div class="modal-content offer-popup">
+											<div class="content has-text-centered">
+								        <h3 class="is-bold">Offer for <span id="offer-modal-domain"></span></h3>
+								        <small>Received on <span id="offer-modal-timestamp"></span></small>
+								      </div>
+											<div class="content margin-bottom-0">
+												<h1 id="offer-modal-price" class="margin-bottom-20 has-text-centered"></h1>
+								        <ul class="offer-info">
+							            <li>
+						                <span class="icon is-small" title="From"><i class="fa fa-user-o"></i></span><span id="offer-modal-name"></span>
+							            </li>
+							            <li>
+						                <span class="icon is-small" title="Email"><i class="fa fa-envelope-o"></i></span><span id="offer-modal-email"></span>
+							            </li>
+							            <li>
+						                <span class="icon is-small" title="Phone"><i class="fa fa-phone"></i></span><span id="offer-modal-phone"></span>
+							            </li>
+							            <li class="">
+						                <span class="icon is-small" title="Message"><i class="fa fa-comment-o"></i></span>
+														<p id="offer-modal-message" class="offer-msg"></p>
+							            </li>
+								        </ul>
+								      </div>
+											<div id="offer-modal-button-wrapper" class="control margin-top-20 is-grouped is-grouped-center">
+								        <p class="control">
+								          <a id="accept_button" tabindex="0" class='button is-primary is-stylish is-small'>Accept offer</a>
+								        </p>
+								        <p class="control">
+								          <a id="reject_button" tabindex="0" class='button is-outlined is-danger is-stylish is-small'>Reject offer</a>
+								        </p>
+								      </div>
+										</div>
+									</div>
+								  <button class="modal-close"></button>
+								</div>
 								<div id="loading-offers" class="margin-top-20 content">
 									<p>
 										Now loading domain offers...
@@ -467,7 +505,7 @@
 										You have no offers on this domain yet.
 									</p>
 								</div>
-                <div id="deposited-offer" class="is-hidden">
+                <div id="deposited-offer" class="has-border-bottom padding-bottom-15 is-hidden">
                   <div class="content">
                     <h3>
                       Congratulations on selling your domain!
@@ -486,7 +524,7 @@
                     </p>
                   </div>
                 </div>
-                <div id="accepted-offer" class="is-hidden">
+                <div id="accepted-offer" class="has-border-bottom padding-bottom-15 is-hidden">
                   <div class="content">
                     <h3>
                       I accepted the offer--what's next?
@@ -499,7 +537,7 @@
                       <span class="is-bold">There is no required action on your part just yet.</span> Hold tight, we're getting you your money.
                     </p>
                     <p>
-                      <a class="is-accent is-small v-align-middle">Click here to re-send the form to the offerer.</a>
+                      <a id="resend-accept" class="button is-stylish is-small">Re-send email to offerer</a>
                     </p>
                   </div>
                 </div>
@@ -519,15 +557,13 @@
 										</div>
 										<div class="media-items">
 											<div class="media-item">
-												<span class="icon is-small"><i class="fa fa-clock-o"></i></span>
 												<small class="offer-timestamp"></small>
 											</div>
 										</div>
 									</div>
 									<div class="media-right has-text-right">
 										<p class="is-bold"><span class="offer-accepted"></span><span class="offer-offer"></span></p>
-										<a class="offer-accept button is-primary is-small is-outlined is-hidden no-shadow margin-top-0" tabindex="0">Accept Offer</a>
-										<a class="offer-reject button is-danger is-small is-outlined is-hidden no-shadow" tabindex="0">Reject Offer</a>
+										<a class="button offer-modal-button is-small no-shadow" tabindex="0">View Offer</a>
 									</div>
 								</div>
 							</div>

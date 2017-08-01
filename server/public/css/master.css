@@ -178,12 +178,6 @@ textarea {
 .is-capitalized {
   text-transform: capitalize !important; }
 
-h1 + a,
-h2 + a,
-h3 + a,
-p + a {
-  margin-top: 10px; }
-
 h1 + p,
 h2 + p,
 h3 + p {
@@ -3880,13 +3874,13 @@ input:-webkit-autofill {
   .modal-container-calendar {
     width: 100%; } }
 
-.modal-content, .modal-card {
+.modal-content {
   max-height: calc(100vh - 120px);
   overflow: auto;
   position: relative;
   width: 100%; }
   @media screen and (min-width: 769px) {
-    .modal-content.login-box, .login-box.modal-card {
+    .modal-content.login-box {
       margin: 0 auto;
       max-height: calc(100vh - 40px);
       width: 400px; } }
@@ -3899,43 +3893,6 @@ input:-webkit-autofill {
   right: 20px;
   top: 20px;
   width: 30px; }
-
-.modal-card {
-  background-color: white;
-  border-radius: 5px;
-  display: flex;
-  flex-direction: column;
-  max-height: calc(100vh - 40px);
-  overflow: hidden; }
-
-.modal-card-head,
-.modal-card-foot {
-  align-items: center;
-  background-color: white;
-  display: flex;
-  flex-shrink: 0;
-  justify-content: flex-start;
-  padding: 20px;
-  position: relative; }
-
-.modal-card-head {
-  border-bottom: 1px solid rgba(0, 0, 0, 0.12); }
-
-.modal-card-title {
-  color: rgba(0, 0, 0, 0.88);
-  flex-grow: 1;
-  font-size: 22px;
-  line-height: 1; }
-
-.modal-card-foot {
-  border-top: 1px solid rgba(0, 0, 0, 0.12); }
-  .modal-card-foot .button:not(:last-child) {
-    margin-right: 10px; }
-
-.modal-card-body {
-  flex-grow: 1;
-  overflow: auto;
-  padding: 20px; }
 
 .modal {
   bottom: 0;

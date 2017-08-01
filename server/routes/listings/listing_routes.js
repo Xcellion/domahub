@@ -255,6 +255,18 @@ module.exports = function(app, db, auth, error, stripe){
     buyer_functions.notifyOfferer
   ]);
 
+  //resend an email for accept
+  app.post(["/listing/:domain_name/contact/:offer_id/resend"], [
+    auth.checkLoggedIn,
+    urlencodedParser,
+    checkDomainValid,
+    checkDomainListed,
+    profile_functions.getAccountListings,
+    owner_functions.checkListingOwnerPost,
+    sendOkay,
+    buyer_functions.notifyOfferer
+  ]);
+
   //render verify transfer ownership page
   app.get("/listing/:domain_name/bin/:verification_code", [
     checkDomainValid,
@@ -475,6 +487,15 @@ function ifNotDev(req, res, next){
   else {
     res.sendStatus(200);
   }
+}
+
+//function to send okay
+function sendOkay(req, res, next){
+  res.send({
+    state: "success"
+  });
+
+  next();
 }
 
 //function to check validity of domain name

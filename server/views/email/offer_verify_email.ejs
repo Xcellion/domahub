@@ -41,21 +41,21 @@
                                 <tr>
                                     <td align="center" valign="top">
                                       <% if (premium == true && listing_info.logo) { %>
-                                        <a href="http://www.<%= domain_name %>" style="color: <%= listing_info.primary_color %>">
+                                        <a href="http://www.<%= domain_name %>">
                                            <img height="72" width="72" src="<%= listing_info.logo %>" />
                                         </a>
                                       <% } else if (premium == true && !listing_info.logo) { %>
                                         <img height="72" width="72" src="https://domahub.com/images/lib/sign.png" />
                                       <% } else { %>
-                                        <a href="https://www.domahub.com" style="border:0;margin:0;padding:0" rel="noreferrer" target="_blank" title="DomaHub" style="color: <%= listing_info.primary_color %>">
+                                        <a href="https://www.domahub.com" style="border:0;margin:0;padding:0" rel="noreferrer" target="_blank" title="DomaHub">
                                           <img alt height="72" width="72" style="border:0;margin:0;padding:0" src="https://domahub.com/images/dh-assets/circle-logo/dh-circle-logo-white-500x500.png" />
                                         </a>
                                       <% } %>
                                     </td>
                                 </tr>
                                 <tr>
-                                  <td align="center" style="border:0;margin:0;padding-bottom:25px;color:#fff;font-size:24px;font-weight:700;line-height:2;">
-                                    Please verify your offer for <a style="color: <%= listing_info.font_luminance %>;"><%= domain_name %></a>.
+                                  <td align="center" style="color:<%= (premium) ? listing_info.font_luminance : '#fff'e %>;border:0;margin:0;padding-bottom:25px;;font-size:24px;font-weight:700;line-height:2;">
+                                    Please verify your offer for <a style="color: <%= (premium) ? listing_info.font_luminance : '#fff' %>;"><%= domain_name %></a>.
                                   </td>
                                 </tr>
                             </table>
