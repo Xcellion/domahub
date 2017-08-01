@@ -8,7 +8,7 @@ module.exports = {
 function handler(req, res, message, type) {
 
   //send back to POST methods (not GET)
-  if (!type && req.method == "POST"){
+  if (!type && req.method == "POST" && req.path != "/login"){
     var type = "json";
   }
 

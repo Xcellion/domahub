@@ -268,7 +268,7 @@ account_model.prototype.createSignupCodes = function(codes, callback){
 
 //updates a new account
 account_model.prototype.updateAccount = function(account_info, email, callback){
-  console.log("kldasjdflajlfjakdlfjkldasjfklasdjklfsjaklfjasklfkldasjdflajlfjakdlfjkldasjfklasdjklfsjaklfjasklfkldasjdflajlfjakdlfjkldasjfklasdjklfsjaklfjasklf")
+  console.log("HEY WHAT HAPPENED", account_info)
   if (!account_info.date_accessed){
     console.log("DB: Updating account with email: " + email + "...");
   }
