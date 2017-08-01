@@ -230,6 +230,7 @@ button[data-balloon] {
   -webkit-transition: background-color 0.25s ease;
   transition: background-color 0.25s ease;
   border-radius: 2px;
+  cursor: pointer;
   padding: 15px 10px; }
   .media:not(:last-child) {
     border-bottom: 1px solid rgba(0, 0, 0, 0.12); }
@@ -254,6 +255,24 @@ button[data-balloon] {
         margin-bottom: 5px; } }
   .media-item .icon {
     margin-right: 5px; }
+
+.offer-popup {
+  background-color: white;
+  border: 2px;
+  padding: 20px;
+  width: 400px !important; }
+
+.offer-info li .icon {
+  margin-right: 10px; }
+
+.offer-info li:last-child {
+  display: flex; }
+  .offer-info li:last-child .icon {
+    margin-right: 15px; }
+
+.offer-msg {
+  overflow-y: auto;
+  max-height: 100px; }
 
 .box-checked {
   margin-left: 2px; }

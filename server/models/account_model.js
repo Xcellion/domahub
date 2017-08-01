@@ -268,8 +268,8 @@ account_model.prototype.createSignupCodes = function(codes, callback){
 
 //updates a new account
 account_model.prototype.updateAccount = function(account_info, email, callback){
+  console.log("kldasjdflajlfjakdlfjkldasjfklasdjklfsjaklfjasklfkldasjdflajlfjakdlfjkldasjfklasdjklfsjaklfjasklfkldasjdflajlfjakdlfjkldasjfklasdjklfsjaklfjasklf")
   if (!account_info.date_accessed){
-    console.log("kldasjdflajlfjakdlfjkldasjfklasdjklfsjaklfjasklf")
     console.log("DB: Updating account with email: " + email + "...");
   }
   query = "UPDATE accounts \

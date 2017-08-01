@@ -192,8 +192,12 @@ module.exports = {
     //update the DB on accepted or rejected
     Data.acceptRejectOffer(accepted, req.params.domain_name, req.params.offer_id, function(offer_result){
 
-      //delete offers object so we refresh it
       var listing_info = getUserListingObj(req.user.listings, req.params.domain_name);
+      //set accepted variable if accepted
+      if (accepted){
+        listing_info.accepted = 1;
+      }
+      //delete offers object so we refresh it
       delete listing_info.offers;
 
       res.json({
@@ -209,16 +213,14 @@ module.exports = {
   notifyOfferer : function(req, res, next){
     console.log("F: Sending email to offerer to notify of accept/reject status...");
 
-
     getListingOffererContactInfoByID(req.params.domain_name, req.params.offer_id, function(offerer_result){
       var email_contents_path = path.resolve(process.cwd(), 'server', 'views', 'email', 'offer_notify_buyer.ejs');
       var listing_info = getUserListingObj(req.user.listings, req.params.domain_name);
 
-      var accepted = req.path.indexOf("/accept") != -1;
-      var accepted_text = (accepted) ? "accepted" : "rejected";
+      var accepted_text = (offerer_result.accepted) ? "accepted" : "rejected";
       var offer_formatted = moneyFormat.to(parseFloat(offerer_result.offer));
       var EJSVariables = {
-        accepted: accepted,
+        accepted: offerer_result.accepted,
         domain_name: req.params.domain_name,
         offerer_name: offerer_result.name,
         offerer_email: offerer_result.email,
