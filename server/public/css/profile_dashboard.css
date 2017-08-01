@@ -255,6 +255,24 @@ button[data-balloon] {
   .media-item .icon {
     margin-right: 5px; }
 
+.offer-popup {
+  background-color: white;
+  border: 2px;
+  padding: 20px;
+  width: 400px !important; }
+
+.offer-info li .icon {
+  margin-right: 10px; }
+
+.offer-info li:last-child {
+  display: flex; }
+  .offer-info li:last-child .icon {
+    margin-right: 15px; }
+
+.offer-msg {
+  overflow-y: auto;
+  max-height: 100px; }
+
 .box-checked {
   margin-left: 2px; }
 

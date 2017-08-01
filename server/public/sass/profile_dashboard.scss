@@ -39,6 +39,32 @@
   }
 }
 
+.offer-popup {
+  background-color: $white;
+  border: $radius-small;
+  padding: 20px;
+  width: 400px !important;
+}
+
+.offer-info {
+  li {
+    .icon {
+      margin-right: 10px;
+    }
+    &:last-child {
+      display: flex;
+      .icon {
+        margin-right: 15px;
+      }
+    }
+  }
+}
+
+.offer-msg {
+  overflow-y: auto;
+  max-height: 100px;
+}
+
 .box-checked {
     margin-left:2px;
 }
