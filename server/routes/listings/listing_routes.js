@@ -135,6 +135,16 @@ module.exports = function(app, db, auth, error, stripe){
     owner_functions.getListingOffers
   ]);
 
+  //get stats for a verified domain
+  app.post('/listing/:domain_name/getstats', [
+    auth.checkLoggedIn,
+    checkDomainValid,
+    checkDomainListed,
+    profile_functions.getAccountListings,
+    owner_functions.checkListingOwnerPost,
+    owner_functions.getListingStats
+  ]);
+
   //update listing information
   app.post('/listing/:domain_name/update', [
     auth.checkLoggedIn,
