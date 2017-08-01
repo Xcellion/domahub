@@ -178,12 +178,6 @@ textarea {
 .is-capitalized {
   text-transform: capitalize !important; }
 
-h1 + a,
-h2 + a,
-h3 + a,
-p + a {
-  margin-top: 10px; }
-
 h1 + p,
 h2 + p,
 h3 + p {
