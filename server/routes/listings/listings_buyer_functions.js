@@ -98,11 +98,12 @@ module.exports = {
     }
 
     delete req.session.contact_verification_code;
+    var email_from = (req.session.listing_info.premium) ? "'" + req.session.listing_info.username + "'<" + req.session.listing_info.owner_email + ">" : '"DomaHub" <general@domahub.com>'
 
     //email options
     var emailDetails = {
       to: req.body.contact_email,
-      from: '"DomaHub Domains" <general@domahub.com>',
+      from: email_from,
       subject: "Hi, " + req.body.contact_name + '! Please verify your offer for ' + req.session.listing_info.domain_name,
     };
 
@@ -137,6 +138,7 @@ module.exports = {
             offer: offer_formatted,
             message: offerer_result.message
           }
+
           var emailDetails = {
             to: owner_result.email,
             from: '"DomaHub Domains" <general@domahub.com>',
@@ -189,6 +191,11 @@ module.exports = {
 
     //update the DB on accepted or rejected
     Data.acceptRejectOffer(accepted, req.params.domain_name, req.params.offer_id, function(offer_result){
+
+      //delete offers object so we refresh it
+      var listing_info = getUserListingObj(req.user.listings, req.params.domain_name);
+      delete listing_info.offers;
+
       res.json({
         state: offer_result.state,
         accepted: accepted
@@ -222,9 +229,11 @@ module.exports = {
         listing_info: (listing_info) ? listing_info : false
       }
 
+      //premium email from listing owner or from domahub
+      var email_from = (req.user.stripe_subscription_id) ? "'" + req.user.username + "'<" + req.user.email + ">" : '"DomaHub" <general@domahub.com>'
       var emailDetails = {
         to: offerer_result.email,
-        from: '"DomaHub" <general@domahub.com>',
+        from: email_from,
         subject: 'Your ' + offer_formatted + ' offer for ' + req.params.domain_name + " was " + accepted_text + "!"
       };
 

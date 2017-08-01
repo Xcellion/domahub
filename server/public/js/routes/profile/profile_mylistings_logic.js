@@ -175,7 +175,7 @@ function createRows(cur_listing_index){
     $("#loading-tab").addClass('is-hidden');
 
     //update inputs for purchased domain
-    if (listing_to_show.accepted){
+    if (listing_to_show.deposited){
       editRowPurchased(listing_to_show);
     }
     //update inputs for verified
@@ -205,7 +205,7 @@ function createRows(cur_listing_index){
 //function to create a listing row
 function createRow(listing_info, rownum){
   //choose a row to clone (accepted listings are verified by default)
-  if (listing_info.verified || listing_info.accepted){
+  if (listing_info.verified || listing_info.deposited){
     var tempRow = $("#verified-clone-row").clone();
   }
   else {
@@ -272,7 +272,7 @@ function changeRow(row, listing_info, bool){
     $("#current-domain-view").attr("href", "/listing/" + listing_info.domain_name);
 
     //update inputs for purchased domain
-    if (listing_info.accepted){
+    if (listing_info.deposited){
       editRowPurchased(listing_info);
     }
     //update inputs for verified
@@ -406,8 +406,11 @@ function getDomainOffers(domain_name){
           cloned_offer_row.find(".offer-phone").text(listing_info.offers[x].phone);
           cloned_offer_row.find(".offer-offer").text(moneyFormat.to(parseFloat(listing_info.offers[x].offer)));
           cloned_offer_row.find(".offer-message").text(listing_info.offers[x].message);
+
+          //accepted offer!
           if (listing_info.offers[x].accepted == 1){
             cloned_offer_row.find(".offer-accepted").text('Accepted - ');
+            cloned_offer_row.find(".offer-accept").removeClass('is-hidden is-primary').text("View Details");
           }
           else {
             cloned_offer_row.addClass('unaccepted-offer');
@@ -417,18 +420,28 @@ function getDomainOffers(domain_name){
           $("#offers-wrapper").prepend(cloned_offer_row);
         }
 
-        //accepted an offer! hide other offers
-        if (listing_info.accepted == 1){
+        //money has been deposited!
+        if (listing_info.deposited == 1){
           $('.unaccepted-offer').addClass('is-hidden');
-          $("#accepted-offer").removeClass('is-hidden');
+          $("#deposited-offer").removeClass('is-hidden');
         }
         else {
-          $("#accepted-offer").addClass('is-hidden');
+          $("#deposited-offer").addClass('is-hidden');
+
+          //accepted an offer! hide other offers
+          if (listing_info.accepted == 1){
+            $('.unaccepted-offer').addClass('is-hidden');
+            $("#accepted-offer").removeClass('is-hidden');
+          }
+          else {
+            $("#accepted-offer").addClass('is-hidden');
+          }
         }
       }
       else {
         $("#no-offers").removeClass('is-hidden');
         $("#accepted-offer").addClass('is-hidden');
+        $("#deposited-offer").addClass('is-hidden');
       }
     }
   }
