@@ -2,19 +2,47 @@ var current_listing = (listings) ? listings[0] : {};
 
 $(document).ready(function(){
 
-  $(".filter-menu-toggle").on("click", function() {
-    $("#filter-menu").toggleClass("is-active");
-  });
-
-  //populate all themes
-  populateThemeDropdown();
-
   //close offer modal
   $(".modal-close, .modal-background").on("click", function(){
     $(this).parent(".modal").removeClass('is-active');
   });
 
+  //<editor-fold>-------------------------------URL-------------------------------
+
+  var replace_url = [location.protocol, '//', location.host, location.pathname].join('');
+  var url_tab = getParameterByName("tab");
+  if (["verify", "info", "rental", "design", "offers", "purchased"].indexOf(url_tab) == -1){
+    url_tab = "info";
+    updateQueryStringParam("tab", "info");
+  }
+
+  var url_listing_index = 0;
+  var url_listing = getParameterByName("listing");
+  if (listings.length){
+    for (var x = 0 ; x < listings.length; x++){
+      if (listings[x].domain_name == url_listing){
+        var url_listing_index = x;
+        break;
+      }
+    }
+
+    //url_listing doesnt exist in listing var, replace the history
+    if (url_listing_index == 0){
+      updateQueryStringParam("listing", listings[0].domain_name);
+    }
+  }
+
+  //populate all themes
+  populateThemeDropdown();
+
+  //</editor-fold>
+
   //<editor-fold>-------------------------------FILTERS-------------------------------
+
+  //toggle on filter (mobile)
+  $(".filter-menu-toggle").on("click", function() {
+    $("#filter-menu").toggleClass("is-active");
+  });
 
   //sorting
   $("#sort-select").on("change", function(){
@@ -83,7 +111,7 @@ $(document).ready(function(){
 
   //<editor-fold>-------------------------------DOMAIN LIST-------------------------------
 
-  createRows();
+  createRows(url_listing_index, url_tab);
 
   //multiple delete listings
   $("#multi-delete").on("click", function(e){
@@ -114,6 +142,9 @@ $(document).ready(function(){
     //clear any existing messages
     errorMessage(false);
     successMessage(false);
+
+    //update tab URL
+    updateQueryStringParam("tab", $(this).attr("id").replace("-tab", ""));
 
     //hide other tab selectors
     $(".tab.verified-elem").removeClass('is-active');
@@ -163,7 +194,7 @@ $(document).ready(function(){
 //<editor-fold>-------------------------------CREATE ROW VERIFIED DOMAIN-------------------------------
 
 //function to create all rows
-function createRows(cur_listing_index){
+function createRows(cur_listing_index, url_tab){
   //empty the table
   $("#table-body").find(".table-row:not(.clone-row)").remove();
 
@@ -172,7 +203,7 @@ function createRows(cur_listing_index){
     $("#table-body").append(createRow(listings[x], x));
   }
 
-  //show the first child
+  //show specific listing (or first listing)
   if (listings.length > 0){
 
     //a specific listing to show or show first one
@@ -180,6 +211,9 @@ function createRows(cur_listing_index){
     var index_for_table = (cur_listing_index) ? cur_listing_index : 0;
 
     current_listing = listing_to_show;
+
+    var active_tab = (url_tab) ? url_tab : "info";
+    $("#" + active_tab + "-tab").addClass('is-active');
 
     //show and hide elements that we need if there are listings
     $(".yes-listings-elem").removeClass('is-hidden');
@@ -284,6 +318,9 @@ function changeRow(row, listing_info, bool){
 
     current_listing = listing_info;
 
+    //change URL param
+    updateQueryStringParam("listing", listing_info.domain_name);
+
     //change domain name header and view button
     $(".current-domain-name").text(listing_info.domain_name);
     $("#current-domain-view").attr("href", "/listing/" + listing_info.domain_name);
@@ -318,6 +355,24 @@ function changeRow(row, listing_info, bool){
 //function to update a row if it's verified but not yet purchased
 function editRowVerified(listing_info){
 
+  var url_tab = getParameterByName("tab");
+  if (url_tab == "verify"){
+    updateQueryStringParam("tab", "info");
+    $(".tab").removeClass('is-active');
+    $("#info-tab").addClass('is-active');
+  }
+
+  if (url_tab == "offers"){
+    //get offers if tab is offers
+    if (listing_info.offers == undefined){
+      getDomainOffers(listing_info.domain_name);
+    }
+
+    $("#tab-buttons-wrapper").addClass('is-hidden');
+    $("#save-changes-button").addClass('is-hidden');
+    $("#cancel-changes-button").addClass('is-hidden');
+  }
+
   //hide purchased tab, show other tabs
   $(".purchased-elem").addClass('is-hidden');
   $(".unpurchased-elem").removeClass("is-hidden");
@@ -333,7 +388,7 @@ function editRowVerified(listing_info){
 
   //show active tab drop
   $(".drop-tab").addClass('is-hidden');
-  $("#" + $(".verified-elem.tab.is-active").attr('id') + "-drop").removeClass('is-hidden');
+  $("#" + $(".verified-elem.tab.is-active").attr('id') + "-drop").stop().fadeIn(300).removeClass('is-hidden');
 
   //revert preview stuff
   $(".preview-elem").removeAttr('style');
@@ -715,8 +770,10 @@ function editRowPurchased(listing_info){
     //this offer was accepted! hide the buttons
     if (offer.accepted){
       $("#offer-modal-button-wrapper").addClass('is-hidden');
+      $("#offer-response").addClass('is-hidden');
     }
     else {
+      $("#offer-response").removeClass('is-hidden');
       $("#accept_button").off().on("click", function(){
         acceptOrRejectOffer(true, $(this), listing_info, offer.id);
       });
@@ -819,8 +876,6 @@ function editRowPurchased(listing_info){
 
   //function to get stats on a domain
   function getDomainStats(domain_name){
-    console.log("GETTING STATS");
-
     $.ajax({
       url: "/listing/" + domain_name + "/getstats",
       method: "POST"
@@ -1247,6 +1302,8 @@ function successMessage(message){
 
 //function to initiate edit mode for unverified
 function editRowUnverified(listing_info){
+  //change tab URL
+  updateQueryStringParam("tab", "verify");
 
   //refresh the DNS table button
   $("#refresh-dns-button").removeClass('is-disabled').off().on("click", function(){
@@ -1338,9 +1395,10 @@ function updateRegistrarURL(whois){
 
 //update the table with any existing DNS records
 function updateExistingDNS(a_records){
+  //hide loading message
+  $("#loading-records-row").addClass('is-hidden');
+
   if (a_records){
-    //hide loading message
-    $("#loading-records-row").addClass('is-hidden');
 
     var temp_a_records = a_records.slice(0);
 
@@ -1572,6 +1630,50 @@ function deletionHandler(rows, selected_rows){
 //</editor-fold>
 
 //<editor-fold>-------------------------------HELPER FUNCTIONS--------------------------------
+
+//function to get a URL query param by name
+function getParameterByName(name, url) {
+  if (!url) url = window.location.href;
+  name = name.replace(/[\[\]]/g, "\\$&");
+  var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+  results = regex.exec(url);
+  if (!results) return null;
+  if (!results[2]) return '';
+  return decodeURIComponent(results[2].replace(/\+/g, " "));
+}
+
+function updateQueryStringParam(key, value) {
+
+  var baseUrl = [location.protocol, '//', location.host, location.pathname].join(''),
+  urlQueryString = document.location.search,
+  newParam = key + '=' + value,
+  params = '?' + newParam;
+
+  // If the "search" string exists, then build params from it
+  if (urlQueryString) {
+
+    updateRegex = new RegExp('([\?&])' + key + '[^&]*');
+    removeRegex = new RegExp('([\?&])' + key + '=[^&;]+[&;]?');
+
+    if( typeof value == 'undefined' || value == null || value == '' ) { // Remove param if value is empty
+
+      params = urlQueryString.replace(removeRegex, "$1");
+      params = params.replace( /[&;]$/, "" );
+
+    } else if (urlQueryString.match(updateRegex) !== null) { // If param exists already, update it
+
+      params = urlQueryString.replace(updateRegex, "$1" + newParam);
+
+    } else { // Otherwise, add it to end of query string
+
+      params = urlQueryString + '&' + newParam;
+
+    }
+
+  }
+
+  window.history.replaceState({}, "", baseUrl + params);
+};
 
 //return white or black text based on luminance
 function calculateLuminance(rgb) {
