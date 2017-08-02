@@ -470,7 +470,7 @@
 								      </div>
 											<div class="content margin-bottom-0">
 												<h1 id="offer-modal-price" class="margin-bottom-20 has-text-centered"></h1>
-								        <ul class="offer-info">
+								        <ul id="offer-info" class="margin-bottom-20 offer-info">
 							            <li>
 						                <span class="icon is-small" title="From"><i class="fa fa-user-o"></i></span><span id="offer-modal-name"></span>
 							            </li>
@@ -485,10 +485,15 @@
 														<p id="offer-modal-message" class="offer-msg"></p>
 							            </li>
 								        </ul>
+                        <ul id="offer-response-wrapper">
+                          <li>
+                            <textarea id="offer-response" placeholder="You may include an optional response to the offerer." class='textarea'></textarea>
+                          </li>
+                        </ul>
 								      </div>
 											<div id="offer-modal-button-wrapper" class="control margin-top-20 is-grouped is-grouped-center">
 								        <p class="control">
-								          <a id="accept_button" tabindex="0" class='button is-primary is-stylish is-small'>Accept offer</a>
+								          <a id="accept_button" tabindex="0" class='button margin-right-25 is-primary is-stylish is-small'>Accept offer</a>
 								        </p>
 								        <p class="control">
 								          <a id="reject_button" tabindex="0" class='button is-outlined is-danger is-stylish is-small'>Reject offer</a>
