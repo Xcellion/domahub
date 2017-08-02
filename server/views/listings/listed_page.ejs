@@ -5,7 +5,6 @@
 <script src="/js/routes/listings/theming.js" type="text/javascript"></script>
 
 <div id="compare-preview" class="is-hidden">
-
     <div class="container">
         <div class="columns master right">
           <div class="column">
@@ -47,10 +46,14 @@
           </div>
 
           <div class="column">
+            <% if (listing_info.deposited) { %>
+              <div class="notification is-primary">
+                <h1>This domain is currently in the process of being sold!</h1>
+              </div>
+              <% } else { %>
               <% if (listing_info.rentable){ %>
                 <div id="buy-rent-tabs" class="tabs has-shadow is-medium">
                     <ul>
-
                         <li id="buy-now-button" class="top-tab is-active">
                           <a>
                               <span>Purchase</span>
@@ -62,7 +65,6 @@
                               <span>Rent</span>
                           </a>
                         </li>
-
                     </ul>
                 </div>
             <% } %>
@@ -72,7 +74,6 @@
             <% } else { %>
                 <div class='box'>
             <% } %>
-
                 <% if (listing_info.status == 1) { %>
                     <%# BUY NOW MODULE %>
                     <%- include("modules/buy_now_module.ejs"); %>
@@ -86,9 +87,9 @@
                     <%# UNAVAILABLE MODULE %>
                     <%- include("modules/unavailable_module.ejs"); %>
                 <% } %>
-
+              </div>
             </div>
-          </div>
+            <% } %>
         </div>
 
         <%# TABS FOR THE BELOW MODULES %>
