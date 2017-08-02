@@ -21,13 +21,13 @@ module.exports = {
     //if we dont already have the list of listings
     if (!req.user.listings){
       Account.getAccountListings(req.user.id, function(result){
+
         if (result.state=="error"){error.handler(req, res, result.info);}
         else {
           req.user.listings = result.info;
 
           //redirect if not going to mylistings aka logging in for first time
-          if (req.path.indexOf("mylistings") == -1){
-
+          if (req.method == "GET" && req.path.indexOf("mylistings") == -1){
             //no listings, redirect to listings create
             if (req.user.listings.length == 0){
               res.redirect("/listings/create");

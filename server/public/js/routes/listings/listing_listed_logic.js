@@ -39,9 +39,11 @@ $(document).ready(function() {
       showBuyStuff($("#buy-now-button"));
     }
 
-    $("#contact_phone").intlTelInput({
-      utilsScript: "/js/jquery/utils.js"
-    });
+    if (!listing_info.deposited) {
+      $("#contact_phone").intlTelInput({
+        utilsScript: "/js/jquery/utils.js"
+      });
+    }
 
     //click buy now button or unavailable description
     $("#buy-now-button").on("click", function(e){

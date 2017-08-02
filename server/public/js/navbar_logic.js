@@ -19,7 +19,7 @@ $(document).ready(function() {
     //various ways to close login dropdown menu
     $('.modal-close, .modal-background').click(function() {
       $('#modal-login').removeClass('is-active');
-      $("#message").attr("style", "");
+      $("#message").attr("style", "").text("Log in below");
     });
 
     $(document).keyup(function(e) {

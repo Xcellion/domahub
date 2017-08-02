@@ -135,6 +135,16 @@ module.exports = function(app, db, auth, error, stripe){
     owner_functions.getListingOffers
   ]);
 
+  //get stats for a verified domain
+  app.post('/listing/:domain_name/getstats', [
+    auth.checkLoggedIn,
+    checkDomainValid,
+    checkDomainListed,
+    profile_functions.getAccountListings,
+    owner_functions.checkListingOwnerPost,
+    owner_functions.getListingStats
+  ]);
+
   //update listing information
   app.post('/listing/:domain_name/update', [
     auth.checkLoggedIn,
@@ -196,12 +206,27 @@ module.exports = function(app, db, auth, error, stripe){
 
   //<editor-fold>-------------------------------BUYING RELATED-------------------------------
 
+  //create a new offer history item
+  app.post("/listing/:domain_name/contact/offer", [
+    urlencodedParser,
+    checkDomainValid,
+    checkDomainListed,
+    renter_functions.checkSessionListingInfoPost,
+    buyer_functions.checkContactInfo,
+    stripe.checkStripeSubscription,
+    profile_functions.updateAccountSettingsGet,
+    buyer_functions.createOfferContactRecord,
+    buyer_functions.sendContactVerificationEmail
+  ]);
+
   //verify a offer history item email
   app.get("/listing/:domain_name/contact/:verification_code", [
     urlencodedParser,
     checkDomainValid,
     buyer_functions.checkContactVerificationCode,
-    renter_functions.verifyContactHistory
+    renter_functions.getListingInfo,
+    stripe.checkStripeSubscription,
+    buyer_functions.verifyContactHistory
   ]);
 
   //render the accept or reject an offer page
@@ -227,20 +252,19 @@ module.exports = function(app, db, auth, error, stripe){
     owner_functions.checkListingOwnerPost,
     buyer_functions.checkContactVerified,
     buyer_functions.acceptOrRejectOffer,
-    renter_functions.notifyOfferer
+    buyer_functions.notifyOfferer
   ]);
 
-  //create a new offer history item
-  app.post("/listing/:domain_name/contact/offer", [
+  //resend an email for accept
+  app.post(["/listing/:domain_name/contact/:offer_id/resend"], [
+    auth.checkLoggedIn,
     urlencodedParser,
     checkDomainValid,
     checkDomainListed,
-    renter_functions.checkSessionListingInfoPost,
-    renter_functions.checkContactInfo,
-    stripe.checkStripeSubscription,
-    profile_functions.updateAccountSettingsGet,
-    renter_functions.createOfferContactRecord,
-    renter_functions.sendContactVerificationEmail
+    profile_functions.getAccountListings,
+    owner_functions.checkListingOwnerPost,
+    sendOkay,
+    buyer_functions.notifyOfferer
   ]);
 
   //render verify transfer ownership page
@@ -259,22 +283,6 @@ module.exports = function(app, db, auth, error, stripe){
     buyer_functions.verifyTransferOwnership
   ]);
 
-  //new buy it now
-  app.post("/listing/:domain_name/contact/buy", [
-    urlencodedParser,
-    checkDomainValid,
-    renter_functions.checkSessionListingInfoPost,
-    renter_functions.checkContactInfo,
-    stripe.checkStripeSubscription,
-    profile_functions.updateAccountSettingsGet,
-    buyer_functions.redirectToCheckout
-  ]);
-
-  //render BIN checkout page
-  app.get('/listing/:domain_name/checkout/buy', [
-    buyer_functions.renderCheckout
-  ]);
-
   //buy a listing
   app.post('/listing/:domain_name/buy', [
     urlencodedParser,
@@ -290,6 +298,22 @@ module.exports = function(app, db, auth, error, stripe){
     buyer_functions.deleteBINInfo,
     buyer_functions.disableListing,
     owner_functions.updateListing
+  ]);
+
+  //new buy it now
+  app.post("/listing/:domain_name/contact/buy", [
+    urlencodedParser,
+    checkDomainValid,
+    renter_functions.checkSessionListingInfoPost,
+    buyer_functions.checkContactInfo,
+    stripe.checkStripeSubscription,
+    profile_functions.updateAccountSettingsGet,
+    buyer_functions.redirectToCheckout
+  ]);
+
+  //render BIN checkout page
+  app.get('/listing/:domain_name/checkout/buy', [
+    buyer_functions.renderCheckout
   ]);
 
   //</editor-fold>
@@ -463,6 +487,15 @@ function ifNotDev(req, res, next){
   else {
     res.sendStatus(200);
   }
+}
+
+//function to send okay
+function sendOkay(req, res, next){
+  res.send({
+    state: "success"
+  });
+
+  next();
 }
 
 //function to check validity of domain name

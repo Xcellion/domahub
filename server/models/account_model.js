@@ -113,7 +113,8 @@ account_model.prototype.getAccountListings = function(account_id, callback){
         IF(listings.font_name IS NULL, 'Rubik', listings.font_name) as font_name, \
         IF(listings.font_color IS NULL, '#000000', listings.font_color) as font_color, \
         rented_table.rented, \
-        offers_table.accepted, \
+        offers_table.deposited, \
+        offers_table_accepted.accepted, \
         accounts.stripe_subscription_id \
       FROM listings \
       JOIN accounts ON listings.owner_id = accounts.id \
@@ -132,11 +133,19 @@ account_model.prototype.getAccountListings = function(account_id, callback){
       LEFT JOIN \
         (SELECT DISTINCT\
           stats_contact_history.listing_id as listing_id, \
+          stats_contact_history.deposited IS NOT NULL AS deposited \
+        FROM stats_contact_history \
+        WHERE stats_contact_history.deposited = 1 \
+      ) as offers_table \
+      ON offers_table.listing_id = listings.id \
+      LEFT JOIN \
+        (SELECT DISTINCT\
+          stats_contact_history.listing_id as listing_id, \
           stats_contact_history.accepted IS NOT NULL AS accepted \
         FROM stats_contact_history \
         WHERE stats_contact_history.accepted = 1 \
-      ) as offers_table \
-      ON offers_table.listing_id = listings.id \
+      ) as offers_table_accepted \
+      ON offers_table_accepted.listing_id = listings.id \
       WHERE owner_id = ? \
       AND listings.deleted IS NULL \
       ORDER BY listings.id ASC";

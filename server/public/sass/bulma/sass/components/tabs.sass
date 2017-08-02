@@ -74,12 +74,13 @@
       width: 100%
       &.is-active
         a
-          +box-shadow(0,-1px,0,$black-secondary,0,inset)
+          background-color: $white
       &:not(.is-active)
         a
+          background-color: $grey-lighter
           &:hover,
           &:focus
-            background-color: $grey-lighter
+            background-color: $grey-light
   &.no-border
     ul
       border-bottom: none

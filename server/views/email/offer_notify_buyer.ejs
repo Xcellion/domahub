@@ -1,63 +1,133 @@
-<!DOCTYPE html>
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <script async src="https://use.fontawesome.com/b36602cf54.js"></script>
-    <link rel="stylesheet" type="text/css" href="https://domahub.com/css/min/master.min.css" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Verify your offer on DomaHub!</title>
+    <style type="text/css" >
+    #bodyTable {
+      font-family: Verdana, sans-serif;
+    }
+    #emailBody {
+      padding: 20px;
+    }
+    #emailFooter {
+      background-color:#eee;padding:20px 30px;
+    }
+    a {
+      cursor:pointer;text-decoration:none;
+    }
+    a:hover {
+      opacity:0.8;
+    }
+    .list-item {
+      border:0;margin:0;padding:10px 0;border-bottom:1px solid #ddd;
+    }
+    </style>
 </head>
-<body style="font-family: Verdana;">
-  <section class="section is-light">
-      <div class="container">
-        <div class="box">
-            <div class="content">
-                <a tabindex="0" title="DomaHub" href="https://domahub.com">
-                    <div class="flat-logo is-primary"></div>
-                </a>
-            </div>
-            <div class="content">
-                <h3>
-                   Hello <%= offerer_name %>!
-                </h3>
-                <p>
-                   This email is to inform you that your offer for <strong class="is-700"><%= domain_name %></strong> was <%= (accepted) ? "accepted" : "rejected" %>! Please see below for details on the offer:
-                </p>
-                <ul class="has-disc">
-                    <li>Name: <%= offerer_name %></li>
-                    <li>Email: <%= offerer_email %></li>
-                    <li>Phone: <%= offerer_phone %></li>
-                    <li>Offer: <%= offer %></li>
-                    <li>
-                      Message: <p style="word-break: break-all;">
-                        <%= message %>
-                      </p>
-                    </li>
-                </ul>
-
-                <% if (accepted) { %>
-                    <h3>
-                      What now?
-                    </h3>
-                    <p>
-                      If your offer is accepted, you will receive an email from the domain owner with instructions on how to take over domain ownership and payment details.
-                    </p>
-                    <p>
-                      In the mean time, you may check out other domains on our <a class="is-accent" href="https://domahub.com/">website</a>.
-                    </p>
-                <% } else { %>
-                    <p>
-                        Please click on the button below to submit another offer.
-                    </p>
-                    <a id="accept_button" class='button is-primary no-shadow' href="https://domahub.com/listing/<%= domain_name %>">Send another offer</a>
-                <% } %>
-                <p>
-                    Thank you!
-                </p>
-                <p class="has-text-centered">
-                    Sent by DomaHub
-                </p>
-            </div>
-        </div>
-      </div>
-  </section>
-
+<body>
+    <table border="0" cellpadding="0" cellspacing="0" height="100%" width="100%" id="bodyTable">
+        <tr>
+            <td align="center" valign="top">
+                <table border="0" cellpadding="20" cellspacing="0" width="600" id="emailContainer">
+                    <tr>
+                        <td align="center" valign="top">
+                            <table border="0" cellpadding="20" cellspacing="0" width="100%" id="emailHeader" style="background-color:<%= (premium) ? listing_info.primary_color : '#3cbc8d' %>">
+                                <tr>
+                                    <td align="center" valign="top">
+                                      <% if (premium == true && listing_info.logo) { %>
+                                        <a href="http://www.<%= domain_name %>">
+                                           <img height="72" width="72" src="<%= listing_info.logo %>" />
+                                        </a>
+                                      <% } else if (premium == true && !listing_info.logo) { %>
+                                        <!-- Emoji icon provided free by EmojiOne.com -->
+                                        <img height="72" width="72" src="https://domahub.com/images/lib/cry.png" />
+                                      <% } else { %>
+                                        <a href="https://www.domahub.com" style="border:0;margin:0;padding:0" rel="noreferrer" target="_blank" title="DomaHub">
+                                          <img alt height="72" width="72" style="border:0;margin:0;padding:0" src="https://domahub.com/images/dh-assets/circle-logo/dh-circle-logo-white-500x500.png" />
+                                        </a>
+                                      <% } %>
+                                    </td>
+                                </tr>
+                                <tr>
+                                  <td align="center" style="color:<%= (premium) ? listing_info.font_luminance : '#fff' %>;border:0;margin:0;padding-bottom:25px;font-size:24px;font-weight:700;line-height:2;">
+                                    Your offer for <a style="color: <%= (premium) ? listing_info.font_luminance : '#fff' %>;"><%= domain_name %></a> was <%= (accepted) ? "accepted!" : "rejected." %>
+                                  </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="center" valign="top">
+                            <table border="0" cellpadding="0" cellspacing="0" id="emailBody">
+                                <tr>
+                                  <td align="center" valign="top" colspan="5" style="font-size:18px;padding-bottom:20px;">
+                                    <%= (accepted) ? "Congratulations" : "Hello" %> <%= offerer_name %>
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td align="left" valign="top" colspan="5" style="padding-bottom:20px;">
+                                    <%= (accepted) ? "Great news" : "Unfortunately" %>, your offer for <%= domain_name %> was <%= (accepted) ? "accepted!" : "rejected." %> Please see below for details on your offer:
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td align="left" class="list-item">
+                                    Your offer
+                                  </td>
+                                  <td align="left" class="list-item" style="padding-left:20px;">
+                                    <%= offer %>
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td align="left" valign="top" class="list-item">
+                                    Message from Owner
+                                  </td>
+                                  <td align="left" class="list-item message" style="word-wrap:break-word;padding-left:20px;white-space:pre-wrap;"><% if (response) { %><%= response %><% } else { %>Owner did not include a message.<% } %></td>
+                                </tr>
+                                <tr>
+                                  <td colspan="5" align="center" style="padding-top:20px;">
+                                    <% if (accepted) { %>
+                                      Next Steps: You will receive an email with further instructions regarding domain transfer.
+                                    <% } else { %>
+                                      You may send another offer by clicking the button below.
+                                    <% } %>
+                                  </td>
+                                </tr>
+                                <% if (!accepted) { %>
+                                <tr>
+                                  <td colspan="5" align="center" style="padding-top:30px;">
+                                    <a id="accept_button" class='button' href="https://domahub.com/listing/<%= domain_name %>" style="padding:10px 20px;box-sizing:border-box;border-radius:5px;background-color: <%= (premium) ? listing_info.primary_color : '#3cbc8d' %>;color: <%= (premium) ? listing_info.font_luminance : '#fff' %>;">Send another offer</a>
+                                  </td>
+                                </tr>
+                                <% } %>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="center" valign="top">
+                            <table border="0" cellpadding="10" cellspacing="0" width="100%" id="emailFooter">
+                                <tr>
+                                    <td align="center" valign="top">
+                                        <% if (accepted) { %>
+                                          If the domain is not transferred to you within X days, this transaction will be cancelled and you will
+                                          receive your money back in full.
+                                        <% } else { %>
+                                          You may respond to this email to leave comments or ask any additional questions.
+                                        <% } %>
+                                    </td>
+                                </tr>
+                                <% if (!premium) { %>
+                                  <tr>
+                                    <td align="center" valign="top">
+                                      Powered by <a href="https://www.domahub.com">DomaHub.com</a>.
+                                    </td>
+                                  </tr>
+                                <% } %>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
 </body>
 </html>

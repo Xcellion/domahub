@@ -76,14 +76,18 @@ function emailViews(req, res, next){
 
   var data = {
     domain_name: "fuck.com",
-    premium: true,
-    logo: "http://i.imgur.com/qiJLjgz.png",
+    premium: false,
+    response: "Hey fuck yourself",
+    listing_info: {
+      logo: "http://i.imgur.com/qiJLjgz.png",
+      primary_color: "#ac38be"
+    },
     name : "offerer",
     owner_name : "OWNERFUCK",
     offerer_name: "BUYERTWAT",
     offerer_email: "test@email.com",
     email: "test@email.com",
-    accepted: true,
+    accepted: false,
     offerer_phone: phoneUtil.format(phoneNumber, PNF.INTERNATIONAL),
     phone: phoneUtil.format(phoneNumber, PNF.INTERNATIONAL),
     offer: moneyFormat.to(parseFloat("1231324")),

@@ -13,12 +13,13 @@
             <div class='is-inline-block flat-logo is-primary'></div>
         </a>
     </h2>
-		<p>
-			Sign Up Form
-		</p>
-		<% if (typeof message != "undefined") {%>
-			<p id="message" class="has-text-centered margin-top-0 margin-bottom-15"><%= message %></p>
-		<% } %>
+    <p id="message" class="has-text-centered margin-top-0 margin-bottom-15">
+  		<% if (typeof message != "undefined") {%>
+  			<%= message %>
+  		<% } else { %>
+        Create A New Account
+      <% } %>
+    </p>
 	</div>
 
 	<div id="signup-form" class="account-form">
@@ -26,25 +27,25 @@
 			<label class="label">Email</label>
 				<div class="control has-icon has-icon-right">
 					<input required class="input is-medium" autofocus name="email" type="email" id="email-input" spellcheck="false" value="" />
-					<i class="fa fa-check is-hidden is-primary"></i>
+					<i class="fa fa-check is-hidden is-success"></i>
 					<i class="fa fa-warning is-hidden is-danger"></i>
 				</div>
 			<label class="label">Username</label>
 				<div class="control has-icon has-icon-right">
-					<input required class="input is-medium" name="username" type="text" id="username-input" spellcheck="false" value="" />
-					<i class="fa fa-check is-hidden is-primary"></i>
+					<input pattern=".{3,70}" title="Username must be between 3 and 70 characters!" required class="input is-medium" name="username" type="text" id="username-input" spellcheck="false" value="" />
+					<i class="fa fa-check is-hidden is-success"></i>
 					<i class="fa fa-warning is-hidden is-danger"></i>
 				</div>
 			<label class="label">Password (at least 6 characters)</label>
 				<div class="control has-icon has-icon-right">
-					<input required class="input is-medium" name="password" type="password" id="pw-input" autocomplete="new-password" value="" />
-					<i class="fa fa-check is-hidden is-primary"></i>
+					<input pattern=".{6,}" title="Password must be at least 6 characters!" required class="input is-medium" name="password" type="password" id="pw-input" autocomplete="new-password" value="" />
+					<i class="fa fa-check is-hidden is-success"></i>
 					<i class="fa fa-warning is-hidden is-danger"></i>
 				</div>
 			<label class="label">Confirm Password</label>
 				<div class="control has-icon has-icon-right">
-					<input required class="input is-medium" name="verify-pw" type="password" id="verify-pw" value="" />
-					<i class="fa fa-check is-hidden is-primary"></i>
+					<input pattern=".{6,}" title="Password must be at least 6 characters!" required class="input is-medium" name="verify-pw" type="password" id="verify-pw" value="" />
+					<i class="fa fa-check is-hidden is-success"></i>
 					<i class="fa fa-warning is-hidden is-danger"></i>
 				</div>
 			<div class="g-recaptcha" data-sitekey="6LdwpykTAAAAAEaTl3u4-xDCSqH7-Aj-YDImCQXI"></div>
@@ -68,8 +69,8 @@
 	</div>
 
   <%- include("../templates/js_scripts"); %>
-	<script src="/js/routes/account/account_signup_logic.js" type="text/javascript"></script>
 	<script src='https://www.google.com/recaptcha/api.js'></script>
+  <script src="/js/routes/account/account_signup_logic.js" type="text/javascript"></script>
 </body>
 
 </html>

@@ -1,5 +1,4 @@
 <script type="text/javascript">
-<% delete listing_info.owner_email %>
 var compare = <% if(typeof compare != "undefined"){ %><%-JSON.stringify(compare)%><% }else{ %>""<% } %>;
 </script>
 <link rel="stylesheet" href="/css/lib/jquery.minicolors.css" type="text/css" />
@@ -60,14 +59,14 @@ var compare = <% if(typeof compare != "undefined"){ %><%-JSON.stringify(compare)
         <label class="label" for="buy-price-input">Buy It Now Price</label>
         <input id="buy-price-input" type="number" min="1" step="1" class="input">
         <small class="tip">The price you are willing to immediately sell the domain for.</small>
-        <small class="tip"><a target="_blank" href="/faq#selling" class="is-accent">What are the advantages of buying immediately?</a></small>
+        <small class="tip"><a target="_blank" rel="noopener" href="/faq#selling" class="is-accent">What are the advantages of buying immediately?</a></small>
       </div>
 
       <div class="control is-spaced">
         <div class="control-left">
           <label class="label" for="rentable-input">Allow Rentals</label>
           <small class="tip">Allows verified users to rent usage of this domain for short amounts of time.</small>
-          <small class="tip"><a target="_blank" href="/faq#renting" class="is-accent">Why should I rent my domain out?</a></small>
+          <small class="tip"><a target="_blank" rel="noopener" href="/faq#renting" class="is-accent">Why should I rent my domain out?</a></small>
         </div>
         <div class="control-right">
           <form class="checkbox-form">
@@ -194,19 +193,15 @@ var compare = <% if(typeof compare != "undefined"){ %><%-JSON.stringify(compare)
       </div>
     </div>
     <footer id="compare-footer" class="footer is-white">
-      <div class="content">
-        <p>
-          This page is just an example of what your landing page could look like.
-        </p>
-        <a href="/signup" class="button is-accent is-small is-stylish">Sign Up Now</a>
-      </div>
-      <div class="control">
-        <p>
-          Powered by <a tabindex="0" id="dh_logo" class="is-primary" href="/"  >
-            DomaHub
-          </a>
-        </p>
-      </div>
+        <div class="content">
+          <small>
+            This page is just an example of what your landing page could look like.
+            Powered by <a tabindex="0" id="dh_logo" class="is-accent" href="/">DomaHub</a>.
+          </small>
+        </div>
+        <div class="content">
+          <a href="/signup" class="button is-primary is-small is-stylish">Sign Me Up!</a>
+        </div>
     </footer>
   </div>
 </div>

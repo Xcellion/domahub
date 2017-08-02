@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Forgot Password - DomaHub</title>
+    <link rel="stylesheet" type="text/css" href="/css/min/login_signup.min.css" />
+    <%- include("../templates/head_links"); %>
+  </head>
+
+  <body>
+      <div class="content has-text-centered clear-nav">
+        <h2 class="margin-bottom-5 has-text-centered">
+            <a class='is-inline-block flat-logo is-primary' tabindex="0" title="Home" href="/">
+                <div class='is-inline-block flat-logo is-primary'></div>
+            </a>
+        </h2>
+        <p id="message" class="has-text-centered margin-top-0 margin-bottom-15">
+          <% if (typeof message != "undefined") {%>
+              <%= message %>
+          <% } else {%>
+              Enter your email to reset your password
+          <% } %>
+        </p>
+      </div>
+
+    <div id="login-form" class="account-form">
+      <form id="target" action="/forgot" method="post" autocomplete="off">
+
+      <div id="form_to_hide">
+          <label class="label">Email</label>
+          <p class="control has-icon">
+            <input id="email" required autofocus class="input is-medium" name="email" type="email" placeholder="Email" spellcheck="false">
+            <i class="fa fa-envelope"></i>
+          </p>
+          <p class="control">
+              <button id="login-button" class="is-stylish login-button button is-primary is-medium is-fullwidth">
+                  Change your password
+              </button>
+          </p>
+
+          <p class="control">
+              <p class="has-text-centered">
+                  Remember your password?
+              </p>
+              <div class="has-text-centered">
+                  <a class="signup is-accent" href="/login">Log in now</a>
+              </div>
+          </p>
+      </div>
+
+      <div id="accept">
+          <a id="login-button" class="login-button button is-primary is-medium is-fullwidth" href="/">
+            Go Back Home
+          </a>
+      </div>
+
+      </form>
+    </div>
+
+  <%- include("../templates/js_scripts"); %>
+  <script src="/js/routes/account/account_pw_forgot_logic.js" type="text/javascript"></script>
+
+  </body>
+
+</html>

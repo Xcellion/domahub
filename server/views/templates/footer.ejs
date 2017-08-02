@@ -1,11 +1,11 @@
 <footer class="footer is-dark">
   <div class="container">
     <nav class="footer-list">
-      <li class="footer-item"><a href="/contact" class="is-white" title="Contact Us">Contact</a></li>
-      <li class="footer-item"><a href="/faq" class="is-white" title="FAQs">FAQ</a></li>
-      <li class="footer-item"><a href="https://medium.com/@domahub" class="is-white" title="Blog">Blog</a></li>
-      <li class="footer-item"><a href="/terms" class="is-white" title="Terms of Service">Terms</a></li>
-      <li class="footer-item"><a href="/privacy" class="is-white" title="Privacy Policy">Privacy</a></li>
+      <li class="footer-item"><a href="/contact" title="Contact Us">Contact</a></li>
+      <li class="footer-item"><a href="/faq" title="FAQs">FAQ</a></li>
+      <li class="footer-item"><a href="https://medium.com/@domahub" title="Blog">Blog</a></li>
+      <li class="footer-item"><a href="/terms" title="Terms of Service">Terms</a></li>
+      <li class="footer-item"><a href="/privacy" title="Privacy Policy">Privacy</a></li>
     </nav>
     <div class="footer-bar">
       <div class="margin-bottom-10">
@@ -25,9 +25,14 @@
           </span>
         </a>
       </div>
-      <p class="footer-bar-item is-light">
-        © <%= new Date().getFullYear(); %> DomaHub, Inc.
-      </p>
+      <div class="footer-list is-spaced">
+        <p class="footer-bar-item is-light">
+          © <%= new Date().getFullYear(); %> DomaHub, Inc.
+        </p>
+        <small class="footer-bar-item has-text-right is-light">
+          Icons from <a class="is-light" href="https://www.emojione.com" rel="noopener" target="_blank">Emojione</a>.
+        </small>
+      </div>
     </div>
   </div>
 </footer>

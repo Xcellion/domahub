@@ -158,9 +158,30 @@ data_model.prototype.getCheckoutActions = function(domain_name, callback){
   listing_query(query, "Failed to get checkout actions for " + domain_name + "!", callback, domain_name);
 }
 
-//gets specific offer details for a specific domain
-data_model.prototype.getListingOffererContactInfo = function(domain_name, offer_id, callback){
-  console.log("DB: Attempting to get offer contact info for domain: " + domain_name + " with id: " + offer_id + "...");
+//gets specific offer details for a specific domain by offer ID
+data_model.prototype.getListingOffererContactInfoByID = function(domain_name, offer_id, callback){
+  console.log("DB: Attempting to get contact info for an offer for domain: " + domain_name + " with id: " + offer_id + "...");
+  query = 'SELECT \
+        stats_contact_history.id, \
+        stats_contact_history.name, \
+        stats_contact_history.email, \
+        stats_contact_history.phone, \
+        stats_contact_history.offer, \
+        stats_contact_history.message, \
+        stats_contact_history.response, \
+        stats_contact_history.accepted \
+      FROM stats_contact_history \
+      INNER JOIN listings \
+      ON listings.id = stats_contact_history.listing_id \
+      WHERE listings.domain_name = ? \
+      AND stats_contact_history.id = ? \
+      AND stats_contact_history.verified = 1 '
+  listing_query(query, "Failed to get contact info for an offer for " + domain_name + "!", callback, [domain_name, offer_id]);
+}
+
+//gets specific offer details for a specific domain by verification code
+data_model.prototype.getListingOffererContactInfoByCode = function(domain_name, verification_code, callback){
+  console.log("DB: Attempting to get contact info for an offer for domain: " + domain_name + " with code: " + verification_code + "...");
   query = 'SELECT \
         stats_contact_history.id, \
         stats_contact_history.name, \
@@ -173,9 +194,9 @@ data_model.prototype.getListingOffererContactInfo = function(domain_name, offer_
       INNER JOIN listings \
       ON listings.id = stats_contact_history.listing_id \
       WHERE listings.domain_name = ? \
-      AND stats_contact_history.id = ? \
+      AND stats_contact_history.verification_code = ? \
       AND stats_contact_history.verified = 1 '
-  listing_query(query, "Failed to get offer contact info for " + domain_name + "!", callback, [domain_name, offer_id]);
+  listing_query(query, "Failed to get contact info for an offer for " + domain_name + "!", callback, [domain_name, verification_code]);
 }
 
 //gets all offers for a specific domain
@@ -198,6 +219,24 @@ data_model.prototype.getListingOffers = function(domain_name, callback){
       AND stats_contact_history.verified = 1 \
       AND (stats_contact_history.accepted != 0 OR stats_contact_history.accepted IS NULL)'
   listing_query(query, "Failed to get offers for " + domain_name + "!", callback, domain_name);
+}
+
+//gets statistics for a specific domain
+data_model.prototype.getListingStats = function(domain_name, callback){
+  console.log("DB: Attempting to get statistics for domain: " + domain_name + "...");
+  query = 'SELECT \
+        stats_search_history.timestamp, \
+        stats_search_history.rental_id, \
+        stats_search_history.user_ip, \
+        IFNULL(SUBSTRING_INDEX(SUBSTRING_INDEX(SUBSTRING_INDEX(SUBSTRING_INDEX(stats_search_history.referer, "/", 3), "://", -1), "/", 1), "www", 1), "") AS referer, \
+        stats_search_history.compare, \
+        accounts.username \
+      FROM stats_search_history \
+      LEFT JOIN accounts \
+      ON accounts.id = stats_search_history.account_id \
+      WHERE stats_search_history.domain_name = ? \
+      ORDER BY stats_search_history.timestamp DESC'
+  listing_query(query, "Failed to get statistics for " + domain_name + "!", callback, domain_name);
 }
 
 //</editor-fold>
@@ -294,16 +333,16 @@ data_model.prototype.verifyContactHistory = function(verification_code, domain_n
 }
 
 //accept or reject an offer
-data_model.prototype.acceptRejectOffer = function(accepted, domain_name, offer_id, callback){
-  var accept_text = (accepted) ? "Accepting " : "Rejecting ";
+data_model.prototype.acceptRejectOffer = function(contact_item, domain_name, offer_id, callback){
+  var accept_text = (contact_item.accepted) ? "Accepting " : "Rejecting ";
   console.log("DB: " + accept_text + " offer on domain with id: " + offer_id + " on domain: " + domain_name + "...");
   query = "UPDATE stats_contact_history \
       INNER JOIN listings \
       ON listings.id = stats_contact_history.listing_id \
-      SET stats_contact_history.accepted = ? \
+      SET ? \
       WHERE stats_contact_history.id = ? \
       AND listings.domain_name = ?"
-  account_query(query, "Failed to accept/reject offer!", callback, [accepted, offer_id, domain_name]);
+  account_query(query, "Failed to accept/reject offer!", callback, [contact_item, offer_id, domain_name]);
 }
 
 //</editor-fold>

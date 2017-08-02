@@ -1,20 +1,20 @@
 $(document).ready(function() {
 
-  $("#main_button").on("click", function(e){
-    acceptOrRejectOffer(false, $(this));
+  $("#accept_button").on("click", function(e){
+    acceptOrRejectOffer(true, $(this));
   });
 
-  $("#secondary_button").on("click", function(e){
-    acceptOrRejectOffer(true, $(this));
+  $("#reject_button").on("click", function(e){
+    acceptOrRejectOffer(false, $(this));
   });
 });
 
 //function to submit ajax for accept or reject
-function acceptOrRejectOffer(negate, button_elem){
+function acceptOrRejectOffer(accept, button_elem){
   button_elem.addClass('is-loading');
   $(".button").off();
 
-  var accept_url = (negate == accepted) ? "/reject" : "/accept";
+  var accept_url = (accept) ? "/accept" : "/reject";
 
   $.ajax({
     url: "/listing/" + listing_info.domain_name + "/contact/" + offer_info.id + accept_url,
@@ -25,7 +25,7 @@ function acceptOrRejectOffer(negate, button_elem){
     console.log(data);
 
     if (data.state == "success"){
-      successHandler(negate);
+      successHandler(accept);
     }
     else {
       errorHandler();
@@ -34,9 +34,9 @@ function acceptOrRejectOffer(negate, button_elem){
 }
 
 //function to run when accept or reject was successful
-function successHandler(negate){
-  $("#success-message").removeClass('is-hidden');
-  var accept_text = (negate == accepted) ? "rejected" : "accepted";
+function successHandler(accept){
+  $("#success-message").removeClass('is-hidden').addClass('is-active');
+  var accept_text = (accept) ? "accepted" :  "rejected";
   $("#success-message-text").text("Successfully " + accept_text + " this offer! Now redirecting you back to your profile.");
   redirectDelay("/profile");
 }
@@ -59,5 +59,5 @@ function redirectDelay(path){
 
 //function to run when accept or reject was NOT successful
 function errorHandler(){
-  $("#error-message").removeClass('is-hidden');
+  $("#error-message").removeClass('is-hidden').addClass('is-active');
 }
