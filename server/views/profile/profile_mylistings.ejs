@@ -44,6 +44,9 @@
 									<option selected value="id">View All</option>
 									<option value="unverified">Unverified</option>
 									<option value="rented">Rented Now</option>
+									<option value="accepted">Accepted An Offer</option>
+									<option value="deposited">Sold (Need to Transfer)</option>
+									<option value="">Sold (Done Transfer)</option>
 								</select>
 							</span>
 						</div>
@@ -502,7 +505,7 @@
 								</div>
 								<div id="no-offers" class="content is-hidden">
 									<p>
-										You have no offers on this domain yet.
+										You currently have no offers on this domain!
 									</p>
 								</div>
                 <div id="deposited-offer" class="has-border-bottom padding-bottom-15 is-hidden">
@@ -544,7 +547,7 @@
 								<div id="offers-wrapper">
 
 								</div>
-								<div id="offer-clone" class="media is-hidden">
+								<div id="offer-clone" class="offer-row media is-hidden">
 									<%# <div class="media-left">
 										<form class="checkbox-form">
 											<input class="select-offer" data-selected="false" type="checkbox" tabindex="0" title="Select Offer" />
