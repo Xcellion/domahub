@@ -35,7 +35,7 @@ function acceptOrRejectOffer(accept, button_elem){
 
 //function to run when accept or reject was successful
 function successHandler(accept){
-  $("#success-message").removeClass('is-hidden');
+  $("#success-message").removeClass('is-hidden').addClass('is-active');
   var accept_text = (accept) ? "accepted" :  "rejected";
   $("#success-message-text").text("Successfully " + accept_text + " this offer! Now redirecting you back to your profile.");
   redirectDelay("/profile");
@@ -59,5 +59,5 @@ function redirectDelay(path){
 
 //function to run when accept or reject was NOT successful
 function errorHandler(){
-  $("#error-message").removeClass('is-hidden');
+  $("#error-message").removeClass('is-hidden').addClass('is-active');
 }
