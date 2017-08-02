@@ -188,10 +188,13 @@ module.exports = {
   acceptOrRejectOffer: function(req, res, next){
     console.log("F: Accepting or rejecting an offer...");
     var accepted = req.path.indexOf("/accept") != -1;
+    var contact_item = {
+      accepted : accepted,
+      response : req.body.response || ""
+    }
 
     //update the DB on accepted or rejected
-    Data.acceptRejectOffer(accepted, req.params.domain_name, req.params.offer_id, function(offer_result){
-
+    Data.acceptRejectOffer(contact_item, req.params.domain_name, req.params.offer_id, function(offer_result){
       var listing_info = getUserListingObj(req.user.listings, req.params.domain_name);
       //set accepted variable if accepted
       if (accepted){
@@ -227,6 +230,7 @@ module.exports = {
         offerer_phone: phoneUtil.format(phoneUtil.parse(offerer_result.phone), PNF.INTERNATIONAL),
         offer: offer_formatted,
         message: offerer_result.message,
+        response: offerer_result.response,
         premium: (req.user.stripe_subscription_id) ? true : false,
         listing_info: (listing_info) ? listing_info : false
       }

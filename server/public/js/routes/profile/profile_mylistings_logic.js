@@ -704,6 +704,7 @@ function editRowPurchased(listing_info){
   //function to edit modal with specific offer info
   function editOfferModal(offer, listing_info){
     $("#offer-modal").addClass('is-active');
+    $("#offer-response").val("");
     $("#offer-modal-timestamp").text(moment(offer.timestamp).format("MMMM DD, YYYY - h:MMA"));
     $("#offer-modal-price").text(moneyFormat.to(parseFloat(offer.offer)));
     $("#offer-modal-name").text(offer.name);
@@ -748,7 +749,10 @@ function editRowPurchased(listing_info){
     var accept_url = (accept) ? "/accept" : "/reject";
     $.ajax({
       url: "/listing/" + listing_info.domain_name + "/contact/" + offer_id + accept_url,
-      method: "POST"
+      method: "POST",
+      data: {
+        response: $("#offer-response").val()
+      }
     }).done(function(data){
       button_elem.removeClass('is-loading');
       if (data.state == "success"){

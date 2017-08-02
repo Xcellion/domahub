@@ -168,6 +168,7 @@ data_model.prototype.getListingOffererContactInfoByID = function(domain_name, of
         stats_contact_history.phone, \
         stats_contact_history.offer, \
         stats_contact_history.message, \
+        stats_contact_history.response, \
         stats_contact_history.accepted \
       FROM stats_contact_history \
       INNER JOIN listings \
@@ -332,16 +333,16 @@ data_model.prototype.verifyContactHistory = function(verification_code, domain_n
 }
 
 //accept or reject an offer
-data_model.prototype.acceptRejectOffer = function(accepted, domain_name, offer_id, callback){
-  var accept_text = (accepted) ? "Accepting " : "Rejecting ";
+data_model.prototype.acceptRejectOffer = function(contact_item, domain_name, offer_id, callback){
+  var accept_text = (contact_item.accepted) ? "Accepting " : "Rejecting ";
   console.log("DB: " + accept_text + " offer on domain with id: " + offer_id + " on domain: " + domain_name + "...");
   query = "UPDATE stats_contact_history \
       INNER JOIN listings \
       ON listings.id = stats_contact_history.listing_id \
-      SET stats_contact_history.accepted = ? \
+      SET ? \
       WHERE stats_contact_history.id = ? \
       AND listings.domain_name = ?"
-  account_query(query, "Failed to accept/reject offer!", callback, [accepted, offer_id, domain_name]);
+  account_query(query, "Failed to accept/reject offer!", callback, [contact_item, offer_id, domain_name]);
 }
 
 //</editor-fold>
