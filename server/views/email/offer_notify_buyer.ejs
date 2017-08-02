@@ -45,6 +45,7 @@
                                            <img height="72" width="72" src="<%= listing_info.logo %>" />
                                         </a>
                                       <% } else if (premium == true && !listing_info.logo) { %>
+                                        <!-- Emoji icon provided free by EmojiOne.com -->
                                         <img height="72" width="72" src="https://domahub.com/images/lib/cry.png" />
                                       <% } else { %>
                                         <a href="https://www.domahub.com" style="border:0;margin:0;padding:0" rel="noreferrer" target="_blank" title="DomaHub">
@@ -75,32 +76,8 @@
                                   </td>
                                 </tr>
                                 <tr>
-                                  <td align="left" class="list-item" colspan="1">
-                                    Name
-                                  </td>
-                                  <td aling="right" class="list-item" style="padding-left:20px;">
-                                    <%= offerer_name %>
-                                  </td>
-                                </tr>
-                                <tr>
                                   <td align="left" class="list-item">
-                                    Email
-                                  </td>
-                                  <td align="left" class="list-item" style="padding-left:20px;">
-                                    <%= offerer_email %>
-                                  </td>
-                                </tr>
-                                <tr>
-                                  <td align="left" class="list-item">
-                                    Phone
-                                  </td>
-                                  <td align="left" class="list-item" style="padding-left:20px;">
-                                    <%= offerer_phone %>
-                                  </td>
-                                </tr>
-                                <tr>
-                                  <td align="left" class="list-item">
-                                    Offer
+                                    Your offer
                                   </td>
                                   <td align="left" class="list-item" style="padding-left:20px;">
                                     <%= offer %>
@@ -108,9 +85,15 @@
                                 </tr>
                                 <tr>
                                   <td align="left" valign="top" class="list-item">
-                                    Message
+                                    Message from Owner
                                   </td>
-                                  <td align="left" class="list-item message"><%= message %></td>
+                                  <td align="left" class="list-item message">
+                                    <% if (reponse) { %>
+                                      <%= response %>
+                                    <% } else { %>
+                                      Owner did not include a message.
+                                    <% } %>
+                                  </td>
                                 </tr>
                                 <tr>
                                   <td colspan="5" align="center" style="padding-top:20px;">

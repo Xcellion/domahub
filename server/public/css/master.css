@@ -4538,6 +4538,8 @@ input:-webkit-autofill {
   @media screen and (max-width: 456px) {
     .footer-list {
       flex-wrap: wrap; } }
+  .footer-list.is-spaced {
+    justify-content: space-between; }
 
 .footer-item:not(:last-child) {
   margin-right: 20px; }

@@ -13,6 +13,8 @@
   list-style: none
   +mobile-456px
     flex-wrap: wrap
+  &.is-spaced
+    justify-content: space-between
 
 .footer-item
   &:not(:last-child)
@@ -20,12 +22,12 @@
   +mobile-456px
     margin-top: 10px
   a
-    color: $white-primary
+    color: $white
     padding: 5px 0
     position: relative
     &:hover,
     &:focus
-      @include box-shadow(0,3px,0,$white-primary,0)
+      @include box-shadow(0,3px,0,$white,0)
 
 .footer-bar
   display: flex

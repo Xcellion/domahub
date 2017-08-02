@@ -47,8 +47,17 @@
 
           <div class="column">
             <% if (listing_info.deposited) { %>
-              <div class="notification is-primary">
-                <h1>This domain is currently in the process of being sold!</h1>
+              <div class="box">
+                <figure class="image is-64x64">
+                  <!-- Emoji icon provided free by EmojiOne -->
+                  <img src="/images/lib/money.png" />
+                </figure>
+                <div class="content has-text-centered margin-top-20">
+                  <h2>This domain has been sold!</h2>
+                  <p>
+                    It is currently in the process of being transferred.
+                  </p>
+                </div>
               </div>
               <% } else { %>
               <% if (listing_info.rentable){ %>
@@ -88,8 +97,8 @@
                     <%- include("modules/unavailable_module.ejs"); %>
                 <% } %>
               </div>
+              <% } %>
             </div>
-            <% } %>
         </div>
 
         <%# TABS FOR THE BELOW MODULES %>
