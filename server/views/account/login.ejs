@@ -13,11 +13,12 @@
               <div class='is-inline-block flat-logo is-primary'></div>
           </a>
       </h2>
-      <p>
-        Please Log In
-      </p>
         <% if (typeof message != "undefined") {%>
-            <p id="message" class="has-text-centered margin-top-0 margin-bottom-15"><%= message %></p>
+            <p id="message" class="is-danger has-text-centered margin-top-0 margin-bottom-15"><%= message %></p>
+        <% } else { %>
+            <p>
+              Please log in below.
+            </p>
         <% } %>
     </div>
 

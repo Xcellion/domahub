@@ -278,7 +278,7 @@ module.exports = {
 
   //function to check the size of the image uploaded
   checkImageUploadSize : function(req, res, next){
-    var premium = getUserListingObj(req.user.listings, req.params.domain_name).premium;
+    var premium = req.user.stripe_subscription_id;
     var upload_path = (node_env == "dev") ? "./uploads/images" : '/var/www/w3bbi/uploads/images';
     var storage = multer.diskStorage({
       destination: function (req, file, cb) {
@@ -325,7 +325,7 @@ module.exports = {
           error.handler(req, res, 'Wrong file type!', "json");
         }
         else if (err.message == "NOT_PREMIUM"){
-          error.handler(req, res, "This listing is not a premium listing!", "json");
+          error.handler(req, res, "You must have a Premium account to change the background image!", "json");
         }
         else {
           console.log(err);
@@ -470,8 +470,8 @@ module.exports = {
     if (req.body.status && status != 1 && status != 0){
       error.handler(req, res, "Invalid listing status!", "json");
     }
-    else if (req.body.status){
-      //check to see if its currently rented
+    //check to see if its currently rented
+    else if (req.body.status == 0){
       Listing.checkCurrentlyRented(req.params.domain_name, function(result){
         if (result.state != "success" || result.info.length > 0){
           error.handler(req, res, "This listing is currently being rented!", "json");
@@ -479,6 +479,36 @@ module.exports = {
         else {
           next();
         }
+      });
+    }
+    //check to see if its still pointed to domahub
+    else if (req.body.status == 1){
+      console.log("F: Checking to see if domain is still pointed to DomaHub...");
+
+      dns.resolve(req.params.domain_name, "A", function (err_one, address, family) {
+        //the domain's A Record
+        var domain_ip = address;
+        dns.resolve("domahub.com", "A", function (err_two, address, family) {
+          //not pointed to DH anymore!
+          if (domain_ip[0] != address[0] || domain_ip.length != 1){
+            console.log("F: Listing is not pointed to DomaHub anymore! Reverting verification...");
+            Listing.updateListing(req.params.domain_name, {
+              verified: null,
+              status: 0
+            }, function(result){
+              delete getUserListingObj(req.user.listings, req.params.domain_name).verified;
+              error.handler(req, res, "verification-error", "json");
+            });
+          }
+          //something went wrong in looking up DNS, just mark it inactive
+          else if (err_one || err_two){
+            console.log("F: DNS error! Setting listing to inactive...");
+            next();
+          }
+          else {
+            next();
+          }
+        });
       });
     }
     else {
@@ -560,6 +590,7 @@ module.exports = {
         req.body.traffic_module ||
         req.body.info_module
       ){
+        console.log(req.body);
         error.handler(req, res, "You can only edit a listing design after upgrading to a Premium account!", "json");
       }
       else {
@@ -729,21 +760,41 @@ module.exports = {
     console.log("F: Finding the all verified offers for " + req.params.domain_name + "...");
     var listing_obj = getUserListingObj(req.user.listings, req.params.domain_name);
     Data.getListingOffers(req.params.domain_name, function(result){
+
+      //set server side offers
       if (result.state == "success"){
         listing_obj.offers = result.info;
-        res.send({
-          state: "success",
-          listings: req.user.listings
-        });
       }
       else {
-        res.send({
-          state: "success",
-          listings: req.user.listings
-        });
+        listing_obj.offers = false;
       }
-    });
 
+      res.send({
+        state: "success",
+        listings: req.user.listings
+      });
+    });
+  },
+
+  //gets all statistics for a specific domain
+  getListingStats : function(req, res, next){
+    console.log("F: Finding the all verified statistics for " + req.params.domain_name + "...");
+    var listing_obj = getUserListingObj(req.user.listings, req.params.domain_name);
+    Data.getListingStats(req.params.domain_name, function(result){
+
+      //set server side stats
+      if (result.state == "success"){
+        listing_obj.stats = result.info;
+      }
+      else {
+        listing_obj.stats = false;
+      }
+      
+      res.send({
+        state: "success",
+        listings: req.user.listings
+      });
+    });
   },
 
   //</editor-fold>

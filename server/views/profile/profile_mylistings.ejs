@@ -44,6 +44,9 @@
 									<option selected value="id">View All</option>
 									<option value="unverified">Unverified</option>
 									<option value="rented">Rented Now</option>
+									<option value="accepted">Accepted An Offer</option>
+									<option value="deposited">Sold (Need to Transfer)</option>
+									<option value="">Sold (Done Transfer)</option>
 								</select>
 							</span>
 						</div>
@@ -120,11 +123,11 @@
 						</div>
 						<div class="control-right">
               <a id="status-color" tabindex="0" class="verified-elem unpurchased-elem button is-primary is-small is-outlined" title="Publicly hide or show landing page.">
-                <span class="icon"><i id="status-icon" class="fa fa-toggle-on"></i></span>
+                <span class="icon is-small"><i id="status-icon" class="fa fa-toggle-on"></i></span>
                 <span id="status-text">Active</span>
               </a>
               <input id="status-input" data-name="status" tabindex="0" type="hidden" class="input changeable-input" />
-							<a id="current-domain-view" target="_blank" tabindex="0" class="verified-elem yes-listings-elem is-hidden button is-small margin-top-0" title="View Domain">
+							<a id="current-domain-view" target="_blank" rel="noopener" tabindex="0" class="verified-elem yes-listings-elem is-hidden button is-small margin-top-0" title="View Domain">
 								<span class="icon is-small"><i style="margin-top: 2px" class="fa fa-external-link"></i></span>
 								<span>View</span>
 							</a>
@@ -146,9 +149,12 @@
 							<li id="design-tab" class="verified-elem unpurchased-elem tab">
 								<a tabindex="0">Design</a>
 							</li>
-							<li id="offers-tab" class="verified-elem unpurchased-elem tab">
+							<li id="offers-tab" class="verified-elem no-buttons-tab unpurchased-elem tab">
 								<a tabindex="0">Offers</a>
 							</li>
+              <%# <li id="stats-tab" class="verified-elem no-buttons-tab unpurchased-elem tab">
+                <a tabindex="0">Stats</a>
+              </li>%>
 							<li id="purchased-tab" class="purchased-elem tab is-active is-hidden">
 								<a tabindex="0">Next Steps</a>
 							</li>
@@ -206,7 +212,7 @@
                   <label class="label" for="buy-price-input">Buy It Now Price</label>
                   <input id="buy-price-input" data-name="buy_price" type="number" min="1" step="1" class="input changeable-input">
                   <small class="tip">The price you are willing to immediately sell the domain for. Put blank or 0 for no Buy It Now option.</small>
-                  <small class="tip"><a target="_blank" href="/faq#selling" class="is-accent">What are the advantages of buying immediately?</a></small>
+                  <small class="tip"><a target="_blank" rel="noopener" href="/faq#selling" class="is-accent">What are the advantages of buying immediately?</a></small>
                 </div>
 								<div class="control">
 									<label class="label" for="description">Listing Description</label>
@@ -219,7 +225,7 @@
 									placeholder="What is this website?"></input>
 									<small class="tip">100 character limit.</small>
 								</div>%>
-								<div class="control">
+								<!-- <div class="control">
 									<label class="label margin-bottom-10">
 										<span class="v-align-middle">Categories</span>
 										<span class="icon is-small is-tooltip v-align-middle" data-balloon-length="medium" data-balloon="Categories help users find similar domains. Incorrect categories can lead to a poor user experience and hurt your domain brand by being associated with non-similar domains." data-balloon-pos="up">
@@ -234,14 +240,14 @@
 										<a data-category="<%= categories[x].back %>" class="<%= categories[x].back %>-category tag margin-bottom-5 category-selector"><%= categories[x].front %></a>
 										<% } %>
 									</div>
-								</div>
+								</div> -->
 							</div>
 							<div id="rental-tab-drop" class="drop-tab is-hidden">
 								<div class="control is-spaced">
 									<div class="control-left">
 										<label class="label" for="rentable-input">Allow Rentals</label>
 										<small class="tip">Allows verified users to rent usage of this domain for short amounts of time.</small>
-                    <small class="tip"><a target="_blank" href="/faq#renting" class="is-accent">Why should I rent my domain out?</a></small>
+                    <small class="tip"><a target="_blank" rel="noopener" href="/faq#renting" class="is-accent">Why should I rent my domain out?</a></small>
 									</div>
 									<div class="control-right">
 										<form class="checkbox-form">
@@ -277,19 +283,22 @@
 								</div>
 							</div>
 							<div id="design-tab-drop" class="drop-tab is-hidden">
-									<div id="premium-only-notification" class="control is-spaced">
-										<div class="control-left">
+									<div class="blackscreen">
+										<div id="premium-only-notification" class="content has-text-centered">
 											<p>
-												Please upgrade to a Premium account for custom designs!
+												Please upgrade to a Premium account to customize the look and feel of your landing page!
 											</p>
-										</div>
-										<div class="control-right">
-											<a href="/profile/settings#premium" class="button is-stylish no-shadow is-small">
-												<span class="icon is-small">
-													<i class="fa fa-diamond"></i>
-												</span>
-												<span>Upgrade</span>
+											<a href="/#pricing" class="is-accent">
+												What is a Premium account?
 											</a>
+                      <div class="margin-top-15 control has-text-centered">
+                        <a href="/profile/settings#premium" class="button is-stylish no-shadow is-primary is-small">
+                          <span class="icon is-small">
+                            <i class="fa fa-diamond"></i>
+                          </span>
+                          <span>Upgrade</span>
+                        </a>
+                      </div>
 										</div>
 									</div>
 									<div id="example-wrapper" class="preview-elem padding-25 control has-border-bottom">
@@ -451,24 +460,70 @@
 									</div>
 								</div>
 							<div id="offers-tab-drop" class="drop-tab is-hidden">
-								<div id="loading-offers" class="content">
+								<div id="offer-modal" class="modal">
+									<div class="modal-background"></div>
+						      <div class="modal-container">
+										<div class="modal-content offer-popup">
+											<div class="content has-text-centered">
+								        <h3 class="is-bold">Offer for <span id="offer-modal-domain"></span></h3>
+								        <small>Received on <span id="offer-modal-timestamp"></span></small>
+								      </div>
+											<div class="content margin-bottom-0">
+												<h1 id="offer-modal-price" class="margin-bottom-20 has-text-centered"></h1>
+								        <ul id="offer-info" class="margin-bottom-20 offer-info">
+							            <li>
+						                <span class="icon is-small" title="From"><i class="fa fa-user-o"></i></span><span id="offer-modal-name"></span>
+							            </li>
+							            <li>
+						                <span class="icon is-small" title="Email"><i class="fa fa-envelope-o"></i></span><span id="offer-modal-email"></span>
+							            </li>
+							            <li>
+						                <span class="icon is-small" title="Phone"><i class="fa fa-phone"></i></span><span id="offer-modal-phone"></span>
+							            </li>
+							            <li class="">
+						                <span class="icon is-small" title="Message"><i class="fa fa-comment-o"></i></span>
+														<p id="offer-modal-message" class="offer-msg"></p>
+							            </li>
+								        </ul>
+                        <ul id="offer-response-wrapper">
+                          <li>
+                            <textarea id="offer-response" placeholder="You may include an optional response to the offerer." class='textarea'></textarea>
+                          </li>
+                        </ul>
+								      </div>
+											<div id="offer-modal-button-wrapper" class="control margin-top-20 is-grouped is-grouped-center">
+								        <p class="control">
+								          <a id="accept_button" tabindex="0" class='button margin-right-25 is-primary is-stylish is-small'>Accept offer</a>
+								        </p>
+								        <p class="control">
+								          <a id="reject_button" tabindex="0" class='button is-outlined is-danger is-stylish is-small'>Reject offer</a>
+								        </p>
+								      </div>
+										</div>
+									</div>
+								  <button class="modal-close"></button>
+								</div>
+								<div id="loading-offers" class="margin-top-20 content">
 									<p>
-										Now loading offers...
+										Now loading domain offers...
 									</p>
 								</div>
 								<div id="no-offers" class="content is-hidden">
 									<p>
-										You have no offers on this domain yet.
+										You currently have no offers on this domain!
 									</p>
 								</div>
-                <div id="accepted-offer" class="is-hidden">
+                <div id="deposited-offer" class="has-border-bottom padding-bottom-15 is-hidden">
                   <div class="content">
-                    <h3 class='is-bold'>
+                    <h3>
                       Congratulations on selling your domain!
                     </h3>
                     <p>
-                      The money has been deposited to your DomaHub account. You must now transfer the ownership of this domain to the new owner.
+                      The money has been deposited and verified by DomaHub. You must now transfer the ownership of this domain to the new owner.
                       Once the new owner has verified that the ownership has been transferred over, the money will become available for withdrawal.
+                    </p>
+                    <p class="is-bold">
+                      Failure to transfer ownership of the domain within the next 7 days will result in the money being refunded. Your account will be also be flagged for review.
                     </p>
                     <p>
                       <a class="is-accent" href="/contact">
@@ -477,10 +532,27 @@
                     </p>
                   </div>
                 </div>
+                <div id="accepted-offer" class="has-border-bottom padding-bottom-15 is-hidden">
+                  <div class="content">
+                    <h3>
+                      I accepted the offer--what's next?
+                    </h3>
+                    <p>
+                      The offerer has been sent a form to fill out his/her contact information in addition to completing payment.
+                      Once the payment has been verified, you will need to manually transfer the ownership of this domain to him/her.
+                    </p>
+                    <p>
+                      <span class="is-bold">There is no required action on your part just yet.</span> Hold tight, we're getting you your money.
+                    </p>
+                    <p>
+                      <a id="resend-accept" class="button is-stylish is-small">Re-send email to offerer</a>
+                    </p>
+                  </div>
+                </div>
 								<div id="offers-wrapper">
 
 								</div>
-								<div id="offer-clone" class="media is-hidden">
+								<div id="offer-clone" class="offer-row media is-hidden">
 									<%# <div class="media-left">
 										<form class="checkbox-form">
 											<input class="select-offer" data-selected="false" type="checkbox" tabindex="0" title="Select Offer" />
@@ -489,30 +561,36 @@
 									</div>%>
 									<div class="media-content">
 										<div class="media-heading">
-											<h3 class="offer-name is-bold is-inline">
-											</h3>
-											<small class="offer-timestamp"></small>
+											<p class="offer-name"></p>
 										</div>
 										<div class="media-items">
 											<div class="media-item">
-												<span class="icon is-small is-primary"><i class="fa fa-envelope-o"></i></span>
-												<a class="offer-email"></a>
-											</div>
-											<div class="media-item">
-												<span class="icon is-small is-primary"><i class="fa fa-phone"></i></span>
-												<p class="offer-phone"></p>
+												<small class="offer-timestamp"></small>
 											</div>
 										</div>
 									</div>
 									<div class="media-right has-text-right">
 										<p class="is-bold"><span class="offer-accepted"></span><span class="offer-offer"></span></p>
-										<button class="offer-view button is-primary is-small no-shadow is-outlined" tabindex="0">Respond</button>
-										<a  class="offer-accept button is-primary is-small is-hidden no-shadow" tabindex="0">Accept Offer</a>
-										<a  class="offer-reject button is-danger is-small is-hidden no-shadow" tabindex="0">Reject Offer</a>
+										<a class="button offer-modal-button is-small no-shadow" tabindex="0">View Offer</a>
 									</div>
 								</div>
 							</div>
-						</div>
+              <div id="stats-tab-drop" class="drop-tab is-hidden">
+                <div id="loading-stats" class="margin-top-20 content">
+									<p>
+										Now loading listings statistics...
+									</p>
+								</div>
+								<div id="no-stats" class="content is-hidden">
+									<p>
+										There is no activity on this domain yet. Need some tips? Check out our <a href="/faq" class="is-accent">FAQ</a>.
+									</p>
+								</div>
+								<div id="stats-wrapper">
+								</div>
+                <canvas id="referer-chart"></canvas>
+              </div>
+            </div>
 						<footer id="tab-buttons-wrapper" class="yes-listings-elem is-hidden margin-top-25">
 							<a id="verify-button" class="unverified-elem button is-primary is-stylish is-small no-shadow" title="Verify this domain">
 								<span class="icon is-small"><i class="fa fa-check-circle-o"></i></span>
@@ -541,6 +619,8 @@
 	<script src="/js/lib/wNumb.js" type="text/javascript"></script>
 	<script src="/js/jquery/jquery.minicolors.min.js" type="text/javascript"></script>
   <script src="/js/themes.js" type="text/javascript"></script>
+  <script src="/js/lib/chart.min.js" type="text/javascript"></script>
+  <script src="/js/lib/randomColor.js" type="text/javascript"></script>
 	<script type="text/javascript">
 		//redirect to homepage if user is not defined
 		var user = <% if(typeof user != "undefined"){ %><%-JSON.stringify(user)%><% }else{ %>window.location="/"<% } %>;

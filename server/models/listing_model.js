@@ -160,15 +160,15 @@ listing_model.prototype.getVerifiedListing = function(domain_name, callback){
         accounts.stripe_subscription_id, \
         !ISNULL(accounts.stripe_account) AS stripe_connected, \
         accounts.date_created AS user_created, \
-        offers_table.accepted \
+        offers_table.deposited \
       FROM listings \
       JOIN accounts ON listings.owner_id = accounts.id \
       LEFT JOIN \
         (SELECT DISTINCT\
           stats_contact_history.listing_id as listing_id, \
-          stats_contact_history.accepted IS NOT NULL AS accepted \
+          stats_contact_history.deposited IS NOT NULL AS deposited \
         FROM stats_contact_history \
-        WHERE stats_contact_history.accepted = 1 \
+        WHERE stats_contact_history.deposited = 1 \
       ) as offers_table \
       ON offers_table.listing_id = listings.id \
       WHERE listings.domain_name = ? \

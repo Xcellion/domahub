@@ -34,13 +34,14 @@
       <div class="modal-container">
         <div class="modal-content login-box">
           <div id="login-dropdown" class="padding-25">
-            <h2 class="margin-bottom-10 has-text-centered">
-              <a class='is-inline-block flat-logo is-primary' tabindex="0" title="Home" href="/"></a>
-            </h2>
 
-            <% if (typeof message != "undefined") {%>
-              <p id="message" class="has-text-centered margin-top-0 margin-bottom-15"><%= message %></p>
-            <% } %>
+              <p id="message" class="has-text-centered margin-top-0 margin-bottom-15">
+                <% if (typeof message != "undefined") {%>
+                  <%= message %>
+                <% } else { %>
+                  Log in below
+                <% } %>
+              </p>
 
               <form id="navbar_form" action="/login" method="post">
                 <p class="control has-icon">

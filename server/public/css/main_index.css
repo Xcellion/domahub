@@ -306,8 +306,15 @@ button[data-balloon] {
   display: flex;
   align-items: flex-start;
   padding-top: 30px; }
-  .feature .icon {
+  .feature .icon,
+  .feature .step-number {
     margin-right: 15px; }
+
+.is-step {
+  background-color: #3cbc8d;
+  color: white;
+  padding: 15px;
+  font-weight: 500; }
 
 .price-card {
   -moz-transition: all 0.25s ease;

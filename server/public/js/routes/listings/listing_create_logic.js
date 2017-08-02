@@ -190,7 +190,7 @@ function handleTopAddDomainButton(){
 
 //<editor-fold>-------------------------------TABLE SUBMIT-------------------------------
 
-//function to submit textarea domains
+//function to submit table domains (NOT TEXTAREA)
 function submitDomains(submit_elem){
 
   //only if there are no error messages currently
@@ -234,6 +234,7 @@ function submitDomainsAjax(domains, submit_elem){
       domains: domains
     }
   }).done(function(data){
+    console.log(data);
     refreshNotification();
 
     //handle any good or bad listings
@@ -253,7 +254,7 @@ function submitDomainsAjax(domains, submit_elem){
     }
 
     //click handler for resubmitting newly added domains
-    $("#domains-submit").removeClass('is-loading').off().on("click", function(e){
+    submit_elem.removeClass('is-loading').off().on("click", function(e){
       submitDomains(submit_elem);
     });
 

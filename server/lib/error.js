@@ -6,6 +6,12 @@ module.exports = {
 
 //handle errors, either send them back json, or redirect the page
 function handler(req, res, message, type) {
+
+  //send back to POST methods (not GET)
+  if (!type && req.method == "POST" && req.path != "/login"){
+    var type = "json";
+  }
+
   switch (type){
     case "api":
       console.log("ERROR: " + message);
