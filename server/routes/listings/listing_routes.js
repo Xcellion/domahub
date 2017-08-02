@@ -229,16 +229,12 @@ module.exports = function(app, db, auth, error, stripe){
     buyer_functions.verifyContactHistory
   ]);
 
-  //render the accept or reject an offer page
+  //render the accept or reject an offer page (deprecated, keep this redirect for now though)
   app.get(["/listing/:domain_name/contact/:offer_id/accept",
   "/listing/:domain_name/contact/:offer_id/reject"], [
-    auth.checkLoggedIn,
-    urlencodedParser,
-    checkDomainValid,
-    checkDomainListed,
-    owner_functions.checkListingOwnerGet,
-    buyer_functions.checkContactVerified,
-    buyer_functions.renderAcceptOrRejectOffer
+    function(req, res, next){
+      res.redirect("/profile/mylistings?listing=" + req.params.domain_name + "&tab=offers");
+    }
   ]);
 
   //accept or reject an offer
