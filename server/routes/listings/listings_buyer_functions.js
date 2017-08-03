@@ -45,8 +45,9 @@ module.exports = {
     else if (!req.body.contact_phone || !phoneUtil.isValidNumber(phoneUtil.parse(req.body.contact_phone), PNF.INTERNATIONAL)){
       error.handler(req, res, "Please enter a valid phone number!", "json");
     }
-    else if (!req.body.contact_offer && req.session.listing_info.buy_price <= 0 && !validator.isInt(req.body.contact_offer, { min: req.session.listing_info.min_price })){
-      error.handler(req, res, "This is an invalid offer price! Please enter an amount greater than " + req.session.listing_info.min_price, "json");
+    //if offer price is too low
+    else if (req.body.contact_offer && !validator.isInt(req.body.contact_offer, { min: req.session.listing_info.min_price })){
+      error.handler(req, res, "This is an invalid offer price! Please enter an amount greater than " + moneyFormat.to(parseFloat(req.session.listing_info.min_price)) + ".", "json");
     }
     else if (!req.body.contact_message){
       error.handler(req, res, "A message to the owner greatly increases your chance of successfully purchasing this domain name! Please enter a short message for the owner.", "json");
