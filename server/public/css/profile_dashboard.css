@@ -235,7 +235,7 @@ button[data-balloon] {
   .media:not(:last-child) {
     border-bottom: 1px solid rgba(0, 0, 0, 0.12); }
   .media:hover, .media:focus {
-    background-color: #efefef; }
+    background-color: #f1f1f1; }
 
 .media-items {
   display: flex;
@@ -370,7 +370,7 @@ button[data-balloon] {
   overflow-x: hidden;
   white-space: nowrap; }
   .table-row:hover {
-    background-color: #efefef;
+    background-color: #f1f1f1;
     cursor: pointer; }
   .table-row.is-active {
     border-right-width: 5px;
