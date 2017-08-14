@@ -1,52 +1,59 @@
 .footer
+  background-color: $lighter
+  margin-top: 40px
   overflow: hidden
+  position: relative
   padding: 40px 0
   &.is-dark
     background-color: #222
   +mobile
     padding: 40px 20px
 
-.footer-list
-  display: flex
-  align-items: center
-  text-decoration: none
-  list-style: none
-  +mobile-456px
-    flex-wrap: wrap
-  &.is-spaced
-    justify-content: space-between
-
 .footer-item
+  color: $black-secondary
   &:not(:last-child)
     margin-right: 20px
-  +mobile-456px
-    margin-top: 10px
   a
-    color: $white
+    color: $black-secondary
     padding: 5px 0
     position: relative
     &:hover,
     &:focus
-      @include box-shadow(0,3px,0,$white,0)
+      color: $primary
 
 .footer-bar
   display: flex
-  flex-direction: column
-  margin-top: 40px
+  justify-content: space-between
+  align-items: center
+  .bar-left
+    display: flex
+    align-items: center
+    +mobile
+      margin-bottom: 20px
+  .bar-right
+    display: flex
+    align-items: center
+    text-decoration: none
+    list-style: none
+    +mobile
+      flex-wrap: wrap
+      justify-content: center
   +mobile
     flex-direction: column
 
-.footer-bar-item
-  margin: 0
-  padding: 0
-  box-sizing: border-box
-  &:not(:last-child)
-    margin-right: 10px
+.circle-logo
+  background-image: url("/images/dh-assets/circle-logo/dh-circle-logo-primary-225x225.png")
+  background-repeat: no-repeat
+  background-size: cover
+  width: 30px !important
+  height: 30px !important
 
 .social-icon
+  &:not(:last-child)
+    margin-right: 10px
   & > .icon
     +transition(all 0.25s ease)
-    color: $white
+    color: $black-secondary
     vertical-align: baseline
     &:hover
       color: $primary
