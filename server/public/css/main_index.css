@@ -174,41 +174,39 @@ button[data-balloon] {
   border-bottom: 1px solid rgba(0, 0, 0, 0.12);
   width: 100%;
   position: relative;
-  height: 100vh;
   display: flex;
   align-items: center;
   overflow: hidden; }
   @media screen and (max-width: 456px) {
     #landing {
       height: calc(100vh - 60px); } }
-  #landing .container {
-    top: -100px; }
-    @media screen and (max-height: 720px) {
-      #landing .container {
-        top: -50px; } }
-    @media screen and (max-height: 500px) {
-      #landing .container {
-        top: 0; }
-        #landing .container .image {
-          display: none !important; } }
   #landing .subtitle {
     max-width: 500px;
     margin-left: auto;
     margin-right: auto; }
-  #landing .image {
-    height: 200px;
-    width: 300px; }
-    @media screen and (max-width: 768px) {
-      #landing .image {
-        height: 125px;
-        width: 185px; } }
-    #landing .image img {
-      height: 200px;
-      width: 300px; }
-      @media screen and (max-width: 768px) {
-        #landing .image img {
-          height: 125px;
-          width: 185px; } }
+
+#attention {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-image: linear-gradient(#3cbc8d, #62c9a3);
+  border-radius: 5px;
+  padding: 20px; }
+  @media screen and (max-width: 768px) {
+    #attention {
+      flex-direction: column; }
+      #attention h2 {
+        margin-bottom: 20px;
+        text-align: center; } }
+
+#features {
+  margin-top: -80px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 40px; }
+  @media screen and (max-width: 768px) {
+    #features {
+      margin-top: -120px; } }
 
 .coffee {
   -webkit-animation: steam 3s infinite;
@@ -295,8 +293,6 @@ button[data-balloon] {
   display: flex;
   align-items: center;
   margin: 10px 0; }
-  .flex-align-center p, .flex-align-center h2 {
-    flex-grow: 1; }
   .flex-align-center .icon {
     margin-right: 15px; }
     .flex-align-center .icon.fix {
@@ -309,61 +305,3 @@ button[data-balloon] {
   .feature .icon,
   .feature .step-number {
     margin-right: 15px; }
-
-.is-step {
-  background-color: #3cbc8d;
-  color: white;
-  padding: 15px;
-  font-weight: 500; }
-
-.price-card {
-  -moz-transition: all 0.25s ease;
-  -o-transition: all 0.25s ease;
-  -webkit-transition: all 0.25s ease;
-  transition: all 0.25s ease;
-  border-radius: 3px; }
-  .price-card .card-title {
-    border-bottom: 1px solid rgba(0, 0, 0, 0.12);
-    padding: 15px 20px; }
-  .price-card:hover {
-    -moz-transform: translate(0, -5px);
-    -o-transform: translate(0, -5px);
-    -ms-transform: translate(0, -5px);
-    -webkit-transform: translate(0, -5px);
-      -webkit-transform-transform: translate(0, -5px); }
-
-.section.has-pyramid {
-  position: relative;
-  overflow: hidden; }
-  .section.has-pyramid .container {
-    z-index: 3; }
-  .section.has-pyramid::before {
-    -moz-transform: rotate(60deg);
-    -o-transform: rotate(60deg);
-    -ms-transform: rotate(60deg);
-    -webkit-transform: rotate(60deg);
-      -webkit-transform-transform: rotate(60deg);
-    content: "";
-    background: #62c9a3;
-    width: 500px;
-    position: absolute;
-    top: 200px;
-    height: 500px;
-    left: 0;
-    z-index: 1; }
-  .section.has-pyramid::after {
-    -moz-transform: rotate(105deg);
-    -o-transform: rotate(105deg);
-    -ms-transform: rotate(105deg);
-    -webkit-transform: rotate(105deg);
-      -webkit-transform-transform: rotate(105deg);
-    content: "";
-    opacity: 0.4;
-    width: 0;
-    position: absolute;
-    top: 175px;
-    height: 0;
-    border: 300px solid transparent;
-    border-bottom-color: #309670;
-    left: 253px;
-    z-index: 2; }
