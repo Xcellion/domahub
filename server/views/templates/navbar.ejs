@@ -1,5 +1,4 @@
 <nav id="navbar" class="nav is-white">
-  <div class="container">
     <div class="nav-left">
       <div class="nav-item">
         <a id="nav-logo" class="flat-logo is-primary is-hidden-mobile" tabindex="0" title="Home" href="/">
@@ -88,7 +87,7 @@
       <a class="nav-link" tabindex="0" title="Create Listing" href="/listings/create">Create Listings</a>
     </div>
     <div class="nav-item">
-      <a id="profile-button" tabindex="0" class="button is-stylish is-small" title="Profile">
+      <a id="profile-button" tabindex="0" class="button is-icon-only is-black is-stylish is-small" title="Profile">
         <span><%= (user.username.length > 6) ? user.username.slice(0,6) + "..." : user.username %></span>
         <span class="icon">
           <i class="fa fa-angle-down"></i>
@@ -148,5 +147,4 @@
   </div>
 <% } %>
 
-</div>
 </nav>

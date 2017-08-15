@@ -307,6 +307,7 @@ button[data-balloon] {
     width: 30px; }
 
 .current-domain-name {
+  font-weight: 500;
   word-break: break-all; }
 
 #design-tab-drop {
