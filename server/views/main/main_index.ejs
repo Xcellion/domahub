@@ -12,24 +12,29 @@
 
 <%- include("../templates/navbar", {user: user}); %>
 
-<section id="landing" class="section is-large is-primary gradient-left-right">
+<section id="landing" class="section is-medium">
   <div class="container">
     <div class="content has-text-centered margin-bottom-25">
-      <h1 class="title is-2 is-white is-bold">
+      <h1 class="title is-2 is-bold">
         A user-friendly storefront for selling your domains
       </h1>
-      <p class="subtitle is-4 is-whitelight">
+      <p class="subtitle is-4">
         List, sell, and manage your domains in one place.
       </p>
     </div>
     <form id="tryit-form" action="/compare?domain_name=">
       <div class="control is-grouped is-grouped-center">
         <p class="control">
-          <a href="/listing/cooldomains.com?compare=true" tabindex="0" class="button is-stylish is-primary is-outlined is-large" for="domain-name-input">Try the Demo</a>
+          <a href="/listing/cooldomains.com?compare=true" tabindex="0" class="button is-stylish is-primary is-large" for="domain-name-input">
+            <span class="icon">
+              <i class="fa fa-thumbs-up"></i>
+            </span>
+            <span>Try the Demo</span>
+          </a>
         </p>
       </div>
     </form>
-    <p class="is-white has-text-centered margin-top-10">
+    <p class="has-text-centered margin-top-10">
       Don't be scared - it's free!
     </p>
   </div>
@@ -39,12 +44,12 @@
   <div class="container">
     <div id="features" class="box">
       <div class="content has-text-centered">
-        <h1 class="title margin-bottom-30">The Best Way to Sell your Domains</h1>
+        <h2 class="is-bold margin-bottom-30">The Best Way to Sell your Domains</h2>
       </div>
       <div class="columns">
         <div class="column is-4">
           <div class="content is-mobile has-text-centered">
-            <span class="icon is-primary is-circle is-medium margin-bottom-25">
+            <span class="icon is-danger is-circle is-medium margin-bottom-25">
               <i class="fa fa-clone"></i>
             </span>
             <h2>Offer Forms</h2>
@@ -55,10 +60,10 @@
         </div>
         <div class="column is-4">
           <div class="content is-mobile has-text-centered">
-            <span class="icon is-info is-circle is-medium margin-bottom-25">
+            <span class="icon is-primary is-circle is-medium margin-bottom-25">
               <i class="fa fa-credit-card-alt"></i>
             </span>
-            <h2 class="">Secure Payments</h2>
+            <h2>Secure Payments</h2>
             <p>
               Secure direct bank deposits. Never worry about getting paid.
             </p>
@@ -66,7 +71,7 @@
         </div>
         <div class="column is-4">
           <div class="content is-mobile has-text-centered">
-            <span class="icon is-danger is-circle is-medium margin-bottom-25">
+            <span class="icon is-info is-circle is-medium margin-bottom-25">
               <i class="fa fa-magic"></i>
             </span>
             <h2>Custom Design</h2>
@@ -77,7 +82,10 @@
         </div>
       </div>
       <div class="control has-text-centered">
-        <a class="button is-black is-inverted is-stylish no-shadow">Learn More</a>
+        <a tabindex="0" href="/features" class="is-primary is-bold">
+          <span>Learn More</span>
+          <span class="icon is-small"><i class="fa fa-arrow-circle-right"></i></span>
+        </a>
       </div>
     </div>
   </div>
@@ -87,7 +95,12 @@
   <div class="container">
     <div id="attention" class="content">
       <h2 class="is-white">Try it now for free. No risks involved!</h2>
-      <a tabindex="0" class="button is-primary is-inverted is-stylish is-large" href="/signup">Sign Me Up!</a>
+      <a tabindex="0" class="button is-primary is-inverted is-stylish is-large" href="/signup">
+        <span class="icon">
+          <i class="fa fa-smile-o"></i>
+        </span>
+        <span>Sign Me Up!</span>
+      </a>
     </div>
   </div>
 </section>
