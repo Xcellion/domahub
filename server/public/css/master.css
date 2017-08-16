@@ -155,12 +155,12 @@ button,
 input,
 select,
 textarea {
-  font-family: "Rubik", Helvetica, sans-serif;
+  font-family: "Lato", Helvetica, sans-serif;
   font-size: 16px;
   font-size: 1rem; }
 
 .is-bold {
-  font-weight: 500 !important; }
+  font-weight: 700 !important; }
 
 .is-normal {
   font-weight: 400 !important; }
@@ -451,7 +451,7 @@ span {
   font-weight: inherit; }
 
 strong {
-  font-weight: 500; }
+  font-weight: 700; }
   strong.is-700 {
     font-weight: 700; }
 
@@ -1317,7 +1317,7 @@ pre {
   .button.is-stylish {
     text-transform: uppercase;
     letter-spacing: 1px;
-    font-weight: 500;
+    font-weight: 700;
     font-size: 14px;
     height: 42px;
     padding-left: 16px;
@@ -2106,7 +2106,7 @@ input:-webkit-autofill {
       white-space: nowrap;
       width: 1%; }
   .table th {
-    font-weight: 500;
+    font-weight: 700;
     padding: 10px 8px; }
     .table th:hover {
       cursor: pointer; }
@@ -2182,7 +2182,7 @@ input:-webkit-autofill {
   word-break: break-word; }
   .title strong,
   .subtitle strong {
-    font-weight: 500; }
+    font-weight: 700; }
   .title .tag,
   .subtitle .tag {
     vertical-align: bottom; }
@@ -3639,7 +3639,7 @@ input:-webkit-autofill {
 
 .menu-label {
   color: #212121;
-  font-weight: 500;
+  font-weight: 700;
   font-size: 14px;
   letter-spacing: 1px;
   margin-bottom: 5px;
@@ -4100,7 +4100,7 @@ input:-webkit-autofill {
     .profile-dropdown-menu li:last-child {
       padding-bottom: 14px; }
       .profile-dropdown-menu li:last-child a {
-        font-weight: 500; }
+        font-weight: 700; }
   .profile-dropdown-menu a {
     width: 100%;
     display: inline-block;
