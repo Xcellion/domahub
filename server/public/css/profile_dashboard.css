@@ -307,7 +307,7 @@ button[data-balloon] {
     width: 30px; }
 
 .current-domain-name {
-  font-weight: 500;
+  font-weight: 700;
   word-break: break-all; }
 
 #design-tab-drop {
@@ -375,9 +375,9 @@ button[data-balloon] {
     cursor: pointer; }
   .table-row.is-active {
     border-right-width: 5px;
-    border-right-color: rgba(0, 0, 0, 0.66); }
+    border-right-color: #3cbc8d; }
     .table-row.is-active p {
-      font-weight: 500; }
+      font-weight: 700; }
 
 .table-row-text {
   text-align: right;

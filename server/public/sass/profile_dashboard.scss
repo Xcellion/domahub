@@ -100,7 +100,7 @@
 }
 
 .current-domain-name {
-  font-weight: 500;
+  font-weight: 700;
   word-break: break-all;
 }
 
@@ -175,9 +175,9 @@
   }
   &.is-active {
     border-right-width: 5px;
-    border-right-color: $black-secondary;
+    border-right-color: $primary;
     p {
-      font-weight: 500;
+      font-weight: 700;
     }
   }
 }
