@@ -12,14 +12,14 @@
 
 <%- include("../templates/navbar", {user: user}); %>
 
-<section id="landing" class="section is-medium">
+<section id="landing" class="section is-large">
   <div class="container">
     <div class="content has-text-centered margin-bottom-25">
       <h1 class="title is-2 is-bold">
-        A user-friendly storefront for selling your domains
+        We Help Domainers Profit
       </h1>
       <p class="subtitle is-4">
-        List, sell, and manage your domains in one place.
+        Build secure and user-friendly sales pages for your entire portfolio.
       </p>
     </div>
     <form id="tryit-form" action="/compare?domain_name=">
@@ -32,10 +32,18 @@
             <span>Try the Demo</span>
           </a>
         </p>
+        <p class="control">
+          <a href="/signup" tabindex="0" class="button is-stylish is-primary is-outlined is-large" for="domain-name-input">
+            <span class="icon">
+              <i class="fa fa-sign-in"></i>
+            </span>
+            <span>Sign Up</span>
+          </a>
+        </p>
       </div>
     </form>
     <p class="has-text-centered margin-top-10">
-      Don't be scared - it's free!
+      It only takes minutes to set up!
     </p>
   </div>
 </section>
