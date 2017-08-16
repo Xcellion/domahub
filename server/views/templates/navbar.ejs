@@ -17,10 +17,10 @@
 <%# navbar checks for a user variable, if it doesnt exist, then display the login button %>
 <% if (!user) { %>
         <div class="nav-item">
-          <a tabindex="0" class="nav-link" title="Features" href="/#features">Features</a>
+          <a tabindex="0" class="nav-link" title="Features" href="/features">Features</a>
         </div>
         <div class="nav-item">
-          <a tabindex="0" class="nav-link" title="Pricing" href="/#pricing">Pricing</a>
+          <a tabindex="0" class="nav-link" title="Pricing" href="/features#pricing">Pricing</a>
         </div>
         <div class="nav-item">
           <a id="signup" tabindex="0" class="nav-link" title="Sign Up" href="/signup">Sign Up</a>
@@ -87,7 +87,7 @@
       <a class="nav-link" tabindex="0" title="Create Listing" href="/listings/create">Create Listings</a>
     </div>
     <div class="nav-item">
-      <a id="profile-button" tabindex="0" class="button is-icon-only is-primary is-stylish is-small" title="Profile">
+      <a id="profile-button" tabindex="0" class="button is-transparent is-primary is-stylish is-small" title="Profile">
         <span><%= (user.username.length > 6) ? user.username.slice(0,6) + "..." : user.username %></span>
         <span class="icon">
           <i class="fa fa-angle-down"></i>

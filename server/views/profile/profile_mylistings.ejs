@@ -43,7 +43,7 @@
 								</span>
 								<i class="fa fa-filter"></i>
 							</div>
-							<div class="control has-icon">
+							<div class="control is-expanded has-icon">
 								<span class="select is-fullwidth">
 									<select id="sort-select" tabindex="0">
 										<option disabled selected>Sort</option>
@@ -86,19 +86,19 @@
 						</div>
 					</div>
 					<div class="button-wrapper control margin-top-10">
-						<button id="select-all" data-selected="false" tabindex="0" class="button no-shadow" title="Select All">
+						<button id="select-all" data-selected="false" tabindex="0" class="button is-black is-transparent" title="Select All">
 							<span class="icon is-small">
 								<i class="fa fa-square-o"></i>
 							</span>
 							<span>Select All</span>
 						</button>
-						<button id="multi-delete" class="button is-disabled is-danger is-outlined no-shadow" tabindex="0" title="Delete Listing(s)">
+						<button id="multi-delete" class="button is-disabled is-danger is-transparent" tabindex="0" title="Delete Listing(s)">
 							<span class="icon is-small">
 								<i class="fa fa-trash"></i>
 							</span>
 							<span>Delete</span>
 						</button>
-						<button id="multi-verify" class="button is-disabled is-primary is-outlined no-shadow" tabindex="0" title="Verify Listing(s)">
+						<button id="multi-verify" class="button is-disabled is-primary is-transparent" tabindex="0" title="Verify Listing(s)">
 							<span class="icon is-small">
 								<i class="fa fa-check-circle-o"></i>
 							</span>
@@ -106,7 +106,7 @@
 						</button>
 					</div>
 					<div class="control margin-top-20">
-						<a class="button is-icon-only is-black is-stylish is-small is-fullwidth" tabindex="0" href="/listings/create">
+						<a class="button is-transparent is-black is-stylish is-small is-fullwidth" tabindex="0" href="/listings/create">
 							<span class="icon is-small">
 								<i class="fa fa-plus"></i>
 							</span>
@@ -120,18 +120,18 @@
 					<!-- CURRENT DOMAIN NAME -->
 					<div class="control is-spaced">
 						<div class="control-left">
-							<button tabindex="0" class="button filter-menu-toggle is-inline-block is-dark is-icon-only no-shadow is-small is-hidden-tablet" title="Filters">
+							<button tabindex="0" class="button filter-menu-toggle is-inline-block is-dark is-transparent no-shadow is-small is-hidden-tablet" title="Filters">
 								<span class="icon"><i class="fa fa-bars"></i></span>
 							</button>
 							<h2 class="current-domain-name yes-listings-elem is-inline-block is-hidden"></h2>
 						</div>
 						<div class="control-right">
-              <a id="status-color" tabindex="0" class="verified-elem unpurchased-elem button is-icon-only is-small is-primary" title="Publicly hide or show landing page.">
+              <a id="status-color" tabindex="0" class="verified-elem unpurchased-elem button is-transparent is-small is-primary" title="Publicly hide or show landing page.">
                 <span class="icon is-small"><i id="status-icon" class="fa fa-toggle-on"></i></span>
                 <span id="status-text">Active</span>
               </a>
               <input id="status-input" data-name="status" tabindex="0" type="hidden" class="input changeable-input" />
-							<a id="current-domain-view" target="_blank" rel="noopener" tabindex="0" class="verified-elem yes-listings-elem is-hidden button is-icon-only is-primary is-small margin-top-0" title="View Domain">
+							<a id="current-domain-view" target="_blank" rel="noopener" tabindex="0" class="verified-elem yes-listings-elem is-hidden button is-transparent is-primary is-small margin-top-0" title="View Domain">
 								<span class="icon is-small"><i style="margin-top: 2px" class="fa fa-external-link"></i></span>
 								<span>View</span>
 							</a>
@@ -209,12 +209,12 @@
 							<div id="info-tab-drop" class="drop-tab">
 								<div class="control">
 									<label class="label" for="min-price-input">Minimum Price</label>
-									<input id="min-price-input" data-name="min_price" type="number" min="1" step="1" class="input changeable-input">
+									<input id="min-price-input" data-name="min_price" type="number" min="1" step="1" class="input is-inline changeable-input">
 									<small class="tip">The minimum offer price you will consider. Put blank or 0 for no minimum offer price.</small>
 								</div>
                 <div class="control">
                   <label class="label" for="buy-price-input">Buy It Now Price</label>
-                  <input id="buy-price-input" data-name="buy_price" type="number" min="1" step="1" class="input changeable-input">
+                  <input id="buy-price-input" data-name="buy_price" type="number" min="1" step="1" class="input is-inline changeable-input">
                   <small class="tip">The price you are willing to immediately sell the domain for. Put blank or 0 for no Buy It Now option.</small>
                   <small class="tip"><a target="_blank" rel="noopener" href="/faq#selling" class="is-primary">What are the advantages of buying immediately?</a></small>
                 </div>
@@ -263,7 +263,7 @@
 								<label class="label">Rental Price</label>
 								<div class="control">
 									<div class="control has-addons margin-bottom-0">
-										<input id="price-rate-input" data-name="price_rate" placeholder="minimum 1" type="number" min="1" step="1" class="padding-top-0 input changeable-input rentable-input">
+										<input id="price-rate-input" data-name="price_rate" placeholder="minimum 1" type="number" min="1" step="1" class="input is-inline changeable-input rentable-input">
 										<span class="select price-type-span">
 											<div class="drop-form">
 												<select id="price-type-input" data-name="price_type" class="changeable-input rentable-input">
