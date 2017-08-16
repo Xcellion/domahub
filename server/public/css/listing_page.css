@@ -447,8 +447,10 @@ button[data-balloon] {
 #show-menu-wrapper {
   position: fixed;
   z-index: 99;
-  top: 20px;
-  left: 20px; }
+  padding: 20px;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.75); }
 
 .ticker-row {
   align-items: center;
