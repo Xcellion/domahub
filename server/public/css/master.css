@@ -837,7 +837,7 @@ pre {
       color: #000; }
     .button.is-white:active {
       border-color: transparent; }
-    .button.is-white.is-icon-only {
+    .button.is-white.is-transparent {
       background-color: transparent;
       color: white; }
     .button.is-white.is-inverted {
@@ -863,7 +863,7 @@ pre {
       color: white; }
     .button.is-black:active {
       border-color: transparent; }
-    .button.is-black.is-icon-only {
+    .button.is-black.is-transparent {
       background-color: transparent;
       color: #000; }
     .button.is-black.is-inverted {
@@ -889,7 +889,7 @@ pre {
       color: #444; }
     .button.is-grey:active {
       border-color: transparent; }
-    .button.is-grey.is-icon-only {
+    .button.is-grey.is-transparent {
       background-color: transparent;
       color: #d0d0d0; }
     .button.is-grey.is-inverted {
@@ -915,7 +915,7 @@ pre {
       color: rgba(255, 255, 255, 0.7); }
     .button.is-blacklight:active {
       border-color: transparent; }
-    .button.is-blacklight.is-icon-only {
+    .button.is-blacklight.is-transparent {
       background-color: transparent;
       color: rgba(0, 0, 0, 0.66); }
     .button.is-blacklight.is-inverted {
@@ -941,7 +941,7 @@ pre {
       color: rgba(0, 0, 0, 0.66); }
     .button.is-whitelight:active {
       border-color: transparent; }
-    .button.is-whitelight.is-icon-only {
+    .button.is-whitelight.is-transparent {
       background-color: transparent;
       color: rgba(255, 255, 255, 0.7); }
     .button.is-whitelight.is-inverted {
@@ -967,7 +967,7 @@ pre {
       color: #444; }
     .button.is-light:active {
       border-color: transparent; }
-    .button.is-light.is-icon-only {
+    .button.is-light.is-transparent {
       background-color: transparent;
       color: #d0d0d0; }
     .button.is-light.is-inverted {
@@ -993,7 +993,7 @@ pre {
       color: #f1f1f1; }
     .button.is-lighter:active {
       border-color: transparent; }
-    .button.is-lighter.is-icon-only {
+    .button.is-lighter.is-transparent {
       background-color: transparent;
       color: #f1f1f1; }
     .button.is-lighter.is-inverted {
@@ -1019,7 +1019,7 @@ pre {
       color: #d0d0d0; }
     .button.is-dark:active {
       border-color: transparent; }
-    .button.is-dark.is-icon-only {
+    .button.is-dark.is-transparent {
       background-color: transparent;
       color: #444; }
     .button.is-dark.is-inverted {
@@ -1045,7 +1045,7 @@ pre {
       color: white; }
     .button.is-purple:active {
       border-color: transparent; }
-    .button.is-purple.is-icon-only {
+    .button.is-purple.is-transparent {
       background-color: transparent;
       color: #9c27b0; }
     .button.is-purple.is-inverted {
@@ -1071,7 +1071,7 @@ pre {
       color: white; }
     .button.is-primary:active {
       border-color: transparent; }
-    .button.is-primary.is-icon-only {
+    .button.is-primary.is-transparent {
       background-color: transparent;
       color: #3cbc8d; }
     .button.is-primary.is-inverted {
@@ -1097,7 +1097,7 @@ pre {
       color: #309670; }
     .button.is-primarydark:active {
       border-color: transparent; }
-    .button.is-primarydark.is-icon-only {
+    .button.is-primarydark.is-transparent {
       background-color: transparent;
       color: #309670; }
     .button.is-primarydark.is-inverted {
@@ -1123,7 +1123,7 @@ pre {
       color: #62c9a3; }
     .button.is-primarylight:active {
       border-color: transparent; }
-    .button.is-primarylight.is-icon-only {
+    .button.is-primarylight.is-transparent {
       background-color: transparent;
       color: #62c9a3; }
     .button.is-primarylight.is-inverted {
@@ -1149,7 +1149,7 @@ pre {
       color: #8ad6ba; }
     .button.is-primarylighter:active {
       border-color: transparent; }
-    .button.is-primarylighter.is-icon-only {
+    .button.is-primarylighter.is-transparent {
       background-color: transparent;
       color: #8ad6ba; }
     .button.is-primarylighter.is-inverted {
@@ -1175,7 +1175,7 @@ pre {
       color: white; }
     .button.is-info:active {
       border-color: transparent; }
-    .button.is-info.is-icon-only {
+    .button.is-info.is-transparent {
       background-color: transparent;
       color: #2196f3; }
     .button.is-info.is-inverted {
@@ -1201,7 +1201,7 @@ pre {
       color: #23415f; }
     .button.is-bluedarker:active {
       border-color: transparent; }
-    .button.is-bluedarker.is-icon-only {
+    .button.is-bluedarker.is-transparent {
       background-color: transparent;
       color: #23415f; }
     .button.is-bluedarker.is-inverted {
@@ -1227,7 +1227,7 @@ pre {
       color: white; }
     .button.is-accent:active {
       border-color: transparent; }
-    .button.is-accent.is-icon-only {
+    .button.is-accent.is-transparent {
       background-color: transparent;
       color: #ff5722; }
     .button.is-accent.is-inverted {
@@ -1253,7 +1253,7 @@ pre {
       color: rgba(0, 0, 0, 0.5); }
     .button.is-warning:active {
       border-color: transparent; }
-    .button.is-warning.is-icon-only {
+    .button.is-warning.is-transparent {
       background-color: transparent;
       color: #ffeb3b; }
     .button.is-warning.is-inverted {
@@ -1279,7 +1279,7 @@ pre {
       color: white; }
     .button.is-danger:active {
       border-color: transparent; }
-    .button.is-danger.is-icon-only {
+    .button.is-danger.is-transparent {
       background-color: transparent;
       color: #EF5350; }
     .button.is-danger.is-inverted {
