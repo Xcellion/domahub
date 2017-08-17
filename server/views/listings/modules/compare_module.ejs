@@ -2,7 +2,9 @@
 var compare = <% if(typeof compare != "undefined"){ %><%-JSON.stringify(compare)%><% }else{ %>""<% } %>;
 </script>
 <link rel="stylesheet" href="/css/lib/jquery.minicolors.css" type="text/css" />
+<link rel="stylesheet" href="/css/lib/bootstrap-tour-standalone.min.css" type="text/css" />
 <script src="/js/jquery/jquery.minicolors.min.js" type="text/javascript"></script>
+<script src="/js/lib/bootstrap-tour-standalone.min.js" type="text/javascript"></script>
 <script src="/js/routes/listings/listing_compare_logic.js" type="text/javascript"></script>
 <script src="/js/themes.js" type="text/javascript"></script>
 
@@ -44,7 +46,7 @@ var compare = <% if(typeof compare != "undefined"){ %><%-JSON.stringify(compare)
     <div id="info-box" class="compare-box">
 
       <%# INFO %>
-      <div class="control">
+      <div id="compare-description-control" class="control">
         <label class="label" for="description">Listing Description</label>
         <textarea id="description" class="description-input textarea " tabindex="0" placeholder="A great description will help users understand the full potential of this domain."></textarea>
       </div>
@@ -62,7 +64,7 @@ var compare = <% if(typeof compare != "undefined"){ %><%-JSON.stringify(compare)
         <small class="tip"><a target="_blank" rel="noopener" href="/faq#selling" class="is-accent">What are the advantages of buying immediately?</a></small>
       </div>
 
-      <div class="control is-spaced">
+      <div id="allow-rentals-control" class="control is-spaced">
         <div class="control-left">
           <label class="label" for="rentable-input">Allow Rentals</label>
           <small class="tip">Allows verified users to rent usage of this domain for short amounts of time.</small>
@@ -95,7 +97,7 @@ var compare = <% if(typeof compare != "undefined"){ %><%-JSON.stringify(compare)
 
     <%# DESIGN %>
     <div id="design-box" class="is-hidden compare-box">
-      <div class="control">
+      <div id="theme-control" class="control">
         <label class="label" for="random-button">Theme</label>
         <div class="control is-grouped">
           <div class="control has-icon">
@@ -200,7 +202,8 @@ var compare = <% if(typeof compare != "undefined"){ %><%-JSON.stringify(compare)
           </small>
         </div>
         <div class="content">
-          <a href="/signup" class="button is-primary is-small is-stylish">Sign Me Up!</a>
+          <a id="restart-tutorial-button" class="button is-small is-stylish">Restart Tutorial</a>
+          <a href="/signup" class="button is-small is-primary is-stylish">Sign Me Up!</a>
         </div>
     </footer>
   </div>

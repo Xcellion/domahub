@@ -1,5 +1,10 @@
+var tutorial_tour;
+var listing_description_tour = false;
+
 $(document).ready(function() {
   if (compare){
+
+    //<editor-fold>----------------------------------------------------------------------------------- COMPARE TOOL SETUP
 
     //change compare tabs
     $(".compare-tab").on("click", function(){
@@ -9,6 +14,11 @@ $(document).ready(function() {
       var box_id = $(this).attr('id').split("-")[0];
       $(".compare-box").addClass('is-hidden');
       $("#" + box_id + "-box").removeClass('is-hidden');
+
+      //design tab
+      if (box_id == "design" && tutorial_tour && !tutorial_tour.ended() && tutorial_tour.getCurrentStep() == 4){
+        tutorial_tour.goTo(5);
+      }
     });
 
     //populate all themes
@@ -33,39 +43,296 @@ $(document).ready(function() {
     //change to custom theme if anything is changed
     $(".theme-changeable-input").on("change", function(){
       $("#theme-input").val("Custom");
+      updateQueryStringParam("theme", "Custom");
     });
 
-    enableToggleMenu();
+    menuButtonHandlers();
+
+    //</editor-fold>
+
+    tutorial_tour = new Tour({
+      storage: false,
+      orphan: true,
+      backdrop: true,
+      name: "tutorial",
+      template: "<div class='popover tour'> \
+        <h2 class='popover-title is-bold'></h2> \
+        <div class='popover-content'></div> \
+        <div class='popover-navigation'> \
+          <button class='button is-small btn-default' data-role='prev'>« Prev</button> \
+          <button class='button is-small is-primary btn-default' data-role='next'>Next »</button> \
+          <button class='button is-small btn-default' data-role='end'>End Tutorial</button> \
+        </div> \
+      </div>",
+      steps: [
+
+        //main welcome step - 0
+        {
+          onShow: function(){
+            toggleMenu(false);
+          },
+          template: "<div class='popover tour'> \
+            <h2 class='popover-title is-bold'></h2> \
+            <div class='popover-content'></div> \
+            <div class='padding-left-15 padding-bottom-15'> \
+              <button class='button is-small is-primary margin-bottom-10 btn-default' data-role='next'>Yes! Teach me how it works.</button> \
+              <button class='button is-small btn-default' data-role='end'>No thanks, I'll figure it out myself.</button> \
+            </div> \
+          </div>",
+          title: "Welcome to the DomaHub demo!",
+          content: "This tutorial will guide you on how your domains can look as a DomaHub listing.",
+        },
+
+        //show menu button step - 1
+        {
+          element: "#show-menu-button",
+          container: "#show-menu-wrapper",
+          backdropContainer: "#show-menu-wrapper",
+          placement: "bottom",
+          onShow : function(){
+            toggleMenu(false);
+            $("#show-menu-button").addClass('is-primary');
+          },
+          onHide: function(){
+            $("#show-menu-button").removeClass('is-primary');
+          },
+          template: "<div class='popover tour'> \
+            <div class='popover-content'></div> \
+            <div class='popover-navigation'> \
+              <button class='button is-small btn-default' data-role='prev'>« Prev</button> \
+              <button class='button is-small btn-default' data-role='end'>End Tutorial</button> \
+            </div> \
+          </div>",
+          content: "Click this button to bring up the settings menu for this page.",
+        },
+
+        //explain menu step - 2
+        {
+          element: "#compare-menu",
+          container: "#compare-menu",
+          onShow: function(){
+            toggleMenu(true);
+          },
+          backdropContainer: "#compare-preview",
+          content: "You can use this menu to quickly test the look and feel of your DomaHub domain listing.",
+        },
+
+        //try editing description - 3
+        {
+          element: "#compare-description-control",
+          container: "#compare-menu",
+          backdropContainer: "#compare-menu",
+          backdropPadding: 15,
+          placement: "bottom",
+          onShow: function(){
+            toggleMenu(true);
+            $("#info-edit-tab").click();
+            $("#compare-preview").append("<div class='tour-backdrop'></div>");
+          },
+          onHide: function(){
+            if (listing_description_tour && !listing_description_tour.ended()){
+              listing_description_tour.end();
+            }
+            $("#compare-preview").find(".tour-backdrop").remove();
+          },
+          content: "Try editing the listing description! Remember, this is just a testing tool. Nothing is saved."
+        },
+
+        //design tab - 4
+        {
+          element: "#design-tab",
+          container: "#compare-menu",
+          backdropContainer: "#compare-menu",
+          backdropPadding: 15,
+          placement: "bottom",
+          onShow: function(){
+            toggleMenu(true);
+            $("#compare-preview").append("<div class='tour-backdrop'></div>");
+          },
+          onHide: function(){
+            $("#compare-preview").find(".tour-backdrop").remove();
+          },
+          template: "<div class='popover tour'> \
+            <div class='popover-content'></div> \
+            <div class='popover-navigation'> \
+              <button class='button is-small btn-default' data-role='prev'>« Prev</button> \
+              <button class='button is-small btn-default' data-role='end'>End Tutorial</button> \
+            </div> \
+          </div>",
+          content: "You can also change the look and feel of your DomaHub listing."
+        },
+
+        //try theme - 5
+        {
+          element: "#theme-control",
+          container: "#compare-menu",
+          backdropContainer: "#compare-menu",
+          backdropPadding: 15,
+          placement: "bottom",
+          onShow: function(){
+            toggleMenu(true);
+            $("#compare-preview").append("<div class='tour-backdrop'></div>");
+          },
+          onHide: function(){
+            $("#compare-preview").find(".tour-backdrop").remove();
+          },
+          content: "Try editing the listing theme! If none of them fit your needs, you can always create a custom theme for your DomaHub listing."
+        },
+
+        //contact offer form - 6
+        {
+          element: "#buy-rent-column",
+          backdropContainer: "#compare-preview",
+          placement: "left",
+          onShow: function(){
+            $("#compare-menu").append("<div class='tour-backdrop'></div>");
+            showBuyStuff($("#buy-now-button"));
+          },
+          onHide: function(){
+            $("#compare-menu").find(".tour-backdrop").remove();
+          },
+          content: 'Potential customers can use this form to contact you. All contact information is verified before you are notified of any new offers.'
+        },
+
+        //click rentable tab - 7
+        {
+          element: "#rent-now-button",
+          backdropContainer: "#compare-preview",
+          placement: "bottom",
+          onShow: function(){
+            showBuyStuff($("#buy-now-button"));
+            $("#compare-menu").append("<div class='tour-backdrop'></div>");
+          },
+          onHide: function(){
+            $("#compare-menu").find(".tour-backdrop").remove();
+          },
+          template: "<div class='popover tour'> \
+            <div class='popover-content'></div> \
+            <div class='popover-navigation'> \
+              <button class='button is-small btn-default' data-role='prev'>« Prev</button> \
+              <button class='button is-small btn-default' data-role='end'>End Tutorial</button> \
+            </div> \
+          </div>",
+          content: "At DomaHub, you can also choose to rent out your domains as a new source of revenue."
+        },
+
+        //rental tab - 8
+        {
+          element: "#buy-rent-column",
+          backdropContainer: "#compare-preview",
+          placement: "left",
+          onShow: function(){
+            $("#compare-menu").append("<div class='tour-backdrop'></div>");
+            showRentalStuff($("#rent-now-button"));
+          },
+          onHide: function(){
+            $("#compare-menu").find(".tour-backdrop").remove();
+          },
+          content: 'Customers use this calendar to rent the domain for variable lengths of time and forward the domain to their desired URL. All rentals are cross-checked against the <a href="https://developers.google.com/safe-browsing/" class="is-accent">Google Safe Browsing API.</a>'
+        },
+
+        //modules - 9
+        {
+          element: "#modules-wrapper",
+          backdropContainer: "#compare-preview",
+          placement: "top",
+          onShow: function(){
+            $("#compare-menu").append("<div class='tour-backdrop'></div>");
+          },
+          onHide: function(){
+            $("#compare-menu").find(".tour-backdrop").remove();
+          },
+          content: 'Additional information is displayed here--including links to other listings, domain traffic, and recent events.'
+        },
+
+        //final step - 10
+        {
+          autoScroll: true,
+          title: "Thats the end of the DomaHub demo!",
+          content: "If you have any further questions, please do not hesitate to <a href='/contact' class='is-accent'>contact us</a>.",
+          onShow: function(){
+            toggleMenu(false);
+          },
+          template: "<div class='popover tour'> \
+            <h2 class='popover-title is-bold'></h2> \
+            <div class='popover-content'></div> \
+            <div class='padding-left-15 padding-bottom-15'> \
+              <a href='/signup' class='button is-small is-primary margin-bottom-10 btn-default'>That was awesome! Sign me up.</a> \
+              <button class='button is-small btn-default' data-role='end'>I still want to poke around a bit.</button> \
+            </div> \
+          </div>"
+        },
+
+      ]
+    });
+
+    tutorial_tour.init();
+    tutorial_tour.start();
+
+    //restart the tutorial (where you left off)
+    $("#restart-tutorial-button").on('click', function(){
+      if (tutorial_tour){
+        var cur_step = tutorial_tour.getCurrentStep();
+        if (cur_step == 10){
+          tutorial_tour.restart();
+        }
+        else {
+          tutorial_tour.start(true);
+        }
+      }
+    });
   }
 });
 
-//function to hide and show menu
-function enableToggleMenu() {
-  var hideMenuButton = $("#hide-menu-button");
-  var showMenuButton = $("#show-menu-button");
-  var menu = $("#compare-menu");
-  var preview = $("#compare-preview");
+//<editor-fold>-----------------------------------------------------------------------------------MENU
 
+//function to hide and show menu
+function menuButtonHandlers() {
   //click to hide the compare tool
-  hideMenuButton.on("click", function() {
-    menu.toggleClass("is-active");
-    preview.toggleClass("is-active");
-    showMenuButton.fadeIn(100).toggleClass("is-hidden");
+  $("#hide-menu-button").on("click", function() {
+    toggleMenu(false);
+
+    //clicked the button during tutorial
+    if (!tutorial_tour.ended()){
+      tutorial_tour.prev();
+    }
   });
 
   //click to show the compare tool
-  showMenuButton.on("click",function() {
-    $(this).toggleClass("is-hidden");
-    menu.toggleClass("is-active");
-    preview.toggleClass("is-active");
+  $("#show-menu-button").on("click",function() {
+    toggleMenu(true);
+
+    //clicked the button during tutorial
+    if (!tutorial_tour.ended()){
+      tutorial_tour.next();
+    }
   });
 }
+
+//function to show or hide menu
+function toggleMenu(show){
+  if (show){
+    $("#compare-menu").addClass("is-active");
+    $("#compare-preview").addClass("is-active");
+    $("#show-menu-button").fadeIn(100).addClass("is-hidden");
+  }
+  else {
+    $("#compare-menu").removeClass("is-active");
+    $("#compare-preview").removeClass("is-active");
+    $("#show-menu-button").fadeIn(100).removeClass("is-hidden");
+  }
+}
+
+//</editor-fold>
 
 //<editor-fold>-----------------------------------------------------------------------------------THEMES
 
 //function to switch theme
 function switchTheme(theme_name){
   var theme_to_load = findTheme(theme_name);
+
+  //changing theme during tutorial
+  $("#compare-preview").find(".tour-backdrop").remove();
 
   //if there wasnt a theme, load domahub theme
   if (!theme_to_load && theme_name != "Custom"){
@@ -110,7 +377,46 @@ function updateDescription(){
   $("#description").val(listing_description).on("input", function(){
     $("#description-text").text($(this).val());
     listing_info.description = $(this).val();
-    // updateQueryStringParam("description", $(this).val());
+
+    //tutorial tour is still going on!
+    if (!tutorial_tour.ended()){
+      if (!listing_description_tour){
+        listing_description_tour = new Tour({
+          storage: false,
+          animation: false,
+          name: "description",
+          template: "<div class='popover tour'> \
+            <h2 class='popover-title is-bold'></h2> \
+            <div class='popover-content'></div> \
+          </div>",
+          onStart: function(){
+            $("#compare-preview").find(".tour-backdrop").remove();
+          },
+          steps: [
+            //description is edited! - 4
+            {
+              element: "#description-text",
+              placement: "right",
+              backdrop: true,
+              animation: false,
+              backdropContainer: "#compare-preview",
+              backdropPadding: 15,
+              content: "The listing description will update automatically as you type. </br> </br> A well-written description can help your audience understand the full potential of your domain name!",
+            },
+          ]
+        });
+
+        listing_description_tour.init();
+        listing_description_tour.start();
+
+      }
+      else if (listing_description_tour.ended() && tutorial_tour.getCurrentStep() == 3){
+        listing_description_tour.restart();
+      }
+      else {
+        listing_description_tour.goTo(0);
+      }
+    }
   });
 }
 
@@ -269,8 +575,8 @@ function updateColorScheme(primary_color, secondary_color, tertiary_color){
     stylize(primary_color, ".tag", "background-color");
 
     if (myChart){
+      myChart.data.datasets[0].backgroundColor = ColorLuminance(primary_color, 0.2);
       myChart.data.datasets[0].borderColor = primary_color;
-      myChart.data.datasets[0].backgroundColor = primary_color;
       myChart.update();
     }
   }
@@ -408,8 +714,7 @@ function createTestChart(){
     xAxisID : "traffic-x",
     yAxisID : "traffic-y",
     borderColor: (listing_info.primary_color) ? listing_info.primary_color : "#3CBC8D",
-    backgroundColor: (listing_info.primary_color) ? listing_info.primary_color : "#3CBC8D",
-    fill: false,
+    backgroundColor: (listing_info.primary_color) ? ColorLuminance(listing_info.primary_color, 0.2) : "#3CBC8D",
     data: traffic_data
   }
 
@@ -592,6 +897,8 @@ function testCalendarHandler(){
 
 //</editor-fold>
 
+//<editor-fold>-----------------------------------------------------------------------------------HELPER FUNCTIONS
+
 function randomIntFromInterval(min,max){
   return Math.floor(Math.random()*(max-min+1)+min);
 }
@@ -637,3 +944,5 @@ function updateQueryStringParam(key, value) {
   }
   window.history.replaceState({}, "", baseUrl + params);
 };
+
+//</editor-fold>

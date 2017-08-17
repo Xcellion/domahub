@@ -47,6 +47,10 @@ $(document).ready(function() {
 
     //click buy now button or unavailable description
     $("#buy-now-button").on("click", function(e){
+      //doing the tutorial!
+      if (compare && tutorial_tour && !tutorial_tour.ended()){
+        tutorial_tour.goTo(6);
+      }
       showBuyStuff($(this));
     });
 
@@ -109,6 +113,10 @@ $(document).ready(function() {
 
       //click rent now or unavailable description
       $("#rent-now-button").on("click", function(e) {
+        //doing the tutorial!
+        if (compare && tutorial_tour && !tutorial_tour.ended()){
+          tutorial_tour.goTo(8);
+        }
         showRentalStuff($(this));
       });
 
@@ -246,13 +254,9 @@ function showBuyStuff(buy_now_button){
   if (listing_info.status == 1){
     $("#unavailable-module").addClass('is-hidden');
 
-    //fade out buy button, remove handler
-    buy_now_button.off().addClass('is-disabled is-active');
-
-    //re-attach rent now handler
-    $("#rent-now-button").removeClass('is-disabled  is-active').off().on("click", function(){
-      showRentalStuff($(this));
-    });
+    //fade out buy button
+    buy_now_button.addClass('is-disabled is-active');
+    $("#rent-now-button").removeClass('is-disabled is-active');
 
     //show buy related stuff
     $(".post-buy-module").removeClass('is-hidden');
@@ -276,13 +280,9 @@ function showBuyStuff(buy_now_button){
 //function to show rental module
 function showRentalStuff(rent_now_button){
 
-  //fade out rent button, remove handler
-  rent_now_button.off().addClass('is-disabled is-active');
-
-  //re-attach rent now handler
-  $("#buy-now-button").removeClass('is-disabled  is-active').off().on("click", function(){
-    showBuyStuff($(this));
-  });
+  //fade out rent button
+  rent_now_button.addClass('is-disabled is-active');
+  $("#buy-now-button").removeClass('is-disabled is-active');
 
   //show rental related stuff
   $(".post-rent-module").removeClass('is-hidden');
@@ -329,7 +329,6 @@ function showRentalStuff(rent_now_button){
   else {
     $("#unavailable-module").removeClass('is-hidden');
   }
-
 }
 
 //function to check phone number
