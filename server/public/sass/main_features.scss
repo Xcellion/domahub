@@ -1,0 +1,6 @@
+@import 'vars';
+@import 'mixins';
+
+#features-hero {
+  background-image: linear-gradient($primary, $primary-light);
+}

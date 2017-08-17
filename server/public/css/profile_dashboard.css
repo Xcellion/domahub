@@ -281,7 +281,8 @@ button[data-balloon] {
   -moz-transition: left 0.25s ease;
   -o-transition: left 0.25s ease;
   -webkit-transition: left 0.25s ease;
-  transition: left 0.25s ease; }
+  transition: left 0.25s ease;
+  border-right: 1px solid rgba(0, 0, 0, 0.12); }
   @media screen and (max-width: 768px) {
     #filter-menu {
       -webkit-box-shadow: 0 3px 15px 0 rgba(0, 0, 0, 0.12);
