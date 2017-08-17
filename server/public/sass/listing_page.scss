@@ -79,6 +79,31 @@
   }
 }
 
+#design-tab.tour-step-backdrop {
+  background-color: $primary;
+  border-radius:6px 6px 0px 0px;
+  a {
+    color: $white;
+  }
+}
+
+#rent-now-button.tour-step-backdrop {
+  a {
+    border-radius: 6px 6px 0px 0px;
+    background-color: $primary;
+    color: $white;
+    &:hover {
+      background-color: #309570;
+      border-color: transparent;
+      color: #fff;
+    }
+  }
+}
+
+.popover.tour {
+  min-width:250px;
+}
+
 #compare-buttons {
   border-bottom:1px solid $border;
   padding: 20px;
@@ -330,11 +355,14 @@
 
 #show-menu-wrapper {
   position: fixed;
-  z-index: 99;
   padding: 20px;
-  width: 100vw;
-  height: 100vh;
-  background-color: rgba(0,0,0,0.75);
+  margin-bottom: 0;
+  z-index: 99;
+  &.is-dimmed {
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0,0,0,0.75);
+  }
 }
 
 .ticker-row {

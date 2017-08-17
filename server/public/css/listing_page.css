@@ -261,6 +261,24 @@ button[data-balloon] {
     #compare-menu {
       width: 300px; } }
 
+#design-tab.tour-step-backdrop {
+  background-color: #3cbc8d;
+  border-radius: 6px 6px 0px 0px; }
+  #design-tab.tour-step-backdrop a {
+    color: white; }
+
+#rent-now-button.tour-step-backdrop a {
+  border-radius: 6px 6px 0px 0px;
+  background-color: #3cbc8d;
+  color: white; }
+  #rent-now-button.tour-step-backdrop a:hover {
+    background-color: #309570;
+    border-color: transparent;
+    color: #fff; }
+
+.popover.tour {
+  min-width: 250px; }
+
 #compare-buttons {
   border-bottom: 1px solid rgba(0, 0, 0, 0.12);
   padding: 20px;
@@ -446,11 +464,13 @@ button[data-balloon] {
 
 #show-menu-wrapper {
   position: fixed;
-  z-index: 99;
   padding: 20px;
-  width: 100vw;
-  height: 100vh;
-  background-color: rgba(0, 0, 0, 0.75); }
+  margin-bottom: 0;
+  z-index: 99; }
+  #show-menu-wrapper.is-dimmed {
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.75); }
 
 .ticker-row {
   align-items: center;

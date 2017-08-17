@@ -45,7 +45,7 @@
             }); %>
           </div>
 
-          <div class="column">
+          <div id="buy-rent-column" class="column">
             <% if (listing_info.deposited) { %>
               <div class="box">
                 <figure class="image is-64x64">
@@ -101,30 +101,35 @@
             </div>
         </div>
 
-        <%# TABS FOR THE BELOW MODULES %>
-        <%- include("modules/tabs_module.ejs", {
-            listing_info : listing_info
-        }); %>
+        <div id="modules-wrapper">
 
-        <%# INFO MODULE %>
-        <% if ((listing_info.premium && listing_info.info_module) || !listing_info.premium){ %>
-            <%- include("modules/info_module.ejs", {
-                listing_info : listing_info
-            }); %>
-        <% } %>
+          <%# TABS FOR THE BELOW MODULES %>
+          <%- include("modules/tabs_module.ejs", {
+              listing_info : listing_info
+          }); %>
 
-        <%# TRAFFIC MODULE %>
-        <% if ((listing_info.premium && listing_info.traffic_module) || !listing_info.premium){ %>
-            <%- include("modules/traffic_module.ejs", {
-                listing_info : listing_info
-            }); %>
-        <% } %>
+          <%# INFO MODULE %>
+          <% if ((listing_info.premium && listing_info.info_module) || !listing_info.premium){ %>
+              <%- include("modules/info_module.ejs", {
+                  listing_info : listing_info
+              }); %>
+          <% } %>
 
-        <%# EXAMPLES MODULE %>
-        <% if ((listing_info.premium && listing_info.history_module) || !listing_info.premium){ %>
-            <%- include("modules/ticker_module.ejs", {
-                listing_info : listing_info
-            }); %>
-        <% } %>
+          <%# TRAFFIC MODULE %>
+          <% if ((listing_info.premium && listing_info.traffic_module) || !listing_info.premium){ %>
+              <%- include("modules/traffic_module.ejs", {
+                  listing_info : listing_info
+              }); %>
+          <% } %>
+
+          <%# EXAMPLES MODULE %>
+          <% if ((listing_info.premium && listing_info.history_module) || !listing_info.premium){ %>
+              <%- include("modules/ticker_module.ejs", {
+                  listing_info : listing_info
+              }); %>
+          <% } %>
+
+        </div>
+
     </div>
 </div>
