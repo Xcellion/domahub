@@ -412,6 +412,21 @@ button[data-balloon] {
   right: 0;
   position: absolute !important; }
 
+#logo-image {
+  width: 96px;
+  height: 64px;
+  border-width: 1px 1px 0 1px;
+  border-style: solid;
+  border-color: #9e9e9e;
+  object-fit: contain; }
+
+#example-wrapper {
+  background-repeat: no-repeat;
+  background-size: cover; }
+
+.upload-label {
+  border-radius: 0 0 3px 3px !important; }
+
 .listing-img {
   width: 96px;
   height: auto; }

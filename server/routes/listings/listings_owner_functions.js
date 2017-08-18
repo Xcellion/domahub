@@ -340,7 +340,7 @@ module.exports = {
 
   //function to check the user image and upload to imgur
   checkListingImage : function(req, res, next){
-    if (req.files && (req.files.background_image || req.files.logo)){
+    if (req.files && (req.files.background_image || req.files.logo) && !req.body.background_image_link){
 
       //custom image upload promise function
       var q_function = function(formData){
@@ -394,7 +394,7 @@ module.exports = {
       req.session.new_listing_info = {};
 
       //removing existing image(s) intentionally
-      if (req.body.background_image == ""){
+      if (req.body.background_image == "" || req.body.background_image_link == ""){
         req.session.new_listing_info.background_image = null;
       }
       if (req.body.logo == ""){
@@ -525,7 +525,6 @@ module.exports = {
       var history_module = parseFloat(req.body.history_module);
       var traffic_module = parseFloat(req.body.traffic_module);
       var info_module = parseFloat(req.body.info_module);
-
       //invalid primary color
       if (req.body.primary_color && !validator.isHexColor(req.body.primary_color)){
         error.handler(req, res, "Invalid primary color!", "json");
@@ -545,6 +544,10 @@ module.exports = {
       //invalid background color
       else if (req.body.background_color && !validator.isHexColor(req.body.background_color)){
         error.handler(req, res, "Invalid background color!", "json");
+      }
+      //invalid background link
+      else if (req.body.background_image_link && !validator.isURL(req.body.background_image_link)){
+        error.handler(req, res, "Invalid background URL!", "json");
       }
       //invalid history module
       else if (req.body.history_module && (history_module != 0 && history_module != 1)){
@@ -574,6 +577,11 @@ module.exports = {
         req.session.new_listing_info.history_module = history_module;
         req.session.new_listing_info.traffic_module = traffic_module;
         req.session.new_listing_info.info_module = info_module;
+
+        //posted a URL for background image, not upload
+        if (req.body.background_image_link){
+          req.session.new_listing_info.background_image = req.body.background_image_link;
+        }
 
         next();
       }
@@ -789,7 +797,7 @@ module.exports = {
       else {
         listing_obj.stats = false;
       }
-      
+
       res.send({
         state: "success",
         listings: req.user.listings
