@@ -170,6 +170,15 @@ button[data-balloon] {
 [data-balloon-length="fit"]:after {
   width: 100%; }
 
+#step-1 {
+  left: 20px !important; }
+
+#step-4 {
+  left: 105px !important; }
+
+#step-7 {
+  left: 912px !important; }
+
 .master.right {
   flex-direction: row; }
 
@@ -275,9 +284,6 @@ button[data-balloon] {
     background-color: #309570;
     border-color: transparent;
     color: #fff; }
-
-.popover.tour {
-  min-width: 250px; }
 
 #compare-buttons {
   border-bottom: 1px solid rgba(0, 0, 0, 0.12);
