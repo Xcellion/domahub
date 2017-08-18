@@ -315,9 +315,9 @@
 											<p id="example-font" class="preview-elem is-black">This is a preview of your chosen design. Use the settings below to customize your landing page!</a>
 										</div>
 										<div class="control box" style="display:inline-block">
-											<a id="example-button-primary" class="v-align-middle preview-elem is-primary is-small button is-stylish">Send Offer</a>
-											<a id="example-button-accent" class="v-align-middle preview-elem is-accent is-small button is-stylish">Buy Now</a>
-											<a id="example-link-info" class="v-align-middle preview-elem is-info margin-left-10">Do I need this?</a>
+											<a id="example-button-primary" class="v-align-middle preview-elem is-small button is-stylish">Send Offer</a>
+											<a id="example-button-accent" class="v-align-middle preview-elem is-small button is-stylish">Buy Now</a>
+											<a id="example-link-info" class="v-align-middle preview-elem margin-left-10">Do I need this?</a>
 										</div>
 									</div>
 									<div class="control">
@@ -325,12 +325,12 @@
 			                <div class="control is-grouped">
 			                    <div class="control has-icon">
 			                        <span class="select is-fullwidth">
-			                            <select tabindex="0" id="theme-input" class="premium-input changeable-input"></select>
+		                            <select tabindex="0" id="theme-input" class="premium-input"></select>
 			                        </span>
 			                        <i class="fa fa-picture-o"></i>
 			                    </div>
 			                    <div class="control">
-			                        <a id="random-theme-button" class="no-shadow premium-input button is-small is-stylish">Random Theme</a>
+		                        <a id="random-theme-button" class="no-shadow premium-input button is-small is-stylish">Random Theme</a>
 			                    </div>
 			                </div>
 			            </div>
@@ -365,7 +365,7 @@
 											<div class="control has-icon">
 												<span class="select is-fullwidth">
 													<select tabindex="0" data-name="font_name" id="font-name-input" class="premium-input changeable-input">
-														<option selected default value="Rubik">Rubik</option>
+														<option selected default value="Lato">Lato</option>
 														<option value="Times New Roman">Times New Roman</option>
 														<option value="Helvetica">Helvetica</option>
 														<option value="Courier">Courier</option>
@@ -377,18 +377,44 @@
 											</div>
 										</div>
 									</div>
+                  <div class="control">
+                    <label class="label">
+                      <span class="v-align-middle">Background Image URL</span>
+                      <span class="icon is-small is-tooltip v-align-middle" data-balloon-length="medium" data-balloon="Choose an existing image on the web or upload your own image." data-balloon-pos="up">
+                        <i class="fa fa-question-circle"></i>
+                      </span>
+                    </label>
+                    <form class="is-hidden drop-form-file" method="post" enctype="multipart/form-data">
+                      <input tabindex="0" id="background-image-input" data-name="background_image" type="file" name="background_image" accept="image/png, image/gif, image/jpeg" class="premium-input changeable-input input-file">
+                    </form>
+                    <div class="control has-addons">
+                      <input id="background-link-input" data-name="background_image_link" placeholder="http://link-to-image.com/background.png" type="text" class="premium-input input changeable-input">
+                      <button id="background-link-refresh" class='is-disabled no-shadow is-outlined button'>
+                        <span class="icon is-small">
+                          <i class="fa fa-refresh"></i>
+                        </span>
+                        <span>Refresh Preview</span>
+                      </button>
+                      <label for="background-image-input" class="premium-input button no-shadow">
+                        <span class="icon is-small">
+                          <i class="fa fa-upload" aria-hidden="true"></i>
+                        </span>
+                        <p data-default-name="Background Image" id="background-image-label" class="file-label">Upload</p>
+                      </label>
+                    </div>
+                  </div>
 									<div class="control">
 										<label class="label">
 											<span class="v-align-middle">Background Color</span>
-											<span class="icon is-small is-tooltip v-align-middle" data-balloon-length="medium" data-balloon="This color is only used if there is no background image." data-balloon-pos="up">
+											<span class="icon is-small is-tooltip v-align-middle" data-balloon-length="medium" data-balloon="The background image takes precedence over the background color." data-balloon-pos="up">
 												<i class="fa fa-question-circle"></i>
 											</span>
 										</label>
-										<div class="control">
+                    <div class="control">
 											<input id="background-color-input" data-name="background_color" placeholder="#FFFFFF" type="text" class="premium-input padding-top-0 input changeable-input">
-										</div>
+                    </div>
 									</div>
-									<div class="control is-spaced">
+									<%# <div class="control is-spaced">
 										<div class="control-left">
 											<div class="label">Background Image</div>
 											<small class="tip">This image will display as the full-screen background on your landing page.</small>
@@ -396,18 +422,18 @@
 										<div class="control-right">
 											<figure class="image listing-img">
 												<button id="background" tabindex="0" class="premium-input delete delete-image on-img"></button>
-												<img data-default-img="https://placeholdit.imgix.net/~text?txtsize=20&txt=NO%20IMG&w=96&h=64" id="background-image" alt="Image not found" src="">
+												<img id="background-image" class="image-upload" data-default-img="https://placeholdit.imgix.net/~text?txtsize=20&txt=NO%20IMG&w=96&h=64" alt="Image not found" src="">
 											</figure>
 											<form class="drop-form-file" method="post" enctype="multipart/form-data">
 												<input tabindex="0" id="background-image-input" data-name="background_image" type="file" name="background_image" accept="image/png, image/gif, image/jpeg" class="premium-input changeable-input input-file">
-												<label for="background-image-input" class="premium-input button is-small is-fullwidth no-shadow">
+												<label for="background-image-input" class="upload-label premium-input button is-small is-fullwidth no-shadow">
 													<i class="fa fa-upload" aria-hidden="true"></i>
 													<p data-default-name="Background Image" id="background-image-label" class="file-label">Upload</p>
 												</label>
 											</form>
 										</div>
-									</div>
-									<%#<div class="control is-spaced">
+									</div>%>
+									<div class="control is-spaced">
 										<div class="control-left">
 											<div class="label">Logo</div>
 											<small class="tip">The logo will be utilized for email communications and branding.</small>
@@ -415,17 +441,17 @@
 										<div class="control-right">
 											<figure class="image listing-img">
 												<button id="logo" tabindex="0" class="premium-input delete delete-image on-img"></button>
-												<img data-default-img="https://placeholdit.imgix.net/~text?txtsize=20&txt=NO%20LOGO&w=96&h=64" id="logo-image" alt="Image not found" src="">
+												<img id="logo-image" class="image-upload" data-default-img="https://placeholdit.imgix.net/~text?txtsize=20&txt=NO%20LOGO&w=96&h=64" alt="Image not found" src="">
 											</figure>
 											<form class="drop-form-file" method="post" enctype="multipart/form-data">
 												<input tabindex="0" id="logo-image-input" data-name="logo" type="file" name="logo" accept="image/png, image/gif, image/jpeg" class="premium-input changeable-input input-file">
-												<label for="logo-image-input" class="premium-input button is-small no-shadow is-fullwidth">
+												<label for="logo-image-input" class="upload-label premium-input button is-small no-shadow is-fullwidth">
 													<i class="fa fa-upload" aria-hidden="true"></i>
 													<p data-default-name="Logo" id="logo-image-label" class="file-label">Upload</p>
 												</label>
 											</form>
 										</div>
-									</div>%>
+									</div>
 									<div class="control is-spaced">
 										<div class="control-left">
 											<label class="label">Traffic Module</label>

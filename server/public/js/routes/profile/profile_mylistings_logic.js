@@ -528,10 +528,12 @@ function editRowPurchased(listing_info){
     $("#example-domain-name").css("color", listing_info.primary_color);
     $("#example-button-primary, #example-rent-price-tag, #example-buy-price-tag").css({
       "background-color" : listing_info.primary_color,
+      "border-color" : listing_info.primary_color,
       "color" : calculateLuminance(listing_info.primary_color)
     });
     $("#example-button-accent").css({
       "background-color" : listing_info.secondary_color,
+      "border-color" : listing_info.secondary_color,
       "color" : calculateLuminance(listing_info.secondary_color)
     });
     $("#example-link-info").css("color", listing_info.tertiary_color);
@@ -550,24 +552,43 @@ function editRowPurchased(listing_info){
   }
   function updateBackground(listing_info){
     var background_image = (listing_info.background_image == null || listing_info.background_image == undefined || listing_info.background_image == "") ? "https://placeholdit.imgix.net/~text?txtsize=20&txt=NO%20IMG&w=96&h=64" : listing_info.background_image;
-    $("#background-image").attr('src', background_image).off().on("error", function() {
-      $(this).attr("src", "https://placeholdit.imgix.net/~text?txtsize=20&txt=LOADING...%20&w=96&h=64");
-    });
 
+    //remove any input values on upload forms
+    $("#background-image-input").val("");
+    $("#background-link-input").val(listing_info.background_image);
+    $("#background-link-refresh").removeClass('is-primary').addClass('is-disabled');
+
+    //background image of preview
+    if (listing_info.background_image != null && listing_info.background_image != undefined && listing_info.background_image != ""){
+      $("#example-wrapper").css({'background-image' : "url(" + background_image + ")"});
+    }
+    else {
+      $("#example-wrapper").css('background-image', "");
+    }
+
+    //background color
     var minicolor_options = {
       letterCase: "uppercase",
       swatches: ["#FFFFFF", "#E5E5E5", "#B2B2B2", "#7F7F7F", "#666666", "#222222", "#000000"]
     }
     $("#background-color-input").val(listing_info.background_color).minicolors("destroy").minicolors(minicolor_options);
-
-    //update the preview
-    $("#example-wrapper").css("background-color", listing_info.background_color);
+    $("#example-wrapper").css({"background-color" : listing_info.background_color});
   }
   function updateLogo(listing_info){
-    var logo = (listing_info.logo == null || listing_info.logo == undefined || listing_info.logo == "") ? "/images/dh-assets/flat-logo/dh-flat-logo-primary.png" : listing_info.logo;
+    //logo depending on premium user or not
+    if (user.stripe_subscription_id){
+      var logo = (listing_info.logo == null || listing_info.logo == undefined || listing_info.logo == "") ? "https://placeholdit.imgix.net/~text?txtsize=20&txt=NO%20LOGO&w=96&h=64" : listing_info.logo;
+    }
+    else {
+      var logo = (listing_info.logo == null || listing_info.logo == undefined || listing_info.logo == "") ? "/images/dh-assets/flat-logo/dh-flat-logo-primary.png" : listing_info.logo;
+    }
     $("#logo-image").attr('src', logo).off().on("error", function() {
       $(this).attr("src", "/images/dh-assets/flat-logo/dh-flat-logo-primary.png");
     });
+
+    //remove any input values on upload forms
+    $("#logo-image-input").val("").data("deleted", false);
+    $("#logo-image-label").text("Upload");
   }
   function updateModules(listing_info){
     checkBox(listing_info.history_module, $("#history-module-input"));
@@ -975,6 +996,7 @@ function editRowPurchased(listing_info){
     //load theme buttons
     loadThemeHandler();
 
+    //allow rentals checkbox
     $("#rentable-input").on("change", function(){
       updateRentalInputsDisabled($(this).val());
     });
@@ -988,6 +1010,7 @@ function editRowPurchased(listing_info){
     $("#primary-color-input").on("input", function(){
       $("#example-button-primary, #example-rent-price-tag, #example-buy-price-tag").css({
         "background-color" : $(this).val(),
+        "border-color" : $(this).val(),
         "color" : calculateLuminance($(this).val())
       });
       $("#example-domain-name").css("color", $(this).val());
@@ -997,6 +1020,7 @@ function editRowPurchased(listing_info){
     $("#secondary-color-input").on("input", function(){
       $("#example-button-accent").css({
         "background-color" : $(this).val(),
+        "border-color" : $(this).val(),
         "color" : calculateLuminance($(this).val())
       });
     });
@@ -1016,6 +1040,25 @@ function editRowPurchased(listing_info){
       $("#example-wrapper").css("background-color", $(this).val());
     });
 
+    //remove uploading data and any uploaded images if typing the link
+    $("#background-link-input").on("input", function(){
+      $(this).data("uploading", false);
+      $("#background-image-input").val("");
+      var background_compare = (listing_info.background_image == null || listing_info.background_image == undefined) ? "" : listing_info.background_image;
+      if ($(this).val() != background_compare){
+        $("#background-link-refresh").addClass('is-primary').removeClass('is-disabled');
+      }
+      else {
+        $("#background-link-refresh").removeClass('is-primary').addClass('is-disabled');
+      }
+    });
+
+    //refresh background image (for preview)
+    $("#background-link-refresh").off().on("click", function(){
+      $("#background-link-refresh").removeClass('is-primary').addClass('is-disabled');
+      $("#example-wrapper").css({'background-image' : "url(" + $("#background-link-input").val() + ")"});
+    });
+
     //delete images
     $(".delete-image").off().on("click", function(){
       var image_id = $(this).attr('id');
@@ -1029,7 +1072,7 @@ function editRowPurchased(listing_info){
         temp_img.attr("src", temp_img.data("default-img"));
         temp_input.data("deleted", true);
         temp_input.val("");
-        // temp_label.text(temp_label.data("default-name"));
+        $("#example-wrapper").css("background-image", "");
       }
       changedValue(temp_input, listing_info);
     });
@@ -1045,6 +1088,7 @@ function editRowPurchased(listing_info){
 //helper function to bind to inputs to listen for any changes from existing listing info
 function changedValue(input_elem, listing_info){
   var name_of_attr = input_elem.data("name");
+  var listing_info_comparison = (name_of_attr == "background_image_link") ? listing_info["background_image"] : listing_info[name_of_attr];
 
   //clear any existing messages
   errorMessage(false);
@@ -1054,12 +1098,23 @@ function changedValue(input_elem, listing_info){
   var cancel_button = $("#cancel-changes-button");
 
   //only change if the value changed from existing or if image exists
-  if ((name_of_attr != "background_image" && name_of_attr != "logo" && input_elem.val() != listing_info[name_of_attr])
+  if ((name_of_attr != "background_image" && name_of_attr != "logo" && input_elem.val() != listing_info_comparison)
   || ((name_of_attr == "background_image" || name_of_attr == "logo") && input_elem.val())
   || ((name_of_attr == "background_image" || name_of_attr == "logo") && input_elem.data("deleted"))){
     input_elem.data('changed', true);
     save_button.removeClass("is-disabled");
     cancel_button.removeClass("is-hidden");
+
+    //changing background image
+    if (name_of_attr == "background_image" && input_elem[0].files[0]){
+      $("#background-link-input").data("uploading", true).val("Now uploading - " + input_elem[0].files[0].name);
+      $("#example-wrapper").css("background-image", "url(https://placeholdit.imgix.net/~text?txtsize=50&txt=NOW%20UPLOADING&w=1000&h=250)");
+    }
+    else if (name_of_attr == "logo" && input_elem[0].files[0]){
+      var clipped_file_name = (input_elem[0].files.length && input_elem[0].files[0].name.length > 7) ? input_elem[0].files[0].name.substr(0,7) : input_elem[0].files[0].name;
+      $("#logo-image").attr("src", "https://placeholdit.imgix.net/~text?txtsize=15&txt=" + clipped_file_name + "&w=96&h=64&bg=3cbc8d&txtclr=FFF");
+      $("#logo-image-label").text(clipped_file_name);
+    }
   }
   //hide the cancel, disable the save
   else {
@@ -1088,6 +1143,9 @@ function cancelListingChanges(){
 
 //function to submit status change
 function submitStatusChange(listing_info){
+  //take off the event handler for now
+  $("#status-color").off().addClass('is-loading');
+
   //clear any existing messages
   errorMessage(false);
   successMessage(false);
@@ -1104,6 +1162,13 @@ function submitStatusChange(listing_info){
     contentType: false,
     processData: false
   }, 'json').done(function(data){
+    //reattach status binding
+    $("#status-color").removeClass("is-loading").on("click", function(e){
+      var new_status = ($("#status-input").val() == "1") ? 0 : 1;
+      updateStatus({ status : new_status });
+      submitStatusChange(listing_info);
+    });
+
     if (data.state == "success"){
       var active_inactive_text = ($("#status-input").val() == "0") ? "inactive" : "active";
       successMessage("Listing has been set to " + active_inactive_text + "!");
@@ -1156,22 +1221,27 @@ function submitListingChanges(){
     var input_name = $(this).data("name");
     var input_val = (input_name == "background_image" || input_name == "logo") ? $(this)[0].files[0] : $(this).val();
 
-    //if background image is being deleted
-    if (input_name == "background_image" && $(this).data("deleted")){
-      var input_val = "";
-      $(this).data('deleted', false);
-    }
-
     //if logo is being deleted
     if (input_name == "logo" && $(this).data("deleted")){
       var input_val = "";
       $(this).data('deleted', false);
     }
 
+    //if changing listing image link
+    if (input_name == "background_image_link"){
+      var listing_comparison = current_listing["background_image"];
+    }
+    else {
+      var listing_comparison = (current_listing[input_name] == null || current_listing[input_name] == undefined) ? "" : current_listing[input_name];
+    }
+
     //if null or undefined
-    current_listing[input_name] = (current_listing[input_name] == null || current_listing[input_name] == undefined) ? "" : current_listing[input_name];
-    if (input_val != current_listing[input_name]){
-      formData.append(input_name, input_val);
+    if (input_val != listing_comparison){
+      if (input_name == "background_image_link" && $(this).data("uploading")){
+      }
+      else {
+        formData.append(input_name, input_val);
+      }
     }
   });
 
@@ -1191,15 +1261,7 @@ function submitListingChanges(){
     if (data.state == "success"){
       successMessage("Successfully updated this listing!");
       updateCurrentListing(data.listings);
-
-      //update images if necessary
-      if (data.new_background_image){
-        updateBackground({ background_image : data.new_background_image});
-      }
-      if (data.new_logo){
-        updateBackground({ logo : data.new_logo});
-      }
-
+      updateBackground(current_listing);
       refreshSubmitButtons();
 
       (function(listing_info){
@@ -1225,6 +1287,7 @@ function errorMessage(message){
     $("#listing-msg-error-text").text(message);
   }
   else {
+    refreshSubmitButtons();
     $("#listing-msg-error").addClass('is-hidden').removeClass("is-active");
   }
 }
