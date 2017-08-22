@@ -1,5 +1,6 @@
 <script type="text/javascript">
 var compare = <% if(typeof compare != "undefined"){ %><%-JSON.stringify(compare)%><% }else{ %>""<% } %>;
+var fonts = <% if(typeof fonts != "undefined"){ %><%-JSON.stringify(fonts)%><% }else{ %>""<% } %>;
 </script>
 <link rel="stylesheet" href="/css/lib/jquery.minicolors.css" type="text/css" />
 <script src="/js/jquery/jquery.minicolors.min.js" type="text/javascript"></script>
@@ -134,12 +135,10 @@ var compare = <% if(typeof compare != "undefined"){ %><%-JSON.stringify(compare)
           <p class="control has-icon">
             <span class="select is-fullwidth">
               <select tabindex="0" id="font-name-input" class="theme-changeable-input">
-                <option selected default value="Lato">Lato</option>
-                <option value="Times New Roman">Times New Roman</option>
-                <option value="Helvetica">Helvetica</option>
-                <option value="Courier">Courier</option>
-                <option value="Verdana">Verdana</option>
-                <option value="Tahoma">Tahoma</option>
+                <%# make all the categories %>
+                <% for (var x = 0; x < fonts.length; x++){ %>
+                  <option value="<%= fonts[x] %>"><%= fonts[x] %></option>
+                <% } %>
               </select>
             </span>
             <i class="fa fa-font"></i>

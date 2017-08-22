@@ -1,4 +1,5 @@
 var Categories = require("../../lib/categories.js");
+var Fonts = require("../../lib/fonts.js");
 var bodyParser = require('body-parser')
 var jsonParser = bodyParser.json()
 var urlencodedParser = bodyParser.urlencoded({ extended: false })
@@ -446,7 +447,8 @@ module.exports = {
       message: Auth.messageReset(req),
       user: req.user,
       listings: req.user.listings || false,
-      categories: Categories.all()
+      categories: Categories.all(),
+      fonts: Fonts.all()
     });
   },
 
