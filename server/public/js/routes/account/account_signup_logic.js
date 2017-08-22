@@ -2,7 +2,7 @@ $(document).ready(function() {
 
   //prevent space in username
   $("input").keydown(function(e) {
-    $("#message").text("Create A New Account");
+    $("#message").text("Create a new account below.");
 
     if (e.keyCode == 32){
       e.preventDefault();

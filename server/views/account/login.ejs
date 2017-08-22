@@ -5,7 +5,6 @@
     <link rel="stylesheet" type="text/css" href="/css/min/login_signup.min.css" />
     <%- include("../templates/head_links.ejs"); %>
   </head>
-
   <body>
     <div class="content has-text-centered clear-nav">
       <h2 class="margin-bottom-5 has-text-centered">
@@ -13,13 +12,13 @@
               <div class='is-inline-block flat-logo is-primary'></div>
           </a>
       </h2>
+      <p id="message" class="has-text-centered margin-top-0 margin-bottom-15">
         <% if (typeof message != "undefined") {%>
-            <p id="message" class="is-danger has-text-centered margin-top-0 margin-bottom-15"><%= message %></p>
+          <%= message %>
         <% } else { %>
-            <p>
-              Please log in below.
-            </p>
+          Please log in below.
         <% } %>
+      </p>
     </div>
 
     <div id="login-form" class="account-form">
@@ -35,8 +34,13 @@
           <i class="fa fa-lock"></i>
         </p>
         <p class="control">
-          <button id="login-button" class="login-button button is-primary is-stylish is-fullwidth">
-            Log In
+          <button id="login-button" class="login-button button is-primary has-icon is-stylish is-fullwidth">
+            <span class="icon is-small">
+              <i class="fa fa-sign-in"></i>
+            </span>
+            <span>
+              Log In
+            </span>
           </button>
         </p>
         <div class="control is-spaced">
@@ -49,10 +53,12 @@
           </p>
         </div>
         <div class="control has-text-centered">
-          <p>
+          <small>
             Don't have an account?
-          </p>
-          <a tabindex="0" class="is-primary" href="/signup">Sign Up</a>
+          </small>
+          <small class="is-block">
+            <a tabindex="0" class="is-primary" href="/signup">Sign Up</a>
+          </small>
         </div>
       </form>
     </div>
