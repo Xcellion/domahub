@@ -326,7 +326,7 @@ module.exports = {
           error.handler(req, res, 'Wrong file type!', "json");
         }
         else if (err.message == "NOT_PREMIUM"){
-          error.handler(req, res, "You must have a Premium account to change the background image!", "json");
+          error.handler(req, res, "not-premium", "json");
         }
         else {
           console.log(err);
@@ -622,7 +622,7 @@ module.exports = {
         req.body.traffic_module ||
         req.body.info_module
       ){
-        error.handler(req, res, "You can only edit a listing design after upgrading to a Premium account!", "json");
+        error.handler(req, res, "not-premium", "json");
       }
       else {
         next();

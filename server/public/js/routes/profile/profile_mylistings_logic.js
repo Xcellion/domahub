@@ -506,13 +506,37 @@ function editRowPurchased(listing_info){
     //if premium, remove the notification / disabled inputs
     if (user.stripe_subscription_id){
       $("#premium-only-notification").addClass("is-hidden");
-      $(".blackscreen").addClass("is-hidden");
       $(".premium-input").removeClass("is-disabled");
+      $("#premium-blackscreen").addClass("is-hidden");
     }
     else {
       $("#premium-only-notification").removeClass("is-hidden");
-      $(".blackscreen").removeClass("is-hidden");
       $(".premium-input").addClass("is-disabled");
+
+      //premium blackscreen exists (not deleted by user)
+      if ($("#premium-blackscreen").length != 0){
+        $("#premium-blackscreen").removeClass("is-hidden");
+      }
+      else {
+        $("#design-tab-drop").prepend('<div id="premium-blackscreen" class="blackscreen"> \
+          <div id="premium-only-notification" class="content has-text-centered"> \
+            <p> \
+              Please upgrade to a Premium account to customize the look and feel of your landing page! \
+            </p> \
+            <a href="/#pricing" class="is-primary"> \
+              What is a Premium account? \
+            </a> \
+            <div class="margin-top-15 control has-text-centered"> \
+              <a href="/profile/settings#premium" class="button is-stylish no-shadow is-primary is-small"> \
+                <span class="icon is-small"> \
+                  <i class="fa fa-diamond"></i> \
+                </span> \
+                <span>Upgrade</span> \
+              </a> \
+            </div> \
+          </div> \
+        </div>');
+      }
     }
   }
   function updateColorScheme(listing_info){
@@ -1304,14 +1328,19 @@ function submitListingChanges(){
 
 //helper function to display/hide error messages per listing
 function errorMessage(message){
-  if (message && message != "nothing-changed"){
-    successMessage(false);
+  successMessage(false);
+  if (message && message == "not-premium"){
+    updatePremiumNotification();
     $("#listing-msg-error").removeClass('is-hidden').addClass("is-active");
-    $("#listing-msg-error-text").text(message);
+    $("#listing-msg-error-text").text("You cannot edit the listing design without a Premium Account!");
   }
-  else {
+  else if (message && message == "nothing-changed"){
     refreshSubmitButtons();
     $("#listing-msg-error").addClass('is-hidden').removeClass("is-active");
+  }
+  else if (message){
+    $("#listing-msg-error").removeClass('is-hidden').addClass("is-active");
+    $("#listing-msg-error-text").text(message);
   }
 }
 
