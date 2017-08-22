@@ -1,5 +1,6 @@
 var node_env = process.env.NODE_ENV || 'dev';   //dev or prod bool
 var Categories = require("../../lib/categories.js");
+var Fonts = require("../../lib/fonts.js");
 var default_descriptions = require("../../lib/default_descriptions.js");
 
 var request = require("request");
@@ -340,7 +341,7 @@ module.exports = {
 
   //function to check the user image and upload to imgur
   checkListingImage : function(req, res, next){
-    if (req.files && (req.files.background_image || req.files.logo) && !req.body.background_image_link){
+    if (req.files && (req.files.background_image || req.files.logo) && !req.body.background_image_link && !req.body.logo_image_link){
 
       //custom image upload promise function
       var q_function = function(formData){
@@ -387,6 +388,14 @@ module.exports = {
             req.session.new_listing_info[results[y].value.image_type] = results[y].value.imgur_link;
           }
         }
+
+        //removing existing image(s) intentionally
+        if (req.body.background_image == "" || req.body.background_image_link == ""){
+          req.session.new_listing_info.background_image = null;
+        }
+        if (req.body.logo == "" || req.body.logo_image_link == ""){
+          req.session.new_listing_info.logo = null;
+        }
         next();
       });
     }
@@ -397,7 +406,7 @@ module.exports = {
       if (req.body.background_image == "" || req.body.background_image_link == ""){
         req.session.new_listing_info.background_image = null;
       }
-      if (req.body.logo == ""){
+      if (req.body.logo == "" || req.body.logo_image_link == ""){
         req.session.new_listing_info.logo = null;
       }
       next();
@@ -541,6 +550,10 @@ module.exports = {
       else if (req.body.font_color && !validator.isHexColor(req.body.font_color)){
         error.handler(req, res, "Invalid font color!", "json");
       }
+      //invalid font name
+      else if (req.body.font_name && Fonts.all().indexOf(req.body.font_name) == -1){
+        error.handler(req, res, "Invalid font name!", "json");
+      }
       //invalid background color
       else if (req.body.background_color && !validator.isHexColor(req.body.background_color)){
         error.handler(req, res, "Invalid background color!", "json");
@@ -548,6 +561,10 @@ module.exports = {
       //invalid background link
       else if (req.body.background_image_link && !validator.isURL(req.body.background_image_link)){
         error.handler(req, res, "Invalid background URL!", "json");
+      }
+      //invalid logo link
+      else if (req.body.logo_image_link && !validator.isURL(req.body.logo_image_link)){
+        error.handler(req, res, "Invalid logo URL!", "json");
       }
       //invalid history module
       else if (req.body.history_module && (history_module != 0 && history_module != 1)){
@@ -583,6 +600,11 @@ module.exports = {
           req.session.new_listing_info.background_image = req.body.background_image_link;
         }
 
+        //posted a URL for background image, not upload
+        if (req.body.logo_image_link){
+          req.session.new_listing_info.logo = req.body.logo_image_link;
+        }
+
         next();
       }
     }
@@ -594,11 +616,12 @@ module.exports = {
         req.body.font_name ||
         req.body.font_color ||
         req.body.background_color ||
+        req.body.background_image_link ||
+        req.body.logo_image_link ||
         req.body.history_module ||
         req.body.traffic_module ||
         req.body.info_module
       ){
-        console.log(req.body);
         error.handler(req, res, "You can only edit a listing design after upgrading to a Premium account!", "json");
       }
       else {
