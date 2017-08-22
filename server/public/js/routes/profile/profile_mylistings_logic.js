@@ -1434,7 +1434,7 @@ function updateExistingDNS(a_records){
     if (temp_a_records.indexOf("208.68.37.82") != -1){
       temp_a_records.splice(temp_a_records.indexOf("208.68.37.82"), 1);
       $("#existing_a_record_clone").removeClass('is-hidden').find(".existing_data").text("208.68.37.82");
-      $("#existing_a_record_clone").find(".next_step").html("<span class='is-success'>Done!</span>");
+      $("#existing_a_record_clone").find(".next_step").html("<span class='is-success'>Done! Press the button below!</span>");
 
       //prevent refreshing of table
       $("#refresh-dns-button").off().addClass('is-disabled');
@@ -1568,9 +1568,9 @@ function multiVerify(verify_button){
     }
   }).done(function(data){
 
-    verify_button.on("click", function(){
+    verify_button.removeClass('is-loading').blur().on("click", function(){
       multiVerify(verify_button);
-    }).removeClass('is-loading');
+    });
 
     //deselect all rows
     selectAllRows($("#select-all"), true);
@@ -1594,7 +1594,7 @@ function multiVerify(verify_button){
     //success rows
     if (data.state == "success"){
       verificationHandler(data);
-      successMessage("Successfully verified listings!");
+      successMessage("Successfully verified " + ids.length + " listings!");
     }
   });
 }
@@ -1607,37 +1607,41 @@ function verificationHandler(data){
 
 //function to delete multiple rows
 function multiDelete(delete_button){
-  delete_button.off();
+  //confirm first
+  if (!delete_button.data("confirm")){
+    delete_button.data("confirm", true).find("#multi-delete-text").text("You sure?");
+  }
+  else {
+    delete_button.addClass('is-loading').off();
 
-  var deletion_ids = [];
-  var selected_rows = $(".table-row").filter(function(){
-    if ($(this).hasClass('is-selected')){
-      deletion_ids.push($(this).data('id'));
-      return true;
-    }
-  });
-
-  $.ajax({
-    url: "/profile/mylistings/delete",
-    method: "POST",
-    data: {
-      ids: deletion_ids
-    }
-  }).done(function(data){
-    delete_button.on("click", function(){
-      multiDelete(delete_button);
+    var deletion_ids = [];
+    var selected_rows = $(".table-row").filter(function(){
+      if ($(this).hasClass('is-selected')){
+        deletion_ids.push($(this).data('id'));
+        return true;
+      }
     });
 
-    //deselect all rows
-    selectAllRows($("#select-all"), true);
+    $.ajax({
+      url: "/profile/mylistings/delete",
+      method: "POST",
+      data: {
+        ids: deletion_ids
+      }
+    }).done(function(data){
+      //re-add handler, re-add confirmation
+      delete_button.removeClass('is-loading').blur().data("confirm", false).on("click", function(){
+        multiDelete(delete_button);
+      }).find("#multi-delete-text").text("Delete")
 
-    if (data.state == "success"){
-      deletionHandler(data.rows, selected_rows);
-    }
-    else {
-      console.log(data);
-    }
-  });
+      //deselect all rows
+      selectAllRows($("#select-all"), true);
+      if (data.state == "success"){
+        deletionHandler(data.rows, selected_rows);
+        successMessage("Successfully deleted " + deletion_ids.length + " listings!");
+      }
+    });
+  }
 }
 
 //function to handle post-deletion of multi listings
