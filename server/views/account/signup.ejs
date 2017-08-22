@@ -8,9 +8,9 @@
   <body>
   	<div class="content has-text-centered clear-nav">
   		<h2 class="margin-bottom-5 has-text-centered">
-          <a id="nav-logo" class='is-inline-block flat-logo is-primary' tabindex="0" title="Home" href="/">
-              <div class='is-inline-block flat-logo is-primary'></div>
-          </a>
+        <a id="nav-logo" class='is-inline-block flat-logo is-primary' tabindex="0" title="Home" href="/">
+          <div class='is-inline-block flat-logo is-primary'></div>
+        </a>
       </h2>
       <p id="message" class="has-text-centered margin-top-0 margin-bottom-15">
     		<% if (typeof message != "undefined") {%>
@@ -21,56 +21,56 @@
       </p>
   	</div>
 
-	<div id="signup-form" class="account-form">
-		<form id="target" method="post" autocomplete="off">
-			<label class="label">Email</label>
+	  <div id="signup-form" class="account-form">
+  		<form id="target" method="post" autocomplete="off">
+  			<label class="label">Email</label>
 				<div class="control has-icon has-icon-right">
 					<input required class="input is-medium" autofocus name="email" type="email" id="email-input" spellcheck="false" value="" />
 					<i class="fa fa-check is-hidden is-success"></i>
 					<i class="fa fa-warning is-hidden is-danger"></i>
 				</div>
-			<label class="label">Username</label>
+  			<label class="label">Username</label>
 				<div class="control has-icon has-icon-right">
 					<input pattern=".{3,70}" title="Username must be between 3 and 70 characters!" required class="input is-medium" name="username" type="text" id="username-input" spellcheck="false" value="" />
 					<i class="fa fa-check is-hidden is-success"></i>
 					<i class="fa fa-warning is-hidden is-danger"></i>
 				</div>
-			<label class="label">Password (at least 6 characters)</label>
+  			<label class="label">Password (at least 6 characters)</label>
 				<div class="control has-icon has-icon-right">
 					<input pattern=".{6,}" title="Password must be at least 6 characters!" required class="input is-medium" name="password" type="password" id="pw-input" autocomplete="new-password" value="" />
 					<i class="fa fa-check is-hidden is-success"></i>
 					<i class="fa fa-warning is-hidden is-danger"></i>
 				</div>
-			<label class="label">Confirm Password</label>
+  			<label class="label">Confirm Password</label>
 				<div class="control has-icon has-icon-right">
 					<input pattern=".{6,}" title="Password must be at least 6 characters!" required class="input is-medium" name="verify-pw" type="password" id="verify-pw" value="" />
 					<i class="fa fa-check is-hidden is-success"></i>
 					<i class="fa fa-warning is-hidden is-danger"></i>
 				</div>
-			<div class="g-recaptcha" data-sitekey="6LdwpykTAAAAAEaTl3u4-xDCSqH7-Aj-YDImCQXI"></div>
-			<div class="control has-text-centered">
-				<button id="signup-login-button" class="login-button button has-icon is-primary is-stylish is-fullwidth margin-bottom-10">
-          <span class="icon is-small"><i class="fa fa-user-circle"></i></span>
-          <span>Create Account</span>
-				</button>
-				<small>By signing up, you agree to our
-					<a tabindex="0"  href="/terms" class="is-primary">Terms of Service</a> and
-					<a tabindex="0"  href="/privacy" class="is-primary">Privacy Policy</a>.</small>
-			</div>
-			<div class="control has-text-centered">
-				<small>
-					Already have an account?
-				</small>
-				<small class="is-block">
-					<a tabindex="0" class="is-primary" href="/login">Log In</a>
-				</small>
-			</div>
-		</form>
-	</div>
+  			<div class="g-recaptcha" data-sitekey="6LdwpykTAAAAAEaTl3u4-xDCSqH7-Aj-YDImCQXI"></div>
+  			<div class="control has-text-centered">
+  				<button id="signup-login-button" class="login-button button has-icon is-primary is-stylish is-fullwidth margin-bottom-10">
+            <span class="icon is-small"><i class="fa fa-user-circle"></i></span>
+            <span>Create Account</span>
+  				</button>
+  				<small>By signing up, you agree to our
+  					<a tabindex="0"  href="/terms" class="is-primary">Terms of Service</a> and
+  					<a tabindex="0"  href="/privacy" class="is-primary">Privacy Policy</a>.</small>
+  			</div>
+  			<div class="control has-text-centered">
+  				<small>
+  					Already have an account?
+  				</small>
+  				<small class="is-block">
+  					<a tabindex="0" class="is-primary" href="/login">Log In</a>
+  				</small>
+  			</div>
+  		</form>
+    </div>
 
-  <%- include("../templates/js_scripts"); %>
-	<script src='https://www.google.com/recaptcha/api.js'></script>
-  <script src="/js/routes/account/account_signup_logic.js" type="text/javascript"></script>
-</body>
+    <%- include("../templates/js_scripts"); %>
+	  <script src='https://www.google.com/recaptcha/api.js'></script>
+    <script src="/js/routes/account/account_signup_logic.js" type="text/javascript"></script>
+  </body>
 
 </html>
