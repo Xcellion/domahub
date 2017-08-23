@@ -210,7 +210,8 @@ data_model.prototype.getListingOffers = function(domain_name, callback){
         stats_contact_history.phone, \
         stats_contact_history.offer, \
         stats_contact_history.message, \
-        stats_contact_history.accepted, \
+        stats_contact_history.response, \
+        IFNULL(stats_contact_history.accepted, -1) as accepted, \
         stats_contact_history.bin \
       FROM stats_contact_history \
       INNER JOIN listings \

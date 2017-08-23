@@ -623,7 +623,7 @@ function editRowPurchased(listing_info){
   //function to show loading offers
   function showLoadingOffers(){
     $("#loading-offers").removeClass('is-hidden');
-    $("#accepted-offer, #deposited-offer").addClass('is-hidden');
+    $(".hidden-while-loading-offers").addClass('is-hidden');
   }
 
   //function to get offers on a domain
@@ -665,13 +665,18 @@ function editRowPurchased(listing_info){
       $("#offers-wrapper").empty();
 
       //show rejected offers button
-      $("#show-rejected-offers").off().on('click', function(){
+      $("#show-rejected-offers").removeClass('is-primary').off().on('click', function(){
         $(".rejected-offer").toggleClass('is-hidden');
         $(this).toggleClass('is-primary').find(".fa").toggleClass('fa-toggle-on fa-toggle-off');
-      });
+
+        //hide no offers if there are any offers (that arent rejected)
+        if ($(".offer-row:not(.rejected-offer, #offer-clone)").length == 0){
+          $("#no-offers").toggleClass('is-hidden');
+        }
+      }).find(".fa").removeClass('fa-toggle-on').addClass('fa-toggle-off');
 
       //sort offers
-      $("#offers-sort-select").off().on("change", function(){
+      $("#offers-sort-select").val("timestamp_desc").off().on("change", function(){
         var sort_value = $(this).val().split("_");
         var sort_by = sort_value[0];
         var sort_order = sort_value[1];
@@ -682,7 +687,7 @@ function editRowPurchased(listing_info){
             return $(a).data("offer-data")[sort_by] > $(b).data("offer-data")[sort_by];
           });
         }
-        else if (sort_order == "desc"){
+        else {
           offers_to_sort.sort(function(a,b){
             return $(a).data("offer-data")[sort_by] < $(b).data("offer-data")[sort_by];
           });
@@ -690,7 +695,7 @@ function editRowPurchased(listing_info){
 
         //re-order and append to parent
         for (var i = 0; i < offers_to_sort.length; i++) {
-            offers_to_sort[i].parentNode.appendChild(offers_to_sort[i]);
+          offers_to_sort[i].parentNode.appendChild(offers_to_sort[i]);
         }
       });
 
@@ -702,9 +707,8 @@ function editRowPurchased(listing_info){
         $("#deposited-offer").addClass('is-hidden');
       }
       else {
-        $("#no-offers").addClass('is-hidden');
+        //show toolbar for sort
         $("#offers-toolbar").removeClass('is-hidden');
-        $("#offer-modal-domain").text(listing_info.domain_name);
 
         //clone offers
         for (var x = 0; x < listing_info.offers.length; x++){
@@ -727,20 +731,33 @@ function editRowPurchased(listing_info){
             editOfferModal($(this).find(".offer-modal-button").data("offer"), listing_info);
           });
 
-          //accepted offer!
+          //accepted an offer!
           if (listing_info.offers[x].accepted == 1){
+            $("#offers-toolbar").addClass('is-hidden');
             cloned_offer_row.find(".offer-accepted").text('Accepted - ');
             $("#accepted-offer").data("offer_id", listing_info.offers[x].id);
           }
           else if (listing_info.offers[x].accepted == 0){
             cloned_offer_row.find(".offer-accepted").text('Rejected - ');
-            cloned_offer_row.addClass('rejected-offer is-hidden');
+            cloned_offer_row.addClass('rejected-offer is-hidden unaccepted-offer');
+          }
+          else {
+            cloned_offer_row.addClass('unaccepted-offer');
           }
           $("#offers-wrapper").prepend(cloned_offer_row);
         }
 
+        //hide no offers if there are any offers (that arent rejected)
+        if ($(".offer-row:not(.rejected-offer, #offer-clone)").length){
+          $("#no-offers").addClass('is-hidden');
+        }
+        else {
+          $("#no-offers").removeClass('is-hidden');
+        }
+
         //money has been deposited!
         if (listing_info.deposited == 1){
+          $("#offers-toolbar").addClass('is-hidden');
           $('.unaccepted-offer').addClass('is-hidden');
           $("#deposited-offer").removeClass('is-hidden');
         }
@@ -776,11 +793,20 @@ function editRowPurchased(listing_info){
     $("#offer-modal-phone").text(offer.phone);
     $("#offer-modal-message").text(offer.message);
 
-    //this offer was accepted! hide the buttons
-    if (offer.accepted){
+    //this offer was accepted or rejected! hide the buttons
+    if (offer.accepted == 1 || offer.accepted == 0){
       $("#offer-modal-button-wrapper").addClass('is-hidden');
+      $("#offer-response-label").removeClass('is-hidden');
+      $("#offer-response").val((offer.response) ? offer.response : "No response.").addClass('is-disabled');
+      var accept_or_reject_text = (offer.accepted == 1) ? "Accepted" : "Rejected";
+      $("#offer-modal-domain").text(accept_or_reject_text + " offer for " + listing_info.domain_name);
     }
+    //not yet accepted
     else {
+      $("#offer-modal-button-wrapper").removeClass('is-hidden');
+      $("#offer-modal-domain").text("Offer for " + listing_info.domain_name);
+      $("#offer-response-label").addClass('is-hidden');
+      $("#offer-response").val("").removeClass('is-disabled');
       $("#accept_button").off().on("click", function(){
         acceptOrRejectOffer(true, $(this), listing_info, offer.id);
       });

@@ -47,8 +47,8 @@
 									<select id="sort-select" tabindex="0">
 										<option selected value="id-asc">Date Created (Newest)</option>
 										<option value="id-desc">Date Created (Oldest)</option>
-										<option value="domain_name-asc">Name (A - Z)</option>
-										<option value="domain_name-desc">Name (Z - A)</option>
+										<option value="domain_name-asc">Domain Name (A - Z)</option>
+										<option value="domain_name-desc">Domain Name (Z - A)</option>
 										<option value="min_price-asc">Min. Price (Low - High)</option>
 										<option value="min_price-desc">Min. Price (High - Low)</option>
 									</select>
@@ -502,7 +502,7 @@
 						      <div class="modal-container">
 										<div class="modal-content offer-popup">
 											<div class="content has-text-centered">
-								        <h3 class="is-bold">Offer for <span id="offer-modal-domain"></span></h3>
+								        <h3 class="is-bold" id="offer-modal-domain"></h3>
 								        <small>Received on <span id="offer-modal-timestamp"></span></small>
 								      </div>
 											<div class="content margin-bottom-0">
@@ -522,6 +522,9 @@
 														<p id="offer-modal-message" class="offer-msg"></p>
 							            </li>
 								        </ul>
+                        <ul id="offer-response-label" class="is-hidden">
+                          Your response:
+                        </ul>
                         <ul id="offer-response-wrapper">
                           <li>
                             <textarea id="offer-response" placeholder="You may include an optional response to the offerer." class='textarea'></textarea>
@@ -540,38 +543,12 @@
 									</div>
 								  <button class="modal-close"></button>
 								</div>
-                <div id="offers-toolbar" class="control is-grouped">
-                  <div class="control has-icon">
-                    <span class="select is-fullwidth">
-                      <select id="offers-sort-select" tabindex="0">
-                        <option selected value="timestamp_desc">Date Received (Newest)</option>
-                        <option value="timestamp_asc">Date Received (Oldest)</option>
-                        <option value="offer_desc">Price (High - Low)</option>
-                        <option value="offer_asc">Price (Low - High)</option>
-                        <option value="name_asc">Offerer Name (A - Z)</option>
-                        <option value="name_desc">Offerer Name (Z - A)</option>
-                      </select>
-                    </span>
-                    <i class="fa fa-sort"></i>
-                  </div>
-                  <div class="control">
-                    <a id="show-rejected-offers" class="button no-shadow is-outlined">
-                      <span class="icon is-small"><i class="fa fa-toggle-off"></i></span>
-                      <span class="button-text">Rejected Offers</span>
-                    </a>
-                  </div>
-                </div>
                 <div id="loading-offers" class="margin-top-20 content">
 									<p>
 										Now loading domain offers...
 									</p>
 								</div>
-								<div id="no-offers" class="content is-hidden">
-									<p>
-										You currently have no offers on this domain!
-									</p>
-								</div>
-                <div id="deposited-offer" class="has-border-bottom padding-bottom-15 is-hidden">
+                <div id="deposited-offer" class="hidden-while-loading-offers has-border-bottom padding-bottom-20 is-hidden">
                   <div class="content">
                     <h3>
                       Congratulations on selling your domain!
@@ -590,7 +567,7 @@
                     </p>
                   </div>
                 </div>
-                <div id="accepted-offer" class="has-border-bottom padding-bottom-15 is-hidden">
+                <div id="accepted-offer" class="hidden-while-loading-offers has-border-bottom padding-bottom-20 is-hidden">
                   <div class="content">
                     <h3>
                       I accepted the offer--what's next?
@@ -607,7 +584,35 @@
                     </p>
                   </div>
                 </div>
-								<div id="offers-wrapper">
+                <div id="offers-toolbar" class="hidden-while-loading-offers is-hidden control has-border-bottom padding-bottom-20 margin-bottom-0 is-grouped">
+                  <div class="control has-icon">
+                    <span class="select is-fullwidth">
+                      <select id="offers-sort-select" tabindex="0">
+                        <option selected value="timestamp_desc">Date Received (Newest)</option>
+                        <option value="timestamp_asc">Date Received (Oldest)</option>
+                        <option value="offer_desc">Price (High - Low)</option>
+                        <option value="offer_asc">Price (Low - High)</option>
+                        <option value="name_asc">Offerer Name (A - Z)</option>
+                        <option value="name_desc">Offerer Name (Z - A)</option>
+                        <option value="accepted_desc">Rejected / Accepted</option>
+                        <option value="accepted_asc">Accepted / Rejected</option>
+                      </select>
+                    </span>
+                    <i class="fa fa-sort"></i>
+                  </div>
+                  <div class="control">
+                    <a id="show-rejected-offers" class="button no-shadow is-outlined">
+                      <span class="icon is-small"><i class="fa fa-toggle-off"></i></span>
+                      <span class="button-text">Rejected Offers</span>
+                    </a>
+                  </div>
+                </div>
+                <div id="no-offers" class="hidden-while-loading-offers content margin-top-20 is-hidden">
+                  <p>
+                    You have no outstanding offers on this domain!
+                  </p>
+                </div>
+                <div id="offers-wrapper">
 
 								</div>
 								<div id="offer-clone" class="offer-row media is-hidden">
