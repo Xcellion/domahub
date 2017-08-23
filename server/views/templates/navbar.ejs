@@ -53,7 +53,10 @@
                 </p>
                 <p class="control">
                   <button id="drop-login-button" class="button is-primary is-stylish is-fullwidth">
-                    Log In
+                    <span class="icon is-small">
+                      <i class="fa fa-sign-in"></i>
+                    </span>
+                    <span>Log In</span>
                   </button>
                 </p>
                 <div class="control is-spaced">
@@ -62,7 +65,7 @@
     								<label for="remember-checkbox" tabindex="0">Remember Me</label>
     							</div>
                   <p class="control-right">
-                      <a class="forgot is-accent" href="/forgot">Forgot password?</a>
+                      <a class="forgot is-primary" href="/forgot">Forgot password?</a>
                   </p>
                 </div>
 
@@ -71,7 +74,7 @@
                   Don&#146;t have an account?
                 </p>
                 <div class="has-text-centered">
-                  <a class="signup is-accent" href="/signup">Sign Up Now</a>
+                  <a class="signup is-primary" href="/signup">Sign Up Now</a>
                 </div>
               </p> %>
               </form>
@@ -87,7 +90,7 @@
       <a class="nav-link" tabindex="0" title="Create Listing" href="/listings/create">Create Listings</a>
     </div>
     <div class="nav-item">
-      <a id="profile-button" tabindex="0" class="button is-transparent is-primary is-stylish is-small" title="Profile">
+      <a id="profile-button" tabindex="0" class="button is-inverted is-primary is-stylish is-small" title="Profile">
         <span><%= (user.username.length > 6) ? user.username.slice(0,6) + "..." : user.username %></span>
         <span class="icon">
           <i class="fa fa-angle-down"></i>
