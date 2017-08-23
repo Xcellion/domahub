@@ -18,36 +18,18 @@ $(document).ready(function(){
 
   //sorting
   $("#sort-select").on("change", function(){
-    var sort_by = $(this).val();
+    var sort_value = $(this).val().split("-");
+    var sort_by = sort_value[0];
+    var sort_order = sort_value[1];
 
-    //sort by date created
-    if (sort_by == "date"){
+    if (sort_order == "asc"){
       listings.sort(function(a,b){
-        return sortBy("id", true, a, b);
+        return a[sort_by] > b[sort_by];
       });
     }
-    //sort A to Z
-    else if (sort_by == "az"){
+    else if (sort_order == "desc"){
       listings.sort(function(a,b){
-        return sortBy("domain_name", true, a, b);
-      });
-    }
-    //sort Z to A
-    else if (sort_by == "za") {
-      listings.sort(function(a,b){
-        return sortBy("domain_name", false, a, b);
-      });
-    }
-    //buy_price ascending
-    else if (sort_by == "price_asc"){
-      listings.sort(function(a,b){
-        return sortBy("buy_price", true, a, b);
-      });
-    }
-    //buy_price ascending
-    else if (sort_by == "price_asc"){
-      listings.sort(function(a,b){
-        return sortBy("buy_price", false, a, b);
+        return a[sort_by] < b[sort_by];
       });
     }
 
@@ -455,6 +437,7 @@ function editRowPurchased(listing_info){
 
     updateRentalInputsDisabled(listing_info.rentable);
     $("#buy-price-input").val(listing_info.buy_price);
+    $("#min-price-input").val(listing_info.min_price);
     $("#price-rate-input").val(listing_info.price_rate);
     $("#price-type-input").val(listing_info.price_type);
 
@@ -681,14 +664,46 @@ function editRowPurchased(listing_info){
       $("#loading-offers").addClass('is-hidden');
       $("#offers-wrapper").empty();
 
+      //show rejected offers button
+      $("#show-rejected-offers").off().on('click', function(){
+        $(".rejected-offer").toggleClass('is-hidden');
+        $(this).toggleClass('is-primary').find(".fa").toggleClass('fa-toggle-on fa-toggle-off');
+      });
+
+      //sort offers
+      $("#offers-sort-select").off().on("change", function(){
+        var sort_value = $(this).val().split("_");
+        var sort_by = sort_value[0];
+        var sort_order = sort_value[1];
+
+        var offers_to_sort = $(".offer-row:not(#offer-clone)");
+        if (sort_order == "asc"){
+          offers_to_sort.sort(function(a,b){
+            return $(a).data("offer-data")[sort_by] > $(b).data("offer-data")[sort_by];
+          });
+        }
+        else if (sort_order == "desc"){
+          offers_to_sort.sort(function(a,b){
+            return $(a).data("offer-data")[sort_by] < $(b).data("offer-data")[sort_by];
+          });
+        }
+
+        //re-order and append to parent
+        for (var i = 0; i < offers_to_sort.length; i++) {
+            offers_to_sort[i].parentNode.appendChild(offers_to_sort[i]);
+        }
+      });
+
       //no offers!
       if (!listing_info.offers.length){
         $("#no-offers").removeClass('is-hidden');
+        $("#offers-toolbar").addClass('is-hidden');
         $("#accepted-offer").addClass('is-hidden');
         $("#deposited-offer").addClass('is-hidden');
       }
       else {
         $("#no-offers").addClass('is-hidden');
+        $("#offers-toolbar").removeClass('is-hidden');
         $("#offer-modal-domain").text(listing_info.domain_name);
 
         //clone offers
@@ -702,6 +717,7 @@ function editRowPurchased(listing_info){
           cloned_offer_row.find(".offer-offer").text(moneyFormat.to(parseFloat(listing_info.offers[x].offer)));
           cloned_offer_row.find(".offer-message").text(listing_info.offers[x].message);
           cloned_offer_row.attr("id", "offer-row-" + listing_info.offers[x].id);
+          cloned_offer_row.data("offer-data", listing_info.offers[x]);
 
           //click to open modal
           cloned_offer_row.find(".offer-modal-button").data("offer", listing_info.offers[x]).off().on("click", function(){
@@ -716,8 +732,9 @@ function editRowPurchased(listing_info){
             cloned_offer_row.find(".offer-accepted").text('Accepted - ');
             $("#accepted-offer").data("offer_id", listing_info.offers[x].id);
           }
-          else {
-            cloned_offer_row.addClass('unaccepted-offer');
+          else if (listing_info.offers[x].accepted == 0){
+            cloned_offer_row.find(".offer-accepted").text('Rejected - ');
+            cloned_offer_row.addClass('rejected-offer is-hidden');
           }
           $("#offers-wrapper").prepend(cloned_offer_row);
         }
@@ -850,6 +867,7 @@ function editRowPurchased(listing_info){
       //no more offers!
       if ($(".offer-row").length == 1){
         $("#no-offers").removeClass('is-hidden');
+        $("#offers-toolbar").addClass('is-hidden');
       }
     }
   }
