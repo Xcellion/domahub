@@ -174,7 +174,7 @@ button[data-balloon] {
   background-color: white;
   border-radius: 290486px;
   display: inline-block;
-  font-size: 18px;
+  font-size: 19px;
   height: 32px;
   line-height: 24px;
   min-width: 32px;
@@ -340,6 +340,7 @@ button[data-balloon] {
       width: 225px; } }
 
 #table-body {
+  background-color: white;
   border-radius: 3px;
   max-height: 420px;
   white-space: nowrap;

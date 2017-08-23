@@ -4,3 +4,101 @@
 #features-hero {
   background-image: linear-gradient($primary, $primary-light);
 }
+
+#hero-image {
+  width: 256px;
+  margin: 0 auto 25px;
+}
+
+.coffee {
+  @include keyframes(steam 3s infinite);
+}
+
+@keyframes steam {
+  0%    {transform: translateY(0);}
+  50%   {transform: translateY(-5px);}
+  100%   {transform: translateY(0);}
+}
+
+.line {
+  position: relative;
+  &::before {
+    content: "";
+    position: absolute;
+    height: calc(100% - 35px);
+    left: 50%;
+    top: 60px;
+    width: 1px;
+    background: $border;
+    border: 1px solid $border;
+    border-radius: 10px;
+  }
+  &::after {
+    content: "";
+    position: absolute;
+    height: 1px;
+    top: calc(50% + 35px);
+    left: calc(50% - 40px);
+    width: 40px;
+    background: $border;
+    border: 1px solid $border;
+    border-radius: 10px;
+  }
+  &.right {
+    &::after {
+      left: 50%;
+    }
+  }
+}
+
+.hiw-num {
+  align-items: center;
+  background-color: $primary;
+  border-radius: 100%;
+  color: $white;
+  display: flex;
+  font-weight: 700;
+  height: 35px;
+  font-size: 18px;
+  justify-content: center;
+  margin: 0 auto;
+  width: 35px;
+}
+
+.flex-align-center {
+  display: flex;
+  align-items: center;
+  margin: 10px 0;
+  .icon {
+    margin-right: 10px;
+    &.fix {
+      margin-left: 2px;
+    }
+  }
+}
+
+
+.feature {
+  display: flex;
+  align-items: flex-start;
+  @include mobile {
+    max-width: 400px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .icon {
+    margin-right:10px;
+  }
+}
+
+.price-card {
+  @include transition(all 0.25s ease);
+  border-radius: $radius;
+  .card-title {
+    border-bottom: 1px solid $border;
+    padding: 15px 20px;
+  }
+  &:hover {
+    @include translate(0,-5px);
+  }
+}

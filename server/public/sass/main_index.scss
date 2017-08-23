@@ -38,16 +38,6 @@
   }
 }
 
-.coffee {
-  @include keyframes(steam 3s infinite);
-}
-
-@keyframes steam {
-  0%    {transform: translateY(0);}
-  50%   {transform: translateY(-5px);}
-  100%   {transform: translateY(0);}
-}
-
 #tryit-form {
   margin-left: auto;
   margin-right: auto;
@@ -127,45 +117,11 @@
   }
 }
 
-.flex-align-center {
-  display: flex;
-  align-items: center;
-  margin: 10px 0;
-  .icon {
-    margin-right: 15px;
-    &.fix {
-      margin-left: 2px;
-    }
-  }
-}
-
-.feature {
-  display: flex;
-  align-items: flex-start;
-  padding-top: 30px;
-  .icon,
-  .step-number {
-    margin-right: 15px;
-  }
-}
-
 // .is-step {
 //   background-color: $primary;
 //   color: $white;
 //   padding: 15px;
 //   font-weight: 500;
-// }
-//
-// .price-card {
-//   @include transition(all 0.25s ease);
-//   border-radius: $radius;
-//   .card-title {
-//     border-bottom: 1px solid $border;
-//     padding: 15px 20px;
-//   }
-//   &:hover {
-//     @include translate(0,-5px);
-//   }
 // }
 //
 // .section {
