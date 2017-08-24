@@ -3,59 +3,39 @@
 @import 'balloon';
 
 #landing {
-  border-bottom: 1px solid $border;
-  width: 100%;
-  position: relative;
-  height: 100vh;
-  display: flex;
   align-items: center;
+  display: flex;
   overflow: hidden;
-  @include mobile-456px {
-    height: calc(100vh - 60px);
-  }
-  .container {
-    top: -100px;
-    @media screen and (max-height: 720px) {
-      top: -50px;
-    }
-    @media screen and (max-height: 500px) {
-      top: 0;
-      .image {
-        display: none !important;
-      }
-    }
-  }
+  position: relative;
+  width: 100%;
   .subtitle {
     max-width: 500px;
     margin-left: auto;
     margin-right: auto;
   }
-  .image {
-    height: 200px;
-    width: 300px;
-    @include mobile {
-      height: 125px;
-      width: 185px;
-    }
-    img {
-      height: 200px;
-      width: 300px;
-      @include mobile {
-        height: 125px;
-        width: 185px;
-      }
+}
+
+#features {
+  background-color: $lighter;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 40px;
+}
+
+#attention {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-image: linear-gradient($primary, $primary-light);
+  border-radius: $radius-large;
+  padding: 20px;
+  @include mobile {
+    flex-direction: column;
+    h2 {
+      margin-bottom: 20px;
+      text-align: center;
     }
   }
-}
-
-.coffee {
-  @include keyframes(steam 3s infinite);
-}
-
-@keyframes steam {
-  0%    {transform: translateY(0);}
-  50%   {transform: translateY(-5px);}
-  100%   {transform: translateY(0);}
 }
 
 #tryit-form {
@@ -137,80 +117,43 @@
   }
 }
 
-.flex-align-center {
-  display: flex;
-  align-items: center;
-  margin: 10px 0;
-  p,h2 {
-    flex-grow: 1;
-  }
-  .icon {
-    margin-right: 15px;
-    &.fix {
-      margin-left: 2px;
-    }
-  }
-}
-
-.feature {
-  display: flex;
-  align-items: flex-start;
-  padding-top: 30px;
-  .icon,
-  .step-number {
-    margin-right: 15px;
-  }
-}
-
-.is-step {
-  background-color: $primary;
-  color: $white;
-  padding: 15px;
-  font-weight: 700;
-}
-
-.price-card {
-  @include transition(all 0.25s ease);
-  border-radius: $radius;
-  .card-title {
-    border-bottom: 1px solid $border;
-    padding: 15px 20px;
-  }
-  &:hover {
-    @include translate(0,-5px);
-  }
-}
-
-.section {
-  &.has-pyramid {
-    position: relative;
-    overflow: hidden;
-    .container {
-      z-index: 3;
-    }
-    &::before {
-      @include rotate(60);
-      content:"";
-      background: $primary-light;
-      width: 500px;
-      position: absolute;
-      top: 200px;
-      height: 500px;
-      left: 0;
-      z-index: 1;
-    }
-    &::after {
-      @include rotate(105);
-      content:"";
-      opacity: 0.4;
-      width: 0;
-      position: absolute;
-      top: 175px;
-      height: 0;
-      border: 300px solid transparent;
-      border-bottom-color: $primary-dark;
-      left: 253px;
-      z-index: 2;
-    }
-  }
-}
+// .is-step {
+//   background-color: $primary;
+//   color: $white;
+//   padding: 15px;
+//   font-weight: 500;
+// }
+//
+// .section {
+//   &.has-pyramid {
+//     position: relative;
+//     overflow: hidden;
+//     .container {
+//       z-index: 3;
+//     }
+//     &::before {
+//       @include rotate(60);
+//       content:"";
+//       background: $primary-light;
+//       width: 500px;
+//       position: absolute;
+//       top: 200px;
+//       height: 500px;
+//       left: 0;
+//       z-index: 1;
+//     }
+//     &::after {
+//       @include rotate(105);
+//       content:"";
+//       opacity: 0.4;
+//       width: 0;
+//       position: absolute;
+//       top: 175px;
+//       height: 0;
+//       border: 300px solid transparent;
+//       border-bottom-color: $primary-dark;
+//       left: 253px;
+//       z-index: 2;
+//     }
+//   }
+// }

@@ -1,39 +1,52 @@
 <nav id="navbar" class="nav is-white">
-  <div class="container">
-    <div class="nav-left">
+  <div class="nav-left">
+    <div class="nav-item">
+      <a id="nav-logo" class="flat-logo is-primary is-hidden-mobile" tabindex="0" title="Home" href="/">
+      </a>
+      <a class="circle-logo is-hidden-tablet" tabindex="0" title="Home" href="/"></a>
+    </div>
+  </div>
+  <div class="nav-center"></div>
+  <span class="nav-toggle is-black" tabindex="0">
+    <span></span>
+    <span></span>
+    <span></span>
+  </span>
+  <div class="nav-right nav-menu is-white">
+
+    <%# navbar checks for a user variable, if it doesnt exist, then display the login button %>
+    <% if (!user) { %>
       <div class="nav-item">
-        <a id="nav-logo" class="flat-logo is-primary is-hidden-mobile" tabindex="0" title="Home" href="/">
-        </a>
-        <a class="circle-logo is-hidden-tablet" tabindex="0" title="Home" href="/"></a>
+        <a tabindex="0" class="nav-link" title="Features" href="/features">Features</a>
       </div>
-    </div>
-    <div class="nav-center">
-    </div>
-    <span class="nav-toggle is-black" tabindex="0">
-      <span></span>
-      <span></span>
-      <span></span>
-    </span>
-    <div class="nav-right nav-menu is-white">
-<%# navbar checks for a user variable, if it doesnt exist, then display the login button %>
-<% if (!user) { %>
-        <div class="nav-item">
-          <a tabindex="0" class="nav-link" title="Features" href="/#features">Features</a>
-        </div>
-        <div class="nav-item">
-          <a tabindex="0" class="nav-link" title="Pricing" href="/#pricing">Pricing</a>
-        </div>
-        <div class="nav-item">
-          <a id="signup" tabindex="0" class="nav-link" title="Sign Up" href="/signup">Sign Up</a>
-        </div>
-        <div class="nav-item">
-          <a tabindex="0" id="login-navbar" class="checkout-track login-modal button is-stylish is-small is-primary modal-button" title="Log In" data-object="#modal-login">Log In</a>
-        </div>
-    <div id="modal-login" class="modal">
-      <div class="modal-background"></div>
-      <div class="modal-container">
-        <div class="modal-content login-box">
-          <div id="login-dropdown" class="padding-25">
+      <div class="nav-item">
+        <a tabindex="0" class="nav-link" title="Pricing" href="/features#pricing">Pricing</a>
+      </div>
+      <div class="nav-item">
+        <a id="signup" tabindex="0" class="nav-link has-icon button is-stylish is-small is-primary is-outlined" title="Sign Up" href="/signup">
+          <span class="icon is-small">
+            <i class="fa fa-user-circle"></i>
+          </span>
+          <span>
+            Sign Up
+          </span>
+        </a>
+      </div>
+      <div class="nav-item">
+        <a tabindex="0" id="login-navbar" class="checkout-track has-icon login-modal button is-stylish is-small is-primary modal-button" title="Log In" data-object="#modal-login">
+          <span class="icon is-small">
+            <i class="fa fa-sign-in"></i>
+          </span>
+          <span>
+            Log In
+          </span>
+        </a>
+      </div>
+      <div id="modal-login" class="modal">
+        <div class="modal-background"></div>
+        <div class="modal-container">
+          <div class="modal-content login-box">
+            <div id="login-dropdown" class="padding-20">
 
               <p id="message" class="has-text-centered margin-top-0 margin-bottom-15">
                 <% if (typeof message != "undefined") {%>
@@ -42,8 +55,7 @@
                   Log in below
                 <% } %>
               </p>
-
-              <form id="navbar_form" action="/login" method="post">
+              <form id="login-form" action="/login" method="post">
                 <p class="control has-icon">
                   <input id="email" autofocus class="input is-medium" name="email" type="email" placeholder="Email" spellcheck="false">
                   <i class="fa fa-envelope-o"></i>
@@ -53,8 +65,11 @@
                   <i class="fa fa-lock"></i>
                 </p>
                 <p class="control">
-                  <button id="drop-login-button" class="button is-primary is-stylish is-fullwidth">
-                    Log In
+                  <button id="login-button" class="button is-primary is-stylish is-fullwidth">
+                    <span class="icon is-small">
+                      <i class="fa fa-sign-in"></i>
+                    </span>
+                    <span>Log In</span>
                   </button>
                 </p>
                 <div class="control is-spaced">
@@ -63,90 +78,88 @@
     								<label for="remember-checkbox" tabindex="0">Remember Me</label>
     							</div>
                   <p class="control-right">
-                      <a class="forgot is-accent" href="/forgot">Forgot password?</a>
+                      <a class="forgot is-primary" href="/forgot">Forgot password?</a>
                   </p>
                 </div>
-
               <%# <p class="control">
                 <p class="has-text-centered">
                   Don&#146;t have an account?
                 </p>
                 <div class="has-text-centered">
-                  <a class="signup is-accent" href="/signup">Sign Up Now</a>
+                  <a class="signup is-primary" href="/signup">Sign Up Now</a>
                 </div>
               </p> %>
               </form>
             </div>
+          </div>
+        </div>
+        <button class="modal-close"></button>
+      </div>
+
+    <!-- or else display the user profile as logged in -->
+    <% } else { %>
+      <div class="nav-item">
+        <a class="nav-link" tabindex="0" title="Create Listing" href="/listings/create">Create Listings</a>
+      </div>
+      <div class="nav-item">
+        <a id="profile-button" tabindex="0" class="button is-transparent is-primary is-stylish is-small" title="Profile">
+          <span><%= (user.username.length > 6) ? user.username.slice(0,6) + "..." : user.username %></span>
+          <span class="icon">
+            <i class="fa fa-angle-down"></i>
+          </span>
+        </a>
+        <a tabindex="0" class="nav-link is-hidden-tablet" href="/profile/mylistings" title="My Listings">
+          My Listings
+        </a>
+        <div id="profile-dropdown" class="is-hidden is-hidden-mobile">
+          <ul class="profile-dropdown-menu">
+            <li><a tabindex="0" href="/profile/mylistings">
+              <span class="icon is-small">
+                <i class="fa fa-tasks"></i>
+              </span>
+              <span>My Listings</span>
+            </a></li>
+            <li><a tabindex="0" href="/profile/settings">
+              <span class="icon is-small">
+                <i class="fa fa-cog"></i>
+              </span>
+              <span>Account Settings</span>
+            </a></li>
+            <% if (!user.stripe_subscription_id) { %>
+              <li id="nav-premium-link"><a tabindex="0" href="/profile/settings#premium">
+                <span class="icon is-primary is-small">
+                  <i class="fa fa-diamond"></i>
+                </span>
+                <span>Upgrade Account</span>
+              </a></li>
+            <% } %>
+            <li><a tabindex="0" href="/logout">
+              <span class="icon is-small">
+                <i class="fa fa-sign-out"></i>
+              </span>
+              <span>Log Out</span>
+            </a></li>
+          </ul>
         </div>
       </div>
-      <button class="modal-close"></button>
-    </div>
-
-<!-- or else display the user profile as logged in -->
-<% } else { %>
-    <div class="nav-item">
-      <a class="nav-link" tabindex="0" title="Create Listing" href="/listings/create">Create Listings</a>
-    </div>
-    <div class="nav-item">
-      <a id="profile-button" tabindex="0" class="button is-stylish is-small" title="Profile">
-        <span><%= (user.username.length > 6) ? user.username.slice(0,6) + "..." : user.username %></span>
-        <span class="icon">
-          <i class="fa fa-angle-down"></i>
-        </span>
-      </a>
-      <a tabindex="0" class="nav-link is-hidden-tablet" href="/profile/mylistings" title="My Listings">
-        My Listings
-      </a>
-      <div id="profile-dropdown" class="is-hidden is-hidden-mobile">
-        <ul class="profile-dropdown-menu">
-          <li><a tabindex="0" href="/profile/mylistings">
-            <span class="icon is-small">
-              <i class="fa fa-tasks"></i>
-            </span>
-            <span>My Listings</span>
-          </a></li>
-          <li><a tabindex="0" href="/profile/settings">
-            <span class="icon is-small">
-              <i class="fa fa-cog"></i>
-            </span>
-            <span>Account Settings</span>
-          </a></li>
-          <% if (!user.stripe_subscription_id) { %>
-            <li id="nav-premium-link"><a tabindex="0" href="/profile/settings#premium">
-              <span class="icon is-primary is-small">
-                <i class="fa fa-diamond"></i>
-              </span>
-              <span>Upgrade Account</span>
-            </a></li>
-          <% } %>
-          <li><a tabindex="0" href="/logout">
-            <span class="icon is-small">
-              <i class="fa fa-sign-out"></i>
-            </span>
-            <span>Log Out</span>
-          </a></li>
-        </ul>
-      </div>
-    </div>
-    <div class="nav-item is-hidden-tablet">
-      <a tabindex="0" class="nav-link is-hidden-tablet" href="/profile/settings" title="Account Settings">
-        Account Settings
-      </a>
-    </div>
-    <% if (!user.stripe_subscription_id) { %>
       <div class="nav-item is-hidden-tablet">
-        <a tabindex="0" class="nav-link is-hidden-tablet" href="/profile/settings#premium" title="Upgrade to Premium">
-          Upgrade Account
+        <a tabindex="0" class="nav-link is-hidden-tablet" href="/profile/settings" title="Account Settings">
+          Account Settings
         </a>
       </div>
-    <% } %>
-    <div class="nav-item is-hidden-tablet">
-      <a tabindex="0" class="nav-link is-hidden-tablet" href="/logout" title="Log Out">
-        Log Out
-      </a>
+      <% if (!user.stripe_subscription_id) { %>
+        <div class="nav-item is-hidden-tablet">
+          <a tabindex="0" class="nav-link is-hidden-tablet" href="/profile/settings#premium" title="Upgrade to Premium">
+            Upgrade Account
+          </a>
+        </div>
+      <% } %>
+      <div class="nav-item is-hidden-tablet">
+        <a tabindex="0" class="nav-link is-hidden-tablet" href="/logout" title="Log Out">
+          Log Out
+        </a>
+      </div>
     </div>
-  </div>
-<% } %>
+    <% } %>
 
-</div>
 </nav>
