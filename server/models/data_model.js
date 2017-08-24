@@ -210,14 +210,14 @@ data_model.prototype.getListingOffers = function(domain_name, callback){
         stats_contact_history.phone, \
         stats_contact_history.offer, \
         stats_contact_history.message, \
-        stats_contact_history.accepted, \
+        stats_contact_history.response, \
+        IFNULL(stats_contact_history.accepted, -1) as accepted, \
         stats_contact_history.bin \
       FROM stats_contact_history \
       INNER JOIN listings \
       ON listings.id = stats_contact_history.listing_id \
       WHERE listings.domain_name = ? \
-      AND stats_contact_history.verified = 1 \
-      AND (stats_contact_history.accepted != 0 OR stats_contact_history.accepted IS NULL)'
+      AND stats_contact_history.verified = 1'
   listing_query(query, "Failed to get offers for " + domain_name + "!", callback, domain_name);
 }
 

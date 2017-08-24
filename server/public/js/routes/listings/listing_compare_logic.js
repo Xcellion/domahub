@@ -208,9 +208,21 @@ function updateRentable(){
 
 //function to load background handlers
 function loadBackgroundHandlers(){
+
+  //highlight refresh button
+  $("#background-image-input").off().on("input change", function(){
+    if ($(this).val() != listing_info.background_image){
+      $("#background-image-refresh").addClass('is-primary').removeClass('is-disabled');
+    }
+    else {
+      $("#background-image-refresh").removeClass('is-primary').addClass('is-disabled');
+    }
+  });
+
   //load background image handler
-  $("#background-image-input").off().on("input", function(){
-    updateBackgroundImage($(this).val(), false);
+  $("#background-image-refresh").off().on("click", function(){
+    $("#background-image-refresh").removeClass('is-primary').addClass('is-disabled');
+    updateBackgroundImage($("#background-image-input").val(), false);
   });
 
   //load background color handler

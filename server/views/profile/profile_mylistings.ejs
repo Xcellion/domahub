@@ -32,8 +32,7 @@
 							<div class="control has-icon">
 								<span class="select is-fullwidth">
 									<select id="filter-select" tabindex="0">
-										<option disabled selected>Filter</option>
-										<option value="id">View All</option>
+										<option selected value="id">View All</option>
 										<option value="unverified">Unverified</option>
 										<option value="rented">Rented Now</option>
 										<option value="accepted">Accepted An Offer</option>
@@ -46,12 +45,12 @@
 							<div class="control is-expanded has-icon">
 								<span class="select is-fullwidth">
 									<select id="sort-select" tabindex="0">
-										<option disabled selected>Sort</option>
-										<option value="date">Date Created</option>
-										<option value="az">Name (A - Z)</option>
-										<option value="za">Name (Z - A)</option>
-										<option value="price_asc">Price (Low - High)</option>
-										<option value="price_desc">Price (High - Low)</option>
+										<option selected value="id-asc">Date Created (Newest)</option>
+										<option value="id-desc">Date Created (Oldest)</option>
+										<option value="domain_name-asc">Domain Name (A - Z)</option>
+										<option value="domain_name-desc">Domain Name (Z - A)</option>
+										<option value="min_price-asc">Min. Price (Low - High)</option>
+										<option value="min_price-desc">Min. Price (High - Low)</option>
 									</select>
 								</span>
 								<i class="fa fa-sort"></i>
@@ -96,7 +95,7 @@
 							<span class="icon is-small">
 								<i class="fa fa-trash"></i>
 							</span>
-							<span>Delete</span>
+							<span id="multi-delete-text">Delete</span>
 						</button>
 						<button id="multi-verify" class="button is-disabled is-primary is-inverted" tabindex="0" title="Verify Listing(s)">
 							<span class="icon is-small">
@@ -229,22 +228,22 @@
 									placeholder="What is this website?"></input>
 									<small class="tip">100 character limit.</small>
 								</div>%>
-								<!-- <div class="control">
+								<div class="control">
 									<label class="label margin-bottom-10">
 										<span class="v-align-middle">Categories</span>
-										<span class="icon is-small is-tooltip v-align-middle" data-balloon-length="medium" data-balloon="Categories help users find similar domains. Incorrect categories can lead to a poor user experience and hurt your domain brand by being associated with non-similar domains." data-balloon-pos="up">
+										<span class="icon is-small is-tooltip v-align-middle" data-balloon-length="large" data-balloon="Categories help users find similar domains. Incorrect categories can lead to a poor user experience and hurt your domain brand by being associated with non-similar domains." data-balloon-pos="up">
 											<i class="fa fa-question-circle"></i>
 										</span>
 									</label>
 									<div id="categories" class="category-control">
-									<input id="categories-input" data-name="categories" onchange=""tabindex="0" class="is-hidden input changeable-input" value="" business="" ecard="" marketing="" niche="" personal="" promotion="">
+  									<input id="categories-input" data-name="categories" onchange=""tabindex="0" class="is-hidden input changeable-input" value="" business="" ecard="" marketing="" niche="" personal="" promotion="">
 
-									<%# make all the categories %>
-									<% for (var x = 0; x < categories.length; x++){ %>
-										<a data-category="<%= categories[x].back %>" class="<%= categories[x].back %>-category tag margin-bottom-5 category-selector"><%= categories[x].front %></a>
-										<% } %>
+  									<%# make all the categories %>
+  									<% for (var x = 0; x < categories.length; x++){ %>
+  										<a data-category="<%= categories[x].back %>" class="<%= categories[x].back %>-category tag margin-bottom-5 category-selector"><%= categories[x].front %></a>
+  									<% } %>
 									</div>
-								</div> -->
+								</div>
 							</div>
 							<div id="rental-tab-drop" class="drop-tab is-hidden">
 								<div class="control is-spaced">
@@ -279,7 +278,7 @@
 								<div class="control">
 									<label class="label">
 										<span class="v-align-middle">Example Paths</span>
-										<span class="icon is-small is-tooltip v-align-middle" data-balloon-length="medium" data-balloon="Example paths or subdirectories that users may want to rent on your domain. Must consist of either letters or numbers." data-balloon-pos="up">
+										<span class="icon is-small is-tooltip v-align-middle" data-balloon-length="large" data-balloon="Example paths or subdirectories that users may want to rent on your domain. Must consist of either letters or numbers." data-balloon-pos="up">
 											<i class="fa fa-question-circle"></i>
 										</span>
 									</label>
@@ -287,7 +286,7 @@
 								</div>
 							</div>
 							<div id="design-tab-drop" class="drop-tab is-hidden">
-									<div class="blackscreen">
+									<div id="premium-blackscreen" class="blackscreen">
 										<div id="premium-only-notification" class="content has-text-centered">
 											<p>
 												Please upgrade to a Premium account to customize the look and feel of your landing page!
@@ -306,31 +305,34 @@
 										</div>
 									</div>
 									<div id="example-wrapper" class="preview-elem padding-25 control has-border-bottom">
-										<div class="control">
-											<span id="example-buy-price-tag" class="tag is-primary margin-right-5 margin-bottom-10 is-medium"></span>
-											<span id="example-rent-price-tag" class="tag is-primary margin-right-5 margin-bottom-10 is-medium"></span>
-											<h1 id="example-domain-name" class="preview-elem is-bold current-domain-name"></h1>
-										</div>
-										<div class="control">
-											<p id="example-font" class="preview-elem is-black">This is a preview of your chosen design. Use the settings below to customize your landing page!</a>
-										</div>
-										<div class="control box" style="display:inline-block">
-											<a id="example-button-primary" class="v-align-middle preview-elem is-primary is-small button is-stylish">Send Offer</a>
-											<a id="example-button-accent" class="v-align-middle preview-elem is-accent is-small button is-stylish">Buy Now</a>
-											<a id="example-link-info" class="v-align-middle preview-elem is-info margin-left-10">Do I need this?</a>
-										</div>
+                    <div class="box is-pulled-right">
+                      <image id="example-logo" src=""></image>
+                    </div>
+                    <div class="control">
+                      <span id="example-buy-price-tag" class="tag is-primary margin-right-5 margin-bottom-10 is-medium"></span>
+                      <span id="example-rent-price-tag" class="tag is-primary margin-right-5 margin-bottom-10 is-medium"></span>
+                      <h1 id="example-domain-name" class="preview-elem is-bold current-domain-name"></h1>
+                    </div>
+                    <div class="control">
+                      <p id="example-font" class="preview-elem is-black">This is a preview of your chosen design. Use the settings below to customize your landing page!</a>
+                    </div>
+                    <div class="control box" style="display:inline-block">
+                      <a id="example-button-primary" class="v-align-middle preview-elem is-small button is-stylish">Send Offer</a>
+                      <a id="example-button-accent" class="v-align-middle preview-elem is-small button is-stylish">Buy Now</a>
+                      <a id="example-link-info" class="v-align-middle preview-elem margin-left-10">Do I need this?</a>
+                    </div>
 									</div>
 									<div class="control">
 			                <label class="label" for="random-button">Theme</label>
 			                <div class="control is-grouped">
 			                    <div class="control has-icon">
 			                        <span class="select is-fullwidth">
-			                            <select tabindex="0" id="theme-input" class="premium-input changeable-input"></select>
+		                            <select tabindex="0" id="theme-input" class="premium-input"></select>
 			                        </span>
 			                        <i class="fa fa-picture-o"></i>
 			                    </div>
 			                    <div class="control">
-			                        <a id="random-theme-button" class="no-shadow premium-input button is-small is-stylish">Random Theme</a>
+		                        <a id="random-theme-button" class="no-shadow premium-input button is-small is-stylish">Random Theme</a>
 			                    </div>
 			                </div>
 			            </div>
@@ -365,61 +367,92 @@
 											<div class="control has-icon">
 												<span class="select is-fullwidth">
 													<select tabindex="0" data-name="font_name" id="font-name-input" class="premium-input changeable-input">
-														<option selected default value="Rubik">Rubik</option>
-														<option value="Times New Roman">Times New Roman</option>
-														<option value="Helvetica">Helvetica</option>
-														<option value="Courier">Courier</option>
-														<option value="Verdana">Verdana</option>
-														<option value="Tahoma">Tahoma</option>
+                            <%# make all the categories %>
+                            <% for (var x = 0; x < fonts.length; x++){ %>
+                              <option value="<%= fonts[x] %>"><%= fonts[x] %></option>
+                            <% } %>
 													</select>
 												</span>
 												<i class="fa fa-font"></i>
 											</div>
 										</div>
 									</div>
+                  <div class="control">
+                    <label class="label">
+                      <span class="v-align-middle">Background Image URL</span>
+                      <span class="icon is-small is-tooltip v-align-middle" data-balloon-length="medium" data-balloon="Choose an existing image on the web or upload your own image." data-balloon-pos="up">
+                        <i class="fa fa-question-circle"></i>
+                      </span>
+                    </label>
+                    <form class="is-hidden drop-form-file" method="post" enctype="multipart/form-data">
+                      <input tabindex="0" id="background-image-input" data-name="background_image" type="file" name="background_image" accept="image/png, image/gif, image/jpeg" class="premium-input changeable-input input-file">
+                    </form>
+                    <div class="control has-addons">
+                      <input id="background-link-input" data-name="background_image_link" placeholder="http://link-to-image.com/background.png" type="text" class="premium-input input changeable-input">
+                      <button id="background-link-refresh" class='is-disabled no-shadow is-outlined button'>
+                        <span class="icon is-small">
+                          <i class="fa fa-refresh"></i>
+                        </span>
+                        <span>Refresh Preview</span>
+                      </button>
+                      <label for="background-image-input" class="premium-input button no-shadow">
+                        <span class="icon is-small">
+                          <i class="fa fa-upload" aria-hidden="true"></i>
+                        </span>
+                        <p data-default-name="Upload Background Image" id="background-image-label" class="file-label">Upload</p>
+                      </label>
+                    </div>
+                  </div>
 									<div class="control">
 										<label class="label">
 											<span class="v-align-middle">Background Color</span>
-											<span class="icon is-small is-tooltip v-align-middle" data-balloon-length="medium" data-balloon="This color is only used if there is no background image." data-balloon-pos="up">
+											<span class="icon is-small is-tooltip v-align-middle" data-balloon-length="medium" data-balloon="The background image takes precedence over the background color." data-balloon-pos="up">
 												<i class="fa fa-question-circle"></i>
 											</span>
 										</label>
-										<div class="control">
+                    <div class="control">
 											<input id="background-color-input" data-name="background_color" placeholder="#FFFFFF" type="text" class="premium-input padding-top-0 input changeable-input">
-										</div>
+                    </div>
 									</div>
-									<div class="control is-spaced">
-										<div class="control-left">
-											<div class="label">Background Image</div>
-											<small class="tip">This image will display as the full-screen background on your landing page.</small>
-										</div>
-										<div class="control-right">
-											<figure class="image listing-img">
-												<button id="background" tabindex="0" class="premium-input delete delete-image on-img"></button>
-												<img data-default-img="https://placeholdit.imgix.net/~text?txtsize=20&txt=NO%20IMG&w=96&h=64" id="background-image" alt="Image not found" src="">
-											</figure>
-											<form class="drop-form-file" method="post" enctype="multipart/form-data">
-												<input tabindex="0" id="background-image-input" data-name="background_image" type="file" name="background_image" accept="image/png, image/gif, image/jpeg" class="premium-input changeable-input input-file">
-												<label for="background-image-input" class="premium-input button is-small is-fullwidth no-shadow">
-													<i class="fa fa-upload" aria-hidden="true"></i>
-													<p data-default-name="Background Image" id="background-image-label" class="file-label">Upload</p>
-												</label>
-											</form>
-										</div>
-									</div>
-									<%#<div class="control is-spaced">
+                  <div class="control">
+                    <label class="label">
+                      <span class="v-align-middle">Logo Image URL</span>
+                      <span class="icon is-small is-tooltip v-align-middle" data-balloon-length="medium" data-balloon="The logo will be utilized for email communications and branding." data-balloon-pos="up">
+                        <i class="fa fa-question-circle"></i>
+                      </span>
+                    </label>
+                    <form class="is-hidden drop-form-file" method="post" enctype="multipart/form-data">
+                      <input tabindex="0" id="logo-image-input" data-name="logo" type="file" name="logo" accept="image/png, image/gif, image/jpeg" class="premium-input changeable-input input-file">
+                    </form>
+                    <div class="control has-addons">
+                      <input id="logo-link-input" data-name="logo_image_link" placeholder="http://link-to-image.com/logo.jpg" type="text" class="premium-input input changeable-input">
+                      <button id="logo-link-refresh" class='is-disabled no-shadow is-outlined button'>
+                        <span class="icon is-small">
+                          <i class="fa fa-refresh"></i>
+                        </span>
+                        <span>Refresh Preview</span>
+                      </button>
+                      <label for="logo-image-input" class="premium-input button no-shadow">
+                        <span class="icon is-small">
+                          <i class="fa fa-upload" aria-hidden="true"></i>
+                        </span>
+                        <p data-default-name="Upload Logo" id="logo-image-label" class="file-label">Upload</p>
+                      </label>
+                    </div>
+                  </div>
+									<%# <div class="control is-spaced">
 										<div class="control-left">
 											<div class="label">Logo</div>
-											<small class="tip">The logo will be utilized for email communications and branding.</small>
+											<small class="tip"></small>
 										</div>
 										<div class="control-right">
 											<figure class="image listing-img">
 												<button id="logo" tabindex="0" class="premium-input delete delete-image on-img"></button>
-												<img data-default-img="https://placeholdit.imgix.net/~text?txtsize=20&txt=NO%20LOGO&w=96&h=64" id="logo-image" alt="Image not found" src="">
+												<img id="logo-image" class="image-upload" data-default-img="https://placeholdit.imgix.net/~text?txtsize=20&txt=NO%20LOGO&w=96&h=64" alt="Image not found" src="">
 											</figure>
 											<form class="drop-form-file" method="post" enctype="multipart/form-data">
 												<input tabindex="0" id="logo-image-input" data-name="logo" type="file" name="logo" accept="image/png, image/gif, image/jpeg" class="premium-input changeable-input input-file">
-												<label for="logo-image-input" class="premium-input button is-small no-shadow is-fullwidth">
+												<label for="logo-image-input" class="upload-label premium-input button is-small no-shadow is-fullwidth">
 													<i class="fa fa-upload" aria-hidden="true"></i>
 													<p data-default-name="Logo" id="logo-image-label" class="file-label">Upload</p>
 												</label>
@@ -469,7 +502,7 @@
 						      <div class="modal-container">
 										<div class="modal-content offer-popup">
 											<div class="content has-text-centered">
-								        <h3 class="is-bold">Offer for <span id="offer-modal-domain"></span></h3>
+								        <h3 class="is-bold" id="offer-modal-domain"></h3>
 								        <small>Received on <span id="offer-modal-timestamp"></span></small>
 								      </div>
 											<div class="content margin-bottom-0">
@@ -489,6 +522,9 @@
 														<p id="offer-modal-message" class="offer-msg"></p>
 							            </li>
 								        </ul>
+                        <ul id="offer-response-label" class="is-hidden">
+                          Your response:
+                        </ul>
                         <ul id="offer-response-wrapper">
                           <li>
                             <textarea id="offer-response" placeholder="You may include an optional response to the offerer." class='textarea'></textarea>
@@ -507,17 +543,12 @@
 									</div>
 								  <button class="modal-close"></button>
 								</div>
-								<div id="loading-offers" class="margin-top-20 content">
+                <div id="loading-offers" class="margin-top-20 content">
 									<p>
 										Now loading domain offers...
 									</p>
 								</div>
-								<div id="no-offers" class="content is-hidden">
-									<p>
-										You currently have no offers on this domain!
-									</p>
-								</div>
-                <div id="deposited-offer" class="has-border-bottom padding-bottom-15 is-hidden">
+                <div id="deposited-offer" class="hidden-while-loading-offers has-border-bottom padding-bottom-20 is-hidden">
                   <div class="content">
                     <h3>
                       Congratulations on selling your domain!
@@ -536,7 +567,7 @@
                     </p>
                   </div>
                 </div>
-                <div id="accepted-offer" class="has-border-bottom padding-bottom-15 is-hidden">
+                <div id="accepted-offer" class="hidden-while-loading-offers has-border-bottom padding-bottom-20 is-hidden">
                   <div class="content">
                     <h3>
                       I accepted the offer--what's next?
@@ -553,7 +584,35 @@
                     </p>
                   </div>
                 </div>
-								<div id="offers-wrapper">
+                <div id="offers-toolbar" class="hidden-while-loading-offers is-hidden control has-border-bottom padding-bottom-20 margin-bottom-0 is-grouped">
+                  <div class="control has-icon">
+                    <span class="select is-fullwidth">
+                      <select id="offers-sort-select" tabindex="0">
+                        <option selected value="timestamp_desc">Date Received (Newest)</option>
+                        <option value="timestamp_asc">Date Received (Oldest)</option>
+                        <option value="offer_desc">Price (High - Low)</option>
+                        <option value="offer_asc">Price (Low - High)</option>
+                        <option value="name_asc">Offerer Name (A - Z)</option>
+                        <option value="name_desc">Offerer Name (Z - A)</option>
+                        <option value="accepted_desc">Rejected / Accepted</option>
+                        <option value="accepted_asc">Accepted / Rejected</option>
+                      </select>
+                    </span>
+                    <i class="fa fa-sort"></i>
+                  </div>
+                  <div class="control">
+                    <a id="show-rejected-offers" class="button no-shadow is-outlined">
+                      <span class="icon is-small"><i class="fa fa-toggle-off"></i></span>
+                      <span class="button-text">Rejected Offers</span>
+                    </a>
+                  </div>
+                </div>
+                <div id="no-offers" class="hidden-while-loading-offers content margin-top-20 is-hidden">
+                  <p>
+                    You have no outstanding offers on this domain!
+                  </p>
+                </div>
+                <div id="offers-wrapper">
 
 								</div>
 								<div id="offer-clone" class="offer-row media is-hidden">
@@ -626,10 +685,10 @@
   <script src="/js/lib/chart.min.js" type="text/javascript"></script>
   <script src="/js/lib/randomColor.js" type="text/javascript"></script>
 	<script type="text/javascript">
-		//redirect to homepage if user is not defined
 		var user = <% if(typeof user != "undefined"){ %><%-JSON.stringify(user)%><% }else{ %>window.location="/"<% } %>;
 		var listings = <% if(typeof listings != "undefined"){ %><%-JSON.stringify(listings)%><% }else{ %>""<% } %>;
 		var categories = <% if(typeof categories != "undefined"){ %><%-JSON.stringify(categories)%><% }else{ %>""<% } %>;
+		var fonts = <% if(typeof fonts != "undefined"){ %><%-JSON.stringify(fonts)%><% }else{ %>""<% } %>;
 	</script>
 	<script src="/js/routes/profile/profile_mylistings_logic.js" type="text/javascript"></script>
 </body>

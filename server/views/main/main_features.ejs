@@ -227,7 +227,8 @@
     </div>
     <div class="columns">
       <div class="column is-5">
-        <div class="content has-text-right">
+        <div class="content">
+          <div class="hiw-num is-hidden-tablet"><span>1</span></div>
           <h2>Create a DomaHub account.</h2>
           <p>
             Anybody can create an account on DomaHub (you can <a class="is-primary" href="/signup">sign up here</a>)!
@@ -237,26 +238,27 @@
           </p>
         </div>
       </div>
-      <div class="column is-2 line">
+      <div class="column is-2 line is-hidden-mobile">
         <div class="hiw-num"><span>1</span></div>
       </div>
-      <div class="column is-5">
-        <figure class="image is-128x128 left-aligned">
-          <img src="images/lib/ticket.png" />
+      <div class="column is-5 is-hidden-mobile">
+        <figure class="image is-128x128 left-aligned is-hidden-mobile">
+          <img src="images/lib/hands.png" />
         </figure>
       </div>
     </div>
     <div class="columns">
-      <div class="column is-5">
-        <figure class="image is-128x128 right-aligned">
+      <div class="column is-5 is-hidden-mobile">
+        <figure class="image is-128x128 right-aligned is-hidden-mobile">
           <img src="images/lib/laptop.png" />
         </figure>
       </div>
-      <div class="column is-2 line right">
+      <div class="column is-2 line right is-hidden-mobile">
         <div class="hiw-num"><span>2</span></div>
       </div>
       <div class="column is-5">
         <div class="content">
+          <div class="hiw-num is-hidden-tablet"><span>2</span></div>
           <h2>Add your domains and customize sales pages.</h2>
           <p>
             You can upload as many domains as you want - sales pages will be
@@ -271,6 +273,7 @@
     <div class="columns">
       <div class="column is-5">
         <div class="content">
+          <div class="hiw-num is-hidden-tablet"><span>3</span></div>
           <h2>Manage and respond to offers.</h2>
           <p>
             You will receive an email any time an offer has been made to purchase
@@ -280,11 +283,11 @@
           </p>
         </div>
       </div>
-      <div class="column is-2 line">
+      <div class="column is-2 line is-hidden-mobile">
         <div class="hiw-num"><span>3</span></div>
       </div>
-      <div class="column is-5">
-        <figure class="image is-128x128 left-aligned">
+      <div class="column is-5 is-hidden-mobile">
+        <figure class="image is-128x128 left-aligned is-hidden-mobile">
           <img src="images/lib/money.png" />
         </figure>
       </div>
@@ -295,14 +298,19 @@
 <section class="section is-primary">
   <div class="container">
     <div class="content has-text-centered">
-      <h2 class="title is-bold is-white">Shift your parked domains into gear.</h2>
+      <h2 class="title is-bold is-white">Shift Your Parked Domains Into Gear.</h2>
       <h3 class="is-white">
         Create individual sales pages for your entire portfolio, all at once.
       </h3>
     </div>
     <div class="content has-text-centered">
-      <a class="button is-stylish is-primary is-inverted" href="/signup">Try It Free Now</a>
-      <small class="is-block is-white">No risk. Cancel at any time.</small>
+      <a class="button is-stylish is-primary is-inverted" href="/signup">
+        <span class="icon">
+          <i class="fa fa-user-circle"></i>
+        </span>
+        <span>Try It Free Now</span>
+      </a>
+      <small class="is-block is-white margin-top-5">No risk. Cancel at any time.</small>
     </div>
   </div>
 </section>
@@ -375,7 +383,12 @@
             </div>
           </div>
           <footer class="card-footer">
-            <a href="/signup" tabindex="0" class="card-footer-item button is-stylish is-accent">Choose Basic</a>
+            <a href="/signup" tabindex="0" class="card-footer-item button is-stylish is-accent">
+              <span class="icon">
+                <i class="fa fa-check-circle"></i>
+              </span>
+              <span>Choose Basic</span>
+            </a>
           </footer>
         </div>
         <p class="has-text-centered">
@@ -445,10 +458,15 @@
           </div>
           <footer class="card-footer">
             <% if (user) { %>
-            <a href="/profile/settings#premium" tabindex="0" class="card-footer-item button is-stylish is-primary">Choose Premium</a>
+            <a href="/profile/settings#premium" tabindex="0" class="card-footer-item button is-stylish is-primary">
             <% } else { %>
-            <a href="/signup" tabindex="0" class="card-footer-item button is-stylish is-primary">Choose Premium</a>
+            <a href="/signup" tabindex="0" class="card-footer-item button is-stylish is-primary">
             <% } %>
+              <span class="icon">
+                <i class="fa fa-check-circle"></i>
+              </span>
+              <span>Choose Premium</span>
+            </a>
           </footer>
         </div>
         <p class="has-text-centered">
@@ -470,43 +488,53 @@
 <section class="section is-medium">
   <div class="container">
     <div class="content has-text-centered">
-      <h2 class="title is-bold">Questions? We have answers.</h2>
+      <h2 class="title is-bold">Q & A</h2>
     </div>
     <div class="columns">
-      <div class="column is-6">
+      <div class="column is-4 is-offset-2">
         <div class="content">
-          <h3>How do monkeys climb on trees?</h3>
+          <h3>How are offers verified?</h3>
           <p>
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+            Firstly, users cannot submit any offers that are below your domain's minimum asking price.
+            Secondly, all users must confirm their offers by email. Offers that are not confirmed
+            will not be sent to you.
           </p>
         </div>
       </div>
-      <div class="column is-6">
+      <div class="column is-4">
         <div class="content">
-          <h3>How do monkeys climb on trees?</h3>
+          <h3>What payment options does DomaHub accept?</h3>
           <p>
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+            We accept payments from all major credit and debit cards in more than 130 currencies.
           </p>
         </div>
       </div>
     </div>
     <div class="columns">
-      <div class="column is-6">
+      <div class="column is-4 is-offset-2">
         <div class="content">
-          <h3>How do monkeys climb on trees?</h3>
+          <h3>How do I get paid?</h3>
           <p>
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+            You must link a bank account with DomaHub. Once a transaction has been confirmed, we will deposit the money directly into your account
+            after a few business days.
           </p>
         </div>
       </div>
-      <div class="column is-6">
+      <div class="column is-4">
         <div class="content">
-          <h3>How do monkeys climb on trees?</h3>
+          <h3>Can I cancel my Premium subscription?</h3>
           <p>
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+            You can cancel your Premium subscription at any time. Your account will still remain active and your Premium status will last
+            until the end of the current billing cycle.
           </p>
         </div>
       </div>
+    </div>
+    <div class="content has-text-centered">
+      <p>
+        Have other questions? Visit our <a tabindex="0" class="is-primary" href="/faq">FAQ</a> or
+        <a tabindex="0" class="is-primary" href="/contact">send us a message</a>.
+      </p>
     </div>
   </div>
 </section>

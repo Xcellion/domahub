@@ -57,7 +57,7 @@
 						</p>
 						<ul class="menu-list">
 							<li><a id="paypal-link" href="#paypal" class="setting-link">PayPal Settings</a></li>
-							<li><a id="registrar-link" href="#registrar" class="setting-link">Registrar Settings</a></li>
+							<%# <li><a id="registrar-link" href="#registrar" class="setting-link">Registrar Settings</a></li>%>
 						</ul>
 						<% if (user.stripe_transfers) { %>
 							<p class="menu-label">
@@ -713,7 +713,7 @@
 							</form>
 						</div>
 					</div>
-					<div id="registrar" class="is-hidden card is-fullwidth">
+					<!--<div id="registrar" class="is-hidden card is-fullwidth">
 						<header class="card-header">
 							<p class="card-header-title">
 								Registrar Settings
@@ -728,7 +728,7 @@
                 <button tabindex="0" id="godaddy-connect-button" class="button is-stylish is-small no-shadow">Connect GoDaddy Account</button>
 							</div>
 						</div>
-					</div>
+					</div>-->
 					<% if (user.stripe_transfers) { %>
 						<%- include("profile_transactions", {user: user}); %>
 					<% } %>
