@@ -771,7 +771,7 @@ function editRowPurchased(listing_info){
 
             //resend the accepted offer email button
             $("#resend-accept").off().on("click", function(){
-              resendAcceptEmail($(this), listing_info.domain_name, $("#accepted-offer").data("offer_id"));
+              resendAcceptEmail($(this), listing_info, $("#accepted-offer").data("offer_id"));
             });
           }
           else {
@@ -820,12 +820,16 @@ function editRowPurchased(listing_info){
   function resendAcceptEmail(resend_button, listing_info, offer_id){
     resend_button.off().addClass('is-loading');
     $.ajax({
-      url: "/listing/" + domain_name + "/contact/" + offer_id + "/resend",
+      url: "/listing/" + listing_info.domain_name + "/contact/" + offer_id + "/resend",
       method: "POST"
     }).done(function(data){
-      resend_button.removeClass('is-loading').addClass('is-hidden');
+      resend_button.removeClass('is-loading');
       if (data.state == "success"){
         successMessage("Successfully resent the email to the offerer!");
+        resend_button.addClass('is-hidden');
+
+        //remove the resend button (for margin bottom on previous p)
+        $("#resend-wrapper").remove();
       }
       else {
         errorMessage(data.message);
@@ -846,10 +850,11 @@ function editRowPurchased(listing_info){
     }).done(function(data){
       button_elem.removeClass('is-loading');
       if (data.state == "success"){
+        $("#offers-toolbar").addClass('is-hidden');
         offerSuccessHandler(accept, listing_info, offer_id);
       }
       else {
-        offerErrorHandler(data);
+        offerErrorHandler(data.message, offer_id);
       }
     });
   }
@@ -899,9 +904,18 @@ function editRowPurchased(listing_info){
   }
 
   //function for offer accept error
-  function offerErrorHandler(data){
-    errorMessage(data.message);
+  function offerErrorHandler(message, offer_id){
     $("#offer-modal").removeClass('is-active');
+
+    //show accepted view if already accepted
+    if (message == "already-accepted"){
+      $('.unaccepted-offer').addClass('is-hidden');
+      $("#accepted-offer").removeClass('is-hidden');
+      errorMessage("You have already accepted an offer for this listing!");
+    }
+    else {
+      errorMessage(message);
+    }
   }
 
   //</editor-fold>
