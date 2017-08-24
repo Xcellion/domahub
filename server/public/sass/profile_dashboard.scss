@@ -72,6 +72,7 @@
 
 #filter-menu {
   @include transition(left 0.25s ease);
+  border-right: 1px solid $border;
   @include mobile {
     @include box-shadow(0,3px,15px,$border,0);
     background-color: $white;
@@ -100,6 +101,7 @@
 }
 
 .current-domain-name {
+  font-weight: 700;
   word-break: break-all;
 }
 
@@ -133,6 +135,7 @@
 // table stuff
 
 #table-body {
+  background-color: $white;
   border-radius: $radius;
   max-height: 420px;
   white-space: nowrap;
@@ -174,7 +177,7 @@
   }
   &.is-active {
     border-right-width: 5px;
-    border-right-color: $black-secondary;
+    border-right-color: $primary;
     p {
       font-weight: 700;
     }
@@ -220,6 +223,20 @@
   top: 0;
   right: 0;
   position: absolute !important;
+}
+
+#example-logo{
+  max-width:200px;
+  max-height:150px;
+}
+
+#example-wrapper{
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.upload-label {
+  border-radius: 0 0 3px 3px !important;
 }
 
 .listing-img {

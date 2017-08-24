@@ -185,8 +185,21 @@ module.exports = {
 
   },
 
+  //function to check if already accepted an offer for a listing
+  checkAlreadyAccepted : function(req, res, next){
+    console.log("F: Checking if listing has an existing accepted offer...");
+    var listing_info = getUserListingObj(req.user.listings, req.params.domain_name);
+
+    if (listing_info.accepted){
+      error.handler(req, res, "already-accepted", "json");
+    }
+    else {
+      next();
+    }
+  },
+
   //function to accept or reject an offer
-  acceptOrRejectOffer: function(req, res, next){
+  acceptOrRejectOffer : function(req, res, next){
     console.log("F: Accepting or rejecting an offer...");
     var accepted = req.path.indexOf("/accept") != -1;
     var contact_item = {
@@ -407,7 +420,15 @@ module.exports = {
 
     Data.checkContactVerified(req.params.domain_name, req.params.offer_id, function(result){
       if (result.state == "success" && result.info.length > 0){
-        next();
+        if (result.info[0].accepted == 1){
+          error.handler(req, res, "You have already accepted this offer!", "json");
+        }
+        else if (result.info[0].accepted == 0) {
+          error.handler(req, res, "You have already rejected this offer!", "json");
+        }
+        else {
+          next();
+        }
       }
       else {
         res.redirect("/listing/" + req.params.domain_name);
