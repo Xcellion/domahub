@@ -45,7 +45,7 @@
     +box-shadow(0,0,0,$border,0)
   &:hover,
   &:focus
-    +box-shadow(0,5px,15px,$border,2px)
+    +box-shadow(0,4px,15px,$border,2px)
   &:hover,
   &:focus,
   &.is-active
@@ -75,7 +75,7 @@
       &:hover,
       &:focus,
       &.is-active
-        background-color: darken($color, 10%)
+        background-color: darken($color, 3%)
         border-color: transparent
         color: $color-invert
       &:active
@@ -89,7 +89,7 @@
         &:hover,
         &:active,
         &:focus
-          background-color: darken($color-invert, 10%)
+          background-color: darken($color-invert, 3%)
       &.is-loading
         &:after
           border-color: transparent transparent $grey-light $grey-light !important
@@ -100,7 +100,7 @@
         &:hover,
         &:active,
         &:focus
-          background-color: darken($color-invert, 2%)
+          background-color: darken($color-invert, 3%)
 
   // Sizes
   &.is-small
