@@ -5,6 +5,7 @@ var whois = require("whois");
 var dns = require("dns");
 var default_descriptions = require("../../lib/default_descriptions.js");
 var Categories = require("../../lib/categories.js");
+var Fonts = require("../../lib/fonts.js");
 
 var nodemailer = require('nodemailer');
 var sgTransport = require('nodemailer-sendgrid-transport');
@@ -1255,7 +1256,8 @@ function getWhoIs(req, res, next, domain_name, unlisted){
       res.render("listings/listing.ejs", {
         user: req.user,
         listing_info: listing_info,
-        compare : (req.query.compare == "true") ? true : false
+        compare : (req.query.compare == "true") ? true : false,
+        fonts : Fonts.all()
       });
     }
 

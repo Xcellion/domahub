@@ -33,20 +33,19 @@
     line-height: 1
     margin-top: 5px
   .icon
-    margin-top: -2px
     &:first-child
-      margin-left: -2px
-      margin-right: 2px
+      margin-left: -3px
+      margin-right: 3px
     &:last-child
-      margin-right: -2px
+      margin-right: -3px
     & + span
-      margin-left: 2px
-      margin-right: -2px
+      margin-left: 3px
+      margin-right: -3px
   &:active
-    +box-shadow(0,5px,15px,$border,3px)
+    +box-shadow(0,0,0,$border,0)
   &:hover,
   &:focus
-    +box-shadow(0,3px,9px,$border,1px)
+    +box-shadow(0,4px,15px,$border,2px)
   &:hover,
   &:focus,
   &.is-active
@@ -76,12 +75,12 @@
       &:hover,
       &:focus,
       &.is-active
-        background-color: darken($color, 10%)
+        background-color: darken($color, 3%)
         border-color: transparent
         color: $color-invert
       &:active
         border-color: transparent
-      &.is-icon-only
+      &.is-transparent
         background-color: transparent
         color: $color
       &.is-inverted
@@ -90,7 +89,7 @@
         &:hover,
         &:active,
         &:focus
-          background-color: darken($color-invert, 10%)
+          background-color: darken($color-invert, 3%)
       &.is-loading
         &:after
           border-color: transparent transparent $grey-light $grey-light !important
@@ -101,7 +100,7 @@
         &:hover,
         &:active,
         &:focus
-          background-color: darken($color-invert, 2%)
+          background-color: darken($color-invert, 3%)
 
   // Sizes
   &.is-small
@@ -113,9 +112,9 @@
   &.is-stylish
     +button-stylish
     font-size: 14px
-    height: 42px
-    padding-left: 16px
-    padding-right: 16px
+    height: 38px
+    padding-left: 14px
+    padding-right: 14px
     &.is-small
       font-size: 12px
       height: 32px
@@ -123,9 +122,14 @@
       padding-right: 8px
     &.is-large
       font-size: 16px
-      height: 48px
-      padding-left: 24px
-      padding-right: 24px
+      height: 44px
+      padding-left: 20px
+      padding-right: 20px
+      +mobile-456px
+        font-size: 14px
+        height: 38px
+        padding-left: 14px
+        padding-right: 14px
   // Modifiers
   &[disabled],
   &.is-disabled
