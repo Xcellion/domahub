@@ -413,6 +413,17 @@ button[data-balloon] {
   right: 0;
   position: absolute !important; }
 
+#example-logo {
+  max-width: 200px;
+  max-height: 150px; }
+
+#example-wrapper {
+  background-repeat: no-repeat;
+  background-size: cover; }
+
+.upload-label {
+  border-radius: 0 0 3px 3px !important; }
+
 .listing-img {
   width: 96px;
   height: auto; }

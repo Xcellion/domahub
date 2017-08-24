@@ -18,36 +18,18 @@ $(document).ready(function(){
 
   //sorting
   $("#sort-select").on("change", function(){
-    var sort_by = $(this).val();
+    var sort_value = $(this).val().split("-");
+    var sort_by = sort_value[0];
+    var sort_order = sort_value[1];
 
-    //sort by date created
-    if (sort_by == "date"){
+    if (sort_order == "asc"){
       listings.sort(function(a,b){
-        return sortBy("id", true, a, b);
+        return a[sort_by] > b[sort_by];
       });
     }
-    //sort A to Z
-    else if (sort_by == "az"){
+    else if (sort_order == "desc"){
       listings.sort(function(a,b){
-        return sortBy("domain_name", true, a, b);
-      });
-    }
-    //sort Z to A
-    else if (sort_by == "za") {
-      listings.sort(function(a,b){
-        return sortBy("domain_name", false, a, b);
-      });
-    }
-    //buy_price ascending
-    else if (sort_by == "price_asc"){
-      listings.sort(function(a,b){
-        return sortBy("buy_price", true, a, b);
-      });
-    }
-    //buy_price ascending
-    else if (sort_by == "price_asc"){
-      listings.sort(function(a,b){
-        return sortBy("buy_price", false, a, b);
+        return a[sort_by] < b[sort_by];
       });
     }
 
@@ -455,6 +437,7 @@ function editRowPurchased(listing_info){
 
     updateRentalInputsDisabled(listing_info.rentable);
     $("#buy-price-input").val(listing_info.buy_price);
+    $("#min-price-input").val(listing_info.min_price);
     $("#price-rate-input").val(listing_info.price_rate);
     $("#price-type-input").val(listing_info.price_type);
 
@@ -506,13 +489,37 @@ function editRowPurchased(listing_info){
     //if premium, remove the notification / disabled inputs
     if (user.stripe_subscription_id){
       $("#premium-only-notification").addClass("is-hidden");
-      $(".blackscreen").addClass("is-hidden");
       $(".premium-input").removeClass("is-disabled");
+      $("#premium-blackscreen").addClass("is-hidden");
     }
     else {
       $("#premium-only-notification").removeClass("is-hidden");
-      $(".blackscreen").removeClass("is-hidden");
       $(".premium-input").addClass("is-disabled");
+
+      //premium blackscreen exists (not deleted by user)
+      if ($("#premium-blackscreen").length != 0){
+        $("#premium-blackscreen").removeClass("is-hidden");
+      }
+      else {
+        $("#design-tab-drop").prepend('<div id="premium-blackscreen" class="blackscreen"> \
+          <div id="premium-only-notification" class="content has-text-centered"> \
+            <p> \
+              Please upgrade to a Premium account to customize the look and feel of your landing page! \
+            </p> \
+            <a href="/#pricing" class="is-primary"> \
+              What is a Premium account? \
+            </a> \
+            <div class="margin-top-15 control has-text-centered"> \
+              <a href="/profile/settings#premium" class="button is-stylish no-shadow is-primary is-small"> \
+                <span class="icon is-small"> \
+                  <i class="fa fa-diamond"></i> \
+                </span> \
+                <span>Upgrade</span> \
+              </a> \
+            </div> \
+          </div> \
+        </div>');
+      }
     }
   }
   function updateColorScheme(listing_info){
@@ -528,10 +535,12 @@ function editRowPurchased(listing_info){
     $("#example-domain-name").css("color", listing_info.primary_color);
     $("#example-button-primary, #example-rent-price-tag, #example-buy-price-tag").css({
       "background-color" : listing_info.primary_color,
+      "border-color" : listing_info.primary_color,
       "color" : calculateLuminance(listing_info.primary_color)
     });
     $("#example-button-accent").css({
       "background-color" : listing_info.secondary_color,
+      "border-color" : listing_info.secondary_color,
       "color" : calculateLuminance(listing_info.secondary_color)
     });
     $("#example-link-info").css("color", listing_info.tertiary_color);
@@ -550,22 +559,43 @@ function editRowPurchased(listing_info){
   }
   function updateBackground(listing_info){
     var background_image = (listing_info.background_image == null || listing_info.background_image == undefined || listing_info.background_image == "") ? "https://placeholdit.imgix.net/~text?txtsize=20&txt=NO%20IMG&w=96&h=64" : listing_info.background_image;
-    $("#background-image").attr('src', background_image).off().on("error", function() {
-      $(this).attr("src", "https://placeholdit.imgix.net/~text?txtsize=20&txt=LOADING...%20&w=96&h=64");
-    });
 
+    //remove any input values on upload forms
+    $("#background-image-input").val("");
+    $("#background-link-input").val(listing_info.background_image);
+    $("#background-link-refresh").removeClass('is-primary').addClass('is-disabled');
+
+    //background image of preview
+    if (listing_info.background_image != null && listing_info.background_image != undefined && listing_info.background_image != ""){
+      $("#example-wrapper").css({'background-image' : "url(" + background_image + ")"});
+    }
+    else {
+      $("#example-wrapper").css('background-image', "");
+    }
+
+    //background color
     var minicolor_options = {
       letterCase: "uppercase",
       swatches: ["#FFFFFF", "#E5E5E5", "#B2B2B2", "#7F7F7F", "#666666", "#222222", "#000000"]
     }
     $("#background-color-input").val(listing_info.background_color).minicolors("destroy").minicolors(minicolor_options);
-
-    //update the preview
-    $("#example-wrapper").css("background-color", listing_info.background_color);
+    $("#example-wrapper").css({"background-color" : listing_info.background_color});
   }
   function updateLogo(listing_info){
-    var logo = (listing_info.logo == null || listing_info.logo == undefined || listing_info.logo == "") ? "/images/dh-assets/flat-logo/dh-flat-logo-primary.png" : listing_info.logo;
-    $("#logo-image").attr('src', logo).off().on("error", function() {
+    //logo depending on premium user or not
+    if (user.stripe_subscription_id){
+      var logo = (listing_info.logo == null || listing_info.logo == undefined || listing_info.logo == "") ? "https://placeholdit.imgix.net/~text?txtsize=20&txt=NO%20LOGO&w=200&h=150" : listing_info.logo;
+    }
+    else {
+      var logo = (listing_info.logo == null || listing_info.logo == undefined || listing_info.logo == "") ? "/images/dh-assets/flat-logo/dh-flat-logo-primary.png" : listing_info.logo;
+    }
+
+    //remove any input values on upload forms
+    $("#logo-image-input").val("");
+    $("#logo-link-input").val(listing_info.logo);
+    $("#logo-link-refresh").removeClass('is-primary').addClass('is-disabled');
+
+    $("#example-logo").attr('src', logo).off().on("error", function() {
       $(this).attr("src", "/images/dh-assets/flat-logo/dh-flat-logo-primary.png");
     });
   }
@@ -593,7 +623,7 @@ function editRowPurchased(listing_info){
   //function to show loading offers
   function showLoadingOffers(){
     $("#loading-offers").removeClass('is-hidden');
-    $("#accepted-offer, #deposited-offer").addClass('is-hidden');
+    $(".hidden-while-loading-offers").addClass('is-hidden');
   }
 
   //function to get offers on a domain
@@ -634,15 +664,51 @@ function editRowPurchased(listing_info){
       $("#loading-offers").addClass('is-hidden');
       $("#offers-wrapper").empty();
 
+      //show rejected offers button
+      $("#show-rejected-offers").removeClass('is-primary').off().on('click', function(){
+        $(".rejected-offer").toggleClass('is-hidden');
+        $(this).toggleClass('is-primary').find(".fa").toggleClass('fa-toggle-on fa-toggle-off');
+
+        //hide no offers if there are any offers (that arent rejected)
+        if ($(".offer-row:not(.rejected-offer, #offer-clone)").length == 0){
+          $("#no-offers").toggleClass('is-hidden');
+        }
+      }).find(".fa").removeClass('fa-toggle-on').addClass('fa-toggle-off');
+
+      //sort offers
+      $("#offers-sort-select").val("timestamp_desc").off().on("change", function(){
+        var sort_value = $(this).val().split("_");
+        var sort_by = sort_value[0];
+        var sort_order = sort_value[1];
+
+        var offers_to_sort = $(".offer-row:not(#offer-clone)");
+        if (sort_order == "asc"){
+          offers_to_sort.sort(function(a,b){
+            return $(a).data("offer-data")[sort_by] > $(b).data("offer-data")[sort_by];
+          });
+        }
+        else {
+          offers_to_sort.sort(function(a,b){
+            return $(a).data("offer-data")[sort_by] < $(b).data("offer-data")[sort_by];
+          });
+        }
+
+        //re-order and append to parent
+        for (var i = 0; i < offers_to_sort.length; i++) {
+          offers_to_sort[i].parentNode.appendChild(offers_to_sort[i]);
+        }
+      });
+
       //no offers!
       if (!listing_info.offers.length){
         $("#no-offers").removeClass('is-hidden');
+        $("#offers-toolbar").addClass('is-hidden');
         $("#accepted-offer").addClass('is-hidden');
         $("#deposited-offer").addClass('is-hidden');
       }
       else {
-        $("#no-offers").addClass('is-hidden');
-        $("#offer-modal-domain").text(listing_info.domain_name);
+        //show toolbar for sort
+        $("#offers-toolbar").removeClass('is-hidden');
 
         //clone offers
         for (var x = 0; x < listing_info.offers.length; x++){
@@ -655,6 +721,7 @@ function editRowPurchased(listing_info){
           cloned_offer_row.find(".offer-offer").text(moneyFormat.to(parseFloat(listing_info.offers[x].offer)));
           cloned_offer_row.find(".offer-message").text(listing_info.offers[x].message);
           cloned_offer_row.attr("id", "offer-row-" + listing_info.offers[x].id);
+          cloned_offer_row.data("offer-data", listing_info.offers[x]);
 
           //click to open modal
           cloned_offer_row.find(".offer-modal-button").data("offer", listing_info.offers[x]).off().on("click", function(){
@@ -664,10 +731,15 @@ function editRowPurchased(listing_info){
             editOfferModal($(this).find(".offer-modal-button").data("offer"), listing_info);
           });
 
-          //accepted offer!
+          //accepted an offer!
           if (listing_info.offers[x].accepted == 1){
+            $("#offers-toolbar").addClass('is-hidden');
             cloned_offer_row.find(".offer-accepted").text('Accepted - ');
             $("#accepted-offer").data("offer_id", listing_info.offers[x].id);
+          }
+          else if (listing_info.offers[x].accepted == 0){
+            cloned_offer_row.find(".offer-accepted").text('Rejected - ');
+            cloned_offer_row.addClass('rejected-offer is-hidden unaccepted-offer');
           }
           else {
             cloned_offer_row.addClass('unaccepted-offer');
@@ -675,8 +747,17 @@ function editRowPurchased(listing_info){
           $("#offers-wrapper").prepend(cloned_offer_row);
         }
 
+        //hide no offers if there are any offers (that arent rejected)
+        if ($(".offer-row:not(.rejected-offer, #offer-clone)").length){
+          $("#no-offers").addClass('is-hidden');
+        }
+        else {
+          $("#no-offers").removeClass('is-hidden');
+        }
+
         //money has been deposited!
         if (listing_info.deposited == 1){
+          $("#offers-toolbar").addClass('is-hidden');
           $('.unaccepted-offer').addClass('is-hidden');
           $("#deposited-offer").removeClass('is-hidden');
         }
@@ -712,11 +793,20 @@ function editRowPurchased(listing_info){
     $("#offer-modal-phone").text(offer.phone);
     $("#offer-modal-message").text(offer.message);
 
-    //this offer was accepted! hide the buttons
-    if (offer.accepted){
+    //this offer was accepted or rejected! hide the buttons
+    if (offer.accepted == 1 || offer.accepted == 0){
       $("#offer-modal-button-wrapper").addClass('is-hidden');
+      $("#offer-response-label").removeClass('is-hidden');
+      $("#offer-response").val((offer.response) ? offer.response : "No response.").addClass('is-disabled');
+      var accept_or_reject_text = (offer.accepted == 1) ? "Accepted" : "Rejected";
+      $("#offer-modal-domain").text(accept_or_reject_text + " offer for " + listing_info.domain_name);
     }
+    //not yet accepted
     else {
+      $("#offer-modal-button-wrapper").removeClass('is-hidden');
+      $("#offer-modal-domain").text("Offer for " + listing_info.domain_name);
+      $("#offer-response-label").addClass('is-hidden');
+      $("#offer-response").val("").removeClass('is-disabled');
       $("#accept_button").off().on("click", function(){
         acceptOrRejectOffer(true, $(this), listing_info, offer.id);
       });
@@ -803,6 +893,7 @@ function editRowPurchased(listing_info){
       //no more offers!
       if ($(".offer-row").length == 1){
         $("#no-offers").removeClass('is-hidden');
+        $("#offers-toolbar").addClass('is-hidden');
       }
     }
   }
@@ -975,6 +1066,7 @@ function editRowPurchased(listing_info){
     //load theme buttons
     loadThemeHandler();
 
+    //allow rentals checkbox
     $("#rentable-input").on("change", function(){
       updateRentalInputsDisabled($(this).val());
     });
@@ -988,6 +1080,7 @@ function editRowPurchased(listing_info){
     $("#primary-color-input").on("input", function(){
       $("#example-button-primary, #example-rent-price-tag, #example-buy-price-tag").css({
         "background-color" : $(this).val(),
+        "border-color" : $(this).val(),
         "color" : calculateLuminance($(this).val())
       });
       $("#example-domain-name").css("color", $(this).val());
@@ -997,6 +1090,7 @@ function editRowPurchased(listing_info){
     $("#secondary-color-input").on("input", function(){
       $("#example-button-accent").css({
         "background-color" : $(this).val(),
+        "border-color" : $(this).val(),
         "color" : calculateLuminance($(this).val())
       });
     });
@@ -1016,6 +1110,44 @@ function editRowPurchased(listing_info){
       $("#example-wrapper").css("background-color", $(this).val());
     });
 
+    //remove uploading data and any uploaded images if typing the link
+    $("#background-link-input").on("input", function(){
+      $(this).data("uploading", false);
+      $("#background-image-input").val("");
+      var background_compare = (listing_info.background_image == null || listing_info.background_image == undefined) ? "" : listing_info.background_image;
+      if ($(this).val() != background_compare){
+        $("#background-link-refresh").addClass('is-primary').removeClass('is-disabled');
+      }
+      else {
+        $("#background-link-refresh").removeClass('is-primary').addClass('is-disabled');
+      }
+    });
+
+    //remove uploading data and any uploaded images if typing the link (logo)
+    $("#logo-link-input").on("input", function(){
+      $(this).data("uploading", false);
+      $("#logo-image-input").val("");
+      var logo_compare = (listing_info.logo == null || listing_info.logo == undefined) ? "" : listing_info.logo;
+      if ($(this).val() != logo_compare){
+        $("#logo-link-refresh").addClass('is-primary').removeClass('is-disabled');
+      }
+      else {
+        $("#logo-link-refresh").removeClass('is-primary').addClass('is-disabled');
+      }
+    });
+
+    //refresh background image (for preview)
+    $("#background-link-refresh").off().on("click", function(){
+      $("#background-link-refresh").removeClass('is-primary').addClass('is-disabled');
+      $("#example-wrapper").css({'background-image' : "url(" + $("#background-link-input").val() + ")"});
+    });
+
+    //refresh logo (for preview)
+    $("#logo-link-refresh").off().on("click", function(){
+      $("#logo-link-refresh").removeClass('is-primary').addClass('is-disabled');
+      $("#example-logo").attr('src', $("#logo-link-input").val());
+    });
+
     //delete images
     $(".delete-image").off().on("click", function(){
       var image_id = $(this).attr('id');
@@ -1029,7 +1161,7 @@ function editRowPurchased(listing_info){
         temp_img.attr("src", temp_img.data("default-img"));
         temp_input.data("deleted", true);
         temp_input.val("");
-        // temp_label.text(temp_label.data("default-name"));
+        $("#example-wrapper").css("background-image", "");
       }
       changedValue(temp_input, listing_info);
     });
@@ -1045,27 +1177,43 @@ function editRowPurchased(listing_info){
 //helper function to bind to inputs to listen for any changes from existing listing info
 function changedValue(input_elem, listing_info){
   var name_of_attr = input_elem.data("name");
+  if (name_of_attr == "background_image_link"){
+    var listing_info_comparison = listing_info["background_image"];
+  }
+  else if (name_of_attr == "logo_image_link"){
+    var listing_info_comparison = listing_info["logo"];
+  }
+  else {
+    var listing_info_comparison = listing_info[name_of_attr];
+  }
+
+  listing_info_comparison = (listing_info_comparison == undefined || listing_info_comparison == null) ? "" : listing_info_comparison;
 
   //clear any existing messages
   errorMessage(false);
   successMessage(false);
 
-  var save_button = $("#save-changes-button");
-  var cancel_button = $("#cancel-changes-button");
-
-  //only change if the value changed from existing or if image exists
-  if ((name_of_attr != "background_image" && name_of_attr != "logo" && input_elem.val() != listing_info[name_of_attr])
-  || ((name_of_attr == "background_image" || name_of_attr == "logo") && input_elem.val())
-  || ((name_of_attr == "background_image" || name_of_attr == "logo") && input_elem.data("deleted"))){
+  //only change if the value changed from existing
+  if (input_elem.val() != listing_info_comparison){
     input_elem.data('changed', true);
-    save_button.removeClass("is-disabled");
-    cancel_button.removeClass("is-hidden");
+    $("#save-changes-button").removeClass("is-disabled");
+    $("#cancel-changes-button").removeClass("is-hidden");
+
+    //changing background image
+    if (name_of_attr == "background_image" && input_elem[0].files[0]){
+      $("#background-link-input").data("uploading", true).val("Now uploading - " + input_elem[0].files[0].name);
+      $("#example-wrapper").css("background-image", "url(https://placeholdit.imgix.net/~text?txtsize=50&txt=NOW%20UPLOADING&w=1000&h=250)");
+    }
+    else if (name_of_attr == "logo" && input_elem[0].files[0]){
+      $("#logo-link-input").data("uploading", true).val("Now uploading - " + input_elem[0].files[0].name);
+      $("#example-logo").attr("src-image", "https://placeholdit.imgix.net/~text?txtsize=50&txt=NOW%20UPLOADING");
+    }
   }
   //hide the cancel, disable the save
   else {
     input_elem.data('changed', false);
-    save_button.addClass("is-disabled");
-    cancel_button.addClass("is-hidden");
+    $("#save-changes-button").addClass("is-disabled");
+    $("#cancel-changes-button").addClass("is-hidden");
   }
 }
 
@@ -1088,6 +1236,9 @@ function cancelListingChanges(){
 
 //function to submit status change
 function submitStatusChange(listing_info){
+  //take off the event handler for now
+  $("#status-color").off().addClass('is-loading');
+
   //clear any existing messages
   errorMessage(false);
   successMessage(false);
@@ -1104,6 +1255,13 @@ function submitStatusChange(listing_info){
     contentType: false,
     processData: false
   }, 'json').done(function(data){
+    //reattach status binding
+    $("#status-color").removeClass("is-loading").on("click", function(e){
+      var new_status = ($("#status-input").val() == "1") ? 0 : 1;
+      updateStatus({ status : new_status });
+      submitStatusChange(listing_info);
+    });
+
     if (data.state == "success"){
       var active_inactive_text = ($("#status-input").val() == "0") ? "inactive" : "active";
       successMessage("Listing has been set to " + active_inactive_text + "!");
@@ -1156,22 +1314,24 @@ function submitListingChanges(){
     var input_name = $(this).data("name");
     var input_val = (input_name == "background_image" || input_name == "logo") ? $(this)[0].files[0] : $(this).val();
 
-    //if background image is being deleted
-    if (input_name == "background_image" && $(this).data("deleted")){
-      var input_val = "";
-      $(this).data('deleted', false);
+    //if changing listing image link
+    if (input_name == "background_image_link"){
+      var listing_comparison = current_listing["background_image"];
     }
-
-    //if logo is being deleted
-    if (input_name == "logo" && $(this).data("deleted")){
-      var input_val = "";
-      $(this).data('deleted', false);
+    else if (input_name == "logo_image_link"){
+      var listing_comparison = current_listing["logo"];
+    }
+    else {
+      var listing_comparison = (current_listing[input_name] == null || current_listing[input_name] == undefined) ? "" : current_listing[input_name];
     }
 
     //if null or undefined
-    current_listing[input_name] = (current_listing[input_name] == null || current_listing[input_name] == undefined) ? "" : current_listing[input_name];
-    if (input_val != current_listing[input_name]){
-      formData.append(input_name, input_val);
+    if (input_val != listing_comparison){
+      if ((input_name == "logo_image_link" || input_name == "background_image_link") && $(this).data("uploading")){
+      }
+      else {
+        formData.append(input_name, input_val);
+      }
     }
   });
 
@@ -1191,15 +1351,8 @@ function submitListingChanges(){
     if (data.state == "success"){
       successMessage("Successfully updated this listing!");
       updateCurrentListing(data.listings);
-
-      //update images if necessary
-      if (data.new_background_image){
-        updateBackground({ background_image : data.new_background_image});
-      }
-      if (data.new_logo){
-        updateBackground({ logo : data.new_logo});
-      }
-
+      updateBackground(current_listing);
+      updateLogo(current_listing);
       refreshSubmitButtons();
 
       (function(listing_info){
@@ -1219,13 +1372,19 @@ function submitListingChanges(){
 
 //helper function to display/hide error messages per listing
 function errorMessage(message){
-  if (message && message != "nothing-changed"){
-    successMessage(false);
+  successMessage(false);
+  if (message && message == "not-premium"){
+    updatePremiumNotification();
+    $("#listing-msg-error").removeClass('is-hidden').addClass("is-active");
+    $("#listing-msg-error-text").text("You cannot edit the listing design without a Premium Account!");
+  }
+  else if (message && message == "nothing-changed"){
+    refreshSubmitButtons();
+    $("#listing-msg-error").addClass('is-hidden').removeClass("is-active");
+  }
+  else if (message){
     $("#listing-msg-error").removeClass('is-hidden').addClass("is-active");
     $("#listing-msg-error-text").text(message);
-  }
-  else {
-    $("#listing-msg-error").addClass('is-hidden').removeClass("is-active");
   }
 }
 
@@ -1348,7 +1507,7 @@ function updateExistingDNS(a_records){
     if (temp_a_records.indexOf("208.68.37.82") != -1){
       temp_a_records.splice(temp_a_records.indexOf("208.68.37.82"), 1);
       $("#existing_a_record_clone").removeClass('is-hidden').find(".existing_data").text("208.68.37.82");
-      $("#existing_a_record_clone").find(".next_step").html("<span class='is-success'>Done!</span>");
+      $("#existing_a_record_clone").find(".next_step").html("<span class='is-success'>Done! Press the button below!</span>");
 
       //prevent refreshing of table
       $("#refresh-dns-button").off().addClass('is-disabled');
@@ -1482,9 +1641,9 @@ function multiVerify(verify_button){
     }
   }).done(function(data){
 
-    verify_button.on("click", function(){
+    verify_button.removeClass('is-loading').blur().on("click", function(){
       multiVerify(verify_button);
-    }).removeClass('is-loading');
+    });
 
     //deselect all rows
     selectAllRows($("#select-all"), true);
@@ -1508,7 +1667,7 @@ function multiVerify(verify_button){
     //success rows
     if (data.state == "success"){
       verificationHandler(data);
-      successMessage("Successfully verified listings!");
+      successMessage("Successfully verified " + ids.length + " listings!");
     }
   });
 }
@@ -1521,37 +1680,41 @@ function verificationHandler(data){
 
 //function to delete multiple rows
 function multiDelete(delete_button){
-  delete_button.off();
+  //confirm first
+  if (!delete_button.data("confirm")){
+    delete_button.data("confirm", true).find("#multi-delete-text").text("You sure?");
+  }
+  else {
+    delete_button.addClass('is-loading').off();
 
-  var deletion_ids = [];
-  var selected_rows = $(".table-row").filter(function(){
-    if ($(this).hasClass('is-selected')){
-      deletion_ids.push($(this).data('id'));
-      return true;
-    }
-  });
-
-  $.ajax({
-    url: "/profile/mylistings/delete",
-    method: "POST",
-    data: {
-      ids: deletion_ids
-    }
-  }).done(function(data){
-    delete_button.on("click", function(){
-      multiDelete(delete_button);
+    var deletion_ids = [];
+    var selected_rows = $(".table-row").filter(function(){
+      if ($(this).hasClass('is-selected')){
+        deletion_ids.push($(this).data('id'));
+        return true;
+      }
     });
 
-    //deselect all rows
-    selectAllRows($("#select-all"), true);
+    $.ajax({
+      url: "/profile/mylistings/delete",
+      method: "POST",
+      data: {
+        ids: deletion_ids
+      }
+    }).done(function(data){
+      //re-add handler, re-add confirmation
+      delete_button.removeClass('is-loading').blur().data("confirm", false).on("click", function(){
+        multiDelete(delete_button);
+      }).find("#multi-delete-text").text("Delete")
 
-    if (data.state == "success"){
-      deletionHandler(data.rows, selected_rows);
-    }
-    else {
-      console.log(data);
-    }
-  });
+      //deselect all rows
+      selectAllRows($("#select-all"), true);
+      if (data.state == "success"){
+        deletionHandler(data.rows, selected_rows);
+        successMessage("Successfully deleted " + deletion_ids.length + " listings!");
+      }
+    });
+  }
 }
 
 //function to handle post-deletion of multi listings

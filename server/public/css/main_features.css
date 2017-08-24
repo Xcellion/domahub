@@ -56,6 +56,9 @@
   justify-content: center;
   margin: 0 auto;
   width: 35px; }
+  @media screen and (max-width: 768px) {
+    .hiw-num {
+      margin: 0 0 10px; } }
 
 .flex-align-center {
   display: flex;

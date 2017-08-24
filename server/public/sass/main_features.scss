@@ -63,6 +63,9 @@
   justify-content: center;
   margin: 0 auto;
   width: 35px;
+  @include mobile {
+    margin: 0 0 10px;
+  }
 }
 
 .flex-align-center {
