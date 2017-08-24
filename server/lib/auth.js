@@ -192,7 +192,7 @@ module.exports = {
 
   //function to check token length
   checkToken : function(req, res, next){
-    if (req.params.token.length != 40 || !req.params.token){
+    if (req.params.token.length != 10 || !req.params.token){
       res.redirect('/');
     }
     else {
@@ -239,7 +239,7 @@ module.exports = {
 
   //function to request verification
   requestVerify: function(req, res){
-    if (!req.user.token_exp && req.isAuthenticated() && req.user.type == 0 && !req.user.requested && req.header("x-requested-with") == "XMLHttpRequest"){
+    if ((!req.user.token_exp || !req.user.token) && req.isAuthenticated() && req.user.type == 0 && !req.user.requested && req.header("x-requested-with") == "XMLHttpRequest"){
       req.user.requested = true;
       generateVerify(req, res, req.user.email, req.user.username, function(state){
         if (state == "success"){
@@ -262,7 +262,7 @@ module.exports = {
     else if (req.user.type == 1){
       error.handler(req, res, "Account is already verified!", "json");
     }
-    else if (req.user.requested || (req.user.token_exp && (new Date().getTime() < new Date(req.user.token_exp)))){
+    else if (req.user.requested || (req.user.token && req.user.token_exp && (new Date().getTime() < new Date(req.user.token_exp)))){
       resendVerify(req.user, function(state){
         if (state == "success"){
           req.logout();
@@ -422,7 +422,7 @@ module.exports = {
     else {
 
       //generate token to email to user
-      crypto.randomBytes(20, function(err, buf) {
+      crypto.randomBytes(5, function(err, buf) {
         var token = buf.toString('hex');
         var now = new Date(new Date().getTime() + 3600000);   // 1 hour buffer
         var token_exp = new Date(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(),  now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds());
@@ -678,7 +678,7 @@ function resendVerify(user, cb){
 function generateVerify(req, res, email, username, cb){
   console.log("F: Creating a new verification link...");
   //generate token to email to user
-  crypto.randomBytes(20, function(err, buf) {
+  crypto.randomBytes(5, function(err, buf) {
     var verify_token = buf.toString('hex');
     var now = new Date(new Date().getTime() + 3600000);   // 1 hour buffer
     var verify_exp = new Date(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(),  now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds());
