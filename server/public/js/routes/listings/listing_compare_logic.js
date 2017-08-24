@@ -243,7 +243,7 @@ $(document).ready(function() {
           onHide: function(){
             $("#compare-menu").find(".tour-backdrop").remove();
           },
-          template: "<div class='popover tour arrow-top-right'> \
+          template: "<div class='popover tour'> \
             <div class='popover-content content'></div> \
             <div class='popover-navigation'> \
               <button class='button is-small' data-role='prev'>« Prev</button> \
@@ -392,14 +392,6 @@ function switchTheme(theme_name){
 
   for (var x in theme_to_load){
     listing_info[x] = theme_to_load[x];
-  }
-
-  //hide footer if it's not a basic theme
-  if (theme_to_load.theme_name != "DomaHub"){
-    $(".footer.is-dark").addClass('is-hidden');
-  }
-  else {
-    $(".footer.is-dark").removeClass('is-hidden');
   }
 
   updateBackgroundImage(listing_info.background_image);
