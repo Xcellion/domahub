@@ -24,10 +24,10 @@ module.exports = data_model;
 
 //<editor-fold>-------------------------------CHECKS-------------------------------
 
-//check if a specific offer is verified
+//check if a specific offer is verified and not yet accepted/rejected
 data_model.prototype.checkContactVerified = function(domain_name, offer_id, callback){
   console.log("DB: Checking if code for domain: " + domain_name + " is verified...");
-  query = "SELECT 1 AS 'exist' \
+  query = "SELECT \
       FROM stats_contact_history \
       INNER JOIN listings \
       ON listings.id = stats_contact_history.listing_id \

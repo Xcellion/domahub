@@ -250,6 +250,7 @@ module.exports = function(app, db, auth, error, stripe){
     checkDomainListed,
     profile_functions.getAccountListings,
     owner_functions.checkListingOwnerPost,
+    buyer_functions.checkAlreadyAccepted,
     buyer_functions.checkContactVerified,
     buyer_functions.acceptOrRejectOffer,
     buyer_functions.notifyOfferer
