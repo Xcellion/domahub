@@ -11,12 +11,10 @@ $(document).ready(function() {
     rememberAccount($(this).is(":checked"));
   });
 
-  $("#login-form").on('submit', function(){
-    $("#login-button").addClass('is-loading');
-  });
-
   //to catch empty emails or empty passwords
-  $('#navbar_form').on("submit", function(event){
+  $('#login-form').on("submit", function(event){
+    $("#login-button").addClass('is-loading');
+
     //re-set cookie for remember
     rememberAccount($("#remember-checkbox").is(":checked"));
 
