@@ -1,5 +1,6 @@
 <script type="text/javascript">
 var compare = <% if(typeof compare != "undefined"){ %><%-JSON.stringify(compare)%><% }else{ %>""<% } %>;
+var fonts = <% if(typeof fonts != "undefined"){ %><%-JSON.stringify(fonts)%><% }else{ %>""<% } %>;
 </script>
 <link rel="stylesheet" href="/css/lib/jquery.minicolors.css" type="text/css" />
 <link rel="stylesheet" href="/css/lib/bootstrap-tour-standalone.min.css" type="text/css" />
@@ -136,12 +137,10 @@ var compare = <% if(typeof compare != "undefined"){ %><%-JSON.stringify(compare)
           <p class="control has-icon">
             <span class="select is-fullwidth">
               <select tabindex="0" id="font-name-input" class="theme-changeable-input">
-                <option selected default value="Rubik">Rubik</option>
-                <option value="Times New Roman">Times New Roman</option>
-                <option value="Helvetica">Helvetica</option>
-                <option value="Courier">Courier</option>
-                <option value="Verdana">Verdana</option>
-                <option value="Tahoma">Tahoma</option>
+                <%# make all the categories %>
+                <% for (var x = 0; x < fonts.length; x++){ %>
+                  <option value="<%= fonts[x] %>"><%= fonts[x] %></option>
+                <% } %>
               </select>
             </span>
             <i class="fa fa-font"></i>
@@ -150,7 +149,14 @@ var compare = <% if(typeof compare != "undefined"){ %><%-JSON.stringify(compare)
       </div>
       <div class="control">
         <label class="label" for="background-image-input">Background Image URL</label>
-        <input id="background-image-input" type="text" class="input theme-changeable-input">
+        <div class="control has-addons">
+          <input id="background-image-input" type="text" class="input theme-changeable-input">
+          <button id="background-image-refresh" class='is-disabled no-shadow is-outlined button'>
+            <span class="icon is-small">
+              <i class="fa fa-refresh"></i>
+            </span>
+          </button>
+        </div>
       </div>
       <div class="control">
         <label class="label" for="background-color-input">Background Color</label>

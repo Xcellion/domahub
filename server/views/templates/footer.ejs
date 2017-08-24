@@ -1,38 +1,49 @@
-<footer class="footer is-dark">
+<footer class="footer">
   <div class="container">
-    <nav class="footer-list">
-      <li class="footer-item"><a href="/contact" title="Contact Us">Contact</a></li>
-      <li class="footer-item"><a href="/faq" title="FAQs">FAQ</a></li>
-      <li class="footer-item"><a href="https://medium.com/@domahub" title="Blog">Blog</a></li>
-      <li class="footer-item"><a href="/terms" title="Terms of Service">Terms</a></li>
-      <li class="footer-item"><a href="/privacy" title="Privacy Policy">Privacy</a></li>
-    </nav>
     <div class="footer-bar">
-      <div class="margin-bottom-10">
-        <a id="facebook-icon" class="social-icon footer-bar-item" title="Facebook" href="https://www.facebook.com/domahub">
+      <div class="bar-left">
+        <a tabindex="0" class="circle-logo footer-item" href="/" title="Home"></a>
+        <p class="footer-item">
+          <i class="fa fa-copyright v-align-bottom"></i> DomaHub, Inc.
+        </p>
+        <a id="facebook-icon" class="social-icon" title="Facebook" href="https://www.facebook.com/domahub">
           <span class="icon is-small is-white">
             <i class="fa fa-facebook"></i>
           </span>
         </a>
-        <a id="twitter-icon" class="social-icon footer-bar-item" title="Twitter" href="https://twitter.com/domahub">
+        <a id="twitter-icon" class="social-icon" title="Twitter" href="https://twitter.com/domahub">
           <span class="icon is-small is-white">
             <i class="fa fa-twitter"></i>
           </span>
         </a>
-        <a id="linkedin-icon" class="social-icon footer-bar-item" title="LinkedIn" href="https://www.linkedin.com/company/domahub">
+        <a id="linkedin-icon" class="social-icon" title="LinkedIn" href="https://www.linkedin.com/company/domahub">
           <span class="icon is-small is-white">
             <i class="fa fa-linkedin"></i>
           </span>
         </a>
       </div>
-      <div class="footer-list is-spaced">
-        <p class="footer-bar-item is-light">
-          © <%= new Date().getFullYear(); %> DomaHub, Inc.
-        </p>
-        <small class="footer-bar-item has-text-right is-light">
-          Icons from <a class="is-light" href="https://www.emojione.com" rel="noopener" target="_blank">Emojione</a>.
-        </small>
-      </div>
+      <ul class="bar-right">
+        <li class="footer-item">
+          <a tabindex="0" href="/contact" title="Contact Us">Contact</a>
+        </li>
+        <li class="footer-item">
+          <a tabindex="0" href="/faq" title="FAQs">FAQ</a>
+        </li>
+        <li class="footer-item">
+          <a tabindex="0" href="https://medium.com/@domahub" title="Blog">Blog</a>
+        </li>
+        <li class="footer-item">
+          <a tabindex="0" class="footer-item" href="/terms" title="Terms of Service">Terms</a>
+        </li>
+        <li class="footer-item">
+          <a tabindex="0" class="footer-item" href="/privacy" title="Privacy Policy">Privacy</a>
+        </li>
+        <li>
+          <a class="is-light" href="https://www.emojione.com" rel="noopener" target="_blank" title="Icons from Emojione">
+            <img class="v-align-middle" height="16" width="16" alt="Icons from Emojione" src="/images/lib/smile.png" />
+          </a>
+        </li>
+      </ul>
     </div>
   </div>
 </footer>

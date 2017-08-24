@@ -174,7 +174,7 @@ button[data-balloon] {
   background-color: white;
   border-radius: 290486px;
   display: inline-block;
-  font-size: 18px;
+  font-size: 19px;
   height: 32px;
   line-height: 24px;
   min-width: 32px;
@@ -235,7 +235,7 @@ button[data-balloon] {
   .media:not(:last-child) {
     border-bottom: 1px solid rgba(0, 0, 0, 0.12); }
   .media:hover, .media:focus {
-    background-color: #efefef; }
+    background-color: #f1f1f1; }
 
 .media-items {
   display: flex;
@@ -281,7 +281,8 @@ button[data-balloon] {
   -moz-transition: left 0.25s ease;
   -o-transition: left 0.25s ease;
   -webkit-transition: left 0.25s ease;
-  transition: left 0.25s ease; }
+  transition: left 0.25s ease;
+  border-right: 1px solid rgba(0, 0, 0, 0.12); }
   @media screen and (max-width: 768px) {
     #filter-menu {
       -webkit-box-shadow: 0 3px 15px 0 rgba(0, 0, 0, 0.12);
@@ -307,6 +308,7 @@ button[data-balloon] {
     width: 30px; }
 
 .current-domain-name {
+  font-weight: 700;
   word-break: break-all; }
 
 #design-tab-drop {
@@ -338,6 +340,7 @@ button[data-balloon] {
       width: 225px; } }
 
 #table-body {
+  background-color: white;
   border-radius: 3px;
   max-height: 420px;
   white-space: nowrap;
@@ -370,11 +373,11 @@ button[data-balloon] {
   overflow-x: hidden;
   white-space: nowrap; }
   .table-row:hover {
-    background-color: #efefef;
+    background-color: #f1f1f1;
     cursor: pointer; }
   .table-row.is-active {
     border-right-width: 5px;
-    border-right-color: rgba(0, 0, 0, 0.66); }
+    border-right-color: #3cbc8d; }
     .table-row.is-active p {
       font-weight: 700; }
 
@@ -409,6 +412,17 @@ button[data-balloon] {
   top: 0;
   right: 0;
   position: absolute !important; }
+
+#example-logo {
+  max-width: 200px;
+  max-height: 150px; }
+
+#example-wrapper {
+  background-repeat: no-repeat;
+  background-size: cover; }
+
+.upload-label {
+  border-radius: 0 0 3px 3px !important; }
 
 .listing-img {
   width: 96px;

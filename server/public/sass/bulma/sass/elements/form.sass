@@ -14,12 +14,12 @@ input:-webkit-autofill
 
 .input
   +form-control
-  border: 1px solid $black-disabled
+  border: 1px solid $border
   border-radius: $radius
   max-width: 100%
   width: 100%
   &:hover
-    border-color: $black-secondary
+    border-color: $black-disabled
   // Sizes
   &.is-small
     +control-small
@@ -38,7 +38,7 @@ input:-webkit-autofill
 .textarea
   @extend .input
   border-radius: $radius
-  border: 1px solid $black-disabled
+  border: 1px solid $border
   display: block
   line-height: 1.2
   max-height: 600px
@@ -78,11 +78,11 @@ input:-webkit-autofill
     cursor: pointer
     display: block
     padding-right: 36px
-    border-color: $black-disabled
+    border-color: $border
     &:hover,
     &:active,
     &:focus
-      border-color: $black-secondary
+      border-color: $black-disabled
     &::-ms-expand
       display: none
   &::-ms-expand
@@ -103,7 +103,7 @@ input:-webkit-autofill
     top: 50%
   &:active,
   &:focus
-    border-color: $black-secondary
+    border-color: $black-disabled
   // Sizes
   &.is-small
     height: 24px

@@ -171,58 +171,35 @@ button[data-balloon] {
   width: 100%; }
 
 #landing {
-  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
-  width: 100%;
-  position: relative;
-  height: 100vh;
-  display: flex;
   align-items: center;
-  overflow: hidden; }
-  @media screen and (max-width: 456px) {
-    #landing {
-      height: calc(100vh - 60px); } }
-  #landing .container {
-    top: -100px; }
-    @media screen and (max-height: 720px) {
-      #landing .container {
-        top: -50px; } }
-    @media screen and (max-height: 500px) {
-      #landing .container {
-        top: 0; }
-        #landing .container .image {
-          display: none !important; } }
+  display: flex;
+  overflow: hidden;
+  position: relative;
+  width: 100%; }
   #landing .subtitle {
     max-width: 500px;
     margin-left: auto;
     margin-right: auto; }
-  #landing .image {
-    height: 200px;
-    width: 300px; }
-    @media screen and (max-width: 768px) {
-      #landing .image {
-        height: 125px;
-        width: 185px; } }
-    #landing .image img {
-      height: 200px;
-      width: 300px; }
-      @media screen and (max-width: 768px) {
-        #landing .image img {
-          height: 125px;
-          width: 185px; } }
 
-.coffee {
-  -webkit-animation: steam 3s infinite;
-  -moz-animation: steam 3s infinite;
-  -o-animation: steam 3s infinite;
-  animation: steam 3s infinite; }
+#features {
+  background-color: #f1f1f1;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 40px; }
 
-@keyframes steam {
-  0% {
-    transform: translateY(0); }
-  50% {
-    transform: translateY(-5px); }
-  100% {
-    transform: translateY(0); } }
+#attention {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-image: linear-gradient(#3cbc8d, #62c9a3);
+  border-radius: 5px;
+  padding: 20px; }
+  @media screen and (max-width: 768px) {
+    #attention {
+      flex-direction: column; }
+      #attention h2 {
+        margin-bottom: 20px;
+        text-align: center; } }
 
 #tryit-form {
   margin-left: auto;
@@ -290,80 +267,3 @@ button[data-balloon] {
       .button-wrapper .button:not(:last-child) {
         margin-right: 0;
         margin-bottom: 10px; } }
-
-.flex-align-center {
-  display: flex;
-  align-items: center;
-  margin: 10px 0; }
-  .flex-align-center p, .flex-align-center h2 {
-    flex-grow: 1; }
-  .flex-align-center .icon {
-    margin-right: 15px; }
-    .flex-align-center .icon.fix {
-      margin-left: 2px; }
-
-.feature {
-  display: flex;
-  align-items: flex-start;
-  padding-top: 30px; }
-  .feature .icon,
-  .feature .step-number {
-    margin-right: 15px; }
-
-.is-step {
-  background-color: #3cbc8d;
-  color: white;
-  padding: 15px;
-  font-weight: 700; }
-
-.price-card {
-  -moz-transition: all 0.25s ease;
-  -o-transition: all 0.25s ease;
-  -webkit-transition: all 0.25s ease;
-  transition: all 0.25s ease;
-  border-radius: 3px; }
-  .price-card .card-title {
-    border-bottom: 1px solid rgba(0, 0, 0, 0.12);
-    padding: 15px 20px; }
-  .price-card:hover {
-    -moz-transform: translate(0, -5px);
-    -o-transform: translate(0, -5px);
-    -ms-transform: translate(0, -5px);
-    -webkit-transform: translate(0, -5px);
-      -webkit-transform-transform: translate(0, -5px); }
-
-.section.has-pyramid {
-  position: relative;
-  overflow: hidden; }
-  .section.has-pyramid .container {
-    z-index: 3; }
-  .section.has-pyramid::before {
-    -moz-transform: rotate(60deg);
-    -o-transform: rotate(60deg);
-    -ms-transform: rotate(60deg);
-    -webkit-transform: rotate(60deg);
-      -webkit-transform-transform: rotate(60deg);
-    content: "";
-    background: #62c9a3;
-    width: 500px;
-    position: absolute;
-    top: 200px;
-    height: 500px;
-    left: 0;
-    z-index: 1; }
-  .section.has-pyramid::after {
-    -moz-transform: rotate(105deg);
-    -o-transform: rotate(105deg);
-    -ms-transform: rotate(105deg);
-    -webkit-transform: rotate(105deg);
-      -webkit-transform-transform: rotate(105deg);
-    content: "";
-    opacity: 0.4;
-    width: 0;
-    position: absolute;
-    top: 175px;
-    height: 0;
-    border: 300px solid transparent;
-    border-bottom-color: #309670;
-    left: 253px;
-    z-index: 2; }

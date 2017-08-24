@@ -31,11 +31,7 @@ module.exports = function(app, db, auth, error){
 
   //array of all views from the main page
   main_page_routes = [
-    // "/about",
-    // "/mission",
-    // "/sellers",
-    // "/renters",
-    // "/press",
+    "/features",
     "/privacy",
     "/faq",
     "/careers",
