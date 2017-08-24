@@ -13,35 +13,13 @@ $(document).ready(function() {
 
   //to catch empty emails or empty passwords
   $('#login-form').on("submit", function(event){
-    $("#login-button").addClass('is-loading');
 
     //re-set cookie for remember
     rememberAccount($("#remember-checkbox").is(":checked"));
-
-    //if no email is entered
-    if (!$("#email").val()) {
-      $("#message").fadeOut(100, function(){
-        $("#message").css("color", "#ed1c24").html("Please enter your email address!").fadeIn(100);
-      });
-      return false;
-    }
-
-    //if no password is entered
-    if (!$("#password").val()) {
-      $("#message").fadeOut(100, function(){
-        $("#message").css("color", "#ed1c24").html("Please enter your password!").fadeIn(100);
-      });
-      return false;
-    }
+    $("#login-button").addClass('is-loading');
   });
 
 });
-
-//helper function to validate email address
-function validateEmail(email) {
-  var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-  return re.test(email);
-}
 
 //helper function to remember cookie
 function rememberAccount(bool){
