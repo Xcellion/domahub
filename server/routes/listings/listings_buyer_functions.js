@@ -154,7 +154,7 @@ module.exports = {
       //render the redirect page to notify offerer that offer was successfully sent
       res.render("redirect", {
         redirect: "/listing/" + req.params.domain_name,
-        message: "Your offer has been verified! \n Please wait for the owner to accept or reject your offer.",
+        message: "Your offer has been verified and the owner of " + req.params.domain_name + " has been notified! There is no further action required on your end. Please wait for the owner to accept or reject your offer.",
         button: "Back to " + req.params.domain_name,
         auto_redirect: false,
         listing_info: req.session.listing_info
