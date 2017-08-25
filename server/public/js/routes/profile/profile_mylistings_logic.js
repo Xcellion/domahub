@@ -905,7 +905,11 @@ function editRowPurchased(listing_info){
     }).done(function(data){
       button_elem.removeClass('is-loading');
       if (data.state == "success"){
-        $("#offers-toolbar").addClass('is-hidden');
+
+        //hide toolbar if accepting
+        if (accept){
+          $("#offers-toolbar").addClass('is-hidden');
+        }
         offerSuccessHandler(accept, listing_info, offer_id);
       }
       else {
@@ -942,18 +946,17 @@ function editRowPurchased(listing_info){
       //remove offer from listing_info
       for (var x = 0 ; x < listing_info.offers.length; x++){
         if (listing_info.offers[x].id == offer_id){
-          listing_info.offers.splice(x, 1);
+          listing_info.offers[x].accepted = 0;
           break;
         }
       }
 
-      //remove the offer row
-      $("#offer-row-" + offer_id).remove();
+      //hide the offer row
+      $("#offer-row-" + offer_id).addClass("is-hidden rejected-offer").find(".offer-accepted").text('Rejected - ');
 
       //no more offers!
-      if ($(".offer-row").length == 1){
+      if ($(".offer-row:not(.rejected-offer):not(#offer-clone").length == 0){
         $("#no-offers").removeClass('is-hidden');
-        $("#offers-toolbar").addClass('is-hidden');
       }
     }
   }
