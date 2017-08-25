@@ -420,18 +420,10 @@ module.exports = {
 
     Data.checkContactVerified(req.params.domain_name, req.params.offer_id, function(result){
       if (result.state == "success" && result.info.length > 0){
-        if (result.info[0].accepted == 1){
-          error.handler(req, res, "You have already accepted this offer!", "json");
-        }
-        else if (result.info[0].accepted == 0) {
-          error.handler(req, res, "You have already rejected this offer!", "json");
-        }
-        else {
-          next();
-        }
+        next();
       }
       else {
-        res.redirect("/listing/" + req.params.domain_name);
+        error.handler(req, res, "This is an invalid or unverified offer!", "json");
       }
     });
   },
