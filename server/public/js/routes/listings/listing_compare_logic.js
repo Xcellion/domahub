@@ -327,6 +327,13 @@ $(document).ready(function() {
         }
       }
     });
+
+    //delete notifications button
+    $(".delete").on("click", function(e){
+      e.preventDefault();
+      $("#compare-msg").addClass('is-hidden');
+    });
+
   }
 });
 

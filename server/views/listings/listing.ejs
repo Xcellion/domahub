@@ -32,7 +32,7 @@
 		    <button class="delete"></button>
 		    <span id="contact-error-message">Something went wrong! Please refresh the page and try again.</span>
 		</div>
-		
+
 		<%# TOOL TO COMPARE %>
 		<% if (compare) { %>
 			<%- include("modules/compare_module.ejs") %>
@@ -47,7 +47,7 @@
 
 		<%# SHOW OR HIDE FOOTER %>
 		<% if (!listing_info.premium) { %>
-			<footer class="footer">
+			<footer class="footer is-hidden">
 			  <div class="container">
 			    <div class="footer-bar">
 			      <div class="bar-left">
