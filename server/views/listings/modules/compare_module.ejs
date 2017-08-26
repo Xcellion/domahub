@@ -9,6 +9,19 @@ var fonts = <% if(typeof fonts != "undefined"){ %><%-JSON.stringify(fonts)%><% }
 <script src="/js/routes/listings/listing_compare_logic.js" type="text/javascript"></script>
 <script src="/js/themes.js" type="text/javascript"></script>
 
+<div id="compare-msg" class="notification is-white">
+  <span class="delete"></span>
+  <div class="content">
+    <p>
+      This demo is a preview of what your domain's sales page could look like.
+    </p>
+  </div>
+  <div class="button-wrapper">
+    <a id="restart-tutorial-button" class="button is-small is-stylish">Restart Tutorial</a>
+    <a href="/signup" class="button is-small is-primary is-stylish">Sign Me Up!</a>
+  </div>
+</div>
+
 <div id="show-menu-wrapper" class="control">
   <button id="show-menu-button" class="button">
     <span class="icon">
