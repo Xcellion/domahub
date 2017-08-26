@@ -7,61 +7,64 @@
   </head>
 
   <body>
-      <div class="content has-text-centered clear-nav">
-        <h2 class="margin-bottom-5 has-text-centered">
-            <a class='is-inline-block flat-logo is-primary' tabindex="0" title="Home" href="/">
-                <div class='is-inline-block flat-logo is-primary'></div>
-            </a>
-        </h2>
-          <% if (typeof message != "undefined") {%>
-              <p id="message" class="has-text-centered margin-top-0 margin-bottom-15"><%= message %></p>
-          <% } else { %>
-              <p id="message" class="has-text-centered margin-top-0 margin-bottom-15">Please enter a new password!</p>
-          <% }%>
-      </div>
+    <div class="content has-text-centered clear-nav">
+      <h2 class="margin-bottom-5 has-text-centered">
+        <a class='is-inline-block flat-logo is-primary' tabindex="0" title="Home" href="/">
+          <div class='is-inline-block flat-logo is-primary'></div>
+        </a>
+      </h2>
+      <% if (typeof message != "undefined") {%>
+          <p id="message" class="has-text-centered margin-top-0 margin-bottom-15"><%= message %></p>
+      <% } else { %>
+          <p id="message" class="has-text-centered margin-top-0 margin-bottom-15">Please enter a new password!</p>
+      <% }%>
+    </div>
 
     <div id="login-form" class="account-form">
       <form id="target" action="/reset" method="post">
       <div id="form_to_hide">
-          <label class="label">Password</label>
-          <p class="control has-icon has-icon-right">
-              <input class="input is-medium" name="password" type="password" id="pw-input">
-              <i class="fa fa-check is-hidden is-primary"></i>
-              <i class="fa fa-times is-hidden is-danger"></i>
-          </p>
-          <label class="label">Confirm Password</label>
-          <p class="control has-icon has-icon-right">
-              <input class="input is-medium" name="verify-pw" type="password" id="verify-pw" autocomplete="new-password">
-              <i class="fa fa-check is-hidden is-primary"></i>
-              <i class="fa fa-times is-hidden is-danger"></i>
-          </p>
-          <p class="control">
-              <button id="login-button" class="login-button button is-primary is-medium is-fullwidth">
-                  Change my password
-              </button>
-          </p>
+        <label class="label">Password</label>
+        <p class="control has-icon has-icon-right">
+          <input required class="input is-medium" name="password" type="password" id="pw-input">
+          <i class="fa fa-check is-hidden is-primary"></i>
+          <i class="fa fa-times is-hidden is-danger"></i>
+        </p>
+        <label class="label">Confirm Password</label>
+        <p class="control has-icon has-icon-right">
+          <input required class="input is-medium" name="verify-pw" type="password" id="verify-pw" autocomplete="new-password">
+          <i class="fa fa-check is-hidden is-primary"></i>
+          <i class="fa fa-times is-hidden is-danger"></i>
+        </p>
+        <p class="control">
+          <button id="reset-button" class="is-stylish login-button button is-primary is-medium is-fullwidth">
+            <span class="icon"><i class="fa fa-unlock-alt"></i></span>
+            <span>Reset password</span>
+          </button>
+        </p>
 
-          <p class="control">
-              <p class="has-text-centered">
-                  Remember your password?
-              </p>
-              <div class="has-text-centered">
-                  <a class="signup is-accent" href="/login">Log In Now</a>
-              </div>
-          </p>
+        <div class="control has-text-centered">
+          <small>
+            Remember your password?
+          </small>
+          <small class="is-block">
+            <a class="signup is-primary" href="/login">Log in now</a>
+          </small>
+        </div>
       </div>
 
       <div id="accept">
-          <a id="login-button" class="login-button button is-primary is-medium is-fullwidth" href="/login">
-              Log in
-          </a>
+        <a href="/login" id="login-button" class="login-button button is-primary is-stylish is-fullwidth">
+          <span class="icon is-small">
+            <i class="fa fa-sign-in"></i>
+          </span>
+          <span>Go to Log In</span>
+        </a>
       </div>
 
       </form>
     </div>
 
-  <%- include("../templates/js_scripts"); %>
-  <script src="/js/routes/account/account_pw_reset_logic.js" type="text/javascript"></script>
+    <script src="/js/routes/account/account_pw_reset_logic.js" type="text/javascript"></script>
 
   </body>
 

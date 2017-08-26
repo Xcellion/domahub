@@ -36,7 +36,10 @@ module.exports = function(app, db, auth, error){
   //temporary to test /redirect page
   app.get("/redirect", function(req, res){
     res.render("redirect.ejs", {
-      redirect: "/"
+      redirect: "/",
+      listing_info : {},
+      message: "lol",
+      button: ""
     });
   });
 

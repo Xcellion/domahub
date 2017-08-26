@@ -46,8 +46,8 @@
 							<div class="control is-expanded has-icon">
 								<span class="select is-fullwidth">
 									<select id="sort-select" tabindex="0">
-										<option selected value="id-asc">Date Created (Newest)</option>
-										<option value="id-desc">Date Created (Oldest)</option>
+										<option selected value="id-asc">Date Created (Oldest)</option>
+										<option value="id-desc">Date Created (Newest)</option>
 										<option value="domain_name-asc">Domain Name (A - Z)</option>
 										<option value="domain_name-desc">Domain Name (Z - A)</option>
 										<option value="min_price-asc">Min. Price (Low - High)</option>
@@ -534,10 +534,16 @@
 								      </div>
 											<div id="offer-modal-button-wrapper" class="control margin-top-20 is-grouped is-grouped-center">
 								        <p class="control">
-								          <a id="accept_button" tabindex="0" class='button margin-right-25 is-primary is-stylish is-small'>Accept offer</a>
+								          <a id="accept_button" tabindex="0" class='button margin-right-25 is-primary is-stylish is-small'>
+                            <span class="icon is-small"><i class="fa fa-check"></i></span>
+                            <span>Accept offer</span>
+                          </a>
 								        </p>
 								        <p class="control">
-								          <a id="reject_button" tabindex="0" class='button is-outlined is-danger is-stylish is-small'>Reject offer</a>
+								          <a id="reject_button" tabindex="0" class='button is-outlined is-danger is-stylish is-small'>
+                            <span class="icon is-small"><i class="fa fa-times"></i></span>
+                            <span>Reject offer</span>
+                          </a>
 								        </p>
 								      </div>
 										</div>
@@ -665,8 +671,14 @@
 								<span>Refresh Table</span>
 							</a>
 							<div class="verified-elem">
-								<button id="save-changes-button" class="button is-disabled is-primary is-stylish is-small no-shadow">Save</button>
-								<button id="cancel-changes-button" class="button is-danger is-inverted is-hidden is-stylish is-small no-shadow">Cancel</button>
+								<button id="save-changes-button" class="button is-disabled is-primary is-stylish is-small no-shadow">
+                  <span class="icon is-small"><i class="fa fa-floppy-o"></i></span>
+  								<span>Save Changes</span>
+                </button>
+								<button id="cancel-changes-button" class="button is-danger is-inverted is-hidden is-stylish is-small no-shadow">
+                  <span class="icon is-small"><i class="fa fa-ban"></i></span>
+                  <span>Cancel Changes</span>
+                </button>
 							</div>
 						</footer>
 					</div>
@@ -676,7 +688,6 @@
 	</section>
 
 	<%- include("../templates/footer"); %>
-	<%- include("../templates/js_scripts"); %>
 	<script src="/js/jquery/jquery-ui.js" type="text/javascript"></script>
 	<script src="/js/lib/moment.min.js" type="text/javascript"></script>
 	<script src="/js/lib/tag-it.min.js" type="text/javascript"></script>

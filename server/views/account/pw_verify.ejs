@@ -7,46 +7,51 @@
   </head>
 
   <body>
-      <div class="content has-text-centered clear-nav">
-        <h2 class="margin-bottom-5 has-text-centered">
-            <a class='is-inline-block flat-logo is-primary' tabindex="0" title="Home" href="/">
-                <div class='is-inline-block flat-logo is-primary'></div>
-            </a>
-        </h2>
-          <% if (typeof message != "undefined") {%>
-              <p id="message" class="has-text-centered margin-top-0 margin-bottom-15"><%= message %></p>
-          <% } %>
-      </div>
-
-    <div id="login-form" class="account-form">
-        <form id="target" method="post">
-          <div id="message" class="has-text-centered margin-bottom-15">
-            <% if (typeof message != "undefined") {%>
-              <%= message %>
-            <% } else {%>
-                Click below to send an email to verify your account!
-            <% } %>
-        </div>
-
-        <div id="form_to_hide">
-            <p class="control">
-                <button id="login-button" class="login-button button is-primary is-medium is-fullwidth">
-                    Verify your account
-                </button>
-            </p>
-        </div>
-
-        <div id="accept">
-            <a id="login-button" class="login-button button is-primary is-medium is-fullwidth" href="/login">
-                Log in
-            </a>
-        </div>
-
-        </form>
+    <div class="content has-text-centered clear-nav">
+      <h2 class="margin-bottom-5 has-text-centered">
+        <a class='is-inline-block flat-logo is-primary' tabindex="0" title="Home" href="/">
+            <div class='is-inline-block flat-logo is-primary'></div>
+        </a>
+      </h2>
+      <% if (typeof message != "undefined") {%>
+        <p id="message" class="has-text-centered margin-top-0 margin-bottom-15"><%= message %></p>
+      <% } %>
     </div>
 
-  <%- include("../templates/js_scripts"); %>
-  <script src="/js/routes/account/account_verify_request_logic.js" type="text/javascript"></script>
+    <div id="login-form" class="account-form">
+      <form id="target" method="post">
+        <div id="message" class="has-text-centered margin-bottom-15">
+        <% if (typeof message != "undefined") {%>
+          <%= message %>
+        <% } else {%>
+            This account has not been verified yet! Please click below to send an email to verify your account!
+        <% } %>
+      </div>
+
+      <div id="form_to_hide">
+        <p class="control">
+          <button id="sendverify-button" class="is-stylish login-button button is-primary is-medium is-fullwidth">
+            <span class="icon is-small">
+              <i class="fa fa-check-circle-o"></i>
+            </span>
+            <span>Send verification email</span>
+          </button>
+        </p>
+      </div>
+
+      <div id="accept">
+        <a href="/login" id="login-button" class="login-button button is-primary is-stylish is-fullwidth">
+          <span class="icon is-small">
+            <i class="fa fa-sign-in"></i>
+          </span>
+          <span>Go to Log In</span>
+        </a>
+      </div>
+
+      </form>
+    </div>
+
+    <script src="/js/routes/account/account_verify_request_logic.js" type="text/javascript"></script>
 
   </body>
 

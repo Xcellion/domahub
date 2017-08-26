@@ -168,7 +168,8 @@ function handleSubmitDisabled(){
 
   //see if we should remove disable on submit button
   if ($(".domain-name-input").filter(function(){ return $(this).val() != "" && !$(this).hasClass("is-disabled")}).length > 0
-  && $(".notification.is-danger:not(.is-hidden)").length == 0){
+  && $(".notification.is-danger:not(.is-hidden)").length == 0
+  && $(".domain-name-input.is-danger").length == 0){
     $("#domains-submit").removeClass('is-disabled');
   }
   else {
@@ -202,6 +203,12 @@ function submitDomains(submit_elem){
       submit_elem.off().addClass('is-loading');
       submitDomainsAjax(domains, submit_elem);
     }
+  }
+
+  //show warning that something needs fixed
+  else {
+    $("#domain-error-message").removeClass("is-hidden").addClass("is-active");
+    $("#domains-submit").addClass('is-disabled');
   }
 
 }

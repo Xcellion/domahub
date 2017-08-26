@@ -1,3 +1,5 @@
+<script src="/js/navbar_logic.js" type="text/javascript"></script>
+<script src="/js/routes/account/account_login_logic.js" type="text/javascript"></script>
 <nav id="navbar" class="nav is-white">
   <div class="nav-left">
     <div class="nav-item">
@@ -57,11 +59,11 @@
               </p>
               <form id="login-form" action="/login" method="post">
                 <p class="control has-icon">
-                  <input id="email" autofocus class="input is-medium" name="email" type="email" placeholder="Email" spellcheck="false">
+                  <input required id="email" autofocus class="input is-medium" name="email" type="email" placeholder="Email" spellcheck="false">
                   <i class="fa fa-envelope-o"></i>
                 </p>
                 <p class="control has-icon">
-                  <input id="password" class="input is-medium" name="password" type="password" placeholder="Password">
+                  <input required id="password" class="input is-medium" name="password" type="password" placeholder="Password">
                   <i class="fa fa-lock"></i>
                 </p>
                 <p class="control">
