@@ -1676,6 +1676,10 @@ function selectAllRows(select_all_button, select_or_deselect){
 
 //helper function to handle multi-select action buttons
 function multiSelectButtons(){
+
+  //remove delete confirmation (if exists);
+  $("#multi-delete").data("confirm", false).find("#multi-delete-text").text("Delete");
+
   var selected_rows = $(".table-row:not(.clone-row)").filter(function(){ return $(this).hasClass("is-selected") == true });
   var verified_selected_rows = selected_rows.filter(function(){ return $(this).data("verified") == false});
 
