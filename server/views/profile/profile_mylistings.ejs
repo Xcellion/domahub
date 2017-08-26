@@ -25,7 +25,8 @@
 			</div>
 			<div class="columns">
 				<div id="filter-menu" class="column is-3">
-
+					<button class="delete filter-menu-toggle is-hidden-tablet">
+					</button>
 					<!-- FITER MENU -->
 					<div id="filters">
 						<div class="control is-grouped">
@@ -177,9 +178,9 @@
 						</div>
 						<div id="unverified-drop-tab" class="yes-listings-elem drop-tab unverified-elem is-hidden">
 							<h3 class="is-bold">You must verify that you own this domain.</h3>
-							<p>The table below details the DNS entries that are needed to verify this domain.</p>
-							<p id="registrar_url">Please <a>log in to your domain provider</a> to create these entries.</p>
-							<p>If you require any assistance, please refer to our <a   style'target-new:="" tab;'="" class="is-primary margin-bottom-25" href="https://medium.com/@domahub/how-to-verify-domains-on-domahub-7d526c4ce6d"> step-by-step guide</a> on domain verification.</p>
+							<p class="has-line-height">The table below details the DNS entries that are needed to verify this domain.</p>
+							<p class="has-line-height" id="registrar_url">Please <a>log in to your domain provider</a> to create these entries.</p>
+							<p class="has-line-height">If you require any assistance, please refer to our <a   style'target-new:="" tab;'="" class="is-primary margin-bottom-25" href="https://medium.com/@domahub/how-to-verify-domains-on-domahub-7d526c4ce6d"> step-by-step guide</a> on domain verification.</p>
 							<table class="table margin-top-15">
                 <thead>
 									<tr>
@@ -502,7 +503,7 @@
 						      <div class="modal-container">
 										<div class="modal-content offer-popup">
 											<div class="content has-text-centered">
-								        <h3 class="is-bold" id="offer-modal-domain"></h3>
+								        <p class="is-bold" id="offer-modal-domain"></p>
 								        <small>Received on <span id="offer-modal-timestamp"></span></small>
 								      </div>
 											<div class="content margin-bottom-0">
@@ -624,7 +625,7 @@
 									</div>%>
 									<div class="media-content">
 										<div class="media-heading">
-											<h3 class="offer-name"></h3>
+											<p class="offer-name"></p>
 										</div>
 										<div class="media-items">
 											<div class="media-item">
@@ -633,7 +634,7 @@
 										</div>
 									</div>
 									<div class="media-right has-text-right">
-										<h3 class="is-bold"><span class="offer-accepted"></span><span class="offer-offer"></span></h3>
+										<p class="is-bold"><span class="offer-accepted"></span><span class="offer-offer"></span></p>
 										<a class="button offer-modal-button is-small no-shadow margin-top-5" tabindex="0">View Offer</a>
 									</div>
 								</div>

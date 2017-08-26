@@ -11,6 +11,19 @@
   left: 105px !important;
 }
 
+#compare-msg {
+  position: fixed;
+  bottom: 0;
+  right: 20px;
+  z-index: 10;
+  width: 400px;
+  @include mobile {
+    bottom: -20px;
+    width: 100%;
+    right: 0;
+  }
+}
+
 // Compare Model Stuff
 .master {
   &.right {
@@ -26,7 +39,7 @@
 }
 
 .module {
-  min-height: 410px;
+  min-height: 460px;
 }
 
 #compare-model {

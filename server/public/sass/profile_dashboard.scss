@@ -71,20 +71,19 @@
 }
 
 #filter-menu {
-  @include transition(left 0.25s ease);
+  @include transition(all 0.25s);
   border-right: 1px solid $border;
   @include mobile {
     @include box-shadow(0,3px,15px,$border,0);
     background-color: $white;
-    height: 1000px;
+    height: 100%;
     width: 300px;
-    left: -300%;
+    left: -100%;
     position: absolute;
     z-index: 10;
   }
   &.is-active {
     left: -20px;
-    top: 9px;
   }
   .delete {
     position: absolute;
@@ -109,16 +108,6 @@
   position: relative;
 }
 
-.blackscreen {
-  position: absolute;
-  height: calc(100% + 100px);
-  width: calc(100% + 40px);
-  top: -22px;
-  left: -19px;
-  background-color: $black-secondary;
-  z-index: 5;
-}
-
 #premium-only-notification {
   @include translate(-50%,50%);
   background-color: $white;
@@ -133,44 +122,31 @@
 }
 
 // table stuff
+#filters {
+  margin-top: 35px;
+}
 
 #table-body {
   background-color: $white;
   border-radius: $radius;
+  border: 1px solid $border;
+  border-top-width: 0;
   max-height: 420px;
   white-space: nowrap;
   overflow-y: auto;
 }
 
-.button-wrapper {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  .button {
-    &:nth-child(2) {
-      margin-right: 5px;
-      margin-left: 5px;
-    }
-  }
-  .button,
-  .select {
-    flex-grow: 1;
-    margin-bottom: 5px;
-  }
-  select {
-    width: 100%;
-  }
-}
-
 .table-row {
   @include transition(border 0.25s ease);
   align-items: center;
-  border: 1px solid $border;
   display: flex;
   justify-content: space-between;
   padding: 5px;
   overflow-x: hidden;
   white-space: nowrap;
+  &:not(:first-child) {
+    border-top: 1px solid $border;
+  }
   &:hover {
     background-color: $grey-lighter;
     cursor: pointer;
@@ -197,6 +173,36 @@
   overflow-x: hidden;
 }
 
+.button-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  .button {
+    &:nth-child(2) {
+      margin-right: 5px;
+      margin-left: 5px;
+    }
+  }
+  .button,
+  .select {
+    flex-grow: 1;
+    margin-bottom: 5px;
+  }
+  select {
+    width: 100%;
+  }
+}
+
+.blackscreen {
+  position: absolute;
+  height: calc(100% + 100px);
+  width: calc(100% + 40px);
+  top: -22px;
+  left: -19px;
+  background-color: $black-secondary;
+  z-index: 5;
+}
+
 .checkbox-form {
   height: 24px;
   margin-right: 10px;
@@ -216,6 +222,10 @@
   display: block;
   margin: 5px 0;
   color: $text-light;
+}
+
+.has-line-height {
+  line-height: 1.5;
 }
 
 // listing image

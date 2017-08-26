@@ -278,10 +278,10 @@ button[data-balloon] {
   margin-left: 2px; }
 
 #filter-menu {
-  -moz-transition: left 0.25s ease;
-  -o-transition: left 0.25s ease;
-  -webkit-transition: left 0.25s ease;
-  transition: left 0.25s ease;
+  -moz-transition: all 0.25s;
+  -o-transition: all 0.25s;
+  -webkit-transition: all 0.25s;
+  transition: all 0.25s;
   border-right: 1px solid rgba(0, 0, 0, 0.12); }
   @media screen and (max-width: 768px) {
     #filter-menu {
@@ -289,14 +289,13 @@ button[data-balloon] {
       -moz-box-shadow: 0 3px 15px 0 rgba(0, 0, 0, 0.12);
       box-shadow: 0 3px 15px 0 rgba(0, 0, 0, 0.12);
       background-color: white;
-      height: 1000px;
+      height: 100%;
       width: 300px;
-      left: -300%;
+      left: -100%;
       position: absolute;
       z-index: 10; } }
   #filter-menu.is-active {
-    left: -20px;
-    top: 9px; }
+    left: -20px; }
   #filter-menu .delete {
     position: absolute;
     right: 10px; }
@@ -314,15 +313,6 @@ button[data-balloon] {
 #design-tab-drop {
   position: relative; }
 
-.blackscreen {
-  position: absolute;
-  height: calc(100% + 100px);
-  width: calc(100% + 40px);
-  top: -22px;
-  left: -19px;
-  background-color: rgba(0, 0, 0, 0.66);
-  z-index: 5; }
-
 #premium-only-notification {
   -moz-transform: translate(-50%, 50%);
   -o-transform: translate(-50%, 50%);
@@ -339,26 +329,17 @@ button[data-balloon] {
     #premium-only-notification {
       width: 225px; } }
 
+#filters {
+  margin-top: 35px; }
+
 #table-body {
   background-color: white;
   border-radius: 3px;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  border-top-width: 0;
   max-height: 420px;
   white-space: nowrap;
   overflow-y: auto; }
-
-.button-wrapper {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between; }
-  .button-wrapper .button:nth-child(2) {
-    margin-right: 5px;
-    margin-left: 5px; }
-  .button-wrapper .button,
-  .button-wrapper .select {
-    flex-grow: 1;
-    margin-bottom: 5px; }
-  .button-wrapper select {
-    width: 100%; }
 
 .table-row {
   -moz-transition: border 0.25s ease;
@@ -366,12 +347,13 @@ button[data-balloon] {
   -webkit-transition: border 0.25s ease;
   transition: border 0.25s ease;
   align-items: center;
-  border: 1px solid rgba(0, 0, 0, 0.12);
   display: flex;
   justify-content: space-between;
   padding: 5px;
   overflow-x: hidden;
   white-space: nowrap; }
+  .table-row:not(:first-child) {
+    border-top: 1px solid rgba(0, 0, 0, 0.12); }
   .table-row:hover {
     background-color: #f1f1f1;
     cursor: pointer; }
@@ -391,6 +373,29 @@ button[data-balloon] {
 .td-domain {
   overflow-x: hidden; }
 
+.button-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between; }
+  .button-wrapper .button:nth-child(2) {
+    margin-right: 5px;
+    margin-left: 5px; }
+  .button-wrapper .button,
+  .button-wrapper .select {
+    flex-grow: 1;
+    margin-bottom: 5px; }
+  .button-wrapper select {
+    width: 100%; }
+
+.blackscreen {
+  position: absolute;
+  height: calc(100% + 100px);
+  width: calc(100% + 40px);
+  top: -22px;
+  left: -19px;
+  background-color: rgba(0, 0, 0, 0.66);
+  z-index: 5; }
+
 .checkbox-form {
   height: 24px;
   margin-right: 10px;
@@ -407,6 +412,9 @@ button[data-balloon] {
   display: block;
   margin: 5px 0;
   color: rgba(0, 0, 0, 0.66); }
+
+.has-line-height {
+  line-height: 1.5; }
 
 .on-img {
   top: 0;

@@ -1649,7 +1649,7 @@ input:-webkit-autofill {
     .select.is-fullwidth select {
       width: 100%; }
   .select.is-disabled select {
-    background-color: #f1f1f1;
+    background-color: #d0d0d0;
     color: rgba(0, 0, 0, 0.38);
     border-color: #d0d0d0; }
   .select:after {
@@ -1699,7 +1699,8 @@ input:-webkit-autofill {
 
 .label {
   color: #212121;
-  display: block; }
+  display: block;
+  font-weight: 700; }
   @media screen and (max-width: 456px) {
     .label {
       font-size: 14px !important; } }
@@ -2017,7 +2018,7 @@ input:-webkit-autofill {
     width: 350px;
     z-index: 100; }
     .notification.is-popup.is-active {
-      top: 60px; }
+      top: 80px; }
       @media screen and (max-width: 768px) {
         .notification.is-popup.is-active {
           border-radius: 0;
@@ -4308,7 +4309,6 @@ input:-webkit-autofill {
 
 .footer {
   background-color: #f1f1f1;
-  margin-top: 40px;
   overflow: hidden;
   position: relative;
   padding: 40px 0; }
