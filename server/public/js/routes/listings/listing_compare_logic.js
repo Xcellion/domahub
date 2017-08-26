@@ -394,6 +394,14 @@ function switchTheme(theme_name){
     listing_info[x] = theme_to_load[x];
   }
 
+  //hide footer if it's not a basic theme
+    if (theme_to_load.theme_name != "DomaHub"){
+      $(".footer").addClass('is-hidden');
+    }
+    else {
+      $(".footer").removeClass('is-hidden');
+    }
+
   updateBackgroundImage(listing_info.background_image);
   updateBackgroundColor(listing_info.background_color);
   updateFontName(listing_info.font_name);

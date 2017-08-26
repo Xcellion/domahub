@@ -522,7 +522,7 @@ function editRowPurchased(listing_info){
   //</editor-fold>
 
   //<editor-fold>-------------------------------DESIGN TAB EDITS-------------------------------
-
+  
   //function to switch theme
   function switchTheme(theme_name){
     var theme_to_load = findTheme(theme_name);
@@ -1560,7 +1560,7 @@ function updateRegistrarURL(whois){
     var reg_url = whois["Registrar URL"] || whois["Registrar URL (registration services)"];
     var regex_url = /^((http|https):\/\/)/;
     if (!regex_url.test(reg_url)) { reg_url = "http://" + reg_url; }
-    $("#registrar_url").replaceWith("<p id='registrar_url'>Please <a target='_blank' class='is-accent' href='" + reg_url + "'>log in to your domain provider</a> (" + reg_name + ") to create these entries.");
+    $("#registrar_url").replaceWith("<p id='registrar_url'>Please <a target='_blank' class='is-primary' href='" + reg_url + "'>log in to your domain provider</a> (" + reg_name + ") to create these entries.");
   }
 }
 

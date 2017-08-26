@@ -176,6 +176,18 @@ button[data-balloon] {
 #step-4 {
   left: 105px !important; }
 
+#compare-msg {
+  position: fixed;
+  bottom: 0;
+  right: 20px;
+  z-index: 10;
+  width: 400px; }
+  @media screen and (max-width: 768px) {
+    #compare-msg {
+      bottom: -20px;
+      width: 100%;
+      right: 0; } }
+
 .master.right {
   flex-direction: row; }
 
@@ -187,7 +199,7 @@ button[data-balloon] {
   align-items: center; }
 
 .module {
-  min-height: 410px; }
+  min-height: 460px; }
 
 #compare-model {
   width: 100%;
