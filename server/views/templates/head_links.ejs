@@ -53,3 +53,14 @@ qacct:"p-09CUz3n_dWjFg"
     ga('create', 'UA-92778659-1', 'auto');
     ga('send', 'pageview');
 </script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script>
+    (function($){
+        var $span = $('<span class="fa" style="display:none"></span>').appendTo('body');
+        if ($span.css('fontFamily') !== 'FontAwesome' ) {
+            //fallback link
+            $('head').append('<link href="/fonts/font-awesome/css/font-awesome.min.css" rel="stylesheet">');
+        }
+        $span.remove();
+    })(jQuery);
+</script>

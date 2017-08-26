@@ -1,5 +1,3 @@
-var can_submit = true;
-
 $(document).ready(function() {
 
   //verify password input
@@ -8,6 +6,16 @@ $(document).ready(function() {
 
     if (70 > pw_length && pw_length >= 6) {
       showSuccessDanger($(this), true);
+
+      //if matching verified pw input field as well
+      if ($("#verify-pw").val()){
+        if ($("#verify-pw").val() == $(this).val()) {
+          showSuccessDanger($("#verify-pw"), true);
+        }
+        else {
+          showSuccessDanger($("#verify-pw"), false);
+        }
+      }
     }
     else if (pw_length == 0){
       showSuccessDanger($(this));
@@ -19,7 +27,7 @@ $(document).ready(function() {
 
   //verify passwords are matching
   $("#verify-pw").keyup(function() {
-    if ($("#pw-input").val() == $(this).val()) {
+    if ($("#pw-input").val().length > 0 && $("#pw-input").val() == $(this).val()) {
       showSuccessDanger($(this), true);
     }
     else if ($(this).val().length == 0){
@@ -33,54 +41,32 @@ $(document).ready(function() {
   $('#login-form').submit(function(event){
     event.preventDefault();
 
-    //if no password is entered
-    if (!$("#pw-input").val()) {
-      $("#message").fadeOut(100, function(){
-        $("#message").css("color", "#ed1c24").text("Please enter a password!").fadeIn(100);
-        $("#pw-input").focus();
-        showSuccessDanger($("#pw-input"), false);
-      });
-      return false;
-    }
+    $("#reset-button").addClass('is-loading');
 
-    //if passwords do not match
-    else if ($("#pw-input").val() != $("#verify-pw").val()){
-      $("#message").fadeOut(100, function(){
-        $("#message").css("color", "#ed1c24").html("Passwords do not match!").fadeIn(100);
-        $("#pw-input").focus();
-        showSuccessDanger($("#verify-pw"), false);
-      });
-      return false;
-    }
-    else {
-      can_submit = false;
+    $.ajax({
+      type: "POST",
+      url: window.location.pathname,
+      data: {
+        password: $("#pw-input").val()
+      }
+    }).done(function(data){
+      //reset the data
+      $("#pw-input").val("");
+      $("#verify-pw").val("");
+      $("#reset-button").removeClass('is-loading');
 
-      $.ajax({
-        type: "POST",
-        url: window.location.pathname,
-        data: {
-          password: $("#pw-input").val()
-        }
-      }).done(function(data){
-        //reset the data
-        $("#pw-input").val("");
-        $("#verify-pw").val("");
-
-        if (data.state == "success"){
-          $("#message").removeAttr("style").text("Success! You may log in with your new password!");
-          $("#form_to_hide").hide();
-          $("#accept").show();
-        }
-        else if (data.message == "Invalid token! Please click here to reset your password again!"){
-          $("#message").html("Invalid token! Please click <a href='/forgot'>here</a> to reset your password again!");
-        }
-        else {
-          console.log(data);
-          can_submit = true;
-          $("#message").html(data.message);
-        }
-      });
-    }
+      if (data.state == "success"){
+        $("#message").text("Success! You may log in with your new password!");
+        $("#form_to_hide").hide();
+        $("#accept").show();
+      }
+      else if (data.message == "Invalid token! Please click here to reset your password again!"){
+        $("#message").html("Invalid token! Please click <a class='is-primary' href='/forgot'>here</a> to reset your password again!");
+      }
+      else {
+        $("#message").html(data.message);
+      }
+    });
   });
 });
 
