@@ -719,6 +719,7 @@ function editRowPurchased(listing_info){
     //hide loading msg
     else {
       $("#loading-offers").addClass('is-hidden');
+      $("#offers-wrapper").empty();
 
       //rejected offers button
       $("#show-rejected-offers").removeClass('is-primary').off().on('click', function(){
