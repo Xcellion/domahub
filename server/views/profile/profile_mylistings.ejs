@@ -593,7 +593,7 @@
                 </div>
                 <div id="offers-toolbar" class="hidden-while-loading-offers is-hidden control has-border-bottom padding-bottom-20 margin-bottom-0 is-grouped">
                   <div class="control has-icon">
-                    <span class="select is-fullwidth">
+                    <span class="select">
                       <select id="offers-sort-select" tabindex="0">
                         <option selected value="timestamp_desc">Date Received (Newest)</option>
                         <option value="timestamp_asc">Date Received (Oldest)</option>
@@ -606,11 +606,13 @@
                       </select>
                     </span>
                     <i class="fa fa-sort"></i>
-                  </div>
-                  <div class="control">
                     <a id="show-rejected-offers" class="button no-shadow is-outlined">
                       <span class="icon is-small"><i class="fa fa-toggle-off"></i></span>
                       <span class="button-text">Rejected Offers</span>
+                    </a>
+                    <a id="refresh-offers" class="button no-shadow is-outlined">
+                      <span class="icon is-small"><i class="fa fa-refresh"></i></span>
+                      <span class="button-text">Refresh Offers</span>
                     </a>
                   </div>
                 </div>
