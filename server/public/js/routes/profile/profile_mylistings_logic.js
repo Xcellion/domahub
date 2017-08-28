@@ -426,12 +426,10 @@ function editRowPurchased(listing_info){
     $("#status-input").val(listing_info.status);
 
     if (listing_info.status == 1){
-      $("#status-text").text("Active");
       $("#status-color").addClass("is-primary").removeClass('is-danger');
       $("#status-icon").addClass("fa-toggle-on").removeClass('fa-toggle-off');
     }
     else {
-      $("#status-text").text("Inactive");
       $("#status-color").addClass('is-danger').removeClass("is-primary");
       $("#status-icon").addClass('fa-toggle-off').removeClass("fa-toggle-on");
     }
@@ -522,7 +520,7 @@ function editRowPurchased(listing_info){
   //</editor-fold>
 
   //<editor-fold>-------------------------------DESIGN TAB EDITS-------------------------------
-  
+
   //function to switch theme
   function switchTheme(theme_name){
     var theme_to_load = findTheme(theme_name);
