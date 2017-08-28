@@ -54,11 +54,14 @@
     }
     &:last-child {
       display: flex;
-      .icon {
-        margin-right: 15px;
-      }
     }
   }
+}
+
+#offer-modal-message{
+  max-height:100px;
+  width:100%;
+  white-space:pre-wrap;
 }
 
 .offer-msg {
