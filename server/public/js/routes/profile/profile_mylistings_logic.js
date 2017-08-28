@@ -677,6 +677,7 @@ function editRowPurchased(listing_info){
   function showLoadingOffers(){
     $("#loading-offers").removeClass('is-hidden');
     $(".hidden-while-loading-offers").addClass('is-hidden');
+    $("#offers-wrapper").empty();
   }
 
   //function to get offers on a domain
@@ -692,6 +693,8 @@ function editRowPurchased(listing_info){
         //update local listings variable
         if (current_listing){
           (function(current_listing){
+
+            $("#refresh-offers").removeClass('is-loading');
 
             //update the change row handler
             $("#row-listing_id" + current_listing.id).off().on("click", function(e){
@@ -710,14 +713,13 @@ function editRowPurchased(listing_info){
     //show offers if we have it
     if (listing_info.offers == undefined){
       showLoadingOffers();
-      $("#offers-wrapper").empty();
     }
     //hide loading msg
     else {
       $("#loading-offers").addClass('is-hidden');
       $("#offers-wrapper").empty();
 
-      //show rejected offers button
+      //rejected offers button
       $("#show-rejected-offers").removeClass('is-primary').off().on('click', function(){
         $(".rejected-offer").toggleClass('is-hidden');
         $(this).toggleClass('is-primary').find(".fa").toggleClass('fa-toggle-on fa-toggle-off');
@@ -727,6 +729,12 @@ function editRowPurchased(listing_info){
           $("#no-offers").toggleClass('is-hidden');
         }
       }).find(".fa").removeClass('fa-toggle-on').addClass('fa-toggle-off');
+
+      //refresh offers button
+      $("#refresh-offers").off().on('click', function(){
+        $(this).addClass('is-loading');
+        getDomainOffers(listing_info.domain_name);
+      });
 
       //sort offers
       $("#offers-sort-select").val("timestamp_desc").off().on("change", function(){
