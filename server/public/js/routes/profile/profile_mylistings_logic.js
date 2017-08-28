@@ -680,6 +680,15 @@ function editRowPurchased(listing_info){
     $("#offers-wrapper").empty();
   }
 
+  ///get a specific offer by ID
+  function getOffer(offers, offer_id){
+    for (var x = 0; x < offers.length; x++){
+      if (offers[x].id == offer_id){
+        return offers[x];
+      }
+    }
+  }
+
   //function to get offers on a domain
   function getDomainOffers(domain_name){
     showLoadingOffers();
@@ -912,15 +921,19 @@ function editRowPurchased(listing_info){
   function acceptOrRejectOffer(accept, button_elem, listing_info, offer_id){
     button_elem.addClass('is-loading');
     var accept_url = (accept) ? "/accept" : "/reject";
+    var response_to_offerer = $("#offer-response").val();
     $.ajax({
       url: "/listing/" + listing_info.domain_name + "/contact/" + offer_id + accept_url,
       method: "POST",
       data: {
-        response: $("#offer-response").val()
+        response: response_to_offerer
       }
     }).done(function(data){
       button_elem.removeClass('is-loading');
       if (data.state == "success"){
+
+        //set the response text
+        getOffer(listing_info.offers, offer_id).response = response_to_offerer;
 
         //hide toolbar if accepting
         if (accept){
