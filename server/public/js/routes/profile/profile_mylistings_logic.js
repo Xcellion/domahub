@@ -745,12 +745,22 @@ function editRowPurchased(listing_info){
         var offers_to_sort = $(".offer-row:not(#offer-clone)");
         if (sort_order == "asc"){
           offers_to_sort.sort(function(a,b){
-            return $(a).data("offer-data")[sort_by] > $(b).data("offer-data")[sort_by];
+            if (sort_by == "name"){
+              return $(a).data("offer-data")[sort_by].toLowerCase() > $(b).data("offer-data")[sort_by].toLowerCase();
+            }
+            else {
+              return $(a).data("offer-data")[sort_by] > $(b).data("offer-data")[sort_by];
+            }
           });
         }
         else {
           offers_to_sort.sort(function(a,b){
-            return $(a).data("offer-data")[sort_by] < $(b).data("offer-data")[sort_by];
+            if (sort_by == "name"){
+              return $(a).data("offer-data")[sort_by].toLowerCase() < $(b).data("offer-data")[sort_by].toLowerCase();
+            }
+            else {
+              return $(a).data("offer-data")[sort_by] < $(b).data("offer-data")[sort_by];
+            }
           });
         }
 
@@ -858,7 +868,7 @@ function editRowPurchased(listing_info){
     if (offer.accepted == 1 || offer.accepted == 0){
       $("#offer-modal-button-wrapper").addClass('is-hidden');
       $("#offer-response-label").removeClass('is-hidden');
-      $("#offer-response").val((offer.response) ? offer.response : "No response.").addClass('is-disabled');
+      $("#offer-response").val((offer.response) ? offer.response : "You did not include a response.").addClass('is-disabled');
       var accept_or_reject_text = (offer.accepted == 1) ? "Accepted" : "Rejected";
       $("#offer-modal-domain").text(accept_or_reject_text + " offer for " + listing_info.domain_name);
     }
