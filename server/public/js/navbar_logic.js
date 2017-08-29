@@ -64,12 +64,6 @@ $(document).ready(function() {
     });
   }
 
-  //delete notifications button
-  $(".delete").on("click", function(e){
-    e.preventDefault();
-    $(this).parent(".notification").addClass('is-hidden');
-  });
-
 });
 
 //function to change navbar on scroll

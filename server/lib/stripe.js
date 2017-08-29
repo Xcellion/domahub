@@ -377,7 +377,9 @@ module.exports = {
     }
     else {
 
-      var total_price = Math.round(req.session.listing_info.buy_price * 100);    //USD in cents
+      //BIN or buying acter accepting an offer
+      var price_of_listing = (req.session.new_buying_info.id) ? req.session.new_buying_info.offer : req.session.listing_info.buy_price;
+      var total_price = Math.round(price_of_listing * 100);    //USD in cents
 
       //something went wrong with the price
       if (isNaN(total_price)){
@@ -395,9 +397,10 @@ module.exports = {
             "domain_name" : req.params.domain_name,
             "owner_email" : req.session.listing_info.owner_id,
             "listing_id" : req.session.listing_info.id,
-            "buyer_name" : req.session.new_buying_info.offerer_name,
-            "buyer_email" : req.session.new_buying_info.offerer_email,
-            "buyer_phone" : req.session.new_buying_info.offerer_phone,
+            "offer_id" : req.session.new_buying_info.offer_id,
+            "buyer_name" : req.session.new_buying_info.name,
+            "buyer_email" : req.session.new_buying_info.email,
+            "buyer_phone" : req.session.new_buying_info.phone,
           }
         }
 

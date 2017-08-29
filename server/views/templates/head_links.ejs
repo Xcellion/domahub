@@ -63,4 +63,13 @@ qacct:"p-09CUz3n_dWjFg"
         }
         $span.remove();
     })(jQuery);
+
+    $(document).ready(function(){
+      //delete notifications button
+      $(".delete").on("click", function(e){
+        e.preventDefault();
+        $(this).parent(".notification").addClass('is-hidden');
+      });
+    });
+
 </script>

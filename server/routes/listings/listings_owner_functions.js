@@ -461,7 +461,13 @@ module.exports = {
 
   //function to check if listing has been purchased
   checkListingPurchased : function(req, res, next){
-    if (getUserListingObj(req.user.listings, req.params.domain_name).accepted){
+    console.log("F: Checking if the listing was already purchased or accepted...");
+    
+    var listing_obj = getUserListingObj(req.user.listings, req.params.domain_name)
+    if (listing_obj.accepted){
+      error.handler(req, res, "You have already accepted an offer for this domain! Please wait for the offerer to complete the payment process.", "json");
+    }
+    else if (listing_obj.deposited){
       error.handler(req, res, "This listing has already been purchased! Please complete the ownership transfer to the new owner.", "json");
     }
     else {

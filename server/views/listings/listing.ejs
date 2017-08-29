@@ -21,20 +21,20 @@
     </script>
 
 		<div id="contact-success" class="is-hidden notification is-popup is-primary">
-		    <button class="delete"></button>
-		    Success! Please check your email for further instructions.
-		</div>
-		<div id="contact-success-compare" class="is-hidden notification is-popup is-primary">
-		    <button class="delete"></button>
-		    Success! If this were your real domain, you would receive a notification with the details of this new offer.
+	    <button class="delete"></button>
+	    Success! Please check your email for further instructions.
 		</div>
 		<div id="contact-error" class="is-hidden notification is-popup is-danger">
-		    <button class="delete"></button>
-		    <span id="contact-error-message">Something went wrong! Please refresh the page and try again.</span>
+	    <button class="delete"></button>
+	    <span id="contact-error-message">Something went wrong! Please refresh the page and try again.</span>
 		</div>
 
 		<%# TOOL TO COMPARE %>
 		<% if (compare) { %>
+      <div id="contact-success-compare" class="is-hidden notification is-popup is-primary">
+        <button class="delete"></button>
+        Success! If this were your real domain, you would receive a notification with the details of this new offer.
+      </div>
 			<%- include("modules/compare_module.ejs") %>
 		<% } %>
 
