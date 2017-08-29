@@ -26,19 +26,19 @@ module.exports = data_model;
 
 //check if a specific offer is verified and not yet accepted/rejected
 data_model.prototype.checkContactVerified = function(domain_name, offer_id, callback){
-  console.log("DB: Checking if code for domain: " + domain_name + " is verified...");
+  console.log("DB: Checking if code for domain " + domain_name + " is verified...");
   query = "SELECT 1 AS 'exist' \
       FROM stats_contact_history \
       INNER JOIN listings \
       ON listings.id = stats_contact_history.listing_id \
       WHERE listings.domain_name = ? \
       AND stats_contact_history.id = ? "
-  data_query(query, "Failed to get traffic for domain: " + domain_name + "!", callback, [domain_name, offer_id]);
+  data_query(query, "Failed to check if offer for domain " + domain_name + " was verified and not yet accepted/rejected!", callback, [domain_name, offer_id]);
 }
 
 //check if a specific verification code for a domain exists
 data_model.prototype.checkContactVerificationCode = function(domain_name, verification_code, callback){
-  console.log("DB: Checking if code for domain: " + domain_name + " is not verified...");
+  console.log("DB: Checking if code for domain " + domain_name + " is not verified...");
   query = "SELECT 1 AS 'exist' \
       FROM stats_contact_history \
       INNER JOIN listings \
@@ -46,7 +46,22 @@ data_model.prototype.checkContactVerificationCode = function(domain_name, verifi
       WHERE listings.domain_name = ? \
       AND stats_contact_history.verification_code = ? \
       AND stats_contact_history.verified IS NULL "
-  data_query(query, "Failed to get traffic for domain: " + domain_name + "!", callback, [domain_name, verification_code]);
+  data_query(query, "Failed to check if code for " + domain_name + " was correct!", callback, [domain_name, verification_code]);
+}
+
+//check if a specific offer has been accepted and not yet deposited
+data_model.prototype.checkOfferAccepted = function(domain_name, offer_id, callback){
+  console.log("DB: Checking if offer for domain " + domain_name + " has been accepted...");
+  query = "SELECT 1 AS 'exist' \
+      FROM stats_contact_history \
+      INNER JOIN listings \
+      ON listings.id = stats_contact_history.listing_id \
+      WHERE listings.domain_name = ? \
+      AND stats_contact_history.id = ? \
+      AND stats_contact_history.verified = 1 \
+      AND stats_contact_history.accepted = 1 \
+      AND stats_contact_history.deposited IS NULL "
+  data_query(query, "Failed to get check if offer for domain " + domain_name + " was accepted!", callback, [domain_name, offer_id]);
 }
 
 //</editor-fold>
@@ -169,7 +184,8 @@ data_model.prototype.getListingOffererContactInfoByID = function(domain_name, of
         stats_contact_history.offer, \
         stats_contact_history.message, \
         stats_contact_history.response, \
-        stats_contact_history.accepted \
+        stats_contact_history.accepted, \
+        stats_contact_history.verification_code \
       FROM stats_contact_history \
       INNER JOIN listings \
       ON listings.id = stats_contact_history.listing_id \
@@ -205,6 +221,7 @@ data_model.prototype.getListingOffers = function(domain_name, callback){
   query = 'SELECT \
         stats_contact_history.id, \
         stats_contact_history.timestamp, \
+        stats_contact_history.deadline, \
         stats_contact_history.name, \
         stats_contact_history.email, \
         stats_contact_history.phone, \
@@ -343,6 +360,18 @@ data_model.prototype.acceptRejectOffer = function(contact_item, domain_name, off
       WHERE stats_contact_history.id = ? \
       AND listings.domain_name = ?"
   account_query(query, "Failed to accept/reject offer!", callback, [contact_item, offer_id, domain_name]);
+}
+
+//changes an offer to deposited
+data_model.prototype.depositedOffer = function(deposited_details, domain_name, offer_id, callback){
+  console.log("DB: Updating deposited for offer with id: " + offer_id + " on domain: " + domain_name + "...");
+  query = "UPDATE stats_contact_history \
+      INNER JOIN listings \
+      ON listings.id = stats_contact_history.listing_id \
+      SET ? \
+      WHERE stats_contact_history.id = ? \
+      AND listings.domain_name = ?"
+  account_query(query, "Failed to change offer to deposited!", callback, [deposited_details, offer_id, domain_name]);
 }
 
 //</editor-fold>

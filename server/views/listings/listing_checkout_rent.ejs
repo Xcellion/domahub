@@ -496,19 +496,26 @@
     </section>
 
     <%# SHOW OR HIDE FOOTER %>
-		<% if (!listing_info.premium) { %>
-			<footer class="footer is-dark is-hidden">
-				<div class="container">
-					<p id="powered-by" class="is-primary">
-						Powered by
-					</p>
-					<a id="dh_logo" class="logo" href="/"  >
-						<p tabindex="0" class="flat-logo is-primary"></p>
-					</a>
-					<img id="custom_logo" />
-				</div>
-			</footer>
-		<% } %>
+  	<% if (!listing_info.premium) { %>
+      <footer class="footer">
+        <div class="container">
+          <div class="footer-bar">
+            <div class="bar-left">
+              <a tabindex="0" class="circle-logo footer-item" href="/" title="Home"></a>
+              <img id="custom_logo"/>
+              <p class="footer-item">
+                <i class="fa fa-copyright v-align-bottom"></i> DomaHub, Inc.
+              </p>
+            </div>
+            <div class="bar-right">
+              <p class="footer-item">
+                Simple, clean sales pages for your domains.
+              </p>
+            </div>
+          </div>
+        </div>
+      </footer>
+  	<% } %>
 
     <script src="/js/lib/moment.min.js" type="text/javascript"></script>
     <script src="/js/lib/wNumb.js" type="text/javascript"></script>
