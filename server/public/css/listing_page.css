@@ -310,6 +310,7 @@ button[data-balloon] {
   overflow-y: auto;
   height: calc(100vh - 74px); }
   #compare-content .footer {
+    background-color: white;
     border-top: 1px solid rgba(0, 0, 0, 0.12);
     margin-top: 20px;
     padding: 20px 0 !important; }
