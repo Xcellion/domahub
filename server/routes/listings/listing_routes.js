@@ -269,6 +269,8 @@ module.exports = function(app, db, auth, error, stripe){
     checkDomainValid,
     checkDomainListed,
     buyer_functions.checkListingPurchaseVerificationCode,
+    renter_functions.getListingInfo,
+    stripe.checkStripeSubscription,
     buyer_functions.renderVerificationPage
   ]);
 
