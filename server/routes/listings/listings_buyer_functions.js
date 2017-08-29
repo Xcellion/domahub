@@ -209,36 +209,68 @@ module.exports = {
 
   //asynchronously alert the offerer
   notifyOfferer : function(req, res, next){
-    console.log("F: Sending email to offerer to notify of accept/reject status...");
 
     getListingOffererContactInfoByID(req.params.domain_name, req.params.offer_id, function(offer_result){
       if (offer_result){
-        var email_contents_path = path.resolve(process.cwd(), 'server', 'views', 'email', 'offer_notify_buyer.ejs');
-        var listing_info = getUserListingObj(req.user.listings, req.params.domain_name);
 
-        var accepted_text = (offer_result.accepted) ? "accepted" : "rejected";
-        var offer_formatted = moneyFormat.to(parseFloat(offer_result.offer));
-        var EJSVariables = {
-          accepted: offer_result.accepted,
-          domain_name: req.params.domain_name,
-          offer_id: offer_result.id,
-          offerer_name: offer_result.name,
-          offerer_email: offer_result.email,
-          offerer_phone: phoneUtil.format(phoneUtil.parse(offer_result.phone), PNF.INTERNATIONAL),
-          offer: offer_formatted,
-          message: offer_result.message,
-          response: offer_result.response,
-          premium: (req.user.stripe_subscription_id) ? true : false,
-          listing_info: (listing_info) ? listing_info : false
+        //send a transfer verify email
+        if (offer_result.deposited){
+          console.log("F: Sending email to the buyer for transfer verification / next steps!");
+          var email_contents_path = path.resolve(process.cwd(), 'server', 'views', 'email', 'bin_notify_buyer.ejs');
+          var price_formatted = moneyFormat.to(parseFloat(offer_result.offer));
+          var EJSVariables = {
+            domain_name: req.params.domain_name,
+            owner_name: req.user.username,
+            owner_email: req.user.email,
+            price: price_formatted,
+
+            //for custom emails
+            premium: (req.user.stripe_subscription_id) ? true : false,
+            listing_info: getUserListingObj(req.user.listings, req.params.domain_name),
+
+            offerer_name: offer_result.name,
+            offerer_email: offer_result.email,
+            offerer_phone: offer_result.phone,
+            message: offer_result.message,
+            verification_code : offer_result.verification_code
+          }
+          var emailDetails = {
+            to: offer_result.email,
+            from: '"DomaHub Domains" <general@domahub.com>',
+            subject: 'Congratulations on your recent purchase of ' + req.params.domain_name + " for " + price_formatted + "!"
+          };
         }
 
-        //premium email from listing owner or from domahub
-        var email_from = (req.user.stripe_subscription_id) ? "'" + req.user.username + "'<" + req.user.email + ">" : '"DomaHub" <general@domahub.com>'
-        var emailDetails = {
-          to: offer_result.email,
-          from: email_from,
-          subject: 'Your ' + offer_formatted + ' offer for ' + req.params.domain_name + " was " + accepted_text + "!"
-        };
+        //send accept/reject email
+        else {
+          console.log("F: Sending email to offerer to notify of accept/reject status...");
+          var email_contents_path = path.resolve(process.cwd(), 'server', 'views', 'email', 'offer_notify_buyer.ejs');
+          var listing_info = getUserListingObj(req.user.listings, req.params.domain_name);
+
+          var accepted_text = (offer_result.accepted) ? "accepted" : "rejected";
+          var offer_formatted = moneyFormat.to(parseFloat(offer_result.offer));
+          var EJSVariables = {
+            accepted: offer_result.accepted,
+            domain_name: req.params.domain_name,
+            offer_id: offer_result.id,
+            offerer_name: offer_result.name,
+            offerer_email: offer_result.email,
+            offerer_phone: phoneUtil.format(phoneUtil.parse(offer_result.phone), PNF.INTERNATIONAL),
+            offer: offer_formatted,
+            message: offer_result.message,
+            response: offer_result.response,
+            premium: (req.user.stripe_subscription_id) ? true : false,
+            listing_info: (listing_info) ? listing_info : false
+          }
+
+          //premium email from listing owner or from domahub
+          var email_from = (req.user.stripe_subscription_id) ? "'" + req.user.username + "'<" + req.user.email + ">" : '"DomaHub" <general@domahub.com>'
+          var emailDetails = {
+            to: offer_result.email,
+            from: email_from,
+            subject: 'Your ' + offer_formatted + ' offer for ' + req.params.domain_name + " was " + accepted_text + "!"
+          };
+        }
 
         //email the offerer
         emailSomeone(req, res, email_contents_path, EJSVariables, emailDetails, false);
@@ -389,7 +421,7 @@ module.exports = {
 
   //alert the buyer of next steps
   alertBuyerNextSteps : function(req, res, next){
-    console.log("F: Alerting the buyer of next steps!");
+    console.log("F: Sending email to the buyer for transfer verification / next steps!");
 
     //get the listing owner contact information to email
     var email_contents_path = path.resolve(process.cwd(), 'server', 'views', 'email', 'bin_notify_buyer.ejs');
