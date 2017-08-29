@@ -17,7 +17,7 @@ var fonts = <% if(typeof fonts != "undefined"){ %><%-JSON.stringify(fonts)%><% }
     </p>
   </div>
   <div class="button-wrapper">
-    <a id="restart-tutorial-button" class="button is-small is-stylish">Restart Tutorial</a>
+    <a class="button is-small is-stylish restart-tutorial-button">Restart Tutorial</a>
     <a href="/signup" class="button is-small is-primary is-stylish">Sign Me Up!</a>
   </div>
 </div>
@@ -213,5 +213,28 @@ var fonts = <% if(typeof fonts != "undefined"){ %><%-JSON.stringify(fonts)%><% }
         </div>
       </div>
     </div>
+
+    <!-- FOOTER -->
+    <footer id="compare-footer" class="footer is-hidden">
+      <div class="content">
+        <p>
+          This demo is a preview of what your sales page could look like.
+          <a tabindex="0" class="is-primary" href="/features">Click here to learn more</a>!
+        </p>
+        <div class="button-wrapper">
+          <a class="button is-small is-stylish restart-tutorial-button">Restart Tutorial</a>
+          <a href="/signup" class="button is-small is-primary is-stylish">Sign Me Up!</a>
+        </div>
+      </div>
+      <div class="footer-bar">
+        <div class="bar-left">
+          <a tabindex="0" class="circle-logo footer-item" href="/" title="Home"></a>
+          <p class="footer-item">
+            <i class="fa fa-copyright v-align-bottom"></i> DomaHub, Inc.
+          </p>
+        </div>
+      </div>
+    </footer>
+
   </div>
 </div>

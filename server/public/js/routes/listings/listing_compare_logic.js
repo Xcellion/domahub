@@ -7,6 +7,7 @@ $(document).ready(function() {
     //delete notifications button
     $(".delete").on("click", function(e){
       $("#compare-msg").addClass('is-hidden');
+      $("#compare-footer").removeClass('is-hidden').fadeIn(300);
     });
 
     //<editor-fold>---------------------------------COMPARE TOOL SETUP--------------------------------------------------
@@ -322,7 +323,7 @@ $(document).ready(function() {
     tutorial_tour.start();
 
     //restart the tutorial (where you left off)
-    $("#restart-tutorial-button").on('click', function(){
+    $(".restart-tutorial-button").on('click', function(){
       if (tutorial_tour){
         var cur_step = tutorial_tour.getCurrentStep();
         if (cur_step == 10){
