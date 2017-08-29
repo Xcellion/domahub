@@ -231,7 +231,7 @@ module.exports = function(app, db, auth, error, stripe){
 
   //render the accept or reject an offer page (deprecated, keep this redirect for now though)
   app.get(["/listing/:domain_name/contact/:offer_id/accept",
-  "/listing/:domain_name/contact/:offer_id/reject"], [
+    "/listing/:domain_name/contact/:offer_id/reject"], [
     function(req, res, next){
       res.redirect("/profile/mylistings?listing=" + req.params.domain_name + "&tab=offers");
     }
@@ -239,7 +239,7 @@ module.exports = function(app, db, auth, error, stripe){
 
   //accept or reject an offer
   app.post(["/listing/:domain_name/contact/:offer_id/accept",
-  "/listing/:domain_name/contact/:offer_id/reject"], [
+    "/listing/:domain_name/contact/:offer_id/reject"], [
     auth.checkLoggedIn,
     urlencodedParser,
     checkDomainValid,
@@ -278,6 +278,17 @@ module.exports = function(app, db, auth, error, stripe){
     checkDomainListed,
     buyer_functions.checkListingPurchaseVerificationCode,
     buyer_functions.verifyTransferOwnership
+  ]);
+
+  //send offerer buy link post acceptance
+  app.get("/listing/:domain_name/contact/:offer_id/bin", [
+    urlencodedParser,
+    checkDomainValid,
+    buyer_functions.checkOfferAccepted,
+    renter_functions.getListingInfo,
+    stripe.checkStripeSubscription,
+    buyer_functions.getContactInfo,
+    buyer_functions.renderCheckout
   ]);
 
   //buy a listing
