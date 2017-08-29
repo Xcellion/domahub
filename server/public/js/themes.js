@@ -74,7 +74,8 @@ var listing_themes = [
 //function to populate theme dropdown
 function populateThemeDropdown(){
   for (var x = 0; x < listing_themes.length; x++){
-    $("#theme-input").append($("<option value=" + listing_themes[x].theme_name + ">" + listing_themes[x].theme_name + "</option>"));
+    var theme_name_display = (listing_themes[x].theme_name == "DomaHub") ? "DomaHub (Basic)" : listing_themes[x].theme_name;
+    $("#theme-input").append($("<option value=" + listing_themes[x].theme_name + ">" + theme_name_display + "</option>"));
   }
   $("#theme-input").prepend($("<option value='Custom'>Custom</option>"));
 }
