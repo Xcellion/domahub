@@ -3,7 +3,7 @@
 
 <div id="buy-now-module" class="top-module post-buy-module">
   <div class="description-text">
-    <form id="buy-now-form" method="post" action="/listing/<%= listing_info.domain_name %>/contact" >
+    <form id="buy-now-form" autocomplete="off" method="post" action="/listing/<%= listing_info.domain_name %>/contact" >
       <label class="error_message label" for="contact_name">Name</label>
       <p class="control has-icon">
         <input id="contact_name" required class="contact-input input" name="contact_name" type="text">

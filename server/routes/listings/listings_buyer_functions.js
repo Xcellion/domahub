@@ -18,6 +18,7 @@ var mailer = nodemailer.createTransport(sgTransport(mailOptions));
 
 var ejs = require('ejs');
 var path = require("path");
+var moment = require('moment');
 
 var wNumb = require("wnumb");
 var moneyFormat = wNumb({
@@ -69,8 +70,7 @@ module.exports = {
       email : req.body.contact_email,
       phone : phoneUtil.format(phoneUtil.parse(req.body.contact_phone), PNF.INTERNATIONAL),
       offer : req.body.contact_offer,
-      message : req.body.contact_message,
-      bin : false
+      message : req.body.contact_message
     }
 
     //recursive function to make sure verification code is unique
@@ -125,30 +125,34 @@ module.exports = {
       //asynchronously alert the owner!
       //get the listing owner contact information to email
       getListingOwnerContactInfo(req.params.domain_name, function(owner_result){
-        getListingOffererContactInfoByCode(req.params.domain_name, req.params.verification_code, function(offerer_result){
-          console.log("F: Emailing owner about new verified offer...");
-          var email_contents_path = path.resolve(process.cwd(), 'server', 'views', 'email', 'offer_notify_owner.ejs');
-          var offer_formatted = moneyFormat.to(parseFloat(offerer_result.offer))
-          var EJSVariables = {
-            domain_name: req.params.domain_name,
-            owner_name: owner_result.username,
-            offerer_name: offerer_result.name,
-            offerer_email: offerer_result.email,
-            offerer_phone: phoneUtil.format(phoneUtil.parse(offerer_result.phone), PNF.INTERNATIONAL),
-            verification_code: req.params.verification_code,
-            offer: offer_formatted,
-            message: offerer_result.message
-          }
+        if (owner_result){
+          getListingOffererContactInfoByCode(req.params.domain_name, req.params.verification_code, function(offer_result){
+            if (offer_result){
+              console.log("F: Emailing owner about new verified offer...");
+              var email_contents_path = path.resolve(process.cwd(), 'server', 'views', 'email', 'offer_notify_owner.ejs');
+              var offer_formatted = moneyFormat.to(parseFloat(offer_result.offer))
+              var EJSVariables = {
+                domain_name: req.params.domain_name,
+                owner_name: owner_result.username,
+                offerer_name: offer_result.name,
+                offerer_email: offer_result.email,
+                offerer_phone: phoneUtil.format(phoneUtil.parse(offer_result.phone), PNF.INTERNATIONAL),
+                verification_code: req.params.verification_code,
+                offer: offer_formatted,
+                message: offer_result.message
+              }
 
-          var emailDetails = {
-            to: owner_result.email,
-            from: '"DomaHub Domains" <general@domahub.com>',
-            subject: 'You have a new ' + offer_formatted + ' offer for ' + req.params.domain_name + "!"
-          };
+              var emailDetails = {
+                to: owner_result.email,
+                from: '"DomaHub Domains" <general@domahub.com>',
+                subject: 'You have a new ' + offer_formatted + ' offer for ' + req.params.domain_name + "!"
+              };
 
-          //email the owner
-          emailSomeone(req, res, email_contents_path, EJSVariables, emailDetails, false);
-        });
+              //email the owner
+              emailSomeone(req, res, email_contents_path, EJSVariables, emailDetails, false);
+            }
+          });
+        }
       });
 
       //render the redirect page to notify offerer that offer was successfully sent
@@ -160,29 +164,6 @@ module.exports = {
         listing_info: req.session.listing_info
       });
     });
-  },
-
-  //function to render the accept or reject an offer page
-  renderAcceptOrRejectOffer: function(req, res, next){
-    console.log("Rendering accept or reject offer page...");
-
-    var accepted = req.path.indexOf("/accept") != -1;
-
-    Listing.getVerifiedListing(req.params.domain_name, function(listing_result){
-      Data.getListingOffererContactInfoByID(req.params.domain_name, req.params.offer_id, function(offer_result){
-        if (offer_result.state == "success" && offer_result.info[0] && !offer_result.info[0].accepted){
-          res.render("listings/accept_or_reject.ejs", {
-            accepted : accepted,
-            offer_info : offer_result.info[0],
-            listing_info : listing_result.info[0]
-          });
-        }
-        else {
-          res.redirect('/listing/' + req.params.domain_name);
-        }
-      });
-    });
-
   },
 
   //function to check if already accepted an offer for a listing
@@ -230,35 +211,38 @@ module.exports = {
   notifyOfferer : function(req, res, next){
     console.log("F: Sending email to offerer to notify of accept/reject status...");
 
-    getListingOffererContactInfoByID(req.params.domain_name, req.params.offer_id, function(offerer_result){
-      var email_contents_path = path.resolve(process.cwd(), 'server', 'views', 'email', 'offer_notify_buyer.ejs');
-      var listing_info = getUserListingObj(req.user.listings, req.params.domain_name);
+    getListingOffererContactInfoByID(req.params.domain_name, req.params.offer_id, function(offer_result){
+      if (offer_result){
+        var email_contents_path = path.resolve(process.cwd(), 'server', 'views', 'email', 'offer_notify_buyer.ejs');
+        var listing_info = getUserListingObj(req.user.listings, req.params.domain_name);
 
-      var accepted_text = (offerer_result.accepted) ? "accepted" : "rejected";
-      var offer_formatted = moneyFormat.to(parseFloat(offerer_result.offer));
-      var EJSVariables = {
-        accepted: offerer_result.accepted,
-        domain_name: req.params.domain_name,
-        offerer_name: offerer_result.name,
-        offerer_email: offerer_result.email,
-        offerer_phone: phoneUtil.format(phoneUtil.parse(offerer_result.phone), PNF.INTERNATIONAL),
-        offer: offer_formatted,
-        message: offerer_result.message,
-        response: offerer_result.response,
-        premium: (req.user.stripe_subscription_id) ? true : false,
-        listing_info: (listing_info) ? listing_info : false
+        var accepted_text = (offer_result.accepted) ? "accepted" : "rejected";
+        var offer_formatted = moneyFormat.to(parseFloat(offer_result.offer));
+        var EJSVariables = {
+          accepted: offer_result.accepted,
+          domain_name: req.params.domain_name,
+          offer_id: offer_result.id,
+          offerer_name: offer_result.name,
+          offerer_email: offer_result.email,
+          offerer_phone: phoneUtil.format(phoneUtil.parse(offer_result.phone), PNF.INTERNATIONAL),
+          offer: offer_formatted,
+          message: offer_result.message,
+          response: offer_result.response,
+          premium: (req.user.stripe_subscription_id) ? true : false,
+          listing_info: (listing_info) ? listing_info : false
+        }
+
+        //premium email from listing owner or from domahub
+        var email_from = (req.user.stripe_subscription_id) ? "'" + req.user.username + "'<" + req.user.email + ">" : '"DomaHub" <general@domahub.com>'
+        var emailDetails = {
+          to: offer_result.email,
+          from: email_from,
+          subject: 'Your ' + offer_formatted + ' offer for ' + req.params.domain_name + " was " + accepted_text + "!"
+        };
+
+        //email the offerer
+        emailSomeone(req, res, email_contents_path, EJSVariables, emailDetails, false);
       }
-
-      //premium email from listing owner or from domahub
-      var email_from = (req.user.stripe_subscription_id) ? "'" + req.user.username + "'<" + req.user.email + ">" : '"DomaHub" <general@domahub.com>'
-      var emailDetails = {
-        to: offerer_result.email,
-        from: email_from,
-        subject: 'Your ' + offer_formatted + ' offer for ' + req.params.domain_name + " was " + accepted_text + "!"
-      };
-
-      //email the offerer
-      emailSomeone(req, res, email_contents_path, EJSVariables, emailDetails, false);
     });
   },
 
@@ -269,9 +253,9 @@ module.exports = {
   redirectToCheckout : function(req, res, next){
     req.session.new_buying_info = {
       domain_name : req.params.domain_name,
-      offerer_name : req.body.contact_name,
-      offerer_email : req.body.contact_email,
-      offerer_phone : phoneUtil.format(phoneUtil.parse(req.body.contact_phone), PNF.INTERNATIONAL),
+      name : req.body.contact_name,
+      email : req.body.contact_email,
+      phone : phoneUtil.format(phoneUtil.parse(req.body.contact_phone), PNF.INTERNATIONAL),
       offer : req.body.contact_offer,
       message : req.body.contact_message
     };
@@ -281,7 +265,36 @@ module.exports = {
     });
   },
 
-  //renders the checkout page for creating a new rental
+  //check the posted offer to see if it was accepted
+  checkOfferAccepted : function(req, res, next){
+    console.log("F: Checking if offer has been accepted by the owner...");
+
+    Data.checkOfferAccepted(req.params.domain_name, req.params.offer_id, function(result){
+      if (result.state == "success" && result.info.length > 0){
+        next();
+      }
+      else {
+        console.log("F: This offer hasn't been accepted!");
+        res.redirect("/listing/" + req.params.domain_name);
+      }
+    });
+  },
+
+  //gets the offer contact info so we can render the checkout page
+  getContactInfo : function(req, res, next){
+    getListingOffererContactInfoByID(req.params.domain_name, req.params.offer_id, function(offer_result){
+      if (offer_result){
+        req.session.new_buying_info = offer_result;
+        req.session.new_buying_info.domain_name = req.params.domain_name;
+        next();
+      }
+      else {
+        res.redirect('/listing/' + req.params.domain_name);
+      }
+    });
+  },
+
+  //renders the checkout page for a new BIN
   renderCheckout : function(req, res, next){
     if (req.session.new_buying_info && req.session.new_buying_info.domain_name == req.params.domain_name){
       console.log("F: Rendering listing checkout page...");
@@ -307,29 +320,43 @@ module.exports = {
 
   //create a record for this purchase
   createBuyContactRecord : function(req, res, next){
-    console.log("F: Creating a new contact buy record...");
-
-    req.session.new_buying_info.verification_code = randomstring.generate(10);
-
-    var contact_details = {
-      listing_id : req.session.listing_info.id,
-      timestamp : new Date().getTime(),
-      name : req.session.new_buying_info.offerer_name,
-      email : req.session.new_buying_info.offerer_email,
-      phone : req.session.new_buying_info.offerer_phone,
-      message : req.session.new_buying_info.message,
-      verification_code : req.session.new_buying_info.verification_code,
-      bin : true
+    if (req.session.new_buying_info.id){
+      console.log("F: Updating contact record with deposited...");
+      Data.depositedOffer({
+        deposited : true,
+        deadline : moment().endOf("day").add(1, "week")
+      }, req.session.listing_info.domain_name, req.session.new_buying_info.id, function(result){
+        if (result.state == "success"){
+          next();
+        }
+        else {
+          error.handler(req, res, "Something went wrong! Please refresh the page and try again.", "json");
+        }
+      });
     }
+    else {
+      console.log("F: Creating a new contact buy record...");
+      req.session.new_buying_info.verification_code = randomstring.generate(10);
+      var contact_details = {
+        listing_id : req.session.listing_info.id,
+        timestamp : new Date().getTime(),
+        name : req.session.new_buying_info.name,
+        email : req.session.new_buying_info.email,
+        phone : req.session.new_buying_info.phone,
+        message : req.session.new_buying_info.message,
+        verification_code : req.session.new_buying_info.verification_code,
+        bin : true
+      }
 
-    Data.newListingContactHistory(req.session.listing_info.domain_name, contact_details, function(result){
-      if (result.state == "success"){
-        next();
-      }
-      else {
-        error.handler(req, res, "Something went wrong! Please refresh the page and try again.", "json");
-      }
-    });
+      Data.newListingContactHistory(req.session.listing_info.domain_name, contact_details, function(result){
+        if (result.state == "success"){
+          next();
+        }
+        else {
+          error.handler(req, res, "Something went wrong! Please refresh the page and try again.", "json");
+        }
+      });
+    }
   },
 
   //alert the owner that a new BIN came through
@@ -344,9 +371,9 @@ module.exports = {
       owner_name: req.session.listing_info.username,
       buy_price: price_formatted,
 
-      offerer_name: req.session.new_buying_info.offerer_name || "Somebody",
-      offerer_email: req.session.new_buying_info.offerer_email || "Undisclosed",
-      offerer_phone: req.session.new_buying_info.offerer_phone || "Undisclosed",
+      offerer_name: req.session.new_buying_info.name || "Somebody",
+      offerer_email: req.session.new_buying_info.email || "Undisclosed",
+      offerer_phone: req.session.new_buying_info.phone || "Undisclosed",
       message: req.session.new_buying_info.message || "No message."
     }
     var emailDetails = {
@@ -373,17 +400,20 @@ module.exports = {
       domain_name: req.session.listing_info.domain_name,
       owner_name: req.session.listing_info.username,
       owner_email: req.session.listing_info.owner_email,
-      buy_price: price_formatted,
+      offer: (req.session.new_buying_info.id) ? req.session.new_buying_info.offer : req.session.listing_info.buy_price,
 
-      offerer_name: req.session.new_buying_info.offerer_name || "Somebody",
-      offerer_email: req.session.new_buying_info.offerer_email || "Undisclosed",
-      offerer_phone: req.session.new_buying_info.offerer_phone || "Undisclosed",
+      premium: req.session.listing_info.premium,
+      listing_info: req.session.listing_info,
+
+      offerer_name: req.session.new_buying_info.name || "Somebody",
+      offerer_email: req.session.new_buying_info.email || "Undisclosed",
+      offerer_phone: req.session.new_buying_info.phone || "Undisclosed",
       message: req.session.new_buying_info.message || "No message.",
 
       verification_code : req.session.new_buying_info.verification_code,
     }
     var emailDetails = {
-      to: req.session.new_buying_info.offerer_email,
+      to: req.session.new_buying_info.email,
       cc: "",
       from: '"DomaHub Domains" <general@domahub.com>',
       subject: 'Congratulations on your recent purchase of ' + req.params.domain_name + " for " + price_formatted + "!"
@@ -437,6 +467,7 @@ module.exports = {
         next();
       }
       else {
+        console.log("F: Invalid verification code for offer!");
         res.redirect("/listing/" + req.params.domain_name);
       }
     });
@@ -481,14 +512,20 @@ function getListingOwnerContactInfo(domain_name, cb){
     if (result.state == "success" && result.info.length > 0){
       cb(result.info[0]);
     }
+    else {
+      cb(false);
+    }
   });
 }
 
 //helper function to get the email address of the listing offerer to contact
-function getListingOffererContactInfoByID(domain_name, verification_code, cb){
-  Data.getListingOffererContactInfoByID(domain_name, verification_code, function(result){
+function getListingOffererContactInfoByID(domain_name, offer_id, cb){
+  Data.getListingOffererContactInfoByID(domain_name, offer_id, function(result){
     if (result.state == "success" && result.info.length > 0){
       cb(result.info[0]);
+    }
+    else {
+      cb(false);
     }
   });
 }
@@ -498,6 +535,9 @@ function getListingOffererContactInfoByCode(domain_name, verification_code, cb){
   Data.getListingOffererContactInfoByCode(domain_name, verification_code, function(result){
     if (result.state == "success" && result.info.length > 0){
       cb(result.info[0]);
+    }
+    else {
+      cb(false);
     }
   });
 }
