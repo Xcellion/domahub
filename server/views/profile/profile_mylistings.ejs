@@ -24,7 +24,7 @@
 				<p id="listing-msg-success-text" class='is-white'></p>
 			</div>
 			<div class="columns">
-				<div id="filter-menu" class="column is-3">
+				<div id="filter-menu" class="column is-3 is-offset-1-widescreen">
 					<button class="delete filter-menu-toggle is-hidden-tablet">
 					</button>
 					<!-- FITER MENU -->
@@ -78,27 +78,27 @@
 								<label for="select-button"></label>
 							</form>
 							<div class="table-row-text">
+								<p class="td-domain is-danger is-inline"></p>
 								<span class="icon is-danger is-small is-inline">
 									<i class="fa fa-exclamation-circle"></i>
 								</span>
-								<p class="td-domain is-danger is-inline"></p>
 							</div>
 						</div>
 					</div>
 					<div class="button-wrapper control margin-top-10">
-						<button id="select-all" data-selected="false" tabindex="0" class="button is-white" title="Select All">
+						<button id="select-all" data-selected="false" tabindex="0" class="button" title="Select All">
 							<span class="icon is-small">
 								<i class="fa fa-square-o"></i>
 							</span>
 							<span>Select All</span>
 						</button>
-						<button id="multi-delete" class="button is-disabled is-danger is-inverted" tabindex="0" title="Delete Listing(s)">
+						<button id="multi-delete" class="button is-disabled is-danger is-transparent" tabindex="0" title="Delete Listing(s)">
 							<span class="icon is-small">
 								<i class="fa fa-trash"></i>
 							</span>
 							<span id="multi-delete-text">Delete</span>
 						</button>
-						<button id="multi-verify" class="button is-disabled is-primary is-inverted" tabindex="0" title="Verify Listing(s)">
+						<button id="multi-verify" class="button is-disabled is-primary is-transparent" tabindex="0" title="Verify Listing(s)">
 							<span class="icon is-small">
 								<i class="fa fa-check-circle-o"></i>
 							</span>
@@ -106,7 +106,7 @@
 						</button>
 					</div>
 					<div class="control margin-top-20">
-						<a class="button is-white is-stylish is-small is-fullwidth" tabindex="0" href="/listings/create">
+						<a class="button is-stylish is-small is-fullwidth" tabindex="0" href="/listings/create">
 							<span class="icon is-small">
 								<i class="fa fa-plus"></i>
 							</span>
@@ -116,24 +116,17 @@
 				</div>
 
 				<!-- LISTING DETAILS  -->
-				<div class="column is-9">
+				<div class="column is-7-widescreen is-9-tablet">
 					<!-- CURRENT DOMAIN NAME -->
 					<div class="control is-spaced">
 						<div class="control-left">
-							<button tabindex="0" class="button filter-menu-toggle is-inline-block is-dark is-transparent no-shadow is-small is-hidden-tablet" title="Filters">
+							<button tabindex="0" class="button filter-menu-toggle is-inline-block no-shadow is-dark is-transparent is-small is-hidden-tablet" title="Filters">
 								<span class="icon"><i class="fa fa-bars"></i></span>
 							</button>
 							<h2 class="current-domain-name yes-listings-elem is-inline-block is-hidden"></h2>
-							<button tabindex="0" class="button no-shadow is-black is-transparent verified-elem unpurchased-elem" title="Publicly hide or show landing page.">
+							<button tabindex="0" class="button is-black is-transparent verified-elem unpurchased-elem no-shadow" title="Publicly hide or show landing page.">
 								<span id="status-color" class="icon is-primary"><i id="status-icon" class="fa fa-toggle-on"></i></span>
 							</button>
-						</div>
-						<div class="control-right">
-              <input id="status-input" data-name="status" tabindex="0" type="hidden" class="input changeable-input" />
-							<a id="current-domain-view" target="_blank" rel="noopener" tabindex="0" class="verified-elem yes-listings-elem is-hidden button is-transparent is-primary is-small margin-top-0" title="View Domain">
-								<span class="icon is-small"><i style="margin-top: 2px" class="fa fa-external-link"></i></span>
-								<span>View</span>
-							</a>
 						</div>
 					</div>
 
@@ -146,14 +139,14 @@
 							<li id="info-tab" class="verified-elem unpurchased-elem tab">
 								<a tabindex="0">Information</a>
 							</li>
-							<li id="rental-tab" class="verified-elem unpurchased-elem tab">
-								<a tabindex="0">Rental</a>
-							</li>
 							<li id="design-tab" class="verified-elem unpurchased-elem tab">
 								<a tabindex="0">Design</a>
 							</li>
 							<li id="offers-tab" class="verified-elem no-buttons-tab unpurchased-elem tab">
 								<a tabindex="0">Offers</a>
+							</li>
+							<li id="rental-tab" class="verified-elem unpurchased-elem tab">
+								<a tabindex="0">Rental</a>
 							</li>
               <%# <li id="stats-tab" class="verified-elem no-buttons-tab unpurchased-elem tab">
                 <a tabindex="0">Stats</a>
@@ -179,7 +172,7 @@
 							<h3 class="is-bold">You must verify that you own this domain.</h3>
 							<p class="has-line-height">The table below details the DNS entries that are needed to verify this domain.</p>
 							<p class="has-line-height" id="registrar_url">Please <a>log in to your domain provider</a> to create these entries.</p>
-							<p class="has-line-height">If you require any assistance, please refer to our <a   style'target-new:="" tab;'="" class="is-primary margin-bottom-25" href="https://medium.com/@domahub/how-to-verify-domains-on-domahub-7d526c4ce6d"> step-by-step guide</a> on domain verification.</p>
+							<p class="has-line-height">If you require any assistance, please refer to our <a tabindex="0" class="is-primary margin-bottom-25" href="https://medium.com/@domahub/how-to-verify-domains-on-domahub-7d526c4ce6d"> step-by-step guide</a> on domain verification.</p>
 							<table class="table margin-top-15">
                 <thead>
 									<tr>
@@ -225,18 +218,18 @@
 								<%# <div class="control">
 									<label class="label" for="short-desc">Short Description</label>
 									<input id="short-desc" data-name="description_hook" tabindex="0" class="input changeable-input"
-									placeholder="What is this website?"></input>
+									placeholder="What is this website?" />
 									<small class="tip">100 character limit.</small>
 								</div>%>
 								<div class="control">
 									<label class="label margin-bottom-10">
 										<span class="v-align-middle">Categories</span>
-										<span class="icon is-small is-tooltip v-align-middle" data-balloon-length="large" data-balloon="Categories help users find similar domains. Incorrect categories can lead to a poor user experience and hurt your domain brand by being associated with non-similar domains." data-balloon-pos="up">
+										<span class="icon is-small is-tooltip v-align-bottom" data-balloon-length="large" data-balloon="Categories help users find similar domains. Incorrect categories can lead to a poor user experience and hurt your domain brand by being associated with non-similar domains." data-balloon-pos="up">
 											<i class="fa fa-question-circle"></i>
 										</span>
 									</label>
 									<div id="categories" class="category-control">
-  									<input id="categories-input" data-name="categories" onchange=""tabindex="0" class="is-hidden input changeable-input" value="" business="" ecard="" marketing="" niche="" personal="" promotion="">
+  									<input id="categories-input" data-name="categories" onchange="" tabindex="0" class="is-hidden input changeable-input" value="" business="" ecard="" marketing="" niche="" personal="" promotion="">
 
   									<%# make all the categories %>
   									<% for (var x = 0; x < categories.length; x++){ %>
@@ -262,8 +255,8 @@
 								<label class="label">Rental Price</label>
 								<div class="control">
 									<div class="control has-addons margin-bottom-0">
-										<input id="price-rate-input" data-name="price_rate" placeholder="minimum 1" type="number" min="1" step="1" class="input is-inline changeable-input rentable-input">
-										<span class="select price-type-span">
+										<input id="price-rate-input" data-name="price_rate" placeholder="minimum 1" type="number" min="1" step="1" class="input is-inline changeable-input rentable-input" />
+										<span class="select price-type-span no-shadow">
 											<div class="drop-form">
 												<select id="price-type-input" data-name="price_type" class="changeable-input rentable-input">
 													<option value="month">Month</option>
@@ -278,11 +271,11 @@
 								<div class="control">
 									<label class="label">
 										<span class="v-align-middle">Example Paths</span>
-										<span class="icon is-small is-tooltip v-align-middle" data-balloon-length="large" data-balloon="Example paths or subdirectories that users may want to rent on your domain. Must consist of either letters or numbers." data-balloon-pos="up">
+										<span class="icon is-small is-tooltip v-align-bottom" data-balloon-length="large" data-balloon="Example paths or subdirectories that users may want to rent on your domain. Must consist of either letters or numbers." data-balloon-pos="up">
 											<i class="fa fa-question-circle"></i>
 										</span>
 									</label>
-									<input id="paths-input" data-name="paths" tabindex="0" class="is-hidden input changeable-input rentable-input"></input>
+									<input id="paths-input" data-name="paths" tabindex="0" class="is-hidden input changeable-input rentable-input" />
 								</div>
 							</div>
 							<div id="design-tab-drop" class="drop-tab is-hidden">
@@ -295,7 +288,7 @@
 												What is a Premium account?
 											</a>
                       <div class="margin-top-15 control has-text-centered">
-                        <a href="/profile/settings#premium" class="button is-stylish no-shadow is-primary is-small">
+                        <a href="/profile/settings#premium" class="button is-stylish is-primary is-small">
                           <span class="icon is-small">
                             <i class="fa fa-diamond"></i>
                           </span>
@@ -306,7 +299,7 @@
 									</div>
 									<div id="example-wrapper" class="preview-elem padding-25 control has-border-bottom">
                     <div class="box is-pulled-right">
-                      <image id="example-logo" src=""></image>
+                      <img id="example-logo" src="" />
                     </div>
                     <div class="control">
                       <span id="example-buy-price-tag" class="tag is-primary margin-right-5 margin-bottom-10 is-medium"></span>
@@ -314,7 +307,7 @@
                       <h1 id="example-domain-name" class="preview-elem is-bold current-domain-name"></h1>
                     </div>
                     <div class="control">
-                      <p id="example-font" class="preview-elem is-black">This is a preview of your chosen design. Use the settings below to customize your landing page!</a>
+                      <p id="example-font" class="preview-elem is-black">This is a preview of your chosen design. Use the settings below to customize your landing page!</p>
                     </div>
                     <div class="control box" style="display:inline-block">
                       <a id="example-button-primary" class="v-align-middle preview-elem is-small button is-stylish">Send Offer</a>
@@ -332,14 +325,14 @@
 			                        <i class="fa fa-picture-o"></i>
 			                    </div>
 			                    <div class="control">
-		                        <a id="random-theme-button" class="no-shadow premium-input button is-small is-stylish">Random Theme</a>
+		                        <a id="random-theme-button" class="premium-input button is-small is-stylish">Random Theme</a>
 			                    </div>
 			                </div>
 			            </div>
 									<div class="control">
 										<label class="label">
 											<span class="v-align-middle">Color Scheme</span>
-											<span class="icon is-small is-tooltip v-align-middle" data-balloon-length="medium" data-balloon="The three main colors of your landing page." data-balloon-pos="up">
+											<span class="icon is-small is-tooltip v-align-bottom" data-balloon-length="medium" data-balloon="The three main colors of your landing page." data-balloon-pos="up">
 												<i class="fa fa-question-circle"></i>
 											</span>
 										</label>
@@ -356,7 +349,7 @@
 									<div class="control">
 										<label class="label">
 											<span class="v-align-middle">Font Styling</span>
-											<span class="icon is-small is-tooltip v-align-middle" data-balloon-length="medium" data-balloon="You can choose both the color and the font-family. We are working on offering more extensive fonts in the near future." data-balloon-pos="up">
+											<span class="icon is-small is-tooltip v-align-bottom" data-balloon-length="medium" data-balloon="You can choose both the color and the font-family. We are working on offering more extensive fonts in the near future." data-balloon-pos="up">
 												<i class="fa fa-question-circle"></i>
 											</span>
 										</label>
@@ -380,7 +373,7 @@
                   <div class="control">
                     <label class="label">
                       <span class="v-align-middle">Background Image URL</span>
-                      <span class="icon is-small is-tooltip v-align-middle" data-balloon-length="medium" data-balloon="Choose an existing image on the web or upload your own image." data-balloon-pos="up">
+                      <span class="icon is-small is-tooltip v-align-bottom" data-balloon-length="medium" data-balloon="Choose an existing image on the web or upload your own image." data-balloon-pos="up">
                         <i class="fa fa-question-circle"></i>
                       </span>
                     </label>
@@ -389,13 +382,13 @@
                     </form>
                     <div class="control has-addons">
                       <input id="background-link-input" data-name="background_image_link" placeholder="http://link-to-image.com/background.png" type="text" class="premium-input input changeable-input">
-                      <button id="background-link-refresh" class='is-disabled no-shadow is-outlined button'>
+                      <button id="background-link-refresh" class='button is-disabled is-outlined'>
                         <span class="icon is-small">
                           <i class="fa fa-refresh"></i>
                         </span>
                         <span>Refresh Preview</span>
                       </button>
-                      <label for="background-image-input" class="premium-input button no-shadow">
+                      <label for="background-image-input" class="premium-input button">
                         <span class="icon is-small">
                           <i class="fa fa-upload" aria-hidden="true"></i>
                         </span>
@@ -406,7 +399,7 @@
 									<div class="control">
 										<label class="label">
 											<span class="v-align-middle">Background Color</span>
-											<span class="icon is-small is-tooltip v-align-middle" data-balloon-length="medium" data-balloon="The background image takes precedence over the background color." data-balloon-pos="up">
+											<span class="icon is-small is-tooltip v-align-bottom" data-balloon-length="medium" data-balloon="The background image takes precedence over the background color." data-balloon-pos="up">
 												<i class="fa fa-question-circle"></i>
 											</span>
 										</label>
@@ -417,7 +410,7 @@
                   <div class="control">
                     <label class="label">
                       <span class="v-align-middle">Logo Image URL</span>
-                      <span class="icon is-small is-tooltip v-align-middle" data-balloon-length="medium" data-balloon="The logo will be utilized for email communications and branding." data-balloon-pos="up">
+                      <span class="icon is-small is-tooltip v-align-bottom" data-balloon-length="medium" data-balloon="The logo will be utilized for email communications and branding." data-balloon-pos="up">
                         <i class="fa fa-question-circle"></i>
                       </span>
                     </label>
@@ -426,13 +419,13 @@
                     </form>
                     <div class="control has-addons">
                       <input id="logo-link-input" data-name="logo_image_link" placeholder="http://link-to-image.com/logo.jpg" type="text" class="premium-input input changeable-input">
-                      <button id="logo-link-refresh" class='is-disabled no-shadow is-outlined button'>
+                      <button id="logo-link-refresh" class='is-disabled is-outlined button'>
                         <span class="icon is-small">
                           <i class="fa fa-refresh"></i>
                         </span>
                         <span>Refresh Preview</span>
                       </button>
-                      <label for="logo-image-input" class="premium-input button no-shadow">
+                      <label for="logo-image-input" class="premium-input button">
                         <span class="icon is-small">
                           <i class="fa fa-upload" aria-hidden="true"></i>
                         </span>
@@ -452,7 +445,7 @@
 											</figure>
 											<form class="drop-form-file" method="post" enctype="multipart/form-data">
 												<input tabindex="0" id="logo-image-input" data-name="logo" type="file" name="logo" accept="image/png, image/gif, image/jpeg" class="premium-input changeable-input input-file">
-												<label for="logo-image-input" class="upload-label premium-input button is-small no-shadow is-fullwidth">
+												<label for="logo-image-input" class="upload-label premium-input button is-small is-fullwidth">
 													<i class="fa fa-upload" aria-hidden="true"></i>
 													<p data-default-name="Logo" id="logo-image-label" class="file-label">Upload</p>
 												</label>
@@ -591,28 +584,32 @@
                   </div>
                 </div>
                 <div id="offers-toolbar" class="hidden-while-loading-offers is-hidden control has-border-bottom padding-bottom-20 margin-bottom-0 is-grouped">
-                  <div class="control has-icon">
-                    <span class="select">
-                      <select id="offers-sort-select" tabindex="0">
-                        <option selected value="timestamp_desc">Date Received (Newest)</option>
-                        <option value="timestamp_asc">Date Received (Oldest)</option>
-                        <option value="offer_desc">Price (High - Low)</option>
-                        <option value="offer_asc">Price (Low - High)</option>
-                        <option value="name_asc">Offerer Name (A - Z)</option>
-                        <option value="name_desc">Offerer Name (Z - A)</option>
-                        <option value="accepted_desc">Rejected / Accepted</option>
-                        <option value="accepted_asc">Accepted / Rejected</option>
-                      </select>
-                    </span>
-                    <i class="fa fa-sort"></i>
-                    <a id="show-rejected-offers" class="button no-shadow is-outlined">
-                      <span class="icon is-small"><i class="fa fa-toggle-off"></i></span>
-                      <span class="button-text">Rejected Offers</span>
-                    </a>
-                    <a id="refresh-offers" class="button no-shadow is-outlined">
-                      <span class="icon is-small"><i class="fa fa-refresh"></i></span>
-                      <span class="button-text">Refresh Offers</span>
-                    </a>
+                  <div class="control is-spaced is-expanded is-mobile">
+                    <div class="control-left control has-icon">
+											<span class="select is-small">
+	                      <select id="offers-sort-select" tabindex="0">
+	                        <option selected value="timestamp_desc">Date Received (Newest)</option>
+	                        <option value="timestamp_asc">Date Received (Oldest)</option>
+	                        <option value="offer_desc">Price (High - Low)</option>
+	                        <option value="offer_asc">Price (Low - High)</option>
+	                        <option value="name_asc">Offerer Name (A - Z)</option>
+	                        <option value="name_desc">Offerer Name (Z - A)</option>
+	                        <option value="accepted_desc">Rejected / Accepted</option>
+	                        <option value="accepted_asc">Accepted / Rejected</option>
+	                      </select>
+	                    </span>
+											<i class="fa fa-sort"></i>
+											<a id="refresh-offers" class="button is-outlined is-small">
+												<span class="icon is-small"><i class="fa fa-refresh"></i></span>
+												<span class="button-text">Refresh</span>
+											</a>
+										</div>
+										<div class="control-right">
+											<a id="show-rejected-offers" class="button is-outlined is-small">
+												<span class="icon is-small"><i class="fa fa-toggle-off"></i></span>
+												<span class="button-text">Show Rejected</span>
+											</a>
+										</div>
                   </div>
                 </div>
                 <div id="no-offers" class="hidden-while-loading-offers content margin-top-20 is-hidden">
@@ -642,7 +639,7 @@
 									</div>
 									<div class="media-right has-text-right">
 										<p class="is-bold"><span class="offer-accepted"></span><span class="offer-offer"></span></p>
-										<a class="button offer-modal-button is-small no-shadow margin-top-5" tabindex="0">View Offer</a>
+										<a class="button offer-modal-button is-small margin-top-5" tabindex="0">View Offer</a>
 									</div>
 								</div>
 							</div>
@@ -663,21 +660,19 @@
               </div>
             </div>
 						<footer id="tab-buttons-wrapper" class="yes-listings-elem is-hidden margin-top-25">
-							<a id="verify-button" class="unverified-elem button is-primary is-stylish is-small no-shadow" title="Verify this domain">
+							<a id="verify-button" class="unverified-elem button is-primary is-stylish is-small" title="Verify this domain">
 								<span class="icon is-small"><i class="fa fa-check-circle-o"></i></span>
 								<span>Verify Now</span>
 							</a>
-							<a id="refresh-dns-button" class="unverified-elem button is-outlined is-stylish is-small no-shadow" title="Refresh DNS">
+							<a id="refresh-dns-button" class="unverified-elem button is-outlined is-stylish is-small" title="Refresh DNS">
 								<span class="icon is-small"><i class="fa fa-refresh"></i></span>
 								<span>Refresh Table</span>
 							</a>
 							<div class="verified-elem">
-								<button id="save-changes-button" class="button is-disabled is-primary is-stylish is-small no-shadow">
-                  <span class="icon is-small"><i class="fa fa-floppy-o"></i></span>
+								<button id="save-changes-button" class="button is-disabled is-primary is-stylish is-small">
   								<span>Save Changes</span>
                 </button>
-								<button id="cancel-changes-button" class="button is-danger is-inverted is-hidden is-stylish is-small no-shadow">
-                  <span class="icon is-small"><i class="fa fa-ban"></i></span>
+								<button id="cancel-changes-button" class="button is-danger is-inverted is-hidden is-stylish is-small">
                   <span>Cancel Changes</span>
                 </button>
 							</div>

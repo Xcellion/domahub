@@ -104,7 +104,7 @@
         <a class="nav-link" tabindex="0" title="Create Listing" href="/listings/create">Create Listings</a>
       </div>
       <div class="nav-item">
-        <a id="profile-button" tabindex="0" class="button is-transparent is-primary is-stylish is-small" title="Profile">
+        <a id="profile-button" tabindex="0" class="button is-primary is-outlined is-stylish is-small" title="Profile">
           <span><%= (user.username.length > 6) ? user.username.slice(0,6) + "..." : user.username %></span>
           <span class="icon">
             <i class="fa fa-angle-down"></i>
@@ -130,7 +130,7 @@
             <% if (!user.stripe_subscription_id) { %>
               <li id="nav-premium-link"><a tabindex="0" href="/profile/settings#premium">
                 <span class="icon is-primary is-small">
-                  <i class="fa fa-diamond"></i>
+                  <i class="fa fa-trophy"></i>
                 </span>
                 <span>Upgrade Account</span>
               </a></li>

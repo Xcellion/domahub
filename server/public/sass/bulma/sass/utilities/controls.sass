@@ -3,7 +3,7 @@
   -webkit-appearance: none
   align-items: center
   background-color: $control-background
-  border: 1px solid $black-disabled
+  border: 1px solid $border
   border-radius: $radius
   color: $control
   display: inline-flex
@@ -18,10 +18,10 @@
   +mobile-456px
     font-size: $size-small
   &:hover
-    border-color: $black-secondary
+    border-color: $black-disabled
   &:focus,
   &.is-active
-    border-color: $black-primary
+    border-color: $black-secondary
   &[disabled],
   &.is-disabled
     background-color: $grey-light !important
@@ -34,8 +34,8 @@
 
 =control-small
   border-radius: $radius-small
-  font-size: 11px
-  height: 24px
+  font-size: 12px
+  height: 26px
   line-height: 16px
   padding-left: 6px
   padding-right: 6px

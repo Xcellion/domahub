@@ -39,7 +39,7 @@
                 <% } %>
               </span>
               <span class="v-align-middle icon is-small">
-                <i class="fa fa-diamond"></i>
+                <i class="fa fa-trophy"></i>
               </span>
               </a></li>
               <li><a id="verifications-link" href='#verification' class="setting-link">Verifications</a></li>
@@ -77,8 +77,8 @@
 							<p class="card-header-title">
 								Basic Information
 							</p>
-							<button class='edit-section-button card-header-icon button is-small no-shadow'>
-								<span class="icon is-small is-icon"><i class="fa fa-cog"></i></span>
+							<button class='edit-section-button card-header-icon button is-small'>
+								<span class="icon is-small"><i class="fa fa-cog"></i></span>
 								<span>Edit</span>
 							</button>
 						</div>
@@ -86,7 +86,7 @@
 							<form id="account-form" class="margin-0 form account-form">
 								<div class="control">
 									<div class="label-icon">
-										<label class="label" for"email-input">Email Address</label>
+										<label class="label" for="email-input">Email Address</label>
 										<span data-balloon="Private" data-balloon-pos="up" class="icon is-tooltip is-small">
 											<i class="fa fa-lock"></i>
 										</span>
@@ -112,12 +112,10 @@
 									<input id="verify-pw-input" class="new-account-input is-disabled input account-input" type="password">
 								</div>
 								<div class="control hidden-edit is-hidden">
-									<button id="change-account-submit" class="button is-disabled is-primary no-shadow is-stylish is-small">
-                    <span class="icon is-small"><i class="fa fa-floppy-o"></i></span>
+									<button id="change-account-submit" class="button is-disabled is-primary is-stylish is-small">
                     <span>Save Changes</span>
                   </button>
-									<button id="change-account-cancel" class="button is-hidden is-danger no-shadow is-stylish is-small is-inverted">
-                    <span class="icon is-small"><i class="fa fa-ban"></i></span>
+									<button id="change-account-cancel" class="button is-hidden is-danger is-stylish is-small is-inverted">
                     <span>Cancel Changes</span>
                   </button>
 								</div>
@@ -135,7 +133,7 @@
 
             <div class="card-content">
 
-              <div class="control is-spaced">
+              <div class="control is-spaced is-mobile">
                 <div class="control-left">
                   <p>
                     Premium Status
@@ -143,20 +141,20 @@
                   <small id="renew-status" class="tip"></small>
                 </div>
                 <div class="control-right">
-                  <a id="upgrade-button" class="margin-top-5 is-stylish is-small basic-elem button no-shadow">
+                  <a id="upgrade-button" class="margin-top-5 basic-elem button">
                     <span class="icon is-small">
-                      <i class="fa fa-diamond"></i>
+                      <i class="fa fa-trophy"></i>
                     </span>
                     <span class="button-text">Upgrade</span>
                   </a>
                   <div class="premium-elem control">
-                    <a id="cancel-premium-button" class="margin-top-5 is-hidden is-outlined is-small is-stylish button no-shadow is-danger">
+                    <a id="cancel-premium-button" class="margin-top-5 is-hidden is-outlined button is-danger">
                       <span class="icon is-small">
                         <i class="fa fa-times-circle"></i>
                       </span>
                       <span>Cancel Plan</span>
                     </a>
-                    <a id="renew-premium-button" class="margin-top-5 is-hidden is-outlined is-small is-stylish button no-shadow is-primary">
+                    <a id="renew-premium-button" class="margin-top-5 is-hidden is-outlined button is-primary">
                       <span class="icon is-small">
                         <i class="fa fa-repeat"></i>
                       </span>
@@ -166,19 +164,19 @@
                 </div>
               </div>
 
-              <div class="control margin-bottom-0 is-spaced">
+              <div class="control is-spaced is-mobile">
                 <div class="control-left">
                   <p>
                     Default Payment Method
                   </p>
-                  <small id="existing-cc" class="tip">Click the button on the right to add a default credit card!</small>
+                  <small id="existing-cc" class="tip">Click the add new card button to add a default credit card!</small>
                 </div>
                 <div class="control-right">
-                  <a id="change-card-button" tabindex="0" title="Change Payment Method" class="button is-primary is-outlined is-small is-stylish no-shadow">
+                  <a id="change-card-button" tabindex="0" title="Change Payment Method" class="button is-primary is-inverted">
                     <span class="icon is-small">
                       <i class="fa fa-credit-card"></i>
                     </span>
-                    <span>Add New Payment Method</span>
+                    <span>Add New Card</span>
                   </a>
                 </div>
               </div>
@@ -233,7 +231,7 @@
                 </div>
               </form>
               <footer id="checkout-button-wrapper" class="is-hidden margin-top-25">
-                <button id="checkout-button" class="button is-primary is-disabled is-stylish is-small no-shadow">Add a New Card</button>
+                <button id="checkout-button" class="button is-primary is-disabled is-stylish is-small">Add a New Card</button>
               </footer>
 						</div>
           </div>
@@ -277,8 +275,8 @@
 							<p class="card-header-title">
 								Payout Address
 							</p>
-							<button class='edit-section-button card-header-icon button is-small no-shadow'>
-								<span class="icon is-small is-icon"><i class="fa fa-cog"></i></span>
+							<button class='edit-section-button card-header-icon button is-small'>
+								<span class="icon is-small"><i class="fa fa-cog"></i></span>
 								<span>Edit</span>
 							</button>
 						</div>
@@ -286,7 +284,7 @@
 							<form id="payout-address-form" class="form payout-form stripe-form">
 									<div class="control">
 										<div class="label-icon">
-											<label class="label" for"country-input">Country</label>
+											<label class="label" for="country-input">Country</label>
 											<span data-balloon="Private" data-balloon-pos="up" class="icon is-tooltip is-small">
 												<i class="fa fa-lock"></i>
 											</span>
@@ -321,7 +319,7 @@
 									</div>
 									<div class="control">
 										<div class="label-icon">
-											<label class="label" for"addressline1-input">Address Line 1</label>
+											<label class="label" for="addressline1-input">Address Line 1</label>
 											<span data-balloon="Private" data-balloon-pos="up" class="icon is-tooltip is-small">
 												<i class="fa fa-lock"></i>
 											</span>
@@ -330,7 +328,7 @@
 									</div>
 									<div class="control">
 										<div class="label-icon">
-											<label class="label" for"addressline2-input">Address Line 2</label>
+											<label class="label" for="addressline2-input">Address Line 2</label>
 											<span data-balloon="Private" data-balloon-pos="up" class="icon is-tooltip is-small">
 												<i class="fa fa-lock"></i>
 											</span>
@@ -339,7 +337,7 @@
 									</div>
 									<div class="control">
 										<div class="label-icon">
-											<label class="label" for"city-input">City</label>
+											<label class="label" for="city-input">City</label>
 											<span data-balloon="Private" data-balloon-pos="up" class="icon is-tooltip is-small">
 												<i class="fa fa-lock"></i>
 											</span>
@@ -348,7 +346,7 @@
 									</div>
 									<div class="control">
 										<div class="label-icon">
-											<label class="label" for"state-input">State / Province</label>
+											<label class="label" for="state-input">State / Province</label>
 											<span data-balloon="Private" data-balloon-pos="up" class="icon is-tooltip is-small">
 												<i class="fa fa-lock"></i>
 											</span>
@@ -357,7 +355,7 @@
 									</div>
 									<div class="control">
 										<div class="label-icon">
-											<label class="label" for"zip-input">Zip / Postal Code</label>
+											<label class="label" for="zip-input">Zip / Postal Code</label>
 											<span data-balloon="Private" data-balloon-pos="up" class="icon is-tooltip is-small">
 												<i class="fa fa-lock"></i>
 											</span>
@@ -365,15 +363,13 @@
 										<input required id="zip-input" class="input is-disabled stripe-input" type="text" name="zip" autocomplete=""/>
 									</div>
 								<div class="control hidden-edit is-hidden">
-									<button tabindex="0" id="payout-address-submit" class="submit-payout button is-stylish is-small is-primary no-shadow is-disabled">
-                    <span class="icon is-small"><i class="fa fa-floppy-o"></i></span>
+									<button tabindex="0" id="payout-address-submit" class="submit-payout button is-stylish is-small is-primary is-disabled">
                     <span>Save Changes</span>
                   </button>
-									<button tabindex="0" id="payout-address-cancel" class="cancel-payout button is-stylish is-small is-danger no-shadow is-hidden is-inverted">
-                    <span class="icon is-small"><i class="fa fa-ban"></i></span>
+									<button tabindex="0" id="payout-address-cancel" class="cancel-payout button is-stylish is-small is-danger is-hidden is-inverted">
                     <span>Cancel Changes</span>
                   </button>
-									<button tabindex="0" id="payout-address-next" class="payout-next-button is-hidden button is-stylish is-small is-primary is-pulled-right no-shadow is-hidden">Personal Information</button>
+									<button tabindex="0" id="payout-address-next" class="payout-next-button is-hidden button is-stylish is-small is-primary is-pulled-right is-hidden">Personal Information</button>
 								</div>
 							</form>
 						</div>
@@ -383,8 +379,8 @@
 							<p class="card-header-title">
 								Personal Information
 							</p>
-							<button class='edit-section-button card-header-icon button is-small no-shadow'>
-								<span class="icon is-small is-icon"><i class="fa fa-cog"></i></span>
+							<button class='edit-section-button card-header-icon button is-small'>
+								<span class="icon is-small"><i class="fa fa-cog"></i></span>
 								<span>Edit</span>
 							</button>
 						</div>
@@ -561,15 +557,13 @@
 										<small class="tip">We use this info for our records ONLY.</small>
 									</div>
 								<div class="control hidden-edit is-hidden">
-									<button tabindex="0" id="payout-personal-submit" class="submit-payout button is-stylish is-small is-primary no-shadow is-disabled">
-                    <span class="icon is-small"><i class="fa fa-floppy-o"></i></span>
+									<button tabindex="0" id="payout-personal-submit" class="submit-payout button is-stylish is-small is-primary is-disabled">
                     <span>Save Changes</span>
                   </button>
-									<button tabindex="0" id="payout-personal-cancel" class="cancel-payout button is-stylish is-small is-danger no-shadow is-hidden is-inverted">
-                    <span class="icon is-small"><i class="fa fa-ban"></i></span>
+									<button tabindex="0" id="payout-personal-cancel" class="cancel-payout button is-stylish is-small is-danger is-hidden is-inverted">
                     <span>Cancel Changes</span>
                   </button>
-									<button tabindex="0" id="payout-personal-next" class="payout-next-button is-hidden button is-stylish is-small is-primary is-pulled-right no-shadow is-hidden">Bank Information</button>
+									<button tabindex="0" id="payout-personal-next" class="payout-next-button is-hidden button is-stylish is-small is-primary is-pulled-right is-hidden">Bank Information</button>
 								</div>
 							</form>
 						</div>
@@ -579,8 +573,8 @@
 							<p class="card-header-title">
 								Bank Information
 							</p>
-							<button class='edit-section-button card-header-icon button is-small no-shadow'>
-								<span class="icon is-small is-icon"><i class="fa fa-cog"></i></span>
+							<button class='edit-section-button card-header-icon button is-small'>
+								<span class="icon is-small"><i class="fa fa-cog"></i></span>
 								<span>Edit</span>
 							</button>
 						</div>
@@ -597,7 +591,7 @@
 									</div>
 									<div class="control">
 										<div class="label-icon">
-											<label class="label" for"country-input">Country</label>
+											<label class="label" for="country-input">Country</label>
 											<span data-balloon="Private" data-balloon-pos="up" class="icon is-tooltip is-small">
 												<i class="fa fa-lock"></i>
 											</span>
@@ -695,12 +689,10 @@
 										<small class="tip">This information is stored with our third party payment provider, Stripe.</small>
 									</div>
 								<div class="control hidden-edit is-hidden">
-									<button tabindex="0" id="payout-bank-submit" class="submit-payout button is-stylish is-small is-primary no-shadow is-disabled">
-                    <span class="icon is-small"><i class="fa fa-floppy-o"></i></span>
+									<button tabindex="0" id="payout-bank-submit" class="submit-payout button is-stylish is-small is-primary is-disabled">
                     <span>Save Changes</span>
                   </button>
-									<button tabindex="0" id="payout-bank-cancel" class="cancel-payout button is-stylish is-small is-danger no-shadow is-hidden is-inverted">
-                    <span class="icon is-small"><i class="fa fa-ban"></i></span>
+									<button tabindex="0" id="payout-bank-cancel" class="cancel-payout button is-stylish is-small is-danger is-hidden is-inverted">
                     <span>Cancel Changes</span>
                   </button>
 								</div>
@@ -713,8 +705,8 @@
 							<p class="card-header-title">
 								PayPal Settings
 							</p>
-							<button class='edit-section-button card-header-icon button is-small no-shadow'>
-								<span class="icon is-small is-icon"><i class="fa fa-cog"></i></span>
+							<button class='edit-section-button card-header-icon button is-small'>
+								<span class="icon is-small"><i class="fa fa-cog"></i></span>
 								<span>Edit</span>
 							</button>
 						</div>
@@ -731,12 +723,10 @@
 									<small class="tip">Please enter the email address of your PayPal account.</small>
 								</div>
 								<div class="control hidden-edit is-hidden">
-									<button tabindex="0" id="paypal-submit" class="button is-stylish is-small is-primary no-shadow is-disabled">
-                    <span class="icon is-small"><i class="fa fa-floppy-o"></i></span>
+									<button tabindex="0" id="paypal-submit" class="button is-stylish is-small is-primary is-disabled">
                     <span>Save Changes</span>
                   </button>
-									<button tabindex="0" id="paypal-cancel" class="button is-stylish is-small is-danger no-shadow is-hidden is-inverted">
-                    <span class="icon is-small"><i class="fa fa-ban"></i></span>
+									<button tabindex="0" id="paypal-cancel" class="button is-stylish is-small is-danger is-hidden is-inverted">
                     <span>Cancel Changes</span>
                   </button>
 								</div>
@@ -748,14 +738,14 @@
 							<p class="card-header-title">
 								Registrar Settings
 							</p>
-							<button class='edit-section-button card-header-icon button is-small no-shadow'>
-								<span class="icon is-small is-icon"><i class="fa fa-cog"></i></span>
+							<button class='edit-section-button card-header-icon button is-small'>
+								<span class="icon is-small"><i class="fa fa-cog"></i></span>
 								<span>Edit</span>
 							</button>
 						</header>
 						<div class="card-content">
 							<div class="control">
-                <button tabindex="0" id="godaddy-connect-button" class="button is-stylish is-small no-shadow">Connect GoDaddy Account</button>
+                <button tabindex="0" id="godaddy-connect-button" class="button is-stylish is-small">Connect GoDaddy Account</button>
 							</div>
 						</div>
 					</div>-->

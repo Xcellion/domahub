@@ -290,11 +290,11 @@ function setUpUpgradeTab(){
 
     //has a credit card on file, but no premium
     if (user.premium_cc_last4 || user.premium_cc_brand){
-      $("#renew-status").text("Click the button on the right to upgrade to a Premium account!");
+      $("#renew-status").text("Click the upgrade button to upgrade to a Premium account!");
       $("#upgrade-button").removeClass('is-hidden');
     }
     else {
-      $("#renew-status").text("Add a new default payment method to upgrade to a Premium account!");
+      $("#renew-status").text("Add a new card to upgrade to a Premium account!");
       $("#upgrade-button").addClass('is-hidden');
     }
   }

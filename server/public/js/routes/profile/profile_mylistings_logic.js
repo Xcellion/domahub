@@ -440,15 +440,15 @@ function editRowPurchased(listing_info){
   }
   function updateCategories(listing_info){
     var listing_categories = (listing_info.categories) ? listing_info.categories.split(" ") : [];
-    $(".category-selector").removeClass('is-primary');
+    $(".category-selector").removeClass('is-dark');
     for (var x = 0; x < listing_info.categories.split(" ").length; x++){
       //color existing categories
-      var temp_category = $("." + listing_categories[x] + "-category").addClass('is-primary');
+      var temp_category = $("." + listing_categories[x] + "-category").addClass('is-dark');
     }
     updateHiddenCategoryInput();
   }
   function updateHiddenCategoryInput(){
-    var joined_categories = $(".category-selector.is-primary").map(function() {
+    var joined_categories = $(".category-selector.is-dark").map(function() {
       return $(this).data("category");
     }).toArray().sort().join(" ");
     joined_categories = (joined_categories == "") ? null : joined_categories;
@@ -722,7 +722,7 @@ function editRowPurchased(listing_info){
       //rejected offers button
       $("#show-rejected-offers").removeClass('is-primary').off().on('click', function(){
         $(".rejected-offer").toggleClass('is-hidden');
-        $(this).toggleClass('is-primary').find(".fa").toggleClass('fa-toggle-on fa-toggle-off');
+        $(this).toggleClass('is-primary is-black').find(".fa").toggleClass('fa-toggle-on fa-toggle-off');
 
         //hide no offers if there are any offers (that arent rejected)
         if ($(".offer-row:not(.rejected-offer, #offer-clone)").length == 0){
@@ -1115,7 +1115,7 @@ function editRowPurchased(listing_info){
 
     //click to add this category
     $(".category-selector").off().on("click", function(e){
-      $(this).toggleClass('is-primary');
+      $(this).toggleClass('is-dark');
       updateHiddenCategoryInput();
       changedValue($("#categories-input"), listing_info);
     });
