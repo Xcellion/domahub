@@ -324,7 +324,7 @@ module.exports = {
       console.log("F: Updating contact record with deposited...");
       Data.depositedOffer({
         deposited : true,
-        deadline : moment().endOf("day").add(1, "week")
+        deadline : moment().add(1, "week")._d.getTime()
       }, req.session.listing_info.domain_name, req.session.new_buying_info.id, function(result){
         if (result.state == "success"){
           next();
@@ -365,16 +365,15 @@ module.exports = {
 
     //get the listing owner contact information to email
     var email_contents_path = path.resolve(process.cwd(), 'server', 'views', 'email', 'bin_notify_owner.ejs');
-    var price_formatted = moneyFormat.to(parseFloat(req.session.listing_info.buy_price));
+    var price_formatted = moneyFormat.to(parseFloat((req.session.new_buying_info.id) ? req.session.new_buying_info.offer : req.session.listing_info.buy_price));
     var EJSVariables = {
       domain_name: req.session.listing_info.domain_name,
       owner_name: req.session.listing_info.username,
-      buy_price: price_formatted,
-
-      offerer_name: req.session.new_buying_info.name || "Somebody",
-      offerer_email: req.session.new_buying_info.email || "Undisclosed",
-      offerer_phone: req.session.new_buying_info.phone || "Undisclosed",
-      message: req.session.new_buying_info.message || "No message."
+      price: price_formatted,
+      offerer_name: req.session.new_buying_info.name,
+      offerer_email: req.session.new_buying_info.email,
+      offerer_phone: req.session.new_buying_info.phone,
+      message: req.session.new_buying_info.message
     }
     var emailDetails = {
       to: req.session.listing_info.owner_email,
@@ -394,27 +393,25 @@ module.exports = {
 
     //get the listing owner contact information to email
     var email_contents_path = path.resolve(process.cwd(), 'server', 'views', 'email', 'bin_notify_buyer.ejs');
-
-    var price_formatted = moneyFormat.to(parseFloat(req.session.listing_info.buy_price));
+    var price_formatted = moneyFormat.to(parseFloat((req.session.new_buying_info.id) ? req.session.new_buying_info.offer : req.session.listing_info.buy_price));
     var EJSVariables = {
       domain_name: req.session.listing_info.domain_name,
       owner_name: req.session.listing_info.username,
       owner_email: req.session.listing_info.owner_email,
-      offer: (req.session.new_buying_info.id) ? req.session.new_buying_info.offer : req.session.listing_info.buy_price,
+      price: price_formatted,
 
+      //for custom emails
       premium: req.session.listing_info.premium,
       listing_info: req.session.listing_info,
 
-      offerer_name: req.session.new_buying_info.name || "Somebody",
-      offerer_email: req.session.new_buying_info.email || "Undisclosed",
-      offerer_phone: req.session.new_buying_info.phone || "Undisclosed",
-      message: req.session.new_buying_info.message || "No message.",
-
+      offerer_name: req.session.new_buying_info.name,
+      offerer_email: req.session.new_buying_info.email,
+      offerer_phone: req.session.new_buying_info.phone,
+      message: req.session.new_buying_info.message,
       verification_code : req.session.new_buying_info.verification_code,
     }
     var emailDetails = {
       to: req.session.new_buying_info.email,
-      cc: "",
       from: '"DomaHub Domains" <general@domahub.com>',
       subject: 'Congratulations on your recent purchase of ' + req.params.domain_name + " for " + price_formatted + "!"
     };
