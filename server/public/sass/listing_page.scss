@@ -144,6 +144,7 @@
   overflow-y: auto;
   height: calc(100vh - 74px);
   .footer {
+    background-color: $white;
     border-top: 1px solid $border;
     margin-top: 20px;
     padding: 20px 0 !important;
