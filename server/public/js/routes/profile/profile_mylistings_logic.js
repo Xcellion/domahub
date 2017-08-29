@@ -862,7 +862,12 @@ function editRowPurchased(listing_info){
           $("#offers-toolbar").addClass('is-hidden');
           $('.unaccepted-offer').addClass('is-hidden');
           $("#deposited-offer").removeClass('is-hidden');
-          $("#deposited-deadline").text(moment(deposited_deadline).format("MMMM DD, YYYY - h:mmA"))
+          $("#deposited-deadline").text(moment(deposited_deadline).format("MMMM DD, YYYY - h:mmA"));
+
+          //resend the deposited offer email button
+          $("#resend-deposit").off().on("click", function(){
+            resendAcceptEmail($(this), listing_info, $("#accepted-offer").data("offer_id"), true);
+          });
         }
         else {
           $("#deposited-offer").addClass('is-hidden');
@@ -874,7 +879,7 @@ function editRowPurchased(listing_info){
 
             //resend the accepted offer email button
             $("#resend-accept").off().on("click", function(){
-              resendAcceptEmail($(this), listing_info, $("#accepted-offer").data("offer_id"));
+              resendAcceptEmail($(this), listing_info, $("#accepted-offer").data("offer_id"), false);
             });
           }
           else {
@@ -920,7 +925,7 @@ function editRowPurchased(listing_info){
   }
 
   //function to resend the accepted offer email to offerer
-  function resendAcceptEmail(resend_button, listing_info, offer_id){
+  function resendAcceptEmail(resend_button, listing_info, offer_id, deposit){
     resend_button.off().addClass('is-loading');
     $.ajax({
       url: "/listing/" + listing_info.domain_name + "/contact/" + offer_id + "/resend",
@@ -928,11 +933,12 @@ function editRowPurchased(listing_info){
     }).done(function(data){
       resend_button.removeClass('is-loading');
       if (data.state == "success"){
-        successMessage("Successfully resent the email to the offerer!");
+        var success_text = (deposit) ? "transfer verification" : "payment information";
+        successMessage("Successfully re-sent the " + success_text + " email to the buyer!");
         resend_button.addClass('is-hidden');
 
         //remove the resend button (for margin bottom on previous p)
-        $("#resend-wrapper").remove();
+        $(".resend-wrapper").remove();
       }
       else {
         errorMessage(data.message);
