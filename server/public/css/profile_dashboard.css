@@ -235,7 +235,7 @@ button[data-balloon] {
   .media:not(:last-child) {
     border-bottom: 1px solid rgba(0, 0, 0, 0.12); }
   .media:hover, .media:focus {
-    background-color: #f1f1f1; }
+    background-color: #f9f9f9; }
 
 .media-items {
   display: flex;
@@ -294,7 +294,7 @@ button[data-balloon] {
       background-color: white;
       height: 3000px;
       width: 300px;
-      left: -100%;
+      left: -123%;
       position: absolute;
       z-index: 10; } }
   #filter-menu.is-active {
@@ -332,8 +332,9 @@ button[data-balloon] {
     #premium-only-notification {
       width: 225px; } }
 
-#filters {
-  margin-top: 35px; }
+@media screen and (max-width: 768px) {
+  #filters {
+    margin-top: 35px; } }
 
 #table-body {
   background-color: white;

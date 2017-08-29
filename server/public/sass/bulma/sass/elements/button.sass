@@ -45,15 +45,15 @@
     +box-shadow(0,0,0,$border,0)
   &:hover,
   &:focus
-    +box-shadow(0,4px,10px,$border,2px)
+    +box-shadow(0,2px,6px,$border,1px)
   &:hover,
   &:focus,
   &.is-active
-    border-color: $black-secondary
+    border-color: $black-disabled
   &.is-active
     &:hover,
     &:focus
-      border-color: $black-disabled
+      border-color: $black-secondary
       color: $black-secondary
   // Modifiers
   &.no-shadow
@@ -75,7 +75,7 @@
       &:hover,
       &:focus,
       &.is-active
-        background-color: darken($color, 3%)
+        background-color: lighten($color, 5%)
         border-color: transparent
         color: $color-invert
       &:active
@@ -89,7 +89,7 @@
         &:hover,
         &:active,
         &:focus
-          background-color: darken($color-invert, 3%)
+          background-color: lighten($color-invert, 5%)
       &.is-loading
         &:after
           border-color: transparent transparent $grey-light $grey-light !important
@@ -100,7 +100,7 @@
         &:hover,
         &:active,
         &:focus
-          background-color: darken($color-invert, 3%)
+          background-color: lighten($color-invert, 5%)
 
   // Sizes
   &.is-small

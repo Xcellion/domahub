@@ -13,7 +13,7 @@
   }
   &:hover,
   &:focus {
-    background-color: $grey-lighter;
+    background-color: #f9f9f9;
   }
 }
 
@@ -81,7 +81,7 @@
     background-color: $white;
     height: 3000px;
     width: 300px;
-    left: -100%;
+    left: -123%;
     position: absolute;
     z-index: 10;
   }
@@ -126,7 +126,9 @@
 
 // table stuff
 #filters {
-  margin-top: 35px;
+  @include mobile {
+    margin-top: 35px;
+  }
 }
 
 #table-body {

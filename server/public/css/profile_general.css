@@ -180,7 +180,6 @@ button[data-balloon] {
   .form .label-icon label {
     display: inline; }
   .form .label-icon .icon {
-    margin-bottom: 4px;
     margin-left: 2px; }
 
 .tip {
