@@ -156,11 +156,7 @@ module.exports = {
       });
 
       //render the redirect page to notify offerer that offer was successfully sent
-      res.render("redirect", {
-        redirect: "/listing/" + req.params.domain_name,
-        message: "Your offer has been verified and the owner of " + req.params.domain_name + " has been notified! There is no further action required on your end. Please wait for the owner to accept or reject your offer.",
-        button: "Back to " + req.params.domain_name,
-        auto_redirect: false,
+      res.render("listings/offer_verify.ejs", {
         listing_info: req.session.listing_info
       });
     });
@@ -516,9 +512,11 @@ module.exports = {
 
   //function to render the transfer ownership verifcation page
   renderVerificationPage : function(req, res, next){
-    res.render("listings/transfer_verify.ejs", {
-      domain_name : req.params.domain_name,
-      verification_code: req.params.verification_code
+    getListingOffererContactInfoByCode(req.params.domain_name, req.params.verification_code, function(offer_result){
+      res.render("listings/transfer_verify.ejs", {
+        listing_info: req.session.listing_info,
+        offer_info: offer_result,
+      });
     });
   },
 
