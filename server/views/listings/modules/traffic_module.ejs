@@ -19,7 +19,11 @@
       }); %>
 
       <p class="content">
-        These are people who are typing the address directly into their browser. You can capture this traffic instantly the moment you start utilizing this domain!
+        <% if (listing_info.unlisted) { %>
+          These are people who have searched for this domain name on DomaHub. You can capture this traffic in addition to any natural traffic your domain is currently receiving the moment you sign up with DomaHub!
+        <% } else { %>
+          These are people who are typing the address directly into their browser. You can capture this traffic instantly the moment you start utilizing this domain!
+        <% } %>
       </p>
 
     </div>
