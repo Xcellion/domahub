@@ -269,6 +269,8 @@ module.exports = function(app, db, auth, error, stripe){
     checkDomainValid,
     checkDomainListed,
     buyer_functions.checkListingPurchaseVerificationCode,
+    renter_functions.getListingInfo,
+    stripe.checkStripeSubscription,
     buyer_functions.renderVerificationPage
   ]);
 
@@ -487,6 +489,8 @@ module.exports = function(app, db, auth, error, stripe){
 
 }
 
+//<editor-fold>-------------------------------HELPERS-------------------------------
+
 //function to check dev or not
 function ifNotDev(req, res, next){
   if (node_env != "dev"){
@@ -553,3 +557,5 @@ function checkDomainNotListed(req, res, next){
     }
   });
 }
+
+//</editor-fold>

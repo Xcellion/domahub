@@ -31,39 +31,27 @@ module.exports = function(app, db, auth, error){
     createSignupCodes
   ]);
   app.get("/analysis/:domain_name", analysis);
-  app.get("/paypal", paypal);
+  app.get("/viewstest/:path/:view_name", showView)
 
-  //temporary to test /redirect page
-  app.get("/redirect", function(req, res){
-    res.render("redirect.ejs", {
-      redirect: "/",
-      listing_info : {},
-      message: "lol",
-      button: ""
-    });
-  });
-
-  app.get('/godaddy', godaddy);
-}
-
-//godaddy api connect
-function godaddy(req, res, next){
-  request({
-    url: "https://api.ote-godaddy.com//v1/domains/available?domain=testfuck.com",
-    method: "GET",
-    headers: {
-      'Authorization':'sso-key VUxKSUdS_Bnj2xEUWUGZ7RJ93jmqTe4:Bnj6gnvLHN7z4hsKzUDA5r'
-    }
-  }, function (err, response, body) {
-    console.log(response);
-    res.send(response);
-  });
 }
 
 //<editor-fold>
 
-function paypal(req, res, next){
-  res.render("paypaltest.ejs");
+
+//show a specific view
+function showView(req, res, next){
+  var view_vars = {
+    listing_info : {
+      domain_name : "testdomain.com",
+      primary_color : "#e86666",
+      premium: true,
+    },
+    offer_info : {
+      name : "WOFJ",
+      verification_code : "fdjasks"
+    }
+  }
+  res.render(req.params.path + "/" + req.params.view_name, view_vars);
 }
 
 //to read email templates

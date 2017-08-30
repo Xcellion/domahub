@@ -121,43 +121,49 @@ $(document).ready(function(){
 
   //change tabs
   $(".tab").on("click", function(e){
-    //clear any existing messages
-    errorMessage(false);
-    successMessage(false);
+    var current_tab = $(".tab.is-active").attr("id").replace("-tab", "");
+    var new_tab = $(this).attr("id").replace("-tab", "");
 
-    //update tab URL
-    updateQueryStringParam("tab", $(this).attr("id").replace("-tab", ""));
+    if (current_tab != new_tab){
+      //clear any existing messages
+      errorMessage(false);
+      successMessage(false);
 
-    //hide other tab selectors
-    $(".tab.verified-elem").removeClass('is-active');
-    $(this).addClass('is-active');
+      //update tab URL
+      updateQueryStringParam("tab", new_tab);
 
-    //show specific tab
-    $(".drop-tab").stop().fadeOut(300).addClass('is-hidden');
-    $("#" + $(this).attr("id") + "-drop").stop().fadeIn(300).removeClass('is-hidden');
+      //hide other tab selectors
+      $(".tab.verified-elem").removeClass('is-active');
+      $(this).addClass('is-active');
 
-    //get offers if we havent yet
-    if ($(this).attr("id") == "offers-tab" && current_listing.offers == undefined){
-      getDomainOffers(current_listing.domain_name);
+      //show specific tab
+      new_tab = (new_tab == "purchased") ? "offers-tab" : new_tab + "-tab";
+      $(".drop-tab").stop().fadeOut(300).addClass('is-hidden');
+      $("#" + new_tab + "-drop").stop().fadeIn(300).removeClass('is-hidden');
+
+      //get offers if we havent yet
+      if ($(this).attr("id") == "offers-tab" && current_listing.offers == undefined){
+        getDomainOffers(current_listing.domain_name);
+      }
+      else if ($(this).attr("id") == "stats-tab" && current_listing.stats == undefined){
+        getDomainStats(current_listing.domain_name);
+      }
+
+      //hide save/cancel changes buttons a tab that shouldnt show the save changes buttons
+      if ($(this).hasClass("no-buttons-tab")){
+        $("#tab-buttons-wrapper").addClass('is-hidden');
+        $("#save-changes-button").addClass('is-hidden');
+        $("#cancel-changes-button").addClass('is-hidden');
+      }
+      //clicked on a not upgrade tab
+      else {
+        $("#tab-buttons-wrapper").removeClass('is-hidden');
+        $("#save-changes-button").removeClass('is-hidden');
+        $("#cancel-changes-button").removeClass('is-hidden');
+      }
+
+      cancelListingChanges();
     }
-    else if ($(this).attr("id") == "stats-tab" && current_listing.stats == undefined){
-      getDomainStats(current_listing.domain_name);
-    }
-
-    //hide save/cancel changes buttons a tab that shouldnt show the save changes buttons
-    if ($(this).hasClass("no-buttons-tab")){
-      $("#tab-buttons-wrapper").addClass('is-hidden');
-      $("#save-changes-button").addClass('is-hidden');
-      $("#cancel-changes-button").addClass('is-hidden');
-    }
-    //clicked on a not upgrade tab
-    else {
-      $("#tab-buttons-wrapper").removeClass('is-hidden');
-      $("#save-changes-button").removeClass('is-hidden');
-      $("#cancel-changes-button").removeClass('is-hidden');
-    }
-
-    cancelListingChanges();
   });
 
   //to submit form changes
@@ -338,7 +344,8 @@ function changeRow(row, listing_info, bool){
 function editRowVerified(listing_info, fadeIn){
 
   var url_tab = getParameterByName("tab");
-  if (url_tab == "verify"){
+  //not yet purchased / verified, but URL is wrong
+  if (url_tab == "verify" || (url_tab == "purchased" && !listing_info.deposited)){
     updateQueryStringParam("tab", "info");
     $(".tab").removeClass('is-active');
     $("#info-tab").addClass('is-active');
@@ -416,6 +423,10 @@ function editRowPurchased(listing_info){
   $("#drop-tab").addClass('is-active');
   $(".drop-tab").addClass('is-hidden');
   $("#offers-tab-drop").removeClass('is-hidden').show();
+  $("#purchased-tab").addClass('is-active');
+
+  //update URL
+  updateQueryStringParam("tab", "purchased");
 
   //hide buttons wrapper
   $("#tab-buttons-wrapper").addClass('is-hidden');
@@ -851,7 +862,12 @@ function editRowPurchased(listing_info){
           $("#offers-toolbar").addClass('is-hidden');
           $('.unaccepted-offer').addClass('is-hidden');
           $("#deposited-offer").removeClass('is-hidden');
-          $("#deposited-deadline").text(moment(deposited_deadline).format("MMMM DD, YYYY - h:mmA"))
+          $("#deposited-deadline").text(moment(deposited_deadline).format("MMMM DD, YYYY - h:mmA"));
+
+          //resend the deposited offer email button
+          $("#resend-deposit").off().on("click", function(){
+            resendAcceptEmail($(this), listing_info, $("#accepted-offer").data("offer_id"), true);
+          });
         }
         else {
           $("#deposited-offer").addClass('is-hidden');
@@ -863,7 +879,7 @@ function editRowPurchased(listing_info){
 
             //resend the accepted offer email button
             $("#resend-accept").off().on("click", function(){
-              resendAcceptEmail($(this), listing_info, $("#accepted-offer").data("offer_id"));
+              resendAcceptEmail($(this), listing_info, $("#accepted-offer").data("offer_id"), false);
             });
           }
           else {
@@ -909,7 +925,7 @@ function editRowPurchased(listing_info){
   }
 
   //function to resend the accepted offer email to offerer
-  function resendAcceptEmail(resend_button, listing_info, offer_id){
+  function resendAcceptEmail(resend_button, listing_info, offer_id, deposit){
     resend_button.off().addClass('is-loading');
     $.ajax({
       url: "/listing/" + listing_info.domain_name + "/contact/" + offer_id + "/resend",
@@ -917,11 +933,12 @@ function editRowPurchased(listing_info){
     }).done(function(data){
       resend_button.removeClass('is-loading');
       if (data.state == "success"){
-        successMessage("Successfully resent the email to the offerer!");
+        var success_text = (deposit) ? "transfer verification" : "payment information";
+        successMessage("Successfully re-sent the " + success_text + " email to the buyer!");
         resend_button.addClass('is-hidden');
 
         //remove the resend button (for margin bottom on previous p)
-        $("#resend-wrapper").remove();
+        $(".resend-wrapper").remove();
       }
       else {
         errorMessage(data.message);
@@ -1338,8 +1355,16 @@ function refreshSubmitButtons(){
 function cancelListingChanges(){
   refreshSubmitButtons();
 
-  //revert all inputs (prevent fade in)
-  editRowVerified(current_listing, true);
+  //revert all inputs
+  if (current_listing.deposited){
+    editRowPurchased(current_listing);
+  }
+  else if (current_listing.verified){
+    editRowVerified(current_listing, true);   //true to prevent fade in
+  }
+  else {
+    editRowUnverified(current_listing);
+  }
 
   errorMessage(false);
   successMessage(false);

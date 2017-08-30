@@ -377,7 +377,7 @@ module.exports = {
   loginPost: function(req, res, next){
     var referer = req.header("Referer").split("/");
     //redirect to profile unless coming from a listing
-    if (referer.indexOf('rentalpreview') != -1 || referer.indexOf("listing") != -1 || referer.indexOf("listings") != -1 || referer.indexOf("profile") != -1){
+    if (referer.indexOf('rentalpreview') != -1 || referer.indexOf("profile") != -1){
       redirectTo = req.header("Referer");
     }
     else {

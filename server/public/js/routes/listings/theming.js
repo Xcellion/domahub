@@ -1,6 +1,12 @@
 $(document).ready(function() {
+
+  //dont remove footer if we're using the compare tool
+  if (!compare){
+    $(".footer").removeClass('is-hidden');
+  }
+
   //remove class to prevent screen flash DH green
-  $("#compare-preview, .footer").removeClass('is-hidden');
+  $("#compare-preview").removeClass('is-hidden');
 
   //if it's premium, check if theres any customization in the design
   if (listing_info.premium){
@@ -33,7 +39,7 @@ $(document).ready(function() {
   }
 
   //if not using the compare module, use default DH styling
-  else if (!compare){
+  else if (compare == undefined || !compare){
     setupDefaultColors();
   }
 });
@@ -80,6 +86,7 @@ function stylize(color, element, style) {
 
 //function to setup any custom premium colors
 function setupCustomColors(){
+  console.log("Setting up custom theme...");
   stylize(listing_info.primary_color, ".is-primary:not(.notification)", "color");
   stylize(listing_info.primary_color, ".daterangepicker td.active, .daterangepicker td.active:hover", "background-color");
   stylize(listing_info.primary_color, ".button", "background-color");
