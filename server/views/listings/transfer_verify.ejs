@@ -16,9 +16,9 @@
 
     <div class="content has-text-centered clear-nav">
       <h1 class="margin-bottom-5 has-text-centered">
-        <% if (listing_info.premium) {%>
-          <a href="<%= listing_info.domain_name %>" class="is-primary"><%= listing_info.domain_name %></a>
-        <% } else {%>
+        <% if (listing_info.premium) { %>
+          <a href="http://<%= listing_info.domain_name %>" class="is-primary"><%= listing_info.domain_name %></a>
+        <% } else { %>
           <a class='is-inline-block flat-logo is-primary' tabindex="0" title="Home" href="/">
             <div class='is-inline-block flat-logo is-primary'></div>
           </a>
