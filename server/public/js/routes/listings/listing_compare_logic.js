@@ -49,7 +49,7 @@ $(document).ready(function() {
     //change to custom theme if anything is changed
     $(".theme-changeable-input").on("change", function(){
       $("#theme-input").val("Custom");
-      $(".footer").addClass('is-hidden');
+      $("#dh-footer").addClass('is-hidden');
       $("#navbar").addClass('is-hidden');
       updateQueryStringParam("theme", "Custom");
     });
@@ -406,11 +406,11 @@ function switchTheme(theme_name){
 
   //hide footer/navbar if it's not a basic theme
   if (theme_to_load.theme_name != "DomaHub"){
-    $(".footer").addClass('is-hidden');
+    $("#dh-footer").addClass('is-hidden');
     $("#navbar").addClass('is-hidden');
   }
   else {
-    $(".footer").removeClass('is-hidden');
+    $("#dh-footer").removeClass('is-hidden');
     $("#navbar").removeClass('is-hidden');
   }
 
