@@ -170,14 +170,23 @@ button[data-balloon] {
 [data-balloon-length="fit"]:after {
   width: 100%; }
 
-.box.hover-effect {
-  cursor: pointer; }
-  .box.hover-effect:hover.is-primary, .box.hover-effect:focus.is-primary {
-    border-color: #3cbc8d !important; }
-  .box.hover-effect:hover.is-info, .box.hover-effect:focus.is-info {
-    border-color: #2196f3 !important; }
-  .box.hover-effect:hover.is-accent, .box.hover-effect:focus.is-accent {
-    border-color: #ff5722 !important; }
+.box {
+  -moz-transition: all 0.3s ease;
+  -o-transition: all 0.3s ease;
+  -webkit-transition: all 0.3s ease;
+  transition: all 0.3s ease; }
+  .box.hover-effect {
+    cursor: pointer; }
+  .box:hover, .box:focus {
+    background-color: #f9f9f9;
+    -moz-transform: translate(0, 2px);
+    -o-transform: translate(0, 2px);
+    -ms-transform: translate(0, 2px);
+    -webkit-transform: translate(0, 2px);
+      -webkit-transform-transform: translate(0, 2px);
+    -webkit-box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.12);
+    -moz-box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.12);
+    box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.12); }
 
 .step-box {
   display: flex;
@@ -250,7 +259,7 @@ button[data-balloon] {
     height: 150px;
     background-repeat: no-repeat;
     background-position: center center;
-    background-size: cover; }
+    background-size: contain; }
 
 .control-flex {
   display: flex;
