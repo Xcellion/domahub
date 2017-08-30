@@ -439,8 +439,7 @@ function editRowPurchased(listing_info){
 
   //update the information tab
   function updateStatus(listing_info){
-    $("#status-input").val(listing_info.status);
-
+    $("#status-input").data("status", listing_info.status);
     if (listing_info.status == 1){
       $("#status-color").addClass("is-primary").removeClass('is-danger');
       $("#status-icon").addClass("fa-toggle-on").removeClass('fa-toggle-off');
@@ -1179,8 +1178,6 @@ function editRowPurchased(listing_info){
 
     //update status binding
     $("#status-color").off().on("click", function(e){
-      var new_status = ($("#status-input").val() == "1") ? 0 : 1;
-      updateStatus({ status : new_status });
       submitStatusChange(listing_info);
     });
 
@@ -1373,14 +1370,15 @@ function cancelListingChanges(){
 //function to submit status change
 function submitStatusChange(listing_info){
   //take off the event handler for now
-  $("#status-color").off().addClass('is-loading');
+  $("#status-color").off();
 
   //clear any existing messages
   errorMessage(false);
   successMessage(false);
 
+  var new_status = ($("#status-input").data("status") == "1") ? 0 : 1;
   var formData = new FormData();
-  formData.append("status", $("#status-input").val());
+  formData.append("status", new_status);
 
   $.ajax({
     url: "/listing/" + listing_info.domain_name + "/update",
@@ -1392,15 +1390,13 @@ function submitStatusChange(listing_info){
     processData: false
   }, 'json').done(function(data){
     //reattach status binding
-    $("#status-color").removeClass("is-loading").on("click", function(e){
-      var new_status = ($("#status-input").val() == "1") ? 0 : 1;
-      updateStatus({ status : new_status });
+    $("#status-color").on("click", function(e){
       submitStatusChange(listing_info);
     });
 
     if (data.state == "success"){
-      var active_inactive_text = ($("#status-input").val() == "0") ? "inactive" : "active";
-      successMessage("Listing has been set to " + active_inactive_text + "!");
+      var active_inactive_text = (new_status) ? "inactive! It is no longer visible to the public." : "active! It is now visible to the public.";
+      successMessage("This listing has been set to " + active_inactive_text);
       updateCurrentListing(data.listings);
       refreshSubmitButtons();
 
@@ -1410,6 +1406,7 @@ function submitStatusChange(listing_info){
           changeRow($(this), new_listing_info, true);
         });
 
+        updateStatus({ status : new_status });
         updateBindings(new_listing_info);
       })(listing_info);
     }
