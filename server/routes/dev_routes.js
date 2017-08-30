@@ -44,7 +44,7 @@ function showView(req, res, next){
     listing_info : {
       domain_name : "testdomain.com",
       primary_color : "#e86666",
-      premium: false,
+      premium: true,
     },
     offer_info : {
       name : "WOFJ",
