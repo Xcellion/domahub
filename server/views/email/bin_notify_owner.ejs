@@ -37,7 +37,7 @@
                     <table border="0" cellpadding="20" cellspacing="0" width="600" id="emailContainer">
                         <tr>
                             <td align="center" valign="top">
-                                <table border="0" cellpadding="20" cellspacing="0" width="100%" id="emailHeader" style="background-color:<%= (premium) ? listing_info.primary_color : '#3cbc8d' %>">
+                                <table border="0" cellpadding="20" cellspacing="0" width="100%" id="emailHeader" style="background-color:#3cbc8d">
                                     <tr>
                                         <td align="center" valign="top">
                                             <a href="https://www.domahub.com" style="border:0;margin:0;padding:0" rel="noreferrer" target="_blank" title="DomaHub">
@@ -46,8 +46,8 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                      <td align="center" style="color:<%= (premium) ? listing_info.font_luminance : '#fff' %>;border:0;margin:0;padding-bottom:25px;font-size:24px;font-weight:700;line-height:2;">
-                                        Congratulations, someone has purchased <a style="color:<%= (premium) ? listing_info.font_luminance : '#fff' %>"><%= domain_name %></a>!
+                                      <td align="center" style="color:#fff;border:0;margin:0;padding-bottom:25px;font-size:24px;font-weight:700;line-height:2;">
+                                        Congratulations, someone has purchased <a style="color:#fff"><%= domain_name %></a>!
                                       </td>
                                     </tr>
                                 </table>
@@ -95,7 +95,7 @@
                                         Sale Price
                                       </td>
                                       <td align="left" class="list-item" style="padding-left:20px;">
-                                        <%= offer %>
+                                        <%= price %>
                                       </td>
                                     </tr>
                                     <tr>
@@ -123,11 +123,7 @@
                                 <table border="0" cellpadding="10" cellspacing="0" width="100%" id="emailFooter">
                                       <tr>
                                         <td align="center" valign="top">
-                                          <% if (premium) { %>
-                                            Thank you for your business.
-                                          <% } else { %>
-                                            Powered by <a href="https://www.domahub.com">DomaHub.com</a>. Have questions? <a href="mailto:support@domahub.com">Send us an email</a>!
-                                          <% } %>
+                                          Powered by <a href="https://www.domahub.com">DomaHub.com</a>. Have questions? <a href="mailto:support@domahub.com">Send us an email</a>!
                                         </td>
                                       </tr>
                                 </table>

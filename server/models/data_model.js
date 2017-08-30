@@ -185,6 +185,7 @@ data_model.prototype.getListingOffererContactInfoByID = function(domain_name, of
         stats_contact_history.message, \
         stats_contact_history.response, \
         stats_contact_history.accepted, \
+        stats_contact_history.deposited, \
         stats_contact_history.verification_code \
       FROM stats_contact_history \
       INNER JOIN listings \
