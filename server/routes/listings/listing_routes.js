@@ -226,6 +226,7 @@ module.exports = function(app, db, auth, error, stripe){
     buyer_functions.checkContactVerificationCode,
     renter_functions.getListingInfo,
     stripe.checkStripeSubscription,
+    profile_functions.updateAccountSettingsGet,
     buyer_functions.verifyContactHistory
   ]);
 
@@ -271,6 +272,7 @@ module.exports = function(app, db, auth, error, stripe){
     buyer_functions.checkListingPurchaseVerificationCode,
     renter_functions.getListingInfo,
     stripe.checkStripeSubscription,
+    profile_functions.updateAccountSettingsGet,
     buyer_functions.renderVerificationPage
   ]);
 
@@ -289,6 +291,7 @@ module.exports = function(app, db, auth, error, stripe){
     buyer_functions.checkOfferAccepted,
     renter_functions.getListingInfo,
     stripe.checkStripeSubscription,
+    profile_functions.updateAccountSettingsGet,
     buyer_functions.getContactInfo,
     buyer_functions.renderCheckout
   ]);
