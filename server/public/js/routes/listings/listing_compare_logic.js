@@ -300,7 +300,7 @@ $(document).ready(function() {
             <h3 class='popover-title'></h3> \
             <div class='popover-content content'></div> \
             <div> \
-              <a href='/signup' class='button is-small is-primary margin-bottom-10'>That was awesome! Sign me up.</a> \
+              <a href='/signup' class='button is-small is-primary'>That was awesome! Sign me up.</a> \
               <button class='button is-small' data-role='end'>I still want to poke around a bit.</button> \
             </div> \
           </div>"

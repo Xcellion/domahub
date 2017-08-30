@@ -47,7 +47,7 @@ var fonts = <% if(typeof fonts != "undefined"){ %><%-JSON.stringify(fonts)%><% }
         </ul>
       </div>
       <div class="control-right">
-        <button id="hide-menu-button" class="button no-shadow" tabindex="0" title="Hide Menu">
+        <button id="hide-menu-button" class="button" tabindex="0" title="Hide Menu">
           <span class="icon"><i class="fa fa-long-arrow-left"></i></span>
           <span>Hide Menu</span>
         </button>
@@ -95,7 +95,7 @@ var fonts = <% if(typeof fonts != "undefined"){ %><%-JSON.stringify(fonts)%><% }
         <label class="label" for="price-rate-input">Rental Price</label>
         <div class="control has-addons margin-bottom-0">
           <input id="price-rate-input" placeholder="" type="number" min="1" step="1" class="padding-top-0 input ">
-          <span class="select price-type-span">
+          <span class="select price-type-span no-shadow">
             <div class="drop-form">
               <select tabindex="0" id="price-type-input" class="">
                 <option value="month">Month</option>
