@@ -5,9 +5,9 @@ $(document).ready(function() {
   $(".tab").eq(0).addClass('is-active');
   $(".module").eq(0).removeClass('is-hidden');
 
-  //remove footer (use JS so it's after theming);
+  //dont remove footer if we're using the compare tool
   if (!compare){
-    $(".footer.is-dark").removeClass('is-hidden');
+    $(".footer").removeClass('is-hidden');
   }
 
   //date registered format
