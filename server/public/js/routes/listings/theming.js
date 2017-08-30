@@ -1,10 +1,5 @@
 $(document).ready(function() {
 
-  //dont remove footer if we're using the compare tool
-  if (!compare){
-    $(".footer").removeClass('is-hidden');
-  }
-
   //remove class to prevent screen flash DH green
   $("#compare-preview").removeClass('is-hidden');
 
