@@ -829,11 +829,11 @@ function editRowPurchased(listing_info){
           //accepted an offer!
           if (listing_info.offers[x].accepted == 1){
             $("#offers-toolbar").addClass('is-hidden');
-            cloned_offer_row.find(".offer-accepted").text('Accepted - ');
+            cloned_offer_row.find(".offer-accepted").text('Accepted - ').addClass('is-success');
             $("#accepted-offer").data("offer_id", listing_info.offers[x].id);
           }
           else if (listing_info.offers[x].accepted == 0){
-            cloned_offer_row.find(".offer-accepted").text('Rejected - ');
+            cloned_offer_row.find(".offer-accepted").text('Rejected - ').addClass('is-danger');
             cloned_offer_row.addClass('rejected-offer is-hidden unaccepted-offer');
           }
           else {
@@ -994,7 +994,7 @@ function editRowPurchased(listing_info){
       }
 
       //show accepted view
-      $("#offer-row-" + offer_id).removeClass('unaccepted-offer').find(".offer-accepted").text('Accepted - ');
+      $("#offer-row-" + offer_id).removeClass('unaccepted-offer').find(".offer-accepted").text('Accepted - ').addClass('is-success');
       $('.unaccepted-offer').addClass('is-hidden');
       $("#accepted-offer").removeClass('is-hidden');
     }
@@ -1009,7 +1009,7 @@ function editRowPurchased(listing_info){
       }
 
       //hide the offer row
-      $("#offer-row-" + offer_id).addClass("is-hidden rejected-offer").find(".offer-accepted").text('Rejected - ');
+      $("#offer-row-" + offer_id).addClass("is-hidden rejected-offer").find(".offer-accepted").text('Rejected - ').addClass('is-danger');
 
       //no more offers!
       if ($(".offer-row:not(.rejected-offer):not(#offer-clone").length == 0){
