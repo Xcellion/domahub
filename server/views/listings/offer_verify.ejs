@@ -26,16 +26,16 @@
     </div>
 
   <div class="account-form">
-      <div class="control">
-        <p class="control">
+      <div class="content">
+        <p>
           Your offer has been verified and the owner of <%= listing_info.domain_name %> has been notified!
         </p>
-        <p class="control">
+        <p>
           There is no further action required on your end. Please wait for the owner to accept or reject your offer.
         </p>
       </div>
       <div class="has-text-centered">
-        <a href="http://<%= listing_info.domain_name %>" id="gohome-button" class='button is-stylish is-primary'>
+        <a href="http://www.<%= listing_info.domain_name %>" id="gohome-button" class='button is-stylish'>
           <span class="icon is-small"><i class="fa fa-undo"></i></span>
           <span>Back to <%= listing_info.domain_name %></span>
         </a>
