@@ -17,26 +17,24 @@
     <div class="container">
       <div class="columns">
         <div class="column is-7">
-            <header class="checkout-track margin-top-15">
-              <h2>Checkout</h2>
-            </header>
+            <div class="content checkout-track">
+              <h1>Checkout</h1>
+            </div>
             <div id="step-content-payment" class='step-content'>
-              <article class="message">
-                <div class="message-body">
-                  <p id="payment-regular-message" class="regular-message">
-                    Please choose your preferred method of payment.</a>
-                  </p>
-                  <p id="stripe-regular-message" class="is-hidden regular-message">
-                    Please enter your payment information. By clicking the Confirm & Pay button,
-                    you are agreeing to pay the entire amount shown as well as our <a href="/terms" class='is-accent'>Terms and Conditions</a>.
-                  </p>
-                  <p id="paypal-regular-message" class="is-hidden regular-message">
-                    Please log in to your PayPal account.
-                  </p>
-                  <p id="stripe-error-message" class="error-message is-danger is-hidden"></p>
-                  <p id="stripe-success-message" class="regular-message is-hidden"></p>
-                </div>
-              </article>
+              <div class="notification is-lighter no-shadow">
+                <p id="payment-regular-message" class="regular-message">
+                  Please choose your preferred method of payment.</a>
+                </p>
+                <p id="stripe-regular-message" class="is-hidden regular-message">
+                  Please enter your payment information. By clicking the Confirm & Pay button,
+                  you are agreeing to pay the entire amount shown as well as our <a tabindex="0" href="/terms" class='is-primary'>Terms and Conditions</a>.
+                </p>
+                <p id="paypal-regular-message" class="is-hidden regular-message">
+                  Please log in to your PayPal account.
+                </p>
+                <p id="stripe-error-message" class="error-message is-danger is-hidden"></p>
+                <p id="stripe-success-message" class="regular-message is-hidden"></p>
+              </div>
 
               <div id="choices-block">
                 <div id="stripe-choice" class="checkout-track content box no-shadow is-primary hover-effect choice-block">
@@ -67,33 +65,31 @@
                 <div id="stripe-choice-column" class="is-hidden choice-column">
                   <form id="stripe-form" autocomplete="off">
                     <label class="label">Card Number</label>
-                    <p class="control has-icon">
+                    <div class="control has-icon">
                       <input tabindex="0" required id="cc-num" data-stripe="number" class="checkout-track input stripe-input is-medium" type="tel" placeholder="•••• •••• •••• ••••" autocomplete="cc-number"/>
                       <i id="cc-icon" class="fa fa-credit-card"></i>
-                    </p>
+                    </div>
                     <div class="control is-grouped">
-                      <p class="control is-expanded has-icon">
+                      <div class="control is-expanded has-icon">
                         <label class="label">Expiration Date</label>
                         <div class="control has-icon">
                           <input tabindex="0" required id="cc-exp" maxlength="7" data-stripe="exp" class="checkout-track input stripe-input is-medium" type="tel" placeholder="•• / ••" autocomplete="cc-exp"/>
                           <i class="fa fa-calendar-o"></i>
                         </div>
-                      </p>
-                      <p class="control">
+                      </div>
+                      <div class="control">
                         <label class="label">Security Code</label>
                         <div class="control has-icon">
                           <input tabindex="0" required id="cc-cvc" data-stripe="cvc" class="checkout-track input stripe-input is-medium" type="tel" placeholder="•••" autocomplete="off"/>
                           <i class="fa fa-lock"></i>
                         </div>
-                      </p>
-                    </div>
-                    <p class="control has-icon">
-                      <label class="label">Zip Code</label>
-                      <div class="control has-icon">
-                        <input tabindex="0" required id="cc-zip" maxlength="6" data-stripe="address_zip" class="checkout-track input stripe-input is-medium" type="tel" autocomplete="postal-code" placeholder="•••••"/>
-                        <i class="fa fa-map-marker"></i>
                       </div>
-                    </p>
+                    </div>
+                    <label class="label">Zip Code</label>
+                    <div class="control has-icon">
+                      <input tabindex="0" required id="cc-zip" maxlength="6" data-stripe="address_zip" class="checkout-track input stripe-input is-medium" type="tel" autocomplete="postal-code" placeholder="•••••"/>
+                      <i class="fa fa-map-marker"></i>
+                    </div>
                   </form>
 
                   <div class="control margin-top-30">
