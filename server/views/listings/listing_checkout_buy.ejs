@@ -97,7 +97,7 @@
                   </form>
 
                   <div class="control margin-top-30">
-                    <a tabindex="0" class="goback-button checkout-track button is-danger no-shadow is-stylish">
+                    <a tabindex="0" class="goback-button checkout-track button no-shadow is-stylish">
                       <span class="icon is-small"><i class="fa fa-undo"></i></span>
                       <span>Go back</span>
                     </a>
@@ -206,5 +206,14 @@
     var node_env = <% if(typeof node_env != "undefined"){ %><%-JSON.stringify(node_env)%><% }else{ %>""<% } %>;;
   </script>
   <script src="/js/routes/listings/listing_checkout_logic_buy.js" type="text/javascript"></script>
+  <% if (listing_info.premium) { %>
+    <script src="/js/routes/listings/theming.js" type="text/javascript"></script>
+  <% } else { %>
+    <script>
+      $(document).ready(function(){
+        $("#compare-preview").removeClass('is-hidden');
+      });
+    </script>
+  <% } %>
 </body>
 </html>
