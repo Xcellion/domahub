@@ -17,49 +17,51 @@
     <div class="container">
       <div class="columns">
         <div class="column is-7">
-            <header class="checkout-track margin-top-15">
-              <h2>Checkout</h2>
-            </header>
+            <div class="content checkout-track">
+              <h1>Checkout</h1>
+            </div>
             <div id="step-content-payment" class='step-content'>
-              <article class="message">
-                <div class="message-body">
-                  <p id="payment-regular-message" class="regular-message">
-                    Please choose your preferred method of payment.</a>
-                  </p>
-                  <p id="stripe-regular-message" class="is-hidden regular-message">
-                    Please enter your payment information. By clicking the Confirm & Pay button,
-                    you are agreeing to pay the entire amount shown as well as our <a href="/terms" class='is-accent'>Terms and Conditions</a>.
-                  </p>
-                  <p id="paypal-regular-message" class="is-hidden regular-message">
-                    Please log in to your PayPal account.
-                  </p>
-                  <p id="stripe-error-message" class="error-message is-danger is-hidden"></p>
-                  <p id="stripe-success-message" class="regular-message is-hidden"></p>
-                </div>
-              </article>
+              <div class="notification is-lighter no-shadow has-border">
+                <p id="payment-regular-message" class="regular-message">
+                  Please choose your preferred method of payment.</a>
+                </p>
+                <p id="stripe-regular-message" class="is-hidden regular-message">
+                  Please enter your payment information. By clicking the Confirm & Pay button,
+                  you are agreeing to pay the entire amount shown as well as our <a tabindex="0" href="/terms" class='is-primary'>Terms and Conditions</a>.
+                </p>
+                <p id="paypal-regular-message" class="is-hidden regular-message">
+                  Please log in to your PayPal account.
+                </p>
+                <p id="stripe-error-message" class="error-message is-danger is-hidden"></p>
+                <p id="stripe-success-message" class="regular-message is-hidden"></p>
+              </div>
 
               <div id="choices-block">
-                <div id="stripe-choice" class="checkout-track content box no-shadow is-primary hover-effect choice-block">
-                  <div class="step-box">
-                    <span class="icon is-medium is-primary">
-                        <i class="fa fa-credit-card"></i>
-                    </span>
-                    <h2>Pay with a card</h2>
+                <div id="stripe-choice" class="checkout-track box hover-effect choice-block">
+                  <div class="content">
+                    <div class="step-box">
+                      <span class="icon is-medium is-primary">
+                          <i class="fa fa-credit-card"></i>
+                      </span>
+                      <h2>Pay with a card</h2>
+                    </div>
+                    <p>
+                      Pay with any major credit or debit card.
+                    </p>
                   </div>
-                  <p>
-                    Pay with any major credit or debit card.
-                  </p>
                 </div>
-                <%# <div id="paypal-choice" class="checkout-track content box no-shadow is-info hover-effect choice-block">
-                  <div class="step-box">
-                    <span class="icon is-medium is-info">
-                        <i class="fa fa-paypal"></i>
-                    </span>
-                    <h2>Pay with PayPal</h2>
+                <%# <div id="paypal-choice" class="checkout-track box hover-effect choice-block">
+                  <div class="content">
+                    <div class="step-box">
+                      <span class="icon is-medium is-info">
+                          <i class="fa fa-paypal"></i>
+                      </span>
+                      <h2>Pay with PayPal</h2>
+                    </div>
+                    <p>
+                      Login to your PayPal account and pay instantly using your PayPal balance or any of your saved payment methods.
+                    </p>
                   </div>
-                  <p>
-                    Login to your PayPal account and pay instantly using your PayPal balance or any of your saved payment methods.
-                  </p>
                 </div>%>
               </div>
 
@@ -67,41 +69,39 @@
                 <div id="stripe-choice-column" class="is-hidden choice-column">
                   <form id="stripe-form" autocomplete="off">
                     <label class="label">Card Number</label>
-                    <p class="control has-icon">
+                    <div class="control has-icon">
                       <input tabindex="0" required id="cc-num" data-stripe="number" class="checkout-track input stripe-input is-medium" type="tel" placeholder="•••• •••• •••• ••••" autocomplete="cc-number"/>
                       <i id="cc-icon" class="fa fa-credit-card"></i>
-                    </p>
+                    </div>
                     <div class="control is-grouped">
-                      <p class="control is-expanded has-icon">
+                      <div class="control is-expanded has-icon">
                         <label class="label">Expiration Date</label>
                         <div class="control has-icon">
                           <input tabindex="0" required id="cc-exp" maxlength="7" data-stripe="exp" class="checkout-track input stripe-input is-medium" type="tel" placeholder="•• / ••" autocomplete="cc-exp"/>
                           <i class="fa fa-calendar-o"></i>
                         </div>
-                      </p>
-                      <p class="control">
+                      </div>
+                      <div class="control">
                         <label class="label">Security Code</label>
                         <div class="control has-icon">
                           <input tabindex="0" required id="cc-cvc" data-stripe="cvc" class="checkout-track input stripe-input is-medium" type="tel" placeholder="•••" autocomplete="off"/>
                           <i class="fa fa-lock"></i>
                         </div>
-                      </p>
-                    </div>
-                    <p class="control has-icon">
-                      <label class="label">Zip Code</label>
-                      <div class="control has-icon">
-                        <input tabindex="0" required id="cc-zip" maxlength="6" data-stripe="address_zip" class="checkout-track input stripe-input is-medium" type="tel" autocomplete="postal-code" placeholder="•••••"/>
-                        <i class="fa fa-map-marker"></i>
                       </div>
-                    </p>
+                    </div>
+                    <label class="label">Zip Code</label>
+                    <div class="control has-icon">
+                      <input tabindex="0" required id="cc-zip" maxlength="6" data-stripe="address_zip" class="checkout-track input stripe-input is-medium" type="tel" autocomplete="postal-code" placeholder="•••••"/>
+                      <i class="fa fa-map-marker"></i>
+                    </div>
                   </form>
 
                   <div class="control margin-top-30">
-                    <a tabindex="0" class="goback-button checkout-track button no-shadow is-stylish">
-                      <span class="icon is-small"><i class="fa fa-undo"></i></span>
+                    <a tabindex="0" class="goback-button checkout-track button is-stylish">
+                      <span class="icon is-small"><i class="fa fa-long-arrow-left"></i></span>
                       <span>Go back</span>
                     </a>
-                    <button id="checkout-button" tabindex="0" class="checkout-track button is-primary no-shadow is-stylish">
+                    <button id="checkout-button" tabindex="0" class="checkout-track button is-primary is-stylish">
                       <span class="icon is-small"><i class="fa fa-shopping-cart"></i></span>
                       <span>Confirm & Pay</span>
                     </button>
@@ -133,7 +133,7 @@
         </div>
         <div class="column is-5">
           <div class="card is-checkout">
-            <figure class="card-image img-wrapper" style="background-image:url('<%= listing_info.background_image || "https://domahub.com/images/dh-assets/circle-logo/dh-circle-logo-white-500x500.png" %>')"></figure>
+            <figure class="card-image img-wrapper" style="background-image:url('<%= listing_info.logo || "https://domahub.com/images/lib/money-med.png" %>')"></figure>
             <div class="card-content">
               <div class="content has-text-centered">
                 <h1 class="is-primary is-breakword"><%= listing_info.domain_name %></h1>
@@ -157,12 +157,12 @@
             </div>
             <footer id="edit-dates-button" class="card-footer">
               <% if (listing_info.premium){ %>
-                <a id="edit-dates-path" tabindex="0" href="/" class="checkout-track button is-stylish no-shadow is-fullwidth">
+                <a id="edit-dates-path" tabindex="0" href="/" class="checkout-track button is-stylish is-fullwidth">
                   <span class="icon is-small"><i class="fa fa-pencil"></i></span>
                   <span>Edit Offer</span>
                 </a>
               <% } else { %>
-                <a id="edit-dates-path" tabindex="0" href="https://domahub.com/listing/<%= listing_info.domain_name%>" class="checkout-track button is-stylish no-shadow is-fullwidth">
+                <a id="edit-dates-path" tabindex="0" href="https://domahub.com/listing/<%= listing_info.domain_name%>" class="checkout-track button is-stylish is-fullwidth">
                   <span class="icon is-small"><i class="fa fa-pencil"></i></span>
                   <span>Edit Offer</span>
                 </a>
