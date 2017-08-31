@@ -209,7 +209,7 @@ function createRows(cur_listing_index, url_tab){
     $("#loading-tab").addClass('is-hidden');
 
     //update inputs for purchased domain
-    if (listing_to_show.deposited){
+    if (listing_to_show.deposited || listing_to_show.accepted){
       editRowPurchased(listing_to_show);
     }
     //update inputs for verified
@@ -239,7 +239,7 @@ function createRows(cur_listing_index, url_tab){
 //function to create a listing row
 function createRow(listing_info, rownum){
   //choose a row to clone (accepted listings are verified by default)
-  if (listing_info.verified || listing_info.deposited){
+  if (listing_info.verified){
     var tempRow = $("#verified-clone-row").clone();
   }
   else {
@@ -248,7 +248,7 @@ function createRow(listing_info, rownum){
   }
 
   //get offers since only tab available will be offers
-  if (listing_info.deposited){
+  if (listing_info.deposited || listing_info.accepted){
     getDomainOffers(listing_info.domain_name);
   }
 
@@ -321,8 +321,8 @@ function changeRow(row, listing_info, bool){
       getDomainStats(listing_info.domain_name);
     }
 
-    //update inputs for purchased domain
-    if (listing_info.deposited){
+    //update inputs for purchased/accepted domain
+    if (listing_info.deposited || listing_info.accepted){
       editRowPurchased(listing_info);
     }
     //update inputs for verified
@@ -1353,7 +1353,7 @@ function cancelListingChanges(){
   refreshSubmitButtons();
 
   //revert all inputs
-  if (current_listing.deposited){
+  if (current_listing.deposited || current_listing.accepted){
     editRowPurchased(current_listing);
   }
   else if (current_listing.verified){
@@ -1395,7 +1395,7 @@ function submitStatusChange(listing_info){
     });
 
     if (data.state == "success"){
-      var active_inactive_text = (new_status) ? "inactive! It is no longer visible to the public." : "active! It is now visible to the public.";
+      var active_inactive_text = (new_status == 0) ? "inactive! It is no longer visible to the public." : "active! It is now available to the public.";
       successMessage("This listing has been set to " + active_inactive_text);
       updateCurrentListing(data.listings);
       refreshSubmitButtons();
@@ -1542,6 +1542,9 @@ function editRowUnverified(listing_info){
   //change tab URL
   updateQueryStringParam("tab", "verify");
 
+  //disable verify now button (reverted if DNS changes are made)
+  $("#verify-button").addClass('is-disabled');
+
   //refresh the DNS table button
   $("#refresh-dns-button").removeClass('is-disabled').off().on("click", function(){
     $(this).addClass('is-loading');
@@ -1644,6 +1647,7 @@ function updateExistingDNS(a_records){
       temp_a_records.splice(temp_a_records.indexOf("208.68.37.82"), 1);
       $("#existing_a_record_clone").removeClass('is-hidden').find(".existing_data").text("208.68.37.82");
       $("#existing_a_record_clone").find(".next_step").html("<span class='is-success'>Done! Press the button below!</span>");
+      $("#verify-button").removeClass('is-disabled');
 
       //prevent refreshing of table
       $("#refresh-dns-button").off().addClass('is-disabled');
