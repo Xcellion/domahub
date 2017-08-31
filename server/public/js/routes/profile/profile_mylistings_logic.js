@@ -1,4 +1,5 @@
 var current_listing = (listings) ? listings[0] : {};
+var referer_chart = false;
 
 $(document).ready(function(){
 
@@ -11,7 +12,7 @@ $(document).ready(function(){
 
   var replace_url = [location.protocol, '//', location.host, location.pathname].join('');
   var url_tab = getParameterByName("tab");
-  if (["verify", "info", "rental", "design", "offers", "purchased"].indexOf(url_tab) == -1){
+  if (["verify", "info", "rental", "design", "stats", "offers", "purchased"].indexOf(url_tab) == -1){
     url_tab = "info";
     updateQueryStringParam("tab", "info");
   }
@@ -304,8 +305,6 @@ function changeRow(row, listing_info, bool){
     errorMessage(false);
     successMessage(false);
 
-    current_listing = listing_info;
-
     //change URL param
     updateQueryStringParam("listing", listing_info.domain_name);
 
@@ -333,6 +332,9 @@ function changeRow(row, listing_info, bool){
     else {
       editRowUnverified(listing_info);
     }
+
+    //change the current listing at the end
+    current_listing = listing_info;
   }
 }
 
@@ -351,15 +353,9 @@ function editRowVerified(listing_info, fadeIn){
     $("#info-tab").addClass('is-active');
   }
 
-  if (url_tab == "offers"){
-    //get offers if tab is offers
-    if (listing_info.offers == undefined){
-      getDomainOffers(listing_info.domain_name);
-    }
-
-    $("#tab-buttons-wrapper").addClass('is-hidden');
-    $("#save-changes-button").addClass('is-hidden');
-    $("#cancel-changes-button").addClass('is-hidden');
+  //get offers if tab is offers
+  if (url_tab == "offers" && listing_info.offers == undefined){
+    getDomainOffers(listing_info.domain_name);
   }
 
   //hide purchased tab, show other tabs
@@ -370,9 +366,12 @@ function editRowVerified(listing_info, fadeIn){
   $(".verified-elem").removeClass('is-hidden');
   $(".unverified-elem").addClass('is-hidden');
 
-  //show buttons wrapper only on non upgrade/offer tabs
+  //show buttons wrapper only on non button tabs
   if (!$(".verified-elem.tab.is-active").hasClass("no-buttons-tab")){
     $("#tab-buttons-wrapper").removeClass('is-hidden');
+  }
+  else {
+    $("#tab-buttons-wrapper").addClass('is-hidden');
   }
 
   //show active tab drop
@@ -1064,96 +1063,99 @@ function editRowPurchased(listing_info){
 
   //function to update the stats tab
   function updateStats(listing_info){
-    //show offers if we have it
+    //no offers retrieved yet, show loading
     if (listing_info.stats == undefined){
       $("#no-stats").addClass('is-hidden');
       $("#loading-stats").removeClass('is-hidden');
-      $("#stats-wrapper").empty();
+      $(".stats-loading").addClass('is-hidden');
     }
-    //hide loading msg
+    //show offers if we have it, hide loading msg
     else {
       $("#loading-stats").addClass('is-hidden');
-      $("#stats-wrapper").empty();
+      $(".stats-loading").removeClass('is-hidden');
 
-      if (listing_info.stats.length){
-        $("#no-stats").addClass('is-hidden');
-
-        var stats_per_page = Math.min($("#stats-per-page").val(), listing_info.stats.length);
-        var total_pages = Math.ceil(listing_info.stats / stats_per_page);
-
-        //var unique_ips = groupByArray(listing_info.stats, "user_ip");
-
-        //unique referer chart
-        var unique_referers = getDataViewsColors(listing_info.stats, "referer");
-        var referer_dataset = {
-          label: "Referers",
-          borderColor: "#D9D9D9",
-          backgroundColor: unique_referers.colors,
-          fill: false,
-          data: unique_referers.views
-        }
-        var referer_chart = new Chart($("#referer-chart"), {
-          type: 'pie',
-          data: {
-            labels: unique_referers.labels,
-            datasets: [referer_dataset]
-          },
-          options: {
-            legend: {
-              display: false
-            }
-          }
-        });
-
-      }
-      else {
-        $("#no-stats").removeClass('is-hidden');
+      //different listing! make a chart
+      if (!referer_chart || current_listing.domain_name != listing_info.domain_name){
+        createRefererChart(listing_info);
       }
     }
   }
 
+  //function to create a chart
+  function createRefererChart(listing_info){
+    if (listing_info.stats.length){
+      $("#no-stats").addClass('is-hidden');
+
+      var stats_per_page = Math.min($("#stats-per-page").val(), listing_info.stats.length);
+      var total_pages = Math.ceil(listing_info.stats / stats_per_page);
+
+      //var unique_ips = groupByArray(listing_info.stats, "user_ip");
+
+      //unique referer chart
+      var unique_referers = formatRefererDataset(listing_info.stats, "referer", listing_info);
+      var referer_dataset = {
+        label: "Hits",
+        borderColor: "#3CBC8D",
+        borderWidth: 1,
+        backgroundColor: "rgba(60, 188, 141, 0.65)",
+        data: unique_referers.views
+      }
+
+      //destroy if we're making a new one
+      if (referer_chart){
+        referer_chart.destroy();
+      }
+
+      //create the new chart
+      referer_chart = new Chart($("#referer-chart"), {
+        type: 'horizontalBar',
+        data: {
+          labels: unique_referers.labels,
+          datasets: [referer_dataset]
+        },
+        options: {
+          barPercentage: 1,
+          categoryPercentage : 1,
+          legend: {
+            display: false
+          }
+        }
+      });
+    }
+    else {
+      $("#no-stats").removeClass('is-hidden');
+    }
+  }
+
   //function to group an array by key
-  function getDataViewsColors(xs, key) {
-    var dataset = xs.reduce(function (rv, cur) {
+  function formatRefererDataset(stats, key, listing_info) {
+    var dataset = stats.reduce(function (rv, cur) {
       let v = key instanceof Function ? key(cur) : cur[key];
       let el = rv.find((r) => r && r.key === v);
       if (el) {
         el["views"]++;
-      } else if (v != "") {
+      } else if (v != "" && v != listing_info.domain_name) {
+        //if not empty, we can show the stat
         rv.push({ key: v, views: 1});
       }
       return rv;
     }, []);
 
-    //sort the dataset
+    //sort the dataset (most views to least)
     dataset.sort(function(a,b){
-      if (a.views > b.views){
-        return -1;
-      }
-      else if (b.views > a.views){
-        return 1;
-      }
-      else {
-        return 0
-      }
-    })
+      return a.views < b.views;
+    });
 
     var views = [];
     var labels = [];
-    var colors = [];
     for (var x = 0; x < dataset.length; x++){
       labels.push(dataset[x].key);
       views.push(dataset[x].views);
-      colors.push(randomColor({
-        format: 'rgb',
-        hue: "green"
-      }).replace(")", ",0.5)").replace("rgb", "rgba"));
     }
 
     return {
       views : views,
-      labels : labels,
-      colors: colors
+      labels : labels
     }
   }
 
