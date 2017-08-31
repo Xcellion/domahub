@@ -87,7 +87,6 @@ function setupCustomColors(){
   stylize(listing_info.primary_color, ".is-primary.button", "background-color");
   stylize(listing_info.primary_color, ".tag", "background-color");
   stylize(listing_info.font_color, ".regular-font", "color");
-  stylize(listing_info.primary_color, "h1,h2,h3", "color");
   stylize(listing_info.tertiary_color, ".is-info", "color");
   stylize(listing_info.secondary_color, ".is-accent", "color");
   stylize(listing_info.secondary_color, ".is-accent.button", "background-color");
