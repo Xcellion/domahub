@@ -467,7 +467,7 @@ pre {
     padding: 16px 20px; }
 
 .block:not(:last-child), .box:not(:last-child), .content:not(:last-child), .notification:not(:last-child), .title:not(:last-child),
-.subtitle:not(:last-child), .highlight:not(:last-child), .message:not(:last-child), .tabs:not(:last-child) {
+.subtitle:not(:last-child), .highlight:not(:last-child), .tabs:not(:last-child) {
   margin-bottom: 20px; }
 
 .container {
@@ -2022,6 +2022,17 @@ input:-webkit-autofill {
     clear: both;
     content: " ";
     display: table; }
+  .notification .delete, .notification .modal-close {
+    border-radius: 0 3px;
+    float: right;
+    margin: -16px -20px 0 20px; }
+  .notification .subtitle,
+  .notification .title {
+    color: inherit; }
+  .notification p {
+    line-height: 1.5; }
+  .notification.has-border {
+    border: 1px solid rgba(0, 0, 0, 0.12); }
   .notification.no-shadow {
     -webkit-box-shadow: 0 0 0 0 white, 0 0 0 0 white, 0 0 0 0 white;
     -moz-box-shadow: 0 0 0 0 white, 0 0 0 0 white, 0 0 0 0 white;
@@ -2049,13 +2060,6 @@ input:-webkit-autofill {
           border-radius: 0;
           top: 0;
           width: 100%; } }
-  .notification .delete, .notification .modal-close {
-    border-radius: 0 3px;
-    float: right;
-    margin: -16px -20px 0 20px; }
-  .notification .subtitle,
-  .notification .title {
-    color: inherit; }
   .notification.is-white {
     background-color: white;
     color: #000; }
@@ -3611,209 +3615,6 @@ input:-webkit-autofill {
 
 .menu.is-fixed {
   position: fixed; }
-
-.message-body {
-  border: 1px solid rgba(0, 0, 0, 0.12);
-  border-radius: 3px;
-  padding: 10px; }
-  .message-body strong {
-    color: inherit; }
-
-.message-header {
-  background-color: #f1f1f1;
-  border-radius: 3px 3px 0 0;
-  color: white;
-  padding: 12px 15px; }
-  .message-header strong {
-    color: inherit; }
-  .message-header + .message-body {
-    border-radius: 0 0 3px 3px;
-    border-top: none; }
-  .message-header.is-white {
-    background-color: white; }
-  .message-header.is-black {
-    background-color: #000; }
-  .message-header.is-grey {
-    background-color: #d0d0d0; }
-  .message-header.is-blacklight {
-    background-color: rgba(0, 0, 0, 0.66); }
-  .message-header.is-whitelight {
-    background-color: rgba(255, 255, 255, 0.7); }
-  .message-header.is-light {
-    background-color: #d0d0d0; }
-  .message-header.is-lighter {
-    background-color: #f1f1f1; }
-  .message-header.is-dark {
-    background-color: #444; }
-  .message-header.is-purple {
-    background-color: #9c27b0; }
-  .message-header.is-primary {
-    background-color: #3cbc8d; }
-  .message-header.is-primarydark {
-    background-color: #309670; }
-  .message-header.is-primarylight {
-    background-color: #62c9a3; }
-  .message-header.is-primarylighter {
-    background-color: #8ad6ba; }
-  .message-header.is-info {
-    background-color: #2196f3; }
-  .message-header.is-bluedarker {
-    background-color: #23415f; }
-  .message-header.is-accent {
-    background-color: #ff5722; }
-  .message-header.is-warning {
-    background-color: #ffeb3b; }
-  .message-header.is-danger {
-    background-color: #EF5350; }
-
-.message {
-  background-color: #f1f1f1;
-  border-radius: 3px;
-  margin: 20px 0; }
-  .message.is-white {
-    background-color: white; }
-    .message.is-white .message-header {
-      background-color: white;
-      color: #000; }
-    .message.is-white .message-body {
-      border-color: white;
-      color: #666666; }
-  .message.is-black {
-    background-color: whitesmoke; }
-    .message.is-black .message-header {
-      background-color: #000;
-      color: white; }
-    .message.is-black .message-body {
-      border-color: #000;
-      color: gray; }
-  .message.is-grey {
-    background-color: whitesmoke; }
-    .message.is-grey .message-header {
-      background-color: #d0d0d0;
-      color: #444; }
-    .message.is-grey .message-body {
-      border-color: #d0d0d0;
-      color: gray; }
-  .message.is-blacklight {
-    background-color: rgba(245, 245, 245, 0.66); }
-    .message.is-blacklight .message-header {
-      background-color: rgba(0, 0, 0, 0.66);
-      color: rgba(255, 255, 255, 0.7); }
-    .message.is-blacklight .message-body {
-      border-color: rgba(0, 0, 0, 0.66);
-      color: rgba(128, 128, 128, 0.66); }
-  .message.is-whitelight {
-    background-color: rgba(255, 255, 255, 0.7); }
-    .message.is-whitelight .message-header {
-      background-color: rgba(255, 255, 255, 0.7);
-      color: rgba(0, 0, 0, 0.66); }
-    .message.is-whitelight .message-body {
-      border-color: rgba(255, 255, 255, 0.7);
-      color: rgba(102, 102, 102, 0.7); }
-  .message.is-light {
-    background-color: whitesmoke; }
-    .message.is-light .message-header {
-      background-color: #d0d0d0;
-      color: #444; }
-    .message.is-light .message-body {
-      border-color: #d0d0d0;
-      color: gray; }
-  .message.is-lighter {
-    background-color: whitesmoke; }
-    .message.is-lighter .message-header {
-      background-color: #f1f1f1;
-      color: #f1f1f1; }
-    .message.is-lighter .message-body {
-      border-color: #f1f1f1;
-      color: #666666; }
-  .message.is-dark {
-    background-color: whitesmoke; }
-    .message.is-dark .message-header {
-      background-color: #444;
-      color: #d0d0d0; }
-    .message.is-dark .message-body {
-      border-color: #444;
-      color: gray; }
-  .message.is-purple {
-    background-color: #f9eefb; }
-    .message.is-purple .message-header {
-      background-color: #9c27b0;
-      color: white; }
-    .message.is-purple .message-body {
-      border-color: #9c27b0;
-      color: gray; }
-  .message.is-primary {
-    background-color: #f0faf6; }
-    .message.is-primary .message-header {
-      background-color: #3cbc8d;
-      color: white; }
-    .message.is-primary .message-body {
-      border-color: #3cbc8d;
-      color: gray; }
-  .message.is-primarydark {
-    background-color: #f0faf6; }
-    .message.is-primarydark .message-header {
-      background-color: #309670;
-      color: #309670; }
-    .message.is-primarydark .message-body {
-      border-color: #309670;
-      color: gray; }
-  .message.is-primarylight {
-    background-color: #f0faf6; }
-    .message.is-primarylight .message-header {
-      background-color: #62c9a3;
-      color: #62c9a3; }
-    .message.is-primarylight .message-body {
-      border-color: #62c9a3;
-      color: gray; }
-  .message.is-primarylighter {
-    background-color: #f0faf6; }
-    .message.is-primarylighter .message-header {
-      background-color: #8ad6ba;
-      color: #8ad6ba; }
-    .message.is-primarylighter .message-body {
-      border-color: #8ad6ba;
-      color: gray; }
-  .message.is-info {
-    background-color: #ecf6fe; }
-    .message.is-info .message-header {
-      background-color: #2196f3;
-      color: white; }
-    .message.is-info .message-body {
-      border-color: #2196f3;
-      color: gray; }
-  .message.is-bluedarker {
-    background-color: #f0f5fa; }
-    .message.is-bluedarker .message-header {
-      background-color: #23415f;
-      color: #23415f; }
-    .message.is-bluedarker .message-body {
-      border-color: #23415f;
-      color: gray; }
-  .message.is-accent {
-    background-color: #ffefeb; }
-    .message.is-accent .message-header {
-      background-color: #ff5722;
-      color: white; }
-    .message.is-accent .message-body {
-      border-color: #ff5722;
-      color: gray; }
-  .message.is-warning {
-    background-color: #fffdeb; }
-    .message.is-warning .message-header {
-      background-color: #ffeb3b;
-      color: rgba(0, 0, 0, 0.5); }
-    .message.is-warning .message-body {
-      border-color: #ffeb3b;
-      color: #666666; }
-  .message.is-danger {
-    background-color: #fdedec; }
-    .message.is-danger .message-header {
-      background-color: #EF5350;
-      color: white; }
-    .message.is-danger .message-body {
-      border-color: #EF5350;
-      color: gray; }
 
 .modal-background {
   bottom: 0;
