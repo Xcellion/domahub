@@ -9,33 +9,40 @@
         <div class="columns master right">
           <div class="column">
 
-            <% if (listing_info.buy_price > 0) { %>
-                <span id="min-price-tag" class="tag is-primary margin-right-5 margin-bottom-5 is-hidden is-medium"></span>
+            <%# BUYABLE TAG %>
+            <% if (listing_info.status == 1 && listing_info.buy_price > 0) { %>
+              <span id="price-tag" class="tag is-primary margin-right-5 margin-bottom-5 is-hidden is-medium"></span>
+            <% } else if (listing_info.status == 1){ %>
+              <span id="price-tag" class="tag is-primary margin-right-5 margin-bottom-5 is-medium">Now available!</span>
+            <% } else { %>
+              <span class="tag is-primary margin-right-5 margin-bottom-5 is-medium">Currently unavailable</span>
             <% } %>
-            <% if (listing_info.rentable) { %>
-                <span id="rent-price-tag" class="tag is-primary is-medium">
-                  <% if (listing_info.price_rate > 0){ %>
-                      For rent - $<%= listing_info.price_rate %> / <%= listing_info.price_type %>
-                  <% } else { %>
-                      For rent - Free
-                  <% } %>
-                </span>
+
+            <%# RENTABLE TAG %>
+            <% if (listing_info.status == 1 && listing_info.rentable) { %>
+              <span id="rent-price-tag" class="tag is-primary is-medium">
+                <% if (listing_info.price_rate > 0){ %>
+                  For rent - $<%= listing_info.price_rate %> / <%= listing_info.price_type %>
+                <% } else { %>
+                  For rent - Free
+                <% } %>
+              </span>
             <% } %>
             <span id="free-until" class='is-hidden tag is-primary is-medium'></span>
 
             <div id="domain-display" class="content margin-top-15">
-                <% if (listing_info.rentable) { %>
-                    <h1 id="domain-title" class="is-primary is-inline-block margin-bottom-0"><%= listing_info.domain_name %></h1>
-                    <form id="path-input" class="is-hidden is-inline-block">
-                      <div class="control margin-bottom-0">
-                        <input id="typed-slash" class='padding-0' tabindex="0" type="text" autocomplete="off">
-                        <label id="input-tooltip" style="display:none;" class="input-tooltip" for="typed-slash">Click here to edit.</label>
-                        <label id="input-tooltip-error" class="input-tooltip is-active is-hidden" for="typed-slash">Input must be alphanumeric!</label>
-                      </div>
-                    </form>
-                <% } else { %>
-                    <h1 class="is-primary is-inline-block margin-bottom-0"><%= listing_info.domain_name %></h1>
-                <% } %>
+              <% if (listing_info.rentable) { %>
+                <h1 id="domain-title" class="is-primary is-inline-block margin-bottom-0"><%= listing_info.domain_name %></h1>
+                <form id="path-input" class="is-hidden is-inline-block">
+                  <div class="control margin-bottom-0">
+                    <input id="typed-slash" class='padding-0' tabindex="0" type="text" autocomplete="off">
+                    <label id="input-tooltip" style="display:none;" class="input-tooltip" for="typed-slash">Click here to edit.</label>
+                    <label id="input-tooltip-error" class="input-tooltip is-active is-hidden" for="typed-slash">Input must be alphanumeric!</label>
+                  </div>
+                </form>
+              <% } else { %>
+                <h1 class="is-primary is-inline-block margin-bottom-0"><%= listing_info.domain_name %></h1>
+              <% } %>
             </div>
 
             <%# DESCRIPTION AND CHECK AVAILABILITY MODULE %>
@@ -45,59 +52,51 @@
           </div>
 
           <div id="buy-rent-column" class="column">
+            <%# SOLD MODULE %>
             <% if (listing_info.deposited) { %>
-              <div class="box">
-                <figure class="image is-64x64">
-                  <!-- Emoji icon provided free by EmojiOne -->
-                  <img src="/images/lib/money.png" />
-                </figure>
-                <div class="content has-text-centered margin-top-20">
-                  <h2>This domain has been sold!</h2>
-                  <p>
-                    It is currently in the process of being transferred.
-                  </p>
-                </div>
-              </div>
-              <% } else { %>
+              <%- include("modules/sold_module.ejs"); %>
+            <% } else { %>
+
               <% if (listing_info.rentable && listing_info.status == 1){ %>
                 <div id="buy-rent-tabs" class="tabs has-shadow is-medium">
-                    <ul>
-                        <li id="buy-now-button" class="top-tab is-active">
-                          <a>
-                              <span>Purchase</span>
-                          </a>
-                        </li>
+                  <ul>
+                    <li id="buy-now-button" class="top-tab is-active">
+                      <a>
+                        <span>Purchase</span>
+                      </a>
+                    </li>
 
-                        <li id="rent-now-button" class="top-tab">
-                          <a>
-                              <span>Rent</span>
-                          </a>
-                        </li>
-                    </ul>
+                    <li id="rent-now-button" class="top-tab">
+                      <a>
+                        <span>Rent</span>
+                      </a>
+                    </li>
+                  </ul>
                 </div>
-            <% } %>
+              <% } %>
 
-            <% if (listing_info.rentable && listing_info.status == 1){ %>
+              <% if (listing_info.rentable && listing_info.status == 1){ %>
                 <div class='box has-tabs'>
-            <% } else { %>
+              <% } else { %>
                 <div class='box'>
-            <% } %>
-                <% if (listing_info.status == 1) { %>
-                    <%# BUY NOW MODULE %>
-                    <%- include("modules/buy_now_module.ejs"); %>
+              <% } %>
 
-                    <% if (listing_info.rentable) { %>
-                        <%# CALENDAR MODULE %>
-                        <%- include("modules/calendar_module.ejs"); %>
-                    <% } %>
+                <% if (listing_info.status == 1) { %>
+                  <%# BUY NOW MODULE %>
+                  <%- include("modules/buy_now_module.ejs"); %>
+
+                <% if (listing_info.rentable) { %>
+                  <%# CALENDAR MODULE %>
+                  <%- include("modules/calendar_module.ejs"); %>
+                <% } %>
 
                 <% } else { %>
-                    <%# UNAVAILABLE MODULE %>
-                    <%- include("modules/unavailable_module.ejs"); %>
+                  <%# UNAVAILABLE MODULE %>
+                  <%- include("modules/unavailable_module.ejs"); %>
                 <% } %>
               </div>
-              <% } %>
-            </div>
+            <% } %>
+          </div>
         </div>
 
         <div id="modules-wrapper">
