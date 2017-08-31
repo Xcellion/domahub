@@ -84,7 +84,7 @@
                                   <td align="left" valign="top" class="list-item">
                                     Message from Owner
                                   </td>
-                                  <td align="left" class="list-item message" style="word-wrap:break-word;padding-left:20px;white-space:pre-wrap;"><% if (response) { %><%= response %><% } else { %>Owner did not include a message.<% } %></td>
+                                  <td align="left" class="list-item" style="word-wrap:break-word;padding-left:20px;white-space:pre-wrap;"><% if (response) { %><%= response %><% } else { %>Owner did not include a message.<% } %></td>
                                 </tr>
                                 <tr>
                                   <td colspan="5" align="center" style="padding-top:20px;">
@@ -98,9 +98,9 @@
                                 <tr>
                                   <td colspan="5" align="center" style="padding-top:30px;">
                                     <% if (!accepted) { %>
-                                      <a id="accept_button" class='button' href="https://domahub.com/listing/<%= domain_name %>" style="padding:10px 20px;box-sizing:border-box;border-radius:5px;background-color: <%= (premium) ? listing_info.primary_color : '#3cbc8d' %>;color: <%= (premium) ? listing_info.font_luminance : '#fff' %>;">Send another offer</a>
+                                      <a id="accept_button" href="https://domahub.com/listing/<%= domain_name %>" style="padding:10px 20px;box-sizing:border-box;border-radius:5px;background-color: <%= (premium) ? listing_info.primary_color : '#3cbc8d' %>;color: <%= (premium) ? listing_info.font_luminance : '#fff' %>;">Send another offer</a>
                                     <% } else { %>
-                                      <a id="accept_button" class='button' href="https://domahub.com/listing/<%= domain_name %>/contact/<%= offer_id %>/bin" style="padding:10px 20px;box-sizing:border-box;border-radius:5px;background-color: <%= (premium) ? listing_info.primary_color : '#3cbc8d' %>;color: <%= (premium) ? listing_info.font_luminance : '#fff' %>;">Complete payment</a>
+                                      <a id="accept_button" href="https://domahub.com/listing/<%= domain_name %>/contact/<%= offer_id %>/bin" style="padding:10px 20px;box-sizing:border-box;border-radius:5px;background-color: <%= (premium) ? listing_info.primary_color : '#3cbc8d' %>;color: <%= (premium) ? listing_info.font_luminance : '#fff' %>;">Complete payment</a>
                                     <% } %>
                                   </td>
                                 </tr>
