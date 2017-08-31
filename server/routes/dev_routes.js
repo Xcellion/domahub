@@ -78,12 +78,12 @@ function emailViews(req, res, next){
     offerer_email: "test@email.com",
     offer_id: 1,
     email: "test@email.com",
-    accepted: true,
+    accepted: false,
     offerer_phone: phoneUtil.format(phoneNumber, PNF.INTERNATIONAL),
     phone: phoneUtil.format(phoneNumber, PNF.INTERNATIONAL),
     offer: moneyFormat.to(parseFloat("1231324")),
     verification_code: randomstring.generate(10),
-    message: "djkljakljfljasklfjkldasjfklasdjkldfjaskldfjkasdlfjklsajdfklasjdklfjaslkfjklasjdflkjskdlf"
+    message: "djkljakljfljask lfjkldasjfklasdjkldf jaskldfjk asdlfjklsajd klasjdklfjaslk jklasjd flkjskdlf"
   }
 
   res.render("email/" + req.params.email_template + ".ejs", data);
