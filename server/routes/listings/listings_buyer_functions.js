@@ -438,11 +438,15 @@ module.exports = {
       message: req.session.new_buying_info.message,
       verification_code : req.session.new_buying_info.verification_code,
     }
+
+    //premium email from listing owner or from domahub
+    var email_from = (req.user.stripe_subscription_id) ? "'" + req.user.username + "'<" + req.user.email + ">" : '"DomaHub" <general@domahub.com>'
     var emailDetails = {
       to: req.session.new_buying_info.email,
-      from: '"DomaHub Domains" <general@domahub.com>',
+      from: email_from,
       subject: 'Congratulations on your recent purchase of ' + req.params.domain_name + " for " + price_formatted + "!"
     };
+    console.log(email_from);
 
     //email the owner
     emailSomeone(req, res, email_contents_path, EJSVariables, emailDetails, false);
