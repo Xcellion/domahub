@@ -59,7 +59,7 @@
                 </div>
               </div>
               <% } else { %>
-              <% if (listing_info.rentable){ %>
+              <% if (listing_info.rentable && listing_info.status == 1){ %>
                 <div id="buy-rent-tabs" class="tabs has-shadow is-medium">
                     <ul>
                         <li id="buy-now-button" class="top-tab is-active">
@@ -77,7 +77,7 @@
                 </div>
             <% } %>
 
-            <% if (listing_info.rentable){ %>
+            <% if (listing_info.rentable && listing_info.status == 1){ %>
                 <div class='box has-tabs'>
             <% } else { %>
                 <div class='box'>
