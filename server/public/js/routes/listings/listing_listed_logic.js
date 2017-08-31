@@ -18,17 +18,20 @@ $(document).ready(function() {
 
       //show minimum price if it's defined
       if (listing_info.min_price > 0){
-        $("#min-price-tag").text("For sale - " + moneyFormat.to(listing_info.min_price));
+        $("#price-tag").text("For sale - " + moneyFormat.to(listing_info.min_price));
         $("#min-price").text(" (Minimum " + moneyFormat.to(listing_info.min_price) + ")");
-        $("#min-price-tag").removeClass('is-hidden');
+        $("#price-tag").removeClass('is-hidden');
       }
 
       //can buy now
       if (listing_info.buy_price > 0){
+        var buy_text = "Buy now - " + moneyFormat.to(listing_info.buy_price);
+        $("#price-tag").text(buy_text).removeClass('is-hidden');
+
         $("#buy-button").on('click', function(){
           //dont need the min offer input if you're just buying now
           $("#contact_offer").removeAttr("required");
-        }).find("#buy-button-text").text("Buy now - " + moneyFormat.to(listing_info.buy_price));
+        }).find("#buy-button-text").text(buy_text);
 
         //need the min offer input if you're just offering
         $("#buy-now-submit").on('click', function(){
