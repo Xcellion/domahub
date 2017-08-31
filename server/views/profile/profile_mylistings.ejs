@@ -123,8 +123,8 @@
 							<button tabindex="0" class="button filter-menu-toggle is-inline-block no-shadow is-dark is-transparent is-small is-hidden-tablet" title="Filters">
 								<span class="icon"><i class="fa fa-bars"></i></span>
 							</button>
-							<h2 class="current-domain-name yes-listings-elem is-inline-block is-hidden"></h2>
-							<button id="status-input" tabindex="0" class="button is-black is-transparent verified-elem unpurchased-elem no-shadow" title="Publicly hide or show landing page.">
+							<h2 class="current-domain-name yes-listings-elem is-inline-block is-hidden v-align-middle"></h2>
+							<button id="status-input" tabindex="0" class="yes-listings-elem is-hidden v-align-middle button is-black is-transparent verified-elem unpurchased-elem no-shadow" title="Publicly hide or show landing page.">
 								<span id="status-color" class="icon is-primary"><i id="status-icon" class="fa fa-toggle-on"></i></span>
 							</button>
 						</div>
@@ -165,9 +165,10 @@
 
 					<!-- LISTING DETAILS  -->
 					<div class="box">
-						<div id="loading-tab">
-							Now loading listings...
-						</div>
+						<h3 id="loading-tab" class="margin-top-15 margin-bottom-15">
+              <span class="icon margin-right-10"><i class="fa fa-spin fa-refresh"></i></span>
+							<span>Now loading listings...</span>
+						</h3>
 						<div id="no-domains-tab" class="no-listings-elem is-hidden">
 							<p>
 								You have no listings. Let's go make some!
@@ -191,7 +192,10 @@
 								</thead>
 								<tbody id="dns_table-body">
                   <tr id="loading-records-row" class="">
-                    <td colspan=5>Now loading existing DNS records...</td>
+                    <td colspan=5>
+                      <span class="icon is-small margin-right-10"><i class="fa fa-spin fa-refresh"></i></span>
+                      <span>Now loading existing DNS records...</span>
+                    </td>
                   </tr>
 									<tr id="existing_a_record_clone" class='clone-dns-row is-hidden'>
 										<td>@</td>
@@ -550,7 +554,8 @@
 								</div>
                 <div id="loading-offers" class="margin-top-20 content">
 									<p>
-										Now loading domain offers...
+                    <span class="icon is-small margin-right-10"><i class="fa fa-spin fa-refresh"></i></span>
+                    <span>Now loading domain offers...</span>
 									</p>
 								</div>
                 <div id="deposited-offer" class="hidden-while-loading-offers has-border-bottom padding-bottom-20 is-hidden">
@@ -663,7 +668,8 @@
               <div id="stats-tab-drop" class="drop-tab is-hidden">
                 <div id="loading-stats" class="margin-top-20 content">
 									<p>
-										Now loading listings statistics...
+                    <span class="icon is-small margin-right-10"><i class="fa fa-spin fa-refresh"></i></span>
+                    <span>Now loading listing statistics...</span>
 									</p>
 								</div>
 								<div id="no-stats" class="content is-hidden">
@@ -671,9 +677,27 @@
 										There is no activity on this domain yet. Need some tips? Check out our <a href="/faq" class="is-primary">FAQ</a>.
 									</p>
 								</div>
-								<div id="stats-wrapper">
-								</div>
-                <canvas id="referer-chart"></canvas>
+								<div class='stats-loading control'>
+                  <div class="control">
+                    <label class="label">
+											<span class="v-align-middle">Unique Referers</span>
+											<span class="icon is-small is-tooltip v-align-bottom" data-balloon-length="medium" data-balloon="What website your users are coming from (where they are being referred from)." data-balloon-pos="up">
+												<i class="fa fa-question-circle"></i>
+											</span>
+										</label>
+                    <div class="chart-min-height">
+                      <canvas id="referer-chart"></canvas>
+                    </div>
+                  </div>
+                  <div class="control">
+                    <label class="label">
+                      <span class="v-align-middle">Traffic</span>
+                    </label>
+                    <div class="chart-min-height">
+                      <canvas id="traffic-chart"></canvas>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
 						<footer id="tab-buttons-wrapper" class="yes-listings-elem is-hidden margin-top-25">
