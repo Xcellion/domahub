@@ -1,4 +1,4 @@
-var myChart;
+var traffic_chart = false;
 
 $(document).ready(function() {
   //add active to the first appearing tab (maybe some tabs are disabled)
@@ -389,7 +389,7 @@ function createCharts(traffic){
 function createEmptyChart(){
   //create the monthly x-axis labels array
   var monthly_labels = [];
-  var months_to_go_back = 6;
+  var months_to_go_back = 12;
   for (var y = 0; y < months_to_go_back; y++){
     var temp_month = moment().subtract(y, "month").format("MMM");
     monthly_labels.unshift(temp_month);
@@ -437,122 +437,80 @@ function createEmptyChart(){
   }).removeClass('is-hidden');
 }
 
-//function to initiate chart only if uninitiated
-function createTrafficChart(){
-  traffic = listing_info.traffic;
+//function to format the stats to the required format
+function formatDataset(stats) {
 
-  //create the monthly x-axis labels array
-  var monthly_labels = [];
-  var months_to_go_back = traffic.length + 1 || 6;
-  for (var y = 0; y < months_to_go_back; y++){
-    var temp_month = moment().subtract(y, "month").format("MMM");
-    monthly_labels.unshift(temp_month);
-  }
-
-  //create the base object for counting monthly traffic
-  var traffic_data = [];
-  for (var x = 0; x < traffic.length; x++){
-    traffic_data.unshift({
-      x: moment().endOf("month").subtract(x, "month").valueOf(),
-      y: traffic[x].views
+  //traffic dataset
+  var earliest_date = stats[stats.length - 1].timestamp;
+  var num_months_since = Math.min(Math.ceil(moment.duration(new Date().getTime() - earliest_date).as("month") + 1), 12);    //12 months or less
+  var months_since = [];
+  for (var x = 0 ; x < num_months_since ; x++){
+    var temp_month = moment().startOf("month").subtract(x, "month");
+    months_since.push({
+      label : temp_month.format("MMM"),
+      timestamp : temp_month._d.getTime(),
+      views : 0
     });
   }
 
-  //add one extra month
-  traffic_data.unshift({
-    x: moment().endOf("month").subtract(traffic.length, "month").valueOf(),
-    y: 0
-  });
+  var views_per_month = [];
+  var cur_month_needle = 0;
+  var referer_dataset = stats.reduce(function (rv, cur) {
+    //sort into groups divided by months
+    if (cur_month_needle < num_months_since){
+      if (cur.timestamp > months_since[cur_month_needle].timestamp){
+        months_since[cur_month_needle].views++;
+      }
+      else {
+        cur_month_needle++;
+        if (cur_month_needle < num_months_since){
+          months_since[cur_month_needle].views++;
+        }
+      }
+    }
+  }, []);
 
-  //traffic dataset
-  var traffic_dataset = {
-    label: "Website Views",
-    xAxisID : "traffic-x",
-    yAxisID : "traffic-y",
-    borderColor: (listing_info.premium && listing_info.primary_color) ? listing_info.primary_color : "#3CBC8D",
-    backgroundColor: (listing_info.premium && listing_info.primary_color) ? ColorLuminance(listing_info.primary_color, 0.2) : ColorLuminance("#3CBC8D", 0.2),
-    data: traffic_data
+  //reverse the dates
+  months_since.reverse();
+
+  var traffic_views = [];
+  var traffic_labels = [];
+  for (var x = 0; x < months_since.length; x++){
+    traffic_views.push(months_since[x].views);
+    traffic_labels.push(months_since[x].label);
   }
 
-  //create the super dataset containing traffic data and rentals data
-  var all_datasets = [traffic_dataset];
-
-  var last_rental_id;
-
-  //loop through any rentals
-  if (listing_info.rentals){
-    // for (var y = 0; y < listing_info.rentals.length; y++){
-    //
-    //   //add to existing dataset
-    //   if (listing_info.rentals[y].rental_id == last_rental_id){
-    //     var start_date = listing_info.rentals[y].date;
-    //     var end_date = start_date + listing_info.rentals[y].duration;
-    //     all_datasets[all_datasets.length - 1].data[1].x = end_date;
-    //   }
-    //   //create new dataset
-    //   else {
-    //     var temp_data = [];
-    //     var start_date = listing_info.rentals[y].date;
-    //     var end_date = start_date + listing_info.rentals[y].duration;
-    //
-    //     //if the end date is after 6 months ago
-    //     //if the start date is before now
-    //     if (moment(new Date(end_date)).isAfter(moment().endOf("month").subtract(5, "month").startOf("month")) && moment(new Date(start_date)).isBefore(moment())){
-    //       var random_rental_color = randomColor({
-    //         format: 'rgb',
-    //         hue: "green",
-    //         luminosity: "dark"
-    //       }).replace(")", ",0.5)").replace("rgb", "rgba");
-    //       var temp_dataset = {
-    //         label: "Rental #" + listing_info.rentals[y].rental_id,
-    //         xAxisID : "rentals-x",
-    //         yAxisID : "traffic-y",
-    //         pointBackgroundColor: random_rental_color,
-    //         pointHoverBackgroundColor: random_rental_color,
-    //         backgroundColor: random_rental_color,
-    //         data: [
-    //           {
-    //             x: start_date,
-    //             y: listing_info.rentals[y].views
-    //           },
-    //           {
-    //             x: end_date,
-    //             y: listing_info.rentals[y].views
-    //           }
-    //         ]
-    //       }
-    //       all_datasets.push(temp_dataset);
-    //       last_rental_id = listing_info.rentals[y].rental_id;
-    //     }
-    //   }
-    // }
+  return {
+    traffic_views : traffic_views,
+    traffic_labels : traffic_labels
   }
-
-  //create the chart
-  createValidChart(monthly_labels, all_datasets);
 }
 
-//function to create a valid traffic chart
-function createValidChart(monthly_labels, all_datasets){
+//function to initiate chart only if uninitiated
+function createTrafficChart(){
+  formatted_dataset = formatDataset(listing_info.traffic);
   //hide any overlay
   $("#traffic-overlay").addClass('is-hidden');
-
-  if (myChart){
-    myChart.destroy();
+  
+  if (traffic_chart){
+    traffic_chart.destroy();
   }
 
-  myChart = new Chart($("#traffic-chart"), {
+  traffic_chart = new Chart($("#traffic-chart"), {
     type: 'line',
     data: {
-      labels: monthly_labels,
-      datasets: all_datasets
+      labels: formatted_dataset.traffic_labels,
+      datasets: [{
+        label: "Website Views",
+        borderColor: "#3CBC8D",
+        backgroundColor: "rgba(60, 188, 141, 0.65)",
+        data: formatted_dataset.traffic_views
+      }]
     },
     options: {
       legend: {
         display:false
       },
-      responsive: true,
-      maintainAspectRatio: true,
       hover: {
         mode: "index"
       },
@@ -560,7 +518,7 @@ function createValidChart(monthly_labels, all_datasets){
         titleSpacing: 0,
         callbacks: {
           label: function(tooltipItems, data) {
-            if (monthly_labels.indexOf(tooltipItems.xLabel) != -1){
+            if (formatted_dataset.traffic_labels.indexOf(tooltipItems.xLabel) != -1){
               return tooltipItems.xLabel
             }
             else {
@@ -571,7 +529,7 @@ function createValidChart(monthly_labels, all_datasets){
             if (tooltipItems[0].datasetIndex == 0 && tooltipItems[0].yLabel == 0){
               return false;
             }
-            else if (monthly_labels.indexOf(tooltipItems[0].xLabel) != -1){
+            else if (formatted_dataset.traffic_labels.indexOf(tooltipItems[0].xLabel) != -1){
               return false;
             }
             else {
@@ -594,18 +552,9 @@ function createValidChart(monthly_labels, all_datasets){
       },
       scales: {
         xAxes: [{
-          id: "rentals-x",
-          display: false,
-          type: "time",
-          time: {
-            format: 'MM/DD/YYYY HH:mm:SS'
-          },
-        }, {
-          id: "traffic-x",
           type: "category"
         }],
         yAxes: [{
-          id: "traffic-y",
           display: true,
           type: 'linear',
           ticks: {

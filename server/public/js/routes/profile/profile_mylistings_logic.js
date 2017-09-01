@@ -1081,12 +1081,8 @@ function editRowPurchased(listing_info){
         if (listing_info.stats && listing_info.stats.length > 0){
           $("#no-stats").addClass('is-hidden');
           var formatted_dataset = formatDataset(listing_info.stats, listing_info);
-          if (!traffic_chart){
-            createTrafficChart(formatted_dataset, listing_info);
-          }
-          if (!referer_chart){
-            createRefererChart(formatted_dataset, listing_info);
-          }
+          createTrafficChart(formatted_dataset, listing_info);
+          createRefererChart(formatted_dataset, listing_info);
         }
         else {
           $("#no-stats").removeClass('is-hidden');
