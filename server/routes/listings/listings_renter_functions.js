@@ -1040,7 +1040,7 @@ module.exports = {
   getListingTraffic : function(req, res, next){
     console.log("F: Getting all traffic information for domain: " + req.params.domain_name + "...");
 
-    Data.getListingTraffic(req.params.domain_name, function(result){
+    Data.getListingStats(req.params.domain_name, function(result){
       if (result.state=="error"){error.handler(req, res, "Invalid traffic!", 'json');}
       else {
         res.json({

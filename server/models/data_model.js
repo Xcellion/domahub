@@ -68,20 +68,6 @@ data_model.prototype.checkOfferAccepted = function(domain_name, offer_id, callba
 
 //<editor-fold>-------------------------------GETS-------------------------------
 
-//gets all listing traffic grouped by month
-data_model.prototype.getListingTraffic = function(domain_name, callback){
-  console.log("DB: Attempting to get traffic for domain: " + domain_name + "...");
-  query = "SELECT \
-        2592000000 * (stats_search_history.timestamp div 2592000000) as 'from_time', \
-        2592000000 * (stats_search_history.timestamp div 2592000000) + 2629746000 as 'to_time', \
-        COUNT(*) as views \
-      FROM stats_search_history \
-    WHERE domain_name = ? \
-    GROUP BY stats_search_history.timestamp div 2592000000 \
-    ORDER BY from_time DESC "
-  data_query(query, "Failed to get traffic for domain: " + domain_name + "!", callback, domain_name);
-}
-
 //gets all views for a specific listing's rentals
 data_model.prototype.getRentalTraffic = function(domain_name, callback){
   console.log("DB: Attempting to get rental traffic for domain: " + domain_name + "...");
@@ -239,7 +225,7 @@ data_model.prototype.getListingOffers = function(domain_name, callback){
   listing_query(query, "Failed to get offers for " + domain_name + "!", callback, domain_name);
 }
 
-//gets statistics for a specific domain
+//gets view statistics for a specific domain
 data_model.prototype.getListingStats = function(domain_name, callback){
   console.log("DB: Attempting to get statistics for domain: " + domain_name + "...");
   query = 'SELECT \
