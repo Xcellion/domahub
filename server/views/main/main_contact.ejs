@@ -13,6 +13,10 @@
         <span class="delete"></span>
         Message sent! We will get back to you as soon as possible.
       </div>
+      <div id="message-error" class="notification is-danger is-hidden is-popup">
+        <span class="delete"></span>
+        <span id="message-error-text"></span>
+      </div>
       <div class="columns">
         <div class="column is-6">
           <div class="content">
@@ -23,7 +27,7 @@
               you wish to share!
             </p>
           </div>
-          <form id="contact-form">
+          <form id="contact-form" autocomplete="off">
             <label class="error_message label is-medium">Name</label>
             <p class="control has-icon">
               <input id="contact_name" required class="input is-medium" name="contact_name" type="text">
@@ -51,13 +55,6 @@
                       </button>
                     </div>
                   </div>
-                </div>
-              </div>
-              <div class="level-right">
-                <div class="level-item">
-                  <p id="error_message" class="is-hidden is-danger">
-                    Please fill in all the fields!
-                  </p>
                 </div>
               </div>
             </nav>
