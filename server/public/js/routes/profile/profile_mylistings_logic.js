@@ -574,7 +574,7 @@ function editRowPurchased(listing_info){
             <p> \
               Please upgrade to a Premium account to customize the look and feel of your landing page! \
             </p> \
-            <a href="/#pricing" class="is-primary"> \
+            <a href="/features#pricing" class="is-primary"> \
               What is a Premium account? \
             </a> \
             <div class="margin-top-15 control has-text-centered"> \
@@ -1100,7 +1100,7 @@ function editRowPurchased(listing_info){
 
     //traffic dataset
     var earliest_date = stats[stats.length - 1].timestamp;
-    var num_months_since = Math.min(Math.ceil(moment.duration(new Date().getTime() - earliest_date).as("month")), 12);    //12 months or less
+    var num_months_since = Math.min(Math.ceil(moment.duration(new Date().getTime() - earliest_date).as("month") + 1), 12);    //12 months or less
     var months_since = [];
     for (var x = 0 ; x < num_months_since ; x++){
       var temp_month = moment().startOf("month").subtract(x, "month");
@@ -1114,7 +1114,6 @@ function editRowPurchased(listing_info){
     var views_per_month = [];
     var cur_month_needle = 0;
     var referer_dataset = stats.reduce(function (rv, cur) {
-
       //sort into groups divided by months
       if (cur_month_needle < num_months_since){
         if (cur.timestamp > months_since[cur_month_needle].timestamp){
@@ -1122,7 +1121,9 @@ function editRowPurchased(listing_info){
         }
         else {
           cur_month_needle++;
-          months_since[cur_month_needle].views++;
+          if (cur_month_needle < num_months_since){
+            months_since[cur_month_needle].views++;
+          }
         }
       }
 
@@ -1139,9 +1140,7 @@ function editRowPurchased(listing_info){
     }, []);
 
     //sort the dataset (most views to least)
-    referer_dataset.sort(function(a,b){
-      return a.views < b.views;
-    });
+    referer_dataset.sort(function(a,b) {return (a.views > b.views) ? -1 : ((b.views > a.views) ? 1 : 0);} );
 
     //split into separate arrays for Chart JS
     var referer_views = [];
