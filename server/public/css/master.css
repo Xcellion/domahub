@@ -4200,7 +4200,7 @@ input:-webkit-autofill {
 
 /********************** CUSTOM CLASS STYLING ******************/
 .min-height {
-  min-height: calc(100vh - 110px); }
+  min-height: calc(100vh - 90px); }
 
 .clear-nav {
   padding-top: 60px; }

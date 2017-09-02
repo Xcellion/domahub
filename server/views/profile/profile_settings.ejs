@@ -59,7 +59,7 @@
 							<li><a id="paypal-link" href="#paypal" class="setting-link">PayPal Settings</a></li>
 							<%# <li><a id="registrar-link" href="#registrar" class="setting-link">Registrar Settings</a></li>%>
 						</ul>
-						<% if (user.stripe_transfers) { %>
+						<% if (user.stripe_charges) { %>
 							<p class="menu-label">
 								Transactions
 							</p>
@@ -74,9 +74,9 @@
 				<div class="column is-9">
 					<div id="basic" class="is-hidden card is-fullwidth">
 						<div class="card-header">
-							<p class="card-header-title">
-								Basic Information
-							</p>
+							<h2 class="card-header-title">
+								<span>Basic Information</span>
+							</h2>
 							<button class='edit-section-button card-header-icon button is-small'>
 								<span class="icon is-small"><i class="fa fa-cog"></i></span>
 								<span>Edit</span>
@@ -91,7 +91,7 @@
 											<i class="fa fa-lock"></i>
 										</span>
 									</div>
-										<input id="email-input" class="is-disabled input account-input" type="text" value="<%= user.email %>" />
+										<input id="email-input" class="is-disabled input account-input" type="email" value="<%= user.email %>" />
 										<small class="tip">We don't share your email with anyone.</small>
 								</div>
 								<div class="control">
@@ -101,7 +101,7 @@
 								</div>
 								<div class="control">
 									<label class="label" for="old-pw-input">Current Password</label>
-									<input id="old-pw-input" class="new-account-input is-disabled input account-input" name="password" type="password" autocomplete="new-password" value="">
+									<input required id="old-pw-input" class="new-account-input is-disabled input account-input" name="password" type="password" autocomplete="new-password" value="">
 								</div>
 								<div class="control hidden-edit is-hidden">
 									<label id="pw-label" class="label" for="new-pw-input">New Password</label>
@@ -125,10 +125,10 @@
 					</div>
           <div id="premium" class="is-hidden card is-fullwidth">
             <div class="card-header">
-							<p id="upgrade-tab-header" class="card-header-title">
-                  <span>Premium Status</span>
-							</p>
-							 <a tabindex="0" class="is-primary" href="/features#pricing">What is Premium?</a>
+							<h2 id="upgrade-tab-header" class="card-header-title">
+                <span>Premium Status</span>
+							</h2>
+				      <a tabindex="0" class="is-primary" href="/features#pricing">What is Premium?</a>
 						</div>
 
             <div class="card-content">
@@ -240,9 +240,9 @@
           </div>
           <div id="verifications" class="is-hidden card is-fullwidth" >
 						<div class="card-header">
-							<p class="card-header-title">
+							<h2 class="card-header-title">
 								Account Verifications
-							</p>
+							</h2>
 						</div>
 						<div class="card-content">
 							<div class="content">
@@ -275,9 +275,9 @@
 					</div>
 					<div id="payout-address" class="is-hidden card is-fullwidth">
 						<div class="card-header">
-							<p class="card-header-title">
+							<h2 class="card-header-title">
 								Payout Address
-							</p>
+							</h2>
 							<button class='edit-section-button card-header-icon button is-small'>
 								<span class="icon is-small"><i class="fa fa-cog"></i></span>
 								<span>Edit</span>
@@ -379,9 +379,9 @@
 					</div>
 					<div id="payout-personal" class="is-hidden card is-fullwidth">
 						<div class="card-header">
-							<p class="card-header-title">
+							<h2 class="card-header-title">
 								Personal Information
-							</p>
+							</h2>
 							<button class='edit-section-button card-header-icon button is-small'>
 								<span class="icon is-small"><i class="fa fa-cog"></i></span>
 								<span>Edit</span>
@@ -573,9 +573,9 @@
 					</div>
 					<div id="payout-bank" class="is-hidden card is-fullwidth">
 						<div class="card-header">
-							<p class="card-header-title">
+							<h2 class="card-header-title">
 								Bank Information
-							</p>
+							</h2>
 							<button class='edit-section-button card-header-icon button is-small'>
 								<span class="icon is-small"><i class="fa fa-cog"></i></span>
 								<span>Edit</span>
@@ -705,9 +705,9 @@
 
 					<div id="paypal" class="is-hidden card is-fullwidth">
 						<div class="card-header">
-							<p class="card-header-title">
+							<h2 class="card-header-title">
 								PayPal Settings
-							</p>
+							</h2>
 							<button class='edit-section-button card-header-icon button is-small'>
 								<span class="icon is-small"><i class="fa fa-cog"></i></span>
 								<span>Edit</span>
@@ -738,9 +738,9 @@
 					</div>
 					<!--<div id="registrar" class="is-hidden card is-fullwidth">
 						<header class="card-header">
-							<p class="card-header-title">
+							<h2 class="card-header-title">
 								Registrar Settings
-							</p>
+							</h2>
 							<button class='edit-section-button card-header-icon button is-small'>
 								<span class="icon is-small"><i class="fa fa-cog"></i></span>
 								<span>Edit</span>
@@ -752,7 +752,7 @@
 							</div>
 						</div>
 					</div>-->
-					<% if (user.stripe_transfers) { %>
+					<% if (user.stripe_charges) { %>
 						<%- include("profile_transactions", {user: user}); %>
 					<% } %>
 				</div>
@@ -772,7 +772,7 @@
   <script src="/js/jquery/jquery.payment.min.js" type="text/javascript"></script>
 	<script src="/js/routes/profile/profile_settings_logic.js" type="text/javascript"></script>
 	<script src="/js/routes/profile/profile_settings_stripe_logic.js" type="text/javascript"></script>
-	<% if (user.stripe_transfers) { %>
+	<% if (user.stripe_charges) { %>
 		<script src="/js/routes/profile/profile_transactions_logic.js" type="text/javascript"></script>
 	<% } %>
 </body>

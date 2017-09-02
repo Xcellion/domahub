@@ -686,9 +686,7 @@ module.exports = {
 
   //edit the rental (update the database)
   editRental : function(req, res, next){
-
-    //if not blank (aka has address/type/account_id)
-    if (req.session.rental_object.db_object.address || req.session.rental_object.db_object.type || req.session.rental_object.db_object.account_id){
+    if (req.session.rental_object.db_object){
       console.log("F: Updating rental...");
 
       Listing.updateRental(req.params.rental_id, req.session.rental_object.db_object, function(result){
