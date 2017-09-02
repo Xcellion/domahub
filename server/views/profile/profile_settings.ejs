@@ -29,7 +29,7 @@
 							Profile Settings
 						</p>
 						<ul class="menu-list">
-							<li><a id="basic-link" href='#basic' class="setting-link is-active">Basic Information</a></li>
+							<li><a id="basic-link" href='#basic' class="setting-link">Basic Information</a></li>
               <li><a id="premium-link" href='#premium' class="setting-link">
               <span id="upgrade-to-premium-text" class="v-align-middle">
                 <% if (user.stripe_subscription_id) { %>
@@ -128,7 +128,7 @@
 							<p id="upgrade-tab-header" class="card-header-title">
                   <span>Premium Status</span>
 							</p>
-							 <a tabindex="0" href="/features#pricing"><span class="tag is-small is-bordered">What is Premium?</span></a>
+							 <a tabindex="0" class="is-primary" href="/features#pricing">What is Premium?</a>
 						</div>
 
             <div class="card-content">
@@ -141,20 +141,20 @@
                   <small id="renew-status" class="tip"></small>
                 </div>
                 <div class="control-right">
-                  <a id="upgrade-button" class="margin-top-5 basic-elem button">
+                  <a id="upgrade-button" class="is-small is-stylish margin-top-5 basic-elem button">
                     <span class="icon is-small">
                       <i class="fa fa-trophy"></i>
                     </span>
                     <span class="button-text">Upgrade</span>
                   </a>
                   <div class="premium-elem control">
-                    <a id="cancel-premium-button" class="margin-top-5 is-hidden is-outlined button is-danger">
+                    <a id="cancel-premium-button" class="is-small margin-top-5 is-stylish is-hidden is-outlined button is-danger">
                       <span class="icon is-small">
                         <i class="fa fa-times-circle"></i>
                       </span>
                       <span>Cancel Plan</span>
                     </a>
-                    <a id="renew-premium-button" class="margin-top-5 is-hidden is-outlined button is-primary">
+                    <a id="renew-premium-button" class="is-small margin-top-5 is-stylish is-hidden is-outlined button is-primary">
                       <span class="icon is-small">
                         <i class="fa fa-repeat"></i>
                       </span>
@@ -164,7 +164,7 @@
                 </div>
               </div>
 
-              <div class="control is-spaced is-mobile">
+              <div class="control margin-bottom-0 is-spaced is-mobile">
                 <div class="control-left">
                   <p>
                     Default Payment Method
@@ -172,7 +172,7 @@
                   <small id="existing-cc" class="tip">Click the add new card button to add a default credit card!</small>
                 </div>
                 <div class="control-right">
-                  <a id="change-card-button" tabindex="0" title="Change Payment Method" class="button is-primary is-inverted">
+                  <a id="change-card-button" tabindex="0" title="Change Payment Method" class="is-small button is-stylish is-primary is-inverted">
                     <span class="icon is-small">
                       <i class="fa fa-credit-card"></i>
                     </span>
@@ -181,14 +181,14 @@
                 </div>
               </div>
 
-              <form id="stripe-form" class="is-hidden margin-top-20" autocomplete="on">
+              <form id="stripe-form" class="is-hidden margin-top-20">
                 <div class="control">
                   <label class="label">
                     <span class="v-align-middle">Card Number</span>
                   </label>
                   <div class="control is-grouped">
                     <p class="control has-icon">
-                      <input id="cc-num" tabindex="0" data-stripe="number" class="input stripe-input" type="tel" placeholder="•••• •••• •••• ••••" autocomplete="cc-number"/>
+                      <input id="cc-num" required tabindex="0" data-stripe="number" class="input stripe-input" type="tel" placeholder="•••• •••• •••• ••••" autocomplete="cc-number"/>
                       <i id="cc-icon" class="fa fa-credit-card"></i>
                     </p>
                   </div>
@@ -200,7 +200,7 @@
                   </label>
                   <div class="control is-grouped">
                     <p class="control has-icon">
-                      <input id="cc-exp" tabindex="0" maxlength="7" data-stripe="exp" class="input stripe-input" type="tel" placeholder="•• / ••" autocomplete="cc-exp"/>
+                      <input id="cc-exp" required tabindex="0" maxlength="7" data-stripe="exp" class="input stripe-input" type="tel" placeholder="•• / ••" autocomplete="cc-exp"/>
                       <i class="fa fa-calendar-o"></i>
                     </p>
                   </div>
@@ -212,7 +212,7 @@
                   </label>
                   <div class="control is-grouped">
                     <p class="control has-icon">
-                      <input id="cc-cvc" tabindex="0" data-stripe="cvc" class="input stripe-input" type="tel" placeholder="•••" autocomplete="off"/>
+                      <input id="cc-cvc" required tabindex="0" data-stripe="cvc" class="input stripe-input" type="tel" placeholder="•••" autocomplete="off"/>
                       <i class="fa fa-lock"></i>
                     </p>
                   </div>
@@ -224,15 +224,18 @@
                   </label>
                   <div class="control is-grouped">
                     <p class="control has-icon">
-                      <input id="cc-zip" tabindex="0" maxlength="6" data-stripe="address_zip" class="input stripe-input" type="tel" autocomplete="postal-code" placeholder="•••••"/>
+                      <input id="cc-zip" required tabindex="0" maxlength="6" data-stripe="address_zip" class="input stripe-input" type="tel" autocomplete="postal-code" placeholder="•••••"/>
                       <i class="fa fa-map-marker"></i>
                     </p>
                   </div>
                 </div>
+                <footer id="checkout-button-wrapper" class="is-hidden margin-top-25">
+                  <button id="checkout-button" type="submit" class="button is-primary is-disabled is-stylish is-small">
+                    <span class="icon is-small"><i class="fa fa-credit-card"></i></span>
+                    <span id="checkout-button-text">Add a New Card</span>
+                  </button>
+                </footer>
               </form>
-              <footer id="checkout-button-wrapper" class="is-hidden margin-top-25">
-                <button id="checkout-button" class="button is-primary is-disabled is-stylish is-small">Add a New Card</button>
-              </footer>
 						</div>
           </div>
           <div id="verifications" class="is-hidden card is-fullwidth" >
