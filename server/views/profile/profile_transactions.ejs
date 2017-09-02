@@ -1,171 +1,167 @@
 <div id="transactions" class="card is-fullwidth is-hidden" >
-    <header class="card-header">
-        <p class="card-header-title">
-            Transactions &nbsp;<span id="transaction-message" class="setting-message"></span>
-        </p>
-    </header>
-    <div class="card-content">
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Date</th>
-                    <th>Domain</th>
-                    <th>Received</th>
-                    <th>Fees Paid</th>
-                    <th>Profit</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tfoot>
-                <tr>
-                    <td colspan="3"></td>
-                    <td class='is-bold'>Total</td>
-                    <td id="total-earnings" class='is-bold'>$0.00</td>
-                    <td></td>
-                </tr>
-            </tfoot>
-            <tbody class="earnings-table">
-                <tr id="earnings-row-clone" class="earning-row is-hidden">
-                    <td class="earnings-row-date"></td>
-                    <td class="earnings-row-domain"></td>
-                    <td class="earnings-row-amount"></td>
-                    <td class="earnings-row-fees"></td>
-                    <td class="earnings-row-profit"></td>
-                    <td class="earnings-row-buttons">
-                        <a   class="button earnings-row-preview-button no-shadow" tabindex="0">
-                            <span class="icon is-small">
-                                <i class="fa fa-external-link"></i>
-                            </span>
-                            <span>Preview</span>
-                        </a>
-                        <button class="button earnings-row-refund-button no-shadow" tabindex="0">
-                            <span class="icon is-small">
-                                <i class="fa fa-undo"></i>
-                            </span>
-                            <span>Refund</span>
-                        </button>
-                    </td>
-                </tr>
-                <tr id="no-earnings-row">
-                    <td colspan="6">
-                        There are no transactions!
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-        <%# <nav class="pagination">
-            <a class="button">Previous</a>
-            <a class="button">Next page</a>
-            <ul>
-                <li>
-                    <a class="button">1</a>
-                </li>
-                <li>
-                    <span>...</span>
-                </li>
-                <li>
-                    <a class="button">45</a>
-                </li>
-                <li>
-                    <a class="button is-primary">46</a>
-                </li>
-                <li>
-                    <a class="button">47</a>
-                </li>
-                <li>
-                    <span>...</span>
-                </li>
-                <li>
-                    <a class="button">86</a>
-                </li>
-            </ul>
-        </nav>%>
-    </div>
+  <header class="card-header">
+    <h2 class="card-header-title">
+      Transactions &nbsp;<span id="transaction-message" class="setting-message"></span>
+    </h2>
+  </header>
+  <div class="card-content">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Type</th>
+          <th>Domain</th>
+          <th class="has-text-right">Received</th>
+          <th class="has-text-right">Fees Paid</th>
+          <th class="has-text-right">Profit</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tfoot>
+        <tr>
+          <td colspan="4"></td>
+          <td class='is-bold'>Total</td>
+          <td id="total-earnings" class='is-pulled-right is-bold'>$0.00</td>
+          <td></td>
+        </tr>
+      </tfoot>
+      <tbody class="earnings-table">
+        <tr id="earnings-row-clone" class="earning-row is-hidden">
+          <td class="earnings-row-date"></td>
+          <td class="earnings-row-type"></td>
+          <td class="earnings-row-domain"></td>
+          <td class="earnings-row-amount has-text-right"></td>
+          <td class="earnings-row-fees has-text-right"></td>
+          <td class="earnings-row-profit has-text-right"></td>
+          <td class="earnings-row-buttons">
+            <button class="button earnings-row-refund-button no-shadow" tabindex="0">
+              <span class="icon is-small">
+                <i class="fa fa-undo"></i>
+              </span>
+              <span>Refund</span>
+            </button>
+          </td>
+        </tr>
+        <tr id="no-earnings-row">
+          <td colspan="6">
+            There are no transactions!
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <%# <nav class="pagination">
+    <a class="button">Previous</a>
+    <a class="button">Next page</a>
+    <ul>
+    <li>
+    <a class="button">1</a>
+  </li>
+  <li>
+  <span>...</span>
+</li>
+<li>
+<a class="button">45</a>
+</li>
+<li>
+<a class="button is-primary">46</a>
+</li>
+<li>
+<a class="button">47</a>
+</li>
+<li>
+<span>...</span>
+</li>
+<li>
+<a class="button">86</a>
+</li>
+</ul>
+</nav>%>
+</div>
 </div>
 <div id="pending" class="card is-fullwidth is-hidden" >
-    <header class="card-header">
-        <p class="card-header-title">
-            History
-        </p>
-    </header>
-    <div class="card-content">
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Date Initiated</th>
-                    <th>Domain</th>
-                    <th>Renter</th>
-                    <th>Status</th>
-                    <th>Contact</th>
-                </tr>
-            </thead>
-            <tfoot>
-            </tfoot>
-            <tbody>
-                <tr>
-                    <td>01/13/16</td>
-                    <td>www.domainterest.com</td>
-                    <td><a href="">Ted Montague</a></td>
-                    <td class="is-primary">Paid</td>
-                    <td><a class="button" href="">
-                        <span class="icon">
-                            <i class="fa fa-envelope-o"></i>
-                        </span>
-                        <span>Message</span></a>
-                    </td>
-                </tr>
-                <tr>
-                    <td>09/10/16</td>
-                    <td>www.domains.com</td>
-                    <td><a href="">Fred Kirkland</a></td>
-                    <td class="is-danger">Not Paid</td>
-                    <td><a class="button" href="">
-                        <span class="icon">
-                            <i class="fa fa-envelope-o"></i>
-                        </span>
-                        <span>Message</span></a>
-                    </td>
-                </tr>
-                <tr>
-                    <td>09/13/10</td>
-                    <td>www.dominus.com</td>
-                    <td><a href="">Dominic Selzer</a></td>
-                    <td class="is-primary">Paid</td>
-                    <td><a class="button" href="">
-                        <span class="icon">
-                            <i class="fa fa-envelope-o"></i>
-                        </span>
-                        <span>Message</span></a>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-        <nav class="pagination">
-            <a class="button">Previous</a>
-            <a class="button">Next page</a>
-            <ul>
-                <li>
-                    <a class="button">1</a>
-                </li>
-                <li>
-                    <span>...</span>
-                </li>
-                <li>
-                    <a class="button">45</a>
-                </li>
-                <li>
-                    <a class="button is-primary">46</a>
-                </li>
-                <li>
-                    <a class="button">47</a>
-                </li>
-                <li>
-                    <span>...</span>
-                </li>
-                <li>
-                    <a class="button">86</a>
-                </li>
-            </ul>
-        </nav>
-    </div>
+  <header class="card-header">
+    <p class="card-header-title">
+      History
+    </p>
+  </header>
+  <div class="card-content">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Date Initiated</th>
+          <th>Domain</th>
+          <th>Renter</th>
+          <th>Status</th>
+          <th>Contact</th>
+        </tr>
+      </thead>
+      <tfoot>
+      </tfoot>
+      <tbody>
+        <tr>
+          <td>01/13/16</td>
+          <td>www.domainterest.com</td>
+          <td><a href="">Ted Montague</a></td>
+          <td class="is-primary">Paid</td>
+          <td><a class="button" href="">
+            <span class="icon">
+              <i class="fa fa-envelope-o"></i>
+            </span>
+            <span>Message</span></a>
+          </td>
+        </tr>
+        <tr>
+          <td>09/10/16</td>
+          <td>www.domains.com</td>
+          <td><a href="">Fred Kirkland</a></td>
+          <td class="is-danger">Not Paid</td>
+          <td><a class="button" href="">
+            <span class="icon">
+              <i class="fa fa-envelope-o"></i>
+            </span>
+            <span>Message</span></a>
+          </td>
+        </tr>
+        <tr>
+          <td>09/13/10</td>
+          <td>www.dominus.com</td>
+          <td><a href="">Dominic Selzer</a></td>
+          <td class="is-primary">Paid</td>
+          <td><a class="button" href="">
+            <span class="icon">
+              <i class="fa fa-envelope-o"></i>
+            </span>
+            <span>Message</span></a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <nav class="pagination">
+      <a class="button">Previous</a>
+      <a class="button">Next page</a>
+      <ul>
+        <li>
+          <a class="button">1</a>
+        </li>
+        <li>
+          <span>...</span>
+        </li>
+        <li>
+          <a class="button">45</a>
+        </li>
+        <li>
+          <a class="button is-primary">46</a>
+        </li>
+        <li>
+          <a class="button">47</a>
+        </li>
+        <li>
+          <span>...</span>
+        </li>
+        <li>
+          <a class="button">86</a>
+        </li>
+      </ul>
+    </nav>
+  </div>
 </div>

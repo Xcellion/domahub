@@ -3,6 +3,10 @@
 @import 'balloon';
 @import 'bulma/sass/components/media.sass';
 
+#status-input {
+  height: 27px;
+}
+
 .media {
   @include transition(background-color 0.25s ease);
   border-radius: $radius-small;

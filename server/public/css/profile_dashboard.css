@@ -224,6 +224,9 @@ button[data-balloon] {
     .media.is-large .media-number {
       margin-right: 20px; } }
 
+#status-input {
+  height: 27px; }
+
 .media {
   -moz-transition: background-color 0.25s ease;
   -o-transition: background-color 0.25s ease;

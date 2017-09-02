@@ -1,5 +1,5 @@
-var  account_model = require('../models/account_model.js');
-var  listing_model = require('../models/listing_model.js');
+var account_model = require('../models/account_model.js');
+var listing_model = require('../models/listing_model.js');
 
 var Q = require('q');
 var qs = require('qs');
@@ -68,16 +68,15 @@ module.exports = {
   //function to get all charges made to account
   getTransfers : function(req, res, next){
     if (req.user.stripe_account){
-      console.log('SF: Retrieving all Stripe transactions...');
-      stripe.transfers.list({
-        destination: req.user.stripe_account,
-        expand: ["data.source_transaction"]
-      }, function(err, transfers) {
+      console.log('SF: Retrieving all Stmylistiripe transactions...');
+      stripe.charges.list({
+        transfer_group: req.user.id
+      }, function(err, charges) {
         if (err) { console.log(err.message); }
         if (node_env == "dev"){
-          req.user.dev_transfers = transfers;
+          req.user.dev_charges = charges;
         }
-        updateUserStripeTransfers(req.user, transfers.data);
+        updateUserStripeCharges(req.user, charges.data);
         next();
       });
     }
@@ -305,7 +304,7 @@ module.exports = {
 
   //</editor-fold>
 
-  //<editor-fold>-------------------------------STRIPE PAYMENTS (FOR RENTAL)-------------------------------
+  //<editor-fold>-------------------------------STRIPE CHARGES (payments for rental + bin)-------------------------------
 
   //function to pay for a rental via stripe
   chargeMoneyRent : function(req, res, next){
@@ -323,17 +322,12 @@ module.exports = {
           currency: "usd",
           source: req.body.stripeToken,
           description: "Rental for " + req.params.domain_name,
+          transfer_group : req.session.listing_info.owner_id,
           metadata: {
             "domain_name" : req.params.domain_name,
             "renter_name" : (req.user) ? req.user.username : "Guest",
             "rental_id" : req.session.new_rental_info.rental_id
           }
-        }
-
-        //destination if the listing owner has stripe/payments set up
-        if (req.session.new_rental_info.owner_stripe_id){
-          stripeOptions.destination = req.session.new_rental_info.owner_stripe_id;
-          stripeOptions.application_fee = stripe_fees + doma_fees;
         }
 
         //something went wrong with the price
@@ -393,9 +387,10 @@ module.exports = {
           currency: "usd",
           source: req.body.stripeToken,
           description: "Purchasing " + req.params.domain_name,
+          transfer_group : req.session.listing_info.owner_id,
           metadata: {
             "domain_name" : req.params.domain_name,
-            "owner_email" : req.session.listing_info.owner_id,
+            "owner_id" : req.session.listing_info.owner_id,
             "listing_id" : req.session.listing_info.id,
             "offer_id" : req.session.new_buying_info.offer_id,
             "buyer_name" : req.session.new_buying_info.name,
@@ -758,6 +753,8 @@ module.exports = {
 
 }
 
+//<editor-fold>-------------------------------HELPERS-------------------------------
+
 //function to update req.user with stripe info
 function updateUserStripeInfo(user, stripe_results){
   if (!user.stripe_info){
@@ -795,24 +792,25 @@ function updateUserStripeInfo(user, stripe_results){
 }
 
 //function to update req.user with stripe charges
-function updateUserStripeTransfers(user, stripe_transfers){
-  var temp_transfers = [];
-  for (var x = 0; x < stripe_transfers.length; x++){
+function updateUserStripeCharges(user, charges){
+  var temp_charges = [];
+  for (var x = 0; x < charges.length; x++){
     var temp_transfer = {
-      amount: stripe_transfers[x].amount,
-      created: stripe_transfers[x].created,
-      currency: stripe_transfers[x].currency,
-      charge_id: stripe_transfers[x].source_transaction.id
+      amount: charges[x].amount,
+      created: charges[x].created,
+      currency: charges[x].currency,
+      amount_refunded : charges[x].amount_refunded,
+      domain_name : (charges[x].metadata) ? charges[x].metadata.domain_name : ""
     }
-    if (stripe_transfers[x].source_transaction && stripe_transfers[x].source_transaction.id){
-      temp_transfer.amount_refunded = stripe_transfers[x].source_transaction.amount_refunded,
-      temp_transfer.rental_id = stripe_transfers[x].source_transaction.metadata.rental_id;
-      temp_transfer.renter_name = stripe_transfers[x].source_transaction.metadata.renter_name;
-      temp_transfer.domain_name = stripe_transfers[x].source_transaction.metadata.domain_name;
+
+    //if the charge is a rental
+    if (charges[x].metadata && charges[x].metadata.rental_id){
+      temp_transfer.rental_id = charges[x].metadata.rental_id;
+      temp_transfer.renter_name = charges[x].metadata.renter_name;
     }
-    temp_transfers.push(temp_transfer);
+    temp_charges.push(temp_transfer);
   }
-  user.stripe_transfers = temp_transfers;
+  user.stripe_charges = temp_charges;
 }
 
 //helper function to create a new stripe customer
@@ -873,46 +871,6 @@ function newStripeSubscription(req, res, next){
   });
 }
 
-// //helper function to handle unsuccessful stripe card, revert premium
-// function revertPremiumListings(req, res, err){
-//   if (req.path == "/listings/create"){
-//     var premium_db_query_failed = [];
-//
-//     for (var x = 0; x < req.session.new_listings.premium_obj.inserted_ids.length; x++){
-//       premium_db_query_failed.push([
-//         req.session.new_listings.premium_obj.inserted_ids[x],      //insert id
-//         "month",                            //price type
-//         25,                                //price rate
-//         "",                                //subscription id
-//         0,                                //exp date
-//         false                              //expiring
-//       ]);
-//
-//       //add to bad listings
-//       req.session.new_listings.bad_listings.push({
-//         index: req.session.new_listings.premium_obj.indexes[x],
-//         reasons: [
-//           "Premium purchase error! This domain was created as a basic domain instead."
-//         ]
-//       });
-//     }
-//
-//     //revert pricing for failed premium listings
-//     if (premium_db_query_failed.length > 0){
-//       Listing.updateListingsBasic(premium_db_query_failed, function(result){
-//       });
-//       res.send({
-//         bad_listings: req.session.new_listings.bad_listings,
-//         good_listings: req.session.new_listings.good_listings
-//       });
-//       delete req.session.new_listings;
-//     }
-//   }
-//   else {
-//     stripeErrorHandler(req, res, err);
-//   }
-// }
-
 //helper function for handling stripe errors
 function stripeErrorHandler(req, res, err){
   console.log(err.message);
@@ -935,3 +893,5 @@ function getUserListingObj(listings, domain_name){
     }
   }
 }
+
+//</editor-fold>

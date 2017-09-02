@@ -750,7 +750,10 @@ function editRowPurchased(listing_info){
 
         //hide no offers if there are any offers (that arent rejected)
         if ($(".offer-row:not(.rejected-offer, #offer-clone)").length == 0){
-          $("#no-offers").toggleClass('is-hidden');
+          $("#no-offers").removeClass('is-hidden');
+        }
+        else {
+          $("#no-offers").addClass('is-hidden');
         }
       }).find(".fa").removeClass('fa-toggle-on').addClass('fa-toggle-off');
 
@@ -797,7 +800,7 @@ function editRowPurchased(listing_info){
       //no offers!
       if (!listing_info.offers.length){
         $("#no-offers").removeClass('is-hidden');
-        $("#offers-toolbar").addClass('is-hidden');
+        $("#offers-toolbar").removeClass('is-hidden');
         $("#accepted-offer").addClass('is-hidden');
         $("#deposited-offer").addClass('is-hidden');
       }
@@ -963,9 +966,13 @@ function editRowPurchased(listing_info){
         //set the response text
         getOffer(listing_info.offers, offer_id).response = response_to_offerer;
 
-        //hide toolbar if accepting
+        //hide stuff if accepted!
         if (accept){
           $("#offers-toolbar").addClass('is-hidden');
+
+          //show purchased tab, hide other tabs
+          $(".purchased-elem").removeClass('is-hidden');
+          $(".unpurchased-elem").addClass("is-hidden");
         }
         offerSuccessHandler(accept, listing_info, offer_id);
       }
