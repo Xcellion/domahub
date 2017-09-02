@@ -151,12 +151,12 @@
 							<li id="offers-tab" class="verified-elem no-buttons-tab unpurchased-elem tab">
 								<a tabindex="0">Offers</a>
 							</li>
+							<li id="stats-tab" class="verified-elem no-buttons-tab unpurchased-elem tab">
+								<a tabindex="0">Stats</a>
+							</li>
 							<li id="rental-tab" class="verified-elem unpurchased-elem tab">
 								<a tabindex="0">Rental</a>
 							</li>
-              <li id="stats-tab" class="verified-elem no-buttons-tab unpurchased-elem tab">
-                <a tabindex="0">Stats</a>
-              </li>
 							<li id="purchased-tab" class="purchased-elem no-buttons-tab tab is-active is-hidden">
 								<a tabindex="0">Next Steps</a>
 							</li>
@@ -165,10 +165,12 @@
 
 					<!-- LISTING DETAILS  -->
 					<div class="box">
-						<h3 id="loading-tab" class="margin-top-15 margin-bottom-15">
-              <span class="icon margin-right-10"><i class="fa fa-spin fa-refresh"></i></span>
-							<span>Now loading listings...</span>
-						</h3>
+						<div id="loading-tab" class="content margin-top-20">
+              <p>
+								<span class="icon is-small margin-right-10"><i class="fa fa-spin fa-refresh"></i></span>
+								<span>Now loading listings...</span>
+							</p>
+						</div>
 						<div id="no-domains-tab" class="no-listings-elem is-hidden">
 							<p class="control">
 								You have no listings. Let's go make some!
@@ -196,7 +198,7 @@
 	                </tr>
 								</thead>
 								<tbody id="dns_table-body">
-                  <tr id="loading-records-row" class="">
+                  <tr id="loading-records-row">
                     <td colspan=5>
                       <span class="icon is-small margin-right-10"><i class="fa fa-spin fa-refresh"></i></span>
                       <span>Now loading existing DNS records...</span>
@@ -671,10 +673,10 @@
 								</div>
 							</div>
               <div id="stats-tab-drop" class="drop-tab is-hidden">
-                <div id="loading-stats" class="margin-top-20 content">
-									<p>
-                    <span class="icon is-small margin-right-10"><i class="fa fa-spin fa-refresh"></i></span>
-                    <span>Now loading listing statistics...</span>
+								<div id="loading-stats" class="content">
+		              <p>
+										<span class="icon margin-right-10"><i class="fa fa-spin fa-refresh"></i></span>
+										<span>Now loading listing statistics...</span>
 									</p>
 								</div>
 								<div id="no-stats" class="content is-hidden">
@@ -683,26 +685,26 @@
 									</p>
 								</div>
 								<div class='stats-loading control'>
-                  <div class="control">
-                    <label class="label">
-											<span class="v-align-middle">Unique Referers</span>
-											<span class="icon is-small is-tooltip v-align-bottom" data-balloon-length="medium" data-balloon="What website your users are coming from (where they are being referred from)." data-balloon-pos="up">
+                  <div class="content">
+                    <p>
+											Unique Referers
+											<span class="icon is-small is-tooltip" data-balloon-length="medium" data-balloon="What website your users are coming from (where they are being referred from)." data-balloon-pos="up">
 												<i class="fa fa-question-circle"></i>
 											</span>
-										</label>
+										</p>
                     <div class="chart-min-height">
                       <canvas id="referer-chart"></canvas>
                     </div>
                   </div>
-                  <div class="control">
-                    <label class="label">
-                      <span class="v-align-middle">Traffic</span>
-                    </label>
+                  <div class="content">
+                    <p>
+                      Traffic
+                    </p>
                     <div class="chart-min-height">
                       <canvas id="traffic-chart"></canvas>
                     </div>
                   </div>
-                  <div class="control">
+                  <div class="content">
                     <p>
                       Is there a specific statistic you would like to see for your domains? Please <a class="is-primary" href="/contact">let us know</a>!
                     </p>
