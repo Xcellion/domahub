@@ -70,6 +70,7 @@ $(document).ready(function() {
     e.preventDefault();
     Stripe.card.createToken($(this), function(status, response){
       if (response.error){
+        $("#checkout-button").removeClass('is-loading');
         errorMessage(response.error.message);
       }
       else {
@@ -310,7 +311,7 @@ function setUpUpgradeTab(){
     $("#existing-cc").text(premium_cc_brand + " card ending in " + premium_cc_last4);
 
     //change checkout button text
-    $("#checkout-button").text("Change Default Card");
+    $("#checkout-button-text").text("Change Default Card");
   }
 
 }
@@ -409,6 +410,8 @@ function submitCancelPremium(button_elem){
 }
 
 //</editor-fold>
+
+//<editor-fold>------------------------------------------------------------------------------------ HELPERS
 
 //function to check if all fields are filled out
 function checkFieldsFilled(form_elem){
@@ -561,3 +564,5 @@ function cancelFormSubmit(form){
   form.find(".cancel-payout").addClass("is-hidden");
   form.find(".submit-payout").addClass("is-disabled");
 }
+
+//</editor-fold>
