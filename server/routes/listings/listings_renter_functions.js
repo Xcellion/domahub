@@ -949,6 +949,7 @@ module.exports = {
     if (req.session.skip_listed_check == domain_name){
       console.log("F: Skipping database check for unlisted domain!");
       delete req.session.skip_listed_check;
+      var hostname = req.headers.host.replace(/^(https?:\/\/)?(www\.)?/,'');
       res.redirect("https://domahub.com/listing/" + hostname);
     }
     else {
