@@ -53,6 +53,10 @@ $(document).ready(function() {
     $("#stripe-form").addClass('is-hidden');
     $("#checkout-button-wrapper").addClass('is-hidden');
     $("#change-card-button").removeClass('is-hidden');
+    $('#cc-num').val("");
+    $('#cc-exp').val("");
+    $('#cc-cvc').val("");
+    $('#cc-zip').val("");
   });
 
   //to highlight submit when data changes for account form
