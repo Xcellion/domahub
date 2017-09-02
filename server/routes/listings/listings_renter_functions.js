@@ -947,8 +947,16 @@ module.exports = {
 
     //skip listed check if we've already determined it's unlisted and got redirected to domahub from custom URL
     if (req.session.skip_listed_check == domain_name){
-      delete req.session.skip_listed_check;
-      getWhoIs(req, res, next, domain_name, false);
+      console.log("F: Skipping database check for unlisted domain");
+      var hostname = req.headers.host.replace(/^(https?:\/\/)?(www\.)?/,'');
+      if (hostname != "domahub.com" && hostname != "localhost:8080" && hostname != "localhost"){
+        delete req.session.skip_listed_check;
+        req.session.skip_listed_check = domain_name;
+        res.redirect("https://domahub.com/listing/" + hostname);
+      }
+      else {
+        getWhoIs(req, res, next, domain_name, true);
+      }
     }
     else {
       console.log("F: Checking if " + domain_name + " is listed on DomaHub...");
@@ -964,6 +972,7 @@ module.exports = {
           getWhoIs(req, res, next, domain_name, true);
         }
       }, function(result){
+        //listed! go on with routes
         req.session.listing_info = result.info[0];
         getWhoIs(req, res, next, domain_name, false);
       });
