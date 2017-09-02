@@ -23,8 +23,7 @@
               <h2>1. Customize Your Website</h2>
           </header>
           <div id="step-content-site" class="step-content is-hidden">
-                    <article class="message">
-                      <div class="message-body">
+                    <div class="notification is-lighter no-shadow has-border">
                         <p id="address-regular-message" class="regular-message">
                           There are many different ways to create content for your new domain name.
                           See below for some options on what you can do with <span class='is-bold'><%= listing_info.domain_name %></span>!
@@ -39,53 +38,61 @@
                           Create an entirely new website for <span class='is-bold'><%= listing_info.domain_name %><%= (new_rental_info.path) ? "/" + new_rental_info.path : "" %></span>. It doesn&#39;t matter if its a personal portfolio, your new eCommerce store, or just a fun website.
                         </p>
                         <p id="address-error-message" class="error-message is-danger is-hidden">This is an invalid website link! Please choose a different website link.</p>
-                      </div>
-                    </article>
+                    </div>
 
                     <div id="choices-block">
-                      <div id="forward-choice" class="checkout-track content box no-shadow is-primary hover-effect choice-block forward-choice">
-                        <div class="step-box">
-                          <span class="icon is-medium is-primary">
-                            <i class="fa fa-share-square"></i>
-                          </span>
-                          <h2>Forward elsewhere</h2>
-                          <span class="margin-left-5 is-small icon is-inline-block is-tooltip" data-balloon='A user visiting <%= listing_info.domain_name%><%= (new_rental_info.path) ? "/" + new_rental_info.path : "" %> will be redirected to the website you provide us. The address bar will change to the forwarded website URL.' data-balloon-length="large" data-balloon-pos="up">
-                            <i class="fa fa-question-circle-o"></i>
-                          </span>
+                      <div id="forward-choice" class="checkout-track box hover-effect choice-block forward-choice">
+                        <div class="content">
+                          <div class="step-box">
+                            <span class="icon is-medium is-primary">
+                              <i class="fa fa-share-square"></i>
+                            </span>
+                            <h2>Forward elsewhere
+                              <span class="icon is-small is-tooltip v-align-middle" data-balloon='A user visiting <%= listing_info.domain_name%><%= (new_rental_info.path) ? "/" + new_rental_info.path : "" %> will be redirected to the website you provide us. The address bar will change to the forwarded website URL.' data-balloon-length="large" data-balloon-pos="up">
+                              <i class="fa fa-question-circle"></i>
+                            </span>
+                            </h2>
+                          </div>
+                          <p>
+                            Forward <span class='is-bold'><%= listing_info.domain_name %><%= (new_rental_info.path) ? "/" + new_rental_info.path : "" %></span> to an entirely different domain or website.
+                          </p>
                         </div>
-                        <p>
-                          Forward <span class='is-bold'><%= listing_info.domain_name %><%= (new_rental_info.path) ? "/" + new_rental_info.path : "" %></span> to an entirely different domain or website.
-                        </p>
                       </div>
-                      <div id="link-choice" class="checkout-track content box no-shadow is-info hover-effect choice-block link-choice">
-                        <div class="step-box">
-                          <span class="icon is-medium is-info">
-                            <i class="fa fa-external-link-square"></i>
-                          </span>
-                          <h2>Display web content</h2>
-                          <span class="margin-left-5 is-small icon is-inline-block is-tooltip" data-balloon='A user visiting <%= listing_info.domain_name%><%= (new_rental_info.path) ? "/" + new_rental_info.path : "" %> will see that URL in the address bar, but will see the content from the website you provide us.' data-balloon-length="large" data-balloon-pos="up">
-                            <i class="fa fa-question-circle-o"></i>
-                          </span>
+                      <div id="link-choice" class="checkout-track content box hover-effect choice-block link-choice">
+                        <div class="content">
+                          <div class="step-box">
+                            <span class="icon is-medium is-info">
+                              <i class="fa fa-external-link-square"></i>
+                            </span>
+                            <h2>Display web content
+                              <span class="icon is-small is-tooltip v-align-middle" data-balloon='A user visiting <%= listing_info.domain_name%><%= (new_rental_info.path) ? "/" + new_rental_info.path : "" %> will see that URL in the address bar, but will see the content from the website you provide us.' data-balloon-length="large" data-balloon-pos="up">
+                                <i class="fa fa-question-circle"></i>
+                              </span>
+                            </h2>
+                          </div>
+                          <p>
+                            Display an existing website or content (e.g. a gif, image, meme, etc.).
+                            We will show that content on <span class='is-bold'><%= listing_info.domain_name %><%= (new_rental_info.path) ? "/" + new_rental_info.path : "" %></span>.
+                          </p>
                         </div>
-                        <p>
-                          Display an existing website or content (e.g. a gif, image, meme, etc.).
-                          We will show that content on <span class='is-bold'><%= listing_info.domain_name %><%= (new_rental_info.path) ? "/" + new_rental_info.path : "" %></span>.
-                        </p>
                       </div>
-                      <div id="build-choice" class="checkout-track content box no-shadow is-accent hover-effect choice-block build-choice">
-                        <div class="step-box">
-                          <span class="icon is-medium is-accent">
-                            <i class="fa fa-pencil-square"></i>
-                          </span>
-                          <h2>Build a website</h2>
-                          <span class="margin-left-5 is-small icon is-inline-block is-tooltip" data-balloon='A user visiting <%= listing_info.domain_name%><%= (new_rental_info.path) ? "/" + new_rental_info.path : "" %> will see that URL in the address bar, but will see your website on the page.' data-balloon-length="large" data-balloon-pos="up">
-                            <i class="fa fa-question-circle-o"></i>
-                          </span>
+                      <div id="build-choice" class="checkout-track content box hover-effect choice-block build-choice">
+                        <div class="content">
+                          <div class="step-box">
+                            <span class="icon is-medium is-accent">
+                              <i class="fa fa-pencil-square"></i>
+                            </span>
+                            <h2>Build a website
+                              <span class="icon is-small is-tooltip v-align-middle" data-balloon='A user visiting <%= listing_info.domain_name%><%= (new_rental_info.path) ? "/" + new_rental_info.path : "" %> will see that URL in the address bar, but will see your website on the page.' data-balloon-length="large" data-balloon-pos="up">
+                                <i class="fa fa-question-circle"></i>
+                              </span>
+                            </h2>
+                          </div>
+                          <p>
+                            Use a website building service to create a new website for <span class='is-bold'><%= listing_info.domain_name %><%= (new_rental_info.path) ? "/" + new_rental_info.path : "" %></span> in minutes.
+                            You don&#39;t even have to know how to code!
+                          </p>
                         </div>
-                        <p>
-                          Use a website building service to create a new website for <span class='is-bold'><%= listing_info.domain_name %><%= (new_rental_info.path) ? "/" + new_rental_info.path : "" %></span> in minutes.
-                          You don&#39;t even have to know how to code!
-                        </p>
                       </div>
                     </div>
 
@@ -294,12 +301,11 @@
             <% } %>
           </header>
           <div id="step-content-payment" class='step-content is-hidden'>
-            <article class="message">
-              <div class="message-body">
+            <div class="notification is-lighter has-border no-shadow">
                 <% if (new_rental_info.price != 0) { %>
                   <p id="stripe-regular-message" class="regular-message">
                     Please enter your payment information. By clicking the Confirm & Pay button,
-                    you are agreeing to pay the entire amount shown as well as our <a href="/terms" class='is-accent'>Terms and Conditions</a>.
+                    you are agreeing to pay the entire amount shown as well as our <a href="/terms" class='is-primary'>Terms and Conditions</a>.
                   </p>
                 <% } else { %>
                   <p id="stripe-regular-message" class="regular-message">
@@ -309,26 +315,25 @@
                 <% } %>
                 <p id="stripe-error-message" class="error-message is-danger is-hidden"></p>
                 <p id="stripe-success-message" class="regular-message is-hidden"></p>
-              </div>
-            </article>
+            </div>
             <div id="checkout-card-content" class="success-hide checkout-card-content">
               <% if (new_rental_info.price != 0) { %>
                 <form id="stripe-form" autocomplete="on">
-                  <label class="label is-medium">Card Number</label>
+                  <label class="label">Card Number</label>
                   <p class="control has-icon">
                     <input tabindex="0" id="cc-num" data-stripe="number" class="checkout-track input stripe-input is-medium" type="tel" placeholder="•••• •••• •••• ••••" autocomplete="cc-number"/>
                     <i id="cc-icon" class="fa fa-credit-card"></i>
                   </p>
                   <div class="control is-grouped">
                     <div class="control is-expanded">
-                      <label class="label is-medium">Expiration Date</label>
+                      <label class="label">Expiration Date</label>
                       <div class="control has-icon">
                         <input tabindex="0" id="cc-exp" maxlength="7" data-stripe="exp" class="checkout-track input stripe-input is-medium" type="tel" placeholder="•• / ••" autocomplete="cc-exp"/>
                         <i class="fa fa-calendar-o"></i>
                       </div>
                     </div>
                     <div class="control">
-                      <label class="label is-medium">Security Code</label>
+                      <label class="label">Security Code</label>
                       <div class="control has-icon">
                         <input tabindex="0" id="cc-cvc" data-stripe="cvc" class="checkout-track input stripe-input is-medium" type="tel" placeholder="•••" autocomplete="off"/>
                         <i class="fa fa-lock"></i>
@@ -336,7 +341,7 @@
                     </div>
                   </div>
                   <div class="control">
-                    <label class="label is-medium">Zip Code</label>
+                    <label class="label">Zip Code</label>
                     <div class="control has-icon">
                       <input tabindex="0" id="cc-zip" maxlength="6" data-stripe="address_zip" class="checkout-track input stripe-input is-medium" type="tel" autocomplete="postal-code" placeholder="•••••"/>
                       <i class="fa fa-map-marker"></i>
