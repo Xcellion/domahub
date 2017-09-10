@@ -937,6 +937,16 @@ function testSubmitBuyHandler(){
   }, 500);
 }
 
+//function to do submit rent handler
+function testSubmitRentHandler(checkout_button){
+  setTimeout(function(){
+    checkout_button.removeClass('is-loading').addClass('is-disabled').on('click', function(){
+      submitTimes(checkout_button);
+    });
+    $("#rental-success-compare").removeClass('is-hidden').addClass('is-active');
+  }, 500);
+}
+
 //function to handle submit calendar handler
 function testCalendarHandler(){
   setTimeout(function(){

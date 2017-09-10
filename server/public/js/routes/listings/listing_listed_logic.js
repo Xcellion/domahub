@@ -372,34 +372,41 @@ function submitTimes(checkout_button){
   var newEvent = checkTimes();
 
   if (newEvent.starttime && newEvent.endtime){
-    //redirect to checkout page
-    $.ajax({
-      type: "POST",
-      url: "/listing/" + listing_info.domain_name + "/checkoutrent",
-      data: {
-        starttime: newEvent.starttime,
-        endtime: newEvent.endtime,
-        path: $("#typed-slash").val()
-      },
-      xhrFields: { withCredentials: true }
-    }).done(function(data){
-      checkout_button.removeClass('is-loading');
-      if (data.state == "success"){
-        window.location.assign("/listing/" + listing_info.domain_name + "/checkout/rent");
-      }
-      else if (data.state == "error"){
-        $("#calendar-regular-message").addClass('is-hidden');
-        errorHandler(data.message);
-        checkout_button.on('click', function(){
-          submitTimes(checkout_button);
-        });
 
-        //re-add calendar event handler to fetch new events
-        $("#calendar").off('click').on("click", function(){
-          getTimes($(this));
-        });
-      }
-    });
+    //test rental submit (for compare tool)
+    if (compare){
+      testSubmitRentHandler(checkout_button);
+    }
+    else {
+      //redirect to checkout page
+      $.ajax({
+        type: "POST",
+        url: "/listing/" + listing_info.domain_name + "/checkoutrent",
+        data: {
+          starttime: newEvent.starttime,
+          endtime: newEvent.endtime,
+          path: $("#typed-slash").val()
+        },
+        xhrFields: { withCredentials: true }
+      }).done(function(data){
+        checkout_button.removeClass('is-loading');
+        if (data.state == "success"){
+          window.location.assign("/listing/" + listing_info.domain_name + "/checkout/rent");
+        }
+        else if (data.state == "error"){
+          $("#calendar-regular-message").addClass('is-hidden');
+          errorHandler(data.message);
+          checkout_button.on('click', function(){
+            submitTimes(checkout_button);
+          });
+
+          //re-add calendar event handler to fetch new events
+          $("#calendar").off('click').on("click", function(){
+            getTimes($(this));
+          });
+        }
+      });
+    }
   }
 }
 
