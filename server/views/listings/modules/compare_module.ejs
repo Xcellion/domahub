@@ -9,6 +9,16 @@ var fonts = <% if(typeof fonts != "undefined"){ %><%-JSON.stringify(fonts)%><% }
 <script src="/js/routes/listings/listing_compare_logic.js" type="text/javascript"></script>
 <script src="/js/themes.js" type="text/javascript"></script>
 
+<div id="contact-success-compare" class="is-hidden notification is-popup is-primary">
+  <button class="delete"></button>
+  Success! If this were your real domain, you would receive a notification with the details of this new offer once it has been verified.
+</div>
+
+<div id="rental-success-compare" class="is-hidden notification is-popup is-primary">
+  <button class="delete"></button>
+  Success! If this were your real domain, the user would be redirected to a checkout page where they can edit the details of their domain rental.
+</div>
+
 <div id="compare-msg" class="notification is-white">
   <span class="delete"></span>
   <div class="content">
