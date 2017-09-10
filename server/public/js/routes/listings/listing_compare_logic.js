@@ -644,10 +644,10 @@ function updateColorScheme(primary_color, secondary_color, tertiary_color){
     stylize(primary_color, "#compare-preview .is-primary.button", "background-color");
     stylize(primary_color, ".tag", "background-color");
 
-    if (myChart){
-      myChart.data.datasets[0].backgroundColor = ColorLuminance(primary_color, 0.2);
-      myChart.data.datasets[0].borderColor = primary_color;
-      myChart.update();
+    if (traffic_chart){
+      traffic_chart.data.datasets[0].backgroundColor = ColorLuminance(primary_color, 0.2);
+      traffic_chart.data.datasets[0].borderColor = primary_color;
+      traffic_chart.update();
     }
   }
   if (secondary_color != false){
@@ -757,8 +757,8 @@ function checkBox(module_value, elem){
 //function to create a test chart
 function createTestChart(){
 
-  if (myChart){
-    myChart.destroy();
+  if (traffic_chart){
+    traffic_chart.destroy();
   }
 
   listing_info.traffic = [{
