@@ -420,35 +420,46 @@ function createEmptyChart(){
 //function to format the stats to the required format
 function formatDataset(stats) {
 
-  //traffic dataset
-  var earliest_date = stats[stats.length - 1].timestamp;
-  var num_months_since = Math.min(Math.ceil(moment.duration(new Date().getTime() - earliest_date).as("month") + 1), 12);    //12 months or less
+  //compare tool (not listed)
+  if (compare && listing_info.unlisted){
+    var num_months_since = Math.floor(Math.random() * 6) + 6;   //random between 6 and 12
+  }
+  else {
+    //traffic dataset
+    var earliest_date = stats[stats.length - 1].timestamp;
+    var num_months_since = Math.min(Math.ceil(moment.duration(new Date().getTime() - earliest_date).as("month") + 1), 12);    //12 months or less
+  }
+
   var months_since = [];
   for (var x = 0 ; x < num_months_since ; x++){
     var temp_month = moment().startOf("month").subtract(x, "month");
     months_since.push({
       label : temp_month.format("MMM"),
       timestamp : temp_month._d.getTime(),
-      views : 0
+      views : (compare && listing_info.unlisted) ? Math.round(Math.random() * 5000) + 2500 : 0   //fake traffic numbers if using compare tool
     });
   }
 
   var views_per_month = [];
-  var cur_month_needle = 0;
-  var referer_dataset = stats.reduce(function (rv, cur) {
-    //sort into groups divided by months
-    if (cur_month_needle < num_months_since){
-      if (cur.timestamp > months_since[cur_month_needle].timestamp){
-        months_since[cur_month_needle].views++;
-      }
-      else {
-        cur_month_needle++;
-        if (cur_month_needle < num_months_since){
+
+  //get real traffic numbers
+  if (stats && stats.length > 0){
+    var cur_month_needle = 0;
+    var referer_dataset = stats.reduce(function (rv, cur) {
+      //sort into groups divided by months
+      if (cur_month_needle < num_months_since){
+        if (cur.timestamp > months_since[cur_month_needle].timestamp){
           months_since[cur_month_needle].views++;
         }
+        else {
+          cur_month_needle++;
+          if (cur_month_needle < num_months_since){
+            months_since[cur_month_needle].views++;
+          }
+        }
       }
-    }
-  }, []);
+    }, []);
+  }
 
   //to add for views for ticker tab
   listing_info.months_since = months_since;
@@ -463,7 +474,6 @@ function formatDataset(stats) {
     traffic_labels.push(months_since[x].label);
   }
 
-
   return {
     traffic_views : traffic_views,
     traffic_labels : traffic_labels
@@ -473,6 +483,7 @@ function formatDataset(stats) {
 //function to initiate chart only if uninitiated
 function createTrafficChart(){
   formatted_dataset = formatDataset(listing_info.traffic);
+
   //hide any overlay
   $("#traffic-overlay").addClass('is-hidden');
 
