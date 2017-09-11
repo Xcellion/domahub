@@ -782,7 +782,8 @@ pre {
     border-color: #d0d0d0;
     color: rgba(0, 0, 0, 0.38);
     cursor: not-allowed;
-    pointer-events: none; }
+    pointer-events: none;
+    opacity: 0.7; }
     .button[disabled]::-moz-placeholder, .button.is-disabled::-moz-placeholder {
       color: rgba(0, 0, 0, 0.3); }
     .button[disabled]::-webkit-input-placeholder, .button.is-disabled::-webkit-input-placeholder {
@@ -1335,7 +1336,7 @@ pre {
           padding-left: 14px;
           padding-right: 14px; } }
   .button[disabled], .button.is-disabled {
-    opacity: 0.5; }
+    opacity: 0.7; }
   .button.is-fullwidth {
     display: flex;
     width: 100%; }
@@ -1454,7 +1455,8 @@ input:-webkit-autofill {
     border-color: #d0d0d0;
     color: rgba(0, 0, 0, 0.38);
     cursor: not-allowed;
-    pointer-events: none; }
+    pointer-events: none;
+    opacity: 0.7; }
     .input[disabled]::-moz-placeholder, [disabled].textarea::-moz-placeholder, .input.is-disabled::-moz-placeholder, .is-disabled.textarea::-moz-placeholder {
       color: rgba(0, 0, 0, 0.3); }
     .input[disabled]::-webkit-input-placeholder, [disabled].textarea::-webkit-input-placeholder, .input.is-disabled::-webkit-input-placeholder, .is-disabled.textarea::-webkit-input-placeholder {
@@ -1602,7 +1604,8 @@ input:-webkit-autofill {
       border-color: #d0d0d0;
       color: rgba(0, 0, 0, 0.38);
       cursor: not-allowed;
-      pointer-events: none; }
+      pointer-events: none;
+      opacity: 0.7; }
       .select select[disabled]::-moz-placeholder, .select select.is-disabled::-moz-placeholder {
         color: rgba(0, 0, 0, 0.3); }
       .select select[disabled]::-webkit-input-placeholder, .select select.is-disabled::-webkit-input-placeholder {
@@ -2239,7 +2242,7 @@ input:-webkit-autofill {
         font-size: 40px; } }
     @media screen and (max-width: 456px) {
       .title.is-1 {
-        font-size: 32px; } }
+        font-size: 36px; } }
     .title.is-1 code {
       font-size: 36px; }
   .title.is-2 {
@@ -2249,7 +2252,7 @@ input:-webkit-autofill {
         font-size: 28px; } }
     @media screen and (max-width: 456px) {
       .title.is-2 {
-        font-size: 20px; } }
+        font-size: 24px; } }
     .title.is-2 code {
       font-size: 28px; }
   .title.is-3 {
@@ -2259,7 +2262,7 @@ input:-webkit-autofill {
         font-size: 20px; } }
     @media screen and (max-width: 456px) {
       .title.is-3 {
-        font-size: 12px; } }
+        font-size: 16px; } }
     .title.is-3 code {
       font-size: 22px; }
   .title.is-4 {
@@ -2269,7 +2272,7 @@ input:-webkit-autofill {
         font-size: 14px; } }
     @media screen and (max-width: 456px) {
       .title.is-4 {
-        font-size: 6px; } }
+        font-size: 10px; } }
     .title.is-4 code {
       font-size: 19px; }
   .title.is-5 {
@@ -2279,7 +2282,7 @@ input:-webkit-autofill {
         font-size: 11px; } }
     @media screen and (max-width: 456px) {
       .title.is-5 {
-        font-size: 3px; } }
+        font-size: 7px; } }
     .title.is-5 code {
       font-size: 16px; }
   .title.is-6 {
@@ -2289,7 +2292,7 @@ input:-webkit-autofill {
         font-size: 8px; } }
     @media screen and (max-width: 456px) {
       .title.is-6 {
-        font-size: 0px; } }
+        font-size: 4px; } }
     .title.is-6 code {
       font-size: 16px; }
 
