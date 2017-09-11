@@ -310,7 +310,7 @@
                 <% } else { %>
                   <p id="stripe-regular-message" class="regular-message">
                     Please clicking the Confirm button,
-                    you are agreeing to our <a href="/terms" class='is-accent'>Terms and Conditions</a>.
+                    you are agreeing to our <a href="/terms" class='is-primary'>Terms and Conditions</a>.
                   </p>
                 <% } %>
                 <p id="stripe-error-message" class="error-message is-danger is-hidden"></p>
@@ -370,7 +370,7 @@
                   If you provided us with an email address, we have
                   also sent a copy of this link to that address as well.
                   <!-- You can
-                  <a id="checkout-signup" class='checkout-track is-accent' href="https://domahub.com/signup">sign up</a>
+                  <a id="checkout-signup" class='checkout-track is-primary' href="https://domahub.com/signup">sign up</a>
                   for a DomaHub account to keep
                   track of all your rentals in one place. -->
                   </p>
@@ -384,7 +384,7 @@
               <% } else { %>
                 <div class="content">
                   <p>
-                    You may edit your rental settings at <a id="checkout-myrental" class="checkout-track is-accent" href="/profile/myrentals" tabindex="0">
+                    You may edit your rental settings at <a id="checkout-myrental" class="checkout-track is-primary" href="/profile/myrentals" tabindex="0">
                     your rentals page</a>.
                   </p>
                 </div>
@@ -415,8 +415,8 @@
                   </p>
                   <p id="rental-start"></p>
                 </div>
-                <div class="column is-2">
-                  <span class="icon is-medium is-blacklight is-hidden-mobile">
+                <div class="column is-2 is-hidden-mobile">
+                  <span class="icon is-medium is-blacklight">
                     <i class="fa fa-long-arrow-right"></i>
                   </span>
                 </div>
@@ -446,9 +446,19 @@
             </div>
             <footer id="edit-dates-button" class="card-footer">
               <% if (listing_info.premium){ %>
-                <a id="edit-dates-path" tabindex="0" href="/" class="checkout-track button is-stylish no-shadow is-fullwidth">Edit Dates or Path</a>
+                <a id="edit-dates-path" tabindex="0" href="/" class="checkout-track button is-stylish is-fullwidth">
+                  <span class="icon is-small">
+                    <i class="fa fa-pencil"></i>
+                  </span>
+                  <span>Edit Dates or Path</span>
+                </a>
               <% } else { %>
-                <a id="edit-dates-path" tabindex="0" href="https://domahub.com/listing/<%= listing_info.domain_name%>" class="checkout-track button is-stylish no-shadow is-fullwidth">Edit Dates or Path</a>
+                <a id="edit-dates-path" tabindex="0" href="https://domahub.com/listing/<%= listing_info.domain_name%>" class="checkout-track button is-stylish is-fullwidth">
+                  <span class="icon is-small">
+                    <i class="fa fa-pencil"></i>
+                  </span>
+                  <span>Edit Dates or Path</span>
+                </a>
               <% } %>
             </footer>
           </div>
