@@ -110,6 +110,17 @@ module.exports = function(app, db, auth, error, stripe){
     stripe.cancelStripeSubscription
   ]);
 
+  //transfer to bank
+  app.post("/profile/transfer", [
+    urlencodedParser,
+    auth.checkLoggedIn,
+    stripe.getAccountInfo,
+    stripe.getTransfers,
+    stripe.getStripeCustomer,
+    stripe.getStripeSubscription,
+    stripe.transferMoney
+  ]);
+
   //settings
   app.get("/profile/settings", [
     auth.checkLoggedIn,
