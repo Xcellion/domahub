@@ -52,21 +52,23 @@
 							<li><a id="payout-personal-link" href="#payout-personal" class="hide-stripe is-hidden setting-link">Personal Information</a></li>
 							<li><a id="payout-bank-link" href="#payout-bank" class="hide-stripe is-hidden setting-link">Bank Information</a></li>
 						</ul>
-						<p class="menu-label">
+						<!--<p class="menu-label">
 							Integrations
 						</p>
 						<ul class="menu-list">
 							<li><a id="paypal-link" href="#paypal" class="setting-link">PayPal Settings</a></li>
 							<%# <li><a id="registrar-link" href="#registrar" class="setting-link">Registrar Settings</a></li>%>
-						</ul>
+						</ul>-->
 						<% if (user.stripe_charges) { %>
 							<p class="menu-label">
 								Transactions
 							</p>
 							<ul class="menu-list">
-								<li><a id="transactions-link" href='#transactions' class="setting-link">History</a></li>
-								<%# <li><a id="pending-link" href='#pending' class="setting-link">Pending</a></li> %>
+								<li><a id="history-link" href='#history' class="setting-link">Sales History</a></li>
 							</ul>
+              <ul class="menu-list">
+                <li><a id="withdrawal-link" href='#withdrawal' class="setting-link">Withdraw Money</a></li>
+              </ul>
 						<% } %>
 					</aside>
 				</div>
@@ -260,16 +262,6 @@
 								<% } else { %>
 										<span class="tag is-danger">Not Connected</span>
 								<% } %>
-							</div>
-							<div class="content">
-								<p>
-									Account Standing
-								</p>
-									<% if (user.type >= 2) { %>
-											<span class="tag is-primary">Good</span>
-									<% } else { %>
-											<span class="tag is-danger">Not Good</span>
-									<% } %>
 							</div>
 						</div>
 					</div>
@@ -703,7 +695,7 @@
 						</div>
 					</div>
 
-					<div id="paypal" class="is-hidden card is-fullwidth">
+					<!--<div id="paypal" class="is-hidden card is-fullwidth">
 						<div class="card-header">
 							<h2 class="card-header-title">
 								PayPal Settings
@@ -736,6 +728,7 @@
 							</form>
 						</div>
 					</div>
+          -->
 					<!--<div id="registrar" class="is-hidden card is-fullwidth">
 						<header class="card-header">
 							<h2 class="card-header-title">
