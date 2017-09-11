@@ -77,6 +77,16 @@ module.exports = {
           req.user.dev_charges = charges;
         }
         updateUserStripeCharges(req.user, charges.data);
+        // req.user.stripe_charges = [];
+        // for (var x = 0; x < 100; x++){
+        //   req.user.stripe_charges.push({
+        //     amount: Math.round(Math.random()* 100),
+        //     created: new Date().getTime(),
+        //     currency: "usd",
+        //     amount_refunded : 0,
+        //     domain_name : "fuckyoutest.com"
+        //   })
+        // }
         next();
       });
     }
@@ -313,8 +323,8 @@ module.exports = {
       if (req.body.stripeToken){
         var total_price = Math.round(req.session.new_rental_info.price * 100);    //USD in cents
 
-        //doma fee if the listing is basic (aka premium hasn't expired)
-        var doma_fees = Math.round(total_price * 0.18);
+        //doma fee if the account owner is basic (aka premium hasn't expired)
+        var doma_fees = (req.session.listing_info.premium) ? 0 : Math.round(total_price * 0.10);
         var stripe_fees = Math.round(total_price * 0.029) + 30;
 
         var stripeOptions = {
@@ -326,7 +336,9 @@ module.exports = {
           metadata: {
             "domain_name" : req.params.domain_name,
             "renter_name" : (req.user) ? req.user.username : "Guest",
-            "rental_id" : req.session.new_rental_info.rental_id
+            "rental_id" : req.session.new_rental_info.rental_id,
+            "doma_fees" : doma_fees,
+            "stripe_fees" : stripe_fees
           }
         }
 
@@ -375,6 +387,10 @@ module.exports = {
       var price_of_listing = (req.session.new_buying_info.id) ? req.session.new_buying_info.offer : req.session.listing_info.buy_price;
       var total_price = Math.round(price_of_listing * 100);    //USD in cents
 
+      //doma fee if the account owner is basic (aka premium hasn't expired)
+      var doma_fees = (req.session.listing_info.premium) ? 0 : Math.round(total_price * 0.10);
+      var stripe_fees = Math.round(total_price * 0.029) + 30;
+
       //something went wrong with the price
       if (isNaN(total_price)){
         error.handler(req, res, "Something went wrong with the payment! Please refresh the page and try again.", 'json');
@@ -396,6 +412,8 @@ module.exports = {
             "buyer_name" : req.session.new_buying_info.name,
             "buyer_email" : req.session.new_buying_info.email,
             "buyer_phone" : req.session.new_buying_info.phone,
+            "doma_fees" : doma_fees,
+            "stripe_fees" : stripe_fees
           }
         }
 
@@ -800,7 +818,9 @@ function updateUserStripeCharges(user, charges){
       created: charges[x].created,
       currency: charges[x].currency,
       amount_refunded : charges[x].amount_refunded,
-      domain_name : (charges[x].metadata) ? charges[x].metadata.domain_name : ""
+      domain_name : (charges[x].metadata) ? charges[x].metadata.domain_name : "",
+      stripe_fees : (charges[x].metadata) ? charges[x].metadata.stripe_fees : "",
+      doma_fees : (charges[x].metadata) ? charges[x].metadata.doma_fees : "",
     }
 
     //if the charge is a rental
