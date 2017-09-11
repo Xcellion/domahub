@@ -761,38 +761,8 @@ function createTestChart(){
     traffic_chart.destroy();
   }
 
-  listing_info.traffic = [{
-    views : Math.floor(Math.random() * 10000)
-  }];
-
-  //create the monthly x-axis labels array
-  var monthly_labels = [];
-  var traffic_data = [];
-  var months_to_go_back = 6;
-  for (var y = 0; y < months_to_go_back; y++){
-    var temp_month = moment().subtract(y, "month").format("MMM");
-    monthly_labels.unshift(temp_month);
-    traffic_data.unshift({
-      x: temp_month,
-      y: Math.round(Math.random() * 10000)
-    });
-  }
-
-  //traffic dataset
-  var traffic_dataset = {
-    label: "Website Views",
-    xAxisID : "traffic-x",
-    yAxisID : "traffic-y",
-    borderColor: (listing_info.primary_color) ? listing_info.primary_color : "#3CBC8D",
-    backgroundColor: (listing_info.primary_color) ? ColorLuminance(listing_info.primary_color, 0.2) : "#3CBC8D",
-    data: traffic_data
-  }
-
-  //create the super dataset containing traffic data and rentals data
-  var all_datasets = [traffic_dataset];
-
-  //create the chart
-  createValidChart(monthly_labels, all_datasets);
+  listing_info.traffic = [];
+  createTrafficChart();
 }
 
 //function to create test domains
