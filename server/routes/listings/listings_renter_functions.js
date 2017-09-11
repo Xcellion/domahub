@@ -163,22 +163,22 @@ module.exports = {
 
       //check if its a legit date
       if (!start_moment.isValid() || !end_moment.isValid()){
-        error.handler(req, res, "Invalid dates! Not valid dates!", "json");
+        error.handler(req, res, "Invalid dates!", "json");
       }
 
       //not divisible by hour blocks
       else if (end_moment.diff(start_moment) % 3600000 != 0){
-        error.handler(req, res, "Not divisible by hour blocks!", "json");
+        error.handler(req, res, "Invalid dates!", "json");
       }
 
       //start time in the past
       else if (start_moment.isBefore(moment().startOf("hour"))){
-        error.handler(req, res, "Start time in the past!", "json");
+        error.handler(req, res, "Invalid start time!", "json");
       }
 
       //end date further than 1 year
       else if (end_moment.isAfter(moment().add(1, "year"))){
-        error.handler(req, res, "End time further than 1 year from now!", "json");
+        error.handler(req, res, "Invalid end time!", "json");
       }
 
       //invalid time slot end
@@ -552,6 +552,7 @@ module.exports = {
 
   //updates the owner of a rental that has no owner (hash rental)
   updateRentalOwner : function(req, res, next){
+    //if we're actually updating the owner of the rental
     if (req.user && req.params.owner_hash_id && req.params.owner_hash_id == req.session.rental_info.owner_hash_id){
       console.log("F: Updating the rental owner...");
       req.session.proxy_edit = true;
@@ -564,7 +565,9 @@ module.exports = {
       }
       next();
     }
+    //else delete the rental object to edit DB
     else {
+      delete req.session.rental_object;
       next();
     }
   },
@@ -686,7 +689,7 @@ module.exports = {
 
   //edit the rental (update the database)
   editRental : function(req, res, next){
-    if (req.session.rental_object.db_object){
+    if (req.session.rental_object && req.session.rental_object.db_object){
       console.log("F: Updating rental...");
 
       Listing.updateRental(req.params.rental_id, req.session.rental_object.db_object, function(result){

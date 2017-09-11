@@ -1,9 +1,9 @@
-<div id="transactions" class="card is-fullwidth is-hidden" >
-  <header class="card-header">
+<div id="history" class="card is-fullwidth is-hidden">
+  <div class="card-header">
     <h2 class="card-header-title">
-      Transactions &nbsp;<span id="transaction-message" class="setting-message"></span>
+      <span>Sales History</span>
     </h2>
-  </header>
+  </div>
   <div class="card-content">
     <table class="table">
       <thead>
@@ -11,17 +11,27 @@
           <th>Date</th>
           <th>Type</th>
           <th>Domain</th>
-          <th class="has-text-right">Received</th>
-          <th class="has-text-right">Fees Paid</th>
+          <th>Date Available</th>
+          <th class="has-text-right">Total Earned</th>
+          <th class="has-text-right">
+            <a href="/faq#pricing" class="is-primary">
+              <span>Fees Paid</span>
+              <span class="icon is-small is-tooltip v-align-bottom" data-balloon-length="medium" data-balloon="Click to learn more about DomaHub fees." data-balloon-pos="up">
+                <i class="fa fa-question-circle"></i>
+              </span>
+            </a>
+          </th>
           <th class="has-text-right">Profit</th>
           <th></th>
         </tr>
       </thead>
       <tfoot>
         <tr>
-          <td colspan="4"></td>
-          <td class='is-bold'>Total</td>
-          <td id="total-earnings" class='is-pulled-right is-bold'>$0.00</td>
+          <td colspan="3"></td>
+          <td class='has-text-right is-bold'>Total</td>
+          <td id="total-earnings" class='has-text-right is-bold'>$0.00</td>
+          <td id="total-fees" class='has-text-right is-bold'>$0.00</td>
+          <td id="total-profit" class='has-text-right is-bold'>$0.00</td>
           <td></td>
         </tr>
       </tfoot>
@@ -30,6 +40,7 @@
           <td class="earnings-row-date"></td>
           <td class="earnings-row-type"></td>
           <td class="earnings-row-domain"></td>
+          <td class="earnings-row-available"></td>
           <td class="earnings-row-amount has-text-right"></td>
           <td class="earnings-row-fees has-text-right"></td>
           <td class="earnings-row-profit has-text-right"></td>
@@ -49,119 +60,36 @@
         </tr>
       </tbody>
     </table>
-    <%# <nav class="pagination">
-    <a class="button">Previous</a>
-    <a class="button">Next page</a>
-    <ul>
-    <li>
-    <a class="button">1</a>
-  </li>
-  <li>
-  <span>...</span>
-</li>
-<li>
-<a class="button">45</a>
-</li>
-<li>
-<a class="button is-primary">46</a>
-</li>
-<li>
-<a class="button">47</a>
-</li>
-<li>
-<span>...</span>
-</li>
-<li>
-<a class="button">86</a>
-</li>
-</ul>
-</nav>%>
+  </div>
 </div>
-</div>
-<div id="pending" class="card is-fullwidth is-hidden" >
-  <header class="card-header">
-    <p class="card-header-title">
-      History
-    </p>
-  </header>
+
+<div id="withdrawal" class="card is-fullwidth is-hidden">
+  <div class="card-header">
+    <h2 class="card-header-title">
+      <span>Withdraw Money</span>
+    </h2>
+  </div>
   <div class="card-content">
-    <table class="table">
-      <thead>
-        <tr>
-          <th>Date Initiated</th>
-          <th>Domain</th>
-          <th>Renter</th>
-          <th>Status</th>
-          <th>Contact</th>
-        </tr>
-      </thead>
-      <tfoot>
-      </tfoot>
-      <tbody>
-        <tr>
-          <td>01/13/16</td>
-          <td>www.domainterest.com</td>
-          <td><a href="">Ted Montague</a></td>
-          <td class="is-primary">Paid</td>
-          <td><a class="button" href="">
-            <span class="icon">
-              <i class="fa fa-envelope-o"></i>
-            </span>
-            <span>Message</span></a>
-          </td>
-        </tr>
-        <tr>
-          <td>09/10/16</td>
-          <td>www.domains.com</td>
-          <td><a href="">Fred Kirkland</a></td>
-          <td class="is-danger">Not Paid</td>
-          <td><a class="button" href="">
-            <span class="icon">
-              <i class="fa fa-envelope-o"></i>
-            </span>
-            <span>Message</span></a>
-          </td>
-        </tr>
-        <tr>
-          <td>09/13/10</td>
-          <td>www.dominus.com</td>
-          <td><a href="">Dominic Selzer</a></td>
-          <td class="is-primary">Paid</td>
-          <td><a class="button" href="">
-            <span class="icon">
-              <i class="fa fa-envelope-o"></i>
-            </span>
-            <span>Message</span></a>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-    <nav class="pagination">
-      <a class="button">Previous</a>
-      <a class="button">Next page</a>
-      <ul>
-        <li>
-          <a class="button">1</a>
-        </li>
-        <li>
-          <span>...</span>
-        </li>
-        <li>
-          <a class="button">45</a>
-        </li>
-        <li>
-          <a class="button is-primary">46</a>
-        </li>
-        <li>
-          <a class="button">47</a>
-        </li>
-        <li>
-          <span>...</span>
-        </li>
-        <li>
-          <a class="button">86</a>
-        </li>
-      </ul>
-    </nav>
+    <div class="control">
+      <p>
+        You currently have <span class="withdrawal-available"></span> available for withdrawal.
+      </p>
+    </div>
+    <div class="control">
+      You currently have <span id="withdrawal-pending"></span> in pending funds.
+      <a class="is-primary" href="/faq#pricing">Why is this?</a>
+    </div>
+    <div class="control">
+      You currently have <span id="withdrawal-unavailable"></span> in unavailable funds.
+      <a class="is-primary" href="/faq#pricing">Why is this?</a>
+    </div>
+    <div class="control">
+      <a id="transfer-button" class="is-disabled is-stylish is-primary button">
+        <span class="icon is-small"><i class="fa fa-exchange"></i></span>
+        <span>Transfer <span class="withdrawal-available"></span> to Bank</span>
+      </a>
+    </div>
+
+    <small>Most banks only process transfers on business days. Money withdrawn on holidays or weekends may only be available when your bank opens. Your withdrawal could be delayed or blocked if we identify an issue with either your DomaHub account or bank account. If we do detect any issues we will be sure to let you know via email!</small>
   </div>
 </div>
