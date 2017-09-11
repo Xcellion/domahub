@@ -1,3 +1,5 @@
+//<editor-fold>-------------------------------VARIABLES-------------------------------
+
 var account_model = require('../models/account_model.js');
 var listing_model = require('../models/listing_model.js');
 
@@ -10,7 +12,16 @@ var stripe_key = (node_env == "dev") ? "sk_test_PHd0TEZT5ytlF0qCNvmgAThp" : "sk_
 var stripe = require("stripe")(stripe_key);
 var validator = require("validator");
 
+var wNumb = require("wnumb");
+var moneyFormat = wNumb({
+  thousand: ',',
+  prefix: '$',
+  decimals: 2
+});
+
 var database, error;
+
+//</editor-fold>
 
 module.exports = {
 
@@ -68,15 +79,18 @@ module.exports = {
   //function to get all charges made to account
   getTransfers : function(req, res, next){
     if (req.user.stripe_account){
-      console.log('SF: Retrieving all Stmylistiripe transactions...');
+      console.log('SF: Retrieving all Stripe transactions...');
       stripe.charges.list({
-        transfer_group: req.user.id
+        transfer_group: req.user.id,
+        expand: ["data.balance_transaction"]    //when the balance is available for transfer / withrdrawal
       }, function(err, charges) {
         if (err) { console.log(err.message); }
         if (node_env == "dev"){
           req.user.dev_charges = charges;
         }
         updateUserStripeCharges(req.user, charges.data);
+
+        // for test data on pagination
         // req.user.stripe_charges = [];
         // for (var x = 0; x < 100; x++){
         //   req.user.stripe_charges.push({
@@ -87,6 +101,7 @@ module.exports = {
         //     domain_name : "fuckyoutest.com"
         //   })
         // }
+
         next();
       });
     }
@@ -95,6 +110,59 @@ module.exports = {
     }
   },
 
+  //function to transfer money to a stripe connected account
+  transferMoney : function(req, res, next){
+    if (req.user.type != 2 || !req.user.stripe_account || !req.user.stripe_info){
+      error.handler(req, res, "No bank account to charge!", "json");
+    }
+    else if (!req.user.stripe_charges){
+      error.handler(req, res, "Invalid charges!", "json");
+    }
+    else {
+      var total_transfer = 0;
+      var time_now = new Date().getTime();
+      for (var x = 0; x < req.user.stripe_charges.length; x++){
+
+        //only if it's a rental (and not refunded) or if it's a sale thats already transferred and if balance is available now
+        if (req.user.stripe_charges[x].available_on * 1000 < time_now && (req.user.stripe_charges[x].rental_id && req.user.stripe_charges[x].amount_refunded == 0) || req.user.stripe_charges[x].pending_transfer == "false"){
+          var doma_fees = (typeof req.user.stripe_charges[x].doma_fees != undefined) ? parseFloat(req.user.stripe_charges[x].doma_fees) : getDomaFees(req.user.stripe_charges[x].amount);
+          var stripe_fees = (typeof req.user.stripe_charges[x].stripe_fees != undefined) ? parseFloat(req.user.stripe_charges[x].stripe_fees) : getStripeFees(req.user.stripe_charges[x].amount);
+          total_transfer += req.user.stripe_charges[x].amount - doma_fees - stripe_fees;
+          req.user.stripe_charges[x].transferred = true;
+        }
+      }
+
+      //if it's a legit number
+      if (total_transfer > 0 && Number.isInteger(total_transfer)){
+        console.log("SF: Attempting to transfer " + moneyFormat.to(total_transfer/100) + "...");
+
+        //transfer the money to their stripe account
+        stripe.transfers.create({
+          amount: total_transfer,
+          currency: "usd",
+          destination: req.user.stripe_account,
+          transfer_group: "bank_transfer_" + req.user.id
+        }, function(err, transfer) {
+          if (!err){
+            res.send({
+              state : "success",
+              user : req.user
+            });
+          }
+          else {
+            console.log(err);
+            error.handler(req, res, "Something went wrong with the bank transfer! Please refresh the page and try again.", "json");
+          }
+        });
+      }
+      else {
+        error.handler(req, res, "You have no available funds to transfer to your bank!", "json");
+      }
+
+    }
+  },
+
+  //function to get stripe managed account info
   checkManagedAccount : function(req, res, next){
     if (!req.user.stripe_account){
       error.handler(req, res, "Please first enter your payout address!", "json");
@@ -324,8 +392,8 @@ module.exports = {
         var total_price = Math.round(req.session.new_rental_info.price * 100);    //USD in cents
 
         //doma fee if the account owner is basic (aka premium hasn't expired)
-        var doma_fees = (req.session.listing_info.premium) ? 0 : Math.round(total_price * 0.10);
-        var stripe_fees = Math.round(total_price * 0.029) + 30;
+        var doma_fees = (req.session.listing_info.premium) ? 0 : getDomaFees(total_price);
+        var stripe_fees = getStripeFees(total_price);
 
         var stripeOptions = {
           amount: total_price,
@@ -356,7 +424,7 @@ module.exports = {
               error.handler(req, res, "Invalid price!", "json");
             }
             else {
-              console.log("Payment processed! Customer paid $" + ((total_price - stripe_fees - doma_fees)/100).toFixed(2) + " with $" + (doma_fees/100).toFixed(2) + " in Doma fees and $" + (stripe_fees/100).toFixed(2) + " in Stripe fees.")
+              console.log("Payment processed! Customer paid " + moneyFormat.to((total_price - stripe_fees - doma_fees)/100) + " with " +  moneyFormat.to(doma_fees/100) + " in Doma fees and " + moneyFormat.to(stripe_fees/100) + " in Stripe fees.");
               next();
             }
           });
@@ -377,8 +445,6 @@ module.exports = {
   //function to pay for a listing via stripe
   chargeMoneyBuy : function(req, res, next){
     if (!req.body.stripeToken){
-      console.log("wt");
-
       stripeErrorHandler(req, res, {message: "Something went wrong with your payment! Please refresh the page and try again."});
     }
     else {
@@ -388,8 +454,8 @@ module.exports = {
       var total_price = Math.round(price_of_listing * 100);    //USD in cents
 
       //doma fee if the account owner is basic (aka premium hasn't expired)
-      var doma_fees = (req.session.listing_info.premium) ? 0 : Math.round(total_price * 0.10);
-      var stripe_fees = Math.round(total_price * 0.029) + 30;
+      var doma_fees = (req.session.listing_info.premium) ? 0 : getDomaFees(total_price);
+      var stripe_fees = getStripeFees(total_price);
 
       //something went wrong with the price
       if (isNaN(total_price)){
@@ -413,7 +479,8 @@ module.exports = {
             "buyer_email" : req.session.new_buying_info.email,
             "buyer_phone" : req.session.new_buying_info.phone,
             "doma_fees" : doma_fees,
-            "stripe_fees" : stripe_fees
+            "stripe_fees" : stripe_fees,
+            "pending_transfer" : true
           }
         }
 
@@ -424,7 +491,7 @@ module.exports = {
             error.handler(req, res, "Invalid price!", "json");
           }
           else {
-            console.log("Payment processed! Received $" + (total_price/100).toFixed(2));
+            console.log("Payment processed! Received " + moneyFormat.to(total_price/100));
             next();
           }
         });
@@ -450,7 +517,7 @@ module.exports = {
       });
     }
     else {
-      stripeErrorHandler(req, res, {message: "Invalid Stripe charge!"});
+      error.handler(req, res, "There was an error in refunding this rental. Please refresh the page and try again!");
     }
   },
 
@@ -814,13 +881,16 @@ function updateUserStripeCharges(user, charges){
   var temp_charges = [];
   for (var x = 0; x < charges.length; x++){
     var temp_transfer = {
-      amount: charges[x].amount,
-      created: charges[x].created,
-      currency: charges[x].currency,
+      charge_id : charges[x].id,
+      amount : charges[x].amount,
+      created : charges[x].created,
+      currency : charges[x].currency,
       amount_refunded : charges[x].amount_refunded,
       domain_name : (charges[x].metadata) ? charges[x].metadata.domain_name : "",
       stripe_fees : (charges[x].metadata) ? charges[x].metadata.stripe_fees : "",
       doma_fees : (charges[x].metadata) ? charges[x].metadata.doma_fees : "",
+      pending_transfer : (charges[x].metadata) ? charges[x].metadata.pending_transfer : "",
+      available_on : (charges[x].balance_transaction && charges[x].balance_transaction.available_on) ? charges[x].balance_transaction.available_on : false,
     }
 
     //if the charge is a rental
@@ -896,11 +966,11 @@ function stripeErrorHandler(req, res, err){
   console.log(err.message);
   switch (err.message){
     case ("Your card was declined!"):
-      case ("Your card's expiration year is invalid."):
-      error.handler(req, res, err.message, "json");
+    case ("Your card's expiration year is invalid."):
+    error.handler(req, res, err.message, "json");
     break;
     default:
-      error.handler(req, res, "Something went wrong with the payment!", "json");
+    error.handler(req, res, "Something went wrong with the payment!", "json");
     break;
   }
 }
@@ -912,6 +982,16 @@ function getUserListingObj(listings, domain_name){
       return listings[x];
     }
   }
+}
+
+//function to get the doma fees
+function getDomaFees(amount){
+  return Math.round(amount * 0.1);
+}
+
+//function to get the stripe fees
+function getStripeFees(amount){
+  return Math.round(amount * 0.029) + 30;
 }
 
 //</editor-fold>

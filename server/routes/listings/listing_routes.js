@@ -474,17 +474,17 @@ module.exports = function(app, db, auth, error, stripe){
 
   //delete a rental
   app.post('/listing/:domain_name/:rental_id/refund', [
-    urlencodedParser,
-    auth.checkLoggedIn,
-    checkDomainValid,
-    checkDomainListed,
-    renter_functions.getRental,
-    renter_functions.checkRentalDomain,
-    renter_functions.checkDomainOwner,
-    stripe.refundRental,
-    renter_functions.createRentalObject,
-    renter_functions.deactivateRental,
-    renter_functions.editRental,
+    // urlencodedParser,
+    // auth.checkLoggedIn,
+    // checkDomainValid,
+    // checkDomainListed,
+    // renter_functions.getRental,
+    // renter_functions.checkRentalDomain,
+    // renter_functions.checkDomainOwner,
+    // stripe.refundRental,
+    // renter_functions.createRentalObject,
+    // renter_functions.deactivateRental,
+    // renter_functions.editRental,
     general_functions.sendSuccess
   ]);
 
