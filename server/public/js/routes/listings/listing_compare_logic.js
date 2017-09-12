@@ -86,7 +86,7 @@ $(document).ready(function() {
           <div class='popover-content content'></div> \
           <div> \
           <button class='button is-small is-primary' data-role='next'>Yes! Teach me how it works.</button> \
-          <button class='button is-small is-danger is-inverted' data-role='end'>No thanks, I'll figure it out myself.</button> \
+          <button class='button is-small is-danger is-outlined' data-role='end'>No thanks, I'll figure it out myself.</button> \
           </div> \
           </div>",
           title: "Welcome to the DomaHub demo!",
@@ -385,6 +385,7 @@ function toggleMenu(show){
 
 //function to switch theme
 function switchTheme(theme_name){
+  console.log("Switching theme...");
   var theme_to_load = findTheme(theme_name);
 
   //changing theme during tutorial
@@ -642,7 +643,7 @@ function updateColorScheme(primary_color, secondary_color, tertiary_color){
     stylize(primary_color, ".daterangepicker td.active, .daterangepicker td.active:hover", "background-color");
     stylize(primary_color, "#compare-preview .is-primary", "color");
     stylize(primary_color, "#compare-preview .is-primary.button", "background-color");
-    stylize(primary_color, ".tag", "background-color");
+    stylize(primary_color, ".tag:not(.is-accent)", "background-color");
 
     if (traffic_chart){
       traffic_chart.data.datasets[0].backgroundColor = ColorLuminance(primary_color, 0.2);
@@ -654,7 +655,7 @@ function updateColorScheme(primary_color, secondary_color, tertiary_color){
     listing_info.secondary_color = secondary_color;
     $("#secondary-color-input").val(secondary_color);
     stylize(secondary_color, "#compare-preview .is-accent", "color");
-    stylize(secondary_color, "#compare-preview .is-accent.button", "background-color");
+    stylize(secondary_color, "#compare-preview .is-accent.button, #compare-preview .is-accent.tag", "background-color");
   }
   if (tertiary_color != false){
     listing_info.tertiary_color = tertiary_color;
@@ -793,7 +794,7 @@ function createTestOtherDomains(){
     "week",
     "month"
   ];
-  var max_listings = Math.round(Math.random()*(2) + 8);
+  var max_listings = Math.round(Math.random()*(5) + 8);
 
   //create a random amount of test listings
   for (var x = 0; x < max_listings; x++){

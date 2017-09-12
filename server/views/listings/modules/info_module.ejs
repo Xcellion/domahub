@@ -5,18 +5,17 @@
         <%# IS THE LISTED LISTED OR UNLISTED WITH DOMAHUB %>
         <% if (listing_info.unlisted && !compare) { %>
 
-            <div class="column">
             <%# UNLISTED LISTING IS OWNED BY SOMEONE %>
-                <% if (!listing_info.available) { %>
-                	<%- include("info/unbuyable_module.ejs", {
-                	  listing_info : listing_info
-                	}); %>
-                <% } else { %>
-                    <%- include("info/buyable_module.ejs", {
-                	  listing_info : listing_info
-                	}); %>
-                <% } %>
-            </div>
+            <%- include("info/unlisted_module.ejs", {
+              listing_info : listing_info
+            }); %>
+
+            <% if (listing_info.available) { %>
+              <%# BUYABLE AT A REGISTRAR %>
+              <%- include("info/buyable_module.ejs", {
+                listing_info : listing_info
+              }); %>
+            <% } %>
 
         <% } else { %>
             <div class="column">
@@ -28,6 +27,11 @@
 
                 <%# CATEGORIES MODULE %>
                 <%- include("info/categories_module.ejs", {
+                  listing_info : listing_info
+                }); %>
+
+                <%# APPRAISALS MODULE %>
+                <%- include("info/appraisals_module.ejs", {
                   listing_info : listing_info
                 }); %>
 

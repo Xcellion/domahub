@@ -1208,12 +1208,8 @@ function getWhoIs(req, res, next, domain_name, unlisted){
     if (data){
       var array = parser.parseWhoIsData(data);
       for (var x = 0; x < array.length; x++){
-        whoisObj[array[x].attribute] = array[x].value;
+        whoisObj[array[x].attribute.trim()] = array[x].value;
       }
-    }
-
-    if (whoisObj["End Text"]){
-      console.log("WHOIS Query limit exceeded!");
     }
 
     //who is for unlisted only
@@ -1227,7 +1223,13 @@ function getWhoIs(req, res, next, domain_name, unlisted){
         username: owner_name,
         unlisted: true,
         date_registered: whoisObj["Creation Date"],
-        date_updated: whoisObj["Updated Date"]
+        date_updated: whoisObj["Updated Date"],
+        registrar: whoisObj["Registrar"],
+      }
+
+      //development troubleshooting for whoisobj
+      if (node_env == "dev"){
+        listing_info.dev_whois = whoisObj;
       }
 
       //comparing, so make fake listing info
@@ -1256,8 +1258,9 @@ function getWhoIs(req, res, next, domain_name, unlisted){
         listing_info.traffic_module = 1;
         listing_info.info_module = 1;
       }
+
       //nobody owns it!
-      else if (!whoisObj["End Text"] && owner_name == "Nobody" && data && whoisObj.source != "IANA"){
+      else if (whoisObj["End Text"] && whoisObj["End Text"].indexOf("No match for domain ") != -1 && owner_name == "Someone out there" && data){
         listing_info.available = true;
         listing_info.username = "Nobody yet!";
       }
@@ -1274,8 +1277,14 @@ function getWhoIs(req, res, next, domain_name, unlisted){
 
     //domain is listed on DomaHub, we just need to get the registrar creation and last updated date
     else {
+      //development troubleshooting for whoisobj
+      if (node_env == "dev"){
+        req.session.listing_info.dev_whois = whoisObj;
+      }
+
       req.session.listing_info.date_updated = whoisObj["Updated Date"];
       req.session.listing_info.date_registered = whoisObj["Creation Date"];
+      req.session.listing_info.registrar = whoisObj["Registrar"],
 
       next();
     }

@@ -10,7 +10,7 @@ $(document).ready(function() {
     $(".footer").removeClass('is-hidden');
   }
 
-  //date registered format
+  //date registered for info module
   if (listing_info.date_registered){
     $("#date_registered").text(moment(listing_info.date_registered).format("MMMM DD, YYYY"));
   }
@@ -90,7 +90,6 @@ function getTickerData(loadmore){
 
     //how many to load at a time;
     var max_count = 10;
-    loadingDots($("#ticker-loading"));
 
     $.ajax({
       url: "/listing/" + listing_info.domain_name + "/ticker",
@@ -104,7 +103,6 @@ function getTickerData(loadmore){
     }).done(function(data){
       //remove the loading message
       $("#ticker-loading").addClass('is-hidden');
-      clearLoadingDots($("#ticker-loading"));
 
       if (data.state == "success"){
         //add to the session listing_info
@@ -149,7 +147,7 @@ function editTickerDates(){
   }
 
   if (listing_info.date_registered){
-    $("#ticker-registered").removeClass('is-hidden');
+    $("#ticker-registered").removeClass('is-hidden').appendTo("#ticker-wrapper");
     $("#ticker-registered-date").text("This domain was first registered on " + moment(listing_info.date_registered).format("MMMM DD, YYYY") + ".");
   }
 }
@@ -683,30 +681,6 @@ function getHost(href) {
   l.href = href;
   return l.hostname.replace("www.", "");
 };
-
-//keep appending dots to loading message
-function loadingDots(elem){
-  var max_dots = 4;
-  var cur_dots = 0;
-  var original_text = elem.text();
-
-  elem.data("interval", window.setInterval(function(){
-    elem.data("original_text", original_text);
-    cur_dots++;
-    elem.text(elem.text() + ".");
-
-    if (cur_dots >= max_dots){
-      cur_dots = 0;
-      elem.text(original_text);
-    }
-  }, 100));
-}
-
-//function to stop the loading message interval
-function clearLoadingDots(elem){
-  clearInterval(elem.data("interval"));
-  elem.text(elem.data("original_text"));
-}
 
 //function to get query string
 function getParameterByName(name, url) {

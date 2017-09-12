@@ -3,23 +3,29 @@
     You can rent any subpage on this domain to display any web content you desire. Try out the domain name before you buy at a fraction of the price!
   </p>
   <p class="margin-bottom-10">
-    <a href="/faq#renting" class="is-primary">
+    Click the domain name on the left to edit the subpage and use the calendar below to select the desired dates.
+  </p>
+  <p class="margin-bottom-10">
+    <a href="https://domahub.com/faq#renting" class="is-info is-underlined">
       How does renting this domain work?
     </a>
   </p>
-  <div class='is-bold'>
-    <span id="total-price" class='margin-right-5 is-hidden'>Total: </span>
+  <div class='is-bold margin-bottom-10'>
+    <span class='total-price margin-right-5 is-hidden'>Total - </span>
     <span id="orig-price" class='margin-right-5 is-linethrough is-hidden'></span>
-    <span id="actual-price">Total - $0</span>
+    <span class="actual-price">Total - $0</span>
   </div>
   <p id="calendar-regular-message" class='is-hidden'>
-    Select your desired date and time:
+    Select your desired dates:
   </p>
   <p id="calendar-error-message" class='is-danger is-hidden'></p>
-  <p id="calendar-loading-message">Now loading dates</p>
+  <p id="calendar-loading-message">
+    <span class="icon is-small v-align-middle"><i class="fa fa-spin fa-refresh"></i></span>
+    <span class="v-align-middle">Now loading dates</span>
+  </p>
   <input id="calendar" class="input margin-bottom-10 margin-top-10 is-disabled" placeholder="Anytime">
   <a id="checkout-button" tabindex="0" class="is-disabled button no-shadow is-primary is-stylish">
     <span class="icon is-small"><i class="fa fa-shopping-cart"></i></span>
-    <span>Checkout</span>
+    <span>Checkout<span class="total-price is-hidden"> - </span><span class="actual-price"></span></span>
   </a>
 </div>

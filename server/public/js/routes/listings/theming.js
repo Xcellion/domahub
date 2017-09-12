@@ -7,8 +7,6 @@ $(document).ready(function() {
   if (listing_info.premium){
     setupCustomColors();
 
-    stylize(listing_info.secondary_color, "#typed-slash", "color");
-
     if (listing_info.background_image){
       $("#compare-preview").css("background", "url(" + listing_info.background_image + ") center/cover no-repeat").on("error", function(){
         $(this).css({
@@ -19,10 +17,6 @@ $(document).ready(function() {
     }
 
     if (listing_info.logo){
-      //hide dh logo
-      $("#powered-by").html('&nbsp;');
-      $("#dh_logo").addClass('is-hidden');
-
       //show custom logo
       $("#custom_logo").attr("src", listing_info.logo).on("error", function(){
         console.log("Error loading logo!");
@@ -31,11 +25,6 @@ $(document).ready(function() {
     else {
       $(".footer").addClass('is-hidden');
     }
-  }
-
-  //if not using the compare module, use default DH styling
-  else if (compare == undefined || !compare){
-    setupDefaultColors();
   }
 });
 
@@ -90,12 +79,8 @@ function setupCustomColors(){
   stylize(listing_info.tertiary_color, ".is-info", "color");
   stylize(listing_info.secondary_color, ".is-accent", "color");
   stylize(listing_info.secondary_color, ".is-accent.button", "background-color");
+  stylize(listing_info.secondary_color, "#typed-slash", "color");
   stylize(listing_info.background_color, "#compare-preview", "background-color");
   stylize(listing_info.font_name, "#domain-title", "font-family");
   stylize(listing_info.font_name, "#typed-slash", "font-family");
-}
-
-//set up default DH colors
-function setupDefaultColors(){
-  stylize(primaryColor, ".tag", "background-color");
 }

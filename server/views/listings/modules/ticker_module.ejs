@@ -17,8 +17,9 @@
       <div class="ticker-text">
         <p>
           <span id="views-total" class="is-inline">0</span>
-          <span id="views-plural"></span> viewed the rented websites using this domain in the past
+          <span id="views-plural"></span> viewed the various rented websites that used this domain in the past
           <span id="views-time">day</span>.
+          <a href="https://domahub.com/faq#renting" class="is-info is-underlined">What does this mean?</a>
         </p>
       </div>
     </li>
@@ -34,6 +35,15 @@
         <p id="ticker-created-date"></p>
       </div>
     </li>
-    <li id="ticker-loading" class='ticker-row'>Now loading recent history</li>
+    <li id="ticker-registered" class='ticker-row is-hidden'>
+      <span class='ticker-icon-color is-danger'><i class="margin-right-10 fa fa-thumbs-up ticker-icon"></i></span>
+      <div class="ticker-text">
+        <p id="ticker-registered-date"></p>
+      </div>
+    </li>
+    <li id="ticker-loading" class='ticker-row'>
+      <span class='icon is-small v-align-middle margin-right-5'><i class="fa fa-spin fa-refresh"></i></span>
+      <span class="v-align-middle">Now loading recent rental history</span>
+    </li>
   </ul>
 </div>
