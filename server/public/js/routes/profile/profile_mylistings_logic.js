@@ -249,11 +249,6 @@ function createRow(listing_info, rownum){
     tempRow.data("verified", false);
   }
 
-  //get offers since only tab available will be offers
-  if (listing_info.deposited || listing_info.accepted){
-    getDomainOffers(listing_info.domain_name);
-  }
-
   //update row specifics and add handlers
   updateDomainName(tempRow, listing_info);
   updateIcon(tempRow, listing_info);
@@ -312,14 +307,6 @@ function changeRow(row, listing_info, bool){
     //change domain name header and view button
     $(".current-domain-name").text(listing_info.domain_name);
     $("#current-domain-view").attr("href", "/listing/" + listing_info.domain_name);
-
-    //get offers if we havent yet
-    if ($(".drop-tab").not(".is-hidden").attr("id") == "offers-tab-drop" && listing_info.offers == undefined){
-      getDomainOffers(listing_info.domain_name);
-    }
-    else if ($(".drop-tab").not(".is-hidden").attr("id") == "stats-tab-drop" && listing_info.stats == undefined){
-      getDomainStats(listing_info.domain_name);
-    }
 
     //update inputs for purchased/accepted domain
     if (listing_info.deposited || listing_info.accepted){
@@ -424,6 +411,11 @@ function editRowPurchased(listing_info){
   $(".drop-tab").addClass('is-hidden');
   $("#offers-tab-drop").removeClass('is-hidden').show();
   $("#purchased-tab").addClass('is-active');
+
+  //get offers if we havent yet
+  if (listing_info.offers == undefined){
+    getDomainOffers(listing_info.domain_name);
+  }
 
   //update URL
   updateQueryStringParam("tab", "purchased");
