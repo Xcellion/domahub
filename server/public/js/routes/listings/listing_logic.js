@@ -5,11 +5,6 @@ $(document).ready(function() {
   $(".tab").eq(0).addClass('is-active');
   $(".module").eq(0).removeClass('is-hidden');
 
-  //dont remove footer if we're using the compare tool
-  if (!compare){
-    $(".footer").removeClass('is-hidden');
-  }
-
   //date registered for info module
   if (listing_info.date_registered){
     $("#date_registered").text(moment(listing_info.date_registered).format("MMMM DD, YYYY"));
@@ -495,8 +490,8 @@ function createTrafficChart(){
       labels: formatted_dataset.traffic_labels,
       datasets: [{
         label: "Website Views",
-        borderColor: "#3CBC8D",
-        backgroundColor: "rgba(60, 188, 141, 0.65)",
+        borderColor: (listing_info.traffic) ? listing_info.primary_color : "#3CBC8D",
+        backgroundColor: (listing_info.traffic) ? hexToRgbA(listing_info.primary_color).replace(",1)", ",.65)") : "rgba(60, 188, 141, 0.65)",
         data: formatted_dataset.traffic_views
       }]
     },
@@ -693,26 +688,17 @@ function getParameterByName(name, url) {
   return decodeURIComponent(results[2].replace(/\+/g, " "));
 }
 
-function ColorLuminance(hex, lum) {
-	// validate hex string
-	hex = String(hex).replace(/[^0-9a-f]/gi, '');
-	if (hex.length < 6) {
-		hex = hex[0]+hex[0]+hex[1]+hex[1]+hex[2]+hex[2];
-	}
-	lum = lum || 0;
-
-	// convert to decimal and change luminosity
-	var rgb = "#", c, i;
-	for (i = 0; i < 3; i++) {
-		c = parseInt(hex.substr(i*2,2), 16);
-    //prevent getting too light
-    if (c >= 175){
-      c = 175;
+function hexToRgbA(hex){
+    var c;
+    if(/^#([A-Fa-f0-9]{3}){1,2}$/.test(hex)){
+        c= hex.substring(1).split('');
+        if(c.length== 3){
+            c= [c[0], c[0], c[1], c[1], c[2], c[2]];
+        }
+        c= '0x'+c.join('');
+        return 'rgba('+[(c>>16)&255, (c>>8)&255, c&255].join(',')+',1)';
     }
-		c = Math.round(Math.min(Math.max(0, c + (c * lum)), 255)).toString(16);
-		rgb += ("00"+c).substr(c.length);
-	}
-	return rgb;
+    throw new Error('Bad Hex');
 }
 
 //</editor-fold>

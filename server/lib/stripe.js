@@ -543,13 +543,18 @@ module.exports = {
           console.log("SF: Premium is still active!");
           listing_info.premium = true;
         }
-        else {
+        else if (node_env != "dev"){
           //delete it from our database if it's wrong
           console.log("SF: Premium is NOT active!");
           req.session.new_account_info = {
             stripe_subscription_id : null
           }
           listing_info.premium = false;
+        }
+        //TEST ONLY -- CHANGE AS NEEDED
+        else if (node_env == "dev") {
+          console.log("SF: Using live Stripe key in test mode!");
+          listing_info.premium = true;
         }
         next();
       });
@@ -575,10 +580,12 @@ module.exports = {
       //check it against stripe
       stripe.subscriptions.retrieve(req.user.stripe_subscription_id, function(err, subscription) {
         if (err || !subscription){
-          console.log("SF: Premium is NOT active!");
           //delete it from our database if it's wrong
-          req.session.new_account_info = {
-            stripe_subscription_id : null
+          if (node_env != "dev"){
+            console.log("SF: Premium is NOT active!");
+            req.session.new_account_info = {
+              stripe_subscription_id : null
+            }
           }
         }
         next();
@@ -597,7 +604,7 @@ module.exports = {
 
       //check it against stripe
       stripe.customers.retrieve(req.user.stripe_customer_id, function(err, customer) {
-        if ((customer && customer.deleted) || (err && !customer && err.message.indexOf("a similar object exists in live mode") == -1)){
+        if ((customer && customer.deleted) || (err && !customer) && node_env != "dev"){
           console.log("SF: Not a real Stripe customer! Updating our database appropriately...");
 
           //update our DH database to remove stripe_customer_id
@@ -618,9 +625,9 @@ module.exports = {
           }
           next();
         }
-
-        //using live mode subscription key in test mode
-        else {
+        //TEST ONLY -- CHANGE AS NEEDED
+        else if (node_env == "dev"){
+          console.log("SF: Using live Stripe key in test mode!");
           next();
         }
       });
@@ -639,7 +646,7 @@ module.exports = {
 
       //check it against stripe
       stripe.subscriptions.retrieve(req.user.stripe_subscription_id, function(err, subscription) {
-        if (err && !subscription && err.message.indexOf("a similar object exists in live mode") == -1){
+        if (err && !subscription && node_env != "dev"){
           console.log("SF: Not a real Stripe subscription! Updating our database appropriately...");
 
           //update our DH database to remove stripe_subscription_id
@@ -658,7 +665,7 @@ module.exports = {
         }
 
         //using live mode subscription key in test mode
-        else {
+        else if (node_env == "dev"){
           console.log("SF: Using live Stripe key in test mode!");
           req.user.premium_exp_date = (new Date().getTime() + 2592000000) / 1000;
           req.user.premium_expiring = false;

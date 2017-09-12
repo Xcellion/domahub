@@ -141,6 +141,7 @@ listing_model.prototype.getVerifiedListing = function(domain_name, callback){
         listings.min_price,\
         listings.description,\
         listings.description_hook,\
+        listings.description_footer,\
         listings.categories,\
         listings.paths,\
         listings.background_image,\
@@ -273,6 +274,7 @@ listing_model.prototype.getCurrentRental = function(domain_name, path, callback)
         rentals.*,\
         listings.domain_name,\
         listings.description_hook,\
+        listings.description_footer,\
         listings.id,\
         rental_times.date,\
         rental_times.duration \
@@ -645,3 +647,5 @@ function toUTC(date, offset){
   date = new Date(date - (offset * 60 * 1000));
   return new Date(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(),  date.getUTCHours(), date.getUTCMinutes(), date.getUTCSeconds());
 }
+
+//</editor-fold>
