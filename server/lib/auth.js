@@ -238,22 +238,26 @@ module.exports = {
 
     //already verified
     else if (req.user.type == 1){
-      error.handler(req, res, "Account is already verified!", "json");
+      res.redirect("/profile");
     }
 
     //already requested and token still good
     if (req.user.token && req.user.token_exp && (new Date().getTime() < new Date(req.user.token_exp).getTime())){
+      console.log("F: Sending existing token!");
+
       //use helper function to email someone
       emailSomeone(path.resolve(process.cwd(), 'server', 'views', 'email', 'email_verify.ejs'), {
-        user: user    //ESJ Variables
+        //ESJ Variables
+        username : req.user.username,
+        token : req.user.token
       }, {
         //email variables
         to: user.email,
         from: 'support@domahub.com',
         subject: "Hi, " + user.username + '! Please verify your email address for DomaHub!',
       }, function(state){
+        req.logout();
         if (state == "success"){
-          req.logout();
           res.send({
             state: "success"
           });
@@ -692,6 +696,7 @@ function emailSomeone(pathEJSTemplate, EJSVariables, emailDetails, cb){
   //read the file and add appropriate variables
   ejs.renderFile(pathEJSTemplate, EJSVariables, null, function(err, html_str){
     if (err){
+      console.log(err);
       cb("error");
     }
     else {
