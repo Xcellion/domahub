@@ -357,6 +357,7 @@ button[data-balloon] {
   max-width: 500px; }
 
 #description-text {
+  word-break: break-all;
   white-space: pre-wrap; }
 
 #domain-display h1 {
