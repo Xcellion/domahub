@@ -67,7 +67,7 @@ $(document).ready(function() {
       name: "tutorial",
       template: "<div class='popover tour'> \
       <h3 class='popover-title'></h3> \
-      <div class='popover-content content'></div> \
+      <div class='popover-content margin-top-0 content'></div> \
       <div class='popover-navigation'> \
       <button class='button is-small' data-role='prev'>« Prev</button> \
       <button class='button is-small is-primary' data-role='next'>Next »</button> \
@@ -107,7 +107,7 @@ $(document).ready(function() {
             $("#show-menu-button").removeClass('is-primary');
           },
           template: "<div class='popover tour arrow-top'> \
-          <div class='popover-content content'></div> \
+          <div class='popover-content margin-top-0 content'></div> \
           <div class='popover-navigation'> \
           <button class='button is-small' data-role='prev'>« Prev</button> \
           <button class='button is-small' data-role='end'>End Tutorial</button> \
@@ -126,7 +126,7 @@ $(document).ready(function() {
           },
           template: "<div class='popover tour arrow-left'> \
           <h3 class='popover-title'></h3> \
-          <div class='popover-content content'></div> \
+          <div class='popover-content margin-top-0 content'></div> \
           <div class='popover-navigation'> \
           <button class='button is-small' data-role='prev'>« Prev</button> \
           <button class='button is-small is-primary' data-role='next'>Next »</button> \
@@ -157,7 +157,7 @@ $(document).ready(function() {
           },
           template: "<div class='popover tour arrow-top'> \
           <h3 class='popover-title'></h3> \
-          <div class='popover-content content'></div> \
+          <div class='popover-content margin-top-0 content'></div> \
           <div class='popover-navigation'> \
           <button class='button is-small' data-role='prev'>« Prev</button> \
           <button class='button is-small is-primary' data-role='next'>Next »</button> \
@@ -182,7 +182,7 @@ $(document).ready(function() {
             $("#compare-preview").find(".tour-backdrop").remove();
           },
           template: "<div class='popover tour arrow-top'> \
-          <div class='popover-content content'></div> \
+          <div class='popover-content margin-top-0 content'></div> \
           <div class='popover-navigation'> \
           <button class='button is-small' data-role='prev'>« Prev</button> \
           <button class='button is-small' data-role='end'>End Tutorial</button> \
@@ -207,7 +207,7 @@ $(document).ready(function() {
           },
           template: "<div class='popover tour arrow-top'> \
           <h3 class='popover-title'></h3> \
-          <div class='popover-content content'></div> \
+          <div class='popover-content margin-top-0 content'></div> \
           <div class='popover-navigation'> \
           <button class='button is-small' data-role='prev'>« Prev</button> \
           <button class='button is-small is-primary' data-role='next'>Next »</button> \
@@ -228,7 +228,7 @@ $(document).ready(function() {
           },
           template: "<div class='popover tour arrow-right'> \
           <h3 class='popover-title'></h3> \
-          <div class='popover-content content'></div> \
+          <div class='popover-content margin-top-0 content'></div> \
           <div class='popover-navigation'> \
           <button class='button is-small' data-role='prev'>« Prev</button> \
           <button class='button is-small is-primary' data-role='next'>Next »</button> \
@@ -251,7 +251,7 @@ $(document).ready(function() {
             $("#compare-menu").find(".tour-backdrop").remove();
           },
           template: "<div class='popover tour'> \
-          <div class='popover-content content'></div> \
+          <div class='popover-content margin-top-0 content'></div> \
           <div class='popover-navigation'> \
           <button class='button is-small' data-role='prev'>« Prev</button> \
           <button class='button is-small' data-role='end'>End Tutorial</button> \
@@ -288,7 +288,7 @@ $(document).ready(function() {
           },
           template: "<div class='popover tour arrow-bottom'> \
           <h3 class='popover-title'></h3> \
-          <div class='popover-content content'></div> \
+          <div class='popover-content margin-top-0 content'></div> \
           <div class='popover-navigation'> \
           <button class='button is-small' data-role='prev'>« Prev</button> \
           <button class='button is-small is-primary' data-role='next'>Next »</button> \
@@ -308,7 +308,7 @@ $(document).ready(function() {
           },
           template: "<div class='popover tour'> \
             <h3 class='popover-title'></h3> \
-            <div class='popover-content content'></div> \
+            <div class='popover-content margin-top-0 content'></div> \
             <div> \
               <a href='/signup' class='button is-small is-primary'>That was awesome! Sign me up.</a> \
               <button class='button is-small' data-role='end'>I still want to poke around a bit.</button> \
@@ -446,7 +446,7 @@ function updateDescription(){
           name: "description",
           template: "<div class='popover tour'> \
           <h3 class='popover-title'></h3> \
-          <div class='popover-content content'></div> \
+          <div class='popover-content margin-top-0'></div> \
           </div>",
           onStart: function(){
             $("#compare-preview").find(".tour-backdrop").remove();
