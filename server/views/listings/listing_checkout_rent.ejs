@@ -106,7 +106,10 @@
                                 <i class="fa fa-link"></i>
                               </p>
                               <p class="control">
-                                <button id="forward-submit" class="checkout-track address-next-button is-disabled button is-large is-primary is-stylish">Forward</button>
+                                <button id="forward-submit" class="checkout-track address-next-button is-disabled button is-large is-primary is-stylish">
+                                  <span class="icon"><i class="fa fa-check-circle"></i></span>
+                                  <span>Submit</span>
+                                </button>
                               </p>
                             </div>
                             <p class='margin-bottom-10 margin-top-30'>Here are some example websites for inspiration!</p>
@@ -154,7 +157,10 @@
                               <i class="fa fa-link"></i>
                             </p>
                             <p class="control">
-                              <button id="link-submit" class="checkout-track address-next-button is-disabled button is-large is-primary is-stylish">Submit</button>
+                              <button id="link-submit" class="checkout-track address-next-button is-disabled button is-large is-primary is-stylish">
+                                <span class="icon"><i class="fa fa-check-circle"></i></span>
+                                <span>Submit</span>
+                              </button>
                             </p>
                           </div>
                           <p class='margin-bottom-10 margin-top-30'>These websites provide great content for your domain rental.</p>
@@ -185,7 +191,7 @@
                               </a>
                               <div class="content">
                                 <p>
-                                  Display subreddits, threads, or comments.
+                                  Display trending subreddits, threads, or comments.
                                 </p>
                               </div>
                             </div>
@@ -202,7 +208,10 @@
                               <i class="fa fa-link"></i>
                             </p>
                             <p class="control">
-                              <button id="build-submit" class="checkout-track address-next-button is-disabled button is-large is-primary is-stylish">Submit</button>
+                              <button id="build-submit" class="checkout-track address-next-button is-disabled button is-large is-primary is-stylish">
+                                <span class="icon"><i class="fa fa-check-circle"></i></span>
+                                <span>Submit</span>
+                              </button>
                             </p>
                           </div>
                           <p class='margin-bottom-10 margin-top-30'>Here are some premium website creation services!</p>
@@ -287,7 +296,10 @@
                         </div>
                       </div>
                       <div class="control">
-                        <button id="site-cancel" class="checkout-track button is-danger is-stylish back-button">Cancel</button>
+                        <button id="site-cancel" class="checkout-track button is-stylish back-button">
+                          <span class="icon is-small"><i class="fa fa-long-arrow-left"></i></span>
+                          <span>Go back</span>
+                        </button>
                       </div>
                     </div>
                   </div>
@@ -351,9 +363,15 @@
               <% } %>
 
               <div class="control margin-top-30">
-                <a id="back-to-address-button" tabindex="0" class="checkout-track button is-danger no-shadow is-stylish">Go Back</a>
+                <a id="back-to-address-button" tabindex="0" class="checkout-track button no-shadow is-stylish">
+                  <span class="icon is-small"><i class="fa fa-long-arrow-left"></i></span>
+                  <span>Go back</span>
+                </a>
                 <% if (new_rental_info.price != 0) { %>
-                  <a id="checkout-button" tabindex="0" class="checkout-track button is-primary no-shadow is-stylish">Confirm & Pay</a>
+                  <a id="checkout-button" tabindex="0" class="checkout-track button is-primary no-shadow is-stylish">
+                    <span class="icon is-small"><i class="fa fa-shopping-cart"></i></span>
+                    <span>Confirm & Pay</span>
+                  </a>
                 <% } else { %>
                   <a id="checkout-button" tabindex="0" class="checkout-track button is-primary no-shadow is-stylish">Confirm</a>
                 <% } %>
