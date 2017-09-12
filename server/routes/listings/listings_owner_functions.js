@@ -202,7 +202,7 @@ module.exports = {
     }
 
     //loop through and parse the CSV file, check every entry and format it correctly
-      parseCSVFile(req.file.path, onError, function(bad_listings, good_listings){
+    parseCSVFile(req.file.path, onError, function(bad_listings, good_listings){
 
       //none were good
       if (good_listings.length == 0){
@@ -380,8 +380,8 @@ module.exports = {
       }
       //wait for all promises to finish
       Q.allSettled(promises)
-       .then(function(results) {
-         req.session.new_listing_info = {};
+      .then(function(results) {
+        req.session.new_listing_info = {};
         //figure out which promises failed / passed
         for (var y = 0; y < results.length; y++){
           if (results[y].state == "fulfilled"){
@@ -462,7 +462,7 @@ module.exports = {
   //function to check if listing has been purchased
   checkListingPurchased : function(req, res, next){
     console.log("F: Checking if the listing was already purchased or accepted...");
-    
+
     var listing_obj = getUserListingObj(req.user.listings, req.params.domain_name)
     if (listing_obj.accepted){
       error.handler(req, res, "You have already accepted an offer for this domain! Please wait for the offerer to complete the payment process.", "json");
@@ -643,8 +643,9 @@ module.exports = {
     var listing_info = getUserListingObj(req.user.listings, req.params.domain_name);
 
     var status = parseFloat(req.body.status);
-        var description = req.body.description;
-        var description_hook = req.body.description_hook;
+    var description = req.body.description;
+    var description_hook = req.body.description_hook;
+    var description_footer = req.body.description_footer;
 
     //prices
     var price_rate = req.body.price_rate;
@@ -678,16 +679,16 @@ module.exports = {
     }
     categories_clean = categories_clean.join(" ");
 
-    //no description
-    if (req.body.description && description.length == 0){
-      error.handler(req, res, "Invalid listing description!", "json");
-    }
-    //no short description
-    else if (req.body.description_hook && description_hook.length == 0){
+    //invalid short description
+    if (req.body.description_hook && (description_hook.length < 0 || description_hook.length > 75)){
       error.handler(req, res, "Invalid short listing description!", "json");
     }
+    //invalid footer description
+    else if (req.body.description_footer && (description_footer.length < 0 || description_footer.length > 75)){
+      error.handler(req, res, "The footer description cannot be more than 75 characters!", "json");
+    }
     //no paths
-    else if (req.body.paths && paths.length == 0){
+    else if (req.body.paths && paths_clean.length == 0){
       error.handler(req, res, "Invalid example pathes!", "json");
     }
     //invalid categories
@@ -719,6 +720,7 @@ module.exports = {
       req.session.new_listing_info.status = status;
       req.session.new_listing_info.description = description;
       req.session.new_listing_info.description_hook = description_hook;
+      req.session.new_listing_info.description_footer = description_footer;
       req.session.new_listing_info.price_type = price_type;
       req.session.new_listing_info.price_rate = price_rate;
       req.session.new_listing_info.buy_price = (buy_price == "" || buy_price == 0) ? "" : buy_price;
@@ -1114,22 +1116,22 @@ function parseCSVFile(sourceFilePath, errorHandler, done){
   var domains_sofar = [];
   var row = 0;
 
-    var source = fs.createReadStream(sourceFilePath);
-    var parser = parse({
+  var source = fs.createReadStream(sourceFilePath);
+  var parser = parse({
     skip_empty_lines: true
-    });
+  });
 
-    parser.on("readable", function(){
-        var record;
+  parser.on("readable", function(){
+    var record;
 
     //loop through all rows
-        while (record = parser.read()) {
+    while (record = parser.read()) {
       record_check = checkCSVRow(record, domains_sofar);
       domains_sofar.push(record[0]);
       row++;
 
       //check if the row is legit
-            if (record_check.state == "error"){
+      if (record_check.state == "error"){
         bad_listing = {
           row: row,
           data : record,
@@ -1140,20 +1142,20 @@ function parseCSVFile(sourceFilePath, errorHandler, done){
       else {
         good_listings.push(record);
       }
-        }
-    });
+    }
+  });
 
-    parser.on("error", function(error){
+  parser.on("error", function(error){
     console.log(error);
     errorHandler();
-    });
+  });
 
   //pass it back to create session variables
-    parser.on("end", function(){
-        done(bad_listings, good_listings);
-    });
+  parser.on("end", function(){
+    done(bad_listings, good_listings);
+  });
 
-    source.pipe(parser);
+  source.pipe(parser);
 }
 
 //helper function to update req.user.listings after updating a listing
