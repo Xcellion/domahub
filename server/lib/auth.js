@@ -679,12 +679,14 @@ function generateVerify(req, res, email, username, cb){
       else {
         //use helper function to email someone
         emailSomeone(path.resolve(process.cwd(), 'server', 'views', 'email', 'email_verify.ejs'), {
-          user: req.user    //ESJ Variables
+          //ESJ Variables
+          username : username,
+          token : verify_token
         }, {
           //email variables
-          to: req.user.email,
+          to: email,
           from: 'support@domahub.com',
-          subject: "Hi, " + req.user.username + '! Please verify your email address for DomaHub!',
+          subject: "Hi, " + username + '! Please verify your email address for DomaHub!',
         }, cb);
       }
     });
