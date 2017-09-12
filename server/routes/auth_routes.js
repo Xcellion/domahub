@@ -18,12 +18,6 @@ module.exports = function(app, auth){
     }
   ]);
 
-  app.get("/signup/:code", [
-    auth.checkCode,
-    auth.signup,
-    auth.signupCode
-  ]);
-
   //to render reset/verify page
   app.get("/reset/:token", [
     auth.isNotLoggedIn,
@@ -35,14 +29,6 @@ module.exports = function(app, auth){
     auth.checkToken,
     auth.renderVerify
   ]);
-
-  // //to render the request verify page
-  // app.get("/verify", [
-  //   auth.checkLoggedIn,
-  //   function(req, res){
-  //     res.redirect('/profile');
-  //   }
-  // ]);
 
   //post routes for authentication
   app.post([

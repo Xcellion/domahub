@@ -52,22 +52,22 @@
                             <table border="0" cellpadding="0" cellspacing="0" id="emailBody">
                                 <tr>
                                   <td align="center" valign="top" colspan="5" style="font-size:18px;padding-bottom:20px;">
-                                    Hello,
+                                    Hello <%= user.username %>,
                                   </td>
                                 </tr>
                                 <tr>
                                   <td align="left" valign="top" colspan="5" style="padding-bottom:20px;">
-                                    Please click on the following link, or paste it into your browser to verify your email address.
+                                    Please click on the button below to verify your email address.
                                   </td>
                                 </tr>
                                 <tr>
                                   <td align="left" valign="top" colspan="5" style="padding-bottom:20px;">
-                                    LINK
+                                    <a href="https://domahub.com/verify/<%= user.token %>">Verify My Account</a>
                                   </td>
                                 </tr>
                                 <tr>
                                   <td align="left" valign="top" colspan="5" style="padding-bottom:20px;">
-                                    The link will expire in one hour.
+                                    The above button/link will expire in one hour.
                                   </td>
                                 </tr>
                             </table>
@@ -78,7 +78,7 @@
                             <table border="0" cellpadding="10" cellspacing="0" width="100%" id="emailFooter">
                                 <tr>
                                     <td align="center" valign="top">
-                                        If the link has expired, please go to the <a href="https://www.domahub.com/login">log in</a> page,
+                                        If the above link has expired, please go to the <a href="https://www.domahub.com/login">log in</a> page,
                                         and log in with your credentials. You will be able to resend the verification email.
                                     </td>
                                 </tr>
