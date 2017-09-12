@@ -793,7 +793,7 @@ function createTestOtherDomains(){
     "week",
     "month"
   ];
-  var max_listings = Math.floor(Math.random()*(2) + 8);
+  var max_listings = Math.round(Math.random()*(2) + 8);
 
   //create a random amount of test listings
   for (var x = 0; x < max_listings; x++){
