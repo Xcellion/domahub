@@ -443,27 +443,19 @@ module.exports = {
           if (result.state=="error"){error.handler(req, res, result.info);}
           else {
 
-            var email = {
+            //use helper function to email someone
+            emailSomeone(path.resolve(process.cwd(), 'server', 'views', 'email', 'forgot_password.ejs'), {
+              //ESJ Variables
+              token : token
+            }, {
+              //email variables
               to: req.body.email,
-              from: 'noreply@domahub.com',
+              from: 'support@domahub.com',
               subject: 'Forgot your password for domahub?',
-              text: 'You are receiving this because you (or someone else) requested the reset of the password for your account.\n\n' +
-              'Please click on the following link, or paste this into your browser to complete the process:\n\n' +
-              'http://' + req.headers.host + '/reset/' + token + '\n\n' +
-              'If you did not request this, please ignore this email and your password will remain unchanged.\n' +
-              'The link above will expire in 1 hour.'
-            };
-
-            //send email
-            mailer.sendMail(email, function(err) {
-              if (err) {
-                console.log(err)
-              }
-              else {
-                res.send({
-                  state: "success"
-                })
-              }
+            }, function(err) {
+              res.send({
+                state: "success"
+              });
             });
           }
         });
@@ -679,12 +671,14 @@ function generateVerify(req, res, email, username, cb){
       else {
         //use helper function to email someone
         emailSomeone(path.resolve(process.cwd(), 'server', 'views', 'email', 'email_verify.ejs'), {
-          user: req.user    //ESJ Variables
+          //ESJ Variables
+          username : username,
+          token : verify_token
         }, {
           //email variables
-          to: req.user.email,
+          to: email,
           from: 'support@domahub.com',
-          subject: "Hi, " + req.user.username + '! Please verify your email address for DomaHub!',
+          subject: "Hi, " + username + '! Please verify your email address for DomaHub!',
         }, cb);
       }
     });
