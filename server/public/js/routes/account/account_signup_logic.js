@@ -2,7 +2,7 @@ $(document).ready(function() {
 
   //prevent space in username
   $("input").keydown(function(e) {
-    $("#message").text("Create a new account below.");
+    $("#message").text("Create a new account below.").removeAttr("style");
 
     if (e.keyCode == 32){
       e.preventDefault();
@@ -107,6 +107,12 @@ $(document).ready(function() {
 function validateCaptcha(){
   var captcha_response = grecaptcha.getResponse();
   return captcha_response.length != 0;
+}
+
+//to validate an email using regex
+function validateEmail(email) {
+    var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(email);
 }
 
 //helper function to hide or show checkmark / x-mark
