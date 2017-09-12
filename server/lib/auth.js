@@ -1,13 +1,13 @@
-var  account_model = require('../models/account_model.js');
-
+//<editor-fold>------------------------------------------VARIABLES---------------------------------------
+var account_model = require('../models/account_model.js');
 var LocalStrategy = require('passport-local').Strategy;
 var bcrypt = require('bcrypt-nodejs');
 var validator = require("validator");
 var crypto = require("crypto");
-
 var request = require('request');
 var moment = require('moment');
-
+var ejs = require('ejs');
+var path = require("path");
 var nodemailer = require('nodemailer');
 var sgTransport = require('nodemailer-sendgrid-transport');
 var mailOptions = {
@@ -17,7 +17,11 @@ var mailOptions = {
 }
 var mailer = nodemailer.createTransport(sgTransport(mailOptions));
 
+//</editor-fold>
+
 module.exports = {
+
+  //<editor-fold>------------------------------------------PASSPORT---------------------------------------
 
   //constructor
   init: function(db, pp, e){
@@ -130,26 +134,9 @@ module.exports = {
     }));
   },
 
-  //check if signup beta code is legit
-  checkCode : function(req, res, next){
-    if (!req.params.code){
-      res.redirect('/');
-    }
-    else {
-      Account.checkSignupCode(req.params.code, function(result){
-        if (result.state == "error" || result.info.length == 0){
-          res.redirect('/');
-        }
-        else {
-          next();
-        }
-      });
-    }
-  },
+  //</editor-fold>
 
-  signupCode : function(req, res, next){
-    console.log("Logged in, do something");
-  },
+  //<editor-fold>------------------------------------------CHECKS---------------------------------------
 
   //make sure user is logged in before doing anything
   checkLoggedIn : function(req, res, next) {
@@ -163,7 +150,7 @@ module.exports = {
 
       //no verified email, make them verify
       if (req.user.type == 0){
-        res.render("account/pw_verify.ejs", {message: messageReset(req)});
+        res.render("account/page_for_not_verified_email.ejs", {message: messageReset(req)});
       }
       else {
         req.session.touch();  //reset maxAge for session since user did something
@@ -200,8 +187,12 @@ module.exports = {
     }
   },
 
-  //resets message
-  messageReset: messageReset,
+  //</editor-fold>
+
+  //<editor-fold>------------------------------------------RENDERS---------------------------------------
+
+  //resets message before returning it
+  messageReset : messageReset,
 
   //log out of the session
   logout: function(req, res) {
@@ -224,23 +215,59 @@ module.exports = {
 
   //forgot my password
   forgot: function(req, res){
-    res.render("account/pw_forgot.ejs", {message: messageReset(req)});
+    res.render("account/page_for_pw_forgot.ejs", {message: messageReset(req)});
   },
 
   //function to check token for resetting password
   renderReset: function(req, res){
-    res.render("account/pw_reset.ejs", {message: messageReset(req)});
+    res.render("account/page_for_pw_reset.ejs", {message: messageReset(req)});
   },
 
   //function to check token for verifying account email
   renderVerify: function(req, res){
-    res.render("account/verify_email.ejs", {message: messageReset(req)});
+    res.render("account/page_to_verify_email.ejs", {message: messageReset(req)});
   },
 
   //function to request verification
   requestVerify: function(req, res){
-    if ((!req.user.token_exp || !req.user.token) && req.isAuthenticated() && req.user.type == 0 && !req.user.requested && req.header("x-requested-with") == "XMLHttpRequest"){
-      req.user.requested = true;
+
+    //not logged in
+    if (!req.isAuthenticated()){
+      error.handler(req, res, "Please log in!", "json");
+    }
+
+    //already verified
+    else if (req.user.type == 1){
+      error.handler(req, res, "Account is already verified!", "json");
+    }
+
+    //already requested and token still good
+    if (req.user.token && req.user.token_exp && (new Date().getTime() < new Date(req.user.token_exp).getTime())){
+      //use helper function to email someone
+      emailSomeone(path.resolve(process.cwd(), 'server', 'views', 'email', 'email_verify.ejs'), {
+        user: user    //ESJ Variables
+      }, {
+        //email variables
+        to: user.email,
+        from: 'support@domahub.com',
+        subject: "Hi, " + user.username + '! Please verify your email address for DomaHub!',
+      }, function(state){
+        if (state == "success"){
+          req.logout();
+          res.send({
+            state: "success"
+          });
+        }
+        else {
+          res.send({
+            state: "error"
+          });
+        }
+      });
+    }
+
+    //generate new token
+    else {
       generateVerify(req, res, req.user.email, req.user.username, function(state){
         if (state == "success"){
           req.logout();
@@ -255,32 +282,11 @@ module.exports = {
         }
       });
     }
-    else if (!req.isAuthenticated()){
-      req.session.message = "You must log in first to verify your account!";
-      error.handler(req, res, "Please log in!", "json");
-    }
-    else if (req.user.type == 1){
-      error.handler(req, res, "Account is already verified!", "json");
-    }
-    else if (req.user.requested || (req.user.token && req.user.token_exp && (new Date().getTime() < new Date(req.user.token_exp)))){
-      resendVerify(req.user, function(state){
-        if (state == "success"){
-          req.logout();
-          res.send({
-            state: "success"
-          });
-        }
-        else {
-          res.send({
-            state: "error"
-          });
-        }
-      });
-    }
-    else {
-      error.handler(req, res, "Something went wrong with account verification!", "json");
-    }
   },
+
+  //</editor-fold>
+
+  //<editor-fold>------------------------------------------POSTS---------------------------------------
 
   //function to sign up for a new account
   signupPost: function(req, res, next){
@@ -538,7 +544,7 @@ module.exports = {
     Account.getAccountByToken(token, function(result){
       if (result.state=="error"){error.handler(req, res, result.info);}
       else if (!result.info.length){
-        error.handler(req, res, "Invalid token! Please click here to verify your account again!", "json");
+        error.handler(req, res, "Invalid token!", "json");
       }
       else {
         var email = result.info[0].email;
@@ -639,39 +645,18 @@ module.exports = {
     }
   },
 
-}
+  //</editor-fold>
 
-//helper function to reset a session message;
+}
+//<editor-fold>------------------------------------------HELPERS---------------------------------------
+
+//resets message before returning it
 function messageReset(req){
-  if (req.session){
-    var message = req.session.message;
-    delete req.session.message;
-    return message;
-  }
-}
-
-//function to resend same verification email link
-function resendVerify(user, cb){
-  console.log("F: Resending the same verification link...");
-  var email_message = {
-    to: user.email,
-    from: 'noreply@domahub.com',
-    subject: 'Verify your account at domahub!',
-    text: 'Hello, ' + user.username + '.\n\n' +
-    'Please click on the following link, or paste this into your browser to verify your email.\n\n' +
-    'http://domahub.com/verify/' + user.token + '\n\n' +
-    'The link above will expire in 1 hour.'
-  };
-
-  //send email
-  mailer.sendMail(email_message, function(err) {
-    if (err) {
-      cb(err);
-    }
-    else {
-      cb("success");
-    }
-  });
+ if (req.session){
+   var message = req.session.message;
+   delete req.session.message;
+   return message;
+ }
 }
 
 //helper function to verify account
@@ -692,26 +677,45 @@ function generateVerify(req, res, email, username, cb){
     Account.updateAccount(account_info, email, function(result){
       if (result.state=="error"){error.handler(req, res, result.info);}
       else {
-        var email_message = {
-          to: email,
-          from: 'noreply@domahub.com',
-          subject: 'Verify your account at domahub!',
-          text: 'Hello, ' + username + '.\n\n' +
-          'Please click on the following link, or paste this into your browser to verify your email.\n\n' +
-          'http://' + req.headers.host + '/verify/' + verify_token + '\n\n' +
-          'The link above will expire in 1 hour.'
-        };
-
-        //send email
-        mailer.sendMail(email_message, function(err) {
-          if (err) {
-            cb(err);
-          }
-          else {
-            cb("success");
-          }
-        });
+        //use helper function to email someone
+        emailSomeone(path.resolve(process.cwd(), 'server', 'views', 'email', 'email_verify.ejs'), {
+          user: user    //ESJ Variables
+        }, {
+          //email variables
+          to: user.email,
+          from: 'support@domahub.com',
+          subject: "Hi, " + user.username + '! Please verify your email address for DomaHub!',
+        }, cb);
       }
     });
   });
 }
+
+//helper function to email someone
+function emailSomeone(pathEJSTemplate, EJSVariables, emailDetails, cb){
+  console.log("F: Sending email!");
+
+  //read the file and add appropriate variables
+  ejs.renderFile(pathEJSTemplate, EJSVariables, null, function(err, html_str){
+    if (err){
+      cb("error");
+    }
+    else {
+      //set EJS template to body of email
+      emailDetails.html = html_str;
+
+      //send email
+      mailer.sendMail(emailDetails, function(err) {
+        if (err){
+          console.log(err);
+          cb("error");
+        }
+        else {
+          cb("success");
+        }
+      });
+    }
+  });
+}
+
+//</editor-fold>
