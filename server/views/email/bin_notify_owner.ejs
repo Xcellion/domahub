@@ -16,9 +16,6 @@
         a {
           cursor:pointer;text-decoration:none;
         }
-        a:hover {
-          opacity:0.8;
-        }
         .list-item {
           border:0;margin:0;padding:10px 0;border-bottom:1px solid #ddd;
         }
@@ -31,7 +28,7 @@
         </style>
     </head>
     <body>
-        <table border="0" cellpadding="0" cellspacing="0" height="100%" width="100%" id="bodyTable">
+        <table border="0" cellpadding="0" cellspacing="0" height="100%" width="100%" id="bodyTable" style="font-family: Verdana, sans-serif;">
             <tr>
                 <td align="center" valign="top">
                     <table border="0" cellpadding="20" cellspacing="0" width="600" id="emailContainer">
@@ -67,42 +64,42 @@
                                       </td>
                                     </tr>
                                     <tr>
-                                      <td align="left" class="list-item" colspan="1">
+                                      <td align="left" class="list-item" colspan="1" style="border:0;margin:0;padding:10px 0;border-bottom:1px solid #ddd;">
                                         Name
                                       </td>
-                                      <td aling="right" class="list-item" style="padding-left:20px;">
+                                      <td aling="right" class="list-item" style="padding-left:20px;border:0;margin:0;border-bottom:1px solid #ddd;">
                                         <%= offerer_name %>
                                       </td>
                                     </tr>
                                     <tr>
-                                      <td align="left" class="list-item">
+                                      <td align="left" class="list-item" style="border:0;margin:0;padding:10px 0;border-bottom:1px solid #ddd;">
                                         Email
                                       </td>
-                                      <td align="left" class="list-item" style="padding-left:20px;">
+                                      <td align="left" class="list-item" style="padding-left:20px;border:0;margin:0;border-bottom:1px solid #ddd;">
                                         <%= offerer_email %>
                                       </td>
                                     </tr>
                                     <tr>
-                                      <td align="left" class="list-item">
+                                      <td align="left" class="list-item" style="border:0;margin:0;padding:10px 0;border-bottom:1px solid #ddd;">
                                         Phone
                                       </td>
-                                      <td align="left" class="list-item" style="padding-left:20px;">
+                                      <td align="left" class="list-item" style="padding-left:20px;border:0;margin:0;border-bottom:1px solid #ddd;">
                                         <%= offerer_phone %>
                                       </td>
                                     </tr>
                                     <tr>
-                                      <td align="left" class="list-item">
+                                      <td align="left" class="list-item" style="border:0;margin:0;padding:10px 0;border-bottom:1px solid #ddd;">
                                         Sale Price
                                       </td>
-                                      <td align="left" class="list-item" style="padding-left:20px;">
+                                      <td align="left" class="list-item" style="padding-left:20px;border:0;margin:0;border-bottom:1px solid #ddd;">
                                         <%= price %>
                                       </td>
                                     </tr>
                                     <tr>
-                                      <td align="left" valign="top" class="list-item">
+                                      <td align="left" valign="top" class="list-item" style="border:0;margin:0;padding:10px 0;border-bottom:1px solid #ddd;">
                                         Message
                                       </td>
-                                      <td align="left" valign="top" class="list-item message"><%= message %></td>
+                                      <td align="left" valign="top" class="list-item message" style="border:0;margin:0;border-bottom:1px solid #ddd;word-wrap:break-word;padding-left:20px;white-space:pre-wrap;"><%= message %></td>
                                     </tr>
                                     <tr>
                                       <td colspan="5" align="center" style="padding:20px 0;line-height:1.5;">
@@ -120,7 +117,7 @@
                         </tr>
                         <tr>
                             <td align="center" valign="top">
-                                <table border="0" cellpadding="10" cellspacing="0" width="100%" id="emailFooter">
+                                <table border="0" cellpadding="10" cellspacing="0" width="100%" id="emailFooter" style="background-color:#eee;padding:20px 30px;">
                                       <tr>
                                         <td align="center" valign="top">
                                           Powered by <a href="https://www.domahub.com">DomaHub.com</a>. Have questions? <a href="mailto:support@domahub.com">Send us an email</a>!
