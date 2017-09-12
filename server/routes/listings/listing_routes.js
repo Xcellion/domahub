@@ -165,43 +165,6 @@ module.exports = function(app, db, auth, error, stripe){
     owner_functions.updateListing
   ]);
 
-  // //get a listing's stripe info
-  // app.get('/listing/:domain_name/stripeinfo', [
-  //   auth.checkLoggedIn,
-  //   checkDomainValid,
-  //   checkDomainListed,
-  //   profile_functions.getAccountListings,
-  //   owner_functions.checkListingOwnerPost,
-  //   owner_functions.checkListingVerified,
-  //   stripe.getStripeSubscription,
-  //   owner_functions.updateListing
-  // ]);
-
-  // //update listing to premium
-  // app.post('/listing/:domain_name/upgrade', [
-  //   urlencodedParser,
-  //   auth.checkLoggedIn,
-  //   checkDomainValid,
-  //   checkDomainListed,
-  //   profile_functions.getAccountListings,
-  //   owner_functions.checkListingOwnerPost,
-  //   owner_functions.checkListingVerified,
-  //   stripe.createStripeCustomer,
-  //   stripe.createStripeSubscription,
-  //   owner_functions.updateListing
-  // ]);
-
-  // //degrade listing to basic
-  // app.post('/listing/:domain_name/downgrade', [
-  //   auth.checkLoggedIn,
-  //   checkDomainValid,
-  //   checkDomainListed,
-  //   profile_functions.getAccountListings,
-  //   owner_functions.checkListingOwnerPost,
-  //   owner_functions.checkListingVerified,
-  //   stripe.cancelStripeSubscription
-  // ]);
-
   //</editor-fold>
 
   //<editor-fold>-------------------------------BUYING RELATED-------------------------------

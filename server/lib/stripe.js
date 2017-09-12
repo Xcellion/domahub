@@ -649,7 +649,7 @@ module.exports = {
           next();
         }
 
-        //using live mode subscription key in test mode
+        //legit subscription!
         else if (subscription) {
           console.log("SF: Legit Stripe subscription!");
           req.user.premium_exp_date = subscription.current_period_end;
@@ -660,8 +660,8 @@ module.exports = {
         //using live mode subscription key in test mode
         else {
           console.log("SF: Using live Stripe key in test mode!");
-          listing_info.premium_exp_date = false;
-          listing_info.premium_expiring = false;
+          req.user.premium_exp_date = (new Date().getTime() + 2592000000) / 1000;
+          req.user.premium_expiring = false;
           next();
         }
       });
