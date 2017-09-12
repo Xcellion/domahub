@@ -72,6 +72,9 @@ function emailViews(req, res, next){
     listing_info: {
       primary_color: "#ac38be"
     },
+    user: {
+      username: "Blake Griffin"
+    },
     name : "offerer",
     owner_name : "OWNERFUCK",
     offerer_name: "BUYERTWAT",
