@@ -446,7 +446,6 @@ function getTimes(calendar_elem){
   //now loading messages
   $("#calendar").addClass('is-disabled');
   $("#calendar-loading-message").removeClass('is-hidden');
-  loadingDots($("#calendar-loading-message"));
   $("#calendar-regular-message").addClass('is-hidden');
   $("#calendar-error-message").addClass('is-hidden');
 
@@ -469,7 +468,6 @@ function getTimes(calendar_elem){
     }).done(function(data){
       $("#calendar").removeClass('is-disabled');
       $("#calendar-loading-message").addClass('is-hidden');
-      clearLoadingDots($("#calendar-loading-message"));
       $("#calendar-regular-message").removeClass('is-hidden');
 
       //got the future events, go ahead and create the calendar
@@ -628,12 +626,12 @@ function updatePrices(){
 
     //price or price per day
     if (totalPrice == 0 && listing_info.price_rate != 0 && overlappedTime == 0){
-      $("#total-price").addClass("is-hidden");
+      $(".total-price").addClass("is-hidden");
       $("#checkout-button").addClass('is-disabled');
-      $("#actual-price").text("$" + listing_info.price_rate + " Per " + listing_info.price_type.capitalizeFirstLetter());
+      $(".actual-price").text("$" + listing_info.price_rate + " Per " + listing_info.price_type.capitalizeFirstLetter());
     }
     else {
-      $("#total-price").removeClass("is-hidden");
+      $(".total-price").removeClass("is-hidden");
       $("#checkout-button").removeClass('is-disabled');
 
       if (origPrice){
@@ -644,7 +642,7 @@ function updatePrices(){
         $("#orig-price").addClass('is-hidden');
       }
 
-      countPrice($("#actual-price"), totalPrice);
+      countPrice($(".actual-price"), totalPrice);
     }
   }
 }
