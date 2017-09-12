@@ -13,11 +13,13 @@
           <div class='is-inline-block flat-logo is-primary'></div>
         </a>
       </h2>
-      <% if (typeof message != "undefined") {%>
-          <p id="message" class="has-text-centered margin-top-0 margin-bottom-15"><%= message %></p>
-      <% } else { %>
-          <p id="message" class="has-text-centered margin-top-0 margin-bottom-15">Please enter a new password!</p>
-      <% }%>
+      <p id="message" class="is-bold has-text-centered margin-top-0 margin-bottom-15">
+        <% if (typeof message != "undefined") {%>
+          <%= message %>
+        <% } else { %>
+          Please enter a new password!
+        <% }%>
+      </p>
     </div>
 
     <div id="login-form" class="account-form">
