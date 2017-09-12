@@ -2125,7 +2125,6 @@ input:-webkit-autofill {
   border-radius: 3px;
   border-spacing: 0px;
   border: 1px solid rgba(0, 0, 0, 0.12);
-  border-bottom: none;
   box-shadow: none;
   color: #212121;
   margin-bottom: 20px;
