@@ -8,18 +8,18 @@ module.exports = {
 function handler(req, res, message, type) {
 
   //send back to POST methods (not GET)
-  if (!type && req.method == "POST" && req.path != "/login"){
+  if (type != undefined && req.method == "POST" && req.path != "/login"  && req.path != "/signup"){
     var type = "json";
   }
 
   switch (type){
     case "api":
-      console.log("ERROR: " + message);
+      console.log("API ERROR: " + message);
       res.sendStatus(404);
       break;
     //send direct message or redirect page
     case "json":
-      console.log("ERROR: " + message);
+      console.log("JSON ERROR: " + message);
       res.send({
         state: "error",
         message: message
