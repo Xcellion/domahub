@@ -4,6 +4,7 @@
 <head>
   <title>Checkout - DomaHub</title>
   <link rel="stylesheet" type="text/css" href="/css/min/listing_checkout.min.css" />
+  <link rel="stylesheet" href="/css/min/listing_page.min.css" type="text/css" />
   <%- include("../templates/head_links"); %>
 </head>
 
@@ -379,34 +380,19 @@
 
             </div>
             <div id="checkout-success-content" class="success-hide is-hidden">
-              <% if (!user) { %>
-                <div class="content">
-                  <p>
+              <div class="content">
+                <p>
                   Below is the link to edit your rental.
                   Anyone with this link can edit your rental
                   so please be cautious and do not misplace it.
-                  If you provided us with an email address, we have
-                  also sent a copy of this link to that address as well.
-                  <!-- You can
-                  <a id="checkout-signup" class='checkout-track is-primary' href="https://domahub.com/signup">sign up</a>
-                  for a DomaHub account to keep
-                  track of all your rentals in one place. -->
-                  </p>
-                  <div class="control has-addons">
-                      <input id="rental-link-input" class='checkout-track is-large input is-expanded' placeholder="Save me for later!"/>
-                      <a id="rental-link-copy" class="checkout-track button is-large is-primary no-shadow">
-                          <i class="fa fa-clipboard"></i>
-                      </a>
-                  </div>
+                </p>
+                <div class="control has-addons">
+                  <input id="rental-link-input" class='checkout-track is-large input is-expanded' placeholder="Save me for later!"/>
+                  <a id="rental-link-copy" class="checkout-track button is-large is-primary no-shadow">
+                    <i class="fa fa-clipboard"></i>
+                  </a>
                 </div>
-              <% } else { %>
-                <div class="content">
-                  <p>
-                    You may edit your rental settings at <a id="checkout-myrental" class="checkout-track is-primary" href="/profile/myrentals" tabindex="0">
-                    your rentals page</a>.
-                  </p>
-                </div>
-              <% } %>
+              </div>
               <a id="rental-preview-button" class="checkout-track button is-stylish is-primary no-shadow">
                 <span class="icon is-small"><i class="fa fa-search"></i></span>
                 <span>Preview Rental</span>
@@ -485,36 +471,18 @@
     </div>
   </section>
 
-  <%# SHOW OR HIDE FOOTER %>
-  <% if (!listing_info.premium) { %>
-    <footer class="footer">
-      <div class="container">
-        <div class="footer-bar">
-          <div class="bar-left">
-            <a tabindex="0" class="circle-logo footer-item" href="/" title="Home"></a>
-            <img id="custom_logo"/>
-            <p class="footer-item">
-              <i class="fa fa-copyright v-align-bottom"></i> DomaHub, Inc.
-            </p>
-          </div>
-          <div class="bar-right">
-            <p class="footer-item">
-              Simple, clean sales pages for your domains.
-            </p>
-          </div>
-        </div>
-      </div>
-    </footer>
-  <% } %>
+  <%# LISTING FOOTER %>
+  <%- include("listing_footer.ejs") %>
 
   <script src="/js/lib/moment.min.js" type="text/javascript"></script>
   <script src="/js/lib/wNumb.js" type="text/javascript"></script>
   <script src="https://js.stripe.com/v2/" type="text/javascript" ></script>
   <script src="/js/jquery/jquery.payment.min.js" type="text/javascript"></script>
   <script type="text/javascript">
-  var listing_info = <% if(typeof listing_info != "undefined"){ %><%-JSON.stringify(listing_info)%><% }else{ %>""<% } %>;
-  var new_rental_info = <% if(typeof new_rental_info != "undefined"){ %><%-JSON.stringify(new_rental_info)%><% }else{ %>""<% } %>;
-  var node_env = <% if(typeof node_env != "undefined"){ %><%-JSON.stringify(node_env)%><% }else{ %>""<% } %>;;
+    var listing_info = <% if(typeof listing_info != "undefined"){ %><%-JSON.stringify(listing_info)%><% }else{ %>""<% } %>;
+    var new_rental_info = <% if(typeof new_rental_info != "undefined"){ %><%-JSON.stringify(new_rental_info)%><% }else{ %>""<% } %>;
+    var node_env = <% if(typeof node_env != "undefined"){ %><%-JSON.stringify(node_env)%><% }else{ %>""<% } %>;
+    var compare = false;
   </script>
   <script src="/js/routes/listings/listing_checkout_logic_rent.js" type="text/javascript"></script>
   <% if (listing_info.premium) { %>

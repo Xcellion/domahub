@@ -448,7 +448,8 @@ function updateStatus(listing_info){
 }
 function updateDescription(listing_info){
   $("#description").val(listing_info.description);
-  $("#short-desc").val(listing_info.description_hook);
+  $("#description-hook").val(listing_info.description_hook);
+  $("#description-footer").val(listing_info.description_footer);
 }
 function updateCategories(listing_info){
   var listing_categories = (listing_info.categories) ? listing_info.categories.split(" ") : [];

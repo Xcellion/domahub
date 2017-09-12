@@ -578,7 +578,7 @@ function checkIfNotOverlapped(event){
       var rental_end = listing_info.rental_moments[x].end;
 
       //include start, exclude end
-      if (event.isBetween(rental_start, rental_end, listing_info.price_type, "[)")){
+      if (event.isBetween(rental_start, rental_end, "day", "[)")){
         overlap++;
       }
     }

@@ -2,25 +2,26 @@ $(document).ready(function() {
 
   //remove class to prevent screen flash DH green
   $("#compare-preview").removeClass('is-hidden');
+  
+  //dont remove footer if we're using the compare tool
+  if (!compare){
+    $(".footer").removeClass('is-hidden');
+  }
 
   //if it's premium, check if theres any customization in the design
   if (listing_info.premium){
     setupCustomColors();
 
     if (listing_info.background_image){
-      $("#compare-preview").css("background", "url(" + listing_info.background_image + ") center/cover no-repeat").on("error", function(){
-        $(this).css({
-          background: "",
-          "background-color": "#FFF"
-        });
-      });
+      $("#compare-preview").css("background-image", "url(" + listing_info.background_image + ")");
+      $("#compare-preview").css("background-repeat", "no-repeat");
+      $("#compare-preview").css("background-position", "center");
+      $("#compare-preview").css("background-size", "cover");
     }
 
     if (listing_info.logo){
       //show custom logo
-      $("#custom_logo").attr("src", listing_info.logo).on("error", function(){
-        console.log("Error loading logo!");
-      });
+      $("#custom_logo").attr("src", listing_info.logo);
     }
     else {
       $(".footer").addClass('is-hidden');
@@ -59,10 +60,10 @@ function calculateLuminance(rgb) {
   }
 }
 
-function stylize(color, element, style) {
+function stylize(color, element, style, calculateluminance) {
   if (color){
     $(element).css(style, color);
-    if (style == "background-color") {
+    if (style == "background-color" && calculateluminance) {
       $(element).css("color", calculateLuminance(color));
     }
   }
@@ -72,13 +73,13 @@ function stylize(color, element, style) {
 function setupCustomColors(){
   console.log("Setting up custom theme...");
   stylize(listing_info.primary_color, ".is-primary:not(.notification)", "color");
-  stylize(listing_info.primary_color, ".daterangepicker td.active, .daterangepicker td.active:hover", "background-color");
-  stylize(listing_info.primary_color, ".is-primary.button", "background-color");
-  stylize(listing_info.primary_color, ".tag", "background-color");
+  stylize(listing_info.primary_color, ".daterangepicker td.active, .daterangepicker td.active:hover", "background-color", true);
+  stylize(listing_info.primary_color, ".is-primary.button", "background-color", true);
+  stylize(listing_info.primary_color, ".tag", "background-color", true);
   stylize(listing_info.font_color, ".regular-font", "color");
   stylize(listing_info.tertiary_color, ".is-info", "color");
-  stylize(listing_info.secondary_color, ".is-accent", "color");
-  stylize(listing_info.secondary_color, ".is-accent.button", "background-color");
+  stylize(listing_info.secondary_color, ".is-accent:not(.tag)", "color");
+  stylize(listing_info.secondary_color, ".is-accent.button", "background-color", true);
   stylize(listing_info.secondary_color, "#typed-slash", "color");
   stylize(listing_info.background_color, "#compare-preview", "background-color");
   stylize(listing_info.font_name, "#domain-title", "font-family");
