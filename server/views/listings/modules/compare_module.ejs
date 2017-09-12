@@ -25,16 +25,27 @@ var fonts = <% if(typeof fonts != "undefined"){ %><%-JSON.stringify(fonts)%><% }
     <p>
       This demo is a preview of what your domain's sales page could look like. Any data on this page is purely for demonstration purposes only.
     </p>
+    <a tabindex="0" class="is-primary" href="/features">Click here to learn more</a>!
   </div>
   <div class="button-wrapper">
-    <a class="button is-small is-stylish restart-tutorial-button">Restart Tutorial</a>
-    <a href="/signup" class="button is-small is-primary is-stylish">Sign Me Up!</a>
+    <a href="/signup" class="button is-small is-primary is-stylish">
+      <span class="icon is-small">
+        <i class="fa fa-user-circle"></i>
+      </span>
+      <span>Sign me up</span>
+    </a>
+    <a class="button is-small is-stylish restart-tutorial-button">
+      <span class="icon is-small">
+        <i class="fa fa-refresh"></i>
+      </span>
+      <span>Restart Tutorial</span>
+    </a>
   </div>
 </div>
 
 <div id="show-menu-wrapper" class="control">
   <button id="show-menu-button" class="button">
-    <span class="icon">
+    <span class="icon is-small">
       <i class="fa fa-bars"></i>
     </span>
     <span>Show Menu</span>
@@ -58,7 +69,7 @@ var fonts = <% if(typeof fonts != "undefined"){ %><%-JSON.stringify(fonts)%><% }
       </div>
       <div class="control-right">
         <button id="hide-menu-button" class="button" tabindex="0" title="Hide Menu">
-          <span class="icon"><i class="fa fa-long-arrow-left"></i></span>
+          <span class="icon is-small"><i class="fa fa-long-arrow-left"></i></span>
           <span>Hide Menu</span>
         </button>
       </div>
@@ -131,7 +142,12 @@ var fonts = <% if(typeof fonts != "undefined"){ %><%-JSON.stringify(fonts)%><% }
             <i class="fa fa-picture-o"></i>
           </div>
           <div class="control">
-            <a id="random-theme-button" class="button is-small is-stylish">Random Theme</a>
+            <a id="random-theme-button" class="button is-small is-stylish">
+              <span class="icon is-small">
+                <i class="fa fa-random"></i>
+              </span>
+              <span>Random Theme</span>
+            </a>
           </div>
         </div>
       </div>
@@ -228,13 +244,23 @@ var fonts = <% if(typeof fonts != "undefined"){ %><%-JSON.stringify(fonts)%><% }
     <footer id="compare-footer" class="footer is-hidden">
       <div class="content">
         <p>
-          This demo is a preview of what your sales page could look like.
-          <a tabindex="0" class="is-primary" href="/features">Click here to learn more</a>!
+          This demo is a preview of what your domain's sales page could look like. Any data on this page is purely for demonstration purposes only.
         </p>
-        <div class="button-wrapper">
-          <a class="button is-small is-stylish restart-tutorial-button">Restart Tutorial</a>
-          <a href="/signup" class="button is-small is-primary is-stylish">Sign Me Up!</a>
-        </div>
+        <a tabindex="0" class="is-primary" href="/features">Click here to learn more</a>!
+      </div>
+      <div class="button-wrapper">
+        <a href="/signup" class="button is-small is-primary is-stylish">
+          <span class="icon is-small">
+            <i class="fa fa-user-circle"></i>
+          </span>
+          <span>Sign me up</span>
+        </a>
+        <a class="button is-small is-stylish restart-tutorial-button">
+          <span class="icon is-small">
+            <i class="fa fa-refresh"></i>
+          </span>
+          <span>Restart Tutorial</span>
+        </a>
       </div>
     </footer>
 
