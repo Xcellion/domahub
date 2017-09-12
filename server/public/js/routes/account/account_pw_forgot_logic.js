@@ -19,7 +19,7 @@ $(document).ready(function() {
       }
       else {
         $("#forgot-button").removeClass('is-loading');
-        $("#message").text(data.message);
+        $("#message").text("That was an invalid email address! Please enter a correct email address.");
       }
     });
   });
