@@ -4186,8 +4186,8 @@ input:-webkit-autofill {
   background-image: url("/images/dh-assets/circle-logo/dh-circle-logo-primary-225x225.png");
   background-repeat: no-repeat;
   background-size: cover;
-  width: 30px !important;
-  height: 30px !important; }
+  width: 45px !important;
+  height: 45px !important; }
 
 .social-icon:not(:last-child) {
   margin-right: 10px; }
@@ -4204,7 +4204,7 @@ input:-webkit-autofill {
 
 /********************** CUSTOM CLASS STYLING ******************/
 .min-height {
-  min-height: calc(100vh - 90px); }
+  min-height: calc(100vh - 125px); }
 
 .clear-nav {
   padding-top: 60px; }
@@ -4374,51 +4374,6 @@ input:-webkit-autofill {
 .margin-right-50 {
   margin-right: 50px !important; }
 
-.margin-75 {
-  margin: 75px !important; }
-
-.margin-top-75 {
-  margin-top: 75px !important; }
-
-.margin-bottom-75 {
-  margin-bottom: 75px !important; }
-
-.margin-left-75 {
-  margin-left: 75px !important; }
-
-.margin-right-75 {
-  margin-right: 75px !important; }
-
-.margin-100 {
-  margin: 100px !important; }
-
-.margin-top-100 {
-  margin-top: 100px !important; }
-
-.margin-bottom-100 {
-  margin-bottom: 100px !important; }
-
-.margin-left-100 {
-  margin-left: 100px !important; }
-
-.margin-right-100 {
-  margin-right: 100px !important; }
-
-.margin-125 {
-  margin: 125px !important; }
-
-.margin-top-125 {
-  margin-top: 125px !important; }
-
-.margin-bottom-125 {
-  margin-bottom: 125px !important; }
-
-.margin-left-125 {
-  margin-left: 125px !important; }
-
-.margin-right-125 {
-  margin-right: 125px !important; }
-
 .padding-0 {
   padding: 0px !important; }
 
@@ -4583,51 +4538,6 @@ input:-webkit-autofill {
 
 .padding-right-50 {
   padding-right: 50px !important; }
-
-.padding-75 {
-  padding: 75px !important; }
-
-.padding-top-75 {
-  padding-top: 75px !important; }
-
-.padding-bottom-75 {
-  padding-bottom: 75px !important; }
-
-.padding-left-75 {
-  padding-left: 75px !important; }
-
-.padding-right-75 {
-  padding-right: 75px !important; }
-
-.padding-100 {
-  padding: 100px !important; }
-
-.padding-top-100 {
-  padding-top: 100px !important; }
-
-.padding-bottom-100 {
-  padding-bottom: 100px !important; }
-
-.padding-left-100 {
-  padding-left: 100px !important; }
-
-.padding-right-100 {
-  padding-right: 100px !important; }
-
-.padding-125 {
-  padding: 125px !important; }
-
-.padding-top-125 {
-  padding-top: 125px !important; }
-
-.padding-bottom-125 {
-  padding-bottom: 125px !important; }
-
-.padding-left-125 {
-  padding-left: 125px !important; }
-
-.padding-right-125 {
-  padding-right: 125px !important; }
 
 .low-opacity {
   opacity: 0.5; }
