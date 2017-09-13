@@ -958,7 +958,12 @@ module.exports = {
         else {
           var background_image = req.session.new_listing_info.background_image || false;
           var logo = req.session.new_listing_info.logo || false;
-          updateUserListingsObject(req, res, domain_name);
+
+          //only if user exists
+          if (req.user){
+            updateUserListingsObject(req, res, domain_name);
+          }
+
           res.json({
             state: "success",
             user: (req.user) ? req.user : false,
