@@ -14,9 +14,17 @@
 
 	<section class="section is-medium min-height">
 		<div class="container">
-			<div id="domain-error-message" class="is-hidden notification is-danger is-popup">
+			<div id="domain-error" class="is-hidden notification is-danger is-popup">
 				<button class="delete"></button>
-				Some domain names were invalid! See below for more details.
+				<span id="domain-error-text"></span>
+        <p class="margin-top-10">
+          <a id="scroll-error-button" tabindex="0" class="is-stylish is-hidden is-danger is-inverted button is-small">
+            <span>Go to Next Error</span>
+            <span class='icon is-small'>
+              <i class='fa fa-long-arrow-right'></i>
+            </span>
+          </a>
+        </p>
 			</div>
 			<div id="domain-success-message" class="is-hidden notification is-primary is-popup">
 				<button class="delete"></button>
@@ -33,14 +41,14 @@
 						<div id="textarea-helptext" class='content-wrapper'>
 							<h1 class="is-3">Create Listings</h1>
 							<p>
-								Enter your domain name(s) in the box below separated
+								Enter up to 500 of your domain name(s) in the box below separated
 								by commas. You must include the TLD extension at the end.
 							</p>
 						</div>
 						<div id="table-helptext" class='content-wrapper is-hidden'>
 							<h1 class="is-3">Review and Edit</h1>
 							<p>
-								Review and edit your domain information.
+								Review and edit your domain information below. You can refresh the page to add your domains in bulk.
 							</p>
 						</div>
 						<div id="success-helptext" class='content-wrapper is-hidden'>
@@ -89,7 +97,7 @@
 								<th class='padding-left-15'>Domain Name</th>
 								<th style="width:25%">
 									<span>Min. Purchase Price</span>
-									<span class="icon is-tooltip is-small" data-balloon="The minimum you're willing to sell this domain for. Set to blank or 0 for no minimum purchase price." data-balloon-length="large" data-balloon-pos="up">
+									<span class="icon is-tooltip is-small" data-balloon="The minimum you're willing to sell this domain for. Set to blank or 0 for no minimum purchase price. You can always change this later." data-balloon-length="large" data-balloon-pos="up">
 									  <i class="fa fa-question-circle"></i>
 									</span>
 								</th>

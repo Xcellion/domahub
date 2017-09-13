@@ -44,8 +44,8 @@ module.exports = {
     console.log("F: Checking all posted domain names...");
     var domain_names = req.body.domain_names;
 
-    if (!domain_names || domain_names.length <= 0){
-      error.handler(req, res, "domain_names", "json");
+    if (!domain_names || domain_names.length <= 0 || domain_names.length > 500){
+      error.handler(req, res, "You can only create up to 500 domains at a time!", "json");
     }
     else {
       //loop through and check all posted domain names
@@ -79,6 +79,7 @@ module.exports = {
       }
 
       res.send({
+        state : "success",
         bad_listings : bad_listings,
         good_listings : good_listings
       });
