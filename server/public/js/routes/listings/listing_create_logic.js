@@ -1,9 +1,10 @@
 $(document).ready(function() {
 
-  //delete notifications button
-  $(".delete").on("click", function(e){
-    e.preventDefault();
-    handleSubmitDisabled();
+  $("#scroll-error-button").on("click", function(){
+    $('html, body').stop().animate({
+      scrollTop: $("input.is-danger").offset().top - 100
+    }, 500);
+    $("input.is-danger").focus();
   });
 
   //<editor-fold>-------------------------------LISTING CREATE-------------------------------
@@ -82,13 +83,25 @@ function submitDomainNames(submit_elem){
         domain_names: domain_names
       }
     }).done(function(data){
-      createTable(data.bad_listings, data.good_listings);
-      submit_elem.removeClass('is-loading');
-      submit_elem.off().on("click", function(e){
+      submit_elem.removeClass('is-loading').off().on("click", function(e){
         e.preventDefault();
         submitDomainNames(submit_elem);
       });
-    });
+
+      //successfully checked domain names
+      if (data.state == "success"){
+        createTable(data.bad_listings, data.good_listings);
+      }
+      else {
+        errorMessage(data.message);
+      }
+    }).error(function(){
+      submit_elem.removeClass('is-loading').off().on("click", function(e){
+        e.preventDefault();
+        submitDomainNames(submit_elem);
+      });
+      errorMessage("You can only create up to 500 domains at a time!");
+    })
   }
 }
 
@@ -98,7 +111,7 @@ function createTable(bad_listings, good_listings){
   $("#table-columns").removeClass('is-hidden');
 
   if (bad_listings.length > 0){
-    $("#domain-error-message").removeClass("is-hidden").addClass("is-active");
+    errorMessage("invalid domains");
     for (var x = 0; x < bad_listings.length; x++){
       createTableRow(bad_listings[x]);
     }
@@ -195,8 +208,9 @@ function handleTopAddDomainButton(){
 function submitDomains(submit_elem){
 
   //only if there are no error messages currently
-  if ($("#domain-error-message").hasClass("is-hidden") && $("td .is-danger").length == 0){
+  if ($("#domain-error").hasClass("is-hidden") && $("td .is-danger").length == 0){
     deleteEmptyTableRows();
+
     var domains = getTableListingInfo(".domain-name-input");
 
     if (domains.length > 0){
@@ -207,7 +221,7 @@ function submitDomains(submit_elem){
 
   //show warning that something needs fixed
   else {
-    $("#domain-error-message").removeClass("is-hidden").addClass("is-active");
+    errorMessage("invalid domains");
     $("#domains-submit").addClass('is-disabled');
   }
 
@@ -253,7 +267,7 @@ function submitDomainsAjax(domains, submit_elem){
         showTable();
       }
 
-      handleErrors(data.message);
+      errorMessage(data.message);
     }
 
     if (data.bad_listings && data.bad_listings.length == 0){
@@ -339,7 +353,7 @@ function refreshNotification(){
 //function to remove all success/error messages
 function clearDangerSuccess(){
   //notifications
-  $("#domain-error-message").addClass("is-hidden").removeClass("is-active");
+  errorMessage(false);
   $("#domain-success-message").addClass("is-hidden").removeClass("is-active");
 
   //remove small error reasons
@@ -352,7 +366,7 @@ function clearDangerSuccess(){
 
 //label the incorrect table rows
 function badTableRows(bad_listings){
-  $("#domain-error-message").removeClass("is-hidden").addClass("is-active");
+  errorMessage("invalid domains");
   for (var x = 0; x < bad_listings.length; x++){
     var table_row = $($(".table-row").not("#clone-row")[bad_listings[x].index]);
     handleBadReasons(bad_listings[x].reasons, table_row);
@@ -409,3 +423,31 @@ function deleteGoodTableRows(){
 }
 
 //</editor-fold>
+
+
+//helper function to display/hide error messages
+function errorMessage(message){
+
+  //hide success
+  $("#domain-success-message").addClass("is-hidden").removeClass("is-active");
+
+  //show errors or hide errors
+  if (message == "invalid domains"){
+    $("#domain-error-text").text("Some domain names were invalid! See below for more details.");
+    $("#scroll-error-button").removeClass('is-hidden');
+    $("#domain-error").removeClass("is-hidden").addClass("is-active");
+  }
+  else {
+
+    //hide scroll to button
+    $("#scroll-error-button").addClass('is-hidden');
+
+    if (message){
+      $("#domain-error-text").text(message);
+      $("#domain-error").removeClass("is-hidden").addClass("is-active");
+    }
+    else {
+      $("#domain-error").addClass("is-hidden").removeClass("is-active");
+    }
+  }
+}
