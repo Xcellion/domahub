@@ -84,7 +84,7 @@ module.exports = {
     var email_contents_path = path.resolve(process.cwd(), 'server', 'views', 'email', 'offer_verify_email.ejs');
 
     //figure out luminance based on primary color
-    getListingInfoLuminance(req.session.listing_info);
+    req.session.listing_info.font_luminance = calculateLuminance(listing_info.primary_color);
 
     var EJSVariables = {
       premium: req.session.listing_info.premium || false,
@@ -99,9 +99,9 @@ module.exports = {
     }
 
     delete req.session.contact_verification_code;
-    var email_from = (req.session.listing_info.premium) ? "'" + req.session.listing_info.username + "'<" + req.session.listing_info.owner_email + ">" : '"DomaHub" <general@domahub.com>'
 
-    //email options
+    //premium email from listing owner or from domahub
+    var email_from = (req.session.listing_info.premium) ? "'" + req.session.listing_info.username + "'<" + req.session.listing_info.owner_email + ">" : '"DomaHub" <general@domahub.com>'
     var emailDetails = {
       to: req.body.contact_email,
       from: email_from,
@@ -214,6 +214,11 @@ module.exports = {
           console.log("F: Sending email to the buyer for transfer verification / next steps!");
           var email_contents_path = path.resolve(process.cwd(), 'server', 'views', 'email', 'bin_notify_buyer.ejs');
           var price_formatted = moneyFormat.to(parseFloat(offer_result.offer));
+          listing_info = getUserListingObj(req.user.listings, req.params.domain_name);
+
+          //figure out luminance based on primary color
+          listing_info.font_luminance = calculateLuminance(listing_info.primary_color);
+
           var EJSVariables = {
             domain_name: req.params.domain_name,
             owner_name: req.user.username,
@@ -222,7 +227,7 @@ module.exports = {
 
             //for custom emails
             premium: (req.user.stripe_subscription_id) ? true : false,
-            listing_info: getUserListingObj(req.user.listings, req.params.domain_name),
+            listing_info: listing_info,
 
             offerer_name: offer_result.name,
             offerer_email: offer_result.email,
@@ -230,9 +235,12 @@ module.exports = {
             message: offer_result.message,
             verification_code : offer_result.verification_code
           }
+
+          //premium email from listing owner or from domahub
+          var email_from = (req.user.stripe_subscription_id) ? "'" + req.user.username + "'<" + req.user.email + ">" : '"DomaHub" <general@domahub.com>'
           var emailDetails = {
             to: offer_result.email,
-            from: '"DomaHub Domains" <general@domahub.com>',
+            from: email_from,
             subject: 'Congratulations on your recent purchase of ' + req.params.domain_name + " for " + price_formatted + "!"
           };
         }
@@ -242,6 +250,9 @@ module.exports = {
           console.log("F: Sending email to offerer to notify of accept/reject status...");
           var email_contents_path = path.resolve(process.cwd(), 'server', 'views', 'email', 'offer_notify_buyer.ejs');
           var listing_info = getUserListingObj(req.user.listings, req.params.domain_name);
+
+          //figure out luminance based on primary color
+          listing_info.font_luminance = calculateLuminance(listing_info.primary_color);
 
           var accepted_text = (offer_result.accepted) ? "accepted" : "rejected";
           var offer_formatted = moneyFormat.to(parseFloat(offer_result.offer));
@@ -422,6 +433,10 @@ module.exports = {
     //get the listing owner contact information to email
     var email_contents_path = path.resolve(process.cwd(), 'server', 'views', 'email', 'bin_notify_buyer.ejs');
     var price_formatted = moneyFormat.to(parseFloat((req.session.new_buying_info.id) ? req.session.new_buying_info.offer : req.session.listing_info.buy_price));
+
+    //figure out luminance based on primary color
+    req.session.listing_info.font_luminance = calculateLuminance(listing_info.primary_color);
+
     var EJSVariables = {
       domain_name: req.session.listing_info.domain_name,
       owner_name: req.session.listing_info.username,
@@ -446,7 +461,6 @@ module.exports = {
       from: email_from,
       subject: 'Congratulations on your recent purchase of ' + req.params.domain_name + " for " + price_formatted + "!"
     };
-    console.log(email_from);
 
     //email the owner
     emailSomeone(req, res, email_contents_path, EJSVariables, emailDetails, false);
@@ -636,11 +650,6 @@ function getUserListingObj(listings, domain_name){
       return listings[x];
     }
   }
-}
-
-//get the luminance based on listing info primary color (for email)
-function getListingInfoLuminance(listing_info){
-  listing_info.font_luminance = calculateLuminance(listing_info.primary_color);
 }
 
 //return white or black text based on luminance
