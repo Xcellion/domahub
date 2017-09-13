@@ -1238,7 +1238,7 @@ function getWhoIs(req, res, next, domain_name, unlisted){
 
         listing_info.username = "The Domain Master";
         listing_info.owner_id = "compare";
-        listing_info.categories = Categories.allFrontAsString();
+        listing_info.categories = Categories.randomFrontAsString();
         listing_info.date_created = new Date().getTime();
         listing_info.description = default_descriptions.random();
         listing_info.status = 1;
