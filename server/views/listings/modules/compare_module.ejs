@@ -158,9 +158,15 @@ var fonts = <% if(typeof fonts != "undefined"){ %><%-JSON.stringify(fonts)%><% }
             <i class="fa fa-question-circle"></i>
           </span>
         </label>
-        <input id="primary-color-input" placeholder="#3CBC8D" type="text" class="padding-top-0 input theme-changeable-input">
-        <input id="secondary-color-input" placeholder="#FF5722" type="text" class="padding-top-0 input theme-changeable-input">
-        <input id="tertiary-color-input" placeholder="#2196F3" type="text" class="padding-top-0 input theme-changeable-input">
+        <div class="control">
+          <input id="primary-color-input" placeholder="#3CBC8D" type="text" class="padding-top-0 input theme-changeable-input">
+        </div>
+        <div class="control">
+          <input id="secondary-color-input" placeholder="#FF5722" type="text" class="padding-top-0 input theme-changeable-input">
+        </div>
+        <div class="control">
+          <input id="tertiary-color-input" placeholder="#2196F3" type="text" class="padding-top-0 input theme-changeable-input">
+        </div>
       </div>
       <div class="control">
         <label class="label">
@@ -198,8 +204,10 @@ var fonts = <% if(typeof fonts != "undefined"){ %><%-JSON.stringify(fonts)%><% }
         </div>
       </div>
       <div class="control">
-        <label class="label" for="background-color-input">Background Color</label>
-        <input id="background-color-input" type="text" class="input theme-changeable-input">
+        <div class="control">
+          <label class="label" for="background-color-input">Background Color</label>
+          <input id="background-color-input" type="text" class="input theme-changeable-input">
+        </div>
       </div>
       <div class="control is-spaced">
         <div class="control-left">

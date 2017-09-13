@@ -539,6 +539,10 @@ function switchTheme(theme_name){
   updateFontColor(listing_info.font_color);
   updateFontName(listing_info.font_name);
 
+  loadBackgroundHandlers();
+  loadColorSchemeHandlers();
+  loadFontStyleHandlers();
+
   $("#theme-input").val(theme_to_load.theme_name);
   updateQueryStringParam("theme", theme_to_load.theme_name);
 }
@@ -708,7 +712,7 @@ function loadBackgroundHandlers(){
   });
 
   //load background color handler
-  $("#background-color-input").minicolors({
+  $("#background-color-input").minicolors("destroy").minicolors({
     letterCase: "uppercase",
     swatches: ["#FFFFFF", "#E5E5E5", "#B2B2B2", "#7F7F7F", "#666666", "#222222", "#000000"]
   }).off().on("input", function(){
@@ -736,18 +740,20 @@ function updateBackgroundColor(background_color){
 }
 
 //load color scheme handlers
-function loadColorSchemeHandlers(){
+function loadColorSchemeHandlers(destroy){
   var minicolor_options = {
     letterCase: "uppercase",
     swatches: ["#3cbc8d", "#FF5722", "#2196F3"]
   }
-  $("#primary-color-input").minicolors(minicolor_options).off().on("change", function(){
+
+
+  $("#primary-color-input").minicolors("destroy").minicolors(minicolor_options).off().on("change", function(){
     updateColorScheme($(this).val(), false, false);
   });
-  $("#secondary-color-input").minicolors(minicolor_options).off().on("change", function(){
+  $("#secondary-color-input").minicolors("destroy").minicolors(minicolor_options).off().on("change", function(){
     updateColorScheme(false, $(this).val(), false);
   });
-  $("#tertiary-color-input").minicolors(minicolor_options).off().on("change", function(){
+  $("#tertiary-color-input").minicolors("destroy").minicolors(minicolor_options).off().on("change", function(){
     updateColorScheme(false, false, $(this).val());
   });
 }
@@ -760,7 +766,7 @@ function updateColorScheme(primary_color, secondary_color, tertiary_color){
     setupCustomColors();
 
     if (traffic_chart){
-      traffic_chart.data.datasets[0].backgroundColor = ColorLuminance(primary_color, 0.2);
+      traffic_chart.data.datasets[0].backgroundColor = hexToRgbA(listing_info.primary_color).replace(",1)", ",.65)");
       traffic_chart.data.datasets[0].borderColor = primary_color;
       traffic_chart.update();
     }
@@ -780,7 +786,7 @@ function updateColorScheme(primary_color, secondary_color, tertiary_color){
 //load the font styling handlers
 function loadFontStyleHandlers(){
   //font color
-  $("#font-color-input").minicolors({
+  $("#font-color-input").minicolors("destroy").minicolors({
     letterCase: "uppercase",
     swatches: ["#000", "#222", "#D3D3D3", "#FFF"]
   }).on("change", function(){
