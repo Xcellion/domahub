@@ -83,23 +83,23 @@
 
 .button-wrapper {
   display: flex;
+  align-items: center;
   justify-content: center;
   flex-wrap: wrap;
-  margin-top: 25px;
   &.is-left-aligned {
     justify-content: flex-start;
   }
   .button {
-    &:not(:last-child) {
+    &:first-child {
       margin-right: 10px;
     }
   }
-  @include mobile-456px {
+  @media screen and (max-width: 527px) {
     flex-direction: column;
     justify-content: center;
     align-items: center;
     .button {
-      &:not(:last-child) {
+      &:first-child {
         margin-right: 0;
         margin-bottom: 10px;
       }

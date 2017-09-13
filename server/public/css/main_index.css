@@ -246,18 +246,18 @@ button[data-balloon] {
 
 .button-wrapper {
   display: flex;
+  align-items: center;
   justify-content: center;
-  flex-wrap: wrap;
-  margin-top: 25px; }
+  flex-wrap: wrap; }
   .button-wrapper.is-left-aligned {
     justify-content: flex-start; }
-  .button-wrapper .button:not(:last-child) {
+  .button-wrapper .button:first-child {
     margin-right: 10px; }
-  @media screen and (max-width: 456px) {
+  @media screen and (max-width: 527px) {
     .button-wrapper {
       flex-direction: column;
       justify-content: center;
       align-items: center; }
-      .button-wrapper .button:not(:last-child) {
+      .button-wrapper .button:first-child {
         margin-right: 0;
         margin-bottom: 10px; } }
