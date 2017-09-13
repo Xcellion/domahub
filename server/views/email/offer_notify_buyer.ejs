@@ -19,15 +19,6 @@
       a:hover {
         opacity:0.8;
       }
-      .list-item {
-        border:0;margin:0;padding:10px 0;border-bottom:1px solid #ddd;
-      }
-      .message {
-        word-wrap:break-word;padding-left:20px;white-space:pre-wrap;
-      }
-      .button {
-        padding:10px 20px;box-sizing:border-box;border-radius:5px;
-      }
     </style>
 </head>
 <body>
@@ -58,7 +49,7 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                  <td align="center" style="border:0;margin:0;padding-bottom:25px;;font-size:24px;font-weight:700;line-height:2;color:<%= (premium) ? listing_info.font_luminance : '#fff' %>;">
+                                  <td align="center" style="color:<%= (premium) ? listing_info.font_luminance : '#fff' %>;border:0;margin:0;padding-bottom:25px;font-size:24px;font-weight:700;line-height:2;">
                                     Your offer for <a href="<%= domain_name %>" style="color: <%= (premium) ? listing_info.font_luminance : '#fff' %>;"><%= domain_name %></a> was <%= (accepted) ? "accepted!" : "rejected." %>
                                   </td>
                                 </tr>
@@ -104,9 +95,9 @@
                                 <tr>
                                   <td colspan="5" align="center" style="padding-top:30px;">
                                     <% if (!accepted) { %>
-                                      <a id="accept_button" class="button" href="https://domahub.com/listing/<%= domain_name %>" style="padding:10px 20px;box-sizing:border-box;border-radius:5px;background-color: <%= (premium) ? listing_info.primary_color : '#3cbc8d' %>; color: <%= (premium) ? listing_info.font_luminance : '#fff' %>;">Send another offer</a>
+                                      <a id="accept_button" class="button" href="https://domahub.com/listing/<%= domain_name %>" style="background-color: <%= (premium) ? listing_info.primary_color : '#3cbc8d' %>; color: <%= (premium) ? listing_info.font_luminance : '#fff' %>;padding:10px 20px;box-sizing:border-box;border-radius:5px;">Send another offer</a>
                                     <% } else { %>
-                                      <a id="accept_button" class="button" href="https://domahub.com/listing/<%= domain_name %>/contact/<%= offer_id %>/bin" style="padding:10px 20px;box-sizing:border-box;border-radius:5px;background-color: <%= (premium) ? listing_info.primary_color : '#3cbc8d' %>; color: <%= (premium) ? listing_info.font_luminance : '#fff' %>;">Complete payment</a>
+                                      <a id="accept_button" class="button" href="https://domahub.com/listing/<%= domain_name %>/contact/<%= offer_id %>/bin" style="background-color: <%= (premium) ? listing_info.primary_color : '#3cbc8d' %>; color: <%= (premium) ? listing_info.font_luminance : '#fff' %>;padding:10px 20px;box-sizing:border-box;border-radius:5px;">Complete payment</a>
                                     <% } %>
                                   </td>
                                 </tr>
@@ -120,7 +111,7 @@
                                 <tr>
                                     <td align="center" valign="top">
                                         <% if (accepted) { %>
-                                          Once paid, if the domain is not transferred to you within 7 days, this transaction will be cancelled and you will
+                                          Once paid, if the domain is not transferred to you within 14 days, this transaction will be cancelled and you will
                                           receive your money back in full.
                                         <% } else { %>
                                           You may respond to this email to leave comments or ask any additional questions.
