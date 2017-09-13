@@ -25,6 +25,7 @@
 .account-form {
   @include box-shadow(0,3px,15px,$border,1px);
   background-color: #fff;
+  border-radius: $radius;
   left: 0;
   margin: 0 auto;
   padding: 20px;
