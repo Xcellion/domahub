@@ -605,11 +605,13 @@ function updatePricing(){
   var buy_price = getParameterByName("buy_price") || listing_info.buy_price;
   $("#buy-price-input").val(buy_price).on("input", function(){
     listing_info.buy_price = $(this).val();
-    $("#buy-button").text("Buy now - " + moneyFormat.to(parseFloat(listing_info.buy_price)));
+    if (parseFloat($(this).val()) > 0){
+      $("#buy-button").text("Buy now - " + moneyFormat.to(parseFloat(listing_info.buy_price)));
+    }
   });
   var min_price = getParameterByName("min_price") || listing_info.min_price;
   $("#min-price-input").val(min_price).on("input", function(){
-    if ($(this).val() > 0){
+    if (parseFloat($(this).val()) > 0){
       $("#min-price-tag").removeClass('is-hidden');
       $("#min-price-tag").text("For sale - " + moneyFormat.to(parseFloat($(this).val())));
       $("#min-price").removeClass('is-hidden').text(" (Minimum " + moneyFormat.to(parseFloat($(this).val())) + ")");
@@ -836,6 +838,11 @@ function updateModules(){
         var next_visible_id = next_visible.attr("id").split("-")[0];
         $("#" + next_visible_id + "-module").removeClass('is-hidden');
         next_visible.addClass('is-active');
+
+        //create test chart if it's the next visible
+        if (next_visible_id == "traffic"){
+          getTrafficData();
+        }
       }
     }
     else {
