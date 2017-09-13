@@ -349,9 +349,10 @@ button[data-balloon] {
     height: 100%; }
 
 #custom_logo {
-  max-width: 100px;
-  max-height: 50px;
-  object-fit: cover; }
+  border-radius: 10px;
+  height: 45px;
+  object-fit: cover;
+  width: 45px; }
 
 .description-wrapper {
   max-width: 500px; }

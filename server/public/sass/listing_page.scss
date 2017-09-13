@@ -191,9 +191,10 @@
 }
 
 #custom_logo {
-    max-width:100px;
-    max-height:50px;
+    border-radius: 10px;
+    height: 45px;
     object-fit:cover;
+    width: 45px;
 }
 
 .description-wrapper {

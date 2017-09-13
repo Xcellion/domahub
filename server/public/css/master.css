@@ -4186,8 +4186,8 @@ input:-webkit-autofill {
   background-image: url("/images/dh-assets/circle-logo/dh-circle-logo-primary-225x225.png");
   background-repeat: no-repeat;
   background-size: cover;
-  width: 30px !important;
-  height: 30px !important; }
+  width: 45px !important;
+  height: 45px !important; }
 
 .social-icon:not(:last-child) {
   margin-right: 10px; }
@@ -4204,7 +4204,7 @@ input:-webkit-autofill {
 
 /********************** CUSTOM CLASS STYLING ******************/
 .min-height {
-  min-height: calc(100vh - 110px); }
+  min-height: calc(100vh - 125px); }
 
 .clear-nav {
   padding-top: 60px; }
