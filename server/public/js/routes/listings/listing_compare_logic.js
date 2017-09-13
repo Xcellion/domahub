@@ -135,7 +135,7 @@ $(document).ready(function() {
           template: "<div class='popover tour arrow-top'> \
                       <div class='popover-content margin-top-0 content'></div> \
                       <div class='popover-navigation'> \
-                        <div class='button-wrapper'> \
+                        <div> \
                           <button class='button is-small' data-role='prev'> \
                             <span class='icon is-small'> \
                               <i class='fa fa-angle-double-left'></i> \

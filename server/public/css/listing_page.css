@@ -469,6 +469,21 @@ button[data-balloon] {
     margin-bottom: 10px;
     margin-right: 10px; }
 
+.button-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center; }
+  .button-wrapper .button:first-child {
+    margin-right: 10px; }
+  @media screen and (max-width: 425px) {
+    .button-wrapper {
+      flex-direction: column;
+      justify-content: center;
+      align-items: center; }
+      .button-wrapper .button:first-child {
+        margin-right: 0;
+        margin-bottom: 10px; } }
+
 #ticker-module {
   padding: 0;
   background: #FFF;
