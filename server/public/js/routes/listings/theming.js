@@ -70,9 +70,9 @@ function stylize(color, element, style, calculateluminance) {
 //function to setup any custom premium colors
 function setupCustomColors(){
   console.log("Setting up custom theme...");
-  stylize(listing_info.primary_color, ".is-primary:not(.notification)", "color");
+  stylize(listing_info.primary_color, "#compare-preview .is-primary:not(.notification)", "color");
   stylize(listing_info.primary_color, ".daterangepicker td.active, .daterangepicker td.active:hover", "background-color", true);
-  stylize(listing_info.primary_color, ".is-primary.button", "background-color", true);
+  stylize(listing_info.primary_color, "#compare-preview .is-primary.button", "background-color", true);
   stylize(listing_info.primary_color, ".tag:not(.category-tag)", "background-color", true);
   stylize(listing_info.font_color, ".regular-font", "color");
   stylize(listing_info.tertiary_color, ".is-info", "color");

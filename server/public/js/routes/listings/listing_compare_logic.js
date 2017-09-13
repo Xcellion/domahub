@@ -539,6 +539,10 @@ function switchTheme(theme_name){
   updateFontColor(listing_info.font_color);
   updateFontName(listing_info.font_name);
 
+  loadBackgroundHandlers();
+  loadColorSchemeHandlers();
+  loadFontStyleHandlers();
+
   $("#theme-input").val(theme_to_load.theme_name);
   updateQueryStringParam("theme", theme_to_load.theme_name);
 }
@@ -601,11 +605,13 @@ function updatePricing(){
   var buy_price = getParameterByName("buy_price") || listing_info.buy_price;
   $("#buy-price-input").val(buy_price).on("input", function(){
     listing_info.buy_price = $(this).val();
-    $("#buy-button").text("Buy now - " + moneyFormat.to(parseFloat(listing_info.buy_price)));
+    if (parseFloat($(this).val()) > 0){
+      $("#buy-button").text("Buy now - " + moneyFormat.to(parseFloat(listing_info.buy_price)));
+    }
   });
   var min_price = getParameterByName("min_price") || listing_info.min_price;
   $("#min-price-input").val(min_price).on("input", function(){
-    if ($(this).val() > 0){
+    if (parseFloat($(this).val()) > 0){
       $("#min-price-tag").removeClass('is-hidden');
       $("#min-price-tag").text("For sale - " + moneyFormat.to(parseFloat($(this).val())));
       $("#min-price").removeClass('is-hidden').text(" (Minimum " + moneyFormat.to(parseFloat($(this).val())) + ")");
@@ -708,7 +714,7 @@ function loadBackgroundHandlers(){
   });
 
   //load background color handler
-  $("#background-color-input").minicolors({
+  $("#background-color-input").minicolors("destroy").minicolors({
     letterCase: "uppercase",
     swatches: ["#FFFFFF", "#E5E5E5", "#B2B2B2", "#7F7F7F", "#666666", "#222222", "#000000"]
   }).off().on("input", function(){
@@ -736,18 +742,20 @@ function updateBackgroundColor(background_color){
 }
 
 //load color scheme handlers
-function loadColorSchemeHandlers(){
+function loadColorSchemeHandlers(destroy){
   var minicolor_options = {
     letterCase: "uppercase",
     swatches: ["#3cbc8d", "#FF5722", "#2196F3"]
   }
-  $("#primary-color-input").minicolors(minicolor_options).off().on("change", function(){
+
+
+  $("#primary-color-input").minicolors("destroy").minicolors(minicolor_options).off().on("change", function(){
     updateColorScheme($(this).val(), false, false);
   });
-  $("#secondary-color-input").minicolors(minicolor_options).off().on("change", function(){
+  $("#secondary-color-input").minicolors("destroy").minicolors(minicolor_options).off().on("change", function(){
     updateColorScheme(false, $(this).val(), false);
   });
-  $("#tertiary-color-input").minicolors(minicolor_options).off().on("change", function(){
+  $("#tertiary-color-input").minicolors("destroy").minicolors(minicolor_options).off().on("change", function(){
     updateColorScheme(false, false, $(this).val());
   });
 }
@@ -760,7 +768,7 @@ function updateColorScheme(primary_color, secondary_color, tertiary_color){
     setupCustomColors();
 
     if (traffic_chart){
-      traffic_chart.data.datasets[0].backgroundColor = ColorLuminance(primary_color, 0.2);
+      traffic_chart.data.datasets[0].backgroundColor = hexToRgbA(listing_info.primary_color).replace(",1)", ",.65)");
       traffic_chart.data.datasets[0].borderColor = primary_color;
       traffic_chart.update();
     }
@@ -780,7 +788,7 @@ function updateColorScheme(primary_color, secondary_color, tertiary_color){
 //load the font styling handlers
 function loadFontStyleHandlers(){
   //font color
-  $("#font-color-input").minicolors({
+  $("#font-color-input").minicolors("destroy").minicolors({
     letterCase: "uppercase",
     swatches: ["#000", "#222", "#D3D3D3", "#FFF"]
   }).on("change", function(){
@@ -830,6 +838,11 @@ function updateModules(){
         var next_visible_id = next_visible.attr("id").split("-")[0];
         $("#" + next_visible_id + "-module").removeClass('is-hidden');
         next_visible.addClass('is-active');
+
+        //create test chart if it's the next visible
+        if (next_visible_id == "traffic"){
+          getTrafficData();
+        }
       }
     }
     else {
