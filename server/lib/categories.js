@@ -156,6 +156,13 @@ module.exports = {
     }).join(" ");
   },
 
+  //return random 5-10 categories as a string
+  randomFrontAsString : function(){
+    return getUnique(Math.round(Math.random(5) + 5)).map(function(a) {
+      return a["front"];
+    }).join(" ");
+  },
+
   //categories that are formatted for the back-end
   back : function(){
     var back_array = [];
@@ -184,4 +191,18 @@ module.exports = {
     return false;
   }
 
+}
+
+function getUnique(count) {
+  // Make a copy of the array
+  var tmp = all_categories.slice(all_categories);
+  var ret = [];
+
+  for (var i = 0; i < count; i++) {
+    var index = Math.floor(Math.random() * tmp.length);
+    var removed = tmp.splice(index, 1);
+    // Since we are only removing one element
+    ret.push(removed[0]);
+  }
+  return ret;
 }
