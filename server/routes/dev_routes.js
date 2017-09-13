@@ -70,7 +70,7 @@ function emailViews(req, res, next){
     premium: true,
     response: "Hey fuck yourself",
     listing_info: {
-      primary_color: "#ac38be"
+      primary_color: "#000"
     },
     user: {
       username: "Blake Griffin"
