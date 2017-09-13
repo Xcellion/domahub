@@ -398,7 +398,7 @@
         </div>
         <div class="column is-5">
           <div class="card is-checkout">
-            <figure class="card-image img-wrapper" style="background-image:url('<%= listing_info.background_image || "https://source.unsplash.com/category/nature/375x150" %>')"></figure>
+            <figure class="card-image img-wrapper" style="background-image:url('<%=(listing_info.premium && listing_info.logo) ? listing_info.logo : 'https://domahub.com/images/lib/money.png'%>')"></figure>
             <div class="card-content">
               <div class="content">
                 <h1 class="is-primary is-breakword"><%= listing_info.domain_name %><%= (new_rental_info.path) ? "/" + new_rental_info.path : "" %></h1>
