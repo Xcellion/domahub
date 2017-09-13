@@ -363,7 +363,7 @@ module.exports = {
       console.log("F: Updating contact record with deposited...");
       Data.depositedOffer({
         deposited : true,
-        deadline : moment().add(1, "week")._d.getTime()
+        deadline : moment().add(2, "week")._d.getTime()
       }, req.session.listing_info.domain_name, req.session.new_buying_info.id, function(result){
         if (result.state == "success"){
           next();
