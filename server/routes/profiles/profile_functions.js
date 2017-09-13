@@ -5,6 +5,7 @@ var jsonParser = bodyParser.json()
 var urlencodedParser = bodyParser.urlencoded({ extended: false })
 
 var Q = require('q');
+var bcrypt = require("bcrypt-nodejs");
 var whois = require("whois");
 var parser = require('parse-whois');
 var dns = require("dns");

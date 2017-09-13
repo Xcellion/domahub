@@ -1,6 +1,6 @@
 $(document).ready(function () {
 
-  //--------------------------------------------------------------------------------------------------------- HEADER STEPS
+  //<editor-fold>------------------------------------------HEADER STEPS----------------------------------------
 
   showStep("site");
   showMessage("address-regular-message");
@@ -59,7 +59,9 @@ $(document).ready(function () {
     }
   });
 
-  //--------------------------------------------------------------------------------------------------------- LISTING DETAILS CARD
+  //</editor-fold>
+
+  //<editor-fold>------------------------------------------LISTING DETAILS CARD----------------------------------------
 
   var starttime = moment(new_rental_info.starttime);
   var endtime = moment(new_rental_info.endtime);
@@ -103,7 +105,9 @@ $(document).ready(function () {
     $("#total-price").text("Free");
   }
 
-  //--------------------------------------------------------------------------------------------------------- CHOICE BLOCKS
+  //</editor-fold>
+
+  //<editor-fold>------------------------------------------CHOICE BLOCKS----------------------------------------
 
   //click choice block
   var which_address = "address-regular-message";
@@ -190,7 +194,9 @@ $(document).ready(function () {
     }
   });
 
-  //--------------------------------------------------------------------------------------------------------- PAYMENT
+  //</editor-fold>
+
+  //<editor-fold>------------------------------------------PAYMENT----------------------------------------
 
   //key for stripe
   if (node_env == "dev"){
@@ -257,7 +263,7 @@ $(document).ready(function () {
     showMessage(which_address);
   });
 
-  //--------------------------------------------------------------------------------------------------------- BEHAVIOR TRACKER
+  //</editor-fold>
 
   $(".checkout-track").on("click", function(){
     trackCheckoutBehavior($(this).attr("id"));
@@ -265,50 +271,7 @@ $(document).ready(function () {
 
 });
 
-//used to see what people are doing on this checkout page
-function trackCheckoutBehavior(id){
-  $.ajax({
-    url: "/listing/" + listing_info.domain_name + "/checkouttrack",
-    method: "POST",
-    async: true,
-    data: {
-      elem_id : id
-    }
-  }).done(function(data){
-    // console.log(data);
-  });
-}
-
-//function to show a specific message, hide all others
-function showMessage(message_id, text){
-  $(".regular-message").addClass('is-hidden');
-  $(".error-message").addClass('is-hidden');
-  $("#log-error-message").addClass('is-hidden');
-  $("#" + message_id).removeClass('is-hidden');
-
-  //optional text
-  if (text){
-    $("#" + message_id).html(text);
-  }
-}
-
-//function to show step
-function showStep(step_id){
-  $(".step-header").addClass('is-disabled');
-  $(".step-content").addClass('is-hidden');
-
-  if (step_id == "site"){
-    var coming_step_id = "log";
-  }
-
-  $("#step-header-" + step_id).removeClass('is-disabled');
-  $("#step-header-" + step_id).data("can-go", true);
-  $("#step-header-" + coming_step_id).data("can-go", true);
-  $("#step-content-" + step_id).removeClass('is-hidden');
-
-  //focus any visible input fields
-  $("#step-content-" + step_id).find("input:visible").first().focus();
-}
+//<editor-fold>------------------------------------------CHECKS----------------------------------------
 
 //check the address of the site
 function checkAddress(address){
@@ -340,6 +303,10 @@ function checkCC(){
     return true;
   }
 }
+
+//</editor-fold>
+
+//<editor-fold>------------------------------------------SUBMIT----------------------------------------
 
 //client side check and then submit for a new stripe token
 function submitStripe(checkout_button){
@@ -395,6 +362,7 @@ function submitNewRental(stripeToken){
     }
   });
 }
+
 //handler for various error messages
 function errorHandler(message){
   console.log(message);
@@ -478,12 +446,61 @@ function successHandler(rental_id, owner_hash_id){
   }
 }
 
+//</editor-fold>
+
+//<editor-fold>------------------------------------------HELPERS----------------------------------------
+
 //to format a number for $$$$
 var moneyFormat = wNumb({
   thousand: ',',
   prefix: '$',
   decimals: 2
 });
+
+//used to see what people are doing on this checkout page
+function trackCheckoutBehavior(id){
+  $.ajax({
+    url: "/listing/" + listing_info.domain_name + "/checkouttrack",
+    method: "POST",
+    async: true,
+    data: {
+      elem_id : id
+    }
+  }).done(function(data){
+    // console.log(data);
+  });
+}
+
+//function to show a specific message, hide all others
+function showMessage(message_id, text){
+  $(".regular-message").addClass('is-hidden');
+  $(".error-message").addClass('is-hidden');
+  $("#log-error-message").addClass('is-hidden');
+  $("#" + message_id).removeClass('is-hidden');
+
+  //optional text
+  if (text){
+    $("#" + message_id).html(text);
+  }
+}
+
+//function to show step
+function showStep(step_id){
+  $(".step-header").addClass('is-disabled');
+  $(".step-content").addClass('is-hidden');
+
+  if (step_id == "site"){
+    var coming_step_id = "log";
+  }
+
+  $("#step-header-" + step_id).removeClass('is-disabled');
+  $("#step-header-" + step_id).data("can-go", true);
+  $("#step-header-" + coming_step_id).data("can-go", true);
+  $("#step-content-" + step_id).removeClass('is-hidden');
+
+  //focus any visible input fields
+  $("#step-content-" + step_id).find("input:visible").first().focus();
+}
 
 //helper function to get price of events
 function calculatePrice(starttime, endtime, overlappedTime, listing_info){
@@ -550,3 +567,5 @@ function anyFreeDayOverlap(starttime, endtime){
     return 0;
   }
 }
+
+//</editor-fold>
