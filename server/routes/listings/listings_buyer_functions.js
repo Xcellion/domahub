@@ -84,7 +84,7 @@ module.exports = {
     var email_contents_path = path.resolve(process.cwd(), 'server', 'views', 'email', 'offer_verify_email.ejs');
 
     //figure out luminance based on primary color
-    req.session.listing_info.font_luminance = calculateLuminance(listing_info.primary_color);
+    req.session.listing_info.font_luminance = calculateLuminance(req.session.listing_info.primary_color);
 
     var EJSVariables = {
       premium: req.session.listing_info.premium || false,
@@ -435,7 +435,7 @@ module.exports = {
     var price_formatted = moneyFormat.to(parseFloat((req.session.new_buying_info.id) ? req.session.new_buying_info.offer : req.session.listing_info.buy_price));
 
     //figure out luminance based on primary color
-    req.session.listing_info.font_luminance = calculateLuminance(listing_info.primary_color);
+    req.session.listing_info.font_luminance = calculateLuminance(req.session.listing_info.primary_color);
 
     var EJSVariables = {
       domain_name: req.session.listing_info.domain_name,
