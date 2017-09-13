@@ -20,286 +20,286 @@
               <h2>1. Customize Your Website</h2>
           </header>
           <div id="step-content-site" class="step-content is-hidden">
-                    <div class="notification is-lighter no-shadow has-border">
-                        <p id="address-regular-message" class="regular-message">
-                          There are many different ways to create content for your new domain name.
-                          See below for some options on what you can do with <span class='is-bold'><%= listing_info.domain_name %></span>!
+            <div class="notification is-lighter no-shadow has-border">
+              <p id="address-regular-message" class="regular-message">
+                There are many different ways to create content for your new domain name.
+                See below for some options on what you can do with <span class='is-bold'><%= listing_info.domain_name %></span>!
+              </p>
+              <p id="address-forward-message" class="is-hidden regular-message">
+                Anyone navigating to <span class='is-bold'><%= listing_info.domain_name %><%= (new_rental_info.path) ? "/" + new_rental_info.path : "" %></span> will be automatically redirected to this link for the duration of your rental. Enter the link of the website you want to get started!
+              </p>
+              <p id="address-link-message" class="is-hidden regular-message">
+                Display an existing website or web content (e.g. a gif, image, meme, etc.). This will be displayed <span class='is-bold'><%= listing_info.domain_name %><%= (new_rental_info.path) ? "/" + new_rental_info.path : "" %></span> for the duration of your rental. Enter the link below to get started!
+              </p>
+              <p id="address-build-message" class="is-hidden regular-message">
+                Create an entirely new website for <span class='is-bold'><%= listing_info.domain_name %><%= (new_rental_info.path) ? "/" + new_rental_info.path : "" %></span>. It doesn&#39;t matter if its a personal portfolio, your new eCommerce store, or just a fun website.
+              </p>
+              <p id="address-error-message" class="error-message is-danger is-hidden">This is an invalid website link! Please choose a different website link.</p>
+            </div>
+
+            <div id="choices-block">
+              <div id="forward-choice" class="checkout-track box hover-effect choice-block forward-choice">
+                <div class="content">
+                  <div class="step-box">
+                    <span class="icon is-medium is-primary">
+                      <i class="fa fa-share-square"></i>
+                    </span>
+                    <h2>Forward elsewhere
+                      <span class="icon is-small is-tooltip v-align-middle" data-balloon='A user visiting <%= listing_info.domain_name%><%= (new_rental_info.path) ? "/" + new_rental_info.path : "" %> will be redirected to the website you provide us. The address bar will change to the forwarded website URL.' data-balloon-length="large" data-balloon-pos="up">
+                        <i class="fa fa-question-circle"></i>
+                      </span>
+                    </h2>
+                  </div>
+                  <p>
+                    Forward <span class='is-bold'><%= listing_info.domain_name %><%= (new_rental_info.path) ? "/" + new_rental_info.path : "" %></span> to an entirely different domain or website.
+                  </p>
+                </div>
+              </div>
+              <div id="link-choice" class="checkout-track content box hover-effect choice-block link-choice">
+                <div class="content">
+                  <div class="step-box">
+                    <span class="icon is-medium is-info">
+                      <i class="fa fa-external-link-square"></i>
+                    </span>
+                    <h2>Display web content
+                      <span class="icon is-small is-tooltip v-align-middle" data-balloon='A user visiting <%= listing_info.domain_name%><%= (new_rental_info.path) ? "/" + new_rental_info.path : "" %> will see that URL in the address bar, but will see the content from the website you provide us.' data-balloon-length="large" data-balloon-pos="up">
+                        <i class="fa fa-question-circle"></i>
+                      </span>
+                    </h2>
+                  </div>
+                  <p>
+                    Display an existing website or content (e.g. a gif, image, meme, etc.).
+                    We will show that content on <span class='is-bold'><%= listing_info.domain_name %><%= (new_rental_info.path) ? "/" + new_rental_info.path : "" %></span>.
+                  </p>
+                </div>
+              </div>
+              <div id="build-choice" class="checkout-track content box hover-effect choice-block build-choice">
+                <div class="content">
+                  <div class="step-box">
+                    <span class="icon is-medium is-accent">
+                      <i class="fa fa-pencil-square"></i>
+                    </span>
+                    <h2>Build a website
+                      <span class="icon is-small is-tooltip v-align-middle" data-balloon='A user visiting <%= listing_info.domain_name%><%= (new_rental_info.path) ? "/" + new_rental_info.path : "" %> will see that URL in the address bar, but will see your website on the page.' data-balloon-length="large" data-balloon-pos="up">
+                        <i class="fa fa-question-circle"></i>
+                      </span>
+                    </h2>
+                  </div>
+                  <p>
+                    Use a website building service to create a new website for <span class='is-bold'><%= listing_info.domain_name %><%= (new_rental_info.path) ? "/" + new_rental_info.path : "" %></span> in minutes.
+                    You don&#39;t even have to know how to code!
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div id="choices-selected" style="display:none;">
+
+              <div class="columns is-hidden forward-choice-column choice-column">
+                <div class="column">
+                  <div class="control is-grouped">
+                    <p class="control is-expanded has-icon">
+                      <input tabindex="0" id="address-forward-input" class="checkout-track address-input input is-large" type="url" placeholder="Your company website, your friend's Instagram, or a product page..."/>
+                      <i class="fa fa-link"></i>
+                    </p>
+                    <p class="control">
+                      <button id="forward-submit" class="checkout-track address-next-button is-disabled button is-large is-primary is-stylish">
+                        <span class="icon"><i class="fa fa-check-circle"></i></span>
+                        <span>Submit</span>
+                      </button>
+                    </p>
+                  </div>
+                  <p class='margin-bottom-10 margin-top-30'>Here are some example websites for inspiration!</p>
+                  <div class='is-flex-wrap'>
+                    <div class="provider-card">
+                      <a id="linkedin-example"   href="https://linkedin.com" title="LinkedIn" class="checkout-track provider-img" style="border-color: #efefef; background-color: #efefef;">
+                        <img src="/images/companies/linkedin-logo.png" alt="LinkedIn"/>
+                      </a>
+                      <div class="content">
+                        <p>
+                          Forward to your company page or job posting.
                         </p>
-                        <p id="address-forward-message" class="is-hidden regular-message">
-                          Anyone navigating to <span class='is-bold'><%= listing_info.domain_name %><%= (new_rental_info.path) ? "/" + new_rental_info.path : "" %></span> will be automatically redirected to this link for the duration of your rental. Enter the link of the website you want to get started!
-                        </p>
-                        <p id="address-link-message" class="is-hidden regular-message">
-                          Display an existing website or web content (e.g. a gif, image, meme, etc.). This will be displayed <span class='is-bold'><%= listing_info.domain_name %><%= (new_rental_info.path) ? "/" + new_rental_info.path : "" %></span> for the duration of your rental. Enter the link below to get started!
-                        </p>
-                        <p id="address-build-message" class="is-hidden regular-message">
-                          Create an entirely new website for <span class='is-bold'><%= listing_info.domain_name %><%= (new_rental_info.path) ? "/" + new_rental_info.path : "" %></span>. It doesn&#39;t matter if its a personal portfolio, your new eCommerce store, or just a fun website.
-                        </p>
-                        <p id="address-error-message" class="error-message is-danger is-hidden">This is an invalid website link! Please choose a different website link.</p>
+                      </div>
                     </div>
-
-                    <div id="choices-block">
-                      <div id="forward-choice" class="checkout-track box hover-effect choice-block forward-choice">
-                        <div class="content">
-                          <div class="step-box">
-                            <span class="icon is-medium is-primary">
-                              <i class="fa fa-share-square"></i>
-                            </span>
-                            <h2>Forward elsewhere
-                              <span class="icon is-small is-tooltip v-align-middle" data-balloon='A user visiting <%= listing_info.domain_name%><%= (new_rental_info.path) ? "/" + new_rental_info.path : "" %> will be redirected to the website you provide us. The address bar will change to the forwarded website URL.' data-balloon-length="large" data-balloon-pos="up">
-                              <i class="fa fa-question-circle"></i>
-                            </span>
-                            </h2>
-                          </div>
-                          <p>
-                            Forward <span class='is-bold'><%= listing_info.domain_name %><%= (new_rental_info.path) ? "/" + new_rental_info.path : "" %></span> to an entirely different domain or website.
-                          </p>
-                        </div>
-                      </div>
-                      <div id="link-choice" class="checkout-track content box hover-effect choice-block link-choice">
-                        <div class="content">
-                          <div class="step-box">
-                            <span class="icon is-medium is-info">
-                              <i class="fa fa-external-link-square"></i>
-                            </span>
-                            <h2>Display web content
-                              <span class="icon is-small is-tooltip v-align-middle" data-balloon='A user visiting <%= listing_info.domain_name%><%= (new_rental_info.path) ? "/" + new_rental_info.path : "" %> will see that URL in the address bar, but will see the content from the website you provide us.' data-balloon-length="large" data-balloon-pos="up">
-                                <i class="fa fa-question-circle"></i>
-                              </span>
-                            </h2>
-                          </div>
-                          <p>
-                            Display an existing website or content (e.g. a gif, image, meme, etc.).
-                            We will show that content on <span class='is-bold'><%= listing_info.domain_name %><%= (new_rental_info.path) ? "/" + new_rental_info.path : "" %></span>.
-                          </p>
-                        </div>
-                      </div>
-                      <div id="build-choice" class="checkout-track content box hover-effect choice-block build-choice">
-                        <div class="content">
-                          <div class="step-box">
-                            <span class="icon is-medium is-accent">
-                              <i class="fa fa-pencil-square"></i>
-                            </span>
-                            <h2>Build a website
-                              <span class="icon is-small is-tooltip v-align-middle" data-balloon='A user visiting <%= listing_info.domain_name%><%= (new_rental_info.path) ? "/" + new_rental_info.path : "" %> will see that URL in the address bar, but will see your website on the page.' data-balloon-length="large" data-balloon-pos="up">
-                                <i class="fa fa-question-circle"></i>
-                              </span>
-                            </h2>
-                          </div>
-                          <p>
-                            Use a website building service to create a new website for <span class='is-bold'><%= listing_info.domain_name %><%= (new_rental_info.path) ? "/" + new_rental_info.path : "" %></span> in minutes.
-                            You don&#39;t even have to know how to code!
-                          </p>
-                        </div>
+                    <div class="provider-card">
+                      <a id="facebook-example"   href="https://facebook.com" title="Facebook" class="checkout-track provider-img" style="border-color: #4867aa; background-color: #4867aa;">
+                        <img src="/images/companies/facebook-logo.png" alt="Facebook" height="50px"/>
+                      </a>
+                      <div class="content">
+                        <p>
+                          Forward to a personal, business, or promotional page.
+                        </p>
                       </div>
                     </div>
-
-                      <div id="choices-selected" style="display:none;">
-
-                      <div class="columns is-hidden forward-choice-column choice-column">
-                        <div class="column">
-                            <div class="control is-grouped">
-                              <p class="control is-expanded has-icon">
-                                <input tabindex="0" id="address-forward-input" class="checkout-track address-input input is-large" type="url" placeholder="Your company website, your friend's Instagram, or a product page..."/>
-                                <i class="fa fa-link"></i>
-                              </p>
-                              <p class="control">
-                                <button id="forward-submit" class="checkout-track address-next-button is-disabled button is-large is-primary is-stylish">
-                                  <span class="icon"><i class="fa fa-check-circle"></i></span>
-                                  <span>Submit</span>
-                                </button>
-                              </p>
-                            </div>
-                            <p class='margin-bottom-10 margin-top-30'>Here are some example websites for inspiration!</p>
-                              <div class='is-flex-wrap'>
-                                <div class="provider-card">
-                                  <a id="linkedin-example"   href="https://linkedin.com" title="LinkedIn" class="checkout-track provider-img" style="border-color: #efefef; background-color: #efefef;">
-                                    <img src="/images/companies/linkedin-logo.png" alt="LinkedIn"/>
-                                  </a>
-                                  <div class="content">
-                                    <p>
-                                     Forward to your company page or job posting.
-                                    </p>
-                                  </div>
-                                </div>
-                                <div class="provider-card">
-                                  <a id="facebook-example"   href="https://facebook.com" title="Facebook" class="checkout-track provider-img" style="border-color: #4867aa; background-color: #4867aa;">
-                                    <img src="/images/companies/facebook-logo.png" alt="Facebook" height="50px"/>
-                                  </a>
-                                  <div class="content">
-                                    <p>
-                                      Forward to a personal, business, or promotional page.
-                                    </p>
-                                  </div>
-                                </div>
-                                <div class="provider-card">
-                                  <a id="instagram-example"   href="https://instagram.com" title="Instagram" class="checkout-track provider-img" style="border-color: #efefef; background-color: #FFF;">
-                                    <img src="/images/companies/instagram-logo.png" alt="Instagram" height="50px"/>
-                                  </a>
-                                  <div class="content">
-                                    <p>
-                                      Forward to a specific picture, post, or an account.
-                                    </p>
-                                  </div>
-                                </div>
-                            </div>
-                            <small>NOTE: We are not sponsored by any of the sites listed above. Clicking the image will send you to the respective website.</small>
-                          </div>
-                      </div>
-
-                      <div class="columns is-hidden link-choice-column choice-column">
-                        <div class="column">
-                          <div class="control is-grouped">
-                            <p class="control is-expanded has-icon">
-                              <input tabindex="0" id="address-link-input" class="checkout-track address-input input is-large" type="url" placeholder="A funny picture, a viral meme, or a cat GIF..."/>
-                              <i class="fa fa-link"></i>
-                            </p>
-                            <p class="control">
-                              <button id="link-submit" class="checkout-track address-next-button is-disabled button is-large is-primary is-stylish">
-                                <span class="icon"><i class="fa fa-check-circle"></i></span>
-                                <span>Submit</span>
-                              </button>
-                            </p>
-                          </div>
-                          <p class='margin-bottom-10 margin-top-30'>These websites provide great content for your domain rental.</p>
-                          <div class='is-flex-wrap'>
-                            <div class="provider-card">
-                              <a id="imgur-example"   href="https://imgur.com" title="Imgur" class="checkout-track provider-img" style="border-color: #2b2b2b; background-color: #2b2b2b;">
-                                <img src="/images/companies/imgur-logo.png" alt="Imgur" height="40px"/>
-                              </a>
-                              <div class="content">
-                                <p>
-                                  Display GIFs, funny memes, or other viral images.
-                                </p>
-                              </div>
-                            </div>
-                            <div class="provider-card">
-                              <a id="googleimages-example"   href="https://images.google.com" title="Google Images" class="checkout-track provider-img" style="border-color: #efefef; background-color: #FFF;">
-                                <img src="/images/companies/googleimages-logo.png" alt="Google Images" height="45px"/>
-                              </a>
-                              <div class="content">
-                                <p>
-                                  Display images, wallpapers, comics, etc.
-                                </p>
-                              </div>
-                            </div>
-                            <div class="provider-card">
-                              <a id="reddit-example"   href="https://reddit.com" title="Reddit" class="checkout-track provider-img" style="border-color: #efefef; background-color: #efefef;">
-                                <img src="/images/companies/reddit-logo.png" alt="Reddit" height="40px"/>
-                              </a>
-                              <div class="content">
-                                <p>
-                                  Display trending subreddits, threads, or comments.
-                                </p>
-                              </div>
-                            </div>
-                          </div>
-                          <small>NOTE: We are not sponsored by any of the sites listed above. Clicking the image will send you to the respective website.</small>
-                        </div>
-                      </div>
-
-                      <div class="columns is-hidden build-choice-column choice-column">
-                        <div class="column">
-                          <div class="control is-grouped">
-                            <p class="control is-expanded has-icon">
-                              <input tabindex="0" id="address-build-input" class="checkout-track address-input input is-large" type="url" placeholder="Your personal portfolio, an eCommerce store, or a new website..."/>
-                              <i class="fa fa-link"></i>
-                            </p>
-                            <p class="control">
-                              <button id="build-submit" class="checkout-track address-next-button is-disabled button is-large is-primary is-stylish">
-                                <span class="icon"><i class="fa fa-check-circle"></i></span>
-                                <span>Submit</span>
-                              </button>
-                            </p>
-                          </div>
-                          <p class='margin-bottom-10 margin-top-30'>Here are some premium website creation services!</p>
-                          <div class='is-flex-wrap'>
-                            <div class="provider-card">
-                              <a id="googlesites-example"   href="https://gsuite.google.com/products/sites/" title="Google Sites" class="checkout-track provider-img" style="border-color: #efefef; background-color: #efefef;">
-                                <img src="/images/companies/google-logo.png" alt="Google" height="50px"/>
-                              </a>
-                              <div class="content">
-                                <ul class="has-disc">
-                                  <li>
-                                    Free option
-                                  </li>
-                                  <li>
-                                    Collaborative
-                                  </li>
-                                </ul>
-                              </div>
-                            </div>
-                            <div class="provider-card">
-                              <a id="weebly-example"   href="https://www.weebly.com/themes" title="Weebly" class="checkout-track provider-img" style="border-color: rgb(41, 144, 234); background-color: rgb(41, 144, 234);">
-                                <img src="/images/companies/weebly-logo.png" alt="Weebly" height="35px"/>
-                              </a>
-                              <div class="content">
-                                <ul class="has-disc">
-                                  <li>
-                                    Free option
-                                  </li>
-                                  <li>
-                                    eCommerce
-                                  </li>
-                                </ul>
-                              </div>
-                            </div>
-                            <div class="provider-card">
-                              <a id="squarespace-example"   href="https://www.squarespace.com/templates" title="Squarespace" class="checkout-track provider-img" style="border-color: rgb(35, 31, 32); background-color: rgb(35, 31, 32);">
-                                <img src="/images/companies/squarespace-logo.png" alt="Squarespace" height="40px"/>
-                              </a>
-                              <div class="content">
-                                <ul class="has-disc">
-                                  <li>
-                                    Free option
-                                  </li>
-                                  <li>
-                                    eCommerce
-                                  </li>
-                                </ul>
-                              </div>
-                            </div>
-                            <div class="provider-card">
-                              <a id="wix-example"   href="http://www.wix.com/website/templates" title="Wix" class="checkout-track provider-img" style="border-color: rgb(170, 77, 200); background-color: rgb(170, 77, 200);">
-                                <img src="/images/companies/wix-logo.png" alt="Wix" height="35px"/>
-                              </a>
-                              <div class="content">
-                                <ul class="has-disc">
-                                  <li>
-                                    Free option
-                                  </li>
-                                  <li>
-                                    eCommerce
-                                  </li>
-                                </ul>
-                              </div>
-                            </div>
-                            <div class="provider-card">
-                              <a id="shopify-example"   href="https://www.shopify.com/online" title="Shopify" class="checkout-track provider-img" style="border-color: rgb(122, 181, 92); background-color: rgb(122, 181, 92);">
-                                <img src="/images/companies/shopify-logo.png" alt="Shopify" height="35px"/>
-                              </a>
-                              <div class="content">
-                                <ul class="has-disc">
-                                  <li>
-                                    Paid only
-                                  </li>
-                                  <li>
-                                    eCommerce
-                                  </li>
-                                </ul>
-                              </div>
-                            </div>
-                          </div>
-                          <small>NOTE: We are not sponsored by any of the sites listed above. Clicking the image will send you to the respective website.</small>
-                        </div>
-                      </div>
-                      <div class="control">
-                        <button id="site-cancel" class="checkout-track button is-stylish back-button">
-                          <span class="icon is-small"><i class="fa fa-long-arrow-left"></i></span>
-                          <span>Go back</span>
-                        </button>
+                    <div class="provider-card">
+                      <a id="instagram-example"   href="https://instagram.com" title="Instagram" class="checkout-track provider-img" style="border-color: #efefef; background-color: #FFF;">
+                        <img src="/images/companies/instagram-logo.png" alt="Instagram" height="50px"/>
+                      </a>
+                      <div class="content">
+                        <p>
+                          Forward to a specific picture, post, or an account.
+                        </p>
                       </div>
                     </div>
                   </div>
+                  <small>NOTE: We are not sponsored by any of the sites listed above. Clicking the image will send you to the respective website.</small>
+                </div>
+              </div>
+
+              <div class="columns is-hidden link-choice-column choice-column">
+                <div class="column">
+                  <div class="control is-grouped">
+                    <p class="control is-expanded has-icon">
+                      <input tabindex="0" id="address-link-input" class="checkout-track address-input input is-large" type="url" placeholder="A funny picture, a viral meme, or a cat GIF..."/>
+                      <i class="fa fa-link"></i>
+                    </p>
+                    <p class="control">
+                      <button id="link-submit" class="checkout-track address-next-button is-disabled button is-large is-primary is-stylish">
+                        <span class="icon"><i class="fa fa-check-circle"></i></span>
+                        <span>Submit</span>
+                      </button>
+                    </p>
+                  </div>
+                  <p class='margin-bottom-10 margin-top-30'>These websites provide great content for your domain rental.</p>
+                  <div class='is-flex-wrap'>
+                    <div class="provider-card">
+                      <a id="imgur-example"   href="https://imgur.com" title="Imgur" class="checkout-track provider-img" style="border-color: #2b2b2b; background-color: #2b2b2b;">
+                        <img src="/images/companies/imgur-logo.png" alt="Imgur" height="40px"/>
+                      </a>
+                      <div class="content">
+                        <p>
+                          Display GIFs, funny memes, or other viral images.
+                        </p>
+                      </div>
+                    </div>
+                    <div class="provider-card">
+                      <a id="googleimages-example"   href="https://images.google.com" title="Google Images" class="checkout-track provider-img" style="border-color: #efefef; background-color: #FFF;">
+                        <img src="/images/companies/googleimages-logo.png" alt="Google Images" height="45px"/>
+                      </a>
+                      <div class="content">
+                        <p>
+                          Display images, wallpapers, comics, etc.
+                        </p>
+                      </div>
+                    </div>
+                    <div class="provider-card">
+                      <a id="reddit-example"   href="https://reddit.com" title="Reddit" class="checkout-track provider-img" style="border-color: #efefef; background-color: #efefef;">
+                        <img src="/images/companies/reddit-logo.png" alt="Reddit" height="40px"/>
+                      </a>
+                      <div class="content">
+                        <p>
+                          Display trending subreddits, threads, or comments.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  <small>NOTE: We are not sponsored by any of the sites listed above. Clicking the image will send you to the respective website.</small>
+                </div>
+              </div>
+
+              <div class="columns is-hidden build-choice-column choice-column">
+                <div class="column">
+                  <div class="control is-grouped">
+                    <p class="control is-expanded has-icon">
+                      <input tabindex="0" id="address-build-input" class="checkout-track address-input input is-large" type="url" placeholder="Your personal portfolio, an eCommerce store, or a new website..."/>
+                      <i class="fa fa-link"></i>
+                    </p>
+                    <p class="control">
+                      <button id="build-submit" class="checkout-track address-next-button is-disabled button is-large is-primary is-stylish">
+                        <span class="icon"><i class="fa fa-check-circle"></i></span>
+                        <span>Submit</span>
+                      </button>
+                    </p>
+                  </div>
+                  <p class='margin-bottom-10 margin-top-30'>Here are some premium website creation services!</p>
+                  <div class='is-flex-wrap'>
+                    <div class="provider-card">
+                      <a id="googlesites-example"   href="https://gsuite.google.com/products/sites/" title="Google Sites" class="checkout-track provider-img" style="border-color: #efefef; background-color: #efefef;">
+                        <img src="/images/companies/google-logo.png" alt="Google" height="50px"/>
+                      </a>
+                      <div class="content">
+                        <ul class="has-disc">
+                          <li>
+                            Free option
+                          </li>
+                          <li>
+                            Collaborative
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                    <div class="provider-card">
+                      <a id="weebly-example"   href="https://www.weebly.com/themes" title="Weebly" class="checkout-track provider-img" style="border-color: rgb(41, 144, 234); background-color: rgb(41, 144, 234);">
+                        <img src="/images/companies/weebly-logo.png" alt="Weebly" height="35px"/>
+                      </a>
+                      <div class="content">
+                        <ul class="has-disc">
+                          <li>
+                            Free option
+                          </li>
+                          <li>
+                            eCommerce
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                    <div class="provider-card">
+                      <a id="squarespace-example"   href="https://www.squarespace.com/templates" title="Squarespace" class="checkout-track provider-img" style="border-color: rgb(35, 31, 32); background-color: rgb(35, 31, 32);">
+                        <img src="/images/companies/squarespace-logo.png" alt="Squarespace" height="40px"/>
+                      </a>
+                      <div class="content">
+                        <ul class="has-disc">
+                          <li>
+                            Free option
+                          </li>
+                          <li>
+                            eCommerce
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                    <div class="provider-card">
+                      <a id="wix-example"   href="http://www.wix.com/website/templates" title="Wix" class="checkout-track provider-img" style="border-color: rgb(170, 77, 200); background-color: rgb(170, 77, 200);">
+                        <img src="/images/companies/wix-logo.png" alt="Wix" height="35px"/>
+                      </a>
+                      <div class="content">
+                        <ul class="has-disc">
+                          <li>
+                            Free option
+                          </li>
+                          <li>
+                            eCommerce
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                    <div class="provider-card">
+                      <a id="shopify-example"   href="https://www.shopify.com/online" title="Shopify" class="checkout-track provider-img" style="border-color: rgb(122, 181, 92); background-color: rgb(122, 181, 92);">
+                        <img src="/images/companies/shopify-logo.png" alt="Shopify" height="35px"/>
+                      </a>
+                      <div class="content">
+                        <ul class="has-disc">
+                          <li>
+                            Paid only
+                          </li>
+                          <li>
+                            eCommerce
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                  <small>NOTE: We are not sponsored by any of the sites listed above. Clicking the image will send you to the respective website.</small>
+                </div>
+              </div>
+              <div class="control">
+                <button id="site-cancel" class="checkout-track button is-stylish back-button">
+                  <span class="icon is-small"><i class="fa fa-long-arrow-left"></i></span>
+                  <span>Go back</span>
+                </button>
+              </div>
+            </div>
+          </div>
 
           <!--PAYMENT STEP-->
           <header id="step-header-payment" class="checkout-track step-header header is-disabled margin-top-15">
