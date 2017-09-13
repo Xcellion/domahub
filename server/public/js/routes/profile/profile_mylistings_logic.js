@@ -1630,7 +1630,9 @@ function submitListingChanges(){
 
 //helper function to display/hide error messages per listing
 function errorMessage(message){
-  successMessage(false);
+  //hide success
+  $("#listing-msg-success").addClass('is-hidden').removeClass("is-active");
+  
   if (message && message == "not-premium"){
     updatePremiumNotification();
     $("#listing-msg-error").removeClass('is-hidden').addClass("is-active");
@@ -1644,16 +1646,21 @@ function errorMessage(message){
     $("#listing-msg-error").removeClass('is-hidden').addClass("is-active");
     $("#listing-msg-error-text").text(message);
   }
+  else if (!message) {
+    $("#listing-msg-error").addClass('is-hidden').removeClass("is-active");
+  }
 }
 
 //helper function to display success messages per listing
 function successMessage(message){
+  //hide error
+  $("#listing-msg-error").addClass('is-hidden').removeClass("is-active");
+
   if (message){
-    errorMessage(false);
     $("#listing-msg-success").removeClass('is-hidden').addClass("is-active");
     $("#listing-msg-success-text").text(message);
   }
-  else {
+  else if (!message){
     $("#listing-msg-success").addClass('is-hidden').removeClass("is-active");
   }
 }
@@ -1998,6 +2005,10 @@ function deletionHandler(rows, selected_rows){
     $(".yes-listings-elem").addClass('is-hidden');
     $(".no-listings-elem").removeClass('is-hidden');
     $("#loading-tab").addClass('is-hidden');
+  }
+  //recreate the rows
+  else {
+    createRows();
   }
 }
 
