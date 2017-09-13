@@ -757,10 +757,7 @@ function updateColorScheme(primary_color, secondary_color, tertiary_color){
   if (primary_color != false){
     listing_info.primary_color = primary_color;
     $("#primary-color-input").val(primary_color);
-    stylize(primary_color, ".daterangepicker td.active, .daterangepicker td.active:hover", "background-color");
-    stylize(primary_color, "#compare-preview .is-primary", "color");
-    stylize(primary_color, "#compare-preview .is-primary.button", "background-color");
-    stylize(primary_color, ".tag:not(.is-accent)", "background-color");
+    setupCustomColors();
 
     if (traffic_chart){
       traffic_chart.data.datasets[0].backgroundColor = ColorLuminance(primary_color, 0.2);
@@ -771,13 +768,12 @@ function updateColorScheme(primary_color, secondary_color, tertiary_color){
   if (secondary_color != false){
     listing_info.secondary_color = secondary_color;
     $("#secondary-color-input").val(secondary_color);
-    stylize(secondary_color, "#compare-preview .is-accent", "color");
-    stylize(secondary_color, "#compare-preview .is-accent.button, #compare-preview .is-accent.tag", "background-color");
+    setupCustomColors();
   }
   if (tertiary_color != false){
     listing_info.tertiary_color = tertiary_color;
     $("#tertiary-color-input").val(tertiary_color);
-    stylize(tertiary_color, "#compare-preview .is-info", "color");
+    setupCustomColors();
   }
 }
 
@@ -801,14 +797,14 @@ function loadFontStyleHandlers(){
 function updateFontColor(font_color){
   listing_info.font_color = font_color;
   $("#font-color-input").val(font_color);
-  stylize(font_color, ".regular-font", "color");
+  setupCustomColors();
 }
 
 //function to update font name
 function updateFontName(font_name){
   listing_info.font_name = font_name;
   $("#font-name-input").val(font_name)
-  stylize(font_name, "#domain-title", "font-family");
+  setupCustomColors();
 }
 
 //function to update modules
