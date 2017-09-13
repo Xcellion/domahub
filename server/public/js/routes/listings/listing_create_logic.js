@@ -1,10 +1,12 @@
 $(document).ready(function() {
 
+  //scroll to next error
   $("#scroll-error-button").on("click", function(){
     $('html, body').stop().animate({
       scrollTop: $("input.is-danger").offset().top - 100
-    }, 500);
-    $("input.is-danger").focus();
+    }, 500, function(){
+      $("input.is-danger:first").focus();
+    });
   });
 
   //<editor-fold>-------------------------------LISTING CREATE-------------------------------
@@ -61,11 +63,42 @@ $(document).ready(function() {
 
 });
 
+//<editor-fold>-------------------------------HELPERS-------------------------------
+
 //helper function to show next help text
 function showHelpText(help_text_id){
   $(".content-wrapper").addClass("is-hidden");
   $("#" + help_text_id + "-helptext").removeClass('is-hidden');
 }
+
+//helper function to display/hide error messages
+function errorMessage(message){
+
+  //hide success
+  $("#domain-success-message").addClass("is-hidden").removeClass("is-active");
+
+  //show errors or hide errors
+  if (message == "invalid domains"){
+    $("#domain-error-text").text("Some domain names were invalid! See below for more details.");
+    $("#scroll-error-button").removeClass('is-hidden');
+    $("#domain-error").removeClass("is-hidden").addClass("is-active");
+  }
+  else {
+
+    //hide scroll to button
+    $("#scroll-error-button").addClass('is-hidden');
+
+    if (message){
+      $("#domain-error-text").text(message);
+      $("#domain-error").removeClass("is-hidden").addClass("is-active");
+    }
+    else {
+      $("#domain-error").addClass("is-hidden").removeClass("is-active");
+    }
+  }
+}
+
+//</editor-fold>
 
 //<editor-fold>-------------------------------TEXTAREA CREATE-------------------------------
 
@@ -157,9 +190,9 @@ function createTableRow(data){
     if ($(".delete-icon").length == 1){
       createTableRow("");
     }
-    handleSubmitDisabled();
-    handleTopAddDomainButton();
     refreshNotification();
+    handleTopAddDomainButton();
+    handleSubmitDisabled();
   });
 
   //reasons for why it was a bad listing
@@ -385,7 +418,7 @@ function handleBadReasons(reasons, row){
     for (var x = 0; x < reasons.length; x++){
       var explanation = $("<small class='is-danger tip'>" + reasons[x] + "</small>")
       if (reasons[x] == "Invalid price!"){
-        var reason_input = ".buy-price-input";
+        var reason_input = ".min-price-input";
       }
       else {
         var reason_input = ".domain-name-input";
@@ -409,7 +442,7 @@ function goodTableRows(good_listings){
     var table_row = $($(".table-row").not("#clone-row")[good_listings[x].index]);
     var explanation = $("<small class='is-primary tip'>Successfully added!</small>")
     table_row.find(".domain-name-input").addClass('is-primary').closest('td').append(explanation);
-    table_row.find(".domain-name-input, .buy-price-input").addClass('is-disabled');
+    table_row.find(".domain-name-input, .min-price-input").addClass('is-disabled');
   }
 }
 
@@ -423,31 +456,3 @@ function deleteGoodTableRows(){
 }
 
 //</editor-fold>
-
-
-//helper function to display/hide error messages
-function errorMessage(message){
-
-  //hide success
-  $("#domain-success-message").addClass("is-hidden").removeClass("is-active");
-
-  //show errors or hide errors
-  if (message == "invalid domains"){
-    $("#domain-error-text").text("Some domain names were invalid! See below for more details.");
-    $("#scroll-error-button").removeClass('is-hidden');
-    $("#domain-error").removeClass("is-hidden").addClass("is-active");
-  }
-  else {
-
-    //hide scroll to button
-    $("#scroll-error-button").addClass('is-hidden');
-
-    if (message){
-      $("#domain-error-text").text(message);
-      $("#domain-error").removeClass("is-hidden").addClass("is-active");
-    }
-    else {
-      $("#domain-error").addClass("is-hidden").removeClass("is-active");
-    }
-  }
-}
