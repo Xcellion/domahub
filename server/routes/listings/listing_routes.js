@@ -216,7 +216,7 @@ module.exports = function(app, db, auth, error, stripe){
     buyer_functions.notifyOfferer
   ]);
 
-  //resend an email for accept
+  //resend an email for accept or transfer verify
   app.post(["/listing/:domain_name/contact/:offer_id/resend"], [
     auth.checkLoggedIn,
     urlencodedParser,

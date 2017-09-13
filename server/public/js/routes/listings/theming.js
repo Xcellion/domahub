@@ -2,7 +2,7 @@ $(document).ready(function() {
 
   //remove class to prevent screen flash DH green
   $("#compare-preview").removeClass('is-hidden');
-  
+
   //dont remove footer if we're using the compare tool
   if (!compare){
     $(".footer").removeClass('is-hidden');
@@ -12,6 +12,7 @@ $(document).ready(function() {
   if (listing_info.premium){
     setupCustomColors();
 
+    //show background image
     if (listing_info.background_image){
       $("#compare-preview").css("background-image", "url(" + listing_info.background_image + ")");
       $("#compare-preview").css("background-repeat", "no-repeat");
@@ -19,12 +20,9 @@ $(document).ready(function() {
       $("#compare-preview").css("background-size", "cover");
     }
 
+    //show custom logo
     if (listing_info.logo){
-      //show custom logo
       $("#custom_logo").attr("src", listing_info.logo);
-    }
-    else {
-      $(".footer").addClass('is-hidden');
     }
   }
 });
