@@ -475,6 +475,10 @@ button[data-balloon] {
   justify-content: center; }
   .button-wrapper.is-aligned-left {
     justify-content: flex-start; }
+    @media screen and (max-width: 425px) {
+      .button-wrapper.is-aligned-left {
+        flex-direction: column;
+        align-items: stretch; } }
   .button-wrapper .button:first-child {
     margin-right: 10px; }
   @media screen and (max-width: 425px) {
