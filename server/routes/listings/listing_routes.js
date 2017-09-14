@@ -297,12 +297,9 @@ module.exports = function(app, db, auth, error, stripe){
   //<editor-fold>-------------------------------RENTAL RELATED-------------------------------
 
   //domahub easter egg page
-  // app.get(['/listing/domahub.com', '/listing/w3bbi.com'], function(req, res){
-  //   res.render("listings/listing_w3bbi.ejs", {
-  //     user: req.user,
-  //     message: Auth.messageReset(req)
-  //   });
-  // });
+  app.get(['/listing/domahub.com', '/listing/w3bbi.com'], function(req, res){
+    res.redirect("/");
+  });
 
   //render specific listing page
   app.get('/listing/:domain_name', [
