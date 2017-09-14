@@ -490,8 +490,8 @@ function createTrafficChart(){
       labels: formatted_dataset.traffic_labels,
       datasets: [{
         label: "Website Views",
-        borderColor: (listing_info.traffic) ? listing_info.primary_color : "#3CBC8D",
-        backgroundColor: (listing_info.traffic) ? hexToRgbA(listing_info.primary_color).replace(",1)", ",.65)") : "rgba(60, 188, 141, 0.65)",
+        borderColor: (listing_info.traffic && listing_info.premium && listing_info.primary_color) ? listing_info.primary_color : "#3CBC8D",
+        backgroundColor: (listing_info.traffic && listing_info.premium && listing_info.primary_color) ? hexToRgbA(listing_info.primary_color).replace(",1)", ",.65)") : "rgba(60, 188, 141, 0.65)",
         data: formatted_dataset.traffic_views
       }]
     },
