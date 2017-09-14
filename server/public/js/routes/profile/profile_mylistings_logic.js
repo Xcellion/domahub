@@ -89,6 +89,15 @@ $(document).ready(function(){
         return true;
       }
     }).removeClass('is-hidden');
+
+    //something matches new filter
+    if ($(".table-row:not(.clone-row):visible:first").length > 0){
+      $("#no-listings-row").addClass('is-hidden');
+    }
+    //nothing matches the new filter
+    else {
+      $("#no-listings-row").removeClass('is-hidden');
+    }
   });
 
   //</editor-fold>
@@ -259,12 +268,8 @@ function createRow(listing_info, rownum){
   });
 
   tempRow.removeClass('is-hidden clone-row').attr("id", "row-listing_id" + listing_info.id);
-  tempRow.data("editing", false);
   tempRow.data("selected", false);
-  tempRow.data("id", listing_info.id);
-  tempRow.data("domain_name", listing_info.domain_name);
-  tempRow.data("unverified", (listing_info.verified) ? false : true);
-  tempRow.data("rented", listing_info.rented);
+  updateRowData(tempRow, listing_info);
 
   //already got the dns and a records for unverified domain
   if (listing_info.a_records != undefined && listing_info.whois != undefined){
@@ -272,6 +277,16 @@ function createRow(listing_info, rownum){
   }
 
   return tempRow;
+}
+
+//function to update row data
+function updateRowData(row, listing_info){
+  row.data("id", listing_info.id);
+  row.data("domain_name", listing_info.domain_name);
+  row.data("unverified", (listing_info.verified) ? false : true);
+  row.data("rented", listing_info.rented);
+  row.data("status", (listing_info.status == 1) ? true : false);
+  row.data("inactive", (listing_info.status == 0) ? true : false);
 }
 
 //update the clone row with row specifics
@@ -290,6 +305,7 @@ function changeRow(row, listing_info, bool){
 
   //only if actually changing
   if (current_listing != listing_info || bool){
+
     refreshSubmitButtons();
     $(".changeable-input").off();
 
@@ -1531,6 +1547,7 @@ function submitStatusChange(listing_info){
           changeRow($(this), new_listing_info, true);
         });
 
+        updateRowData($("#row-listing_id" + new_listing_info.id), new_listing_info);
         updateStatus({ status : new_status });
         updateBindings(new_listing_info);
       })(listing_info);
