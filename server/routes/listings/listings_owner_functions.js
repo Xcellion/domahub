@@ -540,8 +540,13 @@ module.exports = {
       var history_module = parseFloat(req.body.history_module);
       var traffic_module = parseFloat(req.body.traffic_module);
       var info_module = parseFloat(req.body.info_module);
+
+      //invalid footer description
+      if (req.body.description_footer && (req.body.description_footer.length < 0 || req.body.description_footer.length > 75)){
+        error.handler(req, res, "The footer description cannot be more than 75 characters!", "json");
+      }
       //invalid primary color
-      if (req.body.primary_color && !validator.isHexColor(req.body.primary_color)){
+      else if (req.body.primary_color && !validator.isHexColor(req.body.primary_color)){
         error.handler(req, res, "Invalid primary color!", "json");
       }
       //invalid secondary color
@@ -591,6 +596,7 @@ module.exports = {
         if (!req.session.new_listing_info) {
           req.session.new_listing_info = {};
         }
+        req.session.new_listing_info.description_footer = req.body.description_footer;
         req.session.new_listing_info.primary_color = req.body.primary_color;
         req.session.new_listing_info.secondary_color = req.body.secondary_color;
         req.session.new_listing_info.tertiary_color = req.body.tertiary_color;
@@ -626,7 +632,8 @@ module.exports = {
         req.body.logo_image_link ||
         req.body.history_module ||
         req.body.traffic_module ||
-        req.body.info_module
+        req.body.info_module ||
+        req.body.description_footer
       ){
         error.handler(req, res, "not-premium", "json");
       }
@@ -645,7 +652,6 @@ module.exports = {
     var status = parseFloat(req.body.status);
     var description = req.body.description;
     var description_hook = req.body.description_hook;
-    var description_footer = req.body.description_footer;
 
     //prices
     var price_rate = req.body.price_rate;
@@ -683,10 +689,6 @@ module.exports = {
     if (req.body.description_hook && (description_hook.length < 0 || description_hook.length > 75)){
       error.handler(req, res, "Invalid short listing description!", "json");
     }
-    //invalid footer description
-    else if (req.body.description_footer && (description_footer.length < 0 || description_footer.length > 75)){
-      error.handler(req, res, "The footer description cannot be more than 75 characters!", "json");
-    }
     //no paths
     else if (req.body.paths && paths_clean.length == 0){
       error.handler(req, res, "Invalid example pathes!", "json");
@@ -720,7 +722,6 @@ module.exports = {
       req.session.new_listing_info.status = status;
       req.session.new_listing_info.description = description;
       req.session.new_listing_info.description_hook = description_hook;
-      req.session.new_listing_info.description_footer = description_footer;
       req.session.new_listing_info.price_type = price_type;
       req.session.new_listing_info.price_rate = price_rate;
       req.session.new_listing_info.buy_price = (buy_price == "" || buy_price == 0) ? "" : buy_price;

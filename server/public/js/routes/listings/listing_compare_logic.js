@@ -46,14 +46,7 @@ $(document).ready(function() {
     loadFontStyleHandlers();
     updateModules();
 
-    //change to custom theme if anything is changed
-    $(".theme-changeable-input").on("change", function(){
-      $("#theme-input").val("Custom");
-      $("#dh-footer").addClass('is-hidden');
-      $("#navbar").addClass('is-hidden');
-      updateQueryStringParam("theme", "Custom");
-    });
-
+    loadPremiumAndBasicHandler();
     menuButtonHandlers();
 
     //</editor-fold>
@@ -185,7 +178,7 @@ $(document).ready(function() {
                         </button> \
                       </div> \
                     </div>",
-          backdropContainer: "#compare-preview",
+          backdropContainer: "#page-contents",
           content: "You can use this menu to quickly test the look and feel of your DomaHub domain listing.",
         },
 
@@ -199,13 +192,13 @@ $(document).ready(function() {
           onShow: function(){
             toggleMenu(true);
             $("#info-edit-tab").click();
-            $("#compare-preview").append("<div class='tour-backdrop'></div>");
+            $("#page-contents").append("<div class='tour-backdrop'></div>");
           },
           onHide: function(){
             if (listing_description_tour && !listing_description_tour.ended()){
               listing_description_tour.end();
             }
-            $("#compare-preview").find(".tour-backdrop").remove();
+            $("#page-contents").find(".tour-backdrop").remove();
           },
           content: "Try editing the listing description! Remember, this is just a testing tool. Nothing is saved."
         },
@@ -219,10 +212,10 @@ $(document).ready(function() {
           placement: "bottom",
           onShow: function(){
             toggleMenu(true);
-            $("#compare-preview").append("<div class='tour-backdrop'></div>");
+            $("#page-contents").append("<div class='tour-backdrop'></div>");
           },
           onHide: function(){
-            $("#compare-preview").find(".tour-backdrop").remove();
+            $("#page-contents").find(".tour-backdrop").remove();
           },
           template: "<div class='popover tour arrow-top'> \
                       <div class='popover-content margin-top-0 content'></div> \
@@ -253,10 +246,10 @@ $(document).ready(function() {
           placement: "bottom",
           onShow: function(){
             toggleMenu(true);
-            $("#compare-preview").append("<div class='tour-backdrop'></div>");
+            $("#page-contents").append("<div class='tour-backdrop'></div>");
           },
           onHide: function(){
-            $("#compare-preview").find(".tour-backdrop").remove();
+            $("#page-contents").find(".tour-backdrop").remove();
           },
           content: "Try editing the listing theme! If none of them fit your needs, you can always create a custom theme for your DomaHub listing."
         },
@@ -264,7 +257,7 @@ $(document).ready(function() {
         //contact offer form - 6
         {
           element: "#buy-rent-column",
-          backdropContainer: "#compare-preview",
+          backdropContainer: "#page-contents",
           placement: (window.mobilecheck()) ? "top" : "left",
           onShow: function(){
             toggleMenu(false);
@@ -299,7 +292,7 @@ $(document).ready(function() {
         //click rentable tab - 7
         {
           element: "#rent-now-button",
-          backdropContainer: "#compare-preview",
+          backdropContainer: "#page-contents",
           placement: "bottom",
           onShow: function(){
             showBuyStuff($("#buy-now-button"));
@@ -331,7 +324,7 @@ $(document).ready(function() {
         //rental tab - 8
         {
           element: "#buy-rent-column",
-          backdropContainer: "#compare-preview",
+          backdropContainer: "#page-contents",
           placement: (window.mobilecheck()) ? "top" : "left",
           onShow: function(){
             $("#compare-menu").append("<div class='tour-backdrop'></div>");
@@ -369,7 +362,7 @@ $(document).ready(function() {
         //modules - 9
         {
           element: "#modules-wrapper",
-          backdropContainer: "#compare-preview",
+          backdropContainer: "#page-contents",
           placement: "top",
           onShow: function(){
             $("#compare-menu").append("<div class='tour-backdrop'></div>");
@@ -486,12 +479,14 @@ function menuButtonHandlers() {
 function toggleMenu(show){
   if (show){
     $("#compare-menu").addClass("is-active");
-    $("#compare-preview").addClass("is-active");
+    $("#page-contents").addClass("is-active");
+    $("#dh-footer").addClass("is-active");
     $("#show-menu-button").fadeIn(100).addClass("is-hidden");
   }
   else {
     $("#compare-menu").removeClass("is-active");
-    $("#compare-preview").removeClass("is-active");
+    $("#page-contents").removeClass("is-active");
+    $("#dh-footer").removeClass("is-active");
     $("#show-menu-button").fadeIn(100).removeClass("is-hidden");
   }
 }
@@ -502,11 +497,10 @@ function toggleMenu(show){
 
 //function to switch theme
 function switchTheme(theme_name){
-  console.log("Switching theme...");
   var theme_to_load = findTheme(theme_name);
 
   //changing theme during tutorial
-  $("#compare-preview").find(".tour-backdrop").remove();
+  $("#page-contents").find(".tour-backdrop").remove();
 
   //if there wasnt a theme, load domahub theme
   if (!theme_to_load && theme_name != "Custom"){
@@ -522,14 +516,12 @@ function switchTheme(theme_name){
     listing_info[x] = theme_to_load[x];
   }
 
-  //hide footer/navbar if it's not a basic theme
+  //edit footer if it's not a basic theme
   if (theme_to_load.theme_name != "DomaHub"){
-    $("#dh-footer").addClass('is-hidden');
-    $("#navbar").addClass('is-hidden');
+    updateFooter(true);
   }
   else {
-    $("#dh-footer").removeClass('is-hidden');
-    $("#navbar").removeClass('is-hidden');
+    updateFooter(false);
   }
 
   updateBackgroundImage(listing_info.background_image);
@@ -542,6 +534,7 @@ function switchTheme(theme_name){
   loadBackgroundHandlers();
   loadColorSchemeHandlers();
   loadFontStyleHandlers();
+  loadPremiumAndBasicHandler();
 
   $("#theme-input").val(theme_to_load.theme_name);
   updateQueryStringParam("theme", theme_to_load.theme_name);
@@ -551,10 +544,9 @@ function switchTheme(theme_name){
 
 //<editor-fold>-----------------------------------------------------------------------------------INFO TAB
 
-//function to update the description
+//function to update the description / description footer
 function updateDescription(){
-  var listing_description = getParameterByName("description") || listing_info.description;
-  $("#description").val(listing_description).on("input", function(){
+  $("#description").val(listing_info.description).on("input", function(){
     $("#description-text").text($(this).val());
     listing_info.description = $(this).val();
 
@@ -570,7 +562,7 @@ function updateDescription(){
           <div class='popover-content margin-top-0'></div> \
           </div>",
           onStart: function(){
-            $("#compare-preview").find(".tour-backdrop").remove();
+            $("#page-contents").find(".tour-backdrop").remove();
           },
           steps: [
             //description is edited! - 4
@@ -579,7 +571,7 @@ function updateDescription(){
               placement: "right",
               backdrop: true,
               animation: false,
-              backdropContainer: "#compare-preview",
+              backdropContainer: "#page-contents",
               backdropPadding: 15,
               content: "The listing description will update automatically as you type. </br> </br> A well-written description can help your audience understand the full potential of your domain name!",
             },
@@ -596,6 +588,12 @@ function updateDescription(){
       else {
         listing_description_tour.goTo(0);
       }
+    }
+  });
+  $("#description-footer").val(listing_info.description_footer).on("input", function(e){
+    if ($(this).val().length < 100){
+      $("#doma_logo").text($(this).val());
+      listing_info.description_footer = $(this).val();
     }
   });
 }
@@ -694,6 +692,16 @@ function updateRentable(){
 
 //<editor-fold>-----------------------------------------------------------------------------------DESIGN TAB
 
+//function to change URL to custom for premium v basic
+function loadPremiumAndBasicHandler(){
+  //change to custom theme if anything is changed
+  $(".theme-changeable-input").on("change", function(){
+    $("#theme-input").val("Custom");
+    updateFooter(true);
+    updateQueryStringParam("theme", "Custom");
+  });
+}
+
 //function to load background handlers
 function loadBackgroundHandlers(){
 
@@ -713,6 +721,22 @@ function loadBackgroundHandlers(){
     updateBackgroundImage($("#background-image-input").val(), false);
   });
 
+  //highlight refresh button
+  $("#logo-image-input").off().on("input change", function(){
+    if ($(this).val() != listing_info.logo){
+      $("#logo-image-refresh").addClass('is-primary').removeClass('is-disabled');
+    }
+    else {
+      $("#logo-image-refresh").removeClass('is-primary').addClass('is-disabled');
+    }
+  });
+
+  //load background image handler
+  $("#logo-image-refresh").off().on("click", function(){
+    $("#logo-image-refresh").removeClass('is-primary').addClass('is-disabled');
+    updateLogoImage($("#logo-image-input").val(), false);
+  });
+
   //load background color handler
   $("#background-color-input").minicolors("destroy").minicolors({
     letterCase: "uppercase",
@@ -727,10 +751,43 @@ function updateBackgroundImage(background_image){
   listing_info.background_image = background_image;
   $("#background-image-input").val(background_image);
   if (background_image == ""){
-    $("#compare-preview").css("background", "");
+    $("#page-contents").css("background", "");
   }
   else {
-    $("#compare-preview").css("background", "url(" + background_image + ") center/cover no-repeat");
+    $("#page-contents").css("background", "url(" + background_image + ") center/cover no-repeat");
+  }
+}
+
+//input to update logo and the page
+function updateLogoImage(logo){
+  listing_info.logo = logo;
+  $("#logo-image-input").val(logo);
+  updateFooter(true);
+}
+
+//function to update the footer if it's premium
+function updateFooter(premium){
+  if (premium){
+
+    //change logo if it exists
+    if (listing_info.logo == ""){
+      $("#custom_logo").addClass("is-hidden");
+    }
+    else {
+      $("#custom_logo").removeClass('is-hidden').css("background", "url(" + listing_info.logo + ") center/cover no-repeat").removeAttr("href");
+    }
+
+    //change text
+    $("#dh-footer-right-text").text(listing_info.domain_name);
+    $("#dh-footer-right-smile").addClass("is-hidden");
+    $("#doma_logo").text(listing_info.description_footer).removeAttr("href");
+  }
+  //revert to basic
+  else {
+    $("#dh-footer-right-text").text("Simple, clean sales pages for your domains.");
+    $("#dh-footer-right-smile").removeClass("is-hidden");
+    $("#doma_logo").html('<i class="fa fa-copyright v-align-bottom"></i> DomaHub, Inc.');
+    $("#custom_logo").removeClass('is-hidden').removeAttr("style").attr("href", "/");
   }
 }
 
@@ -738,7 +795,7 @@ function updateBackgroundImage(background_image){
 function updateBackgroundColor(background_color){
   listing_info.background_color = background_color;
   $("#background-color-input").val(background_color);
-  $("#compare-preview").css("background-color", background_color);
+  $("#page-contents").css("background-color", background_color);
 }
 
 //load color scheme handlers

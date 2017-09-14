@@ -18,6 +18,12 @@
 			<div id="listing-msg-error" class="is-hidden is-danger notification is-popup">
 				<button class="delete"></button>
         <p id="listing-msg-error-text" class='is-white'></p>
+        <a id="error-upgrade-button" href="/profile/settings#premium" class="margin-top-15 is-hidden button is-stylish is-danger is-inverted is-small">
+          <span class="icon is-small">
+            <i class="fa fa-diamond"></i>
+          </span>
+          <span>Click Here To Upgrade</span>
+        </a>
 			</div>
 			<div id="listing-msg-success" class="is-hidden is-primary notification is-popup">
 				<button class="delete"></button>
@@ -243,8 +249,11 @@
                     <span class="icon is-small is-tooltip v-align-bottom" data-balloon-length="large" data-balloon="An optional description (up to 75 characters) to be displayed in the footer of your sales page. An ideal location for a slogan, phrase, or trademark." data-balloon-pos="up">
                       <i class="fa fa-question-circle"></i>
                     </span>
+                    <span class="icon is-small is-tooltip v-align-bottom" data-balloon-length="medium" data-balloon="You must upgrade to a Premium account to edit this." data-balloon-pos="up">
+                      <i class="fa fa-diamond"></i>
+                    </span>
                   </label>
-                  <input id="description-footer" data-name="description_footer" tabindex="0" class="input changeable-input" placeholder="The best domain names in the industry." />
+                  <input id="description-footer" data-name="description_footer" tabindex="0" class="premium-input input changeable-input" placeholder="The best domain names in the industry." />
                 </div>
 								<%# <div class="control">
 									<label class="label" for="description-hook">Short Description</label>
@@ -318,11 +327,11 @@
 												What is a Premium account?
 											</a>
                       <div class="margin-top-15 control has-text-centered">
-                        <a href="/profile/settings#premium" class="button is-stylish is-primary is-small">
+                        <a href="/profile/settings#premium" class="button is-stylish is-primary">
                           <span class="icon is-small">
                             <i class="fa fa-diamond"></i>
                           </span>
-                          <span>Upgrade</span>
+                          <span>Click Here To Upgrade</span>
                         </a>
                       </div>
 										</div>

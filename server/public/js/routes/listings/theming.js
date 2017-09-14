@@ -1,12 +1,8 @@
 $(document).ready(function() {
 
   //remove class to prevent screen flash DH green
-  $("#compare-preview").removeClass('is-hidden');
-
-  //dont remove footer if we're using the compare tool
-  if (!compare){
-    $(".footer").removeClass('is-hidden');
-  }
+  $("#page-contents").removeClass('is-hidden');
+  $("#dh-footer").removeClass('is-hidden');
 
   //if it's premium, check if theres any customization in the design
   if (listing_info.premium){
@@ -14,10 +10,10 @@ $(document).ready(function() {
 
     //show background image
     if (listing_info.background_image){
-      $("#compare-preview").css("background-image", "url(" + listing_info.background_image + ")");
-      $("#compare-preview").css("background-repeat", "no-repeat");
-      $("#compare-preview").css("background-position", "center");
-      $("#compare-preview").css("background-size", "cover");
+      $("#page-contents").css("background-image", "url(" + listing_info.background_image + ")");
+      $("#page-contents").css("background-repeat", "no-repeat");
+      $("#page-contents").css("background-position", "center");
+      $("#page-contents").css("background-size", "cover");
     }
 
     //show custom logo
@@ -70,9 +66,9 @@ function stylize(color, element, style, calculateluminance) {
 //function to setup any custom premium colors
 function setupCustomColors(){
   console.log("Setting up custom theme...");
-  stylize(listing_info.primary_color, "#compare-preview .is-primary:not(.notification)", "color");
+  stylize(listing_info.primary_color, "#page-contents .is-primary:not(.notification)", "color");
   stylize(listing_info.primary_color, ".daterangepicker td.active, .daterangepicker td.active:hover", "background-color", true);
-  stylize(listing_info.primary_color, "#compare-preview .is-primary.button", "background-color", true);
+  stylize(listing_info.primary_color, "#page-contents .is-primary.button", "background-color", true);
   stylize(listing_info.primary_color, ".tag:not(.category-tag)", "background-color", true);
   stylize(listing_info.font_color, ".regular-font", "color");
   stylize(listing_info.tertiary_color, ".is-info", "color");
@@ -80,7 +76,7 @@ function setupCustomColors(){
   stylize(listing_info.secondary_color, ".is-accent:not(.tag)", "color");
   stylize(listing_info.secondary_color, ".is-accent.button", "background-color", true);
   stylize(listing_info.secondary_color, "#typed-slash", "color");
-  stylize(listing_info.background_color, "#compare-preview", "background-color");
+  stylize(listing_info.background_color, "#page-contents", "background-color");
   stylize(listing_info.font_name, "#domain-title", "font-family");
   stylize(listing_info.font_name, "#typed-slash", "font-family");
 }

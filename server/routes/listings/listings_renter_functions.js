@@ -1241,6 +1241,7 @@ function getWhoIs(req, res, next, domain_name, unlisted){
         listing_info.categories = Categories.randomFrontAsString();
         listing_info.date_created = new Date().getTime();
         listing_info.description = default_descriptions.random();
+        listing_info.description_footer = "The greatest domains in the industry.";
         listing_info.status = 1;
         listing_info.price_rate = Math.round(Math.random() * 250);
         listing_info.price_type = "day";
@@ -1254,6 +1255,7 @@ function getWhoIs(req, res, next, domain_name, unlisted){
         listing_info.font_name = "Rubik";
         listing_info.background_color = "#FFFFFF";
         listing_info.background_image = "";
+        listing_info.logo = "";
         listing_info.history_module = 1;
         listing_info.traffic_module = 1;
         listing_info.info_module = 1;

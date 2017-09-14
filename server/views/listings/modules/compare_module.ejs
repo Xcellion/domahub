@@ -82,8 +82,22 @@ var fonts = <% if(typeof fonts != "undefined"){ %><%-JSON.stringify(fonts)%><% }
 
       <%# INFO %>
       <div id="compare-description-control" class="control">
-        <label class="label" for="description">Listing Description</label>
+        <label class="label" for="description">
+          <span>Listing Description</span>
+          <span class="icon is-small is-tooltip v-align-bottom" data-balloon-length="large" data-balloon="A well written description can help customers understand the value and potential of your domain name. Remember to use correct spelling and grammar to show your professionalism!" data-balloon-pos="down">
+            <i class="fa fa-question-circle"></i>
+          </span>
+        </label>
         <textarea id="description" class="description-input textarea " tabindex="0" placeholder="A great description will help users understand the full potential of this domain."></textarea>
+      </div>
+      <div id="compare-description-footer-control" class="control">
+        <label class="label" for="description_footer">
+          <span>Listing Footer Description</span>
+          <span class="icon is-small is-tooltip v-align-bottom" data-balloon-length="large" data-balloon="An optional description (up to 75 characters) to be displayed in the footer of your sales page. An ideal location for a slogan, phrase, or trademark." data-balloon-pos="up">
+            <i class="fa fa-question-circle"></i>
+          </span>
+        </label>
+        <input id="description-footer" class="description-footer-input input theme-changeable-input" tabindex="0" placeholder="The greatest domains in the industry."></textarea>
       </div>
 
       <%# PRICING %>
@@ -207,6 +221,22 @@ var fonts = <% if(typeof fonts != "undefined"){ %><%-JSON.stringify(fonts)%><% }
         <div class="control">
           <label class="label" for="background-color-input">Background Color</label>
           <input id="background-color-input" type="text" class="input theme-changeable-input">
+        </div>
+      </div>
+      <div class="control">
+        <label class="label" for="background-image-input">
+          <span>Logo Image URL</span>
+          <span class="icon is-small is-tooltip v-align-bottom" data-balloon-length="large" data-balloon="A logo to use on the footer of your listings page. It is included in various emails your customers receive and on checkout pages when customers rent/buy your domain. " data-balloon-pos="up">
+            <i class="fa fa-question-circle"></i>
+          </span>
+        </label>
+        <div class="control has-addons">
+          <input id="logo-image-input" type="text" class="input theme-changeable-input">
+          <button id="logo-image-refresh" class='is-disabled no-shadow is-outlined button'>
+            <span class="icon is-small">
+              <i class="fa fa-refresh"></i>
+            </span>
+          </button>
         </div>
       </div>
       <div class="control is-spaced">
