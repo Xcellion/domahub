@@ -1632,11 +1632,13 @@ function submitListingChanges(){
 function errorMessage(message){
   //hide success
   $("#listing-msg-success").addClass('is-hidden').removeClass("is-active");
-  
+  $("#error-upgrade-button").addClass('is-hidden');
+
   if (message && message == "not-premium"){
     updatePremiumNotification();
     $("#listing-msg-error").removeClass('is-hidden').addClass("is-active");
-    $("#listing-msg-error-text").text("You cannot edit the listing design without a Premium Account!");
+    $("#listing-msg-error-text").text("You must upgrade to a Premium Account to be able to edit that!");
+    $("#error-upgrade-button").removeClass('is-hidden');
   }
   else if (message && message == "nothing-changed"){
     refreshSubmitButtons();

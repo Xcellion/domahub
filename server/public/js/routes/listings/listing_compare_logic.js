@@ -46,15 +46,7 @@ $(document).ready(function() {
     loadFontStyleHandlers();
     updateModules();
 
-    //change to custom theme if anything is changed
-    $(".theme-changeable-input").on("change", function(){
-      $("#theme-input").val("Custom");
-      $("#dh-footer-right-text").text(listing_info.domain_name);
-      $("#dh-footer-right-smile").addClass("is-hidden");
-      $("#doma_logo").text(listing_info.description_footer).removeAttr("href");
-      updateQueryStringParam("theme", "Custom");
-    });
-
+    loadPremiumAndBasicHandler();
     menuButtonHandlers();
 
     //</editor-fold>
@@ -526,15 +518,10 @@ function switchTheme(theme_name){
 
   //edit footer if it's not a basic theme
   if (theme_to_load.theme_name != "DomaHub"){
-    $("#dh-footer-right-text").text(listing_info.domain_name);
-    $("#dh-footer-right-smile").addClass("is-hidden");
-    $("#doma_logo").text(listing_info.description_footer).removeAttr("href");
+    updateFooter(true);
   }
   else {
-    $("#dh-footer-right-text").text("Simple, clean sales pages for your domains.");
-    $("#dh-footer-right-smile").removeClass("is-hidden");
-    $("#doma_logo").html('<i class="fa fa-copyright v-align-bottom"></i> DomaHub, Inc.');
-    $("#custom_logo").removeAttr("style").addClass('circle-logo').attr("href", "/");
+    updateFooter(false);
   }
 
   updateBackgroundImage(listing_info.background_image);
@@ -547,6 +534,7 @@ function switchTheme(theme_name){
   loadBackgroundHandlers();
   loadColorSchemeHandlers();
   loadFontStyleHandlers();
+  loadPremiumAndBasicHandler();
 
   $("#theme-input").val(theme_to_load.theme_name);
   updateQueryStringParam("theme", theme_to_load.theme_name);
@@ -704,6 +692,16 @@ function updateRentable(){
 
 //<editor-fold>-----------------------------------------------------------------------------------DESIGN TAB
 
+//function to change URL to custom for premium v basic
+function loadPremiumAndBasicHandler(){
+  //change to custom theme if anything is changed
+  $(".theme-changeable-input").on("change", function(){
+    $("#theme-input").val("Custom");
+    updateFooter(true);
+    updateQueryStringParam("theme", "Custom");
+  });
+}
+
 //function to load background handlers
 function loadBackgroundHandlers(){
 
@@ -764,11 +762,32 @@ function updateBackgroundImage(background_image){
 function updateLogoImage(logo){
   listing_info.logo = logo;
   $("#logo-image-input").val(logo);
-  if (logo == ""){
-    $("#custom_logo").css("background", "").removeClass('circle-logo').removeAttr("href");
+  updateFooter(true);
+}
+
+//function to update the footer if it's premium
+function updateFooter(premium){
+  if (premium){
+
+    //change logo if it exists
+    if (listing_info.logo == ""){
+      $("#custom_logo").addClass("is-hidden");
+    }
+    else {
+      $("#custom_logo").removeClass('is-hidden').css("background", "url(" + listing_info.logo + ") center/cover no-repeat").removeAttr("href");
+    }
+
+    //change text
+    $("#dh-footer-right-text").text(listing_info.domain_name);
+    $("#dh-footer-right-smile").addClass("is-hidden");
+    $("#doma_logo").text(listing_info.description_footer).removeAttr("href");
   }
+  //revert to basic
   else {
-    $("#custom_logo").css("background", "url(" + logo + ") center/cover no-repeat").removeAttr("href");
+    $("#dh-footer-right-text").text("Simple, clean sales pages for your domains.");
+    $("#dh-footer-right-smile").removeClass("is-hidden");
+    $("#doma_logo").html('<i class="fa fa-copyright v-align-bottom"></i> DomaHub, Inc.');
+    $("#custom_logo").removeClass('is-hidden').removeAttr("style").attr("href", "/");
   }
 }
 
