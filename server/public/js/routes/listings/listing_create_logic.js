@@ -40,7 +40,6 @@ $(document).ready(function() {
   $(".delete-domains-button").on("click", function(e){
     deleteAllRows();
     handleSubmitDisabled();
-    handleTopAddDomainButton();
     refreshNotification();
   });
 
@@ -48,7 +47,6 @@ $(document).ready(function() {
   $(".delete-errors-button").on("click", function(e){
     deleteErroredRows();
     handleSubmitDisabled();
-    handleTopAddDomainButton();
     refreshNotification();
   });
 
@@ -190,7 +188,6 @@ function createTableRow(data){
       createTableRow("");
     }
     refreshNotification();
-    handleTopAddDomainButton();
     handleSubmitDisabled();
   });
 
@@ -198,11 +195,9 @@ function createTableRow(data){
   handleBadReasons(data.reasons, temp_table_row);
 
   $("#clone-row").addClass("is-hidden");
-  temp_table_row.appendTo("#domain-input-table");
+  temp_table_row.appendTo("#domain-input-body");
   temp_table_row.find(".domain-name-input").focus();
 
-  //add addbutton on top if there are too many
-  handleTopAddDomainButton();
   refreshNotification();
 }
 
@@ -219,16 +214,6 @@ function handleSubmitDisabled(){
   }
   else {
     $("#domains-submit").addClass('is-disabled');
-  }
-}
-
-//if there are more than 10 rows, add the add-domain button to the top as well
-function handleTopAddDomainButton(){
-  if ($(".table-row").length > 7 && $("#top-header-row").children().length == 0){
-    $("#top-header-row").append($("#table-buttons").clone(true))
-  }
-  else {
-    $("#top-header-row").empty();
   }
 }
 

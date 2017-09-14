@@ -75,38 +75,9 @@
 			</div>
 			<div id="table-columns" class="is-hidden columns flex-column-mobile">
 				<div id="table-column" class="column is-9 order-2-mobile">
-					<table class="table">
-						<thead id="top-header-row"></thead>
-						<thead>
-							<tr>
-								<th class='padding-left-15'>Domain Name</th>
-								<th style="width:25%">
-									<span>Min. Purchase Price</span>
-									<span class="icon is-tooltip is-small" data-balloon="The minimum you're willing to sell this domain for. Set to blank or 0 for no minimum purchase price. You can always change this later." data-balloon-length="large" data-balloon-pos="up">
-									  <i class="fa fa-question-circle"></i>
-									</span>
-								</th>
-							</tr>
-						</thead>
-						<tbody id="domain-input-table" data-rows="0">
-							<tr id="clone-row" class="table-row no-hover-effect">
-								<td class="td-domain aligned">
-									<div class='control has-addons is-marginless'>
-										<a class="button no-shadow">
-											<span class='icon delete-icon is-small'>
-												<i class='fa fa-trash-o'></i>
-											</span>
-										</a>
-										<input class="domain-name-input input is-expanded" type="text" value=""/>
-									</div>
-								</td>
-								<td class="td-min-price aligned">
-									<input class="min-price-input input" type="number" tabindex="-1" min="0" />
-								</td>
-							</tr>
-						</tbody>
-						<tfoot>
-							<tr id="table-buttons">
+					<table id="domain-input-table" class="table">
+						<thead id="top-header-row">
+              <tr id="table-buttons">
 								<th colspan='2'>
 									<a tabindex="0" class="is-inline-block add-domain-button button is-small">
 										<span class="icon is-small"><i class="fa fa-plus"></i></span>
@@ -124,9 +95,43 @@
 										</span>
 										<span>Clear Errored Rows</span>
 									</a>
+									<a tabindex="0" class="is-hidden is-pulled-right scroll-down-button button is-small is-primary is-outlined">
+										<span class='icon is-small'>
+											<i class='fa fa-long-arrow-down'></i>
+										</span>
+										<span>Scroll Down</span>
+									</a>
 								</th>
 							</tr>
-						</tfoot>
+            </thead>
+						<thead>
+							<tr>
+								<th class='td-domain'>Domain Name</th>
+								<th class="td-min-price">
+									<span>Min. Purchase Price</span>
+									<span class="icon is-tooltip is-small" data-balloon="The minimum you're willing to sell this domain for. Set to blank or 0 for no minimum purchase price. You can always change this later." data-balloon-length="large" data-balloon-pos="up">
+									  <i class="fa fa-question-circle"></i>
+									</span>
+								</th>
+							</tr>
+						</thead>
+						<tbody id="domain-input-body" data-rows="0">
+							<tr id="clone-row" class="table-row no-hover-effect">
+								<td class="td-domain aligned">
+									<div class='control has-addons is-marginless'>
+										<a class="button no-shadow">
+											<span class='icon delete-icon is-small'>
+												<i class='fa fa-trash-o'></i>
+											</span>
+										</a>
+										<input class="domain-name-input input is-expanded" type="text" value=""/>
+									</div>
+								</td>
+								<td class="td-min-price aligned">
+									<input class="min-price-input input" type="number" tabindex="-1" min="0" />
+								</td>
+							</tr>
+						</tbody>
 					</table>
 					<div class="control">
 						<a id='domains-submit'class="is-disabled button is-primary is-stylish">
