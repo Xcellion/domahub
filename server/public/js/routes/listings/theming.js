@@ -2,11 +2,7 @@ $(document).ready(function() {
 
   //remove class to prevent screen flash DH green
   $("#compare-preview").removeClass('is-hidden');
-
-  //dont remove footer if we're using the compare tool
-  if (!compare){
-    $(".footer").removeClass('is-hidden');
-  }
+  $(".footer").removeClass('is-hidden');
 
   //if it's premium, check if theres any customization in the design
   if (listing_info.premium){

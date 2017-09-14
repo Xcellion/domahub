@@ -49,7 +49,6 @@ $(document).ready(function() {
     //change to custom theme if anything is changed
     $(".theme-changeable-input").on("change", function(){
       $("#theme-input").val("Custom");
-      $("#dh-footer").addClass('is-hidden');
       $("#navbar").addClass('is-hidden');
       updateQueryStringParam("theme", "Custom");
     });
@@ -524,12 +523,14 @@ function switchTheme(theme_name){
 
   //hide footer/navbar if it's not a basic theme
   if (theme_to_load.theme_name != "DomaHub"){
-    $("#dh-footer").addClass('is-hidden');
-    $("#navbar").addClass('is-hidden');
+    $("#dh-footer-right-text").text(listing_info.domain_name);
+    $("#dh-footer-right-smile").addClass("is-hidden");
+    $("#doma_logo").text(listing_info.description_footer);
   }
   else {
-    $("#dh-footer").removeClass('is-hidden');
-    $("#navbar").removeClass('is-hidden');
+    $("#dh-footer-right-text").text("Simple, clean sales pages for your domains.");
+    $("#dh-footer-right-smile").removeClass("is-hidden");
+    $("#doma_logo").html('<i class="fa fa-copyright v-align-bottom"></i> DomaHub, Inc.');
   }
 
   updateBackgroundImage(listing_info.background_image);
@@ -551,10 +552,9 @@ function switchTheme(theme_name){
 
 //<editor-fold>-----------------------------------------------------------------------------------INFO TAB
 
-//function to update the description
+//function to update the description / description footer
 function updateDescription(){
-  var listing_description = getParameterByName("description") || listing_info.description;
-  $("#description").val(listing_description).on("input", function(){
+  $("#description").val(listing_info.description).on("input", function(){
     $("#description-text").text($(this).val());
     listing_info.description = $(this).val();
 
@@ -596,6 +596,15 @@ function updateDescription(){
       else {
         listing_description_tour.goTo(0);
       }
+    }
+  });
+  $("#description-footer").val(listing_info.description_footer).on("input", function(e){
+    if ($(this).val().length < 100){
+      $("#doma_logo").text($(this).val());
+      listing_info.description_footer = $(this).val();
+    }
+    else {
+      e.preventDefault();
     }
   });
 }

@@ -14,14 +14,14 @@
       </div>
       <div class="bar-right">
         <% if (!listing_info.premium) { %>
-        <p class="footer-item">
+        <p id="dh-footer-right-text" class="footer-item">
           Simple, clean sales pages for your domains.
         </p>
-        <a class="footer-item" href="https://www.emojione.com" rel="noopener" target="_blank" title="Icons from Emojione">
+        <a id="dh-footer-right-smile" class="footer-item" href="https://www.emojione.com" rel="noopener" target="_blank" title="Icons from Emojione">
           <img class="v-align-middle" height="16" width="16" alt="Icons from Emojione" src="/images/lib/smile.png" />
         </a>
         <% } else { %>
-          <a tabindex="0" href="http://<%= listing_info.domain_name %>" title="<%= listing_info.domain_name %>" class="footer-item">
+          <a id="dh_footer-right-text" tabindex="0" href="http://<%= listing_info.domain_name %>" title="<%= listing_info.domain_name %>" class="footer-item">
             <%= listing_info.domain_name %>
           </a>
         <% } %>
