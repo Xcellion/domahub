@@ -406,7 +406,7 @@ $(document).ready(function() {
         {
           autoScroll: true,
           title: "Thats the end of the DomaHub demo!",
-          content: "If you have any further questions, please do not hesitate to <a href='/contact' class='is-accent'>contact us</a>.",
+          content: "If you have any further questions, please do not hesitate to <a href='/contact' class='is-primary'>contact us</a>.",
           onShow: function(){
             toggleMenu(false);
           },
