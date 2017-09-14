@@ -5,6 +5,29 @@
   width: 256px;
   margin: 0 auto 25px; }
 
+#product-img {
+  position: relative; }
+  #product-img img {
+    -moz-transition: opacity 0.2s ease-in;
+    -o-transition: opacity 0.2s ease-in;
+    -webkit-transition: opacity 0.2s ease-in;
+    transition: opacity 0.2s ease-in; }
+  #product-img .button {
+    -moz-transition: opacity 0.2s ease-in;
+    -o-transition: opacity 0.2s ease-in;
+    -webkit-transition: opacity 0.2s ease-in;
+    transition: opacity 0.2s ease-in;
+    position: absolute;
+    top: 35%;
+    left: 50%;
+    transform: translate(-50%, 50%);
+    opacity: 0;
+    z-index: 9; }
+  #product-img:hover img {
+    opacity: 0.3; }
+  #product-img:hover .button {
+    opacity: 1; }
+
 .coffee {
   -webkit-animation: steam 3s infinite;
   -moz-animation: steam 3s infinite;
