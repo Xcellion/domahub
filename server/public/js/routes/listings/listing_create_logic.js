@@ -1,15 +1,6 @@
 $(document).ready(function() {
 
-  //scroll to next error
-  $("#scroll-error-button").on("click", function(){
-    $('html, body').stop().animate({
-      scrollTop: $("input.is-danger").offset().top - 100
-    }, 500, function(){
-      $("input.is-danger:first").focus();
-    });
-  });
-
-  //<editor-fold>-------------------------------LISTING CREATE-------------------------------
+  //<editor-fold>-------------------------------TEXT AREA BINDINGS-------------------------------
 
   //submit to create the table
   $("#domain-names-submit").on("click", function(e){
@@ -25,38 +16,46 @@ $(document).ready(function() {
     }
   });
 
+  //</editor-fold>
+
+  //<editor-fold>-------------------------------TABLE BINDINGS-------------------------------
+
+  //scroll to next error
+  $("#scroll-error-button").on("click", function(){
+    $('html, body').stop().animate({
+      scrollTop: $("input.is-danger").offset().top - 100
+    }, 500, function(){
+      $("input.is-danger:first").focus();
+    });
+  });
+
   //add row to table
-  $(".add-domain-button").on("click keypress", function(e){
-    if (e.which == 1 || e.which == 13 || e.which == 32){
-      e.preventDefault();
-      clearSuccessRows();
-      createTableRow("");
-      handleSubmitDisabled();
-    }
+  $(".add-domain-button").on("click", function(e){
+    clearSuccessRows();
+    createTableRow("");
+    handleSubmitDisabled();
   });
 
   //delete all rows
-  $(".delete-domains-button").on("click keypress", function(e){
-    if (e.which == 1 || e.which == 13 || e.which == 32){
-      e.preventDefault();
-      deleteAllRows();
-      handleSubmitDisabled();
-      handleTopAddDomainButton();
-      refreshNotification();
-    }
+  $(".delete-domains-button").on("click", function(e){
+    deleteAllRows();
+    handleSubmitDisabled();
+    handleTopAddDomainButton();
+    refreshNotification();
+  });
+
+  //delete all errored rows
+  $(".delete-errors-button").on("click", function(e){
+    deleteErroredRows();
+    handleSubmitDisabled();
+    handleTopAddDomainButton();
+    refreshNotification();
   });
 
   //submit to create listings
   $("#domains-submit").on("click", function(e){
     e.preventDefault();
     submitDomains($(this));
-  });
-
-  //go back to edit table
-  $("#review-table-button, #goback-button").on("click", function(e){
-    e.preventDefault();
-    showTable();
-    refreshNotification();
   });
 
   //</editor-fold>
@@ -225,11 +224,11 @@ function handleSubmitDisabled(){
 
 //if there are more than 10 rows, add the add-domain button to the top as well
 function handleTopAddDomainButton(){
-  if ($(".table-row").length > 7){
-    $("#top-header-row").removeClass('is-hidden');
+  if ($(".table-row").length > 7 && $("#top-header-row").children().length == 0){
+    $("#top-header-row").append($("#table-buttons").clone(true))
   }
   else {
-    $("#top-header-row").addClass('is-hidden');
+    $("#top-header-row").empty();
   }
 }
 
@@ -337,6 +336,14 @@ function deleteAllRows(){
   }
 }
 
+//function to delete all errored rows
+function deleteErroredRows(){
+  $(".table-row.errored-row").not("#clone-row").remove();
+  if ($(".table-row").length == 1){
+    createTableRow("");
+  }
+}
+
 //function to clear all successful rows
 function clearSuccessRows(){
   $(".domain-name-input.is-disabled").closest(".table-row").not("#clone-row").remove();
@@ -411,6 +418,7 @@ function handleBadReasons(reasons, row){
   if (reasons){
 
     //refresh the row
+    row.addClass('errored-row');
     row.find("small").remove();
     row.find('.is-danger').removeClass("is-danger");
 
@@ -427,6 +435,7 @@ function handleBadReasons(reasons, row){
       //handler to clear reasons and append the reason
       row.find(reason_input).addClass('is-danger').on("input change", function(){
         if ($(this).val().indexOf(".") != -1){
+          row.removeClass('errored-row');
           $(this).removeClass('is-danger');
           $(this).closest("td").find("small").remove();
           refreshNotification();
