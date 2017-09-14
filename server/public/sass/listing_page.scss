@@ -336,6 +336,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  &.is-aligned-left {
+    justify-content: flex-start;
+  }
   .button {
     &:first-child {
       margin-right: 10px;
