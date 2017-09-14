@@ -41,6 +41,8 @@
 									<select id="filter-select" tabindex="0">
 										<option selected value="id">View All</option>
 										<option value="unverified">Unverified</option>
+										<option value="status">Active</option>
+										<option value="inactive">Inactive</option>
 										<option value="rented">Rented Now</option>
 										<option value="accepted">Accepted An Offer</option>
 										<option value="deposited">Sold (Need to Transfer)</option>
@@ -71,6 +73,10 @@
 
 					<!-- DOMAINS TABLE  -->
 					<div id="table-body" class="margin-top-15">
+            <div id="no-listings-row" class="padding-15 clone-row has-text-centered is-hidden">
+              <span class="icon is-small"><i class="fa fa-frown-o"></i></span>
+              <span>There are no matching listings!</span>
+            </div>
 						<div id="verified-clone-row" class="clone-row table-row is-hidden">
 							<form class="checkbox-form">
 								<input class="select-button" data-selected="false" type="checkbox" tabindex="0" title="Select" />
