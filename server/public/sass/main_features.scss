@@ -10,6 +10,30 @@
   margin: 0 auto 25px;
 }
 
+#product-img {
+  position: relative;
+  img {
+    @include transition(opacity 0.2s ease-in);
+  }
+  .button {
+    @include transition(opacity 0.2s ease-in);
+    position: absolute;
+    top: 35%;
+    left: 50%;
+    transform: translate(-50%,50%);
+    opacity: 0;
+    z-index: 9;
+  }
+  &:hover {
+    img {
+      opacity: 0.3;
+    }
+    .button {
+      opacity: 1;
+    }
+  }
+}
+
 .coffee {
   @include keyframes(steam 3s infinite);
 }
