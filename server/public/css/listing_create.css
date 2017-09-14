@@ -207,6 +207,7 @@ button[data-balloon] {
 
 .tip {
   margin-top: 5px;
+  margin-left: 5px;
   float: right; }
 
 .aligned {

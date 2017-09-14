@@ -123,6 +123,10 @@ module.exports = {
       if (posted_domains[x].domain_name.length > 100){
         bad_reasons.push("Domain name is too long!");
       }
+      //too many domains (domains so far has 1 less right here, so needs to be >= maximum)
+      if (!req.user.stripe_subscription_id && domains_sofar.length + req.user.listings.length >= 100){
+        bad_reasons.push("Upgrade to a Premium account to create more listings!");
+      }
 
       //some were messed up
       if (bad_reasons.length > 0){
@@ -133,11 +137,6 @@ module.exports = {
       }
       //all good! format the db array
       else {
-        // //update the premium object if its premium
-        // if (posted_domains[x].premium == "true"){
-        //   premium_obj.count++;
-        //   premium_obj.domain_names.push([posted_domains[x].domain_name]);
-        // }
         domains_sofar.push(posted_domains[x].domain_name);
 
         //format the object for DB insert
