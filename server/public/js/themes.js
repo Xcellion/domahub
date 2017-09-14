@@ -69,6 +69,16 @@ var listing_themes = [
     background_color : "#000000",
     background_image : "",
   },
+  {
+    theme_name : "Island",
+    primary_color : "#3A9FD1",
+    secondary_color : "#E3A468",
+    tertiary_color : "#2196F3",
+    font_name : "Lato",
+    font_color : "#FFFFFF",
+    background_color : "#FFFFFF",
+    background_image : "https://images.unsplash.com/photo-1497968021412-a86898ccbc4a?dpr=1&auto=format&fit=crop&w=800&h=600&q=80&cs=tinysrgb&crop=",
+  }
 ]
 
 //function to populate theme dropdown
