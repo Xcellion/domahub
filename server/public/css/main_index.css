@@ -249,7 +249,7 @@ button[data-balloon] {
   align-items: center;
   justify-content: center;
   flex-wrap: wrap; }
-  .button-wrapper.is-left-aligned {
+  .button-wrapper.is-aligned-left {
     justify-content: flex-start; }
   .button-wrapper .button:first-child {
     margin-right: 10px; }

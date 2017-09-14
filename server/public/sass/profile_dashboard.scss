@@ -144,7 +144,6 @@
   background-color: $white;
   border-radius: $radius;
   border: 1px solid $border;
-  border-top-width: 0;
   max-height: 385px;
   white-space: nowrap;
   overflow-y: auto;
@@ -158,8 +157,8 @@
   padding: 5px;
   overflow-x: hidden;
   white-space: nowrap;
-  &:not(:first-child) {
-    border-top: 1px solid $border;
+  &:not(:last-child) {
+    border-bottom: 1px solid $border;
   }
   &:hover {
     background-color: $grey-lighter;
@@ -216,6 +215,7 @@
 .checkbox-form {
   height: 24px;
   margin-right: 10px;
+  position: relative;
   width: 24px;
   label::before {
     top: 0 !important;
