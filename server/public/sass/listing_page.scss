@@ -338,6 +338,10 @@
   justify-content: center;
   &.is-aligned-left {
     justify-content: flex-start;
+    @media screen and (max-width: 425px) {
+      flex-direction: column;
+      align-items: stretch;
+    }
   }
   .button {
     &:first-child {
