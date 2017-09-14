@@ -556,44 +556,47 @@ function updateDescription(){
     $("#description-text").text($(this).val());
     listing_info.description = $(this).val();
 
-    //tutorial tour is still going on!
-    if (!tutorial_tour.ended()){
-      if (!listing_description_tour && !window.mobilecheck()){
-        listing_description_tour = new Tour({
-          storage: false,
-          animation: false,
-          name: "description",
-          template: "<div class='popover tour'> \
-          <h3 class='popover-title'></h3> \
-          <div class='popover-content margin-top-0'></div> \
-          </div>",
-          onStart: function(){
-            $("#page-contents").find(".tour-backdrop").remove();
-          },
-          steps: [
-            //description is edited! - 4
-            {
-              element: "#description-text",
-              placement: "right",
-              backdrop: true,
-              animation: false,
-              backdropContainer: "#page-contents",
-              backdropPadding: 15,
-              content: "The listing description will update automatically as you type. </br> </br> A well-written description can help your audience understand the full potential of your domain name!",
+    if (!!window.mobilecheck()){
+      //tutorial tour is still going on!
+      if (!tutorial_tour.ended()){
+        if (!listing_description_tour && !window.mobilecheck()){
+          listing_description_tour = new Tour({
+            storage: false,
+            animation: false,
+            name: "description",
+            template: "<div class='popover tour'> \
+            <h3 class='popover-title'></h3> \
+            <div class='popover-content margin-top-0'></div> \
+            </div>",
+            onStart: function(){
+              $("#page-contents").find(".tour-backdrop").remove();
             },
-          ]
-        });
+            steps: [
+              //description is edited! - 4
+              {
+                element: "#description-text",
+                placement: "right",
+                backdrop: true,
+                animation: false,
+                backdropContainer: "#page-contents",
+                backdropPadding: 15,
+                content: "The listing description will update automatically as you type. </br> </br> A well-written description can help your audience understand the full potential of your domain name!",
+              },
+            ]
+          });
 
-        listing_description_tour.init();
-        listing_description_tour.start();
+          listing_description_tour.init();
+          listing_description_tour.start();
+          
+        }
+        else if (listing_description_tour.ended() && tutorial_tour.getCurrentStep() == 3){
+          listing_description_tour.restart();
+        }
+        else {
+          listing_description_tour.goTo(0);
+        }
+      }
 
-      }
-      else if (listing_description_tour.ended() && tutorial_tour.getCurrentStep() == 3){
-        listing_description_tour.restart();
-      }
-      else {
-        listing_description_tour.goTo(0);
-      }
     }
   });
   $("#description-footer").val(listing_info.description_footer).on("input", function(e){
