@@ -48,7 +48,30 @@
   display: flex;
 }
 
-#compare-preview {
+#dh-footer {
+  @include transition(all 0.2s ease);
+  &.is-active {
+    @include translate(500px,0);
+    width: calc(100% - 500px);
+    @include mobile {
+      @include translate(0,0);
+      width: 100%;
+    }
+    @media screen and (min-width: 768px) and (max-width: 1305px) {
+      @include translate(300px,0);
+      width: calc(100% - 300px);
+    }
+    @include tablet-only {
+      .master {
+        &.right {
+          flex-direction: column;
+        }
+      }
+    }
+  }
+}
+
+#page-contents {
   @include transition(all 0.2s ease);
   background-attachment: fixed;
   background-color: #fff;
