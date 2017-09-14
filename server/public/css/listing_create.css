@@ -202,8 +202,19 @@ button[data-balloon] {
     display: flex;
     flex-direction: column; } }
 
-.td-domain {
-  width: 300px; }
+thead {
+  display: block; }
+
+#domain-input-table {
+  display: block; }
+
+#domain-input-body {
+  display: block;
+  overflow-y: scroll;
+  height: 500px; }
+
+.td-min-price {
+  width: 25%; }
 
 .tip {
   margin-top: 5px;

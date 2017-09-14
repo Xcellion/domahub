@@ -51,9 +51,23 @@
   }
 }
 
+thead {
+  display: block;
+}
+
+#domain-input-table {
+  display:block;
+}
+
+#domain-input-body {
+  display:block;
+  overflow-y:scroll;
+  height:500px;
+}
+
 // Table columns
-.td-domain {
-  width: 300px;
+.td-min-price {
+  width: 25%;
 }
 
 .tip {
