@@ -223,6 +223,22 @@ var fonts = <% if(typeof fonts != "undefined"){ %><%-JSON.stringify(fonts)%><% }
           <input id="background-color-input" type="text" class="input theme-changeable-input">
         </div>
       </div>
+      <div class="control">
+        <label class="label" for="background-image-input">
+          <span>Logo Image URL</span>
+          <span class="icon is-small is-tooltip v-align-bottom" data-balloon-length="large" data-balloon="A logo to use on the footer of your listings page. It is included in various emails your customers receive and on checkout pages when customers rent/buy your domain. " data-balloon-pos="up">
+            <i class="fa fa-question-circle"></i>
+          </span>
+        </label>
+        <div class="control has-addons">
+          <input id="logo-image-input" type="text" class="input theme-changeable-input">
+          <button id="logo-image-refresh" class='is-disabled no-shadow is-outlined button'>
+            <span class="icon is-small">
+              <i class="fa fa-refresh"></i>
+            </span>
+          </button>
+        </div>
+      </div>
       <div class="control is-spaced">
         <div class="control-left">
           <label class="label" for="info-module-input">Info Module</label>

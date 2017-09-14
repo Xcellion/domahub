@@ -206,7 +206,39 @@ button[data-balloon] {
   height: 100%;
   display: flex; }
 
-#compare-preview {
+#dh-footer {
+  -moz-transition: all 0.2s ease;
+  -o-transition: all 0.2s ease;
+  -webkit-transition: all 0.2s ease;
+  transition: all 0.2s ease; }
+  #dh-footer.is-active {
+    -moz-transform: translate(500px, 0);
+    -o-transform: translate(500px, 0);
+    -ms-transform: translate(500px, 0);
+    -webkit-transform: translate(500px, 0);
+      -webkit-transform-transform: translate(500px, 0);
+    width: calc(100% - 500px); }
+    @media screen and (max-width: 768px) {
+      #dh-footer.is-active {
+        -moz-transform: translate(0, 0);
+        -o-transform: translate(0, 0);
+        -ms-transform: translate(0, 0);
+        -webkit-transform: translate(0, 0);
+          -webkit-transform-transform: translate(0, 0);
+        width: 100%; } }
+    @media screen and (min-width: 768px) and (max-width: 1305px) {
+      #dh-footer.is-active {
+        -moz-transform: translate(300px, 0);
+        -o-transform: translate(300px, 0);
+        -ms-transform: translate(300px, 0);
+        -webkit-transform: translate(300px, 0);
+          -webkit-transform-transform: translate(300px, 0);
+        width: calc(100% - 300px); } }
+    @media screen and (min-width: 769px) and (max-width: 979px) {
+      #dh-footer.is-active .master.right {
+        flex-direction: column; } }
+
+#page-contents {
   -moz-transition: all 0.2s ease;
   -o-transition: all 0.2s ease;
   -webkit-transition: all 0.2s ease;
@@ -218,7 +250,7 @@ button[data-balloon] {
   padding: 80px 20px;
   width: 100%;
   min-height: 100vh; }
-  #compare-preview.is-active {
+  #page-contents.is-active {
     -moz-transform: translate(500px, 0);
     -o-transform: translate(500px, 0);
     -ms-transform: translate(500px, 0);
@@ -226,7 +258,7 @@ button[data-balloon] {
       -webkit-transform-transform: translate(500px, 0);
     width: calc(100% - 500px); }
     @media screen and (max-width: 768px) {
-      #compare-preview.is-active {
+      #page-contents.is-active {
         -moz-transform: translate(0, 0);
         -o-transform: translate(0, 0);
         -ms-transform: translate(0, 0);
@@ -234,7 +266,7 @@ button[data-balloon] {
           -webkit-transform-transform: translate(0, 0);
         width: 100%; } }
     @media screen and (min-width: 768px) and (max-width: 1305px) {
-      #compare-preview.is-active {
+      #page-contents.is-active {
         -moz-transform: translate(300px, 0);
         -o-transform: translate(300px, 0);
         -ms-transform: translate(300px, 0);
@@ -242,7 +274,7 @@ button[data-balloon] {
           -webkit-transform-transform: translate(300px, 0);
         width: calc(100% - 300px); } }
     @media screen and (min-width: 769px) and (max-width: 979px) {
-      #compare-preview.is-active .master.right {
+      #page-contents.is-active .master.right {
         flex-direction: column; } }
 
 #compare-menu {
