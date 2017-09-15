@@ -4,11 +4,17 @@ var listing_description_tour = false;
 $(document).ready(function() {
   if (compare){
 
-    //delete notifications button
+    //hide bottom right notification button
     $("#compare-msg .delete").on("click", function(e){
       $("#compare-msg").addClass('is-hidden');
-      $("#compare-footer").removeClass('is-hidden').fadeIn(300);
+      $("#compare-footer").removeClass('is-hidden');
     });
+
+    //hide compare msg automatically if mobile
+    if (window.mobilecheck()){
+      $("#compare-msg").addClass('is-hidden');
+      $("#compare-footer").removeClass('is-hidden');
+    }
 
     //<editor-fold>---------------------------------COMPARE TOOL SETUP--------------------------------------------------
 
@@ -58,7 +64,7 @@ $(document).ready(function() {
       orphan: true,
       backdrop: true,
       name: "tutorial",
-      template: "<div class='popover tour arrow-top'> \
+      template: "<div class='popover tour'> \
                   <div class='popover-content margin-top-0 content'></div> \
                   <div class='popover-navigation'> \
                     <button class='button is-small' data-role='prev'> \
@@ -200,7 +206,30 @@ $(document).ready(function() {
             }
             $("#page-contents").find(".tour-backdrop").remove();
           },
-          content: "Try editing the listing description! Remember, this is just a testing tool. Nothing is saved."
+          template: "<div class='popover tour arrow-top'> \
+                      <div class='popover-content margin-top-0 content'></div> \
+                      <div class='popover-navigation'> \
+                        <button class='button is-small' data-role='prev'> \
+                          <span class='icon is-small'> \
+                            <i class='fa fa-angle-double-left'></i> \
+                          </span> \
+                          <span>Prev</span> \
+                        </button> \
+                        <button class='button is-small is-primary' data-role='next'> \
+                          <span>Next</span> \
+                          <span class='icon is-small'> \
+                            <i class='fa fa-angle-double-right'></i> \
+                          </span> \
+                        </button> \
+                        <button class='button is-small' data-role='end'> \
+                          <span class='icon is-small'> \
+                            <i class='fa fa-sign-out'></i> \
+                          </span> \
+                          <span>End Tutorial</span> \
+                        </button> \
+                      </div> \
+                    </div>",
+          content: "You can edit the listing description here! Remember, this is just a testing tool. Nothing is saved."
         },
 
         //design tab - 4
@@ -251,19 +280,7 @@ $(document).ready(function() {
           onHide: function(){
             $("#page-contents").find(".tour-backdrop").remove();
           },
-          content: "Try editing the listing theme! If none of them fit your needs, you can always create a custom theme for your DomaHub listing."
-        },
-
-        //contact offer form - 6
-        {
-          element: "#buy-rent-column",
-          backdropContainer: "#page-contents",
-          placement: (window.mobilecheck()) ? "top" : "left",
-          onShow: function(){
-            toggleMenu(false);
-            showBuyStuff($("#buy-now-button"));
-          },
-          template: "<div class='popover tour arrow-right'> \
+          template: "<div class='popover tour arrow-top'> \
                       <div class='popover-content margin-top-0 content'></div> \
                       <div class='popover-navigation'> \
                         <button class='button is-small' data-role='prev'> \
@@ -286,6 +303,18 @@ $(document).ready(function() {
                         </button> \
                       </div> \
                     </div>",
+          content: "Click here to edit the listing theme! If none of them fit your needs, you can always create a custom theme for your DomaHub listing."
+        },
+
+        //contact offer form - 6
+        {
+          element: "#buy-rent-column",
+          backdropContainer: "#page-contents",
+          placement: (window.mobilecheck()) ? "top" : "left",
+          onShow: function(){
+            toggleMenu(false);
+            showBuyStuff($("#buy-now-button"));
+          },
           content: 'Potential customers can use this form to contact you. All contact information is verified before you are notified of any new offers.'
         },
 
@@ -333,29 +362,6 @@ $(document).ready(function() {
           onHide: function(){
             $("#compare-menu").find(".tour-backdrop").remove();
           },
-          template: "<div class='popover tour arrow-right'> \
-                      <div class='popover-content margin-top-0 content'></div> \
-                      <div class='popover-navigation'> \
-                        <button class='button is-small' data-role='prev'> \
-                          <span class='icon is-small'> \
-                            <i class='fa fa-angle-double-left'></i> \
-                          </span> \
-                          <span>Prev</span> \
-                        </button> \
-                        <button class='button is-small is-primary' data-role='next'> \
-                          <span>Next</span> \
-                          <span class='icon is-small'> \
-                            <i class='fa fa-angle-double-right'></i> \
-                          </span> \
-                        </button> \
-                        <button class='button is-small' data-role='end'> \
-                          <span class='icon is-small'> \
-                            <i class='fa fa-sign-out'></i> \
-                          </span> \
-                          <span>End Tutorial</span> \
-                        </button> \
-                      </div> \
-                    </div>",
           content: 'Customers use this calendar to rent the domain for variable lengths of time and forward the domain to their desired URL. All rentals are cross-checked against the <a href="https://developers.google.com/safe-browsing/" class="is-primary">Google Safe Browsing API.</a>'
         },
 
@@ -400,7 +406,7 @@ $(document).ready(function() {
         {
           autoScroll: true,
           title: "Thats the end of the DomaHub demo!",
-          content: "If you have any further questions, please do not hesitate to <a href='/contact' class='is-accent'>contact us</a>.",
+          content: "If you have any further questions, please do not hesitate to <a href='/contact' class='is-primary'>contact us</a>.",
           onShow: function(){
             toggleMenu(false);
           },
@@ -550,44 +556,47 @@ function updateDescription(){
     $("#description-text").text($(this).val());
     listing_info.description = $(this).val();
 
-    //tutorial tour is still going on!
-    if (!tutorial_tour.ended()){
-      if (!listing_description_tour && !window.mobilecheck()){
-        listing_description_tour = new Tour({
-          storage: false,
-          animation: false,
-          name: "description",
-          template: "<div class='popover tour'> \
-          <h3 class='popover-title'></h3> \
-          <div class='popover-content margin-top-0'></div> \
-          </div>",
-          onStart: function(){
-            $("#page-contents").find(".tour-backdrop").remove();
-          },
-          steps: [
-            //description is edited! - 4
-            {
-              element: "#description-text",
-              placement: "right",
-              backdrop: true,
-              animation: false,
-              backdropContainer: "#page-contents",
-              backdropPadding: 15,
-              content: "The listing description will update automatically as you type. </br> </br> A well-written description can help your audience understand the full potential of your domain name!",
+    if (!!window.mobilecheck()){
+      //tutorial tour is still going on!
+      if (!tutorial_tour.ended()){
+        if (!listing_description_tour && !window.mobilecheck()){
+          listing_description_tour = new Tour({
+            storage: false,
+            animation: false,
+            name: "description",
+            template: "<div class='popover tour'> \
+            <h3 class='popover-title'></h3> \
+            <div class='popover-content margin-top-0'></div> \
+            </div>",
+            onStart: function(){
+              $("#page-contents").find(".tour-backdrop").remove();
             },
-          ]
-        });
+            steps: [
+              //description is edited! - 4
+              {
+                element: "#description-text",
+                placement: "right",
+                backdrop: true,
+                animation: false,
+                backdropContainer: "#page-contents",
+                backdropPadding: 15,
+                content: "The listing description will update automatically as you type. </br> </br> A well-written description can help your audience understand the full potential of your domain name!",
+              },
+            ]
+          });
 
-        listing_description_tour.init();
-        listing_description_tour.start();
+          listing_description_tour.init();
+          listing_description_tour.start();
+          
+        }
+        else if (listing_description_tour.ended() && tutorial_tour.getCurrentStep() == 3){
+          listing_description_tour.restart();
+        }
+        else {
+          listing_description_tour.goTo(0);
+        }
+      }
 
-      }
-      else if (listing_description_tour.ended() && tutorial_tour.getCurrentStep() == 3){
-        listing_description_tour.restart();
-      }
-      else {
-        listing_description_tour.goTo(0);
-      }
     }
   });
   $("#description-footer").val(listing_info.description_footer).on("input", function(e){
