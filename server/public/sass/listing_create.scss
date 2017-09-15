@@ -34,16 +34,6 @@
   }
 }
 
-.checkbox-wrapper {
-  border: 2px solid $border;
-  & > li {
-    position: relative;
-    &:not(:first-child) {
-      border-top: 2px solid $border;
-    }
-  }
-}
-
 .flex-column-mobile {
   @include mobile {
     display: flex;
@@ -51,25 +41,45 @@
   }
 }
 
-thead {
-  display: block;
-}
-
+// Table stuff
 #domain-input-table {
-  display:block;
+  thead,
+  tbody tr {
+    display: table;
+    table-layout: fixed;
+    width: 100%;
+  }
 }
 
 #domain-input-body {
-  display:block;
-  overflow-y:scroll;
-  height:500px;
+  display: block;
+  max-height: 390px;
+  overflow-y: auto;
 }
 
-// Table columns
+#table-buttons {
+  th {
+    @include mobile-456px {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: stretch;
+      .button {
+        margin-right: 5px;
+        margin-bottom: 5px;
+        flex-grow: 1;
+      }
+    }
+  }
+}
+
 .td-min-price {
   width: 25%;
+  @include mobile-456px {
+    width: 35%;
+  }
 }
 
+// MISC
 .tip {
   margin-top: 5px;
   margin-left: 5px;

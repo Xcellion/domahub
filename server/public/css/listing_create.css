@@ -190,31 +190,37 @@ button[data-balloon] {
 .control > .input.input-number {
   width: 100%; }
 
-.checkbox-wrapper {
-  border: 2px solid rgba(0, 0, 0, 0.12); }
-  .checkbox-wrapper > li {
-    position: relative; }
-    .checkbox-wrapper > li:not(:first-child) {
-      border-top: 2px solid rgba(0, 0, 0, 0.12); }
-
 @media screen and (max-width: 768px) {
   .flex-column-mobile {
     display: flex;
     flex-direction: column; } }
 
-thead {
-  display: block; }
-
-#domain-input-table {
-  display: block; }
+#domain-input-table thead,
+#domain-input-table tbody tr {
+  display: table;
+  table-layout: fixed;
+  width: 100%; }
 
 #domain-input-body {
   display: block;
-  overflow-y: scroll;
-  height: 500px; }
+  max-height: 390px;
+  overflow-y: auto; }
+
+@media screen and (max-width: 456px) {
+  #table-buttons th {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: stretch; }
+    #table-buttons th .button {
+      margin-right: 5px;
+      margin-bottom: 5px;
+      flex-grow: 1; } }
 
 .td-min-price {
   width: 25%; }
+  @media screen and (max-width: 456px) {
+    .td-min-price {
+      width: 35%; } }
 
 .tip {
   margin-top: 5px;

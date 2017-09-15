@@ -152,7 +152,17 @@
   background-color: $white;
   .control {
     &.is-spaced {
-      @media screen and (max-width: 1305px) {
+      @media screen and (min-width: 457px) and (max-width: 1305px) {
+        flex-direction: column-reverse;
+        align-items: flex-start;
+        .control-right {
+          margin-bottom: 10px;
+        }
+      }
+      @include mobile-456px {
+        flex-direction: row;
+      }
+      @media screen and (max-width: 320px) {
         flex-direction: column-reverse;
         align-items: flex-start;
         .control-right {

@@ -204,7 +204,7 @@ button[data-balloon] {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  justify-content: space-between; }
+  justify-content: space-around; }
   @media screen and (max-width: 768px) {
     .is-flex-wrap {
       flex-direction: column;

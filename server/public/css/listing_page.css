@@ -331,7 +331,16 @@ button[data-balloon] {
   padding: 20px;
   width: 100%;
   background-color: white; }
-  @media screen and (max-width: 1305px) {
+  @media screen and (min-width: 457px) and (max-width: 1305px) {
+    #compare-buttons .control.is-spaced {
+      flex-direction: column-reverse;
+      align-items: flex-start; }
+      #compare-buttons .control.is-spaced .control-right {
+        margin-bottom: 10px; } }
+  @media screen and (max-width: 456px) {
+    #compare-buttons .control.is-spaced {
+      flex-direction: row; } }
+  @media screen and (max-width: 320px) {
     #compare-buttons .control.is-spaced {
       flex-direction: column-reverse;
       align-items: flex-start; }

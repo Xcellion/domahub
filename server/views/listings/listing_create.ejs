@@ -78,28 +78,22 @@
 					<table id="domain-input-table" class="table">
 						<thead id="top-header-row">
               <tr id="table-buttons">
-								<th colspan='2'>
-									<a tabindex="0" class="is-inline-block add-domain-button button is-small">
+								<th>
+									<a tabindex="0" class="is-inline-block add-domain-button button is-small is-black is-inverted">
 										<span class="icon is-small"><i class="fa fa-plus"></i></span>
 										<span>Add Row</span>
 									</a>
-									<a tabindex="0" class="delete-domains-button button is-small is-outlined">
+									<a tabindex="0" class="delete-domains-button button is-small is-black is-inverted">
 										<span class='icon is-small'>
 											<i class='fa fa-trash-o'></i>
 										</span>
-										<span>Remove All</span>
+										<span>Delete All</span>
 									</a>
-									<a tabindex="0" class="delete-errors-button button is-small is-outlined">
+									<a tabindex="0" class="delete-errors-button button is-small is-danger is-inverted">
 										<span class='icon is-small'>
 											<i class='fa fa-ban'></i>
 										</span>
 										<span>Clear Errored Rows</span>
-									</a>
-									<a tabindex="0" class="is-hidden is-pulled-right scroll-down-button button is-small is-primary is-outlined">
-										<span class='icon is-small'>
-											<i class='fa fa-long-arrow-down'></i>
-										</span>
-										<span>Scroll Down</span>
 									</a>
 								</th>
 							</tr>
@@ -107,8 +101,8 @@
 						<thead>
 							<tr>
 								<th class='td-domain'>Domain Name</th>
-								<th class="td-min-price">
-									<span>Min. Purchase Price</span>
+								<th class="td-min-price is-hidden-mobile">
+									<span>Min. Price</span>
 									<span class="icon is-tooltip is-small" data-balloon="The minimum you're willing to sell this domain for. Set to blank or 0 for no minimum purchase price. You can always change this later." data-balloon-length="large" data-balloon-pos="up">
 									  <i class="fa fa-question-circle"></i>
 									</span>
@@ -127,7 +121,7 @@
 										<input class="domain-name-input input is-expanded" type="text" value=""/>
 									</div>
 								</td>
-								<td class="td-min-price aligned">
+								<td class="td-min-price aligned is-hidden-mobile">
 									<input class="min-price-input input" type="number" tabindex="-1" min="0" />
 								</td>
 							</tr>
