@@ -188,14 +188,13 @@
 .button-wrapper {
   display: flex;
   flex-wrap: wrap;
+  align-items: stretch;
   justify-content: space-between;
-  .button {
-    margin-right: 5px;
-  }
   .button,
   .select {
-    flex-grow: 1;
+    margin-right: 5px;
     margin-bottom: 5px;
+    flex-grow: 1;
   }
   select {
     width: 100%;

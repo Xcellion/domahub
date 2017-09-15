@@ -385,13 +385,13 @@ button[data-balloon] {
 .button-wrapper {
   display: flex;
   flex-wrap: wrap;
+  align-items: stretch;
   justify-content: space-between; }
-  .button-wrapper .button {
-    margin-right: 5px; }
   .button-wrapper .button,
   .button-wrapper .select {
-    flex-grow: 1;
-    margin-bottom: 5px; }
+    margin-right: 5px;
+    margin-bottom: 5px;
+    flex-grow: 1; }
   .button-wrapper select {
     width: 100%; }
 
