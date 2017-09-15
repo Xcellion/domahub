@@ -424,7 +424,7 @@ module.exports = {
               error.handler(req, res, "Invalid price!", "json");
             }
             else {
-              console.log("Payment processed! Customer paid " + moneyFormat.to((total_price - stripe_fees - doma_fees)/100) + " with " +  moneyFormat.to(doma_fees/100) + " in Doma fees and " + moneyFormat.to(stripe_fees/100) + " in Stripe fees.");
+              console.log("Payment processed! Customer paid " + moneyFormat.to(total_price/100) + " with " +  moneyFormat.to(doma_fees/100) + " in Doma fees and " + moneyFormat.to(stripe_fees/100) + " in Stripe fees.");
               next();
             }
           });

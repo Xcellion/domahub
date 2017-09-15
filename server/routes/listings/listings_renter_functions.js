@@ -267,7 +267,7 @@ module.exports = {
   renderCheckout : function(req, res, next){
     var domain_name = (typeof req.session.pipe_to_dh != "undefined") ? req.session.pipe_to_dh : req.params.domain_name;
 
-    if (req.session.new_rental_info && req.session.new_rental_info.domain_name == domain_name){
+    if (req.session.listing_info && req.session.new_rental_info && req.session.new_rental_info.domain_name == domain_name){
       console.log("F: Rendering listing checkout page...");
 
       res.render("listings/listing_checkout_rent.ejs", {

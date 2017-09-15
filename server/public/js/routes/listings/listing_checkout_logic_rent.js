@@ -1,65 +1,7 @@
 $(document).ready(function () {
 
-  //<editor-fold>------------------------------------------HEADER STEPS----------------------------------------
-
   showStep("site");
-  showMessage("address-regular-message");
-
-  //continue as guest
-  $("#guest-button").on("click", function(){
-    $(this).next(".control").removeClass('is-hidden');
-    $(this).addClass("is-hidden");
-    $("#new-user-email").focus();
-    $("#email-balloon").removeClass('is-hidden');
-    $("#email-skip").removeClass('is-hidden');
-    showMessage("guest-regular-message", "Enter your email below.");
-  });
-
-  //submit guest email
-  $("#guest-submit").on("click", function() {
-    if (checkEmail($("#new-user-email").val())){
-      showStep("site");
-      showMessage("address-regular-message");
-    }
-    else {
-      showMessage("log-error-message");
-    }
-  });
-
-  $("#email-skip").on('click', function(){
-    showStep("site");
-    showMessage("address-regular-message");
-  });
-
-  //enter in an email for guests
-  $("#new-user-email").on("change keyup paste", function(){
-    if ($(this).val()){
-      $("#guest-submit").removeClass('is-disabled');
-    }
-    else {
-      $("#guest-submit").addClass('is-disabled');
-    }
-  }).on("keypress", function(e){
-    //enter to go next
-    if (e.keyCode == 13 && checkEmail($(this).val())){
-      $("#guest-submit").click();
-    }
-  });
-
-  //click to go to different step
-  $(".step-header").on("click", function(){
-    if ($(this).attr('id') == "step-header-log" && user){
-      //dont allow change to step 1 if logged in
-    }
-    else if ($(this).data('can-go') == true){
-      var step_id = $(this).attr('id').split("-");
-      step_id = step_id[step_id.length - 1];
-      showStep(step_id);
-      showMessage($(this).next(".step-content").find(".regular-message:first-child").attr('id'));
-    }
-  });
-
-  //</editor-fold>
+  showMessage("site-regular-message");
 
   //<editor-fold>------------------------------------------LISTING DETAILS CARD----------------------------------------
 
@@ -110,46 +52,68 @@ $(document).ready(function () {
   //<editor-fold>------------------------------------------CHOICE BLOCKS----------------------------------------
 
   //click choice block
-  var which_address = "address-regular-message";
   $(".choice-block").on("click", function() {
     var which_choice = $(this);
-    $("#choices-block").stop().fadeOut(250, function(){
-      $("#choices-selected").stop().fadeIn(250);
+
+    var step_content = $(this).closest(".step-content");
+    var choices_selected = step_content.find(".choices-selected");
+    var choices_block = step_content.find(".choices-block");
+
+    choices_block.stop().fadeOut(250, function(){
+      choices_selected.stop().fadeIn(250);
 
       //build a website
       if (which_choice.hasClass("build-choice")) {
         $(".build-choice-column").removeClass("is-hidden").find('input').focus();
         showMessage("address-build-message");
-        which_address = "address-build-message";
       }
 
       //link a website
       else if (which_choice.hasClass("link-choice")) {
         $(".link-choice-column").removeClass("is-hidden").find('input').focus();
         showMessage("address-link-message");
-        which_address = "address-link-message";
       }
 
       //forward to a website
-      else {
+      else if (which_choice.hasClass("forward-choice")){
         $(".forward-choice-column").removeClass("is-hidden").find('input').focus();
         showMessage("address-forward-message");
-        which_address = "address-forward-message";
+      }
+
+      //stripe (credit card)
+      else if (which_choice.hasClass("stripe-choice")){
+        $(".stripe-choice-column").removeClass("is-hidden").find('input:first').focus();
+        showMessage("stripe-regular-message");
+      }
+
+      //stripe (credit card)
+      else if (which_choice.hasClass("bitcoin-choice")){
+        $(".bitcoin-choice-column").removeClass("is-hidden").find('input').focus();
+        showMessage("bitcoin-regular-message");
       }
     });
 
   });
 
-  //back button on address selection
+  //back button on address / payment selection
   $(".back-button").on("click", function() {
-    $("#choices-selected").stop().fadeOut(250, function(){
-      $("#choices-block").stop().fadeIn(250);
-      $(".choice-column").addClass('is-hidden');
-      showMessage("address-regular-message");
-      $(".address-input").val("").removeClass('input-selected');
-      $("#rental-will-msg").addClass('is-hidden');
-      $("#rental-will-duration-msg").addClass('is-hidden');
-      $(".address-next-button").addClass('is-disabled');
+    var step_content = $(this).closest(".step-content");
+    var which_step = step_content.attr("id").split("-")[2] + "-regular-message";
+    var choices_selected = step_content.find(".choices-selected");
+    var choices_block = step_content.find(".choices-block");
+
+    choices_selected.stop().fadeOut(250, function(){
+      choices_block.stop().fadeIn(250);
+      step_content.find(".choice-column").addClass('is-hidden');
+      showMessage(which_step);
+
+      //going back to address
+      if (which_step == "site-regular-message"){
+        $(".address-input").val("").removeClass('input-selected');
+        $("#rental-will-msg").addClass('is-hidden');
+        $("#rental-will-duration-msg").addClass('is-hidden');
+        $(".address-next-button").addClass('is-disabled');
+      }
     });
   });
 
@@ -186,7 +150,7 @@ $(document).ready(function () {
     var address_input = $(this).parent(".control").parent(".control").find(".address-input");
     if (checkAddress(address_input.val())){
       showStep("payment");
-      showMessage("stripe-regular-message");
+      showMessage("payment-regular-message");
       address_input.addClass('input-selected');
     }
     else {
@@ -260,7 +224,7 @@ $(document).ready(function () {
   //go back to address
   $("#back-to-address-button").on('click', function(){
     showStep("site");
-    showMessage(which_address);
+    showMessage("site-regular-message");
   });
 
   //</editor-fold>
@@ -365,7 +329,6 @@ function submitNewRental(stripeToken){
 
 //handler for various error messages
 function errorHandler(message){
-  console.log(message);
   switch (message){
     case "Dates are unavailable!":
     showMessage("stripe-error-message", "The selected time slot is not available anymore! Please edit your selected rental dates.");
@@ -394,10 +357,6 @@ function errorHandler(message){
     showStep("site");
     showMessage("address-error-message", "This website link has been deemed malicious or dangerous! Please choose a different website link.");
     break;
-    case "Invalid email!":
-    showStep("log");
-    showMessage("log-error-message");
-    break;
     default:
     showMessage("stripe-error-message", "Something went wrong with the rental! Please refresh the page and try again.");
     break;
@@ -411,29 +370,31 @@ function errorHandler(message){
 
 //handler for successful rental
 function successHandler(rental_id, owner_hash_id){
-  //show success message
-  var domain_and_path = (new_rental_info.path) ? listing_info.domain_name + "/" + new_rental_info.path : listing_info.domain_name;
-  var starttime_format = moment(new_rental_info.starttime).format("MMMM D, YYYY");
-  var endtime_format = moment(new_rental_info.endtime).format("MMMM D, YYYY");
-  showMessage("stripe-success-message", "Hurray! Your rental was successfully created for <strong>" + domain_and_path + "</strong>. It is scheduled to start on <strong>" + starttime_format + "</strong> and end on <strong>" + endtime_format + "</strong>.");
 
-  //hide certain stuff
-  $("#checkout-card-content").remove();
-  $("#checkout-success-content").removeClass('is-hidden');
-  $("#edit-dates-button").find("a").text('Rent again').addClass('is-primary');
+  //hide the payment choices section
+  $(".choices-selected").fadeOut(250, function(){
+    //show success message
+    var domain_and_path = (new_rental_info.path) ? listing_info.domain_name + "/" + new_rental_info.path : listing_info.domain_name;
+    var starttime_format = moment(new_rental_info.starttime).format("MMMM D, YYYY");
+    var endtime_format = moment(new_rental_info.endtime).format("MMMM D, YYYY");
+    showMessage("stripe-success-message", "Hurray! Your rental was successfully created for <strong>" + domain_and_path + "</strong>. It is scheduled to start on <strong>" + starttime_format + "</strong> and end on <strong>" + endtime_format + "</strong>.");
 
-  //remove click handler for going back to login/customize
-  $(".step-header").off();
+    //hide certain stuff
+    $("#checkout-card-content").remove();
+    $("#checkout-success-content").removeClass('is-hidden');
+    $("#edit-dates-button").find("a").text('Rent again').addClass('is-primary');
 
-  //edit preview button
-  if (listing_info.premium){
-    $("#rental-preview-button").attr("href", "/listing/" + listing_info.domain_name + "/" + rental_id);
-  } else {
-    $("#rental-preview-button").attr("href", "https://domahub.com/listing/" + listing_info.domain_name + "/" + rental_id);
-  }
+    //remove click handler for going back to login/customize
+    $(".step-header").off();
 
-  //copy ownership url
-  if (!user){
+    //edit preview button
+    if (listing_info.premium){
+      $("#rental-preview-button").attr("href", "/listing/" + listing_info.domain_name + "/" + rental_id);
+    } else {
+      $("#rental-preview-button").attr("href", "https://domahub.com/listing/" + listing_info.domain_name + "/" + rental_id);
+    }
+
+    //copy ownership url
     $("#rental-link-input").val("https://domahub.com/listing/" + listing_info.domain_name + "/" + rental_id + "/" + owner_hash_id).on("click", function(){
       $(this).select();
     });
@@ -443,7 +404,7 @@ function successHandler(rental_id, owner_hash_id){
       $("#rental-link-input").blur();
       $(this).find("i").removeClass("fa-clipboard").addClass('fa-check-square-o');
     });
-  }
+  });
 }
 
 //</editor-fold>
@@ -488,15 +449,11 @@ function showMessage(message_id, text){
 function showStep(step_id){
   $(".step-header").addClass('is-disabled');
   $(".step-content").addClass('is-hidden');
-
   if (step_id == "site"){
     var coming_step_id = "log";
   }
-
   $("#step-header-" + step_id).removeClass('is-disabled');
-  $("#step-header-" + step_id).data("can-go", true);
-  $("#step-header-" + coming_step_id).data("can-go", true);
-  $("#step-content-" + step_id).removeClass('is-hidden');
+  $("#step-content-" + step_id).removeClass("is-hidden");
 
   //focus any visible input fields
   $("#step-content-" + step_id).find("input:visible").first().focus();
