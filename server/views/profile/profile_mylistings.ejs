@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<html>
+<html class="prevent-scroll-jump">
 
 <head>
 	<title>My Listings - DomaHub</title>
@@ -297,6 +297,23 @@
 										</form>
 									</div>
 								</div>
+                <%# <div class="control is-spaced">
+                  <div class="control-left">
+                    <label class="label" for="rentable-input">
+                      <span>Manually Approve Rentals</span>
+                      <span class="icon is-small is-tooltip v-align-bottom" data-balloon-length="large" data-balloon="Failure to approve rentals in time could lead to a poor user experience for the domain renter. If you cannot approve rentals in a timely fashion, we suggest you keep this box unchecked." data-balloon-pos="up">
+                        <i class="fa fa-question-circle"></i>
+                      </span>
+                    </label>
+                    <small class="tip">All rentals on your domain must be manually approved before they go live. </small>
+                  </div>
+                  <div class="control-right">
+                    <form class="checkbox-form">
+                      <input id="rent-approve-input" data-name="rent_approve" type="checkbox" class="checkbox-input rentable-input changeable-input" tabindex="0" />
+                      <label for="rent-approve-input"></label>
+                    </form>
+                  </div>
+                </div>%>
 								<label class="label">Rental Price</label>
 								<div class="control">
 									<div class="control has-addons margin-bottom-0">
