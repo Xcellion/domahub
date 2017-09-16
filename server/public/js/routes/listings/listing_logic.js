@@ -218,7 +218,7 @@ function createTickerRow(rental, now){
   }
   //rental ends in the future but started in the past
   else {
-    ticker_pre_tense = "is "
+    ticker_pre_tense = "has been "
     ticker_verb_tense = "ing";
     var path = (rental.path == "" || !rental.path) ? "<a href='" + rental_preview + "' class='is-accent'>this website</a>" : listing_info.domain_name + "<a href='" + rental_preview + "' class='is-accent'>" + "/" + rental.path + '</a>';
 
