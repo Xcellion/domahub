@@ -3754,6 +3754,10 @@ input:-webkit-autofill {
 .min-height {
   min-height: calc(100vh - 125px); }
 
+.prevent-scroll-jump {
+  width: 100vw;
+  overflow-x: hidden; }
+
 .clear-nav {
   padding-top: 60px; }
 
