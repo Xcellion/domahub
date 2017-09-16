@@ -19,20 +19,27 @@
   &.no-shadow
     @include box-shadows(0 0 0 0 $white,0 0 0 0 $white,0 0 0 0 $white)
   &.is-popup
-    +transition(top 0.25s ease, width 0s ease)
-    +translate(-50%,0)
-    left: 50%
+    +keyframes(effect .1s forwards)
+    left: 0
+    right: 0
+    margin: auto
     box-sizing: border-box
     position: fixed
-    top: -100%
+    top: 80px
     width: 350px
     z-index: 100
     &.is-active
-      top: 80px
       +mobile
         border-radius: 0
         top: 0
         width: 100%
+  // animate
+  @keyframes effect
+    0%
+      opacity: 0
+      +scale(0.7)
+    100%
+      opacity: 1
   // Colors
   @each $name, $pair in $colors
     $color: nth($pair, 1)

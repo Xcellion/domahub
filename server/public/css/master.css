@@ -1769,28 +1769,34 @@ input:-webkit-autofill {
     -moz-box-shadow: 0 0 0 0 white, 0 0 0 0 white, 0 0 0 0 white;
     box-shadow: 0 0 0 0 white, 0 0 0 0 white, 0 0 0 0 white; }
   .notification.is-popup {
-    -moz-transition: top 0.25s ease, width 0s ease;
-    -o-transition: top 0.25s ease, width 0s ease;
-    -webkit-transition: top 0.25s ease, width 0s ease;
-    transition: top 0.25s ease, width 0s ease;
-    -moz-transform: translate(-50%, 0);
-    -o-transform: translate(-50%, 0);
-    -ms-transform: translate(-50%, 0);
-    -webkit-transform: translate(-50%, 0);
-      -webkit-transform-transform: translate(-50%, 0);
-    left: 50%;
+    -webkit-animation: effect 0.1s forwards;
+    -moz-animation: effect 0.1s forwards;
+    -o-animation: effect 0.1s forwards;
+    animation: effect 0.1s forwards;
+    left: 0;
+    right: 0;
+    margin: auto;
     box-sizing: border-box;
     position: fixed;
-    top: -100%;
+    top: 80px;
     width: 350px;
     z-index: 100; }
-    .notification.is-popup.is-active {
-      top: 80px; }
-      @media screen and (max-width: 768px) {
-        .notification.is-popup.is-active {
-          border-radius: 0;
-          top: 0;
-          width: 100%; } }
+    @media screen and (max-width: 768px) {
+      .notification.is-popup.is-active {
+        border-radius: 0;
+        top: 0;
+        width: 100%; } }
+
+@keyframes effect {
+  0% {
+    opacity: 0;
+    -moz-transform: scale(0.7);
+    -o-transform: scale(0.7);
+    -ms-transform: scale(0.7);
+    -webkit-transform: scale(0.7);
+      -webkit-transform-transform: scale(0.7); }
+  100% {
+    opacity: 1; } }
   .notification.is-white {
     background-color: white;
     color: #000; }
@@ -3181,23 +3187,7 @@ input:-webkit-autofill {
   position: absolute;
   right: 0;
   top: 0;
-  background-color: rgba(0, 0, 0, 0.86); }
-
-@media screen and (min-width: 980px) {
-  .modal-container-calendar {
-    width: 960px; } }
-
-@media screen and (min-width: 1260px) {
-  .modal-container-calendar {
-    width: 1240px; } }
-
-@media screen and (min-width: 769px) and (max-width: 979px) {
-  .modal-container-calendar {
-    width: 100%; } }
-
-@media screen and (max-width: 768px) {
-  .modal-container-calendar {
-    width: 100%; } }
+  background-color: rgba(0, 0, 0, 0.8); }
 
 .modal-content {
   max-height: calc(100vh - 120px);
@@ -3235,6 +3225,23 @@ input:-webkit-autofill {
   z-index: 1986; }
   .modal.is-active {
     display: flex; }
+
+.pop-in {
+  -webkit-animation: effect 0.1s forwards;
+  -moz-animation: effect 0.1s forwards;
+  -o-animation: effect 0.1s forwards;
+  animation: effect 0.1s forwards; }
+
+@keyframes effect {
+  0% {
+    opacity: 0;
+    -moz-transform: scale(0.7);
+    -o-transform: scale(0.7);
+    -ms-transform: scale(0.7);
+    -webkit-transform: scale(0.7);
+      -webkit-transform-transform: scale(0.7); }
+  100% {
+    opacity: 1; } }
 
 @media screen and (min-width: 769px) {
   .nav-toggle {
