@@ -1,17 +1,6 @@
 .modal-background
   +overlay
-  background-color: rgba($black, 0.86)
-
-.modal-container
-  &-calendar
-    +desktop
-      width: 960px
-    +widescreen
-      width: 1240px
-    +tablet-only
-      width: 100%
-    +mobile
-      width: 100%
+  background-color: rgba($black, 0.8)
 
 .modal-content
   max-height: calc(100vh - 120px)
@@ -47,3 +36,13 @@
   // Modifiers
   &.is-active
     display: flex
+
+.pop-in
+  +keyframes(effect 0.1s forwards)
+
+@keyframes effect
+  0%
+    opacity: 0
+    +scale(0.7)
+  100%
+    opacity: 1
