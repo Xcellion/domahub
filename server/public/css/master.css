@@ -3734,8 +3734,8 @@ input:-webkit-autofill {
   background-image: url("/images/dh-assets/circle-logo/dh-circle-logo-primary-225x225.png");
   background-repeat: no-repeat;
   background-size: cover;
-  width: 45px !important;
-  height: 45px !important; }
+  width: 30px !important;
+  height: 30px !important; }
 
 .social-icon:not(:last-child) {
   margin-right: 10px; }
