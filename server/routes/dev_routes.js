@@ -30,13 +30,15 @@ module.exports = function(app, db, auth, error){
   app.get("/createcodes/:number", [
     createSignupCodes
   ]);
-  app.get("/analysis/:domain_name", analysis);
-  app.get("/viewstest/:path/:view_name", showView)
+  app.get("/viewstest/:path/:view_name", showView);
+
+  //analysis
+  app.get("/analysis/searchhistory", analysisSearchHistory);
+  app.get("/analysis/:domain_name", analysisDomainTraffic);
 
 }
 
-//<editor-fold>
-
+//<editor-fold>-------------------------------DEV-------------------------------------
 
 //show a specific view
 function showView(req, res, next){
@@ -209,8 +211,13 @@ function proxysite(req, res, next){
   });
 }
 
+//</editor-fold>
+
+
+//<editor-fold>-----------------------------ANALYSIS---------------------------------
+
 //function to analyze traffic funnel
-function analysis(req, res, next){
+function analysisDomainTraffic(req, res, next){
   var domain_name = req.params.domain_name;
 
   var traffic = {
@@ -240,13 +247,25 @@ function analysis(req, res, next){
               length: result.info.length,
               data: result.info
             }
-            res.render("dev/analysis.ejs", {
+            res.render("dev/domainAnalysis.ejs", {
               traffic: traffic
             });
           });
         });
       });
     });
+  });
+}
+
+//function to analyze traffic
+function analysisSearchHistory(req, res, next){
+  Data.getDemoDomains(function(demo_domains){
+    Data.getReferers(function(referers){
+      res.render("dev/searchHistory.ejs", {
+        demo_domains: demo_domains.info,
+        referers: referers.info
+      });
+    })
   });
 }
 
