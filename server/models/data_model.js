@@ -243,6 +243,28 @@ data_model.prototype.getListingStats = function(domain_name, callback){
   listing_query(query, "Failed to get statistics for " + domain_name + "!", callback, domain_name);
 }
 
+//gets all domains viewed on demo mode
+data_model.prototype.getDemoDomains = function(callback){
+  console.log("DB: Attempting to get demo mode statistics...");
+  query = 'SELECT domain_name, COUNT( * ) AS count \
+            FROM stats_search_history \
+            WHERE compare = 1 \
+            GROUP BY domain_name \
+            ORDER BY count DESC'
+  listing_query(query, "Failed to get demo mode statistics!", callback);
+}
+
+//gets all referers on domains
+data_model.prototype.getReferers = function(callback){
+  console.log("DB: Attempting to get referers...");
+  query = 'SELECT referer, COUNT( * ) AS count \
+            FROM stats_search_history \
+            WHERE referer IS NOT NULL \
+            GROUP BY referer \
+            ORDER BY count DESC'
+  listing_query(query, "Failed to get demo mode statistics!", callback);
+}
+
 //</editor-fold>
 
 //<editor-fold>-------------------------------SETS-------------------------------
