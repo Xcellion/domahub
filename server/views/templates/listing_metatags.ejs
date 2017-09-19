@@ -3,11 +3,11 @@
 <% if (!compare) { %>
   <meta property="og:title" content="<%= listing_info.domain_name %> - DomaHub" />
   <meta property="og:description" content="<%= listing_info.description %>" />
-  <meta property="og:image" content="https://domahub.com/images/dh-assets/dh-features.png" />
+  <meta property="og:image" content="<%= (listing_info.logo && listing_info.premium) ? listing_info.logo : 'https://domahub.com/images/lib/money.png' %>" />
 <% } else { %>
   <meta property="og:description" content="Create beautiful sales pages for your domain names! Click here to try out the demo and see how your domain name could look like!" />
   <meta property="og:title" content="Simple, Beautiful Sales Pages For Your Domains" />
-  <meta property="og:image" content="<%= (listing_info.logo && listing_info.premium) ? listing_info.logo : 'https://domahub.com/images/lib/money.png' %>" />
+  <meta property="og:image" content="https://domahub.com/images/dh-assets/dh-features.png" />
 <% } %>
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://www.domahub.com/listing/<%= listing_info.domain_name %>" />
