@@ -43,42 +43,13 @@
   margin-right: auto;
 }
 
-#learn-more-wrapper {
-  left: 50%;
-  position: absolute;
-  z-index: 4;
-  transform: translateX(-50%);
-  margin-right: -50%;
-  cursor: pointer;
-  bottom: 40px;
+#learn-more-arrow {
+  @include keyframes(bob 750ms linear alternate infinite);
 }
 
-#learn-more-text {
-  margin:auto;
-  margin-bottom:15px;
-}
-
-.learn-more-arrow {
-  @include box-shadow(1px,1px,10px,$black-disabled,0);
-  @include transition(background-color 0.25s ease);
-  @include transform(translate(-50%,0));
-  background-color: $primary;
-  border-radius: 100%;
-  left: 50%;
-  top: 34px;
-  position: absolute;
-  z-index: 4;
-  width:34px;
-  margin:auto;
-  &:hover {
-    background-color: $primary-dark;
-  }
-  a {
-    &:active,
-    &:focus {
-      outline: none;
-    }
-  }
+@keyframes bob {
+  0% {@include translate(0,0);}
+  100% {@include translate(5px,0);}
 }
 
 .button-wrapper {

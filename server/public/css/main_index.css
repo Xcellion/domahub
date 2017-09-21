@@ -205,44 +205,25 @@ button[data-balloon] {
   margin-left: auto;
   margin-right: auto; }
 
-#learn-more-wrapper {
-  left: 50%;
-  position: absolute;
-  z-index: 4;
-  transform: translateX(-50%);
-  margin-right: -50%;
-  cursor: pointer;
-  bottom: 40px; }
+#learn-more-arrow {
+  -webkit-animation: bob 750ms linear alternate infinite;
+  -moz-animation: bob 750ms linear alternate infinite;
+  -o-animation: bob 750ms linear alternate infinite;
+  animation: bob 750ms linear alternate infinite; }
 
-#learn-more-text {
-  margin: auto;
-  margin-bottom: 15px; }
-
-.learn-more-arrow {
-  -webkit-box-shadow: 1px 1px 10px 0 rgba(0, 0, 0, 0.38);
-  -moz-box-shadow: 1px 1px 10px 0 rgba(0, 0, 0, 0.38);
-  box-shadow: 1px 1px 10px 0 rgba(0, 0, 0, 0.38);
-  -moz-transition: background-color 0.25s ease;
-  -o-transition: background-color 0.25s ease;
-  -webkit-transition: background-color 0.25s ease;
-  transition: background-color 0.25s ease;
-  -moz-transform: translate(-50%, 0);
-  -o-transform: translate(-50%, 0);
-  -ms-transform: translate(-50%, 0);
-  -webkit-transform: translate(-50%, 0);
-    -webkit-transform-transform: translate(-50%, 0);
-  background-color: #3cbc8d;
-  border-radius: 100%;
-  left: 50%;
-  top: 34px;
-  position: absolute;
-  z-index: 4;
-  width: 34px;
-  margin: auto; }
-  .learn-more-arrow:hover {
-    background-color: #309670; }
-  .learn-more-arrow a:active, .learn-more-arrow a:focus {
-    outline: none; }
+@keyframes bob {
+  0% {
+    -moz-transform: translate(0, 0);
+    -o-transform: translate(0, 0);
+    -ms-transform: translate(0, 0);
+    -webkit-transform: translate(0, 0);
+      -webkit-transform-transform: translate(0, 0); }
+  100% {
+    -moz-transform: translate(5px, 0);
+    -o-transform: translate(5px, 0);
+    -ms-transform: translate(5px, 0);
+    -webkit-transform: translate(5px, 0);
+      -webkit-transform-transform: translate(5px, 0); } }
 
 .button-wrapper {
   display: flex;
