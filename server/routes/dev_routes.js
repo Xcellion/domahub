@@ -23,6 +23,7 @@ var XLSX = require('xlsx');
 var Q = require("Q");
 var qlimit = require("qlimit");
 var glob = require("glob");
+var json2csv = require('json2csv');
 
 //</editor-fold>
 
@@ -293,7 +294,7 @@ function parseFolder(req, res, next){
   //look for all csvs
   glob('other/registrations/csv/' + date + '/*.csv', function(err, files) { // read the folder or folders if you want: example json/**/*.json
     if(err) {
-      console.log("Cannot read the folder, something wrong! ", err);
+      console.log("Cannot read the folder, something went wrong! ", err);
     }
     else {
       console.log("Now parsing " + files.length + " CSV files!");
@@ -303,7 +304,7 @@ function parseFolder(req, res, next){
         console.log("\x1b[0m", "Starting on CSV file # " + index);
 
         //last one
-        if (index == files.length){
+        if (index == files.length - 1){
           return parseCSV(date, files[index], verbose, function(){
             console.log("all done");
           });
@@ -318,11 +319,123 @@ function parseFolder(req, res, next){
 
       //node --max-old-space-size=8192 server/server.js
 
-      //start
-      recursive_parse(84);
+      //start recursion
+      // recursive_parse(37);
+
+      //singular parse
+      // parseCSV(date, files[83], verbose, function(){
+      //   console.log("all done");
+      // });
     }
   });
   res.sendStatus(200);
+}
+
+//function to parse all JSONs in a folder and combine them
+function parseJSON(req, res, next){
+  console.log("Reading folder for JSON files...");
+
+  var this_dir = 'other/registrations/json/' + req.params.date;
+
+  //create raw directory for raw JSON files
+  if (!fs.existsSync(this_dir + '/raw')){
+    fs.mkdirSync(this_dir + '/raw');
+  }
+
+  //parse raw JSON now
+  glob(this_dir + '/*.json', { ignore : [
+    this_dir + "/" + req.params.date + "-all.json",
+    this_dir + "/" + req.params.date + "-multi.json",
+    this_dir + "/" + req.params.date + "-failed.json"
+  ] }, function(err, files) { // read the folder or folders if you want: example json/**/*.json
+    if(err) {
+      console.log("Cannot read the folder, something went wrong! ", err);
+    }
+
+    console.log("Now parsing " + files.length + " JSON files!");
+    var all_contacts = [];
+    var failed_domains = [];
+    var multi_domains = [];
+
+    var finished_callback = function(){
+      console.log("Finished parsing all raw JSON files!");
+      console.log("Now creating importable CSV files!");
+
+      //parse multi domain owners
+      fs.readFile(this_dir + "/" + req.params.date + "-multi.json", 'utf8', function (err, json_data) { // Read each file
+        var csv_version = json2csv({
+          data: JSON.parse(json_data),
+          fields: ["email", "name", "domain1"]
+        });
+        fs.writeFileSync(this_dir + "/" + req.params.date + "-multi.csv", csv_version, {encoding:'utf8',flag:'w'});
+
+        //parse error domain owners
+        fs.readFile(this_dir + "/" + req.params.date + "-failed.json", 'utf8', function (err, json_data) { // Read each file
+          var csv_version = json2csv({
+            data: JSON.parse(json_data),
+            fields: ["email", "name", "failed_domains"],
+            fieldNames: ["email", "name", "domain"]
+          });
+          fs.writeFileSync(this_dir + "/" + req.params.date + "-failed.csv", csv_version, {encoding:'utf8',flag:'w'});
+          console.log("Finished making importable CSV files! Make sure to manually edit the CSV files before importing!");
+        });
+      });
+    }
+
+    //parse all raw JSON files and create master JSON files (move raw to raw folder)
+    var index = 0;
+    files.forEach(function(file) {
+      fs.readFile(file, 'utf8', function (err, data) { // Read each file
+        if(err) {
+          console.log("cannot read the file, something goes wrong with the file", err);
+        }
+        var contacts = JSON.parse(data);
+
+        contacts.forEach(function(contact){
+          var duplicate = false;
+          for (var x = 0 ; x < all_contacts.length; x++){
+            if (all_contacts[x].name == contact.name){
+              duplicate = true;
+            }
+          }
+
+          if (!duplicate){
+            all_contacts.push(contact);
+
+            if (contact.failed_domains){
+              failed_domains.push(contact);
+            }
+            else {
+              multi_domains.push(contact);
+            }
+          }
+          else {
+            console.log("Duplicate found! " + contact.name);
+          }
+        });
+
+        // console.log("\x1b[0m", "Writing to file...");
+        fs.rename(file, file.replace("/" + req.params.date + "/", "/" + req.params.date + "/raw/"), function(){
+          fs.writeFileSync(this_dir + "/" + req.params.date + "-all.json", JSON.stringify(all_contacts, null, 2), {encoding:'utf8',flag:'w'})
+          fs.writeFileSync(this_dir + "/" + req.params.date + "-failed.json", JSON.stringify(failed_domains, null, 2), {encoding:'utf8',flag:'w'})
+          fs.writeFileSync(this_dir + "/" + req.params.date + "-multi.json", JSON.stringify(multi_domains, null, 2), {encoding:'utf8',flag:'w'})
+          index++;
+
+          //finished!
+          if (index == files.length){
+            finished_callback();
+          }
+        });
+      });
+    });
+
+    //finished already
+    if (files.length == 0){
+      finished_callback();
+    }
+
+    res.sendStatus(200);
+  });
 }
 
 //array of non-names to filter for
@@ -557,7 +670,7 @@ function q_function(domain_name, name, email){
   var deferred = Q.defer();
   request.get({
     url: "http://" + domain_name,
-    // timeout: 10000
+    timeout: 100000
   }, function (err, response, body) {
 
     //if theres something there, reject
@@ -582,41 +695,6 @@ function q_function(domain_name, name, email){
 //function to make proper nouns titlecase
 function toTitleCase(str){
   return str.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
-}
-
-//function to parse all JSONs in a folder and combine them
-function parseJSON(){
-  glob('other/marketing/json/' + req.params.date + '/*.json', function(err, files) { // read the folder or folders if you want: example json/**/*.json
-    if(err) {
-      console.log("cannot read the folder, something goes wrong with glob", err);
-    }
-    var all_contacts = [];
-    files.forEach(function(file) {
-      fs.readFile(file, 'utf8', function (err, data) { // Read each file
-        if(err) {
-          console.log("cannot read the file, something goes wrong with the file", err);
-        }
-        var contacts = JSON.parse(data);
-
-        contacts.forEach(function(contact){
-          var duplicate = false;
-          for (var x = 0 ; x < all_contacts.length; x++){
-            if (all_contacts[x].name == contact.name){
-              duplicate = true;
-            }
-          }
-
-          if (!duplicate){
-            all_contacts.push(contact);
-          }
-          else {
-            console.log("Duplicate found! " + contact.name);
-          }
-        });
-
-      });
-    });
-  });
 }
 
 //</editor-fold>
