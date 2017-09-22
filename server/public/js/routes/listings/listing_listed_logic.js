@@ -340,7 +340,7 @@ function checkPhone(){
     return true;
   }
   else {
-    $("#contact-error-message").text("Please enter a real phone number!");
+    $("#contact-error-message").text("Please enter a real phone number! Did you select the correct country for your phone number?");
     $("#contact-error").removeClass('is-hidden').addClass('is-active');
   }
 }
