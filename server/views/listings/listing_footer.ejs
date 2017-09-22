@@ -8,7 +8,9 @@
             <i class="fa fa-copyright v-align-bottom"></i> DomaHub, Inc.
           </a>
         <% } else { %>
-          <img id="custom_logo" class="footer-item" />
+          <% if (listing_info.logo) %>
+            <img id="custom_logo" class="footer-item" />
+          <% } %>
           <span class="footer-item"><%= listing_info.description_footer %></span>
         <% } %>
       </div>
