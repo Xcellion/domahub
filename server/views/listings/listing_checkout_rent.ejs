@@ -5,17 +5,16 @@
   <title>Checkout - DomaHub</title>
   <link rel="stylesheet" type="text/css" href="/css/min/listing_checkout.min.css" />
   <link rel="stylesheet" href="/css/min/listing_page.min.css" type="text/css" />
-  <%- include("../templates/head_links"); %>
-</head>
-
-<body>
-
   <script type="text/javascript">
     var listing_info = <% if(typeof listing_info != "undefined"){ %><%-JSON.stringify(listing_info)%><% }else{ %>""<% } %>;
     var new_rental_info = <% if(typeof new_rental_info != "undefined"){ %><%-JSON.stringify(new_rental_info)%><% }else{ %>""<% } %>;
     var node_env = <% if(typeof node_env != "undefined"){ %><%-JSON.stringify(node_env)%><% }else{ %>""<% } %>;
     var compare = false;
   </script>
+  <%- include("../templates/head_links"); %>
+</head>
+
+<body>
 
   <section class="section is-medium min-height">
     <div class="container">
