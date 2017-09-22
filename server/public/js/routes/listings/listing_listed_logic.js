@@ -340,7 +340,7 @@ function checkPhone(){
     return true;
   }
   else {
-    $("#contact-error-message").text("That is not a valid phone number!");
+    $("#contact-error-message").text("Please enter a real phone number!");
     $("#contact-error").removeClass('is-hidden').addClass('is-active');
   }
 }
