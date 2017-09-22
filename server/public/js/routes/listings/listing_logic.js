@@ -656,13 +656,12 @@ function createOtherDomains(other_listings){
       cloned_similar_listing.find(".otherowner-domain-name").text(sliced_domain).attr("href", "/listing/" + other_listings[x].domain_name + "?compare=true&theme=Random");
     }
     else {
-
       //premium or basic link
       if (listing_info.premium){
-        var link_to_domain = "https://domahub.com/listing/" + other_listings[x].domain_name;
+        var link_to_domain = "https://" + other_listings[x].domain_name;
       }
       else {
-        var link_to_domain = "https://" + other_listings[x].domain_name;
+        var link_to_domain = "https://domahub.com/listing/" + other_listings[x].domain_name;
       }
       cloned_similar_listing.find(".otherowner-domain-name").text(sliced_domain).attr("href", link_to_domain);
     }
