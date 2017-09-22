@@ -1,6 +1,6 @@
 <meta name="description" content="<%= listing_info.description %>" />
 <%# compare tool or not %>
-<% if (!compare) { %>
+<% if (typeof compare == undefined || compare == false ) { %>
   <meta property="og:title" content="<%= listing_info.domain_name %> - DomaHub" />
   <meta property="og:description" content="<%= (listing_info.description) ? listing_info.description : 'Click here to buy this domain name on DomaHub! Make an offer or rent the domain for variable lengths of time.' %>" />
   <meta property="og:image" content="<%= (listing_info.logo && listing_info.premium) ? listing_info.logo : 'https://domahub.com/images/dh-assets/dh-listing-splash.png' %>" />
