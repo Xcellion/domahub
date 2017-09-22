@@ -275,7 +275,8 @@ module.exports = {
         message: Auth.messageReset(req),
         listing_info: req.session.listing_info,
         new_rental_info : req.session.new_rental_info,
-        node_env : node_env || "dev"
+        node_env : node_env || "dev",
+        compare: false
       });
     }
     else {
