@@ -1084,7 +1084,7 @@ module.exports = {
     res.render("listings/listing.ejs", {
       user: req.user,
       listing_info: req.session.listing_info,
-      compare : (req.query.compare == "true") ? true : false,
+      compare : (!req.session.listing_info.premium && req.query.compare == "true") ? true : false,
       fonts : Fonts.all()
     });
   },
