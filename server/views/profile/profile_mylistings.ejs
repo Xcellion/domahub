@@ -500,29 +500,34 @@
                       </label>
                     </div>
                   </div>
-									<%# <div class="control is-spaced">
-										<div class="control-left">
-											<div class="label">Logo</div>
-											<small class="tip"></small>
-										</div>
-										<div class="control-right">
-											<figure class="image listing-img">
-												<button id="logo" tabindex="0" class="premium-input delete delete-image on-img"></button>
-												<img id="logo-image" class="image-upload" data-default-img="https://placeholdit.imgix.net/~text?txtsize=20&txt=NO%20LOGO&w=96&h=64" alt="Image not found" src="">
-											</figure>
-											<form class="drop-form-file" method="post" enctype="multipart/form-data">
-												<input tabindex="0" id="logo-image-input" data-name="logo" type="file" name="logo" accept="image/png, image/gif, image/jpeg" class="premium-input changeable-input input-file">
-												<label for="logo-image-input" class="upload-label premium-input button is-small is-fullwidth">
-													<i class="fa fa-upload" aria-hidden="true"></i>
-													<p data-default-name="Logo" id="logo-image-label" class="file-label">Upload</p>
-												</label>
-											</form>
-										</div>
-									</div>%>
+                                   <%# <div class="control is-spaced">
+                                      <div class="control-left">
+                                          <label class="label">Domain Age</label>
+                                          <small class="tip">Displays a small sentence showing when this domain was first registered.</small>
+                                      </div>
+                                      <div class="control-right">
+                                          <form class="checkbox-form">
+                                              <input id="domain-age-input" data-name="domain_age" type="checkbox" class="checkbox-input premium-input changeable-input" tabindex="0" />
+                                              <label for="domain-age-input" class="premium-input"></label>
+                                          </form>
+                                      </div>
+                                  </div>%>
+                                  <div class="control is-spaced">
+                                      <div class="control-left">
+                                          <label class="label">Info Module</label>
+                                          <small class="tip">Displays other domains the owner has for sale as well as other relevant information.</small>
+                                      </div>
+                                      <div class="control-right">
+                                          <form class="checkbox-form">
+                                              <input id="info-module-input" data-name="info_module" type="checkbox" class="checkbox-input premium-input changeable-input" tabindex="0" />
+                                              <label for="info-module-input" class="premium-input"></label>
+                                          </form>
+                                      </div>
+                                  </div>
 									<div class="control is-spaced">
 										<div class="control-left">
 											<label class="label">Traffic Module</label>
-											<small class="tip">Displays detailed traffic data from <a class="is-primary"  id="alexa_link">Alexa</a>.</small>
+											<small class="tip">Displays detailed traffic data in addition to <a class="is-primary" id="alexa_link">Alexa</a> data.</small>
 										</div>
 										<div class="control-right">
 											<form class="checkbox-form">
@@ -540,18 +545,6 @@
 											<form class="checkbox-form">
 												<input id="history-module-input" data-name="history_module" type="checkbox" class="checkbox-input premium-input changeable-input" tabindex="0" />
 												<label for="history-module-input" class="premium-input"></label>
-											</form>
-										</div>
-									</div>
-									<div class="control is-spaced">
-										<div class="control-left">
-											<label class="label">Info Module</label>
-											<small class="tip">Displays other domains the owner has for sale as well as other relevant information.</small>
-										</div>
-										<div class="control-right">
-											<form class="checkbox-form">
-												<input id="info-module-input" data-name="info_module" type="checkbox" class="checkbox-input premium-input changeable-input" tabindex="0" />
-												<label for="info-module-input" class="premium-input"></label>
 											</form>
 										</div>
 									</div>
