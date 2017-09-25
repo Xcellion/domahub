@@ -5,7 +5,7 @@
         <%# IS THE LISTED LISTED OR UNLISTED WITH DOMAHUB %>
         <% if (listing_info.unlisted && !compare) { %>
 
-            <%# UNLISTED LISTING IS OWNED BY SOMEONE %>
+            <%# UNLISTED LISTING %>
             <%- include("info/unlisted_module.ejs", {
               listing_info : listing_info
             }); %>
@@ -35,19 +35,19 @@
                   listing_info : listing_info
                 }); %>
 
+                <%# SOCIAL SHARING MODULE %>
+                <%- include("info/social_share_module.ejs", {
+                  listing_info : listing_info
+                }); %>
+
             </div>
 
             <%# OTHER BY SAME OWNER DOMAINS MODULE %>
-            <%- include("info/same_owner_listings_module.ejs", {
+            <%- include("info/more_from_owner_module.ejs", {
               listing_info : listing_info
             }); %>
 
         <% } %>
     </div>
-
-    <%# SIMILAR DOMAINS MODULE %>
-    <%# include("info/similar_domains_module.ejs", {
-      listing_info : listing_info
-    }); %>
 
 </div>
