@@ -69,7 +69,7 @@ function emailViews(req, res, next){
 
   var data = {
     domain_name: "fuck.com",
-    premium: true,
+    premium: false,
     response: "Hey fuck yourself",
     listing_info: {
       primary_color: "#000"
