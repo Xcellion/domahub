@@ -275,7 +275,8 @@ module.exports = {
         message: Auth.messageReset(req),
         listing_info: req.session.listing_info,
         new_rental_info : req.session.new_rental_info,
-        node_env : node_env || "dev"
+        node_env : node_env || "dev",
+        compare: false
       });
     }
     else {
@@ -1083,7 +1084,7 @@ module.exports = {
     res.render("listings/listing.ejs", {
       user: req.user,
       listing_info: req.session.listing_info,
-      compare : (req.query.compare == "true") ? true : false,
+      compare : (!req.session.listing_info.premium && req.query.compare == "true") ? true : false,
       fonts : Fonts.all()
     });
   },

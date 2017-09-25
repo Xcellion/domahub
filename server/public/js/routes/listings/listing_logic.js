@@ -651,11 +651,19 @@ function createOtherDomains(other_listings){
       cloned_similar_listing.find(".otherowner-domain-price").text("Now available!");
     }
 
+    //if compare tool
     if (other_listings[x].compare && listing_info.unlisted){
       cloned_similar_listing.find(".otherowner-domain-name").text(sliced_domain).attr("href", "/listing/" + other_listings[x].domain_name + "?compare=true&theme=Random");
     }
     else {
-      cloned_similar_listing.find(".otherowner-domain-name").text(sliced_domain).attr("href", "/listing/" + other_listings[x].domain_name);
+      //premium or basic link
+      if (listing_info.premium){
+        var link_to_domain = "https://" + other_listings[x].domain_name;
+      }
+      else {
+        var link_to_domain = "https://domahub.com/listing/" + other_listings[x].domain_name;
+      }
+      cloned_similar_listing.find(".otherowner-domain-name").text(sliced_domain).attr("href", link_to_domain);
     }
     $("#otherowner-domain-table").append(cloned_similar_listing);
   }

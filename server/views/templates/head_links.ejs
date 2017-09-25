@@ -5,15 +5,20 @@
 <%# metatags for social sharing %>
 <% if (typeof listing_info != "undefined") { %>
     <%- include("listing_metatags.ejs"); %>
+    <% if (listing_info.premium && listing_info.logo){ %>
+      <link rel="icon" type="image/png" href="<%= listing_info.logo %>" />
+    <% } else { %>
+      <link rel="icon" type="image/png" href="/images/dh-assets/circle-logo/dh-circle-logo-primary.png" />
+    <% } %>
 <% } else { %>
     <%- include("domahub_metatags.ejs"); %>
+    <link rel="icon" type="image/png" href="/images/dh-assets/circle-logo/dh-circle-logo-primary.png" />
 <% } %>
 <script type="text/javascript">
     var user = <% if(typeof user != "undefined"){ %><%-JSON.stringify(user)%><% }else{ %>""<% } %>;
     var message = <% if(typeof message != "undefined"){ %><%-JSON.stringify(message)%><% }else{ %>""<% } %>;
 </script>
 <link rel="stylesheet" type="text/css" href="/css/min/master.min.css" />
-<link rel="icon" type="image/png" href="/images/dh-assets/circle-logo/dh-circle-logo-primary-225x225.png" />
 <script src="https://use.fontawesome.com/b36602cf54.js"></script>
 <link href="https://fonts.googleapis.com/css?family=Lato:400,700" rel="stylesheet" />
 <script type="application/ld+json">

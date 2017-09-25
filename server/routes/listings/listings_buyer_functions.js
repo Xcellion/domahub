@@ -44,7 +44,7 @@ module.exports = {
       error.handler(req, res, "Please enter a valid email address!", "json");
     }
     else if (!req.body.contact_phone || !phoneUtil.isValidNumber(phoneUtil.parse(req.body.contact_phone), PNF.INTERNATIONAL)){
-      error.handler(req, res, "Please enter a valid phone number!", "json");
+      error.handler(req, res, "Please enter a real phone number! Did you select the correct country for your phone number?", "json");
     }
     //if offer price is too low
     else if (req.body.contact_offer && !validator.isInt(req.body.contact_offer, { min: req.session.listing_info.min_price })){
@@ -343,7 +343,8 @@ module.exports = {
         message: Auth.messageReset(req),
         listing_info: req.session.listing_info,
         new_buying_info: req.session.new_buying_info,
-        node_env : node_env || "dev"
+        node_env : node_env || "dev",
+        compare: false
       });
     }
     else {
