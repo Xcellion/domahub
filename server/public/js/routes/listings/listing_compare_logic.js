@@ -883,9 +883,17 @@ function updateFontName(font_name){
 
 //function to update modules
 function updateModules(){
+  checkBox(listing_info.domain_age, $("#domain-age-input"));
+  checkBox(listing_info.domain_appraisal, $("#domain-appraisal-input"));
+  checkBox(listing_info.social_sharing, $("#social-sharing-input"));
   checkBox(listing_info.traffic_module, $("#traffic-module-input"));
   checkBox(listing_info.info_module, $("#info-module-input"));
   checkBox(listing_info.history_module, $("#ticker-module-input"));
+
+  //toggleable things (domain age, appraisal sites, social media)
+  $(".toggle-input").on("change", function(){
+    $("#" + $(this).data('target') + "-module").toggleClass('is-hidden');
+  });
 
   $(".module-input").on("change", function(){
     var which_module = $(this).attr("id").split("-")[0];
