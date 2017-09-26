@@ -105,6 +105,8 @@ account_model.prototype.getAccountListings = function(account_id, callback){
         listings.background_color,\
         listings.logo,\
         listings.domain_age,\
+        listings.domain_appraisal,\
+        listings.social_sharing,\
         listings.history_module,\
         listings.traffic_module,\
         listings.info_module,\

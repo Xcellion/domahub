@@ -31,14 +31,18 @@
                 }); %>
 
                 <%# APPRAISALS MODULE %>
-                <%- include("info/appraisals_module.ejs", {
-                  listing_info : listing_info
-                }); %>
+                <% if (!listing_info.premium || (listing_info.premium && listing_info.domain_appraisal)) { %>
+                  <%- include("info/appraisals_module.ejs", {
+                    listing_info : listing_info
+                  }); %>
+                <% } %>
 
-                <%# SOCIAL SHARING MODULE %>
-                <%- include("info/social_share_module.ejs", {
-                  listing_info : listing_info
-                }); %>
+                <% if (!listing_info.premium || (listing_info.premium && listing_info.social_sharing)) { %>
+                  <%# SOCIAL SHARING MODULE %>
+                  <%- include("info/social_share_module.ejs", {
+                    listing_info : listing_info
+                  }); %>
+                <% } %>
 
             </div>
 

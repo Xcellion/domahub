@@ -149,6 +149,8 @@ listing_model.prototype.getVerifiedListing = function(domain_name, callback){
         IF(listings.background_color IS NULL, '#FFFFFF', listings.background_color) as background_color, \
         listings.logo,\
         listings.domain_age,\
+        listings.domain_appraisal,\
+        listings.social_sharing,\
         listings.history_module,\
         listings.traffic_module,\
         listings.info_module,\

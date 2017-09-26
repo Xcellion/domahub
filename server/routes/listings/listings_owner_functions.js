@@ -439,6 +439,8 @@ module.exports = {
         console.log("F: Checking posted premium listing details...");
 
         var domain_age = parseFloat(req.body.domain_age);
+        var domain_appraisal = parseFloat(req.body.domain_appraisal);
+        var social_sharing = parseFloat(req.body.social_sharing);
         var history_module = parseFloat(req.body.history_module);
         var traffic_module = parseFloat(req.body.traffic_module);
         var info_module = parseFloat(req.body.info_module);
@@ -483,6 +485,14 @@ module.exports = {
         else if (req.body.domain_age && (domain_age != 0 && domain_age != 1)){
           error.handler(req, res, "Invalid domain age selection! Please refresh the page and try again!", "json");
         }
+        //invalid domain appraisal
+        else if (req.body.domain_appraisal && (domain_appraisal != 0 && domain_appraisal != 1)){
+          error.handler(req, res, "Invalid domain appraisal selection! Please refresh the page and try again!", "json");
+        }
+        //invalid social sharing
+        else if (req.body.social_sharing && (social_sharing != 0 && social_sharing != 1)){
+          error.handler(req, res, "Invalid social sharing selection! Please refresh the page and try again!", "json");
+        }
         //invalid history module
         else if (req.body.history_module && (history_module != 0 && history_module != 1)){
           error.handler(req, res, "Invalid history module selection! Please refresh the page and try again!", "json");
@@ -510,6 +520,8 @@ module.exports = {
           req.session.new_listing_info.font_color = req.body.font_color;
           req.session.new_listing_info.background_color = req.body.background_color;
           req.session.new_listing_info.domain_age = domain_age;
+          req.session.new_listing_info.domain_appraisal = domain_appraisal;
+          req.session.new_listing_info.social_sharing = social_sharing;
           req.session.new_listing_info.history_module = history_module;
           req.session.new_listing_info.traffic_module = traffic_module;
           req.session.new_listing_info.info_module = info_module;
