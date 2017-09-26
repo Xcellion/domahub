@@ -955,7 +955,7 @@ function createTestChart(){
   }
 
   listing_info.traffic = [];
-  createTrafficChart();
+  createTrafficChart(true);   //compare module so use custom color
 }
 
 //function to create test domains
