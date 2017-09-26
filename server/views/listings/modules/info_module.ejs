@@ -20,29 +20,29 @@
         <% } else { %>
             <div class="column">
 
-                <%# LISTING OWNER MODULE %>
-                <%- include("info/listing_owner_module.ejs", {
+              <%# LISTING OWNER MODULE %>
+              <%- include("info/listing_owner_module.ejs", {
+                listing_info : listing_info
+              }); %>
+
+              <%# CATEGORIES MODULE %>
+              <%- include("info/categories_module.ejs", {
+                listing_info : listing_info
+              }); %>
+
+              <%# APPRAISALS MODULE %>
+              <% if (!listing_info.premium || (listing_info.premium && listing_info.domain_appraisal)) { %>
+                <%- include("info/appraisals_module.ejs", {
                   listing_info : listing_info
                 }); %>
+              <% } %>
 
-                <%# CATEGORIES MODULE %>
-                <%- include("info/categories_module.ejs", {
+              <% if (!listing_info.premium || (listing_info.premium && listing_info.social_sharing)) { %>
+                <%# SOCIAL SHARING MODULE %>
+                <%- include("info/social_share_module.ejs", {
                   listing_info : listing_info
                 }); %>
-
-                <%# APPRAISALS MODULE %>
-                <% if (!listing_info.premium || (listing_info.premium && listing_info.domain_appraisal)) { %>
-                  <%- include("info/appraisals_module.ejs", {
-                    listing_info : listing_info
-                  }); %>
-                <% } %>
-
-                <% if (!listing_info.premium || (listing_info.premium && listing_info.social_sharing)) { %>
-                  <%# SOCIAL SHARING MODULE %>
-                  <%- include("info/social_share_module.ejs", {
-                    listing_info : listing_info
-                  }); %>
-                <% } %>
+              <% } %>
 
             </div>
 

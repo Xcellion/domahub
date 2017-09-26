@@ -1233,6 +1233,7 @@ function getWhoIs(req, res, next, domain_name, unlisted){
         listing_info.dev_whois = whoisObj;
       }
 
+      //COMPARE TOOL VARIABLES
       //comparing, so make fake listing info
       if (req.query.compare == "true"){
         console.log("F: Rendering the comparison tool!");
@@ -1257,6 +1258,9 @@ function getWhoIs(req, res, next, domain_name, unlisted){
         listing_info.background_color = "#FFFFFF";
         listing_info.background_image = "";
         listing_info.logo = "";
+        listing_info.domain_age = 1;
+        listing_info.domain_appraisal = 1;
+        listing_info.social_sharing = 1;
         listing_info.history_module = 1;
         listing_info.traffic_module = 1;
         listing_info.info_module = 1;
