@@ -1,3 +1,5 @@
+//<editor-fold>-------------------------------VARIABLES-------------------------------
+
 var node_env = process.env.NODE_ENV || 'dev';   //dev or prod bool
 var Categories = require("../../lib/categories.js");
 var Fonts = require("../../lib/fonts.js");
@@ -14,6 +16,8 @@ var multer = require("multer");
 var parse = require("csv-parse");
 var Q = require('q');
 var fs = require('fs');
+
+//</editor-fold>
 
 module.exports = {
 
@@ -39,355 +43,265 @@ module.exports = {
 
   //<editor-fold>-------------------------------CHECKS------------------------------
 
-  //function to check all posted domain names
-  checkPostedDomains : function(req, res, next){
-    console.log("F: Checking all posted domain names...");
-    var domain_names = req.body.domain_names;
+    //<editor-fold>-------------------------------CREATE LISTING------------------------------
 
-    if (!domain_names || domain_names.length <= 0 || domain_names.length > 500){
-      error.handler(req, res, "You can only create up to 500 domains at a time!", "json");
-    }
-    else {
-      //loop through and check all posted domain names
-      var bad_listings = [];
-      var good_listings = [];
-      var domains_sofar = [];
-      for (var x = 0; x < domain_names.length; x++){
-        if (!validator.isFQDN(domain_names[x])){
-          bad_listings.push({
-            domain_name: domain_names[x],
-            reasons: [
-              "Invalid domain name!"
-            ]
-          });
-        }
-        else if (domains_sofar.indexOf(domain_names[x]) != -1){
-          bad_listings.push({
-            domain_name: domain_names[x],
-            reasons: [
-              "Duplicate domain name!"
-            ]
-          });
-        }
-        else {
-          domains_sofar.push(domain_names[x]);
-          good_listings.push({
-            index: x,
-            domain_name: domain_names[x]
-          });
-        }
-      }
+    //function to check all posted domain names
+    checkPostedDomainNames : function(req, res, next){
+      console.log("F: Checking all posted domain names...");
+      var domain_names = req.body.domain_names;
 
-      res.send({
-        state : "success",
-        bad_listings : bad_listings,
-        good_listings : good_listings
-      });
-    }
-  },
-
-  //function to check all posted listing info
-  checkPostedListingInfoForCreate : function(req, res, next){
-    console.log("F: Checking all posted listing info...");
-
-    var posted_domains = req.body.domains;
-
-    var bad_listings = [];
-    var domains_sofar = [];
-    var date_now = new Date().getTime();
-    var db_object = [];
-
-    //object to keep track of premium domains
-    var premium_obj = {
-      count : 0,
-      indexes : [],
-      domain_names : []
-    };
-
-    for (var x = 0; x < posted_domains.length; x++){
-      var bad_reasons = [];
-
-      //check domain
-      if (!validator.isFQDN(posted_domains[x].domain_name) || !validator.isAscii(posted_domains[x].domain_name)){
-        bad_reasons.push("Invalid domain name!");
-      }
-      //check for duplicates among valid FQDN domains
-      if (domains_sofar.indexOf(posted_domains[x].domain_name) != -1){
-        bad_reasons.push("Duplicate domain name!");
-      }
-      //check price rate
-      if (!validator.isInt(posted_domains[x].min_price, {min: 0}) && posted_domains[x].min_price != ""){
-        bad_reasons.push("Invalid price!");
-      }
-      //domain is too long
-      if (posted_domains[x].domain_name.length > 100){
-        bad_reasons.push("Domain name is too long!");
-      }
-      //too many domains (domains so far has 1 less right here, so needs to be >= maximum)
-      if (!req.user.stripe_subscription_id && domains_sofar.length + req.user.listings.length >= 100){
-        bad_reasons.push("Upgrade to a Premium account to create more listings!");
-      }
-
-      //some were messed up
-      if (bad_reasons.length > 0){
-        bad_listings.push({
-          index: x,
-          reasons: bad_reasons
-        });
-      }
-      //all good! format the db array
-      else {
-        domains_sofar.push(posted_domains[x].domain_name);
-
-        //format the object for DB insert
-        db_object.push([
-          req.user.id,
-          date_now,
-          posted_domains[x].domain_name.toLowerCase(),
-          posted_domains[x].min_price,
-          default_descriptions.random()    //random default description
-        ]);
-
-      }
-    }
-
-    if (bad_listings.length > 0){
-      res.send({
-        bad_listings: bad_listings
-      });
-    }
-    else {
-      //create an object for the session
-      req.session.new_listings = {
-        premium_obj : premium_obj,
-        db_object : db_object,
-        good_listings : [],
-        bad_listings : bad_listings
-      }
-      next();
-    }
-  },
-
-  //function to send back how many premium domains
-  checkPostedPremium : function(req, res, next){
-    console.log("F: Checking for any Premium listings...");
-    if (req.session.new_listings.premium_obj.count > 0){
-
-      //posting new card, go next
-      if (req.body.stripeToken && typeof req.body.stripeToken == "string"){
-        next();
-      }
-
-      //card already on file, go next
-      else if (req.user.stripe_info && req.user.stripe_info.premium_cc_last4){
-        next();
+      if (!domain_names || domain_names.length <= 0 || domain_names.length > 500){
+        error.handler(req, res, "You can only create up to 500 domains at a time!", "json");
       }
       else {
-        res.send({
-          state: "error",
-          message: "There were no valid payment methods! Please add a valid payment method.",
-          premium_count : req.session.new_listings.premium_obj.count
-        });
-      }
-    }
-    else {
-      next();
-    }
-  },
-
-  //function to check the format of the batch CSV file
-  checkListingBatch : function(req, res, next){
-    onError = function(req, res){
-      error.handler(req, res, "CSV parser error!");
-    }
-
-    //loop through and parse the CSV file, check every entry and format it correctly
-    parseCSVFile(req.file.path, onError, function(bad_listings, good_listings){
-
-      //none were good
-      if (good_listings.length == 0){
-        res.send({
-          bad_listings: bad_listings,
-          good_listings: false
-        });
-      }
-      else {
-        //need to add owner id, verified, and date created
-        for (var x = 0; x < good_listings.length; x++){
-          good_listings[x].push("" + req.user.id + "", 1, new Date().getTime());
-        }
-        req.session.good_listings = good_listings;
-        req.session.bad_listings = bad_listings;
-        next();
-      }
-    });
-  },
-
-  //function to check the size of the CSV file uploaded
-  checkCSVUploadSize : function(req, res, next){
-    var upload_path = (node_env == "dev") ? "./uploads/csv" : '/var/www/w3bbi/uploads/csv';
-    var storage = multer.diskStorage({
-      destination: function (req, file, cb) {
-        cb(null, './uploads/csv');
-      },
-      filename: function (req, file, cb) {
-        cb(null, Date.now() + "-" + req.user.username + "-" + file.fieldname);
-      }
-    });
-
-    var upload = multer({
-      storage: storage,
-      limits: { fileSize: 1000000 },
-      fileFilter: function (req, file, cb) {
-        var allowedMimeTypes = [
-          "text/csv",
-          "application/csv",
-          "application/excel",
-          "application/vnd.ms-excel",
-          "application/vnd.msexcel",
-          "text/comma-separated-values"
-        ];
-
-        if (allowedMimeTypes.indexOf(file.mimetype) <= -1) {
-          cb(new Error('FILE_TYPE_WRONG'));
-        }
-        else {
-          cb(null, true);
-        }
-      }
-    }).single("csv");
-
-    console.log(req.user.username + " is uploading a CSV file for parsing...");
-
-    upload(req, res, function(err){
-      if (err){
-        if (err.code == "LIMIT_FILE_SIZE"){
-          error.handler(req, res, 'File is bigger than 1 MB!', "json");
-        }
-        else if (err.message == "FILE_TYPE_WRONG"){
-          error.handler(req, res, 'Wrong file type!', "json");
-        }
-        else {
-          error.handler(req, res, 'Something went wrong with the upload!', "json");
-        }
-      }
-      else if (!err && req.file) {
-        next();
-      }
-    });
-  },
-
-  //function to check the size of the image uploaded
-  checkImageUploadSize : function(req, res, next){
-    var premium = req.user.stripe_subscription_id;
-    var upload_path = (node_env == "dev") ? "./uploads/images" : '/var/www/w3bbi/uploads/images';
-    var storage = multer.diskStorage({
-      destination: function (req, file, cb) {
-        cb(null, upload_path);
-      },
-      filename: function (req, file, cb) {
-        cb(null, Date.now() + "_" + req.params.domain_name + "_" + req.user.username);
-      }
-    });
-
-    var upload_img = multer({
-      storage: storage,
-      limits: { fileSize: 1000000 },
-
-      //to check for file type
-      fileFilter: function (req, file, cb) {
-        console.log("F: " + req.user.username + " is uploading an image file for parsing...");
-
-        var allowedMimeTypes = [
-          "image/jpeg",
-          "image/jpg",
-          "image/png",
-          "image/gif"
-        ];
-
-        if (allowedMimeTypes.indexOf(file.mimetype) <= -1) {
-          cb(new Error('FILE_TYPE_WRONG'));
-        }
-        else if (!premium){
-          cb(new Error('NOT_PREMIUM'));
-        }
-        else {
-          cb(null, true);
-        }
-      }
-    }).fields([{ name: 'background_image', maxCount: 1 }, { name: 'logo', maxCount: 1 }]);
-
-    upload_img(req, res, function(err){
-      if (err){
-        if (err.code == "LIMIT_FILE_SIZE"){
-          error.handler(req, res, 'File is bigger than 1 MB!', "json");
-        }
-        else if (err.message == "FILE_TYPE_WRONG"){
-          error.handler(req, res, 'Wrong file type!', "json");
-        }
-        else if (err.message == "NOT_PREMIUM"){
-          error.handler(req, res, "not-premium", "json");
-        }
-        else {
-          console.log(err);
-          error.handler(req, res, 'Something went wrong with the upload!', "json");
-        }
-      }
-      else if (!err) {
-        next();
-      }
-    });
-  },
-
-  //function to check the user image and upload to imgur
-  checkListingImage : function(req, res, next){
-    if (req.files && (req.files.background_image || req.files.logo) && !req.body.background_image_link && !req.body.logo_image_link){
-
-      //custom image upload promise function
-      var q_function = function(formData){
-        return Q.Promise(function(resolve, reject, notify){
-          console.log("F: " + req.user.username + " is uploading image(s) to Imgur...");
-          request.post({
-            url: "https://imgur-apiv3.p.mashape.com/3/image",
-            headers: {
-              'X-Mashape-Key' : "72Ivh0ASpImsh02oTqa4gJe0fD3Dp1iZagojsn1Yt1hWAaIzX3",
-              'Authorization' : 'Client-ID 730e9e6f4471d64'
-            },
-            formData: formData
-          }, function (err, response, body) {
-            if (!err){
-              resolve({
-                imgur_link: JSON.parse(body).data.link.replace("http", "https"),
-                image_type: formData.image_type
-              });
-            }
-            else {
-              reject(err);
-            }
-          });
-        })
-      }
-
-      //create the array of promises
-      var promises = [];
-      for (var x in req.files){
-        var promise = q_function({
-          title : req.files[x][0].filename,
-          image : fs.createReadStream(req.files[x][0].path),
-          image_type : req.files[x][0].fieldname
-        });
-        promises.push(promise);
-      }
-      //wait for all promises to finish
-      Q.allSettled(promises)
-      .then(function(results) {
-        req.session.new_listing_info = {};
-        //figure out which promises failed / passed
-        for (var y = 0; y < results.length; y++){
-          if (results[y].state == "fulfilled"){
-            req.session.new_listing_info[results[y].value.image_type] = results[y].value.imgur_link;
+        //loop through and check all posted domain names
+        var bad_listings = [];
+        var good_listings = [];
+        var domains_sofar = [];
+        for (var x = 0; x < domain_names.length; x++){
+          if (!validator.isFQDN(domain_names[x])){
+            bad_listings.push({
+              domain_name: domain_names[x],
+              reasons: [
+                "Invalid domain name!"
+              ]
+            });
+          }
+          else if (domains_sofar.indexOf(domain_names[x]) != -1){
+            bad_listings.push({
+              domain_name: domain_names[x],
+              reasons: [
+                "Duplicate domain name!"
+              ]
+            });
+          }
+          else {
+            domains_sofar.push(domain_names[x]);
+            good_listings.push({
+              index: x,
+              domain_name: domain_names[x]
+            });
           }
         }
+
+        res.send({
+          state : "success",
+          bad_listings : bad_listings,
+          good_listings : good_listings
+        });
+      }
+    },
+
+    //function to check all posted listing info
+    checkPostedListingInfoForCreate : function(req, res, next){
+      console.log("F: Checking all posted listing info...");
+
+      var posted_domains = req.body.domains;
+
+      var bad_listings = [];
+      var domains_sofar = [];
+      var date_now = new Date().getTime();
+      var db_object = [];
+
+      //object to keep track of premium domains
+      var premium_obj = {
+        count : 0,
+        indexes : [],
+        domain_names : []
+      };
+
+      for (var x = 0; x < posted_domains.length; x++){
+        var bad_reasons = [];
+
+        //check domain
+        if (!validator.isFQDN(posted_domains[x].domain_name) || !validator.isAscii(posted_domains[x].domain_name)){
+          bad_reasons.push("Invalid domain name!");
+        }
+        //check for duplicates among valid FQDN domains
+        if (domains_sofar.indexOf(posted_domains[x].domain_name) != -1){
+          bad_reasons.push("Duplicate domain name!");
+        }
+        //check price rate
+        if (!validator.isInt(posted_domains[x].min_price, {min: 0}) && posted_domains[x].min_price != ""){
+          bad_reasons.push("Invalid price!");
+        }
+        //domain is too long
+        if (posted_domains[x].domain_name.length > 100){
+          bad_reasons.push("Domain name is too long!");
+        }
+        //too many domains (domains so far has 1 less right here, so needs to be >= maximum)
+        if (!req.user.stripe_subscription_id && domains_sofar.length + req.user.listings.length >= 100){
+          bad_reasons.push("Upgrade to a Premium account to create more listings!");
+        }
+
+        //some were messed up
+        if (bad_reasons.length > 0){
+          bad_listings.push({
+            index: x,
+            reasons: bad_reasons
+          });
+        }
+        //all good! format the db array
+        else {
+          domains_sofar.push(posted_domains[x].domain_name);
+
+          //format the object for DB insert
+          db_object.push([
+            req.user.id,
+            date_now,
+            posted_domains[x].domain_name.toLowerCase(),
+            posted_domains[x].min_price,
+            default_descriptions.random()    //random default description
+          ]);
+
+        }
+      }
+
+      if (bad_listings.length > 0){
+        res.send({
+          bad_listings: bad_listings
+        });
+      }
+      else {
+        //create an object for the session
+        req.session.new_listings = {
+          premium_obj : premium_obj,
+          db_object : db_object,
+          good_listings : [],
+          bad_listings : bad_listings
+        }
+        next();
+      }
+    },
+
+    //</editor-fold>
+
+    //<editor-fold>-------------------------------UPDATE LISTING------------------------------
+
+    //function to check the size of the image uploaded
+    checkImageUploadSize : function(req, res, next){
+      var premium = req.user.stripe_subscription_id;
+      var upload_path = (node_env == "dev") ? "./uploads/images" : '/var/www/w3bbi/uploads/images';
+      var storage = multer.diskStorage({
+        destination: function (req, file, cb) {
+          cb(null, upload_path);
+        },
+        filename: function (req, file, cb) {
+          cb(null, Date.now() + "_" + req.params.domain_name + "_" + req.user.username);
+        }
+      });
+
+      var upload_img = multer({
+        storage: storage,
+        limits: { fileSize: 1000000 },
+
+        //to check for file type
+        fileFilter: function (req, file, cb) {
+          console.log("F: " + req.user.username + " is uploading an image file for parsing...");
+
+          var allowedMimeTypes = [
+            "image/jpeg",
+            "image/jpg",
+            "image/png",
+            "image/gif"
+          ];
+
+          if (allowedMimeTypes.indexOf(file.mimetype) <= -1) {
+            cb(new Error('FILE_TYPE_WRONG'));
+          }
+          else if (!premium){
+            cb(new Error('NOT_PREMIUM'));
+          }
+          else {
+            cb(null, true);
+          }
+        }
+      }).fields([{ name: 'background_image', maxCount: 1 }, { name: 'logo', maxCount: 1 }]);
+
+      upload_img(req, res, function(err){
+        if (err){
+          if (err.code == "LIMIT_FILE_SIZE"){
+            error.handler(req, res, 'File is bigger than 1 MB!', "json");
+          }
+          else if (err.message == "FILE_TYPE_WRONG"){
+            error.handler(req, res, 'Wrong file type!', "json");
+          }
+          else if (err.message == "NOT_PREMIUM"){
+            error.handler(req, res, "not-premium", "json");
+          }
+          else {
+            console.log(err);
+            error.handler(req, res, 'Something went wrong with the upload!', "json");
+          }
+        }
+        else if (!err) {
+          next();
+        }
+      });
+    },
+
+    //function to check the user image and upload to imgur
+    checkListingImage : function(req, res, next){
+      if (req.files && (req.files.background_image || req.files.logo) && !req.body.background_image_link && !req.body.logo_image_link){
+
+        //custom image upload promise function
+        var q_function = function(formData){
+          return Q.Promise(function(resolve, reject, notify){
+            console.log("F: " + req.user.username + " is uploading image(s) to Imgur...");
+            request.post({
+              url: "https://imgur-apiv3.p.mashape.com/3/image",
+              headers: {
+                'X-Mashape-Key' : "72Ivh0ASpImsh02oTqa4gJe0fD3Dp1iZagojsn1Yt1hWAaIzX3",
+                'Authorization' : 'Client-ID 730e9e6f4471d64'
+              },
+              formData: formData
+            }, function (err, response, body) {
+              if (!err){
+                resolve({
+                  imgur_link: JSON.parse(body).data.link.replace("http", "https"),
+                  image_type: formData.image_type
+                });
+              }
+              else {
+                reject(err);
+              }
+            });
+          })
+        }
+
+        //create the array of promises
+        var promises = [];
+        for (var x in req.files){
+          var promise = q_function({
+            title : req.files[x][0].filename,
+            image : fs.createReadStream(req.files[x][0].path),
+            image_type : req.files[x][0].fieldname
+          });
+          promises.push(promise);
+        }
+        //wait for all promises to finish
+        Q.allSettled(promises)
+        .then(function(results) {
+          req.session.new_listing_info = {};
+          //figure out which promises failed / passed
+          for (var y = 0; y < results.length; y++){
+            if (results[y].state == "fulfilled"){
+              req.session.new_listing_info[results[y].value.image_type] = results[y].value.imgur_link;
+            }
+          }
+
+          //removing existing image(s) intentionally
+          if (req.body.background_image == "" || req.body.background_image_link == ""){
+            req.session.new_listing_info.background_image = null;
+          }
+          if (req.body.logo == "" || req.body.logo_image_link == ""){
+            req.session.new_listing_info.logo = null;
+          }
+          next();
+        });
+      }
+      else {
+        req.session.new_listing_info = {};
 
         //removing existing image(s) intentionally
         if (req.body.background_image == "" || req.body.background_image_link == ""){
@@ -397,372 +311,367 @@ module.exports = {
           req.session.new_listing_info.logo = null;
         }
         next();
-      });
-    }
-    else {
-      req.session.new_listing_info = {};
-
-      //removing existing image(s) intentionally
-      if (req.body.background_image == "" || req.body.background_image_link == ""){
-        req.session.new_listing_info.background_image = null;
       }
-      if (req.body.logo == "" || req.body.logo_image_link == ""){
-        req.session.new_listing_info.logo = null;
+    },
+
+    //function to check that the listing is verified
+    checkListingVerified : function(req, res, next){
+      console.log("F: Checking if listing is a verified listing...");
+
+      if (!req.listing_info){
+        req.listing_info = getUserListingObj(req.user.listings, req.params.domain_name);
       }
-      next();
-    }
-  },
 
-  //function to check that the listing is verified
-  checkListingVerified : function(req, res, next){
-    console.log("F: Checking if listing is a verified listing...");
-
-    if (!req.listing_info){
-      req.listing_info = getUserListingObj(req.user.listings, req.params.domain_name);
-    }
-
-    if (req.listing_info.verified != 1){
-      error.handler(req, res, "Please verify that you own this domain!", "json");
-    }
-    else {
-      next();
-    }
-  },
-
-  //function to check that the user owns the listing
-  checkListingOwnerPost : function(req, res, next){
-    console.log("F: Checking if current user is listing owner...");
-
-    if (!req.listing_info){
-      req.listing_info = getUserListingObj(req.user.listings, req.params.domain_name);
-    }
-
-    if (req.listing_info.owner_id != req.user.id){
-      error.handler(req, res, "You do not own this domain!", "json");
-    }
-    else {
-      next();
-    }
-  },
-
-  //function to check that the user owns the listing
-  checkListingOwnerGet : function(req, res, next){
-    console.log("F: Checking if current user is listing owner...");
-
-    Listing.checkListingOwner(req.user.id, req.params.domain_name, function(result){
-      if (result.state == "error" || result.info.length <= 0){
-        res.redirect("/listing/" + req.params.domain_name);
+      if (req.listing_info.verified != 1){
+        error.handler(req, res, "Please verify that you own this domain!", "json");
       }
       else {
         next();
       }
-    });
-  },
+    },
 
-  //function to check if listing has been purchased
-  checkListingPurchased : function(req, res, next){
-    console.log("F: Checking if the listing was already purchased or accepted...");
+    //function to check that the user owns the listing
+    checkListingOwnerPost : function(req, res, next){
+      console.log("F: Checking if current user is listing owner...");
 
-    var listing_obj = getUserListingObj(req.user.listings, req.params.domain_name)
-    if (listing_obj.accepted){
-      error.handler(req, res, "You have already accepted an offer for this domain! Please wait for the offerer to complete the payment process.", "json");
-    }
-    else if (listing_obj.deposited){
-      error.handler(req, res, "This listing has already been purchased! Please complete the ownership transfer to the new owner.", "json");
-    }
-    else {
-      next();
-    }
-  },
+      if (!req.listing_info){
+        req.listing_info = getUserListingObj(req.user.listings, req.params.domain_name);
+      }
 
-  //function to check the posted status change of a listing
-  checkListingStatus : function(req, res, next){
-    console.log("F: Checking posted listing status...");
+      if (req.listing_info.owner_id != req.user.id){
+        error.handler(req, res, "You do not own this domain!", "json");
+      }
+      else {
+        next();
+      }
+    },
 
-    var status = parseFloat(req.body.status);
+    //function to check that the user owns the listing
+    checkListingOwnerGet : function(req, res, next){
+      console.log("F: Checking if current user is listing owner...");
 
-    //if status exists and is not 1 or 0
-    if (req.body.status && status != 1 && status != 0){
-      error.handler(req, res, "Invalid listing status!", "json");
-    }
-    //check to see if its currently rented
-    else if (req.body.status == 0){
-      Listing.checkCurrentlyRented(req.params.domain_name, function(result){
-        if (result.state != "success" || result.info.length > 0){
-          error.handler(req, res, "This listing is currently being rented!", "json");
+      Listing.checkListingOwner(req.user.id, req.params.domain_name, function(result){
+        if (result.state == "error" || result.info.length <= 0){
+          res.redirect("/listing/" + req.params.domain_name);
         }
         else {
           next();
         }
       });
-    }
-    //check to see if its still pointed to domahub
-    else if (req.body.status == 1){
-      console.log("F: Checking to see if domain is still pointed to DomaHub...");
+    },
 
-      dns.resolve(req.params.domain_name, "A", function (err_one, address, family) {
-        //the domain's A Record
-        var domain_ip = address;
-        dns.resolve("domahub.com", "A", function (err_two, address, family) {
-          //not pointed to DH anymore!
-          if (domain_ip[0] != address[0] || domain_ip.length != 1){
-            console.log("F: Listing is not pointed to DomaHub anymore! Reverting verification...");
-            Listing.updateListing(req.params.domain_name, {
-              verified: null,
-              status: 0
-            }, function(result){
-              delete getUserListingObj(req.user.listings, req.params.domain_name).verified;
-              error.handler(req, res, "verification-error", "json");
-            });
-          }
-          //something went wrong in looking up DNS, just mark it inactive
-          else if (err_one || err_two){
-            console.log("F: DNS error! Setting listing to inactive...");
-            next();
+    //function to check if listing has been purchased
+    checkListingPurchased : function(req, res, next){
+      console.log("F: Checking if the listing was already purchased or accepted...");
+
+      var listing_obj = getUserListingObj(req.user.listings, req.params.domain_name)
+      if (listing_obj.accepted){
+        error.handler(req, res, "You have already accepted an offer for this domain! Please wait for the offerer to complete the payment process.", "json");
+      }
+      else if (listing_obj.deposited){
+        error.handler(req, res, "This listing has already been purchased! Please complete the ownership transfer to the new owner.", "json");
+      }
+      else {
+        next();
+      }
+    },
+
+    //function to check the posted status change of a listing
+    checkListingStatus : function(req, res, next){
+      console.log("F: Checking posted listing status...");
+
+      var status = parseFloat(req.body.status);
+
+      //if status exists and is not 1 or 0
+      if (req.body.status && status != 1 && status != 0){
+        error.handler(req, res, "Invalid listing status!", "json");
+      }
+      //check to see if its currently rented
+      else if (req.body.status == 0){
+        Listing.checkCurrentlyRented(req.params.domain_name, function(result){
+          if (result.state != "success" || result.info.length > 0){
+            error.handler(req, res, "This listing is currently being rented!", "json");
           }
           else {
             next();
           }
         });
-      });
-    }
-    else {
-      next();
-    }
-  },
+      }
+      //check to see if its still pointed to domahub
+      else if (req.body.status == 1){
+        console.log("F: Checking to see if domain is still pointed to DomaHub...");
 
-  //function to check and reformat new listings details excluding image
-  checkListingPremiumDetails : function(req, res, next){
-    //premium design checks
-    if (req.user.stripe_subscription_id){
-      console.log("F: Checking posted premium listing details...");
-
-      var history_module = parseFloat(req.body.history_module);
-      var traffic_module = parseFloat(req.body.traffic_module);
-      var info_module = parseFloat(req.body.info_module);
-
-      //invalid footer description
-      if (req.body.description_footer && (req.body.description_footer.length < 0 || req.body.description_footer.length > 75)){
-        error.handler(req, res, "The footer description cannot be more than 75 characters!", "json");
+        dns.resolve(req.params.domain_name, "A", function (err_one, address, family) {
+          //the domain's A Record
+          var domain_ip = address;
+          dns.resolve("domahub.com", "A", function (err_two, address, family) {
+            //not pointed to DH anymore!
+            if (domain_ip[0] != address[0] || domain_ip.length != 1){
+              console.log("F: Listing is not pointed to DomaHub anymore! Reverting verification...");
+              Listing.updateListing(req.params.domain_name, {
+                verified: null,
+                status: 0
+              }, function(result){
+                delete getUserListingObj(req.user.listings, req.params.domain_name).verified;
+                error.handler(req, res, "verification-error", "json");
+              });
+            }
+            //something went wrong in looking up DNS, just mark it inactive
+            else if (err_one || err_two){
+              console.log("F: DNS error! Setting listing to inactive...");
+              next();
+            }
+            else {
+              next();
+            }
+          });
+        });
       }
-      //invalid primary color
-      else if (req.body.primary_color && !validator.isHexColor(req.body.primary_color)){
-        error.handler(req, res, "Invalid primary color!", "json");
-      }
-      //invalid secondary color
-      else if (req.body.secondary_color && !validator.isHexColor(req.body.secondary_color)){
-        error.handler(req, res, "Invalid secondary color!", "json");
-      }
-      //invalid tertiary color
-      else if (req.body.tertiary_color && !validator.isHexColor(req.body.tertiary_color)){
-        error.handler(req, res, "Invalid tertiary color!", "json");
-      }
-      //invalid font color
-      else if (req.body.font_color && !validator.isHexColor(req.body.font_color)){
-        error.handler(req, res, "Invalid font color!", "json");
-      }
-      //invalid font name
-      else if (req.body.font_name && Fonts.all().indexOf(req.body.font_name) == -1){
-        error.handler(req, res, "Invalid font name!", "json");
-      }
-      //invalid background color
-      else if (req.body.background_color && !validator.isHexColor(req.body.background_color)){
-        error.handler(req, res, "Invalid background color!", "json");
-      }
-      //invalid background link
-      else if (req.body.background_image_link && !validator.isURL(req.body.background_image_link)){
-        error.handler(req, res, "Invalid background URL!", "json");
-      }
-      //invalid logo link
-      else if (req.body.logo_image_link && !validator.isURL(req.body.logo_image_link)){
-        error.handler(req, res, "Invalid logo URL!", "json");
-      }
-      //invalid history module
-      else if (req.body.history_module && (history_module != 0 && history_module != 1)){
-        error.handler(req, res, "Invalid history module selection!", "json");
-      }
-      //invalid traffic module
-      else if (req.body.traffic_module && (traffic_module != 0 && traffic_module != 1)){
-        error.handler(req, res, "Invalid traffic module selection!", "json");
-      }
-      //invalid info module
-      else if (req.body.info_module && (info_module != 0 && info_module != 1)){
-        error.handler(req, res, "Invalid info module selection!", "json");
-      }
-      //all good!
       else {
+        next();
+      }
+    },
 
-        //set the new listing info
+    //function to check and reformat new listings details excluding image
+    checkListingPremiumDetails : function(req, res, next){
+      //premium design checks
+      if (req.user.stripe_subscription_id){
+        console.log("F: Checking posted premium listing details...");
+
+        var domain_age = parseFloat(req.body.domain_age);
+        var history_module = parseFloat(req.body.history_module);
+        var traffic_module = parseFloat(req.body.traffic_module);
+        var info_module = parseFloat(req.body.info_module);
+
+        //invalid footer description
+        if (req.body.description_footer && (req.body.description_footer.length < 0 || req.body.description_footer.length > 75)){
+          error.handler(req, res, "The footer description cannot be more than 75 characters!", "json");
+        }
+        //invalid primary color
+        else if (req.body.primary_color && !validator.isHexColor(req.body.primary_color)){
+          error.handler(req, res, "Invalid primary color! Please choose a different color!", "json");
+        }
+        //invalid secondary color
+        else if (req.body.secondary_color && !validator.isHexColor(req.body.secondary_color)){
+          error.handler(req, res, "Invalid secondary color! Please choose a different color!", "json");
+        }
+        //invalid tertiary color
+        else if (req.body.tertiary_color && !validator.isHexColor(req.body.tertiary_color)){
+          error.handler(req, res, "Invalid tertiary color! Please choose a different color!", "json");
+        }
+        //invalid font color
+        else if (req.body.font_color && !validator.isHexColor(req.body.font_color)){
+          error.handler(req, res, "Invalid font color! Please choose a different color!", "json");
+        }
+        //invalid font name
+        else if (req.body.font_name && Fonts.all().indexOf(req.body.font_name) == -1){
+          error.handler(req, res, "Invalid font name! Please choose a different font!", "json");
+        }
+        //invalid background color
+        else if (req.body.background_color && !validator.isHexColor(req.body.background_color)){
+          error.handler(req, res, "Invalid background color! Please choose a different color!", "json");
+        }
+        //invalid background link
+        else if (req.body.background_image_link && !validator.isURL(req.body.background_image_link)){
+          error.handler(req, res, "Invalid background URL! Please enter a different URL!", "json");
+        }
+        //invalid logo link
+        else if (req.body.logo_image_link && !validator.isURL(req.body.logo_image_link)){
+          error.handler(req, res, "Invalid logo URL! Please enter a different URL!", "json");
+        }
+        //invalid domain age
+        else if (req.body.domain_age && (domain_age != 0 && domain_age != 1)){
+          error.handler(req, res, "Invalid domain age selection! Please refresh the page and try again!", "json");
+        }
+        //invalid history module
+        else if (req.body.history_module && (history_module != 0 && history_module != 1)){
+          error.handler(req, res, "Invalid history module selection! Please refresh the page and try again!", "json");
+        }
+        //invalid traffic module
+        else if (req.body.traffic_module && (traffic_module != 0 && traffic_module != 1)){
+          error.handler(req, res, "Invalid traffic module selection! Please refresh the page and try again!", "json");
+        }
+        //invalid info module
+        else if (req.body.info_module && (info_module != 0 && info_module != 1)){
+          error.handler(req, res, "Invalid info module selection! Please refresh the page and try again!", "json");
+        }
+        //all good!
+        else {
+
+          //set the new listing info
+          if (!req.session.new_listing_info) {
+            req.session.new_listing_info = {};
+          }
+          req.session.new_listing_info.description_footer = req.body.description_footer;
+          req.session.new_listing_info.primary_color = req.body.primary_color;
+          req.session.new_listing_info.secondary_color = req.body.secondary_color;
+          req.session.new_listing_info.tertiary_color = req.body.tertiary_color;
+          req.session.new_listing_info.font_name = req.body.font_name;
+          req.session.new_listing_info.font_color = req.body.font_color;
+          req.session.new_listing_info.background_color = req.body.background_color;
+          req.session.new_listing_info.domain_age = domain_age;
+          req.session.new_listing_info.history_module = history_module;
+          req.session.new_listing_info.traffic_module = traffic_module;
+          req.session.new_listing_info.info_module = info_module;
+
+          //posted a URL for background image, not upload
+          if (req.body.background_image_link){
+            req.session.new_listing_info.background_image = req.body.background_image_link;
+          }
+
+          //posted a URL for background image, not upload
+          if (req.body.logo_image_link){
+            req.session.new_listing_info.logo = req.body.logo_image_link;
+          }
+
+          next();
+        }
+      }
+      else {
+        //not premium but tried to do premium updates
+        if (req.body.primary_color ||
+          req.body.secondary_color ||
+          req.body.tertiary_color ||
+          req.body.font_name ||
+          req.body.font_color ||
+          req.body.background_color ||
+          req.body.background_image_link ||
+          req.body.logo_image_link ||
+          req.body.history_module ||
+          req.body.traffic_module ||
+          req.body.info_module ||
+          req.body.description_footer
+        ){
+          error.handler(req, res, "not-premium", "json");
+        }
+        else {
+          next();
+        }
+      }
+    },
+
+    //function to check and reformat new listings details excluding image
+    checkListingDetails : function(req, res, next){
+      console.log("F: Checking posted listing details...");
+
+      var listing_info = getUserListingObj(req.user.listings, req.params.domain_name);
+
+      var status = parseFloat(req.body.status);
+      var description = req.body.description;
+      var description_hook = req.body.description_hook;
+
+      //prices
+      var price_rate = req.body.price_rate;
+      var price_type = req.body.price_type;
+      var buy_price = req.body.buy_price;
+      var min_price = req.body.min_price;
+
+      //rentable?
+      var rentable = parseFloat(req.body.rentable);
+
+      //example paths
+      var paths = (req.body.paths) ? req.body.paths.replace(/\s/g, "").toLowerCase().split(",") : [];
+      var paths_clean = [];
+      //loop through the paths posted
+      for (var x = 0; x < paths.length; x++){
+        //if its alphanumeric
+        if (validator.isAlphanumeric(paths[x])){
+          paths_clean.push(paths[x]);
+        }
+      }
+      paths_clean = paths_clean.join(",");
+
+      var categories = (req.body.categories) ? req.body.categories.replace(/\s/g, " ").toLowerCase().split(" ").sort() : [];
+      var categories_clean = [];
+      //loop through the categories posted
+      for (var x = 0; x < categories.length; x++){
+        //if it exists in our list
+        if (Categories.existsBack(categories[x])){
+          categories_clean.push(categories[x]);
+        }
+      }
+      categories_clean = categories_clean.join(" ");
+
+      //invalid short description
+      if (req.body.description_hook && (description_hook.length < 0 || description_hook.length > 75)){
+        error.handler(req, res, "Invalid short listing description!", "json");
+      }
+      //no paths
+      else if (req.body.paths && paths_clean.length == 0){
+        error.handler(req, res, "Invalid example pathes!", "json");
+      }
+      //invalid categories
+      else if (req.body.categories && categories_clean.length == 0){
+        error.handler(req, res, "Invalid categories!", "json");
+      }
+      //invalid price type
+      else if (req.body.price_type && ["month", "week", "day"].indexOf(price_type) == -1){
+        error.handler(req, res, "Invalid rental price type!", "json");
+      }
+      else if (req.body.price_rate && !validator.isInt(price_rate)){
+        error.handler(req, res, "Rental price must be a whole number!", "json");
+      }
+      else if (req.body.buy_price && !validator.isInt(buy_price) && buy_price != 0){
+        error.handler(req, res, "The buy it now price must be a whole number!", "json");
+      }
+      else if (req.body.min_price && !validator.isInt(min_price) && min_price != 0){
+        error.handler(req, res, "The minimum price must be a whole number!", "json");
+      }
+      else if (rentable && rentable != 1 && rentable != 0){
+        error.handler(req, res, "Invalid option! Please refresh the page and try again!", "json");
+      }
+      else {
+        var listing_info = getUserListingObj(req.user.listings, req.params.domain_name);
+
         if (!req.session.new_listing_info) {
           req.session.new_listing_info = {};
         }
-        req.session.new_listing_info.description_footer = req.body.description_footer;
-        req.session.new_listing_info.primary_color = req.body.primary_color;
-        req.session.new_listing_info.secondary_color = req.body.secondary_color;
-        req.session.new_listing_info.tertiary_color = req.body.tertiary_color;
-        req.session.new_listing_info.font_name = req.body.font_name;
-        req.session.new_listing_info.font_color = req.body.font_color;
-        req.session.new_listing_info.background_color = req.body.background_color;
-        req.session.new_listing_info.history_module = history_module;
-        req.session.new_listing_info.traffic_module = traffic_module;
-        req.session.new_listing_info.info_module = info_module;
+        req.session.new_listing_info.status = status;
+        req.session.new_listing_info.description = description;
+        req.session.new_listing_info.description_hook = description_hook;
+        req.session.new_listing_info.price_type = price_type;
+        req.session.new_listing_info.price_rate = price_rate;
+        req.session.new_listing_info.buy_price = (buy_price == "" || buy_price == 0) ? "" : buy_price;
+        req.session.new_listing_info.min_price = (min_price == "" || min_price == 0) ? "" : min_price;
+        req.session.new_listing_info.categories = (categories_clean == "") ? null : categories_clean;
+        req.session.new_listing_info.paths = (paths_clean == "") ? null : paths_clean;
+        req.session.new_listing_info.rentable = rentable;
 
-        //posted a URL for background image, not upload
-        if (req.body.background_image_link){
-          req.session.new_listing_info.background_image = req.body.background_image_link;
+        //delete anything that wasnt posted (except if its "", in which case it was intentional deletion)
+        for (var x in req.session.new_listing_info){
+          if (!req.body[x] && req.body[x] != "" && x != "background_image" && x != "logo"){
+            delete req.session.new_listing_info[x];
+          }
         }
-
-        //posted a URL for background image, not upload
-        if (req.body.logo_image_link){
-          req.session.new_listing_info.logo = req.body.logo_image_link;
-        }
-
         next();
       }
-    }
-    else {
-      //not premium but tried to do premium updates
-      if (req.body.primary_color ||
-        req.body.secondary_color ||
-        req.body.tertiary_color ||
-        req.body.font_name ||
-        req.body.font_color ||
-        req.body.background_color ||
-        req.body.background_image_link ||
-        req.body.logo_image_link ||
-        req.body.history_module ||
-        req.body.traffic_module ||
-        req.body.info_module ||
-        req.body.description_footer
-      ){
-        error.handler(req, res, "not-premium", "json");
+    },
+
+    //function to make sure that its different from the existing listing info
+    checkListingExistingDetails : function(req, res, next){
+      console.log("F: Checking if listing details are being changed...");
+
+      if (!req.listing_info){
+        req.listing_info = getUserListingObj(req.user.listings, req.params.domain_name);
       }
-      else {
-        next();
-      }
-    }
-  },
 
-  //function to check and reformat new listings details excluding image
-  checkListingDetails : function(req, res, next){
-    console.log("F: Checking posted listing details...");
-
-    var listing_info = getUserListingObj(req.user.listings, req.params.domain_name);
-
-    var status = parseFloat(req.body.status);
-    var description = req.body.description;
-    var description_hook = req.body.description_hook;
-
-    //prices
-    var price_rate = req.body.price_rate;
-    var price_type = req.body.price_type;
-    var buy_price = req.body.buy_price;
-    var min_price = req.body.min_price;
-
-    //rentable?
-    var rentable = parseFloat(req.body.rentable);
-
-    //example paths
-    var paths = (req.body.paths) ? req.body.paths.replace(/\s/g, "").toLowerCase().split(",") : [];
-    var paths_clean = [];
-    //loop through the paths posted
-    for (var x = 0; x < paths.length; x++){
-      //if its alphanumeric
-      if (validator.isAlphanumeric(paths[x])){
-        paths_clean.push(paths[x]);
-      }
-    }
-    paths_clean = paths_clean.join(",");
-
-    var categories = (req.body.categories) ? req.body.categories.replace(/\s/g, " ").toLowerCase().split(" ").sort() : [];
-    var categories_clean = [];
-    //loop through the categories posted
-    for (var x = 0; x < categories.length; x++){
-      //if it exists in our list
-      if (Categories.existsBack(categories[x])){
-        categories_clean.push(categories[x]);
-      }
-    }
-    categories_clean = categories_clean.join(" ");
-
-    //invalid short description
-    if (req.body.description_hook && (description_hook.length < 0 || description_hook.length > 75)){
-      error.handler(req, res, "Invalid short listing description!", "json");
-    }
-    //no paths
-    else if (req.body.paths && paths_clean.length == 0){
-      error.handler(req, res, "Invalid example pathes!", "json");
-    }
-    //invalid categories
-    else if (req.body.categories && categories_clean.length == 0){
-      error.handler(req, res, "Invalid categories!", "json");
-    }
-    //invalid price type
-    else if (req.body.price_type && ["month", "week", "day"].indexOf(price_type) == -1){
-      error.handler(req, res, "Invalid rental price type!", "json");
-    }
-    else if (req.body.price_rate && !validator.isInt(price_rate)){
-      error.handler(req, res, "Rental price must be a whole number!", "json");
-    }
-    else if (req.body.buy_price && !validator.isInt(buy_price) && buy_price != 0){
-      error.handler(req, res, "The buy it now price must be a whole number!", "json");
-    }
-    else if (req.body.min_price && !validator.isInt(min_price) && min_price != 0){
-      error.handler(req, res, "The minimum price must be a whole number!", "json");
-    }
-    else if (rentable && rentable != 1 && rentable != 0){
-      error.handler(req, res, "Invalid option! Please refresh the page and try again!", "json");
-    }
-    else {
-      var listing_info = getUserListingObj(req.user.listings, req.params.domain_name);
-
-      if (!req.session.new_listing_info) {
-        req.session.new_listing_info = {};
-      }
-      req.session.new_listing_info.status = status;
-      req.session.new_listing_info.description = description;
-      req.session.new_listing_info.description_hook = description_hook;
-      req.session.new_listing_info.price_type = price_type;
-      req.session.new_listing_info.price_rate = price_rate;
-      req.session.new_listing_info.buy_price = (buy_price == "" || buy_price == 0) ? "" : buy_price;
-      req.session.new_listing_info.min_price = (min_price == "" || min_price == 0) ? "" : min_price;
-      req.session.new_listing_info.categories = (categories_clean == "") ? null : categories_clean;
-      req.session.new_listing_info.paths = (paths_clean == "") ? null : paths_clean;
-      req.session.new_listing_info.rentable = rentable;
-
-      //delete anything that wasnt posted (except if its "", in which case it was intentional deletion)
       for (var x in req.session.new_listing_info){
-        if (!req.body[x] && req.body[x] != "" && x != "background_image" && x != "logo"){
+        if (req.session.new_listing_info[x] == req.listing_info[x]){
           delete req.session.new_listing_info[x];
         }
       }
-      next();
-    }
-  },
 
-  //function to make sure that its different from the existing listing info
-  checkListingExisting : function(req, res, next){
-    console.log("F: Checking if listing details are being changed...");
-
-    if (!req.listing_info){
-      req.listing_info = getUserListingObj(req.user.listings, req.params.domain_name);
-    }
-
-    for (var x in req.session.new_listing_info){
-      if (req.session.new_listing_info[x] == req.listing_info[x]){
-        delete req.session.new_listing_info[x];
+      //if nothing is being changed
+      if (Object.keys(req.session.new_listing_info).length === 0 && req.session.new_listing_info.constructor === Object){
+        error.handler(req, res, "nothing-changed", "json");
       }
-    }
+      //only go next if the object has anything
+      else {
+        next();
+      }
+    },
 
-    //if nothing is being changed
-    if (Object.keys(req.session.new_listing_info).length === 0 && req.session.new_listing_info.constructor === Object){
-      error.handler(req, res, "nothing-changed", "json");
-    }
-    //only go next if the object has anything
-    else {
-      next();
-    }
-  },
+    //</editor-fold>
 
   //</editor-fold>
 

@@ -682,6 +682,7 @@ function updateLogo(listing_info){
   });
 }
 function updateModules(listing_info){
+  checkBox(listing_info.domain_age, $("#domain-age-input"));
   checkBox(listing_info.history_module, $("#history-module-input"));
   checkBox(listing_info.traffic_module, $("#traffic-module-input"));
   checkBox(listing_info.info_module, $("#info-module-input"));
