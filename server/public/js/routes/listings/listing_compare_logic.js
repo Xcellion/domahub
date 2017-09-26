@@ -587,7 +587,7 @@ function updateDescription(){
 
           listing_description_tour.init();
           listing_description_tour.start();
-          
+
         }
         else if (listing_description_tour.ended() && tutorial_tour.getCurrentStep() == 3){
           listing_description_tour.restart();
@@ -613,7 +613,7 @@ function updatePricing(){
   $("#buy-price-input").val(buy_price).on("input", function(){
     listing_info.buy_price = $(this).val();
     if (parseFloat($(this).val()) > 0){
-      $("#buy-button").text("Buy now - " + moneyFormat.to(parseFloat(listing_info.buy_price)));
+      $("#buy-button, #price-tag").text("Buy now - " + moneyFormat.to(parseFloat(listing_info.buy_price)));
     }
   });
   var min_price = getParameterByName("min_price") || listing_info.min_price;
