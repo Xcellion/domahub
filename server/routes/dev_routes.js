@@ -226,11 +226,9 @@ function proxysite(req, res, next){
 
 //function to test and make sure DNS is set up properly
 function testDNS(req, res, next){
-  request.get({
-    url: "http://" + req.params.domain_name
-  }, function(err, response, body){
-    res.send(response.headers);
-  })
+  dns.resolve(req.params.domain_name, "A", function (err, address, family) {
+    res.send(address);
+  });
 }
 
 //</editor-fold>
