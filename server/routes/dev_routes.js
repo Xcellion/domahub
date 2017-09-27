@@ -226,24 +226,11 @@ function proxysite(req, res, next){
 
 //function to test and make sure DNS is set up properly
 function testDNS(req, res, next){
-  whois.lookup(req.params.domain_name, function(err, data){
-    var whoisObj = {};
-    if (!err){
-      var array = parser.parseWhoIsData(data);
-      for (var x = 0; x < array.length; x++){
-        whoisObj[array[x].attribute] = array[x].value;
-      }
-    }
-
-    //look up any existing DNS A Records
-    dns.resolve(req.params.domain_name, "A", function(err, addresses){
-      res.send({
-        whois : whoisObj,
-        a_records : addresses
-      });
-    });
-
-  });
+  request.get({
+    url: "http://" + req.params.domain_name
+  }, function(err, response, body){
+    res.send(response.headers);
+  })
 }
 
 //</editor-fold>
