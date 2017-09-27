@@ -895,6 +895,7 @@ function updateModules(){
     $("#" + $(this).data('target') + "-module").toggleClass('is-hidden');
   });
 
+  //turn off or on modules
   $(".module-input").on("change", function(){
     var which_module = $(this).attr("id").split("-")[0];
     var selected_position = $("#" + which_module + "-tab").data('position');
@@ -948,6 +949,7 @@ function checkBox(module_value, elem){
   }
   else {
     elem.val(module_value).prop("checked", false);
+    $("#" + elem.data('target') + "-module").addClass('is-hidden');
   }
 }
 

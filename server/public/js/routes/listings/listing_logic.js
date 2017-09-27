@@ -1,6 +1,7 @@
 var traffic_chart = false;
 
 $(document).ready(function() {
+
   //add active to the first appearing tab (maybe some tabs are disabled)
   $(".tab").eq(0).addClass('is-active');
   $(".module").eq(0).removeClass('is-hidden');

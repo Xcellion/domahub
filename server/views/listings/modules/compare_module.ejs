@@ -241,8 +241,25 @@ var fonts = <% if(typeof fonts != "undefined"){ %><%-JSON.stringify(fonts)%><% }
       </div>
       <div class="control is-spaced">
         <div class="control-left">
-          <label class="label">Domain Age</label>
-          <small class="tip">Displays a small sentence showing when this domain was first registered.</small>
+          <label class="label" for="info-module-input">Info Module</label>
+          <small class="tip">Displays more detailed information about the domain and other related information.</small>
+        </div>
+        <div class="control-right">
+          <form class="checkbox-form">
+            <input id="info-module-input" data-target="info" type="checkbox" class="module-input checkbox-input" tabindex="0" />
+            <label for="info-module-input"></label>
+          </form>
+        </div>
+      </div>
+      <div class="control is-spaced">
+        <div class="control-left">
+          <label class="label">
+            <span>Domain Age</span>
+            <span class="icon is-small is-tooltip v-align-bottom" data-balloon-length="medium" data-balloon="Info module must be enabled for this setting to take effect." data-balloon-pos="up">
+              <i class="fa fa-question-circle"></i>
+            </span>
+          </label>
+          <small class="tip">Displays a small sentence showing when this domain was first registered. Info module must be enabled.</small>
         </div>
         <div class="control-right">
           <form class="checkbox-form">
@@ -253,7 +270,12 @@ var fonts = <% if(typeof fonts != "undefined"){ %><%-JSON.stringify(fonts)%><% }
       </div>
       <div class="control is-spaced">
         <div class="control-left">
-          <label class="label">Appraisal Sites</label>
+          <label class="label">
+            <span>Appraisal Sites</span>
+            <span class="icon is-small is-tooltip v-align-bottom" data-balloon-length="medium" data-balloon="Info module must be enabled for this setting to take effect." data-balloon-pos="up">
+              <i class="fa fa-question-circle"></i>
+            </span>
+          </label>
           <small class="tip">Displays links to various domain appraisal sites.</small>
         </div>
         <div class="control-right">
@@ -265,25 +287,18 @@ var fonts = <% if(typeof fonts != "undefined"){ %><%-JSON.stringify(fonts)%><% }
       </div>
       <div class="control is-spaced">
         <div class="control-left">
-          <label class="label">Social Media Sharing Buttons</label>
+          <label class="label">
+            <span>Social Media Sharing Buttons</span>
+            <span class="icon is-small is-tooltip v-align-bottom" data-balloon-length="medium" data-balloon="Info module must be enabled for this setting to take effect." data-balloon-pos="up">
+              <i class="fa fa-question-circle"></i>
+            </span>
+          </label>
           <small class="tip">Displays buttons to share the domain listing on various social media sites.</small>
         </div>
         <div class="control-right">
           <form class="checkbox-form">
             <input id="social-sharing-input" data-target="social-sharing" type="checkbox" class="toggle-input checkbox-input" tabindex="0" />
             <label for="social-sharing-input"></label>
-          </form>
-        </div>
-      </div>
-      <div class="control is-spaced">
-        <div class="control-left">
-          <label class="label" for="info-module-input">Info Module</label>
-          <small class="tip">Displays more detailed information about the domain and other related information.</small>
-        </div>
-        <div class="control-right">
-          <form class="checkbox-form">
-            <input id="info-module-input" type="checkbox" class="module-input checkbox-input" tabindex="0" />
-            <label for="info-module-input"></label>
           </form>
         </div>
       </div>
