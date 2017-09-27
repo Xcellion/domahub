@@ -957,7 +957,7 @@ module.exports = {
     dns.resolve(domain_name, "A", function (err, address, family) {
       var domain_ip = address;
       dns.lookup("domahub.com", function (err, address, family) {
-        if (domain_ip && address && (domain_ip == address || domain_ip[0] == address) && domain_ip.length == 1){
+        if (domain_ip && address && domain_ip[0] == address[0] && domain_ip.length == 1){
           req.session.new_listing_info = {
             domain_name: domain_name,
             verified: 1,
