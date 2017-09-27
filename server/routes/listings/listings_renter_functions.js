@@ -750,6 +750,7 @@ module.exports = {
         else {
           var domain_ip = address;
           dns.resolve("domahub.com", "A", function (err, address, family) {
+            console.log(domain_ip, address);
             //not pointed to DH anymore!
             if (domain_ip[0] != address[0] || domain_ip.length != 1){
               console.log("F: Listing is not pointed to DomaHub anymore! Reverting verification...");

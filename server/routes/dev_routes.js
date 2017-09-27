@@ -4,8 +4,6 @@ var account_model = require('../models/account_model.js');
 var listing_model = require('../models/listing_model.js');
 var data_model = require('../models/data_model.js');
 var validator = require('validator');
-var http = require('http');
-http.globalAgent.maxSockets = 25;
 var request = require('request');
 var bodyParser = require('body-parser');
 var urlencodedParser = bodyParser.urlencoded({ extended: false });
@@ -24,6 +22,8 @@ var Q = require("Q");
 var qlimit = require("qlimit");
 var glob = require("glob");
 var json2csv = require('json2csv');
+var whois = require("whois");
+var parser = require('parse-whois');
 
 //</editor-fold>
 
@@ -38,6 +38,7 @@ module.exports = function(app, db, auth, error){
     createSignupCodes
   ]);
   app.get("/viewstest/:path/:view_name", showView);
+  app.get("/dnstest/:domain_name", testDNS);
 
   //parse cold contact excel
   app.get("/parsecontacts/:date/:verbose", parseFolder);
@@ -219,6 +220,28 @@ function proxysite(req, res, next){
       res.set("content-type", response.headers["content-type"]);
       res.end(Buffer.concat(buffer_array));
     }
+
+  });
+}
+
+//function to test and make sure DNS is set up properly
+function testDNS(req, res, next){
+  whois.lookup(req.params.domain_name, function(err, data){
+    var whoisObj = {};
+    if (!err){
+      var array = parser.parseWhoIsData(data);
+      for (var x = 0; x < array.length; x++){
+        whoisObj[array[x].attribute] = array[x].value;
+      }
+    }
+
+    //look up any existing DNS A Records
+    dns.resolve(req.params.domain_name, "A", function(err, addresses){
+      res.send({
+        whois : whoisObj,
+        a_records : addresses
+      });
+    });
 
   });
 }
