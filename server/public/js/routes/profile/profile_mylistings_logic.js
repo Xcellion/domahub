@@ -1800,11 +1800,17 @@ function updateExistingDNS(a_records){
     if (temp_a_records.indexOf("208.68.37.82") != -1){
       temp_a_records.splice(temp_a_records.indexOf("208.68.37.82"), 1);
       $("#existing_a_record_clone").removeClass('is-hidden').find(".existing_data").text("208.68.37.82");
-      $("#existing_a_record_clone").find(".next_step").html("<span class='is-success'>Done! Press the button below!</span>");
-      $("#verify-button").removeClass('is-disabled');
 
-      //prevent refreshing of table
-      $("#refresh-dns-button").off().addClass('is-disabled');
+      //if only domahub
+      if (temp_a_records.length == 1){
+        $("#existing_a_record_clone").find(".next_step").html("<span class='is-success'>Done! Press the button below!</span>");
+
+        $("#verify-button").removeClass('is-disabled');
+        $("#refresh-dns-button").off().addClass('is-disabled');   //prevent refreshing of table
+      }
+      else {
+        $("#existing_a_record_clone").find(".next_step").html("<span class='is-success'>Done!</span>");
+      }
     }
     else {
       $("#existing_a_record_clone").removeClass('is-hidden').find(".existing_data").text("-");
