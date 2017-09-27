@@ -1795,7 +1795,7 @@ function updateExistingDNS(a_records){
   if (a_records){
 
     var temp_a_records = a_records.slice(0);
-    console.log(temp_a_records);
+    console.log(temp_a_records, a_records);
 
     //domahub IP exists
     if (temp_a_records.indexOf("208.68.37.82") != -1){
