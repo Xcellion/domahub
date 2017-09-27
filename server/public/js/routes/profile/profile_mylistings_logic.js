@@ -1802,6 +1802,7 @@ function updateExistingDNS(a_records){
       $("#existing_a_record_clone").removeClass('is-hidden').find(".existing_data").text("208.68.37.82");
 
       //if only domahub
+      console.log(temp_a_records);
       if (temp_a_records.length == 1){
         $("#existing_a_record_clone").find(".next_step").html("<span class='is-success'>Done! Press the button below!</span>");
 
