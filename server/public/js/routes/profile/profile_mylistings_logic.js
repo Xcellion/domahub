@@ -1795,7 +1795,6 @@ function updateExistingDNS(a_records){
   if (a_records){
 
     var temp_a_records = a_records.slice(0);
-    console.log(temp_a_records, a_records);
 
     //domahub IP exists
     if (temp_a_records.indexOf("208.68.37.82") != -1){
@@ -1823,11 +1822,13 @@ function updateExistingDNS(a_records){
 
     //delete any existing records
     for (var x = 0; x < temp_a_records.length; x++){
-      var temp_dns_row = $("#existing_a_record_clone").clone().removeAttr('id').removeClass('is-hidden');
-      temp_dns_row.find(".existing_data").text(a_records[x]);
-      temp_dns_row.find(".required_data").text("-");
-      temp_dns_row.find(".next_step").html("<span class='is-danger'>Delete this record.</span>");
-      $("#dns_table-body").append(temp_dns_row);
+      if (temp_a_records[x] != "208.68.37.82"){
+        var temp_dns_row = $("#existing_a_record_clone").clone().removeAttr('id').removeClass('is-hidden');
+        temp_dns_row.find(".existing_data").text(temp_a_records[x]);
+        temp_dns_row.find(".required_data").text("-");
+        temp_dns_row.find(".next_step").html("<span class='is-danger'>Delete this record.</span>");
+        $("#dns_table-body").append(temp_dns_row);
+      }
     }
   }
   else {
