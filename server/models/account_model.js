@@ -288,3 +288,5 @@ account_model.prototype.updateAccountStripe = function(account_info, stripe_acco
       WHERE stripe_account = ?"
   account_query(query, "Failed to update account with Stripe account id: " + stripe_account + "!", callback, [account_info, stripe_account]);
 }
+
+//</editor-fold>

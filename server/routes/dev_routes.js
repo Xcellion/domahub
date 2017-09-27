@@ -24,6 +24,7 @@ var glob = require("glob");
 var json2csv = require('json2csv');
 var whois = require("whois");
 var parser = require('parse-whois');
+var parseDomain = require('parse-domain');
 
 //</editor-fold>
 
@@ -39,6 +40,10 @@ module.exports = function(app, db, auth, error){
   ]);
   app.get("/viewstest/:path/:view_name", showView);
   app.get("/dnstest/:domain_name", testDNS);
+  app.get("/domaintest/:domain_name", function(req, res){
+    console.log(parseDomain(req.params.domain_name));
+    res.sendStatus(200);
+  });
 
   //parse cold contact excel
   app.get("/parsecontacts/:date/:verbose", parseFolder);
@@ -146,7 +151,7 @@ function createSignupCodes(req, res, next){
     for (var x = 0; x < req.params.number; x++){
       var random_string = randomstring.generate(10);
       codes.push([random_string, 1]);
-      return_lazy.push("https://domahub.com/signup/" + random_string);
+      return_lazy.push(random_string);
     }
   }
   Account.createSignupCodes(codes, function(result){
