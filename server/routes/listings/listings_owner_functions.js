@@ -67,6 +67,15 @@ module.exports = {
               ]
             });
           }
+          //subdomains are not allowed
+          else if (parseDomain(domain_names[x]).subdomain != ""){
+            bad_listings.push({
+              domain_name: domain_names[x],
+              reasons: [
+                "No sub-domains!"
+              ]
+            });
+          }
           else if (domains_sofar.indexOf(domain_names[x]) != -1){
             bad_listings.push({
               domain_name: domain_names[x],
@@ -116,6 +125,10 @@ module.exports = {
         //check domain
         if (!validator.isFQDN(posted_domains[x].domain_name) || !validator.isAscii(posted_domains[x].domain_name)){
           bad_reasons.push("Invalid domain name!");
+        }
+        //subdomains are not allowed
+        if (parseDomain(posted_domains[x].domain_name).subdomain != ""){
+          bad_reasons.push("No sub-domains!");
         }
         //check for duplicates among valid FQDN domains
         if (domains_sofar.indexOf(posted_domains[x].domain_name) != -1){
@@ -956,7 +969,8 @@ module.exports = {
     var domain_name = req.params.domain_name;
     dns.resolve(domain_name, "A", function (err, address, family) {
       var domain_ip = address;
-      dns.lookup("domahub.com", function (err, address, family) {
+      dns.resolve("domahub.com", "A", function (err, address, family) {
+        console.log(domain_ip, address);
         if (domain_ip && address && domain_ip[0] == address[0] && domain_ip.length == 1){
           req.session.new_listing_info = {
             domain_name: domain_name,
