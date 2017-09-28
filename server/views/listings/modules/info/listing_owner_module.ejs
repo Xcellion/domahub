@@ -7,8 +7,8 @@
       This domain is owned by <%= listing_info.username %>.
     <% } %>
   </p>
-  <% if (listing_info.date_registered) { %>
-    <div class='content'>
+  <% if (listing_info.date_registered && (!listing_info.premium || (listing_info.premium && listing_info.domain_age))) { %>
+    <div id="domain-age-module" class='content'>
       <p>
       This domain was first registered at <span class="is-bold"><%= listing_info.registrar %></span> on <span id="date_registered"></span>.
       </p>

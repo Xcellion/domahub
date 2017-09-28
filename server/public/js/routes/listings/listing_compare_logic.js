@@ -587,7 +587,7 @@ function updateDescription(){
 
           listing_description_tour.init();
           listing_description_tour.start();
-          
+
         }
         else if (listing_description_tour.ended() && tutorial_tour.getCurrentStep() == 3){
           listing_description_tour.restart();
@@ -613,7 +613,7 @@ function updatePricing(){
   $("#buy-price-input").val(buy_price).on("input", function(){
     listing_info.buy_price = $(this).val();
     if (parseFloat($(this).val()) > 0){
-      $("#buy-button").text("Buy now - " + moneyFormat.to(parseFloat(listing_info.buy_price)));
+      $("#buy-button, #price-tag").text("Buy now - " + moneyFormat.to(parseFloat(listing_info.buy_price)));
     }
   });
   var min_price = getParameterByName("min_price") || listing_info.min_price;
@@ -883,10 +883,19 @@ function updateFontName(font_name){
 
 //function to update modules
 function updateModules(){
+  checkBox(listing_info.domain_age, $("#domain-age-input"));
+  checkBox(listing_info.domain_appraisal, $("#domain-appraisal-input"));
+  checkBox(listing_info.social_sharing, $("#social-sharing-input"));
   checkBox(listing_info.traffic_module, $("#traffic-module-input"));
   checkBox(listing_info.info_module, $("#info-module-input"));
   checkBox(listing_info.history_module, $("#ticker-module-input"));
 
+  //toggleable things (domain age, appraisal sites, social media)
+  $(".toggle-input").on("change", function(){
+    $("#" + $(this).data('target') + "-module").toggleClass('is-hidden');
+  });
+
+  //turn off or on modules
   $(".module-input").on("change", function(){
     var which_module = $(this).attr("id").split("-")[0];
     var selected_position = $("#" + which_module + "-tab").data('position');
@@ -940,6 +949,7 @@ function checkBox(module_value, elem){
   }
   else {
     elem.val(module_value).prop("checked", false);
+    $("#" + elem.data('target') + "-module").addClass('is-hidden');
   }
 }
 
@@ -955,7 +965,7 @@ function createTestChart(){
   }
 
   listing_info.traffic = [];
-  createTrafficChart();
+  createTrafficChart(true);   //compare module so use custom color
 }
 
 //function to create test domains

@@ -1,9 +1,15 @@
 var traffic_chart = false;
 
 $(document).ready(function() {
+
   //add active to the first appearing tab (maybe some tabs are disabled)
   $(".tab").eq(0).addClass('is-active');
   $(".module").eq(0).removeClass('is-hidden');
+
+  //if traffic tab is first visible
+  if ($(".module").eq(0).attr("id") == "traffic-module"){
+    getTrafficData();
+  }
 
   //date registered for info module
   if (listing_info.date_registered){
@@ -474,7 +480,7 @@ function formatDataset(stats) {
 }
 
 //function to initiate chart only if uninitiated
-function createTrafficChart(){
+function createTrafficChart(compare){
   formatted_dataset = formatDataset(listing_info.traffic);
 
   //hide any overlay
@@ -490,8 +496,8 @@ function createTrafficChart(){
       labels: formatted_dataset.traffic_labels,
       datasets: [{
         label: "Website Views",
-        borderColor: (listing_info.traffic && listing_info.premium && listing_info.primary_color) ? listing_info.primary_color : "#3CBC8D",
-        backgroundColor: (listing_info.traffic && listing_info.premium && listing_info.primary_color) ? hexToRgbA(listing_info.primary_color).replace(",1)", ",.65)") : "rgba(60, 188, 141, 0.65)",
+        borderColor: ((listing_info.traffic && listing_info.premium && listing_info.primary_color) || compare) ? listing_info.primary_color : "#3CBC8D",
+        backgroundColor: ((listing_info.traffic && listing_info.premium && listing_info.primary_color) || compare) ? hexToRgbA(listing_info.primary_color).replace(",1)", ",.65)") : "rgba(60, 188, 141, 0.65)",
         data: formatted_dataset.traffic_views
       }]
     },
