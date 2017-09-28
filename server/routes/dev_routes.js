@@ -4,8 +4,6 @@ var account_model = require('../models/account_model.js');
 var listing_model = require('../models/listing_model.js');
 var data_model = require('../models/data_model.js');
 var validator = require('validator');
-var http = require('http');
-http.globalAgent.maxSockets = 25;
 var request = require('request');
 var bodyParser = require('body-parser');
 var urlencodedParser = bodyParser.urlencoded({ extended: false });
@@ -24,6 +22,9 @@ var Q = require("Q");
 var qlimit = require("qlimit");
 var glob = require("glob");
 var json2csv = require('json2csv');
+var whois = require("whois");
+var parser = require('parse-whois');
+var parseDomain = require('parse-domain');
 
 //</editor-fold>
 
@@ -35,9 +36,14 @@ module.exports = function(app, db, auth, error){
 
   app.get("/emailviews/:email_template", emailViews);
   app.get("/createcodes/:number", [
-    createSignupCodes
+    createCouponCodes
   ]);
   app.get("/viewstest/:path/:view_name", showView);
+  app.get("/dnstest/:domain_name", testDNS);
+  app.get("/domaintest/:domain_name", function(req, res){
+    console.log(parseDomain(req.params.domain_name));
+    res.sendStatus(200);
+  });
 
   //parse cold contact excel
   app.get("/parsecontacts/:date/:verbose", parseFolder);
@@ -136,21 +142,38 @@ function alexa(req, res, next){
 }
 
 //function to create X sign up codes
-function createSignupCodes(req, res, next){
-  console.log("F: Creating " + req.params.number + " signup codes...");
+function createCouponCodes(req, res, next){
+  console.log("F: Creating " + req.params.number + " coupon codes...");
   var codes = [];
   var return_lazy = [];
 
   if (validator.isInt(req.params.number)){
     for (var x = 0; x < req.params.number; x++){
       var random_string = randomstring.generate(10);
-      codes.push([random_string, 1]);
-      return_lazy.push("https://domahub.com/signup/" + random_string);
+      codes.push([random_string, null]);
+      return_lazy.push(random_string);
     }
   }
-  Account.createSignupCodes(codes, function(result){
-    res.send(return_lazy.join("</br></br>"));
+  Account.getCouponCodes(function(result){
+    if (result.state == "success"){
+      var exists = false;
+      for (var x = 0 ; x < result.info.length; x++){
+        for (var y = 0 ; y < codes.length ; y++){
+          if (codes[y] == result.info[x]){
+            exists = true;
+            break;
+          }
+        }
+      }
+
+      if (!exists){
+        Account.createCouponCodes(["ZfVkAdyGwB"], function(result){
+          res.send(return_lazy.join("</br></br>"));
+        });
+      }
+    }
   });
+
 }
 
 //function to test proxy image
@@ -220,6 +243,13 @@ function proxysite(req, res, next){
       res.end(Buffer.concat(buffer_array));
     }
 
+  });
+}
+
+//function to test and make sure DNS is set up properly
+function testDNS(req, res, next){
+  dns.resolve(req.params.domain_name, "A", function (err, address, family) {
+    res.send(address);
   });
 }
 
@@ -450,13 +480,16 @@ var not_names = [
   "corp",
   "domain",
   "development",
+  "department",
   "designer",
   "enterprises",
   "for sale",
+  "gaming",
   "guard",
   "global",
   "hosting",
   "inc.",
+  "interactive",
   "llc",
   "network",
   "manager",
@@ -468,10 +501,12 @@ var not_names = [
   "realty",
   "registration",
   "service",
+  "store",
   "support",
   "whois",
   "worldwide",
   "website",
+  "webmaster",
 ]
 
 //function to build cold contacts from excel sheet

@@ -751,8 +751,10 @@ module.exports = {
           var domain_ip = address;
           dns.resolve("domahub.com", "A", function (err, address, family) {
             //not pointed to DH anymore!
-            if (domain_ip[0] != address[0] || domain_ip.length != 1){
+            if (!domain_ip || !address || domain_ip[0] != address[0] || domain_ip.length != 1){
               console.log("F: Listing is not pointed to DomaHub anymore! Reverting verification...");
+              req.session.listing_info.status = 0;
+              
               Listing.updateListing(domain_name, {
                 verified: null,
                 status: 0
@@ -1233,6 +1235,7 @@ function getWhoIs(req, res, next, domain_name, unlisted){
         listing_info.dev_whois = whoisObj;
       }
 
+      //COMPARE TOOL VARIABLES
       //comparing, so make fake listing info
       if (req.query.compare == "true"){
         console.log("F: Rendering the comparison tool!");
@@ -1257,6 +1260,9 @@ function getWhoIs(req, res, next, domain_name, unlisted){
         listing_info.background_color = "#FFFFFF";
         listing_info.background_image = "";
         listing_info.logo = "";
+        listing_info.domain_age = 1;
+        listing_info.domain_appraisal = 1;
+        listing_info.social_sharing = 1;
         listing_info.history_module = 1;
         listing_info.traffic_module = 1;
         listing_info.info_module = 1;

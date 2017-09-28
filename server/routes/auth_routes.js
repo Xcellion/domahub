@@ -18,6 +18,11 @@ module.exports = function(app, auth){
     }
   ]);
 
+  //redirect any old signup beta code URLs to just /signup
+  app.get("/signup/*", function(req, res){
+    res.redirect("/signup");
+  });
+
   //to render reset/verify page
   app.get("/reset/:token", [
     auth.isNotLoggedIn,
@@ -25,6 +30,7 @@ module.exports = function(app, auth){
     auth.renderReset
   ]);
 
+  //verify email
   app.get("/verify/:token", [
     auth.checkToken,
     auth.renderVerify
@@ -43,19 +49,13 @@ module.exports = function(app, auth){
     }
   ]);
 
+  //send forgot password email
   app.post("/forgot", [
     urlencodedParser,
     auth.isNotLoggedIn,
     checkAccountExists,
     auth.forgotPost
   ])
-
-  //signup with code
-  app.post("/signup/:code", [
-    urlencodedParser,
-    auth.isNotLoggedIn,
-    auth.signupPost
-  ]);
 
   //to reset password
   app.post("/reset/:token", [

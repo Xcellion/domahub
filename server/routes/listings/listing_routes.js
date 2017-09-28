@@ -77,7 +77,7 @@ module.exports = function(app, db, auth, error, stripe){
   app.post("/listings/create/table", [
     urlencodedParser,
     auth.checkLoggedIn,
-    owner_functions.checkPostedDomains
+    owner_functions.checkPostedDomainNames
   ]);
 
   //create new domains from table
@@ -93,15 +93,6 @@ module.exports = function(app, db, auth, error, stripe){
   app.get('/listings/create*', function(req, res){
     res.redirect("/listings/create");
   });
-
-  //create multiple listings
-  // app.post('/listings/create/multiple', [
-  //   auth.checkLoggedIn,
-  //   profile_functions.getAccountListings,
-  //   owner_functions.checkCSVUploadSize,
-  //   owner_functions.checkListingBatch,
-  //   owner_functions.createListingBatch
-  // ]);
 
   //verify that someone changed their DNS to point to domahub
   app.post('/listing/:domain_name/verify', [
@@ -161,7 +152,7 @@ module.exports = function(app, db, auth, error, stripe){
     owner_functions.checkListingStatus,
     owner_functions.checkListingPremiumDetails,
     owner_functions.checkListingDetails,
-    owner_functions.checkListingExisting,
+    owner_functions.checkListingExistingDetails,
     owner_functions.updateListing
   ]);
 

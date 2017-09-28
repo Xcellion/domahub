@@ -381,6 +381,7 @@ function editRowVerified(listing_info, fadeIn){
   else {
     $("#" + $(".verified-elem.tab.is-active").attr('id') + "-drop").removeClass('is-hidden');
   }
+  $("#current-domain-view").attr("href", "/listing/" + listing_info.domain_name);
 
   //get offers if we havent yet
   if (!fadeIn && url_tab == "offers" && listing_info.offers == undefined){
@@ -682,6 +683,9 @@ function updateLogo(listing_info){
   });
 }
 function updateModules(listing_info){
+  checkBox(listing_info.domain_age, $("#domain-age-input"));
+  checkBox(listing_info.domain_appraisal, $("#domain-appraisal-input"));
+  checkBox(listing_info.social_sharing, $("#social-sharing-input"));
   checkBox(listing_info.history_module, $("#history-module-input"));
   checkBox(listing_info.traffic_module, $("#traffic-module-input"));
   checkBox(listing_info.info_module, $("#info-module-input"));
@@ -1743,6 +1747,9 @@ function editRowUnverified(listing_info){
 
 //function to get A Record and Whois info for unverified domain
 function getDNSRecordAndWhois(domain_name){
+  $("#loading-records-row").removeClass('is-hidden');
+  //clear table first of non-clones
+  $("#dns_table-body").find(".clone-dns-row:not(#existing_a_record_clone)").remove();
   $.ajax({
     url: "/listing/" + domain_name + "/unverifiedInfo",
     method: "POST"
@@ -1789,6 +1796,8 @@ function updateExistingDNS(a_records){
   //hide loading message
   $("#loading-records-row").addClass('is-hidden');
 
+  //clear table first of non-clones
+  $("#dns_table-body").find(".clone-dns-row:not(#existing_a_record_clone)").remove();
   if (a_records){
 
     var temp_a_records = a_records.slice(0);
@@ -1796,35 +1805,60 @@ function updateExistingDNS(a_records){
     //domahub IP exists
     if (temp_a_records.indexOf("208.68.37.82") != -1){
       temp_a_records.splice(temp_a_records.indexOf("208.68.37.82"), 1);
-      $("#existing_a_record_clone").removeClass('is-hidden').find(".existing_data").text("208.68.37.82");
-      $("#existing_a_record_clone").find(".next_step").html("<span class='is-success'>Done! Press the button below!</span>");
-      $("#verify-button").removeClass('is-disabled');
+      createDomaRecords(true);
 
-      //prevent refreshing of table
-      $("#refresh-dns-button").off().addClass('is-disabled');
+      //if only domahub
+      if (a_records.length == 1 && a_records[0] == "208.68.37.82"){
+        $("#existing_a_record_clone").find(".next_step").html("<span class='is-success'>Done! Press the button below!</span>");
+
+        $("#verify-button").removeClass('is-disabled');
+        $("#refresh-dns-button").off().addClass('is-disabled');   //prevent refreshing of table
+      }
+      else {
+        $("#existing_a_record_clone").find(".next_step").html("<span class='is-success'>Done!</span>");
+      }
     }
     else {
-      $("#existing_a_record_clone").removeClass('is-hidden').find(".existing_data").text("-");
-      $("#existing_a_record_clone").find(".next_step").html("<span class='is-primary'>Create this record.</span>");
+      createDomaRecords(false);
     }
-
-    //clear table first of non-clones
-    $("#dns_table-body").find(".clone-dns-row:not(#existing_a_record_clone)").remove();
 
     //delete any existing records
     for (var x = 0; x < temp_a_records.length; x++){
-      var temp_dns_row = $("#existing_a_record_clone").clone().removeAttr('id').removeClass('is-hidden');
-      temp_dns_row.find(".existing_data").text(a_records[x]);
-      temp_dns_row.find(".required_data").text("-");
-      temp_dns_row.find(".next_step").html("<span class='is-danger'>Delete this record.</span>");
-      $("#dns_table-body").append(temp_dns_row);
+      if (temp_a_records[x] != "208.68.37.82"){
+        var temp_dns_row = $("#existing_a_record_clone").clone().removeAttr('id').removeClass('is-hidden');
+        temp_dns_row.find(".existing_data").text(temp_a_records[x]);
+        temp_dns_row.find(".required_data").text("-");
+        temp_dns_row.find(".next_step").html("<span class='is-danger'>Delete this record.</span>");
+        $("#dns_table-body").append(temp_dns_row);
+      }
     }
   }
   else {
-    //clear table first
-    $("#dns_table-body").find(".clone-dns-row:not(#existing_a_record_clone)").remove();
-    $("#existing_a_record_clone").removeClass('is-hidden').find(".existing_data").text("Not found!").addClass('is-danger');
+    createDomaRecords(false);
   }
+}
+
+function createDomaRecords(exists){
+
+  var existing_data_text = (exists) ? "207.68.37.82" : "Not found!";
+  var next_step_class = (exists) ? "is-primary" : "is-danger";
+  var next_step_text = (exists) ? "Done!" : "Create this record.";
+
+  //create @ host
+  var temp_dns_row = $("#existing_a_record_clone").clone().removeAttr('id').removeClass('is-hidden');
+  temp_dns_row.find(".dns_host").text("@");
+  temp_dns_row.find(".existing_data").text(existing_data_text);
+  temp_dns_row.find(".required_data").text("208.68.37.82");
+  temp_dns_row.find(".next_step").html("<span class='" + next_step_class + "'>" + next_step_text + "</span>");
+  $("#dns_table-body").append(temp_dns_row);
+
+  //create www host as well
+  var temp_dns_row = $("#existing_a_record_clone").clone().removeAttr('id').removeClass('is-hidden');
+  temp_dns_row.find(".dns_host").text("www");
+  temp_dns_row.find(".existing_data").text(existing_data_text);
+  temp_dns_row.find(".required_data").text("208.68.37.82");
+  temp_dns_row.find(".next_step").html("<span class='" + next_step_class + "'>" + next_step_text + "</span>");
+  $("#dns_table-body").append(temp_dns_row);
 }
 
 //update the verify button
