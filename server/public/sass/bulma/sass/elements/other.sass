@@ -52,6 +52,8 @@
   width: 1.5rem
   .fa
     font-size: 21px
+    height: 1.5rem
+    width: 1.5rem
   // Colors
   @each $name, $pair in $colors
     $color: nth($pair, 1)
@@ -216,6 +218,7 @@
   color: $text
   display: inline-flex
   font-size: 12px
+  font-weight: 400
   height: 24px
   justify-content: center
   line-height: 16px
@@ -244,10 +247,11 @@
       color: $color-invert
   // Sizes
   &.is-small
-    font-size: $size-8
-    height: 22px
-    padding-left: 8px
-    padding-right: 8px
+    height: 18px
+    margin-bottom: 2px
+    vertical-align: middle
+    padding-left: 6px
+    padding-right: 6px
   &.is-medium
     font-size: $size-normal
     height: 32px
