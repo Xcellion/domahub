@@ -253,16 +253,16 @@ account_model.prototype.useSignupCode = function(signup_code, code_obj, callback
 }
 
 //creates new sign up codes
-account_model.prototype.createSignupCodes = function(codes, callback){
-  console.log("DB: Creating signup codes...");
-  query = "INSERT IGNORE INTO signup_codes (\
+account_model.prototype.createCouponCodes = function(codes, callback){
+  console.log("DB: Creating coupon codes...");
+  query = "INSERT IGNORE INTO coupon_codes (\
         code, \
         referer_id \
       )\
       VALUES ? \
       ON DUPLICATE KEY UPDATE \
         code = MD5(NOW())"
-  account_query(query, "Failed to create signup codes!", callback, [codes]);
+  account_query(query, "Failed to create coupon codes!", callback, [codes]);
 }
 
 //</editor-fold>
