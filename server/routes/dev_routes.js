@@ -36,7 +36,7 @@ module.exports = function(app, db, auth, error){
 
   app.get("/emailviews/:email_template", emailViews);
   app.get("/createcodes/:number", [
-    createSignupCodes
+    createCouponCodes
   ]);
   app.get("/viewstest/:path/:view_name", showView);
   app.get("/dnstest/:domain_name", testDNS);
@@ -142,19 +142,19 @@ function alexa(req, res, next){
 }
 
 //function to create X sign up codes
-function createSignupCodes(req, res, next){
-  console.log("F: Creating " + req.params.number + " signup codes...");
+function createCouponCodes(req, res, next){
+  console.log("F: Creating " + req.params.number + " coupon codes...");
   var codes = [];
   var return_lazy = [];
 
   if (validator.isInt(req.params.number)){
     for (var x = 0; x < req.params.number; x++){
       var random_string = randomstring.generate(10);
-      codes.push([random_string, 1]);
+      codes.push([random_string, null]);
       return_lazy.push(random_string);
     }
   }
-  Account.createSignupCodes(codes, function(result){
+  Account.createCouponCodes(["ZfVkAdyGwB"], function(result){
     res.send(return_lazy.join("</br></br>"));
   });
 }

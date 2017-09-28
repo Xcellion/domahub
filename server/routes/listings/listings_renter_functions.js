@@ -753,6 +753,8 @@ module.exports = {
             //not pointed to DH anymore!
             if (!domain_ip || !address || domain_ip[0] != address[0] || domain_ip.length != 1){
               console.log("F: Listing is not pointed to DomaHub anymore! Reverting verification...");
+              req.session.listing_info.status = 0;
+              
               Listing.updateListing(domain_name, {
                 verified: null,
                 status: 0
