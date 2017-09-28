@@ -4,36 +4,36 @@
   </p>
   <div>
     <% if (listing_info.premium) { %>
-      <a class="button" target="_blank" href="http://www.facebook.com/sharer/sharer.php?u=https://<%= listing_info.domain_name %>&title=Check out this awesome domain!">
+      <a class="button is-icon" target="_blank" href="http://www.facebook.com/sharer/sharer.php?u=https://<%= listing_info.domain_name %>&title=Check out this awesome domain!">
     <% } else { %>
-      <a class="button" target="_blank" href="http://www.facebook.com/sharer/sharer.php?u=https://domahub.com/listing/<%= listing_info.domain_name %>&title=Check out this awesome domain!">
+      <a class="button is-icon" target="_blank" href="http://www.facebook.com/sharer/sharer.php?u=https://domahub.com/listing/<%= listing_info.domain_name %>&title=Check out this awesome domain!">
     <% } %>
       <span class="icon">
         <i class="fa fa-facebook"></i>
       </span>
     </a>
     <% if (listing_info.premium) { %>
-      <a class="button" target="_blank" href="http://twitter.com/intent/tweet?status=Check out this awesome domain!+https://<%= listing_info.domain_name %>">
+      <a class="button is-icon" target="_blank" href="http://twitter.com/intent/tweet?status=Check out this awesome domain!+https://<%= listing_info.domain_name %>">
     <% } else { %>
-      <a class="button" target="_blank" href="http://twitter.com/intent/tweet?status=Check out this awesome domain!+https://domahub.com/listing/<%= listing_info.domain_name %>">
+      <a class="button is-icon" target="_blank" href="http://twitter.com/intent/tweet?status=Check out this awesome domain!+https://domahub.com/listing/<%= listing_info.domain_name %>">
     <% } %>
       <span class="icon">
         <i class="fa fa-twitter"></i>
       </span>
     </a>
     <% if (listing_info.premium) { %>
-      <a class="button" target="_blank" href="https://www.linkedin.com/shareArticle?mini=true&url=https://<%= listing_info.domain_name %>&title=Check out this awesome domain!">
+      <a class="button is-icon" target="_blank" href="https://www.linkedin.com/shareArticle?mini=true&url=https://<%= listing_info.domain_name %>&title=Check out this awesome domain!">
     <% } else { %>
-      <a class="button" target="_blank" href="https://www.linkedin.com/shareArticle?mini=true&url=https://domahub.com/listing/<%= listing_info.domain_name %>&title=Check out this awesome domain!">
+      <a class="button is-icon" target="_blank" href="https://www.linkedin.com/shareArticle?mini=true&url=https://domahub.com/listing/<%= listing_info.domain_name %>&title=Check out this awesome domain!">
     <% } %>
       <span class="icon">
         <i class="fa fa-linkedin"></i>
       </span>
     </a>
     <% if (listing_info.premium) { %>
-      <a class="button" target="_blank" href="mailto:?body=https://<%= listing_info.domain_name %>&subject=Check out this awesome domain!">
+      <a class="button is-icon" target="_blank" href="mailto:?body=https://<%= listing_info.domain_name %>&subject=Check out this awesome domain!">
     <% } else { %>
-      <a class="button" target="_blank" href="mailto:?body=https://domahub.com/listing/<%= listing_info.domain_name %>&subject=Check out this awesome domain!">
+      <a class="button is-icon" target="_blank" href="mailto:?body=https://domahub.com/listing/<%= listing_info.domain_name %>&subject=Check out this awesome domain!">
     <% } %>
       <span class="icon">
         <i class="fa fa-envelope"></i>

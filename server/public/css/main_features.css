@@ -93,15 +93,14 @@
       margin-left: 2px; }
 
 .feature {
-  display: flex;
-  align-items: flex-start; }
-  @media screen and (max-width: 768px) {
-    .feature {
-      max-width: 400px;
-      margin-left: auto;
-      margin-right: auto; } }
+  align-items: flex-start;
+  display: flex; }
+  .feature:not(:last-child) {
+    margin-bottom: 20px; }
   .feature .icon {
-    margin-right: 10px; }
+    margin-right: 15px; }
+  .feature .content p:not(:last-child) {
+    margin-bottom: 0; }
 
 .price-card {
   -moz-transition: all 0.25s ease;
@@ -118,3 +117,39 @@
     -ms-transform: translate(0, -5px);
     -webkit-transform: translate(0, -5px);
       -webkit-transform-transform: translate(0, -5px); }
+
+.blurb {
+  -webkit-animation: fadeIn 300ms forwards;
+  -moz-animation: fadeIn 300ms forwards;
+  -o-animation: fadeIn 300ms forwards;
+  animation: fadeIn 300ms forwards; }
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0; }
+  100% {
+    opacity: 1; } }
+
+.slick-slide {
+  padding: 5px 20px 20px; }
+  .slick-slide:focus {
+    outline: none !important; }
+
+.slick-prev {
+  left: -10px !important; }
+  .slick-prev:before {
+    color: #3cbc8d !important; }
+
+.slick-next {
+  right: -10px !important; }
+  .slick-next:before {
+    color: #3cbc8d !important; }
+
+.slick-dots li button:hover:before, .slick-dots li button:focus:before {
+  color: #8ad6ba; }
+
+.slick-dots li button:before {
+  font-size: 10px !important; }
+
+.slick-dots li.slick-active button:before {
+  color: #3cbc8d !important; }

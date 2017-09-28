@@ -4,6 +4,8 @@
 <head>
   <title>Features - DomaHub</title>
   <link rel="stylesheet" type="text/css" href="/css/min/main_features.min.css" />
+  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.7.1/slick.min.css"/>
+  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.7.1/slick-theme.min.css"/>
   <meta name="description" content="Simple, clean domain name sales pages." />
   <%- include("../templates/head_links"); %>
 </head>
@@ -117,101 +119,298 @@
       </svg>
     </figure>
     <div class="content has-text-centered">
-      <h1 class="title is-2 is-white is-bold">A Custom Storefront For Your Domains</h1>
+      <h1 class="title is-2 is-white is-bold">Professional Storefront For Your Domains</h1>
       <h2 class="subtitle is-4 is-white">Attract buyers, seamlessly handle payments, and make money - directly from your domain.</h2>
     </div>
   </div>
 </section>
 
-<section class="section is-medium">
+<section id="features-section" class="section is-medium">
   <div class="container">
     <div class="content has-text-centered">
       <h2 class="title is-bold">Features</h2>
     </div>
     <div class="columns">
-      <div class="column is-5 is-10-mobile is-offset-1-mobile">
-        <figure id="product-img" class="image has-shadow">
-          <img src="/images/main/listing-example.png" alt="Preview of our sales page"/>
-          <a tabindex="1" href="/listing/cooldomains.com?compare=true&theme=DomaHub" class="button is-primary is-stylish">
-            <span class="icon is-small"><i class="fa fa-rocket"></i></span>
-            <span>Try the Demo</span>
-          </a>
-        </figure>
+      <div id="dotted" class="column is-6">
+        <div id="offers" class="blurb">
+          <div class="content">
+            <h3 class="is-bold">Offer Forms</h3>
+            <p>
+              Unique offer forms are embedded in every sales page, helping you to automate
+              your sales channel without any unwanted spam from bots or other malicious parties.
+            </p>
+          </div>
+          <div class="feature">
+            <span class="icon"><i class="fa fa-check-circle-o"></i></span>
+            <div class="content">
+              <p class="is-bold">Verified Email</p>
+              <p>
+                 We verify all offers by email. No offers will reach your inbox until
+                 we have verified the buyer.
+              </p>
+            </div>
+          </div>
+          <div class="feature">
+            <span class="icon"><i class="fa fa-phone"></i></span>
+            <div class="content">
+              <p class="is-bold">Verified Phone #</p>
+              <p>
+                 We also verify all phone numbers through Google's phone API.
+              </p>
+            </div>
+          </div>
+          <div class="feature">
+            <span class="icon"><i class="fa fa-dollar"></i></span>
+            <div class="content">
+              <p class="is-bold">Minimum Asking Price</p>
+              <p>
+                Never receive offers below your minimum asking price.
+              </p>
+            </div>
+          </div>
+          <div class="feature">
+            <span class="icon"><i class="fa fa-handshake-o"></i></span>
+            <div class="content">
+              <p class="is-bold">Buy It Now</p>
+              <p>
+                Set a buy-it-now price to sell your domains immediately!
+              </p>
+            </div>
+          </div>
+          <div class="feature">
+            <span class="icon"><i class="fa fa-credit-card"></i></span>
+            <div class="content">
+              <p class="is-bold">Managed Payments</p>
+              <p>
+                Our payments are powered by <a tabindex="0" href="https://www.stripe.com" class="is-primary">Stripe</a>,
+                a secure processor trusted by companies like Lyft, Pinterest, and Kickstarter.
+              </p>
+            </div>
+          </div>
+        </div>
+        <div id="design" class="blurb is-hidden">
+          <div class="content">
+            <h3 class="is-bold">Custom Branding
+              <span class="tag margin-left-5 is-primary is-small">Premium</span>
+            </h3>
+            <p>
+              Fully customize the look and feel of your sales page from the texts
+              to the images and everything in between. Make your domain brand stand out!
+            </p>
+          </div>
+          <div class="feature">
+            <span class="icon"><i class="fa fa-picture-o"></i></span>
+            <div class="content">
+              <p class="is-bold">Logo and Background Image</p>
+              <p>
+                Add your own logo or background image to brand your domain.
+              </p>
+            </div>
+          </div>
+          <div class="feature">
+            <span class="icon"><i class="fa fa-font"></i></span>
+            <div class="content">
+              <p class="is-bold">Fonts and Colors</p>
+              <p>
+                Choose from many different fonts and any colors you wish.
+              </p>
+            </div>
+          </div>
+          <div class="feature">
+            <span class="icon"><i class="fa fa-minus-circle"></i></span>
+            <div class="content">
+              <p class="is-bold">No DomaHub Branding</p>
+              <p>
+                Your store's brand is important, that's why we've removed all mention of DomaHub
+                on your sales page.
+              </p>
+            </div>
+          </div>
+          <div class="feature">
+            <span class="icon"><i class="fa fa-text-width"></i></span>
+            <div class="content">
+              <p class="is-bold is-inline">Text Field Customization</p>
+              <span class="tag margin-left-5 is-accent is-small is-inline">Coming Soon</span>
+              <p>
+                Edit any text fields, placeholder texts, etc.
+              </p>
+            </div>
+          </div>
+        </div>
+        <div id="emails" class="blurb is-hidden">
+          <div class="content">
+            <h3 class="is-bold">Automated Emails</h3>
+            <p>
+              Don't worry about communicating with your buyer. We will send out emails
+              back and forth throughout the whole sales process.
+            </p>
+          </div>
+          <div class="feature">
+            <span class="icon"><i class="fa fa-envelope-open-o"></i></span>
+            <div class="content">
+              <p class="is-bold">Professional Communication</p>
+              <p>
+                Emails are sent at every step of the transaction. From the initial offer verification
+                to the final transfer instructions.
+              </p>
+            </div>
+          </div>
+          <div class="feature">
+            <span class="icon"><i class="fa fa-camera-retro"></i></span>
+            <div class="content">
+              <p class="is-bold is-inline">Custom Branding</p>
+              <span class="tag margin-left-5 is-primary is-small is-inline">Premium</span>
+              <p>
+                Branded emails according to your domain's design and logo settings.
+                Your professional brand - not our's.
+              </p>
+            </div>
+          </div>
+          <div class="feature">
+            <span class="icon"><i class="fa fa-user-circle"></i></span>
+            <div class="content">
+              <p class="is-bold is-inline">Sent From Your Email</p>
+              <span class="tag margin-left-5 is-primary is-small is-inline">Premium</span>
+              <p>
+                All communications are sent from your account's email address.
+                The buyer will never see a @domahub address!
+              </p>
+            </div>
+          </div>
+          <div class="feature">
+            <span class="icon"><i class="fa fa-file-text-o"></i></span>
+            <div class="content">
+              <p class="is-bold is-inline">Email Editor</p>
+              <span class="tag margin-left-5 is-accent is-small is-inline">Coming Soon</span>
+              <p>
+                Edit all emails (text and design) through a WYSIWYG editor and send the
+                right message!
+              </p>
+            </div>
+          </div>
+        </div>
+        <div id="rentals" class="blurb is-hidden">
+          <div class="content">
+            <h3 class="is-bold">Domain Rentals</h3>
+            <p>
+              You have the option to rent out your domains by the day, week, or month.
+              Potentially increase your revenue stream!
+            </p>
+          </div>
+          <div class="feature">
+            <span class="icon"><i class="fa fa-cog"></i></span>
+            <div class="content">
+              <p class="is-bold">Approve or Reject</p>
+              <p>
+                You can choose which rental requests to accept or reject.
+              </p>
+            </div>
+          </div>
+          <div class="feature">
+            <span class="icon"><i class="fa fa-calendar"></i></span>
+            <div class="content">
+              <p class="is-bold">Automatic Scheduling</p>
+              <p>
+                Don't worry about figuring out scheduling - our system does it for you.
+              </p>
+            </div>
+          </div>
+          <div class="feature">
+            <span class="icon"><i class="fa fa-shield"></i></span>
+            <div class="content">
+              <p class="is-bold">Google Safe Browsing</p>
+              <p>
+                We utilize the <a tabindex="0" href="https://developers.google.com/safe-browsing/" class="is-primary">Google Safe Browsing API</a>
+                to detect and remove any malicious rentals.
+              </p>
+            </div>
+          </div>
+          <div class="feature">
+            <span class="icon"><i class="fa fa-folder-o"></i></span>
+            <div class="content">
+              <p class="is-bold">Paths and Subdirectories</p>
+              <p>
+                Rent out any valid path or subdirectory of your domain as well. (e.g. www.yourdomain.com/path)
+              </p>
+            </div>
+          </div>
+          <div class="feature">
+            <span class="icon"><i class="fa fa-chain-broken"></i></span>
+            <div class="content">
+              <p class="is-bold">No Domain Transfer</p>
+              <p>
+                You don't have to transfer your domain or change your nameservers.
+                We will display the rental's content on your domain.
+              </p>
+            </div>
+          </div>
+        </div>
+        <div id="other" class="blurb is-hidden">
+          <div class="content">
+            <h3 class="is-bold">Even More Perks!</h3>
+            <p>
+              Don't worry, we've got even more features to share.
+              Take a look at some of the other cool benefits we offer!
+            </p>
+          </div>
+          <div class="feature">
+            <span class="icon"><i class="fa fa-lock"></i></span>
+            <div class="content">
+              <p class="is-bold is-inline">SSL Certificate</p>
+              <span class="tag margin-left-5 is-primary is-small is-inline">Premium</span>
+              <p>
+                Domain sales pages have their own SSL Certificate. Visitors will connect
+                to your domain via HTTPS, letting them know the website is 100% secure.
+              </p>
+            </div>
+          </div>
+          <div class="feature">
+            <span class="icon"><i class="fa fa-bar-chart"></i></span>
+            <div class="content">
+              <p class="is-bold">Traffic Statistics</p>
+              <p>
+                Real-time traffic statistics as well as top referers
+                (i.e. what websites your visitors are coming from) to your domain.
+              </p>
+            </div>
+          </div>
+          <div class="feature">
+            <span class="icon"><i class="fa fa-id-card-o"></i></span>
+            <div class="content">
+              <p class="is-bold">Portfolio Showcase</p>
+              <p>
+                Customers can browse your entire portfolio by viewing links to other domains you have listed on DomaHub.
+              </p>
+            </div>
+          </div>
+          <div class="feature">
+            <span class="icon"><i class="fa fa-share-alt"></i></span>
+            <div class="content">
+              <p class="is-bold">Social Media Sharing</p>
+              <p>
+                Quickly share and post your domain listing on Facebook, Twitter, LinkedIn, or email.
+              </p>
+            </div>
+          </div>
+        </div>
       </div>
-      <div class="column is-7">
-        <div class="columns is-desktop">
-          <div class="column is-6-desktop is-12-tablet">
-            <div class="feature">
-              <span class="icon is-medium is-primary"><i class="fa fa-list-alt"></i></span>
-              <div class="content">
-                <h3>Offer Forms</h3>
-                <p>
-                  We will verify all offers before you receive them. Enforce minimum offers
-                  as well as a Buy-it-Now option.
-                </p>
-              </div>
-            </div>
-          </div>
-          <div class="column is-6-desktop is-12-tablet">
-            <div class="feature">
-              <span class="icon is-medium is-primary"><i class="fa fa-credit-card"></i></span>
-              <div class="content">
-                <h3>Managed Payments</h3>
-                <p>
-                  DomaHub manages all payments securely. Once a transaction has finished,
-                  we deposit the money directly into your account.
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="columns is-desktop">
-          <div class="column is-6-desktop is-12-tablet">
-            <div class="feature">
-              <span class="icon is-medium is-primary"><i class="fa fa-magic"></i></span>
-              <div class="content">
-                <h3>Custom Design</h3>
-                <p>
-                  Fully customize the look and feel of your sales page. Edit colors, insert images and logos, add texts, etc.
-                </p>
-              </div>
-            </div>
-          </div>
-          <div class="column is-6-desktop is-12-tablet">
-            <div class="feature">
-              <span class="icon is-medium is-primary"><i class="fa fa-folder-open-o"></i></span>
-              <div class="content">
-                <h3>Portfolio Showcase</h3>
-                <p>
-                  Allow customers to browse your entire portfolio by linking other domains you have listed on DomaHub.
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="columns is-desktop">
-          <div class="column is-6-desktop is-12-tablet">
-            <div class="feature">
-              <span class="icon is-medium is-primary"><i class="fa fa-shield"></i></span>
-              <div class="content">
-                <h3>HTTPS Connection</h3>
-                <p>
-                  HTTPS is enforced on all sales pages to ensure utmost security during transactions.
-                </p>
-              </div>
-            </div>
-          </div>
-          <div class="column is-6-desktop is-12-tablet">
-            <div class="feature">
-              <span class="icon is-medium is-primary"><i class="fa fa-area-chart"></i></span>
-              <div class="content">
-                <h3>Traffic Statistics</h3>
-                <p>
-                  Present real-time traffic statistics as well as domain history and other relevant information.
-                </p>
-              </div>
-            </div>
-          </div>
+      <div class="column is-6 is-hidden-mobile">
+        <div class="features-carousel">
+          <figure class="image has-shadow">
+            <img src="/images/main/feature-form.png" />
+          </figure>
+          <figure class="image has-shadow">
+            <img src="/images/main/feature-design.jpg" />
+          </figure>
+          <figure class="image has-shadow">
+            <img src="/images/main/feature-email.png" />
+          </figure>
+          <figure class="image has-shadow">
+            <img src="/images/main/feature-rentals.png" />
+          </figure>
+          <figure class="image">
+            <img src="/images/main/feature-collage.png" />
+          </figure>
         </div>
       </div>
     </div>
@@ -570,5 +769,7 @@
 </section>
 
 <%- include("../templates/footer"); %>
+<script type="text/javascript" src="/js/routes/main/main_features_logic.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.7.1/slick.min.js"></script>
 </body>
 </html>
