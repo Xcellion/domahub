@@ -45,13 +45,6 @@ account_model.prototype.checkAccountUsername = function(username, callback){
   account_query(query, "Account does not exist!", callback, username);
 }
 
-//check if a signup code exists
-account_model.prototype.checkSignupCode = function(code, callback){
-  console.log("DB: Checking to see if sign-up code " + code + " exists...");
-  query = 'SELECT 1 AS "exist" FROM signup_codes WHERE code = ?'
-  account_query(query, "Code does not exist!", callback, code);
-}
-
 //</editor-fold>
 
 //<editor-fold>-------------------------------GETS-------------------------------
@@ -231,6 +224,14 @@ account_model.prototype.getStripeAndType = function(domain_name, callback){
   account_query(query, "Failed to get the Stripe ID of the owner of: " + domain_name + "!", callback, domain_name);
 }
 
+//gets all coupon codes
+account_model.prototype.getCouponCodes = function(callback){
+  console.log("DB: Attempting to get all coupon codes...");
+  query = "SELECT code FROM coupon_codes"
+  account_query(query, "Failed to get all coupon codes!", callback);
+}
+
+
 //</editor-fold>
 
 //<editor-fold>-------------------------------SETS-------------------------------
@@ -241,15 +242,6 @@ account_model.prototype.newAccount = function(account_info, callback){
   query = "INSERT INTO accounts \
       SET ? "
   account_query(query, "Failed to create a new account for email: " + account_info.email + "!", callback, account_info);
-}
-
-//uses a sign up code
-account_model.prototype.useSignupCode = function(signup_code, code_obj, callback){
-  console.log("DB: Using signup code: " + signup_code + "...");
-  query = "UPDATE signup_codes \
-      SET ? \
-      WHERE code = ?"
-  account_query(query, "Failed to use signup code: " + signup_code + "!", callback, [code_obj, signup_code]);
 }
 
 //creates new sign up codes
