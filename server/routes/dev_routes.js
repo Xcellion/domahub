@@ -154,9 +154,26 @@ function createCouponCodes(req, res, next){
       return_lazy.push(random_string);
     }
   }
-  Account.createCouponCodes(["ZfVkAdyGwB"], function(result){
-    res.send(return_lazy.join("</br></br>"));
+  Account.getCouponCodes(function(result){
+    if (result.state == "success"){
+      var exists = false;
+      for (var x = 0 ; x < result.info.length; x++){
+        for (var y = 0 ; y < codes.length ; y++){
+          if (codes[y] == result.info[x]){
+            exists = true;
+            break;
+          }
+        }
+      }
+
+      if (!exists){
+        Account.createCouponCodes(["ZfVkAdyGwB"], function(result){
+          res.send(return_lazy.join("</br></br>"));
+        });
+      }
+    }
   });
+
 }
 
 //function to test proxy image

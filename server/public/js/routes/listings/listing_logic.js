@@ -6,6 +6,11 @@ $(document).ready(function() {
   $(".tab").eq(0).addClass('is-active');
   $(".module").eq(0).removeClass('is-hidden');
 
+  //if traffic tab is first visible
+  if ($(".module").eq(0).attr("id") == "traffic-module"){
+    getTrafficData();
+  }
+
   //date registered for info module
   if (listing_info.date_registered){
     $("#date_registered").text(moment(listing_info.date_registered).format("MMMM DD, YYYY"));
