@@ -82,13 +82,22 @@
     margin-left:2px;
 }
 
-#filter-menu {
+// wrapper and contents
+.wrapper {
+  display: flex;
+  height: 100%;
+  width: 100%;
+}
+
+.left-menu {
   @include transition(all 0.25s);
-  border-right: 1px solid $border;
+  background-color: $primary;
+  padding: 40px 20px;
+  height: 100%;
+  min-width: 300px;
   @include mobile {
     @include box-shadow(0,3px,15px,$border,0);
     background-color: $white;
-    height: 3000px;
     width: 300px;
     left: -123%;
     position: absolute;
@@ -101,14 +110,61 @@
     position: absolute;
     right: 10px;
   }
+  .menu-list {
+    a {
+      &.primary-theme {
+        &:hover {
+          background-color: $primary-light;
+        }
+        &.is-active {
+          background-color: $primary-dark;
+          p {
+            font-weight: 700;
+          }
+        }
+      }
+    }
+  }
 }
 
-.filter-menu-toggle {
-  cursor: pointer;
-  &.hamburger {
-    height: 30px;
-    width: 30px;
+.right-content {
+  padding: 40px 20px;
+  height: 100%;
+  overflow-y: auto;
+  width: 100%;
+}
+
+.user-panel {
+  position: absolute;
+  bottom: 20px;
+}
+
+#user-dropdown-button {
+  @include box-shadow(0,3px,5px,$border,5px);
+  border-radius: 100%;
+  padding: 5px;
+  height: auto;
+  &:focus {
+    @include box-shadow(0,0,4px,#5E9ED6,0);
+    outline: none;
+    border: 1px solid #5E9ED6;
   }
+  &.is-active {
+    @include box-shadow(0,0,0,#fff,0);
+    background-color: $primary-dark;
+    color: $white;
+  }
+}
+
+.user-dropdown-menu {
+  @include box-shadow(0,3px,15px,$border,2px);
+  background-color: $white;
+  border-radius: 5px 5px 5px 0;
+  padding: 5px 8px;
+  position: absolute;
+  left: 45px;
+  top: -300px;
+  width: 151px;
 }
 
 .current-domain-name {
@@ -140,11 +196,15 @@
   }
 }
 
+.filter-menu-toggle {
+  cursor: pointer;
+  &.hamburger {
+    height: 30px;
+    width: 30px;
+  }
+}
+
 #table-body {
-  background-color: $white;
-  border-radius: $radius;
-  border: 1px solid $border;
-  max-height: 385px;
   white-space: nowrap;
   overflow-y: auto;
 }
@@ -189,15 +249,10 @@
   display: flex;
   flex-wrap: wrap;
   align-items: stretch;
-  justify-content: space-between;
   .button,
   .select {
     margin-right: 5px;
     margin-bottom: 5px;
-    flex-grow: 1;
-  }
-  select {
-    width: 100%;
   }
 }
 

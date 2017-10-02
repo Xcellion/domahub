@@ -2,6 +2,14 @@
 @import 'mixins';
 @import 'balloon';
 
+.edit-section-button {
+  margin-left: 10px;
+}
+
+.has-border-right {
+  border-right: 1px solid $border;
+}
+
 // form class in settings
 .form {
   // stop ptr events on label
@@ -25,4 +33,97 @@
   display: block;
   margin: 5px 0;
   color: $text-light;
+}
+
+// wrapper and contents
+.wrapper {
+  display: flex;
+  height: 100%;
+  width: 100%;
+}
+
+.left-menu {
+  @include transition(all 0.25s);
+  background-color: $primary;
+  padding: 40px 20px;
+  height: 100%;
+  min-width: 300px;
+  @include mobile {
+    @include box-shadow(0,3px,15px,$border,0);
+    background-color: $white;
+    width: 300px;
+    left: -123%;
+    position: absolute;
+    z-index: 10;
+  }
+  &.is-active {
+    left: -20px;
+  }
+  .delete {
+    position: absolute;
+    right: 10px;
+  }
+  .menu-list {
+    a {
+      &.primary-theme {
+        &:hover {
+          background-color: $primary-light;
+        }
+        &.is-active {
+          background-color: $primary-dark;
+          p {
+            font-weight: 700;
+          }
+        }
+      }
+    }
+  }
+}
+
+.right-content {
+  padding: 40px 20px;
+  height: 100%;
+  overflow-y: auto;
+  width: 100%;
+}
+
+.filter-menu-toggle {
+  cursor: pointer;
+  &.hamburger {
+    height: 30px;
+    width: 30px;
+  }
+}
+
+.user-panel {
+  position: absolute;
+  bottom: 20px;
+}
+
+#user-dropdown-button {
+  @include box-shadow(0,3px,5px,$border,5px);
+  border-radius: 100%;
+  padding: 5px;
+  height: auto;
+  &:focus {
+    @include box-shadow(0,0,4px,#5E9ED6,0);
+    outline: none;
+    border: 1px solid #5E9ED6;
+  }
+  &.is-active {
+    @include box-shadow(0,0,0,#fff,0);
+    background-color: $primary-dark;
+    color: $white;
+  }
+}
+
+.user-dropdown-menu {
+  @include box-shadow(0,3px,15px,$border,2px);
+  background-color: $white;
+  border-radius: 5px 5px 5px 0;
+  padding: 5px 8px;
+  position: absolute;
+  left: 45px;
+  top: -300px;
+  width: 151px;
 }
