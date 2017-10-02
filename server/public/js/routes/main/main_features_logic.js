@@ -53,7 +53,7 @@ function hideBlurbs() {
 
 // update hash
 function updateHash(hash) {
-  return history.pushState({},"",hash);
+  return history.replaceState({},"",hash);
 }
 
 // go to appropriate slide
