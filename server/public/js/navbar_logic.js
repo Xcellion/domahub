@@ -10,12 +10,12 @@ $(document).ready(function() {
     }
 
     //adds is-active to login button
-    $('.login-modal').click(function() {
+    $('.login-modal').on("click", function() {
       $('#modal-login').addClass('is-active');
     });
 
     //various ways to close login dropdown menu
-    $('.modal-close, .modal-background').click(function() {
+    $('.modal-close, .modal-background').on("click", function() {
       $('#modal-login').removeClass('is-active');
       $("#message").attr("style", "").text("Log in below");
     });
@@ -32,7 +32,7 @@ $(document).ready(function() {
     }
 
     //hamburger toggle button
-    $(".nav-toggle").click(function() {
+    $(".nav-toggle").on("click", function() {
       $(this).toggleClass("is-active");
       $(".nav-menu").toggleClass("is-active");
     });
