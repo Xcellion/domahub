@@ -41,8 +41,22 @@ account_model.prototype.checkAccountEmail = function(email, callback){
 //check if an account username exists
 account_model.prototype.checkAccountUsername = function(username, callback){
   console.log("DB: Checking to see if account with username " + username + " exists on DomaHub...");
-  query = 'SELECT 1 AS "exist" FROM accounts WHERE username = ?'
+  query = 'SELECT 1 AS "exist" FROM accounts WHERE LOWER(username) = LOWER(?)'
   account_query(query, "Account does not exist!", callback, username);
+}
+
+//check if an account already applied a promo code for referral
+account_model.prototype.checkExistingReferral = function(account_id, referer_id, callback){
+  console.log("DB: Checking to see if account #" + account_id + " has an applied referer promo code...");
+  query = 'SELECT 1 AS "exist" FROM coupon_codes WHERE (account_id = ? AND referer_id IS NOT NULL) OR (referer_id = ? AND account_id = ?)'
+  account_query(query, "Promo code does not exist!", callback, [account_id, account_id, referer_id]);
+}
+
+//check if a promocode exists
+account_model.prototype.checkPromoCodeUnused = function(code, callback){
+  console.log("DB: Checking to see if promo code " + code + " exists...");
+  query = 'SELECT 1 AS "exist" FROM coupon_codes WHERE code = ? AND account_id IS NULL'
+  account_query(query, "Promo code does not exist!", callback, code);
 }
 
 //</editor-fold>
@@ -57,14 +71,14 @@ account_model.prototype.getAccount = function(email, username, callback){
   else {
     console.log("DB: Attempting to get all account information for username " + username + "...");
   }
-  query = "SELECT * FROM accounts WHERE email = ? OR username = ?"
+  query = "SELECT * FROM accounts WHERE email = ? OR username = ? "
   account_query(query, "Failed to get all account information for email: " + email + "!", callback, [email, username]);
 }
 
-//gets all account info
-account_model.prototype.getAccountByUsername = function(username, callback){
+//gets id of account by username
+account_model.prototype.getAccountIDByUsername = function(username, callback){
   console.log("DB: Attempting to get all account information for username: " + username + "...");
-  query = "SELECT * FROM accounts WHERE username = ?"
+  query = "SELECT id FROM accounts WHERE LOWER(username) = LOWER(?)"
   account_query(query, "Failed to get all account information for username: " + username + "!", callback, username);
 }
 
@@ -231,6 +245,16 @@ account_model.prototype.getCouponCodes = function(callback){
   account_query(query, "Failed to get all coupon codes!", callback);
 }
 
+//gets any existing coupon code for a user
+account_model.prototype.getExistingPromoCodeByUser = function(account_id, callback){
+  console.log("DB: Attempting to get the existing coupon code for user #" + account_id + "...");
+  query = "SELECT coupon_codes.code, coupon_codes.referer_id, coupon_codes.duration_in_months, accounts.stripe_subscription_id \
+          FROM accounts \
+          LEFT JOIN coupon_codes ON accounts.id = coupon_codes.account_id \
+          WHERE accounts.id = ?"
+  account_query(query, "Failed to get an existing coupon code!", callback, account_id);
+}
+
 
 //</editor-fold>
 
@@ -247,13 +271,12 @@ account_model.prototype.newAccount = function(account_info, callback){
 //creates new sign up codes
 account_model.prototype.createCouponCodes = function(codes, callback){
   console.log("DB: Creating coupon codes...");
-  query = "INSERT IGNORE INTO coupon_codes (\
+  query = "INSERT INTO coupon_codes (\
         code, \
-        referer_id \
+        referer_id, \
+        duration_in_months \
       )\
-      VALUES ? \
-      ON DUPLICATE KEY UPDATE \
-        code = MD5(NOW())"
+      VALUES ? "
   account_query(query, "Failed to create coupon codes!", callback, [codes]);
 }
 
@@ -279,6 +302,28 @@ account_model.prototype.updateAccountStripe = function(account_info, stripe_acco
       SET ? \
       WHERE stripe_account = ?"
   account_query(query, "Failed to update account with Stripe account id: " + stripe_account + "!", callback, [account_info, stripe_account]);
+}
+
+//attaches a user to a promo code
+account_model.prototype.updatePromoCode = function(code, account_info, callback){
+  console.log("DB: Updating coupon " + code + " code details...");
+  query = "UPDATE coupon_codes \
+        SET ? \
+      WHERE code = ? "
+  account_query(query, "Failed to apply coupon code!", callback, [account_info, code]);
+}
+
+//</editor-fold>
+
+//<editor-fold>-------------------------------DELETES-------------------------------
+
+//deletes a specific coupon code
+account_model.prototype.deletePromoCode = function(code, callback){
+  console.log("DB: Deleting coupon " + code + "...");
+  query = "DELETE FROM coupon_codes \
+        WHERE code = ? \
+        LIMIT 1"
+  account_query(query, "Failed to delete coupon code!", callback, [code]);
 }
 
 //</editor-fold>

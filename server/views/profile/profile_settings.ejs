@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<html>
+<html class="prevent-scroll-jump">
 
 <head>
 	<title>Account Settings - DomaHub</title>
@@ -12,7 +12,7 @@
 
 	<%- include("../templates/navbar", {user: user}); %>
 
-  <section class="section min-height is-medium">
+  <section class="section min-height is-medium is-clipped">
     <div class="container">
       <div id="settings-msg-error" class="is-hidden is-danger notification is-popup">
         <button class="delete"></button>
@@ -33,9 +33,9 @@
               <li><a id="premium-link" href='#premium' class="setting-link">
               <span id="upgrade-to-premium-text" class="v-align-middle">
                 <% if (user.stripe_subscription_id) { %>
-                  Upgrade to Premium
-                <% } else { %>
                   Premium Status
+                <% } else { %>
+                  Upgrade to Premium
                 <% } %>
               </span>
               <span class="v-align-middle icon is-small">
@@ -76,9 +76,9 @@
 				<div class="column is-9">
 					<div id="basic" class="is-hidden card is-fullwidth">
 						<div class="card-header">
-							<h2 class="card-header-title">
+							<h3 class="card-header-title">
 								<span>Basic Information</span>
-							</h2>
+							</h3>
 							<button class='edit-section-button card-header-icon button is-small'>
 								<span class="icon is-small"><i class="fa fa-cog"></i></span>
 								<span>Edit</span>
@@ -127,13 +127,29 @@
 					</div>
           <div id="premium" class="is-hidden card is-fullwidth">
             <div class="card-header">
-							<h2 id="upgrade-tab-header" class="card-header-title">
+							<h3 id="upgrade-tab-header" class="card-header-title">
                 <span>Premium Status</span>
-							</h2>
+							</h3>
 				      <a tabindex="0" class="is-primary" href="/features#pricing">What is Premium?</a>
 						</div>
 
             <div class="card-content">
+              <div id="promo-control" class="control is-spaced is-mobile">
+                <div class="control-left">
+                  <p>
+                    Promo Code
+                  </p>
+                </div>
+                <div class="control-right">
+                  <form id="promo-form">
+                    <p class="control has-icon has-addons">
+                      <input id="promo-input" autocomplete="off" required tabindex="0" class="input promo-input" type="text"/>
+                      <i class="fa fa-tags"></i>
+                      <input id="promo-submit" class="promo-input no-shadow is-small is-stylish button" text="Submit" type="submit">
+                    </p>
+                  </form>
+                </div>
+              </div>
 
               <div class="control is-spaced is-mobile">
                 <div class="control-left">
@@ -242,9 +258,9 @@
           </div>
           <div id="verifications" class="is-hidden card is-fullwidth" >
 						<div class="card-header">
-							<h2 class="card-header-title">
+							<h3 class="card-header-title">
 								Account Verifications
-							</h2>
+							</h3>
 						</div>
 						<div class="card-content">
 							<div class="content">
@@ -267,9 +283,9 @@
 					</div>
 					<div id="payout-address" class="is-hidden card is-fullwidth">
 						<div class="card-header">
-							<h2 class="card-header-title">
+							<h3 class="card-header-title">
 								Payout Address
-							</h2>
+							</h3>
 							<button class='edit-section-button card-header-icon button is-small'>
 								<span class="icon is-small"><i class="fa fa-cog"></i></span>
 								<span>Edit</span>
@@ -371,9 +387,9 @@
 					</div>
 					<div id="payout-personal" class="is-hidden card is-fullwidth">
 						<div class="card-header">
-							<h2 class="card-header-title">
+							<h3 class="card-header-title">
 								Personal Information
-							</h2>
+							</h3>
 							<button class='edit-section-button card-header-icon button is-small'>
 								<span class="icon is-small"><i class="fa fa-cog"></i></span>
 								<span>Edit</span>
@@ -565,9 +581,9 @@
 					</div>
 					<div id="payout-bank" class="is-hidden card is-fullwidth">
 						<div class="card-header">
-							<h2 class="card-header-title">
+							<h3 class="card-header-title">
 								Bank Information
-							</h2>
+							</h3>
 							<button class='edit-section-button card-header-icon button is-small'>
 								<span class="icon is-small"><i class="fa fa-cog"></i></span>
 								<span>Edit</span>
@@ -697,9 +713,9 @@
 
 					<!--<div id="paypal" class="is-hidden card is-fullwidth">
 						<div class="card-header">
-							<h2 class="card-header-title">
+							<h3 class="card-header-title">
 								PayPal Settings
-							</h2>
+							</h3>
 							<button class='edit-section-button card-header-icon button is-small'>
 								<span class="icon is-small"><i class="fa fa-cog"></i></span>
 								<span>Edit</span>
@@ -731,9 +747,9 @@
           -->
 					<!--<div id="registrar" class="is-hidden card is-fullwidth">
 						<header class="card-header">
-							<h2 class="card-header-title">
+							<h3 class="card-header-title">
 								Registrar Settings
-							</h2>
+							</h3>
 							<button class='edit-section-button card-header-icon button is-small'>
 								<span class="icon is-small"><i class="fa fa-cog"></i></span>
 								<span>Edit</span>

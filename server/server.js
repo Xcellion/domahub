@@ -49,10 +49,13 @@ if (node_env == "dev"){
     cookie: {
       secure: false
     },
-    saveUninitialized: true,
-    resave: true,
+    saveUninitialized: false,
+    resave: false,
     rolling: true
   }));
+
+  //pretty json in dev
+  app.set('json spaces', 2);
 }
 else {
   console.log("Production environment! Using redis for sessions store.");

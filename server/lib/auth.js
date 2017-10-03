@@ -1,4 +1,5 @@
 //<editor-fold>------------------------------------------VARIABLES---------------------------------------
+
 var account_model = require('../models/account_model.js');
 var LocalStrategy = require('passport-local').Strategy;
 var bcrypt = require('bcrypt-nodejs');
@@ -162,7 +163,10 @@ module.exports = {
         error.handler(req, res, "Invalid username / password!", "json");
       }
       else {
-        res.render("account/login.ejs", {message: messageReset(req)});
+        res.render("account/login.ejs", {
+          user: false,
+          message: messageReset(req)
+        });
       }
     }
   },
@@ -197,9 +201,10 @@ module.exports = {
   //log out of the session
   logout: function(req, res) {
     if (req.isAuthenticated()){
-      delete req.session.mylistings;
-      delete req.session.myrentals;
       req.logout();
+      req.session.destroy();
+      delete req.session;
+      delete req.user;
       redirectTo = "/login";
       res.redirect(redirectTo);
     }
