@@ -203,7 +203,7 @@ function successMessage(message){
 
 //function to cancel edit mode
 function cancelEdits(){
-  $(".card").find(".input, .select").addClass('is-disabled');
+  $(".card").find(".input, .select").not(".promo-input").addClass('is-disabled');
   $(".card").find(".hidden-edit").addClass('is-hidden');
 }
 

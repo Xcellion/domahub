@@ -4,6 +4,17 @@ var traffic_chart = false;
 
 $(document).ready(function(){
 
+  //array find for IE
+  if(Array.prototype.find == null){
+    Array.prototype.find = function(callback, thisArg){
+      for(var i = 0; i < this.length; i++){
+        if(callback.call(thisArg || window, this[i], i, this))
+        return this[i];
+      }
+      return undefined;
+    };
+  }
+
   //close offer modal
   $(".modal-close, .modal-background").on("click", function(){
     $(this).parent(".modal").removeClass('is-active');
@@ -1154,7 +1165,9 @@ function formatDataset(stats, listing_info) {
 
     //group referer by similar domains
     let v = "referer" instanceof Function ? key(cur) : cur["referer"];
-    let el = rv.find((r) => r && r["referer"] === v);
+    var el = rv.find(function (r) {
+      return r && r["referer"] === v;
+    });
     if (el) {
       el["views"]++;
     } else if (v != "" && v != listing_info.domain_name) {
