@@ -227,6 +227,12 @@ button[data-balloon] {
 #status-input {
   height: 27px; }
 
+.child-module {
+  padding-left: 10px;
+  border-left: 1px solid #9e9e9e; }
+  .child-module.is-disabled {
+    opacity: 0.25; }
+
 .media {
   -moz-transition: background-color 0.25s ease;
   -o-transition: background-color 0.25s ease;

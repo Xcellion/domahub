@@ -1,34 +1,44 @@
-<script src="/js/lib/chart.min.js" type="text/javascript"></script>
-<script src="/js/lib/randomColor.js" type="text/javascript"></script>
-<div id="traffic-module" class="box has-tabs is-hidden module margin-bottom-0">
-  <div class="columns">
-    <div class="column is-8" style="position:relative;">
-      <canvas id="traffic-chart"></canvas>
-      <div id="traffic-overlay" class="is-hidden">
-        <p id="traffic-overlay-text" class='traffic-overlay-text is-hidden is-bold'>
-            There is not enough data!
-        </p>
-        <p id="traffic-overlay-load" class='traffic-overlay-text'>
-          <span class='icon is-small v-align-middle margin-right-5'><i class="fa fa-spin fa-refresh"></i></span>
-          <span class="v-align-middle">Now loading traffic information</span>
-        </p>
+<% if ((listing_info.premium && listing_info.traffic_module) || !listing_info.premium){ %>
+
+  <script src="/js/lib/chart.min.js" type="text/javascript"></script>
+  <script src="/js/lib/randomColor.js" type="text/javascript"></script>
+  <div id="traffic-module" class="box has-tabs is-hidden module margin-bottom-0">
+    <div class="columns">
+
+      <% if (!listing_info.premium || (listing_info.premium && listing_info.traffic_graph)) { %>
+        <div class="column is-8" style="position:relative;">
+          <canvas id="traffic-chart"></canvas>
+          <div id="traffic-overlay" class="is-hidden">
+            <p id="traffic-overlay-text" class='traffic-overlay-text is-hidden is-bold'>
+                There is not enough data!
+            </p>
+            <p id="traffic-overlay-load" class='traffic-overlay-text'>
+              <span class='icon is-small v-align-middle margin-right-5'><i class="fa fa-spin fa-refresh"></i></span>
+              <span class="v-align-middle">Now loading traffic information</span>
+            </p>
+          </div>
+        </div>
+      <% } %>
+
+      <div class="column is-4">
+
+        <%# ALEXA MODULE %>
+        <%- include("traffic/alexa_module.ejs", {
+          listing_info : listing_info
+        }); %>
+
+        <% if (!listing_info.premium || (listing_info.premium && listing_info.traffic_graph)) { %>
+          <p class="content">
+            <% if (listing_info.unlisted) { %>
+              These are people who have searched for this domain name on DomaHub. You can capture this traffic in addition to any natural traffic your domain is currently receiving the moment you sign up with DomaHub!
+            <% } else { %>
+              These are people who are typing the address directly into their browser. You can capture this traffic instantly the moment you start utilizing this domain!
+            <% } %>
+          </p>
+        <% } %>
+
       </div>
     </div>
-    <div class="column is-4">
-
-      <%# ALEXA MODULE %>
-      <%- include("traffic/alexa_module.ejs", {
-        listing_info : listing_info
-      }); %>
-
-      <p class="content">
-        <% if (listing_info.unlisted) { %>
-          These are people who have searched for this domain name on DomaHub. You can capture this traffic in addition to any natural traffic your domain is currently receiving the moment you sign up with DomaHub!
-        <% } else { %>
-          These are people who are typing the address directly into their browser. You can capture this traffic instantly the moment you start utilizing this domain!
-        <% } %>
-      </p>
-
-    </div>
   </div>
-</div>
+
+<% } %>
