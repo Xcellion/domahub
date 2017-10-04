@@ -111,11 +111,15 @@ account_model.prototype.getAccountListings = function(account_id, callback){
         listings.background_image,\
         listings.background_color,\
         listings.logo,\
+        listings.domain_owner,\
         listings.domain_age,\
+        listings.domain_list,\
         listings.domain_appraisal,\
         listings.social_sharing,\
-        listings.history_module,\
         listings.traffic_module,\
+        listings.traffic_graph,\
+        listings.alexa_stats,\
+        listings.history_module,\
         listings.info_module,\
         IF(listings.primary_color IS NULL, '#3CBC8D', listings.primary_color) as primary_color, \
         IF(listings.secondary_color IS NULL, '#FF5722', listings.secondary_color) as secondary_color, \

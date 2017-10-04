@@ -502,21 +502,38 @@
                   </div>
                   <div class="control is-spaced">
                     <div class="control-left">
-                      <label class="label">Info Module</label>
-                      <small class="tip">Displays other domains the owner has for sale as well as other relevant information.</small>
+                      <label class="label">Information Tab</label>
+                      <small class="tip">Displays detailed relevant information about this listing.</small>
                     </div>
                     <div class="control-right">
                       <form class="checkbox-form">
-                        <input id="info-module-input" data-name="info_module" type="checkbox" class="checkbox-input premium-input changeable-input" tabindex="0" />
+                        <input id="info-module-input" data-name="info_module" type="checkbox" class="parent-module checkbox-input premium-input changeable-input" tabindex="0" />
                         <label for="info-module-input" class="premium-input"></label>
                       </form>
                     </div>
                   </div>
-                  <div class="control is-spaced">
+                  <div class="control info-module-child child-module is-spaced">
+                    <div class="control-left">
+                      <label class="label">
+                        <span>Domain Owner</span>
+                        <span class="icon is-small is-tooltip v-align-bottom" data-balloon-length="medium" data-balloon="The information tab must be enabled for this setting to take effect." data-balloon-pos="up">
+                          <i class="fa fa-question-circle"></i>
+                        </span>
+                      </label>
+                      <small class="tip">Displays a small sentence to showing your username and when this listing was created.</small>
+                    </div>
+                    <div class="control-right">
+                      <form class="checkbox-form">
+                        <input id="domain-owner-input" data-name="domain_owner" type="checkbox" class="checkbox-input premium-input changeable-input" tabindex="0" />
+                        <label for="domain-owner-input" class="premium-input"></label>
+                      </form>
+                    </div>
+                  </div>
+                  <div class="control info-module-child child-module is-spaced">
                     <div class="control-left">
                       <label class="label">
                         <span>Domain Age</span>
-                        <span class="icon is-small is-tooltip v-align-bottom" data-balloon-length="medium" data-balloon="Info module must be enabled for this setting to take effect." data-balloon-pos="up">
+                        <span class="icon is-small is-tooltip v-align-bottom" data-balloon-length="medium" data-balloon="The information tab must be enabled for this setting to take effect." data-balloon-pos="up">
                           <i class="fa fa-question-circle"></i>
                         </span>
                       </label>
@@ -529,11 +546,28 @@
                       </form>
                     </div>
                   </div>
-                  <div class="control is-spaced">
+                  <div class="control info-module-child child-module is-spaced">
+                    <div class="control-left">
+                      <label class="label">
+                        <span>Show Other Listings</span>
+                        <span class="icon is-small is-tooltip v-align-bottom" data-balloon-length="medium" data-balloon="The information tab must be enabled for this setting to take effect." data-balloon-pos="up">
+                          <i class="fa fa-question-circle"></i>
+                        </span>
+                      </label>
+                      <small class="tip">Displays a list of other listings you own on DomaHub.</small>
+                    </div>
+                    <div class="control-right">
+                      <form class="checkbox-form">
+                        <input id="domain-list-input" data-name="domain_list" type="checkbox" class="checkbox-input premium-input changeable-input" tabindex="0" />
+                        <label for="domain-list-input" class="premium-input"></label>
+                      </form>
+                    </div>
+                  </div>
+                  <div class="control info-module-child child-module is-spaced">
                     <div class="control-left">
                       <label class="label">
                         <span>Appraisal Sites</span>
-                        <span class="icon is-small is-tooltip v-align-bottom" data-balloon-length="medium" data-balloon="Info module must be enabled for this setting to take effect." data-balloon-pos="up">
+                        <span class="icon is-small is-tooltip v-align-bottom" data-balloon-length="medium" data-balloon="The information tab must be enabled for this setting to take effect." data-balloon-pos="up">
                           <i class="fa fa-question-circle"></i>
                         </span>
                       </label>
@@ -546,15 +580,15 @@
                       </form>
                     </div>
                   </div>
-                  <div class="control is-spaced">
+                  <div class="control info-module-child child-module is-spaced">
                     <div class="control-left">
                       <label class="label">
                         <span>Social Media Sharing Buttons</span>
-                        <span class="icon is-small is-tooltip v-align-bottom" data-balloon-length="medium" data-balloon="Info module must be enabled for this setting to take effect." data-balloon-pos="up">
+                        <span class="icon is-small is-tooltip v-align-bottom" data-balloon-length="medium" data-balloon="The information tab must be enabled for this setting to take effect." data-balloon-pos="up">
                           <i class="fa fa-question-circle"></i>
                         </span>
                       </label>
-                      <small class="tip">Displays buttons to share the domain listing on various social media sites.</small>
+                      <small class="tip">Displays buttons to share the listing on various social media sites.</small>
                     </div>
                     <div class="control-right">
                       <form class="checkbox-form">
@@ -565,20 +599,54 @@
                   </div>
 									<div class="control is-spaced">
 										<div class="control-left">
-											<label class="label">Traffic Module</label>
-											<small class="tip">Displays detailed traffic data in addition to <a class="is-primary" id="alexa_link">Alexa</a> data.</small>
+											<label class="label">Traffic Tab</label>
+											<small class="tip">Displays detailed traffic information about this listing.</small>
 										</div>
 										<div class="control-right">
 											<form class="checkbox-form">
-												<input id="traffic-module-input" data-name="traffic_module" type="checkbox" class="checkbox-input premium-input changeable-input" tabindex="0" />
+												<input id="traffic-module-input" data-name="traffic_module" type="checkbox" class="parent-module checkbox-input premium-input changeable-input" tabindex="0" />
 												<label for="traffic-module-input" class="premium-input"></label>
 											</form>
 										</div>
 									</div>
+                  <div class="control traffic-module-child child-module is-spaced">
+                    <div class="control-left">
+                      <label class="label">
+                        <span>Traffic Graph</span>
+                        <span class="icon is-small is-tooltip v-align-bottom" data-balloon-length="medium" data-balloon="The traffic tab must be enabled for this setting to take effect." data-balloon-pos="up">
+                          <i class="fa fa-question-circle"></i>
+                        </span>
+                      </label>
+                      <small class="tip">Displays a graph of the listing traffic.</small>
+                    </div>
+                    <div class="control-right">
+                      <form class="checkbox-form">
+                        <input id="traffic-graph-input" data-name="traffic_graph" type="checkbox" class="checkbox-input premium-input changeable-input" tabindex="0" />
+                        <label for="traffic-graph-input" class="premium-input"></label>
+                      </form>
+                    </div>
+                  </div>
+                  <div class="control traffic-module-child child-module is-spaced">
+                    <div class="control-left">
+                      <label class="label">
+                        <span>Alexa Statistics</span>
+                        <span class="icon is-small is-tooltip v-align-bottom" data-balloon-length="medium" data-balloon="The traffic tab must be enabled for this setting to take effect." data-balloon-pos="up">
+                          <i class="fa fa-question-circle"></i>
+                        </span>
+                      </label>
+                      <small class="tip">Displays <a class="is-primary" id="alexa_link">Alexa</a> traffic statistics.</small>
+                    </div>
+                    <div class="control-right">
+                      <form class="checkbox-form">
+                        <input id="alexa-stats-input" data-name="alexa_stats" type="checkbox" class="checkbox-input premium-input changeable-input" tabindex="0" />
+                        <label for="alexa-stats-input" class="premium-input"></label>
+                      </form>
+                    </div>
+                  </div>
 									<div class="control is-spaced">
 										<div class="control-left">
-											<label class="label">History Module</label>
-											<small class="tip">Displays recent activity on your domain name - useful if you have rentals enabled.</small>
+											<label class="label">History Tab</label>
+											<small class="tip">Displays recent activity on your listing - useful if you have rentals enabled.</small>
 										</div>
 										<div class="control-right">
 											<form class="checkbox-form">

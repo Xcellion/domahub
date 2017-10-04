@@ -153,6 +153,7 @@ module.exports = function(app, db, auth, error, stripe){
     owner_functions.checkListingPremiumDetails,
     owner_functions.checkListingDetails,
     owner_functions.checkListingExistingDetails,
+    owner_functions.checkListingModules,
     owner_functions.updateListing
   ]);
 

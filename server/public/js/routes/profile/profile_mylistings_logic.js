@@ -427,7 +427,6 @@ function editRowVerified(listing_info, fadeIn){
   updateFontStyling(listing_info);
   updateModules(listing_info);
   updateBackground(listing_info);
-  updateModules(listing_info);
   updateLogo(listing_info);
 
   updateBindings(listing_info);
@@ -694,22 +693,41 @@ function updateLogo(listing_info){
   });
 }
 function updateModules(listing_info){
+  //info module
+  checkBox(listing_info.info_module, $("#info-module-input"), true);
+  checkBox(listing_info.domain_owner, $("#domain-owner-input"));
   checkBox(listing_info.domain_age, $("#domain-age-input"));
+  checkBox(listing_info.domain_list, $("#domain-list-input"));
   checkBox(listing_info.domain_appraisal, $("#domain-appraisal-input"));
   checkBox(listing_info.social_sharing, $("#social-sharing-input"));
-  checkBox(listing_info.history_module, $("#history-module-input"));
+
+  //traffic module
   checkBox(listing_info.traffic_module, $("#traffic-module-input"));
-  checkBox(listing_info.info_module, $("#info-module-input"));
+  checkBox(listing_info.traffic_graph, $("#traffic-graph-input"));
+  checkBox(listing_info.alexa_stats, $("#alexa-stats-input"));
+
+  checkBox(listing_info.history_module, $("#history-module-input"));
 
   //alexa link
   $("#alexa_link").attr("href", "https://www.alexa.com/siteinfo/" + listing_info.domain_name);
 }
-function checkBox(module_value, elem){
-  if (module_value){
-    elem.val(module_value).prop("checked", true);
+function checkBox(module_value, elem, child){
+  elem.val(module_value).prop("checked", module_value);
+  if (child){
+    if (module_value){
+      $("." + elem.attr("id").replace("input", "child")).removeClass('is-disabled');
+    }
+    else {
+      $("." + elem.attr("id").replace("input", "child")).addClass('is-disabled');
+    }
+  }
+}
+function updateModuleChildren(elem){
+  if (elem.val() == 1){
+    $("." + elem.attr("id").replace("input", "child")).removeClass('is-disabled');
   }
   else {
-    elem.val(module_value).prop("checked", false);
+    $("." + elem.attr("id").replace("input", "child")).addClass('is-disabled');
   }
 }
 
@@ -1344,6 +1362,11 @@ function updateBindings(listing_info){
     var new_checkbox_val = ($(this).val() == "1") ? 0 : 1;
     $(this).val(new_checkbox_val);
     changedValue($(this), listing_info);
+
+    //parent module
+    if ($(this).hasClass('parent-module')){
+      updateModuleChildren($(this));
+    }
   });
 
   //load theme buttons
@@ -1647,13 +1670,14 @@ function submitListingChanges(){
       updateLogo(current_listing);
       refreshSubmitButtons();
 
-      (function(listing_info){
+      (function(new_listing_info){
         //update the change row handler
         $("#row-listing_id" + current_listing.id).off().on("click", function(e){
-          changeRow($(this), listing_info, true);
+          changeRow($(this), new_listing_info, true);
         });
 
-        updateBindings(listing_info);
+        updateModules(new_listing_info);
+        updateBindings(new_listing_info);
       })(current_listing);
     }
     else {
