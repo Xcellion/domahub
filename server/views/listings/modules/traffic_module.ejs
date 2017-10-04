@@ -20,7 +20,11 @@
         </div>
       <% } %>
 
-      <div class="column is-4">
+      <% if (!listing_info.premium || (listing_info.premium && listing_info.traffic_graph)) { %>
+        <div class="column is-4">
+      <% } else { %>
+        <div class="column">
+      <% } %>
 
         <%# ALEXA MODULE %>
         <%- include("traffic/alexa_module.ejs", {
