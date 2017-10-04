@@ -13,8 +13,16 @@ var all_categories = [
     front: "Automotive"
   },
   {
+    back: "brandable",
+    front: "Brandable"
+  },
+  {
     back: "business",
     front: "Business"
+  },
+  {
+    back: "currency",
+    front: "Currency"
   },
   {
     back: "dating",
@@ -77,6 +85,10 @@ var all_categories = [
     front: "Insurance"
   },
   {
+    back: "keywords",
+    front: "Key-words"
+  },
+  {
     back: "legal",
     front: "Legal"
   },
@@ -125,6 +137,10 @@ var all_categories = [
     front: "Shopping"
   },
   {
+    back: "short",
+    front: "Short"
+  },
+  {
     back: "sports",
     front: "Sports"
   },
@@ -139,6 +155,10 @@ var all_categories = [
   {
     back: "travel",
     front: "Travel"
+  },
+  {
+    back: "vr",
+    front: "VR"
   }
 ]
 

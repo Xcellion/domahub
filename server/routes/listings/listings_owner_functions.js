@@ -162,7 +162,7 @@ module.exports = {
           db_object.push([
             req.user.id,
             date_now,
-            posted_domains[x].domain_name.toLowerCase(),
+            (req.user.stripe_subscription_id) ? posted_domains[x].domain_name : posted_domains[x].domain_name.toLowerCase(),
             posted_domains[x].min_price,
             default_descriptions.random()    //random default description
           ]);
@@ -462,6 +462,10 @@ module.exports = {
         if (req.body.description_footer && (req.body.description_footer.length < 0 || req.body.description_footer.length > 75)){
           error.handler(req, res, "The footer description cannot be more than 75 characters!", "json");
         }
+        //invalid domain capitalization
+        else if (req.body.domain_name && req.body.domain_name.toLowerCase() != getUserListingObj(req.user.listings, req.params.domain_name).domain_name.toLowerCase()){
+          error.handler(req, res, "That's an invalid domain name capitalization. Please try again!", "json");
+        }
         //invalid primary color
         else if (req.body.primary_color && !validator.isHexColor(req.body.primary_color)){
           error.handler(req, res, "Invalid primary color! Please choose a different color!", "json");
@@ -541,7 +545,12 @@ module.exports = {
           if (!req.session.new_listing_info) {
             req.session.new_listing_info = {};
           }
+
+          //info
           req.session.new_listing_info.description_footer = req.body.description_footer;
+          req.session.new_listing_info.domain_name = req.body.domain_name;
+
+          //design
           req.session.new_listing_info.primary_color = req.body.primary_color;
           req.session.new_listing_info.secondary_color = req.body.secondary_color;
           req.session.new_listing_info.tertiary_color = req.body.tertiary_color;
@@ -597,6 +606,7 @@ module.exports = {
           req.body.traffic_graph ||
           req.body.alexa_stats ||
           req.body.history_module ||
+          req.body.domain_name ||
           req.body.description_footer
         ){
           error.handler(req, res, "not-premium", "json");

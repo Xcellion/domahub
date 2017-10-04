@@ -412,6 +412,7 @@ function editRowVerified(listing_info, fadeIn){
 
   //info tab
   updateStatus(listing_info);
+  updateDomainNameCapital(listing_info);
   updateDescription(listing_info);
   updateCategories(listing_info);
   updatePriceInputs(listing_info);
@@ -472,6 +473,9 @@ function updateStatus(listing_info){
     $("#status-color").addClass('is-danger').removeClass("is-primary");
     $("#status-icon").addClass('fa-toggle-off').removeClass("fa-toggle-on");
   }
+}
+function updateDomainNameCapital(listing_info){
+  $("#domain-name-input").val(listing_info.domain_name).attr("placeholder", listing_info.domain_name);
 }
 function updateDescription(listing_info){
   $("#description").val(listing_info.description);
@@ -755,7 +759,7 @@ function getOffer(offers, offer_id){
 function getDomainOffers(domain_name){
   showLoadingOffers();
   $.ajax({
-    url: "/listing/" + domain_name + "/getoffers",
+    url: "/listing/" + domain_name.toLowerCase() + "/getoffers",
     method: "POST"
   }).done(function(data){
     if (data.listings){
@@ -977,7 +981,7 @@ function editOfferModal(offer, listing_info){
 function resendAcceptEmail(resend_button, listing_info, offer_id, deposit){
   resend_button.off().addClass('is-loading');
   $.ajax({
-    url: "/listing/" + listing_info.domain_name + "/contact/" + offer_id + "/resend",
+    url: "/listing/" + listing_info.domain_name.toLowerCase() + "/contact/" + offer_id + "/resend",
     method: "POST"
   }).done(function(data){
     resend_button.removeClass('is-loading');
@@ -1001,7 +1005,7 @@ function acceptOrRejectOffer(accept, button_elem, listing_info, offer_id){
   var accept_url = (accept) ? "/accept" : "/reject";
   var response_to_offerer = $("#offer-response").val();
   $.ajax({
-    url: "/listing/" + listing_info.domain_name + "/contact/" + offer_id + accept_url,
+    url: "/listing/" + listing_info.domain_name.toLowerCase() + "/contact/" + offer_id + accept_url,
     method: "POST",
     data: {
       response: response_to_offerer
@@ -1095,7 +1099,7 @@ function offerErrorHandler(message, offer_id){
 function getDomainStats(domain_name){
   showLoadingStats();
   $.ajax({
-    url: "/listing/" + domain_name + "/getstats",
+    url: "/listing/" + domain_name.toLowerCase() + "/getstats",
     method: "POST"
   }).done(function(data){
     if (data.listings){
@@ -1562,7 +1566,7 @@ function submitStatusChange(listing_info){
   formData.append("status", new_status);
 
   $.ajax({
-    url: "/listing/" + listing_info.domain_name + "/update",
+    url: "/listing/" + listing_info.domain_name.toLowerCase() + "/update",
     type: "POST",
     data: formData,
     // Options to tell jQuery not to process data or worry about the content-type
@@ -1653,7 +1657,7 @@ function submitListingChanges(){
   $("#save-changes-button").addClass("is-loading");
 
   $.ajax({
-    url: "/listing/" + current_listing.domain_name + "/update",
+    url: "/listing/" + current_listing.domain_name.toLowerCase() + "/update",
     type: "POST",
     data: formData,
     // Options to tell jQuery not to process data or worry about the content-type
@@ -1666,9 +1670,6 @@ function submitListingChanges(){
     if (data.state == "success"){
       successMessage("Successfully updated this listing!");
       updateCurrentListing(data.listings);
-      updateBackground(current_listing);
-      updateLogo(current_listing);
-      refreshSubmitButtons();
 
       (function(new_listing_info){
         //update the change row handler
@@ -1676,6 +1677,14 @@ function submitListingChanges(){
           changeRow($(this), new_listing_info, true);
         });
 
+        //change domain name header && URL param
+        updateQueryStringParam("listing", new_listing_info.domain_name);
+        $(".current-domain-name").text(new_listing_info.domain_name);
+        updateDomainName($("#row-listing_id" + new_listing_info.id), new_listing_info);
+
+        updateBackground(new_listing_info);
+        updateLogo(new_listing_info);
+        refreshSubmitButtons();
         updateModules(new_listing_info);
         updateBindings(new_listing_info);
       })(current_listing);
@@ -1788,7 +1797,7 @@ function getDNSRecordAndWhois(domain_name){
   //clear table first of non-clones
   $("#dns_table-body").find(".clone-dns-row:not(#existing_a_record_clone)").remove();
   $.ajax({
-    url: "/listing/" + domain_name + "/unverifiedInfo",
+    url: "/listing/" + domain_name.toLowerCase() + "/unverifiedInfo",
     method: "POST"
   }).done(function(data){
     $("#refresh-dns-button").removeClass("is-loading");
@@ -1908,7 +1917,7 @@ function updateVerificationButton(listing_info, cb_when_verified){
 
     verify_button.addClass('is-loading');
     $.ajax({
-      url: "/listing/" + listing_info.domain_name + "/verify",
+      url: "/listing/" + listing_info.domain_name.toLowerCase() + "/verify",
       method: "POST"
     }).done(function(data){
       verify_button.removeClass('is-loading is-danger');
