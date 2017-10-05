@@ -307,8 +307,12 @@
 							<div id="rental-tab-drop" class="drop-tab is-hidden">
 								<div class="control is-spaced">
 									<div class="control-left">
-										<label class="label" for="rentable-input">Allow Rentals</label>
-										<small class="tip">Allows verified users to rent usage of this domain for short amounts of time.</small>
+										<label class="label" for="rentable-input">
+                      Allow Rentals
+                      <span class="icon is-small is-tooltip v-align-bottom" data-balloon-length="large" data-balloon="Allows verified users to rent usage of this domain for short amounts of time." data-balloon-pos="up">
+                        <i class="fa fa-question-circle"></i>
+                      </span>
+                    </label>
                     <small class="tip"><a target="_blank" rel="noopener" href="/faq#renting" class="is-primary">Why should I rent my domain out?</a></small>
 									</div>
 									<div class="control-right">
@@ -335,7 +339,12 @@
                     </form>
                   </div>
                 </div>%>
-								<label class="label">Rental Price</label>
+								<label class="label">
+                  Rental Price
+                  <span class="icon is-small is-tooltip v-align-bottom" data-balloon-length="medium" data-balloon="Price per unit of time for the domain rental." data-balloon-pos="up">
+                    <i class="fa fa-question-circle"></i>
+                  </span>
+                </label>
 								<div class="control">
 									<div class="control has-addons margin-bottom-0">
 										<input id="price-rate-input" data-name="price_rate" placeholder="minimum 1" type="number" min="1" step="1" class="input is-inline changeable-input rentable-input" />
@@ -349,7 +358,7 @@
 											</div>
 										</span>
 									</div>
-									<small class="tip">Price per unit of time for the domain rental.</small>
+									<small class="tip"></small>
 								</div>
 								<div class="control">
 									<label class="label">

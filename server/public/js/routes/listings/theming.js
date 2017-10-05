@@ -10,10 +10,10 @@ $(document).ready(function() {
 
     //show background image
     if (listing_info.background_image){
-      $("#page-contents").css("background-image", "url(" + listing_info.background_image + ")");
-      $("#page-contents").css("background-repeat", "no-repeat");
-      $("#page-contents").css("background-position", "center");
-      $("#page-contents").css("background-size", "cover");
+      $("#page-contents:not(.no-background)").css("background-image", "url(" + listing_info.background_image + ")");
+      $("#page-contents:not(.no-background)").css("background-repeat", "no-repeat");
+      $("#page-contents:not(.no-background)").css("background-position", "center");
+      $("#page-contents:not(.no-background)").css("background-size", "cover");
     }
 
     //show custom logo
@@ -76,7 +76,7 @@ function setupCustomColors(){
   stylize(listing_info.secondary_color, ".is-accent:not(.tag)", "color");
   stylize(listing_info.secondary_color, ".is-accent.button", "background-color", true);
   stylize(listing_info.secondary_color, "#typed-slash", "color");
-  stylize(listing_info.background_color, "#page-contents", "background-color");
+  stylize(listing_info.background_color, "#page-contents:not(.no-background)", "background-color");
   stylize(listing_info.font_name, "#domain-title", "font-family");
   stylize(listing_info.font_name, "#typed-slash", "font-family");
 }

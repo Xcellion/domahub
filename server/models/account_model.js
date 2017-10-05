@@ -106,6 +106,7 @@ account_model.prototype.getAccountListings = function(account_id, callback){
         listings.min_price,\
         listings.description,\
         listings.description_hook,\
+        listings.description_footer,\
         listings.categories,\
         listings.paths,\
         listings.background_image,\

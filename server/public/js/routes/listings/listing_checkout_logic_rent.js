@@ -110,7 +110,7 @@ $(document).ready(function () {
       //going back to address
       if (which_step == "site-regular-message"){
         $(".address-input").val("").removeClass('input-selected');
-        $("#rental-will-msg").addClass('is-hidden');
+        $("#rental-will-wrapper").addClass('is-hidden');
         $("#rental-will-duration-msg").addClass('is-hidden');
         $(".address-next-button").addClass('is-disabled');
       }
@@ -123,19 +123,20 @@ $(document).ready(function () {
       var value_clipped = ($(this).val().length > 35) ? $(this).val().substr(0, 35) + "..." : $(this).val();
       var link_absolute = ($(this).val().indexOf("http") == -1) ? "http://" + $(this).val() : $(this).val();
       if ($(this).attr("id") == "address-forward-input"){
-        var rental_type_text = "Will forward to <a target='_blank' href=" + link_absolute + " class='is-accent'>this link </br>(" + value_clipped + ")</a>";
+        $("#rental-will-msg").text("Will forward to");
       }
       else {
-        var rental_type_text = "Will display the content on <a target='_blank' href=" + link_absolute + " class='is-accent'>this link </br>(" + value_clipped + ")</a>";
+        $("#rental-will-msg").text("Will display the content on");
       }
-      $("#rental-will-msg").html(rental_type_text).removeClass('is-hidden');
+      $("#rental-will-link").text(value_clipped).attr('href', link_absolute);
+      $("#rental-will-wrapper").removeClass('is-hidden');
       $("#rental-will-duration-msg").removeClass('is-hidden');
       $(".address-next-button").removeClass('is-disabled');
     }
     else {
       $(".address-input").removeClass('input-selected');
       $(".address-next-button").addClass('is-disabled');
-      $("#rental-will-msg").addClass('is-hidden');
+      $("#rental-will-wrapper").addClass('is-hidden');
       $("#rental-will-duration-msg").addClass('is-hidden');
     }
   }).on("keypress", function(e){
@@ -311,7 +312,7 @@ function submitNewRental(stripeToken){
 
   $.ajax({
     type: "POST",
-    url: "/listing/" + listing_info.domain_name + "/rent",
+    url: "/listing/" + listing_info.domain_name.toLowerCase() + "/rent",
     data: data_for_submit
   }).done(function(data){
     $("#checkout-button").removeClass('is-loading');
@@ -323,6 +324,9 @@ function submitNewRental(stripeToken){
     }
     else if (data.state == "error"){
       errorHandler(data.message);
+    }
+    else {
+      errorHandler("Something went wrong! Please refresh the page and try again!");
     }
   });
 }
@@ -382,20 +386,23 @@ function successHandler(rental_id, owner_hash_id){
     //hide certain stuff
     $("#checkout-card-content").remove();
     $("#checkout-success-content").removeClass('is-hidden');
-    $("#edit-dates-button").find("a").text('Rent again').addClass('is-primary');
+    $("#edit-dates-text").text('Rent again');
+    $("#edit-dates-icon").removeClass('fa-pencil').addClass('fa-check');
 
     //remove click handler for going back to login/customize
     $(".step-header").off();
 
     //edit preview button
     if (listing_info.premium){
-      $("#rental-preview-button").attr("href", "/listing/" + listing_info.domain_name + "/" + rental_id);
+      $("#rental-preview-button").attr("href", "/listing/" + listing_info.domain_name.toLowerCase() + "/" + rental_id);
+      $("#rental-link-input").val("https://" + listing_info.domain_name.toLowerCase() + "/listing/" + listing_info.domain_name.toLowerCase() + "/" + rental_id + "/" + owner_hash_id);
     } else {
-      $("#rental-preview-button").attr("href", "https://domahub.com/listing/" + listing_info.domain_name + "/" + rental_id);
+      $("#rental-preview-button").attr("href", "https://domahub.com/listing/" + listing_info.domain_name.toLowerCase() + "/" + rental_id);
+      $("#rental-link-input").val("https://domahub.com/listing/" + listing_info.domain_name.toLowerCase() + "/" + rental_id + "/" + owner_hash_id);
     }
 
     //copy ownership url
-    $("#rental-link-input").val("https://domahub.com/listing/" + listing_info.domain_name + "/" + rental_id + "/" + owner_hash_id).on("click", function(){
+    $("#rental-link-input").on("click", function(){
       $(this).select();
     });
     $("#rental-link-copy").on("click", function(){
@@ -421,7 +428,7 @@ var moneyFormat = wNumb({
 //used to see what people are doing on this checkout page
 function trackCheckoutBehavior(id){
   $.ajax({
-    url: "/listing/" + listing_info.domain_name + "/checkouttrack",
+    url: "/listing/" + listing_info.domain_name.toLowerCase() + "/checkouttrack",
     method: "POST",
     async: true,
     data: {
