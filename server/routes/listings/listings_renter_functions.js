@@ -1084,7 +1084,8 @@ module.exports = {
 
   redirectPremium : function(req, res, next){
     if (req.session.listing_info.premium && req.path != "/"){
-      res.redirect('/');
+      console.log("F: Redirecting premium domain to root domain...");
+      res.redirect('https://' + req.session.listing_info.domain_name);
     }
     else {
       next();
