@@ -118,7 +118,7 @@ function checkForBasicRedirect(req, res, next){
     console.log("AF: Premium domain! Display listing on custom URL...");
 
     //redirect to base path if it's requesting something weird
-    if (req.originalUrl != "/"){
+    if (req.originalUrl != "/" || req.originalUrl == "/listing/" + req.session.listing_info.domain_name){
       req.session.skip_rental_check = true;
       res.redirect("/");
     }
