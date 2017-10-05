@@ -33,7 +33,7 @@ $(document).ready(function(){
   var url_listing = getParameterByName("listing");
   if (listings.length){
     for (var x = 0 ; x < listings.length; x++){
-      if (listings[x].domain_name == url_listing){
+      if (listings[x].domain_name.toLowerCase() == url_listing.toLowerCase()){
         var url_listing_index = x;
         break;
       }
@@ -1817,7 +1817,7 @@ function getDNSRecordAndWhois(domain_name){
         unverified_domain.whois = data.listing.whois;
 
         //only if the current visible listing is the one we asked AJAX info for
-        if (current_listing.domain_name == unverified_domain.domain_name){
+        if (current_listing.domain_name.toLowerCase() == unverified_domain.domain_name.toLowerCase()){
           //update the change row handler
           $("#row-listing_id" + current_listing.id).off().on("click", function(e){
             changeRow($(this), unverified_domain, true);
@@ -2253,7 +2253,7 @@ function getUserListingObj(listings, domain_name){
 //helper function to find index of a specific listing in listings array
 function getListingIndex(domain_name){
   for (var x = 0; x < listings.length; x++){
-    if (listings[x].domain_name == domain_name){
+    if (listings[x].domain_name.toLowerCase() == domain_name.toLowerCase()){
       return x;
     }
   }

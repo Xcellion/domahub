@@ -337,8 +337,14 @@ module.exports = {
 
   //renders the checkout page for a new BIN
   renderCheckout : function(req, res, next){
-    if (req.session.new_buying_info && req.session.new_buying_info.domain_name == req.params.domain_name){
-      console.log("F: Rendering listing checkout page...");
+    var domain_name = (typeof req.session.pipe_to_dh != "undefined") ? req.session.pipe_to_dh : req.params.domain_name;
+
+    if (req.session.listing_info &&
+        req.session.new_buying_info &&
+        req.session.listing_info.domain_name.toLowerCase() == domain_name.toLowerCase() &&
+        req.session.new_buying_info.domain_name.toLowerCase() == domain_name.toLowerCase()
+      ){
+      console.log("F: Rendering listing checkout page for purchasing...");
 
       res.render("listings/listing_checkout_buy.ejs", {
         user: req.user,
@@ -351,8 +357,7 @@ module.exports = {
     }
     else {
       console.log("F: Not checking out! Redirecting to listings page...");
-
-      res.redirect("/listing/" + req.params.domain_name);
+      res.redirect("/listing/" + domain_name.toLowerCase());
     }
   },
 

@@ -32,7 +32,7 @@ module.exports = function(app, db, e){
 
 //function to check if the requested host is not for domahub
 function checkHost(req, res, next){
-  var domain_name = req.headers.host.replace(/^(https?:\/\/)?(www\.)?/,'');
+  var domain_name = req.headers.host.replace(/^(https?:\/\/)?(www\.)?/,'').toLowerCase();
 
   //skip rental check for some reason (if requested a path besides / and was redirected)
   if (req.session.skip_rental_check == true){
