@@ -33,7 +33,7 @@ $(document).ready(function(){
   var url_listing = getParameterByName("listing");
   if (listings.length){
     for (var x = 0 ; x < listings.length; x++){
-      if (listings[x].domain_name.toLowerCase() == url_listing.toLowerCase()){
+      if (listings[x].domain_name.toLowerCase() == url_listing){
         var url_listing_index = x;
         break;
       }
