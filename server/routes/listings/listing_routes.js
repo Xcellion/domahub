@@ -302,6 +302,7 @@ module.exports = function(app, db, auth, error, stripe){
     stripe.checkStripeSubscription,
     profile_functions.updateAccountSettingsGet,
     // renter_functions.getListingFreeTimes,
+    renter_functions.redirectPremium,
     renter_functions.renderListing
   ]);
 
