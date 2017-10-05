@@ -158,7 +158,8 @@ module.exports = {
 
       //render the redirect page to notify offerer that offer was successfully sent
       res.render("listings/offer_verify.ejs", {
-        listing_info: req.session.listing_info
+        listing_info : req.session.listing_info,
+        compare : false
       });
     });
   },
@@ -537,6 +538,7 @@ module.exports = {
       res.render("listings/transfer_verify.ejs", {
         listing_info: req.session.listing_info,
         offer_info: offer_result,
+        compare: false
       });
     });
   },
