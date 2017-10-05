@@ -472,9 +472,12 @@ function checkDomainValid(req, res, next){
   if (!validator.isAscii(domain_name) || !validator.isFQDN(domain_name)){
     error.handler(req, res, "Invalid domain name!");
   }
+
+  //redirect to lowercase URL of listing
   else if (req.params.domain_name != req.params.domain_name.toLowerCase()){
     res.redirect(req.originalUrl.replace(req.params.domain_name, req.params.domain_name.toLowerCase()));
   }
+
   else {
     next();
   }
