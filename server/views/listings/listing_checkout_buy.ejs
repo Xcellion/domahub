@@ -116,7 +116,7 @@
                 <div class="control margin-top-30">
                   <a tabindex="0" class="goback-button checkout-track button is-stylish">
                     <span class="icon is-small"><i class="fa fa-long-arrow-left"></i></span>
-                    <span>Go back</span>
+                    <span>Back to Payment Selection</span>
                   </a>
                   <button id="checkout-button" tabindex="0" class="checkout-track button is-primary is-stylish">
                     <span class="icon is-small"><i class="fa fa-shopping-cart"></i></span>
@@ -130,7 +130,7 @@
                 <div class="control margin-top-30">
                   <a tabindex="0" class="goback-button checkout-track button is-danger no-shadow is-stylish">
                     <span class="icon is-small"><i class="fa fa-undo"></i></span>
-                    <span>Go back</span>
+                    <span>Back to Payment Selection</span>
                   </a>
                 </div>
               </div>
@@ -176,12 +176,12 @@
               <% if (listing_info.premium){ %>
                 <a id="edit-dates-path" tabindex="0" href="/" class="checkout-track button is-stylish is-fullwidth">
                   <span class="icon is-small"><i class="fa fa-long-arrow-left"></i></span>
-                  <span>Go Back</span>
+                  <span>Back to <%= listing_info.domain_name %></span>
                 </a>
               <% } else { %>
                 <a id="edit-dates-path" tabindex="0" href="https://domahub.com/listing/<%= listing_info.domain_name%>" class="checkout-track button is-stylish is-fullwidth">
                   <span class="icon is-small"><i class="fa fa-long-arrow-left"></i></span>
-                  <span>Go Back</span>
+                  <span>Back to <%= listing_info.domain_name %></span>
                 </a>
               <% } %>
             </footer>
