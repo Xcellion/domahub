@@ -802,12 +802,12 @@ function updateOffers(listing_info){
       $(".rejected-offer").toggleClass('is-hidden');
       $(this).toggleClass('is-primary is-black').find(".fa").toggleClass('fa-toggle-on fa-toggle-off');
 
-      //hide no offers if there are any offers (that arent rejected)
-      if ($(".offer-row:not(.rejected-offer, #offer-clone)").length == 0){
+      //hide no offers if there are any offers (including rejected)
+      if ($(".offer-row:not(#offer-clone)").length == 0){
         $("#no-offers").removeClass('is-hidden');
       }
       else {
-        $("#no-offers").addClass('is-hidden');
+        $("#no-offers").toggleClass('is-hidden');
       }
     }).find(".fa").removeClass('fa-toggle-on').addClass('fa-toggle-off');
 
