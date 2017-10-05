@@ -1082,6 +1082,11 @@ module.exports = {
     });
   },
 
+  redirectPremium : function(req, res, next){
+    console.log(req.path);
+    next();
+  },
+
   //render a listing that is listed on domahub
   renderListing : function(req, res, next){
     console.log("F: Rendering listing...");
