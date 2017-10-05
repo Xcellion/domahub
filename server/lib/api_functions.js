@@ -35,6 +35,7 @@ function checkHost(req, res, next){
   var domain_name = req.headers.host.replace(/^(https?:\/\/)?(www\.)?/,'').toLowerCase();
 
   if (req.session.pipe_to_dh == domain_name && req.originalUrl.indexOf("listing") != -1){
+    console.log("AF: Forwarding to the next route...");
     next("route");
   }
   else if (req.headers.host){
