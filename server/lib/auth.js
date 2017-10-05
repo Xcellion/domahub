@@ -160,7 +160,7 @@ module.exports = {
     }
     else {
       if (req.method == "POST"){
-        error.handler(req, res, "Invalid username / password!", "json");
+        error.handler(req, res, "Your login session has expired! Please refresh the page and log back in.", "json");
       }
       else {
         res.render("account/login.ejs", {

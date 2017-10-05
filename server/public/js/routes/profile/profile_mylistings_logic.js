@@ -780,6 +780,9 @@ function getDomainOffers(domain_name){
         })(current_listing);
       }
     }
+    else if (data.state != "success") {
+      errorMessage(data.message);
+    }
   });
 }
 
@@ -952,6 +955,7 @@ function editOfferModal(offer, listing_info){
   $("#offer-modal-name").text(offer.name);
   $("#offer-modal-email").text(offer.email);
   $("#offer-modal-phone").text(offer.phone);
+  $("#offer-modal-ip").text(offer.user_ip).attr("href", "http://whatismyipaddress.com/ip/" + offer.user_ip);
   $("#offer-modal-message").text(offer.message);
 
   //this offer was accepted or rejected! hide the buttons
@@ -1116,6 +1120,9 @@ function getDomainStats(domain_name){
           updateStats(current_listing, true);
         })(current_listing);
       }
+    }
+    else if (data.state != "success"){
+      errorMessage(data.message);
     }
   });
 }
