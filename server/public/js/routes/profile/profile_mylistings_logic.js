@@ -1364,7 +1364,7 @@ function updateBindings(listing_info){
   });
 
   //update status binding
-  $("#status-color").off().on("click", function(e){
+  $("#status-input").off().on("click", function(e){
     submitStatusChange(listing_info);
   });
 
