@@ -481,6 +481,11 @@ function checkDomainValid(req, res, next){
     res.redirect(req.originalUrl.replace(req.params.domain_name, req.params.domain_name.toLowerCase()));
   }
 
+  //redirect www. inside of a domain name
+  else if (req.params.domain_name.indexOf("www.") != -1){
+    res.redirect(req.originalUrl.replace("www.", ""));
+  }
+
   else {
     next();
   }
