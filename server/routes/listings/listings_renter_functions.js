@@ -1083,8 +1083,12 @@ module.exports = {
   },
 
   redirectPremium : function(req, res, next){
-    console.log(req.path);
-    next();
+    if (req.session.listing_info.premium && req.path != "/"){
+      res.redirect('/');
+    }
+    else {
+      next();
+    }
   },
 
   //render a listing that is listed on domahub
