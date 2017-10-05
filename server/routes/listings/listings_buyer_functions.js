@@ -65,6 +65,7 @@ module.exports = {
     var contact_details = {
       listing_id : req.session.listing_info.id,
       timestamp : new Date().getTime(),
+      user_ip : getIP(req),
       verification_code : randomstring.generate(10),
       name : req.body.contact_name,
       email : req.body.contact_email,
@@ -380,6 +381,7 @@ module.exports = {
       var contact_details = {
         listing_id : req.session.listing_info.id,
         timestamp : new Date().getTime(),
+        user_ip : getIP(req),
         name : req.session.new_buying_info.name,
         email : req.session.new_buying_info.email,
         phone : req.session.new_buying_info.phone,
@@ -551,6 +553,22 @@ module.exports = {
 }
 
 //<editor-fold>-------------------------------HELPERS-------------------------------
+
+//helper function to get a user's ip
+function getIP(req){
+  if (node_env == "dev"){
+    return null;
+  }
+  else {
+    //nginx https proxy removes IP
+    if (req.headers["x-real-ip"]){
+      return req.headers["x-real-ip"];
+    }
+    else {
+      return req.headers['x-forwarded-for'] || req.connection.remoteAddress || req.socket.remoteAddress;
+    }
+  }
+}
 
 //helper function to get the email address of the listing owner to contact
 function getListingOwnerContactInfo(domain_name, cb){

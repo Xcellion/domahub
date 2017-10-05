@@ -332,7 +332,7 @@ function getTrafficData(){
     createEmptyChart();
 
     $.ajax({
-      url: "/listing/" + listing_info.domain_name + "/traffic",
+      url: "/listing/" + listing_info.domain_name.toLowerCase() + "/traffic",
       method: "POST"
     }).done(function(data){
       //hide the loading overlay
@@ -558,7 +558,7 @@ function createTrafficChart(compare){
 //function to get alexa data
 function getAlexaData(){
   $.ajax({
-    url: "/listing/" + listing_info.domain_name + "/alexa",
+    url: "/listing/" + listing_info.domain_name.toLowerCase() + "/alexa",
     method: "POST"
   }).done(function(data){
     createAlexa(data.alexa);
