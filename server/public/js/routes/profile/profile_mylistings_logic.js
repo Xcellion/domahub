@@ -248,7 +248,7 @@ function createRows(cur_listing_index, url_tab){
 
     //change domain name header and view button
     $(".current-domain-name").text(listing_to_show.domain_name);
-    $("#current-domain-view").attr("href", "/listing/" + listing_to_show.domain_name);
+    $("#current-domain-view").attr("href", (user.stripe_subscription_id) ? "https://" + listing_to_show.domain_name.toLowerCase() : "/listing/" + listing_to_show.domain_name);
   }
   //there are no listings to show!
   else {
@@ -333,7 +333,7 @@ function changeRow(row, listing_info, bool){
 
     //change domain name header and view button
     $(".current-domain-name").text(listing_info.domain_name);
-    $("#current-domain-view").attr("href", "/listing/" + listing_info.domain_name);
+    $("#current-domain-view").attr("href", (user.stripe_subscription_id) ? "https://" + listing_info.domain_name.toLowerCase() : "/listing/" + listing_info.domain_name);
 
     //update inputs for purchased/accepted domain
     if (listing_info.deposited || listing_info.accepted){
@@ -392,7 +392,7 @@ function editRowVerified(listing_info, fadeIn){
   else {
     $("#" + $(".verified-elem.tab.is-active").attr('id') + "-drop").removeClass('is-hidden');
   }
-  $("#current-domain-view").attr("href", "/listing/" + listing_info.domain_name);
+  $("#current-domain-view").attr("href", (user.stripe_subscription_id) ? "https://" + listing_info.domain_name.toLowerCase() : "/listing/" + listing_info.domain_name);
 
   //get offers if we havent yet
   if (!fadeIn && url_tab == "offers" && listing_info.offers == undefined){
