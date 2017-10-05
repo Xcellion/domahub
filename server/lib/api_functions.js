@@ -34,14 +34,7 @@ module.exports = function(app, db, e){
 function checkHost(req, res, next){
   var domain_name = req.headers.host.replace(/^(https?:\/\/)?(www\.)?/,'').toLowerCase();
 
-  //skip rental check for some reason (if requested a path besides / and was redirected)
-  if (req.session.skip_rental_check == true){
-    delete req.session.skip_rental_check;
-    req.session.pipe_to_dh = req.headers.host.replace(/^(https?:\/\/)?(www\.)?/,'');
-    next();
-  }
-  //if the cookie set by DH is the same as the requested host, proxy the request to the main server
-  else if (req.session.pipe_to_dh == domain_name && req.originalUrl.indexOf("listing") != -1){
+  if (req.session.pipe_to_dh == domain_name && req.originalUrl.indexOf("listing") != -1){
     next("route");
   }
   else if (req.headers.host){
@@ -119,7 +112,6 @@ function checkForBasicRedirect(req, res, next){
 
     //redirect to base path if it's requesting something weird
     if (req.originalUrl != "/" || req.originalUrl == "/listing/" + req.session.listing_info.domain_name){
-      req.session.skip_rental_check = true;
       res.redirect("/");
     }
     else {
