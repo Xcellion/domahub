@@ -10,10 +10,9 @@
 
 <body>
 
-	<%- include("../templates/navbar", {user: user}); %>
+	<%- include("../profile/profile_nav.ejs"); %>
 
-	<section class="section is-medium min-height">
-		<div class="container">
+	<section class="section is-fullscreen is-clipped">
 			<div id="domain-error" class="is-hidden notification is-danger is-popup">
 				<button class="delete"></button>
 				<span id="domain-error-text"></span>
@@ -35,110 +34,189 @@
 					</a>
 				</p>
 			</div>
-			<div class="columns">
-				<div class="column is-6">
-					<div class="content">
-						<div id="textarea-helptext" class='content-wrapper'>
-							<h1 class="is-3">Create Listings</h1>
-							<p>
-								Enter up to 500 of your domain name(s) in the box below separated
-								by commas. You must include the TLD extension at the end.
-							</p>
-						</div>
-						<div id="table-helptext" class='content-wrapper is-hidden'>
-							<h1 class="is-3">Review and Edit</h1>
-							<p>
-								Review and edit your domain information below. You can refresh the page to add your domains in bulk.
-							</p>
-						</div>
-						<div id="success-helptext" class='content-wrapper is-hidden'>
-							<h1 class="is-3">It was a success!</h1>
-							<p>
-								See below for more details on your newly created domain(s).
-							</p>
-						</div>
+			<div class="wrapper">
+				<div class="left-menu">
+					<div class="margin-bottom-30">
+						<a class="dh-logo" tabindex="0" title="Home" href="/">
+							<div class="flat-logo is-white"></div>
+						</a>
 					</div>
-				</div>
-			</div>
-			<div id="domain-input-form" class="columns">
-				<div class="column is-6">
-					<p class="control">
-						<textarea tabindex="0" autofocus id="domain-names" class="textarea" placeholder="e.g. butterflies.com, tigers.net, oysters.org" spellcheck="false"></textarea>
-					</p>
-					<p class="control">
-						<a tabindex="0" id="domain-names-submit" class="button is-primary is-stylish" title="Submit Domains">
-              <span class="icon is-small"><i class="fa fa-check-circle"></i></span>
-              <span>Submit</span>
-            </a>
-					</p>
-				</div>
-			</div>
-			<div id="table-columns" class="is-hidden columns flex-column-mobile">
-				<div id="table-column" class="column is-9 order-2-mobile">
-					<table id="domain-input-table" class="table">
-						<thead id="top-header-row">
-              <tr id="table-buttons">
-								<th>
-									<a tabindex="0" class="is-inline-block add-domain-button button is-small is-black is-inverted">
-										<span class="icon is-small"><i class="fa fa-plus"></i></span>
-										<span>Add Row</span>
-									</a>
-									<a tabindex="0" class="delete-domains-button button is-small is-black is-inverted">
-										<span class='icon is-small'>
-											<i class='fa fa-trash-o'></i>
-										</span>
-										<span>Delete All</span>
-									</a>
-									<a tabindex="0" class="delete-errors-button button is-small is-danger is-inverted">
-										<span class='icon is-small'>
-											<i class='fa fa-ban'></i>
-										</span>
-										<span>Clear Errored Rows</span>
-									</a>
-								</th>
-							</tr>
-            </thead>
-						<thead>
-							<tr>
-								<th class='td-domain'>Domain Name</th>
-								<th class="td-min-price is-hidden-mobile">
-									<span>Min. Price</span>
-									<span class="icon is-tooltip is-small" data-balloon="The minimum you're willing to sell this domain for. Set to blank or 0 for no minimum purchase price. You can always change this later." data-balloon-length="large" data-balloon-pos="up">
-									  <i class="fa fa-question-circle"></i>
-									</span>
-								</th>
-							</tr>
-						</thead>
-						<tbody id="domain-input-body" data-rows="0">
-							<tr id="clone-row" class="table-row no-hover-effect">
-								<td class="td-domain aligned">
-									<div class='control has-addons is-marginless'>
-										<a class="button no-shadow">
-											<span class='icon delete-icon is-small'>
-												<i class='fa fa-trash-o'></i>
-											</span>
+					<aside class="menu">
+						<ul class="menu-list">
+							<li class="menu-item has-icon">
+								<a tabindex="0" title="Dashboard" href="/profile" class="primary-theme">
+									<span class="icon is-white"><i class="fa fa-window-maximize"></i></span>
+									<p class="is-white">Dashboard</p>
+								</a>
+							</li>
+							<li class="menu-item has-icon">
+								<a tabindex="0" title="My Listings" href="/profile" class="primary-theme">
+									<span class="icon is-white"><i class="fa fa-list-alt"></i></span>
+									<p class="is-white">My Listings</p>
+								</a>
+								<ul>
+									<li>
+										<a tabindex="0" title="Create Listing" href="/listings/create" class="is-active primary-theme">
+											<small class="is-white">Create Listing</small>
 										</a>
-										<input class="domain-name-input input is-expanded" type="text" value=""/>
-									</div>
-								</td>
-								<td class="td-min-price aligned is-hidden-mobile">
-									<input class="min-price-input input" type="number" tabindex="-1" min="0" />
-								</td>
-							</tr>
-						</tbody>
-					</table>
-					<div class="control">
-						<a id='domains-submit'class="is-disabled button is-primary is-stylish">
-              <span class="icon is-small"><i class="fa fa-check-circle"></i></span>
-              <span>Submit</span>
-            </a>
+									</li>
+								</ul>
+							</li>
+							<li class="menu-item has-icon">
+								<a tabindex="0" title="Account Settings" href="/profile/settings" class="primary-theme">
+									<span class="icon is-white"><i class="fa fa-cogs"></i></span>
+									<p class="is-white">Account Settings</p>
+								</a>
+								<% if (!user.stripe_subscription_id) { %>
+								<ul>
+									<li>
+										<a tabindex="0" title="Upgrade Account" href="/profile/settings#premium" class="primary-theme">
+											<small class="is-white">Upgrade to Premium</small>
+										</a>
+									</li>
+								</ul>
+								<% } %>
+							</li>
+						</ul>
+					</aside>
+					<hr />
+					<div class="content">
+						<p class="is-white">
+							You are currently logged in as <%= user.username %>.
+						</p>
+					</div>
+					<div class="user-panel">
+						<div>
+							<button tabindex="0" id="user-dropdown-button" class="button is-large is-primary is-inverted">
+								<i class="fa fa-user-circle"></i>
+							</button>
+						</div>
+						<aside class="user-dropdown-menu is-hidden">
+							<p class="menu-label">Support</p>
+							<ul class="menu-list">
+								<li><a tabindex="0" href="https://medium.com/domahub/tagged/domahub-support" title="Docs">Docs</a></li>
+								<li><a tabindex="0" href="/faq" title="FAQ">FAQ</a></li>
+								<li><a tabindex="0" href="/features#pricing" title="Pricing">Pricing</a></li>
+							</ul>
+							<p class="menu-label">Company</p>
+							<ul class="menu-list">
+								<li><a tabindex="0" href="/contact" title="Send a Message">Send a Message</a></li>
+								<li><a tabindex="0" href="/terms" title="Terms of Service">Terms of Service</a></li>
+								<li><a tabindex="0" href="/privacy" title="Privacy Policy">Privacy Policy</a></li>
+							</ul>
+							<p class="menu-label">Account</p>
+							<ul class="menu-list">
+								<li><a tabindex="0" href="/logout" title="Log Out">Log Out</a></li>
+							</ul>
+						</aside>
+					</div>
+				</div>
+				<div class="right-content">
+					<div class="columns">
+						<div class="column is-8-widescreen is-12-desktop">
+							<div class="content">
+								<div id="textarea-helptext" class='content-wrapper'>
+									<h2>Create Listings</h2>
+									<p>
+										Enter up to 500 of your domain name(s) in the box below separated
+										by commas. You must include the TLD extension at the end.
+									</p>
+								</div>
+								<div id="table-helptext" class='content-wrapper is-hidden'>
+									<h2 class="is-3">Review and Edit</h2>
+									<p>
+										Review and edit your domain information below. You can refresh the page to add your domains in bulk.
+									</p>
+								</div>
+								<div id="success-helptext" class='content-wrapper is-hidden'>
+									<h1 class="is-3">It was a success!</h1>
+									<p>
+										See below for more details on your newly created domain(s).
+									</p>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div id="domain-input-form" class="columns">
+						<div class="column is-8-widescreen is-12-desktop">
+							<p class="control">
+								<textarea tabindex="0" autofocus id="domain-names" class="textarea" placeholder="e.g. butterflies.com, tigers.net, oysters.org" spellcheck="false"></textarea>
+							</p>
+							<p class="control">
+								<a tabindex="0" id="domain-names-submit" class="button is-primary is-stylish" title="Submit Domains">
+			            <span class="icon is-small"><i class="fa fa-check-circle"></i></span>
+			            <span>Submit</span>
+			          </a>
+							</p>
+						</div>
+					</div>
+					<div id="table-columns" class="is-hidden columns flex-column-mobile">
+						<div id="table-column" class="column is-9 order-2-mobile">
+							<table id="domain-input-table" class="table">
+								<thead id="top-header-row">
+			            <tr id="table-buttons">
+										<th>
+											<a tabindex="0" class="is-inline-block add-domain-button button is-small is-black is-inverted">
+												<span class="icon is-small"><i class="fa fa-plus"></i></span>
+												<span>Add Row</span>
+											</a>
+											<a tabindex="0" class="delete-domains-button button is-small is-black is-inverted">
+												<span class='icon is-small'>
+													<i class='fa fa-trash-o'></i>
+												</span>
+												<span>Delete All</span>
+											</a>
+											<a tabindex="0" class="delete-errors-button button is-small is-danger is-inverted">
+												<span class='icon is-small'>
+													<i class='fa fa-ban'></i>
+												</span>
+												<span>Clear Errored Rows</span>
+											</a>
+										</th>
+									</tr>
+			          </thead>
+								<thead>
+									<tr>
+										<th class='td-domain'>Domain Name</th>
+										<th class="td-min-price is-hidden-mobile">
+											<span>Min. Price</span>
+											<span class="icon is-tooltip is-small" data-balloon="The minimum you're willing to sell this domain for. Set to blank or 0 for no minimum purchase price. You can always change this later." data-balloon-length="large" data-balloon-pos="up">
+											  <i class="fa fa-question-circle"></i>
+											</span>
+										</th>
+									</tr>
+								</thead>
+								<tbody id="domain-input-body" data-rows="0">
+									<tr id="clone-row" class="table-row no-hover-effect">
+										<td class="td-domain aligned">
+											<div class='control has-addons is-marginless'>
+												<a class="button no-shadow">
+													<span class='icon delete-icon is-small'>
+														<i class='fa fa-trash-o'></i>
+													</span>
+												</a>
+												<input class="domain-name-input input is-expanded" type="text" value=""/>
+											</div>
+										</td>
+										<td class="td-min-price aligned is-hidden-mobile">
+											<input class="min-price-input input" type="number" tabindex="-1" min="0" />
+										</td>
+									</tr>
+								</tbody>
+							</table>
+							<div class="control">
+								<a id='domains-submit'class="is-disabled button is-primary is-stylish">
+			            <span class="icon is-small"><i class="fa fa-check-circle"></i></span>
+			            <span>Submit</span>
+			          </a>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>
-		</section>
+	</section>
 
-		<%- include("../templates/footer"); %>
-		<script src="/js/routes/listings/listing_create_logic.js" type="text/javascript"></script>
-	</body>
+	<script src="/js/routes/listings/listing_create_logic.js" type="text/javascript"></script>
+</body>
 
 </html>

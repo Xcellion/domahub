@@ -16,7 +16,7 @@
 =button-stylish
   text-transform: uppercase
   letter-spacing: 1px
-  font-weight: 700
+  font-weight: 500
 
 .button
   @extend .unselectable
@@ -75,7 +75,7 @@
       &:hover,
       &:focus,
       &.is-active
-        background-color: lighten($color, 5%)
+        background-color: darken($color, 5%)
         border-color: transparent
         color: $color-invert
       &:active
@@ -89,7 +89,7 @@
         &:hover,
         &:active,
         &:focus
-          background-color: lighten($color-invert, 5%)
+          background-color: darken($color-invert, 5%)
       &.is-loading
         &:after
           border-color: transparent transparent $grey $grey !important
@@ -100,7 +100,7 @@
         &:hover,
         &:active,
         &:focus
-          background-color: lighten($color-invert, 5%)
+          background-color: darken($color-invert, 5%)
 
   // Sizes
   &.is-small

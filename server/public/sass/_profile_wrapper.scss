@@ -1,45 +1,10 @@
-@import 'vars';
-@import 'mixins';
-@import 'balloon';
-
-.edit-section-button {
-  margin-left: 10px;
-}
-
-.has-border-right {
-  border-right: 1px solid $border;
-}
-
-// form class in settings
-.form {
-  // stop ptr events on label
-  .label {
-    pointer-events: none;
-  }
-  .label-icon {
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    label {
-      display: inline;
-    }
-    .icon {
-      margin-left: 2px;
-    }
-  }
-}
-
-.tip {
-  display: block;
-  margin: 5px 0;
-  color: $text-light;
-}
-
-// wrapper and contents
 .wrapper {
   display: flex;
   height: 100%;
   width: 100%;
+  @include mobile {
+    padding-top: 40px;
+  }
 }
 
 .left-menu {
@@ -48,14 +13,6 @@
   padding: 40px 20px;
   height: 100%;
   min-width: 300px;
-  @include mobile {
-    @include box-shadow(0,3px,15px,$border,0);
-    background-color: $white;
-    width: 300px;
-    left: -123%;
-    position: absolute;
-    z-index: 10;
-  }
   &.is-active {
     left: -20px;
   }
@@ -72,27 +29,29 @@
         &.is-active {
           background-color: $primary-dark;
           p {
-            font-weight: 700;
+            font-weight: 500;
           }
         }
       }
     }
+  }
+  @include mobile {
+    background-color: $white;
+    left: -123%;
+    position: absolute;
+    min-width: 0;
+    width: 0;
+  }
+  @include tablet-only {
+    min-width: 80px;
+    width: 80px;
   }
 }
 
 .right-content {
   padding: 40px 20px;
   height: 100%;
-  overflow-y: auto;
   width: 100%;
-}
-
-.filter-menu-toggle {
-  cursor: pointer;
-  &.hamburger {
-    height: 30px;
-    width: 30px;
-  }
 }
 
 .user-panel {
@@ -125,5 +84,5 @@
   position: absolute;
   left: 45px;
   top: -300px;
-  width: 151px;
+  width: 159px;
 }

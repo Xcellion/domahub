@@ -1,0 +1,70 @@
+<div class="left-menu">
+  <div class="margin-bottom-30">
+    <a class="dh-logo" tabindex="0" title="Home" href="/">
+      <div class="flat-logo is-white is-hidden-tablet-only"></div>
+      <div class="circle-logo is-white is-hidden-desktop"></div>
+    </a>
+  </div>
+  <aside class="menu">
+    <ul class="menu-list">
+      <li class="menu-item has-icon">
+        <a tabindex="0" title="Dashboard" href="/profile/dashboard" class="primary-theme">
+          <span class="icon is-white"><i class="fa fa-window-maximize"></i></span>
+          <p class="is-white is-hidden-tablet-only">Dashboard</p>
+        </a>
+      </li>
+      <li class="menu-item has-icon">
+        <a tabindex="0" title="My Listings" href="/profile/mylistings" class="primary-theme">
+          <span class="icon is-white"><i class="fa fa-list-alt"></i></span>
+          <p class="is-white is-hidden-tablet-only">My Listings</p>
+        </a>
+      </li>
+      <li class="menu-item has-icon">
+        <a tabindex="0" title="Account Settings" href="/profile/settings" class="primary-theme">
+          <span class="icon is-white"><i class="fa fa-cogs"></i></span>
+          <p class="is-white is-hidden-tablet-only">Account Settings</p>
+        </a>
+        <% if (!user.stripe_subscription_id) { %>
+        <ul class="is-hidden-tablet-only">
+          <li>
+            <a tabindex="0" title="Upgrade Account" href="/profile/settings#premium" class="primary-theme">
+              <small class="is-white">Upgrade to Premium</small>
+            </a>
+          </li>
+        </ul>
+        <% } %>
+      </li>
+    </ul>
+  </aside>
+  <hr class="is-hidden-tablet-only"/>
+  <div class="content is-hidden-tablet-only">
+    <p class="is-white">
+      You are currently logged in as <%= user.username %>.
+    </p>
+  </div>
+  <div class="user-panel">
+    <div>
+      <button tabindex="0" id="user-dropdown-button" class="button is-large is-primary is-inverted">
+        <i class="fa fa-user-circle"></i>
+      </button>
+    </div>
+    <aside class="user-dropdown-menu is-hidden">
+      <p class="menu-label">Support</p>
+      <ul class="menu-list">
+        <li><a tabindex="0" href="https://medium.com/domahub/tagged/domahub-support" title="Docs">Docs</a></li>
+        <li><a tabindex="0" href="/faq" title="FAQ">FAQ</a></li>
+        <li><a tabindex="0" href="/features#pricing" title="Pricing">Pricing</a></li>
+      </ul>
+      <p class="menu-label">Company</p>
+      <ul class="menu-list">
+        <li><a tabindex="0" href="/contact" title="Contact Us">Contact Us</a></li>
+        <li><a tabindex="0" href="/terms" title="Terms of Service">Terms of Service</a></li>
+        <li><a tabindex="0" href="/privacy" title="Privacy Policy">Privacy Policy</a></li>
+      </ul>
+      <p class="menu-label">Account</p>
+      <ul class="menu-list">
+        <li><a tabindex="0" href="/logout" title="Log Out">Log Out</a></li>
+      </ul>
+    </aside>
+  </div>
+</div>
