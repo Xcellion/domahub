@@ -99,6 +99,7 @@ module.exports = function(app, db, auth, error, stripe){
   app.post("/profile/upgrade", [
     urlencodedParser,
     auth.checkLoggedIn,
+    profile_functions.getExistingCoupon,
     stripe.createStripeSubscription,
     profile_functions.updateAccountSettingsPost
   ]);
@@ -145,6 +146,17 @@ module.exports = function(app, db, auth, error, stripe){
     auth.checkLoggedIn,
     auth.checkAccountSettings,
     profile_functions.updateAccountSettingsPost
+  ]);
+
+  app.post("/profile/promocode", [
+    urlencodedParser,
+    auth.checkLoggedIn,
+    profile_functions.checkPromoCode,
+    stripe.getExistingDiscount,
+    profile_functions.checkExistingPromoCode,
+    stripe.deletePromoCode,
+    profile_functions.applyPromoCode,
+    stripe.applyPromoCode,
   ]);
 
   //post to create new stripe managed account or update address of old

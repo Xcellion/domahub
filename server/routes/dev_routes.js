@@ -39,15 +39,10 @@ module.exports = function(app, db, auth, error){
     createCouponCodes
   ]);
   app.get("/viewstest/:path/:view_name", showView);
-  app.get("/dnstest/:domain_name", testDNS);
-  app.get("/domaintest/:domain_name", function(req, res){
-    console.log(parseDomain(req.params.domain_name));
-    res.sendStatus(200);
-  });
+  app.get("/stripe/subscription/:stripe_subscription_id", getStripeSubscription);
 
   //parse cold contact excel
   app.get("/parsecontacts/:date/:verbose", parseFolder);
-  //combine JSONs
   app.get("/parsejsons/:date/", parseJSON);
 
   //analysis
@@ -144,112 +139,88 @@ function alexa(req, res, next){
 //function to create X sign up codes
 function createCouponCodes(req, res, next){
   console.log("F: Creating " + req.params.number + " coupon codes...");
-  var codes = [];
-  var return_lazy = [];
 
-  if (validator.isInt(req.params.number)){
-    for (var x = 0; x < req.params.number; x++){
-      var random_string = randomstring.generate(10);
-      codes.push([random_string, null]);
-      return_lazy.push(random_string);
+  var createUniqueCoupons = function(number, referrer){
+    var codes = [];
+
+    if (validator.isInt(number)){
+      for (var x = 0; x < number; x++){
+        var random_string = randomstring.generate(10);
+        codes.push([random_string, null, 1]);
+      }
     }
+
+    return codes;
   }
-  Account.getCouponCodes(function(result){
-    if (result.state == "success"){
-      var exists = false;
-      for (var x = 0 ; x < result.info.length; x++){
-        for (var y = 0 ; y < codes.length ; y++){
-          if (codes[y] == result.info[x]){
-            exists = true;
-            break;
+
+  var insertCoupons = function(codes, number, cb){
+    Account.createCouponCodes(codes, function(result){
+      if (result.state == "error" && result.errcode == "ER_DUP_ENTRY"){
+        console.log("Duplicate coupon!");
+        insertCoupons(createUniqueCoupons(number), number);
+      }
+      else if (result.state != "error"){
+        cb(codes);
+      }
+    });
+  }
+
+  insertCoupons(createUniqueCoupons(req.params.number), req.params.number, function(codes){
+    var stripe_promises = [];
+    for (var x = 0 ; x < codes.length ; x++){
+      var promise = (function(code){
+        var deferred = Q.defer();
+        stripe.coupons.create({
+          id: code,
+          duration: "repeating",
+          percent_off: 100,
+          duration_in_months: 1,
+          max_redemptions : 1
+        }, function(err, coupon) {
+          if (err){
+            deferred.reject(err);
           }
+          else {
+            deferred.resolve(coupon);
+          }
+        });
+        return deferred.promise;
+      })(codes[x][0]);
+      stripe_promises.push(promise);
+    }
+
+    Q.allSettled(stripe_promises).then(function(results) {
+      var success_codes = []
+      for (var x = 0 ; x < results.length; x++){
+        if (results[x].state == "fulfilled"){
+          success_codes.push(results[x].value.id);
+        }
+        else {
+          console.log(results[x]);
         }
       }
 
-      if (!exists){
-        Account.createCouponCodes(["ZfVkAdyGwB"], function(result){
-          res.send(return_lazy.join("</br></br>"));
-        });
+      //all successful!
+      if (success_codes.length == parseFloat(req.params.number)){
+        res.send(success_codes.join("</br>"));
       }
-    }
+      else {
+        res.send("Something went wrong with Stripe coupons!");
+      }
+    });
+
   });
 
 }
 
-//function to test proxy image
-function proxyimage(req, res, next){
-  res.render("proxy/proxy-image.ejs", {
-    image: "https://clips.twitch.tv/GoodAgileSparrowUWot",
-    content: "image",
-    edit: false,
-    preview: false,
-    doma_rental_info : {
-      address: "https://clips.twitch.tv/GoodAgileSparrowUWot",
-      type: 0,
-      rental_id : 359,
-      path: "lol",
-      domain_name: "youretoxic.com",
-      date: 1493352000000,
-      duration: 86400000,
-      owner_hash_id: "jfka0"
-    }
-  });
-}
+//</editor-fold>
 
-//function to test proxy websites
-function proxysite(req, res, next){
-  var doma_rental_info = {
-    address: "http://1minlee.com",
-    type: 0,
-    rental_id : 359,
-    path: "lol",
-    domain_name: "youretoxic.com",
-    date: 1493352000000,
-    duration: 86400000,
-    owner_hash_id: "jfka0"
-  }
+//<editor-fold>-----------------------------STRIPE---------------------------------
 
-  var address_request = request({
-    url: doma_rental_info.address,
-    encoding: null
-  }, function (err, response, body) {
-
-    var index_path = path.resolve(process.cwd(), 'server', 'views', 'proxy', 'proxy-index.ejs');
-    var preview_path = path.resolve(process.cwd(), 'server', 'views', 'proxy', 'proxy-preview.ejs');
-
-    var proxy_index = fs.readFileSync(index_path);
-    var proxy_preview = fs.readFileSync(preview_path);
-
-    var rental_info_buffer = new Buffer("<script>var doma_rental_info = " + JSON.stringify(doma_rental_info) + "</script>");
-    var buffer_array = [body, proxy_index, proxy_preview, rental_info_buffer];
-
-    //if authenticated to edit the rental preview
-    if (req.session.proxy_edit){
-      var edit_path = path.resolve(process.cwd(), 'server', 'views', 'proxy', 'proxy-edit.ejs');
-      var proxy_preview = fs.readFileSync(edit_path);
-      buffer_array.push(proxy_preview);
-    }
-    else {
-      var noedit_path = path.resolve(process.cwd(), 'server', 'views', 'proxy', 'proxy-noedit.ejs');
-      var proxy_nopreview = fs.readFileSync(noedit_path);
-      buffer_array.push(proxy_nopreview);
-    }
-
-    if (!proxy_index || (req.session.proxy_edit && !proxy_preview) || (!req.session.proxy_edit && !proxy_nopreview)) {
-      error.handler(req, res, "Invalid rental!");
-    }
-    else {
-      res.set("content-type", response.headers["content-type"]);
-      res.end(Buffer.concat(buffer_array));
-    }
-
-  });
-}
-
-//function to test and make sure DNS is set up properly
-function testDNS(req, res, next){
-  dns.resolve(req.params.domain_name, "A", function (err, address, family) {
-    res.send(address);
+function getStripeSubscription(req, res, next){
+  stripe.subscriptions.retrieve(req.params.stripe_subscription_id, function(err, subscription){
+    if (err) throw err;
+    res.json(subscription);
   });
 }
 

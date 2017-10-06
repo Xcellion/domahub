@@ -153,6 +153,7 @@ module.exports = function(app, db, auth, error, stripe){
     owner_functions.checkListingPremiumDetails,
     owner_functions.checkListingDetails,
     owner_functions.checkListingExistingDetails,
+    owner_functions.checkListingModules,
     owner_functions.updateListing
   ]);
 
@@ -301,6 +302,7 @@ module.exports = function(app, db, auth, error, stripe){
     stripe.checkStripeSubscription,
     profile_functions.updateAccountSettingsGet,
     // renter_functions.getListingFreeTimes,
+    renter_functions.redirectPremium,
     renter_functions.renderListing
   ]);
 
@@ -346,6 +348,7 @@ module.exports = function(app, db, auth, error, stripe){
     checkDomainListed,
     // renter_functions.deletePipeToDH,
     renter_functions.checkSessionListingInfoPost,
+    stripe.checkStripeSubscription,
     renter_functions.getListingFreeTimes,
     renter_functions.createNewRentalObject,
     renter_functions.checkRentalTimes,
@@ -360,6 +363,7 @@ module.exports = function(app, db, auth, error, stripe){
     checkDomainValid,
     checkDomainListed,
     renter_functions.checkSessionListingInfoPost,
+    stripe.checkStripeSubscription,
     renter_functions.getListingFreeTimes,
     renter_functions.checkRentalInfoNew,
     renter_functions.checkRentalTimes,
@@ -467,14 +471,21 @@ function sendOkay(req, res, next){
 //function to check validity of domain name
 function checkDomainValid(req, res, next){
   console.log("F: Checking domain FQDN validity...");
-
   var domain_name = req.params.domain_name || req.body["domain-name"];
   if (!validator.isAscii(domain_name) || !validator.isFQDN(domain_name)){
     error.handler(req, res, "Invalid domain name!");
   }
+
+  //redirect to lowercase URL of listing
   else if (req.params.domain_name != req.params.domain_name.toLowerCase()){
-    res.redirect(req.originalUrl.toLowerCase());
+    res.redirect(req.originalUrl.replace(req.params.domain_name, req.params.domain_name.toLowerCase()));
   }
+
+  //redirect www. inside of a domain name
+  else if (req.params.domain_name.indexOf("www.") != -1){
+    res.redirect(req.originalUrl.replace("www.", ""));
+  }
+
   else {
     next();
   }
@@ -483,9 +494,7 @@ function checkDomainValid(req, res, next){
 //function to check if listing is listed on domahub
 function checkDomainListed(req, res, next){
   console.log("F: Checking if domain is listed...");
-
   var domain_name = req.params.domain_name || req.body["domain-name"];
-
   Listing.checkListing(domain_name, function(result){
     if (!result.info.length || result.state == "error"){
       error.handler(req, res, "Invalid domain name!");
@@ -499,9 +508,7 @@ function checkDomainListed(req, res, next){
 //function to check if listing is NOT listed on domahub
 function checkDomainNotListed(req, res, next){
   console.log("F: Checking if domain is NOT listed...");
-
   var domain_name = req.params.domain_name || req.body["domain-name"];
-
   Listing.checkListing(domain_name, function(result){
     if (!result.info.length || result.state == "error"){
       next();

@@ -1,3 +1,11 @@
+.child-module {
+  padding-left:10px;
+  border-left: 1px solid $grey;
+  &.is-disabled {
+    opacity:0.25;
+  }
+}
+
 .wrapper {
   display: flex;
   height: 100%;

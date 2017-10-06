@@ -6,11 +6,6 @@ $(document).ready(function() {
   $(".tab").eq(0).addClass('is-active');
   $(".module").eq(0).removeClass('is-hidden');
 
-  //if traffic tab is first visible
-  if ($(".module").eq(0).attr("id") == "traffic-module"){
-    getTrafficData();
-  }
-
   //date registered for info module
   if (listing_info.date_registered){
     $("#date_registered").text(moment(listing_info.date_registered).format("MMMM DD, YYYY"));
@@ -47,13 +42,15 @@ $(document).ready(function() {
   }
 
   //only get traffic if it's visible due to chartjs responsive endless loop
-  if ($("#traffic-module").is(":visible")){
-    getTrafficData();
-  }
-  else {
-    $("#traffic-tab").on("click", function(){
+  if ((listing_info.premium && listing_info.traffic_graph) || !listing_info.premium){
+    if ($(".module").eq(0).attr("id") == "traffic-module"){
       getTrafficData();
-    });
+    }
+    else {
+      $("#traffic-tab").on("click", function(){
+        getTrafficData();
+      });
+    }
   }
 
   //</editor-fold>
@@ -330,10 +327,12 @@ function getTrafficData(){
     createTestChart();
   }
   else if (!listing_info.traffic) {
+
+    //create empty chart while we get traffic data via AJAX
     createEmptyChart();
 
     $.ajax({
-      url: "/listing/" + listing_info.domain_name + "/traffic",
+      url: "/listing/" + listing_info.domain_name.toLowerCase() + "/traffic",
       method: "POST"
     }).done(function(data){
       //hide the loading overlay
@@ -366,6 +365,7 @@ function createCharts(traffic){
 
 //function to create an empty chart
 function createEmptyChart(){
+
   //create the monthly x-axis labels array
   var monthly_labels = [];
   var months_to_go_back = 12;
@@ -382,18 +382,9 @@ function createEmptyChart(){
       datasets: []
     },
     options: {
-      animation : false,
       legend: {
         display:false
       },
-      responsive: true,
-      onResize: function(controller, object){
-        $("#traffic-overlay").css({
-          "height" : object.height,
-          "width" : object.width
-        })
-      },
-      maintainAspectRatio: true,
       scales: {
         xAxes: [{
           type: "category"
@@ -567,7 +558,7 @@ function createTrafficChart(compare){
 //function to get alexa data
 function getAlexaData(){
   $.ajax({
-    url: "/listing/" + listing_info.domain_name + "/alexa",
+    url: "/listing/" + listing_info.domain_name.toLowerCase() + "/alexa",
     method: "POST"
   }).done(function(data){
     createAlexa(data.alexa);
