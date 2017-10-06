@@ -575,7 +575,7 @@ button[data-balloon] {
   position: absolute;
   background-color: rgba(255, 255, 255, 0.5);
   display: block;
-  top: 10px;
+  top: 20px;
   z-index: 99; }
 
 .traffic-overlay-text {

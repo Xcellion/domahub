@@ -5,6 +5,14 @@ var all_categories = [
     front: "Adult"
   },
   {
+    back: "animals",
+    front: "Animals"
+  },
+  {
+    back: "apps",
+    front: "Apps"
+  },
+  {
     back: "art",
     front: "Art"
   },
@@ -13,12 +21,28 @@ var all_categories = [
     front: "Automotive"
   },
   {
+    back: "brandable",
+    front: "Brandable"
+  },
+  {
     back: "business",
     front: "Business"
   },
   {
+    back: "career",
+    front: "Career"
+  },
+  {
+    back: "currency",
+    front: "Currency"
+  },
+  {
     back: "dating",
     front: "Dating"
+  },
+  {
+    back: "drones",
+    front: "Drones"
   },
   {
     back: "ecard",
@@ -29,12 +53,24 @@ var all_categories = [
     front: "Education"
   },
   {
+    back: "electronics",
+    front: "Electronics"
+  },
+  {
+    back: "emoji",
+    front: "Emoji"
+  },
+  {
     back: "event",
     front: "Event"
   },
   {
     back: "family",
     front: "Family"
+  },
+  {
+    back: "fashion",
+    front: "Fashion"
   },
   {
     back: "financial",
@@ -47,6 +83,10 @@ var all_categories = [
   {
     back: "gaming",
     front: "Gaming"
+  },
+  {
+    back: "gambling",
+    front: "Gambling"
   },
   {
     back: "health",
@@ -77,16 +117,40 @@ var all_categories = [
     front: "Insurance"
   },
   {
+    back: "kids",
+    front: "Kids"
+  },
+  {
+    back: "keywords",
+    front: "Key-words"
+  },
+  {
+    back: "lifestyle",
+    front: "Lifestyle"
+  },
+  {
     back: "legal",
     front: "Legal"
+  },
+  {
+    back: "news",
+    front: "News",
   },
   {
     back: "niche",
     front: "Niche",
   },
   {
+    back: "marijuana",
+    front: "Marijuana"
+  },
+  {
     back: "marketing",
     front: "Marketing"
+  },
+  {
+    back: "movies",
+    front: "Movies"
   },
   {
     back: "music",
@@ -117,12 +181,20 @@ var all_categories = [
     front: "Religion"
   },
   {
+    back: "robot",
+    front: "Robot"
+  },
+  {
     back: "science",
     front: "Science"
   },
   {
     back: "shopping",
     front: "Shopping"
+  },
+  {
+    back: "short",
+    front: "Short"
   },
   {
     back: "sports",
@@ -137,8 +209,16 @@ var all_categories = [
     front: "Technology"
   },
   {
+    back: "toys",
+    front: "Toys"
+  },
+  {
     back: "travel",
     front: "Travel"
+  },
+  {
+    back: "vr",
+    front: "VR"
   }
 ]
 
