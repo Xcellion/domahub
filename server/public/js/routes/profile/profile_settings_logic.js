@@ -75,6 +75,12 @@ $(document).ready(function() {
     }
   });
 
+  //mobile view nav menu
+  $(".nav-toggle").on("click", function() {
+    $(this).toggleClass("is-active");
+    $(".nav-menu").toggleClass("is-active");
+  });
+
   //close user dropdown menu on click outside the element
   $(document).on("click", function(event) {
     if (!$(event.target).closest("#user-dropdown-button").length) {

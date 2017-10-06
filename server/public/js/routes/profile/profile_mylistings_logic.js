@@ -41,10 +41,11 @@ $(document).ready(function(){
 
   //<editor-fold>-------------------------------FILTERS-------------------------------
 
-  //toggle on filter (mobile)
-  // $(".filter-menu-toggle").on("click", function() {
-  //   $("#filter-menu").toggleClass("is-active");
-  // });
+  //mobile view nav menu
+  $(".nav-toggle").on("click", function() {
+    $(this).toggleClass("is-active");
+    $(".nav-menu").toggleClass("is-active");
+  });
 
   //close user dropdown menu on click outside the element
   $(document).on("click", function(event) {
@@ -308,6 +309,10 @@ function updateRowData(row, listing_info){
 //update the clone row with row specifics
 function updateDomainName(tempRow, listing_info){
   tempRow.find(".td-domain").text(listing_info.domain_name);
+  tempRow.find(".td-date").text(moment(listing_info.date_created).format("M/D/YYYY"));
+  tempRow.find(".td-min").text("$" + listing_info.min_price);
+  tempRow.find(".td-bin").text("$" + listing_info.buy_price);
+  tempRow.find(".td-theme").text("Theme");
 }
 function updateIcon(tempRow, listing_info){
   tempRow.find(".select-button").on('click', function(e){

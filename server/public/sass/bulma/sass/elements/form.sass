@@ -97,6 +97,12 @@ input:-webkit-autofill
     &:hover,
     &:focus
       +box-shadow(0,0,0,$border,0)
+  &.no-borders
+    select
+      border: none
+    &:hover
+      select
+        background-color: $grey-lighter
   &.is-fullwidth
     width: 100%
     select

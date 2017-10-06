@@ -4,13 +4,15 @@
 
 <head>
 	<title>Account Settings - DomaHub</title>
-	<link rel="stylesheet" href="/css/min/profile_general.min.css" type="text/css" />
+	<link rel="stylesheet" href="/css/min/profile_settings.min.css" type="text/css" />
 	<%- include("../templates/head_links"); %>
 </head>
 
 <body>
 
-  <section class="section is-fullscreen is-clipped">
+	<%- include("profile_nav.ejs"); %>
+
+  <section class="section is-fullscreen">
       <div id="settings-msg-error" class="is-hidden is-danger notification is-popup">
         <button class="delete"></button>
         <p id="settings-msg-error-text" class='is-white'></p>
@@ -20,75 +22,9 @@
         <p id="settings-msg-success-text" class='is-white'></p>
       </div>
 			<div class="wrapper">
-				<!-- NAV MENU -->
-				<div class="left-menu">
-					<div class="content margin-bottom-30">
-						<a class="dh-logo" tabindex="0" title="Home" href="/">
-							<div class="flat-logo is-white"></div>
-						</a>
-					</div>
-					<aside class="menu">
-						<ul class="menu-list">
-							<li class="menu-item has-icon">
-								<a tabindex="0" title="Dashboard" href="/profile" class="primary-theme">
-									<span class="icon is-white"><i class="fa fa-window-maximize"></i></span>
-									<p class="is-white">Dashboard</p>
-								</a>
-							</li>
-							<li class="menu-item has-icon">
-								<a tabindex="0" title="My Listings" href="/profile" class="primary-theme">
-									<span class="icon is-white"><i class="fa fa-list-alt"></i></span>
-									<p class="is-white">My Listings</p>
-								</a>
-							</li>
-							<li class="menu-item has-icon">
-								<a tabindex="0" title="Account Settings" href="/profile/settings" class="is-active primary-theme">
-									<span class="icon is-white"><i class="fa fa-cogs"></i></span>
-									<p class="is-white">Account Settings</p>
-								</a>
-							</li>
-							<% if (!user.stripe_subscription_id) { %>
-							<li class="menu-item has-text-right">
-								<a tabindex="0" title="Upgrade Account" href="/profile/settings#premium" class="primary-theme">
-									<small class="is-white is-inline">Upgrade to Premium</small>
-									<span class="icon is-white is-small"><i class="fa fa-long-arrow-right"></i></span>
-								</a>
-							</li>
-							<% } %>
-						</ul>
-					</aside>
-					<hr />
-					<div class="content">
-						<p class="is-white">
-							You are currently logged in as <%= user.username %>.
-						</p>
-					</div>
-					<div class="user-panel">
-						<div>
-							<button tabindex="0" id="user-dropdown-button" class="button is-large is-primary is-inverted">
-								<i class="fa fa-user-circle"></i>
-							</button>
-						</div>
-						<aside class="user-dropdown-menu is-hidden">
-							<p class="menu-label">Support</p>
-							<ul class="menu-list">
-								<li><a tabindex="0" href="https://medium.com/domahub/tagged/domahub-support" title="Docs">Docs</a></li>
-								<li><a tabindex="0" href="/faq" title="FAQ">FAQ</a></li>
-								<li><a tabindex="0" href="/features#pricing" title="Pricing">Pricing</a></li>
-							</ul>
-							<p class="menu-label">Company</p>
-							<ul class="menu-list">
-								<li><a tabindex="0" href="/contact" title="Send a Message">Send a Message</a></li>
-								<li><a tabindex="0" href="/terms" title="Terms of Service">Terms of Service</a></li>
-								<li><a tabindex="0" href="/privacy" title="Privacy Policy">Privacy Policy</a></li>
-							</ul>
-							<p class="menu-label">Account</p>
-							<ul class="menu-list">
-								<li><a tabindex="0" href="/logout" title="Log Out">Log Out</a></li>
-							</ul>
-						</aside>
-					</div>
-				</div>
+				
+				<%- include("profile_left_menu.ejs"); %>
+
 				<div class="right-content">
 					<div class="columns">
 						<div class="column is-narrow">

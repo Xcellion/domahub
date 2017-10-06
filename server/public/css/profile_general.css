@@ -170,33 +170,13 @@ button[data-balloon] {
 [data-balloon-length="fit"]:after {
   width: 100%; }
 
-.edit-section-button {
-  margin-left: 10px; }
-
-.has-border-right {
-  border-right: 1px solid rgba(0, 0, 0, 0.12); }
-
-.form .label {
-  pointer-events: none; }
-
-.form .label-icon {
-  display: flex;
-  align-items: center;
-  justify-content: flex-start; }
-  .form .label-icon label {
-    display: inline; }
-  .form .label-icon .icon {
-    margin-left: 2px; }
-
-.tip {
-  display: block;
-  margin: 5px 0;
-  color: rgba(0, 0, 0, 0.66); }
-
 .wrapper {
   display: flex;
   height: 100%;
   width: 100%; }
+  @media screen and (max-width: 768px) {
+    .wrapper {
+      padding-top: 20px; } }
 
 .left-menu {
   -moz-transition: all 0.25s;
@@ -235,12 +215,6 @@ button[data-balloon] {
   overflow-y: auto;
   width: 100%; }
 
-.filter-menu-toggle {
-  cursor: pointer; }
-  .filter-menu-toggle.hamburger {
-    height: 30px;
-    width: 30px; }
-
 .user-panel {
   position: absolute;
   bottom: 20px; }
@@ -276,3 +250,26 @@ button[data-balloon] {
   left: 45px;
   top: -300px;
   width: 151px; }
+
+.edit-section-button {
+  margin-left: 10px; }
+
+.has-border-right {
+  border-right: 1px solid rgba(0, 0, 0, 0.12); }
+
+.form .label {
+  pointer-events: none; }
+
+.form .label-icon {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start; }
+  .form .label-icon label {
+    display: inline; }
+  .form .label-icon .icon {
+    margin-left: 2px; }
+
+.tip {
+  display: block;
+  margin: 5px 0;
+  color: rgba(0, 0, 0, 0.66); }

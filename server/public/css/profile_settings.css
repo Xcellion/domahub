@@ -251,65 +251,25 @@ button[data-balloon] {
   top: -300px;
   width: 159px; }
 
-#preview-img {
-  background-image: url("https://source.unsplash.com/category/nature"); }
+.edit-section-button {
+  margin-left: 10px; }
 
-#premium-form {
-  margin-top: 5px; }
-  #premium-form label::before {
-    top: 0;
-    left: 0; }
+.has-border-right {
+  border-right: 1px solid rgba(0, 0, 0, 0.12); }
 
-#premium-label {
-  width: 24px;
-  height: 24px;
-  padding: 0; }
+.form .label {
+  pointer-events: none; }
 
-.control-label.is-small {
-  width: 40px; }
-
-.control > .input.input-number {
-  width: 100%; }
-
-@media screen and (max-width: 768px) {
-  .flex-column-mobile {
-    display: flex;
-    flex-direction: column; } }
-
-#domain-input-table thead,
-#domain-input-table tbody tr {
-  display: table;
-  table-layout: fixed;
-  width: 100%; }
-
-#domain-input-body {
-  display: block;
-  max-height: 390px;
-  overflow-y: auto; }
-
-@media screen and (max-width: 456px) {
-  #table-buttons th {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: stretch; }
-    #table-buttons th .button {
-      margin-right: 5px;
-      margin-bottom: 5px;
-      flex-grow: 1; } }
-
-.td-min-price {
-  width: 25%; }
-  @media screen and (max-width: 456px) {
-    .td-min-price {
-      width: 35%; } }
+.form .label-icon {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start; }
+  .form .label-icon label {
+    display: inline; }
+  .form .label-icon .icon {
+    margin-left: 2px; }
 
 .tip {
-  margin-top: 5px;
-  margin-left: 5px;
-  float: right; }
-
-.aligned {
-  vertical-align: top !important; }
-
-.what-is-premium {
-  text-align: right !important; }
+  display: block;
+  margin: 5px 0;
+  color: rgba(0, 0, 0, 0.66); }

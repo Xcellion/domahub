@@ -21,7 +21,7 @@
       white-space: nowrap
       width: 1%
   th
-    font-weight: 700
+    font-weight: 500
     padding: 10px 8px
   td
     padding: 8px
@@ -29,9 +29,12 @@
   thead
     th
       border-bottom: 1px solid $border
-    &.has-shadow
-      border: none
-      +box-shadow(0,2px,3px,$border,0)
+    &.has-hover-effect
+      th
+        &:not(:first-child)
+          &:hover
+            background-color: $grey-lighter
+            cursor: pointer
   tbody
     tr
       &:hover

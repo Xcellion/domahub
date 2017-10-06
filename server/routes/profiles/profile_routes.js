@@ -33,13 +33,13 @@ module.exports = function(app, db, auth, error, stripe){
   //   profile_functions.deleteRentals
   // ]);
 
-  // //check if user is legit, get all listings, get all rentals
-  // app.get("/profile/dashboard", [
-  //   auth.checkLoggedIn,
-  //   profile_functions.getAccountListingsSearch,
-  //   profile_functions.getAccountRentals,
-  //   profile_functions.renderDashboard
-  // ]);
+  //check if user is legit, get all listings, get all rentals
+  app.get("/profile/dashboard", [
+    auth.checkLoggedIn,
+    profile_functions.getAccountListingsSearch,
+    profile_functions.getAccountRentals,
+    profile_functions.renderDashboard
+  ]);
 
   // //inbox
   // app.get([
