@@ -28,11 +28,7 @@
 					<div class="column is-7">
 						<div class="card no-shadow is-fullwidth">
 							<div class="card-header">
-								<h3 class="card-header-title">Portfolio Overview (2/7/17 - 2/14/17)</h3>
-								<button class="card-header-icon button">
-									<span class="icon"><i class="fa fa-calendar"></i></span>
-									<span>Change Date</span>
-								</button>
+								<h3 class="card-header-title">Portfolio Overview</h3>
 							</div>
 							<div class="card-content">
 								<div class="level is-mobile">
@@ -42,7 +38,7 @@
 												Total
 											</small>
 											<h1 class="margin-bottom-10">
-												50
+												<%= user.listings.length %>
 											</h1>
 											<a class="is-underlined">Create Listings</a>
 										</div>
@@ -52,8 +48,7 @@
 											<small class="heading is-uppercase margin-bottom-20">
 												Unverified
 											</small>
-											<h1 class="is-danger margin-bottom-10">
-												28
+											<h1 id="unverified-counter" class="is-danger margin-bottom-10">
 											</h1>
 											<a class="is-underlined">Verify Domains</a>
 										</div>
