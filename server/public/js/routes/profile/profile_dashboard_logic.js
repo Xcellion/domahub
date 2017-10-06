@@ -22,4 +22,13 @@ $(document).ready(function() {
     $(".user-dropdown-menu").toggleClass("is-hidden");
   });
 
+  calcUnverified();
 });
+
+function calcUnverified() {
+  var counter = user.listings.filter(function(listing) {
+    return listing.verified == null;
+  });
+
+  $("#unverified-counter").text(counter.length);
+}
