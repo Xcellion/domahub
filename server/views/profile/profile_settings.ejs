@@ -256,16 +256,34 @@
 									</div>
 									<div class="content">
 										<p>
+											Payout Settings
+											<span class="icon is-tooltip is-small"
+											 data-balloon-length="large" data-balloon="You must complete your payout settings first in order to add a bank account." data-balloon-pos="up">
+											 <i class="fa fa-question-circle"></i>
+										 	</span>
+										</p>
+										<% if (user.stripe_account) { %>
+											<span class="tag is-primary control-right">Completed</span>
+										<% } else { %>
+											<span class="tag is-danger control-right">Incomplete</span>
+										<% } %>
+									</div>
+									<div class="content">
+										<p>
 											Bank Account
+											<span class="icon is-tooltip is-small"
+											 data-balloon-length="large" data-balloon="You will not be able to withdraw funds until you connect your bank account." data-balloon-pos="up">
+											 <i class="fa fa-question-circle"></i>
+										 	</span>
 										</p>
 										<% if (user.stripe_info && user.stripe_info.transfers_enabled) { %>
 											<span class="tag is-primary">Connected</span>
-											<% } else { %>
-												<span class="tag is-danger">Not Connected</span>
-												<% } %>
-											</div>
+										<% } else { %>
+											<span class="tag is-danger">Not Connected</span>
+										<% } %>
 										</div>
 									</div>
+								</div>
 									<div id="payout-address" class="is-hidden card is-fullwidth">
 										<div class="card-header is-justified-start">
 											<h3 class="card-header-title">
