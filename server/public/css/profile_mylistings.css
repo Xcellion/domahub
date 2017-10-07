@@ -311,8 +311,8 @@ button[data-balloon] {
     .media.is-large .media-number {
       margin-right: 20px; } }
 
-#status-input {
-  height: 27px; }
+.delete-modal-cloned-domain {
+  word-break: break-all; }
 
 .media {
   -moz-transition: background-color 0.25s ease;
@@ -437,7 +437,6 @@ button[data-balloon] {
 
 .checkbox-form {
   height: 24px;
-  margin-right: 10px;
   position: relative;
   width: 24px; }
   .checkbox-form label::before {

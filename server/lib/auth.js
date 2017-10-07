@@ -396,7 +396,7 @@ module.exports = {
       redirectTo = req.header("Referer");
     }
     else {
-      redirectTo = "/profile";
+      redirectTo = "/profile/dashboard";
     }
 
     passport.authenticate('local-login', function(err, user, info){

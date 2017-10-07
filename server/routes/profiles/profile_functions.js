@@ -32,60 +32,13 @@ module.exports = {
         if (result.state=="error"){error.handler(req, res, result.info);}
         else {
           req.user.listings = result.info;
-
-          //redirect if not going to mylistings aka logging in for first time
-          if (req.method == "GET" && req.path.indexOf("mylistings") == -1){
-            //no listings, redirect to listings create
-            if (req.user.listings.length == 0){
-              res.redirect("/listings/create");
-            }
-            //has listings, redirect to mylistings
-            else {
-              res.redirect("/profile/mylistings");
-            }
-          }
-          else {
-            next();
-          }
+          next();
         }
       });
     }
     else {
       next();
     }
-  },
-
-  //gets all listings search history for a user
-  getAccountListingsSearch : function(req, res, next){
-    Account.getAccountListingsSearch(req.user.id, function(result){
-      if (result.state=="error"){
-        req.user.listings_search = false;
-        next();
-      }
-      else {
-        var temp_listings = [];
-        var temp_obj = {};
-
-        //format the results
-        for (var x = 0; x < result.info.length; x++){
-          if (!temp_obj || temp_obj.domain_name != result.info[x].domain_name){
-            temp_obj = {
-              domain_name : result.info[x].domain_name,
-              count : [result.info[x].count],
-              months_away : [result.info[x].months_away]
-            }
-            temp_listings.push(temp_obj);
-          }
-          else {
-            temp_obj.months_away.push(result.info[x].months_away);
-            temp_obj.count.push(result.info[x].count);
-          }
-        }
-
-        req.user.listings_search = temp_listings;
-        next();
-      }
-    });
   },
 
   //gets all rentals for a user
@@ -432,8 +385,17 @@ module.exports = {
 
   //<editor-fold>----------------------------------------------------------------------RENDERS
 
+  renderDashboard : function(req, res, next){
+    res.render("profile/profile_dashboard.ejs", {
+      message: Auth.messageReset(req),
+      user: req.user,
+      listings: req.user.listings,
+      listings_search: req.user.listings_search
+    });
+  },
+
   renderMyListings: function(req, res){
-    res.render("profile/profile_mylistings", {
+    res.render("profile/profile_mylistings.ejs", {
       message: Auth.messageReset(req),
       user: req.user,
       listings: req.user.listings || false,
@@ -442,16 +404,8 @@ module.exports = {
     });
   },
 
-  // renderMyRentals : function(req, res){
-  //   res.render("profile/profile_myrentals", {
-  //     message: Auth.messageReset(req),
-  //     user: req.user,
-  //     rentals: req.user.rentals || false
-  //   });
-  // },
-
   renderSettings: function(req, res){
-    res.render("profile/profile_settings", {
+    res.render("profile/profile_settings.ejs", {
       message: Auth.messageReset(req),
       user: req.user
     });
@@ -459,15 +413,15 @@ module.exports = {
 
   //function to redirect to appropriate profile page
   redirectProfile : function(req, res, next){
-    path = req.path;
-    if (path.includes("mylistings")){
+    console.log("F: Redirecting to appropriate profile page...");
+    if (req.path.indexOf("mylistings") != -1){
       res.redirect("/profile/mylistings");
     }
-    else if (path.includes("myrentals")){
-      res.redirect("/profile/myrentals");
+    else if (req.path.indexOf("settings") != -1){
+      res.redirect("/profile/settings");
     }
     else {
-      res.redirect("/profile/settings");
+      res.redirect("/profile/dashboard");
     }
   },
 
