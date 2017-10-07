@@ -170,6 +170,12 @@ button[data-balloon] {
 [data-balloon-length="fit"]:after {
   width: 100%; }
 
+.child-module {
+  padding-left: 10px;
+  border-left: 1px solid #9e9e9e; }
+  .child-module.is-disabled {
+    opacity: 0.25; }
+
 .wrapper {
   display: flex;
   height: 100%;

@@ -73,7 +73,7 @@ $(document).ready(function() {
         else {
           //send an offer / or buy it now request
           $.ajax({
-            url: "/listing/" + listing_info.domain_name + "/contact/" + type_of_submit,
+            url: "/listing/" + listing_info.domain_name.toLowerCase() + "/contact/" + type_of_submit,
             method: "POST",
             data: {
               contact_email: $("#contact_email").val(),
@@ -381,7 +381,7 @@ function submitTimes(checkout_button){
       //redirect to checkout page
       $.ajax({
         type: "POST",
-        url: "/listing/" + listing_info.domain_name + "/checkoutrent",
+        url: "/listing/" + listing_info.domain_name.toLowerCase() + "/checkoutrent",
         data: {
           starttime: newEvent.starttime,
           endtime: newEvent.endtime,
@@ -460,7 +460,7 @@ function getTimes(calendar_elem){
   }
   else {
     $.ajax({
-      url: "/listing/" + listing_info.domain_name + "/times",
+      url: "/listing/" + listing_info.domain_name.toLowerCase() + "/times",
       method: "POST",
       data: {
         path: $("#typed-slash").val()
