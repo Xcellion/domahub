@@ -22,24 +22,20 @@
         <span id="status-color" class="icon"><i id="status-icon" class="fa fa-toggle-on"></i></span>
         <span>Toggle Status</span>
       </button>
-      <div id="tab-buttons-wrapper" class="is-hidden">
-        <a id="verify-button" class="unverified-elem is-disabled button is-primary is-stylish is-small" title="Verify this domain">
-          <span class="icon is-small"><i class="fa fa-check-circle-o"></i></span>
-          <span>Verify Now</span>
-        </a>
-        <a id="refresh-dns-button" class="unverified-elem button is-outlined is-stylish is-small" title="Refresh DNS">
-          <span class="icon is-small"><i class="fa fa-refresh"></i></span>
-          <span>Refresh Table</span>
-        </a>
-        <div class="verified-elem">
-          <button id="save-changes-button" class="button is-hidden is-primary is-stylish is-small">
-            <span>Save Changes</span>
-          </button>
-          <button id="cancel-changes-button" class="button is-danger is-inverted is-hidden is-stylish is-small">
-            <span>Cancel Changes</span>
-          </button>
-        </div>
-      </div>
+      <a id="verify-button" class="unverified-elem is-hidden button is-primary is-stylish is-small" title="Verify domain(s)">
+        <span class="icon is-small"><i class="fa fa-check-circle-o"></i></span>
+        <span>Verify Now</span>
+      </a>
+      <a id="refresh-dns-button" class="unverified-elem is-hidden button is-outlined is-stylish is-small" title="Refresh DNS Table">
+        <span class="icon is-small"><i class="fa fa-refresh"></i></span>
+        <span>Refresh Table</span>
+      </a>
+      <button id="save-changes-button" class="verified-elem button is-hidden is-primary is-stylish is-small">
+        <span>Save Changes</span>
+      </button>
+      <button id="cancel-changes-button" class="verified-elem button is-danger is-inverted is-hidden is-stylish is-small">
+        <span>Cancel Changes</span>
+      </button>
     </div>
 
     <!-- LISTING DETAIL TABS  -->
@@ -90,18 +86,32 @@
           </thead>
           <tbody id="dns_table-body">
             <tr id="loading-records-row">
-              <td colspan=7>
+              <td colspan=7 class="has-text-centered padding-top-25 padding-bottom-25">
                 <span class="icon is-small margin-right-5"><i class="v-align-middle fa fa-spin fa-refresh"></i></span>
                 <span class="v-align-middle">Now loading existing DNS records...</span>
               </td>
             </tr>
-            <tr id="existing_a_record_clone" class='clone-dns-row is-hidden'>
-              <td class="verify_table_domain_name">-</td>
-              <td class="verify_table_registrar">-</td>
+            <tr id="doma-a-record-clone" class='is-hidden'>
+              <td rowspan=2 class="verify_table_domain_name"></td>
+              <td rowspan=2 class="verify_table_registrar">-</td>
               <td class="dns_host">@</td>
               <td>A</td>
               <td class='required_data'>208.68.37.82</td>
-              <td class="existing_data">208.68.37.82</td>
+              <td class="existing_data"></td>
+              <td class="next_step"><span class='is-danger'></span></td>
+            </tr>
+            <tr id="doma-www-record-clone" class='is-hidden'>
+              <td class="dns_host">www</td>
+              <td>A</td>
+              <td class='required_data'>208.68.37.82</td>
+              <td class="existing_data"></td>
+              <td class="next_step"><span class='is-danger'></span></td>
+            </tr>
+            <tr id="existing-dns-row" class='is-hidden'>
+              <td class="dns_host">@</td>
+              <td>A</td>
+              <td class='required_data'></td>
+              <td class="existing_data"></td>
               <td class="next_step"><span class='is-danger'>Create this record</span></td>
             </tr>
           </tbody>

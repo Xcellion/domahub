@@ -130,7 +130,7 @@ module.exports = {
     //custom promise creation, get ip address of domain
     var q_function = function(listing_obj){
       return Q.Promise(function(resolve, reject, notify){
-        dns.lookup(listing_obj.domain_name, function(err, address, family){
+        dns.resolve(listing_obj.domain_name, "A", function(err, address, family){
           if (err) {reject(err)}
           else {
             resolve({
@@ -153,7 +153,7 @@ module.exports = {
               to_verify_promises.push(q_function({
                 domain_name : req.user.listings[y].domain_name,
                 listing_id : req.user.listings[y].id
-              }))
+              }));
             }
             break;
           }
@@ -163,7 +163,7 @@ module.exports = {
     if (to_verify_promises.length > 0){
       console.log("F: Checking domain name IP addresses...");
 
-      dns.lookup("domahub.com", function (err, address, family) {
+      dns.resolve("domahub.com", "A", function (err, address, family) {
         var doma_ip = address;
 
         //wait for all promises to finish
@@ -187,7 +187,7 @@ module.exports = {
              req.session.verification_object = {
                to_verify_formatted : to_verify_formatted,
                unverified_listings : unverified_listings,
-                verified_listings : verified_listings
+               verified_listings : verified_listings
              }
              next();
            }

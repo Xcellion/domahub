@@ -377,38 +377,6 @@ function viewDomainsDNS(){
   editRowUnverified(selected_domain_ids);
 }
 
-//function to multi-verify listings
-function multiVerify(verify_button){
-  verify_button.off().addClass('is-loading');
-
-  var verify_ids = getSelectedDomains("id", false);
-
-  $.ajax({
-    url: "/profile/mylistings/verify",
-    method: "POST",
-    data: {
-      ids: verify_ids
-    }
-  }).done(function(data){
-    verify_button.removeClass('is-loading').blur().on("click", function(){
-      multiVerify(verify_button);
-    });
-    //deselect all rows
-    selectAllRows($("#select-all"), false);
-
-    //success!
-    if (data.state == "success"){
-      successMessage("Successfully verified " + verify_ids.length + " listings!");
-      listings = data.listings;
-      createRows();
-    }
-    //unverified listings error
-    else if (data.unverified_listings){
-      errorMessage("Failed to verify listings! Did you make the necessary DNS changes?");
-    }
-  });
-}
-
 //</editor-fold>
 
 //<editor-fold>-------------------------------DELETE LISTINGS-------------------------------
