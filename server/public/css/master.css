@@ -2039,6 +2039,10 @@ input:-webkit-autofill {
     text-align: center; } }
 
 .delete, .modal-close {
+  -moz-transition: all 0.2s ease;
+  -o-transition: all 0.2s ease;
+  -webkit-transition: all 0.2s ease;
+  transition: all 0.2s ease;
   -moz-appearance: none;
   -webkit-appearance: none;
   background-color: rgba(0, 0, 0, 0.38);
@@ -2069,9 +2073,24 @@ input:-webkit-autofill {
     width: 2px; }
   .delete:hover, .modal-close:hover, .delete:focus, .modal-close:focus, .delete:active, .modal-close:active {
     background-color: rgba(0, 0, 0, 0.66); }
+  .delete.is-transparent, .is-transparent.modal-close {
+    background-color: transparent; }
+    .delete.is-transparent.is-fc, .is-transparent.is-fc.modal-close {
+      margin-right: 10px; }
+    .delete.is-transparent.is-lc, .is-transparent.is-lc.modal-close {
+      margin-left: 10px; }
+    .delete.is-transparent:before, .is-transparent.modal-close:before, .delete.is-transparent:after, .is-transparent.modal-close:after {
+      background-color: rgba(0, 0, 0, 0.66); }
+    .delete.is-transparent:hover, .is-transparent.modal-close:hover, .delete.is-transparent:focus, .is-transparent.modal-close:focus, .delete.is-transparent:active, .is-transparent.modal-close:active {
+      -moz-transform: scale(1.4);
+      -o-transform: scale(1.4);
+      -ms-transform: scale(1.4);
+      -webkit-transform: scale(1.4);
+        -webkit-transform-transform: scale(1.4);
+      background-color: transparent; }
   .delete.is-small, .tag:not(.is-large) .delete, .tag:not(.is-large) .modal-close, .is-small.modal-close {
-    height: 14px;
-    width: 14px; }
+    height: 18px;
+    width: 18px; }
   .delete.is-medium, .is-medium.modal-close {
     height: 32px;
     width: 32px; }
