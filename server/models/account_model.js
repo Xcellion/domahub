@@ -167,23 +167,6 @@ account_model.prototype.getAccountListings = function(account_id, callback){
   account_query(query, "Failed to get all listings belonging to account " + account_id + "!", callback, account_id);
 }
 
-//gets all listing search info belonging to specific account
-account_model.prototype.getAccountListingsSearch = function(account_id, callback){
-  console.log("DB: Attempting to get search history for listings belonging to account " + account_id + "...");
-  query = "SELECT \
-        (UNIX_TIMESTAMP(NOW()) DIV 2592000 - IFNULL(timestamp DIV 2592000000, 0)) AS months_away, \
-        COUNT(stats_search_history.timestamp) as count, \
-        listings.domain_name \
-      FROM listings \
-      LEFT JOIN stats_search_history \
-        ON listings.domain_name = stats_search_history.domain_name \
-      WHERE listings.owner_id = ? \
-      AND listings.deleted IS NULL \
-      GROUP BY listings.domain_name, timestamp DIV 2592000000 \
-      ORDER BY listings.domain_name ASC, months_away DESC";
-  account_query(query, "Failed to get  search history for listings belonging to account " + account_id + "!", callback, account_id);
-}
-
 //gets all rental info belonging to specific account
 account_model.prototype.getAccountRentals = function(account_id, callback){
   console.log("DB: Attempting to get all rentals belonging to account " + account_id + "...");

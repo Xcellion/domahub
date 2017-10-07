@@ -8,19 +8,36 @@
   <aside class="menu">
     <ul class="menu-list">
       <li class="menu-item has-icon">
-        <a tabindex="0" title="Dashboard" href="/profile/dashboard" class="primary-theme">
+        <a id="dashboard-left-tab" tabindex="0" title="Dashboard" href="/profile/dashboard" class="left-tab primary-theme">
           <span class="icon is-white"><i class="fa fa-window-maximize"></i></span>
           <p class="is-white is-hidden-tablet-only">Dashboard</p>
         </a>
       </li>
       <li class="menu-item has-icon">
-        <a tabindex="0" title="My Listings" href="/profile/mylistings" class="primary-theme">
+        <a id="mylistings-left-tab" tabindex="0" title="My Listings" href="/profile/mylistings" class="left-tab primary-theme">
           <span class="icon is-white"><i class="fa fa-list-alt"></i></span>
           <p class="is-white is-hidden-tablet-only">My Listings</p>
         </a>
+        <ul>
+          <li>
+            <a tabindex="0" title="View Listing Offers" class="primary-theme">
+              <small class="is-white">View Offers</small>
+            </a>
+          </li>
+          <li>
+            <a tabindex="0" title="View Listing Statistics" class="primary-theme">
+              <small class="is-white">View Statistics</small>
+            </a>
+          </li>
+          <li>
+            <a tabindex="0" title="Create Listing" href="/listings/create" class="primary-theme">
+              <small class="is-white">Create New Listings</small>
+            </a>
+          </li>
+        </ul>
       </li>
       <li class="menu-item has-icon">
-        <a tabindex="0" title="Account Settings" href="/profile/settings" class="primary-theme">
+        <a id="settings-left-tab" tabindex="0" title="Account Settings" href="/profile/settings" class="left-tab primary-theme">
           <span class="icon is-white"><i class="fa fa-cogs"></i></span>
           <p class="is-white is-hidden-tablet-only">Account Settings</p>
         </a>
@@ -68,3 +85,10 @@
     </aside>
   </div>
 </div>
+
+<script>
+  $(document).ready(function(){
+    //add active to left menu
+    $("#" + window.location.pathname.split("/")[2] + "-left-tab").addClass('is-active');
+  });
+</script>

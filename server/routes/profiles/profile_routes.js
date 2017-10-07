@@ -12,7 +12,7 @@ var qs = require('qs');
 module.exports = function(app, db, auth, error, stripe){
   Account = new account_model(db);
 
-  //<editor-fold>------------------------------------------------------------------------------------------RENTALS
+  //<editor-fold>------------------------------------------------------------------------------------------DEFUNCT
 
   //myrentals pages
   // app.get([
@@ -33,14 +33,6 @@ module.exports = function(app, db, auth, error, stripe){
   //   profile_functions.deleteRentals
   // ]);
 
-  //check if user is legit, get all listings, get all rentals
-  app.get("/profile/dashboard", [
-    auth.checkLoggedIn,
-    profile_functions.getAccountListingsSearch,
-    profile_functions.getAccountRentals,
-    profile_functions.renderDashboard
-  ]);
-
   // //inbox
   // app.get([
   //   "/profile/messages",
@@ -55,11 +47,15 @@ module.exports = function(app, db, auth, error, stripe){
 
   //<editor-fold>------------------------------------------------------------------------------------------PROFILE
 
+  //dashboard
+  app.get("/profile/dashboard", [
+    auth.checkLoggedIn,
+    profile_functions.getAccountListings,
+    profile_functions.renderDashboard
+  ]);
+
   //mylistings pages
-  app.get([
-    "/profile",
-    "/profile/mylistings"
-  ], [
+  app.get("/profile/mylistings", [
     auth.checkLoggedIn,
     profile_functions.getAccountListings,
     stripe.getAccountInfo,
@@ -87,7 +83,7 @@ module.exports = function(app, db, auth, error, stripe){
     profile_functions.verifyListings
   ]);
 
-  //add a new card to user
+  //add a new card to user (stripe subscription)
   app.post("/profile/newcard", [
     urlencodedParser,
     auth.checkLoggedIn,
