@@ -170,6 +170,12 @@ button[data-balloon] {
 [data-balloon-length="fit"]:after {
   width: 100%; }
 
+.child-module {
+  padding-left: 10px;
+  border-left: 1px solid #9e9e9e; }
+  .child-module.is-disabled {
+    opacity: 0.25; }
+
 .wrapper {
   display: flex;
   height: 100%;
@@ -305,8 +311,8 @@ button[data-balloon] {
     .media.is-large .media-number {
       margin-right: 20px; } }
 
-#status-input {
-  height: 27px; }
+.delete-modal-cloned-domain {
+  word-break: break-all; }
 
 .media {
   -moz-transition: background-color 0.25s ease;
@@ -431,7 +437,6 @@ button[data-balloon] {
 
 .checkbox-form {
   height: 24px;
-  margin-right: 10px;
   position: relative;
   width: 24px; }
   .checkbox-form label::before {

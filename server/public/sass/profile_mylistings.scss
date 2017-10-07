@@ -4,8 +4,8 @@
 @import 'profile_wrapper';
 @import 'bulma/sass/components/media.sass';
 
-#status-input {
-  height: 27px;
+.delete-modal-cloned-domain {
+  word-break: break-all;
 }
 
 .media {
@@ -158,7 +158,6 @@
 
 .checkbox-form {
   height: 24px;
-  margin-right: 10px;
   position: relative;
   width: 24px;
   label::before {

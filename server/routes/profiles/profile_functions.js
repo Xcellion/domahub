@@ -1,14 +1,19 @@
+//<editor-fold>----------------------------------------------------------------------VARIABLES
+
 var Categories = require("../../lib/categories.js");
 var Fonts = require("../../lib/fonts.js");
-var bodyParser = require('body-parser')
-var jsonParser = bodyParser.json()
-var urlencodedParser = bodyParser.urlencoded({ extended: false })
+var bodyParser = require('body-parser');
+var jsonParser = bodyParser.json();
+var urlencodedParser = bodyParser.urlencoded({ extended: false });
 
 var Q = require('q');
 var bcrypt = require("bcrypt-nodejs");
 var whois = require("whois");
 var parser = require('parse-whois');
 var dns = require("dns");
+var stripe = require('../../lib/stripe.js');
+
+//</editor-fold>
 
 module.exports = {
 
@@ -27,60 +32,13 @@ module.exports = {
         if (result.state=="error"){error.handler(req, res, result.info);}
         else {
           req.user.listings = result.info;
-
-          //redirect if not going to mylistings aka logging in for first time
-          if (req.method == "GET" && req.path.indexOf("mylistings") == -1){
-            //no listings, redirect to listings create
-            if (req.user.listings.length == 0){
-              res.redirect("/listings/create");
-            }
-            //has listings, redirect to mylistings
-            else {
-              res.redirect("/profile/mylistings");
-            }
-          }
-          else {
-            next();
-          }
+          next();
         }
       });
     }
     else {
       next();
     }
-  },
-
-  //gets all listings search history for a user
-  getAccountListingsSearch : function(req, res, next){
-    Account.getAccountListingsSearch(req.user.id, function(result){
-      if (result.state=="error"){
-        req.user.listings_search = false;
-        next();
-      }
-      else {
-        var temp_listings = [];
-        var temp_obj = {};
-
-        //format the results
-        for (var x = 0; x < result.info.length; x++){
-          if (!temp_obj || temp_obj.domain_name != result.info[x].domain_name){
-            temp_obj = {
-              domain_name : result.info[x].domain_name,
-              count : [result.info[x].count],
-              months_away : [result.info[x].months_away]
-            }
-            temp_listings.push(temp_obj);
-          }
-          else {
-            temp_obj.months_away.push(result.info[x].months_away);
-            temp_obj.count.push(result.info[x].count);
-          }
-        }
-
-        req.user.listings_search = temp_listings;
-        next();
-      }
-    });
   },
 
   //gets all rentals for a user
@@ -330,6 +288,7 @@ module.exports = {
             req.user[x] = new_account_info[x];
           }
         }
+        delete req.session.new_account_info;
         next();
       });
 
@@ -426,25 +385,17 @@ module.exports = {
 
   //<editor-fold>----------------------------------------------------------------------RENDERS
 
-  renderDashboard : function(req, res){
-    res.render("profile/profile_dashboard", {
+  renderDashboard : function(req, res, next){
+    res.render("profile/profile_dashboard.ejs", {
       message: Auth.messageReset(req),
       user: req.user,
-      rentals: req.user.rentals || false,
-      listings_search: req.user.listings_search || false
-    });
-  },
-
-  renderInbox: function(req, res){
-    res.render("profile/profile_inbox", {
-      message: Auth.messageReset(req),
-      user: req.user,
-      convo_list: req.user.convo_list || false
+      listings: req.user.listings,
+      listings_search: req.user.listings_search
     });
   },
 
   renderMyListings: function(req, res){
-    res.render("profile/profile_mylistings", {
+    res.render("profile/profile_mylistings.ejs", {
       message: Auth.messageReset(req),
       user: req.user,
       listings: req.user.listings || false,
@@ -453,16 +404,8 @@ module.exports = {
     });
   },
 
-  renderMyRentals : function(req, res){
-    res.render("profile/profile_myrentals", {
-      message: Auth.messageReset(req),
-      user: req.user,
-      rentals: req.user.rentals || false
-    });
-  },
-
   renderSettings: function(req, res){
-    res.render("profile/profile_settings", {
+    res.render("profile/profile_settings.ejs", {
       message: Auth.messageReset(req),
       user: req.user
     });
@@ -470,27 +413,176 @@ module.exports = {
 
   //function to redirect to appropriate profile page
   redirectProfile : function(req, res, next){
-    path = req.path;
-    // if (path.includes("dashboard")){
-    //   res.redirect("/profile/dashboard");
-    // }
-    // else if (path.includes("inbox")){
-    //   res.redirect("/profile/messages");
-    // }
-    if (path.includes("mylistings")){
+    console.log("F: Redirecting to appropriate profile page...");
+    if (req.path.indexOf("mylistings") != -1){
       res.redirect("/profile/mylistings");
     }
-    else if (path.includes("myrentals")){
-      res.redirect("/profile/myrentals");
-    }
-    else {
+    else if (req.path.indexOf("settings") != -1){
       res.redirect("/profile/settings");
     }
-  }
+    else {
+      res.redirect("/profile/dashboard");
+    }
+  },
+
+  //</editor-fold>
+
+  //<editor-fold>----------------------------------------------------------------------PROMO CODE
+
+  //get any existing promo code to apply to a new stripe subscription
+  getExistingCoupon : function(req, res, next){
+    Account.getExistingPromoCodeByUser(req.user.id, function(result){
+      if (result.state == "success" && result.info.length > 0 && result.info[0].code){
+        req.user.existing_promo_code = result.info[0].code;
+        req.user.existing_referer_id = result.info[0].referer_id;
+      }
+      next();
+    });
+  },
+
+  //check if the promo code exists in our database
+  checkPromoCode : function(req, res, next){
+    if (!req.body.code){
+      error.handler(req, res, "Invalid promo code!", "json");
+    }
+    else {
+
+      //check if code exists and is unused
+      Account.checkPromoCodeUnused(req.body.code, function(result){
+        if (result.state == "success" && result.info.length > 0){
+          console.log("F: Promo code exists!");
+          req.user.promo_code = req.body.code;
+          next();
+        }
+
+        //promo code doesnt exist, maybe it's a username (AKA referral)? (only if not already premium)
+        else if (!req.user.stripe_subscription_id){
+
+          //get the username ID so we can create a referral code
+          Account.getAccountIDByUsername(req.body.code, function(result){
+            if (result.state == "success" && result.info.length > 0){
+              console.log("F: Username exists!");
+              var referer_id = result.info[0].id;
+
+              //cant refer yourself
+              if (referer_id == req.user.id){
+                error.handler(req, res, "Invalid promo code!", "json");
+              }
+              else {
+                //check if current user has an existing promo code referral (if not, create a coupon)
+                Account.checkExistingReferral(req.user.id, referer_id, function(result){
+                  req.user.new_referer_id = referer_id;
+                  if (result.state == "success" && result.info.length > 0){
+                    error.handler(req, res, "Invalid promo code!", "json");
+                  }
+                  else {
+                    console.log("F: User doesn't have any existing referrals! Creating coupon...");
+
+                    //create 1 promo code, with referer_id, and 1 duration_in_months
+                    stripe.createPromoCode("1", referer_id, "1", function(result){
+                      req.user.promo_code = result[0];
+                      next();
+                    });
+                  }
+                });
+              }
+            }
+
+            //no username ID exists by that code
+            else {
+              error.handler(req, res, "Invalid promo code!", "json");
+            }
+          });
+
+        }
+
+        //already premium, no referrals allowed
+        else {
+          error.handler(req, res, "Invalid promo code!", "json");
+        }
+      });
+    }
+  },
+
+  //check if this user has an existing promo code
+  checkExistingPromoCode : function(req, res, next){
+    console.log("F: Checking for any existing promo code for the user in our database...");
+    Account.getExistingPromoCodeByUser(req.user.id, function(result){
+
+      //exists! delete it and re-create a combined coupon
+      if (result.state == "success" && result.info.length > 0 && result.info[0].code){
+        var existing_coupon_code = result.info[0].code || 1;
+        req.user.old_promos = [existing_coupon_code, req.user.promo_code];    //old promo codes to delete via stripe
+        var existing_duration_in_months = result.info[0].duration_in_months;
+        var existing_referer_id = result.info[0].referer_id || req.user.new_referer_id;
+        delete req.user.new_referer_id;
+
+        //delete newly made code
+        Account.deletePromoCode(req.user.promo_code, function(result){
+          if (result.state == "success"){
+
+            //delete old existing code
+            Account.deletePromoCode(existing_coupon_code, function(result){
+
+              //subtract any existing times redeemed from stripe
+              if (req.user.stripe_used_months){
+                var duration_in_months = existing_duration_in_months - req.user.stripe_used_months + 1;
+                delete req.user.stripe_used_months;
+              }
+              else {
+                var duration_in_months = existing_duration_in_months + 1;
+              }
+
+              //recreate new code with new duration_in_months
+              stripe.createPromoCode("1", existing_referer_id, duration_in_months, function(result){
+                req.user.promo_code = result[0];
+                next();
+              });
+
+            });
+
+          }
+          else {
+            error.handler(req, res, "Something went wrong with the promo code! Please refresh the page and try again!", "json");
+          }
+        });
+      }
+
+      //nothing exists, just go next
+      else {
+        next();
+      }
+    });
+  },
+
+  //attach this user to the promo code
+  applyPromoCode : function(req, res, next){
+    console.log("F: Applying promo code to user in our database...");
+    //continue to stripe if existing user
+    if (req.user.stripe_subscription_id){
+      next();
+    }
+    //if not yet premium, just update our database
+    else {
+      Account.updatePromoCode(req.user.promo_code, { account_id : req.user.id }, function(result){
+        if (result.state == "success"){
+          delete req.user.promo_code;
+          res.send({
+            state: "success"
+          });
+        }
+        else {
+          error.handler(req, res, "Something went wrong with the promo code! Please refresh the page and try again!", "json");
+        }
+      });
+    }
+  },
 
   //</editor-fold>
 
 }
+
+//<editor-fold>----------------------------------------------------------------------HELPERS
 
 //function to join all rental times
 function joinRentalTimes(rental_times){
@@ -587,3 +679,5 @@ function updateUserListingsObjectVerify(user_listings, to_verify_formatted){
 function isEmptyObject(obj) {
   return !Object.keys(obj).length;
 }
+
+//</editor-fold>

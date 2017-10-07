@@ -1,52 +1,54 @@
-<div class="content margin-top-10">
-  <div class="level has-border is-mobile">
-    <div class="level-left">
-      <a class="level-item" data-balloon-length="medium"
-       data-balloon="Rank is calculated using a combination of average daily visitors to this site and pageviews on this site over the past 3 months."
-       data-balloon-pos="up">
-        Global Rank
-      </a>
+<% if (!listing_info.premium || (listing_info.premium && listing_info.alexa_stats)) { %>
+  <div class="content margin-top-10">
+    <div class="level has-border is-mobile">
+      <div class="level-left">
+        <a class="level-item" data-balloon-length="medium"
+         data-balloon="Rank is calculated using a combination of average daily visitors to this site and pageviews on this site over the past 3 months."
+         data-balloon-pos="up">
+          Global Rank
+        </a>
+      </div>
+      <div class="level-right">
+        <p id="alexa-globalrank">Loading...</p>
+      </div>
     </div>
-    <div class="level-right">
-      <p id="alexa-globalrank">Loading...</p>
+    <div class="level has-border is-mobile">
+      <div class="level-left">
+        <a class="level-item" data-balloon-length="medium"
+        data-balloon="Estimated daily time on site (mm:ss) per visitor to the site." data-balloon-pos="up">
+          Time on Site
+        </a>
+      </div>
+      <div class="level-right">
+        <p id="alexa-timeonsite">Loading...</p>
+      </div>
     </div>
-  </div>
-  <div class="level has-border is-mobile">
-    <div class="level-left">
-      <a class="level-item" data-balloon-length="medium"
-      data-balloon="Estimated daily time on site (mm:ss) per visitor to the site." data-balloon-pos="up">
-        Time on Site
-      </a>
+    <div class="level has-border is-mobile">
+      <div class="level-left">
+        <a class="level-item" data-balloon-length="medium"
+         data-balloon="Estimated daily unique pageviews per visitor on the site." data-balloon-pos="up">
+          Page Views
+        </a>
+      </div>
+      <div class="level-right">
+        <p id="alexa-pageviews">Loading...</p>
+      </div>
     </div>
-    <div class="level-right">
-      <p id="alexa-timeonsite">Loading...</p>
+    <div class="level has-border is-mobile">
+      <div class="level-left">
+        <a class="level-item" data-balloon-length="medium"
+        data-balloon="Percentage of visits to the site that consist of a single pageview." data-balloon-pos="up">
+          Bounce Rate
+        </a>
+      </div>
+      <div class="level-right">
+        <p id="alexa-bouncerate">Loading...</p>
+      </div>
     </div>
-  </div>
-  <div class="level has-border is-mobile">
-    <div class="level-left">
-      <a class="level-item" data-balloon-length="medium"
-       data-balloon="Estimated daily unique pageviews per visitor on the site." data-balloon-pos="up">
-        Page Views
-      </a>
-    </div>
-    <div class="level-right">
-      <p id="alexa-pageviews">Loading...</p>
-    </div>
-  </div>
-  <div class="level has-border is-mobile">
-    <div class="level-left">
-      <a class="level-item" data-balloon-length="medium"
-      data-balloon="Percentage of visits to the site that consist of a single pageview." data-balloon-pos="up">
-        Bounce Rate
-      </a>
-    </div>
-    <div class="level-right">
-      <p id="alexa-bouncerate">Loading...</p>
-    </div>
-  </div>
-  <p>
+    <p>
       <small>
-      For more information, please visit <a title="Link to Alexa website" class='is-underlined is-info' href="http://www.alexa.com/siteinfo/<%= listing_info.domain_name %>">Alexa.com</a>
+        For more information, please visit <a title="Link to Alexa website" class='is-underlined is-info' href="http://www.alexa.com/siteinfo/<%= listing_info.domain_name %>">Alexa.com</a>
       </small>
-  </p>
-</div>
+    </p>
+  </div>
+<% } %>

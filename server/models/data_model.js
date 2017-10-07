@@ -209,6 +209,7 @@ data_model.prototype.getListingOffers = function(domain_name, callback){
         stats_contact_history.id, \
         stats_contact_history.timestamp, \
         stats_contact_history.deadline, \
+        stats_contact_history.user_ip, \
         stats_contact_history.name, \
         stats_contact_history.email, \
         stats_contact_history.phone, \
