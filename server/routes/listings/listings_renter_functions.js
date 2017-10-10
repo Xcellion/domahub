@@ -267,8 +267,12 @@ module.exports = {
   renderCheckout : function(req, res, next){
     var domain_name = (typeof req.session.pipe_to_dh != "undefined") ? req.session.pipe_to_dh : req.params.domain_name;
 
-    if (req.session.listing_info && req.session.new_rental_info && req.session.new_rental_info.domain_name == domain_name){
-      console.log("F: Rendering listing checkout page...");
+    if (req.session.listing_info &&
+        req.session.new_rental_info &&
+        req.session.new_rental_info.domain_name.toLowerCase() == domain_name.toLowerCase() &&
+        req.session.listing_info.domain_name.toLowerCase() == domain_name.toLowerCase()
+      ){
+      console.log("F: Rendering listing checkout page for renting...");
 
       res.render("listings/listing_checkout_rent.ejs", {
         user: req.user,
@@ -281,8 +285,7 @@ module.exports = {
     }
     else {
       console.log("F: Not checking out! Redirecting to listings page...");
-
-      res.redirect("/listing/" + domain_name);
+      res.redirect("/listing/" + domain_name.toLowerCase());
     }
   },
 
@@ -437,7 +440,7 @@ module.exports = {
     console.log("F: Checking if rental belongs to the correct domain...");
     var domain_name = req.params.domain_name;
 
-    if (req.session.rental_info.domain_name != domain_name){
+    if (req.session.rental_info.domain_name.toLowerCase() != domain_name.toLowerCase()){
       error.handler(req, res, "Invalid domain name for rental!");
     }
     else {
@@ -754,7 +757,7 @@ module.exports = {
             if (!domain_ip || !address || domain_ip[0] != address[0] || domain_ip.length != 1){
               console.log("F: Listing is not pointed to DomaHub anymore! Reverting verification...");
               req.session.listing_info.status = 0;
-              
+
               Listing.updateListing(domain_name, {
                 verified: null,
                 status: 0
@@ -931,7 +934,7 @@ module.exports = {
     console.log("F: Checking if session listing info domain is same as posted domain...");
     var domain_name = (typeof req.session.pipe_to_dh != "undefined") ? req.session.pipe_to_dh : req.params.domain_name;
 
-    if (req.session.listing_info && req.session.listing_info.domain_name == domain_name){
+    if (req.session.listing_info && req.session.listing_info.domain_name.toLowerCase() == domain_name.toLowerCase()){
       next();
     }
     else {
@@ -1077,6 +1080,16 @@ module.exports = {
         });
       }
     });
+  },
+
+  redirectPremium : function(req, res, next){
+    if (req.session.listing_info.premium && req.path != "/"){
+      console.log("F: Redirecting premium domain to root domain...");
+      res.redirect('https://' + req.session.listing_info.domain_name);
+    }
+    else {
+      next();
+    }
   },
 
   //render a listing that is listed on domahub

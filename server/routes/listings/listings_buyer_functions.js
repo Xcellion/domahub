@@ -65,6 +65,7 @@ module.exports = {
     var contact_details = {
       listing_id : req.session.listing_info.id,
       timestamp : new Date().getTime(),
+      user_ip : getIP(req),
       verification_code : randomstring.generate(10),
       name : req.body.contact_name,
       email : req.body.contact_email,
@@ -157,7 +158,8 @@ module.exports = {
 
       //render the redirect page to notify offerer that offer was successfully sent
       res.render("listings/offer_verify.ejs", {
-        listing_info: req.session.listing_info
+        listing_info : req.session.listing_info,
+        compare : false
       });
     });
   },
@@ -335,8 +337,14 @@ module.exports = {
 
   //renders the checkout page for a new BIN
   renderCheckout : function(req, res, next){
-    if (req.session.new_buying_info && req.session.new_buying_info.domain_name == req.params.domain_name){
-      console.log("F: Rendering listing checkout page...");
+    var domain_name = (typeof req.session.pipe_to_dh != "undefined") ? req.session.pipe_to_dh : req.params.domain_name;
+
+    if (req.session.listing_info &&
+        req.session.new_buying_info &&
+        req.session.listing_info.domain_name.toLowerCase() == domain_name.toLowerCase() &&
+        req.session.new_buying_info.domain_name.toLowerCase() == domain_name.toLowerCase()
+      ){
+      console.log("F: Rendering listing checkout page for purchasing...");
 
       res.render("listings/listing_checkout_buy.ejs", {
         user: req.user,
@@ -349,8 +357,7 @@ module.exports = {
     }
     else {
       console.log("F: Not checking out! Redirecting to listings page...");
-
-      res.redirect("/listing/" + req.params.domain_name);
+      res.redirect("/listing/" + domain_name.toLowerCase());
     }
   },
 
@@ -380,6 +387,7 @@ module.exports = {
       var contact_details = {
         listing_id : req.session.listing_info.id,
         timestamp : new Date().getTime(),
+        user_ip : getIP(req),
         name : req.session.new_buying_info.name,
         email : req.session.new_buying_info.email,
         phone : req.session.new_buying_info.phone,
@@ -535,6 +543,7 @@ module.exports = {
       res.render("listings/transfer_verify.ejs", {
         listing_info: req.session.listing_info,
         offer_info: offer_result,
+        compare: false
       });
     });
   },
@@ -551,6 +560,22 @@ module.exports = {
 }
 
 //<editor-fold>-------------------------------HELPERS-------------------------------
+
+//helper function to get a user's ip
+function getIP(req){
+  if (node_env == "dev"){
+    return null;
+  }
+  else {
+    //nginx https proxy removes IP
+    if (req.headers["x-real-ip"]){
+      return req.headers["x-real-ip"];
+    }
+    else {
+      return req.headers['x-forwarded-for'] || req.connection.remoteAddress || req.socket.remoteAddress;
+    }
+  }
+}
 
 //helper function to get the email address of the listing owner to contact
 function getListingOwnerContactInfo(domain_name, cb){

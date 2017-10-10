@@ -34,7 +34,7 @@ module.exports = function(app, db, auth, error){
     "/features",
     "/privacy",
     "/faq",
-    "/careers",
+    // "/careers",
     "/contact",
     "/terms",
     "/nothinghere"

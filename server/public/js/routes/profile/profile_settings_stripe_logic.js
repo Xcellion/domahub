@@ -6,6 +6,31 @@ $(document).ready(function() {
   else {
     Stripe.setPublishableKey('pk_live_506Yzo8MYppeCnLZkW9GEm13');
   }
+  //<editor-fold>------------------------------------------------------------------------------------PROMO CODE
+
+  $("#promo-form").on('submit', function(e){
+    e.preventDefault();
+    $("#promo-submit").addClass('is-loading');
+    $.ajax({
+      url: "/profile/promocode",
+      method: "POST",
+      data: {
+        code : $("#promo-input").val()
+      }
+    }).done(function(data){
+      $("#promo-submit").removeClass('is-loading');
+      $("#promo-input").val("");
+      if (data.state == "success"){
+        var subscription_exists_text = (user.stripe_subscription_id) ? "Your free month will be applied on the next pay cycle." : "Please upgrade to Premium to receive your free month.";
+        successMessage("Successfully applied promo code! " + subscription_exists_text);
+      }
+      else {
+        errorMessage(data.message);
+      }
+    });
+  });
+
+  //</editor-fold>
 
   //<editor-fold>------------------------------------------------------------------------------------PREMIUM
 
@@ -49,6 +74,7 @@ $(document).ready(function() {
     $(this).addClass('is-hidden');
     $("#checkout-button-wrapper").removeClass('is-hidden');
     $("#stripe-form").removeClass('is-hidden').find(".stripe-input").removeClass('is-disabled');
+    $(".promo-input").removeClass('is-disabled');
     $('#cc-num').focus();
   });
 
@@ -165,7 +191,7 @@ $(document).ready(function() {
           cancelFormSubmit($("#payout-" + which_form + "-form"));
         }
         else {
-          flashError($("#payout-" + which_form + "-message"), data.message);
+          errorMessage(data.message);
         }
       });
     }
@@ -229,8 +255,7 @@ $(document).ready(function() {
       //create stripe token
       Stripe.bankAccount.createToken(stripe_info, function(status, response){
         if (status != 200){
-          console.log(response);
-          flashError($("#payout-bank-message"), response.error.message);
+          errorMessage(response.error.message);
         }
         else {
           //submit to server
@@ -442,7 +467,7 @@ function checkRequiredFields(form_elem, which_form){
   var required_missing_idx = required_missing_vals.indexOf("");
   if (required_missing_idx > 0){
     $(required_missing[required_missing_idx]).addClass('is-danger');
-    flashError($("#payout-" + which_form + "-message"), "Missing " + which_form + " information!");
+    errorMessage("Missing " + which_form + " information!");
     return false;
   }
   else {
@@ -477,7 +502,7 @@ function submitBank(stripe_token){
       cancelFormSubmit($("#payout-bank-form"));
     }
     else {
-      flashError($("#payout-bank-message"), data.message);
+      errorMessage(data.message);
     }
   });
 }
