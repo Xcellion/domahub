@@ -116,7 +116,7 @@ $(document).ready(function () {
 //used to see what people are doing on this checkout page
 function trackCheckoutBehavior(id){
   $.ajax({
-    url: "/listing/" + listing_info.domain_name + "/checkouttrack",
+    url: "/listing/" + listing_info.domain_name.toLowerCase() + "/checkouttrack",
     method: "POST",
     async: true,
     data: {
@@ -183,7 +183,7 @@ function submitStripe(checkout_button){
 function submitNewPurchase(stripeToken){
   $.ajax({
     type: "POST",
-    url: "/listing/" + listing_info.domain_name + "/buy",
+    url: "/listing/" + listing_info.domain_name.toLowerCase() + "/buy",
     data: {
       stripeToken: stripeToken
     }

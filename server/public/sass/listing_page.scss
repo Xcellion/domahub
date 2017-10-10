@@ -224,19 +224,19 @@
 }
 
 #custom_logo {
-    border-radius: 10px;
-    height: 45px;
-    object-fit:cover;
-    width: 45px;
+  border-radius: 10px;
+  height: 45px;
+  object-fit:cover;
+  width: 45px;
 }
 
 .description-wrapper {
-    max-width: 500px;
+  max-width: 500px;
 }
 
 #description-text {
-    word-break: break-word;
-    white-space: pre-wrap;
+  word-break: break-word;
+  white-space: pre-wrap;
 }
 
 #domain-display {
@@ -442,17 +442,17 @@
 }
 
 #traffic-overlay {
-    position:absolute;
-    background-color:rgba(255,255,255,0.5);
-    display:block;
-    top:10px;
-    z-index:99;
+  position:absolute;
+  background-color:rgba(255,255,255,0.5);
+  display:block;
+  top:20px;
+  z-index:99;
 }
 
 .traffic-overlay-text {
-    position:absolute;
-    top:50%;
-    left:50%;
-    transform:translate(-50%,-50%);
-    margin-right:-50%;
+  position:absolute;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%);
+  margin-right:-50%;
 }

@@ -1,57 +1,65 @@
-<div id="info-module" class="box has-tabs is-hidden module margin-bottom-0">
-
+<% if ((listing_info.premium && listing_info.info_module) || !listing_info.premium){ %>
+  <div id="info-module" class="box has-tabs is-hidden module margin-bottom-0">
     <div class="columns">
 
-        <%# IS THE LISTED LISTED OR UNLISTED WITH DOMAHUB %>
-        <% if (listing_info.unlisted && !compare) { %>
+      <%# IS THE LISTED LISTED OR UNLISTED WITH DOMAHUB %>
+      <% if (listing_info.unlisted && !compare) { %>
 
-            <%# UNLISTED LISTING %>
-            <%- include("info/unlisted_module.ejs", {
-              listing_info : listing_info
-            }); %>
+        <%# UNLISTED LISTING %>
+        <%- include("info/unlisted_module.ejs", {
+          listing_info : listing_info
+        }); %>
 
-            <% if (listing_info.available) { %>
-              <%# BUYABLE AT A REGISTRAR %>
-              <%- include("info/buyable_module.ejs", {
-                listing_info : listing_info
-              }); %>
-            <% } %>
+        <%# BUYABLE AT A REGISTRAR %>
+        <%- include("info/buyable_module.ejs", {
+          listing_info : listing_info
+        }); %>
 
-        <% } else { %>
-            <div class="column">
+      <% } else { %>
 
-              <%# LISTING OWNER MODULE %>
-              <%- include("info/listing_owner_module.ejs", {
-                listing_info : listing_info
-              }); %>
+          <% if (!listing_info.premium ||
+            (listing_info.domain_owner ||
+             listing_info.domain_age ||
+             listing_info.domain_appraisal ||
+             listing_info.social_sharing ||
+             listing_info.categories
+           )) { %>
+             <div class="column">
 
-              <%# CATEGORIES MODULE %>
-              <%- include("info/categories_module.ejs", {
-                listing_info : listing_info
-              }); %>
+               <%# LISTING OWNER MODULE %>
+               <%- include("info/domain_owner_module.ejs", {
+                 listing_info : listing_info
+               }); %>
 
-              <%# APPRAISALS MODULE %>
-              <% if (!listing_info.premium || (listing_info.premium && listing_info.domain_appraisal)) { %>
-                <%- include("info/appraisals_module.ejs", {
-                  listing_info : listing_info
-                }); %>
-              <% } %>
+               <%# LISTING AGE MODULE %>
+               <%- include("info/domain_age_module.ejs", {
+                 listing_info : listing_info
+               }); %>
 
-              <% if (!listing_info.premium || (listing_info.premium && listing_info.social_sharing)) { %>
-                <%# SOCIAL SHARING MODULE %>
-                <%- include("info/social_share_module.ejs", {
-                  listing_info : listing_info
-                }); %>
-              <% } %>
+               <%# CATEGORIES MODULE %>
+               <%- include("info/categories_module.ejs", {
+                 listing_info : listing_info
+               }); %>
 
-            </div>
+               <%# APPRAISALS MODULE %>
+               <%- include("info/appraisals_module.ejs", {
+                 listing_info : listing_info
+               }); %>
 
-            <%# OTHER BY SAME OWNER DOMAINS MODULE %>
-            <%- include("info/more_from_owner_module.ejs", {
-              listing_info : listing_info
-            }); %>
+               <%# SOCIAL SHARING MODULE %>
+               <%- include("info/social_share_module.ejs", {
+                 listing_info : listing_info
+               }); %>
 
-        <% } %>
+             </div>
+          <% } %>
+
+          <%# OTHER BY SAME OWNER DOMAINS MODULE %>
+          <%- include("info/domain_list_module.ejs", {
+            listing_info : listing_info
+          }); %>
+
+      <% } %>
     </div>
-
-</div>
+  </div>
+<% } %>

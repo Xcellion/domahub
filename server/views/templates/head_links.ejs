@@ -7,6 +7,8 @@
     <%- include("listing_metatags.ejs"); %>
     <% if (listing_info.premium && listing_info.logo){ %>
       <link rel="icon" type="image/png" href="<%= listing_info.logo %>" />
+    <% } else if (listing_info.premium) { %>
+      <link rel="icon" type="image/png" href="/images/dh-assets/circle-logo/computer-circle-logo.png" />
     <% } else { %>
       <link rel="icon" type="image/png" href="/images/dh-assets/circle-logo/dh-circle-logo-primary.png" />
     <% } %>
