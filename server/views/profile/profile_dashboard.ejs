@@ -40,7 +40,7 @@
 											<h1 class="margin-bottom-10">
 												<%= user.listings.length %>
 											</h1>
-											<a class="is-underlined">Create Listings</a>
+											<a tabindex="0" href="/listings/create" class="is-underlined">Create Listings</a>
 										</div>
 									</div>
 									<div class="level-item has-text-centered">
@@ -50,7 +50,7 @@
 											</small>
 											<h1 id="unverified-counter" class="is-danger margin-bottom-10">
 											</h1>
-											<a class="is-underlined">Verify Domains</a>
+											<a tabindex="0" href="" class="is-underlined">Verify Domains</a>
 										</div>
 									</div>
 									<div class="level-item has-text-centered">
@@ -61,7 +61,7 @@
 											<h1 class="margin-bottom-10">
 												3
 											</h1>
-											<a class="is-underlined">View Offers</a>
+											<a tabindex="0" href="/profile/mylistings" class="is-underlined">View Offers</a>
 										</div>
 									</div>
 								</div>
@@ -86,16 +86,6 @@
 						</div>
 					</div>
           <div class="column is-5">
-            <div class="notification is-info no-shadow">
-              <div class="content">
-                <h3 class="is-bold is-white">Earn Free Premium</h3>
-                <p class="is-white">
-                  Invite your friends to try DomaHub using your unique promo code and get 1 free month of premium
-                  for each friend that signs up!
-                </p>
-              </div>
-              <a tabindex="0" class="button is-info is-inverted">Invite Friends</a>
-            </div>
             <div class="card no-shadow is-fullwidth">
               <div class="card-header">
                 <h3 class="card-header-title">Notifications</h3>
@@ -153,6 +143,16 @@
 									<% } %>
                 </div>
               </div>
+            </div>
+						<div class="notification is-info no-shadow">
+              <div class="content">
+                <h3 class="is-bold is-white">Earn Free Premium</h3>
+                <p class="is-white">
+                  Invite your friends to try DomaHub using your unique promo code and get 1 free month of premium
+                  for each friend that signs up!
+                </p>
+              </div>
+              <a tabindex="0" class="button is-info is-inverted">Invite Friends</a>
             </div>
           </div>
         </div>
