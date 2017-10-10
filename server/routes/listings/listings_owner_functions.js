@@ -778,13 +778,13 @@ module.exports = {
   getDNSRecordAndWhois : function(req, res, next){
     console.log("F: Finding the existing A Record and WHOIS information for " + req.params.domain_name + "...");
 
-    listing_obj = getUserListingObj(req.user.listings, req.params.domain_name);
+    var listing_obj = getUserListingObj(req.user.listings, req.params.domain_name);
     whois.lookup(listing_obj.domain_name, function(err, data){
       var whoisObj = {};
-      if (!err){
+      if (data){
         var array = parser.parseWhoIsData(data);
         for (var x = 0; x < array.length; x++){
-          whoisObj[array[x].attribute] = array[x].value;
+          whoisObj[array[x].attribute.trim()] = array[x].value;
         }
       }
       listing_obj.whois = whoisObj;
@@ -1042,7 +1042,6 @@ module.exports = {
     dns.resolve(domain_name, "A", function (err, address, family) {
       var domain_ip = address;
       dns.resolve("domahub.com", "A", function (err, address, family) {
-        console.log(domain_ip, address);
         if (domain_ip && address && domain_ip[0] == address[0] && domain_ip.length == 1){
           req.session.new_listing_info = {
             domain_name: domain_name,

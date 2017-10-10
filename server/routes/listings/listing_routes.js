@@ -94,20 +94,8 @@ module.exports = function(app, db, auth, error, stripe){
     res.redirect("/listings/create");
   });
 
-  //verify that someone changed their DNS to point to domahub
-  app.post('/listing/:domain_name/verify', [
-    auth.checkLoggedIn,
-    checkDomainValid,
-    checkDomainListed,
-    stripe.getAccountInfo,
-    profile_functions.getAccountListings,
-    owner_functions.checkListingOwnerPost,
-    owner_functions.verifyListing,
-    owner_functions.updateListing
-  ]);
-
   //get the whois and DNS records for an unverified domain
-  app.post('/listing/:domain_name/unverifiedInfo', [
+  app.post('/listing/:domain_name/unverifiedinfo', [
     auth.checkLoggedIn,
     checkDomainValid,
     checkDomainListed,
