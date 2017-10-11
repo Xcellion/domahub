@@ -1,8 +1,9 @@
 <div id="domain-editor" class="is-hidden columns">
   <div class="column">
+      
     <!-- CURRENT DOMAIN NAME -->
     <div class="content">
-      <h2 class="is-inline-block">
+      <h2 id="editor-title-wrapper" class="is-inline-block">
         <span id="editor-title"></span>
         <span class="current-domain-name"></span>
       </h2>
@@ -14,14 +15,17 @@
         </span>
       <span>Back To My Listings</span>
       </button>
-      <a id="current-domain-view" target="_blank" rel="noopener" tabindex="0" class="button is-stylish is-transparent verified-elem is-hidden is-small" title="View Listing(s)">
-        <span class="icon is-small"><i style="margin-top: 2px" class="fa fa-external-link"></i></span>
-        <span>View Listing<span class="button-plural is-hidden">s</span></span>
-      </a>
-      <button id="status-input" tabindex="0" class="button is-stylish is-hidden is-transparent is-small" title="Publicly hide or show landing page.">
-        <span id="status-color" class="icon"><i id="status-icon" class="fa fa-toggle-on"></i></span>
-        <span>Toggle Status</span>
+      <button id="status-input" tabindex="0" class="verified-elem button is-stylish is-hidden is-transparent is-small" title="Publicly hide or show landing page(s).">
+        <span id="status-color" class="icon"><i id="status-icon" class="fa"></i></span>
+        <span id="status-text"></span>
       </button>
+      <div id="view-listings-button-wrapper">
+        <a id="view-listings-button" target="_blank" rel="noopener" tabindex="0" class="button is-stylish is-transparent verified-elem is-hidden is-small">
+          <span class="icon is-small"><i style="margin-top: 2px" class="fa fa-external-link"></i></span>
+          <span>View Listing<span class="edit-domain-plural is-hidden">s</span></span>
+        </a>
+        <div id="view-listings-button-drop" class="box domain-tooltip is-hidden"></div>
+      </div>
       <a id="verify-button" class="unverified-elem is-hidden button is-primary is-stylish is-small" title="Verify domain(s)">
         <span class="icon is-small"><i class="fa fa-check-circle-o"></i></span>
         <span>Verify Now</span>
@@ -30,10 +34,12 @@
         <span class="icon is-small"><i class="fa fa-refresh"></i></span>
         <span>Refresh Table</span>
       </a>
-      <button id="save-changes-button" class="verified-elem button is-hidden is-primary is-stylish is-small">
+      <button id="save-changes-button" class="button is-hidden is-primary is-stylish is-small">
+        <span class="icon is-small"><i class="fa fa-floppy-o"></i></span>
         <span>Save Changes</span>
       </button>
-      <button id="cancel-changes-button" class="verified-elem button is-danger is-inverted is-hidden is-stylish is-small">
+      <button id="cancel-changes-button" class="button is-danger is-outlined is-hidden is-stylish is-small">
+        <span class="icon is-small"><i class="fa fa-ban"></i></span>
         <span>Cancel Changes</span>
       </button>
     </div>
@@ -41,9 +47,6 @@
     <!-- LISTING DETAIL TABS  -->
     <div class="is-hidden tabs no-border">
       <ul>
-        <li id="verify-tab" class="unverified-elem is-hidden unpurchased-elem tab">
-          <a tabindex="0">Verification Status</a>
-        </li>
         <li id="info-tab" class="verified-elem unpurchased-elem tab">
           <a tabindex="0">Information</a>
         </li>
@@ -59,9 +62,6 @@
         <li id="stats-tab" class="verified-elem no-buttons-tab unpurchased-elem tab">
           <a tabindex="0">Stats</a>
         </li>%>
-        <li id="purchased-tab" class="purchased-elem no-buttons-tab tab is-active is-hidden">
-          <a tabindex="0">Next Steps</a>
-        </li>
       </ul>
     </div>
 
@@ -127,7 +127,7 @@
                   <i class="fa fa-question-circle"></i>
                 </span>
               </label>
-							<input id="min-price-input" data-name="min_price" type="number" min="1" step="1" class="input is-inline changeable-input">
+							<input id="min-price-input" data-name="min_price" type="number" min="1" step="1" class="input changeable-input">
 						</div>
             <div class="control">
               <label class="label" for="buy-price-input">
@@ -136,7 +136,7 @@
                   <i class="fa fa-question-circle"></i>
                 </span>
               </label>
-              <input id="buy-price-input" data-name="buy_price" type="number" min="1" step="1" class="input is-inline changeable-input">
+              <input id="buy-price-input" data-name="buy_price" type="number" min="1" step="1" class="input changeable-input">
               <small class="tip"><a target="_blank" rel="noopener" href="/faq#selling" class="is-primary">What are the advantages of buying immediately?</a></small>
             </div>
 						<div class="control">
@@ -159,6 +159,7 @@
                   <i class="fa fa-diamond"></i>
                 </span>
               </label>
+              <small id="domain-name-cap-missing">You cannot edit the domain name capitalization with more than one domain selected. Please select a specific domain to edit this setting.</small>
               <input id="domain-name-input" data-name="domain_name" type="text" class="input premium-input changeable-input">
             </div>
             <div class="control">
@@ -216,22 +217,32 @@
                 </div>
               </div>
             </div>
-            <div id="example-wrapper" class="preview-elem padding-25 control has-border-bottom">
+            <div id="example-wrapper" class="box preview-elem padding-25 control has-border-bottom">
               <div class="box is-pulled-right">
                 <img id="example-logo" src="" />
               </div>
               <div class="control">
                 <span id="example-buy-price-tag" class="tag is-primary margin-right-5 margin-bottom-10 is-medium"></span>
                 <span id="example-rent-price-tag" class="tag is-primary margin-right-5 margin-bottom-10 is-medium"></span>
-                <h1 id="example-domain-name" class="preview-elem is-bold current-domain-name"></h1>
+                <h1 id="example-domain-name" class="preview-elem is-bold"></h1>
               </div>
               <div class="control">
                 <p id="example-font" class="preview-elem is-black">This is a preview of your chosen design. Use the settings below to customize your landing page!</p>
               </div>
-              <div class="control box" style="display:inline-block">
-                <a id="example-button-primary" class="v-align-middle preview-elem is-small button is-stylish">Send Offer</a>
-                <a id="example-button-accent" class="v-align-middle preview-elem is-small button is-stylish">Buy Now</a>
-                <a id="example-link-info" class="v-align-middle preview-elem margin-left-10">Do I need this?</a>
+              <div class="button-wrapper control box" style="display:inline-block">
+                <a id="example-button-primary" class="v-align-middle preview-elem button is-stylish">
+                  <span class="icon is-small">
+                    <i class="fa fa-paper-plane-o" aria-hidden="true"></i>
+                  </span>
+                  <span>Send Offer</span>
+                </a>
+                <a id="example-button-accent" class="v-align-middle preview-elem button is-stylish">
+                  <span class="icon is-small">
+                    <i class="fa fa-shopping-cart" aria-hidden="true"></i>
+                  </span>
+                  <span>Buy Now</span>
+                </a>
+                <a id="example-link-info" class="v-align-middle is-underlined preview-elem margin-left-10">Do I need this?</a>
               </div>
             </div>
             <div class="control">
@@ -550,13 +561,13 @@
             </div>%>
             <label class="label">
               Rental Price
-              <span class="icon is-small is-tooltip v-align-bottom" data-balloon-length="medium" data-balloon="Price per unit of time for the domain rental." data-balloon-pos="up">
+              <span class="icon is-small is-tooltip v-align-bottom" data-balloon-length="large" data-balloon="Price per unit of time for the domain rental. Put 0 or blank for free rentals on your domain." data-balloon-pos="up">
                 <i class="fa fa-question-circle"></i>
               </span>
             </label>
             <div class="control">
               <div class="control has-addons margin-bottom-0">
-                <input id="price-rate-input" data-name="price_rate" placeholder="minimum 1" type="number" min="1" step="1" class="input is-inline changeable-input rentable-input" />
+                <input id="price-rate-input" data-name="price_rate" type="number" min="1" step="1" class="input changeable-input rentable-input" />
                 <span class="select price-type-span no-shadow">
                   <div class="drop-form">
                     <select id="price-type-input" data-name="price_type" class="changeable-input rentable-input">

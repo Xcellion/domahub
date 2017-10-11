@@ -200,7 +200,8 @@ module.exports = {
           cb(null, upload_path);
         },
         filename: function (req, file, cb) {
-          cb(null, Date.now() + "_" + req.params.domain_name + "_" + req.user.username);
+          var filename_postfix = (req.params.domain_name) ? "_" + req.params.domain_name + "_" + req.user.username : "_" + req.user.username;
+          cb(null, Date.now() + filename_postfix);
         }
       });
 
@@ -327,10 +328,60 @@ module.exports = {
       }
     },
 
+    //check for verified, ownership, and purchased for multi listing edit
+    checkPostedListingInfoMulti : function(req, res, next){
+      var selected_ids = (req.body.selected_ids) ? req.body.selected_ids.split(",") : false;
+      var owned_domains = 0;
+      var verified_domains = 0;
+      var accepted_domains = 0;
+      var deposited_domains = 0;
+
+      //loop through and check
+      for (var x = 0 ; x < req.user.listings.length ; x++){
+        if (req.user.listings[x].verified == 1){
+          verified_domains++;
+        }
+
+        if (req.user.listings[x].accepted == 1){
+          accepted_domains++;
+        }
+
+        if (req.user.listings[x].deposited == 1){
+          deposited_domains++;
+        }
+
+        //check ownership
+        for (var y = 0 ; y < selected_ids.length ; y++){
+          if (parseFloat(selected_ids[y]) == req.user.listings[x].id){
+            owned_domains++;
+            break;
+          }
+        }
+      }
+
+      //all good!
+      var error_message_plural = (req.body.selected_ids.length == 1) ? "this domain" : "some or all of these domains";
+      error_message_plural += "! Please select different listings to edit!";
+      if (owned_domains != selected_ids.length){
+        error.handler(req, res, "You do not own " + error_message_plural, "json");
+      }
+      else if (verified_domains != selected_ids.length){
+        error.handler(req, res, "You have not verified " + error_message_plural, "json");
+      }
+      else if (accepted_domains != 0){
+        error.handler(req, res, "You have already accepted an offer for " + error_message_plural, "json");
+      }
+      else if (deposited_domains != 0){
+        error.handler(req, res, "You have already sold " + error_message_plural, "json");
+      }
+      else {
+        next();
+      }
+    },
+
     //function to check that the listing is verified
     checkListingVerified : function(req, res, next){
       console.log("F: Checking if listing is a verified listing...");
-
       if (getUserListingObj(req.user.listings, req.params.domain_name).verified != 1){
         error.handler(req, res, "Please verify that you own this domain!", "json");
       }
@@ -341,10 +392,9 @@ module.exports = {
 
     //function to check that the user owns the listing
     checkListingOwnerPost : function(req, res, next){
-      console.log("F: Checking if current user is listing owner...");
-
+      console.log("F: Checking if current user is the owner...");
       if (getUserListingObj(req.user.listings, req.params.domain_name).owner_id != req.user.id){
-        error.handler(req, res, "You do not own this domain!", "json");
+        error.handler(req, res, "You do not own this domain! Please refresh the page and try again!", "json");
       }
       else {
         next();
@@ -354,7 +404,6 @@ module.exports = {
     //function to check that the user owns the listing
     checkListingOwnerGet : function(req, res, next){
       console.log("F: Checking if current user is listing owner...");
-
       Listing.checkListingOwner(req.user.id, req.params.domain_name, function(result){
         if (result.state == "error" || result.info.length <= 0){
           res.redirect("/listing/" + req.params.domain_name);
@@ -368,7 +417,6 @@ module.exports = {
     //function to check if listing has been purchased
     checkListingPurchased : function(req, res, next){
       console.log("F: Checking if the listing was already purchased or accepted...");
-
       var listing_obj = getUserListingObj(req.user.listings, req.params.domain_name);
       if (listing_obj.accepted){
         error.handler(req, res, "You have already accepted an offer for this domain! Please wait for the offerer to complete the payment process.", "json");
@@ -1064,111 +1112,6 @@ module.exports = {
 
 }
 //<editor-fold>-------------------------------HELPERS------------------------------
-
-//checks each row of the CSV file
-function checkCSVRow(record, domains_sofar){
-  var record_check = {
-    state: "success",
-    reasons: []
-  }
-
-  //at least 2 records required -- domain name and description
-  if (record.length < 2){
-    record_check.state = "error";
-    record_check.reasons.push("Missing required columns!");
-  }
-
-  //too many fields
-  if (record.length > 2){
-    record_check.state = "error";
-    record_check.reasons.push("Too many columns!");
-  }
-
-  //not a domain name
-  if (!validator.isFQDN(record[0]) || !record[0]){
-    record_check.state = "error";
-    record_check.reasons.push("Incorrect domain name!");
-  }
-
-  //if domain name already exists
-  if (domains_sofar && domains_sofar.indexOf(record[0]) != -1){
-    record_check.state = "error";
-    record_check.reasons.push("Duplicate domain name!");
-  }
-
-  //no description
-  if (record[1].length = 0 || !record[1] || record[1].replace(/\s/g, '') == ""){
-    record_check.state = "error";
-    record_check.reasons.push("Invalid description");
-  }
-  //
-  // //optionals were supplied
-  // if (record.length > 2){
-  //   //invalid URL for background image
-  //   if (record[2] && !validator.isURL(record[2], { protocols: ["http", "https"]})){
-  //     record_check.state = "error";
-  //     record_check.reasons.push("Invalid background image URL");
-  //   }
-  //
-  //   //invalid buy link
-  //   if (record[3] && !validator.isURL(record[3], { protocols: ["http", "https"]})){
-  //     record_check.state = "error";
-  //     record_check.reasons.push("Invalid buy link URL");
-  //   }
-  //
-  // }
-
-  return record_check;
-}
-
-//helper function to parse the csv file
-function parseCSVFile(sourceFilePath, errorHandler, done){
-  var bad_listings = [];
-  var good_listings = [];
-  var domains_sofar = [];
-  var row = 0;
-
-  var source = fs.createReadStream(sourceFilePath);
-  var parser = parse({
-    skip_empty_lines: true
-  });
-
-  parser.on("readable", function(){
-    var record;
-
-    //loop through all rows
-    while (record = parser.read()) {
-      record_check = checkCSVRow(record, domains_sofar);
-      domains_sofar.push(record[0]);
-      row++;
-
-      //check if the row is legit
-      if (record_check.state == "error"){
-        bad_listing = {
-          row: row,
-          data : record,
-          reasons: record_check.reasons
-        }
-        bad_listings.push(bad_listing);
-      }
-      else {
-        good_listings.push(record);
-      }
-    }
-  });
-
-  parser.on("error", function(error){
-    console.log(error);
-    errorHandler();
-  });
-
-  //pass it back to create session variables
-  parser.on("end", function(){
-    done(bad_listings, good_listings);
-  });
-
-  source.pipe(parser);
-}
 
 //helper function to update req.user.listings after updating a listing
 function updateUserListingsObject(req, res, domain_name){

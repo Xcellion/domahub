@@ -73,6 +73,32 @@ module.exports = function(app, db, auth, error, stripe){
   //   owner_functions.renderCreateListingMultiple
   // ]);
 
+  //multi update of listings details
+  app.post("/listings/multiupdate", [
+    auth.checkLoggedIn,
+    urlencodedParser,
+    owner_functions.checkImageUploadSize,
+    checkSelectedIDs,
+    profile_functions.getAccountListings,
+    owner_functions.checkPostedListingInfoMulti,
+    stripe.checkStripeSubscriptionUser,
+    profile_functions.updateAccountSettingsGet,
+    owner_functions.checkListingImage,
+    owner_functions.checkListingStatus,
+    function(req, res, next){
+      console.log(req.session.new_listing_info);
+      res.send({
+        state: "error",
+        message: "fuck yeah"
+      });
+    },
+    owner_functions.checkListingPremiumDetails,
+    owner_functions.checkListingDetails,
+    owner_functions.checkListingExistingDetails,
+    owner_functions.checkListingModules,
+    owner_functions.updateListing
+  ]);
+
   //check all posted textarea domains to render table
   app.post("/listings/create/table", [
     urlencodedParser,
@@ -97,6 +123,7 @@ module.exports = function(app, db, auth, error, stripe){
   //get the whois and DNS records for an unverified domain
   app.post('/listing/:domain_name/unverifiedinfo', [
     auth.checkLoggedIn,
+    urlencodedParser,
     checkDomainValid,
     checkDomainListed,
     profile_functions.getAccountListings,
@@ -107,6 +134,7 @@ module.exports = function(app, db, auth, error, stripe){
   //get offers for a verified domain
   app.post('/listing/:domain_name/getoffers', [
     auth.checkLoggedIn,
+    urlencodedParser,
     checkDomainValid,
     checkDomainListed,
     profile_functions.getAccountListings,
@@ -117,6 +145,7 @@ module.exports = function(app, db, auth, error, stripe){
   //get stats for a verified domain
   app.post('/listing/:domain_name/getstats', [
     auth.checkLoggedIn,
+    urlencodedParser,
     checkDomainValid,
     checkDomainListed,
     profile_functions.getAccountListings,
@@ -127,6 +156,7 @@ module.exports = function(app, db, auth, error, stripe){
   //update listing information
   app.post('/listing/:domain_name/update', [
     auth.checkLoggedIn,
+    urlencodedParser,
     checkDomainValid,
     checkDomainListed,
     profile_functions.getAccountListings,
@@ -302,11 +332,13 @@ module.exports = function(app, db, auth, error, stripe){
 
   //get a domain's traffic
   app.post("/listing/:domain_name/traffic", [
+    urlencodedParser,
     renter_functions.getListingTraffic
   ]);
 
   //get a domain's alexa information
   app.post("/listing/:domain_name/alexa", [
+    urlencodedParser,
     renter_functions.getListingAlexa
   ]);
 
@@ -505,6 +537,33 @@ function checkDomainNotListed(req, res, next){
       error.handler(req, res, "Invalid domain name!");
     }
   });
+}
+
+//function to check if posted selected IDs are numbers
+function checkSelectedIDs(req, res, next){
+  console.log("F: Checking posted domain IDs...");
+  var selected_ids = (req.body.selected_ids) ? req.body.selected_ids.split(",") : false;
+  if (!selected_ids){
+    error.handler(req, res, "You have selected invalid domains! Please refresh the page and try again!", "json");
+  }
+  else if (selected_ids.length <= 0){
+    error.handler(req, res, "You have selected invalid domains! Please refresh the page and try again!", "json");
+  }
+  else {
+    var all_good = true;
+    for (var x = 0 ; x < selected_ids.length ; x++){
+      if (!validator.isInt(selected_ids[x], { min : 1 })){
+        all_good = false;
+        break;
+      }
+    }
+    if (!all_good){
+      error.handler(req, res, "You have selected invalid domains! Please refresh the page and try again!", "json");
+    }
+    else {
+      next();
+    }
+  }
 }
 
 //</editor-fold>
