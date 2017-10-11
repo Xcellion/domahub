@@ -164,14 +164,14 @@ module.exports = {
       console.log("F: Checking domain name IP addresses...");
 
       dns.resolve("domahub.com", "A", function (err, address, family) {
-        var doma_ip = address;
+        var doma_ip = address[0];
 
         //wait for all promises to finish
         Q.allSettled(to_verify_promises)
          .then(function(results) {
            for (var x = 0; x < results.length; x++){
              if (results[x].state == "fulfilled"){
-               if (results[x].value.address == doma_ip){
+               if (doma_ip && results[x].value.address && doma_ip == results[x].value.address[0] && results[x].value.address.length == 1){
                  //format the db query
                  var mark_active_if_stripe = (req.user.stripe_info && req.user.stripe_info.charges_enabled) ? 1 : 0;
                  to_verify_formatted.push([results[x].value.listing_id, 1, mark_active_if_stripe]);

@@ -1,35 +1,5 @@
 $(document).ready(function(){
 
-  //<editor-fold>-------------------------------URL-------------------------------
-
-  // var replace_url = [location.protocol, '//', location.host, location.pathname].join('');
-  // var url_tab = getParameterByName("tab");
-  // if (["verify", "info", "rental", "design", "stats", "offers", "purchased"].indexOf(url_tab) == -1){
-  //   url_tab = "info";
-  //   updateQueryStringParam("tab", "info");
-  // }
-  //
-  // var url_listing_index = 0;
-  // var url_listing = getParameterByName("listing");
-  // if (listings.length){
-  //   for (var x = 0 ; x < listings.length; x++){
-  //     if (listings[x].domain_name.toLowerCase() == url_listing){
-  //       var url_listing_index = x;
-  //       break;
-  //     }
-  //   }
-  //
-  //   //url_listing doesnt exist in listing var, replace the history
-  //   if (url_listing_index == 0){
-  //     updateQueryStringParam("listing", listings[0].domain_name);
-  //   }
-  // }
-
-  //populate all themes
-  populateThemeDropdown();
-
-  //</editor-fold>
-
   //<editor-fold>-------------------------------FILTERS-------------------------------
 
   //mobile view nav menu
@@ -129,9 +99,8 @@ $(document).ready(function(){
   });
 
   //go into edit mode
-  $("#go-to-editor").on('click', function(){
-    $("#domain-selector").addClass('is-hidden');
-    $("#domain-editor").removeClass('is-hidden');
+  $("#selector-edit-button").on('click', function(){
+    viewDomainDetails();
   });
 
   //multiple verify listings
@@ -151,12 +120,52 @@ $(document).ready(function(){
 
   //</editor-fold>
 
+  //<editor-fold>-------------------------------URL-------------------------------
+
+  //replace URL tab if not a good tab
+  var replace_url = [location.protocol, '//', location.host, location.pathname].join('');
+  var url_tab = getParameterByName("tab");
+  if (["verify", "info", "rental", "design", "stats", "offers", "purchased"].indexOf(url_tab) == -1){
+    removeURLParameter("tab");
+    url_tab = "";
+  }
+
+  //select URL rows
+  var url_selected_listings = getParameterByName("listings");
+  if (url_selected_listings){
+    var url_listings_id = url_selected_listings.split(",");
+    for (var x = 0 ; x < url_listings_id.length; x++){
+      selectRow($("#row-listing_id" + url_listings_id[x]), true);
+    }
+
+    if ($(".table-row.is-selected").length == 0){
+      removeURLParameter("listings");
+      url_selected_listings = "";
+    }
+
+    //check for what has been selected and display buttons accordingly
+    multiSelectButtons();
+  }
+
+  //requested specific tab
+  if (url_selected_listings != "" && ["info", "rental", "design"].indexOf(url_tab) != -1){
+    viewDomainDetails(url_tab);
+  }
+  else if (url_selected_listings != "" && url_tab == "verify"){
+    viewDomainsDNS();
+  }
+  else {
+    showSelector();
+  }
+
+  //</editor-fold>
+
 });
 
 //<editor-fold>-------------------------------CREATE ROWS OF DOMAINS-------------------------------
 
 //function to create all rows
-function createRows(){
+function createRows(selected_ids){
   //empty the table and hide loading
   $("#table-body").find(".table-row:not(.clone-row)").remove();
   $("#loading-tab").addClass('is-hidden');
@@ -166,7 +175,19 @@ function createRows(){
     $("#loading-tab").addClass('is-hidden');
     //create rows for each listing
     for (var x = 0; x < listings.length; x++){
-      $("#table-body").append(createRow(listings[x], x));
+
+      //if there is any existing selected
+      var selected = false;
+      if (selected_ids){
+        for (var y = 0; y < selected_ids.length; y++){
+          if (selected_ids[y] == listings[x].id){
+            selected = true;
+            break;
+          }
+        }
+      }
+
+      $("#table-body").append(createRow(listings[x], x, selected));
     }
   }
   //there are no listings to show!
@@ -176,7 +197,7 @@ function createRows(){
 }
 
 //function to create a listing row
-function createRow(listing_info, rownum){
+function createRow(listing_info, rownum, selected){
   //choose a row to clone (accepted listings are verified by default)
   if (listing_info.verified){
     var tempRow = $("#verified-clone-row").clone();
@@ -190,11 +211,9 @@ function createRow(listing_info, rownum){
   updateDomainRow(tempRow, listing_info);
   updateRowData(tempRow, listing_info);
 
-  //select row by clicking it
-  tempRow.on('click', function(e){
-    e.stopPropagation();
-    selectRow($(this), listing_info);
-  });
+  if (selected){
+    selectRow(tempRow, true);
+  }
 
   return tempRow;
 }
@@ -216,14 +235,17 @@ function updateRowData(row, listing_info){
 
 //update the clone row with row specifics
 function updateDomainRow(tempRow, listing_info){
-  tempRow.find(".td-domain").text((listing_info.domain_name.length > 100) ? listing_info.domain_name.substr(0, 97) + "..." : listing_info.domain_name);
+  var clipped_domain_name = (listing_info.domain_name.length > 100) ? listing_info.domain_name.substr(0, 97) + "..." : listing_info.domain_name;
+  var listing_href = (user.stripe_subscription_id) ? "https://" + listing_info.domain_name.toLowerCase() : "/listing/" + listing_info.domain_name;
+
+  tempRow.find(".td-domain").html("<a href='" + listing_href + "' class='is-underlined'>" + clipped_domain_name + "</a>");
   tempRow.find(".td-date").text(moment(listing_info.date_created).format("M/D/YYYY"));
   tempRow.find(".td-status").text((listing_info.verified) ? ((listing_info.status) ? "Active" : "Inactive") : "Unverified");
-  tempRow.find(".td-min").text((listing_info.min_price) ? moneyFormat.to(listing_info.min_price) : "-");
-  tempRow.find(".td-bin").text((listing_info.buy_price) ? moneyFormat.to(listing_info.buy_price) : "-");
+  tempRow.find(".td-min").text((listing_info.min_price) ? moneyFormat.to(parseFloat(listing_info.min_price)) : "-");
+  tempRow.find(".td-bin").text((listing_info.buy_price) ? moneyFormat.to(parseFloat(listing_info.buy_price)) : "-");
   tempRow.find(".select-button").off().on('click', function(e){
     e.stopPropagation();
-    selectRow(tempRow, listing_info);
+    toggleSelectRow(tempRow);
   });
 }
 
@@ -232,11 +254,24 @@ function updateDomainRow(tempRow, listing_info){
 //<editor-fold>-------------------------------SELECT ROW-------------------------------
 
 //function to select a row
-function selectRow(row, listing_info){
+function selectRow(row, selected){
+  if (row){
+    if (selected){
+      row.addClass('is-selected');
+    }
+    else {
+      row.removeClass('is-selected');
+    }
+  }
+  row.find(".select-button").prop("checked", selected);
+}
+
+//function to toggle a row select
+function toggleSelectRow(row){
   var selected = (row.hasClass("is-selected")) ? false : true;
   row.toggleClass('is-selected');
   row.find(".select-button").prop("checked", selected);
-  multiSelectButtons($(this));
+  multiSelectButtons(row);
 }
 
 //function to select all rows
@@ -292,6 +327,11 @@ function multiSelectButtons(clicked_row){
   else {
     $(".selector-unverified-button").addClass("is-hidden");
   }
+
+  var selected_ids = getSelectedDomains("id");
+  if (selected_ids.length > 0){
+    updateQueryStringParam("listings", getSelectedDomains("id"));
+  }
 }
 
 //</editor-fold>
@@ -299,46 +339,40 @@ function multiSelectButtons(clicked_row){
 //<editor-fold>-------------------------------EDIT DOMAIN DETAILS-------------------------------
 
 //function to change domain
-function editDomainDetails(listing_info){
-
-  $(".changeable-input").off();
-
+function viewDomainDetails(url_tab){
   //clear any existing messages
   errorMessage(false);
   successMessage(false);
+  $(".changeable-input").off();
 
-  //change URL param
-  updateQueryStringParam("listing", listing_info.domain_name);
+  var selected_domain_ids = getSelectedDomains("id", true);
 
-  //change domain name header and view button
-  $(".current-domain-name").text(listing_info.domain_name);
-  $("#current-domain-view").attr("href", (user.stripe_subscription_id) ? "https://" + listing_info.domain_name.toLowerCase() : "/listing/" + listing_info.domain_name);
+  if (selected_domain_ids.length > 0){
+    //show editor
+    $("#domain-selector").addClass('is-hidden');
+    $("#domain-editor").removeClass('is-hidden');
 
-  //update inputs for purchased/accepted domain
-  if (listing_info.deposited || listing_info.accepted){
-    editRowPurchased(listing_info);
+    //hide other tabs
+    $(".tabs").removeClass('is-hidden');
+    $(".drop-tab").addClass('is-hidden');
+    $(".tab.verified-elem").removeClass('is-active');
+
+    if (!url_tab){
+      url_tab = "info";
+    }
+
+    //show tabs and update URL
+    updateQueryStringParam("tab", url_tab);
+    updateQueryStringParam("listings", selected_domain_ids);
+    $("#" + url_tab + "-tab").addClass('is-active');
+    $("#" + url_tab + "-tab-drop").show().removeClass('is-hidden');
+
+    //display the editing menu
+    editRowVerified(selected_domain_ids);
   }
-  //update inputs for verified
-  else if (listing_info.verified){
-    editRowVerified(listing_info);
-  }
-  //update inputs for unverified
   else {
-    editRowUnverified(listing_info);
+    window.history.replaceState({}, "", "/profile/mylistings");
   }
-
-  //change the current listing at the end
-  current_listing = listing_info;
-}
-
-//function to view offers
-function viewDomainOffers(){
-
-}
-
-//function to view statistics
-function viewDomainOffers(){
-
 }
 
 //</editor-fold>
@@ -347,34 +381,41 @@ function viewDomainOffers(){
 
 //function to change domain
 function viewDomainsDNS(){
-
-  var selected_domain_ids = getSelectedDomains("id", false);
-
   //clear any existing messages
   errorMessage(false);
   successMessage(false);
   $(".changeable-input").off();
 
-  //show editor
-  $("#domain-selector").addClass('is-hidden');
-  $("#domain-editor").removeClass('is-hidden');
+  var selected_domain_ids = getSelectedDomains("id", false);
 
-  //change domain name header
-  $("#editor-title").text("Now Verifying - ");
-  if (selected_domain_ids.length > 1){
-    $(".current-domain-name").text(selected_domain_ids.length + " Domains");
-    $(".verification-plural").text("s");
-    $(".verification-domains-plural").text("these domains");
+  //change tab URL
+  updateQueryStringParam("tab", "verify");
+
+  if (selected_domain_ids.length > 0){
+    //show editor
+    $("#domain-selector").addClass('is-hidden');
+    $("#domain-editor").removeClass('is-hidden');
+
+    //change domain name header
+    $("#editor-title").text("Now Verifying - ");
+    if (selected_domain_ids.length > 1){
+      $(".current-domain-name").text(selected_domain_ids.length + " Domains");
+      $(".verification-plural").text("s");
+      $(".verification-domains-plural").text("these domains");
+    }
+    else {
+      var verifying_domain = getDomainByID(selected_domain_ids[0]);
+      $(".current-domain-name").text(verifying_domain.domain_name);
+      $(".verification-plural").text("");
+      $(".verification-domains-plural").text("this domain");
+    }
+
+    //display the verification menu
+    editRowUnverified(selected_domain_ids);
   }
   else {
-    var verifying_domain = getDomainByID(selected_domain_ids[0]);
-    $(".current-domain-name").text(verifying_domain.domain_name);
-    $(".verification-plural").text("");
-    $(".verification-domains-plural").text("this domain");
+    window.history.replaceState({}, "", "/profile/mylistings");
   }
-
-  //display the verification menu
-  editRowUnverified(selected_domain_ids);
 }
 
 //</editor-fold>
@@ -447,7 +488,7 @@ function deletionHandler(rows, selected_rows){
 
 //</editor-fold>
 
-//<editor-fold>-------------------------------HELPER FUNCTIONS--------------------------------
+//<editor-fold>-------------------------------URL HELPER FUNCTIONS--------------------------------
 
 //function to get a URL query param by name
 function getParameterByName(name, url) {
@@ -490,8 +531,37 @@ function updateQueryStringParam(key, value) {
 
   }
 
+  params = (params == "?") ? "" : params;
+
   window.history.replaceState({}, "", baseUrl + params);
 };
+
+function removeURLParameter(parameter) {
+  var url = [location.protocol, '//', location.host, location.pathname].join('');
+  var urlparts= window.location.href.split('?');
+  if (urlparts.length>=2) {
+
+    var prefix= encodeURIComponent(parameter)+'=';
+    var pars= urlparts[1].split(/[&;]/g);
+
+    //reverse iteration as may be destructive
+    for (var i= pars.length; i-- > 0;) {
+      //idiom for string.startsWith
+      if (pars[i].lastIndexOf(prefix, 0) !== -1) {
+        pars.splice(i, 1);
+      }
+    }
+
+    url= urlparts[0] + (pars.length > 0 ? '?' + pars.join('&') : "");
+    window.history.replaceState({}, "", url);
+  } else {
+    window.history.replaceState({}, "", url);
+  }
+}
+
+//</editor-fold>
+
+//<editor-fold>-------------------------------HELPER FUNCTIONS--------------------------------
 
 //function to sort
 function sortBy(property_name, asc, a, b){

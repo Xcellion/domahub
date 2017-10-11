@@ -4,6 +4,16 @@
 @import 'profile_wrapper';
 @import 'bulma/sass/components/media.sass';
 
+.domain-tooltip {
+  position: absolute;
+  top:40px;
+  z-index:99;
+}
+
+.table-row.is-selected {
+  background-color:#ffc;
+}
+
 .delete-modal-cloned-domain {
   word-break: break-all;
 }
@@ -190,7 +200,7 @@
 
 #example-logo{
   max-width:200px;
-  max-height:150px;
+  max-height:125px;
 }
 
 #example-wrapper{
