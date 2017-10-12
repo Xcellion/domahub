@@ -15,24 +15,30 @@
 	<section class="section is-fullscreen is-clipped">
 			<div id="domain-error" class="is-hidden notification is-danger is-popup">
 				<button class="delete"></button>
-				<span id="domain-error-text"></span>
-        <p class="margin-top-10">
+				<div class="content">
+					<p class="is-white" id="domain-error-text"></p>
+				</div>
+        <div class="control">
           <a id="scroll-error-button" tabindex="0" class="is-stylish is-hidden is-danger is-inverted button is-small">
             <span>Go to Next Error</span>
             <span class='icon is-small'>
               <i class='fa fa-long-arrow-right'></i>
             </span>
           </a>
-        </p>
+        </div>
 			</div>
 			<div id="domain-success-message" class="is-hidden notification is-primary is-popup">
 				<button class="delete"></button>
-				Successfully created <span id="success-total"></span>! Please click the button below to view your newly created listings!
-				<p class="control margin-top-15">
+				<div class="content">
+					<p class="is-white">
+						Successfully created <span id="success-total"></span>! Please click the button below to view your newly created listings!
+					</p>
+				</div>
+				<div class="control">
 					<a tabindex="0" href="/profile/mylistings" class="button is-stylish is-small is-inverted is-primary" title="My Listings">
 						<span>My Listings</span>
 					</a>
-				</p>
+				</div>
 			</div>
 			<div class="wrapper">
 
