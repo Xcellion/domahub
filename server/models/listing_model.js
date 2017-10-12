@@ -54,13 +54,6 @@ listing_model.prototype.checkListingOwner = function(account_id, domain_name, ca
   listing_query(query, "Account does not own the domain" + domain_name + "!", callback, [account_id, domain_name]);
 }
 
-// //check if a listing has a stripe subscription
-// listing_model.prototype.checkListingStripe = function(domain_name, callback){
-//   console.log("DB: Checking to see if " + domain_name + " has a Stripe subscription ID...");
-//   query = 'SELECT stripe_subscription_id FROM listings WHERE stripe_subscription_id IS NOT NULL AND domain_name = ? AND listings.deleted IS NULL'
-//   listing_query(query, "There is no Stripe subscription for " + domain_name + "!", callback, [domain_name]);
-// }
-
 //check if a listing has been purchased already
 listing_model.prototype.checkListingPurchased = function(domain_name, callback){
   console.log("DB: Checking to see if domain " + domain_name + " has been purchased...");
@@ -83,22 +76,24 @@ listing_model.prototype.checkListingPurchaseVerificationCode = function(domain_n
   listing_query(query, "Failed to check if verification code for domain is correct!" + domain_name + "!", callback, [domain_name, verification_code]);
 }
 
-//check if listing is currently rented
-listing_model.prototype.checkCurrentlyRented = function(domain_name, callback){
-  console.log("DB: Checking if domain " + domain_name + " is currently rented...");
+//check if listing(s) are currently rented
+listing_model.prototype.checkCurrentlyRented = function(domain_names, callback){
+  console.log("DB: Checking if domain(s) are currently rented...");
   query = "SELECT 1 AS 'exist' \
         FROM rentals \
       LEFT JOIN listings \
         ON rentals.listing_id = listings.id \
       LEFT OUTER JOIN rental_times \
         ON rentals.rental_id = rental_times.rental_id \
-      WHERE listings.domain_name = ? \
+      WHERE \
+        (listings.domain_name IN (?) \
+        OR listings.id IN (?)) \
         AND (UNIX_TIMESTAMP(NOW()) * 1000) BETWEEN rental_times.date AND rental_times.date + rental_times.duration \
         AND listings.status = 1 \
         AND listings.verified = 1 \
         AND listings.deleted IS NULL \
         AND rentals.status = 1";
-  listing_query(query, "Failed to check if domain " + domain_name + " is currently rented!", callback, domain_name);
+  listing_query(query, "Failed to check if domain(s) are currently rented!", callback, [domain_names, domain_names]);
 }
 
 //check if an account owns a listing
@@ -438,7 +433,7 @@ listing_model.prototype.getRandomListings = function(search_term, total, callbac
 
 //</editor-fold>
 
-//<editor-fold>-------------------------------SETS-------------------------------
+//<editor-fold>-------------------------------INSERTS-------------------------------
 
 //creates a new listing
 listing_model.prototype.newListing = function(listing_info, callback){
@@ -496,51 +491,13 @@ listing_model.prototype.newRentalTimes = function(rental_id, rental_times, callb
 //<editor-fold>-------------------------------UPDATES-------------------------------
 
 //updates listing info
-listing_model.prototype.updateListing = function(domain_name, listing_info, callback){
-  console.log("DB: Attempting to update domain " + domain_name + "...");
+listing_model.prototype.updateListingsInfo = function(domains, listing_info, callback){
+  console.log("DB: Attempting to update domain(s)...");
   query = "UPDATE listings \
       SET ? \
-      WHERE domain_name = ?"
-  listing_query(query, "Failed to update domain " + domain_name + "!", callback, [listing_info, domain_name]);
+      WHERE (listings.domain_name IN (?) OR listings.id IN (?))"
+  listing_query(query, "Failed to update domain(s)!", callback, [listing_info, domains, domains]);
 }
-
-// //updates bulk listings to premium
-// //BULK INSERT NEEDS TRIPLE NESTED ARRAYS
-// listing_model.prototype.updateListingsPremium = function(listing_info_array, callback){
-//   console.log("DB: Attempting to upgrade " + listing_info_array.length + " listings to Premium...");
-//   query = "INSERT INTO listings ( \
-//         id, \
-//         stripe_subscription_id \
-//       )\
-//        VALUES ? \
-//        ON DUPLICATE KEY UPDATE \
-//          id = VALUES(id), \
-//          stripe_subscription_id = VALUES(stripe_subscription_id)"
-//   listing_query(query, "Failed to upgrade " + listing_info_array.length + " listings to Premium!", callback, [listing_info_array]);
-// }
-//
-// //reverts bulk listings to basic
-// //BULK INSERT NEEDS TRIPLE NESTED ARRAYS
-// listing_model.prototype.updateListingsBasic = function(listing_info_array, callback){
-//   console.log("DB: Attempting to revert " + listing_info_array.length + " listings to Basic...");
-//   query = "INSERT INTO listings ( \
-//         id, \
-//         price_type, \
-//         price_rate, \
-//         stripe_subscription_id, \
-//         exp_date, \
-//         expiring \
-//       )\
-//        VALUES ? \
-//        ON DUPLICATE KEY UPDATE \
-//          id = VALUES(id), \
-//          price_type = VALUES(price_type), \
-//          price_rate = VALUES(price_rate), \
-//          stripe_subscription_id = VALUES(stripe_subscription_id), \
-//          exp_date = VALUES(exp_date), \
-//          expiring = VALUES(expiring) "
-//   listing_query(query, "Failed to revert " + listing_info_array.length + " listings to Basic!", callback, [listing_info_array]);
-// }
 
 //updates multiple listings, needs to be all created without error, or else cant figure out insert IDs
 listing_model.prototype.updateListingsVerified = function(listing_ids, callback){
@@ -643,16 +600,6 @@ listing_model.prototype.deleteListings = function(listings_to_delete, callback){
     deleted = 1, \
     status = NULL "
   listing_query(query, "Failed to deactivate " + listings_to_delete.length + " listings!", callback, [listings_to_delete]);
-}
-
-//</editor-fold>
-
-//<editor-fold>-------------------------------HELPER-------------------------------
-
-//helper function to change a date to UTC
-function toUTC(date, offset){
-  date = new Date(date - (offset * 60 * 1000));
-  return new Date(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(),  date.getUTCHours(), date.getUTCMinutes(), date.getUTCSeconds());
 }
 
 //</editor-fold>

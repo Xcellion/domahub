@@ -170,6 +170,18 @@ function createRows(selected_ids){
   $("#table-body").find(".table-row:not(.clone-row)").remove();
   $("#loading-tab").addClass('is-hidden');
 
+  var url_listings = getParameterByName("listings")
+
+  if (selected_ids == false){
+    removeURLParameter("listings");
+  }
+  else if (!selected_ids && url_listings){
+    selected_ids = url_listings.split(",");
+  }
+  else {
+    selected_ids = [];
+  }
+
   //if listings, create rows
   if (listings.length > 0){
     $("#loading-tab").addClass('is-hidden');
@@ -186,9 +198,10 @@ function createRows(selected_ids){
           }
         }
       }
-
       $("#table-body").append(createRow(listings[x], x, selected));
     }
+
+    multiSelectButtons();
   }
   //there are no listings to show!
   else {
