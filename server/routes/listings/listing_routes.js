@@ -1,7 +1,6 @@
 var listing_model = require('../../models/listing_model.js');
 var data_model = require('../../models/data_model.js');
 
-var search_functions = require("../listings/listings_search_functions.js");
 var renter_functions = require("../listings/listings_renter_functions.js");
 var buyer_functions = require("../listings/listings_buyer_functions.js");
 var owner_functions = require("../listings/listings_owner_functions.js");
@@ -19,45 +18,6 @@ module.exports = function(app, db, auth, error, stripe){
   Listing = new listing_model(db);
   Data = new data_model(db);
 
-  //render listing hub
-  // app.get("/listings", [
-  //   search_functions.renderListingHub
-  // ]);
-
-  //get more listings for the listings hub
-  app.post("/listings", [
-    urlencodedParser,
-    search_functions.getMoreListings
-  ]);
-
-  //<editor-fold>-------------------------------SEARCH LISTINGS-------------------------------
-
-  //get a random listing with specific category
-  app.get("/listing/random/:category", [
-    search_functions.getRandomListingByCategory
-  ]);
-
-  //get a random listing with specific category
-  app.post("/listing/related", [
-    urlencodedParser,
-    search_functions.getRelatedListings
-  ]);
-
-  //get random listings belonging to specific owner
-  app.post("/listing/otherowner", [
-    urlencodedParser,
-    search_functions.getOtherListings
-  ]);
-
-  // //search for a listing with specific filters
-  // app.post("/listing/search", [
-  //   urlencodedParser,
-  //   search_functions.checkSearchParams,
-  //   search_functions.getListingBySearchParams
-  // ]);
-
-  //</editor-fold>
-
   //<editor-fold>-------------------------------OWNER RELATED-------------------------------
 
   //render listing create
@@ -66,12 +26,6 @@ module.exports = function(app, db, auth, error, stripe){
     stripe.getAccountInfo,
     owner_functions.renderCreateListing
   ]);
-
-  // //render create listing multiple
-  // app.get('/listings/create/multiple', [
-  //   auth.checkLoggedIn,
-  //   owner_functions.renderCreateListingMultiple
-  // ]);
 
   //multi update of listings details
   app.post("/listings/multiupdate", [
@@ -85,18 +39,9 @@ module.exports = function(app, db, auth, error, stripe){
     profile_functions.updateAccountSettingsGet,
     owner_functions.checkListingImage,
     owner_functions.checkListingStatus,
-    function(req, res, next){
-      console.log(req.session.new_listing_info);
-      res.send({
-        state: "error",
-        message: "fuck yeah"
-      });
-    },
     owner_functions.checkListingPremiumDetails,
     owner_functions.checkListingDetails,
-    owner_functions.checkListingExistingDetails,
-    owner_functions.checkListingModules,
-    owner_functions.updateListing
+    owner_functions.updateListingsInfo
   ]);
 
   //check all posted textarea domains to render table
@@ -170,9 +115,8 @@ module.exports = function(app, db, auth, error, stripe){
     owner_functions.checkListingStatus,
     owner_functions.checkListingPremiumDetails,
     owner_functions.checkListingDetails,
-    owner_functions.checkListingExistingDetails,
     owner_functions.checkListingModules,
-    owner_functions.updateListing
+    owner_functions.updateListingsInfo
   ]);
 
   //</editor-fold>
@@ -283,7 +227,7 @@ module.exports = function(app, db, auth, error, stripe){
     buyer_functions.alertBuyerNextSteps,
     buyer_functions.deleteBINInfo,
     buyer_functions.disableListing,
-    owner_functions.updateListing
+    owner_functions.updateListingsInfo
   ]);
 
   //new buy it now
@@ -445,22 +389,6 @@ module.exports = function(app, db, auth, error, stripe){
     renter_functions.deactivateRental,
     renter_functions.editRental,
     renter_functions.updateRentalObject
-  ]);
-
-  //delete a rental
-  app.post('/listing/:domain_name/:rental_id/refund', [
-    // urlencodedParser,
-    // auth.checkLoggedIn,
-    // checkDomainValid,
-    // checkDomainListed,
-    // renter_functions.getRental,
-    // renter_functions.checkRentalDomain,
-    // renter_functions.checkDomainOwner,
-    // stripe.refundRental,
-    // renter_functions.createRentalObject,
-    // renter_functions.deactivateRental,
-    // renter_functions.editRental,
-    general_functions.sendSuccess
   ]);
 
   //</editor-fold>
