@@ -1,0 +1,51 @@
+.hamburger
+  cursor: pointer
+  display: block
+  height: $nav-height
+  position: relative
+  width: $nav-height
+  &.is-black
+    span
+      background-color: $black
+    &.is-active
+      span
+        background-color: $black
+  &.is-white
+    span
+      background-color: $white
+    &.is-active
+      span
+        background-color: $white
+  span
+    display: block
+    height: 1px
+    left: 50%
+    margin-left: -7px
+    position: absolute
+    top: 50%
+    transition: none $speed $easing
+    transition-property: background, left, opacity, transform
+    width: 15px
+    &:nth-child(1)
+      margin-top: -6px
+    &:nth-child(2)
+      margin-top: -1px
+    &:nth-child(3)
+      margin-top: 4px
+  &:hover
+    background-color: $border
+  // Modifers
+  &.is-active
+    background-color: $border
+    span
+      background-color: $border
+      &:nth-child(1)
+        margin-left: -5px
+        transform: rotate(45deg)
+        transform-origin: left top
+      &:nth-child(2)
+        opacity: 0
+      &:nth-child(3)
+        margin-left: -5px
+        transform: rotate(-45deg)
+        transform-origin: left bottom

@@ -103,7 +103,7 @@
           <tr id="loading-tab">
             <td colspan="6" class="has-text-centered padding-top-25 padding-bottom-25">
               <p>
-                <span class="icon is-small margin-right-5"><i class="v-align-middle fa fa-spin fa-refresh"></i></span>
+                <span class="icon is-small"><i class="v-align-middle fa fa-spin fa-refresh"></i></span>
                 <span class="v-align-middle">Now loading listings...</span>
               </p>
             </td>
@@ -168,17 +168,19 @@
   <div class="modal-background"></div>
   <div class="modal-container">
     <div class="modal-content offer-popup">
-      <div class="margin-bottom-10 has-text-centered">
+      <div class="content has-text-centered">
         <p class="is-bold">Are you sure you want to delete the following <span id="delete-modal-count"></span> listing<span id="delete-modal-plural">s</span>?</p>
       </div>
-      <div id="delete-modal-domains" class="margin-bottom-0">
-        <li id="delete-modal-domain-name-clone" class="is-hidden"></li>
+      <div class="content">
+        <ul id="delete-modal-domains" class="has-disc">
+          <li id="delete-modal-domain-name-clone" class="is-hidden"></li>
+        </ul>
       </div>
-      <div class="control margin-top-20 is-grouped is-grouped-center">
+      <div class="control is-grouped is-grouped-center">
         <p class="control">
-          <a id="delete-confirmed" tabindex="0" class='button margin-right-25 is-danger is-outlined is-stylish is-small'>
+          <a id="delete-confirmed" tabindex="0" class='button is-danger is-outlined is-stylish is-small'>
             <span class="icon is-small"><i class="fa fa-trash"></i></span>
-            <span>Delete them</span>
+            <span>Delete</span>
           </a>
         </p>
         <p class="control">

@@ -3,11 +3,14 @@ var sass = require('gulp-sass');
 var cleanCSS = require('gulp-clean-css');
 var rename = require('gulp-rename');
 var uncss = require('gulp-uncss');
+var changed = require('gulp-changed');
 // var spritesmith = require('gulp.spritesmith');
 
 gulp.task('sass', function() {
-  return gulp.src('server/public/sass/**/*.scss')
+  return gulp.src('server/public/sass/prod**/*.scss')
+    .pipe(changed('server/public/sass/prod**/*.scss'))
     .pipe(sass()) // gulp-sass module - converts sass to css
+    .pipe(rename({dirname: ''}))
     .pipe(gulp.dest('server/public/css'));
 });
 
@@ -27,7 +30,7 @@ gulp.task('un-css', function() {
     }))
     .pipe(gulp.dest('server/public/css/uncssed'));
 });
-//
+
 // gulp.task('sprite', function() {
 //   var spriteData = gulp.src('server/public/images/dh-assets/flat-logo/*.png')
 //     .pipe(spritesmith({

@@ -34,10 +34,10 @@
 								<div class="level is-mobile">
 									<div class="level-item has-text-centered">
 										<div class="content">
-											<small class="heading is-uppercase margin-bottom-20">
+											<small class="heading">
 												Total
 											</small>
-											<h1 class="margin-bottom-10">
+											<h1 class="counter">
 												<%= user.listings.length %>
 											</h1>
 											<a tabindex="0" href="/listings/create" class="is-underlined">Create Listings</a>
@@ -45,20 +45,20 @@
 									</div>
 									<div class="level-item has-text-centered">
 										<div class="content">
-											<small class="heading is-uppercase margin-bottom-20">
+											<small class="heading">
 												Unverified
 											</small>
-											<h1 id="unverified-counter" class="is-danger margin-bottom-10">
+											<h1 id="unverified-counter" class="is-danger counter">
 											</h1>
 											<a tabindex="0" href="" class="is-underlined">Verify Domains</a>
 										</div>
 									</div>
 									<div class="level-item has-text-centered">
 										<div class="content">
-											<small class="heading is-uppercase margin-bottom-20">
+											<small class="heading">
 												Offers
 											</small>
-											<h1 class="margin-bottom-10">
+											<h1 class="counter">
 												3
 											</h1>
 											<a tabindex="0" href="/profile/mylistings" class="is-underlined">View Offers</a>
@@ -108,7 +108,7 @@
                       Email Address
                     </p>
                   </div>
-									<span class="tag is-primary control-right">Verified</span>
+									<span class="tag is-primary control-right has-text-right">Verified</span>
                 </div>
 								<div class="control is-spaced">
                   <div class="content control-left">
@@ -121,9 +121,9 @@
                     </p>
                   </div>
 									<% if (user.stripe_account) { %>
-										<span class="tag is-primary control-right">Completed</span>
+										<span class="tag is-primary control-right has-text-right">Completed</span>
 									<% } else { %>
-										<span class="tag is-danger control-right">Incomplete</span>
+										<span class="tag is-danger control-right has-text-right">Incomplete</span>
 									<% } %>
                 </div>
                 <div class="control is-spaced">
@@ -137,9 +137,9 @@
                     </p>
                   </div>
 									<% if (user.stripe_info && user.stripe_info.transfers_enabled) { %>
-										<span class="tag is-primary control-right">Connected</span>
+										<span class="tag is-primary control-right has-text-right">Connected</span>
 									<% } else { %>
-										<span class="tag is-danger control-right">Not Connected</span>
+										<span class="tag is-danger control-right has-text-right">Not Connected</span>
 									<% } %>
                 </div>
               </div>
