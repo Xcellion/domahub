@@ -18,11 +18,13 @@
 			<%- include("profile_left_menu.ejs"); %>
 
       <div class="right-content">
-				<div class="content">
-					<h2>Dashboard</h2>
-					<p>
-						Welcome <%= user.username %>!
-					</p>
+				<div class="columns">
+          <div class="column">
+            <h2 class="is-bold">Dashboard</h2>
+            <p>
+              Welcome <%= user.username %>!
+            </p>
+          </div>
 				</div>
         <div class="columns">
 					<div class="column is-7">
@@ -37,10 +39,13 @@
 											<small class="heading is-uppercase margin-bottom-20">
 												Total
 											</small>
-											<h1 class="margin-bottom-10">
-												<%= user.listings.length %>
-											</h1>
-											<a tabindex="0" href="/listings/create" class="is-underlined">Create Listings</a>
+											<h1 class="margin-bottom-10"><%= user.listings.length %></h1>
+											<a tabindex="0" href="/listings/create" class="button is-stylish">
+                        <span class="icon is-small">
+                          <i class="fa fa-plus"></i>
+                        </span>
+                        <span>Create Listings</span>
+                      </a>
 										</div>
 									</div>
 									<div class="level-item has-text-centered">
@@ -50,19 +55,27 @@
 											</small>
 											<h1 id="unverified-counter" class="is-danger margin-bottom-10">
 											</h1>
-											<a tabindex="0" href="" class="is-underlined">Verify Domains</a>
-										</div>
-									</div>
+                      <a id="unverified-button" tabindex="0" class="unverified-href button is-stylish">
+                        <span class="icon is-small">
+                          <i class="fa fa-check-circle-o"></i>
+                        </span>
+                        <span>Verify Listings</span>
+                      </a>
+                    </div>
+                  </div>
 									<div class="level-item has-text-centered">
 										<div class="content">
 											<small class="heading is-uppercase margin-bottom-20">
 												Offers
 											</small>
-											<h1 class="margin-bottom-10">
-												3
-											</h1>
-											<a tabindex="0" href="/profile/mylistings" class="is-underlined">View Offers</a>
-										</div>
+											<h1 id="offers-counter" class="is-success margin-bottom-10">0</h1>
+                      <a tabindex="0" href="/profile/mylistings?tab=offers" class="button is-stylish">
+                        <span class="icon is-small">
+                          <i class="fa fa-check-circle-o"></i>
+                        </span>
+                        <span>View Offers</span>
+                      </a>
+                    </div>
 									</div>
 								</div>
 							</div>
@@ -114,10 +127,12 @@
                   <div class="content control-left">
                     <p>
                       Payout Settings
-											<span class="icon is-tooltip is-small"
-											 data-balloon-length="large" data-balloon="You must complete your payout settings first in order to add a bank account." data-balloon-pos="up">
-											 <i class="fa fa-question-circle"></i>
-										 	</span>
+                      <% if (!user.stripe_account) { %>
+                        <span class="icon is-tooltip is-small"
+                        data-balloon-length="large" data-balloon="You must complete your payout settings first in order to add a bank account." data-balloon-pos="up">
+                        <i class="fa fa-question-circle"></i>
+                        </span>
+                      <% } %>
                     </p>
                   </div>
 									<% if (user.stripe_account) { %>
@@ -130,10 +145,12 @@
                   <div class="content control-left">
                     <p>
                       Bank Account
-											<span class="icon is-tooltip is-small"
-											 data-balloon-length="large" data-balloon="You will not be able to withdraw funds until you connect your bank account." data-balloon-pos="up">
-											 <i class="fa fa-question-circle"></i>
-										 	</span>
+                      <% if (!user.stripe_info || !user.stripe_info.transfers_enabled) { %>
+                        <span class="icon is-tooltip is-small"
+                        data-balloon-length="large" data-balloon="You will not be able to withdraw funds until you connect your bank account." data-balloon-pos="up">
+                        <i class="fa fa-question-circle"></i>
+                        </span>
+                      <% } %>
                     </p>
                   </div>
 									<% if (user.stripe_info && user.stripe_info.transfers_enabled) { %>

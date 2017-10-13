@@ -1,34 +1,7 @@
 $(document).ready(function() {
-
-  //mobile view nav menu
-  $(".nav-toggle").on("click", function() {
-    $(this).toggleClass("is-active");
-    $(".nav-menu").toggleClass("is-active");
-  });
-
-  //close user dropdown menu on click outside the element
-  $(document).on("click", function(event) {
-    if (!$(event.target).closest("#user-dropdown-button").length) {
-      if ($(".user-dropdown-menu").is(":visible")) {
-        $(".user-dropdown-menu").addClass("is-hidden");
-        $("#user-dropdown-button").toggleClass("is-active").blur();
-      }
-    }
-  });
-
-  //toggle user drop down menu on icon button click
-  $("#user-dropdown-button").on("click", function() {
-    $(this).toggleClass("is-active");
-    $(".user-dropdown-menu").toggleClass("is-hidden");
-  });
-
-  //calculate and show # of unverified domains
   calcUnverified();
-
-  //populate the notifications tray
+  calcOffers();
   showNotifications();
-
-  //show empty notification if tray is empty
   ifTrayEmpty();
 
   //delete notification when you click its respective X
@@ -41,11 +14,28 @@ $(document).ready(function() {
 
 //find out how many domains are unverified
 function calcUnverified() {
-  var counter = user.listings.filter(function(listing) {
-    return listing.verified == null;
-  });
+  var unverified_listings_id = user.listings.reduce(function(arr, listing) {
+    if (!listing.verified) { arr.push(listing.id); }
+    return arr;
+  }, []);
+  var unverified_href = "/profile/mylistings?listings=" + unverified_listings_id.join(",") + "&tab=verify";
 
-  $("#unverified-counter").text(counter.length);
+  $("#unverified-counter").text(unverified_listings_id.length);
+  if (unverified_listings_id.length > 0){
+    appendNotification("Verify " + unverified_listings_id.length + " <a tabindex='0' class='is-underlined' href='" + unverified_href + "'>unverified domains</a>.", true);
+    $("#unverified-button").attr("href", unverified_href);
+  }
+  else {
+    $("#unverified-button").addClass("is-hidden");
+  }
+}
+
+//find out how many offers per domain
+function calcOffers(){
+  var num_total_offers = user.listings.reduce(function(arr, listing) {
+    return arr + ((listing.offers_count) ? listing.offers_count : 0);
+  }, 0) || 0;
+  $("#offers-counter").text(num_total_offers);
 }
 
 //populate the notifications tray
@@ -59,13 +49,6 @@ function showNotifications() {
   //if bank account is not connected
   if (!(user.stripe_info && user.stripe_info.transfers_enabled)) {
     appendNotification("Connect your <a tabindex='0' class='is-underlined' href='/profile/settings#payout-bank'>bank account</a>.", true);
-  }
-
-  //if domains are not verified
-  const counter = parseInt($("#unverified-counter").text());
-
-  if (counter > 0) {
-    appendNotification("Verify " + counter + " <a tabindex='0' class='is-underlined' href='/profile/mylistings'>unverified domains</a>.", true);
   }
 }
 

@@ -40,48 +40,7 @@ module.exports = {
       next();
     }
   },
-
-  //gets all rentals for a user
-  getAccountRentals : function(req, res, next){
-
-    //if we dont already have the list of rentals or if we need to refresh them
-    if (!req.user.rentals){
-      account_id = req.user.id;
-
-      Account.getAccountRentals(account_id, function(result){
-        if (result.state=="error"){error.handler(req, res, result.info);}
-        else {
-          //combine any adjacent rental times
-          var all_rentals = joinRentalTimes(result.info);
-          req.user.rentals = createRentalProp(all_rentals);
-          next();
-        }
-      });
-    }
-    else {
-      next();
-    }
-  },
-
-  //gets all chats for a user
-  getAccountChats: function(req, res, next){
-    //if we dont already have the list of chats or if we need to refresh them
-    if (!req.user.convo_list){
-      account_id = req.user.id;
-
-      Account.getAccountChats(account_id, function(result){
-        if (result.state=="error"){error.handler(req, res, result.info);}
-        else {
-          req.user.convo_list = result.info;
-          next();
-        }
-      });
-    }
-    else {
-      next();
-    }
-  },
-
+  
   //</editor-fold>
 
   //<editor-fold>----------------------------------------------------------------------MULTI
@@ -389,8 +348,7 @@ module.exports = {
     res.render("profile/profile_dashboard.ejs", {
       message: Auth.messageReset(req),
       user: req.user,
-      listings: req.user.listings,
-      listings_search: req.user.listings_search
+      listings: req.user.listings
     });
   },
 
