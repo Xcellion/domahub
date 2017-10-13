@@ -175,7 +175,7 @@ $(document).ready(function(){
 });
 
 //function to return to domain selector
-function showEditor(url_tab){
+function showEditor(url_tab, selected_domain_ids){
   $(".changeable-input").off();
 
   //hide other tabs and drop-tabs
@@ -187,6 +187,9 @@ function showEditor(url_tab){
     updateQueryStringParam("tab", url_tab);
     $("#" + url_tab + "-tab").addClass('is-active');
     $("#" + url_tab + "-tab-drop").show().removeClass('is-hidden');
+  }
+  if (selected_domain_ids.length > 0){
+    updateQueryStringParam("listings", selected_domain_ids);
   }
   errorMessage(false);
   successMessage(false);
@@ -406,7 +409,7 @@ function viewDomainDetails(url_tab){
     if (!url_tab){
       url_tab = "info";
     }
-    showEditor(url_tab);
+    showEditor(url_tab, selected_domain_ids);
     $("#edit-toolbar").removeClass('is-hidden');
     $("#offers-toolbar").addClass('is-hidden');
     updateEditorEditing(selected_domain_ids);
@@ -419,7 +422,7 @@ function viewDomainDetails(url_tab){
 //function to view domain offers
 function viewDomainOffers(url_tab){
   var selected_domain_ids = getSelectedDomains("id", true);
-  showEditor("offers");
+  showEditor("offers", selected_domain_ids);
   $("#edit-toolbar").addClass('is-hidden');
   $("#offers-toolbar").removeClass('is-hidden');
   updateEditorOffers(selected_domain_ids);
@@ -428,7 +431,7 @@ function viewDomainOffers(url_tab){
 //function to view domain stats
 function viewDomainStats(url_tab){
   var selected_domain_ids = getSelectedDomains("id", true);
-  showEditor("stats");
+  showEditor("stats", selected_domain_ids);
   $("#edit-toolbar").addClass('is-hidden');
   $("#offers-toolbar").addClass('is-hidden');
   updateEditorStats(selected_domain_ids);
@@ -438,7 +441,7 @@ function viewDomainStats(url_tab){
 function viewDomainDNS(){
   var selected_domain_ids = getSelectedDomains("id", false);
   if (selected_domain_ids.length > 0){
-    showEditor("verify");
+    showEditor("verify", selected_domain_ids);
     $("#edit-toolbar").addClass('is-hidden');
     updateEditorUnverified(selected_domain_ids);
   }
@@ -538,6 +541,15 @@ function getSelectedDomains(data_name, verified){
 
   //return verified or unverified selected
   else {
+
+    //deselect other ones
+    $(".table-row:not(.clone-row).is-selected").filter(function(){
+      return $(this).data("unverified") == verified
+    }).each(function(){
+      selectRow($(this), false);
+    });
+
+    //return selected ones
     return $(".table-row:not(.clone-row).is-selected").filter(function(){
       return $(this).data("unverified") != verified
     }).map(function(){
