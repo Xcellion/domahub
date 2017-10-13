@@ -12,44 +12,15 @@ var qs = require('qs');
 module.exports = function(app, db, auth, error, stripe){
   Account = new account_model(db);
 
-  //<editor-fold>------------------------------------------------------------------------------------------DEFUNCT
-
-  //myrentals pages
-  // app.get([
-  //   "/profile/myrentals",
-  //   "/profile/myrentals/:page"
-  // ], [
-  //   auth.checkLoggedIn,
-  //   profile_functions.getAccountRentals,
-  //   profile_functions.renderMyRentals
-  // ]);
-
-  //myrentals multi delete
-  // app.post("/profile/myrentals/delete", [
-  //   urlencodedParser,
-  //   auth.checkLoggedIn,
-  //   profile_functions.getAccountRentals,
-  //   profile_functions.checkPostedDeletionRows,
-  //   profile_functions.deleteRentals
-  // ]);
-
-  // //inbox
-  // app.get([
-  //   "/profile/messages",
-  //   "/profile/messages/:target_username"
-  // ], [
-  //   auth.checkLoggedIn,
-  //   profile_functions.getAccountChats,
-  //   profile_functions.renderInbox
-  // ])
-
-  //</editor-fold>
-
   //<editor-fold>------------------------------------------------------------------------------------------PROFILE
 
   //dashboard
   app.get("/profile/dashboard", [
     auth.checkLoggedIn,
+    stripe.getAccountInfo,
+    stripe.getStripeCustomer,
+    stripe.getStripeSubscription,
+    profile_functions.updateAccountSettingsGet,
     profile_functions.getAccountListings,
     profile_functions.renderDashboard
   ]);

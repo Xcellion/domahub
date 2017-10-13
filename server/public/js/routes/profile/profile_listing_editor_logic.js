@@ -88,6 +88,7 @@ function showSelector(){
   $("#domain-selector").removeClass('is-hidden');
   $("#domain-editor").addClass('is-hidden');
   removeURLParameter("tab");
+  leftMenuActive();
 }
 
 //function to show editor domain names (for editing, offers, stats)
@@ -139,15 +140,15 @@ function updateEditorDomains(selected_domain_ids){
     ');
 
     //tooltip to view individual listings
-    $("#view-listings-button").removeAttr("href").on('mouseenter', function(){
-      $("#view-listings-button-drop").removeClass('is-hidden').on('mouseleave', function(){
-        $(this).addClass('is-hidden');
-      });
-    }).on('click', function(){
+    $("#view-listings-button").removeAttr("href").on('click', function(){
       $("#view-listings-button-drop").toggleClass('is-hidden');
     });
-    $("#view-listings-button-wrapper").on('mouseleave', function(){
-      $("#view-listings-button-drop").addClass('is-hidden');
+
+    //close listings view dropper on click anywhere else
+    $(document).on("click", function(event) {
+      if (!$(event.target).closest("#view-listings-button").length) {
+        $("#view-listings-button-drop").addClass('is-hidden');
+      }
     });
 
     //hide domain capitalization
