@@ -840,6 +840,11 @@ function updateEditorOffers(selected_domain_ids){
   $("#status-toggle-button").addClass('is-hidden');
   $("#refresh-stats-button").addClass('is-hidden');
 
+  if (selected_domain_ids.length == 0){
+    selectSpecificRows("verified", 1);
+    selected_domain_ids = getSelectedDomains("id");
+  }
+
   //refresh offers button
   $("#refresh-offers-button").off().on('click', function(){
     $(this).addClass('is-loading');
