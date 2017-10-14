@@ -29,9 +29,6 @@ module.exports = function(app, db, auth, error, stripe){
   app.get("/profile/mylistings", [
     auth.checkLoggedIn,
     profile_functions.getAccountListings,
-    stripe.getAccountInfo,
-    stripe.getStripeSubscription,
-    profile_functions.updateAccountSettingsGet,
     profile_functions.renderMyListings
   ]);
 

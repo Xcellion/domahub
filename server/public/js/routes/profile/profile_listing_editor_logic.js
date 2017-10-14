@@ -845,6 +845,30 @@ function updateEditorOffers(selected_domain_ids){
     selected_domain_ids = getSelectedDomains("id");
   }
 
+  //search offers
+  $("#offer-search").off().on('input', function(){
+    var search_term = $(this).val();
+    if (search_term){
+      $(".offer-row:not(#offer-clone)").addClass('is-hidden').each(function(){
+        //if offerer name or domain name is being searched for
+        if ($(this).data("offer").name.toLowerCase().indexOf(search_term) != -1 || $(this).data("domain_name").toLowerCase().indexOf(search_term) != -1){
+          if (!$(this).hasClass("rejected-offer") || ($(this).hasClass("rejected-offer") && !$("#show-rejected-offers").hasClass('is-primary'))){
+            $(this).removeClass('is-hidden');
+          }
+        }
+      });
+    }
+    else {
+      //show rows (show rejected if button toggled)
+      if (!$("#show-rejected-offers").hasClass('is-primary')){
+        $(".offer-row:not(#offer-clone)").removeClass('is-hidden');
+      }
+      else {
+        $(".offer-row.unaccepted-offer:not(#offer-clone)").removeClass('is-hidden');
+      }
+    }
+  });
+
   //refresh offers button
   $("#refresh-offers-button").off().on('click', function(){
     $(this).addClass('is-loading');
@@ -953,9 +977,10 @@ function updateOffersTable(listing_info, total_domains){
       cloned_offer_row.find(".td-offer-timestamp").text(moment(listing_info.offers[x].timestamp).format("MMMM DD, YYYY - h:mmA"));
       cloned_offer_row.find(".td-offer-offer").text(moneyFormat.to(parseFloat(listing_info.offers[x].offer)));
       cloned_offer_row.attr("id", "offer-row-" + listing_info.offers[x].id);
+      cloned_offer_row.data("domain_name", listing_info.domain_name).data("offer", listing_info.offers[x]);
 
       //click to open modal
-      cloned_offer_row.data("offer", listing_info.offers[x]).off().on("click", function(){
+      cloned_offer_row.off().on("click", function(){
         editOfferModal($(this).data("offer"), listing_info);
       });
 
