@@ -6,6 +6,10 @@
 @import '../bulma/components/nav.sass';
 @import '../bulma/components/menu.sass';
 @import '../bulma/components/media.sass';
+@import '../bulma/components/tabs.sass';
+@import '../bulma/elements/tag.sass';
+@import '../bulma/elements/box.sass';
+@import '../bulma/elements/delete.sass';
 @import '../bulma/elements/notification.sass';
 @import '../bulma/elements/table.sass';
 @import '../bulma/elements/form.sass';
@@ -71,11 +75,6 @@
   }
 }
 
-.chart-min-height {
-  max-height: 500px;
-  max-width: 1000px;
-}
-
 .offer-popup {
   background-color: $white;
   border-radius: $radius-large;
@@ -110,7 +109,6 @@
 }
 
 .current-domain-name {
-  font-weight: 500;
   word-break: break-all;
 }
 
@@ -132,17 +130,25 @@
 }
 
 // table stuff
+// #filters {
+//   @include mobile {
+//     margin-top: 35px;
+//   }
+// }
+//
+// .filter-menu-toggle {
+//   cursor: pointer;
+//   &.hamburger {
+//     height: 30px;
+//     width: 30px;
+//   }
+// }
+
 #filters {
   @include mobile {
-    margin-top: 35px;
-  }
-}
-
-.filter-menu-toggle {
-  cursor: pointer;
-  &.hamburger {
-    height: 30px;
-    width: 30px;
+    select {
+      width: 68px;
+    }
   }
 }
 
@@ -214,14 +220,29 @@
   position: absolute !important;
 }
 
-#example-logo{
+#example-logo {
   max-width:200px;
   max-height:125px;
 }
 
-#example-wrapper{
+#example-wrapper {
   background-repeat: no-repeat;
   background-size: cover;
+}
+
+#select-all-drop {
+  @include box-shadow(0,3px,15px,$border,0);
+  background-color: $white;
+  border-radius: 0 $radius-small $radius-small $radius-small;
+  display: flex;
+  flex-direction: column;
+  top: 32px;
+  a {
+    padding: 6px 10px;
+    &:hover {
+      background-color: $lighter;
+    }
+  }
 }
 
 .upload-label {
@@ -231,6 +252,10 @@
 .listing-img {
   width: 96px;
   height: auto;
+}
+
+.checkbox-col {
+  width: 40px;
 }
 
 // category buttons

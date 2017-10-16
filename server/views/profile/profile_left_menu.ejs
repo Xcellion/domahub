@@ -1,3 +1,4 @@
+<script src="/js/left_navbar_logic.js" type="text/javascript"></script>
 <div class="left-menu">
   <div class="company-logo">
     <a class="dh-logo" tabindex="0" title="Home" href="/">
@@ -20,17 +21,17 @@
         </a>
         <ul>
           <li>
-            <a tabindex="0" title="View Listing Offers" class="primary-theme">
+            <a id="offers-left-tab" href="/profile/mylistings?tab=offers" tabindex="0" title="View Listing Offers" class="left-tab primary-theme">
               <small class="is-white">View Offers</small>
             </a>
           </li>
-          <li>
-            <a tabindex="0" title="View Listing Statistics" class="primary-theme">
+          <%# <li>
+            <a id="stats-left-tab" href="/profile/mylistings?tab=stats" tabindex="0" title="View Listing Statistics" class="left-tab primary-theme">
               <small class="is-white">View Statistics</small>
             </a>
-          </li>
+          </li>%>
           <li>
-            <a tabindex="0" title="Create Listing" href="/listings/create" class="primary-theme">
+            <a id="create-left-tab"  tabindex="0" title="Create Listings" href="/listings/create" class="left-tab primary-theme">
               <small class="is-white">Create Listings</small>
             </a>
           </li>
@@ -42,13 +43,13 @@
           <p class="is-white is-hidden-tablet-only">Account Settings</p>
         </a>
         <% if (!user.stripe_subscription_id) { %>
-        <ul class="is-hidden-tablet-only">
-          <li>
-            <a tabindex="0" title="Upgrade Account" href="/profile/settings#premium" class="primary-theme">
-              <small class="is-white">Upgrade to Premium</small>
-            </a>
-          </li>
-        </ul>
+          <ul class="is-hidden-tablet-only">
+            <li>
+              <a tabindex="0" title="Upgrade Account" href="/profile/settings#premium" class="left-tab primary-theme">
+                <small class="is-white">Upgrade to Premium</small>
+              </a>
+            </li>
+          </ul>
         <% } %>
       </li>
     </ul>
@@ -85,10 +86,3 @@
     </aside>
   </div>
 </div>
-
-<script>
-  $(document).ready(function(){
-    //add active to left menu
-    $("#" + window.location.pathname.split("/")[2] + "-left-tab").addClass('is-active');
-  });
-</script>

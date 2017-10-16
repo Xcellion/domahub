@@ -18,6 +18,10 @@
 @import '../bulma/layout/section.sass';
 @import '../profile_wrapper';
 
+.company-logo {
+  margin-bottom: 30px;
+}
+
 .has-border-right {
   border-right: 1px solid $border;
 }

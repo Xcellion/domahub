@@ -369,10 +369,10 @@ module.exports = {
         error.handler(req, res, "verification-error", "json");
       }
       else if (accepted_domains != 0){
-        error.handler(req, res, "You have already accepted an offer for " + error_message_plural, "json");
+        error.handler(req, res, "accepted-error", "json");
       }
       else if (deposited_domains != 0){
-        error.handler(req, res, "You have already sold " + error_message_plural, "json");
+        error.handler(req, res, "deposited-error", "json");
       }
       else {
         next();
@@ -907,7 +907,7 @@ module.exports = {
 
       res.send({
         state: "success",
-        listings: req.user.listings
+        listing: listing_obj
       });
     });
   },

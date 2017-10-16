@@ -8,7 +8,6 @@ var changed = require('gulp-changed');
 
 gulp.task('sass', function() {
   return gulp.src('server/public/sass/prod**/*.scss')
-    .pipe(changed('server/public/sass/prod**/*.scss'))
     .pipe(sass()) // gulp-sass module - converts sass to css
     .pipe(rename({dirname: ''}))
     .pipe(gulp.dest('server/public/css'));
