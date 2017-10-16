@@ -130,6 +130,7 @@ account_model.prototype.getAccountListings = function(account_id, callback){
         rented_table.rented, \
         offers_table.deposited, \
         offers_table_accepted.accepted, \
+        offers_table_count.offers_count, \
         accounts.stripe_subscription_id \
       FROM listings \
       JOIN accounts ON listings.owner_id = accounts.id \
@@ -161,6 +162,14 @@ account_model.prototype.getAccountListings = function(account_id, callback){
         WHERE stats_contact_history.accepted = 1 \
       ) as offers_table_accepted \
       ON offers_table_accepted.listing_id = listings.id \
+      LEFT JOIN \
+        (SELECT DISTINCT\
+          stats_contact_history.listing_id as listing_id, \
+          COUNT(stats_contact_history.listing_id) as offers_count \
+        FROM stats_contact_history \
+        WHERE stats_contact_history.accepted IS NULL \
+      ) as offers_table_count \
+      ON offers_table_count.listing_id = listings.id \
       WHERE owner_id = ? \
       AND listings.deleted IS NULL \
       ORDER BY listings.id ASC";

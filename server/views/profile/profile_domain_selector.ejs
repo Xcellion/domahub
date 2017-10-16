@@ -3,47 +3,62 @@
     <div id="filter-menu">
       <!-- FITER MENU -->
       <div class="content">
-        <h2>My Listings</h2>
+        <h2 class="is-bold">My Listings</h2>
       </div>
       <div class="button-wrapper control">
-        <button id="selector-select-button" class="button is-stylish is-transparent is-small" tabindex="0" title="Select">
-          <form id="select-all" class="checkbox-form v-align-middle">
-            <input class="select-button" data-selected="false" type="checkbox" tabindex="0" title="Select All" />
-            <label for="select-button"></label>
-          </form>
-          <span class="icon v-align-middle"><i class="fa fa-angle-down"></i></span>
-        </button>
-        <button id="selector-edit-button" class="selector-verified-button button is-stylish is-hidden is-transparent is-small" tabindex="0" title="Edit Details">
-          <span class="icon is-small is-primary">
+        <div id="select-all-wrapper">
+          <a id="selector-select-button" class="button is-black is-stylish is-transparent is-small" tabindex="0" title="Select">
+            <form class="checkbox-form">
+              <input id="select-all" class="select-button" data-selected="false" type="checkbox" tabindex="0" title="Select All" />
+              <label for="select-button"></label>
+            </form>
+            <span class="icon "><i class="fa fa-angle-down"></i></span>
+          </a>
+          <div id="select-all-drop" class="is-hidden domain-tooltip">
+            <a class="select-drop-button" data-type="all" data-value=true>All</a>
+            <a class="select-drop-button" data-type="none" data-value=true>None</a>
+            <a class="select-drop-button" data-type="verified" data-value=true>Verified</a>
+            <a class="select-drop-button" data-type="unverified" data-value=true>Unverified</a>
+            <a class="select-drop-button" data-type="status" data-value=true>Active</a>
+            <a class="select-drop-button" data-type="status" data-value=false>Inactive</a>
+            <a class="select-drop-button" data-type="rented" data-value=1>Rented Now</a>
+            <a class="select-drop-button" data-type="accepted" data-value=1>Accepted An Offer</a>
+            <a class="select-drop-button" data-type="deposited" data-value=1>Sold (Not Transferred)</a>
+            <a class="select-drop-button" data-type="transferred" data-value=1>Sold (Transferred)</a>
+          </div>
+        </div>
+
+        <a id="selector-edit-button" class="selector-verified-button button is-primary is-transparent is-stylish is-hidden is-small" tabindex="0" title="Edit Details">
+          <span class="icon is-small">
             <i class="fa fa-pencil-square-o"></i>
           </span>
           <span>Edit Details</span>
-        </button>
-        <button id="selector-offers-button" class="selector-verified-button button is-stylish is-hidden is-transparent is-small" tabindex="0" title="View Offers">
-          <span class="icon is-small">
-            <i class="fa fa-money"></i>
-          </span>
-          <span>View Offers</span>
-        </button>
-        <button id="selector-stat-button" class="selector-verified-button button is-stylish is-hidden is-transparent is-small" tabindex="0" title="View Statistics">
-          <span class="icon is-small">
-            <i class="fa fa-bar-chart"></i>
-          </span>
-          <span>View Statistics</span>
-        </button>
-        <button id="selector-verify-button" class="selector-unverified-button button is-stylish is-hidden is-transparent is-small" tabindex="0" title="Verify Ownership">
+        </a>
+        <a id="selector-verify-button" class="selector-unverified-button button is-primary is-inverted is-stylish is-hidden is-small" tabindex="0" title="Verify Ownership">
           <span class="icon is-small">
             <i class="fa fa-check-circle-o"></i>
           </span>
           <span>Verify Ownership</span>
-        </button>
-        <button id="selector-delete-button" class="selector-button button is-stylish is-hidden is-transparent is-small" tabindex="0" title="Delete Listing(s)">
-          <span class="icon is-small is-danger">
+        </a>
+        <a id="selector-delete-button" class="selector-button button is-danger is-transparent is-stylish is-hidden is-small" tabindex="0" title="Delete Listing(s)">
+          <span class="icon is-small">
             <i class="fa fa-trash"></i>
           </span>
           <span id="multi-delete-text">Delete</span>
-        </button>
-        <a class="button is-stylish is-transparent is-small" title="Create New Listings" tabindex="0" href="/listings/create">
+        </a>
+        <a id="selector-offers-button" class="selector-verified-button button is-stylish is-black is-transparent is-hidden is-small" tabindex="0" title="View Offers">
+          <span class="icon is-small">
+            <i class="fa fa-money"></i>
+          </span>
+          <span>View Offers</span>
+        </a>
+        <%# <a id="selector-stats-button" class="selector-verified-button button is-stylish is-hidden is-small" tabindex="0" title="View Statistics">
+          <span class="icon is-small">
+            <i class="fa fa-bar-chart"></i>
+          </span>
+          <span>View Statistics</span>
+        </a>%>
+        <a class="button is-black is-transparent is-stylish is-small" title="Create New Listings" tabindex="0" href="/listings/create">
           <span class="icon is-small">
             <i class="fa fa-plus"></i>
           </span>
@@ -53,7 +68,7 @@
       <div id="filters" class="control">
         <div class="control is-grouped">
           <div class="control has-icon">
-            <span class="select">
+            <span class="select no-borders">
               <select id="filter-select" tabindex="0">
                 <option selected value="id">View All</option>
                 <option value="unverified">Unverified</option>
@@ -68,9 +83,9 @@
             <i class="fa fa-filter"></i>
           </div>
           <div class="control has-icon">
-            <span class="select">
+            <span class="select no-borders">
               <select id="sort-select" tabindex="0">
-                <option selected value="id-asc">Date Created (Oldest)</option>
+                <option value="id-asc">Date Created (Oldest)</option>
                 <option value="id-desc">Date Created (Newest)</option>
                 <option value="domain_name-asc">Domain Name (A - Z)</option>
                 <option value="domain_name-desc">Domain Name (Z - A)</option>
@@ -89,7 +104,7 @@
 
       <!-- DOMAINS TABLE -->
       <table class="table is-bordered">
-        <thead class="has-hover-effect">
+        <thead>
           <tr>
             <th></th>
             <th>Domain Name</th>
@@ -103,8 +118,8 @@
           <tr id="loading-tab">
             <td colspan="6" class="has-text-centered padding-top-25 padding-bottom-25">
               <p>
-                <span class="icon is-small"><i class="v-align-middle fa fa-spin fa-refresh"></i></span>
-                <span class="v-align-middle">Now loading listings...</span>
+                <span class="icon is-small"><i class=" fa fa-spin fa-refresh"></i></span>
+                <span class="">Now loading listings...</span>
               </p>
             </td>
           </tr>
@@ -128,7 +143,7 @@
             </td>
           </tr>
           <tr id="verified-clone-row" class="clone-row table-row is-hidden">
-            <td>
+            <td class="checkbox-col">
               <form class="checkbox-form">
                 <input class="select-button" data-selected="false" type="checkbox" tabindex="0" title="Select" />
                 <label for="select-button"></label>
@@ -141,7 +156,7 @@
             <td class="td-bin"></td>
           </tr>
           <tr id="unverified-clone-row" class="clone-row table-row is-unverified is-hidden">
-            <td>
+            <td class="checkbox-col">
               <form class="checkbox-form">
                 <input class="select-button" data-selected="false" type="checkbox" tabindex="0" title="Select" />
                 <label for="select-button"></label>

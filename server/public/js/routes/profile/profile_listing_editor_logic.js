@@ -1,8 +1,11 @@
 var current_listing = {};
 var referer_chart = false;
 var traffic_chart = false;
+var completed_domains = 0;
 
 $(document).ready(function(){
+
+  //<editor-fold>-------------------------------OTHER-------------------------------
 
   //close offer modal
   $(".modal-close, .modal-background, #delete-nevermind").on("click", function(){
@@ -20,10 +23,12 @@ $(document).ready(function(){
     };
   }
 
+  //</editor-fold>
+
   //<editor-fold>-------------------------------BUTTONS-------------------------------
 
   //go into select mode
-  $("#go-to-selector").on('click', function(){
+  $("#show-selector-button").on('click', function(){
     showSelector();
   });
 
@@ -83,28 +88,23 @@ function showSelector(){
   $("#domain-selector").removeClass('is-hidden');
   $("#domain-editor").addClass('is-hidden');
   removeURLParameter("tab");
+  multiSelectButtons();
+  leftMenuActive();
 }
 
-//<editor-fold>-------------------------------UPDATE ROW VERIFIED-------------------------------
-
-//function to update a row if it's verified but not yet purchased
-function editRowVerified(editing_listings){
+//function to show editor domain names (for editing, offers, stats)
+function updateEditorDomains(selected_domain_ids){
   //show verified stuff, hide unverified stuff
   $(".verified-elem").removeClass('is-hidden');
   $(".unverified-elem").addClass('is-hidden');
-
-  //change domain name header
-  $("#editor-title").text("Now Editing - ");
 
   //title domain list tooltip
   $("#current-domain-list").remove();
   $("#view-listings-button-drop").empty();
 
-  populateThemeDropdown();
-
-  //update tabs
-  if (editing_listings.length == 1){
-    var listing_info = getDomainByID(editing_listings[0]);
+  //update buttons
+  if (selected_domain_ids.length == 1){
+    var listing_info = getDomainByID(selected_domain_ids[0]);
     current_listing = listing_info;
 
     //update domain name and plural
@@ -118,19 +118,16 @@ function editRowVerified(editing_listings){
     $("#domain-name-cap-missing").addClass('is-hidden');
     $("#domain-name-input").removeClass('is-hidden');
   }
-  else {
-    var listing_info = getCommonListingInfo(editing_listings);
-    current_listing = listing_info;
-
+  else if (selected_domain_ids.length > 1){
     //update domain name and plural
-    $(".current-domain-name").text(editing_listings.length + " Domains");
+    $(".current-domain-name").text(selected_domain_ids.length + " Domains");
     $(".edit-domain-plural").removeClass('is-hidden');
-    $("#example-domain-name").text("Editing" + editing_listings.length + "DomainNames.com");
+    $("#example-domain-name").text("Editing" + selected_domain_ids.length + "DomainNames.com");
 
     //domain list drop
     var domain_title_list = []
-    for (var x = 0 ; x < editing_listings.length ; x++){
-      var temp_listing_info = getDomainByID(editing_listings[x]);
+    for (var x = 0 ; x < selected_domain_ids.length ; x++){
+      var temp_listing_info = getDomainByID(selected_domain_ids[x]);
       var listing_href = (user.stripe_subscription_id) ? "https://" + temp_listing_info.domain_name.toLowerCase() : "/listing/" + temp_listing_info.domain_name;
       $("#view-listings-button-drop").append("<li><a target='_blank' href='" + listing_href + "' class='is-primary is-underlined'>" + temp_listing_info.domain_name + "</a></li>");
       domain_title_list.push(temp_listing_info.domain_name);
@@ -144,31 +141,55 @@ function editRowVerified(editing_listings){
     ');
 
     //tooltip to view individual listings
-    $("#view-listings-button").removeAttr("href").on('mouseenter', function(){
-      $("#view-listings-button-drop").removeClass('is-hidden').on('mouseleave', function(){
-        $(this).addClass('is-hidden');
-      });
-    }).on('click', function(){
+    $("#view-listings-button").removeAttr("href").on('click', function(){
       $("#view-listings-button-drop").toggleClass('is-hidden');
     });
-    $("#view-listings-button-wrapper").on('mouseleave', function(){
-      $("#view-listings-button-drop").addClass('is-hidden');
+
+    //close listings view dropper on click anywhere else
+    $(document).on("click", function(event) {
+      if (!$(event.target).closest("#view-listings-button").length) {
+        $("#view-listings-button-drop").addClass('is-hidden');
+      }
     });
 
     //hide domain capitalization
     $("#domain-name-cap-missing").removeClass('is-hidden');
     $("#domain-name-input").addClass('is-hidden');
   }
-  updateStatus(listing_info);
-  updateInfoTab(listing_info);
-  updateDesignTab(listing_info);
-  updateRentalTab(listing_info);
-  updateBindings(listing_info);
+  else {
+    $("#view-listings-button-wrapper").addClass('is-hidden');
+  }
+}
+
+//<editor-fold>-------------------------------UPDATE EDITOR EDITING-------------------------------
+
+//function to update a row if it's verified but not yet purchased
+function updateEditorEditing(selected_domain_ids){
+
+  //update the domain names
+  updateEditorDomains(selected_domain_ids);
+
+  //editing view specific things
+  $("#editor-title").text("Now Editing - ");
+  $("#refresh-offers-button").addClass('is-hidden');
+  $("#refresh-stats-button").addClass('is-hidden');
+
+  //set current listing to common denom listing_info obj
+  if (selected_domain_ids.length > 1){
+    var listing_info = getCommonListingInfo(selected_domain_ids);
+    current_listing = listing_info;
+  }
+
+  updateStatus(current_listing);
+  updateInfoTab(current_listing);
+  updateDesignTab(current_listing);
+  updateRentalTab(current_listing);
+  updateBindings(current_listing);
 }
 
 function updateStatus(listing_info){
   //status
-  $("#status-input").data("status", (listing_info.status) ? listing_info.status : 0);
+  $("#status-toggle-button").data("status", (listing_info.status) ? listing_info.status : 0);
 
   //turned on, turn off?
   if (listing_info.status == 1){
@@ -197,341 +218,717 @@ function checkBox(module_value, elem, child){
   }
 }
 
-//function to update a row if it's been purchased
-function editRowPurchased(listing_info){
-  //show purchased tab, hide other tabs
-  $(".purchased-elem").removeClass('is-hidden');
-  $(".unpurchased-elem").addClass("is-hidden");
+  //<editor-fold>-------------------------------INFORMATION TAB EDITS-------------------------------
 
-  //show offers tab only
-  $("#drop-tab").addClass('is-active');
-  $(".drop-tab").addClass('is-hidden');
-  $("#offers-tab-drop").removeClass('is-hidden').show();
-  $("#purchased-tab").addClass('is-active');
+  //function to update information tab for editing a listing
+  function updateInfoTab(listing_info){
+    //pricing
+    $("#buy-price-input").val(listing_info.buy_price);
+    $("#min-price-input").val(listing_info.min_price);
 
-  //get offers if we havent yet
-  if (listing_info.offers == undefined){
-    getDomainOffers(listing_info.domain_name);
-  }
+    //domain descriptions
+    $("#description").val(listing_info.description);
+    $("#description-hook").val(listing_info.description_hook);
+    $("#description-footer").val(listing_info.description_footer);
+    $("#domain-name-input").val(listing_info.domain_name).attr("placeholder", listing_info.domain_name);
 
-  //hide buttons wrapper
-  $("#tab-buttons-wrapper").addClass('is-hidden');
-  $("#verified-drop-tab, #offers-tab-drop").removeClass('is-hidden');
-  updateOffers(listing_info);
-  updateStats(listing_info);
-}
-
-//<editor-fold>-------------------------------INFORMATION TAB EDITS-------------------------------
-
-//function to update information tab for editing a listing
-function updateInfoTab(listing_info){
-  //pricing
-  $("#buy-price-input").val(listing_info.buy_price);
-  $("#min-price-input").val(listing_info.min_price);
-
-  //domain descriptions
-  $("#description").val(listing_info.description);
-  $("#description-hook").val(listing_info.description_hook);
-  $("#description-footer").val(listing_info.description_footer);
-  $("#domain-name-input").val(listing_info.domain_name).attr("placeholder", listing_info.domain_name);
-
-  //categories
-  //remove any existing categories
-  $(".category-selector").removeClass('is-dark');
-  var listing_categories = (listing_info.categories) ? listing_info.categories.split(" ") : [];
-  for (var x = 0; x < listing_categories.length; x++){
-    //color existing categories
-    var temp_category = $("." + listing_categories[x] + "-category").addClass('is-dark');
-  }
-  updateHiddenCategoryInput();
-}
-function updateHiddenCategoryInput(){
-  var joined_categories = $(".category-selector.is-dark").map(function() {
-    return $(this).data("category");
-  }).toArray().sort().join(" ");
-  joined_categories = (joined_categories == "") ? null : joined_categories;
-  $("#categories-input").val(joined_categories);
-}
-
-//</editor-fold>
-
-//<editor-fold>-------------------------------RENTAL TAB EDITS-------------------------------
-
-function updateRentalTab(listing_info){
-  checkBox(listing_info.rentable, $("#rentable-input"));
-
-  //rental pricing
-  $("#price-rate-input").val(listing_info.price_rate);
-  $("#price-type-input").val(listing_info.price_type);
-
-  //paths
-  $("#paths-input").val(listing_info.paths);
-
-  //if created tags before
-  if ($("#paths-input").data('tags') == true){
-    $("#paths-input").tagit("destroy");
-  }
-  else {
-    $("#paths-input").data("tags", true);
-  }
-  $("#paths-input").tagit({
-    animate: false,
-    afterTagAdded : function(event, ui){
-      changedValue($("#paths-input"), listing_info);
-    },
-    afterTagRemoved : function(event, ui){
-      changedValue($("#paths-input"), listing_info);
+    //categories
+    //remove any existing categories
+    $(".category-selector").removeClass('is-dark');
+    var listing_categories = (listing_info.categories) ? listing_info.categories.split(" ") : [];
+    for (var x = 0; x < listing_categories.length; x++){
+      //color existing categories
+      var temp_category = $("." + listing_categories[x] + "-category").addClass('is-dark');
     }
-  });
-
-  //add custom class so we can gray it out if not rentable
-  $(".tagit.textarea").addClass('rentable-input');
-  updateRentalInputsDisabled(listing_info.rentable);
-}
-function updateRentalInputsDisabled(rentable){
-  if (rentable == 1){
-    $(".rentable-input").removeClass('is-disabled');
+    updateHiddenCategoryInput();
   }
-  else {
-    $(".rentable-input").addClass('is-disabled');
-  }
-}
-
-//</editor-fold>
-
-//<editor-fold>-------------------------------DESIGN TAB EDITS-------------------------------
-
-function updateDesignTab(listing_info){
-  //revert preview stuff
-  $(".preview-elem").removeAttr('style');
-
-  updatePremiumNotification();
-  updateColorScheme(listing_info);
-  updateFontStyling(listing_info);
-  updateBackground(listing_info);
-  updateLogo(listing_info);
-  updateModules(listing_info);
-  updatePriceInputs(listing_info);
-}
-
-//function to switch theme
-function switchTheme(theme_name){
-  var theme_to_load = findTheme(theme_name);
-
-  //if there wasnt a theme, load domahub theme
-  if (!theme_to_load){
-    var theme_to_load = findTheme("DomaHub");
+  function updateHiddenCategoryInput(){
+    var joined_categories = $(".category-selector.is-dark").map(function() {
+      return $(this).data("category");
+    }).toArray().sort().join(" ");
+    joined_categories = (joined_categories == "") ? null : joined_categories;
+    $("#categories-input").val(joined_categories);
   }
 
-  updateBackground(theme_to_load);
-  updateColorScheme(theme_to_load);
-  updateFontStyling(theme_to_load);
-  $("#theme-input").val(theme_to_load.theme_name);
-  changedValue($(".changeable-input"), theme_to_load);
-}
+  //</editor-fold>
 
-//update the design tab
-function updatePremiumNotification(){
-  //if premium, remove the notification / disabled inputs
-  if (user.stripe_subscription_id){
-    $("#premium-only-notification").addClass("is-hidden");
-    $(".premium-input").removeClass("is-disabled");
-    $("#premium-blackscreen").addClass("is-hidden");
-  }
-  else {
-    $("#premium-only-notification").removeClass("is-hidden");
-    $(".premium-input").addClass("is-disabled");
+  //<editor-fold>-------------------------------RENTAL TAB EDITS-------------------------------
 
-    //premium blackscreen exists (not deleted by user)
-    if ($("#premium-blackscreen").length != 0){
-      $("#premium-blackscreen").removeClass("is-hidden");
+  function updateRentalTab(listing_info){
+    checkBox(listing_info.rentable, $("#rentable-input"));
+
+    //rental pricing
+    $("#price-rate-input").val(listing_info.price_rate);
+    $("#price-type-input").val(listing_info.price_type);
+
+    //paths
+    $("#paths-input").val(listing_info.paths);
+
+    //if created tags before
+    if ($("#paths-input").data('tags') == true){
+      $("#paths-input").tagit("destroy");
     }
     else {
-      $("#design-tab-drop").prepend('<div id="premium-blackscreen" class="blackscreen"> \
-        <div id="premium-only-notification" class="content has-text-centered"> \
-          <p> \
-            Please upgrade to a Premium account to customize the look and feel of your landing page! \
-          </p> \
-          <a href="/features#pricing" class="is-primary"> \
-            What is a Premium account? \
-          </a> \
-          <div class="margin-top-15 control has-text-centered"> \
-            <a href="/profile/settings#premium" class="button is-stylish no-shadow is-primary is-small"> \
-              <span class="icon is-small"> \
-                <i class="fa fa-diamond"></i> \
-              </span> \
-              <span>Upgrade</span> \
-            </a> \
-          </div> \
-        </div> \
-      </div>');
+      $("#paths-input").data("tags", true);
+    }
+    $("#paths-input").tagit({
+      animate: false,
+      afterTagAdded : function(event, ui){
+        changedValue($("#paths-input"), listing_info);
+      },
+      afterTagRemoved : function(event, ui){
+        changedValue($("#paths-input"), listing_info);
+      }
+    });
+
+    //add custom class so we can gray it out if not rentable
+    $(".tagit.textarea").addClass('rentable-input');
+    updateRentalInputsDisabled(listing_info.rentable);
+  }
+  function updateRentalInputsDisabled(rentable){
+    if (rentable == 1){
+      $(".rentable-input").removeClass('is-disabled');
+    }
+    else {
+      $(".rentable-input").addClass('is-disabled');
     }
   }
-}
-function updatePriceInputs(listing_info){
-  //update preview on design page
-  if (listing_info.buy_price > 0){
-    $("#example-buy-price-tag").removeClass('is-hidden').text("For sale - " + moneyFormat.to(parseFloat(listing_info.buy_price)));
-  }
-  else {
-    $("#example-buy-price-tag").addClass('is-hidden');
-  }
-  if (listing_info.rentable && listing_info.price_rate > 0){
-    $("#example-rent-price-tag").removeClass('is-hidden').text("For rent - " + moneyFormat.to(parseFloat(listing_info.price_rate)) + " / " + listing_info.price_type);
-  }
-  else {
-    $("#example-rent-price-tag").addClass('is-hidden');
-  }
-}
-function updateColorScheme(listing_info){
-  var minicolor_options = {
-    letterCase: "uppercase",
-    swatches: ["#3CBC8D", "#FF5722", "#2196F3"]
+
+  //</editor-fold>
+
+  //<editor-fold>-------------------------------DESIGN TAB EDITS-------------------------------
+
+  function updateDesignTab(listing_info){
+    //revert preview stuff
+    $(".preview-elem").removeAttr('style');
+
+    populateThemeDropdown();
+    updatePremiumNotification();
+    updateColorScheme(listing_info);
+    updateFontStyling(listing_info);
+    updateBackground(listing_info);
+    updateLogo(listing_info);
+    updateModules(listing_info);
+    updatePriceInputs(listing_info);
   }
 
-  $("#primary-color-input").val(listing_info.primary_color).minicolors("destroy").minicolors(minicolor_options);
-  $("#secondary-color-input").val(listing_info.secondary_color).minicolors("destroy").minicolors(minicolor_options);
-  $("#tertiary-color-input").val(listing_info.tertiary_color).minicolors("destroy").minicolors(minicolor_options);
+  //function to switch theme
+  function switchTheme(theme_name){
+    var theme_to_load = findTheme(theme_name);
 
-  //update the preview
-  $("#example-domain-name").css("color", listing_info.primary_color);
-  $("#example-button-primary, #example-rent-price-tag, #example-buy-price-tag").css({
-    "background-color" : listing_info.primary_color,
-    "border-color" : listing_info.primary_color,
-    "color" : calculateLuminance(listing_info.primary_color)
-  });
-  $("#example-button-accent").css({
-    "background-color" : listing_info.secondary_color,
-    "border-color" : listing_info.secondary_color,
-    "color" : calculateLuminance(listing_info.secondary_color)
-  });
-  $("#example-link-info").css("color", listing_info.tertiary_color);
-}
-function updateFontStyling(listing_info){
-  var minicolor_options = {
-    letterCase: "uppercase",
-    swatches: ["#000", "#222", "#D3D3D3", "#FFF"]
+    //if there wasnt a theme, load domahub theme
+    if (!theme_to_load){
+      var theme_to_load = findTheme("DomaHub");
+    }
+
+    updateBackground(theme_to_load);
+    updateColorScheme(theme_to_load);
+    updateFontStyling(theme_to_load);
+    $("#theme-input").val(theme_to_load.theme_name);
+    changedValue($(".changeable-input"), theme_to_load);
   }
 
-  $("#font-color-input").val(listing_info.font_color).minicolors("destroy").minicolors(minicolor_options);
-  $("#font-name-input").val(listing_info.font_name);
+  //update the design tab
+  function updatePremiumNotification(){
+    //if premium, remove the notification / disabled inputs
+    if (user.stripe_subscription_id){
+      $("#premium-only-notification").addClass("is-hidden");
+      $(".premium-input").removeClass("is-disabled");
+      $("#premium-blackscreen").addClass("is-hidden");
+    }
+    else {
+      $("#premium-only-notification").removeClass("is-hidden");
+      $(".premium-input").addClass("is-disabled");
 
-  //update the preview
-  $("#example-domain-name").css("font-family", listing_info.font_name);
-  $("#example-font").css("color", listing_info.font_color);
-}
-function updateBackground(listing_info){
-  //remove any input values on upload forms
-  $("#background-image-input").val("");
-  $("#background-link-refresh").removeClass('is-primary').addClass('is-disabled');
+      //premium blackscreen exists (not deleted by user)
+      if ($("#premium-blackscreen").length != 0){
+        $("#premium-blackscreen").removeClass("is-hidden");
+      }
+      else {
+        $("#design-tab-drop").prepend('<div id="premium-blackscreen" class="blackscreen"> \
+          <div id="premium-only-notification" class="content has-text-centered"> \
+            <p> \
+              Please upgrade to a Premium account to customize the look and feel of your landing page! \
+            </p> \
+            <a href="/features#pricing" class="is-primary"> \
+              What is a Premium account? \
+            </a> \
+            <div class="margin-top-15 control has-text-centered"> \
+              <a href="/profile/settings#premium" class="button is-stylish no-shadow is-primary is-small"> \
+                <span class="icon is-small"> \
+                  <i class="fa fa-diamond"></i> \
+                </span> \
+                <span>Upgrade</span> \
+              </a> \
+            </div> \
+          </div> \
+        </div>');
+      }
+    }
+  }
+  function updatePriceInputs(listing_info){
+    //update preview on design page
+    if (listing_info.buy_price > 0){
+      $("#example-buy-price-tag").removeClass('is-hidden').text("For sale - " + moneyFormat.to(parseFloat(listing_info.buy_price)));
+    }
+    else {
+      $("#example-buy-price-tag").addClass('is-hidden');
+    }
+    if (listing_info.rentable && listing_info.price_rate > 0){
+      $("#example-rent-price-tag").removeClass('is-hidden').text("For rent - " + moneyFormat.to(parseFloat(listing_info.price_rate)) + " / " + listing_info.price_type);
+    }
+    else {
+      $("#example-rent-price-tag").addClass('is-hidden');
+    }
+  }
+  function updateColorScheme(listing_info){
+    var minicolor_options = {
+      letterCase: "uppercase",
+      swatches: ["#3CBC8D", "#FF5722", "#2196F3"]
+    }
 
-  //background color
-  var minicolor_options = {
-    letterCase: "uppercase",
-    swatches: ["#FFFFFF", "#E5E5E5", "#B2B2B2", "#7F7F7F", "#666666", "#222222", "#000000"]
+    $("#primary-color-input").val(listing_info.primary_color).minicolors("destroy").minicolors(minicolor_options);
+    $("#secondary-color-input").val(listing_info.secondary_color).minicolors("destroy").minicolors(minicolor_options);
+    $("#tertiary-color-input").val(listing_info.tertiary_color).minicolors("destroy").minicolors(minicolor_options);
+
+    //update the preview
+    $("#example-domain-name").css("color", listing_info.primary_color);
+    $("#example-button-primary, #example-rent-price-tag, #example-buy-price-tag").css({
+      "background-color" : listing_info.primary_color,
+      "border-color" : listing_info.primary_color,
+      "color" : calculateLuminance(listing_info.primary_color)
+    });
+    $("#example-button-accent").css({
+      "background-color" : listing_info.secondary_color,
+      "border-color" : listing_info.secondary_color,
+      "color" : calculateLuminance(listing_info.secondary_color)
+    });
+    $("#example-link-info").css("color", listing_info.tertiary_color);
+  }
+  function updateFontStyling(listing_info){
+    var minicolor_options = {
+      letterCase: "uppercase",
+      swatches: ["#000", "#222", "#D3D3D3", "#FFF"]
+    }
+
+    $("#font-color-input").val(listing_info.font_color).minicolors("destroy").minicolors(minicolor_options);
+    $("#font-name-input").val(listing_info.font_name);
+
+    //update the preview
+    $("#example-domain-name").css("font-family", listing_info.font_name);
+    $("#example-font").css("color", listing_info.font_color);
+  }
+  function updateBackground(listing_info){
+    //remove any input values on upload forms
+    $("#background-image-input").val("");
+    $("#background-link-refresh").removeClass('is-primary').addClass('is-disabled');
+
+    //background color
+    var minicolor_options = {
+      letterCase: "uppercase",
+      swatches: ["#FFFFFF", "#E5E5E5", "#B2B2B2", "#7F7F7F", "#666666", "#222222", "#000000"]
+    }
+
+    var background_image = (listing_info.background_image == null || listing_info.background_image == undefined || listing_info.background_image == "") ? "https://placeholdit.imgix.net/~text?txtsize=20&txt=NO%20IMG&w=96&h=64" : listing_info.background_image;
+    $("#background-link-input").val(listing_info.background_image);
+
+    //background image of preview
+    if (listing_info.background_image != null && listing_info.background_image != undefined && listing_info.background_image != ""){
+      $("#example-wrapper").css({'background-image' : "url(" + background_image + ")"});
+    }
+    else {
+      $("#example-wrapper").css('background-image', "");
+    }
+
+    $("#background-color-input").val(listing_info.background_color).minicolors("destroy").minicolors(minicolor_options);
+    $("#example-wrapper").css({"background-color" : listing_info.background_color});
+  }
+  function updateLogo(listing_info){
+    //remove any input values on upload forms
+    $("#logo-image-input").val("");
+    $("#logo-link-refresh").removeClass('is-primary').addClass('is-disabled');
+
+    //logo depending on premium user or not
+    if (user.stripe_subscription_id){
+      var logo = (listing_info.logo == null || listing_info.logo == undefined || listing_info.logo == "") ? "https://placeholdit.imgix.net/~text?txtsize=20&txt=NO%20LOGO&w=200&h=125" : listing_info.logo;
+    }
+    else {
+      var logo = (listing_info.logo == null || listing_info.logo == undefined || listing_info.logo == "") ? "/images/dh-assets/flat-logo/dh-flat-logo-primary.png" : listing_info.logo;
+    }
+
+    $("#logo-link-input").val(listing_info.logo);
+    $("#example-logo").attr('src', logo);
+  }
+  function updateModules(listing_info){
+    //info module
+    checkBox(listing_info.info_module, $("#info-module-input"), true);
+    checkBox(listing_info.domain_owner, $("#domain-owner-input"));
+    checkBox(listing_info.domain_age, $("#domain-age-input"));
+    checkBox(listing_info.domain_list, $("#domain-list-input"));
+    checkBox(listing_info.domain_appraisal, $("#domain-appraisal-input"));
+    checkBox(listing_info.social_sharing, $("#social-sharing-input"));
+
+    //traffic module
+    checkBox(listing_info.traffic_module, $("#traffic-module-input"), true);
+    checkBox(listing_info.traffic_graph, $("#traffic-graph-input"));
+    checkBox(listing_info.alexa_stats, $("#alexa-stats-input"));
+
+    checkBox(listing_info.history_module, $("#history-module-input"));
+
+    //alexa link
+    if (listing_info){
+      $("#alexa_link").attr("href", "https://www.alexa.com/siteinfo/" + listing_info.domain_name);
+    }
+    else {
+      $("#alexa_link").attr("href", "https://www.alexa.com");
+    }
+  }
+  function updateModuleChildren(elem){
+    if (elem.val() == 1){
+      $("." + elem.attr("id").replace("input", "child")).removeClass('is-disabled');
+    }
+    else {
+      $("." + elem.attr("id").replace("input", "child")).addClass('is-disabled');
+    }
   }
 
-  var background_image = (listing_info.background_image == null || listing_info.background_image == undefined || listing_info.background_image == "") ? "https://placeholdit.imgix.net/~text?txtsize=20&txt=NO%20IMG&w=96&h=64" : listing_info.background_image;
-  $("#background-link-input").val(listing_info.background_image);
+  //</editor-fold>
 
-  //background image of preview
-  if (listing_info.background_image != null && listing_info.background_image != undefined && listing_info.background_image != ""){
-    $("#example-wrapper").css({'background-image' : "url(" + background_image + ")"});
-  }
-  else {
-    $("#example-wrapper").css('background-image', "");
+  //<editor-fold>-------------------------------BINDINGS-------------------------------
+
+  //update change bindings (category, changeable-input, status)
+  function updateBindings(listing_info){
+
+    //click to add this category
+    $(".category-selector").off().on("click", function(e){
+      $(this).toggleClass('is-dark');
+      updateHiddenCategoryInput();
+      changedValue($("#categories-input"), listing_info);
+    });
+
+    //bind new handlers for any changeable inputs
+    $(".changeable-input").off().on("change input", function(e){
+      changedValue($(this), listing_info);
+    });
+
+    //update status binding
+    $("#status-toggle-button").off().on("click", function(e){
+      submitListingChanges($(this));
+    });
+
+    //module checkbox handlers
+    $(".checkbox-input").off().on("change", function(){
+      var new_checkbox_val = ($(this).val() == "1") ? 0 : 1;
+      $(this).val(new_checkbox_val);
+      changedValue($(this), listing_info);
+
+      //parent module
+      if ($(this).hasClass('parent-module')){
+        updateModuleChildren($(this));
+      }
+    });
+
+    //load theme buttons
+    loadThemeHandler();
+
+    //allow rentals checkbox
+    $("#rentable-input").on("change", function(){
+      updateRentalInputsDisabled($(this).val());
+    });
+
+    //change domain name font
+    $("#font-name-input").on("input", function(){
+      $("#example-domain-name").css("font-family", $(this).val());
+    });
+
+    //change primary font color
+    $("#primary-color-input").on("input", function(){
+      $("#example-button-primary, #example-rent-price-tag, #example-buy-price-tag").css({
+        "background-color" : $(this).val(),
+        "border-color" : $(this).val(),
+        "color" : calculateLuminance($(this).val())
+      });
+      $("#example-domain-name").css("color", $(this).val());
+    });
+
+    //change secondary font color
+    $("#secondary-color-input").on("input", function(){
+      $("#example-button-accent").css({
+        "background-color" : $(this).val(),
+        "border-color" : $(this).val(),
+        "color" : calculateLuminance($(this).val())
+      });
+    });
+
+    //change tertiary font color
+    $("#tertiary-color-input").on("input", function(){
+      $("#example-link-info").css("color", $(this).val());
+    });
+
+    //change regular font color
+    $("#font-color-input").on("input", function(){
+      $("#example-font").css("color", $(this).val());
+    });
+
+    //change background color
+    $("#background-color-input").on("input", function(){
+      $("#example-wrapper").css("background-color", $(this).val());
+    });
+
+    //remove uploading data and any uploaded images if typing the link
+    $("#background-link-input").on("input", function(){
+      $(this).data("uploading", false);
+      $("#background-image-input").val("");
+      var background_compare = (listing_info.background_image == null || listing_info.background_image == undefined) ? "" : listing_info.background_image;
+      if ($(this).val() != background_compare){
+        $("#background-link-refresh").addClass('is-primary').removeClass('is-disabled');
+      }
+      else {
+        $("#background-link-refresh").removeClass('is-primary').addClass('is-disabled');
+      }
+    });
+
+    //remove uploading data and any uploaded images if typing the link (logo)
+    $("#logo-link-input").on("input", function(){
+      $(this).data("uploading", false);
+      $("#logo-image-input").val("");
+      var logo_compare = (listing_info.logo == null || listing_info.logo == undefined) ? "" : listing_info.logo;
+      if ($(this).val() != logo_compare){
+        $("#logo-link-refresh").addClass('is-primary').removeClass('is-disabled');
+      }
+      else {
+        $("#logo-link-refresh").removeClass('is-primary').addClass('is-disabled');
+      }
+    });
+
+    //refresh background image (for preview)
+    $("#background-link-refresh").off().on("click", function(){
+      $("#background-link-refresh").removeClass('is-primary').addClass('is-disabled');
+      $("#example-wrapper").css({'background-image' : "url(" + $("#background-link-input").val() + ")"});
+    });
+
+    //refresh logo (for preview)
+    $("#logo-link-refresh").off().on("click", function(){
+      $("#logo-link-refresh").removeClass('is-primary').addClass('is-disabled');
+      $("#example-logo").attr('src', $("#logo-link-input").val());
+    });
+
   }
 
-  $("#background-color-input").val(listing_info.background_color).minicolors("destroy").minicolors(minicolor_options);
-  $("#example-wrapper").css({"background-color" : listing_info.background_color});
-}
-function updateLogo(listing_info){
-  //remove any input values on upload forms
-  $("#logo-image-input").val("");
-  $("#logo-link-refresh").removeClass('is-primary').addClass('is-disabled');
+  //</editor-fold>
 
-  //logo depending on premium user or not
-  if (user.stripe_subscription_id){
-    var logo = (listing_info.logo == null || listing_info.logo == undefined || listing_info.logo == "") ? "https://placeholdit.imgix.net/~text?txtsize=20&txt=NO%20LOGO&w=200&h=125" : listing_info.logo;
-  }
-  else {
-    var logo = (listing_info.logo == null || listing_info.logo == undefined || listing_info.logo == "") ? "/images/dh-assets/flat-logo/dh-flat-logo-primary.png" : listing_info.logo;
+  //<editor-fold>-------------------------------SUBMIT LISTING UPDATES-------------------------------
+
+  //helper function to bind to inputs to listen for any changes from existing listing info
+  function changedValue(input_elem, listing_info){
+    var name_of_attr = input_elem.data("name");
+
+    if (listing_info){
+      if (name_of_attr == "background_image_link"){
+        var listing_info_comparison = listing_info["background_image"];
+      }
+      else if (name_of_attr == "logo_image_link"){
+        var listing_info_comparison = listing_info["logo"];
+      }
+      else {
+        var listing_info_comparison = listing_info[name_of_attr];
+      }
+    }
+
+    //clear any existing messages
+    errorMessage(false);
+    successMessage(false);
+
+    //only change if the value changed from existing
+    if (input_elem.val() != listing_info_comparison){
+      input_elem.data('changed', true);
+      $("#save-changes-button").removeClass("is-hidden");
+      $("#cancel-changes-button").removeClass("is-hidden");
+
+      //changing background image
+      if (name_of_attr == "background_image" && input_elem[0].files[0]){
+        $("#background-link-input").data("uploading", true).val("Now uploading - " + input_elem[0].files[0].name);
+        $("#example-wrapper").css("background-image", "url(https://placeholdit.imgix.net/~text?txtsize=50&txt=NOW%20UPLOADING&w=1000&h=250)");
+      }
+      else if (name_of_attr == "logo" && input_elem[0].files[0]){
+        $("#logo-link-input").data("uploading", true).val("Now uploading - " + input_elem[0].files[0].name);
+        $("#example-logo").attr("src-image", "https://placeholdit.imgix.net/~text?txtsize=50&txt=NOW%20UPLOADING");
+      }
+    }
+    //hide the cancel, disable the save
+    else {
+      input_elem.data('changed', false);
+      $("#save-changes-button").addClass("is-hidden");
+      $("#cancel-changes-button").addClass("is-hidden");
+    }
   }
 
-  $("#logo-link-input").val(listing_info.logo);
-  $("#example-logo").attr('src', logo);
-}
-function updateModules(listing_info){
-  //info module
-  checkBox(listing_info.info_module, $("#info-module-input"), true);
-  checkBox(listing_info.domain_owner, $("#domain-owner-input"));
-  checkBox(listing_info.domain_age, $("#domain-age-input"));
-  checkBox(listing_info.domain_list, $("#domain-list-input"));
-  checkBox(listing_info.domain_appraisal, $("#domain-appraisal-input"));
-  checkBox(listing_info.social_sharing, $("#social-sharing-input"));
+  //function to visually reset submit/cancel buttons
+  function refreshSubmitButtons(){
+    $("#cancel-changes-button").addClass("is-hidden");
+    $("#save-changes-button").addClass('is-hidden');
+  }
 
-  //traffic module
-  checkBox(listing_info.traffic_module, $("#traffic-module-input"), true);
-  checkBox(listing_info.traffic_graph, $("#traffic-graph-input"));
-  checkBox(listing_info.alexa_stats, $("#alexa-stats-input"));
+  //function to cancel the listing submit
+  function cancelListingChanges(){
+    refreshSubmitButtons();
 
-  checkBox(listing_info.history_module, $("#history-module-input"));
+    //revert all inputs
+    editRowVerified(getSelectedDomains("id", true));
 
-  //alexa link
-  if (listing_info){
-    $("#alexa_link").attr("href", "https://www.alexa.com/siteinfo/" + listing_info.domain_name);
+    errorMessage(false);
+    successMessage(false);
   }
-  else {
-    $("#alexa_link").attr("href", "https://www.alexa.com");
+
+  //function to submit status change
+  function submitListingChanges(submit_button, status_only){
+    //clear any existing messages
+    errorMessage(false);
+    successMessage(false);
+    submit_button.addClass('is-loading');
+
+    //append data for editing
+    var formData = new FormData();
+    var selected_ids = getSelectedDomains("id", true);
+    formData.append("selected_ids", selected_ids);
+    if (status_only){
+      var new_status = ($("#status-toggle-button").data("status") == "1") ? 0 : 1;
+      formData.append("status", new_status);
+    }
+    else {
+      $(".changeable-input").each(function(e){
+        var input_name = $(this).data("name");
+        var input_val = (input_name == "background_image" || input_name == "logo") ? $(this)[0].files[0] : $(this).val();
+
+        //if changing listing image link
+        if (input_name == "background_image_link"){
+          var listing_comparison = current_listing["background_image"];
+        }
+        else if (input_name == "logo_image_link"){
+          var listing_comparison = current_listing["logo"];
+        }
+        else {
+          var listing_comparison = (current_listing[input_name] == null || current_listing[input_name] == undefined) ? "" : current_listing[input_name];
+        }
+
+        //if null or undefined
+        if (input_val != listing_comparison && input_val != null && input_val != undefined && listing_comparison != undefined){
+          if ((input_name == "logo_image_link" || input_name == "background_image_link") && $(this).data("uploading")){
+          }
+          else {
+            formData.append(input_name, input_val);
+          }
+        }
+      });
+    }
+
+    $.ajax({
+      url: (selected_ids.length == 1) ? "/listing/" + getDomainByID(selected_ids[0]).domain_name.toLowerCase() + "/update" : "/listings/multiupdate",
+      type: "POST",
+      data: formData,
+      // Options to tell jQuery not to process data or worry about the content-type
+      cache: false,
+      contentType: false,
+      processData: false
+    }, 'json').done(function(data){
+      submit_button.removeClass('is-loading');
+      refreshSubmitButtons();
+      if (data.state == "success"){
+        //status only success message
+        if (status_only){
+          var plural_success_msg = (selected_ids.length == 1) ? "This listing has" : selected_ids.length + " listings have";
+          var active_inactive_text = (new_status == 0) ? "inactive! It is no longer visible to the public." : "active! It is now available to the public.";
+          successMessage(plural_success_msg + " been set to " + active_inactive_text);
+        }
+        //editing success message
+        else {
+          var plural_success_msg = (selected_ids.length == 1) ? "this listing" : selected_ids.length + " listings";
+          successMessage("Successfully changed settings for " + plural_success_msg + "!");
+        }
+        listings = data.listings;
+        createRows(selected_ids);
+        editRowVerified(selected_ids);
+      }
+      else {
+        //listing is no longer pointed to domahub, revert to verify tab
+        if (data.message == "verification-error"){
+          var plural_error_msg = (selected_ids.length == 1) ? "This listing has" : "Some of the selected listings have";
+          var error_msg = plural_error_msg + " not been verified yet! Please verify that you own this domain by confirming your DNS settings.";
+        }
+        else if (data.message == "ownership-error"){
+          var plural_error_msg = (selected_ids.length == 1) ? "this listing" : "some of the listings";
+          var error_msg = "You do not own " + plural_error_msg + " that you are trying to edit! Please select something else to edit.";
+        }
+        else if (data.message == "accepted-error"){
+          var plural_error_msg = (selected_ids.length == 1) ? "this listing" : "some of the selected listings";
+          var error_msg = "You have already accepted an offer for " + plural_error_msg + "! Please select something else to edit.";
+        }
+        else if (data.message == "deposited-error"){
+          var plural_error_msg = (selected_ids.length == 1) ? "this listing" : "some of the selected listings";
+          var error_msg = "You have already sold " + plural_error_msg + "! Please select something else to edit.";
+        }
+        else {
+          var error_msg = data.message;
+        }
+
+        if (data.listings){
+          listings = data.listings;
+        }
+
+        errorMessage(error_msg);
+        createRows(false);
+        showSelector();
+      }
+    });
   }
-}
-function updateModuleChildren(elem){
-  if (elem.val() == 1){
-    $("." + elem.attr("id").replace("input", "child")).removeClass('is-disabled');
+
+  //helper function to display/hide error messages per listing
+  function errorMessage(message){
+    //hide success
+    $("#listing-msg-success").addClass('is-hidden').removeClass("is-active");
+    $("#error-upgrade-button").addClass('is-hidden');
+
+    if (message && message == "not-premium"){
+      updatePremiumNotification();
+      $("#listing-msg-error").removeClass('is-hidden').addClass("is-active");
+      $("#listing-msg-error-text").html("You must upgrade to a Premium Account to be able to edit that!");
+      $("#error-upgrade-button").removeClass('is-hidden');
+    }
+    else if (message && message == "nothing-changed"){
+      refreshSubmitButtons();
+      $("#listing-msg-error").addClass('is-hidden').removeClass("is-active");
+    }
+    else if (message){
+      $("#listing-msg-error").removeClass('is-hidden').addClass("is-active");
+      $("#listing-msg-error-text").html(message);
+    }
+    else if (!message) {
+      $("#listing-msg-error").addClass('is-hidden').removeClass("is-active");
+    }
   }
-  else {
-    $("." + elem.attr("id").replace("input", "child")).addClass('is-disabled');
+
+  //helper function to display success messages per listing
+  function successMessage(message){
+    //hide error
+    $("#listing-msg-error").addClass('is-hidden').removeClass("is-active");
+
+    if (message){
+      $("#listing-msg-success").removeClass('is-hidden').addClass("is-active");
+      $("#listing-msg-success-text").text(message);
+    }
+    else if (!message){
+      $("#listing-msg-success").addClass('is-hidden').removeClass("is-active");
+    }
   }
-}
+
+  //</editor-fold>
 
 //</editor-fold>
 
-//<editor-fold>-------------------------------OFFER TAB EDITS-------------------------------
+//<editor-fold>-------------------------------UPDATE EDITOR OFFERS-------------------------------
 
-//function to show loading offers
-function showLoadingOffers(){
-  $("#loading-offers").removeClass('is-hidden');
-  $(".hidden-while-loading-offers").addClass('is-hidden');
-  $("#offers-wrapper").empty();
+//function to update a row if it's verified but not yet purchased
+function updateEditorOffers(selected_domain_ids){
+  updateEditorDomains(selected_domain_ids);
+  //change domain name header
+  if (selected_domain_ids.length == 0){
+    $("#editor-title").text("My Listing Offers");
+  }
+  else {
+    $("#editor-title").text("Viewing Offers - ");
+  }
+  $("#status-toggle-button").addClass('is-hidden');
+  $("#refresh-stats-button").addClass('is-hidden');
+
+  //refresh offers button
+  $("#refresh-offers-button").off().on('click', function(){
+    $(this).addClass('is-loading');
+    createOffersTable(selected_domain_ids, true);
+  });
+
+  //rejected offers button
+  $("#show-rejected-offers").removeClass('is-primary').off().on('click', function(){
+    $(".rejected-offer").toggleClass('is-hidden');
+    $(this).toggleClass('is-primary is-black').find(".fa").toggleClass('fa-toggle-on fa-toggle-off');
+
+    //hide no offers if there are any offers (including rejected)
+    if ($(".offer-row:not(#offer-clone, .is-hidden)").length == 0){
+      $("#no-offers").removeClass('is-hidden');
+    }
+    else {
+      $("#no-offers").addClass('is-hidden');
+    }
+  }).find(".fa").removeClass('fa-toggle-on').addClass('fa-toggle-off');
+
+  //sort offers
+  $("#offers-sort-select").val("timestamp_desc").off().on("change", function(){
+    var sort_value = $(this).val().split("_");
+    var sort_by = sort_value[0];
+    var sort_order = sort_value[1];
+
+    var offers_to_sort = $(".offer-row:not(#offer-clone)");
+    if (sort_order == "asc"){
+      offers_to_sort.sort(function(a,b){
+        if (sort_by == "name"){
+          return $(a).data("offer-data")[sort_by].toLowerCase() > $(b).data("offer-data")[sort_by].toLowerCase();
+        }
+        else {
+          return $(a).data("offer-data")[sort_by] > $(b).data("offer-data")[sort_by];
+        }
+      });
+    }
+    else {
+      offers_to_sort.sort(function(a,b){
+        if (sort_by == "name"){
+          return $(a).data("offer-data")[sort_by].toLowerCase() < $(b).data("offer-data")[sort_by].toLowerCase();
+        }
+        else {
+          return $(a).data("offer-data")[sort_by] < $(b).data("offer-data")[sort_by];
+        }
+      });
+    }
+
+    //re-order and append to parent
+    for (var i = 0; i < offers_to_sort.length; i++) {
+      offers_to_sort[i].parentNode.appendChild(offers_to_sort[i]);
+    }
+  });
+
+  createOffersTable(selected_domain_ids);
 }
 
-///get a specific offer by ID
-function getOffer(offers, offer_id){
-  for (var x = 0; x < offers.length; x++){
-    if (offers[x].id == offer_id){
-      return offers[x];
+//function to create offer rows
+function createOffersTable(selected_domain_ids, force){
+  //show loading offers
+  $("#loading-offers").removeClass('is-hidden');
+  $("#no-offers").addClass('is-hidden');
+  $(".hidden-while-loading-offers").addClass('is-hidden');
+  $("#offers-wrapper").find(".offer-row:not(#offer-clone)").remove();
+  completed_domains = 0;
+
+  for (var x = 0; x < selected_domain_ids.length; x++){
+    var listing_info = getDomainByID(selected_domain_ids[x]);
+
+    //if we havent gotten offers yet
+    if (listing_info.offers == undefined || force){
+      getDomainOffers(listing_info, selected_domain_ids.length);
+    }
+    else {
+      updateOffersTable(listing_info, selected_domain_ids.length);
     }
   }
 }
 
 //function to get offers on a domain
-function getDomainOffers(domain_name){
-  showLoadingOffers();
+function getDomainOffers(listing_info, total_domains){
   $.ajax({
-    url: "/listing/" + domain_name.toLowerCase() + "/getoffers",
+    url: "/listing/" + listing_info.domain_name.toLowerCase() + "/getoffers",
     method: "POST"
   }).done(function(data){
-    if (data.listings){
-      updateCurrentListing(data.listings);
-
-      //update local listings variable
-      if (current_listing){
-        (function(current_listing){
-
-          $("#refresh-offers").removeClass('is-loading');
-          updateOffers(current_listing);
-        })(current_listing);
-      }
+    $("#refresh-offers-button").removeClass('is-loading');
+    if (data.listing){
+      listing_info = data.listing;
+      updateOffersTable(listing_info, total_domains);
     }
     else if (data.state != "success") {
       errorMessage(data.message);
@@ -539,123 +936,90 @@ function getDomainOffers(domain_name){
   });
 }
 
-//function to update the offers tab
-function updateOffers(listing_info){
-  //show offers if we have it
-  if (listing_info.offers == undefined){
-    showLoadingOffers();
-  }
-  //hide loading msg
-  else {
-    $("#loading-offers").addClass('is-hidden');
-    $("#offers-wrapper").empty();
+//function to update the offers table
+function updateOffersTable(listing_info, total_domains){
+  if (listing_info.offers){
+    //clone offers
+    for (var x = 0; x < listing_info.offers.length; x++){
+      var cloned_offer_row = $("#offer-clone").clone();
+      cloned_offer_row.removeAttr("id");
+      cloned_offer_row.find(".td-offer-domain").text(listing_info.domain_name);
+      cloned_offer_row.find(".td-offer-name").text(listing_info.offers[x].name);
+      cloned_offer_row.find(".td-offer-timestamp").text(moment(listing_info.offers[x].timestamp).format("MMMM DD, YYYY - h:mmA"));
+      cloned_offer_row.find(".td-offer-offer").text(moneyFormat.to(parseFloat(listing_info.offers[x].offer)));
+      cloned_offer_row.attr("id", "offer-row-" + listing_info.offers[x].id);
 
-    //rejected offers button
-    $("#show-rejected-offers").removeClass('is-primary').off().on('click', function(){
-      $(".rejected-offer").toggleClass('is-hidden');
-      $(this).toggleClass('is-primary is-black').find(".fa").toggleClass('fa-toggle-on fa-toggle-off');
+      //click to open modal
+      cloned_offer_row.data("offer", listing_info.offers[x]).off().on("click", function(){
+        editOfferModal($(this).data("offer"), listing_info);
+      });
 
-      //hide no offers if there are any offers (including rejected)
-      if ($(".offer-row:not(#offer-clone)").length == 0){
-        $("#no-offers").removeClass('is-hidden');
+      //accepted an offer!
+      if (listing_info.offers[x].accepted == 1){
+        cloned_offer_row.find(".td-offer-status").text('Accepted').addClass('is-success');
+      }
+      else if (listing_info.offers[x].accepted == 0){
+        cloned_offer_row.find(".td-offer-status").text('Rejected').addClass('is-danger');
+        cloned_offer_row.addClass('rejected-offer unaccepted-offer');
       }
       else {
-        $("#no-offers").toggleClass('is-hidden');
-      }
-    }).find(".fa").removeClass('fa-toggle-on').addClass('fa-toggle-off');
-
-    //refresh offers button
-    $("#refresh-offers").off().on('click', function(){
-      $(this).addClass('is-loading');
-      getDomainOffers(listing_info.domain_name);
-    });
-
-    //sort offers
-    $("#offers-sort-select").val("timestamp_desc").off().on("change", function(){
-      var sort_value = $(this).val().split("_");
-      var sort_by = sort_value[0];
-      var sort_order = sort_value[1];
-
-      var offers_to_sort = $(".offer-row:not(#offer-clone)");
-      if (sort_order == "asc"){
-        offers_to_sort.sort(function(a,b){
-          if (sort_by == "name"){
-            return $(a).data("offer-data")[sort_by].toLowerCase() > $(b).data("offer-data")[sort_by].toLowerCase();
-          }
-          else {
-            return $(a).data("offer-data")[sort_by] > $(b).data("offer-data")[sort_by];
-          }
-        });
-      }
-      else {
-        offers_to_sort.sort(function(a,b){
-          if (sort_by == "name"){
-            return $(a).data("offer-data")[sort_by].toLowerCase() < $(b).data("offer-data")[sort_by].toLowerCase();
-          }
-          else {
-            return $(a).data("offer-data")[sort_by] < $(b).data("offer-data")[sort_by];
-          }
-        });
+        cloned_offer_row.find(".td-offer-status").text('Unanswered');
+        cloned_offer_row.addClass('unaccepted-offer');
       }
 
-      //re-order and append to parent
-      for (var i = 0; i < offers_to_sort.length; i++) {
-        offers_to_sort[i].parentNode.appendChild(offers_to_sort[i]);
-      }
-    });
+      $("#offers-wrapper").prepend(cloned_offer_row);
+    }
 
-    //no offers!
-    if (!listing_info.offers.length){
-      $("#no-offers").removeClass('is-hidden');
-      $("#offers-toolbar").removeClass('is-hidden');
-      $("#accepted-offer").addClass('is-hidden');
-      $("#deposited-offer").addClass('is-hidden');
+    completed_domains++;
+
+    //money has been deposited!
+    if (listing_info.deposited == 1){
+      $("#offers-toolbar").addClass('is-hidden');
+      $('.unaccepted-offer').addClass('is-hidden');
+      $("#deposited-offer").removeClass('is-hidden');
+      $("#deposited-deadline").text(moment(deposited_deadline).format("MMMM DD, YYYY - h:mmA"));
+
+      //resend the deposited offer email button
+      $("#resend-deposit").off().on("click", function(){
+        resendAcceptEmail($(this), listing_info, $("#accepted-offer").data("offer_id"), true);
+      });
     }
     else {
-      //show toolbar for sort
-      $("#offers-toolbar").removeClass('is-hidden');
+      $("#deposited-offer").addClass('is-hidden');
 
-      //clone offers
-      for (var x = 0; x < listing_info.offers.length; x++){
-        var cloned_offer_row = $("#offer-clone").clone();
-        cloned_offer_row.removeAttr("id").removeClass('is-hidden');
-        cloned_offer_row.find(".offer-timestamp").text(moment(listing_info.offers[x].timestamp).format("MMMM DD, YYYY - h:mmA"));
-        cloned_offer_row.find(".offer-name").text(listing_info.offers[x].name);
-        cloned_offer_row.find(".offer-email").text(listing_info.offers[x].email).attr("href", "mailto:" + listing_info.offers[x].email);
-        cloned_offer_row.find(".offer-phone").text(listing_info.offers[x].phone);
-        cloned_offer_row.find(".offer-offer").text(moneyFormat.to(parseFloat(listing_info.offers[x].offer)));
-        cloned_offer_row.find(".offer-message").text(listing_info.offers[x].message);
-        cloned_offer_row.attr("id", "offer-row-" + listing_info.offers[x].id);
-        cloned_offer_row.data("offer-data", listing_info.offers[x]);
+      //accepted an offer! hide other offers
+      if (listing_info.accepted == 1){
+        $('.unaccepted-offer').addClass('is-hidden');
+        $("#accepted-offer").removeClass('is-hidden');
 
-        //click to open modal
-        cloned_offer_row.find(".offer-modal-button").data("offer", listing_info.offers[x]).off().on("click", function(){
-          editOfferModal($(this).data("offer"), listing_info);
+        //resend the accepted offer email button
+        $("#resend-accept").off().on("click", function(){
+          resendAcceptEmail($(this), listing_info, $("#accepted-offer").data("offer_id"), false);
         });
-        cloned_offer_row.off().on('click', function(){
-          editOfferModal($(this).find(".offer-modal-button").data("offer"), listing_info);
-        });
+      }
+      else {
+        $("#accepted-offer").addClass('is-hidden');
+      }
+    }
+  }
 
-        //accepted an offer!
-        if (listing_info.offers[x].accepted == 1){
-          $("#offers-toolbar").addClass('is-hidden');
-          cloned_offer_row.find(".offer-accepted").text('Accepted - ').addClass('is-success');
-          $("#accepted-offer").data("offer_id", listing_info.offers[x].id);
-        }
-        else if (listing_info.offers[x].accepted == 0){
-          cloned_offer_row.find(".offer-accepted").text('Rejected - ').addClass('is-danger');
-          cloned_offer_row.addClass('rejected-offer is-hidden unaccepted-offer');
-        }
-        else {
-          cloned_offer_row.addClass('unaccepted-offer');
-        }
+  //all offers gotten
+  if (completed_domains == total_domains){
+    //hide loading offers
+    $("#loading-offers").addClass('is-hidden');
 
-        //deposited! figure out deadline
-        if (listing_info.offers[x].deadline){
-          var deposited_deadline = listing_info.offers[x].deadline;
-        }
-
-        $("#offers-wrapper").prepend(cloned_offer_row);
+    //no offers!
+    if ($(".offer-row:not(#offer-clone)").length == 0){
+      $("#no-offers").removeClass('is-hidden');
+    }
+    //offers exist
+    else {
+      //show rows (show rejected if button toggled)
+      if (!$("#show-rejected-offers").hasClass('is-primary')){
+        $(".offer-row:not(#offer-clone)").removeClass('is-hidden');
+      }
+      else {
+        $(".offer-row.unaccepted-offer:not(#offer-clone)").removeClass('is-hidden');
       }
 
       //hide no offers if there are any offers (that arent rejected)
@@ -664,36 +1028,6 @@ function updateOffers(listing_info){
       }
       else {
         $("#no-offers").removeClass('is-hidden');
-      }
-
-      //money has been deposited!
-      if (listing_info.deposited == 1){
-        $("#offers-toolbar").addClass('is-hidden');
-        $('.unaccepted-offer').addClass('is-hidden');
-        $("#deposited-offer").removeClass('is-hidden');
-        $("#deposited-deadline").text(moment(deposited_deadline).format("MMMM DD, YYYY - h:mmA"));
-
-        //resend the deposited offer email button
-        $("#resend-deposit").off().on("click", function(){
-          resendAcceptEmail($(this), listing_info, $("#accepted-offer").data("offer_id"), true);
-        });
-      }
-      else {
-        $("#deposited-offer").addClass('is-hidden');
-
-        //accepted an offer! hide other offers
-        if (listing_info.accepted == 1){
-          $('.unaccepted-offer').addClass('is-hidden');
-          $("#accepted-offer").removeClass('is-hidden');
-
-          //resend the accepted offer email button
-          $("#resend-accept").off().on("click", function(){
-            resendAcceptEmail($(this), listing_info, $("#accepted-offer").data("offer_id"), false);
-          });
-        }
-        else {
-          $("#accepted-offer").addClass('is-hidden');
-        }
       }
     }
   }
@@ -790,6 +1124,15 @@ function acceptOrRejectOffer(accept, button_elem, listing_info, offer_id){
   });
 }
 
+///get a specific offer by ID
+function getOffer(offers, offer_id){
+  for (var x = 0; x < offers.length; x++){
+    if (offers[x].id == offer_id){
+      return offers[x];
+    }
+  }
+}
+
 //function for offer accept success
 function offerSuccessHandler(accept, listing_info, offer_id){
   var accept_text = (accept) ? "accepted" :  "rejected";
@@ -850,7 +1193,22 @@ function offerErrorHandler(message, offer_id){
 
 //</editor-fold>
 
-//<editor-fold>-------------------------------STATS TAB EDITS-------------------------------
+//<editor-fold>-------------------------------UDPATE EDITOR STATS-------------------------------
+
+//function to view editor stats mode
+function updateEditorStats(selected_domain_ids){
+  updateEditorDomains(selected_domain_ids);
+  //change domain name header
+  if (selected_domain_ids.length == 0){
+    $("#editor-title").text("My Listing Stats");
+  }
+  else {
+    $("#editor-title").text("Viewing Stats - ");
+  }
+  $("#status-toggle-button").addClass('is-hidden');
+  $("#refresh-offers-button").addClass('is-hidden');
+  $("#refresh-stats-button").removeClass('is-hidden');
+}
 
 //function to get stats on a domain
 function getDomainStats(domain_name){
@@ -1094,347 +1452,15 @@ function createTrafficChart(formatted_dataset, listing_info){
 
 //</editor-fold>
 
-//<editor-fold>-------------------------------BINDINGS-------------------------------
-
-//update change bindings (category, changeable-input, status)
-function updateBindings(listing_info){
-
-  //click to add this category
-  $(".category-selector").off().on("click", function(e){
-    $(this).toggleClass('is-dark');
-    updateHiddenCategoryInput();
-    changedValue($("#categories-input"), listing_info);
-  });
-
-  //bind new handlers for any changeable inputs
-  $(".changeable-input").off().on("change input", function(e){
-    changedValue($(this), listing_info);
-  });
-
-  //update status binding
-  $("#status-input").off().on("click", function(e){
-    submitListingChanges($(this));
-  });
-
-  //module checkbox handlers
-  $(".checkbox-input").off().on("change", function(){
-    var new_checkbox_val = ($(this).val() == "1") ? 0 : 1;
-    $(this).val(new_checkbox_val);
-    changedValue($(this), listing_info);
-
-    //parent module
-    if ($(this).hasClass('parent-module')){
-      updateModuleChildren($(this));
-    }
-  });
-
-  //load theme buttons
-  loadThemeHandler();
-
-  //allow rentals checkbox
-  $("#rentable-input").on("change", function(){
-    updateRentalInputsDisabled($(this).val());
-  });
-
-  //change domain name font
-  $("#font-name-input").on("input", function(){
-    $("#example-domain-name").css("font-family", $(this).val());
-  });
-
-  //change primary font color
-  $("#primary-color-input").on("input", function(){
-    $("#example-button-primary, #example-rent-price-tag, #example-buy-price-tag").css({
-      "background-color" : $(this).val(),
-      "border-color" : $(this).val(),
-      "color" : calculateLuminance($(this).val())
-    });
-    $("#example-domain-name").css("color", $(this).val());
-  });
-
-  //change secondary font color
-  $("#secondary-color-input").on("input", function(){
-    $("#example-button-accent").css({
-      "background-color" : $(this).val(),
-      "border-color" : $(this).val(),
-      "color" : calculateLuminance($(this).val())
-    });
-  });
-
-  //change tertiary font color
-  $("#tertiary-color-input").on("input", function(){
-    $("#example-link-info").css("color", $(this).val());
-  });
-
-  //change regular font color
-  $("#font-color-input").on("input", function(){
-    $("#example-font").css("color", $(this).val());
-  });
-
-  //change background color
-  $("#background-color-input").on("input", function(){
-    $("#example-wrapper").css("background-color", $(this).val());
-  });
-
-  //remove uploading data and any uploaded images if typing the link
-  $("#background-link-input").on("input", function(){
-    $(this).data("uploading", false);
-    $("#background-image-input").val("");
-    var background_compare = (listing_info.background_image == null || listing_info.background_image == undefined) ? "" : listing_info.background_image;
-    if ($(this).val() != background_compare){
-      $("#background-link-refresh").addClass('is-primary').removeClass('is-disabled');
-    }
-    else {
-      $("#background-link-refresh").removeClass('is-primary').addClass('is-disabled');
-    }
-  });
-
-  //remove uploading data and any uploaded images if typing the link (logo)
-  $("#logo-link-input").on("input", function(){
-    $(this).data("uploading", false);
-    $("#logo-image-input").val("");
-    var logo_compare = (listing_info.logo == null || listing_info.logo == undefined) ? "" : listing_info.logo;
-    if ($(this).val() != logo_compare){
-      $("#logo-link-refresh").addClass('is-primary').removeClass('is-disabled');
-    }
-    else {
-      $("#logo-link-refresh").removeClass('is-primary').addClass('is-disabled');
-    }
-  });
-
-  //refresh background image (for preview)
-  $("#background-link-refresh").off().on("click", function(){
-    $("#background-link-refresh").removeClass('is-primary').addClass('is-disabled');
-    $("#example-wrapper").css({'background-image' : "url(" + $("#background-link-input").val() + ")"});
-  });
-
-  //refresh logo (for preview)
-  $("#logo-link-refresh").off().on("click", function(){
-    $("#logo-link-refresh").removeClass('is-primary').addClass('is-disabled');
-    $("#example-logo").attr('src', $("#logo-link-input").val());
-  });
-
-}
-
-//</editor-fold>
-
-//</editor-fold>
-
-//<editor-fold>-------------------------------SUBMIT LISTING UPDATES-------------------------------
-
-//helper function to bind to inputs to listen for any changes from existing listing info
-function changedValue(input_elem, listing_info){
-  var name_of_attr = input_elem.data("name");
-
-  if (listing_info){
-    if (name_of_attr == "background_image_link"){
-      var listing_info_comparison = listing_info["background_image"];
-    }
-    else if (name_of_attr == "logo_image_link"){
-      var listing_info_comparison = listing_info["logo"];
-    }
-    else {
-      var listing_info_comparison = listing_info[name_of_attr];
-    }
-  }
-
-  //clear any existing messages
-  errorMessage(false);
-  successMessage(false);
-
-  //only change if the value changed from existing
-  if (input_elem.val() != listing_info_comparison){
-    input_elem.data('changed', true);
-    $("#save-changes-button").removeClass("is-hidden");
-    $("#cancel-changes-button").removeClass("is-hidden");
-
-    //changing background image
-    if (name_of_attr == "background_image" && input_elem[0].files[0]){
-      $("#background-link-input").data("uploading", true).val("Now uploading - " + input_elem[0].files[0].name);
-      $("#example-wrapper").css("background-image", "url(https://placeholdit.imgix.net/~text?txtsize=50&txt=NOW%20UPLOADING&w=1000&h=250)");
-    }
-    else if (name_of_attr == "logo" && input_elem[0].files[0]){
-      $("#logo-link-input").data("uploading", true).val("Now uploading - " + input_elem[0].files[0].name);
-      $("#example-logo").attr("src-image", "https://placeholdit.imgix.net/~text?txtsize=50&txt=NOW%20UPLOADING");
-    }
-  }
-  //hide the cancel, disable the save
-  else {
-    input_elem.data('changed', false);
-    $("#save-changes-button").addClass("is-hidden");
-    $("#cancel-changes-button").addClass("is-hidden");
-  }
-}
-
-//function to visually reset submit/cancel buttons
-function refreshSubmitButtons(){
-  $("#cancel-changes-button").addClass("is-hidden");
-  $("#save-changes-button").addClass('is-hidden');
-}
-
-//function to cancel the listing submit
-function cancelListingChanges(){
-  refreshSubmitButtons();
-
-  //revert all inputs
-  editRowVerified(getSelectedDomains("id", true));
-
-  errorMessage(false);
-  successMessage(false);
-}
-
-//function to submit status change
-function submitListingChanges(submit_button, status_only){
-  //clear any existing messages
-  errorMessage(false);
-  successMessage(false);
-  submit_button.addClass('is-loading');
-
-  //append data for editing
-  var formData = new FormData();
-  var selected_ids = getSelectedDomains("id", true);
-  formData.append("selected_ids", selected_ids);
-  if (status_only){
-    var new_status = ($("#status-input").data("status") == "1") ? 0 : 1;
-    formData.append("status", new_status);
-  }
-  else {
-    $(".changeable-input").each(function(e){
-      var input_name = $(this).data("name");
-      var input_val = (input_name == "background_image" || input_name == "logo") ? $(this)[0].files[0] : $(this).val();
-
-      //if changing listing image link
-      if (input_name == "background_image_link"){
-        var listing_comparison = current_listing["background_image"];
-      }
-      else if (input_name == "logo_image_link"){
-        var listing_comparison = current_listing["logo"];
-      }
-      else {
-        var listing_comparison = (current_listing[input_name] == null || current_listing[input_name] == undefined) ? "" : current_listing[input_name];
-      }
-
-      //if null or undefined
-      if (input_val != listing_comparison && input_val != null && input_val != undefined && listing_comparison != undefined){
-        if ((input_name == "logo_image_link" || input_name == "background_image_link") && $(this).data("uploading")){
-        }
-        else {
-          formData.append(input_name, input_val);
-        }
-      }
-    });
-  }
-
-  $.ajax({
-    url: (selected_ids.length == 1) ? "/listing/" + getDomainByID(selected_ids[0]).domain_name.toLowerCase() + "/update" : "/listings/multiupdate",
-    type: "POST",
-    data: formData,
-    // Options to tell jQuery not to process data or worry about the content-type
-    cache: false,
-    contentType: false,
-    processData: false
-  }, 'json').done(function(data){
-    submit_button.removeClass('is-loading');
-    refreshSubmitButtons();
-    if (data.state == "success"){
-      //status only success message
-      if (status_only){
-        var plural_success_msg = (selected_ids.length == 1) ? "This listing has" : selected_ids.length + " listings have";
-        var active_inactive_text = (new_status == 0) ? "inactive! It is no longer visible to the public." : "active! It is now available to the public.";
-        successMessage(plural_success_msg + " been set to " + active_inactive_text);
-      }
-      //editing success message
-      else {
-        var plural_success_msg = (selected_ids.length == 1) ? "this listing" : selected_ids.length + " listings";
-        successMessage("Successfully changed settings for " + plural_success_msg + "!");
-      }
-      listings = data.listings;
-      createRows(selected_ids);
-      editRowVerified(selected_ids);
-    }
-    else {
-      //listing is no longer pointed to domahub, revert to verify tab
-      if (data.message == "verification-error"){
-        var plural_error_msg = (selected_ids.length == 1) ? "This listing has" : "Some of the selected listings have";
-        var error_msg = plural_error_msg + " not been verified yet! Please verify that you own this domain by confirming your DNS settings.";
-      }
-      else if (data.message == "ownership-error"){
-        var plural_error_msg = (selected_ids.length == 1) ? "this listing" : "some of the listings";
-        var error_msg = "You do not own " + plural_error_msg + " that you are trying to edit! Please select something else to edit.";
-      }
-      else if (data.message == "accepted-error"){
-        var plural_error_msg = (selected_ids.length == 1) ? "this listing" : "some of the selected listings";
-        var error_msg = "You have already accepted an offer for " + plural_error_msg + "! Please select something else to edit.";
-      }
-      else if (data.message == "deposited-error"){
-        var plural_error_msg = (selected_ids.length == 1) ? "this listing" : "some of the selected listings";
-        var error_msg = "You have already sold " + plural_error_msg + "! Please select something else to edit.";
-      }
-      else {
-        var error_msg = data.message;
-      }
-
-      if (data.listings){
-        listings = data.listings;
-      }
-
-      errorMessage(error_msg);
-      createRows(false);
-      showSelector();
-    }
-  });
-}
-
-//helper function to display/hide error messages per listing
-function errorMessage(message){
-  //hide success
-  $("#listing-msg-success").addClass('is-hidden').removeClass("is-active");
-  $("#error-upgrade-button").addClass('is-hidden');
-
-  if (message && message == "not-premium"){
-    updatePremiumNotification();
-    $("#listing-msg-error").removeClass('is-hidden').addClass("is-active");
-    $("#listing-msg-error-text").html("You must upgrade to a Premium Account to be able to edit that!");
-    $("#error-upgrade-button").removeClass('is-hidden');
-  }
-  else if (message && message == "nothing-changed"){
-    refreshSubmitButtons();
-    $("#listing-msg-error").addClass('is-hidden').removeClass("is-active");
-  }
-  else if (message){
-    $("#listing-msg-error").removeClass('is-hidden').addClass("is-active");
-    $("#listing-msg-error-text").html(message);
-  }
-  else if (!message) {
-    $("#listing-msg-error").addClass('is-hidden').removeClass("is-active");
-  }
-}
-
-//helper function to display success messages per listing
-function successMessage(message){
-  //hide error
-  $("#listing-msg-error").addClass('is-hidden').removeClass("is-active");
-
-  if (message){
-    $("#listing-msg-success").removeClass('is-hidden').addClass("is-active");
-    $("#listing-msg-success-text").text(message);
-  }
-  else if (!message){
-    $("#listing-msg-success").addClass('is-hidden').removeClass("is-active");
-  }
-}
-
-//</editor-fold>
-
-//<editor-fold>-------------------------------UPDATE ROW UNVERIFIED-------------------------------
+//<editor-fold>-------------------------------UPDATE EDITOR UNVERIFIED-------------------------------
 
 //function to initiate edit mode for unverified
-function editRowUnverified(unverified_listings){
-  //hide purchased tab, show other tabs
+function updateEditorUnverified(selected_domain_ids){
+  //hide purchased elems
   $(".purchased-elem").addClass('is-hidden');
   $(".unpurchased-elem").removeClass("is-hidden");
 
-  //show the verification tab, hide others
-  $("#verify-tab").addClass('is-active');
+  //show specific elems, hide others
   $(".verified-elem").addClass('is-hidden');
   $(".unverified-elem").removeClass('is-hidden');
 
@@ -1445,29 +1471,43 @@ function editRowUnverified(unverified_listings){
   //refresh the DNS table button
   $("#refresh-dns-button").off().on("click", function(){
     $(this).addClass('is-loading');
-    createDNSRecordRows(unverified_listings, true);
+    createDNSRecordRows(selected_domain_ids, true);
   });
 
+  //change domain name header
+  $("#editor-title").text("Now Verifying - ");
+  if (selected_domain_ids.length > 1){
+    $(".current-domain-name").text(selected_domain_ids.length + " Domains");
+    $(".verification-plural").text("s");
+    $(".verification-domains-plural").text("these domains");
+  }
+  else {
+    var verifying_domain = getDomainByID(selected_domain_ids[0]);
+    $(".current-domain-name").text(verifying_domain.domain_name);
+    $(".verification-plural").text("");
+    $(".verification-domains-plural").text("this domain");
+  }
+
   //create all tables for each unverified listing
-  createDNSRecordRows(unverified_listings);
+  createDNSRecordRows(selected_domain_ids);
 }
 
 //function to create DNS rows
-function createDNSRecordRows(unverified_listings, force){
+function createDNSRecordRows(selected_domain_ids, force){
   //show loading
   $("#loading-records-row").removeClass('is-hidden');
 
   //loop through and create all tables for each unverified listing
   $(".cloned-dns-row").remove();
-  for (var x = 0; x < unverified_listings.length; x++){
-    var listing_info = getDomainByID(unverified_listings[x]);
+  for (var x = 0; x < selected_domain_ids.length; x++){
+    var listing_info = getDomainByID(selected_domain_ids[x]);
 
     //get who is an A record data if we haven't yet
     if (listing_info.a_records == undefined || listing_info.whois == undefined || force){
-      getDNSRecordAndWhois(listing_info, unverified_listings.length);
+      getDNSRecordAndWhois(listing_info, selected_domain_ids.length);
     }
     else {
-      updateDNSRecordAndWhois(listing_info, unverified_listings.length);
+      updateDNSRecordAndWhois(listing_info, selected_domain_ids.length);
     }
   }
 }

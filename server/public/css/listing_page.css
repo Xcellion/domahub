@@ -2019,6 +2019,82 @@ pre {
   .title-container {
     text-align: center; } }
 
+.image {
+  display: block;
+  position: relative;
+  margin: 0 auto; }
+  .image.has-shadow > img {
+    -webkit-box-shadow: 0 10px 30px 0 #d0d0d0;
+    -moz-box-shadow: 0 10px 30px 0 #d0d0d0;
+    box-shadow: 0 10px 30px 0 #d0d0d0; }
+  .image.is-circle > img {
+    border-radius: 100%; }
+  .image.left-aligned {
+    margin-left: 0;
+    margin-right: 0; }
+  .image.right-aligned {
+    margin: 0 0 0 auto; }
+  .image.is-real-ratio img {
+    width: auto; }
+    @media screen and (max-width: 768px) {
+      .image.is-real-ratio img {
+        width: 280px;
+        margin: 0 auto; } }
+  .image img {
+    display: block;
+    height: auto;
+    width: 100%; }
+  .image.is-square img, .image.is-1by1 img, .image.is-4by3 img, .image.is-3by2 img, .image.is-16by9 img, .image.is-2by1 img {
+    bottom: 0;
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+    height: 100%;
+    width: 100%; }
+  .image.is-square, .image.is-1by1 {
+    padding-top: 100%; }
+  .image.is-4by3 {
+    padding-top: 75%; }
+  .image.is-3by2 {
+    padding-top: 66.6666%; }
+  .image.is-16by9 {
+    padding-top: 56.25%; }
+  .image.is-2by1 {
+    padding-top: 50%; }
+  .image.is-16x16 {
+    height: 16px;
+    width: 16px; }
+  .image.is-24x24 {
+    height: 24px;
+    width: 24px; }
+  .image.is-32x32 {
+    height: 32px;
+    width: 32px; }
+  .image.is-48x48 {
+    height: 48px;
+    width: 48px; }
+  .image.is-64x64 {
+    height: 64px;
+    width: 64px; }
+  .image.is-96x96 {
+    height: 96px;
+    width: 96px; }
+  .image.is-128x128 {
+    height: 128px;
+    width: 128px; }
+  .image.is-256x256 {
+    height: 256px;
+    width: 256px; }
+  .image.is-512x512 {
+    height: 512px;
+    width: 512px; }
+
+.image + p,
+.image + h2,
+.image + h3 {
+  margin-top: 10px; }
+
 .box {
   -webkit-box-shadow: 0 3px 15px 0 rgba(0, 0, 0, 0.12);
   -moz-box-shadow: 0 3px 15px 0 rgba(0, 0, 0, 0.12);
@@ -2879,6 +2955,8 @@ input:-webkit-autofill {
     .button.is-white.is-transparent {
       background-color: transparent;
       color: white; }
+      .button.is-white.is-transparent:hover, .button.is-white.is-transparent:active, .button.is-white.is-transparent:focus {
+        background-color: #f1f1f1; }
     .button.is-white.is-inverted {
       background-color: #000;
       color: white; }
@@ -2905,6 +2983,8 @@ input:-webkit-autofill {
     .button.is-black.is-transparent {
       background-color: transparent;
       color: #000; }
+      .button.is-black.is-transparent:hover, .button.is-black.is-transparent:active, .button.is-black.is-transparent:focus {
+        background-color: #f1f1f1; }
     .button.is-black.is-inverted {
       background-color: white;
       color: #000; }
@@ -2931,6 +3011,8 @@ input:-webkit-autofill {
     .button.is-grey.is-transparent {
       background-color: transparent;
       color: #d0d0d0; }
+      .button.is-grey.is-transparent:hover, .button.is-grey.is-transparent:active, .button.is-grey.is-transparent:focus {
+        background-color: #f1f1f1; }
     .button.is-grey.is-inverted {
       background-color: #444;
       color: #d0d0d0; }
@@ -2957,6 +3039,8 @@ input:-webkit-autofill {
     .button.is-blacklight.is-transparent {
       background-color: transparent;
       color: rgba(0, 0, 0, 0.66); }
+      .button.is-blacklight.is-transparent:hover, .button.is-blacklight.is-transparent:active, .button.is-blacklight.is-transparent:focus {
+        background-color: #f1f1f1; }
     .button.is-blacklight.is-inverted {
       background-color: rgba(255, 255, 255, 0.7);
       color: rgba(0, 0, 0, 0.66); }
@@ -2983,6 +3067,8 @@ input:-webkit-autofill {
     .button.is-light.is-transparent {
       background-color: transparent;
       color: #d0d0d0; }
+      .button.is-light.is-transparent:hover, .button.is-light.is-transparent:active, .button.is-light.is-transparent:focus {
+        background-color: #f1f1f1; }
     .button.is-light.is-inverted {
       background-color: #444;
       color: #d0d0d0; }
@@ -3009,6 +3095,8 @@ input:-webkit-autofill {
     .button.is-lighter.is-transparent {
       background-color: transparent;
       color: #f1f1f1; }
+      .button.is-lighter.is-transparent:hover, .button.is-lighter.is-transparent:active, .button.is-lighter.is-transparent:focus {
+        background-color: #f1f1f1; }
     .button.is-lighter.is-inverted {
       background-color: #f1f1f1;
       color: #f1f1f1; }
@@ -3035,6 +3123,8 @@ input:-webkit-autofill {
     .button.is-dark.is-transparent {
       background-color: transparent;
       color: #444; }
+      .button.is-dark.is-transparent:hover, .button.is-dark.is-transparent:active, .button.is-dark.is-transparent:focus {
+        background-color: #f1f1f1; }
     .button.is-dark.is-inverted {
       background-color: #d0d0d0;
       color: #444; }
@@ -3061,6 +3151,8 @@ input:-webkit-autofill {
     .button.is-primary.is-transparent {
       background-color: transparent;
       color: #3cbc8d; }
+      .button.is-primary.is-transparent:hover, .button.is-primary.is-transparent:active, .button.is-primary.is-transparent:focus {
+        background-color: #f1f1f1; }
     .button.is-primary.is-inverted {
       background-color: white;
       color: #3cbc8d; }
@@ -3087,6 +3179,8 @@ input:-webkit-autofill {
     .button.is-info.is-transparent {
       background-color: transparent;
       color: #2196f3; }
+      .button.is-info.is-transparent:hover, .button.is-info.is-transparent:active, .button.is-info.is-transparent:focus {
+        background-color: #f1f1f1; }
     .button.is-info.is-inverted {
       background-color: white;
       color: #2196f3; }
@@ -3113,6 +3207,8 @@ input:-webkit-autofill {
     .button.is-accent.is-transparent {
       background-color: transparent;
       color: #ff5722; }
+      .button.is-accent.is-transparent:hover, .button.is-accent.is-transparent:active, .button.is-accent.is-transparent:focus {
+        background-color: #f1f1f1; }
     .button.is-accent.is-inverted {
       background-color: white;
       color: #ff5722; }
@@ -3139,6 +3235,8 @@ input:-webkit-autofill {
     .button.is-danger.is-transparent {
       background-color: transparent;
       color: #EF5350; }
+      .button.is-danger.is-transparent:hover, .button.is-danger.is-transparent:active, .button.is-danger.is-transparent:focus {
+        background-color: #f1f1f1; }
     .button.is-danger.is-inverted {
       background-color: white;
       color: #EF5350; }
