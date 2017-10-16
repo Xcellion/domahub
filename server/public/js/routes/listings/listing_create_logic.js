@@ -58,22 +58,6 @@ $(document).ready(function() {
 
   //</editor-fold>
 
-  //close user dropdown menu on click outside the element
-  $(document).on("click", function(event) {
-    if (!$(event.target).closest("#user-dropdown-button").length) {
-      if ($(".user-dropdown-menu").is(":visible")) {
-        $(".user-dropdown-menu").addClass("is-hidden");
-        $("#user-dropdown-button").toggleClass("is-active").blur();
-      }
-    }
-  });
-
-  //toggle user drop down menu on icon button click
-  $("#user-dropdown-button").on("click", function() {
-    $(this).toggleClass("is-active");
-    $(".user-dropdown-menu").toggleClass("is-hidden");
-  });
-  
 });
 
 //<editor-fold>-------------------------------HELPERS-------------------------------
@@ -154,7 +138,7 @@ function submitDomainNames(submit_elem){
 //function to create the listing table from server info after initial textarea
 function createTable(bad_listings, good_listings){
   $("#domain-input-form").addClass('is-hidden');
-  $("#table-columns").removeClass('is-hidden');
+  $("#table-columns, #table-buttons-wrapper").removeClass('is-hidden');
 
   if (bad_listings.length > 0){
     errorMessage("invalid domains");
