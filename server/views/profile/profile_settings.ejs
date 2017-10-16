@@ -51,6 +51,7 @@
   										</span>
 										</a>
                   </li>
+                  <li><a id="promo-link" href='#promo' class="setting-link">Referrals & Promo Codes</a></li>
 								</ul>
 								<hr />
 								<p class="menu-label">
@@ -132,11 +133,12 @@
                   <h3 id="upgrade-tab-header" class="card-header-title">
                     <span>Premium Status</span>
                   </h3>
-                  <a tabindex="0" class="button is-small margin-left-10 is-primary" href="/features#pricing">Learn More</a>
+                  <a tabindex="0" class="button is-small margin-left-10 is-primary" href="/features#pricing">
+                    <span class="icon is-small"><i class="fa fa-info-circle"></i></span>
+                    <span>Learn More</span>
+                  </a>
                 </div>
-
                 <div class="card-content">
-
                   <div class="control is-spaced is-mobile">
                     <div class="control-left">
                       <p>
@@ -240,6 +242,33 @@
                       </button>
                     </footer>
                   </form>
+                </div>
+              </div>
+              <div id="promo" class="is-hidden card is-fullwidth">
+                <div class="card-header is-justified-start">
+                  <h3 class="card-header-title">
+                    <span>Referrals and Promo Codes</span>
+                  </h3>
+                </div>
+
+                <div class="card-content">
+                  <div id="promo-control" class="control is-spaced is-mobile">
+                    <div class="control-left">
+                      <p>
+                        Promo Code
+                      </p>
+                    </div>
+                    <div class="control-right">
+                      <form id="promo-form">
+                        <p class="control has-icon has-addons">
+                          <input id="promo-input" autocomplete="off" required tabindex="0" class="input promo-input" type="text"/>
+                          <i class="fa fa-tags"></i>
+                          <input id="promo-submit" class="promo-input no-shadow is-small is-stylish button" text="Submit" type="submit">
+                        </p>
+                      </form>
+                    </div>
+                  </div>
+
                 </div>
               </div>
               <div id="payout-address" class="is-hidden card is-fullwidth">
