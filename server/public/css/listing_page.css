@@ -1817,7 +1817,8 @@ pre {
   .tabs.is-boxed li.is-active a {
     background-color: white;
     border-color: rgba(0, 0, 0, 0.12);
-    border-bottom-color: transparent !important; }
+    border-bottom-color: transparent !important;
+    color: #3cbc8d; }
   .tabs.is-fullwidth li {
     flex-grow: 1; }
   .tabs.is-toggle a {
@@ -2394,6 +2395,8 @@ input:-webkit-autofill {
     line-height: 40px;
     padding-left: 12px;
     padding-right: 12px; }
+  .input.is-narrow, .is-narrow.textarea {
+    width: auto; }
   .input.is-fullwidth, .is-fullwidth.textarea {
     display: block;
     width: 100%; }
