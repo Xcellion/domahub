@@ -1,0 +1,341 @@
+=form-control
+  +control
+  @each $name, $pair in $colors
+    $color: nth($pair, 1)
+    &.is-#{$name}
+      border-color: $color
+
+input:-webkit-autofill
+    -webkit-box-shadow: 0 0 0px 1000px white inset
+    box-shadow: 0 0 0px 1000px white inset
+
+.form
+  margin: 10px 0
+
+.input
+  +form-control
+  border: 1px solid $border
+  border-radius: $radius
+  box-shadow: inset 0 1px 2px rgba(0,0,0,.16), 0 -1px 1px #FFF, 0 1px 0 #FFF
+  max-width: 100%
+  width: 100%
+  &:hover
+    border-color: $black-disabled
+  // Sizes
+  &.is-small
+    +control-small
+  &.is-medium
+    +control-medium
+  &.is-large
+    +control-large
+  // Modifiers
+  &.is-fullwidth
+    display: block
+    width: 100%
+  &.is-inline
+    display: inline
+    width: auto
+
+.textarea
+  @extend .input
+  border-radius: $radius
+  border: 1px solid $border
+  display: block
+  line-height: 1.2
+  max-height: 600px
+  min-height: 100px
+  padding: 10px
+  width: 100%
+  resize: none
+
+%control-with-element
+  cursor: pointer
+  display: inline-block
+  line-height: 16px
+  position: relative
+  &.is-disabled
+    color: $text-disabled
+    pointer-events: none
+    input
+      pointer-events: none
+
+.checkbox
+  @extend %control-with-element
+
+.radio
+  @extend %control-with-element
+  & + .radio
+    margin-left: 10px
+
+.select
+  +box-shadow(0,2px,4px,$border,0)
+  +transition(all 0.25s ease)
+  border-radius: $radius-small
+  display: inline-block
+  height: 32px
+  position: relative
+  vertical-align: top
+  &:hover,
+  &:focus
+    +box-shadow(0,2px,6px,$border,1px)
+  select
+    +form-control
+    cursor: pointer
+    display: block
+    padding-right: 36px
+    border-color: $border
+    &:hover,
+    &:active,
+    &:focus
+      border-color: $black-disabled
+    &::-ms-expand
+      display: none
+  &::-ms-expand
+    display: none
+  &.no-shadow
+    +box-shadow(0,0,0,$border,0)
+    &:hover,
+    &:focus
+      +box-shadow(0,0,0,$border,0)
+  &.no-borders
+    select
+      border: none
+    &:hover
+      select
+        background-color: $lighter
+  &.is-fullwidth
+    width: 100%
+    select
+      width: 100%
+  &.is-disabled
+    select
+      background-color: $grey-light
+      color: $text-disabled
+      border-color: $grey-light
+      opacity: 0.7
+  &:after
+    +arrow($black-primary)
+    margin-top: -6px
+    right: 16px
+    top: 50%
+  &:active,
+  &:focus
+    border-color: $black-disabled
+  // Sizes
+  &.is-small
+    height: 26px
+    select
+      +control-small
+      padding-right: 28px
+  &.is-medium
+    height: 40px
+    select
+      +control-medium
+      padding-right: 44px
+  &.is-large
+    height: 48px
+    select
+      +control-large
+      padding-right: 52px
+
+.label
+  color: $text
+  display: block
+  +mobile-456px
+    font-size: $size-7 !important
+  &:not(:last-child)
+    margin-bottom: 5px
+  &.is-small
+    font-size: $size-small
+  &.is-medium
+    font-size: $size-medium
+  &.is-large
+    font-size: $size-large
+
+// control containers
+.control
+  position: relative
+  text-align: left
+  &:not(:last-child)
+    margin-bottom: 20px
+  // Modifiers
+  &.has-text-centered
+    text-align: center
+  &.has-addons
+    display: flex
+    justify-content: flex-start
+    .button,
+    .input,
+    .select
+      border-radius: 0
+      margin-right: -1px
+      &.is-icon
+        margin-right: 0
+      &:hover
+        z-index: 2
+      &:active,
+      &:focus
+        z-index: 3
+      &:first-child
+        border-radius: $radius 0 0 $radius
+        select
+          border-radius: $radius 0 0 $radius
+      &:last-child
+        border-radius: 0 $radius $radius 0
+        select
+          border-radius: 0 $radius $radius 0
+      &.is-expanded
+        flex-grow: 1
+    &.has-addons-centered
+      justify-content: center
+    &.has-addons-right
+      justify-content: flex-end
+    &.has-addons-fullwidth
+      .button,
+      .input,
+      .select
+        flex-grow: 1
+  &.is-spaced
+    display: flex
+    justify-content: space-between
+    align-items: center
+    .control-left
+      margin-right: 10px
+      margin-bottom: 0
+    &.is-mobile
+      +mobile
+        align-items: flex-start
+        flex-direction: column
+        justify-content: flex-start
+        .control-left
+          margin-right: 0
+          margin-bottom: 10px
+  &.has-items-center
+    display: flex
+    align-items: center
+  &.has-icon
+    & > .fa
+      +fa(14px, 24px)
+      color: $text-disabled
+      pointer-events: none
+      position: absolute
+      top: 4px
+      z-index: 4
+      &.is-danger
+        color: $danger
+      &.is-success
+        color: $primary
+    .input,
+    .select
+      &:focus + .fa
+        color: $black-secondary
+      &.is-small + .fa
+        font-size: 10.5px
+        top: 2px
+      &.is-medium + .fa
+        font-size: 20px
+        top: 9px
+      &.is-large + .fa
+        font-size: 21px
+        top: 12px
+    .select
+      & + .fa
+        color: $black-secondary
+    &:not(.has-icon-right)
+      & > .fa
+        left: 4px
+      .input
+        padding-left: 32px
+        &.is-small
+          padding-left: 24px
+          & + .fa
+            left: 0
+        &.is-medium
+          padding-left: 40px
+          & + .fa
+            left: 8px
+        &.is-large
+          padding-left: 48px
+          & + .fa
+            left: 12px
+      .select
+        select
+          padding-left: 32px
+        &.is-small
+          select
+            padding-left: 24px
+          & + .fa
+            left: 0
+        &.is-medium
+          select
+            padding-left: 40px
+          & + .fa
+            left: 8px
+        &.is-large
+          select
+            padding-left: 48px
+          & + .fa
+            left: 12px
+    &.has-icon-right
+      & > .fa
+        right: 4px
+      .input
+        padding-right: 32px
+        &.is-small
+          padding-right: 24px
+          & + .fa
+            right: 0
+        &.is-medium
+          padding-right: 40px
+          & + .fa
+            right: 8px
+        &.is-large
+          padding-right: 48px
+          & + .fa
+            right: 12px
+      .select
+        select
+          padding-right: 32px
+        &.is-small
+          select
+            padding-right: 24px
+          & + .fa
+            left: 0
+        &.is-medium
+          select
+            padding-right: 40px
+          & + .fa
+            left: 8px
+        &.is-large
+          select
+            padding-right: 48px
+          & + .fa
+            left: 12px
+  &.is-grouped
+    display: flex
+    justify-content: flex-start
+    & > .control
+      &:not(:last-child)
+        margin-bottom: 0
+        margin-right: 10px
+      &.is-expanded
+        flex-grow: 1
+  &.is-grouped-center
+    display: flex
+    justify-content: center
+  &.is-grouped-right
+    display: flex
+    justify-content: flex-end
+  &.is-horizontal
+    +tablet
+      display: flex
+      justify-content: flex-end
+      & > .control
+        display: flex
+        flex-grow: 5
+  &.is-loading
+    &:after
+      @extend .loader
+      position: absolute !important
+      right: 8px
+      top: 8px

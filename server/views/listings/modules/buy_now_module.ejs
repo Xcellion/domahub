@@ -16,7 +16,7 @@
       </p>
       <label class="error_message label" for="contact_phone">Phone</label>
       <p class="control has-icon">
-        <input id="contact_phone" required class="padding-left-50 contact-input input" name="contact_phone" type="tel">
+        <input id="contact_phone" required class="contact-input input phone-number" name="contact_phone" type="tel">
       </p>
       <label class="error_message label" for="contact_offer">Offer in USD<span id="min-price"></span></label>
       <p class="control has-icon">
@@ -29,26 +29,25 @@
       </p>
 
       <div class='control'>
-        <button id="buy-now-submit" name="offer" type="submit" class="margin-bottom-15 contact-input button is-primary is-stylish">
+        <button id="buy-now-submit" name="offer" type="submit" class="contact-input button is-primary is-stylish">
           <span class="icon is-small"><i class="fa fa-paper-plane-o"></i></span>
           <span>Send offer</span>
         </button>
 
         <% if (listing_info.buy_price > 0) { %>
-          <button id="buy-button" name="buy" type="submit" class='margin-bottom-15 is-accent button is-stylish contact-input'>
+          <button id="buy-button" name="buy" type="submit" class='is-accent button is-stylish contact-input'>
             <span class="icon is-small"><i class="fa fa-shopping-cart"></i></span>
             <span id="buy-button-text">Buy Now</span>
           </button>
         <% } %>
+      </div>
 
-        <div>
-          <p id="why-somuch" class="is-info">
-            <span class="icon is-tooltip is-small"
-            data-balloon="By providing all of your contact information, you increase the likelihood of your purchase. Nobody likes responding to fake accounts or bots!"
-            data-balloon-length="large" data-balloon-pos="down"><i class="fa fa-question-circle"></i></span>
-            <span>Do I need to give all this information?</span>
-          </p>
-        </div>
+      <div class="content">
+        <p id="why-somuch" class="is-info"
+        data-balloon="By providing all of your contact information, you increase the likelihood of your purchase. Nobody likes responding to fake accounts or bots!"
+        data-balloon-length="large" data-balloon-pos="down">
+          Do I need to give all this information?
+        </p>
       </div>
 
     </form>

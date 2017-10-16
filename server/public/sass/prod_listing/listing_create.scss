@@ -1,0 +1,112 @@
+@import '../balloon';
+@import '../bulma/utilities/utilities.sass';
+@import '../bulma/base/base.sass';
+@import '../bulma/components/grid.sass';
+@import '../bulma/components/nav.sass';
+@import '../bulma/components/menu.sass';
+@import '../bulma/elements/delete.sass';
+@import '../bulma/elements/notification.sass';
+@import '../bulma/elements/table.sass';
+@import '../bulma/elements/form.sass';
+@import '../bulma/elements/button.sass';
+@import '../bulma/elements/content.sass';
+@import '../bulma/elements/hamburger.sass';
+@import '../bulma/elements/icon.sass';
+@import '../bulma/layout/section.sass';
+@import '../profile_wrapper';
+
+.company-logo {
+  margin-bottom: 30px;
+}
+
+#preview-img {
+  background-image: url("https://source.unsplash.com/category/nature");
+}
+
+#premium-form {
+  margin-top: 5px;
+  label::before {
+    top: 0;
+    left: 0;
+  }
+}
+
+#premium-label {
+  width: 24px;
+  height: 24px;
+  padding: 0;
+}
+
+.control-label {
+  &.is-small {
+    width: 40px;
+  }
+}
+
+.control {
+  & > .input {
+    &.input-number {
+      width: 100%;
+    }
+  }
+}
+
+.flex-column-mobile {
+  @include mobile {
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+// Table stuff
+#domain-input-table {
+  thead,
+  tbody tr {
+    display: table;
+    table-layout: fixed;
+    width: 100%;
+  }
+}
+
+#domain-input-body {
+  display: block;
+  max-height: 390px;
+  overflow-y: auto;
+}
+
+#table-buttons {
+  th {
+    @include mobile-456px {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: stretch;
+      .button {
+        margin-right: 5px;
+        margin-bottom: 5px;
+        flex-grow: 1;
+      }
+    }
+  }
+}
+
+.td-min-price {
+  width: 25%;
+  @include mobile-456px {
+    width: 35%;
+  }
+}
+
+// MISC
+.tip {
+  margin-top: 5px;
+  margin-left: 5px;
+  float: right;
+}
+
+.aligned {
+  vertical-align: top !important;
+}
+
+.what-is-premium {
+  text-align:right !important;
+}
