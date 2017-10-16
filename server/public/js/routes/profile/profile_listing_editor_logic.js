@@ -513,7 +513,7 @@ function checkBox(module_value, elem, child){
 
     //update status binding
     $("#status-toggle-button").off().on("click", function(e){
-      submitListingChanges($(this));
+      submitListingChanges($(this), true);
     });
 
     //module checkbox handlers
@@ -674,7 +674,7 @@ function checkBox(module_value, elem, child){
     refreshSubmitButtons();
 
     //revert all inputs
-    editRowVerified(getSelectedDomains("id", true));
+    updateEditorEditing(getSelectedDomains("id", true));
 
     errorMessage(false);
     successMessage(false);
@@ -746,8 +746,7 @@ function checkBox(module_value, elem, child){
           successMessage("Successfully changed settings for " + plural_success_msg + "!");
         }
         listings = data.listings;
-        createRows(selected_ids);
-        editRowVerified(selected_ids);
+        updateEditorEditing(selected_ids);
       }
       else {
         //listing is no longer pointed to domahub, revert to verify tab
