@@ -1046,7 +1046,7 @@ function updateOffersTable(listing_info, total_domains){
     else {
       //show rows (show rejected if button toggled)
       if (!$("#show-rejected-offers").hasClass('is-primary')){
-        $(".offer-row:not(#offer-clone)").removeClass('is-hidden');
+        $(".offer-row:not(#offer-clone, .rejected-offer)").removeClass('is-hidden');
       }
       else {
         $(".offer-row.unaccepted-offer:not(#offer-clone)").removeClass('is-hidden');
