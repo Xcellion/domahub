@@ -9,56 +9,65 @@
       </h2>
     </div>
     <div class="button-wrapper control margin-top-10">
-      <a id="show-selector-button" class="button is-stylish is-black is-transparent is-small" tabindex="0" title="Back To Domain Selector">
+      <a id="show-selector-button" class="button is-black is-transparent" tabindex="0" title="Back To Domain Selector">
         <span class="icon is-small">
           <i class="fa fa-long-arrow-left"></i>
         </span>
         <span>Back To My Listings</span>
       </a>
-      <a id="status-toggle-button" tabindex="0" class="verified-elem button is-stylish is-hidden is-black is-transparent is-small" title="Publicly hide or show landing page(s).">
+      <a id="status-toggle-button" tabindex="0" class="verified-elem button is-hidden is-black is-transparent" title="Publicly hide or show landing page(s).">
         <span id="status-color" class="icon"><i id="status-icon" class="fa"></i></span>
         <span id="status-text"></span>
       </a>
-      <a id="refresh-offers-button" class="verified-elem is-hidden button is-outlined is-stylish is-small" title="Refresh Offers">
+      <a id="refresh-offers-button" class="verified-elem is-hidden button is-outlined" title="Refresh Offers">
         <span class="icon is-small"><i class="fa fa-refresh"></i></span>
         <span>Refresh Offers</span>
       </a>
       <div id="view-listings-button-wrapper">
-        <a id="view-listings-button" target="_blank" rel="noopener" tabindex="0" class="button is-stylish is-transparent verified-elem is-hidden is-small">
+        <a id="view-listings-button" target="_blank" rel="noopener" tabindex="0" class="button is-black is-transparent verified-elem is-hidden">
           <span class="icon is-small"><i style="margin-top: 2px" class="fa fa-external-link"></i></span>
           <span>View Listing<span class="edit-domain-plural is-hidden">s</span></span>
         </a>
         <div id="view-listings-button-drop" class="box domain-tooltip is-hidden"></div>
       </div>
-      <a id="verify-button" class="unverified-elem is-hidden button is-primary is-stylish is-small" title="Verify domain(s)">
+      <a id="verify-button" class="unverified-elem is-hidden button is-primary" title="Verify domain(s)">
         <span class="icon is-small"><i class="fa fa-check-circle-o"></i></span>
         <span>Verify Now</span>
       </a>
-      <a id="refresh-dns-button" class="unverified-elem is-hidden button is-outlined is-stylish is-small" title="Refresh DNS Table">
+      <a id="refresh-dns-button" class="unverified-elem is-hidden button is-outlined" title="Refresh DNS Table">
         <span class="icon is-small"><i class="fa fa-refresh"></i></span>
         <span>Refresh Table</span>
       </a>
-      <a id="save-changes-button" class="button is-hidden is-primary is-stylish is-small">
+      <a id="save-changes-button" class="button is-hidden is-primary">
         <span class="icon is-small"><i class="fa fa-floppy-o"></i></span>
         <span>Save Changes</span>
       </a>
-      <a id="cancel-changes-button" class="button is-danger is-hidden is-stylish is-small">
+      <a id="cancel-changes-button" class="button is-danger is-hidden">
         <span class="icon is-small"><i class="fa fa-ban"></i></span>
         <span>Cancel Changes</span>
       </a>
     </div>
 
     <!-- EDIT LISTING DETAILS TABS  -->
-    <div id="edit-toolbar" class="is-hidden tabs no-border">
+    <div id="edit-toolbar" class="is-hidden tabs is-boxed">
       <ul>
         <li id="info-tab" class="verified-elem unpurchased-elem tab">
-          <a tabindex="0">Information</a>
+          <a tabindex="0">
+            <span class="icon is-small"><i class="fa fa-info"></i></span>
+            <span>Information</span>
+          </a>
         </li>
         <li id="design-tab" class="verified-elem unpurchased-elem tab">
-          <a tabindex="0">Design</a>
+          <a tabindex="0">
+            <span class="icon is-small"><i class="fa fa-magic"></i></span>
+            <span>Design</span>
+          </a>
         </li>
         <li id="rental-tab" class="verified-elem unpurchased-elem tab">
-          <a tabindex="0">Rental</a>
+          <a tabindex="0">
+            <span class="icon is-small"><i class="fa fa-calendar-check-o"></i></span>
+            <span>Rental</span>
+          </a>
         </li>
       </ul>
     </div>
@@ -86,7 +95,7 @@
           <input id="offer-search" tabindex="0" class="input is-expanded" type="text" placeholder="Search Offers" />
         </div>
         <div class="control">
-          <a id="show-rejected-offers" class="button is-small is-outlined is-stylish">
+          <a id="show-rejected-offers" class="button is-outlined">
             <span class="icon"><i class="fa fa-toggle-off"></i></span>
             <span class="button-text">Show Rejected</span>
           </a>
@@ -116,7 +125,7 @@
           <tbody id="dns_table-body">
             <tr id="loading-records-row">
               <td colspan=7 class="has-text-centered padding-top-25 padding-bottom-25">
-                <span class="icon is-small margin-right-5"><i class="v-align-middle fa fa-spin fa-refresh"></i></span>
+                <span class="icon is-small margin-right-5"><i class="fa fa-spin fa-refresh"></i></span>
                 <span class="v-align-middle">Now loading existing DNS records...</span>
               </td>
             </tr>
@@ -150,55 +159,50 @@
 				<div class="control">
 					<label class="label" for="min-price-input">
             Minimum Price
-            <span class="icon is-small is-tooltip v-align-bottom" data-balloon-length="large" data-balloon="The minimum offer price you will consider. Put blank or 0 for no minimum offer price." data-balloon-pos="up">
-              <i class="fa fa-question-circle"></i>
-            </span>
           </label>
-					<input id="min-price-input" data-name="min_price" type="number" min="1" step="1" class="input changeable-input">
+          <small class="tip">The minimum offer price you will consider. Leave blank or 0 to disable minimum offer price.</small>
+					<input id="min-price-input" class="input changeable-input is-narrow" data-name="min_price" type="number" min="1" step="1">
 				</div>
         <div class="control">
           <label class="label" for="buy-price-input">
             Buy It Now Price
-            <span class="icon is-small is-tooltip v-align-bottom" data-balloon-length="large" data-balloon="The price you are willing to immediately sell the domain for. Put blank or 0 for no Buy It Now option." data-balloon-pos="up">
-              <i class="fa fa-question-circle"></i>
-            </span>
           </label>
-          <input id="buy-price-input" data-name="buy_price" type="number" min="1" step="1" class="input changeable-input">
-          <small class="tip"><a target="_blank" rel="noopener" href="/faq#selling" class="is-primary">What are the advantages of buying immediately?</a></small>
+          <small class="tip">The price you are willing to immediately sell the domain for. Leave blank or 0 to disable Buy It Now option.</small>
+          <input id="buy-price-input" class="input changeable-input is-narrow" data-name="buy_price" type="number" min="1" step="1">
         </div>
 				<div class="control">
 					<label class="label" for="description">
-            <span>Listing Description</span>
-            <span class="icon is-small is-tooltip v-align-bottom" data-balloon-length="large" data-balloon="A well written description can help customers understand the value and potential of your domain name. Remember to use correct spelling and grammar to show your professionalism!" data-balloon-pos="up">
-              <i class="fa fa-question-circle"></i>
-            </span>
+            Listing Description
           </label>
+          <small class="tip">Say anything you want about your domain. This will appear as a paragraph below the domain name.</small>
 					<textarea id="description" class="description-input textarea changeable-input"
 					tabindex="0" data-name="description" placeholder="Write anything you want!"></textarea>
 				</div>
         <div class="control">
-          <label class="label" for="min-price-input">
+          <label class="label" for="domain-name-input">
             Domain Capitalization
             <span class="icon is-small is-tooltip v-align-bottom" data-balloon-length="large" data-balloon="Change the capitalization of your domain name to fit your custom domain branding." data-balloon-pos="up">
               <i class="fa fa-question-circle"></i>
             </span>
-            <span class="icon is-small is-tooltip v-align-bottom" data-balloon-length="medium" data-balloon="You must upgrade to a Premium account to edit this." data-balloon-pos="up">
+            <% if (!user.stripe_subscription_id) { %>
+            <span class="icon is-small is-tooltip v-align-bottom" data-balloon="Premium Feature" data-balloon-pos="up">
               <i class="fa fa-diamond"></i>
             </span>
+            <% } %>
           </label>
-          <small id="domain-name-cap-missing">You cannot edit the domain name capitalization with more than one domain selected. Please select a specific domain to edit this setting.</small>
-          <input id="domain-name-input" data-name="domain_name" type="text" class="input premium-input changeable-input">
+          <small id="domain-name-cap-missing" class="tip is-danger">You cannot edit the domain name capitalization with more than one domain selected. Please select a specific domain to edit this setting.</small>
+          <input id="domain-name-input" class="input premium-input changeable-input is-narrow" data-name="domain_name" type="text">
         </div>
         <div class="control">
           <label class="label" for="description-footer">
             <span>Footer Description</span>
-            <span class="icon is-small is-tooltip v-align-bottom" data-balloon-length="large" data-balloon="An optional description (up to 75 characters) to be displayed in the footer of your sales page. An ideal location for a slogan, phrase, or trademark." data-balloon-pos="up">
-              <i class="fa fa-question-circle"></i>
-            </span>
-            <span class="icon is-small is-tooltip v-align-bottom" data-balloon-length="medium" data-balloon="You must upgrade to a Premium account to edit this." data-balloon-pos="up">
+            <% if (!user.stripe_subscription_id) { %>
+            <span class="icon is-small is-tooltip v-align-bottom" data-balloon="Premium Feature" data-balloon-pos="up">
               <i class="fa fa-diamond"></i>
             </span>
+            <% } %>
           </label>
+          <small class="tip">Insert up to 75 characters to be displayed in the footer of your sales page. An ideal location for a slogan, phrase, or trademark.</small>
           <input id="description-footer" data-name="description_footer" tabindex="0" class="premium-input input changeable-input" placeholder="The best domain names in the industry." />
         </div>
 				<%# <div class="control">
@@ -234,7 +238,7 @@
               What is a Premium account?
             </a>
             <div class="margin-top-15 control has-text-centered">
-              <a href="/profile/settings#premium" class="button is-stylish is-primary">
+              <a href="/profile/settings#premium" class="button is-primary">
                 <span class="icon is-small">
                   <i class="fa fa-diamond"></i>
                 </span>
@@ -258,13 +262,13 @@
             <p id="example-font" class="preview-elem is-black">This is a preview of your chosen design. Use the settings below to customize your landing page!</p>
           </div>
           <div class="button-wrapper control">
-            <a id="example-button-primary" class="v-align-middle preview-elem button is-stylish">
+            <a id="example-button-primary" class="preview-elem button">
               <span class="icon is-small">
                 <i class="fa fa-paper-plane-o" aria-hidden="true"></i>
               </span>
               <span>Send Offer</span>
             </a>
-            <a id="example-button-accent" class="v-align-middle preview-elem button is-stylish">
+            <a id="example-button-accent" class="preview-elem button">
               <span class="icon is-small">
                 <i class="fa fa-shopping-cart" aria-hidden="true"></i>
               </span>
@@ -285,7 +289,7 @@
               <i class="fa fa-picture-o"></i>
             </div>
             <div class="control">
-              <a id="random-theme-button" class="premium-input button is-small is-stylish">
+              <a id="random-theme-button" class="premium-input button">
                 <span class="icon is-small">
                   <i class="fa fa-random"></i>
                 </span>
@@ -657,13 +661,13 @@
               </div>
               <div id="offer-modal-button-wrapper" class="control margin-top-20 is-grouped is-grouped-center">
                 <p class="control">
-                  <a id="accept_button" tabindex="0" class='button margin-right-25 is-primary is-stylish is-small'>
+                  <a id="accept_button" tabindex="0" class='button margin-right-25 is-primary '>
                     <span class="icon is-small"><i class="fa fa-check"></i></span>
                     <span>Accept offer</span>
                   </a>
                 </p>
                 <p class="control">
-                  <a id="reject_button" tabindex="0" class='button is-outlined is-danger is-stylish is-small'>
+                  <a id="reject_button" tabindex="0" class='button is-outlined is-danger '>
                     <span class="icon is-small"><i class="fa fa-times"></i></span>
                     <span>Reject offer</span>
                   </a>
@@ -691,7 +695,7 @@
             </p>
             <p>
               <p class="resend-wrapper">
-                <a id="resend-deposit" class="button is-stylish is-small">Re-send verification email to buyer</a>
+                <a id="resend-deposit" class="button ">Re-send verification email to buyer</a>
               </p>
               <a class="is-primary" href="/contact">
                 Having issues? Contact us for assistance.
@@ -716,7 +720,7 @@
               If you have changed your mind about this offer, please <a href="/contact" class="is-primary">let us know</a>.
             </p>
             <p class="resend-wrapper">
-              <a id="resend-accept" class="button is-stylish is-small">Re-send payment email to buyer</a>
+              <a id="resend-accept" class="button ">Re-send payment email to buyer</a>
             </p>
           </div>
         </div>
@@ -734,7 +738,7 @@
             <tr id="loading-offers">
               <td colspan="5" class="has-text-centered padding-top-25 padding-bottom-25">
                 <p>
-                  <span class="icon is-small margin-right-5"><i class="v-align-middle fa fa-spin fa-refresh"></i></span>
+                  <span class="icon is-small margin-right-5"><i class="fa fa-spin fa-refresh"></i></span>
                   <span class="v-align-middle">Now loading domain offers...</span>
                 </p>
               </td>
@@ -759,7 +763,7 @@
       <div id="stats-tab-drop" class="drop-tab is-hidden">
         <div id="loading-stats" class="content margin-top-20">
           <p>
-            <span class="icon is-small margin-right-5"><i class="v-align-middle fa fa-spin fa-refresh"></i></span>
+            <span class="icon is-small margin-right-5"><i class="fa fa-spin fa-refresh"></i></span>
             <span class="v-align-middle">Now loading listing statistics...</span>
           </p>
         </div>
