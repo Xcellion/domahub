@@ -36,44 +36,35 @@
 								<div class="level is-mobile">
 									<div class="level-item has-text-centered">
 										<div class="content">
-											<small class="heading is-uppercase margin-bottom-20">
+											<small class="heading">
 												Total
 											</small>
-											<h1 class="margin-bottom-10"><%= user.listings.length %></h1>
-											<a tabindex="0" href="/listings/create" class="button is-stylish">
-                        <span class="icon is-small">
-                          <i class="fa fa-plus"></i>
-                        </span>
-                        <span>Create Listings</span>
+											<h1 class="counter"><%= user.listings.length %></h1>
+											<a tabindex="0" href="/listings/create" class="is-underlined">
+                        Create Listings
                       </a>
 										</div>
 									</div>
 									<div class="level-item has-text-centered">
 										<div class="content">
-											<small class="heading is-uppercase margin-bottom-20">
+											<small class="heading">
 												Unverified
 											</small>
-											<h1 id="unverified-counter" class="is-danger margin-bottom-10">
+											<h1 id="unverified-counter" class="is-danger counter">
 											</h1>
-                      <a id="unverified-button" tabindex="0" class="unverified-href button is-stylish">
-                        <span class="icon is-small">
-                          <i class="fa fa-check-circle-o"></i>
-                        </span>
-                        <span>Verify Listings</span>
+                      <a id="unverified-button" tabindex="0" class="unverified-href is-underlined">
+                        Verify Listings
                       </a>
                     </div>
                   </div>
 									<div class="level-item has-text-centered">
 										<div class="content">
-											<small class="heading is-uppercase margin-bottom-20">
+											<small class="heading">
 												Offers
 											</small>
-											<h1 id="offers-counter" class="is-success margin-bottom-10">0</h1>
-                      <a tabindex="0" href="/profile/mylistings?tab=offers" class="button is-stylish">
-                        <span class="icon is-small">
-                          <i class="fa fa-check-circle-o"></i>
-                        </span>
-                        <span>View Offers</span>
+											<h1 id="offers-counter" class="is-primary counter">0</h1>
+                      <a tabindex="0" href="/profile/mylistings?tab=offers" class="is-underlined">
+                      View Offers
                       </a>
                     </div>
 									</div>
@@ -121,7 +112,7 @@
                       Email Address
                     </p>
                   </div>
-									<span class="tag is-primary control-right">Verified</span>
+									<span class="tag is-primary control-right has-text-right">Verified</span>
                 </div>
 								<div class="control is-spaced">
                   <div class="content control-left">
@@ -136,9 +127,9 @@
                     </p>
                   </div>
 									<% if (user.stripe_account) { %>
-										<span class="tag is-primary control-right">Completed</span>
+										<span class="tag is-primary control-right has-text-right">Completed</span>
 									<% } else { %>
-										<span class="tag is-danger control-right">Incomplete</span>
+										<span class="tag is-danger control-right has-text-right">Incomplete</span>
 									<% } %>
                 </div>
                 <div class="control is-spaced">
@@ -154,9 +145,9 @@
                     </p>
                   </div>
 									<% if (user.stripe_info && user.stripe_info.transfers_enabled) { %>
-										<span class="tag is-primary control-right">Connected</span>
+										<span class="tag is-primary control-right has-text-right">Connected</span>
 									<% } else { %>
-										<span class="tag is-danger control-right">Not Connected</span>
+										<span class="tag is-danger control-right has-text-right">Not Connected</span>
 									<% } %>
                 </div>
               </div>

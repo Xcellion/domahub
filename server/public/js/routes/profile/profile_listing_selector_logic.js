@@ -72,7 +72,6 @@ $(document).ready(function(){
 
   //select dropper
   $("#selector-select-button").on('click', function(e){
-    console.log("WTF")
     $("#select-all-drop").toggleClass('is-hidden');
   });
 

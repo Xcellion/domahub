@@ -10,16 +10,16 @@
 
         <%# BUYABLE TAG %>
         <% if (listing_info.status == 1 && listing_info.buy_price > 0) { %>
-          <span id="price-tag" class="tag is-primary margin-right-5 margin-bottom-5 is-hidden is-medium"></span>
+          <span id="price-tag" class="tag is-bold is-primary is-hidden is-medium"></span>
         <% } else if (listing_info.status == 1){ %>
-          <span id="price-tag" class="tag is-primary margin-right-5 margin-bottom-5 is-medium">Now available!</span>
+          <span id="price-tag" class="tag is-bold is-primary is-medium">Now available!</span>
         <% } else { %>
-          <span class="tag is-primary margin-right-5 margin-bottom-5 is-medium">Currently unavailable</span>
+          <span class="tag is-primary is-medium">Currently unavailable</span>
         <% } %>
 
         <%# RENTABLE TAG %>
         <% if (listing_info.status == 1 && listing_info.rentable) { %>
-          <span id="rent-price-tag" class="tag is-primary is-medium">
+          <span id="rent-price-tag" class="tag is-bold is-primary is-medium">
             <% if (listing_info.price_rate > 0){ %>
               For rent - $<%= listing_info.price_rate %> / <%= listing_info.price_type %>
             <% } else { %>
@@ -29,18 +29,18 @@
         <% } %>
         <span id="free-until" class='is-hidden tag is-primary is-medium'></span>
 
-        <div id="domain-display" class="content margin-top-15">
+        <div id="domain-display" class="content">
           <% if (listing_info.rentable) { %>
-            <h1 id="domain-title" class="is-primary is-inline-block margin-bottom-0"><%= listing_info.domain_name %></h1>
+            <h1 id="domain-title" class="is-primary is-inline-block"><%= listing_info.domain_name %></h1>
             <form id="path-input" class="is-hidden is-inline-block">
-              <div class="control margin-bottom-0">
+              <div class="control">
                 <input id="typed-slash" class='padding-0' tabindex="0" type="text" autocomplete="off">
                 <label id="input-tooltip" style="display:none;" class="input-tooltip" for="typed-slash">Click here to edit.</label>
                 <label id="input-tooltip-error" class="input-tooltip is-active is-hidden" for="typed-slash">Input must be alphanumeric!</label>
               </div>
             </form>
           <% } else { %>
-            <h1 class="is-primary is-inline-block margin-bottom-0"><%= listing_info.domain_name %></h1>
+            <h1 class="is-primary is-inline-block"><%= listing_info.domain_name %></h1>
           <% } %>
         </div>
 
