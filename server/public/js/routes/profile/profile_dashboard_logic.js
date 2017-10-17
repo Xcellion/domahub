@@ -19,7 +19,7 @@ $(document).ready(function() {
     document.execCommand("copy");
     $("#referral-link-input").blur();
     $(this).find("i").removeClass("fa-clipboard").addClass('fa-check');
-    $(this).find("span").text("Copied!");
+    $(this).find("p").text("Copied!");
   });
 
 });
