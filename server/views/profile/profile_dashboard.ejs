@@ -74,18 +74,21 @@
 						<div class="card no-shadow is-fullwidth">
 							<div class="card-header">
 								<h3 class="card-header-title">Traffic Overview</h3>
-								<button tabindex="0" class="card-header-icon button">
+								<%# <a tabindex="0" class="is-stylish is-small card-header-icon button">
 									<span class="icon"><i class="fa fa-calendar"></i></span>
 									<span>Change Date</span>
-								</button>
+								</a>%>
 							</div>
 							<div class="card-content">
-								<span class="select">
+								<%# <span class="select">
 									<select tabindex="0">
 										<option>All Domains</option>
 										<option>Most Traffic</option>
 									</select>
-								</span>
+								</span>%>
+                <div class="box">
+                  Statistics and traffic data are currently being developed. Please <a class="is-underlined is-primary" href="/contact">let us know</a> what kind of traffic tools you'd like to see on your DomaHub dashboard!
+                </div>
 							</div>
 						</div>
 					</div>
@@ -112,7 +115,11 @@
                       Email Address
                     </p>
                   </div>
-									<span class="tag is-primary control-right has-text-right">Verified</span>
+
+									<p class="tag is-primary control-right has-text-right">
+                    <span class="icon is-small"><i class="fa fa-check"></i></span>
+                    <span>Verified</span>
+                  </p>
                 </div>
 								<div class="control is-spaced">
                   <div class="content control-left">
@@ -127,9 +134,15 @@
                     </p>
                   </div>
 									<% if (user.stripe_account) { %>
-										<span class="tag is-primary control-right has-text-right">Completed</span>
+                    <p class="tag is-primary control-right has-text-right">
+                      <span class="icon is-small"><i class="fa fa-check"></i></span>
+                      <span>Connected</span>
+                    </p>
 									<% } else { %>
-										<span class="tag is-danger control-right has-text-right">Incomplete</span>
+                    <p class="tag is-danger control-right has-text-right">
+                      <span class="icon is-small"><i class="fa fa-times"></i></span>
+                      <span>Not Connected</span>
+                    </p>
 									<% } %>
                 </div>
                 <div class="control is-spaced">
@@ -145,10 +158,16 @@
                     </p>
                   </div>
 									<% if (user.stripe_info && user.stripe_info.transfers_enabled) { %>
-										<span class="tag is-primary control-right has-text-right">Connected</span>
-									<% } else { %>
-										<span class="tag is-danger control-right has-text-right">Not Connected</span>
-									<% } %>
+                    <p class="tag is-primary control-right has-text-right">
+                      <span class="icon is-small"><i class="fa fa-check"></i></span>
+                      <span>Connected</span>
+                    </p>
+                  <% } else { %>
+                    <p class="tag is-danger control-right has-text-right">
+                      <span class="icon is-small"><i class="fa fa-times"></i></span>
+                      <span>Not Connected</span>
+                    </p>
+                  <% } %>
                 </div>
               </div>
             </div>
@@ -156,14 +175,17 @@
               <div class="content">
                 <h3 class="is-bold is-white">Earn Free Months of <a href="/features#pricing" class="is-underlined">Premium</a></h3>
                 <p class="is-white">
-                  Invite your friends to try DomaHub using your unique promo code and get 1 free month of premium
+                  Invite your friends to try DomaHub using your unique promo code and get a free month of premium
                   for each friend that signs up for a Premium account!
                 </p>
               </div>
-              <a tabindex="0" class="button is-info is-inverted">
-                <span class="icon is-small"><i class="fa fa-smile-o"></i></span>
-                <span>Invite Friends</span>
-              </a>
+              <div class="control has-addons">
+                <input id="referral-link" value="https://domahub.com/signup/<%= user.username %>" class='input is-extended' placeholder="Invite your friends!"/>
+                <a id="referral-link-copy" class="button is-small is-stylish">
+                  <i class="fa fa-clipboard"></i>
+                  <span>Copy link</span>
+                </a>
+              </div>
             </div>
           </div>
         </div>
