@@ -6,9 +6,9 @@
 @import '../bulma/components/nav.sass';
 @import '../bulma/components/menu.sass';
 @import '../bulma/components/media.sass';
+@import '../bulma/components/card.sass';
 @import '../bulma/components/tabs.sass';
 @import '../bulma/elements/tag.sass';
-@import '../bulma/elements/box.sass';
 @import '../bulma/elements/delete.sass';
 @import '../bulma/elements/notification.sass';
 @import '../bulma/elements/table.sass';
@@ -129,35 +129,14 @@
   }
 }
 
-// table stuff
-// #filters {
-//   @include mobile {
-//     margin-top: 35px;
-//   }
-// }
-//
-// .filter-menu-toggle {
-//   cursor: pointer;
-//   &.hamburger {
-//     height: 30px;
-//     width: 30px;
-//   }
-// }
+#status-toggle-button {
+  border: none;
+  justify-content: flex-start;
+}
 
-.verified-elem {
-  position: relative;
-  &.is-loading {
-    @include transition(none);
-    color: $black-secondary !important;
-    pointer-events: none;
-    &:after {
-      @extend .loader;
-      @include center(16px);
-      left: 50px !important;
-      position: absolute !important;
-      border-color: transparent transparent $black-secondary $black-secondary !important
-    }
-  }
+.tabs-menu {
+  max-width: 300px;
+  min-width: 300px;
 }
 
 #filters {
@@ -223,10 +202,6 @@
   display: block;
   margin: 5px 0;
   color: $text-light;
-}
-
-.has-line-height {
-  line-height: 1.5;
 }
 
 // listing image
