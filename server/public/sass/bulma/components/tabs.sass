@@ -25,6 +25,8 @@
       outline: none
   li
     display: block
+    &:not(:last-child)
+      margin-right: 20px
     &.is-active
       a
         border-bottom-color: $black-primary
@@ -81,22 +83,27 @@
           &:hover,
           &:focus
             background-color: $grey-light
-  &.no-border
+  &.no-borders
     ul
       border-bottom: none
     li
-      margin: 0 10px
       a
-        +transition(all .2s ease)
+        +transition(color .2s ease)
         border-bottom: none
         margin-bottom: 0
+        padding: 0
         &:hover,
-        &:active
-          +box-shadow(0,-2px,0,$black-disabled,0,inset)
+        &:active,
+        &:focus
+          color: $black-disabled
           outline: 0
       &.is-active
         a
-          +box-shadow(0,-2px,0,$primary,0,inset)
+          color: $primary
+          font-weight: 500
+      &.side-tabs
+        border-left: 2px solid $black-secondary
+        padding-left: 20px
   &.is-boxed
     a
       border: 1px solid transparent

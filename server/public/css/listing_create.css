@@ -1536,6 +1536,9 @@ pre {
   .menu-list a.is-active {
     background-color: #3cbc8d;
     color: white; }
+    .menu-list a.is-active p {
+      color: white;
+      font-weight: 500; }
 
 .menu-list li ul {
   border-left: 1px solid rgba(0, 0, 0, 0.12);
@@ -3062,7 +3065,7 @@ button {
   .icon.is-disabled {
     color: rgba(0, 0, 0, 0.38); }
   .icon.is-tooltip {
-    color: rgba(0, 0, 0, 0.66);
+    color: #767676;
     cursor: pointer !important; }
 
 .section {

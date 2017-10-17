@@ -144,6 +144,22 @@
 //   }
 // }
 
+.verified-elem {
+  position: relative;
+  &.is-loading {
+    @include transition(none);
+    color: $black-secondary !important;
+    pointer-events: none;
+    &:after {
+      @extend .loader;
+      @include center(16px);
+      left: 50px !important;
+      position: absolute !important;
+      border-color: transparent transparent $black-secondary $black-secondary !important
+    }
+  }
+}
+
 #filters {
   @include mobile {
     select {
