@@ -738,7 +738,7 @@ function checkBox(module_value, elem, child){
         //status only success message
         if (status_only){
           var plural_success_msg = (selected_ids.length == 1) ? "This listing has" : selected_ids.length + " listings have";
-          var active_inactive_text = (new_status == 0) ? "inactive! It is no longer visible to the public." : "active! It is now available to the public.";
+          var active_inactive_text = (new_status == 0) ? "inactive!" : "active!";
           successMessage(plural_success_msg + " been set to " + active_inactive_text);
         }
         //editing success message
