@@ -73,104 +73,176 @@
   <div class="column">
 
     <!-- OFFERS TABLE -->
-    <div id="offers-toolbar" class="is-hidden control">
-      <div class="control is-grouped">
-        <div class="control has-icon">
-          <span class="select">
-            <select id="offers-sort-select" tabindex="0">
-              <option selected value="timestamp_desc">Date Received (Newest)</option>
-              <option value="timestamp_asc">Date Received (Oldest)</option>
-              <option value="offer_desc">Price (High - Low)</option>
-              <option value="offer_asc">Price (Low - High)</option>
-              <option value="name_asc">Offerer Name (A - Z)</option>
-              <option value="name_desc">Offerer Name (Z - A)</option>
-              <option value="accepted_desc">Rejected / Accepted</option>
-              <option value="accepted_asc">Accepted / Rejected</option>
-            </select>
-          </span>
-          <i class="fa fa-sort"></i>
+    <div id="offers-tab-drop" class="is-hidden">
+      <div id="offers-toolbar" class="control">
+        <div class="control is-grouped">
+          <div class="control has-icon">
+            <span class="select">
+              <select id="offers-sort-select" tabindex="0">
+                <option selected value="timestamp_desc">Date Received (Newest)</option>
+                <option value="timestamp_asc">Date Received (Oldest)</option>
+                <option value="offer_desc">Price (High - Low)</option>
+                <option value="offer_asc">Price (Low - High)</option>
+                <option value="name_asc">Offerer Name (A - Z)</option>
+                <option value="name_desc">Offerer Name (Z - A)</option>
+                <option value="accepted_desc">Rejected / Accepted</option>
+                <option value="accepted_asc">Accepted / Rejected</option>
+              </select>
+            </span>
+            <i class="fa fa-sort"></i>
+          </div>
+          <div class="control has-icon">
+            <i class="fa fa-search"></i>
+            <input id="offer-search" tabindex="0" class="input is-expanded" type="text" placeholder="Search Offers" />
+          </div>
+          <div class="control">
+            <a id="show-rejected-offers" class="button is-outlined">
+              <span class="icon"><i class="fa fa-toggle-off"></i></span>
+              <span class="button-text">Show Rejected</span>
+            </a>
+          </div>
         </div>
-        <div class="control has-icon">
-          <i class="fa fa-search"></i>
-          <input id="offer-search" tabindex="0" class="input is-expanded" type="text" placeholder="Search Offers" />
+      </div>
+      <div>
+        <div id="offer-modal" class="modal">
+          <div class="modal-background"></div>
+          <div class="modal-container">
+            <div class="modal-content offer-popup">
+              <div class="content has-text-centered">
+                <p class="is-bold" id="offer-modal-domain"></p>
+                <small>Received on <span id="offer-modal-timestamp"></span></small>
+              </div>
+              <div class="content">
+                <h1 id="offer-modal-price" class="has-text-centered"></h1>
+                <ul id="offer-info" class="offer-info">
+                  <li>
+                    <span class="icon is-small" title="From"><i class="fa fa-user-o"></i></span><span id="offer-modal-name"></span>
+                  </li>
+                  <li>
+                    <span class="icon is-small" title="Email"><i class="fa fa-envelope-o"></i></span><span id="offer-modal-email"></span>
+                  </li>
+                  <li>
+                    <span class="icon is-small" title="Phone"><i class="fa fa-phone"></i></span><span id="offer-modal-phone"></span>
+                  </li>
+                  <li class="">
+                    <span class="icon is-small" title="Message"><i class="fa fa-comment-o"></i></span>
+                    <p id="offer-modal-message" class="offer-msg"></p>
+                  </li>
+                </ul>
+                <ul id="offer-response-label" class="is-hidden">
+                  Your response:
+                </ul>
+                <ul id="offer-response-wrapper">
+                  <li>
+                    <textarea id="offer-response" placeholder="You may include an optional response to the offerer." class='textarea'></textarea>
+                  </li>
+                </ul>
+              </div>
+              <div id="offer-modal-button-wrapper" class="control is-grouped is-grouped-center">
+                <p class="control">
+                  <a id="accept_button" tabindex="0" class='button is-primary '>
+                    <span class="icon is-small"><i class="fa fa-check"></i></span>
+                    <span>Accept offer</span>
+                  </a>
+                </p>
+                <p class="control">
+                  <a id="reject_button" tabindex="0" class='button is-outlined is-danger '>
+                    <span class="icon is-small"><i class="fa fa-times"></i></span>
+                    <span>Reject offer</span>
+                  </a>
+                </p>
+              </div>
+            </div>
+          </div>
+          <button class="modal-close"></button>
         </div>
-        <div class="control">
-          <a id="show-rejected-offers" class="button is-outlined">
-            <span class="icon"><i class="fa fa-toggle-off"></i></span>
-            <span class="button-text">Show Rejected</span>
-          </a>
+        <div id="deposited-offer" class="hidden-while-loading-offers has-border-bottom is-hidden">
+          <div class="content">
+            <h3>
+              Congratulations on selling your domain!
+            </h3>
+            <p>
+              The money has been deposited and verified by DomaHub. You must now transfer the ownership of this domain to the new owner.
+              Once the new owner has verified that the ownership has been transferred over, the money will become available for withdrawal.
+              If you do not know how to manually transfer a domain, please refer to our <a href="https://medium.com/@domahub/how-to-transfer-your-domain-9d3f93070292" class="is-primary">Domain Transfer Guide</a>.
+            </p>
+            <p class="is-bold">
+              This domain must be transferred by <span id="deposited-deadline"></span>.
+            </p>
+            <p class="is-bold">
+              Failure to transfer ownership of the domain within the next 7 days will result in the money being refunded. Your account will be also be flagged for review.
+            </p>
+            <p>
+              <p class="resend-wrapper">
+                <a id="resend-deposit" class="button ">Re-send verification email to buyer</a>
+              </p>
+              <a class="is-primary" href="/contact">
+                Having issues? Contact us for assistance.
+              </a>
+            </p>
+          </div>
         </div>
+        <div id="accepted-offer" class="hidden-while-loading-offers has-border-bottom is-hidden">
+          <div class="content">
+            <h3>
+              I accepted the offer--what's next?
+            </h3>
+            <p>
+              The buyer has been sent an email with instructions on completing payment.
+              Once the payment has been verified, you will need to manually transfer the ownership of this domain to him/her.
+              If you do not know how to manually transfer a domain, please refer to our <a href="/faq#transferguide" class="is-primary">Domain Transfer Guide</a>.
+            </p>
+            <p>
+              <span class="is-bold">There is no required action on your part just yet.</span> Hold tight, we are getting you your money.
+            </p>
+            <p>
+              If you have changed your mind about this offer, please <a href="/contact" class="is-primary">let us know</a>.
+            </p>
+            <p class="resend-wrapper">
+              <a id="resend-accept" class="button ">Re-send payment email to buyer</a>
+            </p>
+          </div>
+        </div>
+        <table class="table is-bordered">
+          <thead class="has-hover-effect">
+            <tr>
+              <th>Domain Name</th>
+              <th>Offer</th>
+              <th>Name</th>
+              <th>Date</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="offers-wrapper">
+            <tr id="loading-offers">
+              <td colspan="5" class="has-text-centered">
+                <p>
+                  <span class="icon is-small"><i class="fa fa-spin fa-refresh"></i></span>
+                  <span>Now loading domain offers...</span>
+                </p>
+              </td>
+            </tr>
+            <tr id="no-offers" class="is-hidden">
+              <td colspan="5" class="has-text-centered">
+                <p class="control">
+                  You have no outstanding offers!
+                </p>
+              </td>
+            </tr>
+            <tr id="offer-clone" class="offer-row table-row is-hidden">
+              <td class="td-offer-domain"></td>
+              <td class="td-offer-offer"></td>
+              <td class="td-offer-name"></td>
+              <td class="td-offer-timestamp"></td>
+              <td class="td-offer-status"></td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
-    <div id="rental-tab-drop" data-title="Edit Rental Details" class="is-hidden">
-       <div class="control is-spaced">
-         <div class="control-left">
-           <label class="label" for="rentable-input">
-              Allow Rentals
-              <span class="icon is-small is-tooltip" data-balloon-length="large" data-balloon="Allows verified users to rent usage of this domain for short amounts of time." data-balloon-pos="up">
-                <i class="fa fa-question-circle"></i>
-              </span>
-            </label>
-            <small class="tip"><a target="_blank" rel="noopener" href="/faq#renting" class="is-primary">Why should I rent my domain out?</a></small>
-         </div>
-         <div class="control-right">
-           <form class="checkbox-form">
-             <input id="rentable-input" data-name="rentable" type="checkbox" class="checkbox-input changeable-input" tabindex="0" />
-             <label for="rentable-input"></label>
-           </form>
-         </div>
-       </div>
-        <%# <div class="control is-spaced">
-          <div class="control-left">
-            <label class="label" for="rentable-input">
-              <span>Manually Approve Rentals</span>
-              <span class="icon is-small is-tooltip" data-balloon-length="large" data-balloon="Failure to approve rentals in time could lead to a poor user experience for the domain renter. If you cannot approve rentals in a timely fashion, we suggest you keep this box unchecked." data-balloon-pos="up">
-                <i class="fa fa-question-circle"></i>
-              </span>
-            </label>
-            <small class="tip">All rentals on your domain must be manually approved before they go live. </small>
-          </div>
-          <div class="control-right">
-            <form class="checkbox-form">
-              <input id="rent-approve-input" data-name="rent_approve" type="checkbox" class="checkbox-input rentable-input changeable-input" tabindex="0" />
-              <label for="rent-approve-input"></label>
-            </form>
-          </div>
-        </div>%>
-        <label class="label">
-          Rental Price
-          <span class="icon is-small is-tooltip" data-balloon-length="large" data-balloon="Price per unit of time for the domain rental. Put 0 or blank for free rentals on your domain." data-balloon-pos="up">
-            <i class="fa fa-question-circle"></i>
-          </span>
-        </label>
-        <div class="control">
-          <div class="control has-addons">
-            <input id="price-rate-input" data-name="price_rate" type="number" min="1" step="1" class="input changeable-input rentable-input" />
-            <span class="select price-type-span no-shadow">
-              <div class="drop-form">
-                <select id="price-type-input" data-name="price_type" class="changeable-input rentable-input">
-                  <option value="month">Month</option>
-                  <option value="week">Week</option>
-                  <option value="day">Day</option>
-                </select>
-              </div>
-            </span>
-          </div>
-          <small class="tip"></small>
-        </div>
-        <div class="control">
-          <label class="label">
-            <span>Example Paths</span>
-            <span class="icon is-small is-tooltip" data-balloon-length="large" data-balloon="Example paths or subdirectories that users may want to rent on your domain. Must consist of either letters or numbers." data-balloon-pos="up">
-              <i class="fa fa-question-circle"></i>
-            </span>
-          </label>
-          <input id="paths-input" data-name="paths" tabindex="0" class="is-hidden input rentable-input" />
-        </div>
-      </div>
 
     <!-- LISTING DETAILS AND VERIFICATION -->
-    <div class="card is-fullwidth">
+    <div id="card-view" class="card is-fullwidth">
       <div class="card-header is-justified-start">
         <h3 id="tab-title" class="card-header-title"></h3>
         <div class="">
@@ -641,141 +713,71 @@
 						</div>
 					</div>
 			</div>
-      <div id="offers-tab-drop" data-title="View Offers"  class="tab-drop card-content is-hidden">
-        <div id="offer-modal" class="modal">
-          <div class="modal-background"></div>
-          <div class="modal-container">
-            <div class="modal-content offer-popup">
-              <div class="content has-text-centered">
-                <p class="is-bold" id="offer-modal-domain"></p>
-                <small>Received on <span id="offer-modal-timestamp"></span></small>
-              </div>
-              <div class="content">
-                <h1 id="offer-modal-price" class="has-text-centered"></h1>
-                <ul id="offer-info" class="offer-info">
-                  <li>
-                    <span class="icon is-small" title="From"><i class="fa fa-user-o"></i></span><span id="offer-modal-name"></span>
-                  </li>
-                  <li>
-                    <span class="icon is-small" title="Email"><i class="fa fa-envelope-o"></i></span><span id="offer-modal-email"></span>
-                  </li>
-                  <li>
-                    <span class="icon is-small" title="Phone"><i class="fa fa-phone"></i></span><span id="offer-modal-phone"></span>
-                  </li>
-                  <li class="">
-                    <span class="icon is-small" title="Message"><i class="fa fa-comment-o"></i></span>
-                    <p id="offer-modal-message" class="offer-msg"></p>
-                  </li>
-                </ul>
-                <ul id="offer-response-label" class="is-hidden">
-                  Your response:
-                </ul>
-                <ul id="offer-response-wrapper">
-                  <li>
-                    <textarea id="offer-response" placeholder="You may include an optional response to the offerer." class='textarea'></textarea>
-                  </li>
-                </ul>
-              </div>
-              <div id="offer-modal-button-wrapper" class="control is-grouped is-grouped-center">
-                <p class="control">
-                  <a id="accept_button" tabindex="0" class='button is-primary '>
-                    <span class="icon is-small"><i class="fa fa-check"></i></span>
-                    <span>Accept offer</span>
-                  </a>
-                </p>
-                <p class="control">
-                  <a id="reject_button" tabindex="0" class='button is-outlined is-danger '>
-                    <span class="icon is-small"><i class="fa fa-times"></i></span>
-                    <span>Reject offer</span>
-                  </a>
-                </p>
-              </div>
-            </div>
+      <div id="rental-tab-drop" data-title="Edit Rental Details" class="tab-drop card-content is-hidden">
+       <div class="control is-spaced">
+         <div class="control-left">
+           <label class="label" for="rentable-input">
+              Allow Rentals
+              <span class="icon is-small is-tooltip" data-balloon-length="large" data-balloon="Allows verified users to rent usage of this domain for short amounts of time." data-balloon-pos="up">
+                <i class="fa fa-question-circle"></i>
+              </span>
+            </label>
+            <small class="tip"><a target="_blank" rel="noopener" href="/faq#renting" class="is-primary">Why should I rent my domain out?</a></small>
+         </div>
+         <div class="control-right">
+           <form class="checkbox-form">
+             <input id="rentable-input" data-name="rentable" type="checkbox" class="checkbox-input changeable-input" tabindex="0" />
+             <label for="rentable-input"></label>
+           </form>
+         </div>
+       </div>
+        <%# <div class="control is-spaced">
+          <div class="control-left">
+            <label class="label" for="rentable-input">
+              <span>Manually Approve Rentals</span>
+              <span class="icon is-small is-tooltip" data-balloon-length="large" data-balloon="Failure to approve rentals in time could lead to a poor user experience for the domain renter. If you cannot approve rentals in a timely fashion, we suggest you keep this box unchecked." data-balloon-pos="up">
+                <i class="fa fa-question-circle"></i>
+              </span>
+            </label>
+            <small class="tip">All rentals on your domain must be manually approved before they go live. </small>
           </div>
-          <button class="modal-close"></button>
-        </div>
-        <div id="deposited-offer" class="hidden-while-loading-offers has-border-bottom is-hidden">
-          <div class="content">
-            <h3>
-              Congratulations on selling your domain!
-            </h3>
-            <p>
-              The money has been deposited and verified by DomaHub. You must now transfer the ownership of this domain to the new owner.
-              Once the new owner has verified that the ownership has been transferred over, the money will become available for withdrawal.
-              If you do not know how to manually transfer a domain, please refer to our <a href="https://medium.com/@domahub/how-to-transfer-your-domain-9d3f93070292" class="is-primary">Domain Transfer Guide</a>.
-            </p>
-            <p class="is-bold">
-              This domain must be transferred by <span id="deposited-deadline"></span>.
-            </p>
-            <p class="is-bold">
-              Failure to transfer ownership of the domain within the next 7 days will result in the money being refunded. Your account will be also be flagged for review.
-            </p>
-            <p>
-              <p class="resend-wrapper">
-                <a id="resend-deposit" class="button ">Re-send verification email to buyer</a>
-              </p>
-              <a class="is-primary" href="/contact">
-                Having issues? Contact us for assistance.
-              </a>
-            </p>
+          <div class="control-right">
+            <form class="checkbox-form">
+              <input id="rent-approve-input" data-name="rent_approve" type="checkbox" class="checkbox-input rentable-input changeable-input" tabindex="0" />
+              <label for="rent-approve-input"></label>
+            </form>
           </div>
-        </div>
-        <div id="accepted-offer" class="hidden-while-loading-offers has-border-bottom is-hidden">
-          <div class="content">
-            <h3>
-              I accepted the offer--what's next?
-            </h3>
-            <p>
-              The buyer has been sent an email with instructions on completing payment.
-              Once the payment has been verified, you will need to manually transfer the ownership of this domain to him/her.
-              If you do not know how to manually transfer a domain, please refer to our <a href="/faq#transferguide" class="is-primary">Domain Transfer Guide</a>.
-            </p>
-            <p>
-              <span class="is-bold">There is no required action on your part just yet.</span> Hold tight, we are getting you your money.
-            </p>
-            <p>
-              If you have changed your mind about this offer, please <a href="/contact" class="is-primary">let us know</a>.
-            </p>
-            <p class="resend-wrapper">
-              <a id="resend-accept" class="button ">Re-send payment email to buyer</a>
-            </p>
+        </div>%>
+        <label class="label">
+          Rental Price
+          <span class="icon is-small is-tooltip" data-balloon-length="large" data-balloon="Price per unit of time for the domain rental. Put 0 or blank for free rentals on your domain." data-balloon-pos="up">
+            <i class="fa fa-question-circle"></i>
+          </span>
+        </label>
+        <div class="control">
+          <div class="control has-addons">
+            <input id="price-rate-input" data-name="price_rate" type="number" min="1" step="1" class="input changeable-input rentable-input" />
+            <span class="select price-type-span no-shadow">
+              <div class="drop-form">
+                <select id="price-type-input" data-name="price_type" class="changeable-input rentable-input">
+                  <option value="month">Month</option>
+                  <option value="week">Week</option>
+                  <option value="day">Day</option>
+                </select>
+              </div>
+            </span>
           </div>
+          <small class="tip"></small>
         </div>
-        <table class="table is-bordered">
-          <thead class="has-hover-effect">
-            <tr>
-              <th>Domain Name</th>
-              <th>Offer</th>
-              <th>Name</th>
-              <th>Date</th>
-              <th>Status</th>
-            </tr>
-          </thead>
-          <tbody id="offers-wrapper">
-            <tr id="loading-offers">
-              <td colspan="5" class="has-text-centered">
-                <p>
-                  <span class="icon is-small"><i class="fa fa-spin fa-refresh"></i></span>
-                  <span>Now loading domain offers...</span>
-                </p>
-              </td>
-            </tr>
-            <tr id="no-offers" class="is-hidden">
-              <td colspan="5" class="has-text-centered">
-                <p class="control">
-                  You have no outstanding offers!
-                </p>
-              </td>
-            </tr>
-            <tr id="offer-clone" class="offer-row table-row is-hidden">
-              <td class="td-offer-domain"></td>
-              <td class="td-offer-offer"></td>
-              <td class="td-offer-name"></td>
-              <td class="td-offer-timestamp"></td>
-              <td class="td-offer-status"></td>
-            </tr>
-          </tbody>
-        </table>
+        <div class="control">
+          <label class="label">
+            <span>Example Paths</span>
+            <span class="icon is-small is-tooltip" data-balloon-length="large" data-balloon="Example paths or subdirectories that users may want to rent on your domain. Must consist of either letters or numbers." data-balloon-pos="up">
+              <i class="fa fa-question-circle"></i>
+            </span>
+          </label>
+          <input id="paths-input" data-name="paths" tabindex="0" class="is-hidden input rentable-input" />
+        </div>
       </div>
       <div id="stats-tab-drop" class="tab-drop card-content is-hidden">
         <div id="loading-stats" class="content">
