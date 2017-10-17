@@ -112,6 +112,14 @@ module.exports = function(app, db, auth, error, stripe){
     profile_functions.updateAccountSettingsPost
   ]);
 
+  //get all existing referral promo codes for user
+  app.post("/profile/getreferrals", [
+    urlencodedParser,
+    auth.checkLoggedIn,
+    profile_functions.getReferralsFromUser,
+  ]);
+
+  //posting a new promo code
   app.post("/profile/promocode", [
     urlencodedParser,
     auth.checkLoggedIn,

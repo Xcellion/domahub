@@ -72,6 +72,7 @@ $(document).ready(function(){
 
   //select dropper
   $("#selector-select-button").on('click', function(e){
+    console.log("WTF");
     $("#select-all-drop").toggleClass('is-hidden');
   });
 
@@ -177,13 +178,14 @@ $(document).ready(function(){
 function showEditor(url_tab, selected_domain_ids){
   $(".changeable-input").off();
 
-  //hide other tabs and drop-tabs
-  $(".drop-tab").addClass('is-hidden');
+  //hide other tabs and tab-drops
+  $(".tab-drop").addClass('is-hidden');
   $(".tab.verified-elem").removeClass('is-active');
 
   //update URL if exists
   if (url_tab){
     updateQueryStringParam("tab", url_tab);
+    $("#tab-title").text($("#" + url_tab + "-tab-drop").data('title'));
     $("#" + url_tab + "-tab").addClass('is-active');
     $("#" + url_tab + "-tab-drop").show().removeClass('is-hidden');
   }
