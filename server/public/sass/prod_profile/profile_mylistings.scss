@@ -141,6 +141,7 @@
   }
 }
 
+// my listing edit toolbar
 .tabs-menu {
   width: 300px;
   max-width: 300px;
@@ -178,8 +179,16 @@
   z-index:99;
 }
 
-.table-row.is-selected {
-  background-color:#ffc;
+.table-row {
+  &.has-hover-effect {
+    &:hover {
+      cursor: pointer;
+      background-color: $lighter;
+    }
+  }
+  &.is-selected {
+    background-color:#ffc;
+  }
 }
 
 .td-domain {

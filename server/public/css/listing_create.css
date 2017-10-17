@@ -3156,6 +3156,9 @@ button {
   .left-menu .delete {
     position: absolute;
     right: 10px; }
+  @media screen and (min-width: 769px) and (max-width: 979px) {
+    .left-menu .menu-list .menu-item {
+      margin-top: 10px; } }
   .left-menu .menu-list a.primary-theme:hover {
     background-color: #62c9a3; }
   .left-menu .menu-list a.primary-theme.is-active {
@@ -3173,6 +3176,12 @@ button {
     .left-menu {
       min-width: 80px;
       width: 80px; } }
+
+@media screen and (min-width: 769px) and (max-width: 979px) {
+  #collapse-submenu {
+    margin: 0;
+    padding-left: 0;
+    border-left: none; } }
 
 .right-content {
   -moz-transition: left 0.2s ease;
