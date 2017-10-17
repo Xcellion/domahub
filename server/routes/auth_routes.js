@@ -18,10 +18,11 @@ module.exports = function(app, auth){
     }
   ]);
 
-  //redirect any old signup beta code URLs to just /signup
-  app.get("/signup/*", function(req, res){
-    res.redirect("/signup");
-  });
+  //signup referrals
+  app.get("/signup/:promo_code", [
+    auth.isNotLoggedIn,
+    auth.checkReferralCode
+  ]);
 
   //to render reset/verify page
   app.get("/reset/:token", [

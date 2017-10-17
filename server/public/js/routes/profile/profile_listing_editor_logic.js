@@ -73,10 +73,9 @@ $(document).ready(function(){
       $(this).addClass('is-active');
 
       //show specific tab
-      new_tab = (new_tab == "purchased") ? "offers-tab" : new_tab + "-tab";
-      $(".drop-tab").stop().fadeOut(300).addClass('is-hidden');
-      $("#drop-tab-title").text(new_tab);
-      $("#" + new_tab + "-drop").stop().fadeIn(300).removeClass('is-hidden');
+      $(".tab-drop").stop().fadeOut(300).addClass('is-hidden');
+      $("#tab-title").text($("#" + new_tab + "-tab-drop").data('title'));
+      $("#" + new_tab + "-tab-drop").stop().fadeIn(300).removeClass('is-hidden');
     }
   });
 
@@ -732,6 +731,7 @@ function checkBox(module_value, elem, child){
       contentType: false,
       processData: false
     }, 'json').done(function(data){
+      console.log(data);
       submit_button.removeClass('is-loading');
       refreshSubmitButtons();
       if (data.state == "success"){
@@ -1716,6 +1716,10 @@ function updateVerificationButton(listing_info, cb_when_verified){
 //</editor-fold>
 
 //<editor-fold>-------------------------------HELPER FUNCTIONS--------------------------------
+
+String.prototype.toProperCase = function () {
+    return this.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+};
 
 //return white or black text based on luminance
 function calculateLuminance(rgb) {

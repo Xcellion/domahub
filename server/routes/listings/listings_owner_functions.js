@@ -461,7 +461,12 @@ module.exports = {
         var q_function_ip = function(listing_obj){
           return Q.Promise(function(resolve, reject, notify){
             dns.resolve(listing_obj.domain_name, "A", function(err, address, family){
-              if (err) {reject(err)}
+              if (err) {
+                reject({
+                  err: err,
+                  domain_name : listing_obj.domain_name
+                });
+              }
               else {
                 resolve({
                   domain_name : listing_obj.domain_name,
@@ -506,7 +511,7 @@ module.exports = {
                    }
                  }
                  else {
-                   not_pointing.push(results[x].value.domain_name);
+                   not_pointing.push(results[x].reason.domain_name);
                  }
                }
 

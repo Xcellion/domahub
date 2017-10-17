@@ -17,6 +17,7 @@ var mailOptions = {
   }
 }
 var mailer = nodemailer.createTransport(sgTransport(mailOptions));
+var stripe = require('../lib/stripe.js');
 
 //</editor-fold>
 
@@ -181,13 +182,55 @@ module.exports = {
     }
   },
 
-  //function to check token length
+  //function to check token length (for pw reset, email verify)
   checkToken : function(req, res, next){
     if (req.params.token.length != 10 || !req.params.token){
       res.redirect('/');
     }
     else {
       next();
+    }
+  },
+
+  //function to check promo code for referral
+  checkReferralCode : function(req, res, next){
+    console.log("F: Checking referral code validity...");
+
+    if (!req.params.promo_code){
+      res.redirect("/signup");
+    }
+    else {
+
+      //check if code exists and is unused
+      Account.checkPromoCodeUnused(req.params.promo_code, function(result){
+        if (result.state == "success" && result.info.length > 0){
+          console.log("F: Promo code exists!");
+          next();
+        }
+
+        //promo code doesnt exist, maybe it's a username (AKA referral)
+        else {
+
+          //get the username ID so we can create a referral code
+          Account.getAccountIDByUsername(req.params.promo_code, function(result){
+            if (result.state == "success" && result.info.length > 0){
+              var referer_id = result.info[0].id;
+              console.log("F: User doesn't have any existing referrals! Creating coupon...");
+
+              //create 1 promo code, with referer_id, and 1 duration_in_months
+              stripe.createPromoCode("1", referer_id, "1", function(result){
+                res.redirect("/signup");
+              });
+            }
+
+            //no username ID exists by that code
+            else {
+              res.redirect("/signup");
+            }
+          });
+
+        }
+      });
     }
   },
 
