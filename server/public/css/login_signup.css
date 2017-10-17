@@ -591,6 +591,9 @@ pre {
 .is-pulled-right {
   float: right; }
 
+.is-relative {
+  position: relative; }
+
 .is-clipped {
   overflow: hidden !important; }
 
@@ -654,6 +657,9 @@ pre {
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none; }
+
+.has-cursor {
+  cursor: pointer; }
 
 .is-disabled {
   pointer-events: none; }

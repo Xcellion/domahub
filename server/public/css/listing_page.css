@@ -764,6 +764,9 @@ pre {
 .is-pulled-right {
   float: right; }
 
+.is-relative {
+  position: relative; }
+
 .is-clipped {
   overflow: hidden !important; }
 
@@ -827,6 +830,9 @@ pre {
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none; }
+
+.has-cursor {
+  cursor: pointer; }
 
 .is-disabled {
   pointer-events: none; }
@@ -3776,8 +3782,7 @@ button {
   .section.is-fullscreen {
     padding: 0;
     height: 100vh;
-    width: 100vw;
-    overflow-y: auto; }
+    width: 100%; }
 
 #step-1 {
   left: 20px !important; }
