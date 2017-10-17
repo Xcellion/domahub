@@ -6,9 +6,10 @@
 @import '../bulma/components/nav.sass';
 @import '../bulma/components/menu.sass';
 @import '../bulma/components/media.sass';
+@import '../bulma/components/card.sass';
 @import '../bulma/components/tabs.sass';
-@import '../bulma/elements/tag.sass';
 @import '../bulma/elements/box.sass';
+@import '../bulma/elements/tag.sass';
 @import '../bulma/elements/delete.sass';
 @import '../bulma/elements/notification.sass';
 @import '../bulma/elements/table.sass';
@@ -22,16 +23,6 @@
 
 .company-logo {
   margin-bottom: 30px;
-}
-
-.domain-tooltip {
-  position: absolute;
-  top:40px;
-  z-index:99;
-}
-
-.table-row.is-selected {
-  background-color:#ffc;
 }
 
 .delete-modal-cloned-domain {
@@ -105,17 +96,14 @@
 }
 
 .box-checked {
-    margin-left:2px;
+  margin-left:2px;
 }
 
 .current-domain-name {
   word-break: break-all;
 }
 
-#design-tab-drop {
-  position: relative;
-}
-
+// design tab blackout !premium
 #premium-only-notification {
   @include translate(-50%,50%);
   background-color: $white;
@@ -129,35 +117,20 @@
   }
 }
 
-// table stuff
-// #filters {
-//   @include mobile {
-//     margin-top: 35px;
-//   }
-// }
-//
-// .filter-menu-toggle {
-//   cursor: pointer;
-//   &.hamburger {
-//     height: 30px;
-//     width: 30px;
-//   }
-// }
+.blackscreen {
+  position: absolute;
+  height: calc(100% + 60px);
+  width: 100%;
+  top: -60px;
+  left: 0;
+  background-color: $black-secondary;
+  z-index: 5;
+}
 
-.verified-elem {
-  position: relative;
-  &.is-loading {
-    @include transition(none);
-    color: $black-secondary !important;
-    pointer-events: none;
-    &:after {
-      @extend .loader;
-      @include center(16px);
-      left: 50px !important;
-      position: absolute !important;
-      border-color: transparent transparent $black-secondary $black-secondary !important
-    }
-  }
+#status-toggle-button {
+  border: none;
+  justify-content: flex-start;
+  height: 31px;
 }
 
 #filters {
@@ -168,9 +141,45 @@
   }
 }
 
+.tabs-menu {
+  width: 300px;
+  max-width: 300px;
+  @include mobile {
+    width: 100%;
+    max-width: 100%;
+  }
+}
+
+#edit-toolbar {
+  .menu-list {
+    @include mobile {
+      @include unselectable;
+      @include overflow-touch;
+      align-items: stretch;
+      display: flex;
+      font-size: $size-normal;
+      justify-content: space-between;
+      overflow: hidden;
+      overflow-x: auto;
+      white-space: nowrap;
+    }
+  }
+}
+
+// table
 #table-body {
   white-space: nowrap;
   overflow-y: auto;
+}
+
+.domain-tooltip {
+  position: absolute;
+  top:40px;
+  z-index:99;
+}
+
+.table-row.is-selected {
+  background-color:#ffc;
 }
 
 .td-domain {
@@ -194,16 +203,6 @@
   }
 }
 
-.blackscreen {
-  position: absolute;
-  height: calc(100% + 100px);
-  width: calc(100% + 40px);
-  top: -22px;
-  left: -19px;
-  background-color: $black-secondary;
-  z-index: 5;
-}
-
 .checkbox-form {
   height: 24px;
   position: relative;
@@ -220,13 +219,10 @@
 }
 
 .tip {
-  display: block;
-  margin: 5px 0;
   color: $text-light;
-}
-
-.has-line-height {
+  display: block;
   line-height: 1.5;
+  margin: 5px 0;
 }
 
 // listing image

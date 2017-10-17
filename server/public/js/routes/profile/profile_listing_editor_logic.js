@@ -75,6 +75,7 @@ $(document).ready(function(){
       //show specific tab
       new_tab = (new_tab == "purchased") ? "offers-tab" : new_tab + "-tab";
       $(".drop-tab").stop().fadeOut(300).addClass('is-hidden');
+      $("#drop-tab-title").text(new_tab);
       $("#" + new_tab + "-drop").stop().fadeIn(300).removeClass('is-hidden');
     }
   });
@@ -170,7 +171,7 @@ function updateEditorEditing(selected_domain_ids){
   updateEditorDomains(selected_domain_ids);
 
   //editing view specific things
-  $("#editor-title").text("Now Editing - ");
+  $("#editor-title").text("Editing - ");
   $("#refresh-offers-button").addClass('is-hidden');
   $("#refresh-stats-button").addClass('is-hidden');
 
@@ -195,12 +196,12 @@ function updateStatus(listing_info){
   if (listing_info.status == 1){
     $("#status-color").addClass("is-primary").removeClass('is-danger');
     $("#status-icon").addClass("fa-toggle-on").removeClass('fa-toggle-off');
-    $("#status-text").text("Currently Active");
+    $("#status-text").text("Active").addClass("is-primary").removeClass('is-danger');
   }
   else {
     $("#status-color").addClass('is-danger').removeClass("is-primary");
     $("#status-icon").addClass('fa-toggle-off').removeClass("fa-toggle-on");
-    $("#status-text").text("Currently Inactive");
+    $("#status-text").text("Inactive").addClass("is-danger").removeClass('is-primary');
   }
 }
 
@@ -738,7 +739,7 @@ function checkBox(module_value, elem, child){
         //status only success message
         if (status_only){
           var plural_success_msg = (selected_ids.length == 1) ? "This listing has" : selected_ids.length + " listings have";
-          var active_inactive_text = (new_status == 0) ? "inactive! It is no longer visible to the public." : "active! It is now available to the public.";
+          var active_inactive_text = (new_status == 0) ? "inactive!" : "active!";
           successMessage(plural_success_msg + " been set to " + active_inactive_text);
         }
         //editing success message
@@ -1505,7 +1506,7 @@ function updateEditorUnverified(selected_domain_ids){
   });
 
   //change domain name header
-  $("#editor-title").text("Now Verifying - ");
+  $("#editor-title").text("Verifying - ");
   if (selected_domain_ids.length > 1){
     $(".current-domain-name").text(selected_domain_ids.length + " Domains");
     $(".verification-plural").text("s");
