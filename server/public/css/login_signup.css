@@ -2405,7 +2405,7 @@ button {
   .icon.is-disabled {
     color: rgba(0, 0, 0, 0.38); }
   .icon.is-tooltip {
-    color: rgba(0, 0, 0, 0.66);
+    color: #767676;
     cursor: pointer !important; }
 
 .checkbox-form label {
