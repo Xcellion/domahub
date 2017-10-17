@@ -10,6 +10,18 @@ $(document).ready(function() {
     ifTrayEmpty();
   });
 
+  //referral link
+  $("#referral-link").on("focus", function(){
+    $(this).select();
+  });
+  $("#referral-link-copy").on("click", function(){
+    $("#referral-link").select();
+    document.execCommand("copy");
+    $("#referral-link-input").blur();
+    $(this).find("i").removeClass("fa-clipboard").addClass('fa-check');
+    $(this).find("span").text("Copied!");
+  });
+
 });
 
 //find out how many domains are unverified

@@ -41,9 +41,9 @@
                     <a id="premium-link" href='#premium' class="setting-link">
   										<span id="upgrade-to-premium-text" class="v-align-middle">
   											<% if (user.stripe_subscription_id) { %>
-  												Upgrade to Premium
+                          Premium Status
   											<% } else { %>
-  												Premium Status
+                          Upgrade to Premium
   											<% } %>
   										</span>
   										<span class="v-align-middle icon is-small">
@@ -133,7 +133,10 @@
 									<h3 id="upgrade-tab-header" class="card-header-title">
 										<span>Premium Status</span>
 									</h3>
-									<a tabindex="0" class="button is-small is-primary card-header-icon" href="/features#pricing">Learn More</a>
+									<a tabindex="0" class="button is-small is-primary card-header-icon" href="/features#pricing">
+                    <span class="icon is-small"><i class="fa fa-info-circle"></i></span>
+                    <span>Learn More</span>
+                  </a>
 								</div>
 
                 <div class="card-content">
@@ -243,7 +246,36 @@
 									</form>
 								</div>
 							</div>
-							<div id="verifications" class="is-hidden card is-fullwidth" >
+              <div id="promo" class="is-hidden card is-fullwidth">
+								<div class="card-header is-justified-start">
+									<h3 class="card-header-title">
+										<span>Referrals and Promo Codes</span>
+									</h3>
+								</div>
+
+                <div class="card-content">
+
+                  <div id="promo-control" class="control is-spaced is-mobile">
+                    <div class="control-left">
+                      <p>
+                        Promo Code
+                      </p>
+                    </div>
+                    <div class="control-right">
+                      <form id="promo-form">
+                        <p class="control has-icon has-addons">
+                          <input id="promo-input" autocomplete="off" required tabindex="0" class="input promo-input" type="text"/>
+                          <i class="fa fa-tags"></i>
+                          <input id="promo-submit" class="promo-input no-shadow is-small is-stylish button" text="Submit" type="submit">
+                        </p>
+                      </form>
+                    </div>
+                  </div>
+
+								</div>
+							</div>
+
+              <div id="verifications" class="is-hidden card is-fullwidth" >
 								<div class="card-header is-justified-start">
 									<h3 class="card-header-title">
 										Account Verifications
@@ -715,7 +747,6 @@
 											</form>
 										</div>
 									</div>
-
               <!-- <div id="paypal" class="is-hidden card is-fullwidth">
                 <div class="card-header is-justified-start">
                   <h3 class="card-header-title">
@@ -765,7 +796,6 @@
                   </div>
                 </div>
               </div> -->
-
               <% if (user.stripe_charges) { %>
                 <%- include("profile_transactions", {user: user}); %>
               <% } %>
