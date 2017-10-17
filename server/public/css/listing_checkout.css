@@ -1978,6 +1978,8 @@ input:-webkit-autofill {
     line-height: 40px;
     padding-left: 12px;
     padding-right: 12px; }
+  .input.is-narrow, .is-narrow.textarea {
+    width: auto; }
   .input.is-fullwidth, .is-fullwidth.textarea {
     display: block;
     width: 100%; }
@@ -3174,7 +3176,7 @@ button {
   .icon.is-disabled {
     color: rgba(0, 0, 0, 0.38); }
   .icon.is-tooltip {
-    color: rgba(0, 0, 0, 0.66);
+    color: #767676;
     cursor: pointer !important; }
 
 .section {

@@ -134,9 +134,9 @@ function updateEditorDomains(selected_domain_ids){
     }
 
     $("#editor-title-wrapper").append(' \
-      <span id="current-domain-list" class="icon is-small is-tooltip v-align-middle" \
+      <span id="current-domain-list" class="icon is-tooltip" \
        data-balloon-length="medium" data-balloon-break data-balloon="' + domain_title_list.join("&#10;") + '" \
-       data-balloon-pos="up"> <i class="fa fa-question-circle"></i> \
+       data-balloon-pos="down"> <i class="fa fa-question-circle"></i> \
       </span> \
     ');
 
