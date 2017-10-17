@@ -31,6 +31,11 @@
     right: 10px;
   }
   .menu-list {
+    .menu-item {
+      @include tablet-only {
+        margin-top: 10px;
+      }
+    }
     a {
       &.primary-theme {
         &:hover {
@@ -55,6 +60,14 @@
   @include tablet-only {
     min-width: 80px;
     width: 80px;
+  }
+}
+
+#collapse-submenu {
+  @include tablet-only {
+    margin: 0;
+    padding-left: 0;
+    border-left: none;
   }
 }
 

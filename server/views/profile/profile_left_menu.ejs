@@ -19,10 +19,11 @@
           <span class="icon is-white"><i class="fa fa-list-alt"></i></span>
           <p class="is-white is-hidden-tablet-only">My Listings</p>
         </a>
-        <ul class="is-hidden-tablet-only">
-          <li>
+        <ul id="collapse-submenu">
+          <li class="menu-item has-icon">
             <a id="offers-left-tab" href="/profile/mylistings?tab=offers" tabindex="0" title="View Listing Offers" class="left-tab primary-theme">
-              <small class="is-white">View Offers</small>
+              <span class="icon is-white is-hidden-desktop"><i class="fa fa-money"></i></span>
+              <small class="is-white is-hidden-tablet-only">View Offers</small>
             </a>
           </li>
           <%# <li>
@@ -30,9 +31,10 @@
               <small class="is-white">View Statistics</small>
             </a>
           </li>%>
-          <li>
+          <li class="menu-item has-icon">
             <a id="create-left-tab"  tabindex="0" title="Create Listings" href="/listings/create" class="left-tab primary-theme">
-              <small class="is-white">Create Listings</small>
+              <span class="icon is-white is-hidden-desktop"><i class="fa fa-plus"></i></span>
+              <small class="is-white is-hidden-tablet-only">Create Listings</small>
             </a>
           </li>
         </ul>
