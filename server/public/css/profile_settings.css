@@ -764,6 +764,9 @@ pre {
 .is-pulled-right {
   float: right; }
 
+.is-relative {
+  position: relative; }
+
 .is-clipped {
   overflow: hidden !important; }
 
@@ -827,6 +830,9 @@ pre {
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none; }
+
+.has-cursor {
+  cursor: pointer; }
 
 .is-disabled {
   pointer-events: none; }
@@ -3473,8 +3479,7 @@ button {
   .section.is-fullscreen {
     padding: 0;
     height: 100vh;
-    width: 100vw;
-    overflow-y: auto; }
+    width: 100%; }
 
 .child-module {
   padding-left: 10px;
@@ -3491,14 +3496,16 @@ button {
       padding-top: 40px; } }
 
 .left-menu {
-  -moz-transition: all 0.25s;
-  -o-transition: all 0.25s;
-  -webkit-transition: all 0.25s;
-  transition: all 0.25s;
+  -moz-transition: all 0.2s;
+  -o-transition: all 0.2s;
+  -webkit-transition: all 0.2s;
+  transition: all 0.2s;
   background-color: #3cbc8d;
   padding: 40px 20px;
   height: 100%;
-  min-width: 300px; }
+  min-width: 300px;
+  width: 300px;
+  position: fixed; }
   .left-menu.is-active {
     left: -20px; }
   .left-menu .delete {
@@ -3523,9 +3530,24 @@ button {
       width: 80px; } }
 
 .right-content {
-  padding: 40px 20px;
+  -moz-transition: left 0.2s ease;
+  -o-transition: left 0.2s ease;
+  -webkit-transition: left 0.2s ease;
+  transition: left 0.2s ease;
   height: 100%;
-  width: 100%; }
+  left: 300px;
+  overflow-x: hidden;
+  padding: 40px 20px;
+  position: absolute;
+  width: calc(100% - 300px); }
+  @media screen and (min-width: 769px) and (max-width: 979px) {
+    .right-content {
+      left: 80px;
+      width: calc(100% - 80px); } }
+  @media screen and (max-width: 768px) {
+    .right-content {
+      left: 0;
+      width: 100%; } }
 
 .user-panel {
   position: absolute;
