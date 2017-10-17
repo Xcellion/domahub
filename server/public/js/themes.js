@@ -83,6 +83,7 @@ var listing_themes = [
 
 //function to populate theme dropdown
 function populateThemeDropdown(){
+  $("#theme-input").empty();
   for (var x = 0; x < listing_themes.length; x++){
     var theme_name_display = (listing_themes[x].theme_name == "DomaHub") ? "DomaHub (Basic)" : listing_themes[x].theme_name;
     $("#theme-input").append($("<option value=" + listing_themes[x].theme_name + ">" + theme_name_display + "</option>"));
