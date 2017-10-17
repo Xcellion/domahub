@@ -1,7 +1,7 @@
 <div id="domain-editor" class="columns is-hidden">
-  <div class="tabs-menu column">
 
-    <!-- CURRENT DOMAIN NAME -->
+  <!-- SECOND LEFT MENU -->
+  <div id="second-left-menu" class="tabs-menu is-hidden column">
     <div class="content">
       <a id="show-selector-button" class="button is-black is-transparent no-shadow" tabindex="0" title="Back To Domain Selector">
         <span class="icon is-small">
@@ -71,7 +71,8 @@
   </div>
 
   <div class="column">
-    <!-- OFFERS TOOLBAR  -->
+
+    <!-- OFFERS TABLE -->
     <div id="offers-toolbar" class="is-hidden control">
       <div class="control is-grouped">
         <div class="control has-icon">
@@ -101,8 +102,74 @@
         </div>
       </div>
     </div>
+    <div id="rental-tab-drop" data-title="Edit Rental Details" class="is-hidden">
+       <div class="control is-spaced">
+         <div class="control-left">
+           <label class="label" for="rentable-input">
+              Allow Rentals
+              <span class="icon is-small is-tooltip" data-balloon-length="large" data-balloon="Allows verified users to rent usage of this domain for short amounts of time." data-balloon-pos="up">
+                <i class="fa fa-question-circle"></i>
+              </span>
+            </label>
+            <small class="tip"><a target="_blank" rel="noopener" href="/faq#renting" class="is-primary">Why should I rent my domain out?</a></small>
+         </div>
+         <div class="control-right">
+           <form class="checkbox-form">
+             <input id="rentable-input" data-name="rentable" type="checkbox" class="checkbox-input changeable-input" tabindex="0" />
+             <label for="rentable-input"></label>
+           </form>
+         </div>
+       </div>
+        <%# <div class="control is-spaced">
+          <div class="control-left">
+            <label class="label" for="rentable-input">
+              <span>Manually Approve Rentals</span>
+              <span class="icon is-small is-tooltip" data-balloon-length="large" data-balloon="Failure to approve rentals in time could lead to a poor user experience for the domain renter. If you cannot approve rentals in a timely fashion, we suggest you keep this box unchecked." data-balloon-pos="up">
+                <i class="fa fa-question-circle"></i>
+              </span>
+            </label>
+            <small class="tip">All rentals on your domain must be manually approved before they go live. </small>
+          </div>
+          <div class="control-right">
+            <form class="checkbox-form">
+              <input id="rent-approve-input" data-name="rent_approve" type="checkbox" class="checkbox-input rentable-input changeable-input" tabindex="0" />
+              <label for="rent-approve-input"></label>
+            </form>
+          </div>
+        </div>%>
+        <label class="label">
+          Rental Price
+          <span class="icon is-small is-tooltip" data-balloon-length="large" data-balloon="Price per unit of time for the domain rental. Put 0 or blank for free rentals on your domain." data-balloon-pos="up">
+            <i class="fa fa-question-circle"></i>
+          </span>
+        </label>
+        <div class="control">
+          <div class="control has-addons">
+            <input id="price-rate-input" data-name="price_rate" type="number" min="1" step="1" class="input changeable-input rentable-input" />
+            <span class="select price-type-span no-shadow">
+              <div class="drop-form">
+                <select id="price-type-input" data-name="price_type" class="changeable-input rentable-input">
+                  <option value="month">Month</option>
+                  <option value="week">Week</option>
+                  <option value="day">Day</option>
+                </select>
+              </div>
+            </span>
+          </div>
+          <small class="tip"></small>
+        </div>
+        <div class="control">
+          <label class="label">
+            <span>Example Paths</span>
+            <span class="icon is-small is-tooltip" data-balloon-length="large" data-balloon="Example paths or subdirectories that users may want to rent on your domain. Must consist of either letters or numbers." data-balloon-pos="up">
+              <i class="fa fa-question-circle"></i>
+            </span>
+          </label>
+          <input id="paths-input" data-name="paths" tabindex="0" class="is-hidden input rentable-input" />
+        </div>
+      </div>
 
-    <!-- LISTING DETAILS  -->
+    <!-- LISTING DETAILS AND VERIFICATION -->
     <div class="card is-fullwidth">
       <div class="card-header is-justified-start">
         <h3 id="tab-title" class="card-header-title"></h3>
@@ -574,72 +641,6 @@
 						</div>
 					</div>
 			</div>
-      <div id="rental-tab-drop" data-title="Edit Rental Details"  class="tab-drop card-content is-hidden">
-       <div class="control is-spaced">
-         <div class="control-left">
-           <label class="label" for="rentable-input">
-              Allow Rentals
-              <span class="icon is-small is-tooltip" data-balloon-length="large" data-balloon="Allows verified users to rent usage of this domain for short amounts of time." data-balloon-pos="up">
-                <i class="fa fa-question-circle"></i>
-              </span>
-            </label>
-            <small class="tip"><a target="_blank" rel="noopener" href="/faq#renting" class="is-primary">Why should I rent my domain out?</a></small>
-         </div>
-         <div class="control-right">
-           <form class="checkbox-form">
-             <input id="rentable-input" data-name="rentable" type="checkbox" class="checkbox-input changeable-input" tabindex="0" />
-             <label for="rentable-input"></label>
-           </form>
-         </div>
-       </div>
-        <%# <div class="control is-spaced">
-          <div class="control-left">
-            <label class="label" for="rentable-input">
-              <span>Manually Approve Rentals</span>
-              <span class="icon is-small is-tooltip" data-balloon-length="large" data-balloon="Failure to approve rentals in time could lead to a poor user experience for the domain renter. If you cannot approve rentals in a timely fashion, we suggest you keep this box unchecked." data-balloon-pos="up">
-                <i class="fa fa-question-circle"></i>
-              </span>
-            </label>
-            <small class="tip">All rentals on your domain must be manually approved before they go live. </small>
-          </div>
-          <div class="control-right">
-            <form class="checkbox-form">
-              <input id="rent-approve-input" data-name="rent_approve" type="checkbox" class="checkbox-input rentable-input changeable-input" tabindex="0" />
-              <label for="rent-approve-input"></label>
-            </form>
-          </div>
-        </div>%>
-        <label class="label">
-          Rental Price
-          <span class="icon is-small is-tooltip" data-balloon-length="large" data-balloon="Price per unit of time for the domain rental. Put 0 or blank for free rentals on your domain." data-balloon-pos="up">
-            <i class="fa fa-question-circle"></i>
-          </span>
-        </label>
-        <div class="control">
-          <div class="control has-addons">
-            <input id="price-rate-input" data-name="price_rate" type="number" min="1" step="1" class="input changeable-input rentable-input" />
-            <span class="select price-type-span no-shadow">
-              <div class="drop-form">
-                <select id="price-type-input" data-name="price_type" class="changeable-input rentable-input">
-                  <option value="month">Month</option>
-                  <option value="week">Week</option>
-                  <option value="day">Day</option>
-                </select>
-              </div>
-            </span>
-          </div>
-          <small class="tip"></small>
-        </div>
-        <div class="control">
-          <label class="label">
-            <span>Example Paths</span>
-            <span class="icon is-small is-tooltip" data-balloon-length="large" data-balloon="Example paths or subdirectories that users may want to rent on your domain. Must consist of either letters or numbers." data-balloon-pos="up">
-              <i class="fa fa-question-circle"></i>
-            </span>
-          </label>
-          <input id="paths-input" data-name="paths" tabindex="0" class="is-hidden input rentable-input" />
-        </div>
-      </div>
       <div id="offers-tab-drop" data-title="View Offers"  class="tab-drop card-content is-hidden">
         <div id="offer-modal" class="modal">
           <div class="modal-background"></div>

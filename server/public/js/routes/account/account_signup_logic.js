@@ -1,8 +1,10 @@
 $(document).ready(function() {
 
-  //prevent space in username
+  //reset message, prevent space
   $("input").keydown(function(e) {
-    $("#message").text("Create a new account below.").removeAttr("style");
+    if ($("#message").hasClass('is-danger')){
+      $("#message").text("Create a new account below.").removeAttr("style");
+    }
 
     if (e.keyCode == 32){
       e.preventDefault();
@@ -12,7 +14,6 @@ $(document).ready(function() {
 
   //verify email
   $("#email-input").keyup(function(e) {
-    //if correct email, show check
     if (validateEmail($(this).val())) {
       showSuccessDanger($(this), true);
     }
@@ -26,8 +27,8 @@ $(document).ready(function() {
 
   //verify username
   $("#username-input").keyup(function(e) {
-    name_length = $(this).val().length;
-    name_val = $(this).val();
+    var name_length = $(this).val().length;
+    var name_val = $(this).val();
     if (name_val.includes(" ")){
       showSuccessDanger($(this), false);
     }
@@ -44,7 +45,7 @@ $(document).ready(function() {
 
   //verify password input
   $("#pw-input").keyup(function() {
-    pw_length = $(this).val().length;
+    var pw_length = $(this).val().length;
 
     if (70 > pw_length && pw_length >= 6) {
       showSuccessDanger($(this), true);
@@ -84,15 +85,15 @@ $(document).ready(function() {
   $('#target').on("submit", function(event){
     //passwords dont match
     if ($("#pw-input").val() != $("#verify-pw").val()){
-      $("#message").fadeOut(100, function(){
-        $("#message").css("color", "#ed1c24").html("Your passwords don't match!").fadeIn(100);
+      $("#message").stop().fadeOut(100, function(){
+        $("#message").addClass('is-danger').html("Your passwords do not match!").fadeIn(100);
       });
       return false;
     }
     //if recaptcha is not done
     else if (!validateCaptcha()){
-      $("#message").fadeOut(100, function(){
-        $("#message").css("color", "#ed1c24").html("Please prove you're not a robot!").fadeIn(100);
+      $("#message").stop().fadeOut(100, function(){
+        $("#message").addClass('is-danger').html("Please prove that you are not a robot!").fadeIn(100);
       });
       return false;
     }

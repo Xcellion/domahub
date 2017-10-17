@@ -205,6 +205,8 @@ module.exports = {
       Account.checkPromoCodeUnused(req.params.promo_code, function(result){
         if (result.state == "success" && result.info.length > 0){
           console.log("F: Promo code exists!");
+          req.session.promo_code_signup = req.params.promo_code;
+          req.session.message = "Promo code applied! Sign up below to get started.";
           next();
         }
 
@@ -214,19 +216,11 @@ module.exports = {
           //get the username ID so we can create a referral code
           Account.getAccountIDByUsername(req.params.promo_code, function(result){
             if (result.state == "success" && result.info.length > 0){
-              var referer_id = result.info[0].id;
-              console.log("F: User doesn't have any existing referrals! Creating coupon...");
-
-              //create 1 promo code, with referer_id, and 1 duration_in_months
-              stripe.createPromoCode("1", referer_id, "1", function(result){
-                res.redirect("/signup");
-              });
+              console.log("F: Username referral code exists!");
+              req.session.referer_id = result.info[0].id;
+              req.session.message = "Promo code applied! Sign up below to get started.";
             }
-
-            //no username ID exists by that code
-            else {
-              res.redirect("/signup");
-            }
+            res.redirect("/signup");
           });
 
         }
@@ -353,8 +347,12 @@ module.exports = {
       error.handler(req, res, "Please enter an email address!");
     }
     //invalid username
-    else if (!username || /\s/.test(username)){
+    else if (!username){
       error.handler(req, res, "Please enter a username!");
+    }
+    //username has a space
+    else if (/\s/.test(username)){
+      error.handler(req, res, "Usernames cannot have a space!");
     }
     //username is too long
     else if (username.length > 70){
@@ -378,7 +376,7 @@ module.exports = {
     }
     //passwords aren't the same
     else if (password != verify_pw){
-      error.handler(req, res, "Please prove you're not a robot!");
+      error.handler(req, res, "Please prove that you are not a robot!");
     }
     //recaptcha is empty
     else if (!recaptcha){
@@ -692,6 +690,7 @@ module.exports = {
   //</editor-fold>
 
 }
+
 //<editor-fold>------------------------------------------HELPERS---------------------------------------
 
 //resets message before returning it
