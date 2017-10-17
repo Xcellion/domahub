@@ -176,62 +176,14 @@ account_model.prototype.getAccountListings = function(account_id, callback){
   account_query(query, "Failed to get all listings belonging to account " + account_id + "!", callback, account_id);
 }
 
-//gets all rental info belonging to specific account
-account_model.prototype.getAccountRentals = function(account_id, callback){
-  console.log("DB: Attempting to get all rentals belonging to account " + account_id + "...");
-  query = "SELECT \
-        rentals.*,\
-        rental_times.date,\
-        rental_times.duration,\
-        listings.id,\
-        listings.domain_name\
-      FROM rentals \
-      JOIN rental_times ON rentals.rental_id = rental_times.rental_id \
-      JOIN listings ON listings.id = rentals.listing_id \
-      WHERE rentals.account_id = ? \
-      AND rentals.status = 1 \
-      ORDER BY listings.domain_name ASC, rentals.rental_id DESC, rental_times.date ASC";
-  account_query(query, "Failed to get all rentals belonging to account " + account_id + "!", callback, account_id);
-}
-
-//gets all chats for an account
-account_model.prototype.getAccountChats = function(account_id, callback){
-  console.log("DB: Attempting to get all chat info for account #" + account_id + "...");
-  query = "SELECT \
-        chat_history.message, \
-        chat_history.seen, \
-        max_date.timestamp, \
-        max_date.username, \
-        max_date.id \
-      FROM chat_history \
-      INNER JOIN ( \
-        SELECT  \
-           MAX(chat_history.id) as max_id, \
-           MAX(chat_history.timestamp) as timestamp, \
-           accounts.username, \
-           accounts.id \
-         FROM chat_history  \
-        JOIN accounts \
-        ON (  \
-          (accounts.id = chat_history.sender_account_id AND chat_history.receiver_account_id = ?)  \
-          OR  \
-          (accounts.id = chat_history.receiver_account_id AND chat_history.sender_account_id = ?)  \
-        ) \
-        GROUP BY accounts.email \
-      ) max_date \
-      ON chat_history.timestamp = max_date.timestamp AND chat_history.id = max_date.max_id \
-      ORDER BY chat_history.timestamp DESC"
-  account_query(query, "Failed to get all chat info for account #" + account_id + "!", callback, [account_id, account_id]);
-}
-
 //gets the stripe ID and listing type of a listing owner
 account_model.prototype.getStripeAndType = function(domain_name, callback){
   console.log("DB: Attempting to get the Stripe ID of the owner of: " + domain_name + "...");
   query = "SELECT \
         accounts.stripe_account \
-      FROM accounts \
-      JOIN listings ON listings.owner_id = accounts.id \
-      WHERE listings.domain_name = ? ";
+          FROM accounts \
+          JOIN listings ON listings.owner_id = accounts.id \
+          WHERE listings.domain_name = ? ";
   account_query(query, "Failed to get the Stripe ID of the owner of: " + domain_name + "!", callback, domain_name);
 }
 
@@ -242,16 +194,33 @@ account_model.prototype.getCouponCodes = function(callback){
   account_query(query, "Failed to get all coupon codes!", callback);
 }
 
+//gets all referrals made by a user
+account_model.prototype.getReferralsFromUser = function(account_id, callback){
+  console.log("DB: Attempting to get all referrals made by user #" + account_id + "...");
+  query = "SELECT \
+        coupon_codes.date_created, \
+        coupon_codes.date_accessed, \
+        accounts.username, \
+        accounts.stripe_subscription_id \
+          FROM accounts \
+          LEFT JOIN coupon_codes ON accounts.id = coupon_codes.account_id \
+          WHERE coupon_codes.referer_id = ?"
+  account_query(query, "Failed to get all coupon codes!", callback, account_id);
+}
+
 //gets any existing coupon code for a user
 account_model.prototype.getExistingPromoCodeByUser = function(account_id, callback){
   console.log("DB: Attempting to get the existing coupon code for user #" + account_id + "...");
-  query = "SELECT coupon_codes.code, coupon_codes.referer_id, coupon_codes.duration_in_months, accounts.stripe_subscription_id \
+  query = "SELECT \
+        coupon_codes.code, \
+        coupon_codes.referer_id, \
+        coupon_codes.duration_in_months, \
+        accounts.stripe_subscription_id \
           FROM accounts \
           LEFT JOIN coupon_codes ON accounts.id = coupon_codes.account_id \
           WHERE accounts.id = ?"
   account_query(query, "Failed to get an existing coupon code!", callback, account_id);
 }
-
 
 //</editor-fold>
 

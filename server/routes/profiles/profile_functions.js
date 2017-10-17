@@ -40,7 +40,7 @@ module.exports = {
       next();
     }
   },
-  
+
   //</editor-fold>
 
   //<editor-fold>----------------------------------------------------------------------MULTI
@@ -387,8 +387,28 @@ module.exports = {
 
   //<editor-fold>----------------------------------------------------------------------PROMO CODE
 
+  //function to get all referrals for a user
+  getReferralsFromUser : function(req, res, next){
+    console.log("F: Getting all referrals made by user...");
+    Account.getReferralsFromUser(req.user.id, function(result){
+      if (result.state == "success"){
+        req.user.referrals = result.info;
+      }
+      else {
+        req.user.referrals = [];
+      }
+
+      res.send({
+        state : "success",
+        user : req.user
+      });
+    });
+  },
+
   //get any existing promo code to apply to a new stripe subscription
   getExistingCoupon : function(req, res, next){
+    console.log("F: Getting any existing coupons for user...");
+
     Account.getExistingPromoCodeByUser(req.user.id, function(result){
       if (result.state == "success" && result.info.length > 0 && result.info[0].code){
         req.user.existing_promo_code = result.info[0].code;
@@ -400,6 +420,8 @@ module.exports = {
 
   //check if the promo code exists in our database
   checkPromoCode : function(req, res, next){
+    console.log("F: Checking coupon code validity...");
+
     if (!req.body.code){
       error.handler(req, res, "Invalid promo code!", "json");
     }

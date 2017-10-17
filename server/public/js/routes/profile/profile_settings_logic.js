@@ -1,35 +1,7 @@
-//function that runs when back button is pressed
-window.onpopstate = function(event) {
-  showSectionByURL();
-}
-
-//function to show a specific section
-function showSection(section_id){
-  resetErrorSuccess();
-  cancelEdits();
-  $(".setting-link").removeClass("is-active");
-  $("#" + section_id + "-link").addClass("is-active");
-  temp_section = $("#" + section_id);
-  $(".card").not(temp_section).addClass("is-hidden");
-  temp_section.removeClass("is-hidden");
-}
-
-function showSectionByURL(){
-  temp_hash = location.hash.split("#")[1];
-  array_of_ids = [];
-  $(".card").each(function(index) {
-    array_of_ids.push($(this).attr("id"));
-  });
-
-  if (array_of_ids.indexOf(temp_hash) == -1){
-    showSection("basic");
-  }
-  else {
-    showSection(temp_hash);
-  }
-}
-
 $(document).ready(function() {
+
+  //<editor-fold>-------------------------------SHOW SECTION-------------------------------
+
   window.scrollTo(0,0);
 
   //function to show section depending on url
@@ -59,21 +31,7 @@ $(document).ready(function() {
     $('#cc-zip').val("");
   });
 
-  //to highlight submit when data changes for account form
-  $(".account-form .account-input").on("input", function(e){
-    var account_form = $(this).closest(".account-form");
-    var success_button = account_form.find(".button.is-primary");
-    var cancel_button = account_form.find(".button.is-danger");
-
-    if ($(this).val() != user[$(this).attr("id").replace("-input", "")]){
-      success_button.removeClass("is-disabled");
-      cancel_button.removeClass("is-hidden");
-    }
-    else {
-      success_button.addClass("is-disabled");
-      cancel_button.addClass("is-hidden");
-    }
-  });
+  //</editor-fold>
 
   //<editor-fold>-------------------------------ACCOUNT INFO-------------------------------
 
@@ -159,6 +117,22 @@ $(document).ready(function() {
 
   //<editor-fold>-------------------------------EDIT INFO-------------------------------
 
+  //to highlight submit when data changes for account form
+  $(".account-form .account-input").on("input", function(e){
+    var account_form = $(this).closest(".account-form");
+    var success_button = account_form.find(".button.is-primary");
+    var cancel_button = account_form.find(".button.is-danger");
+
+    if ($(this).val() != user[$(this).attr("id").replace("-input", "")]){
+      success_button.removeClass("is-disabled");
+      cancel_button.removeClass("is-hidden");
+    }
+    else {
+      success_button.addClass("is-disabled");
+      cancel_button.addClass("is-hidden");
+    }
+  });
+
   //to edit the current section
   $(".edit-section-button").on("click", function(e){
     var current_section = $(this).closest(".card");
@@ -176,6 +150,85 @@ $(document).ready(function() {
   //</editor-fold>
 
 });
+
+//<editor-fold>-------------------------------SHOW SECTION-------------------------------
+
+//function that runs when back button is pressed
+window.onpopstate = function(event) {
+  showSectionByURL();
+}
+
+//function to show a specific section
+function showSection(section_id){
+  resetErrorSuccess();
+  cancelEdits();
+  $(".setting-link").removeClass("is-active");
+  $("#" + section_id + "-link").addClass("is-active");
+  temp_section = $("#" + section_id);
+  $(".card").not(temp_section).addClass("is-hidden");
+  temp_section.removeClass("is-hidden");
+
+  //get AJAX for promo codes if we havent yet
+  if (section_id == "promo") {
+    if (!user.referrals){
+      $.ajax({
+        url: "/profile/getreferrals",
+        method: "POST"
+      }).done(function(data){
+        if (data.state == "success"){
+          user = data.user;
+        }
+
+        createReferralsTable();
+      });
+    }
+    else {
+      createReferralsTable();
+    }
+  }
+}
+
+function showSectionByURL(){
+  temp_hash = location.hash.split("#")[1];
+  array_of_ids = [];
+  $(".card").each(function(index) {
+    array_of_ids.push($(this).attr("id"));
+  });
+
+  if (array_of_ids.indexOf(temp_hash) == -1){
+    showSection("basic");
+  }
+  else {
+    showSection(temp_hash);
+  }
+}
+
+//</editor-fold>
+
+//<editor-fold>
+
+//function to create the referrals table
+function createReferralsTable(){
+  if (user.referrals && user.referrals.length > 0){
+    $(".referral-row:not(#referral-clone)").remove();
+
+    for (var x = 0 ; x < user.referrals.length ; x++){
+      var referral_clone = $("#referral-clone").clone().removeAttr("id");
+
+      referral_clone.find(".referral-username").text(user.referrals[x].username);
+      referral_clone.find(".referral-created").text(moment(user.referrals[x].date_created).format("MMMM DD, YYYY"));
+      referral_clone.find(".referral-redeemed").text((user.referrals[x].date_accessed) ? moment(user.referrals[x].date_accessed).format("MMMM DD, YYYY") : "-");
+
+      $("#referral-table").append(referral_clone);
+    }
+
+    $(".referral-row:not(#referral-clone)").removeClass('is-hidden');
+  }
+}
+
+//</editor-fold>
+
+//<editor-fold>-------------------------------HELPERS-------------------------------
 
 //helper function to display/hide error messages per listing
 function errorMessage(message){
@@ -265,3 +318,5 @@ function validateEmail(email) {
   var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   return re.test(email);
 }
+
+//</editor-fold>

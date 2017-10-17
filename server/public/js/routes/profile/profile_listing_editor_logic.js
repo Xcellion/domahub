@@ -731,6 +731,7 @@ function checkBox(module_value, elem, child){
       contentType: false,
       processData: false
     }, 'json').done(function(data){
+      console.log(data);
       submit_button.removeClass('is-loading');
       refreshSubmitButtons();
       if (data.state == "success"){
