@@ -1,12 +1,14 @@
 .card-header
   align-items: stretch
   background-color: inherit
-  border-bottom: 2px solid $border
+  border-bottom: 1px solid $border
   display: flex
   justify-content: space-between
   min-height: 40px
   padding: 15px 20px
   border-radius: $radius $radius 0 0
+  &.is-grey
+    background-color: $lighter
   &.is-justified-start
     justify-content: flex-start
     .card-header-title

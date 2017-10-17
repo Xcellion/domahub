@@ -1451,12 +1451,14 @@ pre {
 .card-header {
   align-items: stretch;
   background-color: inherit;
-  border-bottom: 2px solid rgba(0, 0, 0, 0.12);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
   display: flex;
   justify-content: space-between;
   min-height: 40px;
   padding: 15px 20px;
   border-radius: 3px 3px 0 0; }
+  .card-header.is-grey {
+    background-color: #f1f1f1; }
   .card-header.is-justified-start {
     justify-content: flex-start; }
     .card-header.is-justified-start .card-header-title {
@@ -1599,7 +1601,6 @@ input:-webkit-autofill {
   vertical-align: top;
   border: 1px solid rgba(0, 0, 0, 0.12);
   border-radius: 3px;
-  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.16), 0 -1px 1px #FFF, 0 1px 0 #FFF;
   max-width: 100%;
   width: 100%; }
   @media screen and (max-width: 456px) {
