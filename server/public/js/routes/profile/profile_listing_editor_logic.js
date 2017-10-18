@@ -7,9 +7,16 @@ $(document).ready(function(){
 
   //<editor-fold>-------------------------------OTHER-------------------------------
 
-  //close offer modal
-  $(".modal-close, .modal-background, #delete-nevermind").on("click", function(){
-    $(this).closest(".modal").removeClass('is-active');
+  //go into select mode
+  $(".show-selector-button").on('click', function(){
+    showSelector();
+  });
+
+  //close listings view dropper on click anywhere else (here instead of inside editor bc dont want to .off() on document)
+  $(document).on("click", function(event) {
+    if (!$(event.target).closest("#view-listings-button").length) {
+      $("#view-listings-button-drop").addClass('is-hidden');
+    }
   });
 
   //array find for IE (for stats tab)
@@ -25,38 +32,123 @@ $(document).ready(function(){
 
   //</editor-fold>
 
-  //<editor-fold>-------------------------------BUTTONS-------------------------------
+});
 
-  //go into select mode
-  $(".show-selector-button").on('click', function(){
-    showSelector();
-  });
+//<editor-fold>-------------------------------EDITOR FUNCTIONS-------------------------------
+
+//function to return to domain selector
+function showSelector(keep_message){
+  removeURLParameter("tab");
+  multiSelectButtons();
+  leftMenuActive();
+  if (!keep_message){
+    errorMessage(false);
+    successMessage(false);
+  }
+  $("#domain-selector").removeClass('is-hidden');
+  $("#domain-editor").addClass('is-hidden');
+}
+
+//function to show domain names for multiple selected
+function updateEditorDomains(selected_domain_ids){
+  if (selected_domain_ids.length == 1){
+    //update domain name and plural
+    $(".current-domain-name, #example-domain-name").text(listing_info.domain_name);
+    $(".edit-domain-plural").addClass('is-hidden');
+  }
+  else if (selected_domain_ids.length > 1){
+    //update domain name and plural
+    $(".current-domain-name").text(selected_domain_ids.length + " Domains");
+    $(".edit-domain-plural").removeClass('is-hidden');
+
+    $(".current-domain-list").remove();
+    $(".title-wrapper").append(' \
+      <span class="current-domain-list icon is-tooltip" \
+       data-balloon-length="medium" data-balloon-break data-balloon="' + getSelectedDomains("domain_name").join("&#10;") + '" \
+       data-balloon-pos="down"> <i class="fa fa-question-circle"></i> \
+      </span> \
+    ');
+  }
+}
+
+//</editor-fold>
+
+//<editor-fold>-------------------------------UPDATE EDITOR EDITING-------------------------------
+
+//function to update a row if it's verified but not yet purchased
+function updateEditorEditing(selected_domain_ids){
+
+  //update the domain names
+  updateEditorDomains(selected_domain_ids);
+
+  //editing view specific things
+  $(".editor-title").text("Editing - ");
+  $("#example-domain-name").text("Editing" + selected_domain_ids.length + "DomainNames.com");
+  $(".non-edit-elem").addClass('is-hidden');
+  $(".edit-elem").removeClass('is-hidden');
+
+  setupEditingButtons();
+
+  //set current listing to common denom listing_info obj
+  if (selected_domain_ids.length > 1){
+    var listing_info = getCommonListingInfo(selected_domain_ids);
+    current_listing = listing_info;
+
+    //hide domain capitalization
+    $("#domain-name-cap-missing").removeClass('is-hidden');
+    $("#domain-name-input").addClass('is-hidden');
+
+    //tooltip to view individual listings
+    $("#view-listings-button").removeAttr("href").off().on('click', function(){
+      $("#view-listings-button-drop").toggleClass('is-hidden');
+    });
+
+    //domain list drop
+    $("#view-listings-button-drop").empty();
+    var domain_names_list = getSelectedDomains("domain_name");
+    for (var x = 0 ; x < domain_names_list.length ; x++){
+      var listing_href = (user.stripe_subscription_id) ? "https://" + domain_names_list[x].toLowerCase() : "/listing/" + domain_names_list[x].toLowerCase();
+      $("#view-listings-button-drop").append("<li><a target='_blank' href='" + listing_href + "' class='is-primary is-underlined'>" + domain_names_list[x] + "</a></li>");
+    }
+  }
+  else {
+    var listing_info = getDomainByID(selected_domain_ids[0]);
+    current_listing = listing_info;
+
+    //view listing button link
+    $("#view-listings-button").off().attr("href", (user.stripe_subscription_id) ? "https://" + listing_info.domain_name.toLowerCase() : "/listing/" + listing_info.domain_name);
+
+    //show domain capitalization
+    $("#domain-name-cap-missing").addClass('is-hidden');
+    $("#domain-name-input").removeClass('is-hidden');
+  }
+
+  updateStatus(current_listing);
+  updateInfoTab(current_listing);
+  updateDesignTab(current_listing);
+  updateRentalTab(current_listing);
+  updateBindings(current_listing);
+}
+
+function setupEditingButtons(){
 
   //to submit form changes
-  $("#save-changes-button").on("click", function(e){
+  $("#save-changes-button").off().on("click", function(e){
     submitListingChanges($(this));
   });
 
   //to cancel form changes
-  $("#cancel-changes-button").on("click", function(e){
+  $("#cancel-changes-button").off().on("click", function(e){
     cancelListingChanges();
   });
 
-  $("#verify-button").on('click', function(){
-    multiVerify($(this));
-  });
-
-  //</editor-fold>
-
-  //<editor-fold>-------------------------------REGULAR TABS-------------------------------
-
   //click to move to upgrade tab from design tab
-  $("#other-tab-upgrade-button").on('click', function(e){
+  $("#other-tab-upgrade-button").off().on('click', function(e){
     $("#upgrade-tab").click();
   });
 
   //change tabs for editing
-  $("#edit-toolbar.tab").on("click", function(e){
+  $("#edit-toolbar .tab").off().on("click", function(e){
     var current_tab = $(".tab.is-active").attr("id").replace("-tab", "");
     var new_tab = $(this).attr("id").replace("-tab", "");
 
@@ -79,120 +171,6 @@ $(document).ready(function(){
     }
   });
 
-  //</editor-fold>
-
-});
-
-//<editor-fold>-------------------------------EDITOR FUNCTIONS-------------------------------
-
-//function to return to domain selector
-function showSelector(keep_message){
-  removeURLParameter("tab");
-  multiSelectButtons();
-  leftMenuActive();
-  if (!keep_message){
-    errorMessage(false);
-    successMessage(false);
-  }
-  $("#domain-selector").removeClass('is-hidden');
-  $("#domain-editor").addClass('is-hidden');
-}
-
-//function to show editor domain names (for editing, offers, stats)
-function updateEditorDomains(selected_domain_ids){
-  //show verified stuff, hide unverified stuff
-  $(".verified-elem").removeClass('is-hidden');
-  $(".unverified-elem").addClass('is-hidden');
-
-  //title domain list tooltip
-  $("#current-domain-list").remove();
-  $("#view-listings-button-drop").empty();
-
-  //update buttons
-  if (selected_domain_ids.length == 1){
-    var listing_info = getDomainByID(selected_domain_ids[0]);
-    current_listing = listing_info;
-
-    //update domain name and plural
-    $(".current-domain-name, #example-domain-name").text(listing_info.domain_name);
-    $(".edit-domain-plural").addClass('is-hidden');
-
-    //view listing button link
-    $("#view-listings-button").off().attr("href", (user.stripe_subscription_id) ? "https://" + listing_info.domain_name.toLowerCase() : "/listing/" + listing_info.domain_name);
-
-    //show domain capitalization
-    $("#domain-name-cap-missing").addClass('is-hidden');
-    $("#domain-name-input").removeClass('is-hidden');
-  }
-  else if (selected_domain_ids.length > 1){
-    //update domain name and plural
-    $(".current-domain-name").text(selected_domain_ids.length + " Domains");
-    $(".edit-domain-plural").removeClass('is-hidden');
-    $("#example-domain-name").text("Editing" + selected_domain_ids.length + "DomainNames.com");
-
-    //domain list drop
-    var domain_title_list = []
-    for (var x = 0 ; x < selected_domain_ids.length ; x++){
-      var temp_listing_info = getDomainByID(selected_domain_ids[x]);
-      var listing_href = (user.stripe_subscription_id) ? "https://" + temp_listing_info.domain_name.toLowerCase() : "/listing/" + temp_listing_info.domain_name;
-      $("#view-listings-button-drop").append("<li><a target='_blank' href='" + listing_href + "' class='is-primary is-underlined'>" + temp_listing_info.domain_name + "</a></li>");
-      domain_title_list.push(temp_listing_info.domain_name);
-    }
-
-    $(".editor-title-wrapper").append(' \
-      <span id="current-domain-list" class="icon is-tooltip" \
-       data-balloon-length="medium" data-balloon-break data-balloon="' + domain_title_list.join("&#10;") + '" \
-       data-balloon-pos="down"> <i class="fa fa-question-circle"></i> \
-      </span> \
-    ');
-
-    //tooltip to view individual listings
-    $("#view-listings-button").removeAttr("href").on('click', function(){
-      $("#view-listings-button-drop").toggleClass('is-hidden');
-    });
-
-    //close listings view dropper on click anywhere else
-    $(document).on("click", function(event) {
-      if (!$(event.target).closest("#view-listings-button").length) {
-        $("#view-listings-button-drop").addClass('is-hidden');
-      }
-    });
-
-    //hide domain capitalization
-    $("#domain-name-cap-missing").removeClass('is-hidden');
-    $("#domain-name-input").addClass('is-hidden');
-  }
-  else {
-    $("#view-listings-button-wrapper").addClass('is-hidden');
-  }
-}
-
-//</editor-fold>
-
-//<editor-fold>-------------------------------UPDATE EDITOR EDITING-------------------------------
-
-//function to update a row if it's verified but not yet purchased
-function updateEditorEditing(selected_domain_ids){
-
-  //update the domain names
-  updateEditorDomains(selected_domain_ids);
-
-  //editing view specific things
-  $(".editor-title").text("Editing - ");
-  $("#refresh-offers-button").addClass('is-hidden');
-  $("#refresh-stats-button").addClass('is-hidden');
-
-  //set current listing to common denom listing_info obj
-  if (selected_domain_ids.length > 1){
-    var listing_info = getCommonListingInfo(selected_domain_ids);
-    current_listing = listing_info;
-  }
-
-  updateStatus(current_listing);
-  updateInfoTab(current_listing);
-  updateDesignTab(current_listing);
-  updateRentalTab(current_listing);
-  updateBindings(current_listing);
 }
 
 function updateStatus(listing_info){
@@ -841,6 +819,8 @@ function checkBox(module_value, elem, child){
 //function to update a row if it's verified but not yet purchased
 function updateEditorOffers(selected_domain_ids){
   updateEditorDomains(selected_domain_ids);
+  $(".non-offer-elem").addClass('is-hidden');
+  $(".offer-elem").removeClass('is-hidden');
 
   //change domain name header
   if (selected_domain_ids.length == 0){
@@ -849,8 +829,6 @@ function updateEditorOffers(selected_domain_ids){
   else {
     $(".editor-title").text("Viewing Offers - ");
   }
-  $("#status-toggle-button").addClass('is-hidden');
-  $("#refresh-stats-button").addClass('is-hidden');
 
   if (selected_domain_ids.length == 0){
     selectSpecificRows("verified", 1);
@@ -868,6 +846,11 @@ function setupOfferButtons(selected_domain_ids){
   }
   else {
     $(".offer-button").removeClass('is-hidden');
+
+    //close offer modal
+    $(".modal-close, .modal-background, #delete-nevermind").off().on("click", function(){
+      $(this).closest(".modal").removeClass('is-active');
+    });
 
     //search offers input
     $("#offer-search").off().on('input', function(){
@@ -1525,23 +1508,11 @@ function createTrafficChart(formatted_dataset, listing_info){
 
 //function to initiate edit mode for unverified
 function updateEditorUnverified(selected_domain_ids){
-  //hide purchased elems
-  $(".purchased-elem").addClass('is-hidden');
-  $(".unpurchased-elem").removeClass("is-hidden");
 
-  //show specific elems, hide others
-  $(".verified-elem").addClass('is-hidden');
-  $(".unverified-elem").removeClass('is-hidden');
-
-  //hide buttons for now
-  $("#verify-button").addClass('is-hidden');
-  $("#refresh-dns-button").addClass('is-hidden');
-
-  //refresh the DNS table button
-  $("#refresh-dns-button").off().on("click", function(){
-    $(this).addClass('is-loading');
-    createDNSRecordRows(selected_domain_ids, true);
-  });
+  updateEditorDomains(selected_domain_ids);
+  $(".non-verify-elem").addClass('is-hidden');
+  $(".verify-elem").removeClass('is-hidden');
+  setupVerificationButtons(selected_domain_ids);
 
   //change domain name header
   $(".editor-title").text("Verifying - ");
@@ -1559,6 +1530,21 @@ function updateEditorUnverified(selected_domain_ids){
 
   //create all tables for each unverified listing
   createDNSRecordRows(selected_domain_ids);
+}
+
+//function to set up verification buttons
+function setupVerificationButtons(selected_domain_ids){
+
+  //refresh the DNS table button
+  $("#refresh-dns-button").addClass('is-hidden').off().on("click", function(){
+    $(this).addClass('is-loading');
+    createDNSRecordRows(selected_domain_ids, true);
+  });
+
+  //verify the domains!
+  $("#verify-button").addClass('is-hidden').off().on('click', function(){
+    multiVerify($(this));
+  });
 }
 
 //function to create DNS rows

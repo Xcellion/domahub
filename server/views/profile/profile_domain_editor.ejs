@@ -1,5 +1,7 @@
 <div id="domain-editor" class="columns is-hidden">
-  <div id="second-left-menu" class="tabs-menu column">
+
+  <!-- LISTING EDIT TOOLBAR -->
+  <div id="edit-toolbar" class="edit-elem non-offer-elem non-verify-elem tabs-menu column">
 
     <!-- CURRENT DOMAIN NAME -->
     <div class="content">
@@ -11,61 +13,42 @@
       </a>
     </div>
     <div class="content">
-      <h2 id="editor-title-wrapper" class="is-inline-block">
+      <h2 class="title-wrapper is-inline-block">
         <span class="editor-title"></span>
         <span class="current-domain-name"></span>
       </h2>
     </div>
 
-    <!-- LISTING VERIFY TOOLBAR -->
-    <div id="verify-toolbar" class="unverified-elem menu is-hidden">
+    <div class="menu">
       <ul class="menu-list">
         <li class="menu-item has-icon">
-          <a id="verify-button" class="is-hidden tab" title="Verify domain(s)">
-            <span class="icon is-small"><i class="fa fa-check-circle-o"></i></span>
-            <span>Verify Now</span>
-          </a>
-        </li>
-        <li class="menu-item has-icon">
-          <a id="refresh-dns-button" class="is-hidden tab" title="Refresh DNS Table">
-            <span class="icon is-small"><i class="fa fa-refresh"></i></span>
-            <span>Refresh DNS Table</span>
-          </a>
-        </li>
-      </ul>
-    </div>
-
-    <!-- LISTING EDIT TOOLBAR -->
-    <div id="edit-toolbar" class="menu is-hidden">
-      <ul class="menu-list">
-        <li class="menu-item has-icon">
-          <a id="info-tab" tabindex="0" class="verified-elem unpurchased-elem tab primary-theme is-active">
+          <a id="info-tab" tabindex="0" class="unpurchased-elem tab primary-theme is-active">
             <span class="icon is-small"><i class="fa fa-info"></i></span>
             <p>Information</p>
           </a>
         </li>
         <li class="menu-item has-icon">
-          <a id="design-tab" tabindex="0" class="verified-elem unpurchased-elem tab">
+          <a id="design-tab" tabindex="0" class="unpurchased-elem tab">
             <span class="icon is-small"><i class="fa fa-magic"></i></span>
             <p>Design</p>
           </a>
         </li>
         <li class="menu-item has-icon">
-          <a id="rental-tab" tabindex="0" class="verified-elem unpurchased-elem tab">
+          <a id="rental-tab" tabindex="0" class="unpurchased-elem tab">
             <span class="icon is-small"><i class="fa fa-calendar-check-o"></i></span>
             <p>Rental</p>
           </a>
         </li>
         <hr class="is-hidden-mobile"/>
         <li class="menu-item has-icon">
-          <a id="status-toggle-button" tabindex="0" class="button no-shadow verified-elem" title="Publicly hide or show landing page(s).">
+          <a id="status-toggle-button" tabindex="0" class="button no-shadow verify-elem" title="Publicly hide or show landing page(s).">
             <span id="status-color" class="icon is-small"><i id="status-icon" class="fa"></i></span>
             <span id="status-text"></span>
           </a>
         </li>
         <li class="menu-item has-icon">
           <div id="view-listings-button-wrapper" class="is-relative">
-            <a id="view-listings-button" target="_blank" rel="noopener" tabindex="0" class="verified-elem is-hidden">
+            <a id="view-listings-button" target="_blank" rel="noopener" tabindex="0">
               <span class="icon is-small"><i class="fa fa-external-link"></i></span>
               <span>View Listing<span class="edit-domain-plural is-hidden">s</span></span>
             </a>
@@ -77,8 +60,9 @@
   </div>
 
   <div class="column">
+
     <!-- OFFERS TABLE -->
-    <div id="offers-tab-drop" class="is-hidden">
+    <div id="offers-section" class="offer-elem non-edit-elem non-verify-elem is-hidden">
       <div class="content">
         <a class="show-selector-button button is-black is-transparent no-shadow" tabindex="0" title="Back To Domain Selector">
           <span class="icon is-small">
@@ -88,15 +72,15 @@
         </a>
       </div>
 
-      <div class="control">
+      <div id="offers-toolbar" class="control">
         <div class="content">
-          <h2 class="is-bold">
+          <h2 class="title-wrapper is-bold">
             <span class="editor-title">My Offers</span>
             <span class="current-domain-name"></span>
           </h2>
         </div>
         <div class="offer-button control button-wrapper">
-          <a id="refresh-offers-button" class="verified-elem is-hidden button is-black is-transparent" title="Refresh Offers">
+          <a id="refresh-offers-button" class="is-hidden button is-black is-transparent" title="Refresh Offers">
             <span class="icon is-small"><i class="fa fa-refresh"></i></span>
             <span>Refresh Offers</span>
           </a>
@@ -268,8 +252,93 @@
       </div>
     </div>
 
-    <!-- LISTING DETAILS AND VERIFICATION -->
-    <div id="card-view" class="card is-fullwidth">
+    <!-- VERIFICATION TABLE -->
+    <div id="verify-section" class="verify-elem non-verify-elem non-edit-elem is-hidden">
+
+      <div class="content">
+        <a class="show-selector-button button is-black is-transparent no-shadow" tabindex="0" title="Back To Domain Selector">
+          <span class="icon is-small">
+            <i class="fa fa-long-arrow-left"></i>
+          </span>
+          <span>Go Back To Listings</span>
+        </a>
+      </div>
+
+      <!-- LISTING VERIFY TOOLBAR -->
+      <div id="verify-toolbar" class="control">
+        <div class="content">
+          <h2 class="title-wrapper is-bold">
+            <span class="editor-title"></span>
+            <span class="current-domain-name"></span>
+          </h2>
+        </div>
+        <div class="offer-button control button-wrapper">
+          <a id="verify-button" class="is-hidden button" title="Verify domain(s)">
+            <span class="icon is-small"><i class="fa fa-check-circle-o"></i></span>
+            <span>Verify Now</span>
+          </a>
+          <a id="refresh-dns-button" class="is-hidden button" title="Refresh DNS Table">
+            <span class="icon is-small"><i class="fa fa-refresh"></i></span>
+            <span>Refresh DNS Table</span>
+          </a>
+        </div>
+      </div>
+
+      <div class="content">
+        <p>The table below details the DNS entries that are needed to verify <span class="verification-domains-plural"></span>.</p>
+        <p id="registrar_url">Please <a>log in to your respective domain provider<span class="verification-plural"></span></a> to create these entries.</p>
+        <p>If you require any assistance, please refer to our <a tabindex="0" target="_blank" class="is-underlined is-primary" href="https://medium.com/@domahub/how-to-verify-domains-on-domahub-7d526c4ce6d"> step-by-step guide</a> on domain verification.</p>
+      </div>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Domain Name</th>
+            <th>Registrar</th>
+            <th>Host</th>
+            <th>Record</th>
+            <th>Required Data</th>
+            <th>Current Data</th>
+            <th>Next Steps</th>
+          </tr>
+        </thead>
+        <tbody id="dns_table-body">
+          <tr id="loading-records-row">
+            <td colspan=7 class="has-text-centered">
+              <div class="nothing-exists-row has-text-centered">
+                <p class="icon is-medium"><i class="fa fa-spin fa-refresh"></i></p>
+                <p>Now loading existing DNS records...</p>
+              </div>
+            </td>
+          </tr>
+          <tr id="doma-a-record-clone" class='is-hidden'>
+            <td rowspan=2 class="verify_table_domain_name"></td>
+            <td rowspan=2 class="verify_table_registrar">-</td>
+            <td class="dns_host">@</td>
+            <td>A</td>
+            <td class='required_data'>208.68.37.82</td>
+            <td class="existing_data"></td>
+            <td class="next_step"><span class='is-danger'></span></td>
+          </tr>
+          <tr id="doma-www-record-clone" class='is-hidden'>
+            <td class="dns_host">www</td>
+            <td>A</td>
+            <td class='required_data'>208.68.37.82</td>
+            <td class="existing_data"></td>
+            <td class="next_step"><span class='is-danger'></span></td>
+          </tr>
+          <tr id="existing-dns-row" class='is-hidden'>
+            <td class="dns_host">@</td>
+            <td>A</td>
+            <td class='required_data'></td>
+            <td class="existing_data"></td>
+            <td class="next_step"><span class='is-danger'>Create this record</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- LISTING DETAILS -->
+    <div id="editing-section" class="edit-elem non-offer-elem non-verify-elem card is-fullwidth">
       <div class="card-header is-justified-start">
         <h3 id="tab-title" class="card-header-title"></h3>
         <div class="">
@@ -283,74 +352,20 @@
           </a>
         </div>
       </div>
-      <div id="verify-tab-drop" data-title="Verify Ownership" class="tab-drop card-content unverified-elem is-hidden">
-        <div class="content">
-          <h3 class="is-bold">You must verify that you own <span class="verification-domains-plural"></span>.</h3>
-          <p>The table below details the DNS entries that are needed to verify <span class="verification-domains-plural"></span>.</p>
-          <p id="registrar_url">Please <a>log in to your respective domain provider<span class="verification-plural"></span></a> to create these entries.</p>
-          <p>If you require any assistance, please refer to our <a tabindex="0" target="_blank" class="is-underlined is-primary" href="https://medium.com/@domahub/how-to-verify-domains-on-domahub-7d526c4ce6d"> step-by-step guide</a> on domain verification.</p>
-        </div>
-        <table class="table">
-          <thead>
-            <tr>
-              <th>Domain Name</th>
-              <th>Registrar</th>
-              <th>Host</th>
-              <th>Record</th>
-              <th>Required Data</th>
-              <th>Current Data</th>
-              <th>Next Steps</th>
-            </tr>
-          </thead>
-          <tbody id="dns_table-body">
-            <tr id="loading-records-row">
-              <td colspan=7 class="has-text-centered">
-                <div class="nothing-exists-row has-text-centered">
-                  <p class="icon is-medium"><i class="fa fa-spin fa-refresh"></i></p>
-                  <p>Now loading existing DNS records...</p>
-                </div>
-              </td>
-            </tr>
-            <tr id="doma-a-record-clone" class='is-hidden'>
-              <td rowspan=2 class="verify_table_domain_name"></td>
-              <td rowspan=2 class="verify_table_registrar">-</td>
-              <td class="dns_host">@</td>
-              <td>A</td>
-              <td class='required_data'>208.68.37.82</td>
-              <td class="existing_data"></td>
-              <td class="next_step"><span class='is-danger'></span></td>
-            </tr>
-            <tr id="doma-www-record-clone" class='is-hidden'>
-              <td class="dns_host">www</td>
-              <td>A</td>
-              <td class='required_data'>208.68.37.82</td>
-              <td class="existing_data"></td>
-              <td class="next_step"><span class='is-danger'></span></td>
-            </tr>
-            <tr id="existing-dns-row" class='is-hidden'>
-              <td class="dns_host">@</td>
-              <td>A</td>
-              <td class='required_data'></td>
-              <td class="existing_data"></td>
-              <td class="next_step"><span class='is-danger'>Create this record</span></td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
 			<div id="info-tab-drop" data-title="Edit Information Details" class="tab-drop card-content is-hidden">
 				<div class="control">
 					<label class="label" for="min-price-input">
             Minimum Price
           </label>
           <small class="tip">The minimum offer price you will consider. Leave blank or 0 to disable minimum offer price.</small>
-					<input id="min-price-input" class="input changeable-input is-narrow" data-name="min_price" type="number" min="1" step="1">
+					<input id="min-price-input" class="input changeable-input" data-name="min_price" type="number" min="1" step="1">
 				</div>
         <div class="control">
           <label class="label" for="buy-price-input">
             Buy It Now Price
           </label>
           <small class="tip">The price you are willing to immediately sell the domain for. Leave blank or 0 to disable Buy It Now option.</small>
-          <input id="buy-price-input" class="input changeable-input is-narrow" data-name="buy_price" type="number" min="1" step="1">
+          <input id="buy-price-input" class="input changeable-input" data-name="buy_price" type="number" min="1" step="1">
         </div>
 				<div class="control">
 					<label class="label" for="description">
@@ -410,7 +425,7 @@
 					</div>
 				</div>
 			</div>
-      <div id="design-tab-drop" data-title="Edit Design Details"  class="tab-drop card-content is-relative is-hidden">
+      <div id="design-tab-drop" data-title="Edit Design Details" class="tab-drop card-content is-relative is-hidden">
         <div id="premium-blackscreen" class="blackscreen">
           <div id="premium-only-notification" class="content has-text-centered">
             <p>
@@ -779,10 +794,11 @@
         </div>%>
         <label class="label">
           Rental Price
-          <span class="icon is-small is-tooltip" data-balloon-length="large" data-balloon="Price per unit of time for the domain rental. Put 0 or blank for free rentals on your domain." data-balloon-pos="up">
+          <span class="icon is-small is-tooltip" data-balloon-length="medium" data-balloon="Put 0 or blank for free rentals on your domain." data-balloon-pos="up">
             <i class="fa fa-question-circle"></i>
           </span>
         </label>
+        <small class="tip">Price per unit of time for the domain rental.</small>
         <div class="control">
           <div class="control has-addons">
             <input id="price-rate-input" data-name="price_rate" type="number" min="1" step="1" class="input changeable-input rentable-input" />
