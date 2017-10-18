@@ -199,10 +199,10 @@ function showEditor(url_tab, selected_domain_ids){
 
   //hide secondary left menu if offers
   if (url_tab != "offers"){
-    $("#second-left-menu").removeClass('is-hidden');
+    $("#second-left-menu, #card-view").removeClass('is-hidden');
   }
   else {
-    $("#second-left-menu").addClass('is-hidden');
+    $("#second-left-menu, #card-view").addClass('is-hidden');
   }
 
   leftMenuActive();
