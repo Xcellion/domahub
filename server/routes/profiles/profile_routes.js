@@ -97,6 +97,17 @@ module.exports = function(app, db, auth, error, stripe){
     profile_functions.renderSettings
   ]);
 
+  //redirect upgrade premium to right link
+  app.get([
+    "/upgrade",
+    "/premium"
+  ], [
+    auth.checkLoggedIn,
+    function(req, res, next){
+      res.redirect("/profile/settings#premium");
+    }
+  ]);
+
   //redirect anything not caught above to /profile
   app.get("/profile*", profile_functions.redirectProfile);
 

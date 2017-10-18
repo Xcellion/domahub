@@ -50,7 +50,13 @@ module.exports = {
       console.log("F: Checking all posted domain names...");
       var domain_names = req.body.domain_names;
 
-      if (!domain_names || domain_names.length <= 0 || domain_names.length > 500){
+      if (domain_names.length + req.user.listings.length > 100 && !req.user.stripe_subscription_id){
+        error.handler(req, res, "max-domains-reached", "json");
+      }
+      else if (!domain_names || domain_names.length <= 0){
+        error.handler(req, res, "You can't create listigns without any domain names!", "json");
+      }
+      else if (domain_names.length > 500){
         error.handler(req, res, "You can only create up to 500 domains at a time!", "json");
       }
       else {

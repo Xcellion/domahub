@@ -2,12 +2,11 @@ $(document).ready(function() {
   calcUnverified();
   calcOffers();
   showNotifications();
-  ifTrayEmpty();
 
   //delete notification when you click its respective X
-  $(".delete").on("click", function() {
+  $("#notifications-tray .delete").on("click", function() {
     $(this).parent().remove();
-    ifTrayEmpty();
+    calcNotificationCounter();
   });
 
   //referral link
@@ -62,20 +61,25 @@ function showNotifications() {
   if (!(user.stripe_info && user.stripe_info.transfers_enabled)) {
     appendNotification("Connect your <a tabindex='0' class='is-underlined' href='/profile/settings#payout-bank'>bank account</a>.", true);
   }
+
+  calcNotificationCounter();
 }
 
 //when notifications tray is empty
-function ifTrayEmpty() {
+function calcNotificationCounter() {
   if ($("#notifications-tray li").length == 0) {
     appendNotification("Nothing to show - you're all set!", false);
+  }
+  else {
+    $("#notification-counter").text($("#notifications-tray li").length);
+    document.title = "Dashboard (" +  $("#notifications-tray li").length + ") - DomaHub";
   }
 }
 
 function appendNotification(msg, delOption) {
   var tray = $("#notifications-tray");
-
   if (delOption) {
-    return tray.append("<li>" + "<span class='delete is-small is-transparent is-fc'></span>" + msg + "</li>");
+    return tray.append("<li><span class='delete is-small is-transparent is-fc'></span>" + msg + "</li>");
   }
   else {
     return tray.append("<li>" + msg + "</li>");
