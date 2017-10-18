@@ -85,11 +85,13 @@ $(document).ready(function(){
 
 //function to return to domain selector
 function showSelector(){
-  $("#domain-selector").removeClass('is-hidden');
-  $("#domain-editor").addClass('is-hidden');
   removeURLParameter("tab");
   multiSelectButtons();
   leftMenuActive();
+  errorMessage(false);
+  successMessage(false);
+  $("#domain-selector").removeClass('is-hidden');
+  $("#domain-editor").addClass('is-hidden');
 }
 
 //function to show editor domain names (for editing, offers, stats)
@@ -261,9 +263,6 @@ function checkBox(module_value, elem, child){
     $("#price-rate-input").val(listing_info.price_rate);
     $("#price-type-input").val(listing_info.price_type);
 
-    //paths
-    $("#paths-input").val(listing_info.paths);
-
     //if created tags before
     if ($("#paths-input").data('tags') == true){
       $("#paths-input").tagit("destroy");
@@ -271,13 +270,17 @@ function checkBox(module_value, elem, child){
     else {
       $("#paths-input").data("tags", true);
     }
-    $("#paths-input").tagit({
+    $("#paths-input").val(listing_info.paths).tagit({
       animate: false,
       afterTagAdded : function(event, ui){
-        changedValue($("#paths-input"), listing_info);
+        if (!ui.duringInitialization){
+          changedValue($("#paths-input"), listing_info);
+        }
       },
       afterTagRemoved : function(event, ui){
-        changedValue($("#paths-input"), listing_info);
+        if (!ui.duringInitialization){
+          changedValue($("#paths-input"), listing_info);
+        }
       }
     });
 
@@ -731,10 +734,10 @@ function checkBox(module_value, elem, child){
       contentType: false,
       processData: false
     }, 'json').done(function(data){
-      console.log(data);
       submit_button.removeClass('is-loading');
       refreshSubmitButtons();
       if (data.state == "success"){
+
         //status only success message
         if (status_only){
           var plural_success_msg = (selected_ids.length == 1) ? "This listing has" : selected_ids.length + " listings have";
@@ -748,6 +751,7 @@ function checkBox(module_value, elem, child){
         }
         listings = data.listings;
         updateEditorEditing(selected_ids);
+        createRows();
       }
       else {
         //listing is no longer pointed to domahub, revert to verify tab
