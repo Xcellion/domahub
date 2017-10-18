@@ -1,3 +1,5 @@
+var last_selected;
+
 $(document).ready(function(){
   createRows();
 
@@ -174,6 +176,8 @@ $(document).ready(function(){
 
 });
 
+//<editor-fold>-------------------------------SELECTOR FUNCTIONS-------------------------------
+
 //function to return to domain selector
 function showEditor(url_tab, selected_domain_ids){
   $(".changeable-input").off();
@@ -207,6 +211,8 @@ function showEditor(url_tab, selected_domain_ids){
 
   leftMenuActive();
 }
+
+//</editor-fold>
 
 //<editor-fold>-------------------------------CREATE ROWS OF DOMAINS-------------------------------
 
@@ -306,7 +312,7 @@ function updateDomainRow(tempRow, listing_info){
   tempRow.find(".td-bin").text((listing_info.buy_price) ? moneyFormat.to(parseFloat(listing_info.buy_price)) : "-");
   tempRow.find(".select-button").off().on('click', function(e){
     e.stopPropagation();
-    toggleSelectRow(tempRow);
+    toggleSelectRow(tempRow, e);
   });
 }
 
@@ -328,11 +334,21 @@ function selectRow(row, selected){
 }
 
 //function to toggle a row select
-function toggleSelectRow(row){
+function toggleSelectRow(row, event){
   var selected = (row.hasClass("is-selected")) ? false : true;
   row.toggleClass('is-selected');
   row.find(".select-button").prop("checked", selected);
   multiSelectButtons(row);
+
+  //shift click to select/deselect all in between
+  if (event.shiftKey && last_selected >= 0){
+    var current_selected = row.index(".table-row:not('.clone-row')");
+
+    for (var x = Math.min(current_selected, last_selected) ; x <= Math.max(current_selected, last_selected) ; x++){
+      selectRow($($(".table-row:not('.clone-row')")[x]), selected);
+    }
+  }
+  last_selected = row.index(".table-row:not('.clone-row')");
 }
 
 //function to select all rows

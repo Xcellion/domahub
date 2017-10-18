@@ -1564,21 +1564,16 @@ function getDNSRecordAndWhois(listing_info, total_unverified){
       listing_info.whois = data.listing.whois;
 
       //update the unverified domain table
-      updateDNSRecordAndWhois(listing_info, total_unverified, true);
+      updateDNSRecordAndWhois(listing_info, total_unverified);
     })(listing_info);
   });
 }
 
 //update the registrar URL if there is one
-function updateDNSRecordAndWhois(listing_info, total_unverified, prepend){
+function updateDNSRecordAndWhois(listing_info, total_unverified){
   var cloned_a_row = $("#doma-a-record-clone").clone().removeAttr('id').addClass('cloned-dns-row');
   var cloned_www_row = $("#doma-www-record-clone").clone().removeAttr('id').addClass('cloned-dns-row');
-  if (prepend){
-    $("#dns_table-body").prepend(cloned_a_row, cloned_www_row);
-  }
-  else {
-    $("#dns_table-body").append(cloned_a_row, cloned_www_row);
-  }
+  $("#dns_table-body").append(cloned_a_row, cloned_www_row);
   cloned_a_row.find(".verify_table_domain_name").text(listing_info.domain_name);
 
   //update registrar
@@ -1615,12 +1610,7 @@ function updateDNSRecordAndWhois(listing_info, total_unverified, prepend){
         cloned_existing_row.find(".existing_data").text(listing_info.a_records[x]);
         cloned_existing_row.find(".required_data").text("-");
         cloned_existing_row.find(".next_step").text("Delete this record.");
-        if (prepend){
-          $("#dns_table-body").prepend(cloned_existing_row);
-        }
-        else {
-          $("#dns_table-body").append(cloned_existing_row);
-        }
+        $("#dns_table-body").append(cloned_existing_row);
         temp_row_span++;
       }
     }
