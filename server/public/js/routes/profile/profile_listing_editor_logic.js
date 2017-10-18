@@ -83,6 +83,8 @@ $(document).ready(function(){
 
 });
 
+//<editor-fold>-------------------------------EDITOR FUNCTIONS-------------------------------
+
 //function to return to domain selector
 function showSelector(){
   removeURLParameter("tab");
@@ -162,6 +164,8 @@ function updateEditorDomains(selected_domain_ids){
     $("#view-listings-button-wrapper").addClass('is-hidden');
   }
 }
+
+//</editor-fold>
 
 //<editor-fold>-------------------------------UPDATE EDITOR EDITING-------------------------------
 
@@ -849,7 +853,7 @@ function updateEditorOffers(selected_domain_ids){
     selected_domain_ids = getSelectedDomains("id");
   }
 
-  //search offers
+  //search offers input
   $("#offer-search").off().on('input', function(){
     var search_term = $(this).val();
     if (search_term){
