@@ -3543,7 +3543,6 @@ button {
   -o-transition: left 0.2s ease;
   -webkit-transition: left 0.2s ease;
   transition: left 0.2s ease;
-  height: 100%;
   left: 300px;
   overflow-x: hidden;
   padding: 40px 20px;

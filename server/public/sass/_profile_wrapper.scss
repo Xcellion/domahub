@@ -73,7 +73,6 @@
 
 .right-content {
   @include transition(left 0.2s ease);
-  height: 100%;
   left: 300px;
   overflow-x: hidden;
   padding: 40px 20px;
