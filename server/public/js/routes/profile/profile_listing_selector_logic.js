@@ -74,7 +74,6 @@ $(document).ready(function(){
 
   //select dropper
   $("#selector-select-button").on('click', function(e){
-    console.log("WTF");
     $("#select-all-drop").toggleClass('is-hidden');
   });
 
@@ -258,6 +257,7 @@ function createRows(selected_ids){
   //there are no listings to show!
   else {
     $("#no-domains-row").removeClass('is-hidden');
+    $(".yes-listings-elem").addClass('is-hidden');
   }
 }
 
@@ -305,7 +305,7 @@ function updateDomainRow(tempRow, listing_info){
   var clipped_domain_name = (listing_info.domain_name.length > 100) ? listing_info.domain_name.substr(0, 97) + "..." : listing_info.domain_name;
   var listing_href = (user.stripe_subscription_id) ? "https://" + listing_info.domain_name.toLowerCase() : "/listing/" + listing_info.domain_name;
 
-  tempRow.find(".td-domain").html("<a href='" + listing_href + "'>" + clipped_domain_name + "</a>");
+  tempRow.find(".td-domain").html("<a target='_blank' href='" + listing_href + "'>" + clipped_domain_name + "</a>");
   tempRow.find(".td-date").text(moment(listing_info.date_created).format("M/D/YYYY"));
   tempRow.find(".td-status").text((listing_info.verified) ? ((listing_info.status) ? "Active" : "Inactive") : "Unverified");
   tempRow.find(".td-min").text((listing_info.min_price) ? moneyFormat.to(parseFloat(listing_info.min_price)) : "-");
@@ -408,7 +408,7 @@ function multiSelectButtons(clicked_row){
   }
 
   //every row is selected
-  if (not_selected_rows.length == 0){
+  if (not_selected_rows.length == 0 && listings.length > 0){
     $("#select-all").data('selected', true).prop("checked", true);
   }
   else {

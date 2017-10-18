@@ -55,8 +55,8 @@ $(document).ready(function(){
     $("#upgrade-tab").click();
   });
 
-  //change tabs
-  $(".tab").on("click", function(e){
+  //change tabs for editing
+  $("#edit-toolbar.tab").on("click", function(e){
     var current_tab = $(".tab.is-active").attr("id").replace("-tab", "");
     var new_tab = $(this).attr("id").replace("-tab", "");
 
@@ -841,6 +841,7 @@ function checkBox(module_value, elem, child){
 //function to update a row if it's verified but not yet purchased
 function updateEditorOffers(selected_domain_ids){
   updateEditorDomains(selected_domain_ids);
+
   //change domain name header
   if (selected_domain_ids.length == 0){
     $("#editor-title").text("My Listing Offers");
@@ -855,59 +856,73 @@ function updateEditorOffers(selected_domain_ids){
     selectSpecificRows("verified", 1);
     selected_domain_ids = getSelectedDomains("id");
   }
-
-  //search offers input
-  $("#offer-search").off().on('input', function(){
-    showOffers($(this).val(), $("#show-rejected-offers").hasClass('is-primary'));
-  });
-
-  //refresh offers button
-  $("#refresh-offers-button").off().on('click', function(){
-    $(this).addClass('is-loading');
-    createOffersTable(selected_domain_ids, true);
-  });
-
-  //rejected offers button
-  $("#show-rejected-offers").removeClass('is-primary').off().on('click', function(){
-    $(this).toggleClass('is-primary is-black').find(".fa").toggleClass('fa-toggle-on fa-toggle-off');
-    showOffers($("#offer-search").val(), $("#show-rejected-offers").hasClass('is-primary'));
-  }).find(".fa").removeClass('fa-toggle-on').addClass('fa-toggle-off');
-
-  //sort offers
-  $("#offers-sort-select").val("timestamp_desc").off().on("change", function(){
-    var sort_value = $(this).val().split("_");
-    var sort_by = sort_value[0];
-    var sort_order = sort_value[1];
-
-    var offers_to_sort = $(".offer-row:not(#offer-clone)");
-    if (sort_order == "asc"){
-      offers_to_sort.sort(function(a,b){
-        if (sort_by == "name"){
-          return $(a).data("offer-data")[sort_by].toLowerCase() > $(b).data("offer-data")[sort_by].toLowerCase();
-        }
-        else {
-          return $(a).data("offer-data")[sort_by] > $(b).data("offer-data")[sort_by];
-        }
-      });
-    }
-    else {
-      offers_to_sort.sort(function(a,b){
-        if (sort_by == "name"){
-          return $(a).data("offer-data")[sort_by].toLowerCase() < $(b).data("offer-data")[sort_by].toLowerCase();
-        }
-        else {
-          return $(a).data("offer-data")[sort_by] < $(b).data("offer-data")[sort_by];
-        }
-      });
-    }
-
-    //re-order and append to parent
-    for (var i = 0; i < offers_to_sort.length; i++) {
-      offers_to_sort[i].parentNode.appendChild(offers_to_sort[i]);
-    }
-  });
-
+  setupOfferButtons(selected_domain_ids);
+  showLoadingOffers();
   createOffersTable(selected_domain_ids);
+}
+
+//function to set up offer buttons
+function setupOfferButtons(selected_domain_ids){
+  if (selected_domain_ids.length == 0){
+    $(".offer-button").addClass('is-hidden');
+  }
+  else {
+    $(".offer-button").removeClass('is-hidden');
+
+    //search offers input
+    $("#offer-search").off().on('input', function(){
+      showOffers($(this).val(), $("#show-rejected-offers").hasClass('is-primary'));
+    });
+
+    //refresh offers button
+    $("#refresh-offers-button").removeClass('is-hidden').off().on('click', function(){
+      $(this).addClass('is-loading');
+      showLoadingOffers();
+      createOffersTable(selected_domain_ids, true);
+    });
+
+    //rejected offers button
+    $("#show-rejected-offers").removeClass('is-primary').off().on('click', function(){
+      $(this).toggleClass('is-primary is-black').find(".fa").toggleClass('fa-toggle-on fa-toggle-off');
+      showOffers($("#offer-search").val(), $("#show-rejected-offers").hasClass('is-primary'));
+    }).find(".fa").removeClass('fa-toggle-on').addClass('fa-toggle-off');
+
+    //sort offers
+    $("#offers-sort-select").val("timestamp_desc").off().on("change", function(){
+      var sort_value = $(this).val().split("_");
+      var sort_by = sort_value[0];
+      var sort_order = sort_value[1];
+
+      var offers_to_sort = $(".offer-row:not(#offer-clone)");
+      if (sort_order == "asc"){
+        offers_to_sort.sort(function(a,b){
+          if (sort_by == "name"){
+            return $(a).data("offer-data")[sort_by].toLowerCase() > $(b).data("offer-data")[sort_by].toLowerCase();
+          }
+          else {
+            return $(a).data("offer-data")[sort_by] > $(b).data("offer-data")[sort_by];
+          }
+        });
+      }
+      else {
+        offers_to_sort.sort(function(a,b){
+          if (sort_by == "name"){
+            return $(a).data("offer-data")[sort_by].toLowerCase() < $(b).data("offer-data")[sort_by].toLowerCase();
+          }
+          else {
+            return $(a).data("offer-data")[sort_by] < $(b).data("offer-data")[sort_by];
+          }
+        });
+      }
+
+      //re-order and append to parent
+      for (var i = 0; i < offers_to_sort.length; i++) {
+        offers_to_sort[i].parentNode.appendChild(offers_to_sort[i]);
+      }
+    });
+
+  }
+
 }
 
 //show or hide offers based on toggle and search term
@@ -937,25 +952,33 @@ function showOffers(search_term, show_rejected){
   }
 }
 
-//function to create offer rows
-function createOffersTable(selected_domain_ids, force){
-  //show loading offers
+//function to show loading offers row
+function showLoadingOffers(){
   $("#loading-offers").removeClass('is-hidden');
   $("#no-offers").addClass('is-hidden');
   $(".hidden-while-loading-offers").addClass('is-hidden');
+}
+
+//function to create offer rows
+function createOffersTable(selected_domain_ids, force){
   $("#offers-wrapper").find(".offer-row:not(#offer-clone)").remove();
   completed_domains = 0;
 
-  for (var x = 0; x < selected_domain_ids.length; x++){
-    var listing_info = getDomainByID(selected_domain_ids[x]);
+  if (selected_domain_ids.length > 0){
+    for (var x = 0; x < selected_domain_ids.length; x++){
+      var listing_info = getDomainByID(selected_domain_ids[x]);
 
-    //if we havent gotten offers yet
-    if (listing_info.offers == undefined || force){
-      getDomainOffers(listing_info, selected_domain_ids.length);
+      //if we havent gotten offers yet
+      if (listing_info.offers == undefined || force){
+        getDomainOffers(listing_info, selected_domain_ids.length);
+      }
+      else {
+        updateOffersTable(listing_info, selected_domain_ids.length);
+      }
     }
-    else {
-      updateOffersTable(listing_info, selected_domain_ids.length);
-    }
+  }
+  else {
+    finishedOfferTable();
   }
 }
 
@@ -965,7 +988,6 @@ function getDomainOffers(listing_info, total_domains){
     url: "/listing/" + listing_info.domain_name.toLowerCase() + "/getoffers",
     method: "POST"
   }).done(function(data){
-    $("#refresh-offers-button").removeClass('is-loading');
     if (data.listing){
       listing_info = data.listing;
       updateOffersTable(listing_info, total_domains);
@@ -1046,30 +1068,36 @@ function updateOffersTable(listing_info, total_domains){
 
   //all offers gotten
   if (completed_domains == total_domains){
-    //hide loading offers
-    $("#loading-offers").addClass('is-hidden');
+    finishedOfferTable();
+  }
+}
 
-    //no offers!
-    if ($(".offer-row:not(#offer-clone)").length == 0){
-      $("#no-offers").removeClass('is-hidden');
+//function to finish creating offers table
+function finishedOfferTable(){
+  //hide loading offers
+  $("#loading-offers").addClass('is-hidden');
+  $("#refresh-offers-button").removeClass('is-loading');
+
+  //no offers!
+  if ($(".offer-row:not(#offer-clone)").length == 0){
+    $("#no-offers").removeClass('is-hidden');
+  }
+  //offers exist
+  else {
+    //show rows (show rejected if button toggled)
+    if (!$("#show-rejected-offers").hasClass('is-primary')){
+      $(".offer-row:not(#offer-clone, .rejected-offer)").removeClass('is-hidden');
     }
-    //offers exist
     else {
-      //show rows (show rejected if button toggled)
-      if (!$("#show-rejected-offers").hasClass('is-primary')){
-        $(".offer-row:not(#offer-clone, .rejected-offer)").removeClass('is-hidden');
-      }
-      else {
-        $(".offer-row.unaccepted-offer:not(#offer-clone)").removeClass('is-hidden');
-      }
+      $(".offer-row.unaccepted-offer:not(#offer-clone)").removeClass('is-hidden');
+    }
 
-      //hide no offers if there are any offers (that arent rejected)
-      if ($(".offer-row:not(.rejected-offer, #offer-clone)").length){
-        $("#no-offers").addClass('is-hidden');
-      }
-      else {
-        $("#no-offers").removeClass('is-hidden');
-      }
+    //hide no offers if there are any offers (that arent rejected)
+    if ($(".offer-row:not(.rejected-offer, #offer-clone)").length){
+      $("#no-offers").addClass('is-hidden');
+    }
+    else {
+      $("#no-offers").removeClass('is-hidden');
     }
   }
 }
@@ -1545,34 +1573,34 @@ function createDNSRecordRows(selected_domain_ids, force){
 
     //get who is an A record data if we haven't yet
     if (listing_info.a_records == undefined || listing_info.whois == undefined || force){
-      getDNSRecordAndWhois(listing_info, selected_domain_ids.length);
+      getDNSRecordAndWhois(listing_info, selected_domain_ids.length, x);
     }
     else {
-      updateDNSRecordAndWhois(listing_info, selected_domain_ids.length);
+      updateDNSRecordAndWhois(listing_info, selected_domain_ids.length, x);
     }
   }
 }
 
 //function to get A Record and Whois info for unverified domain
-function getDNSRecordAndWhois(listing_info, total_unverified){
+function getDNSRecordAndWhois(listing_info, total_unverified, row_index){
   $.ajax({
     url: "/listing/" + listing_info.domain_name.toLowerCase() + "/unverifiedinfo",
     method: "POST"
   }).done(function(data){
-    (function(listing_info){
+    (function(listing_info, data, row_index){
       listing_info.a_records = data.listing.a_records;
       listing_info.whois = data.listing.whois;
 
       //update the unverified domain table
-      updateDNSRecordAndWhois(listing_info, total_unverified);
-    })(listing_info);
+      updateDNSRecordAndWhois(listing_info, total_unverified, row_index);
+    })(listing_info, data, row_index);
   });
 }
 
 //update the registrar URL if there is one
-function updateDNSRecordAndWhois(listing_info, total_unverified){
-  var cloned_a_row = $("#doma-a-record-clone").clone().removeAttr('id').addClass('cloned-dns-row');
-  var cloned_www_row = $("#doma-www-record-clone").clone().removeAttr('id').addClass('cloned-dns-row');
+function updateDNSRecordAndWhois(listing_info, total_unverified, row_index){
+  var cloned_a_row = $("#doma-a-record-clone").clone().removeAttr('id').attr("id", row_index + "a-dns_row").addClass('cloned-dns-row').data("row-index", row_index);
+  var cloned_www_row = $("#doma-www-record-clone").clone().removeAttr('id').attr("id", row_index + "www-dns_row").addClass('cloned-dns-row').data("row-index", row_index + 0.1)
   $("#dns_table-body").append(cloned_a_row, cloned_www_row);
   cloned_a_row.find(".verify_table_domain_name").text(listing_info.domain_name);
 
@@ -1606,7 +1634,7 @@ function updateDNSRecordAndWhois(listing_info, total_unverified){
     //delete any existing records
     for (var x = 0; x < listing_info.a_records.length; x++){
       if (listing_info.a_records[x] != "208.68.37.82"){
-        var cloned_existing_row = $("#existing-dns-row").clone().removeAttr('id').addClass('cloned-dns-row needs-action-row');
+        var cloned_existing_row = $("#existing-dns-row").clone().removeAttr('id').attr("id", row_index + "-" + x + "-existing-dns_row").addClass('cloned-dns-row needs-action-row').data("row-index", row_index + (x / 10) + 0.2);
         cloned_existing_row.find(".existing_data").text(listing_info.a_records[x]);
         cloned_existing_row.find(".required_data").text("-");
         cloned_existing_row.find(".next_step").text("Delete this record.");
@@ -1654,6 +1682,12 @@ function checkDNSAllDone(total_unverified){
   if ($(".cloned-dns-row .verify_table_domain_name").length == total_unverified) {
     $("#loading-records-row").addClass('is-hidden');
     $("#refresh-dns-button").removeClass('is-loading');
+
+    //sort by selected index
+    $(".cloned-dns-row").sort(function(a, b){
+      return ($(a).data("row-index") < $(b).data("row-index")) ? -1 : ($(a).data("row-index") > $(b).data("row-index")) ? 1 : 0;
+    }).appendTo("#dns_table-body");
+
     $(".cloned-dns-row").removeClass('is-hidden');
   }
 }

@@ -16,7 +16,7 @@ $(document).ready(function() {
   $("#referral-link-copy").on("click", function(){
     $("#referral-link").select();
     document.execCommand("copy");
-    $("#referral-link-input").blur();
+    $("#referral-link").blur();
     $(this).find("i").removeClass("fa-clipboard").addClass('fa-check');
     $(this).find("p").text("Copied!");
   });

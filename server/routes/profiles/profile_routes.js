@@ -89,6 +89,7 @@ module.exports = function(app, db, auth, error, stripe){
   //settings
   app.get("/profile/settings", [
     auth.checkLoggedIn,
+    profile_functions.getAccountListings,
     stripe.getAccountInfo,
     stripe.getTransfers,
     stripe.getStripeCustomer,

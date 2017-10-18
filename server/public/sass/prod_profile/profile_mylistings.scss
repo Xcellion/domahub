@@ -173,6 +173,17 @@
   overflow-y: auto;
 }
 
+.nothing-exists-row {
+  padding:25px;
+  min-height:200px;
+  img {
+    width:100px;
+  }
+  p {
+    margin-top:25px;
+  }
+}
+
 .domain-tooltip {
   position: absolute;
   top:40px;
