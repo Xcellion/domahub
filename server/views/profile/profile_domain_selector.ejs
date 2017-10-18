@@ -5,7 +5,7 @@
       <div class="content">
         <h2 class="is-bold">My Listings</h2>
       </div>
-      <div class="button-wrapper control">
+      <div class="yes-listings-elem button-wrapper control">
         <div id="select-all-wrapper">
           <a id="selector-select-button" class="button is-black is-transparent" tabindex="0" title="Select">
             <form class="checkbox-form">
@@ -65,7 +65,7 @@
           <span>Create New Listings</span>
         </a>
       </div>
-      <div id="filters" class="control">
+      <div id="filters" class="yes-listings-elem control">
         <div class="control is-grouped">
           <div class="control has-icon">
             <span class="select no-borders">
@@ -125,21 +125,26 @@
           </tr>
           <tr id="no-domains-row" class="is-hidden">
             <td colspan="6">
-              <p class="control">
-                You have no listings. Let's go make some!
-              </p>
-              <a class="button is-primary" href="/listings/create">
-                <span class="icon is-small">
-                  <i class="fa fa-plus"></i>
-                </span>
-                <span>Create Listings</span>
-              </a>
+              <div class="nothing-exists-row has-text-centered">
+                <img src="/images/lib/smile.png" />
+                <p class="control has-text-centered">
+                  You have no listings. Let's go make some!
+                </p>
+                <a class="button is-primary" href="/listings/create">
+                  <span class="icon is-small">
+                    <i class="fa fa-plus"></i>
+                  </span>
+                  <span>Create New Listings</span>
+                </a>
+              </div>
             </td>
           </tr>
-          <tr id="no-listings-row" class="padding-15 clone-row has-text-centered is-hidden">
+          <tr id="no-listings-row" class="is-hidden">
             <td colspan="6">
-              <span class="icon is-small"><i class="fa fa-frown-o"></i></span>
-              <span>There are no matching listings!</span>
+              <div class="nothing-exists-row has-text-centered">
+                <img src="/images/lib/ggface.png" />
+                <p>Oh, no! There are no matching listings!</p>
+              </div>
             </td>
           </tr>
           <tr id="verified-clone-row" class="clone-row table-row no-hover-effect is-hidden">
