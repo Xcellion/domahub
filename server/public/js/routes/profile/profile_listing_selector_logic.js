@@ -196,6 +196,15 @@ function showEditor(url_tab, selected_domain_ids){
   successMessage(false);
   $("#domain-selector").addClass('is-hidden');
   $("#domain-editor").removeClass('is-hidden');
+
+  //hide secondary left menu if offers
+  if (url_tab != "offers"){
+    $("#second-left-menu").removeClass('is-hidden');
+  }
+  else {
+    $("#second-left-menu").addClass('is-hidden');
+  }
+
   leftMenuActive();
 }
 

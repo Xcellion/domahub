@@ -72,38 +72,8 @@
   </div>
 
   <div class="column">
-    <!-- OFFERS TOOLBAR  -->
-    <div id="offers-toolbar" class="is-hidden control">
-      <div class="control">
-        <div class="control has-icon">
-          <span class="select">
-            <select id="offers-sort-select" tabindex="0">
-              <option selected value="timestamp_desc">Date Received (Newest)</option>
-              <option value="timestamp_asc">Date Received (Oldest)</option>
-              <option value="offer_desc">Price (High - Low)</option>
-              <option value="offer_asc">Price (Low - High)</option>
-              <option value="name_asc">Offerer Name (A - Z)</option>
-              <option value="name_desc">Offerer Name (Z - A)</option>
-              <option value="accepted_desc">Rejected / Accepted</option>
-              <option value="accepted_asc">Accepted / Rejected</option>
-            </select>
-          </span>
-          <i class="fa fa-sort"></i>
-        </div>
-      </div>
-      <div class="control has-icon">
-        <i class="fa fa-search"></i>
-        <input id="offer-search" tabindex="0" class="input is-expanded" type="text" placeholder="Search Offers" />
-      </div>
-      <div class="control">
-        <a id="show-rejected-offers" class="button is-outlined">
-          <span class="icon"><i class="fa fa-toggle-off"></i></span>
-          <span class="button-text">Show Rejected</span>
-        </a>
-      </div>
-    </div>
     <!-- OFFERS TABLE -->
-    <div id="offers-tab-drop" data-title="View Offers"  class="is-hidden">
+    <div id="offers-tab-drop" data-title="View Offers"  class="tab-drop card-content is-hidden">
       <div id="offer-modal" class="modal">
         <div class="modal-background"></div>
         <div class="modal-container">

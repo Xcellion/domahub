@@ -5,28 +5,25 @@
     <link rel="stylesheet" type="text/css" href="/css/min/login_signup.min.css" />
     <%- include("../templates/head_links"); %>
   </head>
-
   <body>
     <div class="content has-text-centered clear-nav">
       <h2>
-          <a class='is-inline-block flat-logo is-primary' tabindex="0" title="Home" href="/">
-              <div class='is-inline-block flat-logo is-primary'></div>
-          </a>
+        <a class='is-inline-block flat-logo is-primary' tabindex="0" title="Home" href="/">
+          <div class='is-inline-block flat-logo is-primary'></div>
+        </a>
       </h2>
     </div>
     <div class="content has-text-centered">
       <p id="message">
         <% if (typeof message != "undefined") {%>
-            <%= message %>
+          <%= message %>
         <% } else {%>
-            Enter your email to reset your password
+          Enter your email to reset your password
         <% } %>
       </p>
     </div>
-
     <div class="account-form">
       <form id="forgot-form" action="/forgot" method="post" autocomplete="off">
-
         <div id="form_to_hide">
           <label class="label">Email</label>
           <p class="control has-icon">
