@@ -53,7 +53,7 @@ function showSelector(keep_message){
 function updateEditorDomains(selected_domain_ids){
   if (selected_domain_ids.length == 1){
     //update domain name and plural
-    $(".current-domain-name, #example-domain-name").text(listing_info.domain_name);
+    $(".current-domain-name, #example-domain-name").text(getSelectedDomains("domain_name")[0]);
     $(".edit-domain-plural").addClass('is-hidden');
   }
   else if (selected_domain_ids.length > 1){
@@ -62,9 +62,14 @@ function updateEditorDomains(selected_domain_ids){
     $(".edit-domain-plural").removeClass('is-hidden');
 
     $(".current-domain-list").remove();
+    var domain_names_substr = [];
+    var selected_domain_names = getSelectedDomains("domain_name")
+    for (var x = 0 ; x < selected_domain_names.length ; x++){
+      domain_names_substr.push((selected_domain_names[x].length > 20) ? selected_domain_names[x].substr(0, 12) + "..." + selected_domain_names[x].substr(selected_domain_names[x].length - 7, selected_domain_names[x].length): selected_domain_names[x]);
+    }
     $(".title-wrapper").append(' \
       <span class="current-domain-list icon is-tooltip" \
-       data-balloon-length="medium" data-balloon-break data-balloon="' + getSelectedDomains("domain_name").join("&#10;") + '" \
+       data-balloon-length="medium" data-balloon-break data-balloon="' + domain_names_substr.join("&#10;") + '" \
        data-balloon-pos="down"> <i class="fa fa-question-circle"></i> \
       </span> \
     ');
@@ -1705,7 +1710,7 @@ function multiVerify(verify_button){
     else if (data.unverified_listings){
       errorMessage("Failed to verify listings! Did you make the necessary DNS changes? If you think something is wrong, <a class='is-underlined' href='/contact'>contact us</a> and let us know!");
       $("#refresh-dns-button").removeClass('is-hidden');
-      createDNSRecordRows(unverified_listings, true);
+      createDNSRecordRows(data.unverified_listings, true);
     }
   });
 }
