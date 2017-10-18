@@ -398,20 +398,24 @@ module.exports = {
           var redirectUrl = (req.params.code) ? "/signup/" + req.params.code : "/signup";
 
           passport.authenticate('local-signup', {
-            failureRedirect : redirectUrl, // redirect back to the signup page if there is an error
+            failureRedirect : redirectUrl,    //redirect back to the signup page if there is an error
           }, function(user, info){
             if (!user && info){
               error.handler(req, res, info.message);
             }
             else {
-              //if code, update
-              if (req.params.code){
-                Account.useSignupCode(req.params.code, {
-                  account_id : user.id,
-                  code : null,
-                  date_accessed : new Date()
-                }, function(){
-                  console.log("Successfully used code!");
+              //create 1 promo code, with referer_id, and 1 duration_in_months
+              if (req.session.referer_id){
+                stripe.createPromoCode("1", req.session.referer_id, "1", function(result){
+                  Account.updatePromoCode(result[0], { account_id : user.id }, function(result){
+                    delete req.session.referer_id;
+                  });
+                });
+              }
+              //just update our database
+              else if (req.session.promo_code_signup){
+                Account.updatePromoCode(req.session.promo_code_signup, { account_id : user.id }, function(result){
+                  delete req.session.promo_code_signup;
                 });
               }
 
@@ -432,9 +436,13 @@ module.exports = {
   //function to login
   loginPost: function(req, res, next){
     var referer = req.header("Referer").split("/");
+    var redirectTo = "";
     //redirect to profile unless coming from a listing
     if (referer.indexOf('rentalpreview') != -1 || referer.indexOf("profile") != -1){
       redirectTo = req.header("Referer");
+    }
+    else if (referer.indexOf("upgrade") != -1 || referer.indexOf("premium") != -1){
+      redirectTo = "/profile/settings#premium";
     }
     else {
       redirectTo = "/profile/dashboard";

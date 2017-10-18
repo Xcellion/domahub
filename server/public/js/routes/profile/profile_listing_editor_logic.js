@@ -86,12 +86,14 @@ $(document).ready(function(){
 //<editor-fold>-------------------------------EDITOR FUNCTIONS-------------------------------
 
 //function to return to domain selector
-function showSelector(){
+function showSelector(keep_message){
   removeURLParameter("tab");
   multiSelectButtons();
   leftMenuActive();
-  errorMessage(false);
-  successMessage(false);
+  if (!keep_message){
+    errorMessage(false);
+    successMessage(false);
+  }
   $("#domain-selector").removeClass('is-hidden');
   $("#domain-editor").addClass('is-hidden');
 }
@@ -740,6 +742,7 @@ function checkBox(module_value, elem, child){
     }, 'json').done(function(data){
       submit_button.removeClass('is-loading');
       refreshSubmitButtons();
+      console.log(data);
       if (data.state == "success"){
 
         //status only success message
@@ -785,7 +788,7 @@ function checkBox(module_value, elem, child){
 
         errorMessage(error_msg);
         createRows(false);
-        showSelector();
+        showSelector(true);
       }
     });
   }
@@ -855,26 +858,7 @@ function updateEditorOffers(selected_domain_ids){
 
   //search offers input
   $("#offer-search").off().on('input', function(){
-    var search_term = $(this).val();
-    if (search_term){
-      $(".offer-row:not(#offer-clone)").addClass('is-hidden').each(function(){
-        //if offerer name or domain name is being searched for
-        if ($(this).data("offer").name.toLowerCase().indexOf(search_term) != -1 || $(this).data("domain_name").toLowerCase().indexOf(search_term) != -1){
-          if (!$(this).hasClass("rejected-offer") || ($(this).hasClass("rejected-offer") && !$("#show-rejected-offers").hasClass('is-primary'))){
-            $(this).removeClass('is-hidden');
-          }
-        }
-      });
-    }
-    else {
-      //show rows (show rejected if button toggled)
-      if (!$("#show-rejected-offers").hasClass('is-primary')){
-        $(".offer-row:not(#offer-clone)").removeClass('is-hidden');
-      }
-      else {
-        $(".offer-row.unaccepted-offer:not(#offer-clone)").removeClass('is-hidden');
-      }
-    }
+    showOffers($(this).val(), $("#show-rejected-offers").hasClass('is-primary'));
   });
 
   //refresh offers button
@@ -885,16 +869,8 @@ function updateEditorOffers(selected_domain_ids){
 
   //rejected offers button
   $("#show-rejected-offers").removeClass('is-primary').off().on('click', function(){
-    $(".rejected-offer").toggleClass('is-hidden');
     $(this).toggleClass('is-primary is-black').find(".fa").toggleClass('fa-toggle-on fa-toggle-off');
-
-    //hide no offers if there are any offers (including rejected)
-    if ($(".offer-row:not(#offer-clone, .is-hidden)").length == 0){
-      $("#no-offers").removeClass('is-hidden');
-    }
-    else {
-      $("#no-offers").addClass('is-hidden');
-    }
+    showOffers($("#offer-search").val(), $("#show-rejected-offers").hasClass('is-primary'));
   }).find(".fa").removeClass('fa-toggle-on').addClass('fa-toggle-off');
 
   //sort offers
@@ -932,6 +908,33 @@ function updateEditorOffers(selected_domain_ids){
   });
 
   createOffersTable(selected_domain_ids);
+}
+
+//show or hide offers based on toggle and search term
+function showOffers(search_term, show_rejected){
+  $(".offer-row:not(#offer-clone)").addClass('is-hidden').each(function(){
+    if (search_term){
+      //if offerer name or domain name is being searched for
+      if ($(this).data("offer").name.toLowerCase().indexOf(search_term) != -1 || $(this).data("domain_name").toLowerCase().indexOf(search_term) != -1){
+        if (!$(this).hasClass("rejected-offer") || ($(this).hasClass("rejected-offer") && show_rejected)){
+          $(this).removeClass('is-hidden');
+        }
+      }
+    }
+    else {
+      if (!$(this).hasClass("rejected-offer") || ($(this).hasClass("rejected-offer") && show_rejected)){
+        $(this).removeClass('is-hidden');
+      }
+    }
+  });
+
+  //hide no offers if there are any offers (including rejected)
+  if ($(".offer-row:not(#offer-clone, .is-hidden)").length == 0){
+    $("#no-offers").removeClass('is-hidden');
+  }
+  else {
+    $("#no-offers").addClass('is-hidden');
+  }
 }
 
 //function to create offer rows
@@ -1561,21 +1564,16 @@ function getDNSRecordAndWhois(listing_info, total_unverified){
       listing_info.whois = data.listing.whois;
 
       //update the unverified domain table
-      updateDNSRecordAndWhois(listing_info, total_unverified, true);
+      updateDNSRecordAndWhois(listing_info, total_unverified);
     })(listing_info);
   });
 }
 
 //update the registrar URL if there is one
-function updateDNSRecordAndWhois(listing_info, total_unverified, prepend){
+function updateDNSRecordAndWhois(listing_info, total_unverified){
   var cloned_a_row = $("#doma-a-record-clone").clone().removeAttr('id').addClass('cloned-dns-row');
   var cloned_www_row = $("#doma-www-record-clone").clone().removeAttr('id').addClass('cloned-dns-row');
-  if (prepend){
-    $("#dns_table-body").prepend(cloned_a_row, cloned_www_row);
-  }
-  else {
-    $("#dns_table-body").append(cloned_a_row, cloned_www_row);
-  }
+  $("#dns_table-body").append(cloned_a_row, cloned_www_row);
   cloned_a_row.find(".verify_table_domain_name").text(listing_info.domain_name);
 
   //update registrar
@@ -1612,12 +1610,7 @@ function updateDNSRecordAndWhois(listing_info, total_unverified, prepend){
         cloned_existing_row.find(".existing_data").text(listing_info.a_records[x]);
         cloned_existing_row.find(".required_data").text("-");
         cloned_existing_row.find(".next_step").text("Delete this record.");
-        if (prepend){
-          $("#dns_table-body").prepend(cloned_existing_row);
-        }
-        else {
-          $("#dns_table-body").append(cloned_existing_row);
-        }
+        $("#dns_table-body").append(cloned_existing_row);
         temp_row_span++;
       }
     }
@@ -1686,7 +1679,7 @@ function multiVerify(verify_button){
       successMessage("Successfully verified " + verify_ids.length + " listings!");
       listings = data.listings;
       createRows();
-      showSelector();
+      showSelector(true);
     }
     //unverified listings error
     else if (data.unverified_listings){
