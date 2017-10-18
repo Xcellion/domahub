@@ -623,6 +623,10 @@ pre {
 .is-hidden {
   display: none !important; }
 
+@media screen and (max-width: 456px) {
+  .is-hidden-456px {
+    display: none !important; } }
+
 @media screen and (max-width: 768px) {
   .is-hidden-mobile {
     display: none !important; } }
