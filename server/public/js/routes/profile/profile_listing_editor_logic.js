@@ -28,7 +28,7 @@ $(document).ready(function(){
   //<editor-fold>-------------------------------BUTTONS-------------------------------
 
   //go into select mode
-  $("#show-selector-button").on('click', function(){
+  $(".show-selector-button").on('click', function(){
     showSelector();
   });
 
@@ -139,7 +139,7 @@ function updateEditorDomains(selected_domain_ids){
       domain_title_list.push(temp_listing_info.domain_name);
     }
 
-    $("#editor-title-wrapper").append(' \
+    $(".editor-title-wrapper").append(' \
       <span id="current-domain-list" class="icon is-tooltip" \
        data-balloon-length="medium" data-balloon-break data-balloon="' + domain_title_list.join("&#10;") + '" \
        data-balloon-pos="down"> <i class="fa fa-question-circle"></i> \
@@ -178,7 +178,7 @@ function updateEditorEditing(selected_domain_ids){
   updateEditorDomains(selected_domain_ids);
 
   //editing view specific things
-  $("#editor-title").text("Editing - ");
+  $(".editor-title").text("Editing - ");
   $("#refresh-offers-button").addClass('is-hidden');
   $("#refresh-stats-button").addClass('is-hidden');
 
@@ -844,10 +844,10 @@ function updateEditorOffers(selected_domain_ids){
 
   //change domain name header
   if (selected_domain_ids.length == 0){
-    $("#editor-title").text("My Listing Offers");
+    $(".editor-title").text("My Listing Offers");
   }
   else {
-    $("#editor-title").text("Viewing Offers - ");
+    $(".editor-title").text("Viewing Offers - ");
   }
   $("#status-toggle-button").addClass('is-hidden');
   $("#refresh-stats-button").addClass('is-hidden');
@@ -1269,10 +1269,10 @@ function updateEditorStats(selected_domain_ids){
   updateEditorDomains(selected_domain_ids);
   //change domain name header
   if (selected_domain_ids.length == 0){
-    $("#editor-title").text("My Listing Stats");
+    $(".editor-title").text("My Listing Stats");
   }
   else {
-    $("#editor-title").text("Viewing Stats - ");
+    $(".editor-title").text("Viewing Stats - ");
   }
   $("#status-toggle-button").addClass('is-hidden');
   $("#refresh-offers-button").addClass('is-hidden');
@@ -1544,7 +1544,7 @@ function updateEditorUnverified(selected_domain_ids){
   });
 
   //change domain name header
-  $("#editor-title").text("Verifying - ");
+  $(".editor-title").text("Verifying - ");
   if (selected_domain_ids.length > 1){
     $(".current-domain-name").text(selected_domain_ids.length + " Domains");
     $(".verification-plural").text("s");

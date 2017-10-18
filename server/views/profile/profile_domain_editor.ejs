@@ -3,7 +3,7 @@
 
     <!-- CURRENT DOMAIN NAME -->
     <div class="content">
-      <a id="show-selector-button" class="button is-black is-transparent no-shadow" tabindex="0" title="Back To Domain Selector">
+      <a class="show-selector-button button is-black is-transparent no-shadow" tabindex="0" title="Back To Domain Selector">
         <span class="icon is-small">
           <i class="fa fa-long-arrow-left"></i>
         </span>
@@ -12,7 +12,7 @@
     </div>
     <div class="content">
       <h2 id="editor-title-wrapper" class="is-inline-block">
-        <span id="editor-title"></span>
+        <span class="editor-title"></span>
         <span class="current-domain-name"></span>
       </h2>
     </div>
@@ -79,9 +79,21 @@
   <div class="column">
     <!-- OFFERS TABLE -->
     <div id="offers-tab-drop" class="is-hidden">
+      <div class="content">
+        <a class="show-selector-button button is-black is-transparent no-shadow" tabindex="0" title="Back To Domain Selector">
+          <span class="icon is-small">
+            <i class="fa fa-long-arrow-left"></i>
+          </span>
+          <span>Go Back To Listings</span>
+        </a>
+      </div>
+
       <div class="control">
         <div class="content">
-          <h2 class="is-bold">My Offers</h2>
+          <h2 class="is-bold">
+            <span class="editor-title">My Offers</span>
+            <span class="current-domain-name"></span>
+          </h2>
         </div>
         <div class="offer-button control button-wrapper">
           <a id="refresh-offers-button" class="verified-elem is-hidden button is-black is-transparent" title="Refresh Offers">
