@@ -74,7 +74,6 @@ $(document).ready(function(){
 
   //select dropper
   $("#selector-select-button").on('click', function(e){
-    console.log("WTF");
     $("#select-all-drop").toggleClass('is-hidden');
   });
 
@@ -258,6 +257,7 @@ function createRows(selected_ids){
   //there are no listings to show!
   else {
     $("#no-domains-row").removeClass('is-hidden');
+    $(".yes-listings-elem").addClass('is-hidden');
   }
 }
 
@@ -408,7 +408,7 @@ function multiSelectButtons(clicked_row){
   }
 
   //every row is selected
-  if (not_selected_rows.length == 0){
+  if (not_selected_rows.length == 0 && listings.length > 0){
     $("#select-all").data('selected', true).prop("checked", true);
   }
   else {
