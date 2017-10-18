@@ -27,8 +27,8 @@
 }
 
 #notification-counter {
-  background-color: red;
-  padding: 0 8px 0 8px;
+  background-color: $danger;
+  padding: 0 8px;
   margin-right: 15px;
   border-radius: 3px;
 }
@@ -39,4 +39,15 @@
 
 .company-logo {
   margin-bottom: 30px;
+}
+
+.button-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+  .button,
+  .select {
+    margin-right: 10px;
+    margin-bottom: 8px;
+  }
 }
