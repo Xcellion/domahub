@@ -168,8 +168,18 @@
 }
 
 // table
+#listings-table {
+  thead,
+  tbody tr {
+    display: table;
+    table-layout: fixed;
+    width: 100%;
+  }
+}
+
 #table-body {
-  white-space: nowrap;
+  display: block;
+  max-height: 696px;
   overflow-y: auto;
 }
 

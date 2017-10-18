@@ -3734,7 +3734,6 @@ button {
   -o-transition: left 0.2s ease;
   -webkit-transition: left 0.2s ease;
   transition: left 0.2s ease;
-  height: 100%;
   left: 300px;
   overflow-x: hidden;
   padding: 40px 20px;
@@ -3908,8 +3907,15 @@ button {
     overflow-x: auto;
     white-space: nowrap; } }
 
+#listings-table thead,
+#listings-table tbody tr {
+  display: table;
+  table-layout: fixed;
+  width: 100%; }
+
 #table-body {
-  white-space: nowrap;
+  display: block;
+  max-height: 696px;
   overflow-y: auto; }
 
 .nothing-exists-row {
