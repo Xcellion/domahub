@@ -55,8 +55,8 @@ $(document).ready(function(){
     $("#upgrade-tab").click();
   });
 
-  //change tabs
-  $(".tab").on("click", function(e){
+  //change tabs for editing
+  $("#edit-toolbar.tab").on("click", function(e){
     var current_tab = $(".tab.is-active").attr("id").replace("-tab", "");
     var new_tab = $(this).attr("id").replace("-tab", "");
 
