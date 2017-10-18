@@ -855,26 +855,7 @@ function updateEditorOffers(selected_domain_ids){
 
   //search offers input
   $("#offer-search").off().on('input', function(){
-    var search_term = $(this).val();
-    if (search_term){
-      $(".offer-row:not(#offer-clone)").addClass('is-hidden').each(function(){
-        //if offerer name or domain name is being searched for
-        if ($(this).data("offer").name.toLowerCase().indexOf(search_term) != -1 || $(this).data("domain_name").toLowerCase().indexOf(search_term) != -1){
-          if (!$(this).hasClass("rejected-offer") || ($(this).hasClass("rejected-offer") && !$("#show-rejected-offers").hasClass('is-primary'))){
-            $(this).removeClass('is-hidden');
-          }
-        }
-      });
-    }
-    else {
-      //show rows (show rejected if button toggled)
-      if (!$("#show-rejected-offers").hasClass('is-primary')){
-        $(".offer-row:not(#offer-clone)").removeClass('is-hidden');
-      }
-      else {
-        $(".offer-row.unaccepted-offer:not(#offer-clone)").removeClass('is-hidden');
-      }
-    }
+    showOffers($(this).val(), $("#show-rejected-offers").hasClass('is-primary'));
   });
 
   //refresh offers button
@@ -885,16 +866,8 @@ function updateEditorOffers(selected_domain_ids){
 
   //rejected offers button
   $("#show-rejected-offers").removeClass('is-primary').off().on('click', function(){
-    $(".rejected-offer").toggleClass('is-hidden');
     $(this).toggleClass('is-primary is-black').find(".fa").toggleClass('fa-toggle-on fa-toggle-off');
-
-    //hide no offers if there are any offers (including rejected)
-    if ($(".offer-row:not(#offer-clone, .is-hidden)").length == 0){
-      $("#no-offers").removeClass('is-hidden');
-    }
-    else {
-      $("#no-offers").addClass('is-hidden');
-    }
+    showOffers($("#offer-search").val(), $("#show-rejected-offers").hasClass('is-primary'));
   }).find(".fa").removeClass('fa-toggle-on').addClass('fa-toggle-off');
 
   //sort offers
@@ -932,6 +905,33 @@ function updateEditorOffers(selected_domain_ids){
   });
 
   createOffersTable(selected_domain_ids);
+}
+
+//show or hide offers based on toggle and search term
+function showOffers(search_term, show_rejected){
+  $(".offer-row:not(#offer-clone)").addClass('is-hidden').each(function(){
+    if (search_term){
+      //if offerer name or domain name is being searched for
+      if ($(this).data("offer").name.toLowerCase().indexOf(search_term) != -1 || $(this).data("domain_name").toLowerCase().indexOf(search_term) != -1){
+        if (!$(this).hasClass("rejected-offer") || ($(this).hasClass("rejected-offer") && show_rejected)){
+          $(this).removeClass('is-hidden');
+        }
+      }
+    }
+    else {
+      if (!$(this).hasClass("rejected-offer") || ($(this).hasClass("rejected-offer") && show_rejected)){
+        $(this).removeClass('is-hidden');
+      }
+    }
+  });
+
+  //hide no offers if there are any offers (including rejected)
+  if ($(".offer-row:not(#offer-clone, .is-hidden)").length == 0){
+    $("#no-offers").removeClass('is-hidden');
+  }
+  else {
+    $("#no-offers").addClass('is-hidden');
+  }
 }
 
 //function to create offer rows
