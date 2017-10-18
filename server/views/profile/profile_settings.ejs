@@ -76,7 +76,7 @@
 								<% } %>
 							</aside>
 						</div>
-						<div class="column is-8">
+						<div class="column">
 							<div id="basic" class="is-hidden card is-fullwidth">
 								<div class="card-header is-justified-start">
 									<h3 class="card-header-title">
@@ -260,25 +260,44 @@
                       <p>
                         Promo Code
                       </p>
+											<small class="tip">Enter any promo codes here.</small>
                     </div>
                     <div class="control-right">
                       <form id="promo-form">
                         <p class="control has-icon has-addons">
                           <input id="promo-input" autocomplete="off" required tabindex="0" class="input promo-input" type="text"/>
                           <i class="fa fa-tags"></i>
-                          <input id="promo-submit" class="promo-input no-shadow is-small is-stylish button" text="Submit" type="submit">
+                          <button id="promo-submit" class="promo-input no-shadow is-small is-stylish is-primary button" text="Submit" type="submit">Submit</button>
                         </p>
                       </form>
                     </div>
                   </div>
 
-                  <div id="referral-table" class="control">
-                    <div id="referral-clone" class="is-hidden referral-row">
-                      <p class="referral-username"></p>
-                      <p class="referral-created"></p>
-                      <p class="referral-redeemed"></p>
-                    </div>
-                  </div>
+									<div class="control">
+										<p>My Referrals</p>
+										<small class="tip">
+											These are people who have signed up using your Referral Code.
+											You can refer people by sending them the following link:
+											<a class="is-underlined is-primary" href="https://domahub.com/signup/<%= user.username %>">https://domahub.com/signup/<%= user.username %></a>.
+										</small>
+									</div>
+
+                  <table id="referral-table" class="table">
+										<thead>
+											<tr>
+												<th>User</th>
+												<th>Signed Up</th>
+												<th>Status</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr id="referral-clone" class="is-hidden referral-row no-hover-effect">
+												<td class="referral-username"></td>
+	                      <td class="referral-created"></td>
+	                      <td class="referral-redeemed"></td>
+											</tr>
+										</tbody>
+                  </table>
 
 								</div>
 							</div>

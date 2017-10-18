@@ -200,10 +200,10 @@
   z-index:99;
 }
 
-.table-row {
+.table-row,
+.offer-row {
   &.has-hover-effect {
     &:hover {
-      cursor: pointer;
       background-color: $lighter;
     }
   }

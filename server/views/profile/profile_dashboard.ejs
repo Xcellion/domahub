@@ -123,16 +123,33 @@
             </div>
             <div class="card no-shadow is-fullwidth">
               <div class="card-header is-grey">
-                <h3 class="card-header-title">Verifications</h3>
+                <h3 class="card-header-title">Account Status</h3>
               </div>
               <div class="card-content">
+								<div class="control is-spaced">
+                  <div class="content control-left">
+                    <p>
+                      Premium
+                    </p>
+                  </div>
+									<% if (user.stripe_subscription_id) { %>
+									<p class="tag is-primary control-right has-text-right">
+                    <span class="icon is-small"><i class="fa fa-check"></i></span>
+                    <span>Active</span>
+                  </p>
+									<% } else { %>
+									<p class="tag is-danger control-right has-text-right">
+                    <span class="icon is-small"><i class="fa fa-check"></i></span>
+                    <span>Inactive</span>
+                  </p>
+									<% } %>
+                </div>
                 <div class="control is-spaced">
                   <div class="content control-left">
                     <p>
                       Email Address
                     </p>
                   </div>
-
 									<p class="tag is-primary control-right has-text-right">
                     <span class="icon is-small"><i class="fa fa-check"></i></span>
                     <span>Verified</span>
