@@ -795,6 +795,10 @@ pre {
 .is-hidden {
   display: none !important; }
 
+@media screen and (max-width: 456px) {
+  .is-hidden-456px {
+    display: none !important; } }
+
 @media screen and (max-width: 768px) {
   .is-hidden-mobile {
     display: none !important; } }
@@ -1720,7 +1724,7 @@ pre {
   border-bottom: 1px solid rgba(0, 0, 0, 0.12);
   display: flex;
   justify-content: space-between;
-  min-height: 40px;
+  height: 60px;
   padding: 15px 20px;
   border-radius: 3px 3px 0 0; }
   .card-header.is-grey {
@@ -3931,11 +3935,12 @@ button {
   top: 40px;
   z-index: 99; }
 
-.table-row.has-hover-effect:hover {
-  cursor: pointer;
+.table-row.has-hover-effect:hover,
+.offer-row.has-hover-effect:hover {
   background-color: #f1f1f1; }
 
-.table-row.is-selected {
+.table-row.is-selected,
+.offer-row.is-selected {
   background-color: #ffc; }
 
 .td-domain {
