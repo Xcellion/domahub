@@ -48,6 +48,7 @@ module.exports = function(app, db, auth, error, stripe){
   app.post("/listings/create/table", [
     urlencodedParser,
     auth.checkLoggedIn,
+    profile_functions.getAccountListings,    //to find out if we've reached max listings count for basic
     owner_functions.checkPostedDomainNames
   ]);
 

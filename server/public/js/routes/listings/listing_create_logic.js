@@ -20,15 +20,6 @@ $(document).ready(function() {
 
   //<editor-fold>-------------------------------TABLE BINDINGS-------------------------------
 
-  //scroll to next error
-  $("#scroll-error-button").on("click", function(){
-    $('html, body').stop().animate({
-      scrollTop: $("input.is-danger").offset().top - 100
-    }, 500, function(){
-      $("input.is-danger:first").focus();
-    });
-  });
-
   //add row to table
   $(".add-domain-button").on("click", function(e){
     clearSuccessRows();
@@ -77,14 +68,13 @@ function errorMessage(message){
   //show errors or hide errors
   if (message == "invalid domains"){
     $("#domain-error-text").text("Some domain names were invalid! See below for more details.");
-    $("#scroll-error-button").removeClass('is-hidden');
+    $("#domain-error").removeClass("is-hidden").addClass("is-active");
+  }
+  else if (message == "max-domains-reached"){
+    $("#domain-error-text").html("You have reached the maximum 100 domains for a Basic account. Please <a class='is-underlined' href='/profile/settings#premium'>upgrade to a Premium account</a> to create more listings!");
     $("#domain-error").removeClass("is-hidden").addClass("is-active");
   }
   else {
-
-    //hide scroll to button
-    $("#scroll-error-button").addClass('is-hidden');
-
     if (message){
       $("#domain-error-text").text(message);
       $("#domain-error").removeClass("is-hidden").addClass("is-active");
@@ -272,7 +262,6 @@ function submitDomainsAjax(domains, submit_elem){
       domains: domains
     }
   }).done(function(data){
-    console.log(data);
     refreshNotification();
 
     //handle any good or bad listings
@@ -351,7 +340,7 @@ function refreshRows(bad_listings, good_listings){
     goodTableRows(good_listings);
 
     //how many were created successfully
-    var success_amount = (good_listings.length == 1) ? "1 domain" : good_listings.length + " domains"
+    var success_amount = (good_listings.length == 1) ? "a listing" : good_listings.length + " listings"
     $("#success-total").text(success_amount);
     $("#domain-success-message").removeClass("is-hidden").addClass("is-active");
   }

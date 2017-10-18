@@ -86,12 +86,14 @@ $(document).ready(function(){
 //<editor-fold>-------------------------------EDITOR FUNCTIONS-------------------------------
 
 //function to return to domain selector
-function showSelector(){
+function showSelector(keep_message){
   removeURLParameter("tab");
   multiSelectButtons();
   leftMenuActive();
-  errorMessage(false);
-  successMessage(false);
+  if (!keep_message){
+    errorMessage(false);
+    successMessage(false);
+  }
   $("#domain-selector").removeClass('is-hidden');
   $("#domain-editor").addClass('is-hidden');
 }
@@ -740,6 +742,7 @@ function checkBox(module_value, elem, child){
     }, 'json').done(function(data){
       submit_button.removeClass('is-loading');
       refreshSubmitButtons();
+      console.log(data);
       if (data.state == "success"){
 
         //status only success message
@@ -785,7 +788,7 @@ function checkBox(module_value, elem, child){
 
         errorMessage(error_msg);
         createRows(false);
-        showSelector();
+        showSelector(true);
       }
     });
   }
@@ -1686,7 +1689,7 @@ function multiVerify(verify_button){
       successMessage("Successfully verified " + verify_ids.length + " listings!");
       listings = data.listings;
       createRows();
-      showSelector();
+      showSelector(true);
     }
     //unverified listings error
     else if (data.unverified_listings){
