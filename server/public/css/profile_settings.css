@@ -2113,7 +2113,6 @@ pre {
   .table tbody tr.is-active {
     background-color: #efefef; }
   .table tbody tr.no-hover-effect:hover {
-    background-color: transparent;
     cursor: default; }
   .table.is-bordered td,
   .table.is-bordered th {
@@ -3093,7 +3092,7 @@ button {
 
 .loader, .control.is-loading:after, .button.is-loading:after {
   animation: spin-around 500ms infinite linear;
-  border: 2px solid rgba(0, 0, 0, 0.12);
+  border: 2px solid rgba(0, 0, 0, 0.38);
   border-radius: 290486px;
   border-right-color: transparent;
   border-top-color: transparent;
