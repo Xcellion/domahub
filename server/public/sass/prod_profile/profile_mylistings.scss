@@ -193,6 +193,11 @@
 
 .td-domain {
   overflow-x: hidden;
+  &.is-danger {
+    a {
+      color: $danger;
+    }
+  }
 }
 
 .is-unverified {
@@ -207,7 +212,7 @@
   align-items: stretch;
   .button,
   .select {
-    margin-right: 5px;
+    margin-right: 10px;
     margin-bottom: 5px;
   }
 }
