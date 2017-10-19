@@ -20,15 +20,16 @@ $(document).ready(function() {
       $("#message").attr("style", "").text("Log in below");
     });
 
+    //ESC key to close modal
     $(document).keyup(function(e) {
       if (e.which == 27) {
-        $('#modal-login').removeClass('is-active');
+        $('.modal').removeClass('is-active');
       }
     });
 
     //close modal if user is logged in
     if (user){
-      $("#login_modal").removeAttr("style");
+      $('#modal-login').removeClass('is-active');
     }
 
     //hamburger toggle button
