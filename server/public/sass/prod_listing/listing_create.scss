@@ -19,6 +19,17 @@
   margin-bottom: 30px;
 }
 
+.button-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+  .button,
+  .select {
+    margin-right: 10px;
+    margin-bottom: 8px;
+  }
+}
+
 #preview-img {
   background-image: url("https://source.unsplash.com/category/nature");
 }
