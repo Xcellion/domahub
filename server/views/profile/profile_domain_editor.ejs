@@ -277,12 +277,17 @@
       <div id="verify-toolbar" class="is-hidden control">
         <div class="content">
           <p id="verification-left" class="is-hidden is-danger">You have <span id="verification-left-num"></span> DNS settings left to modify.</p>
+          <p id="verification-done" class="is-hidden is-primary">All DNS settings look good! Click the button below to verify your domains.</p>
         </div>
         <div class="control is-grouped">
           <div class="control button-wrapper">
             <a id="refresh-dns-button" class="button" title="Refresh DNS Table">
               <span class="icon is-small"><i class="fa fa-refresh"></i></span>
               <span>Refresh DNS Table<span class="verification-plural"></span></span>
+            </a>
+            <a id="verify-button" class="is-primary button is-hidden" title="Verify domain(s)">
+              <span class="icon is-small"><i class="fa fa-check-circle-o"></i></span>
+              <span>Verify Now</span>
             </a>
             <a id="prev-dns-table-button" data-value="-1" class="button" title="Previous DNS Table">
               <span class="icon is-small"><i class="fa fa-angle-left"></i></span>
@@ -291,10 +296,6 @@
             <a id="next-dns-table-button" data-value="1" class="button" title="Next DNS Table">
               <span>Next</span>
               <span class="icon is-small"><i class="fa fa-angle-right"></i></span>
-            </a>
-            <a id="verify-button" class="is-primary button is-hidden" title="Verify domain(s)">
-              <span class="icon is-small"><i class="fa fa-check-circle-o"></i></span>
-              <span>Verify Now</span>
             </a>
           </div>
         </div>
