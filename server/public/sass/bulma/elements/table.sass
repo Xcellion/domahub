@@ -8,6 +8,8 @@
   color: $text
   margin-bottom: 20px
   width: 100%
+  &.is-fixed
+    table-layout: fixed
   &.is-narrow
     width: auto
   &.no-borders
@@ -30,8 +32,9 @@
     &.is-400
       font-weight: 400
   td
-    padding: 10px
     border-bottom: 1px solid $border
+    padding: 10px
+    word-break: break-all
     &.is-danger
       color: $danger
     &.is-primary
