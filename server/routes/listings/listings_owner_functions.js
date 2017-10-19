@@ -875,33 +875,6 @@ module.exports = {
 
   //<editor-fold>-------------------------------GETS------------------------------
 
-  //gets unverified A Record and domain who is info
-  getDNSRecordAndWhois : function(req, res, next){
-    console.log("F: Finding the existing A Record and WHOIS information for " + req.params.domain_name + "...");
-
-    var listing_obj = getUserListingObjByName(req.user.listings, req.params.domain_name);
-    whois.lookup(listing_obj.domain_name, function(err, data){
-      var whoisObj = {};
-      if (data){
-        var array = parser.parseWhoIsData(data);
-        for (var x = 0; x < array.length; x++){
-          whoisObj[array[x].attribute.trim()] = array[x].value;
-        }
-      }
-      listing_obj.whois = whoisObj;
-
-      //look up any existing DNS A Records
-      dns.resolve(listing_obj.domain_name, "A", function(err, addresses){
-        listing_obj.a_records = addresses || false;
-        res.send({
-          state: "success",
-          listing: listing_obj
-        });
-      });
-    });
-
-  },
-
   //gets all offers for a specific domain
   getListingOffers : function(req, res, next){
     console.log("F: Finding the all verified offers for " + req.params.domain_name + "...");

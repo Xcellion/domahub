@@ -1569,37 +1569,61 @@ function createDNSRecordRows(selected_domain_ids, force){
 
   //loop through and create all tables for each unverified listing
   $(".cloned-dns-table").remove();
+  var needs_dns_info = [];
   for (var x = 0; x < selected_domain_ids.length; x++){
     var listing_info = getDomainByID(selected_domain_ids[x]);
 
-    //get who is an A record data if we haven't yet
+    //get who is an A record data if we haven't yet (or being refreshed)
     if (listing_info.a_records == undefined || listing_info.whois == undefined || force){
-      getDNSRecordAndWhois(listing_info, selected_domain_ids.length, x);
+      needs_dns_info.push({
+        domain_name : listing_info.domain_name,
+        id : selected_domain_ids[x],
+        client_index : x
+      });
     }
     else {
-      updateDNSRecordAndWhois(listing_info, selected_domain_ids.length, x);
+      createDNSTable(listing_info, selected_domain_ids.length, x);
     }
+  }
+
+  //if we need to get any DNS records, get them in one call
+  if (needs_dns_info.length > 0){
+    getDNSRecords(needs_dns_info, selected_domain_ids);
   }
 }
 
-//function to get A Record and Whois info for unverified domain
-function getDNSRecordAndWhois(listing_info, total_unverified, row_index){
+//function to get DNS settings at once for all selected domains (and unknown DNS)
+function getDNSRecords(needs_dns_info, selected_domain_ids){
   $.ajax({
-    url: "/listing/" + listing_info.domain_name.toLowerCase() + "/unverifiedinfo",
-    method: "POST"
+    url: "/profile/mylistings/dnsrecords",
+    method: "POST",
+    data: {
+      needs_dns_info : needs_dns_info
+    }
   }).done(function(data){
-    (function(listing_info, data, row_index){
-      listing_info.a_records = data.listing.a_records;
-      listing_info.whois = data.listing.whois;
+    if (data.state == "success"){
+      listings = data.listings;
 
-      //update the unverified domain table
-      updateDNSRecordAndWhois(listing_info, total_unverified, row_index);
-    })(listing_info, data, row_index);
+      //make tables for domains we didnt yet
+      for (var x = 0 ; x < needs_dns_info.length ; x++){
+        for (var y = 0 ; y < listings.length ; y++){
+          if (listings[y].id == needs_dns_info[x].id){
+            needs_dns_info[x].a_records = listings[y].a_records;
+            needs_dns_info[x].whois = listings[y].whois;
+            createDNSTable(needs_dns_info[x], selected_domain_ids.length, needs_dns_info[x].client_index);
+            break;
+          }
+        }
+      }
+    }
+    else {
+      errorMessage(data.message);
+    }
   });
 }
 
 //update the registrar URL if there is one
-function updateDNSRecordAndWhois(listing_info, total_unverified, row_index){
+function createDNSTable(listing_info, total_unverified, row_index){
   var cloned_table = $("#current-dns-table-clone").clone().removeAttr('id').attr("id", "dns-table" + row_index).addClass("cloned-dns-table").data("index", row_index)
   var cloned_a_row = cloned_table.find(".doma-a-record");
   var cloned_www_row = cloned_table.find(".doma-www-record");

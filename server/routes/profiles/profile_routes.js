@@ -1,18 +1,14 @@
-var  account_model = require('../../models/account_model.js');
-var  profile_functions = require('../profiles/profile_functions.js');
+var account_model = require('../../models/account_model.js');
+var profile_functions = require('../profiles/profile_functions.js');
 
 var bodyParser = require('body-parser')
 var jsonParser = bodyParser.json()
 var urlencodedParser = bodyParser.urlencoded({ extended: true })
 
-var request = require('request');
-var validator = require('validator');
-var qs = require('qs');
-
 module.exports = function(app, db, auth, error, stripe){
   Account = new account_model(db);
 
-  //<editor-fold>------------------------------------------------------------------------------------------PROFILE
+  //<editor-fold>-----------------------------------PROFILE-------------------------------------------------------
 
   //dashboard
   app.get("/profile/dashboard", [
@@ -41,49 +37,21 @@ module.exports = function(app, db, auth, error, stripe){
     profile_functions.deleteListings
   ]);
 
+  //mylistings multi DNS records
+  app.post("/profile/mylistings/dnsrecords", [
+    urlencodedParser,
+    auth.checkLoggedIn,
+    profile_functions.getAccountListings,
+    profile_functions.getDNSRecordsMulti
+  ]);
+
   //mylistings multi verify
   app.post("/profile/mylistings/verify", [
     urlencodedParser,
     auth.checkLoggedIn,
     profile_functions.getAccountListings,
-    stripe.getAccountInfo,
     profile_functions.checkPostedVerificationRows,
     profile_functions.verifyListings
-  ]);
-
-  //add a new card to user (stripe subscription)
-  app.post("/profile/newcard", [
-    urlencodedParser,
-    auth.checkLoggedIn,
-    stripe.createStripeCustomer,
-    profile_functions.updateAccountSettingsPost
-  ]);
-
-  //update listing to premium
-  app.post("/profile/upgrade", [
-    urlencodedParser,
-    auth.checkLoggedIn,
-    profile_functions.getExistingCoupon,
-    stripe.createStripeSubscription,
-    profile_functions.updateAccountSettingsPost
-  ]);
-
-  //cancel renewal of premium
-  app.post("/profile/downgrade", [
-    urlencodedParser,
-    auth.checkLoggedIn,
-    stripe.cancelStripeSubscription
-  ]);
-
-  //transfer to bank
-  app.post("/profile/transfer", [
-    urlencodedParser,
-    auth.checkLoggedIn,
-    stripe.getAccountInfo,
-    stripe.getTransfers,
-    stripe.getStripeCustomer,
-    stripe.getStripeSubscription,
-    stripe.transferMoney
   ]);
 
   //settings
@@ -112,10 +80,6 @@ module.exports = function(app, db, auth, error, stripe){
   //redirect anything not caught above to /profile
   app.get("/profile*", profile_functions.redirectProfile);
 
-  //</editor-fold>
-
-  //<editor-fold>------------------------------------------------------------------------------------------ STRIPE MANAGED
-
   //post to change account settings
   app.post("/profile/settings", [
     urlencodedParser,
@@ -123,6 +87,10 @@ module.exports = function(app, db, auth, error, stripe){
     auth.checkAccountSettings,
     profile_functions.updateAccountSettingsPost
   ]);
+
+  //</editor-fold>
+
+  //<editor-fold>-----------------------------------PROMO CODES-------------------------------------------------------
 
   //get all existing referral promo codes for user
   app.post("/profile/getreferrals", [
@@ -141,6 +109,45 @@ module.exports = function(app, db, auth, error, stripe){
     stripe.deletePromoCode,
     profile_functions.applyPromoCode,
     stripe.applyPromoCode,
+  ]);
+
+  //</editor-fold>
+
+  //<editor-fold>-----------------------------------STRIPE-------------------------------------------------------
+
+  //add a new card to user (stripe subscription)
+  app.post("/profile/newcard", [
+    urlencodedParser,
+    auth.checkLoggedIn,
+    stripe.createStripeCustomer,
+    profile_functions.updateAccountSettingsPost
+  ]);
+
+  //upgrade account to premium
+  app.post("/profile/upgrade", [
+    urlencodedParser,
+    auth.checkLoggedIn,
+    profile_functions.getExistingCoupon,
+    stripe.createStripeSubscription,
+    profile_functions.updateAccountSettingsPost
+  ]);
+
+  //cancel renewal of premium
+  app.post("/profile/downgrade", [
+    urlencodedParser,
+    auth.checkLoggedIn,
+    stripe.cancelStripeSubscription
+  ]);
+
+  //transfer to bank
+  app.post("/profile/transfer", [
+    urlencodedParser,
+    auth.checkLoggedIn,
+    stripe.getAccountInfo,
+    stripe.getTransfers,
+    stripe.getStripeCustomer,
+    stripe.getStripeSubscription,
+    stripe.transferMoney
   ]);
 
   //post to create new stripe managed account or update address of old
