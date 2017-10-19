@@ -1629,12 +1629,12 @@ function createDNSTable(listing_info, total_unverified, row_index){
   var cloned_www_row = cloned_table.find(".doma-www-record");
 
   //table header text
-  var table_header_text = "Current DNS Settings for " + "<span class='is-bold'" + listing_info.domain_name + "</span";
+  var table_header_text = "Current DNS Settings for " + "<span class='is-bold'>" + listing_info.domain_name + "</span>";
   if (total_unverified > 1){
     table_header_text = "Domain " + (row_index + 1) + " / " + total_unverified + " - " + table_header_text;
   }
   if (listing_info.whois){
-    var reg_name = (listing_info.whois["Registrar"] && listing_info.whois["Registrar"].length > 15) ? listing_info.whois["Registrar"].substr(0, 15) + "..." : listing_info.whois["Registrar"];
+    var reg_name = (listing_info.whois["Registrar"] && listing_info.whois["Registrar"].length > 25) ? listing_info.whois["Registrar"].substr(0, 25) + "..." : listing_info.whois["Registrar"];
     var reg_url = listing_info.whois["Registrar URL"];
     var regex_url = /^((http|https):\/\/)/;
     if (!regex_url.test(reg_url)) { reg_url = "http://" + reg_url; }
