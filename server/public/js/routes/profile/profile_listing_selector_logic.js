@@ -306,7 +306,7 @@ function updateDomainRow(tempRow, listing_info){
   var listing_href = (user.stripe_subscription_id) ? "https://" + listing_info.domain_name.toLowerCase() : "/listing/" + listing_info.domain_name;
 
   tempRow.find(".td-domain").html("<a target='_blank' href='" + listing_href + "'>" + clipped_domain_name + "</a>");
-  tempRow.find(".td-date").text(moment(listing_info.date_created).format("M/D/YYYY"));
+  tempRow.find(".td-date").text(moment(listing_info.date_created).format("MMMM DD, YYYY")).attr("title", moment(listing_info.date_created).format("MMMM DD, YYYY - hh:mm:A"));
   tempRow.find(".td-status").text((listing_info.verified) ? ((listing_info.status) ? "Active" : "Inactive") : "Unverified");
   tempRow.find(".td-min").text((listing_info.min_price) ? moneyFormat.to(parseFloat(listing_info.min_price)) : "-");
   tempRow.find(".td-bin").text((listing_info.buy_price) ? moneyFormat.to(parseFloat(listing_info.buy_price)) : "-");
