@@ -1525,12 +1525,14 @@ function updateEditorUnverified(selected_domain_ids){
     $(".current-domain-name").text(selected_domain_ids.length + " Domains");
     $(".verification-plural").text("s");
     $(".verification-domains-plural").text("these domains");
+    $("#prev-dns-table-button, #next-dns-table-button").removeClass('is-hidden');
   }
   else {
     var verifying_domain = getDomainByID(selected_domain_ids[0]);
     $(".current-domain-name").text(verifying_domain.domain_name);
     $(".verification-plural").text("");
     $(".verification-domains-plural").text("this domain");
+    $("#prev-dns-table-button, #next-dns-table-button").addClass('is-hidden');
   }
 
   //create all tables for each unverified listing
@@ -1602,7 +1604,10 @@ function updateDNSRecordAndWhois(listing_info, total_unverified, row_index){
   var cloned_www_row = cloned_table.find(".doma-www-record");
 
   //table header text
-  var table_header_text = "Domain " + (row_index + 1) + " / 12 - Current DNS Settings for " + listing_info.domain_name;
+  var table_header_text = "Current DNS Settings for " + listing_info.domain_name;
+  if (total_unverified > 1){
+    table_header_text = "Domain " + (row_index + 1) + " / " + total_unverified + " - " + table_header_text;
+  }
   if (listing_info.whois){
     var reg_name = (listing_info.whois["Registrar"] && listing_info.whois["Registrar"].length > 15) ? listing_info.whois["Registrar"].substr(0, 15) + "..." : listing_info.whois["Registrar"];
     var reg_url = listing_info.whois["Registrar URL"];
