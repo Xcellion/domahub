@@ -335,7 +335,7 @@ a {
   color: #212121;
   font-weight: 400;
   text-decoration: none;
-  word-break: break-word; }
+  word-break: break-all; }
   a:active {
     outline: none; }
   a:active, a:hover, a:focus {
