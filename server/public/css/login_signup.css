@@ -1146,6 +1146,8 @@ pre {
     border-bottom: 1px solid rgba(0, 0, 0, 0.12); }
     .table td.is-danger {
       color: #EF5350; }
+    .table td.is-primary {
+      color: #3cbc8d; }
   .table thead th {
     border-bottom: 1px solid rgba(0, 0, 0, 0.12); }
   .table thead.has-hover-effect th:not(:first-child):hover {
