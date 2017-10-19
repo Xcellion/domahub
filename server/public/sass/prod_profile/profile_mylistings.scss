@@ -29,6 +29,11 @@
   word-break: break-all;
 }
 
+#delete-modal-domains {
+  max-height: 250px;
+  overflow-y: auto;
+}
+
 .media {
   @include transition(background-color 0.25s ease);
   border-radius: $radius-small;
