@@ -1711,14 +1711,12 @@ function multiVerify(verify_button){
       ids: verify_ids
     }
   }).done(function(data){
-    //deselect all rows
-    selectAllRows($("#select-all"), false);
     verify_button.removeClass('is-loading');
 
     //success!
     if (data.state == "success"){
-      successMessage("Successfully verified " + verify_ids.length + " listings!");
       listings = data.listings;
+      successMessage("Successfully verified " + verify_ids.length + " listings!");
       createRows();
       showSelector(true);
     }
