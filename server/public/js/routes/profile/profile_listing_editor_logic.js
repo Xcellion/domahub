@@ -1565,6 +1565,7 @@ function setupVerificationButtons(selected_domain_ids){
 function createDNSRecordRows(selected_domain_ids, force){
   //show loading
   $("#loading-dns-table").removeClass('is-hidden');
+  $("#verify-toolbar").addClass("is-hidden");
 
   //loop through and create all tables for each unverified listing
   $(".cloned-dns-table").remove();
@@ -1624,9 +1625,9 @@ function updateDNSRecordAndWhois(listing_info, total_unverified, row_index){
       cloned_a_row.removeClass('needs-action-row');
       cloned_www_row.removeClass('needs-action-row');
       cloned_a_row.find(".existing_data").text("208.68.37.82");
-      cloned_a_row.find(".next_step").text("Done!");
+      cloned_a_row.find(".next_step").removeClass('is-danger').addClass('is-primary').text("Done!");
       cloned_www_row.find(".existing_data").text("208.68.37.82");
-      cloned_www_row.find(".next_step").text("Done!");
+      cloned_www_row.find(".next_step").removeClass('is-danger').addClass('is-primary').text("Done!");
     }
     else {
       createDomaRecords(cloned_a_row, cloned_www_row);
@@ -1677,14 +1678,22 @@ function checkDNSAllDone(total_unverified){
     $(".cloned-dns-table").sort(function(a, b){
       return ($(a).data("index") < $(b).data("index")) ? -1 : ($(a).data("index") > $(b).data("index")) ? 1 : 0;
     }).appendTo("#current-dns-tables");
-    $(".cloned-dns-table").eq(0).removeClass('is-hidden');
 
-    //all DNS settings are good
-    if ($(".needs-action-row").length == 0){
-      $("#verify-dns-button, #verification-left").addClass('is-hidden');
+    if ($(".cloned-dns-table .is-danger").length){
+      $(".cloned-dns-table .is-danger").closest(".cloned-dns-table").eq(0).removeClass('is-hidden');
     }
     else {
-      $("#verification-left").removeClass('is-hidden');
+      $(".cloned-dns-table").eq(0).removeClass('is-hidden');
+    }
+
+    //all DNS settings are good
+    if ($(".cloned-dns-table .needs-action-row").length == 0){
+      $("#verify-button, #verification-done").removeClass('is-hidden');
+      $("#refresh-dns-button, #verification-left").addClass('is-hidden');
+    }
+    else {
+      $("#verify-button, #verification-done").addClass('is-hidden');
+      $("#refresh-dns-button, #verification-left").removeClass('is-hidden');
       $("#verification-left-num").text($(".cloned-dns-table .needs-action-row").length);
     }
   }
