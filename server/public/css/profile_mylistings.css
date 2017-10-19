@@ -3944,6 +3944,16 @@ button {
     #table-body {
       max-height: 584px; } }
 
+.dns-status {
+  padding: 5px;
+  margin-right: 10px;
+  color: white;
+  border-radius: 3px; }
+  .dns-status.is-incomplete {
+    background-color: #EF5350; }
+  .dns-status.is-complete {
+    background-color: #3cbc8d; }
+
 .nothing-exists-row {
   padding: 25px;
   min-height: 200px; }

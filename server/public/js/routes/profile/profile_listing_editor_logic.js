@@ -1649,6 +1649,15 @@ function updateDNSRecordAndWhois(listing_info, total_unverified, row_index){
     createDomaRecords(cloned_a_row, cloned_www_row);
   }
 
+  //incomplete
+  if (cloned_table.find(".is-danger").length > 0){
+    table_header_text = "<span class='is-incomplete dns-status'>Incomplete</span>" + table_header_text;
+  }
+  //complete
+  else {
+    table_header_text = "<span class='is-complete dns-status'>Completed</span>" + table_header_text;
+  }
+
   cloned_table.find(".existing-dns-row").remove();
   cloned_table.find(".table-header").html(table_header_text);
   $("#current-dns-tables").append(cloned_table);
