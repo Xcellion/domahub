@@ -45,6 +45,7 @@ module.exports = {
 
   //<editor-fold>----------------------------------------------------------------------MULTI
 
+  //check that the requesting user owns the domain to be deleted
   checkPostedDeletionRows : function(req, res, next){
     console.log("F: Checking posted IDs for deletion...");
     var to_delete_formatted = [];
@@ -131,9 +132,7 @@ module.exports = {
            for (var x = 0; x < results.length; x++){
              if (results[x].state == "fulfilled"){
                if (doma_ip && results[x].value.address && doma_ip == results[x].value.address[0] && results[x].value.address.length == 1){
-                 //format the db query
-                 var mark_active_if_stripe = (req.user.stripe_info && req.user.stripe_info.charges_enabled) ? 1 : 0;
-                 to_verify_formatted.push([results[x].value.listing_id, 1, mark_active_if_stripe]);
+                 to_verify_formatted.push([results[x].value.listing_id, 1, 1]);
                  verified_listings.push(results[x].value.listing_id);
                }
                else {
@@ -163,24 +162,6 @@ module.exports = {
       res.send({state: "error"});
     }
   },
-
-  // //multi-delete rentals
-  // deleteRentals : function(req, res, next){
-  //   console.log("F: Deleting rentals...");
-  //   Listing.deleteRentals(req.session.deletion_object, function(result){
-  //     if (result.state == "success"){
-  //       updateUserRentalsObject(req.user.rentals, req.session.deletion_object);
-  //       delete req.session.deletion_object;
-  //       res.send({
-  //         state: "success",
-  //         rows: req.user.rentals
-  //       });
-  //     }
-  //     else {
-  //       res.send({state: "error"});
-  //     }
-  //   });
-  // },
 
   //multi-delete listings
   deleteListings : function(req, res, next){
@@ -220,6 +201,74 @@ module.exports = {
         res.send({state: "error"});
       }
     });
+  },
+
+  //get DNS settings for multiple domains
+  getDNSRecordsMulti : function(req, res, next){
+    console.log("F: Finding the existing DNS records for the posted domains...");
+
+    var dns_record_promises = [];
+
+    //custom promise creation
+    var q_function = function(listing_obj){
+      return Q.Promise(function(resolve, reject, notify){
+        whois.lookup(listing_obj.domain_name, function(err, data){
+          var whoisObj = {};
+          if (data){
+            var array = parser.parseWhoIsData(data);
+            for (var x = 0; x < array.length; x++){
+              whoisObj[array[x].attribute.trim()] = array[x].value;
+            }
+          }
+          listing_obj.whois = whoisObj;
+
+          //look up any existing DNS A Records
+          dns.resolve(listing_obj.domain_name, "A", function(err, addresses){
+            listing_obj.a_records = addresses || false;
+            resolve(listing_obj);
+          });
+        });
+      });
+    }
+    if (req.body.needs_dns_info){
+      for (var x = 0; x < req.body.needs_dns_info.length; x++){
+        for (var y = 0; y < req.user.listings.length; y++){
+          //user object has the same listing id as the listing being verified
+          if (req.user.listings[y].id == req.body.needs_dns_info[x].id){
+            if (req.user.listings[y].verified != 1){
+              //add to list of promises
+              dns_record_promises.push(q_function({
+                domain_name : req.user.listings[y].domain_name,
+                id : req.user.listings[y].id
+              }));
+            }
+            break;
+          }
+        }
+      }
+    }
+
+    if (dns_record_promises.length == 0){
+      error.handler(req, res, "Something went wrong with the domains you have selected! Please refresh the page and try again!", "json");
+    }
+    else {
+      //wait for all promises to finish
+      Q.allSettled(dns_record_promises)
+      .then(function(results) {
+
+        //update req.user.listings
+        for (var x = 0; x < results.length; x++){
+          var temp_listing_obj = getListingByID(req.user.listings, results[x].value.id);
+          temp_listing_obj.whois = results[x].value.whois;
+          temp_listing_obj.a_records = results[x].value.a_records;
+        }
+
+        res.send({
+          state: "success",
+          listings: req.user.listings
+        });
+      });
+    }
   },
 
   //</editor-fold>
@@ -564,73 +613,7 @@ module.exports = {
 
 //<editor-fold>----------------------------------------------------------------------HELPERS
 
-//function to join all rental times
-function joinRentalTimes(rental_times){
-  var temp_times = rental_times.slice(0);
-
-    //loop once
-    for (var x = temp_times.length - 1; x >= 0; x--){
-        var orig_start = temp_times[x].date;
-        var orig_end = orig_start + temp_times[x].duration;
-
-        //loop twice to check with all others
-        for (var y = temp_times.length - 1; y >= 0; y--){
-            var compare_start = temp_times[y].date;
-            var compare_end = compare_start + temp_times[y].duration;
-
-            //touches bottom
-            if (x != y && orig_start == compare_end && temp_times[x].rental_id == temp_times[y].rental_id){
-        temp_times[y].duration = temp_times[y].duration + temp_times[x].duration;
-                temp_times.splice(x, 1);
-            }
-        }
-    }
-
-  return temp_times;
-}
-
-//function to create rental properties inside listing info
-function createRentalProp(all_rentals){
-  //iterate once across all results
-  for (var x = 0; x < all_rentals.length; x++){
-    var temp_dates = [];
-    var temp_durations = [];
-
-    //iterate again to look for multiple dates and durations
-    for (var y = 0; y < all_rentals.length; y++){
-      if (!all_rentals[y].checked && all_rentals[x]["rental_id"] == all_rentals[y]["rental_id"]){
-        temp_dates.push(all_rentals[y].date);
-        temp_durations.push(all_rentals[y].duration);
-        all_rentals[y].checked = true;
-      }
-    }
-
-    //combine dates into a property
-    all_rentals[x].date = temp_dates;
-    all_rentals[x].duration = temp_durations;
-  }
-
-  //remove empty date entries
-  all_rentals = all_rentals.filter(function(value, index, array){
-    return value.date.length;
-  });
-
-  return all_rentals;
-}
-
-//helper function to update req.user.rentals after deleting
-function updateUserRentalsObject(user_rentals, to_delete_formatted){
-  for (var x = user_rentals.length - 1; x >= 0; x--){
-    for (var y = 0; y < to_delete_formatted.length; y++){
-      if (user_rentals[x].rental_id == to_delete_formatted[y][0]){
-        user_rentals.splice(x, 1);
-        break;
-      }
-    }
-  }
-}
-
-//helper function to update req.user.rentals after deleting
+//helper function to update req.user.listings after deleting
 function updateUserListingsObjectDelete(user_listings, to_delete_formatted){
   for (var x = user_listings.length - 1; x >= 0; x--){
     for (var y = 0; y < to_delete_formatted.length; y++){
@@ -642,15 +625,24 @@ function updateUserListingsObjectDelete(user_listings, to_delete_formatted){
   }
 }
 
-//helper function to update req.user.rentals after deleting
+//helper function to update req.user.listings after verifying
 function updateUserListingsObjectVerify(user_listings, to_verify_formatted){
   for (var x = user_listings.length - 1; x >= 0; x--){
     for (var y = 0; y < to_verify_formatted.length; y++){
       if (user_listings[x].id == to_verify_formatted[y][0]){
         user_listings[x].verified = 1;    //set it to verified;
-        user_listings[x].status = to_verify_formatted[y][2];    //if user is good with stripe, then set it to active
+        user_listings[x].status = 1;      //set it to active
         break;
       }
+    }
+  }
+}
+
+//helper function to get listing by ID
+function getListingByID(listings, id){
+  for (var x = 0 ; x < listings.length ; x++){
+    if (listings[x].id == id){
+      return listings[x];
     }
   }
 }

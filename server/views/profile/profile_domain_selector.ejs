@@ -1,188 +1,187 @@
-<div id="domain-selector" class="is-hidden columns">
-  <div class="column">
-    <div id="filter-menu">
-      <!-- FITER MENU -->
-      <div class="content">
-        <h2 class="is-bold">My Listings</h2>
-      </div>
-      <div class="yes-listings-elem button-wrapper control">
-        <div id="select-all-wrapper">
-          <a id="selector-select-button" class="button is-black is-transparent" tabindex="0" title="Select">
-            <form class="checkbox-form">
-              <input id="select-all" class="select-button" data-selected="false" type="checkbox" tabindex="0" title="Select All" />
-              <label for="select-button"></label>
-            </form>
-            <span class="icon "><i class="fa fa-angle-down"></i></span>
-          </a>
-          <div id="select-all-drop" class="is-hidden domain-tooltip">
-            <a class="select-drop-button" data-type="all" data-value=true>All</a>
-            <a class="select-drop-button" data-type="none" data-value=true>None</a>
-            <a class="select-drop-button" data-type="verified" data-value=true>Verified</a>
-            <a class="select-drop-button" data-type="unverified" data-value=true>Unverified</a>
-            <a class="select-drop-button" data-type="status" data-value=true>Active</a>
-            <a class="select-drop-button" data-type="status" data-value=false>Inactive</a>
-            <a class="select-drop-button" data-type="rented" data-value=1>Rented Now</a>
-            <a class="select-drop-button" data-type="accepted" data-value=1>Accepted An Offer</a>
-            <a class="select-drop-button" data-type="deposited" data-value=1>Sold (Not Transferred)</a>
-            <a class="select-drop-button" data-type="transferred" data-value=1>Sold (Transferred)</a>
-          </div>
-        </div>
-
-        <a id="selector-edit-button" class="selector-verified-button button is-primary is-transparent is-hidden" tabindex="0" title="Edit Details">
-          <span class="icon is-small">
-            <i class="fa fa-pencil-square-o"></i>
-          </span>
-          <span>Edit Details</span>
+<div id="domain-selector" class="is-hidden">
+  <div id="filter-menu" class="content">
+    <!-- FITER MENU -->
+    <div class="content">
+      <h2 class="is-bold">My Listings</h2>
+    </div>
+    <div class="yes-listings-elem button-wrapper control">
+      <div id="select-all-wrapper">
+        <a id="selector-select-button" class="button is-black is-transparent" tabindex="0" title="Select">
+          <form class="checkbox-form">
+            <input id="select-all" class="select-button" data-selected="false" type="checkbox" tabindex="0" title="Select All" />
+            <label for="select-button"></label>
+          </form>
+          <span class="icon "><i class="fa fa-angle-down"></i></span>
         </a>
-        <a id="selector-verify-button" class="selector-unverified-button button is-primary is-inverted is-hidden" tabindex="0" title="Verify Ownership">
-          <span class="icon is-small">
-            <i class="fa fa-check-circle-o"></i>
-          </span>
-          <span>Verify Ownership</span>
-        </a>
-        <a id="selector-delete-button" class="selector-button button is-danger is-transparent is-hidden" tabindex="0" title="Delete Listing(s)">
-          <span class="icon is-small">
-            <i class="fa fa-trash"></i>
-          </span>
-          <span id="multi-delete-text">Delete</span>
-        </a>
-        <a id="selector-offers-button" class="selector-verified-button button is-black is-transparent is-hidden" tabindex="0" title="View Offers">
-          <span class="icon is-small">
-            <i class="fa fa-money"></i>
-          </span>
-          <span>View Offers</span>
-        </a>
-        <%# <a id="selector-stats-button" class="selector-verified-button button is-hidden" tabindex="0" title="View Statistics">
-          <span class="icon is-small">
-            <i class="fa fa-bar-chart"></i>
-          </span>
-          <span>View Statistics</span>
-        </a>%>
-        <a class="button is-black is-transparent " title="Create New Listings" tabindex="0" href="/listings/create">
-          <span class="icon is-small">
-            <i class="fa fa-plus"></i>
-          </span>
-          <span>Create New Listings</span>
-        </a>
-      </div>
-      <div id="filters" class="yes-listings-elem control">
-        <div class="control is-grouped">
-          <div class="control has-icon">
-            <span class="select no-borders">
-              <select id="filter-select" tabindex="0">
-                <option selected value="id">View All</option>
-                <option value="unverified">Unverified</option>
-                <option value="status">Active (Verified)</option>
-                <option value="inactive">Inactive (Verified)</option>
-                <option value="rented">Rented Now</option>
-                <option value="accepted">Accepted An Offer</option>
-                <option value="deposited">Sold (Not Transferred)</option>
-                <option value="">Sold (Transferred)</option>
-              </select>
-            </span>
-            <i class="fa fa-filter"></i>
-          </div>
-          <div class="control has-icon">
-            <span class="select no-borders">
-              <select id="sort-select" tabindex="0">
-                <option value="id-asc">Date Created (Oldest)</option>
-                <option value="id-desc">Date Created (Newest)</option>
-                <option value="domain_name-asc">Domain Name (A - Z)</option>
-                <option value="domain_name-desc">Domain Name (Z - A)</option>
-                <option value="min_price-asc">Min. Price (Low - High)</option>
-                <option value="min_price-desc">Min. Price (High - Low)</option>
-              </select>
-            </span>
-            <i class="fa fa-sort"></i>
-          </div>
-          <div class="control has-icon">
-            <i class="fa fa-search"></i>
-            <input id="domain-search" tabindex="0" class="input is-expanded" type="text" placeholder="Search" />
-          </div>
+        <div id="select-all-drop" class="is-hidden domain-tooltip">
+          <a class="select-drop-button" data-type="all" data-value=true>All</a>
+          <a class="select-drop-button" data-type="none" data-value=true>None</a>
+          <a class="select-drop-button" data-type="verified" data-value=true>Verified</a>
+          <a class="select-drop-button" data-type="unverified" data-value=true>Unverified</a>
+          <a class="select-drop-button" data-type="status" data-value=true>Active</a>
+          <a class="select-drop-button" data-type="status" data-value=false>Inactive</a>
+          <a class="select-drop-button" data-type="rented" data-value=1>Rented Now</a>
+          <a class="select-drop-button" data-type="accepted" data-value=1>Accepted An Offer</a>
+          <a class="select-drop-button" data-type="deposited" data-value=1>Sold (Not Transferred)</a>
+          <a class="select-drop-button" data-type="transferred" data-value=1>Sold (Transferred)</a>
         </div>
       </div>
 
-      <!-- DOMAINS TABLE -->
-      <table id="listings-table" class="table is-bordered">
-        <thead>
-          <tr>
-            <th class="checkbox-col"></th>
-            <th>Domain Name</th>
-            <th>Status</th>
-            <th class="is-hidden-mobile">Created</th>
-            <th class="is-hidden-456px">Min. Offer</th>
-            <th class="is-hidden-456px">BIN</th>
-          </tr>
-        </thead>
-        <tbody id="table-body">
-          <tr id="loading-tab">
-            <td colspan="6">
-              <div class="nothing-exists-row has-text-centered">
-                <p class="icon is-medium"><i class="fa fa-spin fa-refresh"></i></p>
-                <p>Now loading your DomaHub listings...</p>
-              </div>
-            </td>
-          </tr>
-          <tr id="no-domains-row" class="is-hidden">
-            <td colspan="6">
-              <div class="nothing-exists-row has-text-centered">
-                <img src="/images/lib/smile.png" />
-                <p class="control has-text-centered">
-                  You have no listings. Let's go make some!
-                </p>
-                <a class="button is-primary" href="/listings/create">
-                  <span class="icon is-small">
-                    <i class="fa fa-plus"></i>
-                  </span>
-                  <span>Create New Listings</span>
-                </a>
-              </div>
-            </td>
-          </tr>
-          <tr id="no-listings-row" class="is-hidden">
-            <td colspan="6">
-              <div class="nothing-exists-row has-text-centered">
-                <img src="/images/lib/ggface.png" />
-                <p>Oh, no! There are no matching listings!</p>
-              </div>
-            </td>
-          </tr>
-          <tr id="verified-clone-row" class="clone-row table-row no-hover-effect is-hidden">
-            <td class="checkbox-col">
-              <form class="checkbox-form">
-                <input class="select-button" data-selected="false" type="checkbox" tabindex="0" title="Select" />
-                <label for="select-button"></label>
-              </form>
-            </td>
-            <td class="td-domain"></td>
-            <td class="td-status"></td>
-            <td class="td-date is-hidden-mobile"></td>
-            <td class="td-min is-hidden-456px"></td>
-            <td class="td-bin is-hidden-456px"></td>
-          </tr>
-          <tr id="unverified-clone-row" class="clone-row table-row no-hover-effect is-unverified is-hidden">
-            <td class="checkbox-col">
-              <form class="checkbox-form">
-                <input class="select-button" data-selected="false" type="checkbox" tabindex="0" title="Select" />
-                <label for="select-button"></label>
-              </form>
-            </td>
-            <td>
-              <span class="td-domain is-danger"></span>
-              <span class="icon is-danger is-inline is-small" data-balloon-length="large" data-balloon="You must prove that you own this domain. Please verify ownership by selecting it and clicking the 'Verify Ownership' button above." data-balloon-pos="up">
-                <i class="fa fa-exclamation-circle"></i>
-              </span>
-            </td>
-            <td class="td-status"></td>
-            <td class="td-date is-hidden-mobile"></td>
-            <td class="td-min is-hidden-456px"></td>
-            <td class="td-bin is-hidden-456px"></td>
-          </tr>
-        </tbody>
-      </table>
+      <a id="selector-edit-button" class="selector-verified-button button is-primary is-transparent is-hidden" tabindex="0" title="Edit Details">
+        <span class="icon is-small">
+          <i class="fa fa-pencil-square-o"></i>
+        </span>
+        <span>Edit Details</span>
+      </a>
+      <a id="selector-verify-button" class="selector-unverified-button button is-primary is-inverted is-hidden" tabindex="0" title="Verify Ownership">
+        <span class="icon is-small">
+          <i class="fa fa-check-circle-o"></i>
+        </span>
+        <span>Verify Ownership</span>
+      </a>
+      <a id="selector-delete-button" class="selector-button button is-danger is-transparent is-hidden" tabindex="0" title="Delete Listing(s)">
+        <span class="icon is-small">
+          <i class="fa fa-trash"></i>
+        </span>
+        <span id="multi-delete-text">Delete</span>
+      </a>
+      <a id="selector-offers-button" class="selector-verified-button button is-black is-transparent is-hidden" tabindex="0" title="View Offers">
+        <span class="icon is-small">
+          <i class="fa fa-money"></i>
+        </span>
+        <span>View Offers</span>
+      </a>
+      <%# <a id="selector-stats-button" class="selector-verified-button button is-hidden" tabindex="0" title="View Statistics">
+        <span class="icon is-small">
+          <i class="fa fa-bar-chart"></i>
+        </span>
+        <span>View Statistics</span>
+      </a>%>
+      <a class="button is-black is-transparent " title="Create New Listings" tabindex="0" href="/listings/create">
+        <span class="icon is-small">
+          <i class="fa fa-plus"></i>
+        </span>
+        <span>Create New Listings</span>
+      </a>
+    </div>
+    <div class="yes-listings-elem control">
+      <div class="control is-grouped">
+        <div class="control has-icon">
+          <span class="select no-borders">
+            <select id="filter-select" tabindex="0">
+              <option selected value="id">View All</option>
+              <option value="unverified">Unverified</option>
+              <option value="status">Active (Verified)</option>
+              <option value="inactive">Inactive (Verified)</option>
+              <option value="rented">Rented Now</option>
+              <option value="accepted">Accepted An Offer</option>
+              <option value="deposited">Sold (Not Transferred)</option>
+              <option value="">Sold (Transferred)</option>
+            </select>
+          </span>
+          <i class="fa fa-filter"></i>
+        </div>
+        <div class="control has-icon">
+          <span class="select no-borders">
+            <select id="sort-select" tabindex="0">
+              <option value="id-asc">Date Created (Oldest)</option>
+              <option value="id-desc">Date Created (Newest)</option>
+              <option value="domain_name-asc">Domain Name (A - Z)</option>
+              <option value="domain_name-desc">Domain Name (Z - A)</option>
+              <option value="min_price-asc">Min. Price (Low - High)</option>
+              <option value="min_price-desc">Min. Price (High - Low)</option>
+            </select>
+          </span>
+          <i class="fa fa-sort"></i>
+        </div>
+        <div class="control has-icon">
+          <i class="fa fa-search"></i>
+          <input id="domain-search" tabindex="0" class="input is-expanded" type="text" placeholder="Search" />
+        </div>
+      </div>
     </div>
   </div>
+
+  <!-- DOMAINS TABLE -->
+  <table id="listings-table" class="table is-bordered">
+      <thead>
+        <tr>
+          <th class="checkbox-col"></th>
+          <th>Domain Name</th>
+          <th>Status</th>
+          <th class="is-hidden-mobile">Created</th>
+          <th class="is-hidden-456px">Min. Offer</th>
+          <th class="is-hidden-456px">BIN</th>
+        </tr>
+      </thead>
+      <tbody id="table-body">
+        <tr id="loading-tab">
+          <td colspan="6">
+            <div class="nothing-exists-row has-text-centered">
+              <p class="icon is-medium"><i class="fa fa-spin fa-refresh"></i></p>
+              <p>Now loading your DomaHub listings...</p>
+            </div>
+          </td>
+        </tr>
+        <tr id="no-domains-row" class="is-hidden">
+          <td colspan="6">
+            <div class="nothing-exists-row has-text-centered">
+              <img src="/images/lib/smile.png" />
+              <p class="control has-text-centered">
+                You have no listings. Let's go make some!
+              </p>
+              <a class="button is-primary" href="/listings/create">
+                <span class="icon is-small">
+                  <i class="fa fa-plus"></i>
+                </span>
+                <span>Create New Listings</span>
+              </a>
+            </div>
+          </td>
+        </tr>
+        <tr id="no-listings-row" class="is-hidden">
+          <td colspan="6">
+            <div class="nothing-exists-row has-text-centered">
+              <img src="/images/lib/ggface.png" />
+              <p>Oh, no! There are no matching listings!</p>
+            </div>
+          </td>
+        </tr>
+        <tr id="verified-clone-row" class="clone-row table-row no-hover-effect is-hidden">
+          <td class="checkbox-col">
+            <form class="checkbox-form">
+              <input class="select-button" data-selected="false" type="checkbox" tabindex="0" title="Select" />
+              <label for="select-button"></label>
+            </form>
+          </td>
+          <td class="td-domain"></td>
+          <td class="td-status"></td>
+          <td class="td-date is-hidden-mobile"></td>
+          <td class="td-min is-hidden-456px"></td>
+          <td class="td-bin is-hidden-456px"></td>
+        </tr>
+        <tr id="unverified-clone-row" class="clone-row table-row no-hover-effect is-unverified is-hidden">
+          <td class="checkbox-col">
+            <form class="checkbox-form">
+              <input class="select-button" data-selected="false" type="checkbox" tabindex="0" title="Select" />
+              <label for="select-button"></label>
+            </form>
+          </td>
+          <td>
+            <span class="td-domain is-danger"></span>
+            <span class="icon is-danger is-inline is-small" data-balloon-length="large" data-balloon="You must prove that you own this domain. Please verify ownership by selecting it and clicking the 'Verify Ownership' button above." data-balloon-pos="up">
+              <i class="fa fa-exclamation-circle"></i>
+            </span>
+          </td>
+          <td class="td-status"></td>
+          <td class="td-date is-hidden-mobile"></td>
+          <td class="td-min is-hidden-456px"></td>
+          <td class="td-bin is-hidden-456px"></td>
+        </tr>
+      </tbody>
+    </table>
 </div>
+
 <div id="delete-modal" class="modal">
   <div class="modal-background"></div>
   <div class="modal-container">

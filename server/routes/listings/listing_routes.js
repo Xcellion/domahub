@@ -66,17 +66,6 @@ module.exports = function(app, db, auth, error, stripe){
     res.redirect("/listings/create");
   });
 
-  //get the whois and DNS records for an unverified domain
-  app.post('/listing/:domain_name/unverifiedinfo', [
-    auth.checkLoggedIn,
-    urlencodedParser,
-    checkDomainValid,
-    checkDomainListed,
-    profile_functions.getAccountListings,
-    owner_functions.checkListingOwnerPost,
-    owner_functions.getDNSRecordAndWhois
-  ]);
-
   //get offers for a verified domain
   app.post('/listing/:domain_name/getoffers', [
     auth.checkLoggedIn,

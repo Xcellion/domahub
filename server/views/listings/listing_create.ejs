@@ -32,59 +32,61 @@
 			<%- include("../profile/profile_left_menu.ejs"); %>
 
       <div class="right-content">
-        <div class="columns">
-          <div class="column is-8-widescreen is-12-desktop">
-            <div class="content">
-              <div id="textarea-helptext" class='content-wrapper'>
-                <h2 class='is-bold'>Create Listings</h2>
-                <p>
-                  Enter up to 500 of your domain name(s) in the box below separated
-                  by commas. You must include the TLD extension at the end.
-                </p>
-              </div>
-              <div id="table-helptext" class='content-wrapper is-hidden'>
-                <h2 class="is-bold">Review and Edit</h2>
-              </div>
-              <div id="success-helptext" class='content-wrapper is-hidden'>
-                <h1 class="is-bold">It was a success!</h1>
-                <p>
-                  See below for more details on your newly created domain(s).
-                </p>
-              </div>
+        <div class="content">
+          <div class="content">
+            <div id="textarea-helptext" class='content-wrapper'>
+              <h2 class='is-bold'>Create Listings</h2>
+              <p>
+                Enter up to 500 of your domain name(s) in the box below separated
+                by commas. You must include the TLD extension at the end.
+              </p>
             </div>
-						<div id="domain-input-form" class="content">
-	            <p class="control">
-	              <textarea tabindex="0" autofocus id="domain-names" class="textarea" placeholder="e.g. butterflies.com, tigers.net, oysters.org" spellcheck="false"></textarea>
-	            </p>
-	            <p class="control">
-	              <a tabindex="0" id="domain-names-submit" class="button is-primary is-stylish" title="Submit Domains">
-	                <span class="icon is-small"><i class="fa fa-check-circle"></i></span>
-	                <span>Submit</span>
-	              </a>
-	            </p>
-		        </div>
-            <div id="table-buttons-wrapper" class="is-hidden button-wrapper control">
-              <a tabindex="0" class="add-domain-button button is-primary is-transparent">
-                <span class="icon is-small"><i class="fa fa-plus"></i></span>
-                <span>Add Row</span>
-              </a>
-              <a tabindex="0" class="delete-domains-button button is-danger is-transparent">
-                <span class='icon is-small is-danger'>
-                  <i class='fa fa-trash-o'></i>
-                </span>
-                <span>Delete All</span>
-              </a>
-              <a tabindex="0" class="delete-errors-button button is-black is-transparent">
-                <span class='icon is-small'>
-                  <i class='fa fa-ban'></i>
-                </span>
-                <span>Clear Errored Rows</span>
-              </a>
+            <div id="table-helptext" class='content-wrapper is-hidden'>
+              <h2 class="is-bold">Review and Edit</h2>
+            </div>
+            <div id="success-helptext" class='content-wrapper is-hidden'>
+              <h1 class="is-bold">It was a success!</h1>
+              <p>
+                See below for more details on your newly created domain(s).
+              </p>
             </div>
           </div>
+					<div id="domain-input-form" class="content">
+            <p class="control">
+              <textarea tabindex="0" autofocus id="domain-names" class="textarea" placeholder="e.g. butterflies.com, tigers.net, oysters.org" spellcheck="false"></textarea>
+            </p>
+            <p class="control">
+              <a tabindex="0" id="domain-names-submit" class="button is-primary is-stylish" title="Submit Domains">
+                <span class="icon is-small"><i class="fa fa-check-circle"></i></span>
+                <span>Submit</span>
+              </a>
+            </p>
+	        </div>
+          <div id="table-buttons-wrapper" class="is-hidden button-wrapper control">
+            <a tabindex="0" class="add-domain-button button is-primary is-transparent">
+              <span class="icon is-small"><i class="fa fa-plus"></i></span>
+              <span>Add Row</span>
+            </a>
+            <a tabindex="0" class="delete-domains-button button is-danger is-transparent">
+              <span class='icon is-small is-danger'>
+                <i class='fa fa-trash-o'></i>
+              </span>
+              <span>Delete All</span>
+            </a>
+            <a tabindex="0" class="delete-errors-button button is-black is-transparent">
+              <span class='icon is-small'>
+                <i class='fa fa-ban'></i>
+              </span>
+              <span>Clear Errored Rows</span>
+            </a>
+            <a id='domains-submit'class="is-disabled button is-primary">
+              <span class="icon is-small"><i class="fa fa-check-circle"></i></span>
+              <span>Submit</span>
+            </a>
+          </div>
         </div>
-        <div id="table-columns" class="is-hidden columns flex-column-mobile">
-          <div id="table-column" class="column is-9 order-2-mobile">
+        <div id="table-columns" class="is-hidden ">
+          <div id="table-column" class="">
             <table id="domain-input-table" class="table">
               <thead>
                 <tr>
@@ -115,12 +117,6 @@
                 </tr>
               </tbody>
             </table>
-            <div class="control">
-              <a id='domains-submit'class="is-disabled button is-primary is-stylish">
-                <span class="icon is-small"><i class="fa fa-check-circle"></i></span>
-                <span>Submit</span>
-              </a>
-            </div>
           </div>
         </div>
       </div>
