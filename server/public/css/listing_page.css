@@ -1492,8 +1492,6 @@ pre {
     .nav-menu .nav-item {
       padding: 10px;
       width: 100%; }
-    .nav-menu.is-blue {
-      background-color: #23415f; }
     .nav-menu.is-active {
       display: flex;
       flex-direction: column;
