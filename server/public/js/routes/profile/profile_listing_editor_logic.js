@@ -1547,7 +1547,7 @@ function setupVerificationButtons(selected_domain_ids){
   });
 
   //verify the domains!
-  $("#verify-button").addClass('is-hidden').off().on('click', function(){
+  $("#verify-button").off().on('click', function(){
     multiVerify($(this));
   });
 }
@@ -1660,17 +1660,9 @@ function createDomaRecords(cloned_a_row, cloned_www_row){
 
 //function to check if we can verify everything
 function checkDNSAllDone(total_unverified){
-  if ($(".needs-action-row").length == 0){
-    $("#verify-button").removeClass('is-hidden');
-    $("#refresh-dns-button").addClass('is-hidden');
-  }
-  else {
-    $("#refresh-dns-button").removeClass('is-hidden');
-    $("#verify-button").addClass('is-hidden');
-  }
-
   //remove loading from refresh, remove loading row, show all cloned rows
   if ($(".cloned-dns-row .verify_table_domain_name").length == total_unverified) {
+    $("#current-dns-button").removeClass('is-hidden');
     $("#loading-records-row").addClass('is-hidden');
     $("#refresh-dns-button").removeClass('is-loading');
 
@@ -1678,8 +1670,16 @@ function checkDNSAllDone(total_unverified){
     $(".cloned-dns-row").sort(function(a, b){
       return ($(a).data("row-index") < $(b).data("row-index")) ? -1 : ($(a).data("row-index") > $(b).data("row-index")) ? 1 : 0;
     }).appendTo("#dns_table-body");
-
     $(".cloned-dns-row").removeClass('is-hidden');
+
+    //all DNS settings are good
+    if ($(".needs-action-row").length == 0){
+      $("#verify-dns-button, #verification-left").addClass('is-hidden');
+    }
+    else {
+      $("#verification-left").removeClass('is-hidden');
+      $("#verification-left-num").text($(".needs-action-row").length);
+    }
   }
 }
 
