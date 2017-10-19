@@ -1847,6 +1847,8 @@ pre {
   color: #212121;
   margin-bottom: 20px;
   width: 100%; }
+  .table.is-narrow {
+    width: auto; }
   .table.no-borders td,
   .table.no-borders th {
     border-bottom: none; }
@@ -1860,9 +1862,9 @@ pre {
       width: 1%; }
   .table th {
     font-weight: 500;
-    padding: 10px 8px; }
+    padding: 10px; }
   .table td {
-    padding: 8px;
+    padding: 10px;
     border-bottom: 1px solid rgba(0, 0, 0, 0.12); }
   .table thead th {
     border-bottom: 1px solid rgba(0, 0, 0, 0.12); }
@@ -1881,9 +1883,6 @@ pre {
   .table.is-bordered tr:last-child td,
   .table.is-bordered tr:last-child th {
     border-bottom-width: 1px; }
-  .table.is-narrow td,
-  .table.is-narrow th {
-    padding: 6px; }
   .table.is-striped tbody tr:hover {
     background-color: #fafafa; }
   .table.is-striped tbody tr:nth-child(2n) {

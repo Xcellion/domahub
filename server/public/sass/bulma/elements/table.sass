@@ -8,6 +8,8 @@
   color: $text
   margin-bottom: 20px
   width: 100%
+  &.is-narrow
+    width: auto
   &.no-borders
     td,
     th
@@ -22,9 +24,9 @@
       width: 1%
   th
     font-weight: 500
-    padding: 10px 8px
+    padding: 10px
   td
-    padding: 8px
+    padding: 10px
     border-bottom: 1px solid $border
   thead
     th
@@ -54,10 +56,6 @@
         td,
         th
           border-bottom-width: 1px
-  &.is-narrow
-    td,
-    th
-      padding: 6px
   &.is-striped
     tbody
       tr
