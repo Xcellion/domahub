@@ -1134,6 +1134,10 @@ pre {
     .table th.is-narrow {
       white-space: nowrap;
       width: 1%; }
+    @media screen and (max-width: 456px) {
+      .table td,
+      .table th {
+        font-size: 14px; } }
   .table th {
     font-weight: 500;
     padding: 10px; }
@@ -2082,6 +2086,10 @@ input:-webkit-autofill {
     height: 38px;
     padding-left: 14px;
     padding-right: 14px; }
+    @media screen and (max-width: 456px) {
+      .button.is-stylish {
+        font-size: 12px;
+        height: 32px; } }
     .button.is-stylish.is-small {
       font-size: 12px;
       height: 32px;
